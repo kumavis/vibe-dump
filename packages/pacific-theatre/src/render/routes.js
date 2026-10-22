@@ -15,8 +15,9 @@
 //
 // `window` is [from, to] in ms UTC (time.js WarClock.windowAt); `fade` is the
 // overlays' strength (1 on the table, easing to 0 over the last third of a
-// fly-down into a box); `focus` is the id of the event the tour stands on,
-// whose own routes are its story and stay.
+// fly-down into a box); `focus` is the event the tour stands on (its id, or {
+// id, routes } with the route ids its card lists), whose own routes are its
+// story and stay, whatever the window.
 //
 // The lines are drawn as lines.js draws the coast: instanced quads widened in
 // screen space and draped on the ground, so a landing at the end of a route
@@ -275,6 +276,17 @@ export class RouteLine {
   }
 }
 
+/**
+ * Whether a route belongs to the tour's step: `focus` is an event id, or {
+ * id, routes } (the event's id and the route ids its card lists); a route is
+ * its step's when the route names the event or the event names the route.
+ */
+export function isFocus(route, focus) {
+  if (!focus) return false
+  if (typeof focus === 'string') return route.event === focus
+  return (focus.id && route.event === focus.id) || (Array.isArray(focus.routes) && focus.routes.includes(route.id))
+}
+
 function hash(s) {
   let h = 2166136261
   for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619)
@@ -357,7 +369,7 @@ export class Routes {
     for (const l of this.lines) {
       const [a, b] = l.span
       // (the routes of the event the tour stands on are its story: always on)
-      const mine = focus !== null && l.route.event === focus
+      const mine = isFocus(l.route, focus)
       const on = mine || (b >= wa && a <= wb) ? 1 : 0
       l.k += (on - l.k) * ease
       if (Math.abs(on - l.k) < 0.003) l.k = on

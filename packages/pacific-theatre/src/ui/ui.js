@@ -1,39 +1,67 @@
-// The interface: the year control and the chapter tour that walks it, the
-// event pins and their cards, layer toggles, a legend for the far view with
-// the switch between its two modes (the chiefdoms, the land), a hover card
-// naming the moku under the pointer (and in the land view, what the layers
-// hold there), and an about panel with the data's provenance. Built on the
-// ahupuaʻa app's cards and glass panels; words are kept for the cards.
+// The interface on the table (ENGINEERING.md §11, DESIGN.md §§5.5–5.6): the
+// clock and the chapter tour that walks it, the event pins and their cards,
+// the names on the table driven in the same frame as the pins, the front's
+// legend, the overlays' switches, a hover card naming what is under the
+// pointer (the place, the front's land there on the date, the height or
+// depth), an about panel, and the Sources and credits panel.
 //
-// The legend and the hover card belong to the far views: both go as the
-// camera closes in and the far view's overlays fade (farStrength), and the
-// hover card goes too wherever a district is down. Once gone for the near
-// zoom, the hover card stays gone until the camera is back out where the
-// legend shows again, so it doesn't flicker at the edge of the rule.
-
-// the far view's strength under which the hover card goes, and over which
-// the legend (and the hover card with it) comes back
-const NEAR_GONE = 0.05
-const FAR_BACK = 0.25
+// The hooks the UI raises and never fulfils itself, so the integrator wires
+// them to app.battle (they are no-ops against Stage 0's stub Battle):
+//
+//   ui.onEnter(ev)                 *Enter the battle* on a box event's card
+//   ui.onTake(momentId)            *Take the controls* on the briefing (or a moment's stop)
+//   ui.onWatch()                   *Watch* on the briefing
+//   ui.onWatchOn()                 *Watch on* on the after-card
+//   ui.onLeave()                   *Back to the table* on the after-card, and Esc in a box
+//   ui.onRetry(momentId, from)     a restart point on the after-card ('start' | 'checkpoint')
+//   ui.onPrefetch(ev)              a box event's card opened: its pack may start decoding
+//   ui.onStep(dir)                 the tour's keys while a box is open (its own stops)
+//
+// and the ways in for the box's side: ui.openBriefing(data), ui.openAfter(data)
+// (plain objects, briefing.js and after.js say their shape), ui.openCredits().
+//
+// Input arbitration (ENGINEERING §8): every key is read against app.mode.
+// `table`: the tour's keys and Esc; `watch`: Esc closes the card, then
+// leaves the box (onLeave), the arrows raise onStep; `flying`: Esc only
+// (onLeave, which the integrator reads as an abort); `moment`: none.
+//
+// Adapted from holo-i-ke-au's ui/ui.js (b480c27): the build, the tools, the
+// keys, the free box beside the card and the hover card's pattern are kept;
+// the far view's chiefdoms and land legend, the moku inspector and the
+// district logic are gone.
 
 import { $, h, esc } from './dom.js'
 import { icon } from './icons.js'
-import { landZoom, polityZoom } from '../app.js'
-import { TimelineBar } from './timeline.js'
+import { TimelineBar, dayLabel } from './timeline.js'
 import { Pins } from './pins.js'
 import { EventCard } from './card.js'
 import { Tour } from './tour.js'
+import { geometryPoint } from '../geo.js'
+
+const noop = () => {}
 
 export class UI {
   constructor(app) {
     this.app = app
     app.ui = this
+    // the hooks (ENGINEERING §11): the integrator replaces these
+    this.onEnter = noop
+    this.onTake = noop
+    this.onWatch = noop
+    this.onWatchOn = noop
+    this.onLeave = noop
+    this.onRetry = noop
+    this.onPrefetch = noop
+    this.onStep = noop
+    this.overlay = { front: true, routes: true, pins: true, labels: true }
     this.build()
     this.bind()
+    app.table.labels.driven = true
     app.updaters.push((dt) => this.update(dt))
-    // Open on the first chapter's card, unless the address asks for a year
-    // or a view of its own.
-    if (!app.params.has('year') && !app.params.has('cam') && this.tour.chapters.length) {
+    // Open on the first chapter's card, unless the address asks for a date or
+    // a view of its own.
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ''))
+    if (!hash.has('date') && !hash.has('cam') && !hash.has('battle') && this.tour.chapters.length) {
       this.tour.begin()
       this.timeline.el.classList.add('invite')
     }
@@ -44,33 +72,24 @@ export class UI {
     const root = h('div', { id: 'ui' })
     document.body.appendChild(root)
     this.root = root
-    const archName = app.world.archPack.name
-    this.brand = h('div', { class: 'brand' }, `<div class="brand-name">Holo i ke Au</div><div class="brand-sub"><span class="where">${esc(archName)}</span><span class="loading"></span></div>`)
+    this.brand = h('div', { class: 'brand' }, `<div class="brand-name">Pacific Theatre</div><div class="brand-sub"><span class="where">A sand table of the record</span></div>`)
     root.appendChild(this.brand)
 
     this.tools = h('div', { class: 'tools' })
     const tool = (id, ic, label, on) => h('button', { class: `tool${on ? ' on' : ''}`, 'data-tool': id, title: label, 'aria-label': label, 'aria-pressed': String(!!on) }, icon(ic, 20))
     this.tools.append(
-      tool('lines', 'lines', 'Moku and ahupuaʻa boundaries', app.overlay.lines),
-      tool('routes', 'routes', 'Voyages, fleets and ships at sea', app.overlay.routes),
-      tool('pins', 'pins', 'Events', app.overlay.pins),
-      tool('home', 'home', 'The whole chain'),
+      tool('front', 'front', 'The front', this.overlay.front),
+      tool('routes', 'routes', 'Fleets, strikes and lanes', this.overlay.routes),
+      tool('pins', 'pins', 'Events', this.overlay.pins),
+      tool('labels', 'labels', 'Names', this.overlay.labels),
+      tool('home', 'home', 'The whole theatre'),
+      tool('sources', 'sources', 'Sources and credits'),
       tool('help', 'help', 'About'),
       tool('full', 'expand', 'Full screen'),
     )
     root.appendChild(this.tools)
 
-    // the far view's two modes, as a switch heading its legend: pressing the
-    // one that is on turns the overlay off, as the old toggle did
-    this.legend = h('div', { class: 'legend' })
-    this.legend.innerHTML = `
-      <div class="lg-switch" role="group" aria-label="What the far view shows">
-        <button type="button" data-view="chiefdoms" aria-pressed="false" title="Who held each moku">Chiefdoms</button>
-        <button type="button" data-view="land" aria-pressed="false" title="Cultivation, settlement and forest in the chosen year">Land</button>
-      </div>
-      <div class="lg-body"></div>`
-    this.legendBody = $('.lg-body', this.legend)
-    this.legend.inert = true // (until the view is far enough out for it)
+    this.legend = h('div', { class: 'legend', 'aria-live': 'polite' })
     root.appendChild(this.legend)
     this.inspector = h('div', { class: 'inspector' })
     root.appendChild(this.inspector)
@@ -81,53 +100,29 @@ export class UI {
     this.tour = new Tour(app, this)
     app.tour = this.tour
     this.tour.onChange((t) => this.timeline.refreshTour(t))
-    // off the tour, what Next will do follows the slider
-    app.timeline.onChange(() => this.timeline.refreshTour(this.tour))
+    // off the tour, what Next will do follows the slider; a date set from
+    // outside the tour and the slider (the URL's #date, the tools) leaves the
+    // tour as taking the slider does
+    app.clock.onChange(() => {
+      if (this.tour.active && !this.tour.setting && !this.timeline.tween && !this.timeline.dragging) this.onScrub()
+      this.timeline.refreshTour(this.tour)
+    })
     this.timeline.refreshTour(this.tour)
 
     this.help = h('div', { class: 'help hidden' })
-    const credits = this.credits()
     this.help.innerHTML = `
       <div class="help-card">
         <button class="help-close" aria-label="Close">${icon('close', 18)}</button>
-        <h2>Holo i ke Au</h2>
-        <p><em>Holo i ke au</em>: sail on the current, into the era. <em>Au</em> is both a period of time and a current, and the title rides it.</p>
-        <p>The Hawaiian Islands from real terrain, across the eras from the first canoes to 1898. Far out, each moku takes the colour of the chiefdom or kingdom that held it; close in, the boundaries of moku and ahupuaʻa lie on the land. Pins are events of the chosen era: open one for its story, how sure the record is, and its sources. A number stands for several events in one spot; open it for the list. A source marked <span class="flag">verify</span> has not yet been read at the source.</p>
-        <p>The switch on the legend turns the far view from the <b>Chiefdoms</b> to the <b>Land</b>: where it was cultivated, where people lived and how many, and the native forest, in the chosen year, blended between layers made for 1778, 1853, 1896 and now. A layer marked <em>modelled</em> was drawn by a written rule where no map of its time exists.</p>
-        <p><b>Next</b> walks the story an era at a time: each era opens with its card, then its events in order, the year and the camera moving to each. Look around as you like between steps; the timeline is free too, and Next picks the story up again from the nearest era.</p>
+        <h2>Pacific Theatre</h2>
+        <p class="help-sub">The Pacific War, 7 December 1941 – 2 September 1945 <span lang="ja">太平洋戦争</span></p>
+        <p>The table is the theatre in relief, from Ceylon to Hawaiʻi and from the Aleutians to Australia, the sea floor tinted by its depth. Move the date and the war moves on it: land held is coloured by who held it, hatched where it was contested or where Japan held only the cities and the railways between them; a dashed line rings the island groups Japan held; the declared lines of the war appear on their own dates. Each island carries a mark of who held it that day, and a dashed ring marks a garrison cut off behind the advance.</p>
+        <p>Pins are the events of the weeks around the date; a number stands for several in one spot. Open one for its story, its time on its own clock, how sure the record is, where the tellings differ, and its sources. A source marked <span class="flag">verify</span> has not yet been read at the source.</p>
+        <p><b>Next</b> walks the war a chapter at a time: each chapter opens with its card, then its events in order, the date and the camera moving to each. Look around as you like between steps; the clock is free too, and Next picks the walk up again from the chapter you are in. A battle with a box offers <b>Enter the battle</b>.</p>
         <div class="help-keys">
-          <span><b>→ / Space</b> next</span><span><b>←</b> back</span><span><b>, .</b> era by era</span><span><b>Drag</b> move</span><span><b>Right-drag / Shift</b> turn and tilt</span><span><b>Scroll / pinch</b> zoom</span><span><b>Double-click</b> fly closer</span>
+          <span><b>→ / Space</b> next</span><span><b>←</b> back</span><span><b>, .</b> chapter by chapter</span><span><b>Drag</b> move</span><span><b>Right-drag / Shift</b> turn and tilt</span><span><b>Scroll / pinch</b> zoom</span><span><b>Double-click</b> fly closer</span><span><b>Esc</b> close the card</span>
         </div>
-        ${credits ? `<h3>Data</h3><ul class="credits">${credits}</ul>` : ''}
-        <div class="land-credits"></div>
       </div>`
     root.appendChild(this.help)
-    this.refreshLegend()
-  }
-
-  /** Provenance of the terrain and boundary data, from the manifest and the boundary files. */
-  credits() {
-    const d = this.app.data
-    const seen = new Map()
-    const add = (s) => {
-      if (s && s.id && !seen.has(s.id)) seen.set(s.id, s)
-    }
-    for (const p of d.packs) for (const s of p.sources || []) add(s)
-    for (const s of d.moku?.sources || []) add(s)
-    for (const s of d.ahupuaa?.sources || []) add(s)
-    return creditList([...seen.values()])
-  }
-
-  /** And of the land layers, once their manifest is in: every source its methods cite. */
-  landCredits() {
-    const el = $('.land-credits', this.help)
-    const m = this.app.land.manifest
-    if (!el || !m || el.childElementCount) return
-    const seen = new Map()
-    for (const kf of Object.values(m.methods || {})) {
-      for (const layer of Object.values(kf || {})) for (const s of layer?.sources || []) if (s?.id && /^https?:/.test(s.url || '') && !seen.has(s.id)) seen.set(s.id, s)
-    }
-    if (seen.size) el.innerHTML = `<h3>Land layers</h3><ul class="credits">${creditList([...seen.values()])}</ul>`
   }
 
   bind() {
@@ -137,37 +132,25 @@ export class UI {
       if (!b) return
       const t = b.dataset.tool
       if (t === 'help') this.help.classList.toggle('hidden')
-      else if (t === 'full') {
+      else if (t === 'sources') {
+        if (this.card.mode === 'credits') this.card.close()
+        else this.openCredits()
+      } else if (t === 'full') {
         if (document.fullscreenElement) document.exitFullscreen?.()
         else document.documentElement.requestFullscreen?.().catch(() => {})
       } else if (t === 'home') {
-        // the whole chain, beside the card if one is open
-        const r = app.rig
-        r.home = this.tour.chainView()
-        r.flyTo({ target: r.home.target, distance: r.home.distance, yaw: r.home.yaw, pitch: r.home.pitch }, 3)
-      } else if (t in app.overlay) {
-        app.overlay[t] = !app.overlay[t]
-        b.classList.toggle('on', app.overlay[t])
-        b.setAttribute('aria-pressed', String(app.overlay[t]))
+        const v = this.tour.theatreView()
+        app.table.rig.flyTo(v, 2.6)
+      } else if (t in this.overlay) {
+        this.overlay[t] = !this.overlay[t]
+        b.classList.toggle('on', this.overlay[t])
+        b.setAttribute('aria-pressed', String(this.overlay[t]))
+        if (t === 'front') app.table.front.on = this.overlay.front
+        if (t === 'routes') app.table.routes.visible = this.overlay.routes
       }
-    })
-    this.legend.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-view]')
-      if (!b || b.disabled) return
-      const v = b.dataset.view
-      app.setView(app.view === v ? null : v, { user: true })
-    })
-    app.onView(() => this.refreshLegend())
-    app.land.onChange(() => {
-      this.refreshLegend()
-      this.landCredits()
     })
     this.help.addEventListener('click', (e) => {
       if (e.target === this.help || e.target.closest('.help-close')) this.help.classList.add('hidden')
-    })
-    app.timeline.onChange(() => {
-      const e = app.timeline.era
-      if (e !== this.legendEra) this.refreshLegend()
     })
     const canvas = app.canvas
     let lastHover = 0
@@ -180,26 +163,41 @@ export class UI {
     })
     canvas.addEventListener('pointerleave', () => this.hover(null))
     canvas.addEventListener('pointerdown', () => this.hover(null))
-    addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (!this.help.classList.contains('hidden')) this.help.classList.add('hidden')
-        else this.card.close()
-        return
+    addEventListener('keydown', (e) => this.key(e))
+  }
+
+  key(e) {
+    const app = this.app
+    const mode = app.mode
+    if (mode === 'moment') return
+    if (e.key === 'Escape') {
+      if (!this.help.classList.contains('hidden')) return this.help.classList.add('hidden')
+      if (this.card.isOpen) return this.card.close()
+      if (mode === 'watch' || mode === 'flying') this.onLeave()
+      return
+    }
+    if (mode === 'flying') return
+    // (the slider takes its own arrows; a focused button takes its own space)
+    if (e.target.closest?.('input, textarea, select') || e.altKey || e.ctrlKey || e.metaKey) return
+    if (!this.help.classList.contains('hidden')) return
+    const fwd = e.key === 'ArrowRight' || (e.key === ' ' && !e.target.closest?.('button, a'))
+    if (mode === 'watch') {
+      if (fwd || e.key === 'ArrowLeft') {
+        e.preventDefault()
+        this.onStep(fwd ? 1 : -1)
       }
-      // (the slider takes its own arrows; a focused button takes its own space)
-      if (e.target.closest?.('input, textarea, select') || e.altKey || e.ctrlKey || e.metaKey) return
-      if (!this.help.classList.contains('hidden')) return
-      const tour = this.tour
-      if (e.key === 'ArrowRight' || (e.key === ' ' && !e.target.closest?.('button, a'))) {
-        e.preventDefault()
-        this.timeline.el.classList.remove('invite')
-        tour.next()
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault()
-        tour.back()
-      } else if (e.key === ',' || e.key === '<') tour.skip(-1)
-      else if (e.key === '.' || e.key === '>') tour.skip(1)
-    })
+      return
+    }
+    const tour = this.tour
+    if (fwd) {
+      e.preventDefault()
+      this.timeline.el.classList.remove('invite')
+      tour.next()
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      tour.back()
+    } else if (e.key === ',' || e.key === '<') tour.skip(-1)
+    else if (e.key === '.' || e.key === '>') tour.skip(1)
   }
 
   /** A pin: its card, and the tour moves to it, so Next carries on from there. */
@@ -214,20 +212,37 @@ export class UI {
     this.card.openList(evs)
   }
 
+  /** The box's briefing (briefing.js says the shape). */
+  openBriefing(data) {
+    this.card.openBriefing(data)
+  }
+
+  /** A sortie's after-card (after.js says the shape). */
+  openAfter(data) {
+    this.card.openAfter(data)
+  }
+
+  openCredits() {
+    this.card.openCredits()
+  }
+
   onCardClosed() {
     // the tour's own event keeps its pin lit while the tour is on it
     const tour = this.tour
     if (tour.active && tour.event) return
     this.pins.activeEvent = null
     this.pins.setStopPlace(null)
+    this.timeline.zone = null
+    this.timeline.refresh()
+    this.app.table.setFocus(null)
   }
 
-  /** The viewer has taken the timeline (to position s): off the tour, and an era's card that no longer matches goes. */
-  onScrub(s = this.app.timeline.s) {
+  /** The viewer has taken the timeline: off the tour, and a chapter's card that no longer matches goes. */
+  onScrub() {
     const tour = this.tour
     tour.leave()
-    const tl = this.app.timeline
-    if (this.card.mode === 'era' && this.card.chapter?.era !== tl.eras[Math.round(Math.max(0, Math.min(tl.max, s)))]) this.card.close()
+    const clock = this.app.clock
+    if (this.card.mode === 'chapter' && this.card.chapter?.chapter !== clock.chapterAt(clock.date)) this.card.close()
     if (!this.card.ev) {
       this.pins.activeEvent = null
       this.pins.setStopPlace(null)
@@ -244,7 +259,7 @@ export class UI {
     const H = innerHeight
     const box = { x0: 16, y0: 72, x1: W - 16, y1: H - 16 }
     const tl = this.timeline.el
-    if (!tl.hidden && tl.offsetHeight) box.y1 = Math.min(box.y1, tl.offsetTop - 14)
+    if (!tl.hidden && tl.offsetHeight) box.y1 = Math.min(box.y1, tl.offsetTop - 30)
     const c = this.card.el
     if (this.card.isOpen && c.offsetWidth) {
       if (c.offsetLeft > W * 0.35) box.x1 = Math.min(box.x1, c.offsetLeft - 16)
@@ -254,151 +269,112 @@ export class UI {
     return box
   }
 
-  /**
-   * How strongly the far view's overlay shows at the camera's distance: the
-   * land's in the land view, else the chiefdoms' (with no overlay chosen, the
-   * chiefdoms' too: that is when its legend's switch would bring one back).
-   */
-  farStrength(d = this.app.rig.state.distance) {
-    return this.app.view === 'land' ? landZoom(d) : polityZoom(d)
-  }
-
-  /** Whether the hover card may show: far enough out, no district down, and (once gone) back out where the legend is. */
-  inspectorAllowed() {
-    const app = this.app
-    const k = this.farStrength()
-    const district = !!(app.districts?.on || app.districts?.k > 0)
-    if (district || k < NEAR_GONE) this.nearHeld = true
-    else if (k > FAR_BACK) this.nearHeld = false
-    return !this.nearHeld
-  }
-
   hideInspector() {
-    this.app.shared.uniforms.uHoverMoku.value = 0
     this.inspector.classList.remove('show')
     this.inspectorKey = null
   }
 
+  /** The hover card: the nearest place to the pointer, the front's land there on the date, the height or depth. */
   hover(cx, cy) {
     const app = this.app
-    const u = app.shared.uniforms
-    if (cx === null || cx === undefined || !this.inspectorAllowed()) return this.hideInspector()
-    const p = app.rig.pickGround(cx, cy)
-    const m = p && app.world.metresAt(p.x, p.z) > 0 ? app.polity.mokuAt(p.x, p.z) : null
-    // (in the land view the moku isn't lit in its polity's colour, which would
-    // hide the layers under it; and close in, where the polity colours have
-    // gone, it isn't lit either: the card names it)
-    const landView = app.view === 'land' && app.landK > 0.25
-    const close = polityZoom(app.rig.state.distance) < 0.05
-    u.uHoverMoku.value = m && !landView && !close ? m.index : 0
-    if (!m) {
-      this.inspector.classList.remove('show')
-      return
+    const table = app.table
+    if (cx === null || cx === undefined || app.active !== table || app.mode !== 'table') return this.hideInspector()
+    const p = table.rig.pickGround(cx, cy)
+    const b = table.ground.bounds
+    if (!p || p.x < b.x0 || p.x > b.x1 || p.z < b.z0 || p.z > b.z1) return this.hideInspector()
+    const m = table.ground.metresAt(p.x, p.z)
+    // the nearest named place within a fingertip
+    let best = null
+    let bestD = 30 * 30
+    const v = this._hv || (this._hv = p.clone())
+    for (const pl of app.data.places) {
+      const pt = geometryPoint(pl.geometry)
+      if (!pt || pl.placePrecision === 'off') continue
+      const [x, z] = app.data.proj.toWorld(pt)
+      v.set(x, table.ground.heightAt(x, z), z).project(table.camera)
+      if (v.z > 1) continue
+      const dx = ((v.x + 1) / 2) * innerWidth - cx
+      const dy = ((1 - v.y) / 2) * innerHeight - cy
+      const d2 = dx * dx + dy * dy
+      if (d2 < bestD) [best, bestD] = [pl, d2]
     }
-    const v = landView ? app.land.valuesAt(p.x, p.z) : null
-    const key = `${m.index}:${app.timeline.era?.id}:${v ? JSON.stringify(v) : ''}`
+    const front = m > 0 && this.overlay.front ? table.front.at(p.x, p.z) : null
+    const isle = best ? table.front.isles?.find((s) => s.place === best) : null
+    const [lon, lat] = app.data.proj.toLonLat(p.x, p.z)
+    const key = `${best?.id}|${front?.name}|${front?.state}|${isle?.now?.by}|${Math.round(m / 10)}`
     if (this.inspectorKey !== key) {
       this.inspectorKey = key
-      const holder = app.polity.holder(app.timeline.era, m)
       const row = (k, val) => `<div class="in-row"><span class="in-k">${k}</span>${val}</div>`
+      const depth = m > 0 ? `${Math.round(m).toLocaleString('en-GB')} m` : `${Math.round(-m).toLocaleString('en-GB')} m deep`
+      const where = `${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(((lon + 540) % 360) - 180).toFixed(1)}°${((lon + 540) % 360) - 180 >= 0 ? 'E' : 'W'}`
+      const held = isle?.now ? `${isle.now.by === 'jp' ? 'held by Japan' : 'held by the Allies'}${isle.now.c !== null && app.clock.date >= isle.now.c ? ', cut off' : ''}` : null
       this.inspector.innerHTML = `
-        <div class="in-head"><b>${esc(m.name)}</b><span class="in-island">${esc(m.island || '')}</span></div>
-        ${row('moku', holder ? `<span class="in-pol"><i style="background:${esc(holder.colour)}"></i>${esc(holder.name)}</span>` : '<span class="in-none">no polity recorded</span>')}
-        ${v ? row('fields', share(v.cultivation)) + row('people', perKm2(v.people)) + row('forest', share(v.forest)) : ''}`
+        ${best ? `<div class="in-head"><b>${esc(best.name)}</b>${best.ja?.kanji ? `<span class="in-ja" lang="ja">${esc(best.ja.kanji)}</span>` : ''}${best.today && best.today !== best.name ? `<span class="in-today">today ${esc(best.today)}</span>` : ''}</div>` : ''}
+        ${held ? row('on the date', esc(held)) : ''}
+        ${front ? row('the front', `<span class="in-pol"><i style="background:rgb(${front.colour.join(',')})"></i>${esc(front.pointsAndLines ? 'cities and railways held by Japan' : front.label)}</span>`) : ''}
+        ${row(m > 0 ? 'height' : 'depth', esc(depth))}
+        ${row('at', esc(where))}`
     }
     this.inspector.classList.add('show')
     const x = Math.min(innerWidth - 250, cx + 18)
-    const y = Math.max(70, Math.min(innerHeight - 120, cy + 18))
+    const y = Math.max(70, Math.min(innerHeight - 140, cy + 18))
     this.inspector.style.transform = `translate(${x}px, ${y}px)`
   }
 
-  refreshLegend() {
-    const app = this.app
-    const e = app.timeline.era
-    this.legendEra = e
-    for (const b of this.legend.querySelectorAll('[data-view]')) {
-      b.setAttribute('aria-pressed', String(app.view === b.dataset.view))
-      b.classList.toggle('on', app.view === b.dataset.view)
-    }
-    const landBtn = $('[data-view="land"]', this.legend)
-    landBtn.disabled = app.land.available === false
-    landBtn.title = landBtn.disabled ? 'No land layers in this data' : 'Cultivation, settlement and forest in the chosen year'
-    let body = ''
-    if (app.view === 'chiefdoms') {
-      const ps = app.polity.politiesIn(e)
-      if (ps.length) body = `<div class="lg-title">${esc(e?.label || '')}</div>${ps.map((p) => `<div class="lg"><i style="background:${esc(p.colour)}"></i><b>${esc(p.name)}</b></div>`).join('')}`
-    } else if (app.view === 'land') {
-      const d = app.land.describe()
-      this.legendLand = JSON.stringify(d)
-      if (d) {
-        const from = d.years.length > 1 ? `between the ${d.years[0]} and ${d.years[1]} layers` : `the ${d.years[0]} layers`
-        const note = !app.land.bound ? 'the layers are on their way' : d.early ? `${from}, thinned for the early centuries` : from
-        body = `<div class="lg-title">${esc(e?.label || '')}</div>${d.layers
-          .map((l) => `<div class="lg lg-land"><i class="sw-${l.id}"></i><b>${esc(l.name)}</b>${l.note ? `<em>${esc(l.note)}</em>` : ''}</div>`)
-          .join('')}<div class="lg-note">${esc(note)}</div>`
-      }
-    }
-    this.legendBody.innerHTML = body
+  /**
+   * Everything that eases in the interface, straight to where it is going
+   * (app.settle(), for the tools): the clock's easing, and the names' and the
+   * pins' fades, which skip their transitions for the next two frames so a
+   * screenshot never catches a name fading out where the camera was.
+   */
+  settle() {
+    this.timeline.finish()
+    this.snap = 2
+    document.body.classList.add('snap')
   }
 
-  setLoading(text) {
-    $('.loading', this.brand).textContent = text || ''
+  /** The front's legend: the states on the table now, the keyframe's date, the marks. */
+  refreshLegend() {
+    const lg = this.overlay.front ? this.app.table.front.legend() : null
+    const key = JSON.stringify(lg && { k: lg.keyframe, b: lg.between, s: lg.states.map((s) => s.id), d: lg.declared, i: lg.isles })
+    if (key === this.legendKey) return
+    this.legendKey = key
+    this.legend.classList.toggle('show', !!lg)
+    if (!lg) {
+      this.legend.innerHTML = ''
+      return
+    }
+    const asOf = lg.between ? `between ${esc(dayLabel(Date.parse(lg.between[0])))} and ${esc(dayLabel(Date.parse(lg.between[1])))}` : `as of ${esc(dayLabel(Date.parse(lg.date)))}`
+    const states = lg.states.map((s) => `<div class="lg"><i class="${s.hatch ? 'hatch' : ''}" style="--c:rgb(${s.colour.join(',')})"></i><b>${esc(s.label)}</b></div>`).join('')
+    const pl = lg.pointsAndLines ? `<div class="lg"><i class="hatch" style="--c:rgb(170,58,46)"></i><b>cities and railways held by Japan</b></div>` : ''
+    const per = lg.perimeter ? `<div class="lg"><i class="dash"></i><b>the island area Japan held</b></div>` : ''
+    const dec = lg.declared.map((d) => `<div class="lg"><i class="dash long"></i><b>${esc(d.name)}</b>${d.ja ? ` <span lang="ja">${esc(typeof d.ja === 'string' ? d.ja : d.ja.kanji)}</span>` : ''}</div>`).join('')
+    const isles = [lg.isles.jp && '<span class="lg-isle jp"></span>held by Japan', lg.isles.allied && '<span class="lg-isle al"></span>held by the Allies', lg.isles.cut && '<span class="lg-isle cut"></span>cut off'].filter(Boolean)
+    this.legend.innerHTML = `
+      <div class="lg-title">The front <span>${asOf}</span></div>
+      ${states}${pl}${per}${dec}
+      ${isles.length ? `<div class="lg-isles">${isles.map((t) => `<span>${t}</span>`).join('')}</div>` : ''}`
   }
 
   update(dt) {
     const app = this.app
+    // (the clock's easing on the wall clock under a software renderer, as the table's flights are)
     const now = performance.now()
+    if (app.software && this._wall !== undefined) dt = Math.max(dt, Math.min(1, (now - this._wall) / 1000))
+    this._wall = now
+    const onTable = app.active === app.table
+    if (this.snap && --this.snap === 0) document.body.classList.remove('snap')
+    // the table's clock, legend and pins are the table's: hidden in a box
+    if (this.timeline.el.hidden === onTable) this.timeline.el.hidden = !onTable
     this.timeline.update(dt)
-    this.pins.update(app.overlay.pins)
-    // the legend, and the switch on it, while the far view's overlays can
-    // show; and the hover card, by the same rule (a card left up as the
-    // camera flies in under a resting pointer goes with it)
-    const far = this.farStrength() > FAR_BACK
-    if (far !== this.legend.classList.contains('show')) {
-      this.legend.classList.toggle('show', far)
-      this.legend.inert = !far
-    }
-    if (!this.inspectorAllowed() && (this.inspector.classList.contains('show') || app.shared.uniforms.uHoverMoku.value)) this.hideInspector()
-    // (which keyframes the land is drawn from moves with the year, and the
-    // words arrive with the manifest)
-    if (app.view === 'land' && now - (this.landAt || 0) > 250) {
-      this.landAt = now
-      if (JSON.stringify(app.land.describe()) !== this.legendLand || !app.land.bound !== this.legendWaiting) {
-        this.legendWaiting = !app.land.bound
-        this.refreshLegend()
-      }
-    }
-    if (now - (this.whereAt || 0) > 300) {
-      this.whereAt = now
-      // the name of the island under the camera once one fills the view
-      const t = app.rig.state.target
-      const isl = app.rig.state.distance < 1400 ? app.world.islandAt(t.x, t.z) : null
-      $('.where', this.brand).textContent = isl ? isl.pack.name : app.world.archPack.name
+    const fade = app.table.fade
+    const rects = this.pins.update(onTable && this.overlay.pins && fade > 0.3)
+    app.table.labels.update(rects, onTable && this.overlay.labels ? fade : 0)
+    if (!onTable) this.legend.classList.remove('show')
+    else if (performance.now() - (this.legendAt || 0) > 250) {
+      this.legendAt = performance.now()
+      this.refreshLegend()
+      this.legend.style.opacity = fade.toFixed(2)
     }
   }
-}
-
-/** A share of the ground, for the hover card: "35%", "under 1%" or "none". */
-function share(v) {
-  const p = v * 100
-  if (p < 0.5) return '<span class="in-none">none</span>'
-  if (p < 1) return 'under 1%'
-  return `${Math.round(p)}%`
-}
-
-/** People per km², to two figures, for the hover card. */
-function perKm2(d) {
-  if (d < 0.5) return '<span class="in-none">none</span>'
-  const r = d < 10 ? Math.round(d) : Number(d.toPrecision(2))
-  return `about ${r.toLocaleString('en-US')} a km²`
-}
-
-/** Sources as the about panel lists them: title (linked), licence, when fetched. */
-function creditList(sources) {
-  return sources
-    .map((s) => {
-      const t = s.url && /^https?:/.test(s.url) ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.id)}</a>` : esc(s.title || s.id)
-      return `<li>${t}${s.licence ? ` <em>${esc(s.licence)}</em>` : ''}${s.fetched ? ` <em>fetched ${esc(s.fetched)}</em>` : ''}</li>`
-    })
-    .join('')
 }

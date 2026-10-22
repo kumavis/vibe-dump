@@ -166,6 +166,18 @@ export class Pipeline {
     return this.quad.material.uniforms
   }
 
+  /**
+   * The scene target's multisampling (4 by default). Under a software
+   * renderer (SwiftShader: the smoke test and the thumbnail) the resolve of a
+   * 4× half-float target is about half of every frame, so App turns it off
+   * there; the table's lines are then aliased by a pixel at most.
+   */
+  setSamples(n) {
+    if (this.sceneRT.samples === n) return
+    this.sceneRT.samples = n
+    this.sceneRT.dispose()
+  }
+
   /** The aerial perspective of the active scene: density and falloff in its own world units. */
   setFog(density, falloff) {
     this.uniforms.uFogDensity.value = density

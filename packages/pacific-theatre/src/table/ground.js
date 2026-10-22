@@ -8,6 +8,10 @@
 // metresAt (the CPU copy of groundMetres), heightAt, and its own uniforms
 // (never merged into the light bag). vert = exaggeration / proj.unit is the
 // only conversion from metres to world y.
+//
+// The relief material's own uniforms (the isobaths' strength, and the front's
+// masks that front.js writes) come in as `own`, shared by reference, so a
+// module that writes .value on them reaches both of the CDLOD grid materials.
 
 import * as THREE from 'three'
 import { TABLE } from '../config.js'
@@ -15,8 +19,12 @@ import { PackTerrain } from '../render/pack.js'
 import { reliefVertex, reliefFragment } from './relief.js'
 
 export class TableGround {
-  /** app: for the renderer and the light bag; pack: data.table, decoded; proj: the TableProjection. */
-  constructor(app, pack, proj) {
+  /**
+   * app: for the renderer and the light bag; pack: data.table, decoded; proj:
+   * the TableProjection; own: the relief material's own uniforms ({ name: {
+   * value } }, written by reference: the front's masks among them).
+   */
+  constructor(app, pack, proj, own = {}) {
     this.pack = pack
     this.unit = proj.unit
     this.exag = TABLE.exaggeration(TABLE.maxDistance)
@@ -35,6 +43,7 @@ export class TableGround {
       fragmentShader: reliefFragment,
       seaCull: -Infinity,
       unit: this.unit,
+      uniforms: { uIso: { value: 1 }, ...own },
     })
     this.uniforms.uArchH.value = this.terrain.heightTex
     this.uniforms.uArchRect.value.copy(this.terrain.rect)

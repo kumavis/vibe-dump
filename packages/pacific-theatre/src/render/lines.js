@@ -20,6 +20,14 @@
 // (shaders/logdepth.glsl.js), and no polygonOffset, which does nothing under
 // the logarithmic depth buffer: the lines rely on their lift. The Hawaiian
 // Boundaries (moku and ahupuaʻa) are gone.
+//
+// Dashes (the table workflow's extension, for the front's perimeters, the
+// declared lines and the date line): every segment carries its distance
+// along its own line at both ends (aDist), and a set made with `dash` draws
+// a dash and a gap of uDash.x world units (uDash.y of it inked); the caller
+// scales uDash.x with the camera's distance each frame (setDash) so the
+// dashes keep their size on screen. A set without `dash` draws solid, as
+// before.
 
 import * as THREE from 'three'
 import { constants } from './shaders/common.glsl.js'
@@ -33,11 +41,13 @@ ${world}
 ${ground}
 ${logDepthParsVertex}
 in vec4 aSeg;            // the segment's ends: ax, az, bx, bz
+in vec2 aDist;           // distance along its line at A and at B, world units
 uniform vec2 uResolution;  // drawing buffer, px
 uniform float uWidth;      // px
 uniform vec2 uLift;        // world units off the ground: x + y × the distance to the camera
 uniform vec3 uCamPos;
 out float vFade;
+out float vS;
 
 vec3 draped(vec2 xz) {
   vec3 p = vec3(xz.x, max(groundMetres(xz), 0.0) * uVert, xz.y);
@@ -53,6 +63,7 @@ void main() {
   vec4 cb = pv * vec4(B, 1.0);
   // a segment through the near plane is cut where it crosses it
   const float W0 = 1e-3;
+  vS = position.x > 0.5 ? aDist.y : aDist.x;
   if (ca.w < W0 && cb.w < W0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vFade = 0.0; ${logDepthVertex} return; }
   if (ca.w < W0) ca = mix(ca, cb, (W0 - ca.w) / (cb.w - ca.w));
   if (cb.w < W0) cb = mix(cb, ca, (W0 - cb.w) / (ca.w - cb.w));
@@ -77,10 +88,19 @@ const lineFragment = /* glsl */ `
 ${logDepthParsFragment}
 uniform vec3 uColor;
 uniform float uOpacity;
+uniform vec2 uDash;        // dash and gap, world units (0: solid); the inked share
 in float vFade;
+in float vS;
 void main() {
   ${logDepthFragment}
-  gl_FragColor = vec4(uColor, uOpacity * vFade);
+  float a = uOpacity * vFade;
+  if (uDash.x > 0.0) {
+    float u = vS / uDash.x;
+    float ph = fract(u);
+    float w = max(fwidth(u) * 1.2, 1e-3);
+    a *= smoothstep(0.0, w, ph) * (1.0 - smoothstep(uDash.y - w, uDash.y, ph));
+  }
+  gl_FragColor = vec4(uColor, a);
 }
 `
 
@@ -107,24 +127,31 @@ function buildSegments(source, proj, { maxSeg, batch, world: inWorld, densifyKm 
   const q = (v) => Math.round(v * 1e6)
   const add = (key, line, toXZ) => {
     let arr = byKey.get(key)
-    if (!arr) byKey.set(key, (arr = []))
+    if (!arr) byKey.set(key, (arr = { seg: [], dist: [] }))
+    let along = 0
     for (let i = 0; i + 1 < line.length; i++) {
       const p = line[i]
       const r = line[i + 1]
       const ka = `${q(p[0])},${q(p[1])}`
       const kb = `${q(r[0])},${q(r[1])}`
       if (ka === kb) continue
-      const k = ka < kb ? `${ka}|${kb}` : `${kb}|${ka}`
-      if (seen.has(k)) continue
-      seen.add(k)
       const [ax, az] = toXZ(p)
       const [bx, bz] = toXZ(r)
-      const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / maxSeg))
+      const L = Math.hypot(bx - ax, bz - az)
+      const k = ka < kb ? `${ka}|${kb}` : `${kb}|${ka}`
+      if (seen.has(k)) {
+        along += L
+        continue
+      }
+      seen.add(k)
+      const n = Math.max(1, Math.ceil(L / maxSeg))
       for (let s = 0; s < n; s++) {
         const t0 = s / n
         const t1 = (s + 1) / n
-        arr.push(ax + (bx - ax) * t0, az + (bz - az) * t0, ax + (bx - ax) * t1, az + (bz - az) * t1)
+        arr.seg.push(ax + (bx - ax) * t0, az + (bz - az) * t0, ax + (bx - ax) * t1, az + (bz - az) * t1)
+        arr.dist.push(along + L * t0, along + L * t1)
       }
+      along += L
     }
   }
   if (inWorld) {
@@ -144,10 +171,12 @@ export class LineSet {
    * ground). opts: { color: [r, g, b] (linear, may exceed 1), width (px),
    * order (renderOrder), maxSeg (world units), lift: [base, k] (world units,
    * and per unit of camera distance), height (world units: the tallest the
-   * ground gets, for the bounds), batch (feature → key), densifyKm, world }
+   * ground gets, for the bounds), batch (feature → key), densifyKm, world,
+   * dash ([dash and gap, inked share]: world units, scaled each frame by
+   * setDash; omitted: solid) }
    */
   constructor(source, proj, uniforms, opts = {}) {
-    const { color = [1, 1, 1], width = 1.5, order = 3, maxSeg = 1.5, lift = [0.015, 0.0022], height = 60, batch = null, densifyKm = 50, world: inWorld = false } = opts
+    const { color = [1, 1, 1], width = 1.5, order = 3, maxSeg = 1.5, lift = [0.015, 0.0022], height = 60, batch = null, densifyKm = 50, world: inWorld = false, dash = null } = opts
     this.group = new THREE.Group()
     this.uniforms = {
       ...uniforms,
@@ -157,7 +186,9 @@ export class LineSet {
       uCamPos: { value: new THREE.Vector3() },
       uColor: { value: new THREE.Color(...color) },
       uOpacity: { value: 1 },
+      uDash: { value: new THREE.Vector2(dash ? dash[0] : 0, dash ? dash[1] : 0.55) },
     }
+    this.dashed = !!dash
     this.material = new THREE.ShaderMaterial({
       vertexShader: lineVertex,
       fragmentShader: lineFragment,
@@ -169,13 +200,14 @@ export class LineSet {
     const quad = new Float32Array([0, -1, 0, 0, 1, 0, 1, -1, 0, 1, 1, 0])
     this.count = 0
     this.geometries = []
-    for (const [, segs] of buildSegments(source, proj, { maxSeg, batch, world: inWorld, densifyKm })) {
+    for (const [, { seg: segs, dist }] of buildSegments(source, proj, { maxSeg, batch, world: inWorld, densifyKm })) {
       if (!segs.length) continue
       const g = new THREE.InstancedBufferGeometry()
       g.setAttribute('position', new THREE.BufferAttribute(quad, 3))
       g.setIndex([0, 2, 1, 1, 2, 3])
       const data = new Float32Array(segs)
       g.setAttribute('aSeg', new THREE.InstancedBufferAttribute(data, 4))
+      g.setAttribute('aDist', new THREE.InstancedBufferAttribute(new Float32Array(dist), 2))
       g.instanceCount = data.length / 4
       this.count += g.instanceCount
       // (bounds by hand: three's would only see the unit quad)
@@ -196,6 +228,11 @@ export class LineSet {
       this.group.add(mesh)
       this.geometries.push(g)
     }
+  }
+
+  /** A dashed set's dash and gap, world units (scale it with the camera's distance to keep its size on screen). */
+  setDash(length, share = this.uniforms.uDash.value.y) {
+    if (this.dashed) this.uniforms.uDash.value.set(length, share)
   }
 
   update(camera, resolution, opacity = 1) {
