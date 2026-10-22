@@ -23,12 +23,15 @@
 
 import { geometryPoint } from '../geo.js'
 import { eventSpan, eventStart } from '../time.js'
-import { preferredPitch } from '../render/camera.js'
+import { preferredPitch, CHAIN_REACH } from '../render/camera.js'
 
 // camera distance for DATA.md's zooms; `island` frames the whole island
 // instead, where the place has one
 export const ZOOM = { far: 2600, island: 520, near: 70 }
 const DEPTH = { far: 0, island: 1, near: 2 }
+// the ground (world units) a far step shows across the free part of the
+// screen's shorter side: what ZOOM.far shows beside the card on a wide screen
+const FAR_SPAN = 1500
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 
@@ -358,9 +361,14 @@ export class Tour {
 
   // --- views ------------------------------------------------------------------
 
-  /** North up, or turned down the screen's long side when the free part of it is portrait (as rig.homeView). */
+  /**
+   * The whole chain's turn for the free part of the screen: the way the
+   * chain view looks, kept by a chapter that opens on one island and by a
+   * far step, so the islands keep their places on the screen from one to
+   * the next.
+   */
   homeYaw(box = this.ui.freeBox()) {
-    return (box.x1 - box.x0) / Math.max(1, box.y1 - box.y0) < 0.85 ? 1.1 : 0
+    return this.chainView(box).yaw
   }
 
   /** The tilt the viewer has added to the zoom's own, kept from step to step (within reason). */
@@ -369,15 +377,19 @@ export class Tour {
     return clamp(g.pitch - preferredPitch(g.distance), -0.3, 0.3)
   }
 
-  /** The whole chain, from Niʻihau to Hawaiʻi, beside the card. */
-  chainView() {
-    const box = this.ui.freeBox()
-    let r = null
-    for (const p of this.islands.values()) {
-      const q = p.rect
-      r = r ? { x0: Math.min(r.x0, q.x0), z0: Math.min(r.z0, q.z0), x1: Math.max(r.x1, q.x1), z1: Math.max(r.z1, q.z1) } : { ...q }
-    }
-    return this.app.rig.fit({ rect: r || this.app.world.bounds, yaw: this.homeYaw(box), box })
+  /**
+   * The whole chain, from Niʻihau to Hawaiʻi, beside the card: turned so its
+   * long axis runs down the free part of the screen's diagonal, Niʻihau at
+   * the top left and Hawaiʻi at the bottom right, and as large as that
+   * leaves room for (render/camera.js homeView, fit). The rig may pull back
+   * as far as it needs, which on a phone is further than its usual reach.
+   */
+  chainView(box = this.ui.freeBox()) {
+    const rig = this.app.rig
+    const c = this.app.world.chainShape()
+    const view = rig.fit({ points: c.hull, along: [c.from, c.to], box, reach: CHAIN_REACH })
+    rig.reach(view.distance)
+    return view
   }
 
   islandView(id, yaw = this.app.rig.goal.yaw, tilt = 0) {
@@ -397,7 +409,10 @@ export class Tour {
       x += dx * k
       z += dz * k
     }
-    return this.app.rig.fit({ rect: { x0: x, x1: x, z0: z, z1: z }, distance, tilt: this.tilt(), box: this.ui.freeBox() })
+    // (a far view keeps the whole chain's turn: it only slides and zooms)
+    const box = this.ui.freeBox()
+    const yaw = towardChain ? this.homeYaw(box) : this.app.rig.goal.yaw
+    return this.app.rig.fit({ rect: { x0: x, x1: x, z0: z, z1: z }, distance, yaw, tilt: this.tilt(), box })
   }
 
   /**
@@ -429,7 +444,19 @@ export class Tour {
     if (zoom === 'island') return this.pointView(place, ZOOM.island)
     // far: the chain around the place, or the whole of it for a place that is the whole of it
     if (!place.island && place.placePrecision === 'island') return this.chainView()
-    return this.pointView(place, ZOOM.far, { towardChain: 0.35 })
+    return this.pointView(place, this.farDistance(), { towardChain: 0.35 })
+  }
+
+  /**
+   * How far out a far step stands: ZOOM.far, or further where the free part
+   * of the screen is small (a phone, above its card), so that the step shows
+   * as much of the chain around its place as a wide screen does and the lean
+   * toward the chain's middle keeps the place in view.
+   */
+  farDistance(box = this.ui.freeBox()) {
+    const tanH = Math.tan((this.app.camera.fov * Math.PI) / 360)
+    const side = Math.max(60, Math.min(box.x1 - box.x0, box.y1 - box.y0))
+    return Math.max(ZOOM.far, (FAR_SPAN * innerHeight) / (2 * tanH * side))
   }
 
   /** From a pin: to the place, closer only as far as the island and never farther out than now. */

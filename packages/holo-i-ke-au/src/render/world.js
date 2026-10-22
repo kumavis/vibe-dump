@@ -272,6 +272,48 @@ export class World {
     return hi * this.uniforms.uVert.value
   }
 
+  /**
+   * The chain as the whole-chain view frames it (render/camera.js fit): the
+   * hull of the land of every island, sampled from the archipelago's own
+   * heights so it is there before any island pack is, and the chain's long
+   * axis, from the middle of the westernmost island (Niʻihau) to the
+   * south-east point of the easternmost (Hawaiʻi's Puna coast, where the
+   * chain ends). World (x, z) at sea level; worked out once.
+   */
+  chainShape() {
+    if (this._chain) return this._chain
+    const a = this.arch
+    const N = 48
+    const land = []
+    let west = null
+    let east = null
+    for (const p of this.islandPacks) {
+      const r = p.rect
+      const own = []
+      for (let j = 0; j <= N; j++) {
+        for (let i = 0; i <= N; i++) {
+          const x = r.x0 + ((r.x1 - r.x0) * i) / N
+          const z = r.z0 + ((r.z1 - r.z0) * j) / N
+          if (a.metresAt(x, z) > 0) own.push([x, z])
+        }
+      }
+      if (!own.length) continue
+      land.push(...own)
+      const cx = (r.x0 + r.x1) / 2
+      if (!west || cx < west.cx) west = { cx, own }
+      if (!east || cx > east.cx) east = { cx, own }
+    }
+    if (!land.length) {
+      const b = this.bounds
+      const hull = [[b.x0, b.z0], [b.x1, b.z0], [b.x1, b.z1], [b.x0, b.z1]]
+      return (this._chain = { hull, from: hull[0], to: hull[2] })
+    }
+    const mid = west.own.reduce((m, [x, z]) => [m[0] + x / west.own.length, m[1] + z / west.own.length], [0, 0])
+    // (x runs east and z south, so the south-east point is the one furthest along x + z)
+    const se = east.own.reduce((m, p) => (p[0] + p[1] > m[0] + m[1] ? p : m))
+    return (this._chain = { hull: convexHull(land), from: mid, to: se })
+  }
+
   /** The island pack whose rect holds (x, z) most deeply, if any is loaded. */
   islandAt(x, z) {
     let best = null
@@ -297,4 +339,23 @@ export class World {
     const d = this.district?.cur?.terrain
     if (d) for (const g of [d.full, d.half]) g.material.uniforms.uDebug.value = v
   }
+}
+
+/** The convex hull of [x, z] points, in order round it (Andrew's monotone chain). */
+function convexHull(points) {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1])
+  if (p.length < 3) return p
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+  const lower = []
+  for (const q of p) {
+    while (lower.length >= 2 && cross(lower.at(-2), lower.at(-1), q) <= 0) lower.pop()
+    lower.push(q)
+  }
+  const upper = []
+  for (let i = p.length - 1; i >= 0; i--) {
+    const q = p[i]
+    while (upper.length >= 2 && cross(upper.at(-2), upper.at(-1), q) <= 0) upper.pop()
+    upper.push(q)
+  }
+  return lower.slice(0, -1).concat(upper.slice(0, -1))
 }

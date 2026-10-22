@@ -1,6 +1,6 @@
 {
  "type": "FeatureCollection",
- "about": "What stood in Nuʻuanu, Honolulu and the neighbouring valleys, with the battles of 1783 and 1795 as masses and lines. DATA.md “District packs” gives the schema; RESEARCH.md §10 says how each feature was made, and §11 what changed after the first render. A feature’s to year is the last year a source read shows it, not a sourced end. Forces and lines carry event, when, step (their order within the event) and stop (the index, from 0, of the stop of their event at which they show); streams carry role reference, the mapped courses kept for labels and checks while the app routes the water from the heights; heiau carry placePrecision and ahupuaa and stand at the ahupuaʻa centroid; ponds from the State site record carry its site number.",
+ "about": "What stood in Nuʻuanu, Honolulu and the neighbouring valleys, with the battles of 1783 and 1795 as masses and lines. DATA.md “District packs” gives the schema; RESEARCH.md §10 says how each feature was made, and §11 what changed after the first render. A feature’s to year is the last year a source read shows it, not a sourced end. Forces and lines carry event, when, step (their order within the event), stop (the index, from 0, of the stop of their event at which they show), behaviour (march, run, stand, engage, surround or leap) and arms (the shares of spears, clubs, slings, daggers and muskets each side carried, and its cannon; RESEARCH.md §12 says what they rest on); streams carry role reference, the mapped courses kept for labels and checks while the app routes the water from the heights; heiau carry placePrecision and ahupuaa and stand at the ahupuaʻa centroid; ponds from the State site record carry its site number.",
  "features": [
   {
    "type": "Feature",
@@ -3450,6 +3450,15 @@
     "to": 1795,
     "step": 0,
     "stop": 2,
+    "behaviour": "march",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -3483,6 +3492,15 @@
     "to": 1795,
     "step": 1,
     "stop": 4,
+    "behaviour": "stand",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3525,6 +3543,15 @@
     "to": 1795,
     "step": 1,
     "stop": 3,
+    "behaviour": "stand",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 2
+    },
     "precision": "inferred",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3563,6 +3590,15 @@
     "to": 1795,
     "step": 2,
     "stop": 4,
+    "behaviour": "march",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 2
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3600,6 +3636,15 @@
     "to": 1795,
     "step": 4,
     "stop": 6,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "inferred",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3621,14 +3666,23 @@
    "id": "force-oahu-retreat",
    "properties": {
     "kind": "force",
-    "name": "The retreat to the head of the valley",
+    "name": "The run up the valley",
     "role": "oahu",
     "event": "nuuanu-1795",
     "when": "1795-04",
     "from": 1795,
     "to": 1795,
     "step": 5,
-    "stop": 7,
+    "stop": 6,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3636,7 +3690,7 @@
      "jarves-1847",
      "ellis-1827"
     ],
-    "note": "The rest of the Oʻahu forces fall back up the valley to the pali, where the land drops away to Koʻolau. What happened at the edge is told differently in every source."
+    "note": "The rest of the Oʻahu forces run up the floor of the valley, past Luakaha, toward its head, with Kamehameha’s forces behind them. Fornander has the defeat become a rout and Kalanikūpule hotly pursued; Jarves has the rest pursued to the end of the valley; Ellis has the army flee toward the precipice, chased by Kamehameha’s warriors."
    },
    "geometry": {
     "type": "LineString",
@@ -3657,9 +3711,7 @@
      [-157.8056, 21.3593],
      [-157.80423, 21.36076],
      [-157.7967, 21.36424],
-     [-157.79415, 21.36587],
-     [-157.7941, 21.3664],
-     [-157.79334, 21.36685]
+     [-157.7955, 21.365]
     ]
    }
   },
@@ -3675,14 +3727,23 @@
     "from": 1795,
     "to": 1795,
     "step": 5,
-    "stop": 7,
+    "stop": 6,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
      "fornander-v2",
      "jarves-1847"
     ],
-    "note": "Kamehameha’s forces follow the retreat up the valley; Fornander has Kalanikūpule hotly pursued."
+    "note": "Kamehameha’s forces follow the Oʻahu forces up the valley floor. Fornander has Kalanikūpule hotly pursued; Jarves has the Oʻahu forces pursued with great slaughter to the end of the valley."
    },
    "geometry": {
     "type": "LineString",
@@ -3718,6 +3779,15 @@
     "to": 1795,
     "step": 5,
     "stop": 6,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -3749,6 +3819,15 @@
     "to": 1795,
     "step": 5,
     "stop": 6,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -3779,6 +3858,15 @@
     "to": 1795,
     "step": 6,
     "stop": 7,
+    "behaviour": "run",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "pacific-worlds-nuuanu",
@@ -3798,6 +3886,130 @@
   },
   {
    "type": "Feature",
+   "id": "force-hawaii-surround",
+   "properties": {
+    "kind": "force",
+    "name": "Kamehameha’s forces close in at the head of the valley",
+    "role": "hawaii",
+    "event": "nuuanu-1795",
+    "when": "1795-04",
+    "from": 1795,
+    "to": 1795,
+    "step": 6,
+    "stop": 7,
+    "behaviour": "surround",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 0
+    },
+    "precision": "schematic",
+    "sources": [
+     "fornander-v2",
+     "jarves-1847",
+     "ellis-1827",
+     "dibble-1843"
+    ],
+    "note": "Kamehameha’s forces come up the valley floor below the gap and close round the Oʻahu fighters left at the edge. Fornander has the Oʻahu forces driven to the pali, Jarves to the end of the valley, Dibble to the precipice at its end; Ellis has them chased to the edge. The sources give the place, not the positions."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [-157.799, 21.3632],
+     [-157.7967, 21.36424],
+     [-157.7955, 21.365],
+     [-157.79415, 21.36587],
+     [-157.7938, 21.3666]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "force-oahu-last-stand",
+   "properties": {
+    "kind": "force",
+    "name": "The last of the Oʻahu fighters at the edge",
+    "role": "oahu",
+    "event": "nuuanu-1795",
+    "when": "1795-04",
+    "from": 1795,
+    "to": 1795,
+    "step": 6,
+    "stop": 7,
+    "behaviour": "stand",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
+    "precision": "schematic",
+    "sources": [
+     "ellis-1827",
+     "jarves-1847",
+     "dibble-1843",
+     "fornander-v2"
+    ],
+    "note": "At the edge of the pali a stand is made and held until the end: Ellis gives it to Kaʻiana, whom Kamakau and Fornander have killed lower in the valley. Jarves and Dibble have the rest of the Oʻahu forces driven to the end of the valley. The line follows the brink at the gap."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [-157.79395, 21.36695],
+     [-157.7934, 21.36675],
+     [-157.79285, 21.3669]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "force-oahu-over-the-edge",
+   "properties": {
+    "kind": "force",
+    "name": "Over the edge at the pali",
+    "role": "oahu",
+    "event": "nuuanu-1795",
+    "when": "1795-04",
+    "from": 1795,
+    "to": 1795,
+    "step": 6,
+    "stop": 7,
+    "behaviour": "leap",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
+    "precision": "schematic",
+    "sources": [
+     "fornander-v2",
+     "dibble-1843",
+     "bingham-1847",
+     "jarves-1847",
+     "ellis-1827",
+     "kamakau-ruling-chiefs",
+     "pacific-worlds-nuuanu"
+    ],
+    "note": "Fornander has a large number driven over the pali; Dibble and Bingham have many forced down the precipice at the end of the valley; Jarves has some driven over its brink; Ellis has a number driven headlong over. Kamakau does not mention the pali, and an oral account reads the battle’s name as telling something other than men forced off the cliff. How many went over is told differently in every source."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [-157.7938, 21.36655],
+     [-157.79338, 21.36712]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "id": "line-puiwa-oahu",
    "properties": {
     "kind": "line",
@@ -3810,6 +4022,15 @@
     "to": 1795,
     "step": 3,
     "stop": 5,
+    "behaviour": "engage",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3840,6 +4061,15 @@
     "to": 1795,
     "step": 3,
     "stop": 5,
+    "behaviour": "engage",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 2
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3870,6 +4100,15 @@
     "to": 1795,
     "step": 4,
     "stop": 6,
+    "behaviour": "engage",
+    "arms": {
+     "spear": 0.52,
+     "club": 0.22,
+     "sling": 0.13,
+     "dagger": 0.08,
+     "musket": 0.05,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3900,6 +4139,15 @@
     "to": 1795,
     "step": 4,
     "stop": 6,
+    "behaviour": "engage",
+    "arms": {
+     "spear": 0.5,
+     "club": 0.2,
+     "sling": 0.12,
+     "dagger": 0.08,
+     "musket": 0.1,
+     "cannon": 2
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",
@@ -3929,6 +4177,15 @@
     "to": 1783,
     "step": 0,
     "stop": 0,
+    "behaviour": "stand",
+    "arms": {
+     "spear": 0.55,
+     "club": 0.2,
+     "sling": 0.17,
+     "dagger": 0.08,
+     "musket": 0,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -3965,6 +4222,15 @@
     "to": 1783,
     "step": 1,
     "stop": 1,
+    "behaviour": "march",
+    "arms": {
+     "spear": 0.55,
+     "club": 0.2,
+     "sling": 0.17,
+     "dagger": 0.08,
+     "musket": 0,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -3996,6 +4262,15 @@
     "to": 1783,
     "step": 1,
     "stop": 1,
+    "behaviour": "march",
+    "arms": {
+     "spear": 0.55,
+     "club": 0.2,
+     "sling": 0.17,
+     "dagger": 0.08,
+     "musket": 0,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -4027,6 +4302,15 @@
     "to": 1783,
     "step": 1,
     "stop": 1,
+    "behaviour": "march",
+    "arms": {
+     "spear": 0.55,
+     "club": 0.2,
+     "sling": 0.17,
+     "dagger": 0.08,
+     "musket": 0,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "fornander-v2",
@@ -4060,6 +4344,15 @@
     "to": 1783,
     "step": 2,
     "stop": 2,
+    "behaviour": "stand",
+    "arms": {
+     "spear": 0.55,
+     "club": 0.22,
+     "sling": 0.15,
+     "dagger": 0.08,
+     "musket": 0,
+     "cannon": 0
+    },
     "precision": "schematic",
     "sources": [
      "kamakau-ruling-chiefs",

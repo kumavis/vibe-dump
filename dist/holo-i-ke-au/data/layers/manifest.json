@@ -178,39 +178,21 @@
       }
     },
     "kauikeaouli": {
-      "year": 1844,
-      "cultivation": {
-        "from": "contact",
-        "to": "mahele",
-        "t": 0.88
-      },
-      "settlement": {
-        "from": "contact",
-        "to": "mahele",
-        "t": 0.88
-      },
-      "forest": {
-        "from": "contact",
-        "to": "kingdom",
-        "t": 0.559
-      }
-    },
-    "kamehameha-iv-v": {
-      "year": 1864,
+      "year": 1853,
       "cultivation": {
         "from": "mahele",
         "to": "kingdom",
-        "t": 0.256
+        "t": 0
       },
       "settlement": {
         "from": "mahele",
         "to": "kingdom",
-        "t": 0.256
+        "t": 0
       },
       "forest": {
         "from": "contact",
         "to": "kingdom",
-        "t": 0.729
+        "t": 0.636
       }
     },
     "kalakaua": {
@@ -2023,5 +2005,1189 @@
       }
     },
     "calibrationNote": "For each island, the area of Land Commission Award parcels under 5 ha (kuleana size) and the share of it lying where the published Traditional Agriculture zones, the valley-floor loʻi rule, or either reach 0.5. The parcels are 1848–1855 evidence of land in use; much of what they miss is kula (dryland) and house lots outside both models."
+  },
+  "zoning": {
+    "about": "Zoning for the present-day settlements: what kind of building stands where. Per island pack, the county’s zoning generalized to twelve building-form classes (now-zoning.png) and the State Land Use District (lud.png), each an 8-bit greyscale PNG of class numbers with exactly the bounds and size of its pack in ../manifest.json (texel registration as DATA.md has it), 0 over sea. Class numbers are categories, not amounts: sample them nearest, never filtered.",
+    "encoding": {
+      "zoning": {
+        "file": "<island>/now-zoning.png",
+        "keyframes": [
+          "now"
+        ],
+        "classes": {
+          "0": "none or water",
+          "1": "residential, houses",
+          "2": "residential, low-rise apartments",
+          "3": "residential, high-rise apartments",
+          "4": "commercial or business",
+          "5": "mixed-use downtown",
+          "6": "industrial",
+          "7": "resort",
+          "8": "agricultural",
+          "9": "conservation or preservation",
+          "10": "military or federal",
+          "11": "public or institutional",
+          "12": "parks and open space"
+        }
+      },
+      "lud": {
+        "file": "<island>/lud.png",
+        "fromYear": 1964,
+        "classes": {
+          "0": "sea or none",
+          "1": "urban",
+          "2": "rural",
+          "3": "agricultural",
+          "4": "conservation"
+        },
+        "note": "the State Land Use Law (Act 187, 1961) put every acre in one of four districts; the app applies them to years from 1964 on"
+      }
+    },
+    "rule": "A texel takes the class covering most of its area: it is split into s × s samples about 8 m apart (19 m on Hawaiʻi, whose texels are 151 m), each sample takes the class of the polygon over its centre, and the commonest class among the samples wins, provided classed samples cover at least 25% of the texel; otherwise, and wherever the pack is sea, the value is 0. Roads, streams, drainage and land a county marks as not zoned count as no class, so a road through a town takes the town’s class. A pack holds the slivers of neighbours in its box; they are classed by their own county’s layer or left 0.",
+    "sources": {
+      "honolulu": {
+        "id": "honolulu-zoning",
+        "title": "City and County of Honolulu, Zoning (Land Use Ordinance zoning districts), Zoning_Reg FeatureServer layer 0",
+        "publisher": "City and County of Honolulu",
+        "url": "https://services.arcgis.com/tNJpAOha4mODLkXz/arcgis/rest/services/Zoning_Reg/FeatureServer/0",
+        "layer": "Zoning",
+        "fields": [
+          "objectid (OID)",
+          "zone_class (String)",
+          "zoning_description (String)",
+          "zoning_label (String)"
+        ],
+        "classField": "zone_class",
+        "nameField": "zoning_description",
+        "item": "https://www.arcgis.com/home/item.html?id=8068469b47834d3ca4bc299d4079f35f",
+        "hub": "https://honolulu-cchnl.opendata.arcgis.com/",
+        "dataLastEdited": "2026-10-16",
+        "fetched": "2026-10-22",
+        "licence": "terms as the publisher states them: Information shown on these maps are derived from public records that are constantly undergoing change and do not replace a site survey, and is not warranted for content or accuracy. The City does not guarantee the positional or thematic accuracy of the GIS data. The GIS data or cartographic digital files are not a legal representation of any of the features in which it depicts, and disclaims any assumption of the legal status of which it represents. Any implied warranties, including warranties of merchantability or fitness for a particular purpose, shall be expressly excluded.",
+        "credit": "Honolulu Land Information System (Holis), Department of and Permitting, City and County of Honolulu",
+        "note": "the Land Use Ordinance (ROH Chapter 21) districts as the Department of Planning and Permitting maps them in HOLIS; the State-administered Kakaʻako and Aloha Tower districts and the Waikīkī and Kakaʻako precincts are classes of their own"
+      },
+      "honoluluHeight": {
+        "id": "honolulu-zoning-height",
+        "title": "City and County of Honolulu, Zoning Map Height Limit, Zoning_Reg FeatureServer layer 2",
+        "publisher": "City and County of Honolulu",
+        "url": "https://services.arcgis.com/tNJpAOha4mODLkXz/arcgis/rest/services/Zoning_Reg/FeatureServer/2",
+        "layer": "Zoning Map Height Limit",
+        "fields": [
+          "objectid (OID)",
+          "height_label (String)",
+          "height_label_source (String)"
+        ],
+        "classField": "height_label",
+        "item": "https://www.arcgis.com/home/item.html?id=8068469b47834d3ca4bc299d4079f35f",
+        "dataLastEdited": "2026-04-28",
+        "fetched": "2026-10-22",
+        "licence": "terms as the publisher states them: Information shown on these maps are derived from public records that are constantly undergoing change and do not replace a site survey, and is not warranted for content or accuracy. The City does not guarantee the positional or thematic accuracy of the GIS data. The GIS data or cartographic digital files are not a legal representation of any of the features in which it depicts, and disclaims any assumption of the legal status of which it represents. Any implied warranties, including warranties of merchantability or fitness for a particular purpose, shall be expressly excluded.",
+        "credit": "Honolulu Land Information System (Holis), Department of and Permitting, City and County of Honolulu",
+        "note": "the height limits of the zoning maps, in feet (a bonus height in brackets); read only to tell tower blocks from walk-ups in the medium-density apartment districts"
+      },
+      "maui": {
+        "id": "maui-county-zoning",
+        "title": "County of Maui Department of Planning, Maui County Zoning Districts (PLDB.PL.MauiCountyZoningDistrict), FeatureServer layer 0",
+        "publisher": "County of Maui",
+        "url": "https://services3.arcgis.com/fsrDo0QMPlK9CkZD/arcgis/rest/services/Maui_County_Zoning_Districts/FeatureServer/0",
+        "layer": "PLDB.PL.MauiCountyZoningDistrict",
+        "fields": [
+          "OBJECTID (OID)",
+          "ZONE_CLASS (String)",
+          "COMMUNITY_PLAN (String, “Comm Plan Area”)",
+          "Island (String, “Major Island”)",
+          "LASTUPDATE (Date, “Last Update Date”)"
+        ],
+        "classField": "ZONE_CLASS",
+        "item": "https://www.arcgis.com/home/item.html?id=8a9b0fdba5494c648dec8902cd574132",
+        "dataLastEdited": "2026-07-20",
+        "fetched": "2026-10-22",
+        "licence": "no licence or terms stated on the service or its item; published openly by the county, used here only generalised to a dozen classes at the pack’s texel size, with credit",
+        "credit": "County of Maui Department of Planning",
+        "note": "Maui County Code Title 19 districts on Maui, Molokaʻi and Lānaʻi (the layer has none on Kahoʻolawe); a three-digit code whose names are the layer’s coded-value domain; much land is still in the Interim district that holds land never comprehensively zoned"
+      },
+      "hawaii": {
+        "id": "hawaii-county-zoning",
+        "title": "County of Hawaiʻi Planning Department, Hawaii County Zoning (Zoning_COH FeatureServer layer 9)",
+        "publisher": "County of Hawaiʻi",
+        "url": "https://services1.arcgis.com/C2LPusZs5OXNGFDn/arcgis/rest/services/Zoning_COH/FeatureServer/9",
+        "layer": "Zoning",
+        "fields": [
+          "OBJECTID (OID)",
+          "ZONE (String)",
+          "DISTRICT (String)",
+          "ORDINANCE (String)"
+        ],
+        "classField": "ZONE",
+        "item": "https://www.arcgis.com/home/item.html?id=c854c958632d408cbfa40398725a63fa",
+        "metadata": "https://gis.hawaiicounty.gov/public/downloads/plhyperlinks/MetadataFiles/Zoning.pdf",
+        "dataLastEdited": "2026-10-20",
+        "fetched": "2026-10-22",
+        "licence": "terms as the publisher states them: This zoning data is provided by the County of Hawaiʻi for informational, planning, and general reference purposes. While reasonable efforts are made to maintain accurate and current information, the County does not guarantee the accuracy, completeness, currency, positional accuracy, thematic accuracy, or suitability of the data for any particular purpose. The layer is intended to be used as a guide for planning purposes only. Zoning boundaries and other mapped features should not be used for boundary interpretation or spatial analysis beyond the limitations of the data.",
+        "credit": "County of Hawaiʻi Planning Department",
+        "note": "Hawaiʻi County Code Chapter 25 districts; the code is the district and its minimum lot or land area per unit (RS-10 is single-family on 10,000 square feet, A-20a agricultural on 20 acres); the zone definitions are in the layer description"
+      },
+      "kauai": {
+        "id": "kauai-county-zoning",
+        "title": "County of Kauaʻi Planning Department (Kauaʻi GIS), Zoning FeatureServer layer 0",
+        "publisher": "County of Kauaʻi",
+        "url": "https://services1.arcgis.com/0DaVqrPt2eyXUS9g/arcgis/rest/services/Zoning/FeatureServer/0",
+        "layer": "Zoning",
+        "fields": [
+          "ZONING (String)",
+          "OBJECTID (OID)",
+          "DESCRIPTION (String)"
+        ],
+        "classField": "ZONING",
+        "nameField": "DESCRIPTION",
+        "item": "https://www.arcgis.com/home/item.html?id=afc3493f5e004109b7c01d721fcb13d0",
+        "hub": "https://kauai-open-data-kauaigis.hub.arcgis.com/",
+        "dataLastEdited": "2026-06-10",
+        "fetched": "2026-10-22",
+        "licence": "terms as the publisher states them: LIMITATION OF USE Zoning data is provided only for general reference or use. The digital zoning map depicts the approximate location of land uses, facilities, and zoning district boundaries, based partially on parcels that are non-survey grade as illustration only. DISCLAIMER This electronic copy of Kaua‘i’s zoning map is believed to be up-to-date but the County does not warranty its accuracy. Final confirmation of zoning must be provided by the Planning Department. The County of Kaua‘i shall have no liability with regard to the digital zoning map.",
+        "credit": "Kauai GIS for Kauai Planning Dept",
+        "note": "Kauaʻi Comprehensive Zoning Ordinance districts on Kauaʻi (the layer has none on Niʻihau); a code such as R-6/ST-P is a district with an overlay after the slash, and the district before it decides the class"
+      },
+      "slud": {
+        "id": "hawaii-gis-state-land-use-districts",
+        "title": "State of Hawaiʻi GIS, State Land Use Districts (ParcelsZoning MapServer layer 20)",
+        "publisher": "State of Hawaiʻi",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/20",
+        "layer": "State Land Use Districts",
+        "fields": [
+          "objectid (OID)",
+          "ludcode (String)",
+          "island (String)"
+        ],
+        "classField": "ludcode",
+        "item": "https://www.arcgis.com/home/item.html?id=7b6e118ffe5d4370923dde14ed1ea6e3",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/slud.pdf",
+        "fetched": "2026-10-22",
+        "licence": "terms as the publisher states them: State of Hawaii Terms of Use. The contents of this web page are public domain and to the extent indicated otherwise in the Terms of Use, are exempt from Terms of Use policy restrictions.There are no expressed warranties associated with the release of this data or product. Specifically, no warranty is made that the GIS data or any subsequent updates will be error free and no warranty is made regarding the positional or thematic accuracy of the GIS data. The GIS data and any features depicted do not represent or confer any legal rights, privileges, benefits, boundaries or claims of any kind.",
+        "credit": "Hawaii State Land Use Commission; Hawaii Statewide GIS Program",
+        "note": "the Land Use Commission’s district boundaries for the eight main islands as of December 2020, under HRS Chapter 205 (in force since 1961); amendments under 15 acres after 2016 are not in the layer, and it is not the official boundary"
+      }
+    },
+    "mapping": {
+      "honolulu": {
+        "layer": "honolulu-zoning",
+        "classField": "zone_class",
+        "classes": {
+          "1": [
+            "R-5 (R-5 Residential District): 108.16 km²",
+            "R-7.5 (R-7.5 Residential District): 25.72 km²",
+            "R-10 (R-10 Residential District): 20.31 km²",
+            "C (Country District): 13.23 km²",
+            "R-3.5 (R-3.5 Residential District): 7.04 km²",
+            "R-20 (R-20 Residential District): 2.12 km²"
+          ],
+          "2": [
+            "A-1 (A-1 Low-density Apartment District): 13.28 km²",
+            "A-2 (A-2 Medium-density Apartment District), height limit under 100 ft, or none mapped: 7.8 km²",
+            "AMX-2 (AMX-2 Medium-density Apartment Mixed Use District), height limit under 100 ft, or none mapped: 2.16 km²",
+            "AMX-1 (AMX-1 Low-density Apartment Mixed Use District): 0.17 km²"
+          ],
+          "3": [
+            "A-2 (A-2 Medium-density Apartment District), height limit 100 ft or more: 4.1 km²",
+            "A-3 (A-3 High-density Apartment District): 0.5 km²",
+            "Apart (Apartment Precinct (Waikiki Special District)): 0.47 km²",
+            "ApartMix (Apartment Mixed Use Subprecinct (Waikiki Special District)): 0.15 km²",
+            "AMX-3 (AMX-3 High-density Apartment Mixed Use District): 0.1 km²",
+            "AMX-2 (AMX-2 Medium-density Apartment Mixed Use District), height limit 100 ft or more: 0.09 km²"
+          ],
+          "4": [
+            "BMX-3 (BMX-3 Community Business Mixed Use District): 8.65 km²",
+            "B-2 (B-2 Community Business District): 6.72 km²",
+            "B-1 (B-1 Neighborhood Business District): 1.62 km²"
+          ],
+          "5": [
+            "Kak (State Jurisdiction: Kakaako Community Development District (Admin. by HCDA)): 2.4 km²",
+            "BMX-4 (BMX-4 Central Business Mixed Use District): 0.67 km²",
+            "Aloha (State Jurisdiction: Aloha Tower Project (Admin. by Aloha Tower Development Corp.)): 0.1 km²"
+          ],
+          "6": [
+            "I-2 (I-2 Intensive Industrial District): 24.63 km²",
+            "IMX-1 (IMX-1 Industrial Mixed Use District): 4.54 km²",
+            "I-3 (I-3 Waterfront Industrial District): 3.56 km²",
+            "I-1 (I-1 Limited Industrial District): 0.95 km²",
+            "WI (Waterfront Industrial Precinct (Kakaako Special Design District)): 0.22 km²"
+          ],
+          "7": [
+            "Resort (Resort District): 2.09 km²",
+            "ResMix (Resort Mixed Use Precinct (Waikiki Special District)): 0.84 km²"
+          ],
+          "8": [
+            "AG-1 (AG-1 Restricted Agriculture District): 258.08 km²",
+            "AG-2 (AG-2 General Agriculture District): 169.81 km²"
+          ],
+          "9": [
+            "P-1 (P-1 Restricted Preservation District): 638.77 km²"
+          ],
+          "10": [
+            "F-1 (F-1 Federal and Military Preservation District): 156.38 km²"
+          ],
+          "11": [
+            "PU (Public Use Precinct (Kakaako Special Design District)): 0.03 km²"
+          ],
+          "12": [
+            "P-2 (P-2 General Preservation District): 69.73 km²",
+            "Pub (Public Precinct (Waikiki Special District)): 0.8 km²"
+          ]
+        },
+        "rules": [
+          {
+            "codes": "C",
+            "class": 1,
+            "why": "Country: large lots, houses among small farms"
+          },
+          {
+            "codes": "A-2|AMX-2",
+            "class": "2 or 3",
+            "why": "high-rise where the zoning map’s height limit (its base figure, not a bonus height) is 100 ft or more, otherwise low-rise"
+          },
+          {
+            "codes": "Apart|ApartMix",
+            "class": 3,
+            "why": "Waikīkī’s apartment precincts, the towers behind the hotels"
+          },
+          {
+            "codes": "BMX-4",
+            "class": 5,
+            "why": "the central business district"
+          },
+          {
+            "codes": "Kak|Aloha|MU",
+            "class": 5,
+            "why": "the State-administered Kakaʻako and Aloha Tower districts and Kakaʻako’s mixed-use precinct: towers over shops"
+          },
+          {
+            "codes": "I-1|I-2|I-3|IMX-1|WI",
+            "class": 6,
+            "why": "the airport is zoned I-2 and counts with it"
+          },
+          {
+            "codes": "P-1",
+            "class": 9,
+            "why": "Restricted Preservation: the State Conservation district"
+          },
+          {
+            "codes": "P-2|Pub",
+            "class": 12,
+            "why": "General Preservation (parks, beaches, golf courses, cemeteries) and Waikīkī’s Public Precinct (Kapiʻolani Park, the zoo, Fort DeRussy’s lawns)"
+          }
+        ],
+        "note": "per class number, every class of the county layer that fed it, as \"code (name), when a rule chose: km² of pack land it covered\" (sampled; under 0.005 km² left out); 0 lists what counts as no class"
+      },
+      "maui": {
+        "layer": "maui-county-zoning",
+        "classField": "ZONE_CLASS",
+        "classes": {
+          "0": [
+            "998 (Not Zoned): 34.25 km²",
+            "999 (Road): 29.11 km²",
+            "099 (INT Interim), outside every State district: 1.34 km²",
+            "996 (PR Proposed Road): 0.37 km²",
+            "825 (Drainage): 0.03 km²"
+          ],
+          "1": [
+            "099 (INT Interim), in the State urban or rural district: 21.86 km²",
+            "030 (R-3 Residential): 14.28 km²",
+            "605 (RU-0.5 Rural - 1/2 Acre): 10.02 km²",
+            "020 (R-2 Residential): 9.74 km²",
+            "720 (PD Project District), houses: 8.32 km²",
+            "010 (R-1 Residential): 4.32 km²",
+            "600 (R Rural): 2.56 km²",
+            "365 (WCT Waikapu Country Town District): 2.04 km²",
+            "610 (RU-1 Rural 1 Acre): 0.73 km²",
+            "102 (D-2 Duplex): 0.17 km²",
+            "000 (R-0 Residential): 0.06 km²",
+            "101 (D-1 Duplex): 0.06 km²",
+            "040 (Residential - WRA): 0.03 km²"
+          ],
+          "2": [
+            "120 (A-2 Apartment): 3.48 km²",
+            "110 (A-1 Apartment): 2.65 km²",
+            "100 (Multi Family - WRA): 0.04 km²"
+          ],
+          "4": [
+            "705 (MRTP Maui Research & Technology Park): 1.52 km²",
+            "320 (B-2 Business - Community): 1.5 km²",
+            "360 (B-CT Business - Country Town): 0.52 km²",
+            "330 (B-3 Business - Central District): 0.17 km²",
+            "310 (B-1 Business - Neighborhood): 0.08 km²",
+            "700 (KRTP Kihei Research & Technology Park): 0.08 km²",
+            "390 (SBR Service Business Residential): 0.01 km²"
+          ],
+          "5": [
+            "771 (HD-1 Historic District 1): 0.19 km²",
+            "370 (Commercial Mixed Use - WRA): 0.16 km²",
+            "772 (HD-2 Historic District 2): 0.07 km²",
+            "380 (Business Multi Family - WRA): 0.05 km²",
+            "773 (HD-3 Historic District 3): 0.05 km²"
+          ],
+          "6": [
+            "430 (AP Airport): 7.54 km²",
+            "410 (M-1 Light Industrial): 4.14 km²",
+            "420 (M-2 Heavy Industrial): 3.2 km²",
+            "425 (M-3 Heavy Industrial): 0.35 km²"
+          ],
+          "7": [
+            "720 (PD Project District), resort: 14.87 km²",
+            "215 (H-M Hotel): 2.15 km²",
+            "210 (H-1 Hotel): 0.9 km²",
+            "220 (H-2 Hotel): 0.89 km²",
+            "340 (BR Business - Resort): 0.41 km²",
+            "200 (H Hotel): 0.32 km²",
+            "730 (CID Napili Bay Civic Improvement District): 0.2 km²"
+          ],
+          "8": [
+            "500 (AG Agriculture): 1522.34 km²",
+            "099 (INT Interim), in the State agricultural district: 90.79 km²",
+            "799 (UR Urban Reserve): 0.63 km²"
+          ],
+          "9": [
+            "099 (INT Interim), in the State conservation district: 1098.42 km²"
+          ],
+          "11": [
+            "900 (P-1 Public/Quasi-Public): 3.03 km²",
+            "909 (P Public Use): 0.19 km²",
+            "902 (P-2 Public/Quasi-Public): 0.11 km²",
+            "905 (Public/Quasi-Public - WRA): 0.01 km²"
+          ],
+          "12": [
+            "925 (PK(GC) Park - Golf Course): 7.78 km²",
+            "829 (OZ Open Zone): 6.16 km²",
+            "929 (PK Park): 5.27 km²",
+            "822 (OS-2 Open Space Active): 1.41 km²",
+            "821 (OS-1 Open Space Passive): 1.1 km²",
+            "820 (OS Open Space): 0.14 km²",
+            "919 (BRW Beach Right-of-Way): 0.01 km²"
+          ]
+        },
+        "rules": [
+          {
+            "codes": "600|605|610",
+            "class": 1,
+            "why": "Rural: houses on half-acre and larger lots"
+          },
+          {
+            "codes": "365",
+            "class": 1,
+            "why": "Waikapū Country Town, a planned village of houses"
+          },
+          {
+            "codes": "100|110|120",
+            "class": 2,
+            "why": "Maui County’s apartment districts are walk-ups and low blocks; its towers are hotels"
+          },
+          {
+            "codes": "310|320|330|360|390|700|705",
+            "class": 4,
+            "why": "neighbourhood, community, central and country-town business, and the research and technology parks"
+          },
+          {
+            "codes": "370|380",
+            "class": 5,
+            "why": "Wailuku Redevelopment Area’s mixed-use core"
+          },
+          {
+            "codes": "771|772|773",
+            "class": 5,
+            "why": "the historic districts of Lahaina town: shops, restaurants and the old hotel along Front Street"
+          },
+          {
+            "codes": "430",
+            "class": 6,
+            "why": "airports: hangars, terminals and sheds"
+          },
+          {
+            "codes": "200|210|215|220|340|730",
+            "class": 7,
+            "why": "hotel districts, Business–Resort, and the Nāpili Bay Civic Improvement District"
+          },
+          {
+            "codes": "720",
+            "class": "7 or 1",
+            "why": "resort in the West Maui and Lānaʻi community plans (Kapalua, Kāʻanapali North Beach, Mānele, Kōʻele) and in Kīhei–Mākena south of 20.70° N (Mākena); houses elsewhere (Maui Lani, Kehalani and the other master-planned neighbourhoods of Wailuku–Kahului and Kīhei)"
+          },
+          {
+            "codes": "799",
+            "class": 8,
+            "why": "Urban Reserve, farmed until it is built on"
+          },
+          {
+            "codes": "099",
+            "class": "1, 8, 9",
+            "why": "by the State Land Use District beneath it: urban or rural ground as houses (the district allows single-family dwellings), agricultural as agricultural, conservation as conservation; none where no State district is mapped"
+          },
+          {
+            "codes": "825|996|997|998|999",
+            "class": 0,
+            "why": "drainage, roads and land the county has not zoned (Kalaupapa, which is Kalawao County)"
+          }
+        ],
+        "note": "per class number, every class of the county layer that fed it, as \"code (name), when a rule chose: km² of pack land it covered\" (sampled; under 0.005 km² left out); 0 lists what counts as no class"
+      },
+      "hawaii": {
+        "layer": "hawaii-county-zoning",
+        "classField": "ZONE",
+        "classes": {
+          "0": [
+            "(road) (Non-zoned area): 82.86 km²",
+            "(pond) (Non-zoned area): 0.07 km²",
+            "(river) (Non-zoned area): 0.05 km²",
+            "(flood) (Non-zoned area): 0.01 km²"
+          ],
+          "1": [
+            "RS-10 (Single-Family Residential District): 34.01 km²",
+            "RS-15 (Single-Family Residential District): 22.02 km²",
+            "PD (Project District): 11.32 km²",
+            "RS-20 (Single-Family Residential District): 9.23 km²",
+            "RS-7.5 (Single-Family Residential District): 7.71 km²",
+            "RA-1a (Residential and Agricultural District): 7.34 km²",
+            "RA-.5a (Residential and Agricultural District): 4.89 km²",
+            "RA-2a (Residential and Agricultural District): 1.25 km²",
+            "RS-22 (Single-Family Residential District): 0.63 km²",
+            "RD-3.75 (Double-Family Residential District): 0.45 km²",
+            "RA-5a (Residential and Agricultural District): 0.17 km²",
+            "RS-5a (Single-Family Residential District): 0.13 km²",
+            "RS-10a (Single-Family Residential District): 0.06 km²",
+            "RA-3a (Residential and Agricultural District): 0.04 km²",
+            "RA-2.5a (Residential and Agricultural District): 0.02 km²",
+            "RA-1.5a (Residential and Agricultural District): 0.01 km²",
+            "RD-5 (Double-Family Residential District): 0.01 km²"
+          ],
+          "2": [
+            "RM-4 (Multiple-Family Residential District): 3.16 km²",
+            "RM-3 (Multiple-Family Residential District): 2.09 km²",
+            "RM-1.5 (Multiple-Family Residential District): 1.14 km²",
+            "RM-6 (Multiple-Family Residential District): 0.84 km²",
+            "RM-2 (Multiple-Family Residential District): 0.83 km²",
+            "RM-5 (Multiple-Family Residential District): 0.76 km²",
+            "RM-14.5 (Multiple-Family Residential District): 0.75 km²",
+            "RM-1 (Multiple-Family Residential District): 0.67 km²",
+            "RM-3.5 (Multiple-Family Residential District): 0.58 km²",
+            "RM-7 (Multiple-Family Residential District): 0.42 km²",
+            "RM-2.5 (Multiple-Family Residential District): 0.32 km²",
+            "RM-20 (Multiple-Family Residential District): 0.31 km²",
+            "RM-5.5 (Multiple-Family Residential District): 0.25 km²",
+            "RM-8 (Multiple-Family Residential District): 0.22 km²",
+            "RM-30 (Multiple-Family Residential District): 0.21 km²",
+            "RM-1.25 (Multiple-Family Residential District): 0.16 km²",
+            "RM-10 (Multiple-Family Residential District): 0.15 km²",
+            "RM-15 (Multiple-Family Residential District): 0.1 km²",
+            "RM-.75 (Multiple-Family Residential District): 0.07 km²"
+          ],
+          "4": [
+            "CV-10 (Village Commercial District): 3.34 km²",
+            "CV-7.5 (Village Commercial District): 1.5 km²",
+            "CG-10 (General Commercial District): 1.09 km²",
+            "CG-20 (General Commercial District): 0.75 km²",
+            "CG-7.5 (General Commercial District): 0.63 km²",
+            "CN-10 (Neighborhood Commercial District): 0.44 km²",
+            "CN-20 (Neighborhood Commercial District): 0.32 km²",
+            "CN-7.5 (Neighborhood Commercial District): 0.2 km²",
+            "CV-20 (Village Commercial District): 0.15 km²",
+            "CV-38 (Village Commercial District): 0.15 km²",
+            "CN-40 (Neighborhood Commercial District): 0.06 km²",
+            "CV-40 (Village Commercial District): 0.02 km²"
+          ],
+          "5": [
+            "CDH (Downtown Hilo Commercial District): 0.31 km²",
+            "RCX-2 (Residential-Commercial Mixed Use District): 0.09 km²",
+            "RCX-20 (Residential-Commercial Mixed Use District): 0.01 km²"
+          ],
+          "6": [
+            "MG-1a (General Industrial District): 10.88 km²",
+            "ML-20 (Limited Industrial District): 6.72 km²",
+            "MG-20 (General Industrial District): 1.9 km²",
+            "MG-3a (General Industrial District): 1.73 km²",
+            "MCX-20 (Industrial-Commercial Mixed District): 1.7 km²",
+            "ML-1a (Limited Industrial District): 0.89 km²",
+            "MCX-1a (Industrial-Commercial Mixed District): 0.43 km²",
+            "MG-10a (General Industrial District): 0.26 km²",
+            "MG-5a (General Industrial District): 0.22 km²",
+            "ML-3a (Limited Industrial District): 0.16 km²",
+            "ML-10 (Limited Industrial District): 0.1 km²",
+            "MG-15a (General Industrial District): 0.06 km²",
+            "MCX-3a (Industrial-Commercial Mixed District): 0.01 km²"
+          ],
+          "7": [
+            "V-1.25 (Resort-Hotel District): 2.34 km²",
+            "V-.75 (Resort-Hotel District): 1.12 km²",
+            "V-2.25 (Resort-Hotel District): 0.29 km²",
+            "V-7 (Resort-Hotel District): 0.19 km²",
+            "V-1.5 (Resort-Hotel District): 0.17 km²",
+            "V-2.0 (Resort-Hotel District): 0.13 km²",
+            "V-1.0 (Resort-Hotel District): 0.09 km²",
+            "V-4 (Resort-Hotel District): 0.05 km²",
+            "V-2a (Resort-Hotel District): 0.04 km²",
+            "V-1.75 (Resort-Hotel District): 0.03 km²",
+            "V-1 (Resort-Hotel District): 0.01 km²"
+          ],
+          "8": [
+            "A-20a (Agricultural District): 2901 km²",
+            "A-40a (Agricultural District): 1183.69 km²",
+            "A-5a (Agricultural District): 877.33 km²",
+            "A-3a (Agricultural District): 247.68 km²",
+            "A-1a (Agricultural District): 221.79 km²",
+            "A-10a (Agricultural District): 75.26 km²",
+            "A-600a (Agricultural District): 4.99 km²",
+            "A-200a (Agricultural District): 4.9 km²",
+            "A-900a (Agricultural District): 4.04 km²",
+            "A-80a (Agricultural District): 3.91 km²",
+            "FA-1a (Family Agricultural District): 2.67 km²",
+            "A-500a (Agricultural District): 2.23 km²",
+            "A-400a (Agricultural District): 1.69 km²",
+            "A-100a (Agricultural District): 1.62 km²",
+            "A-2a (Agricultural District): 1.3 km²",
+            "FA-3a (Family Agricultural District): 1.27 km²",
+            "FA-2a (Family Agricultural District): 0.58 km²",
+            "FA-5a (Family Agricultural District): 0.36 km²",
+            "A-35a (Agricultural District): 0.31 km²",
+            "A-7a (Agricultural District): 0.17 km²",
+            "A-6a (Agricultural District): 0.16 km²",
+            "APD (Agricultural Project District): 0.09 km²",
+            "A-8a (Agricultural District): 0.07 km²"
+          ],
+          "9": [
+            "FR (Forest Reserve): 2948.77 km²",
+            "NP (National Park): 812.02 km²"
+          ],
+          "11": [
+            "UNV (University): 1.25 km²"
+          ],
+          "12": [
+            "OPEN (Open District): 814.55 km²"
+          ]
+        },
+        "rules": [
+          {
+            "codes": "PD",
+            "class": 1,
+            "district": "Project District",
+            "why": "master-planned communities in Kona, Hilo and Kohala, mostly houses"
+          },
+          {
+            "codes": "FR",
+            "class": 9,
+            "district": "Forest Reserve",
+            "why": "the layer’s non-zoned forest reserve and conservation land"
+          },
+          {
+            "codes": "NP",
+            "class": 9,
+            "district": "National Park",
+            "why": "preserved land: federal, but no buildings to speak of"
+          },
+          {
+            "codes": "(road)|(river)|(pond)|(flood)|(pier)|(breakwater)",
+            "class": 0,
+            "district": "Non-zoned area",
+            "why": "roads and trails, streams, ponds, floodways, piers and breakwaters"
+          }
+        ],
+        "note": "per class number, every class of the county layer that fed it, as \"code (name), when a rule chose: km² of pack land it covered\" (sampled; under 0.005 km² left out); 0 lists what counts as no class"
+      },
+      "kauai": {
+        "layer": "kauai-county-zoning",
+        "classField": "ZONING",
+        "classes": {
+          "0": [
+            "SEE PLANNING DEPT (See Planning Department): 5.76 km²"
+          ],
+          "1": [
+            "R-4 (Residential (4 units/acre)): 9.54 km²",
+            "R-6 (Residential (6 units/acre)): 6.57 km²",
+            "R-2 (Residential (2 units/acre)): 4.39 km²",
+            "R-1/ST-P (Rural (1 unit/acre)/Special Treatment - Public): 1.41 km²",
+            "PC (Plantation Camp): 0.71 km²",
+            "R-1 (Rural (1 unit/acre)): 0.52 km²",
+            "R-4/ST-P (Residential (4 units/acre)/Special Treatment - Public): 0.32 km²",
+            "R-6/P-D (Residential (6 units/acre)/Project District): 0.13 km²",
+            "R-2/P-D (Residential (2 units/acre)/Project District): 0.08 km²",
+            "R-6/ST-P (Residential (6 units/acre)/Special Treatment - Public): 0.07 km²",
+            "P-D (Project District): 0.05 km²",
+            "PD-C (Plan Development Community): 0.05 km²",
+            "P-D/ST-CE (Project District/Special Treatment - Coastal Edge): 0.03 km²",
+            "P-D/ST-C (Project District/Special Treatment - Cultural): 0.01 km²",
+            "R-4/ST-CE (Residential (4 units/acre)/Special Treatment - Coastal Edge): 0.01 km²"
+          ],
+          "2": [
+            "R-20 (Residential (20 units/acre)): 1.58 km²",
+            "R-10 (Residential (10 units/acre)): 1.25 km²",
+            "R-8 (Residential (8 units/acre)): 0.68 km²",
+            "R-15 (Residential (15 units/acre)): 0.23 km²",
+            "R-10/ST-P (Residential (10 units/acre)/Special Treatment - Public): 0.03 km²",
+            "R-10/P-D (Residential (10 units/acre)/Project District): 0.01 km²"
+          ],
+          "4": [
+            "C-G (Commercial General): 2.24 km²",
+            "C-N (Commercial Neighborhood): 0.24 km²",
+            "C-G/ST-P (Commercial General/Special Treatment - Public): 0.12 km²",
+            "C-N/P-D (Commercial Neighborhood/Project District): 0.06 km²",
+            "C-N/ST-P (Commercial Neighborhood/Special Treatment - Public): 0.04 km²",
+            "C-G/P-D (Commercial General/Project District): 0.01 km²"
+          ],
+          "5": [
+            "SPA-A (Special Planning Area - A): 0.11 km²"
+          ],
+          "6": [
+            "I-G/ST-P (Industrial General/Special Treatment - Public): 3.05 km²",
+            "I-G (Industrial General): 1.55 km²",
+            "I-L (Industrial Limited): 0.78 km²"
+          ],
+          "7": [
+            "RR-20 (Resort (20 units/acre)): 1.21 km²",
+            "RR-10 (Resort (10 units/acre)): 0.46 km²",
+            "RR-1 (Resort (1 unit/acre)): 0.43 km²",
+            "RR-4 (Resort (4 units/acre)): 0.17 km²",
+            "RR-1/ST-C (Resort (1 unit/acre)/Special Treatment - Cultural): 0.08 km²",
+            "RR (Resort): 0.01 km²"
+          ],
+          "8": [
+            "A (Agricultural): 374.99 km²",
+            "A/ST-CE (Agricultural/Special Treatment - Coastal Edge): 0.01 km²"
+          ],
+          "9": [
+            "CON (Conservation): 793.93 km²",
+            "ST-R (Special Treatment - Ecological): 0.48 km²"
+          ],
+          "11": [
+            "UNV (University District): 0.77 km²"
+          ],
+          "12": [
+            "O (Open Space): 218.51 km²",
+            "O/ST-R (Open Space//Special Treatment - Ecological): 2.75 km²",
+            "O/ST-P (Open Space//Special Treatment - Public): 1.15 km²",
+            "O/ST-C (Open Space/Special Treatment - Cultural): 0.44 km²",
+            "O/ST-CE (Open Space/Special Treatment - Coastal Edge): 0.38 km²",
+            "O/ST-R/ST-C (Open Space/Special Treatment - Ecological/Special Treatment - Cultural): 0.14 km²",
+            "O/ST-P/ST-C (Open Space//Special Treatment - Public/Special Treatment - Cultural): 0.08 km²",
+            "ST-C (Special Treatment - Cultural): 0.05 km²",
+            "O/P-D (Open Space/Project District): 0.01 km²"
+          ]
+        },
+        "rules": [
+          {
+            "codes": "R-(1|2|4|6)",
+            "class": 1,
+            "why": "up to six units an acre"
+          },
+          {
+            "codes": "PC|P-D|PD-C",
+            "class": 1,
+            "why": "Plantation Camp, Project District and Plan Development Community"
+          },
+          {
+            "codes": "R-(8|10|15|20)",
+            "class": 2,
+            "why": "eight to twenty units an acre, under the island’s four-storey limit"
+          },
+          {
+            "codes": "SPA-A",
+            "class": 5,
+            "why": "the Kapaʻa town core"
+          },
+          {
+            "codes": "I-G|I-L",
+            "class": 6,
+            "why": "the airport at Līhuʻe is I-G and counts with it"
+          },
+          {
+            "codes": "CON|ST-R",
+            "class": 9,
+            "why": "Conservation, and Special Treatment – Ecological standing alone"
+          },
+          {
+            "codes": "O|ST-C",
+            "class": 12,
+            "why": "Open Space, and Special Treatment – Cultural standing alone"
+          },
+          {
+            "codes": "SEE PLANNING DEPT",
+            "class": 0,
+            "why": "the layer names no district here (two areas around Kukuiʻula and Poʻipū)"
+          }
+        ],
+        "note": "per class number, every class of the county layer that fed it, as \"code (name), when a rule chose: km² of pack land it covered\" (sampled; under 0.005 km² left out); 0 lists what counts as no class"
+      },
+      "slud": {
+        "layer": "hawaii-gis-state-land-use-districts",
+        "classField": "ludcode",
+        "classes": {
+          "1": [
+            "U (Urban): 823.4 km²"
+          ],
+          "2": [
+            "R (Rural): 42.2 km²"
+          ],
+          "3": [
+            "A (Agricultural): 7593.8 km²"
+          ],
+          "4": [
+            "C (Conservation): 8170.2 km²"
+          ]
+        }
+      }
+    },
+    "islands": {
+      "hawaii": {
+        "pack": "hawaii",
+        "size": [
+          896,
+          1024
+        ],
+        "bounds": [
+          -156.0808839,
+          18.892604,
+          -154.7874248,
+          20.286571
+        ],
+        "lud": {
+          "file": "hawaii/lud.png",
+          "size": [
+            896,
+            1024
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 457432,
+            "classed": 1,
+            "none": 0,
+            "share": {
+              "1": 0.0219,
+              "2": 0.0003,
+              "3": 0.4584,
+              "4": 0.5193
+            }
+          }
+        },
+        "zoning": {
+          "file": "hawaii/now-zoning.png",
+          "size": [
+            896,
+            1024
+          ],
+          "source": "hawaii-county-zoning",
+          "mapping": "hawaii",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 457432,
+            "classed": 0.9999,
+            "none": 0.0001,
+            "share": {
+              "1": 0.0107,
+              "2": 0.0013,
+              "4": 0.0009,
+              "5": 0,
+              "6": 0.0026,
+              "7": 0.0005,
+              "8": 0.541,
+              "9": 0.3634,
+              "11": 0.0001,
+              "12": 0.0793
+            }
+          }
+        }
+      },
+      "maui": {
+        "pack": "maui",
+        "size": [
+          1024,
+          708
+        ],
+        "bounds": [
+          -156.7164101,
+          20.5562628,
+          -155.9598279,
+          21.049547
+        ],
+        "lud": {
+          "file": "maui/lud.png",
+          "size": [
+            1024,
+            708
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 325470,
+            "classed": 0.9991,
+            "none": 0.0009,
+            "share": {
+              "1": 0.049,
+              "2": 0.0091,
+              "3": 0.4915,
+              "4": 0.4494
+            }
+          }
+        },
+        "zoning": {
+          "file": "maui/now-zoning.png",
+          "size": [
+            1024,
+            708
+          ],
+          "source": "maui-county-zoning",
+          "mapping": "maui",
+          "fetched": "2026-10-22",
+          "alsoReads": [
+            "hawaii-gis-state-land-use-districts"
+          ],
+          "stats": {
+            "landTexels": 325470,
+            "classed": 0.9761,
+            "none": 0.0239,
+            "share": {
+              "1": 0.0313,
+              "2": 0.0031,
+              "4": 0.002,
+              "5": 0.0003,
+              "6": 0.0065,
+              "7": 0.007,
+              "8": 0.5224,
+              "9": 0.3917,
+              "11": 0.0016,
+              "12": 0.0102
+            }
+          }
+        }
+      },
+      "kahoolawe": {
+        "pack": "kahoolawe",
+        "size": [
+          1024,
+          730
+        ],
+        "bounds": [
+          -156.7198501,
+          20.4827242,
+          -156.5125214,
+          20.6221009
+        ],
+        "lud": {
+          "file": "kahoolawe/lud.png",
+          "size": [
+            1024,
+            730
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 262438,
+            "classed": 0.9883,
+            "none": 0.0117,
+            "share": {
+              "4": 0.9883
+            }
+          }
+        },
+        "zoning": null,
+        "zoningNote": "No county zoning: the County of Maui layer maps none on Kahoʻolawe, which the State holds as the Kahoʻolawe Island Reserve. The app falls back to density and value alone."
+      },
+      "lanai": {
+        "pack": "lanai",
+        "size": [
+          1024,
+          860
+        ],
+        "bounds": [
+          -157.0814354,
+          20.713664,
+          -156.7861411,
+          20.9475269
+        ],
+        "lud": {
+          "file": "lanai/lud.png",
+          "size": [
+            1024,
+            860
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 406455,
+            "classed": 0.9961,
+            "none": 0.0039,
+            "share": {
+              "1": 0.0339,
+              "2": 0.0232,
+              "3": 0.4916,
+              "4": 0.4474
+            }
+          }
+        },
+        "zoning": {
+          "file": "lanai/now-zoning.png",
+          "size": [
+            1024,
+            860
+          ],
+          "source": "maui-county-zoning",
+          "mapping": "maui",
+          "fetched": "2026-10-22",
+          "alsoReads": [
+            "hawaii-gis-state-land-use-districts"
+          ],
+          "stats": {
+            "landTexels": 406455,
+            "classed": 0.9937,
+            "none": 0.0063,
+            "share": {
+              "1": 0.0343,
+              "2": 0.0002,
+              "4": 0.0004,
+              "6": 0.0083,
+              "7": 0.017,
+              "8": 0.4874,
+              "9": 0.4451,
+              "11": 0.0005,
+              "12": 0.0007
+            }
+          }
+        }
+      },
+      "molokai": {
+        "pack": "molokai",
+        "size": [
+          1024,
+          365
+        ],
+        "bounds": [
+          -157.330056,
+          21.0276437,
+          -156.6906621,
+          21.24256
+        ],
+        "lud": {
+          "file": "molokai/lud.png",
+          "size": [
+            1024,
+            365
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 161107,
+            "classed": 0.995,
+            "none": 0.005,
+            "share": {
+              "1": 0.0139,
+              "2": 0.0108,
+              "3": 0.6584,
+              "4": 0.3118
+            }
+          }
+        },
+        "zoning": {
+          "file": "molokai/now-zoning.png",
+          "size": [
+            1024,
+            365
+          ],
+          "source": "maui-county-zoning",
+          "mapping": "maui",
+          "fetched": "2026-10-22",
+          "alsoReads": [
+            "hawaii-gis-state-land-use-districts"
+          ],
+          "stats": {
+            "landTexels": 161107,
+            "classed": 0.9403,
+            "none": 0.0597,
+            "share": {
+              "1": 0.0151,
+              "2": 0.0014,
+              "4": 0.0004,
+              "6": 0.0009,
+              "7": 0.0016,
+              "8": 0.6471,
+              "9": 0.2692,
+              "11": 0.0003,
+              "12": 0.0043
+            }
+          }
+        }
+      },
+      "oahu": {
+        "pack": "oahu",
+        "size": [
+          1024,
+          801
+        ],
+        "bounds": [
+          -158.3000505,
+          21.2364436,
+          -157.6294454,
+          21.7311041
+        ],
+        "lud": {
+          "file": "oahu/lud.png",
+          "size": [
+            1024,
+            801
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 335807,
+            "classed": 0.9984,
+            "none": 0.0016,
+            "share": {
+              "1": 0.2726,
+              "3": 0.3138,
+              "4": 0.4119
+            }
+          }
+        },
+        "zoning": {
+          "file": "oahu/now-zoning.png",
+          "size": [
+            1024,
+            801
+          ],
+          "source": "honolulu-zoning",
+          "mapping": "honolulu",
+          "fetched": "2026-10-22",
+          "alsoReads": [
+            "honolulu-zoning-height"
+          ],
+          "stats": {
+            "landTexels": 335807,
+            "classed": 0.9969,
+            "none": 0.0031,
+            "share": {
+              "1": 0.1145,
+              "2": 0.015,
+              "3": 0.0034,
+              "4": 0.0108,
+              "5": 0.002,
+              "6": 0.022,
+              "7": 0.0019,
+              "8": 0.2736,
+              "9": 0.4084,
+              "10": 0.1003,
+              "11": 0,
+              "12": 0.0449
+            }
+          }
+        }
+      },
+      "kauai": {
+        "pack": "kauai",
+        "size": [
+          1024,
+          815
+        ],
+        "bounds": [
+          -159.8072936,
+          21.850076,
+          -159.2732356,
+          22.2509001
+        ],
+        "lud": {
+          "file": "kauai/lud.png",
+          "size": [
+            1024,
+            815
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 491979,
+            "classed": 0.9981,
+            "none": 0.0019,
+            "share": {
+              "1": 0.0428,
+              "2": 0.0039,
+              "3": 0.4045,
+              "4": 0.547
+            }
+          }
+        },
+        "zoning": {
+          "file": "kauai/now-zoning.png",
+          "size": [
+            1024,
+            815
+          ],
+          "source": "kauai-county-zoning",
+          "mapping": "kauai",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 491979,
+            "classed": 0.9937,
+            "none": 0.0063,
+            "share": {
+              "1": 0.0189,
+              "2": 0.0028,
+              "4": 0.0021,
+              "5": 0.0001,
+              "6": 0.0038,
+              "7": 0.0017,
+              "8": 0.2605,
+              "9": 0.5475,
+              "11": 0.0005,
+              "12": 0.1555
+            }
+          }
+        }
+      },
+      "niihau": {
+        "pack": "niihau",
+        "size": [
+          797,
+          1024
+        ],
+        "bounds": [
+          -160.2663097,
+          21.7608545,
+          -160.0301183,
+          22.0470175
+        ],
+        "lud": {
+          "file": "niihau/lud.png",
+          "size": [
+            797,
+            1024
+          ],
+          "source": "hawaii-gis-state-land-use-districts",
+          "fetched": "2026-10-22",
+          "stats": {
+            "landTexels": 200044,
+            "classed": 0.9901,
+            "none": 0.0099,
+            "share": {
+              "3": 0.984,
+              "4": 0.006
+            }
+          }
+        },
+        "zoning": null,
+        "zoningNote": "No county zoning: the County of Kauaʻi layer maps none on Niʻihau. The app falls back to density and value alone."
+      }
+    },
+    "stats": {
+      "files": 14,
+      "bytes": 202079
+    },
+    "baked": {
+      "tool": "tools/bake-zoning.mjs",
+      "packManifest": "manifest.json",
+      "samplesPerTexelSide": {
+        "hawaii": 8,
+        "maui": 8,
+        "kahoolawe": 3,
+        "lanai": 4,
+        "molokai": 8,
+        "oahu": 8,
+        "kauai": 7,
+        "niihau": 4
+      },
+      "minClassed": 0.25
+    }
   }
 }

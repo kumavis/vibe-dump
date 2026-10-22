@@ -1,6 +1,7 @@
 // Routes over the sea: the voyaging canoes, the war fleets, Cook's ships and
 // the trade lanes of public/data/routes.json (DATA.md "Routes"), drawn on the
-// far view while the chosen year falls within their dates.
+// far view for the part of the story in front of the viewer (or, with the
+// toggle on, every route whose dates fall around the chosen year).
 //
 // How the app uses it (src/app.js; this module reads nothing else of the app):
 //
@@ -13,19 +14,28 @@
 //   loadRoutes(this.data, this.warn).then((r) => this.routes.setRoutes(r))
 //
 //   // in update(dt), after this.lines.update(...):
-//   this.routes.visible = this.overlay.routes !== false
-//   this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel, fill, focus })
+//   this.routes.update(this.timeline.year, d, { window: this.timeline.window, light: lightLevel, fill, section, all })
 //
 //   // in settle(), so a screenshot doesn't catch a route halfway faded in:
-//   this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window, fill, focus })
+//   this.routes?.settle(this.timeline.year, g.distance, { window: this.timeline.window, fill, section, all })
 //
 //   // and on teardown: this.routes.dispose()
 //
-// `window` is the stretch of years whose events show (time.js); without it the
-// module works out the same half-an-era-either-side window from the eras.
+// `window` is the stretch of years whose events show (time.js), which the
+// toggle's routes keep to; without it the module works out the same
+// half-an-era-either-side window from the eras.
 // `fill` is how much of the screen the island under the camera's target fills
-// (0 over open sea, about 1 edge to edge; app.islandFill()), and `focus` the id
-// of the event the tour stands on, whose own routes are its story and stay.
+// (0 over open sea, about 1 edge to edge; app.islandFill()).
+//
+// `section` is the part of the story the routes belong to (app.routeSection()):
+// `{ routes, events, k, focus }`, the routes named outright (an event's own
+// `routes` list) and the events whose routes are theirs (a route's `event`),
+// drawn at `k` of their strength (a chapter's card draws its events' routes
+// faintly), and with `focus` the routes are the story of the event the
+// viewer stands on, and stay when an island fills the screen. A section's
+// routes draw whatever the year; with no section no route draws. `all` (the
+// routes toggle, turned on) draws every route of the year besides, as the
+// layer did before it followed the story.
 //
 // The lines are drawn as lines.js draws the boundaries: instanced quads
 // widened in screen space and draped on whatever ground is showing, so a
@@ -39,7 +49,7 @@
 // it fades in as the chain comes into frame and is gone by the time one
 // island fills the screen (by that island's size, not a fixed distance, since
 // Hawaiʻi fills the screen from four times as far out as Lānaʻi), all but
-// the routes of the event the tour stands on.
+// the routes of the event the viewer stands on.
 
 import * as THREE from 'three'
 import { constants, world, ground } from './shaders/common.glsl.js'
@@ -280,7 +290,8 @@ class RouteLine {
     this.mesh = new THREE.Mesh(g, this.material)
     this.mesh.renderOrder = 4
     this.mesh.visible = false
-    this.k = 0 // its fade in time, eased
+    this.k = 0 // its fade in time and in the story, eased
+    this.w = 1 // its strength in the story (a chapter's card draws faintly), eased
     // so that routes showing together don't pulse in step
     this.phase = (hash(route.id || '') % 1000) / 1000
   }
@@ -316,7 +327,6 @@ export class Routes {
     this.group = new THREE.Group()
     this.group.name = 'routes'
     this.lines = []
-    this.visible = true
     this._res = new THREE.Vector2()
     this._last = null
     this.setRoutes(routes)
@@ -370,36 +380,44 @@ export class Routes {
   /**
    * Once a frame. `year` is the timeline's year, `cameraDistance` the rig's
    * distance from its target; `window` (time.js), `light` (0..1, the level
-   * the boundary lines are lit by), `fill` and `focus` (see the top) are optional.
+   * the boundary lines are lit by), `fill`, `section` and `all` (see the top)
+   * are optional.
    */
-  update(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
+  update(year, cameraDistance, { window, light = 1, fill = 0, section = null, all = false } = {}) {
     const now = performance.now() / 1000
     const dt = this._last === null ? 1 : Math.max(0, Math.min(0.1, now - this._last))
     this._last = now
-    this.apply(year, cameraDistance, { win: window, light, fill, focus }, now, 1 - Math.exp(-dt * 4))
+    this.apply(year, cameraDistance, { win: window, light, fill, section, all }, now, 1 - Math.exp(-dt * 4))
   }
 
-  /** Every route straight to the fade the view and the year ask for (tools, screenshots). */
-  settle(year, cameraDistance, { window, light = 1, fill = 0, focus = null } = {}) {
-    this.apply(year, cameraDistance, { win: window, light, fill, focus }, performance.now() / 1000, 1)
+  /** Every route straight to the fade the view, the year and the section ask for (tools, screenshots). */
+  settle(year, cameraDistance, { window, light = 1, fill = 0, section = null, all = false } = {}) {
+    this.apply(year, cameraDistance, { win: window, light, fill, section, all }, performance.now() / 1000, 1)
   }
 
-  apply(year, d, { win, light, fill, focus }, now, ease) {
+  apply(year, d, { win, light, fill, section, all }, now, ease) {
     const [wa, wb] = win || this.windowAt(year)
     this.renderer.getDrawingBufferSize(this._res)
     const dpr = this.renderer.getPixelRatio()
-    const zoom = this.visible ? smooth(ZOOM_IN[0], ZOOM_IN[1], d) : 0
+    const zoom = smooth(ZOOM_IN[0], ZOOM_IN[1], d)
     const away = 1 - smooth(FILL_OUT[0], FILL_OUT[1], fill)
     const wide = 1 - smooth(800, 4000, d) // a little wider over an island group than over the whole chain
     for (const l of this.lines) {
       const [a, b] = l.span
-      const on = b >= wa && a <= wb ? 1 : 0
+      // the section's own (an event's, or a chapter's events'), whatever the
+      // year, as the open event's pin stands whatever it is (ui/pins.js); and
+      // with the toggle on, every route whose dates meet the window
+      const own = !!section && (section.routes?.has(l.route.id) || section.events?.has(l.route.event))
+      const on = own || (all && b >= wa && a <= wb) ? 1 : 0
       l.k += (on - l.k) * ease
       if (Math.abs(on - l.k) < 0.003) l.k = on
+      const w = own && !all ? (section.k ?? 1) : 1
+      l.w += (w - l.w) * ease
+      if (Math.abs(w - l.w) < 0.003) l.w = w
       // a route whose own dates hold the year stands out from its neighbours in the window
       const inYear = year >= a && year <= b ? 1 : 0.55
-      const mine = focus !== null && l.route.event === focus
-      const alpha = l.style.opacity * l.k * zoom * (mine ? 1 : away) * inYear
+      const mine = own && !!section.focus
+      const alpha = l.style.opacity * l.k * l.w * zoom * (mine ? 1 : away) * inYear
       l.mesh.visible = alpha > 0.01
       if (!l.mesh.visible) continue
       const u = l.uniforms
@@ -409,6 +427,8 @@ export class Routes {
       u.uHead.value = (8 + 3 * wide) * dpr
       u.uOpacity.value = alpha
       u.uColor.value.setRGB(l.colour[0] * light, l.colour[1] * light, l.colour[2] * light)
+      // (a faint route's brightening is as quiet as the rest of it)
+      u.uPulseK.value = l.style.pulse * l.w
       // dashes and the brightening keep a constant size on screen
       u.uDashLen.value = d * 0.016
       u.uPulseLen.value = Math.min(l.total * 0.12, d * 0.035)

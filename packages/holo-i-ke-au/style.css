@@ -418,8 +418,15 @@ button { font: inherit; color: inherit; }
   .card-body p { font-size: 13.5px; }
   .timeline { bottom: 10px; padding: 8px 16px 4px 10px; }
   .tl-era { font-size: 16px; }
-  .legend { left: 10px; bottom: auto; top: 64px; max-width: 200px; padding: 8px 10px 6px; }
+  /* the legend in a corner the whole chain leaves empty (it runs from the
+     top left to the bottom right): the bottom left, above the timeline; and
+     while a card takes the lower half of the screen, the switch alone at
+     the top right, under the tools */
+  .legend { left: 10px; bottom: 144px; max-width: 180px; padding: 8px 10px 6px; }
   .lg b { font-size: 12.5px; }
+  #ui.carded .legend { left: auto; right: 10px; bottom: auto; top: 54px; padding: 4px 6px; }
+  #ui.carded .legend .lg-switch { margin: 0; }
+  #ui.carded .legend .lg-body { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card, .legend, .pin, .help, .halo, .cluster, .cl-tip { transition: none; }

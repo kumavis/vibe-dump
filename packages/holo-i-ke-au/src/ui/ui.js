@@ -32,10 +32,14 @@ export class UI {
     this.bind()
     app.updaters.push((dt) => this.update(dt))
     // Open on the first chapter's card, unless the address asks for a year
-    // or a view of its own.
+    // or a view of its own; a year alone opens on the whole chain, framed
+    // as the home button frames it.
     if (!app.params.has('year') && !app.params.has('cam') && this.tour.chapters.length) {
       this.tour.begin()
       this.timeline.el.classList.add('invite')
+    } else if (!app.params.has('cam')) {
+      const v = this.tour.chainView()
+      app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })
     }
   }
 
@@ -52,7 +56,8 @@ export class UI {
     const tool = (id, ic, label, on) => h('button', { class: `tool${on ? ' on' : ''}`, 'data-tool': id, title: label, 'aria-label': label, 'aria-pressed': String(!!on) }, icon(ic, 20))
     this.tools.append(
       tool('lines', 'lines', 'Moku and ahupuaʻa boundaries', app.overlay.lines),
-      tool('routes', 'routes', 'Voyages, fleets and ships at sea', app.overlay.routes),
+      // (the routes follow the story by themselves; this one shows them all)
+      tool('routes', 'routes', 'Every voyage, fleet and ship at sea in these years', app.overlay.routes),
       tool('pins', 'pins', 'Events', app.overlay.pins),
       tool('home', 'home', 'The whole chain'),
       tool('help', 'help', 'About'),
@@ -237,7 +242,9 @@ export class UI {
   /**
    * The part of the screen the scene can be seen in: below the title, above
    * the timeline, and beside the card (down the right on a wide screen) or
-   * above it (along the bottom on a narrow one). The tour frames into this.
+   * above it and below the legend's switch (a narrow one). The tour frames
+   * into this. The legend's own place, otherwise, is a corner the whole
+   * chain leaves empty, so the box doesn't give way to it.
    */
   freeBox() {
     const W = innerWidth
@@ -246,12 +253,24 @@ export class UI {
     const tl = this.timeline.el
     if (!tl.hidden && tl.offsetHeight) box.y1 = Math.min(box.y1, tl.offsetTop - 14)
     const c = this.card.el
+    this.syncCarded()
     if (this.card.isOpen && c.offsetWidth) {
       if (c.offsetLeft > W * 0.35) box.x1 = Math.min(box.x1, c.offsetLeft - 16)
-      else box.y1 = Math.min(box.y1, c.offsetTop - 12)
+      else {
+        box.y1 = Math.min(box.y1, c.offsetTop - 12)
+        // (and under the legend's switch, which a phone puts at the top while a card is up)
+        const lg = this.legend
+        if (lg.offsetHeight && lg.offsetTop < H / 3) box.y0 = Math.max(box.y0, lg.offsetTop + lg.offsetHeight + 6)
+      }
     }
     if (box.y1 - box.y0 < 120) box.y1 = box.y0 + 120
     return box
+  }
+
+  /** Whether a card is up, as a class on the interface: a phone keeps only the legend's switch then (style.css). */
+  syncCarded() {
+    const on = this.card.isOpen
+    if (on !== this.root.classList.contains('carded')) this.root.classList.toggle('carded', on)
   }
 
   /**
@@ -359,6 +378,7 @@ export class UI {
       this.legend.inert = !far
     }
     if (!this.inspectorAllowed() && (this.inspector.classList.contains('show') || app.shared.uniforms.uHoverMoku.value)) this.hideInspector()
+    this.syncCarded()
     // (which keyframes the land is drawn from moves with the year, and the
     // words arrive with the manifest)
     if (app.view === 'land' && now - (this.landAt || 0) > 250) {

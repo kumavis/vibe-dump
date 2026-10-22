@@ -32,6 +32,7 @@ const smooth = (a, b, x) => {
 export const polityZoom = (d) => smooth(260, 900, d)
 /** The land overlay's: full at the island zooms, gone over a valley. */
 export const landZoom = (d) => smooth(90, 300, d)
+/** How strongly a chapter's card draws its events' routes: a sketch of what is to come. */
 
 export class App {
   constructor(canvas, data, { warn = console.warn } = {}) {
@@ -88,7 +89,9 @@ export class App {
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
     this.land = new LandOverlay(this)
-    this.overlay = { lines: true, pins: true, routes: true }
+    // (the routes follow the story unless the viewer turns them all on: the
+    // toggle is the override, off until they press it)
+    this.overlay = { lines: true, pins: true, routes: false }
     // 'chiefdoms', 'land', or null for neither; ?view= asks for one, and
     // counts as the viewer's choice
     const v = this.params.get('view')
@@ -196,10 +199,36 @@ export class App {
     return Math.max((q.x1 - q.x0) / (h * this.camera.aspect), (q.z1 - q.z0) / h)
   }
 
-  /** What the routes need to know of the tour and the view, besides the year. */
-  routeOptions(extra) {
+  /**
+   * The routes the part of the story in front of the viewer asks for
+   * (render/routes.js `section`): on an event's step that event's own, and
+   * nothing on a chapter's card, because a path belongs to the step it is
+   * part of; off the tour the routes of the event whose card is open, or
+   * none. Null for none.
+   */
+  routeSection() {
     const tour = this.tour
-    return { window: this.timeline.window, fill: this.islandFill(), focus: tour?.active ? (tour.event?.id ?? null) : null, ...extra }
+    const card = this.ui?.card
+    let ev = null
+    if (tour?.active && tour.event) ev = tour.event
+    else if (!tour?.active && card?.mode === 'event' && card.ev) ev = card.ev
+    const key = ev ? `ev:${ev.id}` : ''
+    if (key !== this._routeKey) {
+      this._routeKey = key
+      this._routeSection = ev
+        ? { routes: new Set(ev.routes || []), events: new Set([ev.id]), k: 1, focus: true }
+        : null
+    }
+    return this._routeSection
+  }
+
+  /**
+   * What the routes need to know of the tour and the view, besides the year:
+   * the section's routes, or with the routes toggle on (the viewer's
+   * override), every route of the year.
+   */
+  routeOptions(extra) {
+    return { window: this.timeline.window, fill: this.islandFill(), section: this.routeSection(), all: this.overlay.routes === true, ...extra }
   }
 
   /** An island pack, decoded in the background. */
@@ -324,7 +353,6 @@ export class App {
     const L = this.light
     const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)
     this.lines.update(this.camera, this.renderer, d, lightLevel)
-    this.routes.visible = this.overlay.routes !== false
     this.routes.update(this.timeline.year, d, this.routeOptions({ light: lightLevel }))
     for (const u of this.updaters) u(dt, this.time)
     const pu = this.pipeline.uniforms

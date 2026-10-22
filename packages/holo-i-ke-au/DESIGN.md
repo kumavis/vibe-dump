@@ -76,7 +76,7 @@ year.
 | settlement and population | far, mid | all eras |
 | forest extent | far, mid | all eras |
 | moku and ahupuaʻa lines | mid, near | all eras (lines barely move) |
-| voyaging and fleet routes, ship tracks | far | only the section the tour is on: the step's event, or a chapter's events faintly on its card; the routes toggle overrides to every route of the year |
+| voyaging and fleet routes, ship tracks | far | only the step the tour is on: that event's routes and nothing on a chapter card; the routes toggle overrides to every route of the year |
 | battle lines and movements | near | one event |
 | the diorama itself: terrain, vegetation, structures, people, weather | near | the keyframe nearest the chosen year |
 

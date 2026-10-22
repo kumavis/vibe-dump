@@ -41,7 +41,29 @@ const nearShot = (name, place, year, [bearing, pitch, distance], first = false) 
   until: "app.districts.cur?.state === 'ready' && !!app.districts.cur.features?.settlements.ready",
   report: 'app.districts.cur.features.settlements.stats()',
 })
+// ==== chain: the whole chain and the routes that follow the story ==============
+//   node tools/shoot.mjs <outdir> chain          (and VIEWPORT=390x844 for a phone)
+// The opening (chapter 1's card over the chain, its events' routes faint), the
+// chain alone from the home button, the chain at contact in each far view
+// with no card (no routes), the same with the routes toggle on (all of them),
+// the Pāʻao step (its own route), the far steps of Moʻikeha and Kaʻieʻiewaho
+// (the chain's turn kept), and Cook at Kealakekua.
+const tourTo = (id) => `const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1])`
+const homeChain = "const v = app.tour.chainView(); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })"
+const chainReport = '[Math.round(app.rig.goal.distance), +app.rig.goal.yaw.toFixed(3), +app.rig.goal.pitch.toFixed(3), app.ui.freeBox()]'
+// ==== end chain ===============================================================
 const PRESETS = {
+  chain: [
+    { name: 'open', report: chainReport },
+    { name: 'home', eval: `app.ui.card.close(); ${homeChain}`, report: chainReport },
+    { name: 'chiefdoms-1778', year: 1778, eval: `app.ui.card.close(); app.ui.onScrub(); app.setView('chiefdoms'); ${homeChain}`, report: chainReport },
+    { name: 'land-1778', year: 1778, eval: `app.setView('land'); ${homeChain}`, until: 'app.land.ready', frames: 4 },
+    { name: 'routes-all-1778', year: 1778, eval: `app.setView('chiefdoms'); document.querySelector('.tools [data-tool="routes"]').click(); ${homeChain}` },
+    { name: 'paao', eval: `document.querySelector('.tools [data-tool="routes"]').click(); ${tourTo('paao')}` },
+    { name: 'moikeha-far', eval: tourTo('moikeha'), report: chainReport },
+    { name: 'kaieiewaho-far', eval: tourTo('kaieiewaho-1796'), report: chainReport },
+    { name: 'cook-kealakekua', eval: tourTo('cook-kealakekua-1779') },
+  ],
   settlements: [
     nearShot('harbour-1795', 'kou', 1795, [45, 0.6, 40], true),
     nearShot('kou-1795', 'kou', 1795, [30, 0.45, 16]),

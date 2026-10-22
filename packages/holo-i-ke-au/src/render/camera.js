@@ -10,7 +10,7 @@
 // distance, and picking marches the ray down from the highest summit rather
 // than out from the lens. fit() finds the view that puts a stretch of ground
 // in one part of the screen, so the tour can frame an island beside a card
-// rather than under it.
+// rather than under it, and turns the whole chain to lie corner to corner.
 //
 // Close in, the ground under the target is rough: a pan across a valley wall
 // would lift and drop the whole view with every ridge and gulch it crossed.
@@ -43,6 +43,9 @@ const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
   return t * t * (3 - 2 * t)
 }
+// how far out the whole chain may stand: a phone held upright, with a card
+// over the lower half of it, needs about twice MAX_DISTANCE
+export const CHAIN_REACH = 40000
 
 /** The tilt a zoom eases toward: oblique over a valley, steep over the whole chain. */
 export function preferredPitch(d) {
@@ -54,7 +57,12 @@ export class CameraRig {
     this.camera = camera
     this.dom = dom
     this.world = world
+    this.minDistance = MIN_DISTANCE
+    this.maxDistance = MAX_DISTANCE
+    this._ray = new THREE.Raycaster()
+    this._v = new THREE.Vector3()
     this.home = this.homeView()
+    this.reach(this.home.distance)
     const h = this.home
     this.state = { target: h.target.clone(), distance: h.distance, yaw: h.yaw, pitch: h.pitch, lift: 0 }
     this.goal = { target: h.target.clone(), distance: h.distance, yaw: h.yaw, pitch: h.pitch, lift: 0 }
@@ -65,34 +73,32 @@ export class CameraRig {
     this.groundM = 0
     this.pinned = true
     this._lastXZ = new THREE.Vector2(h.target.x, h.target.z)
-    this.minDistance = MIN_DISTANCE
-    this.maxDistance = MAX_DISTANCE
     this.autoOrbit = 0
     this.lastInput = -1e9
     this.onUserInput = null
     this.enabled = true
-    this._ray = new THREE.Raycaster()
-    this._v = new THREE.Vector3()
     this.bind()
   }
 
   /**
-   * The whole chain, seen from a little south of overhead. On a landscape
-   * screen north is up and the chain runs across it; on a portrait one the
-   * view turns so the chain, which lies west-north-west to east-south-east,
-   * runs down the screen's long side from Kauaʻi to Hawaiʻi instead of
-   * shrinking to a strip across the middle.
+   * The whole chain, turned so it runs corner to corner: Niʻihau at the top
+   * left, Hawaiʻi at the bottom right, along the screen's diagonal whatever
+   * its shape (steep on a phone held upright), below the title and above the
+   * timeline. This is the view before the interface is up; from then on the
+   * tour frames the same thing into the part of the screen the card leaves
+   * clear (ui/tour.js chainView).
    */
-  homeView(aspect = innerWidth / Math.max(1, innerHeight)) {
-    const b = this.world.bounds
-    const w = b.x1 - b.x0
-    const t = Math.tan((this.camera.fov * Math.PI) / 360)
-    const portrait = aspect < 0.85
-    // (1.2: the tilt and the perspective want a little more room than the rect)
-    const d = portrait ? (1.2 * Math.hypot(w, b.z1 - b.z0) * 0.92) / (2 * t) : (1.2 * w) / (2 * t * Math.max(1, aspect))
-    const distance = Math.min(MAX_DISTANCE, d)
-    const target = new THREE.Vector3((b.x0 + b.x1) / 2, 0, (b.z0 + b.z1) / 2 + (portrait ? 0 : (b.z1 - b.z0) * 0.04))
-    return { target, distance, yaw: portrait ? 1.1 : 0, pitch: preferredPitch(distance) }
+  homeView(box = { x0: 16, y0: 72, x1: innerWidth - 16, y1: innerHeight - 120 }) {
+    const c = this.world.chainShape()
+    return this.fit({ points: c.hull, along: [c.from, c.to], yaw: 0, box, reach: CHAIN_REACH })
+  }
+
+  /**
+   * Let the zoom pull back as far as `d` and a little further: on a narrow
+   * screen the whole chain needs more room than MAX_DISTANCE gives.
+   */
+  reach(d) {
+    this.maxDistance = Math.max(MAX_DISTANCE, d * 1.15)
   }
 
   bind() {
@@ -287,32 +293,68 @@ export class CameraRig {
    * rounds. Corners sit at sea level, which is where an island's outline is.
    * A `pitch` holds the tilt at that, whatever the distance prefers (a tour
    * stop's own camera).
+   *
+   * `points` ([x, z] at sea level) frames a shape instead of the rectangle,
+   * and `along` ([from, to], two of its points) turns the yaw as well, so
+   * that from → to runs down the box's diagonal, from its top left corner to
+   * its bottom right: each round sees which way the pair runs on the screen
+   * and turns by what is left, measured on the ground (the screen's down is
+   * foreshortened by the tilt). `yaw` is then only where it starts. `reach`
+   * is the farthest the distance may go (the rig's own by default).
    */
-  fit({ rect, distance, yaw = this.goal.yaw, tilt = 0, pitch: fixedPitch, box, pad = 1.06 }) {
+  fit({ rect, points, along, distance, yaw = this.goal.yaw, tilt = 0, pitch: fixedPitch, box, pad = 1.06, reach = this.maxDistance }) {
     const cam = this._fitCam || (this._fitCam = new THREE.PerspectiveCamera())
+    const W = innerWidth
+    const H = innerHeight
     cam.fov = this.camera.fov
-    cam.aspect = this.camera.aspect
+    cam.aspect = W / Math.max(1, H)
     cam.near = 0.1
     cam.far = 1e6
     cam.updateProjectionMatrix()
-    const W = innerWidth
-    const H = innerHeight
     const b = box || { x0: 0, y0: 0, x1: W, y1: H }
     const bw = Math.max(60, b.x1 - b.x0)
     const bh = Math.max(60, b.y1 - b.y0)
     const tanH = Math.tan((cam.fov * Math.PI) / 360)
-    const cy = Math.cos(yaw)
-    const sy = Math.sin(yaw)
-    let tx = (rect.x0 + rect.x1) / 2
-    let tz = (rect.z0 + rect.z1) / 2
+    const pts = points || [
+      [rect.x0, rect.z0],
+      [rect.x1, rect.z0],
+      [rect.x0, rect.z1],
+      [rect.x1, rect.z1],
+    ]
+    let rx0 = Infinity
+    let rz0 = Infinity
+    let rx1 = -Infinity
+    let rz1 = -Infinity
+    for (const [x, z] of pts) {
+      rx0 = Math.min(rx0, x)
+      rx1 = Math.max(rx1, x)
+      rz0 = Math.min(rz0, z)
+      rz1 = Math.max(rz1, z)
+    }
+    let tx = (rx0 + rx1) / 2
+    let tz = (rz0 + rz1) / 2
     const fixed = distance !== undefined
-    let d = fixed ? distance : (Math.max(rect.x1 - rect.x0, rect.z1 - rect.z0) / (2 * tanH)) * (H / bh)
+    let d = fixed ? distance : (Math.max(rx1 - rx0, rz1 - rz0) / (2 * tanH)) * (H / bh)
     let pitch = 0
+    // the box's diagonal, and an angle on the screen as it lies on the ground
+    // (the screen's down stretched back out by the tilt)
+    const diag = Math.atan2(bh, bw)
+    const ground = (a, p) => Math.atan2(Math.sin(a) / Math.max(0.35, Math.sin(p)), Math.cos(a))
+    if (along) {
+      const [[ax, az], [bx, bz]] = along
+      yaw = ground(diag, preferredPitch(d) + tilt) - Math.atan2(bz - az, bx - ax)
+    }
     const v = this._v
-    for (let i = 0; i < 8; i++) {
-      d = THREE.MathUtils.clamp(d, this.minDistance, this.maxDistance)
+    const screen = (x, y, z) => {
+      v.set(x, y, z).project(cam)
+      return [((v.x + 1) / 2) * W, ((1 - v.y) / 2) * H]
+    }
+    for (let i = 0, n = along ? 14 : 8; i < n; i++) {
+      d = THREE.MathUtils.clamp(d, this.minDistance, reach)
       pitch = THREE.MathUtils.clamp(fixedPitch ?? preferredPitch(d) + tilt, 0.06, 1.52)
       const cp = Math.cos(pitch)
+      const cy = Math.cos(yaw)
+      const sy = Math.sin(yaw)
       const ty = fixed ? this.world.heightAt(tx, tz) : 0
       cam.position.set(tx + d * cp * sy, ty + d * Math.sin(pitch), tz + d * cp * cy)
       cam.lookAt(tx, ty, tz)
@@ -321,14 +363,18 @@ export class CameraRig {
       let y0 = Infinity
       let x1 = -Infinity
       let y1 = -Infinity
-      for (let k = 0; k < 4; k++) {
-        v.set(k & 1 ? rect.x1 : rect.x0, ty, k & 2 ? rect.z1 : rect.z0).project(cam)
-        const px = ((v.x + 1) / 2) * W
-        const py = ((1 - v.y) / 2) * H
+      for (const [x, z] of pts) {
+        const [px, py] = screen(x, ty, z)
         x0 = Math.min(x0, px)
         x1 = Math.max(x1, px)
         y0 = Math.min(y0, py)
         y1 = Math.max(y1, py)
+      }
+      if (along) {
+        const [[ax, az], [bx, bz]] = along
+        const [pax, pay] = screen(ax, ty, az)
+        const [pbx, pby] = screen(bx, ty, bz)
+        yaw += wrapAngle(ground(diag, pitch) - ground(Math.atan2(pby - pay, pbx - pax), pitch))
       }
       if (!fixed) d *= THREE.MathUtils.clamp(Math.max(((x1 - x0) * pad) / bw, ((y1 - y0) * pad) / bh), 0.3, 3)
       // slide so the middle of what's framed lands in the middle of the box:
@@ -340,7 +386,8 @@ export class CameraRig {
       tx += ex * cy + ey * sy
       tz += -ex * sy + ey * cy
     }
-    return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw, pitch }
+    d = THREE.MathUtils.clamp(d, this.minDistance, reach)
+    return { target: new THREE.Vector3(tx, this.world.heightAt(tx, tz), tz), distance: d, yaw: along ? wrapAngle(yaw) : yaw, pitch }
   }
 
   /** The ground under (x, z) in metres (the sea at 0), as the shaders draw it. */
@@ -469,8 +516,11 @@ export class CameraRig {
     } else if (this.autoOrbit && performance.now() - this.lastInput > 4000) {
       g.yaw += this.autoOrbit * dt
     }
+    // the target stays near the islands; further out it may stand further
+    // off them, since a view framed above a card on a phone looks at sea
+    // well south of what it shows
     const b = this.world.bounds
-    const m = 150
+    const m = 150 + g.distance * 0.3
     g.target.x = THREE.MathUtils.clamp(g.target.x, b.x0 - m, b.x1 + m)
     g.target.z = THREE.MathUtils.clamp(g.target.z, b.z0 - m, b.z1 + m)
     if (!this.flight) {

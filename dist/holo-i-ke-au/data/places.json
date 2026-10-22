@@ -1954,5 +1954,49 @@
       "kamakau-ruling-chiefs"
     ],
     "note": "The windward district of East Maui, where Kalaniʻōpuʻu held on in 1778–79. The point is the moku’s area centroid in the State layer, up on the mountain."
+  },
+  {
+    "id": "mauna-loa",
+    "name": "Mauna Loa",
+    "alt": [],
+    "kind": "peak",
+    "island": "hawaii",
+    "moku": "Hāmākua",
+    "ahupuaa": "Kaʻohe Mauka",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.6058,
+        19.47539
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "alexander-1891"
+    ],
+    "note": "The summit, as GNIS places it; the State ahupuaʻa layer puts it inside Kaʻohe Mauka."
+  },
+  {
+    "id": "kahuku-kau",
+    "name": "Kahuku",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "hawaii",
+    "moku": "Kaʻū",
+    "ahupuaa": "Kahuku",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.6933,
+        19.2489
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "alexander-1891"
+    ],
+    "note": "The land on the southwest slope of Mauna Loa, in Kaʻū; not Kahuku on Oʻahu."
   }
 ]

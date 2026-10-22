@@ -383,41 +383,6 @@
       "kauai:Puna": "kingdom",
       "niihau:Kona": "kingdom"
     },
-    "kamehameha-iv-v": {
-      "hawaii:Hilo": "kingdom",
-      "hawaii:Puna": "kingdom",
-      "hawaii:Hāmākua": "kingdom",
-      "hawaii:Kohala": "kingdom",
-      "hawaii:Kona": "kingdom",
-      "hawaii:Kaʻū": "kingdom",
-      "maui:Honuaʻula": "kingdom",
-      "maui:Kāʻanapali": "kingdom",
-      "maui:Pūʻali Komohana": "kingdom",
-      "maui:Hāmākualoa": "kingdom",
-      "maui:Hāmākuapoko": "kingdom",
-      "maui:Lāhainā": "kingdom",
-      "maui:Koʻolau": "kingdom",
-      "maui:Kula": "kingdom",
-      "maui:Hāna": "kingdom",
-      "maui:Kīpahulu": "kingdom",
-      "maui:Kahikinui": "kingdom",
-      "maui:Kaupō": "kingdom",
-      "lanai:Lāhainā": "kingdom",
-      "molokai:Kona": "kingdom",
-      "molokai:Koʻolau": "kingdom",
-      "oahu:Koʻolauloa": "kingdom",
-      "oahu:Waialua": "kingdom",
-      "oahu:Waiʻanae": "kingdom",
-      "oahu:Koʻolaupoko": "kingdom",
-      "oahu:ʻEwa": "kingdom",
-      "oahu:Kona": "kingdom",
-      "kauai:Koʻolau": "kingdom",
-      "kauai:Haleleʻa": "kingdom",
-      "kauai:Nāpali": "kingdom",
-      "kauai:Kona": "kingdom",
-      "kauai:Puna": "kingdom",
-      "niihau:Kona": "kingdom"
-    },
     "kalakaua": {
       "hawaii:Hilo": "kingdom",
       "hawaii:Puna": "kingdom",
@@ -607,10 +572,8 @@
     ],
     "kauikeaouli": [
       "kamakau-ruling-chiefs",
-      "jarves-1847"
-    ],
-    "kamehameha-iv-v": [
-      "liliuokalani-1898"
+      "jarves-1847",
+      "alexander-1891"
     ],
     "kalakaua": [
       "liliuokalani-1898"

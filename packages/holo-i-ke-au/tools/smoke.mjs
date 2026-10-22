@@ -4,7 +4,10 @@
 // view's switch between the chiefdoms and the land, the chapter tour's Next
 // and Back and the view it picks, an event's stops, the pins and the clusters
 // they gather into, and their cards) to catch anything that stops input
-// reaching what's on screen, and any console error on the way; the chapter
+// reaching what's on screen, and any console error on the way; the whole
+// chain framed corner to corner on a wide screen and on a phone, the routes
+// following the story (a chapter's card, an event's step, off the tour) and
+// the toggle that shows them all; the chapter
 // card set as a chapter's first page, the hover card kept to the far views,
 // the patches raising and lowering the ground by year (the data's own, and
 // the test masks tools/fake-data.mjs writes), the battle's forces by the stop
@@ -224,6 +227,106 @@ await check('home flies to the whole chain', async () => {
   const d = await ui('Math.round(app.rig.goal.distance) === Math.round(app.rig.home.distance)')
   if (!d) throw new Error('not home')
 })
+
+/**
+ * Where the whole chain lands in the free part of the screen (the box the
+ * tour frames into: below the title, above the timeline, beside or above
+ * the card): Niʻihau's and Hawaiʻi Island's middles (the mean of their land)
+ * as fractions of the box, how far the chain's long axis lies off the box's
+ * diagonal, how much of the diagonal the land spans, and any island whose
+ * middle is off the screen or under the card, the legend, the timeline, the
+ * tools or the title.
+ */
+const chainFrame = () =>
+  ui(`(() => {
+    const box = app.ui.freeBox(), cam = app.camera, W = innerWidth, H = innerHeight
+    const V = cam.position.constructor
+    const at = ([x, z]) => { const v = new V(x, 0, z).project(cam); return [((v.x + 1) / 2) * W, ((1 - v.y) / 2) * H] }
+    const middle = (p) => {
+      const r = p.rect
+      let sx = 0, sz = 0, n = 0
+      for (let j = 0; j <= 40; j++) for (let i = 0; i <= 40; i++) {
+        const x = r.x0 + ((r.x1 - r.x0) * i) / 40, z = r.z0 + ((r.z1 - r.z0) * j) / 40
+        if (app.world.arch.metresAt(x, z) > 0) { sx += x; sz += z; n++ }
+      }
+      return [sx / n, sz / n]
+    }
+    const packs = app.world.islandPacks
+    const cx = (p) => (p.rect.x0 + p.rect.x1) / 2
+    const ni = packs.find((p) => p.id === 'niihau') || packs.reduce((a, b) => (cx(b) < cx(a) ? b : a))
+    const ha = packs.find((p) => p.id === 'hawaii') || packs.reduce((a, b) => (cx(b) > cx(a) ? b : a))
+    const bw = box.x1 - box.x0, bh = box.y1 - box.y0, L = Math.hypot(bw, bh)
+    const rel = ([x, y]) => [+((x - box.x0) / bw).toFixed(2), +((y - box.y0) / bh).toFixed(2)]
+    const c = app.world.chainShape()
+    const a = at(c.from), b = at(c.to)
+    const off = ((Math.atan2(b[1] - a[1], b[0] - a[0]) - Math.atan2(bh, bw)) * 180) / Math.PI
+    const along = c.hull.map((p) => { const [x, y] = at(p); return (x * bw + y * bh) / L })
+    const panels = [...document.querySelectorAll('.card.show, .legend.show, .timeline, .tools, .brand')].map((el) => el.getBoundingClientRect())
+    const hidden = packs.filter((p) => {
+      const [x, y] = at(middle(p))
+      return x < 0 || y < 0 || x > W || y > H || panels.some((r) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom)
+    }).map((p) => p.id)
+    return { ni: rel(at(middle(ni))), niPx: at(middle(ni)).map(Math.round), ha: rel(at(middle(ha))), haPx: at(middle(ha)).map(Math.round), off: +off.toFixed(2), fill: +((Math.max(...along) - Math.min(...along)) / L).toFixed(3), hidden, yaw: +app.rig.goal.yaw.toFixed(3), d: Math.round(app.rig.goal.distance), pitch: +app.rig.goal.pitch.toFixed(2), box: [box.x0, box.y0, box.x1, box.y1].map(Math.round) }
+  })()`)
+if (eras > 0) {
+  for (const [w, h] of [
+    [1280, 800],
+    [390, 844],
+  ]) {
+    await check(`the whole chain runs corner to corner at ${w} × ${h}: Niʻihau at the top left, Hawaiʻi at the bottom right`, async () => {
+      await page.setViewportSize({ width: w, height: h })
+      await frames(2)
+      const rows = []
+      for (const card of [true, false]) {
+        // the opening view, beside (or above) the chapter's card; then home with no card
+        if (card) await run('app.tour.goTo(0, -1); app.settle()')
+        else {
+          await run('app.ui.card.close()')
+          await page.click('.tools [data-tool="home"]', opts)
+          await run('app.rig.finishFlight(); app.settle()')
+        }
+        await frames(2)
+        const f = await chainFrame()
+        const where = card ? 'with the card' : 'with no card'
+        if (Math.abs(f.off) > 3) throw new Error(`${where}: the chain’s axis is ${f.off}° off the diagonal`)
+        if (!(f.ni[0] < 0.3 && f.ni[1] < 0.3)) throw new Error(`${where}: Niʻihau at ${f.ni} of the box ${f.box}`)
+        if (!(f.ha[0] > 0.65 && f.ha[1] > 0.6)) throw new Error(`${where}: Hawaiʻi at ${f.ha} of the box ${f.box}`)
+        if (!(f.fill >= 0.7)) throw new Error(`${where}: the land spans ${f.fill} of the diagonal`)
+        if (f.hidden.length) throw new Error(`${where}: ${f.hidden.join(', ')} under the interface or off the screen`)
+        rows.push(`${where}: yaw ${f.yaw}, distance ${f.d}, pitch ${f.pitch}; box ${f.box}; Niʻihau at ${f.niPx} (${f.ni}), Hawaiʻi at ${f.haPx} (${f.ha}); ${(f.fill * 100).toFixed(0)}% of the diagonal, ${f.off}° off it`)
+      }
+      for (const r of rows) console.log(`      ${r}`)
+    })
+    // a far step leans the chain toward its place: the same turn, only nearer
+    const farStep = await ui(`(() => {
+      for (const ch of app.tour.chapters) for (const ev of ch.events) {
+        const p = app.tour.placeOf(ev)
+        if (p && p.island && JSON.stringify(ev.zoom) === '["far"]') return ev.id
+      }
+      return null
+    })()`)
+    if (farStep) {
+      await check(`a far step keeps the whole chain’s turn at ${w} × ${h}, only nearer, its place in view (${farStep})`, async () => {
+        await run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${farStep}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+        await frames(2)
+        const r = await ui(`(() => {
+          const box = app.ui.freeBox(), chain = app.tour.chainView(box), g = app.rig.goal
+          const it = app.ui.pins.items.find((it) => it.ev.id === '${farStep}')
+          const v = new app.camera.position.constructor(it.x, app.world.heightAt(it.x, it.z), it.z).project(app.camera)
+          const x = ((v.x + 1) / 2) * innerWidth, y = ((1 - v.y) / 2) * innerHeight
+          return { yaw: +g.yaw.toFixed(3), chainYaw: +chain.yaw.toFixed(3), d: Math.round(g.distance), chainD: Math.round(chain.distance), at: [Math.round(x), Math.round(y)], inBox: x >= box.x0 && x <= box.x1 && y >= box.y0 && y <= box.y1 }
+        })()`)
+        if (Math.abs(r.yaw - r.chainYaw) > 0.01) throw new Error(`yaw ${r.yaw}, the whole chain's ${r.chainYaw}`)
+        if (!(r.d < r.chainD)) throw new Error(`at ${r.d}, no nearer than the whole chain's ${r.chainD}`)
+        if (!r.inBox) throw new Error(`its place at ${r.at}, outside the free box`)
+        console.log(`      yaw ${r.yaw} (the chain's ${r.chainYaw}), distance ${r.d} (the chain's ${r.chainD}), its place at ${r.at}`)
+      })
+    }
+  }
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await frames(2)
+  await run('app.tour.goTo(0, -1); app.settle()')
+}
 if (eras > 1) {
   await check('a tick on the timeline moves the year', async () => {
     await page.click('.tl-tick[data-i="0"] span', opts)
@@ -456,67 +559,149 @@ if (chapters > 1) {
 for (const t of ['lines', 'routes', 'pins']) {
   await check(`toggle ${t}`, async () => {
     const was = await ui(`app.overlay.${t}`)
-    await page.click(`.tools [data-tool="${t}"]`, opts)
-    await expect(`app.overlay.${t}`, !was)
-    await page.click(`.tools [data-tool="${t}"]`, opts)
-    await expect(`app.overlay.${t}`, was)
+    try {
+      await page.click(`.tools [data-tool="${t}"]`, opts)
+      await expect(`app.overlay.${t}`, !was)
+      await page.click(`.tools [data-tool="${t}"]`, opts)
+      await expect(`app.overlay.${t}`, was)
+    } finally {
+      // (a click that timed out under load leaves the layer as it was, so
+      // the checks after this one aren't run with it switched off)
+      if ((await ui(`app.overlay.${t}`)) !== was) await page.evaluate((t) => document.querySelector(`.tools [data-tool="${t}"]`).click(), t)
+    }
   })
 }
 
 const routeCount = await ui('app.routes.lines.length')
 /** Fly the camera to a view (an expression for one) and land everything. */
 const view = (expr) => run(`const v = ${expr}; app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
-const shownRoutes = () => ui('app.routes.visibleRoutes().map((r) => r.id)')
-if (routeCount) {
-  await check('the routes toggle hides and shows the routes', async () => {
-    await run('app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(1779.1); app.ui.timeline.finish()')
-    await view('app.tour.chainView()')
-    await frames(2)
-    const on = await shownRoutes()
-    if (!on.length) throw new Error('no routes over the chain in 1779')
-    await page.click('.tools [data-tool="routes"]', opts)
-    await run('app.settle()')
-    await frames(2)
-    const off = await shownRoutes()
-    if (off.length) throw new Error(`still showing with the toggle off: ${off.join(', ')}`)
-    await page.click('.tools [data-tool="routes"]', opts)
-    await run('app.settle()')
-    await frames(2)
-    if (!(await shownRoutes()).length) throw new Error('not back with the toggle on')
-    console.log(`      1779 over the chain: ${on.join(', ')}`)
+const shownRoutes = () => ui('app.routes.visibleRoutes().map((r) => r.id).sort()')
+/** The routes the data gives these events: each one's own list, and the routes that name it. */
+const routesOf = (ids) =>
+  ui(`(() => {
+    const ids = new Set(${JSON.stringify(ids)})
+    const own = new Set(app.data.events.filter((e) => ids.has(e.id)).flatMap((e) => e.routes || []))
+    return app.routes.lines.map((l) => l.route).filter((r) => own.has(r.id) || ids.has(r.event)).map((r) => r.id).sort()
+  })()`)
+/** Every route whose dates meet the timeline's window: what the toggle, turned on, shows. */
+const routesOfYear = () => ui('(() => { const [a, b] = app.timeline.window; return app.routes.lines.filter((l) => l.span[1] >= a && l.span[0] <= b).map((l) => l.route.id).sort() })()')
+const listed = (a) => a.join(', ') || 'none'
+const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+const goEvent = (id) => run(`const at = app.tour.locate(app.data.events.find((e) => e.id === '${id}')); app.tour.goTo(at[0], at[1]); app.settle()`)
+/** Take the slider to timeline position s as a hand would, which leaves the tour. */
+const dragSlider = async (s) => {
+  const box = await page.locator('.tl-input').boundingBox()
+  const [now, max] = await ui('[app.timeline.s, app.timeline.max]')
+  const x = (v) => box.x + 8 + ((box.width - 16) * v) / max
+  await page.mouse.move(x(now), box.y + box.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(x(s), box.y + box.height / 2, { steps: 6 })
+  await page.mouse.up()
+  await run('app.settle()')
+  await frames(2)
+}
+/** The routes toggle, pressed as the viewer would until it reads `on`. */
+const routesToggle = async (on) => {
+  if ((await ui('app.overlay.routes')) !== on) await page.click('.tools [data-tool="routes"]', opts)
+  await expect('app.overlay.routes', on)
+  await expect(`document.querySelector('.tools [data-tool="routes"]').getAttribute('aria-pressed')`, String(on))
+  await run('app.settle()')
+  await frames(2)
+}
+/** The first event in the tour with routes of its own that also passes `test` (a body over `ev`). */
+const firstWithRoutes = (test) =>
+  ui(`(() => {
+    for (const ch of app.tour.chapters) for (const ev of ch.events) {
+      if ((ev.routes?.length || app.routes.lines.some((l) => l.route.event === ev.id)) && (${test})) return ev.id
+    }
+    return null
+  })()`)
+if (routeCount && chapters) {
+  await check('the routes toggle starts off: the routes follow the story', async () => {
+    await expect('app.overlay.routes', false)
+    await expect(`document.querySelector('.tools [data-tool="routes"]').getAttribute('aria-pressed')`, 'false')
   })
-  await check('routes are gone once one island fills the screen, all but the tour’s own', async () => {
-    await view("app.tour.islandView('hawaii', 0)")
+  await check('a chapter’s card draws no routes: a path belongs to its step', async () => {
+    await routesToggle(false)
+    await run('app.tour.goTo(0, -1); app.settle()')
+    await frames(2)
+    const got = await shownRoutes()
+    if (got.length) throw new Error(`chapter 1’s card shows ${listed(got)}`)
+    const could = await routesOf(await ui('app.tour.chapters[0].events.map((e) => e.id)'))
+    console.log(`      chapter 1: none shown (its events carry ${could.length})`)
+  })
+  const stepEv = (await ui("app.data.events.some((e) => e.id === 'paao') ? 'paao' : null")) || (await firstWithRoutes("ev.zoom?.includes('island') && !ev.stops?.length"))
+  if (stepEv) {
+    await check(`an event’s step draws its own routes and no others (${stepEv}), held as its island fills the screen`, async () => {
+      await goEvent(stepEv)
+      await frames(2)
+      const want = await routesOf([stepEv])
+      const got = await shownRoutes()
+      const [d, fill] = await ui('[app.rig.state.distance, app.islandFill()]')
+      if (!sameList(got, want)) throw new Error(`the step shows ${listed(got)}, wanted ${listed(want)} (at ${d.toFixed(0)}, fill ${fill.toFixed(2)})`)
+      console.log(`      ${stepEv}: ${listed(got)} at ${d.toFixed(0)} (fill ${fill.toFixed(2)})`)
+    })
+  }
+  if (await ui("app.data.events.some((e) => e.id === 'mokuohai-1782')")) {
+    await check('the Mokuʻōhai step: no route of its own, and its island fills the screen: none', async () => {
+      await goEvent('mokuohai-1782')
+      await frames(2)
+      const own = await routesOf(['mokuohai-1782'])
+      const got = await shownRoutes()
+      const [d, fill] = await ui('[app.rig.state.distance, app.islandFill()]')
+      if (got.length) throw new Error(`showing ${listed(got)} (at ${d.toFixed(0)}, fill ${fill.toFixed(2)})`)
+      console.log(`      at ${d.toFixed(0)} (fill ${fill.toFixed(2)}); its own: ${listed(own)}; showing none`)
+    })
+  }
+  const farEv = (await ui("app.data.events.some((e) => e.id === 'kaieiewaho-1796') ? 'kaieiewaho-1796' : null")) || (await firstWithRoutes("JSON.stringify(ev.zoom) === '[\"far\"]'"))
+  if (farEv) {
+    await check(`off the tour, the open card’s event keeps its routes (${farEv}); closed, none`, async () => {
+      await goEvent(farEv)
+      await frames(2)
+      const want = await routesOf([farEv])
+      await dragSlider((await ui('app.timeline.s')) + 0.3)
+      await expect('app.tour.active', false)
+      await expect('app.ui.card.mode', 'event')
+      const got = await shownRoutes()
+      if (!sameList(got, want)) throw new Error(`with its card open: ${listed(got)}, wanted ${listed(want)}`)
+      await page.click('.card.show .card-close', opts)
+      await run('app.settle()')
+      await frames(2)
+      const closed = await shownRoutes()
+      if (closed.length) throw new Error(`with the card closed: ${listed(closed)}`)
+      console.log(`      its card open: ${listed(got)}; closed: none`)
+    })
+  }
+  await check('the slider taken with no card open: no routes, though the year has some', async () => {
+    await run('app.ui.card.close()')
+    await view('app.tour.chainView()')
+    // (to contact: Cook's ships and the fleets of the 1770s)
+    await dragSlider(await ui('app.timeline.sAtYear(1779.1)'))
+    await expect('app.tour.active', false)
+    await expect('app.ui.card.isOpen', false)
+    const got = await shownRoutes()
+    const year = await routesOfYear()
+    if (got.length) throw new Error(`showing ${listed(got)}`)
+    if (!year.length) throw new Error('no route in the year’s window to leave out')
+    console.log(`      at ${(await ui('app.timeline.year')).toFixed(1)}: none of the ${year.length} of these years`)
+  })
+  await check('the routes toggle is the override: every route of the year, gone where one island fills the screen, then the story again', async () => {
+    await routesToggle(true)
+    const want = await routesOfYear()
+    const got = await shownRoutes()
+    if (!sameList(got, want)) throw new Error(`with the toggle on: ${listed(got)}, wanted ${listed(want)}`)
+    const isl = await ui("app.tour.islands.has('hawaii') ? 'hawaii' : [...app.tour.islands.keys()][0]")
+    await view(`app.tour.islandView('${isl}', 0)`)
     await frames(2)
     const [d, fill] = await ui('[app.rig.state.distance, app.islandFill()]')
-    const left = await shownRoutes()
-    if (left.length) throw new Error(`over Hawaiʻi Island at ${d.toFixed(0)} (fill ${fill.toFixed(2)}): ${left.join(', ')}`)
-    console.log(`      Hawaiʻi Island fills ${(fill * 100).toFixed(0)}% at ${d.toFixed(0)}: no routes`)
-    const step = await ui("(() => { const ev = app.data.events.find((e) => e.id === 'mokuohai-1782'); return ev ? app.tour.locate(ev) : null })()")
-    if (step) {
-      await run(`app.tour.goTo(${step[0]}, ${step[1]}); app.settle()`)
-      await frames(2)
-      const [d2, fill2] = await ui('[app.rig.state.distance, app.islandFill()]')
-      const at = await shownRoutes()
-      if (at.length) throw new Error(`at the Mokuʻōhai step (${d2.toFixed(0)}, fill ${fill2.toFixed(2)}): ${at.join(', ')}`)
-      console.log(`      the Mokuʻōhai step at ${d2.toFixed(0)} (fill ${fill2.toFixed(2)}): no routes`)
-    }
-    // an event's own route stays on its island view
-    const own = await ui(`(() => {
-      for (const ch of app.tour.chapters) for (let s = 0; s < ch.events.length; s++) {
-        const ev = ch.events[s]
-        if (ev.routes?.length && !ev.stops?.length && !ev.zoom?.includes('near') && ev.zoom?.includes('island')) return [ch.index, s, ev.id]
-      }
-      return null
-    })()`)
-    if (own) {
-      await run(`app.tour.goTo(${own[0]}, ${own[1]}); app.settle()`)
-      await frames(2)
-      const [d3, fill3] = await ui('[app.rig.state.distance, app.islandFill()]')
-      const r = await ui(`app.routes.visibleRoutes().filter((r) => r.event === '${own[2]}').map((r) => r.id)`)
-      if (!r.length && fill3 > 0.4) throw new Error(`${own[2]}'s own route is gone from its step (${d3.toFixed(0)}, fill ${fill3.toFixed(2)})`)
-      console.log(`      ${own[2]} at ${d3.toFixed(0)} (fill ${fill3.toFixed(2)}) keeps ${r.join(', ') || 'none'}`)
-    }
+    const over = await shownRoutes()
+    if (over.length) throw new Error(`over ${isl} at ${d.toFixed(0)} (fill ${fill.toFixed(2)}): ${listed(over)}`)
+    await routesToggle(false)
+    await view('app.tour.chainView()')
+    const off = await shownRoutes()
+    if (off.length) throw new Error(`with the toggle off again: ${listed(off)}`)
+    console.log(`      on, over the chain at ${(await ui('app.timeline.year')).toFixed(1)}: ${listed(got)}`)
+    console.log(`      on, over ${isl} (fill ${fill.toFixed(2)}): none; off again: none`)
   })
 } else console.log('  - no routes: route checks skipped')
 
