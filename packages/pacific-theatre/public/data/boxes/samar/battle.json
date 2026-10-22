@@ -6056,7 +6056,7 @@
           "by": "taffy2-tbm-0833",
           "count": [1,1],
           "where": "aft: the port screw and the rudder",
-          "damage": 0.5,
+          "damage": 1.0,
           "sources": [{"id":"morison-xii","where":"XII §8"},{"id":"trom-chikuma","where":"0853"}],
           "text": "Chikuma is hit by an air torpedo.",
           "tellings": [
@@ -6892,7 +6892,7 @@
           "by": "vc-5-tbm",
           "count": [2,4],
           "where": "amidships, the stern and the bow",
-          "damage": 0.5,
+          "damage": 0.7,
           "sources": [
             {"id":"morison-xii","where":"XII §7"},
             {"id":"sib22-leyte-1945","where":"ComCarAirGrp 26"}

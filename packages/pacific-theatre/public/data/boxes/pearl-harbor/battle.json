@@ -456,7 +456,7 @@
           "by": "akagi-torpedo",
           "count": [2,3],
           "where": "the port side, aft",
-          "damage": 0.4,
+          "damage": 0.5,
           "sources": [{"id":"bushships-summary-1942"}],
           "byNote": "as above"
         },
@@ -517,7 +517,7 @@
           "by": "hiryu-torpedo",
           "count": [2,2],
           "where": "the port side, forward and aft",
-          "damage": 0.4,
+          "damage": 0.6,
           "sources": [{"id":"california-ar-1941"},{"id":"bushships-summary-1942","where":"WDR No. 21"}],
           "text": "California is torpedoed.",
           "tellings": [
@@ -532,7 +532,7 @@
           "by": "soryu-level",
           "count": [1,1],
           "where": "abreast the first casemate",
-          "damage": 0.2,
+          "damage": 0.4,
           "sources": [{"id":"california-ar-1941"},{"id":"bushships-summary-1942","where":"WDR No. 21"}],
           "byNote": "the shooter is not named",
           "tellings": [{"source":"batfor-1942","says":"About 08:45 (Train); Kimmel’s narrative 09:00."}]

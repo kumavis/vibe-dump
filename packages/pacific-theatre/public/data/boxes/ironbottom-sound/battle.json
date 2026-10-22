@@ -1294,7 +1294,7 @@
           "by": "nagara",
           "count": [1,1],
           "where": "starboard, frame 45; the forecastle blown off to the bridge",
-          "damage": 0.8,
+          "damage": 1.0,
           "sources": [
             {"id":"lundgren-bbaction","where":"0033"},
             {"id":"oni-cn-guadalcanal-1944","where":"Part III"},
@@ -1596,7 +1596,7 @@
           "by": "nagara",
           "count": [1,1],
           "where": "near frame 6: the bow",
-          "damage": 0.45,
+          "damage": 1.0,
           "sources": [
             {"id":"lundgren-bbaction","where":"0034"},
             {"id":"oni-cn-guadalcanal-1944","where":"Part III"}
@@ -1879,7 +1879,7 @@
           "by": "nagara",
           "count": [2,2],
           "where": "starboard, between the firerooms; her second stack falls",
-          "damage": 0.25,
+          "damage": 1.0,
           "sources": [
             {"id":"oni-cn-guadalcanal-1944","where":"Part III"},
             {"id":"lundgren-bbaction","where":"0031"}
@@ -2521,7 +2521,7 @@
           "by": "washington",
           "count": [4,10],
           "where": "the stern and the after hydraulic pump room; below the waterline",
-          "damage": 0.4,
+          "damage": 0.5,
           "sources": [{"id":"lundgren-wash-gunfire","where":"salvos 11–14"},{"id":"lundgren-wreck"}],
           "sourceClock": "0105",
           "sourceZone": "+12:00",
@@ -5590,7 +5590,7 @@
           "by": "south-dakota",
           "count": [1,2],
           "where": "amidships",
-          "damage": 0.4,
+          "damage": 0.55,
           "sources": [
             {"id":"wdr-south-dakota-1942","where":"¶7"},
             {"id":"ar-south-dakota-1942","where":"chronological log"}
