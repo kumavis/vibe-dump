@@ -8,16 +8,20 @@
 //   node sim/perturb.mjs --fn hypot [--only ai] [--ref <ref> | --dir <dir>] [--no-control]
 //
 // --fn takes a comma-separated list (hypot, or sin,cos,atan,atan2 for N0).
-// Unless --no-control, the same nudge first runs on the PIN code, which still
-// calls Math everywhere, to show the probe has teeth there: at least one PIN
+// Unless --no-control, the same nudge first runs on a copy of the code under
+// test whose core/dmath.js hands every call to the engine's Math (until F4
+// the control was the PIN code, then the R0 commit, which called Math
+// everywhere), to show the probe has teeth there: at least one control
 // battle must move, or the check is inconclusive (exit 2), as it is when any
 // run reports no nudged call (the preload didn't load). Exit 0 when no
 // battle of the code under test moves, else 1.
 import { parseArgs } from 'node:util'
 import { pathToFileURL } from 'node:url'
 import { join, resolve } from 'node:path'
-import { loadCorpus, select, runOracle, pool, CPUS, verdict, SIM } from './lib.mjs'
-import { codeDir, readPin } from './oracle/pin.mjs'
+import { tmpdir } from 'node:os'
+import { writeFileSync, rmSync } from 'node:fs'
+import { loadCorpus, select, runOracle, pool, CPUS, verdict, SIM, copyCode, runnerOf } from './lib.mjs'
+import { codeDir } from './oracle/pin.mjs'
 
 const { values: a } = parseArgs({ options: { fn: { type: 'string' }, only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, 'no-control': { type: 'boolean' } } })
 if (!a.fn) {
@@ -37,12 +41,14 @@ const dir = a.dir ? resolve(a.dir) : codeDir(a.ref ?? 'WORKTREE')
 process.env.PERTURB = a.fn
 process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS ?? ''} --import ${pathToFileURL(join(SIM, 'oracle', 'perturb-preload.mjs')).href}`.trim()
 
-// every child must say how many results it nudged: a run where the preload
-// never loaded, or nothing called the functions, proves nothing either way
+// every control run must say it nudged results: one where the preload never
+// loaded, or nothing called the functions, proves nothing either way (the
+// code under test may well never call them: its core runs headless, and
+// dmath is its maths)
 let silent = 0
-const moved = async (code) => {
-  const res = await pool(items, CPUS, (it) => runOracle(it.job, code).catch((e) => ({ trace: [], error: e.message })))
-  for (const r of res) if (!r.error && !(Number(r.stderr?.match(/perturb: (\d+) nudged calls/)?.[1]) > 0)) silent++
+const moved = async (code, control = false) => {
+  const res = await pool(items, CPUS, (it) => runOracle(it.job, code, { runner: runnerOf(code) }).catch((e) => ({ trace: [], error: e.message })))
+  if (control) for (const r of res) if (!r.error && !(Number(r.stderr?.match(/perturb: (\d+) nudged calls/)?.[1]) > 0)) silent++
   return items.map((it, i) => ({ it, r: res[i], v: verdict(it, res[i]) }))
 }
 const show = (rows) => {
@@ -56,9 +62,18 @@ const show = (rows) => {
 console.log(`perturb: Math.${a.fn.split(',').join(', Math.')} nudged one ULP, ${items.length} battles`)
 let teeth = true
 if (!a['no-control']) {
-  const pin = readPin()
-  console.log(`\ncontrol, the PIN code (${pin.slice(0, 12)}):`)
-  const n = show(await moved(codeDir(pin)))
+  const control = copyCode(dir, join(tmpdir(), `tails-and-scales-perturb-${process.pid}`))
+  writeFileSync(join(control, 'core', 'dmath.js'), `// (perturb's control) the engine's own Math
+export const hypot = (x, y) => Math.hypot(x, y)
+export const hypot3 = (x, y, z) => Math.hypot(x, y, z)
+export const sin = (x) => Math.sin(x)
+export const cos = (x) => Math.cos(x)
+export const atan = (x) => Math.atan(x)
+export const atan2 = (y, x) => Math.atan2(y, x)
+`)
+  console.log('\ncontrol, the same code with core/dmath.js on the engine\'s Math:')
+  const n = show(await moved(control, true))
+  rmSync(control, { recursive: true, force: true })
   console.log(`  ${n}/${items.length} move`)
   teeth = n > 0
 }
@@ -66,7 +81,7 @@ console.log(`\n${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}:`)
 const n = show(await moved(dir))
 console.log(`  ${n}/${items.length} move`)
 if (silent) {
-  console.log(`\nperturb INCONCLUSIVE: ${silent} run(s) report no nudged call to Math.${a.fn}, so the probe never fired there.`)
+  console.log(`\nperturb INCONCLUSIVE: ${silent} control run(s) report no nudged call to Math.${a.fn}, so the probe never fired there.`)
   process.exit(2)
 }
 if (!teeth) {

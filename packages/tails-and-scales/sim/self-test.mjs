@@ -18,13 +18,14 @@
 //   node sim/self-test.mjs [--browser]
 //
 // Runs the frozen PIN code: the mutants are copies of it, so their exact-text
-// edits keep applying while the working tree is refactored (until the PIN
-// moves; then a mutation that no longer applies is reported, not thrown).
-// The PIN's code has no pure core, so parity plays the mutants' pages
-// (--page; the pure core is parity's default since R6b).
+// edits keep applying while the working tree changes (until the PIN moves;
+// then a mutation that no longer applies is reported, not thrown). (F4) The
+// PIN is refactored code, so parity judges the core's mutants by its own
+// default runner, the pure core folded headless (until F4 the PIN's code had
+// none, and they were the R0 page's), and the title's in Chromium.
 // Exit 0 when every case gets the verdict it must, else 1.
 import { parseArgs } from 'node:util'
-import { readFileSync, writeFileSync, rmSync, symlinkSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, rmSync, symlinkSync, mkdirSync, existsSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
@@ -47,7 +48,7 @@ const verdictLine = (ok, what, why) => {
 // a wrong verdict) when the PIN's text no longer holds the anchor.
 function mutant(name, file, from, to) {
   const dir = copyCode(BASE, join(work, name))
-  const src = readFileSync(join(dir, file), 'utf8')
+  const src = existsSync(join(dir, file)) ? readFileSync(join(dir, file), 'utf8') : ''
   if (src.split(from).length !== 2) {
     verdictLine(false, `mutant "${name}"`, `the PIN's ${file} doesn't hold exactly one "${from.slice(0, 60)}"; update this case for the new PIN`)
     return null
@@ -90,32 +91,33 @@ for (const [what, k, make, want] of cases) {
 console.log('2. parity.mjs, run through a symlinked path, still judges')
 const link = join(work, 'linked-package')
 symlinkSync(PKG, link)
-const dice = mutant('dice', 'rules.js', 'export const d6 = () => 1 + Math.floor(rng() * 6)', 'export const d6 = () => 6 - Math.floor(rng() * 6) // MUTANT')
+const dice = mutant('dice', 'core/rules.js', 'export const d6 = (G) => 1 + Math.floor(draw(G.rng) * 6)', 'export const d6 = (G) => 6 - Math.floor(draw(G.rng) * 6) // MUTANT')
 if (dice) {
-  const r = parity(join(link, 'sim', 'parity.mjs'), ['--page', '--dir', dice, '--only', '64-89'])
+  const r = parity(join(link, 'sim', 'parity.mjs'), ['--dir', dice, '--only', '64-89'])
   verdictLine(r.status === 1 && /DIVERGES at trace line \d+/.test(r.out), 'a dice mutant, via the link', `exit ${r.status}, ${last(r.out)}`)
 }
 
 // ── 3. A loop that never yields ─────────────────────────────────────────────
 console.log('3. a battle that spins forever is stopped and named')
-const spin = mutant('spin', 'main.js',
+const spin = mutant('spin', 'core/actions/fight.js',
   `  for (let guard = 0; guard < 30; guard++) {
-    const next = units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(u))`,
+    const next = G.units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(G, u))
+    const other = G.units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(G, u))`,
   `  for (let guard = 0; ; guard++) { // MUTANT: no guard, and the fought flag ignored
-    const next = units.find((u) => u.side === side && alive(u) && isEngaged(u))`)
-if (spin) writeFileSync(join(spin, 'main.js'), readFileSync(join(spin, 'main.js'), 'utf8').replace('    if (next) await fight(next)\n', '    if (next) fight(next) // MUTANT: not awaited\n'))
+    const next = G.units.find((u) => u.side === side && alive(u) && isEngaged(G, u))
+    const other = G.units.find((u) => u.side === 1 - side && alive(u) && isEngaged(G, u))`)
 if (spin) {
   const t0 = Date.now()
-  const r = parity(PARITY, ['--page', '--dir', spin, '--only', '64-89'], { ORACLE_TIMEOUT_MS: '10000' })
+  const r = parity(PARITY, ['--dir', spin, '--only', '64-89'], { ORACLE_TIMEOUT_MS: '10000' })
   const secs = Math.round((Date.now() - t0) / 1000)
   verdictLine(!r.hung && r.status === 1 && /ai\s+64-89 .* STOPPED/.test(r.out) && /killed/.test(r.out), `the spinning mutant, with a 10 s deadline (${secs} s)`, r.hung ? 'parity hung' : `exit ${r.status}, ${(r.out.match(/STOPPED before trace line \d+ of \d+/) ?? [last(r.out)])[0]}`)
 }
 
 // ── 4. The battle log ───────────────────────────────────────────────────────
 console.log('4. a battle log missing its destroyed-unit lines fails, traces unchanged')
-const quiet = mutant('quiet', 'main.js', "  S.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])\n", '  // MUTANT: the destroyed line is never written\n')
+const quiet = mutant('quiet', 'core/actions/damage.js', "  G.journal.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])\n", '  // MUTANT: the destroyed line is never written\n')
 if (quiet) {
-  const r = parity(PARITY, ['--page', '--dir', quiet, '--only', '64-89,hotseat-aggressive-909'])
+  const r = parity(PARITY, ['--dir', quiet, '--only', '64-89,hotseat-aggressive-909'])
   const both = ['64-89', 'hotseat-aggressive-909'].every((id) => new RegExp(`${id} .* LOG DIFFERS`).test(r.out))
   verdictLine(r.status === 1 && both && !/DIVERGES|SHADOW DIFFERS/.test(r.out), 'the mutant that drops "… destroyed!"', `exit ${r.status}, ${(r.out.match(/BATTLE LOG DIFFERS at write \d+ of \d+/) ?? [last(r.out)])[0]}`)
 }
@@ -126,7 +128,7 @@ if (a.browser) {
   // one corpus battle per button the verdict names, taken from the corpus so
   // a re-record can't leave this asking for a battle that is gone
   const ids = ['watch', 'hotseat'].map((m) => items.find((it) => it.mode === m)?.id)
-  const dead = ids.every(Boolean) && mutant('title', 'main.js', '    start(b.dataset.mode)\n', '    // MUTANT: the title-screen buttons start nothing\n')
+  const dead = ids.every(Boolean) && mutant('title', 'ui/screens/title.js', '        start(b.dataset.mode)\n', '        // MUTANT: the title-screen buttons start nothing\n')
   if (!ids.every(Boolean)) verdictLine(false, 'the mutant title screen', `the corpus has no ${['watch', 'hotseat'].filter((m, i) => !ids[i]).join(' or ')} battle to start`)
   else if (dead) {
     const dist = await buildApp(dead, join(work, 'title-dist'))
