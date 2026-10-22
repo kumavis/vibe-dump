@@ -1,0 +1,5052 @@
+{
+  "id": "midway",
+  "event": "midway-1942",
+  "title": "Midway, 4 June 1942",
+  "ja": {"kanji":"ミッドウェー海戦","romaji":"Middowē kaisen"},
+  "clock": {
+    "id": "usn-zp12",
+    "zone": "-12:00",
+    "name": "Midway time (zone +12)",
+    "from": "1942-06-04T04:00-12:00",
+    "to": "1942-06-04T18:00-12:00",
+    "others": [
+      {
+        "id": "jst",
+        "name": "Tokyo time",
+        "zone": "+09:00",
+        "rule": "add 3 hours and take a day off the Japanese reports (the Nagumo report keeps Tokyo time and the Tokyo date, 5 June)"
+      },
+      {
+        "id": "usn-zp10",
+        "name": "the US carriers’ clocks (zone +10)",
+        "zone": "-10:00",
+        "rule": "take 2 hours off the carrier and squadron reports"
+      }
+    ],
+    "note": "Zone +12 (UTC−12), as CINCPAC and the Naval War College use it; the Nagumo report keeps Tokyo time and the Tokyo date; the carriers and their squadrons kept zone +10 (R4 §2.1)."
+  },
+  "weather": {
+    "wind": {"fromDeg":135,"kn":5},
+    "sea": 1,
+    "swellM": 1,
+    "cloud": {
+      "baseM": 500,
+      "topsM": 1000,
+      "cover": 0.3,
+      "note": "scattered cumulus from 1,500 to 2,500 ft over the dive at 10:22; 8/10 over the Kidō Butai at dawn, clearing to 1–3/10 later"
+    },
+    "phases": [
+      {
+        "from": "04:00",
+        "to": "08:00",
+        "region": "kido-butai",
+        "cover": 0.8,
+        "baseM": 500,
+        "topsM": 1000,
+        "sources": [{"id":"nagumo-1947","where":"strike reports: cloudy, amount 8, ceiling 500–1,000 m"}]
+      },
+      {
+        "from": "08:00",
+        "to": "18:00",
+        "region": "kido-butai",
+        "cover": 0.2,
+        "baseM": 500,
+        "topsM": 4000,
+        "sources": [{"id":"nagumo-1947","where":"Action of Cover Units: clear, 1 to 3"}]
+      },
+      {
+        "from": "11:00",
+        "to": "15:00",
+        "region": "tf-17",
+        "cover": 0.3,
+        "baseM": 900,
+        "topsM": 1500,
+        "sources": [
+          {"id":"nwc-midway-1948","where":"p. 137: clouds 3/10, visibility 20 miles, sea smooth with swells from east"}
+        ]
+      }
+    ],
+    "visibilityM": 40000,
+    "squalls": [],
+    "note": "Light south-easterly air all day, “directly away from the enemy” for the American carriers (Hornet report); the sea smooth, a swell from the east.",
+    "sources": [
+      {"id":"nagumo-1947","where":"strike reports; Table 2"},
+      {"id":"nwc-midway-1948","where":"pp. 121, 126, 137"},
+      {"id":"cv8-midway-1942","where":"air operations"}
+    ]
+  },
+  "sides": {
+    "japan": {"side":"jp","name":"Imperial Japanese Navy","ja":"大日本帝国海軍"},
+    "usa": {"side":"us","name":"United States Navy, Marine Corps and Army Air Forces"}
+  },
+  "units": [
+    {
+      "id": "akagi",
+      "kit": "akagi",
+      "side": "jp",
+      "name": "Akagi",
+      "ja": "赤城",
+      "group": "kido-butai",
+      "track": [
+        {
+          "t": "04:00",
+          "lonlat": [179.5,30.95],
+          "courseDeg": 135,
+          "speedKn": 20,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "dead reckoning back from the 07:00 fix along the morning’s course of 135°; the force’s own track chart was not read for this hour"
+        },
+        {
+          "t": "07:00",
+          "lonlat": [-179.69,30.19],
+          "courseDeg": 135,
+          "speedKn": 28,
+          "precision": "report",
+          "source": "nwc-midway-1948",
+          "sourceNote": "NWC p. 88: bore 315°, 170 miles from Midway, course 135°, 28 knots; Nagumo’s chart: 0400 (Tokyo) 315°, 170 miles"
+        },
+        {
+          "t": "09:00",
+          "lonlat": [-179.35,29.86],
+          "courseDeg": 100,
+          "speedKn": 24,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "Diagram D-3, read by eye, ±5′; course 100° from 07:39"
+        },
+        {
+          "t": "10:00",
+          "lonlat": [-179,30],
+          "courseDeg": 30,
+          "speedKn": 24,
+          "precision": "report",
+          "source": "nagumo-1947",
+          "sourceClock": "0700",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "sourceNote": "Nagumo’s own signal: Lat. 30° N., Long. 179° W., course 30 degrees, speed 24 knots (NWC p. 93)"
+        },
+        {
+          "t": "10:22",
+          "lonlat": [-179.02,30.15],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-3 puts the attacks at about 30°06′–30°10′N 178°59′–179°01′W; course 300° from 10:14 (Akagi’s TROM); Enterprise reported 30°05′N 178°50′W"
+        },
+        {
+          "t": "10:26",
+          "lonlat": [-179.03,30.16],
+          "courseDeg": 0,
+          "speedKn": 24,
+          "precision": "schematic",
+          "source": "nagumo-1947",
+          "sourceClock": "0726",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "sourceNote": "a maximum reverse turn as the dive bombers came down (log 0724)"
+        },
+        {
+          "t": "10:42",
+          "lonlat": [-179.04,30.17],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nagumo-1947",
+          "sourceClock": "0742",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "sourceNote": "steering damaged, engines stopped (log 0742); rudder jammed about 20° (TROM)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-179.04,30.17],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "dead in the water; her scuttling position (30°30′N 178°40′W, Nagumo) lies some twenty miles from the attack plot: the reckonings do not agree"
+        }
+      ],
+      "hangarHazard": [
+        {
+          "t": "04:00",
+          "h": 0.3,
+          "sources": [{"id":"nagumo-1947","where":"narrative p. 7: Organization No. 4 held for ships"}],
+          "note": "the second wave in the hangar, armed for ships"
+        },
+        {
+          "t": "07:15",
+          "h": 0.6,
+          "sources": [{"id":"nagumo-1947","where":"log 0415 JST"}],
+          "note": "rearming with bombs: torpedoes coming off below"
+        },
+        {
+          "t": "09:00",
+          "h": 0.7,
+          "sources": [{"id":"nagumo-1947","where":"log 0559–0618 JST"}],
+          "note": "the Midway strike recovered, refuelling"
+        },
+        {
+          "t": "10:20",
+          "h": 0.8,
+          "sources": [
+            {"id":"nagumo-1947","where":"narrative p. 7: CarDiv 1’s attack planes ready at 0730 (10:30)"}
+          ],
+          "note": "R7 §4.8’s value for the Kidō Butai at 10:20"
+        }
+      ],
+      "events": [
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-akagi-d3a",
+          "sources": [{"id":"nagumo-1947","where":"log 0130 JST; Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi launches her dive bombers and fighters for Midway."
+        },
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-akagi-a6m",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "05:43",
+          "kind": "launches",
+          "by": "cap-morning",
+          "sources": [{"id":"nagumo-1947","where":"log 0242–0243 JST"}],
+          "sourceClock": "0243",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "A flying boat is sighted; fighters are launched from all ships."
+        },
+        {
+          "t": "05:52",
+          "kind": "sighted",
+          "by": "midway-pby",
+          "sources": [
+            {"id":"nwc-midway-1948","where":"p. 121"},
+            {"id":"cv6-midway-1942","where":"0803 zone +10"}
+          ],
+          "text": "A Catalina reports carriers and battleships steaming south-east."
+        },
+        {
+          "t": "07:05",
+          "kind": "sighted",
+          "sources": [{"id":"nagumo-1947","where":"log 0405 JST"}],
+          "sourceClock": "0405",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi sights aircraft low to the south-south-east: Midway’s torpedo planes."
+        },
+        {
+          "t": "07:10",
+          "kind": "near-miss",
+          "by": "midway-b26",
+          "count": [3,4],
+          "where": "torpedoes passing to starboard and to port; one explodes in the wake",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0407–0415 JST"},
+            {"id":"trom-akagi","where":"4 June 1942"}
+          ],
+          "sourceClock": "0410",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi swings hard both ways and combs the torpedoes."
+        },
+        {
+          "t": "07:15",
+          "kind": "signal",
+          "sources": [{"id":"nagumo-1947","where":"log 0415 JST"},{"id":"nwc-midway-1948","where":"0716"}],
+          "sourceClock": "0415",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Nagumo: the second attack wave stands by; re-equip with bombs.",
+          "tellings": [
+            {"source":"nwc-midway-1948","says":"Logs the order at 0716 and questions the delay in Tone 4’s report."}
+          ]
+        },
+        {
+          "t": "07:45",
+          "kind": "signal",
+          "sources": [{"id":"nagumo-1947","where":"log 0445 JST"}],
+          "sourceClock": "0445",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Nagumo: prepare to attack enemy fleet units; leave torpedoes on the planes not yet changed to bombs."
+        },
+        {
+          "t": "09:00",
+          "kind": "recovers",
+          "by": "strike-akagi-d3a",
+          "sources": [{"id":"nagumo-1947","where":"log 0559–0618 JST"}],
+          "sourceClock": "0600",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "The Midway strike lands on."
+        },
+        {
+          "t": "09:17",
+          "kind": "turns",
+          "sources": [{"id":"nagumo-1947","where":"log 0617 JST"},{"id":"nwc-midway-1948","where":"0917"}],
+          "sourceClock": "0617",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "The force turns to 070° at battle speed."
+        },
+        {
+          "t": "10:14",
+          "kind": "turns",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0710–0714 JST"},
+            {"id":"trom-akagi","where":"4 June 1942"}
+          ],
+          "sourceClock": "0714",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi settles on 300° to put her stern to the torpedo planes."
+        },
+        {
+          "t": "10:20",
+          "kind": "sighted",
+          "sources": [{"id":"nagumo-1947","where":"log 0720 JST"},{"id":"trom-akagi","where":"4 June 1942"}],
+          "sourceClock": "0720",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi sees dive bombers over Kaga and makes a maximum turn."
+        },
+        {
+          "t": "10:26",
+          "kind": "near-miss",
+          "by": "vb-6-akagi",
+          "count": [1,2],
+          "where": "abeam the bridge, about ten metres to port",
+          "sources": [{"id":"nagumo-1947","where":"log 0726 JST; Table 3"}],
+          "sourceClock": "0726",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "A bomb bursts close aboard the bridge.",
+          "tellings": [
+            {
+              "source": "trom-akagi",
+              "says": "After Parshall and Tully: one hit amidships; the second bomb slices through the fantail’s net-guards and bursts under the port quarter, jamming the rudder; the third a near miss forward."
+            }
+          ]
+        },
+        {
+          "t": "10:26",
+          "kind": "hit",
+          "by": "vb-6-akagi",
+          "count": [1,2],
+          "where": "the amidships elevator, into the upper hangar among armed and fuelled aircraft; aft on the port flight deck",
+          "damage": 0.3,
+          "sources": [{"id":"nagumo-1947","where":"log 0726 JST; Table 3"}],
+          "sourceClock": "0726",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi: a bomb bursts in the upper hangar.",
+          "tellings": [
+            {
+              "source": "nagumo-1947",
+              "says": "Three bombers from 80° to port, diving at about 50° from about 2,000 m, releasing at about 500 m: a near miss, a hit at the amidships elevator (the fatal hit), a hit aft on the port flight deck."
+            },
+            {
+              "source": "wp-midway",
+              "says": "Only one direct hit, almost certainly dropped by Lieutenant Best (after Parshall and Tully)."
+            },
+            {
+              "source": "jawp-midway",
+              "says": "Kroeger’s bomb missed about 10 m off the port bow; Weber’s a near miss; Best’s hit."
+            }
+          ]
+        },
+        {
+          "t": "10:27",
+          "kind": "fire",
+          "sources": [{"id":"nagumo-1947","where":"log 0726–0729 JST"}],
+          "sourceClock": "0727",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi: fire on the hangar deck."
+        },
+        {
+          "t": "10:29",
+          "kind": "fire",
+          "sources": [{"id":"nagumo-1947","where":"log 0729 JST"}],
+          "sourceClock": "0729",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi: torpedoes in the hangar explode; the magazines are ordered flooded, the after ones fail."
+        },
+        {
+          "t": "10:36",
+          "kind": "other",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0732–0736 JST"},
+            {"id":"trom-akagi","where":"4 June 1942"}
+          ],
+          "sourceClock": "0736",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi: the after starboard engine fails; twelve knots."
+        },
+        {
+          "t": "10:42",
+          "kind": "steering-jammed",
+          "sources": [{"id":"nagumo-1947","where":"log 0742 JST"},{"id":"trom-akagi","where":"4 June 1942"}],
+          "sourceClock": "0742",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Akagi: rudder jammed, engines stopped."
+        },
+        {
+          "t": "10:42",
+          "kind": "dead-in-water",
+          "sources": [{"id":"nagumo-1947","where":"log 0742 JST"}],
+          "sourceClock": "0742",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "10:46",
+          "kind": "other",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0746 JST; narrative"},
+            {"id":"nwc-midway-1948","where":"D-3: flag shifted to Nagara 1045"}
+          ],
+          "sourceClock": "0746",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Nagumo leaves Akagi; his flag goes to Nagara.",
+          "tellings": [
+            {
+              "source": "nagumo-1947",
+              "says": "The narrative has the transfer at 1130; the TROM has the flag raised on Nagara at 11:27."
+            }
+          ]
+        },
+        {
+          "t": "1942-06-05T05:00-12:00",
+          "kind": "scuttled",
+          "by": "arashi",
+          "sources": [
+            {"id":"nagumo-1947","where":"narrative; Table 3"},
+            {"id":"trom-akagi","where":"5 June 1942"}
+          ],
+          "sourceClock": "0200",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-06",
+          "text": "Akagi is scuttled by the torpedoes of her destroyers at dawn on 5 June.",
+          "tellings": [
+            {
+              "source": "trom-akagi",
+              "says": "Torpedoes of Arashi, Hagikaze, Maikaze and Nowaki; she sank at 30-30N 178-40W."
+            }
+          ]
+        }
+      ],
+      "fate": {
+        "kind": "scuttled",
+        "t": "1942-06-05T05:00-12:00",
+        "sources": [{"id":"nagumo-1947","where":"Table 3"}],
+        "tellings": [
+          {"source":"nagumo-1947","says":"221 dead (8 officers and warrant officers, 213 men)."},
+          {"source":"trom-akagi","says":"263 dead."}
+        ]
+      }
+    },
+    {
+      "id": "kaga",
+      "kit": "kaga",
+      "side": "jp",
+      "name": "Kaga",
+      "ja": "加賀",
+      "group": "kido-butai",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 210,
+        "rangeM": 6000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "hangarHazard": [
+        {"t":"04:00","h":0.3,"sources":[{"id":"nagumo-1947","where":"narrative p. 7"}]},
+        {"t":"07:15","h":0.6,"sources":[{"id":"nagumo-1947","where":"log 0415 JST"}]},
+        {"t":"09:00","h":0.7,"sources":[{"id":"trom-kaga","where":"4 June 1942: recovery 0837–0850"}]},
+        {"t":"10:20","h":0.8,"sources":[{"id":"nagumo-1947","where":"narrative p. 7"}],"note":"R7 §4.8"}
+      ],
+      "events": [
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-kaga-d3a",
+          "sources": [{"id":"nagumo-1947","where":"log 0130 JST; Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-kaga-a6m",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "08:37",
+          "kind": "recovers",
+          "by": "strike-kaga-d3a",
+          "sources": [{"id":"trom-kaga","where":"4 June 1942"}],
+          "text": "Kaga recovers her Midway strike."
+        },
+        {
+          "t": "09:45",
+          "kind": "near-miss",
+          "by": "vt-6",
+          "count": [1,8],
+          "where": "torpedo tracks on both bows, combed",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0640–0658 JST"},
+            {"id":"trom-kaga","where":"4 June 1942"}
+          ],
+          "sourceClock": "0645",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Kaga turns away from the torpedo planes on both bows; no torpedo hits."
+        },
+        {
+          "t": "10:22",
+          "kind": "near-miss",
+          "by": "vs-6",
+          "count": [3,5],
+          "where": "close aboard, both sides",
+          "sources": [{"id":"nagumo-1947","where":"narrative; log 0722 JST"}],
+          "sourceClock": "0722",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "The first bombs fall close aboard Kaga.",
+          "tellings": [
+            {"source":"nagumo-1947","says":"Successful against the first, second and third bombs."},
+            {
+              "source": "nwc-midway-1948",
+              "says": "Four hits and five near misses: two on the starboard bow, one starboard quarter, one port side amidships."
+            }
+          ]
+        },
+        {
+          "t": "10:22:40",
+          "kind": "hit",
+          "by": "vs-6",
+          "count": [2,3],
+          "where": "starboard aft; the forward elevator",
+          "damage": 0.3,
+          "sources": [{"id":"nagumo-1947","where":"narrative; log 0722 JST"}],
+          "sourceClock": "0722",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Kaga: bombs hit aft and at the forward elevator.",
+          "tellings": [
+            {
+              "source": "nagumo-1947",
+              "says": "Nine dive bombers sighted among the clouds; bombs 4, 7, 8 and 9 hit: 4 starboard aft, 7 and 8 near the forward elevator, 9 amidships."
+            },
+            {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs."},
+            {
+              "source": "jawp-midway",
+              "says": "McClusky’s section near-missed; Gallaher’s bomb was the fourth, aft; three more followed in quick succession."
+            }
+          ],
+          "byNote": "the record does not divide the hits between the squadrons; the TROM’s one 1,000-pound and three 500-pound bombs put most of them on Scouting Six (500-pound loads) and one or two on Bombing Six (1,000-pound)"
+        },
+        {
+          "t": "10:23:30",
+          "kind": "hit",
+          "by": "vb-6",
+          "count": [1,2],
+          "where": "forward of the bridge; amidships",
+          "damage": 0.3,
+          "sources": [
+            {"id":"nagumo-1947","where":"narrative; log 0723 JST"},
+            {"id":"trom-kaga","where":"4 June 1942"}
+          ],
+          "sourceClock": "0723",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Kaga: the bridge is wrecked; another bomb amidships.",
+          "byNote": "see the hit at 10:22:40"
+        },
+        {
+          "t": "10:24",
+          "kind": "fire",
+          "sources": [{"id":"nagumo-1947","where":"log 0724 JST"}],
+          "sourceClock": "0724",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Kaga: fire on the hangar deck."
+        },
+        {
+          "t": "14:10",
+          "kind": "other",
+          "sources": [{"id":"trom-kaga","where":"4 June 1942"},{"id":"cincpac-midway-1942","where":"para 30"}],
+          "text": "A submarine’s torpedo strikes Kaga and does not explode.",
+          "tellings": [
+            {
+              "source": "cincpac-midway-1942",
+              "says": "Nautilus fired three torpedoes at a burning carrier she took for Sōryū, 13:59–14:10."
+            }
+          ]
+        },
+        {
+          "t": "19:25",
+          "kind": "sinks",
+          "sources": [{"id":"nagumo-1947","where":"narrative"},{"id":"trom-kaga","where":"4 June 1942"}],
+          "sourceClock": "1625",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "tellings": [
+            {
+              "source": "nagumo-1947",
+              "says": "Fire reached the forward and after fuel tanks by 1625 (Tokyo), causing two great explosions, and she sank."
+            },
+            {
+              "source": "trom-kaga",
+              "says": "Hagikaze fired two torpedoes into her starboard side at 19:25 on orders to scuttle."
+            }
+          ]
+        }
+      ],
+      "fate": {
+        "kind": "sunk",
+        "t": "19:25",
+        "sources": [{"id":"nagumo-1947","where":"narrative; Table 3"},{"id":"trom-kaga"}],
+        "note": "Her sinking position lies some twenty miles from the attack plot.",
+        "tellings": [
+          {
+            "source": "nagumo-1947",
+            "says": "Sank at 30-20.3N 179-17.2W (narrative); 30-23.3N 179-17.2W in Table 3, as in the TROM and NWC."
+          },
+          {"source":"nagumo-1947","says":"Dead printed as “1 800” (garbled in the translation)."},
+          {"source":"trom-kaga","says":"814 dead."},
+          {"source":"jawp-midway","says":"Just under 800 dead (800名弱)."}
+        ]
+      },
+      "track": [
+        {
+          "t": "10:23",
+          "lonlat": [-179.0537,30.1055],
+          "courseDeg": 300,
+          "speedKn": 26,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "on station south-west of Akagi when the bombs fell (schematic)"
+        },
+        {
+          "t": "10:35",
+          "lonlat": [-179.0717,30.1145],
+          "courseDeg": 300,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "burning and losing way"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-179.0717,30.1145],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ]
+    },
+    {
+      "id": "soryu",
+      "kit": "soryu",
+      "side": "jp",
+      "name": "Sōryū",
+      "ja": "蒼龍",
+      "group": "kido-butai",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 110,
+        "rangeM": 6000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "hangarHazard": [
+        {"t":"04:00","h":0.3,"sources":[{"id":"nagumo-1947","where":"narrative p. 7"}]},
+        {
+          "t": "08:30",
+          "h": 0.6,
+          "sources": [{"id":"nagumo-1947","where":"log 0530 JST: 250 kg bombs for CarDiv 2’s bombers"}]
+        },
+        {"t":"09:00","h":0.7,"sources":[{"id":"nagumo-1947","where":"log 0559–0618 JST"}]},
+        {
+          "t": "10:20",
+          "h": 0.8,
+          "sources": [{"id":"nagumo-1947","where":"narrative p. 7: CarDiv 2 ready 0730–0800 (10:30–11:00)"}],
+          "note": "R7 §4.8"
+        }
+      ],
+      "events": [
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-soryu-b5n",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-soryu-a6m",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "08:14",
+          "kind": "near-miss",
+          "by": "b-17-sweeney",
+          "count": [1,16],
+          "where": "bomb patterns from high level",
+          "sources": [{"id":"cincpac-midway-1942","where":"para 25"},{"id":"nwc-midway-1948","where":"p. 90"}],
+          "text": "Bombs from high level fall around the carriers; no hits.",
+          "tellings": [
+            {"source":"cincpac-midway-1942","says":"Claimed three hits on carriers, probably Sōryū."},
+            {"source":"nagumo-1947","says":"No hits on any carrier from the high-level attacks (Table 3)."}
+          ]
+        },
+        {
+          "t": "08:30",
+          "kind": "launches",
+          "by": "soryu-d4y",
+          "sources": [{"id":"trom-soryu","where":"4 June 1942"},{"id":"nagumo-1947","where":"log 0530 JST"}],
+          "sourceClock": "0530",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "10:25",
+          "kind": "hit",
+          "by": "vb-3",
+          "count": [1,1],
+          "where": "the forward elevator",
+          "damage": 0.25,
+          "sources": [{"id":"nagumo-1947","where":"narrative; Table 3"}],
+          "sourceClock": "0725",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū: a bomb at the forward elevator; a fighter is blown over the side.",
+          "tellings": [
+            {
+              "source": "trom-soryu",
+              "says": "Two hits at 10:25–10:26 (forward elevator; abaft No. 2 elevator) and one at 10:29 amidships."
+            },
+            {
+              "source": "cv5-midway-1942",
+              "says": "Five direct hits and three very near misses claimed; at least seven hits claimed in all."
+            }
+          ]
+        },
+        {
+          "t": "10:26",
+          "kind": "hit",
+          "by": "vb-3",
+          "count": [1,1],
+          "where": "abaft No. 2 elevator",
+          "damage": 0.25,
+          "sources": [{"id":"nagumo-1947","where":"narrative"},{"id":"trom-soryu","where":"4 June 1942"}],
+          "sourceClock": "0726",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū: a second hit aft."
+        },
+        {
+          "t": "10:28",
+          "kind": "hit",
+          "by": "vb-3",
+          "count": [1,1],
+          "where": "amidships, by the funnels",
+          "damage": 0.25,
+          "sources": [{"id":"nagumo-1947","where":"narrative"}],
+          "sourceClock": "0728",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū: a third hit amidships."
+        },
+        {
+          "t": "10:30",
+          "kind": "fire",
+          "sources": [{"id":"nagumo-1947","where":"narrative"}],
+          "sourceClock": "0730",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū: fires spread, with explosions in the bomb and torpedo rooms."
+        },
+        {
+          "t": "10:40",
+          "kind": "dead-in-water",
+          "sources": [{"id":"nagumo-1947","where":"narrative 0740 JST"}],
+          "sourceClock": "0740",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "10:43",
+          "kind": "steering-jammed",
+          "sources": [{"id":"nagumo-1947","where":"narrative 0743 JST"}],
+          "sourceClock": "0743",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū: steering fails."
+        },
+        {
+          "t": "10:45",
+          "kind": "abandoned",
+          "sources": [{"id":"nagumo-1947","where":"narrative 0745 JST"}],
+          "sourceClock": "0745",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Sōryū’s captain orders her abandoned."
+        },
+        {
+          "t": "19:13",
+          "kind": "sinks",
+          "sources": [{"id":"nagumo-1947","where":"narrative; Table 3"}],
+          "sourceClock": "1613",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "tellings": [
+            {"source":"trom-soryu","says":"Isokaze’s three torpedoes at 19:12."},
+            {"source":"nagumo-1947","says":"A great underwater explosion at 19:20."}
+          ]
+        }
+      ],
+      "fate": {
+        "kind": "sunk",
+        "t": "19:13",
+        "sources": [{"id":"nagumo-1947","where":"Table 3"}],
+        "note": "Her sinking position differs by some thirty miles between Nagumo and the TROM.",
+        "tellings": [
+          {"source":"nagumo-1947","says":"Sank at 30-42.5N 178-37.5W."},
+          {"source":"trom-soryu","says":"Sank at 30°38′N 179°13′W."},
+          {"source":"nagumo-1947","says":"718 dead (35 officers and warrant officers, 683 men)."},
+          {"source":"trom-soryu","says":"713 dead."}
+        ]
+      },
+      "track": [
+        {
+          "t": "10:25",
+          "lonlat": [-178.9689,30.1389],
+          "courseDeg": 180,
+          "speedKn": 28,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "turning to a southerly course to launch fighters (R4 M3)"
+        },
+        {
+          "t": "10:40",
+          "lonlat": [-178.9689,30.1118],
+          "courseDeg": 180,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nagumo-1947",
+          "sourceClock": "0740",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "sourceNote": "engines stopped (narrative 0740)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-178.9689,30.1118],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ]
+    },
+    {
+      "id": "hiryu",
+      "kit": "hiryu",
+      "side": "jp",
+      "name": "Hiryū",
+      "ja": "飛龍",
+      "group": "kido-butai",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 40,
+        "rangeM": 9000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2); station until her own track from 10:54"
+      },
+      "track": [
+        {
+          "t": "10:54",
+          "lonlat": [-179.1,30.4333],
+          "courseDeg": 0,
+          "speedKn": 24,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-3: Hiryū launches at about 30°26′N 179°06′W, on a northerly course in light wind (NWC p. 94)"
+        },
+        {
+          "t": "13:31",
+          "lonlat": [-178.7667,30.8167],
+          "courseDeg": 30,
+          "speedKn": 24,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-4: the second strike launched at about 30°49′N 178°46′W"
+        },
+        {
+          "t": "17:03",
+          "lonlat": [-178.45,31.5667],
+          "courseDeg": 0,
+          "speedKn": 28,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-4: about 31°34′N 178°27′W; the Enterprise report gives 31°40′N 179°10′W, about forty minutes of longitude apart"
+        },
+        {
+          "t": "17:30",
+          "lonlat": [-178.44,31.61],
+          "courseDeg": 20,
+          "speedKn": 12,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "burning, still under way"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-178.43,31.63],
+          "courseDeg": 20,
+          "speedKn": 6,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "burning; she stopped later that night (Nagumo)"
+        }
+      ],
+      "hangarHazard": [
+        {"t":"04:00","h":0.3,"sources":[{"id":"nagumo-1947","where":"narrative p. 7"}]},
+        {"t":"08:30","h":0.6,"sources":[{"id":"nagumo-1947","where":"log 0530 JST"}]},
+        {"t":"09:00","h":0.7,"sources":[{"id":"nagumo-1947","where":"log 0559–0618 JST"}]},
+        {
+          "t": "10:58",
+          "h": 0.4,
+          "sources": [{"id":"nagumo-1947","where":"log 0754–0758 JST"}],
+          "note": "the first strike away"
+        },
+        {"t":"13:31","h":0.3,"sources":[{"id":"nwc-midway-1948","where":"D-4"}],"note":"the second strike away"},
+        {"t":"15:40","h":0.5,"sources":[{"id":"nagumo-1947","where":"narrative: a dusk attack at 18:00 planned"}]},
+        {
+          "t": "17:00",
+          "h": 0.6,
+          "sources": [{"id":"nagumo-1947","where":"narrative 1330 JST: third attack wave to take off at 1500"}],
+          "note": "R7 §4.8’s value for Hiryū at 17:03"
+        }
+      ],
+      "events": [
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-hiryu-b5n",
+          "sources": [{"id":"nagumo-1947","where":"log 0130 JST; Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū launches the Midway strike; one level bomber soon turns back with engine trouble."
+        },
+        {
+          "t": "04:30",
+          "kind": "launches",
+          "by": "strike-hiryu-a6m",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "07:10",
+          "kind": "near-miss",
+          "by": "midway-tbf",
+          "count": [1,4],
+          "where": "torpedoes from ahead on both bows",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0407–0415 JST"},
+            {"id":"nwc-midway-1948","where":"p. 88"}
+          ],
+          "sourceClock": "0410",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Midway’s torpedo planes attack from ahead; no hits."
+        },
+        {
+          "t": "08:00",
+          "kind": "near-miss",
+          "by": "vmsb-241-sbd",
+          "count": [1,8],
+          "where": "glide-bombing, astern and abeam",
+          "sources": [{"id":"nagumo-1947","where":"log 0453–0521 JST; Table 3"}],
+          "sourceClock": "0500",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Marine dive bombers glide-bomb Hiryū; no hits.",
+          "tellings": [{"source":"cincpac-midway-1942","says":"Claimed three hits, probably on Sōryū."}]
+        },
+        {
+          "t": "09:00",
+          "kind": "recovers",
+          "by": "strike-hiryu-b5n",
+          "sources": [{"id":"nagumo-1947","where":"log 0559–0618 JST"}],
+          "sourceClock": "0600",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "10:16",
+          "kind": "near-miss",
+          "by": "vt-3",
+          "count": [1,5],
+          "where": "torpedo tracks, combed",
+          "sources": [
+            {"id":"nagumo-1947","where":"Cover Units report 0709–0718 JST"},
+            {"id":"cv5-midway-1942","where":"Air Department"}
+          ],
+          "sourceClock": "0716",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū combs the torpedo tracks; no hit."
+        },
+        {
+          "t": "10:54",
+          "kind": "launches",
+          "by": "hiryu-d3a-1",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0750–0758 JST"},
+            {"id":"nwc-midway-1948","where":"p. 94"}
+          ],
+          "sourceClock": "0754",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū launches her dive bombers for the American carriers."
+        },
+        {
+          "t": "10:54",
+          "kind": "launches",
+          "by": "hiryu-a6m-1",
+          "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+          "sourceClock": "0754",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "12:45",
+          "kind": "signal",
+          "sources": [{"id":"nagumo-1947","where":"log 0945 JST"}],
+          "sourceClock": "0945",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū’s strike: enemy carrier burning."
+        },
+        {
+          "t": "13:31",
+          "kind": "launches",
+          "by": "hiryu-b5n-2",
+          "sources": [{"id":"nwc-midway-1948","where":"D-4"},{"id":"nagumo-1947","where":"log 1031 JST"}],
+          "text": "Hiryū launches her torpedo planes.",
+          "tellings": [
+            {
+              "source": "nagumo-1947",
+              "says": "The log has “1031 Second attack wave takes off” and CarDiv 2’s report “1020” (13:20–13:31); a Chikuma entry has 0906, which matches nothing else."
+            },
+            {"source":"trom-hiryu","says":"12:45."},
+            {"source":"jawp-midway","says":"13:30."}
+          ]
+        },
+        {"t":"13:31","kind":"launches","by":"hiryu-a6m-2","sources":[{"id":"nwc-midway-1948","where":"D-4"}]},
+        {
+          "t": "15:40",
+          "kind": "recovers",
+          "by": "hiryu-b5n-2",
+          "sources": [{"id":"nagumo-1947","where":"narrative; log 1240 JST"}],
+          "sourceClock": "1240",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū recovers what is left of her torpedo planes and plans a dusk attack."
+        },
+        {
+          "t": "17:01",
+          "kind": "near-miss",
+          "by": "enterprise-pm",
+          "count": [4,9],
+          "where": "close aboard as she turns",
+          "sources": [{"id":"nagumo-1947","where":"log 1401–1405 JST; Table 3"},{"id":"jawp-midway"}],
+          "sourceClock": "1401",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū’s helm throws off the first bombs."
+        },
+        {
+          "t": "17:03",
+          "kind": "hit",
+          "by": "enterprise-pm",
+          "count": [4,5],
+          "where": "three in a row forward, one by the bridge; the forward elevator thrown against the island",
+          "damage": 0.5,
+          "sources": [
+            {"id":"nagumo-1947","where":"log 1403 JST; Table 3"},
+            {"id":"trom-hiryu","where":"4 June 1942"}
+          ],
+          "sourceClock": "1403",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū: bombs forward; the elevator is flung against the island.",
+          "tellings": [
+            {"source":"nagumo-1947","says":"Thirteen dive bombers, four hits (Table 3)."},
+            {"source":"wp-midway","says":"Twenty-four attacking; four bombs, possibly five."}
+          ]
+        },
+        {
+          "t": "17:05",
+          "kind": "fire",
+          "sources": [{"id":"nagumo-1947","where":"log 1405 JST"}],
+          "sourceClock": "1405",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Hiryū: fire forward and in the hangar."
+        },
+        {
+          "t": "1942-06-05T05:10-12:00",
+          "kind": "scuttled",
+          "by": "makigumo",
+          "sources": [
+            {"id":"nagumo-1947","where":"narrative; Table 3"},
+            {"id":"trom-hiryu","where":"5 June 1942"}
+          ],
+          "sourceClock": "0210",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-06",
+          "text": "Makigumo torpedoes Hiryū to scuttle her.",
+          "tellings": [
+            {"source":"trom-hiryu","says":"Seen afloat by a Hōshō plane at 06:30; she sank about 09:12."}
+          ]
+        }
+      ],
+      "fate": {
+        "kind": "scuttled",
+        "t": "1942-06-05T05:10-12:00",
+        "sources": [{"id":"nagumo-1947","where":"Table 3"},{"id":"trom-hiryu"}],
+        "note": "Rear Admiral Yamaguchi and Captain Kaku stayed aboard.",
+        "tellings": [
+          {"source":"nagumo-1947","says":"416 dead (29 officers and warrant officers, 387 men)."},
+          {"source":"jawp-midway","says":"417, counting 34 engine-room men later rescued by US forces."}
+        ]
+      }
+    },
+    {
+      "id": "haruna",
+      "kit": "kongo",
+      "side": "jp",
+      "name": "Haruna",
+      "ja": "榛名",
+      "group": "support-force",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 250,
+        "rangeM": 16000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "events": [
+        {
+          "t": "08:28",
+          "kind": "near-miss",
+          "by": "vmsb-241-sb2u",
+          "count": [1,11],
+          "where": "glide-bombs astern and abeam",
+          "sources": [
+            {"id":"nagumo-1947","where":"log 0527–0530 JST"},
+            {"id":"nwc-midway-1948","where":"p. 91"}
+          ],
+          "sourceClock": "0528",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Marine Vindicators glide-bomb Haruna; no hits.",
+          "tellings": [
+            {"source":"cincpac-midway-1942","says":"Two hits reported; the battleship smoking and listed (para 24)."}
+          ]
+        },
+        {
+          "t": "17:15",
+          "kind": "near-miss",
+          "by": "enterprise-pm",
+          "count": [1,2],
+          "where": "close aboard",
+          "sources": [{"id":"nagumo-1947","where":"log 1407–1448 JST; Table 3"}],
+          "sourceClock": "1415",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Dive bombers near-miss Haruna; no hits."
+        }
+      ],
+      "fate": {"kind":"undamaged","sources":[{"id":"nagumo-1947","where":"Table 3"}]}
+    },
+    {
+      "id": "kirishima",
+      "kit": "kongo",
+      "side": "jp",
+      "name": "Kirishima",
+      "ja": "霧島",
+      "group": "support-force",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 200,
+        "rangeM": 18000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "events": [
+        {
+          "t": "05:34",
+          "kind": "smoke-screen",
+          "lonlat": [179.919,30.4625],
+          "lengthM": 3000,
+          "durationS": 600,
+          "sources": [{"id":"nagumo-1947","where":"log 0232–0234 JST"}],
+          "sourceClock": "0234",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Nagara, then Kirishima, lay smoke."
+        }
+      ]
+    },
+    {
+      "id": "tone",
+      "kit": "tone",
+      "side": "jp",
+      "name": "Tone",
+      "ja": "利根",
+      "group": "support-force",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 110,
+        "rangeM": 10000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "events": [
+        {
+          "t": "05:00",
+          "kind": "launches",
+          "by": "tone-4",
+          "sources": [{"id":"nagumo-1947","where":"log 0200 JST"}],
+          "sourceClock": "0200",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Tone launches a search plane about half an hour late."
+        },
+        {
+          "t": "09:29",
+          "kind": "opens-fire",
+          "by": "tone",
+          "target": "vt-8",
+          "sources": [{"id":"nagumo-1947","where":"log 0629 JST"}],
+          "sourceClock": "0629",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Tone opens fire on the torpedo planes."
+        },
+        {
+          "t": "17:30",
+          "kind": "near-miss",
+          "by": "hornet-pm",
+          "count": [1,16],
+          "where": "bombs close aboard",
+          "sources": [{"id":"cv8-midway-1942","where":"1930 zone +10"},{"id":"nagumo-1947","where":"Table 3"}],
+          "sourceClock": "1930",
+          "sourceZone": "-10:00",
+          "text": "Hornet’s dive bombers attack the cruisers; no hits.",
+          "tellings": [
+            {"source":"cv8-midway-1942","says":"Claimed three hits on “one BB” and two on a heavy cruiser."},
+            {"source":"nagumo-1947","says":"No hits on Tone, Chikuma or Haruna (Table 3)."}
+          ]
+        }
+      ],
+      "fate": {"kind":"undamaged","sources":[{"id":"nagumo-1947","where":"Table 3"}]}
+    },
+    {
+      "id": "chikuma",
+      "kit": "tone",
+      "side": "jp",
+      "name": "Chikuma",
+      "ja": "筑摩",
+      "group": "support-force",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 320,
+        "rangeM": 10000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "events": [
+        {
+          "t": "04:35",
+          "kind": "launches",
+          "by": "chikuma-5",
+          "sources": [{"id":"nagumo-1947","where":"log 0135 JST"}],
+          "sourceClock": "0135",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "09:18",
+          "kind": "sighted",
+          "sources": [{"id":"nagumo-1947","where":"log 0618 JST"}],
+          "sourceClock": "0618",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Chikuma sights torpedo planes at 52° to starboard."
+        },
+        {
+          "t": "09:27",
+          "kind": "opens-fire",
+          "by": "chikuma",
+          "target": "vt-8",
+          "sources": [{"id":"nagumo-1947","where":"log 0627 JST"}],
+          "sourceClock": "0627",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        }
+      ],
+      "fate": {"kind":"undamaged","sources":[{"id":"nagumo-1947","where":"Table 3"}]}
+    },
+    {
+      "id": "nagara",
+      "kit": "nagara",
+      "side": "jp",
+      "name": "Nagara",
+      "ja": "長良",
+      "group": "screen",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 150,
+        "rangeM": 8000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "schematic: R4 §3.2’s constraints (Kaga south-west, Akagi north of Kaga, Sōryū east, Hiryū north-east and drawing away, a destroyer close to each carrier, the heavy ships 10 to 20 km out); no source read gives the spacing (R4 D2)"
+      },
+      "events": [
+        {
+          "t": "05:32",
+          "kind": "smoke-screen",
+          "lonlat": [179.9557,30.4989],
+          "lengthM": 3000,
+          "durationS": 600,
+          "sources": [{"id":"nagumo-1947","where":"log 0232 JST"}],
+          "sourceClock": "0232",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05"
+        },
+        {
+          "t": "08:24",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"0824"}],
+          "text": "Nagara and Arashi depth-charge the submarine Nautilus."
+        },
+        {
+          "t": "11:30",
+          "kind": "signal",
+          "sources": [{"id":"nagumo-1947","where":"narrative"},{"id":"trom-akagi","where":"4 June 1942"}],
+          "sourceClock": "0830",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "text": "Nagumo’s flag flies in Nagara."
+        }
+      ],
+      "track": [
+        {
+          "t": "11:30",
+          "lonlat": [-178.9984,30.1073],
+          "courseDeg": 0,
+          "speedKn": 24,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "Nagumo’s flag; the force gathers to the north"
+        },
+        {
+          "t": "17:00",
+          "lonlat": [-178.5086,31.4286],
+          "courseDeg": 0,
+          "speedKn": 20,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-178.4841,31.5025],
+          "courseDeg": 0,
+          "speedKn": 16,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ]
+    },
+    {
+      "id": "nowaki",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Nowaki",
+      "ja": "野分",
+      "group": "desdiv-4",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 135,
+        "rangeM": 1500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "arashi",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Arashi",
+      "ja": "嵐",
+      "group": "desdiv-4",
+      "station": {
+        "guide": "akagi",
+        "bearingDeg": 315,
+        "rangeM": 1500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947"
+      },
+      "track": [
+        {
+          "t": "08:24",
+          "lonlat": [-179.4839,29.8825],
+          "courseDeg": 200,
+          "speedKn": 10,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "astern of the force, hunting Nautilus (NWC 0824)"
+        },
+        {
+          "t": "09:10",
+          "lonlat": [-179.4875,29.874],
+          "courseDeg": 90,
+          "speedKn": 8,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        },
+        {
+          "t": "09:55",
+          "lonlat": [-179.1871,29.9893],
+          "courseDeg": 45,
+          "speedKn": 30,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "McClusky sights a destroyer running north-east and follows her (NWC p. 131)"
+        },
+        {
+          "t": "10:20",
+          "lonlat": [-179.0329,30.1492],
+          "courseDeg": 45,
+          "speedKn": 30,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-179.051,30.1796],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "standing by Akagi, which she helped scuttle at dawn (Nagumo)"
+        }
+      ],
+      "events": [
+        {
+          "t": "08:24",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"0824"}],
+          "text": "Arashi depth-charges the submarine Nautilus and stays behind to hunt her."
+        },
+        {
+          "t": "09:55",
+          "kind": "sighted",
+          "by": "vs-6",
+          "sources": [{"id":"nwc-midway-1948","where":"p. 131"}],
+          "text": "A destroyer running north-east leads Enterprise’s dive bombers to the carriers."
+        }
+      ]
+    },
+    {
+      "id": "hagikaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Hagikaze",
+      "ja": "萩風",
+      "group": "desdiv-4",
+      "station": {
+        "guide": "kaga",
+        "bearingDeg": 90,
+        "rangeM": 1500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "maikaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Maikaze",
+      "ja": "舞風",
+      "group": "desdiv-4",
+      "station": {
+        "guide": "kaga",
+        "bearingDeg": 270,
+        "rangeM": 1500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "kazagumo",
+      "kit": "yugumo",
+      "side": "jp",
+      "name": "Kazagumo",
+      "ja": "風雲",
+      "group": "desdiv-10",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 0,
+        "rangeM": 2500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "yugumo",
+      "kit": "yugumo",
+      "side": "jp",
+      "name": "Yūgumo",
+      "ja": "夕雲",
+      "group": "desdiv-10",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 120,
+        "rangeM": 2500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "makigumo",
+      "kit": "yugumo",
+      "side": "jp",
+      "name": "Makigumo",
+      "ja": "巻雲",
+      "group": "desdiv-10",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 240,
+        "rangeM": 2500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      },
+      "events": []
+    },
+    {
+      "id": "urakaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Urakaze",
+      "ja": "浦風",
+      "group": "desdiv-17",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 60,
+        "rangeM": 5000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "isokaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Isokaze",
+      "ja": "磯風",
+      "group": "desdiv-17",
+      "station": {
+        "guide": "soryu",
+        "bearingDeg": 180,
+        "rangeM": 1500,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      },
+      "events": []
+    },
+    {
+      "id": "tanikaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Tanikaze",
+      "ja": "谷風",
+      "group": "desdiv-17",
+      "station": {
+        "guide": "hiryu",
+        "bearingDeg": 300,
+        "rangeM": 5000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "hamakaze",
+      "kit": "kagero",
+      "side": "jp",
+      "name": "Hamakaze",
+      "ja": "浜風",
+      "group": "desdiv-17",
+      "station": {
+        "guide": "soryu",
+        "bearingDeg": 0,
+        "rangeM": 2000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nagumo-1947",
+        "note": "plane guards as the record names them (Isokaze for Sōryū; Hagikaze and Maikaze for Kaga; Nowaki and Arashi for Akagi); the rest on Hiryū, positions schematic"
+      }
+    },
+    {
+      "id": "yorktown",
+      "kit": "yorktown",
+      "side": "us",
+      "name": "Yorktown",
+      "hull": "CV-5",
+      "group": "tf-17",
+      "track": [
+        {
+          "t": "04:00",
+          "lonlat": [-176.44,31.6],
+          "courseDeg": 210,
+          "speedKn": 13.5,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "back along the base course from the planned 04:30 position"
+        },
+        {
+          "t": "04:30",
+          "lonlat": [-176.5,31.5],
+          "courseDeg": 210,
+          "speedKn": 13.5,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "NWC p. 120: TF 17’s planned 04:30 position, 31°30′N 176°30′W, 013° (T) 202 miles from Midway; base course 210°, 13.5 knots. A planned position, not a logged fix"
+        },
+        {
+          "t": "09:00",
+          "lonlat": [-176.5333,31.2667],
+          "courseDeg": 225,
+          "speedKn": 25,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-3: about 31°16′N 176°32′W"
+        },
+        {
+          "t": "12:05",
+          "lonlat": [-176.84,30.86],
+          "courseDeg": 225,
+          "speedKn": 30.5,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-3: about 30°52′N 176°50′W; axis 225°, 30.5 knots (NWC p. 137)"
+        },
+        {
+          "t": "12:40",
+          "lonlat": [-176.85,30.855],
+          "courseDeg": 225,
+          "speedKn": 0,
+          "precision": "narrative",
+          "source": "cv5-midway-1942",
+          "sourceClock": "1440",
+          "sourceZone": "-10:00",
+          "sourceNote": "“stopped at 1440, about 20 minutes after the bomb had hit”"
+        },
+        {
+          "t": "13:40",
+          "lonlat": [-176.85,30.855],
+          "courseDeg": 90,
+          "speedKn": 0,
+          "precision": "narrative",
+          "source": "cv5-midway-1942",
+          "sourceClock": "1540",
+          "sourceZone": "-10:00",
+          "sourceNote": "boilers relit, under way"
+        },
+        {
+          "t": "14:00",
+          "lonlat": [-176.81,30.82],
+          "courseDeg": 135,
+          "speedKn": 19,
+          "precision": "schematic",
+          "source": "cincpac-midway-1942",
+          "sourceNote": "CINCPAC 1402: course 090° (its latitude 33-51 N is a misprint for 30°5x′)"
+        },
+        {
+          "t": "14:41",
+          "lonlat": [-176.7167,30.7167],
+          "courseDeg": 120,
+          "speedKn": 18,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-4: about 30°43′N 176°43′W"
+        },
+        {
+          "t": "14:47",
+          "lonlat": [-176.71,30.715],
+          "courseDeg": 120,
+          "speedKn": 0,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "power lost after the torpedo hits"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.71,30.715],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "abandoned and drifting; she sank on 7 June at 30°47′N 176°24′W (NWC p. 185)"
+        }
+      ],
+      "hangarHazard": [
+        {"t":"04:00","h":0.3,"sources":[{"id":"cv5-midway-1942","where":"Air Department"}]},
+        {"t":"09:06","h":0.2,"sources":[{"id":"nwc-midway-1948","where":"p. 133"}],"note":"the strike away"},
+        {
+          "t": "11:55",
+          "h": 0.15,
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 40"},
+            {"id":"cv5-midway-1942","where":"Engineering"}
+          ],
+          "note": "refuelling stopped, gasoline lines drained and filled with CO₂ (R7 §4.8)"
+        },
+        {
+          "t": "14:30",
+          "h": 0.3,
+          "sources": [{"id":"cv5-midway-1942","where":"Air Department"}],
+          "note": "R7 §4.8: fighters refuelled and launched with 23 gallons each"
+        }
+      ],
+      "events": [
+        {
+          "t": "04:31",
+          "kind": "launches",
+          "by": "vs-5-dawn",
+          "sources": [{"id":"nwc-midway-1948","where":"0431"}],
+          "text": "Yorktown sends Scouting Five to search the northern semicircle."
+        },
+        {
+          "t": "08:30",
+          "kind": "launches",
+          "by": "vb-3",
+          "sources": [
+            {"id":"cv5-midway-1942","where":"1030 zone +10"},
+            {"id":"nwc-midway-1948","where":"complete by 0906"}
+          ],
+          "sourceClock": "1030",
+          "sourceZone": "-10:00",
+          "text": "Yorktown launches Bombing Three and Torpedo Three."
+        },
+        {
+          "t": "08:45",
+          "kind": "launches",
+          "by": "vt-3",
+          "sources": [{"id":"cv5-midway-1942","where":"1045 zone +10"}],
+          "sourceClock": "1045",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "09:05",
+          "kind": "launches",
+          "by": "vf-3-escort",
+          "sources": [{"id":"cv5-midway-1942","where":"1105 zone +10"}],
+          "sourceClock": "1105",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "11:33",
+          "kind": "launches",
+          "by": "vs-5-search",
+          "sources": [
+            {"id":"nwc-midway-1948","where":"1133"},
+            {"id":"cincpac-midway-1942","where":"para 40: 1150"}
+          ],
+          "text": "Yorktown launches scouts to search to the west and north."
+        },
+        {"t":"11:40","kind":"launches","by":"vf-3-cap-noon","sources":[{"id":"nwc-midway-1948","where":"1133"}]},
+        {
+          "t": "11:45",
+          "kind": "recovers",
+          "by": "vf-3-escort",
+          "sources": [
+            {"id":"nwc-midway-1948","where":"1133"},
+            {"id":"cv5-midway-1942","where":"Air Department"}
+          ],
+          "text": "Yorktown lands her escort fighters."
+        },
+        {
+          "t": "11:52",
+          "kind": "sighted",
+          "sources": [{"id":"cincpac-midway-1942","where":"para 40"}],
+          "text": "Radar: many aircraft from the west, closing.",
+          "tellings": [
+            {"source":"cv5-midway-1942","says":"A raid at 250°, 46 miles, climbing (1359 zone +10)."},
+            {"source":"cincpac-midway-1942","says":"Many planes approaching from westward, distant 32 miles (11:52)."}
+          ]
+        },
+        {
+          "t": "11:55",
+          "kind": "other",
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 40"},
+            {"id":"cv5-midway-1942","where":"Engineering"}
+          ],
+          "text": "Yorktown stops refuelling, drains her gasoline lines and fills them with CO₂."
+        },
+        {
+          "t": "12:05",
+          "kind": "hit",
+          "by": "hiryu-d3a-1",
+          "count": [1,1],
+          "where": "the flight deck aft of the island, abaft No. 2 elevator (the bomb of a bomber cut apart by gunfire)",
+          "damage": 0.05,
+          "sources": [
+            {"id":"nwc-midway-1948","where":"1205"},
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Gunnery"}
+          ],
+          "text": "Yorktown: a bomb bursts on the flight deck aft of the island."
+        },
+        {
+          "t": "12:06",
+          "kind": "near-miss",
+          "by": "hiryu-d3a-1",
+          "count": [1,1],
+          "where": "close astern",
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Gunnery"}
+          ]
+        },
+        {
+          "t": "12:10",
+          "kind": "hit",
+          "by": "hiryu-d3a-1",
+          "count": [1,1],
+          "where": "the uptakes",
+          "damage": 0.05,
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Engineering"}
+          ],
+          "text": "Yorktown: a bomb in the stack puts out her boilers.",
+          "tellings": [
+            {"source":"cincpac-midway-1942","says":"At 1214 a hit in the uptake forced the Yorktown to stop."}
+          ],
+          "note": "the three hits are spread across the record’s 12:05–12:15 in the order the Yorktown report tells them"
+        },
+        {
+          "t": "12:12",
+          "kind": "hit",
+          "by": "hiryu-d3a-1",
+          "count": [1,1],
+          "where": "the forward elevator well, beside the forward gasoline tanks",
+          "damage": 0.04,
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Gunnery"}
+          ],
+          "text": "Yorktown: a bomb in the forward elevator well; the gasoline does not catch."
+        },
+        {
+          "t": "12:13",
+          "kind": "near-miss",
+          "by": "hiryu-d3a-1",
+          "count": [1,1],
+          "where": "to starboard",
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Gunnery"}
+          ]
+        },
+        {
+          "t": "12:15",
+          "kind": "fire",
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 41"},
+            {"id":"cv5-midway-1942","where":"Damage control"}
+          ],
+          "text": "Yorktown: fires below, fought."
+        },
+        {
+          "t": "12:40",
+          "kind": "dead-in-water",
+          "sources": [{"id":"cv5-midway-1942","where":"1440 zone +10"}],
+          "sourceClock": "1440",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "13:00",
+          "kind": "signal",
+          "sources": [{"id":"comcrupac-midway-1942","where":"1500 zone +10"}],
+          "sourceClock": "1500",
+          "sourceZone": "-10:00",
+          "text": "Fletcher shifts his flag to Astoria."
+        },
+        {
+          "t": "13:40",
+          "kind": "other",
+          "sources": [
+            {"id":"cv5-midway-1942","where":"1540 zone +10"},
+            {"id":"cincpac-midway-1942","where":"1402"}
+          ],
+          "sourceClock": "1540",
+          "sourceZone": "-10:00",
+          "text": "Yorktown’s boilers are relit; she gathers way to nearly twenty knots."
+        },
+        {
+          "t": "14:32",
+          "kind": "sighted",
+          "sources": [{"id":"nwc-midway-1948","where":"1432"}],
+          "text": "Radar: a raid to the west-north-west, forty miles out.",
+          "tellings": [
+            {"source":"cincpac-midway-1942","says":"340°, 25 miles at 1433."},
+            {"source":"cv5-midway-1942","says":"33 miles, 340°, “about 1555” zone +10, from memory."}
+          ]
+        },
+        {
+          "t": "14:40",
+          "kind": "launches",
+          "by": "vf-3-cap-1430",
+          "sources": [
+            {"id":"cincpac-midway-1942","where":"para 43"},
+            {"id":"cv5-midway-1942","where":"Air Department"}
+          ],
+          "text": "Yorktown launches her last fighters, with little fuel."
+        },
+        {
+          "t": "14:44",
+          "kind": "torpedo-hit",
+          "by": "hiryu-b5n-2",
+          "count": [2,2],
+          "where": "port side abreast the bridge, about frames 75 to 92",
+          "damage": 0.36,
+          "sources": [
+            {"id":"nwc-midway-1948","where":"1443"},
+            {"id":"cincpac-midway-1942","where":"para 43: 1445"}
+          ],
+          "text": "Yorktown: two torpedoes hit her port side.",
+          "tellings": [
+            {"source":"cv5-midway-1942","says":"“About 1620” zone +10, from memory: 23 minutes before every log."},
+            {"source":"comcrupac-midway-1942","says":"“1541” zone +10, evidently a misprint for 1641."}
+          ]
+        },
+        {
+          "t": "14:45",
+          "kind": "power-failure",
+          "sources": [{"id":"nwc-midway-1948","where":"p. 140"},{"id":"cv5-midway-1942","where":"Engineering"}],
+          "text": "Yorktown loses power."
+        },
+        {
+          "t": "14:47",
+          "kind": "list",
+          "sources": [
+            {"id":"nwc-midway-1948","where":"p. 140"},
+            {"id":"cv5-midway-1942","where":"Damage control"}
+          ],
+          "text": "Yorktown lists to port, seventeen degrees and growing."
+        },
+        {
+          "t": "14:47",
+          "kind": "dead-in-water",
+          "sources": [{"id":"nwc-midway-1948","where":"p. 140"},{"id":"cv5-midway-1942","where":"Engineering"}]
+        },
+        {
+          "t": "15:14",
+          "kind": "abandoned",
+          "sources": [
+            {"id":"comcrupac-midway-1942","where":"1714 zone +10"},
+            {"id":"nwc-midway-1948","where":"p. 140"}
+          ],
+          "sourceClock": "1714",
+          "sourceZone": "-10:00",
+          "text": "Yorktown is abandoned."
+        },
+        {
+          "t": "1942-06-07T05:01-12:00",
+          "kind": "sinks",
+          "sources": [
+            {"id":"nwc-midway-1948","where":"p. 185"},
+            {"id":"cv5-midway-1942","where":"0701 zone +10"}
+          ],
+          "tellings": [
+            {
+              "source": "cv5-midway-1942",
+              "says": "I-168 torpedoed her (two hits) and Hammann (one) at 1536 zone +10 on 6 June; she capsized to port and sank at 0701 on 7 June. Her report prints 167°24′ West, a misprint for 176°24′."
+            }
+          ]
+        }
+      ],
+      "fate": {
+        "kind": "sunk",
+        "t": "1942-06-07T05:01-12:00",
+        "sources": [{"id":"nwc-midway-1948","where":"p. 185"}],
+        "note": "Afloat and abandoned when the clock closes; sunk on 7 June after a submarine’s torpedoes."
+      }
+    },
+    {
+      "id": "portland",
+      "kit": "portland",
+      "side": "us",
+      "name": "Portland",
+      "hull": "CA-33",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 285,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      }
+    },
+    {
+      "id": "astoria",
+      "kit": "new-orleans",
+      "side": "us",
+      "name": "Astoria",
+      "hull": "CA-34",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 165,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      },
+      "events": [
+        {
+          "t": "13:00",
+          "kind": "signal",
+          "sources": [{"id":"comcrupac-midway-1942","where":"1500 zone +10"}],
+          "sourceClock": "1500",
+          "sourceZone": "-10:00",
+          "text": "Fletcher’s flag in Astoria."
+        }
+      ]
+    },
+    {
+      "id": "morris",
+      "kit": "sims",
+      "side": "us",
+      "name": "Morris",
+      "hull": "DD-417",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 205,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      }
+    },
+    {
+      "id": "hammann",
+      "kit": "sims",
+      "side": "us",
+      "name": "Hammann",
+      "hull": "DD-412",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 245,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      },
+      "fate": {
+        "kind": "sunk",
+        "t": "1942-06-06T13:36-12:00",
+        "sources": [{"id":"cv5-midway-1942","where":"1536 zone +10, 6 June"}],
+        "note": "a submarine’s torpedo on 6 June, standing by Yorktown",
+        "tellings": [
+          {"source":"cv5-midway-1942","says":"I-168 torpedoed Yorktown (two hits) and Hammann (one); Hammann sank."}
+        ]
+      },
+      "events": [
+        {
+          "t": "1942-06-06T13:36-12:00",
+          "kind": "sinks",
+          "sources": [{"id":"cv5-midway-1942","where":"1536 zone +10, 6 June"}],
+          "sourceClock": "1536",
+          "sourceZone": "-10:00",
+          "sourceDate": "1942-06-06"
+        }
+      ]
+    },
+    {
+      "id": "russell",
+      "kit": "sims",
+      "side": "us",
+      "name": "Russell",
+      "hull": "DD-414",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 345,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      }
+    },
+    {
+      "id": "hughes",
+      "kit": "sims",
+      "side": "us",
+      "name": "Hughes",
+      "hull": "DD-410",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 105,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      }
+    },
+    {
+      "id": "anderson",
+      "kit": "sims",
+      "side": "us",
+      "name": "Anderson",
+      "hull": "DD-411",
+      "group": "tf-17",
+      "station": {
+        "guide": "yorktown",
+        "bearingDeg": 45,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "narrative",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 137 at noon: cruisers 60° on either bow on the 2,000-yard circle, destroyers at 340°, 020°, 120°, 240° and 180° on the 3,000-yard circle, axis 225° (T); bearings taken as relative to the axis (R4 §3.2, verify) and held all day"
+      }
+    },
+    {
+      "id": "enterprise",
+      "kit": "yorktown",
+      "side": "us",
+      "name": "Enterprise",
+      "hull": "CV-6",
+      "group": "tf-16",
+      "track": [
+        {
+          "t": "04:00",
+          "lonlat": [-176.56,31.48],
+          "courseDeg": 210,
+          "speedKn": 13.5,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "south-west of TF 17"
+        },
+        {
+          "t": "04:20",
+          "lonlat": [-176.6,31.43],
+          "courseDeg": 210,
+          "speedKn": 13.5,
+          "precision": "narrative",
+          "source": "comcrupac-midway-1942",
+          "sourceClock": "0620",
+          "sourceZone": "-10:00",
+          "sourceNote": "Fletcher directs the two forces to operate five to ten miles apart, TF 16 to the south-westward"
+        },
+        {
+          "t": "07:00",
+          "lonlat": [-176.6,31.39],
+          "courseDeg": 135,
+          "speedKn": 25,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "NWC pp. 88, 122: 065°, 175 miles from the Mobile Force while launching (computed by R4)"
+        },
+        {
+          "t": "09:00",
+          "lonlat": [-176.7333,30.95],
+          "courseDeg": 240,
+          "speedKn": 25,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-3: about 30°57′N 176°44′W"
+        },
+        {
+          "t": "13:00",
+          "lonlat": [-176.2333,30.4667],
+          "courseDeg": 135,
+          "speedKn": 20,
+          "precision": "chart",
+          "source": "nwc-midway-1948",
+          "sourceNote": "D-4: about 30°28′N 176°14′W"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.3,30.4],
+          "courseDeg": 270,
+          "speedKn": 15,
+          "precision": "schematic",
+          "source": "cincpac-midway-1942",
+          "sourceNote": "no fix read after 13:00; held near it, into the wind for the 15:30 launch; she stood east and back west in the night (para 48)"
+        }
+      ],
+      "hangarHazard": [
+        {
+          "t": "04:00",
+          "h": 0.4,
+          "sources": [{"id":"cv6-midway-1942","where":"loads"}],
+          "note": "the attack group spotted and fuelled"
+        },
+        {"t":"08:06","h":0.2,"sources":[{"id":"nwc-midway-1948","where":"0806"}]},
+        {
+          "t": "11:50",
+          "h": 0.4,
+          "sources": [{"id":"cv6-midway-1942","where":"recovery"}],
+          "note": "recovering and refuelling"
+        },
+        {"t":"15:50","h":0.2,"sources":[{"id":"cv6-midway-1942","where":"1730 zone +10"}]}
+      ],
+      "events": [
+        {
+          "t": "07:06",
+          "kind": "launches",
+          "by": "vs-6",
+          "sources": [
+            {"id":"cv6-midway-1942","where":"0906 zone +10"},
+            {"id":"nwc-midway-1948","where":"pp. 122, 130"}
+          ],
+          "sourceClock": "0906",
+          "sourceZone": "-10:00",
+          "text": "Enterprise begins launching her attack group."
+        },
+        {
+          "t": "07:20",
+          "kind": "launches",
+          "by": "vb-6",
+          "sources": [{"id":"cv6-midway-1942","where":"0906 zone +10"}],
+          "sourceClock": "0920",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "07:25",
+          "kind": "launches",
+          "by": "vb-6-akagi",
+          "sources": [{"id":"cv6-midway-1942","where":"0906 zone +10"}],
+          "sourceClock": "0925",
+          "sourceZone": "-10:00"
+        },
+        {"t":"07:40","kind":"launches","by":"vf-6","sources":[{"id":"nwc-midway-1948","where":"p. 127"}]},
+        {
+          "t": "07:52",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"0745, 0752"}],
+          "text": "Enterprise’s dive bombers leave ahead of the torpedo planes on Spruance’s order."
+        },
+        {"t":"07:55","kind":"launches","by":"vt-6","sources":[{"id":"nwc-midway-1948","where":"0806"}]},
+        {
+          "t": "11:50",
+          "kind": "recovers",
+          "by": "vs-6",
+          "sources": [{"id":"cv6-midway-1942","where":"recovery, 1350 zone +10"}],
+          "sourceClock": "1350",
+          "sourceZone": "-10:00",
+          "text": "Enterprise recovers what returns of her dive bombers."
+        },
+        {
+          "t": "12:37",
+          "kind": "recovers",
+          "by": "vb-3",
+          "sources": [{"id":"nwc-midway-1948","where":"1235–1237"}],
+          "text": "Enterprise lands Bombing Three, whose carrier is under attack."
+        },
+        {
+          "t": "15:30",
+          "kind": "launches",
+          "by": "enterprise-pm",
+          "sources": [{"id":"cv6-midway-1942","where":"1730 zone +10"}],
+          "sourceClock": "1730",
+          "sourceZone": "-10:00",
+          "text": "Enterprise launches her dive bombers, Yorktown’s among them, for Hiryū."
+        }
+      ],
+      "fate": {"kind":"undamaged","sources":[{"id":"cincpac-midway-1942","where":"para 47"}]}
+    },
+    {
+      "id": "hornet",
+      "kit": "yorktown",
+      "side": "us",
+      "name": "Hornet",
+      "hull": "CV-8",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 45,
+        "rangeM": 8000,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "NWC p. 123: the two carrier groups were separated at times by several thousand yards and at times by as much as twenty miles; held at about four miles"
+      },
+      "hangarHazard": [
+        {"t":"04:00","h":0.4,"sources":[{"id":"cv8-midway-1942","where":"launch"}]},
+        {"t":"08:06","h":0.2,"sources":[{"id":"nwc-midway-1948","where":"0806"}]},
+        {"t":"11:30","h":0.4,"sources":[{"id":"cv8-midway-1942","where":"recovery"}]},
+        {"t":"16:14","h":0.2,"sources":[{"id":"cv8-midway-1942","where":"1803 zone +10"}]}
+      ],
+      "events": [
+        {
+          "t": "07:00",
+          "kind": "launches",
+          "by": "hornet-sbd",
+          "sources": [{"id":"cv8-midway-1942","where":"0900 zone +10"}],
+          "sourceClock": "0900",
+          "sourceZone": "-10:00",
+          "text": "Hornet launches her air group."
+        },
+        {
+          "t": "07:05",
+          "kind": "launches",
+          "by": "vf-8",
+          "sources": [{"id":"cv8-midway-1942","where":"0900 zone +10"}],
+          "sourceClock": "0905",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "07:45",
+          "kind": "launches",
+          "by": "vt-8",
+          "sources": [
+            {"id":"cv8-midway-1942","where":"0900 zone +10"},
+            {"id":"nwc-midway-1948","where":"p. 127"}
+          ],
+          "sourceClock": "0945",
+          "sourceZone": "-10:00"
+        },
+        {
+          "t": "11:30",
+          "kind": "recovers",
+          "by": "hornet-sbd",
+          "sources": [{"id":"cincpac-midway-1942","where":"para 29"}],
+          "text": "Hornet’s dive bombers come back, some by way of Midway, without having attacked."
+        },
+        {
+          "t": "16:03",
+          "kind": "launches",
+          "by": "hornet-pm",
+          "sources": [{"id":"cv8-midway-1942","where":"1803 zone +10"},{"id":"nwc-midway-1948","where":"D-4"}],
+          "sourceClock": "1803",
+          "sourceZone": "-10:00"
+        }
+      ],
+      "fate": {"kind":"undamaged","sources":[{"id":"cincpac-midway-1942","where":"para 47"}]}
+    },
+    {
+      "id": "northampton",
+      "kit": "northampton",
+      "side": "us",
+      "name": "Northampton",
+      "hull": "CA-26",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 0,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "vincennes",
+      "kit": "new-orleans",
+      "side": "us",
+      "name": "Vincennes",
+      "hull": "CA-44",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 120,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      },
+      "track": [
+        {
+          "t": "12:37",
+          "lonlat": [-176.2647,30.5047],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "detached from TF 16 to TF 17 (NWC 1235–1237)"
+        },
+        {
+          "t": "14:05",
+          "lonlat": [-176.7905,30.7812],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "joined about 1530 zone +10 (13:30) by Fletcher’s report; the D-4 plots put TF 16 some forty miles off at 13:00, so the box has them in by about 14:05"
+        },
+        {
+          "t": "14:41",
+          "lonlat": [-176.7086,30.6905],
+          "courseDeg": 120,
+          "speedKn": 18,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "in the screen on the 2,000-yard circle at the torpedo attack (NWC p. 139)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.7019,30.6888],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ],
+      "events": [
+        {
+          "t": "12:37",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"1235–1237"}],
+          "text": "Vincennes is detached to screen Yorktown."
+        }
+      ]
+    },
+    {
+      "id": "pensacola",
+      "kit": "pensacola",
+      "side": "us",
+      "name": "Pensacola",
+      "hull": "CA-24",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 240,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      },
+      "track": [
+        {
+          "t": "12:37",
+          "lonlat": [-176.2977,30.5047],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "detached from TF 16 to TF 17 (NWC 1235–1237)"
+        },
+        {
+          "t": "14:05",
+          "lonlat": [-176.8289,30.8144],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "joined about 1530 zone +10 (13:30) by Fletcher’s report; the D-4 plots put TF 16 some forty miles off at 13:00, so the box has them in by about 14:05"
+        },
+        {
+          "t": "14:41",
+          "lonlat": [-176.747,30.7237],
+          "courseDeg": 120,
+          "speedKn": 18,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "in the screen on the 2,000-yard circle at the torpedo attack (NWC p. 139)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.7403,30.722],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ],
+      "events": [
+        {
+          "t": "12:37",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"1235–1237"}],
+          "text": "Pensacola is detached to screen Yorktown."
+        }
+      ]
+    },
+    {
+      "id": "balch",
+      "kit": "porter",
+      "side": "us",
+      "name": "Balch",
+      "hull": "DD-363",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 36,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      },
+      "track": [
+        {
+          "t": "12:37",
+          "lonlat": [-176.2644,30.5331],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "detached from TF 16 to TF 17 (NWC 1235–1237)"
+        },
+        {
+          "t": "14:05",
+          "lonlat": [-176.8094,30.8423],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "joined about 1530 zone +10 (13:30) by Fletcher’s report; the D-4 plots put TF 16 some forty miles off at 13:00, so the box has them in by about 14:05"
+        },
+        {
+          "t": "14:41",
+          "lonlat": [-176.7275,30.7516],
+          "courseDeg": 120,
+          "speedKn": 18,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "in the screen on the 2,000-yard circle at the torpedo attack (NWC p. 139)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.7208,30.7499],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ],
+      "events": [
+        {
+          "t": "12:37",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"1235–1237"}],
+          "text": "Balch is detached to screen Yorktown."
+        }
+      ]
+    },
+    {
+      "id": "benham",
+      "kit": "benham",
+      "side": "us",
+      "name": "Benham",
+      "hull": "DD-397",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 108,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      },
+      "track": [
+        {
+          "t": "12:37",
+          "lonlat": [-176.254,30.5053],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "sourceNote": "detached from TF 16 to TF 17 (NWC 1235–1237)"
+        },
+        {
+          "t": "14:05",
+          "lonlat": [-176.7582,30.798],
+          "courseDeg": 300,
+          "speedKn": 28,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "joined about 1530 zone +10 (13:30) by Fletcher’s report; the D-4 plots put TF 16 some forty miles off at 13:00, so the box has them in by about 14:05"
+        },
+        {
+          "t": "14:41",
+          "lonlat": [-176.6763,30.7073],
+          "courseDeg": 120,
+          "speedKn": 18,
+          "precision": "schematic",
+          "source": "nwc-midway-1948",
+          "sourceNote": "in the screen on the 2,000-yard circle at the torpedo attack (NWC p. 139)"
+        },
+        {
+          "t": "18:00",
+          "lonlat": [-176.6696,30.7056],
+          "courseDeg": 0,
+          "speedKn": 0,
+          "precision": "schematic",
+          "source": "nwc-midway-1948"
+        }
+      ],
+      "events": [
+        {
+          "t": "12:37",
+          "kind": "other",
+          "sources": [{"id":"nwc-midway-1948","where":"1235–1237"}],
+          "text": "Benham is detached to screen Yorktown."
+        }
+      ]
+    },
+    {
+      "id": "aylwin",
+      "kit": "farragut",
+      "side": "us",
+      "name": "Aylwin",
+      "hull": "DD-355",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 180,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "monaghan",
+      "kit": "farragut",
+      "side": "us",
+      "name": "Monaghan",
+      "hull": "DD-354",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 252,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "phelps",
+      "kit": "porter",
+      "side": "us",
+      "name": "Phelps",
+      "hull": "DD-360",
+      "group": "tf-16",
+      "station": {
+        "guide": "enterprise",
+        "bearingDeg": 324,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "minneapolis",
+      "kit": "new-orleans",
+      "side": "us",
+      "name": "Minneapolis",
+      "hull": "CA-36",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 0,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "new-orleans",
+      "kit": "new-orleans",
+      "side": "us",
+      "name": "New Orleans",
+      "hull": "CA-32",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 120,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "atlanta",
+      "kit": "atlanta",
+      "side": "us",
+      "name": "Atlanta",
+      "hull": "CL-51",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 240,
+        "rangeM": 1829,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "maury",
+      "kit": "gridley",
+      "side": "us",
+      "name": "Maury",
+      "hull": "DD-401",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 45,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "ellet",
+      "kit": "benham",
+      "side": "us",
+      "name": "Ellet",
+      "hull": "DD-398",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 135,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "worden",
+      "kit": "farragut",
+      "side": "us",
+      "name": "Worden",
+      "hull": "DD-352",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 225,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    },
+    {
+      "id": "conyngham",
+      "kit": "mahan",
+      "side": "us",
+      "name": "Conyngham",
+      "hull": "DD-371",
+      "group": "tf-16-hornet",
+      "station": {
+        "guide": "hornet",
+        "bearingDeg": 315,
+        "rangeM": 2743,
+        "bearingRef": "true",
+        "precision": "schematic",
+        "source": "nwc-midway-1948",
+        "note": "AA formation 11V, ordered at 08:35 (NWC p. 123): a circle about each carrier; the stations in it are not in what was read"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "strike-hiryu-b5n",
+      "kit": "b5n2",
+      "side": "jp",
+      "name": "Hiryū’s level bombers, Midway strike",
+      "count": 18,
+      "from": "hiryu",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 3000,
+      "route": [
+        {"t":"05:30","lonlat":[-179.2752,29.8594],"altM":3000,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"06:16","lonlat":[-177.8372,28.6245],"altM":3000,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "06:34",
+        "target": "eastern-island-airfield",
+        "profile": "level",
+        "altM": 3000,
+        "sourceClock": "0334",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0334–0343 JST"}],
+        "reached": [14,17],
+        "fromDeg": 315
+      },
+      "recover": {"t":"09:00","to":"hiryu","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [
+        {"id":"nagumo-1947","where":"Table 1; strike reports"},
+        {"id":"heinl-1948","where":"ch. 4"}
+      ],
+      "note": "the strike flew course 225° to Midway and was met well out; which unit bombed which island is not in what was read (Heinl’s attributions differ from Nagumo’s organisation): targets schematic",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Intercepted 06:16–06:20 about 30–40 miles out (R4 §3.5)."},
+        {
+          "source": "nagumo-1947",
+          "says": "One Hiryū B5N returned with engine trouble; the B5Ns carried No. 80 land bombs (805 kg) and bombed from 2,700–3,400 m."
+        },
+        {
+          "source": "heinl-1948",
+          "says": "Observers counted 22 of the 36 level bombers; two were shot down at extreme range before they released."
+        }
+      ]
+    },
+    {
+      "id": "strike-soryu-b5n",
+      "kit": "b5n2",
+      "side": "jp",
+      "name": "Sōryū’s level bombers, Midway strike",
+      "count": 18,
+      "from": "soryu",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 3000,
+      "route": [
+        {"t":"05:30","lonlat":[-179.2752,29.8594],"altM":3000,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"06:16","lonlat":[-177.8372,28.6245],"altM":3000,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "06:34",
+        "target": "sand-island-seaplane-hangars",
+        "profile": "level",
+        "altM": 3000,
+        "sourceClock": "0334",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0334–0343 JST"}],
+        "reached": [14,18],
+        "fromDeg": 315
+      },
+      "recover": {"t":"09:00","to":"soryu","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [
+        {"id":"nagumo-1947","where":"Table 1; strike reports"},
+        {"id":"heinl-1948","where":"ch. 4"}
+      ],
+      "note": "the strike flew course 225° to Midway and was met well out; which unit bombed which island is not in what was read (Heinl’s attributions differ from Nagumo’s organisation): targets schematic",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Intercepted 06:16–06:20 about 30–40 miles out (R4 §3.5)."}
+      ]
+    },
+    {
+      "id": "strike-akagi-d3a",
+      "kit": "d3a1",
+      "side": "jp",
+      "name": "Akagi’s dive bombers, Midway strike",
+      "count": 18,
+      "from": "akagi",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 3500,
+      "route": [
+        {"t":"05:30","lonlat":[-179.2752,29.8594],"altM":3500,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"06:16","lonlat":[-177.8372,28.6245],"altM":3500,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "06:34",
+        "target": "eastern-island-airfield",
+        "profile": "dive",
+        "altM": 3500,
+        "sourceClock": "0334",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0334–0343 JST"}],
+        "reached": [12,18],
+        "fromDeg": 315,
+        "releaseM": 500
+      },
+      "recover": {"t":"09:00","to":"akagi","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [
+        {"id":"nagumo-1947","where":"Table 1; strike reports"},
+        {"id":"heinl-1948","where":"ch. 4"}
+      ],
+      "note": "the strike flew course 225° to Midway and was met well out; which unit bombed which island is not in what was read (Heinl’s attributions differ from Nagumo’s organisation): targets schematic",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Intercepted 06:16–06:20 about 30–40 miles out (R4 §3.5)."},
+        {"source":"nagumo-1947","says":"The D3As carried No. 25 land bombs (242 kg)."},
+        {"source":"heinl-1948","says":"Witnesses on the ground counted no more than 18 of the 36 dive bombers."}
+      ]
+    },
+    {
+      "id": "strike-kaga-d3a",
+      "kit": "d3a1",
+      "side": "jp",
+      "name": "Kaga’s dive bombers, Midway strike",
+      "count": 18,
+      "from": "kaga",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 3500,
+      "route": [
+        {"t":"05:30","lonlat":[-179.2752,29.8594],"altM":3500,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"06:16","lonlat":[-177.8372,28.6245],"altM":3500,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "06:34",
+        "target": "sand-island-seaplane-hangars",
+        "profile": "dive",
+        "altM": 3500,
+        "sourceClock": "0334",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0334–0343 JST"}],
+        "reached": [12,18],
+        "fromDeg": 315,
+        "releaseM": 500
+      },
+      "recover": {"t":"09:00","to":"kaga","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [
+        {"id":"nagumo-1947","where":"Table 1; strike reports"},
+        {"id":"heinl-1948","where":"ch. 4"}
+      ],
+      "note": "the strike flew course 225° to Midway and was met well out; which unit bombed which island is not in what was read (Heinl’s attributions differ from Nagumo’s organisation): targets schematic",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Intercepted 06:16–06:20 about 30–40 miles out (R4 §3.5)."}
+      ]
+    },
+    {
+      "id": "strike-akagi-a6m",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Akagi’s fighters, Midway strike",
+      "count": 9,
+      "from": "akagi",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 4000,
+      "attack": {
+        "t": "06:16",
+        "profile": "escort",
+        "target": "strike-akagi-d3a",
+        "altM": 4000,
+        "sourceClock": "0316",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0316–0320 JST"}]
+      },
+      "recover": {"t":"09:00","to":"akagi","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+      "note": "fought Midway’s fighters, then strafed both islands",
+      "tellings": [{"source":"nagumo-1947","says":"The fighters fought at 2,000–4,500 m."}]
+    },
+    {
+      "id": "strike-kaga-a6m",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Kaga’s fighters, Midway strike",
+      "count": 9,
+      "from": "kaga",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 4000,
+      "attack": {
+        "t": "06:16",
+        "profile": "escort",
+        "target": "strike-kaga-d3a",
+        "altM": 4000,
+        "sourceClock": "0316",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0316–0320 JST"}]
+      },
+      "recover": {"t":"09:00","to":"kaga","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+      "note": "fought Midway’s fighters, then strafed both islands",
+      "tellings": [{"source":"nagumo-1947","says":"The fighters fought at 2,000–4,500 m."}]
+    },
+    {
+      "id": "strike-soryu-a6m",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Sōryū’s fighters, Midway strike",
+      "count": 9,
+      "from": "soryu",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 4000,
+      "attack": {
+        "t": "06:16",
+        "profile": "escort",
+        "target": "strike-soryu-b5n",
+        "altM": 4000,
+        "sourceClock": "0316",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0316–0320 JST"}]
+      },
+      "recover": {"t":"09:00","to":"soryu","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+      "note": "fought Midway’s fighters, then strafed both islands",
+      "tellings": [{"source":"nagumo-1947","says":"The fighters fought at 2,000–4,500 m."}]
+    },
+    {
+      "id": "strike-hiryu-a6m",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Hiryū’s fighters, Midway strike",
+      "count": 9,
+      "from": "hiryu",
+      "launch": "04:30",
+      "launchSource": {"t":"04:30","sourceClock":"0130","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 4000,
+      "attack": {
+        "t": "06:16",
+        "profile": "escort",
+        "target": "strike-hiryu-b5n",
+        "altM": 4000,
+        "sourceClock": "0316",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"strike reports 0316–0320 JST"}]
+      },
+      "recover": {"t":"09:00","to":"hiryu","sourceClock":"0600","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1"}],
+      "note": "fought Midway’s fighters, then strafed both islands",
+      "tellings": [{"source":"nagumo-1947","says":"The fighters fought at 2,000–4,500 m."}]
+    },
+    {
+      "id": "cap-morning",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "combat air patrol over the Kidō Butai, morning",
+      "count": 18,
+      "from": "akagi",
+      "launch": "05:43",
+      "launchSource": {"t":"05:43","sourceClock":"0243","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 2000,
+      "attack": {
+        "t": "07:08",
+        "profile": "cap",
+        "target": "midway-tbf",
+        "altM": 300,
+        "window": ["07:05","08:30"],
+        "sources": [{"id":"nagumo-1947","where":"log 0407–0530 JST"}],
+        "sourceClock": "0408",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "sources": [{"id":"nagumo-1947","where":"log; Table 8"}],
+      "note": "the number aloft at each hour is not in what was read (Parshall and Tully’s appendix has it); the count follows the American witnesses"
+    },
+    {
+      "id": "cap-vt8",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "combat air patrol against Torpedo Eight",
+      "count": 18,
+      "from": "kaga",
+      "launch": "09:00",
+      "altM": 1000,
+      "attack": {
+        "t": "09:28",
+        "profile": "cap",
+        "target": "vt-8",
+        "altM": 300,
+        "sources": [
+          {"id":"nagumo-1947","where":"log 0618–0642 JST"},
+          {"id":"nwc-midway-1948","where":"p. 128"}
+        ],
+        "sourceClock": "0628",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "sources": [{"id":"nagumo-1947","where":"log 0629–0632 JST: Kaga and Akagi launch more fighters"}],
+      "note": "the number aloft at each hour is not in what was read (Parshall and Tully’s appendix has it); the count follows the American witnesses",
+      "tellings": [{"source":"gay-1943","says":"About 35 Zeros."}]
+    },
+    {
+      "id": "cap-vt6",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "combat air patrol against Torpedo Six",
+      "count": 25,
+      "from": "akagi",
+      "launch": "09:30",
+      "launchSource": {"t":"09:30","sourceClock":"0630","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 1000,
+      "attack": {"t":"09:40","profile":"cap","target":"vt-6","altM":300,"sources":[{"id":"nwc-midway-1948","where":"p. 129"}]},
+      "sources": [{"id":"nwc-midway-1948","where":"p. 129: about 25 Zeros"}],
+      "note": "the number aloft at each hour is not in what was read (Parshall and Tully’s appendix has it); the count follows the American witnesses"
+    },
+    {
+      "id": "cap-vt3",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "combat air patrol against Torpedo Three, Hiryū’s and the others’",
+      "count": 18,
+      "from": "hiryu",
+      "launch": "09:50",
+      "altM": 1000,
+      "attack": {
+        "t": "10:09",
+        "profile": "cap",
+        "target": "vt-3",
+        "altM": 300,
+        "window": ["10:09","10:18"],
+        "sourceClock": "0709",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"Cover Units report 0709–0718 JST"}]
+      },
+      "losses": [[0,4]],
+      "sources": [
+        {"id":"nagumo-1947","where":"Cover Units report; Table 8"},
+        {"id":"cv5-midway-1942","where":"Air Department (VF-3: 15 to 20 Zeros)"}
+      ],
+      "note": "the number aloft at each hour is not in what was read (Parshall and Tully’s appendix has it); the count follows the American witnesses",
+      "tellings": [
+        {
+          "source": "nagumo-1947",
+          "says": "Hiryū’s fighters claimed nine of fourteen torpedo planes and all nine escorting fighters; the CAP’s claims for the day (Kaga 32, Hiryū 46, Sōryū 28) run several times the American losses."
+        },
+        {"source":"nagumo-1947","says":"Table 8 counts the day’s CAP losses at ten: Akagi 2, Kaga 4, Hiryū 4."},
+        {"source":"cv5-midway-1942","says":"VF-3 counted 18 to 20 Zeros; VT-3 at least 8."}
+      ]
+    },
+    {
+      "id": "cap-hiryu-pm",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Hiryū’s combat air patrol, evening",
+      "count": 6,
+      "from": "hiryu",
+      "launch": "16:30",
+      "altM": 1500,
+      "attack": {"t":"17:00","profile":"cap","target":"enterprise-pm","altM":1500,"sources":[{"id":"jawp-midway"}]},
+      "sources": [
+        {"id":"jawp-midway"},
+        {"id":"cincpac-midway-1942","where":"para 45: 6 to 12 fighters encountered"}
+      ],
+      "tellings": [{"source":"wp-midway","says":"More than a dozen."}]
+    },
+    {
+      "id": "hiryu-d3a-1",
+      "kit": "d3a1",
+      "side": "jp",
+      "name": "Hiryū’s dive bombers (first strike)",
+      "count": 18,
+      "from": "hiryu",
+      "launch": "10:54",
+      "launchSource": {"t":"10:54","sourceClock":"0754","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 3700,
+      "route": [
+        {
+          "t": "11:30",
+          "lonlat": [-178.4224,30.4213],
+          "altM": 300,
+          "precision": "narrative",
+          "source": "cv5-midway-1942",
+          "note": "came in low, then climbed to avoid radar"
+        },
+        {"t":"11:59","lonlat":[-177.1944,30.7586],"altM":2700,"precision":"narrative","source":"cv5-midway-1942"}
+      ],
+      "attack": {
+        "t": "12:05",
+        "target": "yorktown",
+        "profile": "dive",
+        "fromDeg": 250,
+        "altM": 3700,
+        "pushOverM": 2100,
+        "releaseM": 150,
+        "reached": [7,8],
+        "sources": [
+          {"id":"nwc-midway-1948","where":"p. 137"},
+          {"id":"cv5-midway-1942","where":"Gunnery"},
+          {"id":"cincpac-midway-1942","where":"para 41"}
+        ]
+      },
+      "losses": [[13,13]],
+      "lossesBy": [
+        {"by":"vf-3-cap-noon","count":[9,11],"t":"12:00"},
+        {"by":"tf16-cap-noon","count":[0,2],"t":"12:00"},
+        {"by":"yorktown","count":[2,3],"t":"12:05"}
+      ],
+      "recover": {"t":"13:30","to":"hiryu"},
+      "sources": [
+        {"id":"nagumo-1947","where":"First Attack; Table 8"},
+        {"id":"cv5-midway-1942","where":"Gunnery"},
+        {"id":"cincpac-midway-1942","where":"paras 40–41"}
+      ],
+      "tellings": [
+        {
+          "source": "nagumo-1947",
+          "says": "13 D3A and 3 A6M lost (one more A6M ditched); “5 hits with #25 ordinary and 1 with #25 land bombs” claimed."
+        },
+        {
+          "source": "cincpac-midway-1942",
+          "says": "The CAP of 12 fighters met them at about 9,000 feet and shot down 11 of the bombers; seven broke out and dived."
+        },
+        {
+          "source": "cv5-midway-1942",
+          "says": "Approach at about 12,000 ft, a shallow glide to a position angle of about 60° at 6,000–8,000 ft, then a steep dive; release about 500 ft."
+        }
+      ]
+    },
+    {
+      "id": "hiryu-a6m-1",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "Hiryū’s escort fighters (first strike)",
+      "count": 6,
+      "from": "hiryu",
+      "launch": "10:54",
+      "altM": 4000,
+      "attack": {
+        "t": "12:00",
+        "profile": "escort",
+        "target": "hiryu-d3a-1",
+        "altM": 4000,
+        "sources": [{"id":"nagumo-1947","where":"Table 1"}]
+      },
+      "losses": [[3,4]],
+      "recover": {"t":"13:30","to":"hiryu"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1; Table 8"}],
+      "note": "two peeled off at about 11:20 to attack returning dive bombers and did not join the attack"
+    },
+    {
+      "id": "hiryu-b5n-2",
+      "kit": "b5n2",
+      "side": "jp",
+      "name": "Hiryū’s torpedo planes (second strike)",
+      "count": 10,
+      "from": "hiryu",
+      "launch": "13:31",
+      "altM": 1500,
+      "route": [
+        {"t":"14:30","lonlat":[-177.4123,31.0794],"altM":1500,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "14:44",
+        "target": "yorktown",
+        "profile": "torpedo",
+        "fromDeg": 300,
+        "altM": 30,
+        "window": ["14:41","14:46"],
+        "reached": [8,9],
+        "sources": [
+          {"id":"nwc-midway-1948","where":"p. 139"},
+          {"id":"cincpac-midway-1942","where":"para 43"},
+          {"id":"cv5-midway-1942","where":"Gunnery"}
+        ]
+      },
+      "losses": [[5,5]],
+      "recover": {"t":"15:40","to":"hiryu","sourceClock":"1240","sourceZone":"+09:00","sourceDate":"1942-06-05"},
+      "sources": [
+        {"id":"nagumo-1947","where":"Second Attack; Table 8"},
+        {"id":"cincpac-midway-1942","where":"para 43"}
+      ],
+      "note": "one of them was Akagi’s and did not drop; the formation split to attack from both sides",
+      "tellings": [
+        {
+          "source": "cv5-midway-1942",
+          "says": "A loose V formation with planes varying in altitude from 50 to 2000 feet, changing altitude and swerving; released at about 800 yards."
+        },
+        {"source":"nagumo-1947","says":"5 B5N, 2 Hiryū A6M and 1 Kaga A6M lost; two certain torpedo hits claimed."},
+        {
+          "source": "cincpac-midway-1942",
+          "says": "12 to 15 torpedo planes and 10 to 18 fighters; about eight came on into the screen’s fire; five launched."
+        }
+      ]
+    },
+    {
+      "id": "hiryu-a6m-2",
+      "kit": "a6m2",
+      "side": "jp",
+      "name": "escort fighters (second strike), Hiryū’s and Kaga’s",
+      "count": 6,
+      "from": "hiryu",
+      "launch": "13:31",
+      "altM": 2000,
+      "attack": {
+        "t": "14:41",
+        "profile": "escort",
+        "target": "hiryu-b5n-2",
+        "altM": 2000,
+        "sources": [{"id":"nagumo-1947","where":"Table 1"}]
+      },
+      "losses": [[3,3]],
+      "recover": {"t":"15:40","to":"hiryu"},
+      "sources": [{"id":"nagumo-1947","where":"Table 1; Table 8"}]
+    },
+    {
+      "id": "tone-4",
+      "kit": "e13a1",
+      "side": "jp",
+      "name": "Tone’s No. 4 search plane",
+      "count": 1,
+      "from": "tone",
+      "launch": "05:00",
+      "launchSource": {"t":"05:00","sourceClock":"0200","sourceZone":"+09:00","sourceDate":"1942-06-05","source":"nagumo-1947"},
+      "altM": 1000,
+      "attack": {
+        "t": "07:28",
+        "profile": "search",
+        "target": "enterprise",
+        "sourceClock": "0428",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"log 0428 JST"}]
+      },
+      "sources": [{"id":"nagumo-1947","where":"log 0200–0520 JST"}],
+      "tellings": [
+        {
+          "source": "nagumo-1947",
+          "says": "“Sight what appears to be 10 enemy surface ships, bearing 10 degrees distance 240 miles from Midway”: about 50 miles north of the true position; filed 0428, “not delivered until about 0500” (08:00)."
+        }
+      ]
+    },
+    {
+      "id": "chikuma-5",
+      "kit": "e13a1",
+      "side": "jp",
+      "name": "Chikuma’s No. 5 search plane",
+      "count": 1,
+      "from": "chikuma",
+      "launch": "04:35",
+      "altM": 1000,
+      "attack": {
+        "t": "11:10",
+        "profile": "search",
+        "target": "yorktown",
+        "sourceClock": "0810",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [{"id":"nagumo-1947","where":"log 0810–0816 JST"}]
+      },
+      "sources": [{"id":"nagumo-1947","where":"log"}]
+    },
+    {
+      "id": "soryu-d4y",
+      "kit": "d4y1",
+      "side": "jp",
+      "name": "Sōryū’s reconnaissance bomber",
+      "count": 1,
+      "from": "soryu",
+      "launch": "08:30",
+      "altM": 4000,
+      "attack": {"t":"10:00","profile":"search","sources":[{"id":"trom-soryu","where":"4 June 1942"}]},
+      "sources": [{"id":"trom-soryu","where":"4 June 1942"}]
+    },
+    {
+      "id": "vs-6",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Scouting Six, with the group commander’s section",
+      "count": 18,
+      "from": "enterprise",
+      "launch": "07:06",
+      "launchSource": {"t":"07:06","sourceClock":"0906","sourceZone":"-10:00","source":"cv6-midway-1942"},
+      "altM": 5800,
+      "route": [
+        {"t":"07:52","lonlat":[-176.6578,31.1993],"altM":1000,"precision":"narrative","source":"nwc-midway-1948"},
+        {
+          "t": "09:35",
+          "lonlat": [-178.7569,29.8713],
+          "altM": 5800,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "note": "course 231° for 142 miles; the search leg reversed at 09:35"
+        },
+        {"t":"09:55","lonlat":[-179.2092,29.9701],"altM":5800,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"10:10","lonlat":[-179.1063,30.0597],"altM":5800,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "10:22",
+        "target": "kaga",
+        "profile": "dive",
+        "fromDeg": 225,
+        "pushOverM": 5800,
+        "releaseM": 760,
+        "reached": [15,18],
+        "sources": [{"id":"nwc-midway-1948","where":"pp. 130–131"}]
+      },
+      "losses": [[7,7]],
+      "recover": {"t":"11:50","to":"enterprise"},
+      "sources": [
+        {"id":"cv6-midway-1942","where":"attack group"},
+        {"id":"nwc-midway-1948","where":"pp. 130–132"}
+      ],
+      "note": "the attack group’s aircraft with the lighter bomb loads; approach in step-down vees from high altitude, diving at about ten-second intervals",
+      "tellings": [
+        {
+          "source": "cv6-midway-1942",
+          "says": "33 VSB: 15 with one 1,000-lb bomb, 12 with one 500-lb and two 100-lb, 6 with one 500-lb."
+        },
+        {
+          "source": "nwc-midway-1948",
+          "says": "Climbing to 20,000 ft at about 115 knots; the approach begun from 19,000 ft at 10:10."
+        },
+        {
+          "source": "nwc-midway-1948",
+          "says": "VS-6 and VB-6 lost seven each that morning; four and possibly as many as seven came down at sea with empty tanks."
+        },
+        {
+          "source": "wp-midway",
+          "says": "A miscommunication sent both squadrons onto Kaga; only Best and his two wingmen pulled out and went north to Akagi (after Lundstrom, Parshall and Tully)."
+        },
+        {
+          "source": "nwc-midway-1948",
+          "says": "McClusky led VS-6 on the carrier on his port bow and VB-6 took the one on his starboard bow."
+        }
+      ]
+    },
+    {
+      "id": "vb-6",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Bombing Six",
+      "count": 12,
+      "from": "enterprise",
+      "launch": "07:20",
+      "altM": 5800,
+      "route": [
+        {"t":"09:35","lonlat":[-178.7569,29.8713],"altM":5800,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"10:10","lonlat":[-179.1137,30.0533],"altM":5800,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "10:23",
+        "target": "kaga",
+        "profile": "dive",
+        "fromDeg": 200,
+        "pushOverM": 5800,
+        "releaseM": 760,
+        "reached": [10,12],
+        "sources": [{"id":"nwc-midway-1948","where":"p. 131"}]
+      },
+      "losses": [[5,7]],
+      "recover": {"t":"11:50","to":"enterprise"},
+      "sources": [
+        {"id":"cv6-midway-1942","where":"attack group"},
+        {"id":"nwc-midway-1948","where":"p. 131"}
+      ],
+      "note": "Bombing Six carried the heaviest bombs; its leading section flies as a group of its own",
+      "tellings": [
+        {"source":"cv6-midway-1942","says":"15 with one 1,000-lb bomb."},
+        {"source":"nwc-midway-1948","says":"Seven of Bombing Six lost, not divided between the sections."}
+      ]
+    },
+    {
+      "id": "vb-6-akagi",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Bombing Six’s leading section",
+      "count": 3,
+      "from": "enterprise",
+      "launch": "07:25",
+      "altM": 5800,
+      "route": [
+        {"t":"10:10","lonlat":[-179.1137,30.0533],"altM":5800,"precision":"narrative","source":"nwc-midway-1948"}
+      ],
+      "attack": {
+        "t": "10:26",
+        "target": "akagi",
+        "profile": "dive",
+        "fromDeg": 260,
+        "pushOverM": 4000,
+        "releaseM": 500,
+        "reached": [3,3],
+        "sources": [
+          {"id":"nagumo-1947","where":"log 0726 JST: three bombers from 80° to port"},
+          {"id":"wp-midway"}
+        ],
+        "sourceClock": "0726",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "losses": [[0,2]],
+      "recover": {"t":"11:50","to":"enterprise"},
+      "sources": [{"id":"nagumo-1947","where":"log 0726 JST"},{"id":"wp-midway"},{"id":"jawp-midway"}],
+      "note": "pulled out of the approach to Kaga and went north to Akagi",
+      "tellings": [
+        {
+          "source": "nagumo-1947",
+          "says": "Three bombers from 80° to port, altitude about 2,000 m, angle of dive about 50°; bombs loosed at about 500 m."
+        }
+      ]
+    },
+    {
+      "id": "vt-6",
+      "kit": "tbd-1",
+      "side": "us",
+      "name": "Torpedo Six",
+      "count": 14,
+      "from": "enterprise",
+      "launch": "07:55",
+      "altM": 450,
+      "route": [
+        {
+          "t": "09:30",
+          "lonlat": [-178.8048,29.5451],
+          "altM": 450,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "note": "sighted the force at 320°, 30 miles, at 09:30"
+        }
+      ],
+      "attack": {
+        "t": "09:40",
+        "target": "kaga",
+        "profile": "torpedo",
+        "fromDeg": 160,
+        "altM": 30,
+        "window": ["09:38","09:58"],
+        "reached": [7,9],
+        "sources": [
+          {"id":"nwc-midway-1948","where":"p. 129"},
+          {"id":"nagumo-1947","where":"log 0640–0658 JST"}
+        ]
+      },
+      "losses": [[10,10]],
+      "recover": {"t":"11:30","to":"enterprise"},
+      "sources": [
+        {"id":"nwc-midway-1948","where":"p. 129"},
+        {"id":"cv6-midway-1942","where":"VT-6"},
+        {"id":"cincpac-midway-1942","where":"para 33"}
+      ],
+      "note": "two divisions of seven for an anvil on both bows of Kaga; the force turned away to keep them on the quarter; about eight torpedoes dropped; no hits"
+    },
+    {
+      "id": "vf-6",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "Fighting Six",
+      "count": 10,
+      "from": "enterprise",
+      "launch": "07:40",
+      "altM": 6100,
+      "attack": {
+        "t": "09:20",
+        "profile": "escort",
+        "target": "vt-8",
+        "altM": 6100,
+        "sources": [{"id":"nwc-midway-1948","where":"p. 127"}]
+      },
+      "recover": {"t":"11:40","to":"enterprise"},
+      "sources": [
+        {"id":"nwc-midway-1948","where":"p. 127"},
+        {"id":"cv6-midway-1942","where":"attack group"}
+      ],
+      "note": "joined Torpedo Eight by mistake and circled the Mobile Force high above for more than thirty minutes; no prearranged call came",
+      "tellings": [{"source":"nwc-midway-1948","says":"At 20,000 ft (p. 127)."}]
+    },
+    {
+      "id": "hornet-sbd",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Hornet’s dive bombers (Bombing Eight, Scouting Eight and the group commander)",
+      "count": 35,
+      "from": "hornet",
+      "launch": "07:00",
+      "launchSource": {"t":"07:00","sourceClock":"0900","sourceZone":"-10:00","source":"cv8-midway-1942"},
+      "altM": 5800,
+      "route": [
+        {
+          "t": "09:20",
+          "lonlat": [-179.1313,30.1041],
+          "altM": 5800,
+          "precision": "narrative",
+          "source": "cv8-midway-1942",
+          "note": "course 239° for 155 miles by the carrier’s report"
+        },
+        {
+          "t": "09:50",
+          "lonlat": [-179.1313,29.6016],
+          "altM": 5800,
+          "precision": "narrative",
+          "source": "cv8-midway-1942",
+          "note": "then south along the enemy’s reported track"
+        }
+      ],
+      "attack": {
+        "t": "09:50",
+        "profile": "search",
+        "sources": [{"id":"cv8-midway-1942","where":"track"},{"id":"cincpac-midway-1942","where":"para 29"}]
+      },
+      "recover": {"t":"11:30","to":"hornet"},
+      "sources": [
+        {"id":"cv8-midway-1942","where":"attack group"},
+        {"id":"cincpac-midway-1942","where":"para 29"},
+        {"id":"nwc-midway-1948","where":"p. 127"}
+      ],
+      "note": "no contact; some of Bombing Eight came back by way of Midway",
+      "tellings": [
+        {"source":"cv8-midway-1942","says":"35 VSB on contact; course 239° for 155 miles, then south."},
+        {
+          "source": "nwc-midway-1948",
+          "says": "Later tellings (Symonds, Mrazek; print, verify) argue a more westerly course, “the flight to nowhere”; the squadron track charts were not on HyperWar."
+        }
+      ]
+    },
+    {
+      "id": "vf-8",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "Fighting Eight",
+      "count": 10,
+      "from": "hornet",
+      "launch": "07:05",
+      "altM": 6100,
+      "attack": {
+        "t": "09:20",
+        "profile": "escort",
+        "target": "hornet-sbd",
+        "altM": 6100,
+        "sources": [{"id":"cincpac-midway-1942","where":"para 29"}]
+      },
+      "losses": [[10,10]],
+      "sources": [
+        {"id":"cincpac-midway-1942","where":"para 29: all ten forced down for lack of gas; eight pilots recovered"}
+      ]
+    },
+    {
+      "id": "vt-8",
+      "kit": "tbd-1",
+      "side": "us",
+      "name": "Torpedo Eight",
+      "count": 15,
+      "from": "hornet",
+      "launch": "07:45",
+      "altM": 450,
+      "route": [
+        {
+          "t": "09:20",
+          "lonlat": [-179.0853,29.7527],
+          "altM": 450,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "note": "carriers sighted to the north-west about 09:20"
+        }
+      ],
+      "attack": {
+        "t": "09:28",
+        "target": "kaga",
+        "profile": "torpedo",
+        "fromDeg": 140,
+        "altM": 30,
+        "window": ["09:20","09:36"],
+        "reached": [1,1],
+        "sources": [
+          {"id":"nwc-midway-1948","where":"pp. 127–128"},
+          {"id":"cincpac-midway-1942","where":"para 31"}
+        ]
+      },
+      "losses": [[15,15]],
+      "sources": [
+        {"id":"cv8-midway-1942","where":"VT-8"},
+        {"id":"nwc-midway-1948","where":"pp. 127–128"},
+        {"id":"gay-1943"}
+      ],
+      "note": "low under the cloud; attacked by fighters from about eight miles out; one torpedo known dropped",
+      "tellings": [
+        {"source":"cv8-midway-1942","says":"100 knots below the clouds at about 1,500 ft."},
+        {"source":"nwc-midway-1948","says":"Headed for the southernmost carrier."},
+        {"source":"cincpac-midway-1942","says":"Probably hitting the Kaga (of Gay)."},
+        {"source":"gay-1943","says":"Gay calls “the larger one close to me” the Akagi."}
+      ]
+    },
+    {
+      "id": "vb-3",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Bombing Three",
+      "count": 17,
+      "from": "yorktown",
+      "launch": "08:30",
+      "launchSource": {"t":"08:30","sourceClock":"1030","sourceZone":"-10:00","source":"cv5-midway-1942"},
+      "altM": 4900,
+      "route": [
+        {
+          "t": "09:45",
+          "lonlat": [-177.2814,30.8328],
+          "altM": 4900,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "note": "rendezvous; VB-3 at 16,000 ft"
+        },
+        {
+          "t": "10:20",
+          "lonlat": [-178.908,30.0405],
+          "altM": 4420,
+          "precision": "narrative",
+          "source": "cv5-midway-1942",
+          "note": "from 14,500 feet out of the sun"
+        }
+      ],
+      "attack": {
+        "t": "10:25",
+        "target": "soryu",
+        "profile": "dive",
+        "fromDeg": 180,
+        "pushOverM": 4420,
+        "releaseM": 760,
+        "reached": [9,13],
+        "sources": [
+          {"id":"cv5-midway-1942","where":"VB-3"},
+          {"id":"nwc-midway-1948","where":"p. 135"},
+          {"id":"nagumo-1947","where":"narrative; Table 3"}
+        ]
+      },
+      "losses": [[0,2]],
+      "recover": {"t":"12:37","to":"enterprise"},
+      "sources": [{"id":"cv5-midway-1942","where":"VB-3"},{"id":"nwc-midway-1948","where":"pp. 133–135"}],
+      "note": "diving from the south along her fore-and-aft line, withdrawing north-east close to the water; some bombs fell early from the electrical arming switch, Leslie’s among them; the last of the squadron shifted to a destroyer and a battleship",
+      "tellings": [
+        {
+          "source": "cv5-midway-1942",
+          "says": "From 14,500 feet out of the sun; release averaged 2,500 feet; four bombs released early by the electrical arming switch; the last four planes shifted to a destroyer and a battleship."
+        },
+        {"source":"nagumo-1947","says":"12 or 13 dive bombers on Sōryū, three hits."},
+        {"source":"cv5-midway-1942","says":"None of VB-3 lost over the target; two ditched later, crews rescued."}
+      ]
+    },
+    {
+      "id": "vt-3",
+      "kit": "tbd-1",
+      "side": "us",
+      "name": "Torpedo Three",
+      "count": 12,
+      "from": "yorktown",
+      "launch": "08:45",
+      "altM": 450,
+      "route": [
+        {"t":"09:45","lonlat":[-177.2814,30.8328],"altM":450,"precision":"narrative","source":"nwc-midway-1948"},
+        {
+          "t": "10:00",
+          "lonlat": [-178.826,29.4338],
+          "altM": 450,
+          "precision": "narrative",
+          "source": "nwc-midway-1948",
+          "note": "sighted the force at 345°, 30 to 40 miles"
+        }
+      ],
+      "attack": {
+        "t": "10:16",
+        "target": "hiryu",
+        "profile": "torpedo",
+        "fromDeg": 135,
+        "altM": 45,
+        "reached": [5,5],
+        "sources": [{"id":"nwc-midway-1948","where":"p. 135"},{"id":"cv5-midway-1942","where":"VT-3"}]
+      },
+      "losses": [[10,10]],
+      "sources": [
+        {"id":"cv5-midway-1942","where":"VT-3"},
+        {"id":"nwc-midway-1948","where":"pp. 133–135"},
+        {"id":"cincpac-midway-1942","where":"para 33"}
+      ],
+      "note": "down to wave height after the fighters met them fourteen miles out; most were lost before the drop and the rest after it",
+      "tellings": [
+        {
+          "source": "nwc-midway-1948",
+          "says": "Down to 150 ft; seven shot down on the approach, five dropped, three more lost after; no hits (p. 135)."
+        },
+        {"source":"jawp-midway","says":"The other two ditched on the way back."}
+      ]
+    },
+    {
+      "id": "vf-3-escort",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "Fighting Three, escort of Torpedo Three",
+      "count": 6,
+      "from": "yorktown",
+      "launch": "09:05",
+      "launchSource": {"t":"09:05","sourceClock":"1105","sourceZone":"-10:00","source":"cv5-midway-1942"},
+      "altM": 1700,
+      "attack": {
+        "t": "10:05",
+        "profile": "escort",
+        "target": "vt-3",
+        "altM": 1700,
+        "window": ["10:05","10:18"],
+        "sources": [{"id":"cv5-midway-1942","where":"VF-3"}]
+      },
+      "losses": [[1,1]],
+      "recover": {"t":"11:45","to":"yorktown"},
+      "sources": [{"id":"cv5-midway-1942","where":"VF-3"},{"id":"nwc-midway-1948","where":"p. 135"}],
+      "note": "over Torpedo Three, weaving in pairs",
+      "tellings": [
+        {
+          "source": "cv5-midway-1942",
+          "says": "VT-3 at 1,500 ft, two VF at 2,500 ft, four at 5,000–6,000 ft, VB-3 at 16,000 ft."
+        },
+        {
+          "source": "cv5-midway-1942",
+          "says": "“The Zeros concentrated most of their attacks on the rear plane, making beam and astern runs and pulling clear after each run.” One F4F lost, five or six Zeros claimed; one F4F crash-landed on Hornet."
+        }
+      ]
+    },
+    {
+      "id": "vs-5-dawn",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Scouting Five, dawn search",
+      "count": 10,
+      "from": "yorktown",
+      "launch": "04:31",
+      "altM": 450,
+      "attack": {"t":"05:30","profile":"search","sources":[{"id":"nwc-midway-1948","where":"0431"}]},
+      "sources": [
+        {"id":"nwc-midway-1948","where":"0431"},
+        {"id":"cv5-midway-1942","where":"Air Department"}
+      ],
+      "note": "a search of the northern semicircle",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Ten VSB of VS-5 to search the northern semicircle to 100 miles."}
+      ]
+    },
+    {
+      "id": "vs-5-search",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Scouting Five, afternoon search",
+      "count": 10,
+      "from": "yorktown",
+      "launch": "11:33",
+      "altM": 1000,
+      "route": [
+        {
+          "t": "14:45",
+          "lonlat": [-179.0833,31.25],
+          "altM": 1000,
+          "precision": "report",
+          "source": "cv6-midway-1942",
+          "sourceClock": "1645",
+          "sourceZone": "-10:00",
+          "note": "the position Adams reported, about 42 miles west of the true one (NWC p. 98)"
+        }
+      ],
+      "attack": {
+        "t": "14:45",
+        "profile": "search",
+        "target": "hiryu",
+        "sources": [
+          {"id":"cv6-midway-1942","where":"1645 zone +10"},
+          {"id":"nwc-midway-1948","where":"p. 98"},
+          {"id":"cincpac-midway-1942","where":"para 45"}
+        ],
+        "sourceClock": "1645",
+        "sourceZone": "-10:00"
+      },
+      "sources": [{"id":"nwc-midway-1948","where":"1133"},{"id":"cincpac-midway-1942","where":"para 40"}],
+      "note": "a search to the west and north",
+      "tellings": [
+        {"source":"nwc-midway-1948","says":"Sector 280°–020°, 200 miles."},
+        {"source":"cincpac-midway-1942","says":"Sector 280–030 to 200 miles, launched at 1150."}
+      ]
+    },
+    {
+      "id": "vf-3-cap-noon",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "Yorktown’s combat air patrol, noon",
+      "count": 12,
+      "from": "yorktown",
+      "launch": "11:40",
+      "altM": 3000,
+      "attack": {
+        "t": "12:00",
+        "profile": "cap",
+        "target": "hiryu-d3a-1",
+        "altM": 2700,
+        "sources": [{"id":"cincpac-midway-1942","where":"para 41"},{"id":"cv5-midway-1942","where":"VF-3"}]
+      },
+      "recover": {"t":"13:00","to":"enterprise"},
+      "sources": [
+        {"id":"cincpac-midway-1942","where":"para 41"},
+        {"id":"nwc-midway-1948","where":"p. 137"},
+        {"id":"cv5-midway-1942","where":"Air Department"}
+      ],
+      "note": "intercepted well out; many ran out of ammunition before the attack was over",
+      "tellings": [
+        {
+          "source": "cv5-midway-1942",
+          "says": "Met them 15–20 miles out at 8,000–10,000 ft; “Many of our fighters ran out of ammunition even before the attack was over.”"
+        },
+        {"source":"cv5-midway-1942","says":"Yorktown’s fighters claimed thirteen bombers and two fighters."},
+        {"source":"nagumo-1947","says":"Thirteen bombers and three fighters lost (Table 8)."}
+      ]
+    },
+    {
+      "id": "tf16-cap-noon",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "TF 16’s fighters sent to TF 17, noon",
+      "count": 16,
+      "from": "enterprise",
+      "launch": "11:30",
+      "altM": 3000,
+      "attack": {
+        "t": "12:02",
+        "profile": "cap",
+        "target": "hiryu-d3a-1",
+        "altM": 2700,
+        "sources": [{"id":"nwc-midway-1948","where":"p. 137"}]
+      },
+      "recover": {"t":"13:00","to":"enterprise"},
+      "sources": [{"id":"nwc-midway-1948","where":"p. 137: about 28 fighters in all with TF 17’s twelve"}]
+    },
+    {
+      "id": "vf-3-cap-1430",
+      "kit": "f4f-4",
+      "side": "us",
+      "name": "Yorktown’s last fighters, 14:40",
+      "count": 8,
+      "from": "yorktown",
+      "launch": "14:40",
+      "altM": 1500,
+      "attack": {
+        "t": "14:42",
+        "profile": "cap",
+        "target": "hiryu-b5n-2",
+        "altM": 1500,
+        "sources": [
+          {"id":"cv5-midway-1942","where":"Air Department"},
+          {"id":"cincpac-midway-1942","where":"para 43"}
+        ]
+      },
+      "recover": {"t":"15:30","to":"enterprise"},
+      "sources": [
+        {"id":"cv5-midway-1942","where":"Air Department: launched with 23 gallons each"},
+        {"id":"cincpac-midway-1942","where":"para 43"}
+      ],
+      "note": "the patrol already aloft, high, over-ran the torpedo planes coming in low",
+      "tellings": [
+        {
+          "source": "cv5-midway-1942",
+          "says": "The CAP at 10,000–12,000 ft; the torpedo planes at about 5,000 ft; the last eight fighters launched with 23 gallons each."
+        },
+        {
+          "source": "jawp-midway",
+          "says": "Thach shot down a B5N with a leader’s marking, which dropped as it fell (verify)."
+        }
+      ]
+    },
+    {
+      "id": "enterprise-pm",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Enterprise’s afternoon strike (Scouting Six, Bombing Six and Bombing Three)",
+      "count": 24,
+      "from": "enterprise",
+      "launch": "15:30",
+      "launchSource": {"t":"15:30","sourceClock":"1730","sourceZone":"-10:00","source":"cv6-midway-1942"},
+      "altM": 4000,
+      "route": [
+        {
+          "t": "16:50",
+          "lonlat": [-178.717,31.4434],
+          "altM": 4000,
+          "precision": "narrative",
+          "source": "jawp-midway",
+          "note": "from the west-south-west with the low sun behind (verify the height)"
+        }
+      ],
+      "attack": {
+        "t": "17:01",
+        "target": "hiryu",
+        "profile": "dive",
+        "fromDeg": 250,
+        "pushOverM": 4000,
+        "releaseM": 760,
+        "window": ["17:01","17:05"],
+        "reached": [13,20],
+        "sourceClock": "1401",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05",
+        "sources": [
+          {"id":"nagumo-1947","where":"log 1401–1405 JST; Table 3"},
+          {"id":"nwc-midway-1948","where":"D-4"}
+        ]
+      },
+      "losses": [[3,3]],
+      "recover": {"t":"18:30","to":"enterprise"},
+      "sources": [
+        {"id":"cv6-midway-1942","where":"1730 zone +10"},
+        {"id":"nwc-midway-1948","where":"D-4"},
+        {"id":"cincpac-midway-1942","where":"para 45"}
+      ],
+      "note": "two of Bombing Three’s went for Haruna",
+      "tellings": [
+        {"source":"cv6-midway-1942","says":"24 VSB: 11 with 1,000-lb and 13 with 500-lb bombs."},
+        {"source":"wp-midway","says":"Six of VS-6, four of VB-6, fourteen of VB-3."},
+        {"source":"cv6-midway-1942","says":"Three did not return."}
+      ]
+    },
+    {
+      "id": "hornet-pm",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Hornet’s afternoon strike",
+      "count": 16,
+      "from": "hornet",
+      "launch": "16:03",
+      "launchSource": {"t":"16:03","sourceClock":"1803","sourceZone":"-10:00","source":"cv8-midway-1942"},
+      "altM": 4000,
+      "attack": {
+        "t": "17:30",
+        "target": "tone",
+        "profile": "dive",
+        "fromDeg": 250,
+        "pushOverM": 4000,
+        "releaseM": 760,
+        "reached": [14,16],
+        "sourceClock": "1930",
+        "sourceZone": "-10:00",
+        "sources": [{"id":"cv8-midway-1942","where":"1930 zone +10"}]
+      },
+      "recover": {"t":"19:00","to":"hornet"},
+      "sources": [
+        {"id":"cv8-midway-1942","where":"1803–1930 zone +10"},
+        {"id":"nagumo-1947","where":"Table 3"}
+      ],
+      "note": "on “one BB” and “a heavy cruiser”; no hits in the Japanese record"
+    },
+    {
+      "id": "midway-pby",
+      "kit": "pby-5",
+      "side": "us",
+      "name": "Midway’s patrol planes on the search line",
+      "count": 2,
+      "from": "eastern-island-airfield",
+      "launch": "04:00",
+      "altM": 300,
+      "attack": {
+        "t": "05:52",
+        "profile": "search",
+        "target": "akagi",
+        "sources": [{"id":"cincpac-midway-1942","where":"para 18"},{"id":"nwc-midway-1948","where":"p. 121"}]
+      },
+      "sources": [{"id":"cincpac-midway-1942","where":"para 18"}],
+      "note": "aloft before dawn; one reported many planes heading for Midway at 05:45, another the carriers at 05:52"
+    },
+    {
+      "id": "b-17-sweeney",
+      "kit": "b-17e",
+      "side": "us",
+      "name": "Army B-17s from Midway",
+      "count": 16,
+      "from": "eastern-island-airfield",
+      "launch": "04:00",
+      "altM": 6100,
+      "attack": {
+        "t": "08:14",
+        "target": "soryu",
+        "profile": "level",
+        "altM": 6100,
+        "reached": [14,16],
+        "sources": [{"id":"cincpac-midway-1942","where":"para 25"},{"id":"nwc-midway-1948","where":"p. 90"}]
+      },
+      "recover": {"t":"11:00","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"paras 18, 25"}],
+      "note": "despatched before dawn against the transports, then diverted to the carriers; the launch time is not in what was read",
+      "tellings": [
+        {
+          "source": "cincpac-midway-1942",
+          "says": "Each plane carrying 8 500-pound demolition bombs, attacking from 20,000 feet at 0814; claimed three hits on carriers (para 25)."
+        }
+      ]
+    },
+    {
+      "id": "midway-tbf",
+      "kit": "tbf-1",
+      "side": "us",
+      "name": "Torpedo Eight’s detachment at Midway",
+      "count": 6,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 600,
+      "attack": {
+        "t": "07:10",
+        "target": "hiryu",
+        "profile": "torpedo",
+        "fromDeg": 150,
+        "altM": 30,
+        "reached": [2,4],
+        "sources": [
+          {"id":"cincpac-midway-1942","where":"para 22"},
+          {"id":"nagumo-1947","where":"log 0407–0415 JST"}
+        ],
+        "sourceClock": "0410",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "losses": [[5,5]],
+      "recover": {"t":"08:00","to":"eastern-island-airfield"},
+      "sources": [
+        {"id":"cincpac-midway-1942","where":"paras 19, 22"},
+        {"id":"nwc-midway-1948","where":"p. 88"}
+      ],
+      "note": "from ahead on both bows; at least two shot down before they could launch"
+    },
+    {
+      "id": "midway-b26",
+      "kit": "b-26",
+      "side": "us",
+      "name": "Army B-26s with torpedoes",
+      "count": 4,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 600,
+      "attack": {
+        "t": "07:10",
+        "target": "akagi",
+        "profile": "torpedo",
+        "fromDeg": 150,
+        "altM": 40,
+        "reached": [3,4],
+        "sources": [
+          {"id":"cincpac-midway-1942","where":"para 21"},
+          {"id":"nagumo-1947","where":"log 0407–0415 JST"}
+        ],
+        "sourceClock": "0410",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "losses": [[2,2]],
+      "recover": {"t":"08:00","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"para 21"},{"id":"nwc-midway-1948","where":"p. 88"}],
+      "tellings": [
+        {
+          "source": "cincpac-midway-1942",
+          "says": "One is said to have touched the flight deck of its target in pulling out before crashing into the sea; the Akagi TROM traces the story of a B-26 trying to crash Akagi to a strafing pass."
+        }
+      ]
+    },
+    {
+      "id": "vmf-221-f2a",
+      "kit": "f2a-3",
+      "side": "us",
+      "name": "Marine Fighting 221, Brewsters",
+      "count": 20,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 3600,
+      "attack": {
+        "t": "06:16",
+        "profile": "cap",
+        "target": "strike-akagi-d3a",
+        "altM": 3600,
+        "sources": [
+          {"id":"cincpac-midway-1942","where":"para 19"},
+          {"id":"nagumo-1947","where":"strike reports 0316–0320 JST"}
+        ],
+        "sourceClock": "0316",
+        "sourceZone": "+09:00",
+        "sourceDate": "1942-06-05"
+      },
+      "losses": [[11,15]],
+      "recover": {"t":"07:00","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"para 19"},{"id":"heinl-1948","where":"ch. 3–4"}],
+      "note": "Midway’s fighters were Brewsters and the Wildcats that arrived on 26 May",
+      "tellings": [
+        {
+          "source": "heinl-1948",
+          "says": "Seven F4F-3s arrived in Kittyhawk on 26 May; the rest of VMF-221’s 27 fighters (CINCPAC) were Brewsters."
+        },
+        {"source":"cincpac-midway-1942","says":"Of the 27 fighters available, 15 were lost and 7 severely damaged."}
+      ]
+    },
+    {
+      "id": "vmf-221-f4f",
+      "kit": "f4f-3",
+      "side": "us",
+      "name": "Marine Fighting 221, Wildcats",
+      "count": 7,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 3600,
+      "attack": {
+        "t": "06:16",
+        "profile": "cap",
+        "target": "strike-hiryu-b5n",
+        "altM": 3600,
+        "sources": [{"id":"cincpac-midway-1942","where":"para 19"}]
+      },
+      "losses": [[0,4]],
+      "recover": {"t":"07:00","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"para 19"},{"id":"heinl-1948","where":"ch. 3 p. 24"}]
+    },
+    {
+      "id": "vmsb-241-sbd",
+      "kit": "sbd-3",
+      "side": "us",
+      "name": "Marine Scout-Bombing 241, Dauntlesses",
+      "count": 16,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 2500,
+      "attack": {
+        "t": "07:55",
+        "target": "hiryu",
+        "profile": "dive",
+        "fromDeg": 150,
+        "pushOverM": 2500,
+        "releaseM": 300,
+        "reached": [8,16],
+        "window": ["07:55","08:12"],
+        "sources": [
+          {"id":"cincpac-midway-1942","where":"para 23"},
+          {"id":"nagumo-1947","where":"log 0453–0514 JST; Table 3"}
+        ]
+      },
+      "losses": [[8,8]],
+      "recover": {"t":"09:00","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"para 23"}],
+      "note": "SBD-2s, too newly received for dive bombing: a glide-bombing attack for its lower pull-outs"
+    },
+    {
+      "id": "vmsb-241-sb2u",
+      "kit": "sb2u-3",
+      "side": "us",
+      "name": "Marine Scout-Bombing 241, Vindicators",
+      "count": 11,
+      "from": "eastern-island-airfield",
+      "launch": "05:55",
+      "altM": 2500,
+      "attack": {
+        "t": "08:27",
+        "target": "haruna",
+        "profile": "dive",
+        "fromDeg": 150,
+        "pushOverM": 2500,
+        "releaseM": 300,
+        "reached": [9,11],
+        "sources": [{"id":"nwc-midway-1948","where":"p. 91"},{"id":"cincpac-midway-1942","where":"para 24"}]
+      },
+      "recover": {"t":"09:30","to":"eastern-island-airfield"},
+      "sources": [{"id":"cincpac-midway-1942","where":"para 24"},{"id":"nwc-midway-1948","where":"p. 91"}],
+      "note": "glide-bombing against heavy fighter attack"
+    }
+  ],
+  "sites": [
+    {
+      "id": "eastern-island-airfield",
+      "kind": "airfield",
+      "name": "Eastern Island airfield",
+      "lonlat": [-177.333,28.212],
+      "side": "us",
+      "target": true,
+      "precision": "chart",
+      "sources": [
+        {"id":"heinl-1948","where":"ch. 3"},
+        {"id":"osm-overpass","where":"Midway Atoll, queried 2026-10-22"}
+      ],
+      "note": "the island’s runways; Midway’s aircraft were all aloft before 06:00",
+      "tellings": [
+        {
+          "source": "cincpac-midway-1942",
+          "says": "All serviceable planes at Midway were in the air before 0600, except for 3 SB2U spares (para 19)."
+        }
+      ],
+      "events": [
+        {
+          "t": "06:40",
+          "kind": "hit",
+          "by": "strike-akagi-d3a",
+          "count": [1,18],
+          "where": "the north shore of Eastern Island: mess hall, galley and exchange, which the returning pilots called hangars",
+          "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+          "tellings": [
+            {
+              "source": "cincpac-midway-1942",
+              "says": "Little damage was done to the runways, the Japanese apparently leaving these intact for their own use (para 20)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eastern-island-powerhouse",
+      "kind": "building",
+      "name": "Eastern Island power plant",
+      "lonlat": [-177.329,28.2135],
+      "side": "us",
+      "target": false,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 4 p. 32"},{"id":"cincpac-midway-1942","where":"para 20"}],
+      "note": "destroyed by two heavy bombs",
+      "events": [
+        {
+          "t": "06:36",
+          "kind": "hit",
+          "by": "strike-hiryu-b5n",
+          "count": [2,2],
+          "where": "the power plant",
+          "sources": [{"id":"heinl-1948","where":"ch. 4 p. 32"},{"id":"cincpac-midway-1942","where":"para 20"}],
+          "tellings": [
+            {"source":"heinl-1948","says":"Direct hits from two 805-kg bombs destroyed virtually the entire plant."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eastern-island-command-post",
+      "kind": "command-post",
+      "name": "Eastern Island command post, 6th Defense Battalion",
+      "lonlat": [-177.3285,28.2105],
+      "side": "us",
+      "target": false,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 4 p. 32"}],
+      "note": "hit at the very end of the strike"
+    },
+    {
+      "id": "eastern-island-aa-3in",
+      "kind": "aa",
+      "name": "Eastern Island 3-inch AA batteries",
+      "lonlat": [-177.339,28.207],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 3 n. 3; ch. 4"}],
+      "note": "on the south shore near the western tip (Burton)"
+    },
+    {
+      "id": "eastern-island-aa-light",
+      "kind": "aa",
+      "name": "Eastern Island 37-mm and 20-mm guns",
+      "lonlat": [-177.331,28.2095],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 3 p. 23"}],
+      "note": "four 37-mm guns on each island"
+    },
+    {
+      "id": "sand-island-seaplane-hangars",
+      "kind": "hangar",
+      "name": "Sand Island seaplane hangars",
+      "lonlat": [-177.3685,28.2138],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [
+        {"id":"heinl-1948","where":"ch. 4 p. 31"},
+        {"id":"osm-overpass","where":"Midway Atoll, queried 2026-10-22"}
+      ],
+      "note": "by the seaplane ramps on the island’s east shore",
+      "events": [
+        {
+          "t": "06:34",
+          "kind": "hit",
+          "by": "strike-kaga-d3a",
+          "count": [1,9],
+          "where": "the seaplane hangars, set afire",
+          "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+          "tellings": [
+            {
+              "source": "heinl-1948",
+              "says": "The Kaga group dropped nine 242-kg bombs on and about the seaplane hangars, setting them afire."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sand-island-seaplane-base",
+      "kind": "seaplane-base",
+      "name": "Sand Island seaplane ramps and apron",
+      "lonlat": [-177.368,28.2145],
+      "side": "us",
+      "target": true,
+      "precision": "chart",
+      "sources": [
+        {"id":"osm-overpass","where":"Midway Atoll, queried 2026-10-22"},
+        {"id":"heinl-1948","where":"ch. 3 p. 24"}
+      ],
+      "note": "the ramps survive and are mapped"
+    },
+    {
+      "id": "sand-island-fuel-tanks",
+      "kind": "fuel-tanks",
+      "name": "Sand Island fuel-oil tanks",
+      "lonlat": [-177.371,28.218],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+      "note": "north of the seaplane hangars, at the north end of the island",
+      "tellings": [
+        {
+          "source": "heinl-1948",
+          "says": "A large oil fire in the fuel-oil tanks 500 yards to the north of the seaplane hangars."
+        }
+      ],
+      "events": [
+        {
+          "t": "06:35",
+          "kind": "fire",
+          "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+          "text": "The fuel-oil tanks on Sand Island burn."
+        }
+      ]
+    },
+    {
+      "id": "sand-island-aa-3in",
+      "kind": "aa",
+      "name": "Battery D, 3-inch AA, Sand Island",
+      "lonlat": [-177.375,28.202],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+      "note": "midway along the south-east coast of Sand Island; its heightfinder damaged",
+      "events": [
+        {
+          "t": "06:38",
+          "kind": "near-miss",
+          "by": "strike-soryu-b5n",
+          "count": [1,4],
+          "where": "about the battery",
+          "sources": [{"id":"heinl-1948","where":"ch. 4 p. 31"}],
+          "tellings": [
+            {
+              "source": "heinl-1948",
+              "says": "One of the principal targets of the Sōryū’s group, which reported it silenced; it had a damaged heightfinder."
+            }
+          ],
+          "byNote": "Heinl names Sōryū’s dive bombers; by Nagumo’s organisation Sōryū’s aircraft over Midway were level bombers"
+        }
+      ]
+    },
+    {
+      "id": "sand-island-aa-light",
+      "kind": "aa",
+      "name": "Sand Island 37-mm and 20-mm guns",
+      "lonlat": [-177.381,28.207],
+      "side": "us",
+      "target": true,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 3 p. 23"}],
+      "note": "four 37-mm guns on each island"
+    },
+    {
+      "id": "sand-island-dispensary",
+      "kind": "hospital",
+      "name": "Sand Island dispensary",
+      "lonlat": [-177.3775,28.2125],
+      "side": "us",
+      "target": false,
+      "precision": "schematic",
+      "sources": [{"id":"heinl-1948","where":"ch. 4 p. 32"}]
+    },
+    {
+      "id": "sand-island-cable-station",
+      "kind": "building",
+      "name": "the Cable Station, Sand Island",
+      "lonlat": [-177.3786,28.2157],
+      "side": "us",
+      "target": false,
+      "precision": "chart",
+      "sources": [
+        {"id":"osm-overpass","where":"Midway Atoll, queried 2026-10-22"},
+        {"id":"heinl-1948","where":"ch. 3 n. 3"}
+      ]
+    }
+  ],
+  "stops": [
+    {
+      "t": "04:30",
+      "text": "04:30, Midway time. Before sunrise the Kidō Butai turns into the south-easterly breeze and launches its strike on Midway: level bombers, dive bombers and fighters from every carrier. Far to the east, unseen, the American carriers wait for news.",
+      "camera": {"target":"akagi","bearingDeg":135,"pitch":0.35,"distanceM":9000},
+      "sources": [{"id":"nagumo-1947","where":"log 0130 JST"},{"id":"nwc-midway-1948","where":"p. 86"}]
+    },
+    {
+      "t": "05:52",
+      "text": "05:52. A Catalina finds the carriers, steaming south-east, and reports them; the American carriers hear it and turn to close.",
+      "camera": {"target":"akagi","bearingDeg":320,"pitch":0.5,"distanceM":14000},
+      "sources": [{"id":"nwc-midway-1948","where":"p. 121"},{"id":"cincpac-midway-1942","where":"para 18"}]
+    },
+    {
+      "t": "06:34",
+      "text": "06:34. Midway’s guns are firing; bombs fall on the seaplane hangars and fuel tanks of Sand Island and on Eastern Island’s buildings. The runways are left almost untouched. Midway’s own fighters have already met the strike, thirty miles out, and few of them come back.",
+      "camera": {"target":"eastern-island-airfield","bearingDeg":315,"pitch":0.45,"distanceM":12000},
+      "sources": [{"id":"heinl-1948","where":"ch. 4"},{"id":"cincpac-midway-1942","where":"paras 19–20"}]
+    },
+    {
+      "t": "07:10",
+      "text": "07:10. Midway’s torpedo planes and Army bombers come in low from ahead. Akagi swings hard and combs the torpedoes; the fighters overhead cut the attackers down. At 07:15 Nagumo orders his second wave re-armed with bombs for Midway.",
+      "camera": {"target":"akagi","bearingDeg":150,"pitch":0.3,"distanceM":7000},
+      "sources": [
+        {"id":"nagumo-1947","where":"log 0407–0415 JST"},
+        {"id":"cincpac-midway-1942","where":"paras 21–22"}
+      ]
+    },
+    {
+      "t": "07:28",
+      "text": "07:28. Tone’s search plane, launched late, reports enemy ships to the north-east. Nagumo reverses his order at 07:45: the planes still carrying torpedoes keep them. Through the morning Midway’s dive bombers and B-17s attack and hit nothing.",
+      "camera": {"target":"tone","bearingDeg":30,"pitch":0.4,"distanceM":11000},
+      "sources": [
+        {"id":"nagumo-1947","where":"log 0428–0530 JST"},
+        {"id":"cincpac-midway-1942","where":"paras 23–25"}
+      ]
+    },
+    {
+      "t": "09:20",
+      "text": "09:20. Torpedo Eight, without fighters, finds the carriers and attacks alone, low under the cloud. The combat air patrol meets it eight miles out and follows it all the way in. None of its aircraft return.",
+      "camera": {"target":"kaga","bearingDeg":140,"pitch":0.25,"distanceM":9000},
+      "sources": [
+        {"id":"nwc-midway-1948","where":"pp. 127–128"},
+        {"id":"cv8-midway-1942","where":"VT-8"},
+        {"id":"cincpac-midway-1942","where":"para 31"}
+      ],
+      "tellings": [
+        {"source":"cv8-midway-1942","says":"All 15 TBDs lost; one pilot, Ensign Gay, survived in the water."}
+      ]
+    },
+    {
+      "t": "09:40",
+      "text": "09:40. Torpedo Six attacks Kaga from both bows; the carriers turn away to hold the torpedo planes on the quarter, and the fighters come down to meet them.",
+      "camera": {"target":"kaga","bearingDeg":160,"pitch":0.3,"distanceM":8000},
+      "sources": [{"id":"nwc-midway-1948","where":"p. 129"}]
+    },
+    {
+      "t": "10:09",
+      "text": "10:09. Torpedo Three and its handful of fighters come in from the south-east. The Zeros are low over them, and the sky above the carriers is empty.",
+      "camera": {"target":"hiryu","bearingDeg":135,"pitch":0.25,"distanceM":9000},
+      "moment": "hiryu-cap-vt3",
+      "sources": [
+        {"id":"nagumo-1947","where":"Cover Units report 0709 JST"},
+        {"id":"cv5-midway-1942","where":"VT-3"}
+      ]
+    },
+    {
+      "t": "10:22",
+      "text": "10:22. Enterprise’s dive bombers fall on Kaga out of the scattered cumulus. Yorktown’s Bombing Three is pushing over on Sōryū; three of Enterprise’s go north to Akagi.",
+      "camera": {"target":"kaga","bearingDeg":225,"pitch":0.55,"distanceM":6000},
+      "moment": "vb6-kaga",
+      "sources": [{"id":"nagumo-1947","where":"narrative"},{"id":"nwc-midway-1948","where":"pp. 131–135"}]
+    },
+    {
+      "t": "10:26",
+      "text": "10:26. Within minutes Kaga, Sōryū and Akagi are burning, the fuelled and armed aircraft in their hangars feeding the fires. Hiryū, further north, is untouched.",
+      "camera": {"target":"akagi","bearingDeg":200,"pitch":0.4,"distanceM":14000},
+      "moment": "vb6-akagi",
+      "sources": [{"id":"nagumo-1947","where":"log 0722–0730 JST"},{"id":"nwc-midway-1948","where":"D-3"}]
+    },
+    {
+      "t": "10:54",
+      "text": "10:54. Hiryū launches her dive bombers against the American carriers while Abe signals that the other three are burning.",
+      "camera": {"target":"hiryu","bearingDeg":0,"pitch":0.35,"distanceM":8000},
+      "sources": [{"id":"nagumo-1947","where":"log 0750–0758 JST"}]
+    },
+    {
+      "t": "12:05",
+      "text": "12:05. Yorktown’s fighters break up Hiryū’s dive bombers well out, but some get through. Three bombs hit; a hit in the uptakes stops her.",
+      "camera": {"target":"yorktown","bearingDeg":250,"pitch":0.45,"distanceM":7000},
+      "moment": "hiryu-d3a-yorktown",
+      "sources": [{"id":"nwc-midway-1948","where":"p. 137"},{"id":"cincpac-midway-1942","where":"para 41"}]
+    },
+    {
+      "t": "14:44",
+      "text": "14:44. Hiryū’s torpedo planes come in from both sides through the screen’s fire. Two torpedoes hit Yorktown’s port side; she loses power and lists, and is abandoned half an hour later.",
+      "camera": {"target":"yorktown","bearingDeg":300,"pitch":0.3,"distanceM":6000},
+      "moment": "hiryu-b5n-yorktown",
+      "sources": [{"id":"nwc-midway-1948","where":"p. 139"},{"id":"cincpac-midway-1942","where":"para 43"}]
+    },
+    {
+      "t": "17:03",
+      "text": "17:03. Dive bombers from Enterprise, Yorktown’s among them, find Hiryū with the low sun behind them. Her helm throws off the first; then bombs strike forward.",
+      "camera": {"target":"hiryu","bearingDeg":250,"pitch":0.45,"distanceM":7000},
+      "moment": "vb-dive-hiryu",
+      "sources": [{"id":"nagumo-1947","where":"log 1401–1405 JST"},{"id":"nwc-midway-1948","where":"D-4"}]
+    },
+    {
+      "t": "17:55",
+      "text": "17:55. The day ends with every carrier of the Kidō Butai burning. Kaga and Sōryū sink in the evening; Akagi and Hiryū are scuttled by their own destroyers the next morning. Yorktown is afloat and abandoned; a submarine’s torpedoes sink her on 7 June.",
+      "camera": {"target":[-178.6,30.6],"bearingDeg":270,"pitch":0.6,"distanceM":120000},
+      "sources": [
+        {"id":"nagumo-1947","where":"narrative; Table 3"},
+        {"id":"nwc-midway-1948","where":"p. 185"}
+      ]
+    }
+  ],
+  "moments": [
+    {
+      "id": "vb6-kaga",
+      "title": "Bombing Six pushes over on Kaga",
+      "ja": null,
+      "role": {"kind":"aircraft","kit":"sbd-3","side":"us","group":"vb-6","name":"a Dauntless of Bombing Six"},
+      "t": "10:21:30",
+      "durationS": 180,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"kaga","bearingDeg":200,"rangeM":3000,"altM":5800,"speedMs":78,"headingDeg":20},
+      "objective": {"kind":"dive","target":"kaga","text":"Put a thousand-pound bomb on Kaga’s flight deck."},
+      "beats": [
+        {"t":"10:22:00","text":"The first bombs fall close aboard Kaga."},
+        {"t":"10:22:40","text":"Hits aft and at the forward elevator."},
+        {"t":"10:24:00","text":"Kaga is burning from the island aft."}
+      ],
+      "checkpoints": [{"t":"10:24:30","text":"Kaga is burning; Sōryū is being hit to the east."}],
+      "record": {
+        "hits": [{"unit":"kaga","count":[1,2],"window":["10:22","10:26"]}],
+        "note": "Bombing Six’s share of the hits on Kaga is inferred (see the 10:22:40 event); the whole attack put three to five bombs on her"
+      },
+      "after": {
+        "text": "Nagumo’s report has the first bombs missing and four striking Kaga, one of them on the bridge. Fires spread through her hangars among armed and fuelled aircraft. She burned through the afternoon and sank at 19:25. Many of Enterprise’s dive bombers came down at sea on the way home, their tanks empty.",
+        "sources": [
+          {"id":"nagumo-1947","where":"narrative; Table 3"},
+          {"id":"nwc-midway-1948","where":"pp. 131, 140"},
+          {"id":"trom-kaga"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"Bombs 4, 7, 8 and 9 hit; Kaga’s dead printed “1 800” (garbled)."},
+          {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 dead."},
+          {"source":"wp-midway","says":"Three to five direct hits."},
+          {
+            "source": "nwc-midway-1948",
+            "says": "VS-6 and VB-6 lost seven aircraft each that morning; four and possibly as many as seven ditched for want of fuel."
+          }
+        ]
+      }
+    },
+    {
+      "id": "vb6-akagi",
+      "title": "Three Dauntlesses turn north to Akagi",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "sbd-3",
+        "side": "us",
+        "group": "vb-6-akagi",
+        "name": "a Dauntless of Bombing Six’s leading section"
+      },
+      "t": "10:25:00",
+      "durationS": 150,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"akagi","bearingDeg":230,"rangeM":4000,"altM":4000,"speedMs":75,"headingDeg":50},
+      "objective": {"kind":"dive","target":"akagi","text":"Dive on Akagi and put your bomb on her flight deck."},
+      "beats": [
+        {"t":"10:25:30","text":"Akagi swings into a hard reverse turn below you."},
+        {"t":"10:26:00","text":"The first bomb bursts close aboard her bridge."},
+        {"t":"10:27:00","text":"Fire in Akagi’s upper hangar."}
+      ],
+      "checkpoints": [{"t":"10:27:30","text":"Akagi is burning; the torpedoes in her hangar begin to go off."}],
+      "record": {"hits":[{"unit":"akagi","count":[1,2],"window":["10:26","10:27"]}]},
+      "after": {
+        "text": "One bomb, probably Best’s, burst among the armed and fuelled aircraft in Akagi’s upper hangar. A near miss astern jammed her rudder. By 10:42 her engines had stopped; Nagumo left her, and she was scuttled at dawn on 5 June.",
+        "sources": [
+          {"id":"nagumo-1947","where":"log 0726–0746 JST; Table 3"},
+          {"id":"trom-akagi"},
+          {"id":"wp-midway"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"Two hits and a near miss; 221 dead."},
+          {
+            "source": "trom-akagi",
+            "says": "One hit, one under the port quarter, one near miss forward (after Parshall and Tully); 263 dead."
+          }
+        ]
+      }
+    },
+    {
+      "id": "vb3-soryu",
+      "title": "Bombing Three dives on Sōryū out of the sun",
+      "ja": null,
+      "role": {"kind":"aircraft","kit":"sbd-3","side":"us","group":"vb-3","name":"a Dauntless of Bombing Three"},
+      "t": "10:24:30",
+      "durationS": 180,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"soryu","bearingDeg":150,"rangeM":4000,"altM":4420,"speedMs":75,"headingDeg":330},
+      "objective": {"kind":"dive","target":"soryu","text":"Dive from the south along Sōryū’s length and hit her flight deck."},
+      "beats": [
+        {"t":"10:25:00","text":"The first bomb hits at the forward elevator; a fighter goes over the side."},
+        {"t":"10:26:00","text":"A second hit aft."},
+        {"t":"10:28:00","text":"A third amidships; the last of the squadron turn on a destroyer and a battleship."}
+      ],
+      "checkpoints": [{"t":"10:27:30","text":"Sōryū is burning end to end."}],
+      "record": {"hits":[{"unit":"soryu","count":[3,3],"window":["10:25","10:29"]}]},
+      "after": {
+        "text": "Three bombs hit Sōryū. Within a quarter of an hour her engines had stopped and her steering had failed, and at 10:45 her captain ordered her abandoned. She sank at 19:13. None of Bombing Three was lost over the target.",
+        "sources": [
+          {"id":"nagumo-1947","where":"narrative; Table 3"},
+          {"id":"cv5-midway-1942","where":"VB-3"},
+          {"id":"trom-soryu"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"718 dead."},
+          {"source":"trom-soryu","says":"713 dead; hits at 10:25–10:26 and 10:29."},
+          {"source":"cv5-midway-1942","says":"Five direct hits and three very near misses claimed."}
+        ]
+      }
+    },
+    {
+      "id": "hiryu-cap-vt3",
+      "title": "Zeros over Torpedo Three",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "a6m2",
+        "side": "jp",
+        "group": "cap-vt3",
+        "name": "a Zero of the carriers’ combat air patrol"
+      },
+      "t": "10:09:00",
+      "durationS": 300,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"hiryu","bearingDeg":140,"rangeM":14000,"altM":600,"speedMs":100,"headingDeg":140},
+      "objective": {"kind":"cap","target":"vt-3","text":"Turn the torpedo planes away before they drop on Hiryū."},
+      "beats": [
+        {"t":"10:09:30","text":"A screening ship fires two bursts toward the raid."},
+        {"t":"10:12:00","text":"The escorting Wildcats turn into the Zeros."},
+        {"t":"10:14:00","text":"The torpedo planes are down to wave height."}
+      ],
+      "checkpoints": [
+        {"t":"10:14:00","text":"The surviving torpedo planes are on their run; above you the sky is empty."}
+      ],
+      "record": {
+        "aircraft": {"count":[7,10],"group":"vt-3"},
+        "note": "what the record gives the combat air patrol over Torpedo Three: ten of twelve lost, seven before the drop, no torpedo hit"
+      },
+      "after": {
+        "text": "Hiryū’s fighters claimed nearly every torpedo plane and every escort. The record has most of Torpedo Three lost and one of its escorts; Hiryū combed the torpedoes and was not hit. At 10:22, while the fighters were low in the south-east, dive bombers fell on Kaga, Akagi and Sōryū.",
+        "sources": [
+          {"id":"nagumo-1947","where":"Cover Units report; Table 8"},
+          {"id":"cv5-midway-1942","where":"VT-3; VF-3"},
+          {"id":"nwc-midway-1948","where":"p. 127"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"Claimed: nine of fourteen torpedo planes, all nine fighters."},
+          {"source":"cincpac-midway-1942","says":"Yorktown lost 10 of 12 torpedo planes."},
+          {
+            "source": "nwc-midway-1948",
+            "says": "The Japanese brought most, if not all, of the defending fighters down to low altitudes, leaving few if any to oppose the dive bombers."
+          },
+          {
+            "source": "wp-midway",
+            "says": "After Parshall and Tully: a failure of control and position; a Zero could regain 10,000 ft in about five minutes."
+          }
+        ]
+      }
+    },
+    {
+      "id": "vf3-escort",
+      "title": "Fighting Three over Torpedo Three",
+      "ja": null,
+      "role": {"kind":"aircraft","kit":"f4f-4","side":"us","group":"vf-3-escort","name":"a Wildcat of Fighting Three"},
+      "t": "10:05:00",
+      "durationS": 300,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"hiryu","bearingDeg":135,"rangeM":30000,"altM":1700,"speedMs":80,"headingDeg":315},
+      "objective": {"kind":"escort","target":"vt-3","text":"Keep the Zeros off the torpedo planes below you."},
+      "beats": [
+        {"t":"10:06:00","text":"Zeros come down on the rear of the formation."},
+        {"t":"10:09:00","text":"Two bursts of flak mark you for the fighters."}
+      ],
+      "checkpoints": [{"t":"10:10:00","text":"The torpedo planes press on through the fighters."}],
+      "record": {"losses":{"count":[1,1],"group":"vf-3-escort"},"note":"one Wildcat lost; five or six Zeros claimed"},
+      "after": {
+        "text": "Six Wildcats fought far more Zeros over Torpedo Three, weaving in pairs. One was lost; another crash-landed on Hornet. Torpedo Three pressed its attack and most of its aircraft did not return.",
+        "sources": [{"id":"cv5-midway-1942","where":"VF-3; VT-3"},{"id":"nwc-midway-1948","where":"p. 135"}],
+        "tellings": [
+          {"source":"cv5-midway-1942","says":"VF-3 counted 15 to 20 Zeros; one F4F lost, five or six Zeros claimed."}
+        ]
+      }
+    },
+    {
+      "id": "hiryu-d3a-yorktown",
+      "title": "Hiryū’s dive bombers find Yorktown",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "d3a1",
+        "side": "jp",
+        "group": "hiryu-d3a-1",
+        "name": "a Type 99 carrier bomber of Hiryū’s first strike"
+      },
+      "t": "11:59:00",
+      "durationS": 360,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"yorktown","bearingDeg":250,"rangeM":37000,"altM":2700,"speedMs":75,"headingDeg":70},
+      "objective": {"kind":"dive","target":"yorktown","text":"Get through the fighters and hit the carrier."},
+      "beats": [
+        {"t":"12:00:00","text":"Wildcats meet the formation well out."},
+        {"t":"12:04:00","text":"One at a time, bombers break away toward the carrier."},
+        {"t":"12:05:00","text":"A bomb bursts on Yorktown’s flight deck aft."}
+      ],
+      "checkpoints": [{"t":"12:05:00","text":"Yorktown is hit; she slows."}],
+      "record": {"hits":[{"unit":"yorktown","count":[3,3],"window":["12:05","12:15"]}]},
+      "after": {
+        "text": "A few of Hiryū’s dive bombers got through to Yorktown and three bombs hit; one in her uptakes stopped her. Most of the bombers and some of their fighters did not return; Lieutenant Kobayashi was among them. Hiryū reported the carrier sunk; within an hour and a half Yorktown was steaming again at nearly twenty knots.",
+        "sources": [
+          {"id":"nagumo-1947","where":"First Attack; Table 8"},
+          {"id":"nwc-midway-1948","where":"p. 137"},
+          {"id":"cincpac-midway-1942","where":"para 41"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"13 of 18 bombers and 3 fighters did not return."},
+          {"source":"cincpac-midway-1942","says":"Seven broke through; three hits."}
+        ]
+      }
+    },
+    {
+      "id": "vf3-cap-yorktown",
+      "title": "Wildcats over TF 17 at noon",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "f4f-4",
+        "side": "us",
+        "group": "vf-3-cap-noon",
+        "name": "a Wildcat of Yorktown’s combat air patrol"
+      },
+      "t": "11:59:00",
+      "durationS": 300,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"yorktown","bearingDeg":250,"rangeM":6000,"altM":3050,"speedMs":90,"headingDeg":250},
+      "objective": {"kind":"intercept","target":"hiryu-d3a-1","text":"Break up the dive bombers before they reach the carrier."},
+      "beats": [
+        {"t":"12:00:00","text":"Tally-ho: dive bombers with fighters above them, climbing."},
+        {"t":"12:04:00","text":"Some break out of the fight and dive through the guns."}
+      ],
+      "checkpoints": [{"t":"12:04:00","text":"The dive bombers are over Yorktown."}],
+      "record": {
+        "aircraft": {"count":[9,11],"group":"hiryu-d3a-1"},
+        "note": "what the record gives Yorktown’s combat air patrol against the bombers before the dive"
+      },
+      "after": {
+        "text": "The combat air patrol broke up the attack fifteen to twenty miles out; a few bombers got through and three bombs hit Yorktown. The fighters claimed most of the bombers; the Japanese record agrees nearly to the aircraft. Many of the Wildcats had run out of ammunition before the attack was over.",
+        "sources": [
+          {"id":"cv5-midway-1942","where":"VF-3; Air Department"},
+          {"id":"nagumo-1947","where":"Table 8"},
+          {"id":"cincpac-midway-1942","where":"para 41"}
+        ],
+        "tellings": [
+          {"source":"cv5-midway-1942","says":"Claimed: thirteen bombers and two fighters."},
+          {"source":"nagumo-1947","says":"Thirteen bombers and three fighters lost."}
+        ]
+      }
+    },
+    {
+      "id": "hiryu-b5n-yorktown",
+      "title": "Hiryū’s torpedo planes on Yorktown",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "b5n2",
+        "side": "jp",
+        "group": "hiryu-b5n-2",
+        "name": "a Type 97 carrier attack plane of Hiryū’s second strike"
+      },
+      "t": "14:38:00",
+      "durationS": 300,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"yorktown","bearingDeg":310,"rangeM":22000,"altM":1500,"speedMs":72,"headingDeg":130},
+      "objective": {
+        "kind": "torpedo",
+        "target": "yorktown",
+        "text": "Split from the formation, run in low and put your torpedo into the carrier."
+      },
+      "beats": [
+        {"t":"14:40:00","text":"Yorktown launches her last fighters."},
+        {"t":"14:41:00","text":"The screen’s fire comes up to meet you."},
+        {"t":"14:44:00","text":"Torpedoes hit Yorktown’s port side."}
+      ],
+      "checkpoints": [{"t":"14:43:00","text":"The torpedoes are in the water."}],
+      "record": {"hits":[{"unit":"yorktown","count":[2,2],"window":["14:43","14:46"]}]},
+      "after": {
+        "text": "Hiryū’s torpedo planes split to come in from both sides; two torpedoes hit Yorktown. Half of them did not return, Lieutenant Tomonaga’s among them. Hiryū believed she had disabled a second carrier. Yorktown was abandoned within half an hour and sank on 7 June after a submarine’s torpedoes.",
+        "sources": [
+          {"id":"nagumo-1947","where":"Second Attack; Table 8"},
+          {"id":"nwc-midway-1948","where":"pp. 139–140"},
+          {"id":"cincpac-midway-1942","where":"para 43"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"5 of 10 torpedo planes lost, with 3 escorts."},
+          {
+            "source": "cincpac-midway-1942",
+            "says": "Five launched; the last two, released at about 800 yards, hit at 1445."
+          }
+        ]
+      }
+    },
+    {
+      "id": "vb-dive-hiryu",
+      "title": "The evening dive on Hiryū",
+      "ja": null,
+      "role": {
+        "kind": "aircraft",
+        "kit": "sbd-3",
+        "side": "us",
+        "group": "enterprise-pm",
+        "name": "a Dauntless of Enterprise’s afternoon strike"
+      },
+      "t": "17:00:00",
+      "durationS": 210,
+      "timeScale": 1,
+      "maxTimeScale": 4,
+      "start": {"from":"hiryu","bearingDeg":250,"rangeM":7000,"altM":4000,"speedMs":75,"headingDeg":70},
+      "objective": {"kind":"dive","target":"hiryu","text":"Dive on Hiryū out of the low sun."},
+      "beats": [
+        {"t":"17:01:00","text":"Hiryū turns hard; the first bombs miss."},
+        {"t":"17:03:00","text":"Bombs strike Hiryū forward."}
+      ],
+      "checkpoints": [
+        {"t":"17:03:30","text":"Hiryū is burning forward; the elevator lies against her island."}
+      ],
+      "record": {"hits":[{"unit":"hiryu","count":[4,5],"window":["17:01","17:05"]}]},
+      "after": {
+        "text": "Four bombs hit Hiryū, three in a row forward and one by the bridge. She burned all night. Rear Admiral Yamaguchi and Captain Kaku stayed aboard when she was scuttled the next morning. Some of the dive bombers did not return.",
+        "sources": [
+          {"id":"nagumo-1947","where":"Table 3; narrative"},
+          {"id":"trom-hiryu"},
+          {"id":"cv6-midway-1942","where":"1905 zone +10"}
+        ],
+        "tellings": [
+          {"source":"nagumo-1947","says":"416 dead."},
+          {"source":"jawp-midway","says":"417, counting 34 engine-room men later rescued by US forces."},
+          {"source":"cv6-midway-1942","says":"Three did not return."}
+        ]
+      }
+    }
+  ],
+  "sources": [
+    {"id":"nagumo-1947"},
+    {"id":"cincpac-midway-1942"},
+    {"id":"nwc-midway-1948"},
+    {"id":"ctf16-midway-1942"},
+    {"id":"comcrupac-midway-1942"},
+    {"id":"cv6-midway-1942"},
+    {"id":"cv8-midway-1942"},
+    {"id":"cv5-midway-1942"},
+    {"id":"heinl-1948"},
+    {"id":"trom-akagi"},
+    {"id":"trom-kaga"},
+    {"id":"trom-soryu"},
+    {"id":"trom-hiryu"},
+    {"id":"jawp-midway"},
+    {"id":"wp-midway"},
+    {"id":"parshall-tully-2005"},
+    {"id":"lundstrom-1984"}
+  ],
+  "tellings": [
+    {
+      "source": "nwc-midway-1948",
+      "says": "Japanese dead about 2,500; 234 carrier aircraft lost (48 shot down, 186 lost aboard or ditched). US dead about 307; 132 aircraft lost."
+    },
+    {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese dead and 248 aircraft (verify)."},
+    {
+      "source": "cincpac-midway-1942",
+      "says": "About 92 officers and 215 men lost; about 150 planes lost in action or damaged beyond repair."
+    }
+  ]
+}
