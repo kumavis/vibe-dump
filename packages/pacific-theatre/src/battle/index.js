@@ -377,9 +377,10 @@ export class Battle {
     const obj = m.objective?.kind
     const mode = pl.kind === 'aircraft' ? 'chase' : obj === 'gunnery' ? 'director' : 'bridge'
     sc.setCamera(mode, { unitIndex: pl.unitIndex, zoom: obj === 'gunnery' ? 4 : 1 })
+    // (the mode first: Input builds the touch controls only for a live moment)
+    app.setMode('moment')
     this.input = new Input(app, this)
     if (!scripted && pl.kind === 'aircraft') this.input.requestLock()
-    app.setMode('moment')
     this.timeScale = sim.momentState.timeScale
     this.running = true
     const touch = matchMedia?.('(pointer: coarse)')?.matches
