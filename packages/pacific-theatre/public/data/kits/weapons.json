@@ -1,0 +1,1530 @@
+[
+ {
+  "id": "jp-46-t94",
+  "kind": "gun",
+  "name": "46 cm/45 Type 94",
+  "calibreMm": 460,
+  "shellKg": 1460,
+  "shell": "apc",
+  "mvMs": 780,
+  "maxRangeM": 42030,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 1.7,
+  "formFactor": 1.14,
+  "dispersion": {
+   "rangePct": 1.1,
+   "mils": 2
+  },
+  "tof": [
+   [
+    16830,
+    26.05
+   ],
+   [
+    27920,
+    49.21
+   ],
+   [
+    35830,
+    70.27
+   ],
+   [
+    40700,
+    89.42
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnjap-18-45-t94",
+    "where": "data, range table with times of flight, dispersion 400–500 m at maximum range, cycle about 35 s"
+   }
+  ],
+  "notes": "Officially \"40 cm\". Dispersion 1.1 % of range from 400–500 m at 42 km and the Samar reports of small patterns; 2 mils assumed (R7 §4.4). Form factor R7's.",
+  "maxRangeModelM": 42034
+ },
+ {
+  "id": "jp-41-3ns",
+  "kind": "gun",
+  "name": "41 cm/45 3rd Year Type",
+  "calibreMm": 410,
+  "shellKg": 1020,
+  "shell": "apc",
+  "mvMs": 780,
+  "maxRangeM": 38725,
+  "maxRangeElevDeg": 43,
+  "rofRpm": 2,
+  "dispersion": {
+   "rangePct": 1.1,
+   "mils": 2
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-161-45-3ns",
+    "where": "data"
+   }
+  ],
+  "notes": "Dispersion as the 46 cm (verify). Form factor fitted to the maximum range.",
+  "formFactor": 1.21,
+  "formFactorFitted": true,
+  "maxRangeModelM": 38727
+ },
+ {
+  "id": "jp-36-t41",
+  "kind": "gun",
+  "name": "36 cm/45 41st Year Type",
+  "calibreMm": 356,
+  "shellKg": 673.5,
+  "shell": "apc",
+  "mvMs": 775,
+  "maxRangeM": 35450,
+  "maxRangeElevDeg": 43,
+  "rofRpm": 2,
+  "formFactor": 1.26,
+  "dispersion": {
+   "rangePct": 1.1,
+   "mils": 2.5
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-14-45-t41",
+    "where": "data; elevation 14.4° at 20,000 m and 20.0° at 25,000 m; dye colours"
+   }
+  ],
+  "notes": "Dispersion 1.1 % and 2.5 mils (R7 §4.4, verify). Form factor R7's.",
+  "elevationCheck": [
+   [
+    20000,
+    14.4
+   ],
+   [
+    25000,
+    20
+   ]
+  ],
+  "maxRangeModelM": 35428
+ },
+ {
+  "id": "jp-20-3ns2",
+  "kind": "gun",
+  "name": "20 cm/50 3rd Year Type No. 2",
+  "calibreMm": 203,
+  "shellKg": 125.85,
+  "shell": "ap",
+  "mvMs": 840,
+  "maxRangeM": 29400,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 3.5,
+  "formFactor": 1.28,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 2
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-8-50-3ns",
+    "where": "data; Myōkō class patterns 280–330 m at 20–22 km; illumination round"
+   }
+  ],
+  "notes": "Also stands for the older No. 1 gun in Akagi's and Kaga's casemates, whose own figures were not reached (R6 S2; verify). Form factor R7's.",
+  "maxRangeModelM": 29431
+ },
+ {
+  "id": "jp-155-3ns",
+  "kind": "gun",
+  "name": "15.5 cm/60 3rd Year Type",
+  "calibreMm": 155,
+  "shellKg": 55.87,
+  "shell": "ap",
+  "mvMs": 920,
+  "maxRangeM": 27400,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 5.5,
+  "formFactor": 1.32,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-61-60-3ns",
+    "where": "data"
+   }
+  ],
+  "notes": "R6 id jp-15.5-3ns. Dispersion verify. Form factor R7's.",
+  "maxRangeModelM": 27341
+ },
+ {
+  "id": "jp-15-t41",
+  "kind": "gun",
+  "name": "15 cm/50 41st Year Type",
+  "calibreMm": 152,
+  "shellKg": 45.36,
+  "shell": "he",
+  "mvMs": 850,
+  "maxRangeM": 21000,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 5.5,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-6-50-t41",
+    "where": "data"
+   }
+  ],
+  "notes": "Casemates on Kongō and Fusō (elevation limited by the mount); twins on Agano. Dispersion verify.",
+  "formFactor": 1.457,
+  "formFactorFitted": true,
+  "maxRangeModelM": 21004
+ },
+ {
+  "id": "jp-14-3ns",
+  "kind": "gun",
+  "name": "14 cm/50 3rd Year Type",
+  "calibreMm": 140,
+  "shellKg": 38,
+  "shell": "he",
+  "mvMs": 850,
+  "maxRangeM": 20574,
+  "maxRangeElevDeg": 35,
+  "rofRpm": 7,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-55-50-3ns",
+    "where": "data"
+   }
+  ],
+  "notes": "Dispersion verify.",
+  "formFactor": 1.354,
+  "formFactorFitted": true,
+  "maxRangeModelM": 20575
+ },
+ {
+  "id": "jp-127-3ns",
+  "kind": "gun",
+  "name": "12.7 cm/50 3rd Year Type",
+  "calibreMm": 127,
+  "shellKg": 23,
+  "shell": "he",
+  "mvMs": 915,
+  "maxRangeM": 18380,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 7,
+  "formFactor": 1.44,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-5-50-3ns",
+    "where": "data; 5 rpm for the Type A twin, up to 10"
+   }
+  ],
+  "notes": "Form factor R7's. Dispersion 1.5 % and 3 mils (R7 §4.4, verify).",
+  "maxRangeModelM": 18389
+ },
+ {
+  "id": "jp-127-t89",
+  "kind": "gun",
+  "name": "12.7 cm/40 Type 89 (DP)",
+  "calibreMm": 127,
+  "shellKg": 23.45,
+  "shell": "he",
+  "mvMs": 712,
+  "maxRangeM": 14800,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 8,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00013,
+   "rangeM": 6400,
+   "roundsPerS": 0.2,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-5-40-t89",
+    "where": "data; 8 rpm sustained"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "AA rate R7's estimate (no rounds-per-bird figure for Japanese weapons).",
+  "formFactor": 1.442,
+  "formFactorFitted": true,
+  "maxRangeModelM": 14798
+ },
+ {
+  "id": "jp-12-10ns",
+  "kind": "gun",
+  "name": "12 cm/45 10th Year Type",
+  "calibreMm": 120,
+  "shellKg": 20.3,
+  "shell": "he",
+  "mvMs": 828,
+  "maxRangeM": 16000,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 7,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00011,
+   "rangeM": 6000,
+   "roundsPerS": 0.15,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-47-45-10ns",
+    "where": "data"
+   }
+  ],
+  "notes": "AA rate the engine's estimate, below the Type 89's (hand-worked Model B mounts).",
+  "formFactor": 1.527,
+  "formFactorFitted": true,
+  "maxRangeModelM": 16000
+ },
+ {
+  "id": "jp-10-t98",
+  "kind": "gun",
+  "name": "10 cm/65 Type 98",
+  "calibreMm": 100,
+  "shellKg": 13,
+  "shell": "he",
+  "mvMs": 1000,
+  "maxRangeM": 19500,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 17,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00028,
+   "rangeM": 8000,
+   "roundsPerS": 0.28,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-39-65-t98",
+    "where": "data"
+   }
+  ],
+  "notes": "AA rate the engine's estimate (the best Japanese heavy AA gun; verify).",
+  "formFactor": 1.361,
+  "formFactorFitted": true,
+  "maxRangeModelM": 19503
+ },
+ {
+  "id": "jp-8-t98",
+  "kind": "gun",
+  "name": "8 cm/60 Type 98",
+  "calibreMm": 76,
+  "shellKg": 5.99,
+  "shell": "he",
+  "mvMs": 910,
+  "maxRangeM": 13600,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 25,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00024,
+   "rangeM": 5000,
+   "roundsPerS": 0.4,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-3-60-t98",
+    "where": "data"
+   }
+  ],
+  "notes": "AA rate the engine's estimate.",
+  "formFactor": 1.589,
+  "formFactorFitted": true,
+  "maxRangeModelM": 13601
+ },
+ {
+  "id": "jp-8-3ns",
+  "kind": "gun",
+  "name": "8 cm/40 3rd Year Type (AA)",
+  "calibreMm": 76,
+  "shellKg": 5.99,
+  "shell": "he",
+  "mvMs": 680,
+  "maxRangeM": 10800,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 13,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00009,
+   "rangeM": 4500,
+   "roundsPerS": 0.2,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "wp-nagara-class-cruiser",
+    "where": "armament: 8 cm/40 × 2 AA"
+   }
+  ],
+  "notes": "Ballistics are the engine's estimate (no NavWeaps page read for this gun; verify). Only its AA rate matters in v1.",
+  "formFactor": 1.641,
+  "formFactorFitted": true,
+  "maxRangeModelM": 10800
+ },
+ {
+  "id": "us-16-45-mk6",
+  "kind": "gun",
+  "name": "16\"/45 Mark 6",
+  "calibreMm": 406,
+  "shellKg": 1225,
+  "shell": "ap",
+  "mvMs": 701,
+  "maxRangeM": 33741,
+  "maxRangeElevDeg": 45.37,
+  "rofRpm": 2,
+  "formFactor": 1.3,
+  "dispersion": {
+   "rangePct": 1,
+   "mils": 2
+  },
+  "tof": [
+   [
+    4572,
+    6.83
+   ],
+   [
+    9140,
+    14.45
+   ],
+   [
+    13716,
+    22.94
+   ],
+   [
+    18290,
+    32.55
+   ],
+   [
+    22860,
+    43.61
+   ],
+   [
+    27430,
+    56.64
+   ],
+   [
+    32000,
+    74.42
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-16-45-mk6",
+    "where": "data and BuOrd range table with times of flight; Massachusetts' patterns of about 2 mils and 200–300 yd; Washington's 1.54–1.56 rounds per gun per minute"
+   }
+  ],
+  "notes": "AP Mark 8, 2,700 lb. Form factor R7's; times of flight from the range table (the calibration test holds the firing table within 3 % of them).",
+  "maxRangeModelM": 33743
+ },
+ {
+  "id": "us-16-45-mk1",
+  "kind": "gun",
+  "name": "16\"/45 Mark 1",
+  "calibreMm": 406,
+  "shellKg": 952.5,
+  "shell": "ap",
+  "mvMs": 792,
+  "maxRangeM": 31360,
+  "maxRangeElevDeg": 30,
+  "rofRpm": 1.5,
+  "dispersion": {
+   "rangePct": 1,
+   "mils": 2
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-16-45-mk1",
+    "where": "data (34,300 yd at 30°)"
+   }
+  ],
+  "notes": "Colorado class. Form factor fitted to 31,360 m at the mounts' 30°.",
+  "formFactor": 1.425,
+  "formFactorFitted": true,
+  "maxRangeModelM": 31365
+ },
+ {
+  "id": "us-14-45-mk8-12",
+  "kind": "gun",
+  "name": "14\"/45 Marks 8–12",
+  "calibreMm": 356,
+  "shellKg": 680.4,
+  "shell": "ap",
+  "mvMs": 792,
+  "maxRangeM": 31090,
+  "maxRangeElevDeg": 29.5,
+  "rofRpm": 1.6,
+  "dispersion": {
+   "rangePct": 1.1,
+   "mils": 2.5
+  },
+  "tof": [
+   [
+    9144,
+    13.4
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-14-45-mk10",
+    "where": "data; 13.40 s at 9,144 m"
+   }
+  ],
+  "notes": "Nevada and Pennsylvania classes (modernised, +30°).",
+  "formFactor": 1.325,
+  "formFactorFitted": true,
+  "maxRangeModelM": 31089
+ },
+ {
+  "id": "us-14-50-mk11",
+  "kind": "gun",
+  "name": "14\"/50 Mark 11",
+  "calibreMm": 356,
+  "shellKg": 680.4,
+  "shell": "ap",
+  "mvMs": 823,
+  "maxRangeM": 32900,
+  "maxRangeElevDeg": 29.5,
+  "rofRpm": 1.75,
+  "dispersion": {
+   "rangePct": 1.1,
+   "mils": 2.5
+  },
+  "tof": [
+   [
+    9140,
+    12.86
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-14-50-mk11",
+    "where": "data; 12.86 s at 9,140 m"
+   }
+  ],
+  "notes": "Tennessee class.",
+  "formFactor": 1.338,
+  "formFactorFitted": true,
+  "maxRangeModelM": 32903
+ },
+ {
+  "id": "us-8-55-mk12",
+  "kind": "gun",
+  "name": "8\"/55 Marks 9–15",
+  "calibreMm": 203,
+  "shellKg": 118,
+  "shell": "ap",
+  "mvMs": 823,
+  "maxRangeM": 27889,
+  "maxRangeElevDeg": 41.92,
+  "rofRpm": 3.5,
+  "formFactor": 1.22,
+  "dispersion": {
+   "rangePct": 1.2,
+   "mils": 2.5
+  },
+  "tof": [
+   [
+    3658,
+    4.86
+   ],
+   [
+    9140,
+    14.03
+   ],
+   [
+    18290,
+    36.91
+   ],
+   [
+    21946,
+    49.46
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-8-55-mk12-15",
+    "where": "data, AP Mark 19 range table (the 20.41 s at 16,000 yd entry left out as a likely misprint, R7 §4.4)"
+   }
+  ],
+  "notes": "Stands for every US heavy cruiser's 8\"/55 (Pensacola's Mark 9 and Northampton's Mark 9–14 differ in detail, not ballistics). Dispersion 1.2 % (R7, verify). Form factor R7's.",
+  "maxRangeModelM": 27856
+ },
+ {
+  "id": "us-6-47-mk16",
+  "kind": "gun",
+  "name": "6\"/47 Mark 16",
+  "calibreMm": 152,
+  "shellKg": 59,
+  "shell": "ap",
+  "mvMs": 762,
+  "maxRangeM": 23881,
+  "maxRangeElevDeg": 47.5,
+  "rofRpm": 9,
+  "dispersion": {
+   "rangePct": 1.4,
+   "mils": 3
+  },
+  "tof": [
+   [
+    9140,
+    16.15
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-6-47-mk16",
+    "where": "data; 16.15 s at 9,140 m"
+   }
+  ],
+  "notes": "Brooklyn class. Dispersion verify.",
+  "formFactor": 1.232,
+  "formFactorFitted": true,
+  "maxRangeModelM": 23878
+ },
+ {
+  "id": "us-6-53-mk12",
+  "kind": "gun",
+  "name": "6\"/53 Marks 12–18",
+  "calibreMm": 152,
+  "shellKg": 47.6,
+  "shell": "he",
+  "mvMs": 914,
+  "maxRangeM": 23200,
+  "maxRangeElevDeg": 30,
+  "rofRpm": 6.5,
+  "dispersion": {
+   "rangePct": 1.4,
+   "mils": 3
+  },
+  "tof": [
+   [
+    9140,
+    13.97
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-6-53-mk12",
+    "where": "data; 13.97 s at 9,140 m"
+   }
+  ],
+  "notes": "Omaha class twins and casemates.",
+  "formFactor": 1.222,
+  "formFactorFitted": true,
+  "maxRangeModelM": 23205
+ },
+ {
+  "id": "us-5-38-mk12",
+  "kind": "gun",
+  "name": "5\"/38 Mark 12",
+  "calibreMm": 127,
+  "shellKg": 25,
+  "shell": "he",
+  "mvMs": 792,
+  "maxRangeM": 16642,
+  "maxRangeElevDeg": 43.3,
+  "rofRpm": 15,
+  "formFactor": 1.48,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "tof": [
+   [
+    1829,
+    2.55
+   ],
+   [
+    3658,
+    5.71
+   ],
+   [
+    5486,
+    9.67
+   ],
+   [
+    7315,
+    14.73
+   ],
+   [
+    9144,
+    20.81
+   ],
+   [
+    10972,
+    27.78
+   ],
+   [
+    12802,
+    35.81
+   ],
+   [
+    14630,
+    45.44
+   ]
+  ],
+  "aa": {
+   "lambdaBarrel": 0.00026,
+   "rangeM": 7300,
+   "roundsPerS": 0.25,
+   "vt": {
+    "from": "1943-01",
+    "lambdaBarrel": 0.00053
+   }
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-5-38-mk12",
+    "where": "data and AA common range table; 12–15 rpm pedestal, 15–22 base ring"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "AA common 55 lb. VT fuzes from January 1943 (R7: not before 1943). Form factor R7's.",
+  "maxRangeModelM": 16648
+ },
+ {
+  "id": "us-5-25",
+  "kind": "gun",
+  "name": "5\"/25 Marks 10–17",
+  "calibreMm": 127,
+  "shellKg": 24.5,
+  "shell": "he",
+  "mvMs": 657,
+  "maxRangeM": 13259,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 15,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "tof": [
+   [
+    9140,
+    26.07
+   ]
+  ],
+  "aa": {
+   "lambdaBarrel": 0.00023,
+   "rangeM": 6400,
+   "roundsPerS": 0.25,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-5-25-mk10",
+    "where": "data; 26.07 s at 9,140 m"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "The 1941 battleships' and cruisers' AA gun; AA rate R7's estimate.",
+  "formFactor": 1.617,
+  "formFactorFitted": true,
+  "maxRangeModelM": 13260
+ },
+ {
+  "id": "us-5-51",
+  "kind": "gun",
+  "name": "5\"/51 Marks 7–15",
+  "calibreMm": 127,
+  "shellKg": 22.7,
+  "shell": "he",
+  "mvMs": 960,
+  "maxRangeM": 17282,
+  "maxRangeElevDeg": 25.2,
+  "rofRpm": 8.5,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "tof": [
+   [
+    9140,
+    17
+   ]
+  ],
+  "sources": [
+   {
+    "id": "nw-wnus-5-51-mk7",
+    "where": "data; 17.00 s at 9,140 m"
+   }
+  ],
+  "notes": "Battleship casemates; low-angle, no AA.",
+  "formFactor": 1.301,
+  "formFactorFitted": true,
+  "maxRangeModelM": 17284
+ },
+ {
+  "id": "us-4-50-mk9",
+  "kind": "gun",
+  "name": "4\"/50 Mark 9",
+  "calibreMm": 102,
+  "shellKg": 15,
+  "shell": "he",
+  "mvMs": 884,
+  "maxRangeM": 14560,
+  "maxRangeElevDeg": 20,
+  "rofRpm": 9,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "sources": [
+   {
+    "id": "wp-wickes-class-destroyer",
+    "where": "armament: 4 × 4 in/50"
+   }
+  ],
+  "notes": "Ballistics are the engine's estimate from memory (33 lb shell, 2,900 fps, about 15,900 yd at 20°); no NavWeaps page read (verify). Ward's guns.",
+  "formFactor": 1.323,
+  "formFactorFitted": true,
+  "maxRangeModelM": 14558
+ },
+ {
+  "id": "us-3-50",
+  "kind": "gun",
+  "name": "3\"/50 Marks 10–22",
+  "calibreMm": 76.2,
+  "shellKg": 5.9,
+  "shell": "he",
+  "mvMs": 823,
+  "maxRangeM": 13350,
+  "maxRangeElevDeg": 45,
+  "rofRpm": 17,
+  "dispersion": {
+   "rangePct": 1.5,
+   "mils": 3
+  },
+  "aa": {
+   "lambdaBarrel": 0.00041,
+   "rangeM": 5500,
+   "roundsPerS": 0.3,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-3-50-mk10-22",
+    "where": "data; 15–20 rpm"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "3\"/50: 710 and 752 rounds per bird"
+   }
+  ],
+  "notes": "Maximum range the engine's estimate (verify against the range table). AA rate from 731 rounds per bird at 0.3 rounds a second (practical rate verify).",
+  "formFactor": 1.433,
+  "formFactorFitted": true,
+  "maxRangeModelM": 13351
+ },
+ {
+  "id": "us-3-23",
+  "kind": "aa",
+  "name": "3\"/23 Marks 14–22",
+  "calibreMm": 76.2,
+  "shellKg": 5.9,
+  "mvMs": 503,
+  "aa": {
+   "lambdaBarrel": 0.00015,
+   "rangeM": 3500,
+   "roundsPerS": 0.2,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-3-23-mk14-22",
+    "where": "data"
+   }
+  ],
+  "notes": "The Wickes class's AA gun. AA rate the engine's estimate."
+ },
+ {
+  "id": "jp-25-t96",
+  "kind": "aa",
+  "name": "25 mm/60 Type 96",
+  "calibreMm": 25,
+  "shellKg": 0.25,
+  "mvMs": 900,
+  "aa": {
+   "lambdaBarrel": 0.00015,
+   "rangeM": 2000,
+   "roundsPerS": 2.3,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-25mm-60-mg",
+    "where": "data; 110–120 rounds a minute effective per barrel"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "R7's estimate: worse than the Oerlikon (no rounds per bird published for it)."
+ },
+ {
+  "id": "jp-13-t93",
+  "kind": "aa",
+  "name": "13.2 mm Type 93",
+  "calibreMm": 13.2,
+  "shellKg": 0.05,
+  "mvMs": 805,
+  "aa": {
+   "lambdaBarrel": 0.0001,
+   "rangeM": 1000,
+   "roundsPerS": 4,
+   "estimate": true
+  },
+  "sources": [
+   {
+    "id": "nw-wnjap-13mm-76-mg",
+    "where": "data; AA effective 1,000 m"
+   }
+  ],
+  "notes": "AA rate the engine's estimate."
+ },
+ {
+  "id": "us-28-1-1in",
+  "kind": "aa",
+  "name": "1.1\"/75 Mark 1",
+  "calibreMm": 28,
+  "shellKg": 0.416,
+  "mvMs": 808,
+  "aa": {
+   "lambdaBarrel": 0.00032,
+   "rangeM": 2700,
+   "roundsPerS": 1.5
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-1-1-75-mk1",
+    "where": "data; 100 rounds a minute practical"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "R6 id us-28-1.1in."
+ },
+ {
+  "id": "us-20-oerlikon",
+  "kind": "aa",
+  "name": "20 mm/70 Oerlikon",
+  "calibreMm": 20,
+  "shellKg": 0.123,
+  "mvMs": 840,
+  "aa": {
+   "lambdaBarrel": 0.00042,
+   "rangeM": 1800,
+   "roundsPerS": 5,
+   "from": "1942-02"
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-2cm-70-mk234",
+    "where": "data; fitted from early 1942"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "us-40-bofors",
+  "kind": "aa",
+  "name": "40 mm/56 Bofors",
+  "calibreMm": 40,
+  "shellKg": 0.9,
+  "mvMs": 865,
+  "aa": {
+   "lambdaBarrel": 0.00071,
+   "rangeM": 3200,
+   "roundsPerS": 2,
+   "from": "1942-08"
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-4cm-56-mk12",
+    "where": "data"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "South Dakota carried them at Guadalcanal; most US ships from 1943."
+ },
+ {
+  "id": "us-50cal-m2",
+  "kind": "aa",
+  "name": ".50 M2 (water-cooled)",
+  "calibreMm": 12.7,
+  "shellKg": 0.0485,
+  "mvMs": 875,
+  "aa": {
+   "lambdaBarrel": 0.00029,
+   "rangeM": 1100,
+   "roundsPerS": 8
+  },
+  "sources": [
+   {
+    "id": "nw-wnus-50cal-m2-mg",
+    "where": "data"
+   },
+   {
+    "id": "cominch-p009",
+    "where": "rounds per bird, Tables V–VI; per-barrel rate as R7 §4.6 (practical rate of fire verify)"
+   }
+  ],
+  "notes": "R6 id us-12.7-m2."
+ },
+ {
+  "id": "jp-77-t97",
+  "kind": "mg",
+  "name": "7.7 mm Type 97 (fixed)",
+  "calibreMm": 7.7,
+  "mvMs": 750,
+  "rofRpm": 900,
+  "vsAircraft": {
+   "protected": 0.015,
+   "unprotected": 0.03
+  },
+  "sources": [
+   {
+    "id": "wp-mitsubishi-a6m-zero",
+    "where": "armament"
+   }
+  ],
+  "notes": "Damage per round as a share of an aircraft's fatal: R7 §4.3's estimates. Rate of fire unsynchronised (verify)."
+ },
+ {
+  "id": "jp-77-t92",
+  "kind": "mg",
+  "name": "7.7 mm Type 92 (flexible)",
+  "calibreMm": 7.7,
+  "mvMs": 745,
+  "rofRpm": 600,
+  "vsAircraft": {
+   "protected": 0.015,
+   "unprotected": 0.03
+  },
+  "sources": [
+   {
+    "id": "wp-nakajima-b5n",
+    "where": "armament"
+   }
+  ],
+  "notes": "R7 §4.3 damage estimate. Rate verify."
+ },
+ {
+  "id": "jp-20-t99-1",
+  "kind": "cannon",
+  "name": "20 mm Type 99-1",
+  "calibreMm": 20,
+  "mvMs": 600,
+  "rofRpm": 520,
+  "vsAircraft": {
+   "protected": 0.25,
+   "unprotected": 0.4
+  },
+  "sources": [
+   {
+    "id": "wp-mitsubishi-a6m-zero",
+    "where": "armament: 2 × 20 mm, 60 rounds a gun"
+   }
+  ],
+  "notes": "R7 §4.3 damage estimate. Muzzle velocity and rate verify."
+ },
+ {
+  "id": "jp-20-t99-2",
+  "kind": "cannon",
+  "name": "20 mm Type 99-2",
+  "calibreMm": 20,
+  "mvMs": 750,
+  "rofRpm": 490,
+  "vsAircraft": {
+   "protected": 0.25,
+   "unprotected": 0.4
+  },
+  "sources": [
+   {
+    "id": "taic-1",
+    "where": "leaf n26 (Zeke 52)"
+   }
+  ],
+  "notes": "R7 §4.3 damage estimate. Muzzle velocity and rate verify."
+ },
+ {
+  "id": "us-50cal-an-m2",
+  "kind": "mg",
+  "name": ".50 AN/M2 (aircraft)",
+  "calibreMm": 12.7,
+  "mvMs": 870,
+  "rofRpm": 800,
+  "vsAircraft": {
+   "protected": 0.06,
+   "unprotected": 0.12
+  },
+  "sources": [
+   {
+    "id": "wp-grumman-f4f-wildcat",
+    "where": "armament"
+   }
+  ],
+  "notes": "R7 §4.3 damage estimate. Rate verify (synchronised guns fire slower)."
+ },
+ {
+  "id": "us-30cal-an-m2",
+  "kind": "mg",
+  "name": ".30 AN/M2 (aircraft)",
+  "calibreMm": 7.62,
+  "mvMs": 820,
+  "rofRpm": 1000,
+  "vsAircraft": {
+   "protected": 0.015,
+   "unprotected": 0.03
+  },
+  "sources": [
+   {
+    "id": "wp-douglas-sbd-dauntless",
+    "where": "armament"
+   }
+  ],
+  "notes": "R7 §4.3 damage estimate. Rate verify."
+ },
+ {
+  "id": "type-93-m1",
+  "kind": "torpedo",
+  "name": "61 cm Type 93 Model 1",
+  "calibreMm": 610,
+  "warheadKg": 490,
+  "settings": [
+   {
+    "speedKn": 49,
+    "rangeM": 20000
+   },
+   {
+    "speedKn": 41,
+    "rangeM": 32000
+   },
+   {
+    "speedKn": 37,
+    "rangeM": 40000
+   }
+  ],
+  "armRunM": 300,
+  "wander": [
+   [
+    20000,
+    500
+   ],
+   [
+    32000,
+    1000
+   ],
+   [
+    40000,
+    1500
+   ]
+  ],
+  "failRate": [
+   {
+    "from": "1941-12",
+    "to": "1942-04",
+    "rate": 0.33,
+    "note": "about a third prematured or burst on wakes at the Java Sea, traced to crews resetting the fuze sensitivity (NavWeaps)"
+   },
+   {
+    "from": "1942-04",
+    "to": "1945-09",
+    "rate": null,
+    "note": "verify: no source reached for a rate after the fuze fault was found"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtjap-wwii",
+    "where": "Type 93: speeds and ranges, warhead, wander, the Java Sea prematures"
+   }
+  ],
+  "notes": "Arming run the engine's estimate (verify)."
+ },
+ {
+  "id": "type-90",
+  "kind": "torpedo",
+  "name": "61 cm Type 90",
+  "calibreMm": 610,
+  "warheadKg": 375,
+  "settings": [
+   {
+    "speedKn": 46,
+    "rangeM": 7000
+   },
+   {
+    "speedKn": 42,
+    "rangeM": 10000
+   },
+   {
+    "speedKn": 35,
+    "rangeM": 15000
+   }
+  ],
+  "armRunM": 300,
+  "failRate": [
+   {
+    "from": "1941-12",
+    "to": "1945-09",
+    "rate": null,
+    "note": "verify: no source reached"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtjap-wwii",
+    "where": "Type 90"
+   }
+  ],
+  "notes": "Speeds, ranges and warhead are the engine's reading from memory of the same page (verify); the Fubuki class's and Ayanami's torpedo."
+ },
+ {
+  "id": "type-97-midget",
+  "kind": "torpedo",
+  "name": "45 cm Type 97 (midget submarine)",
+  "calibreMm": 450,
+  "warheadKg": 350,
+  "settings": [
+   {
+    "speedKn": 44,
+    "rangeM": 5500
+   }
+  ],
+  "armRunM": 200,
+  "failRate": [
+   {
+    "from": "1941-12",
+    "to": "1945-09",
+    "rate": null,
+    "note": "verify: no source reached"
+   }
+  ],
+  "sources": [
+   {
+    "id": "wp-ko-hyoteki-class-submarine",
+    "where": "armament: 2 × 450 mm torpedoes"
+   }
+  ],
+  "notes": "Speed, range and warhead from memory (verify). The midget submarines are tokkō units: never a player's weapon."
+ },
+ {
+  "id": "mk15",
+  "kind": "torpedo",
+  "name": "21-in Mark 15 Mod 0",
+  "calibreMm": 533,
+  "warheadKg": 224,
+  "settings": [
+   {
+    "speedKn": 45,
+    "rangeM": 5500
+   },
+   {
+    "speedKn": 33.5,
+    "rangeM": 9150
+   },
+   {
+    "speedKn": 26.5,
+    "rangeM": 13700
+   }
+  ],
+  "armRunM": 400,
+  "failRate": [
+   {
+    "from": "1941-12",
+    "to": "1943-09",
+    "rate": null,
+    "note": "verify: Gwin's four failed against the wreck of Benham (combinedfleet); no rate reached"
+   },
+   {
+    "from": "1943-09",
+    "to": "1945-09",
+    "rate": null,
+    "note": "verify"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtus-wwii",
+    "where": "Mark 15: settings, warheads (Mod 3: 363–373 kg)"
+   },
+   {
+    "id": "cf-kirishima",
+    "where": "Gwin's Mark 15s at Benham"
+   }
+  ],
+  "notes": "The DATA.md example's arming run of 400 m (verify)."
+ },
+ {
+  "id": "type-91-m2",
+  "kind": "torpedo",
+  "air": true,
+  "name": "45 cm Type 91 Mod 2",
+  "calibreMm": 450,
+  "warheadKg": 205,
+  "speedKn": 42,
+  "rangeM": 2000,
+  "dropSpeedKn": 180,
+  "dropAltM": 20,
+  "armRunM": 200,
+  "failRate": [
+   {
+    "from": "1941-08",
+    "to": "1942-06",
+    "rate": null,
+    "note": "verify"
+   }
+  ],
+  "sources": [
+   {
+    "id": "wp-type-91-torpedo",
+    "where": "release at 180 kn from 20 m by design; the shallow-water fit"
+   },
+   {
+    "id": "nw-wtjap-wwii",
+    "where": "Type 91 Mod 2"
+   }
+  ],
+  "notes": "The shallow-water fit of Pearl Harbor (anti-roll controller, wooden fins). Arming run verify."
+ },
+ {
+  "id": "type-91-m3",
+  "kind": "torpedo",
+  "air": true,
+  "name": "45 cm Type 91 Mod 3",
+  "calibreMm": 450,
+  "warheadKg": 240,
+  "speedKn": 42,
+  "rangeM": 2000,
+  "dropSpeedKn": 180,
+  "dropAltM": 20,
+  "armRunM": 200,
+  "failRate": [
+   {
+    "from": "1942-01",
+    "to": "1945-09",
+    "rate": null,
+    "note": "verify"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtjap-wwii",
+    "where": "Type 91 Mod 3: 240 kg, 2,000 m at 41–43 kn"
+   }
+  ],
+  "notes": "Midway. Drop envelope as the Mod 2 (verify)."
+ },
+ {
+  "id": "mk13-1942",
+  "kind": "torpedo",
+  "air": true,
+  "name": "22.4-in Mark 13 Mod 0/1 (1942)",
+  "calibreMm": 569,
+  "warheadKg": 183,
+  "speedKn": 30,
+  "rangeM": 5210,
+  "dropSpeedKn": 110,
+  "dropAltM": 15,
+  "armRunM": 183,
+  "failRate": [
+   {
+    "from": "1941-07",
+    "to": "1943-06",
+    "rate": 0.65,
+    "note": "mid-1943 analysis of 105 drops above 150 kn: 31 % satisfactory; VT-6 exercise July 1941: 1 of 10 normal (NavWeaps; R6 D6's 0.6–0.7)"
+   },
+   {
+    "from": "1943-06",
+    "to": "1944-09",
+    "rate": 0.3,
+    "note": "verify: improving through 1943–44 before the drag ring"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtus-wwii",
+    "where": "Mark 13: dropped low and slow, 50 ft and 110 kn; the 1941 exercise and the 1943 analysis"
+   },
+   {
+    "id": "wp-douglas-tbd-devastator",
+    "where": "could not release above 115 mph"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "mk13-1944",
+  "kind": "torpedo",
+  "air": true,
+  "name": "22.4-in Mark 13 with drag and shroud rings (late 1944)",
+  "calibreMm": 569,
+  "warheadKg": 274,
+  "speedKn": 33.5,
+  "rangeM": 3660,
+  "dropSpeedKn": 300,
+  "dropAltM": 240,
+  "armRunM": 183,
+  "failRate": [
+   {
+    "from": "1944-09",
+    "to": "1945-09",
+    "rate": 0.05,
+    "note": "hot, straight and normal runs \"approached 100 percent\" (NavWeaps)"
+   }
+  ],
+  "sources": [
+   {
+    "id": "nw-wtus-wwii",
+    "where": "Mark 13 Mod 10 with drag ring"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "us-1000lb-an-m65",
+  "kind": "bomb",
+  "name": "1,000-lb GP AN-M65",
+  "massKg": 454,
+  "class": "bomb-1000",
+  "sources": [
+   {
+    "id": "wp-douglas-sbd-dauntless",
+    "where": "payload: one 1,000-lb bomb on the centreline"
+   }
+  ],
+  "notes": "Midway's SBDs, fuzed at 1/100 s delay (R4)."
+ },
+ {
+  "id": "us-500lb-an-m64",
+  "kind": "bomb",
+  "name": "500-lb GP AN-M64",
+  "massKg": 227,
+  "class": "bomb-500",
+  "sources": [
+   {
+    "id": "wp-douglas-sbd-dauntless",
+    "where": "payload"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "us-100lb-an-m30",
+  "kind": "bomb",
+  "name": "100-lb GP AN-M30",
+  "massKg": 45,
+  "class": "bomb-100",
+  "sources": [
+   {
+    "id": "wp-douglas-sbd-dauntless",
+    "where": "payload"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "jp-250kg-t99",
+  "kind": "bomb",
+  "name": "250 kg Type 99 No. 25 ordinary bomb",
+  "massKg": 242,
+  "class": "bomb-500",
+  "sources": [
+   {
+    "id": "wp-aichi-d3a",
+    "where": "bombs: 1 × 250 kg under the fuselage"
+   }
+  ],
+  "notes": "Against ships (semi-armour-piercing, delay fuze)."
+ },
+ {
+  "id": "jp-250kg-t98",
+  "kind": "bomb",
+  "name": "250 kg Type 98 land bomb",
+  "massKg": 242,
+  "class": "bomb-500",
+  "sources": [
+   {
+    "id": "wp-aichi-d3a",
+    "where": "bombs"
+   }
+  ],
+  "notes": "Against airfields at Pearl Harbor."
+ },
+ {
+  "id": "jp-60kg-t97",
+  "kind": "bomb",
+  "name": "60 kg Type 97 land bomb",
+  "massKg": 60,
+  "class": "bomb-100",
+  "sources": [
+   {
+    "id": "wp-aichi-d3a",
+    "where": "bombs: 2 × 60 kg under the wings"
+   }
+  ],
+  "notes": ""
+ },
+ {
+  "id": "jp-800kg-t99-80",
+  "kind": "bomb",
+  "name": "800 kg Type 99 No. 80 armour-piercing bomb",
+  "massKg": 797,
+  "class": "bomb-ap-800",
+  "sources": [
+   {
+    "id": "wp-nakajima-b5n",
+    "where": "bombs: 1 × 800 kg"
+   }
+  ],
+  "notes": "Made from a 41 cm shell; the high-level bombers' weapon at Pearl Harbor, never a player's (DESIGN §3.5)."
+ }
+]

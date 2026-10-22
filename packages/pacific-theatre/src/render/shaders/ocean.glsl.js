@@ -16,6 +16,7 @@
 // on, does nothing under the logarithmic depth buffer, and the terrain's sea
 // bed is sunk well below the water instead. The fishponds and the patches'
 // reef flats of the Hawaiian sea answer zero from the single-pack ground.
+// The engine adds the record's sea state and swell (uSeaK, uSwellK).
 
 import { constants, noise, lighting } from './common.glsl.js'
 import { world, ground } from './ground.glsl.js'
@@ -43,6 +44,8 @@ uniform vec3 uCamPos;
 uniform float uUnitM;      // metres per world unit (1 in a box): the Hawaiian tuning is in 100 m units
 uniform vec2 uWind;        // direction the wind blows toward, scaled by strength (0..1+)
 uniform vec2 uSwellDir;    // direction the swell travels
+uniform float uSeaK;       // the record's sea state as a scale on the chop and the whitecaps (1 near sea 2–3)
+uniform float uSwellK;     // the record's swell as a scale on the long waves
 uniform int uDebug;
 in vec3 vWorld;
 
@@ -71,7 +74,7 @@ vec2 waveSlope(vec2 p, float t, float detail) {
   vec2 d0 = normalize(uWind + vec2(1e-3));
   vec2 sw = normalize(uSwellDir + vec2(1e-3));
   vec2 grad = vec2(0.0);
-  float amp = 0.006;
+  float amp = 0.006 * uSwellK;
   float k = 2.2;
   for (int i = 0; i < 4; i++) {
     float fi = float(i);
@@ -109,7 +112,7 @@ void main() {
 
   // (in a fishpond, behind its wall, the water lies still and green)
   float pond = distPond(vWorld.xz);
-  vec2 g = waveSlope(xz, uTime, px) * (0.55 + 0.6 * length(uWind));
+  vec2 g = waveSlope(xz, uTime, px) * (0.55 + 0.6 * length(uWind)) * uSeaK;
   g *= (1.0 + 0.6 * (1.0 - smoothstep(0.5, 6.0, depth))) * (1.0 - 0.85 * pond);
   vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
 
@@ -176,7 +179,7 @@ void main() {
   float shore = (1.0 - smoothstep(0.1, 1.4, depth)) * (1.0 - pond) * (1.0 - 0.75 * rf);
   float swash = 0.5 + 0.5 * sin(depth * 9.0 - uTime * 1.6 + fbm2F(xz * 3.0, px * 3.0) * 4.0);
   float foamTex = smoothstep(0.35, 0.75, fbm2F(xz * 9.0 + vec2(uTime * 0.3, 0.0), px * 9.0));
-  float caps = smoothstep(0.78, 0.92, fbm2F(xz * 0.9 + uWind * uTime * 0.06, px * 0.9)) * smoothstep(0.55, 1.1, length(uWind)) * smoothstep(20.0, 60.0, depth);
+  float caps = smoothstep(0.78, 0.92, fbm2F(xz * 0.9 + uWind * uTime * 0.06, px * 0.9)) * smoothstep(0.55, 1.1, length(uWind) * uSeaK) * smoothstep(20.0, 60.0, depth);
   caps *= 1.0 - smoothstep(0.3, 1.2, px);
   float foam = max(shore * swash * 0.9 * (1.0 - smoothstep(0.4, 2.5, px)), caps * 0.5) * mix(1.0, foamTex, 0.5);
   vec3 foamC = vec3(0.92) * (uSunColor * max(uSunDir.y, 0.0) * vis + uSkyColor * 1.4);
