@@ -47,6 +47,19 @@ The berths F-6 to F-8 and the wrecks of Arizona and Utah were positioned
 from OpenStreetMap: © OpenStreetMap contributors, Open Database License
 (ODbL).
 
+The shore of 7 December 1941 was recovered by undoing the harbour's and the
+airport's later works at the box's 50 m texel, on the dated record in
+*Building the Navy's Bases in World War II*, vol. II, ch. XXII (Bureau of
+Yards and Docks, 1947; public domain, HyperWar transcription); the Hawaiʻi
+Department of Transportation's Honolulu International Airport histories
+(State of Hawaiʻi publications, quoted for their dates); *Images of Old
+Hawaiʻi*'s Ala Wai posts (quoted for their dates; text © its author); the
+1881 Government Survey and the 1938 USGS sheets of Oʻahu as georeferenced
+by the State of Hawaiʻi GIS Program (open data; the maps themselves are
+public-domain surveys); and the Hawaiian diorama's own dated works list.
+Each work, with its sources, is listed under `shore.works` in the box's
+`manifest.json`.
+
 ## Coastlines and positions on the table: Natural Earth
 
 Natural Earth, version 5 (10 m physical and cultural vectors),

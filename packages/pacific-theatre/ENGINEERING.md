@@ -749,8 +749,10 @@ and "back to the table") and `credits` (a Sources and credits panel opened
 from a small control on the table, in every box and from the boot screen's
 footer, listing every data source with its licence: GLO-30 with its notice
 and liability sentence verbatim, GMRT with its citation and "resampled and
-clamped", ETOPO 2022 with its DOI, Natural Earth, the Oʻahu pack's USGS
-sources, the fonts under the SIL OFL; the same text is `NOTICE.md`). The tour's
+clamped", ETOPO 2022 with its DOI, Natural Earth, NOAA's CUDEM and the
+dated record the 1941 shore rests on (the Pearl Harbor box's
+`shore.references`), the fonts under the SIL OFL; the same text is
+`NOTICE.md`). The tour's
 step for an event with a box offers *Enter the battle*; inside a box its
 stops with `t` scrub the battle; a stop that is also a moment offers *Take
 the controls*. The UI raises `ui.onEnter(ev)` and `ui.onTake(momentId)`,

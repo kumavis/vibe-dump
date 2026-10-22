@@ -95,6 +95,10 @@ host answers to a person with a browser.
 | the Naval War College's Diagrams D-1 and D-2 for Midway and its Japanese-disposition plates | reachable on archive.org, not opened | positions from 04:30 to 09:00, now from the text only |
 | Snyder, *Map Projections: A Working Manual* (USGS PP 1395) | reachable (22.5 MB), not downloaded | page numbers for the projection formulas, which were checked numerically instead |
 | a nautical almanac (USNO or the Nautical Almanac) for the four battle dates | not consulted | the sun's and the moon's times at each box, Ironbottom Sound on 14–15 November 1942 above all, against the app's low-precision ephemeris (R9) |
+| the 1938 USGS Honolulu sheet, or any 1941 map of Keʻehi lagoon | the State GIS scan is reachable; not compared texel by texel | whether the bake's removal of the 1943–44 Keʻehi fill takes out any of John Rodgers Airport (1927), which stood on made ground (research/bake.md §9) |
+| the Hawaiʻi State geologic map's artificial-fill unit | not fetched | the fill outlines the Hawaiian 1941 patches also used; the works' regions and the 1881 shoreline stand in for it at 50 m |
+| a Pearl Harbor Navy Yard plan or photograph of December 1941 showing Drydock No. 2 | *Building the Navy's Bases* vol. II (HyperWar) dates the dock; no plan was read | whether No. 2's basin was open water on 7 December 1941; the bake fills it as not yet built |
+| charted heights for Savo, Kōnāhuanui and Samar's summits | a nautical chart or the national mapping agencies, not consulted | a check of the packs' summits against a charted figure; the check uses R1's GLO-30 readings |
 
 ## Permission, not access
 
@@ -105,6 +109,7 @@ host answers to a person with a browser.
 | combinedfleet.com's Tabular Records of Movement; Lundgren's analyses on navweaps.com | copyrighted compilations: facts cited, text never copied; nothing to ask, only a rule to keep |
 | Morison's *History of United States Naval Operations in World War II* | in copyright (renewals R600933, R670368, R637305, R657783, R657781 found): read for facts, cited as print, never copied, never linked to the uploads |
 | Wikimedia Commons maps (CC BY-SA) | nothing traced from them; the fronts come from public-domain US charts |
+| Copernicus GLO-30 packs derived for the four boxes, committed to a public repository and served from Pages | a reading of the Copernicus DEM licence's clause on derived products by someone who reads licences, before release; the notice and the liability sentence are carried as the licence asks (research/bake.md §9) |
 
 ## Found open, not yet read
 

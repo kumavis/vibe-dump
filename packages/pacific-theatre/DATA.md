@@ -166,6 +166,11 @@ data's own resolution is about 500 m) and carrying:
 - `area`: km², so the app can drop the smallest polygons at the far zoom and
   draw an atoll as a dot
 
+Natural Earth's `reefs` layer is lines, not polygons: the reef *polygons*
+are its closed rings (146 of them), and every reef line is kept as well in a
+third collection, `reefs`, which the app may ignore. A minor island that is
+also in the `land` layer (1,504 of 1,527 are) is kept once, as `island`.
+
 The strokes come from a second collection in the same file, `strokes`, built
 from `ne_10m_coastline` and `ne_10m_minor_islands_coastline` (lines), so that
 no false meridian is drawn along a merged split (R1 §4). The app draws the
