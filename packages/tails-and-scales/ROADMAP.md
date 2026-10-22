@@ -695,7 +695,11 @@ follows N3.
   `--browser`); perturb on `sin,cos,atan,atan2` moves 24/24 PIN battles and
   0/24 now; the corpus's `webShadow` is retired, P-browser checking
   Chromium against Node's shadow (DESIGN's N0 notes).
-- [ ] **F3** The End-phase button lights up when nothing is left to do.
+- [x] **F3** The End-phase button lights up when nothing is left to do.
+  End is an ordinary button while units can still act, and lit (with a
+  slow glow, still under reduced motion) once none can, and as Begin battle
+  in the deployment; `sim/hud-check.mjs` holds the page to it (DESIGN's F3
+  notes).
 - [ ] **F1** Playing a side puts your side of the board in front of you
   (the serpents included); the presets take the board as an argument.
 - [ ] **F2** Spectating is viewed broadside: one army left, one right.

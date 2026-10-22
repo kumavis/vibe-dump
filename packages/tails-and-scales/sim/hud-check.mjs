@@ -44,20 +44,24 @@
 // the end screen. The battle must then play on to its end with every log
 // entry played and no page error.
 //
-// And the HUD model's end.ready (F3 lights End by it; nothing shows it
-// yet), read off the ?debug block's `hud` (the model last put on the page):
-// after each snap in a phase, and wherever the player is idle on a seat
-// played here holding its phase decision, it must be exactly "no unit of
-// the seat can act" (the core's anyCanAct, asked with the dice locked).
-// Over the default battles it must have been true somewhere (a seat with
-// nothing left to do in its phase, before its End) as well as false.
+// And the HUD model's end.ready, read off the ?debug block's `hud` (the
+// model last put on the page): after each snap in a phase, and wherever the
+// player is idle on a seat played here holding its phase decision, it must
+// be exactly "no unit of the seat can act" (the core's anyCanAct, asked
+// with the dice locked), and (F3) the page must show it: End lit (its
+// `.ready` class) exactly then, and Begin battle lit wherever it shows in
+// the deployment. Over the default battles it must have been true somewhere
+// (a seat with nothing left to do in its phase, before its End) as well as
+// false.
 //
 //   node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]
 //   node sim/hud-check.mjs --self-test     each edit of MUTATIONS (the HUD's
 //                                          state, a charge's spots or the
 //                                          end screen left as the dropped
-//                                          events had them, or End never
-//                                          ready, in a copy) must fail it,
+//                                          events had them, End never
+//                                          ready, or (F3) End or Begin
+//                                          battle never lit, in a copy)
+//                                          must fail it,
 //                                          after the unedited code passes
 //
 // By default four battles: a watched one and three human logs (one per
@@ -106,6 +110,12 @@ const MUTATIONS = {
   'phase-unshown': ['present/hud-model.js', "export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })", 'export const afterSnap = () => ({ phaseShown: false, buttonsUp: false })'],
   // End never ready, whatever is left to do (F3's End never lit)
   'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => q.anyCanAct(G, P.seats[0])) : false,', '    ready: false,'],
+  // (F3) the model right, but End never lit on the page
+  'lit-never': ['ui/actions.js', "    end.classList.toggle('ready', m.end.lit)", "    end.classList.toggle('ready', false)"],
+  // (F3) End lit only when ready: Begin battle neutral in the deployment
+  'deploy-unlit': ['present/hud-model.js', '  end.lit = deploying || end.ready', '  end.lit = end.ready'],
+  // (F3) Begin battle lit, but End never lit when nothing is left to do
+  'ready-unlit': ['present/hud-model.js', '  end.lit = deploying || end.ready', '  end.lit = deploying'],
   // no end screen after a snap past the battle's end
   'over-unshown': ['app/flow.js', "    if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))", '    // (dropped)'],
   // a charge's spots left marked as shaded after a snap clears them: the
@@ -164,6 +174,7 @@ function pageHarness(job, mode, settle, names) {
   const todo = mode === 'watch' ? ['past the end'] : ['in the deployment', 'in the roll-off', 'in a phase', CHARGE_END, AGAIN, 'past the end']
   let waiting = null
   // the page as a player sees it
+  const lit = () => document.querySelector('#endPhase').classList.contains('ready')
   const shown = (s) => {
     const el = document.querySelector(s)
     return { show: getComputedStyle(el).display !== 'none', enabled: !el.disabled, text: el.textContent }
@@ -258,7 +269,11 @@ function pageHarness(job, mode, settle, names) {
         sim.ready.checked++
         if (want) sim.ready.ready++
         if (got !== want) sim.ready.wrong ??= `End's readiness ${got} at trace line ${ts.trace.length} (seat ${g.pending.seats[0]}'s ${g.pending.phase}), not ${want}`
+        // (F3) and the page shows it: End lit exactly then
+        else if (lit() !== want) sim.ready.wrong ??= `End ${lit() ? 'lit' : 'not lit'} at trace line ${ts.trace.length} (seat ${g.pending.seats[0]}'s ${g.pending.phase}), where its readiness is ${want}`
       }
+      // (F3) Begin battle lit wherever it shows in the deployment
+      if (g && ts.player.idle && g.pending?.k === 'deploy' && shown('#endPhase') && !lit()) sim.ready.wrong ??= `Begin battle not lit in the deployment (trace line ${ts.trace.length})`
       sim.driver?.tick()
     } catch (e) {
       sim.error ??= String(e.stack ?? e)

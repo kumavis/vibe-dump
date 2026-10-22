@@ -17,8 +17,9 @@
 //     end, auto, advance, shortest   the action buttons: { show, label,
 //                                 busy } (show or label null: as it was);
 //                                 end.ready, nothing left to do in the
-//                                 seat's phase (F3 lights End by it; not
-//                                 shown yet)
+//                                 seat's phase, and end.lit, End lit for
+//                                 it (F3: ready, or Begin battle in the
+//                                 deployment)
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -98,6 +99,9 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     // caught up)
     ready: mine && idle ? !ask((G, q) => q.anyCanAct(G, P.seats[0])) : false,
   }
+  // (F3) End lit when there is nothing else to do: the phase's units all
+  // spent, or the deployment, where Begin battle is the only way on
+  end.lit = deploying || end.ready
   const advance = {
     show: !mine ? false : idle ? P.phase === 'move' && !!sel && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
     label: !sel ? null : sel.t.chargeAfterAdvance ? 'Advance (+D6") — can still charge' : `Advance (+D6") — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`,

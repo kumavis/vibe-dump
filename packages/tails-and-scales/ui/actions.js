@@ -17,6 +17,8 @@ export class Actions {
     $('#closestSpot').style.display = m.shortest.show ? '' : 'none'
     if (m.end.label !== null) end.textContent = m.end.label
     end.disabled = m.end.busy
+    // (F3) neutral while units can still act, lit once nothing is left
+    end.classList.toggle('ready', m.end.lit)
     auto.disabled = m.auto.busy
     adv.disabled = m.advance.busy
     if (m.advance.show !== null) adv.style.display = m.advance.show ? '' : 'none'

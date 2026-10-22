@@ -62,6 +62,36 @@ button.primary {
 button.primary:hover {
   background: linear-gradient(#c9863a, #9a6020);
 }
+/* End (F3): an ordinary button while units can still act; lit, and
+   breathing a glow, once there is nothing left to do (or in the
+   deployment, where Begin battle is the way on) */
+#endPhase.ready {
+  background: linear-gradient(#b8762c, #8a5216);
+  border-color: #e0a050;
+  font-weight: bold;
+  animation: endReady 1.6s ease-in-out infinite;
+}
+#endPhase.ready:hover {
+  background: linear-gradient(#c9863a, #9a6020);
+}
+#endPhase.ready:disabled {
+  animation: none;
+}
+@keyframes endReady {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(224, 160, 80, 0);
+  }
+  50% {
+    box-shadow: 0 0 14px 3px rgba(224, 160, 80, 0.75);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #endPhase.ready {
+    animation: none;
+    box-shadow: 0 0 10px 2px rgba(224, 160, 80, 0.6);
+  }
+}
 
 /* ── HUD ─────────────────────────────────────────────────────────────── */
 #hud {
