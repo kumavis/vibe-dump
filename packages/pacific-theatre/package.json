@@ -30,7 +30,8 @@
     "thinking": "high",
     "thumbnail": {
       "waitFor": "!#boot",
-      "settle": 4000
+      "click": ".card .card-close",
+      "settle": 3000
     }
   }
 }
