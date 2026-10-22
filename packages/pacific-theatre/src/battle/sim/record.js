@@ -87,6 +87,7 @@ export function readRecord(battle, ctx) {
       return ev
     })
     r.events.sort((a, b) => a.t - b.t)
+    r.events.forEach((e, k) => (e.k = k))
     if (u.fate) r.fate = { kind: u.fate.kind, t: u.fate.t != null ? T(u.fate.t) : null }
     if (r.fate && SINK_KINDS.has(r.fate.kind) && r.fate.t != null) r.sinkT = r.fate.t
     else {

@@ -19,29 +19,25 @@ export const wrap180 = (d) => ((((d + 180) % 360) + 360) % 360) - 180
  * cubic Hermite whose tangents lie along each fix's course with the chord's
  * length, so the ship passes every fix on its course and the speed between
  * is the record's distance over the record's time; before the first fix and
- * after the last it runs on at that fix's course and speed.
+ * after the last it runs on at that fix's course and speed for an hour, and
+ * then holds where that leaves it.
  */
+export const EXTRAPOLATE_S = 3600
 export function trackAt(track, t, out) {
   const n = track.length
   const a0 = track[0]
-  if (t <= a0.t || n === 1) {
-    const f = t <= a0.t ? a0 : track[n - 1]
-    const dt = t - f.t
+  const last = track[n - 1]
+  if (t <= a0.t || t >= last.t || n === 1) {
+    // beyond the record's fixes the ship runs on at the nearest fix's course and speed for an hour, then holds there
+    const f = t <= a0.t ? a0 : last
+    const raw = t - f.t
+    const dt = Math.max(-EXTRAPOLATE_S, Math.min(EXTRAPOLATE_S, raw))
+    const moving = Math.abs(raw) < EXTRAPOLATE_S
     out.x = f.x + f.ux * f.speed * dt
     out.z = f.z + f.uz * f.speed * dt
-    out.vx = f.ux * f.speed
-    out.vz = f.uz * f.speed
+    out.vx = moving ? f.ux * f.speed : 0
+    out.vz = moving ? f.uz * f.speed : 0
     out.course = f.course
-    return out
-  }
-  const last = track[n - 1]
-  if (t >= last.t) {
-    const dt = t - last.t
-    out.x = last.x + last.ux * last.speed * dt
-    out.z = last.z + last.uz * last.speed * dt
-    out.vx = last.ux * last.speed
-    out.vz = last.uz * last.speed
-    out.course = last.course
     return out
   }
   let lo = 0

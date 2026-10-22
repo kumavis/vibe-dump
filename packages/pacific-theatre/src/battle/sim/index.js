@@ -374,8 +374,10 @@ export function createSim(battle, kits, opts = {}) {
     rd.fires = 0
     rd.list = 0
     rd.hits = 0
+    rd.applied = 0
     for (const ev of r.events) {
       if (ev.t > t) break
+      rd.applied = ev.k + 1
       if (HIT_KINDS.has(ev.kind) && ev.kind !== 'near-miss') {
         rd.damage += ev.damage ?? 0.08 * Math.max(1, ev.rc)
         rd.hits += ev.rc
@@ -461,8 +463,9 @@ export function createSim(battle, kits, opts = {}) {
     const r = x.rec
     const rr = R.dmg.fork(`init:${r.id}`)
     let anyHit = false
+    // (the record's events already crossed: the one being decided now is not among them)
     for (const ev of r.events) {
-      if (ev.t > sim.t) break
+      if (ev.k >= (x.rd.applied ?? 0)) break
       if (ev.kind === 'hit' || ev.kind === 'torpedo-hit') {
         anyHit = true
         const cls = causeClass(ev)
@@ -667,6 +670,14 @@ export function createSim(battle, kits, opts = {}) {
 
   /** A record event crossed by the clock, under the authority rules. */
   function recordEvent(a) {
+    const x = X[a.slot]
+    try {
+      return recordEvent1(a)
+    } finally {
+      x.rd.applied = Math.max(x.rd.applied ?? 0, a.ev.k + 1)
+    }
+  }
+  function recordEvent1(a) {
     const i = a.slot
     const ev = a.ev
     const u = units[i]
@@ -1059,8 +1070,8 @@ export function createSim(battle, kits, opts = {}) {
         const wi = pr.weapon[p]
         flyShell(pr, p, sim.weaponList[wi].shell, dt, prev)
         if (pr.flags[p] & FLAG.star) {
-          // a star shell bursts at the top of its flight and hangs
-          if (pr.vel[o + 1] < 0) {
+          // a star shell bursts when its time fuze runs out (or at the top of its flight without one) and hangs
+          if (pr.life[p] > 0 ? sim.t - pr.born[p] >= pr.life[p] || pr.pos[o + 1] < 60 : pr.vel[o + 1] < 0) {
             fx(FX.starshell, pr.pos[o], pr.pos[o + 1], pr.pos[o + 2], { unit: pr.owner[p], size: 45 })
             sight.addLight(pr.pos[o], 0, pr.pos[o + 2], 1800, sim.t + 45, 'starshell')
             pr.kill(p)

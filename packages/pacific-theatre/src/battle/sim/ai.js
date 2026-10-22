@@ -382,7 +382,7 @@ function aiSalvo(sim, i, x, bg, mounts, ti, seen) {
 }
 
 /** Fire mounts at a point, each shell about the salvo's mean point with the historical dispersion. */
-function fireMounts(sim, i, bg, mounts, px0, pz0, { salvo, target, player, star = false, mountError = null, ux = 0, uz = 0 }) {
+function fireMounts(sim, i, bg, mounts, px0, pz0, { salvo, target, player, star = false, fuze = 0, mountError = null, ux = 0, uz = 0 }) {
   const s = sim.state
   const b = bg.battery
   const w = b.weapon
@@ -415,7 +415,7 @@ function fireMounts(sim, i, bg, mounts, px0, pz0, { salvo, target, player, star 
       const dEl = (g.gauss() * sR) / Math.max(1, lay.dRdE)
       const dAz = (g.gauss() * disp.mils) / 3.5 / 1000 / DEG
       const [ux, uy, uz] = muzzle(w.mvMs, lay.az + dAz, lay.el + dEl, vx, vz)
-      const p = sim.projectiles.spawn(KIND.shell, mx, my, mz, ux, uy, uz, { calibreMm: w.calibreMm, owner: i, weapon: bg.wi, t: sim.t, salvo, target, flags: (player ? FLAG.player : 0) | (star ? FLAG.star : 0) })
+      const p = sim.projectiles.spawn(KIND.shell, mx, my, mz, ux, uy, uz, { calibreMm: w.calibreMm, owner: i, weapon: bg.wi, t: sim.t, salvo, target, flags: (player ? FLAG.player : 0) | (star ? FLAG.star : 0), life: fuze })
       if (p >= 0) fired++
     }
     sim.fx(FX.flash, mx, my + 2, mz, { unit: i, dx: Math.sin(lay.az * DEG), dz: -Math.cos(lay.az * DEG), size: w.calibreMm / 100 })
@@ -663,9 +663,11 @@ function playerShip(sim, pl, i, x, dt) {
     if (bg) {
       const mt = bg.mounts.find((m) => m.readyAt <= sim.t && arcCovers(m.arc, (aimAz - s.heading[i] + 360) % 360))
       if (mt) {
-        const R0 = Math.min((inp.aimRange ?? 8000) + 600, bg.battery.table.maxRange * 0.9)
+        // a time fuze set to burst just beyond the aim, a few hundred metres up
+        const R0 = Math.min((inp.aimRange ?? 8000) + 500, bg.battery.table.maxRange * 0.95)
         const [ux, uz] = courseVec(aimAz)
-        fireMounts(sim, i, bg, [mt], s.pos[3 * i] + ux * R0 * 1.25, s.pos[3 * i + 2] + uz * R0 * 1.25, { salvo: sim._salvo++, target: -1, player: true, star: true })
+        const row = atRange(bg.battery.table, R0)
+        fireMounts(sim, i, bg, [mt], s.pos[3 * i] + ux * R0, s.pos[3 * i + 2] + uz * R0, { salvo: sim._salvo++, target: -1, player: true, star: true, fuze: (row?.tof ?? 20) * 0.93 })
       }
     }
   }
@@ -1463,7 +1465,8 @@ export function updatePlayerState(sim) {
     st.target = airTarget(sim, i, x)
     // the CCIP in a dive (where the bomb falls now) and the release cue
     st.ccip = x.ammo.bombs > 0 ? ccip(sim, i, x) : null
-    st.release = !!(st.ccip && st.ccip.onTarget && b.y > safePullout(b))
+    // the release light: in a dive, the impact point inside a hull, above the safe pull-out height (R7 §4.3)
+    st.release = !!(st.ccip && st.ccip.onTarget && b.gamma < -30 * DEG && b.y > safePullout(b))
     st.safeAlt = safePullout(b)
     st.envelope = x.ammo.torpedoes > 0 ? torpedoEnvelope(x.model, b) : null
     const home = sim.record.groupById.get(sim.units[i].group || '')
