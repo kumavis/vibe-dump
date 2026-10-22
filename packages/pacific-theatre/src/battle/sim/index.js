@@ -1071,7 +1071,7 @@ export function createSim(battle, kits, opts = {}) {
         flyShell(pr, p, sim.weaponList[wi].shell, dt, prev)
         if (pr.flags[p] & FLAG.star) {
           // a star shell bursts when its time fuze runs out (or at the top of its flight without one) and hangs
-          if (pr.life[p] > 0 ? sim.t - pr.born[p] >= pr.life[p] || pr.pos[o + 1] < 60 : pr.vel[o + 1] < 0) {
+          if (pr.life[p] > 0 ? sim.t - pr.born[p] >= pr.life[p] || (pr.vel[o + 1] < 0 && pr.pos[o + 1] < 250) : pr.vel[o + 1] < 0) {
             fx(FX.starshell, pr.pos[o], pr.pos[o + 1], pr.pos[o + 2], { unit: pr.owner[p], size: 45 })
             sight.addLight(pr.pos[o], 0, pr.pos[o + 2], 1800, sim.t + 45, 'starshell')
             pr.kill(p)

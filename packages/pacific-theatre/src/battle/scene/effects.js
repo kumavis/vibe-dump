@@ -518,7 +518,7 @@ export class EffectsRenderer {
         l.y = Math.max(50, l.y + l.vy * dt)
         if (!l.sprite || l.spriteT < t) {
           l.spriteT = t + 0.5
-          this.add.add({ x: l.x, y: l.y, z: l.z, vx: 0, vy: l.vy, vz: 0, born: t, life: 0.55, s0: 14, s1: 14, kind: K.star })
+          this.add.add({ x: l.x, y: l.y, z: l.z, vx: 0, vy: l.vy, vz: 0, born: t, life: 0.55, s0: 36, s1: 36, kind: K.star })
         }
       }
     }

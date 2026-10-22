@@ -12,7 +12,7 @@ import { KN, DEG, G, tableFor, arcCovers, rho } from './units.js'
 import { headingOf, courseVec, wrap180 } from './path.js'
 import { planPos } from './record.js'
 import { applyHit, speedCap, weaponClass } from './damage.js'
-import { stepAir, airQuat, airFrame, instructor, stallSpeed, eulerQuat } from './aircraft.js'
+import { stepAir, airQuat, airFrame, instructor, stallSpeed, eulerQuat, createAirBody as createAirBody0 } from './aircraft.js'
 import { stepShip, helmsman, telegraphFor, orderedOf } from './ship.js'
 import { KIND, FLAG, muzzle, layOn, createSolution, trackTarget, noteTargetManoeuvre, correct, errorFactor } from './guns.js'
 import { atRange } from './ballistics.js'
@@ -180,6 +180,7 @@ export function think(sim, dt) {
     sim._thinkT = 1
     if (pl && s.alive[pl.unitIndex] === 1) recruit(sim)
     signalRaids(sim)
+    savedCarriers(sim)
   }
   for (let i = 0; i < sim.capacity; i++) {
     const u = sim.units[i]
@@ -252,6 +253,68 @@ function recruit(sim) {
       }
     }
   }
+}
+
+/**
+ * A saved carrier (R7 §4.7, D12): a carrier the record lost, not doomed in
+ * the player's battle, launches what the record says was ready (a unit's
+ * optional `ready: [{ t, kit, count }]`, 30 minutes to spot it) at the
+ * nearest enemy carrier, its last contact. Labelled the sim's guess.
+ */
+function savedCarriers(sim) {
+  const s = sim.state
+  for (const r of sim.record.ships) {
+    if (!r.ready?.length || r.sinkT == null) continue
+    const i = r.slot
+    const x = sim._X[i]
+    const d = x.dmg
+    if (!x.touched || d.regime !== 'sim' || d.doomed || d.sinking || d.out || s.alive[i] !== 1) continue
+    x.launched ||= new Set()
+    for (const [k, rd] of r.ready.entries()) {
+      const tReady = (typeof rd.t === 'number' ? rd.t : sim.clock.parse(rd.t)) + 1800
+      if (x.launched.has(k) || sim.t < tReady) continue
+      x.launched.add(k)
+      // the last contact: the nearest enemy carrier afloat
+      let tgt = -1
+      let best = Infinity
+      for (const q of sim.record.ships) {
+        const j = q.slot
+        if (q.side === r.side || s.alive[j] !== 1 || !sim._X[j].model?.carrier) continue
+        const dd = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+        if (dd < best) {
+          best = dd
+          tgt = j
+        }
+      }
+      if (tgt < 0) continue
+      const m = x.model
+      let n = 0
+      for (let c = 0; c < (rd.count ?? 6); c++) {
+        const j = sim._allocSpare(rd.kit, 'aircraft')
+        if (j < 0) break
+        const xj = sim._X[j]
+        const h = s.heading[i] * DEG
+        xj.body = createAirBodyAt(xj.model, s.pos[3 * i] + Math.sin(h) * (c * 30 - m.L * 0.3), (m.fdTop ?? 20) + 30 + c * 15, s.pos[3 * i + 2] - Math.cos(h) * (c * 30 - m.L * 0.3), s.heading[i])
+        xj.ai = createAirAI(sim, j)
+        const air = xj.model.torpedo ? 'torpedo' : 'dive'
+        Object.assign(xj.ai, { mode: air, target: tgt, from: headingOf(s.pos[3 * i] - s.pos[3 * tgt], s.pos[3 * i + 2] - s.pos[3 * tgt + 2]), pushOver: 4000, releaseM: 600, phase: 'approach' })
+        xj.ammo = ammoOf(xj.model)
+        sim.units[j].side = r.side
+        sim._setAlive(j, 1)
+        n++
+      }
+      if (n) {
+        sim._guess ||= []
+        sim._guess.push({ unit: r.id, t: sim.t, text: `${r.name}: ${n} aircraft launched against ${sim.units[tgt].name}: the sim's guess; the record has no such strike` })
+        sim.beat(i, 'launches', `${r.name}: launching (the sim's guess; the record has no such strike)`)
+      }
+    }
+  }
+}
+
+function createAirBodyAt(model, x, y, z, heading) {
+  const b = { ...createAirBody0(model), x, y, z, psi: heading * DEG }
+  return b
 }
 
 /** A Japanese ship that sights a raid fires two bursts toward it, and the CAP turns to them (R7 §4.6). */
@@ -503,7 +566,10 @@ function airThink(sim, i, x, dt) {
       x.ai = null
     }
   } else {
-    ai.aim = [Math.sin(b.psi), 0, -Math.cos(b.psi)]
+    // (an aircraft with no plan of the record's, a saved carrier's strike: on, and gone after a quarter of an hour)
+    ai.aim = [Math.sin(b.psi), 0.05, -Math.cos(b.psi)]
+    ai.homeT ??= t + 900
+    if (t > ai.homeT && sim.player?.unitIndex !== i) sim._setAlive(i, 0)
   }
 }
 
