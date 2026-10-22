@@ -1984,7 +1984,7 @@ const MUTANTS = {
   // (N2) the closing check: a device whose match is over never says so; a
   // final's hash never compared; an over match deaf to a final (the drift
   // inside the last entry goes unseen)
-  'silent-final': ['match/session.js', "    return !this.append({ t: 'final' }, { s: seat, p: this.folder.last, h: stateHash(this.G) })\n", '    return false\n'],
+  'silent-final': ['match/session.js', "    return !this.append({ t: 'final' }, { s: seat, p: at, h: stateHash(this.G) })\n", '    return false\n'],
   'final-unchecked': ['match/fold.js', '    if (e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
   'over-ignores-final': ['match/fold.js', "      if (e.t === 'desync' || e.t === 'final') return this.outOfBand(e)\n", "      if (e.t === 'desync') return this.outOfBand(e)\n"],
   // (N2's review) the head after a concession its id alone: a final written
