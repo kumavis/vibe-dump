@@ -686,6 +686,9 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
       if (!owner) ctx.bad(`${at} role`, `group “${r.group}” is not a group`)
       roleKit = owner?.kit
       if (owner?.attack?.profile === 'level' && owner.wave === 1 && boxId === 'pearl-harbor') ctx.bad(`${at} role`, `${owner.id} is among the first wave’s level bombers: never a role (DESIGN.md §3.5)`)
+      if (owner && owner.namedCrews !== undefined && owner.namedCrews !== true) ctx.bad(`group ${owner.id}`, 'namedCrews is true or absent')
+      // the player never flies the leader (k 0) nor a named crew's aircraft: such a moment flies a spare, which starts at the moment's start
+      if (owner && (owner.namedCrews || (owner.count ?? 0) < 2) && !m.start) ctx.bad(`${at} role`, `${owner.id} has no aircraft the player may fly (its leader${owner.namedCrews ? ' and its named crews' : ''} stay on the record), so the moment flies a spare and needs a start`)
     }
     if (r.kit === undefined) ctx.warn(`${at} role`, 'names no kit')
     else if (roleKit && r.kit !== roleKit) ctx.bad(`${at} role`, `kit ${r.kit}; the ${r.kind === 'ship' ? 'unit' : 'group'} flies ${roleKit}`)

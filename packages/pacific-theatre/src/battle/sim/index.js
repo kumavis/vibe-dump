@@ -914,8 +914,10 @@ export function createSim(battle, kits, opts = {}) {
       const g = role.group ? record.groupById.get(role.group) : null
       const kitId = role.kit || g?.kitId
       if (g) {
-        // a member alive now that has not yet reached its attack, the soonest to it first
-        const cand = g.aircraft.filter((ac) => ac.slot != null && units[ac.slot].authority === 'record' && state.alive[ac.slot] === 1)
+        // a member alive now that has not yet reached its attack, the soonest to it first; never the group's leader
+        // (k 0: Best's, Kobayashi's, Tomonaga's aircraft stay AI on the record), and none of a group whose every
+        // crew the record names (`namedCrews`: Welch's and Taylor's P-40s), whose moment flies a spare (R8 §5.1, 13)
+        const cand = g.raw?.namedCrews ? [] : g.aircraft.filter((ac) => ac.k !== 0 && ac.slot != null && units[ac.slot].authority === 'record' && state.alive[ac.slot] === 1)
         cand.sort((a, b) => (a.releaseT ?? 1e9) - (b.releaseT ?? 1e9))
         const pick = cand.find((ac) => (ac.releaseT ?? Infinity) > sim.t + 15) || cand[0]
         if (pick) i = pick.slot

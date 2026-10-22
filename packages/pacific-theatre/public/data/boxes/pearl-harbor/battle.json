@@ -7404,6 +7404,7 @@
       "side": "us",
       "name": "Two P-40Bs of the 47th Pursuit Squadron from Haleʻiwa",
       "count": 2,
+      "namedCrews": true,
       "from": "haleiwa",
       "launch": "08:30",
       "altM": 1500,
@@ -8099,7 +8100,7 @@
       "t": "08:33",
       "text": "08:33. A pair of Army fighter pilots who took off from Haleʻiwa on their own find dive bombers strafing the Marine field at ʻEwa.",
       "camera": {"target":"ewa-field","bearingDeg":340,"pitch":0.35,"distanceM":6000},
-      "moment": "welch-taylor-ewa",
+      "moment": "p40-haleiwa-ewa",
       "sources": [{"id":"aaf-7dec41","where":"ch. 4"},{"id":"usmc-infamous-day"}]
     },
     {
@@ -8286,7 +8287,7 @@
       }
     },
     {
-      "id": "welch-taylor-ewa",
+      "id": "p40-haleiwa-ewa",
       "title": "Two P-40s from Haleʻiwa",
       "ja": null,
       "role": {

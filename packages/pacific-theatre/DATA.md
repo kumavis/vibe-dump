@@ -737,6 +737,11 @@ Rules:
   run on to the clock's `to`. The Samar box's clock ends before the
   Shikishima unit's attack on St. Lo (about 10:50), which is a closing card. `start` for an aircraft is a
   position relative to a unit; for a ship it is the unit's own track at `t`.
+  An aircraft role never takes the group's leader (its first aircraft,
+  which stays on the record) nor any aircraft of a group marked
+  `namedCrews: true` (every crew a person the record names: Welch's and
+  Taylor's P-40s at Pearl Harbor); such a moment flies a spare of the
+  group's kit, which needs `start`.
   `record` lists what the record gives the player's unit or group
   (`hits`, with a window), for the after-card's comparison (DESIGN.md §5.7).
   `after` has text and at least one opened source, and its text speaks of
