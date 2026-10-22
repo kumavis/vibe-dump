@@ -75,11 +75,17 @@ export function downloadGmrt(ledger, dir, id, grid, log = () => {}) {
     const file = join(dir, r.file)
     const known = ledger.get(file)
     if (fetched && !(known && known.url === r.url && known.bytes > 0)) sleep(5000)
+    // a grid cut short (the server stops mid-stream under load) does not parse: fetched again, spaced
     let res
-    try {
-      res = fetchTo(ledger, r.url, file, { maxTime: 600, emptyRetries: 10 })
-    } catch (e) {
-      res = { ok: false, status: String(e.message).slice(0, 200) }
+    for (let k = 1; k <= 3; k++) {
+      try {
+        res = fetchTo(ledger, r.url, file, { maxTime: 600, emptyRetries: 10, force: k > 1 })
+        if (res.ok) readAsciiGrid(file, { min: -11000, max: 9000 })
+        break
+      } catch (e) {
+        res = { ok: false, status: String(e.message).slice(0, 200) }
+        if (k < 3) sleep(10000 * k)
+      }
     }
     if (!res.cached) fetched = true
     if (!res.ok) {

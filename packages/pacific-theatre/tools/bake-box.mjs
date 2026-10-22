@@ -32,7 +32,7 @@
 //   work dated after 1941 is undone, at the texel, on its authors' word.
 // - Encoded `metres = (R·256 + G)·0.25 − 11000`.
 import { spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cachedWindow, loadGrid } from './lib/cog.mjs'
@@ -791,12 +791,13 @@ function clean(dir, ids) {
     }
     rmSync(join(dir, 'glo30', id), { recursive: true, force: true })
   }
-  // the shared lists go when every box's downloads are gone
+  // the shared lists, and the directories, go when every box's downloads are gone
   if (ids.length === Object.keys(BOXES).length) {
     for (const rel of ['glo30/tileList.txt', 'cudem/urllist9428.txt']) {
       rmSync(join(dir, rel), { force: true })
       delete ledger.entries[rel]
     }
+    for (const sub of ['glo30', 'gmrt', 'etopo15', 'cudem']) if (existsSync(join(dir, sub)) && !readdirSync(join(dir, sub)).length) rmSync(join(dir, sub), { recursive: true })
   }
   writeFileSync(ledger.path, JSON.stringify(ledger.entries, null, 2) + '\n')
   log(`clean: removed ${gone.length} downloads of ${ids.join(', ')} from ${dir}`)

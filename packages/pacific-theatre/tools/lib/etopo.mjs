@@ -18,9 +18,9 @@
 //
 // Every subset goes through tools/lib/fetch.mjs's curl and ledger into the
 // downloads directory; the readers only parse what is on disk.
-import { readFileSync } from 'node:fs'
+import { readFileSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
-import { fetchTo } from './fetch.mjs'
+import { fetchTo, sleep } from './fetch.mjs'
 
 export const ETOPO = {
   doi: '10.25921/fd45-gt74',
@@ -72,6 +72,29 @@ export function readDods(buf) {
   const lat = map()
   const lon = map()
   return { dds, type, nx, ny, z, lat, lon }
+}
+
+/**
+ * Fetch a .dods subset and make sure it is whole: THREDDS sometimes answers
+ * 200 and stops after the DDS (a 250-byte "file" for Pearl Harbor's 15″
+ * subset on 2026-10-22), which curl --fail cannot see. A response that does
+ * not parse is fetched again, spaced, up to `tries` times.
+ */
+export function fetchDods(ledger, url, path, { tries = 5, maxTime = 900 } = {}) {
+  let last = null
+  for (let k = 1; k <= tries; k++) {
+    const res = fetchTo(ledger, url, path, { globoff: true, maxTime, force: k > 1 })
+    if (!res.ok) return res
+    try {
+      readDods(readFileSync(path))
+      return { ...res, tries: k }
+    } catch (e) {
+      last = e
+      rmSync(path, { force: true })
+      if (k < tries) sleep(5000 * k)
+    }
+  }
+  throw new Error(`${url}: the response never came whole (${last?.message})`)
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +149,7 @@ export function downloadEtopo60(ledger, dir, envelope, opts = {}, log = () => {}
   let bytes = 0
   for (const r of reqs) {
     const path = join(dir, r.file)
-    const res = fetchTo(ledger, r.url, path, { globoff: true, maxTime: 900 })
+    const res = fetchDods(ledger, r.url, path, { maxTime: 900 })
     if (!res.ok) throw new Error(`ETOPO 60″ band ${r.file}: HTTP ${res.status}`)
     bytes += ledger.get(path).bytes
     log(`  etopo 60″ ${r.piece} rows ${r.i0}–${r.i1}: ${res.cached ? 'cached' : 'fetched'}`)
@@ -220,9 +243,9 @@ export function downloadEtopo15(ledger, dir, bounds, log = () => {}) {
   const reqs = etopo15Requests(bounds)
   for (const r of reqs) {
     const path = join(dir, r.file)
-    const res = fetchTo(ledger, r.url, path, { globoff: true, maxTime: 300 })
+    const res = fetchDods(ledger, r.url, path, { maxTime: 300 })
     if (!res.ok) throw new Error(`ETOPO 15″ ${r.name}: HTTP ${res.status}`)
-    log(`  etopo 15″ ${r.name} [${r.i0}:${r.i1}][${r.j0}:${r.j1}]: ${res.cached ? 'cached' : 'fetched'}`)
+    log(`  etopo 15″ ${r.name} [${r.i0}:${r.i1}][${r.j0}:${r.j1}]: ${res.cached ? 'cached' : 'fetched'}${res.tries > 1 ? ` (whole on try ${res.tries})` : ''}`)
   }
   return reqs
 }
