@@ -4576,7 +4576,7 @@
     },
     {
       "t": "07:10",
-      "text": "07:10. Midway’s torpedo planes and Army bombers come in low from ahead. Akagi swings hard and combs the torpedoes; the fighters overhead cut the attackers down. At 07:15 Nagumo orders his second wave re-armed with bombs for Midway.",
+      "text": "07:10. Midway’s torpedo planes and Army bombers come in low from ahead. Akagi swings hard and combs the torpedoes; the fighters overhead cut the attackers down. At 07:15 Vice Admiral NAGUMO Chūichi 南雲忠一 orders his second wave re-armed with bombs for Midway.",
       "camera": {"target":"akagi","bearingDeg":150,"pitch":0.3,"distanceM":7000},
       "sources": [
         {"id":"nagumo-1947","where":"log 0407–0415 JST"},
@@ -4585,7 +4585,7 @@
     },
     {
       "t": "07:28",
-      "text": "07:28. Tone’s search plane, launched late, reports enemy ships to the north-east. Nagumo reverses his order at 07:45: the planes still carrying torpedoes keep them. Through the morning Midway’s dive bombers and B-17s attack and hit nothing.",
+      "text": "07:28. Tone’s search plane, launched late, reports enemy ships to the north-east. Vice Admiral NAGUMO Chūichi 南雲忠一 reverses his order at 07:45: the planes still carrying torpedoes keep them. Through the morning Midway’s dive bombers and B-17s attack and hit nothing.",
       "camera": {"target":"tone","bearingDeg":30,"pitch":0.4,"distanceM":11000},
       "sources": [
         {"id":"nagumo-1947","where":"log 0428–0530 JST"},
@@ -4637,7 +4637,7 @@
     },
     {
       "t": "10:54",
-      "text": "10:54. Hiryū launches her dive bombers against the American carriers while Abe signals that the other three are burning.",
+      "text": "10:54. Hiryū launches her dive bombers against the American carriers while Rear Admiral ABE Hiroaki 阿部弘毅 signals that the other three are burning.",
       "camera": {"target":"hiryu","bearingDeg":0,"pitch":0.35,"distanceM":8000},
       "sources": [{"id":"nagumo-1947","where":"log 0750–0758 JST"}]
     },
@@ -4703,7 +4703,7 @@
         ],
         "tellings": [
           {"source":"nagumo-1947","says":"Bombs 4, 7, 8 and 9 hit; Kaga’s dead printed “1 800” (garbled)."},
-          {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 dead."},
+          {"source":"trom-kaga","says":"A minimum of one 1,000-pound and three 500-pound bombs; 814 of her crew lost their lives."},
           {"source":"wp-midway","says":"Three to five direct hits."},
           {
             "source": "nwc-midway-1948",
@@ -4737,17 +4737,17 @@
       "checkpoints": [{"t":"10:27:30","text":"Akagi is burning; the torpedoes in her hangar begin to go off."}],
       "record": {"hits":[{"unit":"akagi","count":[1,2],"window":["10:26","10:27"]}]},
       "after": {
-        "text": "One bomb, probably Best’s, burst among the armed and fuelled aircraft in Akagi’s upper hangar. A near miss astern jammed her rudder. By 10:42 her engines had stopped; Nagumo left her, and she was scuttled at dawn on 5 June.",
+        "text": "One bomb, probably Lieutenant Richard H. Best’s, burst among the armed and fuelled aircraft in Akagi’s upper hangar. A near miss astern jammed her rudder. By 10:42 her engines had stopped; Vice Admiral NAGUMO Chūichi 南雲忠一 left her, and she was scuttled at dawn on 5 June.",
         "sources": [
           {"id":"nagumo-1947","where":"log 0726–0746 JST; Table 3"},
           {"id":"trom-akagi"},
           {"id":"wp-midway"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"Two hits and a near miss; 221 dead."},
+          {"source":"nagumo-1947","says":"Two hits and a near miss; 221 of her crew lost their lives."},
           {
             "source": "trom-akagi",
-            "says": "One hit, one under the port quarter, one near miss forward (after Parshall and Tully); 263 dead."
+            "says": "One hit, one under the port quarter, one near miss forward (after Parshall and Tully); 263 of her crew lost their lives."
           }
         ]
       }
@@ -4778,8 +4778,8 @@
           {"id":"trom-soryu"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"718 dead."},
-          {"source":"trom-soryu","says":"713 dead; hits at 10:25–10:26 and 10:29."},
+          {"source":"nagumo-1947","says":"718 of her crew lost their lives."},
+          {"source":"trom-soryu","says":"713 of her crew lost their lives; hits at 10:25–10:26 and 10:29."},
           {"source":"cv5-midway-1942","says":"Five direct hits and three very near misses claimed."}
         ]
       }
@@ -4884,7 +4884,7 @@
       "checkpoints": [{"t":"12:05:00","text":"Yorktown is hit; she slows."}],
       "record": {"hits":[{"unit":"yorktown","count":[3,3],"window":["12:05","12:15"]}]},
       "after": {
-        "text": "A few of Hiryū’s dive bombers got through to Yorktown and three bombs hit; one in her uptakes stopped her. Most of the bombers and some of their fighters did not return; Lieutenant Kobayashi was among them. Hiryū reported the carrier sunk; within an hour and a half Yorktown was steaming again at nearly twenty knots.",
+        "text": "A few of Hiryū’s dive bombers got through to Yorktown and three bombs hit; one in her uptakes stopped her. Most of the bombers and some of their fighters did not return; Lieutenant (大尉) KOBAYASHI Michio 小林道雄 was among them. Hiryū reported the carrier sunk; within an hour and a half Yorktown was steaming again at nearly twenty knots.",
         "sources": [
           {"id":"nagumo-1947","where":"First Attack; Table 8"},
           {"id":"nwc-midway-1948","where":"p. 137"},
@@ -4964,7 +4964,7 @@
       "checkpoints": [{"t":"14:43:00","text":"The torpedoes are in the water."}],
       "record": {"hits":[{"unit":"yorktown","count":[2,2],"window":["14:43","14:46"]}]},
       "after": {
-        "text": "Hiryū’s torpedo planes split to come in from both sides; two torpedoes hit Yorktown. Half of them did not return, Lieutenant Tomonaga’s among them. Hiryū believed she had disabled a second carrier. Yorktown was abandoned within half an hour and sank on 7 June after a submarine’s torpedoes.",
+        "text": "Hiryū’s torpedo planes split to come in from both sides; two torpedoes hit Yorktown. Half of them did not return, among them the aircraft of Lieutenant (大尉) TOMONAGA Jōichi 友永丈市. Hiryū believed she had disabled a second carrier. Yorktown was abandoned within half an hour and sank on 7 June after a submarine’s torpedoes.",
         "sources": [
           {"id":"nagumo-1947","where":"Second Attack; Table 8"},
           {"id":"nwc-midway-1948","where":"pp. 139–140"},
@@ -5005,14 +5005,14 @@
       ],
       "record": {"hits":[{"unit":"hiryu","count":[4,5],"window":["17:01","17:05"]}]},
       "after": {
-        "text": "Four bombs hit Hiryū, three in a row forward and one by the bridge. She burned all night. Rear Admiral Yamaguchi and Captain Kaku stayed aboard when she was scuttled the next morning. Some of the dive bombers did not return.",
+        "text": "Four bombs hit Hiryū, three in a row forward and one by the bridge. She burned all night. Rear Admiral YAMAGUCHI Tamon 山口多聞 and Captain KAKU Tomeo 加来止男 stayed aboard when she was scuttled the next morning. Some of the dive bombers did not return.",
         "sources": [
           {"id":"nagumo-1947","where":"Table 3; narrative"},
           {"id":"trom-hiryu"},
           {"id":"cv6-midway-1942","where":"1905 zone +10"}
         ],
         "tellings": [
-          {"source":"nagumo-1947","says":"416 dead."},
+          {"source":"nagumo-1947","says":"416 of her crew lost their lives."},
           {"source":"jawp-midway","says":"417, counting 34 engine-room men later rescued by US forces."},
           {"source":"cv6-midway-1942","says":"Three did not return."}
         ]
@@ -5043,7 +5043,7 @@
       "source": "nwc-midway-1948",
       "says": "Japanese dead about 2,500; 234 carrier aircraft lost (48 shot down, 186 lost aboard or ditched). US dead about 307; 132 aircraft lost."
     },
-    {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese dead and 248 aircraft (verify)."},
+    {"source":"wp-midway","says":"After Parshall and Tully: 3,057 Japanese lost their lives, and 248 aircraft were lost (verify)."},
     {
       "source": "cincpac-midway-1942",
       "says": "About 92 officers and 215 men lost; about 150 planes lost in action or damaged beyond repair."

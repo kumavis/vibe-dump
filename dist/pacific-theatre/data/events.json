@@ -610,7 +610,7 @@
       },
       {
         "source": "wp-pearl-harbor",
-        "says": "55 airmen and 9 of the 10 midget-submarine crewmen killed, one captured: 64 Japanese dead; the same article's infobox gives 129, unexplained.",
+        "says": "55 airmen and 9 of the 10 midget-submarine crewmen lost their lives and one was taken prisoner: 64 Japanese in all; the same article's infobox gives 129, unexplained.",
         "scope": "Japanese dead"
       },
       {
@@ -2086,7 +2086,7 @@
       },
       {
         "source": "parshall-tully-2005",
-        "says": "3,057 Japanese dead (pp. 114, 365, 377–380, 476; known here at second hand, through Wikipedia).",
+        "says": "3,057 Japanese lost their lives (pp. 114, 365, 377–380, 476; known here at second hand, through Wikipedia).",
         "scope": "Japanese dead"
       },
       {
@@ -2197,7 +2197,7 @@
       "table"
     ],
     "box": null,
-    "summary": "A naval landing force occupies Kiska and an army battalion lands on Attu, far out at the western end of the Aleutian chain, without opposition. On Attu they take the Unangax̂ villagers of Chichagof Harbor and the American couple living among them. Japan renames the islands Atsuta-jima 熱田島 and Narukami-jima 鳴神島.",
+    "summary": "A naval landing force occupies Kiska and an army battalion lands on Attu, far out at the western end of the Aleutian chain, without opposition. On Attu they take the Unangax̂ villagers of Chichagof Harbor and the American couple living among them. Japan renames Attu Atsuta-jima 熱田島 and Kiska Narukami-jima 鳴神島.",
     "stops": [],
     "sources": [
       {
@@ -2888,7 +2888,7 @@
       "table"
     ],
     "box": null,
-    "summary": "Japan sends the battleships Hiei 比叡 and Kirishima 霧島 to shell Henderson Field ahead of a great troop convoy. In the first hours of 13 November Rear Admiral Callaghan's cruisers and destroyers meet them off Lunga at point-blank range in a confused night action; Hiei is crippled and sunk next day by aircraft, and Admirals Callaghan and Scott are killed.",
+    "summary": "Japan sends the battleships Hiei 比叡 and Kirishima 霧島 to shell Henderson Field ahead of a great troop convoy. In the first hours of 13 November Rear Admiral Callaghan's cruisers and destroyers meet them off Lunga at point-blank range in a confused night action; Hiei is crippled, and after a day of air attacks from Henderson Field and Enterprise she sinks that night; Rear Admirals Callaghan and Scott lose their lives.",
     "stops": [],
     "sources": [
       {
@@ -2918,7 +2918,7 @@
   {
     "id": "guadalcanal-naval-2-1942",
     "title": "The Naval Battle of Guadalcanal: the second night",
-    "gloss": "radar against searchlights north of Savo",
+    "gloss": "radar against searchlights west of Savo",
     "ja": {
       "kanji": "第三次ソロモン海戦",
       "romaji": "Dai-sanji Soromon kaisen",
@@ -2981,10 +2981,10 @@
       "box"
     ],
     "box": "ironbottom-sound",
-    "summary": "Two nights after the first action, Vice Admiral KONDŌ Nobutake 近藤信竹 brings Kirishima 霧島 and heavy cruisers down to shell Henderson Field, and Rear Admiral Lee meets him north of Savo with the battleships Washington and South Dakota and a destroyer screen. The Japanese torpedoes and guns wreck the American destroyers, and South Dakota, her power and radars failing, is lit by searchlights and hit again and again. Washington, unseen in the dark, tracks Kirishima by radar and opens fire at close range a little before midnight; within minutes Kirishima's steering is wrecked, and she circles helplessly and is abandoned, capsizing north-west of Savo in the early morning. The troop convoy beaches at Tassafaronga at dawn.",
+    "summary": "Two nights after the first action, Vice Admiral KONDŌ Nobutake 近藤信竹 brings Kirishima 霧島 and heavy cruisers down to shell Henderson Field, and Rear Admiral Lee meets him south and west of Savo with the battleships Washington and South Dakota and a destroyer screen. The Japanese torpedoes and guns wreck the American destroyers, and South Dakota, her power and radars failing, is lit by searchlights and hit again and again. Washington, unseen in the dark, tracks Kirishima by radar and opens fire at close range at midnight; within minutes Kirishima's steering is wrecked, and she circles helplessly and is abandoned, capsizing north-west of Savo in the early morning. The troop convoy beaches at Tassafaronga at dawn.",
     "stops": [
       {
-        "text": "23:01: Washington's radar finds the Japanese force north of Savo.",
+        "text": "23:01: Washington's radar finds Japanese ships east of Savo.",
         "place": "savo",
         "zoom": "table"
       },
@@ -4831,7 +4831,7 @@
       "table"
     ],
     "box": null,
-    "summary": "Japan's plan, Shō-ichi-gō 捷一号作戦, sends its battleships and cruisers from the west and south at the Leyte landing while Vice Admiral OZAWA Jisaburō 小沢治三郎's carriers, nearly empty of aircraft, draw Halsey's fast carriers north. US submarines strike first in the Palawan Passage; aircraft sink Musashi 武蔵 in the Sibuyan Sea; old battleships destroy Vice Admiral Nishimura's force in Surigao Strait; and Kurita comes through San Bernardino Strait to find only escort carriers off Samar. It is the last great fleet action, and the end of the Imperial Japanese Navy as a fighting fleet.",
+    "summary": "Japan's plan, Shō-ichi-gō 捷一号作戦, sends its battleships and cruisers from the west and south at the Leyte landing while Vice Admiral OZAWA Jisaburō 小沢治三郎's carriers, nearly empty of aircraft, draw Halsey's fast carriers north. US submarines strike first in the Palawan Passage; aircraft sink Musashi 武蔵 in the Sibuyan Sea; old battleships sink nearly all of Vice Admiral NISHIMURA Shōji 西村祥治's force in Surigao Strait; and Vice Admiral KURITA Takeo 栗田健男 comes through San Bernardino Strait to find only escort carriers off Samar. It is the last great fleet action, and the end of the Imperial Japanese Navy as a fighting fleet.",
     "stops": [
       {
         "text": "23 October: submarines sink Atago and Maya in the Palawan Passage.",
@@ -5077,7 +5077,7 @@
       "table"
     ],
     "box": null,
-    "summary": "As Taffy 3 recovers its aircraft after the surface action, Zeros of the Shikishima unit 敷島隊 of the 201st Air Group, formed days earlier at Mabalacat on Luzon, come in low under the radar and climb to dive with their bombs onto the escort carriers. One crashes through the flight deck of St. Lo; explosions follow in her hangar, and she sinks at 11:25. Japan's navy and army make such attacks a system: the tokkō (special attack) units, which the Allies call kamikaze.",
+    "summary": "That morning tokkō aircraft strike the escort carriers of Taffy 1 to the south, Santee and Suwannee among them. As Taffy 3 recovers its aircraft after the surface action, Zeros of the Shikishima unit 敷島隊 of the 201st Air Group, formed days earlier at Mabalacat on Luzon, come in low under the radar and climb to dive with their bombs onto the escort carriers. One crashes through the flight deck of St. Lo; explosions follow in her hangar, and she sinks at 11:25. Japan's navy and army make such attacks a system: the tokkō (special attack) units, which the Allies call kamikaze.",
     "stops": [
       {
         "text": "Mabalacat, where the unit is formed.",

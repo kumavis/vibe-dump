@@ -73,7 +73,7 @@
     ]
   },
   "sides": {
-    "japan": {"side":"jp","name":"Imperial Japanese Navy: the First Striking Force’s Force A (Kurita)","ja":"第一遊撃部隊"},
+    "japan": {"side":"jp","name":"Imperial Japanese Navy: the First Striking Force’s Force A (Vice Admiral KURITA Takeo 栗田健男)","ja":"第一遊撃部隊"},
     "usa": {"side":"us","name":"United States Navy: Task Unit 77.4.3 (Taffy 3)"}
   },
   "units": [
@@ -12302,13 +12302,13 @@
   "stops": [
     {
       "t": "06:15",
-      "text": "06:15, Item time. Off Samar the escort carriers of Taffy 3 secure from dawn general quarters. Their aircraft are aloft on routine patrols; nobody knows that Kurita’s battleships came through San Bernardino Strait in the night.",
+      "text": "06:15, Item time. Off Samar the escort carriers of Taffy 3 secure from dawn general quarters. Their aircraft are aloft on routine patrols; nobody knows that the battleships of Vice Admiral KURITA Takeo 栗田健男 came through San Bernardino Strait in the night.",
       "camera": {"target":"fanshaw-bay","bearingDeg":200,"pitch":0.35,"distanceM":9000},
       "sources": [{"id":"morison-xii","where":"XII §2"},{"id":"ussbs-nav9"}]
     },
     {
       "t": "06:44",
-      "text": "06:44. From Yamato masts are sighted to the south-east. The Japanese fleet is changing from its night formation; Kurita orders all ships to the east.",
+      "text": "06:44. From Yamato masts are sighted to the south-east. The Japanese fleet is changing from its night formation; Vice Admiral KURITA Takeo 栗田健男 orders all ships to the east.",
       "camera": {"target":"yamato","bearingDeg":290,"pitch":0.3,"distanceM":9000},
       "sources": [{"id":"trom-yamato"},{"id":"morison-xii","where":"XII §2"},{"id":"ussbs-nav41"}]
     },
@@ -12367,7 +12367,7 @@
     },
     {
       "t": "09:11",
-      "text": "09:11. Kurita orders his ships to break off and rendezvous to the north. The cruisers on the carriers’ flank cease fire and turn away.",
+      "text": "09:11. Vice Admiral KURITA Takeo 栗田健男 orders his ships to break off and rendezvous to the north. The cruisers on the carriers’ flank cease fire and turn away.",
       "camera": {"target":"yamato","bearingDeg":180,"pitch":0.4,"distanceM":12000},
       "sources": [{"id":"morison-xii","where":"XIII §2"},{"id":"ussbs-nav9"}]
     },
@@ -12430,7 +12430,7 @@
         "text": "Johnston turned toward the cruisers, firing as she went, and launched her whole load of torpedoes at close range before running back into her smoke. One struck Kumano, flagship of the cruiser division, and put her out of the fight; the division’s admiral moved to Suzuya. Minutes later heavy shells hit Johnston: she lost an engine room, her steering power and her after guns, and fought on behind smoke and a rain squall for more than two hours. She sank in mid-morning; many of her crew lost their lives, most of them in the water.",
         "sources": [{"id":"johnston-ar-1944"},{"id":"morison-xii","where":"XII §§4, 6"},{"id":"trom-kumano"}],
         "tellings": [
-          {"source":"morison-xii","says":"Of 327, 141 were saved and 186 lost; Evans was among them."},
+          {"source":"morison-xii","says":"Of a complement of 327, 141 survived and 186 lost their lives; Commander Ernest E. Evans was among them."},
           {"source":"trom-kumano","says":"The torpedo struck at 07:24 and tore off a section of her bow."}
         ]
       }
@@ -12465,7 +12465,7 @@
         "note": "Yamato’s report: salvos on one carrier, then the next, and her spotter called the first a hit; the American record has no carrier hit in these minutes, only straddles and dyed splashes"
       },
       "after": {
-        "text": "Yamato opened fire on ships at ranges battleships had trained for and seldom reached. Her first salvos fell among the carriers and their dyed splashes rose astern of them, but the carriers turned away into the wind, hid in their own smoke and then in a rain squall, and the rangefinders lost them. Later in the morning torpedo tracks sent Yamato north, out of the fight, and soon after nine Kurita broke off the action.",
+        "text": "Yamato opened fire on ships at ranges battleships had trained for and seldom reached. Her first salvos fell among the carriers and their dyed splashes rose astern of them, but the carriers turned away into the wind, hid in their own smoke and then in a rain squall, and the rangefinders lost them. Later in the morning torpedo tracks sent Yamato north, out of the fight, and soon after nine Vice Admiral KURITA Takeo 栗田健男 broke off the action.",
         "sources": [
           {"id":"ussbs-nav9"},
           {"id":"trom-yamato"},
@@ -12594,7 +12594,7 @@
         "note": "Tone’s report: several hits observed on a carrier it took for Ranger"
       },
       "after": {
-        "text": "Tone and Chikuma pulled ahead of the Japanese fleet and came up on the carriers’ open flank. With the cruisers astern of them they found Gambier Bay, fallen behind, and sank her. Aircraft attacked them all morning; Chikuma was crippled by an air torpedo, and Kurita’s order to reassemble reached the division when its leading ships were within ten kilometres of the surviving carriers.",
+        "text": "Tone and Chikuma pulled ahead of the Japanese fleet and came up on the carriers’ open flank. With the cruisers astern of them they found Gambier Bay, fallen behind, and sank her. Aircraft attacked them all morning; Chikuma was crippled by an air torpedo, and the order of Vice Admiral KURITA Takeo 栗田健男 to reassemble reached the division when its leading ships were within ten kilometres of the surviving carriers.",
         "sources": [
           {"id":"trom-tone"},
           {"id":"trom-chikuma"},

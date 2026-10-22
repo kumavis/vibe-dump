@@ -117,6 +117,7 @@
         {
           "t": "08:06:10",
           "kind": "explodes",
+          "hud": false,
           "sources": [
             {"id":"trom-hiryu"},
             {"id":"kimmel-narrative","where":"Mugford 0808"},
@@ -304,6 +305,7 @@
         {
           "t": "08:08",
           "kind": "sinks",
+          "text": "Oklahoma rolls over at her berth.",
           "sources": [{"id":"kimmel-narrative","where":"Mugford 0808"},{"id":"oklahoma-ar-1941"}],
           "tellings": [
             {"source":"cincpac-pearl-1942","says":"She capsized in eight to eleven minutes, her masts on the bottom."}
@@ -1038,16 +1040,18 @@
       ],
       "events": [
         {
-          "t": "08:30",
+          "t": "09:00",
           "kind": "list",
           "sources": [{"id":"oglala-ar-1941"}],
-          "text": "Oglala, her plates opened by the torpedo’s blast, is warped astern of Helena and lists."
+          "sourceNote": "“At about 0900, the ship was secured to Ten Ten dock astern of the Helena”",
+          "text": "Oglala is secured astern of Helena and lists."
         },
-        {"t":"09:00","kind":"sinks","sources":[{"id":"kimmel-narrative","where":"0900"},{"id":"oglala-ar-1941"}]}
+        {"t":"09:30","kind":"abandoned","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“About 0930 with a list of approximately 20° the order was given to abandon ship”"},
+        {"t":"09:58","kind":"sinks","sources":[{"id":"oglala-ar-1941"}],"sourceNote":"“At about 1000 or slightly before, the Oglala turned over on her port side”"}
       ],
       "fate": {
         "kind": "capsized",
-        "t": "09:00",
+        "t": "09:58",
         "sources": [{"id":"oglala-ar-1941"},{"id":"kimmel-narrative"}],
         "note": "capsized at her berth at the Navy Yard; raised and recommissioned"
       }
@@ -1382,7 +1386,7 @@
           "tellings": [{"source":"utah-ar-1941","says":"“About 5” by her own estimate."}]
         },
         {"t":"08:05","kind":"list","sources":[{"id":"utah-ar-1941"}]},
-        {"t":"08:12","kind":"sinks","sources":[{"id":"kimmel-narrative","where":"0812"},{"id":"utah-ar-1941"}]}
+        {"t":"08:12","kind":"sinks","text":"Utah rolls over at her berth.","sources":[{"id":"kimmel-narrative","where":"0812"},{"id":"utah-ar-1941"}]}
       ],
       "fate": {
         "kind": "capsized",
@@ -7404,6 +7408,7 @@
       "side": "us",
       "name": "Two P-40Bs of the 47th Pursuit Squadron from Haleʻiwa",
       "count": 2,
+      "namedCrews": true,
       "from": "haleiwa",
       "launch": "08:30",
       "altM": 1500,
@@ -8099,7 +8104,7 @@
       "t": "08:33",
       "text": "08:33. A pair of Army fighter pilots who took off from Haleʻiwa on their own find dive bombers strafing the Marine field at ʻEwa.",
       "camera": {"target":"ewa-field","bearingDeg":340,"pitch":0.35,"distanceM":6000},
-      "moment": "welch-taylor-ewa",
+      "moment": "p40-haleiwa-ewa",
       "sources": [{"id":"aaf-7dec41","where":"ch. 4"},{"id":"usmc-infamous-day"}]
     },
     {
@@ -8178,7 +8183,7 @@
         "note": "which carrier’s torpedoes struck which ship is not settled; the box keeps Oklahoma’s with Akagi’s unit"
       },
       "after": {
-        "text": "Kaga’s torpedo unit came in low over the Southeast Loch and released at the outboard battleships. West Virginia was torn open along her side and settled upright on the bottom; Oklahoma, ahead of her, rolled over within minutes with men trapped inside her. Kaga’s torpedo unit lost more aircraft than any other that morning; their crews did not return.",
+        "text": "Kaga’s torpedo unit came in low over the Southeast Loch and released at the outboard battleships. West Virginia was torn open along her side and settled upright on the bottom; Oklahoma, ahead of her, rolled over within minutes with men trapped inside her. Kaga’s torpedo unit lost more aircraft than any other torpedo unit that morning; their crews did not return.",
         "sources": [
           {"id":"bushships-summary-1942"},
           {"id":"combatships-1941"},
@@ -8286,7 +8291,7 @@
       }
     },
     {
-      "id": "welch-taylor-ewa",
+      "id": "p40-haleiwa-ewa",
       "title": "Two P-40s from Haleʻiwa",
       "ja": null,
       "role": {
@@ -8319,7 +8324,7 @@
         "tellings": [
           {
             "source": "aaf-7dec41",
-            "says": "“Each getting two confirmed kills during this first engagement”; the Army’s claims for the day were 10 confirmed and 4 probables."
+            "says": "The Army’s history credits each of the two pilots with two aircraft in this first engagement; the Army’s claims for the day were 10 confirmed and 4 probable."
           },
           {"source":"pha-exhibit-8","says":"The Japanese lost 29 aircraft to all causes (answer 40)."}
         ]
@@ -8396,7 +8401,7 @@
     {"source":"wp-pearl-harbor","says":"2,403, with 68 civilians (Conn et al. 2000)."},
     {
       "source": "pha-exhibit-8",
-      "says": "The Japanese lost 29 aircraft; the airmen and the midget submarines’ crews killed are given as 64, one taken prisoner (Wikipedia, tertiary)."
+      "says": "The Japanese lost 29 aircraft; 64 airmen and midget-submarine crewmen lost their lives and one was taken prisoner (Wikipedia, tertiary)."
     }
   ]
 }
