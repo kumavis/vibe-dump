@@ -177,6 +177,6 @@ for (const s of shots) {
 }
 const perf = await page.evaluate(() => window.__app.stats?.())
 if (perf) console.log('stats', JSON.stringify(perf))
-console.log(errors.length ? `${errors.length} console errors/warnings` : 'no console errors')
+console.log(errors.length ? `${errors.length} console errors/warnings: ${errors.slice(0, 3).join(' | ')}` : 'no console errors')
 await browser.close()
 server.close()
