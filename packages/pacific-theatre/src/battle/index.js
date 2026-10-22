@@ -355,9 +355,11 @@ export class Battle {
   /**
    * Take a moment (from the click on "Take the controls"). A box the player
    * has already changed restarts from the record at the moment's t (R7 D10).
+   * atCheckpoint: the sim already stands at the moment's checkpoint, on the
+   * record (restart('checkpoint')), and the unit is handed over there.
    * Resolves with { score, outcome } when the sortie ends or finish() is called.
    */
-  takeMoment(momentId, { scripted = false } = {}) {
+  takeMoment(momentId, { scripted = false, atCheckpoint = false } = {}) {
     const app = this.app
     let sim = this.sim
     if (!sim) throw new Error('takeMoment() comes after enter()')
@@ -366,10 +368,11 @@ export class Battle {
     if (this.input) this.release()
     this.momentId = momentId
     if (sim.diverged) sim = this.rebuild(m.t, momentId)
-    else if (sim.t !== m.t) sim.setTime(m.t)
-    const pl = sim.startMoment(momentId)
+    else if (!atCheckpoint && sim.t !== m.t) sim.setTime(m.t)
+    const pl = sim.startMoment(momentId, { atCheckpoint })
     pl.scripted = scripted
-    this._checkpointSeen = false
+    // (from the checkpoint the sortie runs on: the checkpoint's pause is behind it)
+    this._checkpointSeen = atCheckpoint
     const sc = this.scene
     const obj = m.objective?.kind
     const mode = pl.kind === 'aircraft' ? 'chase' : obj === 'gunnery' ? 'director' : 'bridge'
@@ -450,13 +453,10 @@ export class Battle {
     this._moment = null
     const sim = this.rebuild(m.t, this.momentId)
     if (which === 'checkpoint') {
-      const ts = m.timeScale ?? 1
-      sim.setTime(m.t)
-      const p = this.takeMoment(this.momentId)
-      // play the record to the checkpoint under the player's unit, then hand it over there
-      const t1 = m.t + (m.durationS ?? 180) * ts
-      while (sim.t < t1 - 1e-6) sim.advance(Math.min(t1 - sim.t, 1 / 7.5))
-      return p
+      // the rebuilt sim follows the record, so it stands at the checkpoint closed-form, and the unit is handed over there
+      const ts = m.timeScale ?? (m.role?.kind === 'aircraft' ? 1 : 2)
+      sim.setTime(m.t + (m.durationS ?? 180) * ts)
+      return this.takeMoment(this.momentId, { atCheckpoint: true })
     }
     return this.takeMoment(this.momentId)
   }

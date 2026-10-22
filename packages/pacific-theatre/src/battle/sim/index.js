@@ -988,16 +988,29 @@ export function createSim(battle, kits, opts = {}) {
   }
 
   // --- moments (moments: checkpoints, restart points, the end) -------------------------------------------
-  sim.startMoment = function startMoment(id) {
+  /** atCheckpoint: the sim stands at the checkpoint on the record (a restart point); the unit is taken where the record has it. */
+  sim.startMoment = function startMoment(id, { atCheckpoint = false } = {}) {
     const m = record.moments.get(id)
     if (!m) throw new Error(`no moment “${id}”`)
-    if (!sim.diverged && Math.abs(sim.t - m.t) > 1e-6) sim.setTime(m.t)
+    if (!sim.diverged && !atCheckpoint && Math.abs(sim.t - m.t) > 1e-6) sim.setTime(m.t)
     const pl = sim.player || sim.takeControl(m.role)
-    AI.applyStart(sim, m)
+    // (a spare has no place on the record: it starts where the moment does)
+    if (!atCheckpoint || state.alive[pl.unitIndex] !== 1) AI.applyStart(sim, m)
+    else if (pl.kind === 'aircraft') {
+      // (the record's torpedo approach can dip under the sea for a moment: the hand-over never starts the player beneath it)
+      const b = X[pl.unitIndex].body
+      const floor = Math.max(0, world.heightAt(b.x, b.z)) + 30
+      if (b.y < floor) {
+        b.y = floor
+        b.gamma = Math.max(0, b.gamma)
+        state.pos[3 * pl.unitIndex + 1] = floor
+      }
+    }
     const ts = m.timeScale ?? (m.role.kind === 'aircraft' ? 1 : 2)
-    sim.momentState = { id, t0: m.t, t1: m.t + (m.durationS ?? 180) * ts, elapsed: 0, checkpoint: false, done: false, reason: null, timeScale: ts, maxTimeScale: m.maxTimeScale ?? (m.role.kind === 'aircraft' ? 4 : 4), restart: [m.t, m.t + (m.durationS ?? 180) * ts] }
+    const t1 = m.t + (m.durationS ?? 180) * ts
+    sim.momentState = { id, t0: m.t, t1, elapsed: sim.t - m.t, checkpoint: atCheckpoint, done: false, reason: null, timeScale: ts, maxTimeScale: m.maxTimeScale ?? (m.role.kind === 'aircraft' ? 4 : 4), restart: [m.t, t1] }
     sim._momentQueue = (m.beats || []).map((b) => ({ ...b })).sort((a, b) => a.t - b.t)
-    sim._momentCursor = 0
+    sim._momentCursor = atCheckpoint ? sim._momentQueue.findIndex((b) => b.t > sim.t) >>> 0 : 0
     sim._score.start = sim.t
     sim._moment = m
     return pl
