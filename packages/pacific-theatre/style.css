@@ -494,10 +494,10 @@ button { font: inherit; color: inherit; }
 .card-clock span { display: block; font-weight: 400; color: var(--faint); letter-spacing: 0; margin-top: 2px; }
 .card-credit { margin: 12px 0 0; font-size: 10.5px; line-height: 1.45; color: var(--faint); }
 /* the briefing: the forces by side, the moments on offer */
-.bf { display: grid; gap: 8px; }
+.bf { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .bf-side h3 { margin: 0 0 2px; font-family: var(--serif); font-weight: 600; font-size: 14.5px; color: rgba(var(--ink-rgb), 0.92); }
 .bf-side h3 span { font-family: var(--jp); font-weight: 400; font-size: 12px; color: var(--muted); }
-.bf-side p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.bf-side p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
 .bf-side p i { font-style: normal; margin: 0 5px; color: var(--faint); }
 .card-sec ul.bms { list-style: none; padding: 0; }
 .card-sec li.bm { list-style: none; margin: 0 0 10px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); }
@@ -572,3 +572,33 @@ body.snap .label, body.snap .pin, body.snap .cluster, body.snap .halo, body.snap
   .timeline.invite .tl-next { animation: none; }
   .boot-art .ship, .boot-art .route { animation: none; }
 }
+
+/* --- a box: the bar at the foot, the briefing's sides (src/ui/boxbar.js, src/link.js) --- */
+.tools.in-box [data-tool='front'], .tools.in-box [data-tool='routes'], .tools.in-box [data-tool='pins'], .tools.in-box [data-tool='labels'], .tools.in-box [data-tool='home'] { display: none; }
+.boxbar {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); pointer-events: auto;
+  max-width: calc(100vw - 24px); padding: 7px 10px; border-radius: 999px;
+  background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line); color: var(--ink); font-size: 13px;
+}
+.boxbar[hidden] { display: none; }
+.boxbar .bb-watch, .boxbar .bb-check { display: flex; align-items: center; gap: 6px; }
+.boxbar .bb-check { display: none; }
+.boxbar[data-mode='checkpoint'] .bb-watch { display: none; }
+.boxbar[data-mode='checkpoint'] .bb-check { display: flex; }
+.boxbar .nav { height: 32px; }
+.bb-sep { width: 1px; height: 22px; background: var(--line); margin: 0 2px; }
+.bb-stop { display: inline-flex; flex-direction: column; align-items: center; min-width: 74px; line-height: 1.15; }
+.bb-clock { font-variant-numeric: tabular-nums; font-weight: 600; }
+.bb-where { font-style: normal; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.bb-check-t { color: var(--muted); padding: 0 6px; }
+.bms .bm-side { list-style: none; margin: 12px 0 4px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.bms .bm-side:first-child { margin-top: 0; }
+@media (max-width: 640px) {
+  .boxbar { bottom: 10px; padding: 5px 6px; }
+  .boxbar .bb-leave span, .boxbar .bb-brief span { display: none; }
+  .bb-stop { min-width: 56px; }
+}
+/* (in a box the battle's clock stands where the title was) */
+.brand.in-box { display: none; }
+.tools.in-moment { display: none; }

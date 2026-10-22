@@ -56,7 +56,7 @@ export class EventCard {
     this.events = new Map(app.data.events.map((e) => [e.id, e]))
     this.routes = new Map(app.data.routes.map((r) => [r.id, r]))
     this.clocks = app.data.clockById || new Map()
-    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits'
+    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits' | 'stop'
     this.ev = null
     this.stop = -1
     this.chapter = null
@@ -95,6 +95,11 @@ export class EventCard {
 
   openAfter(a) {
     this.set('after', { payload: a })
+  }
+
+  /** A stop inside a box (link.js feeds it from battle.json): its time, its text, its sources, the moment it offers. */
+  openStop(st) {
+    this.set('stop', { payload: st })
   }
 
   openCredits() {
@@ -145,6 +150,8 @@ export class EventCard {
       const ev = this.events.get(b.dataset.enter)
       if (ev) ui.onEnter(ev)
     } else if (b.dataset.take) ui.onTake(b.dataset.take)
+    else if (b.classList.contains('bstop-prev')) ui.onStep(-1)
+    else if (b.classList.contains('bstop-next')) ui.onStep(1)
     else if (b.classList.contains('watch')) {
       this.close()
       ui.onWatch()
@@ -229,6 +236,7 @@ export class EventCard {
     else if (this.mode === 'briefing') this.el.innerHTML = briefingHTML(this.payload || {}, helpers)
     else if (this.mode === 'after') this.el.innerHTML = afterHTML(this.payload || {}, helpers)
     else if (this.mode === 'credits') this.el.innerHTML = this.creditsHTML()
+    else if (this.mode === 'stop') this.el.innerHTML = this.stopHTML(this.payload || {})
     else return
     this.el.dataset.mode = this.mode
     this.el.classList.toggle('chapter', this.mode === 'chapter')
@@ -346,6 +354,23 @@ export class EventCard {
     return `
       ${this.header('pins', `${list.length} events`, at)}
       <div class="card-sec"><ul class="ev-list">${this.eventRows(list)}</ul></div>`
+  }
+
+  stopHTML(st) {
+    const moments = (st.moments || [])
+      .map((m) => `<li class="bm"><div class="bm-head"><span class="bm-t">${esc(m.t || '')}</span><b>${esc(m.title)}</b></div>${m.role ? `<div class="bm-role">${esc(m.role)}${m.sideName ? ` · ${esc(m.sideName)}` : ''}</div>` : ''}<button class="nav take" data-take="${esc(m.id)}">${icon('take', 16)}<span>Take the controls</span></button></li>`)
+      .join('')
+    return `
+      ${this.header('box', st.title || '', st.when || '', st.ja || null)}
+      ${st.clock ? `<div class="card-clock">${esc(st.clock)}</div>` : ''}
+      <div class="card-body"><p>${esc(st.text || '')}</p></div>
+      ${moments ? `<div class="card-sec"><h2>Moments</h2><ul class="bms">${moments}</ul></div>` : ''}
+      ${(st.sources || []).length ? this.sourcesSection(st.sources) : ''}
+      <footer>
+        <button class="nav bstop-prev" aria-label="The stop before" title="The stop before (←)" ${st.index > 0 ? '' : 'disabled'}>${icon('prev', 18)}</button>
+        <span class="count">${esc(`stop ${st.index + 1} of ${st.count}`)}</span>
+        <button class="nav next bstop-next" aria-label="The next stop" title="The next stop (→ or space)" ${st.index < st.count - 1 ? '' : 'disabled'}><span>Next</span>${icon('next', 18)}</button>
+      </footer>`
   }
 
   creditsHTML() {

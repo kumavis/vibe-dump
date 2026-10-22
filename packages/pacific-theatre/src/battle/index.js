@@ -2,10 +2,11 @@
 // battle.json and the kits, build the sim at t, fly in, hand over), watch
 // it, scrub it, take a moment and give the controls back, and leave.
 //
-// The hand-over is App's (one scene drawn per frame, a fade through the haze
-// between them); Battle does the box's side of it and, while App has not
-// been wired to do the table's side, the table's too through the calls App
-// will make (the integrator moves them into App or keeps them here):
+// The hand-over is drawn with App's primitives (app.setMode, app.cut,
+// app.setActive, the table's flyTo and outline: one scene drawn per frame, a
+// fade through the haze between them); Battle.enter and Battle.leave call
+// them in the contract's order, for both sides, and App (src/link.js) calls
+// Battle (the integration kept the calls here rather than split them):
 //
 //   enter, from the table (from: 'table'):
 //     app.setMode('flying')
@@ -79,9 +80,13 @@ export class Battle {
     this.ready = false
     this.momentId = momentId
     const table = app.table && typeof app.table.flyTo === 'function' ? app.table : null
-    // 1. the box's pack decoding in App's PackDecoder, battle.json, the kits (and the weapons the kits name)
+    const startPose = table ? table.rig.pose() : null
+    let abortNow
+    const aborted = new Promise((r) => (abortNow = r))
+    this._abort = () => abortNow('aborted')
+    // 1. the box's pack decoding in App's PackDecoder (or the decode a card started: app.prefetched), battle.json, the kits (and the weapons the kits name)
     const loading = (async () => {
-      const loaded = await app.data.loadBox(boxId, { decoder: app.decoder, warn: app.warn })
+      const loaded = await (app.takePrefetch?.(boxId) ?? app.data.loadBox(boxId, { decoder: app.decoder, warn: app.warn }))
       if (!app.data.kits.weapons) {
         try {
           const r = await fetch(app.data.abs('kits/weapons.json'))
@@ -110,21 +115,22 @@ export class Battle {
       this.ready = true
       return loaded
     })()
-    // the table side: fly to the hand-over pose while the box loads (App's, until integration)
+    // the table side: fly to the hand-over pose while the box loads (ENGINEERING §9 step 2)
     if (table && from === 'table') {
       app.setMode('flying')
       table.outline?.(boxId, true)
       const view = table.outlineView?.(boxId)
-      if (view) await table.flyTo(view, { duration: 2.5, ready: () => this.ready })
-    }
-    await loading
+      if (view && (await Promise.race([table.flyTo(view, { duration: 2.5, ready: () => this.ready }), aborted])) === 'aborted') return this.abandon(boxId, loading, startPose)
+    } else app.setMode('flying')
+    if ((await Promise.race([loading, aborted])) === 'aborted') return this.abandon(boxId, loading, startPose)
+    this._abort = null
     const scene = this.scene
     const sim = this.sim
-    // the box side: cut through the haze, the box's rig at the matched pose (or the first stop's view)
+    // the box side (step 3): cut through the haze, the box's rig at the matched pose (or the view of the stop at t)
     await app.cut(() => {
       app.setActive(scene)
       if (table && from === 'table') scene.rig.jump(poseToBox(table.rig.pose(), box.placement))
-      else this.lookAtStop(this.loaded.battle.stops?.[0], { jump: true })
+      else this.lookAtStop(this.stopAt(sim.t), { jump: true })
       app.resize?.()
     })
     app.setMode('watch')
@@ -135,6 +141,40 @@ export class Battle {
     app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'enter', boxId } }))
     log('in', boxId, `${sim.clock.dateLabel(sim.t)} ${sim.clock.label(sim.t)}`, `${sim.capacity} slots`, scene.stats())
     return this.state
+  }
+
+  /** Esc while the table flies down (app.mode 'flying'): back to where the flight started, the box let go. */
+  abort() {
+    this._abort?.()
+  }
+
+  async abandon(boxId, loading, startPose) {
+    const app = this.app
+    this._abort = null
+    log('abort', boxId)
+    app.table?.outline?.(boxId, false)
+    if (startPose && app.table) app.table.rig.flyTo({ target: startPose.target, distance: startPose.distance, yaw: startPose.yaw, pitch: startPose.pitch }, 1.4)
+    app.setMode('table')
+    // (the load finishes in its own time and is let go)
+    loading.then(() => {
+      if (this.scene && app.active !== this.scene) {
+        this.scene.dispose()
+        this.scene = null
+        this.sim = null
+        this.loaded = null
+        this.ready = false
+      }
+    }, () => {})
+    app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'abort', boxId } }))
+    return null
+  }
+
+  /** The stop at or before t (the first if none is). */
+  stopAt(t) {
+    const stops = this.sim?.record.stops || []
+    let best = stops[0] || null
+    for (const s of stops) if (s.t <= t + 1e-6) best = s
+    return best
   }
 
   /** Stage 0's preview(): the box is already drawn by enter(); kept so the tools written against the stub still run. */
@@ -205,7 +245,7 @@ export class Battle {
       if (ms.checkpoint && !this._checkpointSeen) {
         this._checkpointSeen = true
         this.running = false
-        this.scene?.hud.say('Checkpoint. Enter: keep going · the card: Backspace twice, or wait for the end', 30)
+        this.scene?.hud.say('Checkpoint · Enter: keep going · Backspace twice: the card', 30)
         this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'checkpoint', momentId: ms.id } }))
       }
       if (ms.done) this.finish(ms.reason)
@@ -460,6 +500,16 @@ export class Battle {
     if (s) {
       const pl = this.loaded?.box.placement
       app.setMode('flying')
+      // (step 4) the box's rig flies up to the hand-over pose first, so the table takes over where it let go
+      if (table && pl && id && table.outlineView) {
+        s.setCamera('free')
+        const up = poseToBox(table.outlineView(id), pl)
+        await Promise.race([
+          new Promise((r) => s.rig.flyTo(up, 2.2, { onDone: r })),
+          new Promise((r) => setTimeout(r, 3500)),
+        ])
+        s.rig.finishFlight?.()
+      }
       await app.cut(() => {
         if (table) {
           if (pl) app.table.rig.jump(poseToTable(s.rig.pose(), pl))

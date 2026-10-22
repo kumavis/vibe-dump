@@ -18,6 +18,7 @@ import { loadData } from './src/data/load.js'
 import { App } from './src/app.js'
 import { UI } from './src/ui/ui.js'
 import { creditsHTML } from './src/ui/credits.js'
+import { link } from './src/link.js'
 
 const boot = document.getElementById('boot')
 const bar = boot.querySelector('.boot-bar span')
@@ -52,7 +53,7 @@ async function start() {
   progress('inking the coasts', 0.85)
   await new Promise((r) => setTimeout(r, 0))
   app.start()
-  new UI(app)
+  link(app, new UI(app))
   console.log(`table ready in ${((performance.now() - t0) / 1000).toFixed(1)} s`)
 
   // let a few frames land (shaders compile) before lifting the curtain; one

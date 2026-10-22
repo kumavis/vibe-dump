@@ -15,8 +15,8 @@
 //
 // The URL (ENGINEERING §9): the hash carries the view (#date, #cam, #battle,
 // #t, #moment), the query string the tools' switches (?data=, ?q=, ?fixedq,
-// ?debug=). Until integration, #battle, #t and #moment are parsed, kept and
-// logged, not acted on.
+// ?debug=). #battle, #t and #moment act through src/link.js (app.urlBattle);
+// entering and leaving a box push a history entry, so Back leaves the box.
 
 import * as THREE from 'three'
 import { CLOCK, QUALITY } from './config.js'
@@ -30,6 +30,16 @@ import { Battle } from './battle/index.js'
 
 export const MODES = ['table', 'flying', 'watch', 'moment']
 const pad = (n) => String(n).padStart(2, '0')
+
+/** A battle-clock time for the URL, as BattleClock.parse reads it back: hours from the clock's first midnight (24:07 the next day). */
+export function urlTime(clock, t) {
+  const [h0, m0, s0] = clock.label(0, { seconds: true }).split(':').map(Number)
+  const all = Math.round(h0 * 3600 + m0 * 60 + s0 + t)
+  const h = Math.floor(all / 3600)
+  const m = Math.floor((all % 3600) / 60)
+  const sec = all % 60
+  return `${pad(h)}:${pad(m)}${sec ? `:${pad(sec)}` : ''}`
+}
 
 export class App {
   constructor(canvas, data, { warn = console.warn } = {}) {
@@ -209,7 +219,9 @@ export class App {
       }
     }
     const cam = h.get('cam')
-    if (cam) {
+    // (a box's camera is in its metres: link.js places it once the box is in)
+    const boxCam = h.get('battle') && this.active === this.table
+    if (cam && !boxCam) {
       const v = cam.split(',').map(Number)
       if (v.length === 5 && v.every(Number.isFinite)) {
         const [x, z, distance, yaw, pitch] = v
@@ -217,15 +229,41 @@ export class App {
       } else this.warn(`#cam=${cam}: want x,z,distance,yaw,pitch`)
     }
     for (const k of ['battle', 't', 'moment']) this.url[k] = h.get(k)
-    if (this.url.battle || this.url.t || this.url.moment) {
-      // (integration wires these to app.battle; until then they are kept and said)
-      console.info('[url] kept until integration:', JSON.stringify({ battle: this.url.battle, t: this.url.t, moment: this.url.moment }))
-    }
+    this.urlBattle?.(h)
+  }
+
+  /** A history entry for the view now (entering and leaving a box), so the browser's Back undoes it. */
+  pushUrl() {
+    const h = this.hashNow()
+    this.url.written = h
+    this.url.timer = 0.25
+    if (h !== location.hash) history.pushState(history.state, '', `${location.pathname}${location.search}${h}`)
+  }
+
+  /** Start decoding a box's pack before the click that enters it (a box event's card is open). */
+  prefetch(boxId) {
+    if (!boxId || this.battle?.scene || !this.data.boxById?.has(boxId) || this._prefetch?.id === boxId) return
+    const p = this.data.loadBox(boxId, { decoder: this.decoder, warn: this.warn })
+    p.catch(() => {})
+    this._prefetch = { id: boxId, p }
+  }
+
+  /** The prefetched load, once (Battle.enter takes it), or null. */
+  takePrefetch(boxId) {
+    const f = this._prefetch
+    if (!f || f.id !== boxId) return null
+    this._prefetch = null
+    return f.p
   }
 
   /** The hash the view now stands for: the date (a day), the active rig's pose, the kept keys. */
   hashNow() {
     const p = new URLSearchParams()
+    const sim = this.battle?.sim
+    if (sim && this.active === this.battle.scene) {
+      // in a box: its clock's time, to the second when it is not on the minute
+      this.url.t = urlTime(sim.clock, sim.t)
+    }
     const d = new Date(this.clock.date)
     p.set('date', `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`)
     const s = this.active.rig.goal

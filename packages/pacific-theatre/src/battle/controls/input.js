@@ -71,7 +71,8 @@ export class Input {
       const was = this.lock
       this.lock = document.pointerLockElement === canvas
       // losing the lock (Esc) pauses and offers release
-      if (was && !this.lock && this.live) this.battle.pauseForRelease?.()
+      // (at the checkpoint the battle is already paused and the lock let go on purpose: the bar's buttons need the pointer)
+      if (was && !this.lock && this.live && this.battle.running) this.battle.pauseForRelease?.()
     }, on)
     canvas.addEventListener('touchstart', () => this.ensureTouch(), { ...on, passive: true })
     if (matchMedia?.('(pointer: coarse)')?.matches) this.ensureTouch()

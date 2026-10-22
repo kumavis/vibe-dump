@@ -366,6 +366,10 @@ export class UI {
     if (this.snap && --this.snap === 0) document.body.classList.remove('snap')
     // the table's clock, legend and pins are the table's: hidden in a box
     if (this.timeline.el.hidden === onTable) this.timeline.el.hidden = !onTable
+    // (the table's own switches stand aside in a box; the sources, the about and full screen stay)
+    this.tools.classList.toggle('in-box', !onTable)
+    this.brand.classList.toggle('in-box', !onTable)
+    this.tools.classList.toggle('in-moment', app.mode === 'moment')
     this.timeline.update(dt)
     const fade = app.table.fade
     const rects = this.pins.update(onTable && this.overlay.pins && fade > 0.3)

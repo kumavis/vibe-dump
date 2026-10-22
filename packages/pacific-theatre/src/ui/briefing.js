@@ -33,9 +33,11 @@ export function briefingHTML(b, { sourceLine }) {
       </div>`,
     )
     .join('')
+  // the moments on both sides, each side under its own name
+  let lastSide = null
   const moments = (b.moments || [])
     .map(
-      (m) => `<li class="bm">
+      (m) => `${m.sideName && m.sideName !== lastSide ? `<li class="bm-side">${esc((lastSide = m.sideName))}</li>` : ''}<li class="bm">
         <div class="bm-head"><span class="bm-t">${esc(m.t || '')}</span><b>${esc(m.title)}</b></div>
         ${m.ja ? `<div class="bm-ja" lang="ja">${esc(m.ja)}</div>` : ''}
         ${m.role ? `<div class="bm-role">${esc(m.role)}</div>` : ''}
