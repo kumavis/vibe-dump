@@ -150,7 +150,15 @@ python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
   - the railway south of Changsha to Hengyang, occupied China `held` with
     `pointsAndLines`, on 1944-08-15: page 58 draws a white corridor too
     narrow for the trace, with the black of the period's gains at Hengyang,
-    which fell on 8 August (R3 K4; the event `ichigo-1944`).
+    which fell on 8 August (R3 K4; the event `ichigo-1944`);
+  - Choiseul `held` on 1943-11-01, inside page 20's white with its name
+    lettered across the island (R3 K3 runs the perimeter through the
+    Shortlands and Choiseul);
+  - Sorong and the western Vogelkop, New Guinea west of 131.95° E, `held` on
+    1945-01-15 and 1945-07-01 and `zone-swpa` on 1945-09-02: pages 78, 98 and
+    100 paint the Vogelkop white, but the pink of the Allied sea lane past
+    Sansapor crosses its western tip (R3 K5: the Vogelkop cut off; K4 has
+    Sorong held, less Sansapor; Smith's Map 1 on 1945-01-15).
 
   `tools/check/fronts.mjs` holds R3's named cut-off garrisons to `held` on
   every keyframe from their isolation to their surrender (a zone of General
@@ -193,9 +201,14 @@ annexations in Laos, Cambodia, Malaya and the Shan States are not drawn);
 1941–42's China from a 1943 map; the Atlas's own simplification (it paints
 the interior of New Guinea as enemy-held until the Allies hold the coast);
 page 100 is the situation to 1 August 1945, not 15 August. The trace's misreading of narrow land is
-fixed only where it was looked at: the western Vogelkop at Sorong reads
-Allied on 1945-01-15 and 1945-07-01 under the page's pink sea lane past
-Sansapor, and Choiseul reads Allied on 1943-11-01, inside R3 K3's perimeter.
+fixed only where it was looked at. East of the Sorong override the lane's
+pink still reads Allied in a strip south from Sansapor, to about 1.3° S on
+1945-01-15 and 1945-07-01 and across the Vogelkop to its south coast on
+1945-09-02; how much of it is Sansapor's beachhead needs a source. An
+override also moves a vertex or two, up to 0.07° and under the table's front
+texel, on the other islands of the multi-part features it takes cells from:
+the union of the cells starts their rings elsewhere, and the simplifier keeps
+other points.
 
 ## 4. How the routes were traced
 

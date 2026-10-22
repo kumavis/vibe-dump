@@ -117,7 +117,8 @@ function inPolygon(rings, [lon, lat]) {
 
 /**
  * R3's named cut-off garrisons (research/R3-timeline.md §5: K4's "held and cut off", K5's "Cut off:" list;
- * research/content.md §3), each from the first keyframe on which R3 names it cut off. On the land the
+ * research/content.md §3), each from the first keyframe on which R3 names it cut off, and the land R3 runs
+ * a keyframe's perimeter round where the trace once misread the page (Choiseul on K3). On the land the
  * front draws (`at`, a point inside the garrison), the keyframe's state there is `held`, or on the last
  * keyframe a zone of General Order No. 1, through `to` or the place's Japanese interval's end. An island
  * the front leaves to the marks (`place` alone) has a Japanese held interval in places.json that covers
@@ -128,8 +129,11 @@ export const CUT_OFF = [
   { name: 'New Ireland, isolated with Rabaul', at: [150.8, -2.58], from: '1944-08-15', to: LAST },
   { name: 'the Wewak pocket', at: [143.63, -3.55], place: 'wewak', from: '1944-08-15' },
   { name: 'Bougainville, less Torokina', at: [155.63, -6.22], place: 'bougainville', from: '1945-01-15' },
-  // the Vogelkop at Manokwari; Sorong, under the page's pink sea lane past Sansapor, is a known gap (content.md §3)
+  // the Vogelkop at Manokwari, and at Sorong, under the page's pink sea lane past Sansapor (content.md §3)
   { name: 'the Vogelkop', at: [134.08, -0.87], from: '1945-01-15', to: LAST },
+  { name: 'Sorong, on the western Vogelkop', at: [131.4, -1.0], from: '1945-01-15', to: LAST },
+  // inside K3's perimeter ("the Shortlands → Choiseul → New Britain"), the island's name lettered across it on the page
+  { name: 'Choiseul', at: [157.0, -7.05], from: '1943-11-01', to: '1943-11-01', why: 'R3 has it inside K3’s perimeter' },
   ...['wotje', 'maloelap', 'mili', 'jaluit', 'rota', 'pagan'].map((place) => ({ place, from: '1944-08-15' })),
   ...['truk', 'ponape', 'kusaie', 'nauru', 'banaba', 'wake', 'marcus', 'yap', 'babelthuap'].map((place) => ({ place, from: '1945-01-15' })),
 ]
@@ -324,7 +328,7 @@ export default function check(ctx) {
           if (ps.some((rings) => inPolygon(rings, g.at))) states.push(p.state)
         }
         const ok = states.length && states.every((st) => st === 'held' || (k.id === LAST && String(st).startsWith('zone-')))
-        if (!ok) ctx.bad(`${k.file} at ${g.at.join(', ')}`, `${g.name} is ${states.join(' and ') || 'not on the front’s land'}; R3 has it cut off and Japanese from ${g.from} to ${to} (held, or a General Order No. 1 zone on ${LAST})`)
+        if (!ok) ctx.bad(`${k.file} at ${g.at.join(', ')}`, `${g.name} is ${states.join(' and ') || 'not on the front’s land'}; ${g.why || 'R3 has it cut off'} and Japanese from ${g.from} to ${to} (held, or a General Order No. 1 zone on ${LAST})`)
         else ctx.count('cut-off garrison keyframes held')
       }
     }

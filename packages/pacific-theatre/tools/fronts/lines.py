@@ -48,8 +48,8 @@ WHERE = {
     '1943-11-01': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 20, the period ending 1 November 1943'},
                     {'id': 'zimmerman-1949', 'where': 'p. 2: the Resident Commissioner removed to Malaita in May 1942'}],
                    'Traced from the Atlas page for the second half of October 1943 by its colours (enemy-held white, Allied pink, neutral grey), registered to Natural Earth\'s coast. '
-                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held; Malaita, where the British Resident Commissioner moved in May 1942 '
-                   '(Zimmerman, The Guadalcanal Campaign), is Allied, though the edge of the page\'s Allied sea crosses it.'),
+                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held; so is Choiseul, inside the white with its name lettered across it; '
+                   'Malaita, where the British Resident Commissioner moved in May 1942 (Zimmerman, The Guadalcanal Campaign), is Allied, though the edge of the page\'s Allied sea crosses it.'),
     '1944-08-15': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 58, the period ending 15 August 1944'}],
                    'Traced from the Atlas page for the first half of August 1944: the Marianas lost, New Guinea west to Sansapor, the Ichi-gō offensive in China. '
                    'Where the trace misreads the page, the record stands: New Ireland, the coast from Wewak to the Sepik and the railway south of Changsha to Hengyang, which fell on 8 August, '
@@ -57,12 +57,12 @@ WHERE = {
     '1945-01-15': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 78, the period ending 15 January 1945'}, {'id': 'smith-1963', 'where': 'Map 1'}],
                    'Traced from the Atlas page for the first half of January 1945: Leyte and Mindoro, the landing at Lingayen Gulf, the corridor through China. '
                    'Where the trace misreads the page, the record stands: Bougainville, inside the page\'s white, is held and cut off, as Smith\'s Triumph in the Philippines draws it, '
-                   'less the Torokina perimeter, which is drawn schematically.'),
+                   'less the Torokina perimeter, which is drawn schematically; and the Vogelkop is held and cut off at Sorong too, where the pink of the Allied sea lane past Sansapor crosses its western tip.'),
     '1945-07-01': ([{'id': 'atlas-battle-fronts-1945', 'where': 'p. 98, the period to 1 July 1945'}],
                    'Traced from the Atlas page to 1 July 1945: Okinawa ended, Borneo landings, Burma retaken, Indochina held outright since the coup of 9 March 1945. '
-                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held.'),
+                   'Where the trace misreads the page, the record stands: New Ireland, inside the page\'s white, is held, and so is the Vogelkop at Sorong, under the pink of the Allied sea lane past Sansapor.'),
     '1945-09-02': ([{'id': 'go1-1945', 'where': 'paragraph 1 (a)–(e)'}, {'id': 'atlas-battle-fronts-1945', 'where': 'p. 100, the period to 1 August 1945'}],
-                   'The surrender: General Order No. 1\'s zones laid over the land Japan still held on the Atlas\'s page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken. New Ireland, held to the surrender inside the page\'s white, goes to the Australian forces.'),
+                   'The surrender: General Order No. 1\'s zones laid over the land Japan still held on the Atlas\'s page to 1 August 1945, Manchuria, Karafuto and the Kurils as the Soviet forces had taken them, the 16th and 38th parallels dividing Indochina and Korea. The zones are drawn by territory and parallel, so schematic; where the order leaves the split between South East Asia Command and the Australian forces to be arranged, Sumatra and Java go to the first and Borneo and the islands east to the second, as the surrenders were taken. New Ireland, held to the surrender inside the page\'s white, and the Vogelkop at Sorong, under the pink of the Allied sea lane past Sansapor, go to the Australian forces.'),
 }
 
 if __name__ == '__main__':

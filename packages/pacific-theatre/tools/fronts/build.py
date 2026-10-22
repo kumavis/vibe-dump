@@ -220,16 +220,30 @@ XIANG_VALLEY = LineString([(112.95, 28.05), (113.1, 27.8), (112.9, 27.25), (112.
 NEW_IRELAND = (151.5, -3.0)  # a point on each island, to pick its Natural Earth polygon
 MALAITA = (161.0, -9.0)
 BOUGAINVILLE = (155.4, -6.3)  # Buka, under ISLE_KM2, is left to the islands
+CHOISEUL = (157.0, -7.05)
+NEW_GUINEA = (131.5, -1.1)  # on the Vogelkop
+EAST_OF_SORONG = box(131.95, -12.0, 152.0, 1.0)  # New Guinea less its western tip: Sansapor's beachhead and Manokwari keep the trace's reading
 
 
 def _atlas(kf, what):
     return {'id': 'atlas-battle-fronts-1945', 'where': f'{ATLAS_WHERE[kf]}: {what}'}
 
 
+# Sorong and the western Vogelkop (R3 §5 K5: the Vogelkop cut off; K4 has Sorong held, less Sansapor), from the
+# first keyframe R3 names it cut off to the surrender: pages 78, 98 and 100 paint the Vogelkop white, but the pink of
+# the Allied sea lane past Sansapor crosses its western tip
+def _sorong(what):
+    return dict(state='held', name='Sorong and the western Vogelkop', island=NEW_GUINEA, less=EAST_OF_SORONG, terr=('nei',),
+                sources=lambda kf: [_atlas(kf, what)] + ([{'id': 'smith-1963', 'where': 'Map 1: the Vogelkop cut off'}] if kf == '1945-01-15' else []))
+
+
 RECORD = {
     '1943-11-01': [
         dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
              sources=lambda kf: [_atlas(kf, 'New Ireland inside the enemy-held white')]),
+        # R3 §5 K3 runs the perimeter through Choiseul: the page's white covers it, but the island is narrow and its name is lettered across it
+        dict(state='held', name='Choiseul', island=CHOISEUL, terr=('solomons',),
+             sources=lambda kf: [_atlas(kf, 'Choiseul inside the enemy-held white, its name lettered across it')]),
         dict(state='allied', name='Malaita', island=MALAITA, terr=('solomons',),
              sources=lambda kf: [{'id': 'zimmerman-1949', 'where': 'p. 2: the Resident Commissioner removed to Malaita in May 1942'},
                                  _atlas(kf, 'the edge of the Allied sea across Malaita')]),
@@ -247,15 +261,18 @@ RECORD = {
              sources=lambda kf: [_atlas(kf, 'Bougainville in the enemy-held white'), {'id': 'smith-1963', 'where': 'Map 1: Bougainville cut off'}]),
         dict(state='allied', name='the Torokina perimeter', region=TOROKINA, terr=('papua',),
              sources=lambda kf: [{'id': 'atlas-battle-fronts-1945', 'where': 'p. 22, the period ending 15 November 1943: "our troops consolidated and enlarged their holdings on strategic Bougainville"'}]),
+        _sorong('the Vogelkop in the enemy-held white, its western tip under the pink of the Allied sea lane past Sansapor'),
     ],
     '1945-07-01': [
         dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
              sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
+        _sorong('the Vogelkop in the enemy-held white, its western tip under the pink of the Allied sea lane past Sansapor'),
     ],
-    # held to the surrender, so General Order No. 1 gives it to the Australian forces
+    # held to the surrender, so General Order No. 1 gives them to the Australian forces
     '1945-09-02': [
         dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
              sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
+        _sorong('the Vogelkop in the enemy-held white, its western tip under the pink of the Allied sea lane past Sansapor'),
     ],
 }
 
