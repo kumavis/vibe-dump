@@ -48,7 +48,11 @@ export class TouchControls {
     const on = { signal: this.ac.signal }
     b.addEventListener('pointerdown', (e) => {
       e.preventDefault()
-      b.setPointerCapture(e.pointerId)
+      try {
+        b.setPointerCapture(e.pointerId)
+      } catch {
+        // (a page under pointer lock refuses the capture; the control still acts)
+      }
       b.classList.add('on')
       onDown()
     }, on)
@@ -85,7 +89,11 @@ export class TouchControls {
     }
     s.addEventListener('pointerdown', (e) => {
       e.preventDefault()
-      s.setPointerCapture(e.pointerId)
+      try {
+        s.setPointerCapture(e.pointerId)
+      } catch {
+        // (a page under pointer lock refuses the capture; the control still acts)
+      }
       pick(e)
     }, on)
     s.addEventListener('pointermove', (e) => {
@@ -116,7 +124,11 @@ export class TouchControls {
     }
     pad.addEventListener('pointerdown', (e) => {
       e.preventDefault()
-      pad.setPointerCapture(e.pointerId)
+      try {
+        pad.setPointerCapture(e.pointerId)
+      } catch {
+        // (a page under pointer lock refuses the capture; the control still acts)
+      }
       this.stick.id = e.pointerId
       this.active = true
       setStick(e)

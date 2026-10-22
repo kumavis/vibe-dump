@@ -83,10 +83,15 @@ export class Input {
     this.touch = new TouchControls(this)
   }
 
-  /** Ask for pointer lock (from the click that took the controls). */
+  /** Ask for pointer lock (from the click that took the controls); never on a coarse pointer, whose touch controls need the pointer. */
   requestLock() {
+    if (matchMedia?.('(pointer: coarse)')?.matches) return
     try {
-      this.app.canvas.requestPointerLock?.()
+      const p = this.app.canvas.requestPointerLock?.()
+      // (a lock granted after the controls were given back is let go)
+      p?.then?.(() => {
+        if (this.ac.signal.aborted && document.pointerLockElement === this.app.canvas) document.exitPointerLock?.()
+      }, () => {})
     } catch {
       // (no lock: the pointer's place on the screen aims instead)
     }
