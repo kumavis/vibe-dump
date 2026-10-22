@@ -143,9 +143,10 @@ python3 -I tools/fronts/preview.py 1944-08-15 --bbox=141.5,-5,146,-2.6 --k=90
     the island's coast west of the page's drawing of it) and cut off on Smith's
     Map 1 as R3 K5 reads it, less a schematic Torokina perimeter round Cape
     Torokina; Buka is under the front's island size and left out;
-  - the Wewak coast, from west of Wewak to the Sepik's mouth, `held` on
-    1944-08-15 (page 58's white along it; R3 K4, "the Wewak pocket is held
-    and cut off");
+  - the Wewak pocket on 1944-08-15: the coast from west of Wewak to the
+    Sepik's mouth `held` (page 58's white along it; R3 K4, "the Wewak pocket
+    is held and cut off"), drawn with the held land the trace found behind
+    it as one feature, so no seam opens between two outlines;
   - the railway south of Changsha to Hengyang, occupied China `held` with
     `pointsAndLines`, on 1944-08-15: page 58 draws a white corridor too
     narrow for the trace, with the black of the period's gains at Hengyang,

@@ -215,7 +215,7 @@ HAND = {
 # the cells of one Natural Earth island (grown like the coast) or of a hand region, in the territories
 # named, before General Order No. 1; its feature is schematic and carries its own sources.
 TOROKINA = P([(154.92, -6.12), (155.12, -6.10), (155.22, -6.25), (155.12, -6.36), (154.98, -6.30)])  # the beachhead at Cape Torokina, schematic
-WEWAK_COAST = P([(143.3, -3.35), (143.75, -3.45), (144.2, -3.6), (144.65, -3.8), (144.65, -4.05), (143.3, -3.85)])  # Wewak east to the Sepik's mouth
+WEWAK_COAST = P([(143.3, -3.35), (143.75, -3.45), (144.2, -3.6), (144.65, -3.8), (144.65, -4.05), (143.3, -3.85)])  # Wewak east to the Sepik's mouth (with the held land behind it)
 XIANG_VALLEY = LineString([(112.95, 28.05), (113.1, 27.8), (112.9, 27.25), (112.57, 26.89), (112.5, 26.75)]).buffer(0.22, cap_style='flat')  # the railway south of Changsha to Hengyang
 NEW_IRELAND = (151.5, -3.0)  # a point on each island, to pick its Natural Earth polygon
 MALAITA = (161.0, -9.0)
@@ -237,7 +237,7 @@ RECORD = {
     '1944-08-15': [
         dict(state='held', name='New Ireland', island=NEW_IRELAND, terr=('papua',),
              sources=lambda kf: [_atlas(kf, 'New Ireland and the Gazelle Peninsula inside the enemy-held white')]),
-        dict(state='held', name='the Wewak coast', region=WEWAK_COAST, terr=('papua',),
+        dict(state='held', name='the Wewak pocket', region=WEWAK_COAST, terr=('papua',), absorb=True,
              sources=lambda kf: [_atlas(kf, 'the coast at Wewak in the enemy-held white')]),
         dict(state='held', name='occupied China: Hengyang and the Xiang valley', region=XIANG_VALLEY, terr=('china',), pointsAndLines=True,
              sources=lambda kf: [_atlas(kf, 'the white corridor south from Changsha and the black of the period\'s gains at Hengyang')]),
@@ -268,11 +268,22 @@ def island_of(land, at):
     return hit[0]
 
 
-def record_cells(r, land, LON, LAT, inside, tid):
+def record_cells(r, land, LON, LAT, inside, tid, state):
     region = island_of(land, r['island']).buffer(GROW) if 'island' in r else r['region']
     if 'less' in r:
         region = region.difference(r['less'])
-    return inside & np.isin(tid, list(r['terr'])) & shapely.contains_xy(region, LON, LAT)
+    terr = inside & np.isin(tid, list(r['terr']))
+    m = terr & shapely.contains_xy(region, LON, LAT)
+    if r.get('absorb'):
+        # the trace's own cells of the same state that touch the region join it, so the place is one
+        # feature and no seam of two smoothed outlines opens between them
+        same = terr & (state == r['state'])
+        while True:
+            grown = m | (same & (np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)))
+            if (grown == m).all():
+                break
+            m = grown
+    return m
 
 
 # General Order No. 1's zones (keyframe 1945-09-02): what Japanese forces surrendered to whom, by territory
@@ -447,7 +458,7 @@ def build():
         rec_src = {}
         over = np.full(LON.shape, '', dtype=object)
         for r in RECORD.get(kf, []):
-            m = record_cells(r, land, LON, LAT, inside, tid)
+            m = record_cells(r, land, LON, LAT, inside, tid, state)
             if not m.any():
                 sys.exit(f'RECORD {kf} {r["name"]}: no cells')
             state[m] = r['state']
