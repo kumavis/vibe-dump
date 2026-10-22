@@ -1,0 +1,82 @@
+[
+  {
+    "id": "prologue",
+    "label": "the long war in China",
+    "short": "Prologue",
+    "from": "1931-09-18",
+    "to": "1941-12-07",
+    "keyframe": "1941-12-06",
+    "note": "Japan's Kwantung Army seizes Manchuria in 1931, and from 1937 Japan is at war with China in all but name. On the eve of the Pacific War the empire holds Korea, Formosa and southern Sakhalin as colonies, rules Manchuria through the state of Manchukuo, occupies the cities, railways and coast of eastern China, and keeps troops in French Indochina by agreement with Vichy; the islands of the South Seas Mandate lie across the central Pacific. When the United States, Britain and the Netherlands stop its oil in the summer of 1941, Japan's leaders choose between a settlement and the oilfields of the Indies, and choose war.",
+    "sources": ["morton-1962", "ussbs-campaigns-1946", "atlas-battle-fronts-1945"]
+  },
+  {
+    "id": "first-six-months",
+    "label": "the first six months",
+    "short": "First six months",
+    "from": "1941-12-07",
+    "to": "1942-06-01",
+    "keyframe": "1942-05-08",
+    "note": "Within hours of the attack on Pearl Harbor, Japanese forces land in Malaya and Thailand and strike Hong Kong, the Philippines, Guam and Wake. By May the empire's southern edge runs from the Burmese border through the Andamans, Sumatra, Java and Timor to New Guinea, Rabaul and the Solomons; Singapore, the Indies and the Philippines have fallen, and the Kidō Butai has raided Darwin and Ceylon. In the Coral Sea carriers fight without sighting one another, and the seaborne thrust at Port Moresby turns back.",
+    "sources": ["morton-1962", "ussbs-campaigns-1946", "usn-chron"]
+  },
+  {
+    "id": "turn",
+    "label": "the turn",
+    "short": "The turn",
+    "from": "1942-06-01",
+    "to": "1943-02-10",
+    "keyframe": "1942-09-15",
+    "note": "At Midway the Kidō Butai loses its carriers in a day, and Japan's advance across the central Pacific ends. In the north it holds Attu and Kiska; in the south it lands at Buna and climbs the Kokoda Track toward Port Moresby, and in August US Marines land on Guadalcanal. For six months both sides feed ships, aircraft and soldiers into the Solomons by day and by night, until Japanese destroyers take the last of the army off Guadalcanal in February 1943.",
+    "sources": ["morton-1962", "ussbs-campaigns-1946", "usn-chron", "milner-1957"]
+  },
+  {
+    "id": "ladder",
+    "label": "up the Solomons and New Guinea",
+    "short": "Solomons and New Guinea",
+    "from": "1943-02-10",
+    "to": "1943-11-20",
+    "keyframe": "1943-11-01",
+    "note": "The Allies climb the Solomons and the New Guinea coast toward Rabaul, airfield by airfield. Attu is retaken in May and Kiska found empty in August. Japan draws back to an Absolute National Defence Zone that runs from the Kurils through the Marianas and the Carolines to western New Guinea, and in Thailand and Burma prisoners and labourers finish the railway. On 1 November US Marines land at Empress Augusta Bay on Bougainville.",
+    "sources": ["atlas-battle-fronts-1945", "morton-1962", "usn-chron"]
+  },
+  {
+    "id": "central-pacific",
+    "label": "across the Central Pacific",
+    "short": "Central Pacific",
+    "from": "1943-11-20",
+    "to": "1944-09-15",
+    "keyframe": "1944-08-15",
+    "note": "US forces cross the central Pacific: the Gilberts in November, the Marshalls in February, the Marianas in the summer, whose airfields put the B-29s within reach of Japan. Truk and Rabaul are struck and left behind, their garrisons cut off with the islanders around them, as MacArthur leaps along the coast of New Guinea. In Asia Japan's offensive at Imphal and Kohima fails while Ichi-Go drives south through China, and at the Philippine Sea Japan's carrier air arm is destroyed.",
+    "sources": ["atlas-battle-fronts-1945", "ussbs-campaigns-1946", "usn-chron"]
+  },
+  {
+    "id": "return",
+    "label": "the return to the Philippines",
+    "short": "The Philippines",
+    "from": "1944-09-15",
+    "to": "1945-02-19",
+    "keyframe": "1945-01-15",
+    "note": "Peleliu, Morotai and Ulithi open the way to the Philippines, and in October the Sixth Army lands on Leyte. Japan sends its whole fleet against the landing and loses it in the battles of Leyte Gulf; off Samar the first tokkō (special attack) units strike. By way of Mindoro and Lingayen Gulf the Americans return to Luzon, and Manila's people are caught in a month of fighting. In China, Ichi-Go joins Japan's front to Indochina.",
+    "sources": ["atlas-battle-fronts-1945", "ussbs-campaigns-1946", "smith-1963"]
+  },
+  {
+    "id": "approaches",
+    "label": "the approaches to Japan",
+    "short": "Approaches",
+    "from": "1945-02-19",
+    "to": "1945-07-26",
+    "keyframe": "1945-07-01",
+    "note": "Marines take Iwo Jima, B-29s burn Japan's cities by night, and mines close its harbours. The Tenth Army lands on Okinawa and fights for nearly three months among its people while tokkō aircraft strike the fleet offshore, and Yamato sails on her last sortie. In Burma the Fourteenth Army takes Mandalay and Rangoon; Australians land on Borneo; and on 9 March Japan takes Indochina outright from its French administration.",
+    "sources": ["atlas-battle-fronts-1945", "appleman-1948", "ussbs-campaigns-1946"]
+  },
+  {
+    "id": "end",
+    "label": "the end of the war",
+    "short": "The end",
+    "from": "1945-07-26",
+    "to": "1945-09-03",
+    "keyframe": "1945-09-02",
+    "note": "From Potsdam the United States, Britain and China call on Japan to surrender. In August atomic bombs are dropped on Hiroshima and Nagasaki, and the Soviet Union enters the war and overruns Manchuria, northern Korea, southern Sakhalin and the Kurils. On 15 August the Emperor's broadcast tells Japan that it will accept the Allies' terms, and on 2 September the instrument of surrender is signed in Tokyo Bay. General Order No. 1 divides the surrender of Japan's forces among the Allied commands.",
+    "sources": ["atlas-battle-fronts-1945", "go1-1945", "usn-chron"]
+  }
+]

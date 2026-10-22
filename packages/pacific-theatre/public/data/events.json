@@ -1,0 +1,6537 @@
+[
+  {
+    "id": "mukden-1931",
+    "title": "The Mukden Incident",
+    "gloss": "the railway blown, and Manchuria taken",
+    "ja": {
+      "kanji": "柳条湖事件",
+      "romaji": "Ryūjōko jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1931-09-18",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "mukden",
+        "role": "at"
+      }
+    ],
+    "kind": "political",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Officers of Japan's Kwantung Army set off a charge on the South Manchuria Railway outside Mukden and blame Chinese troops. The army uses the incident to occupy all of Manchuria within months, ahead of orders from Tokyo and against opposition in the cabinet, and sets up a regime of its own there. Many Chinese and Japanese historians date the war from this night; Japan calls what follows the Manchurian Incident, 満洲事変.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "ch. II"
+      },
+      {
+        "id": "wikidata",
+        "where": "Q242099"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 gives the place from Wikidata (41.835 N 123.466 E); 満洲事変 Manshū jihen is *verify*."
+  },
+  {
+    "id": "marco-polo-1937",
+    "title": "The Marco Polo Bridge Incident",
+    "gloss": "a night exercise, and a war in all but name",
+    "ja": {
+      "kanji": "盧溝橋事件",
+      "romaji": "Rokōkyō jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1937-07-07",
+      "to": "1937-07-09",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "marco-polo-bridge",
+        "role": "at"
+      },
+      {
+        "place": "peiping",
+        "role": "near"
+      }
+    ],
+    "kind": "political",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "A Japanese night exercise beside the Marco Polo Bridge outside Peiping ends in shooting between Japanese and Chinese troops. Neither government backs down, Japanese forces march into northern China, and within weeks the two countries are at war in all but name. Japan calls it the China Incident, 支那事変.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "ch. II"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "支那事変 Shina jihen was the Japanese official name then (R3); the reading is *verify*."
+  },
+  {
+    "id": "shanghai-1937",
+    "title": "The Battle of Shanghai",
+    "gloss": "a city fought for street by street",
+    "ja": {
+      "kanji": "第二次上海事変",
+      "romaji": "Dai-niji Shanhai jihen",
+      "verify": true
+    },
+    "when": {
+      "from": "1937-08-13",
+      "to": "1937-11-26",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "shanghai",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Chiang Kai-shek commits his best divisions to Shanghai and fights for the city street by street through the autumn. A Japanese landing at Hangzhou Bay outflanks the Chinese line in November, and the road to Nanking lies open.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "morton-1962",
+        "where": "ch. II"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 takes the span from Wikidata and asks for a Chinese or Japanese history to confirm it."
+  },
+  {
+    "id": "nanjing-1937",
+    "title": "Nanking",
+    "gloss": "the capital taken, and its people killed",
+    "ja": {
+      "kanji": "南京事件",
+      "romaji": "Nankin jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1937-12-13",
+      "to": "1938-02",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "nanking",
+        "role": "in"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "alsoSides": [
+      "chinese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese troops take the Chinese capital and, over the following weeks, kill prisoners of war and civilians and commit mass rape. Foreign residents run a Safety Zone in the city and record what they see. Tribunals and historians disagree on the number of the dead.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "morton-1962",
+        "where": "ch. II"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3: \"tellings needed (IMTFE judgment, Nanjing tribunal, Japanese and Chinese historians)\". No figure was read at its source in this pass, so the card carries none yet; this needs a person. The 2026 dispute over the Nagasaki museum's term (\"Nanjing Massacre\" or \"Nanjing Incident\") is R8 §2.1's."
+  },
+  {
+    "id": "nomonhan-1939",
+    "title": "Nomonhan (Khalkhin Gol)",
+    "gloss": "a summer's war on the Mongolian border",
+    "ja": {
+      "kanji": "ノモンハン事件",
+      "romaji": "Nomonhan jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1939-05-11",
+      "to": "1939-09-16",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "nomonhan",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "mk",
+      "su",
+      "mn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "A border quarrel between Manchukuo and Mongolia becomes a summer of fighting with Soviet and Mongolian forces under Georgy Zhukov, who encircles the Japanese in August. The defeat turns Japan's planners away from war in the north and toward the south.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "Opened only in Wikidata (R3: *verify*). The interpretation that it turned Japan south is R3's and needs a cited history."
+  },
+  {
+    "id": "indochina-1940",
+    "title": "Japanese troops enter French Indochina",
+    "gloss": "the airfields within reach of Singapore",
+    "ja": {
+      "kanji": "北部仏印進駐",
+      "romaji": "Hokubu Futsuin shinchū",
+      "verify": true
+    },
+    "when": {
+      "from": "1940-09-22",
+      "to": "1941-07-29",
+      "precision": "day",
+      "zone": "+07:00"
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "haiphong",
+        "role": "in"
+      },
+      {
+        "place": "saigon",
+        "role": "in"
+      }
+    ],
+    "kind": "occupation",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "fr"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "With France defeated in Europe, Japan presses Vichy's colonial government to admit its troops; on 22 September 1940 they enter Tonkin in the north, and five days later Japan joins the Axis. In July 1941 they move into the south, and airfields near Saigon put Malaya and Singapore within reach of Japanese bombers.",
+    "stops": [
+      {
+        "text": "September 1940: Japanese troops enter Tonkin, to cut the supply route to Chungking.",
+        "place": "haiphong",
+        "zoom": "table"
+      },
+      {
+        "text": "July 1941: the occupation of the south, and the airfields near Saigon.",
+        "place": "saigon",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "chs. II–III"
+      },
+      {
+        "id": "wikidata",
+        "where": "Q140025"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The move into the south is 南部仏印進駐 Nanbu Futsuin shinchū (R3, *verify*). Morton: Japanese troops entered northern Indochina on 22 September 1940; \"The following day Japanese troops moved into the southern portion of Indochina\" (25 July 1941)."
+  },
+  {
+    "id": "embargo-1941",
+    "title": "Assets frozen, oil cut off, and the decision for war",
+    "gloss": "a settlement or the oil of the Indies",
+    "ja": {
+      "kanji": "対日石油禁輸",
+      "romaji": "tai-Nichi sekiyu kinyu",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-07-26",
+      "to": "1941-12-01",
+      "precision": "day",
+      "zone": "-04:00",
+      "zoneNote": "Dates are Washington's; the Imperial conference of 1 December is Tokyo's date."
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "washington",
+        "role": "in"
+      },
+      {
+        "place": "tokyo",
+        "role": "in"
+      }
+    ],
+    "kind": "political",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "uk",
+      "nl",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "On 26 July 1941 the United States answers the move into southern Indochina by freezing Japanese assets, and with them its oil; Britain and the Netherlands Indies follow. Japan's navy counts its oil in months. Imperial conferences in September and November decide to negotiate and, failing a settlement, to go to war. On 26 November Secretary of State Cordell Hull hands Japan's envoys a proposal that includes withdrawal from China; Tokyo reads it as an ultimatum, and on 1 December an Imperial conference decides for war.",
+    "stops": [
+      {
+        "text": "26 July: the order freezing Japanese assets in the United States.",
+        "place": "washington",
+        "zoom": "table"
+      },
+      {
+        "text": "1 December: the Imperial conference decides for war.",
+        "place": "tokyo",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "chs. III–V"
+      },
+      {
+        "id": "jm-97",
+        "where": "Navy Order No. 9, 1 December"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3's embargo-1941 and hull-note-1941 merged, as R3 allows, to keep the prologue's core at eight cards. The Hull note is ハル・ノート Haru nōto; the conference 御前会議 gozen kaigi (R3, *verify*)."
+  },
+  {
+    "id": "kido-butai-sails-1941",
+    "title": "The Kidō Butai sails from Hitokappu Bay",
+    "gloss": "east across the empty northern Pacific",
+    "ja": {
+      "kanji": "機動部隊 単冠湾出撃",
+      "romaji": "Kidō Butai Hitokappu-wan shutsugeki",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-11-26T06:00+09:00",
+      "precision": "minute",
+      "clock": "jst",
+      "readings": [
+        {
+          "t": "1941-11-26T06:00+09:00",
+          "sourceClock": "0600",
+          "sourceZone": "+09:00",
+          "sourceDate": "1941-11-26",
+          "source": "ussbs-campaigns-1946"
+        }
+      ]
+    },
+    "chapter": "prologue",
+    "where": [
+      {
+        "place": "hitokappu-bay",
+        "role": "from"
+      }
+    ],
+    "kind": "other",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Kidō Butai 機動部隊, its carriers and their escorts, leaves Hitokappu Bay in the Kurils and steams east by a northerly route, well off the shipping lanes, under radio silence. If the talks in Washington succeed, it is to turn back.",
+    "stops": [
+      {
+        "text": "Tankan Bay, 06:00 Tokyo time: the force sails.",
+        "place": "hitokappu-bay",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. II"
+      },
+      {
+        "id": "jm-97"
+      },
+      {
+        "id": "morton-1962",
+        "where": "ch. VI and Map I inset"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "firm"
+    },
+    "tellings": [],
+    "routes": [
+      "kido-butai-hawaii-1941"
+    ],
+    "notes": "USSBS: \"sortied from Hitokappu Bay at 0600, 26 November\". Morton: \"left the assembly area in Tankan Bay in the desolate, snowbound Kurils on 26 November, Tokyo time\"."
+  },
+  {
+    "id": "pearl-harbor-1941",
+    "title": "The attack on Pearl Harbor",
+    "gloss": "a Sunday morning on Oʻahu",
+    "ja": {
+      "kanji": "真珠湾攻撃",
+      "romaji": "Shinjuwan kōgeki",
+      "verify": false
+    },
+    "when": {
+      "from": "1941-12-07T07:55-10:30",
+      "to": "1941-12-07T09:45-10:30",
+      "precision": "minute",
+      "clock": "hst-1941",
+      "alt": [
+        {
+          "clock": "jst",
+          "from": "1941-12-08"
+        }
+      ],
+      "zoneNote": "Hawaiian time in 1941 is UTC−10:30; Japanese reports keep Tokyo time and the Tokyo date, nineteen and a half hours ahead, so the first bombs fall at 03:25 on 8 December by their clock.",
+      "readings": [
+        {
+          "t": "1941-12-07T07:55-10:30",
+          "sourceClock": "0325",
+          "sourceZone": "+09:00",
+          "sourceDate": "1941-12-08",
+          "source": "pha-exhibit-8"
+        }
+      ]
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "pearl-harbor",
+        "role": "target"
+      },
+      {
+        "place": "oahu",
+        "role": "target"
+      },
+      {
+        "place": "kido-butai-launch-1941",
+        "role": "from"
+      }
+    ],
+    "kind": "raid",
+    "flag": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table",
+      "box"
+    ],
+    "box": "pearl-harbor",
+    "summary": "On a Sunday morning the carrier aircraft of the Kidō Butai 機動部隊 strike the US Pacific Fleet at its moorings and the airfields of Oʻahu. Torpedo bombers come in low across the harbour at the battleships along Ford Island; Arizona's forward magazines explode, Oklahoma capsizes, and Nevada gets under way and is beached off Hospital Point. The fleet's carriers are at sea and are spared. In Washington, Japan's note breaking off the talks is handed to Secretary Hull after the attack has begun.",
+    "stops": [
+      {
+        "text": "06:00: the first wave takes off north of Oʻahu; the second follows an hour and a quarter later.",
+        "place": "kido-butai-launch-1941",
+        "zoom": "table"
+      },
+      {
+        "text": "From 07:55 the attack falls on the airfields and on Battleship Row; by 09:45 the last of the attackers have gone.",
+        "place": "oahu",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "cincpac-pearl-1942"
+      },
+      {
+        "id": "kimmel-narrative"
+      },
+      {
+        "id": "pha-exhibit-8",
+        "where": "answers 26–41"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. II, App. 2, 3"
+      },
+      {
+        "id": "bushships-summary-1942",
+        "where": "Table II"
+      },
+      {
+        "id": "nps-pearl-people"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1941, 7 December"
+      },
+      {
+        "id": "morton-1962",
+        "where": "ch. VI"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "nps-pearl-people",
+        "says": "2,390 Americans lost their lives: 2,341 service members and 49 civilians, \"some due to enemy actions and others from friendly fire\"; Arizona 1,177, Oklahoma 429, West Virginia 106, California 105, Utah 58; Hickam Field 191, including 5 civilians.",
+        "scope": "all Americans killed on 7 December 1941"
+      },
+      {
+        "source": "wp-pearl-harbor",
+        "says": "2,403 killed, 68 of them civilians (citing Conn, Engelman and Fairchild, Guarding the United States and Its Outposts); an older telling.",
+        "scope": "all Americans killed"
+      },
+      {
+        "source": "pha-exhibit-8",
+        "says": "Japan lost 29 aircraft from all causes: 9 in the first wave and 20 in the second.",
+        "scope": "Japanese aircraft lost"
+      },
+      {
+        "source": "wp-pearl-harbor",
+        "says": "55 airmen and 9 of the 10 midget-submarine crewmen killed, one captured: 64 Japanese dead; the same article's infobox gives 129, unexplained.",
+        "scope": "Japanese dead"
+      },
+      {
+        "source": "cincpac-pearl-1942",
+        "says": "\"a minimum of 68 killed, due solely to Navy action\" (an estimate of February 1942).",
+        "scope": "Japanese dead"
+      },
+      {
+        "source": "pha-exhibit-8",
+        "says": "The launch points are measured from Point Z, the western tip of Lānaʻi: the first wave at 01:30 Tokyo time (06:00 Hawaiian) from 230 nautical miles north of it; USSBS has \"200 miles north of Oahu\"; the AAF history 220 miles.",
+        "scope": "the launch"
+      },
+      {
+        "source": "bushships-summary-1942",
+        "says": "Arizona: 8 bombs and 1 torpedo; West Virginia: 7 torpedoes and 2 dud bombs; Oklahoma: about 5 torpedoes and 3 near misses; Nevada: 1 torpedo and 5 bombs.",
+        "scope": "hits per ship"
+      },
+      {
+        "source": "combatships-1941",
+        "says": "West Virginia 4 torpedoes; Oklahoma 3 to 5; Arizona 3 bombs: the battleships' own count of 19 December 1941.",
+        "scope": "hits per ship"
+      },
+      {
+        "source": "cincpac-pearl-1942",
+        "says": "Arizona received \"about eight heavy bomb hits\"; the attack on her came from dive bombers by CINCPAC's reading, while the Hiryū table of movement and ja.wikipedia credit an 800-kg bomb from a level bomber.",
+        "scope": "what destroyed Arizona"
+      },
+      {
+        "source": "kimmel-narrative",
+        "says": "Arizona's explosion is timed between about 08:06 and 08:20 in the ships' reports (Mugford 08:08, Jarvis 08:10, Vestal 08:20).",
+        "scope": "the explosion"
+      }
+    ],
+    "routes": [
+      "kido-butai-hawaii-1941"
+    ],
+    "notes": "The table stops only; the box's stops are in boxes/pearl-harbor/battle.json. Kāneʻohe was bombed at about 07:48 (*verify*)."
+  },
+  {
+    "id": "malaya-1941",
+    "title": "The landings in Malaya and southern Thailand",
+    "gloss": "before the bombs fall on Pearl Harbor",
+    "ja": {
+      "kanji": "マレー作戦",
+      "romaji": "Marē sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-08",
+      "to": "1942-01-31",
+      "precision": "day",
+      "clock": "malaya-1941",
+      "zoneNote": "The first landing at Kota Bharu falls shortly after midnight on 8 December, Malaya time, about an hour and a half before the first bombs on Pearl Harbor, where it is still 7 December."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "kota-bharu",
+        "role": "landing"
+      },
+      {
+        "place": "singora",
+        "role": "landing"
+      },
+      {
+        "place": "patani",
+        "role": "landing"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk",
+      "in",
+      "au",
+      "th"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese troops land at Kota Bharu in British Malaya and at Singora and Patani in southern Thailand in the first hours of 8 December; the shooting at Kota Bharu begins before the bombs fall on Pearl Harbor. The landings in Thailand meet no opposition, and some help from local Thai officials, while the force at Kota Bharu comes under attack from British aircraft. From the Thai beaches the 25th Army drives down the peninsula toward Singapore, much of it by bicycle.",
+    "stops": [
+      {
+        "text": "Kota Bharu: the landing that opens the Pacific War.",
+        "place": "kota-bharu",
+        "zoom": "table"
+      },
+      {
+        "text": "Singora and Patani: unopposed landings in southern Thailand.",
+        "place": "singora",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "morton-1962",
+        "where": "ch. VI"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1941, 8 December"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. III"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "malaya-convoy-1941",
+      "malaya-convoy-kota-bharu-1941"
+    ]
+  },
+  {
+    "id": "hong-kong-1941",
+    "title": "The battle of Hong Kong",
+    "gloss": "a colony that surrenders on Christmas Day",
+    "ja": {
+      "kanji": "香港の戦い",
+      "romaji": "Honkon no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-08",
+      "to": "1941-12-25",
+      "precision": "day",
+      "zone": "+08:30",
+      "zoneNote": "Hong Kong's 1941 offset as the tz database gives it."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "hong-kong",
+        "role": "in"
+      }
+    ],
+    "kind": "siege",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk",
+      "ca",
+      "in"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The 23rd Army crosses from the mainland, takes the Kowloon peninsula and lands on Hong Kong Island. British, Canadian, Indian and local volunteer units fight on until the governor surrenders on Christmas Day.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3: *verify* in Kirby (the UK official history); 香港攻略戦 is an alternative Japanese name (*verify*)."
+  },
+  {
+    "id": "guam-1941",
+    "title": "Guam taken",
+    "gloss": "Ōmiya-jima, Great Shrine Island",
+    "ja": {
+      "kanji": "グアムの戦い",
+      "romaji": "Guamu no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-08",
+      "to": "1941-12-10",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "guam",
+        "role": "at"
+      },
+      {
+        "place": "agana",
+        "role": "in"
+      }
+    ],
+    "kind": "occupation",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "chamorro"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Aircraft from Saipan bomb Guam on 8 December, and the South Seas Detachment lands on the 10th. The naval governor surrenders the island, which Japan renames Ōmiya-jima 大宮島, Great Shrine Island. For the Chamorro people of Guam the occupation begins.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1941, 8 and 10 December"
+      },
+      {
+        "id": "wp-guam-occupation"
+      },
+      {
+        "id": "nps-wapa-memorial"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "nps-wapa-memorial",
+        "says": "The island's memorial wall names \"the 1,170 people of Guam who died during the war\" and \"the 14,721 who suffered atrocities during the occupation and battles\".",
+        "scope": "the people of Guam, December 1941 – August 1944"
+      }
+    ],
+    "routes": []
+  },
+  {
+    "id": "wake-1941",
+    "title": "The siege of Wake",
+    "gloss": "a landing turned back, and a second that is not",
+    "ja": {
+      "kanji": "ウェーク島の戦い",
+      "romaji": "Wēku-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-08",
+      "to": "1941-12-23",
+      "precision": "day",
+      "zone": "+12:00",
+      "zoneNote": "Wake lies west of the date line and keeps the western Pacific's date; the garrison's own clock is not in the record read."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "wake",
+        "role": "at"
+      }
+    ],
+    "kind": "siege",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Bombers from the Marshalls strike Wake's airfield on 8 December. On the 11th the Marines' coastal guns and their last Wildcats turn back the first landing and sink destroyers. The Japanese return with carriers detached from the force that struck Pearl Harbor, and Wake is taken on 23 December.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1941, 8, 11 and 23 December"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "kido-butai-hawaii-1941",
+      "cardiv2-wake-1941"
+    ]
+  },
+  {
+    "id": "force-z-1941",
+    "title": "Prince of Wales and Repulse sunk",
+    "gloss": "capital ships under way, and aircraft alone",
+    "ja": {
+      "kanji": "マレー沖海戦",
+      "romaji": "Marē-oki kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-10",
+      "precision": "day",
+      "clock": "malaya-1941"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "off-kuantan",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Naval bombers from airfields near Saigon find the battleship Prince of Wales and the battlecruiser Repulse off Kuantan without fighter cover, and sink both with torpedoes and bombs. Capital ships under way at sea have not been sunk by aircraft alone before.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. III"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "rabaul-1942",
+    "title": "Rabaul taken",
+    "gloss": "Japan's great base in the South Pacific",
+    "ja": {
+      "kanji": "ラバウルの戦い",
+      "romaji": "Rabauru no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-01-23",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "rabaul",
+        "role": "at"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The South Seas Detachment overwhelms Rabaul's small Australian garrison, and Japanese troops land at Kieta on Bougainville the same day. The harbour and its airfields become Japan's great base in the South Pacific, and stay Japanese until the surrender.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 23 January"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "bataan-1942",
+    "title": "The siege of Bataan",
+    "gloss": "a peninsula held through the dry season",
+    "ja": {
+      "kanji": "バターンの戦い",
+      "romaji": "Batān no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-01-07",
+      "to": "1942-04-09",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "bataan",
+        "role": "in"
+      }
+    ],
+    "kind": "siege",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "ph"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "American and Filipino troops, short of food and quinine, hold the Bataan peninsula through the dry season. The Japanese break the last line in April, and on 9 April the Luzon Force surrenders; at Mariveles the navy scuttles its ships rather than leave them.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 9 April"
+      },
+      {
+        "id": "morton-1953"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "philippines-landings-north-1941",
+      "philippines-landings-south-1941",
+      "philippines-landings-lamon-1941"
+    ]
+  },
+  {
+    "id": "singapore-1942",
+    "title": "The fall of Singapore",
+    "gloss": "Britain's fortress in the East",
+    "ja": {
+      "kanji": "シンガポールの戦い",
+      "romaji": "Shingapōru no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-02-08",
+      "to": "1942-02-15",
+      "precision": "day",
+      "clock": "malaya-1941"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "singapore",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk",
+      "au",
+      "in"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The 25th Army crosses the Johor Strait by night and fights its way to the reservoirs that water the city. On 15 February Lieutenant-General Percival surrenders Singapore, and Japan renames the island Shōnan 昭南, Light of the South.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 15 February"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "sook-ching-1942",
+    "title": "Sook Ching",
+    "gloss": "a purge through cleansing",
+    "ja": {
+      "kanji": "シンガポール華僑粛清事件",
+      "romaji": "Shingapōru kakyō shukusei jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-02-18",
+      "to": "1942-03-04",
+      "precision": "day",
+      "clock": "jst",
+      "zoneNote": "The occupation puts Singapore on Tokyo time."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "singapore",
+        "role": "in"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp"
+    ],
+    "alsoSides": [
+      "chinese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese military police screen Singapore's Chinese men at registration points and take those they suspect to beaches and other places to be shot. The name, Sook Ching, means purge through cleansing. The number killed is disputed.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3: tellings needed; none was read at its source in this pass. Needs a person."
+  },
+  {
+    "id": "darwin-1942",
+    "title": "The bombing of Darwin",
+    "gloss": "the first of many raids on northern Australia",
+    "ja": {
+      "kanji": "ダーウィン空襲",
+      "romaji": "Dāwin kūshū",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-02-19",
+      "precision": "day",
+      "zone": "+09:30"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "darwin",
+        "role": "target"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Aircraft from the carriers of the force that struck Pearl Harbor, with land-based bombers, attack Darwin's harbour and airfields. Ships at the wharf and in the harbour are sunk, among them the destroyer Peary, the town is wrecked, and many residents leave for the south. It is the first of many raids on northern Australia.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 19 February"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "usn-chron",
+        "says": "Carrier aircraft from Akagi, Kaga, Hiryū and Sōryū: the chronology gives 189 planes.",
+        "scope": "the carrier strike"
+      }
+    ],
+    "routes": []
+  },
+  {
+    "id": "java-sea-1942",
+    "title": "The battle of the Java Sea",
+    "gloss": "outranged by day, torpedoed by night",
+    "ja": {
+      "kanji": "スラバヤ沖海戦",
+      "romaji": "Surabaya-oki kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-02-27",
+      "to": "1942-03-01",
+      "precision": "day",
+      "zone": "+07:30"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "java-sea",
+        "role": "at"
+      },
+      {
+        "place": "surabaya",
+        "role": "from"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "nl",
+      "uk",
+      "us",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Rear Admiral Karel Doorman leads the Allied striking force of cruisers and destroyers out of Soerabaja against the convoy carrying the invasion of eastern Java. Japanese cruisers outrange them by day and their long-range torpedoes strike at night; Doorman goes down with his flagship De Ruyter.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 27 February – 1 March"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "java-surrender-1942",
+    "title": "The Indies capitulate",
+    "gloss": "terms accepted at Kalidjati",
+    "ja": {
+      "kanji": "蘭印作戦",
+      "romaji": "Ran'in sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-03-08",
+      "to": "1942-03-09",
+      "precision": "day",
+      "zone": "+07:30"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "kalijati",
+        "role": "at"
+      }
+    ],
+    "kind": "surrender",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "nl"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "At Kalidjati airfield the Dutch governor-general and army commander accept the 16th Army's terms, and the Netherlands Indies capitulate. Sukarno and Hatta, released from Dutch exile, later work with the occupation while pressing for independence.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "East Indies"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The meeting is カリジャティ会談 Karijati kaidan (R3, *verify*); the campaign runs from 8 December 1941 to 9 March 1942 (Wikidata)."
+  },
+  {
+    "id": "burma-1942",
+    "title": "The conquest of Burma",
+    "gloss": "the Burma Road cut",
+    "ja": {
+      "kanji": "ビルマ攻略作戦",
+      "romaji": "Biruma kōryaku sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12-14",
+      "to": "1942-05-26",
+      "precision": "day",
+      "zone": "+06:30"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "rangoon",
+        "role": "in"
+      },
+      {
+        "place": "mandalay",
+        "role": "in"
+      },
+      {
+        "place": "myitkyina",
+        "role": "in"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk",
+      "in",
+      "cn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The 15th Army crosses from Thailand, takes Moulmein and Rangoon, and drives the British, Indian, Burmese and Chinese forces north. The Burma Road to China is cut. The retreat ends at the Indian border in May with the monsoon, and refugees walk out beside the army.",
+    "stops": [
+      {
+        "text": "March: Rangoon falls.",
+        "place": "rangoon",
+        "zoom": "table"
+      },
+      {
+        "text": "May: Myitkyina falls, and the retreat reaches the Indian border with the monsoon.",
+        "place": "myitkyina",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "cmh-campaigns",
+        "where": "Burma, 7 December 1941 – 26 May 1942"
+      },
+      {
+        "id": "romanus-1953",
+        "where": "Maps 3–4"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The Japanese name ビルマ攻略作戦 is *verify* (R3)."
+  },
+  {
+    "id": "indian-ocean-raid-1942",
+    "title": "The Indian Ocean raid",
+    "gloss": "Easter Sunday at Colombo",
+    "ja": {
+      "kanji": "セイロン沖海戦",
+      "romaji": "Seiron-oki kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-04-05",
+      "to": "1942-04-09",
+      "precision": "day",
+      "zone": "+06:00",
+      "zoneNote": "Ceylon's wartime offset as the tz database gives it for April 1942."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "colombo",
+        "role": "target"
+      },
+      {
+        "place": "trincomalee",
+        "role": "target"
+      },
+      {
+        "place": "staring-bay",
+        "role": "from"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Kidō Butai sails from Staring Bay in Celebes into the Indian Ocean, strikes Colombo on Easter Sunday and Trincomalee four days later. Its dive bombers sink the cruisers Cornwall and Dorsetshire and the carrier Hermes. The British Eastern Fleet withdraws to East Africa, and the carriers pass Singapore homeward.",
+    "stops": [
+      {
+        "text": "5 April: the strike on Colombo, and the cruisers sunk south-west of Ceylon.",
+        "place": "colombo",
+        "zoom": "table"
+      },
+      {
+        "text": "9 April: the strike on Trincomalee, and Hermes sunk off Batticaloa.",
+        "place": "trincomalee",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 5 and 9 April"
+      },
+      {
+        "id": "wp-indian-ocean-raid"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 11"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "indian-ocean-raid-1942",
+      "malaya-force-1942"
+    ],
+    "notes": "C作戦 C sakusen is the operation's name (R3, *verify*)."
+  },
+  {
+    "id": "bataan-march-1942",
+    "title": "The Bataan Death March",
+    "gloss": "from Mariveles to Camp O'Donnell",
+    "ja": {
+      "kanji": "バターン死の行進",
+      "romaji": "Batān shi no kōshin",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-04-10",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "mariveles",
+        "role": "from"
+      },
+      {
+        "place": "san-fernando",
+        "role": "via"
+      },
+      {
+        "place": "camp-odonnell",
+        "role": "to"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "ph"
+    ],
+    "alsoSides": [
+      "filipino-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "After the surrender on Bataan, the Imperial Japanese Army marches the Filipino and American prisoners north from Mariveles to San Fernando, carries them by rail to Capas, and walks them on to Camp O'Donnell. The US Army's historian writes of men \"denied food and water\" and \"clubbed, beaten, and bayoneted\". Many die on the road and many more in the camp, of exhaustion, disease and beatings; Filipino civilians who give them food are punished.",
+    "stops": [
+      {
+        "text": "The march begins at the tip of the peninsula.",
+        "place": "mariveles",
+        "zoom": "table"
+      },
+      {
+        "text": "San Fernando: from here, packed freight cars to Capas.",
+        "place": "san-fernando",
+        "zoom": "table"
+      },
+      {
+        "text": "Camp O'Donnell, where many more die.",
+        "place": "camp-odonnell",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "morton-1953-march",
+        "where": "ch. XXIV"
+      },
+      {
+        "id": "wp-bataan-march"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-bataan-march",
+        "says": "Some 72,000 to 78,000 Filipino and American prisoners were marched about 100 km.",
+        "scope": "the prisoners marched"
+      },
+      {
+        "source": "wp-bataan-march",
+        "says": "Deaths on the march run from about 5,500 to more than 18,000 by different estimates, and many more died in the camp.",
+        "scope": "deaths on the march"
+      },
+      {
+        "source": "morton-1953-march",
+        "says": "Morton describes the march and defers to Falk (1962) on the numbers.",
+        "scope": "the US Army history"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words, with its figures moved to the tellings."
+  },
+  {
+    "id": "doolittle-1942",
+    "title": "The Doolittle raid",
+    "gloss": "bombers from a carrier's deck",
+    "ja": {
+      "kanji": "ドーリットル空襲",
+      "romaji": "Dōrittoru kūshū",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-04-18",
+      "precision": "day",
+      "clock": "jst",
+      "zoneNote": "The take-off and the raid fall on 18 April by both sides' dates."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "doolittle-takeoff",
+        "role": "from"
+      },
+      {
+        "place": "tokyo",
+        "role": "target"
+      },
+      {
+        "place": "nagoya",
+        "role": "target"
+      },
+      {
+        "place": "kobe",
+        "role": "target"
+      },
+      {
+        "place": "chuchow",
+        "role": "to"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Army B-25 bombers take off from the carrier Hornet far out in the Pacific, earlier than planned after a picket boat sights the task force. They bomb Tokyo, Yokohama, Yokosuka, Nagoya and Kobe and fly on to China, where most crews bail out in the dark; one crew lands near Vladivostok and is interned. The raid does little damage, but it settles Japan's argument over striking at Midway.",
+    "stops": [
+      {
+        "text": "The take-off from Hornet, far east of Tokyo.",
+        "place": "doolittle-takeoff",
+        "zoom": "table"
+      },
+      {
+        "text": "The field they were meant to reach, near Chuchow.",
+        "place": "chuchow",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "doolittle-report-1942"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 18 April"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [
+      {
+        "source": "doolittle-report-1942",
+        "says": "The take-off was \"approximately 824 statute miles East of the center of Tokyo\".",
+        "scope": "the take-off"
+      }
+    ],
+    "routes": [
+      "doolittle-1942-fleet",
+      "doolittle-1942-bombers",
+      "doolittle-1942-china"
+    ]
+  },
+  {
+    "id": "corregidor-1942",
+    "title": "Corregidor falls",
+    "gloss": "the fortress islands of Manila Bay",
+    "ja": {
+      "kanji": "コレヒドールの戦い",
+      "romaji": "Korehidōru no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-05-05",
+      "to": "1942-05-06",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "corregidor",
+        "role": "at"
+      }
+    ],
+    "kind": "siege",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "ph"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "After weeks of shelling from Bataan, Japanese troops land on Corregidor at night. On 6 May General Wainwright surrenders Corregidor and the forts of Manila Bay, and the forces in the rest of the Philippines over the following days.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 6 May"
+      },
+      {
+        "id": "morton-1953",
+        "where": "Map 25"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "coral-sea-1942",
+    "title": "The battle of the Coral Sea",
+    "gloss": "carriers that never see each other",
+    "ja": {
+      "kanji": "珊瑚海海戦",
+      "romaji": "Sangokai kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-05-04",
+      "to": "1942-05-08",
+      "precision": "day",
+      "zone": "+10:00",
+      "zoneNote": "The nautical zone of the Coral Sea; the action reports' own zone lines are not yet checked."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "coral-sea",
+        "role": "at"
+      },
+      {
+        "place": "shoho-sinking",
+        "role": "at"
+      },
+      {
+        "place": "tulagi",
+        "role": "target"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japan sends an invasion convoy for Port Moresby round the tip of New Guinea, covered by carriers, and lands at Tulagi in the Solomons. Aircraft from Yorktown strike Tulagi on 4 May; on the 7th American aircraft sink the light carrier Shōhō 祥鳳 off Misima, and on the 8th the carrier forces strike each other without their ships ever coming in sight. Lexington is lost and Shōkaku 翔鶴 is damaged, and the convoy turns back.",
+    "stops": [
+      {
+        "text": "4 May: Yorktown's aircraft strike the landing at Tulagi.",
+        "place": "tulagi",
+        "zoom": "table"
+      },
+      {
+        "text": "7 May: Shōhō sunk off Misima.",
+        "place": "shoho-sinking",
+        "zoom": "table"
+      },
+      {
+        "text": "8 May: the carriers strike each other; Lexington is scuttled.",
+        "place": "lexington-sinking",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 4–8 May"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. IV, App. 17"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "coral-sea-1942-tf17",
+      "coral-sea-1942-mo-carriers",
+      "coral-sea-1942-moresby",
+      "coral-sea-1942-tulagi"
+    ],
+    "notes": "MO作戦 MO sakusen is the operation (R3, *verify*)."
+  },
+  {
+    "id": "zhejiang-jiangxi-1942",
+    "title": "The Zhejiang–Jiangxi campaign",
+    "gloss": "the raiders' landing fields, and the people who hid them",
+    "ja": {
+      "kanji": "浙贛作戦",
+      "romaji": "Sekkan sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-05-15",
+      "to": "1942-09-06",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "chuchow",
+        "role": "in"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "alsoSides": [
+      "chinese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "After the Doolittle raid, Japanese forces sweep the Chinese provinces where some of the raiders came down, destroy the airfields they were meant to land on, and strike at the people who sheltered them. Villages that helped the airmen are burned. Estimates of the Chinese dead, most of them civilians, differ widely.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-zhejiang-jiangxi"
+      },
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "doolittle-report-1942",
+        "where": "Chuchow"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-zhejiang-jiangxi",
+        "says": "Chinese dead \"anywhere from over 20,000 to as many as 250,000\", most of them civilians.",
+        "scope": "the campaign"
+      },
+      {
+        "source": "wp-zhejiang-jiangxi",
+        "says": "Chennault reported 250,000; Chinese records give 20,000 to more than 66,526 in Zhejiang.",
+        "scope": "the campaign"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words. R3 adds Chinese sources' account of disease spread by biological weapons (*verify*); it is left off the card until read at a source. The operation's name is *verify*."
+  },
+  {
+    "id": "sydney-harbour-1942",
+    "title": "Midget submarines in Sydney Harbour",
+    "gloss": "a torpedo meant for a cruiser",
+    "ja": {
+      "kanji": "特殊潜航艇によるシドニー港攻撃",
+      "romaji": "Tokushu senkōtei ni yoru Shidonī-kō kōgeki",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-05-31",
+      "to": "1942-06-01",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "sydney-harbour",
+        "role": "target"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Midget submarines launched from larger submarines off the coast slip into Sydney Harbour at night. A torpedo meant for the cruiser Chicago sinks the depot ship Kuttabul with sailors asleep aboard. A week later submarines shell the eastern suburbs of Sydney and Newcastle.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 31 May"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "midway-1942",
+    "title": "The battle of Midway",
+    "gloss": "the Kidō Butai's carriers lost in a day",
+    "ja": {
+      "kanji": "ミッドウェー海戦",
+      "romaji": "Middowē kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1942-06-04T04:30-12:00",
+      "to": "1942-06-07",
+      "precision": "minute",
+      "clock": "usn-zp12",
+      "alt": [
+        {
+          "clock": "jst",
+          "from": "1942-06-05",
+          "to": "1942-06-08"
+        }
+      ],
+      "zoneNote": "The US Navy's zone plus 12 is UTC−12 (ISO offset −12:00) and Midway's own time; the US carriers kept zone plus 10, two hours ahead; Japanese reports keep Tokyo time, twenty-one hours ahead, so their date is 5 June.",
+      "readings": [
+        {
+          "t": "1942-06-04T04:30-12:00",
+          "sourceClock": "0130",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "source": "nagumo-1947"
+        },
+        {
+          "t": "1942-06-04T10:22-12:00",
+          "sourceClock": "0722",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-06-05",
+          "source": "nagumo-1947"
+        },
+        {
+          "t": "1942-06-04T10:22-12:00",
+          "sourceClock": "1222",
+          "sourceZone": "-10:00",
+          "sourceDate": "1942-06-04",
+          "source": "cv6-midway-1942"
+        }
+      ]
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "midway",
+        "role": "near"
+      },
+      {
+        "place": "midway-sea-kido-butai",
+        "role": "fleet"
+      },
+      {
+        "place": "point-luck",
+        "role": "fleet"
+      }
+    ],
+    "kind": "battle",
+    "flag": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table",
+      "box"
+    ],
+    "box": "midway",
+    "summary": "Admiral YAMAMOTO Isoroku 山本五十六 sends the Kidō Butai 機動部隊 against Midway to draw out the US Pacific Fleet. Forewarned by codebreakers, the American carriers wait to the north-east. Through the morning of 4 June the atoll's aircraft and the carriers' torpedo squadrons attack in turn and are cut down; then, from 10:22, dive bombers from Enterprise and Yorktown catch Kaga 加賀, Akagi 赤城 and Sōryū 蒼龍 with armed and fuelled aircraft in their hangars and set them ablaze within minutes. Hiryū 飛龍's strikes cripple Yorktown before Hiryū too is hit that evening.",
+    "stops": [
+      {
+        "text": "2 June: TF 16 and TF 17 meet north-east of Midway, and wait.",
+        "place": "point-luck",
+        "zoom": "table"
+      },
+      {
+        "text": "04:30: the Kidō Butai launches its strike on Midway; through the morning the atoll's aircraft attack the carriers.",
+        "place": "midway",
+        "zoom": "table"
+      },
+      {
+        "text": "10:22 to 10:28: the dive bombers strike Kaga, Akagi and Sōryū.",
+        "place": "midway-sea-kido-butai",
+        "zoom": "table"
+      },
+      {
+        "text": "7 June: Yorktown, torpedoed again by a submarine on the 6th, sinks.",
+        "place": "yorktown-sinking",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "nagumo-1947",
+        "where": "narrative, log, Tables 3 and 8"
+      },
+      {
+        "id": "cincpac-midway-1942",
+        "where": "paras 1–44"
+      },
+      {
+        "id": "nwc-midway-1948",
+        "where": "pp. 84–98, 119–143, App. III"
+      },
+      {
+        "id": "ctf16-midway-1942"
+      },
+      {
+        "id": "cv6-midway-1942"
+      },
+      {
+        "id": "comcrupac-midway-1942"
+      },
+      {
+        "id": "oni-cn-midway-1943"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 4–7 June"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. V"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "cincpac-midway-1942",
+        "says": "\"about ninety-two (92) officers and two hundred and fifteen (215) men\": about 307 Americans lost their lives.",
+        "scope": "US dead, 4–7 June"
+      },
+      {
+        "source": "nwc-midway-1948",
+        "says": "\"Total losses – Personnel – 2500 men\", citing USSBS Questionnaire No. 14.",
+        "scope": "Japanese dead"
+      },
+      {
+        "source": "parshall-tully-2005",
+        "says": "3,057 Japanese dead (pp. 114, 365, 377–380, 476; known here at second hand, through Wikipedia).",
+        "scope": "Japanese dead"
+      },
+      {
+        "source": "nagumo-1947",
+        "says": "Killed in action: Akagi 221, Sōryū 718, Hiryū 416; Kaga printed \"1 800\" in the 1947 translation, a garbled figure.",
+        "scope": "the four carriers' crews"
+      },
+      {
+        "source": "trom-kaga",
+        "says": "Kaga 814 lost; Akagi 263 (its own table); Sōryū 713; ja.wikipedia counts Hiryū's 417 including 34 engine-room men later rescued by US forces.",
+        "scope": "the four carriers' crews"
+      },
+      {
+        "source": "nwc-midway-1948",
+        "says": "234 carrier aircraft lost (48 shot down, 186 lost aboard or in water landings); 258 of all types \"per Japanese report\".",
+        "scope": "Japanese aircraft"
+      },
+      {
+        "source": "nwc-midway-1948",
+        "says": "132 US aircraft lost in the Midway area; CINCPAC counts 148, the difference being aircraft struck off as uneconomical to repair.",
+        "scope": "US aircraft"
+      },
+      {
+        "source": "nagumo-1947",
+        "says": "Kaga took 4 of 9 bombs; Akagi 2 hits and a near miss; Sōryū 3; Hiryū 4 of 13 attackers.",
+        "scope": "hits on the carriers"
+      },
+      {
+        "source": "trom-akagi",
+        "says": "Akagi: one hit amidships, a near miss under the port quarter that jammed her rudder, and a near miss forward (Parshall and Tully's reading).",
+        "scope": "hits on Akagi"
+      },
+      {
+        "source": "ctf16-midway-1942",
+        "says": "Spruance: \"The wiping out of our torpedo plane squadrons was, I believe, done largely by enemy VFs. This seems to have pulled enemy VFs down and left the air clear for our dive bombers.\" NWC 1948 says the same.",
+        "scope": "why the dive bombers met no fighters"
+      },
+      {
+        "source": "wp-midway",
+        "says": "Parshall and Tully (2005, at second hand) put the failure in the combat air patrol's control and position, drawn to the south-east by Torpedo Three, rather than its altitude.",
+        "scope": "why the dive bombers met no fighters"
+      },
+      {
+        "source": "nagumo-1947",
+        "says": "The report's readiness signal has Carrier Division 1's torpedo-armed strike ready to take off at 10:30 Midway time; Fuchida (1955) wrote that the decks were full and launch five minutes off, which Parshall and Tully dispute.",
+        "scope": "the decks at 10:22"
+      },
+      {
+        "source": "cv8-midway-1942",
+        "says": "Torpedo Eight: all 15 aircraft lost, one man survived.",
+        "scope": "VT-8"
+      }
+    ],
+    "routes": [
+      "kido-butai-midway-1942",
+      "tf16-tf17-midway-1942",
+      "midway-occupation-force-1942"
+    ],
+    "notes": "The table stops only; the box's stops are in boxes/midway/battle.json. MI作戦 MI sakusen is R2 §13's."
+  },
+  {
+    "id": "attu-kiska-1942",
+    "title": "Attu and Kiska occupied",
+    "gloss": "the western end of the Aleutian chain",
+    "ja": {
+      "kanji": "アッツ島・キスカ島占領",
+      "romaji": "Attsu-tō Kisuka-tō senryō",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-06-05",
+      "to": "1942-06-07",
+      "precision": "day",
+      "clock": "usn-zp10",
+      "alt": [
+        {
+          "clock": "jst",
+          "from": "1942-06-06",
+          "to": "1942-06-08"
+        }
+      ],
+      "zoneNote": "Attu and Kiska lie west of 180° but keep Alaska's date; USSBS gives the US Navy's \"150th meridian west longitude, zone plus 10, time and date\"."
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "kiska",
+        "role": "landing"
+      },
+      {
+        "place": "attu",
+        "role": "landing"
+      },
+      {
+        "place": "chichagof-harbor",
+        "role": "in"
+      }
+    ],
+    "kind": "occupation",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "unangax"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "A naval landing force occupies Kiska and an army battalion lands on Attu, far out at the western end of the Aleutian chain, without opposition. On Attu they take the Unangax̂ villagers of Chichagof Harbor and the American couple living among them. Japan renames the islands Atsuta-jima 熱田島 and Narukami-jima 鳴神島.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 5 and 7 June"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. VI"
+      },
+      {
+        "id": "nps-aleu-removal"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "usn-chron",
+        "says": "Attu occupied on 5 June, Kiska on 7 June 1942.",
+        "scope": "the dates"
+      },
+      {
+        "source": "ussbs-campaigns-1946",
+        "says": "Kiska at \"1500, 6 June (150th meridian west longitude, zone plus 10, time and date)\"; Attu \"about 0300, 7 June\".",
+        "scope": "the dates"
+      }
+    ],
+    "routes": [],
+    "notes": "The two tellings disagree on the order and the dates; one of them is wrong, and a primary must settle it (R3 headline 5). The Japanese renamings are *verify*."
+  },
+  {
+    "id": "unangax-1942",
+    "title": "The removal of the Unangax̂",
+    "gloss": "taken from their islands by both sides",
+    "ja": null,
+    "when": {
+      "from": "1942-06",
+      "to": "1945",
+      "precision": "month",
+      "zone": "-10:00"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "attu",
+        "role": "from"
+      },
+      {
+        "place": "otaru",
+        "role": "to"
+      },
+      {
+        "place": "pribilof-islands",
+        "role": "from"
+      },
+      {
+        "place": "funter-bay",
+        "role": "to"
+      }
+    ],
+    "kind": "people",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "unangax"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "After the raids the US military removes the Unangax̂ of the Pribilof Islands and the Aleutian villages to disused canneries and camps in Southeast Alaska, and burns villages behind them. In the camps, without heat or water, many die of disease in the cold and crowding. The Attuans taken by Japan are shipped by way of Kiska to Otaru in Hokkaido in September 1942 and held there until the war ends; they are not allowed home to Attu.",
+    "stops": [
+      {
+        "text": "September 1942: the Attuans are taken to Kiska, and on to Japan.",
+        "place": "attu",
+        "zoom": "table"
+      },
+      {
+        "text": "Otaru, where they are held until September 1945.",
+        "place": "otaru",
+        "zoom": "table"
+      },
+      {
+        "text": "Funter Bay, a disused cannery in Southeast Alaska.",
+        "place": "funter-bay",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "nps-aleu-removal"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 5–7 June"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "nps-aleu-removal",
+        "says": "The American military \"forced nearly 900 villagers to move from their homes in the Aleutian Islands to Southeast Alaska\"; 560 people went to Funter Bay on SS Delarof, 17–24 June 1942.",
+        "scope": "the US removal"
+      },
+      {
+        "source": "nps-aleu-removal",
+        "says": "From Attu 42 people were taken to Kiska on 14 September 1942, and 41 on to Japan late in September; they were held at Otaru from 28 September 1942 to 17 September 1945.",
+        "scope": "the Attuans"
+      }
+    ],
+    "routes": [],
+    "notes": "The deaths in the Southeast Alaska camps are R3's, from a search summary (*verify* their scale at a source)."
+  },
+  {
+    "id": "kokoda-1942",
+    "title": "The Kokoda Track",
+    "gloss": "over the Owen Stanleys toward Port Moresby",
+    "ja": {
+      "kanji": "ポートモレスビー作戦",
+      "romaji": "Pōto Moresubī sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-07-21",
+      "to": "1942-11-16",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "kokoda",
+        "role": "at"
+      },
+      {
+        "place": "buna",
+        "role": "landing"
+      },
+      {
+        "place": "ioribaiwa",
+        "role": "to"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au"
+    ],
+    "alsoSides": [
+      "papuan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese troops land at Buna and Gona and climb the Kokoda Track over the Owen Stanley Range toward Port Moresby. Australian militia and then AIF battalions fall back through the rainforest until, at Ioribaiwa close to Port Moresby, the Japanese are ordered to withdraw. The Australians follow them back over the range to the beaches.",
+    "stops": [
+      {
+        "text": "21 July: the landing at Buna.",
+        "place": "buna",
+        "zoom": "table"
+      },
+      {
+        "text": "Kokoda, on the track over the range.",
+        "place": "kokoda",
+        "zoom": "table"
+      },
+      {
+        "text": "September: Ioribaiwa ridge, the Japanese nearest point to Port Moresby.",
+        "place": "ioribaiwa",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 21 July"
+      },
+      {
+        "id": "milner-1957"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Papua, 23 July 1942 – 23 January 1943"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "papuan-carriers-1942",
+    "title": "The carriers of the Owen Stanleys",
+    "gloss": "food up the track, the wounded down",
+    "ja": null,
+    "when": {
+      "from": "1942-07",
+      "to": "1943-01",
+      "precision": "month",
+      "zone": "+10:00"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "kokoda-track",
+        "role": "in"
+      }
+    ],
+    "kind": "people",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "au",
+      "jp"
+    ],
+    "alsoSides": [
+      "papuan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Papuan and New Guinean men, many of them conscripted by the Australian administration, carry food and ammunition up the Kokoda Track and carry the wounded down on stretchers. Australian soldiers call them the \"Fuzzy Wuzzy Angels\"; the carriers' own accounts were written down much later. The Japanese also press local men into carrying for them.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata",
+        "where": "Q5511096"
+      },
+      {
+        "id": "milner-1957"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The soldiers' name in quotation marks, as R8 §3.1 asks; R3 asks for Australian War Memorial and Papua New Guinean sources (*verify*)."
+  },
+  {
+    "id": "guadalcanal-1942",
+    "title": "Guadalcanal",
+    "gloss": "six months for an airfield",
+    "ja": {
+      "kanji": "ガダルカナル島の戦い",
+      "romaji": "Gadarukanaru-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-08-07",
+      "to": "1943-02-09",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "lunga-point",
+        "role": "landing"
+      },
+      {
+        "place": "guadalcanal",
+        "role": "in"
+      },
+      {
+        "place": "tulagi",
+        "role": "landing"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "au",
+      "nz",
+      "uk"
+    ],
+    "alsoSides": [
+      "solomon-islanders"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "US Marines land on Guadalcanal, Tulagi and the islets nearby and seize the airfield the Japanese are building at Lunga, which they name Henderson Field. For six months both sides feed soldiers, ships and aircraft into the island; the Marines hold the airfield through night bombardments and repeated attacks, and the Japanese army on the island starves.",
+    "stops": [
+      {
+        "text": "7 August: the landing, and the unfinished airfield taken.",
+        "place": "lunga-point",
+        "zoom": "table"
+      },
+      {
+        "text": "Henderson Field, held through the autumn.",
+        "place": "henderson-field",
+        "zoom": "table"
+      },
+      {
+        "text": "February 1943: the Japanese evacuation from Cape Esperance.",
+        "place": "cape-esperance",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 7–8 August"
+      },
+      {
+        "id": "miller-1949"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Guadalcanal, 7 August 1942 – 21 February 1943"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 adds that Japanese soldiers came to call the island 餓島 Gatō, starvation island (*verify*); it is left off the card until read at a source."
+  },
+  {
+    "id": "savo-1942",
+    "title": "The battle of Savo Island",
+    "gloss": "cruisers sunk in the dark",
+    "ja": {
+      "kanji": "第一次ソロモン海戦",
+      "romaji": "Dai-ichiji Soromon kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-08-08",
+      "to": "1942-08-09",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "savo",
+        "role": "near"
+      },
+      {
+        "place": "ironbottom-sound",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Vice Admiral MIKAWA Gun'ichi 三川軍一's cruisers come down from Rabaul and pass Savo Island in the dark, unseen by the picket destroyers. In a short night action they sink the heavy cruisers Quincy, Vincennes, Astoria and HMAS Canberra, and leave before dawn without touching the transports.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 9 August"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 39"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "Mikawa's kanji are *verify*."
+  },
+  {
+    "id": "vouza-1942",
+    "title": "Scouts and coastwatchers of the Solomons",
+    "gloss": "warning of every raid down the Slot",
+    "ja": null,
+    "when": {
+      "from": "1942-08-20",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "ilu-river",
+        "role": "at"
+      }
+    ],
+    "kind": "people",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "au",
+      "uk",
+      "jp"
+    ],
+    "alsoSides": [
+      "solomon-islanders"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Solomon Islanders scout and guide for the Marines, and island networks shelter the coastwatchers who radio warning of each Japanese air raid coming down the Slot. Sergeant Major Jacob Vouza of the Armed Constabulary, captured by the Ichiki detachment and bayoneted, frees himself and crawls back to warn the Marines on the Ilu River before the attack that night.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-vouza"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 14 and 19 October (coastwatchers landed by submarine)"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "nauru-banaba-1942",
+    "title": "Nauru and Ocean Island occupied",
+    "gloss": "the phosphate islands",
+    "ja": {
+      "kanji": "ナウル島・オーシャン島占領",
+      "romaji": "Nauru-tō Ōshan-tō senryō",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-08-25",
+      "to": "1942-08-26",
+      "precision": "day",
+      "zone": "+11:30",
+      "zoneNote": "Nauru's pre-war offset as the tz database gives it; the occupation moves the island to Tokyo time."
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "nauru",
+        "role": "at"
+      },
+      {
+        "place": "banaba",
+        "role": "at"
+      }
+    ],
+    "kind": "occupation",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "nauruan",
+      "banaban"
+    ],
+    "alsoSides": [
+      "i-kiribati"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese naval forces occupy the phosphate islands of Nauru and Ocean Island, cut off since the evacuations of early 1942. Nauruans are put to forced labour building airfields.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 23, 25 and 26 August"
+      },
+      {
+        "id": "wp-nauru"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "usn-chron",
+        "says": "Nauru occupied on 25 August, Ocean Island on 26 August 1942.",
+        "scope": "the dates"
+      },
+      {
+        "source": "wp-nauru",
+        "says": "Its lead gives 26 August for Nauru, its narrative 29 August.",
+        "scope": "the dates"
+      }
+    ],
+    "routes": [],
+    "notes": "R3 adds that Banabans were later deported to Nauru, Tarawa and Kosrae (*verify*)."
+  },
+  {
+    "id": "milne-bay-1942",
+    "title": "Milne Bay",
+    "gloss": "a landing thrown back",
+    "ja": {
+      "kanji": "ラビの戦い",
+      "romaji": "Rabi no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-08-25",
+      "to": "1942-09-07",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "milne-bay",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese naval troops land at Milne Bay, at the eastern tip of New Guinea, to take the airfields being built there. Australian infantry, with RAAF Kittyhawks flying from those same strips, throw them back in two weeks of rain and mud, and the survivors are taken off by sea early in September.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 26 August and 5 September"
+      },
+      {
+        "id": "milner-1957",
+        "where": "Map 5"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "santa-cruz-1942",
+    "title": "The battle of the Santa Cruz Islands",
+    "gloss": "the carriers meet again",
+    "ja": {
+      "kanji": "南太平洋海戦",
+      "romaji": "Minami Taiheiyō kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-10-26",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "santa-cruz-islands",
+        "role": "near"
+      },
+      {
+        "place": "hornet-sinking",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The carriers meet again north of the Santa Cruz Islands. Japanese aircraft sink Hornet and damage Enterprise; American aircraft wreck the flight decks of Shōkaku 翔鶴 and Zuihō 瑞鳳. Japan wins the exchange of ships but loses many of its experienced aircrews.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1942, 26–27 October"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 45"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "guadalcanal-naval-1-1942",
+    "title": "The Naval Battle of Guadalcanal: the first night",
+    "gloss": "battleships at point-blank range",
+    "ja": {
+      "kanji": "第三次ソロモン海戦",
+      "romaji": "Dai-sanji Soromon kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1942-11-13T01:48+11:00",
+      "to": "1942-11-13T02:26+11:00",
+      "precision": "minute",
+      "clock": "usn-zm11",
+      "zoneNote": "Part One of the ONI narrative keeps zone minus 11; Tokyo time is two hours behind."
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "ironbottom-sound",
+        "role": "at"
+      },
+      {
+        "place": "lunga-point",
+        "role": "near"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japan sends the battleships Hiei 比叡 and Kirishima 霧島 to shell Henderson Field ahead of a great troop convoy. In the first hours of 13 November Rear Admiral Callaghan's cruisers and destroyers meet them off Lunga at point-blank range in a confused night action; Hiei is crippled and sunk next day by aircraft, and Admirals Callaghan and Scott are killed.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Part I"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 12–13 November"
+      },
+      {
+        "id": "jacar-batdiv11-1942"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "guadalcanal-1942-callaghan",
+      "guadalcanal-1942-abe"
+    ],
+    "notes": "\"Odd ships fire to starboard, even to port\" at 01:48 (ONI Part I, via R5 §5.3)."
+  },
+  {
+    "id": "guadalcanal-naval-2-1942",
+    "title": "The Naval Battle of Guadalcanal: the second night",
+    "gloss": "radar against searchlights north of Savo",
+    "ja": {
+      "kanji": "第三次ソロモン海戦",
+      "romaji": "Dai-sanji Soromon kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1942-11-14T23:01+11:00",
+      "to": "1942-11-15T03:20+11:00",
+      "precision": "minute",
+      "clock": "usn-zm11",
+      "zoneNote": "The box keeps zone minus 11, Morison's and the Solomons' own. Washington's and South Dakota's reports and Parts Two and Three of the ONI narrative keep zone minus 12, an hour ahead; Japanese reports keep Tokyo time, two hours behind.",
+      "readings": [
+        {
+          "t": "1942-11-14T23:01+11:00",
+          "sourceClock": "0001",
+          "sourceZone": "+12:00",
+          "sourceDate": "1942-11-15",
+          "source": "oni-cn-guadalcanal-1944"
+        },
+        {
+          "t": "1942-11-14T23:16+11:00",
+          "sourceClock": "0016",
+          "sourceZone": "+12:00",
+          "sourceDate": "1942-11-15",
+          "source": "oni-cn-guadalcanal-1944"
+        },
+        {
+          "t": "1942-11-14T23:16+11:00",
+          "sourceClock": "2116",
+          "sourceZone": "+09:00",
+          "sourceDate": "1942-11-14",
+          "source": "jacar-inazuma-1942"
+        }
+      ]
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "savo",
+        "role": "near"
+      },
+      {
+        "place": "ironbottom-sound",
+        "role": "at"
+      },
+      {
+        "place": "kirishima-sinking",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table",
+      "box"
+    ],
+    "box": "ironbottom-sound",
+    "summary": "Two nights after the first action, Vice Admiral KONDŌ Nobutake 近藤信竹 brings Kirishima 霧島 and heavy cruisers down to shell Henderson Field, and Rear Admiral Lee meets him north of Savo with the battleships Washington and South Dakota and a destroyer screen. The Japanese torpedoes and guns wreck the American destroyers, and South Dakota, her power and radars failing, is lit by searchlights and hit again and again. Washington, unseen in the dark, tracks Kirishima by radar and opens fire at close range a little before midnight; within minutes Kirishima's steering is wrecked, and she circles helplessly and is abandoned, capsizing north-west of Savo in the early morning. The troop convoy beaches at Tassafaronga at dawn.",
+    "stops": [
+      {
+        "text": "23:01: Washington's radar finds the Japanese force north of Savo.",
+        "place": "savo",
+        "zoom": "table"
+      },
+      {
+        "text": "Early on 15 November Kirishima capsizes north-west of Savo.",
+        "place": "kirishima-sinking",
+        "zoom": "table"
+      },
+      {
+        "text": "At dawn the surviving transports beach at Tassafaronga.",
+        "place": "tassafaronga",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944",
+        "where": "Parts II–III"
+      },
+      {
+        "id": "wdr-south-dakota-1942"
+      },
+      {
+        "id": "ar-south-dakota-1942"
+      },
+      {
+        "id": "ussbs-ijo-1946",
+        "where": "Nav 33 (Tokuno)"
+      },
+      {
+        "id": "jacar-atago-1942"
+      },
+      {
+        "id": "jacar-inazuma-1942"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, 15 November"
+      },
+      {
+        "id": "morison-v"
+      },
+      {
+        "id": "trom-kirishima"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "washington-ar-1942",
+        "says": "Lee's report: 8 sixteen-inch hits on Kirishima (known through the Kirishima TROM and Lundgren).",
+        "scope": "hits on Kirishima"
+      },
+      {
+        "source": "ussbs-ijo-1946",
+        "says": "Tokuno, Kirishima's assistant gunnery officer (Nav 33): \"about 9\" sixteen-inch and \"about 40\" five-inch hits; Morison repeats \"9 out of 75\".",
+        "scope": "hits on Kirishima"
+      },
+      {
+        "source": "lundgren-wreck",
+        "says": "\"between 17 and 21 times by 16-inch projectiles and between 17 and 20 times by 5-inch\", after the 2019 survey of the wreck.",
+        "scope": "hits on Kirishima"
+      },
+      {
+        "source": "wdr-south-dakota-1942",
+        "says": "\"at least 26 projectiles\": one 5-inch, six 6-inch, eighteen 8-inch, one 14-inch; her armour never penetrated. Morison: \"42 large-caliber hits\".",
+        "scope": "hits on South Dakota"
+      },
+      {
+        "source": "morison-v",
+        "says": "South Dakota: \"38 men killed or missing and 60 wounded\"; ONI: thirty killed and 60 wounded; Frank (at second hand, through Wikipedia): 39 killed, 59 wounded.",
+        "scope": "South Dakota's crew"
+      },
+      {
+        "source": "trom-kirishima",
+        "says": "Kirishima: 212 lost; her captain, executive officer and 1,098 men rescued. Lundgren: about 209 killed. Tokuno: about 250 of about 1,400.",
+        "scope": "Kirishima's crew"
+      },
+      {
+        "source": "trom-kirishima",
+        "says": "She capsized at 03:25 at 09°05′S 159°42′E; Morison has her scuttled and sinking \"at 0320\"; Lundgren's \"0323\", on his zone minus 12 clock, would be 02:23.",
+        "scope": "when Kirishima sank"
+      },
+      {
+        "source": "ussbs-ijo-1946",
+        "says": "Tokuno: the captain ordered the Kingston valves opened; Lundgren: she was not scuttled but capsized to port while being abandoned.",
+        "scope": "how Kirishima sank"
+      },
+      {
+        "source": "oni-cn-guadalcanal-1944",
+        "says": "Preston was hit on her port side by \"an enemy heavy cruiser\" that came in \"virtually undetected\"; Lundgren argues there were no Japanese ships to her port side, a question he calls \"probably unsolvable\".",
+        "scope": "Preston"
+      }
+    ],
+    "routes": [
+      "guadalcanal-1942-tanaka",
+      "guadalcanal-1942-kondo",
+      "guadalcanal-1942-tf64"
+    ],
+    "notes": "The table stops only; the box's stops are in boxes/ironbottom-sound/battle.json. Kondō's kanji are *verify*."
+  },
+  {
+    "id": "buna-gona-1942",
+    "title": "Buna, Gona and Sanananda",
+    "gloss": "beachheads among the swamps",
+    "ja": {
+      "kanji": "ブナ・ゴナの戦い",
+      "romaji": "Buna Gona no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-11-16",
+      "to": "1943-01-22",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "buna",
+        "role": "at"
+      },
+      {
+        "place": "gona",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au",
+      "us"
+    ],
+    "alsoSides": [
+      "papuan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Australian and American troops attack the Japanese beachheads at Buna, Gona and Sanananda, dug in among swamps and coconut groves. Disease strikes both sides. The last beachhead falls in January 1943.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "milner-1957"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "tokyo-express-1942",
+    "title": "The Tokyo Express",
+    "gloss": "down the Slot by night",
+    "ja": {
+      "kanji": "鼠輸送",
+      "romaji": "Nezumi yusō",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-08",
+      "to": "1943-02",
+      "precision": "month",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "the-slot",
+        "role": "along"
+      },
+      {
+        "place": "shortland-islands",
+        "role": "from"
+      },
+      {
+        "place": "cape-esperance",
+        "role": "to"
+      }
+    ],
+    "kind": "other",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japanese destroyers run soldiers and supplies down the Slot from the Shortlands by night and are gone before dawn, out of reach of the aircraft at Henderson Field. Americans call it the Tokyo Express; the Japanese call it rat transportation, and the barges that creep along the coasts, ant transportation.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "oni-cn-guadalcanal-1944"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1942, December"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "tokyo-express-1942"
+    ],
+    "notes": "The barges are 蟻輸送 Ari yusō (R3, *verify*)."
+  },
+  {
+    "id": "ke-1943",
+    "title": "Guadalcanal evacuated",
+    "gloss": "a change of direction",
+    "ja": {
+      "kanji": "ケ号作戦",
+      "romaji": "Ke-gō sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-02-01",
+      "to": "1943-02-07",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "turn",
+    "where": [
+      {
+        "place": "cape-esperance",
+        "role": "from"
+      }
+    ],
+    "kind": "other",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "In night runs at the start of February, Japanese destroyers lift the starving survivors of the 17th Army from Cape Esperance. The Americans find the island empty only afterward. Tokyo announces the withdrawal as a 転進 tenshin, a change of direction.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1943, 1 February"
+      },
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "jm-98"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "wikidata",
+        "says": "The operation dated 14 January to 7 February 1943.",
+        "scope": "the dates"
+      },
+      {
+        "source": "usn-chron",
+        "says": "The destroyer runs of 1–7 February 1943.",
+        "scope": "the dates"
+      }
+    ],
+    "routes": []
+  },
+  {
+    "id": "bismarck-sea-1943",
+    "title": "The battle of the Bismarck Sea",
+    "gloss": "a convoy to Lae that does not arrive",
+    "ja": {
+      "kanji": "ビスマルク海海戦",
+      "romaji": "Bisumaruku-kai kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-03-02",
+      "to": "1943-03-04",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "bismarck-sea",
+        "role": "at"
+      },
+      {
+        "place": "rabaul",
+        "role": "from"
+      },
+      {
+        "place": "lae",
+        "role": "to"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "A convoy carrying an army division from Rabaul to Lae is found in the Bismarck Sea. US and Australian bombers come in at mast height and skip their bombs into the ships, and the transports and several destroyers are sunk; men in the water are strafed. Japan stops sending convoys to Lae.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1943, 2–4 March"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. VIII"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 and R8 flag the strafing of survivors in the water; the card says it once, plainly. ダンピールの悲劇 Danpīru no higeki, \"the Dampier tragedy\", is the Japanese name (R3, *verify*)."
+  },
+  {
+    "id": "yamamoto-1943",
+    "title": "Admiral Yamamoto shot down",
+    "gloss": "a schedule read by codebreakers",
+    "ja": {
+      "kanji": "海軍甲事件",
+      "romaji": "Kaigun kō jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-04-18",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "buin",
+        "role": "at"
+      },
+      {
+        "place": "bougainville",
+        "role": "over"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "US codebreakers read the schedule of Admiral YAMAMOTO Isoroku 山本五十六's inspection flight. Army P-38s from Guadalcanal intercept his bomber over Bougainville and shoot it down into the jungle near Buin. Japan announces his death in May and gives him a state funeral.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1943, 18 April"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "firm"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "attu-1943",
+    "title": "The battle of Attu",
+    "gloss": "up the snow-filled valleys",
+    "ja": {
+      "kanji": "アッツ島の戦い",
+      "romaji": "Attsu-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-05-11",
+      "to": "1943-05-30",
+      "precision": "day",
+      "clock": "usn-zp10"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "attu",
+        "role": "landing"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The US 7th Division lands on Attu in fog and fights up the snow-filled valleys from Massacre Bay and Holtz Bay. The last of the garrison makes a final massed attack on 29 May, and organised resistance ends the next day. Tokyo announces the end as 玉砕 gyokusai, \"shattering like a jewel\", the communiqués' word.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1943, 11–30 May"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Aleutian Islands, 3 June 1942 – 24 August 1943"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R8 §3.1: 玉砕 named as the communiqués' word, first used officially for Attu (ja.wikipedia, tertiary; *verify*)."
+  },
+  {
+    "id": "nauru-deportation-1943",
+    "title": "Nauruans deported to Truk",
+    "gloss": "hunger on both islands",
+    "ja": null,
+    "when": {
+      "from": "1943-06",
+      "to": "1946-01",
+      "precision": "month",
+      "clock": "jst",
+      "zoneNote": "The occupation keeps Nauru on Tokyo time."
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "nauru",
+        "role": "from"
+      },
+      {
+        "place": "tol",
+        "role": "to"
+      }
+    ],
+    "kind": "people",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "nauruan",
+      "jp"
+    ],
+    "alsoSides": [
+      "chuukese"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Japanese command deports most of Nauru's people to the Truk lagoon, where they are put to work and go hungry as Truk is cut off. Those left on Nauru starve too. The survivors are brought home in January 1946.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-nauru"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "burma-railway-1943",
+    "title": "The Burma–Thailand railway",
+    "gloss": "through the jungle to the Burma front",
+    "ja": {
+      "kanji": "泰緬鉄道",
+      "romaji": "Taimen tetsudō",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-06",
+      "to": "1943-10-17",
+      "precision": "day",
+      "zone": "+07:00"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "kanchanaburi",
+        "role": "at"
+      },
+      {
+        "place": "thanbyuzayat",
+        "role": "at"
+      }
+    ],
+    "kind": "captivity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "uk",
+      "au",
+      "nl",
+      "us"
+    ],
+    "alsoSides": [
+      "romusha"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Prisoners of war and conscripted Asian labourers, the rōmusha, are made to build a railway through the jungle between Thailand and Burma to supply the Burma front. Cholera, starvation and beatings kill a great many of them; most of the dead are Asian labourers whose names were never recorded. The line is finished in October 1943.",
+    "stops": [
+      {
+        "text": "The bridge over the Mae Klong at Kanchanaburi.",
+        "place": "kanchanaburi",
+        "zoom": "table"
+      },
+      {
+        "text": "Thanbyuzayat, the line's Burmese end.",
+        "place": "thanbyuzayat",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "awm-pow"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "awm-pow",
+        "says": "\"approximately 22,000 Australians became prisoners of the Japanese\".",
+        "scope": "Australian prisoners of the Japanese, the whole war"
+      }
+    ],
+    "routes": [],
+    "notes": "The completion date is R3's *verify*."
+  },
+  {
+    "id": "new-georgia-1943",
+    "title": "New Georgia",
+    "gloss": "Munda, and night actions in the channels",
+    "ja": {
+      "kanji": "ニュージョージア島の戦い",
+      "romaji": "Nyū Jōjia-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-06-30",
+      "to": "1943-10-07",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "munda",
+        "role": "at"
+      },
+      {
+        "place": "kula-gulf",
+        "role": "near"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "nz",
+      "jp"
+    ],
+    "alsoSides": [
+      "solomon-islanders"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "American troops land on Rendova and New Georgia to take the Japanese airfield at Munda, and fight slowly through the jungle to capture it in August. In the channels around the island destroyers and cruisers meet by night again and again, in Kula Gulf, off Kolombangara and in Vella Gulf.",
+    "stops": [
+      {
+        "text": "August: Munda airfield taken.",
+        "place": "munda",
+        "zoom": "table"
+      },
+      {
+        "text": "July: night actions in Kula Gulf and off Kolombangara.",
+        "place": "kula-gulf",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 July – 15 October 1943"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 50–55"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "lae-1943",
+    "title": "Lae, Salamaua and Nadzab",
+    "gloss": "paratroops in the Markham valley",
+    "ja": {
+      "kanji": "ラエ・サラモアの戦い",
+      "romaji": "Rae Saramoa no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-09-04",
+      "to": "1943-09-16",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "lae",
+        "role": "at"
+      },
+      {
+        "place": "nadzab",
+        "role": "landing"
+      },
+      {
+        "place": "salamaua",
+        "role": "near"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "au",
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "papuan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Australians land east of Lae from the sea while US paratroops seize Nadzab in the Markham valley and Australian troops are flown in behind them. Salamaua falls, and Lae on 16 September; its garrison escapes north over the Saruwaged Range.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 September and 1 October 1943"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1943, September"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "new-guinea-1943-44"
+    ]
+  },
+  {
+    "id": "bougainville-1943",
+    "title": "The landing at Empress Augusta Bay",
+    "gloss": "a perimeter and its airfields",
+    "ja": {
+      "kanji": "ブーゲンビル島の戦い",
+      "romaji": "Būgenbiru-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-11-01",
+      "to": "1943-11-02",
+      "precision": "day",
+      "clock": "usn-zm11"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "cape-torokina",
+        "role": "landing"
+      },
+      {
+        "place": "bougainville",
+        "role": "in"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "nz",
+      "au",
+      "jp"
+    ],
+    "alsoSides": [
+      "bougainvillean"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "US Marines land at Empress Augusta Bay, halfway along Bougainville's west coast, and build airfields inside a perimeter rather than take the whole island. That night a US cruiser force turns back a Japanese counterstroke in the bay. Australian troops take over the campaign in late 1944, and it lasts until the war's end.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 and 15 November 1943"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "App. 57–58"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "tarawa-1943",
+    "title": "Tarawa",
+    "gloss": "landing craft grounded on the reef",
+    "ja": {
+      "kanji": "タラワの戦い",
+      "romaji": "Tarawa no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1943-11-20",
+      "to": "1943-11-23",
+      "precision": "day",
+      "zone": "+12:00",
+      "zoneNote": "The nautical zone of the Gilberts."
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "betio",
+        "role": "landing"
+      },
+      {
+        "place": "tarawa",
+        "role": "in"
+      },
+      {
+        "place": "makin",
+        "role": "landing"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "korean",
+      "i-kiribati"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Marines assault Betio, the fortified islet at the corner of Tarawa atoll, while Army troops land on Makin. At Betio their landing craft ground on the reef at low tide and men wade a long way to the beach under fire. Betio is declared secure in three days; almost the whole garrison dies, Korean labourers among them.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1943, 20 and 23 November"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 December 1943"
+      },
+      {
+        "id": "crowl-love-1955"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "central-pacific-1943-44"
+    ],
+    "notes": "R3 adds that the people of Tarawa had been moved off Betio by the Japanese (*verify*)."
+  },
+  {
+    "id": "kwajalein-1944",
+    "title": "Kwajalein and Roi-Namur",
+    "gloss": "one of the world's largest lagoons",
+    "ja": {
+      "kanji": "クェゼリンの戦い",
+      "romaji": "Kwezerin no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-01-31",
+      "to": "1944-02-04",
+      "precision": "day",
+      "zone": "+11:00",
+      "zoneNote": "The nautical zone of the Marshalls."
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "kwajalein",
+        "role": "landing"
+      },
+      {
+        "place": "roi-namur",
+        "role": "landing"
+      },
+      {
+        "place": "majuro",
+        "role": "landing"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "marshallese"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "After days of bombardment the Army takes Kwajalein islet and the Marines Roi-Namur, at the two ends of one of the world's largest lagoons; Majuro is taken unopposed for an anchorage, and Eniwetok follows in February. The fortified atolls of Wotje, Maloelap, Mili and Jaluit are bypassed and left to starve, with the Marshallese who live on them.",
+    "stops": [
+      {
+        "text": "Roi-Namur, at the lagoon's northern corner.",
+        "place": "roi-namur",
+        "zoom": "table"
+      },
+      {
+        "text": "Kwajalein islet, at its southern end.",
+        "place": "kwajalein",
+        "zoom": "table"
+      },
+      {
+        "text": "The bypassed atolls: Mili, Jaluit, Maloelap, Wotje.",
+        "place": "mili",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 February 1944"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Eastern Mandates"
+      },
+      {
+        "id": "crowl-love-1955"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "central-pacific-1943-44"
+    ]
+  },
+  {
+    "id": "truk-1944",
+    "title": "Truk struck",
+    "gloss": "the Combined Fleet's anchorage, never invaded",
+    "ja": {
+      "kanji": "トラック島空襲",
+      "romaji": "Torakku-tō kūshū",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-02-17",
+      "to": "1944-02-18",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "truk",
+        "role": "target"
+      }
+    ],
+    "kind": "raid",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "chuukese"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The fast carriers strike Truk, the Combined Fleet's anchorage in the Carolines. The fleet has already gone, but aircraft and ships sink cruisers, destroyers and a great tonnage of merchant shipping in the lagoon and wreck the aircraft on its airfields. Truk is never invaded; it is left cut off, with its garrison and the Chuukese around it.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 March 1944"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. IX"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 17–18 February"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "imphal-kohima-1944",
+    "title": "Imphal and Kohima",
+    "gloss": "the front across a tennis court",
+    "ja": {
+      "kanji": "インパール作戦",
+      "romaji": "Inpāru sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-03-08",
+      "to": "1944-07-03",
+      "precision": "day",
+      "zone": "+06:30",
+      "zoneNote": "India's war time, as the tz database gives it."
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "imphal",
+        "role": "at"
+      },
+      {
+        "place": "kohima",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "ina",
+      "uk",
+      "in"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The 15th Army crosses the Chindwin to take Imphal and Kohima and break into India, with the Indian National Army beside it. British and Indian divisions, supplied by air, hold both; at Kohima the front runs across the deputy commissioner's tennis court. With the monsoon and hunger, the Japanese retreat becomes a disaster.",
+    "stops": [
+      {
+        "text": "Kohima, where the front runs through the deputy commissioner's garden.",
+        "place": "kohima",
+        "zoom": "table"
+      },
+      {
+        "text": "Imphal, held and supplied by air.",
+        "place": "imphal",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 April – 15 July 1944"
+      },
+      {
+        "id": "romanus-1956",
+        "where": "Map 10"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "ウ号作戦 U-gō sakusen and コヒマの戦い are the Japanese names (R3, *verify*)."
+  },
+  {
+    "id": "ichigo-1944",
+    "title": "Operation Ichi-Go",
+    "gloss": "a land route from Korea to Indochina",
+    "ja": {
+      "kanji": "大陸打通作戦",
+      "romaji": "Tairiku datsū sakusen",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-04-19",
+      "to": "1944-12",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "hengyang",
+        "role": "in"
+      },
+      {
+        "place": "kweilin",
+        "role": "in"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "cn"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japan's great offensive in China drives south through Henan, Hunan and Guangxi to open a land route from Korea to Indochina and overrun the airfields of the US Fourteenth Air Force. Hengyang holds out for weeks in the summer; Kweilin and Liuchow fall in November, and in December the corridor joins Indochina. Nationalist China suffers its worst defeats since 1938.",
+    "stops": [
+      {
+        "text": "Summer: the siege of Hengyang, which falls on 8 August.",
+        "place": "hengyang",
+        "zoom": "table"
+      },
+      {
+        "text": "November: Kweilin and Liuchow fall.",
+        "place": "kweilin",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 May – 15 December 1944"
+      },
+      {
+        "id": "romanus-1956",
+        "where": "Map 18 (ICHIGO Plan)"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "matterhorn-1944"
+    ],
+    "notes": "一号作戦 Ichi-gō sakusen is the other Japanese name (R3, *verify*). R3 calls it Japan's largest offensive of the war (*verify*); the card says \"great\"."
+  },
+  {
+    "id": "saipan-1944",
+    "title": "Saipan",
+    "gloss": "the heart of the Mandate's settlement",
+    "ja": {
+      "kanji": "サイパンの戦い",
+      "romaji": "Saipan no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-06-15",
+      "to": "1944-07-09",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "charan-kanoa",
+        "role": "landing"
+      },
+      {
+        "place": "saipan",
+        "role": "in"
+      },
+      {
+        "place": "marpi-point",
+        "role": "at"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "chamorro",
+      "okinawan"
+    ],
+    "alsoSides": [
+      "refaluwasch",
+      "japanese-civ",
+      "korean"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Marines and soldiers land on Saipan, the heart of Japanese settlement in the South Seas Mandate, home to Chamorro and Carolinian people and to many settlers from Okinawa and Japan. The garrison makes its last massed attack on 7 July, and the island is declared secure on the 9th. At Marpi Point in the north, civilians die leaping from the cliffs, at their own hands and at their soldiers'.",
+    "stops": [
+      {
+        "text": "15 June: the landing at Charan Kanoa.",
+        "place": "charan-kanoa",
+        "zoom": "table"
+      },
+      {
+        "text": "July: Marpi Point.",
+        "place": "marpi-point",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 15 June"
+      },
+      {
+        "id": "crowl-1960"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 July 1944"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "central-pacific-1943-44",
+      "b29-marianas-1944-45"
+    ]
+  },
+  {
+    "id": "philippine-sea-1944",
+    "title": "The battle of the Philippine Sea",
+    "gloss": "Japan's carrier air arm destroyed",
+    "ja": {
+      "kanji": "マリアナ沖海戦",
+      "romaji": "Mariana-oki kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1944-06-19",
+      "to": "1944-06-20",
+      "precision": "day",
+      "zone": "+09:00"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "philippine-sea",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Vice Admiral OZAWA Jisaburō 小沢治三郎's Mobile Fleet sends great raids against the US Fifth Fleet off the Marianas. Radar-directed Hellcats and the fleet's guns destroy most of the attackers; American airmen call it the \"Great Marianas Turkey Shoot\". Submarines sink Taihō 大鳳 and Shōkaku 翔鶴, and a strike at dusk the next day sinks Hiyō 飛鷹.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. X, App. 79–84"
+      },
+      {
+        "id": "ussbs-ijo-1946",
+        "where": "Nav 3 (Ozawa)"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 19–20 June"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "あ号作戦 A-gō sakusen is R2 §13's. Positions are R3's *verify* (from USSBS App. 83–84)."
+  },
+  {
+    "id": "guam-1944",
+    "title": "Guam retaken",
+    "gloss": "Liberation Day, 21 July",
+    "ja": {
+      "kanji": "グアムの戦い",
+      "romaji": "Guamu no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-07-21",
+      "to": "1944-08-10",
+      "precision": "day",
+      "zone": "+10:00"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "asan",
+        "role": "landing"
+      },
+      {
+        "place": "guam",
+        "role": "in"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "chamorro"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Marines and soldiers land on either side of the Orote peninsula on 21 July, the day Guam keeps as Liberation Day. Organised resistance ends on 10 August; some soldiers hide in the jungle for years.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 21 July"
+      },
+      {
+        "id": "wp-guam-occupation"
+      },
+      {
+        "id": "crowl-1960"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "central-pacific-1943-44"
+    ]
+  },
+  {
+    "id": "guam-massacres-1944",
+    "title": "Manenggon, Tinta and Faha",
+    "gloss": "marched inland before the landing",
+    "ja": null,
+    "when": {
+      "from": "1944-07-15",
+      "to": "1944-07-16",
+      "precision": "day",
+      "clock": "jst",
+      "zoneNote": "The occupation keeps Guam on Tokyo time."
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "malesso",
+        "role": "at"
+      },
+      {
+        "place": "manenggon",
+        "role": "at"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "chamorro"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "As the American landing nears, the Japanese command marches most of Guam's people inland to camps such as Manenggon in the Ylig river valley. At Tinta and Faha, near the village of Malesso', soldiers kill villagers in caves on 15–16 July; at Tinta some survive by lying among the dead. Days later the men of Malesso' rise against their guards.",
+    "stops": [
+      {
+        "text": "Manenggon, in the Ylig river valley.",
+        "place": "manenggon",
+        "zoom": "table"
+      },
+      {
+        "text": "Tinta and Faha, near Malesso'.",
+        "place": "malesso",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "wp-guam-occupation"
+      },
+      {
+        "id": "nps-wapa-memorial"
+      },
+      {
+        "id": "nps-wapa-tinta-faha"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "nps-wapa-memorial",
+        "says": "The island's memorial wall names \"the 1,170 people of Guam who died during the war\" and \"the 14,721 who suffered atrocities during the occupation and battles\".",
+        "scope": "the people of Guam, December 1941 – August 1944"
+      }
+    ],
+    "routes": [],
+    "notes": "The dates and places of Tinta and Faha rest on the NPS pages, known only from a search summary (R3: *verify*); their pages on nps.gov did not load in this pass. A Chamorro reader should see this card (R3 §11)."
+  },
+  {
+    "id": "tsushima-maru-1944",
+    "title": "The Tsushima Maru",
+    "gloss": "schoolchildren evacuated from Okinawa",
+    "ja": {
+      "kanji": "対馬丸事件",
+      "romaji": "Tsushima Maru jiken",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-08-22",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "tsushima-maru-sinking",
+        "role": "at"
+      },
+      {
+        "place": "akusekijima",
+        "role": "near"
+      }
+    ],
+    "kind": "sinking",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "okinawan"
+    ],
+    "alsoSides": [
+      "japanese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The transport Tsushima Maru, carrying schoolchildren and families evacuated from Okinawa to Kyushu, is torpedoed at night by the submarine Bowfin near Akusekijima. The submarine's crew does not know who is aboard. Most of the children are lost.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 22 August"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 adds that survivors were told not to speak of it (*verify*)."
+  },
+  {
+    "id": "hell-ships-1944",
+    "title": "The prisoner transports: Rakuyō Maru, Jun'yō Maru, Arisan Maru",
+    "gloss": "prisoners in the holds",
+    "ja": {
+      "kanji": "捕虜輸送船（地獄船）",
+      "romaji": "Horyo yusōsen (jigokusen)",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-09-12",
+      "to": "1944-10-24",
+      "precision": "day",
+      "zone": "+08:00",
+      "zoneNote": "The dates are the chronology's."
+    },
+    "chapter": "central-pacific",
+    "where": [
+      {
+        "place": "rakuyo-maru-sinking",
+        "role": "at"
+      },
+      {
+        "place": "junyo-maru-sinking",
+        "role": "at"
+      },
+      {
+        "place": "arisan-maru-sinking",
+        "role": "at"
+      }
+    ],
+    "kind": "captivity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "uk",
+      "au",
+      "nl"
+    ],
+    "alsoSides": [
+      "romusha"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japan moves Allied prisoners and Asian labourers in the holds of cargo ships, in heat and thirst. Most of the prisoners who die at sea die when the ships are sunk by Allied submarines and aircraft whose crews do not know who is aboard. In a few weeks of 1944 the Rakuyō Maru in the South China Sea, the Jun'yō Maru off Sumatra and the Arisan Maru in the Bashi Channel go down with prisoners and labourers in their holds.",
+    "stops": [
+      {
+        "text": "12 September: Rakuyō Maru, in the South China Sea.",
+        "place": "rakuyo-maru-sinking",
+        "zoom": "table"
+      },
+      {
+        "text": "18 September: Jun'yō Maru, off Sumatra.",
+        "place": "junyo-maru-sinking",
+        "zoom": "table"
+      },
+      {
+        "text": "24 October: Arisan Maru, in the Bashi Channel.",
+        "place": "arisan-maru-sinking",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 12 and 18 September, 24 October"
+      },
+      {
+        "id": "wp-hell-ships"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-hell-ships",
+        "says": "\"More than 20,000 Allied POWs died at sea when the transport ships carrying them were attacked by Allied submarines and aircraft\"; others died of suffocation, thirst and disease in the holds.",
+        "scope": "the whole war"
+      }
+    ],
+    "routes": [
+      "japan-oil-route"
+    ],
+    "notes": "Written in R8 §5.3's words; the ships' kanji 楽洋丸, 順陽丸 and 阿里山丸 are *verify* (R3 §11)."
+  },
+  {
+    "id": "peleliu-1944",
+    "title": "Peleliu",
+    "gloss": "dug into the coral ridges",
+    "ja": {
+      "kanji": "ペリリューの戦い",
+      "romaji": "Peririū no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-09-15",
+      "to": "1944-11-27",
+      "precision": "day",
+      "zone": "+09:00"
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "peleliu",
+        "role": "landing"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "palauan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The 1st Marine Division lands on Peleliu expecting a short fight. The garrison, dug into the coral ridges of the Umurbrogol under new orders not to waste itself in massed attacks, holds out for over two months. Angaur is taken, and Babelthuap and Koror, the Mandate's capital, are left behind, cut off.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "smith-1953",
+        "where": "Maps 19–24"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XI"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 October 1944"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "central-pacific-1943-44"
+    ],
+    "notes": "R3 adds that the island's Palauan villagers had been moved away before the battle (*verify*)."
+  },
+  {
+    "id": "naha-raid-1944",
+    "title": "The ten-ten air raid",
+    "gloss": "Naha burned",
+    "ja": {
+      "kanji": "十・十空襲",
+      "romaji": "Jū-jū kūshū",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-10-10",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "naha",
+        "role": "target"
+      },
+      {
+        "place": "okinawa",
+        "role": "in"
+      }
+    ],
+    "kind": "bombing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "okinawan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Carrier aircraft attack Okinawa and the Ryukyus for the first time, striking shipping and airfields and burning most of Naha. Okinawans name the raid for its date, ten-ten.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 10 October"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "leyte-1944",
+    "title": "The landings on Leyte",
+    "gloss": "\"I have returned\"",
+    "ja": {
+      "kanji": "レイテ島の戦い",
+      "romaji": "Reite-tō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-10-20",
+      "to": "1944-12-26",
+      "precision": "day",
+      "clock": "usn-item"
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "palo",
+        "role": "landing"
+      },
+      {
+        "place": "leyte",
+        "role": "in"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "ph",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Sixth Army lands on Leyte's east coast, and MacArthur wades ashore to announce his return. Japan answers by sending its whole fleet against the landing and its reinforcements through Ormoc Bay. The fighting in the rain-soaked mountains lasts to the end of the year.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 November 1944"
+      },
+      {
+        "id": "cannon-1954"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Leyte, 17 October 1944 – 1 July 1945"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "leyte-gulf-1944-kurita",
+      "leyte-gulf-1944-nishimura",
+      "leyte-gulf-1944-ozawa"
+    ]
+  },
+  {
+    "id": "leyte-gulf-1944",
+    "title": "The battle of Leyte Gulf",
+    "gloss": "the last great fleet action",
+    "ja": {
+      "kanji": "レイテ沖海戦",
+      "romaji": "Reite-oki kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1944-10-23",
+      "to": "1944-10-26",
+      "precision": "day",
+      "clock": "usn-item",
+      "zoneNote": "Item is UTC+9, the same as Tokyo time, so the two sides' dates agree."
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "leyte-gulf",
+        "role": "target"
+      },
+      {
+        "place": "palawan-passage",
+        "role": "at"
+      },
+      {
+        "place": "sibuyan-sea",
+        "role": "at"
+      },
+      {
+        "place": "surigao-strait",
+        "role": "at"
+      },
+      {
+        "place": "off-samar",
+        "role": "at"
+      },
+      {
+        "place": "cape-engano",
+        "role": "at"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "au"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Japan's plan, Shō-ichi-gō 捷一号作戦, sends its battleships and cruisers from the west and south at the Leyte landing while Vice Admiral OZAWA Jisaburō 小沢治三郎's carriers, nearly empty of aircraft, draw Halsey's fast carriers north. US submarines strike first in the Palawan Passage; aircraft sink Musashi 武蔵 in the Sibuyan Sea; old battleships destroy Vice Admiral Nishimura's force in Surigao Strait; and Kurita comes through San Bernardino Strait to find only escort carriers off Samar. It is the last great fleet action, and the end of the Imperial Japanese Navy as a fighting fleet.",
+    "stops": [
+      {
+        "text": "23 October: submarines sink Atago and Maya in the Palawan Passage.",
+        "place": "palawan-passage",
+        "zoom": "table"
+      },
+      {
+        "text": "24 October: aircraft sink Musashi in the Sibuyan Sea.",
+        "place": "sibuyan-sea",
+        "zoom": "table"
+      },
+      {
+        "text": "The night of 24–25 October: Fusō and Yamashiro sunk in Surigao Strait.",
+        "place": "surigao-strait",
+        "zoom": "table"
+      },
+      {
+        "text": "The morning of 25 October: Kurita's battleships meet Taffy 3 off Samar.",
+        "place": "off-samar",
+        "zoom": "table"
+      },
+      {
+        "text": "25 October: Zuikaku and Ozawa's carriers sunk off Cape Engaño.",
+        "place": "cape-engano",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1944, 23–25 October"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XII, App. 93"
+      },
+      {
+        "id": "nwc-leyte-3"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "leyte-gulf-1944-nishimura",
+      "leyte-gulf-1944-shima",
+      "leyte-gulf-1944-ozawa",
+      "leyte-gulf-1944-halsey",
+      "leyte-gulf-1944-kurita"
+    ],
+    "notes": "Samar has its own event and box (samar-1944); Surigao is a later box. 比島沖海戦 Hitō-oki kaisen is the wartime Japanese name (R2 §13)."
+  },
+  {
+    "id": "samar-1944",
+    "title": "The battle off Samar",
+    "gloss": "escort carriers and their screen against battleships",
+    "ja": {
+      "kanji": "サマール沖海戦",
+      "romaji": "Samāru-oki kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1944-10-25T06:45+09:00",
+      "to": "1944-10-25T10:10+09:00",
+      "precision": "minute",
+      "clock": "usn-item",
+      "zoneNote": "Item, the US Navy's zone minus 9, is UTC+9 and the same clock as Tokyo time. Several Japanese tables of movement run an hour behind it in their early entries."
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "off-samar",
+        "role": "at"
+      },
+      {
+        "place": "samar",
+        "role": "near"
+      }
+    ],
+    "kind": "battle",
+    "flag": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table",
+      "box"
+    ],
+    "box": "samar",
+    "summary": "At dawn the escort carriers of Taffy 3 sight the pagoda masts of Vice Admiral KURITA Takeo 栗田健男's battleships and cruisers on the horizon off Samar, and Yamato 大和 opens fire. Taffy 3's destroyers and destroyer escorts turn and charge with torpedoes and 5-inch guns through smoke and rain squalls, while the carriers' aircraft attack with whatever they carry; a torpedo from Johnston strikes the cruiser Kumano 熊野. Gambier Bay, Johnston, Hoel and Samuel B. Roberts are sunk, and the cruisers Chōkai 鳥海, Chikuma 筑摩 and Suzuya 鈴谷 are lost. At 09:11 Kurita, unsure what he faces, turns away north.",
+    "stops": [
+      {
+        "text": "06:45: Taffy 3 sights the Japanese fleet; Yamato opens fire at 06:58.",
+        "place": "off-samar",
+        "zoom": "table"
+      },
+      {
+        "text": "09:11: Kurita orders his ships to re-form and turns north.",
+        "place": "samar",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "johnston-ar-1944"
+      },
+      {
+        "id": "hoel-ar-1944"
+      },
+      {
+        "id": "sib22-leyte-1945",
+        "where": "time table and track chart"
+      },
+      {
+        "id": "ussbs-ijo-1946",
+        "where": "Nav 9 (Kurita), 35 (Koyanagi), 41 (Ōtani)"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 25 October"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XII, App. 94"
+      },
+      {
+        "id": "jacar-crudiv7-1944"
+      },
+      {
+        "id": "morison-xii"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "morison-xii",
+        "says": "Johnston: of a complement of 327, 141 saved and 186 lost: about 50 killed while she was afloat, 45 died on the rafts, and 92, Commander Evans among them, were alive in the water but never found.",
+        "scope": "Johnston"
+      },
+      {
+        "source": "johnston-hoel-assn",
+        "says": "Johnston \"suffered the loss of 152 Members\" and \"had 144 Survivors\"; Hoel lost 252, with 89 survivors.",
+        "scope": "Johnston and Hoel"
+      },
+      {
+        "source": "morison-xii",
+        "says": "Samuel B. Roberts: of 8 officers and about 170 men, \"3 officers and 86 men were killed, missing or died of wounds\".",
+        "scope": "Samuel B. Roberts"
+      },
+      {
+        "source": "morison-xii",
+        "says": "Gambier Bay: \"About 750 of the total complement of 854 went over the side\".",
+        "scope": "Gambier Bay"
+      },
+      {
+        "source": "wp-samar",
+        "says": "1,161 Americans killed and missing and 913 wounded (NHHC H-Gram 036, at second hand).",
+        "scope": "US losses at Samar"
+      },
+      {
+        "source": "wp-samar",
+        "says": "\"2,700+ killed and wounded\" (the CTG 77.4 report, a US estimate, at second hand).",
+        "scope": "Japanese losses at Samar"
+      },
+      {
+        "source": "trom-suzuya",
+        "says": "Suzuya: 247 lost; her captain and 401 rescued by Okinami.",
+        "scope": "Suzuya"
+      },
+      {
+        "source": "trom-kumano",
+        "says": "Johnston's torpedo hit Kumano at 07:24; Morison has 07:27, which the torpedoes' run time favours (R5 §4.6).",
+        "scope": "Kumano"
+      },
+      {
+        "source": "trom-yamato",
+        "says": "Yamato opens fire at \"0558\", an hour behind Item; Morison has the first salvo at 06:58.",
+        "scope": "the first salvo"
+      },
+      {
+        "source": "ussbs-ijo-1946",
+        "says": "Kurita (Nav 9): \"thinking that this engagement was over and that we would come under attack from your northern carrier force, I ordered the formation closed. It was about ten minutes past nine o'clock.\" Koyanagi (Nav 35): \"We couldn't see anything during most of the battle.\" Morison: the escort carriers' top speed was 18 knots against the Japanese 24 or 25.",
+        "scope": "why Kurita turned away"
+      }
+    ],
+    "routes": [
+      "leyte-gulf-1944-kurita"
+    ],
+    "notes": "The table stops only; the box's stops are in boxes/samar/battle.json. The box's clock closes before the attack on St. Lo, which is its own card (tokko-1944)."
+  },
+  {
+    "id": "tokko-1944",
+    "title": "The first tokkō attacks",
+    "gloss": "the Shikishima unit off Samar",
+    "ja": {
+      "kanji": "神風特別攻撃隊",
+      "romaji": "Shinpū tokubetsu kōgekitai",
+      "verify": true
+    },
+    "when": {
+      "from": "1944-10-25T10:51+09:00",
+      "to": "1944-10-25T11:25+09:00",
+      "precision": "minute",
+      "clock": "usn-item",
+      "readings": [
+        {
+          "t": "1944-10-25T10:51+09:00",
+          "sourceClock": "1051",
+          "sourceZone": "+09:00",
+          "sourceDate": "1944-10-25",
+          "source": "morison-xii"
+        }
+      ]
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "st-lo-sinking",
+        "role": "at"
+      },
+      {
+        "place": "mabalacat",
+        "role": "from"
+      }
+    ],
+    "kind": "other",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "As Taffy 3 recovers its aircraft after the surface action, Zeros of the Shikishima unit 敷島隊 of the 201st Air Group, formed days earlier at Mabalacat on Luzon, come in low under the radar and climb to dive with their bombs onto the escort carriers. One crashes through the flight deck of St. Lo; explosions follow in her hangar, and she sinks at 11:25. Japan's navy and army make such attacks a system: the tokkō (special attack) units, which the Allies call kamikaze.",
+    "stops": [
+      {
+        "text": "Mabalacat, where the unit is formed.",
+        "place": "mabalacat",
+        "zoom": "table"
+      },
+      {
+        "text": "10:51: St. Lo is struck; at 11:25 she sinks.",
+        "place": "st-lo-sinking",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "morison-xii"
+      },
+      {
+        "id": "danfs-st-lo"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1944, 25 October"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "morison-xii",
+        "says": "The screen searched for survivors until 15:34 and recovered 754.",
+        "scope": "St. Lo"
+      },
+      {
+        "source": "danfs-st-lo",
+        "says": "Crashed at 10:51 and sank \"half an hour later\".",
+        "scope": "St. Lo"
+      }
+    ],
+    "routes": [],
+    "notes": "Never a role (DESIGN §3.5); the unit leader was Lieutenant SEKI Yukio 関行男 (Yamato TROM, *verify*)."
+  },
+  {
+    "id": "manila-1945",
+    "title": "Manila",
+    "gloss": "a city destroyed in a month",
+    "ja": {
+      "kanji": "マニラの戦い",
+      "romaji": "Manira no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-02-03",
+      "to": "1945-03-03",
+      "precision": "day",
+      "zone": "+08:00"
+    },
+    "chapter": "return",
+    "where": [
+      {
+        "place": "intramuros",
+        "role": "in"
+      },
+      {
+        "place": "manila",
+        "role": "in"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "ph",
+      "jp"
+    ],
+    "alsoSides": [
+      "filipino-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "In February 1945, as US and Filipino forces fight to retake Manila, Japanese naval and army troops left to hold the city fight block by block and massacre its people. American artillery levels the old walled city of Intramuros. The city's civilian dead, counted from all causes, include those massacred by Japanese troops and those killed in the shelling; Manila is left among the most destroyed cities of the war.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-manila-massacre"
+      },
+      {
+        "id": "smith-1963"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-manila-massacre",
+        "says": "\"at least 100,000 civilians were killed in total during the battle from all causes, including the massacre by Japanese troops\" (at second hand, citing Connaughton et al.).",
+        "scope": "Manila's civilians, February–March 1945"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words. マニラ大虐殺 Manira daigyakusatsu is the Japanese name of the massacre (R3, *verify*)."
+  },
+  {
+    "id": "iwo-jima-1945",
+    "title": "Iwo Jima",
+    "gloss": "black sand, and a garrison in tunnels",
+    "ja": {
+      "kanji": "硫黄島の戦い",
+      "romaji": "Iōtō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-02-19",
+      "to": "1945-03-26",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "iwo-jima",
+        "role": "landing"
+      }
+    ],
+    "kind": "landing",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Marines land on the black volcanic sand of Iwo Jima, halfway between the Marianas and Tokyo, to take its airfields. Lieutenant General KURIBAYASHI Tadamichi 栗林忠道's garrison fights from tunnels and does not come out to die in massed attacks. A flag goes up on Mount Suribachi on the fifth day; the fighting lasts five weeks, and crippled B-29s are landing on the island before it ends.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1945, 19 February"
+      },
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XIII"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 March and 1 April 1945"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "Kuribayashi's kanji and the reading of 硫黄島 (Iōtō or Iwō-jima) are *verify* (R3 §11)."
+  },
+  {
+    "id": "tokyo-fire-raid-1945",
+    "title": "The firebombing of Tokyo",
+    "gloss": "one night in March",
+    "ja": {
+      "kanji": "東京大空襲",
+      "romaji": "Tōkyō daikūshū",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-03-10",
+      "precision": "day",
+      "clock": "jst",
+      "zoneNote": "The bombers come over late on 9 March and the fires burn through the night; Japan names the raid for 10 March."
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "shitamachi",
+        "role": "target"
+      }
+    ],
+    "kind": "bombing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "japanese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "In the night of 9–10 March, General LeMay sends the B-29s in low with incendiaries against the crowded wooden districts east of the Sumida river. The fire storm burns a great part of Tokyo in one night, most of the dead are civilians, and a great many are left homeless. It opens months of fire raids on Japan's cities.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-tokyo-raid-1945"
+      },
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "craven-cate",
+        "where": "vol. V"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-tokyo-raid-1945",
+        "says": "\"more than 90,000 and possibly over 100,000\" killed, mostly civilians, and a million left homeless (citing Frank 1999).",
+        "scope": "the night of 9–10 March 1945"
+      }
+    ],
+    "routes": [
+      "b29-marianas-1944-45"
+    ],
+    "notes": "Written in R8 §5.3's words, with the figures in the tellings."
+  },
+  {
+    "id": "burma-1945",
+    "title": "Meiktila, Mandalay and Rangoon",
+    "gloss": "a race south before the monsoon",
+    "ja": {
+      "kanji": "イラワジ会戦",
+      "romaji": "Irawaji kaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-01",
+      "to": "1945-05-03",
+      "precision": "day",
+      "zone": "+06:30"
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "meiktila",
+        "role": "in"
+      },
+      {
+        "place": "mandalay",
+        "role": "in"
+      },
+      {
+        "place": "rangoon",
+        "role": "to"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "uk",
+      "in",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Slim's Fourteenth Army crosses the Irrawaddy, seizes Meiktila behind the Japanese armies and takes Mandalay in March. Aung San's Burma National Army turns against the Japanese. A race south to beat the monsoon ends when Rangoon is entered from the sea in early May.",
+    "stops": [
+      {
+        "text": "March: Meiktila, seized behind the Japanese armies.",
+        "place": "meiktila",
+        "zoom": "table"
+      },
+      {
+        "text": "March: Mandalay.",
+        "place": "mandalay",
+        "zoom": "table"
+      },
+      {
+        "text": "3 May: Rangoon, entered from the sea.",
+        "place": "rangoon",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 February – 15 May 1945"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Central Burma"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "ドラキュラ作戦 is the Japanese rendering of Operation Dracula (R3, *verify*)."
+  },
+  {
+    "id": "kerama-1945",
+    "title": "The Kerama Islands",
+    "gloss": "an anchorage, and families who died together",
+    "ja": {
+      "kanji": "慶良間諸島の戦い",
+      "romaji": "Kerama shotō no tatakai",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-03-26",
+      "to": "1945-03-28",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "zamami",
+        "role": "at"
+      },
+      {
+        "place": "tokashiki",
+        "role": "at"
+      },
+      {
+        "place": "kerama-islands",
+        "role": "in"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp",
+      "okinawan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "American troops land on the Kerama Islands west of Okinawa to make an anchorage. On Zamami, Tokashiki and other islands many islanders die in group suicides, often whole families, told that capture would be worse and handed grenades by soldiers. Whether the army ordered the deaths has been argued in Japanese courts and textbooks.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1945, 26 March"
+      },
+      {
+        "id": "appleman-1948"
+      },
+      {
+        "id": "okinawa-museum-statement"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The term 集団自決 shūdan jiketsu, \"group suicide\", is itself contested in Japan; R3 asks for Okinawa prefectural sources and a reader (*verify*)."
+  },
+  {
+    "id": "okinawa-1945",
+    "title": "Okinawa",
+    "gloss": "the typhoon of steel",
+    "ja": {
+      "kanji": "沖縄戦",
+      "romaji": "Okinawa-sen",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-04-01",
+      "to": "1945-06-23",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "hagushi",
+        "role": "landing"
+      },
+      {
+        "place": "shuri",
+        "role": "in"
+      },
+      {
+        "place": "okinawa",
+        "role": "in"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "uk",
+      "jp",
+      "okinawan"
+    ],
+    "alsoSides": [
+      "korean"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Tenth Army lands unopposed on the Hagushi beaches and meets the Japanese army in the Shuri line across the south. For nearly three months the battle grinds through the part of the island where most Okinawans live, while tokkō (special attack) aircraft, which the Allies call kamikaze, strike the fleet offshore. More civilians die than soldiers: some are killed by shellfire, some die of hunger and malaria, some are driven to take their own lives, and some are sacrificed by their own retreating army. The Japanese commander takes his life on 22 June or the 23rd; Okinawa keeps 23 June as 慰霊の日 Irei no hi, its day of mourning.",
+    "stops": [
+      {
+        "text": "1 April: the landing, unopposed.",
+        "place": "hagushi",
+        "zoom": "table"
+      },
+      {
+        "text": "April–May: the Shuri line.",
+        "place": "shuri",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XIV"
+      },
+      {
+        "id": "appleman-1948"
+      },
+      {
+        "id": "cmh-campaigns",
+        "where": "Ryukyus, 26 March – 2 July 1945"
+      },
+      {
+        "id": "okinawa-museum-statement"
+      },
+      {
+        "id": "cornerstone-of-peace"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "okinawa-museum-statement",
+        "says": "Ninety days of \"the typhoon of steel\" took more than 200,000 lives (「20数万の尊い人命」); civilian deaths, more than 100,000 (「10数万」), exceeded the soldiers'.",
+        "scope": "the Battle of Okinawa"
+      },
+      {
+        "source": "cornerstone-of-peace",
+        "says": "242,225 names on the Cornerstone of Peace in June 2024, \"regardless of their nationality or military or civilian status\".",
+        "scope": "all the dead of the Battle of Okinawa and of the war years the Cornerstone counts"
+      },
+      {
+        "source": "cmh-campaigns",
+        "says": "The US declares the campaign over on 2 July 1945; the Japanese commander's death on 22 or 23 June ends organised resistance.",
+        "scope": "the end"
+      }
+    ],
+    "routes": [],
+    "notes": "The civilians' sentence follows R8 §5.3, after the prefecture's museum."
+  },
+  {
+    "id": "ten-go-1945",
+    "title": "Yamato's last sortie",
+    "gloss": "the Surface Special Attack Force",
+    "ja": {
+      "kanji": "坊ノ岬沖海戦",
+      "romaji": "Bōnomisaki-oki kaisen",
+      "verify": false
+    },
+    "when": {
+      "from": "1945-04-06T15:20+09:00",
+      "to": "1945-04-07T14:23+09:00",
+      "precision": "minute",
+      "clock": "jst",
+      "readings": [
+        {
+          "t": "1945-04-06T15:20+09:00",
+          "sourceClock": "1520",
+          "sourceZone": "+09:00",
+          "sourceDate": "1945-04-06",
+          "source": "ussbs-campaigns-1946"
+        },
+        {
+          "t": "1945-04-07T14:23+09:00",
+          "sourceClock": "1423",
+          "sourceZone": "+09:00",
+          "sourceDate": "1945-04-07",
+          "source": "ussbs-campaigns-1946"
+        }
+      ]
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "yamato-sinking",
+        "role": "at"
+      },
+      {
+        "place": "tokuyama",
+        "role": "from"
+      },
+      {
+        "place": "bungo-strait",
+        "role": "via"
+      }
+    ],
+    "kind": "battle",
+    "flag": "cards",
+    "candidate": "box",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Yamato 大和 sails from Tokuyama with the light cruiser Yahagi 矢矧 and a destroyer screen as the Surface Special Attack Force, 海上特攻隊, ordered to reach Okinawa and beach herself there as a fortress. US submarines report her leaving the Bungo Strait in the evening; next day wave after wave of carrier aircraft attack her in the East China Sea from about 12:40, and at 14:23 she capsizes and blows up.",
+    "stops": [
+      {
+        "text": "6 April, evening: submarines report the force leaving the Bungo Strait.",
+        "place": "bungo-strait",
+        "zoom": "table"
+      },
+      {
+        "text": "7 April, 14:23: Yamato capsizes and blows up.",
+        "place": "yamato-sinking",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XIV, App. 100–103"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1945, 7 April"
+      },
+      {
+        "id": "tf58-okinawa-1945"
+      },
+      {
+        "id": "jacar-2sd-tengo-1945"
+      },
+      {
+        "id": "trom-yamato"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "contested",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "trom-yamato",
+        "says": "\"3,055 of 3,332 crewmen are lost\"; 276 rescued. Yahagi and four destroyers: 1,187 lost. The US: 10 aircraft and 12 airmen.",
+        "scope": "7 April 1945"
+      },
+      {
+        "source": "trom-yamato",
+        "says": "Yamato sank at 30°22′N 128°04′E.",
+        "scope": "where she sank"
+      },
+      {
+        "source": "usn-chron",
+        "says": "Yamato sank at 30°40′N 128°03′E.",
+        "scope": "where she sank"
+      }
+    ],
+    "routes": [
+      "ten-go-1945"
+    ],
+    "notes": "天一号作戦 Ten-ichi-gō sakusen and 海上特攻隊 are R2 §13's. R3: the story that she carried fuel for one way only is disputed (*verify*), and it stays off the card."
+  },
+  {
+    "id": "himeyuri-1945",
+    "title": "The Himeyuri students",
+    "gloss": "schoolgirls in the army's cave hospitals",
+    "ja": {
+      "kanji": "ひめゆり学徒隊",
+      "romaji": "Himeyuri gakutotai",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-03-23",
+      "to": "1945-06",
+      "precision": "day",
+      "clock": "jst"
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "ihara",
+        "role": "at"
+      }
+    ],
+    "kind": "people",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "okinawan"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Schoolgirls and teachers from two Okinawan girls' schools are mobilised as nurses for the army's cave hospitals. When the army retreats south in late May they follow it, and when the unit is disbanded in June they are left among the fighting. A museum stands at one of the caves.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wikidata",
+        "where": "Q717158"
+      },
+      {
+        "id": "okinawa-museum-statement"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3: *verify* in Okinawa prefectural sources and with the Himeyuri museum; the wording is contested in Japan (R3 §11)."
+  },
+  {
+    "id": "sandakan-1945",
+    "title": "The Sandakan death marches",
+    "gloss": "inland through the jungle to Ranau",
+    "ja": {
+      "kanji": "サンダカン死の行進",
+      "romaji": "Sandakan shi no kōshin",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-01",
+      "to": "1945-08",
+      "precision": "month",
+      "clock": "jst",
+      "zoneNote": "The occupation keeps North Borneo on Tokyo time."
+    },
+    "chapter": "approaches",
+    "where": [
+      {
+        "place": "sandakan",
+        "role": "from"
+      },
+      {
+        "place": "ranau",
+        "role": "to"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "au",
+      "uk"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Australian and British prisoners held at Sandakan in North Borneo are marched inland through jungle to Ranau. Those who fall behind are killed; those who arrive die there of starvation and killing. Only a few men who escaped survive, sheltered by local people.",
+    "stops": [
+      {
+        "text": "Sandakan, the camp.",
+        "place": "sandakan",
+        "zoom": "table"
+      },
+      {
+        "text": "Ranau, at the end of the track.",
+        "place": "ranau",
+        "zoom": "table"
+      }
+    ],
+    "sources": [
+      {
+        "id": "wikidata"
+      },
+      {
+        "id": "awm-pow"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "R3 cites only the Australian War Memorial, unread (*verify*); its pages did not load in this pass."
+  },
+  {
+    "id": "potsdam-1945",
+    "title": "The Potsdam Declaration",
+    "gloss": "\"prompt and utter destruction\"",
+    "ja": {
+      "kanji": "ポツダム宣言",
+      "romaji": "Potsudamu sengen",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-07-26",
+      "precision": "day",
+      "zone": "+02:00",
+      "zoneNote": "The date of its issue at Potsdam."
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "tokyo",
+        "role": "in"
+      },
+      {
+        "place": "potsdam",
+        "role": "from"
+      }
+    ],
+    "kind": "political",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "uk",
+      "cn",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The United States, Britain and China call on Japan to surrender unconditionally or face \"prompt and utter destruction\". Prime Minister SUZUKI Kantarō 鈴木貫太郎 tells the press his government will 黙殺 mokusatsu, kill it with silence, a word read abroad as rejection.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "1 August 1945"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The pin stands at Tokyo, where the declaration was answered; Potsdam is off the table."
+  },
+  {
+    "id": "hiroshima-1945",
+    "title": "Hiroshima",
+    "gloss": "08:15, 6 August",
+    "ja": {
+      "kanji": "広島市への原子爆弾投下",
+      "romaji": "Hiroshima-shi e no genshi bakudan tōka",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-08-06T08:15+09:00",
+      "precision": "minute",
+      "clock": "jst"
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "hiroshima",
+        "role": "target"
+      }
+    ],
+    "kind": "bombing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "japanese-civ",
+      "korean"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "At 08:15 a single atomic bomb, dropped by a US B-29 flying from Tinian, explodes over Hiroshima. Blast and fire destroy the centre of the city, and through the months that follow many more die of burns and radiation sickness; the exact number of the dead, the city says, is still unknown. Among them are people from Korea, then a Japanese colony, and American prisoners held in the city.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "hiroshima-city-faq"
+      },
+      {
+        "id": "ussbs-atomic-1946"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 August 1945"
+      },
+      {
+        "id": "obama-hiroshima-2016"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "hiroshima-city-faq",
+        "says": "\"The exact number of deaths from the atomic bombing is still unknown. Estimates place the number of dead by the end of December 1945 ... at roughly 140,000.\"",
+        "scope": "the dead to the end of December 1945"
+      },
+      {
+        "source": "ussbs-atomic-1946",
+        "says": "70,000–80,000 \"killed, or missing and presumed dead\".",
+        "scope": "the immediate dead"
+      },
+      {
+        "source": "obama-hiroshima-2016",
+        "says": "\"We come to mourn the dead, including over 100,000 in Japanese men, women and children; thousands of Koreans; a dozen Americans held prisoner.\" (as the White House archive prints it)",
+        "scope": "the dead, as a US president named them in 2016"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words, with the figures in the tellings."
+  },
+  {
+    "id": "soviet-entry-1945",
+    "title": "The Soviet Union enters the war",
+    "gloss": "Manchuria overrun in days",
+    "ja": {
+      "kanji": "ソ連対日参戦",
+      "romaji": "So-ren tai-Nichi sansen",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-08-09",
+      "to": "1945-08-20",
+      "precision": "day",
+      "clock": "jst",
+      "alt": [
+        {
+          "zone": "+03:00",
+          "from": "1945-08-08",
+          "note": "the declaration, delivered in Moscow"
+        }
+      ]
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "manchuria",
+        "role": "in"
+      },
+      {
+        "place": "karafuto",
+        "role": "in"
+      },
+      {
+        "place": "kurils",
+        "role": "in"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "su",
+      "mn",
+      "jp",
+      "mk"
+    ],
+    "alsoSides": [
+      "japanese-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "The Soviet Union declares war, and its armies cross into Manchuria from three directions at once. The Kwantung Army collapses within days. Soviet forces take southern Sakhalin, northern Korea to the 38th parallel and the Kurils; Japanese settlers in Manchuria flee south, and many soldiers are carried off to labour camps in Siberia.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 August 1945"
+      },
+      {
+        "id": "go1-1945"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "The Kurils' occupation runs into early September (R3, *verify*)."
+  },
+  {
+    "id": "nagasaki-1945",
+    "title": "Nagasaki",
+    "gloss": "11:02, 9 August",
+    "ja": {
+      "kanji": "長崎市への原子爆弾投下",
+      "romaji": "Nagasaki-shi e no genshi bakudan tōka",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-08-09T11:02+09:00",
+      "precision": "minute",
+      "clock": "jst"
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "nagasaki",
+        "role": "target"
+      }
+    ],
+    "kind": "bombing",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "jp"
+    ],
+    "alsoSides": [
+      "japanese-civ",
+      "korean"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "With Kokura, the primary target, hidden by haze and smoke, the second atomic bomb is dropped on Nagasaki. At 11:02 it bursts over the Urakami valley, home of the city's old Catholic community, near its cathedral. The city keeps its own count of the dead and the injured to the end of December 1945.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "nagasaki-peace"
+      },
+      {
+        "id": "ussbs-atomic-1946"
+      },
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 August 1945"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "nagasaki-peace",
+        "says": "\"by the end of December 1945, 73,884 of its people had been killed, and 74,909 had been injured by the A-bomb\" (a July 1950 report of the Committee for the Preservation of Atomic Bomb Artifacts).",
+        "scope": "to the end of December 1945"
+      },
+      {
+        "source": "ussbs-atomic-1946",
+        "says": "35,000–40,000 killed.",
+        "scope": "the immediate dead"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words; \"Urakami\" is R8's *verify* on the wording."
+  },
+  {
+    "id": "gyokuon-1945",
+    "title": "The Emperor's broadcast",
+    "gloss": "\"enduring the unendurable\"",
+    "ja": {
+      "kanji": "玉音放送",
+      "romaji": "Gyokuon hōsō",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-08-15T12:00+09:00",
+      "precision": "minute",
+      "clock": "jst",
+      "alt": [
+        {
+          "zone": "-04:00",
+          "from": "1945-08-14",
+          "note": "Washington, where Truman announced the surrender at 19:00 on the 14th"
+        }
+      ],
+      "zoneNote": "Noon in Tokyo is 23:00 on 14 August in Washington; Truman's announcement at 19:00 Washington time came four hours before the broadcast."
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "tokyo",
+        "role": "at"
+      }
+    ],
+    "kind": "political",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "At noon the Emperor's recorded voice tells his subjects, in a court Japanese many cannot follow, that Japan will \"endure the unendurable\" and accept the Allies' terms. Japan remembers the day as 終戦の日 Shūsen no hi, the end of the war; in Korea it is the day of liberation.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "atlas-battle-fronts-1945",
+        "where": "15 August 1945"
+      },
+      {
+        "id": "usn-chron",
+        "where": "1945, 14 August"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "ocean-island-1945",
+    "title": "The Ocean Island massacre",
+    "gloss": "days after the surrender is announced",
+    "ja": null,
+    "when": {
+      "from": "1945-08-20",
+      "precision": "day",
+      "clock": "jst",
+      "zoneNote": "The occupation keeps Ocean Island on Tokyo time."
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "banaba",
+        "role": "at"
+      },
+      {
+        "place": "nikunau",
+        "role": "from"
+      }
+    ],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "banaban"
+    ],
+    "alsoSides": [
+      "i-kiribati"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Days after the surrender is announced, the Japanese garrison on Ocean Island kills the Gilbertese labourers left on the island. One man, Kabunare Koura of Nikunau, survives by hiding; his account, given in December 1945, brings the killings to trial.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-ocean-island"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": []
+  },
+  {
+    "id": "surrender-1945",
+    "title": "The surrender in Tokyo Bay",
+    "gloss": "aboard Missouri, among the Allied fleet",
+    "ja": {
+      "kanji": "降伏文書調印",
+      "romaji": "Kōfuku bunsho chōin",
+      "verify": true
+    },
+    "when": {
+      "from": "1945-09-02",
+      "precision": "day",
+      "clock": "jst",
+      "alt": [
+        {
+          "zone": "-04:00",
+          "from": "1945-09-01",
+          "note": "the evening before, in Washington"
+        }
+      ]
+    },
+    "chapter": "end",
+    "where": [
+      {
+        "place": "missouri-anchorage",
+        "role": "at"
+      },
+      {
+        "place": "tokyo-bay",
+        "role": "in"
+      }
+    ],
+    "kind": "surrender",
+    "flag": "cards",
+    "candidate": "view",
+    "tier": 1,
+    "sides": [
+      "jp",
+      "us",
+      "cn",
+      "uk",
+      "su",
+      "au",
+      "ca",
+      "fr",
+      "nl",
+      "nz"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "On the deck of the battleship Missouri, anchored in Tokyo Bay among the Allied fleet, Foreign Minister SHIGEMITSU Mamoru 重光葵 and General UMEZU Yoshijirō 梅津美治郎 sign the instrument of surrender, and MacArthur signs for the Allied Powers, followed by the representatives of each nation. The same day the garrisons of Truk, Palau, Rota and Pagan surrender aboard American ships; Japanese forces across Asia and the Pacific surrender to local commanders in the weeks after, as General Order No. 1 directs.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "usn-chron",
+        "where": "1945, 2 September"
+      },
+      {
+        "id": "go1-1945"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "firm"
+    },
+    "tellings": [],
+    "routes": [
+      "tokyo-bay-1945"
+    ],
+    "notes": "The signatories' kanji are *verify*."
+  },
+  {
+    "id": "submarine-war",
+    "title": "The war on shipping",
+    "gloss": "the merchant fleet sunk",
+    "ja": {
+      "kanji": "通商破壊戦",
+      "romaji": "Tsūshō hakaisen",
+      "verify": true
+    },
+    "when": {
+      "from": "1941-12",
+      "to": "1945-08",
+      "precision": "month",
+      "zone": "+08:00"
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "luzon-strait",
+        "role": "in"
+      }
+    ],
+    "kind": "campaign",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "uk",
+      "nl",
+      "jp"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "American submarines, with British and Dutch boats working from Fremantle and Ceylon, sink most of Japan's merchant fleet. Their torpedoes run deep and fail to explode until 1943; once they are fixed, the boats hunt in packs across the convoy routes from the oilfields of the Indies to Japan, and the Luzon Strait becomes \"Convoy College\". Japan's own submarines are spent hunting warships and supplying cut-off garrisons.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "ussbs-campaigns-1946",
+        "where": "ch. XVI, App. 109–112"
+      },
+      {
+        "id": "usn-chron"
+      },
+      {
+        "id": "janac-1947"
+      },
+      {
+        "id": "ussbs-transport-1947"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [],
+    "routes": [
+      "submarine-lanes-pearl",
+      "submarine-lanes-fremantle",
+      "japan-oil-route",
+      "japan-supply-lines"
+    ]
+  },
+  {
+    "id": "internment-us-1942",
+    "title": "The incarceration of Japanese Americans",
+    "gloss": "Executive Order 9066",
+    "ja": {
+      "kanji": "日系アメリカ人の強制収容",
+      "romaji": "Nikkei Amerikajin no kyōsei shūyō",
+      "verify": true
+    },
+    "when": {
+      "from": "1942-02-19",
+      "to": "1946-03",
+      "precision": "day",
+      "zone": "-04:00",
+      "zoneNote": "Washington's date (Eastern War Time)."
+    },
+    "chapter": "first-six-months",
+    "where": [
+      {
+        "place": "honouliuli",
+        "role": "at"
+      },
+      {
+        "place": "us-west-coast",
+        "role": "from"
+      }
+    ],
+    "kind": "captivity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "us",
+      "japanese-am"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Under Executive Order 9066, people of Japanese ancestry, most of them American citizens, are removed from the West Coast and held in camps. In Hawaiʻi, where people of Japanese descent are a large part of the population, there is no mass removal, but community leaders are detained, some at Honouliuli on Oʻahu. In 1988 Congress finds the removal \"motivated largely by racial prejudice, wartime hysteria, and a failure of political leadership\" and apologises.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "civil-liberties-act-1988"
+      },
+      {
+        "id": "jacl-power-of-words"
+      },
+      {
+        "id": "wp-incarceration"
+      },
+      {
+        "id": "wikidata"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "jacl-power-of-words",
+        "says": "\"some 110,000 ... (of which nearly 70% were American citizens)\".",
+        "scope": "the people removed"
+      },
+      {
+        "source": "wp-incarceration",
+        "says": "About 120,000 people.",
+        "scope": "the people removed"
+      }
+    ],
+    "routes": [],
+    "notes": "Written in R8 §5.3's words. Honouliuli's position is R3's *verify*."
+  },
+  {
+    "id": "comfort-system",
+    "title": "The \"comfort women\"",
+    "gloss": "the military's comfort stations",
+    "ja": {
+      "kanji": "慰安婦",
+      "romaji": "ianfu",
+      "verify": true
+    },
+    "when": {
+      "from": "1932",
+      "to": "1945",
+      "precision": "year",
+      "zone": "+09:00"
+    },
+    "chapter": "prologue",
+    "where": [],
+    "kind": "atrocity",
+    "flag": "cards",
+    "tier": 1,
+    "sides": [
+      "jp"
+    ],
+    "alsoSides": [
+      "korean",
+      "chinese-civ",
+      "filipino-civ"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Across the occupied territories the Japanese military sets up or uses \"comfort stations\", ianjo 慰安所, to which women and girls from Korea, China, the Philippines, the Dutch East Indies and elsewhere are brought, many by force or deception. Japan's government has said that the issue, \"with an involvement of the Japanese military authorities at that time, was a grave affront to the honor and dignity of large numbers of women\". Survivors begin to testify publicly in 1991.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "japan-rok-2015"
+      },
+      {
+        "id": "wp-comfort-women"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "wp-comfort-women",
+        "says": "20,000 to 200,000 women, by \"most historians\"; Chinese scholars give up to 360,000–410,000.",
+        "scope": "the women held, 1932–1945"
+      },
+      {
+        "source": "wp-comfort-women",
+        "says": "\"Military sexual slavery\" is the United Nations' term (1996); Japan's government objected in 2019 to the expression \"sex slaves\".",
+        "scope": "the names for it"
+      }
+    ],
+    "routes": [],
+    "notes": "No pin (R3 D13): the card opens from its chapter's list. The span (1932–45) and the list of origins are R8's *verify*. Written in R8 §5.3's words, led by the Japanese government's 2015 wording."
+  },
+  {
+    "id": "bengal-famine-1943",
+    "title": "The Bengal famine",
+    "gloss": "rice, a cyclone, and decisions far away",
+    "ja": {
+      "kanji": "ベンガル飢饉",
+      "romaji": "Bengaru kikin",
+      "verify": true
+    },
+    "when": {
+      "from": "1943",
+      "to": "1944",
+      "precision": "year",
+      "zone": "+06:30"
+    },
+    "chapter": "ladder",
+    "where": [
+      {
+        "place": "calcutta",
+        "role": "in"
+      }
+    ],
+    "kind": "other",
+    "flag": "cards",
+    "tier": 2,
+    "sides": [
+      "uk",
+      "in"
+    ],
+    "zoom": [
+      "table"
+    ],
+    "box": null,
+    "summary": "Famine kills a great many people in Bengal after the loss of Burma's rice, a cyclone, wartime inflation and hoarding, and decisions in Delhi and London about food. Historians argue about the causes, and about how much of the dying the governments could have prevented.",
+    "stops": [],
+    "sources": [
+      {
+        "id": "wp-bengal-famine"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "soft",
+      "numbers": "contested"
+    },
+    "tellings": [],
+    "routes": [],
+    "notes": "In as a card of kind `other`, as DATA.md §4 records the designer's call on R3 §11. Its figures and the historians' tellings were not read at their sources in this pass; this card needs a person before it carries any."
+  }
+]
