@@ -10,6 +10,7 @@
 //   node tools/bake-table.mjs --check          tools/check-data.mjs's packs module (and core)
 //   node tools/bake-table.mjs --preview DIR    hillshaded pictures of the committed pack with the coast drawn
 //   node tools/bake-table.mjs --clean          delete this bake's downloads
+//   node tools/bake-table.mjs --clip-coast     clip the committed coast.json to the table's rectangle (no downloads; the bake does it as it writes)
 //   --downloads DIR (or $PACIFIC_THEATRE_DOWNLOADS) moves the downloads, which stay outside the repository.
 //
 // How the pack is made (DATA.md §2):
@@ -494,13 +495,14 @@ async function writeCoast(dir, envelope, polys) {
   const fc = {
     type: 'FeatureCollection',
     note:
-      'Natural Earth 10 m (public domain), clipped to the table’s envelope, its splits at 180° merged (longitudes continuous, past 180 where they fall), ' +
+      'Natural Earth 10 m (public domain), clipped to the table’s envelope and then to its projected rectangle, its splits at 180° merged (longitudes continuous, past 180 where they fall), ' +
       `simplified at ${COAST_TOL} m. Polygons: kind land (ne_10m_land), island (ne_10m_minor_islands), reef (the closed rings of ne_10m_reefs, which is a line layer); ` +
       'area in km² on the sphere, before simplification; outer rings counter-clockwise. strokes: ne_10m_coastline and ne_10m_minor_islands_coastline. reefs: every ne_10m_reefs line, open or closed.',
     features,
     strokes: { type: 'FeatureCollection', features: strokeFeatures },
     reefs: { type: 'FeatureCollection', features: reefFeatures },
   }
+  clipCoastToTable(fc, tableGeometry())
   const text = JSON.stringify(fc)
   writeFileSync(join(OUT, 'table/coast.json'), text + '\n')
   if (invalid) log(`  warning: ${invalid} polygons stay invalid at the source's own vertices`)
@@ -589,6 +591,101 @@ function clean(dir) {
 }
 
 // ---------------------------------------------------------------------------
+// The coast clipped to the table's own rectangle
+
+/**
+ * The envelope is lon/lat and the table a rectangle in projected space, so a
+ * polygon inside the envelope can lie past the table's edge (India beyond the
+ * west edge, islets beyond the east): clip every polygon and line to the
+ * projected extent, in projected space, where the renderer draws their edges
+ * straight, and take the new vertices back to lon/lat. In place; returns what
+ * it cut.
+ */
+const EDGE_KM = 20 // the spacing of the points laid along the table's edge where a polygon is cut
+
+export function clipCoastToTable(fc, geo) {
+  const { proj, extent } = geo
+  const lon0 = proj.lon0
+  // (vertices that survive keep their lon/lat exactly; the cuts' new ones come back through the projection)
+  // (in a north-up frame, x east and y = −z, so the rings keep the orientation the clipper reads outers and holes by)
+  const known = new Map()
+  const fwd = (c) => {
+    const [x, z] = proj.toWorld(c)
+    known.set(`${x},${-z}`, c)
+    return [x, -z]
+  }
+  const back = ([x, y]) => {
+    const k = known.get(`${x},${y}`)
+    if (k) return k
+    const [lon, lat] = proj.toLonLat(x, -y)
+    let l = lon
+    while (l - lon0 > 180) l -= 360
+    while (l - lon0 < -180) l += 360
+    return [+l.toFixed(5), +lat.toFixed(5)]
+  }
+  const [x0, z0, x1, z1] = extent
+  const rect = [x0, -z1, x1, -z0]
+  const inside = ([x, y]) => x >= rect[0] && x <= rect[2] && y >= rect[1] && y <= rect[3]
+  let dropped = 0
+  let cut = 0
+  const features = []
+  for (const f of fc.features) {
+    const pr = f.geometry.coordinates.map((r) => r.map(fwd))
+    if (pr.every((r) => r.every(inside))) {
+      features.push(f)
+      continue
+    }
+    // the bake's own half-plane clipper (tools/lib/ne.mjs), in projected space: a polygon the edge cuts in two stays two
+    const pieces = ne.clipPolygonToRect(pr, rect).filter((rings) => rings[0]?.length >= 4)
+    if (!pieces.length) {
+      dropped++
+      continue
+    }
+    cut++
+    // (a run along the table's edge is straight on the table: points every few km keep it so in lon/lat, where the check reads it)
+    const side = ([x, y]) => (Math.abs(x - rect[0]) < 1e-6 ? 'w' : Math.abs(x - rect[2]) < 1e-6 ? 'e' : Math.abs(y - rect[1]) < 1e-6 ? 's' : Math.abs(y - rect[3]) < 1e-6 ? 'n' : null)
+    const dens = (r) => {
+      const out = []
+      for (let i = 0; i < r.length; i++) {
+        const a = r[i]
+        out.push(a)
+        const b = r[i + 1]
+        if (!b || !side(a) || side(a) !== side(b)) continue
+        const n = Math.floor(Math.hypot(b[0] - a[0], b[1] - a[1]) / EDGE_KM)
+        for (let k = 1; k <= n; k++) out.push([a[0] + ((b[0] - a[0]) * k) / (n + 1), a[1] + ((b[1] - a[1]) * k) / (n + 1)])
+      }
+      return out
+    }
+    for (const rings of pieces) features.push({ ...f, geometry: { type: 'Polygon', coordinates: rings.map((r) => dens(r).map(back)) } })
+  }
+  fc.features = features
+  let lines = 0
+  for (const coll of [fc.strokes, fc.reefs]) {
+    if (!coll?.features) continue
+    const out = []
+    for (const f of coll.features) {
+      const pts = f.geometry.coordinates.map(fwd)
+      if (pts.every(inside)) {
+        out.push(f)
+        continue
+      }
+      lines++
+      for (const piece of ne.clipLineToRect(pts, rect)) if (piece.length >= 2) out.push({ ...f, geometry: { type: 'LineString', coordinates: piece.map(back) } })
+    }
+    coll.features = out
+  }
+  log(`  coast clipped to the table's rectangle: ${cut} polygons cut, ${dropped} wholly past its edge dropped; ${lines} lines cut`)
+  return { cut, dropped, lines }
+}
+
+/** The committed coast.json clipped to the table's rectangle, no downloads (the bake does it as it writes). */
+function clipCommittedCoast() {
+  const p = join(OUT, 'table/coast.json')
+  const fc = JSON.parse(readFileSync(p, 'utf8'))
+  clipCoastToTable(fc, tableGeometry())
+  fc.note = String(fc.note).replace('clipped to the table’s envelope,', 'clipped to the table’s envelope and then to its projected rectangle,')
+  writeFileSync(p, JSON.stringify(fc) + '\n')
+}
 
 async function main() {
   const args = process.argv.slice(2)
@@ -604,6 +701,7 @@ async function main() {
   log(`downloads: ${dir}`)
   if (all || has('--download')) download(dir)
   if (all || has('--bake')) await bake(dir)
+  if (has('--clip-coast')) clipCommittedCoast()
   if (all || has('--check')) code = check()
   const pv = args.indexOf('--preview')
   if (pv >= 0) preview(resolve(args[pv + 1] || join(dir, 'previews')))
