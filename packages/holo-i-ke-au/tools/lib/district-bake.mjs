@@ -431,6 +431,7 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
     name: d.name,
     island: d.island,
     parent: d.island,
+    ...(d.moku ? { moku: d.moku } : {}),
     bounds: grid.bounds,
     size: [W, H],
     metresPerTexel: grid.metresPerTexel.map((v) => round(v, 4)),
@@ -456,9 +457,10 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   const existing = readJson(manifestPath)
   const districts = (existing?.districts || []).filter((x) => x.id !== d.id)
   districts.push(entry)
-  // in the order the districts are declared (district-sources.mjs), the
-  // finer first: where two boxes overlap (Koʻolaupoko's holds most of
-  // Nuʻuanu's), the first district whose box holds a point is the one for it
+  // in the order the districts are declared (district-sources.mjs), each
+  // with its moku: where two boxes overlap (Koʻolaupoko's holds most of
+  // Nuʻuanu's), which district a point goes to is the app's rule (DATA.md,
+  // "District packs"), the list's order only its last tie-break
   const rank = (x) => {
     const k = Object.keys(DISTRICTS).indexOf(x.id)
     return k < 0 ? Infinity : k

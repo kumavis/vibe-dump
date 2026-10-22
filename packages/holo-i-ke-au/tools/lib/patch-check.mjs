@@ -185,6 +185,7 @@ const VIEWS = [
   { id: 'honolulu-harbour', bbox: [-157.895, 21.285, -157.855, 21.325], packs: ['nuuanu'] },
   { id: 'kewalo-waikiki', bbox: [-157.87, 21.262, -157.81, 21.302] },
   { id: 'south-shore', bbox: [-158.0, 21.27, -157.8, 21.38], packs: ['oahu'], px: 900 },
+  { id: 'kaneohe-bay', bbox: [-157.83, 21.41, -157.735, 21.475], packs: ['oahu', 'koolaupoko'] },
 ]
 const YEARS = [null, 1795, 1930, 1950]
 const lerp = (a, b, t) => a + (b - a) * t

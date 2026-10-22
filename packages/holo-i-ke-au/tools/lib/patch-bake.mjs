@@ -42,6 +42,12 @@
 // Works are shared out so that no texel's weights within one kind add up to
 // more than one: raise groups claim their texels in order, lower works in
 // order, and the waterfront patch takes only what the dated works leave.
+//
+// Carried (a work a district reads at its own scale, as Koʻolaupoko's bay):
+// on the island pack only, from the district's own mask, averaged onto the
+// island's grid (8 × 8 samples a texel), held to the island's coast (a raise
+// over sea deeper than its depth, a lower over land above it) and to what
+// the works above leave; after them all, so they change none of theirs.
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { Ledger } from './fetch.mjs'
@@ -50,7 +56,7 @@ import { distanceTo, readPack } from './layers-raster.mjs'
 import { readPNG, writeGreyPNG } from './png.mjs'
 import { resampleGrid } from './raster.mjs'
 import { CUDEM, ENC, FILL, MAPS, cudemTiles, patchPaths, raiseBox } from './patch-sources.mjs'
-import { BARS, HISTORIES, LOWER_WORKS, OLD_SHORES, PASSAGES, RAISE_GROUPS, feature } from './patch-works.mjs'
+import { BARS, CARRIED_WORKS, HISTORIES, LOWER_WORKS, OLD_SHORES, PASSAGES, RAISE_GROUPS, feature } from './patch-works.mjs'
 import { boxBlur, components, cudemMosaic, dilate, erode, gridOfRaster, packWindow, polygonCover, reduceMask, sampleMask, spreadFromRim } from './patch-raster.mjs'
 
 const GROW_METRES = 20 // the footprint is grown this far round the cut cells (at least a texel; two on the island pack)
@@ -323,6 +329,59 @@ function lowerWeights(L, P, shapes, fill, used) {
 }
 
 // ---------------------------------------------------------------------------
+// Carried
+
+const CARRY_SAMPLES = 8
+
+/** A district's patch averaged onto a pack: weights over a window of the pack, held to its coast and to what is taken. */
+function carriedWeights(de, dEntry, data, P, taken) {
+  const mask = readPNG(join(data, 'districts', de.file))
+  const [DW, DH] = dEntry.size
+  if (mask.channels !== 1 || mask.width !== DW || mask.height !== DH) throw new Error(`${de.file}: not a ${DW}x${DH} greyscale mask`)
+  const [dw, ds, de_, dn] = dEntry.bounds
+  const dLon = (de_ - dw) / DW
+  const dLat = (dn - ds) / DH
+  const win = packWindow(P.grid, dEntry.bounds, 1)
+  if (!win) return null
+  const { grid, i0, j0, W, H } = win
+  const PW = P.W
+  const at = (o) => (j0 + Math.floor(o / W)) * PW + i0 + (o % W)
+  const S = CARRY_SAMPLES
+  const w = new Float32Array(W * H)
+  let on = 0
+  let sum = 0
+  let moved = 0
+  for (let j = 0; j < H; j++) {
+    for (let i = 0; i < W; i++) {
+      const o = j * W + i
+      const p = at(o)
+      const h = P.metres[p]
+      if (de.kind === 'raise' ? !(h <= 0 && h < de.depth) : !(h > 0 && h > de.depth)) continue
+      let c = 0
+      for (let b = 0; b < S; b++) {
+        const lat = grid.bounds[3] - (j + (b + 0.5) / S) * grid.dLat
+        const dj = Math.floor((dn - lat) / dLat)
+        if (dj < 0 || dj >= DH) continue
+        for (let a = 0; a < S; a++) {
+          const lon = grid.bounds[0] + (i + (a + 0.5) / S) * grid.dLon
+          const di = Math.floor((lon - dw) / dLon)
+          if (di >= 0 && di < DW) c += mask.data[dj * DW + di]
+        }
+      }
+      let v = Math.min(c / (255 * S * S), 1 - taken[p])
+      v = Math.round(v * 255) / 255
+      if (v < 1 / 255) continue
+      w[o] = v
+      on++
+      sum += v
+      moved += v * Math.abs(de.depth - h)
+    }
+  }
+  if (!on) return null
+  return { win, w, at, on, sum, meanMove: moved / on }
+}
+
+// ---------------------------------------------------------------------------
 
 function toBytes(win, w, at, PW, PH) {
   const bytes = new Uint8Array(PW * PH)
@@ -446,7 +505,7 @@ export async function bakePatches({ dir, data, log }) {
     // --- lower: dated works first, then what is left to the waterfront
     const used = new Float32Array(PN)
     for (const L of [...LOWER_WORKS.filter((x) => !x.rest), ...LOWER_WORKS.filter((x) => x.rest)]) {
-      if (L.islandOnly && pk.kind !== 'island') continue
+      if ((L.islandOnly && pk.kind !== 'island') || L.notOn?.includes(pk.id)) continue
       const box = L.region ? boxOfGeoms([L.region]) : boxOfGeoms(L.within.map((k) => shapes[k].geometry))
       if (!meets(box, P.grid.bounds)) continue
       const r = lowerWeights(L, P, shapes, fill, used)
@@ -479,6 +538,54 @@ export async function bakePatches({ dir, data, log }) {
         stats: { texels: r.on, km2: round(km2, 3), meanLowerMetres: round(r.meanLower, 2) },
       })
       log(`  lower ${L.id} (until ${L.until}): ${r.on} texels, ${km2.toFixed(3)} km², to ${L.level} m, mean lower ${r.meanLower.toFixed(1)} m`)
+    }
+
+    // --- carried from a district, on the island pack, after every work above
+    if (pk.kind === 'island') {
+      const raised = Float32Array.from(claimed)
+      for (const c of CARRIED_WORKS) {
+        const dp = packs.find((x) => x.id === c.district)
+        const de = dp?.entry.patches?.find((q) => q.id === c.patch)
+        if (!de) {
+          log(`  carried ${c.district}/${c.patch}: not in the district manifest; bake the district first`)
+          continue
+        }
+        if (!meets(dp.entry.bounds, P.grid.bounds)) continue
+        const taken = de.kind === 'raise' ? raised : used
+        const r = carriedWeights(de, dp.entry, data, P, taken)
+        if (!r || r.sum < 1) {
+          log(`  carried ${c.patch}: ${r ? r.sum.toFixed(2) : 0} texels' worth at ${P.texelMetres.toFixed(0)} m, under one; left to the district`)
+          continue
+        }
+        const bytes = toBytes(r.win, r.w, r.at, P.W, P.H)
+        for (let o = 0; o < PN; o++) taken[o] += bytes[o] / 255
+        const file = pk.file(c.patch)
+        writeGreyPNG(join(data, file), P.W, P.H, bytes)
+        written.add(file)
+        const km2 = r.on * P.texelKm2
+        const sources = c.sources.map((id) => {
+          const s = dp.entry.sources.find((x) => x.id === id)
+          if (!s) throw new Error(`carried ${c.patch}: no source ${id} in the ${c.district} district's manifest`)
+          return s
+        })
+        const [mx] = dp.entry.metresPerTexel
+        entries.push({
+          id: `${pk.id}-${c.patch}`,
+          pack: pk.id,
+          kind: de.kind,
+          depth: de.depth,
+          until: de.until,
+          file,
+          size: [P.W, P.H],
+          name: de.name,
+          note:
+            `${de.note}. On the island pack: the ${dp.entry.name} district’s own mask (${mx.toFixed(2)} m, its manifest’s \`${de.id}\`), ` +
+            `averaged onto the island’s grid, each texel weighted by the share of it the work covers, on the island’s own coast`,
+          sources,
+          stats: { texels: r.on, km2: round(km2, 3), [de.kind === 'raise' ? 'meanRaiseMetres' : 'meanLowerMetres']: round(r.meanMove, 2), carriedFrom: c.district },
+        })
+        log(`  carried ${de.kind} ${c.patch} (until ${de.until}): ${r.on} texels (${r.sum.toFixed(1)} texels' worth), ${km2.toFixed(3)} km², to ${de.depth} m, mean ${r.meanMove.toFixed(1)} m`)
+      }
     }
   }
 

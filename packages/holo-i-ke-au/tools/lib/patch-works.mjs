@@ -449,8 +449,8 @@ export const RAISE_GROUPS = [
 // Each lists the shapes that must all hold (`within`: today's land is always
 // one of them) and those that must not (`outside`). `fill` asks for the State
 // geologic map's fill unit too, where it maps the made ground. `level` is the
-// height the texels go back to. `islandOnly` keeps a work off the district,
-// whose own manifest already carries it (the contact and kingdom patches).
+// height the texels go back to. `notOn` keeps a work off the districts whose
+// own manifest already carries it (nuuanu's contact and kingdom patches).
 
 const sea = 'sea1881'
 export const LOWER_WORKS = [
@@ -463,7 +463,7 @@ export const LOWER_WORKS = [
     within: [sea],
     // everything the dated works below do not take
     rest: true,
-    islandOnly: true,
+    notOn: ['nuuanu'],
     sheets: [1899],
     sources: [],
     note:
@@ -573,6 +573,44 @@ export const LOWER_WORKS = [
     region: polygon([[-157.9494, 21.359], [-157.9476, 21.3614], [-157.9444, 21.3638], [-157.9408, 21.3662], [-157.9388, 21.3656], [-157.9412, 21.3618], [-157.9444, 21.3598], [-157.9464, 21.3574], [-157.9476, 21.355], [-157.9492, 21.3562]]),
     sources: ['usn-building-bases-1947'],
     note: 'Kuahua Island extended into the loch with the spoil of the wartime dredging, from 47 acres to a 116-acre peninsula; the contract ran to December 1943',
+  },
+]
+
+// ---------------------------------------------------------------------------
+// Works carried from a district: read at the district's own scale and from
+// its own sources (the district bake writes them into its manifest: for
+// Koʻolaupoko, district-koolaupoko.mjs, off Jackson's chart of 1882), and
+// laid on the island pack from the district's masks, so that the island and
+// the district agree across the takeover. On the island a texel's weight is
+// the share of it the district's patch covers, held to the island's own
+// coast; a work under a texel's worth at the island's resolution is left
+// to the district. `sources` are ids among the district's own sources.
+
+export const CARRIED_WORKS = [
+  {
+    district: 'koolaupoko',
+    patch: 'kaneohe-bay-dredging',
+    sources: ['kipuka-rm-1140', 'kipuka-rm-1848', 'noaa-enc-direct-koolaupoko', 'noaa-ncei-cudem-ninth-hawaii', 'mokapu-1965', 'usn-building-bases-1947'],
+  },
+  {
+    district: 'koolaupoko',
+    patch: 'heeia-kea-harbour',
+    sources: ['kipuka-rm-1848', 'noaa-ncei-cudem-ninth-hawaii', 'dlnr-boating-history-2016'],
+  },
+  {
+    district: 'koolaupoko',
+    patch: 'mokapu-air-station-fill',
+    sources: ['hawaii-gis-geologic-units-fill', 'kipuka-rm-1848', 'hawaii-gis-oahu-topo-1927', 'mokapu-1965', 'usn-building-bases-1947'],
+  },
+  {
+    district: 'koolaupoko',
+    patch: 'moku-o-loe-fill',
+    sources: ['kipuka-rm-1848', 'hawaii-gis-oahu-topo-1927', 'wikipedia-coconut-island'],
+  },
+  {
+    district: 'koolaupoko',
+    patch: 'heeia-kea-fill',
+    sources: ['kipuka-rm-1848', 'hawaii-gis-oahu-topo-1927', 'dlnr-boating-history-2016'],
   },
 ]
 

@@ -9,6 +9,7 @@
       "name": "Nuʻuanu",
       "island": "oahu",
       "parent": "oahu",
+      "moku": "Kona",
       "bounds": [
         -157.8970085,
         21.269,
@@ -1028,6 +1029,7 @@
       "name": "Koʻolaupoko",
       "island": "oahu",
       "parent": "oahu",
+      "moku": "Koʻolaupoko",
       "bounds": [
         -157.898,
         21.3019994,

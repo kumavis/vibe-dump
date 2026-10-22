@@ -129,6 +129,7 @@ export function checkDistricts({ data, log }) {
   }
   const manifest = JSON.parse(readFileSync(mPath, 'utf8'))
   const islands = JSON.parse(readFileSync(join(data, 'manifest.json'), 'utf8'))
+  const mokuNames = new Set(JSON.parse(readFileSync(join(data, 'boundaries', 'moku.geojson'), 'utf8')).features.map((f) => `${f.properties.islandId}:${f.properties.name}`))
   ok(Array.isArray(manifest.districts) && manifest.districts.length > 0, 'manifest has no districts')
   for (const d of manifest.districts) {
     log(`${d.id}:`)
@@ -141,6 +142,8 @@ export function checkDistricts({ data, log }) {
     ok(Math.abs(mx / mz - 1) < 0.005, `${d.id}: texels are not square (${mx} x ${mz} m)`)
     ok(mx >= TEXEL[0] && mx <= TEXEL[1], `${d.id}: ${mx} m per texel, outside ${TEXEL.join('–')}`)
     for (const s of d.sources) ok(s.id && s.title && s.url && s.licence && s.fetched, `${d.id}: source ${s.id || '?'} lacks id, title, url, licence or fetched`)
+    // its moku (optional), by the boundary file's own name on its island
+    if (d.moku !== undefined) ok(mokuNames.has(`${d.island}:${d.moku}`), `${d.id}: moku ${d.moku} is no moku of ${d.island} in boundaries/moku.geojson`)
 
     // heights
     const img = readPNG(join(dir, d.height.file))

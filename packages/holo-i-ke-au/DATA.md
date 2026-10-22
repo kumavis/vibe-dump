@@ -600,10 +600,13 @@ Bay and Mōkapu, Kailua and Waimānalo.
   (the ids among the district's `sources` that date it) and `stats`; no
   texel's weights of one kind over the dated works pass one. Two district
   boxes may overlap (Koʻolaupoko's holds about 70% of Nuʻuanu's, for the moku
-  runs north-west to south-east): the manifest lists the finer district first,
-  and the district for a point is the first whose box holds it. A district's
-  texel may run to 13.5 m where the district is large (Koʻolaupoko's is 12.98
-  m), and each district's directory stays under 4 MB.
+  runs north-west to south-east): the manifest lists the districts in
+  declaration order and each carries its `moku` (the boundary file's name);
+  which district a point goes to is the app's rule, written under "District
+  packs" ("Accepted for the second district"), with list order only as the
+  last tie-break. A district's texel may run to 13.5 m where the district is
+  large (Koʻolaupoko's is 12.98 m), and each district's directory stays under
+  4 MB.
 
 ### How to bake a district
 
@@ -653,8 +656,11 @@ What `koolaupoko` rests on:
   m that lets Kahaluʻu, Waiāhole and Kualoa in with the rest (a box padded 700
   m all round would be 13.5 m). The moku lies north-west to south-east, so the
   box also holds the leeward side behind the crest and Honolulu's harbour at
-  its south-west corner: about 70% of the `nuuanu` box, which the manifest
-  lists first.
+  its south-west corner: about 70% of the `nuuanu` box. The manifest lists
+  the districts in declaration order and each carries its `moku` (`Kona` for
+  `nuuanu`, `Koʻolaupoko` here); which district a point goes to is the app's
+  rule ("District packs", "Accepted for the second district"), with list
+  order only as the last tie-break.
 - **Heights**: the same lidar, 1,419 tiles, area-averaged to 12.98 m, with the
   same datum shift (measured again here: residual −0.07 m) and the same rules,
   and two more that this district asks for (`walls` and `islets` in
@@ -720,9 +726,9 @@ What `koolaupoko` rests on:
   the texel passes 10 m, and Maunawili, which ends in the open water of
   Kawainui at the Hāmākua canal, to 100 m.
 
-Beyond the contract the manifest carries `parent`, `files` (supporting files),
-`breaches`, `streams` (the check's findings), `stats`, and a `source` and
-`note` on each patch.
+Beyond the contract the manifest carries `parent`, `moku`, `files`
+(supporting files), `breaches`, `streams` (the check's findings), `stats`,
+and a `source` and `note` on each patch.
 
 ## Patches, on any pack
 
@@ -827,15 +833,16 @@ How a mask is made:
 What the app can rely on beyond the contract:
 
 - The district's masks are listed in `patches/manifest.json` with `pack:
-  "nuuanu"` and a `file` relative to `public/data/`, not in the district
-  manifest: its check holds the keyframe patches listed there to the first
-  district's rules (a single kind, 0 or 255, over today's land, each inside
-  the last), and a district's own dated works (`koolaupoko`'s) to these:
-  each on its own side of the coast, weights of one kind never over one.
-  The district's own `contact` and `kingdom` patches stay as they were (with
-  `kind: "lower"` and `depth: -1` now written out) and overlap the dated
-  lowers there; both lower to −1 m, so applying both is the same as applying
-  either.
+  "nuuanu"` (or `"koolaupoko"`) and a `file` relative to `public/data/`, not
+  in the district manifest: its check holds the keyframe patches listed
+  there to the first district's rules (a single kind, 0 or 255, over today's
+  land, each inside the last), and a district's own dated works
+  (`koolaupoko`'s) to these: each on its own side of the coast, weights of
+  one kind never over one. An island entry carried from a district has
+  `stats.carriedFrom`. `nuuanu`'s own `contact` and `kingdom` patches stay
+  as they were (with `kind: "lower"` and `depth: -1` now written out) and
+  overlap the dated lowers there; both lower to −1 m, so applying both is the
+  same as applying either.
 - Every mask is at its pack's full size, and `size` says so.
 - Two depths are above the sea: the Ala Wai Canal is raised to +0.5 m, the
   wetland it was dug through, and the Ala Wai's fill on the Waikīkī wetland
@@ -854,20 +861,37 @@ the work lies in the district, raise Honolulu's bar cut (1892), harbour
 island it is land); lower Sand Island's first fill (1908) and its later fill
 (1944), Ala Moana Park (1934), Magic Island (1964) and the Waikīkī wetland
 fill (1928). On `oahu` only: raise the Pearl Harbor entrance channel and bar
-(1911) and the cuts beside the Reef Runway (1977); lower the Honolulu
-waterfront (1900, the district's kingdom patch), the airport's fill on Keʻehi
-lagoon (1944), the Reef Runway (1977), Ford Island's edges (1940) and Kuahua
-(1943).
+(1911) and the cuts beside the Reef Runway (1977); lower the airport's fill on
+Keʻehi lagoon (1944), the Reef Runway (1977), Ford Island's edges (1940) and
+Kuahua (1943). On `oahu` and `koolaupoko` but not `nuuanu`, whose kingdom
+patch it is: lower the Honolulu waterfront (1900). On `koolaupoko` too, whose
+south-west corner holds Honolulu's harbour, the shared works that lie in its
+box: raise the harbour (1908), Kapālama (1935), Kalihi Channel and the Keʻehi
+seaplane runways (1944); lower Sand Island's first fill (1908) and its later
+fill (1944).
+
+Carried from `koolaupoko` onto `oahu` (`CARRIED_WORKS` in `patch-works.mjs`):
+the district reads Kāneʻohe Bay's works at its own scale and from its own
+sources ("What `koolaupoko` rests on"), and the island takes the district's
+masks, each island texel weighted by the share of it the district's patch
+covers, on the island's own coast, so the two agree across the takeover.
+Raise the bay's dredging (1943; 0.91 km² weighted) and the Heʻeia Kea
+harbour (1950; 0.036 km²); lower the air station's fill on Mōkapu (1943; 1.09
+km²), Moku o Loʻe (1936; 0.032 km²) and Heʻeia Kea's moles (1950; 0.011 km²).
+A carried work under a texel's worth at the island's resolution is left to
+the district; none of these is. They are baked after every other work on
+the pack, so they change none of the others' masks, and the district must be
+baked before them.
 
 Not done: inside Pearl Harbor the lochs and their wartime mooring dredging
 are left as today's (natural deep water in 1881 within a few metres), as are
 the Navy Yard's piers and the airport's ground west of Keʻehi lagoon, which
 the 1881 sheet shows as land and ponds. Kāneʻohe Bay's seaplane runways
 (1939–43) were cleared through patch reefs in a naturally deep lagoon: the
-`koolaupoko` district carries them, read off Jackson's chart of 1882 ("What
-`koolaupoko` rests on"), but the island pack does not; Haleʻiwa,
-Waiʻanae, Barbers Point (cut into the land in the 1980s), Ko Olina and
-Hawaiʻi Kai's Kuapā pond are not patched either. The ENC's dredged areas
+`koolaupoko` district reads them off Jackson's chart of 1882 and the island
+carries them from it (above); Haleʻiwa, Waiʻanae, Barbers Point (cut into the
+land in the 1980s), Ko Olina and Hawaiʻi Kai's Kuapā pond are not patched
+either. The ENC's dredged areas
 outside every zone are listed by the bake.
 
 The check (`--check`) reads every mask back on its pack: a greyscale image of

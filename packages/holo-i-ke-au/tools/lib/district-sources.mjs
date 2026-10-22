@@ -37,6 +37,8 @@ export const DISTRICTS = {
     id: 'nuuanu',
     name: 'Nuʻuanu',
     island: 'oahu',
+    // the moku the district lies in (the app's choice between overlapping boxes)
+    moku: 'Kona',
     // West: Kalihi Kai and the east side of Keʻehi lagoon (Kalihi's ahupuaʻa
     // reaches 157.891 W), so Sand Island and Mokauea are whole. East: past
     // Mānoa's east ridge and 1.4 km past the Pali lookout (157.793 W). South:
@@ -93,6 +95,7 @@ export const DISTRICTS = {
     id: 'koolaupoko',
     name: 'Koʻolaupoko',
     island: 'oahu',
+    moku: 'Koʻolaupoko',
     // The whole moku, from Kualoa to Makapuʻu: its ahupuaʻa reach from
     // 157.8978 W (the crest behind Waikāne) to 157.6494 W (Makapuʻu Point)
     // and from 21.3085 N (Makapuʻu) to 21.5354 N (Kualoa), and the

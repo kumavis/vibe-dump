@@ -19,10 +19,12 @@
 // are hand-written in lib/patch-works.mjs; the bake turns them into masks
 // with the CUDEM, the packs' own heights, the State's fill unit and the
 // traced old shores. It reads public/data/manifest.json and
-// districts/manifest.json and writes only public/data/patches/ and the
-// districts' patch-<work>.png files; it never touches the packs, the
-// district manifest or features.json. Like `npm run thumbnails`, a by-hand
-// step whose output is committed; nothing here runs at app runtime.
+// districts/manifest.json (and, for the works the island carries from a
+// district, that district's own masks: bake the district first) and writes
+// only public/data/patches/ and the districts' patch-<work>.png files; it
+// never touches the packs, the district manifest or features.json. Like
+// `npm run thumbnails`, a by-hand step whose output is committed; nothing
+// here runs at app runtime.
 import { rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
