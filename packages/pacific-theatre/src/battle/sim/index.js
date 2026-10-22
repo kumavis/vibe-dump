@@ -624,7 +624,8 @@ export function createSim(battle, kits, opts = {}) {
         if (x.dmg.regime === 'sim' && !x.rec.fixed) return
         setAlive(i, 2)
         fx(FX.sink, state.pos[3 * i], 0, state.pos[3 * i + 2], { unit: i, size: x.model.L })
-        beat(i, 'sinks', `${u.name}: sinking`)
+        // (a fixed fate's own record events carry its line)
+        if (!x.rec?.fixed) beat(i, 'sinks', `${u.name}: sinking`)
         return
       case 'sunk':
         if (x.dmg.regime === 'sim' && !x.rec.fixed) return
@@ -708,6 +709,8 @@ export function createSim(battle, kits, opts = {}) {
   function recordEvent1(a) {
     const i = a.slot
     const ev = a.ev
+    // (an event with hud: false plays and is drawn, and the HUD says nothing: Arizona's magazine, R8 §5.2 a)
+    const beat = ev.hud === false ? () => {} : sim.beat
     const u = units[i]
     const x = X[i]
     const pl = sim.player

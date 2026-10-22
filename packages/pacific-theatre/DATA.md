@@ -716,7 +716,11 @@ Rules:
   range, `where`, `damage` (the share of the target's `fatal` it does, so the
   record's hits sink what the record sank), sources and tellings where the
   tellings differ. A `sinks`, `explodes` or `dead-in-water` carries nothing
-  but its time and sources: whether it happens is the damage model's call.
+  but its time and sources (and the `text` and tellings any event may
+  carry): whether it happens is the damage model's call. Any event may
+  carry `hud: false`: it plays and is drawn, and the HUD prints no line
+  for it (Arizona's magazine at 08:06, R8 §5.2 a); a `fixed` unit's going
+  down prints only its own events' lines.
 - A group's `attack.profile`: `dive | torpedo | level | strafe | cap |
   escort | search`. `losses` are ranges. A group with no `route` flies a
   straight line from its `from` unit's position at `launch` to its attack. A

@@ -117,6 +117,7 @@
         {
           "t": "08:06:10",
           "kind": "explodes",
+          "hud": false,
           "sources": [
             {"id":"trom-hiryu"},
             {"id":"kimmel-narrative","where":"Mugford 0808"},
@@ -304,6 +305,7 @@
         {
           "t": "08:08",
           "kind": "sinks",
+          "text": "Oklahoma rolls over at her berth.",
           "sources": [{"id":"kimmel-narrative","where":"Mugford 0808"},{"id":"oklahoma-ar-1941"}],
           "tellings": [
             {"source":"cincpac-pearl-1942","says":"She capsized in eight to eleven minutes, her masts on the bottom."}
@@ -1382,7 +1384,7 @@
           "tellings": [{"source":"utah-ar-1941","says":"“About 5” by her own estimate."}]
         },
         {"t":"08:05","kind":"list","sources":[{"id":"utah-ar-1941"}]},
-        {"t":"08:12","kind":"sinks","sources":[{"id":"kimmel-narrative","where":"0812"},{"id":"utah-ar-1941"}]}
+        {"t":"08:12","kind":"sinks","text":"Utah rolls over at her berth.","sources":[{"id":"kimmel-narrative","where":"0812"},{"id":"utah-ar-1941"}]}
       ],
       "fate": {
         "kind": "capsized",
