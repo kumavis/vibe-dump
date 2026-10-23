@@ -25,7 +25,13 @@
 //   presets: "table" (the theatre, the test box's outline, the box's preview);
 //            "gate" (the table workflow's gate: the whole table, an island group close, the
 //            front at two keyframes with its hatch and perimeters, a card, the chapter page,
-//            a cluster, the credits, the briefing and the after-card)
+//            a cluster, the credits, the briefing and the after-card);
+//            "ui" and "ui-air" (round two's interface on the dev page ui.html against the mock
+//            Battle, served by Vite's dev server: the unit list, the unit card of a takeable ship,
+//            of a greyed Arizona and of an aircraft, the briefing's Start here, the station bar,
+//            a bookmark's title on the strip and the after-card over a span; "ui-air" the same
+//            for an aircraft held at Midway). Any preset whose name starts with "ui", or PAGE=ui,
+//            loads ui.html?box=$BOX&t=$T (pearl-harbor, 08:40) instead of the built app.
 //   DATA=real   load public/data/ (the default once public/data/manifest.json exists)
 //   VIEWPORT=390x844, PORT=5299, DPR=2, CHROMIUM_PATH=...
 //
@@ -52,6 +58,10 @@ const KF = (i) => `app.ui?.card.close(); app.ui?.onScrub(); const k = [...app.ta
 // the box event's date from the whole theatre, where its neighbours gather with it
 const CLUSTER = "app.ui.card.close(); app.ui.pins.activeEvent = null; app.table.setFocus(null); app.ui.onScrub(); app.clock.setDate(Date.UTC(1942, 5, 4, 18)); const h = app.table.rig.homeView(); app.table.rig.jump({ x: h.target.x, z: h.target.z, distance: app.table.rig.maxDistance, yaw: 0, pitch: 1.12 })"
 const BRIEFING = "app.ui.openBriefing({ title: 'The Test Box Battle, 4 June 1942', ja: { kanji: '試験海戦', romaji: 'Shiken kaisen' }, when: '4 June 1942, 10:20', clock: 'zone plus 12, Midway time (UTC−12)', clockNote: 'Test: Tokyo time is 21 hours ahead.', situation: 'Test: two made-up forces close near Dateline Island. Nothing here is history.', forces: [{ name: 'Test Japanese force', ja: '試験部隊', units: ['Test Carrier A', 'Test Battleship', 'Test Destroyer'] }, { name: 'Test US force', units: ['Test Carrier B', 'Test Cruiser', 'Test Destroyer'] }], moments: [{ id: 'test-dive', title: 'A test dive', role: 'a test dive bomber of the test group', t: '10:21:30', objective: 'Test: put a bomb on the test carrier.', focus: true }, { id: 'test-duel', title: 'A test gunnery duel', role: 'the test battleship', t: '11:40', objective: 'Test: hit the test cruiser.' }], sources: [{ id: 'test-source-a', where: 'p. 2' }], credit: 'Test terrain: made-up relief from tools/fake-data.mjs.' })"
+// round two on ui.html: a clean slate (no card, no list, nothing held), a unit selected by its units() id, another box
+const UI_RESET = 'if (app.battle.state?.station) app.ui.onRelease(); app.ui.card.close(); app.ui.unitList?.close();'
+const UI_SELECT = (id) => `app.ui.onSelect(app.link.units().find((u) => u.id === ${JSON.stringify(id)}).index); await new Promise((r) => setTimeout(r, 100));`
+const UI_BOX = (box, t) => `${UI_RESET} await app.urlBattle(new URLSearchParams('battle=${box}&t=${t}')); app.battle.pause(); app.ui.card.close();`
 const AFTER = "app.ui.openAfter({ momentId: 'test-dive', title: 'A test dive', sortie: [{ label: 'Hits', value: 'one test bomb, aft' }, { label: 'Release', value: '740 m (the record: about 760 m)' }, { label: 'Came back', value: 'landed' }], battle: { rows: [{ what: 'Test Carrier A', record: 'burning from 10:25, sank 19:25', yours: 'burning from 10:24; sinks 19:25 as in the record' }], guesses: ['Test: the sim’s guess; the record has no such event'] }, record: { text: 'Test: the record counts between 1,000 and 1,200 men lost their lives aboard the test carrier.', tellings: [{ source: 'test-source-b', says: 'Test: three hits.' }], sources: ['test-source-a'] }, next: { text: 'Test: what came next.' }, retry: { start: true, checkpoint: true } })"
 const PRESETS = {
   gate: [
@@ -73,8 +83,29 @@ const PRESETS = {
     { name: 'table-outline', battle: 'test-box', frames: 3 },
     { name: 'box-preview', battle: 'test-box', preview: true, frames: 3 },
   ],
+  // round two's interface on ui.html (the mock Battle over the real Pearl Harbor file)
+  ui: [
+    { name: 'ui-list', eval: `${UI_RESET} app.ui.onUnits()`, frames: 2 },
+    { name: 'ui-list-air', eval: "document.querySelector('.ul-filter [data-kind=aircraft]').click()", frames: 2 },
+    { name: 'ui-card-ship', eval: `document.querySelector('.ul-filter [data-kind=all]').click(); ${UI_SELECT('nevada')}`, frames: 2 },
+    { name: 'ui-card-grey', eval: UI_SELECT('arizona'), frames: 2 },
+    { name: 'ui-card-air', eval: UI_SELECT('kaga-level#3'), frames: 2 },
+    { name: 'ui-briefing', eval: "app.ui.unitList.close(); app.link.openBriefing(); document.querySelector('.card .door')?.scrollIntoView()", frames: 2 },
+    { name: 'ui-station-bar', eval: `app.ui.card.close(); ${UI_SELECT('nevada')} document.querySelector('.card [data-station=main]').click(); await new Promise((r) => setTimeout(r, 200)); document.querySelector('.bb-st[data-station=aa]').click()`, frames: 2 },
+    { name: 'ui-after', eval: "app.battle.play(8); await new Promise((r) => setTimeout(r, 4500)); app.ui.onRelease()", frames: 2 },
+    { name: 'ui-strip', eval: 'app.ui.card.close()', hover: '.bb-mark', frames: 1 },
+  ],
+  // an aircraft held, at Midway
+  'ui-air': [
+    { name: 'ui-air-card', eval: `${UI_BOX('midway', '10:22')} ${UI_SELECT('vb-6#4')}`, frames: 2 },
+    { name: 'ui-air-held', eval: "document.querySelector('.card [data-station=gunner]').click()", frames: 2 },
+    { name: 'ui-air-after', eval: 'app.battle.play(2); await new Promise((r) => setTimeout(r, 5000)); app.ui.onRelease()', frames: 2 },
+    { name: 'ui-air-briefing', eval: "app.link.openBriefing(); document.querySelector('.card .door')?.scrollIntoView()", frames: 2 },
+  ],
 }
-const shots = PRESETS[process.argv[3]] || JSON.parse(process.argv[3] || '[{"name":"default"}]')
+const preset = process.argv[3] || ''
+const UI = preset.startsWith('ui') || process.env.PAGE === 'ui'
+const shots = PRESETS[preset] || JSON.parse(preset || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
 const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
@@ -111,11 +142,23 @@ page.on('pageerror', (e) => {
   console.log('[pageerror]', e.message)
 })
 const t0 = Date.now()
-const q = [useTest ? 'data=../test-data/' : '', extra].filter(Boolean).join('&')
-await page.goto(`http://127.0.0.1:${port}/dist/index.html${q ? `?${q}` : ''}`)
-await page.waitForSelector('#boot', { state: 'detached', timeout: 180000 })
-await page.waitForFunction(() => window.__app?.ready, null, { timeout: 180000 })
-console.log('booted after', Date.now() - t0, 'ms', useTest ? '(test data)' : '(real data)')
+let vite = null
+if (UI) {
+  // the dev page is not in the build: Vite's dev server serves it (and public/data at ./data/)
+  const { createServer: viteServer } = await import('vite')
+  vite = await viteServer({ root, configFile: join(root, 'vite.config.js'), logLevel: 'error', clearScreen: false, server: { port: port + 1, host: '127.0.0.1', strictPort: false, hmr: false } })
+  await vite.listen()
+  const q = [`box=${process.env.BOX || 'pearl-harbor'}`, `t=${process.env.T || '08:40'}`, 'paused', extra].filter(Boolean).join('&')
+  await page.goto(`http://127.0.0.1:${vite.httpServer.address().port}/ui.html?${q}`)
+  await page.waitForFunction(() => window.__app?.ready && window.__app.battle?.sim, null, { timeout: 180000 })
+  console.log('the dev page up after', Date.now() - t0, 'ms (the mock Battle over the real battle file)')
+} else {
+  const q = [useTest ? 'data=../test-data/' : '', extra].filter(Boolean).join('&')
+  await page.goto(`http://127.0.0.1:${port}/dist/index.html${q ? `?${q}` : ''}`)
+  await page.waitForSelector('#boot', { state: 'detached', timeout: 180000 })
+  await page.waitForFunction(() => window.__app?.ready, null, { timeout: 180000 })
+  console.log('booted after', Date.now() - t0, 'ms', useTest ? '(test data)' : '(real data)')
+}
 
 const frames = async (n) => {
   const f0 = await page.evaluate(() => window.__app.frames)
@@ -123,9 +166,14 @@ const frames = async (n) => {
 }
 
 for (const s of shots) {
-  await page.evaluate(async (s) => {
+  await page.evaluate(async ([s, UI]) => {
     const app = window.__app
     const b = app.battle
+    // the dev page stays in its box; only eval, keys, click and hover act there
+    if (UI) {
+      if (s.eval) await new Function('app', `return (async () => { ${s.eval} })()`)(app)
+      return
+    }
     // a shot without a battle, or with another one, leaves the box it is in
     if (b.state && (!s.battle || s.battle !== b.state.boxId || (b.scene && !s.preview))) await b.leave()
     if (s.date) app.clock.setDate(Date.parse(`${s.date}T00:00:00Z`))
@@ -144,7 +192,7 @@ for (const s of shots) {
     if (s.card === 'close') app.ui.card.close()
     if (s.card === 'credits') app.ui.openCredits()
     if (s.eval) await new Function('app', `return (async () => { ${s.eval} })()`)(app)
-  }, s)
+  }, [s, UI])
   for (const k of s.keys || []) await page.keyboard.press(k)
   if (s.click) await page.click(s.click, { timeout: 30000 })
   // a frame to move the camera, then let the ground and the camera's target settle
@@ -180,3 +228,4 @@ if (perf) console.log('stats', JSON.stringify(perf))
 console.log(errors.length ? `${errors.length} console errors/warnings: ${errors.slice(0, 3).join(' | ')}` : 'no console errors')
 await browser.close()
 server.close()
+await vite?.close()
