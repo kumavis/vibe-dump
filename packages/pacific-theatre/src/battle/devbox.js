@@ -3,6 +3,10 @@
 // straight into a box with the real Battle, from: 'url' (no fly-down):
 //
 //   battle.html?box=test-box&t=10:20&moment=test-dive[&data=./test-data/][&speed=4][&aid=guided]
+//   battle.html?box=pearl-harbor&data=./data/&t=07:58&unit=nevada&station=aa[&assist=pilot]
+//       takes a unit at a station at t (ROUND-2 §4) without the UI: unit is a
+//       ship's id, an aircraft's slot id (kaga-level#3) or a group's id (any
+//       of its aircraft but the leader, or a spare beside it)
 //
 // A small panel offers the box's moments ("Take the controls"), its stops,
 // the watch speeds and leaving. window.__app and window.__battle are the
@@ -76,10 +80,24 @@ export async function bootBox(params, status) {
   const boxId = params.get('box') || data.boxes[0]?.id
   if (!boxId) throw new Error('no box in boxes/manifest.json')
   if (params.get('aid')) app.battle.setAid(params.get('aid'))
+  if (params.get('assist')) app.battle.assist = params.get('assist')
   status(`entering ${boxId}`)
   const t0 = performance.now()
   await app.battle.enter(boxId, { t: params.get('t'), momentId: params.get('moment'), from: 'url' })
   if (params.get('speed')) app.battle.play(Number(params.get('speed')))
+  const unit = params.get('unit')
+  if (unit) {
+    const sim = app.battle.sim
+    const role = sim.record.groupById.has(unit) ? { group: unit } : { unit }
+    if (params.get('station')) role.station = params.get('station')
+    if (params.get('index') != null && role.group) role.index = Number(params.get('index'))
+    try {
+      app.battle.take(role).then((r) => console.info('[battle] after', JSON.stringify(r.sortie)))
+    } catch (err) {
+      status(`${unit}: ${err.message}`)
+      console.info('[battle] not taken:', err.message)
+    }
+  }
   app.ready = true
   status(`${boxId}: in ${((performance.now() - t0) / 1000).toFixed(1)} s`)
   panel(app, params)
@@ -130,6 +148,25 @@ function panel(app, params) {
       battle.lookAtStop(s)
     })
   }
+  head('Take over')
+  const row2 = document.createElement('div')
+  row2.className = 'row'
+  el.appendChild(row2)
+  add(row2, 'Selected', () => {
+    const i = battle.selected
+    if (i == null) return status('select a unit first (a click in the box, or Tab)')
+    try {
+      battle.take(sim().roleOf(i)).then((r) => console.info('[battle] after', JSON.stringify(r.sortie)))
+    } catch (err) {
+      status(err.message)
+    }
+  })
+  add(row2, 'Tab station', () => battle.cycleStation())
+  add(row2, 'Release', () => battle.release())
+  const as = add(el, `Assist: ${battle.assist}`, () => {
+    battle.assist = battle.assist === 'assisted' ? 'pilot' : 'assisted'
+    as.textContent = `Assist: ${battle.assist}`
+  })
   head('Watch')
   const row = document.createElement('div')
   row.className = 'row'

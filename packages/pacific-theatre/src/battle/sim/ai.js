@@ -12,11 +12,11 @@ import { KN, DEG, G, tableFor, arcCovers, rho } from './units.js'
 import { headingOf, courseVec, wrap180 } from './path.js'
 import { planPos } from './record.js'
 import { applyHit, speedCap, weaponClass } from './damage.js'
-import { stepAir, airQuat, airFrame, instructor, stallSpeed, eulerQuat, createAirBody as createAirBody0 } from './aircraft.js'
+import { stepAir, airQuat, airFrame, instructor, stallSpeed, eulerQuat, nMaxAt, tableAt, createAirBody as createAirBody0 } from './aircraft.js'
 import { stepShip, helmsman, telegraphFor, orderedOf } from './ship.js'
 import { KIND, FLAG, muzzle, layOn, createSolution, trackTarget, noteTargetManoeuvre, correct, errorFactor } from './guns.js'
-import { atRange } from './ballistics.js'
-import { shipLambda, aaReach, eraFactor, aspectOf, alertAt, aaStep as hazardStep, hitDamage } from './aa.js'
+import { atRange, bombImpact } from './ballistics.js'
+import { shipLambda, aaReach, eraFactor, aspectOf, alertAt, aaStep as hazardStep, hitDamage, fRange } from './aa.js'
 import { FX } from './effects.js'
 import { boxDistance } from './collide.js'
 
@@ -52,6 +52,171 @@ export function ammoOf(model) {
     torpedoes: model.torpedo ? 1 : 0,
     nextShot: 0,
   }
+}
+
+/**
+ * The ammunition an aircraft of a group carries: what its profile flew with
+ * (a torpedo group's aircraft carry the torpedo and no bomb, a level or dive
+ * group's the bombs and no torpedo, fighters on CAP, escort or strafing no
+ * bombs); without a profile, the kit's.
+ */
+export function ammoFor(model, profile = null) {
+  const a = ammoOf(model)
+  if (profile === 'torpedo' && a.torpedoes > 0) a.bombs = 0
+  else if (profile === 'level' || profile === 'dive') a.torpedoes = 0
+  else if (profile === 'cap' || profile === 'escort' || profile === 'strafe') {
+    a.bombs = 0
+    a.torpedoes = 0
+  }
+  return a
+}
+
+// --- the take-over (ROUND-2 §3): the soft take, the stations the player is not at -------------------------------
+
+const LEVELS = ['pitch', 'roll', 'yaw', 'throttle', 'helm', 'telegraph']
+const COUNTERS = ['fireCount', 'bombCount', 'torpedoCount', 'salvoCount', 'starshellCount']
+
+/** The levels of an input at the take, so a later change can be told from none. */
+export function snapshotInput(inp) {
+  const o = {}
+  for (const k of LEVELS) o[k] = inp[k] ?? 0
+  return o
+}
+
+/**
+ * Whether the player has acted since the take (ROUND-2 §3: "no non-zero
+ * level or counter since the take"): a counter advanced, a gun held, the
+ * AA directed, or, at the station they belong to, a level moved (the helm or
+ * telegraph; the stick, the rudder, the throttle or the mouse-aim). Aiming a
+ * gun without firing it changes nothing in the battle and is not an act.
+ */
+export function inputTouched(pl) {
+  const inp = pl.input
+  const b = pl.base
+  const seen = pl._seen
+  for (const c of COUNTERS) if ((inp[c] | 0) > (seen[c] | 0)) return true
+  if (inp.fireHeld || inp.aa) return true
+  const all = pl.allStations
+  if (pl.kind === 'ship') {
+    if (all || pl.station === 'helm') for (const k of ['helm', 'telegraph']) if (Math.abs((inp[k] ?? 0) - (b[k] ?? 0)) > 1e-3) return true
+    return false
+  }
+  if (all || pl.station === 'pilot') {
+    for (const k of ['pitch', 'roll', 'yaw', 'throttle']) if (Math.abs((inp[k] ?? 0) - (b[k] ?? 0)) > 1e-3) return true
+    if (inp.aimDir && inp.mode !== 'direct') return true
+  }
+  if (pl.station === 'bombardier' && Math.abs(inp.roll ?? 0) > 1e-3) return true
+  return false
+}
+
+/** A soft take's shadow body, kept on the record's place so the HUD reads the unit as it flies or steams. */
+export function syncPlayerBody(sim, pl) {
+  const i = pl.unitIndex
+  const x = sim._X[i]
+  const s = sim.state
+  const b = x.body
+  if (!b) return
+  const o = 3 * i
+  if (pl.kind === 'ship') {
+    b.x = s.pos[o]
+    b.z = s.pos[o + 2]
+    b.heading = s.heading[i]
+    b.V = s.speed[i]
+    return
+  }
+  const vx = s.vel[o]
+  const vy = s.vel[o + 1]
+  const vz = s.vel[o + 2]
+  const hs = Math.hypot(vx, vz)
+  b.x = s.pos[o]
+  b.y = s.pos[o + 1]
+  b.z = s.pos[o + 2]
+  b.V = Math.max(20, Math.hypot(hs, vy))
+  b.psi = s.heading[i] * DEG
+  b.gamma = Math.atan2(vy, Math.max(1, hs))
+  b.phi = x.bank || 0
+  b.p = 0
+  b.ias = b.V * Math.sqrt(rho(b.y) / rho(0))
+  b.n = Math.cos(b.gamma) / Math.max(0.25, Math.cos(b.phi))
+}
+
+/** The station left: what it was doing is held for the AI (the helm's course and speed, the battery's target, the pilot's heading, height and speed). */
+export function leaveStation(sim, pl, name) {
+  const s = sim.state
+  const i = pl.unitIndex
+  const x = sim._X[i]
+  const inp = pl.input
+  pl.aims[name] = { aimAz: inp.aimAz, aimEl: inp.aimEl, aimRange: inp.aimRange, aimDir: inp.aimDir, mode: inp.mode }
+  if (name === 'helm' || pl.allStations) {
+    pl.hold.heading = s.heading[i]
+    pl.hold.speed = x.body && pl.kind === 'ship' ? Math.max(0, orderedOf(x.body.telegraph) * x.model.vmax) : s.speed[i]
+  }
+  if (name === 'main' || (pl.allStations && pl.kind === 'ship')) {
+    const t = pl.state?.target?.index
+    if (t != null && t >= 0) pl.hold.mainTarget = t
+  }
+  if (pl.kind === 'aircraft' && (name === 'pilot' || name === 'bombardier' || pl.allStations)) {
+    pl.hold.heading = s.heading[i]
+    pl.hold.alt = s.pos[3 * i + 1]
+    pl.hold.speed = s.speed[i]
+  }
+  inp.fireHeld = false
+  inp.aa = false
+}
+
+/** The station entered: its own aim back (or a first one: the guns on the nearest aircraft of the other side). */
+export function enterStation(sim, pl, name) {
+  const inp = pl.input
+  const s = sim.state
+  const i = pl.unitIndex
+  const a = pl.aims[name]
+  if (a) Object.assign(inp, a)
+  else if (name === 'aa' || name === 'gunner') {
+    // (the gunner's only where the rear gun bears: aft and above, not through the tail, the wings or the propeller)
+    const bears = (j) => {
+      const dx = s.pos[3 * j] - s.pos[3 * i]
+      const dy = s.pos[3 * j + 1] - s.pos[3 * i + 1]
+      const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
+      const offTail = Math.abs(wrap180(headingOf(dx, dz) - s.heading[i] - 180))
+      return offTail <= P.gunner.arcFromTailDeg && dy / (Math.hypot(dx, dy, dz) || 1) >= P.gunner.minUpDot
+    }
+    const j = nearestEnemyAircraft(sim, i, name === 'aa' ? 7000 : 1500, name === 'gunner' ? bears : null)
+    if (j >= 0) {
+      const dx = s.pos[3 * j] - s.pos[3 * i]
+      const dy = s.pos[3 * j + 1] - s.pos[3 * i + 1]
+      const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
+      inp.aimAz = headingOf(dx, dz)
+      inp.aimEl = Math.atan2(dy, Math.hypot(dx, dz)) / DEG
+    } else {
+      inp.aimAz = (s.heading[i] + (name === 'gunner' ? 180 : 90)) % 360
+      inp.aimEl = name === 'gunner' ? 10 : 25
+    }
+  } else if (name === 'pilot') {
+    inp.aimDir = null
+    inp.mode = 'aim'
+  }
+  if (name === 'bombardier') {
+    pl.hold.heading = s.heading[i]
+    pl.hold.alt = s.pos[3 * i + 1]
+    pl.hold.speed = s.speed[i]
+  }
+  inp.fireHeld = false
+}
+
+function nearestEnemyAircraft(sim, i, within, ok = null) {
+  const s = sim.state
+  let best = -1
+  let bd = within
+  for (const j of sim._air || airList(sim)) {
+    if (sim.slots[j].side === sim.slots[i].side || j === i || s.alive[j] !== 1) continue
+    if (ok && !ok(j)) continue
+    const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 1] - s.pos[3 * i + 1], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+    if (d < bd) {
+      bd = d
+      best = j
+    }
+  }
+  return best
 }
 
 /** The moment's start: an aircraft placed relative to a unit; a ship on its own track (already). */
@@ -150,7 +315,7 @@ function airList(sim) {
   const s = sim.state
   const out = sim._air || (sim._air = [])
   out.length = 0
-  for (let i = 0; i < sim.capacity; i++) if (s.alive[i] === 1 && sim.units[i].kind === 'aircraft' && !sim.units[i].parked) out.push(i)
+  for (let i = 0; i < sim.capacity; i++) if (s.alive[i] === 1 && sim.slots[i].kind === 'aircraft' && !sim.slots[i].parked) out.push(i)
   return out
 }
 
@@ -178,12 +343,13 @@ export function think(sim, dt) {
   sim._thinkT = (sim._thinkT ?? 0) - dt
   if (sim._thinkT <= 0) {
     sim._thinkT = 1
-    if (pl && s.alive[pl.unitIndex] === 1) recruit(sim)
+    if (pl && pl.engaged && s.alive[pl.unitIndex] === 1) recruit(sim)
+    if (sim._released.size) recruitOnReleased(sim)
     signalRaids(sim)
     savedCarriers(sim)
   }
   for (let i = 0; i < sim.capacity; i++) {
-    const u = sim.units[i]
+    const u = sim.slots[i]
     if (u.authority !== 'ai' || !s.alive[i]) continue
     const x = X[i]
     if (u.kind === 'ship') shipThink(sim, i, x, dt)
@@ -197,17 +363,21 @@ function recruit(sim) {
   const s = sim.state
   const X = sim._X
   const pi = pl.unitIndex
-  const pu = sim.units[pi]
+  const pu = sim.slots[pi]
   const px = s.pos[3 * pi]
   const py = s.pos[3 * pi + 1]
   const pz = s.pos[3 * pi + 2]
   if (pl.kind === 'aircraft') {
     let fighting = 0
-    for (const i of sim._air) if (sim.units[i].authority === 'ai' && X[i].ai?.mode === 'fight' && X[i].ai.target === pi) fighting++
-    if (fighting < 4) {
+    for (const i of sim._air) if (sim.slots[i].authority === 'ai' && X[i].ai?.mode === 'fight' && X[i].ai.target === pi) fighting++
+    // (in Assisted, Guided's rule for what is aimed at the player, R7 §4.5: at most two fighters on the player's
+    // aircraft at once, slower to aim and with twice the lead error; ROUND-2 §1.2's casual player)
+    const easy = sim.assist === 'assisted'
+    const most = easy ? P.assist.fightersOnPlayer : 4
+    if (fighting < most) {
       const cand = []
       for (const i of sim._air) {
-        const u = sim.units[i]
+        const u = sim.slots[i]
         if (u.authority !== 'record' || u.side === pu.side) continue
         const g = X[i].g
         const prof = g?.attack?.profile
@@ -218,19 +388,23 @@ function recruit(sim) {
         cand.push([d, i])
       }
       cand.sort((a, b) => a[0] - b[0])
-      for (const [, i] of cand.slice(0, 4 - fighting)) {
-        sim._toAI(i)
+      for (const [, i] of cand.slice(0, most - fighting)) {
+        sim._toAI(i, 'engaged the player')
         X[i].ai.mode = 'fight'
         X[i].ai.target = pi
+        if (easy) {
+          X[i].ai.leadMils *= P.assist.fighterLeadK
+          X[i].ai.reaction *= P.assist.fighterReactionK
+        }
       }
     }
     // the wingman: a fighter of the player's own group turns into an enemy on the player's tail
     if (pu.groupIndex >= 0 && X[pi].model.type === 'fighter') {
-      const tail = sim._air.find((i) => sim.units[i].authority === 'ai' && X[i].ai?.mode === 'fight' && X[i].ai.target === pi && Math.hypot(s.pos[3 * i] - px, s.pos[3 * i + 2] - pz) < 1200)
+      const tail = sim._air.find((i) => sim.slots[i].authority === 'ai' && X[i].ai?.mode === 'fight' && X[i].ai.target === pi && Math.hypot(s.pos[3 * i] - px, s.pos[3 * i + 2] - pz) < 1200)
       if (tail != null) {
-        const mate = sim._air.find((i) => i !== pi && sim.units[i].groupIndex === pu.groupIndex && (sim.units[i].authority === 'record' || X[i].ai?.mode === 'rejoin'))
-        if (mate != null && !sim._air.some((i) => X[i].ai?.mode === 'fight' && X[i].ai.target === tail && sim.units[i].side === pu.side)) {
-          sim._toAI(mate)
+        const mate = sim._air.find((i) => i !== pi && sim.slots[i].groupIndex === pu.groupIndex && (sim.slots[i].authority === 'record' || X[i].ai?.mode === 'rejoin'))
+        if (mate != null && !sim._air.some((i) => X[i].ai?.mode === 'fight' && X[i].ai.target === tail && sim.slots[i].side === pu.side)) {
+          sim._toAI(mate, 'turned into the attacker')
           X[mate].ai.mode = 'fight'
           X[mate].ai.target = tail
         }
@@ -243,9 +417,34 @@ function recruit(sim) {
       for (const ac of g.aircraft) {
         if (sim.record.ships[ac.target ?? g.attack.targetUnit]?.slot !== pi) continue
         const i = ac.slot
-        if (i == null || sim.units[i].authority !== 'record' || s.alive[i] !== 1) continue
+        if (i == null || sim.slots[i].authority !== 'record' || s.alive[i] !== 1) continue
         if (ac.releaseT == null || sim.t < ac.releaseT - 150 || sim.t > ac.releaseT + 30) continue
-        sim._toAI(i)
+        sim._toAI(i, 'its attack flown for real')
+        X[i].ai.mode = g.attack.profile === 'torpedo' ? 'torpedo' : g.attack.profile === 'level' ? 'level' : 'dive'
+        X[i].ai.target = pi
+        X[i].ai.from = g.attack.fromDeg ?? headingOf(s.pos[3 * i] - s.pos[3 * pi], s.pos[3 * i + 2] - s.pos[3 * pi + 2])
+        X[i].ai.pushOver = g.attack.pushOverM ?? Math.max(1500, s.pos[3 * i + 1])
+        X[i].ai.releaseM = g.attack.releaseM ?? 600
+      }
+    }
+  }
+}
+
+/** Strikes the record sends at a ship the player touched and gave back are flown for real (her record events stay unscripted, ROUND-2 §3). */
+function recruitOnReleased(sim) {
+  const s = sim.state
+  const X = sim._X
+  for (const pi of sim._released) {
+    if (sim.slots[pi].kind !== 'ship' || !targetable(sim, pi)) continue
+    if (sim.player && sim.player.unitIndex === pi) continue
+    for (const g of sim.record.groups) {
+      if (!g.attack?.targets?.some((x) => x.unit >= 0 && sim.record.ships[x.unit]?.slot === pi)) continue
+      for (const ac of g.aircraft) {
+        if (sim.record.ships[ac.target ?? g.attack.targetUnit]?.slot !== pi) continue
+        const i = ac.slot
+        if (i == null || sim.slots[i].authority !== 'record' || s.alive[i] !== 1) continue
+        if (ac.releaseT == null || sim.t < ac.releaseT - 150 || sim.t > ac.releaseT + 30) continue
+        sim._toAI(i, 'its attack flown for real')
         X[i].ai.mode = g.attack.profile === 'torpedo' ? 'torpedo' : g.attack.profile === 'level' ? 'level' : 'dive'
         X[i].ai.target = pi
         X[i].ai.from = g.attack.fromDeg ?? headingOf(s.pos[3 * i] - s.pos[3 * pi], s.pos[3 * i + 2] - s.pos[3 * pi + 2])
@@ -300,13 +499,13 @@ function savedCarriers(sim) {
         const air = xj.model.torpedo ? 'torpedo' : 'dive'
         Object.assign(xj.ai, { mode: air, target: tgt, from: headingOf(s.pos[3 * i] - s.pos[3 * tgt], s.pos[3 * i + 2] - s.pos[3 * tgt + 2]), pushOver: 4000, releaseM: 600, phase: 'approach' })
         xj.ammo = ammoOf(xj.model)
-        sim.units[j].side = r.side
+        sim.slots[j].side = r.side
         sim._setAlive(j, 1)
         n++
       }
       if (n) {
         sim._guess ||= []
-        sim._guess.push({ unit: r.id, t: sim.t, text: `${r.name}: ${n} aircraft launched against ${sim.units[tgt].name}: the sim's guess; the record has no such strike` })
+        sim._guess.push({ unit: r.id, t: sim.t, text: `${r.name}: ${n} aircraft launched against ${sim.slots[tgt].name}: the sim's guess; the record has no such strike` })
         sim.beat(i, 'launches', `${r.name}: launching (the sim's guess; the record has no such strike)`)
       }
     }
@@ -325,7 +524,7 @@ function signalRaids(sim) {
   sim._signalled ||= new Set()
   for (const r of sim.record.ships) {
     const i = r.slot
-    if (r.side !== 'jp' || s.alive[i] !== 1 || sim.units[i].kind !== 'ship') continue
+    if (r.side !== 'jp' || s.alive[i] !== 1 || sim.slots[i].kind !== 'ship') continue
     for (const g of sim.record.groups) {
       if (g.side === 'jp' || sim._signalled.has(`${i}:${g.index}`)) continue
       const lead = g.aircraft.find((ac) => ac.slot != null && s.alive[ac.slot] === 1)
@@ -346,15 +545,13 @@ export function createShipAI(sim, i) {
   return { engaged: false, evadeUntil: -1, evadeTurn: 0, evadeDv: 0, sol: createSolution(P.aiGun), guns: createGuns(sim, i), target: -1, salvos: new Map(), lastSeenT: -1e9 }
 }
 
-/** An AI ship: its track (with the evasion the player's fire provokes), and its guns at the player. */
-function shipThink(sim, i, x, dt) {
+/** The record's way ahead for ship i: the heading and speed that keep it on its track (a point a minute on), catching up when behind. */
+function recordWay(sim, i, x, pose = { x: 0, z: 0, vx: 0, vz: 0, heading: 0, speed: 0 }) {
   const s = sim.state
-  const ai = x.ai
   const r = x.rec
-  // the record's way ahead: a point a minute on along its track
-  const pose = { x: 0, z: 0, vx: 0, vz: 0, heading: 0, speed: 0 }
   let wantH = s.heading[i]
   let wantV = s.speed[i]
+  pose.heading = wantH
   if (r && (r.track || r.station)) {
     sim.record.motion.pose(r.index, sim.t + 60, pose)
     const dx = pose.x - x.body.x
@@ -366,6 +563,14 @@ function shipThink(sim, i, x, dt) {
     const lag = Math.hypot(pose.x - x.body.x, pose.z - x.body.z)
     if (lag > 300) wantV = Math.min(x.model.vmax, wantV + Math.min(5 * KN, lag / 300))
   }
+  return { wantH, wantV, pose }
+}
+
+/** An AI ship: its track (with the evasion the player's fire provokes), and its guns at the player (or at the target the record's event gave it). */
+function shipThink(sim, i, x, dt) {
+  const s = sim.state
+  const ai = x.ai
+  let { wantH, wantV, pose } = recordWay(sim, i, x)
   if (sim.t < ai.evadeUntil) {
     wantH = (pose.heading + ai.evadeTurn + 360) % 360
     wantV = clamp(wantV + ai.evadeDv, 0, x.model.vmax)
@@ -373,11 +578,13 @@ function shipThink(sim, i, x, dt) {
   const cmd = helmsman(x.body, x.model, wantH, wantV)
   ai.helm = cmd.helm
   ai.telegraph = cmd.telegraph
-  // gunnery at the player's ship
+  // gunnery: at the engaged player's ship, or at the ship a record event named when the player's touch left it unscripted
   const pl = sim.player
-  if (!pl || pl.kind !== 'ship' || !ai.engaged || x.dmg?.out || x.dmg?.sinking) return
-  const ti = pl.unitIndex
-  if (!targetable(sim, ti) || sim.units[ti].side === sim.units[i].side) return
+  if (!ai.engaged || x.dmg?.out || x.dmg?.sinking) return
+  let ti = -1
+  if (ai.target >= 0 && targetable(sim, ai.target) && sim.slots[ai.target].side !== sim.slots[i].side) ti = ai.target
+  else if (pl && pl.engaged && pl.kind === 'ship') ti = pl.unitIndex
+  if (ti < 0 || !targetable(sim, ti) || sim.slots[ti].side === sim.slots[i].side) return
   const tx = s.pos[3 * ti]
   const tz = s.pos[3 * ti + 2]
   const obs = { x: s.pos[3 * i], y: x.model.top * 0.8, z: s.pos[3 * i + 2], sensors: x.model.sensors }
@@ -393,7 +600,7 @@ function shipThink(sim, i, x, dt) {
     if (b.role !== 'main' && ai.guns[0].battery.table.maxRange > R0 && ai.guns[0].mounts.some((m) => m.readyAt > sim.t)) continue
     const ready = bg.mounts.filter((mt) => mt.readyAt <= sim.t && bearsOn(sim, i, mt, tx, tz))
     if (!ready.length || ready.length < Math.ceil(bg.mounts.length * 0.3)) continue
-    aiSalvo(sim, i, x, bg, ready, ti, seen)
+    aiSalvo(sim, i, ai, bg, ready, ti, seen)
     break
   }
 }
@@ -405,10 +612,9 @@ function bearsOn(sim, i, mt, tx, tz) {
   return arcCovers(mt.arc, (brg - s.heading[i] + 360) % 360)
 }
 
-/** One AI salvo with its solution error (ENGINEERING §5). */
-function aiSalvo(sim, i, x, bg, mounts, ti, seen) {
+/** One AI salvo with its solution error (ENGINEERING §5); ai: the director's state ({ sol, salvos }); player: the player's ship's own director. */
+function aiSalvo(sim, i, ai, bg, mounts, ti, seen, player = false) {
   const s = sim.state
-  const ai = x.ai
   const b = bg.battery
   const w = b.weapon
   const tbl = b.table
@@ -441,8 +647,12 @@ function aiSalvo(sim, i, x, bg, mounts, ti, seen) {
   const salvo = sim._salvo++
   ai.salvos.set(salvo, { seenAtFire: seen.how, t: sim.t, x: px, z: pz })
   // each turret lays on the salvo's point with its own share of the error
-  fireMounts(sim, i, bg, mounts, px, pz, { salvo, target: ti, player: false, mountError: () => [g.gauss() * sR * share, g.gauss() * sD * share], ux, uz })
+  const n = fireMounts(sim, i, bg, mounts, px, pz, { salvo, target: ti, player, mountError: () => [g.gauss() * sR * share, g.gauss() * sD * share], ux, uz })
   sol.salvos++
+  if (player && n && sim._score) {
+    sim._score.salvos++
+    sim._score.shells += n
+  }
 }
 
 /** Fire mounts at a point, each shell about the salvo's mean point with the historical dispersion. */
@@ -491,7 +701,7 @@ function fireMounts(sim, i, bg, mounts, px0, pz0, { salvo, target, player, star 
 }
 
 export function createAirAI(sim, i, { rejoin = false } = {}) {
-  const veteran = sim.units[i].side === 'jp' && sim.year <= 1942
+  const veteran = sim.slots[i].side === 'jp' && sim.year <= 1942
   const r = sim.rngs.ai
   return {
     mode: rejoin ? 'rejoin' : 'fight',
@@ -549,8 +759,13 @@ function airThink(sim, i, x, dt) {
     if (ai.dist < P.cap.fireRangeM && err < P.cap.leadTolDeg * 3 && t >= ai.nextBurst) {
       ai.burstUntil = t + P.cap.burstS[0] + sim.rngs.ai.next() * (P.cap.burstS[1] - P.cap.burstS[0])
       ai.nextBurst = ai.burstUntil + 1.5
+      // (in Assisted a fighter on the player's aircraft makes its run and pulls clear, as the Zeros did, R7 §4.7; P.assist)
+      if (sim.assist === 'assisted' && sim.player?.unitIndex === ti && sim.player.kind === 'aircraft') {
+        ai.breakUntil = ai.burstUntil + P.assist.fighterBreakS
+        ai.nextBurst = ai.burstUntil + P.assist.fighterBreakS + 2
+      }
     }
-    if (ai.dist < 120) ai.breakUntil = t + 4
+    if (ai.dist < 120) ai.breakUntil = Math.max(ai.breakUntil, t + 4)
     return
   }
   if (ai.mode === 'dive' || ai.mode === 'torpedo' || ai.mode === 'level') return attackThink(sim, i, x, dt)
@@ -560,8 +775,9 @@ function airThink(sim, i, x, dt) {
     planPos(x.ac, t + 20, p, { motion: sim.record.motion, groups: sim.record.groups })
     ai.aim = [p.x - b.x, p.y - b.y, p.z - b.z]
     const d = Math.hypot(...ai.aim)
-    if (d < 300 && !x.lostAt && sim.units[i].authority === 'ai' && t < x.ac.endT) {
-      sim.units[i].authority = 'record'
+    // (a unit the player touched and gave back stays the AI's: ROUND-2 §3)
+    if (d < 300 && !x.lostAt && !x.keepAI && sim.slots[i].authority === 'ai' && t < x.ac.endT) {
+      sim.slots[i].authority = 'record'
       x.prev = null
       x.body = null
       x.ai = null
@@ -659,6 +875,25 @@ function attackThink(sim, i, x, dt) {
 
 // --- 3. the player's physics -------------------------------------------------------------------------
 
+/** An untouched spare keeps its place beside its group's aircraft (right and back of it, at its speed and heading); false once that aircraft is gone. */
+function holdSpare(sim, i, sp) {
+  const s = sim.state
+  const j = sp.j
+  if (s.alive[j] !== 1) return false
+  const h = s.heading[j] * DEG
+  const o = 3 * i
+  const q = 3 * j
+  s.pos[o] = s.pos[q] + Math.cos(h) * sp.right - Math.sin(h) * sp.back
+  s.pos[o + 1] = s.pos[q + 1]
+  s.pos[o + 2] = s.pos[q + 2] + Math.sin(h) * sp.right + Math.cos(h) * sp.back
+  for (let k = 0; k < 3; k++) s.vel[o + k] = s.vel[q + k]
+  for (let k = 0; k < 4; k++) s.quat[4 * i + k] = s.quat[4 * j + k]
+  s.heading[i] = s.heading[j]
+  s.speed[i] = s.speed[j]
+  sim._X[i].bank = sim._X[j].bank ?? 0
+  return true
+}
+
 export function playerStep(sim, dt) {
   const pl = sim.player
   if (!pl) return
@@ -666,21 +901,113 @@ export function playerStep(sim, dt) {
   const s = sim.state
   if (!s.alive[i]) return
   const x = sim._X[i]
+  if (!pl.engaged) {
+    // a soft take: the record moves the unit; the first act takes it off the record (ROUND-2 §3)
+    if (x.spareOf && !holdSpare(sim, i, x.spareOf)) return sim._engagePlayer(pl, 'its group gone')
+    syncPlayerBody(sim, pl)
+    if (s.alive[i] !== 1 || !inputTouched(pl)) return
+    sim._engagePlayer(pl, 'input')
+  }
   if (pl.kind === 'ship') return playerShip(sim, pl, i, x, dt)
   return playerAir(sim, pl, i, x, dt)
 }
+
+/** The helm the record would have: steering for the place a minute on along the unit's track. */
+function recordHelm(sim, i, x) {
+  const w = recordWay(sim, i, x)
+  return helmsman(x.body, x.model, w.wantH, w.wantV)
+}
+
+/** The ship the record has unit i firing at now (an opens-fire without a cease-fire, its target or the next it hits), or −1. */
+export function recordFireTarget(sim, i) {
+  const r = sim._X[i].rec
+  if (!r) return -1
+  let open = null
+  for (const ev of r.events) {
+    if (ev.t > sim.t) break
+    if (ev.kind === 'opens-fire') open = ev
+    else if (ev.kind === 'ceases-fire') open = null
+  }
+  if (!open) return -1
+  let target = open.target ? sim.record.shipById.get(open.target)?.slot ?? -1 : -1
+  let until = open.t + 1200
+  let next = null
+  for (const s2 of sim.record.ships) {
+    for (const e of s2.events) {
+      if (e.by !== r.id || e.t < open.t || !HIT.has(e.kind)) continue
+      until = Math.max(until, e.t + 600)
+      if (e.t >= sim.t && (!next || e.t < next.t)) next = { t: e.t, slot: s2.slot }
+    }
+  }
+  if (sim.t > until) return -1
+  if (target < 0 && next) target = next.slot
+  return target
+}
+const HIT = new Set(['hit', 'torpedo-hit'])
 
 function playerShip(sim, pl, i, x, dt) {
   const s = sim.state
   const inp = pl.input
   const st = x.dmg
+  const at = (n) => pl.allStations || pl.station === n
   if (s.alive[i] === 1) {
-    stepShip(x.body, x.model, inp.helm, inp.telegraph, dt, speedCap(st, x.model, sim.t), st.rudderJam)
+    let helm = inp.helm
+    let tel = inp.telegraph
+    if (at('helm')) {
+      if (Math.abs(helm - (pl.base.helm ?? 0)) > 1e-3 || Math.abs(tel - (pl.base.telegraph ?? 0)) > 1e-3) pl.steered = true
+      // Assisted: the course held while the helm is centred (ROUND-2 §1.2)
+      if (sim.assist === 'assisted' && Math.abs(helm) < 1e-3 && pl.steered) {
+        pl.courseHold ??= x.body.heading
+        helm = helmsman(x.body, x.model, pl.courseHold, 0).helm
+      } else pl.courseHold = null
+      if (!pl.steered && !pl.allStations) {
+        // (at the helm but not yet steered: on the record's way)
+        const c = recordHelm(sim, i, x)
+        helm = c.helm
+        tel = c.telegraph
+      }
+    } else {
+      // the helm held by the AI: the record's way until the player has steered, then the course and speed left
+      const c = pl.steered ? helmsman(x.body, x.model, pl.hold.heading, pl.hold.speed) : recordHelm(sim, i, x)
+      helm = c.helm
+      tel = c.telegraph
+    }
+    stepShip(x.body, x.model, helm, tel, dt, speedCap(st, x.model, sim.t), st.rudderJam)
     grounding(sim, i, x)
   }
   writeShip(sim, i)
   if (s.alive[i] !== 1 || st.out) return
-  // the batteries: traverse toward the aim within the arcs, elevate from the firing table
+  const seen = pl._seen
+  if (at('main')) playerMainBattery(sim, pl, i, x, dt)
+  else {
+    // the main battery held by the AI: on the target the player left it on, or the record's
+    seen.salvoCount = inp.salvoCount
+    seen.starshellCount = inp.starshellCount
+    mainDirector(sim, pl, i, x, dt)
+  }
+  // torpedoes: one mount's spread per press, on the aim's bearing if the tubes bear
+  if (inp.torpedoCount > seen.torpedoCount) {
+    seen.torpedoCount = inp.torpedoCount
+    if (at('torpedoes')) fireShipTorpedoes(sim, i, x, inp.aimAz ?? s.heading[i], inp.aimRange, inp.spread)
+  }
+  if (pl.allStations) {
+    // the AA (a bookmark, as the first build): Space points every bearing mount at the pointer's aircraft for 5 s
+    if (inp.aa) {
+      let t = inp.aaTarget ?? -1
+      if (t < 0 && inp.aaDir) t = nearestAircraftOnRay(sim, i, inp.aaDir)
+      if (t >= 0) {
+        pl.aaTarget = t
+        pl.aaUntil = sim.t + P.aa.directS
+      }
+    }
+  } else if (pl.station === 'aa') aaDirector(sim, pl, i, x, dt)
+}
+
+/** The player at the main battery: the turrets traverse to the aim, a salvo on a click, star shell. */
+function playerMainBattery(sim, pl, i, x, dt) {
+  const s = sim.state
+  const inp = pl.input
+  const st = x.dmg
   const aimAz = inp.aimAz ?? s.heading[i]
   for (const bg of x.guns) {
     const b = bg.battery
@@ -705,8 +1032,8 @@ function playerShip(sim, pl, i, x, dt) {
   seen.salvoCount = inp.salvoCount
   if (fireNow && x.guns.length) {
     const bg = x.guns[bi]
-    const ready = bg.mounts.filter((mt) => mt.readyAt <= sim.t && arcCovers(mt.arc, (aimAz - s.heading[i] + 360) % 360) && Math.abs(wrap180((aimAz - s.heading[i]) - mt.bearing)) < 1.5)
-    if (ready.length && (!inp.fireHeld || inp.salvoCount > 0 || true)) {
+    const ready = bg.mounts.filter((mt) => mt.readyAt <= sim.t && arcCovers(mt.arc, (aimAz - s.heading[i] + 360) % 360) && Math.abs(wrap180(aimAz - s.heading[i] - mt.bearing)) < 1.5)
+    if (ready.length) {
       const share = st.crippled ? Math.ceil(ready.length / 2) : ready.length
       const R0 = inp.aimRange ?? (atRange(bg.battery.table, 10000) ? 10000 : bg.battery.table.maxRange * 0.5)
       const [ux, uz] = courseVec(aimAz)
@@ -738,19 +1065,210 @@ function playerShip(sim, pl, i, x, dt) {
       }
     }
   }
-  // torpedoes: one mount's spread per press, on the aim's bearing if the tubes bear
-  if (inp.torpedoCount > seen.torpedoCount) {
-    seen.torpedoCount = inp.torpedoCount
-    fireShipTorpedoes(sim, i, x, aimAz, inp.aimRange, inp.spread)
+}
+
+/**
+ * The main battery held by the AI while the player is at another station
+ * (ROUND-2 §3: "main battery keeps its target"): the target the player left
+ * it on, or the ship the record has her firing at, with the AI's gunnery (a
+ * solution error that improves with seen falls, ENGINEERING §5). Her shells
+ * are the player's (the player holds the ship): their hits are the sortie's.
+ */
+function mainDirector(sim, pl, i, x, dt) {
+  const s = sim.state
+  let ti = pl.hold.mainTarget ?? -1
+  if (!(ti >= 0) || !targetable(sim, ti) || sim.slots[ti].side === sim.slots[i].side) ti = recordFireTarget(sim, i)
+  pl.directorTarget = ti
+  if (!(ti >= 0) || !targetable(sim, ti) || sim.slots[ti].side === sim.slots[i].side || sim.slots[ti].kind !== 'ship') return
+  pl.director ||= { sol: createSolution(P.aiGun), salvos: new Map(), lastSeenT: -1e9 }
+  const ai = pl.director
+  const tx = s.pos[3 * ti]
+  const tz = s.pos[3 * ti + 2]
+  const obs = { x: s.pos[3 * i], y: x.model.top * 0.8, z: s.pos[3 * i + 2], sensors: x.model.sensors }
+  const seen = sim.sight.sees(obs, { x: tx, y: 10, z: tz, big: true, lit: sim._X[ti].litUntil > sim.t })
+  if (!seen) return
+  ai.lastSeenT = sim.t
+  trackTarget(ai.sol, s.vel[3 * ti], s.vel[3 * ti + 2], dt, P.aiGun.leadLagS)
+  noteTargetManoeuvre(ai.sol, P.aiGun, s.heading[ti], s.speed[ti] / KN, sim.t)
+  const R0 = Math.hypot(tx - s.pos[3 * i], tz - s.pos[3 * i + 2])
+  for (const bg of x.guns) {
+    if (bg.battery.role !== 'main') continue
+    if (R0 > bg.battery.table.maxRange * 0.98) continue
+    const ready = bg.mounts.filter((mt) => mt.readyAt <= sim.t && bearsOn(sim, i, mt, tx, tz))
+    if (!ready.length || ready.length < Math.ceil(bg.mounts.length * 0.3)) continue
+    aiSalvo(sim, i, ai, bg, x.dmg.crippled ? ready.slice(0, Math.ceil(ready.length / 2)) : ready, ti, seen, true)
+    break
   }
-  // the AA: Space points every bearing mount at the pointer's aircraft for 5 s
-  if (inp.aa) {
-    let t = inp.aaTarget ?? -1
-    if (t < 0 && inp.aaDir) t = nearestAircraftOnRay(sim, i, inp.aaDir)
-    if (t >= 0) {
-      pl.aaTarget = t
-      pl.aaUntil = sim.t + P.aa.directS
+}
+
+/** A world direction from an aim: input.aa as a point, or input.aimAz/aimEl (compass degrees, degrees above the horizon). */
+function aimDirOf(inp, eye) {
+  if (Array.isArray(inp.aa) && inp.aa.length === 3) {
+    const d = [inp.aa[0] - eye[0], inp.aa[1] - eye[1], inp.aa[2] - eye[2]]
+    const L = Math.hypot(d[0], d[1], d[2]) || 1
+    return [d[0] / L, d[1] / L, d[2] / L]
+  }
+  const az = (inp.aimAz ?? 0) * DEG
+  const el = clamp(inp.aimEl ?? 0, -10, 89) * DEG
+  return [Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)]
+}
+
+/** The aircraft of the other side nearest an aim's line from eye, within maxDeg of it and maxRange: its slot or −1. */
+function aimedAircraft(sim, i, eye, dir, maxDeg, maxRange) {
+  const s = sim.state
+  let best = -1
+  let bestA = maxDeg * DEG
+  for (const j of sim._air || []) {
+    if (j === i || sim.slots[j].side === sim.slots[i].side) continue
+    const px = s.pos[3 * j] - eye[0]
+    const py = s.pos[3 * j + 1] - eye[1]
+    const pz = s.pos[3 * j + 2] - eye[2]
+    const L = Math.hypot(px, py, pz)
+    if (L > maxRange || L < 1) continue
+    const a = Math.acos(clamp((px * dir[0] + py * dir[1] + pz * dir[2]) / L, -1, 1))
+    if (a < bestA) {
+      bestA = a
+      best = j
     }
+  }
+  return best
+}
+
+/**
+ * The lead: the direction from eye (moving at own velocity ov) in which a
+ * round at muzzle velocity mv meets aircraft j (its mean speed over the
+ * flight about 0.75 mv; two iterations). Returns { dir, point, tof, range }.
+ */
+export function leadOn(sim, eye, ov, j, mv) {
+  const s = sim.state
+  const vm = 0.75 * mv
+  const rx = s.vel[3 * j] - ov[0]
+  const ry = s.vel[3 * j + 1] - ov[1]
+  const rz = s.vel[3 * j + 2] - ov[2]
+  const px = s.pos[3 * j] - eye[0]
+  const py = s.pos[3 * j + 1] - eye[1]
+  const pz = s.pos[3 * j + 2] - eye[2]
+  let tof = Math.hypot(px, py, pz) / vm
+  let lx = px
+  let ly = py
+  let lz = pz
+  for (let k = 0; k < 3; k++) {
+    lx = px + rx * tof
+    ly = py + ry * tof
+    lz = pz + rz * tof
+    tof = Math.hypot(lx, ly, lz) / vm
+  }
+  const L = Math.hypot(lx, ly, lz) || 1
+  return { dir: [lx / L, ly / L, lz / L], point: [eye[0] + lx, eye[1] + ly, eye[2] + lz], tof, range: Math.hypot(px, py, pz) }
+}
+
+const angleMil = (a, b) => Math.acos(clamp(a[0] * b[0] + a[1] * b[1] + a[2] * b[2], -1, 1)) * 1000
+const cone = (mil, width) => Math.max(0, 1 - mil / width)
+const aspectFrom = (sim, j) => {
+  const s = sim.state
+  const vy = s.vel[3 * j + 1]
+  const v = Math.max(1, s.speed[j])
+  const y = s.pos[3 * j + 1]
+  return vy / v < -0.5 ? 'dive' : y < 120 && Math.abs(vy / v) < 0.1 ? 'torpedo' : 'crossing'
+}
+
+/** An aircraft the player's fire reaches leaves the record: its fate is the sim's (ROUND-2 §3). */
+function firedOnAircraft(sim, j) {
+  if (sim.slots[j].authority === 'record') {
+    sim._toAI(j, 'fired on by the player')
+    const xj = sim._X[j]
+    if (xj.ai && xj.ai.mode !== 'fight') xj.ai.mode = 'rejoin'
+  }
+  sim._X[j].firedOnByPlayer = true
+}
+
+/**
+ * The AA director station (ROUND-2 §3): the player aims the ship's AA (the
+ * mounts that bear) along input.aimAz/aimEl or at input.aa as a point, and
+ * fires with fireHeld or fireCount (half a second a press). The eye sees
+ * tracer from the ship and bursts at the aim point; the hits come from the AA
+ * hazard (aa.js) with the ship's whole λ on the aimed aircraft (share 1),
+ * scaled by the lead error: a cone full at 0 mil and zero beyond 40 mil for
+ * the heavy mounts and 80 for the machine guns.
+ */
+/**
+ * The AA director's eye: atop the bridge (the superstructure's top, 3 m forward of its after end), where the
+ * scene's director and gun cameras stand, so the aim the player sees down is the aim the sim fires along.
+ */
+export function directorEye(s, i, m) {
+  const sup = m.sup || { yHi: (m.top ?? 20) * 0.6, z0: -(m.L ?? 100) * 0.15 }
+  const h = s.heading[i] * DEG
+  const along = -(sup.z0 ?? 0) + 3
+  return [s.pos[3 * i] + Math.sin(h) * along, s.pos[3 * i + 1] + sup.yHi * 1.05, s.pos[3 * i + 2] - Math.cos(h) * along]
+}
+
+function aaDirector(sim, pl, i, x, dt) {
+  const s = sim.state
+  const inp = pl.input
+  const seen = pl._seen
+  const m = x.model
+  const eye = directorEye(s, i, m)
+  const dir = aimDirOf(inp, eye)
+  const reach = aaReach(m)
+  const j = aimedAircraft(sim, i, eye, dir, P.aaStation.aimedWithinDeg, reach)
+  pl.aaDir = dir
+  pl.aaAimed = j
+  if (inp.fireCount > seen.fireCount) {
+    seen.fireCount = inp.fireCount
+    pl.aaPulse = sim.t + 0.5
+  }
+  const firing = !!m.aa.length && (inp.fireHeld || sim.t < (pl.aaPulse ?? -1))
+  pl.aaFiring = firing
+  pl.aaCone = 0
+  if (!firing) return
+  const R = j >= 0 ? Math.hypot(s.pos[3 * j] - eye[0], s.pos[3 * j + 1] - eye[1], s.pos[3 * j + 2] - eye[2]) : 2500
+  // the eye's tracer and bursts, at the aim point
+  pl.aaFxT = (pl.aaFxT ?? 0) - dt
+  if (pl.aaFxT <= 0) {
+    pl.aaFxT = P.aaStation.tracerS
+    if (sim._score) sim._score.aaBursts++
+    const r = sim.rngs.fx
+    const h = s.heading[i] * DEG
+    const along = (r.next() - 0.5) * m.L * 0.6
+    const side = dir[0] * Math.cos(h) + dir[2] * Math.sin(h) >= 0 ? 1 : -1
+    const ox = s.pos[3 * i] + Math.sin(h) * along + Math.cos(h) * side * m.B * 0.4
+    const oz = s.pos[3 * i + 2] - Math.cos(h) * along + Math.sin(h) * side * m.B * 0.4
+    // (the stream starts 40 m out along the aim, so the eye on the ship's deck sees it go, not a flare at its feet)
+    const ox2 = ox + dir[0] * 40
+    const oy = (m.deck ?? 8) + 3 + dir[1] * 40
+    const oz2 = oz + dir[2] * 40
+    const light = Math.min(R, 2500)
+    sim.fx(FX.tracer, ox2, oy, oz2, { unit: i, dx: eye[0] + dir[0] * light - ox2 + r.gauss() * light * 0.01, dy: eye[1] + dir[1] * light - oy + r.gauss() * light * 0.01, dz: eye[2] + dir[2] * light - oz2 + r.gauss() * light * 0.01, size: 1, data: 2 })
+    if (m.aa.some((a) => a.heavy) && R > 600) sim.fx(FX.flash, eye[0] + dir[0] * R + r.gauss() * R * 0.02, eye[1] + dir[1] * R + r.gauss() * R * 0.02, eye[2] + dir[2] * R + r.gauss() * R * 0.02, { unit: i, size: 1, data: 1 })
+  }
+  if (j < 0 || s.alive[j] !== 1) return
+  // the hits: the ship's λ concentrated on the aimed aircraft, scaled by the lead error
+  const ov = [s.vel[3 * i], 0, s.vel[3 * i + 2]]
+  let lam = 0
+  let best = 0
+  for (const a of m.aa) {
+    if (R > a.rangeM) continue
+    const lead = leadOn(sim, eye, ov, j, a.weapon?.mvMs ?? (a.heavy ? 790 : 850))
+    const c = cone(angleMil(dir, lead.dir), a.heavy ? P.aaStation.coneHeavyMil : P.aaStation.coneLightMil)
+    best = Math.max(best, c)
+    lam += a.lambda * a.barrels * P.aa.bearingShare * fRange(R, a.rangeM) * c
+  }
+  pl.aaCone = best
+  if (best <= 0) return
+  firedOnAircraft(sim, j)
+  const xs = sim._X[i]
+  xs.sighted ??= {}
+  const key = sim.slots[j].groupIndex >= 0 ? sim.slots[j].groupIndex : `u${j}`
+  xs.sighted[key] ??= sim.t
+  const era = eraFactor(sim.slots[i].side, sim.year, { peacetime: sim.year === 1941 && sim.slots[i].side === 'us' })
+  lam *= era * alertAt(sim.t, xs.sighted[key]) * aspectOf(aspectFrom(sim, j)) * (x.dmg?.crippled ? 0.5 : 1)
+  const xj = sim._X[j]
+  const r = hazardStep(lam, dt, sim.rngs.aa)
+  if (r === 'kill') loseAircraft(sim, j, 'aa', 'player')
+  else if (r === 'hit' && xj.body) {
+    xj.body.damage = Math.min(0.95, xj.body.damage + hitDamage(m, R, sim.rngs.aa))
+    sim.fx(FX.smoke, xj.body.x, xj.body.y, xj.body.z, { unit: j, size: 0.4 })
+    sim._diverge?.(j, 'hit by the player’s AA')
   }
 }
 
@@ -763,7 +1281,7 @@ function nearestAircraftOnRay(sim, i, d) {
   let best = -1
   let bestA = 15 * DEG
   for (const j of sim._air || []) {
-    if (sim.units[j].side === sim.units[i].side) continue
+    if (sim.slots[j].side === sim.slots[i].side) continue
     const px = s.pos[3 * j] - ox
     const py = s.pos[3 * j + 1] - oy
     const pz = s.pos[3 * j + 2] - oz
@@ -818,7 +1336,7 @@ export function failRate(w, date) {
 // A record aircraft carries its whole group's name ("Two P-40Bs of the 47th Pursuit Squadron from Haleʻiwa"), so
 // a line about one aircraft names the one: the player's by its role ("a Dauntless of Bombing Six"), any other as
 // one of its kind of its group ("a Zero of the combat air patrol against Torpedo Eight").
-const KIT_SHORT = {
+export const KIT_SHORT = {
   a6m2: 'Zero', a6m5: 'Zero', d3a1: 'Type 99 carrier bomber', b5n2: 'Type 97 carrier attack plane', d4y1: 'Suisei', b6n2: 'Tenzan', e13a1: 'Type 0 reconnaissance seaplane', f1m2: 'Type 0 observation seaplane',
   'f4f-3': 'Wildcat', 'f4f-4': 'Wildcat', 'fm-2': 'Wildcat', 'f6f-3': 'Hellcat', 'f2a-3': 'Buffalo', 'sbd-3': 'Dauntless', 'sb2u-3': 'Vindicator', 'tbd-1': 'Devastator', 'tbf-1': 'Avenger', 'tbm-1c': 'Avenger',
   'p-40b': 'P-40B', 'p-36a': 'P-36A', 'pby-5': 'Catalina', 'b-17e': 'B-17', 'b-26': 'B-26', 'b-18': 'B-18', 'a-20': 'A-20',
@@ -827,7 +1345,7 @@ const COUNT_OF = /^(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|tw
 const upper = (s) => s.charAt(0).toUpperCase() + s.slice(1)
 
 function oneAircraft(sim, i) {
-  const u = sim.units[i]
+  const u = sim.slots[i]
   const name = KIT_SHORT[u.kit] ?? String(sim._X[i].model?.name ?? u.kit ?? 'aircraft').split(/\s+/).pop()
   const one = `${/^[AEIOU]/.test(name) ? 'an' : 'a'} ${name}`
   let g = u.groupIndex >= 0 ? sim.record.groups[u.groupIndex]?.name : null
@@ -836,6 +1354,9 @@ function oneAircraft(sim, i) {
   if (/^[a-z0-9]/.test(g) && !/^the\b/.test(g)) g = `the ${g}`
   return `${one} of ${g}`
 }
+
+/** One aircraft of its group, in the HUD's words ("a Dauntless of Bombing Six"): the unit list's and the card's label. */
+export const oneAircraftName = (sim, i) => oneAircraft(sim, i)
 
 /** The HUD's name for aircraft i: the player's role, or one of its kind of its group; capitalised to open a line. */
 export function airName(sim, i) {
@@ -846,11 +1367,15 @@ export function airName(sim, i) {
 function grounding(sim, i, x) {
   const b = x.body
   const m = x.model
+  // (not where she was taken: a ship moored at a quay reads shallow under her bow on the 30 m raster; she runs aground once she has
+  // made her own way, more than 0.6 of her length from there)
+  b.start ??= [b.x, b.z]
+  if (Math.hypot(b.x - b.start[0], b.z - b.start[1]) < m.L * 0.6) return
   const [ux, uz] = courseVec(b.heading)
   const bow = sim.world.metresAt(b.x + ux * m.L * 0.45, b.z + uz * m.L * 0.45)
   if (bow > -m.T * 0.8 && !b.aground) {
     b.aground = true
-    sim.beat(i, 'aground', `${sim.units[i].name}: aground`)
+    sim.beat(i, 'aground', `${sim.slots[i].name}: aground`)
   }
 }
 
@@ -859,17 +1384,32 @@ function playerAir(sim, pl, i, x, dt) {
   const inp = pl.input
   const b = x.body
   if (s.alive[i] === 2) return
-  let cmd = null
-  if (inp.aimDir && inp.mode !== 'direct' && !b.broken) {
-    cmd = instructor(b, x.model, inp.aimDir)
-    if (inp.pitch) cmd.n += inp.pitch * 2
+  const at = (n) => pl.allStations || pl.station === n
+  if (at('pilot')) {
+    if (pilotActed(pl)) pl.flown = true
+    if (sim.assist === 'assisted' && !b.broken) {
+      const cmd = assistedCommand(sim, pl, i, x, dt)
+      stepAir(b, x.model, { throttle: cmd.throttle, yaw: (inp.yaw ?? 0) * 0.5, brakes: cmd.brakes ?? undefined }, dt, cmd)
+      assistAfter(sim, pl, i, x)
+    } else {
+      // Pilot: the first build's step
+      pl.assisting = null
+      let cmd = null
+      if (inp.aimDir && inp.mode !== 'direct' && !b.broken) {
+        cmd = instructor(b, x.model, inp.aimDir)
+        if (inp.pitch) cmd.n += inp.pitch * 2
+      }
+      // Guided: no stall (the instructor never lets the speed die), no black-out
+      if (sim.aid === 'guided' && b.V < stallSpeed(b, x.model) * 1.2) {
+        if (cmd) cmd.n = Math.min(cmd.n, 1)
+        b.throttle = 1
+      }
+      stepAir(b, x.model, inp, dt, cmd)
+    }
+  } else {
+    if (pl.station === 'bombardier') bombardierSteer(sim, pl, dt)
+    pilotAI(sim, pl, i, x, dt)
   }
-  // Guided: no stall (the instructor never lets the speed die), no black-out
-  if (sim.aid === 'guided' && b.V < stallSpeed(b, x.model) * 1.2) {
-    if (cmd) cmd.n = Math.min(cmd.n, 1)
-    b.throttle = 1
-  }
-  stepAir(b, x.model, inp, dt, cmd)
   if (sim.aid === 'guided') b.blackout = 0
   writeAir(sim, i)
   // the ground, the sea, a deck
@@ -889,19 +1429,529 @@ function playerAir(sim, pl, i, x, dt) {
     x.brokenSaid = true
     sim.beat(i, 'damage', `${airName(sim, i)}: a control surface failed`)
   }
-  // the guns
+  // the weapons, by station: the fixed guns, the bombs and the torpedo are the pilot's; the rear gun the gunner's; the stick the bombardier's
   const seen = pl._seen
-  const firing = inp.fireHeld || inp.fireCount > seen.fireCount
-  seen.fireCount = inp.fireCount
-  if (firing) fireAirGuns(sim, i, x, true)
+  if (at('pilot')) {
+    const firing = inp.fireHeld || inp.fireCount > seen.fireCount
+    seen.fireCount = inp.fireCount
+    if (firing) fireAirGuns(sim, i, x, true)
+  } else if (pl.station === 'gunner') rearGunner(sim, pl, i, x, dt)
+  else {
+    seen.fireCount = inp.fireCount
+  }
   if (inp.bombCount > seen.bombCount) {
     seen.bombCount = inp.bombCount
-    dropBomb(sim, i, x, true)
+    if (pl.station === 'bombardier' && !pl.allStations) releaseStick(sim, pl, i, x)
+    else if (at('pilot')) dropBomb(sim, i, x, true)
   }
+  if (pl.stick) stickStep(sim, pl, i, x)
   if (inp.torpedoCount > seen.torpedoCount) {
     seen.torpedoCount = inp.torpedoCount
-    dropTorpedo(sim, i, x, true)
+    if (at('pilot')) dropTorpedo(sim, i, x, true)
   }
+}
+
+/** Whether the player has flown at the pilot's station since the take (the pilot AI then holds what they left). */
+function pilotActed(pl) {
+  const inp = pl.input
+  const b = pl.base
+  if (Math.abs(inp.pitch ?? 0) > 1e-3 || Math.abs(inp.roll ?? 0) > 1e-3 || Math.abs(inp.yaw ?? 0) > 1e-3) return true
+  if (Math.abs((inp.throttle ?? 0) - (b.throttle ?? 0)) > 1e-3) return true
+  return !!(inp.aimDir && inp.mode !== 'direct')
+}
+
+// --- the pilot the player is not at (ROUND-2 §3) ----------------------------------------------------------------
+
+/**
+ * The pilot station held by the AI: the record's path while the player has
+ * not flown the aircraft (a spare has none: it holds), else the heading,
+ * height and speed the player left; at the bombardier's station, the run-in
+ * on the bombardier's heading. The floor of Assisted flight keeps it off the
+ * ground and the sea whatever the setting (it is the player's aircraft).
+ */
+function pilotAI(sim, pl, i, x, dt) {
+  const b = x.body
+  const t = sim.t
+  const ctx = { motion: sim.record.motion, groups: sim.record.groups }
+  let aim
+  let vWant = pl.hold.speed || b.V
+  const runIn = pl.station === 'bombardier' && pl.bombSteered
+  if (!pl.flown && !runIn && x.ac?.plan?.legs?.length && t < x.ac.endT) {
+    const p = { x: 0, y: 0, z: 0 }
+    const q = { x: 0, y: 0, z: 0 }
+    planPos(x.ac, t + 4, p, ctx)
+    planPos(x.ac, t + 5, q, ctx)
+    aim = [p.x - b.x, p.y - b.y, p.z - b.z]
+    if (Math.hypot(aim[0], aim[2]) < 30) aim = [q.x - p.x, q.y - p.y, q.z - p.z]
+    vWant = Math.max(stallSpeed(b, x.model) * 1.3, Math.hypot(q.x - p.x, q.y - p.y, q.z - p.z))
+    // the pilot releases what the record has this aircraft release
+    for (const a of x.ac.actions || []) {
+      if (a.t > t || a.t <= t - dt - 1e-9) continue
+      if (a.kind === 'release') dropBomb(sim, i, x, true)
+      else if (a.kind === 'drop') dropTorpedo(sim, i, x, true)
+    }
+  } else {
+    const h = pl.hold.heading * DEG
+    const dy = clamp(((pl.hold.alt ?? b.y) - b.y) / 600, -0.25, 0.25)
+    aim = [Math.sin(h), dy, -Math.cos(h)]
+  }
+  const cmd = instructor(b, x.model, aim, { maxG: 3 })
+  const fl = floorAhead(sim, pl, i, x, envelopeOf(sim, pl, i, x))
+  if (fl > 0) cmd.n = Math.max(cmd.n, Math.cos(b.gamma) / Math.max(0.3, Math.cos(b.phi)) + clamp(fl / 40, 0, 3))
+  const throttle = clamp(b.throttle + (vWant - b.V) * 0.05 * dt, 0.3, 1)
+  stepAir(b, x.model, { throttle }, dt, cmd)
+  assistAfter(sim, pl, i, x, { hardOnly: true })
+}
+
+// --- assisted flight (ROUND-2 §1.2, §3) ------------------------------------------------------------------------
+
+/**
+ * The player's aircraft at the pilot's station in Assisted: the stick or the
+ * mouse-aim turned into a load factor and a roll rate, then limited and
+ * held: a bank limit of 60°, path angles of +25° and −30° (−80° in a dive
+ * bomber's dive), an angle-of-attack limiter in place of the stall, an
+ * overspeed limiter in place of the break-up, the wings levelled and the
+ * height held when the stick is centred, the instructor's gain scaled down
+ * with speed, the floor (60 m over land, 15 m over the sea, suspended to 15
+ * and 10 on a weapon run below it), and the weapon envelope: the height and
+ * speed of the drop on a torpedo run's last 1,500 m (a 5° glide down to it
+ * before), the dive's speed in its last 800 m, the height and speed held on a
+ * level run's last 20 s. Returns { n, p, throttle, brakes } for stepAir.
+ */
+function assistedCommand(sim, pl, i, x, dt) {
+  const A = P.assist
+  const b = x.body
+  const m = x.model
+  const inp = pl.input
+  const V = Math.max(1, b.V)
+  const vs = stallSpeed(b, m)
+  const q = 0.5 * rho(Math.max(0, b.y)) * V * V
+  const nLift = (q * m.S * m.clMax) / (b.mass * G)
+  const cphi = Math.max(0.3, Math.cos(b.phi))
+  const n0 = Math.cos(b.gamma) / cphi
+  const nFor = (gWant, tau = 1.5) => (Math.cos(b.gamma) + (V * (gWant - b.gamma)) / (G * tau)) / cphi
+  const pMax = tableAt(m.rollTable, V) * DEG
+  const env = envelopeOf(sim, pl, i, x)
+  const why = []
+  let throttle = clamp(inp.throttle ?? b.throttle, 0, 1)
+  let brakes = null
+  let n
+  let p
+  const direct = inp.mode === 'direct' || !inp.aimDir
+  if (!direct) {
+    const gain = P.air.instructorGain * clamp((m.vCruise * A.gainSpeedRef) / V, A.gainFloor, 1)
+    const c = instructor(b, m, inp.aimDir, { gain })
+    n = c.n + (inp.pitch ? inp.pitch * 2 : 0)
+    p = c.p
+    pl.altHold = null
+  } else {
+    // roll: the stick rolls; centred, the wings come level
+    const roll = clamp(inp.roll ?? 0, -1, 1)
+    p = Math.abs(roll) > 0.02 ? roll * pMax : clamp(-b.phi * A.levelGain, -pMax, pMax)
+    // pitch: the stick pulls or pushes about the load that holds the path; centred, the height is held
+    const pitch = clamp(inp.pitch ?? 0, -1, 1)
+    if (Math.abs(pitch) > 0.02) {
+      pl.altHold = null
+      n = pitch >= 0 ? n0 + pitch * Math.max(0, nMaxAt(b, m) * 0.8 - n0) : n0 + pitch * 1.6
+    } else {
+      if (pl.altHold == null) pl.altHold = b.y
+      let hold = pl.altHold
+      if (env.hold != null) {
+        hold = env.hold
+        why.push('envelope')
+      } else if (env.glide != null && env.glide < hold) {
+        hold = env.glide
+        why.push('envelope')
+      }
+      pl.altHold = env.hold != null || (env.glide != null && env.glide < pl.altHold) ? hold : pl.altHold
+      const gWant = clamp((hold - b.y) * A.holdGain, -A.holdMaxDeg * DEG, A.holdMaxDeg * DEG)
+      n = nFor(gWant)
+    }
+  }
+  // the bank limit
+  const bl = A.bankDeg * DEG
+  if (b.phi > bl - 0.03 && p > 0) {
+    p = Math.min(p, -(b.phi - bl) * 4)
+    why.push('bank')
+  } else if (b.phi < -bl + 0.03 && p < 0) {
+    p = Math.max(p, -(b.phi + bl) * 4)
+    why.push('bank')
+  }
+  // the path angle limits (a dive bomber's dive may go steep)
+  const gUp = A.pitchUpDeg * DEG
+  const gDn = -(env.divePermitted ? A.diveDeg : A.pitchDownDeg) * DEG
+  if (b.gamma > gUp - 0.05 && n > nFor(gUp)) {
+    n = Math.min(n, nFor(gUp, 1))
+    why.push('pitch')
+  }
+  if (b.gamma < gDn + 0.05 && n < nFor(gDn)) {
+    n = Math.max(n, nFor(gDn, 1))
+    why.push('pitch')
+  }
+  // the angle-of-attack limiter in place of the stall
+  if (n > nLift * A.clFrac) {
+    n = nLift * A.clFrac
+    why.push('lift')
+  }
+  if (V < A.lowSpeed * vs) {
+    n = Math.min(n, n0 - 0.15)
+    throttle = 1
+    why.push('speed')
+  }
+  // the overspeed limiter in place of the break-up
+  if (b.ias > A.overspeed * m.vShake) {
+    throttle = 0
+    brakes = m.diveDrag > 0 ? true : null
+    n = Math.max(n, n0 + (b.ias / m.vShake - A.overspeed) * 10)
+    why.push('overspeed')
+  }
+  // the weapon envelope's speed
+  if (env.maxV != null && V > env.maxV) {
+    throttle = Math.min(throttle, clamp(0.55 - (V - env.maxV) / 15, 0, 1))
+    if (env.kind === 'dive' && m.diveDrag > 0) brakes = true
+    why.push('envelope')
+  }
+  if (env.holdV != null) throttle = clamp(throttle + (env.holdV - V) * 0.05, 0.2, 1)
+  // the floor
+  const short = floorAhead(sim, pl, i, x, env)
+  if (short > 0) {
+    n = Math.max(n, n0 + clamp(short / 30, 0.3, 3.5))
+    if (Math.abs(b.phi) > 0.6) p = clamp(-b.phi * 3, -pMax, pMax)
+    why.push('floor')
+  }
+  pl.assisting = why.length ? [...new Set(why)] : null
+  return { n, p, throttle, brakes }
+}
+
+/** After the assisted step: never into the ground, the sea or a hull; never past the break-up; out of the stall. */
+function assistAfter(sim, pl, i, x, { hardOnly = false } = {}) {
+  const b = x.body
+  const m = x.model
+  const w = sim.world
+  const land = w.metresAt(b.x, b.z) > 0
+  const hard = w.heightAt(b.x, b.z) + (land ? 6 : 4)
+  if (b.y < hard) {
+    b.y = hard
+    if (b.gamma < 0.02) b.gamma = 0.02
+  }
+  // a carrier's deck: a landing (slow, shallow) is let through; anything else lifts over it
+  const s = sim.state
+  for (const j of sim._shipsNear(b.x, b.z, 60)) {
+    const mj = sim._X[j].model
+    const d = boxDistance(b.x, b.z, s.pos[3 * j], s.pos[3 * j + 2], s.heading[j], mj.B / 2 + 4, mj.L / 2 + 4)
+    if (d.d > 0) continue
+    const top = (mj.fdTop ?? mj.deck ?? 8) + s.pos[3 * j + 1]
+    const landing = mj.fdTop != null && b.V < stallSpeed(b, m) * 1.6 && b.gamma > -8 * DEG
+    if (!landing && b.y < top + 3) {
+      b.y = top + 3
+      if (b.gamma < 0.02) b.gamma = 0.02
+    }
+  }
+  if (hardOnly) return
+  b.overS = 0
+  const vLim = m.vBreak * 0.97
+  if (b.ias > vLim) b.V *= vLim / b.ias
+  if (b.stalled && b.V > stallSpeed(b, m) * 1.02) b.stalled = false
+}
+
+/**
+ * The floor's shortfall ahead (m, positive when short): the path looked
+ * along for six seconds against the ground (60 m over land, 15 m over the
+ * sea, or 15 and 10 on a weapon run below them) and the ships' tops.
+ */
+function floorAhead(sim, pl, i, x, env) {
+  const A = P.assist
+  const b = x.body
+  const w = sim.world
+  const ch = Math.cos(b.gamma) * b.V
+  const vx = ch * Math.sin(b.psi)
+  const vz = -ch * Math.cos(b.psi)
+  const vy = Math.sin(b.gamma) * b.V
+  let short = -Infinity
+  for (const ts of A.floorLookS) {
+    const px = b.x + vx * ts
+    const pz = b.z + vz * ts
+    const py = b.y + vy * ts
+    const land = w.metresAt(px, pz) > 0
+    const floor = (land ? w.heightAt(px, pz) : 0) + (env.run ? (land ? A.floorRunLandM : A.floorRunSeaM) : land ? A.floorLandM : A.floorSeaM)
+    short = Math.max(short, (floor - py) * (ts > 0 ? 1 / (1 + ts * 0.15) : 1))
+  }
+  // the ships ahead: over a hull, its top and some (a landing on a deck excepted)
+  const s = sim.state
+  const slow = b.V < stallSpeed(b, x.model) * 1.6
+  for (const j of sim._shipsNear(b.x + vx * 3, b.z + vz * 3, 400)) {
+    const mj = sim._X[j].model
+    if (slow && mj.fdTop != null) continue
+    const top = mj.top + s.pos[3 * j + 1] + A.shipClearM
+    for (const ts of [0, 1.5, 3]) {
+      const d = boxDistance(b.x + vx * ts, b.z + vz * ts, s.pos[3 * j], s.pos[3 * j + 2], s.heading[j], mj.B / 2 + 20, mj.L / 2 + 20)
+      if (d.d <= 0) short = Math.max(short, top - (b.y + vy * ts))
+    }
+  }
+  return short
+}
+
+/**
+ * The weapon the aircraft is approaching a release with, and what the assist
+ * does about it: { kind: 'torpedo' | 'dive' | 'level' | null, target, range,
+ * hold (a height to hold), glide (a height not to be above), maxV, holdV,
+ * run (a weapon run below the floor), divePermitted }. The profile is the
+ * bookmark's objective, else the group's attack, else the kit's weapon.
+ */
+export function envelopeOf(sim, pl, i, x) {
+  const A = P.assist
+  const out = { kind: null, target: -1, range: Infinity, hold: null, glide: null, maxV: null, holdV: null, run: false, divePermitted: false }
+  const am = x.ammo
+  const b = x.body
+  if (!am || !b) return out
+  const prof = weaponProfile(sim, pl, x)
+  const ti = weaponTarget(sim, pl, i, x, prof)
+  out.target = ti
+  if (ti < 0) {
+    if (prof === 'level' && am.bombs > 0 && pl.station === 'bombardier') out.kind = 'level'
+    return out
+  }
+  const s = sim.state
+  const d = Math.hypot(s.pos[3 * ti] - b.x, s.pos[3 * ti + 2] - b.z)
+  out.range = d
+  if (prof === 'torpedo' && am.torpedoes > 0 && x.model.torpedo) {
+    const w = x.model.torpedo
+    out.kind = 'torpedo'
+    const dropH = clamp((w.dropAltM ?? 30) * 0.8, A.floorRunSeaM + 6, 45)
+    const runStart = A.torpedoWindowM[0] + 600 + A.torpedoRunM
+    if (d < runStart) {
+      out.hold = dropH
+      out.maxV = (w.dropSpeedKn ?? 110) * KN * 0.95
+    } else out.glide = dropH + (d - runStart) * Math.tan(A.torpedoGlideDeg * DEG)
+    out.run = d < runStart + 1500
+  } else if (prof === 'dive' && am.bombs > 0) {
+    out.kind = 'dive'
+    const h = b.y
+    out.divePermitted = d < h * 1.6 + 1200
+    const rel = sim._moment?.objective?.releaseM ?? x.g?.attack?.releaseM ?? 600
+    if (b.gamma < -30 * DEG && h - rel < A.diveLastM) out.maxV = clamp(x.model.kit?.aero?.diveMs ?? x.model.vShake * 0.8, 85, 160)
+  } else if ((prof === 'level' || pl.station === 'bombardier') && am.bombs > 0) {
+    out.kind = 'level'
+    const tf = Math.sqrt((2 * Math.max(50, b.y)) / G)
+    const tTo = (d - b.V * tf) / Math.max(30, b.V)
+    if (tTo < A.levelLastS && tTo > -10) {
+      pl.levelHold ??= { y: b.y, V: b.V }
+      out.hold = pl.levelHold.y
+      out.holdV = pl.levelHold.V
+    } else pl.levelHold = null
+  }
+  return out
+}
+
+/** The profile the player's weapon is flown with: the bookmark's objective, the group's attack, or the kit's own weapon. */
+function weaponProfile(sim, pl, x) {
+  const obj = pl.allStations || sim._moment ? sim._moment?.objective?.kind : null
+  if (obj === 'dive' || obj === 'torpedo' || obj === 'level') return obj
+  const prof = x.g?.attack?.profile ?? (x.wasSpare && sim.slots[pl.unitIndex].groupIndex >= 0 ? sim.record.groups[sim.slots[pl.unitIndex].groupIndex]?.attack?.profile : null)
+  if (prof === 'dive' || prof === 'torpedo' || prof === 'level') return prof
+  const t = x.model.kit?.type
+  if (t === 'dive') return 'dive'
+  if (t === 'torpedo') return x.ammo?.torpedoes > 0 ? 'torpedo' : 'level'
+  if (t === 'level' || t === 'bomber' || t === 'patrol') return 'level'
+  return null
+}
+
+/** The ship the weapon is for: the bookmark's target, this aircraft's attack target, or the nearest of the other side's ships ahead. */
+function weaponTarget(sim, pl, i, x, prof) {
+  const s = sim.state
+  const ob = sim._moment?.objective
+  const tid = Array.isArray(ob?.target) ? ob.target[0] : ob?.target
+  const r = tid ? sim.record.shipById.get(tid) : null
+  if (r && s.alive[r.slot] === 1 && targetable(sim, r.slot) && sim.slots[r.slot].side !== sim.slots[i].side) return r.slot
+  const at = x.ac?.target
+  if (at != null && at >= 0) {
+    const j = sim.record.ships[at]?.slot
+    if (j != null && targetable(sim, j) && sim.slots[j].side !== sim.slots[i].side) return j
+  }
+  if (!prof) return -1
+  // the nearest the nose points at, within 20 km and 60° of it
+  const b = x.body
+  let best = -1
+  let bs = Infinity
+  for (const rr of sim.record.ships) {
+    const j = rr.slot
+    if (sim.slots[j].kind !== 'ship' || sim.slots[j].side === sim.slots[i].side || !targetable(sim, j)) continue
+    const dx = s.pos[3 * j] - b.x
+    const dz = s.pos[3 * j + 2] - b.z
+    const d = Math.hypot(dx, dz)
+    if (d > 20000) continue
+    const off = Math.abs(wrap180(headingOf(dx, dz) - b.psi / DEG))
+    if (off > 60) continue
+    const score = d * (1 + off / 60)
+    if (score < bs) {
+      bs = score
+      best = j
+    }
+  }
+  return best
+}
+
+// --- the gunner and the bombardier (ROUND-2 §3) --------------------------------------------------------------
+
+/**
+ * The gunner station: the rear gun aimed along input.aimAz/aimEl, firing
+ * with fireHeld or fireCount within its arc (80° about the tail), at an
+ * aircraft of the other side: tracer for the eye, rounds off its drums, and
+ * hits from a hazard on the aimed aircraft (P.gunner, the engine's estimate)
+ * scaled by the lead error (a cone zero beyond 80 mil). The pilot flies on.
+ */
+function rearGunner(sim, pl, i, x, dt) {
+  const s = sim.state
+  const b = x.body
+  const inp = pl.input
+  const seen = pl._seen
+  const guns = (x.ammo?.guns || []).filter((g) => !g.fixed)
+  const eye = [b.x, b.y + 1, b.z]
+  const dir = aimDirOf(inp, eye)
+  const fr = airFrame(b)
+  const offTail = Math.acos(clamp(-(dir[0] * fr.f[0] + dir[1] * fr.f[1] + dir[2] * fr.f[2]), -1, 1)) / DEG
+  const up = dir[0] * fr.u[0] + dir[1] * fr.u[1] + dir[2] * fr.u[2]
+  const bears = offTail <= P.gunner.arcFromTailDeg && up >= P.gunner.minUpDot
+  const j = aimedAircraft(sim, i, eye, dir, 10, P.gunner.rangeM)
+  pl.gunDir = dir
+  pl.gunBears = bears
+  pl.gunAimed = j
+  if (inp.fireCount > seen.fireCount) {
+    seen.fireCount = inp.fireCount
+    pl.gunPulse = sim.t + 0.4
+  }
+  const left = guns.reduce((a, g) => a + g.left, 0)
+  const firing = bears && left > 0 && (inp.fireHeld || sim.t < (pl.gunPulse ?? -1))
+  pl.gunFiring = firing
+  pl.gunCone = 0
+  if (!firing) return
+  let barrels = 0
+  for (const g of guns) {
+    if (g.left <= 0) continue
+    const r = Math.min(g.left, ((g.count * (g.weapon.rofRpm ?? 900)) / 60) * dt)
+    g.left -= r
+    if (sim._score) sim._score.rounds += r
+    barrels += g.count
+  }
+  const ov = [s.vel[3 * i], s.vel[3 * i + 1], s.vel[3 * i + 2]]
+  pl.gunFxT = (pl.gunFxT ?? 0) - dt
+  if (pl.gunFxT <= 0) {
+    pl.gunFxT = 0.1
+    const L = 600
+    sim.fx(FX.tracer, eye[0] + dir[0] * 15, eye[1] + dir[1] * 15, eye[2] + dir[2] * 15, { unit: i, dx: dir[0] * L + ov[0] * 0.6, dy: dir[1] * L + ov[1] * 0.6, dz: dir[2] * L + ov[2] * 0.6, size: 0.5, data: 2 })
+  }
+  if (j < 0 || s.alive[j] !== 1) return
+  const R = Math.hypot(s.pos[3 * j] - eye[0], s.pos[3 * j + 1] - eye[1], s.pos[3 * j + 2] - eye[2])
+  let lam = 0
+  let best = 0
+  for (const g of guns) {
+    if (g.left <= 0) continue
+    const lead = leadOn(sim, eye, ov, j, g.weapon.mvMs ?? 800)
+    const c = cone(angleMil(dir, lead.dir), P.gunner.coneMil)
+    best = Math.max(best, c)
+    lam += (g.weapon.calibreMm >= 12 ? P.gunner.lambda.heavy : P.gunner.lambda.light) * g.count * fRangeAt(R, P.gunner.rangeM) * c
+  }
+  pl.gunCone = best
+  void barrels
+  if (best <= 0) return
+  firedOnAircraft(sim, j)
+  const xj = sim._X[j]
+  const r = hazardStep(lam, dt, sim.rngs.aa)
+  if (r === 'kill') loseAircraft(sim, j, 'shot', 'player')
+  else if (r === 'hit' && xj.body) {
+    xj.body.damage = Math.min(0.95, xj.body.damage + 0.3 * (0.4 + 0.4 * sim.rngs.aa.next()))
+    sim.fx(FX.hit, xj.body.x, xj.body.y, xj.body.z, { unit: j, size: 0.2 })
+    sim._diverge?.(j, 'hit by the player’s gunner')
+    if (xj.ai && xj.ai.mode === 'fight') xj.ai.breakUntil = sim.t + 3
+  }
+}
+const fRangeAt = (r, eff) => (r >= eff ? 0 : r <= 0.35 * eff ? 1 : (eff - r) / (eff - 0.35 * eff))
+
+/** The bombardier's release: the whole stick, a bomb every 0.15 s. */
+function releaseStick(sim, pl, i, x) {
+  if (!x.ammo || x.ammo.bombs <= 0 || pl.stick) return
+  pl.stick = { next: sim.t, every: 0.15 }
+}
+function stickStep(sim, pl, i, x) {
+  const st = pl.stick
+  while (st && sim.t >= st.next && x.ammo.bombs > 0) {
+    dropBomb(sim, i, x, true)
+    st.next += st.every
+  }
+  if (!x.ammo || x.ammo.bombs <= 0) pl.stick = null
+}
+
+/** The bombardier steers the run-in (the pilot's director indicator): a level of roll turns the held heading. */
+export function bombardierSteer(sim, pl, dt) {
+  const r = pl.input.roll ?? 0
+  if (Math.abs(r) > 1e-3) {
+    pl.bombSteered = true
+    pl.hold.heading = (pl.hold.heading + r * 4 * dt + 360) % 360
+  }
+}
+
+/**
+ * The release cue (ROUND-2 §1.2): when a release now meets the target, with
+ * the window twice the record's in Assisted. A bomb's: the predicted impact
+ * inside the target's hull (twice its length and beam), in a dive above the
+ * safe pull-out, or level (Assisted, or the bombardier). A torpedo's: inside
+ * the drop envelope, at a range in the window (300–1,500 m; 150 m to twice
+ * that in Assisted, within the torpedo's run) with its track meeting the hull
+ * (twice its length). Returns { kind, on, value, lo, hi, miss, half } or null.
+ */
+function releaseCue(sim, pl, i, x, ccipNow) {
+  const b = x.body
+  const s = sim.state
+  const k = sim.assist === 'assisted' ? P.assist.windowK : 1
+  const am = x.ammo
+  if (am?.torpedoes > 0 && x.model.torpedo) {
+    const env = torpedoEnvelope(x.model, b)
+    const ti = weaponTarget(sim, pl, i, x, 'torpedo')
+    if (ti < 0) return { kind: 'torpedo', on: false, envelope: env, value: null, lo: null, hi: null }
+    const w = x.model.torpedo
+    const vt = ((w.speedKn ?? w.settings?.[0]?.speedKn ?? 33) || 33) * KN
+    const dropFwd = b.V * Math.sqrt((2 * Math.max(1, b.y)) / G)
+    const ux = Math.sin(b.psi)
+    const uz = -Math.cos(b.psi)
+    const x0 = b.x + ux * dropFwd
+    const z0 = b.z + uz * dropFwd
+    // the closest the run comes to the target holding its course and speed
+    let miss = Infinity
+    const mj = sim._X[ti].model
+    for (let tt = 0; tt <= 240; tt += 1) {
+      const px = x0 + ux * vt * tt
+      const pz = z0 + uz * vt * tt
+      if (vt * tt > (w.rangeM ?? 2000)) break
+      const d = boxDistance(px, pz, s.pos[3 * ti] + s.vel[3 * ti] * tt, s.pos[3 * ti + 2] + s.vel[3 * ti + 2] * tt, s.heading[ti], (mj.B / 2) * k, (mj.L / 2) * k)
+      if (d.d < miss) miss = d.d
+      if (miss <= 0) break
+    }
+    const range = Math.hypot(s.pos[3 * ti] - b.x, s.pos[3 * ti + 2] - b.z)
+    const [lo0, hi0] = P.assist.torpedoWindowM
+    const lo = lo0 / k
+    const hi = Math.min(hi0 * k, (w.rangeM ?? 2000) * 0.9)
+    const on = env.ok && range >= lo && range <= hi && miss <= 0
+    return { kind: 'torpedo', on, envelope: env, value: Math.round(range), lo: Math.round(lo), hi: Math.round(hi), miss: Number.isFinite(miss) ? Math.round(Math.max(0, miss)) : null, target: ti }
+  }
+  if (am?.bombs > 0 && ccipNow) {
+    const c = ccipNow
+    const level = Math.abs(b.gamma) < 15 * DEG
+    const dive = b.gamma < -30 * DEG
+    const ok = (dive && b.y > safePullout(b)) || (level && (sim.assist === 'assisted' || pl.station === 'bombardier'))
+    let on = false
+    let miss = null
+    let half = null
+    const ti = c.near ?? c.target
+    if (ti >= 0) {
+      const mj = sim._X[ti].model
+      const d = boxDistance(c.x, c.z, s.pos[3 * ti] + s.vel[3 * ti] * c.tof, s.pos[3 * ti + 2] + s.vel[3 * ti + 2] * c.tof, s.heading[ti], (mj.B / 2) * k, (mj.L / 2) * k)
+      miss = Math.round(Math.max(0, d.d))
+      half = Math.round((mj.L / 2) * k)
+      on = ok && d.d <= 0
+    }
+    return { kind: dive ? 'dive' : 'level', on, value: miss, lo: 0, hi: half, miss, half, target: ti }
+  }
+  return null
 }
 
 /** A carrier's deck under an aircraft: { y, unit } or null. */
@@ -918,7 +1968,7 @@ function deckUnder(sim, i, b) {
 
 function landed(sim, i, unit) {
   const x = sim._X[i]
-  sim.beat(i, 'landed', `${airName(sim, i)}: aboard ${sim.units[unit].name}`)
+  sim.beat(i, 'landed', `${airName(sim, i)}: aboard ${sim.slots[unit].name}`)
   sim._setAlive(i, 0)
   x.how = 'landed'
   sim._score.how = 'landed'
@@ -1050,7 +2100,7 @@ export function torpedoEnvelope(model, b) {
 export function aiPhysics(sim, dt) {
   const s = sim.state
   for (let i = 0; i < sim.capacity; i++) {
-    const u = sim.units[i]
+    const u = sim.slots[i]
     if (u.authority !== 'ai' || !s.alive[i]) continue
     const x = sim._X[i]
     if (!x.body) continue
@@ -1084,15 +2134,17 @@ export function bulletStrike(sim, p, i) {
   const w = sim.weaponList[pr.weapon[p]]?.w
   const x = sim._X[i]
   const byPlayer = !!(pr.flags[p] & FLAG.player)
-  if (sim.units[i].authority === 'record') sim._toAI(i)
+  if (sim.slots[i].authority === 'record') sim._toAI(i)
   const b = x.body
   if (!b) return
   const prot = x.model.protection === 'self-sealing' ? 'protected' : 'unprotected'
   const per = w?.vsAircraft?.[prot] ?? (w?.calibreMm >= 20 ? 0.3 : 0.06)
   const rounds = pr.aux[p] || 1
-  const dmg = per * rounds * 0.35
+  // (in Assisted the rounds aimed at the player's aircraft do half: Guided's rule, R7 §4.5; P.assist)
+  const easy = sim.assist === 'assisted' && sim.player?.engaged && sim.player.unitIndex === i ? P.assist.hitsOnPlayerK : 1
+  const dmg = per * rounds * 0.35 * easy
   b.damage += dmg / (x.model.fatal || 1)
-  if (b.burning <= 0 && sim.rngs.dmg.chance((P.damage.aircraftFireChance[x.model.protection] ?? 0.1) * Math.min(1, rounds * 0.35))) {
+  if (b.burning <= 0 && sim.rngs.dmg.chance((P.damage.aircraftFireChance[x.model.protection] ?? 0.1) * Math.min(1, rounds * 0.35) * easy)) {
     b.burning = P.damage.aircraftFireBurnS[0] + sim.rngs.dmg.next() * (P.damage.aircraftFireBurnS[1] - P.damage.aircraftFireBurnS[0])
     sim.fx(FX.fire, b.x, b.y, b.z, { unit: i, size: 0.5 })
   }
@@ -1111,7 +2163,7 @@ export function bulletStrike(sim, p, i) {
  */
 export function targetable(sim, j) {
   if (j == null || j < 0) return false
-  const u = sim.units[j]
+  const u = sim.slots[j]
   if (!u?.target || sim.state.alive[j] !== 1) return false
   if (u.kind !== 'ship') return true
   const x = sim._X[j]
@@ -1134,6 +2186,13 @@ function recordDamageAt(r, t) {
   return sum
 }
 
+/** An aircraft the player brought down, for the sortie's hits (kind 'aircraft', by its one-aircraft name). */
+function downedBy(sim, i) {
+  const sc = sim._score
+  if (!sc) return
+  ;(sc.downedList ||= []).push({ unit: sim.slots[i].id, index: i, name: oneAircraft(sim, i), kind: 'aircraft', count: 1 })
+}
+
 export function loseAircraft(sim, i, how, by = null) {
   const x = sim._X[i]
   const s = sim.state
@@ -1143,6 +2202,7 @@ export function loseAircraft(sim, i, how, by = null) {
   if (by === 'player') {
     x.lostByPlayer = true
     sim._score.downed++
+    downedBy(sim, i)
     sim.beat(i, 'downed', `${airName(sim, i)}: shot down`)
   }
   sim._setAlive(i, 2)
@@ -1157,7 +2217,7 @@ export function loseAircraft(sim, i, how, by = null) {
 
 export function bombStrike(sim, p, i, local, w) {
   const x = sim._X[i]
-  const u = sim.units[i]
+  const u = sim.slots[i]
   const pr = sim.projectiles
   const byPlayer = !!(pr.flags[p] & FLAG.player)
   if (!targetable(sim, i)) return
@@ -1185,7 +2245,7 @@ export function bombFell(sim, p, x0, z0, w) {
       sim._touch(i, 'near miss')
       if (m.type === 'dd' || m.type === 'de') applyHit(x.dmg, m, { cls: 'small', part: 'waterline', zone: 1, t: sim.t }, sim.rngs.dmg)
       if (pr.flags[p] & FLAG.player) {
-        sim.beat(i, 'near-miss', `${sim.units[i].name}: near miss`)
+        sim.beat(i, 'near-miss', `${sim.slots[i].name}: near miss`)
         scoreHit(sim, i, 'near-miss')
       }
       return
@@ -1195,7 +2255,7 @@ export function bombFell(sim, p, x0, z0, w) {
 
 export function torpedoStrike(sim, p, i, local) {
   const x = sim._X[i]
-  const u = sim.units[i]
+  const u = sim.slots[i]
   const pr = sim.projectiles
   const byPlayer = !!(pr.flags[p] & FLAG.player)
   if (!targetable(sim, i)) return
@@ -1224,7 +2284,7 @@ export function shellFell(sim, p, x0, z0) {
     let near = -1
     let nd = 1000
     for (const i of sim._shipsNear(x0, z0, 1000)) {
-      if (sim.units[i].side === sim.units[owner]?.side) continue
+      if (sim.slots[i].side === sim.slots[owner]?.side) continue
       const d = Math.hypot(s.pos[3 * i] - x0, s.pos[3 * i + 2] - z0)
       if (d < nd) {
         nd = d
@@ -1249,11 +2309,13 @@ export function shellFell(sim, p, x0, z0) {
         }
       }
     }
-    return
+    // (the main battery's director, held by the AI while the player is at another station, corrects as an AI does)
+    const dir = sim.player && sim.player.unitIndex === owner ? sim.player.director : null
+    if (!dir?.salvos?.has(salvo)) return
   }
   // an AI salvo: corrected when its fall was seen (a lit target, daylight, or a radar that sees splashes)
   const x = owner >= 0 ? sim._X[owner] : null
-  const ai = x?.ai
+  const ai = x?.ai || (sim.player && sim.player.unitIndex === owner ? sim.player.director : null)
   if (!ai?.salvos) return
   const rec = ai.salvos.get(salvo)
   if (!rec || rec.done) return
@@ -1269,7 +2331,7 @@ export function shellFell(sim, p, x0, z0) {
 /** An AI ship fired upon by the player: it evades within its bounds and returns fire. */
 export function firedOn(sim, i, x0, z0) {
   const x = sim._X[i]
-  const u = sim.units[i]
+  const u = sim.slots[i]
   if (u.kind !== 'ship' || u.authority === 'player' || x.rec?.fixed) return
   sim._engage(i)
   const ai = x.ai
@@ -1287,12 +2349,12 @@ export function firedOn(sim, i, x0, z0) {
 export function scoreHit(sim, i, kind, where = null) {
   const sc = sim._score
   if (!sc) return
-  let h = sc.hits.find((x) => x.unit === sim.units[i].id && x.kind === kind)
-  if (!h) sc.hits.push((h = { unit: sim.units[i].id, name: sim.units[i].name, kind, count: 0, where: [] }))
+  let h = sc.hits.find((x) => x.unit === sim.slots[i].id && x.kind === kind)
+  if (!h) sc.hits.push((h = { unit: sim.slots[i].id, name: sim.slots[i].name, kind, count: 0, where: [] }))
   h.count++
   if (where) h.where.push(where)
   const obj = sim._moment?.objective
-  if (obj?.target && obj.target === sim.units[i].id && kind !== 'near-miss') sc.objective = true
+  if (obj?.target && obj.target === sim.slots[i].id && kind !== 'near-miss') sc.objective = true
 }
 
 // --- 6. the AA hazard ------------------------------------------------------------------------------------
@@ -1303,7 +2365,7 @@ export function aaStep(sim, dt) {
   const pl = sim.player
   sim._aaOnPlayer = 0
   for (const i of sim._air || []) {
-    const u = sim.units[i]
+    const u = sim.slots[i]
     if (u.authority === 'record' || s.alive[i] !== 1) continue
     const x = X[i]
     const b = x.body
@@ -1319,7 +2381,9 @@ export function aaStep(sim, dt) {
     const mode = b.gamma < -30 * DEG ? 'dive' : b.y < 120 && Math.abs(b.gamma) < 0.1 ? 'torpedo' : 'crossing'
     for (const r of sim.record.ships) {
       const j = r.slot
-      if (s.alive[j] !== 1 || sim.units[j].side === u.side || sim.units[j].kind !== 'ship') continue
+      if (s.alive[j] !== 1 || sim.slots[j].side === u.side || sim.slots[j].kind !== 'ship') continue
+      // (the player at the ship's AA director fires by the station's own resolution, ai.js aaDirector)
+      if (pl && pl.engaged && !pl.allStations && pl.station === 'aa' && pl.unitIndex === j) continue
       const m = X[j].model
       const reach = aaReach(m)
       const d = Math.hypot(s.pos[3 * j] - b.x, s.pos[3 * j + 2] - b.z, b.y - 20)
@@ -1334,15 +2398,16 @@ export function aaStep(sim, dt) {
       const alert = alertAt(sim.t, X[j].sighted[key])
       // the fire shared among the attackers in its reach (the player's director gives one aircraft all of it)
       let share = 0
-      for (const k of sim._air) if (sim.units[k].side === u.side && Math.hypot(s.pos[3 * k] - s.pos[3 * j], s.pos[3 * k + 2] - s.pos[3 * j + 2]) < reach) share++
+      for (const k of sim._air) if (sim.slots[k].side === u.side && Math.hypot(s.pos[3 * k] - s.pos[3 * j], s.pos[3 * k + 2] - s.pos[3 * j + 2]) < reach) share++
       share = Math.max(1, Math.min(share, 4))
       if (pl && pl.kind === 'ship' && pl.unitIndex === j && pl.aaTarget === i && sim.t < (pl.aaUntil ?? 0)) share = 1
-      const era = eraFactor(sim.units[j].side, sim.year, { peacetime: sim.year === 1941 && sim.units[j].side === 'us' })
+      const era = eraFactor(sim.slots[j].side, sim.year, { peacetime: sim.year === 1941 && sim.slots[j].side === 'us' })
       const dmgScale = jd && jd.regime === 'sim' && jd.crippled ? 0.5 : 1
       lam += (shipLambda(m, d) * era * alert * aspectOf(mode) * dmgScale) / share
       if (!nearest || d < nearest.d) nearest = { j, d, m }
     }
-    if (pl && pl.unitIndex === i && sim.aid === 'guided') lam *= 0.5
+    // (Guided, and Assisted for an aircraft, halve the AA aimed at the player: R7 §4.5)
+    if (pl && pl.unitIndex === i && (sim.aid === 'guided' || sim.assist === 'assisted')) lam *= 0.5
     if (pl && pl.unitIndex === i) sim._aaOnPlayer = lam
     if (lam <= 0) continue
     // the flak the eye sees, at a rate with the hazard
@@ -1350,7 +2415,10 @@ export function aaStep(sim, dt) {
     const r = hazardStep(lam, dt, sim.rngs.aa)
     if (r === 'kill') {
       loseAircraft(sim, i, 'aa')
-      if (pl && pl.unitIndex !== i && sim.units[nearest.j].authority === 'player') sim._score.downed++
+      if (pl && pl.unitIndex !== i && sim.slots[nearest.j].authority === 'player') {
+        sim._score.downed++
+        downedBy(sim, i)
+      }
     } else if (r === 'hit') {
       b.damage = Math.min(0.95, b.damage + hitDamage(nearest.m, nearest.d, sim.rngs.aa))
       sim.fx(FX.smoke, b.x, b.y, b.z, { unit: i, size: 0.4 })
@@ -1432,7 +2500,7 @@ export function scriptedTorpedoes(sim, i, ev) {
   const w = x.model.torp?.weapon || { id: 'torpedo', kind: 'torpedo', speedKn: ev.speedKn ?? 36, rangeM: 15000 }
   const wi = sim.weaponIdx(w)
   const v = (ev.speedKn ?? w.settings?.[0]?.speedKn ?? 36) * KN
-  const real = sim.player && sim.player.unitIndex === ti
+  const real = sim._engagedIndex() === ti
   const d = Math.hypot(s.pos[3 * ti] - s.pos[3 * i], s.pos[3 * ti + 2] - s.pos[3 * i + 2])
   const tt = d / v
   const aim = headingOf(s.pos[3 * ti] + s.vel[3 * ti] * tt - s.pos[3 * i], s.pos[3 * ti + 2] + s.vel[3 * ti + 2] * tt - s.pos[3 * i + 2])
@@ -1448,14 +2516,14 @@ export function scriptedTorpedoes(sim, i, ev) {
 /** Scripted kills look real: a nearby enemy fighter fires tracer at the victim, or the AA bursts round it (R7 §4.7). */
 export function choreograph(sim, i, a) {
   const s = sim.state
-  const side = sim.units[i].side
+  const side = sim.slots[i].side
   const vx = s.pos[3 * i]
   const vy = s.pos[3 * i + 1]
   const vz = s.pos[3 * i + 2]
   let best = -1
   let bd = 3000
   for (const j of sim._air || []) {
-    if (sim.units[j].side === side || sim._X[j].model?.type !== 'fighter') continue
+    if (sim.slots[j].side === side || sim._X[j].model?.type !== 'fighter') continue
     const d = Math.hypot(s.pos[3 * j] - vx, s.pos[3 * j + 1] - vy, s.pos[3 * j + 2] - vz)
     if (d < bd) {
       bd = d
@@ -1480,7 +2548,7 @@ export function visualGunfire(sim) {
     }
     if (sim.t < vf.next) continue
     const x = sim._X[i]
-    const u = sim.units[i]
+    const u = sim.slots[i]
     if (s.alive[i] !== 1 || (u.authority === 'ai' && x.ai?.engaged) || u.authority === 'player') {
       sim._visualFire.delete(i)
       continue
@@ -1518,7 +2586,7 @@ export function visualGunfire(sim) {
 export function fates(sim, dt) {
   const s = sim.state
   for (let i = 0; i < sim.capacity; i++) {
-    const u = sim.units[i]
+    const u = sim.slots[i]
     if (u.authority === 'record' || u.authority === 'free' || s.alive[i] !== 2 || u.kind !== 'aircraft') continue
     // an aircraft under the sim falling: down to the sea or the ground
     const x = sim._X[i]
@@ -1563,7 +2631,13 @@ export function updatePlayerState(sim) {
   const st = pl.state
   st.t = sim.t
   st.alive = s.alive[i]
-  st.side = sim.units[i].side
+  st.side = sim.slots[i].side
+  st.station = pl.station
+  st.stations = pl.stations
+  st.engaged = pl.engaged
+  st.allStations = pl.allStations
+  st.assist = sim.assist
+  st.assisting = pl.engaged ? pl.assisting ?? null : null
   st.units = st.side === 'jp' ? 'metric' : 'imperial'
   st.x = s.pos[3 * i]
   st.y = s.pos[3 * i + 1]
@@ -1594,11 +2668,17 @@ export function updatePlayerState(sim) {
     st.target = airTarget(sim, i, x)
     // the CCIP in a dive (where the bomb falls now) and the release cue
     st.ccip = x.ammo.bombs > 0 ? ccip(sim, i, x) : null
-    // the release light: in a dive, the impact point inside a hull, above the safe pull-out height (R7 §4.3)
-    st.release = !!(st.ccip && st.ccip.onTarget && b.gamma < -30 * DEG && b.y > safePullout(b))
+    // the release light: in a dive, the impact point inside a hull, above the safe pull-out height (R7 §4.3); in
+    // Assisted (or at the bombardier's station) the cue's window: twice the record's, level releases too (ROUND-2 §1.2)
     st.safeAlt = safePullout(b)
     st.envelope = x.ammo.torpedoes > 0 ? torpedoEnvelope(x.model, b) : null
-    const home = sim.record.groupById.get(sim.units[i].group || '')
+    st.cue = releaseCue(sim, pl, i, x, st.ccip)
+    const pilotRelease = !!(st.ccip && st.ccip.onTarget && b.gamma < -30 * DEG && b.y > safePullout(b))
+    st.release = sim.assist === 'assisted' || pl.station === 'bombardier' ? !!(st.cue && st.cue.kind !== 'torpedo' && st.cue.on) || pilotRelease : pilotRelease
+    // the gunner's and the bombardier's sights
+    st.gun = pl.station === 'gunner' ? gunnerSight(sim, pl, i, x) : null
+    st.sight = pl.station === 'bombardier' && st.ccip ? { x: st.ccip.x, z: st.ccip.z, tof: st.ccip.tof, drift: [Math.sin(b.psi), -Math.cos(b.psi)], onTarget: !!st.cue?.on, target: st.cue?.target ?? -1, heading: pl.hold.heading } : null
+    const home = sim.record.groupById.get(sim.slots[i].group || '')
     const hi = home?.recover?.to >= 0 ? home.recover.to : home?.from ?? -1
     if (hi >= 0) {
       const hs = sim.record.ships[hi].slot
@@ -1630,8 +2710,46 @@ export function updatePlayerState(sim) {
     st.lastSalvo = pl.lastSalvo || null
     st.torpedoesReady = x.torpedoes?.ready ?? 0
     st.aaTarget = sim.t < (pl.aaUntil ?? 0) ? pl.aaTarget : -1
+    st.helmHeld = pl.station !== 'helm' && !pl.allStations ? (pl.steered ? { heading: pl.hold.heading, speed: pl.hold.speed } : 'record') : null
+    st.mainTarget = pl.station !== 'main' && !pl.allStations ? pl.directorTarget ?? -1 : -1
+    st.director = pl.station === 'aa' && !pl.allStations ? directorSight(sim, pl, i, x) : null
   }
   st.contacts = contacts(sim, i)
+}
+
+/** The AA director's sight: the aim, the aimed aircraft, its lead points (heavy and light), how well the aim lies on them. */
+function directorSight(sim, pl, i, x) {
+  const s = sim.state
+  const m = x.model
+  const eye = directorEye(s, i, m)
+  const dir = aimDirOf(pl.input, eye)
+  const j = pl.aaAimed ?? aimedAircraft(sim, i, eye, dir, P.aaStation.aimedWithinDeg, aaReach(m))
+  const out = { dir, eye, aimed: j >= 0 && s.alive[j] === 1 ? j : -1, firing: !!pl.aaFiring, cone: pl.aaCone ?? 0, reach: aaReach(m), lead: null, leadLight: null, range: null }
+  if (out.aimed >= 0) {
+    const ov = [s.vel[3 * i], 0, s.vel[3 * i + 2]]
+    const heavy = m.aa.find((a) => a.heavy)
+    const light = m.aa.find((a) => !a.heavy)
+    if (heavy) out.lead = leadOn(sim, eye, ov, j, heavy.weapon?.mvMs ?? 790).point
+    if (light) out.leadLight = leadOn(sim, eye, ov, j, light.weapon?.mvMs ?? 850).point
+    out.range = Math.hypot(s.pos[3 * j] - eye[0], s.pos[3 * j + 1] - eye[1], s.pos[3 * j + 2] - eye[2])
+  }
+  return out
+}
+
+/** The gunner's sight: the aim, whether the gun bears, the aimed aircraft and its lead point, the rounds left. */
+function gunnerSight(sim, pl, i, x) {
+  const s = sim.state
+  const b = x.body
+  const eye = [b.x, b.y + 1, b.z]
+  const dir = aimDirOf(pl.input, eye)
+  const guns = (x.ammo?.guns || []).filter((g) => !g.fixed)
+  const j = pl.gunAimed ?? -1
+  const out = { dir, eye, bears: pl.gunBears ?? true, aimed: j >= 0 && s.alive[j] === 1 ? j : -1, firing: !!pl.gunFiring, cone: pl.gunCone ?? 0, rounds: Math.round(guns.reduce((a, g) => a + g.left, 0)), lead: null, range: null }
+  if (out.aimed >= 0 && guns.length) {
+    out.lead = leadOn(sim, eye, [s.vel[3 * i], s.vel[3 * i + 1], s.vel[3 * i + 2]], j, guns[0].weapon.mvMs ?? 800).point
+    out.range = Math.hypot(s.pos[3 * j] - eye[0], s.pos[3 * j + 1] - eye[1], s.pos[3 * j + 2] - eye[2])
+  }
+  return out
 }
 
 function safePullout(b) {
@@ -1646,7 +2764,7 @@ function airTarget(sim, i, x) {
   const f = airFrame(b).f
   let best = null
   for (const j of sim._air || []) {
-    if (sim.units[j].side === sim.units[i].side) continue
+    if (sim.slots[j].side === sim.slots[i].side) continue
     const dx = s.pos[3 * j] - b.x
     const dy = s.pos[3 * j + 1] - b.y
     const dz = s.pos[3 * j + 2] - b.z
@@ -1679,39 +2797,32 @@ function airTarget(sim, i, x) {
 function ccip(sim, i, x) {
   const s = sim.state
   const b = x.body
-  let px = b.x
-  let py = b.y
-  let pz = b.z
-  let vx = Math.sin(b.psi) * Math.cos(b.gamma) * b.V
-  let vy = Math.sin(b.gamma) * b.V
-  let vz = -Math.cos(b.psi) * Math.cos(b.gamma) * b.V
-  const k = 4e-5
-  let t = 0
-  const dt = 0.1
-  while (py > 0 && t < 60) {
-    const v = Math.hypot(vx, vy, vz)
-    vx -= k * v * vx * dt
-    vy -= (k * v * vy + G) * dt
-    vz -= k * v * vz * dt
-    px += vx * dt
-    py += vy * dt
-    pz += vz * dt
-    t += dt
-  }
+  // (the ballistics module's bomb: a light quadratic drag to the sea's level)
+  const fall = bombImpact(b.x, b.y, b.z, Math.sin(b.psi) * Math.cos(b.gamma) * b.V, Math.sin(b.gamma) * b.V, -Math.cos(b.psi) * Math.cos(b.gamma) * b.V)
+  const px = fall.x
+  const pz = fall.z
+  const t = fall.tof
+  const vx = fall.vx
+  const vz = fall.vz
   let onTarget = false
   let target = -1
-  for (const j of sim._shipsNear(px, pz, 300)) {
-    if (sim.units[j].side === sim.units[i].side || !targetable(sim, j)) continue
+  let near = -1
+  let nearD = Infinity
+  for (const j of sim._shipsNear(px, pz, 1500)) {
+    if (sim.slots[j].side === sim.slots[i].side || !targetable(sim, j)) continue
     const m = sim._X[j].model
     // the target moves on through the fall
     const d = boxDistance(px, pz, s.pos[3 * j] + s.vel[3 * j] * t, s.pos[3 * j + 2] + s.vel[3 * j + 2] * t, s.heading[j], m.B / 2, m.L / 2)
-    if (d.d <= 0) {
+    if (d.d < nearD) {
+      nearD = d.d
+      near = j
+    }
+    if (d.d <= 0 && !onTarget) {
       onTarget = true
       target = j
-      break
     }
   }
-  return { x: px, y: 0, z: pz, tof: t, onTarget, target }
+  return { x: px, y: 0, z: pz, tof: t, onTarget, target, near, vx, vz }
 }
 
 function shipTarget(sim, i, x, aimAz) {
@@ -1719,7 +2830,7 @@ function shipTarget(sim, i, x, aimAz) {
   let best = null
   for (const r of sim.record.ships) {
     const j = r.slot
-    if (!targetable(sim, j) || sim.units[j].side === sim.units[i].side || sim.units[j].kind !== 'ship') continue
+    if (!targetable(sim, j) || sim.slots[j].side === sim.slots[i].side || sim.slots[j].kind !== 'ship') continue
     const dx = s.pos[3 * j] - s.pos[3 * i]
     const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
     const brg = headingOf(dx, dz)
@@ -1748,15 +2859,15 @@ function contacts(sim, i) {
   const out = []
   const obs = { x: s.pos[3 * i], y: Math.max(20, s.pos[3 * i + 1]), z: s.pos[3 * i + 2], sensors: x.model.sensors || [] }
   for (let j = 0; j < sim.capacity; j++) {
-    if (j === i || s.alive[j] !== 1 || sim.units[j].parked) continue
-    const u = sim.units[j]
+    if (j === i || s.alive[j] !== 1 || sim.slots[j].parked) continue
+    const u = sim.slots[j]
     const dx = s.pos[3 * j] - obs.x
     const dz = s.pos[3 * j + 2] - obs.z
     const d = Math.hypot(dx, dz)
     if (d > 40000) continue
     const seen = sim.sight.sees(obs, { x: s.pos[3 * j], y: s.pos[3 * j + 1], z: s.pos[3 * j + 2], big: u.kind === 'ship' && (sim._X[j].model?.L ?? 0) > 150, aircraft: u.kind === 'aircraft', lit: sim._X[j].litUntil > sim.t })
     if (!seen) continue
-    out.push({ index: j, kind: u.kind, friendly: u.side === sim.units[i].side, range: d, bearing: headingOf(dx, dz), how: seen.how })
+    out.push({ index: j, kind: u.kind, friendly: u.side === sim.slots[i].side, range: d, bearing: headingOf(dx, dz), how: seen.how })
     if (out.length > 120) break
   }
   return out
@@ -1786,7 +2897,7 @@ export function threat(sim) {
     if ((sim._aaOnPlayer || 0) > 0) return why('AA')
   }
   for (const j of sim._air || []) {
-    if (sim.units[j].side === sim.units[i].side) continue
+    if (sim.slots[j].side === sim.slots[i].side) continue
     if (Math.hypot(s.pos[3 * j] - px, s.pos[3 * j + 1] - py, s.pos[3 * j + 2] - pz) < T.aircraftM) return why('enemy aircraft')
   }
   if (pl.kind === 'ship') {
@@ -1802,7 +2913,7 @@ export function threat(sim) {
     }
     for (const r of sim.record.ships) {
       const j = r.slot
-      if (s.alive[j] !== 1 || sim.units[j].side === sim.units[i].side) continue
+      if (s.alive[j] !== 1 || sim.slots[j].side === sim.slots[i].side) continue
       if (Math.hypot(s.pos[3 * j] - px, s.pos[3 * j + 2] - pz) < T.shipNearM) return why('enemy ship')
     }
   }

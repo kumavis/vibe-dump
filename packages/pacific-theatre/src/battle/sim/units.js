@@ -274,7 +274,8 @@ export function aircraftModel(kit, weapons, date, warn) {
   const torpedo = torpedoId ? weapons.get(torpedoId) || null : kit.torpedo ? { id: 'inline-air-torpedo', kind: 'torpedo', air: true, warheadKg: 200, speedKn: kit.torpedo.type === 'mark-13' ? 30 : 42, rangeM: 2000, dropSpeedKn: kit.torpedo.dropSpeedKn ?? 110, dropAltM: kit.torpedo.dropAltM ?? 30, armRunM: kit.torpedo.armRunM ?? 200, failRate: [] } : null
   const guns = (kit.guns || []).map((g) => {
     const w = (g.weapon && weapons.get(g.weapon)) || { id: `inline-mg:${g.calibreMm}`, kind: g.calibreMm >= 20 ? 'cannon' : 'mg', calibreMm: g.calibreMm ?? 12.7, mvMs: g.calibreMm >= 20 ? 650 : 850, rofRpm: g.calibreMm >= 20 ? 500 : 800, vsAircraft: g.calibreMm >= 20 ? { protected: 0.25, unprotected: 0.4 } : g.calibreMm >= 12 ? { protected: 0.06, unprotected: 0.12 } : { protected: 0.015, unprotected: 0.03 } }
-    return { weapon: w, count: g.count ?? 1, position: g.position ?? 'nose', rounds: g.rounds ?? 300, fixed: ['nose', 'wing', 'cowl'].includes(g.position ?? 'nose') }
+    // (a gun the kit marks arc: 'rear' is the gunner's, ROUND-2 §7; the fixed guns fire along the nose)
+    return { weapon: w, count: g.count ?? 1, position: g.position ?? 'nose', rounds: g.rounds ?? 300, arc: g.arc ?? null, fixed: g.arc !== 'rear' && ['nose', 'wing', 'cowl'].includes(g.position ?? 'nose') }
   })
   const payload = (kit.payload || []).map((p) => ({ weapon: (p.weapon && weapons.get(p.weapon)) || { id: `inline-bomb:${p.massKg}`, kind: 'bomb', massKg: p.massKg ?? 250, class: (p.massKg ?? 250) >= 400 ? 'bomb-1000' : (p.massKg ?? 250) >= 200 ? 'bomb-500' : 'bomb-100' }, count: p.count ?? 1 }))
   return {

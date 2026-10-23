@@ -18,6 +18,7 @@ import { EffectsRenderer } from './effects.js'
 import { Weather } from './weather.js'
 import { Cameras } from './cameras.js'
 import { Hud } from './hud.js'
+import { Picker } from './pick.js'
 import { insigniaAtlas } from '../kits/index.js'
 
 const tick = () => new Promise((r) => setTimeout(r, 0))
@@ -37,6 +38,14 @@ export class BoxScene {
     this.aid = 'standard'
     this.time = 0
     this.lowQuality = !!app.software || matchMedia?.('(pointer: coarse)')?.matches
+    this.selected = null // ROUND-2 §4: the selected unit's slot (a bracket on it), or null
+  }
+
+  /** Select a unit (its slot) or none: the HUD's bracket marks it. Battle.select calls this; selecting never changes the sim. */
+  select(index) {
+    const sim = this.sim
+    this.selected = index != null && sim && index >= 0 && index < sim.capacity ? index : null
+    return this.selected
   }
 
   /**
@@ -61,6 +70,7 @@ export class BoxScene {
     this.cameras = new Cameras(this)
     this.atlas = insigniaAtlas()
     this.hud = new Hud(this)
+    this.picker = new Picker(this)
     await tick()
     return this
   }
@@ -68,6 +78,7 @@ export class BoxScene {
   /** Bind the sim: the unit and effect renderers and the weather (squalls from the record); kits built a few at a time. */
   async setSim(sim) {
     this.sim = sim
+    this.selected = null
     const app = this.app
     const date = sim.clock.utc(0)
     const weapons = new Map((Array.isArray(this.kits?.weapons) ? this.kits.weapons : []).map((w) => [w.id, w]))
@@ -114,7 +125,7 @@ export class BoxScene {
     return { density: (0.6 * 3.912) / vis, falloff: 1 / base }
   }
 
-  /** setCamera(mode, { unitIndex, target, bearing, pitch, distance }): free, orbit, chase, bridge, director, sight. */
+  /** setCamera(mode, { unitIndex, target, bearing, pitch, distance }): free, orbit, chase, bridge, director, sight, gun, bombsight. */
   setCamera(mode, opts = {}) {
     this.cameras.set(mode, opts)
   }
@@ -177,6 +188,7 @@ export class BoxScene {
   }
 
   dispose() {
+    this.picker?.dispose()
     this.rig?.dispose()
     this.ground?.dispose()
     this.ocean?.dispose()

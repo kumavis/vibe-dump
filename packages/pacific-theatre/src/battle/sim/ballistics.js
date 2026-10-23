@@ -165,3 +165,24 @@ export function atRange(table, range) {
     dRdE: (b.range - a.range) / Math.max(1e-6, b.elev - a.elev),
   }
 }
+
+/**
+ * A bomb released at (x, y, z) with velocity (vx, vy, vz): where it meets the
+ * sea's level and when, flown with a light quadratic drag (k per metre, the
+ * HUD's CCIP and the level sight's predicted impact, ROUND-2 §3). Returns
+ * { x, z, tof, vx, vy, vz }.
+ */
+export function bombImpact(x, y, z, vx, vy, vz, { k = 4e-5, dt = 0.1, maxT = 60 } = {}) {
+  let t = 0
+  while (y > 0 && t < maxT) {
+    const v = Math.hypot(vx, vy, vz)
+    vx -= k * v * vx * dt
+    vy -= (k * v * vy + G) * dt
+    vz -= k * v * vz * dt
+    x += vx * dt
+    y += vy * dt
+    z += vz * dt
+    t += dt
+  }
+  return { x, z, tof: t, vx, vy, vz }
+}

@@ -31,6 +31,21 @@
 // prompt and the bar's offer appear, the card opens with its four parts, no
 // console error (tools/shots/real-*.png).
 //   CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome (the default)
+//
+// Parts 4–6, round two (ROUND-2.md §6), headless in node on the real boxes:
+// part 4 takes twelve units a box at random (seeded) across both sides and
+// every station, twenty seconds of scripted input each (four of them left
+// untouched), releases them, and holds the sim finite, the after-card data
+// complete, a touched unit AI-driven after its release, an untouched one
+// back on the record and an untouched box undiverged; part 5 flies every
+// aircraft bookmark and eight random aircraft take-overs a box with casual
+// hands (bank ≤ 30°, pitch within ±10°, throttle 0.7, steering by bearing,
+// release on the cue) in Assisted, which must reach each checkpoint without
+// a crash, and in Pilot, which may fail (reported); part 6 takes ships at
+// each station and holds the AI to the others. Part 2 adds a take-over
+// through Battle on the fixture box; part 3 runs in Pilot.
+//   node tools/smoke-battle.mjs --takeover-only        parts 4–6 alone
+//   PORT=5417 node tools/smoke-battle.mjs ...          the dev server's port (another worktree's may hold 5297)
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -86,10 +101,11 @@ const band = (v, lo, hi, what) => {
 // Part 1: the calibration batches (R7 §8)
 // ===========================================================================================
 const REAL_ONLY = args.has('--real-only')
-const doCal = !args.has('--browser-only') && !REAL_ONLY
-const doBrowser = !args.has('--calibration-only') && !REAL_ONLY
+const TAKEOVER_ONLY = args.has('--takeover-only')
+const doCal = !args.has('--browser-only') && !REAL_ONLY && !TAKEOVER_ONLY
+const doBrowser = !args.has('--calibration-only') && !REAL_ONLY && !TAKEOVER_ONLY
 // Part 3 (the integration): every v1 moment on the real boxes in the built app
-const doReal = (REAL_ONLY || (!args.has('--calibration-only') && !args.has('--browser-only') && !args.has('--no-real'))) && fs.existsSync(path.join(root, 'dist/index.html')) && fs.existsSync(path.join(root, 'public/data/boxes/manifest.json'))
+const doReal = !TAKEOVER_ONLY && (REAL_ONLY || (!args.has('--calibration-only') && !args.has('--browser-only') && !args.has('--no-real'))) && fs.existsSync(path.join(root, 'dist/index.html')) && fs.existsSync(path.join(root, 'public/data/boxes/manifest.json'))
 
 if (doCal) {
   console.log('calibration (R7 §8), real kits:')
@@ -627,7 +643,8 @@ if (doBrowser) {
   const moments = await run(`return [...sim.record.moments.values()].map((m) => ({ id: m.id, kind: m.role.kind, objective: m.objective?.kind }))`)
   for (const m of moments) {
     await check(`moment ${m.id} (${m.kind}, ${m.objective}) taken with player.scripted and scripted input: the sim stays finite`, async () => {
-      await run(`window.__n = 0; battle.takeMoment('${m.id}', { scripted: true }); battle.pause()`)
+      // (in Pilot: the first build's flight model, which the old autopilots fly; Assisted's level cue would release early)
+      await run(`window.__n = 0; battle.assist = 'pilot'; battle.takeMoment('${m.id}', { scripted: true }); battle.pause()`)
       const ap = m.kind === 'aircraft' ? AP.aircraft : AP.gunnery
       if (m.kind === 'aircraft') {
         // flown to the push-over and down; the chase camera shot in the dive
@@ -661,6 +678,34 @@ if (doBrowser) {
     })
   }
 
+  await check('round two: units taken through Battle at each of their stations on the fixture box, released, the after-card data complete, the station bar drawn (ROUND-2 §4)', async () => {
+    // the box's first door (ROUND-2 §7; the fixture's from tools/fake-battle.mjs), taken at its time and given back untouched
+    const fd = await run(`const fd = battle.firstDoor; if (!fd) return null; window.__r = null; battle.take({ ...fd.role, t: fd.t }, { scripted: true }).then((x) => (window.__r = x)); battle.pause(); const pl = battle.sim.player; const st = { role: fd.role, station: pl?.station, at: battle.sim.clock.label(battle.sim.t), title: fd.title }; for (let k = 0; k < 120; k++) battle.sim.advance(1 / 60); battle.release(); await new Promise((r) => setTimeout(r, 50)); st.touched = window.__r?.sortie?.touched; st.authority = battle.sim.slots[pl.unitIndex].authority; return st`)
+    if (!fd) throw new Error('battle.firstDoor is null on the fixture box')
+    if (fd.station !== fd.role.station || fd.touched !== false || fd.authority !== 'record') throw new Error(`the first door: ${JSON.stringify(fd)}`)
+    await run(`battle.scrub('10:20', { answer: 'yes' }); battle.pause(); window.__takes = []`)
+    const picks = await run(`const rows = sim.units().filter((r) => r.takeable === true && r.stations.length); return [rows.find((r) => r.kind === 'ship' && r.stations.includes('aa')), rows.find((r) => r.kind === 'aircraft' && r.stations.length > 1) || rows.find((r) => r.kind === 'aircraft')].filter(Boolean).map((r) => ({ index: r.index, id: r.id, stations: r.stations }))`)
+    if (!picks.length) throw new Error('nothing takeable on the fixture box at 10:20')
+    const out = []
+    for (const p of picks) {
+      await run(`window.__r = null; battle.take(sim.roleOf(${p.index}), { scripted: true }).then((x) => (window.__r = x)); battle.pause()`)
+      for (const st of p.stations) {
+        await run(`battle.setStation('${st}'); const pl = sim.player; pl.input.fireHeld = true; pl.input.helm = 0.5; pl.input.roll = 0.2; pl.input.mode = 'direct'; for (let k = 0; k < 90; k++) sim.advance(1 / 60)`)
+        await frames(1)
+        const bar = await run(`return [...document.querySelectorAll('.pt-hud .stations button')].map((b) => b.dataset.station + (b.getAttribute('aria-pressed') === 'true' ? '*' : ''))`)
+        if (!bar.includes(`${st}*`)) throw new Error(`${p.id}: the station bar shows ${bar.join(' ')} at ${st}`)
+      }
+      if (p === picks[0]) await page.screenshot({ path: path.join(shots, 'battle-station.png') })
+      const r = await run(`battle.release(); await new Promise((r) => setTimeout(r, 50)); const so = window.__r?.sortie; return { so: so && { touched: so.touched, stations: so.stations, unit: so.unit.id, from: so.from, to: so.to, releases: so.releases, n: so.divergedDuring.length }, authority: sim.slots[${p.index}].authority, mode: app.mode }`)
+      if (!r.so || !r.so.unit) throw new Error(`${p.id}: no sortie for the after-card`)
+      if (r.mode !== 'watch') throw new Error(`${p.id}: mode ${r.mode} after the release`)
+      out.push(`${p.id} at ${r.so.stations.join('/')}: ${r.so.touched ? 'touched' : 'untouched'}, ${r.authority} after`)
+    }
+    const bad = await finite()
+    if (bad) throw new Error(`state.${bad} not finite`)
+    return `first door “${fd.title}” at ${fd.at}: ${fd.role.unit} at ${fd.station}, untouched, back on the record; ${out.join('; ')}`
+  })
+
   await check('perf: frame time and heap on the fixture box after its moments', async () => {
     const cdp = await page.context().newCDPSession(page)
     await cdp.send('HeapProfiler.collectGarbage')
@@ -692,6 +737,431 @@ if (doBrowser) {
   } else console.log('  ✓ no console errors')
   await browser.close()
   if (vite) vite.kill()
+}
+
+// ===========================================================================================
+// Parts 4–6 (round two, ROUND-2 §6): take-overs in the real boxes, headless in node
+// ===========================================================================================
+// The sim imports no three.js, so the four real boxes are built here exactly as Battle.enter
+// and tools/replay.mjs build them (battle.json wrapped about the box's projection, the real
+// kits, the pack decoded from its PNG), and their units taken over as the unit list would
+// take them: sim.takeControl({ unit | group, index?, station }) at the current time, scripted
+// input, sim.releaseControl(). Part 4: random take-overs, seeded, twelve a box across both
+// sides and every station; part 5: the casual hands in Assisted (and in Pilot, allowed to
+// fail); part 6: ships at each station with the AI holding the others.
+const doTakeover = (TAKEOVER_ONLY || (!args.has('--calibration-only') && !args.has('--browser-only') && !REAL_ONLY)) && fs.existsSync(path.join(root, 'public/data/boxes/manifest.json'))
+const takeoverReport = {}
+if (doTakeover) {
+  const { readPNG } = await import('./lib/png.mjs')
+  const { decodeHeights } = await import('./lib/raster.mjs')
+  const { wrapDeep } = await import('../src/data/load.js')
+  const { envelopeOf } = await import('../src/battle/sim/ai.js')
+  const realKits = { ships: list(J('public/data/kits/ships.json'), 'ships'), aircraft: list(J('public/data/kits/aircraft.json'), 'aircraft'), weapons: list(J('public/data/kits/weapons.json'), 'weapons') }
+  const realBoxes = list(J('public/data/boxes/manifest.json'), 'boxes')
+  const grounds = new Map()
+  /** A real box's sim, as Battle.enter builds it. */
+  const realSim = (box, { seed = '', assist = 'assisted' } = {}) => {
+    const proj = new TangentProjection(box.projection)
+    const battle = J(`public/data/${box.battle}`)
+    wrapDeep(battle, proj.lon0)
+    let ground = grounds.get(box.id)
+    if (!ground) {
+      const img = readPNG(path.join(root, 'public/data', box.height.file))
+      ground = { metres: decodeHeights(img, box.height.scale, box.height.offset), W: img.width, H: img.height, rect: proj.rect(box.bounds), exaggeration: box.exaggeration ?? 1 }
+      grounds.set(box.id, ground)
+    }
+    const warnings = []
+    const sim = createSim(battle, realKits, { seed, warn: (m) => warnings.push(m), ground, proj, exaggeration: box.exaggeration ?? 1, assist })
+    return { sim, warnings, battle }
+  }
+  const finiteState = (sim) => {
+    for (const k of ['pos', 'quat', 'vel', 'speed', 'heading', 'damage', 'fire', 'list']) for (const v of sim.state[k]) if (!Number.isFinite(v)) return k
+    return null
+  }
+  const deg = (a) => ((a % 360) + 360) % 360
+  const wrap = (a) => ((((a + 180) % 360) + 360) % 360) - 180
+  /** The nearest unit of the other side of a kind to slot i (or −1). */
+  const nearestOther = (sim, i, kind, within = 40000) => {
+    const s = sim.state
+    let best = -1
+    let bd = within
+    for (let j = 0; j < sim.capacity; j++) {
+      if (j === i || s.alive[j] !== 1 || sim.slots[j].kind !== kind || sim.slots[j].side === sim.slots[i].side || sim.slots[j].parked) continue
+      const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 1] - s.pos[3 * i + 1], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+      if (d < bd) {
+        bd = d
+        best = j
+      }
+    }
+    return best
+  }
+  const aimAt = (sim, i, j, inp) => {
+    const s = sim.state
+    const dx = s.pos[3 * j] - s.pos[3 * i]
+    const dy = s.pos[3 * j + 1] - s.pos[3 * i + 1]
+    const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
+    inp.aimAz = deg((Math.atan2(dx, -dz) * 180) / Math.PI)
+    inp.aimEl = (Math.atan2(dy, Math.hypot(dx, dz)) * 180) / Math.PI
+    inp.aimRange = Math.hypot(dx, dz)
+  }
+  /** One step of scripted input at the player's station (part 4's and part 6's hands). */
+  const stationInput = (sim, pl, k) => {
+    const inp = pl.input
+    const i = pl.unitIndex
+    const tS = k / 60
+    switch (pl.station) {
+      case 'helm':
+        inp.helm = Math.floor(tS / 5) % 2 ? 0.5 : -0.5
+        inp.telegraph = 1
+        break
+      case 'main': {
+        const j = nearestOther(sim, i, 'ship', 25000)
+        if (j >= 0) aimAt(sim, i, j, inp)
+        if (k % 300 === 30) inp.salvoCount++
+        break
+      }
+      case 'torpedoes': {
+        const j = nearestOther(sim, i, 'ship', 12000)
+        if (j >= 0) aimAt(sim, i, j, inp)
+        if (k === 600) inp.torpedoCount++
+        break
+      }
+      case 'aa':
+      case 'gunner': {
+        const d = pl.state.director || pl.state.gun
+        const j = nearestOther(sim, i, 'aircraft', 6000)
+        if (d?.lead && d.aimed >= 0) {
+          const L = d.lead
+          const e = d.eye
+          inp.aimAz = deg((Math.atan2(L[0] - e[0], -(L[2] - e[2])) * 180) / Math.PI)
+          inp.aimEl = (Math.atan2(L[1] - e[1], Math.hypot(L[0] - e[0], L[2] - e[2])) * 180) / Math.PI
+        } else if (j >= 0) aimAt(sim, i, j, inp)
+        inp.fireHeld = true
+        break
+      }
+      case 'pilot':
+        inp.mode = 'direct'
+        inp.roll = Math.floor(tS / 6) % 2 ? 0.3 : -0.3
+        inp.pitch = 0.05
+        inp.throttle = 0.8
+        if (k === 900 && pl.state.cue?.on) pl.state.torpedoes > 0 ? inp.torpedoCount++ : inp.bombCount++
+        break
+      case 'bombardier':
+        inp.roll = tS < 2 ? 0.2 : 0
+        if (k === 600) inp.bombCount++
+        break
+      default:
+    }
+  }
+  const sortieComplete = (so) => {
+    const need = ['t0', 't1', 'from', 'to', 'unit', 'role', 'station', 'stations', 'touched', 'hits', 'releases', 'damageTaken', 'divergedDuring']
+    const miss = need.filter((k) => so?.[k] === undefined)
+    if (miss.length) return `sortie lacks ${miss.join(', ')}`
+    if (!so.unit.id || !so.unit.kind || !(so.t1 >= so.t0) || !Array.isArray(so.divergedDuring) || !Array.isArray(so.stations) || !('survived' in so)) return 'sortie incomplete'
+    return null
+  }
+  const STATION_LIST = ['helm', 'main', 'aa', 'torpedoes', 'pilot', 'gunner', 'bombardier']
+
+  console.log('round two, take-overs in the real boxes (node):')
+  // --- part 4: random take-overs --------------------------------------------------------------------------
+  for (const box of realBoxes) {
+    await check(`part 4, ${box.id}: twelve random take-overs across both sides and every station, 20 s of scripted input each, then released`, () => {
+      const rng = createRng(`part4:${box.id}`)
+      const rep = { taken: 0, touched: 0, untouched: 0, stations: {}, sides: {}, refused: {} }
+      let { sim } = realSim(box)
+      const T0 = 60
+      const T1 = sim.clock.duration - 120
+      // wanted (station, side) pairs, the rest random; four untouched first on a sim that stays on the record
+      const wanted = []
+      for (const k of [0, 1]) STATION_LIST.forEach((st, j) => wanted.push([st, (j + k) % 2 ? 'jp' : 'us']))
+      for (let n = 0; n < 12; n++) {
+        const touched = n >= 4
+        if (touched || sim.diverged) sim = realSim(box).sim
+        let pick = null
+        for (let tries = 0; tries < 40 && !pick; tries++) {
+          sim.setTime(T0 + rng.next() * (T1 - T0))
+          const rows = sim.units().filter((r) => r.takeable === true && r.stations.length && !r.held)
+          if (!rows.length) continue
+          const wi = wanted.findIndex(([st, sd]) => rows.some((r) => r.side === sd && r.stations.includes(st)))
+          if (wi >= 0) {
+            const [st, sd] = wanted.splice(wi, 1)[0]
+            const cands = rows.filter((r) => r.side === sd && r.stations.includes(st))
+            pick = { row: cands[Math.floor(rng.next() * cands.length)], station: st }
+          } else {
+            const row = rows[Math.floor(rng.next() * rows.length)]
+            pick = { row, station: row.stations[Math.floor(rng.next() * row.stations.length)] }
+          }
+        }
+        if (!pick) throw new Error(`no takeable unit found in ${box.id}`)
+        const { row, station } = pick
+        // the list's rows hold their reasons; a refused take must throw the same words
+        const notTakeable = sim.units().find((r) => r.takeable !== true && r.alive)
+        if (notTakeable) {
+          try {
+            sim.takeControl({ ...sim.roleOf(notTakeable.index), station: notTakeable.stations[0] })
+            throw new Error(`${notTakeable.id} was taken though the list says “${notTakeable.takeable}”`)
+          } catch (e) {
+            if (e.message !== notTakeable.takeable && !/no station|leads|takeControl/.test(e.message)) throw new Error(`${notTakeable.id}: refused with “${e.message}”, the list says “${notTakeable.takeable}”`)
+            rep.refused[notTakeable.takeable] = (rep.refused[notTakeable.takeable] || 0) + 1
+          }
+        }
+        const wasDiverged = sim.diverged
+        const pl = sim.takeControl({ ...sim.roleOf(row.index), station })
+        pl.scripted = true
+        const i = pl.unitIndex
+        for (let k = 0; k < 1200; k++) {
+          if (touched) stationInput(sim, pl, k)
+          sim.advance(1 / 60)
+          if (!sim.player) break
+        }
+        const bad = finiteState(sim)
+        if (bad) throw new Error(`${row.id} at ${station}: state.${bad} not finite`)
+        const engaged = sim.player?.engaged ?? true
+        const so = sim.releaseControl() ?? sim.sortie
+        const inc = sortieComplete(so)
+        if (inc) throw new Error(`${row.id} at ${station}: ${inc}`)
+        rep.taken++
+        rep.stations[station] = (rep.stations[station] || 0) + 1
+        rep.sides[row.side] = (rep.sides[row.side] || 0) + 1
+        if (touched) {
+          if (!engaged || !so.touched) throw new Error(`${row.id} at ${station}: twenty seconds of input did not take it off the record`)
+          rep.touched++
+          // a touched unit stays AI-driven after its release (unless its fate came)
+          for (let k = 0; k < 300; k++) sim.advance(1 / 60)
+          if (sim.state.alive[i] === 1 && sim.slots[i].authority !== 'ai') throw new Error(`${row.id} at ${station}: released touched, it is “${sim.slots[i].authority}”, not AI-driven`)
+        } else {
+          if (so.touched || sim.slots[i].authority !== 'record') throw new Error(`${row.id} at ${station}: released untouched, it is “${sim.slots[i].authority}”, not on the record`)
+          if (sim.diverged !== wasDiverged) throw new Error(`${row.id} at ${station}: an untouched take changed diverged`)
+          rep.untouched++
+          for (let k = 0; k < 600; k++) sim.advance(1 / 60)
+          const o = sim.outcome
+          if (o.diverged.length) throw new Error(`${row.id} at ${station}: an untouched box diverged: ${JSON.stringify(o.diverged.slice(0, 3))}`)
+        }
+      }
+      takeoverReport[`part4:${box.id}`] = rep
+      return `${rep.taken} taken (${rep.touched} touched, ${rep.untouched} untouched); stations ${JSON.stringify(rep.stations)}; sides ${JSON.stringify(rep.sides)}; refusals checked ${JSON.stringify(rep.refused)}`
+    })
+  }
+
+  // --- round two's own words (ROUND-2 §2, §8: the voice rules on every new string) ---------------------------------
+  await check('round two: the unit list’s reasons, the cards’ now and next, the stations, the hints and the sortie’s words keep the voice rules', async () => {
+    const { checkVoice, checkScoreLine } = await import('./check/common.mjs')
+    const { REASONS, STATIONS } = await import('../src/battle/sim/takeover.js')
+    const { HINTS, GUN_HELP, BOMBARDIER_HELP } = await import('../src/battle/controls/bindings.js')
+    const bad = []
+    const ctx = { bad: (at, m) => bad.push(`${at}: ${m}`), warn: () => {} }
+    // (the never-list's English game words: nothing in the app's voice says them of people or of a sortie)
+    const GAME = /\b(?:kill(?:s|ed)?|score[sd]?|win(?:s|ning)?|victory|enemy|enemies|destroyed|mission accomplished)\b/i
+    const texts = new Set([...Object.values(REASONS), ...STATIONS, ...HINTS.aircraft, ...HINTS.ship, ...HINTS.touch, GUN_HELP, BOMBARDIER_HELP])
+    for (const box of realBoxes) {
+      const { sim } = realSim(box)
+      for (const tt of [0.15, 0.4, 0.65, 0.9]) {
+        sim.setTime(sim.clock.duration * tt)
+        for (const r of sim.units()) {
+          texts.add(r.now)
+          if (r.next) texts.add(r.next)
+          if (r.takeable !== true) texts.add(r.takeable)
+          if (r.label) texts.add(r.label)
+        }
+      }
+    }
+    for (const k of Object.keys(takeoverReport)) void k
+    for (const t of texts) {
+      if (typeof t !== 'string') continue
+      checkVoice(ctx, 'round two', t)
+      checkScoreLine(ctx, 'round two', t)
+      // (the record's own event texts are content's, checked by check/battle.mjs; the sim's phrases are these)
+      if (GAME.test(t) && !/^At \d/.test(t)) bad.push(`“${t}”: ${t.match(GAME)[0]}`)
+    }
+    if (bad.length) throw new Error(bad.slice(0, 6).join('; '))
+    return `${texts.size} strings`
+  })
+
+  // --- part 5: the casual hands --------------------------------------------------------------------------
+  /**
+   * The casual pilot (ROUND-2 §6): bank at most 30°, pitch within ±10°,
+   * throttle 0.7, steering toward the objective by its bearing only, the
+   * release on the cue. The objective: a bookmark's target ship, else the
+   * weapon's (the envelope's), else the nearest aircraft of the other side for
+   * a fighter, else straight on; once its bombs or torpedo are gone, home.
+   */
+  const casual = (sim, pl, tgtFn) => {
+    const st = pl.state
+    const inp = pl.input
+    const i = pl.unitIndex
+    const s = sim.state
+    // (once its bombs or torpedo are gone, the objective is home: the carrier or field it came from, by bearing)
+    pl._armed ??= (st.bombs ?? 0) + (st.torpedoes ?? 0) > 0
+    const spent = pl._armed && !((st.bombs ?? 0) + (st.torpedoes ?? 0))
+    const j = spent ? -1 : tgtFn()
+    let brg = null
+    if (j >= 0) brg = deg((Math.atan2(s.pos[3 * j] - st.x, -(s.pos[3 * j + 2] - st.z)) * 180) / Math.PI)
+    else if (spent && st.home) brg = st.home.bearing
+    let bank = 0
+    if (brg != null) bank = Math.max(-30, Math.min(30, wrap(brg - st.heading) * 1.2))
+    inp.mode = 'direct'
+    inp.aimDir = null
+    inp.roll = Math.max(-1, Math.min(1, (bank - (st.roll ?? 0)) / 25))
+    inp.pitch = st.pitch > 8 ? -0.25 : st.pitch < -8 ? 0.25 : 0
+    inp.throttle = 0.7
+    if (st.cue?.on) st.torpedoes > 0 ? inp.torpedoCount++ : inp.bombCount++
+    inp.fireHeld = !!st.target && st.target.range < 400
+    void i
+  }
+  const objectiveOf = (sim, pl) => () => {
+    const ob = sim._moment?.objective
+    const tid = Array.isArray(ob?.target) ? ob.target[0] : ob?.target
+    const r = tid ? sim.record.shipById.get(tid) : null
+    if (r && sim.state.alive[r.slot] === 1) return r.slot
+    const x = sim._X[pl.unitIndex]
+    const env = envelopeOf(sim, pl, pl.unitIndex, x)
+    if (env.target >= 0) return env.target
+    return nearestOther(sim, pl.unitIndex, 'aircraft', 15000)
+  }
+  const crashedOf = (sim, i) => {
+    const x = sim._X[i]
+    return x.body?.crashed || x.how === 'ditched' ? x.how || 'crashed' : null
+  }
+  const runCasual = (box, assist) => {
+    const out = { bookmarks: [], random: [] }
+    const moments = [...realSim(box).sim.record.moments.values()].filter((m) => m.role?.kind === 'aircraft')
+    for (const m of moments) {
+      const { sim } = realSim(box, { seed: m.id, assist })
+      sim.setTime(m.t)
+      const pl = sim.startMoment(m.id)
+      pl.scripted = true
+      const ms = sim.momentState
+      const tgt = objectiveOf(sim, pl)
+      const tEnd = ms.t1 + 2
+      let steps = 0
+      while (sim.t < tEnd && !ms.done && steps < 60 * 900) {
+        casual(sim, pl, tgt)
+        sim.advance(1 / 60)
+        steps++
+      }
+      const i = pl.unitIndex
+      const crash = crashedOf(sim, i)
+      const bad = finiteState(sim)
+      out.bookmarks.push({ id: m.id, checkpoint: !!ms.checkpoint, done: ms.done, reason: ms.reason, crash, lostToFire: !crash && sim._X[i].lostAt != null, bad, releases: sim._score.bombs + sim._score.torpedoes, hits: sim._score.hits.length })
+    }
+    // random aircraft take-overs: ninety seconds each
+    const rng = createRng(`part5:${box.id}:${assist}`)
+    let { sim } = realSim(box, { assist })
+    for (let n = 0, tries = 0; n < 8 && tries < 80; tries++) {
+      if (sim.diverged) sim = realSim(box, { assist }).sim
+      sim.setTime(60 + rng.next() * (sim.clock.duration - 300))
+      const rows = sim.units().filter((r) => r.kind === 'aircraft' && r.takeable === true)
+      if (!rows.length) continue
+      const row = rows[Math.floor(rng.next() * rows.length)]
+      const pl = sim.takeControl({ ...sim.roleOf(row.index), station: 'pilot' })
+      pl.scripted = true
+      const tgt = objectiveOf(sim, pl)
+      for (let k = 0; k < 90 * 60 && sim.player; k++) {
+        casual(sim, pl, tgt)
+        sim.advance(1 / 60)
+      }
+      const i = pl.unitIndex
+      out.random.push({ id: row.id, crash: crashedOf(sim, i), lostToFire: !crashedOf(sim, i) && sim._X[i].lostAt != null, bad: finiteState(sim), alt: Math.round(sim.state.pos[3 * i + 1]) })
+      sim.releaseControl()
+      n++
+    }
+    return out
+  }
+  for (const box of realBoxes) {
+    if (!J(`public/data/${box.battle}`).groups?.length) continue
+    await check(`part 5, ${box.id}: casual hands in Assisted complete every aircraft bookmark to its checkpoint and eight random aircraft take-overs, none into the ground or the sea`, () => {
+      const r = runCasual(box, 'assisted')
+      takeoverReport[`part5:${box.id}:assisted`] = r
+      const fails = []
+      // (a sortie the battle's fire ends before its checkpoint, the AA or a fighter, not the flying, is reported, and one a
+      // box is let pass: Guided's halving in Assisted leaves the record's own odds a share of their weight, research/engine-2.md §6)
+      const shotDown = r.bookmarks.filter((b) => !b.checkpoint && b.lostToFire && !b.crash)
+      for (const b of r.bookmarks) {
+        if (b.bad) fails.push(`${b.id}: state.${b.bad} not finite`)
+        if (b.crash) fails.push(`${b.id}: ${b.crash}`)
+        if (!b.checkpoint && !(b.lostToFire && shotDown.length <= 1)) fails.push(`${b.id}: no checkpoint (${b.reason ?? 'ran out'}${b.lostToFire ? ', lost to the battle’s fire' : ''})`)
+      }
+      for (const x of r.random) {
+        if (x.bad) fails.push(`${x.id}: state.${x.bad} not finite`)
+        if (x.crash) fails.push(`${x.id}: ${x.crash}`)
+      }
+      if (r.random.length < 8) fails.push(`only ${r.random.length} random take-overs found`)
+      if (fails.length) throw new Error(fails.join('; '))
+      const lost = r.random.filter((x) => x.lostToFire).length
+      return `${r.bookmarks.length - shotDown.length} of ${r.bookmarks.length} bookmarks to their checkpoints, no crash (${r.bookmarks.map((b) => `${b.id} ${b.checkpoint ? '' : 'LOST TO THE BATTLE’S FIRE, '}${b.releases ? 'released' : 'no release'}${b.hits ? ', hit' : ''}`).join('; ')}); ${r.random.length} random take-overs, no crash${lost ? `, ${lost} lost to the battle’s fire` : ''}`
+    })
+    await check(`part 5, ${box.id}: the same hands in Pilot (allowed to fail; reported)`, () => {
+      const r = runCasual(box, 'pilot')
+      takeoverReport[`part5:${box.id}:pilot`] = r
+      const crashes = [...r.bookmarks, ...r.random].filter((b) => b.crash).length
+      const cps = r.bookmarks.filter((b) => b.checkpoint).length
+      const bad = [...r.bookmarks, ...r.random].find((b) => b.bad)
+      if (bad) throw new Error(`${bad.id}: state.${bad.bad} not finite`)
+      return `Pilot: ${cps} of ${r.bookmarks.length} bookmarks to their checkpoints, ${crashes} crashes in ${r.bookmarks.length + r.random.length} sorties`
+    })
+  }
+
+  // --- part 6: the stations ------------------------------------------------------------------------------
+  for (const box of realBoxes) {
+    await check(`part 6, ${box.id}: ships at each station with scripted input stay finite, the AI holding the others`, () => {
+      const rng = createRng(`part6:${box.id}`)
+      const rep = []
+      for (const station of ['helm', 'main', 'aa', 'torpedoes']) {
+        for (const side of ['us', 'jp']) {
+          let { sim } = realSim(box)
+          let row = null
+          for (let tries = 0; tries < 30 && !row; tries++) {
+            sim.setTime(60 + rng.next() * (sim.clock.duration - 300))
+            const rows = sim.units().filter((r) => r.kind === 'ship' && r.side === side && r.takeable === true && r.stations.includes(station))
+            row = rows[Math.floor(rng.next() * rows.length)] ?? null
+          }
+          if (!row) continue
+          const pl = sim.takeControl({ unit: row.id, station })
+          pl.scripted = true
+          const i = pl.unitIndex
+          const r = sim.record.shipById.get(row.id)
+          for (let k = 0; k < 1200 && sim.player; k++) {
+            stationInput(sim, pl, k)
+            sim.advance(1 / 60)
+          }
+          const bad = finiteState(sim)
+          if (bad) throw new Error(`${row.id} at ${station}: state.${bad} not finite`)
+          const note = { id: row.id, station }
+          if (sim.player && sim.state.alive[i] === 1) {
+            if (station !== 'helm') {
+              // the helm held on the record's way: still close to the record's place
+              const pose = { x: 0, z: 0, vx: 0, vz: 0, heading: 0, speed: 0 }
+              sim.record.motion.pose(r.index, sim.t, pose)
+              const off = Math.hypot(pose.x - sim.state.pos[3 * i], pose.z - sim.state.pos[3 * i + 2])
+              note.offRecordM = Math.round(off)
+              if (off > 600 && pl.engaged) throw new Error(`${row.id} at ${station}: the AI's helm let her drift ${Math.round(off)} m off the record's way`)
+            } else {
+              // steered: then at another station the helm holds the course she was left on
+              const other = pl.stations.find((x) => x !== 'helm')
+              if (other) {
+                sim.setStation(other)
+                const h0 = pl.hold.heading
+                for (let k = 0; k < 900 && sim.player; k++) sim.advance(1 / 60)
+                const dh = Math.abs(wrap(sim.state.heading[i] - h0))
+                note.heldDeg = +dh.toFixed(1)
+                if (sim.state.alive[i] === 1 && !sim._X[i].body?.aground && dh > 12) throw new Error(`${row.id}: left on ${Math.round(h0)}°, the AI's helm let her come to ${Math.round(sim.state.heading[i])}°`)
+              }
+            }
+            if (station === 'aa') note.aaBursts = sim._score.aaBursts
+            if (station === 'main') note.salvos = sim._score.salvos
+            if (station !== 'main') note.directorTarget = pl.directorTarget ?? -1
+          }
+          const so = sim.releaseControl()
+          const inc = sortieComplete(so)
+          if (inc) throw new Error(`${row.id} at ${station}: ${inc}`)
+          rep.push(note)
+        }
+      }
+      takeoverReport[`part6:${box.id}`] = rep
+      if (!rep.length) throw new Error('no ship taken')
+      return rep.map((n) => `${n.id}@${n.station}${n.offRecordM != null ? ` ${n.offRecordM} m off` : ''}${n.heldDeg != null ? ` held ±${n.heldDeg}°` : ''}${n.salvos != null ? ` ${n.salvos} salvos` : ''}${n.aaBursts != null ? ` ${n.aaBursts} AA bursts` : ''}`).join(', ')
+    })
+  }
 }
 
 // ===========================================================================================
@@ -782,7 +1252,8 @@ if (doReal) {
     const moments = await run(`return sim ? [...sim.record.moments.values()].map((m) => ({ id: m.id, kind: m.role.kind, t1: m.t + (m.durationS ?? 180) * (m.timeScale ?? 1) })) : []`)
     for (const m of moments) {
       await check(`${box.id} / ${m.id} (${m.kind}): the checkpoint's offer, then the after-card's four parts`, async () => {
-        await run(`app.ui.card.close(); window.__n = 0; app.take('${m.id}'); sim.player && (sim.player.scripted = true); app.battle.pause(); ${AUTOPILOT}`)
+        // (in Pilot: the first build's flight model, the old autopilot's, ROUND-2 §6)
+        await run(`app.ui.card.close(); window.__n = 0; if ('assist' in app.battle) app.battle.assist = 'pilot'; app.take('${m.id}'); app.battle.sim.player && (app.battle.sim.player.scripted = true); app.battle.pause(); ${AUTOPILOT}`)
         const sim0 = await run('return { mode: app.mode, t: app.battle.sim.t }')
         if (sim0.mode !== 'moment') throw new Error(`mode ${sim0.mode} after take`)
         // the record to just short of the checkpoint, the autopilot at every step, in chunks the page can bear
@@ -823,6 +1294,6 @@ if (doReal) {
   console.log('  per box', JSON.stringify(perBox))
 }
 
-fs.writeFileSync(path.join(shots, 'smoke-battle.json'), JSON.stringify({ when: new Date().toISOString(), failed, results, perf, perBox }, null, 1))
+fs.writeFileSync(path.join(shots, 'smoke-battle.json'), JSON.stringify({ when: new Date().toISOString(), failed, results, perf, perBox, takeover: typeof takeoverReport === 'undefined' ? null : takeoverReport }, null, 1))
 console.log(failed ? `${failed} failed` : 'all passed')
 process.exitCode = failed ? 1 : 0

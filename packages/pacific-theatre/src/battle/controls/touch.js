@@ -8,6 +8,12 @@
 // and the aim by dragging on the sea. Camera and time buttons for both, and
 // a release under the clock that gives the controls back on a second tap,
 // as Backspace does (ENGINEERING §8).
+//
+// Round two (ROUND-2.md §4): at a gun station (the AA director, the gunner)
+// a drag anywhere on the box turns the aim and a fire button fires while
+// held; the bombardier has two steering buttons and a release. The station
+// bar is the HUD's (its buttons take a tap). The stick writes nothing until
+// it has been touched, so a take left alone stays on the record.
 
 import { HELM_STEPS, TELEGRAPH_LEVELS } from './bindings.js'
 
@@ -38,8 +44,49 @@ export class TouchControls {
     this.el = el
     this.ac = new AbortController()
     const p = input.player
-    if (p?.kind === 'aircraft') this.buildAircraft()
+    const st = p && !p.allStations ? p.station : null
+    if (st === 'aa' || st === 'gunner') this.buildGun()
+    else if (st === 'bombardier') this.buildBombardier()
+    else if (p?.kind === 'aircraft') this.buildAircraft()
     else this.buildShip()
+  }
+
+  /** A gun station: a drag on the box turns the aim; a fire button held fires. */
+  buildGun() {
+    const inp = () => this.input.player?.input
+    const canvas = this.input.app.canvas
+    const on = { signal: this.ac.signal }
+    let last = null
+    canvas.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch') return
+      last = { x: e.clientX, y: e.clientY, id: e.pointerId }
+    }, on)
+    canvas.addEventListener('pointermove', (e) => {
+      if (!last || e.pointerId !== last.id) return
+      const g = this.input.gun
+      this.input.gunInit()
+      g.az = (g.az + (e.clientX - last.x) * 0.18 + 360) % 360
+      g.el = Math.max(-10, Math.min(85, g.el - (e.clientY - last.y) * 0.18))
+      last = { x: e.clientX, y: e.clientY, id: e.pointerId }
+      this.input.acted = true
+    }, on)
+    canvas.addEventListener('pointerup', () => (last = null), on)
+    this.btn('fire', { right: '24px', bottom: '24px', minWidth: '84px', minHeight: '84px' }, () => inp() && (inp().fireHeld = true), () => inp() && (inp().fireHeld = false))
+    this.btn('cam', { right: '24px', top: '210px' }, () => this.input.battle.cycleCamera?.())
+    this.btn('time', { right: '96px', top: '210px' }, () => this.input.battle.cycleTime?.())
+    this.releaseButton()
+    this.active = true
+  }
+
+  /** The bombardier: steer the run-in left and right, release the stick. */
+  buildBombardier() {
+    const inp = () => this.input.player?.input
+    this.btn('◀', { left: '24px', bottom: '24px' }, () => inp() && (inp().roll = -1), () => inp() && (inp().roll = 0))
+    this.btn('▶', { left: '96px', bottom: '24px' }, () => inp() && (inp().roll = 1), () => inp() && (inp().roll = 0))
+    this.btn('release bombs', { right: '24px', bottom: '24px', minWidth: '96px', padding: '0 10px' }, () => inp() && inp().bombCount++)
+    this.btn('cam', { right: '24px', top: '210px' }, () => this.input.battle.cycleCamera?.())
+    this.releaseButton()
+    this.active = true
   }
 
   btn(label, style, onDown, onUp = null) {
@@ -133,6 +180,8 @@ export class TouchControls {
       }
       this.stick.id = e.pointerId
       this.active = true
+      this.stick.used = true
+      this.input.acted = true
       setStick(e)
     }, on)
     pad.addEventListener('pointermove', (e) => {
@@ -182,7 +231,8 @@ export class TouchControls {
   /** The bank-to-turn stick: a bank of up to 60° from the stick's x, a pull from its y; let go and the wings level. */
   update() {
     const p = this.input.player
-    if (!p || p.kind !== 'aircraft') return
+    if (!p || p.kind !== 'aircraft' || !this.stick.used) return
+    if (!p.allStations && p.station !== 'pilot') return
     const st = p.state
     const inp = p.input
     const wantBank = this.stick.x * 60

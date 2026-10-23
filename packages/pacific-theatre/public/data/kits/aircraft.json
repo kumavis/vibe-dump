@@ -422,7 +422,14 @@
     "weapon": "jp-77-t92",
     "count": 1,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-aichi-d3a",
+      "where": "armament: one 7.7 mm Type 92 flexible machine gun, rear (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -576,7 +583,14 @@
     "weapon": "jp-77-t92",
     "count": 1,
     "position": "rear",
-    "rounds": 582
+    "rounds": 582,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-nakajima-b5n",
+      "where": "armament: one 7.7 mm Type 92 machine gun, rear dorsal (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -751,7 +765,14 @@
     "weapon": "jp-77-t92",
     "count": 1,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-yokosuka-d4y-suisei",
+      "where": "armament: one flexible machine gun in the rear cockpit (R6 table A3, calibre verify)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -887,7 +908,14 @@
     "weapon": "jp-77-t92",
     "count": 2,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "taic-1-1945",
+      "where": "leaf n149 (Jill): the rear and tunnel guns (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -1025,7 +1053,14 @@
     "weapon": "jp-77-t92",
     "count": 1,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-aichi-e13a",
+      "where": "armament: one 7.7 mm Type 92 flexible machine gun, rear (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -1175,7 +1210,14 @@
     "weapon": "jp-77-t92",
     "count": 1,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-mitsubishi-f1m",
+      "where": "armament: one 7.7 mm flexible machine gun, rear (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -2165,7 +2207,14 @@
     "weapon": "us-30cal-an-m2",
     "count": 2,
     "position": "rear",
-    "rounds": 2000
+    "rounds": 2000,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-douglas-sbd-dauntless",
+      "where": "armament: two .30 M1919 flexible machine guns, rear (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -2343,7 +2392,14 @@
     "weapon": "us-50cal-an-m2",
     "count": 1,
     "position": "rear",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-vought-sb2u-vindicator",
+      "where": "armament: one flexible machine gun in the rear cockpit (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -2485,7 +2541,14 @@
     "weapon": "us-30cal-an-m2",
     "count": 1,
     "position": "rear",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-douglas-tbd-devastator",
+      "where": "armament: one .30 flexible machine gun, rear (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -2629,13 +2692,27 @@
     "weapon": "us-50cal-an-m2",
     "count": 1,
     "position": "turret",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-grumman-tbf-avenger",
+      "where": "armament: one .50 in the dorsal turret, one .30 ventral (R6 table A3)"
+     }
+    ]
    },
    {
     "weapon": "us-30cal-an-m2",
     "count": 1,
     "position": "ventral",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-grumman-tbf-avenger",
+      "where": "armament: one .50 in the dorsal turret, one .30 ventral (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -2819,13 +2896,27 @@
     "weapon": "us-50cal-an-m2",
     "count": 1,
     "position": "turret",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-grumman-tbf-avenger",
+      "where": "armament: one .50 in the dorsal turret, one .30 ventral (R6 table A3)"
+     }
+    ]
    },
    {
     "weapon": "us-30cal-an-m2",
     "count": 1,
     "position": "ventral",
-    "rounds": 600
+    "rounds": 600,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-grumman-tbf-avenger",
+      "where": "armament: one .50 in the dorsal turret, one .30 ventral (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -3329,13 +3420,27 @@
     "weapon": "us-50cal-an-m2",
     "count": 2,
     "position": "waist",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-consolidated-pby-catalina",
+      "where": "armament: two .50 in the waist blisters and a .30 in the ventral tunnel (R6 table A3)"
+     }
+    ]
    },
    {
     "weapon": "us-30cal-an-m2",
     "count": 1,
     "position": "ventral",
-    "rounds": 500
+    "rounds": 500,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-consolidated-pby-catalina",
+      "where": "armament: two .50 in the waist blisters and a .30 in the ventral tunnel (R6 table A3)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -3500,7 +3605,14 @@
     "weapon": "us-50cal-an-m2",
     "count": 8,
     "position": "turret",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-boeing-b-17-flying-fortress",
+      "where": "armament: .50 in the tail, ball, top turret and waist positions (R6 table A3)"
+     }
+    ]
    },
    {
     "weapon": "us-30cal-an-m2",
@@ -3656,7 +3768,14 @@
     "weapon": "us-50cal-an-m2",
     "count": 2,
     "position": "turret",
-    "rounds": 400
+    "rounds": 400,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-martin-b-26-marauder",
+      "where": "armament: the dorsal turret’s .50s (R6 table A3, the kit’s guns)"
+     }
+    ]
    },
    {
     "weapon": "us-30cal-an-m2",
@@ -3814,7 +3933,14 @@
     "weapon": "us-30cal-an-m2",
     "count": 3,
     "position": "turret",
-    "rounds": 500
+    "rounds": 500,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-douglas-b-18-bolo",
+      "where": "armament: the dorsal and ventral .30 positions (R6 table A3, the kit’s guns)"
+     }
+    ]
    }
   ],
   "payload": [
@@ -3970,7 +4096,14 @@
     "weapon": "us-30cal-an-m2",
     "count": 2,
     "position": "rear",
-    "rounds": 500
+    "rounds": 500,
+    "arc": "rear",
+    "sources": [
+     {
+      "id": "wp-douglas-a-20-havoc",
+      "where": "armament: the flexible .30s in the rear (R6 table A3, the kit’s guns)"
+     }
+    ]
    }
   ],
   "payload": [

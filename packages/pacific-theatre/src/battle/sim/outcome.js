@@ -5,6 +5,8 @@
 // the record's at the clock's end or when the player leaves, divergences
 // named. People are never counted here.
 
+import { oneAircraftName } from './ai.js'
+
 /** The sortie's score. */
 export function computeScore(sim) {
   const sc = sim._score
@@ -28,6 +30,110 @@ export function computeScore(sim) {
     releaseM: sc.releaseM,
     envelope: sc.envelope,
     objective: sc.objective,
+    rounds: Math.round(sc.rounds ?? 0),
+    aaBursts: sc.aaBursts ?? 0,
+    downedList: (sc.downedList ?? []).map((h) => ({ ...h })),
+  }
+}
+
+// --- the sortie (ROUND-2.md §3): a take's span [tTake, tRelease] and what happened in it ----------------------
+
+/** What the HUD and the after-card compare: the unit's damage at a moment. */
+function damageSnap(sim, i) {
+  const x = sim._X[i]
+  const s = sim.state
+  if (sim.slots[i].kind === 'ship') {
+    const d = x.dmg
+    const simR = d?.regime === 'sim'
+    return { alive: s.alive[i], damage: +s.damage[i].toFixed(3), fight: simR ? d.fight : 0, float: simR ? d.float : 0, list: +s.list[i].toFixed(1), fires: simR ? d.fires.filter((v) => v > 0).length : x.rd?.fires ?? 0, hits: simR ? d.hits ?? 0 : x.rd?.hits ?? 0, systemsOut: simR ? [...(d.systemsOut || [])] : [] }
+  }
+  return { alive: s.alive[i], damage: +(x.body?.damage ?? s.damage[i]).toFixed(3), fuelS: x.body ? Math.round(x.body.fuelS) : null, altM: Math.round(s.pos[3 * i + 1]) }
+}
+
+/** A sortie opened at a take. */
+export function openSortie(sim, pl, group) {
+  const i = pl.unitIndex
+  const u = sim.slots[i]
+  return {
+    t0: sim.t,
+    t1: null,
+    engagedAt: null,
+    index: i,
+    unit: { index: i, id: u.id, name: u.name, ja: u.ja ?? null, label: pl.role?.name ?? u.name, kind: u.kind, side: u.side, kit: u.kit, group: group?.id ?? null, groupName: group?.name ?? null },
+    role: { ...pl.role },
+    station: pl.station,
+    stations: [pl.station],
+    momentId: sim._momentPending?.id ?? null,
+    start: damageSnap(sim, i),
+    end: null,
+    score: null,
+    logFrom: sim._log.length,
+    logTo: null,
+    engaged: false,
+  }
+}
+
+/** The sortie closed at the release (or the unit's fate). */
+export function closeSortie(sim, so) {
+  so.t1 = sim.t
+  so.end = damageSnap(sim, so.index)
+  so.score = computeScore(sim)
+  so.station = sim.player?.station ?? so.station
+  so.engaged = !!sim.player?.engaged
+  so.logTo = sim._log.length
+}
+
+const short = (sim, i) => {
+  const u = sim.slots[i]
+  if (u.kind !== 'aircraft' || u.parked) return u.name
+  return sim._X[i].ac || sim._X[i].wasSpare ? oneAircraftName(sim, i) : u.name
+}
+
+/**
+ * sim.sortie: { held, t0, t1, from, to, durationS, unit, role, station,
+ * stations, momentId, touched, engagedAt, hits, downed, torpedoesHit,
+ * releases, damageTaken, survived, how, divergedDuring: [{ unit, index,
+ * name, kind, side, why, t, at }] }. While held, t1 is now.
+ */
+export function sortieOf(sim, so) {
+  const live = so.t1 == null
+  const end = live ? damageSnap(sim, so.index) : so.end
+  const sc = live ? computeScore(sim) : so.score
+  const t1 = live ? sim.t : so.t1
+  const st = so.start
+  const ship = so.unit.kind === 'ship'
+  const damageTaken = ship
+    ? { fight: +Math.max(0, end.fight - st.fight).toFixed(3), float: +Math.max(0, end.float - st.float).toFixed(3), list: +(end.list - st.list).toFixed(1), fires: end.fires, hits: Math.max(0, end.hits - st.hits), systemsOut: end.systemsOut }
+    : { damage: +Math.max(0, end.damage - st.damage).toFixed(3) }
+  const seen = new Map()
+  const log = sim._log.slice(so.logFrom, live ? sim._log.length : so.logTo)
+  for (const e of log) if (e.i !== so.index && !seen.has(e.i)) seen.set(e.i, e)
+  // (reason: ui-2's name for why, link.js's after-card)
+  const divergedDuring = [...seen.values()].map((e) => ({ unit: sim.slots[e.i].id, index: e.i, name: short(sim, e.i), kind: sim.slots[e.i].kind, side: sim.slots[e.i].side, why: e.why, reason: e.why, t: e.t, at: sim.clock.label(e.t) }))
+  return {
+    held: live,
+    t0: so.t0,
+    t1,
+    span: [so.t0, t1], // (ui-2's name for [t0, t1])
+    from: sim.clock.label(so.t0),
+    to: sim.clock.label(t1),
+    durationS: +(t1 - so.t0).toFixed(1),
+    unit: so.unit,
+    role: so.role,
+    station: live ? sim.player?.station ?? so.station : so.station,
+    stations: [...so.stations],
+    momentId: so.momentId,
+    touched: live ? !!sim.player?.engaged : so.engaged,
+    engagedAt: so.engagedAt,
+    // the aircraft the player brought down are hits of kind 'aircraft' (one each, by name: never a count of people)
+    hits: [...(sc?.hits ?? []), ...(sc?.downedList ?? [])],
+    downed: sc?.downed ?? 0,
+    torpedoesHit: sc?.torpedoesHit ?? 0,
+    releases: { bombs: sc?.bombs ?? 0, torpedoes: sc?.torpedoes ?? 0, salvos: sc?.salvos ?? 0, shells: sc?.shells ?? 0, rounds: sc?.rounds ?? 0, aaBursts: sc?.aaBursts ?? 0, releaseM: sc?.releaseM ?? null, envelope: sc?.envelope ?? [] },
+    damageTaken,
+    survived: sc?.survived ?? end.alive === 1,
+    how: sc?.how ?? null,
+    divergedDuring,
   }
 }
 
@@ -70,7 +176,7 @@ export function computeOutcome(sim, { at = null } = {}) {
   const diverged = []
   for (const r of sim.record.ships) {
     const i = r.slot
-    if (sim.units[i].kind !== 'ship') continue
+    if (sim.slots[i].kind !== 'ship') continue
     const a = simStatus(sim, i, T)
     const b = recordStatus(r, T)
     const so = side(bySide, r.side)
@@ -91,7 +197,7 @@ export function computeOutcome(sim, { at = null } = {}) {
       if (i == null) continue
       const x = sim._X[i]
       if (x.lostAt != null && x.lostAt <= T) simLost++
-      else if (sim.units[i].authority === 'record' && !x.spared && ac.lossT != null && ac.lossT <= T && !sim._cancelled.has(g.index)) simLost++
+      else if (sim.slots[i].authority === 'record' && !x.spared && ac.lossT != null && ac.lossT <= T && !sim._cancelled.has(g.index)) simLost++
     }
     side(record, g.side).aircraftLost += recLost
     side(bySide, g.side).aircraftLost += simLost
@@ -100,6 +206,6 @@ export function computeOutcome(sim, { at = null } = {}) {
   }
   // the player's own aircraft, if it came from a spare
   const pl = sim.player
-  if (pl && pl.kind === 'aircraft' && sim._X[pl.unitIndex].wasSpare && sim._X[pl.unitIndex].lostAt != null) side(bySide, sim.units[pl.unitIndex].side).aircraftLost++
+  if (pl && pl.kind === 'aircraft' && sim._X[pl.unitIndex].wasSpare && sim._X[pl.unitIndex].lostAt != null) side(bySide, sim.slots[pl.unitIndex].side).aircraftLost++
   return { at: T, label: sim.clock.label(T), bySide, record, diverged, guess: sim._guess || [] }
 }
