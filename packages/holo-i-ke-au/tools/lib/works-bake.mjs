@@ -13,7 +13,7 @@ import {
 } from './works-geom.mjs'
 import { LAYERS, layerSource, readLayer } from './works-sources.mjs'
 import { KINDS, ABOUT, WORKS, BLOCKS, BLOCK_BASES } from './works-dates.mjs'
-import { BLOCK_SHEETS, OSM_SOURCE, datesBySheets, readBuildings } from './works-osm.mjs'
+import { BLOCK_SHEETS, OSM_SOURCE, datesBySheets, readBuildings, useOf } from './works-osm.mjs'
 import { TRACED, ZONES } from './works-traced.mjs'
 
 export const TOLERANCE_METRES = 10
@@ -215,6 +215,7 @@ function properties(entry, extra) {
     ...(entry.class ? { class: entry.class } : {}),
     ...(extra.lanes ? { lanes: extra.lanes } : {}),
     ...(entry.storeys ? { storeys: entry.storeys } : {}),
+    ...(entry.use ? { use: entry.use } : {}),
     sources: entry.sources,
     note: entry.note,
     layer: extra.layer,
@@ -350,6 +351,7 @@ function blocksOf(B, lands, dir, ledger) {
       datePrecision: special?.datePrecision || (taken ? 'year' : 'by'),
       by: special || taken ? undefined : sheet || OSM_SOURCE.id,
       storeys,
+      use: useOf(b.tags),
       sources: [OSM_SOURCE.id, ...(sheet && !special ? [sheet] : []), ...B.sources],
       note: special?.note || B.note,
     }

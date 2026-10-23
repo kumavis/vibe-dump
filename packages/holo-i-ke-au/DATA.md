@@ -1165,6 +1165,17 @@ works `tools/fake-data.mjs` writes; the bake may rely on these.
   app fits one building to it, along its longer axis); a `range` is a Polygon
   or MultiPolygon, like a `land`. A block without a footprint stands along the
   nearest `runway` of its `group`, if one is within 800 m.
+- **What a block is for.** A `block` may carry `use`, from the tags of the
+  building it was made from: `hangar` (OSM `building=hangar` or
+  `aeroway=hangar`), `barracks` (`building=barracks` or `dormitory`,
+  `military=barracks`), `hospital` (`building=hospital`, `amenity=hospital`),
+  `warehouse` (`building=warehouse` or `shed`), `industrial`, `office`,
+  `school` (`school`, `college`, `university`, `kindergarten`), `church`
+  (`church`, `chapel`, `cathedral`), `residential` (`residential`, `house`,
+  `apartments`, `detached`, `semidetached_house`, `terrace`), `tower`; none
+  where the tags say only "building". It lets the app tell a hangar from a
+  large shop or a hospital of the same size where neither has `storeys`.
+  `check-data` holds it to this list and to blocks.
 - **The years.** A work is whole in its `from` and still stands in its `to`
   (it fades in over the year before `from` and out over the year after `to`,
   as a district feature's `to` is its last year). With `built: [start, end]`

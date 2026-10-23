@@ -71,6 +71,25 @@ export function downloadBlocks(ledger, dir, blocks, log) {
   log(`  osm: ${n} tiles over ${blocks.length} bases, and the sheets over each`)
 }
 
+/**
+ * What a building is for, read from its OSM tags (DATA.md, "Works, dated": a block's `use`), or undefined
+ * where the tags say no more than "building". A dormitory on a base is its barracks.
+ */
+export function useOf(tags) {
+  const b = tags.building
+  if (b === 'hangar' || tags.aeroway === 'hangar') return 'hangar'
+  if (b === 'barracks' || b === 'dormitory' || tags.military === 'barracks') return 'barracks'
+  if (b === 'hospital' || tags.amenity === 'hospital') return 'hospital'
+  if (b === 'warehouse' || b === 'shed') return 'warehouse'
+  if (b === 'industrial') return 'industrial'
+  if (b === 'office') return 'office'
+  if (['school', 'college', 'university', 'kindergarten'].includes(b)) return 'school'
+  if (['church', 'chapel', 'cathedral'].includes(b)) return 'church'
+  if (['residential', 'house', 'apartments', 'detached', 'semidetached_house', 'terrace'].includes(b)) return 'residential'
+  if (b === 'tower') return 'tower'
+  return undefined
+}
+
 /** Every building of a base's tiles: { id, tags, ring } with ring as closed [lon, lat] positions. */
 export function readBuildings(dir, base) {
   const nodes = new Map()

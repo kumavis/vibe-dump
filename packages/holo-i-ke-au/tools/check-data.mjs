@@ -1298,6 +1298,7 @@ function checkWorks() {
   const WORK_DATES = new Set(['year', 'decade', 'by'])
   const WORK_PRECISION = new Set(['exact', 'mapped', 'inferred'])
   const ROAD_CLASS = new Set(['interstate', 'state', 'county'])
+  const BLOCK_USE = new Set(['hangar', 'barracks', 'hospital', 'warehouse', 'industrial', 'office', 'school', 'church', 'residential', 'tower'])
   const AREAL = new Set(['land', 'field', 'range', 'block']) // Polygon or MultiPolygon
   const LINEAR = new Set(['runway', 'pier', 'breakwater', 'road', 'tunnel', 'line']) // LineString with width
   const FREE = new Set(['land', 'field', 'road', 'line']) // parts not held to lie inside their group's land or field
@@ -1386,6 +1387,7 @@ function checkWorks() {
       if (p.class !== undefined && !['road', 'tunnel'].includes(p.part)) bad(at, 'class belongs to a road')
       if (p.lanes !== undefined && !(Number.isInteger(p.lanes) && p.lanes > 0)) bad(at, 'lanes must be a whole number')
       if (p.storeys !== undefined && !(p.part === 'block' && Number.isInteger(p.storeys) && p.storeys > 0)) bad(at, 'storeys belongs to a block and is a whole number')
+      if (p.use !== undefined && !(p.part === 'block' && BLOCK_USE.has(p.use))) bad(at, `use “${p.use}” belongs to a block and is ${[...BLOCK_USE].join(' | ')}`)
       // sources, note
       if (!Array.isArray(p.sources) || !p.sources.length) bad(at, 'cites no source')
       for (const s of p.sources || []) useSource(at, s)
