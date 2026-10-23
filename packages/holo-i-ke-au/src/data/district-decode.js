@@ -365,9 +365,10 @@ const STREAM_KEEP = [7, 16] // the stream keeps its own bed: no terrace this nea
  * Lay the loʻi of `feature` (its rings rastered in `inside`) into terraces:
  * writes aux (g mask, b paddy, a index) and carve, and returns its paddy count.
  * hs: the heights smoothed (the floor's broad shape), cls: the step class,
- * chanDist: metres to the nearest trunk.
+ * chanDist: metres to the nearest trunk. `seed` makes its terraces its own
+ * (its index unless loʻi of the same years share one: data/district.js).
  */
-function layLoi({ index, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, mz }) {
+function layLoi({ index, seed = index, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, mz }) {
   const { x0, y0, x1, y1 } = box
   const bw = x1 - x0 + 1
   const bh = y1 - y0 + 1
@@ -381,7 +382,7 @@ function layLoi({ index, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, m
       const xm = i * mx
       const zm = j * mz
       // the edge wanders, as an inferred outline should: about ±12 m over a few hundred
-      const wob = (vnoise(xm / 140 + index * 7.1, zm / 140) - 0.5) * 24
+      const wob = (vnoise(xm / 140 + seed * 7.1, zm / 140) - 0.5) * 24
       const edge = smooth(0, LOI_EDGE, din[(j - y0) * bw + (i - x0)] + wob)
       const keep = smooth(STREAM_KEEP[0], STREAM_KEEP[1], chanDist[c])
       if (edge * keep < 0.02) continue
@@ -406,7 +407,7 @@ function layLoi({ index, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, m
       // value that runs smoothly between texels (district.glsl.js). Kept
       // modulo 64 terraces so a half float holds it finely; the shader
       // restores the whole of it from the height.
-      const u = (chanDist[c] - STREAM_KEEP[0]) / paddyWide(L, k, index) + ihash(index, L, k * 7 + 2)
+      const u = (chanDist[c] - STREAM_KEEP[0]) / paddyWide(L, k, seed) + ihash(seed, L, k * 7 + 2)
       seen.add((k * 4096 + L) * 4096 + Math.floor(u))
       aux[c * 4 + 1] = Math.round(255 * w)
       aux[c * 4 + 2] = k
@@ -1127,7 +1128,7 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
       const n = fillRings(inside, W, H, f.rings, 1)
       if (!n) continue
       if (f.kind === 'loi') {
-        counts[f.index] = layLoi({ index: f.index, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, mz })
+        counts[f.index] = (counts[f.index] || 0) + layLoi({ index: f.index, seed: f.seed, inside, box, m, hs, cls, chanDist, aux, carve, W, mx, mz })
       } else {
         // a pond's water, or the village's ground: a soft inner edge
         const bw = box.x1 - box.x0 + 1
@@ -1143,7 +1144,7 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
             carve[c * 2] = carve[c * 2 + 1] = 0
           }
         }
-        counts[f.index] = n
+        counts[f.index] = (counts[f.index] || 0) + n
       }
       for (let j = box.y0; j <= box.y1; j++) for (let i = box.x0; i <= box.x1; i++) if (inside[j * W + i]) clearIdx[j * W + i] = f.index
     }

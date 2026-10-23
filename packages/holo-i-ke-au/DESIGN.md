@@ -279,7 +279,10 @@ extent (the 1881 and 1899 survey sheets for Honolulu) it bounds the placement.
 Each era is a set of masks per island: polity of each moku, cultivation extent,
 settlement points with a size, forest extent. Interpolate between keyframes;
 hatch what is uncertain. Districts you go deep on get their own keyframes
-(c. 1700, 1795, 1850, now for Nuʻuanu) and their own asset sets.
+(c. 1700, 1795, 1850, now for Nuʻuanu; c. 1700, 1850 and now for
+Koʻolaupoko) and their own asset sets. Now is the present: the timeline runs
+on past the coda's tick to this year, so a loʻi laid again in 2010 stands
+at the end of it.
 
 Archaeology gives the pre-contact layers as growth, not as a frozen state:
 windward valley loʻi first, dryland field systems expanding after about 1400,

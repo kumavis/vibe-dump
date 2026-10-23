@@ -11,12 +11,15 @@
 // card set as a chapter's first page, the hover card kept to the far views,
 // the patches raising and lowering the ground by year (the data's own, and
 // the test masks tools/fake-data.mjs writes), the battle's forces by the stop
-// they name, and the camera gliding over a valley's walls; then what the page
-// costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au`
-// first (and `node tools/fake-data.mjs` for the test masks).
+// they name, and the camera gliding over a valley's walls; two districts, the
+// one the camera comes down into streamed and the other let go, never both
+// drawn; one district across the years it is drawn at, and at now; the coda's
+// chapter coming down into it; then what the page costs in heap and frame
+// time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
+// `node tools/fake-data.mjs` for the test masks and the test data).
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
-//   DATA=test node tools/smoke.mjs       (test-data/, from tools/fake-data.mjs)
+//   DATA=fake node tools/smoke.mjs       (test-data/, from tools/fake-data.mjs; DATA=test is the same)
 //   DATA=real node tools/smoke.mjs
 import { chromium } from 'playwright'
 import { createServer } from 'node:http'
@@ -28,7 +31,7 @@ import { dirname, join, normalize, extname } from 'node:path'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const port = Number(process.env.PORT || 5298)
 const realReady = existsSync(join(root, 'public/data/manifest.json')) && existsSync(join(root, 'public/data/events.json'))
-const useTest = process.env.DATA ? process.env.DATA === 'test' : !realReady
+const useTest = process.env.DATA ? process.env.DATA === 'test' || process.env.DATA === 'fake' : !realReady
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.png': 'image/png', '.woff2': 'font/woff2' }
 const server = createServer(async (req, res) => {
@@ -74,11 +77,13 @@ const expect = async (expr, want) => {
   const got = await ui(expr)
   if (got !== want) throw new Error(`${expr} = ${JSON.stringify(got)}, wanted ${JSON.stringify(want)}`)
 }
+// (a software frame near the ground can take several seconds on a busy machine)
 const frames = async (n) => {
   const f0 = await ui('app.frames')
-  await page.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 120000 })
+  await page.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 300000 })
 }
-const opts = { timeout: 20000 }
+// (a click waits for the page to draw a frame or two, which down over a town can take half a minute)
+const opts = { timeout: 90000 }
 const cardTitle = () => ui("document.querySelector('.card.show h1')?.textContent ?? null")
 /**
  * Land the year's easing and say where it landed. (Under the software
@@ -556,6 +561,10 @@ if (chapters > 1) {
   }
 } else console.log('  - fewer than two chapters: tour checks skipped')
 
+// (from the whole chain, where frames are quick: a step before may have left
+// the camera down in a district, where under the software renderer a frame
+// can outlast a click's wait)
+await run('const v = app.tour.chainView(); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()')
 for (const t of ['lines', 'routes', 'pins']) {
   await check(`toggle ${t}`, async () => {
     const was = await ui(`app.overlay.${t}`)
@@ -741,7 +750,9 @@ if (await ui('app.land.available')) {
     await run('app.timeline.setYear(1778); app.ui.timeline.finish()')
     await landReady()
     const k = {}
-    for (const [name, v] of [['chain', 'app.tour.chainView()'], ['oahu', "app.tour.islandView('oahu', 0)"], ['lanai', "app.tour.islandView('lanai', 0)"]]) {
+    // (a small island: Lānaʻi, or in data without it the smallest there is)
+    const small = await ui("app.tour.islands.has('lanai') ? 'lanai' : [...app.tour.islands.values()].sort((a, b) => (a.rect.x1 - a.rect.x0) * (a.rect.z1 - a.rect.z0) - (b.rect.x1 - b.rect.x0) * (b.rect.z1 - b.rect.z0))[0].id")
+    for (const [name, v] of [['chain', 'app.tour.chainView()'], ['oahu', "app.tour.islandView('oahu', 0)"], ['lanai', `app.tour.islandView('${small}', 0)`]]) {
       await view(v)
       await frames(2)
       k[name] = await ui('[Math.round(app.rig.state.distance), +app.shared.uniforms.uLandK.value.toFixed(3)]')
@@ -939,7 +950,11 @@ if (evs) {
 // its battles' forces stop by stop, lands each stop's camera where the stop
 // asks, and is let go once the camera has left.
 const districtCount = await ui('app.districts?.list.length ?? 0')
-if (districtCount) {
+// (these are the real Nuʻuanu's: its places and its battles; the test data's
+// stand-in for it is tried with the second district, further on)
+const nuuanuHere = await ui("!!app.districts?.list.some((d) => d.id === 'nuuanu') && app.tour.places.has('puiwa') && app.tour.places.has('kou')")
+if (districtCount && !nuuanuHere) console.log('  - no Nuʻuanu with its places: the Nuʻuanu district checks skipped')
+if (districtCount && nuuanuHere) {
   const offTour = (year) => run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish()`)
   const districtReady = () => page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
   const nearView = "app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 16 })"
@@ -1947,7 +1962,7 @@ if (districtCount) {
 // strip, towers nowhere else); the district placing its own and Kou winning;
 // no two buildings on one footprint; nothing flickering between two frames a
 // hair apart; and what the island's towns cost.
-if (await ui('app.districts?.list.length ?? 0')) {
+if (nuuanuHere) {
   const townReady = () => page.waitForFunction(() => window.__app.districts.cur?.state === 'ready' && window.__app.districts.cur.features?.settlements.ready, null, { timeout: 300000 })
   const atHarbour = async (year) => {
     await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish(); const v = app.tour.cameraView(app.tour.places.get('kou'), { bearing: 45, pitch: 0.6, distance: 40 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
@@ -2410,6 +2425,371 @@ if (await ui('app.districts?.list.length ?? 0')) {
 }
 // ==== [settlements] end =======================================================
 
+// ==== two districts, one across the years it is drawn at, and the coda ========= [koolaupoko]
+// With two districts in the manifest (the test data's stand-in for Nuʻuanu and
+// its Koʻolaupoko overlap where the pali is, as the real two do): the one the
+// camera comes down into is streamed while the other eases out and is let go,
+// never both drawn, and the GPU holds the same again each time it comes back;
+// where they overlap the one down keeps the ground, and with neither down the
+// first the manifest lists; once the camera leaves, both are let go. A
+// district drawn at several years (Koʻolaupoko: c. 1700, 1850 and now): each
+// feature and patch by its own from, to and until at each, the loʻi, the
+// village and the buildings reading differently at each, and at now nothing
+// of an earlier year: no patch, the shore the pack's own, the buildings by
+// the zoning. The coda's chapter: its card at its year, its steps past 1970,
+// the timeline running on to now, and each near stop streaming its district
+// ahead of the camera and landing down in it at the stop's own year, past
+// the era's if the stop says so.
+{
+  const dists = await ui('app.districts?.list.map((d) => d.id) ?? []')
+  const lastY = await ui('app.timeline.yearAt(app.timeline.max)')
+  const offTour2 = (year) => run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish()`)
+  const jumpDown = ([x, z], distance = 30) => run(`app.ui.card.close(); app.rig.jump({ x: ${x}, z: ${z}, distance: ${distance}, yaw: 0.3, pitch: 0.7 }); app.settle()`)
+  /** Until district `id` is down, ready and whole (settling as it goes). */
+  const downIn = (id) => page.waitForFunction((id) => { const app = window.__app, D = app.districts; app.settle(); return D.cur?.d.id === id && D.cur.state === 'ready' && D.k > 0.99 }, id, { timeout: 300000 })
+  /** Land in district `id` well inside it and, if `alone`, outside every other district's rect: the middlemost such point. */
+  const pointIn = (id, alone = true) =>
+    ui(`(() => {
+      const D = app.districts, d = D.list.find((x) => x.id === '${id}'), r = d.rect, m = 8
+      const cx = (r.x0 + r.x1) / 2, cz = (r.z0 + r.z1) / 2
+      let best = null, bd = Infinity
+      for (let j = 1; j < 48; j++) for (let i = 1; i < 48; i++) {
+        const x = r.x0 + ((r.x1 - r.x0) * i) / 48, z = r.z0 + ((r.z1 - r.z0) * j) / 48
+        if (x < r.x0 + m || x > r.x1 - m || z < r.z0 + m || z > r.z1 - m) continue
+        if (${alone} && D.list.some((o) => o !== d && x > o.rect.x0 - m && x < o.rect.x1 + m && z > o.rect.z0 - m && z < o.rect.z1 + m)) continue
+        if (app.world.metresAt(x, z) <= 3) continue
+        const e = Math.hypot(x - cx, z - cz)
+        if (e < bd) { bd = e; best = [x, z] }
+      }
+      return best
+    })()`)
+  /** Every frame from now until watchStop: how many districts are in the scene and drawn, and what came in while another eased out. */
+  const watchStart = () =>
+    page.evaluate(() => {
+      const app = window.__app
+      const w = (app.__dwatch = { frames: 0, terrains: 0, drawn: 0, featureSets: 0, labelLayers: 0, incoming: [], resident: [], incomingOnGpu: 0 })
+      const tick = () => {
+        if (app.__dwatch !== w) return
+        const D = app.districts
+        w.frames++
+        const t = app.world.group.children.filter((g) => g.name.startsWith('district '))
+        w.terrains = Math.max(w.terrains, t.length)
+        w.drawn = Math.max(w.drawn, t.filter((g) => g.visible).length)
+        w.featureSets = Math.max(w.featureSets, app.scene.children.filter((g) => g.name === 'district features').length)
+        w.labelLayers = Math.max(w.labelLayers, document.querySelectorAll('.dlabels').length)
+        if (D.incoming) {
+          if (!w.incoming.includes(D.incoming.d.id)) w.incoming.push(D.incoming.d.id)
+          if (D.incoming.terrain) w.incomingOnGpu++
+        }
+        if (D.cur && !w.resident.includes(D.cur.d.id)) w.resident.push(D.cur.d.id)
+        requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    })
+  const watchStop = () => ui('(() => { const w = app.__dwatch; app.__dwatch = null; return w })()')
+
+  if (dists.length >= 2) {
+    const [A, B] = dists
+    const spotA = await pointIn(A)
+    const spotB = await pointIn(B)
+    await check(`two districts: coming down into one streams it while the other eases out and is let go, never both drawn (${A}, ${B})`, async () => {
+      if (!spotA || !spotB) throw new Error(`no ground of its own in ${spotA ? B : A}`)
+      await offTour2(1850)
+      await jumpDown(spotA)
+      await downIn(A)
+      const rows = []
+      let memB = null
+      for (const [to, at] of [[B, spotB], [A, spotA], [B, spotB]]) {
+        await watchStart()
+        // (a flight, frame by frame: the old one eases out while the new one decodes)
+        await run(`app.rig.flyTo({ target: new app.rig.goal.target.constructor(${at[0]}, 0, ${at[1]}), distance: 30, yaw: 0.3, pitch: 0.7 }, 1.2)`)
+        // (some fifty frames each way, unsettled: on a busy machine a software frame can take seconds)
+        await page.waitForFunction((id) => { const D = window.__app.districts; return !window.__app.rig.flight && D.cur?.d.id === id && D.cur.state === 'ready' && !D.incoming && D.k > 0.99 }, to, { timeout: 900000 })
+        const w = await watchStop()
+        const st = await ui('app.districts.stats()')
+        const mem = await ui('({ ...app.renderer.info.memory })')
+        if (w.drawn > 1 || w.terrains > 1 || w.featureSets > 1 || w.labelLayers > 1) throw new Error(`into ${to}: ${w.drawn} drawn at once, ${w.terrains} in the scene, ${w.featureSets} sets of features, ${w.labelLayers} of names`)
+        if (w.incomingOnGpu) throw new Error(`into ${to}: it reached the GPU before the other had gone`)
+        if (!w.incoming.includes(to)) throw new Error(`into ${to}: it did not come in while the other eased out: ${JSON.stringify(w)}`)
+        rows.push(`into ${to} over ${w.frames} frames, decoded while ${w.resident.filter((r) => r !== to).join(', ')} eased out; then ${st.district} alone: ${st.gpuMB} MB on the GPU, ${st.cpuMB} MB here; ${mem.textures} textures, ${mem.geometries} geometries`)
+        if (to === B && memB && (mem.textures !== memB.textures || Math.abs(mem.geometries - memB.geometries) > 4)) throw new Error(`back in ${B}: ${JSON.stringify(mem)}, the first time ${JSON.stringify(memB)}`)
+        if (to === B && !memB) memB = mem
+      }
+      for (const r of rows) console.log(`      ${r}`)
+    })
+    // points across the overlap: where the moku is one district's own and the same all round, that district's; elsewhere none's
+    const ovPts = await ui(`(() => {
+      const D = app.districts, [a, b] = D.list
+      const r = { x0: Math.max(a.rect.x0, b.rect.x0), x1: Math.min(a.rect.x1, b.rect.x1), z0: Math.max(a.rect.z0, b.rect.z0), z1: Math.min(a.rect.z1, b.rect.z1) }
+      const out = []
+      if (!(r.x0 + 4 < r.x1 && r.z0 + 4 < r.z1)) return out
+      for (let j = 1; j < 10; j++) for (let i = 1; i < 10; i++) {
+        const x = r.x0 + ((r.x1 - r.x0) * i) / 10, z = r.z0 + ((r.z1 - r.z0) * j) / 10
+        const m = D.mokuAt(x, z)
+        const own = m ? D.list.filter((d) => D.homeOf(d) === m) : []
+        out.push({ xz: [x, z], moku: m, by: own.length === 1 ? own[0].id : null })
+      }
+      return out
+    })()`)
+    const byMoku = ovPts.find((p) => p.by)
+    const byNone = ovPts.find((p) => !p.by)
+    if (ovPts.length && spotA && spotB) {
+      await check('two districts: where they overlap, the ground goes to the one whose moku it is; on a moku’s edge to the one down; with neither down, the first listed', async () => {
+        const homes = await ui("app.districts.list.map((d) => d.id + ' in ' + app.districts.homeOf(d))")
+        const out = []
+        for (const [first, spot] of [[A, spotA], [B, spotB]]) {
+          for (const p of [byMoku, byNone].filter(Boolean)) {
+            await jumpDown(spot)
+            await downIn(first)
+            await jumpDown(p.xz, 20)
+            const want = p.by || first
+            await downIn(want)
+            const at = await ui(`app.districts.districtAt(${p.xz[0]}, ${p.xz[1]})?.id ?? null`)
+            if (at !== want) throw new Error(`with ${first} down, at ${p.moku ?? 'a moku’s edge'}: ${at}, wanted ${want}`)
+            out.push(`${first} down, ${p.moku ? `in ${p.moku}` : 'on an edge'}: ${want}`)
+          }
+        }
+        if (byNone) {
+          await run('app.districts.incoming = null; app.districts.drop(); app.districts.prefetched = null')
+          await jumpDown(byNone.xz, 20)
+          await downIn(A)
+          out.push(`neither down, on an edge: ${A}, the first listed`)
+        }
+        console.log(`      ${homes.join(', ')}; ${ovPts.filter((p) => p.by).length} of ${ovPts.length} points across the overlap go by their moku`)
+        console.log(`      ${out.join('; ')}`)
+      })
+    } else console.log('  - the two districts do not overlap: that check skipped')
+    // a near stop for each district, one in the overlap where there is one: the district its place is (by the place's moku where both boxes hold it)
+    const tourStops = await ui(`(() => {
+      const D = app.districts, T = app.tour, out = {}
+      T.chapters.forEach((ch) => ch.events.forEach((ev, s) => (ev.stops || []).forEach((st, i) => {
+        const p = T.places.get(st.place), g = p?.geometry
+        if (st.zoom !== 'near' || g?.type !== 'Point') return
+        const [x, z] = app.data.proj.toWorld(g.coordinates)
+        const holding = D.list.filter((d) => x > d.rect.x0 && x < d.rect.x1 && z > d.rect.z0 && z < d.rect.z1)
+        const own = holding.length > 1 && p.moku ? holding.filter((d) => D.homeOf(d) === p.moku) : holding
+        if (own.length !== 1) return
+        const want = own[0].id, both = holding.length > 1
+        if (!out[want] || (both && !out[want].both)) out[want] = { c: ch.index, s, i, ev: ev.id, place: st.place, moku: p.moku ?? null, want, both }
+      })))
+      return Object.values(out)
+    })()`)
+    if (tourStops.length >= 2 && spotA && spotB) {
+      await check('two districts: a tour stop streams the district its place is, whichever is down and wherever the camera hangs', async () => {
+        const rows = []
+        for (const st of tourStops) {
+          // (the other one down first)
+          const other = st.want === A ? B : A
+          await jumpDown(other === A ? spotA : spotB)
+          await downIn(other)
+          await run(`app.tour.goTo(${st.c}, ${st.s}); app.tour.goStop(${st.i})`)
+          const ahead = await ui('[app.districts.cur?.d.id ?? null, app.districts.incoming?.d.id ?? null]')
+          if (!ahead.includes(st.want)) throw new Error(`${st.ev} stop ${st.i + 1} (${st.place}): as the flight leaves, ${JSON.stringify(ahead)}, not ${st.want}`)
+          await page.evaluate(() => window.__app.rig.finishFlight())
+          await page.waitForFunction((id) => { const D = window.__app.districts; return D.cur?.d.id === id && D.cur.state === 'ready' }, st.want, { timeout: 300000 })
+          await run('app.settle(); app.settle()')
+          await frames(3)
+          const after = await ui('(() => { const D = app.districts, c = app.camera.position; return [D.cur?.d.id ?? null, D.incoming?.d.id ?? null, D.on, D.districtAt(c.x, c.z)?.id ?? null] })()')
+          if (after[0] !== st.want || after[1] || !after[2]) throw new Error(`${st.ev} stop ${st.i + 1}: landed with ${JSON.stringify(after)}, wanted ${st.want}`)
+          rows.push(`${st.ev} stop ${st.i + 1} at ${st.place}${st.both ? ` (in both boxes, ${st.moku})` : ''}: ${st.want} from ${other} down; the camera itself over ${after[3] ?? 'neither'}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+    } else console.log('  - no near stop in each district: the tour-stop check skipped')
+    await check('two districts: once the camera leaves, both are let go', async () => {
+      await view('app.tour.chainView()')
+      await frames(2)
+      await run('app.districts.lastSeen = -1e9; app.districts.prefetchAt = -1e9')
+      await frames(3)
+      const st = await ui("[app.districts.cur?.d.id ?? null, app.districts.incoming?.d.id ?? null, app.world.group.children.filter((g) => g.name.startsWith('district ')).length, app.scene.children.filter((g) => g.name === 'district features').length, document.querySelectorAll('.dlabels').length]")
+      if (st.some(Boolean)) throw new Error(`over the chain: ${JSON.stringify(st)}`)
+      console.log('      none resident, none coming, nothing of either in the scene')
+    })
+  } else console.log('  - one district or none: the two-district checks skipped')
+
+  // -- a district across the years it is drawn at
+  const yd = dists.includes('koolaupoko') ? 'koolaupoko' : null
+  if (yd) {
+    const spot = await pointIn(yd)
+    const at = {}
+    const YEARS = [1700, 1850, lastY]
+    const MODERN = ['house', 'bungalow', 'walkup', 'tower', 'block', 'midrise', 'store', 'shed', 'church', 'spire', 'clock']
+    /** The district at year y: each rastered feature's weight and the weight its years want, the patches', the names, the buildings, and by zoning class the kinds standing. */
+    const yearOf = async (y) => {
+      await offTour2(y)
+      await jumpDown(spot, 60)
+      await downIn(yd)
+      await page.waitForFunction(() => { const S = window.__app.districts.cur?.features?.settlements; return !!S && (S.ready || !!S.failed) }, null, { timeout: 300000 })
+      await run('app.settle(); app.settle()')
+      return ui(`(() => {
+        const D = app.districts, rec = D.cur, y = app.timeline.year
+        const holds = (p) => (p.from == null || y >= p.from) && (p.to == null || y < p.to + 1)
+        const feats = [...rec.d.byIndex].map(([i, f]) => ({ id: f.id ?? f.properties.name, kind: f.properties.kind, from: f.properties.from ?? null, to: f.properties.to ?? null, k: +D.featK[i].toFixed(3), want: holds(f.properties) ? 1 : 0 }))
+        const patches = D.patchWeights().map((p) => ({ id: p.id, until: p.until, k: p.k, want: y < p.until ? 1 : 0 }))
+        const S = rec.features.settlements
+        const Z = S.ready ? S.zoning : null
+        const cls = (x, z) => {
+          const img = Z?.zoning, r = Z?.rect
+          if (!img) return 0
+          const i = Math.floor(((x - r.x0) / (r.x1 - r.x0)) * img.W), j = Math.floor(((z - r.z0) / (r.z1 - r.z0)) * img.H)
+          return i < 0 || j < 0 || i >= img.W || j >= img.H ? 0 : img.px[j * img.W + i]
+        }
+        const byZone = {}
+        if (S.ready) for (const a of S.alive(y)) { if (a.landmark) continue; const c = cls(a.x, a.z); (byZone[c] ||= {})[a.kind] = (byZone[c][a.kind] || 0) + 1 }
+        return { y, feats, patches, census: S.ready ? S.census(y) : null, failed: S.failed ?? null, zoning: S.ready ? S.stats().zoning.zoning : null, byZone, names: rec.features.labels.items.filter((it) => holds(it.p)).map((it) => it.p.name), loi: feats.filter((f) => f.kind === 'loi' && f.k === 1).map((f) => f.id) }
+      })()`)
+    }
+    await check(`${yd} across the years it is drawn at (c. 1700, 1850 and now, ${lastY}): its features and patches by their own years, its ground different at each`, async () => {
+      for (const y of YEARS) at[y] = await yearOf(y)
+      const bad = []
+      for (const y of YEARS) {
+        const a = at[y]
+        if (a.failed || !a.census) bad.push(`${y}: no settlements (${a.failed})`)
+        for (const f of a.feats) if (f.k !== f.want) bad.push(`${y}: ${f.kind} ${f.id} (${f.from}–${f.to}) at ${f.k}`)
+        for (const p of a.patches) if (p.k !== p.want) bad.push(`${y}: patch ${p.id} (until ${p.until}) at ${p.k}`)
+      }
+      const [a, b, c] = YEARS.map((y) => at[y])
+      // (each year reads differently from the others on the ground: what of the features stands, or what is built)
+      const standing = (q) => JSON.stringify([q.feats.filter((f) => f.k === 1).map((f) => f.id), Object.keys(q.census?.by || {}).sort()])
+      for (const [p, q] of [[a, b], [b, c], [a, c]]) if (standing(p) === standing(q)) bad.push(`${p.y} and ${q.y} stand alike`)
+      // what the three must show apart, where the data has it: a pond filled after 1850, a loʻi laid again after the coda's year, a patch dated between, the village ending at 1850
+      const pick = (kind, test) => a.feats.filter((f) => f.kind === kind && test(f)).map((f) => f.id)
+      const k = (y, id) => at[y].feats.find((f) => f.id === id)?.k
+      for (const id of pick('fishpond', (f) => f.to !== null && f.to >= 1850 && f.to < lastY)) if (!(k(1850, id) === 1 && k(lastY, id) === 0)) bad.push(`pond ${id}: ${k(1850, id)} in 1850, ${k(lastY, id)} now`)
+      const later = pick('loi', (f) => f.from !== null && f.from > 2000)
+      if (!later.length) bad.push('no loʻi laid after 2000 to try')
+      for (const id of later) if (!(k(1850, id) === 0 && k(lastY, id) === 1)) bad.push(`loʻi ${id}, from ${a.feats.find((f) => f.id === id).from}: ${k(1850, id)} in 1850, ${k(lastY, id)} now (the timeline ends at ${lastY})`)
+      for (const p of a.patches.filter((p) => p.until > 1850 && p.until <= lastY)) if (!(at[1850].patches.find((q) => q.id === p.id).k === 1 && c.patches.find((q) => q.id === p.id).k === 0)) bad.push(`patch ${p.id} not whole in 1850 and gone now`)
+      // the buildings: kauhale c. 1700, the early kingdom's kinds in 1850, the zoning's now
+      const kinds = (q) => Object.keys(q.census?.by || {})
+      if (!kinds(a).length || kinds(a).some((x) => x !== 'kauhale')) bad.push(`c. 1700: ${JSON.stringify(a.census?.by)}`)
+      if (!kinds(b).length || kinds(b).some((x) => !['hale', 'frame', 'adobe', 'church'].includes(x))) bad.push(`1850: ${JSON.stringify(b.census?.by)}`)
+      if (!kinds(c).length || kinds(c).some((x) => !MODERN.includes(x))) bad.push(`now: ${JSON.stringify(c.census?.by)}`)
+      if (bad.length) throw new Error(bad.slice(0, 6).join('; '))
+      const brief = (q) => Object.entries(q.census.by).map(([kk, v]) => `${v} ${kk}`).join(', ')
+      for (const y of YEARS) {
+        const q = at[y]
+        const ponds = q.feats.filter((f) => f.kind === 'fishpond' && f.k === 1).length
+        const village = q.feats.filter((f) => f.kind === 'village' && f.k === 1).length
+        console.log(`      ${y}: ${q.loi.length} loʻi${q.loi.length && q.loi.length <= 6 ? ` (${q.loi.join(' ')})` : ''}; ${ponds} ponds, ${village} village; patches ${q.patches.map((p) => `${p.id}:${p.k}`).join(' ') || 'none'}; ${brief(q)}; names ${q.names.join(', ')}`)
+      }
+    })
+    await check(`${yd} at now: no patch, the shore the pack's own, the buildings by the zoning, nothing of an earlier year`, async () => {
+      const c = at[lastY] || (await yearOf(lastY))
+      const bad = []
+      if (c.patches.some((p) => p.k !== 0)) bad.push(`patches ${JSON.stringify(c.patches)}`)
+      if (!c.zoning) bad.push('no zoning read')
+      // the ground of every patched texel is the pack's own today
+      const ground = await ui(`(() => {
+        const D = app.districts, rec = D.cur, d = rec.d, pm = rec.pmap
+        if (!pm) return { n: 0, worst: 0 }
+        let n = 0, worst = 0
+        for (let k = 0; k < pm.w * pm.h; k += 7) {
+          if (!(pm.data[k * 4 + 1] || pm.data[k * 4 + 3] || pm.data[k * 4])) continue
+          const i = pm.x0 + (k % pm.w), j = pm.y0 + Math.floor(k / pm.w), cc = j * d.W + i
+          if (rec.aux[cc * 4 + 3]) continue
+          n++
+          worst = Math.max(worst, Math.abs(D.texel(i, j) - rec.metres[cc]))
+        }
+        return { n, worst }
+      })()`)
+      if (ground.worst > 0.01) bad.push(`a patched texel ${ground.worst.toFixed(2)} m off today's ground`)
+      // the zoning's say: the military's land sheds only, conservation and parks none, houses' land houses
+      const z = c.byZone
+      for (const [cls, ok] of [[10, ['shed']], [6, ['shed']], [1, ['house', 'bungalow']]]) for (const kk of Object.keys(z[cls] || {})) if (!ok.includes(kk)) bad.push(`${z[cls][kk]} ${kk} on zoning class ${cls}`)
+      for (const cls of [9, 12]) if (z[cls]) bad.push(`${JSON.stringify(z[cls])} on zoning class ${cls}`)
+      // and nothing older: no feature past its years, no thatch, frame, adobe or cottage
+      for (const kk of ['kauhale', 'hale', 'frame', 'adobe', 'cottage']) if (c.census.by[kk]) bad.push(`${c.census.by[kk]} ${kk}`)
+      if (bad.length) throw new Error(bad.slice(0, 6).join('; '))
+      const zones = Object.entries(z).map(([cls, by]) => `class ${cls}: ${Object.entries(by).map(([kk, v]) => `${v} ${kk}`).join(', ')}`).join(' · ')
+      console.log(`      ${ground.n} patched texels sampled, all today's ground; zoning ${c.zoning}; ${zones}`)
+    })
+  } else console.log('  - no district drawn across the years (Koʻolaupoko): those checks skipped')
+
+  // -- the coda's chapter
+  const coda = await ui("(() => { const ch = app.tour.chapters.find((c) => c.era.id === 'coda'); return ch ? ch.index : null })()")
+  if (coda !== null) {
+    await check('the coda: its card at its year, its steps past 1970, and the timeline running on to now', async () => {
+      await run(`app.tour.goTo(${coda}, -1); app.settle()`)
+      await expect('app.ui.card.mode', 'era')
+      const era = await ui(`app.tour.chapters[${coda}].era`)
+      const y0 = await yearSettles()
+      if (Math.abs(y0 - era.year) > 0.05 || !(y0 > 1970)) throw new Error(`the chapter's card at ${y0}, its era's year ${era.year}`)
+      const rows = []
+      const n = await ui(`app.tour.chapters[${coda}].events.length`)
+      for (let s = 0; s < n; s++) {
+        await run(`app.tour.goTo(${coda}, ${s}); app.rig.finishFlight()`)
+        const [id, want] = await ui('[app.tour.event.id, app.tour.stepYear(app.tour.event, app.tour.current)]')
+        const got = await yearSettles()
+        if (Math.abs(got - want) > 0.05 || !(got > 1970)) throw new Error(`${id}: the year ${got}, wanted ${want}`)
+        const kp = await ui('app.land?.available ? +app.land.position().toFixed(2) : null')
+        rows.push(`${id} ${got.toFixed(1)}${kp === null ? '' : ` (layers ${kp})`}`)
+      }
+      // the track's end: now, this year, where the last era's span reaches it; the layers at their last keyframe there
+      await run('app.ui.timeline.tween = null; app.timeline.set(app.timeline.max)')
+      const end = await ui("[app.timeline.year, new Date().getFullYear(), app.timeline.reachesNow, app.timeline.eras.at(-1).year + (app.timeline.eras.at(-1).yearPrecision || 0), document.querySelector('.tl-year').textContent, app.land?.available ? +app.land.position().toFixed(3) : null, app.land?.keyframes?.length ?? 0]")
+      const [yEnd, now, reaches, span, label, kp, nk] = end
+      if (span >= now && !(reaches && Math.abs(yEnd - now) < 1e-6)) throw new Error(`the last era reaches ${span}, but the track ends at ${yEnd}, not ${now}`)
+      if (reaches && label !== String(now)) throw new Error(`at the end the year reads “${label}”`)
+      if (kp !== null && nk && kp !== nk - 1) throw new Error(`the layers at the end stand at keyframe ${kp} of ${nk}`)
+      console.log(`      the card at ${y0}; the steps ${rows.join(', ')}; the track ends at ${yEnd} (“${label}”), the layers at keyframe ${kp}`)
+    })
+    const stops = await ui(`(() => {
+      const T = app.tour, ch = T.chapters[${coda}], out = []
+      ch.events.forEach((ev, s) => (ev.stops || []).forEach((st, i) => {
+        const g = T.places.get(st.place)?.geometry
+        const c = g?.type === 'Point' ? g.coordinates : null
+        if (st.zoom !== 'near' || !c) return
+        const [x, z] = app.data.proj.toWorld(c)
+        const d = app.districts?.districtAt(x, z)
+        if (d) out.push({ s, i, id: ev.id, place: st.place, year: st.year ?? null, camera: st.camera || null, district: d.id, xz: [x, z] })
+      }))
+      return out
+    })()`)
+    if (!stops.length) console.log('  - the coda has no near stop in a district: its stop checks skipped')
+    const pins = []
+    for (const st of stops) {
+      await check(`the coda: ${st.id} stop ${st.i + 1} flies down into ${st.district} at ${st.year ?? 'its step’s year'}`, async () => {
+        await run(`if (!(app.tour.active && app.tour.chapter === ${coda} && app.tour.step === ${st.s})) app.tour.goTo(${coda}, ${st.s}); app.tour.goStop(${st.i})`)
+        const ahead = await ui('[app.districts.cur?.d.id ?? null, app.districts.incoming?.d.id ?? null, !!app.rig.flight]')
+        if (ahead[0] !== st.district && ahead[1] !== st.district) throw new Error(`as the flight leaves, ${JSON.stringify(ahead)}: ${st.district} not streaming`)
+        await page.evaluate(() => window.__app.rig.finishFlight())
+        const y = await yearSettles()
+        await page.waitForFunction((id) => { const D = window.__app.districts; return D.cur?.d.id === id && D.cur.state === 'ready' }, st.district, { timeout: 300000 })
+        await run('app.settle(); app.settle()')
+        await frames(2)
+        const r = await ui(`(() => {
+          const D = app.districts, s = app.rig.state, yr = app.timeline.year
+          const holds = (p) => (p.from == null || yr >= p.from) && (p.to == null || yr < p.to + 1)
+          const off = [...D.cur.d.byIndex].filter(([i, f]) => +D.featK[i].toFixed(3) !== (holds(f.properties) ? 1 : 0)).map(([, f]) => f.id)
+          const v = new app.camera.position.constructor(${st.xz[0]}, app.world.heightAt(${st.xz[0]}, ${st.xz[1]}), ${st.xz[1]}).project(app.camera)
+          const px = [((v.x + 1) / 2) * innerWidth, ((1 - v.y) / 2) * innerHeight]
+          const pin = document.querySelector('.pin.active.show')
+          const pr = pin?.getBoundingClientRect()
+          const lb = pin?.querySelector('.pin-label')?.getBoundingClientRect()
+          return { on: D.on, k: +D.k.toFixed(3), id: D.cur.d.id, d: +s.distance.toFixed(2), pitch: +s.pitch.toFixed(3), yaw: +s.yaw.toFixed(3), off, label: document.querySelector('.tl-year').textContent,
+            kp: app.land?.available ? +app.land.position().toFixed(3) : null, place: px.map(Math.round), pin: pr ? [pr.left, pr.top, pr.right, pr.bottom].map(Math.round) : null, pinLabel: lb && lb.width ? [lb.left, lb.top, lb.right, lb.bottom].map(Math.round) : null }
+        })()`)
+        if (!r.on || r.k < 0.99 || r.id !== st.district) throw new Error(`landed with ${r.id} at ${r.k} (on ${r.on})`)
+        if (Number.isFinite(st.year) && (Math.abs(y - st.year) > 0.05 || !(y > 1970))) throw new Error(`the year ${y}, the stop's ${st.year}`)
+        if (!r.label.includes(String(Math.round(y)))) throw new Error(`the timeline reads “${r.label}” at ${y}`)
+        if (r.off.length) throw new Error(`features off their years at ${y}: ${r.off.join(', ')}`)
+        if (st.camera) {
+          const wantYaw = (-st.camera.bearing * Math.PI) / 180
+          const dy = Math.abs(((r.yaw - wantYaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI)
+          if (dy > 0.01 || Math.abs(r.pitch - (st.camera.pitch * Math.PI) / 2) > 0.01 || Math.abs(r.d - st.camera.distance) > 0.01) throw new Error(`the camera at yaw ${r.yaw} pitch ${r.pitch} distance ${r.d}, asked ${JSON.stringify(st.camera)}`)
+        }
+        // (the pin's label against the stop's place: reported, the pins being another pass's)
+        const covers = (b) => b && r.place[0] >= b[0] - 4 && r.place[0] <= b[2] + 4 && r.place[1] >= b[1] - 4 && r.place[1] <= b[3] + 4
+        pins.push(`${st.id} ${st.i + 1}: the place at ${r.place}, the pin ${r.pin ? `at ${r.pin}` : 'not shown'}${r.pinLabel ? `, its label at ${r.pinLabel}${covers(r.pinLabel) ? ' over the place' : ''}` : ''}`)
+        console.log(`      ${y.toFixed(1)} (“${r.label}”), the layers at keyframe ${r.kp}; ${st.district} down at ${r.k}, the camera as asked`)
+      })
+    }
+    for (const p of pins) console.log(`      pin: ${p}`)
+  } else console.log('  - no coda chapter: its checks skipped')
+}
+// ==== [koolaupoko] end ========================================================
+
 // Patches (DATA.md "Patches, on any pack"): each raises today's sea or sinks
 // today's land to its reef flat in the years before its until, and not after,
 // easing as the year crosses it; on the island packs and in a district, for
@@ -2470,8 +2850,10 @@ const districtPatchPoints = () =>
     for (const q of out) {
       q.x = r.x0 + ((q.i + 0.5) * (r.x1 - r.x0)) / d.W
       q.z = r.z0 + ((q.j + 0.5) * (r.z1 - r.z0)) / d.H
+      q.district = d.id
     }
-    return out
+    // (with two districts, only where this one is the one drawn while it is down)
+    return out.filter((q) => D.districtAt(q.x, q.z) === d)
   })()`)
 /** Each point before its patch's until and after it, the ground at it, and the weight easing across. */
 const patchByYear = async (pts) => {
@@ -2485,7 +2867,7 @@ const patchByYear = async (pts) => {
     const at = async (y) => {
       await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${y}); app.ui.timeline.finish(); app.rig.jump({ x: ${p.x}, z: ${p.z}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
       if (p.where === 'district') {
-        await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+        await page.waitForFunction((id) => { const D = window.__app.districts; return D.cur?.d.id === id && D.cur.state === 'ready' }, p.district, { timeout: 300000 })
         await run('app.settle(); app.settle()')
         // (the district's own ground as the year lays it: near its edge the world's is eased into the island's)
         return ui(`app.districts.metresAt(${p.x}, ${p.z})`)
@@ -2518,16 +2900,17 @@ const patchCheck = async (label) => {
   if (await ui('app.districts?.list.length ?? 0')) {
     const anyD = await ui('app.districts.list.some((d) => d.patches.length)')
     if (anyD) {
-      // (down at the district, so its patches are laid on its grid)
+      // (down at the district, so its patches are laid on its grid; with two, that one)
       await run("app.ui.card.close(); app.ui.onScrub(); const d = app.districts.list.find((d) => d.patches.length); const r = d.rect; app.rig.jump({ x: (r.x0 + r.x1) / 2, z: r.z0 + (r.z1 - r.z0) * 0.62, distance: 30, yaw: 0, pitch: 0.9 }); app.settle()")
-      await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
+      await page.waitForFunction(() => { const D = window.__app.districts; return D.cur?.state === 'ready' && D.cur.d === D.list.find((d) => d.patches.length) }, null, { timeout: 300000 })
       dpts = await districtPatchPoints()
     }
   }
   const listed = await ui('app.patches.all.length + (app.districts?.list || []).reduce((s, d) => s + d.patches.length, 0)')
   if (!pts.length && !dpts.length) throw new Error(`${label}: ${listed} patches listed, none with a point to try`)
   console.log(`      ${listed} patches listed; ${pts.length} on the islands and ${dpts.length} in the district have a point no other patch reaches, where they change the ground`)
-  const rows = await patchByYear([...pts, ...dpts])
+  // (the district's first, while it is the one down)
+  const rows = await patchByYear([...dpts, ...pts])
   const [y0, y1] = await ui('[app.timeline.eras[0].year, app.timeline.eras.at(-1).year]')
   const k = await easesAcross([...pts, ...dpts].find((p) => p.until - 1 >= y0 && p.until + 1 <= y1))
   for (const r of rows) console.log(`      ${r}`)
@@ -2947,9 +3330,13 @@ await check('perf', async () => {
     }
   }
   if (modes.length > 1) await run("app.setView('chiefdoms')")
-  // and down in a district, where there is one: the near zoom at Puʻiwa in 1795
+  // and down in a district, where there is one: the near zoom at Puʻiwa in 1795 (in data
+  // without Nuʻuanu's places, over the middle of the first district listed)
   if (await ui('app.districts?.list.length ?? 0')) {
-    await run("app.timeline.setYear(1795); app.ui.timeline.finish(); const v = app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 16 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()")
+    const nearView = nuuanuHere
+      ? "app.tour.cameraView(app.tour.places.get('puiwa'), { bearing: 42, pitch: 0.38, distance: 16 })"
+      : '(() => { const r = app.districts.list[0].rect; return { target: { x: (r.x0 + r.x1) / 2, z: (r.z0 + r.z1) / 2 }, distance: 16, yaw: 0.7, pitch: 0.38 } })()'
+    await run(`app.timeline.setYear(1795); app.ui.timeline.finish(); const v = ${nearView}; app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
     await page.waitForFunction(() => window.__app.districts.cur?.state === 'ready', null, { timeout: 300000 })
     await run('app.settle(); app.settle()')
     await frames(4)

@@ -269,7 +269,7 @@ export class UI {
     const tour = this.tour
     tour.leave()
     const tl = this.app.timeline
-    if (this.card.mode === 'era' && this.card.chapter?.era !== tl.eras[Math.round(Math.max(0, Math.min(tl.max, s)))]) this.card.close()
+    if (this.card.mode === 'era' && this.card.chapter?.era !== tl.eraAt(s)) this.card.close()
     if (!this.card.ev) {
       this.pins.activeEvent = null
       this.pins.setStopPlace(null)

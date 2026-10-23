@@ -97,7 +97,7 @@ export class Tour {
       let i = index.get(ev.era)
       if (i === undefined) {
         // an era that isn't in eras.json: the chapter its date falls in
-        i = Math.round(tl.sAtYear(start))
+        i = tl.eras.indexOf(tl.eraAt(tl.sAtYear(start)))
         strays.push(ev.id)
       }
       rows[i].push({ ev, start, order })
@@ -243,7 +243,7 @@ export class Tour {
     this.ui.pins.activeEvent = ev
     this.ui.pins.setStopPlace(null)
     this.ui.card.open(ev)
-    this.fly(this.gentleView(ev))
+    this.fly(this.gentleView(ev), false, this.placeOf(ev))
   }
 
   goTo(c, s = -1, { jump = false, gentle = false, stop = -1 } = {}) {
@@ -285,7 +285,7 @@ export class Tour {
     ui.pins.activeEvent = ev
     ui.pins.setStopPlace(null)
     ui.card.open(ev)
-    const dur = this.fly(gentle ? this.gentleView(ev) : this.eventView(ev), jump)
+    const dur = this.fly(gentle ? this.gentleView(ev) : this.eventView(ev), jump, this.placeOf(ev))
     const tl = this.app.timeline
     const [a, b] = tl.window
     const span = eventSpan(ev)
@@ -313,7 +313,7 @@ export class Tour {
     if (s) {
       // a stop's own camera, if it has one; else its place at its zoom
       const view = pt ? (s.camera ? this.cameraView(place, s.camera) : this.pointView(place, ZOOM[s.zoom] ?? ZOOM.island)) : null
-      const dur = this.fly(view, jump)
+      const dur = this.fly(view, jump, place)
       if (Number.isFinite(s.year)) this.setYear(s.year, dur, jump)
     }
     this.notify()
@@ -322,7 +322,8 @@ export class Tour {
   /**
    * An event that walks into a district: start its pack streaming as soon as
    * the event is opened (data/district.js decodes it in a worker), so it is
-   * down when the walk gets there.
+   * down when the walk gets there. Where two districts' boxes overlap, the
+   * stop's place decides by its moku (render/district.js).
    */
   prefetch(ev) {
     const D = this.app.districts
@@ -332,7 +333,7 @@ export class Tour {
       const pt = p && geometryPoint(p.geometry)
       if (!pt || s.zoom === 'far') continue
       const [x, z] = this.app.data.proj.toWorld(pt)
-      if (D.prefetch(x, z)) return
+      if (D.prefetch(x, z, p.moku)) return
     }
   }
 
@@ -483,8 +484,10 @@ export class Tour {
    * quick, a crossing of the chain or a dive from the whole chain to a valley
    * takes longer, and nothing takes much over three seconds. Between distant
    * places the rig rises mid-flight (its `hop`), so the chain reads on the way.
+   * `place`, the gazetteer place the view is of: where two districts' boxes
+   * overlap, its moku says which one the flight comes down into.
    */
-  fly(view, jump = false) {
+  fly(view, jump = false, place = null) {
     if (!view) return 1
     const rig = this.app.rig
     if (jump) {
@@ -497,8 +500,8 @@ export class Tour {
     const dur = clamp(1.1 + Math.sqrt(travel) * 0.032 + zoom * 0.28, 1.1, 3.4)
     // (into a district: it starts streaming now, and the landing waits for it)
     const D = this.app.districts
-    const into = D && view.distance < 130 ? D.prefetch(view.target.x, view.target.z) : null
-    rig.flyTo(view, dur, into ? { ready: () => D.readyAt(view.target.x, view.target.z) } : {})
+    const into = D && view.distance < 130 ? D.prefetch(view.target.x, view.target.z, place?.moku) : null
+    rig.flyTo(view, dur, into ? { ready: () => D.cur?.d === into && D.cur.state === 'ready' } : {})
     return dur
   }
 

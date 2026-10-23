@@ -360,7 +360,8 @@ export class Routes {
       return E[i].year + (s - i) * (E[i + 1].year - E[i].year)
     }
     let s = 0
-    if (year >= E.at(-1).year) s = E.length - 1
+    // (past the last era at its spacing, as time.js runs a track on to now)
+    if (year >= E.at(-1).year) s = E.length - 1 + (year - E.at(-1).year) / Math.max(1e-6, E.at(-1).year - E.at(-2).year)
     else if (year > E[0].year) {
       for (let i = 0; i + 1 < E.length; i++) {
         if (year <= E[i + 1].year) {

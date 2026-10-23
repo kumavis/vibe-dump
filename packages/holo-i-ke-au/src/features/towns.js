@@ -249,7 +249,7 @@ class IslandTowns extends Scatter {
     this.features = []
     for (const d of app.districts?.list || []) {
       if (d.parent !== this.id) continue
-      for (const [, f] of d.byIndex) {
+      for (const { f } of d.rastered) {
         const ring = (f.geometry?.coordinates?.[0] || []).map((c) => app.data.proj.toWorld(c))
         if (ring.length < 3) continue
         const xs = ring.map((p) => p[0])

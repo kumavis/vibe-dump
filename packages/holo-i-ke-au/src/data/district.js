@@ -6,7 +6,8 @@
 // The features that are rastered onto the pack's grid (loʻi, fishponds, the
 // village) each get an index into the aux map's alpha (DIST_INDEX), and every
 // feature keeps its span of years, so the renderer can weigh each one in the
-// chosen year.
+// chosen year; where a kind has more features than indices (Koʻolaupoko's
+// forty loʻi), those of the same years share one.
 //
 // A district's patches are those its own manifest lists and those
 // patches/manifest.json lists for its pack (data/patches.js), any number of
@@ -73,23 +74,37 @@ function describeDistrict(d, features, data, warn) {
   const [west, south, east, north] = d.bounds
   const abs = (f) => data.abs(`districts/${f}`)
   const toGrid = ([lon, lat]) => [((lon - west) / (east - west)) * W, ((north - lat) / (north - south)) * H]
-  // the rastered features, indexed by kind
+  // The rastered features, indexed by kind: an index each while a kind has
+  // room for them all; past that, those of the kind with the same years share
+  // one, since an index carries nothing but its weight in the year (each
+  // keeps its own seed, so a loʻi's terraces are still its own).
   const next = { loi: DIST_INDEX.loi, pond: DIST_INDEX.pond, other: DIST_INDEX.other }
   const limit = { loi: DIST_INDEX.pond - 1, pond: DIST_INDEX.other - 1, other: DIST_INDEX.max }
+  const kindOf = (p) => (p.kind === 'loi' ? 'loi' : p.kind === 'fishpond' ? 'pond' : p.kind === 'village' ? 'other' : null)
+  const drawn = (features.features || []).filter((f) => kindOf(f.properties || {}) && f.geometry?.type === 'Polygon')
+  const share = Object.fromEntries(Object.keys(next).map((k) => [k, drawn.filter((f) => kindOf(f.properties) === k).length > limit[k] - next[k] + 1]))
+  const bySpan = new Map()
   const raster = []
   const byIndex = new Map()
-  for (const f of features.features || []) {
-    const p = f.properties || {}
-    const kind = p.kind === 'loi' ? 'loi' : p.kind === 'fishpond' ? 'pond' : p.kind === 'village' ? 'other' : null
-    const g = f.geometry
-    if (!kind || g?.type !== 'Polygon') continue
-    if (next[kind] > limit[kind]) {
-      warn(`district ${d.id}: more ${p.kind} features than the aux map has room for; ${p.name} is not drawn`)
-      continue
+  // (every rastered feature with its index, where several may share one)
+  const rastered = []
+  for (const f of drawn) {
+    const p = f.properties
+    const kind = kindOf(p)
+    const seed = DIST_INDEX[kind] + rastered.filter((r) => kindOf(r.f.properties) === kind).length
+    const span = `${kind} ${spanOf(p).join(' ')}`
+    let index = share[kind] ? bySpan.get(span) : undefined
+    if (index === undefined) {
+      if (next[kind] > limit[kind]) {
+        warn(`district ${d.id}: more ${p.kind} features in years of their own than the aux map has room for; ${p.name} is not drawn`)
+        continue
+      }
+      index = next[kind]++
+      if (share[kind]) bySpan.set(span, index)
     }
-    const index = next[kind]++
-    raster.push({ index, kind: kind === 'other' ? p.kind : kind, rings: g.coordinates.map((r) => r.map(toGrid)) })
-    byIndex.set(index, f)
+    raster.push({ index, seed, kind: kind === 'other' ? p.kind : kind, rings: f.geometry.coordinates.map((r) => r.map(toGrid)) })
+    if (!byIndex.has(index)) byIndex.set(index, f)
+    rastered.push({ index, f })
   }
   // its own manifest's patches (DATA.md: kind defaults to lower, depth to -1)
   const own = (d.patches || []).map((p) => describePatch(p, abs, (m) => warn(`district ${d.id}: ${m}`), d.id)).filter(Boolean)
@@ -113,7 +128,9 @@ function describeDistrict(d, features, data, warn) {
     patches: own,
     features,
     raster,
+    // each index's feature (the first of those sharing it), and every rastered feature with its index
     byIndex,
+    rastered,
     sources: d.sources || [],
   }
 }
@@ -174,7 +191,7 @@ export class DistrictDecoder {
       mx: d.mx,
       mz: d.mz,
       rect: { x0: d.rect.x0, z0: d.rect.z0, x1: d.rect.x1, z1: d.rect.z1 },
-      features: d.raster.map((f) => ({ index: f.index, kind: f.kind, rings: f.rings })),
+      features: d.raster.map((f) => ({ index: f.index, seed: f.seed, kind: f.kind, rings: f.rings })),
     }
   }
 

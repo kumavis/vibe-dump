@@ -12,8 +12,8 @@
 //     click / hover: a selector to click, or to rest the pointer on (after the settle)
 //     mouse: [x, y] to rest the pointer at on the scene (after the settle), as a hand would
 //     settle: snap the camera's flight, the year and the island packs to where they're going (default true)
-//   DATA=test   load test-data/ (tools/fake-data.mjs); the default when
-//               public/data/manifest.json doesn't exist yet
+//   DATA=fake   load test-data/ (tools/fake-data.mjs; DATA=test is the same); the
+//               default when public/data/manifest.json doesn't exist yet
 //   VIEWPORT=390x844, PORT=5299, DPR=2
 //
 // The package directory is served as the root, so the app's ?data= can reach
@@ -85,12 +85,30 @@ const PRESETS = {
     nearShot('hilo-now', 'hilo', 2020, [300, 0.3, 22]),
     nearShot('kohala-1778', [-155.815, 20.245], 1778, [30, 0.3, 12]),
   ],
+  koolaupoko: [],
 }
+// ==== koolaupoko: a district at the years it is drawn at, and the coda's stops ====== [koolaupoko]
+//   node tools/shoot.mjs <outdir> koolaupoko       (DATA=fake for the test district)
+// The coda's second near stop's place framed as its camera has it, pulled
+// back to show the shore, c. 1700, in 1850 and now (the timeline's end);
+// then each of the coda's near stops as the tour flies to it, once its
+// district is down.
+{
+  const nearStops = "(() => { const T = app.tour, ch = T.chapters.find((c) => c.era.id === 'coda'), out = []; if (ch) ch.events.forEach((ev, s) => (ev.stops || []).forEach((st, i) => { if (st.zoom === 'near') out.push([ch.index, s, i]) })); return out })()"
+  const down = "(() => { const D = app.districts, t = app.rig.state.target, d = D.districtAt(t.x, t.z); return !!d && D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready })()"
+  const report = '{ district: app.districts.stats(), year: app.timeline.year, label: document.querySelector(".tl-year").textContent, pin: document.querySelector(".pin.active.show")?.getBoundingClientRect() ?? null }'
+  const shore = (year) => `app.ui.card.close(); app.ui.onScrub(); ${year === 'now' ? 'app.timeline.set(app.timeline.max)' : `app.timeline.setYear(${year})`}; const at = ${nearStops}[1] || ${nearStops}[0]; const st = app.tour.chapters[at[0]].events[at[1]].stops[at[2]]; const v = app.tour.cameraView(app.tour.places.get(st.place), { bearing: st.camera?.bearing ?? 225, pitch: 0.42, distance: 34 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`
+  PRESETS.koolaupoko.push(
+    ...['1700', '1850', 'now'].map((y) => ({ name: `shore-${y}`, eval: shore(y), until: down, frames: 4, report })),
+    ...[0, 1, 2, 3].map((k) => ({ name: `coda-stop-${k + 1}`, eval: `const at = ${nearStops}[${k}]; if (at) { app.tour.goTo(at[0], at[1]); app.tour.goStop(at[2]) }`, until: down, frames: 4, report })),
+  )
+}
+// ==== [koolaupoko] end ===============================================================
 // ==== [settlements] end ===============================================================
 const shots = PRESETS[process.argv[3]] || JSON.parse(process.argv[3] || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
-const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
+const useTest = process.env.DATA ? process.env.DATA === 'test' || process.env.DATA === 'fake' : !existsSync(join(root, 'public/data/manifest.json'))
 mkdirSync(outDir, { recursive: true })
 
 // ==== the battles' people (features/soldiers.js) ===================================== [soldiers]

@@ -18,6 +18,13 @@
 // tools/smoke.mjs loads them itself). They are shapes for trying the patch
 // path, placed where a harbour's dredging and a reef's filling would be, and
 // not a record of either.
+//
+// And two test districts over the made-up Oʻahu (test-data/districts/), a
+// stand-in for Nuʻuanu and a Koʻolaupoko drawn at c. 1700, 1850 and now,
+// overlapping where the pali is; era layers and zoning for the test Oʻahu
+// (test-data/layers/); a coda era that reaches the present, and
+// coda events whose near stops come down into Koʻolaupoko. Shapes on the
+// made-up shore for trying those paths (tools/smoke.mjs with DATA=fake).
 import { deflateSync } from 'node:zlib'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -110,7 +117,10 @@ const ISLANDS = [
     name: 'Test ʻĀina Komohana',
     domes: [
       { lon: -158.14, lat: 21.47, H: 1150, R: 15, ax: 2.0, rot: -35 },
-      { lon: -157.82, lat: 21.44, H: 900, R: 13, ax: 2.5, rot: -40 },
+      // (long enough to carry the test districts' boxes, Nuʻuanu's and
+      // Koʻolaupoko's, with a windward shore through the second and a
+      // coastal plain below it)
+      { lon: -157.798, lat: 21.37, H: 950, R: 23, ax: 2.4, rot: -45, plain: true },
     ],
     moku: ['Waialua', 'Koʻolauloa', 'Koʻolaupoko', 'Kona', 'ʻEwa', 'Waiʻanae'],
   },
@@ -191,6 +201,12 @@ function heightAt(x, z) {
     const band = smooth(-200, 500, h) * (1 - smooth(2400, 3600, h))
     h -= 420 * wind * band * Math.pow(1 - ridged, 2.2)
     h += (fbm(x * 0.6, z * 0.6, 21, 4) - 0.5) * 120 * smooth(-100, 300, h)
+    // a coastal plain: the lowest 400 m laid out flat toward the shore (a cube
+    // of the height's share, easing back into the slope above)
+    if (near.plain && h > 0 && h < 400) {
+      const u = h / 400
+      h = 400 * u * u * u + (h - 400 * u * u * u) * smooth(0.6, 1, u)
+    }
   }
   return h
 }
@@ -224,12 +240,16 @@ const SCALE = 0.25
 const OFFSET = -6000
 const r7 = (v) => Math.round(v * 1e7) / 1e7
 
-function bakePack(id, kind, name, bounds, W, H) {
+// each pack's metres as baked, for the test layers (by pack id)
+const packMetres = new Map()
+
+function bakePack(id, kind, name, bounds, W, H, base = out) {
   const [w, s, e, n] = bounds
-  const dir = join(out, id)
+  const dir = join(base, id)
   mkdirSync(dir, { recursive: true })
   const rgb = new Uint8Array(W * H * 3)
   const grey = new Uint8Array(W * H)
+  const metres = new Float32Array(W * H)
   const ln40 = Math.log(40)
   for (let j = 0; j < H; j++) {
     const lat = n - ((j + 0.5) / H) * (n - s)
@@ -242,6 +262,7 @@ function bakePack(id, kind, name, bounds, W, H) {
       if (m <= 0) m = Math.min(m, -0.25)
       const v = Math.max(0, Math.min(65535, Math.round((m - OFFSET) / SCALE)))
       const c = j * W + i
+      metres[c] = m
       rgb[c * 3] = v >> 8
       rgb[c * 3 + 1] = v & 255
       const mm = rainAt(x, z, m)
@@ -250,6 +271,7 @@ function bakePack(id, kind, name, bounds, W, H) {
   }
   writePNG(join(dir, 'height.png'), W, H, rgb, 3)
   writePNG(join(dir, 'rain.png'), W, H, grey, 1)
+  packMetres.set(id, { metres, rain: grey, W, H, bounds })
   const kmx = ((e - w) * KX) / W
   const kmz = ((n - s) * KZ) / H
   return {
@@ -295,44 +317,59 @@ function islandBounds(isl) {
 }
 
 // --- boundaries: wedges from each island's middle out to its coast ---------------------
-function coastAt(isl, th) {
+function coastAt(cx, cz, th) {
   let r = 0.5
-  for (; r < 140; r += 0.15) if (heightAt(isl.cx + Math.cos(th) * r, isl.cz + Math.sin(th) * r) <= 0) break
+  for (; r < 140; r += 0.15) if (heightAt(cx + Math.cos(th) * r, cz + Math.sin(th) * r) <= 0) break
   return r + 0.3 // a little past the shore, as the real layer runs to the waterline
 }
 function islandName(id) {
   return { oahu: 'Oʻahu', maui: 'Maui', hawaii: 'Hawaiʻi' }[id]
 }
+/**
+ * Each island's moku as wedges from its middle out to its coast; Oʻahu's
+ * from each of its two summits, the eastern one's split along its crest,
+ * Kona to the southwest and Koʻolaupoko to the northeast, as the test
+ * districts over it want them (render/district.js gives the ground where two
+ * districts overlap to the one whose moku it is).
+ */
+function mokuGroups(isl) {
+  if (isl.id !== 'oahu') return [{ cx: isl.cx, cz: isl.cz, moku: isl.moku, off: 0.07 }]
+  const [w, e] = isl.domes
+  return [
+    { cx: w.x, cz: w.z, moku: ['Waialua', 'Koʻolauloa', 'ʻEwa', 'Waiʻanae'], off: 0.07 },
+    { cx: e.x, cz: e.z, moku: ['Kona', 'Koʻolaupoko'], off: 0.125 },
+  ]
+}
 function boundaries() {
   const moku = []
   const ahupuaa = []
   let gid = 1
-  for (const isl of ISLANDS) {
-    const N = isl.moku.length
+  for (const isl of ISLANDS) for (const grp of mokuGroups(isl)) {
+    const N = grp.moku.length
     const coast = []
     const STEP = 360 * 2
     for (let k = 0; k <= STEP; k++) {
       const th = (k / STEP) * Math.PI * 2
-      coast.push(coastAt(isl, th))
+      coast.push(coastAt(grp.cx, grp.cz, th))
     }
     const ring = (a, b) => {
       // centre, then the coast from angle a to angle b (fractions of a turn)
-      const pts = [[r7(lonOf(isl.cx)), r7(latOf(isl.cz))]]
+      const pts = [[r7(lonOf(grp.cx)), r7(latOf(grp.cz))]]
       const k0 = Math.round(a * STEP)
       const k1 = Math.round(b * STEP)
       for (let k = k0; k <= k1; k++) {
         const th = (k / STEP) * Math.PI * 2
         const r = coast[k % STEP]
-        pts.push([r7(lonOf(isl.cx + Math.cos(th) * r)), r7(latOf(isl.cz + Math.sin(th) * r))])
+        pts.push([r7(lonOf(grp.cx + Math.cos(th) * r)), r7(latOf(grp.cz + Math.sin(th) * r))])
       }
       pts.push(pts[0])
       return pts
     }
-    const off = 0.07
+    const off = grp.off
     for (let m = 0; m < N; m++) {
       const a = off + m / N
       const b = off + (m + 1) / N
-      const name = isl.moku[m]
+      const name = grp.moku[m]
       moku.push({ type: 'Feature', properties: { name, island: islandName(isl.id), gisId: gid++ }, geometry: { type: 'Polygon', coordinates: [ring(a, b)] } })
       const parts = 3 + (m % 4)
       for (let p = 0; p < parts; p++) {
@@ -354,13 +391,16 @@ function boundaries() {
 }
 
 // --- gazetteer: test entries only ------------------------------------------------------------
-function gazetteer() {
+function gazetteer(spots) {
   const eras = [
     { id: 'first-canoes', label: 'the first canoes', year: 1100, yearPrecision: 100, note: 'test era', sources: ['test-source-a'] },
     { id: 'umi', label: 'in the time of ʻUmi', year: 1600, yearPrecision: 50, note: 'test era', sources: ['test-source-a'] },
     { id: 'kalaniopuu', label: 'in the time of Kalaniʻōpuʻu', year: 1778, yearPrecision: 5, note: 'test era', sources: ['test-source-b'] },
     { id: 'kamehameha', label: 'Kamehameha I', year: 1810, yearPrecision: 1, note: 'test era', sources: ['test-source-b'] },
     { id: 'kingdom', label: 'the kingdom', year: 1850, yearPrecision: 1, note: 'test era', sources: ['test-source-c'] },
+    { id: 'test-late-kingdom', label: 'the end of the kingdom', year: 1895, yearPrecision: 4, note: 'test era', sources: ['test-source-c'] },
+    // (the coda, as the real one: its span reaches the present, so the timeline runs on to now)
+    { id: 'coda', label: 'now', year: 2000, yearPrecision: 30, note: 'test era: 1970 to the present', sources: ['test-source-a'] },
   ]
   const polities = {
     polities: [
@@ -398,6 +438,11 @@ function gazetteer() {
     { id: 'test-bay-east', name: 'Test bay Hikina', alt: [], kind: 'bay', island: 'hawaii', moku: 'Kona', geometry: pt(-155.93, 19.48), placePrecision: 'exact', sources: ['test-source-a'] },
     { id: 'test-moku-kau', name: 'Kaʻū (test)', alt: [], kind: 'moku', island: 'hawaii', moku: 'Kaʻū', geometry: pt(-155.55, 19.18), placePrecision: 'moku', sources: ['test-source-c'] },
     { id: 'test-channel', name: 'Test channel', alt: [], kind: 'channel', island: null, geometry: pt(-157.2, 21.2), placePrecision: 'sea', sources: ['test-source-b'] },
+    // the coda's places, in the test Koʻolaupoko (placed on the made-up shore near where the real ones are)
+    { id: 'test-heeia-pond', name: 'Test pond Heʻeia', alt: [], kind: 'fishpond', island: 'oahu', moku: 'Koʻolaupoko', geometry: pt(...spots.pondHeeia), placePrecision: 'exact', sources: ['test-source-a'] },
+    { id: 'test-heeia-loi', name: 'Test loʻi Heʻeia', alt: [], kind: 'other', island: 'oahu', moku: 'Koʻolaupoko', geometry: pt(...spots.loiRestored), placePrecision: 'exact', sources: ['test-source-a'] },
+    { id: 'test-pahonu', name: 'Test pond Pāhonu', alt: [], kind: 'fishpond', island: 'oahu', moku: 'Koʻolaupoko', geometry: pt(...spots.pondPahonu), placePrecision: 'exact', sources: ['test-source-a'] },
+    { id: 'test-waiahole', name: 'Test valley Waiāhole', alt: [], kind: 'valley', island: 'oahu', moku: 'Koʻolaupoko', geometry: pt(...spots.loiWaiahole), placePrecision: 'exact', sources: ['test-source-a'] },
   ]
   const sources = [
     { id: 'test-source-a', title: 'A test source that was opened', author: 'Test Author ʻAkahi', year: 1900, url: 'about:blank', access: 'open', opened: true, note: 'synthetic' },
@@ -493,6 +538,52 @@ function gazetteer() {
       sources: [{ id: 'test-source-b' }],
       confidence: { date: 'soft', place: 'soft' },
     },
+    // the coda: near stops that come down into the test Koʻolaupoko, at years past the era's own
+    {
+      id: 'test-waiahole-1977',
+      title: 'Test: a stand for the valley',
+      gloss: 'a synthetic coda event with a near stop',
+      when: { from: '1974', to: '1977', precision: 'year' },
+      era: 'coda',
+      where: [{ place: 'test-waiahole', role: 'site' }],
+      zoom: ['island', 'near'],
+      kind: 'protest',
+      summary: 'A test event late on the timeline, its stop down in a district.',
+      stops: [{ text: 'The test valley’s farms, from above its shore.', place: 'test-waiahole', zoom: 'near', year: 1977, camera: { bearing: 225, pitch: 0.32, distance: 16 } }],
+      sources: [{ id: 'test-source-a' }],
+      confidence: { date: 'firm', place: 'firm' },
+    },
+    {
+      id: 'test-heeia-restoration',
+      title: 'Test: a pond and its loʻi',
+      gloss: 'a synthetic restoration with two near stops',
+      when: { from: '2001', to: '2017', precision: 'year' },
+      era: 'coda',
+      where: [{ place: 'test-heeia-pond', role: 'site' }, { place: 'test-heeia-loi', role: 'site' }],
+      zoom: ['island', 'near'],
+      kind: 'restoration',
+      summary: 'A test event after the coda’s own year: the pond, then the loʻi laid again in 2010.',
+      stops: [
+        { text: 'The test pond’s wall, from the bay.', place: 'test-heeia-pond', zoom: 'near', year: 2005, camera: { bearing: 225, pitch: 0.34, distance: 15 } },
+        { text: 'The test loʻi, planted again.', place: 'test-heeia-loi', zoom: 'near', year: 2017, camera: { bearing: 230, pitch: 0.4, distance: 12 } },
+      ],
+      sources: [{ id: 'test-source-a' }],
+      confidence: { date: 'firm', place: 'firm' },
+    },
+    {
+      id: 'test-pahonu-limu',
+      title: 'Test: limu at the pond',
+      gloss: 'a synthetic restoration, near the present',
+      when: { from: '2017', to: '2026', precision: 'year' },
+      era: 'coda',
+      where: [{ place: 'test-pahonu', role: 'site' }],
+      zoom: ['island', 'near'],
+      kind: 'restoration',
+      summary: 'A test event that runs to the present.',
+      stops: [{ text: 'The test pond on the shore.', place: 'test-pahonu', zoom: 'near', year: 2017, camera: { bearing: 240, pitch: 0.34, distance: 14 } }],
+      sources: [{ id: 'test-source-a' }],
+      confidence: { date: 'firm', place: 'firm' },
+    },
   ]
   return { eras, polities, places, sources, events }
 }
@@ -520,10 +611,13 @@ writeFileSync(join(out, 'manifest.json'), JSON.stringify({ projection: { lat0: L
 const b = boundaries()
 writeFileSync(join(out, 'boundaries', 'moku.geojson'), JSON.stringify(b.moku))
 writeFileSync(join(out, 'boundaries', 'ahupuaa.geojson'), JSON.stringify(b.ahupuaa))
-const g = gazetteer()
+const spots = districtSpots()
+const g = gazetteer(spots)
 for (const k of ['eras', 'places', 'sources', 'events', 'polities']) writeFileSync(join(out, `${k}.json`), JSON.stringify(g[k], null, 2))
 testPatches()
 testZoning()
+testDistricts(spots)
+testLayers(spots, g.eras)
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -689,3 +783,284 @@ function testZoning() {
   console.log('test zoning for the real Maui pack', `${Math.ceil(W / 2)}×${Math.ceil(H / 2)}`)
 }
 // ==== [settlements] end =============================================================
+
+// ==== two test districts, one drawn at three years, and the era layers under them ====
+// The test districts (DATA.md "District packs") over the made-up Oʻahu, at the
+// real districts' bounds: a stand-in for Nuʻuanu, first in the manifest as the
+// real one is, and Koʻolaupoko, which overlaps it where the pali is.
+// Koʻolaupoko is drawn at three years, as the real one is to be (c. 1700,
+// 1850, now): loʻi that end before 1850 and before now, one laid again in
+// 2010, a pond filled in 1940 and ponds that stay, a village whose last year
+// is 1850, a raise patch for a bay dredged before 1940, and names; the coda's
+// test events come down into it (gazetteer above). Under them, era layers
+// for the test Oʻahu (DATA.md "Era layers": four keyframes, the Māhele's
+// without forest) and its zoning (a military shore where Mōkapu would
+// be, houses on the coastal plain), so the district's settlements and the
+// land view have something to read. Shapes for trying the paths, placed on
+// the made-up shore near where the real places are, and not a record of any.
+
+/** The test districts' bounds: the real Nuʻuanu pack's, and Koʻolaupoko's as the task has it. */
+function districtBoxes() {
+  return { nuuanu: [-157.8970085, 21.269, -157.7789915, 21.381], koolaupoko: [-157.84, 21.3, -157.66, 21.52] }
+}
+
+/** Where the test features and places stand: on the made-up ground, near where the real ones are. */
+function districtSpots() {
+  const B = districtBoxes()
+  const used = []
+  const inBox = (x, z, b, km) => x > xkm(b[0]) + km && x < xkm(b[2]) - km && z > zkm(b[3]) + km && z < zkm(b[1]) - km
+  const only = (id, other) => (x, z) => inBox(x, z, B[id], 0.5) && !inBox(x, z, B[other], -0.3)
+  const seaNear = (x, z, r) => [[r, 0], [-r, 0], [0, r], [0, -r], [0.7 * r, 0.7 * r], [-0.7 * r, 0.7 * r], [0.7 * r, -0.7 * r], [-0.7 * r, -0.7 * r]].some(([a, b]) => heightAt(x + a, z + b) < -0.5)
+  const slope = (x, z) => Math.hypot(heightAt(x + 0.05, z) - heightAt(x - 0.05, z), heightAt(x, z + 0.05) - heightAt(x, z - 0.05)) / 100
+  const shore = (x, z) => {
+    const h = heightAt(x, z)
+    return h > 0.05 && h < 3 && seaNear(x, z, 0.25)
+  }
+  const lowFlat = (x, z) => {
+    const h = heightAt(x, z)
+    return h > 1.5 && h < 30 && slope(x, z) < 0.08 && !seaNear(x, z, 0.3)
+  }
+  // the nearest point to (lon, lat) inside `where` that `ok` takes, a gap from every one taken before
+  const find = (lon, lat, where, ok, gap = 0.55, km = 8) => {
+    const x0 = xkm(lon)
+    const z0 = zkm(lat)
+    let best = null
+    let bd = Infinity
+    for (let dz = -km; dz <= km; dz += 0.08) {
+      for (let dx = -km; dx <= km; dx += 0.08) {
+        const d = Math.hypot(dx, dz)
+        if (d >= bd || d > km) continue
+        const x = x0 + dx
+        const z = z0 + dz
+        if (!where(x, z) || used.some(([ux, uz]) => Math.hypot(x - ux, z - uz) < gap) || !ok(x, z)) continue
+        bd = d
+        best = [x, z]
+      }
+    }
+    if (!best) throw new Error(`no test spot near ${lon}, ${lat}`)
+    used.push(best)
+    return [r7(lonOf(best[0])), r7(latOf(best[1]))]
+  }
+  const K = only('koolaupoko', 'nuuanu')
+  const N = only('nuuanu', 'koolaupoko')
+  const s = {}
+  s.pondHeeia = find(-157.807, 21.437, K, shore, 0.8)
+  s.loiRestored = find(-157.815, 21.43, K, lowFlat)
+  s.loiKai = find(-157.82, 21.42, K, lowFlat)
+  s.loiUka = find(-157.83, 21.445, K, lowFlat)
+  s.loiKaneohe = find(-157.8, 21.41, K, lowFlat)
+  s.pondFilled = find(-157.785, 21.415, K, shore, 0.8)
+  s.village = find(-157.795, 21.4, K, lowFlat, 0.8)
+  s.military = find(-157.745, 21.44, K, shore, 1.6)
+  s.kailua = find(-157.74, 21.395, K, shore, 0.8)
+  s.pondPahonu = find(-157.7, 21.336, K, shore, 0.8)
+  s.loiWaiahole = find(-157.835, 21.48, K, lowFlat)
+  // (twenty more, small, so the loʻi outnumber the aux map's indices and those of one span share one, as the real ones do)
+  s.loiMore = Array.from({ length: 20 }, () => find(-157.75, 21.39, K, lowFlat, 0.4, 12))
+  s.loiNuuanu = find(-157.85, 21.29, N, lowFlat)
+  s.villageNuuanu = find(-157.86, 21.285, N, lowFlat, 0.8)
+  return s
+}
+
+/** A rectangle w × h km about [lon, lat], turned `rot` degrees anticlockwise: a closed ring, anticlockwise. */
+function rectRing([lon, lat], w, h, rot = 0) {
+  const c = Math.cos(rot * DEG)
+  const s = Math.sin(rot * DEG)
+  const ring = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => {
+    const e = (u * w * c - v * h * s) / 2
+    const n = (u * w * s + v * h * c) / 2
+    return [r7(lon + e / KX), r7(lat + n / KZ)]
+  })
+  return { type: 'Polygon', coordinates: [[...ring, ring[0]]] }
+}
+
+/** The direction (degrees anticlockwise from east) the sea lies in from [lon, lat], within about 1.5 km. */
+function seaward([lon, lat]) {
+  let best = 0
+  let low = Infinity
+  for (let k = 0; k < 16; k++) {
+    const a = (k / 16) * Math.PI * 2
+    const h = heightAt(xkm(lon) + Math.cos(a) * 1.5, zkm(lat) - Math.sin(a) * 1.5)
+    if (h < low) {
+      low = h
+      best = (k / 16) * 360
+    }
+  }
+  return best
+}
+
+function testDistricts(spots) {
+  const B = districtBoxes()
+  const MPT = 24 // metres a texel: coarser than the real 6 m, so the test decodes quickly
+  const fetched = new Date().toISOString().slice(0, 10)
+  const src = [{ id: 'synthetic', title: 'Synthetic test district (tools/fake-data.mjs)', url: 'about:blank', fetched, licence: 'test data, not for release' }]
+  const base = join(out, 'districts')
+  mkdirSync(base, { recursive: true })
+  const entries = []
+  for (const [id, name] of [['nuuanu', 'Nuʻuanu (test)'], ['koolaupoko', 'Koʻolaupoko (test)']]) {
+    const b = B[id]
+    const W = Math.round(((b[2] - b[0]) * KX * 1000) / MPT)
+    const H = Math.round(((b[3] - b[1]) * KZ * 1000) / MPT)
+    const p = bakePack(id, 'district', name, b, W, H, base)
+    // (Koʻolaupoko names its moku; the stand-in Nuʻuanu leaves the app to find its own under its middle)
+    entries.push({ id, name, island: 'oahu', parent: 'oahu', ...(id === 'koolaupoko' ? { moku: 'Koʻolaupoko' } : {}), bounds: p.bounds, size: p.size, metresPerTexel: p.metresPerTexel, height: p.height, rain: p.rain, features: `${id}/features.json`, sources: src })
+    console.log(`test district ${id} ${W}×${H}`)
+  }
+  const F = (id, kind, name, geometry, extra = {}) => ({ type: 'Feature', id, properties: { kind, name, from: null, to: null, precision: 'schematic', sources: ['test-source-a'], ...extra }, geometry })
+  const point = (c) => ({ type: 'Point', coordinates: c })
+  const households = (n) => [{ source: 'test-source-a', says: `Test telling: some ${n} households.` }]
+  const features = {
+    nuuanu: [
+      F('test-loi-nuuanu', 'loi', 'Test loʻi Nuʻuanu', rectRing(spots.loiNuuanu, 0.3, 0.2, 40), { to: 1880 }),
+      F('test-village-nuuanu', 'village', 'Test village Nuʻuanu', rectRing(spots.villageNuuanu, 0.45, 0.3, 40), { to: 1820, tellings: households('thirty') }),
+      F('test-label-nuuanu', 'label', 'Nuʻuanu (test)', point(spots.loiNuuanu)),
+    ],
+    koolaupoko: [
+      // c. 1700 all four of the old loʻi; by 1850 the uka one gone; now none of them, and the one laid again in 2010
+      F('test-loi-uka', 'loi', 'Test loʻi uka', rectRing(spots.loiUka, 0.3, 0.2, 35), { to: 1840 }),
+      F('test-loi-kai', 'loi', 'Test loʻi kai', rectRing(spots.loiKai, 0.3, 0.2, 35), { to: 1920 }),
+      F('test-loi-kaneohe', 'loi', 'Test loʻi Kāneʻohe', rectRing(spots.loiKaneohe, 0.3, 0.2, 35), { from: 1600, to: 1880 }),
+      F('test-loi-waiahole', 'loi', 'Test loʻi Waiāhole', rectRing(spots.loiWaiahole, 0.28, 0.2, 35)),
+      F('test-loi-restored', 'loi', 'Test loʻi, laid again', rectRing(spots.loiRestored, 0.28, 0.2, 35), { from: 2010 }),
+      ...spots.loiMore.map((c, n) => F(`test-loi-small-${n + 1}`, 'loi', `Test loʻi ${n + 1}`, rectRing(c, 0.16, 0.11, 35), { to: n % 2 ? 1856 : 1896 })),
+      // the ponds on the shore: one filled in 1940, two that stay
+      F('test-pond-heeia', 'fishpond', 'Test pond Heʻeia', rectRing(spots.pondHeeia, 0.4, 0.28, seaward(spots.pondHeeia))),
+      F('test-pond-filled', 'fishpond', 'Test pond, filled', rectRing(spots.pondFilled, 0.32, 0.22, seaward(spots.pondFilled)), { to: 1939 }),
+      F('test-pond-pahonu', 'fishpond', 'Test pond Pāhonu', rectRing(spots.pondPahonu, 0.22, 0.16, seaward(spots.pondPahonu))),
+      F('test-village', 'village', 'Test village Kāneʻohe', rectRing(spots.village, 0.5, 0.35, 35), { to: 1850, tellings: households('forty') }),
+      F('test-label-heeia', 'label', 'Heʻeia (test)', point(spots.pondHeeia)),
+      F('test-label-kaneohe', 'label', 'Kāneʻohe (test)', point(spots.village)),
+      F('test-label-kailua', 'label', 'Kailua (test)', point(spots.kailua)),
+      F('test-label-mokapu', 'label', 'Mōkapu (test)', point(spots.military)),
+      F('test-label-waimanalo', 'label', 'Waimānalo (test)', point(spots.pondPahonu)),
+    ],
+  }
+  for (const e of entries) writeFileSync(join(base, e.id, 'features.json'), JSON.stringify({ type: 'FeatureCollection', features: features[e.id] }, null, 1))
+  // the bay off the Heʻeia pond, dredged: its water a reef flat before 1940
+  const k = entries.find((e) => e.id === 'koolaupoko')
+  const [KW, KH] = k.size
+  const sea = seaward(spots.pondHeeia)
+  const [plon, plat] = spots.pondHeeia
+  const at = { lon: plon + (Math.cos(sea * DEG) * 1.6) / KX, lat: plat + (Math.sin(sea * DEG) * 1.6) / KZ }
+  const mask = ellipseMask(k.bounds, KW, KH, { ...at, a: 1.7, b: 0.7, rot: sea + 90 }, (lo, la) => heightAt(xkm(lo), zkm(la)) < -3)
+  writePNG(join(base, 'koolaupoko', 'patch-bay.png'), KW, KH, mask.grey, 1)
+  k.patches = [{ id: 'test-koolaupoko-bay', kind: 'raise', depth: -1.5, until: 1940, file: 'koolaupoko/patch-bay.png', size: [KW, KH], source: 'tools/fake-data.mjs', note: `test mask, ${mask.n} texels: a bay's water a reef flat before it was dredged; not a record` }]
+  console.log(`  patch test-koolaupoko-bay: raise to -1.5 m before 1940, ${mask.n} texels`)
+  writeFileSync(join(base, 'manifest.json'), JSON.stringify({ districts: entries }, null, 2))
+}
+
+/** Era layers and zoning for the test Oʻahu (DATA.md "Era layers", "Zoning, for the settlements"). */
+function testLayers(spots, eras) {
+  const KF = [
+    { id: 'contact', year: 1778, yearPrecision: 30, label: 'test: on the eve of contact', layers: ['cultivation', 'settlement', 'forest'] },
+    { id: 'mahele', year: 1853, yearPrecision: 5, label: 'test: at the Māhele', layers: ['cultivation', 'settlement'] },
+    { id: 'kingdom', year: 1896, yearPrecision: 4, label: 'test: at the end of the kingdom', layers: ['cultivation', 'settlement', 'forest'] },
+    { id: 'now', year: 2020, yearPrecision: 10, label: 'test: now', layers: ['cultivation', 'settlement', 'forest'] },
+  ]
+  const METHOD = { contact: 'modelled', mahele: 'mixed', kingdom: 'mixed', now: 'mapped' }
+  const fetched = new Date().toISOString().slice(0, 10)
+  const src = [{ id: 'synthetic', title: 'Test layers (tools/fake-data.mjs)', url: 'about:blank', fetched, licence: 'test data, not for release' }]
+  const Lg = Math.log(1 + 50000 / 2)
+  const byte = (d) => (d > 0 ? Math.max(1, Math.min(255, Math.round((255 * Math.log(1 + d / 2)) / Lg))) : 0)
+  const B = districtBoxes()
+  const inBox = (lon, lat, b) => lon >= b[0] && lon <= b[2] && lat >= b[1] && lat <= b[3]
+  const km = (lon, lat, q) => Math.hypot(xkm(lon) - xkm(q[0]), zkm(lat) - zkm(q[1]))
+  const dir = join(out, 'layers')
+  const islands = {}
+  let zoningEntry = null
+  // (Oʻahu's alone: the districts are over it, and every other island's towns
+  // would only weigh on the frames of checks that have nothing to do with them)
+  for (const p of packs) {
+    if (p.kind !== 'island' || p.id !== 'oahu') continue
+    const { metres, rain, W, H } = packMetres.get(p.id)
+    const [w0, s0, e0, n0] = p.bounds
+    const masks = Object.fromEntries(KF.map((k) => [k.id, Object.fromEntries(k.layers.map((l) => [l, new Uint8Array(W * H)]))]))
+    const oahu = p.id === 'oahu'
+    const zoning = oahu ? new Uint8Array(W * H) : null
+    const lud = oahu ? new Uint8Array(W * H) : null
+    for (let j = 0; j < H; j++) {
+      const lat = n0 - ((j + 0.5) / H) * (n0 - s0)
+      for (let i = 0; i < W; i++) {
+        const c = j * W + i
+        const h = metres[c]
+        if (h <= 0) continue
+        const lon = w0 + ((i + 0.5) / W) * (e0 - w0)
+        const r = rain[c] / 255
+        const low = h < 150
+        const coast = h < 40
+        const district = oahu && (inBox(lon, lat, B.koolaupoko) || inBox(lon, lat, B.nuuanu))
+        const military = oahu && h < 40 && km(lon, lat, spots.military) < 1.3
+        const town = oahu && km(lon, lat, spots.village) < 2.5
+        // cultivation: the wet lowland farmed, less by the Māhele, cane by 1896, little now
+        const cult = low ? (r > 0.45 ? 0.7 : 0.4) : h < 400 ? 0.15 : 0
+        masks.contact.cultivation[c] = Math.round(255 * cult)
+        masks.mahele.cultivation[c] = Math.round(255 * cult * 0.45)
+        masks.kingdom.cultivation[c] = Math.round(255 * (low ? 0.35 : 0.04))
+        masks.now.cultivation[c] = Math.round(255 * (low && !district ? 0.1 : 0.02))
+        // native forest: the wet uplands, less by 1896, less again now
+        const forest = h > 300 ? Math.min(1, 0.3 + r) : h > 150 ? 0.3 : 0.04
+        masks.contact.forest[c] = Math.round(255 * forest)
+        masks.kingdom.forest[c] = Math.round(255 * forest * 0.75)
+        masks.now.forest[c] = Math.round(255 * forest * 0.45)
+        // people per km²: the shore's villages, fewer at the Māhele, a town by 1896, suburbs now
+        const people = coast ? 80 : low ? 30 : h < 400 ? 4 : 0
+        masks.contact.settlement[c] = byte(people)
+        masks.mahele.settlement[c] = byte(people * 0.35)
+        masks.kingdom.settlement[c] = byte((coast ? 50 : low ? 15 : h < 400 ? 2 : 0) + (town ? 300 : 0))
+        masks.now.settlement[c] = byte(military ? 150 : district ? (h < 60 ? 2600 : h < 200 ? 300 : 0) : coast ? 300 : low ? 40 : 0)
+        if (zoning) {
+          // houses on the plain, a business core in the town, the military shore, farms above, forest reserve higher
+          const z = military ? 10 : town && h < 60 && km(lon, lat, spots.village) < 0.4 ? 4 : h < 60 ? 1 : h < 300 ? 8 : 9
+          zoning[c] = z
+          lud[c] = { 1: 1, 4: 1, 10: 1, 8: 3, 9: 4 }[z]
+        }
+      }
+    }
+    mkdirSync(join(dir, p.id), { recursive: true })
+    const layers = {}
+    for (const k of KF) {
+      layers[k.id] = {}
+      for (const l of k.layers) {
+        const file = `${p.id}/${k.id}-${l}.png`
+        writePNG(join(dir, file), W, H, masks[k.id][l], 1)
+        layers[k.id][l] = { file, method: METHOD[k.id] }
+      }
+    }
+    islands[p.id] = { pack: p.id, size: [W, H], bounds: p.bounds, layers }
+    if (zoning) {
+      writePNG(join(dir, p.id, 'now-zoning.png'), W, H, zoning, 1)
+      writePNG(join(dir, p.id, 'lud.png'), W, H, lud, 1)
+      zoningEntry = { pack: p.id, zoning: { file: `${p.id}/now-zoning.png`, size: [W, H] }, lud: { file: `${p.id}/lud.png`, size: [W, H] } }
+    }
+  }
+  // each era on the keyframes, linear in years; an era whose span reaches the last keyframe stands at it (the coda at now)
+  const map = {}
+  for (const era of eras) {
+    const e = { year: era.year }
+    for (const l of ['cultivation', 'settlement', 'forest']) {
+      const K = KF.filter((k) => k.layers.includes(l))
+      if (era.year <= K[0].year) e[l] = { keyframe: K[0].id }
+      else if (era.year + (era.yearPrecision || 0) >= K.at(-1).year) e[l] = { keyframe: K.at(-1).id }
+      else {
+        const i = K.findIndex((k, q) => q + 1 < K.length && era.year <= K[q + 1].year)
+        const t = (era.year - K[i].year) / (K[i + 1].year - K[i].year)
+        e[l] = t >= 1 ? { keyframe: K[i + 1].id } : { from: K[i].id, to: K[i + 1].id, t: +t.toFixed(3) }
+      }
+    }
+    map[era.id] = e
+  }
+  const methods = Object.fromEntries(KF.map((k) => [k.id, Object.fromEntries(k.layers.map((l) => [l, { method: METHOD[k.id], ...(METHOD[k.id] === 'mapped' ? {} : { rule: 'test rule: by height and rain (tools/fake-data.mjs)' }), sources: src }]))]))
+  const note = 'test layers (tools/fake-data.mjs); not a record'
+  const manifest = {
+    about: note,
+    encoding: { cultivation: 'share of the texel, value / 255', forest: 'share of the texel, value / 255', settlement: { kind: 'log density', d0: 2, dMax: 50000 } },
+    keyframes: KF,
+    eras: map,
+    methods,
+    islands,
+    zoning: { about: note, islands: zoningEntry ? { oahu: zoningEntry } : {} },
+  }
+  writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2))
+  console.log(`test layers for ${Object.keys(islands).join(', ')}; zoning for ${zoningEntry ? zoningEntry.pack : 'none'}`)
+}
+// ==== end of the test districts and layers ==========================================

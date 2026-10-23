@@ -443,7 +443,9 @@ interpolates from `contact` to `kingdom` across it. The `eras` object in the
 manifest gives, for every era in `eras.json` and every layer, either
 `{ keyframe }` or `{ from, to, t }` with `t` linear in years. It is computed
 from `eras.json` at bake time, so re-bake (or recompute from the keyframe
-years) if the eras move.
+years) if the eras move. The coda stands at `now` whole: the timeline runs
+on past the coda's own year to the present ("District packs" below), and
+the layers hold at `now` all the way.
 
 ### `layers/manifest.json`
 
@@ -607,6 +609,46 @@ Bay and Mōkapu, Kailua and Waimānalo.
   last tie-break. A district's texel may run to 13.5 m where the district is
   large (Koʻolaupoko's is 12.98 m), and each district's directory stays under
   4 MB.
+- **Accepted for the second district (Koʻolaupoko).** The manifest may list
+  any number of districts; the app streams the one the camera comes down
+  into, decodes it while the one before eases out, and draws one at a time.
+  Which one: during the tour, the stop's place decides (or the event's
+  first place, for its own view), for the flight the tour sends and while
+  the camera stays where it landed; otherwise the point under a flight's
+  landing, or the point the camera looks at, never the camera's own
+  position (which may hang over the other district's box). Two districts'
+  boxes may overlap (Koʻolaupoko's holds about 70% of Nuʻuanu's, Honolulu
+  harbour and the pali among it): a point in both goes to the district
+  whose moku it lies in, by the place's own `moku` in places.json for a
+  stop, else by `moku.geojson` wherever no other moku comes within 500 m;
+  a district's moku is its manifest entry's optional `moku` (the moku's
+  `name`), else the moku that holds most of its box. On a moku's edge (the
+  pali's notch) the one already down keeps the point, and with neither
+  down the first listed takes it. A point in neither box but within reach
+  of both (Kona west of both, as at the airport terminal) goes to the
+  district whose moku it lies in, else to the nearer box. Manifest order
+  is only that last tie-break among boxes that hold the point: not
+  alphabetical order, nearest centre or smallest box. So `nuuanu` names
+  `"moku": "Kona"` and stays first, `koolaupoko` names
+  `"moku": "Koʻolaupoko"` (its box holds nearly as much Kona as
+  Koʻolaupoko), and Kou, Puʻowaina, Kaheiki, Puʻiwa, Lāʻimi and the pali
+  stay Nuʻuanu's while Kailua, Kāneʻohe, Heʻeia and Waimānalo are
+  Koʻolaupoko's.
+  A district drawn at several years needs nothing beyond the contract: each
+  feature's `from` and `to` and each
+  patch's `until` place it in time, and no `keyframes` list is read (the
+  years a district was drawn at are its features' own). The ground has
+  room for 22 loʻi, 23 fishponds and 16 villages each in years of their
+  own; past that (Koʻolaupoko's 40 loʻi), those of one kind with the same
+  `from` and `to` are drawn as one in time, so what counts is how many
+  different spans of years a kind has, not how many features. A feature's or a
+  stop's year may lie after the last era's year: where the last era's span
+  (`year` plus `yearPrecision`) reaches the present, as the coda's does, the
+  timeline runs on past that era's tick to this year (`src/time.js`), so a
+  loʻi laid again in 2010 or a stop of 2017 stands at its own year. At the
+  timeline's end no patch whose `until` has passed applies, the shore is the
+  pack's own, and the settlements take their kinds from the zoning; the
+  district layer assumes no year of its own.
 
 ### How to bake a district
 

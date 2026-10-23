@@ -15,6 +15,20 @@
 // (DISTRICT.rig), since it draws neither. One district is resident at a time;
 // a while after the camera has left one it is let go, GPU and CPU both.
 //
+// With more than one in the manifest, the one streamed is the one the camera
+// is coming down into: where a flight is headed close in, the district under
+// its landing; otherwise the one under what the camera looks at, once the
+// camera is within reach of it; and a district a tour asked for ahead of the
+// camera (prefetch) keeps its place until the camera is headed into or down
+// at another. Where two overlap (Koʻolaupoko's box takes in most of
+// Nuʻuanu's), the ground goes to the one whose moku it lies in, on a moku's
+// edge (the pali) to the one already down, else to the first listed; a
+// point in neither but within reach of both goes to the one whose moku it
+// lies in, else to the nearer.
+// Changing from one to the other, the new one is decoded in its worker while
+// the old eases out, and only once the old has gone and been let go does the
+// new one reach the GPU: never two drawn, never more than two in memory.
+//
 // Its mesh is the islands' CDLOD quadtree (pack.js) over its own grid: the
 // finest level puts a vertex on every 6 m texel within a few hundred metres
 // of the camera and the levels double from there, so a valley in view is a
@@ -54,6 +68,8 @@ export class Districts {
     this.list = []
     this.loaded = false
     this.cur = null // the resident district: { d, state, data, terrain, features, … }
+    // the one coming in while the resident eases out: decoded, held until the resident has gone
+    this.incoming = null
     this.k = 0
     this.want = 0
     // each patch's weight in the year, by its index in the district's list,
@@ -97,24 +113,102 @@ export class Districts {
     const islands = new Set(this.world.islandPacks.map((p) => p.id))
     for (const p of extra) if (!islands.has(p.pack) && !this.list.some((d) => d.id === p.pack)) warn(`patch ${p.id}: no pack or district ${p.pack} here; not drawn`)
     this.patchW.fill(1)
+    this.incoming = null
     if (this.cur) this.drop()
   }
 
-  /** The district whose rect, grown by `pad` world units, holds (x, z). */
-  districtAt(x, z, pad = 0) {
+  /**
+   * The district at (x, z), its rect grown by `pad` world units. Of those
+   * whose own rect holds the point: the one whose moku the point lies in
+   * (homeOf), where the moku is the same all round it, or `moku` says so
+   * (a gazetteer place's own); else the one down (or coming in); else the
+   * first the manifest lists. Where no rect holds it, of those the pad
+   * reaches the one whose moku it lies in, else the nearest.
+   */
+  districtAt(x, z, pad = 0, moku = null) {
+    const holding = []
+    const near = []
     for (const d of this.list) {
       const r = d.rect
-      if (x > r.x0 - pad && x < r.x1 + pad && z > r.z0 - pad && z < r.z1 + pad) return d
+      if (!(x > r.x0 - pad && x < r.x1 + pad && z > r.z0 - pad && z < r.z1 + pad)) continue
+      const e = Math.hypot(Math.max(r.x0 - x, 0, x - r.x1), Math.max(r.z0 - z, 0, z - r.z1))
+      if (e === 0) holding.push(d)
+      else near.push([e, d])
     }
-    return null
+    if (holding.length === 1) return holding[0]
+    if (!holding.length) {
+      if (near.length < 2) return near[0]?.[1] ?? null
+      // (by the nearest edge alone, Honolulu airport's terminal would go to the box that reaches
+      // a little further west, not to the one whose moku it is; the one down keeps nothing out
+      // here, or it would hold the camera from the other's edge)
+      const here = moku || this.mokuAt(x, z)
+      const own = here ? near.filter(([, d]) => this.homeOf(d) === here) : []
+      if (own.length === 1) return own[0][1]
+      return near.reduce((a, b) => (b[0] < a[0] ? b : a))[1]
+    }
+    const here = moku || this.mokuAt(x, z)
+    const own = here ? holding.filter((d) => this.homeOf(d) === here) : []
+    if (own.length === 1) return own[0]
+    const mine = this.incoming?.d ?? this.cur?.d ?? null
+    return holding.includes(mine) ? mine : holding[0]
   }
 
-  /** Start streaming the district at (x, z), if there is one: a flight is on its way there. */
-  prefetch(x, z) {
-    const d = this.districtAt(x, z, 20)
+  /**
+   * The moku whose ground a district is: its manifest's `moku`, else the
+   * one that holds most of its box's land (by name, from the moku
+   * boundaries the chiefdoms are drawn with).
+   */
+  homeOf(d) {
+    if (d.home === undefined) {
+      const P = this.app.polity
+      const r = d.rect
+      const count = new Map()
+      for (let j = 0; P && j < 12; j++) {
+        for (let i = 0; i < 12; i++) {
+          const m = P.mokuAt(r.x0 + ((i + 0.5) * (r.x1 - r.x0)) / 12, r.z0 + ((j + 0.5) * (r.z1 - r.z0)) / 12)
+          if (m) count.set(m.name, (count.get(m.name) || 0) + 1)
+        }
+      }
+      d.home = d.desc?.moku || [...count].sort((a, b) => b[1] - a[1])[0]?.[0] || null
+    }
+    return d.home
+  }
+
+  /**
+   * The moku's name at (x, z) where no other moku comes within 500 m
+   * (the sea doesn't count); null on a boundary, so the one down keeps it.
+   */
+  mokuAt(x, z) {
+    const P = this.app.polity
+    const m = P?.mokuAt(x, z)
+    if (!m) return null
+    // (by name: one moku may be several features in the boundary file)
+    for (const [dx, dz] of [[5, 0], [-5, 0], [0, 5], [0, -5]]) {
+      const q = P.mokuAt(x + dx, z + dz)
+      if (q && q.name !== m.name) return null
+    }
+    return m.name
+  }
+
+  /** The camera's distance to a district's rect, its height counted (world units). */
+  reach(d, camera) {
+    const r = d.rect
+    const p = camera.position
+    return Math.hypot(Math.max(r.x0 - p.x, 0, p.x - r.x1), Math.max(r.z0 - p.z, 0, p.z - r.z1), Math.max(1, p.y))
+  }
+
+  /**
+   * Start streaming the district at (x, z), if there is one: a flight is on
+   * its way there (the tour's: `moku`, its stop's place's, decides where two
+   * districts overlap, and the flight keeps to the one chosen; aimed).
+   */
+  prefetch(x, z, moku = null) {
+    const d = this.districtAt(x, z, 20, moku)
     if (d) {
       // (asked for ahead of the camera: held a while even if the camera is still far off)
       this.prefetchAt = performance.now()
+      this.prefetched = d
+      this.prefetchXZ = [x, z]
       this.stream(d)
     }
     return d
@@ -126,29 +220,102 @@ export class Districts {
     return !!d && this.cur?.d === d && this.cur.state === 'ready'
   }
 
+  /** Whether the resident district's ground shows at all. */
+  get showing() {
+    return !!this.on || this.k > 0
+  }
+
+  /**
+   * Stream district d: at once if nothing is drawn, else decoded while the
+   * resident eases out (incoming). Asking for the resident again lets go of
+   * whatever was coming.
+   */
   stream(d) {
-    if (this.cur?.d === d) return
+    if (this.cur?.d === d) {
+      this.incoming = null
+      return
+    }
+    if (this.incoming?.d === d) return
     // (its island must be in first: the district is laid over it)
     if (!this.world.terrains.get(d.parent)) {
       this.pending = d
       return
     }
-    if (this.cur) this.drop()
+    if (this.pending === d) this.pending = null
     const rec = { d, state: 'loading', t0: performance.now() }
-    this.cur = rec
+    if (this.cur && this.showing) this.incoming = rec
+    else {
+      this.incoming = null
+      if (this.cur) this.drop()
+      this.cur = rec
+    }
     this.lastSeen = rec.t0
     this.decoder = this.decoder || new DistrictDecoder(this.app.warn)
     this.decoder
       .decode(d)
       .then((out) => {
-        if (this.cur !== rec) return
-        this.arrive(rec, out)
+        if (this.cur === rec) this.arrive(rec, out)
+        else if (this.incoming === rec) {
+          rec.out = out
+          rec.state = 'decoded'
+        }
       })
       .catch((err) => {
-        if (this.cur !== rec) return
+        if (this.cur !== rec && this.incoming !== rec) return
         this.app.warn(`district ${d.id}: ${err.message}`)
         rec.state = 'failed'
       })
+  }
+
+  /** The resident has gone: let it go, and the one coming in takes its place. */
+  swap() {
+    const rec = this.incoming
+    if (!rec) return
+    this.incoming = null
+    if (this.cur) this.drop()
+    this.cur = rec
+    this.lastSeen = performance.now()
+    if (rec.out) {
+      const out = rec.out
+      rec.out = null
+      this.arrive(rec, out)
+    }
+  }
+
+  /**
+   * The district the camera is coming down into, if any: the one the tour
+   * chose by its stop's place, for the flight it sent and while the camera
+   * stays where it landed; else under the landing of a flight headed close
+   * in; else under what the camera looks at (never where the camera itself
+   * is), once it is within reach; and one a tour asked for ahead of the
+   * camera, unless the camera is headed into or down at another.
+   */
+  aimed(camera) {
+    const rig = this.app.rig
+    const f = rig?.flight
+    const asked = this.prefetched && performance.now() - (this.prefetchAt ?? -1e9) < DISTRICT.hold * 1000 ? this.prefetched : null
+    let d = null
+    let down = false
+    if (f) {
+      if (f.dest.distance < DISTRICT.rig[1]) {
+        const t = f.dest.target
+        // (the flight the tour sent into a district it chose by the stop's place keeps to it)
+        const p = this.prefetchXZ
+        d = asked && p && Math.hypot(t.x - p[0], t.z - p[1]) < 0.5 ? asked : this.districtAt(t.x, t.z, 20)
+        down = !!d
+      }
+    } else {
+      // (what the camera looks at, not where the camera itself is; and where
+      // the tour has just put it, the district it chose for the stop)
+      const t = rig ? rig.goal.target : camera.position
+      const p = this.prefetchXZ
+      const c = asked && p && Math.hypot(t.x - p[0], t.z - p[1]) < 0.5 ? asked : this.districtAt(t.x, t.z, DISTRICT.prefetch)
+      const e = c ? this.reach(c, camera) : Infinity
+      if (e < DISTRICT.prefetch) d = c
+      down = e < DISTRICT.far
+    }
+    if (asked && asked !== d && !(d && down)) d = asked
+    return d
   }
 
   /** Decoded: build the textures, the mesh and the features, and queue the uploads. */
@@ -185,6 +352,7 @@ export class Districts {
       u.uDistS.value = terrain.shadow.texture
     }
     terrain.group.visible = false
+    terrain.group.name = `district ${d.id}`
     terrain.applyRange(this.app.qset?.range ?? 4.6)
     if (this.app.params.get('debug')) for (const g of [terrain.full, terrain.half]) g.material.uniforms.uDebug.value = Number(this.app.params.get('debug'))
     rec.terrain = terrain
@@ -221,8 +389,12 @@ export class Districts {
     out.normals = out.land = null
     out.trees = { counts: out.trees.counts }
     out.streams = null
-    // (it arrives in the year as it stands: nothing eases in from another)
+    // (it arrives in the year as it stands: nothing eases in from another,
+    // nor from the features of a district down before it)
     this.patchW.fill(1)
+    this.featK.fill(0)
+    this.featSeen.fill(0)
+    for (const v of this.u.uFeatK.value) v.set(0, 0, 0, 0)
     this.yearWeights(1)
   }
 
@@ -344,19 +516,10 @@ export class Districts {
       this.pending = null
       this.stream(d)
     }
-    // the nearest district to the camera, streamed once the camera is within reach
-    const p = camera.position
-    let near = null
-    let best = Infinity
-    for (const d of this.list) {
-      const r = d.rect
-      const e = Math.hypot(Math.max(r.x0 - p.x, 0, p.x - r.x1), Math.max(r.z0 - p.z, 0, p.z - r.z1), Math.max(1, p.y))
-      if (e < best) {
-        best = e
-        near = d
-      }
-    }
-    if (near && best < DISTRICT.prefetch && this.cur?.d !== near) this.stream(near)
+    // the district the camera is coming down into, streamed (the resident eases out first)
+    const aim = this.aimed(camera)
+    if (aim) this.stream(aim)
+    if (this.incoming && !this.showing) this.swap()
     const rec = this.cur
     const ease = 1 - Math.exp(-dt * 2.5)
     this.yearWeights(dt > 0 ? 1 - Math.exp(-dt * PATCH_EASE) : 1)
@@ -371,9 +534,10 @@ export class Districts {
     }
     const parent = rec.parent
     const pk = parent && parent.slot >= 0 ? parent.k : 0
-    const want = rec.state === 'ready' ? Math.min(this.wantFor(rec.d, camera, distance), pk) : 0
+    // (nothing wanted of it while another is coming in: it eases out first)
+    const want = rec.state === 'ready' && !this.incoming ? Math.min(this.wantFor(rec.d, camera, distance), pk) : 0
     this.want = want
-    if (this.forceK !== null && this.forceK !== undefined && rec.state === 'ready' && pk > 0) this.k = Math.min(this.forceK, pk)
+    if (this.forceK !== null && this.forceK !== undefined && rec.state === 'ready' && pk > 0 && !this.incoming) this.k = Math.min(this.forceK, pk)
     else {
       this.k += (want - this.k) * ease
       if (Math.abs(want - this.k) < 0.004) this.k = want
@@ -383,10 +547,10 @@ export class Districts {
     if (on) this.switchOn(rec)
     else if (this.on) this.off()
     if (on || this.k > 0) this.lastSeen = performance.now()
-    // a while after it has gone and the camera is away, let it go (longer
-    // after a tour has asked for it ahead of the camera)
-    const since = Math.max(this.lastSeen, (this.prefetchAt ?? -1e9) + DISTRICT.hold * 1000)
-    if (!on && best > DISTRICT.prefetch * 1.2 && performance.now() - since > DISTRICT.linger * 1000 && rec.state !== 'loading') this.drop()
+    // a while after it has gone and the camera is away from it, let it go
+    // (longer after a tour has asked for it ahead of the camera)
+    const since = Math.max(this.lastSeen, this.prefetched === rec.d ? (this.prefetchAt ?? -1e9) + DISTRICT.hold * 1000 : -1e9)
+    if (!on && !this.incoming && this.reach(rec.d, camera) > DISTRICT.prefetch * 1.2 && performance.now() - since > DISTRICT.linger * 1000 && rec.state !== 'loading') this.drop()
     if (this.cur) {
       rec.terrain?.update(camera, this.on)
       rec.features?.update(dt, this.on ? this.k : 0, distance)
@@ -417,8 +581,13 @@ export class Districts {
     if (this.on && this.cur?.terrain) this.cur.terrain.shadow.update(renderer, sun, vert, this.k, top)
   }
 
-  /** Straight to what the view wants (tools): the weights of the year, and the detail if it is ready. */
+  /** Straight to what the view wants (tools): the district it is down at, the weights of the year, and the detail if it is ready. */
   settle(camera, distance) {
+    if (this.incoming) {
+      this.k = 0
+      this.off()
+      this.swap()
+    }
     this.yearWeights(1)
     const rec = this.cur
     if (!rec || rec.state !== 'ready') return
@@ -514,13 +683,15 @@ export class Districts {
   /** What is loaded, for the tools. */
   stats() {
     const rec = this.cur
-    if (!rec) return { district: null, loaded: this.loaded, count: this.list.length }
+    if (!rec) return { district: null, incoming: this.incoming ? `${this.incoming.d.id}:${this.incoming.state}` : null, loaded: this.loaded, count: this.list.length }
     const N = rec.d.W * rec.d.H
     // GPU: heights R32F, aux RGBA8, carve RG16F, and normals and land RGBA8 with mipmaps; the shadow map; the patch map
     const gpu = N * 4 + N * 4 + N * 4 + 2 * ((N * 4 * 4) / 3) + 512 * 512 + (rec.pmap ? rec.pmap.w * rec.pmap.h * 4 : 0)
     const cpu = rec.metres ? N * 4 + N * 4 + N * 4 : 0
     return {
       district: rec.d.id,
+      // (what is coming in while it eases out, and its state: decoded, never on the GPU before it is down)
+      incoming: this.incoming ? `${this.incoming.d.id}:${this.incoming.state}` : null,
       state: rec.state,
       k: +this.k.toFixed(3),
       want: +this.want.toFixed(3),

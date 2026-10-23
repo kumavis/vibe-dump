@@ -17,9 +17,9 @@
 // This is modelled placement from a modelled density: nothing here is a
 // surveyed building. The landmarks are the exceptions, and only where the
 // gazetteer has their place or the density peaks: the church of 1842 (at
-// `kawaiahao` if the gazetteer has it, else where the town is densest), a
-// clock tower at the harbour from 1926 (only if the gazetteer has
-// `aloha-tower`); no other building is named.
+// `kawaiahao` in the district that holds it, or where the town is densest
+// if the gazetteer has no such place), a clock tower at the harbour from
+// 1926 (only if the gazetteer has `aloha-tower`); no other building is named.
 //
 // How it is worked out:
 //
@@ -1575,11 +1575,16 @@ export class Settlements extends Scatter {
     const kM = Math.max(0, kAt(1853))
     const kB = Math.max(0, kAt(1896))
     const pc = places.get('kawaiahao')
-    let placed = false
-    if (pc) {
-      const [x, z] = proj.toWorld(geometryPoint(pc.geometry))
-      const l = lotNear(x, z)
-      placed = add('church', x, z, l ? l.face : 0, 1842, 'Kawaiahaʻo')
+    // (Kawaiahaʻo in the gazetteer and in another district: none of 1842
+    // here, the churches standing where this district's town grows; not in
+    // the gazetteer at all, one of 1842 unnamed where the town is)
+    const xz = pc ? proj.toWorld(geometryPoint(pc.geometry)) : null
+    const here = xz && this.edgeAt(xz[0], xz[1]) >= 0
+    const name = here ? 'Kawaiahaʻo' : null
+    let placed = !!pc && !here
+    if (here) {
+      const l = lotNear(xz[0], xz[1])
+      placed = add('church', xz[0], xz[1], l ? l.face : 0, 1842, name)
     }
     if (!placed) {
       // where the town of 1853 is densest, on the layer's own grid (not the
@@ -1598,7 +1603,7 @@ export class Settlements extends Scatter {
         }
       }
       const near = [...lots].sort((a, q) => Math.hypot(a.x - px, a.z - pz) - Math.hypot(q.x - px, q.z - pz))
-      for (const l of near.slice(0, 200)) if ((placed = add('church', l.x, l.z, l.face, 1842, 'Kawaiahaʻo'))) break
+      for (const l of near.slice(0, 200)) if ((placed = add('church', l.x, l.z, l.face, 1842, name))) break
     }
     // the generic churches: the 1896 town's peaks, apart from each other and the first
     const byB = [...lots].sort((a, b) => at(b, kB) - at(a, kB))

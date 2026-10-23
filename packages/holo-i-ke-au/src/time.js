@@ -7,6 +7,17 @@
 // first and a number second. Events are dated in years (DATA.md §4), and show
 // while their span overlaps the stretch of years around s (half an era either
 // side).
+//
+// The last era may be the present's own: the coda runs from 1970 to now, its
+// keyframe year the middle of that. When the last era's span (its year and
+// yearPrecision after it) reaches the present, the track runs on past its
+// tick to this year, at the spacing of the last two eras, so that a stop
+// dated after the era's own year (a restoration of 2017) stands at its year,
+// and the end of the timeline is now. Otherwise the track ends at the last
+// era's tick, as it always has.
+
+/** The year now, which a timeline whose last era reaches it runs to. */
+export const PRESENT = new Date().getFullYear()
 
 /** "1795-04" → 1795.25 (the start of April); a bare "1795" → 1795. */
 function parseDate(v, end = false) {
@@ -74,18 +85,39 @@ export function formatWhen(ev) {
 }
 
 export class Timeline {
-  constructor(eras) {
+  constructor(eras, { now = PRESENT } = {}) {
     this.eras = [...eras].filter((e) => Number.isFinite(e.year)).sort((a, b) => a.year - b.year)
     this.s = 0
     this.listeners = []
+    // the year the track ends at: the last era's, or now when that era reaches it
+    const E = this.eras
+    const last = E.at(-1)
+    this.end = last ? last.year : 1800
+    this.tail = 0
+    if (E.length > 1 && last.year < now && last.year + (last.yearPrecision ?? 0) >= now) {
+      this.end = now
+      // (the track past the last tick, in eras, at the last spacing: yearAt carries on at it)
+      this.tail = (now - last.year) / Math.max(1e-6, last.year - E.at(-2).year)
+    }
   }
 
   get n() {
     return this.eras.length
   }
 
+  /** The track's end: the last era's tick, or a little past it where the track runs on to now. */
   get max() {
-    return Math.max(0, this.n - 1)
+    return Math.max(0, this.n - 1 + this.tail)
+  }
+
+  /** Whether the track runs past its last tick to the present. */
+  get reachesNow() {
+    return this.tail > 0
+  }
+
+  /** The era whose tick is nearest position s. */
+  eraAt(s) {
+    return this.eras[Math.round(Math.max(0, Math.min(this.n - 1, s)))] || null
   }
 
   /** Year at timeline position s; beyond the ends it carries on at the end spacing. */
@@ -107,7 +139,9 @@ export class Timeline {
     for (let i = 0; i + 1 < E.length; i++) {
       if (y <= E[i + 1].year) return i + (y - E[i].year) / Math.max(1e-6, E[i + 1].year - E[i].year)
     }
-    return E.length - 1
+    // (past the last tick, as far as the track runs)
+    const n = E.length - 1
+    return Math.min(this.max, n + (y - E[n].year) / Math.max(1e-6, E[n].year - E[n - 1].year))
   }
 
   get year() {
@@ -116,14 +150,15 @@ export class Timeline {
 
   /** The keyframe nearest the current position. */
   get era() {
-    return this.eras[Math.round(Math.max(0, Math.min(this.max, this.s)))] || null
+    return this.eraAt(this.s)
   }
 
   /** The two keyframes either side and how far between them (for the overlay's crossfade). */
   get pair() {
-    const s = Math.max(0, Math.min(this.max, this.s))
+    const last = Math.max(0, this.n - 1)
+    const s = Math.max(0, Math.min(last, this.s))
     const a = Math.floor(s)
-    const b = Math.min(this.max, a + 1)
+    const b = Math.min(last, a + 1)
     return { a: this.eras[a], b: this.eras[b], t: s - a }
   }
 

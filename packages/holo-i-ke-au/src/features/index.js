@@ -133,7 +133,7 @@ export class DistrictFeatures {
     // --- what people built ---------------------------------------------------------
     const B = new Builder()
     this.counts = { hale: 0, waa: 0, pondWalls: 0 }
-    for (const [index, f] of rec.d.byIndex) {
+    for (const { index, f } of rec.d.rastered) {
       const kind = f.properties?.kind
       const ring = f.geometry.coordinates[0].map((c) => proj.toWorld(c))
       if (kind === 'village') this.buildVillage(B, ring, index, rand)

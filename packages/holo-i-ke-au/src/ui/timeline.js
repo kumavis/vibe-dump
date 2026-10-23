@@ -33,7 +33,7 @@ export class TimelineBar {
       <div class="tl-track">
         <div class="tl-rail"><span></span></div>
         <div class="tl-ticks"></div>
-        <input class="tl-input" type="range" min="0" max="${Math.max(0, n - 1)}" step="0.001" aria-label="Year" />
+        <input class="tl-input" type="range" min="0" max="${this.tl.max}" step="0.001" aria-label="Year" />
       </div>`
     root.appendChild(this.el)
     this.input = $('.tl-input', this.el)
@@ -41,9 +41,10 @@ export class TimelineBar {
     this.nextBtn = $('.tl-next', this.el)
     this.tourEl = $('.tl-tour', this.el)
     const ticks = $('.tl-ticks', this.el)
-    // every tick carries its year; labelTicks() shows as many as fit
+    // every tick carries its year; labelTicks() shows as many as fit (the
+    // track may run on past the last to now: time.js)
     this.tl.eras.forEach((e, i) => {
-      const left = n > 1 ? (i / (n - 1)) * 100 : 50
+      const left = n > 1 ? (i / this.tl.max) * 100 : 50
       const t = h('button', { class: 'tl-tick', style: `left:${left}%`, title: `${e.label} · ${formatYear(e.year, e.yearPrecision)}`, 'aria-label': e.label, 'data-i': i })
       t.innerHTML = `<i></i><span>${esc(formatYear(e.year, e.yearPrecision).replace('c. ', ''))}</span>`
       ticks.appendChild(t)
@@ -125,8 +126,10 @@ export class TimelineBar {
     const tl = this.tl
     const era = tl.era
     $('.tl-era', this.el).textContent = era ? era.label : ''
-    // the year reached, as precise as the nearest keyframe allows
-    $('.tl-year', this.el).textContent = era ? formatYear(tl.year, era.yearPrecision ?? 1) : ''
+    // the year reached, as precise as the nearest keyframe allows (and at
+    // the end of a track that runs to now, this year)
+    const atNow = tl.reachesNow && tl.s >= tl.max - 1e-3
+    $('.tl-year', this.el).textContent = era ? formatYear(tl.year, atNow ? 1 : (era.yearPrecision ?? 1)) : ''
     if (document.activeElement !== this.input) this.input.value = String(tl.s)
     const f = tl.max > 0 ? tl.s / tl.max : 0
     $('.tl-rail span', this.el).style.width = `${f * 100}%`
