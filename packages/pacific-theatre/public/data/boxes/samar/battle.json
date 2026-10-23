@@ -9007,18 +9007,18 @@
           "t": "08:00",
           "lonlat": [126.13,11.76],
           "courseDeg": 150,
-          "speedKn": 12.7,
+          "speedKn": 9.9,
           "precision": "schematic",
           "source": "morison-xii"
         },
         {
-          "t": "08:45",
+          "t": "08:58",
           "lonlat": [126.212,11.622],
           "courseDeg": 208,
-          "speedKn": 4.1,
+          "speedKn": 10,
           "precision": "schematic",
           "source": "morison-xii",
-          "sourceNote": "firing on Gambier Bay (Morison; TROM)"
+          "sourceNote": "firing on Gambier Bay (Morison; TROM); timed so she closes at the speed she came on at"
         },
         {
           "t": "09:07",

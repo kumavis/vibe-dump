@@ -3823,14 +3823,14 @@
       "launch": "08:45",
       "altM": 450,
       "route": [
-        {"t":"09:45","lonlat":[-177.2814,30.8328],"altM":450,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"09:06","lonlat":[-177.2814,30.8328],"altM":450,"precision":"narrative","source":"nwc-midway-1948","note":"at the squadron’s own pace from its launch; Yorktown’s group joined up at 09:45 (NWC) on the next leg"},
         {
-          "t": "10:00",
+          "t": "09:56",
           "lonlat": [-178.826,29.4338],
           "altM": 450,
           "precision": "narrative",
           "source": "nwc-midway-1948",
-          "note": "sighted the force at 345°, 30 to 40 miles"
+          "note": "sighted the force at 345°, 30 to 40 miles (NWC: about 10:00), timed so the run to Hiryū is flown at the squadron’s pace"
         }
       ],
       "attack": {

@@ -2940,16 +2940,16 @@
           "t": "06:45",
           "lonlat": [-157.985,21.272],
           "courseDeg": 120,
-          "speedKn": 2.2,
+          "speedKn": 16.2,
           "precision": "schematic",
           "source": "ward-ar-1941",
           "sourceNote": "firing at 50–100 yards, then depth charges set for 100 feet"
         },
         {
-          "t": "07:30",
+          "t": "06:51",
           "lonlat": [-157.96,21.2584],
           "courseDeg": 14,
-          "speedKn": 0.8,
+          "speedKn": 0.6,
           "precision": "schematic",
           "source": "ward-ar-1941"
         },
@@ -6894,12 +6894,12 @@
           "note": "split about ten miles east of Kahuku"
         },
         {
-          "t": "08:52",
+          "t": "08:55",
           "lonlat": [-157.79,21.25],
           "altM": 1500,
           "precision": "narrative",
           "source": "aaf-7dec41",
-          "note": "south past Diamond Head and round over the sea"
+          "note": "south past Diamond Head and round over the sea; ten minutes from the split at a B5N’s speed"
         }
       ],
       "attack": {
@@ -6996,7 +6996,7 @@
           "source": "aaf-7dec41",
           "note": "split about ten miles east of Kahuku"
         },
-        {"t":"08:52","lonlat":[-157.79,21.25],"altM":1500,"precision":"narrative","source":"aaf-7dec41"}
+        {"t":"08:55","lonlat":[-157.79,21.25],"altM":1500,"precision":"narrative","source":"aaf-7dec41"}
       ],
       "attack": {
         "t": "09:05",
@@ -7416,12 +7416,12 @@
       "altM": 1500,
       "route": [
         {
-          "t": "08:33",
+          "t": "08:34",
           "lonlat": [-158.0764,21.398],
           "altM": 1500,
           "precision": "narrative",
           "source": "aaf-7dec41",
-          "note": "sent by ground control toward ʻEwa"
+          "note": "sent by ground control toward ʻEwa: 22 km from Haleʻiwa, four minutes after they took off"
         }
       ],
       "attack": {

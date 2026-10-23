@@ -30,6 +30,13 @@
 //   an off-box entry on the box's edge), the attack profile of the vocabulary,
 //   `reached` inside the count, losses as ranges, every scripted count the
 //   group causes within what reached;
+// - the record's speeds (the project manager's decision 28): no group's leg
+//   (launch or entry, route, the attack's target) faster than its kit's top
+//   speed, no ship's leg between fixes more than a mile beyond hers, and no
+//   ship under way falling under 5 knots in her own action with nothing in her
+//   record to slow her (Gwin in the van, Ward on her run, Noshiro on Gambier
+//   Bay were; the Haleʻiwa P-40s, Torpedo Three and the second wave's level
+//   bombers flew legs their kits could not);
 // - sites (R10 D11): the kinds below, inside the box, buildings with people
 //   never targets; Pearl Harbor's airfields, hangars, drydocks, quays, AA
 //   positions and its barracks and hospital, the berths at their precisions;
@@ -522,6 +529,9 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
   if (B.firstDoor === undefined) need(rel, 'has no firstDoor (ROUND-2.md §7: the one easy take-over the briefing names)')
   else firstDoor(`${rel} firstDoor`, B.firstDoor)
 
+  // --- the record's speeds against the kits (the project manager's decision 28)
+  recordSpeeds()
+
   // --- the box's own sources
   if (!(B.sources || []).length) ctx.bad(rel, 'cites no sources')
   for (const x of B.sources || []) src(`${rel} sources`, x)
@@ -922,6 +932,98 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
       if (from && units.has(s.from) && tS !== null && !posAt(from, tS)) ctx.bad(`${at} start`, `${s.from} has no position at ${d.t}`)
       if (!spare && r.kind === 'aircraft') ctx.warn(`${at} start`, 'the group has aircraft the player may take where the record has them: the start is for a spare')
     }
+  }
+
+  /**
+   * The record's legs against what the kits can do (the project manager's decision 28). A group's leg (from
+   * its launch or entry, by its route, to its attack's target where that has a place) faster than its kit's
+   * top speed fails; its first leg from a field or a deck allows the take-off the plan flies (record.js: about
+   * 4 km in the first 70 s). A ship's leg between two fixes faster than her kit's top speed fails, with a
+   * nautical mile of slack across the two (the charts' fixes are read to about a minute of arc). A ship under
+   * way (a leg at 5 knots or more in the half hour before she opens fire) fails where a fix inside her action
+   * (from her opening fire to her ceasing fire, else to her next event, else ten minutes) starts a leg under
+   * 5 knots and nothing in her record before that leg's end (a hit, a jammed rudder, a power failure) slows her.
+   * Every speed is the one the sim flies or steams: the distance between the record's places over the time.
+   */
+  function recordSpeeds() {
+    const KMH = 1.852
+    const at = (t) => safeParse(clock, t)
+    const placeOf = (id, tS) => {
+      const u = units.get(id)
+      if (u) return posAt(u, tS)
+      return sites.get(id)?.lonlat ?? null
+    }
+    let legs = 0
+    for (const g of B.groups || []) {
+      const kit = airKits.get(g.kit)
+      // (its top speed at its rated height: kits/aircraft.json speedKmh.max)
+      const top = kit?.speedKmh?.max ?? kit?.speedKmh
+      if (!Number.isFinite(top) || !top) continue
+      const pts = []
+      if (g.offBox && Array.isArray(g.enter?.lonlat)) pts.push({ t: at(g.enter.t), ll: g.enter.lonlat, what: `its entry (${g.enter.t})` })
+      else if (g.launch && g.from) {
+        const t0 = at(g.launch)
+        const ll = t0 !== null ? placeOf(g.from, t0) : null
+        if (ll) pts.push({ t: t0, ll, what: `its launch from ${g.from} (${g.launch})`, takeoff: true })
+      }
+      for (const [i, r] of (g.route || []).entries()) if (Array.isArray(r.lonlat)) pts.push({ t: at(r.t), ll: r.lonlat, what: `route[${i}] (${r.t})` })
+      const a = g.attack
+      if (a?.t && a.target && ['dive', 'torpedo', 'level', 'strafe'].includes(a.profile)) {
+        const ta = at(a.t)
+        const target = [a.target].flat()[0]
+        const ll = ta !== null ? placeOf(target, ta) : null
+        if (ll) pts.push({ t: ta, ll, what: `its attack on ${target} (${a.t})` })
+      }
+      for (let i = 1; i < pts.length; i++) {
+        const p = pts[i - 1]
+        const q = pts[i]
+        if (p.t === null || q.t === null || q.t <= p.t) continue
+        legs++
+        const km = Math.max(0, kmBetween(p.ll, q.ll) - (p.takeoff ? 4 : 0))
+        const h = (q.t - p.t - (p.takeoff ? 70 : 0)) / 3600
+        const kmh = h > 0 ? km / h : Infinity
+        if (kmh > top) ctx.bad(`${rel} group ${g.id}`, `the leg from ${p.what} to ${q.what} needs ${Math.round(kmh / KMH)} knots; a ${g.kit} makes ${Math.round(top / KMH)} at most`)
+      }
+    }
+    const HALT = new Set(['hit', 'torpedo-hit', 'dead-in-water', 'power-failure', 'steering-jammed', 'aground', 'explodes', 'flood', 'collision', 'sinks', 'abandoned', 'scuttled'])
+    for (const u of units.values()) {
+      const fixes = (u.track || []).map((f) => ({ ...f, s: at(f.t) })).filter((f) => f.s !== null && Array.isArray(f.lonlat))
+      // each fix's leg to the next: its speed in knots and where it ends
+      for (let i = 0; i + 1 < fixes.length; i++) {
+        const p = fixes[i]
+        const q = fixes[i + 1]
+        p.next = q
+        p.km = kmBetween(p.lonlat, q.lonlat)
+        p.kn = q.s > p.s ? p.km / KMH / ((q.s - p.s) / 3600) : null
+      }
+      const top = shipKits.get(u.kit)?.speedKn
+      if (Number.isFinite(top) && top > 0) {
+        for (const p of fixes) {
+          if (p.kn === null || p.kn === undefined) continue
+          legs++
+          const hours = (p.next.s - p.s) / 3600
+          if (p.km / KMH - 1 > top * hours) ctx.bad(`${rel} unit ${u.id} track ${p.next.t}`, `the leg from ${p.t} needs ${p.kn.toFixed(1)} knots, more than a mile beyond what ${u.kit} makes at ${top}`)
+        }
+      }
+      // under 5 knots in her own action
+      const evs = (u.events || []).map((e) => ({ ...e, s: at(e.t) })).filter((e) => e.s !== null).sort((x, y) => x.s - y.s)
+      const slow = new Set()
+      for (const [k, e] of evs.entries()) {
+        if (e.kind !== 'opens-fire') continue
+        const later = evs.slice(k + 1)
+        const end = later.find((x) => x.kind === 'ceases-fire')?.s ?? later.find((x) => x.s > e.s && x.kind !== 'opens-fire')?.s ?? e.s + 600
+        // (under way: a leg at 5 knots or more in the half hour before she opened fire; a ship moored, anchored or working in a channel fights where she lies)
+        const underWay = fixes.some((f) => f.kn >= 5 && f.next.s > e.s - 1800 && f.s <= e.s)
+        if (!underWay) continue
+        for (const f of fixes) {
+          if (f.s < e.s || f.s >= end || f.kn === null || f.kn === undefined || f.kn >= 5 || slow.has(f)) continue
+          if (evs.some((x) => HALT.has(x.kind) && x.s < f.next.s)) continue
+          slow.add(f)
+          ctx.bad(`${rel} unit ${u.id} track ${f.t}`, `${f.kn.toFixed(1)} knots from ${f.t} to ${f.next.t}, in her own action (she opens fire at ${e.t}) with nothing in her record to slow her`)
+        }
+      }
+    }
+    ctx.count('record legs held to their kits', legs)
   }
 
   /** When a ship's record ends it (sunk, scuttled, capsized, beached, or its sinking, scuttling, explosion or abandonment), in clock seconds, or null. */
