@@ -15,9 +15,9 @@
 // events at one and the same point never do, and the cluster's list is how
 // they're reached. A halo gathers by its centre. The open event, the tour's
 // or one picked by hand, always stands on its own with its label; except
-// that at a stop of the tour, while the stop's own people are drawn
-// there (features/forces.js), the scene is the subject and the card names
-// the place, so its pin and label stand aside until the people fade (aside).
+// that at a near stop of the tour, or at any stop while the stop's own
+// people are drawn there (features/forces.js), the scene is the subject and
+// the card names the place, so its pin and label stand aside (aside).
 //
 // A few dozen pins: every pair is compared, every frame, in typed arrays and
 // a pool of markers that only grows, so a frame allocates nothing.
@@ -99,15 +99,17 @@ export class Pins {
   }
 
   /**
-   * Whether the open event's pin stands aside: the tour is at one of its stops and the stop's
-   * own people are drawn (forces.js stopShown, with a little play so it doesn't flicker at the
-   * edge), at whatever zoom. A stop with no people, and an event opened off the tour, keep the pin.
+   * Whether the open event's pin stands aside: the tour is at one of its near stops (a close-up,
+   * where a label would cover the pond or the terrace it is about), or at any of its stops while
+   * the stop's own people are drawn (forces.js stopShown, with a little play so it doesn't
+   * flicker at the edge). A far or island stop with no people, and an event opened off the tour,
+   * keep the pin.
    */
   aside() {
     const app = this.app
     const tour = app.tour
     const st = tour?.active && tour.event === this.activeEvent && tour.stop >= 0 ? tour.event.stops?.[tour.stop] : null
-    const k = st ? app.districts?.cur?.features?.forces?.stopShown ?? 0 : 0
+    const k = st ? Math.max(st.zoom === 'near' ? 1 : 0, app.districts?.cur?.features?.forces?.stopShown ?? 0) : 0
     this.asideNow = this.asideNow ? k > 0.2 : k > 0.35
     return this.asideNow
   }
