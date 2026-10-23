@@ -141,11 +141,19 @@ export class Cameras {
         F.set(0, 0, -1).applyQuaternion(Q)
         U.set(0, 1, 0).applyQuaternion(Q)
         cam.position.set(x, y, z).addScaledVector(F, -2.5).addScaledVector(U, 1.4)
-      } else cam.position.set(x, y + (m.deck ?? 8) + 7, z)
+      } else {
+        // the director's eye atop the bridge (ai.js directorEye), above the ship's own structure
+        const sup = m.sup || { yHi: m.top * 0.6, z0: -m.L * 0.15 }
+        const h = s.heading[i] * DEG
+        const along = -(sup.z0 ?? 0) + 3
+        cam.position.set(x + Math.sin(h) * along, y + sup.yHi * 1.05, z - Math.cos(h) * along)
+      }
       // (an aim given as a point, input.aa, as the sim reads it: its compass bearing and height from the eye)
       const pt = Array.isArray(inp?.aa) && inp.aa.length === 3 ? inp.aa : null
-      const aimAz = pt ? Math.atan2(pt[0] - x, -(pt[2] - z)) / DEG : inp?.aimAz
-      const aimEl = pt ? Math.atan2(pt[1] - cam.position.y, Math.hypot(pt[0] - x, pt[2] - z)) / DEG : inp?.aimEl
+      const cx = cam.position.x
+      const cz = cam.position.z
+      const aimAz = pt ? Math.atan2(pt[0] - cx, -(pt[2] - cz)) / DEG : inp?.aimAz
+      const aimEl = pt ? Math.atan2(pt[1] - cam.position.y, Math.hypot(pt[0] - cx, pt[2] - cz)) / DEG : inp?.aimEl
       const az = ((aimAz ?? s.heading[i] + (air ? 180 : 90)) * DEG) + this.look.yaw
       const el = Math.max(-0.2, Math.min(1.5, (aimEl ?? 10) * DEG + this.look.pitch))
       W.set(cam.position.x + Math.sin(az) * Math.cos(el) * 1000, cam.position.y + Math.sin(el) * 1000, cam.position.z - Math.cos(az) * Math.cos(el) * 1000)

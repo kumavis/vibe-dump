@@ -1171,12 +1171,23 @@ function firedOnAircraft(sim, j) {
  * scaled by the lead error: a cone full at 0 mil and zero beyond 40 mil for
  * the heavy mounts and 80 for the machine guns.
  */
+/**
+ * The AA director's eye: atop the bridge (the superstructure's top, 3 m forward of its after end), where the
+ * scene's director and gun cameras stand, so the aim the player sees down is the aim the sim fires along.
+ */
+export function directorEye(s, i, m) {
+  const sup = m.sup || { yHi: (m.top ?? 20) * 0.6, z0: -(m.L ?? 100) * 0.15 }
+  const h = s.heading[i] * DEG
+  const along = -(sup.z0 ?? 0) + 3
+  return [s.pos[3 * i] + Math.sin(h) * along, s.pos[3 * i + 1] + sup.yHi * 1.05, s.pos[3 * i + 2] - Math.cos(h) * along]
+}
+
 function aaDirector(sim, pl, i, x, dt) {
   const s = sim.state
   const inp = pl.input
   const seen = pl._seen
   const m = x.model
-  const eye = [s.pos[3 * i], (m.deck ?? 10) + 6, s.pos[3 * i + 2]]
+  const eye = directorEye(s, i, m)
   const dir = aimDirOf(inp, eye)
   const reach = aaReach(m)
   const j = aimedAircraft(sim, i, eye, dir, P.aaStation.aimedWithinDeg, reach)
@@ -1336,6 +1347,10 @@ export function airName(sim, i) {
 function grounding(sim, i, x) {
   const b = x.body
   const m = x.model
+  // (not where she was taken: a ship moored at a quay reads shallow under her bow on the 30 m raster; she runs aground once she has
+  // made her own way, more than 0.6 of her length from there)
+  b.start ??= [b.x, b.z]
+  if (Math.hypot(b.x - b.start[0], b.z - b.start[1]) < m.L * 0.6) return
   const [ux, uz] = courseVec(b.heading)
   const bow = sim.world.metresAt(b.x + ux * m.L * 0.45, b.z + uz * m.L * 0.45)
   if (bow > -m.T * 0.8 && !b.aground) {
@@ -2675,7 +2690,7 @@ export function updatePlayerState(sim) {
 function directorSight(sim, pl, i, x) {
   const s = sim.state
   const m = x.model
-  const eye = [s.pos[3 * i], (m.deck ?? 10) + 6, s.pos[3 * i + 2]]
+  const eye = directorEye(s, i, m)
   const dir = aimDirOf(pl.input, eye)
   const j = pl.aaAimed ?? aimedAircraft(sim, i, eye, dir, P.aaStation.aimedWithinDeg, aaReach(m))
   const out = { dir, eye, aimed: j >= 0 && s.alive[j] === 1 ? j : -1, firing: !!pl.aaFiring, cone: pl.aaCone ?? 0, reach: aaReach(m), lead: null, leadLight: null, range: null }
