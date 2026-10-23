@@ -20,14 +20,16 @@
 //   stretch through a `tunnel` of its own work is left out, and a work with
 //   `built` grows along its length over those years.
 // - the blocks: one building each, at a point or fitted to a footprint
-//   (the polygon's principal axes), with its storeys and years; across a
-//   `built` span each comes up in a year of its own.
+//   (the polygon's principal axes), with its storeys, its use and its
+//   years (BLOCK_STRIDE floats each); across a `built` span each comes up
+//   in a year of its own.
 // - the names: the military land's, an airfield's and each named road's,
 //   one item each with its place, its years and its size (the larger first).
 // - what the settlements keep off (WorksExclusion): the military land, the
 //   ranges, the fields and the blocks' footprints, and the runways, roads,
 //   rail, piers and breakwaters as strips of their width, each from the year
-//   it was taken or begun to the year after its `to`.
+//   it was taken or begun to the year after its `to`; and the same index
+//   asked for the trees (TREELESS: what a tree never stands on in its years).
 //
 // Years: a work stands from its `from` (fading in over the year before, so
 // in its `from` it is whole) to its `to` (fading out over the year after,
@@ -67,6 +69,37 @@ const WIDTH = { runway: 45, pier: 15, breakwater: 12, road: 10, line: 3.5, tunne
 export const TONE = { land: 0, range: 1, field: 2 }
 /** The ribbons' looks, one batch each. */
 export const LOOKS = ['runway', 'road', 'stone', 'rail']
+/** A block's `use` (DATA.md), as its record codes it (1 + the index; 0 none or another). */
+export const USES = ['hangar', 'barracks', 'hospital', 'warehouse', 'industrial', 'office', 'school', 'church', 'residential', 'tower']
+/** Floats a block takes: x, z, dir, L, W, storeys, use, and its four years. */
+export const BLOCK_STRIDE = 11
+/** The parts no tree stands on while they do (the land, a range and the roads and rail have trees beside and on them). */
+export const TREELESS = new Set(['block', 'runway', 'field', 'pier', 'breakwater'])
+
+// A block's kit (buildings.js worksKits) by its `use` first (DATA.md
+// "Accepted extensions"), and the storeys a use stands at where the file
+// gives none: Tripler a tall concrete block, a base's chapel a church, its
+// quarters houses. A block with no use, or another, goes by its storeys
+// and its size.
+const USE_KIND = { hangar: 'hangar', barracks: 'barracks', hospital: 'block', office: 'block', school: 'block', tower: 'tower', warehouse: 'low', industrial: 'low', church: 'church', residential: 'house' }
+const USE_STOREYS = { barracks: 2, hospital: 6, office: 4, school: 2, tower: 12 }
+
+/** A block's kind and storeys: by its use, else by its storeys and its footprint's area (m²; 0 for a point). */
+export function blockKind(use, storeys, area) {
+  const st = storeys || USE_STOREYS[use] || 0
+  const byUse = USE_KIND[use]
+  if (byUse === 'barracks') return { kind: st >= 3 ? 'barracks3' : 'barracks2', storeys: st }
+  if (byUse) return { kind: byUse, storeys: st }
+  if (storeys >= 4) return { kind: 'block', storeys }
+  if (storeys === 3) return { kind: 'barracks3', storeys }
+  if (storeys === 2) return { kind: 'barracks2', storeys }
+  if (storeys === 1) return { kind: area && area < 900 ? 'low' : 'hangar', storeys }
+  return { kind: area > 2500 ? 'hangar' : 'barracks2', storeys }
+}
+/** Each kind's size as built, metres along and across (buildings.js worksKits), and a block given as a point drawn at BLOCK_POINT_S: the ground it keeps. */
+const BLOCK_SIZE = { hangar: [60, 48], barracks2: [56, 16], barracks3: [56, 16], low: [26, 14], block: [30, 22], tower: [29, 18], church: [25, 45], house: [9.8, 8.6] }
+/** World units per metre a block given as a point is drawn at: a little over life. */
+export const BLOCK_POINT_S = 0.013
 const LOOK_OF = { runway: 'runway', road: 'road', pier: 'stone', breakwater: 'stone', line: 'rail' }
 
 const NEVER = 1e5
@@ -272,6 +305,14 @@ function segDist(x, z, ax, az, bx, bz) {
   const L2 = dx * dx + dz * dz
   const t = L2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / L2)) : 0
   return Math.hypot(x - ax - dx * t, z - az - dz * t)
+}
+
+/** A block's ground kept, as WorksExclusion holds it: the box of half extents hx, hz about (x, z), its length along `dir`. */
+function boxRing(x, z, dir, hx, hz, start, end) {
+  const c = Math.cos(dir)
+  const s = Math.sin(dir)
+  const ring = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [x + u * hx * c - v * hz * s, z + u * hx * s + v * hz * c])
+  return { rings: [Float32Array.from(ring.flat())], box: boxOf([ring]), start, end, part: 'block' }
 }
 
 /** A footprint's principal axes: centre, turn, length and width (world units), from a ring. */
@@ -496,8 +537,10 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
       }
     } else if (part === 'block') {
       const storeys = Number.isFinite(p.storeys) ? Math.max(1, Math.round(p.storeys)) : 0
+      const use = USES.indexOf(p.use) + 1
+      meta.use = use ? p.use : null
       const put = (x, z, dir, L, W) => {
-        blocks.push({ x, z, dir, L, W, storeys, span: [...span], group: meta.group, i: meta.i })
+        blocks.push({ x, z, dir, L, W, storeys, use, span: [...span], keep: [start, end], group: meta.group, i: meta.i })
         grow(x, z)
         meta.rep ??= [x, z]
       }
@@ -506,7 +549,8 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
         if (ring.length < 3) continue
         const fp = footprint(ring)
         put(fp.x, fp.z, fp.dir, fp.L, fp.W)
-        excl.polys.push({ rings: [Float32Array.from(ring.flat())], box: boxOf([ring]), start, end, part })
+        // (the ground kept is the building drawn, its footprint's box, which holds the footprint: no tree in an L's corner stands through its roof)
+        excl.polys.push(boxRing(fp.x, fp.z, fp.dir, fp.L / 2, fp.W / 2, start, end))
       }
       for (const c of pointsOf(f.geometry)) {
         const [x, z] = proj.toWorld(c)
@@ -530,6 +574,9 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
         }
       }
     }
+    // (and keeps the ground its kit stands on, from the settlements and the trees)
+    const [Lm, Wm] = BLOCK_SIZE[blockKind(USES[b.use - 1], b.storeys, 0).kind]
+    excl.polys.push(boxRing(b.x, b.z, b.dir, (Lm * BLOCK_POINT_S) / 2, (Wm * BLOCK_POINT_S) / 2, b.keep[0], b.keep[1]))
   }
   // across a `built` span each block comes up in a year of its own
   blocks.forEach((b, k) => {
@@ -540,8 +587,8 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
     b.span[0] = t
     b.span[1] = t + w
   })
-  const B = new Float32Array(blocks.length * 10)
-  blocks.forEach((b, k) => B.set([b.x, b.z, b.dir, b.L, b.W, b.storeys, ...b.span], k * 10))
+  const B = new Float32Array(blocks.length * BLOCK_STRIDE)
+  blocks.forEach((b, k) => B.set([b.x, b.z, b.dir, b.L, b.W, b.storeys, b.use, ...b.span], k * BLOCK_STRIDE))
   const F32 = (a) => Float32Array.from(a)
   const out = {
     feats,
@@ -741,6 +788,132 @@ export class WorksExclusion {
     }
     return dep
   }
+
+  /**
+   * The years works of `parts` (a Set) take the ground within `r` of (x, z):
+   * [start, end) each, merged where they meet. For a tree: crops.js clips
+   * its years by them.
+   */
+  standing(x, z, r, parts) {
+    const i0 = Math.floor((x - r) / CELL)
+    const i1 = Math.floor((x + r) / CELL)
+    const j0 = Math.floor((z - r) / CELL)
+    const j1 = Math.floor((z + r) / CELL)
+    const stamp = ++this.stamp
+    const spans = []
+    for (let j = j0; j <= j1; j++) {
+      for (let i = i0; i <= i1; i++) {
+        const refs = this.grid.get(i * 100003 + j)
+        if (!refs) continue
+        for (const ref of refs) {
+          let shape
+          let hit
+          if (ref >= 0) {
+            if (this.seen[ref] === stamp) continue
+            this.seen[ref] = stamp
+            shape = this.polys[ref]
+            if (!parts.has(shape.part)) continue
+            const b = shape.box
+            if (x + r < b[0] || x - r > b[2] || z + r < b[1] || z - r > b[3]) continue
+            hit = insideRings(shape.rings, x, z) || insideRings(shape.rings, x - r, z) || insideRings(shape.rings, x + r, z) || insideRings(shape.rings, x, z - r) || insideRings(shape.rings, x, z + r)
+          } else {
+            const q = -1 - ref
+            shape = this.lines[Math.floor(q / 65536)]
+            if (!parts.has(shape.part)) continue
+            const si = q % 65536
+            const P = shape.pts
+            hit = segDist(x, z, P[si * 2], P[si * 2 + 1], P[si * 2 + 2], P[si * 2 + 3]) < shape.hw + r
+          }
+          if (hit) spans.push([shape.start, shape.end])
+        }
+      }
+    }
+    if (spans.length < 2) return spans
+    spans.sort((a, b) => a[0] - b[0])
+    const out = [spans[0].slice()]
+    for (const [a, b] of spans.slice(1)) {
+      const last = out[out.length - 1]
+      if (a <= last[1]) last[1] = Math.max(last[1], b)
+      else out.push([a, b])
+    }
+    return out
+  }
+
+  /**
+   * The texels of an N × N grid over `rect` that the works of `parts` cover
+   * (any texel whose square they reach), one entry per work with its years:
+   * [{ start, end, texels }]. For a district's trees: settlements.js stamps
+   * them into its clearing by their weight in the year (worksClear).
+   */
+  raster(rect, N, parts) {
+    const sx = N / (rect.x1 - rect.x0)
+    const sz = N / (rect.z1 - rect.z0)
+    const tx = 1 / sx
+    const tz = 1 / sz
+    const half = Math.hypot(tx, tz) / 2
+    const ci = (v) => Math.max(0, Math.min(N - 1, v))
+    const out = []
+    const range = (b, m) => {
+      if (b[2] + m < rect.x0 || b[0] - m > rect.x1 || b[3] + m < rect.z0 || b[1] - m > rect.z1) return null
+      return [ci(Math.floor((b[0] - m - rect.x0) * sx)), ci(Math.floor((b[2] + m - rect.x0) * sx)), ci(Math.floor((b[1] - m - rect.z0) * sz)), ci(Math.floor((b[3] + m - rect.z0) * sz))]
+    }
+    for (const p of this.polys) {
+      if (!parts.has(p.part)) continue
+      const q = range(p.box, 0)
+      if (!q) continue
+      const [i0, i1, j0, j1] = q
+      // (the texels an edge of it crosses, so a thin footprint never slips between the texels' middles, and those it holds the middle of)
+      const set = new Set()
+      for (const ring of p.rings) {
+        const n = ring.length / 2
+        for (let k = 0; k < n; k++) {
+          const m = (k + 1) % n
+          const [ax, az, bx, bz] = [ring[k * 2], ring[k * 2 + 1], ring[m * 2], ring[m * 2 + 1]]
+          const e = range([Math.min(ax, bx), Math.min(az, bz), Math.max(ax, bx), Math.max(az, bz)], 0)
+          if (!e) continue
+          for (let j = e[2]; j <= e[3]; j++) {
+            for (let i = e[0]; i <= e[1]; i++) {
+              const cx = rect.x0 + (i + 0.5) * tx
+              const cz = rect.z0 + (j + 0.5) * tz
+              if (segHitsBox(ax - cx, az - cz, bx - cx, bz - cz, 1, 0, 0, 1, tx / 2, tz / 2)) set.add(j * N + i)
+            }
+          }
+        }
+      }
+      for (let j = j0; j <= j1; j++) {
+        for (let i = i0; i <= i1; i++) {
+          if (!set.has(j * N + i) && insideRings(p.rings, rect.x0 + (i + 0.5) * tx, rect.z0 + (j + 0.5) * tz)) set.add(j * N + i)
+        }
+      }
+      const texels = [...set]
+      if (texels.length) out.push({ start: p.start, end: p.end, texels: Int32Array.from(texels) })
+    }
+    for (const l of this.lines) {
+      if (!parts.has(l.part)) continue
+      if (!range(l.box, 0)) continue
+      const set = new Set()
+      const P = l.pts
+      for (let s = 0; s + 3 < P.length; s += 2) {
+        const [ax, az, bx, bz] = [P[s], P[s + 1], P[s + 2], P[s + 3]]
+        const q = range([Math.min(ax, bx), Math.min(az, bz), Math.max(ax, bx), Math.max(az, bz)], l.hw + half)
+        if (!q) continue
+        const [i0, i1, j0, j1] = q
+        for (let j = j0; j <= j1; j++) {
+          for (let i = i0; i <= i1; i++) {
+            if (segDist(rect.x0 + (i + 0.5) * tx, rect.z0 + (j + 0.5) * tz, ax, az, bx, bz) <= l.hw + half) set.add(j * N + i)
+          }
+        }
+      }
+      if (set.size) out.push({ start: l.start, end: l.end, texels: Int32Array.from(set) })
+    }
+    return out
+  }
+}
+
+/** How far a work kept off from `start` to `end` (WorksExclusion's years) stands in a year: in over the year before `start`, out over the year before `end`. */
+export function keptWeight(start, end, y) {
+  // (a work with no `to` keeps it to the end of time)
+  return (Number.isFinite(start) ? smooth(start - 1, start, y) : 1) * (Number.isFinite(end) ? 1 - smooth(end - 1, end, y) : 1)
 }
 
 /** Whether segment a–b (relative to a box's centre) meets the box of half extents hx, hz along axes u, v (Liang–Barsky). */

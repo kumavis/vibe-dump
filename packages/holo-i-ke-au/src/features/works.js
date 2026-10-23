@@ -26,8 +26,9 @@
 //   the ground as the district's streams and trails are, from a point every
 //   25 m within some kilometres of the camera as it comes down, and every
 //   100 m beyond and at the island zoom;
-// - the blocks: hangars, barracks and concrete blocks (buildings.js
-//   worksKits), by their storeys, instanced, standing on the ground drawn
+// - the blocks: hangars, barracks, concrete blocks, and the town's tower,
+//   church and house (buildings.js worksKits), by their use first, else by
+//   their storeys and size (data/works.js blockKind), instanced, standing on the ground drawn
 //   under them now (world.metresAt, refreshed as the district comes and
 //   goes), each floor set into the slope at the mean of the ground under its
 //   footprint and its footing taking up the fall, near in only, as the
@@ -47,9 +48,9 @@ import { constants, noise, world, ground, lighting } from '../render/shaders/com
 import { Ribbons } from './ribbons.js'
 import { Labels } from './labels.js'
 import { Y, objectMaterial } from './kit.js'
-import { worksKits } from './buildings.js'
+import { worksKits, TOWER_H } from './buildings.js'
 import { mulberry32, LIFT } from './settlements.js'
-import { decodeWorks, workWeight, WorksExclusion, LOOKS } from '../data/works.js'
+import { decodeWorks, workWeight, WorksExclusion, LOOKS, USES, BLOCK_STRIDE, BLOCK_POINT_S, blockKind } from '../data/works.js'
 
 // how long an island's works are kept after it gave its slot up (s)
 const LINGER = 30
@@ -66,10 +67,12 @@ const RIBBON_FINE = 280
 const fineReach = (d) => (d < RIBBON_FINE ? Math.max(60, d * 4) : 0)
 // the blocks' scale, world units per metre: a little over life, as a hangar
 // is a large thing already; a footprint from the file is kept at its size
-const WORKS_S = 0.013
+const WORKS_S = BLOCK_POINT_S
 // where a block's ground is read under its footprint, in its half extents:
 // its middle, its corners and the middles of its sides
 const BLOCK_SAMPLES = [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]
+// a storey of a works building, metres (a tower's height by its storeys)
+const STOREY = 3.5
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -556,7 +559,7 @@ class IslandWorks {
 
   /** One instanced mesh per kind of block, each instance fitted to its footprint and standing in its years. */
   buildBlocks(B) {
-    const n = B.length / 10
+    const n = B.length / BLOCK_STRIDE
     this.blockCount = n
     this.blockMeshes = []
     if (!n) return
@@ -574,19 +577,24 @@ class IslandWorks {
     const byKind = new Map()
     this.instances = []
     for (let k = 0; k < n; k++) {
-      const [x, z, dir, L, Wd, storeys, a0, a1, b0, b1] = B.subarray(k * 10, k * 10 + 10)
-      const area = L * Wd * 1e4
-      let kind
-      if (storeys >= 4) kind = 'block'
-      else if (storeys === 3) kind = 'barracks3'
-      else if (storeys === 2) kind = 'barracks2'
-      else if (storeys === 1) kind = area && area < 900 ? 'low' : 'hangar'
-      else kind = area > 2500 ? 'hangar' : 'barracks2'
+      const [x, z, dir0, L0, W0, storeys0, u, a0, a1, b0, b1] = B.subarray(k * BLOCK_STRIDE, (k + 1) * BLOCK_STRIDE)
+      const use = USES[u - 1] ?? null
+      // (by its use first, else its storeys and its size: data/works.js blockKind)
+      const { kind, storeys } = blockKind(use, storeys0, L0 * W0 * 1e4)
       const kit = this.kits[kind]
-      const stretch = kind === 'block' ? Math.max(1, storeys / 4) : 1
+      // (a kit long along z, the church, turned a quarter to lie along a long footprint)
+      let dir = dir0
+      let L = L0
+      let Wd = W0
+      if (L > 0 && Wd > 0 && kit.W > kit.L !== Wd > L) {
+        dir += Math.PI / 2
+        L = W0
+        Wd = L0
+      }
+      const stretch = kind === 'block' ? Math.max(0.25, (storeys || 4) / 4) : kind === 'tower' ? ((storeys || 12) * STOREY) / TOWER_H : 1
       const sx = L > 0 ? L / kit.L : WORKS_S
       const sz = Wd > 0 ? Wd / kit.W : WORKS_S
-      const inst = { x, z, dir, sx, sy: WORKS_S * stretch, sz, stretch, span: [a0, a1, b0, b1], kind, kit, c: 0.94 + 0.12 * rand() }
+      const inst = { x, z, dir, sx, sy: WORKS_S * stretch, sz, stretch, span: [a0, a1, b0, b1], kind, use, storeys, kit, c: 0.94 + 0.12 * rand() }
       if (!byKind.has(kind)) byKind.set(kind, [])
       byKind.get(kind).push(inst)
       this.instances.push(inst)
@@ -736,6 +744,7 @@ class IslandWorks {
       edges: this.edgeCount,
       ribbons: Object.fromEntries(Object.entries(this.batches).map(([k, v]) => [k, { segments: v.n, km: +v.km.toFixed(1) }])),
       blocks: this.blockCount,
+      blockKinds: this.blockMeshes.length,
       blocksShown: this.blockMeshes.length ? +this.own.uShow.value.toFixed(2) : 0,
       calls: (this.wash ? 1 : 0) + (this.edges ? 1 : 0) + Object.keys(this.batches).length + this.blockMeshes.length,
       fineReach: fineReach(this.works.app.rig.state.distance),

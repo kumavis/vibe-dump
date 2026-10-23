@@ -12,7 +12,9 @@
 // out when the camera's target comes within reach of it, every keyframe at
 // once: each tree carries the span of years its keyframe is the year's
 // nearest (overlay/crops.js boundaries), less the years a loʻi, a fishpond or
-// a village of a district over the island stands where it would, so the
+// a village of a district over the island stands where it would, and those a
+// work's building, runway, field or pier does (data/works.js TREELESS: the
+// tiles wait for the island's works to be read), so the
 // year can be dragged without working anything out again, and the trees go
 // over with the fields, dithered by the eased year (kit.js `grow`). The draw
 // buffers are filled again only when the tiles in view change, or the year
@@ -28,6 +30,7 @@ import { CROP, CROP_LATTICE, CROP_REGION, CROP_CELL, COFFEE_PICK } from '../rend
 import { cropRegion, cropField, stripOffset, fromRegion, cropHash, cropCover, unpack } from '../overlay/crops.js'
 import { spanOf } from '../data/district.js'
 import { inside, mulberry32, smooth, clamp } from './settlements.js'
+import { TREELESS } from '../data/works.js'
 
 const TILE = 5 // world units (500 m)
 // the camera's distance over which the trees come in, as the island's towns'
@@ -45,6 +48,8 @@ const reachFor = (d) => clamp(d * 1.5, 24, 36)
 const SINK = 0.6
 // open ends of a span, in years
 const FAR = 1e5
+// how near a tree's trunk a work keeps it off (world units: about its crown)
+const CROWN = 0.04
 
 export const KINDS = ['umbrella', 'orchard']
 const K = Object.fromEntries(KINDS.map((k, i) => [k, i]))
@@ -206,6 +211,18 @@ class IslandCrops {
     for (const [a, b] of this.spans) for (const v of [a, b]) if (Math.abs(v) < FAR) edges.add(v)
     for (const f of this.features) for (const v of f.span) if (Math.abs(v) < FAR) edges.add(v)
     this.edges = [...edges].sort((a, b) => a - b)
+    // the works no tree stands on in their years: until they are read (null where the island has none), no tile is worked out
+    this.works = this.app.works ? undefined : null
+    this.app.works
+      ?.exclusion(this.id)
+      .catch(() => null)
+      .then((ex) => {
+        if (this.disposed) return
+        this.works = ex
+        if (ex) this.edges = [...new Set([...this.edges, ...[...ex.breaks].map((v) => v - 0.5)])].sort((a, b) => a - b)
+        this.tiles.clear()
+        this.key = ''
+      })
     this.mostTrees()
     this.meshes()
   }
@@ -270,13 +287,10 @@ class IslandCrops {
     return out
   }
 
-  /** Spans less the years of the features standing at (x, z). */
+  /** Spans less the years of the features standing at (x, z), and of the works keeping it (data/works.js TREELESS). */
   clip(spans, x, z) {
     let out = spans
-    for (const f of this.features) {
-      const b = f.box
-      if (x < b[0] || z < b[1] || x > b[2] || z > b[3] || !inside(f.ring, x, z)) continue
-      const [fa, fb] = f.span
+    const less = (fa, fb) => {
       const next = []
       for (const [a, b2] of out) {
         if (fb <= a || fa >= b2) next.push([a, b2])
@@ -287,6 +301,13 @@ class IslandCrops {
       }
       out = next
     }
+    for (const f of this.features) {
+      const b = f.box
+      if (x < b[0] || z < b[1] || x > b[2] || z > b[3] || !inside(f.ring, x, z)) continue
+      less(f.span[0], f.span[1])
+    }
+    // (a work is whole from its start and gone at its end, fading over the year before each: the tree goes and comes back half a year early, so it fades as the work does)
+    if (this.works) for (const [a, b] of this.works.standing(x, z, CROWN, TREELESS)) less(a - 0.5, b - 0.5)
     return out
   }
 
@@ -413,6 +434,11 @@ class IslandCrops {
   /** Every frame it is wanted: tiles in reach worked out (nearest first, within the budget), those far behind let go, the draw refreshed. */
   update(target, R, show, budget) {
     this.active = true
+    if (this.works === undefined) {
+      this.pending = 1
+      this.group.visible = false
+      return
+    }
     const r = this.rect
     const i0 = clamp(Math.floor((target.x - R - r.x0) / TILE), 0, this.tw - 1)
     const i1 = clamp(Math.floor((target.x + R - r.x0) / TILE), 0, this.tw - 1)
@@ -638,6 +664,7 @@ class IslandCrops {
   }
 
   dispose() {
+    this.disposed = true
     this.mgr.group.remove(this.group)
     for (const kd of this.kinds) {
       kd.mesh?.dispose()

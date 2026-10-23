@@ -92,7 +92,8 @@
 // grows with the camera's distance. Placed buildings are held to about
 // MAX_PLACED in any year. The streets are ribbons on the ground (ribbons.js),
 // one batch per epoch, crossfading; the trees step back from what is built
-// (kit.js uTownClear).
+// (kit.js uTownClear), and from the works' buildings, runways, fields and
+// piers in their years (data/works.js TREELESS).
 
 import * as THREE from 'three'
 import { S, Y, objectMaterial } from './kit.js'
@@ -105,6 +106,7 @@ import { distanceTransform, blur } from '../data/decode.js'
 import { EARLY } from '../overlay/land.js'
 import { geometryPoint } from '../geo.js'
 import { DISTRICT } from '../config.js'
+import { TREELESS, keptWeight } from '../data/works.js'
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 export const smooth = (a, b, x) => {
@@ -2046,6 +2048,15 @@ export class Settlements extends Scatter {
       this.stamp(this.ix[k], this.iz[k], this.ia[k], this.irx[k], this.irz[k], Math.round(255 * w))
     }
     this.app.towns?.stampInto(this.rec.d.rect, y, (x, z, a, rx, rz, v) => this.stamp(x, z, a, rx, rz, v))
+    // (and the works no tree stands on, by their weight in the year: their texels found once)
+    this.worksClear ??= this.works ? this.works.raster(this.rec.d.rect, this.clearN, TREELESS) : []
+    const D = this.clearData
+    for (const r of this.worksClear) {
+      const w = keptWeight(r.start, r.end, y)
+      if (w < 0.02) continue
+      const v = Math.round(255 * w)
+      for (const t of r.texels) if (D[t] < v) D[t] = v
+    }
     this.clearTex.needsUpdate = true
     this.yearCleared = y
     this.townsCleared = this.app.towns?.version ?? 0

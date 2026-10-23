@@ -272,7 +272,10 @@ shader on the ground drawn there, the island's or a district's lidar, so a
 runway at Kāneʻohe lies on the lidar as the camera comes down; a building's
 floor is set into its slope at the mean of the ground under its footprint, a
 deep footing taking up the fall, since a footprint can be a hundred metres
-across on a hillside (Tripler's). The settlements keep off the works of their
+across on a hillside (Tripler's); a building is drawn by its use first (a
+hospital a tall concrete block, a chapel a church, quarters houses), then by
+its storeys and size. No tree stands on a building, a runway, an airfield or
+a pier while it stands. The settlements keep off the works of their
 year. At the whole chain nothing of the works is drawn: no island is in a slot
 there, and a reservation is a few pixels against the land layers; the Land
 legend names military land while any of it is drawn on the island in view.

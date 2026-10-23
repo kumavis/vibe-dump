@@ -657,17 +657,18 @@ function concreteBlock(rand) {
 /**
  * The works' kits, by kind: a hangar, barracks of two and of three storeys,
  * a low block, and a block of four storeys whose instances stretch to their
- * own. Each as buildKits gives a kind's: geometry, half extents, extents and
+ * own; and the town's tower, church and house, for a block whose `use` is
+ * one of them. Each as buildKits gives a kind's: geometry, half extents, extents and
  * top, `L`, `W`, the size it was built at, for fitting to a footprint, and
  * `foot`, how far its footing reaches under its floor (metres, before a
  * block's stretch).
  */
 export function worksKits(rand) {
-  const kit = (B, L, W, storeys = 1) => {
+  const kit = (B, L, W, storeys = 1, foot = WORKS_FOOT) => {
     const g = indexed(B.geometry())
     g.computeBoundingBox()
     const ob = g.boundingBox
-    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, L, W, storeys, foot: WORKS_FOOT }
+    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, L, W, storeys, foot }
   }
   return {
     hangar: kit(hangar(rand), 60, 48),
@@ -675,6 +676,10 @@ export function worksKits(rand) {
     barracks3: kit(barracks(rand, 3), 56, 16, 3),
     low: kit(lowBlock(rand), 26, 14),
     block: kit(concreteBlock(rand), 30, 22, 4),
+    // (and, for a block whose use says so, the town's own: a tower, TOWER_H tall as built; a church, its length along z; a house)
+    tower: kit(tower(rand, 0), 29, 18, Math.round(TOWER_H / 3.5), FOOT * 3),
+    church: kit(towerChurch(rand), 25, 45, 1, FOOT),
+    house: kit(bungalow(rand, 0), 9.8, 8.6, 1, FOOT),
   }
 }
 

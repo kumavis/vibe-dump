@@ -1201,12 +1201,30 @@ works `tools/fake-data.mjs` writes; the bake may rely on these.
   id; an island with no file has no works, and a data set with no
   `works/manifest.json` has none at all. `?works=<base>` reads the works from
   another base (the tools' test works).
-- **The settlements** keep their lots off a `land`, `range` or `field` and a
-  `block`'s footprint from its `from` (or the start of its `built`) through
+- **The settlements** keep their lots off a `land`, `range` or `field` and
+  the building drawn for a `block` (its footprint's box, or its kit's size
+  where it is a point) from its `from` (or the start of its `built`) through
   its `to`, and off a `runway`, `road`, rail `line`, `pier` or `breakwater`
   as a strip of its drawn width in the same years: the contract's rule, with
   the roads and the rail added, since a house standing on a highway's
   ribbon reads as a fault.
+- **A block's `use`.** Optional, from the OSM tags: `hangar`, `barracks`,
+  `hospital`, `warehouse`, `industrial`, `office`, `school`, `church`,
+  `residential`, `tower` (anything else, or none, as none). The app picks a
+  block's building by its use first: a hangar; barracks of two storeys, or
+  three from three up; a hospital, an office or a school a concrete block of
+  its storeys (where `storeys` is absent, a hospital 6, an office 4, a
+  school 2); a tower the town's tower (12 storeys where absent); a warehouse
+  or an industrial building a low block; a church the town's church; a
+  residential building the town's house. Without a use, by `storeys` and
+  size as before: 4 and up a concrete block, 3 or 2 barracks, 1 a hangar
+  over 900 m² and a low block under it, none a hangar over 2,500 m² and
+  barracks of two under it. A block given as a point keeps the ground of
+  the building drawn for it.
+- **The trees.** No tree stands on a `block`, `runway`, `field`, `pier` or
+  `breakwater` in its years (the district's trees and the crop trees on an
+  island or a district alike); the land, a range, the roads and the rail
+  keep theirs.
 - **The far view.** Nothing of the works is drawn at the whole chain; the
   Land legend adds "Military land" while any of it stands on the island in
   view at the island zoom.

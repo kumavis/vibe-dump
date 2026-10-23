@@ -3646,7 +3646,76 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
           for (const r of rows) console.log(`      ${r}`)
         })
       } else console.log('  - no runway or highway inside a district: that check skipped')
+
+      // the trees: the district's step back from what its clearing holds (the town's and the works' of the year, kit.js
+      // uTownClear), and a crop tree's years are its keyframes' less the works' standing where it would (crops.js clip)
+      if (rIn) {
+        await check(`works: the trees keep off the buildings, runways, fields and piers of their year (${rIn.id}, ${both})`, async () => {
+          await offYear(both)
+          await jumpTo(rIn.at[0], rIn.at[1], 26, 1.2, 0.5)
+          await page.waitForFunction(
+            (id) => {
+              const app = window.__app
+              const D = app.districts
+              app.settle()
+              const s = D.cur?.features?.settlements
+              const isl = app.cropTrees.islands.get('oahu')
+              return D.cur?.d.id === id && D.cur.state === 'ready' && D.k > 0.99 && !!s?.ready && !!s.clearData && (!isl || isl.works !== undefined) && app.cropTrees.idle
+            },
+            rIn.id,
+            { timeout: 300000 },
+          )
+          const res = await ui(`(() => {
+            const TREELESS = new Set(['block', 'runway', 'field', 'pier', 'breakwater'])
+            const D = app.districts, s = D.cur.features.settlements, r = D.cur.d.rect, y = app.timeline.year
+            const v = app.works.islands.get('oahu').view, ex = app.works.entries.get('oahu').excl
+            const pts = []
+            for (const it of v.instances || []) if (y >= it.span[1] && y <= it.span[2]) pts.push(['block', it.x, it.z])
+            for (const [x, z] of ${JSON.stringify(sample(runway, 16))}) pts.push(['runway', x, z])
+            const inside = pts.filter(([, x, z]) => x > r.x0 + 1 && x < r.x1 - 1 && z > r.z0 + 1 && z < r.z1 - 1)
+            const N = s.clearN
+            const at = (x, z) => s.clearData[Math.min(N - 1, Math.floor(((z - r.z0) / (r.z1 - r.z0)) * N)) * N + Math.min(N - 1, Math.floor(((x - r.x0) / (r.x1 - r.x0)) * N))]
+            const open = inside.filter(([, x, z]) => at(x, z) < 179).map(([k, x, z]) => [k, +x.toFixed(2), +z.toFixed(2), at(x, z)])
+            const isl = app.cropTrees.islands.get('oahu')
+            // (each point's crop years: none of them the year, and the years before the work stood kept)
+            const standing = (x, z) => ex.standing(x, z, 0, TREELESS)
+            const clipped = isl ? inside.filter(([, x, z]) => isl.clip([[-1e5, 1e5]], x, z).some(([a, b]) => a <= y && y < b)).map(([k, x, z]) => [k, +x.toFixed(2), +z.toFixed(2)]) : []
+            const before = isl ? inside.filter(([, x, z]) => { const st = standing(x, z)[0]; return st && st[0] > -1e4 && isl.clip([[-1e5, 1e5]], x, z).some(([a, b]) => a <= st[0] - 2 && st[0] - 2 < b) }).length : 0
+            const trees = app.cropTrees.alive(y)
+            const on = trees.filter((t) => standing(t.x, t.z).some(([a, b]) => a <= y && y < b)).length
+            return { pts: pts.length, inside: inside.length, open: open.slice(0, 5), crop: !!isl, clipped: clipped.slice(0, 5), before, trees: trees.length, on, forest: D.cur.features.forest.total }
+          })()`)
+          if (!(res.inside >= 3)) throw new Error(`only ${res.inside} points of works standing in ${both} inside ${rIn.id} to look at`)
+          if (res.open.length) throw new Error(`the district's trees not kept off points of works standing in ${both}: ${JSON.stringify(res.open)} (kind, x, z, clearing)`)
+          if (res.clipped.length) throw new Error(`crop trees' years take in ${both} on works standing then: ${JSON.stringify(res.clipped)}`)
+          if (res.on) throw new Error(`${res.on} crop trees standing in ${both} on a work standing then`)
+          console.log(`      ${res.inside} points of buildings and runway standing in ${both} in ${rIn.id}: all in the clearing its ${res.forest} trees step back from; ${res.crop ? `the crop trees' years clipped at each (${res.before} kept for the years before the work), ${res.trees} standing, none on a work` : 'no crop trees on this island'}`)
+        })
+      }
     } else console.log('  - no runway or highway: those checks skipped')
+
+    // the blocks' kits: by the use the file gives first (a hangar, barracks, a hospital a tall concrete block, a church,
+    // quarters as houses, a tower), else by their storeys and size, as before; the town's church, house and tower only by a use
+    await check('works: each block is drawn by its use first, then by its storeys and size', async () => {
+      await worksIn()
+      const res = await ui(`(() => {
+        const expect = { hangar: ['hangar'], barracks: ['barracks2', 'barracks3'], hospital: ['block'], office: ['block'], school: ['block'], tower: ['tower'], warehouse: ['low'], industrial: ['low'], church: ['church'], residential: ['house'] }
+        const v = app.works.islands.get('oahu').view, by = {}, kinds = {}, wrong = []
+        for (const it of v.instances || []) {
+          kinds[it.kind] = (kinds[it.kind] || 0) + 1
+          if (it.use) {
+            by[it.use] = (by[it.use] || 0) + 1
+            if (!expect[it.use].includes(it.kind)) wrong.push([it.use, it.kind])
+            if (it.use === 'hospital' && !(it.stretch >= 1.5)) wrong.push([it.use, 'stretched ' + it.stretch])
+          } else if (['church', 'house', 'tower'].includes(it.kind)) wrong.push(['none', it.kind])
+        }
+        return { n: (v.instances || []).length, by, kinds, wrong: wrong.slice(0, 6) }
+      })()`)
+      if (res.wrong.length) throw new Error(`blocks drawn as other than their use says: ${JSON.stringify(res.wrong)} (use, kind)`)
+      if (useTest && Object.keys(res.by).length < 6) throw new Error(`the test works give ${Object.keys(res.by).length} uses: ${JSON.stringify(res.by)}`)
+      const uses = Object.entries(res.by).map(([k, n]) => `${k} ${n}`).join(', ')
+      console.log(`      ${res.n} blocks: ${uses ? `by their use, ${uses}` : 'none with a use in this data yet'}; drawn as ${Object.entries(res.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}`)
+    })
 
     // the settlements: the district's over the military land, the island's over an airfield or a road outside every district
     // (one standing to the end, in a district: its own settlements)
@@ -3853,10 +3922,11 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
         }
         await run('app.works.hidden = false; app.settle()')
         const calls = out.with.calls - out.without.calls
-        // (at most 15: the washes and the boundary, each of the four ribbon looks fine near the camera and coarse beyond,
-        // and each of the five kinds of block, its kit its own instanced geometry; one draw for every block would run
-        // every kit's vertices for each of them, four times the vertex work, to save four calls)
-        if (calls > 15) throw new Error(`${name}: ${calls} draw calls for the works`)
+        // (at most the washes and the boundary, each of the four ribbon looks fine near the camera and coarse beyond, and
+        // one for each kind of block the island has, its kit its own instanced geometry, eight kinds at most: one draw for
+        // every block would run every kit's vertices for each of them, several times the vertex work, to save a few calls)
+        const kinds = await ui("app.works.islands.get('oahu').view.stats().blockKinds")
+        if (calls > 2 + 2 * 4 + kinds) throw new Error(`${name}: ${calls} draw calls for the works (${kinds} kinds of block)`)
         rows.push(`${name}: ${out.with.ms} ms a frame with the works, ${out.without.ms} without; ${calls} draw calls, ${out.with.tris - out.without.tris} triangles`)
       }
       for (const r of rows) console.log(`      ${r}`)

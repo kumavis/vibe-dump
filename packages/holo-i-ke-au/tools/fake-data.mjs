@@ -30,9 +30,10 @@
 // those paths (tools/smoke.mjs with DATA=fake).
 //
 // And test works (DATA.md "Works, dated"; test-data/works/): a base with
-// its land growing in across its construction, a runway, a pier and two
-// blocks; a range; a base returned; an airfield with a runway and a hangar's
-// footprint; an interstate built over nine years and a state road through a
+// its land growing in across its construction, a runway, a pier and its
+// blocks, each with a `use` (a hangar, barracks, a chapel, quarters, a store
+// and a tower); a range; a base returned, its block a hospital; an airfield
+// with a runway and a hangar's footprint, no use given; an interstate built over nine years and a state road through a
 // tunnel; a railway lifted in 1947; a breakwater. And, when the real bake is
 // in public/data/, a few of the same over the real Oʻahu
 // (test-data/real/works/: a runway at Mōkapu, roads through Nuʻuanu), for
@@ -1248,6 +1249,9 @@ function testWorks(spots) {
   const perp = [-rw.u[1], rw.u[0]]
   const hangar = [rc[0] + perp[0] * 0.16, rc[1] + perp[1] * 0.16]
   const barracks = [rc[0] - perp[0] * 0.22 + rw.u[0] * 0.3, rc[1] - perp[1] * 0.22 + rw.u[1] * 0.3]
+  // (and beside the hangar and the barracks, a block of each of a few uses: the kit goes by `use` first)
+  const besideHangar = (b) => [hangar[0] + rw.u[0] * b, hangar[1] + rw.u[1] * b]
+  const besideBarracks = (a, b) => [barracks[0] - perp[0] * a + rw.u[0] * b, barracks[1] - perp[1] * a + rw.u[1] * b]
   const shore = near(lonOf(mx), latOf(mz), (x, z) => {
     const h = H(x, z)
     return h > 0.2 && h < 3 && Math.hypot(x - rc[0], z - rc[1]) > 0.5
@@ -1264,8 +1268,12 @@ function testWorks(spots) {
     work('test-mokapu-land', 'military', 'land', base, 'Test station Mōkapu', polygon(around([rw.a, rw.b, shore, pierEnd, hangar, barracks], 0.35)), { owner: 'Navy', from: 1939, built: [1939, 1942] }),
     work('test-mokapu-runway', 'military', 'runway', base, null, line([rw.a, rw.b]), { owner: 'Navy', from: 1941, width: 60 }),
     work('test-mokapu-pier', 'military', 'pier', base, null, line([shore, pierEnd]), { owner: 'Navy', from: 1941, width: 18 }),
-    work('test-mokapu-hangar', 'military', 'block', base, null, point(hangar), { owner: 'Navy', from: 1941, storeys: 1 }),
-    work('test-mokapu-barracks', 'military', 'block', base, null, point(barracks), { owner: 'Navy', from: 1942, storeys: 3 }),
+    work('test-mokapu-hangar', 'military', 'block', base, null, point(hangar), { owner: 'Navy', from: 1941, storeys: 1, use: 'hangar' }),
+    work('test-mokapu-barracks', 'military', 'block', base, null, point(barracks), { owner: 'Navy', from: 1942, storeys: 3, use: 'barracks' }),
+    work('test-mokapu-chapel', 'military', 'block', base, null, point(besideHangar(0.25)), { owner: 'Navy', from: 1943, use: 'church' }),
+    work('test-mokapu-quarters', 'military', 'block', base, null, point(besideHangar(-0.25)), { owner: 'Navy', from: 1943, use: 'residential' }),
+    work('test-mokapu-store', 'military', 'block', base, null, point(besideBarracks(-0.1, -0.15)), { owner: 'Navy', from: 1942, use: 'warehouse' }),
+    work('test-mokapu-tower', 'military', 'block', base, null, point(besideBarracks(-0.1, 0.15)), { owner: 'Navy', from: 1944, storeys: 8, use: 'tower' }),
   )
 
   // a range on the west dome, its land held 1941–1994
@@ -1280,7 +1288,7 @@ function testWorks(spots) {
   const kl = near(-158.07, 21.41, lowFlat(2, 120, 25), 6, 0.05)
   F.push(
     work('test-kalaeloa-land', 'military', 'land', 'test-kalaeloa', 'Test air station Kalaeloa', rect(kl, 3, 2, -10), { owner: 'Navy', from: 1942, to: 1999 }),
-    work('test-kalaeloa-block', 'military', 'block', 'test-kalaeloa', null, point(kl), { owner: 'Navy', from: 1943, to: 1999, storeys: 4 }),
+    work('test-kalaeloa-block', 'military', 'block', 'test-kalaeloa', null, point(kl), { owner: 'Navy', from: 1943, to: 1999, use: 'hospital' }),
   )
 
   // an airfield on the shore north of the test Nuʻuanu and west of the test Koʻolaupoko: its field, a runway, a hangar's footprint
@@ -1293,7 +1301,7 @@ function testWorks(spots) {
   F.push(
     work('test-keehi-field', 'airport', 'field', 'test-keehi', 'Test airfield Keʻehi', polygon(around([ar.a, ar.b, hc], 0.3)), { owner: 'territory', from: 1927 }),
     work('test-keehi-runway', 'airport', 'runway', 'test-keehi', null, line([ar.a, ar.b]), { owner: 'territory', from: 1927, width: 45 }),
-    work('test-keehi-hangar', 'airport', 'block', 'test-keehi', null, rect(hc, 0.09, 0.06, deg), { owner: 'territory', from: 1931, storeys: 1 }),
+    work('test-keehi-hangar', 'airport', 'block', 'test-keehi', null, rect(hc, 0.09, 0.06, deg), { owner: 'territory', from: 1931 }),
   )
 
   // the interstate down the west shore of the east dome, built 1953–1962, and the state road over the test pali through its tunnel
