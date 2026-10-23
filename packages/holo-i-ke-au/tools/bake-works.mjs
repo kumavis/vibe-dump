@@ -4,7 +4,7 @@
 // was built, taken, opened, closed or returned, per island pack.
 //
 //   node packages/holo-i-ke-au/tools/bake-works.mjs --all            download, bake, check, delete the downloads
-//   node packages/holo-i-ke-au/tools/bake-works.mjs --download       fetch every layer (about 3 MB, a minute or two)
+//   node packages/holo-i-ke-au/tools/bake-works.mjs --download       fetch every layer, the OSM buildings and the sheets over the bases (about 120 MB, a few minutes)
 //   node packages/holo-i-ke-au/tools/bake-works.mjs --bake           write public/data/works/
 //   node packages/holo-i-ke-au/tools/bake-works.mjs --check          read the works back and check them
 //   node packages/holo-i-ke-au/tools/bake-works.mjs --sheets DIR     the historic sheets with the traced lines and carving zones over them
@@ -28,6 +28,8 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Ledger } from './lib/fetch.mjs'
 import { downloadWorks } from './lib/works-sources.mjs'
+import { downloadBlocks } from './lib/works-osm.mjs'
+import { BLOCK_BASES } from './lib/works-dates.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const PKG = resolve(HERE, '..')
@@ -60,7 +62,9 @@ async function main() {
   }
   if (f.has('download') || f.has('all')) {
     log(`downloads: ${args.downloads}`)
-    downloadWorks(new Ledger(args.downloads), args.downloads, log)
+    const ledger = new Ledger(args.downloads)
+    downloadWorks(ledger, args.downloads, log)
+    downloadBlocks(ledger, args.downloads, Object.entries(BLOCK_BASES).map(([base, b]) => ({ base, ...b })), log)
   }
   if (f.has('bake') || f.has('all')) {
     const { bakeWorks } = await import('./lib/works-bake.mjs')

@@ -240,10 +240,105 @@
    "licence": "public domain (NOAA); not for navigation",
    "fetched": "2026-10-23",
    "note": "breakwaters, piers, wharves and moles as charted today, queried over a box round each harbour; they carry no names, so the bake joins them by box and category"
+  },
+  {
+   "id": "osm-buildings",
+   "title": "OpenStreetMap building footprints, from the OSM API map call (api.openstreetmap.org/api/0.6/map) over each base",
+   "url": "https://www.openstreetmap.org/",
+   "licence": "Open Database License (ODbL) 1.0; © OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+   "note": "closed ways tagged building, with building:levels where mapped; the buildings standing when they were mapped, dated by the sheets",
+   "fetched": "2026-10-23",
+   "boxes": {
+    "hickam": {
+     "box": [
+      -157.97,
+      21.32,
+      -157.93,
+      21.355
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "pearl-harbor": {
+     "box": [
+      -157.97,
+      21.345,
+      -157.93,
+      21.38
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "wheeler": {
+     "box": [
+      -158.055,
+      21.455,
+      -158.02,
+      21.49
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "schofield": {
+     "box": [
+      -158.085,
+      21.475,
+      -158.045,
+      21.515
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "kaneohe": {
+     "box": [
+      -157.78,
+      21.425,
+      -157.72,
+      21.465
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "barbers-point": {
+     "box": [
+      -158.095,
+      21.295,
+      -158.03,
+      21.335
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    },
+    "tripler": {
+     "box": [
+      -157.9,
+      21.355,
+      -157.88,
+      21.37
+     ],
+     "sheets": [
+      "state-gis-oahu-1943",
+      "usgs-topo-2000-oahu"
+     ]
+    }
+   }
   }
  ],
  "tracedFrom": [
   "state-gis-oahu-1938",
+  "usgs-topo-1911-hawaii",
   "usgs-topo-1924-maui",
   "usgs-topo-1927-oahu",
   "usgs-topo-2000-islands",
@@ -254,9 +349,11 @@
    "military": 7,
    "airport": 10,
    "highway": 5,
+   "rail": 1,
    "harbour": 4,
+   "ranges": 1,
    "datedBy": 1,
-   "bytes": 63688
+   "bytes": 65018
   },
   "maui": {
    "military": 3,
@@ -276,24 +373,28 @@
    "military": 2,
    "airport": 2,
    "highway": 1,
+   "ranges": 1,
    "datedBy": 0,
-   "bytes": 6998
+   "bytes": 6999
   },
   "molokai": {
    "military": 2,
    "airport": 5,
    "harbour": 1,
+   "ranges": 1,
    "datedBy": 3,
-   "bytes": 7724
+   "bytes": 7725
   },
   "oahu": {
-   "military": 51,
+   "military": 605,
    "airport": 11,
    "highway": 37,
    "rail": 5,
-   "harbour": 14,
-   "datedBy": 44,
-   "bytes": 231563
+   "harbour": 16,
+   "blocks": 554,
+   "ranges": 2,
+   "datedBy": 599,
+   "bytes": 739497
   },
   "kauai": {
    "military": 8,

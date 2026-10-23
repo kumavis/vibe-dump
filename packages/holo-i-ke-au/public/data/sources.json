@@ -1492,6 +1492,17 @@
     "note": "Exported on 2026-10-23 along the whole of the Oahu Railway and Land Company's main line, which the works trace from it, and over Honolulu harbour and the airport."
   },
   {
+    "id": "usgs-topo-1911-hawaii",
+    "title": "Topographic quadrangles of Hawaiʻi island, 1911–1930 (State GIS mosaic SoH_Maps/hawaii_topos_1911)",
+    "author": "U.S. Geological Survey",
+    "year": 1911,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/hawaii_topos_1911/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-10-23 over Hilo, Waiākea and the road and railway to Olaʻa, which the works trace from it. It answers only fine exports (about 5 m a pixel or finer); coarser ones come back blank."
+  },
+  {
     "id": "usgs-topo-1924-maui",
     "title": "Topographic quadrangles of Maui, 1924 edition (State GIS mosaic SoH_Maps/maui_topo_1924)",
     "author": "U.S. Geological Survey",
@@ -2406,5 +2417,16 @@
     "read": "title",
     "note": "The site refused this session (HTTP 403). Believed to give the authorizing years and building dates of the federal breakwaters at Kahului, Nāwiliwili, Port Allen, Kaunakakai and Barbers Point.",
     "wanted": "The year each breakwater and deep-draft harbour was built, to replace the dates the works give only by the first sheet that draws them."
+  },
+  {
+    "id": "osm-buildings",
+    "title": "OpenStreetMap building footprints (api.openstreetmap.org/api/0.6/map), over Hickam, Pearl Harbor, Wheeler, Schofield, Kāneʻohe, Barbers Point and Tripler",
+    "author": "OpenStreetMap contributors",
+    "year": 2026,
+    "url": "https://www.openstreetmap.org/copyright",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-10-23 through the OSM API in tiles over each base (the Overpass API and the regional extracts refused this session); closed ways tagged building, with building:levels where mapped. Open Database License 1.0. The buildings standing when they were mapped; the blocks are dated by the sheets."
   }
 ]

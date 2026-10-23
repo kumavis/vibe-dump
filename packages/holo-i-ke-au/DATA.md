@@ -1210,10 +1210,12 @@ node packages/holo-i-ke-au/tools/bake-works.mjs --all               # download, 
 node packages/holo-i-ke-au/tools/bake-works.mjs --sheets /tmp/works # each traced shape and carving zone drawn over the sheet it was read from
 ```
 
-or `--download` (about 3 MB of GeoJSON from the State GIS, the Corps of
-Engineers, the FAA and NOAA), `--bake` (a few seconds), `--check` (reads
-`works/` back, lists every feature dated only `by`, says which layer each kind
-rests on, and runs `tools/check-data.mjs`), `--clean`. `--downloads DIR` (or
+or `--download` (about 120 MB, three or four minutes: 3 MB of GeoJSON from the
+State GIS, the Corps of Engineers, the FAA and NOAA; OpenStreetMap's buildings
+over seven bases; the 1943 and 2000 sheets over the same boxes), `--bake`
+(about two minutes, most of it dating the blocks), `--check` (reads `works/`
+back, lists the blocks and ranges and every feature dated only `by`, says
+which layer each kind rests on, and runs `tools/check-data.mjs`), `--clean`. `--downloads DIR` (or
 `$HOLO_WORKS_DOWNLOADS`) moves the downloads from
 `<os tmpdir>/holo-i-ke-au-bake/works-downloads`; keep them outside the repo.
 Node 22 and `curl`, as for the other bakes. A re-bake from the same downloads
@@ -1230,6 +1232,31 @@ the sheet it was read from; `tools/lib/works-bake.mjs` joins, carves (on a 4 m
 grid), simplifies to 10 m, clips to the pack and writes. The bake stops on any
 entry that does not join, on a tunnel that does not fall on its road, and over
 the 1.5 MB budget.
+
+**Blocks.** `BLOCKS` in `works-dates.mjs` names, per base, the land a
+block may stand on, how many to keep, the owners by year and the sources;
+`tools/lib/works-osm.mjs` fetches OpenStreetMap's buildings over each base's
+box through the OSM API (in tiles of 0.02°, a call every 1.5 s) and the 1943
+and 2000 sheets over the same box. The bake keeps the largest footprints whose
+centre lies on the named land and whose corners lie within 20 m of it,
+simplified to 5 m, and dates each: it registers each sheet to the base's
+three hundred largest buildings (the shift, within 45 m for 1943 and 20 m for
+2000, that makes them stand out darkest from the ground round them), then
+takes the first sheet on which the ground within 20 m of the footprint is
+built up (15% in building black, or on the 2000 sheet, which tints built-up
+ground, half in black or tint), else the year the map was fetched, as
+`datePrecision: "by"` with `by` naming it; where the land was taken after
+that year the block begins with the taking (`datePrecision: "year"`), and a
+block first seen after its land was given up is dropped. It ends when the last
+land holding it was given up. `storeys` is OSM's `building:levels` where
+mapped, and 1 for a hangar. The 1938 sheet is not used for blocks: it
+generalizes its buildings and sits off today's map unevenly by up to 60 m.
+
+**Ranges.** A `range` is drawn where a layer itself sets one apart: the Corps
+of Engineers' former sites whose own description makes them a firing range or
+target area, and the Defense lands layer's Schofield East Range. The impact
+areas of Kahoʻolawe, Pōhakuloa and Mākua and the Kahuku training area are not
+told apart from their reservations by any layer read, so they stay `land`.
 
 **What the contract gained** (all checked by `check-data`):
 
@@ -1250,17 +1277,19 @@ the 1.5 MB budget.
   pieces (a road the layer gives in several pieces is numbered the same way).
 - In the manifest: `about`; `baked` (the date); `tolerance` (metres);
   `tracedFrom` (the sheets the traced shapes cite); per source its `item`,
-  `metadata`, `fields`, `credit` and `note` where the layer has them; per island
-  in `stats`, `datedBy` (features dated only `by`) and `bytes`.
+  `metadata`, `fields`, `credit` and `note` where the layer has them (and, for
+  `osm-buildings`, the `boxes` fetched and the sheets each was dated by); per
+  island in `stats`, `blocks` and `ranges` where there are any, `datedBy`
+  (features dated only `by`) and `bytes`.
 
 **What each kind rests on** (RESEARCH §15 has the reading behind it):
 
 | kind | geometry | dates |
 | --- | --- | --- |
-| military | the State's Department of Defense Lands (2025, from the 2021 land use plan) for land held today, carved by zones read off the 1927, 1943 and 2000 sheets where one polygon holds two bases; the Corps of Engineers' former sites for land given up; Kalaeloa's district for Barbers Point; Kahoʻolawe's own outline; FAA runways | installation histories (the State's aviation history pages, FortWiki and Wikipedia as finding aids), the Corps' site descriptions, the land use plan's lease tables; otherwise `by` the first sheet or record that shows it |
+| military | the State's Department of Defense Lands (2025, from the 2021 land use plan) for land held today, carved by zones read off the 1927, 1943 and 2000 sheets where one polygon holds two bases; the Corps of Engineers' former sites for land given up; Kalaeloa's district for Barbers Point; Kahoʻolawe's own outline; FAA runways; OpenStreetMap's building footprints for the blocks | installation histories (the State's aviation history pages, FortWiki and Wikipedia as finding aids), the Corps' site descriptions, the land use plan's lease tables; otherwise `by` the first sheet or record that shows it; blocks `by` the 1943 or 2000 sheet, or the map |
 | airport | the State's airports layer for the field, carved at the Reef Runway; FAA runways as centrelines at their published width; the old Kona strip traced from the 2000 sheet | the State's aviation history page for each field |
 | highway | the State DOT's HPMS centrelines by route and milepost; the Pali road of 1898 from the City's street centrelines | the State's historic bridge inventory report, the Hawaii Highways route lists, Wikipedia as a finding aid; otherwise `by` the oldest bridge the National Bridge Inventory lists on the stretch |
-| rail | traced from the 1938 Oʻahu sheet (the Oahu Railway and Land Company) and the 1924 Maui sheet (the Kahului Railroad) | the companies' histories as Wikipedia gives them |
+| rail | traced from the 1938 Oʻahu sheet (the Oahu Railway and Land Company), the 1924 Maui sheet (the Kahului Railroad) and the 1911–1930 Hawaiʻi sheets (the Hilo Railroad's Olaʻa line) | the companies' histories as Wikipedia gives them |
 | harbour | NOAA's charted breakwaters and piers, joined by harbour box, category and charted name | Wikipedia for Hilo and Kawaihae; otherwise `by` the first sheet that draws the work |
 
 The State's commercial-harbours layer is downloaded for the harbours' names

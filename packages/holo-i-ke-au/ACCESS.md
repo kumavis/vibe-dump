@@ -32,6 +32,7 @@ strike it here.
 | [Images of Old Hawaiʻi](https://imagesofoldhawaii.com/) | some pages redirect in a loop (307) | “Before the Ala Wai”, which a search summary credits with Waikīkī's 542 acres of rice in 1892 out of Oʻahu's 4,659: read with its source, the cap the crop classes lack for Waikīkī and Oʻahu (§9, Crops) |
 | [Corps of Engineers, Honolulu District](https://www.poh.usace.army.mil/) | 403 | the building years of the federal breakwaters and deep-draft harbours (Kahului, Nāwiliwili, Port Allen, Kaunakakai, Māʻalaea, Barbers Point), which the works date only by the first sheet that draws them (RESEARCH §15; `usace-honolulu-district-harbors`) |
 | army.mil and cnic.navy.mil installation pages | 403 | the Army's and the Navy's own histories of Pōhakuloa, Schofield, the joint base and Barking Sands: the years of the holdings the works date only by the 2000 sheet or the 2021 land use plan |
+| [Overpass API](https://overpass-api.de/) and its mirrors; [Geofabrik](https://download.geofabrik.de/)'s extracts | connection reset; timeouts | OpenStreetMap's military landuse, ranges and every building over the islands in one query, where the works fetched buildings tile by tile through the OSM API over seven bases only (RESEARCH §15) |
 
 ## Scans behind lending
 
@@ -67,7 +68,7 @@ strike it here.
 | Obeyesekere (1992); Sahlins (1995) | the two readings of Cook and Lono, now unread tellings (`cook-kealakekua-1779`) |
 | Wilcox, *Sugar Water* (1996) | the ditches (`hamakua-ditch-1876`) |
 | Osorio, *Dismembering Lāhui* (2002); Beamer, *No Mākou ka Mana* (2014) | Osorio: the constitutions of 1840, 1852 and 1887 and who sat in each legislature, for the kingdom-era cards; Beamer: the kingdom's land and governance as a native system, and his maps of moku and ahupuaʻa as the kingdom's own units, to check the boundary file's reading of the 1850s (DESIGN §7.2) |
-| Best, *Railroads of Hawaii* (1978) | the routes, maps and opening years of the Hilo Railroad, the Hawaii Railway in Kohala, the Kahului Railroad's branches and the Kauaʻi lines, none of which the works trace yet (`best-1978-railroads-of-hawaii`) |
+| Best, *Railroads of Hawaii* (1978) | the routes, maps and opening years of the Hilo Railroad's branches, the Hawaii Railway in Kohala, the Kahului Railroad's branches and the Kauaʻi lines, which the works do not trace yet (`best-1978-railroads-of-hawaii`) |
 | The Territorial Superintendent of Public Works' reports, or Thrum's *Annual* summaries of them | the opening years of the belt roads and the Farrington, Kalanianaʻole, Kūhiō and Kaumualiʻi highways, which the works date only by their oldest bridge |
 
 ## Data
@@ -85,7 +86,9 @@ strike it here.
 | The Territorial Planning Board's land utilization maps (*Historic Inventory*, First Progress Report, 1939) | only their cane and pineapple were digitised (the State GIS 1900, 1920 and 1937 layers); the maps themselves were not found online | rice, ranch land and coffee as the Board mapped them, for the 1896 crop classes now modelled; the “Territorial land-use surveys of the 1930s” the crop contract names are probably these |
 | Hawaiʻi Conservation Alliance fishpond layer | needs a login | real fishponds statewide, now a shore rule (§9) |
 | The Pali road of 1932 | named in the brief as the successor to the road of 1898; no source read mentions it | its line and year, to draw it between the road of 1898 and the highway of 1957 (RESEARCH §15) |
-| Georeferenced Hawaiʻi sheets of the 1920s | the State's 1911–1930 mosaic answers only very fine exports in its old datum and returned blank over Hilo | the Hilo Railroad and its Hāmākua division (1899–1946), to trace them as the Oʻahu railway is traced |
+| The Hawaiʻi sheets of 1911–1930 north of Hilo and in Puna, read along the railways | the State's mosaic answers only exports at about 5 m a pixel or finer, so each stretch is a dozen exports read by eye; the Olaʻa line is traced, the rest not yet | the Hilo Railroad's Hāmākua division (1908–1913, to 1946) and its Kapoho and Glenwood lines, traced as the Olaʻa line is (RESEARCH §15) |
+| Building dates and heights on the bases | no installation history read dates a building but Tripler's hospital, and no source gives its storeys | the years of the hangars, barracks and shops, which the works date only by the first sheet that shows the ground built up (1943 or 2000), and Tripler's height |
+| The impact areas of Kahoʻolawe, Pōhakuloa and Mākua as polygons | no layer read sets them apart from their reservations | to draw them as `range` inside their `land` |
 
 ## Permission, not access
 

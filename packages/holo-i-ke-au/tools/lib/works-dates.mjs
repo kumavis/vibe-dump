@@ -221,7 +221,8 @@ const MILITARY_OAHU = [
     geom: dod('Schofield Barracks'),
   }),
   mil('schofield-east-range', {
-    group: 'schofield-barracks',
+    part: 'range',
+    group: 'schofield-east-range',
     name: 'Schofield Barracks East Range',
     owner: 'Army',
     from: 2000,
@@ -427,6 +428,7 @@ const MILITARY_OAHU = [
     geom: fuds('H09HI0274'),
   }),
   mil('center-combat-range', {
+    part: 'range',
     group: 'center-combat-range',
     name: 'Center Combat Range',
     owner: 'Army',
@@ -747,6 +749,7 @@ const MILITARY_ISLANDS = [
     geom: { runway: { airport: 'BSF', designator: '09/27' } },
   },
   mil('waikoloa-maneuver-area', {
+    part: 'range',
     group: 'waikoloa',
     name: 'Waikoloa Maneuver Area',
     alt: ['Camp Tarawa'],
@@ -868,6 +871,7 @@ const MILITARY_ISLANDS = [
     geom: { layer: 'airports', key: 'MKK' },
   }),
   mil('papohaku-targets', {
+    part: 'range',
     group: 'papohaku',
     name: 'Pāpōhaku bombing targets',
     owner: 'Navy',
@@ -889,6 +893,7 @@ const MILITARY_ISLANDS = [
     geom: fuds('H09HI0199'),
   }),
   mil('lanai-targets', {
+    part: 'range',
     group: 'lanai-targets',
     name: 'Lānaʻi bombing targets',
     owner: 'Navy',
@@ -2052,6 +2057,20 @@ const RAIL = [
     note: 'Past Waimea Bay to the Kahuku mill, finished in December 1898, the main line’s full length. Traced from the 1938 sheet.',
     geom: { traced: 'orl-haleiwa-kahuku' },
   }),
+  rail('hilo-railroad-olaa', {
+    group: 'hilo-railroad',
+    name: 'Hilo Railroad',
+    alt: ['Hawaiʻi Consolidated Railway'],
+    owner: 'private',
+    from: 1900,
+    to: 1946,
+    sources: ['wikipedia-hawaii-consolidated-railway', 'usgs-topo-1911-hawaii'],
+    note:
+      'Benjamin Dillingham’s standard-gauge line from Waiākea to the Olaʻa sugar mill, its first stretch, on which service began ' +
+      'in June 1900; reorganized as the Hawaiʻi Consolidated Railway in 1916 and given up after the tsunami of April 1946. Traced ' +
+      'from the 1911–1930 sheets from Waiākea to the edge of the Olaʻa sheet.',
+    geom: { traced: 'hilo-railroad-olaa' },
+  }),
   rail('kahului-railroad-paia', {
     group: 'kahului-railroad',
     name: 'Kahului and Wailuku Railroad',
@@ -2193,6 +2212,20 @@ const HARBOURS = [
     geom: enc('kaunakakai', 'approach', 'pier', { box: [-157.0295, 21.075, -157.0255, 21.086] }),
     keep: 'longest',
   }),
+  work('barbers-point-wharves', 'pier', {
+    group: 'barbers-point-harbour',
+    name: 'Barbers Point Harbor wharves',
+    alt: ['Kalaeloa Barbers Point Harbor'],
+    owner: 'State',
+    from: 2000,
+    datePrecision: 'by',
+    by: 'usgs-topo-2000-oahu',
+    to: null,
+    width: 20,
+    sources: ['usgs-topo-2000-oahu', 'noaa-enc-shoreline-construction'],
+    note: 'The wharves of the deep-draft harbour dug into the coral shore at Kalaeloa; the 2000 sheet is the first read that draws the harbour.',
+    geom: enc('barbers-point', 'harbour', 'wharf'),
+  }),
   work('honolulu-downtown-piers', 'pier', {
     group: 'honolulu-harbour',
     name: 'Honolulu Harbor piers',
@@ -2208,6 +2241,123 @@ const HARBOURS = [
       'was finished beside Pier 9 in 1926. The 1927 sheet is the first read that draws the piers where they are charted now.',
     geom: enc('honolulu', 'harbour', 'pier', { box: [-157.876, 21.300, -157.858, 21.316] }),
   }),
+]
+
+// ---------------------------------------------------------------------------
+// Blocks: the buildings that stand on the major bases, as OpenStreetMap maps their footprints (works-osm.mjs),
+// the largest on each base, simplified to 5 m. Each is dated `by` the first of the State's sheets (1943, 2000)
+// that shows the ground built up where it stands, or by the map itself where neither does; a history's date
+// replaces that where one names the building. Owner by year; the block ends when the land it stands on was given up.
+
+// the 1938 sheet is not used: its buildings are generalized and it sits off today's map by up to 60 m, unevenly
+const OAHU_SHEETS = ['state-gis-oahu-1943', 'usgs-topo-2000-oahu']
+
+/** The boxes the footprints and the sheets are fetched over. */
+export const BLOCK_BASES = {
+  hickam: { box: [-157.97, 21.32, -157.93, 21.355], sheets: OAHU_SHEETS },
+  'pearl-harbor': { box: [-157.97, 21.345, -157.93, 21.38], sheets: OAHU_SHEETS },
+  wheeler: { box: [-158.055, 21.455, -158.02, 21.49], sheets: OAHU_SHEETS },
+  schofield: { box: [-158.085, 21.475, -158.045, 21.515], sheets: OAHU_SHEETS },
+  kaneohe: { box: [-157.78, 21.425, -157.72, 21.465], sheets: OAHU_SHEETS },
+  'barbers-point': { box: [-158.095, 21.295, -158.03, 21.335], sheets: OAHU_SHEETS },
+  tripler: { box: [-157.9, 21.355, -157.88, 21.37], sheets: OAHU_SHEETS },
+}
+
+const SHEET_NOTE =
+  'dated by the first sheet read that shows the ground built up where it stands, or by the map where none does, so it may be older; ' +
+  'or, where the land was taken after that sheet, from the taking'
+
+export const BLOCKS = [
+  {
+    id: 'hickam',
+    base: 'hickam',
+    within: ['hickam-field'],
+    max: 100,
+    name: 'Hickam Field',
+    owners: [[0, 'Army'], [1947, 'Air Force']],
+    sources: ['hdot-aviation-hickam'],
+    note: `A building of Hickam Field, the hangar line along the flight line and the barracks and quarters behind it, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'pearl-harbor-yard',
+    base: 'pearl-harbor',
+    within: ['pearl-harbor-naval-station'],
+    max: 100,
+    name: 'Pearl Harbor Navy Yard',
+    owners: [[0, 'Navy']],
+    sources: ['wikipedia-naval-station-pearl-harbor'],
+    note: `A building of the navy yard, its shops and storehouses round the dry docks and piers, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'ford-island',
+    base: 'pearl-harbor',
+    within: ['ford-island'],
+    max: 60,
+    name: 'Ford Island',
+    owners: [[0, 'Army'], [1940, 'Navy']],
+    sources: ['hdot-aviation-luke-field'],
+    note: `A building of Ford Island, among them the hangars of the Army’s Luke Field and the Navy’s air station, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'wheeler',
+    base: 'wheeler',
+    within: ['wheeler-field'],
+    max: 60,
+    name: 'Wheeler Field',
+    owners: [[0, 'Army'], [1948, 'Air Force'], [1991, 'Army']],
+    sources: ['hdot-aviation-wheeler'],
+    note: `A building of Wheeler Field, its hangars along the field and the quarters behind them, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'schofield',
+    base: 'schofield',
+    within: ['schofield-barracks', 'schofield-barracks-south'],
+    max: 100,
+    name: 'Schofield Barracks',
+    owners: [[0, 'Army']],
+    sources: ['fortwiki-schofield-barracks'],
+    note: `A building of the Schofield cantonment, among them the quadrangles of barracks round their parade grounds, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'kaneohe',
+    base: 'kaneohe',
+    within: ['kaneohe-naval-air-station', 'kuwaaohe-military-reservation', 'kaneohe-marine-corps-air-station'],
+    max: 100,
+    name: 'Kāneʻohe Bay air station',
+    owners: [[0, 'Navy'], [1952, 'Marines']],
+    ownersWithin: { 'kuwaaohe-military-reservation': [[0, 'Army'], [1952, 'Marines']] },
+    sources: ['hdot-aviation-kaneohe'],
+    note: `A building of the air station on Mōkapu, its seaplane hangars and ramps on the bay and the station behind them, as mapped now; ${SHEET_NOTE}.`,
+  },
+  {
+    id: 'barbers-point',
+    base: 'barbers-point',
+    within: ['nas-barbers-point', 'mcas-ewa', 'ewa-nas-barbers-point', 'kalaeloa-navy'],
+    max: 80,
+    name: 'Barbers Point air station',
+    owners: [[0, 'Navy']],
+    ownersWithin: { 'mcas-ewa': [[0, 'Marines'], [1952, 'Navy']] },
+    sources: ['hdot-aviation-barbers-point', 'wikipedia-mcas-ewa'],
+    note: `A building of the air station at Barbers Point or of the Marine field at ʻEwa it took in, its hangars and shops on the field, as mapped now; ${SHEET_NOTE}. It was the Navy’s until the station closed.`,
+  },
+  {
+    id: 'tripler',
+    base: 'tripler',
+    within: ['tripler'],
+    max: 12,
+    name: 'Tripler',
+    owners: [[0, 'Army']],
+    sources: ['wikipedia-tripler'],
+    note: `A building of the hospital on Moanalua Ridge, as mapped now; ${SHEET_NOTE}.`,
+    // the largest footprint is the hospital itself, finished in 1948
+    largest: {
+      name: 'Tripler General Hospital',
+      alt: ['Tripler Army Medical Center'],
+      from: 1948,
+      datePrecision: 'year',
+      note: 'The hospital’s main building on Moanalua Ridge, planned in 1942 and finished in 1948, the largest footprint on the hospital’s ground.',
+    },
+  },
 ]
 
 export const WORKS = [...MILITARY_OAHU, ...MILITARY_ISLANDS, ...AIRPORTS, ...HIGHWAYS, ...RAIL, ...HARBOURS]

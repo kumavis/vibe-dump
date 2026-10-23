@@ -28,12 +28,19 @@ export function checkWorks({ data, log }) {
   const rows = []
   const by = []
   const rests = {}
+  const blocks = {}
+  const ranges = []
   for (const file of man.files) {
     const fc = JSON.parse(readFileSync(join(dir, file), 'utf8'))
     const t = {}
     for (const f of fc.features) {
       const p = f.properties
       t[p.kind] = (t[p.kind] || 0) + 1
+      if (p.part === 'block') {
+        const b = (blocks[p.id.replace(/-block-\d+$/, '')] ||= {})
+        b[p.from] = (b[p.from] || 0) + 1
+      }
+      if (p.part === 'range') ranges.push(`${p.id} (${p.from}–${p.to ?? ''})`)
       if (p.datePrecision === 'by') by.push(`${p.id} (${p.from}, ${p.by})`)
       const src = p.layer?.source === 'traced' ? `traced from ${p.layer.sheet}` : p.layer?.source
       ;(rests[p.kind] ||= new Set()).add(src)
@@ -44,6 +51,8 @@ export function checkWorks({ data, log }) {
   for (const r of rows) log(r)
   log(`  ${(bytes / 1024).toFixed(0)} KB in ${man.files.length} files and the manifest`)
   for (const k of KINDS) if (rests[k]) log(`  ${k} geometry: ${[...rests[k]].sort().join('; ')}`)
+  for (const [b, y] of Object.entries(blocks)) log(`  blocks ${b}: ${Object.values(y).reduce((a, c) => a + c, 0)} (from ${Object.entries(y).map(([k, v]) => `${k} ${v}`).join(', ')})`)
+  log(`  ranges (${ranges.length}): ${ranges.join(', ')}`)
   log(`  dated only by a sheet or record (${by.length}): ${by.join(', ')}`)
   try {
     const out = execFileSync(process.execPath, [CHECK, data], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })

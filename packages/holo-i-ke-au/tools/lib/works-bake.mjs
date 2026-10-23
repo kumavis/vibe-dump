@@ -8,11 +8,12 @@ import { join } from 'node:path'
 import { Ledger } from './fetch.mjs'
 import { standardName } from './geo.mjs'
 import {
-  areaOf, bboxOfCoords, carve, clipLineToBox, clipPolygonToBox, joinLines, lengthOf, linesOf, polygonsOf,
+  areaOf, bboxOfCoords, carve, edgeDistance, inPolygon, ringArea, clipLineToBox, clipPolygonToBox, joinLines, lengthOf, linesOf, polygonsOf,
   rectangleAxis, roundGeometry, simplifyLine, simplifyPolygon, union, wind, xy,
 } from './works-geom.mjs'
 import { LAYERS, layerSource, readLayer } from './works-sources.mjs'
-import { KINDS, ABOUT, WORKS } from './works-dates.mjs'
+import { KINDS, ABOUT, WORKS, BLOCKS, BLOCK_BASES } from './works-dates.mjs'
+import { BLOCK_SHEETS, OSM_SOURCE, datesBySheets, readBuildings } from './works-osm.mjs'
 import { TRACED, ZONES } from './works-traced.mjs'
 
 export const TOLERANCE_METRES = 10
@@ -283,6 +284,81 @@ function featuresOf(entry, layer, packs) {
   return out
 }
 
+
+// ---------------------------------------------------------------------------
+// Blocks (works-dates.mjs BLOCKS): OSM footprints on a base's land, dated by the sheets
+
+const BLOCK_TOLERANCE = 5 // metres
+const BLOCK_EDGE = 20 // a footprint's corners may stand this far outside its land (the land is simplified to 10 m)
+
+const yearOwner = (table, y) => table.reduce((o, [from, who]) => (y >= from ? who : o), table[0][1])
+
+function blocksOf(B, lands, dir, ledger) {
+  const base = BLOCK_BASES[B.base]
+  const lands0 = B.within.map((id) => {
+    const f = lands.get(id)
+    if (!f) throw new Error(`blocks ${B.id}: no land ${id}`)
+    return f
+  })
+  const inLand = (f, c) => inPolygon(f.geometry, c) || edgeDistance(f.geometry, c) <= BLOCK_EDGE
+  const mapYear = Number((ledger.get(join(dir, 'osm', `${B.base}-00.xml`))?.fetched || '').slice(0, 4))
+  const found = []
+  const all = readBuildings(dir, B.base)
+  for (const b of all) {
+    const ring = b.ring
+    const cx = ring.slice(0, -1).reduce((s, p) => s + p[0], 0) / (ring.length - 1)
+    const cy = ring.slice(0, -1).reduce((s, p) => s + p[1], 0) / (ring.length - 1)
+    // every land of the table that holds it: their years bound the block's
+    const held = lands0.filter((f) => inPolygon(f.geometry, [cx, cy]))
+    if (!held.length || !ring.every((c) => held.some((f) => inLand(f, c)))) continue
+    held.sort((a, b) => a.properties.from - b.properties.from)
+    found.push({ b, held, area: Math.abs(ringArea(ring)) })
+  }
+  found.sort((a, b) => b.area - a.area || (a.b.id < b.b.id ? -1 : 1))
+  // the sheets are registered on the base box's three hundred largest buildings
+  const register = all.map((b) => [Math.abs(ringArea(b.ring)), b.ring]).sort((a, b) => b[0] - a[0]).slice(0, 300).map((x) => x[1])
+  const pool = found.slice(0, B.max * 2)
+  const { verdicts, shifts } = datesBySheets(dir, B.base, base.box, base.sheets, pool.map((c) => c.b.ring), register)
+  const out = []
+  for (const [i, { b, held }] of pool.entries()) {
+    if (out.length >= B.max) break
+    const g = simplifyPolygon({ type: 'Polygon', coordinates: [b.ring] }, BLOCK_TOLERANCE)
+    if (!polygonsOf(g).length) continue
+    const sheet = verdicts[i]
+    const special = i === 0 && B.largest
+    const landFrom = held[0].properties.from
+    const landTo = held.some((f) => f.properties.to === null) ? null : Math.max(...held.map((f) => f.properties.to))
+    const seen = sheet ? BLOCK_SHEETS[sheet].year : mapYear
+    // standing by a sheet's year on land taken later: it is the military's from the taking
+    const taken = !special && seen < landFrom
+    const from = special?.from ?? Math.max(seen, landFrom)
+    if (landTo !== null && from > landTo) continue // first seen after the land was given up: not the military's
+    const kind = b.tags.building
+    const levels = Number.parseInt(b.tags['building:levels'], 10)
+    const storeys = Number.isInteger(levels) && levels > 0 ? levels : kind === 'hangar' ? 1 : undefined
+    const what = kind === 'hangar' ? 'hangar' : /^(barracks|dormitory)$/.test(kind) ? 'barracks' : 'building'
+    const owners = B.ownersWithin?.[held[0].properties.id] || B.owners
+    const entry = {
+      kind: 'military',
+      part: 'block',
+      group: held[0].properties.group,
+      name: special?.name || `${B.name} ${what}`,
+      alt: special?.alt,
+      owner: yearOwner(owners, from),
+      from,
+      to: landTo,
+      datePrecision: special?.datePrecision || (taken ? 'year' : 'by'),
+      by: special || taken ? undefined : sheet || OSM_SOURCE.id,
+      storeys,
+      sources: [OSM_SOURCE.id, ...(sheet && !special ? [sheet] : []), ...B.sources],
+      note: special?.note || B.note,
+    }
+    const id = `${B.id}-block-${String(out.length + 1).padStart(3, '0')}`
+    out.push({ type: 'Feature', properties: properties(entry, { id, precision: 'exact', layer: { source: OSM_SOURCE.id, key: b.id } }), geometry: roundGeometry(g) })
+  }
+  return { features: out, shifts }
+}
+
 export function bakeWorks({ dir, data, log }) {
   const ledger = new Ledger(dir)
   const manifest = JSON.parse(readFileSync(join(data, 'manifest.json'), 'utf8'))
@@ -295,6 +371,31 @@ export function bakeWorks({ dir, data, log }) {
       for (const { pack, feature } of featuresOf(entry, layer, packs)) (byPack[pack] ||= []).push(feature)
     } catch (e) {
       problems.push(e.message)
+    }
+  }
+  // the blocks stand on the land just baked
+  const lands = new Map()
+  const packOf = new Map()
+  for (const [pack, feats] of Object.entries(byPack)) {
+    for (const f of feats) {
+      if (f.properties.part !== 'land') continue
+      lands.set(f.properties.id, f)
+      packOf.set(f.properties.id, pack)
+    }
+  }
+  let blockCount = 0
+  if (!problems.length) {
+    for (const B of BLOCKS) {
+      try {
+        const { features: feats, shifts } = blocksOf(B, lands, dir, ledger)
+        for (const f of feats) (byPack[packOf.get(B.within[0])] ||= []).push(f)
+        blockCount += feats.length
+        const years = {}
+        for (const f of feats) years[f.properties.from] = (years[f.properties.from] || 0) + 1
+        log(`  blocks ${B.id}: ${feats.length} (${Object.entries(years).map(([y, n]) => `${y} ${n}`).join(', ')}); sheets shifted ${Object.entries(shifts).map(([k, v]) => `${k} ${v.join('/')} m`).join(', ')}`)
+      } catch (e) {
+        problems.push(e.message)
+      }
     }
   }
   if (problems.length) throw new Error(`the works table does not bake:\n  ${problems.join('\n  ')}`)
@@ -315,6 +416,10 @@ export function bakeWorks({ dir, data, log }) {
       const n = feats.filter((f) => f.properties.kind === k).length
       if (n) stats[p.id][k] = n
     }
+    for (const part of ['block', 'range']) {
+      const n = feats.filter((f) => f.properties.part === part).length
+      if (n) stats[p.id][`${part}s`] = n
+    }
     stats[p.id].datedBy = feats.filter((f) => f.properties.datePrecision === 'by').length
     stats[p.id].bytes = JSON.stringify({ type: 'FeatureCollection', island: p.id, features: feats }).length + 1
     log(`  ${file}: ${feats.length} features (${Object.entries(stats[p.id]).filter(([k]) => ORDER.includes(k)).map(([k, v]) => `${k} ${v}`).join(', ')}), ${(stats[p.id].bytes / 1024).toFixed(0)} KB`)
@@ -322,6 +427,7 @@ export function bakeWorks({ dir, data, log }) {
   const used = new Set()
   for (const feats of Object.values(byPack)) for (const f of feats) if (f.properties.layer.source !== 'traced') used.add(f.properties.layer.source)
   const sources = Object.keys(LAYERS).filter((k) => used.has(LAYERS[k].id)).map((k) => layerSource(ledger, dir, k))
+  if (blockCount) sources.push({ ...OSM_SOURCE, fetched: ledger.get(join(dir, 'osm', `${BLOCKS[0].base}-00.xml`))?.fetched, boxes: BLOCK_BASES })
   const traced = [...new Set(Object.values(byPack).flat().filter((f) => f.properties.layer.source === 'traced').map((f) => f.properties.layer.sheet))].sort()
   const m = {
     about: ABOUT,

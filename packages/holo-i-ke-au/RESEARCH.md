@@ -1987,27 +1987,29 @@ during the camera checks before it reached the tour, on a machine other runs wer
 
 The record behind `public/data/works/` (DATA.md "Works, dated"): the land the military held, the airfields and their
 runways, the highways and their tunnels, the railways and the harbour works, each dated, per island pack. Made in
-October 2026 by `tools/bake-works.mjs` from the table in `tools/lib/works-dates.mjs`; nothing in the app reads it yet.
+October 2026 by `tools/bake-works.mjs` from the table in `tools/lib/works-dates.mjs`, in two passes: the first without
+blocks or ranges, the second (after the first render) adding the blocks on the major Oʻahu bases, the ranges the layers
+set apart, the Hilo Railroad's Olaʻa line and the Barbers Point wharves; "Blocks and ranges" below.
 
 | file | change |
 | --- | --- |
-| `works/*.geojson`, `works/manifest.json` | new: 197 features in eight packs, 428 KB |
-| `sources.json` | 217 sources (was 123): 94 added, 92 opened (42 of them tertiary, Wikipedia and FortWiki as finding aids) and 2 not; `usgs-topo-1910-kauai` read again |
+| `works/*.geojson`, `works/manifest.json` | new: 754 features in eight packs (554 of them blocks), 928 KB |
+| `sources.json` | 219 sources (was 123): 96 added, 94 opened (42 of them tertiary, Wikipedia and FortWiki as finding aids) and 2 not; `usgs-topo-1910-kauai` read again |
 | `tools/check-data.mjs` | the works block |
 
 | island | military | airport | highway | rail | harbour |
 | --- | --- | --- | --- | --- | --- |
-| Oʻahu | 51 | 11 | 37 | 5 | 14 |
-| Hawaiʻi | 7 | 10 | 5 | 0 | 4 |
+| Oʻahu | 605 (554 blocks, 2 ranges) | 11 | 37 | 5 | 16 |
+| Hawaiʻi | 7 (1 range) | 10 | 5 | 1 | 4 |
 | Maui | 3 | 7 | 5 | 1 | 3 |
 | Kauaʻi | 8 | 5 | 3 | 0 | 2 |
-| Molokaʻi | 2 | 5 | 0 | 0 | 1 |
-| Lānaʻi | 2 | 2 | 1 | 0 | 0 |
+| Molokaʻi | 2 (1 range) | 5 | 0 | 0 | 1 |
+| Lānaʻi | 2 (1 range) | 2 | 1 | 0 | 0 |
 | Kahoʻolawe | 2 | 0 | 0 | 0 | 0 |
 | Niʻihau | 1 | 0 | 0 | 0 | 0 |
 
-A road, a breakwater or a pier set of Honolulu that the layers give in pieces is several features of one entry, so
-the table has 172 entries for the 197 features.
+A road, a breakwater or a pier set of Honolulu that the layers give in pieces is several features of one entry, and the
+blocks come from eight entries of `BLOCKS`, so the table has 174 entries and 8 block entries for the 754 features.
 
 ### What was read
 
@@ -2059,11 +2061,11 @@ airports), the commercial-harbours layer (read for the harbour boxes), and NOAA'
 
 ### Dated only `by`
 
-67 features: on Oʻahu, fourteen Defense-land holdings the first sheet or record shows (Āliamanu, Helemano, Makalapa, the Pearl
+Besides the blocks (553 of the 554 dated `by` the 1943 or 2000 sheet or the map; Tripler's hospital by its year), 69 features: on Oʻahu, fourteen Defense-land holdings the first sheet or record shows (Āliamanu, Helemano, Makalapa, the Pearl
 City and Waipiʻo peninsulas, Schofield's south and east ranges by 2000; Kaʻena's tracking station, Kahuku, Mākua and Poamoho
 by the 1964 leases; Kīpapa, Waikāne and Mānana by 2021), the Wheeler and Kāneʻohe runways (1943), Honolulu's 8/26 (1946)
 and 4L and 4R (2000), Kalaeloa's three runways (2000), six road stretches by the bridge inventory, two railway stretches
-(1892, 1895) and the downtown piers (1927, fourteen pieces); on Hawaiʻi, Hilo's 8/26 (1944); on Maui, Kahului's runways
+(1892, 1895), the downtown piers (1927, fourteen pieces) and the Barbers Point wharves (2000, two pieces); on Hawaiʻi, Hilo's 8/26 (1944); on Maui, Kahului's runways
 (1955), the Hāna road (1940), three roads by the bridge inventory, Kahului's breakwaters (1924) and Māʻalaea's (2000); on
 Molokaʻi, the airport's runways (1955) and Kaunakakai's wharf (2000); on Kauaʻi, the Barking Sands runway (1963), the
 range's leases and Kamokala (1964), Mākaha Ridge (2021), three roads by the bridge inventory, Nāwiliwili and Port Allen
@@ -2086,15 +2088,16 @@ range's leases and Kamokala (1964), Mākaha Ridge (2021), three roads by the bri
 
 - **The 1932 Pali road** the brief names (a successor to the road of 1898) was found in no source read; the road of 1898
   is drawn from its valley alignment of today, and its stretch down the cliff is not traced.
-- **The other railways**: the Hilo Railroad and its Hāmākua division (1899–1946), the Hawaii Railway in Kohala
-  (1883–1945), the Kahului Railroad's Wailuku and Haʻikū lines and the Kauaʻi lines are not traced. The 1911–1930 Hawaiʻi
-  sheets answer only very fine exports and returned blank over Hilo; the 1924 Maui sheets do not meet at their edges
-  near Wailuku; no source read dates the Kohala line's stretches or the Kauaʻi lines. Best's *Railroads of Hawaii* (1978)
+- **The other railways**: the Hilo Railroad's Hāmākua division and its Kapoho and Glenwood lines, the Hawaii Railway in
+  Kohala (1883–1945), the Kahului Railroad's Wailuku and Haʻikū lines, the OR&L's Wahiawā branch and the Kauaʻi lines are
+  not traced (the Hilo Railroad's Olaʻa line is, in the second pass, "Blocks and ranges" below). The 1911–1930 Hawaiʻi
+  sheets answer only fine exports; the 1924 Maui sheets do not meet at their edges near Wailuku; no source read dates the
+  Kohala line's stretches or the Kauaʻi lines. Best's *Railroads of Hawaii* (1978)
   is in `sources.json` as wanted.
 - **Harbour dates**: the Corps of Engineers' Honolulu District site refused (403), so Kahului, Nāwiliwili, Port Allen,
   Māʻalaea and Kaunakakai are dated only by the sheets; Barbers Point's deep-draft harbour of 1985 has no charted
-  breakwater and no source read for its year, and Kaumalapau (1926) and Hāna have no charted works at these scales. None
-  of the three is drawn.
+  breakwater and no source read for its year (its wharves are drawn in the second pass, by the 2000 sheet), and
+  Kaumalapau (1926) and Hāna have no charted works at these scales and are not drawn.
 - **Wikipedia** rate-limited the reads for long stretches; pages it never answered, or that do not exist under the names
   tried: Lualualei, the Hawaii Railway of Kohala, the Hilo, Kahului and Barbers Point harbours, and the Queen Kaʻahumanu,
   Kūhiō and Haleakalā highways.
@@ -2111,3 +2114,55 @@ range's leases and Kamokala (1964), Mākaha Ridge (2021), three roads by the bri
   the roads now dated by their bridges; Best for the railways.
 - **More traced lines**: the Hilo Railroad from a georeferenced copy of the 1920s Hilo and Hāmākua sheets; the OR&L's
   Wahiawā branch (1906) up Waikele and Kīpapa gulches, which the 1938 sheet draws faintly.
+
+### Blocks and ranges
+
+The second pass, after the first render drew every base as a wash with at most a runway.
+
+**Blocks** are OpenStreetMap's building footprints (`osm-buildings`, ODbL), fetched through the OSM API's map call in
+tiles over seven boxes; the Overpass API reset every connection and its mirrors timed out, and Geofabrik's Hawaiʻi
+extract was refused, so the API's own map call was used, a call every 1.5 s. On each base the largest footprints on its
+land are kept, simplified to 5 m:
+
+| base | blocks | from 1943 | from 2000 | by the map (2026) | other |
+| --- | --- | --- | --- | --- | --- |
+| Pearl Harbor Navy Yard | 100 | 63 | 34 | 3 | |
+| Hickam | 100 | 39 | 52 | 9 | |
+| Kāneʻohe Bay | 100 | 25 | 59 | 16 | |
+| Schofield Barracks | 84 | 26 | 37 | 21 | all the footprints OSM maps on the cantonment |
+| Ford Island | 60 | 32 | 8 | 20 | |
+| Wheeler | 60 | 23 | 30 | 7 | |
+| Barbers Point and ʻEwa | 38 | 18 | 4 | 16 | footprints first seen after the station closed in 1999, on land since given up, are dropped |
+| Tripler | 12 | | 10 | 1 | the hospital, from 1948 by its history |
+
+Each is dated by the first sheet that shows the ground built up where it stands (DATA.md "How to bake the works" has
+the rule), checked by eye over the 1943 sheet at Kāneʻohe, Pearl Harbor, Ford Island and Hickam: the 1943 sheet,
+registered to the footprints by a shift of 3 to 30 m, puts its seaplane hangars, the yard's shops and Ford Island's
+hangars on today's footprints. The 1938 sheet was tried and dropped: registered the same way it wanted shifts of up to
+60 m that differed from base to base, and at Schofield its quadrangles fell between the footprints. A block's date is
+therefore the first sheet's, not the building's: the hangar line at Hickam (1935–38) reads "by 1943", and many
+buildings of the 1960s and later read "by 2000". No history read names a building other than Tripler's hospital.
+`storeys` comes from OSM's `building:levels` where mapped and is 1 for a hangar (63 blocks carry it, most at Kāneʻohe and
+Hickam); no storey count was found for Tripler's hospital, so it has none.
+
+What the blocks do not have: Schofield's quadrangles, which OSM maps only in part, so the cantonment's blocks are mostly
+its newer buildings; anything at Puʻunēnē or the Maui air stations, whose wartime hangars are gone and which no sheet
+of the 1940s covers; the ʻEwa Marine field, none of whose footprints the 1943 sheet shows; sheds on the commercial
+piers, which stand outside any base.
+
+**Ranges** are drawn only where a layer sets one apart. The Corps of Engineers' site descriptions make four of its former
+sites ranges: the Waikoloa Maneuver Area ("used as an artillery firing range", 1943–1946), the Center Combat Range at
+Waipiʻo (1943–1946), and the bombing targets at Pāpōhaku on Molokaʻi (1944–1965) and on Lānaʻi (1946–1947). The Defense
+lands layer names one: Schofield East Range. Neither layer, nor OpenStreetMap (searched through Nominatim for impact
+areas, danger areas and ranges), tells the impact areas of Kahoʻolawe, Pōhakuloa or Mākua, or any part of the Kahuku
+training area, apart from the land round them, so they stay `land`.
+
+**Rail and harbours.** The 1911–1930 Hawaiʻi mosaic, which came back blank in the first pass, answers exports at about 5 m
+a pixel; the Hilo Railroad's first line, from Waiākea toward the Olaʻa mill (1900–1946), is traced from it to the edge
+of the Olaʻa sheet. Its Hāmākua division (1908–1913) and the Kapoho and Glenwood lines are not traced: they need the
+sheets north of Hilo and the Puna sheets read the same way, and the Hāmākua division the road's alignment told apart
+from the railway's where the belt road took over its bridges. The OR&L's Wahiawā branch is drawn on the 1938 and 1943
+sheets inside Waikele and Kīpapa gulches among the ditches and roads, too faintly to trace with confidence. The Kohala
+railway has no source read for its dates. Barbers Point's wharves are now drawn from the chart, by the 2000 sheet;
+Kaumalapau's breakwater and Hāna's pier are not drawn on the 2000 sheet clearly enough to trace, and neither is charted
+at the scales fetched.
