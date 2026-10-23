@@ -255,6 +255,14 @@ export class Battle {
     this.input?.onStation?.(name)
     sc?.hud.setStations(pl)
     sc?.hud.say(STATION_WORDS[name] ?? name, 1.5)
+    // (the station left takes its hints with it; a gun station or the sight shows its own the first time it is manned)
+    if (sc && !pl.scripted) {
+      sc.hud.clearHints()
+      if (!matchMedia?.('(pointer: coarse)')?.matches) {
+        const key = HINTS[name] ? name : pl.kind
+        sc.hud.firstHints(key, HINTS[key])
+      }
+    }
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'station', station: name, index: pl.unitIndex } }))
     return name
   }
@@ -641,6 +649,7 @@ export class Battle {
     this.app.setMode('watch')
     if (this.scene && i >= 0) this.scene.setCamera('orbit', { unitIndex: i, distance: 1500 })
     this.scene?.hud.setStations(null)
+    this.scene?.hud.clearHints()
     if (this.timeScale < 1) this.timeScale = 1
     this.running = true
   }

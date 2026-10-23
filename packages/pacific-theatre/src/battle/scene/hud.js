@@ -227,6 +227,12 @@ export class Hud {
     return true
   }
 
+  /** The hints taken down: a station left or the controls given back, so no line names a station no longer held. */
+  clearHints() {
+    this.hints.textContent = ''
+    this.hintsUntil = 0
+  }
+
   setVisible(on) {
     this.visible = on
     this.el.style.display = on ? '' : 'none'
