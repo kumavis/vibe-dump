@@ -1084,3 +1084,109 @@ conservation, Kāʻanapali resort, Lahaina's historic core, Kahului business and
 industrial, Haleakalā conservation, Kailua-Kona business, downtown Hilo
 mixed-use, Līhuʻe business, and the State district at several of them. It
 fails if the zoning rasters pass 1 MB or `layers/` its 8 MB.
+
+## Works, dated: military land, airports, highways, rail, harbours
+
+What was built on the land and when, so that a base, a runway or a road
+appears at its construction and goes when it was closed or returned. Military
+land is drawn as **control** (the area the military holds, as a wash with its
+boundary and name) and **installations** only where they stand (a runway, a
+pier, hangars, housing, a range), because a reservation is mostly land with
+nothing on it. Under `public/data/works/`: a `manifest.json` and one GeoJSON
+per island pack, `works/<island>.geojson`, in lon/lat (WGS84), simplified to
+about 10 m, the whole directory under 1.5 MB.
+
+```jsonc
+// works/manifest.json
+{ "about": "...", "files": ["oahu.geojson", ...], "kinds": { ... the vocabulary below ... },
+  "sources": [ { "id": "...", "title": "...", "url": "...", "licence": "...", "fetched": "..." } ],
+  "stats": { "oahu": { "military": 12, "airport": 4, ... } } }
+```
+
+Every feature's `properties`:
+
+| field | values |
+| --- | --- |
+| `id` | kebab-case ASCII, unique across all islands (`pearl-harbor-naval-station`) |
+| `kind` | `military` · `airport` · `highway` · `rail` · `harbour` |
+| `part` | military: `land` (Polygon, the held area) · `runway` · `pier` · `block` · `range`; airport: `field` (Polygon) · `runway` · `block`; highway: `road` · `tunnel`; rail: `line`; harbour: `breakwater` · `pier` |
+| `group` | the work the part belongs to (`pearl-harbor`, `h-3`), so a base's land and its installations go together |
+| `name` | with the standard ʻokina and kahakō; the name of the day it opened, `alt` for later names |
+| `owner` | `Army` · `Navy` · `Marines` · `Air Force` · `Coast Guard` · `territory` · `State` · `county` · `federal` · `private` (a company's name in `note`) |
+| `from` | the year it opened or the land was taken; `built: [start, end]` optional, the years of construction |
+| `to` | the year it closed, was returned or lifted; `null` while it stands (Kahoʻolawe's range 1941–1994, Barbers Point 1942–1999, the OR&L 1889–1947) |
+| `datePrecision` | `year` · `decade` · `by` (the earliest sheet or record that shows it; the true date is earlier) |
+| `precision` | `exact` (a surveyed layer) · `mapped` (traced from a sheet) · `inferred` |
+| `width` | metres, for a LineString `runway`, `pier`, `breakwater`, `road`, `line` |
+| `class` | for a `road`: `interstate` · `state` · `county`; `lanes` optional |
+| `storeys` | for a `block`, optional (hangars 1, barracks 2–3, a tower more) |
+| `sources` | ids in `sources.json`, at least one opened |
+| `note` | what it is and what the sources could not separate; no figures that belong in a telling |
+
+Rules, enforced by `tools/check-data.mjs`: ids unique; vocabularies as above;
+`from` ≤ `to`; every `part` other than `land`, `field`, `road`, `line` lies
+inside its `group`'s `land` or `field` where one exists; geometry within its
+island pack's bounds; a `land` or `field` is a Polygon or MultiPolygon, a
+`runway`, `pier`, `breakwater`, `road`, `tunnel`, `line` a LineString with
+`width`; names Hawaiian-checked; the copy rule. A base whose land changed
+(returned in part, enlarged) is several `land` features of one `group`, each
+with its own years.
+
+What the app draws, by year (DESIGN §2): at island zoom, military land as a
+translucent wash with a dashed boundary and its name, from `from` (growing in
+across `built` if given) to `to`; runways and aprons as flat paved strips,
+piers and breakwaters as stone ribbons on the water, blocks as buildings in
+the structures' kit by their `storeys`, ranges as a fainter wash; airports'
+fields as a lighter wash with their runways; highways as paved ribbons draped
+on the ground by class (an interstate wider than a state road; a tunnel is
+not drawn, the road reappears beyond it); rail as a thin dark line with ties
+at near zoom; harbour works as stone. At district zoom the same geometry on
+the district ground. At the far view the Land legend may carry military land
+for the keyframes it applies to; nothing else of the works shows there. The
+settlements do not build on military land after `from`, nor on a field or a
+runway.
+
+Where the record gives the land but not the installations (most bases), the
+base is `land` alone. Where a sheet shows a runway but no record gives its
+year, `datePrecision: "by"` with the sheet's year. Sources: the State GIS
+military reservations and federal lands layers, the State DOT roads and the
+airports layer for geometry; the USGS 1927–28, 1938, 1950s sheets for what
+stood when; installation histories, HDOT and FAA records, Thrum's Annual and
+the newspapers for dates; Wikipedia only as a tertiary source, marked. The
+`wanted` rule for sources holds.
+
+## Crops, on the era layers
+
+The cultivation mask says how much of a texel is cultivated; the crop class
+says what grows there, so the ground can draw rice where there was rice and
+pasture where cattle grazed, not taro everywhere. Per island pack and
+keyframe, beside the other masks: `layers/<island>/<keyframe>-crop.png`,
+8-bit, one class per texel, registered like the other masks, listed in
+`layers/manifest.json` under `crops` with its classes, sources, methods and
+`stats` per island and keyframe, as the zoning entry is.
+
+| class | what | first appears |
+| --- | --- | --- |
+| 0 | nothing, or cultivation of no known kind | |
+| 1 | loʻi: wet taro | contact |
+| 2 | dryland fields: sweet potato, dry taro, the leeward field systems | contact |
+| 3 | rice, in old loʻi and marsh | mahele (1853) at Honolulu, kingdom (1896) at its height |
+| 4 | sugar cane | mahele (Kōloa 1835, Līhuʻe, Lahaina), kingdom, gone by now |
+| 5 | pineapple | kingdom (1900s), now where it remains |
+| 6 | pasture, ranch land | mahele (Parker 1847, Kualoa 1850), kingdom, now |
+| 7 | orchard, coffee, macadamia, truck crops | kingdom (Kona coffee), now |
+| 8 | lawn: parks, golf, open grounds | now |
+
+A texel with cultivation > 0 and class 0 is drawn as the era's default (taro
+on a floor, dryland on a slope). Pasture (6) and lawn (8) may stand where the
+cultivation mask is 0, since grazing is not cultivation. Keyframes are the
+layers' own: contact, mahele, kingdom, now; the `eras` map in the manifest
+says which keyframe an era takes, as for the other layers. The app blends
+classes by nearest keyframe, not by mixing bytes. Sources: the 1900 cane and
+pineapple lands already baked, the USGS 1927–28 sheets' rice and cane
+symbols, the Territorial land-use surveys of the 1930s, the State GIS
+Agricultural Land Use layers (1978–80, 2015) for now and for pasture read
+back, the ranch histories for 1853 and 1896; each keyframe's method recorded
+as the other layers' are, mapped or modelled. A district feature of kind
+`loi` may carry `crop` (`taro` · `rice`) with its own years, which overrides
+the class there.

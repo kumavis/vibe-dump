@@ -78,6 +78,8 @@ year.
 | moku and ahupuaʻa lines | mid, near | all eras (lines barely move) |
 | voyaging and fleet routes, ship tracks | far | only the step the tour is on: that event's routes and nothing on a chapter card; the routes toggle overrides to every route of the year |
 | battle lines and movements | near | one event |
+| works: military land as control with installations only where they stand, airports, highways, rail, harbour works (DATA.md "Works, dated") | mid, near | each from its construction to its closing or return |
+| crops: what grows where (taro, dryland, rice, cane, pineapple, pasture, orchard, lawn) | mid, near | the keyframe nearest the chosen year |
 | the diorama itself: terrain, vegetation, structures, people, weather | near | the keyframe nearest the chosen year |
 
 ---
