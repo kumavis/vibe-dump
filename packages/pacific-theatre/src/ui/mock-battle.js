@@ -411,14 +411,25 @@ export class MockBattle {
   }
 
   // the controls' keys the mock stands in for: Backspace gives the unit back (the engine's
-  // bindings.js does this, with its confirm); Tab is link.js's, as the bar's station buttons are
+  // bindings.js does this, with its confirm) and Tab, Shift+Tab switch the station (the controls own Tab
+  // while a unit is held: the project manager's decision 25; link.js binds neither)
   bindKeys() {
     this.unbindKeys()
     this._keys = new AbortController()
     addEventListener(
       'keydown',
       (e) => {
-        if (e.code !== 'Backspace' || !this._held || e.target.closest?.('input, textarea')) return
+        if (!this._held || e.target.closest?.('input, textarea')) return
+        if (e.code === 'Tab') {
+          const list = this.sim.units()[this._held.index]?.stations || []
+          if (list.length < 2) return
+          e.preventDefault()
+          e.stopPropagation()
+          const i = list.indexOf(this.state.station)
+          this.setStation(list[(i + (e.shiftKey ? -1 : 1) + list.length) % list.length])
+          return
+        }
+        if (e.code !== 'Backspace') return
         e.preventDefault()
         this.release()
       },
