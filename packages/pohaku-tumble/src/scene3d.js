@@ -248,6 +248,7 @@ class Block {
     this.peck(this.face(TOP), tile.stone, 1)
     this.roll = null
     this.drop = null
+    this.tip = null
   }
 
   // The stone's own face that currently sits at `place` (TOP, FRONT, …).
@@ -293,8 +294,14 @@ class Block {
     if (this.roll) this.finishRoll()
     const faces = { top: this.face(TOP), front: this.face(FRONT), back: this.face(BACK) }
     this.peck(faces.back, stone, 1)
+    this.tip = null
     this.roll = { t0, dur, faces, hop: 0.22 + Math.random() * 0.12 }
     return t0 + dur
+  }
+
+  // Start to tumble and fall back: clicked, with nothing to turn into.
+  nudge(t0, dur = 0.5) {
+    if (!this.roll && !this.drop) this.tip = { t0, dur }
   }
 
   landsAt() {
@@ -370,6 +377,19 @@ class Block {
         this.u.uCut.value.setComponent(r.faces.front, k)
       }
       if (t >= 1) this.finishRoll()
+    } else if (this.tip) {
+      // Forward about ten degrees, back down, and a small rock onto the back
+      // edge as it lands.
+      const t = clamp01((now - this.tip.t0) / this.tip.dur)
+      const a = t < 0.6 ? 0.18 * Math.sin(Math.PI * (t / 0.6)) : -0.035 * Math.sin(Math.PI * ((t - 0.6) / 0.4))
+      g.quaternion.setFromAxisAngle(X, a)
+      lift = 0.5 * (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a))) - 0.5
+      g.position.y = 0.5 + lift
+      if (t >= 1) {
+        this.tip = null
+        g.quaternion.identity()
+        g.position.y = 0.5
+      }
     }
     const b = this.blob
     const k = Math.min(1, lift / 1.4)

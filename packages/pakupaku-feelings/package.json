@@ -1,0 +1,36 @@
+{
+  "name": "@vibe-dump/pakupaku-feelings",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "standalone": "vite build && node tools/standalone.mjs"
+  },
+  "dependencies": {
+    "@fontsource/nunito": "^5.3.0",
+    "@fontsource/patrick-hand": "^5.3.0"
+  },
+  "gallery": {
+    "title": "Pakupaku Feelings",
+    "description": "A paper fortune teller for feelings, in English or Japanese. It opens to eight plain feelings; unfold one into subtler words, and those into the needs underneath them, Nonviolent Communication style.",
+    "tags": [
+      "tool",
+      "kids"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "extra",
+    "thumbnail": {
+      "click": [
+        "[data-kind=cover] .back .hit",
+        "[data-kind=core][data-id=scared] .back .hit",
+        "[data-kind=closer][data-id=overwhelmed] .front .hit"
+      ],
+      "settle": 2600
+    }
+  }
+}

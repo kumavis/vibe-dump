@@ -6,7 +6,7 @@ Inputs:
   ../review/glossary.json          optional: curated stones — per sense id: spelling, card gloss,
                                    Proto-Polynesian ancestor, cognates; plus per-word sense fixes
   ../review/repeats.tsv            optional: reviewed full repeats (waiwai = wai·wai)
-  .cache/wiktionary.json, .cache/pollex/hawaiian-reflexes.json, compounds.tsv
+  compounds.tsv; downloaded Wiktionary/POLLEX caches for uncurated stones only
 Outputs:
   ../../src/data/words.js          WORDS: [{w, a, b, g, f, ev, nodeal}]
   ../../src/data/roots.js          ROOTS: {id: {s, g, pp, cog}}
@@ -20,6 +20,7 @@ first reading. Overrides apply last.
 """
 import collections
 import csv
+import functools
 import json
 import os
 import re
@@ -53,11 +54,25 @@ overrides = load_opt('overrides.json') or {}
 glossary = load_opt('glossary.json') or {}
 # fixes from the build reviews, keyed by the word as shipped: rephrased glosses, sense changes
 FIXES = load_opt('fixes.json') or {}
-W = json.load(open(os.path.join(C, 'wiktionary.json'), encoding='utf-8'))
-heads = W['heads']
-POLLEX = json.load(open(os.path.join(C, 'pollex', 'hawaiian-reflexes.json'), encoding='utf-8'))
+# Dictionary evidence (pe-check.json), keyed by the reviewed spelling.
+# 'confirmed' or 'fix' clears the circle; 'unattested' never ships; 'unconfirmed' keeps it. An
+# entry carrying 'ruling' applies its gloss only and keeps its circle: those are the calls that
+# would respell a stone other words share, or split a root, and they are the owner's to make.
+PE_CHECK = load_opt('pe-check.json') or {}
+PE = {okina(k).lower(): v for k, v in (PE_CHECK.get('words') or {}).items()}
+PE_STONES = PE_CHECK.get('stones') or {}
 LEXPOS = {'noun', 'verb', 'adj', 'adv', 'num'}
 STOP = set('the a an to of in on at as for and or is be by it with from that this which'.split())
+
+
+@functools.cache
+def provisional_sources():
+    """Downloaded sources are needed only for an uncurated stone."""
+    with open(os.path.join(C, 'wiktionary.json'), encoding='utf-8') as f:
+        heads = json.load(f)['heads']
+    with open(os.path.join(C, 'pollex', 'hawaiian-reflexes.json'), encoding='utf-8') as f:
+        pollex = json.load(f)
+    return heads, pollex
 
 
 def toks(s):
@@ -65,6 +80,7 @@ def toks(s):
 
 
 def homographs(word):
+    heads, _ = provisional_sources()
     groups = collections.OrderedDict()
     for h in heads.get(word, []):
         if h['pos'] in LEXPOS:
@@ -112,6 +128,9 @@ for r in rows:
     if r['transparency'] == 'opaque':
         dropped['opaque'] += 1
         continue
+    if (PE.get(okina(r.get('form') or r['word']).lower()) or {}).get('pe') == 'unattested':
+        dropped['Pukui & Elbert: not an attested word'] += 1
+        continue
     a, b = r['split'].split('·')
     fix = {**(glossary.get('words') or {}).get(r['word'], {}),
            **(FIXES.get('words') or {}).get(okina(r.get('form') or r['word']).lower(), {})}
@@ -127,7 +146,8 @@ if os.path.exists(rp):
     for r in csv.DictReader(open(rp, encoding='utf-8'), delimiter='\t'):
         # a repeat ships only as its base doubled in a sense the base keeps (owner, B7 overridden)
         if (r.get('verdict') in ('keep', 'keep-pending') and r.get('exclusion_flag') != 'True' and r.get('transparency') != 'opaque'
-                and r.get('is_repeat_of_base', 'yes') != 'no' and r.get('sense') not in ('', 'unresolved')):
+                and r.get('is_repeat_of_base', 'yes') != 'no' and r.get('sense') not in ('', 'unresolved')
+                and (PE.get(okina(r.get('form') or r['word']).lower()) or {}).get('pe') != 'unattested'):
             base = okina(r['base'])
             ship.append({'row': {**r, 'split': f'{base}·{base}'}, 'a': base, 'b': base, 'sa': r['sense'], 'sb': r['sense'], 'verdict': r['verdict']})
             reps.append(r['word'])
@@ -142,6 +162,14 @@ for s in ship:
         continue
     kept.append(s)
 ship = kept
+
+# §4.4: common nouns in lower case (Hōkūloa the star is written hōkūloa on a stone pair).
+# The P&E check's spelling, where it gives one, is the form from here on: the stones have to
+# spell it, so a respelling the check cannot make alone arrives as a 'ruling' instead.
+for s in ship:
+    s['pe'] = PE.get(okina(s['row'].get('form') or s['row']['word']).lower()) or {}
+    s['form'] = okina(('ruling' not in s['pe'] and s['pe'].get('spelling'))
+                      or s['row'].get('form') or s['row']['word']).lower()
 
 # ── stones: one id per root in sense ─────────────────────────────────────
 
@@ -189,7 +217,7 @@ for s in ship:
         fallback = (cr.get('root_a') if side == 'a' else cr.get('root_b')) or ''
         gloss = short(gl[0] if gl else fallback.split(':', 1)[-1].lstrip(' ?'))
         best, bs = None, -1
-        for x in POLLEX:
+        for x in provisional_sources()[1]:
             if okina(x.get('haw')) != base:
                 continue
             sc = len(toks(' '.join(gl)) & toks((x.get('haw_gloss') or '') + ' ' + (x.get('proto_gloss') or '')))
@@ -220,9 +248,17 @@ for sid, fx in (FIXES.get('stones') or {}).items():
         drop = {tuple(c) for c in fx.get('drop_cognates', [])}
         roots[sid]['cog'] = [c for c in roots[sid]['cog'] if tuple(c) not in drop]
 
+# the P&E check's stone glosses (nineteen stones shipped with an empty gloss) and spellings
+for sid, fx in PE_STONES.items():
+    if sid in roots:
+        if fx.get('spelling'):
+            roots[sid]['s'] = okina(fx['spelling'])
+        if fx.get('gloss'):
+            roots[sid]['g'] = fx['gloss']
+
 # An unresolved stone has no curated spelling: it is spelled as its word writes it
 for s in ship:
-    form = okina(s['row'].get('form') or s['row']['word']).lower().replace(' ', '')
+    form = s['form'].replace(' ', '')
     a, b = s['id_a'], s['id_b']
     if '?' in a and '?' not in b and form.endswith(roots[b]['s']):
         roots[a]['s'] = form[:len(form) - len(roots[b]['s'])]
@@ -238,8 +274,7 @@ seen = set()
 misspelt = []
 for s in ship:
     r = s['row']
-    # §4.4: common nouns in lower case (Hōkūloa the star is written hōkūloa on a stone pair)
-    form = okina(r.get('form') or r['word']).lower()
+    form = s['form']
     if form in seen:
         continue
     # the two stones must spell the word, or a turn would print letters the word does not have
@@ -254,9 +289,13 @@ for s in ship:
         'w': form,
         'a': s['id_a'],
         'b': s['id_b'],
-        'g': nfc((FIXES.get('glosses') or {}).get(form) or (r.get('gloss') or '').strip()),
+        'g': nfc(s['pe'].get('gloss') or (FIXES.get('glosses') or {}).get(okina(r.get('form') or r['word']).lower())
+                 or (r.get('gloss') or '').strip()),
         'f': field if field in FIELDS else 'hele',
-        'ev': 'keep' if s['verdict'] == 'keep' else 'pending',
+        # the circle is cleared by the P&E check, and only by it — a word it could not confirm, or
+        # one whose spelling waits on a ruling, keeps the circle however the review read it
+        'ev': 'keep' if (s['pe'].get('pe') in ('confirmed', 'fix') and 'ruling' not in s['pe'])
+              else 'pending' if s['pe'] else 'keep' if s['verdict'] == 'keep' else 'pending',
         # E1/E3 rulings; and (build default) coinages for introduced things never open the
         # board, so the first view is the older vocabulary and 'garage' arrives by a turn
         'nodeal': bool((overrides.get(r.get('word', '')) or {}).get('nodeal'))
@@ -304,17 +343,21 @@ head = ('// Generated by packages/pohaku-tumble/research/roots/build_words.py fr
         '// Do not edit by hand: change the review, the overrides or the glossary and regenerate.\n')
 with open(os.path.join(DATA, 'words.js'), 'w', encoding='utf-8') as f:
     f.write(head + '// w: the word as written; a, b: stone ids (root in sense); g: card gloss; f: field;\n'
-            '// ev: keep | pending (pending = not yet confirmed in Pukui & Elbert); nodeal: never an opening word.\n')
+            '// ev: keep | pending (pending = dictionary sense or root decision open); nodeal: never an opening word.\n')
     f.write('export const WORDS = ' + json.dumps(words, ensure_ascii=False, indent=0).replace('\n', '') .replace('},{', '},\n{') + '\n')
 with open(os.path.join(DATA, 'roots.js'), 'w', encoding='utf-8') as f:
     f.write(head + '// id: root in sense ("wai#0"); s: spelling on the stone; g: gloss; pp: Proto-Polynesian ancestor;\n'
             '// cog: cognates [[language, form]]; provisional: gloss and ancestor picked by script, not yet curated.\n')
     f.write('export const ROOTS = ' + json.dumps(roots, ensure_ascii=False, indent=0).replace('\n', '').replace('},"', '},\n"') + '\n')
+by_form = {word['w']: word for word in words}
 with open(os.path.join(OUT or REVIEW, 'wordlist.tsv'), 'w', encoding='utf-8') as f:
-    f.write('word\tform\tstone_a\tstone_b\tgloss\tfield\tevidence\tverdict\n')
+    f.write('word\tform\tstone_a\tstone_b\tgloss\tfield\tevidence\tverdict\tpe_check\n')
     for s in ship:
         r = s['row']
-        f.write('\t'.join([r['word'], okina(r.get('form') or r['word']).lower(), s['id_a'], s['id_b'], r.get('gloss', ''), r.get('field', ''), r.get('evidence', ''), s['verdict']]) + '\n')
+        word = by_form[s['form']]
+        f.write('\t'.join([r['word'], word['w'], word['a'], word['b'], word['g'], word['f'],
+                           r.get('evidence', ''), s['verdict'],
+                           s['pe'].get('pe', '') + (' (ruling open)' if 'ruling' in s['pe'] else '')]) + '\n')
 
 print(f'{len(words)} words ({sum(x["ev"] == "keep" for x in words)} keep, {sum(x["ev"] == "pending" for x in words)} pending, {len(reps)} repeats); '
       f'{len(roots)} stones ({sum(1 for k in roots if "?" in k)} isolated unresolved, {sum(1 for v in roots.values() if v.get("provisional"))} provisional)')

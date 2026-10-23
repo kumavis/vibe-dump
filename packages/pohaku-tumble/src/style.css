@@ -248,7 +248,31 @@ html, body {
   letter-spacing: 0.01em;
 }
 
+/* The mode switch, a plate of its own in the corner the title leaves free:
+   both modes shown, the one in force inked. It keeps to the title's inset
+   and to the top margin outside the Director's band, as the title does. */
+#mode {
+  position: fixed;
+  right: 24px;
+  top: 22px;
+  display: flex;
+  padding: 0;
+  font: 400 15px/1 var(--serif);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+#mode span { padding: 6px 11px 7px; }
+#mode span + span { border-left: 1px solid var(--ink); }
+#mode[aria-pressed='false'] .auto,
+#mode[aria-pressed='true'] .hand { background: var(--ink); color: var(--card); }
+#mode:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+
 body.ready #title,
+body.ready #mode,
 body.ready #legend,
 body.ready #stats { opacity: 1; }
 
@@ -275,6 +299,41 @@ body.ready #stats { opacity: 1; }
 }
 .card.from-right { clip-path: inset(0 0 0 100%); }
 .card.open { clip-path: inset(0 0 0 0); }
+/* In manual mode a card stays until it is closed, so an open one takes the
+   pointer, for its close button. */
+body.manual .card.open { pointer-events: auto; }
+
+/* A cross drawn in two hairlines: the fonts are cut to the characters the
+   app sets, and × isn't one. */
+.card-x {
+  display: none;
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 22px;
+  margin: -6px -8px -6px -2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.card-x::before,
+.card-x::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 1.2px;
+  margin: -0.6px 0 0 -5px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+.card-x::after { transform: rotate(-45deg); }
+.card-x:hover { color: var(--ink); }
+body.manual .card-x { display: block; }
 
 .card-head {
   display: flex;
@@ -423,6 +482,7 @@ body.ready #stats { opacity: 1; }
    legend in two columns, and on a narrow foot the keys give way. */
 @media (min-width: 641px) and (min-height: 521px) and (max-height: 919px) {
   #title { top: 16px; max-width: none; display: flex; align-items: center; padding: 9px 16px 10px; }
+  #mode { top: 16px; }
   #title h1 { flex: none; }
   #title p {
     width: 326px;
@@ -439,6 +499,11 @@ body.ready #stats { opacity: 1; }
 @media (min-width: 641px) and (max-width: 899px) and (min-height: 521px) and (max-height: 919px) {
   #stats .keys { display: none; }
 }
+/* Narrower still, the flat title would run into the mode switch: its
+   sentence gives way too, as on a phone. */
+@media (min-width: 641px) and (max-width: 759px) and (min-height: 521px) and (max-height: 919px) {
+  #title p { display: none; }
+}
 
 /* A small screen either way up — a phone, or a phone held sideways, where
    the desktop's plates would cover half the frame: the title without its
@@ -447,6 +512,8 @@ body.ready #stats { opacity: 1; }
 @media (max-width: 640px), (max-height: 520px) {
   #title { left: 12px; top: 12px; max-width: 240px; padding: 8px 12px 9px; }
   #title .haw { font-size: 25px; }
+  #mode { right: 12px; top: 12px; font-size: 14px; }
+  #mode span { padding: 5px 9px 6px; }
   #title p { display: none; }
   #foot { left: 12px; right: 12px; bottom: 12px; gap: 6px; }
   #legend { display: flex; flex-wrap: wrap; gap: 2px 11px; padding: 5px 10px 6px; font-size: 12px; line-height: 1.25; }
@@ -474,6 +541,8 @@ body.ready #stats { opacity: 1; }
 @media (max-height: 520px) {
   #title { left: 10px; top: 10px; padding: 6px 11px 7px; }
   #title .haw { font-size: 23px; }
+  #mode { right: 10px; top: 10px; }
+  #mode span { padding: 4px 8px 5px; }
   #foot { left: 10px; right: 10px; bottom: 9px; }
   #legend { gap: 1px 8px; padding: 4px 9px 5px; line-height: 1.15; }
   #legend div { gap: 5px; }
@@ -481,6 +550,12 @@ body.ready #stats { opacity: 1; }
   #stats { padding: 3px 10px 4px; }
   #stats .counts { line-height: 1.15; }
   #stats .credit { line-height: 1.2; }
+}
+/* On the narrowest phones the switch would reach the title: it folds to the
+   one word, inked while manual mode is on. */
+@media (max-width: 359px) {
+  #mode .auto { display: none; }
+  #mode span + span { border-left: 0; }
 }
 /* Upright, the legend and the stats close up into one plate across the
    bottom: the legend's line, the counts, the credit. */
