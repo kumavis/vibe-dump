@@ -10,7 +10,11 @@
 // cites is in sources.json (sources-engine.json merged into it at the
 // integration; a fragment that comes back is still checked); every insignia is flown
 // inside its dates; and the units are plausible (metres, knots, tonnes,
-// km/h).
+// km/h). Round two (ROUND-2.md §7, §8): a kit's optional `stations`
+// override holds only the frozen station vocabulary, and only its kind's
+// (a ship's helm, main, aa, torpedoes; an aircraft's pilot, gunner,
+// bombardier); `guns[].arc` is only 'rear', only on an aircraft with a crew of
+// two or more, and cites its source; the aircraft §7 lists each have one.
 //
 // On the Stage 0 fixtures (test-data, test: true), whose kits predate
 // weapons.json and the aero block, the schema checks are warnings and the
@@ -19,6 +23,11 @@
 import { checkIds, VOCAB, instant } from './common.mjs'
 import { BLOCK_KINDS, SHAPES, BOWS, STERNS, assertVocab, span } from '../../src/battle/kits/blocks.js'
 import { PALETTE_NAMES, SCHEME_NAMES, DECKS, AIRCRAFT_COLOURS, DECK_MARKINGS } from '../../src/battle/kits/palette.js'
+
+// ROUND-2 §7: the aircraft with a rear gun the engine marks `arc: 'rear'`
+const REAR_GUNNED = ['b5n2', 'd3a1', 'd4y1', 'b6n2', 'sbd-3', 'sb2u-3', 'tbd-1', 'tbf-1', 'tbm-1c', 'e13a1', 'f1m2', 'pby-5', 'b-17e', 'b-26', 'b-18', 'a-20']
+const SHIP_STATIONS = ['helm', 'main', 'aa', 'torpedoes']
+const AIRCRAFT_STATIONS = ['pilot', 'gunner', 'bombardier']
 
 // US national insignia periods (R6 Table A7, from Wikipedia citing Bell, Doll and Archer); the IJN ones are R6's E
 const INSIGNIA_DATES = {
@@ -84,6 +93,18 @@ export default function check(ctx) {
     }
   }
 
+  /** A kit's `stations` override (ROUND-2 §3, §8): the frozen vocabulary, its kind's stations only. */
+  const stationsOverride = (at, st, kinds) => {
+    if (st === undefined) return
+    if (!Array.isArray(st) || !st.length) return ctx.bad(at, 'stations must be a non-empty list')
+    for (const x of st) {
+      if (!(VOCAB.stations || []).includes(x)) ctx.bad(at, `station “${x}” is not one of ${(VOCAB.stations || []).join(' | ')}`)
+      else if (!kinds.includes(x)) ctx.bad(at, `station “${x}” is not a ${kinds === SHIP_STATIONS ? 'ship' : 'aircraft'}'s`)
+    }
+    if (!st.includes(kinds[0])) ctx.warn(at, `stations leave out ${kinds[0]}; the engine offers it first anyway`)
+    ctx.count('stations overrides')
+  }
+
   // --- weapons ---------------------------------------------------------------------
   const weapons = new Map()
   if (weaponsFile !== undefined && weaponsFile !== null) {
@@ -144,6 +165,7 @@ export default function check(ctx) {
     for (const f of SHIP_FIELDS) if (k[f] === undefined) need(at, `has no ${f}`)
     if (!VOCAB.shipTypes.includes(k.type)) ctx.bad(at, `type “${k.type}”`)
     if (!VOCAB.kitSides.includes(k.side)) ctx.bad(at, `side “${k.side}”`)
+    stationsOverride(at, k.stations, SHIP_STATIONS)
     try {
       assertVocab(k)
     } catch (e) {
@@ -246,6 +268,17 @@ export default function check(ctx) {
     for (const f of AIRCRAFT_FIELDS) if (k[f] === undefined) need(at, `has no ${f}`)
     if (!VOCAB.aircraftTypes.includes(k.type)) ctx.bad(at, `type “${k.type}”`)
     if (!VOCAB.kitSides.includes(k.side)) ctx.bad(at, `side “${k.side}”`)
+    stationsOverride(at, k.stations, AIRCRAFT_STATIONS)
+    for (const [i, g] of (k.guns || []).entries()) {
+      if (g.arc === undefined) continue
+      const gat = `${at} guns[${i}]`
+      if (g.arc !== 'rear') ctx.bad(gat, `arc “${g.arc}”: only 'rear' (ROUND-2 §7)`)
+      if (!((k.crew ?? 1) >= 2)) ctx.bad(gat, `arc 'rear' on an aircraft with a crew of ${k.crew ?? 1}: a rear gun needs a gunner (ROUND-2 §8)`)
+      if (['nose', 'wing', 'cowl'].includes(g.position)) ctx.bad(gat, `arc 'rear' on a ${g.position} gun`)
+      cites(gat, g.sources)
+      ctx.count('rear guns')
+    }
+    if (!soft && REAR_GUNNED.includes(k.id) && !(k.guns || []).some((g) => g.arc === 'rear')) need(at, 'has no gun with arc: \'rear\' (ROUND-2 §7 lists it)')
     const s = k.shape || {}
     if (!VOCAB.wingShapes.includes(s.wing)) ctx.bad(at, `shape.wing “${s.wing}”`)
     if (!VOCAB.tailShapes.includes(s.tail)) ctx.bad(at, `shape.tail “${s.tail}”`)
