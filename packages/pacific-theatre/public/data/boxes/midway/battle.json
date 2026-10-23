@@ -4676,6 +4676,19 @@
       ]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "aircraft",
+      "kit": "f4f-4",
+      "side": "us",
+      "group": "vf-3-cap-noon",
+      "station": "pilot",
+      "name": "a Wildcat of Yorktown’s combat air patrol"
+    },
+    "t": "11:59",
+    "title": "A Wildcat over Yorktown",
+    "text": "Yorktown’s radar has Hiryū’s strike coming in from the west: fly a Wildcat of her combat air patrol out to meet it ahead of the carrier; its guns are all it carries, so there is nothing to release."
+  },
   "moments": [
     {
       "id": "vb6-kaga",
