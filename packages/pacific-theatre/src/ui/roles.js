@@ -131,10 +131,11 @@ export function aircraftRole(kitShortName, groupName) {
  * Six", "At the helm of Johnston", "Aboard Johnston" when more than one
  * station was held.
  */
-export function rolePhrase({ kind, name, kitShortName, groupName }, stations = []) {
+export function rolePhrase({ kind, name, kitShortName, groupName, label = null }, stations = []) {
   const st = [...new Set(stations.filter(Boolean))]
   if (kind === 'aircraft') {
-    const who = aircraftRole(kitShortName || 'aircraft', groupName || name || '')
+    // (the engine's one-aircraft label where it gives one: "a P-40B from Haleʻiwa", "a Zero of Kaga’s fighters")
+    const who = label && /^an? /.test(label) ? label : aircraftRole(kitShortName || 'aircraft', groupName || name || '')
     if (st.length > 1) return `Aboard ${who}`
     if (st[0] === 'gunner') return `At the rear gun of ${who}`
     if (st[0] === 'bombardier') return `At the bombsight of ${who}`
@@ -285,7 +286,8 @@ export const FATE_VERB = { sunk: 'sank', scuttled: 'was scuttled', capsized: 'ca
 export function damageWords(d, kind) {
   if (d == null) return null
   if (typeof d === 'string') return d
-  const share = typeof d === 'object' ? d.share ?? d.damage ?? 0 : d
+  // (a share of the kit's fatal: the mock's share, an aircraft's damage, a ship's fighting or floating damage, whichever is worse)
+  const share = typeof d === 'object' ? d.share ?? d.damage ?? Math.max(d.fight ?? 0, d.float ?? 0) : d
   if (!(share > 0.005)) return 'none'
   if (kind === 'aircraft') return share >= 1 ? 'fatal' : 'hit'
   if (share < 0.15) return 'light'

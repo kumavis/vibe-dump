@@ -721,7 +721,7 @@ body:has(> #ui.holding) .pt-hud { --pt-stations-display: none; }
 @media (min-width: 761px) {
   /* and the first take's hints step down beneath the bar's two rows */
   body:has(> #ui.holding) .pt-hud { --pt-hints-top: 112px; }
-  .boxbar[data-mode='held'] { top: 12px; bottom: auto; max-width: min(900px, calc(100vw - 420px)); }
+  .boxbar[data-mode='held'] { top: 12px; bottom: auto; max-width: min(900px, calc(100vw - 540px)); }
   .boxbar[data-mode='held'] .bb-tip { bottom: auto; top: 30px; }
   .boxbar[data-mode='held'] .bb-lab, .boxbar[data-mode='held'] .bb-credits { display: none; }
   #ui.holding .unitlist, #ui.holding .card { top: 112px; }

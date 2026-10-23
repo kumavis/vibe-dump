@@ -4,8 +4,9 @@
 // battle.json, sim.units() and sim.sortie (or the first round's score and
 // outcome) as plain objects (so the UI never imports the sim), the URL's
 // #battle, #t, #moment, #unit and #station, and the keys that belong to no
-// one module (Esc in a moment and while flying down; L, Enter and Tab in a
-// box).
+// one module (Esc in a moment and while flying down; L and Enter while
+// watching a box: Tab is the box's own, the next unit while watching and the
+// next station while a unit is held).
 //
 // Watching is the default: entering a box plays the record at once, the
 // briefing open beside it; taking the controls is an offer, never a prompt:
@@ -20,7 +21,7 @@
 //   ui.onSelect(index)          a row of the unit list → Battle.select(index); the unit card opens
 //   ui.onTake(arg)              a bookmark's id (a string: Battle.takeMoment, as before) or a role
 //                               { unit | group, index?, station, t? } (Battle.take)
-//   ui.onStation(name)          the bar's station buttons, Tab, the held unit's card → Battle.setStation
+//   ui.onStation(name)          the bar's station buttons, the held unit's card → Battle.setStation (Tab: the controls')
 //   ui.onRelease()              Release on the bar or the card → Battle.release(); the after-card follows
 //   ui.onAssist(value)          Assisted or Pilot → app.setAssist (Battle.assist, kept as pt.assist)
 //   ui.onFirstDoor()            Start here → Battle.take(firstDoor.role at firstDoor.t)
@@ -154,13 +155,15 @@ export function link(app, ui) {
     }
   }
   ui.onStep = (d) => step(d)
-  ui.onSelect = (index) => select(index)
+  // (a group row whose aircraft are all greyed but which flies a spare selects its first aircraft and offers the spare)
+  ui.onSelect = (index, row) => select(index, { spareOf: row?.spareOf ?? null })
   ui.onStation = (name) => setStation(name)
   ui.onRelease = () => release()
   ui.onAssist = (v) => setAssist(v)
   ui.onFirstDoor = () => {
     const fd = battle.firstDoor
-    if (fd?.role) return takeUnit({ ...fd.role, t: fd.t })
+    // (a first door's spare starts where the battle file says: Pearl Harbor's P-40 out of Haleʻiwa)
+    if (fd?.role) return takeUnit({ ...fd.role, t: fd.t, ...(fd.start ? { start: fd.start } : {}) })
   }
   ui.onUnits = () => toggleList()
 
@@ -171,15 +174,11 @@ export function link(app, ui) {
     e.preventDefault()
     release()
   })
-  // L (the list) and Enter (the selection's card) while watching; Tab (the next station) while a unit is held.
-  // The engine's controls take their own keys first (capture, stopPropagation), so a Tab they bind wins.
+  // L (the list) and Enter (the selection's card) while watching are this file's; Tab is the box's (the next unit
+  // while watching: Battle's watch keys; the next station while a unit is held: the controls', controls/input.js)
   addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return
     if (!battle.sim || app.active !== battle.scene || e.target.closest?.('input, textarea, select')) return
-    if (e.code === 'Tab' && heldUnit()) {
-      e.preventDefault()
-      return cycleStation(e.shiftKey ? -1 : 1)
-    }
     if (app.mode !== 'watch') return
     if (e.code === 'KeyL') {
       e.preventDefault()
@@ -208,7 +207,7 @@ export function link(app, ui) {
       setMarks()
     }
     // the unit given back, by Backspace or by its fate: the sortie's card
-    if ((d.kind === 'released' || d.kind === 'sortie') && d.sortie) after({ sortie: d.sortie, reason: d.sortie.how ?? d.reason ?? 'released', momentId: d.momentId ?? L.held?.momentId ?? null }, L.held?.session ?? 0)
+    if ((d.kind === 'released' || d.kind === 'sortie') && d.sortie) after({ sortie: d.sortie, outcome: d.outcome ?? null, reason: d.sortie.how ?? d.reason ?? 'released', momentId: d.momentId ?? L.held?.momentId ?? null }, L.held?.session ?? 0)
     if (d.kind === 'select' || d.kind === 'take' || d.kind === 'station') L.cache = null
   })
   /** For the engine: the after-card of the sortie just closed (the event above does the same). */
@@ -344,6 +343,8 @@ export function link(app, ui) {
   }
 
   // --- the units: the list, the card, the selection ----------------------------------------
+  /** A row afloat or in the air (the engine's alive: 0 gone, 1 afloat or flying, 2 going down; a mock's boolean). */
+  const isAlive = (u) => u.alive === true || u.alive === 1 || u.alive === 2
   /** sim.units() (ROUND-2 §3), read at most four times a second; [] where the sim has none yet. */
   function units() {
     const sim = battle.sim
@@ -406,9 +407,30 @@ export function link(app, ui) {
     return { name: sideName(code), ja: entry?.ja ?? null }
   }
 
+  /** A height in the side's own units, as the HUD and the row's now have them: feet for the US, metres for Japan. */
+  const heightWords = (side, m) => (side === 'jp' ? `${(Math.round(m / 50) * 50).toLocaleString('en')} m` : `${(Math.round((m * 3.28084) / 100) * 100).toLocaleString('en')} ft`)
+
   function stateWords(u) {
     if (Array.isArray(u.state)) return u.state
     if (typeof u.state === 'string') return [u.state]
+    const o = u.state
+    if (o && typeof o === 'object') {
+      // the engine's row state (takeover.js): a ship afloat, listing, on fire, sinking or sunk; an aircraft airborne with its height and fuel, or on the ground
+      if (u.kind === 'ship') {
+        if (o.sunk) return ['sunk']
+        if (o.sinking) return ['sinking']
+        const w = [o.aground ? 'aground' : 'afloat']
+        if (o.onFire) w.push('on fire')
+        if (o.listing) w.push(`listing ${Math.round(o.listDeg ?? 0)}°`)
+        return w
+      }
+      if (o.parked) return ['on the ground']
+      if (!o.airborne) return []
+      const w = ['airborne', heightWords(u.side, o.altM ?? 0)]
+      // (fuel where the sim flies the aircraft itself; the record's own aircraft carry no tanks to read)
+      if (o.fuelS != null) w.push(`fuel for ${Math.max(0, Math.round(o.fuelS / 60))} min`)
+      return w
+    }
     const st = battle.sim?.state
     const i = u.index
     if (!st?.alive || i == null) return []
@@ -424,7 +446,11 @@ export function link(app, ui) {
     return y > 20 ? ['airborne', `${Math.round(y / 10) * 10} m`] : []
   }
 
-  function unitCard(u) {
+  /**
+   * The unit card's data. spareOf: a group whose every aircraft is greyed but which takes as a group, flying a
+   * spare (sim.groupTakeable: Welch's and Taylor's P-40s): the card offers that spare, not the greyed aircraft.
+   */
+  function unitCard(u, { spareOf = null } = {}) {
     const sim = battle.sim
     const { units: rawUnits, groups } = recordMaps()
     const kit = kitFor(u)
@@ -432,7 +458,8 @@ export function link(app, ui) {
     const g = groups.get(u.group)
     const k = memberOf(u)
     const held = (sim.player?.unitIndex ?? -1) === u.index
-    const member = u.kind === 'aircraft' && g ? (u.spare ? 'a spare aircraft of the group' : k === 0 ? 'the leader’s aircraft' : k != null ? `aircraft ${k + 1} of ${g.count}` : null) : null
+    const spare = !held && spareOf && groupTakeable(spareOf) === true
+    const member = u.kind === 'aircraft' && g ? (u.spare || spare ? 'a spare aircraft of the group' : k === 0 ? (g.count > 1 ? 'the leader’s aircraft' : 'the group’s one aircraft') : k != null ? `aircraft ${k + 1} of ${g.count}` : null) : null
     return {
       key: u.id ?? `i${u.index}`,
       index: u.index,
@@ -448,32 +475,44 @@ export function link(app, ui) {
       state: stateWords(u),
       clock: sim.clock.label(sim.t),
       stations: (u.stations || []).map((s) => ({ name: s, label: stationLabel(s), where: STATION[s]?.where ?? '' })),
-      takeable: held ? true : u.takeable,
+      takeable: held || spare ? true : u.takeable,
       held,
       station: held ? heldStation() : null,
-      role: roleOf(u),
+      role: spare ? { group: spareOf } : roleOf(u),
     }
   }
 
-  function openUnitCard(index, { refresh = false, focus = null } = {}) {
+  /** sim.groupTakeable (true, or the reason a group cannot be taken as a group), or null where the sim has none. */
+  function groupTakeable(id) {
+    const f = battle.sim?.groupTakeable
+    if (typeof f !== 'function' || id == null) return null
+    try {
+      return f(id)
+    } catch (err) {
+      return err.message
+    }
+  }
+
+  function openUnitCard(index, { refresh = false, focus = null, spareOf } = {}) {
     const u = unitAt(index)
     if (!u) {
       if (refresh) return
       return app.warn?.(`unit card: no unit at ${index}`)
     }
+    if (spareOf !== undefined || L.cardIndex !== index) L.cardSpare = spareOf ?? null
     L.cardIndex = index
-    ui.card.openUnit(unitCard(u), { focus })
+    ui.card.openUnit(unitCard(u, { spareOf: L.cardSpare }), { focus })
   }
   L.openUnitCard = openUnitCard
 
-  function select(index, { open = true, focus = null } = {}) {
+  function select(index, { open = true, focus = null, spareOf = null } = {}) {
     if (!battle.sim) return
     L.selected = index
     L.seenSelected = index
     if (typeof battle.select === 'function') battle.select(index)
     L.cache = null
     if (narrow() && list.isOpen && open) list.close()
-    if (open && index != null) openUnitCard(index, { focus })
+    if (open && index != null) openUnitCard(index, { focus, spareOf })
     if (list.isOpen) list.set(listData())
   }
 
@@ -492,7 +531,7 @@ export function link(app, ui) {
       const kit = kitFor(u)
       if (u.kind === 'ship') {
         const raw = rawUnits.get(u.id)
-        s.ships.push({ key: `u:${u.id}`, index: u.index, kind: 'ship', name: u.name, ja: u.ja ?? raw?.ja ?? null, hull: u.hull ?? raw?.hull ?? null, sub: shipType(kit, raw), now: u.now, takeable: u.takeable, alive: u.alive })
+        s.ships.push({ key: `u:${u.id}`, index: u.index, kind: 'ship', name: u.name, ja: u.ja ?? raw?.ja ?? null, hull: u.hull ?? raw?.hull ?? null, sub: shipType(kit, raw), now: u.now, takeable: u.takeable, alive: isAlive(u) })
         continue
       }
       const air = groups.has(u.group)
@@ -506,7 +545,7 @@ export function link(app, ui) {
       }
       r.members.push(u.index)
       if (!u.spare) r.count++
-      if (u.alive !== false) r.alive = true
+      if (isAlive(u)) r.alive = true
       r.first ??= u
       if (u.takeable === true && !r.pick) r.pick = u
       // (the reason a group shows: a wingman's, not the leader's, which never changes)
@@ -518,6 +557,12 @@ export function link(app, ui) {
         const u = r.pick || r.wing || r.first
         r.index = u.index
         r.takeable = r.pick ? true : u.takeable
+        // (an air group takes as a group: where every aircraft is greyed but the group flies a spare, the row says so)
+        const gt = r.parked ? null : groupTakeable(r.key.slice(2))
+        if (gt != null && !r.pick) {
+          r.takeable = gt
+          if (gt === true) r.spareOf = r.key.slice(2)
+        }
         r.now = u.now
         delete r.first
         delete r.pick
@@ -581,16 +626,27 @@ export function link(app, ui) {
       if (ui.card.mode === 'unit' && L.cardIndex != null) openUnitCard(L.cardIndex)
       return null
     }
+    // (the held view is the unit's: the card and the list step aside, the bar's Units brings the list back)
     ui.card.close()
-    if (narrow()) list.close()
+    list.close()
     const session = ++L.session
     L.held = { session, momentId: role.momentId ?? null, role }
     L.offered = null
     L.stop = -1
     L.cache = null
+    sawSelection()
     app.url.moment = null
     if (r && typeof r.then === 'function') r.then((res) => after(res, session))
     return r
+  }
+
+  /** The selection Battle made itself (the held unit's bracket) is seen, so the card does not open over the held view. */
+  function sawSelection() {
+    const s = battle.state?.selected
+    if (s !== undefined) {
+      L.selected = s
+      L.seenSelected = s
+    }
   }
   app.takeUnit = takeUnit
 
@@ -607,14 +663,6 @@ export function link(app, ui) {
     L.cache = null
     if (!L.held?.momentId) app.url.station = name
     if (ui.card.mode === 'unit' && L.cardIndex === u.index) openUnitCard(u.index)
-  }
-
-  function cycleStation(d) {
-    const u = heldUnit()
-    const st = u?.stations || []
-    if (st.length < 2) return
-    const i = st.indexOf(heldStation())
-    setStation(st[(i + d + st.length) % st.length])
   }
 
   /** Release on the bar or the card (and Esc without pointer lock): the unit back, the sortie's card. */
@@ -636,7 +684,7 @@ export function link(app, ui) {
     }
     const st = u ? heldStation() : null
     if (u && !L.held?.momentId) {
-      app.url.unit = u.id ?? null
+      app.url.unit = (u.spare ? u.group : u.id) ?? null
       app.url.station = st
     } else if (!u && (app.url.unit || app.url.station)) {
       app.url.unit = null
@@ -733,8 +781,10 @@ export function link(app, ui) {
   /** From a click (briefing, a stop's card, the strip): the controls are taken inside it, so pointer lock may be asked. */
   function take(momentId) {
     if (!battle.sim || !battle.sim.record.moments.has(momentId)) return
+    // (a unit already held is given back first, so its after-card is its own and the bookmark's session is new)
+    if (battle.input || battle.sim.player) battle.release()
     ui.card.close()
-    if (narrow()) list.close()
+    list.close()
     app.url.moment = momentId
     app.url.unit = null
     app.url.station = null
@@ -743,6 +793,7 @@ export function link(app, ui) {
     const p = battle.takeMoment(momentId)
     L.stop = -1
     L.cache = null
+    sawSelection()
     p.then((r) => after(r, session))
     return p
   }
@@ -782,7 +833,7 @@ export function link(app, ui) {
     // (to the second when the controls were held under two minutes, so the span never reads 08:40–08:40)
     const secs = t1 - t0 < 120
     const span = `${sim.clock.label(t0, { seconds: secs })}–${sim.clock.label(t1, { seconds: secs })}`
-    const phrase = rolePhrase({ kind, name: u.name, kitShortName: kitShort(kit, u.kit), groupName: g?.name || u.name }, stations)
+    const phrase = rolePhrase({ kind, name: u.name, kitShortName: kitShort(kit, u.kit), groupName: g?.name || u.name, label: u.label ?? null }, stations)
     // Your sortie: the unit in its own terms
     const sortie = []
     const dur = Math.max(0, t1 - t0)
@@ -792,19 +843,37 @@ export function link(app, ui) {
     const downed = (s.hits || []).filter((x) => x.kind === 'aircraft')
     const near = (s.hits || []).filter((x) => x.kind === 'near-miss').reduce((a, x) => a + (x.count || 1), 0)
     const kindWord = (k) => String(k || '').replace(/-hit$/, '').replace('-', ' ')
-    sortie.push({ label: 'Hits', value: hits.length ? hits.map((x) => `${x.name}: ${x.count ?? 1} ${kindWord(x.kind)} hit${(x.count ?? 1) > 1 ? 's' : ''}${x.where ? `, ${x.where}` : ''}`).join('; ') : 'none' })
+    const whereOf = (x) => [...new Set([].concat(x.where ?? []).map((w) => String(w).trim()).filter(Boolean))].join(', ')
+    sortie.push({ label: 'Hits', value: hits.length ? hits.map((x) => `${x.name}: ${x.count ?? 1} ${kindWord(x.kind)} hit${(x.count ?? 1) > 1 ? 's' : ''}${whereOf(x) ? `, ${whereOf(x)}` : ''}`).join('; ') : 'none' })
     if (near) sortie.push({ label: 'Near misses', value: String(near) })
     if (downed.length) sortie.push({ label: 'Aircraft downed', value: downed.map((x) => `${x.count ?? 1} (${x.name})`).join('; ') })
-    const rel = new Map()
-    for (const x of s.releases || []) {
-      const k = x.kind || 'release'
-      const e = rel.get(k) || { n: 0, h: [] }
-      e.n += x.count ?? 1
-      if (x.heightM != null) e.h.push(Math.round(x.heightM))
-      rel.set(k, e)
+    // what left the unit: the engine's counts ({ bombs, torpedoes, salvos, shells, rounds, aaBursts, releaseM }), or a list of releases
+    const released = []
+    const fired = []
+    const R = s.releases
+    const plural = (n, one, many) => `${n.toLocaleString('en')} ${n === 1 ? one : many}`
+    if (Array.isArray(R)) {
+      const rel = new Map()
+      for (const x of R) {
+        const k = x.kind || 'release'
+        const e = rel.get(k) || { n: 0, h: [] }
+        e.n += x.count ?? 1
+        if (x.heightM != null) e.h.push(Math.round(x.heightM))
+        rel.set(k, e)
+      }
+      const NOUN = { bomb: ['bomb', 'bombs'], torpedo: ['torpedo', 'torpedoes'], salvo: ['salvo', 'salvos'], aa: ['AA round', 'AA rounds'], guns: ['burst', 'bursts'], release: ['release', 'releases'] }
+      for (const [k, e] of rel) released.push(`${e.n} ${(NOUN[k] || [k, `${k}s`])[e.n === 1 ? 0 : 1]}${e.h.length ? ` at ${e.h.join(', ')} m` : ''}`)
+    } else if (R) {
+      const at = R.releaseM != null ? ` at ${Math.round(R.releaseM)} m` : ''
+      if (R.bombs) released.push(`${plural(R.bombs, 'bomb', 'bombs')}${at}`)
+      if (R.torpedoes) released.push(`${plural(R.torpedoes, 'torpedo', 'torpedoes')}${R.bombs ? '' : at}`)
+      if (R.salvos) fired.push(`${plural(R.salvos, 'salvo', 'salvos')}${R.shells ? ` (${plural(R.shells, 'shell', 'shells')})` : ''}`)
+      if (R.rounds >= 1) fired.push(plural(Math.round(R.rounds), 'round', 'rounds'))
+      // (the AA director's tracer streams, one each 0.12 s of fire: said as the time the guns were fired)
+      if (R.aaBursts) fired.push(`the anti-aircraft guns for ${plural(Math.max(1, Math.round(R.aaBursts * 0.12)), 'second', 'seconds')}`)
     }
-    const NOUN = { bomb: ['bomb', 'bombs'], torpedo: ['torpedo', 'torpedoes'], salvo: ['salvo', 'salvos'], aa: ['AA round', 'AA rounds'], guns: ['burst', 'bursts'], release: ['release', 'releases'] }
-    if (rel.size) sortie.push({ label: 'Released', value: [...rel.entries()].map(([k, e]) => `${e.n} ${(NOUN[k] || [k, `${k}s`])[e.n === 1 ? 0 : 1]}${e.h.length ? ` at ${e.h.join(', ')} m` : ''}`).join('; ') })
+    if (released.length) sortie.push({ label: 'Released', value: released.join('; ') })
+    if (fired.length) sortie.push({ label: 'Fired', value: fired.join('; ') })
     const dmg = damageWords(s.damageTaken, kind)
     if (dmg) sortie.push({ label: 'Damage taken', value: dmg })
     const how = s.how ?? r.reason
@@ -818,9 +887,9 @@ export function link(app, ui) {
           : { landed: 'landed', ditched: 'ditched', clock: 'still flying when the battle clock ran out', released: 'still flying, the controls given back', left: 'still flying', card: 'still flying' }[how] ?? 'still flying'
     sortie.push({ label: kind === 'ship' ? 'The ship' : 'The aircraft', value: fate })
     // Your battle: what left the record while the controls were held, in the sim's words only
+    // (the sortie's own span only: the whole battle's divergences from the record are the first round's card, never repeated here)
     const rows = (s.divergedDuring || []).map((d) => ({ what: d.name || d.id || d.unit || d.group, yours: d.reason || d.sim || d.text || 'left the record' }))
     const o = r.outcome
-    if (o?.diverged?.length) for (const d of o.diverged) rows.push({ what: d.name || d.unit || d.group, yours: d.group ? String(d.sim).replace(/^(\d+) lost$/, (_, n) => `${n} aircraft lost`) : d.sim })
     const guesses = (o?.guess || []).map((x) => (typeof x === 'string' ? x : `${label(x.t)}: ${x.text}`))
     // The record: a bookmark's written text, then the unit's own record over the span
     const rec = recordLines(u, kind, t0, t1)
@@ -1003,13 +1072,18 @@ export function link(app, ui) {
   /** A unit named by the URL (#unit, #station): selected, its card open with the station's button focused, never pressed. */
   function offerUnit(id, station) {
     const rows = units()
-    let u = rows.find((x) => x.id === id)
-    // (a group's id: its first aircraft that can be taken)
-    if (!u) u = rows.find((x) => x.group === id && x.kind === 'aircraft' && x.takeable === true) || rows.find((x) => x.group === id && x.kind === 'aircraft')
+    let u = rows.find((x) => x.id === id && !x.spare)
+    let spareOf = null
+    // (a group's id: its first aircraft that can be taken, else the group's spare where it flies one)
+    if (!u) {
+      u = rows.find((x) => x.group === id && x.kind === 'aircraft' && !x.spare && x.takeable === true)
+      if (!u && groupTakeable(id) === true) spareOf = id
+      u ||= rows.find((x) => x.group === id && x.kind === 'aircraft' && !x.spare)
+    }
     if (!u) return app.warn(`#unit=${id}: no such unit in this box`)
     if (station && !(u.stations || []).includes(station)) app.warn(`#station=${station}: ${u.name} has no such station`)
     L.offeredUnit = `${id}|${station ?? ''}`
-    select(u.index, { focus: station && (u.stations || []).includes(station) ? station : (u.stations || [])[0] })
+    select(u.index, { focus: station && (u.stations || []).includes(station) ? station : (u.stations || [])[0], spareOf })
   }
   L.offerUnit = offerUnit
 
