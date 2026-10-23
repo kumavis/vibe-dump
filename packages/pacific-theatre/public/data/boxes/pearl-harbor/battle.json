@@ -3299,11 +3299,11 @@
         {
           "t": "07:15",
           "lonlat": [-157.06,24.13],
-          "courseDeg": 355,
+          "courseDeg": 180,
           "speedKn": 9.2,
           "precision": "report",
           "source": "pha-exhibit-8",
-          "sourceNote": "the second launch point, 200 nm 000° from Point Z (computed, R10 §3.2)",
+          "sourceNote": "the second launch point, 200 nm 000° from Point Z (computed, R10 §3.2); still on the run south from the first launch point (thirty miles in seventy-five minutes), the turn north for the recovery after it",
           "sourceClock": "0245",
           "sourceZone": "+09:00",
           "sourceDate": "1941-12-08"

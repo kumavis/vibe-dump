@@ -321,8 +321,10 @@ function shipNow(sim, i) {
       if (f.t <= sim.t) continue
       if (f.t > end) break
       const prev = r.track[k - 1]
-      const dc = prev ? Math.abs((((f.course - prev.course) % 360) + 540) % 360 - 180) : 0
-      if (dc >= 10) {
+      const turn = (a0, b0) => Math.abs((((b0 - a0) % 360) + 540) % 360 - 180)
+      const dc = prev ? turn(prev.course, f.course) : 0
+      // (a turn she has already made between the fixes is not her next: Akagi heads north long before the 10:00 fix says so)
+      if (dc >= 10 && turn(s.heading[i], f.course) >= 10) {
         next = `At ${L(f.t)}: ${r.name} comes to ${hdg(f.course)}.`
         break
       }
