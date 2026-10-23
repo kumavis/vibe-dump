@@ -1028,6 +1028,20 @@ export function createSim(battle, kits, opts = {}) {
     throw new Error('takeControl: a role names a unit or a group')
   }
 
+  /**
+   * Whether a group can be taken as a group ({ group, station }): true, or the reason. True also when every
+   * row of it is greyed but the take flies a spare (a namedCrews group, a lone aircraft's group): the list's
+   * group row should read this, not its members' reasons.
+   */
+  sim.groupTakeable = function groupTakeable(id) {
+    try {
+      resolveRole({ group: id })
+      return true
+    } catch (e) {
+      return e.reason ?? e.message
+    }
+  }
+
   /** An aircraft body from slot i's place in the state (the record's, or an AI's). */
   function airBodyFromState(i, throttle = 0.8) {
     const x = X[i]

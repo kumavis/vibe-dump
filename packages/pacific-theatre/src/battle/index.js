@@ -616,6 +616,8 @@ export class Battle {
     result.sortie = sim.sortie
     this.scene?.hud.say(endLine(sim, reason, kind), 6)
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'after', ...result } }))
+    // (ui-2's link opens its after-card on 'released' with the sortie: a release by Backspace or by the unit's fate has no caller to return to)
+    if (result.sortie) this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'released', ...result } }))
     mo.resolve(result)
     return result
   }

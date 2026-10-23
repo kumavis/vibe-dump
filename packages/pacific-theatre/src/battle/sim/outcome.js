@@ -32,6 +32,7 @@ export function computeScore(sim) {
     objective: sc.objective,
     rounds: Math.round(sc.rounds ?? 0),
     aaBursts: sc.aaBursts ?? 0,
+    downedList: (sc.downedList ?? []).map((h) => ({ ...h })),
   }
 }
 
@@ -107,11 +108,13 @@ export function sortieOf(sim, so) {
   const seen = new Map()
   const log = sim._log.slice(so.logFrom, live ? sim._log.length : so.logTo)
   for (const e of log) if (e.i !== so.index && !seen.has(e.i)) seen.set(e.i, e)
-  const divergedDuring = [...seen.values()].map((e) => ({ unit: sim.slots[e.i].id, index: e.i, name: short(sim, e.i), kind: sim.slots[e.i].kind, side: sim.slots[e.i].side, why: e.why, t: e.t, at: sim.clock.label(e.t) }))
+  // (reason: ui-2's name for why, link.js's after-card)
+  const divergedDuring = [...seen.values()].map((e) => ({ unit: sim.slots[e.i].id, index: e.i, name: short(sim, e.i), kind: sim.slots[e.i].kind, side: sim.slots[e.i].side, why: e.why, reason: e.why, t: e.t, at: sim.clock.label(e.t) }))
   return {
     held: live,
     t0: so.t0,
     t1,
+    span: [so.t0, t1], // (ui-2's name for [t0, t1])
     from: sim.clock.label(so.t0),
     to: sim.clock.label(t1),
     durationS: +(t1 - so.t0).toFixed(1),
@@ -122,7 +125,8 @@ export function sortieOf(sim, so) {
     momentId: so.momentId,
     touched: live ? !!sim.player?.engaged : so.engaged,
     engagedAt: so.engagedAt,
-    hits: sc?.hits ?? [],
+    // the aircraft the player brought down are hits of kind 'aircraft' (one each, by name: never a count of people)
+    hits: [...(sc?.hits ?? []), ...(sc?.downedList ?? [])],
     downed: sc?.downed ?? 0,
     torpedoesHit: sc?.torpedoesHit ?? 0,
     releases: { bombs: sc?.bombs ?? 0, torpedoes: sc?.torpedoes ?? 0, salvos: sc?.salvos ?? 0, shells: sc?.shells ?? 0, rounds: sc?.rounds ?? 0, aaBursts: sc?.aaBursts ?? 0, releaseM: sc?.releaseM ?? null, envelope: sc?.envelope ?? [] },

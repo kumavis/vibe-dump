@@ -2186,6 +2186,13 @@ function recordDamageAt(r, t) {
   return sum
 }
 
+/** An aircraft the player brought down, for the sortie's hits (kind 'aircraft', by its one-aircraft name). */
+function downedBy(sim, i) {
+  const sc = sim._score
+  if (!sc) return
+  ;(sc.downedList ||= []).push({ unit: sim.slots[i].id, index: i, name: oneAircraft(sim, i), kind: 'aircraft', count: 1 })
+}
+
 export function loseAircraft(sim, i, how, by = null) {
   const x = sim._X[i]
   const s = sim.state
@@ -2195,6 +2202,7 @@ export function loseAircraft(sim, i, how, by = null) {
   if (by === 'player') {
     x.lostByPlayer = true
     sim._score.downed++
+    downedBy(sim, i)
     sim.beat(i, 'downed', `${airName(sim, i)}: shot down`)
   }
   sim._setAlive(i, 2)
@@ -2407,7 +2415,10 @@ export function aaStep(sim, dt) {
     const r = hazardStep(lam, dt, sim.rngs.aa)
     if (r === 'kill') {
       loseAircraft(sim, i, 'aa')
-      if (pl && pl.unitIndex !== i && sim.slots[nearest.j].authority === 'player') sim._score.downed++
+      if (pl && pl.unitIndex !== i && sim.slots[nearest.j].authority === 'player') {
+        sim._score.downed++
+        downedBy(sim, i)
+      }
     } else if (r === 'hit') {
       b.damage = Math.min(0.95, b.damage + hitDamage(nearest.m, nearest.d, sim.rngs.aa))
       sim.fx(FX.smoke, b.x, b.y, b.z, { unit: i, size: 0.4 })

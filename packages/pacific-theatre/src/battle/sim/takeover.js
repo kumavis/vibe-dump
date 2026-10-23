@@ -416,6 +416,8 @@ function row(sim, i, cache, short) {
     group: st.group,
     groupName: st.groupName,
     groupIndex: st.groupIndex,
+    k: st.groupIndex, // (ui-2's name for it: link.js memberOf)
+    spare: !!x.wasSpare, // a namedCrews group's spare (ui-2's card words it so)
     alive: sim.state.alive[i],
     takeable: takeability(sim, i),
     stations: st.stations,
