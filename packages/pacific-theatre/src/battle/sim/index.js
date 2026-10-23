@@ -34,7 +34,8 @@ import { Sight } from './sight.js'
 import { EffectsRing, FX, dyeCode, eventLine } from './effects.js'
 import { shellOf } from './ballistics.js'
 import * as AI from './ai.js'
-import { computeScore, computeOutcome } from './outcome.js'
+import { computeScore, computeOutcome, openSortie, closeSortie, sortieOf } from './outcome.js'
+import { REASONS, stationsOf, takeability, unitRows, aircraftStations } from './takeover.js'
 
 const asList = (x) => (Array.isArray(x) ? x : x instanceof Map ? [...x.values()] : x && typeof x === 'object' ? Object.values(x) : [])
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
@@ -201,7 +202,7 @@ export function createSim(battle, kits, opts = {}) {
     record,
     world,
     sight,
-    units,
+    slots: units,
     groups: record.groups.map((g) => ({ id: g.id, name: g.name, kit: g.kitId, side: g.side, count: g.count, profile: g.attack?.profile ?? null, units: g.aircraft.map((a) => a.slot), reached: g.Srec })),
     state,
     projectiles,
@@ -233,6 +234,10 @@ export function createSim(battle, kits, opts = {}) {
     _score: null,
     _visualFire: new Map(), // slot → { target, next } (a record ship's guns firing for the eye)
     _engaged: new Set(),
+    _released: new Set(), // units the player touched and gave back: AI-driven, their record events unscripted (ROUND-2 §3)
+    _log: [], // { t, i, why }: who left the record and why (the sortie's divergedDuring)
+    _sortie: null,
+    assist: opts.assist === 'pilot' ? 'pilot' : 'assisted', // ROUND-2 §1.2: Assisted by default
     _momentQueue: [],
     _momentCursor: 0,
     warn,
@@ -460,6 +465,7 @@ export function createSim(battle, kits, opts = {}) {
     // (when and why, for the replay test's report: tools/replay.mjs)
     x.touchedAt = sim.t
     x.touchedWhy = why
+    logDiverge(i, why || 'touched')
     if (units[i].kind !== 'ship') return
     const st = x.dmg
     st.regime = 'sim'
@@ -490,11 +496,12 @@ export function createSim(battle, kits, opts = {}) {
   sim._touch = touch
 
   /** Put a ship under the AI (it moves by the ship model; evades, returns fire, rejoins its track). */
-  function toAI(i) {
+  function toAI(i, why = '') {
     const x = X[i]
     const u = units[i]
     if (u.authority !== 'record') return
-    touch(i)
+    touch(i, why)
+    if (u.kind === 'aircraft') logDiverge(i, why || 'under the sim')
     u.authority = 'ai'
     if (u.kind === 'ship') {
       const o3 = 3 * i
@@ -543,7 +550,7 @@ export function createSim(battle, kits, opts = {}) {
     for (const ac of g.aircraft) {
       const i = ac.slot
       if (i == null) continue
-      if (sim.player && sim.player.unitIndex === i) continue
+      if (i === engagedIndex()) continue
       if (ac.noReach) continue
       const x = X[i]
       const rel = ac.releaseT ?? Infinity
@@ -606,6 +613,7 @@ export function createSim(battle, kits, opts = {}) {
           if (state.alive[fi] !== 1 || (fd.regime === 'sim' && (fd.out || fd.sinking || fd.doomed || fd.fires.reduce((s, v) => s + v, 0) >= 2))) {
             sim._cancelled.add(g.index)
             g.cancelledAt = sim.t
+            logDiverge(i, `not launched: ${g.name}`)
             beat(fi, 'launches', `${units[fi].name}: ${g.name} not launched`)
             return
           }
@@ -654,6 +662,7 @@ export function createSim(battle, kits, opts = {}) {
             // spared: it flies its plan on, home or out of the box
             x.spared = true
             x.sparedAt = sim.t
+            logDiverge(i, 'spared: its loss did not come')
             x.ac = { ...x.ac, lossT: null, goneT: null }
             if (Number.isFinite(x.ac.endT)) insertAction({ t: x.ac.endT, kind: 'exit', slot: i, n: queue.length })
             return
@@ -715,18 +724,29 @@ export function createSim(battle, kits, opts = {}) {
     const u = units[i]
     const x = X[i]
     const pl = sim.player
-    const playerUnit = pl ? pl.unitIndex : -1
+    const playerUnit = engagedIndex()
     const isPlayerTarget = i === playerUnit
     const byGroup = ev.by ? record.groupById.get(ev.by) : null
     const byShip = ev.by ? record.shipById.get(ev.by) : null
     const byPlayerShip = byShip && byShip.slot === playerUnit
-    const playerInGroup = byGroup && pl && units[playerUnit]?.groupIndex === byGroup.index
+    const playerInGroup = byGroup && playerUnit >= 0 && units[playerUnit]?.groupIndex === byGroup.index
     const fixed = !!x.rec.fixed
+    // a unit the player touched and gave back: the record's events naming it stay unscripted (ROUND-2 §3)
+    const releasedTarget = sim._released.has(i)
+    const releasedCause = byShip && sim._released.has(byShip.slot)
 
     if (HIT_KINDS.has(ev.kind)) {
       if (!fixed && (isPlayerTarget || byPlayerShip)) {
         // not scripted: the sim resolves it (the player's own fire, or the AI's at the player)
         if (byShip && isPlayerTarget) engage(byShip.slot)
+        return
+      }
+      if (!fixed && (releasedTarget || releasedCause)) {
+        // not scripted: the cause (an AI ship) fires the real gunnery at its target; a strike sent at a released ship is flown for real (ai.js recruit)
+        if (byShip && state.alive[byShip.slot] === 1) {
+          engage(byShip.slot)
+          if (X[byShip.slot].ai) X[byShip.slot].ai.target = i
+        }
         return
       }
       if (!u.target || x.model?.fatal == null) return
@@ -895,66 +915,251 @@ export function createSim(battle, kits, opts = {}) {
   }
   sim._engage = engage
 
-  // --- the player ----------------------------------------------------------------------------------
-  sim.takeControl = function takeControl(role) {
-    if (!role) throw new Error('takeControl: no role')
-    if (sim.player) sim.releaseControl()
-    const kind = role.kind
-    let i = -1
-    if (kind === 'ship') {
-      const r = record.shipById.get(role.unit)
-      if (!r) throw new Error(`takeControl: no unit “${role.unit}”`)
-      if (r.tokko) throw new Error('takeControl: a tokkō unit is never a player role')
-      i = r.slot
-      if (state.alive[i] !== 1) throw new Error(`takeControl: ${r.name} is not afloat at this time`)
-      touch(i, 'player')
-      const x = X[i]
-      const o3 = 3 * i
-      x.body = createShipBody(x.model, { x: state.pos[o3], z: state.pos[o3 + 2], heading: state.heading[i], V: state.speed[i] })
-      x.guns = AI.createGuns(sim, i)
-      x.torpedoes = x.model.torp ? { ready: x.model.torp.tubes ?? 2, reloadAt: 0 } : null
-      units[i].authority = 'player'
-    } else {
-      const g = role.group ? record.groupById.get(role.group) : null
-      const kitId = role.kit || g?.kitId
-      if (g) {
-        // a member alive now that has not yet reached its attack, the soonest to it first; never the group's leader
-        // (k 0: Best's, Kobayashi's, Tomonaga's aircraft stay AI on the record), and none of a group whose every
-        // crew the record names (`namedCrews`: Welch's and Taylor's P-40s), whose moment flies a spare (R8 §5.1, 13)
-        const cand = g.raw?.namedCrews ? [] : g.aircraft.filter((ac) => ac.k !== 0 && ac.slot != null && units[ac.slot].authority === 'record' && state.alive[ac.slot] === 1)
+  // --- the player (ROUND-2.md §1.1, §3: any unit, any time, at a station) ------------------------------------
+  //
+  // A take is soft until the player acts: the unit stays on the record (its
+  // motion, its events, its fate) with a shadow body the HUD reads, and the
+  // first non-zero level or counter (inputTouched, ai.js) engages it: from
+  // then on it is the player's, on the sim's models, and the record's events
+  // naming it are the sim's to resolve. Released untouched, it was never off
+  // the record and `diverged` is unchanged; released touched, the AI drives it
+  // on from where it was left and its record events stay unscripted. A
+  // bookmark (a moment) takes hard at once, as the first build did.
+
+  /** The engaged player's slot, or −1 (a soft take changes nothing the record decides). */
+  function engagedIndex() {
+    const pl = sim.player
+    return pl && pl.engaged ? pl.unitIndex : -1
+  }
+  sim._engagedIndex = engagedIndex
+
+  /** Who left the record and why, for the sortie's divergedDuring. */
+  function logDiverge(i, why) {
+    if (i == null || i < 0) return
+    sim._log.push({ t: sim.t, i, why })
+  }
+  sim._diverge = logDiverge
+
+  const takeCache = { rows: [], order: null, airName: (i) => AI.oneAircraftName(sim, i) }
+  /** sim.units(): the unit list's and the unit card's rows (takeover.js unitRows). */
+  const unitsFn = function units() {
+    return unitRows(sim, takeCache, AI.KIT_SHORT)
+  }
+  // (still indexable as the slots it was in the first build: sim.units[i], sim.units.length; the engine reads sim.slots)
+  for (let i = 0; i < N; i++) unitsFn[i] = units[i]
+  Object.defineProperty(unitsFn, 'length', { value: N })
+  unitsFn[Symbol.iterator] = function* () {
+    for (let i = 0; i < N; i++) yield units[i]
+  }
+  sim.units = unitsFn
+  sim.stationsOf = (i) => stationsOf(sim, i)
+  sim.takeable = (i) => takeability(sim, i)
+  /** The take-over role of slot i: { unit } for a ship, { group, index } for a group's aircraft, or null. */
+  sim.roleOf = function roleOf(i, station = null) {
+    const u = units[i]
+    if (!u || u.authority === 'free') return null
+    const x = X[i]
+    const st = station ?? stationsOf(sim, i)[0] ?? null
+    if (x.ac && x.g) return { group: x.g.id, index: x.ac.k, station: st }
+    return { unit: u.id, station: st }
+  }
+
+  const reasonError = (why) => {
+    const e = new Error(why)
+    e.reason = why
+    return e
+  }
+
+  /** A free take's role resolved to a slot (or a spare beside its group), throwing §2's reason; nothing is changed. */
+  function resolveRole(role) {
+    if (role.unit != null) {
+      let i = typeof role.unit === 'number' ? role.unit : record.shipById.get(role.unit)?.slot
+      if (i == null) {
+        if (record.siteById.get(role.unit)) throw reasonError(REASONS.site)
+        i = units.findIndex((u) => u.id === role.unit)
+        if (i < 0) throw new Error(`takeControl: no unit “${role.unit}”`)
+      }
+      if (!(i >= 0 && i < N)) throw new Error(`takeControl: no unit ${role.unit}`)
+      const why = takeability(sim, i)
+      if (why !== true) throw reasonError(why)
+      return { i, stations: stationsOf(sim, i) }
+    }
+    if (role.group != null) {
+      const g = record.groupById.get(role.group)
+      if (!g) throw new Error(`takeControl: no group “${role.group}”`)
+      if (role.index != null) {
+        if (role.index === 0) throw reasonError(REASONS.leader)
+        const ac = g.aircraft[role.index]
+        if (!ac || ac.slot == null) throw new Error(`takeControl: ${g.id} has no aircraft ${role.index}`)
+        const why = takeability(sim, ac.slot)
+        if (why !== true) throw reasonError(why)
+        return { i: ac.slot, stations: stationsOf(sim, ac.slot) }
+      }
+      if (g.raw?.tokko) throw reasonError(REASONS.tokko)
+      if (sim._cancelled.has(g.index)) throw reasonError(REASONS.cancelled)
+      if (!g.raw?.namedCrews) {
+        // a member in the air that has not yet reached its attack, the soonest to it first; never the leader (k 0)
+        const cand = g.aircraft.filter((ac) => ac.k !== 0 && ac.slot != null && takeability(sim, ac.slot) === true)
         cand.sort((a, b) => (a.releaseT ?? 1e9) - (b.releaseT ?? 1e9))
         const pick = cand.find((ac) => (ac.releaseT ?? Infinity) > sim.t + 15) || cand[0]
-        if (pick) i = pick.slot
+        if (pick) return { i: pick.slot, stations: stationsOf(sim, pick.slot) }
       }
-      if (i < 0) i = allocSpare(kitId, 'aircraft', g)
+      // a spare of the group's kit beside one of its aircraft in the air (a group whose every crew the record names flies a spare)
+      const beside = g.aircraft.find((ac) => ac.slot != null && state.alive[ac.slot] === 1)
+      if (!beside) throw reasonError(g.aircraft.length && sim.t < Math.min(...g.aircraft.map((a) => a.spawnT)) ? REASONS.notYet : REASONS.lost)
+      return { spare: true, g, beside: beside.slot, stations: aircraftStations(airModelOf(g.kitId), g) }
+    }
+    throw new Error('takeControl: a role names a unit or a group')
+  }
+
+  /** An aircraft body from slot i's place in the state (the record's, or an AI's). */
+  function airBodyFromState(i, throttle = 0.8) {
+    const x = X[i]
+    const o3 = 3 * i
+    const vx = state.vel[o3]
+    const vy = state.vel[o3 + 1]
+    const vz = state.vel[o3 + 2]
+    const hs = Math.hypot(vx, vz)
+    const b = createAirBody(x.model, { x: state.pos[o3], y: state.pos[o3 + 1], z: state.pos[o3 + 2], V: Math.max(x.model.vCruise * 0.8, Math.hypot(hs, vy)), heading: state.heading[i], gamma: Math.atan2(vy, Math.max(1, hs)), throttle })
+    b.phi = x.bank || 0
+    return b
+  }
+  sim._airBodyFromState = airBodyFromState
+
+  /** The moment's station: the one its objective names, as the first build's cameras read it. */
+  function momentStation(role, stations) {
+    const m = sim._momentPending
+    const obj = m?.objective?.kind
+    let st = role.kind === 'aircraft' ? 'pilot' : obj === 'gunnery' ? 'main' : obj === 'torpedo' ? 'torpedoes' : 'helm'
+    if (!stations.includes(st)) st = stations[0]
+    return st
+  }
+
+  sim.takeControl = function takeControl(role) {
+    if (!role) throw new Error('takeControl: no role')
+    // a bookmark's role (DATA.md §9: { kind, kit, side, unit | group, name }) takes as the first build did; a free take names a station or an index
+    const moment = role.kind != null && role.station == null && role.index == null
+    const target = moment ? null : resolveRole(role)
+    if (target) {
+      const st = role.station ?? target.stations[0]
+      if (!target.stations.includes(st)) throw new Error(`takeControl: no station “${st}” on this unit (it offers ${target.stations.join(', ')})`)
+    }
+    if (sim.player) sim.releaseControl()
+    let i = -1
+    let kind
+    if (moment) {
+      kind = role.kind
+      if (kind === 'ship') {
+        const r = record.shipById.get(role.unit)
+        if (!r) throw new Error(`takeControl: no unit “${role.unit}”`)
+        if (r.tokko) throw reasonError(REASONS.tokko)
+        i = r.slot
+        if (state.alive[i] !== 1) throw new Error(`takeControl: ${r.name} is not afloat at this time`)
+      } else {
+        const g = role.group ? record.groupById.get(role.group) : null
+        const kitId = role.kit || g?.kitId
+        if (g) {
+          // (k 0: Best's, Kobayashi's, Tomonaga's aircraft stay AI on the record; a group whose every crew the record
+          // names, `namedCrews`: Welch's and Taylor's P-40s, flies a spare, R8 §5.1, 13)
+          const cand = g.raw?.namedCrews ? [] : g.aircraft.filter((ac) => ac.k !== 0 && ac.slot != null && units[ac.slot].authority === 'record' && state.alive[ac.slot] === 1)
+          cand.sort((a, b) => (a.releaseT ?? 1e9) - (b.releaseT ?? 1e9))
+          const pick = cand.find((ac) => (ac.releaseT ?? Infinity) > sim.t + 15) || cand[0]
+          if (pick) i = pick.slot
+        }
+        if (i < 0) i = allocSpare(kitId, 'aircraft', g)
+        if (i < 0) throw new Error('takeControl: no slot free')
+      }
+    } else if (target.spare) {
+      kind = 'aircraft'
+      i = allocSpare(target.g.kitId, 'aircraft', target.g)
       if (i < 0) throw new Error('takeControl: no slot free')
-      const x = X[i]
+      // beside the group's aircraft: 120 m out on its right and 60 m back, at its speed and heading
+      const j = target.beside
       const o3 = 3 * i
-      const vx = state.vel[o3]
-      const vy = state.vel[o3 + 1]
-      const vz = state.vel[o3 + 2]
-      const hs = Math.hypot(vx, vz)
-      x.body = createAirBody(x.model, { x: state.pos[o3], y: state.pos[o3 + 1], z: state.pos[o3 + 2], V: Math.max(x.model.vCruise * 0.8, Math.hypot(hs, vy)), heading: state.heading[i], gamma: Math.atan2(vy, Math.max(1, hs)), throttle: 0.8 })
-      x.ammo = AI.ammoOf(x.model)
-      units[i].authority = 'player'
-      x.touched = true
+      const h = state.heading[j] * DEG
+      state.pos[o3] = state.pos[3 * j] + Math.cos(h) * 120 - Math.sin(h) * 60
+      state.pos[o3 + 1] = state.pos[3 * j + 1]
+      state.pos[o3 + 2] = state.pos[3 * j + 2] + Math.sin(h) * 120 + Math.cos(h) * 60
+      for (let k = 0; k < 3; k++) state.vel[o3 + k] = state.vel[3 * j + k]
+      state.heading[i] = state.heading[j]
+      X[i].bank = 0
+      X[i].body = airBodyFromState(i)
+      setAlive(i, 1)
+    } else {
+      i = target.i
+      kind = units[i].kind
     }
     const u = units[i]
+    const x = X[i]
+    const stations = moment ? stationsOf(sim, i) : target.stations
+    const station = moment ? momentStation(role, stations) : role.station ?? stations[0]
+    const group = x.g || (u.groupIndex >= 0 ? record.groups[u.groupIndex] : null)
+    // the bodies the HUD reads, and the physics once the player acts
+    if (kind === 'ship') {
+      if (u.authority === 'record' || !x.body) x.body = createShipBody(x.model, { x: state.pos[3 * i], z: state.pos[3 * i + 2], heading: state.heading[i], V: state.speed[i] })
+      x.guns ||= AI.createGuns(sim, i)
+      x.torpedoes ||= x.model.torp ? { ready: x.model.torp.tubes ?? 2, reloadAt: 0 } : null
+    } else {
+      if (u.authority === 'record' || !x.body) x.body = airBodyFromState(i)
+      x.ammo ||= AI.ammoFor(x.model, group?.attack?.profile ?? null)
+    }
+    const name = role.name ?? (kind === 'ship' ? u.name : AI.oneAircraftName(sim, i))
     const player = {
       kind,
       unitIndex: i,
       scripted: false,
-      input: AI.defaultInput(kind, X[i], state, i),
+      input: AI.defaultInput(kind, x, state, i),
       state: {},
       _seen: { fireCount: 0, bombCount: 0, torpedoCount: 0, salvoCount: 0, starshellCount: 0 },
-      role,
+      role: moment ? role : { ...role, kind, name, unit: role.unit ?? (kind === 'ship' ? u.id : undefined), station },
+      station,
+      stations,
+      engaged: false,
+      engagedAt: null,
+      allStations: moment, // a bookmark's input drives every station until the first Tab (its first-build behaviour)
+      tTake: sim.t,
+      hold: { heading: state.heading[i], speed: state.speed[i], alt: state.pos[3 * i + 1], mainTarget: null },
+      aims: {},
+      steered: false,
+      flown: false,
+      director: null,
     }
+    player.base = AI.snapshotInput(player.input)
     sim.player = player
-    sim.diverged = true
-    sim._score = { hits: [], downed: 0, torpedoesHit: 0, salvos: 0, straddles: 0, shells: 0, bombs: 0, torpedoes: 0, releaseM: null, envelope: [], objective: false, start: sim.t, lost: null, how: null }
+    sim._score = { hits: [], downed: 0, torpedoesHit: 0, salvos: 0, straddles: 0, shells: 0, bombs: 0, torpedoes: 0, rounds: 0, aaBursts: 0, releaseM: null, envelope: [], objective: false, start: sim.t, lost: null, how: null }
+    sim._sortie = openSortie(sim, player, group)
+    if (moment || u.authority !== 'record') {
+      // hard at once: a bookmark (as the first build), a spare, or a unit already off the record
+      if (moment && kind === 'ship') touch(i, 'player')
+      engagePlayer(player, moment ? 'bookmark' : 'taken')
+    } else AI.syncPlayerBody(sim, player)
     AI.updatePlayerState(sim)
     return player
   }
+
+  /** The player's first act: the unit leaves the record and is the player's, on the sim's models, from where it is. */
+  function engagePlayer(pl, why = 'input') {
+    if (pl.engaged) return
+    const i = pl.unitIndex
+    const u = units[i]
+    const x = X[i]
+    pl.engaged = true
+    pl.engagedAt = sim.t
+    if (u.kind === 'ship') {
+      if (u.authority === 'record') x.body = createShipBody(x.model, { x: state.pos[3 * i], z: state.pos[3 * i + 2], heading: state.heading[i], V: state.speed[i] })
+      touch(i, 'player')
+    } else {
+      if (u.authority === 'record') x.body = airBodyFromState(i, x.body?.throttle ?? 0.8)
+      x.touched = true
+    }
+    if (u.authority !== 'player') logDiverge(i, why === 'input' ? 'at the controls' : why)
+    u.authority = 'player'
+    x.ai = null
+    x.prev = null
+    sim.diverged = true
+    if (sim._sortie) sim._sortie.engagedAt = sim.t
+  }
+  sim._engagePlayer = engagePlayer
 
   function allocSpare(kitId, kind, g = null) {
     for (let i = firstSpare; i < N; i++) {
@@ -970,28 +1175,68 @@ export function createSim(battle, kits, opts = {}) {
       u.group = g?.id ?? null
       u.groupIndex = g?.index ?? -1
       u.authority = 'ai'
-      X[i].model = airModelOf(kitId)
-      X[i].spare = false
-      X[i].wasSpare = true
+      Object.assign(X[i], { model: airModelOf(kitId), spare: false, wasSpare: true, body: null, ai: null, ammo: null, lostAt: null, lostHow: null, how: null, keepAI: false, released: false, touched: false, prev: null, bank: 0 })
+      sim._released.delete(i)
       state.alive[i] = 0
+      state.damage[i] = 0
+      state.fire[i] = 0
       return i
     }
     return -1
   }
   sim._allocSpare = allocSpare
 
+  /**
+   * Switch the player's station (ROUND-2 §3). The station left is held by the
+   * AI where the player left it: the helm on its course and speed, the main
+   * battery on its target, the pilot on its heading, height and speed.
+   */
+  sim.setStation = function setStation(name) {
+    const pl = sim.player
+    if (!pl) throw new Error('setStation: nobody holds a unit')
+    if (!pl.stations.includes(name)) throw new Error(`setStation: no station “${name}” on this unit (it offers ${pl.stations.join(', ')})`)
+    if (name === pl.station && !pl.allStations) return pl
+    AI.leaveStation(sim, pl, pl.station)
+    pl.allStations = false
+    pl.station = name
+    AI.enterStation(sim, pl, name)
+    if (sim._sortie && !sim._sortie.stations.includes(name)) sim._sortie.stations.push(name)
+    AI.updatePlayerState(sim)
+    return pl
+  }
+
+  /**
+   * Give the unit back (ROUND-2 §3). Untouched by input, it never left the
+   * record; touched, the AI drives it on from its state (a touched aircraft
+   * stays the AI's) and the record's events naming it stay unscripted.
+   * Returns the sortie (sim.sortie).
+   */
   sim.releaseControl = function releaseControl() {
     const pl = sim.player
-    if (!pl) return
+    if (!pl) return null
     const i = pl.unitIndex
     const u = units[i]
-    if (u.authority === 'player') {
-      u.authority = 'ai'
-      X[i].ai = u.kind === 'ship' ? AI.createShipAI(sim, i) : AI.createAirAI(sim, i, { rejoin: true })
+    const x = X[i]
+    if (sim._sortie && sim._sortie.t1 == null) closeSortie(sim, sim._sortie)
+    if (pl.engaged) {
+      if (u.authority === 'player') {
+        u.authority = 'ai'
+        x.ai = u.kind === 'ship' ? AI.createShipAI(sim, i) : AI.createAirAI(sim, i, { rejoin: true })
+      }
+      x.keepAI = true
+      x.released = true
+      sim._released.add(i)
+    } else if (u.authority === 'record') {
+      // (the shadow body and the HUD's guns go; the record places it as it always did)
+      x.body = null
+      if (u.kind === 'ship') x.guns = null
     }
     if (sim.momentState && !sim.momentState.done) endMoment('released')
     sim.player = null
+    return sim.sortie
   }
+
+  Object.defineProperty(sim, 'sortie', { get: () => (sim._sortie ? sortieOf(sim, sim._sortie) : null), configurable: true })
 
   // --- moments (moments: checkpoints, restart points, the end) -------------------------------------------
   /** atCheckpoint: the sim stands at the checkpoint on the record (a restart point); the unit is taken where the record has it. */
@@ -999,7 +1244,13 @@ export function createSim(battle, kits, opts = {}) {
     const m = record.moments.get(id)
     if (!m) throw new Error(`no moment “${id}”`)
     if (!sim.diverged && !atCheckpoint && Math.abs(sim.t - m.t) > 1e-6) sim.setTime(m.t)
-    const pl = sim.player || sim.takeControl(m.role)
+    sim._momentPending = m
+    let pl
+    try {
+      pl = sim.player || sim.takeControl(m.role)
+    } finally {
+      sim._momentPending = null
+    }
     // (a spare has no place on the record: it starts where the moment does)
     if (!atCheckpoint || state.alive[pl.unitIndex] !== 1) AI.applyStart(sim, m)
     else if (pl.kind === 'aircraft') {
@@ -1103,6 +1354,7 @@ export function createSim(battle, kits, opts = {}) {
       fx(FX.sink, state.pos[o], 0, state.pos[o + 2], { unit: i, size: X[i].model.L })
       beat(i, 'sinks', `${u.name}: ${e.text}`)
       X[i].sunkAt = sim.t
+      logDiverge(i, 'sank')
     } else if (e.kind === 'gone') setAlive(i, 0)
   }
   sim._shipFate = shipFate

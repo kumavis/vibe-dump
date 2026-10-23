@@ -424,7 +424,7 @@ export class EffectsRenderer {
     for (let i = 0; i < sim.capacity; i++) {
       const a = s.alive[i]
       if (!a) continue
-      const u = sim.units[i]
+      const u = sim.slots[i]
       const x = s.pos[3 * i]
       const z = s.pos[3 * i + 2]
       const far = Math.hypot(x - camx, z - camz)

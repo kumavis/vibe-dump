@@ -103,7 +103,7 @@ export class Cameras {
     const y = s.pos[3 * i + 1]
     const z = s.pos[3 * i + 2]
     Q.set(s.quat[4 * i], s.quat[4 * i + 1], s.quat[4 * i + 2], s.quat[4 * i + 3])
-    const u = sim.units[i]
+    const u = sim.slots[i]
     const X = sim._X[i]
     const m = X.model
     let fov = this.baseFov

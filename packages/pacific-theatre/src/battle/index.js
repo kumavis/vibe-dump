@@ -211,7 +211,7 @@ export class Battle {
       let x = 0
       let z = 0
       for (let i = 0; i < sim.capacity; i++) {
-        if (sim.state.alive[i] !== 1 || sim.units[i].kind !== 'ship') continue
+        if (sim.state.alive[i] !== 1 || sim.slots[i].kind !== 'ship') continue
         x += sim.state.pos[3 * i]
         z += sim.state.pos[3 * i + 2]
         n++
@@ -390,7 +390,7 @@ export class Battle {
     if (m.objective?.text) sc.hud.say(m.objective.text, 5)
     if (touch && this.aid === 'standard') this.setAid('guided')
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'moment', momentId } }))
-    log('moment', momentId, pl.kind, sim.units[pl.unitIndex].name, sim.clock.label(sim.t))
+    log('moment', momentId, pl.kind, sim.slots[pl.unitIndex].name, sim.clock.label(sim.t))
     return new Promise((resolve) => {
       this._moment = { id: momentId, resolve }
     })

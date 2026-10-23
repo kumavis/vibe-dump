@@ -257,7 +257,7 @@ export class Hud {
       const t = st.target
       if (t && box.aid !== 'record') {
         this.place(this.bracket, this.project(s.pos[3 * t.index], 12, s.pos[3 * t.index + 2]))
-        this.bracket.querySelector('span').textContent = `${sim.units[t.index].name} · ${rng(t.range)}${t.tof ? ` · ${t.tof.toFixed(1)} s` : ''}${t.how === 'radar' ? ' · radar' : ''}`
+        this.bracket.querySelector('span').textContent = `${sim.slots[t.index].name} · ${rng(t.range)}${t.tof ? ` · ${t.tof.toFixed(1)} s` : ''}${t.how === 'radar' ? ' · radar' : ''}`
       } else this.bracket.style.display = 'none'
       this.pip.style.display = 'none'
       this.ccip.style.display = 'none'

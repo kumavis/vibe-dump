@@ -127,6 +127,47 @@ export const P = {
     squallVisM: 2500,
   },
 
+  // --- round two: assisted flight (ROUND-2 §1.2, §3; research/engine-2.md) ------------------------------------------
+  // Applied in the player's aircraft physics step only, as limits and holds on the commanded state; in 'pilot'
+  // the step is the first build's. The numbers named in ROUND-2 §1.2 are the contract's; the rest the engine's.
+  assist: {
+    bankDeg: 60, // the bank limit (§1.2)
+    pitchUpDeg: 25, // the path angle limits (§1.2): +25° / −30°
+    pitchDownDeg: 30,
+    diveDeg: 80, // a dive bomber on its dive may go to 80° (its weapon run; the limit above would forbid the dive)
+    clFrac: 0.82, // the angle-of-attack limiter: the commanded lift never past 0.82 of CLmax (the stall at 1.0)
+    lowSpeed: 1.25, // below 1.25 Vs the limiter pushes the nose and opens the throttle
+    overspeed: 0.9, // above 0.9 of vShake the limiter closes the throttle, opens the brakes and lifts the nose
+    holdGain: 0.012, // height hold: the path angle asked per metre off the held height (rad/m), within ±holdMaxDeg
+    holdMaxDeg: 8,
+    levelGain: 2.5, // wings levelled at 2.5 × the bank (rad/s per rad) when the roll axis is centred
+    gainSpeedRef: 1.0, // the instructor's gain × min(1, vCruise × gainSpeedRef / V), at least gainFloor
+    gainFloor: 0.45,
+    floorLandM: 60, // the floor (§1.2): never under 60 m over land, 15 m over the sea
+    floorSeaM: 15,
+    floorRunLandM: 15, // on a weapon run below the floor it is suspended to these
+    floorRunSeaM: 10,
+    floorLookS: [0, 1, 2, 3, 4.5, 6], // the floor looks ahead along the path
+    shipClearM: 25, // and over a ship's top
+    torpedoRunM: 1500, // the weapon envelope assist: a torpedo run's last 1,500 m (§1.2)
+    torpedoGlideDeg: 5, // ...and above it the height is held no higher than a 5° glide to the run's start
+    diveLastM: 800, // a dive's last 800 m of height (§1.2)
+    levelLastS: 20, // a level run's last 20 s (§1.2)
+    windowK: 2, // the release cue's window in Assisted: twice the record's (§1.2)
+    torpedoWindowM: [300, 1500], // the record's drop window (range to the target), R7 §4.3 and §5
+    halfTime: 0.5, // an aircraft take-over in Assisted runs the battle at 0.5×
+  },
+  // the gunner station (ROUND-2 §3): a rear gun's hazard on the fighter it is aimed at (the engine's estimate, verify)
+  gunner: {
+    lambda: { light: 0.006, heavy: 0.012 }, // per barrel per s inside fullWithin of rangeM: rifle calibre, 12.7 mm
+    rangeM: 700,
+    coneMil: 80, // the lead-error cone (§3: machine guns, 80 mil)
+    arcFromTailDeg: 80, // the rear gun bears within 80° of the tail
+    minUpDot: -0.35, // and not far below the tail plane
+  },
+  // the AA director station (ROUND-2 §3): the lead-error cones
+  aaStation: { coneHeavyMil: 40, coneLightMil: 80, tracerS: 0.12, aimedWithinDeg: 8 },
+
   // --- capacities (ENGINEERING §5) -------------------------------------------------------------------------------
   spares: 64,
   projectileCap: 4096,
