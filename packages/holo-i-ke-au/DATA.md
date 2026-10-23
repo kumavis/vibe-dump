@@ -1157,6 +1157,72 @@ stood when; installation histories, HDOT and FAA records, Thrum's Annual and
 the newspapers for dates; Wikipedia only as a tertiary source, marked. The
 `wanted` rule for sources holds.
 
+### How to bake the works
+
+The bake reads `manifest.json` for the island packs' bounds and
+`boundaries/moku.geojson` for the land, and writes only `works/`.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-works.mjs --all               # download, bake, check, delete the downloads (about two minutes)
+node packages/holo-i-ke-au/tools/bake-works.mjs --sheets /tmp/works # each traced shape and carving zone drawn over the sheet it was read from
+```
+
+or `--download` (about 3 MB of GeoJSON from the State GIS, the Corps of
+Engineers, the FAA and NOAA), `--bake` (a few seconds), `--check` (reads
+`works/` back, lists every feature dated only `by`, says which layer each kind
+rests on, and runs `tools/check-data.mjs`), `--clean`. `--downloads DIR` (or
+`$HOLO_WORKS_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/works-downloads`; keep them outside the repo.
+Node 22 and `curl`, as for the other bakes. A re-bake from the same downloads
+is byte-identical but for the `baked` date.
+
+**Where things live.** `tools/lib/works-dates.mjs` is the hand-written table:
+one entry per feature with its name, owner, years, precision, sources and
+note, and a `geom` that joins it to its geometry by the layer's own name or id;
+the header of that file lists the `geom` forms. `tools/lib/works-sources.mjs`
+names the layers and fetches them; `tools/lib/works-traced.mjs` holds what was
+traced by hand (the railways, the old Kona runway, Fort Armstrong) and the
+zones that carve one base out of a layer polygon that merges several, each with
+the sheet it was read from; `tools/lib/works-bake.mjs` joins, carves (on a 4 m
+grid), simplifies to 10 m, clips to the pack and writes. The bake stops on any
+entry that does not join, on a tunnel that does not fall on its road, and over
+the 1.5 MB budget.
+
+**What the contract gained** (all checked by `check-data`):
+
+- `by` on a feature dated `by`: the id in `sources.json` of the sheet or record
+  that first shows it. It must be among the feature's sources and opened.
+- `layer` on every feature: where its geometry came from, as `{ source, key }`
+  (`source` a layer id in the manifest's `sources`, `key` the layer's own name
+  or id joined on); `within` / `outside` name the hand-drawn zones a layer
+  polygon was carved by; a traced shape has `source: "traced"` and the `sheet`
+  it was read from; a harbour's waters drawn as a zone less the land also name
+  the `minus` file.
+- `lanes` on a road and its tunnels, the commonest through-lane count of its
+  HPMS segments; its `width` is then lanes × 3.6 m + 2 m unless the table gives
+  one.
+- A `tunnel` carries its road's `class`, `lanes` and `width`, its own `name`,
+  `from` and `note`, and is cut out of the road at the portals the 2000 sheet
+  draws; the road either side keeps the road's id, with `-2`, `-3` on further
+  pieces (a road the layer gives in several pieces is numbered the same way).
+- In the manifest: `about`; `baked` (the date); `tolerance` (metres);
+  `tracedFrom` (the sheets the traced shapes cite); per source its `item`,
+  `metadata`, `fields`, `credit` and `note` where the layer has them; per island
+  in `stats`, `datedBy` (features dated only `by`) and `bytes`.
+
+**What each kind rests on** (RESEARCH §15 has the reading behind it):
+
+| kind | geometry | dates |
+| --- | --- | --- |
+| military | the State's Department of Defense Lands (2025, from the 2021 land use plan) for land held today, carved by zones read off the 1927, 1943 and 2000 sheets where one polygon holds two bases; the Corps of Engineers' former sites for land given up; Kalaeloa's district for Barbers Point; Kahoʻolawe's own outline; FAA runways | installation histories (the State's aviation history pages, FortWiki and Wikipedia as finding aids), the Corps' site descriptions, the land use plan's lease tables; otherwise `by` the first sheet or record that shows it |
+| airport | the State's airports layer for the field, carved at the Reef Runway; FAA runways as centrelines at their published width; the old Kona strip traced from the 2000 sheet | the State's aviation history page for each field |
+| highway | the State DOT's HPMS centrelines by route and milepost; the Pali road of 1898 from the City's street centrelines | the State's historic bridge inventory report, the Hawaii Highways route lists, Wikipedia as a finding aid; otherwise `by` the oldest bridge the National Bridge Inventory lists on the stretch |
+| rail | traced from the 1938 Oʻahu sheet (the Oahu Railway and Land Company) and the 1924 Maui sheet (the Kahului Railroad) | the companies' histories as Wikipedia gives them |
+| harbour | NOAA's charted breakwaters and piers, joined by harbour box, category and charted name | Wikipedia for Hilo and Kawaihae; otherwise `by` the first sheet that draws the work |
+
+The State's commercial-harbours layer is downloaded for the harbours' names
+and extents, which set the boxes; no feature takes its geometry from it.
+
 ## Crops, on the era layers
 
 The cultivation mask says how much of a texel is cultivated; the crop class

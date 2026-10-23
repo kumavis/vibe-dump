@@ -1,0 +1,312 @@
+{
+ "about": "What was built on the land, and when: the land the military held and the installations on it, the airfields and their runways, the highways and their tunnels, the railways and the harbour works, per island pack, each with the year it opened or was taken and the year it closed or was returned. Geometry from the State GIS, the Corps of Engineers, the FAA and NOAA, and traced from the State’s georeferenced historic sheets; dates from the works’ own histories, named in each feature’s sources.",
+ "baked": "2026-10-23",
+ "tolerance": 10,
+ "files": [
+  "hawaii.geojson",
+  "maui.geojson",
+  "kahoolawe.geojson",
+  "lanai.geojson",
+  "molokai.geojson",
+  "oahu.geojson",
+  "kauai.geojson",
+  "niihau.geojson"
+ ],
+ "kinds": {
+  "kinds": {
+   "military": {
+    "parts": [
+     "land",
+     "runway",
+     "pier",
+     "block",
+     "range"
+    ]
+   },
+   "airport": {
+    "parts": [
+     "field",
+     "runway",
+     "block"
+    ]
+   },
+   "highway": {
+    "parts": [
+     "road",
+     "tunnel"
+    ]
+   },
+   "rail": {
+    "parts": [
+     "line"
+    ]
+   },
+   "harbour": {
+    "parts": [
+     "breakwater",
+     "pier"
+    ]
+   }
+  },
+  "owners": [
+   "Army",
+   "Navy",
+   "Marines",
+   "Air Force",
+   "Coast Guard",
+   "territory",
+   "State",
+   "county",
+   "federal",
+   "private"
+  ],
+  "datePrecision": [
+   "year",
+   "decade",
+   "by"
+  ],
+  "precision": [
+   "exact",
+   "mapped",
+   "inferred"
+  ],
+  "roadClass": [
+   "interstate",
+   "state",
+   "county"
+  ],
+  "polygons": [
+   "land",
+   "field",
+   "range",
+   "block"
+  ],
+  "lines": [
+   "runway",
+   "pier",
+   "breakwater",
+   "road",
+   "tunnel",
+   "line"
+  ]
+ },
+ "sources": [
+  {
+   "id": "state-gis-dod-lands",
+   "title": "State of Hawaiʻi GIS, Department of Defense Lands (ParcelsZoning MapServer layer 34)",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/34",
+   "item": "https://www.arcgis.com/home/item.html?id=345d822d2e024178a829c039698211cd",
+   "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/dod_lands.pdf",
+   "fields": [
+    "objectid",
+    "base_name",
+    "county"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "credit": "Office of the Governor, Hawaii Office of Recovery and Resilience (HIORR)",
+   "fetched": "2026-10-23",
+   "note": "base and facility boundaries as of October 2025, digitized by the Governor’s Office of Recovery and Resilience from the maps of the Hawaiʻi Military Land Use Master Plan (2021) and the TMK parcels; the land held today, not when it was taken"
+  },
+  {
+   "id": "usace-fuds",
+   "title": "U.S. Army Corps of Engineers, Formerly Used Defense Sites (FUDS) property polygons, FY24 (fuds FeatureServer layer 4)",
+   "url": "https://services7.arcgis.com/n1YM8pTrFmm7L4hs/arcgis/rest/services/fuds/FeatureServer/4",
+   "item": "https://www.arcgis.com/home/item.html?id=3f8354667d5b4b1b8ad7a6e00c3cf3b1",
+   "fields": [
+    "OBJECTID",
+    "FEATURENAME",
+    "FUDSUNIQUEPROPERTYNUMBER",
+    "FEATUREDESCRIPTION",
+    "CURRENTOWNER",
+    "COUNTY",
+    "STATUS"
+   ],
+   "licence": "public domain (U.S. Army Corps of Engineers); no usage constraints, preliminary findings, not every property has a polygon",
+   "credit": "US Army Corps of Engineers",
+   "fetched": "2026-10-23",
+   "note": "properties the Defense Department held and gave up before October 1986, with a short history of each in FEATUREDESCRIPTION; the bounds of the property as the Corps maps it today"
+  },
+  {
+   "id": "state-gis-hcda-districts",
+   "title": "State of Hawaiʻi GIS, Hawaii Community Development Authority Districts (AdminBnd MapServer layer 22)",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/AdminBnd/MapServer/22",
+   "item": "https://www.arcgis.com/home/item.html?id=bf379600c2ff433cbfddceac02deac82",
+   "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/hcda_districts.pdf",
+   "fields": [
+    "objectid",
+    "district",
+    "acres"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "credit": "Hawaii Community Development Authority (HCDA); Hawaii Statewide GIS Program",
+   "fetched": "2026-10-23",
+   "note": "the Kalaeloa Community Development District, drawn round the former Naval Air Station Barbers Point"
+  },
+  {
+   "id": "state-gis-ahupuaa",
+   "title": "State of Hawaiʻi GIS, Ahupuaa (Historic Land Divisions), HistoricCultural MapServer layer 1",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/HistoricCultural/MapServer/1",
+   "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/ahupuaa.pdf",
+   "fields": [
+    "objectid",
+    "mokupuni",
+    "ahupuaa"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "fetched": "2026-10-23",
+   "note": "the outline of Kahoʻolawe, one unit of the layer, for the island the Navy held whole"
+  },
+  {
+   "id": "state-gis-airports",
+   "title": "State of Hawaiʻi GIS, Airports (Infrastructure MapServer layer 13), from the State DOT Airports Division",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/13",
+   "item": "https://www.arcgis.com/home/item.html?id=7585917a3bb845beb4f2f4b848c203c8",
+   "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/airports.pdf",
+   "fields": [
+    "objectid",
+    "airport_code",
+    "airport_name"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "credit": "State of Hawaii Department of Transportation, Airports Division; Hawaii Statewide GIS Program",
+   "fetched": "2026-10-23",
+   "note": "the State airports as of March 2019, one or more polygons each; the field as it is today"
+  },
+  {
+   "id": "state-gis-hpms",
+   "title": "State of Hawaiʻi GIS, Highway Performance Monitoring System roads, 2024 (Transportation MapServer layer 12), from the State DOT",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+   "item": "https://www.arcgis.com/home/item.html?id=d90ec964a6a54cb397a58a584243f3ab",
+   "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/hpms.pdf",
+   "fields": [
+    "objectid",
+    "island",
+    "route_id",
+    "route_name",
+    "bmp",
+    "emp",
+    "f_system_t",
+    "facility_type_t",
+    "ownership_t",
+    "through_lanes"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "credit": "Hawaii State Department of Transportation; Hawaii Statewide GIS Program",
+   "fetched": "2026-10-23",
+   "note": "road centrelines with their route, begin and end mileposts, functional system, owner and through lanes, as submitted to the Federal Highway Administration in 2025; today’s alignment"
+  },
+  {
+   "id": "state-gis-oahu-roads",
+   "title": "State of Hawaiʻi GIS, Oahu Roads (Transportation MapServer layer 3), from the City and County of Honolulu",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+   "fields": [
+    "objectid",
+    "fullname",
+    "owner"
+   ],
+   "licence": "State of Hawaiʻi Statewide GIS Program open data under the State of Hawaiʻi Terms of Use (the contents are public domain); no warranty; for planning, not a legal survey",
+   "fetched": "2026-10-23",
+   "note": "street centrelines by name; read for Nuʻuanu Pali Drive and Old Pali Road, the alignment of the Nuʻuanu Pali Road of 1898 in the valley"
+  },
+  {
+   "id": "faa-runways",
+   "title": "Federal Aviation Administration, Aeronautical Information Services, Runways (Runways FeatureServer layer 0)",
+   "url": "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/Runways/FeatureServer/0",
+   "item": "https://www.arcgis.com/home/item.html?id=4d8fa46181aa470d809776c57a8ab1f6",
+   "fields": [
+    "OBJECTID",
+    "AIRPORT_ID",
+    "DESIGNATOR",
+    "LENGTH",
+    "WIDTH",
+    "DIM_UOM",
+    "COMP_CODE"
+   ],
+   "licence": "public (U.S. Federal Aviation Administration); not for navigation",
+   "credit": "Federal Aviation Administration, Air Traffic Organization, Mission Support Services, Aeronautical Information Services.",
+   "fetched": "2026-10-23",
+   "note": "each runway as a rectangle with its designator, length and width in feet; the bake keeps the long axis as the centreline and the published width"
+  },
+  {
+   "id": "noaa-enc-shoreline-construction",
+   "title": "NOAA Office of Coast Survey, ENC Direct to GIS, Shoreline_Construction (SLCONS) lines and areas at harbour and approach scale",
+   "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect",
+   "fields": [
+    "CATSLC",
+    "OBJNAM",
+    "DSNM",
+    "CONDTN"
+   ],
+   "licence": "public domain (NOAA); not for navigation",
+   "fetched": "2026-10-23",
+   "note": "breakwaters, piers, wharves and moles as charted today, queried over a box round each harbour; they carry no names, so the bake joins them by box and category"
+  }
+ ],
+ "tracedFrom": [
+  "state-gis-oahu-1938",
+  "usgs-topo-1924-maui",
+  "usgs-topo-1927-oahu",
+  "usgs-topo-2000-islands",
+  "usgs-topo-2000-oahu"
+ ],
+ "stats": {
+  "hawaii": {
+   "military": 7,
+   "airport": 10,
+   "highway": 5,
+   "harbour": 4,
+   "datedBy": 1,
+   "bytes": 63688
+  },
+  "maui": {
+   "military": 3,
+   "airport": 7,
+   "highway": 5,
+   "rail": 1,
+   "harbour": 3,
+   "datedBy": 9,
+   "bytes": 41637
+  },
+  "kahoolawe": {
+   "military": 2,
+   "datedBy": 0,
+   "bytes": 44014
+  },
+  "lanai": {
+   "military": 2,
+   "airport": 2,
+   "highway": 1,
+   "datedBy": 0,
+   "bytes": 6998
+  },
+  "molokai": {
+   "military": 2,
+   "airport": 5,
+   "harbour": 1,
+   "datedBy": 3,
+   "bytes": 7724
+  },
+  "oahu": {
+   "military": 51,
+   "airport": 11,
+   "highway": 37,
+   "rail": 5,
+   "harbour": 14,
+   "datedBy": 44,
+   "bytes": 231563
+  },
+  "kauai": {
+   "military": 8,
+   "airport": 5,
+   "highway": 3,
+   "harbour": 2,
+   "datedBy": 9,
+   "bytes": 30266
+  },
+  "niihau": {
+   "military": 1,
+   "datedBy": 1,
+   "bytes": 1923
+  }
+ }
+}

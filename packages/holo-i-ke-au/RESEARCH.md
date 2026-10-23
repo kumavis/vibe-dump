@@ -1982,3 +1982,132 @@ during the camera checks before it reached the tour, on a machine other runs wer
 - **The app**: read `crop` on a district loʻi (rice over a taro outline, never in the same year); the three villages as polygons;
   the new era and its chapter; `hilo-chiefs` in the chiefdoms legend.
 - **A reader and a cultural reviewer**: §7's new lines.
+
+## 15. Works
+
+The record behind `public/data/works/` (DATA.md "Works, dated"): the land the military held, the airfields and their
+runways, the highways and their tunnels, the railways and the harbour works, each dated, per island pack. Made in
+October 2026 by `tools/bake-works.mjs` from the table in `tools/lib/works-dates.mjs`; nothing in the app reads it yet.
+
+| file | change |
+| --- | --- |
+| `works/*.geojson`, `works/manifest.json` | new: 197 features in eight packs, 428 KB |
+| `sources.json` | 217 sources (was 123): 94 added, 92 opened (42 of them tertiary, Wikipedia and FortWiki as finding aids) and 2 not; `usgs-topo-1910-kauai` read again |
+| `tools/check-data.mjs` | the works block |
+
+| island | military | airport | highway | rail | harbour |
+| --- | --- | --- | --- | --- | --- |
+| Oʻahu | 51 | 11 | 37 | 5 | 14 |
+| Hawaiʻi | 7 | 10 | 5 | 0 | 4 |
+| Maui | 3 | 7 | 5 | 1 | 3 |
+| Kauaʻi | 8 | 5 | 3 | 0 | 2 |
+| Molokaʻi | 2 | 5 | 0 | 0 | 1 |
+| Lānaʻi | 2 | 2 | 1 | 0 | 0 |
+| Kahoʻolawe | 2 | 0 | 0 | 0 | 0 |
+| Niʻihau | 1 | 0 | 0 | 0 | 0 |
+
+A road, a breakwater or a pier set of Honolulu that the layers give in pieces is several features of one entry, so
+the table has 172 entries for the 197 features.
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `state-gis-dod-lands` | All 76 polygons: the bases held today, as the State digitized them in 2025 from the 2021 land use plan's maps. Its names join the table (`base_name`, misspellings and all: “Bellow”, “Scholfield Barracks”). |
+| `hmlump-2021` | The installation summaries and the lease tables: the State leases of 1964 that end in 2029 (Pōhakuloa's Saddleback lease, Kahuku, Poamoho and Kawailoa, Mākua, the range at Mana, Kamokala, Kaʻena), Kōkeʻe and the Maui sites; West Loch's magazines of the 1930s. |
+| `usace-fuds` | All 72 Hawaiʻi properties and their descriptions. Taken only where the description (or another source) dates both ends: 15 sites, among them Haleʻiwa's field, Kaʻena, the Waimea and Kahuku-side training areas, Makapuʻu, the Diamond Head reservation, Waikoloa, the two Maui air stations, Kōkeʻe's warning station, the Kauaʻi camps, Pāpōhaku and Lānaʻi's radar and targets. |
+| `state-gis-hcda-districts`, `state-gis-ahupuaa` | The Kalaeloa district (Barbers Point) and Kahoʻolawe's outline. |
+| `state-gis-airports`, `faa-runways` | The fields as the State bounds them in 2019; every runway in Hawaiʻi with its designator and width. |
+| `hdot-aviation-*` (30 pages) | The State's aviation history, field by field: the executive orders, dedications, wartime takeovers and returns, the runways' building and lengthening. |
+| `state-gis-hpms`, `state-gis-oahu-roads` | The State routes by milepost with their lanes; Nuʻuanu Pali Drive and Old Pali Road. |
+| `shbie-2024` | Its historic contexts: the Hāna Highway, the Māmalahoa and belt roads, the Hawaiʻi Belt Road and the Hilo railroad, the Pali Highway (the contracts, the tunnels' breakthroughs and openings), the federal-aid roads and H-1 to H-3. |
+| `hawaiihighways-oahu`, `-big-island`, `-lanai-molokai` | The route lists' opening years; the Oʻahu freeway page and the FAQs were read too and not cited. |
+| `state-gis-nbi` | All 1,178 structures, matched to the State routes within 30 m and by route number. |
+| `noaa-enc-shoreline-construction` | The charted works over eleven harbour boxes at harbour and approach scale (555 pieces). |
+| `kirc-history`, `hdot-harbors-history` | Kahoʻolawe's range years; Honolulu harbour from 1825 to statehood. |
+| `state-gis-oahu-1938`, `usgs-topo-1927-oahu`, `state-gis-oahu-1943`, `usgs-topo-2000-oahu`, `usgs-topo-2000-islands`, `usgs-topo-1924-maui`, `usgs-topo-1922-molokai`, `usgs-topo-1910-kauai`, `usgs-topo-1963-kauai` | The State's image services, read window by window with a lon/lat grid drawn on (as §10), over every base whose line a zone follows, every runway dated `by`, every harbour, the Pali, Wilson and Harano tunnels, the railways' whole length on the 1938 Oʻahu sheet, and Kahului to Pāʻia on the 1924 Maui sheet. |
+| `wikipedia-*` (33), `fortwiki-*` (9) | Tertiary, as finding aids: each cited where it dates something the primary sources read do not. |
+
+Also opened and not cited: the 1933 Oʻahu sheet and the Hawaiʻi sheets of 1911–1930 (both answer only very fine exports in
+their old datum, and the Hilo exports came back empty), the 1881 and 1899 Oʻahu surveys and the Maui sheet of 1885 (no works
+of these kinds), the State's airport-property and parks layers, the FAA's airport list (read only to join runways to their
+airports), the commercial-harbours layer (read for the harbour boxes), and NOAA's charted restricted areas over Pearl Harbor
+(they cover the approach, not the lochs).
+
+### What each kind rests on
+
+- **Military land** is the land held today (the Defense lands layer), or the land given up (the Corps' sites), so a base's
+  drawn extent is its last; the years are the installation's, from its history. Where one polygon holds two bases (the joint
+  base's Navy and Air Force ground; Fort Kamehameha inside it; Wheeler inside Schofield; the Ewa Marine field inside
+  Kalaeloa; the Kuwaʻaohe reservation inside the Marine base; Keʻāmuku inside Pōhakuloa; the Reef Runway's fill inside the
+  airport) a zone drawn on the sheet that shows the line carves it, and the feature is `mapped`. Pearl Harbor of 1887 is the
+  lochs, a zone closed across the entrance less the land. The Army's and the Navy's years at Hilo and Homestead Field on
+  Molokaʻi are drawn as the airport's ground of today, marked `inferred`. Military runways are the FAA's.
+- **Airports**: the field as the State bounds it now from the year it opened; runways as the FAA charts them, dated by the
+  history page where it dates them and otherwise `by` the record or sheet that first gives them.
+- **Highways**: today's alignment, dated by when the route opened as a through road. Twelve of the 47 road features rest on the
+  bridge inventory alone: the oldest bridge on a stretch says the road carried traffic by then, and a bridge may itself
+  replace an older one.
+- **Rail**: the Oahu Railway and Land Company's main line, traced from the 1938 sheet by snapping waypoints read off it to
+  its darkest line and checked by eye over the sheet, in the five stretches its history dates (1889, by 1892, by 1895, 1897,
+  1898; all closed 1947). Along the north shore and the Waiʻanae coast the railway, the road and the shore run within a few
+  tens of metres of each other on the sheet, and the trace may follow the road there. The Kahului Railroad from Kahului to
+  Pāʻia (1880–1966) is read point by point off the 1924 sheet.
+- **Harbours**: the charted works of today. Hilo's breakwater (1908–1929) and Kawaihae's (1957–1959, its small-boat harbour
+  from 1970) are dated by their histories; Kahului's two breakwaters by 1924, Nāwiliwili's and Port Allen's by 1963 (open bay
+  on the 1910 sheet), Māʻalaea's breakwater and Kaunakakai's wharf by 2000, the downtown Honolulu piers by 1927.
+
+### Dated only `by`
+
+67 features: on Oʻahu, fourteen Defense-land holdings the first sheet or record shows (Āliamanu, Helemano, Makalapa, the Pearl
+City and Waipiʻo peninsulas, Schofield's south and east ranges by 2000; Kaʻena's tracking station, Kahuku, Mākua and Poamoho
+by the 1964 leases; Kīpapa, Waikāne and Mānana by 2021), the Wheeler and Kāneʻohe runways (1943), Honolulu's 8/26 (1946)
+and 4L and 4R (2000), Kalaeloa's three runways (2000), six road stretches by the bridge inventory, two railway stretches
+(1892, 1895) and the downtown piers (1927, fourteen pieces); on Hawaiʻi, Hilo's 8/26 (1944); on Maui, Kahului's runways
+(1955), the Hāna road (1940), three roads by the bridge inventory, Kahului's breakwaters (1924) and Māʻalaea's (2000); on
+Molokaʻi, the airport's runways (1955) and Kaunakakai's wharf (2000); on Kauaʻi, the Barking Sands runway (1963), the
+range's leases and Kamokala (1964), Mākaha Ridge (2021), three roads by the bridge inventory, Nāwiliwili and Port Allen
+(1963); on Niʻihau, the recovery site (2021). `bake-works.mjs --check` lists them by id.
+
+### Where the sources disagree
+
+- **Barbers Point** closed in 1999 (the land use plan, Wikipedia) or 1998 (the State's aviation history): 1999 is used.
+- **Marine Corps Air Station Ewa** was commissioned in 1941 (Wikipedia) or 1942 (the State's history): 1941 is used.
+- **Kāneʻohe's runway**: added in 1940 (Wikipedia) or after the attack (the State's history); dated by the 1943 sheet.
+- **Fort Kamehameha** ended as a fortification in 1949 (FortWiki); its ground passed to Hickam in 1992 (Wikipedia).
+- **Fort Armstrong** 1907–1950 (Wikipedia) or 1899–1949 (FortWiki).
+- **Keʻāmuku** was bought in 2006 (Wikipedia); the land use plan gives 2014 for its use.
+- **The Pali's Kailua-bound tunnels** opened on May 11, 1959 or December 30, 1960: the same report gives both.
+- **H-1 at Makakilo** opened in September 1966 (Wikipedia) or 1967 (the route list).
+- **Nimitz Highway** was built in the 1940s: in the war, for the bases (Wikipedia), or after it, among the harbour works
+  (the State's harbors history); dated by the decade.
+
+### What could not be reached
+
+- **The 1932 Pali road** the brief names (a successor to the road of 1898) was found in no source read; the road of 1898
+  is drawn from its valley alignment of today, and its stretch down the cliff is not traced.
+- **The other railways**: the Hilo Railroad and its Hāmākua division (1899–1946), the Hawaii Railway in Kohala
+  (1883–1945), the Kahului Railroad's Wailuku and Haʻikū lines and the Kauaʻi lines are not traced. The 1911–1930 Hawaiʻi
+  sheets answer only very fine exports and returned blank over Hilo; the 1924 Maui sheets do not meet at their edges
+  near Wailuku; no source read dates the Kohala line's stretches or the Kauaʻi lines. Best's *Railroads of Hawaii* (1978)
+  is in `sources.json` as wanted.
+- **Harbour dates**: the Corps of Engineers' Honolulu District site refused (403), so Kahului, Nāwiliwili, Port Allen,
+  Māʻalaea and Kaunakakai are dated only by the sheets; Barbers Point's deep-draft harbour of 1985 has no charted
+  breakwater and no source read for its year, and Kaumalapau (1926) and Hāna have no charted works at these scales. None
+  of the three is drawn.
+- **Wikipedia** rate-limited the reads for long stretches; pages it never answered, or that do not exist under the names
+  tried: Lualualei, the Hawaii Railway of Kohala, the Hilo, Kahului and Barbers Point harbours, and the Queen Kaʻahumanu,
+  Kūhiō and Haleakalā highways.
+- **The State's military-installations layer** of the older GIS is no longer served; the federal-lands layer merges every
+  holding by island and owner, and is not used.
+- **The Army's and the Navy's own installation pages** (army.mil, cnic.navy.mil) refused (403).
+
+### Left for others
+
+- **The app**: the five kinds as DATA.md describes; the roads' `lanes` and `width`; tunnels not drawn; Pearl Harbor of
+  1887 is water, not land, so a wash over the lochs, not over the shore.
+- **Better dates**: the Corps' harbour project histories; the Army's and Navy's installation histories for the holdings now
+  dated by the 2000 sheet or the 2021 plan; the Territorial highway reports (Thrum's *Annual* carries their summaries) for
+  the roads now dated by their bridges; Best for the railways.
+- **More traced lines**: the Hilo Railroad from a georeferenced copy of the 1920s Hilo and Hāmākua sheets; the OR&L's
+  Wahiawā branch (1906) up Waikele and Kīpapa gulches, which the 1938 sheet draws faintly.

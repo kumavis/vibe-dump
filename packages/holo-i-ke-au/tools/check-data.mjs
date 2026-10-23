@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Checks the hand-written gazetteer against the rules in DATA.md §4,
-// "Routes" and "District packs".
+// "Routes", "District packs" and "Works, dated".
 //
 //   node packages/holo-i-ke-au/tools/check-data.mjs [data-dir]
 //
@@ -11,10 +11,12 @@
 // districts/*/features.json), with boundaries/ahupuaa.geojson for the heiau rule
 // and the district's height image for the loʻi slope rule; mahele.json (the
 // class of each ahupuaʻa after the Māhele, joined to boundaries/ahupuaa.geojson
-// by gisId) when it exists; and the era map of layers/manifest.json, which must
+// by gisId) when it exists; the era map of layers/manifest.json, which must
 // name only eras in eras.json, with its crops entry when there is one (each
 // class raster read back against its pack's height image and stats, and the
-// crops' historical sources held to sources.json).
+// crops' historical sources held to sources.json); and, when works/manifest.json
+// exists, the works (DATA.md, “Works, dated”), held to their island packs in
+// manifest.json.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -1280,6 +1282,187 @@ function checkCrops(lm) {
 }
 
 // ---------------------------------------------------------------------------
+// works/: military land, airports, highways, rail and harbours, dated (DATA.md "Works, dated")
+let worksCounts = null
+if (existsSync(join(DATA, 'works', 'manifest.json'))) checkWorks()
+
+function checkWorks() {
+  const KIND_PARTS = {
+    military: ['land', 'runway', 'pier', 'block', 'range'],
+    airport: ['field', 'runway', 'block'],
+    highway: ['road', 'tunnel'],
+    rail: ['line'],
+    harbour: ['breakwater', 'pier'],
+  }
+  const OWNERS = new Set(['Army', 'Navy', 'Marines', 'Air Force', 'Coast Guard', 'territory', 'State', 'county', 'federal', 'private'])
+  const WORK_DATES = new Set(['year', 'decade', 'by'])
+  const WORK_PRECISION = new Set(['exact', 'mapped', 'inferred'])
+  const ROAD_CLASS = new Set(['interstate', 'state', 'county'])
+  const AREAL = new Set(['land', 'field', 'range', 'block']) // Polygon or MultiPolygon
+  const LINEAR = new Set(['runway', 'pier', 'breakwater', 'road', 'tunnel', 'line']) // LineString with width
+  const FREE = new Set(['land', 'field', 'road', 'line']) // parts not held to lie inside their group's land or field
+  const INSIDE_TOLERANCE_M = 60 // a part's points may stand this far outside its group's land or field (simplification, two layers' registration)
+  const BUDGET = 1.5e6 // bytes, the whole of works/
+  const YEARS = [1778, 2026] // nothing here is older than contact or later than the bake
+  // numbers in a note: years, decades, a route's or a runway's or a pier's designation; no other figures
+  const WORK_NUMBER_OK = /^(?:1[789]\d\d|20[0-2]\d)s?$/
+  const DESIGNATION = /(?:\b(?:H|Route|route|Routes|routes|Pier|Piers|pier|piers|Runway|runways?|Runways|Battery|No\.)[- ]?|\d{1,2}[LRW]?\/)$/
+  const checkWorkNumbers = (at, text) => {
+    if (typeof text !== 'string') return
+    const w = text.match(BIG_WORDS)
+    if (w) bad(at, `has the number word “${w[0]}”; figures go in tellings`)
+    const re = /\d+(?:[.,]\d+)*[LRW]?/g
+    let m
+    while ((m = re.exec(text))) {
+      const tok = m[0]
+      const before = text.slice(Math.max(0, m.index - 10), m.index)
+      const year = WORK_NUMBER_OK.test(tok + (text[m.index + tok.length] === 's' ? 's' : ''))
+      const range = /^\d{2}$/.test(tok) && /\d{4}[–-]$/.test(before)
+      const desig = DESIGNATION.test(before) || /^\d{1,2}[LRW]?$/.test(tok) && text[m.index + tok.length] === '/'
+      const day = /^\d{1,2}$/.test(tok) && (new RegExp(`^ (${MONTHS})\\b`).test(text.slice(m.index + tok.length)) || new RegExp(`(${MONTHS}) $`).test(before))
+      if (!(year || range || desig || day)) bad(at, `has the figure “${tok}”; figures go in tellings, a note carries only years and designations`)
+    }
+  }
+  const man = load('works/manifest.json')
+  if (!man) return
+  const packs = new Map()
+  try { for (const p of JSON.parse(readFileSync(join(DATA, 'manifest.json'), 'utf8')).packs || []) if (p.kind === 'island') packs.set(p.id, p.bounds) } catch { warn('works', 'no manifest.json, so the files are not held to their packs') }
+  if (!Array.isArray(man.files)) { bad('works/manifest.json', 'files must be a list'); return }
+  for (const s of man.sources || []) {
+    for (const k of ['id', 'title', 'url', 'licence', 'fetched']) if (!s[k]) bad(`works/manifest.json source ${s.id}`, `has no ${k}`)
+  }
+  if (!Array.isArray(man.sources) || !man.sources.length) bad('works/manifest.json', 'names no sources')
+  const ids = new Set()
+  const counts = { islands: {}, kinds: {}, by: [] }
+  let bytes = readdirSync(join(DATA, 'works')).reduce((n, f) => n + readFileSync(join(DATA, 'works', f)).length, 0)
+  for (const file of man.files) {
+    const island = file.replace(/\.geojson$/, '')
+    const at0 = `works/${file}`
+    if (!packs.size) { /* no packs to hold to */ } else if (!packs.has(island)) { bad(at0, 'is not named for an island pack'); continue }
+    const fc = load(`works/${file}`)
+    if (!fc) continue
+    if (fc.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad(at0, 'must be a GeoJSON FeatureCollection'); continue }
+    const box = packs.get(island)
+    const groups = new Map() // group → areal land/field geometries
+    for (const f of fc.features) if (['land', 'field'].includes(f?.properties?.part) && f.geometry) (groups.get(f.properties.group) || groups.set(f.properties.group, []).get(f.properties.group)).push(f.geometry)
+    const tally = (counts.islands[island] = {})
+    for (const [i, f] of fc.features.entries()) {
+      const p = f?.properties || {}
+      const at = `${at0} ${p.id ?? `#${i}`}`
+      if (typeof p.id !== 'string' || !ID.test(p.id)) bad(at, 'id is not kebab-case ASCII')
+      else if (ids.has(p.id)) bad(at, 'id is not unique across the islands')
+      ids.add(p.id)
+      if (!KIND_PARTS[p.kind]) { bad(at, `kind “${p.kind}” is not ${Object.keys(KIND_PARTS).join(' | ')}`); continue }
+      if (!KIND_PARTS[p.kind].includes(p.part)) bad(at, `a ${p.kind}'s part “${p.part}” is not ${KIND_PARTS[p.kind].join(' | ')}`)
+      tally[p.kind] = (tally[p.kind] || 0) + 1
+      counts.kinds[p.kind] = (counts.kinds[p.kind] || 0) + 1
+      if (typeof p.group !== 'string' || !ID.test(p.group)) bad(at, 'group must be a kebab-case id')
+      if (!p.name) bad(at, 'has no name')
+      for (const [k, v] of [['name', p.name], ...(p.alt || []).map((a) => ['alt', a])]) {
+        checkHawaiian(`${at} ${k}`, v)
+        checkCopy(`${at} ${k}`, v)
+        if (typeof v === 'string' && NONSTANDARD.test(v)) bad(`${at} ${k}`, `“${v}” is not the standard spelling (ʻokina U+02BB, kahakō as a macron)`)
+      }
+      if (p.alt !== undefined && !Array.isArray(p.alt)) bad(at, 'alt must be a list')
+      if (!OWNERS.has(p.owner)) bad(at, `owner “${p.owner}” is not ${[...OWNERS].join(' | ')}`)
+      // dates
+      if (!Number.isInteger(p.from)) bad(at, 'from must be a year')
+      if (!(p.to === null || Number.isInteger(p.to))) bad(at, 'to must be a year, or null while it stands')
+      for (const y of [p.from, p.to, ...(p.built || [])]) if (Number.isInteger(y) && (y < YEARS[0] || y > YEARS[1])) bad(at, `year ${y} is outside ${YEARS[0]}–${YEARS[1]}`)
+      if (Number.isInteger(p.from) && Number.isInteger(p.to) && p.from > p.to) bad(at, `from ${p.from} is after to ${p.to}`)
+      if (p.built !== undefined) {
+        if (!(Array.isArray(p.built) && p.built.length === 2 && p.built.every(Number.isInteger) && p.built[0] <= p.built[1])) bad(at, 'built must be [start, end], two years in order')
+        else if (Number.isInteger(p.to) && p.built[0] > p.to) bad(at, `built ${p.built[0]} after it closed in ${p.to}`)
+      }
+      if (!WORK_DATES.has(p.datePrecision)) bad(at, `datePrecision “${p.datePrecision}” is not ${[...WORK_DATES].join(' | ')}`)
+      if (p.datePrecision === 'by') {
+        if (!p.by) bad(at, 'a date given “by” names, in by, the sheet or record that first shows it')
+        else if (!(p.sources || []).includes(p.by)) bad(at, `by “${p.by}” is not among its sources`)
+        else if (!S.get(p.by)?.opened) bad(at, `by “${p.by}” names a source not opened`)
+        counts.by.push(`${island}:${p.id} (${p.from}, ${p.by})`)
+      } else if (p.by !== undefined) bad(at, 'by belongs only to a date given “by”')
+      if (!WORK_PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not ${[...WORK_PRECISION].join(' | ')}`)
+      if (p.part === 'road' && !ROAD_CLASS.has(p.class)) bad(at, `a road's class “${p.class}” is not ${[...ROAD_CLASS].join(' | ')}`)
+      if (p.class !== undefined && !['road', 'tunnel'].includes(p.part)) bad(at, 'class belongs to a road')
+      if (p.lanes !== undefined && !(Number.isInteger(p.lanes) && p.lanes > 0)) bad(at, 'lanes must be a whole number')
+      if (p.storeys !== undefined && !(p.part === 'block' && Number.isInteger(p.storeys) && p.storeys > 0)) bad(at, 'storeys belongs to a block and is a whole number')
+      // sources, note
+      if (!Array.isArray(p.sources) || !p.sources.length) bad(at, 'cites no source')
+      for (const s of p.sources || []) useSource(at, s)
+      if ((p.sources || []).length && !p.sources.some((s) => S.get(s)?.opened)) bad(at, 'none of its sources has been opened')
+      if (!p.note) bad(at, 'has no note')
+      checkHawaiian(`${at} note`, p.note)
+      checkCopy(`${at} note`, p.note)
+      checkWorkNumbers(`${at} note`, p.note)
+      // geometry
+      const g = f.geometry
+      if (AREAL.has(p.part)) {
+        if (!g || !['Polygon', 'MultiPolygon'].includes(g.type)) { bad(at, `a ${p.part} is a Polygon or MultiPolygon`); continue }
+        for (const [k, poly] of (g.type === 'Polygon' ? [g.coordinates] : g.coordinates).entries()) poly.forEach((r, j) => checkRing(`${at} part ${k} ring ${j}`, r, j === 0))
+      } else if (LINEAR.has(p.part)) {
+        if (!g || g.type !== 'LineString') { bad(at, `a ${p.part} is a LineString`); continue }
+        if (g.coordinates.length < 2) bad(at, 'a line needs at least two positions')
+        for (let k = 1; k < g.coordinates.length; k++) if (g.coordinates[k][0] === g.coordinates[k - 1][0] && g.coordinates[k][1] === g.coordinates[k - 1][1]) { bad(at, `position ${k} repeats the one before it`); break }
+        if (!(Number.isFinite(p.width) && p.width > 0)) bad(at, `a ${p.part} carries its width in metres`)
+      }
+      const positions = (function flat(c) { return typeof c[0] === 'number' ? [c] : c.flatMap(flat) })(g.coordinates)
+      if (!positions.every((c) => c.length === 2 && c.every(Number.isFinite))) { bad(at, 'has a position that is not [lon, lat]'); continue }
+      if (box) {
+        const out = positions.find((c) => !inBounds(c, box))
+        if (out) bad(at, `position ${out} is outside the ${island} pack's bounds`)
+      }
+      // a part other than land, field, road or line stands inside its group's land or field, where the group has one
+      if (!FREE.has(p.part) && groups.has(p.group)) {
+        const areas = groups.get(p.group)
+        const inside = (c) => areas.some((a) => worksInPolygon(a, c)) || Math.min(...areas.map((a) => worksEdgeMetres(a, c))) <= INSIDE_TOLERANCE_M
+        const samples = g.type === 'LineString' ? worksSample(g.coordinates, 100) : positions
+        const outside = samples.filter((c) => !inside(c))
+        if (outside.length) bad(at, `stands outside its group ${p.group}'s land or field (at ${outside[0].map((v) => v.toFixed(5)).join(', ')})`)
+      }
+    }
+  }
+  for (const f of readdirSync(join(DATA, 'works'))) if (f !== 'manifest.json' && !man.files.includes(f)) bad(`works/${f}`, 'is not listed in works/manifest.json')
+  if (bytes > BUDGET) bad('works/', `is ${(bytes / 1e6).toFixed(2)} MB, over the ${BUDGET / 1e6} MB budget`)
+  for (const [island, t] of Object.entries(counts.islands)) {
+    const st = man.stats?.[island] || {}
+    for (const k of Object.keys(KIND_PARTS)) if ((st[k] || 0) !== (t[k] || 0)) bad(`works/manifest.json stats ${island}`, `${k} ${st[k] || 0}, but the file has ${t[k] || 0}`)
+  }
+  worksCounts = { ...counts, bytes, n: ids.size }
+}
+
+function worksInPolygon(g, [x, y]) {
+  const inR = (r) => {
+    let c = false
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++) if ((r[i][1] > y) !== (r[j][1] > y) && x < ((r[j][0] - r[i][0]) * (y - r[i][1])) / (r[j][1] - r[i][1]) + r[i][0]) c = !c
+    return c
+  }
+  return (g.type === 'Polygon' ? [g.coordinates] : g.coordinates).some((p) => inR(p[0]) && !p.slice(1).some(inR))
+}
+
+function worksEdgeMetres(g, [x, y]) {
+  const kx = 111320 * Math.cos((y * Math.PI) / 180)
+  let best = Infinity
+  for (const p of g.type === 'Polygon' ? [g.coordinates] : g.coordinates) for (const r of p) for (let i = 1; i < r.length; i++) {
+    const ax = (r[i - 1][0] - x) * kx, ay = (r[i - 1][1] - y) * 110574
+    const dx = (r[i][0] - r[i - 1][0]) * kx, dy = (r[i][1] - r[i - 1][1]) * 110574
+    const t = Math.max(0, Math.min(1, -(ax * dx + ay * dy) / (dx * dx + dy * dy || 1)))
+    best = Math.min(best, Math.hypot(ax + t * dx, ay + t * dy))
+  }
+  return best
+}
+
+/** Points every `step` metres along a line, ends included. */
+function worksSample(coords, step) {
+  const out = [coords[0]]
+  for (let i = 1; i < coords.length; i++) {
+    const [a, b] = [coords[i - 1], coords[i]]
+    const n = Math.max(1, Math.ceil((kmBetween(a, b) * 1000) / step))
+    for (let k = 1; k <= n; k++) out.push([a[0] + ((b[0] - a[0]) * k) / n, a[1] + ((b[1] - a[1]) * k) / n])
+  }
+  return out
+}
+
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -1319,5 +1502,9 @@ function finish() {
   if (maheleCounts) console.log(`  mahele    ${maheleCounts.n} ahupuaʻa (${fmt(maheleCounts.counts)})`)
   if (layerEras !== null) console.log(`  layers    era map for ${layerEras} eras, all in eras.json`)
   if (cropCounts) console.log(`  crops     ${cropCounts.rasters} class rasters over ${cropCounts.keyframes} keyframes, registered on their packs, stats as the images hold; ${cropCounts.sources} sources`)
+  if (worksCounts) {
+    console.log(`  works     ${worksCounts.n} features, ${(worksCounts.bytes / 1024).toFixed(0)} KB (${fmt(worksCounts.kinds)}); dated by a sheet or record: ${worksCounts.by.length}`)
+    console.log(`            ${Object.entries(worksCounts.islands).map(([i, t]) => `${i} ${Object.values(t).reduce((a, b) => a + b, 0)}`).join(', ')}`)
+  }
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }
