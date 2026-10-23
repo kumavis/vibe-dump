@@ -38,7 +38,7 @@ import { legacyDir, LEGACY_REF } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
 const imp = (f) => import(pathToFileURL(join(PKG, f)).href)
-const { PRESETS, battleView, viewsFor, fovFor, orbitPose, follows, fitPose, BOARD_RECT } = await imp('present/camera-presets.js')
+const { PRESETS, battleView, viewsFor, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf } = await imp('present/camera-presets.js')
 const { BOARD } = await imp('core/rules.js')
 const legacy = readFileSync(join(legacyDir(), 'main.js'), 'utf8')
 
@@ -174,7 +174,23 @@ for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', P
   cam.updateMatrixWorld()
   const inside = [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sz]) => new THREE.Vector3(rect.cx + (sx * rect.w) / 2, 0, rect.cz + (sz * rect.h) / 2).project(cam)).every((v) => Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1 && v.z < 1)
   check(inside && p.target[0] === 5 && p.target[1] === 0 && p.target[2] === -3, `fitPose(${name}) of a 60×40 board centred at (5, -3) looks at its centre and sees it whole`, `${p.pos} → ${p.target}`)
+  // (F8a) a mission's board: the preset's max, scaled by the board's reach,
+  // takes it in whole down to a 412×915 portrait phone, as classic's does
+  for (const [bw, bh] of [[60, 40], [80, 56]]) {
+    const r = boardRect({ W: bw, H: bh })
+    for (const aspect of [16 / 9, 4 / 3, 1, 9 / 16, PHONE]) {
+      const q = fitPose(preset, aspect, r)
+      const c = new THREE.PerspectiveCamera(q.fov, aspect, 0.1, 1000)
+      c.position.set(...q.pos)
+      c.lookAt(new THREE.Vector3(...q.target))
+      c.updateMatrixWorld()
+      const d = Math.hypot(...q.pos)
+      const whole = [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sz]) => new THREE.Vector3((sx * bw) / 2, 0, (sz * bh) / 2).project(c)).every((v) => Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1 && v.z < 1)
+      check(whole && d <= preset.max * reachOf(r) + 1e-9, `(F8a) fitPose(${name}) of a ${bw}×${bh} board on aspect ${aspect.toFixed(2)} sees it whole, within its max scaled by the board's reach (${(preset.max * reachOf(r)).toFixed(1)})`, `distance ${d.toFixed(1)}`)
+    }
+  }
 }
+check(reachOf(BOARD_RECT) === 1 && reachOf(boardRect(BOARD)) === 1 && key(boardRect(BOARD)) === key(BOARD_RECT), "(F8a) classic's board reaches 1: its presets, dolly and far plane are exactly classic's")
 // ── The rig: goTo(preset) through fit ───────────────────────────────────────
 // a page's globals, enough for the CameraRig and its OrbitControls to be
 // made and moved (no input reaches them)
@@ -211,6 +227,22 @@ for (const [w, h] of [[1280, 720], [800, 800], [800, 1280], [390, 845]]) {
     rig.toTitle()
     check(rig.controls.maxDistance === 75, `${where}, then back on the title: the dolly's limit is today's 75`, String(rig.controls.maxDistance))
   }
+}
+// (F8a) the rig on a mission's board: the dolly reaches the overview's fit
+// and a tenth more, the far plane three times a preset's farthest; back on
+// classic's, exactly 75 and 400
+{
+  globalThis.innerWidth = 1280
+  globalThis.innerHeight = 720
+  const rig = new CameraRig({ domElement: canvas })
+  rig.setBoard({ W: 80, H: 56 })
+  const o = fitPose(PRESETS.overview, 1280 / 720, boardRect({ W: 80, H: 56 }))
+  const d = Math.hypot(o.pos[0] - o.target[0], o.pos[1] - o.target[1], o.pos[2] - o.target[2])
+  check(Math.abs(rig.dolly - Math.max(75, d * 1.1)) < 1e-9 && rig.camera.far === Math.max(400, 3 * PRESETS.overview.max * reachOf(boardRect({ W: 80, H: 56 }))), `(F8a) CameraRig.setBoard(80×56): the dolly ${rig.dolly.toFixed(1)} (the overview's ${d.toFixed(1)} and a tenth), the far plane ${rig.camera.far}`)
+  rig.goTo(PRESETS.overview)
+  check(rig.controls.maxDistance >= rig.dolly, '(F8a) goTo on an 80×56 board: the dolly reaches the overview', String(rig.controls.maxDistance))
+  rig.setBoard({ W: 40, H: 28 })
+  check(rig.dolly === 75 && rig.camera.far === 400, "(F8a) CameraRig.setBoard back to 40×28: classic's 75 and 400", `${rig.dolly}, ${rig.camera.far}`)
 }
 // (the dolly's limit is held only if some fitted preset goes past it)
 check(fartherThanToday > 0, 'some preset the rig was swung onto rests beyond the dolly limit of 75 (so the limit is tested)', String(fartherThanToday))

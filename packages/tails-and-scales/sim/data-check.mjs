@@ -45,7 +45,12 @@
 //    radius, weight or threshold out of range, falling thresholds, bad
 //    pairs, an unknown mirror, a spacing rule that isn't a number, an unknown
 //    or missing field. So a slip in a new set (F7's `fortified`) fails at
-//    load, not only on the boards whose draws reach it.
+//    load, not only on the boards whose draws reach it. (F8a) And the
+//    missions: checkMission (data/mission.js, run on every mission as it
+//    loads) passes each and refuses one with an odd or fractional board, a
+//    zone reaching within 6" of the centre line, an objective under 1"
+//    inside the board, in a zone or without its point mirror, rounds that
+//    aren't whole, a set that doesn't exist, no army's name.
 // 8. Every core/, data/ and match/ module loads as the only entry of a
 //    fresh Node process. core/ has import cycles (match.js with units.js
 //    and deploy.js, for the seat helpers; queries.js with actions/, for
@@ -119,7 +124,7 @@ const legacyAi = readFileSync(join(LEGACY, 'ai.js'), 'utf8')
 const { RACES, AI_ROLES, defineRace, raceRegistry } = await imp(PKG, 'data/schema.js')
 const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version.js')
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
-const { MISSIONS, CLASSIC } = await imp(PKG, 'data/mission.js')
+const { MISSIONS, CLASSIC, checkMission } = await imp(PKG, 'data/mission.js')
 const { BOARD, ROUNDS } = await imp(PKG, 'core/rules.js')
 const { checkSet } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
@@ -368,11 +373,18 @@ const moves = [
   ['the default rounds (classic 5 → 6)', () => mission((m) => (m.rounds = 6))],
   ['the deployment depth (classic 8 → 9)', () => mission((m) => (m.deploy = 9))],
   ['a new mission', () => rulesId({ missions: { ...MISSIONS, raid: structuredClone(MISSIONS.classic) } })],
+  // (F8a) the board the mission chooses, its sets and its army's name
+  ['the board (classic 40×28 → 40×30)', () => mission((m) => (m.board.H = 30))],
+  ['the sets a mission is fought on', () => mission((m) => m.sets.push('fortified'))],
+  ["the mission's army (classic → field)", () => mission((m) => (m.army = 'field'))],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
 check(rulesData().missions === MISSIONS, 'hashes the missions (data/mission.js)')
 check(MISSIONS.classic.rounds === ROUNDS && MISSIONS.classic.deploy === BOARD.deploy, "the classic mission's rounds and depth are the ruleset's ROUNDS and BOARD.deploy")
+// (F8a) classic's board is the ruleset's BOARD, so every classic battle
+// computes the same doubles as before missions chose the board
+check(MISSIONS.classic.board.W === BOARD.W && MISSIONS.classic.board.H === BOARD.H, "the classic mission's board is the ruleset's BOARD (40×28)", JSON.stringify(MISSIONS.classic.board))
 // a unit or race whose key is a presentation word is rules all the same:
 // RULES_ID strips fields from records, never keys from the race and unit maps
 const retune = (t) => (t.stats = t.stats.replace('M6', 'M7'))
@@ -425,7 +437,7 @@ for (const f of consensus) {
 }
 
 // ── 7. Terrain sets ─────────────────────────────────────────────────────────
-console.log('\n7. checkSet passes the terrain sets and refuses broken ones')
+console.log('\n7. checkSet passes the terrain sets and refuses broken ones (F8a: checkMission the missions)')
 const setError = (S) => {
   try {
     checkSet('test', S)
@@ -460,6 +472,38 @@ for (const [what, want, edit] of brokenSets) {
   edit(c)
   const err = setError(c)
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
+}
+// (F8a) the missions, as the sets
+const missionError = (m) => {
+  try {
+    checkMission('test', m)
+    return null
+  } catch (e) {
+    return e.message
+  }
+}
+for (const name of Object.keys(MISSIONS)) check(missionError(MISSIONS[name]) === null, `checkMission passes ${name}`, missionError(MISSIONS[name]))
+const brokenMissions = [
+  ['a board of odd width', /board is 41×28/, (m) => (m.board.W = 41)],
+  ['a board of fractional height', /board is 40×28.5/, (m) => (m.board.H = 28.5)],
+  ['no board', /board is undefined×undefined/, (m) => delete m.board],
+  ['a zone reaching within 6" of the centre line', /zone 15" deep/, (m) => (m.deploy = 15)],
+  ['no zone', /zone 0" deep/, (m) => (m.deploy = 0)],
+  ['an objective at the board\'s edge (and its mirror)', /less than 1" inside/, (m) => m.objectives.push({ x: 0, z: 13.5 }, { x: 0, z: -13.5 })],
+  ['an objective in a zone (and its mirror)', /in a deployment zone/, (m) => m.objectives.push({ x: 13, z: 0 }, { x: -13, z: 0 })],
+  ['an objective without its point mirror', /no point mirror/, (m) => (m.objectives[1].z = 9)],
+  ['no objectives', /no objectives/, (m) => (m.objectives = [])],
+  ['fractional rounds', /2.5 rounds/, (m) => (m.rounds = 2.5)],
+  ['a set that does not exist', /aren't terrain sets/, (m) => m.sets.push('fortified')],
+  ['a set named by an Object.prototype member', /aren't terrain sets/, (m) => (m.sets = ['toString'])],
+  ['no sets', /aren't terrain sets/, (m) => (m.sets = [])],
+  ['no army', /army has no name/, (m) => delete m.army],
+]
+for (const [what, want, edit] of brokenMissions) {
+  const m = structuredClone(MISSIONS.classic)
+  edit(m)
+  const err = missionError(m)
+  check(err && want.test(err), `checkMission refuses ${what}`, err ?? 'accepted')
 }
 
 // ── 8. each module loads alone ──────────────────────────────────────────────
@@ -696,13 +740,14 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // (2, F4: the vote added nothing shadowState prints for a battle that
   // never votes, so the corpus's states hash as under 1; a voting match's
   // pending decision carries its votes, printed as the pending line always
-  // was; 3, F10b: pilot added a command, nothing shadowState prints)
+  // was; 3, F10b: pilot added a command, nothing shadowState prints; 4, F8a:
+  // the setup names its mission, and G.board stays out of the hash)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

@@ -1,15 +1,14 @@
 // Deployment: where the armies start, and where a unit may be put during
 // its seat's deployment.
-import { BOARD } from './rules.js'
 import { hypot } from './dmath.js'
-import { edgeOf, missionOf } from './match.js'
+import { edgeOf } from './match.js'
 import { setUnitPos } from './units.js'
 
 // The deployment zone of seat `side`: the strip the mission's depth deep
-// along its seat's edge, as x bounds.
+// along its seat's edge, as x bounds (G.board: the mission's board).
 export function zone(G, side) {
-  const { W } = BOARD
-  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - missionOf(G.setup).deploy)
+  const { W, deploy } = G.board
+  const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - deploy)
   return { minX: Math.min(outer, inner), maxX: Math.max(outer, inner) }
 }
 
@@ -58,7 +57,7 @@ export function freeSpot(G, u, x, z, side, others) {
 // Both armies in their zones, seat 0's first: a front row, the heroes
 // behind it, the artillery at the back.
 export function deployArmies(G) {
-  const { W, H } = BOARD
+  const { W, H, deploy } = G.board
   for (const side of [0, 1]) {
     const sx = edgeOf(G, side)
     const list = G.units.filter((u) => u.side === side)
@@ -66,7 +65,6 @@ export function deployArmies(G) {
     const back = list.filter((u) => u.t.deployRow === 'back')
     const mid = list.filter((u) => u.t.deployRow === 'mid')
     const front = list.filter((u) => u.t.deployRow === 'front')
-    const deploy = missionOf(G.setup).deploy
     const rows = [
       [front, W / 2 - deploy + 1.8],
       [mid, W / 2 - deploy + 3.6],

@@ -33,7 +33,7 @@
 // The orders of §4.1 rule 4 (a template's draws; a blast's victims; the
 // gaze's D3) and rule 5 (the dice roll even when there is no save to make)
 // are kept exactly.
-import { BOARD, hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
+import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
@@ -119,7 +119,7 @@ export function doShoot(G, u, target) {
 // the first); the aim's angle, then its offset; the hit roll; on a miss the
 // scatter's D6, then its angle.
 export function blastVolley(G, u, target, w, info) {
-  const { W, H } = BOARD
+  const { W, H } = G.board
   const n = attackCount(u, w, false)
   log(G, u.side, `<b>${u.t.short}</b> fire ${w.name} at ${target.t.short} (${info.need}+${info.visible ? '' : ', unseen'}).`)
   for (let k = 0; k < n; k++) {

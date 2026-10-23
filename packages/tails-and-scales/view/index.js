@@ -28,6 +28,10 @@ import { Shots } from './effects/shots.js'
 import { Diorama } from './diorama.js'
 import { wait } from './clock.js'
 
+// (F8a) what of a board the table is made for: its size, its zones' depth
+// and where its objectives stand
+const boardKey = ({ W, H, deploy }, objectives) => JSON.stringify([W, H, deploy, objectives.map((o) => [o.x, o.z])])
+
 export class View {
   // The table: `W`, `H` the board's size, `deploy` the deployment's depth
   // and `edges` the seats' edges (the zones), `objectives` their places and
@@ -35,6 +39,10 @@ export class View {
   // holder's: the seats' look, ui/theme.js).
   constructor({ lowfi = false, fast = false, W, H, deploy, edges, objectives, range, colorOf }) {
     this.fast = fast
+    // (F8a) the board shown (setBoard): classic's, the title's, as made
+    this.boardKey = boardKey({ W, H, deploy }, objectives)
+    // (how often a match's board made the table over: ?debug's)
+    this.boardBuilds = 0
     this.stage = new Stage({ lowfi, fast })
     const { renderer, scene } = this.stage
     this.renderer = renderer
@@ -138,10 +146,36 @@ export class View {
     // (a snap of the page's own table lets go of a batch's flags; one into
     // views off the table, ?debug's snapDiff, leaves them be)
     if (!to.units) this.owners = null
+    // (F8a) the table for the match's board, should its mission have chosen
+    // another than the one shown (the presenter's: M.board; the zones'
+    // depth and the objectives from the match)
+    if (!to.units) this.setBoard({ ...g.board, ...M.board }, g.objectives, g.nav)
     terrain.sync(chunks)
     uv.sync(g.units, (s) => edgeOf(g, s))
     sh.clear()
     marks.clearDecals()
+  }
+
+  // (F8a) The table for a board W×H whose zones run `deploy` deep, with
+  // `objectives` ([{ x, z }]) and a nav grid `grid` ({ nx, nz }): the mat,
+  // frame and zones (Table.resize), the objectives (place), the overlay's
+  // texture (resize), the edge a fleeing figure runs off, the camera's
+  // reach and far plane (the rig's setBoard), the fog and shadows (the
+  // stage's fit). Only when it differs from the board shown: between two
+  // classic matches nothing is made or drawn again (the title's frame, its
+  // Math.random draws, stay as they were). True when it rebuilt.
+  setBoard({ W, H, deploy }, objectives, grid) {
+    const key = boardKey({ W, H, deploy }, objectives)
+    if (key === this.boardKey) return false
+    this.boardKey = key
+    this.boardBuilds++
+    this.table.resize({ W, H, deploy })
+    this.objectives.place(objectives)
+    this.overlay?.resize({ W, H, grid: { nx: grid.nx, nz: grid.nz } })
+    if (this.units) this.units.W = W
+    this.rig.setBoard({ W, H })
+    this.stage.fit({ W, H })
+    return true
   }
 
   // text floating at `pos` (the player's fallback: an event with no

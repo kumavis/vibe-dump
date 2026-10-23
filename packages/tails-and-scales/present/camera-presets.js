@@ -15,11 +15,18 @@
 // by fitPose, and the view button cycles through them and an overview.
 import { BOARD } from '../core/rules.js'
 
-const { W, H } = BOARD
+// The board as a rectangle on the table, its centre and size: (F8a) a
+// match's own, from the board its mission chose (G.board), or classic's
+// (the ruleset's BOARD, which the classic mission's board is: the title's,
+// and every preset's when no other is passed).
+export const boardRect = ({ W, H }) => Object.freeze({ cx: 0, cz: 0, w: W, h: H })
+export const BOARD_RECT = boardRect(BOARD)
 
-// The board as a rectangle on the table, its centre and size: classic's
-// here; (F8) a mission's own board is passed in its place.
-export const BOARD_RECT = Object.freeze({ cx: 0, cz: 0, w: W, h: H })
+// (F8a) How far a board's views reach beyond classic's: its diagonal over
+// classic's, never under 1 (so a classic board's presets, dolly, fog and
+// far plane are exactly classic's). A preset's `max` is classic's, scaled
+// by it, so each preset can still take in the whole of a larger board.
+export const reachOf = (rect = BOARD_RECT) => Math.max(1, Math.hypot(rect.w, rect.h) / Math.hypot(BOARD.W, BOARD.H))
 
 export const PRESETS = Object.freeze({
   // the title screen: a slow drift around (centre) from behind seat 0's
@@ -86,8 +93,9 @@ export const follows = ({ follow, stage, active, localSeats }) => !!follow && st
 // and the board (`rect`, classic's by default): the camera looking at the
 // board's centre from the nearest distance at which the whole board shows
 // (all four corners, whichever way it lies across the screen), with room
-// for the HUD (12% each way), never farther than the preset's `max`. A pose
-// preset (pos and target) is returned as it is. (The CameraRig's fit and
+// for the HUD (12% each way), never farther than the preset's `max` (F8a:
+// scaled by the board's reachOf). A pose preset (pos and target) is
+// returned as it is. (The CameraRig's fit and
 // goTo go through it. Each fitted preset's max takes in the whole classic
 // board on every screen down to a 412×915 portrait phone; sim/camera-check
 // says so.)
@@ -110,7 +118,7 @@ export function fitPose(preset, aspect, rect = BOARD_RECT) {
     const depth = dot(v, fwd)
     return depth > 0 && Math.abs(dot(v, right)) * 1.12 <= depth * th && Math.abs(dot(v, up)) * 1.12 <= depth * tv
   })
-  let lo = 1, hi = preset.max
+  let lo = 1, hi = preset.max * reachOf(rect)
   if (fits(lo)) hi = lo
   else if (fits(hi)) for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2

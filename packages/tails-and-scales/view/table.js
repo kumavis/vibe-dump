@@ -6,16 +6,30 @@
 // the tufts and flowers each new table (scatterTufts).
 //
 // R7 moved it out of main.js unchanged (the same draws, in the same order).
+// (F8a) A mission's board may be larger: resize() makes the table over for
+// it, in place (the mat, picked by the pointer's ray, stays the same mesh),
+// its mat's paint and its tufts and flowers as many again as its area is
+// the classic board's, capped. The classic board is never resized, so its
+// draws and objects are the ones it always made.
 import * as THREE from 'three'
 
-function paintMat(W, H, renderer) {
+// how many times the classic board's area a board is (1 on classic)
+const areaOf = (W, H) => (W * H) / (40 * 28)
+
+function paintMat(W, H, renderer, k = 1) {
   const c = document.createElement('canvas')
   c.width = 2048
   c.height = Math.round((2048 * H) / W)
   const g = c.getContext('2d')
   g.fillStyle = '#5b7a36'
   g.fillRect(0, 0, c.width, c.height)
+  // (F8a) the canvas is 2048 px across whatever the board's width, so on a
+  // board k times classic's area each blot and stroke is drawn 1/√k the
+  // pixels, k times as many: the mat's mottling as dense per inch as ever
+  const px = 1 / Math.sqrt(k)
   const blot = (cols, n, rmin, rmax, alpha) => {
+    rmin *= px
+    rmax *= px
     for (let i = 0; i < n; i++) {
       g.globalAlpha = alpha * (0.4 + Math.random() * 0.6)
       g.fillStyle = cols[(Math.random() * cols.length) | 0]
@@ -24,13 +38,15 @@ function paintMat(W, H, renderer) {
       g.fill()
     }
   }
-  blot(['#6a8a40', '#4f6c2c', '#729347', '#55742f', '#7f964c'], 700, 20, 90, 0.35)
-  blot(['#7d6b45', '#6e5d3a', '#8a7650'], 40, 30, 110, 0.22)
-  blot(['#8fa65a', '#a4b46a'], 300, 4, 14, 0.4)
-  for (let i = 0; i < 14000; i++) {
+  // (F8a) the blots and strokes as many again as the area, the strokes
+  // capped at 30,000 (classic's counts at k = 1)
+  blot(['#6a8a40', '#4f6c2c', '#729347', '#55742f', '#7f964c'], Math.round(700 * k), 20, 90, 0.35)
+  blot(['#7d6b45', '#6e5d3a', '#8a7650'], Math.round(40 * k), 30, 110, 0.22)
+  blot(['#8fa65a', '#a4b46a'], Math.round(300 * k), 4, 14, 0.4)
+  for (let i = 0, n = Math.min(30000, Math.round(14000 * k)); i < n; i++) {
     g.globalAlpha = 0.35
     g.fillStyle = Math.random() < 0.5 ? '#3f5a24' : '#8fae5a'
-    g.fillRect(Math.random() * c.width, Math.random() * c.height, 2, 4 + Math.random() * 4)
+    g.fillRect(Math.random() * c.width, Math.random() * c.height, 2 * px, (4 + Math.random() * 4) * px)
   }
   g.globalAlpha = 1
   const t = new THREE.CanvasTexture(c)
@@ -60,12 +76,29 @@ function paintWood() {
   return t
 }
 
+// a zone's edge, dashed, along the board's length
+function zoneLine(sx, W, H, deploy) {
+  const pts = []
+  for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - deploy), 0.02, zz), new THREE.Vector3(sx * (W / 2 - deploy), 0.02, zz + 0.5))
+  return pts
+}
+
+// a mesh's geometry swapped for another, the old one freed
+function regeom(mesh, geometry) {
+  mesh.geometry.dispose()
+  mesh.geometry = geometry
+}
+
 export class Table {
   // { W, H }: the board's size; `deploy`: the zones' depth (the mission's);
   // `edges`: each seat's edge (-1 west, 1 east)
   constructor(scene, renderer, { W, H, deploy, edges }) {
+    this.scene = scene
+    this.renderer = renderer
+    this.edges = edges
     this.W = W
     this.H = H
+    this.deploy = deploy
     const boardMat = new THREE.MeshStandardMaterial({ map: paintMat(W, H, renderer), roughness: 0.95 })
     // the mat: what the pointer's ray finds the ground on
     const board = (this.board = new THREE.Mesh(new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2), boardMat))
@@ -83,13 +116,16 @@ export class Table {
         [0.8, 0.8, H, -W / 2 - 0.4, 0],
         [0.8, 0.8, H, W / 2 + 0.4, 0],
       ]
+      // (the frame's sides, kept for resize())
+      this.frame = []
       for (const [w, h, d, x, z] of parts) {
         const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), frameMat)
         m.position.set(x, -0.22, z)
         m.castShadow = m.receiveShadow = true
         scene.add(m)
+        this.frame.push(m)
       }
-      const under = new THREE.Mesh(new THREE.BoxGeometry(W, 0.6, H), frameMat)
+      const under = (this.under = new THREE.Mesh(new THREE.BoxGeometry(W, 0.6, H), frameMat))
       under.position.y = -0.31
       scene.add(under)
     }
@@ -99,6 +135,9 @@ export class Table {
     // rules' zone, core/deploy.js)
     this.zoneMats = []
     this.zoneLineMats = []
+    // (the zones' meshes and lines, kept for resize())
+    this.zoneMeshes = []
+    this.zoneLines = []
     for (const s of [0, 1]) {
       const sx = edges[s]
       const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.07, depthWrite: false })
@@ -107,17 +146,64 @@ export class Table {
       z.position.set(sx * (W / 2 - deploy / 2), 0.008, 0)
       z.renderOrder = 1
       scene.add(z)
-      const pts = []
-      for (let zz = -H / 2; zz < H / 2; zz += 1) pts.push(new THREE.Vector3(sx * (W / 2 - deploy), 0.02, zz), new THREE.Vector3(sx * (W / 2 - deploy), 0.02, zz + 0.5))
+      this.zoneMeshes.push(z)
       const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 })
       this.zoneLineMats.push(lineMat)
-      scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), lineMat))
+      const line = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(zoneLine(sx, W, H, deploy)), lineMat)
+      scene.add(line)
+      this.zoneLines.push(line)
     }
 
     // grass tufts and flowers, purely for looks
     this.tufts = new THREE.InstancedMesh(new THREE.ConeGeometry(0.035, 0.13, 3), new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1 }), 700)
     this.flowers = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.05, 0), new THREE.MeshStandardMaterial({ roughness: 0.6 }), 140)
     scene.add(this.tufts, this.flowers)
+  }
+
+  // (F8a) The table made over for a board W×H, its zones `deploy` deep: the
+  // mat (the same mesh, a new shape and paint), the frame, the zones (their
+  // colours and how strongly they show kept), and the tufts and flowers as
+  // many again as the area (capped at 2,800 and 560), strewn anew.
+  // view/index.js's setBoard calls it only when a match's board differs
+  // from the one shown.
+  resize({ W, H, deploy }) {
+    Object.assign(this, { W, H, deploy })
+    const k = areaOf(W, H)
+    const mat = this.board.material
+    mat.map.dispose()
+    mat.map = paintMat(W, H, this.renderer, k)
+    mat.needsUpdate = true
+    regeom(this.board, new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2))
+    const parts = [
+      [W + 1.6, 0.8, 0.8, 0, -H / 2 - 0.4],
+      [W + 1.6, 0.8, 0.8, 0, H / 2 + 0.4],
+      [0.8, 0.8, H, -W / 2 - 0.4, 0],
+      [0.8, 0.8, H, W / 2 + 0.4, 0],
+    ]
+    parts.forEach(([w, h, d, x, z], i) => {
+      regeom(this.frame[i], new THREE.BoxGeometry(w, h, d))
+      this.frame[i].position.set(x, -0.22, z)
+    })
+    regeom(this.under, new THREE.BoxGeometry(W, 0.6, H))
+    for (const s of [0, 1]) {
+      const sx = this.edges[s]
+      regeom(this.zoneMeshes[s], new THREE.PlaneGeometry(deploy, H).rotateX(-Math.PI / 2))
+      this.zoneMeshes[s].position.set(sx * (W / 2 - deploy / 2), 0.008, 0)
+      regeom(this.zoneLines[s], new THREE.BufferGeometry().setFromPoints(zoneLine(sx, W, H, deploy)))
+    }
+    // the tufts and flowers, as many as the board takes (their geometry and
+    // material kept)
+    const regrow = (old, n) => {
+      if (old.count === n) return old
+      const next = new THREE.InstancedMesh(old.geometry, old.material, n)
+      this.scene.remove(old)
+      old.dispose()
+      this.scene.add(next)
+      return next
+    }
+    this.tufts = regrow(this.tufts, Math.min(2800, Math.round(700 * k)))
+    this.flowers = regrow(this.flowers, Math.min(560, Math.round(140 * k)))
+    this.scatterTufts()
   }
 
   // each seat's zone in its colour (colors[seat])

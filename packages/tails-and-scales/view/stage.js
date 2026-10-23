@@ -38,7 +38,7 @@ export class Stage {
   light() {
     const scene = this.scene
     scene.add(new THREE.HemisphereLight('#d6e6ff', '#3b2a1a', 0.85))
-    const sun = new THREE.DirectionalLight('#fff0d6', 2.3)
+    const sun = (this.sun = new THREE.DirectionalLight('#fff0d6', 2.3))
     sun.position.set(-16, 34, 20)
     sun.castShadow = true
     sun.shadow.mapSize.set(2048, 2048)
@@ -49,6 +49,20 @@ export class Stage {
     const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
     fill.position.set(18, 12, -16)
     scene.add(fill)
+  }
+
+  // (F8a) The fog and the sun's shadows for a board W×H: the fog from 70k to
+  // 140k" (k: the board's diagonal over classic's, never under 1), the
+  // shadow camera classic's ±27 by ±22 (in the sun's own view, where
+  // classic's corners need about ±24.4 by ±20.5) and 90" deep, each times
+  // k, so a larger board's corners cast and catch shadows too (classic's
+  // exactly as ever). (Shadows fitted to the view, so a larger board's keep
+  // their sharpness, are F8b's: DESIGN §4.2.7.)
+  fit({ W, H }) {
+    const k = Math.max(1, Math.hypot(W, H) / Math.hypot(40, 28))
+    Object.assign(this.scene.fog, { near: 70 * k, far: 140 * k })
+    Object.assign(this.sun.shadow.camera, { left: -27 * k, right: 27 * k, top: 22 * k, bottom: -22 * k, far: 90 * k })
+    this.sun.shadow.camera.updateProjectionMatrix()
   }
 
   // Run the table: `parts(dt, time)` each frame after the tweens (the

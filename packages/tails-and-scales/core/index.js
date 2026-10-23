@@ -39,7 +39,8 @@
 // it); `strict` checks every AI command with legal() before it is applied,
 // and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
 // state: the rules don't read them, and stateHash leaves them out.
-import { newState, missionOf, seatName } from './match.js'
+import { newState, missionOf, seatName, SETUP_KEYS, SEAT_KEYS } from './match.js'
+import { MISSIONS } from '../data/mission.js'
 import { lock, unlock } from './rng.js'
 import { emit, log } from './journal.js'
 import { advance, humanSeats } from './engine.js'
@@ -51,6 +52,7 @@ export { legal, KINDS } from './commands.js'
 export { RULES_ID, CORE_VERSION } from './version.js'
 export { stateHash, shadowState } from './hash.js'
 export { canonicalJSON, cyrb53 } from './util.js'
+export { SETUP_KEYS, SEAT_KEYS, missionOf } from './match.js'
 
 // (a copy: whoever sorts or edits the answer leaves the match's decision be)
 export const pendingSeats = (G) => [...(G.pending?.seats ?? [])]
@@ -62,21 +64,42 @@ export const pendingSeats = (G) => [...(G.pending?.seats ?? [])]
 const MAX_ROUNDS = 99
 
 // A setup with its defaults filled in, refused unless the rules can play it.
-//   { board, dice, terrain: 'classic', rounds, overtime: 'never' | 'vote',
-//     diceMode: 'shared', seats: [{ race, ctrl: 'human' | 'ai' }, …] }
+//   { board, dice, mission: 'classic', terrain, rounds, overtime: 'never' |
+//     'vote', diceMode: 'shared', seats: [{ race, ctrl: 'human' | 'ai',
+//     dev?, name?, nonce? }, …] }
 // overtime 'vote' (F4): once the rounds are played, the human seats vote on
 // another round, and again after each one (a battle with no human seat ends
 // on its rounds all the same).
-// board and dice are the two seeds (whole numbers, 0 to 2^32 - 1); rounds
-// defaults to the mission's, and runs from 1 to MAX_ROUNDS. A field left
-// out, null or undefined (a form's or a lobby's empty field) takes its
-// default. The setup's own fields come first, in its order, then the
-// defaults it left out. (The races and controllers are checked as the seats
-// are made, core/match.js.)
+// board and dice are the two seeds (whole numbers, 0 to 2^32 - 1). (F8a)
+// The mission (data/mission.js) chooses the board; terrain defaults to its
+// first set and must be one of its sets; rounds defaults to its rounds, and
+// runs from 1 to MAX_ROUNDS. A field left out, null or undefined (a form's
+// or a lobby's empty field) takes its default. The setup's own fields come
+// first, in its order, then the defaults it left out. (F8a) A field outside
+// SETUP_KEYS, or a seat's outside SEAT_KEYS, is refused (one left null is
+// left out, as ever), in the order the checks below make. (The races and
+// controllers are checked as the seats are made, core/match.js.)
 export function fullSetup(setup) {
+  // (the whitelist reads the setup's own fields before any is copied: a
+  // `__proto__` field, an own key of a parsed log entry, would otherwise set
+  // the copy's prototype rather than be a field of it, and slip past)
+  const fields = Object.entries(setup ?? {}).filter(([, v]) => v != null)
+  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field "${k}"`)
   const s = {}
-  for (const [k, v] of Object.entries(setup ?? {})) if (v != null) s[k] = v
-  const defaults = { terrain: 'classic', rounds: missionOf(setup).rounds, overtime: 'never', diceMode: 'shared' }
+  for (const [k, v] of fields) s[k] = v
+  if (Array.isArray(s.seats)) {
+    s.seats.forEach((seat, i) => {
+      if (seat === null || typeof seat !== 'object' || Array.isArray(seat)) throw new Error(`seat ${i} is ${JSON.stringify(seat)}, not a record of its race and controller`)
+      for (const [k, v] of Object.entries(seat)) if (v != null && !SEAT_KEYS.includes(k)) throw new Error(`seat ${i} takes no field "${k}"`)
+    })
+  }
+  s.mission ??= 'classic'
+  // (MISSIONS has no prototype, so only a mission's own name is in it)
+  if (typeof s.mission !== 'string' || !(s.mission in MISSIONS)) throw new Error(`no mission ${JSON.stringify(s.mission)} (there ${Object.keys(MISSIONS).length === 1 ? 'is' : 'are'} ${Object.keys(MISSIONS).join(', ')})`)
+  const mission = missionOf(s)
+  s.terrain ??= mission.sets[0]
+  if (!mission.sets.includes(s.terrain)) throw new Error(`the ${s.mission} mission is fought on ${mission.sets.join(' or ')}, not ${JSON.stringify(s.terrain)}`)
+  const defaults = { rounds: mission.rounds, overtime: 'never', diceMode: 'shared' }
   for (const [k, v] of Object.entries(defaults)) s[k] ??= v
   const seed = (n) => Number.isInteger(n) && n >= 0 && n <= 0xffffffff
   if (!seed(s.board) || !seed(s.dice)) throw new Error(`a setup's board and dice are whole numbers from 0 to 2^32 - 1, not ${s.board} and ${s.dice}`)

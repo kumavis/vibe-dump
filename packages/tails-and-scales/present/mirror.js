@@ -8,7 +8,8 @@
 //                         alive, mesmerized, engaged } },
 //         chunks: { id → { alive, y } },
 //         owners: [seat or -1, per objective], vp: [a, b],
-//         round, active, phase, stage }
+//         round, active, phase, stage, board: { W, H } }  (F8a: board the
+//         match's, fixed for its whole battle)
 //
 // project(G) is the mirror of a match that is not running ahead of its view
 // (a new table, or a snap); applyEvent(M, e) folds one event into it. Once
@@ -41,7 +42,9 @@ export function project(G) {
   }
   const chunks = {}
   for (const c of G.terrain.chunks) chunks[c.id] = { alive: c.alive, y: c.shape.y }
-  return { units, chunks, owners: owners(G), vp: [...T.vp], round: T.round, active: T.active, phase: phaseKey(G), stage: T.stage }
+  // (F8a) the board the match's mission chose, which no event changes: the
+  // view makes the table for it as it snaps (view/index.js's setBoard)
+  return { units, chunks, owners: owners(G), vp: [...T.vp], round: T.round, active: T.active, phase: phaseKey(G), stage: T.stage, board: { W: G.board.W, H: G.board.H } }
 }
 
 // An empty mirror: no units, no chunks (sim/terrain-check.mjs folds the

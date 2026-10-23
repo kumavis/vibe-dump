@@ -12,18 +12,21 @@
 // numbers, so every view a player sees is today's (sim/camera-check.mjs).
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { PRESETS, fovFor, orbitPose, follows, fitPose } from '../present/camera-presets.js'
+import { PRESETS, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf } from '../present/camera-presets.js'
 import { clock, tween, easeInOut, lerp } from './clock.js'
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2])
 // how far the player may dolly out (OrbitControls clamps the camera's
 // distance to it every frame): today's, unless a preset fitted farther
+// (F8a: or a larger board's overview, setBoard)
 const MAX_DISTANCE = 75
+// the far plane: classic's (F8a: farther for a larger board)
+const FAR = 400
 
 export class CameraRig {
   constructor(renderer) {
     const L = PRESETS.landscape
-    this.camera = new THREE.PerspectiveCamera(L.fov, innerWidth / innerHeight, 0.1, 400)
+    this.camera = new THREE.PerspectiveCamera(L.fov, innerWidth / innerHeight, 0.1, FAR)
     this.camera.position.set(...L.pos)
     const controls = (this.controls = new OrbitControls(this.camera, renderer.domElement))
     controls.target.set(...L.target)
@@ -48,6 +51,10 @@ export class CameraRig {
     // one the camera last went to; none on the title
     this.views = []
     this.viewAt = 0
+    // (F8a) the board the views are fitted to (classic's until a match's
+    // mission chooses another: setBoard) and how far the dolly reaches on it
+    this.rect = BOARD_RECT
+    this.dolly = MAX_DISTANCE
     // the keys held for panning; V the next view, Home the overview
     this.keys = new Set()
     addEventListener('keydown', (e) => {
@@ -78,7 +85,23 @@ export class CameraRig {
   // (F1's behind, F2's broadside) fitted so the board shows (the presets'
   // pure fitPose). Its fov is fovFor(aspect), which fitFov already set.
   fit(preset, aspect = innerWidth / innerHeight) {
-    return fitPose(preset, aspect)
+    return fitPose(preset, aspect, this.rect)
+  }
+
+  // (F8a) The views fitted to a match's board W×H from now on: on a larger
+  // board than classic's the dolly reaches the overview's fit and a tenth
+  // more (DESIGN §4.2.3: max(75, overview fit × 1.1)), and the far plane
+  // three times the overview's reach (max(400, 3 × its max × the board's
+  // reach)). Classic keeps its 75 and 400 exactly.
+  setBoard({ W, H }) {
+    this.rect = boardRect({ W, H })
+    const k = reachOf(this.rect)
+    const overview = fitPose(PRESETS.overview, innerWidth / innerHeight, this.rect)
+    const d = Math.hypot(overview.pos[0] - overview.target[0], overview.pos[1] - overview.target[1], overview.pos[2] - overview.target[2])
+    this.dolly = k > 1 ? Math.max(MAX_DISTANCE, d * 1.1) : MAX_DISTANCE
+    this.camera.far = k > 1 ? Math.max(FAR, 3 * PRESETS.overview.max * k) : FAR
+    this.camera.updateProjectionMatrix()
+    if (this.views.length) this.controls.maxDistance = Math.max(this.controls.maxDistance, this.dolly)
   }
 
   // (F1, F2) A battle's views (viewsFor's), the camera swinging onto the
@@ -113,7 +136,7 @@ export class CameraRig {
     this.titleSpin = false
     const camera = this.camera, controls = this.controls
     const pose = this.fit(preset)
-    controls.maxDistance = Math.max(MAX_DISTANCE, preset.max ?? MAX_DISTANCE)
+    controls.maxDistance = Math.max(this.dolly, (preset.max ?? 0) * reachOf(this.rect))
     const p0 = camera.position.clone(), t0 = controls.target.clone()
     const pos = v3(pose.pos), target = v3(pose.target)
     tween(seconds, (k) => {

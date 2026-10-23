@@ -46,23 +46,25 @@ export function jobSetup(job) {
 
 // How the page starts a setup: the title screen's button for who sits in
 // each seat, and the URL that carries the rest (app/boot.js and app/flow.js
-// read ?seed, ?dice, ?races and ?overtime; a log recorded before F4 never
+// read ?seed, ?dice, ?races, ?overtime and, from F8a, ?mission (named only
+// when it isn't classic); a log recorded before F4 never
 // voted, so its overtime is 'never'). The page builds its own setup from
 // these, and playedAs (below) says whether it built this one: a setup the
 // page can't make (other terrain, rounds or dice) is found there.
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}` }
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:
-// every field alike, but the seats' devices (the page's own) and an absent
-// overtime, which is 'never'. Injected into the browser page by
-// sim/chromium.mjs, so it may only use its arguments.
+// every field alike, but the seats' devices (the page's own), an absent
+// overtime, which is 'never', and (F8a) an absent mission, which is
+// 'classic'. Injected into the browser page by sim/chromium.mjs, so it may
+// only use its arguments.
 export function playedAs(played, setup) {
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
-  const plain = (s) => ({ ...s, overtime: s.overtime ?? 'never', seats: s.seats.map(({ dev, ...seat }) => seat) })
+  const plain = (s) => ({ ...s, overtime: s.overtime ?? 'never', mission: s.mission ?? 'classic', seats: s.seats.map(({ dev, ...seat }) => seat) })
   if (!played?.seats) return 'the page has no battle setup to read (G.setup): code older than R6?'
   const a = canon(plain(played)), b = canon(plain(setup))
   return a === b ? null : `the page started ${a}, not the log's ${b}`
@@ -273,7 +275,9 @@ export function makePolicy(name, seed) {
 
   function deploy(ts, s) {
     const { nav } = ts
-    const W = nav.W, H = nav.H, depth = 8 // BOARD.deploy
+    // (F8a) the zones' depth the match's mission chose (?debug's board);
+    // 8, classic's, on a page from before missions
+    const W = nav.W, H = nav.H, depth = ts.board?.deploy ?? 8
     const mine = ts.units.filter((u) => u.side === s)
     if (!placing.has(s)) placing.set(s, aggressive ? mine.slice() : Array.from({ length: Math.floor(rand() * 4) }, () => pick(mine)))
     const todo = placing.get(s)

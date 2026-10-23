@@ -42,6 +42,24 @@ export class Overlay {
     scene.add(ghost)
   }
 
+  // (F8a) The overlay for another board: its texture one texel per nav cell
+  // of the match's grid (`grid`: { nx, nz }), its plane W×H, the old ones
+  // freed; nothing shaded. view/index.js's setBoard calls it only when a
+  // match's board differs from the one shown.
+  resize({ W, H, grid }) {
+    this.data = new Uint8Array(grid.nx * grid.nz * 4)
+    const tex = new THREE.DataTexture(this.data, grid.nx, grid.nz, THREE.RGBAFormat)
+    tex.magFilter = THREE.LinearFilter
+    tex.minFilter = THREE.LinearFilter
+    this.tex.dispose()
+    this.tex = tex
+    this.mesh.material.map = tex
+    this.mesh.material.needsUpdate = true
+    this.mesh.geometry.dispose()
+    this.mesh.geometry = new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2)
+    this.mesh.visible = false
+  }
+
   // The shaded area is everywhere the unit could stand; spots overlapping a
   // friend are still shaded (a click there snaps to the nearest legal spot),
   // so the region reads as one shape instead of a sieve.

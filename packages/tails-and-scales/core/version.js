@@ -6,8 +6,8 @@
 // `look`, `abilities` text and a weapon's `fx`), plus the table constants,
 // the phase order, the terrain sets (core/terrain/sets.js: the feature
 // table, the centre rule and the spacing rules every board is scattered
-// by) and the missions (data/mission.js: the objectives, the default rounds
-// and the deployment depth). A stat retune changes it, so a match started
+// by) and the missions (data/mission.js: the board, the objectives, the
+// default rounds, the deployment depth, the sets and the army's name). A stat retune changes it, so a match started
 // under other rules can be told apart instead of silently playing
 // differently; a renamed unit doesn't.
 //
@@ -50,5 +50,7 @@ export const RULES_ID = rulesId()
 
 // (1: the rules as R0 recorded them, unchanged through the refactor; 2: F4's
 // round-limit vote, the vote command and setup.overtime 'vote'; 3: F10b's
-// pilot, the AI playing a set of a seat's units)
-export const CORE_VERSION = 3
+// pilot, the AI playing a set of a seat's units; 4: F8a's missions, the
+// setup naming the mission that chooses the board and refusing a field it
+// doesn't know)
+export const CORE_VERSION = 4

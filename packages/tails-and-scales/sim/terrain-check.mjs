@@ -128,7 +128,8 @@ const { blankMirror, applyEvent } = await imp(PKG, 'present/mirror.js')
 const { smashAround } = await imp(PKG, 'core/actions/move.js')
 const { MISSIONS } = await imp(PKG, 'data/mission.js')
 const OBJ_POS = MISSIONS.classic.objectives
-const { W, H } = BOARD
+// (F8a) the board the classic mission chooses (the ruleset's BOARD)
+const { W, H } = MISSIONS.classic.board
 
 // The working tree's battlefield, driven as main.js drives it: the rules'
 // Terrain reports each call's events into `out`, and straight after the

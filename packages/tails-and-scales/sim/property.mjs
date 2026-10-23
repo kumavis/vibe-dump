@@ -879,6 +879,62 @@ const BAD_SETUPS = {
   'an unknown race': { seats: [{ race: 'dragon', ctrl: 'ai' }, SETUP.seats[1]] },
   'an unknown controller': { seats: [SETUP.seats[0], { race: 'serpent', ctrl: 'robot' }] },
 }
+// (F8a) P-mission: a setup's mission and the setup whitelist. Each refused
+// with its own message (fullSetup's, in its order: the field, the seat's
+// field, the mission, the set); code from before F8a takes none of these
+// keys and is held to none of them.
+const BAD_MISSION_SETUPS = {
+  'a field no setup takes': [{ colour: 'red' }, /^a setup takes no field "colour"$/],
+  "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], army: '224222' }, SETUP.seats[1]] }, /^seat 0 takes no field "army"$/],
+  'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
+  'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
+  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there (is|are) classic/],
+  'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
+  'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
+  'a set the mission is not fought on': [{ terrain: 'fortified' }, /^the classic mission is fought on classic, not "fortified"$/],
+  'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
+  // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
+  // for the setup's prototype (its fields would slip past the whitelist)
+  'a __proto__ field': [JSON.parse('{"__proto__":{"board":5,"dice":7,"army":"x"}}'), /^a setup takes no field "__proto__"$/],
+  "a seat's __proto__ field": [{ seats: [JSON.parse('{"race":"squirrel","ctrl":"human","__proto__":{"army":"x"}}'), SETUP.seats[1]] }, /^seat 0 takes no field "__proto__"$/],
+}
+function missionTask(core, MISSIONS) {
+  let n = 0
+  for (const [name, [change, want]] of Object.entries(BAD_MISSION_SETUPS)) {
+    let G = null, why = null
+    // (a change's own fields over SETUP's, a __proto__ field kept as one)
+    const setup = Object.defineProperties({ ...SETUP }, Object.getOwnPropertyDescriptors(change))
+    try {
+      G = core.createMatch(setup)
+    } catch (e) {
+      if (e instanceof TypeError || e instanceof RangeError) throw new Error(`P-mission: createMatch crashes on a setup with ${name} instead of refusing it: ${e.message}`)
+      why = e.message
+    }
+    if (G) throw new Error(`P-mission: createMatch takes a setup with ${name}`)
+    if (!want.test(why)) throw new Error(`P-mission: a setup with ${name} is refused as "${why}", not ${want}`)
+    n++
+  }
+  // a null field is a field left out; the mission named, or not, plays classic
+  for (const change of [{ mission: 'classic' }, { mission: null }, { colour: null }, { seats: SETUP.seats.map((x) => ({ ...x, army: null })) }]) {
+    const G = core.createMatch({ ...SETUP, ...change })
+    if (G.setup.mission !== 'classic' || G.board.W !== 40 || G.board.H !== 28 || G.board.deploy !== 8) throw new Error(`P-mission: a setup with ${JSON.stringify(change)} plays mission ${G.setup.mission} on ${JSON.stringify(G.board)}`)
+  }
+  // every mission as shipped: its objectives point-symmetric, 1" inside its
+  // board and outside both zones; and a match of it on its board
+  for (const [name, m] of Object.entries(MISSIONS)) {
+    const { W, H } = m.board
+    for (const o of m.objectives) {
+      if (!m.objectives.some((p) => p.x === -o.x && p.z === -o.z)) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) has no point mirror`)
+      if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) is under 1" inside its ${W}×${H} board`)
+      if (!(Math.abs(o.x) < W / 2 - m.deploy)) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) is in a zone ${m.deploy}" deep`)
+    }
+    const G = core.createMatch({ ...SETUP, mission: name })
+    if (G.board.W !== W || G.board.H !== H || G.nav.W !== W || G.nav.H !== H || G.objectives.length !== m.objectives.length || G.setup.rounds !== m.rounds || G.setup.terrain !== m.sets[0]) throw new Error(`P-mission: a match of ${name} is on ${JSON.stringify(G.board)}, ${G.objectives.length} objectives, ${G.setup.rounds} rounds, terrain ${G.setup.terrain}`)
+    n++
+  }
+  return n
+}
+
 function setupTask(core) {
   for (const [name, change] of Object.entries(BAD_SETUPS)) {
     const setup = { ...SETUP, ...change }
@@ -966,7 +1022,9 @@ if (a.child) {
     } else if (task.kind === 'offturn') {
       out = { ok: true, counts: { offTurn: 2, results: offTurnTask(core, hud) } }
     } else if (task.kind === 'setups') {
-      out = { ok: true, counts: { refused: setupTask(core) } }
+      // (F8a: P-mission, on code whose setups name their mission)
+      const missions = core.SETUP_KEYS ? (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS : null
+      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions) : 0 } }
     }
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
@@ -1026,8 +1084,10 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   // 8. setups the rules can't play, and G's shape
   {
     const r = await child({ kind: 'setups' }, pkg)
-    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle` : `FAIL ${r.error}`}`)
+    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle${r.counts.missions ? `; (P-mission) ${r.counts.missions} mission setups and missions held` : ''}` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
+    // (code with SETUP_KEYS whitelists its setups: P-mission must have run)
+    else if (existsSync(join(pkg, 'data', 'mission.js')) && /SETUP_KEYS/.test(readFileSync(join(pkg, 'core', 'match.js'), 'utf8')) && !r.counts.missions) bad.push({ error: 'the code whitelists its setups, but P-mission held nothing' })
   }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
@@ -1077,6 +1137,15 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
 // `missing-h-accepted`, `over-any-device` and `core-newer-only` (no honest
 // log writes those entries: only (9)'s replays do).
 const MUTATIONS = {
+  // (F8a, P-mission) a setup's stray field copied through, as before F8a
+  'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
+  // (F8a's review) the whitelist read off the copy, as first built: a
+  // __proto__ field sets the copy's prototype and slips past it
+  'whitelist-after-copy': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n  const s = {}\n  for (const [k, v] of fields) s[k] = v\n", "  const s = {}\n  for (const [k, v] of fields) s[k] = v\n  for (const k of Object.keys(s)) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n"],
+  // a mission MISSIONS lacks taken (the match then has no board)
+  'mission-unchecked': ['core/index.js', "  if (typeof s.mission !== 'string' || !(s.mission in MISSIONS)) throw new Error(`no mission ${JSON.stringify(s.mission)} (there ${Object.keys(MISSIONS).length === 1 ? 'is' : 'are'} ${Object.keys(MISSIONS).join(', ')})`)\n", ''],
+  // a set the mission isn't fought on taken (as long as it exists)
+  'set-unchecked': ['core/index.js', "  if (!mission.sets.includes(s.terrain)) throw new Error(`the ${s.mission} mission is fought on ${mission.sets.join(' or ')}, not ${JSON.stringify(s.terrain)}`)\n", ''],
   // a preview the fold never runs draws a die (a tool's nearest valid end)
   'preview-draws': ['core/actions/move.js', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n  roll(G, 1)\n'],
   // asking leaves a mark on the match

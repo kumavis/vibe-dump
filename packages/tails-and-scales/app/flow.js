@@ -78,12 +78,12 @@ export function bookKey(session) {
   return st ? `${st.id}.${s?.board}.${s?.dice}` : null
 }
 
-// What of a setup the table shows before its battle: the board, the terrain
-// set and the races at it (a mission too, once a setup names one). Who plays
-// a seat, the dice and the rounds draw nothing on it.
+// What of a setup the table shows before its battle: the board seed, (F8a)
+// the mission that chose the board, the terrain set and the races at it.
+// Who plays a seat, the dice and the rounds draw nothing on it.
 export const tableOf = (setup) => {
   const s = fullSetup(setup)
-  return { board: s.board, terrain: s.terrain, races: s.seats.map((x) => x.race) }
+  return { board: s.board, mission: s.mission, terrain: s.terrain, races: s.seats.map((x) => x.race) }
 }
 const sameTable = (a, b) => JSON.stringify(tableOf(a)) === JSON.stringify(tableOf(b))
 
@@ -95,12 +95,14 @@ export class Flow {
   // `view` (view/index.js), `ui` (ui/: { tray, log, card, banner, tooltip,
   // hud, actions, title, result }), `params` (the page's URL parameters:
   // ?dice), `seed` (the title's board seed) and `races` (the races at the
-  // table: the classic matchup, or ?races')
-  constructor({ view, ui, params, seed, races }) {
+  // table: the classic matchup, or ?races'), (F8a) `mission` the mission a
+  // battle started here is fought for (classic, or ?mission's)
+  constructor({ view, ui, params, seed, races, mission = 'classic' }) {
     this.view = view
     this.ui = ui
     this.params = params
     this.races = races
+    this.mission = mission
     // The table's and the screen's own state: the board seed and who plays
     // each seat as the title screen has them. (Every seed the page takes is
     // made a whole number from 0 to 2^32 - 1, as a setup's must be, with
@@ -335,7 +337,7 @@ export class Flow {
   // then the score's banner.
   scored(e) {
     e.owners.forEach((c, i) => {
-      const o = MISSIONS.classic.objectives[i]
+      const o = this.atTable().objectives[i]
       if (c >= 0) this.view.effects.ring(o.x, o.z, OBJECTIVE_RANGE, this.sides[c].color, { life: 1.6, fill: 0.15 })
     })
     this.refreshUI()
@@ -458,14 +460,17 @@ export class Flow {
   // played (both seats human, so it waits at its deployment having drawn
   // nothing, and its dice, 0, are never rolled). The battle a mode starts is
   // a match of its own (start()), on this table when it is the battle's
-  // (tableOf: the title's is the classic terrain set and the races at the
-  // table).
-  showTable(board, { terrain = 'classic', races = this.races } = {}) {
+  // (tableOf: the title's is the classic mission's, on its terrain set, with
+  // the races at the table: the title stays on the classic board, F8a).
+  // (F8a) A battle's mission may choose another board: the snap rebuilds
+  // the table for it (view/index.js's setBoard), and the title's next snap
+  // the classic one again.
+  showTable(board, { mission = 'classic', terrain = MISSIONS[mission].sets[0], races = this.races } = {}) {
     const { view, ui, human } = this
     // the new table first: if building it throws, the last one stays whole
     // (a quiet match: none of what it did is played, the table being drawn
     // from it as it stands)
-    const next = createMatch({ board, dice: 0, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: null })
+    const next = createMatch({ board, dice: 0, mission, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: null })
     this.session?.close()
     this.session = null
     this.battle = null
@@ -523,16 +528,19 @@ export class Flow {
     this.replay?.close()
     if (this.online) this.leaveOnline()
     // (a battle starts on a fresh table: a second start without the end
-    // screen's Back would find the last battle's on show)
-    if (this.session) this.showTable(this.S.seed)
+    // screen's Back would find the last battle's on show; (F8a) the fresh
+    // one is the battle's mission's, so its board is made once)
+    if (this.session) this.showTable(this.S.seed, { mission: this.mission })
     // a fresh logic-dice stream per battle; ?dice=N replays one exactly
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     // (F4) a battle with a seat played by a human asks to play on past its
     // rounds ('vote'), unless ?overtime=never says not (sim/'s replays of a
     // log made without the vote); a watched one ends on its rounds
     const overtime = who.includes('human') && this.params.get('overtime') !== 'never' ? 'vote' : 'never'
+    // (F8a) the mission chooses the board: its first terrain set, its rounds
+    const mission = MISSIONS[this.mission]
     const setup = {
-      board: this.S.seed, dice, terrain: 'classic', rounds: MISSIONS.classic.rounds, overtime, diceMode: 'shared',
+      board: this.S.seed, dice, mission: this.mission, terrain: mission.sets[0], rounds: mission.rounds, overtime, diceMode: 'shared',
       seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE } : { race, ctrl: who[i] })),
     }
     // The battle starts on the table shown, which must be its own: the

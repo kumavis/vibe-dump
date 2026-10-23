@@ -2,19 +2,20 @@
 // start, a last-writer-wins map every peer edits, which the fold never
 // reads (the start copies what it needs):
 //
-//   lobby: { host, board, terrain, rounds, overtime,
+//   lobby: { host, board, mission, terrain, rounds, overtime,
 //            seats: { s0: { ctrl, dev, name, race, ready, nonce }, s1: … },
 //            next }
 //
 // host: the device that made the match (it wrote the log's `open`, and only
-// its start counts: match/fold.js); board, terrain, rounds, overtime: the
-// battle, the host's to change until the start (a change un-readies both
+// its start counts: match/fold.js); board, mission, terrain, rounds,
+// overtime: the battle (F8a: the mission, `classic` in a lobby written
+// before missions), the host's to change until the start (a change un-readies both
 // seats); seats: a claimed seat's record, its own device's to change (a
 // change of race or name un-readies it), keyed s0 and s1 so two devices
 // claiming one seat at once leave one claim standing everywhere (the
 // loser sees another device in it: "seat taken"); next: the rematch's
 // document id, once someone asks for one. Plain fields of a map, so F8a's
-// `mission` and F11b's `army` join without a schema change.
+// `mission` joined (and F11b's `army` will) without a schema change.
 //
 // The edits are automerge-repo changes on the document handle; the reads
 // take the document as it stands (handle.doc()). Nothing here is trusted
@@ -29,8 +30,8 @@ export const SEAT_KEYS = Object.freeze(['s0', 's1'])
 // A new match document: the lobby as its host makes it, the host in seat 0
 // (`me`: its seat record, nonce '' as the host's always is), and an empty
 // log (the host's Session writes its `open` next).
-export function lobbyDoc({ host, board, terrain = 'classic', rounds, overtime = 'vote', me }) {
-  return { ...matchDoc(), lobby: { host, board, terrain, rounds, overtime, seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
+export function lobbyDoc({ host, board, mission = 'classic', terrain = 'classic', rounds, overtime = 'vote', me }) {
+  return { ...matchDoc(), lobby: { host, board, mission, terrain, rounds, overtime, seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
 }
 
 // the lobby of a document as it stands, read safely (a peer may have
@@ -41,7 +42,10 @@ export function lobbyOf(doc) {
   return {
     host: typeof L?.host === 'string' ? L.host : null,
     board: Number.isInteger(L?.board) ? L.board : null,
-    terrain: L?.terrain ?? 'classic',
+    mission: L?.mission ?? 'classic',
+    // (null: the mission's own first set, filled in by the start's setup;
+    // a lobby whose mission changed has none until one is chosen)
+    terrain: L?.terrain ?? null,
     rounds: Number.isInteger(L?.rounds) ? L.rounds : null,
     overtime: L?.overtime ?? 'vote',
     seats: SEAT_KEYS.map((k) => rec(L?.seats?.[k])),
@@ -64,7 +68,7 @@ export const startSeat = (r) => ({ race: r.race, ctrl: r.ctrl, dev: r.dev, name:
 
 // The start's setup from a ready lobby and its dice (net/seed.js).
 export const setupOf = (lobby, dice) => ({
-  board: lobby.board, dice, terrain: lobby.terrain, rounds: lobby.rounds, overtime: lobby.overtime, diceMode: 'shared',
+  board: lobby.board, dice, mission: lobby.mission, terrain: lobby.terrain, rounds: lobby.rounds, overtime: lobby.overtime, diceMode: 'shared',
   seats: lobby.seats.map(startSeat),
 })
 
@@ -110,10 +114,17 @@ export function editSeat(handle, i, dev, fields) {
   return true
 }
 
-// The host changes the battle (the board): both seats un-readied.
+// The host changes the battle (the board, the mission): both seats
+// un-readied. A new mission lets the old one's terrain and rounds go: the
+// start's setup takes the new mission's first set and its rounds.
 export function editBattle(handle, fields) {
   handle.change((d) => {
     if (fields.board !== undefined) d.lobby.board = fields.board
+    if (fields.mission !== undefined && fields.mission !== d.lobby.mission) {
+      d.lobby.mission = fields.mission
+      delete d.lobby.terrain
+      delete d.lobby.rounds
+    }
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })
 }

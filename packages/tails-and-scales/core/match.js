@@ -19,7 +19,6 @@
 // seat and a mirror match is still a fair, mirrored table.
 import { RACES } from '../data/schema.js'
 import { MISSIONS } from '../data/mission.js'
-import { BOARD } from './rules.js'
 import { createRng } from './rng.js'
 import { deepFreeze } from './util.js'
 import { NavGrid } from './nav.js'
@@ -29,10 +28,19 @@ import { deployArmies } from './deploy.js'
 
 export const EDGES = Object.freeze([-1, 1])
 
-// The mission `setup` is fought for (data/mission.js): its objectives, its
-// default rounds and its deployment depth. Every setup plays `classic`
-// until a setup field picks another.
-export const missionOf = (setup) => MISSIONS.classic
+// The mission `setup` is fought for (data/mission.js): its board, its
+// deployment depth, its objectives, its default rounds and its terrain
+// sets. (F8a) `setup.mission` names it; a setup naming none plays
+// `classic`, as every setup did before F8a. (fullSetup has refused a name
+// MISSIONS lacks by the time a match reads it.)
+export const missionOf = (setup) => MISSIONS[setup?.mission ?? 'classic']
+
+// (F8a) The fields a setup may have, and a seat's record: core/index.js
+// fullSetup refuses any other, so a field a newer build adds (an army list,
+// a mission) is never quietly dropped by an older one that would then play
+// another battle (DESIGN §4.2.10 item 8). F11a adds `army` to a seat's.
+export const SETUP_KEYS = Object.freeze(['board', 'dice', 'terrain', 'rounds', 'overtime', 'diceMode', 'seats', 'mission'])
+export const SEAT_KEYS = Object.freeze(['race', 'ctrl', 'dev', 'name', 'nonce'])
 
 // the nav grid's cell, in inches
 export const NAV_CELL = 0.5
@@ -79,14 +87,18 @@ export const ctrl = (G, s) => G.seats[s].ctrl
 // starts at the deployment, the engine's next step the roll-off
 // (createMatch asks the human seats to adjust their deployment first).
 export function newState(setup, { out = null, onTrace = null } = {}) {
-  const { W, H } = BOARD
+  const mission = missionOf(setup)
+  const { W, H } = mission.board
   const G = {
     setup: deepFreeze(copySetup(setup)),
+    // (F8a) the board the mission chose: its size and each zone's depth
+    // (derived from the setup, like the nav grid: never in stateHash)
+    board: Object.freeze({ W, H, deploy: mission.deploy }),
     rng: createRng(setup.dice),
     seats: makeSeats(setup.seats.map((s) => s.race), setup.seats.map((s) => s.ctrl)),
     units: [],
     nextUnitId: 1,
-    objectives: missionOf(setup).objectives.map((p, i) => ({ i, x: p.x, z: p.z })),
+    objectives: mission.objectives.map((p, i) => ({ i, x: p.x, z: p.z })),
     terrain: new Terrain(W, H),
     // derived from the terrain; rebuilt only at refreshNav's call sites
     nav: new NavGrid(W, H, NAV_CELL),
@@ -109,7 +121,7 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
     // (core/index.js's createMatch sets it; I/O, never read by the rules)
     strict: false,
   }
-  G.terrain.generate(setup.board, G.objectives, missionOf(setup).deploy, setup.terrain, out)
+  G.terrain.generate(setup.board, G.objectives, mission.deploy, setup.terrain, out)
   refreshNav(G)
   for (const side of [0, 1]) for (const key of raceOf(G, side).army) G.units.push(makeUnit(G, key, side))
   deployArmies(G)

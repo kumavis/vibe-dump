@@ -247,7 +247,8 @@ function throwingApply(C) {
 
 // ── P-los ───────────────────────────────────────────────────────────────────
 function pLos(C, seeds, perBoard, rand) {
-  const { W, H } = C.rules.BOARD
+  // (F8a) the board the mission chooses
+  const { W, H } = C.mission.board
   const bad = []
   let n = 0
   for (const seed of seeds) {

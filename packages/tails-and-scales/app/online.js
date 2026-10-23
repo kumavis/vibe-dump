@@ -189,7 +189,7 @@ export class Online {
     const { repo, ws } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
     Object.assign(this, { repo, ws })
-    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, rounds: MISSIONS.classic.rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
+    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, mission: this.flow.mission, terrain: MISSIONS[this.flow.mission].sets[0], rounds: MISSIONS[this.flow.mission].rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
     this.id = handle.documentId
     try {
@@ -640,7 +640,7 @@ export class Online {
     const { repo } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
     const me = G.setup.seats.find((s) => s.dev === this.dev) ?? G.setup.seats[0]
-    const doc = N.lobbyDoc({ host: this.dev, board: G.setup.board, rounds: G.setup.rounds, overtime: G.setup.overtime, me: { ctrl: 'human', dev: this.dev, name: me.name, race: me.race } })
+    const doc = N.lobbyDoc({ host: this.dev, board: G.setup.board, mission: G.setup.mission, terrain: G.setup.terrain, rounds: G.setup.rounds, overtime: G.setup.overtime, me: { ctrl: 'human', dev: this.dev, name: me.name, race: me.race } })
     // (each guest draws its nonce as it readies, after this match's open:
     // none is copied, which the host would know)
     G.setup.seats.forEach((s, i) => {

@@ -6,8 +6,10 @@
 // prototypes built theirs:
 //
 //   the board    80×56, deployment 14" deep, 7 rounds, and the grand
-//                mission's nine objectives (BOARD and ROUNDS in
-//                core/rules.js, classic's objectives in data/mission.js)
+//                mission's nine objectives (since F8a, MISSIONS.classic's
+//                board, deploy, rounds and objectives in data/mission.js:
+//                the mission chooses the board; before, BOARD and ROUNDS
+//                in core/rules.js)
 //   the terrain  the classic set at area-scaled density: pairs [24, 12],
 //                attempts ×4 (core/terrain/sets.js)
 //   the armies   each race's `army` becomes its ×3 list (the classic list
@@ -110,8 +112,14 @@ export async function buildGrand({ caps = false, from = PKG } = {}) {
   // a package.json saying ESM, as the package's own does
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module', private: true }))
   const { board, rounds, objectives, pairs, attempts } = GRAND
-  patch(dir, 'core/rules.js', 'export const BOARD = Object.freeze({ W: 40, H: 28, deploy: 8 })', `export const BOARD = Object.freeze({ W: ${board.W}, H: ${board.H}, deploy: ${board.deploy} })`)
-  patch(dir, 'core/rules.js', 'export const ROUNDS = 5\n', `export const ROUNDS = ${rounds}\n`)
+  // (code from before F8a, scale-bench's --dir: its board is BOARD's and
+  // its rounds ROUNDS, in core/rules.js)
+  if (readFileSync(join(dir, 'data/mission.js'), 'utf8').includes('    board: { W: 40, H: 28 },\n')) {
+    patch(dir, 'data/mission.js', '    board: { W: 40, H: 28 },\n    deploy: BOARD.deploy,\n    rounds: ROUNDS,\n', `    board: { W: ${board.W}, H: ${board.H} },\n    deploy: ${board.deploy},\n    rounds: ${rounds},\n`)
+  } else {
+    patch(dir, 'core/rules.js', 'export const BOARD = Object.freeze({ W: 40, H: 28, deploy: 8 })', `export const BOARD = Object.freeze({ W: ${board.W}, H: ${board.H}, deploy: ${board.deploy} })`)
+    patch(dir, 'core/rules.js', 'export const ROUNDS = 5\n', `export const ROUNDS = ${rounds}\n`)
+  }
   patch(dir, 'data/mission.js', `    objectives: [
       { x: 0, z: 0 },
       { x: -9, z: 8 },

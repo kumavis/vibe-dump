@@ -13,8 +13,29 @@ export class ObjectivesView {
   // `places`: [{ x, z }] per objective; `range`: the holding range (the
   // ring); `colorOf(seat)`: a seat's colour
   constructor(scene, places, range, colorOf) {
+    this.scene = scene
+    this.range = range
     this.colorOf = colorOf
-    this.items = places.map((p, i) => {
+    this.items = this.make(places)
+  }
+
+  // (F8a) The objectives where another mission puts them: the old ones off
+  // the table and freed (the stone's and pole's materials are the kit's,
+  // shared, and stay), the new ones nobody's. view/index.js's setBoard calls
+  // it only when a match's objectives differ from those shown.
+  place(places) {
+    for (const o of this.items) {
+      this.scene.remove(o.g)
+      o.g.traverse((m) => m.geometry?.dispose())
+      for (const m of [o.gem.material, o.flagMat, o.ring.material]) m.dispose()
+    }
+    this.items = this.make(places)
+  }
+
+  // each objective's marker, made in the order the table always made them
+  make(places) {
+    const { scene, range } = this
+    return places.map((p, i) => {
       const g = new THREE.Group()
       g.position.set(p.x, 0, p.z)
       const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 0.16, 8), M('#8a8478'))

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { BOARD, OBJECTIVE_RANGE } from '../core/rules.js'
+import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
 import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
@@ -55,12 +55,17 @@ import { Session } from '../match/session.js'
 // races at the table, ?watch a watched battle at once, ?lowfi no shadows
 // and a pixel ratio of 1, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
-// server a battle hosted here uses. The fragment `#m=<id>` (N2) opens an
+// server a battle hosted here uses; (F8a) ?mission=<name> the mission a
+// battle started here is fought for. The fragment `#m=<id>` (N2) opens an
 // online match (`&dev=<id>` plays it as that device, `&sync=` through that
 // server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
 
-const { W, H } = BOARD
+// (F8a) The table is made for the classic mission's board, the title's
+// (so its 1200 ms frame stays the one sim/title-shot.mjs holds); a battle
+// whose mission chooses another rebuilds it as it starts (view/index.js's
+// setBoard, from the snap)
+const { W, H } = MISSIONS.classic.board
 const $ = (s) => document.querySelector(s)
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
@@ -69,6 +74,21 @@ const $ = (s) => document.querySelector(s)
 // value naming no two races gets the classic matchup and a line on the title
 // card saying why, not a page that never starts (sim/mirror-check.mjs fails
 // a run whose log shows other races than it asked for).
+// (F8a) The mission a battle started here is fought for: classic, or one a
+// ?mission=<name> URL names (data/mission.js; only classic ships until
+// F8b, so this is the door sim/'s Chromium runs start another board's
+// battles by, from a build of their own). A name no mission has gets the
+// classic mission and a line on the title card saying why.
+function missionPick(params, title) {
+  if (!params.has('mission')) return 'classic'
+  const pick = params.get('mission').trim().toLowerCase()
+  if (pick in MISSIONS) return pick
+  const msg = `?mission= takes one of ${Object.keys(MISSIONS).join(', ')}, not "${params.get('mission')}"`
+  console.warn(`${msg}: playing the classic mission`)
+  title.note(`${msg}, so this is the classic mission.`)
+  return 'classic'
+}
+
 function racePick(params, title) {
   if (!params.has('races')) return CLASSIC
   const pick = params.get('races').split(',').map((r) => r.trim().toLowerCase())
@@ -128,7 +148,7 @@ export function boot(location) {
     title,
     result: new ResultScreen(),
   }
-  flow = new Flow({ view, ui, params, seed, races })
+  flow = new Flow({ view, ui, params, seed, races, mission: missionPick(params, title) })
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
@@ -531,7 +551,7 @@ export function boot(location) {
       // (draws nothing: a rebuild throws no debris)
       const quiet = new Proxy({}, { get: () => () => {} })
       const at = { M: null }
-      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W })
+      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W: atTable().board.W })
       // (no shot is ever fired off the table: it holds nothing to clear, and
       // fx's marks are the page's, left alone)
       const sh = { clear() {}, held: () => ({ marker: false, thorns: 0 }) }
@@ -666,6 +686,10 @@ export function boot(location) {
       get nav() {
         return atTable().nav
       },
+      // (F8a) the board the match's mission chose: { W, H, deploy }
+      get board() {
+        return atTable().board
+      },
       scenery: {
         get chunks() {
           return serving ? serving.chunks : atTable().terrain.chunks
@@ -795,6 +819,27 @@ export function boot(location) {
           let figures = 0
           scene.traverse((o) => o.userData.fig && figures++)
           return { scene: scene.children.length, terrain: terrainView.group.children.length, figures, labels: view.stage.overlay.children.length, marks: effects.decals.length }
+        },
+        // (F8a) the board the table is made for, as the view holds it
+        // (sim/board-check.mjs): the mat, the zones' depth, the objectives,
+        // the overlay's grid, the figures' run-off edge, the tufts and
+        // flowers, the camera's dolly and far plane, the fog and the
+        // shadow camera, and how often it was made over (setBoard)
+        board: () => {
+          const sc = view.stage.sun.shadow.camera, mat = view.table.board.geometry.parameters
+          return {
+            W: view.table.W, H: view.table.H, deploy: view.table.deploy, mat: [mat.width, mat.height],
+            objectives: view.objectives.items.map((o) => [o.g.position.x, o.g.position.z]),
+            grid: [view.overlay.tex.image.width, view.overlay.tex.image.height], unitsW: view.units.W,
+            tufts: view.table.tufts.count, flowers: view.table.flowers.count,
+            dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
+          }
+        },
+        // (F8a) the mission a battle started here is fought for from now on
+        // (as ?mission= names one at load)
+        mission(name) {
+          if (!(name in MISSIONS)) throw new Error(`?debug view.mission: no mission "${name}"`)
+          flow.mission = name
         },
       },
     }

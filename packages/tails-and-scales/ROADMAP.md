@@ -83,7 +83,8 @@ the commit, and add whatever the work turned up.
   `node sim/pilot-check.mjs` (and `--self-test`: P-auto, a pilot of every
   standing unit and End play the battle Auto plays, phase by phase), and
   from F10c `node sim/macro-check.mjs` covers the standing orders too (the
-  march scenarios at 80%, the settings answered from settled). A step
+  march scenarios at 80%, the settings answered from settled), and from F8a
+  P-prop's setups task holds P-mission. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -115,7 +116,9 @@ the commit, and add whatever the work turned up.
   back; from F10a a group placed and moved online), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
-  Select mode, long presses, the touch fallback). A step that changes what one of them reads ports it in the same
+  Select mode, long presses, the touch fallback), and from F8a
+  `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
+  for each match's board across missions, flat over round trips). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -845,15 +848,21 @@ follows N3.
   §4.2.6's richer cues (a race voice and a ring pulse as an order is given,
   floating text and a minimap ping as one finishes, a dashed turning ring
   for autopilot).
-- [ ] **F8a** Missions choose the board: `setup.mission`, the setup
+- [x] **F8a** Missions choose the board: `setup.mission`, the setup
   whitelist, `G.board`, the table rebuilt per match. Only the classic
   mission yet.
+  (`CORE_VERSION` 4; `checkMission`; `SETUP_KEYS` and `SEAT_KEYS`; `G.board`
+  at every BOARD site; the view's `setBoard` (table, objectives, overlay,
+  dolly, far plane, fog, shadows) only when the board changes; `?mission=`;
+  the lobby's `mission`. P-mission in P-prop, P-board
+  (`sim/board-check.mjs`), camera-check's mission boards, data-check; the
+  Grand fixture on `MISSIONS.classic`. DESIGN's F8a notes.)
+- [ ] **Later (F8a's, with F8b):** the mat's tiled detail texture and shadows
+  fitted to the view (a larger board's are coarser until then).
 - [ ] **F11a** Army lists in the setup: each seat names a preset or a list of
   unit counts, checked against the mission's points limit and slot table;
   prices (`cost`) tuned by `sim/army-sim.mjs`; AI seats play presets (or a
   seeded random list); the classic battles unchanged.
-- [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
-  swoop), each priced for the army builder against the other races.
 - [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
@@ -876,6 +885,10 @@ follows N3.
 - [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
+- [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
+  swoop), each priced for the army builder against the other races, with
+  their Field and Grand presets. (Moved behind F9c after F8a, the user's
+  call: the big boards and vehicles come first.)
 - [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
   bird-people's Sky-Basket (which may land on ramparts).
 - [ ] **F9d** Siege towers that unload onto ramparts (round for every race
@@ -933,9 +946,10 @@ follows N3.
     may come later.
 26. *(answered)* Siege towers are **round for every race** in v1 (each in
     its race's look); towers on each race's own chassis may follow.
-27. *(answered)* The new races arrive **after the army builder's first
-    step** (F5a after F11a), their vehicles after the firing decks (F5b
-    after F9c).
+27. *(answered, then revised after F8a)* The new races arrive **after the
+    firing decks** (F5a after F9c, then their vehicles, F5b): the big
+    boards and vehicles first, the user's call. (First answer: F5a right
+    after F11a.)
 
 ## Done
 
