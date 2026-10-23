@@ -743,7 +743,7 @@ const MUTANTS = {
   'no-continue': ['kept', 'app/online.js', '    await N.saveKept(key, { known, n: known.length, at: Date.now() })\n    this.note()\n', '    await N.saveKept(key, { known, n: known.length, at: Date.now() })\n'],
   // (N3's review) Back from a log found tampered with as the page came
   // back leaves the match attached (its badge, its link, its tick)
-  'tamper-back-attached': ['kept', 'app/online.js', "report: this.reportOf(this.play), back: () => this.close() })", "report: this.reportOf(this.play), back: () => this.leave() })"],
+  'tamper-back-attached': ['kept', 'app/online.js', '        back: () => {\n          this.close()\n', '        back: () => {\n          this.leave()\n'],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

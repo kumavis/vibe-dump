@@ -444,8 +444,14 @@ export class Online {
       // table followed: Back lets go of the match here; and the title
       // offers it no more)
       const [title, say] = (FROZEN[this.play.status] ?? FROZEN.tamper)(this.play.report)
-      this.dialog.show({ title, why: say, report: this.reportOf(this.play), back: () => this.close() })
       this.note()
+      this.dialog.show({
+        title, why: say, report: this.reportOf(this.play),
+        back: () => {
+          this.close()
+          this.flow.ui.title.show()
+        },
+      })
       return
     }
     this.flow.follow(this.play, { status: (st) => this.frozen(st), settled: () => this.keepSoon(), leave: () => this.close() })
