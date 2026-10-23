@@ -259,6 +259,21 @@ As in §2. Each overlay is a texture or line set per era, blended by zoom weight
 and by time weight between keyframes. The ahupuaʻa overlay machinery (`overlay`
 weights per view, `MOKU_COLORS`) is the starting point.
 
+**The works** (DATA.md "Works, dated") are dated, not keyframed: every
+triangle, ribbon and building of an island's works carries its own years, and
+the year is a uniform, so one set of buffers per island, built when the
+island takes its slot and let go after it leaves, draws every year. Military
+land is control: a translucent wash with a dashed edge and a name at the island
+zoom, a range fainter and hatched, an airfield's field lighter; what stood on
+it is drawn only where it stood (runways and roads paved to their width, piers
+and breakwaters stone on the water, rail a thin dark line, hangars and barracks
+as buildings). Everything is draped in the vertex shader on the ground drawn
+there, the island's or a district's lidar, so a runway at Kāneʻohe lies on the
+lidar as the camera comes down. The settlements keep off the works of their
+year. At the whole chain nothing of the works is drawn: no island is in a slot
+there, and a reservation is a few pixels against the land layers; the Land
+legend names military land while any of it is drawn on the island in view.
+
 ### 5.4 Features budgeted by distance
 
 Trees and people exist only near the camera. Mid zoom gets aggregate marks

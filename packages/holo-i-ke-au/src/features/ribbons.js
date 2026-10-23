@@ -10,7 +10,14 @@
 // the ground of the year is under the sea, so a stream ends at the shore of
 // the year), earth (the trail, worn bare), and a band (a front: a faint
 // soft-edged wash of its side's colour, fading out toward its ends rather
-// than cut off square).
+// than cut off square). And three for the works (features/works.js): paved
+// (a runway or a road, a flat strip of its width in metres with crisp edges,
+// a runway's centre line where it is more than a pixel or two wide), stone
+// (a pier or a breakwater, lying on the water as on the land) and rail (a
+// thin dark line, its ties across it at the near zoom). A batch of works
+// carries each segment's years (aSpan, as kit.js has them, with uYearNow),
+// so one draw call holds an island's roads of every date; a work being
+// built (aGrow) comes in along its length across those years.
 
 import * as THREE from 'three'
 import { constants, noise, world, ground, lighting } from '../render/shaders/common.glsl.js'
@@ -22,6 +29,14 @@ ${ground}
 in vec4 aSeg;   // the segment's ends: ax, az, bx, bz
 in vec4 aInfo;  // width at a and at b (world units), distance along at a and at b
 in float aEnd;  // the whole line's length
+#ifdef USE_SPAN
+in vec4 aSpan;  // the years it stands: in from x to y, out from z to w
+in float aGrow; // 1: it comes in along its length from x to y
+uniform float uYearNow;
+uniform vec2 uLod;  // the segments drawn: those whose middle is this near the camera, from x to y (world units)
+out vec4 vSpan;
+out float vGrow;
+#endif
 uniform vec3 uCamPos;
 uniform float uPxK;    // world units per pixel per unit of distance from the camera
 uniform float uMinPx;
@@ -32,6 +47,16 @@ out float vEnd;
 out float vGround;
 out vec3 vWorld;
 void main() {
+  #ifdef USE_SPAN
+  // (a segment not standing in the year at all is not drawn)
+  float yIn = aGrow > 0.5 ? mix(aSpan.x, aSpan.y, clamp(aInfo.z / max(aEnd, 1e-4), 0.0, 1.0)) - 0.6 : aSpan.x;
+  if (uYearNow <= yIn || uYearNow >= aSpan.w) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+  // (and of a batch drawn at two levels, the fine near the camera and the coarse beyond: works.js)
+  float dm = distance(uCamPos.xz, (aSeg.xy + aSeg.zw) * 0.5);
+  if (dm < uLod.x || dm >= uLod.y) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
+  vSpan = aSpan;
+  vGrow = aGrow;
+  #endif
   vec2 a = aSeg.xy;
   vec2 b = aSeg.zw;
   vec2 d = b - a;
@@ -72,8 +97,14 @@ ${world}
 ${lighting}
 uniform vec3 uColor;
 uniform float uAlpha;
-uniform int uMode;    // 0 water, 1 earth, 2 band
+uniform int uMode;    // 0 water, 1 earth, 2 band, 3 paved, 4 stone, 5 rail
 uniform float uEndFade; // world units over which a line fades in at its start and out at its end (0: cut square)
+uniform float uMarks;   // paved: 1 for a runway's centre line
+#ifdef USE_SPAN
+uniform float uYearNow;
+in vec4 vSpan;
+in float vGrow;
+#endif
 in float vSide;
 in float vS;
 in float vEnd;
@@ -85,8 +116,14 @@ void main() {
     float f = min(uEndFade, vEnd * 0.3);
     a *= smoothstep(0.0, f, vS) * smoothstep(0.0, f, vEnd - vS);
   }
+  #ifdef USE_SPAN
+  // in by the year (along its length while it is built), and out by it
+  float yIn = mix(vSpan.x, vSpan.y, clamp(vS / max(vEnd, 1e-4), 0.0, 1.0));
+  a *= (vGrow > 0.5 ? smoothstep(yIn - 0.6, yIn, uYearNow) : smoothstep(vSpan.x, vSpan.y, uYearNow)) * (1.0 - smoothstep(vSpan.z, vSpan.w, uYearNow));
+  #endif
   vec3 col;
   float edge = abs(vSide);
+  vec3 lit = uSunColor * max(uSunDir.y, 0.0) * 0.8 + uSkyColor;
   if (uMode == 0) {
     // a stream: gone where the ground of the year is the sea's
     a *= smoothstep(0.05, 0.4, vGround) * (1.0 - smoothstep(0.7, 1.0, edge));
@@ -101,10 +138,34 @@ void main() {
     a *= 1.0 - smoothstep(0.55, 1.0, edge);
     float k = 0.85 + 0.3 * vnoise(vec2(vS * 2.3, vSide * 1.7));
     col = uColor * k * (uSunColor * max(uSunDir.y, 0.0) * 0.8 + uSkyColor);
-  } else {
+  } else if (uMode == 2) {
     // a front: soft across, a little stronger at its middle
     a *= (1.0 - smoothstep(0.2, 1.0, edge)) * (0.75 + 0.25 * sin(vS * 1.3 + uTime * 0.6));
     col = uColor * (uSunColor * max(uSunDir.y, 0.0) * 0.7 + uSkyColor * 1.1);
+  } else if (uMode == 3) {
+    // paved: a flat strip, its edges crisp, a little worn along it
+    a *= 1.0 - smoothstep(0.86, 1.0, edge);
+    float k = 0.93 + 0.1 * vnoise(vec2(vS * 0.9, vSide * 3.0));
+    col = uColor * k;
+    if (uMarks > 0.5) {
+      // a runway's centre line, dashed, once the strip is wide enough on the screen to carry it
+      float aa = 1.0 - smoothstep(0.08, 0.2, fwidth(vSide));
+      float dash = step(0.4, fract(vS / 0.6));
+      col = mix(col, vec3(0.92, 0.91, 0.86), (1.0 - smoothstep(0.035, 0.07, edge)) * dash * aa * 0.85);
+    }
+    col *= lit;
+  } else if (uMode == 4) {
+    // stone: a mole of rough rock, mottled
+    a *= 1.0 - smoothstep(0.7, 1.0, edge);
+    float k = 0.74 + 0.38 * vnoise(vec2(vS * 7.0, vSide * 2.2)) - 0.12 * edge;
+    col = uColor * k * lit;
+  } else {
+    // rail: ballast and the line on it, the ties across it where they are a few pixels apart
+    a *= 1.0 - smoothstep(0.55, 1.0, edge);
+    float t = vS / 0.024;
+    float aa = 1.0 - smoothstep(0.25, 0.5, fwidth(t));
+    float tie = step(0.6, fract(t)) * (1.0 - smoothstep(0.75, 0.95, edge));
+    col = uColor * (1.0 + 0.9 * tie * aa) * lit;
   }
   if (a <= 0.003) discard;
   gl_FragColor = vec4(col, a);
@@ -112,6 +173,7 @@ void main() {
 `
 
 const QUAD = new Float32Array([0, -1, 0, 0, 1, 0, 1, -1, 0, 1, 1, 0])
+const MODES = { water: 0, earth: 1, band: 2, paved: 3, stone: 4, rail: 5 }
 
 export class Ribbons {
   constructor(shared, camera) {
@@ -124,10 +186,9 @@ export class Ribbons {
 
   /**
    * One batch, one draw call: `lines` are { pts: [[x, z], …], width: [w, …] |
-   * number } (world units); opts { mode: 'water' | 'earth' | 'band', colour,
-   * alpha, minPx, lift, order, endFade }.
+   * number } (world units); opts as addPacked's.
    */
-  add(lines, { mode = 'earth', colour = [1, 1, 1], alpha = 1, minPx = 1, lift = 0.004, order = 5, endFade = 0 } = {}) {
+  add(lines, opts = {}) {
     const seg = []
     const info = []
     const ends = []
@@ -149,12 +210,28 @@ export class Ribbons {
       }
     }
     if (!seg.length) return null
+    return this.addPacked({ seg: new Float32Array(seg), info: new Float32Array(info), end: new Float32Array(ends) }, opts)
+  }
+
+  /**
+   * The same from packed arrays, as data/works.js decodes them: seg, info and
+   * end per segment, and for the works `span` (its four years) and `grow`;
+   * opts { mode: 'water' | 'earth' | 'band' | 'paved' | 'stone' | 'rail',
+   * colour, alpha, minPx, lift, order, endFade, marks (a runway's centre
+   * line), year (the shared uYearNow, for a batch with years) }.
+   */
+  addPacked({ seg, info, end, span = null, grow = null }, { mode = 'earth', colour = [1, 1, 1], alpha = 1, minPx = 1, lift = 0.004, order = 5, endFade = 0, marks = false, year = null } = {}) {
+    if (!seg?.length) return null
     const g = new THREE.InstancedBufferGeometry()
     g.setAttribute('position', new THREE.BufferAttribute(QUAD, 3))
     g.setIndex([0, 2, 1, 1, 2, 3])
-    g.setAttribute('aSeg', new THREE.InstancedBufferAttribute(new Float32Array(seg), 4))
-    g.setAttribute('aInfo', new THREE.InstancedBufferAttribute(new Float32Array(info), 4))
-    g.setAttribute('aEnd', new THREE.InstancedBufferAttribute(new Float32Array(ends), 1))
+    g.setAttribute('aSeg', new THREE.InstancedBufferAttribute(seg, 4))
+    g.setAttribute('aInfo', new THREE.InstancedBufferAttribute(info, 4))
+    g.setAttribute('aEnd', new THREE.InstancedBufferAttribute(end, 1))
+    if (span) {
+      g.setAttribute('aSpan', new THREE.InstancedBufferAttribute(span, 4))
+      g.setAttribute('aGrow', new THREE.InstancedBufferAttribute(grow, 1))
+    }
     g.instanceCount = seg.length / 4
     const uniforms = {
       ...this.shared.uniforms,
@@ -164,13 +241,17 @@ export class Ribbons {
       uLift: { value: lift },
       uColor: { value: new THREE.Color(...colour) },
       uAlpha: { value: alpha },
-      uMode: { value: mode === 'water' ? 0 : mode === 'earth' ? 1 : 2 },
+      uMode: { value: MODES[mode] ?? 1 },
       uEndFade: { value: endFade },
+      uMarks: { value: marks ? 1 : 0 },
+      uYearNow: year || { value: 0 },
+      uLod: { value: new THREE.Vector2(0, 1e9) },
     }
     const material = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms,
+      defines: span ? { USE_SPAN: '' } : {},
       transparent: true,
       depthWrite: false,
       // (widened on the ground, not on the screen, so seen from above a quad

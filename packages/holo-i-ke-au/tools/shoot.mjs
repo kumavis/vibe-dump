@@ -104,6 +104,26 @@ const PRESETS = {
   )
 }
 // ==== [koolaupoko] end ===============================================================
+// ==== works: the works by their years (features/works.js) ========================== [works]
+//   node tools/shoot.mjs <outdir> works      (DATA=fake for the test works; on the real data,
+//                                            with '&works=../test-data/real/' for the real Oʻahu's)
+// Oʻahu at the island zoom in 1930 and 1975, and 1975 in the Land view with its legend; then
+// down to the first runway the works list and the middle of the first named road, in 1975.
+{
+  const isle = "app.ui.card.close(); app.ui.onScrub(); const v = app.tour.islandView('oahu', 0); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })"
+  const ready = "(() => { app.settle(); return !!app.works.islands.get('oahu')?.view })()"
+  const down = "(() => { app.settle(); const D = app.districts, t = app.rig.state.target, d = D.districtAt(t.x, t.z); return !!app.works.islands.get('oahu')?.view && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()"
+  const at = (test, distance, pitch) => `app.setView('chiefdoms'); const f = app.works.entries.get('oahu')?.out?.feats.find((q) => ${test}); if (f?.rep) app.rig.jump({ x: f.rep[0], z: f.rep[1], distance: ${distance}, yaw: 0.6, pitch: ${pitch} })`
+  const report = 'app.works.stats().islands'
+  PRESETS.works = [
+    { name: 'works-oahu-1930', year: 1930, eval: isle, until: ready, frames: 4, report },
+    { name: 'works-oahu-1975', year: 1975, eval: isle, until: ready, frames: 4, report },
+    { name: 'works-oahu-1975-land', year: 1975, eval: "app.setView('land')", until: 'app.land.ready', frames: 6, report: "document.querySelector('.legend').textContent.replace(/\\s+/g, ' ')" },
+    { name: 'works-runway-1975', year: 1975, eval: at("q.part === 'runway'", 30, 0.6), until: down, frames: 4, report },
+    { name: 'works-road-1975', year: 1975, eval: at("q.part === 'road' && q.name", 40, 0.5), until: down, frames: 4, report },
+  ]
+}
+// ==== [works] end =====================================================================
 // ==== [settlements] end ===============================================================
 const shots = PRESETS[process.argv[3]] || JSON.parse(process.argv[3] || '[{"name":"default"}]')
 const extra = process.argv[4] || ''

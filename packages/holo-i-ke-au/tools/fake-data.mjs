@@ -25,6 +25,15 @@
 // (test-data/layers/); a coda era that reaches the present, and
 // coda events whose near stops come down into Koʻolaupoko. Shapes on the
 // made-up shore for trying those paths (tools/smoke.mjs with DATA=fake).
+//
+// And test works (DATA.md "Works, dated"; test-data/works/): a base with
+// its land growing in across its construction, a runway, a pier and two
+// blocks; a range; a base returned; an airfield with a runway and a hangar's
+// footprint; an interstate built over nine years and a state road through a
+// tunnel; a railway lifted in 1947; a breakwater. And, when the real bake is
+// in public/data/, a few of the same over the real Oʻahu
+// (test-data/real/works/: a runway at Mōkapu, roads through Nuʻuanu), for
+// the smoke to lay on the lidar. Shapes, not a record of any of them.
 import { deflateSync } from 'node:zlib'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -618,6 +627,7 @@ testPatches()
 testZoning()
 testDistricts(spots)
 testLayers(spots, g.eras)
+testWorks(spots)
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -1064,3 +1074,241 @@ function testLayers(spots, eras) {
   console.log(`test layers for ${Object.keys(islands).join(', ')}; zoning for ${zoningEntry ? zoningEntry.pack : 'none'}`)
 }
 // ==== end of the test districts and layers ==========================================
+
+// ==== test works ======================================================================
+/** The convex hull of [x, z] km points, anticlockwise (Andrew's monotone chain). */
+function hullKm(points) {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1])
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+  const lower = []
+  for (const q of p) {
+    while (lower.length >= 2 && cross(lower.at(-2), lower.at(-1), q) <= 0) lower.pop()
+    lower.push(q)
+  }
+  const upper = []
+  for (let i = p.length - 1; i >= 0; i--) {
+    const q = p[i]
+    while (upper.length >= 2 && cross(upper.at(-2), upper.at(-1), q) <= 0) upper.pop()
+    upper.push(q)
+  }
+  return lower.slice(0, -1).concat(upper.slice(0, -1))
+}
+
+/** Test works and their manifest (DATA.md "Works, dated") under dir/works/. */
+function writeWorks(dir, byIsland, note) {
+  mkdirSync(join(dir, 'works'), { recursive: true })
+  const stats = {}
+  for (const [id, feats] of Object.entries(byIsland)) {
+    writeFileSync(join(dir, 'works', `${id}.geojson`), JSON.stringify({ type: 'FeatureCollection', features: feats }))
+    stats[id] = {}
+    for (const f of feats) stats[id][f.properties.kind] = (stats[id][f.properties.kind] || 0) + 1
+  }
+  const fetched = new Date().toISOString().slice(0, 10)
+  const kinds = { military: ['land', 'runway', 'pier', 'block', 'range'], airport: ['field', 'runway', 'block'], highway: ['road', 'tunnel'], rail: ['line'], harbour: ['breakwater', 'pier'] }
+  const sources = [{ id: 'synthetic', title: 'Test works (tools/fake-data.mjs)', url: 'about:blank', licence: 'test data, not for release', fetched }]
+  writeFileSync(join(dir, 'works', 'manifest.json'), JSON.stringify({ about: note, files: Object.keys(byIsland).map((id) => `${id}.geojson`), kinds, sources, stats }, null, 2))
+  console.log(`  test works in ${join(dir, 'works')}: ${Object.entries(stats).map(([id, st]) => `${id} ${JSON.stringify(st)}`).join('; ')}`)
+}
+
+/** A work: a GeoJSON feature with the contract's properties (DATA.md "Works, dated"). */
+function work(id, kind, part, group, name, geometry, extra = {}) {
+  return { type: 'Feature', properties: { id, kind, part, group, name, owner: null, from: null, to: null, datePrecision: 'year', precision: 'inferred', sources: ['test-source-a'], note: 'a test shape (tools/fake-data.mjs), not a record', ...extra }, geometry }
+}
+
+/**
+ * The made-up Oʻahu's works, placed on its ground: the base on the shore
+ * where the test Mōkapu is (its land the hull of what stands on it), a range
+ * and a returned base on the west dome, an airfield on the south plain west
+ * of the test Nuʻuanu, the roads across the plain and over the test pali,
+ * a railway along the plain, a breakwater off the test bay.
+ */
+function testWorks(spots) {
+  const H = (x, z) => heightAt(x, z)
+  const ll = ([x, z]) => [r7(lonOf(x)), r7(latOf(z))]
+  const km = (lon, lat) => [xkm(lon), zkm(lat)]
+  /** The nearest point to (lon, lat) within `R` km where `ok(x, z)`. */
+  const near = (lon, lat, ok, R = 6, step = 0.05) => {
+    const [x0, z0] = km(lon, lat)
+    let best = null
+    let bd = Infinity
+    for (let dz = -R; dz <= R; dz += step) {
+      for (let dx = -R; dx <= R; dx += step) {
+        const d = Math.hypot(dx, dz)
+        if (d >= bd || d > R) continue
+        if (!ok(x0 + dx, z0 + dz)) continue
+        bd = d
+        best = [x0 + dx, z0 + dz]
+      }
+    }
+    if (!best) throw new Error(`no test works spot near ${lon}, ${lat}`)
+    return best
+  }
+  const lowFlat = (lo, hi, fall = 6) => (x, z) => {
+    const h = H(x, z)
+    return h > lo && h < hi && Math.abs(H(x + 0.1, z) - H(x - 0.1, z)) < fall && Math.abs(H(x, z + 0.1) - H(x, z - 0.1)) < fall
+  }
+  /** A straight strip `len` km long about c, every point of it on ground between lo and hi metres: { a, b, u }. */
+  const strip = (c, len, lo, hi) => {
+    for (let deg = 0; deg < 180; deg += 5) {
+      const u = [Math.cos((deg * Math.PI) / 180), Math.sin((deg * Math.PI) / 180)]
+      const a = [c[0] - (u[0] * len) / 2, c[1] - (u[1] * len) / 2]
+      const b = [c[0] + (u[0] * len) / 2, c[1] + (u[1] * len) / 2]
+      let ok = true
+      for (let k = 0; k <= 30 && ok; k++) {
+        const h = H(a[0] + ((b[0] - a[0]) * k) / 30, a[1] + ((b[1] - a[1]) * k) / 30)
+        ok = h > lo && h < hi
+      }
+      if (ok) return { a, b, u }
+    }
+    throw new Error(`no strip of ${len} km about ${ll(c)}`)
+  }
+  const around = (pts, r) => pts.flatMap(([x, z]) => Array.from({ length: 8 }, (_, k) => [x + r * Math.cos((k * Math.PI) / 4), z + r * Math.sin((k * Math.PI) / 4)]))
+  const polygon = (pts) => {
+    // (hull in km, x east and z south: anticlockwise there is clockwise on the map, so reversed)
+    const ring = hullKm(pts).map(ll).reverse()
+    return { type: 'Polygon', coordinates: [[...ring, ring[0]]] }
+  }
+  const rect = (c, w, h, rot = 0) => rectRing(ll(c), w, h, rot)
+  const line = (pts) => ({ type: 'LineString', coordinates: pts.map(ll) })
+  const point = (p) => ({ type: 'Point', coordinates: ll(p) })
+  const F = []
+
+  // the base on the windward shore: its runway on the flat behind the shore, a pier out into the bay, a hangar and barracks
+  const [mx, mz] = km(...spots.military)
+  const rc = near(lonOf(mx), latOf(mz), lowFlat(1, 25), 2.5)
+  const rw = strip(rc, 1.3, 0.6, 30)
+  const perp = [-rw.u[1], rw.u[0]]
+  const hangar = [rc[0] + perp[0] * 0.16, rc[1] + perp[1] * 0.16]
+  const barracks = [rc[0] - perp[0] * 0.22 + rw.u[0] * 0.3, rc[1] - perp[1] * 0.22 + rw.u[1] * 0.3]
+  const shore = near(lonOf(mx), latOf(mz), (x, z) => {
+    const h = H(x, z)
+    return h > 0.2 && h < 3 && Math.hypot(x - rc[0], z - rc[1]) > 0.5
+  }, 2)
+  let seaDir = null
+  for (let k = 0; k < 24 && !seaDir; k++) {
+    const a = (k / 24) * Math.PI * 2
+    if (H(shore[0] + Math.cos(a) * 0.35, shore[1] + Math.sin(a) * 0.35) < -1.5) seaDir = [Math.cos(a), Math.sin(a)]
+  }
+  if (!seaDir) throw new Error('no sea beside the test base')
+  const pierEnd = [shore[0] + seaDir[0] * 0.3, shore[1] + seaDir[1] * 0.3]
+  const base = 'test-mokapu'
+  F.push(
+    work('test-mokapu-land', 'military', 'land', base, 'Test station Mōkapu', polygon(around([rw.a, rw.b, shore, pierEnd, hangar, barracks], 0.35)), { owner: 'Navy', from: 1939, built: [1939, 1942] }),
+    work('test-mokapu-runway', 'military', 'runway', base, null, line([rw.a, rw.b]), { owner: 'Navy', from: 1941, width: 60 }),
+    work('test-mokapu-pier', 'military', 'pier', base, null, line([shore, pierEnd]), { owner: 'Navy', from: 1941, width: 18 }),
+    work('test-mokapu-hangar', 'military', 'block', base, null, point(hangar), { owner: 'Navy', from: 1941, storeys: 1 }),
+    work('test-mokapu-barracks', 'military', 'block', base, null, point(barracks), { owner: 'Navy', from: 1942, storeys: 3 }),
+  )
+
+  // a range on the west dome, its land held 1941–1994
+  const west = ISLANDS.find((i) => i.id === 'oahu').domes[0]
+  const rg = near(lonOf(west.x - 5), latOf(west.z - 2), lowFlat(60, 700), 6, 0.1)
+  F.push(
+    work('test-makua-land', 'military', 'land', 'test-makua', 'Test range Mākua', rect(rg, 4, 3, 20), { owner: 'Army', from: 1941, to: 1994 }),
+    work('test-makua-range', 'military', 'range', 'test-makua', null, rect(rg, 2.6, 1.8, 20), { owner: 'Army', from: 1942, to: 1994 }),
+  )
+
+  // a base returned: held 1942–1999 on the south plain, a block of four storeys on it
+  const kl = near(-158.07, 21.41, lowFlat(2, 120, 25), 6, 0.05)
+  F.push(
+    work('test-kalaeloa-land', 'military', 'land', 'test-kalaeloa', 'Test air station Kalaeloa', rect(kl, 3, 2, -10), { owner: 'Navy', from: 1942, to: 1999 }),
+    work('test-kalaeloa-block', 'military', 'block', 'test-kalaeloa', null, point(kl), { owner: 'Navy', from: 1943, to: 1999, storeys: 4 }),
+  )
+
+  // an airfield on the shore north of the test Nuʻuanu and west of the test Koʻolaupoko: its field, a runway, a hangar's footprint
+  const ac = near(-157.895, 21.43, lowFlat(0.8, 40, 15), 4)
+  const ar = strip(ac, 1.0, 0.3, 60)
+  const ap = [-ar.u[1], ar.u[0]]
+  const hc = [ac[0] + ap[0] * 0.2, ac[1] + ap[1] * 0.2]
+  // (rectRing turns anticlockwise on the map, where z runs the other way)
+  const deg = (Math.atan2(-ar.u[1], ar.u[0]) * 180) / Math.PI
+  F.push(
+    work('test-keehi-field', 'airport', 'field', 'test-keehi', 'Test airfield Keʻehi', polygon(around([ar.a, ar.b, hc], 0.3)), { owner: 'territory', from: 1927 }),
+    work('test-keehi-runway', 'airport', 'runway', 'test-keehi', null, line([ar.a, ar.b]), { owner: 'territory', from: 1927, width: 45 }),
+    work('test-keehi-hangar', 'airport', 'block', 'test-keehi', null, rect(hc, 0.09, 0.06, deg), { owner: 'territory', from: 1931, storeys: 1 }),
+  )
+
+  // the interstate down the west shore of the east dome, built 1953–1962, and the state road over the test pali through its tunnel
+  const onLand = (lo, hi) => (x, z) => {
+    const h = H(x, z)
+    return h > lo && h < hi
+  }
+  const way = (pts, lo, hi) => pts.map(([lon, lat]) => near(lon, lat, onLand(lo, hi), 3))
+  const h1 = way([[lonOf(ac[0] + 0.6), latOf(ac[1] + 0.6)], [-157.885, 21.4], [-157.875, 21.36], [-157.85, 21.32], [-157.8, 21.29]], 1, 150)
+  F.push(work('test-h1', 'highway', 'road', 'test-h1', 'Test interstate H-1', line(h1), { owner: 'State', class: 'interstate', lanes: 6, from: 1953, built: [1953, 1962], width: 24 }))
+  const pali = way([[-157.81, 21.295], [-157.825, 21.355], [-157.8, 21.368], [-157.79, 21.372], [-157.785, 21.385], [-157.795, 21.402]], 1, 1500)
+  // (the tunnel where the road runs highest, half a kilometre of it)
+  const dense = []
+  for (let i = 0; i + 1 < pali.length; i++) for (let k = 0; k < 20; k++) dense.push([pali[i][0] + ((pali[i + 1][0] - pali[i][0]) * k) / 20, pali[i][1] + ((pali[i + 1][1] - pali[i][1]) * k) / 20])
+  let top = 0
+  dense.forEach((p, i) => {
+    if (H(...p) > H(...dense[top])) top = i
+  })
+  let s0 = top
+  let s1 = top
+  const kmAlong = (a, b) => Math.hypot(dense[b][0] - dense[a][0], dense[b][1] - dense[a][1])
+  while (s0 > 0 && kmAlong(s0, top) < 0.25) s0--
+  while (s1 < dense.length - 1 && kmAlong(top, s1) < 0.25) s1++
+  F.push(
+    work('test-pali-road', 'highway', 'road', 'test-pali', 'Test Pali road', line(pali), { owner: 'territory', class: 'state', from: 1957, width: 12 }),
+    work('test-pali-tunnel', 'highway', 'tunnel', 'test-pali', 'Test Pali tunnels', line(dense.slice(s0, s1 + 1)), { owner: 'territory', from: 1957, width: 12 }),
+  )
+
+  // a railway along the west dome's south shore, laid 1889 and lifted 1947
+  const rail = way([[-158.2, 21.47], [-158.12, 21.425], [-158.05, 21.42]], 0.8, 200)
+  F.push(work('test-railway', 'rail', 'line', 'test-railway', 'Test Railway', line(rail), { owner: 'private', from: 1889, to: 1947, width: 1, note: 'a test shape (tools/fake-data.mjs), not a record; the Test Railway Company' }))
+
+  // a breakwater off the test bay, built 1908–1912
+  // (along the shore nearest the test bay, a few hundred metres out)
+  const coast = near(-157.86, 21.29, (x, z) => H(x, z) > 0.2 && H(x, z) < 4, 6)
+  let seaward_ = null
+  for (let k = 0; k < 36 && !seaward_; k++) {
+    const a = (k / 36) * Math.PI * 2
+    if (H(coast[0] + Math.cos(a) * 0.3, coast[1] + Math.sin(a) * 0.3) < -1) seaward_ = [Math.cos(a), Math.sin(a)]
+  }
+  if (!seaward_) throw new Error('no sea off the test bay')
+  const bc = [coast[0] + seaward_[0] * 0.3, coast[1] + seaward_[1] * 0.3]
+  const bwa = [bc[0] - seaward_[1] * 0.3, bc[1] + seaward_[0] * 0.3]
+  const bwb = [bc[0] + seaward_[1] * 0.3, bc[1] - seaward_[0] * 0.3]
+  F.push(work('test-breakwater', 'harbour', 'breakwater', 'test-harbour', 'Test breakwater', line([bwa, bwb]), { owner: 'federal', from: 1912, built: [1908, 1912], width: 14 }))
+
+  writeWorks(out, { oahu: F }, 'test works (tools/fake-data.mjs): shapes on the made-up islands, not a record')
+  testRealWorks()
+}
+
+/**
+ * Test works over the real Oʻahu pack, when the real bake is here: a base
+ * on Mōkapu with its runway, a pier and two blocks, a field held and given
+ * back at Bellows, and two roads through Nuʻuanu (one over the pali through a
+ * tunnel), for the smoke to lay on the lidar (tools/smoke.mjs loads them
+ * itself with DATA=real). Shapes placed where such things are, not a record
+ * of them.
+ */
+function testRealWorks() {
+  const real = join(root, 'public/data')
+  if (!existsSync(join(real, 'manifest.json'))) return
+  const man = JSON.parse(readFileSync(join(real, 'manifest.json'), 'utf8'))
+  const oahu = man.packs.find((p) => p.id === 'oahu')
+  if (!oahu) return
+  const h = realHeights(real, oahu)
+  const pt = (c) => ({ type: 'Point', coordinates: c })
+  const ln = (cs) => ({ type: 'LineString', coordinates: cs })
+  const box = (w, s, e, n) => ({ type: 'Polygon', coordinates: [[[w, s], [e, s], [e, n], [w, n], [w, s]]] })
+  const F = [
+    work('test-real-mokapu-land', 'military', 'land', 'test-real-mokapu', 'Test station Mōkapu', box(-157.784, 21.427, -157.728, 21.462), { owner: 'Navy', from: 1939, built: [1939, 1942] }),
+    work('test-real-mokapu-runway', 'military', 'runway', 'test-real-mokapu', null, ln([[-157.7745, 21.446], [-157.7625, 21.4555]]), { owner: 'Navy', from: 1941, width: 60 }),
+    work('test-real-mokapu-pier', 'military', 'pier', 'test-real-mokapu', null, ln([[-157.759, 21.433], [-157.766, 21.433]]), { owner: 'Navy', from: 1941, width: 18 }),
+    work('test-real-mokapu-hangar', 'military', 'block', 'test-real-mokapu', null, pt([-157.766, 21.448]), { owner: 'Navy', from: 1941, storeys: 1 }),
+    work('test-real-mokapu-barracks', 'military', 'block', 'test-real-mokapu', null, pt([-157.752, 21.4425]), { owner: 'Navy', from: 1942, storeys: 3 }),
+    work('test-real-bellows-land', 'military', 'land', 'test-real-bellows', 'Test field Bellows', box(-157.728, 21.352, -157.712, 21.366), { owner: 'Army', from: 1917, to: 1958 }),
+    work('test-real-pali-road', 'highway', 'road', 'test-real-pali', 'Test Pali road', ln([[-157.858, 21.312], [-157.862, 21.33], [-157.858, 21.345], [-157.852, 21.36], [-157.843, 21.366], [-157.832, 21.372], [-157.822, 21.376], [-157.808, 21.375], [-157.797, 21.371], [-157.79, 21.375], [-157.78, 21.38], [-157.775, 21.392], [-157.765, 21.396]]), { owner: 'territory', class: 'state', from: 1957, width: 12 }),
+    work('test-real-pali-tunnel', 'highway', 'tunnel', 'test-real-pali', 'Test Pali tunnels', ln([[-157.815, 21.3765], [-157.808, 21.375], [-157.802, 21.3735]]), { owner: 'territory', from: 1957, width: 12 }),
+    work('test-real-h1', 'highway', 'road', 'test-real-h1', 'Test interstate H-1', ln([[-157.915, 21.335], [-157.885, 21.334], [-157.865, 21.33], [-157.852, 21.318], [-157.84, 21.305], [-157.825, 21.299], [-157.81, 21.296]]), { owner: 'State', class: 'interstate', from: 1953, built: [1953, 1962], width: 24 }),
+  ]
+  // (the runway and the blocks on land, the pier's end in the water)
+  for (const [lon, lat] of [[-157.7745, 21.446], [-157.7625, 21.4555], [-157.766, 21.448], [-157.752, 21.4425], [-157.759, 21.433]]) if (!(h(lon, lat) > 0)) console.log(`  (test works for the real Oʻahu: ${lon}, ${lat} is not on land)`)
+  if (!(h(-157.766, 21.433) < 0)) console.log('  (test works for the real Oʻahu: the pier ends on land)')
+  writeWorks(join(out, 'real'), { oahu: F }, 'test works (tools/fake-data.mjs) over the real Oʻahu pack: shapes, not a record')
+}
+// ==== test works end ==================================================================
+

@@ -18,9 +18,10 @@
 // year (the island's patches laid on its heights by the year: harbours
 // before they were dredged, reefs before they were filled), loʻi, fishponds
 // and the village where a district's features.json has them and they stand,
-// the streams the heights route (drainage over a couple of square
-// kilometres, a texel wide), and ground that falls more than the kind may
-// take under its footprint.
+// the works of the year (military land from its taking to its return,
+// airfields, runways, highways and rail: features/works.js), the streams the
+// heights route (drainage over a couple of square kilometres, a texel wide),
+// and ground that falls more than the kind may take under its footprint.
 //
 // Where a district lies over the island (render/district.js), it places its
 // own: inside its bounds by PART the island's buildings yield to the
@@ -224,11 +225,13 @@ class IslandTowns extends Scatter {
     const files = this.layerFiles(entry)
     if (this.keyframes.length < 2 || files.some((f) => !f.settlement)) throw new Error('the settlement layer lacks a keyframe')
     const grey = (f) => decodeGrey(decodeImage, app.data.abs(`layers/${f}`))
-    const [imgs, vals, zoning, patchList] = await Promise.all([
+    const [imgs, vals, zoning, patchList, works] = await Promise.all([
       Promise.all(files.map((f) => grey(f.settlement))),
       files.every((f) => f.value) ? Promise.all(files.map((f) => grey(f.value))).catch(() => null) : null,
       loadZoning(app, m, this.id),
       app.patches?.ready ?? [],
+      // (the island's works: military land, fields, runways and roads keep the lots off their ground in their years)
+      app.works?.exclusion(this.id) ?? null,
     ])
     if (this.disposed) return
     const t = this.t
@@ -242,6 +245,7 @@ class IslandTowns extends Scatter {
     this.values = vals ? vals.map((img) => img.px) : null
     this.zoning = { ...zoning, rect: r }
     this.places = valuePlaces(app, m)
+    this.works = works
     this.townTerm(m, this.id, 'district')
     // (the patches of this island must be decoded before its ground is asked of)
     this.needPatches = (patchList || []).some((p) => p.pack === this.id)
@@ -271,6 +275,7 @@ class IslandTowns extends Scatter {
       if (Number.isFinite(a)) breaks.add(a)
       if (Number.isFinite(b)) breaks.add(b + 1)
     }
+    for (const y of this.works?.breaks || []) breaks.add(y)
     this.years(breaks)
     const y0 = app.timeline.yearAt(0)
     this.epochYear = [y0, ...this.edges]
@@ -410,6 +415,12 @@ class IslandTowns extends Scatter {
     let hi = -Infinity
     let top = -Infinity
     this.dep = false
+    // the works standing in the year: military land, a field, a runway, a road (data/works.js)
+    if (this.works) {
+      const w = this.works.test(x, z, ax, az, a, year)
+      if (w) this.dep = true
+      if (w === 2) return null
+    }
     const patched = this.patchBoxes
     // (the boxes round all the features and all the patches: most ground is in neither)
     const fb = this.featBox

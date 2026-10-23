@@ -1157,6 +1157,49 @@ stood when; installation histories, HDOT and FAA records, Thrum's Annual and
 the newspapers for dates; Wikipedia only as a tertiary source, marked. The
 `wanted` rule for sources holds.
 
+**Accepted extensions (from the first render).** Built against the test
+works `tools/fake-data.mjs` writes; the bake may rely on these.
+
+- **Geometry the table leaves open.** A `block` is a Point (one building), a
+  MultiPoint (several alike), or a Polygon or MultiPolygon (a footprint: the
+  app fits one building to it, along its longer axis); a `range` is a Polygon
+  or MultiPolygon, like a `land`. A block without a footprint stands along the
+  nearest `runway` of its `group`, if one is within 800 m.
+- **The years.** A work is whole in its `from` and still stands in its `to`
+  (it fades in over the year before `from` and out over the year after `to`,
+  as a district feature's `to` is its last year). With `built: [start, end]`
+  it comes in across those years instead (from the earlier of `start` and
+  `from`): land's wash by its strength, a road or a runway along its length
+  from its first coordinate to its last, a work's blocks each in a year of
+  their own within the span.
+- **Tunnels.** A `road` may run through its `tunnel` or stop at the portals
+  (as the bake cuts it): the app leaves out whatever stretch of a road lies
+  within the width of a `tunnel` of the same `group` (or of no group).
+- **On the water.** A `land` over water (Pearl Harbor's lochs in 1887) is
+  washed over the sea as over the land; only a `field` and a `range` keep to
+  the land. The works are drawn whether they come in one feature or in pieces
+  of one `group`.
+- **Widths.** A road is drawn at its `width`, else at its `lanes` × 3.6 m +
+  2 m (as the bake reckons a width), else at its `class`'s (interstate 24 m,
+  state 12 m, county 8 m); a rail `line` is drawn at least 3 m wide. A
+  runway, pier or breakwater without a `width` is drawn at 45, 15 and 12 m.
+- **Names.** The app names a `land`, a `field` and a named `road` at the
+  island zoom, by `name`; of several features with one name standing in a
+  year, the largest. `alt` is read by nothing yet.
+- **Files.** `manifest.files` lists `<island>.geojson` by the island pack's
+  id; an island with no file has no works, and a data set with no
+  `works/manifest.json` has none at all. `?works=<base>` reads the works from
+  another base (the tools' test works).
+- **The settlements** keep their lots off a `land`, `range` or `field` and a
+  `block`'s footprint from its `from` (or the start of its `built`) through
+  its `to`, and off a `runway`, `road`, rail `line`, `pier` or `breakwater`
+  as a strip of its drawn width in the same years: the contract's rule, with
+  the roads and the rail added, since a house standing on a highway's
+  ribbon reads as a fault.
+- **The far view.** Nothing of the works is drawn at the whole chain; the
+  Land legend adds "Military land" while any of it stands on the island in
+  view at the island zoom.
+
 ### How to bake the works
 
 The bake reads `manifest.json` for the island packs' bounds and

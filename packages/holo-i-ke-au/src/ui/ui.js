@@ -408,13 +408,15 @@ export class UI {
       if (ps.length) body = `<div class="lg-title">${esc(e?.label || '')}</div>${ps.map((p) => `<div class="lg"><i style="background:${esc(p.colour)}"></i><b>${esc(p.name)}</b></div>`).join('')}`
     } else if (fv === 'land') {
       const d = app.land.describe()
-      this.legendLand = JSON.stringify(d)
+      // (and the works drawn with it on the island in view: features/works.js)
+      const works = app.works?.legendRows() ?? []
+      this.legendLand = JSON.stringify([d, works])
       if (d) {
         const from = d.years.length > 1 ? `between the ${d.years[0]} and ${d.years[1]} layers` : `the ${d.years[0]} layers`
         const note = !app.land.bound ? 'the layers are on their way' : d.early ? `${from}, thinned for the early centuries` : from
         body = `<div class="lg-title">${esc(e?.label || '')}</div>${d.layers
           .map((l) => `<div class="lg lg-land"><i class="sw-${l.id}"></i><b>${esc(l.name)}</b>${l.note ? `<em>${esc(l.note)}</em>` : ''}</div>`)
-          .join('')}<div class="lg-note">${esc(note)}</div>`
+          .join('')}${works.map((w) => `<div class="lg lg-land lg-works"><i class="sw-${w.id}"></i><b>${esc(w.name)}</b></div>`).join('')}<div class="lg-note">${esc(note)}</div>`
       }
     }
     this.legendBody.innerHTML = body
@@ -443,7 +445,7 @@ export class UI {
     // words arrive with the manifest)
     if (app.farView === 'land' && now - (this.landAt || 0) > 250) {
       this.landAt = now
-      if (JSON.stringify(app.land.describe()) !== this.legendLand || !app.land.bound !== this.legendWaiting) {
+      if (JSON.stringify([app.land.describe(), app.works?.legendRows() ?? []]) !== this.legendLand || !app.land.bound !== this.legendWaiting) {
         this.legendWaiting = !app.land.bound
         this.refreshLegend()
       }

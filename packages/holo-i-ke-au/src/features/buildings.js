@@ -33,6 +33,10 @@
 //   says industrial (DATA.md "Zoning, for the settlements"), a farm's shed
 //   on agricultural land.
 //
+// And apart from the town's, the works' own (worksKits): hangars, barracks,
+// low blocks and concrete blocks, where the works file has a base's or an
+// airfield's buildings (features/works.js).
+//
 // No two faces of a model lie in one plane where they overlap, since two
 // such faces fight over the depth buffer and flicker as the camera moves: a
 // lanai's floor starts where the plinth ends rather than on top of it, a
@@ -546,6 +550,124 @@ function clockTower(rand) {
   pyramid(B, 13, 46.5, 7, col(P.ironGreen, 0.05, rand))
   B.cyl([0, 53.5, 0], [0, 60, 0], 0.25, 0.15, col(P.dark, 0), MAT.plain, 4)
   return B
+}
+
+// --- the works' buildings (features/works.js) ----------------------------------------
+//
+// What a base or an airfield put up, drawn where the works file has a
+// `block`: poured concrete and corrugated iron, the walls the colour of the
+// concrete, the roofs grey and green iron. Each is built at a size of its own
+// in metres and fitted to the block's footprint where the file gives one.
+
+/** A hangar: a broad low vault of iron over concrete walls, its doors across the front. */
+function hangar(rand) {
+  const B = new Builder()
+  const wall = col(P.concrete, 0.05, rand)
+  const roof = col([P.iron, P.ironGreen][rand() < 0.5 ? 0 : 1], 0.06, rand)
+  const L = 60
+  const W = 48
+  const h = 9
+  plinth(B, L + 0.6, W + 0.6, 0.3, col(P.plinth, 0.08, rand))
+  B.box(0, 0.3, 0, L, h, W, wall, MAT.plain)
+  // (the vault as three facets a side, the ridge along the length)
+  const top = 0.3 + h
+  const steps = [[W / 2 + 0.4, top - 0.2], [W / 3, top + 3.2], [W / 6, top + 5], [0, top + 5.6]]
+  for (let k = 0; k + 1 < steps.length; k++) {
+    const [z0, y0] = steps[k]
+    const [z1, y1] = steps[k + 1]
+    B.quad([-L / 2 - 0.4, y0, z0], [L / 2 + 0.4, y0, z0], [L / 2 + 0.4, y1, z1], [-L / 2 - 0.4, y1, z1], roof, MAT.roof)
+    B.quad([L / 2 + 0.4, y0, -z0], [-L / 2 - 0.4, y0, -z0], [-L / 2 - 0.4, y1, -z1], [L / 2 + 0.4, y1, -z1], roof.map((v) => v * 0.86), MAT.roof)
+  }
+  // the vault's ends, filled in the wall's colour from the wall's top up to it
+  const vy = (z) => {
+    for (let k = 0; k + 1 < steps.length; k++) {
+      const [za, ya] = steps[k]
+      const [zb, yb] = steps[k + 1]
+      if (z <= za && z >= zb) return ya + ((yb - ya) * (za - z)) / (za - zb)
+    }
+    return top
+  }
+  const zs = [W / 2, W / 3, W / 6, 0]
+  for (const sx of [-1, 1]) {
+    const x = (sx * L) / 2
+    for (let k = 0; k + 1 < zs.length; k++) {
+      for (const sz of [1, -1]) {
+        const za = sz > 0 ? zs[k] : -zs[k + 1]
+        const zb = sz > 0 ? zs[k + 1] : -zs[k]
+        const a = [x, top, za]
+        const b = [x, top, zb]
+        const c = [x, vy(Math.abs(zb)), zb]
+        const d = [x, vy(Math.abs(za)), za]
+        if (sx > 0) B.quad(a, b, c, d, wall, MAT.plain)
+        else B.quad(d, c, b, a, wall, MAT.plain)
+      }
+    }
+  }
+  // the doors: a dark opening most of the front's width
+  door(B, W, L * 0.8, h - 1.2, 0.3)
+  return B
+}
+
+/** Barracks of two or three storeys: a long concrete block, its storeys of windows, a hipped iron roof. */
+function barracks(rand, storeys) {
+  const B = new Builder()
+  const wall = col([P.concrete, P.concreteWarm, P.limewash][Math.floor(rand() * 3)], 0.05, rand)
+  const L = 56
+  const W = 16
+  const h = storeys * 3.4
+  plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.08, rand))
+  B.box(0, 0.6, 0, L, h, W, wall, MAT.windows)
+  hip(B, L, W, 0.6 + h, 2.6, 0.9, col([P.ironRed, P.ironGreen, P.iron][Math.floor(rand() * 3)], 0.08, rand))
+  door(B, W, 2.4, 2.6, 0.6)
+  return B
+}
+
+/** A low block of one storey (a shop, an office, a mess hall): concrete under a low iron gable. */
+function lowBlock(rand) {
+  const B = new Builder()
+  const wall = col(P.concrete, 0.06, rand)
+  const L = 26
+  const W = 14
+  plinth(B, L + 0.4, W + 0.4, 0.4, col(P.plinth, 0.08, rand))
+  B.box(0, 0.4, 0, L, 4.2, W, wall, MAT.clap)
+  gable(B, L, W, 4.6, 1.6, 0.5, col(P.iron, 0.08, rand), wall, { wallMat: MAT.clap })
+  door(B, W, 3.2, 3, 0.4)
+  return B
+}
+
+/** A flat-roofed block of four storeys (stretched for more: a tower), its parapet the roof seen from above. */
+function concreteBlock(rand) {
+  const B = new Builder()
+  const wall = col(P.concrete, 0.05, rand)
+  const L = 30
+  const W = 22
+  const h = 4 * 3.6
+  plinth(B, L + 0.4, W + 0.4, 0.5, col(P.plinth, 0.08, rand))
+  B.box(0, 0.5, 0, L, h, W, wall, MAT.windows)
+  B.box(0, 0.5 + h, 0, L + 0.4, 0.8, W + 0.4, wall.map((c) => c * 0.88), MAT.plain)
+  return B
+}
+
+/**
+ * The works' kits, by kind: a hangar, barracks of two and of three storeys,
+ * a low block, and a block of four storeys whose instances stretch to their
+ * own. Each as buildKits gives a kind's: geometry, half extents, extents and
+ * top, and `L`, `W`, the size it was built at, for fitting to a footprint.
+ */
+export function worksKits(rand) {
+  const kit = (B, L, W, storeys = 1) => {
+    const g = indexed(B.geometry())
+    g.computeBoundingBox()
+    const ob = g.boundingBox
+    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, L, W, storeys }
+  }
+  return {
+    hangar: kit(hangar(rand), 60, 48),
+    barracks2: kit(barracks(rand, 2), 56, 16, 2),
+    barracks3: kit(barracks(rand, 3), 56, 16, 3),
+    low: kit(lowBlock(rand), 26, 14),
+    block: kit(concreteBlock(rand), 30, 22, 4),
+  }
 }
 
 // --- the kits --------------------------------------------------------------------

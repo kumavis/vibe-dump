@@ -14,8 +14,9 @@
 // they name, and the camera gliding over a valley's walls; two districts, the
 // one the camera comes down into streamed and the other let go, never both
 // drawn; one district across the years it is drawn at, and at now; the coda's
-// chapter coming down into it; then what the page costs in heap and frame
-// time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
+// chapter coming down into it; the works by their years, on the ground at
+// the island zoom and in a district, the settlements off them, let go with
+// their island; then what the page costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
 // `node tools/fake-data.mjs` for the test masks and the test data).
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
@@ -2933,6 +2934,522 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
     }
   })
 } else if (testBase) console.log('  - no test masks (node tools/fake-data.mjs writes them): that check skipped')
+
+// ==== the works (features/works.js, data/works.js) =================================== [works]
+// The works (DATA.md "Works, dated"): read with Oʻahu as it takes its slot,
+// decoded off the main thread, and nothing at the whole chain; a base in its
+// years and not outside them, read back from the drawing buffer as well as
+// from its weight; its land growing in across its building, and a road along
+// its length; a runway and a highway on the ground drawn under them at the
+// island zoom and down in a district (each read back where the CPU's ground
+// puts it); the settlements, the district's and the island's, off the
+// military land, the fields, the runways and the roads of their year; the
+// names, clear of one another and of the pins; the Land legend's military
+// land; nothing rebuilt as the year moves; the GPU's memory back when the
+// island is let go; and what it costs a frame. Real data has no works until
+// they are baked: there, that the app carries on without them, and then the
+// same checks on the test works tools/fake-data.mjs writes for the real
+// Oʻahu (test-data/real/works/), on its lidar.
+{
+  const testWorks = existsSync(join(root, 'test-data/real/works/manifest.json'))
+  const own = await ui('app.works ? app.works.files().then(() => app.works.available) : null')
+  let worksOn = own === true
+  if (own === false) {
+    await check('works: none in this data, and the app carries on without them', async () => {
+      await view("app.tour.islandView('oahu', 0)")
+      await frames(3)
+      const st = await ui('app.works.stats()')
+      if (st.islands.some((i) => i.drawn) || st.entries.some((e) => e.ready)) throw new Error(JSON.stringify(st))
+      console.log(`      no works manifest: ${st.islands.length} island asked for its works, none drawn`)
+    })
+    if (testWorks) {
+      await run("app.works.setBase('../test-data/real/')")
+      worksOn = true
+      console.log('  - works: the checks that follow read the test works for the real Oʻahu (test-data/real/works/)')
+    } else console.log('  - no test works for the real Oʻahu (node tools/fake-data.mjs writes them): the works checks skipped')
+  } else if (own === null) console.log('  - no works in this build: the works checks skipped')
+  if (worksOn) {
+    const offYear = (y) => run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${y}); app.ui.timeline.finish(); app.settle()`)
+    const jumpTo = (x, z, distance, pitch = 1.1, yaw = 0.3) => run(`app.ui.card.close(); app.rig.jump({ x: ${x}, z: ${z}, distance: ${distance}, yaw: ${yaw}, pitch: ${pitch} }); app.settle(); app.settle()`)
+    const worksIn = () => page.waitForFunction(() => { const app = window.__app; app.settle(); return !!app.works.islands.get('oahu')?.view }, null, { timeout: 300000 })
+    /** Every district and every island's towns let go now, as their lingering would. */
+    const letGoAll = () => run('app.districts.incoming = null; if (app.districts.cur) app.districts.drop(); app.districts.prefetched = null; for (const isl of app.towns.islands.values()) isl.dispose(); app.towns.islands.clear(); app.works.release()')
+    const feats = () => ui("(app.works.entries.get('oahu')?.out?.feats ?? []).map((f) => ({ id: f.id, kind: f.kind, part: f.part, group: f.group, name: f.name, span: f.span, from: f.from, to: f.to, built: f.built, rep: f.rep, box: f.box }))")
+    /** The works file's lines by id, in world units, each a list of [x, z]. */
+    const lines = () =>
+      ui(`app.works.files().then((m) => fetch(app.works.url(m.get('oahu')))).then((r) => r.json()).then((fc) => Object.fromEntries(fc.features.filter((f) => /LineString/.test(f.geometry.type)).map((f) => [f.properties.id, (f.geometry.type === 'LineString' ? [f.geometry.coordinates] : f.geometry.coordinates).map((l) => l.map((c) => app.data.proj.toWorld(c)))])))`)
+    /** n points along a polyline, from fraction a to b of its length. */
+    const along = (pts, n, a = 0.05, b = 0.95) => {
+      const L = []
+      let tot = 0
+      for (let i = 0; i + 1 < pts.length; i++) {
+        L.push(Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]))
+        tot += L[i]
+      }
+      const out = []
+      for (let k = 0; k < n; k++) {
+        let d = tot * (a + ((b - a) * k) / Math.max(1, n - 1))
+        let i = 0
+        while (i < L.length - 1 && d > L[i]) d -= L[i++]
+        const t = L[i] > 0 ? Math.min(1, d / L[i]) : 0
+        out.push([pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t])
+      }
+      return out
+    }
+    /**
+     * A frame drawn now and read back from the drawing buffer at world points
+     * [x, z], each on the ground the CPU has there (world.heightAt, the
+     * district's where it is down): [r, g, b] over 3 × 3 px, or null off the
+     * screen. `bare` draws the ground and the works alone (the district's
+     * trees and buildings and the island's towns away for the frame); `diff`
+     * gives instead how much the works change each point (the frame with them
+     * against one without).
+     */
+    const readAt = (pts, { bare = false, diff = false } = {}) =>
+      page.evaluate(
+        ([pts, bare, diff]) => {
+          const app = window.__app
+          const hide = []
+          if (bare) for (const g of [app.districts?.cur?.features?.group, app.towns.group]) if (g?.visible) hide.push(g)
+          const gl = app.renderer.getContext()
+          const W = gl.drawingBufferWidth
+          const H = gl.drawingBufferHeight
+          const v = new app.camera.position.constructor()
+          const buf = new Uint8Array(36)
+          const read = () => {
+            for (const g of hide) g.visible = false
+            app.pipeline.render(app.scene, app.camera)
+            for (const g of hide) g.visible = true
+            return pts.map(([x, z]) => {
+              v.set(x, app.world.heightAt(x, z), z).project(app.camera)
+              if (v.z > 1 || Math.abs(v.x) > 0.97 || Math.abs(v.y) > 0.97) return null
+              gl.readPixels(Math.round(((v.x + 1) / 2) * W) - 1, Math.round(((v.y + 1) / 2) * H) - 1, 3, 3, gl.RGBA, gl.UNSIGNED_BYTE, buf)
+              const c = [0, 0, 0]
+              for (let k = 0; k < 9; k++) for (let ch = 0; ch < 3; ch++) c[ch] += buf[k * 4 + ch] / 9
+              return c
+            })
+          }
+          const a = read()
+          if (!diff) return a
+          app.works.hidden = true
+          app.works.update(0)
+          const b = read()
+          app.works.hidden = false
+          app.works.update(0)
+          return a.map((c, i) => (c && b[i] ? Math.abs(c[0] - b[i][0]) + Math.abs(c[1] - b[i][1]) + Math.abs(c[2] - b[i][2]) : null))
+        },
+        [pts, bare, diff],
+      )
+    // (the works drawn in a colour nothing else is: magenta, a few pixels wide)
+    const magenta = (c) => !!c && c[0] - c[1] > 45 && c[2] - c[1] > 45
+    const onGround = async (pts, opts) => {
+      const cs = await readAt(pts, opts)
+      const seen = cs.filter(Boolean)
+      return { seen: seen.length, hit: seen.filter(magenta).length, of: pts.length }
+    }
+    const lastY = await ui('app.timeline.yearAt(app.timeline.max)')
+    let F = []
+    let L = {}
+
+    await check('works: read with Oʻahu as it takes its slot, decoded off the main thread; nothing at the whole chain', async () => {
+      await view('app.tour.chainView()')
+      await letGoAll()
+      await frames(3)
+      const none = await ui('[app.works.islands.size, app.works.entries.size, app.scene.getObjectByName("works").children.length]')
+      if (none.some(Boolean)) throw new Error(`at the whole chain: ${none.join(', ')} islands, decodes and groups`)
+      await offYear(1975)
+      await view("app.tour.islandView('oahu', 0)")
+      await worksIn()
+      const st = await ui('app.works.stats()')
+      const isl = st.islands.find((i) => i.id === 'oahu')
+      const e = st.entries.find((q) => q.id === 'oahu')
+      const worker = await ui('!!app.works.worker && !app.works.fallback')
+      if (!isl?.drawn || !e?.features) throw new Error(JSON.stringify(st))
+      F = await feats()
+      L = await lines()
+      if (!worker) throw new Error('decoded on the main thread')
+      const parts = {}
+      for (const f of F) parts[f.part] = (parts[f.part] || 0) + 1
+      console.log(`      ${e.features} works (${Object.entries(parts).map(([k, v]) => `${v} ${k}`).join(', ')}), decoded in the worker in ${e.decodeMs} ms, drawn ${e.ms} ms after it was asked for`)
+      console.log(`      ${isl.washTris} wash triangles, ${isl.edges} boundary segments, ${Object.entries(isl.ribbons).map(([k, v]) => `${k} ${v.segments} (${v.km} km)`).join(', ')}, ${isl.blocks} blocks: ${isl.calls} draw calls, ${isl.gpuMB} MB of buffers`)
+    })
+
+    // (a work's weight in a year, as data/works.js workWeight; and whether another wash stands over a point in any of some years, which would muddy what one work's wash does there)
+    const sm = (a, b, x) => {
+      const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
+      return t * t * (3 - 2 * t)
+    }
+    const weight = (sp, y) => sm(sp[0], sp[1], y) * (1 - sm(sp[2], sp[3], y))
+    const covered = (f, years) => F.some((o) => o !== f && ['land', 'range', 'field'].includes(o.part) && o.box[0] <= f.rep[0] && f.rep[0] <= o.box[2] && o.box[1] <= f.rep[1] && f.rep[1] <= o.box[3] && years.some((y) => weight(o.span, y) > 0.001))
+    const bases = F.filter((f) => f.part === 'land' && Number.isFinite(f.from) && Number.isFinite(f.to) && !f.built && f.rep)
+    const base = bases.find((f) => !covered(f, [f.from - 2, f.to + 2])) || bases[0]
+    if (base) {
+      await check(`works: a base stands from its from to its to and is gone before and after (${base.id}, ${base.from}–${base.to})`, async () => {
+        await jumpTo(base.rep[0], base.rep[1], 220)
+        await worksIn()
+        const rows = []
+        const bad = []
+        for (const [y, want] of [[base.from - 2, 0], [base.from, 1], [Math.round((base.from + base.to) / 2), 1], [base.to, 1], [base.to + 2, 0]]) {
+          await offYear(y)
+          await frames(1)
+          const w = await ui(`app.works.weightOf('${base.id}')`)
+          const [d] = await readAt([base.rep], { diff: true })
+          if (d === null) throw new Error('its middle is off the screen')
+          if (Math.abs(w - want) > 0.01) bad.push(`${y}: weight ${w.toFixed(3)}, wanted ${want}`)
+          if (want && !(d > 8)) bad.push(`${y}: its wash changes its middle by ${d.toFixed(1)}`)
+          if (!want && d > 2) bad.push(`${y}: something of it drawn (${d.toFixed(1)})`)
+          rows.push(`${y} ${w.toFixed(2)} (${d.toFixed(0)})`)
+        }
+        if (bad.length) throw new Error(bad.join('; '))
+        console.log(`      the year, its weight and (what its wash changes on the screen): ${rows.join(', ')}`)
+      })
+    } else console.log('  - no base with a from and a to: that check skipped')
+
+    const growing = F.filter((f) => f.part === 'land' && Array.isArray(f.built) && f.rep)
+    const grows = growing.find((f) => !covered(f, [Math.min(...f.built) - 1, (f.built[0] + f.built[1]) / 2, Math.max(...f.built) + 1])) || growing[0]
+    const road = F.find((f) => f.part === 'road' && Array.isArray(f.built) && L[f.id])
+    if (grows || road) {
+      await check(`works: a base's land grows in across its building${road ? ', and a road along its length' : ''} (${[grows?.id, road?.id].filter(Boolean).join(', ')})`, async () => {
+        const rows = []
+        if (grows) {
+          await jumpTo(grows.rep[0], grows.rep[1], 220)
+          await worksIn()
+          const [b0, b1] = [...grows.built].sort((a, b) => a - b)
+          const at = []
+          for (const y of [b0 - 1, (b0 + b1) / 2, b1 + 1]) {
+            await offYear(y)
+            await frames(1)
+            const w = await ui(`app.works.weightOf('${grows.id}')`)
+            const [d] = await readAt([grows.rep], { diff: true })
+            at.push({ w, d })
+          }
+          const [a, m, c] = at
+          if (!(a.w === 0 && m.w > 0.15 && m.w < 0.85 && c.w === 1)) throw new Error(`its weight ${a.w}, ${m.w}, ${c.w} before, halfway through and after its building`)
+          if (!(m.d > 1 && m.d < c.d && a.d < 2)) throw new Error(`its wash changes its middle by ${a.d.toFixed(1)}, ${m.d.toFixed(1)}, ${c.d.toFixed(1)}`)
+          rows.push(`${grows.id} built ${b0}–${b1}: weight ${a.w}, ${m.w.toFixed(2)}, ${c.w}; on the screen ${a.d.toFixed(0)}, ${m.d.toFixed(0)}, ${c.d.toFixed(0)}`)
+        }
+        if (road) {
+          const pts = L[road.id][0]
+          const xs = pts.map((p) => p[0])
+          const zs = pts.map((p) => p[1])
+          const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...zs) - Math.min(...zs))
+          await jumpTo((Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...zs) + Math.max(...zs)) / 2, Math.max(120, span * 1.5), 1.35)
+          await worksIn()
+          const [b0, b1] = [...road.built].sort((a, b) => a - b)
+          await run('app.works.tint = true')
+          const out = []
+          for (const y of [(b0 * 3 + b1) / 4, b1 + 1]) {
+            await offYear(y)
+            await frames(1)
+            const early = await onGround(along(pts, 6, 0.04, 0.16), { bare: true })
+            const late = await onGround(along(pts, 6, 0.84, 0.96), { bare: true })
+            out.push({ y, early, late })
+          }
+          await run('app.works.tint = false')
+          const [q1, q3] = out
+          // a quarter of the way through its building, its start drawn and its end not (but where another road crosses it); once built, both
+          if (!(q1.early.hit >= q1.early.seen * 0.6 && q1.early.seen >= 3 && q1.late.hit <= q1.late.seen * 0.34)) throw new Error(`a quarter through: its start ${q1.early.hit} of ${q1.early.seen} points drawn, its end ${q1.late.hit} of ${q1.late.seen}`)
+          if (!(q3.early.hit >= q3.early.seen * 0.6 && q3.late.hit >= q3.late.seen * 0.6 && q3.late.seen >= 3)) throw new Error(`once built: its start ${q3.early.hit} of ${q3.early.seen}, its end ${q3.late.hit} of ${q3.late.seen}`)
+          rows.push(`${road.id} built ${b0}–${b1}: in ${q1.y}, ${q1.early.hit}/${q1.early.seen} of its first stretch and ${q1.late.hit}/${q1.late.seen} of its last drawn; in ${q3.y}, ${q3.early.hit}/${q3.early.seen} and ${q3.late.hit}/${q3.late.seen}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+    } else console.log('  - no work with a built span: that check skipped')
+
+    // the district a work runs through, and a point of it well inside that district's box
+    const insideDistrict = (f) =>
+      ui(`(() => {
+        const D = app.districts, m = 6
+        for (const line of ${JSON.stringify(L[f.id])}) for (let k = 0; k <= 40; k++) {
+          const i = Math.min(line.length - 2, Math.floor((k / 40) * (line.length - 1)))
+          const t = (k / 40) * (line.length - 1) - i
+          const x = line[i][0] + (line[i + 1][0] - line[i][0]) * Math.min(1, t), z = line[i][1] + (line[i + 1][1] - line[i][1]) * Math.min(1, t)
+          const d = D.list.find((q) => x > q.rect.x0 + m && x < q.rect.x1 - m && z > q.rect.z0 + m && z < q.rect.z1 - m)
+          // (the one the camera comes down into there: where two boxes overlap, the moku's)
+          if (d) return { id: D.districtAt(x, z)?.id ?? d.id, at: [x, z] }
+        }
+        return null
+      })()`)
+    // a runway and a highway, those that run through a district first (a military runway, a named road standing whole by 1975)
+    const pick = async (list) => {
+      for (const f of list) {
+        const at = await insideDistrict(f)
+        if (at) return { f, at }
+      }
+      return list[0] ? { f: list[0], at: null } : null
+    }
+    const runways = F.filter((f) => f.part === 'runway' && L[f.id]).sort((a, b) => (b.kind === 'military') - (a.kind === 'military'))
+    const roads = F.filter((f) => f.part === 'road' && L[f.id]).sort((a, b) => (!!b.name && !b.built && b.span[1] <= 1975) - (!!a.name && !a.built && a.span[1] <= 1975))
+    const rPick = await pick(runways)
+    const hPick = await pick(roads)
+    const runway = rPick?.f
+    const highway = hPick?.f
+    const both = runway && highway ? Math.min(lastY, Math.max(1975, runway.span[1], highway.span[1]) + 1) : null
+    /** Points along a work's lines, clear of its group's tunnels. */
+    const sample = (f, n) => {
+      const tunnels = F.filter((t) => t.part === 'tunnel' && t.group === f.group).flatMap((t) => L[t.id] || [])
+      const near = (p) => tunnels.some((line) => line.some((q, i) => i + 1 < line.length && Math.hypot(p[0] - (q[0] + line[i + 1][0]) / 2, p[1] - (q[1] + line[i + 1][1]) / 2) < Math.hypot(line[i + 1][0] - q[0], line[i + 1][1] - q[1]) / 2 + 0.6))
+      return L[f.id].flatMap((line) => along(line, n)).filter((p) => !near(p))
+    }
+    if (runway && highway) {
+      await check(`works: a runway and a highway lie on the ground at the island zoom (${runway.id}, ${highway.id})`, async () => {
+        await offYear(both)
+        await view("app.tour.islandView('oahu', 0)")
+        await worksIn()
+        await run('app.works.tint = true; app.works.update(0)')
+        const r = await onGround(sample(runway, 10), { bare: true })
+        const h = await onGround(sample(highway, 40), { bare: true })
+        await run('app.works.tint = false; app.works.update(0)')
+        const d = await ui('[app.rig.state.distance, app.world.exag]')
+        if (!(r.seen >= 4 && r.hit >= r.seen * 0.75)) throw new Error(`the runway: ${r.hit} of ${r.seen} points on the screen drawn where the ground is`)
+        if (!(h.seen >= 10 && h.hit >= h.seen * 0.75)) throw new Error(`the highway: ${h.hit} of ${h.seen} points on the screen drawn where the ground is`)
+        console.log(`      at ${d[0].toFixed(0)} units out, the exaggeration ${d[1].toFixed(2)}: the runway at ${r.hit} of ${r.seen} points, the highway at ${h.hit} of ${h.seen}, each where the ground is drawn`)
+      })
+
+      const rIn = rPick.at
+      const hIn = hPick.at
+      if (rIn || hIn) {
+        await check(`works: down in a district, a runway and a highway on its ground, and the blocks on it (${[rIn && `${runway.id} in ${rIn.id}`, hIn && `${highway.id} in ${hIn.id}`].filter(Boolean).join(', ')})`, async () => {
+          await offYear(both)
+          const rows = []
+          for (const [f, at] of [[runway, rIn], [highway, hIn]]) {
+            if (!at) continue
+            await jumpTo(at.at[0], at.at[1], 26, 1.2, 0.5)
+            await page.waitForFunction((id) => { const app = window.__app, D = app.districts; app.settle(); return D.cur?.d.id === id && D.cur.state === 'ready' && D.k > 0.99 }, at.id, { timeout: 300000 })
+            await worksIn()
+            await run('app.works.tint = true; app.works.update(0)')
+            const pts = sample(f, f.part === 'runway' ? 16 : 200).filter((p) => Math.hypot(p[0] - at.at[0], p[1] - at.at[1]) < 12)
+            const g = await onGround(pts, { bare: true })
+            await run('app.works.tint = false; app.works.update(0)')
+            // (how far the island's ground is from the district's there: what the draping has to follow)
+            const off = await ui(`(() => { const D = app.districts, t = app.world.islandAt(${at.at[0]}, ${at.at[1]}); let m = 0; for (const [x, z] of ${JSON.stringify(pts)}) m = Math.max(m, Math.abs(D.metresAt(x, z) - app.world.ownMetres(t, x, z))); return m })()`)
+            if (!(g.seen >= 6 && g.hit >= g.seen * 0.75)) throw new Error(`${f.id} in ${at.id}: ${g.hit} of ${g.seen} points on the screen drawn where the district's ground is`)
+            rows.push(`${f.id} in ${at.id}: ${g.hit} of ${g.seen} points where the district's ground is drawn (the island's ground up to ${off.toFixed(1)} m off it there)`)
+            // the blocks in the district stand on its ground (the highest of it under them, a hand's breadth up)
+            const blocks = await ui(`(() => {
+              const v = app.works.islands.get('oahu').view, D = app.districts, out = []
+              if (!D.on) return out
+              const r = D.cur.d.rect
+              for (const it of v.instances || []) {
+                if (!(it.x > r.x0 + 8 && it.x < r.x1 - 8 && it.z > r.z0 + 8 && it.z < r.z1 - 8)) continue
+                const y = it.mesh.instanceMatrix.array[it.index * 16 + 13]
+                out.push({ kind: it.kind, dy: (y - app.world.metresAt(it.x, it.z) * 1.3 / 100) / (1.3 / 100) })
+              }
+              return out
+            })()`)
+            const lifted = blocks.filter((b) => b.dy < -0.01 || b.dy > 8)
+            if (lifted.length) throw new Error(`blocks off the district's ground in ${at.id}: ${JSON.stringify(lifted)}`)
+            if (blocks.length) rows.push(`${blocks.length} blocks in ${at.id}, each on its ground: ${blocks.map((b) => `${b.kind} +${b.dy.toFixed(1)} m`).join(', ')}`)
+          }
+          for (const r of rows) console.log(`      ${r}`)
+        })
+      } else console.log('  - no runway or highway inside a district: that check skipped')
+    } else console.log('  - no runway or highway: those checks skipped')
+
+    // the settlements: the district's over the military land, the island's over an airfield or a road outside every district
+    // (one standing to the end, in a district: its own settlements)
+    let held = null
+    for (const f of F.filter((q) => q.part === 'land' && q.kind === 'military' && q.rep && !Number.isFinite(q.to) && q.span[1] < lastY - 8)) {
+      if (await ui(`!!app.districts.districtAt(${f.rep[0]}, ${f.rep[1]})`)) {
+        held = f
+        break
+      }
+    }
+    const away = await (async () => {
+      for (const f of F.filter((q) => ['field', 'runway', 'road'].includes(q.part) && q.rep)) {
+        const out = await ui(`!app.districts.list.some((d) => ${f.rep[0]} > d.rect.x0 - 6 && ${f.rep[0]} < d.rect.x1 + 6 && ${f.rep[1]} > d.rect.z0 - 6 && ${f.rep[1]} < d.rect.z1 + 6)`)
+        if (out) return f
+      }
+      return null
+    })()
+    if (held || away) {
+      await check(`works: the settlements keep off the military land, the fields, the runways and the roads of their year (${[held?.id, away?.id].filter(Boolean).join(', ')})`, async () => {
+        const rows = []
+        if (held) {
+          const at = await ui(`app.districts.districtAt(${held.rep[0]}, ${held.rep[1]})?.id ?? null`)
+          if (at) {
+            await offYear(lastY)
+            await jumpTo(held.rep[0], held.rep[1], 40, 0.9)
+            await page.waitForFunction((id) => { const app = window.__app, D = app.districts; app.settle(); const S = D.cur?.features?.settlements; return D.cur?.d.id === id && D.cur.state === 'ready' && !!S && (S.ready || !!S.failed) }, at, { timeout: 300000 })
+            const r = await ui(`(() => {
+              const S = app.districts.cur.features.settlements
+              if (!S.ready) return { failed: S.failed }
+              if (!S.works) return { none: true }
+              const out = {}
+              for (const y of [${held.from - 8}, ${held.from + 4}, 1975, ${lastY}]) {
+                const a = S.alive(y)
+                out[y] = { all: a.length, on: a.filter((b) => S.works.test(b.x, b.z, b.ax, b.az, b.a, y) === 2).length, later: a.filter((b) => S.works.test(b.x, b.z, b.ax, b.az, b.a, ${lastY}) === 2).length }
+              }
+              return out
+            })()`)
+            if (r.failed || r.none) throw new Error(`the district's settlements in ${at}: ${JSON.stringify(r)}`)
+            const bad = Object.entries(r).filter(([, v]) => v.on)
+            if (bad.length) throw new Error(`in ${at}, buildings on the works of their year: ${JSON.stringify(Object.fromEntries(bad))}`)
+            rows.push(`${at}: ${Object.entries(r).map(([y, v]) => `${y} ${v.all} buildings, none on a work of its year${v.later ? ` (${v.later} where the works stand later)` : ''}`).join('; ')}`)
+          } else rows.push(`${held.id} lies in no district`)
+        }
+        if (away) {
+          await offYear(lastY)
+          await jumpTo(away.rep[0], away.rep[1], 25, 0.9)
+          await page.waitForFunction(() => { const app = window.__app; app.settle(); return app.towns.idle && [...app.towns.islands.values()].some((i) => i.ready) }, null, { timeout: 300000 })
+          const r = await ui(`(() => {
+            const E = app.works.entries.get('oahu')?.excl, isl = app.towns.islands.get('oahu')
+            if (!E || !isl?.works) return { none: true, E: !!E, isl: !!isl }
+            const out = {}
+            for (const y of [1900, 1975, ${lastY}]) {
+              const a = app.towns.alive(y, ${away.rep[0]}, ${away.rep[1]}, 20)
+              out[y] = { all: a.length, on: a.filter((b) => E.test(b.x, b.z, b.ax, b.az, b.a, y) === 2).length, later: a.filter((b) => E.test(b.x, b.z, b.ax, b.az, b.a, ${lastY}) === 2).length }
+            }
+            return out
+          })()`)
+          if (r.none) throw new Error(`the island's towns have no works: ${JSON.stringify(r)}`)
+          const bad = Object.entries(r).filter(([, v]) => v.on)
+          if (bad.length) throw new Error(`the island's buildings on the works of their year: ${JSON.stringify(Object.fromEntries(bad))}`)
+          rows.push(`the island's towns within 2 km of ${away.id}: ${Object.entries(r).map(([y, v]) => `${y} ${v.all}, none on a work of its year${v.later ? ` (${v.later} where the works stand later)` : ''}`).join('; ')}`)
+        }
+        for (const r of rows) console.log(`      ${r}`)
+      })
+    } else console.log('  - no military land or airfield to keep the settlements off: that check skipped')
+
+    await check('works: the names of the military land, the airfields and the highways at the island zoom, clear of one another and of the pins', async () => {
+      await offYear(1975)
+      await view("app.tour.islandView('oahu', 0)")
+      await worksIn()
+      const names = async () => {
+        await frames(3)
+        return ui(`(() => {
+          const v = app.works.islands.get('oahu').view
+          const names = v.labels.rects()
+          const kinds = [...new Set(v.labels.items.filter((it) => it.shown > 0.5).map((it) => it.kind))]
+          const others = [...document.querySelectorAll('.dlabel:not(.wlabel), .pin.show, .cluster.show')].filter((e) => e.offsetParent && getComputedStyle(e).visibility !== 'hidden' && +getComputedStyle(e).opacity > 0.5).map((e) => e.getBoundingClientRect())
+          return { names, kinds, others: others.map((b) => ({ left: b.left, top: b.top, right: b.right, bottom: b.bottom })) }
+        })()`)
+      }
+      const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
+      const bad = []
+      // with the pins: the names that show stand clear of one another, the pins and the place names (a name a pin would cover waits)
+      const r = await names()
+      r.names.forEach((a, i) => r.names.forEach((b, j) => j > i && hit(a, b) && bad.push(`${a.name} over ${b.name}`)))
+      for (const a of r.names) for (const b of r.others) if (hit(a, b)) bad.push(`${a.name} over a pin or a place name`)
+      if (!r.names.length) bad.push('no name shows')
+      // and with the pins off, the military land's and a highway's both show
+      // (the names read the screen's furniture every fifteen frames: at once here)
+      await run("app.overlay.pins = false; app.works.islands.get('oahu').view.labels.frame = 0")
+      const q = await names()
+      await run("app.overlay.pins = true; app.works.islands.get('oahu').view.labels.frame = 0")
+      q.names.forEach((a, i) => q.names.forEach((b, j) => j > i && hit(a, b) && bad.push(`${a.name} over ${b.name}`)))
+      if (!q.kinds.includes('land') || !q.kinds.includes('road')) bad.push(`with the pins off, named: ${q.kinds.join(', ')}`)
+      if (bad.length) throw new Error(bad.join('; '))
+      console.log(`      ${r.names.map((n) => n.name).join(', ')} (${r.kinds.join(', ')}), clear of ${r.others.length} pins and names; with the pins off ${q.names.map((n) => n.name).join(', ')}`)
+    })
+
+    if (await ui('app.land.available')) {
+      await check('works: the Land legend names the military land in the years it stands on the island in view, and not before', async () => {
+        await run("app.setView('land')")
+        const legend = async (y) => {
+          await offYear(y)
+          await view("app.tour.islandView('oahu', 0)")
+          await worksIn()
+          await frames(2)
+          await page.waitForTimeout(400)
+          await frames(2)
+          return ui("document.querySelector('.legend').textContent.replace(/\\s+/g, ' ')")
+        }
+        const first = Math.min(...F.filter((f) => f.part === 'land').map((f) => f.span[1]))
+        const a = await legend(Math.floor(first) - 3)
+        const b = await legend(1975)
+        await run("app.setView('chiefdoms')")
+        if (/Military land/.test(a)) throw new Error(`before ${first} it reads “${a}”`)
+        if (!/Military land/.test(b)) throw new Error(`in 1975 it reads “${b}”`)
+        console.log(`      ${Math.floor(first) - 3}: “${a.trim()}”; 1975: “${b.trim()}”`)
+      })
+    }
+
+    await check('works: the year moves in uniforms, nothing rebuilt as it does', async () => {
+      await view("app.tour.islandView('oahu', 0)")
+      await worksIn()
+      await run("app.works.islands.get('oahu').view.__probe = 1")
+      const before = await ui('[app.renderer.info.memory.geometries, app.works.entries.get("oahu").out.ms]')
+      for (const y of [1880, 1930, 1945, 1960, 1999, lastY]) {
+        await offYear(y)
+        await frames(1)
+      }
+      const after = await ui('[app.renderer.info.memory.geometries, app.works.islands.get("oahu").view.__probe ?? 0, app.works.entries.get("oahu").out.ms]')
+      if (after[1] !== 1 || after[0] !== before[0] || after[2] !== before[1]) throw new Error(`geometries ${before[0]} → ${after[0]}; the island's works ${after[1] ? 'kept' : 'rebuilt'}`)
+      console.log(`      six years from 1880 to ${lastY}: the same ${after[0]} geometries, the island's works never rebuilt or decoded again`)
+    })
+
+    await check('works: let go with the island, and the GPU’s memory with it', async () => {
+      // (the whole chain with everything else let go, then Oʻahu at the island zoom, where nothing but its works comes in, then the chain again)
+      await view('app.tour.chainView()')
+      await letGoAll()
+      await frames(3)
+      const g0 = await ui('app.renderer.info.memory.geometries')
+      await view("app.tour.islandView('oahu', 0)")
+      await worksIn()
+      await frames(2)
+      const g1 = await ui('app.renderer.info.memory.geometries')
+      const held = await ui("(() => { const s = app.works.islands.get('oahu').view.stats(); return { buffers: s.gpuMB, calls: s.calls } })()")
+      await view('app.tour.chainView()')
+      await frames(2)
+      // (as LINGER seconds after the island gave its slot up)
+      await run('app.works.release()')
+      await frames(3)
+      const g2 = await ui('app.renderer.info.memory.geometries')
+      const left = await ui('[app.works.islands.size, app.works.entries.size, app.scene.getObjectByName("works").children.length, document.querySelectorAll(".wlabels").length]')
+      if (left.some(Boolean)) throw new Error(`still held: ${left.join(', ')} (islands, decodes, groups, name layers)`)
+      if (!(g1 > g0) || g2 !== g0) throw new Error(`geometries ${g0} at the chain, ${g1} with Oʻahu's works, ${g2} once they are let go`)
+      console.log(`      geometries ${g0} at the whole chain, ${g1} with Oʻahu's works (${held.buffers} MB of buffers, ${held.calls} draw calls), ${g2} once they are let go`)
+    })
+
+    await check('works: what Oʻahu’s works cost a frame', async () => {
+      const frameMs = (n) =>
+        page.evaluate(
+          (n) =>
+            new Promise((resolve) => {
+              const app = window.__app
+              const f0 = app.frames + 1
+              let t0 = 0
+              const tick = () => {
+                if (!t0 && app.frames >= f0) t0 = performance.now()
+                if (t0 && app.frames >= f0 + n) return resolve(+((performance.now() - t0) / n).toFixed(1))
+                requestAnimationFrame(tick)
+              }
+              requestAnimationFrame(tick)
+            }),
+          n,
+        )
+      const rows = []
+      await offYear(1975)
+      for (const [name, go] of [['oahu', () => view("app.tour.islandView('oahu', 0)")], ['near', () => (runway?.rep ? jumpTo(runway.rep[0], runway.rep[1], 30, 0.8) : view("app.tour.islandView('oahu', 0)"))]]) {
+        await go()
+        await worksIn()
+        await frames(3)
+        const out = {}
+        for (const hidden of [false, true, false]) {
+          await run(`app.works.hidden = ${hidden}; app.settle()`)
+          await frames(2)
+          const ms = await frameMs(6)
+          const s = await ui('[app.renderer.info.render.calls, app.renderer.info.render.triangles]')
+          const k = hidden ? 'without' : 'with'
+          out[k] = out[k] ? { ms: Math.min(out[k].ms, ms), calls: s[0], tris: s[1] } : { ms, calls: s[0], tris: s[1] }
+        }
+        await run('app.works.hidden = false; app.settle()')
+        const calls = out.with.calls - out.without.calls
+        if (calls > 14) throw new Error(`${name}: ${calls} draw calls for the works`)
+        rows.push(`${name}: ${out.with.ms} ms a frame with the works, ${out.without.ms} without; ${calls} draw calls, ${out.with.tris - out.without.tris} triangles`)
+      }
+      for (const r of rows) console.log(`      ${r}`)
+    })
+
+    if (own === false) {
+      await view('app.tour.chainView()')
+      await letGoAll()
+      await run('app.works.setBase(null)')
+    }
+  }
+}
+// ==== [works] end =====================================================================
 
 // ==== [ui6] the sources read, the Māhele, the stop camera's target, the shore, the phone's timeline ====
 {

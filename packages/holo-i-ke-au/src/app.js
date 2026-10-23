@@ -3,6 +3,9 @@
 // the sky, the boundary lines, the routes and the far view's overlays, under
 // one camera that runs from the whole chain to a single valley.
 //
+// The works (features/works.js) come in with their islands, at the island
+// zoom and down into a district, each in the years it stood.
+//
 // The far view shows one of three things at a time (`view`): the chiefdoms,
 // each moku in the colour of the polity that held it (overlay/polity.js);
 // the land, how it was used in the chosen year (overlay/land.js); or, from
@@ -27,6 +30,7 @@ import { LandOverlay } from './overlay/land.js'
 import { MaheleOverlay } from './overlay/mahele.js'
 import { Timeline } from './time.js'
 import { Towns } from './features/towns.js'
+import { Works } from './features/works.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -133,6 +137,8 @@ export class App {
     this.world.district = this.districts
     // and the settlements of every island, where the camera comes down (features/towns.js)
     this.towns = new Towns(this)
+    // the works of the last century and a half, by their dates, on the islands in their slots (features/works.js)
+    this.works = new Works(this)
     this.ocean = new Ocean(this.shared, this.shared.uniforms)
     this.scene.add(this.ocean.mesh)
     this.lines = new Boundaries(this.data, this.shared.uniforms)
@@ -298,6 +304,7 @@ export class App {
     this.world.settle(this.camera)
     this.districts?.settle(this.camera, g.distance)
     this.towns?.settle()
+    this.works?.settle()
     this.rig.jump({ x: g.target.x, z: g.target.z })
     const fv = this.farView
     if (fv === 'chiefdoms' || fv === 'mahele') {

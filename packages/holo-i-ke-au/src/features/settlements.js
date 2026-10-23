@@ -43,8 +43,10 @@
 //   draws more than slopes away from both; a lot is refused where the ground
 //   of the year is water (the patches lower the made land and raise the
 //   dredged channels before their dates), on a loʻi or a fishpond or the
-//   village while it stands, on a stream, or where its footprint falls more
-//   than a few metres.
+//   village while it stands, on the works of the year (military land after
+//   its taking and until its return, an airfield, a runway, and the strip of
+//   a highway or a rail line: features/works.js), on a stream, or where its
+//   footprint falls more than a few metres.
 // - The value (valueAt). Modelled, unless the layers ever carry a value mask
 //   (`layers/<island>/<keyframe>-value.png`, 0..255): rising with the
 //   density, the nearness of the coast, of a harbour and of a town's core,
@@ -1155,11 +1157,14 @@ export class Settlements extends Scatter {
     const files = this.layerFiles(entry)
     if (this.keyframes.length < 2 || files.some((f) => !f.settlement)) throw new Error('the settlement layer lacks a keyframe')
     const grey = (f) => decodeGrey(decodeImage, data.abs(`layers/${f}`))
-    const [imgs, vals, zoning] = await Promise.all([
+    const [imgs, vals, zoning, works] = await Promise.all([
       Promise.all(files.map((f) => grey(f.settlement))),
       files.every((f) => f.value) ? Promise.all(files.map((f) => grey(f.value))).catch(() => null) : null,
       loadZoning(this.app, m, d.parent),
+      this.app.works?.exclusion(d.parent) ?? null,
     ])
+    if (this.disposed) return
+    this.works = works
     for (const [k, img] of [...imgs, ...(vals || [])].entries()) if (img.W !== pack.W || img.H !== pack.H) throw new Error(`a layer of ${d.parent} is ${img.W}×${img.H} (${k}), the pack ${pack.W}×${pack.H}`)
     // the district's box on the island's grid, a texel or two beyond it
     const r = pack.rect
@@ -1282,6 +1287,12 @@ export class Settlements extends Scatter {
     let hi = -Infinity
     let top = -Infinity
     this.dep = false
+    // the works standing in the year: military land, a field, a runway, a road (data/works.js)
+    if (this.works) {
+      const w = this.works.test(x, z, ax, az, a, ep.year)
+      if (w) this.dep = true
+      if (w === 2) return null
+    }
     const parent = rec.parent
     const margin = DISTRICT.margin
     for (let p = 0; p < 13; p++) {
@@ -1425,6 +1436,7 @@ export class Settlements extends Scatter {
       if (Number.isFinite(b)) breaks.add(b + 1)
     }
     for (const L of this.landmarks) breaks.add(L.from)
+    for (const y of this.works?.breaks || []) breaks.add(y)
     this.years(breaks)
     // the epochs: the stretches between breaks, each with its patches and features
     const tl = this.app.timeline
@@ -1555,7 +1567,7 @@ export class Settlements extends Scatter {
       if (this.edgeAt(x, z) < PART + PART_GAP) return false
       const top = this.allows(x, z, kit.hx * kd.sh, kit.hz * kd.sh, face, kd.relief + 2, e)
       if (top === null) return false
-      this.landmarks.push({ kind, name, x, z, face, from, r: Math.hypot(kit.hx, kit.hz) * kd.sh, top })
+      this.landmarks.push({ kind, name, x, z, face, from, r: Math.hypot(kit.hx, kit.hz) * kd.sh, ax: kit.hx * kd.sh, az: kit.hz * kd.sh, top })
       return true
     }
     const lotNear = (x, z) => {
@@ -1658,10 +1670,12 @@ export class Settlements extends Scatter {
       if (li % 256 === 0 && !(await breathe())) return false
       this.scatterLot(lots[li], allows, cap, emit)
     }
-    // the landmarks, standing from their year to the end
+    // the landmarks, standing from their year to the end, or until a work takes their ground (features/works.js)
     for (const L of this.landmarks) {
-      const n0 = this.Ys.findIndex((y) => y >= L.from)
-      inst.push(this.instance({ x: L.x, z: L.z, face: L.face, landmark: true, r5: 0.5, r6: 0.5, r7: 0.5 }, { kind: KIND[L.kind], variant: 0, top: L.top, d: 0, n0: Math.max(0, n0) }, NS))
+      const n0 = Math.max(0, this.Ys.findIndex((y) => y >= L.from))
+      let end = NS
+      if (this.works) for (let n = n0 + 1; n < NS && end === NS; n++) if (this.works.test(L.x, L.z, L.ax, L.az, L.face, this.Ys[n]) === 2) end = n
+      inst.push(this.instance({ x: L.x, z: L.z, face: L.face, landmark: true, r5: 0.5, r6: 0.5, r7: 0.5 }, { kind: KIND[L.kind], variant: 0, top: L.top, d: 0, n0 }, end))
     }
     this.instances = inst
     return true
