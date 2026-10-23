@@ -562,7 +562,7 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
 - **Before about 1450 the 1778 layers overstate the land in use**; the keyframe note
   says so and the app should thin them.
 - Kona coffee (which the 1896 census credits for Kona's growth), rice as its own crop,
-  and ranching are in no layer.
+  and ranching are in no cultivation mask; the crop classes (below) place them.
 
 ### Still needs people
 
@@ -577,6 +577,144 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
 - **A historian** with Schmitt's *Demographic Statistics* for the 1850 census and for
   district figures before 1896, and with the Government Survey sheets for an 1880s
   layer drawn by hand.
+
+### Crops
+
+What grows on the cultivated land, and on the grazed land beside it, at each keyframe:
+`layers/<island>/<keyframe>-crop.png` (DATA.md, "Crops, on the era layers"), baked in
+October 2026 with `node packages/holo-i-ke-au/tools/bake-crops.mjs --all`. Thirty-two
+class rasters, 319 KB; `public/data/layers/` is now 5.48 MB. The manifest's `crops` entry
+writes every rule out, lists what each keyframe draws in `record`, and keeps in
+`record.leftOut` what the brief or the record names that the bake does not draw.
+
+**The approach.** A class follows the keyframe's own cultivation mask, read back from its
+PNG: wherever the mask is above 0, the term of its rule that is largest there names the
+field (the loʻi rule gives loʻi, the dryland and agroforestry zones dryland, the kuleana
+loʻi or dryland by the loʻi rule beneath them, the 1900 lands cane and pineapple, the
+fishpond shore nothing). The terms are the layers bake's own (`cultivationTerms` in
+`lib/layers-model.mjs`, split out of `cultivation` for the purpose; the masks re-bake
+byte-identical). On that the history is laid: plantations and ranches in 1853; rice,
+coffee and ranches in 1896; the 2020 baseline and the lawns now.
+
+#### What was read
+
+| source | what it gave | used for |
+| --- | --- | --- |
+| Hawaiian Annual for 1902, p. 42 (`thrum-annual-1902`) | “List of Principal Stock and Sheep Ranches throughout the Islands”, read on the page image (the text layer misses it): thirty ranches with character, manager, location and agent. Pp. 43–46, the history of H. Hackfeld & Co.: Wood’s Kōloa and East Maui plantations, and the 1853 machinery “for the Koloa and Lihue plantations” | the 1896 ranches; Kōloa and Līhuʻe at 1853 |
+| Hawaiian Annual for 1895 (`thrum-annual-1895`) | Kona’s coffee in 1892 (about 1,000 acres old, 150 new; 170 in Hāmākua and Hilo; about 100 in Puna); the Olaʻa crown-land leases (85, 11,479 acres, 1894); the new Olaʻa plantations at 1,500–2,500 feet on the Volcano Road; rice “with but little change as to area” | coffee at kingdom |
+| Hawaiian Annual for 1900 (`thrum-annual-1900`) | rice on “the lowest flats found at the outlets of valleys and close on the sea … often too low and swampy for cane culture”; Olaʻa’s coffee in 1897 by age (1,344 acres over three years, 2,749½ of one to three, 1,821½ under one) | the rice rule; Olaʻa’s area |
+| Glick, *Sojourners and Settlers* (1980), ch. 3, on UH Press’s open Manifold edition (`glick-1980-sojourners`) | rice started in 1858 (H. Holstein, Royal Hawaiian Agricultural Society), taken up by Chinese in the 1860s; about 1,000 acres in 1875, 7,420 in 1890, 9,130 in 1900, 9,425 in 1909; Damon in 1882 on the ʻEwa shore and Honouliuli; rice plantations at Mānoa (1895), Moanalua (1891), Heʻeia (1888) | the totals; the rice districts; no rice at 1853 |
+| Hanalei Pier, National Register nomination (`nrhp-hanalei-pier`) | after Coulter and Chun: in 1892 Hanalei and Waiʻoli 750 acres, the largest, then Mokulēʻia 738 and Kailua–Waimānalo 400; 1919 5,801 acres, 1934 1,090; the borer at Hanalei, Hulēʻia, Wailua and Kapaʻa in 1928–29 | the three capped districts; the east Kauaʻi district |
+| Kelley, *Rice Soils of Hawaii* (1914) (`kelley-1914-rice-soils`) | about 10,000 acres of rice soils “at or near sea level along the coast”; samples from Waikīkī, Fort Shafter, Kailua, Kāneʻohe, Waiāhole, “Kalaunui” and Hanalei | the rice districts and the 15 m ceiling |
+| Old Sugar Mill of Kōloa, nomination (`nrhp-koloa-mill`, already in the gazetteer) | the 980-acre lease of 1835, Wood from 1848, steam in 1853; the mill’s UTM reference | Kōloa at 1853 |
+| Haʻikū Mill, nomination (`nrhp-haiku-mill`) | five Maui sugar companies at 1858, two in operation (East Maui at Kaluanui, Brewer at Hāliʻimaile, Torbert and Makee at ʻUlupalakua, Haʻikū, Hāna) | Hāna at 1853, and leaving East Maui out |
+| MauiWine’s history of ʻUlupalakua (`mauiwine-ulupalakua-history`) | Torbert’s lease of 1841 (2,087 acres, a mill), Torbertsville’s beef, hogs and sheep, Makee’s purchase of 1856 with 475 sheep and 350 goats, the mill again from 1861 | ʻUlupalakua as grazing, not cane, at 1853 |
+| KIRC’s Kahoʻolawe history (`kirc-history`, already in the gazetteer) | ranch leases from 1858 to 1941; 900 cattle and 15,000 sheep by the late 1890s. (The gazetteer’s entry says its timeline runs from 1941; the page now starts at 1793.) | Kahoʻolawe at kingdom |
+| Wikipedia: Parker Ranch, Kualoa Ranch, Valdemar Knudsen (tertiary) | Parker 1847 at Waimea; Judd’s 622 acres at Kualoa in 1850; Knudsen’s lease of crown lands in Waimea district (Kauaʻi) after 1856 | the 1853 ranches; Kauaʻi’s Kona moku in 1896 |
+| to-hawaii.com on Hāna; Images of Old Hawaiʻi on Pioneer Mill (tertiary) | Wilfong’s Hāna plantation of 1849; Lāhainā’s small sugar of the 1840s and 1850s | Hāna and Lāhainā at 1853 |
+| USGS sheets on the State GIS (`usgs-topo-1927-oahu`, `usgs-topo-1910-kauai`) | the 1927 Oʻahu sheet read at four windows: diked fields with the marsh symbol at Waiawa’s mouth and in rows on the Waikāne flats; Waikīkī already drained by the Ala Wai; Mokulēʻia in cane with the Dillingham Ranch. The 1910 Kauaʻi sheet at Hanalei marks no crops at all | a check on the rice districts, not a map of them |
+
+Data layers (in the manifest, not the gazetteer): the field layers the cultivation masks
+read; the State GIS **Agricultural Land Use Maps, 1978–80** (ALUM, LandUseLandCover layer
+5, 2,127 polygons, commodity codes A-1 grazing, O-5 coffee and the rest per its metadata);
+the **2020 baseline** (layer 19); the **golf courses** (Infrastructure layer 14, 80 points
+of 2023); the **CAH land cover**’s developed open space (class 43). The **2015 baseline**
+(layer 4) was queried and not used: the 2020 update replaces it, and its 157 km² of sugar is
+the Maui plantation that closed in 2016.
+
+#### What each keyframe rests on
+
+- **contact, modelled.** Loʻi and dryland as the cultivation model has them. Nothing
+  else.
+- **mahele, modelled.** The same on the 1853 mask; cane at Kōloa, Līhuʻe, Hāna and
+  Lāhainā, each 300 acres of the land nearest its mill (no 1853 acreage was found for
+  any of them; Kōloa’s lease was 980 acres); pasture at Parker’s Waimea, Judd’s Kualoa
+  and Torbertsville, whose grazed land is unknown, so the lower, drier part of their
+  ahupuaʻa: below 2,000 m, 400–2,000 mm of rain, outside the 1853 forest (interpolated as
+  the app does) and fields. No rice.
+- **kingdom, mixed.** Mapped: the 1900 cane and pineapple. Modelled: loʻi and dryland
+  on the 1896 mask; rice in nine districts a source names, on the flats below 15 m on
+  loʻi or wet ground, capped at the 1892 figure where one exists and there taken old
+  loʻi first; Kona’s coffee as the 1978–80 coffee read back, Olaʻa’s as 4,093 acres
+  nearest the Volcano Road between 1,500 and 2,500 feet; pasture as the 1978–80 grazing
+  read back into the moku of each ranch in the 1902 list (and Knudsen’s, which it omits),
+  and on Lānaʻi, Niʻihau and Kahoʻolawe all land neither forest nor field.
+- **now, mapped.** The 2020 baseline by category group (taro loʻi; pineapple; orchard,
+  coffee, macadamia, fruit, flowers, seed and diversified crops; pasture and dairy); lawn
+  where the CAH’s developed open space covers half a texel and the county zones it parks
+  and open space or a golf course lies within 600 m. No cane: the 14 acres the 2020
+  layer still calls Sugar, small fields after the last plantation closed, count as orchard.
+
+#### The figures
+
+km² of each pack’s land by class (a pack holds the slivers of its neighbours, so Maui’s
+1896 pasture includes Kahoʻolawe’s north shore):
+
+| island | keyframe | loʻi | dryland | rice | cane | pineapple | pasture | orchard | lawn |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Oʻahu | contact | 97.86 | 328.09 | · | · | · | · | · | · |
+| Oʻahu | mahele | 91.76 | 330.24 | · | · | · | 1.3 | · | · |
+| Oʻahu | kingdom | 58.27 | 232.57 | 25.55 | 212.26 | 4.92 | 64.24 | · | · |
+| Oʻahu | now | 0.71 | · | · | · | 15.27 | 77.73 | 95.86 | 14.21 |
+| Hawaiʻi | contact | 11.08 | 812.36 | · | · | · | · | · | · |
+| Hawaiʻi | mahele | 9.56 | 812.38 | · | · | · | 279.5 | · | · |
+| Hawaiʻi | kingdom | 11.35 | 143.56 | · | 574.82 | · | 2656.65 | 25.85 | · |
+| Hawaiʻi | now | 1.61 | · | · | · | · | 2294.07 | 265.59 | 6.25 |
+| Maui | contact | 20.31 | 326.39 | · | · | · | · | · | · |
+| Maui | mahele | 19.6 | 323.92 | · | 2.43 | · | 17.54 | · | · |
+| Maui | kingdom | 13.86 | 67.04 | · | 268.05 | · | 522.02 | · | · |
+| Maui | now | 1 | · | · | · | 4.17 | 481.15 | 34.18 | 7 |
+| Kauaʻi | contact | 55.52 | 182.46 | · | · | · | · | · | · |
+| Kauaʻi | mahele | 51.56 | 184.29 | · | 2.43 | · | · | · | · |
+| Kauaʻi | kingdom | 40.22 | 67.72 | 6.96 | 187.67 | · | 72.4 | · | · |
+| Kauaʻi | now | 2.93 | · | · | · | · | 178.56 | 88.99 | 7.9 |
+| Molokaʻi | contact | 13.65 | 60.61 | · | · | · | · | · | · |
+| Molokaʻi | mahele | 12.87 | 61.29 | · | · | · | · | · | · |
+| Molokaʻi | kingdom | 12.61 | 15.73 | · | · | · | 367.69 | · | · |
+| Molokaʻi | now | 0.05 | · | · | · | · | 157.58 | 17.69 | 0.06 |
+| Lānaʻi | contact, mahele | · | 22 | · | · | · | · | · | · |
+| Lānaʻi | kingdom | · | 0.08 | · | · | · | 353.03 | · | · |
+| Lānaʻi | now | · | · | · | · | · | · | 0.47 | 0.45 |
+| Niʻihau | kingdom (nothing else) | · | · | · | · | · | 189.91 | · | · |
+| Kahoʻolawe | kingdom (nothing else) | · | · | · | · | · | 116.52 | · | · |
+
+A class marks every texel the keyframe’s mask cultivates at all, so a class’s km² is the
+land the fields lay in, not the area cultivated (Oʻahu’s contact mask cultivates 218 km² of
+the 426 km² classed loʻi or dryland). Rice: 8,034 acres drawn against about 8,450 for 1896
+(interpolated between 1890 and 1900): Hanalei and Waiʻoli 750, Mokulēʻia 737, Kailua and
+Waimānalo 400 (all three at their 1892 figure; the rule offered 1,390, 819 and 2,626),
+Waikīkī 2,301, the ʻEwa shore 1,421, Kāneʻohe and Heʻeia 938, Wailua–Kapaʻa–Hulēʻia 971,
+Waiāhole and Waikāne 280, Moanalua 236. Coffee: Kona 2,295 acres (1892’s estimate
+1,150), Olaʻa 4,093. Pasture in 1853: Parker 279.5 km², Torbertsville 17.5, Kualoa 1.3.
+
+#### Where the classes are weak
+
+- **The field kinds are the cultivation model’s.** Where its agroforestry zone outweighs
+  the loʻi rule, as on much of Waiāhole’s lower valley, the class is dryland though the
+  valley is known for loʻi; East Hawaiʻi has almost no class at contact, as it has almost no
+  cultivation.
+- **Rice is placed, not mapped.** No map of the 1890s rice fields was found. Uncapped
+  districts take all land on the rule, which likely overstates Waikīkī and ʻEwa (a search
+  summary gave Waikīkī 542 acres of Oʻahu’s 4,659 in 1892, from a page that would not open;
+  not used). Maui’s, Hawaiʻi Island’s and Koʻolauloa’s rice is not drawn.
+- **Pasture in 1896 is 1980’s grazing read back** into whole moku: right where the ranches
+  kept their land, wrong where grazing came later (forest cleared after 1896) or went
+  (towns, pineapple). Whole-island ranges are drawn as all open land.
+- **The 1853 plantations are discs** of a nominal 300 acres, the 1853 ranches the lower,
+  drier part of an ahupuaʻa: Parker’s comes to 280 km², his whole ahupuaʻa below the
+  forest, far more than the land he held.
+- **Lawn needs two sources to agree** (zoning or a golf point, and the land cover of about
+  2010), so parks that either misses are not lawn.
+
+#### Still needs a reader or a library
+
+Coulter and Chun, *Chinese Rice Farmers in Hawaii* (1937), for the rice districts and
+their acres; Coulter, *Population and Utilization of Land and Sea in Hawaii, 1853* (1931),
+for an 1853 keyframe mapped rather than modelled; MacLennan (1995) on the Maui
+plantations of 1840–60; the Annual for 1895’s coffee growers (pp. 146–148) on the page
+images, to place Kona’s coffee by grower; the Territorial Planning Board’s 1939 land
+utilization maps (the source of the 1900 cane layer), which may show rice and ranch land
+that was never digitised. ACCESS.md lists where each stands.
 
 ## 10. Nuʻuanu 1795
 

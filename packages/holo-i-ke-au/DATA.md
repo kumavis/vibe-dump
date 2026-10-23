@@ -407,7 +407,9 @@ says what each source turned out to be and what is modelled.
 ### Files
 
 `layers/<island>/<keyframe>-<layer>.png`, one per island pack, keyframe and
-layer: 8 islands, 88 masks, about 4.9 MB with the manifest.
+layer: 8 islands, 88 masks, about 4.9 MB with the manifest. Beside them stand
+the zoning rasters and the crop classes (`<keyframe>-crop.png`, "Crops, on
+the era layers" below), each with its own key in the manifest.
 
 - **Registration.** Each mask has exactly the `bounds` and `size` of its island
   pack in `manifest.json`, so texel `(i, j)` is the same ground as in that
@@ -1170,11 +1172,11 @@ keyframe, beside the other masks: `layers/<island>/<keyframe>-crop.png`,
 | 0 | nothing, or cultivation of no known kind | |
 | 1 | loʻi: wet taro | contact |
 | 2 | dryland fields: sweet potato, dry taro, the leeward field systems | contact |
-| 3 | rice, in old loʻi and marsh | mahele (1853) at Honolulu, kingdom (1896) at its height |
-| 4 | sugar cane | mahele (Kōloa 1835, Līhuʻe, Lahaina), kingdom, gone by now |
+| 3 | rice, in old loʻi and marsh | kingdom (1896) at its height; none at mahele, since rice growing began in 1858 |
+| 4 | sugar cane | mahele (Kōloa 1835, Līhuʻe, Hāna, Lāhainā), kingdom, gone by now |
 | 5 | pineapple | kingdom (1900s), now where it remains |
-| 6 | pasture, ranch land | mahele (Parker 1847, Kualoa 1850), kingdom, now |
-| 7 | orchard, coffee, macadamia, truck crops | kingdom (Kona coffee), now |
+| 6 | pasture, ranch land | mahele (Parker 1847, Kualoa 1850, Torbertsville at ʻUlupalakua), kingdom, now |
+| 7 | orchard, coffee, macadamia, truck crops | kingdom (Kona and Olaʻa coffee), now |
 | 8 | lawn: parks, golf, open grounds | now |
 
 A texel with cultivation > 0 and class 0 is drawn as the era's default (taro
@@ -1201,3 +1203,132 @@ rice land of 1882). `check-data.mjs` fails a `crop` other than `taro` or
 `rice`, a `crop` on anything but a `loi`, a rice loʻi without a `from` year,
 and two loʻi on one outline whose years overlap; rice before 1850 warns.
 Koʻolaupoko's rice is in RESEARCH.md §14.
+
+**What the bake settled beyond the table** (accepted extensions, all in the
+manifest's `crops` entry):
+
+- **Rice starts at kingdom.** The table first had rice at Honolulu in 1853.
+  The record has it as an experiment of the Royal Hawaiian Agricultural Society
+  from 1858, taken up by Chinese planters in the 1860s (Glick), so `mahele`
+  draws no rice and says why in `record.leftOut`.
+- **Two more classes may stand where the cultivation mask is 0**, besides
+  pasture and lawn: cane (4) at `mahele`, because the 1853 cultivation mask has
+  no cane in it, and orchard (7) at `kingdom`, because the 1896 mask leaves
+  coffee out (its rule says so). `encoding.uncultivated` lists all four with
+  the reason; everywhere else a class other than 0 stands only on cultivated
+  texels.
+- **The fishpond shore is class 0.** Where the shore rule is the largest term
+  of the cultivation mask the texel is a pond's shore, not a field, so the app
+  draws its default there.
+- **Eras take the nearest keyframe** (`crops.eras`): voyaging to kamehameha
+  take contact, kaahumanu and kauikeaouli mahele, kalakaua and liliuokalani
+  kingdom, the coda now.
+- **Whole-island ranges.** Lānaʻi, Niʻihau and Kahoʻolawe in 1896 are pasture
+  wherever the land is neither forest nor field, since each was stocked end to
+  end and the 1978–80 map cannot give their grazing back.
+
+### `crops` in `layers/manifest.json`
+
+```jsonc
+"crops": {
+  "about": "...",
+  "encoding": { "file": "<island>/<keyframe>-crop.png", "classes": { "0": "...", "8": "..." }, "keys": { "1": "loi", ... },
+                "uncultivated": { "6": "...", "8": "...", "7": "...", "4": "..." }, "sample": "nearest" },
+  "keyframes": ["contact", "mahele", "kingdom", "now"],
+  "eras": { "kamehameha": { "year": 1807, "keyframe": "contact" } },
+  "methods": { "kingdom": { "method": "mixed", "rule": "the rule written out", "classes": [1, 2, 3, 4, 5, 6, 7],
+                            "limits": "what the rule cannot know", "sources": ["thrum-annual-1902", "hawaii-gis-alum-1980", ...] } },
+  "record": { "plantations1853": {...}, "ranches1853": [...], "ranches1896": {...}, "rice1896": {...}, "coffee1896": {...}, "leftOut": [...] },
+  "mapping": { "now": { "field": "crops_2020", "classes": { "Pasture": 6, ... } }, "alum": {...}, "cah": {...} },
+  "rules": { ...the modelling constants },
+  "sources": { "<id>": { "id", "title", "url", "licence", "fetched", "note", "sourcesJson": true, "opened": true } },
+  "islands": { "oahu": { "pack": "oahu", "size": [1024, 801], "bounds": [...],
+                         "layers": { "kingdom": { "file": "oahu/kingdom-crop.png", "method": "mixed",
+                                                  "stats": { "landTexels": 335807, "classedTexels": 128204,
+                                                             "texels": { "1": 12496, ... }, "km2": { "1": 58.27, ... } } } } } },
+  "stats": { "files": 32, "bytes": 326436 },
+  "baked": { "tool": "tools/bake-crops.mjs", ... }
+}
+```
+
+- **`methods`** per keyframe, as the layers' own: `method` (`mapped`,
+  `modelled` or `mixed`), `rule` written out, `classes` (the only classes its
+  rasters may hold), `limits`, and `sources` as ids of `crops.sources`.
+- **`record`** is the history the rules draw, as drawn: each 1853 plantation
+  with its mill, sources and the acres it came to; each ranch with its bounds
+  (ahupuaʻa by `gisId` and name, moku by key, or the whole island) and the km²
+  of pasture drawn; each rice district with its 1892 figure where known, the
+  acres on the rule and the acres drawn; the coffee lands; and `leftOut`,
+  everything the brief or the record names that the bake does not draw, with
+  why.
+- **`sources`** are keyed by id. The data layers carry the date the ledger
+  recorded; the historical sources are the entries of `sources.json`
+  (`sourcesJson: true`), with the date they were read for this bake and the
+  terms they are used under. Sources not opened (`opened: false`) are cited
+  for what they would settle, and check-data holds every id to `sources.json`.
+- **`stats`** per raster, over the pack's land: `landTexels`, `classedTexels`,
+  and per class its `texels` and `km2` (texels times the pack's
+  `metresPerTexel` squared). A pack holds the slivers of neighbours in its box,
+  so islands' figures overlap there.
+- No pack is absent; if one ever is, `islands.<id>.absent` gives the reason
+  (or `absent.<keyframe>` for one keyframe), which the checks accept in place
+  of the raster.
+
+### How to bake the crops
+
+Run the pack bake, the layers bake and the zoning bake first; this reads
+`manifest.json`, each island's `height.png` and `rain.png`, `boundaries/`,
+`eras.json`, `sources.json`, the era layers' cultivation and forest masks and
+the zoning rasters, and writes only `layers/<island>/<keyframe>-crop.png` and
+the top-level `crops` key of `layers/manifest.json`, leaving every other key
+of that file as it stands.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-crops.mjs --all                  # download, bake, check, delete the downloads (about two minutes)
+node packages/holo-i-ke-au/tools/bake-crops.mjs --preview /tmp/crops   # each island's four keyframes side by side, by class over shaded relief, with km²
+```
+
+or `--download` (about 500 MB, nearly all of it the 30 m CAH GeoTIFF the
+layers bake also fetches), `--bake` (about 50 s), `--check`, `--clean`.
+`--downloads DIR` (or `$HOLO_CROPS_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/crops-downloads`; keep them outside the repo.
+Same needs as the other bakes: Node 22, `curl`, the `geotiff` devDependency.
+A re-bake from the same downloads is byte-identical; only `fetched` dates
+move.
+
+It fetches the field layers exactly as the layers bake does (the
+Traditional Agriculture zones, the geologic units, the Land Commission
+Awards, the 1900 cane and pineapple, the 2020 baseline), so the terms that
+name a texel's field are the cultivation masks' own (`fieldInputs` and
+`cultivationTerms` in `lib/layers-model.mjs`, shared with the layers bake),
+and adds the 1978–80 Agricultural Land Use Maps (LandUseLandCover layer 5:
+grazing and coffee, read back to 1896), the golf courses (Infrastructure
+layer 14, points) and the CAH land cover (its class 43, developed open
+space). The history it draws is `lib/crops-history.mjs`, the rules
+`lib/crops-model.mjs`, the check and preview `lib/crops-check.mjs`.
+
+`tools/bake-layers.mjs` rewrites `layers/manifest.json` but carries `zoning`
+and `crops` across. The crop classes read the cultivation masks, so after a
+layers bake that changes them, bake the crops again.
+
+### What the crops check covers
+
+`--check` reads every raster back: greyscale, its pack's exact grid, values
+0–8, nothing over sea, `stats` equal to what the image holds, only the
+classes its keyframe's method lists, and a cultivated class only where that
+keyframe's cultivation mask is above 0 (the four of `encoding.uncultivated`
+excepted). Every keyframe needs a method, a rule, its limits and sources;
+every source a title, URL and licence (a source not opened may lack its URL)
+and, unless it is the project's own bake or unopened, a date; every era a
+keyframe; the historical sources must match `sources.json`. It prints km² by
+class per island and keyframe and a sanity table (Waipiʻo and Hanalei in
+loʻi and the Kohala field system and Kula in dryland at contact; cane at
+Kōloa and pasture at Waimea and Kualoa in 1853; rice at Hanalei and Waikāne,
+cane on the ʻEwa plain, coffee in Kona and at Olaʻa, pasture at Waimea, on
+Niʻihau and on Kahoʻolawe in 1896; Kapiʻolani Park lawn, the pineapple by
+Wahiawā, Kona coffee and Waimea pasture now), and fails if
+`public/data/layers/` passes 8 MB. `tools/check-data.mjs` holds the same
+contract without the bake's libraries: classes 0–8, the pack's grid, nothing
+over sea, stats, every pack and keyframe present or its absence recorded,
+methods with rules and sources, eras in `eras.json`, and every historical
+source in `sources.json`.

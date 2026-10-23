@@ -12,7 +12,9 @@
 // and the district's height image for the loʻi slope rule; mahele.json (the
 // class of each ahupuaʻa after the Māhele, joined to boundaries/ahupuaa.geojson
 // by gisId) when it exists; and the era map of layers/manifest.json, which must
-// name only eras in eras.json.
+// name only eras in eras.json, with its crops entry when there is one (each
+// class raster read back against its pack's height image and stats, and the
+// crops' historical sources held to sources.json).
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -1195,6 +1197,7 @@ function checkMahele() {
 // ---------------------------------------------------------------------------
 // layers/manifest.json: its era map is keyed by era id, so an era that goes leaves a dangling key
 let layerEras = null
+let cropCounts = null
 if (existsSync(join(DATA, 'layers', 'manifest.json'))) {
   const lm = load('layers/manifest.json')
   if (lm && lm.eras && typeof lm.eras === 'object') {
@@ -1205,6 +1208,75 @@ if (existsSync(join(DATA, 'layers', 'manifest.json'))) {
     }
     for (const e of eras) if (!(e.id in lm.eras)) bad('layers/manifest.json', `has no era map for ${e.id}`)
   }
+  if (lm?.crops) checkCrops(lm)
+}
+
+// layers/manifest.json crops (DATA.md "Crops, on the era layers"): a class raster per
+// island pack and keyframe, registered on the pack, classes 0–8, stats as the image holds
+function checkCrops(lm) {
+  const at = 'layers/manifest.json crops'
+  const K = lm.crops
+  const N_CROP = 8
+  const packs = (load('manifest.json')?.packs || []).filter((p) => p.kind === 'island')
+  const keyframes = (lm.keyframes || []).map((k) => k.id)
+  if (JSON.stringify(K.keyframes) !== JSON.stringify(keyframes)) bad(at, `keyframes ${JSON.stringify(K.keyframes)} are not the layers' ${JSON.stringify(keyframes)}`)
+  if (JSON.stringify(Object.keys(K.encoding?.classes || {})) !== JSON.stringify([...Array(N_CROP + 1).keys()].map(String))) bad(at, 'encoding.classes is not the classes 0–8')
+  for (const e of eras) if (!keyframes.includes(K.eras?.[e.id]?.keyframe)) bad(at, `era ${e.id} takes no keyframe`)
+  for (const id of Object.keys(K.eras || {})) if (!E.has(id)) bad(`${at} eras ${id}`, 'is not an era in eras.json')
+  for (const k of keyframes) {
+    const m = K.methods?.[k]
+    if (!m) { bad(at, `no method for ${k}`); continue }
+    if (!['mapped', 'modelled', 'mixed'].includes(m.method)) bad(`${at} methods.${k}`, `method “${m.method}”`)
+    if (m.method !== 'mapped' && !(typeof m.rule === 'string' && m.rule.length > 80)) bad(`${at} methods.${k}`, `${m.method} but no rule written out`)
+    if (!m.sources?.length) bad(`${at} methods.${k}`, 'no sources')
+    for (const id of m.sources || []) if (!K.sources?.[id]) bad(`${at} methods.${k}`, `source ${id} is not among the crops' sources`)
+  }
+  for (const [id, s] of Object.entries(K.sources || {})) {
+    if (!s.title || !s.licence || (!s.url && !(s.sourcesJson && s.opened === false))) bad(`${at} sources ${id}`, 'lacks title, url or licence (only a source not opened may lack its url)')
+    if (s.sourcesJson) useSource(`${at} sources`, id)
+    if (s.sourcesJson && S.has(id) && S.get(id).opened !== s.opened) bad(`${at} sources ${id}`, 'opened differs from sources.json')
+    if (!id.startsWith('holo-') && !(s.sourcesJson && s.opened === false) && !/^\d{4}-\d{2}-\d{2}$/.test(s.fetched || '')) bad(`${at} sources ${id}`, 'a source read or fetched needs its date (fetched)')
+  }
+  const counts = {}
+  for (const pack of packs) {
+    const e = K.islands?.[pack.id]
+    if (!e) { bad(at, `no entry for the ${pack.id} pack (absent packs are recorded with absent and a reason)`); continue }
+    if (e.absent && typeof e.absent === 'string') continue
+    if (JSON.stringify(e.size) !== JSON.stringify(pack.size) || JSON.stringify(e.bounds) !== JSON.stringify(pack.bounds)) bad(`${at} ${pack.id}`, 'size or bounds differ from the pack')
+    let h
+    try { h = readPNG(join(DATA, pack.height.file)) } catch (err) { bad(`${at} ${pack.id}`, `cannot read the pack's height image (${err.message})`); continue }
+    const [W, H] = pack.size
+    const texelKm2 = (pack.metresPerTexel[0] * pack.metresPerTexel[1]) / 1e6
+    for (const k of keyframes) {
+      const L = e.layers?.[k]
+      if (!L) { if (!e.absent?.[k]) bad(`${at} ${pack.id}`, `no ${k} raster and no absence recorded`); continue }
+      const where = `layers/${L.file}`
+      if (L.file !== `${pack.id}/${k}-crop.png`) bad(where, `is not named ${pack.id}/${k}-crop.png`)
+      if (L.method !== K.methods?.[k]?.method) bad(where, `method differs from methods.${k}`)
+      let img
+      try { img = readPNG(join(DATA, 'layers', L.file)) } catch (err) { bad(where, err.message); continue }
+      if (img.channels !== 1) bad(where, 'is not greyscale')
+      if (img.width !== W || img.height !== H) { bad(where, `is ${img.width}x${img.height}, the pack ${W}x${H}`); continue }
+      const n = new Array(N_CROP + 1).fill(0)
+      let land = 0
+      let over = 0
+      let sea = 0
+      for (let o = 0; o < W * H; o++) {
+        const c = img.data[o]
+        if (c > N_CROP) { over++; continue }
+        if ((h.data[o * 3] * 256 + h.data[o * 3 + 1]) * pack.height.scale + pack.height.offset > 0) { land++; n[c]++ } else if (c) sea++
+      }
+      if (over) bad(where, `${over} texels outside the classes 0–${N_CROP}`)
+      if (sea) bad(where, `${sea} texels with a class over sea`)
+      const texels = {}
+      const km2 = {}
+      for (let c = 1; c <= N_CROP; c++) if (n[c]) { texels[c] = n[c]; km2[c] = Math.round(n[c] * texelKm2 * 100) / 100 }
+      const st = { landTexels: land, classedTexels: land - n[0], texels, km2 }
+      if (JSON.stringify(st) !== JSON.stringify(L.stats)) bad(where, 'stats differ from what the image holds')
+      counts[k] = (counts[k] || 0) + 1
+    }
+  }
+  cropCounts = { rasters: Object.values(counts).reduce((a, b) => a + b, 0), keyframes: Object.keys(counts).length, sources: Object.keys(K.sources || {}).length }
 }
 
 // ---------------------------------------------------------------------------
@@ -1246,5 +1318,6 @@ function finish() {
   console.log(`  sources   read ${fmt(count(sources, (s) => s.read))}`)
   if (maheleCounts) console.log(`  mahele    ${maheleCounts.n} ahupuaʻa (${fmt(maheleCounts.counts)})`)
   if (layerEras !== null) console.log(`  layers    era map for ${layerEras} eras, all in eras.json`)
+  if (cropCounts) console.log(`  crops     ${cropCounts.rasters} class rasters over ${cropCounts.keyframes} keyframes, registered on their packs, stats as the images hold; ${cropCounts.sources} sources`)
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

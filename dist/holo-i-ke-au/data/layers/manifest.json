@@ -3201,5 +3201,2292 @@
       },
       "minClassed": 0.25
     }
+  },
+  "crops": {
+    "about": "What grows on each land texel at each era keyframe: per island pack and keyframe, an 8-bit greyscale PNG of class numbers with exactly the bounds and size of its pack in ../manifest.json (texel registration as DATA.md has it), 0 over sea. Class numbers are categories: sample them nearest, never filtered, and take the nearest keyframe for an era (eras), never a blend of bytes. A texel with cultivation above 0 and class 0 is drawn as the era’s default; pasture and lawn may stand where the cultivation mask is 0, and so may two classes the cultivation masks leave out (uncultivated). Where a class is modelled rather than mapped, methods says so and writes the rule out.",
+    "encoding": {
+      "file": "<island>/<keyframe>-crop.png",
+      "classes": {
+        "0": "nothing, or cultivation of no known kind",
+        "1": "loʻi: wet taro",
+        "2": "dryland fields: sweet potato, dry taro, the leeward field systems",
+        "3": "rice, in old loʻi and marsh",
+        "4": "sugar cane",
+        "5": "pineapple",
+        "6": "pasture, ranch land",
+        "7": "orchard, coffee, macadamia, truck crops",
+        "8": "lawn: parks, golf, open grounds"
+      },
+      "keys": {
+        "0": "none",
+        "1": "loi",
+        "2": "dryland",
+        "3": "rice",
+        "4": "cane",
+        "5": "pineapple",
+        "6": "pasture",
+        "7": "orchard",
+        "8": "lawn"
+      },
+      "uncultivated": {
+        "4": "at mahele only: the cultivation mask has no cane, so the class alone marks the plantations",
+        "6": "grazing is not cultivation",
+        "7": "at kingdom only: the cultivation mask leaves coffee out, so the class alone marks it",
+        "8": "lawn is not cultivation"
+      },
+      "sample": "nearest"
+    },
+    "keyframes": [
+      "contact",
+      "mahele",
+      "kingdom",
+      "now"
+    ],
+    "eras": {
+      "voyaging": {
+        "year": 1200,
+        "keyframe": "contact"
+      },
+      "mailikukahi": {
+        "year": 1480,
+        "keyframe": "contact"
+      },
+      "umi": {
+        "year": 1560,
+        "keyframe": "contact"
+      },
+      "kakuhihewa": {
+        "year": 1680,
+        "keyframe": "contact"
+      },
+      "alapai": {
+        "year": 1745,
+        "keyframe": "contact"
+      },
+      "kalaniopuu": {
+        "year": 1772,
+        "keyframe": "contact"
+      },
+      "kahekili": {
+        "year": 1788,
+        "keyframe": "contact"
+      },
+      "kamehameha": {
+        "year": 1807,
+        "keyframe": "contact"
+      },
+      "kaahumanu": {
+        "year": 1826,
+        "keyframe": "mahele"
+      },
+      "kauikeaouli": {
+        "year": 1853,
+        "keyframe": "mahele"
+      },
+      "kalakaua": {
+        "year": 1882,
+        "keyframe": "kingdom"
+      },
+      "liliuokalani": {
+        "year": 1895,
+        "keyframe": "kingdom"
+      },
+      "coda": {
+        "year": 2000,
+        "keyframe": "now"
+      }
+    },
+    "methods": {
+      "contact": {
+        "method": "modelled",
+        "rule": "Where the contact cultivation mask (layers/<island>/contact-cultivation.png) is above 0, the term of its rule that is largest there names the field: the loʻi rule (the Kurashima–Kirch loʻi zones and the valley-floor and coastal-plain rule) gives loʻi (1); the dryland and agroforestry zones give dryland (2); the kuleana parcels give loʻi where the loʻi rule reaches 0.25 there and dryland elsewhere; the fishpond shore gives 0 (a pond’s shore, no crop: the app draws its default). Nothing else grows at contact: classes 1, 2 and 0 only.",
+        "classes": [
+          1,
+          2
+        ],
+        "limits": "As good as the cultivation model beneath it (RESEARCH §9): the dryland zones are the published model of the leeward field systems, not their surveyed footprints; East Hawaiʻi and windward East Maui are thin; the loʻi/dryland line follows which term of the model is largest, not a field survey.",
+        "sources": [
+          "holo-layers",
+          "ksbe-traditional-agriculture",
+          "hawaii-gis-geologic-units",
+          "oha-kipuka-land-commission-awards"
+        ]
+      },
+      "mahele": {
+        "method": "modelled",
+        "rule": "Where the mahele cultivation mask (layers/<island>/mahele-cultivation.png) is above 0, the term of its rule that is largest there names the field: the loʻi rule (the Kurashima–Kirch loʻi zones and the valley-floor and coastal-plain rule) gives loʻi (1); the dryland and agroforestry zones give dryland (2); the kuleana parcels give loʻi where the loʻi rule reaches 0.25 there and dryland elsewhere; the fishpond shore gives 0 (a pond’s shore, no crop: the app draws its default), the abandonment since contact being already in the mask’s lower weights. Cane (4): each plantation grinding by 1853 (Kōloa, Līhuʻe, Hāna, Lāhainā) drawn as 300 acres (no acreage for 1853 was found for any of them, so every one takes this nominal figure) of the land nearest its mill below 300 m and flatter than 15%, not loʻi, land that was cane in 1900 counting as 2 times nearer; the 1853 cultivation mask has no cane, so these texels may be 0 in it. Pasture (6): the ranches by 1853 (Parker, at Waimea, 1847; Kualoa (Judd), 1850; Torbertsville (ʻUlupalakua), 1841), whose grazed land is not known, only their bounds (the ahupuaʻa named in record.ranches1853), so the lower, drier part of the bounds: below 2,000 m, with 400–2,000 mm of rain a year (neither the bare leeward coast nor the wet forest belt), outside the keyframe’s forest (under 50%) and fields (cultivation under 25%). No rice: it was started in 1858 (record.leftOut).",
+        "classes": [
+          1,
+          2,
+          4,
+          6
+        ],
+        "limits": "The plantations are discs of a nominal size around their towns; Hilo’s mills and the East Maui plantation are left out (record.leftOut says why). Pasture is three ranches; the wild cattle of the Waimea plains and Mauna Kea, the herds kept across every island, are not drawn.",
+        "sources": [
+          "holo-layers",
+          "ksbe-traditional-agriculture",
+          "hawaii-gis-geologic-units",
+          "oha-kipuka-land-commission-awards",
+          "hawaii-gis-sugarcane-1900",
+          "holo-boundaries",
+          "nrhp-koloa-mill",
+          "thrum-annual-1902",
+          "to-hawaii-hana",
+          "nrhp-haiku-mill",
+          "imagesofoldhawaii-pioneer-mill",
+          "maclennan-1995-maui-plantations",
+          "mauiwine-ulupalakua-history",
+          "wikipedia-parker-ranch",
+          "wikipedia-kualoa-ranch",
+          "kirc-history",
+          "wikipedia-valdemar-knudsen",
+          "glick-1980-sojourners",
+          "coulter-1931-land-1853"
+        ]
+      },
+      "kingdom": {
+        "method": "mixed",
+        "rule": "Mapped: cane (4) and pineapple (5) where the 1900 cane and pineapple lands are the largest term of the kingdom cultivation mask. Modelled: elsewhere, where the kingdom cultivation mask (layers/<island>/kingdom-cultivation.png) is above 0, the term of its rule that is largest there names the field: the loʻi rule (the Kurashima–Kirch loʻi zones and the valley-floor and coastal-plain rule) gives loʻi (1); the dryland and agroforestry zones give dryland (2); the kuleana parcels give loʻi where the loʻi rule reaches 0.25 there and dryland elsewhere; the fishpond shore gives 0 (a pond’s shore, no crop: the app draws its default). Rice (3): in each district an opened source puts rice in (record.rice1896), the cultivated texels classed loʻi, dryland or none that lie below 15 m and flatter than 6%, on loʻi ground (the loʻi rule at 0.25 or more) or wet ground (alluvium, lagoon deposits or fill at 0.5 or more): “the lowest flats found at the outlets of valleys and close on the sea”; where the 1892 figure of a district is known (Hanalei and Waiʻoli 750 acres, Mokulēʻia 738, Kailua and Waimānalo 400) up to that figure, the old loʻi first (the strongest loʻi rule, then the lowest ground: the rice took over abandoned taro land first), and there rice may take land that was cane by 1900. Coffee (7): in Kona, the land that was at least 50% coffee (O-5) in 1978–80, read back; at Olaʻa, 4,093.5 acres (the 1897 count of coffee land a year old or more) of the land between 1,500 and 2,500 feet nearest the Volcano Road; the kingdom cultivation mask leaves coffee out, so these texels may be 0 in it. Pasture (6): in the bounds of each ranch of the Annual’s list (record.ranches1896: the moku of its listed district), the land that was at least 50% grazing (A-1) in 1978–80, read back, where in 1896 it was under 25% cultivated and under 50% forest and not cane, pineapple, rice or coffee; on Lānaʻi, Niʻihau and Kahoʻolawe, whole-island sheep and cattle ranges the 1978–80 map cannot give back (it leaves out Niʻihau and Kahoʻolawe, and Lānaʻi was pineapple by then), all the land below 2,000 m that is neither forest nor field.",
+        "classes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "limits": "Cane and pineapple are of 1900, four years on. Kahoʻolawe’s range is the KIRC timeline’s “first of many ranch leases” from 1858 and its late-1890s stock, not a map. Rice is placed by rule inside districts, not mapped: no map of the rice fields of the 1890s was found, and the 1927 sheets show what was left after annexation turned rice land to cane (none at Mokulēʻia or Waikīkī by then). Its districts are the ones a source names; Maui, Hawaiʻi Island and Koʻolauloa grew rice too, unplaced. Where no figure caps a district (Waikīkī, the ʻEwa shore, Kāneʻohe and the rest) all the land on the rule is rice, which likely overstates Oʻahu, whose lowlands also held taro, ponds and pasture. Pasture is the grazing of 1978–80 read back into the 1890s ranches’ districts: right where the ranches kept their land, wrong where grazing spread after 1896 (cleared forest) or gave way (pineapple, towns). Kona’s coffee is the coffee of 1980 read back, more than the 1,150 acres estimated for 1892 and probably less than the 1890s boom planted.",
+        "sources": [
+          "holo-layers",
+          "hawaii-gis-sugarcane-1900",
+          "hawaii-gis-pineapple-1900",
+          "ksbe-traditional-agriculture",
+          "hawaii-gis-geologic-units",
+          "oha-kipuka-land-commission-awards",
+          "hawaii-gis-alum-1980",
+          "holo-boundaries",
+          "thrum-annual-1902",
+          "kirc-history",
+          "wikipedia-valdemar-knudsen",
+          "glick-1980-sojourners",
+          "nrhp-hanalei-pier",
+          "kelley-1914-rice-soils",
+          "usgs-topo-1927-oahu",
+          "coulter-chun-1937-rice",
+          "thrum-annual-1895",
+          "thrum-annual-1900",
+          "usgs-topo-1910-kauai",
+          "char-1988-chinese-sites"
+        ]
+      },
+      "now": {
+        "method": "mapped",
+        "rule": "The 2020 agricultural baseline: each texel takes the group of categories covering most of it (mapping.now) when the groups together cover 25% of it or the now cultivation mask is above 0: taro loʻi (1); pineapple (5); orchard, coffee, macadamia, fruit, flowers, seed and diversified crops (7); pasture and dairy (6). No cane: the last plantation closed in 2016, and the 14 acres the layer still calls Sugar count as 7. Lawn (8): where no crop is, the CAH land cover’s developed open space covers 50% of the texel and either the county zones it parks and open space (now-zoning.png class 12) or a golf course lies within 600 m (scaled by the square root of its holes over 18) of the point the State layer gives it.",
+        "classes": [
+          1,
+          5,
+          6,
+          7,
+          8
+        ],
+        "limits": "The baseline maps commercial agriculture only (household gardens and small loʻi are not in it). The lawns need two sources to agree, so a park the zoning misses or turf the land cover of about 2010 calls something else is not lawn; the golf courses are points, so a course’s lawn is the open space near its point. Kahoʻolawe and Niʻihau have no zoning and no golf, so no lawn.",
+        "sources": [
+          "hawaii-gis-agriculture-2020",
+          "usgs-cah-landcover-2017",
+          "hawaii-gis-golf-courses",
+          "holo-zoning",
+          "holo-layers"
+        ]
+      }
+    },
+    "record": {
+      "plantations1853": {
+        "acresEach": 300,
+        "plantations": [
+          {
+            "id": "koloa",
+            "name": "Kōloa",
+            "island": "kauai",
+            "lon": -159.4683,
+            "lat": 21.906,
+            "since": 1835,
+            "sources": [
+              "nrhp-koloa-mill",
+              "thrum-annual-1902"
+            ],
+            "note": "Ladd & Co. leased 980 acres at Kōloa in 1835, the plantation was under R. W. Wood from 1848, and a steam engine came in 1853 (the National Register nomination, whose UTM reference for the mill is the point here); the Matanzas brought \"an outfit for the Koloa and Lihue plantations\" in 1853 (the Annual for 1902, history of H. Hackfeld & Co.)",
+            "acresDrawn": 300
+          },
+          {
+            "id": "lihue",
+            "name": "Līhuʻe",
+            "island": "kauai",
+            "lon": -159.36492,
+            "lat": 21.97409,
+            "since": 1853,
+            "sinceNote": "in operation by 1853; founded earlier, year not read",
+            "sources": [
+              "thrum-annual-1902"
+            ],
+            "note": "outfitted with Kōloa in 1853 (the Annual for 1902); drawn around Līhuʻe town",
+            "acresDrawn": 300
+          },
+          {
+            "id": "hana",
+            "name": "Hāna",
+            "island": "maui",
+            "lon": -156.00849,
+            "lat": 20.77161,
+            "since": 1849,
+            "sources": [
+              "to-hawaii-hana",
+              "nrhp-haiku-mill"
+            ],
+            "note": "George Wilfong’s plantation of 1849 (a travel site, tertiary); a Hāna company is among the five sugar companies on Maui in 1858 (the National Register nomination of the Haʻikū Mill); drawn around Hāna town",
+            "acresDrawn": 301
+          },
+          {
+            "id": "lahaina",
+            "name": "Lāhainā",
+            "island": "maui",
+            "lon": -156.67664,
+            "lat": 20.87429,
+            "since": 1840,
+            "sinceNote": "the 1840s",
+            "sources": [
+              "imagesofoldhawaii-pioneer-mill"
+            ],
+            "note": "sugar made in modest amounts through the 1840s and 1850s, before James Campbell’s plantation of 1860 (a history blog, tertiary); drawn around the town",
+            "acresDrawn": 301
+          }
+        ]
+      },
+      "ranches1853": [
+        {
+          "id": "parker",
+          "name": "Parker, at Waimea",
+          "island": "hawaii",
+          "ahupuaa": [
+            {
+              "gisId": 369,
+              "name": "Waimea, Waikoloa"
+            }
+          ],
+          "since": 1847,
+          "sources": [
+            "wikipedia-parker-ranch"
+          ],
+          "note": "founded 1847 by John Palmer Parker on land granted for ridding the island of feral cattle; bounds: the ahupuaʻa of Waimea and Waikōloa",
+          "km2Drawn": 279.5
+        },
+        {
+          "id": "kualoa",
+          "name": "Kualoa (Judd)",
+          "island": "oahu",
+          "ahupuaa": [
+            {
+              "gisId": 181,
+              "name": "Kualoa 1"
+            },
+            {
+              "gisId": 179,
+              "name": "Kualoa 2"
+            }
+          ],
+          "since": 1850,
+          "sources": [
+            "wikipedia-kualoa-ranch"
+          ],
+          "note": "G. P. Judd bought 622 acres of ranch land at Kualoa from Kamehameha III in 1850 (the two Kualoa units of the boundary file hold about 637 acres)",
+          "km2Drawn": 1.3
+        },
+        {
+          "id": "torbertsville",
+          "name": "Torbertsville (ʻUlupalakua)",
+          "island": "maui",
+          "ahupuaa": [
+            {
+              "gisId": 715,
+              "name": "Papaʻanui"
+            }
+          ],
+          "since": 1841,
+          "sources": [
+            "mauiwine-ulupalakua-history"
+          ],
+          "note": "L. L. Torbert’s lease of 1841, 2,087 acres with a sugar mill; Torbertsville sold beef, hogs and sheep, and went to Makee in 1856 with 475 sheep, 350 goats and oxen; its mill ran again only from 1861. Bounds: the Papaʻanui unit of Honuaʻula that holds ʻUlupalakua",
+          "km2Drawn": 17.54
+        }
+      ],
+      "ranches1896": {
+        "source": "thrum-annual-1902",
+        "listedAs": "List of Principal Stock and Sheep Ranches throughout the Islands, Hawaiian Annual for 1902, p. 42: ranch, character, location as printed",
+        "ranches": [
+          {
+            "name": "Greenwell’s",
+            "character": "Cattle and Sheep",
+            "location": "S. Kona, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kona"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Huehue",
+            "character": "Stock",
+            "location": "N. Kona, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kona"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Paris’",
+            "character": "Stock",
+            "location": "S Kona, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kona"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Puuwaawaa",
+            "character": "Stock",
+            "location": "Kona, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kona"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kahuku",
+            "character": "Stock",
+            "location": "Kau, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kaʻū"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kapapala",
+            "character": "Stock",
+            "location": "Kau, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kaʻū"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Waiohinu Agricultural Co.",
+            "character": "Stock",
+            "location": "Kau, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kaʻū"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Parkers’",
+            "character": "Stock",
+            "location": "Waimea, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kohala"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Puuhue",
+            "character": "Stock",
+            "location": "Kohala, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kohala"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Puuloa",
+            "character": "Sheep",
+            "location": "Waimea, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Kohala"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Humuula",
+            "character": "Sheep",
+            "location": "Kohala, Hawaii",
+            "island": "hawaii",
+            "ahupuaa": [
+              {
+                "gisId": 304,
+                "name": "Humuʻula"
+              }
+            ],
+            "note": "the list prints Kohala; the sheep station is on Humuʻula, which the boundary file puts in Hilo, so the bounds are that ahupuaʻa",
+            "grazed": "alum"
+          },
+          {
+            "name": "Umikoa",
+            "character": "Stock",
+            "location": "Hamakua, Hawaii",
+            "island": "hawaii",
+            "moku": [
+              "hawaii:Hāmākua"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Erehwon Station",
+            "character": "Cattle",
+            "location": "Makawao, Maui",
+            "island": "maui",
+            "moku": [
+              "maui:Kula",
+              "maui:Hāmākuapoko",
+              "maui:Hāmākualoa"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Haleakala",
+            "character": "Stock",
+            "location": "Makawao, Maui",
+            "island": "maui",
+            "moku": [
+              "maui:Kula",
+              "maui:Hāmākuapoko",
+              "maui:Hāmākualoa"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Honolua",
+            "character": "Stock",
+            "location": "Honolua, Maui",
+            "island": "maui",
+            "moku": [
+              "maui:Kāʻanapali"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kahikinui",
+            "character": "Stock",
+            "location": "Nuu, Maui",
+            "island": "maui",
+            "moku": [
+              "maui:Kahikinui",
+              "maui:Kaupō"
+            ],
+            "note": "named for Kahikinui and listed at Nuʻu, which lies in Kaupō: both moku",
+            "grazed": "alum"
+          },
+          {
+            "name": "Rose Ranch",
+            "character": "Stock",
+            "location": "Ulupalakua, Maui",
+            "island": "maui",
+            "moku": [
+              "maui:Honuaʻula"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Molokai Ranch",
+            "character": "Stock and Sheep",
+            "location": "Molokai",
+            "island": "molokai",
+            "moku": [
+              "molokai:Kona",
+              "molokai:Koʻolau"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Puuohoku",
+            "character": "Cattle and Sheep",
+            "location": "East Molokai",
+            "island": "molokai",
+            "moku": [
+              "molokai:Kona",
+              "molokai:Koʻolau"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Lanai Ranch",
+            "character": "Sheep",
+            "location": "Lanai",
+            "island": "lanai",
+            "wholeIsland": true,
+            "grazed": "island"
+          },
+          {
+            "name": "Gay & Robinson",
+            "character": "Sheep",
+            "location": "Niihau",
+            "island": "niihau",
+            "wholeIsland": true,
+            "grazed": "island"
+          },
+          {
+            "name": "the Kahoʻolawe ranch leases",
+            "character": "Cattle and Sheep",
+            "location": "Kahoolawe",
+            "island": "kahoolawe",
+            "wholeIsland": true,
+            "grazed": "island",
+            "notInList": true,
+            "sources": [
+              "kirc-history"
+            ],
+            "note": "not in the 1902 list; the government leased the island for ranching from 1858 to 1941, and by the late 1890s it carried 900 cattle and 15,000 sheep (the Kahoʻolawe Island Reserve Commission’s history)"
+          },
+          {
+            "name": "Honouliuli",
+            "character": "Stock",
+            "location": "Ewa, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:ʻEwa"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kalawao",
+            "character": "Stock",
+            "location": "Ewa, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:ʻEwa"
+            ],
+            "note": "as printed; in ʻEwa, so probably Kalauao",
+            "grazed": "alum"
+          },
+          {
+            "name": "Waimalu",
+            "character": "Stock",
+            "location": "Ewa, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:ʻEwa"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kahuku",
+            "character": "Stock",
+            "location": "Kahuku, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:Koʻolauloa"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Kaneohe",
+            "character": "Stock",
+            "location": "Koolau, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:Koʻolaupoko"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Leilehua",
+            "character": "Stock",
+            "location": "Waianae, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:Waiʻanae"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Makua",
+            "character": "Stock",
+            "location": "Waianae, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:Waiʻanae"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Mokuleia",
+            "character": "Stock",
+            "location": "Waialua, Oahu",
+            "island": "oahu",
+            "moku": [
+              "oahu:Waialua"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Rice’s",
+            "character": "Stock",
+            "location": "Lihue, Kauai",
+            "island": "kauai",
+            "moku": [
+              "kauai:Puna"
+            ],
+            "grazed": "alum"
+          },
+          {
+            "name": "Knudsen’s, on the Waimea crown lands",
+            "character": "Stock",
+            "location": "Waimea, Kauai",
+            "island": "kauai",
+            "moku": [
+              "kauai:Kona"
+            ],
+            "notInList": true,
+            "sources": [
+              "wikipedia-valdemar-knudsen"
+            ],
+            "note": "not in the 1902 list; Knudsen took a thirty-year lease of crown lands in Waimea district and established a ranch there (Wikipedia, tertiary)",
+            "grazed": "alum"
+          }
+        ],
+        "drawn": {
+          "Greenwell’s, Huehue, Paris’, Puuwaawaa": {
+            "island": "hawaii",
+            "bounds": [
+              "hawaii:Kona"
+            ],
+            "grazed": "alum",
+            "km2": 920.98
+          },
+          "Kahuku, Kapapala, Waiohinu Agricultural Co.": {
+            "island": "hawaii",
+            "bounds": [
+              "hawaii:Kaʻū"
+            ],
+            "grazed": "alum",
+            "km2": 395.58
+          },
+          "Parkers’, Puuhue, Puuloa": {
+            "island": "hawaii",
+            "bounds": [
+              "hawaii:Kohala"
+            ],
+            "grazed": "alum",
+            "km2": 699.53
+          },
+          "Humuula": {
+            "island": "hawaii",
+            "bounds": [
+              "Humuʻula"
+            ],
+            "grazed": "alum",
+            "km2": 117.43
+          },
+          "Umikoa": {
+            "island": "hawaii",
+            "bounds": [
+              "hawaii:Hāmākua"
+            ],
+            "grazed": "alum",
+            "km2": 523.14
+          },
+          "Erehwon Station, Haleakala": {
+            "island": "maui",
+            "bounds": [
+              "maui:Kula",
+              "maui:Hāmākuapoko",
+              "maui:Hāmākualoa"
+            ],
+            "grazed": "alum",
+            "km2": 233.6
+          },
+          "Honolua": {
+            "island": "maui",
+            "bounds": [
+              "maui:Kāʻanapali"
+            ],
+            "grazed": "alum",
+            "km2": 14.89
+          },
+          "Kahikinui": {
+            "island": "maui",
+            "bounds": [
+              "maui:Kahikinui",
+              "maui:Kaupō"
+            ],
+            "grazed": "alum",
+            "km2": 151.64
+          },
+          "Rose Ranch": {
+            "island": "maui",
+            "bounds": [
+              "maui:Honuaʻula"
+            ],
+            "grazed": "alum",
+            "km2": 81.41
+          },
+          "the Kahoʻolawe ranch leases": {
+            "island": "kahoolawe",
+            "bounds": "the whole island",
+            "grazed": "island",
+            "km2": 116.51
+          },
+          "Lanai Ranch": {
+            "island": "lanai",
+            "bounds": "the whole island",
+            "grazed": "island",
+            "km2": 353.03
+          },
+          "Molokai Ranch, Puuohoku": {
+            "island": "molokai",
+            "bounds": [
+              "molokai:Kona",
+              "molokai:Koʻolau"
+            ],
+            "grazed": "alum",
+            "km2": 367.69
+          },
+          "Honouliuli, Kalawao, Waimalu": {
+            "island": "oahu",
+            "bounds": [
+              "oahu:ʻEwa"
+            ],
+            "grazed": "alum",
+            "km2": 25.44
+          },
+          "Kahuku": {
+            "island": "oahu",
+            "bounds": [
+              "oahu:Koʻolauloa"
+            ],
+            "grazed": "alum",
+            "km2": 9.49
+          },
+          "Kaneohe": {
+            "island": "oahu",
+            "bounds": [
+              "oahu:Koʻolaupoko"
+            ],
+            "grazed": "alum",
+            "km2": 4.3
+          },
+          "Leilehua, Makua": {
+            "island": "oahu",
+            "bounds": [
+              "oahu:Waiʻanae"
+            ],
+            "grazed": "alum",
+            "km2": 6.05
+          },
+          "Mokuleia": {
+            "island": "oahu",
+            "bounds": [
+              "oahu:Waialua"
+            ],
+            "grazed": "alum",
+            "km2": 18.96
+          },
+          "Rice’s": {
+            "island": "kauai",
+            "bounds": [
+              "kauai:Puna"
+            ],
+            "grazed": "alum",
+            "km2": 16.96
+          },
+          "Knudsen’s, on the Waimea crown lands": {
+            "island": "kauai",
+            "bounds": [
+              "kauai:Kona"
+            ],
+            "grazed": "alum",
+            "km2": 55.44
+          },
+          "Gay & Robinson": {
+            "island": "niihau",
+            "bounds": "the whole island",
+            "grazed": "island",
+            "km2": 189.91
+          }
+        },
+        "note": "ranches sharing bounds are drawn together; km² is pasture drawn in those bounds on their island’s own pack"
+      },
+      "rice1896": {
+        "totals": {
+          "acres": {
+            "1875": 1000,
+            "1890": 7420,
+            "1900": 9130,
+            "1909": 9425
+          },
+          "source": "glick-1980-sojourners",
+          "interpolated1896": 8446
+        },
+        "districts": [
+          {
+            "id": "hanalei",
+            "name": "Hanalei and Waiʻoli",
+            "island": "kauai",
+            "ahupuaa": [
+              {
+                "gisId": 4,
+                "name": "Hanalei"
+              },
+              {
+                "gisId": 20,
+                "name": "Waiʻoli"
+              }
+            ],
+            "acres1892": 750,
+            "sources": [
+              "nrhp-hanalei-pier",
+              "kelley-1914-rice-soils"
+            ],
+            "acresDrawn": 750,
+            "acresOnRule": 1390
+          },
+          {
+            "id": "mokuleia",
+            "name": "Mokulēʻia",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 163,
+                "name": "Mokulēʻia 1"
+              },
+              {
+                "gisId": 171,
+                "name": "Mokulēʻia 2"
+              }
+            ],
+            "acres1892": 738,
+            "sources": [
+              "nrhp-hanalei-pier"
+            ],
+            "note": "cane by 1900 (the Waialua plantation) and on the 1927 sheet; rice here may take 1900 cane land, since the keyframe is 1896",
+            "acresDrawn": 737,
+            "acresOnRule": 819
+          },
+          {
+            "id": "kailua-waimanalo",
+            "name": "Kailua and Waimānalo",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 205,
+                "name": "Kailua"
+              },
+              {
+                "gisId": 725,
+                "name": "Waimānalo"
+              }
+            ],
+            "acres1892": 400,
+            "sources": [
+              "nrhp-hanalei-pier",
+              "kelley-1914-rice-soils"
+            ],
+            "acresDrawn": 400,
+            "acresOnRule": 2626
+          },
+          {
+            "id": "ewa",
+            "name": "the ʻEwa shore",
+            "island": "oahu",
+            "moku": [
+              "oahu:ʻEwa"
+            ],
+            "sources": [
+              "glick-1980-sojourners",
+              "usgs-topo-1927-oahu"
+            ],
+            "note": "Damon in 1882: rice “a fringe bordering the shore for a long distance” west of town, the fields stretching every way at ʻEwa, a large plantation at Honouliuli; the 1927 sheet still shows diked fields with the marsh symbol at Waiawa’s mouth",
+            "acresDrawn": 1421,
+            "acresOnRule": 1421
+          },
+          {
+            "id": "moanalua",
+            "name": "Moanalua",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 210,
+                "name": "Moanalua"
+              }
+            ],
+            "sources": [
+              "glick-1980-sojourners",
+              "kelley-1914-rice-soils"
+            ],
+            "note": "a rice plantation at Moanalua in 1891 (Glick); Kelley sampled rice soil at Fort Shafter, beside it",
+            "acresDrawn": 236,
+            "acresOnRule": 236
+          },
+          {
+            "id": "waikiki",
+            "name": "Waikīkī",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 221,
+                "name": "Waikīkī"
+              }
+            ],
+            "sources": [
+              "kelley-1914-rice-soils",
+              "usgs-topo-1927-oahu"
+            ],
+            "note": "Kelley sampled Waikīkī’s rice soils; the 1927 sheet shows the flats already drained by the Ala Wai",
+            "acresDrawn": 2301,
+            "acresOnRule": 2301
+          },
+          {
+            "id": "kaneohe",
+            "name": "Kāneʻohe and Heʻeia",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 197,
+                "name": "Kāneʻohe"
+              },
+              {
+                "gisId": 206,
+                "name": "Kāneʻohe"
+              },
+              {
+                "gisId": 194,
+                "name": "Heʻeia"
+              },
+              {
+                "gisId": 201,
+                "name": "Heʻeia"
+              }
+            ],
+            "sources": [
+              "glick-1980-sojourners",
+              "kelley-1914-rice-soils"
+            ],
+            "note": "a rice plantation at Heʻeia in 1888 (Glick); Kelley sampled Kāneʻohe",
+            "acresDrawn": 938,
+            "acresOnRule": 938
+          },
+          {
+            "id": "waiahole",
+            "name": "Waiāhole and Waikāne",
+            "island": "oahu",
+            "ahupuaa": [
+              {
+                "gisId": 189,
+                "name": "Waiāhole"
+              },
+              {
+                "gisId": 186,
+                "name": "Waikane"
+              }
+            ],
+            "sources": [
+              "kelley-1914-rice-soils",
+              "usgs-topo-1927-oahu"
+            ],
+            "note": "Kelley sampled Waiāhole; the 1927 sheet marks the Waikāne flats behind the shore road with the marsh symbol in rows",
+            "acresDrawn": 280,
+            "acresOnRule": 280
+          },
+          {
+            "id": "kauai-east",
+            "name": "Wailua, Kapaʻa and Hulēʻia",
+            "island": "kauai",
+            "ahupuaa": [
+              {
+                "gisId": 35,
+                "name": "Wailua"
+              },
+              {
+                "gisId": 34,
+                "name": "Kapaʻa"
+              },
+              {
+                "gisId": 50,
+                "name": "Niumalu"
+              },
+              {
+                "gisId": 56,
+                "name": "Niumalu"
+              }
+            ],
+            "sources": [
+              "nrhp-hanalei-pier"
+            ],
+            "note": "rice farmers at Hulēʻia, Wailua and Kapaʻa lost their crops to the borer in 1928–29 (the nomination); taken as rice lands in 1896 too. Hulēʻia’s flats are drawn as Niumalu’s",
+            "acresDrawn": 971,
+            "acresOnRule": 971
+          }
+        ],
+        "acresDrawn": 8034,
+        "note": "drawn 8034 acres against about 8446 for 1896 (interpolated between 1890 and 1900); the rest grew in districts no source read names (leftOut)"
+      },
+      "coffee1896": {
+        "kona": {
+          "moku": "hawaii:Kona",
+          "acres1892": 1150,
+          "sources": [
+            "thrum-annual-1895"
+          ],
+          "acresDrawn": 2295,
+          "readBack": "1978–80 O-5"
+        },
+        "olaa": {
+          "ahupuaa": [
+            {
+              "gisId": 419,
+              "name": "ʻŌlaʻa"
+            }
+          ],
+          "elevation": [
+            457,
+            762
+          ],
+          "acres": 4093.5,
+          "road": [
+            [
+              -155.04843,
+              19.60212
+            ],
+            [
+              -155.10436,
+              19.55267
+            ],
+            [
+              -155.15138,
+              19.48782
+            ]
+          ],
+          "sources": [
+            "thrum-annual-1895",
+            "thrum-annual-1900"
+          ],
+          "acresDrawn": 4093
+        }
+      },
+      "leftOut": [
+        {
+          "name": "East Maui Plantation (Kaluanui, Makawao)",
+          "why": "the Annual for 1902 has R. W. Wood’s “Koloa and East Maui plantations” in H. Hackfeld’s agency from the house’s early years, but the Makawao museum and Archipedia date the Kaluanui mill to 1857; left out until a reader settles it (MacLennan 1995 would)",
+          "sources": [
+            "thrum-annual-1902",
+            "maclennan-1995-maui-plantations"
+          ]
+        },
+        {
+          "name": "Hilo’s early mills",
+          "why": "no source read places a mill grinding at Hilo in 1853",
+          "sources": [
+            "maclennan-1995-maui-plantations"
+          ]
+        },
+        {
+          "name": "ʻUlupalakua (Torbert)",
+          "why": "Torbert’s lease of 1841 came with a sugar mill, but it ran again only from 1861 under Makee; 1853 draws the place as grazing",
+          "sources": [
+            "mauiwine-ulupalakua-history"
+          ]
+        },
+        {
+          "name": "Kahoʻolawe",
+          "why": "the first ranch lease is of 1858; the goats Vancouver left in 1793 ran wild, which is not a ranch",
+          "sources": [
+            "kirc-history"
+          ]
+        },
+        {
+          "name": "Kahuku (Oʻahu or Kaʻū)",
+          "why": "no source read dates a ranch at either Kahuku to 1853; both stand in the 1902 list",
+          "sources": [
+            "thrum-annual-1902"
+          ]
+        },
+        {
+          "name": "Waimea, Kauaʻi",
+          "why": "Knudsen’s ranch on the Waimea crown lands dates from after his arrival in 1856; nothing read puts a ranch there in 1853",
+          "sources": [
+            "wikipedia-valdemar-knudsen"
+          ]
+        },
+        {
+          "name": "Maui and Hawaiʻi Island (Waipiʻo, Wailuku and others)",
+          "why": "Damon saw rice on both in 1882 (Glick), but no source read names the valleys or the acres; Coulter and Chun would",
+          "sources": [
+            "glick-1980-sojourners",
+            "coulter-chun-1937-rice"
+          ]
+        },
+        {
+          "name": "Koʻolauloa (Kahana, Punaluʻu, Hauʻula, Lāʻie) and Waialua beyond Mokulēʻia",
+          "why": "no source read names them; Kelley’s “Kalaunui” sample may be Kaluanui in Koʻolauloa, but the name is not certain",
+          "sources": [
+            "kelley-1914-rice-soils",
+            "coulter-chun-1937-rice"
+          ]
+        },
+        {
+          "name": "Mānoa and Pālolo above the coastal flats",
+          "why": "a rice plantation in Mānoa in 1895 (Glick), but the valley floors lie above the coastal flats the rule draws, and no acreage was found",
+          "sources": [
+            "glick-1980-sojourners"
+          ]
+        },
+        {
+          "name": "Rice at 1853",
+          "why": "rice growing was started in 1858 by H. Holstein of the Royal Hawaiian Agricultural Society, and Chinese planters took it up in the 1860s (Glick): nothing to draw at the Māhele",
+          "sources": [
+            "glick-1980-sojourners"
+          ]
+        },
+        {
+          "name": "Hāmākua, Hilo and Puna outside Olaʻa",
+          "why": "about 170 acres in Hāmākua and Hilo and 100 in Puna in 1892 (the Annual for 1895); too small and too scattered to place",
+          "sources": [
+            "thrum-annual-1895"
+          ]
+        }
+      ]
+    },
+    "mapping": {
+      "now": {
+        "field": "crops_2020",
+        "classes": {
+          "Taro": 1,
+          "Pineapple": 5,
+          "Pasture": 6,
+          "Dairy": 6,
+          "Coffee": 7,
+          "Macadamia Nuts": 7,
+          "Tropical Fruits": 7,
+          "Papaya": 7,
+          "Banana": 7,
+          "Diversified Crop": 7,
+          "Flowers / Foliage / Landscape": 7,
+          "Seed Production": 7,
+          "Sugar": 7,
+          "Commercial Forestry": 0,
+          "Aquaculture": 0
+        }
+      },
+      "alum": {
+        "field": "commodity",
+        "readBack": {
+          "pasture": [
+            "A-1"
+          ],
+          "coffee": [
+            "O-5"
+          ]
+        }
+      },
+      "cah": {
+        "open": 43,
+        "name": "Developed open space"
+      }
+    },
+    "rules": {
+      "kuleanaLoi": 0.25,
+      "grass": {
+        "maxElevation": 2000,
+        "rainMm": [
+          400,
+          2000
+        ],
+        "maxForest": 0.5,
+        "maxCultivation": 0.25
+      },
+      "alumShare": 0.5,
+      "plantation": {
+        "maxElevation": 300,
+        "maxSlope": 0.15,
+        "cane1900Weight": 0.5
+      },
+      "rice": {
+        "maxElevation": 15,
+        "maxSlope": 0.06,
+        "loi": 0.25,
+        "wetGround": 0.5
+      },
+      "nowMinShare": 0.25,
+      "lawnOpenShare": 0.5,
+      "golfRadius": 600,
+      "valleyLoi": {
+        "streamFlow": 3000000,
+        "flow": [
+          3000000,
+          20000000
+        ],
+        "catchmentRain": [
+          1200,
+          2000
+        ],
+        "aboveStream": [
+          8,
+          25
+        ],
+        "elevation": [
+          200,
+          350
+        ],
+        "slope": [
+          0.06,
+          0.15
+        ],
+        "substrateBlur": 60,
+        "substrateGain": 1.5
+      }
+    },
+    "sources": {
+      "ksbe-traditional-agriculture": {
+        "id": "ksbe-traditional-agriculture",
+        "title": "Traditional Agriculture: modelled areas of high potential for loʻi, dryland and agroforestry (Kamehameha Schools)",
+        "url": "https://services1.arcgis.com/mWZnFht59JsTeUQW/arcgis/rest/services/Traditional_Agriculture/FeatureServer/21",
+        "fetched": "2026-10-23",
+        "licence": "no licence stated on the ArcGIS Online item; credit \"Natalie Kurashima, 2012. Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools Land Assets Division\"; methods in Kurashima and Kirch (2011), Geospatial modeling of pre-contact Hawaiian production systems on Moloka‘i Island, Journal of Archaeological Science 38:3662–3674",
+        "credit": "Natalie Kurashima, 2012 Developed in partnership with Patrick Kirch, University of California at Berkeley, and Kamehameha Schools -Land Assets Division.",
+        "note": "a published GIS model, not a survey: each zone is where soil, rain, substrate, slope, elevation and water would support the system, checked by its authors against archaeological and ethnohistoric data; it covers Hawaiʻi, Maui County, Oʻahu and Kauaʻi, not Niʻihau"
+      },
+      "hawaii-gis-geologic-units": {
+        "id": "hawaii-gis-geologic-units",
+        "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): young lava and wet-ground sediments only",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
+        "query": "(age_group >= 1 AND age_group <= 3) OR name IN ('Alluvium','Lagoon and reef deposits','Lagoon deposits','Lacustrine deposits','Fill')",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+        "credit": "Sherrod, David R., Sinton, John M., Watkins, Sarah E., and and Brunt, Kelly M., 2007, USGS",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
+        "note": "flows younger than about 1,500 years, with their age_range (calendar years for historic flows); and the alluvium, lagoon, lacustrine and fill units, the ground under valley-floor and coastal loʻi (much of the fill was laid over ponds and marsh in the 20th century)"
+      },
+      "oha-kipuka-land-commission-awards": {
+        "id": "oha-kipuka-land-commission-awards",
+        "title": "Land Commission Awards, statewide (Office of Hawaiian Affairs, Kīpuka database), parcels under about 100 ha",
+        "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/LCA_State/FeatureServer/0",
+        "query": "Shape__Area < 1000000",
+        "fetched": "2026-10-23",
+        "licence": "no licence stated on the ArcGIS Online item; credit \"Office of Hawaiian Affairs\"; used only as a smoothed density at hundreds of metres, no parcel is redistributed",
+        "note": "Māhele and kuleana awards of 1846–1855 with later grants; the large konohiki and aliʻi awards (whole ahupuaʻa) are left out by the area filter. Coverage differs by island: Hawaiʻi Island is thinly digitised"
+      },
+      "hawaii-gis-sugarcane-1900": {
+        "id": "hawaii-gis-sugarcane-1900",
+        "title": "State of Hawaiʻi GIS, Historical Sugarcane Lands 1900 (LandUseLandCover MapServer layer 23)",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/23",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+        "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/sugarcane_historical.pdf",
+        "note": "lands in sugar cane in 1900, digitised in 2006 for the State Department of Health from the land utilization maps in the Territorial Planning Board’s Historic Inventory of the Physical, Social, Economic & Industrial Resources of the Territory of Hawaii (First Progress Report, 1939), on USGS 1:24,000 bases; the metadata says final QA/QC was not done"
+      },
+      "hawaii-gis-pineapple-1900": {
+        "id": "hawaii-gis-pineapple-1900",
+        "title": "State of Hawaiʻi GIS, Historical Pineapple Lands 1900 (LandUseLandCover MapServer layer 20)",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/20",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+        "credit": "Hawaii State Department of Health, Hazard Evaluation and Emergency Response Branch; Tetra Tech EM, Inc",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/pineapple_historical.pdf",
+        "note": "one polygon, from the same 1939 Territorial Planning Board maps as the cane lands"
+      },
+      "hawaii-gis-agriculture-2020": {
+        "id": "hawaii-gis-agriculture-2020",
+        "title": "State of Hawaiʻi GIS, 2020 Agricultural Land Use (Statewide Agricultural Land Use Baseline update), LandUseLandCover MapServer layer 19",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/19",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy; cite Perroy, R. and Collier, E. (2021), 2020 Update to the Hawaiʻi Statewide Agricultural Land Use Baseline, Hawaiʻi State Department of Agriculture",
+        "credit": "Please acknowledge Perroy, R., & Collier, E. (2021). 2020 Update to the Hawaiʻi Statewide Agricultural Land Use Baseline. Hawaii State Department of Agriculture, as a source when this data is used in the preparation of reports, papers, publications, maps, and other products.",
+        "note": "commercial agriculture digitised from 2018–2020 WorldView imagery; field crops_2020"
+      },
+      "hawaii-gis-alum-1980": {
+        "id": "hawaii-gis-alum-1980",
+        "title": "State of Hawaiʻi GIS, Agricultural Land Use Maps (ALUM), 1978–80, LandUseLandCover MapServer layer 5",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/LandUseLandCover/MapServer/5",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+        "credit": "Hawaii State Department of Agriculture; Hawaii Statewide GIS Program",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/alum.pdf",
+        "note": "the State Department of Agriculture’s 1:24,000 maps of 1978–80, digitised by the Office of State Planning; COMMODITY codes A-1 grazing, A-2 dairy, F field crops, O orchards (O-5 coffee), P pineapple, S sugarcane, W wetlands; Kauaʻi, Oʻahu, Maui, Molokaʻi, Lānaʻi and Hawaiʻi only (not Niʻihau or Kahoʻolawe)"
+      },
+      "hawaii-gis-golf-courses": {
+        "id": "hawaii-gis-golf-courses",
+        "title": "State of Hawaiʻi GIS, Golf Courses (Infrastructure MapServer layer 14), points",
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/14",
+        "fetched": "2026-10-23",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy; credit the Hawaii State Golf Association",
+        "credit": "Hawaii State Golf Association; Hawaii Statewide GIS Program, Office of Planning and Sustainable Development, State of Hawaii",
+        "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/golf_courses.pdf",
+        "note": "locations of golf courses as of August 2023 (before the Maui fires), from the Hawaii State Golf Association’s list, geocoded and moved by eye on imagery; points, with the number of holes"
+      },
+      "usgs-cah-landcover-2017": {
+        "id": "usgs-cah-landcover-2017",
+        "title": "Carbon Assessment of Hawaii Land Cover Map (CAH_LandCover), 30 m GeoTIFF, NAD83 UTM zone 4",
+        "url": "https://www.sciencebase.gov/catalog/item/592dee56e4b092b266efeb6b",
+        "fetched": "2026-10-23",
+        "licence": "public domain (U.S. Geological Survey data release); cite Jacobi, J.D., Price, J.P., Fortini, L.B., Gon III, S.M., and Berkowitz, P., 2017, Carbon Assessment of Hawaii: U.S. Geological Survey data release, doi:10.5066/F7DB80B9",
+        "note": "land cover from imagery of about 2007–2012, built on the HI-GAP map with NOAA C-CAP (2005) land use and bare ground, Census roads, and corrections against very-high-resolution imagery; 48 classes"
+      },
+      "holo-layers": {
+        "id": "holo-layers",
+        "title": "The era layers’ own cultivation and forest masks (layers/<island>/<keyframe>-cultivation.png, -forest.png), as tools/bake-layers.mjs baked them",
+        "url": "layers/",
+        "licence": "this project’s own bake; its sources are in this manifest’s methods",
+        "note": "read back from the PNGs, so a class stands where the app sees cultivation; the 1853 forest is interpolated as the app interpolates it"
+      },
+      "holo-zoning": {
+        "id": "holo-zoning",
+        "title": "The zoning rasters (layers/<island>/now-zoning.png), as tools/bake-zoning.mjs baked them from each county’s zoning",
+        "url": "layers/",
+        "licence": "this project’s own bake; the counties’ terms are in this manifest’s zoning.sources",
+        "note": "class 12, parks and open space"
+      },
+      "holo-boundaries": {
+        "id": "holo-boundaries",
+        "title": "boundaries/moku.geojson and boundaries/ahupuaa.geojson (State GIS layers, as baked by tools/bake.mjs)",
+        "url": "boundaries/",
+        "licence": "State of Hawaiʻi Statewide GIS Program open data",
+        "note": "the ahupuaʻa and moku the ranches, rice districts and coffee lands are bounded by"
+      },
+      "nrhp-koloa-mill": {
+        "id": "nrhp-koloa-mill",
+        "title": "Old Sugar Mill of Koloa, National Register nomination",
+        "author": "National Park Service",
+        "url": "https://npgallery.nps.gov/NRHP/GetAsset/NHLS/66000296_text",
+        "licence": "public domain (U.S. National Park Service)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "thrum-annual-1902": {
+        "id": "thrum-annual-1902",
+        "title": "Hawaiian Almanac and Annual for 1902",
+        "author": "Thomas G. Thrum",
+        "year": 1901,
+        "url": "https://archive.org/details/acp0143.1902.001.umich.edu",
+        "licence": "public domain (1901)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "to-hawaii-hana": {
+        "id": "to-hawaii-hana",
+        "title": "Hana, Maui (travel guide page)",
+        "author": "to-hawaii.com",
+        "url": "https://www.to-hawaii.com/maui/towns/hana/",
+        "licence": "© to-hawaii.com; facts cited, tertiary",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true,
+        "tertiary": true
+      },
+      "nrhp-haiku-mill": {
+        "id": "nrhp-haiku-mill",
+        "title": "Haiku Mill, National Register of Historic Places nomination",
+        "author": "National Park Service",
+        "url": "https://npgallery.nps.gov/NRHP/GetAsset/NRHP/86000189_text",
+        "licence": "public domain (U.S. National Park Service)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "imagesofoldhawaii-pioneer-mill": {
+        "id": "imagesofoldhawaii-pioneer-mill",
+        "title": "Pioneer Mill (Images of Old Hawaiʻi)",
+        "author": "Peter T. Young",
+        "url": "https://imagesofoldhawaii.com/pioneer-mill/",
+        "licence": "© Images of Old Hawaiʻi; facts cited, tertiary",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true,
+        "tertiary": true
+      },
+      "maclennan-1995-maui-plantations": {
+        "id": "maclennan-1995-maui-plantations",
+        "title": "Foundations of Sugar’s Power: Early Maui Plantations, 1840–1860 (Hawaiian Journal of History 29)",
+        "author": "Carol A. MacLennan",
+        "year": 1995,
+        "url": "https://evols.library.manoa.hawaii.edu/bitstream/10524/292/1/JL29039.pdf",
+        "licence": "not read",
+        "opened": false,
+        "sourcesJson": true
+      },
+      "mauiwine-ulupalakua-history": {
+        "id": "mauiwine-ulupalakua-history",
+        "title": "Company history (ʻUlupalakua Ranch and MauiWine)",
+        "author": "MauiWine",
+        "url": "https://mauiwine.com/company/",
+        "licence": "© MauiWine; facts cited, nothing copied",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "wikipedia-parker-ranch": {
+        "id": "wikipedia-parker-ranch",
+        "title": "Parker Ranch",
+        "author": "Wikipedia",
+        "year": 2026,
+        "url": "https://en.wikipedia.org/wiki/Parker_Ranch",
+        "licence": "CC BY-SA 4.0 (Wikipedia); facts cited, tertiary",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true,
+        "tertiary": true
+      },
+      "wikipedia-kualoa-ranch": {
+        "id": "wikipedia-kualoa-ranch",
+        "title": "Kualoa Ranch",
+        "author": "Wikipedia",
+        "year": 2026,
+        "url": "https://en.wikipedia.org/wiki/Kualoa_Ranch",
+        "licence": "CC BY-SA 4.0 (Wikipedia); facts cited, tertiary",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true,
+        "tertiary": true
+      },
+      "kirc-history": {
+        "id": "kirc-history",
+        "title": "Kahoʻolawe history",
+        "author": "Kahoʻolawe Island Reserve Commission",
+        "url": "https://kahoolawe.hawaii.gov/history.shtml",
+        "licence": "State of Hawaiʻi web page (Kahoʻolawe Island Reserve Commission); facts cited",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "wikipedia-valdemar-knudsen": {
+        "id": "wikipedia-valdemar-knudsen",
+        "title": "Valdemar Knudsen",
+        "author": "Wikipedia",
+        "year": 2026,
+        "url": "https://en.wikipedia.org/wiki/Valdemar_Knudsen",
+        "licence": "CC BY-SA 4.0 (Wikipedia); facts cited, tertiary",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true,
+        "tertiary": true
+      },
+      "glick-1980-sojourners": {
+        "id": "glick-1980-sojourners",
+        "title": "Sojourners and Settlers: Chinese Migrants in Hawaii",
+        "author": "Clarence E. Glick",
+        "year": 1980,
+        "url": "https://manifold.uhpress.hawaii.edu/read/sojourners-and-settlers-chinese-migrants-in-hawaii/section/4052fe0a-e09a-43f4-af6a-a1a753a5d14e",
+        "licence": "© University of Hawaiʻi Press, read on its open-access Manifold edition (2017); figures and places cited, nothing copied",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "nrhp-hanalei-pier": {
+        "id": "nrhp-hanalei-pier",
+        "title": "Hanalei Pier, National Register of Historic Places nomination",
+        "author": "National Park Service",
+        "url": "https://npgallery.nps.gov/GetAsset/4b61e3d2-c089-4554-91b0-69efd0d295f7",
+        "licence": "public domain (U.S. National Park Service)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "kelley-1914-rice-soils": {
+        "id": "kelley-1914-rice-soils",
+        "title": "Rice Soils of Hawaii: Their Fertilization and Management (Hawaii Agricultural Experiment Station Bulletin 31)",
+        "author": "W. P. Kelley",
+        "year": 1914,
+        "url": "https://archive.org/details/ricesoilsofhawai31kell",
+        "licence": "public domain (U.S. Department of Agriculture)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "usgs-topo-1927-oahu": {
+        "id": "usgs-topo-1927-oahu",
+        "title": "Topographic quadrangles of Oʻahu, 1927 edition, as the State GIS mosaic oahu_topo_1927",
+        "author": "U.S. Geological Survey",
+        "year": 1927,
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/oahu_topo_1927/ImageServer",
+        "licence": "public domain (U.S. Geological Survey)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "coulter-chun-1937-rice": {
+        "id": "coulter-chun-1937-rice",
+        "title": "Chinese Rice Farmers in Hawaii (University of Hawaii Research Publications 16)",
+        "author": "John Wesley Coulter and Chee Kwon Chun",
+        "year": 1937,
+        "licence": "not read",
+        "opened": false,
+        "sourcesJson": true
+      },
+      "thrum-annual-1895": {
+        "id": "thrum-annual-1895",
+        "title": "Hawaiian Almanac and Annual for 1895",
+        "author": "Thomas G. Thrum",
+        "year": 1894,
+        "url": "https://archive.org/details/acp0143.1895.001.umich.edu",
+        "licence": "public domain (1894)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "thrum-annual-1900": {
+        "id": "thrum-annual-1900",
+        "title": "Hawaiian Almanac and Annual for 1900",
+        "author": "Thomas G. Thrum",
+        "year": 1899,
+        "url": "https://archive.org/details/acp0143.1900.001.umich.edu",
+        "licence": "public domain (1899)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "usgs-topo-1910-kauai": {
+        "id": "usgs-topo-1910-kauai",
+        "title": "Topographic sheets of Kauaʻi, about 1910, as the State GIS mosaic kauai_topo_1910",
+        "author": "U.S. Geological Survey",
+        "year": 1910,
+        "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/kauai_topo_1910/ImageServer",
+        "licence": "public domain (U.S. Geological Survey)",
+        "fetched": "2026-10-23",
+        "opened": true,
+        "sourcesJson": true
+      },
+      "coulter-1931-land-1853": {
+        "id": "coulter-1931-land-1853",
+        "title": "Population and Utilization of Land and Sea in Hawaii, 1853 (Bishop Museum Bulletin 88)",
+        "author": "John Wesley Coulter",
+        "year": 1931,
+        "url": "https://archive.org/details/populationutiliz0000coul",
+        "licence": "not read",
+        "opened": false,
+        "sourcesJson": true
+      },
+      "char-1988-chinese-sites": {
+        "id": "char-1988-chinese-sites",
+        "title": "Chinese Historic Sites and Pioneer Families of Rural Oahu",
+        "author": "Tin-Yuke Char and Wai Jane Char",
+        "year": 1988,
+        "url": "https://archive.org/details/chinesehistorics0000char",
+        "licence": "not read",
+        "opened": false,
+        "sourcesJson": true
+      }
+    },
+    "islands": {
+      "hawaii": {
+        "pack": "hawaii",
+        "size": [
+          896,
+          1024
+        ],
+        "bounds": [
+          -156.0808839,
+          18.892604,
+          -154.7874248,
+          20.286571
+        ],
+        "layers": {
+          "contact": {
+            "file": "hawaii/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 457432,
+              "classedTexels": 36343,
+              "texels": {
+                "1": 489,
+                "2": 35854
+              },
+              "km2": {
+                "1": 11.08,
+                "2": 812.36
+              }
+            }
+          },
+          "mahele": {
+            "file": "hawaii/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 457432,
+              "classedTexels": 48613,
+              "texels": {
+                "1": 422,
+                "2": 35855,
+                "6": 12336
+              },
+              "km2": {
+                "1": 9.56,
+                "2": 812.38,
+                "6": 279.5
+              }
+            }
+          },
+          "kingdom": {
+            "file": "hawaii/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 457432,
+              "classedTexels": 150601,
+              "texels": {
+                "1": 501,
+                "2": 6336,
+                "4": 25370,
+                "6": 117253,
+                "7": 1141
+              },
+              "km2": {
+                "1": 11.35,
+                "2": 143.56,
+                "4": 574.82,
+                "6": 2656.65,
+                "7": 25.85
+              }
+            }
+          },
+          "now": {
+            "file": "hawaii/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 457432,
+              "classedTexels": 113319,
+              "texels": {
+                "1": 71,
+                "6": 101250,
+                "7": 11722,
+                "8": 276
+              },
+              "km2": {
+                "1": 1.61,
+                "6": 2294.07,
+                "7": 265.59,
+                "8": 6.25
+              }
+            }
+          }
+        }
+      },
+      "maui": {
+        "pack": "maui",
+        "size": [
+          1024,
+          708
+        ],
+        "bounds": [
+          -156.7164101,
+          20.5562628,
+          -155.9598279,
+          21.049547
+        ],
+        "layers": {
+          "contact": {
+            "file": "maui/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 325470,
+              "classedTexels": 58415,
+              "texels": {
+                "1": 3422,
+                "2": 54993
+              },
+              "km2": {
+                "1": 20.31,
+                "2": 326.39
+              }
+            }
+          },
+          "mahele": {
+            "file": "maui/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 325470,
+              "classedTexels": 61246,
+              "texels": {
+                "1": 3303,
+                "2": 54577,
+                "4": 410,
+                "6": 2956
+              },
+              "km2": {
+                "1": 19.6,
+                "2": 323.92,
+                "4": 2.43,
+                "6": 17.54
+              }
+            }
+          },
+          "kingdom": {
+            "file": "maui/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 325470,
+              "classedTexels": 146749,
+              "texels": {
+                "1": 2336,
+                "2": 11296,
+                "4": 45163,
+                "6": 87954
+              },
+              "km2": {
+                "1": 13.86,
+                "2": 67.04,
+                "4": 268.05,
+                "6": 522.02
+              }
+            }
+          },
+          "now": {
+            "file": "maui/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 325470,
+              "classedTexels": 88876,
+              "texels": {
+                "1": 168,
+                "5": 703,
+                "6": 81067,
+                "7": 5759,
+                "8": 1179
+              },
+              "km2": {
+                "1": 1,
+                "5": 4.17,
+                "6": 481.15,
+                "7": 34.18,
+                "8": 7
+              }
+            }
+          }
+        }
+      },
+      "kahoolawe": {
+        "pack": "kahoolawe",
+        "size": [
+          1024,
+          730
+        ],
+        "bounds": [
+          -156.7198501,
+          20.4827242,
+          -156.5125214,
+          20.6221009
+        ],
+        "layers": {
+          "contact": {
+            "file": "kahoolawe/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 262438,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          },
+          "mahele": {
+            "file": "kahoolawe/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 262438,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          },
+          "kingdom": {
+            "file": "kahoolawe/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 262438,
+              "classedTexels": 261421,
+              "texels": {
+                "6": 261421
+              },
+              "km2": {
+                "6": 116.52
+              }
+            }
+          },
+          "now": {
+            "file": "kahoolawe/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 262438,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          }
+        },
+        "note": "no zoning raster for this pack (DATA.md, \"Zoning\"), so no lawn from parks; no golf course in the State layer here either"
+      },
+      "lanai": {
+        "pack": "lanai",
+        "size": [
+          1024,
+          860
+        ],
+        "bounds": [
+          -157.0814354,
+          20.713664,
+          -156.7861411,
+          20.9475269
+        ],
+        "layers": {
+          "contact": {
+            "file": "lanai/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 406455,
+              "classedTexels": 24329,
+              "texels": {
+                "2": 24329
+              },
+              "km2": {
+                "2": 22
+              }
+            }
+          },
+          "mahele": {
+            "file": "lanai/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 406455,
+              "classedTexels": 24392,
+              "texels": {
+                "2": 24392
+              },
+              "km2": {
+                "2": 22.05
+              }
+            }
+          },
+          "kingdom": {
+            "file": "lanai/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 406455,
+              "classedTexels": 390551,
+              "texels": {
+                "2": 91,
+                "6": 390460
+              },
+              "km2": {
+                "2": 0.08,
+                "6": 353.03
+              }
+            }
+          },
+          "now": {
+            "file": "lanai/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 406455,
+              "classedTexels": 1025,
+              "texels": {
+                "7": 522,
+                "8": 503
+              },
+              "km2": {
+                "7": 0.47,
+                "8": 0.45
+              }
+            }
+          }
+        }
+      },
+      "molokai": {
+        "pack": "molokai",
+        "size": [
+          1024,
+          365
+        ],
+        "bounds": [
+          -157.330056,
+          21.0276437,
+          -156.6906621,
+          21.24256
+        ],
+        "layers": {
+          "contact": {
+            "file": "molokai/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 161107,
+              "classedTexels": 17519,
+              "texels": {
+                "1": 3221,
+                "2": 14298
+              },
+              "km2": {
+                "1": 13.65,
+                "2": 60.61
+              }
+            }
+          },
+          "mahele": {
+            "file": "molokai/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 161107,
+              "classedTexels": 17494,
+              "texels": {
+                "1": 3035,
+                "2": 14459
+              },
+              "km2": {
+                "1": 12.87,
+                "2": 61.29
+              }
+            }
+          },
+          "kingdom": {
+            "file": "molokai/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 161107,
+              "classedTexels": 93426,
+              "texels": {
+                "1": 2974,
+                "2": 3711,
+                "6": 86741
+              },
+              "km2": {
+                "1": 12.61,
+                "2": 15.73,
+                "6": 367.69
+              }
+            }
+          },
+          "now": {
+            "file": "molokai/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 161107,
+              "classedTexels": 41374,
+              "texels": {
+                "1": 11,
+                "6": 37175,
+                "7": 4174,
+                "8": 14
+              },
+              "km2": {
+                "1": 0.05,
+                "6": 157.58,
+                "7": 17.69,
+                "8": 0.06
+              }
+            }
+          }
+        }
+      },
+      "oahu": {
+        "pack": "oahu",
+        "size": [
+          1024,
+          801
+        ],
+        "bounds": [
+          -158.3000505,
+          21.2364436,
+          -157.6294454,
+          21.7311041
+        ],
+        "layers": {
+          "contact": {
+            "file": "oahu/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 335807,
+              "classedTexels": 91348,
+              "texels": {
+                "1": 20986,
+                "2": 70362
+              },
+              "km2": {
+                "1": 97.86,
+                "2": 328.09
+              }
+            }
+          },
+          "mahele": {
+            "file": "oahu/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 335807,
+              "classedTexels": 90780,
+              "texels": {
+                "1": 19678,
+                "2": 70824,
+                "6": 278
+              },
+              "km2": {
+                "1": 91.76,
+                "2": 330.24,
+                "6": 1.3
+              }
+            }
+          },
+          "kingdom": {
+            "file": "oahu/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 335807,
+              "classedTexels": 128204,
+              "texels": {
+                "1": 12496,
+                "2": 49877,
+                "3": 5479,
+                "4": 45520,
+                "5": 1055,
+                "6": 13777
+              },
+              "km2": {
+                "1": 58.27,
+                "2": 232.57,
+                "3": 25.55,
+                "4": 212.26,
+                "5": 4.92,
+                "6": 64.24
+              }
+            }
+          },
+          "now": {
+            "file": "oahu/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 335807,
+              "classedTexels": 43701,
+              "texels": {
+                "1": 153,
+                "5": 3274,
+                "6": 16670,
+                "7": 20557,
+                "8": 3047
+              },
+              "km2": {
+                "1": 0.71,
+                "5": 15.27,
+                "6": 77.73,
+                "7": 95.86,
+                "8": 14.21
+              }
+            }
+          }
+        }
+      },
+      "kauai": {
+        "pack": "kauai",
+        "size": [
+          1024,
+          815
+        ],
+        "bounds": [
+          -159.8072936,
+          21.850076,
+          -159.2732356,
+          22.2509001
+        ],
+        "layers": {
+          "contact": {
+            "file": "kauai/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 491979,
+              "classedTexels": 80471,
+              "texels": {
+                "1": 18774,
+                "2": 61697
+              },
+              "km2": {
+                "1": 55.52,
+                "2": 182.46
+              }
+            }
+          },
+          "mahele": {
+            "file": "kauai/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 491979,
+              "classedTexels": 80571,
+              "texels": {
+                "1": 17433,
+                "2": 62316,
+                "4": 822
+              },
+              "km2": {
+                "1": 51.56,
+                "2": 184.29,
+                "4": 2.43
+              }
+            }
+          },
+          "kingdom": {
+            "file": "kauai/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 491979,
+              "classedTexels": 126797,
+              "texels": {
+                "1": 13601,
+                "2": 22900,
+                "3": 2355,
+                "4": 63460,
+                "6": 24481
+              },
+              "km2": {
+                "1": 40.22,
+                "2": 67.72,
+                "3": 6.96,
+                "4": 187.67,
+                "6": 72.4
+              }
+            }
+          },
+          "now": {
+            "file": "kauai/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 491979,
+              "classedTexels": 94134,
+              "texels": {
+                "1": 991,
+                "6": 60379,
+                "7": 30093,
+                "8": 2671
+              },
+              "km2": {
+                "1": 2.93,
+                "6": 178.56,
+                "7": 88.99,
+                "8": 7.9
+              }
+            }
+          }
+        }
+      },
+      "niihau": {
+        "pack": "niihau",
+        "size": [
+          797,
+          1024
+        ],
+        "bounds": [
+          -160.2663097,
+          21.7608545,
+          -160.0301183,
+          22.0470175
+        ],
+        "layers": {
+          "contact": {
+            "file": "niihau/contact-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 200044,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          },
+          "mahele": {
+            "file": "niihau/mahele-crop.png",
+            "method": "modelled",
+            "stats": {
+              "landTexels": 200044,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          },
+          "kingdom": {
+            "file": "niihau/kingdom-crop.png",
+            "method": "mixed",
+            "stats": {
+              "landTexels": 200044,
+              "classedTexels": 198892,
+              "texels": {
+                "6": 198892
+              },
+              "km2": {
+                "6": 189.91
+              }
+            }
+          },
+          "now": {
+            "file": "niihau/now-crop.png",
+            "method": "mapped",
+            "stats": {
+              "landTexels": 200044,
+              "classedTexels": 0,
+              "texels": {},
+              "km2": {}
+            }
+          }
+        },
+        "note": "no zoning raster for this pack (DATA.md, \"Zoning\"), so no lawn from parks; no golf course in the State layer here either"
+      }
+    },
+    "stats": {
+      "files": 32,
+      "bytes": 326436
+    },
+    "baked": {
+      "tool": "tools/bake-crops.mjs",
+      "packManifest": "manifest.json",
+      "acreKm2": 0.0040468564224,
+      "lawn": {
+        "hawaii": {
+          "zoningKm2": 5.62,
+          "golfKm2": 0.63,
+          "golfCourses": 19
+        },
+        "maui": {
+          "zoningKm2": 5.14,
+          "golfKm2": 1.86,
+          "golfCourses": 14
+        },
+        "kahoolawe": {
+          "zoningKm2": 0,
+          "golfKm2": 0,
+          "golfCourses": 0
+        },
+        "lanai": {
+          "zoningKm2": 0.1,
+          "golfKm2": 0.35,
+          "golfCourses": 2
+        },
+        "molokai": {
+          "zoningKm2": 0.06,
+          "golfKm2": 0,
+          "golfCourses": 1
+        },
+        "oahu": {
+          "zoningKm2": 11.01,
+          "golfKm2": 3.2,
+          "golfCourses": 36
+        },
+        "kauai": {
+          "zoningKm2": 6.68,
+          "golfKm2": 1.22,
+          "golfCourses": 8
+        },
+        "niihau": {
+          "zoningKm2": 0,
+          "golfKm2": 0,
+          "golfCourses": 0
+        }
+      }
+    }
   }
 }

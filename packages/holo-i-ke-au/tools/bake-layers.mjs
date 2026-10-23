@@ -529,12 +529,14 @@ async function bake(dir) {
         'evidence of land in use; much of what they miss is kula (dryland) and house lots outside both models.',
     },
   }
-  // tools/bake-zoning.mjs keeps its own entry in this file under `zoning`;
-  // carry it over, since this bake rewrites everything else from scratch
+  // tools/bake-zoning.mjs and tools/bake-crops.mjs keep their own entries in
+  // this file under `zoning` and `crops`; carry them over, since this bake
+  // rewrites everything else from scratch (the crop classes read the
+  // cultivation masks written here, so re-bake the crops after this)
   const prior = join(OUT, 'manifest.json')
   if (existsSync(prior)) {
-    const z = JSON.parse(readFileSync(prior, 'utf8')).zoning
-    if (z) layersManifest.zoning = z
+    const old = JSON.parse(readFileSync(prior, 'utf8'))
+    for (const key of ['zoning', 'crops']) if (old[key]) layersManifest[key] = old[key]
   }
   writeFileSync(join(OUT, 'manifest.json'), JSON.stringify(layersManifest, null, 2) + '\n')
   log(`wrote ${join(OUT, 'manifest.json')} (${(bytes / 1048576).toFixed(2)} MB of masks, ${((Date.now() - t0) / 1000).toFixed(0)} s)`)

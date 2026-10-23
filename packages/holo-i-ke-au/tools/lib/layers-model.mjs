@@ -274,12 +274,13 @@ function membership(P, ahupuaa, moku) {
 }
 
 /**
- * Everything the rules read on one pack: the land itself, the mapped
- * inputs rasterised onto its grid, and the CAH land cover.
+ * The inputs of the field rules on one pack (the land, its rain and water,
+ * membership, the agriculture zones, the valley-floor loʻi, the kuleana, the
+ * pond shore and the 1900 cane and pineapple), which the crop classes read
+ * too (tools/bake-crops.mjs); packInputs adds the rest.
  */
-export async function packInputs(P, src, log) {
+export function fieldInputs(P, src) {
   const { W, H, N, grid, land, metres, texelMetres } = P
-  const t0 = Date.now()
   const s = samplesFor(texelMetres, 20, 8)
   const sea = new Uint8Array(N)
   for (let o = 0; o < N; o++) sea[o] = land[o] ? 0 : 1
@@ -344,6 +345,39 @@ export async function packInputs(P, src, log) {
   // mapped land use
   const sugar1900 = coverage(src.sugar1900.features, grid, s)
   const pine1900 = coverage(src.pine1900.features, grid, s)
+  return {
+    ...P,
+    s,
+    rain,
+    rainNote,
+    dSea,
+    slope,
+    island,
+    mokuKey,
+    wetGround,
+    loi,
+    loiZone,
+    valleyLoi,
+    dryland,
+    agroforestry,
+    kuleanaRaw,
+    kuleana,
+    kuleanaNear,
+    pondShore,
+    sugar1900,
+    pine1900,
+  }
+}
+
+/**
+ * Everything the rules read on one pack: the land itself, the mapped
+ * inputs rasterised onto its grid, and the CAH land cover.
+ */
+export async function packInputs(P, src, log) {
+  const { W, H, N, grid, land, texelMetres } = P
+  const t0 = Date.now()
+  const F = fieldInputs(P, src)
+  const { s } = F
   const crops2020 = coverage(src.ag2020.features, grid, s, (f) => !NOT_CROPS.includes(f.properties.crops_2020))
   const reserve = coverage(src.reserves.features, grid, s)
 
@@ -369,24 +403,7 @@ export async function packInputs(P, src, log) {
 
   log(`    inputs ${((Date.now() - t0) / 1000).toFixed(1)} s (polygons ${s}x${s}, land cover ${cs}x${cs} samples per texel)`)
   return {
-    ...P,
-    rain,
-    rainNote,
-    dSea,
-    slope,
-    island,
-    mokuKey,
-    loi,
-    loiZone,
-    valleyLoi,
-    dryland,
-    agroforestry,
-    kuleanaRaw,
-    kuleana,
-    kuleanaNear,
-    pondShore,
-    sugar1900,
-    pine1900,
+    ...F,
     crops2020,
     reserve,
     post1778,
@@ -402,33 +419,56 @@ export async function packInputs(P, src, log) {
 
 const kuleanaPresence = (I, o) => clamp01(I.kuleanaNear[o] * 4)
 
+/**
+ * The terms whose largest is a land texel's cultivation at a keyframe, by
+ * name, in a fixed order. The crop classes (tools/bake-crops.mjs) read which
+ * term is the largest.
+ */
+export const CULTIVATION_TERMS = {
+  contact: ['loi', 'dryland', 'agroforestry', 'pond', 'kuleana'],
+  mahele: ['loi', 'dryland', 'agroforestry', 'pond', 'kuleana'],
+  kingdom: ['cane', 'pineapple', 'loi', 'dryland', 'agroforestry', 'pond'],
+  now: ['crops'],
+}
+
+/** The values of CULTIVATION_TERMS[key] at land texel o, written into `out` (as long as that list) and returned. */
+export function cultivationTerms(I, key, o, out) {
+  const k = clamp01(I.kuleana[o] * RULES.kuleanaGain)
+  const kp = kuleanaPresence(I, o)
+  if (key === 'contact') {
+    out[0] = I.loi[o] * RULES.loi
+    out[1] = I.dryland[o] * RULES.dryland
+    out[2] = I.agroforestry[o] * RULES.agroforestry
+    out[3] = I.pondShore[o] * RULES.fishpondShore
+    out[4] = k
+  } else if (key === 'mahele') {
+    const kept = RULES.loiKept1853[0] + (RULES.loiKept1853[1] - RULES.loiKept1853[0]) * kp
+    out[0] = I.loi[o] * kept
+    out[1] = I.dryland[o] * RULES.dryland1853
+    out[2] = I.agroforestry[o] * RULES.agroforestry1853
+    out[3] = I.pondShore[o] * RULES.fishpondShore * RULES.ponds1853
+    out[4] = k
+  } else if (key === 'kingdom') {
+    const kept = RULES.loiKept1896[0] + (RULES.loiKept1896[1] - RULES.loiKept1896[0]) * kp
+    out[0] = I.sugar1900[o]
+    out[1] = I.pine1900[o]
+    out[2] = I.loi[o] * kept
+    out[3] = I.dryland[o] * RULES.dryland1896
+    out[4] = I.agroforestry[o] * RULES.agroforestry1896
+    out[5] = I.pondShore[o] * RULES.fishpondShore * RULES.ponds1896
+  } else if (key === 'now') {
+    out[0] = I.crops2020[o]
+  }
+  return out
+}
+
 export function cultivation(I, key) {
   const { N, land } = I
   const out = new Float32Array(N)
+  const t = new Float64Array(CULTIVATION_TERMS[key].length)
   for (let o = 0; o < N; o++) {
     if (!land[o]) continue
-    const k = clamp01(I.kuleana[o] * RULES.kuleanaGain)
-    const kp = kuleanaPresence(I, o)
-    let v = 0
-    if (key === 'contact') {
-      v = Math.max(I.loi[o] * RULES.loi, I.dryland[o] * RULES.dryland, I.agroforestry[o] * RULES.agroforestry, I.pondShore[o] * RULES.fishpondShore, k)
-    } else if (key === 'mahele') {
-      const kept = RULES.loiKept1853[0] + (RULES.loiKept1853[1] - RULES.loiKept1853[0]) * kp
-      v = Math.max(I.loi[o] * kept, I.dryland[o] * RULES.dryland1853, I.agroforestry[o] * RULES.agroforestry1853, I.pondShore[o] * RULES.fishpondShore * RULES.ponds1853, k)
-    } else if (key === 'kingdom') {
-      const kept = RULES.loiKept1896[0] + (RULES.loiKept1896[1] - RULES.loiKept1896[0]) * kp
-      v = Math.max(
-        I.sugar1900[o],
-        I.pine1900[o],
-        I.loi[o] * kept,
-        I.dryland[o] * RULES.dryland1896,
-        I.agroforestry[o] * RULES.agroforestry1896,
-        I.pondShore[o] * RULES.fishpondShore * RULES.ponds1896,
-      )
-    } else if (key === 'now') {
-      v = I.crops2020[o]
-    }
-    out[o] = clamp01(v)
+    out[o] = clamp01(Math.max(...cultivationTerms(I, key, o, t)))
   }
   return out
 }

@@ -136,9 +136,9 @@ export const layerPaths = (dir) => ({
 const vectorFile = (dir, key, off) => join(layerPaths(dir).vectors, `${key}-page-${String(off).padStart(6, '0')}.geojson`)
 const vectorMeta = (dir, key) => join(layerPaths(dir).vectors, `${key}-layer.json`)
 
-/** Fetch one vector layer's description and every feature, paged. */
-export function downloadVector(ledger, dir, key, log) {
-  const L = VECTORS[key]
+/** Fetch one vector layer's description and every feature, paged (`defs`: the table it is defined in, VECTORS unless given). */
+export function downloadVector(ledger, dir, key, log, defs = VECTORS) {
+  const L = defs[key]
   mkdirSync(layerPaths(dir).vectors, { recursive: true })
   const meta = fetchTo(ledger, `${L.service}?f=json`, vectorMeta(dir, key), { force: true })
   if (!meta.ok) throw new Error(`${key}: HTTP ${meta.status} for the layer description`)
@@ -197,8 +197,8 @@ export function downloadAll(ledger, dir, log) {
 }
 
 /** A source entry for the manifest, with the date the ledger recorded. */
-export function vectorSource(ledger, dir, key, extra = {}) {
-  const L = VECTORS[key]
+export function vectorSource(ledger, dir, key, extra = {}, defs = VECTORS) {
+  const L = defs[key]
   const layer = JSON.parse(readFileSync(vectorMeta(dir, key), 'utf8'))
   const fetched = ledger.get(vectorMeta(dir, key))?.fetched
   return {

@@ -42,7 +42,7 @@ export const SANITY = [
   ['kauai', 'Waiʻaleʻale', -159.498, 22.07, 1500, [9], [4]],
 ]
 
-function packLand(data, pack) {
+export function packLand(data, pack) {
   const [W, H] = pack.size
   const h = readPNG(join(data, pack.height.file))
   const land = new Uint8Array(W * H)
@@ -55,7 +55,7 @@ function packLand(data, pack) {
 }
 
 /** Classes within `radius` metres of (lon, lat) on a pack grid, over land: [[class, share]] commonest first, 0 last. */
-function disc(raster, pack, land, lon, lat, radius) {
+export function disc(raster, pack, land, lon, lat, radius) {
   const [W, H] = pack.size
   const g = gridFromBounds(pack.bounds, W, H)
   const [mx, mz] = g.metresPerTexel
@@ -271,7 +271,7 @@ const GLYPHS = {
 }
 
 /** Draw text at (x, y) (top of the kahakō row), scale k; returns the width drawn. */
-function text(rgb, W, H, x, y, str, colour, k = 2) {
+export function text(rgb, W, H, x, y, str, colour, k = 2) {
   const s = String(str).normalize('NFD').toUpperCase()
   let cx = x
   for (let i = 0; i < s.length; i++) {
@@ -295,7 +295,7 @@ function text(rgb, W, H, x, y, str, colour, k = 2) {
   return cx - x
 }
 
-function relief(metres, W, H, mx, mz) {
+export function relief(metres, W, H, mx, mz) {
   const out = new Float32Array(W * H)
   const at = (i, j) => Math.max(0, metres[Math.max(0, Math.min(H - 1, j)) * W + Math.max(0, Math.min(W - 1, i))])
   for (let y = 0; y < H; y++) {
