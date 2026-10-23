@@ -142,8 +142,12 @@ export class Cameras {
         U.set(0, 1, 0).applyQuaternion(Q)
         cam.position.set(x, y, z).addScaledVector(F, -2.5).addScaledVector(U, 1.4)
       } else cam.position.set(x, y + (m.deck ?? 8) + 7, z)
-      const az = ((inp?.aimAz ?? s.heading[i] + (air ? 180 : 90)) * DEG) + this.look.yaw
-      const el = Math.max(-0.2, Math.min(1.5, (inp?.aimEl ?? 10) * DEG + this.look.pitch))
+      // (an aim given as a point, input.aa, as the sim reads it: its compass bearing and height from the eye)
+      const pt = Array.isArray(inp?.aa) && inp.aa.length === 3 ? inp.aa : null
+      const aimAz = pt ? Math.atan2(pt[0] - x, -(pt[2] - z)) / DEG : inp?.aimAz
+      const aimEl = pt ? Math.atan2(pt[1] - cam.position.y, Math.hypot(pt[0] - x, pt[2] - z)) / DEG : inp?.aimEl
+      const az = ((aimAz ?? s.heading[i] + (air ? 180 : 90)) * DEG) + this.look.yaw
+      const el = Math.max(-0.2, Math.min(1.5, (aimEl ?? 10) * DEG + this.look.pitch))
       W.set(cam.position.x + Math.sin(az) * Math.cos(el) * 1000, cam.position.y + Math.sin(el) * 1000, cam.position.z - Math.cos(az) * Math.cos(el) * 1000)
       cam.up.set(0, 1, 0)
       cam.lookAt(W)

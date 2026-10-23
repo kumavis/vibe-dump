@@ -172,7 +172,15 @@ export function enterStation(sim, pl, name) {
   const a = pl.aims[name]
   if (a) Object.assign(inp, a)
   else if (name === 'aa' || name === 'gunner') {
-    const j = nearestEnemyAircraft(sim, i, name === 'aa' ? 7000 : 1500)
+    // (the gunner's only where the rear gun bears: aft and above, not through the tail, the wings or the propeller)
+    const bears = (j) => {
+      const dx = s.pos[3 * j] - s.pos[3 * i]
+      const dy = s.pos[3 * j + 1] - s.pos[3 * i + 1]
+      const dz = s.pos[3 * j + 2] - s.pos[3 * i + 2]
+      const offTail = Math.abs(wrap180(headingOf(dx, dz) - s.heading[i] - 180))
+      return offTail <= P.gunner.arcFromTailDeg && dy / (Math.hypot(dx, dy, dz) || 1) >= P.gunner.minUpDot
+    }
+    const j = nearestEnemyAircraft(sim, i, name === 'aa' ? 7000 : 1500, name === 'gunner' ? bears : null)
     if (j >= 0) {
       const dx = s.pos[3 * j] - s.pos[3 * i]
       const dy = s.pos[3 * j + 1] - s.pos[3 * i + 1]
@@ -195,12 +203,13 @@ export function enterStation(sim, pl, name) {
   inp.fireHeld = false
 }
 
-function nearestEnemyAircraft(sim, i, within) {
+function nearestEnemyAircraft(sim, i, within, ok = null) {
   const s = sim.state
   let best = -1
   let bd = within
   for (const j of sim._air || airList(sim)) {
-    if (sim.slots[j].side === sim.slots[i].side || j === i) continue
+    if (sim.slots[j].side === sim.slots[i].side || j === i || s.alive[j] !== 1) continue
+    if (ok && !ok(j)) continue
     const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 1] - s.pos[3 * i + 1], s.pos[3 * j + 2] - s.pos[3 * i + 2])
     if (d < bd) {
       bd = d

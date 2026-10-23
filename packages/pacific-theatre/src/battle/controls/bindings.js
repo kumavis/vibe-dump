@@ -88,11 +88,15 @@ Tab: the next station · Backspace: release the controls`
 export const BOMBARDIER_HELP = `A/D steer the run-in · B or Space: release the stick when the impact meets the target
 Tab: the next station · Backspace: release the controls`
 
-/** The first take's four lines (ROUND-2 §1.2: stick, throttle, fire or release, Backspace), once a kind (HUD.firstHints). */
+/** The first take's four lines (ROUND-2 §1.2: stick, throttle, fire or release, Backspace), once a kind, and once for each gun and the sight (HUD.firstHints). */
 export const HINTS = {
   aircraft: ['Stick: the mouse (the nose follows it) or W/S and A/D; let go and the wings level', 'Throttle: R and F', 'Fire: Space or the left button · release: B a bomb, T a torpedo, when the cue says so', 'Backspace twice gives the controls back'],
   ship: ['Helm: A and D (it stays until countered) · telegraph: W and S', 'Aim: the mouse lays the guns on the sea', 'Fire: a click · torpedoes: T · Tab: the next station', 'Backspace twice gives the controls back'],
   touch: ['Stick: the left pad (let go and the wings level), or the helm and telegraph sliders', 'Throttle: the slider beside it', 'Fire and release: the buttons on the right', 'Release, tapped twice, gives the controls back'],
+  // a first take at a gun or the sight gets that station's four lines, once each (the stick's would mislead there)
+  gunner: ['Aim: the mouse turns the rear gun (with the pointer locked; else its offset from the centre)', 'It bears aft and above, not through the tail or the wings', 'Fire: the left button or Space · the pip leads the aimed aircraft', 'Tab: the next station · Backspace twice gives the controls back'],
+  aa: ['Aim: the mouse lays the AA director on an aircraft', 'The guns that bear fire where it points; the pip leads the aimed aircraft', 'Fire: the left button or Space · Tab: the next station', 'Backspace twice gives the controls back'],
+  bombardier: ['Steer: A and D bring the track onto the target', 'The sight shows where the stick would fall now', 'Release: B or Space when the impact meets the target', 'Tab: the next station · Backspace twice gives the controls back'],
 }
 
 export const HELM_STEPS = [-1, -0.5, 0, 0.5, 1]

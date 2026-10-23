@@ -233,7 +233,10 @@ export class Battle {
     if (sc) {
       sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
       sc.hud.setStations(pl)
-      if (!scripted) sc.hud.firstHints(pl.kind, touch ? HINTS.touch : HINTS[pl.kind])
+      if (!scripted) {
+        const key = touch ? pl.kind : HINTS[pl.station] ? pl.station : pl.kind
+        sc.hud.firstHints(key, touch ? HINTS.touch : HINTS[key])
+      }
     }
     if (touch && this.aid === 'standard') this.setAid('guided')
   }
