@@ -39,7 +39,11 @@
 // - the copy and voice rules on every user-facing string (common.mjs), counts
 //   only in tellings and typed fields, the words for the dead (R8 §3.6);
 // - routes.json, when it exists: a fleet route of the battle's event that
-//   names box units agrees with their tracks at the battle's start (20 km).
+//   names box units agrees with their tracks at the battle's start (20 km);
+// - the first door (ROUND-2.md §1.2, §7, §8): present, its role takeable by
+//   §2 at its t from the file's own flags and the group's namedCrews, its
+//   station in the vocabulary and one the kit offers by §3's rule (stationsOf),
+//   its title and text in the stops' voice with no game words.
 //
 // Against test-data (the fixtures) the content rules that only the real
 // battles carry (hangarHazard, reached, each box's own clocks and rules) are
@@ -241,6 +245,11 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
 
   const T = (at, t, inside = true) => battleTime(ctx, at, clock, t, { inside })
   const outside = (at, t) => T(at, t, false)
+
+  // the kits, for the first door's stations (ROUND-2.md §3)
+  const kitList = (f) => (Array.isArray(ctx.load(f)) ? ctx.load(f) : []).filter((k) => k?.id)
+  const shipKits = new Map(kitList('kits/ships.json').map((k) => [k.id, k]))
+  const airKits = new Map(kitList('kits/aircraft.json').map((k) => [k.id, k]))
 
   // --- ids
   const units = checkIds(ctx, B.units || [], `${rel} units`)
@@ -508,6 +517,10 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
     ctx.count('moments')
     moment(`${rel} moment ${m.id}`, m)
   }
+
+  // --- the first door (ROUND-2.md §1.2 and §7): the briefing's "Start here", takeable by §2 at its t
+  if (B.firstDoor === undefined) need(rel, 'has no firstDoor (ROUND-2.md §7: the one easy take-over the briefing names)')
+  else firstDoor(`${rel} firstDoor`, B.firstDoor)
 
   // --- the box's own sources
   if (!(B.sources || []).length) ctx.bad(rel, 'cites no sources')
@@ -809,6 +822,116 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
     tellings(at, m.tellings)
   }
 
+  /**
+   * The first door: { role: { kind, unit | group, station, kit?, side?, name?, index? }, t, title, text, start? }.
+   * The role is takeable by ROUND-2.md §2 at t, from the file's own flags: a ship not fixed, not a hospital
+   * ship, not tokkō, not the cause of a fixed fate, afloat and in the box at t (before its fate); an aircraft
+   * of a group (never a parked unit) that is not tokkō, not among Pearl Harbor's first-wave level bombers,
+   * airborne at t (from its launch or entry to its recovery), never index 0; a group whose every crew the
+   * record names (`namedCrews`), or of one aircraft, gives a spare, which starts at the door's `start` if it
+   * has one. The station is in the vocabulary and one the kit offers by §3's rule (stationsOf).
+   */
+  function firstDoor(at, d) {
+    if (!d || typeof d !== 'object') return ctx.bad(at, 'is { role, t, title, text }')
+    const r = d.role || {}
+    if (!d.title) ctx.bad(at, 'has no title')
+    if (!d.text) ctx.bad(at, 'has no text')
+    for (const k of ['title', 'text']) {
+      text(ctx, `${at} ${k}`, d[k], { numbers: true, people, card: `${d.title || ''} ${d.text || ''}` })
+      const w = typeof d[k] === 'string' && d[k].match(GAME_WORDS)
+      if (w) ctx.bad(`${at} ${k}`, `“${w[0]}”: no game words in the app’s voice (DESIGN.md §7.4, R8 §5)`)
+    }
+    checkVocab(ctx, `${at} role`, 'kind', r.kind, 'roleKinds')
+    if (ctx.vocab.stations) checkVocab(ctx, `${at} role`, 'station', r.station, 'stations')
+    for (const k of ['pilot', 'person', 'captain', 'commander']) if (r[k] !== undefined) ctx.bad(`${at} role`, `has a ${k}: the player is never a named person (R8 §5.1)`)
+    if (r.name) {
+      for (const n of PERSON_WORDS) if (new RegExp(`\\b${n}\\b`).test(r.name)) ctx.bad(`${at} role`, `name names a person (“${n}”): the player is never a named person`)
+      text(ctx, `${at} role.name`, r.name, { numbers: true, people })
+    }
+    const tS = T(`${at} t`, d.t)
+    const why = []
+    let kit = null
+    let spare = false
+    if (r.kind === 'ship') {
+      if (r.group) ctx.bad(`${at} role`, 'a ship role names a unit, not a group')
+      const u = units.get(r.unit)
+      if (!u) ctx.bad(`${at} role`, `unit “${r.unit}” is not a unit`)
+      else {
+        kit = shipKits.get(u.kit)
+        if (!ctx.frozen.kits.ships[u.kit]) ctx.bad(`${at} role`, `${u.id} is not a ship`)
+        if (r.side !== undefined && r.side !== u.side) ctx.bad(`${at} role`, `side ${r.side}; ${u.id} is ${u.side}`)
+        if (r.kit !== undefined && r.kit !== u.kit) ctx.bad(`${at} role`, `kit ${r.kit}; ${u.id} is ${u.kit}`)
+        if (u.fixed) why.push('fate is fixed')
+        if (u.hospital) why.push('hospital ship')
+        if (u.tokko) why.push('tokkō unit')
+        if (u.station?.parked) why.push('on the ground')
+        for (const { unit, e } of allEvents) if (unit.fixed && e.by === u.id) why.push(`causes ${unit.id}’s fixed fate at ${e.t}`)
+        if (tS !== null) {
+          const end = endOf(u)
+          if (end !== null && tS >= end) why.push('past its fate')
+          else if (!posAt(u, tS)) why.push(`not in the box at ${d.t} (its track or station does not cover it)`)
+        }
+      }
+    } else if (r.kind === 'aircraft') {
+      if (r.unit !== undefined) why.push(units.get(r.unit)?.station?.parked ? 'on the ground' : `names unit “${r.unit}”: an aircraft role names a group`)
+      const g = groups.get(r.group)
+      if (!g) ctx.bad(`${at} role`, `group “${r.group}” is not a group`)
+      else {
+        kit = airKits.get(g.kit)
+        if (r.side !== undefined && r.side !== g.side) ctx.bad(`${at} role`, `side ${r.side}; ${g.id} is ${g.side}`)
+        if (r.kit !== undefined && r.kit !== g.kit) ctx.bad(`${at} role`, `kit ${r.kit}; ${g.id} flies ${g.kit}`)
+        if (g.tokko || /tokk[oō]|kamikaze|special attack/i.test(g.id)) why.push('tokkō unit')
+        if (g.attack?.profile === 'level' && g.wave === 1 && boxId === 'pearl-harbor') why.push('among the first wave’s level bombers (DESIGN.md §3.5)')
+        if (r.index !== undefined) {
+          if (!(Number.isInteger(r.index) && r.index >= 0 && r.index < g.count)) ctx.bad(`${at} role`, `index ${r.index} is not an aircraft of ${g.id} (0..${g.count - 1})`)
+          if (r.index === 0) why.push('the leader stays on the record')
+          if (g.namedCrews) why.push('a named crew’s aircraft: the group gives a spare, with no index')
+        }
+        spare = g.namedCrews === true || (g.count ?? 0) < 2
+        if (tS !== null) {
+          const up = g.offBox ? safeParse(clock, g.enter?.t) : safeParse(clock, g.launch)
+          const down = g.recover?.t ? safeParse(clock, g.recover.t) : null
+          if (up === null || tS < up) why.push('not yet airborne')
+          else if (down !== null && tS >= down) why.push('has landed')
+        }
+        if (spare && !d.start) ctx.warn(at, `${g.id} gives a spare (${g.namedCrews ? 'its crews are named' : 'it has one aircraft'}): with no start it starts where the engine puts the group`)
+      }
+    }
+    if (why.length) ctx.bad(at, `${r.unit || r.group} is not takeable at ${d.t} (ROUND-2.md §2): ${why.join('; ')}`)
+    else if (r.unit || r.group) ctx.count('first doors takeable')
+    // the station the kit offers (ROUND-2.md §3)
+    if (kit && r.station) {
+      const offered = stationsOf(kit, r.kind)
+      if (!offered.includes(r.station)) ctx.bad(`${at} role`, `station ${r.station}; kit ${kit.id} offers ${offered.join(', ')} (ROUND-2.md §3)`)
+    } else if (r.station && (r.unit || r.group) && !kit) ctx.warn(`${at} role`, 'its kit is not in kits/: the station is not checked')
+    // a spare's start, as a moment's
+    if (d.start !== undefined) {
+      const s = d.start
+      if (r.kind !== 'aircraft') ctx.bad(`${at} start`, 'a ship is taken on its own track')
+      const from = units.get(s?.from) || sites.get(s?.from)
+      if (!from) ctx.bad(`${at} start`, `from “${s?.from}” is not a unit or site`)
+      for (const [k, lo, hi] of [['bearingDeg', 0, 360], ['rangeM', 0, 60000], ['altM', 10, 10000], ['speedMs', 30, 200], ['headingDeg', 0, 360]]) {
+        if (!(Number.isFinite(s?.[k]) && s[k] >= lo && s[k] <= hi)) ctx.bad(`${at} start`, `${k} is ${lo}..${hi}`)
+      }
+      if (from && units.has(s.from) && tS !== null && !posAt(from, tS)) ctx.bad(`${at} start`, `${s.from} has no position at ${d.t}`)
+      if (!spare && r.kind === 'aircraft') ctx.warn(`${at} start`, 'the group has aircraft the player may take where the record has them: the start is for a spare')
+    }
+  }
+
+  /** When a ship's record ends it (sunk, scuttled, capsized, beached, or its sinking, scuttling, explosion or abandonment), in clock seconds, or null. */
+  function endOf(u) {
+    let end = null
+    const at = (t) => safeParse(clock, t)
+    if (u.fate && ['sunk', 'scuttled', 'capsized', 'beached'].includes(u.fate.kind) && u.fate.t) end = at(u.fate.t)
+    for (const e of u.events || []) {
+      if (!['sinks', 'scuttled', 'explodes', 'abandoned', 'aground'].includes(e.kind)) continue
+      if (e.kind === 'aground' && u.fate?.kind !== 'beached') continue
+      const s = at(e.t)
+      if (s !== null && (end === null || s < end)) end = s
+    }
+    return end
+  }
+
   function stLo() {
     const stlo = [...units.values()].find((u) => /^St\.? Lo$/.test(u.name))
     if (!stlo) return ctx.bad(`${rel} units`, 'has no St. Lo')
@@ -822,6 +945,31 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
 }
 
 // --- helpers ---------------------------------------------------------------------
+
+/** Game words, never in the first door's voice (ROUND-2.md §2, DESIGN.md §7.4): no kills, scores, wins, or people as “the enemy”. */
+const GAME_WORDS = /\b(kill(?:s|ed|ing)?|scor(?:e|es|ed|ing)|win(?:s|ning)?|enem(?:y|ies))\b/i
+
+/**
+ * The stations a kit offers, by ROUND-2.md §3's rule unless the kit names its own (`stations`): a ship the
+ * helm, the main battery if it has one, anti-aircraft if it has AA mounts, torpedoes if it has tubes; an
+ * aircraft the pilot, a gunner if its crew is two or more and it has a rear gun (or is a torpedo, dive or
+ * level bomber), a bombardier if it is a level bomber.
+ */
+export function stationsOf(kit, kind) {
+  if (Array.isArray(kit?.stations) && kit.stations.length) return kit.stations
+  if (kind === 'ship') {
+    const out = ['helm']
+    if ((kit?.guns || []).some((g) => g?.role === 'main')) out.push('main')
+    if ((kit?.aa || []).some((a) => (a?.mounts ?? 0) > 0)) out.push('aa')
+    if ((kit?.torpedoes?.tubes ?? 0) > 0) out.push('torpedoes')
+    return out
+  }
+  const out = ['pilot']
+  const rear = (kit?.guns || []).some((g) => g?.arc === 'rear' || g?.position === 'rear')
+  if ((kit?.crew ?? 1) >= 2 && (rear || ['torpedo', 'dive', 'level'].includes(kit?.type))) out.push('gunner')
+  if (kit?.type === 'level') out.push('bombardier')
+  return out
+}
 
 function sourceRef(ctx, ledger) {
   return (at, x) => {

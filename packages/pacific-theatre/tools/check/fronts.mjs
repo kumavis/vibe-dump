@@ -6,6 +6,12 @@
 // lines; the declared lines with a name, a Japanese name and their dates; every keyframe's, polygon's and
 // line's sources public domain (§4); the copy and voice rules on the notes and names the table shows;
 // R3's named cut-off garrisons Japanese on every keyframe from their isolation to their surrender.
+// The second round (ROUND-2.md §1.3, §8): the fourteen frozen keyframes in order; the prologue's (before the
+// eve, 1941-12-06) schematic, each with its sources and its note; Korea, Taiwan, Karafuto and the Kwantung
+// Leased Territory held on every keyframe (a zone of General Order No. 1 on the last), Manchuria from
+// 1932-03-01 and not before, Jehol from 1937-12-31; northern Indochina garrisoned from 1940-09-30 and the
+// south from 1941-07-31, neither Japan's before; the South Seas Mandate's islands Japanese in places.json
+// from before the first keyframe.
 import { resolver, checkVocab, instant, checkCopy, checkVoice, checkNoNumbers, TableProjection, V1_PROJECTION, VOCAB } from './common.mjs'
 import { ALLOW } from './gazetteer.mjs'
 
@@ -138,6 +144,26 @@ export const CUT_OFF = [
   ...['truk', 'ponape', 'kusaie', 'nauru', 'banaba', 'wake', 'marcus', 'yap', 'babelthuap'].map((place) => ({ place, from: '1945-01-15' })),
 ]
 
+const EVE = '1941-12-06'
+/**
+ * Places on the front's land whose holder the prologue fixes (ROUND-2.md §1.3 and §8): `at` points inside
+ * them; `held` on every keyframe from `from` (or the first) to `to` (or the last), a zone of General Order
+ * No. 1 on the last; `not` the states they may not have on the keyframes before `from`. `garrisoned` holds
+ * the state to `garrisoned` over [from, to) instead.
+ */
+export const PROLOGUE_HOLDERS = [
+  { name: 'Korea', at: [[126.98, 37.57], [125.75, 39.03], [129.0, 35.15]] },
+  { name: 'Taiwan', at: [[120.96, 23.7], [121.5, 25.03]] },
+  { name: 'Karafuto', at: [[142.74, 46.96]] },
+  { name: 'the Kwantung Leased Territory', at: [[121.6, 38.92]] },
+  { name: 'Manchuria', at: [[126.55, 43.84], [126.63, 45.75], [123.97, 47.34]], from: '1932-03-01', not: ['held', 'garrisoned'] },
+  { name: 'Jehol', at: [[117.94, 40.97]], from: '1937-12-31' },
+  { name: 'northern Indochina (Tonkin)', at: [[105.85, 21.03]], from: '1940-09-30', to: '1945-03-09', garrisoned: true, not: ['held', 'garrisoned'] },
+  { name: 'southern Indochina', at: [[106.7, 10.78], [104.92, 11.56]], from: '1941-07-31', to: '1945-03-09', garrisoned: true, not: ['held', 'garrisoned'] },
+]
+/** The South Seas Mandate's islands in places.json: Japanese from before the first keyframe (ROUND-2.md §8). */
+export const MANDATES = ['saipan', 'tinian', 'rota', 'pagan', 'yap', 'babelthuap', 'peleliu', 'angaur', 'truk', 'ponape', 'kusaie', 'kwajalein', 'majuro', 'eniwetok', 'jaluit', 'wotje', 'maloelap', 'mili']
+
 const ringArea = (r) => {
   let s = 0
   for (let i = 0; i + 1 < r.length; i++) s += r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1]
@@ -195,6 +221,7 @@ export default function check(ctx) {
     if (i > 0 && man.keyframes[i - 1]?.id >= k.id) ctx.bad(at, 'keyframes are not in date order')
   }
   for (const id of ctx.frozen.keyframes || []) if (!ids.has(id)) ctx.bad('fronts/manifest.json', `has no keyframe ${id} (tools/check/ids.json)`)
+  if (!ctx.test && man.keyframes.map((k) => k?.id).join(' ') !== (ctx.frozen.keyframes || []).join(' ')) ctx.bad('fronts/manifest.json', `the keyframes are the ${(ctx.frozen.keyframes || []).length} frozen ones, in their order: ${(ctx.frozen.keyframes || []).join(', ')} (ROUND-2.md §8)`)
   for (const id of ids) if (!(ctx.frozen.keyframes || []).includes(id)) ctx.warn('fronts/manifest.json', `keyframe ${id} is not a frozen keyframe`)
 
   // --- each keyframe ---------------------------------------------------------------------------------
@@ -331,6 +358,71 @@ export default function check(ctx) {
         if (!ok) ctx.bad(`${k.file} at ${g.at.join(', ')}`, `${g.name} is ${states.join(' and ') || 'not on the front’s land'}; ${g.why || 'R3 has it cut off'} and Japanese from ${g.from} to ${to} (held, or a General Order No. 1 zone on ${LAST})`)
         else ctx.count('cut-off garrison keyframes held')
       }
+    }
+  }
+
+  // --- the prologue (ROUND-2.md §1.3 and §8) ---------------------------------------------------------------
+  if (!ctx.test) {
+    const statesAt = (fc, at) => {
+      const out = []
+      for (const f of fc?.features || []) {
+        const p = f?.properties || {}
+        if (!p.state || !f.geometry) continue
+        const ps = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : []
+        if (ps.some((rings) => inPolygon(rings, at))) out.push(p.state)
+      }
+      return out
+    }
+    // the prologue's keyframes: schematic, sourced beyond the coast, with a note
+    for (const k of man.keyframes) {
+      if (!k?.id || k.id >= EVE) continue
+      const at0 = `fronts/manifest.json ${k.id}`
+      if (!cites(k.sources).some((id) => id !== 'natural-earth')) ctx.bad(at0, 'a prologue keyframe cites a source beyond the coast')
+      if (typeof k.note !== 'string' || !/schematic/i.test(k.note)) ctx.bad(at0, 'a prologue keyframe has a note that says it is schematic')
+      const fc = ctx.load(k.file)
+      for (const [i, f] of (fc?.features || []).entries()) {
+        const p = f?.properties || {}
+        if (!p.state) continue
+        const at = `${k.file} feature ${i} ${p.name ?? ''}`
+        if (p.precision !== 'schematic') ctx.bad(at, `precision ${p.precision}: the prologue's keyframes are schematic`)
+        if (!cites(p.sources).some((id) => id !== 'natural-earth')) ctx.bad(at, 'cites no source beyond the coast')
+      }
+      ctx.count('prologue keyframes')
+    }
+    // who holds what, by date
+    const first = man.keyframes[0]?.id
+    const last = man.keyframes[man.keyframes.length - 1]?.id
+    for (const h of PROLOGUE_HOLDERS) {
+      const from = h.from || first
+      const to = h.to || last
+      for (const k of man.keyframes) {
+        if (!k?.id) continue
+        const fc = ctx.load(k.file)
+        for (const at of h.at) {
+          const states = statesAt(fc, at)
+          const where = `${k.file} at ${at.join(', ')}`
+          if (k.id >= from && (h.garrisoned ? k.id < to : k.id <= to)) {
+            const ok = states.length && states.every((st) => (h.garrisoned ? st === 'garrisoned' : st === 'held') || (k.id === LAST && String(st).startsWith('zone-')))
+            if (!ok) ctx.bad(where, `${h.name} is ${states.join(' and ') || 'not on the front’s land'}; ROUND-2.md §1.3 has it ${h.garrisoned ? 'garrisoned' : 'held'} from ${from}${h.to ? ` to ${h.to}` : ''}`)
+            else ctx.count('prologue holders held')
+          } else if (k.id < from && h.not) {
+            const bad = states.filter((st) => h.not.includes(st))
+            if (bad.length) ctx.bad(where, `${h.name} is ${bad.join(' and ')} on ${k.id}, before ${from}`)
+          }
+        }
+      }
+    }
+    // the Mandate's islands, which the front leaves to the marks
+    const places = new Map(list(ctx.load('places.json')).filter((p) => p?.id).map((p) => [p.id, p]))
+    for (const id of MANDATES) {
+      const p = places.get(id)
+      if (!p) {
+        ctx.bad(`fronts mandate ${id}`, `no place ${id} in places.json`)
+        continue
+      }
+      const jp = list(p.held).find((x) => x?.by === 'jp' && String(x.from) <= String(first))
+      if (!jp) ctx.bad(`fronts mandate ${id}`, `places.json ${id} has no Japanese held interval from before ${first}: the South Seas Mandate is Japan's from the first keyframe`)
+      else ctx.count('mandate islands held from the first keyframe')
     }
   }
 
