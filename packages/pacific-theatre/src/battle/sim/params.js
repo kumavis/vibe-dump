@@ -156,6 +156,15 @@ export const P = {
     windowK: 2, // the release cue's window in Assisted: twice the record's (§1.2)
     torpedoWindowM: [300, 1500], // the record's drop window (range to the target), R7 §4.3 and §5
     halfTime: 0.5, // an aircraft take-over in Assisted runs the battle at 0.5×
+    // what is aimed at the player's aircraft in Assisted: Guided's rule (R7 §4.5, "halves only what is aimed at the
+    // player"), so a casual pilot reaches a bookmark's checkpoint (ROUND-2 §6 part 5): the AA's λ on it halved, at most
+    // two fighters on it at once, each with three times the lead error and half again the reaction time, pulling clear
+    // after each burst, their rounds doing half (the engine's)
+    fightersOnPlayer: 2,
+    hitsOnPlayerK: 0.5, // a fighter's rounds on the player's aircraft do half their damage
+    fighterLeadK: 3,
+    fighterBreakS: 5, // after each burst it pulls clear for 5 s, and fires again no sooner than 2 s after that
+    fighterReactionK: 1.5,
   },
   // the gunner station (ROUND-2 §3): a rear gun's hazard on the fighter it is aimed at (the engine's estimate, verify)
   gunner: {

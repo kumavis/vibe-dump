@@ -361,7 +361,11 @@ function recruit(sim) {
   if (pl.kind === 'aircraft') {
     let fighting = 0
     for (const i of sim._air) if (sim.slots[i].authority === 'ai' && X[i].ai?.mode === 'fight' && X[i].ai.target === pi) fighting++
-    if (fighting < 4) {
+    // (in Assisted, Guided's rule for what is aimed at the player, R7 §4.5: at most two fighters on the player's
+    // aircraft at once, slower to aim and with twice the lead error; ROUND-2 §1.2's casual player)
+    const easy = sim.assist === 'assisted'
+    const most = easy ? P.assist.fightersOnPlayer : 4
+    if (fighting < most) {
       const cand = []
       for (const i of sim._air) {
         const u = sim.slots[i]
@@ -375,10 +379,14 @@ function recruit(sim) {
         cand.push([d, i])
       }
       cand.sort((a, b) => a[0] - b[0])
-      for (const [, i] of cand.slice(0, 4 - fighting)) {
+      for (const [, i] of cand.slice(0, most - fighting)) {
         sim._toAI(i, 'engaged the player')
         X[i].ai.mode = 'fight'
         X[i].ai.target = pi
+        if (easy) {
+          X[i].ai.leadMils *= P.assist.fighterLeadK
+          X[i].ai.reaction *= P.assist.fighterReactionK
+        }
       }
     }
     // the wingman: a fighter of the player's own group turns into an enemy on the player's tail
@@ -742,8 +750,13 @@ function airThink(sim, i, x, dt) {
     if (ai.dist < P.cap.fireRangeM && err < P.cap.leadTolDeg * 3 && t >= ai.nextBurst) {
       ai.burstUntil = t + P.cap.burstS[0] + sim.rngs.ai.next() * (P.cap.burstS[1] - P.cap.burstS[0])
       ai.nextBurst = ai.burstUntil + 1.5
+      // (in Assisted a fighter on the player's aircraft makes its run and pulls clear, as the Zeros did, R7 §4.7; P.assist)
+      if (sim.assist === 'assisted' && sim.player?.unitIndex === ti && sim.player.kind === 'aircraft') {
+        ai.breakUntil = ai.burstUntil + P.assist.fighterBreakS
+        ai.nextBurst = ai.burstUntil + P.assist.fighterBreakS + 2
+      }
     }
-    if (ai.dist < 120) ai.breakUntil = t + 4
+    if (ai.dist < 120) ai.breakUntil = Math.max(ai.breakUntil, t + 4)
     return
   }
   if (ai.mode === 'dive' || ai.mode === 'torpedo' || ai.mode === 'level') return attackThink(sim, i, x, dt)
@@ -2083,9 +2096,11 @@ export function bulletStrike(sim, p, i) {
   const prot = x.model.protection === 'self-sealing' ? 'protected' : 'unprotected'
   const per = w?.vsAircraft?.[prot] ?? (w?.calibreMm >= 20 ? 0.3 : 0.06)
   const rounds = pr.aux[p] || 1
-  const dmg = per * rounds * 0.35
+  // (in Assisted the rounds aimed at the player's aircraft do half: Guided's rule, R7 §4.5; P.assist)
+  const easy = sim.assist === 'assisted' && sim.player?.engaged && sim.player.unitIndex === i ? P.assist.hitsOnPlayerK : 1
+  const dmg = per * rounds * 0.35 * easy
   b.damage += dmg / (x.model.fatal || 1)
-  if (b.burning <= 0 && sim.rngs.dmg.chance((P.damage.aircraftFireChance[x.model.protection] ?? 0.1) * Math.min(1, rounds * 0.35))) {
+  if (b.burning <= 0 && sim.rngs.dmg.chance((P.damage.aircraftFireChance[x.model.protection] ?? 0.1) * Math.min(1, rounds * 0.35) * easy)) {
     b.burning = P.damage.aircraftFireBurnS[0] + sim.rngs.dmg.next() * (P.damage.aircraftFireBurnS[1] - P.damage.aircraftFireBurnS[0])
     sim.fx(FX.fire, b.x, b.y, b.z, { unit: i, size: 0.5 })
   }
@@ -2339,7 +2354,8 @@ export function aaStep(sim, dt) {
       lam += (shipLambda(m, d) * era * alert * aspectOf(mode) * dmgScale) / share
       if (!nearest || d < nearest.d) nearest = { j, d, m }
     }
-    if (pl && pl.unitIndex === i && sim.aid === 'guided') lam *= 0.5
+    // (Guided, and Assisted for an aircraft, halve the AA aimed at the player: R7 §4.5)
+    if (pl && pl.unitIndex === i && (sim.aid === 'guided' || sim.assist === 'assisted')) lam *= 0.5
     if (pl && pl.unitIndex === i) sim._aaOnPlayer = lam
     if (lam <= 0) continue
     // the flak the eye sees, at a rate with the hazard

@@ -8,7 +8,7 @@
 // ship", "tokkō unit", "on the ground", "not yet airborne", and the same
 // register for the rest of §2's cases ("flies the lead", "a named crew",
 // "has landed", "did not return", "no longer afloat", "fate is sealed",
-// "going down", "left the box", "not launched").
+// "going down", "left the area", "not launched").
 
 import { KN } from './units.js'
 import { headingOf } from './path.js'
@@ -32,7 +32,7 @@ export const REASONS = {
   sunk: 'no longer afloat',
   sinking: 'going down',
   sealed: 'fate is sealed',
-  left: 'left the box',
+  left: 'left the area',
   cancelled: 'not launched',
   site: 'a site, not a unit',
   spare: 'not in the battle',
@@ -331,7 +331,7 @@ function aircraftNow(sim, i) {
   // next: the plan's next action
   let next = ''
   if (ac && a !== 2) {
-    if (a === 0 && t < ac.spawnT) next = g?.enter ? `At ${L(ac.spawnT)} it enters the box.` : `At ${L(ac.spawnT)} it takes off${from ? ` from ${from}` : ''}.`
+    if (a === 0 && t < ac.spawnT) next = g?.enter ? `At ${L(ac.spawnT)} it enters the area.` : `At ${L(ac.spawnT)} it takes off${from ? ` from ${from}` : ''}.`
     else {
       const acts = [...(ac.actions || [])].filter((q) => q.t > t && q.t <= sim.clock.duration).sort((p, q) => p.t - q.t)
       const q = acts[0]
@@ -341,7 +341,7 @@ function aircraftNow(sim, i) {
         else if (q.kind === 'drop') next = `At ${L(q.t)} it drops its torpedo at ${tg}.`
         else if (q.kind === 'strafe') next = `At ${L(q.t)} it strafes ${q.site ? sim.record.siteById.get(q.site)?.name ?? tg : tg}.`
         else if (q.kind === 'land') next = `At ${L(q.t)} it lands${q.unit >= 0 ? ` aboard ${sim.record.ships[q.unit]?.name}` : home ? ` at ${home}` : ''}.`
-      } else if (Number.isFinite(ac.endT) && ac.endT > t && ac.endHow !== 'land') next = `At ${L(ac.endT)} it leaves the box.`
+      } else if (Number.isFinite(ac.endT) && ac.endT > t && ac.endHow !== 'land') next = `At ${L(ac.endT)} it leaves the area.`
     }
   }
   return { now, next, state }

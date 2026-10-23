@@ -47,6 +47,9 @@ if (vb) vb.attack.reached = [5, 6]
 const cv = battle.units.find((u) => u.id === 'test-cv-a')
 if (cv) cv.hangarHazard = [{ t: '04:00', h: 0.3 }, { t: '10:00', h: 0.8 }, { t: '11:00', h: 0.4 }]
 
+// round two (ROUND-2 §7): a first door, so Battle.firstDoor and a take from it run on the fixture as on the real boxes
+battle.firstDoor = { role: { kind: 'ship', unit: 'test-dd-b', station: 'helm' }, t: '10:15', title: 'Test: start here', text: 'Test: the test destroyer’s helm, with nothing to fire at yet.' }
+
 // the American task force off the fixture's 900 m island: Stage 0's made-up
 // track ran the carrier and her screen over it, which the record's path
 // never minds but a ship under the player's helm runs aground on. Each fix
