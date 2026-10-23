@@ -2426,5 +2426,125 @@
       "fornander-v2"
     ],
     "note": "A fishing village on the Waimānalo shore near Pāhonu (National Park Service). In 1794 the Oʻahu chiefs threw up earthworks at Kukui (Kamakau), “Kukui in Kalapueo, Waimanalo” (Fornander). The point is a marker near Pāhonu."
+  },
+  {
+    "id": "ewa",
+    "name": "ʻEwa",
+    "alt": [
+      "Ewa"
+    ],
+    "kind": "moku",
+    "island": "oahu",
+    "moku": "ʻEwa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.9994,
+        21.4025
+      ]
+    },
+    "placePrecision": "moku",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "The moku of ʻEwa: one of Kākuhihewa’s royal seats, and the land of the chiefs Kūaliʻi fought on the plains above it (Fornander). The point is the moku’s centroid in the State layer."
+  },
+  {
+    "id": "puako",
+    "name": "Puakō",
+    "alt": [
+      "Puako"
+    ],
+    "kind": "other",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Lālāmilo, Keanuʻiʻomanō",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.84022,
+        19.97154
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "On the Kohala coast south of Kawaihae, where Kamalālāwalu’s fleet came ashore (Fornander). The point is GNIS’s Puakō."
+  },
+  {
+    "id": "hokuula",
+    "name": "Hōkūʻula",
+    "alt": [
+      "Hokuula",
+      "Puʻu Hōkūʻula"
+    ],
+    "kind": "peak",
+    "island": "hawaii",
+    "moku": "Kohala",
+    "ahupuaa": "Lālāmilo, Keanuʻiʻomanō",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.68078,
+        20.03186
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2"
+    ],
+    "note": "A hill on the west side of Waimea (GNIS). Fornander’s Hokuula, where Kamalālāwalu took his stand in Waimea and was defeated, is taken to be it; Kamakau names the battlefield Puʻuʻoaʻoaka, outside the grassy plain of Waimea."
+  },
+  {
+    "id": "laupahoehoe",
+    "name": "Laupāhoehoe",
+    "alt": [
+      "Laupahoehoe",
+      "Laupāhoehoe Point"
+    ],
+    "kind": "other",
+    "island": "hawaii",
+    "moku": "Hilo",
+    "ahupuaa": "Laupāhoehoe, Welokā",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.24056,
+        19.99311
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "fornander-v2"
+    ],
+    "note": "The low point and landing on the Hilo coast where Kūaliʻi’s raiders came ashore (Fornander). The point is GNIS’s Laupāhoehoe Point."
+  },
+  {
+    "id": "kalaupapa",
+    "name": "Kalaupapa",
+    "alt": [],
+    "kind": "ahupuaa",
+    "island": "molokai",
+    "moku": "Koʻolau",
+    "ahupuaa": "Kalaupapa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.9842,
+        21.1846
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "fornander-v2"
+    ],
+    "note": "The land of Kalaupapa on the Molokaʻi peninsula, where the Koʻolau chiefs gathered against Kūaliʻi and the Kona chiefs (Fornander); within Kalaupapa National Historical Park. The point is the Kalaupapa centroid of the State layer."
   }
 ]

@@ -22,6 +22,18 @@
     "note": "Public domain (London: Trübner). Read in full text with printed page numbers. Fornander counts thirty years to a generation, which puts his pre-contact dates earlier than later reckonings, and his theories of Polynesian origins are long superseded; his summaries of Hawaiian traditions and of the 1770s–1795 wars remain a main open source."
   },
   {
+    "id": "fornander-collection-v4",
+    "title": "Fornander Collection of Hawaiian Antiquities and Folk-lore, vol. IV (Memoirs of the Bernice Pauahi Bishop Museum)",
+    "author": "Abraham Fornander; edited by Thomas G. Thrum",
+    "year": 1917,
+    "url": "https://archive.org/details/fornander-collection-of-hawaiian-antiquities-volume-4",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "The Hawaiian texts Fornander's collectors gathered, with Thrum's English on the facing pages (1916–17). Read in its full text on the Internet Archive (a Google scan): the contents of the History of Kualii (pp. 364–434) and the opening of its chapter on his battles and battle grounds (pp. 406–410). Kamakau's editors point to it for Kūaliʻi's story.",
+    "wanted": "the rest of the History of Kualii (pp. 364–434): his character and doings, his trip to Hawaiʻi, his return from Molokaʻi, the battle at Kalakoa, and Kauaʻi given over to him, for the kualii event and the Kauaʻi polities of the kakuhihewa era; and the Story of Lonoikamakahiki (from p. 256), with Lono at Kākuhihewa's court and the battle at Waimea where Kamalālāwalu died, for the kakuhihewa and kamalalawalu events"
+  },
+  {
     "id": "cook-1784-v2",
     "title": "A Voyage to the Pacific Ocean, vol. II",
     "author": "James Cook",
@@ -706,7 +718,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land. Read again over Koʻolaupoko on 2026-10-22: Loko at Heʻeia, Kaeleoulu Loko at Kailua, the Old Mission Res. & Church and a mill at Kāneʻohe, the roads below the pali, and Crown 8000 A. and J. Cummings at Waimānalo."
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land. Read again over Koʻolaupoko on 2026-10-22: Loko at Heʻeia, Kaeleoulu Loko at Kailua, the Old Mission Res. & Church and a mill at Kāneʻohe, the roads below the pali, and Crown 8000 A. and J. Cummings at Waimānalo. Over Koʻolaupoko its lines fall west and south of the award layer and today's shore by a few hundred metres (Kailua's shore about 300 m inland of today's; the Kāneʻohe church about 500 m west of its grant in the award layer), so places there are taken from the awards and GNIS rather than from the sheet."
   },
   {
     "id": "hgs-1899-oahu",
@@ -974,7 +986,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Surveyed and drawn in August 1882 at 1,000 feet to the inch, soundings in fathoms at low water; read in Kīpuka's blueprint copy at low and medium resolution for the ponds, cane and rice lands of the south shore and Mōkapu. A chart of the whole bay, its reefs and passages, before any dredging. Not georeferenced here.",
+    "note": "Surveyed and drawn in August 1882 at 1,000 feet to the inch, soundings in fathoms at low water; read in Kīpuka's blueprint copy at low and medium resolution for the ponds, cane and rice lands of the south shore and Mōkapu. A chart of the whole bay, its reefs and passages, before any dredging. Read again at 150 dpi over Heʻeia and Kāneʻohe, October 2026: “Rice land” over the inland floor of Heʻeia, west of the “Sugar Cane”, and “Taro land” over the Waikalua swamp. Registered roughly on three points (the Heʻeia pond, Moku o Loʻe, Puʻu Pahu), it fits the shore within about 150 m, and its graticule lies about 200 m off today's; inland it drifts, so its fields are placed by the ground they lie on.",
     "wanted": "the whole chart at full resolution, georeferenced: the reef flats, patch reefs, passages and soundings before the seaplane runways and the dredging of 1939–43, for the Kāneʻohe Bay patches; and the ponds and fields of the north shore from Kahaluʻu to Kualoa"
   },
   {
@@ -986,8 +998,20 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "March 1896, 200 feet to the inch: the kuleana of the Waikalua swamp between Kāneʻohe and Kawa streams with their award numbers and holders, the ʻauwai, the fences and the edge of the rice. Read at low resolution for its legend and labels.",
+    "note": "March 1896, 200 feet to the inch: the kuleana of the Waikalua swamp between Kāneʻohe and Kawa streams with their award numbers and holders, the ʻauwai, the fences and the edge of the rice. Read at low and medium resolution for its legend, labels and award numbers; the award numbers south of the main stream were found in the Kīpuka award layer, which places them under the Waikalua loʻi.",
     "wanted": "the parcels at full resolution: which kuleana were in rice and which in taro, and their holders, for the Kāneʻohe loʻi"
+  },
+  {
+    "id": "kipuka-rm-2038",
+    "title": "Plat of Government Lease to L. Ahlo, a portion of the land Kanohuluiwi, Kaneohe, Koolaupoko, Oahu (Registered Map 2038)",
+    "author": "Chas. V. E. Dove, Surveyor",
+    "year": 1901,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/2038.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "June 1901, 200 feet to the inch; Kīpuka's index lists it as “Kaneohe Rice Lands (Gov't. Lease)”. Read at low and medium resolution: the rice on the leased land and beside it, the grants and awards it names (Grant 195, L.C.A. 1963, L.C.A. 2343, Grant 536, Māhele Award 35 at Kalokohanahou), the government road to Heʻeia and the Heʻeia plantation's land. Not georeferenced; the parcels it names were found in the Kīpuka award layer.",
+    "wanted": "the plat at full resolution: the lease's number and term, the bounds of the rice and of the kuleana excluded, for the Kanohuluiwi rice"
   },
   {
     "id": "kipuka-rm-4148",

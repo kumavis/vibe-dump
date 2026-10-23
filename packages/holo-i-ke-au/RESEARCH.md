@@ -244,6 +244,17 @@ the genealogies name chiefs, not districts.
 - Kaʻiwi or Kaiwi for the Molokaʻi channel; Kūheʻeia (UH News) or Kūheia (Ka Wai Ola) on
   Kahoʻolawe; Lēʻahi or Laeʻahi; the battle name "Ahulau ka piipii i Kakanilua", left
   untranslated.
+- Kūaliʻi or Kualiʻi (the app writes Kūaliʻi, Nuʻuanu's heiau note Kualiʻi; Kamakau Ku-ali‘i,
+  Fornander Kualii); Kākuhihewa, or Kamakau's Kuʻihewa for the father of Kanekapu and
+  Kaʻihikapu; Kamalālāwalu (Kamakau Kama-lala-walu), Kauhiakama, Kanaloakuaʻana, Keakealaniwahine;
+  ʻI or ʻĪ for the Hilo chief whose line held Hilo; Laʻa, read as ʻŌlaʻa in Puna; the title
+  Oʻahu-a-Kākuhihewa (§14).
+- Places of the 1600s wars: Hōkūʻula for Fornander's Hokuula, and Kamakau's Puʻuʻoaʻoaka; Kaunooa
+  and Kamakahiwa at Puakō; Kawaluna, Waolani and Keanakamano; Kalena, Heleauau, Malamanui,
+  Paupauwela and Keahumoa; Kalapo and Eleu at Waiʻanae; Haalilo or Haalio, the chief at Laupāhoehoe.
+- In Koʻolaupoko: Moliʻi or Mōliʻi; Alala, the heiau of Kūaliʻi's birth rites; Naonealaʻa (Kamakau)
+  or Naonealaa (Fornander); Alele, which Fornander puts at Kailua and Kamakau at Waikele in ʻEwa;
+  Pamoa or Kamooa; Kanohuluiwi; Kulailua (the award layer) or Kuailua; Waihaukalua and Waikalua.
 - This pass read only English translations. Kamakau's own Hawaiian in *Ka Nupepa
   Kuokoa* and *Ke Au ʻOkoʻa*, and the Papakilo newspapers generally, have not been read.
 
@@ -254,6 +265,10 @@ the genealogies name chiefs, not districts.
   says only that some bones were given back). All are unplaced or held at ahupuaʻa
   precision. The wording around them needs review, as does the decision not to say that
   Keōua's body was offered at Puʻukoholā.
+- **The dead of the 1600s wars** (§14). Kanaloakuaʻana's treatment at Puakō, Kamalālāwalu's death at
+  Waimea and Kauhiakama's at Waikīkī are told in a few plain words; what Kamakau and Fornander say was
+  done to their bodies and bones stays out of the cards, as does the disposal of Kūaliʻi's bones. The
+  battle at Kalaupapa is placed at the land's centroid, inside the national park.
 - **Exact pins on sacred sites.** Puʻukoholā (NPS site, `landmark: true`), Kūkaniloko
   (state monument; its landmark evidence is tertiary), and Kamakahonu with Ahuʻena (NHL
   per a tertiary source). Confirm that the communities are comfortable with exact
@@ -1525,13 +1540,15 @@ shows it, as in §10.
   | Hakipuʻu, Kualoa | 1, 1 | 21.3, 2.7 ha | 1856 | the last awards |
   | Heʻeia, restored | 1 | 2.4 ha | — | from 2010; Kākoʻo ʻŌiwi |
 
+  §14 changes the Kailua and Kāneʻohe end years where rice follows the taro, and adds the rice as loʻi of its own.
+
   The restored loʻi are `schematic`: a disc of 88 m inside the State's wetland parcel (TMK 4-6-16:001) by the highway, where
   the farm's driveway lies just south of the Heʻeia Stream bridge, clipped to the parcel, about the six acres its history gives.
   On the CUDEM test heights the check's measure (texel centres inside the outline) is at most 2.1 %; counting every texel an
   outline touches, the worst Kāneʻohe and Kailua pieces reach 12–13 %, so the outlines run close to steeper edges in places.
   The bake's lidar will see house pads and road cuts the CUDEM smooths; the rule is checked at merge.
 
-- **Villages** (3), points with tellings: Kailua at GNIS's point, to 1850 (the NPS's count of that year); Kāneʻohe where the
+- **Villages** (3), points with tellings (§14 makes them polygons): Kailua at GNIS's point, to 1850 (the NPS's count of that year); Kāneʻohe where the
   1881 sheet writes “Old Mission Res. & Church”, to 1874 (Lyons's survey, with its church, court house and kuleana); Kukui near
   Pāhonu, to 1850, `schematic`. No source read counts households; the tellings give the people counted for Kailua and say so.
 - **Heiau** (7): Ulupō exact, as a landmark; Pahukini, Holomakani and Alala at Kailua's centroid, Kawaewae at Kāneʻohe's,
@@ -1547,7 +1564,7 @@ shows it, as in §10.
 
 ### What each keyframe rests on
 
-- **c. 1700 (`kailua-chiefs`, era `alapai`)**. Kailua as the rulers' windward home: Fornander for Kākuhihewa's house and for
+- **c. 1700 (`kailua-chiefs`, era `alapai`; §14 moves it to `kakuhihewa`, 1690–1730)**. Kailua as the rulers' windward home: Fornander for Kākuhihewa's house and for
   Kūaliʻi's birth, youth and death there; State Parks for the place about 1750. The landscape: the ponds as the site record,
   the old maps and the heights give them (none dated), the loʻi of the kuleana as a stand-in for the older fields, and
   Kawainui as a pond (NPS: in use perhaps from the late 1600s). The one dated moment is Alapaʻinui's landing at Oneawa and the
@@ -1559,7 +1576,7 @@ shows it, as in §10.
   Heʻeia to Paki, Waimānalo and Kualoa crown; the Mōkapu history agrees for the first three); the kuleana from Kīpuka's layer;
   the mission from Bingham, the 1881 sheet and Lyons; depopulation from the NPS's Kailua figures; Kualoa's sale from Wikipedia
   (tertiary, with a `wanted`); rice and cane from Lyons (1874), Jackson (1882), Monsarrat (1896), Thrum (1887) and the NPS.
-  The rice stop's year is 1882, Jackson's chart.
+  The rice stop's year is 1882, Jackson's chart. (§14 moves it to 1896: Jackson writes Taro land over Waikalua.)
 - **Now (the coda)**. Heʻeia (Paepae o Heʻeia, Kākoʻo ʻŌiwi, the reserve), Pāhonu (the Limu Hui) and Waiāhole, each now with
   stops. The years between 1898 and 1970 are tellings, not events, as the brief asks: on `heeia-restoration`, Heʻeia's
   wetland kalo into the 1930s, the Navy's dredging and fill at Mōkapu (1939–43) and the air stations, a shore fill of 1969,
@@ -1578,7 +1595,7 @@ shows it, as in §10.
 | kailua-chiefs | 1 | `kawainui` | 200 | 0.4 | 30 | | the pond from the north, Ulupō on its far edge, Maunawili beyond |
 | kailua-chiefs | 2 | `heeia-fishpond` | 235 | 0.45 | 18 | | the pond's wall from the bay, Heʻeia behind |
 | kailua-chiefs | 3 | `kualoa` | 315 | 0.3 | 30 | −157.843, 21.512 | Kualoa's cliffs and Moliʻi from the bay |
-| kailua-chiefs | 4 | `oneawa` | 250 | 0.35 | 50 | −157.772, 21.418 | the south shore of the bay from over Mōkapu's neck |
+| kailua-chiefs (§14: now `alapai-wars` 0) | 4 | `oneawa` | 250 | 0.35 | 50 | −157.772, 21.418 | the south shore of the bay from over Mōkapu's neck |
 | koolaupoko-1850 | 0 | `kaneohe` | 215 | 0.4 | 28 | | the Kāneʻohe shore and the mission |
 | koolaupoko-1850 | 1 | `heeia-wetlands` | 240 | 0.4 | 22 | −157.815, 21.428 | up the Heʻeia floor |
 | koolaupoko-1850 | 2 | `kawainui` | 210 | 0.4 | 35 | | the marsh |
@@ -1612,7 +1629,7 @@ shows it, as in §10.
 - A fishpond, like a pond from the State site record in Nuʻuanu, carries `site`; here also the ponds traced otherwise, which
   share a site record with a box outline.
 - A loʻi restored in the coda is a second feature with `from` 2010, as the brief allows.
-- The c. 1700 keyframe has no era of its own (above).
+- The c. 1700 keyframe has no era of its own (above). §14 gives it one, `kakuhihewa`.
 - The district needs an entry in `districts/manifest.json` before the check reads its features; the check finds a second
   district only through the manifest once one exists.
 
@@ -1642,4 +1659,188 @@ shows it, as in §10.
   (the traces close gaps of up to six to eight texels, 20–25 m), so a bake that flattens water inside the coast should keep them.
 - **The app**: the new event ids and cameras (`target` on eight stops); `kailua-oahu` is distinct from `kailua-kona`; ponds
   ending in 1943 and Kawainui in 1827; the restored loʻi from 2010; villages as points with tellings.
-- **DATA.md**: nothing new beyond §11–12's list, unless the design gives the 1600s a chapter.
+- **DATA.md**: nothing new beyond §11–12's list, unless the design gives the 1600s a chapter (§14 does).
+
+## 14. The chapter of Kākuhihewa and Kūaliʻi; Koʻolaupoko's villages and rice
+
+Three gazetteer things, October 2026: a chapter for Oʻahu's rulers of the 1600s, between ʻUmi's and Alapaʻinui's, so that
+Kailua of the chiefs no longer sits in Alapaʻinui's; Koʻolaupoko's three villages as outlines the ground can draw; and rice on
+the Koʻolaupoko loʻi where the record has it, under the `crop` that DATA.md "Crops, on the era layers" allows. `check-data.mjs`
+is clean; its event count now warns above seventy, since the chapter takes the file to sixty-two.
+
+| file | change |
+| --- | --- |
+| `eras.json` | 13 eras (was 12): `kakuhihewa`, “in the time of Kākuhihewa and Kūaliʻi”, year 1680, precision 50 |
+| `events.json` | 62 events (was 59): `kakuhihewa`, `kamalalawalu` and `kualii` added; `kailua-chiefs` moved into the new era, 1690–1730, its 1737 stop, Oneawa, Naonealaʻa and Mōkapu and two tellings moved to `alapai-wars`; `koolaupoko-1850`'s rice stop moved to 1896 |
+| `places.json` | 106 places (was 101): `ewa` (moku), `puako`, `hokuula`, `laupahoehoe` (exact, GNIS), `kalaupapa` (ahupuaʻa) |
+| `polities.json` | 14 polities (was 13): `hilo-chiefs`; the `kakuhihewa` map, notes and sources |
+| `layers/manifest.json` | its `eras` map: `kakuhihewa` as `umi`, every layer at `contact`, year 1680, which is what `eraMap()` computes |
+| `sources.json` | 107 sources (was 105): `fornander-collection-v4`, `kipuka-rm-2038`; notes on RM 1140, RM 1936 and the 1881 sheet |
+| `districts/koolaupoko/features.json` | 96 features (was 90): the villages as polygons; six loʻi in rice; the years of six Kailua loʻi and one Kāneʻohe loʻi |
+| `tools/check-data.mjs` | the event count; `crop` on a loʻi; two loʻi on one outline may not overlap in years |
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `fornander-v2` | Pp. 108, 117–118 (Lono sails to Kailua, where Kākuhihewa held his court, the house Kamooa), 122–130 (Lono's visit to Kamalālāwalu at Hāna; the landing near Puakō, Kaunooa and Kamakahiwa, the defeat at Hokuula in Waimea, Kauhiakama's escape; Keakealanikane, Keakamahana, Keakealaniwahine and Keawe; the houses of ʻI in Hilo and Mahi in Kohala), 206–210 (Kamalālāwalu to Kaulahea on Maui; Lānaʻi tributary; Molokaʻi's chiefs turning to Maui and Oʻahu), 272–287 (Kākuhihewa to Kūaliʻi; Kauhiakama at Waikīkī; Kūaliʻi's wars, his Kauaʻi, his death; the chant), 292–296 (Kauaʻi from Kawelomahamahaiʻa to Lonoikahaupu). |
+| `kamakau-ruling-chiefs` | Pp. 52–61 (the chiefs of each island in Lono's time; Lono and Kaʻihikapu at Kalapawai and Pamoa; Kamalālāwalu's spies, the war, Puʻuʻoaʻoaka, the rule after Lono over Kohala, Kona and Kaʻū only), 61–64 (Keakamahana and Keakealani; the wars of Kona and Hilo; Keawe's rule over Kohala, Kona and Kaʻū), 96n (the editors on Kūaliʻi), 232 (Kahekili's revenge for Kauhiakama), 300 (the saying), 369 (Kūaliʻi dies in 1730), Appendix II (Stokes on Kamakau's dates). |
+| `fornander-collection-v4` | New. The contents of the History of Kualii (pp. 364–434) and the opening of its chapter on his battles (pp. 406–410): Keahumoa his last battle, Kauaʻi given over to him by its king, Kawaluna his first. A Google scan on the Internet Archive. |
+| `kipuka-rm-1140` | Read again at 150 dpi over Heʻeia and Kāneʻohe: “Rice land” on the inland floor of Heʻeia, “Sugar Cane” between it, the road and the pond, and “Taro land” over the Waikalua swamp. |
+| `kipuka-rm-1936` | Read again at 75 dpi: the legend (rice north of the main stream 4.25 acres, south of it to Kawa Stream 60, and 21 more) and the award numbers south of the stream. |
+| `kipuka-rm-2038` | New. Dove's plat of June 1901 for a government lease of Kanohuluiwi to L. Ahlo: the rice and the parcels it names. |
+| `kipuka-rm-585` | Read again over the mission and church: L.C.A. 387 to the mission, 5.1 acres; Grant 167 to the Kāneʻohe church, 10 acres; Punaluʻu's fifty acres, twenty-two of them kuleana. |
+| `oha-kipuka-lca` | The parcels Monsarrat's and Dove's maps name, and the mission's and church's lands, looked up by award number. |
+| `hgs-1881-oahu`, `hgs-1899-oahu`, `usgs-topo-1927-oahu` | Exported again over Kāneʻohe, Heʻeia, Kailua and Kukui. The 1899 and 1927 sheets write no rice in Koʻolaupoko; the 1881 sheet's offset is below. |
+| `nps-1992-ka-iwi`, `kakoo-oiwi-history` | Again: p. 35 on the rice of Kawainui; kalo on the Heʻeia wetland through the mid-1930s, and no rice. |
+| `usgs-gnis` | Puakō, Hōkūʻula (the hill west of Waimea), Laupāhoehoe Point. |
+
+Also opened and not cited: Thrum's reduction of Jackson's chart (RM 1848, 1892), which repeats Jackson's Taro Land at Waikalua;
+the State site record's habitation sites in the district (Waimānalo Beach Park, Waikalua, Kukanono, Miomio), none of which
+bounds a village.
+
+### The era
+
+`umi` runs to 1630 and `alapai` from 1730, so `kakuhihewa` takes 1680 ± 50 and fills the gap exactly. Its label names the two
+rulers the chapter runs between; the tour's chapter name reads “Kākuhihewa and Kūaliʻi”. The dates are genealogical: Fornander
+puts Kākuhihewa four generations before Kūaliʻi, who flourished “from the middle to the close of the seventeenth century” and
+died before 1730 (Kamakau gives 1730); Lonoikamakahiki stayed at Kākuhihewa's court, Kamakau makes Kākuhihewa's sons the chiefs of
+Oʻahu in Lono's time, and Kamalālāwalu, Lono's enemy, was Keawenui-a-ʻUmi's contemporary. At Fornander's thirty years a
+generation that opens the chapter in the later 1500s; Kirch's coral dates for Piʻilani and Kiha (1550–1700) bring it into the
+1600s. So the first two events begin before the era's 1630 (`kakuhihewa` 1570–1640, `kamalalawalu` 1580–1640, both
+`generation`); they overlap the era, the check does not warn, and the tour shows each at the point of its span nearest the era's
+year, about 1640. The era's note says why. Three of the four events start on Oʻahu, so the chapter opens on Oʻahu.
+
+### The events
+
+In the tour's order:
+
+1. **`kakuhihewa`, Oʻahu-a-Kākuhihewa** (1570–1640, founding): Kākuhihewa born at Kūkaniloko, the split island made one by peace
+   and marriage, the court at ʻEwa, Waikīkī and Kailua, Lono at Kailua, the island named for him; his sons sharing it in peace.
+   Places: Waikīkī, ʻEwa, Kailua, Kūkaniloko. Fornander pp. 117–118, 272–277; Kamakau pp. 52, 55, 300.
+2. **`kamalalawalu`, Kamalālāwalu** (1580–1640, battle): Maui-a-Kama, the prophet Lanikaula's warning, the landing near Puakō,
+   Kanaloakuaʻana taken, the defeat on the plain of Waimea, Kauhiakama's escape by Kawaihae and his later death at Waikīkī. Places:
+   Waimea, Puakō, Hōkūʻula, Kawaihae, Hāna, Waikīkī. Fornander pp. 108, 122–124, 206–208, 276; Kamakau pp. 55–61, 232; Kirch's
+   dates; Kirch and Ruggles unread.
+3. **`kualii`, Kūaliʻi** (1650–1730, battle): the rites at Kawaluna and the rout of the Kona chiefs, the spear wood from Kauaʻi,
+   the ʻEwa chiefs beaten near Līhuʻe and at Malamanui, the Hilo raid by Laupāhoehoe, the rising at Waiʻanae, the battle at
+   Kalaupapa for the Kona chiefs of Molokaʻi, the windward side of Kauaʻi by inheritance and Peleioholani over it, his death at
+   Kailua. Places: ʻEwa, Nuʻuanu, Waiʻanae, Laupāhoehoe, Kaunakakai, Kalaupapa, Wailua on Kauaʻi. Fornander pp. 278–284, 287,
+   292–296; the legend, pp. 406–408; Kamakau pp. 96n, 369.
+4. **`kailua-chiefs`**, moved: era `kakuhihewa`, 1690–1730 (was `alapai`, 1690–1737). Its summary ends with Kūaliʻi's death; the
+   1737 stop at Oneawa, word for word with its camera, is now `alapai-wars`' only stop, with Oneawa (already there), Naonealaʻa and
+   Mōkapu, Kamakau's day of the meeting and Fornander's “mere series of skirmishes”. It gained Kamakau's Pamoa (p. 55) and his
+   year for Kūaliʻi's death (p. 369). `alapai-wars` keeps its `far` and `island` zooms; the stop carries its own `near`.
+
+`koolaupoko-1850`'s last stop said that by the 1880s old loʻi and swamp land were in rice, “as around the pond of Waikalua”, at
+1882. Jackson's chart of 1882 writes Taro land over the Waikalua swamp; the rice there is Monsarrat's, of 1896. The stop now
+says so and stands at 1896, and the event runs to 1896.
+
+### The polities
+
+| island | holder in `kakuhihewa` | from |
+| --- | --- | --- |
+| Hawaiʻi: Kohala, Kona, Kaʻū | `hawaii`: Lonoikamakahiki, then Keakealanikane, Keakamahana, Keakealaniwahine and Keawe, the Mahi chiefs of Kohala their war leaders | Kamakau pp. 61–64; Fornander pp. 127–130 |
+| Hawaiʻi: Hilo, Hāmākua | `hilo-chiefs`, new: the chiefs of Hilo of the line of ʻI (Kuaʻana, Kuahuʻia, Moku), at war with Kona and more often the victors; hatched | Kamakau pp. 61–63; Fornander p. 128 |
+| Hawaiʻi: Puna | `hilo-chiefs`, hatched: only Laʻa, read as ʻŌlaʻa, is named among the Hilo chiefs' lands; the rest of Puna is unrecorded | Kamakau p. 62 |
+| Maui, with Hāna, and Lānaʻi | `maui`: Kamalālāwalu, Kauhiakama, Kalanikaumakaowākea, Lonohonuakini, Kaulahea; Lānaʻi tributary by inference | Fornander pp. 122, 206–210 |
+| Molokaʻi | `molokai`, its own chiefs; Kūaliʻi's battle at Kalaupapa for the Kona chiefs | Fornander pp. 210, 282 |
+| Oʻahu | `oahu`: Kākuhihewa, his sons, Kahoʻowahaokalani, Kauakahi, Kūaliʻi; ʻEwa and Waialua apart before Kākuhihewa and again before Kūaliʻi | Fornander pp. 272–283 |
+| Kauaʻi and Niʻihau | `kauai`: the Kawelo chiefs; late in the span the windward side Kūaliʻi's by inheritance and Peleioholani over Kauaʻi, Waimea with Lonoikahaupu's family; hatched | Fornander pp. 282, 292–296; the legend p. 406 |
+
+Kamakau and Fornander differ on Keawe: Kamakau has him ruling Kohala, Kona and Kaʻū only (p. 64), Fornander has him win the Hilo
+chiefs by marriage and rule the island in peace (p. 129). The map follows Kamakau for most of the span and the notes give both.
+Fornander contradicts himself on Kauaʻi (Kona section, p. 282; windward side, p. 295); the notes give both.
+
+### The villages
+
+Each village is now a Polygon, traced on the district's heights (12.98 m texels) by a rule written out here rather than drawn by
+hand: the land in a window that meets the village's rules, clear of every loʻi and pond by a texel (the ground rasters one feature
+a texel), the piece holding a seed, holes filled, traced along texel edges and simplified at 18–25 m.
+
+| village | precision | to | area | rules |
+| --- | --- | --- | --- | --- |
+| Kāneʻohe | inferred | 1874 | 10.7 ha, 16 vertices | within 380 m of the centroid of the church's grant (Grant 167) in the award layer, up to 22 m, under 15 % slope; one hook in the trace evened by hand |
+| Kailua | inferred | 1850 | 26.2 ha, 13 vertices | 35 to 200 m from the sea, up to 9 m, from near the mouth of Kaʻelepulu Stream (Kalapawai) north-west to 21.405° N |
+| Kukui | schematic | 1850 | 6.1 ha, 7 vertices | 30 to 150 m from the sea, up to 12 m, west of Pāhonu from −157.689 to −157.683 |
+
+No source read counts households, and the tellings say so. The outlines were sized against the people the tellings do count:
+the ground lays a kauhale about every 85 m (`buildVillage` in `src/features/index.js`), about one to a hectare, so Kailua's
+outline holds about the twenty-five to thirty households that a third of the 430 people outside Maunawili in 1850 would make at
+five or six to a house; Kāneʻohe's about ten; Kukui's about six. That arithmetic is the design's, not a source's.
+
+**The 1881 sheet over Koʻolaupoko.** The State's image service of the 1881 Government Survey sheet, checked in Nuʻuanu (§10),
+falls west and south of the award layer and of today's shore here by a few hundred metres: Kailua's shore on it lies about 300 m
+inland of today's, and its “Old Mission Res. & Church” about 500 m west of the church's grant, which Monsarrat's map of 1896 puts
+where the award layer does. The Kāneʻohe village moved off the sheet's label to the church's grant and the ground round it to
+the wall of Punaluʻu; `hgs-1881-oahu`'s note says so.
+
+### The rice
+
+| feature | outline | years | the record |
+| --- | --- | --- | --- |
+| `loi-kailua-2-rice`, `loi-kailua-5-rice` | the two Kailua loʻi at the edge of Kawainui, 6–8 m | 1860–1945 | rice in the marsh's old taro fields by 1860, given up in the mid-1940s (NPS p. 35) |
+| `loi-kaneohe-1-rice` | the Kāneʻohe loʻi of the Waikalua swamp, south of the main stream | 1896 | Monsarrat, March 1896: 81 acres of rice south of the main stream (about 33 ha; the outline is 30.9) |
+| `loi-kaneohe-2-rice`, `loi-kaneohe-3-rice` | the two Kāneʻohe loʻi that hold the parcels Dove names (L.C.A. 1963, Grants 195 and 536) | 1901 | Dove, June 1901: about twenty acres of rice in Kanohuluiwi (the outlines are 22.5 ha, wider than the rice) |
+| `loi-heeia-rice` | its own: the floor of Heʻeia west of −157.8128 and south of 21.4358, up to 6 m, under 12 % slope, clear of the loʻi | 1882 | Jackson, August 1882: “Rice land” inland of the cane |
+
+- **The taro years.** A loʻi in rice on a taro loʻi's outline is a second feature with years of its own, and the taro's end where
+  the rice begins: `loi-kailua-2` and `-5` now end in 1859 (were 1945) and `loi-kaneohe-1` in 1895 (was 1896). The other four
+  Kailua loʻi lie on the rise at 41–48 m (4, 6), up Maunawili (3) or by Kaʻelepulu (1), where no rice is recorded; their 1945
+  came from the marsh's rice, and they now end with the last awards, 1856. `loi-kaneohe-5`, north of the main stream, where
+  Monsarrat has only 4.25 acres of rice, keeps 1896. `loi-kaneohe-2` and `-3` keep 1896; their rice is of 1901.
+- **Heʻeia.** Jackson's chart, registered on the Heʻeia pond, Moku o Loʻe and Puʻu Pahu, fits the shore within about 150 m, its
+  graticule about 200 m off today's; but his rice land, so registered, falls a few hundred metres west of the floor, on the
+  hillside, where nothing could be planted. The floor itself is taken: the low wet ground inland of the line where Jackson's cane
+  begins and south of the stream's turn to the pond. Kākoʻo ʻŌiwi has kalo on the same wetland by 1928 and through the
+  mid-1930s, so the rice is Jackson's year alone.
+- **One year each.** Kāneʻohe's and Heʻeia's rice rest each on one dated map, so each holds for one year; Char and Devaney
+  (`char-1988-chinese-sites`, `devaney-1976-kaneohe`) would give the spans.
+- **The ground.** Koʻolaupoko's loʻi now have ten spans of years (were five), within the twenty-two the ground has room for.
+  `src/data/district.js` rasters one loʻi index a texel, the later in the file winning, so each rice feature stands just before
+  its taro outline: until the ground reads `crop`, the taro keeps its years there and the rice of those outlines is not seen;
+  Heʻeia's, on an outline of its own, is drawn as a loʻi in 1882.
+
+### What the check now enforces
+
+- the event count warns outside forty to seventy (was sixty);
+- `crop` only on a `loi`, `taro` or `rice`; a rice loʻi has a `from` year, and one before 1850 warns;
+- two loʻi on one outline (the same rings) may not overlap in years;
+- the district's summary line counts the loʻi with a crop.
+
+In the app (a build of this pass, a scratch Playwright script after `tools/smoke.mjs`): the chapter is the fourth of thirteen,
+“Kākuhihewa and Kūaliʻi”, opening on Oʻahu, its four events in the order above; `alapai-wars` walks its one stop. Down in
+Koʻolaupoko at 1690, 1850, 1859, 1860, 1882, 1896, 1901 and 1950, every village and loʻi checked holds exactly in its years
+(the villages to 1850 and 1874, the taro of `loi-kailua-2` to 1859 and its rice from 1860, `loi-kaneohe-1`'s rice in 1896,
+`loi-kaneohe-2`'s in 1901, Heʻeia's in 1882), with no page error or warning. The full smoke test, run once, lost its browser
+during the camera checks before it reached the tour, on a machine other runs were loading; it was not rerun.
+
+### Where the tellings diverge
+
+1. **Where Kamalālāwalu fell.** Fornander: defeated and slain at Hokuula in Waimea, after the fight at Kaunooa near Puakō.
+   Kamakau: the battle on the waterless plain of Puʻuʻoaʻoaka outside the grassy plain of Waimea, and Kamalālāwalu “killed on the
+   grassy plain of Puako”. `hokuula` stands at GNIS's Hōkūʻula; the event's first place is Waimea.
+2. **Kanaloakuaʻana.** Fornander: his eyes put out and slain at Kamakahiwa. Kamakau: tattooed and renamed Kamakahiwa. The card
+   says he was taken and cruelly used.
+3. **Keawe's Hawaiʻi** and **Kūaliʻi's Kauaʻi**: above.
+4. **Pamoa.** Fornander has Kākuhihewa build it at Alele in Kailua (some legends say Kamooa, the name he gives the house where
+   Lono found Kākuhihewa); Kamakau has it the house of Kākuhihewa's son Kaʻihikapu, by the surf at Kalapawai, and an Alele in
+   Waikele, ʻEwa.
+5. **When.** Fornander's reckoning, the shorter generations and Kirch's coral dates disagree by up to a century; Kamakau's 1730
+   for Kūaliʻi's death is the only year, and his own editors warn against his dates.
+
+### What could not be reached
+
+- **Print**: Cordy's *Exalted Sits the Chief*, for the reigns from Lonoikamakahiki to Keawe and which moku each held; Kirch's
+  *How Chiefs Became Kings* and Kirch and Ruggles, for Kamalālāwalu's reign by the coral dates (ACCESS.md has both).
+- **Unread and open**: the rest of the History of Kualii (Fornander Collection IV, pp. 364–434) and its legend of
+  Lonoikamakahiki (from p. 256), which tells the battle at Waimea; `fornander-collection-v4` carries what to look for.
+- **Lending only**: Char and Char; *Ka Poʻe Kahiko*; Handy, as §13.
+- **The registered maps at full resolution**, georeferenced: Jackson (RM 1140) inland, Monsarrat (RM 1936) for the edge of the
+  rice, Dove (RM 2038) for the bounds of the lease; and RM 1345 and 747 for Kailua.
+
+### Left for others
+
+- **The app**: read `crop` on a district loʻi (rice over a taro outline, never in the same year); the three villages as polygons;
+  the new era and its chapter; `hilo-chiefs` in the chiefdoms legend.
+- **A reader and a cultural reviewer**: §7's new lines.

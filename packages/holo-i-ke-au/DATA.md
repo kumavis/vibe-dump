@@ -433,7 +433,7 @@ layer: 8 islands, 88 masks, about 4.9 MB with the manifest.
 
 | id | year | layers | eras that use it directly |
 | --- | --- | --- | --- |
-| `contact` | 1778 | cultivation, settlement, forest | voyaging (with the growth note), mailikukahi, umi, alapai, kalaniopuu |
+| `contact` | 1778 | cultivation, settlement, forest | voyaging (with the growth note), mailikukahi, umi, kakuhihewa, alapai, kalaniopuu |
 | `mahele` | 1853 | cultivation, settlement | none exactly; kahekili to kauikeaouli and kauikeaouli to liliuokalani interpolate through it (the era `kamehameha-iv-v` was dissolved into `kauikeaouli`, 1834–1872) |
 | `kingdom` | 1896 | cultivation, settlement, forest | none exactly; liliuokalani sits at t = 0.98 toward it |
 | `now` | 2020 | cultivation, settlement, forest | coda |
@@ -1190,3 +1190,14 @@ back, the ranch histories for 1853 and 1896; each keyframe's method recorded
 as the other layers' are, mapped or modelled. A district feature of kind
 `loi` may carry `crop` (`taro` · `rice`) with its own years, which overrides
 the class there.
+
+A loʻi with no `crop` is taro. Where the record has rice in a loʻi that is
+already drawn, the rice is a second `loi` feature on the same outline, with
+`crop: "rice"` and years of its own, and the taro feature's years end where
+the rice's begin: two loʻi on one outline never hold in the same year, so the
+ground can keep one loʻi a texel and pick by the year. A rice loʻi may also
+have an outline of its own where the rice lay off the drawn loʻi (Heʻeia's
+rice land of 1882). `check-data.mjs` fails a `crop` other than `taro` or
+`rice`, a `crop` on anything but a `loi`, a rice loʻi without a `from` year,
+and two loʻi on one outline whose years overlap; rice before 1850 warns.
+Koʻolaupoko's rice is in RESEARCH.md §14.

@@ -7152,6 +7152,166 @@
   },
   {
    "type": "Feature",
+   "id": "loi-heeia-rice",
+   "properties": {
+    "kind": "loi",
+    "name": "Rice land of Heʻeia",
+    "crop": "rice",
+    "from": 1882,
+    "to": 1882,
+    "precision": "inferred",
+    "place": "heeia-wetlands",
+    "sources": [
+     "kipuka-rm-1140",
+     "noaa-cudem-hawaii",
+     "usgs-topo-1927-oahu"
+    ],
+    "note": "Jackson’s chart of August 1882 writes Rice land over the floor of Heʻeia inland of the sugar cane, between the cane and the foot of the hills. The outline is that floor on today’s heights, the low wet ground west of the pond and south of the stream, as near as a chart registered on the shore can place it.",
+    "tellings": [
+     {
+      "source": "kipuka-rm-1140",
+      "says": "Jackson writes “Rice land” across the inland floor of Heʻeia and “Sugar Cane” over the lowland between it, the road and the pond. Registered on the Heʻeia pond, Moku o Loʻe and Puʻu Pahu, his rice land falls a few hundred metres west of the floor, on the hillside, so the floor itself is taken."
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.82006,
+       21.43151
+      ],
+      [
+       -157.81906,
+       21.42986
+      ],
+      [
+       -157.81906,
+       21.42881
+      ],
+      [
+       -157.81806,
+       21.42939
+      ],
+      [
+       -157.81732,
+       21.42928
+      ],
+      [
+       -157.81682,
+       21.42857
+      ],
+      [
+       -157.81632,
+       21.42928
+      ],
+      [
+       -157.81595,
+       21.42928
+      ],
+      [
+       -157.8157,
+       21.42892
+      ],
+      [
+       -157.81545,
+       21.42916
+      ],
+      [
+       -157.81445,
+       21.42916
+      ],
+      [
+       -157.81433,
+       21.42963
+      ],
+      [
+       -157.81395,
+       21.42951
+      ],
+      [
+       -157.81283,
+       21.43033
+      ],
+      [
+       -157.81283,
+       21.43385
+      ],
+      [
+       -157.81371,
+       21.43479
+      ],
+      [
+       -157.81383,
+       21.43585
+      ],
+      [
+       -157.81483,
+       21.43585
+      ],
+      [
+       -157.81532,
+       21.43526
+      ],
+      [
+       -157.81545,
+       21.43491
+      ],
+      [
+       -157.81508,
+       21.43444
+      ],
+      [
+       -157.81532,
+       21.43362
+      ],
+      [
+       -157.8162,
+       21.43385
+      ],
+      [
+       -157.81607,
+       21.43444
+      ],
+      [
+       -157.81632,
+       21.43468
+      ],
+      [
+       -157.81769,
+       21.43444
+      ],
+      [
+       -157.81844,
+       21.43491
+      ],
+      [
+       -157.81918,
+       21.43409
+      ],
+      [
+       -157.81906,
+       21.4335
+      ],
+      [
+       -157.81943,
+       21.43268
+      ],
+      [
+       -157.81943,
+       21.43186
+      ],
+      [
+       -157.82006,
+       21.43151
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "id": "loi-kahaluu-1",
    "properties": {
     "kind": "loi",
@@ -8285,7 +8445,7 @@
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1856,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -8294,7 +8454,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. This floor lies away from the wet fields of the marsh that went to rice from about 1860, and the end year is that of the last awards."
    },
    "geometry": {
     "type": "Polygon",
@@ -8798,12 +8958,448 @@
   },
   {
    "type": "Feature",
+   "id": "loi-kailua-2-rice",
+   "properties": {
+    "kind": "loi",
+    "name": "Rice of Kawainui",
+    "crop": "rice",
+    "from": 1860,
+    "to": 1945,
+    "precision": "inferred",
+    "place": "kawainui",
+    "sources": [
+     "nps-1992-ka-iwi",
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii"
+    ],
+    "note": "Wet fields at the edge of Kawainui marsh, on the outline of the loʻi of the kuleana: Chinese farmers planted the old taro fields in rice from about 1860, Japanese growers followed, and the fields were given up in the mid-1940s (National Park Service). The outline is the floor of the kuleana, not a survey of the rice.",
+    "tellings": [
+     {
+      "source": "nps-1992-ka-iwi",
+      "says": "“By 1860 rice cultivation became a major agricultural activity in the marsh with the application of Chinese rice-growing methods to former taro fields in the wet lowlands.” Profits peaked in 1875; the Japanese took up the growing while the Chinese kept the mills; rice “declined steadily until the mid 1940s when the fields were abandoned” (p. 35)."
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.763457,
+       21.37716
+      ],
+      [
+       -157.763333,
+       21.37716
+      ],
+      [
+       -157.763333,
+       21.376543
+      ],
+      [
+       -157.763457,
+       21.376543
+      ],
+      [
+       -157.763457,
+       21.376296
+      ],
+      [
+       -157.763086,
+       21.376296
+      ],
+      [
+       -157.763086,
+       21.37642
+      ],
+      [
+       -157.76284,
+       21.376543
+      ],
+      [
+       -157.76284,
+       21.376296
+      ],
+      [
+       -157.762963,
+       21.376296
+      ],
+      [
+       -157.762963,
+       21.376173
+      ],
+      [
+       -157.763333,
+       21.376173
+      ],
+      [
+       -157.763333,
+       21.376049
+      ],
+      [
+       -157.763457,
+       21.376049
+      ],
+      [
+       -157.763457,
+       21.375802
+      ],
+      [
+       -157.763086,
+       21.375556
+      ],
+      [
+       -157.763086,
+       21.375309
+      ],
+      [
+       -157.762963,
+       21.375309
+      ],
+      [
+       -157.76284,
+       21.375062
+      ],
+      [
+       -157.762716,
+       21.375062
+      ],
+      [
+       -157.762716,
+       21.374691
+      ],
+      [
+       -157.762593,
+       21.374691
+      ],
+      [
+       -157.762593,
+       21.374074
+      ],
+      [
+       -157.762469,
+       21.374074
+      ],
+      [
+       -157.762469,
+       21.373333
+      ],
+      [
+       -157.762222,
+       21.373333
+      ],
+      [
+       -157.762222,
+       21.37321
+      ],
+      [
+       -157.761975,
+       21.37321
+      ],
+      [
+       -157.761975,
+       21.373086
+      ],
+      [
+       -157.761852,
+       21.373086
+      ],
+      [
+       -157.761852,
+       21.372963
+      ],
+      [
+       -157.761481,
+       21.372963
+      ],
+      [
+       -157.761481,
+       21.37284
+      ],
+      [
+       -157.761235,
+       21.37284
+      ],
+      [
+       -157.761235,
+       21.372716
+      ],
+      [
+       -157.760864,
+       21.372716
+      ],
+      [
+       -157.760864,
+       21.372593
+      ],
+      [
+       -157.760617,
+       21.372593
+      ],
+      [
+       -157.760617,
+       21.372963
+      ],
+      [
+       -157.760494,
+       21.372963
+      ],
+      [
+       -157.760494,
+       21.37321
+      ],
+      [
+       -157.760741,
+       21.37321
+      ],
+      [
+       -157.760741,
+       21.373086
+      ],
+      [
+       -157.761111,
+       21.373086
+      ],
+      [
+       -157.761111,
+       21.37321
+      ],
+      [
+       -157.761235,
+       21.37321
+      ],
+      [
+       -157.761235,
+       21.37358
+      ],
+      [
+       -157.761481,
+       21.373704
+      ],
+      [
+       -157.761481,
+       21.373827
+      ],
+      [
+       -157.761728,
+       21.373827
+      ],
+      [
+       -157.761728,
+       21.373951
+      ],
+      [
+       -157.761975,
+       21.373951
+      ],
+      [
+       -157.761975,
+       21.374074
+      ],
+      [
+       -157.762222,
+       21.374074
+      ],
+      [
+       -157.762222,
+       21.374198
+      ],
+      [
+       -157.762346,
+       21.374198
+      ],
+      [
+       -157.762346,
+       21.375309
+      ],
+      [
+       -157.761852,
+       21.375309
+      ],
+      [
+       -157.761852,
+       21.375432
+      ],
+      [
+       -157.761605,
+       21.375432
+      ],
+      [
+       -157.761605,
+       21.375556
+      ],
+      [
+       -157.761481,
+       21.375556
+      ],
+      [
+       -157.761481,
+       21.376543
+      ],
+      [
+       -157.761358,
+       21.376543
+      ],
+      [
+       -157.761235,
+       21.37679
+      ],
+      [
+       -157.760988,
+       21.37679
+      ],
+      [
+       -157.760988,
+       21.377531
+      ],
+      [
+       -157.761111,
+       21.377531
+      ],
+      [
+       -157.761111,
+       21.377654
+      ],
+      [
+       -157.760988,
+       21.377654
+      ],
+      [
+       -157.760988,
+       21.378395
+      ],
+      [
+       -157.760864,
+       21.378395
+      ],
+      [
+       -157.760864,
+       21.378642
+      ],
+      [
+       -157.760617,
+       21.378765
+      ],
+      [
+       -157.760617,
+       21.379012
+      ],
+      [
+       -157.760494,
+       21.379012
+      ],
+      [
+       -157.760494,
+       21.379753
+      ],
+      [
+       -157.76037,
+       21.379753
+      ],
+      [
+       -157.76037,
+       21.38
+      ],
+      [
+       -157.761111,
+       21.38
+      ],
+      [
+       -157.761111,
+       21.380123
+      ],
+      [
+       -157.761975,
+       21.380123
+      ],
+      [
+       -157.761975,
+       21.38
+      ],
+      [
+       -157.762346,
+       21.38
+      ],
+      [
+       -157.762346,
+       21.379753
+      ],
+      [
+       -157.762222,
+       21.379753
+      ],
+      [
+       -157.762222,
+       21.379136
+      ],
+      [
+       -157.762346,
+       21.379136
+      ],
+      [
+       -157.762346,
+       21.378765
+      ],
+      [
+       -157.762716,
+       21.378765
+      ],
+      [
+       -157.762716,
+       21.378519
+      ],
+      [
+       -157.762963,
+       21.378519
+      ],
+      [
+       -157.762963,
+       21.378272
+      ],
+      [
+       -157.763086,
+       21.378272
+      ],
+      [
+       -157.76321,
+       21.377778
+      ],
+      [
+       -157.763333,
+       21.377778
+      ],
+      [
+       -157.763457,
+       21.377531
+      ],
+      [
+       -157.763827,
+       21.377531
+      ],
+      [
+       -157.763827,
+       21.377284
+      ],
+      [
+       -157.763457,
+       21.377284
+      ],
+      [
+       -157.763457,
+       21.37716
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "id": "loi-kailua-2",
    "properties": {
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1859,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -8812,7 +9408,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. From about 1860 these wet fields at the marsh were planted in rice, given up in the mid-1940s; the end year is the year before."
    },
    "geometry": {
     "type": "Polygon",
@@ -9233,7 +9829,7 @@
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1856,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -9242,7 +9838,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. This floor lies away from the wet fields of the marsh that went to rice from about 1860, and the end year is that of the last awards."
    },
    "geometry": {
     "type": "Polygon",
@@ -9535,7 +10131,7 @@
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1856,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -9544,7 +10140,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. This floor lies away from the wet fields of the marsh that went to rice from about 1860, and the end year is that of the last awards."
    },
    "geometry": {
     "type": "Polygon",
@@ -9664,12 +10260,152 @@
   },
   {
    "type": "Feature",
+   "id": "loi-kailua-5-rice",
+   "properties": {
+    "kind": "loi",
+    "name": "Rice of Kawainui",
+    "crop": "rice",
+    "from": 1860,
+    "to": 1945,
+    "precision": "inferred",
+    "place": "kawainui",
+    "sources": [
+     "nps-1992-ka-iwi",
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii"
+    ],
+    "note": "Wet fields at the edge of Kawainui marsh, on the outline of the loʻi of the kuleana: Chinese farmers planted the old taro fields in rice from about 1860, Japanese growers followed, and the fields were given up in the mid-1940s (National Park Service). The outline is the floor of the kuleana, not a survey of the rice.",
+    "tellings": [
+     {
+      "source": "nps-1992-ka-iwi",
+      "says": "“By 1860 rice cultivation became a major agricultural activity in the marsh with the application of Chinese rice-growing methods to former taro fields in the wet lowlands.” Profits peaked in 1875; the Japanese took up the growing while the Chinese kept the mills; rice “declined steadily until the mid 1940s when the fields were abandoned” (p. 35)."
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.765432,
+       21.378642
+      ],
+      [
+       -157.765802,
+       21.378642
+      ],
+      [
+       -157.765802,
+       21.378395
+      ],
+      [
+       -157.765679,
+       21.378395
+      ],
+      [
+       -157.765679,
+       21.377654
+      ],
+      [
+       -157.765556,
+       21.377654
+      ],
+      [
+       -157.765556,
+       21.377284
+      ],
+      [
+       -157.764938,
+       21.377284
+      ],
+      [
+       -157.764938,
+       21.37716
+      ],
+      [
+       -157.764691,
+       21.37716
+      ],
+      [
+       -157.764568,
+       21.377407
+      ],
+      [
+       -157.764074,
+       21.377407
+      ],
+      [
+       -157.763951,
+       21.377654
+      ],
+      [
+       -157.763704,
+       21.377654
+      ],
+      [
+       -157.763704,
+       21.377778
+      ],
+      [
+       -157.763333,
+       21.378025
+      ],
+      [
+       -157.763333,
+       21.378148
+      ],
+      [
+       -157.763086,
+       21.378272
+      ],
+      [
+       -157.763086,
+       21.378519
+      ],
+      [
+       -157.76358,
+       21.378519
+      ],
+      [
+       -157.76358,
+       21.378642
+      ],
+      [
+       -157.763951,
+       21.378642
+      ],
+      [
+       -157.763951,
+       21.378765
+      ],
+      [
+       -157.764568,
+       21.378765
+      ],
+      [
+       -157.764691,
+       21.378519
+      ],
+      [
+       -157.765432,
+       21.378519
+      ],
+      [
+       -157.765432,
+       21.378642
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "id": "loi-kailua-5",
    "properties": {
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1859,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -9678,7 +10414,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. From about 1860 these wet fields at the marsh were planted in rice, given up in the mid-1940s; the end year is the year before."
    },
    "geometry": {
     "type": "Polygon",
@@ -9803,7 +10539,7 @@
     "kind": "loi",
     "name": "Loʻi of Kailua",
     "from": null,
-    "to": 1945,
+    "to": 1856,
     "precision": "inferred",
     "place": "kailua-oahu",
     "sources": [
@@ -9812,7 +10548,7 @@
      "hgs-1881-oahu",
      "nps-1992-ka-iwi"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. By about 1860 the wet fields at the marsh were planted in rice, which was given up in the mid-1940s; the end year is that."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. This floor lies away from the wet fields of the marsh that went to rice from about 1860, and the end year is that of the last awards."
    },
    "geometry": {
     "type": "Polygon",
@@ -10577,22 +11313,32 @@
   },
   {
    "type": "Feature",
-   "id": "loi-kaneohe-1",
+   "id": "loi-kaneohe-1-rice",
    "properties": {
     "kind": "loi",
-    "name": "Loʻi of Kāneʻohe",
-    "from": null,
+    "name": "Rice of Waikalua",
+    "crop": "rice",
+    "from": 1896,
     "to": 1896,
     "precision": "inferred",
-    "place": "kaneohe",
+    "place": "waikalua",
     "sources": [
+     "kipuka-rm-1936",
+     "kipuka-rm-1140",
      "oha-kipuka-lca",
-     "noaa-cudem-hawaii",
-     "hgs-1881-oahu",
-     "kipuka-rm-585",
-     "kipuka-rm-1936"
+     "noaa-cudem-hawaii"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Around Waikalua these kuleana were in rice by 1896, on Monsarrat’s map of the swamp; the end year is that map’s."
+    "note": "The kuleana of the Waikalua swamp, south of the main stream to Kawa Stream and beyond, which Monsarrat’s map of March 1896 draws in rice. Jackson’s chart of 1882 writes Taro land over the same swamp, so the rice came between the two. The outline is the floor of the kuleana the award layer maps there, not Monsarrat’s edge of the rice.",
+    "tellings": [
+     {
+      "source": "kipuka-rm-1936",
+      "says": "Monsarrat’s legend gives rice north of the main stream 4.25 acres, south of it to Kawa Stream 60, and 21 more, “Total 85.25 Acres”. The award numbers on his map south of the stream (L.C.A. 2060, 10165, 3692, 7171, 8144, 4479 among them) are those of the kuleana under this outline in the award layer."
+     },
+     {
+      "source": "kipuka-rm-1140",
+      "says": "Jackson’s chart of August 1882 writes “Taro land” across the Waikalua swamp, below the shore ponds."
+     }
+    ]
    },
    "geometry": {
     "type": "Polygon",
@@ -11104,12 +11850,12 @@
   },
   {
    "type": "Feature",
-   "id": "loi-kaneohe-2",
+   "id": "loi-kaneohe-1",
    "properties": {
     "kind": "loi",
     "name": "Loʻi of Kāneʻohe",
     "from": null,
-    "to": 1896,
+    "to": 1895,
     "precision": "inferred",
     "place": "kaneohe",
     "sources": [
@@ -11119,7 +11865,539 @@
      "kipuka-rm-585",
      "kipuka-rm-1936"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Around Waikalua these kuleana were in rice by 1896, on Monsarrat’s map of the swamp; the end year is that map’s."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Jackson’s chart of 1882 writes Taro land over this swamp; on Monsarrat’s map of 1896 its kuleana are in rice, and the end year is the year before."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.791481,
+       21.411481
+      ],
+      [
+       -157.791852,
+       21.411481
+      ],
+      [
+       -157.791852,
+       21.411358
+      ],
+      [
+       -157.792222,
+       21.411358
+      ],
+      [
+       -157.792222,
+       21.411235
+      ],
+      [
+       -157.792346,
+       21.411235
+      ],
+      [
+       -157.792222,
+       21.410494
+      ],
+      [
+       -157.791852,
+       21.410494
+      ],
+      [
+       -157.791852,
+       21.410617
+      ],
+      [
+       -157.791605,
+       21.410741
+      ],
+      [
+       -157.791605,
+       21.409877
+      ],
+      [
+       -157.791728,
+       21.409877
+      ],
+      [
+       -157.791728,
+       21.40963
+      ],
+      [
+       -157.791605,
+       21.40963
+      ],
+      [
+       -157.791605,
+       21.409383
+      ],
+      [
+       -157.791481,
+       21.409383
+      ],
+      [
+       -157.791481,
+       21.409136
+      ],
+      [
+       -157.791235,
+       21.409136
+      ],
+      [
+       -157.791235,
+       21.409012
+      ],
+      [
+       -157.790123,
+       21.409012
+      ],
+      [
+       -157.790123,
+       21.409136
+      ],
+      [
+       -157.789877,
+       21.409136
+      ],
+      [
+       -157.789877,
+       21.409259
+      ],
+      [
+       -157.789259,
+       21.409259
+      ],
+      [
+       -157.789259,
+       21.408765
+      ],
+      [
+       -157.789136,
+       21.408765
+      ],
+      [
+       -157.789136,
+       21.407901
+      ],
+      [
+       -157.789383,
+       21.407901
+      ],
+      [
+       -157.789383,
+       21.407531
+      ],
+      [
+       -157.789506,
+       21.407531
+      ],
+      [
+       -157.789506,
+       21.407284
+      ],
+      [
+       -157.789259,
+       21.40716
+      ],
+      [
+       -157.789259,
+       21.406914
+      ],
+      [
+       -157.789136,
+       21.406914
+      ],
+      [
+       -157.789136,
+       21.40679
+      ],
+      [
+       -157.788765,
+       21.40679
+      ],
+      [
+       -157.788765,
+       21.407037
+      ],
+      [
+       -157.788519,
+       21.407037
+      ],
+      [
+       -157.788395,
+       21.40679
+      ],
+      [
+       -157.788148,
+       21.40679
+      ],
+      [
+       -157.788148,
+       21.406914
+      ],
+      [
+       -157.788025,
+       21.406914
+      ],
+      [
+       -157.788025,
+       21.40679
+      ],
+      [
+       -157.787531,
+       21.40679
+      ],
+      [
+       -157.787531,
+       21.406543
+      ],
+      [
+       -157.787284,
+       21.406543
+      ],
+      [
+       -157.787284,
+       21.40642
+      ],
+      [
+       -157.786667,
+       21.40642
+      ],
+      [
+       -157.786667,
+       21.406543
+      ],
+      [
+       -157.78642,
+       21.406543
+      ],
+      [
+       -157.78642,
+       21.406667
+      ],
+      [
+       -157.786173,
+       21.406667
+      ],
+      [
+       -157.786173,
+       21.406914
+      ],
+      [
+       -157.785926,
+       21.407037
+      ],
+      [
+       -157.785926,
+       21.407284
+      ],
+      [
+       -157.785679,
+       21.407284
+      ],
+      [
+       -157.785679,
+       21.408148
+      ],
+      [
+       -157.785062,
+       21.408148
+      ],
+      [
+       -157.785062,
+       21.407901
+      ],
+      [
+       -157.784321,
+       21.407901
+      ],
+      [
+       -157.784321,
+       21.408025
+      ],
+      [
+       -157.784074,
+       21.408148
+      ],
+      [
+       -157.784074,
+       21.408642
+      ],
+      [
+       -157.783951,
+       21.408642
+      ],
+      [
+       -157.783951,
+       21.408765
+      ],
+      [
+       -157.783704,
+       21.408765
+      ],
+      [
+       -157.783704,
+       21.409012
+      ],
+      [
+       -157.78321,
+       21.409136
+      ],
+      [
+       -157.78321,
+       21.409259
+      ],
+      [
+       -157.783086,
+       21.409259
+      ],
+      [
+       -157.783086,
+       21.409506
+      ],
+      [
+       -157.782963,
+       21.409506
+      ],
+      [
+       -157.782963,
+       21.409753
+      ],
+      [
+       -157.783333,
+       21.409753
+      ],
+      [
+       -157.783333,
+       21.40963
+      ],
+      [
+       -157.783951,
+       21.40963
+      ],
+      [
+       -157.783951,
+       21.409877
+      ],
+      [
+       -157.784074,
+       21.409877
+      ],
+      [
+       -157.784074,
+       21.41
+      ],
+      [
+       -157.784691,
+       21.41
+      ],
+      [
+       -157.784691,
+       21.410123
+      ],
+      [
+       -157.784815,
+       21.410123
+      ],
+      [
+       -157.784815,
+       21.410494
+      ],
+      [
+       -157.784938,
+       21.410494
+      ],
+      [
+       -157.784938,
+       21.410741
+      ],
+      [
+       -157.785679,
+       21.410741
+      ],
+      [
+       -157.785679,
+       21.410864
+      ],
+      [
+       -157.787284,
+       21.410864
+      ],
+      [
+       -157.787284,
+       21.410741
+      ],
+      [
+       -157.787531,
+       21.410741
+      ],
+      [
+       -157.787531,
+       21.410617
+      ],
+      [
+       -157.787654,
+       21.410617
+      ],
+      [
+       -157.787654,
+       21.410864
+      ],
+      [
+       -157.788025,
+       21.410864
+      ],
+      [
+       -157.788025,
+       21.410988
+      ],
+      [
+       -157.786667,
+       21.411111
+      ],
+      [
+       -157.786667,
+       21.411481
+      ],
+      [
+       -157.78642,
+       21.411481
+      ],
+      [
+       -157.78642,
+       21.411728
+      ],
+      [
+       -157.786914,
+       21.411728
+      ],
+      [
+       -157.787037,
+       21.411481
+      ],
+      [
+       -157.787284,
+       21.411481
+      ],
+      [
+       -157.787284,
+       21.411605
+      ],
+      [
+       -157.789259,
+       21.411605
+      ],
+      [
+       -157.789259,
+       21.411481
+      ],
+      [
+       -157.789383,
+       21.411481
+      ],
+      [
+       -157.789383,
+       21.411605
+      ],
+      [
+       -157.78963,
+       21.411605
+      ],
+      [
+       -157.78963,
+       21.411358
+      ],
+      [
+       -157.789506,
+       21.411358
+      ],
+      [
+       -157.789506,
+       21.411235
+      ],
+      [
+       -157.78963,
+       21.411235
+      ],
+      [
+       -157.78963,
+       21.410988
+      ],
+      [
+       -157.789753,
+       21.410988
+      ],
+      [
+       -157.789753,
+       21.411111
+      ],
+      [
+       -157.79,
+       21.411111
+      ],
+      [
+       -157.79,
+       21.411235
+      ],
+      [
+       -157.790247,
+       21.411235
+      ],
+      [
+       -157.790247,
+       21.411358
+      ],
+      [
+       -157.790494,
+       21.411358
+      ],
+      [
+       -157.790494,
+       21.411481
+      ],
+      [
+       -157.790988,
+       21.411481
+      ],
+      [
+       -157.790988,
+       21.411728
+      ],
+      [
+       -157.791358,
+       21.411728
+      ],
+      [
+       -157.791481,
+       21.411481
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "loi-kaneohe-2-rice",
+   "properties": {
+    "kind": "loi",
+    "name": "Rice of Kanohuluiwi",
+    "crop": "rice",
+    "from": 1901,
+    "to": 1901,
+    "precision": "inferred",
+    "place": "kaneohe",
+    "sources": [
+     "kipuka-rm-2038",
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii"
+    ],
+    "note": "Rice in Kanohuluiwi, Kāneʻohe, on Dove’s plat of June 1901 for a government lease to L. Ahlo: the leased land in rice, the kuleana excluded, beside the grant of Kulailua and the award of Kanehoalani, which lie within these outlines. The outline is the floor of the kuleana there, wider than the rice the plat gives.",
+    "tellings": [
+     {
+      "source": "kipuka-rm-2038",
+      "says": "Dove’s plat marks “15 Acres Rice excluding Kuleana” on the leased land, and rice of 4.75 and 0.65 acres beside it, by Grant 195 and L.C.A. 1963."
+     }
+    ]
    },
    "geometry": {
     "type": "Polygon",
@@ -11519,6 +12797,685 @@
   },
   {
    "type": "Feature",
+   "id": "loi-kaneohe-2",
+   "properties": {
+    "kind": "loi",
+    "name": "Loʻi of Kāneʻohe",
+    "from": null,
+    "to": 1896,
+    "precision": "inferred",
+    "place": "kaneohe",
+    "sources": [
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii",
+     "hgs-1881-oahu",
+     "kipuka-rm-585",
+     "kipuka-rm-1936"
+    ],
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Around Waikalua these kuleana were in rice by 1896, on Monsarrat’s map of the swamp; the end year is that map’s. By 1901 part of this floor, in Kanohuluiwi, was in rice on a government lease."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.795309,
+       21.419259
+      ],
+      [
+       -157.795309,
+       21.418519
+      ],
+      [
+       -157.795802,
+       21.418519
+      ],
+      [
+       -157.795926,
+       21.418272
+      ],
+      [
+       -157.79642,
+       21.418148
+      ],
+      [
+       -157.79642,
+       21.417901
+      ],
+      [
+       -157.796173,
+       21.417778
+      ],
+      [
+       -157.796173,
+       21.417654
+      ],
+      [
+       -157.796296,
+       21.417654
+      ],
+      [
+       -157.796296,
+       21.417407
+      ],
+      [
+       -157.796173,
+       21.417407
+      ],
+      [
+       -157.796173,
+       21.41716
+      ],
+      [
+       -157.796049,
+       21.41716
+      ],
+      [
+       -157.796049,
+       21.41679
+      ],
+      [
+       -157.795926,
+       21.41679
+      ],
+      [
+       -157.795926,
+       21.416543
+      ],
+      [
+       -157.795802,
+       21.416543
+      ],
+      [
+       -157.795802,
+       21.416049
+      ],
+      [
+       -157.795556,
+       21.416049
+      ],
+      [
+       -157.795556,
+       21.415926
+      ],
+      [
+       -157.795926,
+       21.415926
+      ],
+      [
+       -157.795926,
+       21.415679
+      ],
+      [
+       -157.795679,
+       21.415679
+      ],
+      [
+       -157.795679,
+       21.415432
+      ],
+      [
+       -157.795432,
+       21.415309
+      ],
+      [
+       -157.795432,
+       21.414691
+      ],
+      [
+       -157.795062,
+       21.414691
+      ],
+      [
+       -157.795062,
+       21.414815
+      ],
+      [
+       -157.794815,
+       21.414815
+      ],
+      [
+       -157.794815,
+       21.414938
+      ],
+      [
+       -157.794568,
+       21.414938
+      ],
+      [
+       -157.794568,
+       21.415062
+      ],
+      [
+       -157.794321,
+       21.415062
+      ],
+      [
+       -157.794321,
+       21.415185
+      ],
+      [
+       -157.793827,
+       21.415309
+      ],
+      [
+       -157.793827,
+       21.415556
+      ],
+      [
+       -157.793457,
+       21.415556
+      ],
+      [
+       -157.793333,
+       21.415802
+      ],
+      [
+       -157.793086,
+       21.415802
+      ],
+      [
+       -157.792963,
+       21.416049
+      ],
+      [
+       -157.792716,
+       21.416049
+      ],
+      [
+       -157.792593,
+       21.416296
+      ],
+      [
+       -157.792346,
+       21.416296
+      ],
+      [
+       -157.792346,
+       21.41642
+      ],
+      [
+       -157.792099,
+       21.41642
+      ],
+      [
+       -157.792099,
+       21.416543
+      ],
+      [
+       -157.791728,
+       21.416543
+      ],
+      [
+       -157.791728,
+       21.416667
+      ],
+      [
+       -157.791481,
+       21.416667
+      ],
+      [
+       -157.791481,
+       21.416543
+      ],
+      [
+       -157.791111,
+       21.416543
+      ],
+      [
+       -157.791111,
+       21.41642
+      ],
+      [
+       -157.790741,
+       21.41642
+      ],
+      [
+       -157.790741,
+       21.416543
+      ],
+      [
+       -157.790617,
+       21.416543
+      ],
+      [
+       -157.790617,
+       21.41679
+      ],
+      [
+       -157.791235,
+       21.41679
+      ],
+      [
+       -157.791235,
+       21.416914
+      ],
+      [
+       -157.791481,
+       21.416914
+      ],
+      [
+       -157.791481,
+       21.41716
+      ],
+      [
+       -157.791605,
+       21.41716
+      ],
+      [
+       -157.791605,
+       21.417284
+      ],
+      [
+       -157.791975,
+       21.417284
+      ],
+      [
+       -157.791975,
+       21.417037
+      ],
+      [
+       -157.792099,
+       21.417037
+      ],
+      [
+       -157.792099,
+       21.416914
+      ],
+      [
+       -157.792222,
+       21.416914
+      ],
+      [
+       -157.792222,
+       21.417037
+      ],
+      [
+       -157.793457,
+       21.416914
+      ],
+      [
+       -157.793457,
+       21.41679
+      ],
+      [
+       -157.793827,
+       21.41679
+      ],
+      [
+       -157.793827,
+       21.416667
+      ],
+      [
+       -157.793951,
+       21.416667
+      ],
+      [
+       -157.793951,
+       21.41642
+      ],
+      [
+       -157.794074,
+       21.41642
+      ],
+      [
+       -157.794074,
+       21.41679
+      ],
+      [
+       -157.793951,
+       21.41679
+      ],
+      [
+       -157.793951,
+       21.416914
+      ],
+      [
+       -157.79358,
+       21.416914
+      ],
+      [
+       -157.79358,
+       21.417037
+      ],
+      [
+       -157.793333,
+       21.417037
+      ],
+      [
+       -157.793333,
+       21.417654
+      ],
+      [
+       -157.792963,
+       21.417901
+      ],
+      [
+       -157.792963,
+       21.418272
+      ],
+      [
+       -157.793333,
+       21.418272
+      ],
+      [
+       -157.793333,
+       21.418395
+      ],
+      [
+       -157.79284,
+       21.418395
+      ],
+      [
+       -157.79284,
+       21.418642
+      ],
+      [
+       -157.79321,
+       21.418889
+      ],
+      [
+       -157.793086,
+       21.419383
+      ],
+      [
+       -157.793457,
+       21.419383
+      ],
+      [
+       -157.793457,
+       21.419259
+      ],
+      [
+       -157.793951,
+       21.419259
+      ],
+      [
+       -157.793951,
+       21.418889
+      ],
+      [
+       -157.794568,
+       21.418889
+      ],
+      [
+       -157.794568,
+       21.419259
+      ],
+      [
+       -157.795309,
+       21.419259
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "loi-kaneohe-3-rice",
+   "properties": {
+    "kind": "loi",
+    "name": "Rice of Kanohuluiwi",
+    "crop": "rice",
+    "from": 1901,
+    "to": 1901,
+    "precision": "inferred",
+    "place": "kaneohe",
+    "sources": [
+     "kipuka-rm-2038",
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii"
+    ],
+    "note": "Rice in Kanohuluiwi, Kāneʻohe, on Dove’s plat of June 1901 for a government lease to L. Ahlo: the leased land in rice, the kuleana excluded, beside the grant of Kulailua and the award of Kanehoalani, which lie within these outlines. The outline is the floor of the kuleana there, wider than the rice the plat gives.",
+    "tellings": [
+     {
+      "source": "kipuka-rm-2038",
+      "says": "Dove’s plat marks “15 Acres Rice excluding Kuleana” on the leased land, and rice of 4.75 and 0.65 acres beside it, by Grant 195 and L.C.A. 1963."
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.799259,
+       21.416049
+      ],
+      [
+       -157.799259,
+       21.415309
+      ],
+      [
+       -157.799383,
+       21.415309
+      ],
+      [
+       -157.799383,
+       21.415185
+      ],
+      [
+       -157.799753,
+       21.415185
+      ],
+      [
+       -157.799753,
+       21.415062
+      ],
+      [
+       -157.800617,
+       21.415062
+      ],
+      [
+       -157.800617,
+       21.414815
+      ],
+      [
+       -157.800494,
+       21.414815
+      ],
+      [
+       -157.800494,
+       21.414444
+      ],
+      [
+       -157.799753,
+       21.414444
+      ],
+      [
+       -157.799753,
+       21.414321
+      ],
+      [
+       -157.798642,
+       21.414321
+      ],
+      [
+       -157.798642,
+       21.414444
+      ],
+      [
+       -157.798272,
+       21.414444
+      ],
+      [
+       -157.798272,
+       21.414321
+      ],
+      [
+       -157.798395,
+       21.414321
+      ],
+      [
+       -157.798395,
+       21.414074
+      ],
+      [
+       -157.797901,
+       21.414074
+      ],
+      [
+       -157.797901,
+       21.413827
+      ],
+      [
+       -157.797778,
+       21.413827
+      ],
+      [
+       -157.797778,
+       21.413457
+      ],
+      [
+       -157.797284,
+       21.413457
+      ],
+      [
+       -157.797284,
+       21.413333
+      ],
+      [
+       -157.79642,
+       21.413333
+      ],
+      [
+       -157.79642,
+       21.413457
+      ],
+      [
+       -157.796173,
+       21.413457
+      ],
+      [
+       -157.796173,
+       21.41358
+      ],
+      [
+       -157.795926,
+       21.41358
+      ],
+      [
+       -157.795926,
+       21.413704
+      ],
+      [
+       -157.795802,
+       21.413704
+      ],
+      [
+       -157.795802,
+       21.413951
+      ],
+      [
+       -157.795556,
+       21.414074
+      ],
+      [
+       -157.795556,
+       21.414568
+      ],
+      [
+       -157.795926,
+       21.414568
+      ],
+      [
+       -157.795926,
+       21.414444
+      ],
+      [
+       -157.796543,
+       21.414444
+      ],
+      [
+       -157.796543,
+       21.414321
+      ],
+      [
+       -157.797407,
+       21.414321
+      ],
+      [
+       -157.797531,
+       21.415802
+      ],
+      [
+       -157.797284,
+       21.415802
+      ],
+      [
+       -157.797284,
+       21.416049
+      ],
+      [
+       -157.797407,
+       21.416049
+      ],
+      [
+       -157.797407,
+       21.416296
+      ],
+      [
+       -157.797531,
+       21.416296
+      ],
+      [
+       -157.797531,
+       21.416667
+      ],
+      [
+       -157.797654,
+       21.416667
+      ],
+      [
+       -157.797654,
+       21.416914
+      ],
+      [
+       -157.798272,
+       21.416914
+      ],
+      [
+       -157.798272,
+       21.41679
+      ],
+      [
+       -157.798642,
+       21.41679
+      ],
+      [
+       -157.798642,
+       21.416667
+      ],
+      [
+       -157.798889,
+       21.416667
+      ],
+      [
+       -157.798889,
+       21.416543
+      ],
+      [
+       -157.799012,
+       21.416543
+      ],
+      [
+       -157.799012,
+       21.416296
+      ],
+      [
+       -157.799136,
+       21.416296
+      ],
+      [
+       -157.799259,
+       21.416049
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
    "id": "loi-kaneohe-3",
    "properties": {
     "kind": "loi",
@@ -11534,7 +13491,7 @@
      "kipuka-rm-585",
      "kipuka-rm-1936"
     ],
-    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Around Waikalua these kuleana were in rice by 1896, on Monsarrat’s map of the swamp; the end year is that map’s."
+    "note": "The valley floor where the kuleana awarded by the Land Commission in the early 1850s lie, as the Kīpuka award layer maps them: the small awards gathered, kept where today’s ground is gentle and low, and joined where they adjoin. The awards hold house lots and dry plots as well as loʻi, and the layer records no use, so the outline is the floor the awards cover rather than the patches themselves. Around Waikalua these kuleana were in rice by 1896, on Monsarrat’s map of the swamp; the end year is that map’s. By 1901 part of this floor, in Kanohuluiwi, was in rice on a government lease."
    },
    "geometry": {
     "type": "Polygon",
@@ -17701,11 +19658,13 @@
     "place": "kailua-oahu",
     "sources": [
      "fornander-v2",
+     "kamakau-ruling-chiefs",
      "nps-1992-ka-iwi",
      "dlnr-ulupo",
-     "usgs-gnis"
+     "usgs-gnis",
+     "noaa-cudem-hawaii"
     ],
-    "note": "The houses of the chiefs, their families and attendants around Kailua Bay, as State Parks describes the place about 1750. The point is the GNIS point for Kailua; no source read bounds the village. By 1850 the land’s people lived in several clusters, Maunawili among them.",
+    "note": "The houses of the chiefs, their families and attendants around Kailua Bay, as State Parks describes the place about 1750, and of the people of the shore after them. Kūaliʻi was born at Kalapawai near the mouth of Kaʻelepulu Stream, and Kamakau has the chiefs surf there from their house Pamoa. The outline is the sand ridge behind the beach from near that mouth to past the GNIS point for Kailua; no source read bounds the village. By 1850 the land’s people lived in several clusters, Maunawili among them.",
     "tellings": [
      {
       "source": "nps-1992-ka-iwi",
@@ -17713,15 +19672,75 @@
      },
      {
       "source": "fornander-v2",
-      "says": "No count. Kākuhihewa’s great house Pamoa stood at Alele in Kailua (p. 274)."
+      "says": "No count. Kākuhihewa’s great house Pamoa stood at Alele in Kailua (p. 274), and Kūaliʻi was born at Kalapawai (p. 278)."
+     },
+     {
+      "source": "kamakau-ruling-chiefs",
+      "says": "No count. Lonoikamakahiki surfed with Kaʻihikapu at Kalapawai; the chief’s house was named Pamoa (p. 55)."
      }
     ]
    },
    "geometry": {
-    "type": "Point",
+    "type": "Polygon",
     "coordinates": [
-     -157.73946,
-     21.40223
+     [
+      [
+       -157.74049,
+       21.40497
+      ],
+      [
+       -157.73775,
+       21.40133
+      ],
+      [
+       -157.73564,
+       21.39969
+      ],
+      [
+       -157.72954,
+       21.39734
+      ],
+      [
+       -157.73078,
+       21.3964
+      ],
+      [
+       -157.73078,
+       21.39581
+      ],
+      [
+       -157.72916,
+       21.39581
+      ],
+      [
+       -157.72854,
+       21.39617
+      ],
+      [
+       -157.72717,
+       21.39687
+      ],
+      [
+       -157.72729,
+       21.39793
+      ],
+      [
+       -157.7334,
+       21.39992
+      ],
+      [
+       -157.73688,
+       21.40262
+      ],
+      [
+       -157.73887,
+       21.40509
+      ],
+      [
+       -157.74049,
+       21.40497
+      ]
+     ]
     ]
    }
   },
@@ -17739,9 +19758,11 @@
      "bingham-1847",
      "hgs-1881-oahu",
      "kipuka-rm-585",
-     "oha-kipuka-lca"
+     "kipuka-rm-1936",
+     "oha-kipuka-lca",
+     "noaa-cudem-hawaii"
     ],
-    "note": "The village by the shore of the bay where the mission station stood from the 1830s. The point is where the 1881 sheet writes “Old Mission Res. & Church”; Lyons’s survey of 1874 has the mission’s land, the church, a court house and many small kuleana here, the last source read to show the village as such.",
+    "note": "The village by the shore of the bay where the mission station stood from the 1830s: the church’s lot, granted to the Kāneʻohe church, and the low ground round it to the wall of Punaluʻu pond, between the loʻi of Kāneʻohe, with the mission’s land just above. Lyons’s survey of 1874 has the mission’s land, the church, a court house and many small kuleana here, the last source read to show the village as such. The 1881 sheet writes “Old Mission Res. & Church” further west, where its lines over Koʻolaupoko fall west of the award layer and of today’s shore; the outline follows the awards. No source read bounds the village.",
     "tellings": [
      {
       "source": "bingham-1847",
@@ -17750,14 +19771,86 @@
      {
       "source": "oha-kipuka-lca",
       "says": "No count of households. The Kīpuka award layer maps about 250 parcels awarded in Kāneʻohe, most in the early 1850s, under about 136 claims."
+     },
+     {
+      "source": "kipuka-rm-585",
+      "says": "No count of households. Lyons marks L.C.A. 387 to the American Protestant Mission, 5.1 acres, and Grant 167 to the Kāneʻohe church, 10 acres, beside the fifty acres of Punaluʻu, “22 Acres Kuleana”."
      }
     ]
    },
    "geometry": {
-    "type": "Point",
+    "type": "Polygon",
     "coordinates": [
-     -157.7975,
-     21.4142
+     [
+      [
+       -157.79403,
+       21.41507
+      ],
+      [
+       -157.79341,
+       21.41413
+      ],
+      [
+       -157.79229,
+       21.41425
+      ],
+      [
+       -157.79055,
+       21.41354
+      ],
+      [
+       -157.79017,
+       21.41436
+      ],
+      [
+       -157.78918,
+       21.41436
+      ],
+      [
+       -157.78905,
+       21.4153
+      ],
+      [
+       -157.7893,
+       21.41577
+      ],
+      [
+       -157.78918,
+       21.41613
+      ],
+      [
+       -157.7898,
+       21.4166
+      ],
+      [
+       -157.78955,
+       21.41718
+      ],
+      [
+       -157.78992,
+       21.4173
+      ],
+      [
+       -157.7903,
+       21.41695
+      ],
+      [
+       -157.79017,
+       21.41648
+      ],
+      [
+       -157.79117,
+       21.41636
+      ],
+      [
+       -157.79185,
+       21.41598
+      ],
+      [
+       -157.79403,
+       21.41507
+      ]
+     ]
     ]
    }
   },
@@ -17774,9 +19867,10 @@
     "sources": [
      "nps-1992-ka-iwi",
      "kamakau-ruling-chiefs",
-     "fornander-v2"
+     "fornander-v2",
+     "noaa-cudem-hawaii"
     ],
-    "note": "A small fishing village on the Waimānalo shore near Pāhonu. In 1794 the Oʻahu chiefs dug trenches and threw up earthworks at Kukui against Kaʻeokūlani. The point is a marker near Pāhonu; no source read bounds the village.",
+    "note": "A small fishing village on the Waimānalo shore near Pāhonu. In 1794 the Oʻahu chiefs dug trenches and threw up earthworks at Kukui against Kaʻeokūlani. The outline is a strip of the ground behind the beach west of Pāhonu, in the vicinity the National Park Service gives; no source read bounds the village.",
     "tellings": [
      {
       "source": "nps-1992-ka-iwi",
@@ -17785,10 +19879,42 @@
     ]
    },
    "geometry": {
-    "type": "Point",
+    "type": "Polygon",
     "coordinates": [
-     -157.6865,
-     21.3255
+     [
+      [
+       -157.68894,
+       21.3283
+      ],
+      [
+       -157.6887,
+       21.32724
+      ],
+      [
+       -157.68633,
+       21.32607
+      ],
+      [
+       -157.68384,
+       21.32536
+      ],
+      [
+       -157.68284,
+       21.32548
+      ],
+      [
+       -157.68334,
+       21.32619
+      ],
+      [
+       -157.68546,
+       21.32666
+      ],
+      [
+       -157.68894,
+       21.3283
+      ]
+     ]
     ]
    }
   },

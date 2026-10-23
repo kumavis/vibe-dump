@@ -12,6 +12,11 @@
       "colour": "#e8945a"
     },
     {
+      "id": "hilo-chiefs",
+      "name": "Hilo and Hāmākua (the chiefs of Hilo, of the line of ʻI)",
+      "colour": "#c4a25e"
+    },
+    {
       "id": "maui",
       "name": "Maui (from 1783 also Oʻahu and Molokaʻi, under Kahekili)",
       "colour": "#5fa8d3"
@@ -142,6 +147,41 @@
       "hawaii:Hilo": "hawaii",
       "hawaii:Puna": "hawaii",
       "hawaii:Hāmākua": "hawaii",
+      "hawaii:Kohala": "hawaii",
+      "hawaii:Kona": "hawaii",
+      "hawaii:Kaʻū": "hawaii",
+      "maui:Honuaʻula": "maui",
+      "maui:Kāʻanapali": "maui",
+      "maui:Pūʻali Komohana": "maui",
+      "maui:Hāmākualoa": "maui",
+      "maui:Hāmākuapoko": "maui",
+      "maui:Lāhainā": "maui",
+      "maui:Koʻolau": "maui",
+      "maui:Kula": "maui",
+      "maui:Hāna": "maui",
+      "maui:Kīpahulu": "maui",
+      "maui:Kahikinui": "maui",
+      "maui:Kaupō": "maui",
+      "lanai:Lāhainā": "maui",
+      "molokai:Kona": "molokai",
+      "molokai:Koʻolau": "molokai",
+      "oahu:Koʻolauloa": "oahu",
+      "oahu:Waialua": "oahu",
+      "oahu:Waiʻanae": "oahu",
+      "oahu:Koʻolaupoko": "oahu",
+      "oahu:ʻEwa": "oahu",
+      "oahu:Kona": "oahu",
+      "kauai:Koʻolau": "kauai",
+      "kauai:Haleleʻa": "kauai",
+      "kauai:Nāpali": "kauai",
+      "kauai:Kona": "kauai",
+      "kauai:Puna": "kauai",
+      "niihau:Kona": "kauai"
+    },
+    "kakuhihewa": {
+      "hawaii:Hilo": "hilo-chiefs",
+      "hawaii:Puna": "hilo-chiefs",
+      "hawaii:Hāmākua": "hilo-chiefs",
       "hawaii:Kohala": "hawaii",
       "hawaii:Kona": "hawaii",
       "hawaii:Kaʻū": "hawaii",
@@ -503,6 +543,27 @@
     "umi": {
       "_": "Reign-indexed and soft. Hawaiʻi united under ʻUmi; Maui under Piʻilani and Kiha-a-Piʻilani, Hāna included."
     },
+    "kakuhihewa": {
+      "_": "Reign-indexed and soft. Kamakau’s map for these generations: the rulers of Kona over Kohala, Kona and Kaʻū only, with other chiefs over Hilo and Hāmākua (pp. 61, 64); Maui under Kamalālāwalu and his heirs; Oʻahu under Kākuhihewa’s line and Kūaliʻi; Kauaʻi under the Kawelo chiefs.",
+      "hawaii:Hilo": "The chiefs of Hilo of the line of ʻI, at war with the rulers of Kona through the reigns of Keakamahana and Keakealani and more often the victors (Kamakau, pp. 61–63; Fornander, p. 128). Lonoikamakahiki held the whole island at the start of the span; Fornander has Keawe win Hilo back by marriage at its end (p. 129), Kamakau has Keawe still ruling only Kohala, Kona and Kaʻū (p. 64). Contested; hatch.",
+      "hawaii:Hāmākua": "With Hilo: Kamakau names the descendants of ʻUmi’s sons as the rulers of Hilo and Hāmākua (p. 61). Contested; hatch.",
+      "hawaii:Puna": "Kamakau names Laʻa, read here as ʻŌlaʻa in Puna, among the lands the Kona chiefs wanted from the Hilo chiefs (p. 62); who held the rest of Puna is not recorded. Hatch.",
+      "hawaii:Kohala": "The Mahi chiefs of Kohala led the war for the rulers of Kona (Kamakau, p. 63; Fornander, pp. 127–129).",
+      "maui:Hāna": "Kamalālāwalu kept his court at Hāna when Lonoikamakahiki visited him (Fornander, p. 122).",
+      "lanai:Lāhainā": "Fornander infers from the legends that Lānaʻi became subject or tributary to Maui under Kamalālāwalu (p. 207); Kūaliʻi of Oʻahu is said to have raided it (p. 282).",
+      "molokai:Kona": "Its own chiefs. Kūaliʻi fought for the Kona chiefs against those of Koʻolau at Kalaupapa and settled their quarrel without taking the island (Fornander, p. 282); by Kaulahea’s reign on Maui its chiefs looked to Maui and Oʻahu for support (p. 210).",
+      "molokai:Koʻolau": "Its own chiefs, beaten at Kalaupapa by Kūaliʻi and the Kona chiefs (Fornander, p. 282).",
+      "oahu:ʻEwa": "Kākuhihewa made the island one; his sons shared it in peace; by Kūaliʻi’s accession the ʻEwa and Waialua chiefs ruled with little regard for the mōʻī until he beat them (Fornander, pp. 273–275, 278–281).",
+      "oahu:Waialua": "As ʻEwa: held apart from the mōʻī before Kākuhihewa and again before Kūaliʻi (Fornander, pp. 272–273, 278).",
+      "oahu:Waiʻanae": "Held by Kākuhihewa’s cousin until the peace and marriage that made the island one (Fornander, p. 273); its chiefs rose against Kūaliʻi and were crushed (p. 281).",
+      "oahu:Koʻolauloa": "Held by Kākuhihewa’s cousin until the peace and marriage that made the island one (Fornander, p. 273).",
+      "oahu:Koʻolaupoko": "The mōʻī’s own lands from Kanekapu’s time: Kūaliʻi was born, lived and died at Kailua (Fornander, pp. 278, 283).",
+      "kauai:Kona": "The Kawelo chiefs: Kawelomahamahaiʻa, Kawelomakualua at Wailua, then the war in which Kawelo-a-Maihunaliʻi, helped from Oʻahu, overthrew Kaweloaikanaka (Fornander, pp. 292–294). Late in the span Kūaliʻi of Oʻahu came to the windward side by inheritance and set Peleioholani over Kauaʻi, while Waimea and the Kona side stayed with Lonoikahaupu’s family (pp. 282, 295–296); the legend has the king of Kauaʻi give the island over to him (Fornander Collection, vol. IV, p. 406). Contested; hatch.",
+      "kauai:Puna": "Late in the span held by Kūaliʻi of Oʻahu by inheritance, with the rest of the windward side (Fornander, p. 295). Contested; hatch.",
+      "kauai:Koʻolau": "Late in the span held by Kūaliʻi of Oʻahu by inheritance, with the rest of the windward side (Fornander, p. 295). Contested; hatch.",
+      "kauai:Haleleʻa": "Late in the span held by Kūaliʻi of Oʻahu by inheritance, with the rest of the windward side (Fornander, p. 295). Contested; hatch.",
+      "niihau:Kona": "With Kauaʻi; at times independent (Fornander, p. 95)."
+    },
     "alapai": {
       "_": "Fornander's dates for the 1730s wars are estimates.",
       "molokai:Koʻolau": "Fornander (p. 289) says Peleioholani of Oʻahu brought the Koʻolau chiefs of Molokaʻi to acknowledge him about 1738, \"neither very thorough nor very lasting\". Contested; hatch.",
@@ -550,6 +611,11 @@
     "umi": [
       "kamakau-ruling-chiefs",
       "fornander-v2"
+    ],
+    "kakuhihewa": [
+      "fornander-v2",
+      "kamakau-ruling-chiefs",
+      "fornander-collection-v4"
     ],
     "alapai": [
       "fornander-v2",

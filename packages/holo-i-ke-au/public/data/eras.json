@@ -36,6 +36,18 @@
     ]
   },
   {
+    "id": "kakuhihewa",
+    "label": "in the time of Kākuhihewa and Kūaliʻi",
+    "year": 1680,
+    "yearPrecision": 50,
+    "note": "Reign-indexed. The Oʻahu genealogies put Kākuhihewa four generations before Kūaliʻi, who flourished in the later 1600s and died about 1730. Lonoikamakahiki of Hawaiʻi stayed at Kākuhihewa’s court, and Kamalālāwalu of Maui made war on Lono, so the chapter opens about 1600 by the shorter reckonings and earlier by Fornander’s thirty-year generations. Oʻahu is made one again by Kākuhihewa, shared in peace by his sons and won back by war under Kūaliʻi. On Hawaiʻi Island the rulers of Kona, Kohala and Kaʻū war with the chiefs of Hilo; Maui, after Kamalālāwalu’s war and his son’s, is at peace for three reigns; Kauaʻi passes through the wars of the Kawelo chiefs. A saying keeps three of them: Hawaiʻi of Keawe, Maui of Kamalālāwalu, Oʻahu of Kākuhihewa.",
+    "sources": [
+      "fornander-v2",
+      "kamakau-ruling-chiefs",
+      "staradvertiser-2019-kahikinui"
+    ]
+  },
+  {
     "id": "alapai",
     "label": "in the time of Alapaʻinui",
     "year": 1745,

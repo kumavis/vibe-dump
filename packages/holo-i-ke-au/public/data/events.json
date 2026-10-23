@@ -380,15 +380,280 @@
     ]
   },
   {
+    "id": "kakuhihewa",
+    "title": "Oʻahu-a-Kākuhihewa",
+    "gloss": "Kākuhihewa’s island, and his court",
+    "when": {
+      "from": "1570",
+      "to": "1640",
+      "precision": "generation"
+    },
+    "era": "kakuhihewa",
+    "where": [
+      {
+        "place": "waikiki",
+        "role": "seat"
+      },
+      {
+        "place": "ewa",
+        "role": "seat"
+      },
+      {
+        "place": "kailua-oahu",
+        "role": "seat"
+      },
+      {
+        "place": "kukaniloko",
+        "role": "birthplace"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "founding",
+    "summary": "Born at Kūkaniloko, Kākuhihewa succeeds his father as mōʻī (ruler) of Oʻahu at a time when the island is split in two, Waiʻanae, Waialua and Koʻolauloa held by his cousin. He makes peace, marries his cousin’s daughter and has the whole island again. His long reign is remembered for peace and plenty: food from the fields and the sea, people and wealth increasing, and a court at ʻEwa, Waikīkī and Kailua that draws the bravest, the wisest and the merriest chiefs of every island. Lonoikamakahiki, ruler of Hawaiʻi, stays with him at Kailua. Posterity names the island for him, Oʻahu-a-Kākuhihewa. After him his sons share the land in peace, Kanekapu as mōʻī and Kaʻihikapu keeping a brilliant court of his own at ʻEwa and Waikīkī.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 117–118, 272–277"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. IV, pp. 52, 55; p. 300"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "firm"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Kākuhihewa was born at Kūkaniloko and brought up between Waipiʻo, Waiawa and Mānana in ʻEwa (p. 272); his principal royal residences were at ʻEwa, Waikīkī and Kailua (p. 274). Fornander calls his court “the Paris of the group”, and writes that through the rest of his long reign “no war or rebellion distracted the country or diminished his power” (pp. 273–274)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Lonoikamakahiki sailed from Molokaʻi “straight to Kailua, in Koolaupoko district, Oahu, where Kakuhihewa, the Moi of Oahu, then held his court”, the royal house being named Kamooa (pp. 117–118)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau makes Kākuhihewa’s sons, whom he calls Kane-kapu-a-Kuʻihewa and Ka-ʻihi-kapu-a-Kuʻihewa, the chiefs of Oʻahu on the Kona and Koʻolau sides in Lono’s time (p. 52)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Under Kanekapu the island was “divided between the three oldest brothers” and “peace and abundance blessed the land” (pp. 274–275); Kaʻihikapu, Fornander writes, sent men, arms and canoes to Kawelo-a-Maihunaliʻi for his war on Kauaʻi (p. 276)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "At a council of chiefs in Honolulu about 1830 Kamakau first heard the words, “which appear so often in newspapers today”: Hawaiʻi of Keawe, Maui of Kamalālāwalu, Oʻahu of Kākuhihewa, Kauaʻi of Manokalanipo (p. 300)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander’s genealogy puts Kākuhihewa four generations before Kūaliʻi, who died before 1730 at past ninety (pp. 274–278, 280n, 283); at thirty years a generation that sets Kākuhihewa’s reign in the later 1500s, and shorter generations bring it nearer 1600."
+      }
+    ]
+  },
+  {
+    "id": "kamalalawalu",
+    "title": "Kamalālāwalu",
+    "gloss": "Maui’s war on Hawaiʻi Island",
+    "when": {
+      "from": "1580",
+      "to": "1640",
+      "precision": "generation"
+    },
+    "era": "kakuhihewa",
+    "where": [
+      {
+        "place": "waimea-hawaii",
+        "role": "battle"
+      },
+      {
+        "place": "puako",
+        "role": "landing"
+      },
+      {
+        "place": "hokuula",
+        "role": "battle"
+      },
+      {
+        "place": "kawaihae",
+        "role": "escape"
+      },
+      {
+        "place": "hana-bay",
+        "role": "court"
+      },
+      {
+        "place": "waikiki",
+        "role": "death of Kauhiakama"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kamalālāwalu, son of Kiha-a-Piʻilani, rules Maui through a long and prosperous reign, and his island is remembered as Maui-a-Kama, Maui of Kama. Late in life he resolves to conquer Hawaiʻi Island, whose ruler Lonoikamakahiki has lately been his guest at Hāna. Most of his seers promise victory; Lanikaula, a prophet of Molokaʻi, warns him that he will die. His fleet lands on the Kohala coast near Puakō, and Lono’s brother Kanaloakuaʻana, coming down to stop him, is defeated, taken and cruelly used. The Maui army marches inland onto the dry plain of Waimea, where the men of Kona, Kaʻū, Puna, Waimea and Kohala come against it, and Kamalālāwalu is killed with most of his chiefs. His son Kauhiakama escapes by way of Kawaihae and rules Maui after him; at the end of his own reign he lands at Waikīkī with an army and is killed there by the chiefs of Oʻahu.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 108, 122–124, 206–208, 276"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. IV, pp. 55–61; p. 232"
+      },
+      {
+        "id": "staradvertiser-2019-kahikinui",
+        "where": "Kirch’s dates for Piʻilani and Kiha"
+      },
+      {
+        "id": "kirch-ruggles-2019",
+        "where": "not read"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Fornander has the fleet land “without opposition near Puako, a few miles south of Kawaihae”, Kanaloakuaʻana beaten at Kaunooa and taken at Kamakahiwa in Puakō, and Kamalālāwalu defeated and slain at Hokuula in Waimea with his nephew and general Makakuikalani (pp. 123–124)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau has the fighting begin in Kohala, the Maui chiefs break up their own canoes at Kawaihae on the false advice of two old men, and the battle fought on the waterless plain of Puʻuʻoaʻoaka, outside the grassy plain of Waimea; Kamalālāwalu “was killed on the grassy plain of Puako” (pp. 58–60)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "In Kamakau the spies who scouted Hawaiʻi for Kamalālāwalu, his half-brother Kauhiokalani among them, found “many houses, but few men”, for the people of Kohala were at their sports on the shore; the war was made on that report (pp. 56–57)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Fornander makes Kamalālāwalu a contemporary of Keawenui-a-ʻUmi and very old at the time of the war (p. 122); counting thirty years a generation from ʻUmi’s death about 1521–1526 (p. 108), that is the later 1500s."
+      },
+      {
+        "source": "staradvertiser-2019-kahikinui",
+        "says": "Kirch dates the consolidation of Maui under Piʻilani and his son Kiha, Kamalālāwalu’s father, to between 1550 and 1700 from coral offerings in the Kahikinui heiau, which would bring the war into the 1600s."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Kauhiakama’s landing at Waikīkī fell in the time of Kākuhihewa’s son Kaihikapu, “but we know not the cause of the quarrel or the invasion” (p. 276); its memory, Fornander adds, moved Kahekili when he took Oʻahu in 1783 (p. 208)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau too counts the killing of Kauhiakama and his people among the wrongs Kahekili set out to avenge on the chiefs of Oʻahu (p. 232)."
+      }
+    ]
+  },
+  {
+    "id": "kualii",
+    "title": "Kūaliʻi",
+    "gloss": "the wars of Oʻahu’s ruler",
+    "when": {
+      "from": "1650",
+      "to": "1730",
+      "precision": "generation"
+    },
+    "era": "kakuhihewa",
+    "where": [
+      {
+        "place": "ewa",
+        "role": "battles"
+      },
+      {
+        "place": "nuuanu",
+        "role": "rite and battle"
+      },
+      {
+        "place": "waianae",
+        "role": "battle"
+      },
+      {
+        "place": "laupahoehoe",
+        "role": "raid"
+      },
+      {
+        "place": "kaunakakai",
+        "role": "landing"
+      },
+      {
+        "place": "kalaupapa",
+        "role": "battle"
+      },
+      {
+        "place": "wailua-kauai",
+        "role": "windward Kauaʻi"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kūaliʻi, born at Kalapawai in Kailua, succeeds his father as mōʻī of Oʻahu when the title counts for little and the chiefs of Kona, ʻEwa and Waialua rule their lands as they please. He crosses the mountains by Nuʻuanu and Kalihi to perform the rites at Kawaluna, the heiau of the island’s ruler in Waolani, and routs the Kona chiefs who come up the valley to stop him. After a voyage to Kauaʻi for wood for spears, he defeats the ʻEwa chiefs on the plains near Līhuʻe and again at Malamanui, and is acknowledged over the whole island. He raids the Hilo coast of Hawaiʻi, landing at Laupāhoehoe; turns back to crush a rising at Waiʻanae; and, called in by the Kona chiefs of Molokaʻi, beats the Koʻolau chiefs at Kalaupapa. He comes to hold the windward side of Kauaʻi by inheritance and, grown old, sets his son Peleioholani over the island. He dies at Kailua in great old age, by Kamakau’s reckoning in 1730.",
+    "sources": [
+      {
+        "id": "fornander-v2",
+        "where": "pp. 278–284, 287, 292–296"
+      },
+      {
+        "id": "fornander-collection-v4",
+        "where": "pp. 364–434, the History of Kualii (pp. 406–410 read)"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "p. 96n (the editors), p. 369; appendix of dates"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "soft"
+    },
+    "tellings": [
+      {
+        "source": "fornander-v2",
+        "says": "Fornander reconstructs the wars from one written legend, compiled “probably as late as the latter part of the reign of Kamehameha I”, and from the chant of Kūaliʻi, which he takes to be of Kūaliʻi’s own lifetime (pp. 279–280, 280n)."
+      },
+      {
+        "source": "fornander-collection-v4",
+        "says": "The legend itself puts his last battle on the plain of Keahumoa at Honouliuli, ʻEwa, and has Kauaʻi “simply given over by its king to Kualii”, so that, as the legend has it, the group was united under him from Hawaiʻi to Niʻihau (p. 406). His first general battle, at Kawaluna above Waolani, “reddened the pili grass of Keanakamano” (p. 408)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "The battles with the ʻEwa chiefs were at Kalena and the plain of Heleauau, “not far from Lihue”, and at Malamanui and Paupauwela; the rising at Waiʻanae was put down “near the watercourse of Kalapo and below Eleu”; the Hilo raid landed at Laupāhoehoe, where a chief named Haalilo was beaten (p. 281). The chant was sung before the battle of Keahumoa against the ʻEwa chiefs (p. 284)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "On Molokaʻi Kūaliʻi landed at Kaunakakai, met the Kona chiefs’ forces at Moʻomomi in Kaluakoʻi and fell on the Koʻolau chiefs at Kalaupapa; a raid on Lānaʻi Fornander finds told “so full of anachronisms” as to be unreliable (p. 282)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "On Kauaʻi Fornander first has Kūaliʻi set Peleioholani as mōʻī “over at least the Kona section” (p. 282), and later has him come by inheritance to the windward side, the Kona side staying with Lonoikahaupu’s family at Waimea (pp. 295–296)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Kūaliʻi flourished “from the middle to the close of the seventeenth century” (p. 287), was “upwards of ninety years old” when he last wrestled his son (p. 283), and died “some time previous to 1730” (p. 280n)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau gives 1730 for Kūaliʻi’s death (p. 369); his editors call Kūaliʻi a traditional ruling chief “said to have lived during the 17th and early 18th centuries” (p. 96n), and their appendix of Kamakau’s dates warns, after Stokes, that such dates be “scrutinized most rigidly before acceptance”."
+      }
+    ]
+  },
+  {
     "id": "kailua-chiefs",
     "title": "Kailua of the chiefs",
     "gloss": "the windward seat of Oʻahu’s rulers",
     "when": {
       "from": "1690",
-      "to": "1737",
+      "to": "1730",
       "precision": "generation"
     },
-    "era": "alapai",
+    "era": "kakuhihewa",
     "where": [
       {
         "place": "kailua-oahu",
@@ -429,18 +694,6 @@
       {
         "place": "kualoa",
         "role": "sacred land"
-      },
-      {
-        "place": "oneawa",
-        "role": "landing"
-      },
-      {
-        "place": "naonealaa",
-        "role": "meeting"
-      },
-      {
-        "place": "mokapu",
-        "role": "canoes"
       }
     ],
     "zoom": [
@@ -448,7 +701,7 @@
       "near"
     ],
     "kind": "other",
-    "summary": "For generations the rulers of Oʻahu make Kailua, on the windward side, their favourite home. Kākuhihewa builds a great house there, his descendants live chiefly on their lands in Koʻolaupoko, and Kūaliʻi, born at Kalapawai, dies at Kailua in great old age some time before 1730. Behind the beach lie the inland ponds of Kawainui and Kaʻelepulu, ringed with loʻi and dry fields, with the heiau Ulupō above them; along Kāneʻohe Bay walled ponds line the shore, and at its head lies Kualoa, sacred to the chiefs. In 1737 Alapaʻinui of Hawaiʻi lands his army on this coast, and after fighting in Kāneʻohe he and Peleioholani, who has come from Kauaʻi to the aid of the Oʻahu chiefs, make peace on the shore of the bay.",
+    "summary": "For generations the rulers of Oʻahu make Kailua, on the windward side, their favourite home. Kākuhihewa holds his court there and builds a great house, his descendants live chiefly on their lands in Koʻolaupoko, and Kūaliʻi, born at Kalapawai, dies at Kailua in great old age about 1730. Behind the beach lie the inland ponds of Kawainui and Kaʻelepulu, ringed with loʻi and dry fields, with the heiau Ulupō above them; along Kāneʻohe Bay walled ponds line the shore, and at its head lies Kualoa, sacred to the chiefs.",
     "stops": [
       {
         "text": "Kailua is where Oʻahu’s rulers like best to live. Kākuhihewa built his great house Pamoa at Alele here, and Kūaliʻi was born at Kalapawai by the shore and grew up between Kailua and Kualoa.",
@@ -501,31 +754,16 @@
             21.512
           ]
         }
-      },
-      {
-        "text": "In 1737 Alapaʻinui of Hawaiʻi, turned back from Oʻahu’s southern shore, lands his army on the coast of Oneawa. After fighting in Kāneʻohe, he and Peleioholani meet at Naonealaʻa and end the war, the canoes lined up along the shore from Mōkapu.",
-        "place": "oneawa",
-        "zoom": "near",
-        "year": 1737,
-        "camera": {
-          "bearing": 50,
-          "pitch": 0.35,
-          "distance": 50,
-          "target": [
-            -157.772,
-            21.418
-          ]
-        }
       }
     ],
     "sources": [
       {
         "id": "fornander-v2",
-        "where": "pp. 138–139 (Alapaʻi at Oneawa and Naonealaa), 273–274 (Kākuhihewa), 278, 280n and 283 (Kūaliʻi; the kapu of Kualoa)"
+        "where": "pp. 117–118 (Lono at Kākuhihewa’s court at Kailua), 273–274 (Kākuhihewa), 278, 280n and 283 (Kūaliʻi; the kapu of Kualoa)"
       },
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "pp. 71–72 (Alapaʻi), 129 (Kualoa), 192 (Kawainui)"
+        "where": "pp. 55 (Pamoa, and the surf at Kalapawai), 129 (Kualoa), 192 (Kawainui), 369 (Kūaliʻi’s death)"
       },
       {
         "id": "thrum-annual-1907",
@@ -587,20 +825,16 @@
         "says": "Kūaliʻi was born at Kalapawai, the navel-string rite performed at the heiau of Alala; he grew up at Kailua and Kualoa (p. 278), made Kailua his favourite residence and died there “at a very advanced age” (p. 283), “some time previous to 1730” (p. 280n)."
       },
       {
+        "source": "kamakau-ruling-chiefs",
+        "says": "Kamakau has Lonoikamakahiki surf with Kākuhihewa’s son Kaʻihikapu at Kalapawai, and calls the chief’s house there Pamoa (p. 55); he gives 1730 for Kūaliʻi’s death (p. 369)."
+      },
+      {
         "source": "thrum-annual-1907",
         "says": "Thrum puts the rites at Alala for the birth of Kūaliʻi “about 1640”, and lists Upo at Kailua as “a stone paved heiau with walls ten feet high” (p. 49)."
       },
       {
         "source": "dlnr-ulupo",
         "says": "State Parks has Kākuhihewa at Kailua “in the 1400s” and Kūaliʻi “in the late 1600s”; about 1750 Kawainui was a fishpond of about 400 acres, with Kaʻelepulu and Nuʻupia nearby."
-      },
-      {
-        "source": "kamakau-ruling-chiefs",
-        "says": "The two rulers met at Naonealaʻa in Kāneʻohe “on Ka‘elo 13, 1737, corresponding to our January”, the canoes lined up from Kiʻi at Mōkapu to Naonealaʻa (p. 72)."
-      },
-      {
-        "source": "fornander-v2",
-        "says": "Alapaʻinui’s war on Oʻahu was “a mere series of skirmishes”, lasting “nearly a month” (p. 139)."
       },
       {
         "source": "nps-1992-ka-iwi",
@@ -630,6 +864,14 @@
       {
         "place": "oneawa",
         "role": "landing"
+      },
+      {
+        "place": "naonealaa",
+        "role": "meeting"
+      },
+      {
+        "place": "mokapu",
+        "role": "canoes"
       }
     ],
     "zoom": [
@@ -641,11 +883,11 @@
     "sources": [
       {
         "id": "fornander-v2",
-        "where": "pp. 136–144"
+        "where": "pp. 136–144 (pp. 138–139, Oneawa and Naonealaa)"
       },
       {
         "id": "kamakau-ruling-chiefs",
-        "where": "ch. VI, pp. 66–76 (pp. 70–72)"
+        "where": "ch. VI, pp. 66–76 (pp. 70–72, Oneawa and Naonealaʻa)"
       }
     ],
     "confidence": {
@@ -659,7 +901,28 @@
       },
       {
         "source": "kamakau-ruling-chiefs",
-        "says": "Kamakau tells of a meeting between Alapaʻi and Peleioholani at Naonealaʻa, where the two rulers agree to stay the battle (pp. 70–72)."
+        "says": "After fighting in Kāneʻohe, Alapaʻi and Peleioholani met at Naonealaʻa and agreed to stay the battle, “on Ka‘elo 13, 1737, corresponding to our January”, the canoes lined up from Kiʻi at Mōkapu to Naonealaʻa (pp. 70–72)."
+      },
+      {
+        "source": "fornander-v2",
+        "says": "Alapaʻinui’s war on Oʻahu was “a mere series of skirmishes”, lasting “nearly a month” (p. 139)."
+      }
+    ],
+    "stops": [
+      {
+        "text": "In 1737 Alapaʻinui of Hawaiʻi, turned back from Oʻahu’s southern shore, lands his army on the coast of Oneawa. After fighting in Kāneʻohe, he and Peleioholani meet at Naonealaʻa and end the war, the canoes lined up along the shore from Mōkapu.",
+        "place": "oneawa",
+        "zoom": "near",
+        "year": 1737,
+        "camera": {
+          "bearing": 50,
+          "pitch": 0.35,
+          "distance": 50,
+          "target": [
+            -157.772,
+            21.418
+          ]
+        }
       }
     ]
   },
@@ -2508,7 +2771,7 @@
     "gloss": "kuleana, a mission, a ranch, and rice",
     "when": {
       "from": "1848",
-      "to": "1882",
+      "to": "1896",
       "precision": "decade"
     },
     "era": "kauikeaouli",
@@ -2621,10 +2884,10 @@
         }
       },
       {
-        "text": "By the 1880s much of the Kāneʻohe and Heʻeia lowland is in sugar cane, and old loʻi and swamp land are in rice, as around the pond of Waikalua.",
+        "text": "By the 1880s much of the Heʻeia and Kāneʻohe lowland is in sugar cane, with rice land on the floor of Heʻeia inland of it; in 1896 the kuleana of the Waikalua swamp, round the pond, are in rice.",
         "place": "waikalua",
         "zoom": "near",
-        "year": 1882,
+        "year": 1896,
         "camera": {
           "bearing": 205,
           "pitch": 0.45,
@@ -2663,11 +2926,15 @@
       },
       {
         "id": "kipuka-rm-1140",
-        "where": "Sugar Cane, Rice land"
+        "where": "Sugar Cane, Rice land, Taro land"
       },
       {
         "id": "kipuka-rm-1936",
-        "where": "the legend"
+        "where": "the legend and the award numbers"
+      },
+      {
+        "id": "kipuka-rm-2038",
+        "where": "the rice of Kanohuluiwi, 1901"
       },
       {
         "id": "thrum-annual-1887",
@@ -2714,11 +2981,15 @@
       },
       {
         "source": "kipuka-rm-1140",
-        "says": "Jackson’s chart of August 1882 writes “Sugar Cane” across the lowland behind Heʻeia and “Rice land” beside it."
+        "says": "Jackson’s chart of August 1882 writes “Sugar Cane” across the lowland behind Heʻeia and “Rice land” inland of it, and “Taro land” across the Waikalua swamp."
       },
       {
         "source": "kipuka-rm-1936",
         "says": "Monsarrat’s map of March 1896 draws the edge of the rice over the kuleana of the Waikalua swamp: 85.25 acres of rice, 60 of them south of the main stream as far as Kawa Stream."
+      },
+      {
+        "source": "kipuka-rm-2038",
+        "says": "Dove’s plat of June 1901 for a government lease to L. Ahlo in Kanohuluiwi, Kāneʻohe, marks “15 Acres Rice excluding Kuleana”, and rice of 4.75 and 0.65 acres beside it."
       },
       {
         "source": "nps-1992-ka-iwi",
