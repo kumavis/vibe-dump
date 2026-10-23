@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-B-IBziIS.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Cmo7XMGI.css">
+    <script type="module" crossorigin src="./assets/index-WwsF6doV.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BF7y7C2t.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -59,7 +59,9 @@
           <button data-mode="hotseat">⚔️ Two players<small>one screen, take turns</small></button>
           <button data-mode="watch" id="watch">🎥 Watch the AI fight<small>sit back with snacks</small></button>
           <button id="online" class="wide">🌐 Play online<small>against a friend, who joins by your link</small></button>
+          <button id="continue" class="wide hidden">↩️ Continue your online battle<small></small></button>
         </div>
+        <p class="small replayrow"><button id="openReplay" class="link">📼 Watch a replay file</button><input id="replayFile" type="file" accept=".json,application/json" hidden /></p>
         <div class="seedrow">
           <label>Battlefield <input id="seed" type="number" min="0" max="4294967295" step="1" /></label>
           <button id="reroll">🎲 New battlefield</button>
@@ -102,6 +104,7 @@
           <button id="endBattle">End the battle</button>
         </div>
         <button id="rematch" class="hidden">Rematch</button>
+        <button id="watchReplay">📼 Watch the replay</button>
         <button id="again" class="primary">Back to the war room</button>
       </div>
     </div>
@@ -138,6 +141,16 @@
           <button id="netBack" class="primary">Back to the war room</button>
         </div>
       </div>
+    </div>
+
+    <div id="replay" class="hidden">
+      <button id="rpStart" title="Watch from the start">⏮</button>
+      <button id="rpPlay" title="Play on from here">▶</button>
+      <input id="rpAt" type="range" min="-1" max="0" step="1" value="0" aria-label="The move shown" />
+      <span id="rpLabel"></span>
+      <button id="rpLive" title="The battle as it stands">● Live</button>
+      <button id="rpSave" title="Save the battle as a replay file">💾</button>
+      <button id="rpClose" title="Put the replay away">✕</button>
     </div>
 
     <div id="netbadge" class="hidden"></div>
