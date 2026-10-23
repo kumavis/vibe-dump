@@ -3,7 +3,7 @@ import { BOARD, OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
 import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
-import { preview, q } from '../core/index.js'
+import { preview, q, stateHash } from '../core/index.js'
 import { gridSize } from '../core/nav.js'
 import { project } from '../present/mirror.js'
 import { View } from '../view/index.js'
@@ -24,7 +24,10 @@ import { Actions } from '../ui/actions.js'
 import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
+import { ReplayBar } from '../ui/replaybar.js'
 import { Flow } from './flow.js'
+import { Replay, openReplay } from './replay.js'
+import { Session } from '../match/session.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized tabletop wargame.
@@ -138,8 +141,27 @@ export function boot(location) {
       ui.toast.show(`Online play failed: ${err.message}`, 8000)
     })
   }
-  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode), online: () => goOnline('host') })
-  ui.result.wire(() => flow.back(), (more) => human.vote(more))
+  // (N3) the replay (app/replay.js): the end screen's Watch the replay, and
+  // a replay file opened from the title, watched from its start
+  const replay = new Replay({ flow, bar: new ReplayBar() })
+  flow.replay = replay
+  const watchFile = (text) => {
+    const { store, why } = openReplay(text)
+    const ses = store && new Session({ store, dev: 'replay' })
+    if (!ses?.G) {
+      ses?.close()
+      return ui.toast.show(`That replay can't be watched: ${why ?? ses.error ?? `the battle is ${ses.status}`}`, 8000)
+    }
+    flow.follow(ses, null)
+    replay.open(ses)
+    replay.fromStart()
+  }
+  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode), online: () => goOnline('host'), replay: watchFile })
+  ui.result.wire(() => flow.back(), (more) => human.vote(more), () => {
+    if (!flow.battle) return
+    replay.open(flow.battle)
+    replay.fromStart()
+  })
 
   // ── Boot ──────────────────────────────────────────────────────────────────
   // The title's table, then the frame loop (view/stage.js): each frame the
@@ -515,6 +537,12 @@ export function boot(location) {
         return online
       },
       goOnline,
+      // (N3, not promised) the replay (app/replay.js), and a replay file's
+      // text watched as the title's 📼 does (sim/lobby-rig.mjs)
+      replay,
+      watchFile,
+      // (N3, not promised) the hash of the match on the table
+      hash: () => (flow.session?.G ? stateHash(flow.session.G) : null),
       // (not promised) the HUD model last put on the page
       get hud() {
         return flow.shownHud

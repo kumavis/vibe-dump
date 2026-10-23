@@ -66,7 +66,10 @@ the commit, and add whatever the work turned up.
   and the corpus battle; it runs on real time, about a minute), and from N2
   `node sim/net-check.mjs` (names, the seed, the start's check, the lobby
   and a whole battle through a sync server) and `node sim/bundle-check.mjs`
-  (a game played alone loads no Automerge). A step
+  (a game played alone loads no Automerge), and from N3
+  `node sim/replay-check.mjs` (and `--self-test`: every corpus battle
+  scrubbed move by move, replayed from its start event for event, saved
+  and opened again, held to what a page kept). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -94,7 +97,8 @@ the commit, and add whatever the work turned up.
   units by clicks before Begin battle; `--full` without `?lowfi`), and from
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
-  rematch). A step that changes what one of them reads ports it in the same
+  rematch; from N3 the replay bar, replay files and the page that comes
+  back). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -748,7 +752,17 @@ follows N3.
   a concession racing a move no longer freezes an honest match, a bad
   lobby is never started from, guests draw their own nonces after the
   host's commitment. DESIGN's N2 notes.)
-- [ ] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
+- [x] **N3** Spectating, rejoin, scrubbing, replay export, tamper alarm.
+  (A replay bar: a page watching an online battle has it at Live, and
+  anyone gets it once a battle is over or frozen; its slider scrubs to any
+  move, ⏮ watches from the start at the page's speed and catches up with
+  a battle still going on, 💾 saves the battle's log as a replay file,
+  which the title's 📼 opens again. The tamper alarm across reloads: a page
+  keeps the entries it accepted, in IndexedDB once the document is on
+  disk, and holds the log to them when it comes back. Rejoin: "Back in the
+  battle: N moves since you were last here", and the title's Continue for
+  the last online battle still going on. `sim/replay-check.mjs` (Node), four
+  lobby-rig cases, merge-sim edges. DESIGN's N3 notes.)
 - [ ] **F6** Race selection with a mini 3D diorama of each race's figures,
   on a battle-setup panel that a mode button opens (later steps add the
   terrain, the battle size and the army to it). It makes mirror matches

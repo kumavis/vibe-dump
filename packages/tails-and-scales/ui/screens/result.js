@@ -1,6 +1,7 @@
 // The end screen (DESIGN §1.3): who won and why, worded from how the battle
 // ended (the game.over event's `why` and the rounds played: 0 for a battle
-// that ended in its deployment), and Back to the war room. app/flow.js
+// that ended in its deployment), Back to the war room, and (N3) Watch the
+// replay. app/flow.js
 // shows it as the table plays the battle's end, or, after a snap past it
 // (N2's rejoin or scrub), as the table comes to rest there.
 //
@@ -62,16 +63,23 @@ export class ResultScreen {
     $('#over').classList.add('hidden')
   }
 
-  // the vote's parts, or the end's Back to the war room
+  // the vote's parts, or the end's Back to the war room (and (N3) Watch the
+  // replay)
   parts(vote) {
     $('#overVote').classList.toggle('hidden', !vote)
     $('#overVotes').classList.toggle('hidden', !vote)
     $('#again').classList.toggle('hidden', vote)
+    $('#watchReplay').classList.toggle('hidden', vote)
   }
 
-  // Back to the war room: `back()`; (F4) the vote: `vote(more)` (app/flow.js)
-  wire(back, vote) {
+  // Back to the war room: `back()`; (F4) the vote: `vote(more)`
+  // (app/flow.js); (N3) the battle watched back: `replay()` (app/boot.js)
+  wire(back, vote, replay) {
     $('#again').onclick = back
+    $('#watchReplay').onclick = () => {
+      this.hide()
+      replay()
+    }
     $('#keepPlaying').onclick = () => vote(true)
     $('#endBattle').onclick = () => vote(false)
   }

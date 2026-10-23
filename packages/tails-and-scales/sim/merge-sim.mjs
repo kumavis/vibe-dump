@@ -1171,6 +1171,65 @@ function edges(M, it) {
     expect('a copy of an accepted entry inserted before the head it was written after is tamper (the accepted entries out of their order), never a quiet undo', A.p === st.id && B.p === A.id && f.status === 'tamper' && f.report?.moved?.[0] === B.id && f.accepted.length === 3 && !r.events.length && !r.reset, `${f.status}, ${JSON.stringify(f.report && { at: f.report.at, moved: f.report.moved, gone: f.report.gone })}, reset ${r.reset}`)
   }
   {
+    // (N3) The tamper alarm across reloads: a page keeps the entries it
+    // accepted ([id, sum], knownOf), and a Folder of its next life that
+    // keeps them (keep) holds them to the list as it holds its own: still
+    // there, as they were, in their order. An honest list keeps them,
+    // though one of them may be rejected now (a concurrent insert landed
+    // before it meanwhile); and the hold outlives a refold.
+    const st = start()
+    const f = new F.Folder({ out: null })
+    f.push(st)
+    const [A, B, C] = script.slice(0, 3).map((b) => {
+      const e = write(f, b)
+      f.push(e)
+      return e
+    })
+    const known = F.knownOf(f)
+    const life = (list) => {
+      const g = new F.Folder({ out: [] })
+      g.keep(known)
+      const r = g.sync(list)
+      return { g, r }
+    }
+    {
+      const more = write(f, script[3])
+      const { g } = life([st, env({ t: 'nope' }, s0, 'dX'), A, B, C, more])
+      expect('(N3) a page reloaded onto an honest list (its kept entries all there, an entry inserted among them, one more after) folds it as one that never left', known.length === 4 && g.status === 'live' && JSON.stringify(g.accepted) === JSON.stringify([st.id, A.id, B.id, C.id, more.id]), `${g.status}, ${JSON.stringify(g.accepted)}`)
+    }
+    for (const [how, list, key] of [
+      ['gone from the list', [st, A, C], 'gone'],
+      ['under another body', [st, A, E.decode(E.encode({ ...B, zz: 1 })), C], 'gone'],
+      ['out of its order (a copy before the head it was written after)', [st, E.decode(E.encode(C)), A, B, C], 'moved'],
+    ]) {
+      const { g, r } = life(list)
+      expect(`(N3) a kept entry ${how} as the page comes back is tamper, the match frozen before anything is folded`, g.status === 'tamper' && g.report?.[key]?.[0] === (key === 'gone' ? B.id : C.id) && !g.G && !g.accepted.length && !r.events.length, `${g.status}, ${JSON.stringify(g.report && { gone: g.report.gone, moved: g.report.moved })}, ${g.accepted.length} accepted`)
+    }
+    {
+      // seat s0's other first move, on the start's head, inserted before A:
+      // A is stale now (B and C after it), honestly
+      const X = env(script[1], s0, `d${s0}`, { p: st.id })
+      const { g } = life([st, A, B, C])
+      const r1 = g.sync([st, X, A, B, C])
+      const honest = g.status === 'live' && r1.reset && g.accepted.includes(X.id) && !g.accepted.includes(A.id)
+      // … and then A gone: accepted in the last life, rejected in this one,
+      // only the kept entries say it was there
+      g.sync([st, X, B, C])
+      expect('(N3) a kept entry rejected now (a concurrent insert before it) is no tamper; gone from the list after that refold, it is', honest && g.status === 'tamper' && g.report?.gone?.[0] === A.id, `${honest}, ${g.status}, ${JSON.stringify(g.report?.gone)}`)
+    }
+    {
+      let threw = false
+      const g = new F.Folder({ out: null })
+      g.push(st)
+      try {
+        g.keep(known)
+      } catch {
+        threw = true
+      }
+      expect('(N3) keep comes before the first fold, or it throws', threw, String(threw))
+    }
+  }
+  {
     // A Session whose store this test rewrites, its sink the page's kind:
     // handed an entry's events, it reads the Session (its match, a preview
     // of it, its accepted ids), which must be the match they lead to,
@@ -1873,7 +1932,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
         : t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
-          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move`
+          : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move, (N3) kept entries held across a reload (honest, gone, replaced, out of order, rejected then gone)`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`
           : `ok   ${x.peers} peers agree: ${x.accepted} accepted, ${x.rejected} refused${x.conceded ? ', conceded' : ''}; ${x.refolds} inserts before folded entries, ${x.resets} resets${x.undone ? ` (${x.undone} undone)` : ''}${x.reacted ? `; sent from events ${x.reacted.events}, reset ${x.reacted.reset}, settled ${x.reacted.settled}, dropped ${x.reacted.dropped} (${x.reacted.written} written, ${x.reacted.drops} dropped)` : ''}`
       : `FAIL ${r.error}`}`)
@@ -1955,7 +2014,7 @@ const MUTANTS = {
   // anyone's start begins an online log
   'any-start': ['match/fold.js', "if (e.t === 'start' && (this.openBy === null || e.d === this.openBy)) return this.begin(e)", "if (e.t === 'start') return this.begin(e)"],
   // an accepted entry may vanish from the list unnoticed
-  'no-tamper': ['match/fold.js', 'if (gone.length || moved.length) {', 'if (false) {'],
+  'no-tamper': ['match/fold.js', 'if (lost.gone.length || lost.moved.length) {', 'if (false) {'],
   // a seat's desync entry is taken and the match plays on
   'desync-ignored': ['match/fold.js', "      this.accept(e)\n      return this.halt('desync', ", "      return this.accept(e)\n      this.halt('desync', "],
   // no turn check: a seat not waited on is judged by legal() alone
@@ -1994,7 +2053,7 @@ const MUTANTS = {
   'final-said-forever': ['match/session.js', '    this.saidAt = at\n', ''],
   'over-ignores-hash': ['match/fold.js', '      if (e.h !== undefined && e.p === this.last && e.t !== \'concede\' && seat?.ctrl === \'human\' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)\n', ''],
   // tamper by ids alone: another body under an accepted id refolds silently
-  'tamper-by-id': ['match/fold.js', 'const gone = this.accepted.filter((id) => !now.has(id) || !same(now.get(id).e, was.get(id).e))', 'const gone = this.accepted.filter((id) => !now.has(id))'],
+  'tamper-by-id': ['match/fold.js', 'hold(this.accepted, (id, e) => same(e, was.get(id).e))', 'hold(this.accepted, () => true)'],
   // a charge's end taken for a simultaneous decision: written and folded
   // with no hash (§0.2 #3 requires one)
   'chargeEnd-simultaneous': ['match/fold.js', "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit'])", "export const SIMULTANEOUS = Object.freeze(['deploy', 'roundLimit', 'chargeEnd'])"],
@@ -2028,7 +2087,18 @@ const MUTANTS = {
   'core-newer-only': ['match/fold.js', 'if (e.core !== CORE_VERSION || e.rules !== RULES_ID) {', 'if (e.core > CORE_VERSION || e.rules !== RULES_ID) {'],
   // tamper by content alone: a copy inserted before its own head undoes
   // the entry quietly
-  'tamper-ignores-order': ['match/fold.js', 'if (gone.length || moved.length) {', 'if (gone.length) {'],
+  'tamper-ignores-order': ['match/fold.js', 'if (lost.gone.length || lost.moved.length) {', 'if (lost.gone.length) {'],
+  // (N3) the entries kept from a page's earlier life never held to the list
+  'known-ignored': ['match/fold.js', '    if (this.known) {\n      const sums', '    if (false) {\n      const sums'],
+  // … held as the list is first folded only, never at a refold
+  'known-first-only': ['match/fold.js', '    if (this.known) {\n      const sums', '    if (this.known && !n) {\n      const sums'],
+  // … dropped by a refold (the refold's fresh Folder keeps none)
+  'known-lost-on-refold': ['match/fold.js', 'syncing: true, known: this.known })', 'syncing: true })'],
+  // … held by their ids alone, another body under one passing
+  'known-by-id': ['match/fold.js', '(id, e) => sumOf(e) === sums.get(id)', '() => true'],
+  // … the list folded as it stands first, the kept entries looked at only
+  // from the second sync on
+  'known-late': ['match/fold.js', 'if (prefix && (n || !this.known)) {', 'if (prefix) {'],
   // a human seat may name a device no entry can carry: the match waits on
   // it for ever
   'long-device-seated': ['match/fold.js', "x?.ctrl === 'human' && !isName(x.dev)", "x?.ctrl === 'human' && (typeof x.dev !== 'string' || !x.dev)"],
@@ -2072,7 +2142,7 @@ const MUTANTS = {
   // the refold is swapped in only after it is shown: a sink handed its
   // events reads the old match (or none)
   'late-swap': ['match/fold.js', `      if (next.G) Object.assign(next.G, { out: this.opts.out ? [] : null, onTrace: this.opts.onTrace })
-      Object.assign(this, { ...next, opts: this.opts, syncing: true })
+      Object.assign(this, { ...next, opts: this.opts, syncing: true, known: this.known })
     }
     if (!old.length) show()
     for (let i = from; i < N; i++) {
@@ -2109,7 +2179,7 @@ const MUTANTS = {
     }
     const reset = !showing
     if (reset) show()
-    Object.assign(this, { ...next, opts: this.opts, syncing: true })
+    Object.assign(this, { ...next, opts: this.opts, syncing: true, known: this.known })
 `],
 }
 

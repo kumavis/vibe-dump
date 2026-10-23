@@ -19,4 +19,9 @@ export class Banner {
     el.classList.add('show')
     await wait(seconds)
   }
+
+  // (N3) gone at once: a replay's jump to another move
+  hide() {
+    this.el.classList.remove('show')
+  }
 }

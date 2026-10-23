@@ -1026,3 +1026,77 @@ table.wt th {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── (N3) The replay bar ─────────────────────────────────────────────── */
+#replay {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  /* (over the end screen, which a replay's end puts up again) */
+  z-index: 31;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(640px, calc(100vw - 24px));
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+}
+#replay.hidden,
+#replay .hidden,
+#watchReplay.hidden,
+#continue.hidden {
+  display: none;
+}
+#replay button {
+  padding: 5px 9px;
+  flex: none;
+}
+#replay input[type="range"] {
+  flex: 1;
+  min-width: 60px;
+  accent-color: var(--gold);
+}
+#rpLabel {
+  flex: none;
+  min-width: 108px;
+  font-size: 12px;
+  color: var(--dim);
+  text-align: center;
+}
+#rpLive.on {
+  color: #ff6b5e;
+  border-color: #ff6b5e;
+}
+/* (the toast clears the bar) */
+body.replaying #toast {
+  bottom: 70px;
+}
+.replayrow {
+  margin-top: 6px;
+}
+button.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--dim);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+button.link:hover {
+  color: var(--gold);
+}
+@media (max-width: 600px) {
+  #replay {
+    bottom: 8px;
+    gap: 5px;
+    padding: 5px 6px;
+  }
+  #rpLabel {
+    min-width: 0;
+    font-size: 11px;
+  }
+}

@@ -34,6 +34,12 @@
 // and snaps past one of over 30 s. A refold that undoes moves shown (a
 // concurrent insert, §2.6) snaps the table, keeps the battle log (made again)
 // and says "History changed".
+//
+// (N3) The table may show another Session than the battle's own: a replay
+// (app/replay.js) of the battle's first moves, a scrub to one of them, or
+// a replay from its very start; the battle's own Session (`battle`) goes
+// on folding meanwhile, its status still heard (online), and the table
+// comes back to it as it then stands.
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { edgeOf } from '../core/match.js'
@@ -100,6 +106,12 @@ export class Flow {
     // setup, so nothing carries over from one battle to the next.
     this.session = null
     this.G = null
+    // (N3) the battle's own Session: the one shown, but while a replay
+    // shows another (show, showStart); and the replay (app/replay.js), which
+    // app/boot.js hands the flow, told when the table idles and closed when
+    // the battle is left
+    this.battle = null
+    this.replay = null
     // The table the title screen shows (showTable): a match on the board
     // seed that is never played. Both its seats are human, so it stops at
     // its deployment having drawn nothing; it is only drawn (its board, and
@@ -184,7 +196,10 @@ export class Flow {
       // backlog it left (the fold is synchronous, so nothing played
       // meanwhile; a snap here is to the match the whole change leads to)
       settled: (ses) => {
+        if (ses !== this.battle) return
         if (this.online) this.catchUp(ses)
+        this.online?.settled?.(ses)
+        this.replay?.render()
       },
       // The match folded again, some of what was shown undone (a concurrent
       // insert into an online log, §2.6's sync: never in a game played
@@ -344,6 +359,7 @@ export class Flow {
     this.human.idled()
     this.refreshUI()
     tl?.settled()
+    this.replay?.idled()
   }
 
   // A snap has made the table from match G: the HUD's state derived from it
@@ -432,6 +448,7 @@ export class Flow {
     const next = createMatch({ board, dice: 0, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: null })
     this.session?.close()
     this.session = null
+    this.battle = null
     this.G = null
     this.backdrop = next
     this.backdropAsDrawn = true
@@ -475,7 +492,9 @@ export class Flow {
     // playable
     if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
     const who = MODES[mode]
-    // (an online match followed is left: a battle here is played alone)
+    // (an online match followed is left: a battle here is played alone; a
+    // replay shown is closed)
+    this.replay?.close()
     if (this.online) this.leaveOnline()
     // (a battle starts on a fresh table: a second start without the end
     // screen's Back would find the last battle's on show)
@@ -513,6 +532,7 @@ export class Flow {
     this.player.snap(this.backdrop, onTitle(this.backdrop))
     const store = new LocalStore()
     this.session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), dev: DEVICE, sink: this.sink, onTrace: this.onTrace })
+    this.battle = this.session
     this.session.start(setup)
     if (this.session.status !== 'live' && this.session.status !== 'over') {
       // no battle (a start the core refused leaves the log in its lobby):
@@ -538,14 +558,17 @@ export class Flow {
   // made, quietly: its events went nowhere), its match begun: the table
   // drawn afresh for its setup and snapped to the match as it stands, the
   // battle log made again from its entries, and its events played from here
-  // on (the flow's sink). `online`: { status(status, session), leave() }
+  // on (the flow's sink). `online`: { status(status, session),
+  // settled(session) ((N3) a change folded: what the page keeps), leave() }
   // (app/online.js's).
   follow(session, online) {
     const { view, ui, human } = this
     const G = session.G
+    this.replay?.close()
     if (this.online) this.leaveOnline()
     this.showTable(G.setup.board, tableOf(G.setup))
     this.session = session
+    this.battle = session
     this.G = G
     this.S.control = G.setup.seats.map((s) => s.ctrl)
     this.seatPlayers(seatsOf(G.setup.seats.map((s) => s.race)))
@@ -565,14 +588,77 @@ export class Flow {
 
   // A fresh table for the Session's match (its setup's), the Session kept.
   redraw() {
-    const ses = this.session
+    const ses = this.session, battle = this.battle
     this.session = null
     try {
       this.showTable(ses.G.setup.board, tableOf(ses.G.setup))
     } finally {
       this.session = ses
+      this.battle = battle
       this.G = ses.G
     }
+  }
+
+  // ── Another Session on the table (N3) ───────────────────────────────────
+  // The Session shown hands over to `session` (a replay's, or the battle's
+  // own again: app/replay.js). The one it was, if it is the battle's own,
+  // goes on folding with no table: its status and what the page keeps
+  // still heard (online: the online page's hooks), and the replay's bar
+  // told as it moves on; any other is let go of.
+  hand(session) {
+    const was = this.session
+    if (!was || was === session) return
+    if (was !== this.battle) was.close()
+    else {
+      was.sink = {
+        status: (st, ses) => this.online?.status?.(st, ses),
+        settled: (ses) => {
+          this.online?.settled?.(ses)
+          this.replay?.render()
+        },
+      }
+    }
+  }
+
+  // A Session's match on the table, on the battle's own table (the same
+  // setup: no new one is drawn): snapped to it as it stands, its battle log
+  // made again, its events played from there on. The end screen, up for
+  // the match shown before, goes (a snap past the end puts it up again).
+  show(session) {
+    this.hand(session)
+    this.session = session
+    this.G = session.G
+    session.sink = this.sink
+    this.acted.length = 0
+    this.ui.result.hide()
+    this.ui.banner.hide()
+    this.ui.tray.hide()
+    this.traceListener?.rejoin?.(session.G)
+    this.player.snap(session.G, project(session.G))
+    this.relog(session.folder.pushed)
+    this.refreshUI()
+  }
+
+  // A replay from the very start of `setup`'s battle: its table as it stood
+  // before anything happened (drawn afresh, as start() draws one), and
+  // `session`, whose store holds no start yet, shown on it: the start's
+  // events, once it is written there, play on from there, as a battle's do.
+  showStart(session, setup) {
+    this.hand(session)
+    // (the table drawn afresh lets go of the Session shown: none is now)
+    this.session = null
+    const battle = this.battle
+    this.showTable(setup.board, tableOf(setup))
+    this.battle = battle
+    this.ui.result.hide()
+    this.ui.banner.hide()
+    this.seatPlayers(seatsOf(setup.seats.map((x) => x.race)))
+    this.traceListener?.begin()
+    this.acted.length = 0
+    this.player.snap(this.backdrop, onTitle(this.backdrop))
+    this.session = session
+    session.sink = this.sink
+    this.refreshUI()
   }
 
   // The online match left: app/online.js lets go of its document.
@@ -614,6 +700,7 @@ export class Flow {
   // Back to the war room (the end screen's button): the title, its orbit,
   // and its table drawn afresh (an online match left).
   back() {
+    this.replay?.close()
     if (this.online) this.leaveOnline()
     this.ui.result.hide()
     this.ui.title.show()

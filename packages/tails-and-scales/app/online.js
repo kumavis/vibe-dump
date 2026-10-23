@@ -41,8 +41,17 @@
 // The device: localStorage['ts.dev'], unless the tab was opened with
 // `&dev=<id>` (Open second tab: the other seat from the same browser; a
 // "continue on another device" link), kept for the tab in sessionStorage.
+//
+// (N3) Across reloads. The page keeps the entries its match accepted
+// (net/kept.js, in IndexedDB, written once the repo has the document on
+// disk), and a page that comes back holds the log to them (the Folder's
+// keep: an entry it had played that is gone, changed or out of its place
+// is tamper, as it is within a page's life); it says how many moves came
+// while it was away. And the last online battle this browser was in is
+// noted (localStorage['ts.last']), so the title offers to continue it
+// (ui/screens/title.js) without the link.
 import { Session } from '../match/session.js'
-import { SIMULTANEOUS } from '../match/fold.js'
+import { SIMULTANEOUS, knownOf } from '../match/fold.js'
 import { stateHash, createMatch, CORE_VERSION, RULES_ID } from '../core/index.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
@@ -53,7 +62,7 @@ import { NetBadge } from '../ui/netbadge.js'
 // the net layer, once loaded (loadNet): every module's exports in one
 const N = {}
 export async function loadNet() {
-  if (!N.loaded) Object.assign(N, ...(await Promise.all([import('../net/repo.js'), import('../net/automerge-store.js'), import('../net/lobby.js'), import('../net/ids.js'), import('../net/seed.js'), import('../net/presence.js')])), { loaded: true })
+  if (!N.loaded) Object.assign(N, ...(await Promise.all([import('../net/repo.js'), import('../net/automerge-store.js'), import('../net/lobby.js'), import('../net/ids.js'), import('../net/seed.js'), import('../net/presence.js'), import('../net/kept.js')])), { loaded: true })
   return N
 }
 
@@ -159,7 +168,7 @@ export class Online {
     let handle
     try {
       const { repo, ws } = await N.openRepo(this.sync)
-      this.ws = ws
+      Object.assign(this, { repo, ws })
       handle = await repo.find(id)
     } catch (err) {
       if (gen === this.gen) this.screen.note(`Match not found; is the host online? (${err.message})`)
@@ -177,7 +186,7 @@ export class Online {
     this.screen.note('Setting up the battle…')
     const { repo, ws } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
-    this.ws = ws
+    Object.assign(this, { repo, ws })
     const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, rounds: MISSIONS.classic.rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
     this.id = handle.documentId
@@ -417,6 +426,8 @@ export class Online {
     const [open, start] = ses.accepted.slice(0, 2).map(byId)
     const readied = this.readied().filter((r) => r.commit === open?.commit)
     const why = await N.verifyStart({ open, start, documentId: this.id, mine: { dev: this.dev, readied } })
+    // (N3) what this page kept of the match in an earlier life, if any
+    const had = await N.loadKept(this.id)
     if (gen !== this.gen) return
     this.from?.off('change', this.onFrom)
     this.from = null
@@ -425,15 +436,67 @@ export class Online {
     ses.close()
     this.lobbySes = null
     this.readOnly = why
-    this.play = new Session({ store: this.store, localSeats, dev: this.dev, rand: () => N.randomId(4), onTrace: this.flow.onTrace, closing: true })
+    this.play = new Session({ store: this.store, localSeats, dev: this.dev, rand: () => N.randomId(4), onTrace: this.flow.onTrace, closing: true, known: had?.known })
     this.screen.hide()
-    this.flow.follow(this.play, { status: (st) => this.frozen(st), leave: () => this.close() })
+    if (!this.play.G) {
+      // (N3) the log lost an entry this page had played before it came
+      // back: frozen before anything was folded, no match to show
+      const [title, say] = (FROZEN[this.play.status] ?? FROZEN.tamper)(this.play.report)
+      this.dialog.show({ title, why: say, report: this.reportOf(this.play), back: () => this.leave() })
+      return
+    }
+    this.flow.follow(this.play, { status: (st) => this.frozen(st), settled: () => this.keepSoon(), leave: () => this.close() })
+    // (N3) a page with no seat in it watches: the replay bar, at Live
+    if (!localSeats.length) this.flow.replay?.open(this.play, { live: true })
     if (why) this.dialog.show({ title: 'Watching only', why: `${why}. This page won't play a seat in this battle, though you can watch it.`, watch: () => {}, back: () => this.flow.back() })
     // (a page that kept no record of readying, another browser opened with
     // the seat's link: it plays the seat as the start set it, and says so)
     else if (!readied.length && localSeats.length) this.flow.ui.toast?.show(`Playing seat ${localSeats[0] + 1} as the battle's start set it (this browser kept no record of readying it)`, 8000)
+    // (N3) back in a battle this page was in before
+    else if (had) {
+      const since = this.play.accepted.length - had.n
+      this.flow.ui.toast?.show(since > 0 ? `Back in the battle: ${since} move${since === 1 ? '' : 's'} since you were last here` : 'Back in the battle', 5000)
+    }
     this.frozen(this.play.status)
     this.followed()
+    this.keepSoon()
+  }
+
+  // (N3) What this page keeps of its match (net/kept.js): soon after a
+  // change settles, once the repo has the document on disk, the entries
+  // accepted (never a log found tampered with: what was kept stands).
+  keepSoon() {
+    clearTimeout(this.keepTimer)
+    this.keepTimer = setTimeout(() => this.keep(), 800)
+  }
+  async keep() {
+    const ses = this.play, id = this.id, repo = this.repo
+    if (!ses?.G || ses.status === 'tamper') return
+    this.sums ??= new Map()
+    const known = knownOf(ses.folder, this.sums)
+    try {
+      await repo.flush([id])
+    } catch {
+      return
+    }
+    await N.saveKept(id, { known, n: known.length, at: Date.now() })
+    this.note()
+  }
+
+  // (N3) The last online battle this browser was in, for the title's
+  // Continue: its link's parts, how it stands, and who it is against.
+  note() {
+    const ses = this.play
+    if (!ses?.G || !this.id) return
+    const G = ses.G, me = ses.localSeats[0] ?? -1
+    const them = me >= 0 ? G.setup.seats[1 - me]?.name : null
+    kept.set('ts.last', JSON.stringify({ id: this.id, dev: this.dev, sync: this.sync === N.DEFAULT_SYNC ? null : this.sync, status: ses.status, round: G.turn.round, seat: me, vs: them ?? null, at: Date.now() }))
+  }
+
+  // a frozen match's report: the Folder's, the log's raw texts, and where
+  // and when
+  reportOf(ses) {
+    return { ...ses.report, texts: JSON.parse(this.store.export()), url: location.href, agent: navigator.userAgent, at: new Date().toISOString(), core: CORE_VERSION, rules: RULES_ID, device: this.dev }
   }
 
   // a frozen match's dialog (a status that isn't live or over)
@@ -442,8 +505,8 @@ export class Online {
     if (!ses || !FROZEN[status] || this.saidFrozen === status) return this.followed()
     this.saidFrozen = status
     const [title, why] = FROZEN[status](ses.report)
-    const report = { ...ses.report, texts: JSON.parse(this.store.export()), url: location.href, agent: navigator.userAgent, at: new Date().toISOString(), core: CORE_VERSION, rules: RULES_ID, device: this.dev }
-    this.dialog.show({ title, why, report, watch: () => {}, back: () => this.flow.back() })
+    // (N3) Keep watching: the battle as it stood, with the replay bar
+    this.dialog.show({ title, why, report: this.reportOf(ses), watch: () => this.flow.replay?.open(ses), back: () => this.flow.back() })
     this.followed()
   }
 
@@ -483,7 +546,8 @@ export class Online {
     const ses = this.play, M = this.flow.player.mirror, overlay = this.flow.view.overlay
     const them = live.find((p) => p.seat >= 0 && !ses.localSeats.includes(p.seat) && p.sel !== undefined)
     const at = them && M.units?.[them.sel]
-    if (!at || at.alive === false || ses.status !== 'live') return overlay.peer(null)
+    // (none on a replay's table: N3)
+    if (!at || at.alive === false || ses.status !== 'live' || this.flow.session !== ses) return overlay.peer(null)
     const to = them.tg !== undefined && M.units?.[them.tg]?.alive !== false ? M.units?.[them.tg]?.pos ?? null : null
     overlay.peer({ x: at.pos.x, z: at.pos.z, r: at.r }, to, this.flow.sides[them.seat]?.color ?? '#ffffff')
   }
@@ -567,13 +631,14 @@ export class Online {
   close() {
     this.gen++
     clearInterval(this.tick)
+    clearTimeout(this.keepTimer)
     this.from?.off('change', this.onFrom)
     this.from = null
     this.presence?.stop()
     this.handle?.off('change', this.onDoc)
     this.lobbySes?.close()
     this.store?.close()
-    Object.assign(this, { presence: null, lobbySes: null, play: null, store: null, handle: null, id: null, beginning: false, starting: false, saidFrozen: null, readOnly: null, claimed: null, lost: null, hashed: null, shown: null, problemOf: null, refused: null })
+    Object.assign(this, { presence: null, lobbySes: null, play: null, store: null, handle: null, id: null, beginning: false, starting: false, saidFrozen: null, readOnly: null, claimed: null, lost: null, hashed: null, shown: null, problemOf: null, refused: null, sums: null })
     this.badge.hide()
     this.screen.hide()
     this.dialog.hide()

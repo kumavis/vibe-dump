@@ -52,6 +52,22 @@
 //   continue     another browser opens a seat's link (`&dev=`) after the
 //                start, with no record of readying it: it plays the seat, and
 //                says so, rather than watching a battle that then waits on it
+//   (N3)
+//   scrub        a page watching a battle going on has the replay bar, at
+//                Live; the slider scrubs to a move (the table the match as it
+//                stood after it, by its hash), moves landing meanwhile are
+//                folded but not shown, and Live shows the battle as it stands
+//   replay       the watching page's ⏮ plays the battle from its start, a
+//                move at a time, moves landing meanwhile played too, and
+//                comes back to Live, the battle log the match's
+//   files        a seated page, its battle over: Watch the replay, then 💾
+//                downloads the battle's whole log; a fresh page opens it from
+//                the title (📼) and plays it to the same match and log
+//   kept         a seated page that comes back (a reload) says so; the title
+//                offers to continue its battle (Continue), which takes it
+//                back to its seat; and a log that lost an entry the page had
+//                played while it was away (its own copy of the document set
+//                aside) is tamper, said before anything is shown
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -78,9 +94,10 @@ import { Session } from '../match/session.js'
 import { Folder } from '../match/fold.js'
 import { envelope, encode, decode } from '../match/envelope.js'
 import { commitOf } from '../net/seed.js'
+import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -174,6 +191,44 @@ async function runCases(dist, cases) {
     }
     return lines
   }
+  // (N3) the battle's moves as a replay takes them (its accepted entries, in
+  // order), the match's hash after the k-th, and the match's own
+  const refOf = (store) => {
+    const f = new Folder({ out: null })
+    for (const e of store.entries()) f.push(e)
+    const moves = f.acceptedEntries()
+    const hashAt = (k) => {
+      const g = new Folder({ out: null })
+      for (const e of moves.slice(0, k + 1)) g.push(e)
+      return g.G ? stateHash(g.G) : null
+    }
+    return { moves, hashAt, hash: f.G ? stateHash(f.G) : null }
+  }
+  // (N3) a battle made in Node through the same server, played on by both
+  // seats' devices until `stop`: { repo, handle, store, setup, a, d0, d1 }
+  const battle = async (stop) => {
+    const repo = new Repo({ network: [new WebSocketClientAdapter(sync.url, 200)] })
+    const d0 = 'seatzero', d1 = 'seatoneo'
+    const { handle, setup, a } = await makeMatch(repo, { host: 'hosthost', seats: [{ dev: d0, name: 'Ann', race: 'squirrel' }, { dev: d1, name: 'Ben', race: 'serpent' }], overtime: 'never', AutomergeStore })
+    const store = new AutomergeStore(handle)
+    for (const x of autoplay(store, setup, { stop })) x?.close()
+    return { repo, handle, store, setup, a, d0, d1 }
+  }
+  // (N3) how many accepted entries the page keeps for match `id`
+  // (net/kept.js's IndexedDB)
+  const keptN = (page, id) => page.evaluate((id) => new Promise((res) => {
+    const r = indexedDB.open('tails-and-scales-kept')
+    r.onerror = () => res(-1)
+    r.onsuccess = () => {
+      try {
+        const g = r.result.transaction('matches').objectStore('matches').get(id)
+        g.onsuccess = () => res(g.result?.n ?? 0)
+        g.onerror = () => res(-1)
+      } catch {
+        res(-1)
+      }
+    }
+  }), id)
   // seat 0's say from another tab of its device, inserted at place k (as a
   // concurrent change from a higher actor lands), on the head that opened
   // the vote
@@ -469,6 +524,153 @@ async function runCases(dist, cases) {
         await repo.shutdown?.().catch(() => {})
       }
     },
+
+    async scrub() {
+      const { repo, handle, store, setup } = await battle((G) => G.turn.round >= 3)
+      try {
+        const page = await open(`#m=${handle.documentId}`)
+        await live(page)
+        await until(page, () => !document.querySelector('#replay').classList.contains('hidden') && window.__ts.replay.open && document.querySelector('#rpLive.on'), null, 20000, 'the replay bar at Live on the watching page')
+        const ref = refOf(store)
+        const k = Math.floor(ref.moves.length / 2)
+        // the slider, as a hand lets go of it
+        await page.evaluate((k) => {
+          const s = document.querySelector('#rpAt')
+          s.value = k
+          s.dispatchEvent(new Event('change'))
+        }, k)
+        await until(page, (k) => window.__ts.replay.k === k && window.__ts.session !== window.__ts.net.play && window.__ts.player.idle, k, 20000, `the scrub to move ${k}`)
+        const at = await page.evaluate(() => ({ hash: window.__ts.hash(), label: document.querySelector('#rpLabel').textContent }))
+        must(at.hash === ref.hashAt(k), `the scrub to move ${k} shows the match as it stood after it (${at.label})`)
+        // moves land meanwhile: folded by the battle's own Session, the
+        // table where it was
+        for (const x of autoplay(store, setup, { stop: (G) => G.turn.round >= 4 })) x?.close()
+        await until(page, (n) => window.__ts.net.play.accepted.length >= n, refOf(store).moves.length, 20000, 'the moves that landed folded on the page')
+        const still = await page.evaluate(() => ({ k: window.__ts.replay.k, hash: window.__ts.hash() }))
+        must(still.k === k && still.hash === ref.hashAt(k), `moves landing while scrubbed leave the table at move ${k} (${still.k})`)
+        await page.click('#rpLive')
+        await until(page, () => window.__ts.session === window.__ts.net.play && window.__ts.player.idle, null, 20000, 'Live: the battle itself')
+        const now = refOf(store)
+        const end = await page.evaluate(() => window.__ts.hash())
+        must(end === now.hash, 'Live shows the battle as it stands')
+        store.close()
+        return `scrubbed to move ${k + 1} of ${ref.moves.length}, moves landing meanwhile, then Live`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
+
+    async replay() {
+      const { repo, handle, store, setup } = await battle((G) => G.turn.round >= 3)
+      try {
+        const page = await open(`#m=${handle.documentId}`)
+        await live(page)
+        await until(page, () => window.__ts.replay.open, null, 20000, 'the replay bar on the watching page')
+        await page.click('#rpStart')
+        await until(page, () => window.__ts.replay.playing && window.__ts.session !== window.__ts.net.play, null, 20000, 'the replay playing from the start')
+        // moves land while it plays
+        for (const x of autoplay(store, setup, { stop: (G) => G.turn.round >= 4 })) x?.close()
+        await until(page, () => !window.__ts.replay.playing && window.__ts.session === window.__ts.net.play && window.__ts.player.idle, null, 90000, 'the replay back at Live')
+        const ref = refOf(store)
+        const end = await page.evaluate(() => ({ hash: window.__ts.hash(), n: window.__ts.net.play.accepted.length }))
+        must(end.hash === ref.hash && end.n === ref.moves.length, `the replay caught up with the battle and shows it (${end.n} of ${ref.moves.length} moves)`)
+        const shown = await page.evaluate(() => [...document.querySelectorAll('#logList .entry')].map((e) => e.textContent).reverse())
+        const want = logLines(store.entries()).slice(-shown.length)
+        must(shown.length > 0 && JSON.stringify(shown) === JSON.stringify(want), `the battle log after the replay is the match's (${shown.length} lines)`)
+        store.close()
+        return `${ref.moves.length} moves replayed from the start, moves landing meanwhile, back at Live`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
+
+    async files() {
+      const { repo, handle, store, a, d0 } = await battle(() => false)
+      try {
+        const page = await seatPage(handle, a, 0, d0)
+        await until(page, () => window.__ts.session.status === 'over' && !document.querySelector('#over').classList.contains('hidden') && window.__ts.player.idle, null, 60000, 'the end screen')
+        await page.click('#watchReplay')
+        await until(page, () => window.__ts.replay.playing, null, 20000, 'Watch the replay playing')
+        await until(page, () => !window.__ts.replay.playing && window.__ts.player.idle, null, 90000, 'the replay at its end')
+        const [dl] = await Promise.all([page.waitForEvent('download', { timeout: 20000 }), page.click('#rpSave')])
+        const text = readFileSync(await dl.path(), 'utf8')
+        const file = JSON.parse(text)
+        must(file.replay === 'tails-and-scales' && JSON.stringify(file.log) === store.export(), `💾 saves the battle's whole log (${file.log?.length} entries; the log ${store.length})`)
+        // a fresh page opens it from the title
+        const other = await open()
+        await other.setInputFiles('#replayFile', { name: dl.suggestedFilename(), mimeType: 'application/json', buffer: Buffer.from(text) })
+        await until(other, () => window.__ts.replay.open && window.__ts.replay.playing, null, 20000, 'the replay file playing on a fresh page')
+        await until(other, () => !window.__ts.replay.playing && window.__ts.player.idle, null, 90000, 'the replay file at its end')
+        const ref = refOf(store)
+        const end = await other.evaluate(() => window.__ts.hash())
+        const shown = await other.evaluate(() => [...document.querySelectorAll('#logList .entry')].map((e) => e.textContent).reverse())
+        must(end === ref.hash && JSON.stringify(shown) === JSON.stringify(logLines(store.entries()).slice(-shown.length)), 'the replay file plays to the same match and battle log')
+        store.close()
+        return `the replay watched, saved (${file.log.length} entries) and opened again from the title`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
+
+    async kept() {
+      const { repo, handle, store, setup, a, d0 } = await battle((G) => G.turn.round >= 2)
+      try {
+        const id = handle.documentId, url = `${base}#m=${id}&dev=${d0}`
+        const page = await seatPage(handle, a, 0, d0)
+        const ctx = page.context()
+        const n = await page.evaluate(() => window.__ts.net.play.accepted.length)
+        await until(page, (n) => window.__ts.net && window.__ts.net.play.accepted.length === n, n, 5000, 'the page settled')
+        const t0 = Date.now()
+        while ((await keptN(page, id)) < n && Date.now() - t0 < 20000) await sleep(200)
+        must((await keptN(page, id)) >= n, `the page keeps the ${n} entries it accepted`)
+        await page.close()
+        // back after moves landed: it says so
+        for (const x of autoplay(store, setup, { stop: (G) => G.turn.round >= 3 })) x?.close()
+        const back = await ctx.newPage()
+        back.on('pageerror', (e) => errors.push(`${e.message}`))
+        await back.goto(url)
+        await live(back)
+        await until(back, () => /^Back in the battle/.test(document.querySelector('#toast').textContent), null, 20000, 'the toast "Back in the battle"')
+        const said = await back.$eval('#toast', (e) => e.textContent)
+        await sleep(1500)
+        await back.close()
+        // the title offers to continue it, and takes the page back to its seat
+        const title = await ctx.newPage()
+        title.on('pageerror', (e) => errors.push(`${e.message}`))
+        await title.goto(base)
+        await until(title, () => window.__ts && !document.querySelector('#continue').classList.contains('hidden'), null, 20000, 'Continue on the title')
+        const offer = await title.$eval('#continue', (e) => e.textContent)
+        await title.click('#continue')
+        await live(title)
+        const seats = await title.evaluate(() => window.__ts.session.localSeats.join())
+        must(seats === '0' && /against Ben/.test(offer), `Continue ("${offer}") takes the page back to its seat (seats ${seats})`)
+        await sleep(1500)
+        await title.close()
+        // an entry the page played, gone from the log while it was away, its
+        // own copy of the document set aside (as a browser that kept only
+        // what it played would load it from the server)
+        const gone = store.entries().findIndex((e, i) => i > 2 && !e.bad && e.t !== 'final')
+        handle.change((d) => d.log.deleteAt(gone))
+        await sleep(1500)
+        const blank = await ctx.newPage()
+        await blank.goto(base)
+        await blank.evaluate(() => new Promise((r) => {
+          const q = indexedDB.deleteDatabase('tails-and-scales')
+          q.onsuccess = q.onerror = q.onblocked = () => r()
+        }))
+        await blank.close()
+        const again = await ctx.newPage()
+        again.on('pageerror', (e) => errors.push(`${e.message}`))
+        await again.goto(url)
+        await until(again, () => !document.querySelector('#netdialog').classList.contains('hidden') && /log was changed/.test(document.querySelector('#netTitle').textContent), null, 30000, 'the tamper dialog on the page that came back')
+        const st = await again.evaluate(() => ({ status: window.__ts.net.play?.status, G: !!window.__ts.net.play?.G }))
+        must(st.status === 'tamper' && !st.G, `the log that lost an entry the page played is tamper, before any match is shown (${JSON.stringify(st)})`)
+        store.close()
+        return `"${said}", Continue back to the seat, and a log changed while away is tamper`
+      } finally {
+        await repo.shutdown?.().catch(() => {})
+      }
+    },
   }
 
   const out = {}
@@ -521,6 +723,20 @@ const MUTANTS = {
   'no-record-watches': ['continue', 'net/seed.js', '  if (!readied.length) return null\n', ''],
   // no snap past a backlog: the page plays every event (2 or 4 times as fast)
   'no-catch-up-snap': ['catch-up', 'app/flow.js', '    if (behind > 30) {', '    if (false) {'],
+  // (N3) a watching page gets no replay bar
+  'no-watch-bar': ['scrub', 'app/online.js', '    if (!localSeats.length) this.flow.replay?.open(this.play, { live: true })\n', ''],
+  // the scrub shows the battle itself, wherever the slider is
+  'scrub-shows-battle': ['scrub', 'app/replay.js', '    if (ses.G) this.flow.show(ses)\n', '    if (ses.G) this.flow.show(this.battle)\n'],
+  // a replay of a battle going on stops at its last move, never Live
+  'replay-stops': ['replay', 'app/replay.js', '        if (this.isLive) return this.live()\n', ''],
+  // the end screen's Watch the replay does nothing
+  'no-end-replay': ['files', 'app/boot.js', '    replay.open(flow.battle)\n    replay.fromStart()\n', ''],
+  // the title's replay file never read
+  'file-unread': ['files', 'ui/screens/title.js', '      if (f) replay(await f.text())\n', ''],
+  // the page keeps nothing of what it accepted across a reload
+  'kept-unused': ['kept', 'app/online.js', 'closing: true, known: had?.known })', 'closing: true })'],
+  // the title never offers to continue
+  'no-continue': ['kept', 'app/online.js', '    await N.saveKept(id, { known, n: known.length, at: Date.now() })\n    this.note()\n', '    await N.saveKept(id, { known, n: known.length, at: Date.now() })\n'],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

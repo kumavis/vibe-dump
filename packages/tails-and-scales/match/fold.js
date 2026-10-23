@@ -37,6 +37,14 @@
 //   folder.sync(entries, each)  fold the store's list as it now stands:
 //                         → { events, reset } (below); not reentrant (it
 //                         throws when `each` asks for another fold)
+//   folder.keep(known)    (N3) the entries this page accepted in an earlier
+//                         life (a reload), [[id, sum], …] in fold order
+//                         (knownOf): held to the list as an entry accepted
+//                         in this Folder's life is (sync, below), across
+//                         reloads; given before the first sync
+//   folder.acceptedEntries()  (N3) the accepted entries, decoded, in fold
+//                         order: the first k fold to the match as it stood
+//                         after its k-th (a scrub, a replay: app/replay.js)
 //
 // Per entry the Folder does the checks below, stateHash where one seat is
 // waited on, legal() and apply(), and O(1) besides; per sync, one pass of
@@ -134,6 +142,20 @@ const closed = ({ id, heads, seats }) => cyrb53(JSON.stringify(seats.map((s) => 
 // one entry of a store's list is still the entry folded at that place
 const same = (a, b) => a === b || (!!a && !!b && a.id === b.id && JSON.stringify(a) === JSON.stringify(b))
 
+// (N3) an entry's content, as a page keeps it across reloads (keep, below):
+// a digest of the decoded entry, so another body under its id differs
+export const sumOf = (e) => cyrb53(JSON.stringify(e)).toString(36)
+
+// (N3) what a page keeps of a Folder's accepted entries: [id, sum] in fold
+// order (`sums`: a cache of sums by id, the caller's, so each entry is
+// summed once over a match)
+export function knownOf(folder, sums = new Map()) {
+  return folder.acceptedEntries().map((e) => {
+    if (!sums.has(e.id)) sums.set(e.id, sumOf(e))
+    return [e.id, sums.get(e.id)]
+  })
+}
+
 export class Folder {
   constructor({ out = null, onTrace = null, strict = false } = {}) {
     this.opts = { out, onTrace, strict }
@@ -149,6 +171,8 @@ export class Folder {
     // it, seats: the seats it waits on, heads: { [seat]: id } }
     this.pushed = []
     this.seen = new Set()
+    // (N3) the entries accepted in an earlier life of this page (keep)
+    this.known = null
     this.openBy = null
     this.last = null
     this.simul = null
@@ -161,6 +185,27 @@ export class Folder {
 
   head(seat) {
     return this.simul ? this.simul.heads[seat] ?? this.simul.id : this.last
+  }
+
+  // (N3) The entries this page had accepted before (its last life: a reload,
+  // the page keeps them across, app/online.js), [[id, sum], …] in the order
+  // it folded them. Each must still be in the list, the first good entry
+  // with its id as it was (its sum), and in that order: else the list was
+  // changed under the page while it was away, tamper, as for an entry
+  // accepted in this Folder's life (sync, below). An insert never moves an
+  // entry already in the list, nor changes one, so an honest list keeps
+  // them, though an entry accepted then may be rejected now (a concurrent
+  // insert landed before it meanwhile), as within a life. Checked as the
+  // list is first folded, and again at every refold; a refold keeps them.
+  keep(known) {
+    if (this.pushed.length) throw new Error('Folder.keep comes before the first sync: the entries kept are held to the list as it is first folded')
+    this.known = known?.length ? known : null
+  }
+
+  acceptedEntries() {
+    const byId = new Map()
+    for (const e of this.pushed) if (!e.bad && !byId.has(e.id)) byId.set(e.id, e)
+    return this.accepted.map((id) => byId.get(id))
   }
 
   get count() {
@@ -382,7 +427,10 @@ export class Folder {
   //     written after: stale there, it would make the entry itself a
   //     duplicate, undoing it and all after it). An insert never moves an
   //     element already in the list, and a copy written by a peer holding
-  //     the entry lands after it, so neither happens in honest play.
+  //     the entry lands after it, so neither happens in honest play. (N3)
+  //     The entries kept from an earlier life (keep) are held so too, as
+  //     the list is first folded (a list that lost one freezes before
+  //     anything is pushed: no match) and at every refold.
   // `each(events, e)` hears each entry's events as they are handed on; by
   // then the Folder is the match that made them (a refold's included), so
   // its G, accepted and head() are the ones those events lead to. It must
@@ -416,7 +464,10 @@ export class Folder {
     const N = entries.length, n = this.pushed.length
     let prefix = N >= n
     for (let i = 0; prefix && i < n; i++) prefix = same(entries[i], this.pushed[i])
-    if (prefix) {
+    // (the entries kept from an earlier life are held to the list once, as
+    // it is first folded: after that, one pushed with more after it keeps
+    // them, they being pushed)
+    if (prefix && (n || !this.known)) {
       for (let i = n; i < N; i++) this.step(entries[i], events, each)
       return { events, reset: false, undone: 0 }
     }
@@ -428,10 +479,32 @@ export class Folder {
       return m
     }
     const now = firsts(entries, N), was = firsts(this.pushed, n)
-    const gone = this.accepted.filter((id) => !now.has(id) || !same(now.get(id).e, was.get(id).e))
-    const moved = this.accepted.filter((id, k) => k > 0 && now.get(id)?.i < now.get(this.accepted[k - 1])?.i)
-    if (gone.length || moved.length) {
-      this.halt('tamper', gone.length ? { at: gone[0], gone } : { at: moved[0], moved })
+    // an entry accepted, in this life or (N3) an earlier one, that is gone
+    // from the list or another now, and those out of their order
+    const lost = { gone: [], moved: [] }
+    const hold = (ids, sameAs) => {
+      let at = -1
+      for (const id of ids) {
+        const x = now.get(id)
+        if (!x || !sameAs(id, x.e)) lost.gone.push(id)
+        else {
+          if (x.i < at) lost.moved.push(id)
+          at = x.i
+        }
+      }
+    }
+    if (this.known) {
+      const sums = new Map(this.known)
+      hold(this.known.map(([id]) => id), (id, e) => sumOf(e) === sums.get(id))
+    }
+    hold(this.accepted, (id, e) => same(e, was.get(id).e))
+    if (lost.gone.length || lost.moved.length) {
+      this.halt('tamper', lost.gone.length ? { at: lost.gone[0], gone: lost.gone } : { at: lost.moved[0], moved: lost.moved })
+      return { events, reset: false, undone: 0 }
+    }
+    // (the list first folded, its kept entries held: pushed as it is)
+    if (!n) {
+      for (let i = 0; i < N; i++) this.step(entries[i], events, each)
       return { events, reset: false, undone: 0 }
     }
     const old = this.accepted
@@ -445,7 +518,7 @@ export class Folder {
     const show = () => {
       showing = true
       if (next.G) Object.assign(next.G, { out: this.opts.out ? [] : null, onTrace: this.opts.onTrace })
-      Object.assign(this, { ...next, opts: this.opts, syncing: true })
+      Object.assign(this, { ...next, opts: this.opts, syncing: true, known: this.known })
     }
     if (!old.length) show()
     for (let i = from; i < N; i++) {

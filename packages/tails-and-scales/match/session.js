@@ -18,13 +18,16 @@
 // it), the seat's head (`p`), the match's hash (`h`) on a single seat's
 // decision, then legal().
 //
-//   new Session({ store, localSeats, dev, rand, sink, onTrace, strict, closing })
+//   new Session({ store, localSeats, dev, rand, sink, onTrace, strict, closing, known })
 //                         dev: this device (the setup names it on each seat
 //                         played here); rand(): an entry id's random part
 //                         (N2's, so two devices sharing an id don't collide;
 //                         '0' alone); strict: sim/'s, as createMatch's;
 //                         closing: (N2, online) say this device's closing
-//                         hash once its match is over (below)
+//                         hash once its match is over (below); known: (N3)
+//                         the entries this page accepted in an earlier life
+//                         (match/fold.js's keep: the tamper alarm across
+//                         reloads)
 //   session.open(commit)  (N2) an online log's first entry, before anything
 //                         is written: the host's commitment to the seed
 //                         reveal its start carries (net/seed.js)
@@ -133,7 +136,7 @@ import { envelope, newEntryId, encode, decode } from './envelope.js'
 import { Folder, SIMULTANEOUS } from './fold.js'
 
 export class Session {
-  constructor({ store, localSeats = [], dev = 'local', rand = () => '0', sink = null, onTrace = null, strict = false, closing = false }) {
+  constructor({ store, localSeats = [], dev = 'local', rand = () => '0', sink = null, onTrace = null, strict = false, closing = false, known = null }) {
     if (!Number.isInteger(store.length)) throw new Error('a MatchStore tells its length (match/store.js)')
     this.store = store
     this.localSeats = Object.freeze([...localSeats])
@@ -142,6 +145,7 @@ export class Session {
     this.sink = sink
     this.closing = closing
     this.folder = new Folder({ out: [], onTrace, strict })
+    this.folder.keep(known)
     // the entry this device last reported a desync at, and why the last
     // start this device made was never appended
     this.told = null
