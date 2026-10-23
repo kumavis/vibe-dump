@@ -12,6 +12,9 @@
 //   live      a replay of a battle still going on, moves landing in the
 //             battle meanwhile, plays them too, then shows the battle
 //             itself (Live)
+//   refold    the battle folded again under a replay (a concurrent insert
+//             before a move the replay has played): the replay is made
+//             again at its move and plays on to the battle's end
 //   file      a battle's replay file opens again to its log, text for text,
 //             and to its match; a file that isn't one is refused, saying
 //             why
@@ -73,6 +76,41 @@ function write(M, it, { online, upTo = Infinity }) {
   return { ses, events, hashes, setup, rest: entries.slice(k) }
 }
 
+// A store that inserts, as Automerge's does when a concurrent change lands
+// before entries already folded (entries decoded once per text)
+class ListStore {
+  constructor(M, texts) {
+    this.M = M
+    this.texts = texts
+    this.subs = new Set()
+    this.cache = new Map()
+  }
+  get length() {
+    return this.texts.length
+  }
+  entries() {
+    return this.texts.map((t) => {
+      if (!this.cache.has(t)) this.cache.set(t, this.M.E.decode(t))
+      return this.cache.get(t)
+    })
+  }
+  append(t) {
+    this.texts.push(typeof t === 'string' ? t : this.M.E.encode(t))
+    for (const fn of [...this.subs]) fn()
+  }
+  insert(at, t) {
+    this.texts.splice(at, 0, t)
+    for (const fn of [...this.subs]) fn()
+  }
+  subscribe(fn) {
+    this.subs.add(fn)
+    return () => this.subs.delete(fn)
+  }
+  export() {
+    return JSON.stringify(this.texts)
+  }
+}
+
 // The flow, as app/replay.js uses it: the Session shown, its events heard.
 function standIn() {
   const flow = {
@@ -92,16 +130,23 @@ function standIn() {
       flow.shown = ses
       ses.sink = { events: (ev) => flow.heard.push(...ev) }
     },
+    back() {
+      flow.wentBack = true
+    },
   }
   const bar = { wire() {}, render(m) { bar.m = m }, hide() { bar.m = null } }
   return { flow, bar }
 }
 
-// play a replay on until it stops (each step: the table idle, the timer run)
-async function run(replay, guard = 20000) {
-  while (replay.playing && guard-- > 0) {
+// play a replay on until it stops, or stops getting anywhere (each step:
+// the table idle, the timer run), `until(replay)` besides
+async function run(replay, until = () => !replay.playing) {
+  let last = replay.k, still = 0
+  while (!until(replay) && still < 200) {
     replay.idled()
     await new Promise((r) => setTimeout(r, 0))
+    still = replay.k === last ? still + 1 : 0
+    last = replay.k
   }
 }
 
@@ -151,10 +196,11 @@ async function checks(dir, only) {
     const cut = new M.Session({ store: new M.LocalStore(texts.filter((t, i) => i !== texts.length - 1)), dev: 'x', known })
     if (honest.status !== battle.status || M.core.stateHash(honest.G) !== M.core.stateHash(battle.G)) fail(it, `given its own accepted entries, a page folds its log otherwise (${honest.status})`)
     if (cut.status !== 'tamper' || cut.G) fail(it, `given its accepted entries, a log that lost its last is not tamper (${cut.status})`)
-    // close, back: the battle itself shown
+    // close, back: the battle itself shown (one that isn't over: the war
+    // room)
     replay.scrub(first)
     replay.close({ back: true })
-    if (flow.shown !== battle || bar.m) fail(it, "the replay put away doesn't show the battle itself again")
+    if ((battle.status === 'over' ? flow.shown !== battle : !flow.wentBack) || bar.m) fail(it, `the replay put away doesn't show the battle itself again (${battle.status})`)
     n++
   }
   // live: a human battle still going on, moves landing while it replays
@@ -167,17 +213,37 @@ async function checks(dir, only) {
       replay.open(battle, { live: true })
       replay.fromStart()
       let landed = 0
-      for (let guard = 20000; replay.playing && guard > 0; guard--) {
-        // (three more moves land in the battle while the replay is half way)
-        if (replay.k === 10 && !landed) {
-          for (const { s, ...body } of rest.slice(0, 3)) battle.submit(s, body)
-          landed = 3
-        }
-        replay.idled()
-        await new Promise((r) => setTimeout(r, 0))
+      // (three more moves land in the battle while the replay is half way)
+      await run(replay, () => replay.k >= 10 || !replay.playing)
+      if (replay.k === 10) {
+        for (const { s, ...body } of rest.slice(0, 3)) battle.submit(s, body)
+        landed = 3
       }
+      await run(replay)
       const moves = replay.moves()
       if (!landed || flow.shown !== battle || replay.k !== moves.length - 1 || flow.shows.at(-1) !== 'show' || !bar.m?.atLive) fail(it, `a replay of a battle going on, ${landed} moves landing meanwhile, ends ${flow.shown === battle ? 'on the battle itself' : 'elsewhere'} at move ${replay.k} of ${moves.length - 1}, not at Live`)
+    }
+  }
+  // refold: an entry of seat 1 inserted before seat 0's first, both in the
+  // deployment, once the replay has played every move but the last
+  {
+    const it = picked.find((x) => x.id === 'hotseat-late-8') ?? picked.find((x) => x.mode === 'hotseat')
+    if (it) {
+      const { ses: whole } = write(M, it, { online: false, upTo: 12 })
+      const texts = JSON.parse(whole.store.export()), ents = texts.map((t) => M.E.decode(t))
+      const i = ents.findIndex((e) => e.s === 0 && e.t !== 'start'), j = ents.findIndex((e) => e.s === 1)
+      const store = new ListStore(M, texts.slice(0, j))
+      const battle = new M.Session({ store, dev: 'watch' })
+      const { flow, bar } = standIn()
+      const replay = new M.R.Replay({ flow, bar })
+      replay.open(battle)
+      replay.fromStart()
+      await run(replay, () => replay.k >= battle.accepted.length - 1)
+      store.insert(i, texts[j])
+      replay.play()
+      await run(replay)
+      const moves = replay.moves()
+      if (!flow.shown?.G || M.core.stateHash(flow.shown.G) !== M.core.stateHash(battle.G) || replay.k !== moves.length - 1) fail(it, `a replay the battle folded again under ends at move ${replay.k} of ${moves.length - 1}, ${flow.shown?.G && M.core.stateHash(flow.shown.G) === M.core.stateHash(battle.G) ? 'on' : 'not on'} the battle's match`)
     }
   }
   // files that aren't replays
@@ -207,6 +273,9 @@ const MUTANTS = {
   'file-unchecked': ['app/replay.js', "if (f?.replay !== 'tails-and-scales' || !Array.isArray(f.log))", 'if (!Array.isArray(f?.log))'],
   // the bar put away leaves the replay on the table
   'close-stays': ['app/replay.js', '    if (back && shown) this.flow.show(battle)\n', '    if (false) this.flow.show(battle)\n'],
+  // a replay goes on writing moves by their place after the battle folded
+  // again under it
+  'no-refold-check': ['app/replay.js', 'if (at.length !== this.k + 1 || at[this.k] !== moves[this.k]?.id) {', 'if (false) {'],
 }
 
 const only = a.only

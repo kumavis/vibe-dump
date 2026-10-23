@@ -214,9 +214,9 @@ async function runCases(dist, cases) {
     for (const x of autoplay(store, setup, { stop })) x?.close()
     return { repo, handle, store, setup, a, d0, d1 }
   }
-  // (N3) how many accepted entries the page keeps for match `id`
-  // (net/kept.js's IndexedDB)
-  const keptN = (page, id) => page.evaluate((id) => new Promise((res) => {
+  // (N3) how many accepted entries the page keeps for match `id` as device
+  // `dev` (net/kept.js's IndexedDB)
+  const keptN = (page, id, dev) => page.evaluate((id) => new Promise((res) => {
     const r = indexedDB.open('tails-and-scales-kept')
     r.onerror = () => res(-1)
     r.onsuccess = () => {
@@ -228,7 +228,7 @@ async function runCases(dist, cases) {
         res(-1)
       }
     }
-  }), id)
+  }), `${id} ${dev}`)
   // seat 0's say from another tab of its device, inserted at place k (as a
   // concurrent change from a higher actor lands), on the head that opened
   // the vote
@@ -621,8 +621,8 @@ async function runCases(dist, cases) {
         const n = await page.evaluate(() => window.__ts.net.play.accepted.length)
         await until(page, (n) => window.__ts.net && window.__ts.net.play.accepted.length === n, n, 5000, 'the page settled')
         const t0 = Date.now()
-        while ((await keptN(page, id)) < n && Date.now() - t0 < 20000) await sleep(200)
-        must((await keptN(page, id)) >= n, `the page keeps the ${n} entries it accepted`)
+        while ((await keptN(page, id, d0)) < n && Date.now() - t0 < 20000) await sleep(200)
+        must((await keptN(page, id, d0)) >= n, `the page keeps the ${n} entries it accepted`)
         await page.close()
         // back after moves landed: it says so
         for (const x of autoplay(store, setup, { stop: (G) => G.turn.round >= 3 })) x?.close()
@@ -665,8 +665,12 @@ async function runCases(dist, cases) {
         await until(again, () => !document.querySelector('#netdialog').classList.contains('hidden') && /log was changed/.test(document.querySelector('#netTitle').textContent), null, 30000, 'the tamper dialog on the page that came back')
         const st = await again.evaluate(() => ({ status: window.__ts.net.play?.status, G: !!window.__ts.net.play?.G }))
         must(st.status === 'tamper' && !st.G, `the log that lost an entry the page played is tamper, before any match is shown (${JSON.stringify(st)})`)
+        // Back lets go of the match: the title, no badge, the link gone, and
+        // no Continue for it
+        await again.click('#netBack')
+        await until(again, () => !window.__ts.net.id && document.querySelector('#netbadge').classList.contains('hidden') && !/m=/.test(location.hash) && !document.querySelector('#title').classList.contains('hidden') && document.querySelector('#continue').classList.contains('hidden'), null, 20000, 'Back from the tamper dialog: the match let go of')
         store.close()
-        return `"${said}", Continue back to the seat, and a log changed while away is tamper`
+        return `"${said}", Continue back to the seat, and a log changed while away is tamper (Back lets it go)`
       } finally {
         await repo.shutdown?.().catch(() => {})
       }
@@ -705,7 +709,7 @@ const MUTANTS = {
   // verifyStart compares the nonce alone
   'nonce-only': ['altered', 'net/seed.js', "  const keys = [...new Set([...Object.keys(record ?? {}), ...Object.keys(seat ?? {})])].filter((k) => k !== 'ready').sort()", "  const keys = ['nonce']"],
   // the online Session never says its closing hash
-  'no-closing': ['play', 'app/online.js', "onTrace: this.flow.onTrace, closing: true })", 'onTrace: this.flow.onTrace, closing: false })'],
+  'no-closing': ['play', 'app/online.js', 'onTrace: this.flow.onTrace, closing: true, known', 'onTrace: this.flow.onTrace, closing: false, known'],
   // a name box that takes whatever is typed
   'name-unfitted': ['names', 'ui/screens/lobby.js', '        if (fit !== name.value) name.value = fit\n', ''],
   // a refold that undoes moves says nothing
@@ -736,7 +740,10 @@ const MUTANTS = {
   // the page keeps nothing of what it accepted across a reload
   'kept-unused': ['kept', 'app/online.js', 'closing: true, known: had?.known })', 'closing: true })'],
   // the title never offers to continue
-  'no-continue': ['kept', 'app/online.js', '    await N.saveKept(id, { known, n: known.length, at: Date.now() })\n    this.note()\n', '    await N.saveKept(id, { known, n: known.length, at: Date.now() })\n'],
+  'no-continue': ['kept', 'app/online.js', '    await N.saveKept(key, { known, n: known.length, at: Date.now() })\n    this.note()\n', '    await N.saveKept(key, { known, n: known.length, at: Date.now() })\n'],
+  // (N3's review) Back from a log found tampered with as the page came
+  // back leaves the match attached (its badge, its link, its tick)
+  'tamper-back-attached': ['kept', 'app/online.js', "report: this.reportOf(this.play), back: () => this.close() })", "report: this.reportOf(this.play), back: () => this.leave() })"],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

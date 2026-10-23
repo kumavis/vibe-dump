@@ -427,7 +427,7 @@ export class Online {
     const readied = this.readied().filter((r) => r.commit === open?.commit)
     const why = await N.verifyStart({ open, start, documentId: this.id, mine: { dev: this.dev, readied } })
     // (N3) what this page kept of the match in an earlier life, if any
-    const had = await N.loadKept(this.id)
+    const had = await N.loadKept(this.keptKey())
     if (gen !== this.gen) return
     this.from?.off('change', this.onFrom)
     this.from = null
@@ -440,9 +440,12 @@ export class Online {
     this.screen.hide()
     if (!this.play.G) {
       // (N3) the log lost an entry this page had played before it came
-      // back: frozen before anything was folded, no match to show
+      // back: frozen before anything was folded, no match to show (no
+      // table followed: Back lets go of the match here; and the title
+      // offers it no more)
       const [title, say] = (FROZEN[this.play.status] ?? FROZEN.tamper)(this.play.report)
-      this.dialog.show({ title, why: say, report: this.reportOf(this.play), back: () => this.leave() })
+      this.dialog.show({ title, why: say, report: this.reportOf(this.play), back: () => this.close() })
+      this.note()
       return
     }
     this.flow.follow(this.play, { status: (st) => this.frozen(st), settled: () => this.keepSoon(), leave: () => this.close() })
@@ -467,10 +470,18 @@ export class Online {
   // accepted (never a log found tampered with: what was kept stands).
   keepSoon() {
     clearTimeout(this.keepTimer)
-    this.keepTimer = setTimeout(() => this.keep(), 800)
+    this.keepTimer = setTimeout(() => {
+      this.keepTimer = 0
+      this.keep()
+    }, 800)
+  }
+  // (kept per match and device: two tabs of one browser on one match, each
+  // its own device, each say what came while it was away)
+  keptKey() {
+    return `${this.id} ${this.dev}`
   }
   async keep() {
-    const ses = this.play, id = this.id, repo = this.repo
+    const ses = this.play, id = this.id, key = this.keptKey(), repo = this.repo
     if (!ses?.G || ses.status === 'tamper') return
     this.sums ??= new Map()
     const known = knownOf(ses.folder, this.sums)
@@ -479,7 +490,7 @@ export class Online {
     } catch {
       return
     }
-    await N.saveKept(id, { known, n: known.length, at: Date.now() })
+    await N.saveKept(key, { known, n: known.length, at: Date.now() })
     this.note()
   }
 
@@ -487,7 +498,16 @@ export class Online {
   // Continue: its link's parts, how it stands, and who it is against.
   note() {
     const ses = this.play
-    if (!ses?.G || !this.id) return
+    if (!ses || !this.id) return
+    // (a match frozen before anything was folded: no longer to continue)
+    if (!ses.G) {
+      let last = null
+      try {
+        last = JSON.parse(kept.get('ts.last') ?? 'null')
+      } catch {}
+      if (last?.id === this.id) kept.set('ts.last', JSON.stringify({ ...last, status: ses.status }))
+      return
+    }
     const G = ses.G, me = ses.localSeats[0] ?? -1
     const them = me >= 0 ? G.setup.seats[1 - me]?.name : null
     kept.set('ts.last', JSON.stringify({ id: this.id, dev: this.dev, sync: this.sync === N.DEFAULT_SYNC ? null : this.sync, status: ses.status, round: G.turn.round, seat: me, vs: them ?? null, at: Date.now() }))
@@ -631,7 +651,14 @@ export class Online {
   close() {
     this.gen++
     clearInterval(this.tick)
-    clearTimeout(this.keepTimer)
+    // (what the page keeps, still to be written: noted now, and written as
+    // the page lets go of the match)
+    if (this.keepTimer) {
+      clearTimeout(this.keepTimer)
+      this.keepTimer = 0
+      this.note()
+      this.keep()
+    }
     this.from?.off('change', this.onFrom)
     this.from = null
     this.presence?.stop()

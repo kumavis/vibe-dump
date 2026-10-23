@@ -27,8 +27,12 @@ export class ReplayBar {
     $('#rpClose').onclick = () => on.close()
     const go = () => {
       clearTimeout(this.wait)
+      this.wait = 0
       on.scrub(Number(this.slider.value))
     }
+    // (held, or about to scrub: the battle moving on leaves the slider be)
+    this.slider.onpointerdown = () => (this.held = true)
+    this.slider.onpointerup = this.slider.onpointercancel = () => (this.held = false)
     this.slider.oninput = () => {
       this.label(Number(this.slider.value))
       clearTimeout(this.wait)
@@ -42,8 +46,10 @@ export class ReplayBar {
     this.m = m
     this.slider.min = m.min
     this.slider.max = m.max
-    this.slider.value = m.at
-    this.label(m.at)
+    if (!this.held && !this.wait) {
+      this.slider.value = m.at
+      this.label(m.at)
+    }
     $('#rpPlay').textContent = m.playing ? '⏸' : '▶'
     $('#rpPlay').title = m.playing ? 'Pause' : 'Play on from here'
     $('#rpLive').classList.toggle('hidden', !m.live)

@@ -81,8 +81,9 @@ export class Replay {
       this.close()
       this.battle = battle
     }
+    // (the same battle's bar as it stands: a replay on the table stays
+    // there, playing or not)
     this.isLive = live
-    this.k = this.moves().length - 1
     this.render()
   }
 
@@ -159,6 +160,13 @@ export class Replay {
       this.timer = 0
       if (!this.playing || !this.shown || !this.flow.player.idle) return
       const moves = this.moves()
+      // (the battle folded again under the replay, a concurrent insert
+      // before a move it has played: the replay made again at its move)
+      const at = this.shown.accepted
+      if (at.length !== this.k + 1 || at[this.k] !== moves[this.k]?.id) {
+        this.goTo(Math.min(this.k, moves.length - 1), moves)
+        return this.render()
+      }
       if (this.k >= moves.length - 1) {
         if (this.isLive) return this.live()
         this.playing = false
@@ -167,6 +175,8 @@ export class Replay {
       this.k++
       this.shown.store.append(moves[this.k])
       this.render()
+      // (a move the table had nothing to play for: on to the next)
+      if (this.flow.player.idle) this.idled()
     }, BETWEEN / Math.max(1, clock.speed))
   }
 
@@ -176,15 +186,18 @@ export class Replay {
   }
 
   // The bar let go of: the battle's own Session shown again (`back`: the
-  // bar's ✕; else the battle is being left, and its table with it).
+  // bar's ✕; else the battle is being left, and its table with it). ✕ on a
+  // battle that isn't over (a replay file saved mid-battle, a frozen
+  // match) has nothing to come back to but the war room.
   close({ back = false } = {}) {
     if (!this.battle) return
     this.stopFeeding()
     const battle = this.battle, shown = this.shown
     Object.assign(this, { battle: null, shown: null, playing: false, k: -1 })
+    this.bar.hide()
+    if (back && battle.status !== 'over') return this.flow.back()
     if (back && shown) this.flow.show(battle)
     else shown?.close()
-    this.bar.hide()
   }
 
   // the bar as things stand (the battle's own changes too: at Live, the

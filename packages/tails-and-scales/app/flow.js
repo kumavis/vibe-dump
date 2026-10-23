@@ -221,7 +221,9 @@ export class Flow {
       },
       // (N2) the match's status changed (frozen, read-only): the online
       // page's to show (app/online.js)
-      status: (status, ses) => this.online?.status?.(status, ses),
+      status: (status, ses) => {
+        if (ses === this.battle) this.online?.status?.(status, ses)
+      },
     }
     // (N2) the online match followed: { status(status, session), leave() },
     // app/online.js's; null for a game played here alone
