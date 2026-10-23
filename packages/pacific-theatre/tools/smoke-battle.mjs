@@ -41,7 +41,8 @@
 // aircraft bookmark and eight random aircraft take-overs a box with casual
 // hands (bank ≤ 30°, pitch within ±10°, throttle 0.7, steering by bearing,
 // release on the cue) in Assisted, which must reach each checkpoint without
-// a crash, and in Pilot, which may fail (reported); part 6 takes ships at
+// a crash (one bookmark in four, at least one, may end by the battle's fire,
+// reported), and in Pilot, which may fail (reported); part 6 takes ships at
 // each station and holds the AI to the others. Part 2 adds a take-over
 // through Battle on the fixture box; part 3 runs in Pilot.
 //   node tools/smoke-battle.mjs --takeover-only        parts 4–6 alone
@@ -1073,13 +1074,16 @@ if (doTakeover) {
       const r = runCasual(box, 'assisted')
       takeoverReport[`part5:${box.id}:assisted`] = r
       const fails = []
-      // (a sortie the battle's fire ends before its checkpoint, the AA or a fighter, not the flying, is reported, and one a
-      // box is let pass: Guided's halving in Assisted leaves the record's own odds a share of their weight, research/engine-2.md §6)
+      // (a sortie the battle's fire ends before its checkpoint, the AA or a fighter, not the flying, is reported, and one in
+      // four of a box's aircraft bookmarks, at least one, is let pass: Guided's halving in Assisted leaves the record's own
+      // odds a share of their weight, research/engine-2.md §6. Midway's two strikes on Yorktown meet her CAP and AA, which
+      // the record has bring down most of each, now that the record's fighters reach the strike at their kits' speeds)
       const shotDown = r.bookmarks.filter((b) => !b.checkpoint && b.lostToFire && !b.crash)
+      const letPass = Math.max(1, Math.floor(r.bookmarks.length / 4))
       for (const b of r.bookmarks) {
         if (b.bad) fails.push(`${b.id}: state.${b.bad} not finite`)
         if (b.crash) fails.push(`${b.id}: ${b.crash}`)
-        if (!b.checkpoint && !(b.lostToFire && shotDown.length <= 1)) fails.push(`${b.id}: no checkpoint (${b.reason ?? 'ran out'}${b.lostToFire ? ', lost to the battle’s fire' : ''})`)
+        if (!b.checkpoint && !(b.lostToFire && shotDown.length <= letPass)) fails.push(`${b.id}: no checkpoint (${b.reason ?? 'ran out'}${b.lostToFire ? ', lost to the battle’s fire' : ''})`)
       }
       for (const x of r.random) {
         if (x.bad) fails.push(`${x.id}: state.${x.bad} not finite`)

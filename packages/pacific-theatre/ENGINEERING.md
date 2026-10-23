@@ -616,7 +616,10 @@ field and number):
   on a leader the record loses follows on along its last line.
   `tools/check/battle.mjs` holds the record's own legs to the kits (DATA.md
   §9). Splines still swing a fast turn past its kit's speed for seconds at a
-  time (research/engine-2.md §10).
+  time (research/engine-2.md §10). With the CAP at the strike in time,
+  Midway's casual hands lose both strikes on Yorktown to her fighters and
+  her AA, as the record loses most of each: smoke part 5 lets one aircraft
+  bookmark in four (at least one) end by the battle's fire, and reports it.
 
 ## 6. Kits (`src/battle/kits/`)
 
