@@ -855,3 +855,8 @@ pure-JS `shapefile` package; both are devDependencies.
   `aircraft`, `ja`, `catapult` blocks and `notes`; a kit missing a field fails
   the check rather than the generator.
 - `labels.json` is sorted by rank then by text.
+
+
+## Round two
+
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.

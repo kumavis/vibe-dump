@@ -128,6 +128,12 @@
     "end"
   ],
   "keyframes": [
+    "1931-09-18",
+    "1932-03-01",
+    "1937-12-31",
+    "1938-12-31",
+    "1940-09-30",
+    "1941-07-31",
     "1941-12-06",
     "1942-05-08",
     "1942-09-15",
@@ -995,6 +1001,19 @@
       "after",
       "sources",
       "tellings"
+    ],
+    "stations": [
+      "helm",
+      "main",
+      "aa",
+      "torpedoes",
+      "pilot",
+      "gunner",
+      "bombardier"
+    ],
+    "assist": [
+      "assisted",
+      "pilot"
     ]
   },
   "fixtures": {

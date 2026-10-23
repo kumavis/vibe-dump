@@ -1019,3 +1019,8 @@ a file it does not own writes a note in its report instead of editing it.
 7. Run `tools/smoke.mjs` and `tools/smoke-battle.mjs` on real data under
    SwiftShader; record frame times and heap; decide the depth fallback (§2)
    if a box is unusable.
+
+
+## Round two
+
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.

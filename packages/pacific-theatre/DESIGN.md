@@ -929,3 +929,8 @@ pass's own references by report, with the URLs requested and their status.
 - Naval War College, *The Battle of Midway … Strategical and Tactical Analysis* (1948), on archive.org
 - JACAR: <https://www.jacar.archives.go.jp/>; NIDS Senshi Sōsho viewer: <https://www.nids.mod.go.jp/military_history_search/>
 - combinedfleet.com TROMs: <https://www.combinedfleet.com/>
+
+
+## Round two
+
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.
