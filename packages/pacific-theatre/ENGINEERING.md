@@ -782,6 +782,40 @@ step below it (`--pt-stations-display`, `--pt-hints-top` under
 them down (and shows the new station's own the first time it is manned), and
 so does every release.
 
+**As built (the phone layout)**: on a phone, held either way up (the page's
+query: 700 px wide or less, or a coarse pointer), the touch controls keep
+the foot and nothing else stands in their rectangles: the stick (128 px)
+and its throttle, the helm and telegraph (the telegraph above the helm
+upright, beside it on its side) or the bombardier's ◀ ▶ bottom left;
+`[pause][fire]` over `[bomb][torp]`, or salvo, torpedoes and AA, or the
+gun's fire, or *release bombs*, bottom right, each with a 44 px pause
+beside it (the bar's own pause stands down while it shows); *time* and
+*cam* stacked at the right edge under the HUD's plot (44 px, 8 apart,
+from `--pt-plot-top` and `--pt-plot`); at a gun station the middle of the
+screen is the aim. Each control is placed by a `t-*` class and the kind
+(`data-k`) in `touch.js`'s style, the wide layout above unchanged; a
+slider's knob travels a radius short of its ends, so it stays on the
+screen. The controls publish the room they take from the bottom as
+`--pt-controls` on the document. Their round *release* stands down while
+the page's bar is up (`--pt-touch-release: none`): Release on the bar
+gives the controls back with one tap, and the touch hints say "Release,
+at the top"; a gun or the sight has its own four touch lines
+(`HINTS.touchGun`, `HINTS.touchSight`, kept once a station in `pt.hints`),
+the stick's being wrong there. The HUD under the same query (`scene/hud.js`):
+the instruments become a strip of the four numbers for the kind (an
+aircraft's speed, height, heading and g; a ship's speed, heading, rudder
+and main battery ready) under the bar upright and beside it on its side
+(`--pt-head`, `--pt-head-end`), with the warnings, the assist ("assist:
+floor"), the station's state and "on the record" as short tags and a
+second line only for what has run low or out (a gun under a fifth of its
+rounds, fuel under ten minutes; a ship's damage once it has any); the plot
+96 px at the top right with its caption inside; the subtitle one line,
+ellipsized, just above the controls (`--pt-controls`) or the watching bar
+(`--pt-foot`); the first hints (or the keys), a message and the release
+cue stacked in the middle between the plot's column and the subtitle; the
+clock stands down while the bar at the top shows it
+(`--pt-clock-display`). `tools/smoke.mjs` holds the boxes apart (§12).
+
 ## 9. The battle lifecycle (`src/battle/index.js`) and the hand-over (`src/app.js`)
 
 ```js
@@ -955,6 +989,27 @@ own dev page over a mock of Battle: never in the build (Vite builds
 `index.html` alone), and `tools/smoke.mjs` runs its checks on Vite's dev
 server.
 
+**As built (the phone layout)**: under `style.css`'s phone query (700 px
+wide or less, or a coarse pointer, both ways up; a wider screen with a
+fine pointer keeps the layout above, its boxes measured unchanged) the held
+bar is one row at the top on a phone too: the clock at its left end (with
+its seconds, the speed and "paused" under it; HH:MM alone at 380 px and
+less), Release, the stations as pills (a phone's short names: Main, AA,
+Tubes, Sight; a row that outruns the screen scrolls with the one held in
+view) and ⋯, which opens the rest as a sheet beneath it (the held unit's
+name, the speeds, Units, the setting and the strip with its bookmarks;
+a tap outside, or a choice other than a speed or the setting, closes it).
+On its side the bar hugs its row at the top left and the HUD's instruments
+stand beside it. Watching, the bar keeps the foot with its buttons as
+icons, three rows upright (the stops; play, the speed, Units, the briefing
+and the setting; the strip) and one on its side. The list and the card sit
+above the watching bar (and the card above the subtitle), between the held
+bar and the touch controls while held (between the left and right controls
+on its side), and over the HUD and the controls while open. `boxbar.js`
+tells the box where the bar stands through three variables on the
+document: `--pt-head` (the line under a bar at the top), `--pt-head-end`
+(its right edge) and `--pt-foot` (the room a bar at the foot takes).
+
 ## 12. Tools
 
 - `bake-table.mjs`, `bake-box.mjs`: DATA.md §11. `lib/etopo.mjs` reads an
@@ -984,7 +1039,24 @@ server.
   (turn and roll within ±10 %). `fake-data.mjs` writes `test-data/` (§13);
   `fake-battle.mjs` (engine-owned) may extend the box fixture.
 - `shoot.mjs`: the Hawaiian one, with `battle`, `t` and `moment` shot
-  parameters.
+  parameters; `viewport` and `stay` let one boot shoot a state at several
+  sizes. Its presets `phone-watch`, `phone-held-air`, `phone-held-crew`,
+  `phone-held-ship` (and each `-land`; `phone` for all) open a mobile page
+  (isMobile, hasTouch, DPR 2) and shoot the box upright at 360×780,
+  390×844, 412×915 and 412×720 (the owner's phone under the Claude app's
+  header) and on its side at 844×390 and 915×412: watching and with the
+  briefing, Pearl Harbor's first door with the ⋯ sheet, the list, a unit's
+  card and the after-card, a B5N2 at its sight and rear gun, Nevada at the
+  AA director and her helm.
+- `smoke.mjs`'s **phone check**: on a mobile page, watching, holding an
+  aircraft (the first door), an aircraft at its sight or rear gun, a ship
+  at the AA director and at her helm, at the six sizes above, every visible
+  control and readout (the bar and its buttons and pills, the stick, the
+  sliders and buttons, the instruments, the subtitle, the plot, the hints,
+  the clock, the tools) by its bounding box, clipped by any scrolling
+  parent: no two overlap by more than 2 px and none leaves the screen, and
+  the pairs that do are printed (`PHONE=0` skips it, `PHONE=only` runs it
+  alone).
 - `subset-font.mjs`: scans `public/data/**/*.json` for CJK characters and
   writes `src/fonts/noto-sans-jp-subset.woff2` (one static weight, 400) with
   `subset-font` 2.4.0 from the Google Fonts TTF; the result is committed and

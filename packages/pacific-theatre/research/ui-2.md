@@ -200,7 +200,9 @@ any preset named `ui…` or `PAGE=ui` loads `ui.html` through Vite (`BOX`,
   HUD keeps the foot (`scene/hud.js`: instruments bottom left, keys bottom
   right, lines at 64 px); the list and the card step down under it (`#ui.holding`).
   On a phone it stays at the foot: the touch controls' layout is engine-2's,
-  and the integrator must check the two together.
+  and the integrator must check the two together. (Since superseded: on a
+  phone the held bar is one row at the top too, with ⋯ for the rest;
+  ENGINEERING §8 and §11, "As built (the phone layout)".)
 - **The station bar shows even for a unit with one station** (a fighter's
   *Pilot*): the contract says the bar shows while a unit is held.
 - **Speeds**: a list of four or fewer is a row of buttons; watching's seven
