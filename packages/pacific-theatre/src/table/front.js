@@ -498,6 +498,12 @@ export class Front {
     this.date = date
   }
 
+  /** Whether the date is the prologue's, where the Allies are not yet a side: the land Japan did not hold is said as that. */
+  inPrologue() {
+    const pro = this.table.app.clock.prologue
+    return !!pro && this.date !== null && this.date < pro.toMs
+  }
+
   /** What the legend shows: the states in the pair in use, the keyframes' dates and sources. */
   legend() {
     if (!this.pair?.a) return null
@@ -514,6 +520,7 @@ export class Front {
     }
     const nearest = this.pair.t < 0.5 ? this.pair.a : this.pair.b
     const kf = this.keyframes.get(nearest)
+    const prologue = this.inPrologue()
     const isles = { jp: false, allied: false, cut: false }
     for (const s of this.isles || []) {
       if (!s.now) continue
@@ -525,7 +532,11 @@ export class Front {
       keyframe: nearest,
       date: kf?.date ?? nearest,
       between: this.pair.a !== this.pair.b && this.pair.t > 0.02 && this.pair.t < 0.98 ? [this.keyframes.get(this.pair.a)?.date, this.keyframes.get(this.pair.b)?.date] : null,
-      states: [...states].map((s) => ({ id: s, ...(STATES[s] || OTHER) })),
+      states: [...states].map((s) => {
+        const st = STATES[s] || OTHER
+        return { id: s, ...st, label: prologue && st.prologue ? st.prologue : st.label }
+      }),
+      prologue,
       pointsAndLines: hatch,
       perimeter: ids.some((id) => this.perimeters.has(id)),
       declared: this.declared.filter((d) => d.k > 0.5).map((d) => ({ name: d.f.properties.name, ja: d.f.properties.ja })),
@@ -548,6 +559,7 @@ export class Front {
       const polys = g?.type === 'Polygon' ? [g.coordinates] : g?.type === 'MultiPolygon' ? g.coordinates : []
       for (const rings of polys) if (inRings(rings, lon, lat)) hit = { state: p.state, name: p.name, pointsAndLines: !!p.pointsAndLines, ...(STATES[p.state] || OTHER) }
     }
+    if (hit?.prologue && this.inPrologue()) hit.label = hit.prologue
     return hit
   }
 

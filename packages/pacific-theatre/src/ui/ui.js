@@ -326,7 +326,7 @@ export class UI {
       const row = (k, val) => `<div class="in-row"><span class="in-k">${k}</span>${val}</div>`
       const depth = m > 0 ? `${Math.round(m).toLocaleString('en-GB')} m` : `${Math.round(-m).toLocaleString('en-GB')} m deep`
       const where = `${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(((lon + 540) % 360) - 180).toFixed(1)}°${((lon + 540) % 360) - 180 >= 0 ? 'E' : 'W'}`
-      const held = isle?.now ? `${isle.now.by === 'jp' ? 'held by Japan' : 'held by the Allies'}${isle.now.c !== null && app.clock.date >= isle.now.c ? ', cut off' : ''}` : null
+      const held = isle?.now ? `${isle.now.by === 'jp' ? 'held by Japan' : app.table.front.inPrologue() ? 'not held by Japan' : 'held by the Allies'}${isle.now.c !== null && app.clock.date >= isle.now.c ? ', cut off' : ''}` : null
       this.inspector.innerHTML = `
         ${best ? `<div class="in-head"><b>${esc(best.name)}</b>${best.ja?.kanji ? `<span class="in-ja" lang="ja">${esc(best.ja.kanji)}</span>` : ''}${best.today && best.today !== best.name ? `<span class="in-today">today ${esc(best.today)}</span>` : ''}</div>` : ''}
         ${held ? row('on the date', esc(held)) : ''}
@@ -355,7 +355,7 @@ export class UI {
   /** The front's legend: the states on the table now, the keyframe's date, the marks. */
   refreshLegend() {
     const lg = this.overlay.front ? this.app.table.front.legend() : null
-    const key = JSON.stringify(lg && { k: lg.keyframe, b: lg.between, s: lg.states.map((s) => s.id), d: lg.declared, i: lg.isles })
+    const key = JSON.stringify(lg && { k: lg.keyframe, b: lg.between, s: lg.states.map((s) => s.id), d: lg.declared, i: lg.isles, p: lg.prologue })
     if (key === this.legendKey) return
     this.legendKey = key
     this.legend.classList.toggle('show', !!lg)
@@ -368,7 +368,7 @@ export class UI {
     const pl = lg.pointsAndLines ? `<div class="lg"><i class="hatch" style="--c:rgb(170,58,46)"></i><b>cities and railways held by Japan</b></div>` : ''
     const per = lg.perimeter ? `<div class="lg"><i class="dash"></i><b>the island area Japan held</b></div>` : ''
     const dec = lg.declared.map((d) => `<div class="lg"><i class="dash long"></i><b>${esc(d.name)}</b>${d.ja ? ` <span lang="ja">${esc(typeof d.ja === 'string' ? d.ja : d.ja.kanji)}</span>` : ''}</div>`).join('')
-    const isles = [lg.isles.jp && '<span class="lg-isle jp"></span>held by Japan', lg.isles.allied && '<span class="lg-isle al"></span>held by the Allies', lg.isles.cut && '<span class="lg-isle cut"></span>cut off'].filter(Boolean)
+    const isles = [lg.isles.jp && '<span class="lg-isle jp"></span>held by Japan', lg.isles.allied && `<span class="lg-isle al"></span>${lg.prologue ? 'not held by Japan' : 'held by the Allies'}`, lg.isles.cut && '<span class="lg-isle cut"></span>cut off'].filter(Boolean)
     this.legend.innerHTML = `
       <div class="lg-title">The front <span>${asOf}</span></div>
       ${states}${pl}${per}${dec}

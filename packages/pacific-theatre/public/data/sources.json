@@ -1462,12 +1462,12 @@
     "url": "https://www.ibiblio.org/hyperwar/USA/USA-CBI-Mission/index.html",
     "access": "open",
     "opened": true,
-    "read": "title",
+    "read": "part",
     "language": "en",
     "licence": "pd-us-gov",
     "ref": "CMH Pub 9-1",
     "tertiary": false,
-    "note": "Map list opened (R3)."
+    "note": "Map list opened (R3); Map 1, “Japanese Plan, December 1941”, viewed for the prologue front (content-2)."
   },
   {
     "id": "romanus-1956",

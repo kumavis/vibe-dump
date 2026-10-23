@@ -61,7 +61,8 @@ export class Labels {
 
   /**
    * A label: { text, ja, kind, rank, lonlat | xz, along: [[lon, lat], [lon, lat]] (turn the
-   * text along this direction) }. Returns the item; set its `k` (0..1) to want it less.
+   * text along this direction), from?, to? (the days it names the place: from that day, until that
+   * day; DATA.md §3) }. Returns the item; set its `k` (0..1) to want it less.
    */
   add(l) {
     const el = document.createElement('div')
@@ -84,6 +85,8 @@ export class Labels {
       ty: NaN,
       ta: NaN,
       along: l.along ? l.along.map((p) => this.proj.toWorld(p)) : null,
+      from: l.from ? Date.parse(l.from) : null,
+      to: l.to ? Date.parse(l.to) : null,
     }
     // (a dot beside the name: the text starts to its right; an island's
     // name stands just above its point, where the front marks who holds it)
@@ -125,6 +128,7 @@ export class Labels {
     }
     const placed = occupied.slice()
     const v = this._v
+    const date = table.app?.clock?.date ?? null
     let n = 0
     for (const it of this.items) {
       if (!it.measured) {
@@ -132,7 +136,9 @@ export class Labels {
         it.h = it.el.offsetHeight
         it.measured = true
       }
-      let show = opacity > 0.02 && it.k > 0.02 && d < RANK_RANGE[it.rank] && n < MAX_SHOWN
+      // (a name with dates shows only on its days: Hsinking from Manchukuo's proclamation, Changchun before it)
+      const onItsDays = date === null || ((it.from === null || date >= it.from) && (it.to === null || date < it.to))
+      let show = onItsDays && opacity > 0.02 && it.k > 0.02 && d < RANK_RANGE[it.rank] && n < MAX_SHOWN
       let sx = 0
       let sy = 0
       let ang = 0

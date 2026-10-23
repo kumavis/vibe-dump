@@ -13,7 +13,8 @@ export const STATES = {
   garrisoned: { colour: [190, 104, 70], strength: 0.42, jp: 1, label: 'garrisoned by Japan by treaty' },
   'allied-with-japan': { colour: [200, 146, 72], strength: 0.4, jp: 1, label: 'allied with Japan' },
   contested: { colour: [196, 120, 88], strength: 0.2, jp: 0, hatch: 1, label: 'contested' },
-  allied: { colour: [84, 124, 178], strength: 0.5, jp: 0, label: 'held by the Allies' },
+  // (before the war the Allies are not yet a side: the prologue's legend says what the land was not)
+  allied: { colour: [84, 124, 178], strength: 0.5, jp: 0, label: 'held by the Allies', prologue: 'not held by Japan' },
   neutral: { colour: [150, 150, 146], strength: 0.3, jp: 0, label: 'neutral' },
   soviet: { colour: [150, 84, 118], strength: 0.42, jp: 0, label: 'the Soviet Union' },
   'zone-cks': { colour: [176, 150, 84], strength: 0.4, jp: 0, label: 'surrender to Chiang Kai-shek' },
