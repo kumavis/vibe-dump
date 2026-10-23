@@ -90,6 +90,7 @@ export function link(app, ui) {
     const sim = battle.sim
     if (!sim || app.active !== battle.scene || app.mode === 'flying') {
       if (list.isOpen) list.close()
+      ui.root.classList.remove('holding')
       return bar.set(null)
     }
     const ms = sim.momentState
@@ -97,6 +98,8 @@ export function link(app, ui) {
     trackHeld(heldU)
     const holding = !!(battle.input || sim.player)
     const mode = holding ? (ms?.checkpoint && !battle.running ? 'checkpoint' : 'held') : 'watch'
+    // (the bar moves to the top while a unit is held, and the list and the card step down: style.css)
+    ui.root.classList.toggle('holding', mode === 'held')
     const stops = sim.record.stops
     const where = heldU ? heldU.name : L.stop >= 0 ? `stop ${L.stop + 1} of ${stops.length}` : battle.loaded?.battle.title?.split(',')[0] ?? ''
     bar.set({

@@ -712,6 +712,15 @@ body.snap .label, body.snap .pin, body.snap .cluster, body.snap .halo, body.snap
   white-space: normal; width: max-content; pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,0.35);
 }
 .bb-tip[hidden] { display: none; }
+/* while a unit is held the box's HUD has the foot of the screen (its instruments left, its keys right, its lines
+   above the middle: src/battle/scene/hud.js), so on a wide screen the bar moves to the top, between the HUD's clock and
+   its plot, and the list and the card step down beneath it */
+@media (min-width: 761px) {
+  .boxbar[data-mode='held'] { top: 12px; bottom: auto; max-width: min(900px, calc(100vw - 420px)); }
+  .boxbar[data-mode='held'] .bb-tip { bottom: auto; top: 30px; }
+  .boxbar[data-mode='held'] .bb-lab, .boxbar[data-mode='held'] .bb-credits { display: none; }
+  #ui.holding .unitlist, #ui.holding .card { top: 112px; }
+}
 @media (max-width: 760px) {
   .unitlist { left: 10px; right: 10px; top: 52px; bottom: 132px; width: auto; max-height: none; padding: 12px 6px 6px 12px; }
   .boxbar { border-radius: 18px; width: calc(100vw - 20px); }
