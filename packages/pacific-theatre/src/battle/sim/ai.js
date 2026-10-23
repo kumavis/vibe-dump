@@ -875,6 +875,25 @@ function attackThink(sim, i, x, dt) {
 
 // --- 3. the player's physics -------------------------------------------------------------------------
 
+/** An untouched spare keeps its place beside its group's aircraft (right and back of it, at its speed and heading); false once that aircraft is gone. */
+function holdSpare(sim, i, sp) {
+  const s = sim.state
+  const j = sp.j
+  if (s.alive[j] !== 1) return false
+  const h = s.heading[j] * DEG
+  const o = 3 * i
+  const q = 3 * j
+  s.pos[o] = s.pos[q] + Math.cos(h) * sp.right - Math.sin(h) * sp.back
+  s.pos[o + 1] = s.pos[q + 1]
+  s.pos[o + 2] = s.pos[q + 2] + Math.sin(h) * sp.right + Math.cos(h) * sp.back
+  for (let k = 0; k < 3; k++) s.vel[o + k] = s.vel[q + k]
+  for (let k = 0; k < 4; k++) s.quat[4 * i + k] = s.quat[4 * j + k]
+  s.heading[i] = s.heading[j]
+  s.speed[i] = s.speed[j]
+  sim._X[i].bank = sim._X[j].bank ?? 0
+  return true
+}
+
 export function playerStep(sim, dt) {
   const pl = sim.player
   if (!pl) return
@@ -884,6 +903,7 @@ export function playerStep(sim, dt) {
   const x = sim._X[i]
   if (!pl.engaged) {
     // a soft take: the record moves the unit; the first act takes it off the record (ROUND-2 §3)
+    if (x.spareOf && !holdSpare(sim, i, x.spareOf)) return sim._engagePlayer(pl, 'its group gone')
     syncPlayerBody(sim, pl)
     if (s.alive[i] !== 1 || !inputTouched(pl)) return
     sim._engagePlayer(pl, 'input')

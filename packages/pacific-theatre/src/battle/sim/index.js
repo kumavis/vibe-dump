@@ -1036,7 +1036,10 @@ export function createSim(battle, kits, opts = {}) {
     const vy = state.vel[o3 + 1]
     const vz = state.vel[o3 + 2]
     const hs = Math.hypot(vx, vz)
-    const b = createAirBody(x.model, { x: state.pos[o3], y: state.pos[o3 + 1], z: state.pos[o3 + 2], V: Math.max(x.model.vCruise * 0.8, Math.hypot(hs, vy)), heading: state.heading[i], gamma: Math.atan2(vy, Math.max(1, hs)), throttle })
+    // (between 0.8 of its cruise and its top speed, or its dive's limit when diving: a record's leg can ask more of it than the kit gives)
+    const top = vy < -0.3 * Math.max(1, hs) ? x.model.vShake : x.model.vMax
+    const V = Math.min(top, Math.max(x.model.vCruise * 0.8, Math.hypot(hs, vy)))
+    const b = createAirBody(x.model, { x: state.pos[o3], y: state.pos[o3 + 1], z: state.pos[o3 + 2], V, heading: state.heading[i], gamma: Math.atan2(vy, Math.max(1, hs)), throttle })
     b.phi = x.bank || 0
     return b
   }
@@ -1100,7 +1103,11 @@ export function createSim(battle, kits, opts = {}) {
       state.heading[i] = state.heading[j]
       X[i].bank = 0
       X[i].body = airBodyFromState(i)
+      state.speed[i] = X[i].body.V
       setAlive(i, 1)
+      // soft like any take: it keeps its place beside that aircraft until the player acts (ai.js playerStep), and goes if given back untouched
+      X[i].spareOf = { j, right: 120, back: 60 }
+      units[i].authority = 'player'
     } else {
       i = target.i
       kind = units[i].kind
@@ -1146,8 +1153,8 @@ export function createSim(battle, kits, opts = {}) {
     sim.player = player
     sim._score = { hits: [], downed: 0, torpedoesHit: 0, salvos: 0, straddles: 0, shells: 0, bombs: 0, torpedoes: 0, rounds: 0, aaBursts: 0, releaseM: null, envelope: [], objective: false, start: sim.t, lost: null, how: null }
     sim._sortie = openSortie(sim, player, group)
-    if (moment || u.authority !== 'record') {
-      // hard at once: a bookmark (as the first build), a spare, or a unit already off the record
+    if (moment || (u.authority !== 'record' && !x.spareOf)) {
+      // hard at once: a bookmark (as the first build), or a unit already off the record
       if (moment && kind === 'ship') touch(i, 'player')
       engagePlayer(player, moment ? 'bookmark' : 'taken')
     } else AI.syncPlayerBody(sim, player)
@@ -1170,7 +1177,8 @@ export function createSim(battle, kits, opts = {}) {
       if (u.authority === 'record') x.body = airBodyFromState(i, x.body?.throttle ?? 0.8)
       x.touched = true
     }
-    if (u.authority !== 'player') logDiverge(i, why === 'input' ? 'at the controls' : why)
+    if (u.authority !== 'player' || x.spareOf) logDiverge(i, x.spareOf ? 'a spare beside its group, at the controls' : why === 'input' ? 'at the controls' : why)
+    x.spareOf = null
     u.authority = 'player'
     x.ai = null
     x.prev = null
@@ -1248,6 +1256,12 @@ export function createSim(battle, kits, opts = {}) {
       // (the shadow body and the HUD's guns go; the record places it as it always did)
       x.body = null
       if (u.kind === 'ship') x.guns = null
+    } else if (x.spareOf) {
+      // an untouched spare was never in the battle: it goes
+      x.spareOf = null
+      x.body = null
+      setAlive(i, 0)
+      u.authority = 'free'
     }
     if (sim.momentState && !sim.momentState.done) endMoment('released')
     sim.player = null
