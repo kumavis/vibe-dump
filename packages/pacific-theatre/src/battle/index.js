@@ -39,9 +39,12 @@
 // (or t) and resolves, like takeMoment, when the sortie ends, with
 // { sortie, score, outcome, reason }; setStation(name) switches; release()
 // gives it back. bookmarks are the moments; assist is 'assisted' or 'pilot'
-// (App keeps it); firstDoor is the battle file's. The 'battle' events gain
-// 'select', 'take', 'station', 'units' (L) and 'unit-card' (Enter on a
-// selection); 'after' carries the sortie.
+// (App keeps it); firstDoor is the battle file's (a first door's spare takes
+// its `start`: Battle.take passes role.start to the sim). The 'battle' events
+// gain 'select', 'take', 'station' and 'released' (the sortie, at every
+// release); 'after' carries the sortie. The keys have one owner each: L and
+// Enter while watching are src/link.js's, Tab while watching (the next unit)
+// is bindWatchKeys's, Tab while a unit is held is the controls'.
 
 import { createSim } from './sim/index.js'
 import { BoxScene } from './scene/box.js'
@@ -685,17 +688,8 @@ export class Battle {
           return
         }
         if (this.app.mode === 'watch' && !this._question && this.sim && !inField(e)) {
-          // ROUND-2 §4: L the unit list, Enter the selection's card, Tab the next unit (Shift: the previous)
-          if (e.code === 'KeyL' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-            this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'units' } }))
-            return
-          }
-          if ((e.code === 'Enter' || e.code === 'NumpadEnter') && this.selected != null && onCanvas(e)) {
-            e.preventDefault()
-            const row = this.sim.units().find((r) => r.index === this.selected) ?? null
-            this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'unit-card', index: this.selected, unit: row } }))
-            return
-          }
+          // ROUND-2 §4: Tab the next unit (Shift: the previous). L (the unit list) and Enter (the selection's card) are
+          // src/link.js's, and Tab while a unit is held is the controls' (controls/input.js): one owner a key.
           if (e.code === 'Tab' && onCanvas(e)) {
             e.preventDefault()
             this.selectNext(e.shiftKey ? -1 : 1)
