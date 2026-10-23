@@ -6,9 +6,11 @@
 // main.js loads.
 //
 // Every battle starts from its real title-screen button
-// (`[data-mode=<mode>]`), clicked by Playwright as a player would, so the
-// gate also proves the title screen still starts each kind of game. That
-// button calls the same start(mode) the Node oracle calls through __ts.
+// (`[data-mode=<mode>]`), clicked by Playwright as a player would, and (F6)
+// the battle-setup panel it opens, its Start pressed with the races its
+// defaults take from the URL (?races=), so the gate also proves the title
+// screen still starts each kind of game. That calls the same start(mode)
+// the Node oracle calls through __ts.
 //
 // Set CHROMIUM_PATH to the pre-installed Chromium if Playwright's own isn't
 // installed. A battle that stops making progress (no trace line, no driver
@@ -98,6 +100,10 @@ async function runOne(browser, url, job) {
     const button = `[data-mode="${mode}"]`
     await page.click(button, { timeout: 30000 }).catch((e) => {
       throw new Error(`the title screen's ${button} button could not be pressed: ${e.message.split('\n')[0]}`)
+    })
+    // (F6) and the battle-setup panel's Start, as it opened
+    await page.click('#setupStart', { timeout: 30000 }).catch((e) => {
+      throw new Error(`the title screen's ${button} button did not start a ${mode} game (no battle-setup panel's Start to press: ${e.message.split('\n')[0]})`)
     })
     const started = await ask(page, (want) => document.querySelector('#title').classList.contains('hidden') && window.__ts.S.control?.join() === want, IDLE_MS, MODES[mode].join())
     if (!started) throw new Error(`the title screen's ${button} button did not start a ${mode} game (title still up, or S.control isn't ${MODES[mode].join('/')})`)

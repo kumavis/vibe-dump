@@ -25,6 +25,7 @@ import { UnitViews } from './units.js'
 import { Overlay } from './overlay.js'
 import { FX } from './effects/fx.js'
 import { Shots } from './effects/shots.js'
+import { Diorama } from './diorama.js'
 import { wait } from './clock.js'
 
 export class View {
@@ -58,8 +59,8 @@ export class View {
   // (view/effects/shots.js) and what a seat's tools draw on the table
   // (view/overlay.js: one texel per nav cell, `grid` every match's grid
   // size).
-  figures({ mirror, colorOf, W, H, grid }) {
-    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, W })
+  figures({ mirror, colorOf, rimOf, W, H, grid }) {
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W })
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units })
     this.overlay = new Overlay(this.scene, { W, H, grid })
   }
@@ -159,6 +160,15 @@ export class View {
       },
       rig: this.rig,
       shake: () => effects.shake,
+      // (F6) a race's figures in a window of the page, after the table
+      after: (wall) => this.made?.draw(wall),
     })
+  }
+
+  // (F6) The race showcase (view/diorama.js): made the first time a window
+  // asks for it, never as the page loads (the title's draws are the
+  // table's).
+  get diorama() {
+    return (this.made ??= new Diorama(this.renderer))
   }
 }

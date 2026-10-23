@@ -301,6 +301,7 @@ async function lane(browser, url, name) {
     }
     if (name === 'watch') {
       await page.click('[data-mode="watch"]')
+      await page.click('#setupStart')
       await pace()
       await page.waitForSelector('#over:not(.hidden)', { timeout: 3600000 })
       log('end screen:', await text('#overTitle'), '|', await text('#overWhy'))
@@ -312,12 +313,14 @@ async function lane(browser, url, name) {
       await sleep(1500)
       log('new battlefield', await page.inputValue('#seed'))
       await page.click('[data-mode="watch"]')
+      await page.click('#setupStart')
       const until = Date.now() + 600000
       while (Date.now() < until && !/Round [2-5]/.test(await text('#round'))) await sleep(3000)
       log('second watched battle:', await text('#round'), 'log entries:', await page.evaluate(() => document.querySelector('#logList').children.length))
       if (!/Round [2-5]/.test(await text('#round'))) problems.push(`the second watched battle never reached round 2 (${await text('#round')})`)
     } else {
       await page.click(`[data-mode="${name}"]`)
+      await page.click('#setupStart')
       await pace()
       const seats = name === 'bushtail' ? [0] : name === 'serpent' ? [1] : [0, 1]
       log('started', name)

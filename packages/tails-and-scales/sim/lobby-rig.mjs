@@ -4,7 +4,9 @@
 // rig runs), on a fresh build of the package (or --dist).
 //
 //   play         a host's page (Play online), a guest's from the link (Sit
-//                here, a name, Ready) and a watcher's: the battle starts on
+//                here, a name, Ready) and a watcher's (F6: the host's own
+//                seat's race picker live, the guest's seat's showing its
+//                race alone, its button picking nothing): the battle starts on
 //                both seats once both are ready, each page playing its own
 //                seat (the watcher none, its badge counted on the others');
 //                each seat deploys, plays a turn (the AI's Auto), and one
@@ -244,6 +246,13 @@ async function runCases(dist, cases) {
   const RUN = {
     async play() {
       const { host, guest, link } = await lobbyPair()
+      // (F6) each seat's card shows its race in the picker: yours to change
+      // in your own seat only (another seat's button picks nothing)
+      const pickers = await host.evaluate(() => [...document.querySelectorAll('#lobby .seat')].map((s) => ({
+        mine: s.classList.contains('mine'),
+        live: [...s.querySelectorAll('.raceRow button')].filter((b) => !b.disabled && !b.classList.contains('hidden')).length,
+      })))
+      must(pickers.length === 2 && pickers.every((p) => (p.mine ? p.live >= 2 : p.live === 0)), `the host's own seat offers the races and the guest's none: ${JSON.stringify(pickers)}`)
       await setName(guest, 'Ben')
       await press(guest, 'Ready')
       await press(host, 'Ready')

@@ -66,19 +66,30 @@ const seeds = (a.seeds ?? '64-89,4242-99,777-1').split(',').map((p) => {
 
 // Which seat's race each log line shows, if any: the roll-off names the
 // winner's race; a line that opens with a unit's short name is that unit's.
+// (F6) In a mirror match the roll-off and each round's line name each seat
+// by its edge as well ("Coil of Ssithra (west) win the roll-off…"), and in
+// any other match by its race alone: core/match.js's seatName.
 const shorts = Object.values(RACES).flatMap((r) => Object.values(r.units).map((t) => ({ race: r.key, short: t.short })))
   .sort((x, y) => y.short.length - x.short.length)
 function raceProblems(trace, races) {
   const bad = []
-  let checked = 0, rolloff = 0
+  const edge = (seat) => (races[0] === races[1] ? ` (${seat ? 'east' : 'west'})` : '')
+  let checked = 0, rolloff = 0, rounds = 0
   for (const l of trace) {
+    const r = /^log -1 End of round \d+: (.*) hold \d+ objectives?, (.*) hold \d+\. /.exec(l)
+    if (r) {
+      rounds++
+      const names = [0, 1].map((s) => RACES[races[s]].short + edge(s))
+      if (r[1] !== names[0] || r[2] !== names[1]) bad.push(`the round's line should name ${names.join(' and ')}: ${l}`)
+      continue
+    }
     const m = /^log (\d) (.*) rng:\S+$/.exec(l)
     if (!m) continue
     const seat = Number(m[1]), text = m[2], want = RACES[races[seat]]
     const roll = / win the roll-off and take the first turn\.$/.exec(text)
     if (roll) {
       rolloff++
-      if (!text.startsWith(want.name + ' ')) bad.push(`seat ${seat} should be the ${want.name}: ${l}`)
+      if (text !== `${want.name}${edge(seat)} win the roll-off and take the first turn.`) bad.push(`seat ${seat} should be the ${want.name}${edge(seat)}: ${l}`)
       continue
     }
     const by = shorts.find((s) => text.startsWith(s.short + ' ') || text.startsWith(s.short + ':'))
@@ -87,6 +98,7 @@ function raceProblems(trace, races) {
     if (by.race !== want.key && !Object.values(want.units).some((t) => t.short === by.short)) bad.push(`seat ${seat} plays ${want.key}, but: ${l}`)
   }
   if (rolloff !== 1) bad.push(`expected one roll-off line, found ${rolloff}`)
+  if (!rounds) bad.push('no end-of-round line to read the seats\' names from')
   if (checked < 20) bad.push(`only ${checked} log lines name a unit, too few to tell the races apart`)
   return { bad, checked }
 }

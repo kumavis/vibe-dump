@@ -106,16 +106,15 @@ export const ALLOW = [
   ['view/camera.js', "if (e.key === 'Home')", 1, 'a keyboard key'],
   ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
   ['ui/theme.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
+  ['ui/screens/races.js', 'b.dataset.race === race', 1, "(F6) the race picker marks the chosen race's button: presentation"],
+  ['view/diorama.js', 'had.race === race', 1, '(F6) the race showcase drawn once for a race and colour, not rebuilt: presentation'],
+  ['ui/screens/races.js', 'if (race !== this.race) {', 1, "(F6) the race picker puts the last race's unit stats away when another race is shown: presentation"],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],
   ['data/schema.js', 'abilities: [...def.abilities]', 1, 'copies the card text into the normalised type'],
   ['data/schema.js', 'const { key } = def', 1, "reads the race definition's own key, to validate and register it"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
-  ['app/online.js', 'Object.keys(RACES).map((key) => ({ key, name: RACES[key].name, icon: RACES[key].icon }))', 1, "the lobby's race picker lists every race by its key, name and icon: presentation"],
-  ['app/online.js', 'races.find((r) => r.key === race)', 1, "a lobby seat's race shown by its name and icon: presentation"],
-  ['ui/screens/lobby.js', 'o.value = r.key', 1, "the race picker's options, one per race by its key: presentation"],
-  ['ui/screens/lobby.js', 'pick.value = s.race', 1, "the race picker shows the seat's race: presentation"],
 ]
 
 function files(dir) {

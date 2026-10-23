@@ -40,15 +40,17 @@ const tmpV = new THREE.Vector3()
 
 export class UnitViews {
   // `mirror()`: the mirror the table shows (the player's); `colorOf(seat)`
-  // a seat's colour; `labels` the element the floating labels go in; `W`
-  // the board's width (a fleeing figure runs off it)
-  constructor({ scene, labels, fx, mirror, colorOf, W }) {
+  // a seat's colour, `rimOf(seat)` (F6) how broad its bases' rims are (a
+  // mirror match's east army: broader); `labels` the element the floating
+  // labels go in; `W` the board's width (a fleeing figure runs off it)
+  constructor({ scene, labels, fx, mirror, colorOf, rimOf = () => 1, W }) {
     this.scene = scene
     this.W = W
     this.labels = labels
     this.effects = fx
     this.mirror = mirror
     this.colorOf = colorOf
+    this.rimOf = rimOf
     this.views = new Map()
     // bumped by every sync: a playback still running from before it (a walk,
     // a death) touches nothing of the views it left
@@ -98,7 +100,7 @@ export class UnitViews {
         v.models.push({ mesh: null, x: 0, z: 0, yaw: facing, lunge: 0, lungeDir: 0, lift: 0 })
         continue
       }
-      const mesh = buildModel(kit, u.key, u.t, color)
+      const mesh = buildModel(kit, u.key, u.t, color, this.rimOf(u.side))
       this.scene.add(mesh)
       v.models.push({ mesh, x: 0, z: 0, yaw: facing, lunge: 0, lungeDir: 0, lift: 0 })
     }
@@ -209,7 +211,7 @@ export class UnitViews {
         // (a figure that fell or fled, or is falling: a new one)
         if (!f.mesh || f.dying || f.fleeing || !f.mesh.parent) {
           this.unfigure(f)
-          const mesh = buildModel(kit, u.key, u.t, color)
+          const mesh = buildModel(kit, u.key, u.t, color, this.rimOf(u.side))
           this.scene.add(mesh)
           f = v.models[k] = { mesh, x: 0, z: 0, yaw: v.facing, lunge: 0, lungeDir: 0, lift: 0 }
         }

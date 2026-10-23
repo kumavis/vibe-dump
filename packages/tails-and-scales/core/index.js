@@ -39,7 +39,7 @@
 // it); `strict` checks every AI command with legal() before it is applied,
 // and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
 // state: the rules don't read them, and stateHash leaves them out.
-import { newState, missionOf, raceOf } from './match.js'
+import { newState, missionOf, seatName } from './match.js'
 import { lock, unlock } from './rng.js'
 import { emit, log } from './journal.js'
 import { advance, humanSeats } from './engine.js'
@@ -97,7 +97,7 @@ export function createMatch(setup, { out = null, onTrace = null, strict = false 
   const humans = humanSeats(G)
   if (humans.length) {
     emit(G, 'stage', { stage: 'deploy' })
-    for (const s of humans) log(G, s, `<b>${raceOf(G, s).name}</b>: deploy your army.`)
+    for (const s of humans) log(G, s, `<b>${seatName(G, s)}</b>: deploy your army.`)
     G.pending = { k: 'deploy', seats: humans }
   }
   advance(G)

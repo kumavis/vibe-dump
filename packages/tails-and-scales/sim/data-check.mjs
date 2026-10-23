@@ -234,15 +234,18 @@ for (const side of [0, 1]) {
   check(!diffPath(view, wantSide), `seat ${side}: the classic SIDES view`, diffPath(view, wantSide))
 }
 // The seats' look the page paints (ui/theme.js, main.js's SIDES) held to
-// that legacy view for the classic matchup; and a mirror match, which paints
-// seat 1 in its race's alternate colour
+// that legacy view for the classic matchup (with `mirror` false, F6's flag);
+// and a mirror match, which paints seat 1 in its race's alternate colour and
+// (F6) names each seat by its edge as well
 const { sidesFor, isMirror } = await imp(PKG, 'ui/theme.js')
 const seated = (races) => sidesFor(races.map((race, seat) => ({ seat, race })))
-check(isDeepStrictEqual(seated(CLASSIC).map((s) => ({ ...s })), SIDES) && !isMirror(CLASSIC.map((race, seat) => ({ seat, race }))), "ui/theme.js's sidesFor paints the classic seats as the legacy SIDES (and it is no mirror match)", diffPath(seated(CLASSIC).map((s) => ({ ...s })), SIDES))
+const classicWant = SIDES.map((s) => ({ ...s, mirror: false }))
+check(isDeepStrictEqual(seated(CLASSIC).map((s) => ({ ...s })), classicWant) && !isMirror(CLASSIC.map((race, seat) => ({ seat, race }))), "ui/theme.js's sidesFor paints the classic seats as the legacy SIDES (and it is no mirror match)", diffPath(seated(CLASSIC).map((s) => ({ ...s })), classicWant))
 for (const race of Object.keys(RACES)) {
   const twin = [race, race], r = RACES[race], got = seated(twin)
-  const want = [0, 1].map((seat) => ({ name: r.name, short: r.short, icon: r.icon, color: seat ? r.look.alt : r.look.team, dark: r.look.dark }))
-  check(isMirror(twin.map((race, seat) => ({ seat, race }))) && isDeepStrictEqual(got.map((s) => ({ ...s })), want) && r.look.alt !== r.look.team, `a mirror match of ${race}: seat 1 in its alternate colour (${r.look.alt}), seat 0 in its own (${r.look.team})`, diffPath(got.map((s) => ({ ...s })), want) ?? (r.look.alt === r.look.team ? 'the alternate colour is the team colour' : 'isMirror says no'))
+  const edge = (seat) => ` (${seat ? 'east' : 'west'})`
+  const want = [0, 1].map((seat) => ({ name: r.name + edge(seat), short: r.short + edge(seat), icon: r.icon, color: seat ? r.look.alt : r.look.team, dark: r.look.dark, mirror: true }))
+  check(isMirror(twin.map((race, seat) => ({ seat, race }))) && isDeepStrictEqual(got.map((s) => ({ ...s })), want) && r.look.alt !== r.look.team, `a mirror match of ${race}: seat 1 in its alternate colour (${r.look.alt}), seat 0 in its own (${r.look.team}), each named by its edge`, diffPath(got.map((s) => ({ ...s })), want) ?? (r.look.alt === r.look.team ? 'the alternate colour is the team colour' : 'isMirror says no'))
 }
 // a slain model plays sfx.voice(look.voice) (view/units.js), which is
 // silence for a name view/sfx.js's VOICES lacks (R7 keyed the voices so;

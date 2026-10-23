@@ -253,6 +253,7 @@ async function play(code, work, { battles, snap, what }) {
     row('the title', await measure())
     for (let i = 1; i <= battles; i++) {
       await page.click('[data-mode="watch"]')
+      await page.click('#setupStart')
       await page.waitForFunction(() => window.__ts.S.stage === 'over' && window.__ts.player.idle, null, { timeout: 600000, polling: 500 })
       row(`battle ${i}'s end`, await measure())
       await page.click('#again')

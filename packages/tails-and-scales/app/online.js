@@ -56,6 +56,7 @@ import { stateHash, createMatch, CORE_VERSION, RULES_ID } from '../core/index.js
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { LobbyScreen } from '../ui/screens/lobby.js'
+import { sidesFor, seatsOf } from '../ui/theme.js'
 import { NetDialog } from '../ui/screens/netdialog.js'
 import { NetBadge } from '../ui/netbadge.js'
 
@@ -114,7 +115,7 @@ export class Online {
   constructor({ flow, params }) {
     this.flow = flow
     this.params = params
-    this.screen = new LobbyScreen()
+    this.screen = new LobbyScreen({ diorama: () => this.flow.view.diorama })
     this.dialog = new NetDialog()
     this.badge = new NetBadge($('#netbadge'))
     this.screen.wire({
@@ -290,11 +291,14 @@ export class Online {
             : !other.ready ? `Waiting for ${other.name || 'your opponent'} to get ready…`
               : !L.seats[me].ready ? 'Press Ready when you are.'
                 : this.isHost() ? 'Starting…' : hostHere ? 'Waiting for the host to start the battle…' : 'Waiting for host (their page is closed).'
-    const races = Object.keys(RACES).map((key) => ({ key, name: RACES[key].name, icon: RACES[key].icon }))
-    const look = (race) => races.find((r) => r.key === race) ?? { name: String(race ?? '?'), icon: '' }
+    // each seat's race (a free seat's: the one it would bring) and its
+    // bases' rims, the colours the battle would give them (a race the core
+    // doesn't know, a peer's, shows no figures)
+    const races = L.seats.map((r, i) => (r ? r.race : this.freeRace(L, i)))
+    const sides = races.every((race) => Object.hasOwn(RACES, race)) ? sidesFor(seatsOf(races)) : null
     const m = {
-      status, link: this.linkFor(this.id), board: L.board, host: this.isHost(), races,
-      seats: L.seats.map((r, i) => (r ? { name: r.name, race: r.race, look: look(r.race), ready: r.ready, mine: r.dev === this.dev } : { free: true, look: look(this.freeRace(L, i)), canSit: true })),
+      status, link: this.linkFor(this.id), board: L.board, host: this.isHost(),
+      seats: L.seats.map((r, i) => ({ ...(r ? { name: r.name, ready: r.ready, mine: r.dev === this.dev } : { free: true, canSit: true }), race: races[i], color: sides?.[i].color ?? '#9a8a70' })),
     }
     // (drawn again only when it changed: a picker left open stays open)
     const shown = JSON.stringify(m)

@@ -26,6 +26,11 @@ export class TitleScreen {
     if (innerWidth < 700) $('#log').classList.add('collapsed')
   }
 
+  // (F6) out of the way of the battle-setup panel, the battle not yet on
+  away() {
+    $('#title').classList.add('hidden')
+  }
+
   show() {
     $('#title').classList.remove('hidden')
     document.body.classList.remove('playing')
@@ -53,7 +58,8 @@ export class TitleScreen {
   }
 
   // `S`: the title's state ({ seed }, the board on show); `showTable(seed)`
-  // draws a board's table; `start(mode)` a battle (app/flow.js); (N2)
+  // draws a board's table; `start(mode)` a mode's battle ((F6) through the
+  // battle-setup panel: app/boot.js); (N2)
   // `online()` a new online match (app/online.js); (N3) `replay(text)` a
   // replay file's text watched (app/boot.js)
   wire({ S, showTable, start, online, replay }) {

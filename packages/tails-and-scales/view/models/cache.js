@@ -23,7 +23,9 @@
 // to the code before R7 pixel for pixel with the figures hidden, and every
 // figure's place and miniature, vertex for vertex.
 //
-//   buildModel(kit, key, t, color)   a figure: its root's userData holds
+//   buildModel(kit, key, t, color, rim)   a figure ((F6) its base's rim
+//                                    `rim` times as broad): its root's
+//                                    userData holds
 //                                    `fig` (the miniature, marked: the
 //                                    screenshot tools hide figures by it),
 //                                    `anim` (what the view wiggles), `phase`
@@ -48,11 +50,11 @@ const DRAWS = new Set([...SQUIRREL_DRAWS, ...SERPENT_DRAWS])
 // `${kit}/${unit}` → a pristine baked miniature, never put on the table
 const templates = new Map()
 
-export function buildModel(kit, key, t, sideColor) {
+export function buildModel(kit, key, t, sideColor, rim = 1) {
   if (!Object.hasOwn(KITS, kit) || !Object.hasOwn(KITS[kit], key)) throw new Error(`no figure for unit "${key}" in the "${kit}" kit`)
   const id = `${kit}/${key}`, build = KITS[kit][key], draws = DRAWS.has(build)
   const root = new THREE.Group()
-  const b = base(t.base, sideColor)
+  const b = base(t.base, sideColor, rim)
   root.add(b)
   const fresh = draws || !templates.has(id)
   const fig = fresh ? build() : cloneFigure(templates.get(id))

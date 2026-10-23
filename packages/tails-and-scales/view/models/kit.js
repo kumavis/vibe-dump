@@ -48,17 +48,18 @@ export function rod(a, b, r, mat) {
   return m
 }
 
-// A model's round base: dark, flocked, with a rim in its seat's colour. Its
-// tufts of static grass fall at random (Math.random: every figure its own),
-// so a base is made for each figure (view/models/cache.js).
-export function base(r, sideColor) {
+// A model's round base: dark, flocked, with a rim in its seat's colour
+// ((F6) `rim` times as broad: a mirror match's east army, view/units.js).
+// Its tufts of static grass fall at random (Math.random: every figure its
+// own), so a base is made for each figure (view/models/cache.js).
+export function base(r, sideColor, rim = 1) {
   const g = new THREE.Group()
   const b = part(new THREE.CylinderGeometry(r, r * 1.05, 0.09, 28), M('#262422'), 0, 0.045, 0)
   b.receiveShadow = true
   const top = part(new THREE.CylinderGeometry(r * 0.96, r * 0.96, 0.012, 28), M('#4c5e2c', { flatShading: false }), 0, 0.094, 0)
   top.receiveShadow = true
-  const rim = part(new THREE.TorusGeometry(r * 1.02, 0.028, 4, 32).rotateX(Math.PI / 2), M(sideColor, { emissive: sideColor, emissiveIntensity: 0.35 }), 0, 0.07, 0)
-  g.add(b, top, rim)
+  const ring = part(new THREE.TorusGeometry(r * 1.02, 0.028 * rim, 4, 32).rotateX(Math.PI / 2), M(sideColor, { emissive: sideColor, emissiveIntensity: 0.35 }), 0, 0.07, 0)
+  g.add(b, top, ring)
   // flock: a few tufts of static grass
   for (let i = 0; i < Math.round(r * 9); i++) {
     const a = Math.random() * 6, d = Math.sqrt(Math.random()) * r * 0.85

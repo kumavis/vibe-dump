@@ -42,6 +42,7 @@
 // comes back to it as it then stands.
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
+import { RACES } from '../data/schema.js'
 import { edgeOf } from '../core/match.js'
 import { createMatch, fullSetup, preview } from '../core/index.js'
 import { Session } from '../match/session.js'
@@ -484,16 +485,21 @@ export class Flow {
   }
 
   // A battle: the whole setup (the board on the title screen, a fresh dice
-  // stream, who plays each seat, each human seat played from this device),
-  // a LocalStore whose first entry starts it, and a Session over it for the
+  // stream, who plays each seat, each human seat played from this device,
+  // (F6) the races the battle-setup panel chose, else the table's), a
+  // LocalStore whose first entry starts it, and a Session over it for the
   // seats played here. The match runs on at once: to each human seat's
   // deployment, or (watch) to its end, and the table plays it from there.
-  start(mode) {
+  start(mode, races = this.races) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
     if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
+    if (races.length !== 2 || !races.every((r) => Object.hasOwn(RACES, r))) throw new Error(`a battle takes two races of ${Object.keys(RACES).join(', ')}, not ${races.join(', ')}`)
     const who = MODES[mode]
+    // (F6) the races the battle-setup panel chose are the table's from now
+    // on (the title's backdrop after it, the panel's next defaults)
+    this.races = [...races]
     // (an online match followed is left: a battle here is played alone; a
     // replay shown is closed)
     this.replay?.close()

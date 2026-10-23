@@ -763,12 +763,18 @@ follows N3.
   battle: N moves since you were last here", and the title's Continue for
   the last online battle still going on. `sim/replay-check.mjs` (Node), four
   lobby-rig cases, merge-sim edges. DESIGN's N3 notes.)
-- [ ] **F6** Race selection with a mini 3D diorama of each race's figures,
+- [x] **F6** Race selection with a mini 3D diorama of each race's figures,
   on a battle-setup panel that a mode button opens (later steps add the
   terrain, the battle size and the army to it). It makes mirror matches
   reachable from the title, so it also takes R2's leftovers: seat names
   that read the same in a mirror (roll-off rows, log lines, AI hint) and a
   stronger mirror cue on the table.
+  (The panel, `ui/screens/setup.js`; the picker, `ui/screens/races.js`,
+  also in the lobby's seat cards; the figures drawn by the table's own
+  renderer into each window, `view/diorama.js`, with a unit's stats under
+  the pointer. A mirror match names each seat by its edge too, and the
+  east army gets thick rims and filled labels. The Chromium harnesses press
+  the panel's Start; mirror-check holds the names. DESIGN's F6 notes.)
 - [ ] **S0-S3** Scale hygiene: bounded scans, an LOS broadphase, hoisted
   invariants, one forbid mask, a plan memo inside one apply. Byte-identical,
   no bump; `sim/scale-bench.mjs` and a Grand test fixture.

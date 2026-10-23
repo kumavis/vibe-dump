@@ -25,7 +25,7 @@
 // what the view shows is events in G.out (§2.3), never awaited.
 import { PHASES, roll } from './rules.js'
 import { emit, log, flush, traceState } from './journal.js'
-import { ctrl, raceOf } from './match.js'
+import { ctrl, seatName } from './match.js'
 import { alive, isEngaged, anyCanAct, ownersOf, statusOf, phaseKey } from './queries.js'
 import { fightPhase } from './actions/fight.js'
 import { moralePhase } from './actions/morale.js'
@@ -114,11 +114,11 @@ export function rollOff(G) {
   do {
     a = roll(G, 1)
     b = roll(G, 1)
-    emit(G, 'dice', { label: raceOf(G, 0).short, dice: a, need: 0, sum: true })
-    emit(G, 'dice', { label: raceOf(G, 1).short, dice: b, need: 0, sum: true })
+    emit(G, 'dice', { label: seatName(G, 0, 'short'), dice: a, need: 0, sum: true })
+    emit(G, 'dice', { label: seatName(G, 1, 'short'), dice: b, need: 0, sum: true })
   } while (a[0] === b[0])
   T.first = a[0] > b[0] ? 0 : 1
-  log(G, T.first, `<b>${raceOf(G, T.first).name}</b> win the roll-off and take the first turn.`, 'big')
+  log(G, T.first, `<b>${seatName(G, T.first)}</b> win the roll-off and take the first turn.`, 'big')
 }
 
 // A seat's turn begins: every unit's losses this turn are forgotten, and the
@@ -170,7 +170,7 @@ export function scoreRound(G) {
   T.vp[0] += held[0]
   T.vp[1] += held[1]
   traceState(G, `round ${T.round}`)
-  const a = raceOf(G, 0).short, b = raceOf(G, 1).short
+  const a = seatName(G, 0, 'short'), b = seatName(G, 1, 'short')
   log(G, -1, `End of round ${T.round}: ${a} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${b} hold ${held[1]}. Score ${T.vp[0]}–${T.vp[1]}.`, 'big')
   emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners })
 }

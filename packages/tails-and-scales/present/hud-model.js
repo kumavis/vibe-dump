@@ -112,7 +112,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   let hint = hud.hint
   if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
   else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
-  else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name} (AI) are taking their turn…`
+  else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name}${sides[M.active].mirror ? ', the AI,' : ' (AI)'} are taking their turn…`
   // (N2) a human seat played on another device: its player's turn, or the
   // deployment it has still to finish (never in a game played alone, where
   // every human seat is played here)

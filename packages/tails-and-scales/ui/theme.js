@@ -11,14 +11,18 @@ export const isMirror = (seats) => seats.length === 2 && seats[0].race === seats
 
 // Each seat's look, from [{ seat, race }, …]. A mirror match paints seat 1
 // in its race's alternate colour, so the two armies, their zones, labels and
-// log lines still tell apart.
+// log lines still tell apart; and (F6) names each seat by the edge it holds
+// as well ("Bushtail Clans (west)", as the match's own text does:
+// core/match.js's seatName), so the HUD, banners, card and end screen read
+// apart too. `mirror` says which match it is.
 export function sidesFor(seats) {
   const mirror = isMirror(seats)
+  const edge = (seat) => (mirror ? ` (${seat === 0 ? 'west' : 'east'})` : '')
   return Object.freeze(seats.map(({ seat, race }) => {
     const r = RACES[race]
     return Object.freeze({
-      name: r.name, short: r.short, icon: r.icon,
-      color: mirror && seat === 1 ? r.look.alt : r.look.team, dark: r.look.dark,
+      name: r.name + edge(seat), short: r.short + edge(seat), icon: r.icon,
+      color: mirror && seat === 1 ? r.look.alt : r.look.team, dark: r.look.dark, mirror,
     })
   }))
 }
@@ -47,6 +51,9 @@ export function paintSeats(sides) {
     $(`${hud} .ic`).textContent = sides[s].icon
     $(`${hud} .nm`).textContent = sides[s].name
   }
+  // (F6) a mirror match's stronger cue on the table: the east army's labels
+  // filled in its colour (style.css)
+  document.body.classList.toggle('mirror', !!sides[0].mirror)
 }
 
 // In a mirror match both seats' names read the same, so text that names a

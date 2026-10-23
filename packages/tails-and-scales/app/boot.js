@@ -12,7 +12,7 @@ import { UnitViews } from '../view/units.js'
 import { clock } from '../view/clock.js'
 import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
-import { seatsOf } from '../ui/theme.js'
+import { seatsOf, sidesFor, isMirror } from '../ui/theme.js'
 import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
 import { Card } from '../ui/card.js'
@@ -25,7 +25,8 @@ import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
-import { Flow } from './flow.js'
+import { SetupScreen } from '../ui/screens/setup.js'
+import { Flow, MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
 import { Session } from '../match/session.js'
 
@@ -113,7 +114,8 @@ export function boot(location) {
   flow = new Flow({ view, ui, params, seed, races })
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
-  view.figures({ mirror: () => flow.player.mirror, colorOf, W, H, grid: gridSize(W, H, NAV_CELL) })
+  // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
+  view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL) })
 
   // ── The local human (input/), the player, the buttons ─────────────────────
   const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id) })
@@ -128,6 +130,12 @@ export function boot(location) {
   // played here
   let online = null
   const goOnline = (how) => {
+    // (F6) a #m= link opened over the battle-setup panel puts it away: the
+    // lobby or the match takes the page
+    if (setup.up) {
+      setup.hide()
+      title.show()
+    }
     const go = async () => {
       if (!online) {
         const { Online, loadNet } = await import('./online.js')
@@ -156,7 +164,42 @@ export function boot(location) {
     replay.open(ses)
     replay.fromStart()
   }
-  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => flow.start(mode), online: () => goOnline('host'), replay: watchFile })
+  // (F6) The battle-setup panel: a mode button opens it, each seat's race
+  // the table's (?races=, else the classic matchup; then the last chosen),
+  // and its Start begins that mode's battle with the races picked.
+  const setup = new SetupScreen({ diorama: () => view.diorama })
+  const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
+  const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
+  let picking = null
+  const showSetup = () => {
+    const { mode, races } = picking, seats = seatsOf(races), sides = sidesFor(seats)
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats) })
+  }
+  const openSetup = (mode) => {
+    picking = { mode, races: [...flow.races] }
+    title.away()
+    showSetup()
+  }
+  setup.wire({
+    pick: (s, race) => {
+      picking.races[s] = race
+      showSetup()
+    },
+    start: () => {
+      setup.hide()
+      try {
+        flow.start(picking.mode, picking.races)
+      } catch (err) {
+        title.show()
+        ui.toast.show(err.message, 8000)
+      }
+    },
+    back: () => {
+      setup.hide()
+      title.show()
+    },
+  })
+  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => openSetup(mode), online: () => goOnline('host'), replay: watchFile })
   ui.result.wire(() => flow.back(), (more) => human.vote(more), () => {
     if (!flow.battle) return
     replay.open(flow.battle)

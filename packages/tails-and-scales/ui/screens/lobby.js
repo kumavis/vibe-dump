@@ -1,12 +1,15 @@
 // The lobby screen (DESIGN §2.7, N2): an online match before its start. The
 // battle's link (Copy link, Open second tab), the battlefield (the host's to
 // change), the two seats, and a status line. A seat shows who sits there,
-// their race and whether they're ready; your own seat takes your name
+// their race (F6: the race picker, ui/screens/races.js, its figures and
+// their stats) and whether they're ready; your own seat takes your name
 // (fitted as you type: net/ids.js's fitName, which `on.fit` is), your race
-// and your Ready; a free seat
-// offers Sit here. What's shown is drawn from the lobby each time it
-// changes (render), never kept here; a name is a peer's say-so, so it is
+// (the picker's buttons) and your Ready; a free seat offers Sit here, with
+// the race it would bring. What's shown is drawn from the lobby each time
+// it changes (render), never kept here; a name is a peer's say-so, so it is
 // only ever written as text.
+import { RacePicker } from './races.js'
+
 const $ = (s) => document.querySelector(s)
 const el = (tag, cls, text) => {
   const e = document.createElement(tag)
@@ -16,23 +19,40 @@ const el = (tag, cls, text) => {
 }
 
 export class LobbyScreen {
-  constructor() {
+  // `diorama()`: the race showcase (view/diorama.js), asked for only as a
+  // seat first shows its race
+  constructor({ diorama }) {
     this.root = $('#lobby')
+    this.diorama = diorama
     this.on = {}
-    // (your name box, kept across renders while you type in it)
+    // (your name box, kept across renders while you type in it; and each
+    // seat's picker, kept across renders, its figures built once a race)
     this.nameBox = null
+    this.pickers = []
   }
 
   get up() {
     return !this.root.classList.contains('hidden')
   }
 
+  // (F6) the lobby's seats show the table through their figures' windows,
+  // so the title is put out of the way while it is up (style.css)
   show() {
     this.root.classList.remove('hidden')
+    document.body.classList.add('lobbying')
   }
 
   hide() {
     this.root.classList.add('hidden')
+    document.body.classList.remove('lobbying')
+    for (const p of this.pickers) p?.picker.close()
+  }
+
+  // seat i's picker (its parts made once, then moved from render to render)
+  pickerOf(i) {
+    if (this.pickers[i]) return this.pickers[i]
+    const root = el('div', 'picker')
+    return (this.pickers[i] = { root, picker: new RacePicker({ root, diorama: this.diorama(), pick: (race) => this.on.race(race) }) })
   }
 
   // `on`: { claim(i), leave(i), name(text), race(key), ready(bool),
@@ -54,14 +74,15 @@ export class LobbyScreen {
       s.replaceChildren()
       s.classList.remove('mine')
     }
+    for (const p of this.pickers) p?.picker.close()
     this.nameBox = null
     $('#lobbyLink').value = ''
     for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard']) $(id).disabled = true
   }
 
-  // m: { status, link, board, host (the battle is yours to change), races
-  // (the picker's: [{ key, name, icon }]), seats: [{ name, race, look
-  // ({ name, icon } of its race), ready, mine, free, canSit }] }
+  // m: { status, link, board, host (the battle is yours to change), seats:
+  // [{ name, race (a free seat's: the race it would bring), color (its
+  // bases' rims), ready, mine, free, canSit }] }
   render(m) {
     this.show()
     $('#lobbyStatus').textContent = m.status
@@ -70,21 +91,34 @@ export class LobbyScreen {
     const board = $('#lobbyBoard')
     if (document.activeElement !== board) board.value = m.board ?? ''
     board.disabled = $('#lobbyReroll').disabled = !m.host
-    m.seats.forEach((s, i) => this.seat(this.root.querySelector(`.seat[data-seat="${i}"]`), s, i, m.races))
+    m.seats.forEach((s, i) => this.seat(this.root.querySelector(`.seat[data-seat="${i}"]`), s, i))
   }
 
-  seat(box, s, i, races) {
-    const race = s.look
+  // A seat's card: who sits there (its head), its race (the picker: yours
+  // to change in your own seat), and below them what can be done there.
+  seat(box, s, i) {
     box.classList.toggle('mine', !!s.mine)
+    const { root, picker } = this.pickerOf(i)
+    picker.render({ race: s.race, color: s.color, editable: !!s.mine })
+    const head = (who) => {
+      const h = el('div', 'seatHead')
+      h.append(el('span', 'who', who), el('span', 'edge', i ? 'east edge' : 'west edge'))
+      return h
+    }
+    const ctl = (...parts) => {
+      const c = el('div', 'seatCtl')
+      c.append(...parts)
+      return c
+    }
     if (s.free) {
       const sit = el('button', 'primary', 'Sit here')
       sit.onclick = () => this.on.claim(i)
       sit.disabled = !s.canSit
-      box.replaceChildren(el('div', 'who', `Seat ${i + 1} is free`), el('div', 'race', race ? `${race.icon} ${race.name}` : ''), sit)
+      box.replaceChildren(head(`Seat ${i + 1} is free`), root, ctl(sit))
       return
     }
     if (!s.mine) {
-      box.replaceChildren(el('div', 'who', s.name || '…'), el('div', 'race', race ? `${race.icon} ${race.name}` : ''), el('div', s.ready ? 'ok' : 'wait', s.ready ? '✓ Ready' : 'Getting ready…'))
+      box.replaceChildren(head(s.name || '…'), root, ctl(el('div', s.ready ? 'ok' : 'wait', s.ready ? '✓ Ready' : 'Getting ready…')))
       return
     }
     // your own seat: the name box kept while it has focus
@@ -102,19 +136,12 @@ export class LobbyScreen {
       })
     }
     if (document.activeElement !== name) name.value = s.name
-    const pick = el('select')
-    pick.setAttribute('aria-label', 'Your race')
-    for (const r of races) {
-      const o = el('option', '', `${r.icon} ${r.name}`)
-      o.value = r.key
-      pick.appendChild(o)
-    }
-    pick.value = s.race
-    pick.onchange = () => this.on.race(pick.value)
     const ready = el('button', s.ready ? 'on' : 'primary', s.ready ? '✓ Ready (click to wait)' : 'Ready')
     ready.onclick = () => this.on.ready(!s.ready)
     const leave = el('button', '', 'Leave seat')
     leave.onclick = () => this.on.leave(i)
-    box.replaceChildren(el('div', 'race', `Seat ${i + 1} · you`), name, pick, ready, leave)
+    const row = el('div', 'row')
+    row.append(ready, leave)
+    box.replaceChildren(head(`Seat ${i + 1} · you`), root, ctl(name, row))
   }
 }

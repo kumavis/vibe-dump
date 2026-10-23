@@ -52,6 +52,16 @@ const copySetup = (setup) => ({ ...setup, seats: setup.seats.map((s) => ({ ...s 
 
 export const raceOf = (G, s) => RACES[G.seats[s].race]
 export const edgeOf = (G, s) => G.seats[s].edge
+
+// (F6) A seat's name in the match's own text (the battle log, the dice
+// tray): its race's name, or short name (`form`), and in a mirror match,
+// both seats of one race, the edge it holds as well ("Bushtail Clans
+// (west)"), so the two seats read apart. Only a mirror match's lines read
+// otherwise: every other stays exactly as it was (the corpus traces them).
+export const seatName = (G, s, form = 'name') => {
+  const r = raceOf(G, s)
+  return raceOf(G, 0) === raceOf(G, 1) ? `${r[form]} (${edgeOf(G, s) < 0 ? 'west' : 'east'})` : r[form]
+}
 export const ctrl = (G, s) => G.seats[s].ctrl
 
 // A new match on a new table:

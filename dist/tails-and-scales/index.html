@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-C47ZA0i8.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BF7y7C2t.css">
+    <script type="module" crossorigin src="./assets/index-JbsxTVQg.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DSGfrRqI.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -70,6 +70,21 @@
       </div>
     </div>
 
+    <div id="setup" class="modal hidden">
+      <div class="panel setup">
+        <h2 id="setupTitle">Battle</h2>
+        <div class="setupSeats">
+          <div class="setupSeat" data-seat="0"><div class="seatHead"><span class="who"></span><span class="edge">west edge</span></div><div class="picker"></div></div>
+          <div class="setupSeat" data-seat="1"><div class="seatHead"><span class="who"></span><span class="edge">east edge</span></div><div class="picker"></div></div>
+        </div>
+        <p id="setupMirror" class="small hidden">A mirror match: the east army takes its race's other colours.</p>
+        <div class="row">
+          <button id="setupBack">Back</button>
+          <button id="setupStart" class="primary">Start the battle</button>
+        </div>
+      </div>
+    </div>
+
     <div id="help" class="modal hidden">
       <div class="panel rules">
         <button id="helpClose" class="close">✕</button>
@@ -111,23 +126,27 @@
 
     <div id="lobby" class="modal hidden">
       <div class="panel lobby">
-        <h2>Online battle</h2>
-        <p id="lobbyStatus" class="status"></p>
-        <div class="linkrow">
-          <input id="lobbyLink" readonly aria-label="The battle's link" />
-          <button id="copyLink">Copy link</button>
-          <button id="secondTab" title="Play the other seat in a new tab of this browser">Open second tab</button>
-        </div>
-        <div class="seedrow">
-          <label>Battlefield <input id="lobbyBoard" type="number" min="0" max="4294967295" step="1" /></label>
-          <button id="lobbyReroll">🎲 New battlefield</button>
+        <div class="lobbyHead">
+          <h2>Online battle</h2>
+          <p id="lobbyStatus" class="status"></p>
+          <div class="linkrow">
+            <input id="lobbyLink" readonly aria-label="The battle's link" />
+            <button id="copyLink">Copy link</button>
+            <button id="secondTab" title="Play the other seat in a new tab of this browser">Open second tab</button>
+          </div>
+          <div class="seedrow">
+            <label>Battlefield <input id="lobbyBoard" type="number" min="0" max="4294967295" step="1" /></label>
+            <button id="lobbyReroll">🎲 New battlefield</button>
+          </div>
         </div>
         <div class="seats">
           <div class="seat" data-seat="0"></div>
           <div class="seat" data-seat="1"></div>
         </div>
-        <p class="small">Both players press Ready, and the host's page starts the battle. Anyone else who opens the link watches.</p>
-        <button id="lobbyBack">Back to the war room</button>
+        <div class="lobbyFoot">
+          <p class="small">Both players press Ready, and the host's page starts the battle. Anyone else who opens the link watches.</p>
+          <button id="lobbyBack">Back to the war room</button>
+        </div>
       </div>
     </div>
 

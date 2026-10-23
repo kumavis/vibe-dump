@@ -204,6 +204,8 @@ async function run(browser, url, item) {
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
+    // (F6) the battle-setup panel's Start, its races the URL's
+    await page.click('#setupStart', { timeout: 30000 })
     const t0 = Date.now()
     let mark = '', since = Date.now()
     for (;;) {

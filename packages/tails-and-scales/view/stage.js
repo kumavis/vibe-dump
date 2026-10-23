@@ -53,9 +53,11 @@ export class Stage {
 
   // Run the table: `parts(dt, time)` each frame after the tweens (the
   // effects, the figures, the flags, in that order), then the camera rig
-  // moves and draws, jolted by `shake()` (fx's).
-  run({ parts, rig, shake }) {
-    const timer = new THREE.Clock()
+  // moves and draws, jolted by `shake()` (fx's); then (F6) `after(wall)`
+  // draws into its windows of the page (wall: seconds since the page ran),
+  // never under ?fast.
+  run({ parts, rig, shake, after = null }) {
+    const timer = new THREE.Clock(), t0 = performance.now()
     const frame = () => {
       requestAnimationFrame(frame)
       if (this.fast) clock.speed = 1e4
@@ -70,6 +72,7 @@ export class Stage {
       parts(dt, clock.time)
       rig.update(raw)
       rig.render(this.renderer, this.scene, shake(), !this.fast)
+      if (after && !this.fast) after((performance.now() - t0) / 1000)
     }
     frame()
   }
