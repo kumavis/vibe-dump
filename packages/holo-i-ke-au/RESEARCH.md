@@ -967,6 +967,30 @@ It is now `{ bearing 57, pitch 0.2, distance 32 }`, from the geometry:
   notch; at the old camera the floor just in front filled the lower part of the frame, at close
   range, under trees.
 
+### The pali stop, looked at again
+
+The owner, on the published build: at stop 8 of 8 the event's pin and its label stood over the
+last stand and the leaps, and the east end of Kamehameha's arc climbed the side of the gap. Neither
+was in the data, and no data changed; the fixes are in the renderer.
+
+- **The surround's line is on the floor.** On the district heights the five vertices of
+  `force-hawaii-surround` stand at 330, 330, 337, 346 and 351 m, rising gently to the stand
+  (`force-oahu-last-stand`, 345–361 m along its 121 m), and 60 m either side of each vertex the
+  ground is within 10 m of the line (327–361 m). What climbed was the arc `soldiers.js` stands round
+  the stand. It is sized on the screen so that it reads at every zoom, and at the stop's camera
+  (3.2 km out, 6.1 m of ground to the sprite pixel at a device pixel ratio of 1) its east end lay
+  180–270 m from the stand's middle, on the Konahuanui side at 386–425 m. The arc is now held to
+  ground within 20 m above the stand's highest and 30 m below its lowest (315–381 m here), measured
+  once on the district's heights: each figure goes no further from the stand's middle than that
+  ground does in its direction, and never inside the stand. The west half is as it was (332–369 m);
+  the east end closes 74–90 m from the stand's middle, at the foot of the wall (373–378 m).
+- **The pin.** At a near stop whose own people are drawn, the event's pin and its label stand aside
+  until the people fade; the card names the place (DESIGN.md §5.6). At Puʻiwa and Lāʻimi the pin had
+  stood over the fronts too. Far and island stops keep their pin; at Kou, an island stop, it still
+  stands at the head of the march.
+- `tools/smoke.mjs`: the pali check also fails an arc figure on ground above the band (beyond the
+  stand's edge) and the event's pin showing there.
+
 ### Kuwili and Kahoʻikekanaka
 
 Both sheets were read again over the two places, exported by the State's image services in

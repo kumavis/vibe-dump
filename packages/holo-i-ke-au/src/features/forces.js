@@ -27,8 +27,11 @@ import { Soldiers } from './soldiers.js'
 export const ROLE_COLOURS = { hawaii: '#f0ae3c', oahu: '#a88fe6', maui: '#d9703f' }
 
 export class Forces {
-  /** feats: features.json's features; shared: the app's uniforms; ribbons: features/ribbons.js. */
-  constructor(app, feats, shared, ribbons) {
+  /**
+   * feats: features.json's features; shared: the app's uniforms; ribbons: features/ribbons.js;
+   * ground: the district's metres at a world (x, z), for soldiers.js.
+   */
+  constructor(app, feats, shared, ribbons, ground = null) {
     this.app = app
     this.forces = []
     this.lines = []
@@ -61,13 +64,14 @@ export class Forces {
       if (Number.isFinite(r.p.to)) e.to = Math.max(e.to, r.p.to)
     }
     // their people, every one placed now (each rec is given o and n: its first and how many)
-    this.soldiers = new Soldiers(app, this.forces, shared)
+    this.soldiers = new Soldiers(app, this.forces, shared, ground)
     this.count = this.soldiers.count
     // (for the tools: each figure's x, z, how much of it shows, and its scale)
     this.marks = this.soldiers.marks
     this.group = this.soldiers.group
     this.time = 0
     this.showing = { event: null, steps: [], quiet: false }
+    this.stopShown = 0
   }
 
   /**
@@ -174,6 +178,10 @@ export class Forces {
       if (Math.abs(r.goal - r.w) < 0.003) r.w = r.goal
     }
     for (const r of this.lines) r.batch && (r.batch.uniforms.uAlpha.value = 0.26 * r.w * show)
+    // (how strongly the tour stop's own people are drawn: its pin stands aside for them, ui/pins.js)
+    let stop = 0
+    if (!now.quiet && now.recs) for (const r of now.recs) stop = Math.max(stop, r.w)
+    this.stopShown = stop * show
     this.soldiers.update(dt, show, now.quiet)
     this.marksShown = this.soldiers.drawn
   }

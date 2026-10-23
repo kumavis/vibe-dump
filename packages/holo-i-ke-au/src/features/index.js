@@ -173,7 +173,7 @@ export class DistrictFeatures {
       const batch = this.ribbons.add([{ pts, width: 3.2 * S }], { mode: 'earth', colour: new THREE.Color('#9c7f5c').toArray(), alpha: 0, minPx: 1.3, lift: 0.006, order: 5 })
       if (batch) this.trails.push({ p, batch, w: 0 })
     }
-    this.forces = new Forces(app, feats, shared, this.ribbons)
+    this.forces = new Forces(app, feats, shared, this.ribbons, (x, z) => this.groundAt(x, z, false))
     this.group.add(this.ribbons.group, this.forces.group)
 
     // --- the town of the year, and the houses of the countryside ------------------------

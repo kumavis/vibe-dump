@@ -314,7 +314,10 @@ overthrow, the 1895 rising and ʻOnipaʻa at one point). Pins within a few
 dozen screen pixels group into one marker with a count; hovering lists them,
 clicking opens a list card; zooming in splits clusters whose places differ,
 and identical places stay a list. The current tour step's pin is always drawn
-on its own.
+on its own, except at a stop whose own people are drawn (§8), at whatever
+zoom: there the scene is the subject and the card names the place, so the pin
+and its label stand aside until the people fade, rather than cover the stand
+at the pali or the head of the column at Kou.
 
 ### 5.7 Ocean
 

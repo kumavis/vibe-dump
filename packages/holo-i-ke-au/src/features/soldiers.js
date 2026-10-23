@@ -24,7 +24,10 @@
 // - surround: figures come up the line from the valley side at a run, and at
 //   its end an arc of them stands round the other side's stand there (half an
 //   ellipse along the stand and down the way the line came up, open to the
-//   edge), facing in, pressing in and striking and stepping back.
+//   edge), facing in, pressing in and striking and stepping back. The arc is
+//   sized on the screen, so from afar it covers more ground; it is held to
+//   ground within a band of the stand's own (the district's heights), so at
+//   a notch it closes from the floor and does not climb the walls.
 // - leap: figures run from the line's start to its end, at the brink, jump,
 //   and fall out of sight down the face: an arc, a tumble of two frames, then
 //   gone below the ground or dissolved after a drop, one after another in a
@@ -101,6 +104,11 @@ const CLOSE = ['spear', 'club', 'dagger']
 // on the screen, the jump's speed across and up, the fall's pull, the drop past which it dissolves,
 // how long it is in the air, and the time between one leap and the next
 const LEAP = { run: 0.6, least: 18, across: 9, up: 13, pull: 70, fade: 10, air: 1.6, gap: 1.1 }
+// the surround's arc held to the stand's ground: metres above the stand's highest and below its
+// lowest it may stand on; the directions round the stand's middle its reach is measured in, the
+// step (world units) it is measured by and how far out; and how far outside the stand's own
+// half-length it is never pulled in past
+const ARC = { up: 20, down: 30, dirs: 72, step: 0.05, far: 8, clear: 0.1 }
 
 // --- the scale -------------------------------------------------------------------------
 
@@ -169,6 +177,15 @@ export function scaleBands(dpr) {
     out.push({ k, in: [at(k + 0.5 - BAND / 2 + PLAY), at(k + 0.5 + BAND / 2 + PLAY)], out: [at(k + 0.5 + BAND / 2 - PLAY), at(k + 0.5 - BAND / 2 - PLAY)] })
   }
   return out
+}
+
+/** The arc's reach (Soldiers.reachOf) toward (ox, oz) from the stand's middle: the nearer of the two directions either side. */
+function reachAt(reach, ox, oz) {
+  const n = reach.length
+  let a = Math.atan2(oz, ox) / (2 * Math.PI)
+  if (a < 0) a += 1
+  const k = Math.floor(a * n) % n
+  return Math.min(reach[k], reach[(k + 1) % n])
 }
 
 function mulberry32(seed) {
@@ -240,11 +257,14 @@ export class Soldiers {
   /**
    * recs: forces.js's records (forces and fronts, each { p, pts, cum, total,
    * side, line, event }); each is given o and n, its figures' first index and
-   * count. shared: the app's uniforms.
+   * count. shared: the app's uniforms. ground: the district's metres at a
+   * world (x, z), today's, if it has them (the surround's arc is held to the
+   * stand's ground by them).
    */
-  constructor(app, recs, shared) {
+  constructor(app, recs, shared, ground = null) {
     this.app = app
     this.recs = recs
+    this.ground = ground
     this.sheet = buildSheet()
     const rand = mulberry32(1795)
 
@@ -647,7 +667,10 @@ export class Soldiers {
     const vz = -t[3]
     // (and square to the stand on that side, for the tools: the valley side of the brink)
     const s = -uz * vx + ux * vz < 0 ? -1 : 1
-    r.ring = { cx, cz, ux, uz, vx, vz, nx: -uz * s, nz: ux * s, half }
+    r.ring = { cx, cz, ux, uz, vx, vz, nx: -uz * s, nz: ux * s, half, reach: null, inner: half + ARC.clear, band: null }
+    // (sized on the screen, the arc reaches far along the brink when seen from afar, and at a notch
+    // that is up the walls either side: it is held to ground near the stand's own)
+    if (this.ground) this.reachOf(r.ring, stand ? stand : { total: 0, pts: [end], cum: [0] })
     // the arc: two rows on the valley side, open to the edge (as many as stand apart on it)
     const m = Math.min(28, Math.round(n * 0.45))
     for (let i = 0; i < m; i++) {
@@ -657,6 +680,47 @@ export class Soldiers {
     }
     // the rest coming up from below, at a run, gone into the arc as they reach it
     this.planFiles(r, out, rand, { n: n - m, to: Math.max(0.1, L - Math.min(1.2, L * 0.25)), at: 2 })
+  }
+
+  /**
+   * How far the surround's arc may reach from the stand's middle, by direction (ARC.dirs of them,
+   * from +x toward +z): out to where the ground first leaves a band round the stand's own (ARC.up
+   * above its highest, ARC.down below its lowest), so the arc closes from the valley floor and
+   * stays off the walls and the face; Infinity where it never does within ARC.far. Measured once,
+   * on the district's heights; R gains reach and band.
+   */
+  reachOf(R, stand) {
+    const g = this.ground
+    const t = [0, 0, 0, 0]
+    let lo = Infinity
+    let hi = -Infinity
+    for (let s = 0; s <= stand.total + 1e-9; s += Math.max(0.02, stand.total / 40)) {
+      const p = stand.total > 0 ? along(stand, s, t) : stand.pts[0]
+      const m = g(p[0], p[1])
+      lo = Math.min(lo, m)
+      hi = Math.max(hi, m)
+      if (!(stand.total > 0)) break
+    }
+    if (!Number.isFinite(lo) || !Number.isFinite(hi)) return
+    lo -= ARC.down
+    hi += ARC.up
+    const reach = new Float32Array(ARC.dirs)
+    for (let k = 0; k < ARC.dirs; k++) {
+      const a = (k / ARC.dirs) * 2 * Math.PI
+      const dx = Math.cos(a)
+      const dz = Math.sin(a)
+      let out = Infinity
+      for (let d = ARC.step; d <= ARC.far; d += ARC.step) {
+        const m = g(R.cx + dx * d, R.cz + dz * d)
+        if (m < lo || m > hi) {
+          out = d - ARC.step
+          break
+        }
+      }
+      reach[k] = out
+    }
+    R.reach = reach
+    R.band = [lo, hi]
   }
 
   /** The leap: one after another running from the line's start to the brink at its end, and over. */
@@ -1136,18 +1200,30 @@ export class Soldiers {
           // the arc round the stand, pressing in and striking, stepping back: a half ellipse on the
           // ground, along the stand (the brink) and out toward the valley, never past the edge; its
           // two axes as long on the ground as they need to be to look so many sprite pixels on the
-          // screen, so it takes in the stand's knots and reads as an arc at every zoom
+          // screen, so it takes in the stand's knots and reads as an arc at every zoom; but each
+          // figure no further from the stand's middle than the ground near the stand's own goes that
+          // way (reachOf), nor inside the stand, so from afar the arc is drawn in where the walls rise
           const R = r.ring
           const press = quiet ? 0 : 4 * Math.max(0, Math.sin((T / (2.4 + f.ph[i])) * 2 * Math.PI + f.ph[i] * 6.28))
           const lu = Math.max(0.3, Math.hypot(R.ux * V.rx + R.uz * V.rz, (R.ux * V.ax + R.uz * V.az) * V.sinP))
           const lv = Math.max(0.3, Math.hypot(R.vx * V.rx + R.vz * V.rz, (R.vx * V.ax + R.vz * V.az) * V.sinP))
           const row = f.row2[i]
-          const au = ((Math.max((R.half * lu) / unit + 16, 24) + 6 * row - press * 0.5) * unit) / lu
-          const av = ((28 + 9 * row - press) * unit) / lv
+          const au0 = ((Math.max((R.half * lu) / unit + 16, 24) + 6 * row) * unit) / lu
+          const av0 = ((28 + 9 * row) * unit) / lv
+          const au = au0 - (press * 0.5 * unit) / lu
+          const av = av0 - (press * unit) / lv
           const sp = Math.sin(f.s0[i])
           const cp = Math.cos(f.s0[i])
-          x = R.cx + R.ux * au * sp + R.vx * av * cp
-          z = R.cz + R.uz * au * sp + R.vz * av * cp
+          // (drawn in along its way from the middle, the press with it, so one held short still steps in and back)
+          let k = 1
+          if (R.reach) {
+            const ox = R.ux * au0 * sp + R.vx * av0 * cp
+            const oz = R.uz * au0 * sp + R.vz * av0 * cp
+            const r0 = Math.hypot(ox, oz)
+            if (r0 > 1e-6) k = Math.min(1, Math.max(reachAt(R.reach, ox, oz), R.inner) / r0)
+          }
+          x = R.cx + (R.ux * au * sp + R.vx * av * cp) * k
+          z = R.cz + (R.uz * au * sp + R.vz * av * cp) * k
           hx = R.cx - x
           hz = R.cz - z
           if (press > 3) {

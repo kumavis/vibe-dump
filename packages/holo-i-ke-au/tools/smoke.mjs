@@ -1792,7 +1792,7 @@ if (districtCount) {
           const R = ringRec.ring
           // the arc: where its people stand round the stand's middle, along the stand and out toward the valley
           const angles = []
-          let inward = 0, valley = 0, ring = 0, near = 0
+          let inward = 0, valley = 0, ring = 0, near = 0, high = 0, top = -Infinity
           for (let i = ringRec.o; i < ringRec.o + ringRec.n; i++) {
             if (f.vis[i] <= 0 || f.mode[i] !== M.ring) continue
             ring++
@@ -1802,6 +1802,11 @@ if (districtCount) {
             if (v > -0.02) valley++
             if (f.hx[i] * -dx + f.hz[i] * -dz > 0) inward++
             if (Math.hypot(u, v) > Math.min(1.2, R.half)) near++
+            // (on the stand's ground, not up the walls either side of the notch: only one held just
+            // outside the stand may stand higher than the band round the stand's own)
+            const m = app.world.metresAt(f.x[i], f.z[i])
+            top = Math.max(top, m)
+            if (R.band && m > R.band[1] + 5 && Math.hypot(u, v) > R.inner + 0.05) high++
           }
           angles.sort((a, b) => a - b)
           const spread = angles.length ? ((angles.at(-1) - angles[0]) * 180) / Math.PI : 0
@@ -1830,15 +1835,20 @@ if (districtCount) {
             // nobody drawn lying still: a fall frame only in the air
             for (let i = 0; i < S.count; i++) if (f.vis[i] > 0 && f.fr[i] >= 14 && !f.air[i]) left++
           }
-          return { ring, valley, inward, near, spread, leaps, over, below, left, sunk, frames: [...frames].sort((a, b) => a - b), stand: stand.p.name }
+          // the event's own pin, with its people drawn at this near stop: stood aside, off the stand
+          app.ui.pins.update(app.overlay.pins)
+          const pin = app.ui.pins.items.find((it) => it.ev.id === 'nuuanu-1795')?.el.classList.contains('show') ?? false
+          return { ring, valley, inward, near, high, top, band: R.band, spread, leaps, over, below, left, sunk, frames: [...frames].sort((a, b) => a - b), stand: stand.p.name, pin }
         })()`)
         if (r.missing) throw new Error(`at the pali: no ${r.missing.join(', ')}`)
         if (r.ring < 12 || r.valley < r.ring || r.inward < r.ring) throw new Error(`the arc: ${r.ring} people, ${r.valley} on the valley side, ${r.inward} facing in`)
         if (r.spread < 100 || r.near < r.ring) throw new Error(`the arc spans ${r.spread.toFixed(0)}° round the stand, ${r.near} of ${r.ring} outside it`)
+        if (!r.band || r.high) throw new Error(r.band ? `${r.high} of the arc stand above ${r.band[1].toFixed(0)} m, up the walls (the highest at ${r.top.toFixed(0)} m)` : 'the arc is not held to the stand’s ground')
+        if (r.pin) throw new Error('the event’s pin and its label stand over the stand at the pali')
         if (r.leaps < 8 || r.below < r.leaps) throw new Error(`${r.leaps} leaps in 20 s, ${r.below} of them gone over the brink and below it`)
         if (!r.over || r.sunk || r.left) throw new Error(`in the air past the brink ${r.over} times; ${r.sunk} seen below the ground; ${r.left} drawn falling on the ground`)
         if (![4, 14, 15, 16].every((v) => r.frames.includes(v))) throw new Error(`the leap's frames: ${r.frames.join(', ')}`)
-        console.log(`      ${r.ring} of Kamehameha's people in an arc ${r.spread.toFixed(0)}° round “${r.stand}”, all on the valley side and facing in; ${r.leaps} leaps in 20 s, each over the brink and gone below it, frames ${r.frames.join(', ')}; nobody left on the ground or seen under it`)
+        console.log(`      ${r.ring} of Kamehameha's people in an arc ${r.spread.toFixed(0)}° round “${r.stand}”, all on the valley side and facing in, on ground no higher than ${r.top.toFixed(0)} m (the band ${r.band.map((v) => v.toFixed(0)).join('–')} m); the event's pin stood aside; ${r.leaps} leaps in 20 s, each over the brink and gone below it, frames ${r.frames.join(', ')}; nobody left on the ground or seen under it`)
       })
       await check('off the tour, in the battle’s year: fewer of them, walking and standing, nobody fighting or going over', async () => {
         await offTour(1795)

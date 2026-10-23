@@ -14,7 +14,10 @@
 // so a cluster comes apart as the camera closes in and its places separate;
 // events at one and the same point never do, and the cluster's list is how
 // they're reached. A halo gathers by its centre. The open event, the tour's
-// or one picked by hand, always stands on its own with its label.
+// or one picked by hand, always stands on its own with its label; except
+// that at a stop of the tour, while the stop's own people are drawn
+// there (features/forces.js), the scene is the subject and the card names
+// the place, so its pin and label stand aside until the people fade (aside).
 //
 // A few dozen pins: every pair is compared, every frame, in typed arrays and
 // a pool of markers that only grows, so a frame allocates nothing.
@@ -83,6 +86,7 @@ export class Pins {
     this.hovered = null
     this.activeEvent = null
     this.stopXZ = null
+    this.asideNow = false
     this._v = new THREE.Vector3()
     this._w = new THREE.Vector3()
   }
@@ -92,6 +96,20 @@ export class Pins {
     const p = place && geometryPoint(place.geometry)
     this.stopXZ = p ? this.app.data.proj.toWorld(p) : null
     this.stopSoft = place ? SOFT[place.placePrecision] ?? 0 : 0
+  }
+
+  /**
+   * Whether the open event's pin stands aside: the tour is at one of its stops and the stop's
+   * own people are drawn (forces.js stopShown, with a little play so it doesn't flicker at the
+   * edge), at whatever zoom. A stop with no people, and an event opened off the tour, keep the pin.
+   */
+  aside() {
+    const app = this.app
+    const tour = app.tour
+    const st = tour?.active && tour.event === this.activeEvent && tour.stop >= 0 ? tour.event.stops?.[tour.stop] : null
+    const k = st ? app.districts?.cur?.features?.forces?.stopShown ?? 0 : 0
+    this.asideNow = this.asideNow ? k > 0.2 : k > 0.35
+    return this.asideNow
   }
 
   /** Events showing at the timeline's current year. */
@@ -201,6 +219,7 @@ export class Pins {
     const n = items.length
     const { sx, sy, vis, root, size } = this
     const active = this.activeEvent
+    const aside = this.aside()
     const v = this._v
     let solo = -1
 
@@ -213,7 +232,8 @@ export class Pins {
       it.pos.z = walk ? this.stopXZ[1] : it.z
       it.pos.y = app.world.heightAt(it.pos.x, it.pos.z) + 0.02
       it.r = walk ? this.stopSoft : it.soft
-      let show = on && (isActive || (it.span[1] >= ya && it.span[0] <= yb))
+      // (the open event's own pin, standing aside at a near stop, with its halo: nor does it gather)
+      let show = on && (isActive ? !aside : it.span[1] >= ya && it.span[0] <= yb)
       if (show) {
         v.copy(it.pos).project(cam)
         sx[i] = ((v.x + 1) / 2) * W
