@@ -139,3 +139,18 @@ workflow's notes under `research/` say more). Tested from the container on
 | the kits' authoring scripts (R6's table parser, the infobox reader, the aero and form-factor fits) | they stayed in the engine workflow's scratchpad, not the repository | regenerating the kits from their sources; until then `kits/*.json` is the source of truth and `tools/check/kits.mjs` guards it |
 | a real GPU | the container has SwiftShader only (a frame of the table or a box takes 0.6 to 1.3 s there) | the frame time the quality governor and the depth fallback of ENGINEERING §2 are to be decided on |
 | a person with a mouse and a touch screen | the moments have been flown only by scripts | the instructor's gains, the chase camera's lag, the bindings and the Guided aids by hand |
+
+## From round two
+
+What the round's three workflows (research/engine-2.md, ui-2.md,
+content-2.md) could not reach or settle. Tested from the container on
+23 October 2026.
+
+| what | why | what it would unlock |
+| --- | --- | --- |
+| the Lytton Report's fourteen maps (1932) | in neither scan reached; the League of Nations' copy at UN Geneva answers with a challenge page, and the maps' licence is unsettled | Manchuria's 1931–32 keyframes traced, not drawn by hand; until then the report is cited on the prologue chapter only, never on a front feature |
+| a public-domain map of the front in China for 1931–41 at a usable size | none found beyond the 1943 atlas and Romanus and Sunderland's Map 1 | the six prologue keyframes `mapped` instead of `schematic` (the Nanning road of 1940, the Inner Mongolia edge, the Kwantung boundary, Hailar and Manchouli in 1932 are inferred) |
+| a reader of Japanese | the after-card's empty-record line その間の記録はない。 and the station and setting words have not been read by one | the round's Japanese checked with the after-card's other Japanese |
+| a person with a mouse and with a touch screen | round two's stations, the Assisted gains, the gun stations' mouse and drag rates and the fire button were driven only by scripts | the assist and the gun stations tuned by hand, and the phone layout of the held bar beside the touch controls |
+| a real GPU | still SwiftShader only (0.4 to 0.9 s a frame at a station) | the frame time at the stations |
+
