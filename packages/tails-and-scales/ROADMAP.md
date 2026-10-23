@@ -76,7 +76,10 @@ the commit, and add whatever the work turned up.
   classic and Grand, a report failing above 1.5× budget: run it on a quiet
   machine), and from F10a `node sim/macro-check.mjs` (and `--self-test`:
   P-macro, one-shot group actions over a Session send only what the match
-  takes, and land where their preview drew them). A step
+  takes, and land where their preview drew them), and from V1
+  `node sim/playback-check.mjs` (and `--self-test`: the batch rule over
+  every corpus and Grand fixture stream, a Grand AI movement phase within
+  8 s; `--browser` with Chromium). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -802,8 +805,13 @@ follows N3.
   picker's touch fallback; the group in presence as `sels`. P-macro
   (`sim/macro-check.mjs`), `sim/input-check.mjs` and lobby-rig's `group`
   case. DESIGN's F10a notes.)
-- [ ] **V1** Batched playback: units walk together, a batch's advance dice in
+- [x] **V1** Batched playback: units walk together, a batch's advance dice in
   one row.
+  (A seat's walks 0.15 s apart, those after a wreck held back to its last
+  smash; one tray row; the flags turn as their units arrive; ⇉ for one at
+  a time. An AI movement phase 6.0 → 2.6 s on classic, 19.5 → 4.5 s on the
+  Grand fixture (the longest 7.3 s, under 8). `sim/playback-check.mjs`.
+  DESIGN's V1 notes.)
 - [ ] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
   units you choose.
 - [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried

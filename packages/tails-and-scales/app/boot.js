@@ -134,7 +134,7 @@ export function boot(location) {
   }
   human.listen(view.renderer.domElement)
   ui.actions.wire(human)
-  ui.hud.wire({ rig: view.rig })
+  ui.hud.wire({ rig: view.rig, player })
   wireHelp()
   // (N2) online play: app/online.js, the net layer and Automerge loaded the
   // first time they are wanted (Play online, a #m= link), never for a game

@@ -28,8 +28,19 @@
 // anything happened: the same board, terrain and races; the start entry's
 // events then play on from there); (N2) an online match followed, a refold,
 // and the catch-up past a backlog() of 30 s (a scrub is N3's).
+//
+// (V1) Batched playback: with `batched` on (the default; the HUD's ⇉ turns
+// it off, "one at a time"), a run of one seat's walks (present/pace.js's
+// batchAt: a movement phase's units, between their instant events) plays
+// together: the batch's advance dice in one tray row, then each walk
+// PACE.stagger after the last (or once a wreck before it has broken what it
+// breaks), its events folded into the mirror in order as it starts, the
+// batch over when every walk is; one focus for the batch, its pauses and
+// per-unit trays left out, and the flags' owners each walk changes shown
+// once it has arrived (the view's holdOwners). What breaks a batch plays
+// as ever.
 import { applyEvent, project } from '../present/mirror.js'
-import { PACE } from '../present/pace.js'
+import { PACE, batchAt, playTime } from '../present/pace.js'
 import { wait } from './clock.js'
 
 export class EventPlayer {
@@ -51,6 +62,15 @@ export class EventPlayer {
     // which table's events are playing: a snap starts a new one, and a
     // handler's promise from before it resumes nothing
     this.table = 0
+    // (V1) walks batched (false: one at a time, as before V1), and how many
+    // batches have played
+    this.batched = true
+    this.batches = 0
+  }
+
+  // the seat a unit belongs to, as shown (the batch rule's)
+  sideOf(u) {
+    return this.mirror?.units?.[u]?.side
   }
 
   get idle() {
@@ -60,9 +80,8 @@ export class EventPlayer {
   // (N2) about how long, in game seconds, what is queued takes to play
   // (PACE.cost's estimate: the elastic catch-up's, app/flow.js)
   backlog() {
-    let s = 0
-    for (const e of this.q) s += PACE.cost(e)
-    return s
+    // ((V1) a batch counted once, at its longest walk)
+    return playTime(this.q, (u) => this.sideOf(u), this.batched)
   }
 
   // Queue events; they start playing now if nothing is playing.
@@ -92,6 +111,15 @@ export class EventPlayer {
     this.running = true
     try {
       while (this.q.length) {
+        // (V1) a batch of walks from here: played together
+        const b = this.batched ? batchAt(this.q, 0, (u) => this.sideOf(u)) : null
+        if (b) {
+          this.batch(this.q.splice(0, b.to), b, table).then(
+            () => table === this.table && this.run(),
+            (err) => table === this.table && this.fail(err),
+          )
+          return
+        }
         const e = this.q.shift()
         this.mirror = applyEvent(this.mirror, e)
         this.observer?.event?.(e, this.mirror)
@@ -106,6 +134,52 @@ export class EventPlayer {
     }
     this.running = false
     this.onIdle?.()
+  }
+
+  // (V1) A batch (`events`, batchAt's `b` over them): its advance dice in one
+  // row, then its events in order, each walk started at its b.starts and
+  // none awaited until the batch's end; the first focus followed,
+  // the others, the pauses and the per-unit trays and dice left out (the
+  // mirror folds them all). A snap in between ends it.
+  async batch(events, b, table) {
+    const h = this.handlers, walks = []
+    this.batches++
+    // (the flags' owners as shown when the batch starts, each walk's own
+    // shown once it has arrived, in order: the mirror folds them as the walk
+    // sets off)
+    this.view?.holdOwners?.(this.mirror.owners)
+    let shown = Promise.resolve()
+    if (b.dice.length) {
+      h['tray.open']?.({ t: 'tray.open', title: `Advance · ${b.dice.length} unit${b.dice.length > 1 ? 's' : ''}` }, this.mirror)
+      await h.dice?.({ t: 'dice', label: 'D6 each', dice: b.dice, need: 0 }, this.mirror)
+      if (table !== this.table) return
+    }
+    let focused = false
+    for (const e of events) {
+      // (each walk at its start: PACE.stagger after the last, later if a
+      // wreck before it is still breaking scenery)
+      if (e.t === 'unit.move' && walks.length) {
+        await wait(b.starts[walks.length] - b.starts[walks.length - 1])
+        if (table !== this.table) return
+      }
+      this.mirror = applyEvent(this.mirror, e)
+      this.observer?.event?.(e, this.mirror)
+      if (e.t === 'pause' || e.t === 'tray.open' || e.t === 'dice' || (e.t === 'focus' && focused)) continue
+      if (e.t === 'objectives' && walks.length) {
+        const owners = e.owners
+        shown = Promise.all([shown, walks.at(-1)]).then(() => table === this.table && this.view?.holdOwners?.(owners))
+      }
+      if (e.t === 'focus') focused = true
+      const r = (h[e.t] ?? h.fallback)(e, this.mirror)
+      if (e.t === 'unit.move') walks.push(r)
+      else if (r && typeof r.then === 'function') {
+        await r
+        if (table !== this.table) return
+      }
+    }
+    await Promise.all(walks)
+    await shown
+    if (table === this.table) this.view?.holdOwners?.(null)
   }
 
   // An event this table has no visuals for yet: its text over the unit (or

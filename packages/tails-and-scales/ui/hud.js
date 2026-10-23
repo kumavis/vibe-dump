@@ -22,9 +22,10 @@ export class Hud {
   }
 
   // The tools: the animation speed (1×, 2×, 4×), the camera's next view and
-  // its following the action (`rig`, view/camera.js), the sound, and the
-  // battle log folded.
-  wire({ rig }) {
+  // its following the action (`rig`, view/camera.js), (V1) walks together
+  // or one at a time (`player`, view/player.js: kept in this browser), the
+  // sound, and the battle log folded.
+  wire({ rig, player }) {
     const SPEEDS = [1, 2, 4]
     $('#speed').onclick = () => {
       clock.speed = SPEEDS[(SPEEDS.indexOf(clock.speed) + 1) % SPEEDS.length]
@@ -34,6 +35,23 @@ export class Hud {
     $('#follow').onclick = () => {
       rig.follow = !rig.follow
       $('#follow').classList.toggle('off', !rig.follow)
+    }
+    const KEY = 'tails-and-scales:oneAtATime'
+    const batched = (on) => {
+      player.batched = on
+      $('#batch').classList.toggle('off', !on)
+      $('#batch').title = on ? "A side's units walk together (click: one at a time)" : 'One unit walks at a time (click: a side\'s units together)'
+    }
+    let one = false
+    try {
+      one = localStorage.getItem(KEY) === '1'
+    } catch {}
+    batched(!one)
+    $('#batch').onclick = () => {
+      batched(!player.batched)
+      try {
+        localStorage.setItem(KEY, player.batched ? '0' : '1')
+      } catch {}
     }
     $('#mute').textContent = isMuted() ? '🔇' : '🔊'
     $('#mute').onclick = () => {

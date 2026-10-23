@@ -135,6 +135,7 @@ export class View {
   // checkpoint, `chunks` G's as they stood).
   rebuild(g, M, to = {}) {
     const { chunks = g.terrain.chunks, terrain = this.terrain, units: uv = this.units, shots: sh = this.shots, effects: marks = this.effects } = to
+    this.owners = null
     terrain.sync(chunks)
     uv.sync(g.units, (s) => edgeOf(g, s))
     sh.clear()
@@ -147,16 +148,23 @@ export class View {
     this.effects.text(pos, str, color)
   }
 
+  // (V1) The flags' owners held while a batch of walks plays (the player's:
+  // each walk's objectives shown once it has arrived), null for the
+  // mirror's as ever.
+  holdOwners(owners) {
+    this.owners = owners
+  }
+
   // Run the table (view/stage.js): each frame the effects, the figures and
-  // the flags as shown (`mirror()`, the player's; `sel()`, the id of the
-  // unit picked up), then the camera.
+  // the flags as shown (`mirror()`, the player's, or the owners a batch
+  // holds; `sel()`, the id of the unit picked up), then the camera.
   run({ mirror, sel }) {
     const { effects, units, objectives, camera } = this
     this.stage.run({
       parts: (dt, time) => {
         effects.update(dt)
         units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
-        objectives.animate(dt, time, mirror().owners)
+        objectives.animate(dt, time, this.owners ?? mirror().owners)
       },
       rig: this.rig,
       shake: () => effects.shake,
