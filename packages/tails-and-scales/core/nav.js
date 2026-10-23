@@ -33,6 +33,11 @@ export class NavGrid {
     this.clearAll = new Float32Array(N)
     this.clearHard = new Float32Array(N)
     this.tmp = new Float32Array(N)
+    // (S3) how many times the grid was rebuilt, and the last plan made
+    // inside the current apply (core/actions/move.js movePlan: { sig, plan }, sig its key;
+    // null outside one)
+    this.epoch = 0
+    this.memo = null
   }
 
   x(i) {
@@ -51,6 +56,7 @@ export class NavGrid {
   // Re-rasterise every live chunk. Cheap enough (a few thousand cells) to run
   // after each explosion rather than patching incrementally.
   rebuild(chunks) {
+    this.epoch++
     this.hard.fill(0)
     this.soft.fill(0)
     this.diff.fill(0)

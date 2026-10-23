@@ -43,8 +43,10 @@ export function inCover(G, u) {
   return n * 2 >= live.length && n > 0
 }
 
-// Can `a` see `b`? Rays from a's centre to each of b's models.
-export function sight(G, a, b, from = a.pos) {
+// Can `a` see `b`? Rays from a's centre to each of b's models. (S1)
+// `bCover`, when given, is inCover(G, b), worked out once by a caller that
+// asks from many places (the AI's lattice scan, core/ai/score.js).
+export function sight(G, a, b, from = a.pos, bCover = undefined) {
   const eye = { x: from.x, y: eyeY(a), z: from.z }
   let seen = 0, obsc = 0, total = 0
   for (const m of b.models) {
@@ -56,7 +58,7 @@ export function sight(G, a, b, from = a.pos) {
       if (r.obscure) obsc++
     }
   }
-  return { visible: seen > 0, cover: seen > 0 && (obsc > 0 || seen < total || inCover(G, b)), seen, total }
+  return { visible: seen > 0, cover: seen > 0 && (obsc > 0 || seen < total || (bCover ?? inCover(G, b))), seen, total }
 }
 
 export function leadership(G, u) {

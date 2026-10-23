@@ -100,8 +100,21 @@ export function createMatch(setup, { out = null, onTrace = null, strict = false 
     for (const s of humans) log(G, s, `<b>${seatName(G, s)}</b>: deploy your army.`)
     G.pending = { k: 'deploy', seats: humans }
   }
-  advance(G)
+  inApply(G, () => advance(G))
   return G
+}
+
+// (S3, DESIGN §4.2.2) fn() with the match's plan memo open (G.nav.memo,
+// core/actions/move.js movePlan: the last plan and its key, `sig`), and shut again
+// however fn leaves: one apply's plans are shared within it, never past it,
+// and none is left behind by a throw (runAI's strict check).
+function inApply(G, fn) {
+  G.nav.memo = { sig: null, plan: null }
+  try {
+    return fn()
+  } finally {
+    G.nav.memo = null
+  }
 }
 
 // fn(G, q) with the match's dice locked, so a draw throws (§4.1 rule 2):
@@ -123,6 +136,8 @@ export function preview(G, fn) {
 // run the match on.
 export function apply(G, seat, body) {
   if (!Object.hasOwn(HANDLERS, body.t)) throw new Error(`no command "${body.t}"`)
-  HANDLERS[body.t](G, seat, body, 'seat')
-  advance(G)
+  inApply(G, () => {
+    HANDLERS[body.t](G, seat, body, 'seat')
+    advance(G)
+  })
 }

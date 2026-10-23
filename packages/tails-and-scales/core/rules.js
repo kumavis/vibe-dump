@@ -39,11 +39,17 @@ export const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
 // Probability one D6 makes `need`+ (need > 6 never does).
 export const pD6 = (need) => (need > 6 ? 0 : need <= 1 ? 1 : (7 - need) / 6)
 
-// Probability 2D6 totals at least `need`.
-export function p2D6(need) {
+// Probability 2D6 totals at least `need`. (S1, DESIGN §4.2.2) A whole
+// `need` from 0 to 13 is read off a table the same loop filled, so the
+// same doubles; any other number is counted afresh.
+const count2D6 = (need) => {
   let ok = 0
   for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (a + b >= need) ok++
   return ok / 36
+}
+const P2D6 = Object.freeze(Array.from({ length: 14 }, (_, need) => count2D6(need)))
+export function p2D6(need) {
+  return Number.isInteger(need) && need >= 0 && need < P2D6.length ? P2D6[need] : count2D6(need)
 }
 
 // The classic strength-versus-toughness table.

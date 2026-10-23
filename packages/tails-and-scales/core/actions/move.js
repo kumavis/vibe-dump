@@ -14,7 +14,7 @@
 // (core/commands.js), the only path to them, calls core/engine.js's
 // finishAction after the action (DESIGN §2.2's (R6a) note). The advance
 // roll writes no `act` line at all (§4.1 rule 8).
-import { BOARD, ENGAGE, roll } from '../rules.js'
+import { ENGAGE, roll } from '../rules.js'
 import { hypot, sin, cos, atan2 } from '../dmath.js'
 import { lerp } from '../util.js'
 import { emit, log } from '../journal.js'
@@ -30,7 +30,8 @@ export function moveMode(u) {
 // Cells a unit may not enter: within 1" of an enemy (or just their bases when
 // falling back / charging). `onlyBodies` lists whose bases only count.
 export function forbidMask(G, u, pad, onlyBodies = []) {
-  const { W, H } = BOARD, nav = G.nav
+  // (the grid's own size, S0: the board the match is played on)
+  const nav = G.nav, { W, H } = nav
   const f = new Uint8Array(nav.N)
   f.discs = [] // the exact shapes, for nav.walkable's straight-line shortcuts
   for (const e of enemiesOf(G, u)) {
@@ -47,17 +48,46 @@ export function forbidMask(G, u, pad, onlyBodies = []) {
 }
 
 // Everything the movement phase needs for one unit: where it can go and how.
+//
+// (S3, DESIGN §4.2.2) Inside one apply (core/index.js), the last plan made
+// is kept in G.nav.memo, so the AI's plan for a move and the move's own (its
+// legality, then the handler's) are made once: it is read back only for the
+// same unit, where it stands, the same extra inches, the same nav grid (its
+// epoch, after refreshNav) and every live unit where it stands, all that a
+// plan reads (planKey). One plan, not every one: those asks come one after
+// another, and an AI battle, which createMatch plays as one apply, would
+// otherwise keep every plan of the battle. Outside an apply there is no
+// memo (a preview, the HUD, a legality check of the page's): every plan is
+// fresh, so nothing the page asks can feed the fold.
 export function movePlan(G, u, extra = 0) {
   refreshNav(G)
+  const memo = G.nav.memo, key = memo && planKey(G, u, extra)
+  if (memo && memo.sig === key) return memo.plan
   const fallback = isEngaged(G, u)
   const max = u.t.M + extra
   const mode = moveMode(u)
   const enemies = enemiesOf(G, u)
-  // falling back may walk through the 1" bubble but not through bases
-  const forbid = forbidMask(G, u, ENGAGE + 0.05, fallback ? enemies : [])
+  // falling back may walk through the 1" bubble but not through bases; (S3)
+  // any other move's mask is the end's, made once
   const endForbid = forbidMask(G, u, ENGAGE + 0.05)
+  const forbid = fallback ? forbidMask(G, u, ENGAGE + 0.05, enemies) : endForbid
   const res = G.nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid })
-  return { u, res, max, mode, forbid, endForbid, fallback }
+  const plan = { u, res, max, mode, forbid, endForbid, fallback }
+  if (memo) {
+    memo.sig = key
+    memo.plan = plan
+  }
+  return plan
+}
+
+// What a plan reads, as a memo's key: the unit, where it stands, its base,
+// the extra inches, the nav grid's epoch, and every live unit's place and
+// base (numbers exactly, -0 apart from 0).
+const num = (n) => (Object.is(n, -0) ? '-0' : String(n))
+function planKey(G, u, extra) {
+  let k = `${u.id}@${num(u.pos.x)},${num(u.pos.z)} r${num(u.r)} +${num(extra)} e${G.nav.epoch}`
+  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}`
+  return k
 }
 
 // May the plan's unit end its move on cell i?

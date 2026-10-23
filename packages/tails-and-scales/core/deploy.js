@@ -7,7 +7,7 @@ import { setUnitPos } from './units.js'
 
 // The deployment zone of seat `side`: the strip the mission's depth deep
 // along its seat's edge, as x bounds.
-function zone(G, side) {
+export function zone(G, side) {
   const { W } = BOARD
   const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - missionOf(G.setup).deploy)
   return { minX: Math.min(outer, inner), maxX: Math.max(outer, inner) }
@@ -17,7 +17,7 @@ function zone(G, side) {
 // `others` where they stand? Inside the zone, standable, and clear of every
 // other unit by 0.4". (freeSpot's test, cell by cell; the `place` command's
 // legality, core/commands.js.)
-function fits(G, u, i, { minX, maxX }, others) {
+export function fits(G, u, i, { minX, maxX }, others) {
   const nav = G.nav
   const cx = nav.x(i), cz = nav.z(i)
   if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) return false
@@ -34,12 +34,16 @@ export function placeOk(G, u, c) {
 }
 
 // Pick a spot near (x, z) inside the side's deployment zone. Cell centres
-// only; null when nowhere fits.
+// only; null when nowhere fits. (S0, DESIGN §4.2.2) Only the zone's columns
+// are visited, a column either side to spare (fits refuses every other
+// first), row by row in the board's order, so the nearest found first is
+// the one the whole board's scan found.
 export function freeSpot(G, u, x, z, side, others) {
   const nav = G.nav
   let best = null, bd = Infinity
   const box = zone(G, side)
-  for (let i = 0; i < nav.N; i++) {
+  const x0 = Math.max(0, Math.floor((box.minX + nav.W / 2) / nav.cell) - 1), x1 = Math.min(nav.nx - 1, Math.floor((box.maxX + nav.W / 2) / nav.cell) + 1)
+  for (let iz = 0; iz < nav.nz; iz++) for (let i = iz * nav.nx + x0; i <= iz * nav.nx + x1; i++) {
     if (!fits(G, u, i, box, others)) continue
     const cx = nav.x(i), cz = nav.z(i)
     const d = hypot(cx - x, cz - z)

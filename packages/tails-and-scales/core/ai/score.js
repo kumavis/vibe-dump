@@ -12,7 +12,7 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { enemiesOf, friendsOf, isEngaged, sight, controlOf, validEnd } from '../queries.js'
+import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd } from '../queries.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -22,14 +22,16 @@ export function meleeValue(a, d) {
   return expected(a.alive * a.t.A, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), a.t.melee, d, false).value
 }
 
-// Expected points of `e` removed by `u` shooting from `from`.
-export function shotValue(G, u, e, from, moved) {
+// Expected points of `e` removed by `u` shooting from `from`. (S1) `pre`,
+// when given, is what bestSpot worked out about `e` once for its whole
+// scan (its `engaged` and `cover`: the same values, asked once).
+export function shotValue(G, u, e, from, moved, pre = null) {
   const w = u.t.ranged
   if (!w) return 0
   const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > w.range) return 0
-  if (isEngaged(G, e) && !w.spell) return 0
-  const s = sight(G, u, e, from)
+  if ((pre ? pre.engaged : isEngaged(G, e)) && !w.spell) return 0
+  const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
     if (!s.visible) return 0
@@ -46,23 +48,47 @@ export function shotValue(G, u, e, from, moved) {
   return expected(attackCount(u, w, false), hitNeed(u.t.BS, mod), w, e, s.cover).value
 }
 
+// The cells of the board within `reach` inches of (x, z), as rows and
+// columns, a cell either side to spare: (S0, DESIGN §4.2.2) a plan of at
+// most `reach` reaches no cell outside it (every finite cell of a reach lies
+// within its `max` of the start, the path being no shorter than the
+// straight line), so a scan over a plan's cells may skip the rest of the
+// board, in the same order, and draw where it drew.
+export function scanBox(nav, x, z, reach) {
+  const span = reach + nav.cell
+  return {
+    x0: Math.max(0, Math.floor((x - span + nav.W / 2) / nav.cell)), x1: Math.min(nav.nx - 1, Math.floor((x + span + nav.W / 2) / nav.cell)),
+    z0: Math.max(0, Math.floor((z - span + nav.H / 2) / nav.cell)), z1: Math.min(nav.nz - 1, Math.floor((z + span + nav.H / 2) / nav.cell)),
+  }
+}
+
 // The best spot for `u` to end its move on `plan` (movePlan's): staying put
 // is always an option, then every cell of a 1" or 1.5" lattice it may end
 // on, each scored with a small random tie-break off the match's dice (the
-// lattice scan and its draws are behaviour: DESIGN §4.1 rule 6).
+// lattice scan and its draws are behaviour: DESIGN §4.1 rule 6). (S0) The
+// lattice is walked only inside the plan's box (scanBox), on the board's
+// own rows and columns: row iz a multiple of the step, its columns from
+// its offset (1 on odd lattice rows) in steps, as the whole board's scan
+// visited them.
 export function bestSpot(G, u, plan, claimed) {
   const { nav } = G
   const enemies = enemiesOf(G, u)
   const friends = friendsOf(G, u)
   const owners = G.objectives.map((o) => controlOf(G, o))
   const role = u.t.ai
-  const ctx = { enemies, friends, owners, claimed, role }
+  // (S1, DESIGN §4.2.2) what the scan asks of each enemy at every cell, none
+  // of which a cell changes, worked out once: whether it is engaged and in
+  // cover, and the fight's value either way
+  const pre = new Map(enemies.map((e) => [e, { engaged: isEngaged(G, e), cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u) }]))
+  const ctx = { enemies, friends, owners, claimed, role, pre }
   // stay put is always an option
   let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
   const res = plan.res
-  for (let iz = 0; iz < nav.nz; iz += step) {
-    for (let ix = (iz / step) % 2 ? 1 : 0; ix < nav.nx; ix += step) {
+  const box = scanBox(nav, res.sx, res.sz, plan.max)
+  for (let iz = Math.ceil(box.z0 / step) * step; iz <= box.z1; iz += step) {
+    const off = (iz / step) % 2 ? 1 : 0
+    for (let ix = off + Math.max(0, Math.ceil((box.x0 - off) / step)) * step; ix <= box.x1; ix += step) {
       const i = iz * nav.nx + ix
       if (!isFinite(res.dist[i])) continue
       if (!validEnd(G, plan, i)) continue
@@ -74,11 +100,35 @@ export function bestSpot(G, u, plan, claimed) {
   return best
 }
 
+// Where an engaged unit getting out of a fight falls back to, on `plan`
+// (movePlan's, a fall back): the valid end farthest from the nearest enemy's
+// base, over every other cell of the board (the even indices), the first
+// found of the farthest; -1 for none. (S0) Only the cells inside the plan's
+// box are visited (scanBox), in the board's order: none outside is a valid
+// end.
+export function fallbackSpot(G, u, plan) {
+  let best = -1, bs = -Infinity
+  const nav = G.nav, box = scanBox(nav, plan.res.sx, plan.res.sz, plan.max)
+  for (let iz = box.z0; iz <= box.z1; iz++) {
+    const row = iz * nav.nx
+    for (let i = row + box.x0 + ((row + box.x0) % 2); i <= row + box.x1; i += 2) {
+      if (!validEnd(G, plan, i)) continue
+      const x = nav.x(i), z = nav.z(i)
+      const s = Math.min(...enemiesOf(G, u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
+      if (s > bs) {
+        bs = s
+        best = i
+      }
+    }
+  }
+  return best
+}
+
 // How good (x, z) is for `u`, by its role. Leaves what it found in ctx.last:
 // whether the spot is on an objective (and which), and whether u could
 // shoot from it.
 export function score(G, u, x, z, ctx, moving) {
-  const { enemies, friends, owners, claimed, role } = ctx
+  const { enemies, friends, owners, claimed, role, pre } = ctx
   const t = u.t
   const from = { x, z }
   const moved = moving && hypot(x - u.pos.x, z - u.pos.z) > 0.3
@@ -110,7 +160,7 @@ export function score(G, u, x, z, ctx, moving) {
   if (t.ranged && role !== 'melee') {
     let best = 0
     for (const e of enemies) {
-      const v = shotValue(G, u, e, from, moved)
+      const v = shotValue(G, u, e, from, moved, pre.get(e))
       if (v > best) best = v
     }
     if (best > 0) canShoot = true
@@ -125,8 +175,8 @@ export function score(G, u, x, z, ctx, moving) {
       const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
       if (g > CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
-      const back = meleeValue(e, u) * 0.4
-      const v = p * (meleeValue(u, e) - back + (e.t.role === 'Artillery' ? 10 : 0))
+      const back = pre.get(e).back * 0.4
+      const v = p * (pre.get(e).hit - back + (e.t.role === 'Artillery' ? 10 : 0))
       if (v > best) best = v
     }
     const w = role === 'melee' ? 0.3 : role === 'raider' ? 0.18 : role === 'hero' ? 0.06 : 0.15
@@ -141,7 +191,7 @@ export function score(G, u, x, z, ctx, moving) {
   const fragile = role === 'shooter' || role === 'artillery' || role === 'hero'
   for (const e of enemies) {
     const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
-    if (e.t.brawler && g < e.t.M + 7) s -= meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
+    if (e.t.brawler && g < e.t.M + 7) s -= pre.get(e).back * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put
   const ci = G.nav.index(x, z)

@@ -55,14 +55,20 @@ const place = (c) => ({ x: c.shape.x, y: c.shape.y, z: c.shape.z })
 // collapse lowering the chunk can't reach back into an event)
 const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
 
+// (S0b, DESIGN §4.2.2) The line-of-sight broadphase's bins: BIN-inch
+// squares over the table, each listing (by place in `chunks`) every chunk
+// whose bounding circle's box, PAD to spare, reaches into it. A chunk never
+// moves sideways (a collapse only lowers it), so it is binned once, as it
+// joins.
+const BIN = 4, PAD = 0.01
+
 export class Terrain {
   constructor(W, H) {
     this.W = W
     this.H = H
-    this.chunks = []
-    this.features = []
-    this.dirty = true
-    this.nextId = 1
+    this.nbx = Math.ceil(W / BIN)
+    this.nbz = Math.ceil(H / BIN)
+    this.clear()
   }
 
   clear(out = null) {
@@ -70,6 +76,12 @@ export class Terrain {
     this.features = []
     this.nextId = 1
     this.dirty = true
+    this.bins = Array.from({ length: this.nbx * this.nbz }, () => [])
+    // (a query's scratch: the stamp it marks each chunk met with, and the
+    // places of the chunks it met)
+    this.seen = new Uint32Array(64)
+    this.stamp = 0
+    this.met = new Int32Array(64)
     emitTo(out, 'terrain.clear', {})
   }
 
@@ -80,9 +92,26 @@ export class Terrain {
     }
     const s = c.shape
     s.reach = hypot(s.hx, s.hz) + 0.05
+    const at = this.chunks.length
     this.chunks.push(c)
+    if (at >= this.seen.length) {
+      const seen = new Uint32Array(this.seen.length * 2)
+      seen.set(this.seen)
+      this.seen = seen
+      this.met = new Int32Array(seen.length)
+    }
+    const [x0, x1] = this.binSpan(s.x - s.reach - PAD, s.x + s.reach + PAD, this.W, this.nbx)
+    const [z0, z1] = this.binSpan(s.z - s.reach - PAD, s.z + s.reach + PAD, this.H, this.nbz)
+    for (let bz = z0; bz <= z1; bz++) for (let bx = x0; bx <= x1; bx++) this.bins[bz * this.nbx + bx].push(at)
     emitTo(out, 'terrain.add', { def: defOf(c) })
     return c
+  }
+
+  // the bins (columns or rows) from lo to hi inches along a side `size`
+  // long with `n` bins, kept on the table
+  binSpan(lo, hi, size, n) {
+    const at = (v) => Math.min(n - 1, Math.max(0, Math.floor((v + size / 2) / BIN)))
+    return [at(lo), at(hi)]
   }
 
   // ── Generation ────────────────────────────────────────────────────────────
@@ -105,11 +134,18 @@ export class Terrain {
   // Line of sight from a to b. Two obscuring things (trees, hedges...) in a
   // row block it; one gives the target cover. Obscurers hugging the shooter
   // are looked over.
+  //
+  // (S0b) Only the chunks binned where the segment passes are tested, in
+  // the chunks' own order (so a blocker still returns as soon as it is met,
+  // and `obscure`, a count, is what it was); with an end off the table,
+  // every chunk is.
   los(a, b, ignoreR = 1.3) {
     let obscure = 0
     const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z
     const L2 = dx * dx + dz * dz
-    for (const c of this.chunks) {
+    const n = this.near(a, b), every = n < 0, chunks = this.chunks, met = this.met
+    for (let k = 0, N = every ? chunks.length : n; k < N; k++) {
+      const c = chunks[every ? k : met[k]]
       if (!c.alive || !c.los) continue
       const s = c.shape
       // cheap 2D reject: shape's bounding circle vs the segment
@@ -123,6 +159,53 @@ export class Terrain {
       obscure++
     }
     return { blocked: obscure >= 2, obscure }
+  }
+
+  // The chunks a segment from a to b may meet: every chunk in a bin the
+  // segment (PAD to spare) passes through, each once, their places in
+  // `met` in chunk order, and how many; -1 when an end is off the table
+  // (every chunk, then).
+  near(a, b) {
+    const W = this.W, H = this.H
+    const off = (p) => !(Math.abs(p.x) <= W / 2 && Math.abs(p.z) <= H / 2)
+    if (off(a) || off(b)) return -1
+    if (this.stamp === 0xffffffff) {
+      this.seen.fill(0)
+      this.stamp = 0
+    }
+    const stamp = ++this.stamp, seen = this.seen, met = this.met
+    let n = 0
+    const zlo = Math.min(a.z, b.z), zhi = Math.max(a.z, b.z)
+    const [r0, r1] = this.binSpan(zlo - PAD, zhi + PAD, H, this.nbz)
+    for (let r = r0; r <= r1; r++) {
+      // the segment's x across this row of bins (PAD beyond it either way)
+      const z0 = Math.max(zlo, r * BIN - H / 2 - PAD), z1 = Math.min(zhi, (r + 1) * BIN - H / 2 + PAD)
+      let x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x)
+      if (zhi - zlo > 1e-6) {
+        const xa = a.x + ((b.x - a.x) * (z0 - a.z)) / (b.z - a.z), xb = a.x + ((b.x - a.x) * (z1 - a.z)) / (b.z - a.z)
+        x0 = Math.max(x0, Math.min(xa, xb))
+        x1 = Math.min(x1, Math.max(xa, xb))
+      }
+      const [c0, c1] = this.binSpan(x0 - PAD, x1 + PAD, W, this.nbx)
+      for (let c = c0; c <= c1; c++) {
+        for (const at of this.bins[r * this.nbx + c]) {
+          if (seen[at] === stamp) continue
+          seen[at] = stamp
+          met[n++] = at
+        }
+      }
+    }
+    // in chunk order (an insertion sort: a handful each)
+    for (let i = 1; i < n; i++) {
+      const v = met[i]
+      let j = i - 1
+      while (j >= 0 && met[j] > v) {
+        met[j + 1] = met[j]
+        j--
+      }
+      met[j + 1] = v
+    }
+    return n
   }
 
   // ── Destruction ───────────────────────────────────────────────────────────

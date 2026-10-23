@@ -16,3 +16,5 @@ packages/*/tools/shots/
 /.probe/
 _probe*.mjs
 __probe*.mjs
+# the Grand fixture tails-and-scales builds for its scale checks, fresh on every run
+packages/tails-and-scales/sim/.fixtures/

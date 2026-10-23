@@ -22,10 +22,10 @@ import { p2D6 } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import {
-  alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, validEnd, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
+  alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
 } from '../queries.js'
 import { hold } from '../actions/move.js'
-import { worth, meleeValue, shotValue, bestSpot } from './score.js'
+import { worth, meleeValue, shotValue, bestSpot, fallbackSpot } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last.
@@ -53,17 +53,7 @@ function* aiMove(G, side) {
       const theirs = foes.reduce((s, e) => s + meleeValue(e, u), 0)
       const ours = foes.reduce((s, e) => Math.max(s, meleeValue(u, e)), 0)
       if (role === 'melee' || role === 'line' || ours >= theirs * 0.8) continue
-      const plan = movePlan(G, u)
-      let best = -1, bs = -Infinity
-      for (let i = 0; i < G.nav.N; i += 2) {
-        if (!validEnd(G, plan, i)) continue
-        const x = G.nav.x(i), z = G.nav.z(i)
-        const s = Math.min(...enemiesOf(G, u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
-        if (s > bs) {
-          bs = s
-          best = i
-        }
-      }
+      const best = fallbackSpot(G, u, movePlan(G, u))
       if (best >= 0) {
         emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
         yield { t: 'move', u: u.id, c: best }

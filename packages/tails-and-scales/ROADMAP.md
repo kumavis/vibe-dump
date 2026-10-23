@@ -69,7 +69,12 @@ the commit, and add whatever the work turned up.
   (a game played alone loads no Automerge), and from N3
   `node sim/replay-check.mjs` (and `--self-test`: every corpus battle
   scrubbed move by move, replayed from its start event for event, saved
-  and opened again, held to what a page kept). A step
+  and opened again, held to what a page kept), and from S0-S3
+  `node sim/scale-check.mjs` (and `--self-test`: P-scan, P-los and
+  P-memo, the core's scans held to the scans as they were, on classic and
+  the Grand fixture) and `node sim/scale-bench.mjs` (the core's cost on
+  classic and Grand, a report failing above 1.5× budget: run it on a quiet
+  machine). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -775,9 +780,13 @@ follows N3.
   the pointer. A mirror match names each seat by its edge too, and the
   east army gets thick rims and filled labels. The Chromium harnesses press
   the panel's Start; mirror-check holds the names. DESIGN's F6 notes.)
-- [ ] **S0-S3** Scale hygiene: bounded scans, an LOS broadphase, hoisted
+- [x] **S0-S3** Scale hygiene: bounded scans, an LOS broadphase, hoisted
   invariants, one forbid mask, a plan memo inside one apply. Byte-identical,
   no bump; `sim/scale-bench.mjs` and a Grand test fixture.
+  (The AI's scans walk only the box a plan can reach, line of sight tests
+  only the chunks binned where it passes, a plan is made once per apply.
+  `sim/scale-check.mjs` holds every scan to the old one on classic and the
+  Grand fixture; a Grand AI battle 483 → 366 ms here. DESIGN's S0-S3 notes.)
 - [ ] **F10a** Drag-select a group (Shift-drag; ▭ Select on touch), the group
   bar, and group move, approach, fire, charge and place as ordinary commands.
   A group move pins a ghost formation; a second click sends it. No rules
