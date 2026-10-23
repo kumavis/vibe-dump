@@ -106,6 +106,7 @@ export function link(app, ui) {
     bar.set({
       mode,
       clock: sim.clock.label(sim.t),
+      clockS: sim.clock.label(sim.t, { seconds: true }),
       where,
       stop: [L.stop, stops.length],
       running: battle.running,
@@ -114,7 +115,7 @@ export function link(app, ui) {
       t: Math.round(sim.t),
       duration: sim.clock.duration,
       assist: assist(),
-      held: heldU ? { name: heldU.name, station: heldStation(), stations: (heldU.stations || []).map((s) => ({ name: s, label: stationLabel(s), where: STATION[s]?.where ?? '' })) } : null,
+      held: heldU ? { name: heldU.name, station: heldStation(), stations: (heldU.stations || []).map((s) => ({ name: s, label: stationLabel(s), short: STATION[s]?.short ?? null, where: STATION[s]?.where ?? '' })) } : null,
     })
     // the list, the unit card and the selection follow the clock, a few times a second
     const now = performance.now()

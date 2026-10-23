@@ -15,6 +15,15 @@
 // for an aircraft in Assisted), the setting and Units. At a bookmark's
 // checkpoint it offers to keep going or the card, as before.
 //
+// On a phone (style.css's phone layout: 700 px wide or less, or a coarse
+// pointer) the held bar is one row at the top: the clock at its left end,
+// Release, the stations as pills and a ⋯ that opens the rest (the speeds,
+// the setting, Units and the strip with its bookmarks) as a sheet beneath
+// it. The bar says where it stands to the box's HUD and touch controls,
+// which share the screen with it, through three variables on the document
+// (--pt-head: the line under a bar at the top; --pt-head-end: its right
+// edge; --pt-foot: the height of a bar at the foot).
+//
 // A plain DOM template fed by plain objects and raising callbacks, so the UI
 // never imports the sim (src/link.js feeds it from Battle).
 
@@ -24,6 +33,7 @@ import { ASSIST, ASSIST_LABEL } from './roles.js'
 
 const PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>'
 const PAUSE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5.5" width="4" height="13" rx="1"/><rect x="13.5" y="5.5" width="4" height="13" rx="1"/></svg>'
+const MORE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg>'
 const scaleText = (v) => `×${v === 0.5 ? '½' : v}`
 
 export class BoxBar {
@@ -41,21 +51,25 @@ export class BoxBar {
         <span class="bb-sep bb-sep-a"></span>
         <div class="bb-stations" role="radiogroup" aria-label="Stations"></div>
         <button class="nav bb-prev" aria-label="The stop before" title="The stop before (←)">${icon('prev', 16)}</button>
-        <span class="bb-stop"><b class="bb-clock"></b><em class="bb-where"></em></span>
+        <span class="bb-stop"><b class="bb-clock"></b><em class="bb-where"></em><em class="bb-note"></em></span>
         <button class="nav bb-next" aria-label="The next stop" title="The next stop (→)">${icon('next', 16)}</button>
-        <div class="bb-strip" aria-label="The battle's clock, its stops and the record's turning points">
-          <div class="bb-track"><div class="bb-fill"></div><div class="bb-marks"></div><div class="bb-now"></div></div>
-          <div class="bb-tip" hidden></div>
+        <button class="nav bb-more" aria-label="More: the speed, the setting, Units and the clock" aria-expanded="false" title="The speed, the setting, Units and the clock">${MORE}</button>
+        <div class="bb-sheet">
+          <div class="bb-sheet-head"></div>
+          <div class="bb-strip" aria-label="The battle's clock, its stops and the record's turning points">
+            <div class="bb-track"><div class="bb-fill"></div><div class="bb-marks"></div><div class="bb-now"></div></div>
+            <div class="bb-tip" hidden></div>
+          </div>
+          <span class="bb-sep"></span>
+          <button class="nav bb-play" aria-label="Play or pause"></button>
+          <button class="nav bb-speed" title="Watch speed"></button>
+          <div class="bb-speeds" role="radiogroup" aria-label="Speed"></div>
+          <span class="bb-sep"></span>
+          <button class="nav bb-units" title="Units (L)">${icon('units', 16)}<span>Units</span></button>
+          <button class="nav bb-brief" title="The briefing and the record’s turning points">${icon('take', 16)}<span>Briefing</span></button>
+          <div class="assist bb-assist" role="radiogroup" aria-label="Flying"><span class="bb-lab" aria-hidden="true">Flying</span>${ASSIST.map((a) => `<button class="as-opt" role="radio" data-assist="${a}" title="${a === 'assisted' ? 'Assisted flight holds the aircraft for you' : 'Pilot is the real thing'}">${esc(ASSIST_LABEL[a])}</button>`).join('')}</div>
+          <button class="nav bb-credits" aria-label="Sources and credits" title="Sources and credits">${icon('sources', 16)}</button>
         </div>
-        <span class="bb-sep"></span>
-        <button class="nav bb-play" aria-label="Play or pause"></button>
-        <button class="nav bb-speed" title="Watch speed"></button>
-        <div class="bb-speeds" role="radiogroup" aria-label="Speed"></div>
-        <span class="bb-sep"></span>
-        <button class="nav bb-units" title="Units (L)">${icon('units', 16)}<span>Units</span></button>
-        <button class="nav bb-brief" title="The briefing and the record’s turning points">${icon('take', 16)}<span>Briefing</span></button>
-        <div class="assist bb-assist" role="radiogroup" aria-label="Flying"><span class="bb-lab" aria-hidden="true">Flying</span>${ASSIST.map((a) => `<button class="as-opt" role="radio" data-assist="${a}" title="${a === 'assisted' ? 'Assisted flight holds the aircraft for you' : 'Pilot is the real thing'}">${esc(ASSIST_LABEL[a])}</button>`).join('')}</div>
-        <button class="nav bb-credits" aria-label="Sources and credits" title="Sources and credits">${icon('sources', 16)}</button>
       </div>
       <div class="bb-check">
         <span class="bb-check-t">Checkpoint</span>
@@ -71,6 +85,9 @@ export class BoxBar {
       if (!b && track) return this.scrubAt(e)
       if (!b) return
       const c = b.classList
+      // (the sheet a phone's ⋯ opens closes once one of its choices is made, except a speed or the setting, which show their effect in it)
+      if (c.contains('bb-more')) return this.sheet(!this.el.classList.contains('sheet'))
+      if (this.el.classList.contains('sheet') && !b.dataset.scale && !b.dataset.assist && !b.dataset.station) this.sheet(false)
       if (c.contains('bb-leave')) on.leave()
       else if (c.contains('bb-release')) on.release?.()
       else if (c.contains('bb-prev')) on.step(-1)
@@ -109,6 +126,47 @@ export class BoxBar {
     this.key = ''
     this.marksKey = ''
     this.listsKey = ''
+    // a tap outside the bar closes the sheet; the bar's place is told to the HUD and the touch controls when it moves or resizes
+    addEventListener('pointerdown', (e) => {
+      if (this.el.classList.contains('sheet') && !this.el.contains(e.target)) this.sheet(false)
+    }, true)
+    this.placed = ''
+    this.ro = typeof ResizeObserver === 'function' ? new ResizeObserver(() => this.publish()) : null
+    this.ro?.observe(this.el)
+    addEventListener('resize', () => this.publish())
+  }
+
+  /** The phone's sheet (⋯) open or closed. */
+  sheet(open) {
+    this.el.classList.toggle('sheet', open)
+    this.$('.bb-more').setAttribute('aria-expanded', String(open))
+  }
+
+  /**
+   * Where the bar stands, for the box's HUD and touch controls (scene/hud.js, controls/touch.js): --pt-head is the
+   * line under a bar at the top (with a 6 px gap), --pt-head-end the bar's right edge (with 8), --pt-foot the room a
+   * bar at the foot takes from the bottom; 0 for the side it is not on, and all three 0 while it is hidden.
+   */
+  publish() {
+    let head = 0
+    let end = 0
+    let foot = 0
+    if (!this.el.hidden) {
+      const r = this.el.getBoundingClientRect()
+      if (r.height > 0) {
+        if (r.top + r.height / 2 < innerHeight / 2) {
+          head = Math.ceil(r.bottom + 6)
+          end = Math.ceil(r.right + 8)
+        } else foot = Math.ceil(innerHeight - r.top)
+      }
+    }
+    const key = `${head},${end},${foot}`
+    if (key === this.placed) return
+    this.placed = key
+    const st = document.documentElement.style
+    st.setProperty('--pt-head', `${head}px`)
+    st.setProperty('--pt-head-end', `${end}px`)
+    st.setProperty('--pt-foot', `${foot}px`)
   }
 
   /**
@@ -154,11 +212,16 @@ export class BoxBar {
     if (key === this.key) return
     this.key = key
     this.el.hidden = !state || state.mode === 'moment'
-    if (!state) return
+    if (!state || this.el.dataset.mode !== state.mode) this.sheet(false)
+    if (!state) return this.publish()
     const held = state.mode === 'held'
     this.el.dataset.mode = state.mode
-    this.$('.bb-clock').textContent = state.clock || ''
+    // (the seconds, the speed and a pause show on a phone, where the bar's clock stands in for the HUD's: style.css)
+    const sec = state.clockS && state.clock && state.clockS.startsWith(state.clock) ? state.clockS.slice(state.clock.length) : ''
+    this.$('.bb-clock').innerHTML = `${esc(state.clock || '')}<span class="bb-sec">${esc(sec)}</span>`
     this.$('.bb-where').textContent = state.where || ''
+    this.$('.bb-sheet-head').textContent = held ? state.where || '' : ''
+    this.$('.bb-note').textContent = [state.scale != null && state.scale !== 1 ? scaleText(state.scale) : '', state.running === false ? 'paused' : ''].filter(Boolean).join(' · ')
     const [i, n] = state.stop || [-1, 0]
     this.$('.bb-prev').disabled = held || !(n && i > 0)
     this.$('.bb-next').disabled = held || !(n && i < n - 1)
@@ -173,7 +236,8 @@ export class BoxBar {
     if (lists !== this.listsKey) {
       this.listsKey = lists
       this.$('.bb-speeds').innerHTML = list ? scales.map((v) => `<button class="bb-sp" role="radio" data-scale="${v}">${esc(scaleText(v))}</button>`).join('') : ''
-      this.$('.bb-stations').innerHTML = (state.held?.stations || []).map((s) => `<button class="bb-st" role="radio" data-station="${esc(s.name)}" title="${esc(`${s.label}${s.where ? `: ${s.where}` : ''} (Tab)`)}">${esc(s.label)}</button>`).join('')
+      // (a phone's pills carry the station's short name where it has one: Main, AA, Tubes, Sight)
+      this.$('.bb-stations').innerHTML = (state.held?.stations || []).map((s) => `<button class="bb-st" role="radio" data-station="${esc(s.name)}" title="${esc(`${s.label}${s.where ? `: ${s.where}` : ''} (Tab)`)}">${s.short && s.short !== s.label ? `<span class="bb-l">${esc(s.label)}</span><span class="bb-s">${esc(s.short)}</span>` : esc(s.label)}</button>`).join('')
     }
     this.$('.bb-speeds').hidden = !list
     for (const b of this.el.querySelectorAll('.bb-sp')) {
@@ -185,7 +249,15 @@ export class BoxBar {
       const on = b.dataset.station === state.held?.station
       b.classList.toggle('on', on)
       b.setAttribute('aria-checked', String(on))
+      // (a phone's pills scroll where they outrun the row, a destroyer's four at 360 px: the one held brought into view
+      // once each time it changes, and left to the hand after that)
+      const box = b.parentElement
+      if (on && this.inView !== b.dataset.station && box.clientWidth > 0) {
+        this.inView = b.dataset.station
+        if (box.scrollWidth > box.clientWidth + 1) box.scrollLeft = Math.max(0, Math.min(b.offsetLeft - box.offsetLeft - 8, box.scrollWidth - box.clientWidth))
+      }
     }
+    if (!held) this.inView = null
     this.$('.bb-stations').hidden = !(held && (state.held?.stations || []).length)
     for (const b of this.el.querySelectorAll('.bb-assist .as-opt')) {
       const on = b.dataset.assist === state.assist
@@ -196,5 +268,6 @@ export class BoxBar {
     const p = `${((Math.max(0, Math.min(dur, state.t ?? 0)) / dur) * 100).toFixed(2)}%`
     this.$('.bb-fill').style.width = p
     this.$('.bb-now').style.left = p
+    this.publish()
   }
 }

@@ -736,6 +736,115 @@ body:has(> #ui.holding) .pt-hud { --pt-stations-display: none; }
   .boxbar .bb-credits { display: none; }
 }
 
+/* --- a phone, either way up (700 px wide or less, or a coarse pointer): one layout watching and holding ---------------
+   Watching, the bar stays at the foot with its buttons as icons (three rows upright, one on its side). While a unit is
+   held the bar is one row at the top: the clock at its left end, Release, the stations as pills and ⋯, which opens
+   the rest (the speeds, the setting, Units and the strip with its bookmarks) as a sheet beneath it. The box's HUD
+   docks its instruments under the bar (beside it on a phone on its side) and shrinks its plot to the top right; the
+   touch controls keep the foot, with camera and time stacked under the plot. The HUD (src/battle/scene/hud.js) and
+   the touch controls (src/battle/controls/touch.js) keep this query in their own styles and read where the bar
+   stands from boxbar.js's --pt-head, --pt-head-end and --pt-foot; the touch controls give back their height as
+   --pt-controls. A wider screen with a fine pointer keeps the layout above. */
+/* (the phone's own parts, which a wide screen never shows; the sheet's children stand in the bar's row there) */
+.bb-more, .bb-sheet-head, .bb-note, .bb-sec, .bb-st .bb-s { display: none; }
+.bb-sheet { display: contents; }
+/* while the page's bar is up its Release gives the controls back, so the touch controls' own release stands down */
+body:has(> #ui > .boxbar:not([hidden])) .pt-touch { --pt-touch-release: none; }
+@media (max-width: 700px), (pointer: coarse) {
+  .boxbar { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 5px 6px; border-radius: 22px; }
+  .boxbar .nav { min-width: 32px; padding: 0 8px; }
+  .boxbar .bb-leave span, .boxbar .bb-units span, .boxbar .bb-brief span, .boxbar .bb-release span, .bb-lab, .boxbar .bb-credits, .boxbar .bb-sep { display: none; }
+  .boxbar[data-mode='watch'] .bb-watch { gap: 4px; }
+  .bb-stop { min-width: 56px; }
+  /* the page's interface over the HUD (the sheet over its instruments and plot), and over the touch controls too while
+     the sheet is open: a tap outside closes it */
+  #ui { z-index: 25; }
+  body:has(> #ui > :is(.boxbar.sheet, .unitlist:not([hidden]), .card.show)) #ui { z-index: 35; }
+  /* watching, upright, in three rows: the stops; play, the speed, Units, the briefing and the setting; the strip */
+  .boxbar[data-mode='watch'] { width: calc(100vw - 16px); }
+  .boxbar[data-mode='watch'] .bb-watch::before { content: ''; order: 5; flex: 1 0 100%; height: 0; }
+  .boxbar[data-mode='watch'] .bb-watch::after { content: ''; order: 15; flex: 1 0 100%; height: 0; }
+  .boxbar[data-mode='watch'] .bb-play, .boxbar[data-mode='watch'] .bb-speed, .boxbar[data-mode='watch'] .bb-speeds, .boxbar[data-mode='watch'] .bb-units, .boxbar[data-mode='watch'] .bb-brief, .boxbar[data-mode='watch'] .bb-assist { order: 10; }
+  .boxbar[data-mode='watch'] .bb-strip { order: 20; flex: 1 0 100%; width: auto; }
+  .boxbar[data-mode='watch'] .bb-assist .as-opt { height: 30px; }
+
+  /* held (and at a bookmark's checkpoint): one row at the top */
+  .boxbar[data-mode='held'], .boxbar[data-mode='checkpoint'] {
+    top: calc(8px + env(safe-area-inset-top, 0px)); bottom: auto; transform: none;
+    left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px));
+    width: auto; max-width: none; padding: 4px; border-radius: 22px;
+  }
+  .boxbar[data-mode='held'] .bb-watch { flex-wrap: nowrap; justify-content: flex-start; gap: 6px; }
+  .boxbar[data-mode='held'] .bb-stop { order: -1; flex: none; min-width: 0; align-items: flex-start; padding: 0 2px 0 8px; }
+  .boxbar[data-mode='held'] .bb-clock { font-size: 14.5px; }
+  .boxbar[data-mode='held'] .bb-sec { display: inline; }
+  .boxbar[data-mode='held'] .bb-where { display: none; }
+  .boxbar[data-mode='held'] .bb-note { display: block; font-style: normal; font-size: 10.5px; color: var(--muted); white-space: nowrap; }
+  .boxbar[data-mode='held'] .bb-note:empty { display: none; }
+  .boxbar[data-mode='held'] .nav.bb-release { flex: none; width: 40px; height: 36px; padding: 0; }
+  .boxbar[data-mode='held'] .bb-stations { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .boxbar[data-mode='held'] .bb-stations::-webkit-scrollbar { display: none; }
+  .boxbar[data-mode='held'] .bb-stations .bb-st { height: 32px; padding: 0 11px; font-size: 13px; }
+  .boxbar[data-mode='held'] .bb-st .bb-l { display: none; }
+  .boxbar[data-mode='held'] .bb-st .bb-s { display: inline; }
+  .boxbar[data-mode='held'] .nav.bb-more { display: inline-flex; flex: none; margin-left: auto; width: 40px; height: 36px; padding: 0; }
+  .boxbar[data-mode='held'].sheet .nav.bb-more { background: var(--sand); color: var(--on-sand); border-color: var(--sand); }
+  /* the sheet: the rest, beneath the row, until a choice is made or a tap lands elsewhere (no blur of its own: inside
+     the bar's, a backdrop filter would see nothing) */
+  .boxbar[data-mode='held'] .bb-sheet { display: none; }
+  .boxbar[data-mode='held'].sheet .bb-sheet {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 12px 6px; border-radius: 18px; background: rgba(7, 15, 24, 0.95); border: 1px solid var(--line); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+  .boxbar[data-mode='held'] .bb-sheet-head { display: block; flex: 1 0 100%; font-family: var(--serif); font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .boxbar[data-mode='held'] .bb-sheet-head:empty { display: none; }
+  .boxbar[data-mode='held'] .bb-sheet .nav { height: 36px; }
+  .boxbar[data-mode='held'] .bb-sheet .bb-units span { display: inline; }
+  .boxbar[data-mode='held'] .bb-sheet .bb-sp, .boxbar[data-mode='held'] .bb-sheet .as-opt { height: 32px; padding: 0 12px; font-size: 13px; }
+  .boxbar[data-mode='held'] .bb-sheet .bb-strip { order: 10; flex: 1 0 100%; width: auto; height: 48px; padding-top: 14px; }
+  .boxbar[data-mode='held'] .bb-tip { bottom: 34px; top: auto; }
+  /* a touch screen's pause stands beside fire (controls/touch.js), so the bar's stands down */
+  body:has(> .pt-touch .t-pause) .boxbar .bb-play { display: none; }
+  /* the HUD's clock stands down while the bar at the top shows the time (held) or stands in its corner (a checkpoint) */
+  body:has(> #ui > .boxbar:is([data-mode='held'], [data-mode='checkpoint']):not([hidden])) .pt-hud { --pt-clock-display: none; }
+  /* in a box, watching (the held rules are below), the list and the card stand above the bar at the foot, whatever its rows (the card above the
+     subtitle too); on the table the card keeps its place above the timeline */
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .unitlist { bottom: calc(var(--pt-foot, 124px) + 8px); }
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .card { bottom: calc(var(--pt-foot, 136px) + 40px); }
+  /* the list and the card while held: between the bar and the touch controls */
+  #ui.holding .unitlist { top: var(--pt-head, 60px); bottom: calc(var(--pt-controls, 0px) + 12px); left: 8px; right: 8px; width: auto; max-height: none; }
+  #ui.holding .card { top: var(--pt-head, 60px); bottom: auto; left: 8px; right: 8px; width: auto; max-height: calc(100vh - var(--pt-head, 60px) - var(--pt-controls, 0px) - 20px); transform: translateY(-12px); }
+  #ui.holding .card.show { transform: none; }
+}
+/* the narrowest phones (380 px and less): the bar's clock without its seconds and its note, and tighter pills, so a
+   B5N2's three stations fit the row (a destroyer's four scroll, the one held in view) */
+@media (max-width: 380px) {
+  .boxbar[data-mode='held'] .bb-sec, .boxbar[data-mode='held'] .bb-note { display: none; }
+  .boxbar[data-mode='held'] .bb-watch { gap: 4px; }
+  .boxbar[data-mode='held'] .bb-stations .bb-st { padding: 0 9px; font-size: 12.5px; }
+}
+/* a phone on its side: the bar hugs its row at the top left, the HUD's instruments beside it; watching, one row */
+@media (max-width: 700px) and (orientation: landscape), (pointer: coarse) and (orientation: landscape) {
+  .boxbar[data-mode='held'], .boxbar[data-mode='checkpoint'] { right: auto; width: max-content; max-width: calc(100vw - 260px); }
+  .boxbar[data-mode='held'].sheet .bb-sheet { right: auto; width: min(380px, calc(100vw - 24px)); }
+  .boxbar[data-mode='watch'] { width: min(760px, calc(100vw - 24px)); }
+  .boxbar[data-mode='watch'] .bb-watch { flex-wrap: nowrap; }
+  .boxbar[data-mode='watch'] .bb-watch::before, .boxbar[data-mode='watch'] .bb-watch::after { display: none; }
+  .boxbar[data-mode='watch'] .bb-strip { order: 0; flex: 1 1 160px; }
+  .boxbar[data-mode='watch'] .bb-play, .boxbar[data-mode='watch'] .bb-speed, .boxbar[data-mode='watch'] .bb-speeds, .boxbar[data-mode='watch'] .bb-units, .boxbar[data-mode='watch'] .bb-brief, .boxbar[data-mode='watch'] .bb-assist { order: 0; }
+  /* in a box, watching on its side, the card and the list keep their top-down places of a wide screen, short of the
+     subtitle, and the card compact whenever a box is open (on the table they keep the wide screen's own) */
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) :is(.card, .unitlist) { bottom: auto; }
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .card { top: calc(env(safe-area-inset-top, 0px) + 60px); max-height: calc(100vh - 100px - var(--pt-foot, 60px)); width: min(460px, calc(100vw - 24px)); }
+  body:has(> #ui > .boxbar:not([hidden])) .card { padding: 14px 18px 10px; }
+  body:has(> #ui > .boxbar:not([hidden])) .card h1 { font-size: 21px; }
+  body:has(> #ui > .boxbar:not([hidden])) .card-icon { width: 40px; height: 40px; }
+  body:has(> #ui > .boxbar:not([hidden])) .card footer { bottom: -10px; margin: 6px -18px -10px; padding: 10px 18px; }
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .unitlist { top: calc(env(safe-area-inset-top, 0px) + 60px); max-height: calc(100vh - 68px - var(--pt-foot, 60px)); }
+  /* held, between the controls on the left and on the right, the whole height under the bar */
+  #ui.holding .card, #ui.holding .unitlist { left: calc(max(12px, env(safe-area-inset-left, 0px)) + 236px); right: auto; width: min(380px, calc(100vw - 390px)); bottom: auto; max-height: calc(100vh - var(--pt-head, 60px) - 12px); }
+}
+
 /* the dev page (ui.html): the plan behind the interface */
 body.mock-page { background: #07111a; }
 #plan { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }

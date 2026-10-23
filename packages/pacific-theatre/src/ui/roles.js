@@ -15,15 +15,15 @@
 /** The stations (tools/check/ids.json vocab.stations), in the order the bar and the card list them. */
 export const STATIONS = ['helm', 'main', 'aa', 'torpedoes', 'pilot', 'gunner', 'bombardier']
 
-/** A station's name on a button, and the place it puts you (ROUND-2 §1.1). */
+/** A station's name on a button, and the place it puts you (ROUND-2 §1.1); short, the name on a phone's station pill where the label is too long for the bar's one row. */
 export const STATION = {
   helm: { label: 'Helm', where: 'the bridge' },
-  main: { label: 'Main battery', where: 'the director and its sights' },
-  aa: { label: 'Anti-aircraft', where: 'the AA director' },
-  torpedoes: { label: 'Torpedoes', where: 'the tubes' },
+  main: { label: 'Main battery', short: 'Main', where: 'the director and its sights' },
+  aa: { label: 'Anti-aircraft', short: 'AA', where: 'the AA director' },
+  torpedoes: { label: 'Torpedoes', short: 'Tubes', where: 'the tubes' },
   pilot: { label: 'Pilot', where: 'the stick and the throttle' },
   gunner: { label: 'Gunner', where: 'the rear gun' },
-  bombardier: { label: 'Bombardier', where: 'the bombsight' },
+  bombardier: { label: 'Bombardier', short: 'Sight', where: 'the bombsight' },
 }
 export const stationLabel = (s) => STATION[s]?.label ?? String(s)
 
