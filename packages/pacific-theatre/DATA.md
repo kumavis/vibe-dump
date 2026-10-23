@@ -196,6 +196,10 @@ region polygons where they help:
   labels that collide, lowest rank first
 - `ja`: the Japanese name when the record uses one (*verify* until R2's
   reading)
+- `from`, `to` (optional, a day each; round two): the days the label names
+  the place, from `from` until the day before `to`, so a name the record
+  changed is dated: Changchun (長春) to 1932-03-01, Hsinking (新京) and
+  Manchukuo (満洲国) from it. The gazetteer check holds both as days.
 
 ## 4. Gazetteer and events
 
@@ -392,6 +396,25 @@ envelope; every keyframe's sources are public domain (§4). The app
 cross-fades land between the keyframes either side of the date, switches
 islands on their own dates, and hatches `contested` and `pointsAndLines`.
 The sea is never filled.
+
+**As built (round two)**: the manifest holds **fourteen keyframes**, six of
+them before the eve: 1931-09-18 (the eve of Mukden: Korea, Taiwan,
+Karafuto, the Kwantung leased territory and the railway zone, the Mandate
+islands), 1932-03-01 (Manchukuo), 1937-12-31 (Jehol, Chahar and Hebei, the
+Shanghai–Nanjing corridor, Shanxi's railways), 1938-12-31 (Wuhan, Canton,
+the coast and the railways of eastern China), 1940-09-30 (northern
+Indochina garrisoned) and 1941-07-31 (southern Indochina), then the eight
+of the war from 1941-12-06. The six are `schematic`, drawn by the hand-region
+method from dates and named places (`tools/fronts/build.py`; Morton, the
+Japanese Monographs 144 and 70, *Peace and War*, Romanus and Sunderland's
+Map 1, the 1943 atlas), each with its sources and a note; occupied China in
+1937 and 1938 is cut from the eve's own extent, so the hatch grows into it.
+The prologue chapter's keyframe is 1931-09-18. `tools/check/fronts.mjs`
+holds the fourteen in order, the prologue ones schematic with sources,
+Korea, Taiwan and Karafuto held on every keyframe, Manchuria from
+1932-03-01, and each Mandate island held from before 1931 until its own end
+date in `places.json` (the islands taken in 1944 are not held after). On a
+prologue date the app calls `allied` land "not held by Japan".
 
 ## 7. Battle boxes
 
@@ -596,6 +619,20 @@ An aircraft kit:
   roundel-rnzaf`, dated by `colours[].from/to`; the check rejects a unit
   flying an insignia outside its dates.
 
+**As built (round two): stations and rear guns.** A unit's stations come by
+rule from its kit: a ship has `helm`, `main` where it has a main battery,
+`aa` where it has AA mounts and `torpedoes` where it has tubes; an aircraft
+has `pilot`, `gunner` where its crew is two or more and it has a rear gun,
+and `bombardier` where its group's attack profile is `level` (no kit has the
+type `level`; the B5N2 is a torpedo aircraft that also bombs from level
+flight). An optional `stations: [...]` on a kit overrides the rule, from the
+vocabulary `helm`, `main`, `aa`, `torpedoes`, `pilot`, `gunner`,
+`bombardier` (none is set in v1). A rear gun is a `guns[]` entry with `arc:
+"rear"`, carried by the D3A1, B5N2, D4Y1, B6N2, E13A1, F1M2, SBD-3, SB2U-3,
+TBD-1, TBF-1, TBM-1C, PBY-5, B-17E, B-26, B-18 and A-20, each with a
+source; `tools/check/kits.mjs` allows `arc: "rear"` only on a crew of two or
+more and the overrides only within the vocabulary.
+
 ## 9. The record of a battle: `boxes/<id>/battle.json`
 
 The scenario file. Everything the box plays, and everything a moment needs.
@@ -766,6 +803,27 @@ Rules:
   release or the drop in the record; every scripted count the group causes
   is scaled against it (ENGINEERING.md §5, the group rule). A carrier unit
   carries `hangarHazard` by the clock.
+- **`firstDoor`** (round two; required in every real box): the one gentle
+  take-over the briefing offers as *Start here*,
+  `{ role: { kind, kit, side, unit | group, station, name }, t, title, text,
+  start? }`. Its role must be takeable at `t` by the rules of ROUND-2.md §2
+  and the project manager's decisions (never a fixed unit's cause, never a
+  leader, never beyond the box), its station one the unit offers; `start`
+  (as a moment's: `{ from, bearingDeg, rangeM, altM, speedMs, headingDeg }`)
+  places the spare a `namedCrews` group flies. The four: Pearl Harbor a
+  spare P-40B of `welch-taylor` at 08:31 (with `start` off Haleʻiwa),
+  Midway a Wildcat of `vf-3-cap-noon` at 11:59, Ironbottom Sound `gwin` at
+  the helm at 23:24, Samar `johnston` at the helm at 07:10. Optional
+  `unit.takeable: false` with `why` where the rules cannot know (none in v1).
+- **The record's speeds** (round two): no group's leg (from its launch or
+  entry, by its route, to its attack's target) may need more than its kit's
+  top speed, a field or deck launch allowing the take-off (4 km in the first
+  70 s); no ship's leg between fixes may need more than a nautical mile
+  beyond hers; and a ship under way may not fall under 5 knots inside her
+  own action (from opening fire to ceasing fire) unless her record has
+  something to slow her before that leg ends (a hit, a jammed rudder, a
+  power failure). A leg that fails is fixed in its fixes' times, never in
+  their places or the record's events.
 - The copy rules of §4 hold for every text field.
 
 ## 10. What the check covers
@@ -859,4 +917,4 @@ pure-JS `shapefile` package; both are devDependencies.
 
 ## Round two
 
-The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md); its "as built" is folded into §3, §6, §8 and §9 above, and research/content-2.md holds what each prologue keyframe stands on.

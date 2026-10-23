@@ -562,6 +562,62 @@ them out; research/engine.md has the numbers):
   fall, or under 60 m above the ground over land outside a take-off, a
   landing or the shore beside a drop.
 
+**As built (round two)** (ROUND-2.md §3; research/engine-2.md §2 has every
+field and number):
+
+- `sim.units()` is a function (`takeover.js` unitRows, about 2 ms a call):
+  a row per ship, per aircraft of every group, per parked aircraft and per
+  spare in use, with `index`, `id`, `kind`, `side`, `name`, `label` (the
+  HUD's one-aircraft form), `ja`, `kit`, `kitName`, `group`, `groupName`,
+  `k` (an aircraft's index in its group, 0 the leader), `spare`, `alive`
+  (0, 1, or 2 going down), `takeable` (true or the reason), `stations`,
+  `now`, `next` (the stops' voice), `state` (a ship's afloat, listing, on
+  fire, sinking, sunk, speed and heading; an aircraft's airborne, height,
+  speed, heading, `fuelS` where the sim flies it, parked), `held` and
+  `authority`. The slot array of the first build is `sim.slots`, and
+  `sim.units[i]` still reads it.
+- `sim.takeControl(role)` takes `{ unit, station }`, `{ group, station }`
+  (a member in the air before its attack, never the leader; a `namedCrews`
+  group, or a group of one whose crew is named, flies a spare 120 m out on a
+  member's right) or `{ group, index, station }`, at `sim.t`, and throws
+  `Error(reason)` (also `err.reason`) before anything changes. A first
+  door's or a moment's spare starts at its `start`. `sim.setStation(name)`,
+  `sim.releaseControl() → sortie`, `sim.stationsOf(i)`, `sim.takeable(i)`,
+  `sim.roleOf(i, station)` and `sim.groupTakeable(id)` (true also where
+  every row is greyed but the group flies a spare) go with it.
+- **Soft take**: the unit stays on the record until the player's first
+  non-zero input; released untouched, its shadow body goes and `diverged`
+  is unchanged; touched, the AI drives it on from its state and the
+  record's events naming it stay unscripted. A taken aircraft starts within
+  its kit's speeds (0.8 of cruise to top speed); a taken ship grounds only
+  after moving 0.6 of her length.
+- **Takeability** adds to ROUND-2 §2 the project manager's decisions: a
+  group sent at a `fixed` unit, or named as the cause of a fixed unit's
+  events, is greyed whole ("its target’s fate is fixed"); an `offBox` unit
+  is "beyond the box"; a group of one without named crews is that aircraft.
+- `sim.sortie` (`outcome.js` sortieOf): `held`, `t0`, `t1`, `span`, `from`,
+  `to`, `unit`, `role`, `station`, `stations`, `momentId`, `touched`,
+  `hits` (an aircraft the player brought down is a `hits` entry of kind
+  `aircraft`), `releases: { bombs, torpedoes, salvos, shells, rounds,
+  aaBursts, releaseM }`, `damageTaken`, `survived`, `how` and
+  `divergedDuring` (`why`, also as `reason`), never a count of people.
+- `sim.assist` (`'assisted' | 'pilot'`, `createSim(…, { assist })`;
+  `params.js` `P.assist`): limits and holds on the player's aircraft only,
+  the floor, the release window twice the record's, and Guided's easing of
+  what attacks the player (AA halved, two fighters at most, three times
+  their lead error, half their damage). The AI holds the stations the
+  player is not at (the helm follows the record's way until steered, the
+  main battery the record's target while the record fires).
+- **The record's speeds**: a plan drops a route key its aircraft could not
+  reach at its top speed unless the attack pins it (push-over, release,
+  drop); a CAP fighter leaves its patrol as early as its run needs, an
+  escort joins its slot when it can, a late CAP fighter that cannot reach
+  the strike before the fight ends patrols where it was sent, and a fighter
+  on a leader the record loses follows on along its last line.
+  `tools/check/battle.mjs` holds the record's own legs to the kits (DATA.md
+  §9). Splines still swing a fast turn past its kit's speed for seconds at a
+  time (research/engine-2.md §10).
+
 ## 6. Kits (`src/battle/kits/`)
 
 ```js
@@ -705,6 +761,22 @@ one key press would steer, pan and advance the tour. `CameraRig` gains
 `dispose()` (one AbortController for all its listeners) and the box's rig is
 disposed with the box.
 
+**As built (round two)**: Tab (Shift+Tab back) switches stations while a
+unit is held, as do the HUD's and the box bar's station buttons; the gun
+stations (`aa`, `gunner`) aim with the mouse (relative in pointer lock, else
+the pointer's offset from the centre turns them; touch drags) and fire on the
+left button or Space; the bombardier steers with A/D and releases on B or
+Space; Backspace twice gives the controls back; U toggles the HUD's unit
+lines. Touch gains the station bar and a fire button at the gun stations.
+**Each key has one owner**: while watching, L (the list) and Enter (the
+selection's card) are `link.js`'s and Tab (the next unit) is Battle's watch
+keys'; while a unit is held, Tab is the controls' (`controls/input.js`, in
+capture) and `link.js` binds nothing; a key aimed at a field, a button, the
+card, the list or a dialog is the page's. When the box's bar shows the held
+unit's stations the HUD's own station bar stands down and the first hints
+step below it (`--pt-stations-display`, `--pt-hints-top` under
+`#ui.holding`).
+
 ## 9. The battle lifecycle (`src/battle/index.js`) and the hand-over (`src/app.js`)
 
 ```js
@@ -782,6 +854,26 @@ written as hours from the clock's first midnight (`24:07`), as
 `app.clock`, `app.table`, `app.battle` (`.scene`, `.sim`), `app.tour`,
 `app.ui`, `app.settle()`, `app.stats()`.
 
+**As built (round two)**: Battle gains `select(index | null)`, `take({ unit
+| group, index?, station?, t? }) → Promise<{ sortie, score, outcome,
+reason }>` (throws as `takeControl`; `t` goes there first), `setStation`,
+`cycleStation`, `selectNext` (Tab while watching), `release() → result`,
+`bookmarks` (the moments), `assist` (get/set, persisted by App as
+`pt.assist` and set before `enter` so the sim is built with it),
+`firstDoor` (the battle file's, with `at` parsed), `speeds` (watching 1–60;
+an aircraft held ×0.5 ×1 ×2 in Assisted, ×1 in Pilot, more after a
+bookmark's checkpoint; a ship 1–8) and `baseScale()`; `play(0.5)` is
+accepted; `takeMoment`'s result carries `sortie`; `state` gains `selected`,
+`station`, `held`, `assist`, `sortie`. Events on `app.events` `battle`:
+`select`, `take`, `station`, `assist`, `units` (L), `unit-card` (Enter),
+and `released` with the sortie after `after` at every release, by the
+player, by Backspace or by the unit's fate; `link.js` opens the after-card
+on it once per held session. The hash gains `&unit=<id>&station=<name>`
+for a held unit (a slot id such as `kaga-level#3`, a spare by its group;
+a bookmark keeps `&moment=`); read back after the box is entered, it selects
+the unit and focuses that station's button, and takes nothing (`config.js`
+`HASH`).
+
 ## 10. The table scene (`src/table/`)
 
 ```js
@@ -834,6 +926,27 @@ which `integrate` wires to `app.battle`; the after-card reads `score` and
 `outcome` only through `Battle.takeMoment()`'s resolved value, so the UI
 never imports the sim. The timeline becomes the date axis of §4 with
 chapter ticks and the prologue compressed to a tenth.
+
+**As built (round two)**: `ui/unitlist.js` (the list by side, ships then
+air groups in the record's order, one row an air group and one a field's
+parked aircraft, greyed rows with their reasons, All / Ships / Aircraft,
+keyboard-navigable; from the bar's Units and L); the card's seventh mode
+`unit` (`card.js`: name, kanji, kit, side, now, next, state, a *Take the
+controls* button per station, the reason and no button when greyed; while
+held the buttons switch and *Give the controls back* releases);
+`ui/boxbar.js` (watching: the stops, a strip with a tick per stop and a mark
+per bookmark, play, the speed, Units, the briefing, the setting; held:
+Release, the station bar, the speed list as buttons, at the top of a wide
+screen); `briefing.js`'s *Start here* before the turning points, with the
+setting and its line; `after.js`'s span under the title and the unit's own
+record lines; `ui/roles.js` (the words for stations, kits, roles and the
+record's events) and `ui/setting.js` (`pt.assist`). The hooks are
+`ui.onSelect`, `ui.onTake(id | role)`, `ui.onStation`, `ui.onRelease`,
+`ui.onAssist`, `ui.onFirstDoor` and `ui.onUnits`, wired by `link.js` to
+Battle. `ui.html` with `src/ui/mock-battle.js` and `mock-page.js` is the UI's
+own dev page over a mock of Battle: never in the build (Vite builds
+`index.html` alone), and `tools/smoke.mjs` runs its checks on Vite's dev
+server.
 
 ## 12. Tools
 
@@ -1023,4 +1136,4 @@ a file it does not own writes a note in its report instead of editing it.
 
 ## Round two
 
-The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md); its "as built" is folded into §5, §8, §9 and §11 above, and research/engine-2.md and research/ui-2.md hold the detail.

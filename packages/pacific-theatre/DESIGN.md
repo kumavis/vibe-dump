@@ -123,6 +123,16 @@ China front is a land war this table does not otherwise draw (R3 D1). The
 prologue is cards only; its purpose is that the first chapter does not begin
 out of nowhere.
 
+**As built (round two)**: the prologue has its own front. Six schematic
+keyframes before the eve (18 September 1931, 1 March 1932, 31 December 1937,
+31 December 1938, 30 September 1940, 31 July 1941; DATA.md §6) move it, and
+the prologue chapter's keyframe is 18 September 1931, so Korea, Taiwan and
+Karafuto read as held from its first day, Manchuria from Manchukuo's
+proclamation, and occupied China grows into the eve's extent. Before the war
+the legend calls the rest "not held by Japan" (the Allies are not yet a
+side), and a name carries its dates: Changchun until March 1932, Hsinking and
+Manchukuo after.
+
 The chapters are keyframes, as the Hawaiian app's eras are, **eight of
 them**, each on a date a public-domain map shows the front (R3 D2):
 
@@ -502,6 +512,39 @@ what the sources say happened, the people they name, the losses by source as
 ranges; **What came next** (その後), the history, which your battle did not
 change. The parts never share a row or a sum, and the words "saved", "what
 if" and "victory" do not appear.
+
+**As built (round two)**: every ship and every aircraft in the air is a door,
+at any time and on either side (ROUND-2.md §1). The unit list and a click in
+the box select; the unit card offers the unit's stations (a ship's helm, main
+battery, anti-aircraft and torpedoes; an aircraft's pilot, gunner and, on a
+level run, bombardier), and Tab or the bar switches between them. What
+cannot be taken says why in the list's words: a fixed unit, a hospital ship,
+a tokkō unit, an aircraft on the ground, not yet airborne, landed or lost, a
+group's leader, a named crew (the group flies a spare beside them), a ship
+beyond the box or past her fate, and a group sent at a fixed unit or named
+as the cause of its events ("its target's fate is fixed"), so no player is
+ever the cause of Arizona's loss. A take is soft: the unit stays on the
+record until the player first acts, and given back untouched it is as if it
+had never been taken; a touched unit stays with the AI from where it was
+left, and the record's events naming it stay unscripted (the saved carrier's
+rule). The after-card opens at every release, by the bar, by Backspace or by
+the unit's fate, over the span the controls were held: *Your sortie* from
+the sim's sortie, *Your battle* from what left the record in that span only,
+*The record* from the unit's own events in it, *What came next* as before.
+The twenty-three moments are **bookmarks**, marks on the box's strip that
+take their unit at their time with their objective, checkpoint and written
+after text. Nothing prompts a take, and each briefing offers one gentle
+first door, *Start here*: a P-40 out of Haleʻiwa, a Wildcat of Midway's noon
+CAP, Gwin's helm, Johnston's helm. **The setting**, *Assisted* (the default)
+or *Pilot*, is on the bar and the briefing and is the one thing the browser
+keeps (`pt.assist`): Assisted holds the player's aircraft within limits and
+above a floor, opens a release window twice the record's, eases the fire
+aimed at the player as Guided does, and runs the battle at half speed while
+an aircraft is held. The first take of each kind (and of each gun station
+and the sight) shows its four control lines once, kept across visits
+(`pt.hints`). The URL names a held unit (`#unit`, `#station`); read back, it
+selects the unit and focuses the station's button and takes nothing without
+a click, as `#moment` does.
 
 ### 5.8 Kits: ships and aircraft from numbers
 
@@ -888,12 +931,13 @@ Koei's 1989 *P.T.O.*); a Japanese reader takes the military sense from 戦域,
 not from the English word, so the app's Japanese line is 太平洋戦争 and the
 dates, never a katakana title. Nothing a user sees plays on the word.
 
-Gallery card (R8's draft, in the Hawaiian card's register):
+Gallery card (R8's draft, in the Hawaiian card's register; since round two
+any unit can be taken, not one, and the card says so):
 
 ```json
 "gallery": {
   "title": "Pacific Theatre",
-  "description": "The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, or take one aircraft or one ship, on either side.",
+  "description": "The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, or take any ship or aircraft, on either side.",
   "tags": ["game", "simulation", "tutorial"],
   "status": "wip"
 }
@@ -933,4 +977,4 @@ pass's own references by report, with the URLs requested and their status.
 
 ## Round two
 
-The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md), which wins where it differs from this file until its "as built" is folded in.
+The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md); its "as built" is folded into §3.1, §5.7 and §12 above.
