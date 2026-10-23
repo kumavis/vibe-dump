@@ -1084,6 +1084,12 @@ export function createSim(battle, kits, opts = {}) {
       if (!target.stations.includes(st)) throw new Error(`takeControl: no station “${st}” on this unit (it offers ${target.stations.join(', ')})`)
     }
     if (sim.player) sim.releaseControl()
+    // (a free take is no bookmark: the last bookmark's state and objective go with it, or Battle would end the take
+    // at once on the bookmark's done state, and the release cue would read the bookmark's objective)
+    if (!moment) {
+      sim.momentState = null
+      sim._moment = null
+    }
     let i = -1
     let kind
     if (moment) {
