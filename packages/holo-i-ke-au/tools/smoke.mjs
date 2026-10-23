@@ -16,7 +16,10 @@
 // drawn; one district across the years it is drawn at, and at now; the coda's
 // chapter coming down into it; the works by their years, on the ground at
 // the island zoom and in a district, the settlements off them, let go with
-// their island; then what the page costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
+// their island; what grows, by class (an island's crop map coming and going
+// with it, each class's look on the ground, the year's nearest keyframe, a
+// district loʻi's own crop, the trees of the fields); then what the page
+// costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
 // `node tools/fake-data.mjs` for the test masks and the test data).
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
@@ -2625,7 +2628,8 @@ if (nuuanuHere) {
       return ui(`(() => {
         const D = app.districts, rec = D.cur, y = app.timeline.year
         const holds = (p) => (p.from == null || y >= p.from) && (p.to == null || y < p.to + 1)
-        const feats = [...rec.d.byIndex].map(([i, f]) => ({ id: f.id ?? f.properties.name, kind: f.properties.kind, from: f.properties.from ?? null, to: f.properties.to ?? null, k: +D.featK[i].toFixed(3), want: holds(f.properties) ? 1 : 0 }))
+        // (an index stands while any of its features holds the year: loʻi on one outline share one)
+        const feats = [...rec.d.byIndex].map(([i, f]) => ({ id: f.id ?? f.properties.name, kind: f.properties.kind, from: f.properties.from ?? null, to: f.properties.to ?? null, k: +D.featK[i].toFixed(3), want: rec.d.members.get(i).some(holds) ? 1 : 0 }))
         const patches = D.patchWeights().map((p) => ({ id: p.id, until: p.until, k: p.k, want: y < p.until ? 1 : 0 }))
         const S = rec.features.settlements
         const Z = S.ready ? S.zoning : null
@@ -2762,7 +2766,7 @@ if (nuuanuHere) {
         const r = await ui(`(() => {
           const D = app.districts, s = app.rig.state, yr = app.timeline.year
           const holds = (p) => (p.from == null || yr >= p.from) && (p.to == null || yr < p.to + 1)
-          const off = [...D.cur.d.byIndex].filter(([i, f]) => +D.featK[i].toFixed(3) !== (holds(f.properties) ? 1 : 0)).map(([, f]) => f.id)
+          const off = [...D.cur.d.byIndex].filter(([i]) => +D.featK[i].toFixed(3) !== (D.cur.d.members.get(i).some(holds) ? 1 : 0)).map(([, f]) => f.id)
           const v = new app.camera.position.constructor(${st.xz[0]}, app.world.heightAt(${st.xz[0]}, ${st.xz[1]}), ${st.xz[1]}).project(app.camera)
           const px = [((v.x + 1) / 2) * innerWidth, ((1 - v.y) / 2) * innerHeight]
           const pin = document.querySelector('.pin.active.show')
@@ -2790,6 +2794,390 @@ if (nuuanuHere) {
   } else console.log('  - no coda chapter: its checks skipped')
 }
 // ==== [koolaupoko] end ========================================================
+
+// ==== crops: what grows, by class, at the island zooms and in a district ========== [crops]
+// DATA.md "Crops, on the era layers": an island's crop map loads with it when
+// it takes a slot, nearest texel, every keyframe at once, and is let go with
+// it, the GPU's memory with it; each class reads differently on the ground
+// (a planted field of each, read back from the frame); the year shows the
+// nearest keyframe by the map of eras onto keyframes, switching where that
+// map puts the change and never blending, with nothing worked out again; the
+// trees of the pasture, the orchards and the lawns stand in their own fields
+// in their own years. Data without crop masks draws the ground as before,
+// which is checked instead. And with or without them, a district's loʻi that
+// names rice is rice in its own years, the taro loʻi on its outline taro in
+// theirs, one a texel, and one that names none keeps taro.
+{
+  await page.waitForFunction(() => window.__app.crops?.available !== null, null, { timeout: 120000 })
+  const cropsOn = await ui('!!app.crops?.available')
+  const offTour3 = (year) => run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish()`)
+  const cropsSettle = () => page.waitForFunction(() => { const app = window.__app; app.settle(); return app.crops.ready && app.cropTrees.idle && (!app.districts?.cur || app.districts.cur.state === 'ready' || app.districts.cur.state === 'failed') }, null, { timeout: 300000 })
+  /** Let every island's crop map go now (as if the camera had left a while ago), over the whole chain. */
+  const releaseAll = async () => {
+    await view('app.tour.chainView()')
+    await frames(2)
+    await run('for (const r of app.crops.islands.values()) r.lastSeen = -1e9')
+    await frames(2)
+  }
+  /**
+   * The ground (no trees, towns, features or lines) at world points, a
+   * 21-pixel square each, with the crops on and off, drawn by hand with the
+   * loop stopped (and `prep`, a function body with `app`, run once it has):
+   * { on, off } of [r, g, b, s] each, the mean colour and the spread of its
+   * brightness (rows, banks, water and crowns read as texture as much as
+   * colour).
+   */
+  const groundColours = (pts, prep = '') =>
+    page.evaluate(async ([pts, prep]) => {
+      const app = window.__app
+      const keep = app.frame
+      app.frame = () => {}
+      await new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res)))
+      if (prep) new Function('app', prep)(app)
+      const R = app.renderer
+      const gl = R.getContext()
+      const w = gl.drawingBufferWidth
+      const h = gl.drawingBufferHeight
+      const hide = [app.cropTrees.group, app.towns.group, app.districts?.cur?.features?.group, app.lines?.group, app.routes?.group].filter(Boolean)
+      const vis = hide.map((g) => g.visible)
+      for (const g of hide) g.visible = false
+      const V = app.camera.position.constructor
+      const read = () => {
+        app.sky.renderMap(R)
+        app.pipeline.render(app.scene, app.camera)
+        const px = new Uint8Array(w * h * 4)
+        gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px)
+        return pts.map(([x, z]) => {
+          const p = new V(x, app.world.heightAt(x, z), z).project(app.camera)
+          const sx = Math.round(((p.x + 1) / 2) * w)
+          const sy = Math.round(((p.y + 1) / 2) * h)
+          const s = [0, 0, 0]
+          let n = 0
+          let l1 = 0
+          let l2 = 0
+          for (let dy = -10; dy <= 10; dy++) for (let dx = -10; dx <= 10; dx++) {
+            const X = sx + dx
+            const Y = sy + dy
+            if (X < 0 || Y < 0 || X >= w || Y >= h) continue
+            const k = (Y * w + X) * 4
+            for (let c = 0; c < 3; c++) s[c] += px[k + c]
+            const l = 0.3 * px[k] + 0.59 * px[k + 1] + 0.11 * px[k + 2]
+            l1 += l
+            l2 += l * l
+            n++
+          }
+          n = Math.max(1, n)
+          return [...s.map((v) => Math.round(v / n)), Math.round(Math.sqrt(Math.max(0, l2 / n - (l1 / n) ** 2)))]
+        })
+      }
+      const on = read()
+      app.crops.setHidden(true)
+      const off = read()
+      app.crops.setHidden(false)
+      hide.forEach((g, i) => (g.visible = vis[i]))
+      app.frame = keep
+      requestAnimationFrame(app.frame)
+      return { on, off }
+    }, [pts, prep])
+  // (how far apart two samples read: their colours, and their texture twice over)
+  const diff = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]) + 2 * Math.abs((a[3] ?? 0) - (b[3] ?? 0))
+  /**
+   * The middle of a planted field of class c in keyframe k on island `id`, a
+   * few texels into a stretch of that class (so the field's middle is), and
+   * the camera over it from `d`, looking almost straight down.
+   */
+  const fieldOf = (id, c, k) =>
+    ui(`(() => {
+      const m = app.crops.map('${id}'), r = app.world.terrains.get('${id}').pack.rect
+      const cls = (i, j) => i < 0 || j < 0 || i >= m.W || j >= m.H ? -1 : m.bytes[(j * m.W + i) * 4 + ${k}] >> 4
+      // (well away from a district's loʻi, ponds and villages, which draw themselves over the fields)
+      const boxes = (app.districts?.list || []).flatMap((d) => d.rastered.map(({ f }) => { const ring = f.geometry.coordinates[0].map((c) => app.data.proj.toWorld(c)); return [Math.min(...ring.map((q) => q[0])) - 1, Math.min(...ring.map((q) => q[1])) - 1, Math.max(...ring.map((q) => q[0])) + 1, Math.max(...ring.map((q) => q[1])) + 1] }))
+      const clear = (x, z) => !boxes.some((b) => x > b[0] && z > b[1] && x < b[2] && z < b[3])
+      let best = null, bn = 0
+      for (let j = 3; j < m.H - 3; j += 2) for (let i = 3; i < m.W - 3; i += 2) {
+        if (cls(i, j) !== ${c}) continue
+        let n = 0
+        for (let dj = -2; dj <= 2; dj++) for (let di = -2; di <= 2; di++) n += cls(i + di, j + dj) === ${c} ? 1 : 0
+        if (n <= bn) continue
+        // a field planted, its middle in this stretch, and off the beach (no field there)
+        const x = r.x0 + ((i + 0.5) * (r.x1 - r.x0)) / m.W, z = r.z0 + ((j + 0.5) * (r.z1 - r.z0)) / m.H
+        for (const [ox, oz] of [[0, 0], [0.5, 0], [-0.5, 0], [0, 0.5], [0, -0.5], [0.5, 0.5], [-0.5, -0.5]]) {
+          const f = app.crops.cell(x + ox, z + oz)
+          if (app.world.terrains.get('${id}').metresAt(f.cx, f.cz) < 12 || !clear(f.cx, f.cz)) continue
+          const at = app.crops.classAt('${id}', f.cx, f.cz, ${k})
+          if (!at || at[0] !== ${c} || f.pick >= app.crops.cover(at[0], at[1])) continue
+          bn = n
+          best = [f.cx, f.cz]
+          break
+        }
+      }
+      return best
+    })()`)
+
+  if (!cropsOn) {
+    await check('without crop masks the ground is drawn as before: no crop map, none bound, no trees of the fields', async () => {
+      await offTour3(1896)
+      await view("app.tour.islandView('oahu', 0)")
+      await frames(3)
+      const st = await ui(`(() => {
+        const ts = app.world.islands
+        return { available: app.crops.available, maps: app.crops.islands.size, on: ts.filter((t) => t.uniforms.uOwnCropOn.value).map((t) => t.pack.id), district: app.shared.uniforms.uDistCropOn.value, trees: app.cropTrees.stats().drawn, kids: app.cropTrees.group.children.length }
+      })()`)
+      if (st.available !== false || st.maps || st.on.length || st.district || st.trees || st.kids) throw new Error(JSON.stringify(st))
+      console.log(`      ${JSON.stringify(st)}`)
+    })
+  } else {
+    await check('crops: an island’s crop map comes with it and goes with it, nearest texel, every keyframe; the GPU’s memory with it', async () => {
+      await offTour3(1896)
+      await releaseAll()
+      const t0 = await ui('[app.renderer.info.memory.textures, app.crops.stats().gpuMB, app.crops.stats().loads, app.crops.stats().releases]')
+      if (t0[1] !== 0) throw new Error(`over the chain, a while after, ${t0[1]} MB of crop maps held`)
+      await view("app.tour.islandView('oahu', 0)")
+      await cropsSettle()
+      await frames(2)
+      const a = await ui(`(() => {
+        const m = app.crops.map('oahu'), t = app.world.terrains.get('oahu'), s = app.crops.stats()
+        // (the map's texture itself, held to see it leave the GPU)
+        app.__cropTex = m?.tex
+        return { size: m ? [m.W, m.H] : null, pack: [t.pack.W, t.pack.H], has: m?.has, nearest: m ? [m.tex.minFilter, m.tex.magFilter, m.tex.generateMipmaps, m.tex.format] : null, bound: t.uniforms.uOwnCrop.value === m?.tex && t.uniforms.uOwnCropOn.value === 1, onGpu: !!m && !!app.renderer.properties.get(m.tex).__webglTexture, textures: app.renderer.info.memory.textures, gpuMB: s.gpuMB, loads: s.loads }
+      })()`)
+      const NEAREST = 1003
+      if (!a.size || a.size.join() !== a.pack.join()) throw new Error(`the map ${a.size} on a pack of ${a.pack}`)
+      if (a.has.join() !== '1,1,1,1') throw new Error(`keyframes with a mask: ${a.has}`)
+      if (a.nearest[0] !== NEAREST || a.nearest[1] !== NEAREST || a.nearest[2]) throw new Error(`filters ${a.nearest}: not nearest, or mipmapped`)
+      if (!a.bound || !a.onGpu) throw new Error(`the island terrain reads its map: ${a.bound}; on the GPU: ${a.onGpu}`)
+      if (a.loads !== t0[2] + 1) throw new Error(`loads ${t0[2]} → ${a.loads}`)
+      const want = (a.size[0] * a.size[1] * 4) / 1048576
+      if (Math.abs(a.gpuMB - want) > 0.01) throw new Error(`${a.gpuMB} MB on the GPU, the map is ${want.toFixed(2)} MB`)
+      await releaseAll()
+      const b = await ui(`(() => { const s = app.crops.stats(), t = app.world.terrains.get('oahu'), tex = app.__cropTex; app.__cropTex = null; return { textures: app.renderer.info.memory.textures, onGpu: !!app.renderer.properties.get(tex).__webglTexture, gpuMB: s.gpuMB, releases: s.releases, maps: app.crops.islands.size, on: t.uniforms.uOwnCropOn.value, trees: app.cropTrees.islands.has('oahu') } })()`)
+      if (b.onGpu || b.gpuMB !== 0 || b.releases !== t0[3] + 1 || b.maps || b.on || b.trees) throw new Error(`let go: ${JSON.stringify(b)}, before ${t0}`)
+      console.log(`      Oʻahu’s map ${a.size.join('×')}, four keyframes, nearest, ${a.gpuMB} MB on the GPU and off it again (the renderer's textures ${t0[0]} → ${a.textures} → ${b.textures}, others coming and going)`)
+    })
+
+    const NAMES = ['', 'loʻi', 'dryland', 'rice', 'cane', 'pineapple', 'pasture', 'orchard', 'lawn']
+    const KF = await ui('app.crops.keyframes.map((k) => k.id)')
+    const spanMid = (k) => ui(`(() => { const [a, b] = app.crops.edges[${k}]; const T = app.timeline; const lo = Number.isFinite(a) ? a : T.yearAt(0), hi = Number.isFinite(b) ? b : T.yearAt(T.max); return Math.round((lo + hi) / 2) })()`)
+    await check('crops: each class reads differently on the ground, a planted field of each at its keyframe', async () => {
+      // each class at the first keyframe that has a stretch of it on the test Oʻahu
+      await view("app.tour.islandView('oahu', 0)")
+      await cropsSettle()
+      const at = await ui(`(() => {
+        const m = app.crops.map('oahu'), out = {}
+        if (!m) return out
+        for (let c = 1; c <= 8; c++) for (let k = 0; k < 4 && out[c] === undefined; k++) {
+          let n = 0
+          for (let q = k; q < m.bytes.length; q += 4) if (m.bytes[q] >> 4 === c) n++
+          if (n > 60) out[c] = k
+        }
+        return out
+      })()`)
+      const missing = [1, 2, 3, 4, 5, 6, 7, 8].filter((c) => at[c] === undefined)
+      if (missing.length) throw new Error(`no class ${missing.map((c) => NAMES[c]).join(', ')} in any keyframe of the test Oʻahu`)
+      const looks = {}
+      for (let c = 1; c <= 8; c++) {
+        const k = at[c]
+        await offTour3(await spanMid(k))
+        const p = await fieldOf('oahu', c, k)
+        if (!p) throw new Error(`no planted field of ${NAMES[c]} in ${KF[k]}`)
+        await run(`app.rig.jump({ x: ${p[0]}, z: ${p[1]}, distance: 10, yaw: 0.6, pitch: 1.45 }); app.settle()`)
+        await cropsSettle()
+        await frames(2)
+        const shown = await ui(`[app.crops.stats().keyframe, app.crops.classAt('oahu', ${p[0]}, ${p[1]})]`)
+        if (shown[0] !== KF[k] || shown[1][0] !== c) throw new Error(`over the ${NAMES[c]} field in ${KF[k]}: keyframe ${shown[0]}, class ${shown[1]}`)
+        const g = await groundColours([p])
+        looks[c] = { on: g.on[0], off: g.off[0], kf: KF[k] }
+      }
+      const bad = []
+      for (let c = 1; c <= 8; c++) if (diff(looks[c].on, looks[c].off) < 12) bad.push(`${NAMES[c]} reads as the ground without crops (${looks[c].on} against ${looks[c].off})`)
+      let least = [Infinity]
+      for (let a = 1; a <= 8; a++) for (let b = a + 1; b <= 8; b++) {
+        const d = diff(looks[a].on, looks[b].on)
+        if (d < least[0]) least = [d, NAMES[a], NAMES[b]]
+        if (d < 10) bad.push(`${NAMES[a]} and ${NAMES[b]} read alike (${looks[a].on} and ${looks[b].on})`)
+      }
+      if (bad.length) throw new Error(bad.slice(0, 4).join('; '))
+      console.log(`      ${Object.entries(looks).map(([c, l]) => `${NAMES[c]} ${l.kf} rgb(${l.on.slice(0, 3)}) ±${l.on[3]} over rgb(${l.off.slice(0, 3)}) ±${l.off[3]}`).join(' · ')}`)
+      console.log(`      the nearest two: ${least[1]} and ${least[2]}, ${least[0]} apart`)
+    })
+
+    await check('crops: the year shows the nearest keyframe by the eras’ own map, switching where it changes, never blended, nothing worked out again', async () => {
+      // the change from the Māhele to the kingdom: where the map's position crosses half way
+      const k1 = KF.indexOf('mahele') >= 0 ? KF.indexOf('mahele') : 1
+      const edge = await ui(`app.crops.edges[${k1}][1]`)
+      if (!Number.isFinite(edge)) throw new Error(`no change after ${KF[k1]}: ${JSON.stringify(await ui('app.crops.stats().spans'))}`)
+      // a planted field of a class the next keyframe changes
+      const p = await ui(`(() => {
+        const m = app.crops.map('oahu')
+        if (!m) return null
+        const r = app.world.terrains.get('oahu').pack.rect
+        for (let j = 4; j < m.H - 4; j += 3) for (let i = 4; i < m.W - 4; i += 3) {
+          const q = (j * m.W + i) * 4, a = m.bytes[q + ${k1}] >> 4, b = m.bytes[q + ${k1 + 1}] >> 4
+          if (a === b || !a || !b) continue
+          let same = true
+          for (let dj = -2; dj <= 2 && same; dj++) for (let di = -2; di <= 2 && same; di++) { const o = ((j + dj) * m.W + i + di) * 4; same = m.bytes[o + ${k1}] >> 4 === a && m.bytes[o + ${k1 + 1}] >> 4 === b }
+          if (!same) continue
+          const f = app.crops.cell(r.x0 + ((i + 0.5) * (r.x1 - r.x0)) / m.W, r.z0 + ((j + 0.5) * (r.z1 - r.z0)) / m.H)
+          const ca = app.crops.classAt('oahu', f.cx, f.cz, ${k1}), cb = app.crops.classAt('oahu', f.cx, f.cz, ${k1 + 1})
+          if (ca[0] === a && cb[0] === b && f.pick < Math.min(app.crops.cover(ca[0], ca[1]), app.crops.cover(cb[0], cb[1]))) return [f.cx, f.cz, a, b]
+        }
+        return null
+      })()`)
+      if (!p) throw new Error(`no field changes class from ${KF[k1]} to ${KF[k1 + 1]}`)
+      await offTour3(Math.floor(edge) - 1)
+      await run(`app.rig.jump({ x: ${p[0]}, z: ${p[1]}, distance: 10, yaw: 0.6, pitch: 1.45 }); app.settle()`)
+      await cropsSettle()
+      await frames(2)
+      const before = await ui('(() => { const s = app.crops.stats(), t = app.cropTrees.stats(); return { kf: s.keyframe, loads: s.loads, sel: app.shared.uniforms.uCropSelA.value.toArray(), mix: app.shared.uniforms.uCropMix.value, kp: app.land.position(app.timeline.s, app.crops.eraYears), year: app.timeline.year, built: t.built, refills: t.refills } })()')
+      const gA = await groundColours([p])
+      // across the change by a year: the year eased (no settle), the fields going over one by one
+      await run(`app.timeline.setYear(${Math.floor(edge) + 1})`)
+      await frames(1)
+      const mid = await ui('[app.shared.uniforms.uCropSelA.value.toArray(), app.shared.uniforms.uCropSelB.value.toArray(), app.shared.uniforms.uCropMix.value]')
+      await page.waitForFunction(() => window.__app.crops.stats().going === null, null, { timeout: 120000 })
+      await run('app.ui.timeline.finish()')
+      await frames(3)
+      const after = await ui('(() => { const s = app.crops.stats(), t = app.cropTrees.stats(); return { kf: s.keyframe, loads: s.loads, sel: app.shared.uniforms.uCropSelA.value.toArray(), mix: app.shared.uniforms.uCropMix.value, kp: app.land.position(app.timeline.s, app.crops.eraYears), year: app.timeline.year, built: t.built, refills: t.refills } })()')
+      const gB = await groundColours([p])
+      const bad = []
+      if (before.kf !== KF[k1] || !(before.kp < k1 + 0.5)) bad.push(`a year before the change (${before.year.toFixed(2)}, position ${before.kp.toFixed(3)}): ${before.kf}`)
+      if (after.kf !== KF[k1 + 1] || !(after.kp >= k1 + 0.5)) bad.push(`a year after (${after.year.toFixed(2)}, position ${after.kp.toFixed(3)}): ${after.kf}`)
+      const hot = (v) => v.filter((x) => x === 1).length === 1 && v.filter((x) => x === 0).length === 3
+      if (!hot(before.sel) || !hot(after.sel) || before.mix !== 0 || after.mix !== 0) bad.push(`the keyframes on the map not one at a time: ${before.sel}/${before.mix}, ${after.sel}/${after.mix}`)
+      if (!hot(mid[0]) || !hot(mid[1]) || mid[0].join() === mid[1].join() || !(mid[2] >= 0 && mid[2] < 1)) bad.push(`going over: ${JSON.stringify(mid)}`)
+      if (after.loads !== before.loads || after.built !== before.built) bad.push(`worked out again: loads ${before.loads} → ${after.loads}, tiles ${before.built} → ${after.built}`)
+      if (after.refills - before.refills > 6) bad.push(`the trees' buffers filled ${after.refills - before.refills} times over one change`)
+      if (diff(gA.on[0], gB.on[0]) < 12) bad.push(`the field (${NAMES[p[2]]} then ${NAMES[p[3]]}) reads alike either side: ${gA.on[0]} and ${gB.on[0]}`)
+      if (bad.length) throw new Error(bad.join('; '))
+      console.log(`      ${KF[k1]} to ${KF[k1 + 1]} at ${edge.toFixed(2)}: ${before.year.toFixed(1)} ${before.kf} (position ${before.kp.toFixed(3)}), ${after.year.toFixed(1)} ${after.kf} (${after.kp.toFixed(3)}); a field of ${NAMES[p[2]]} then ${NAMES[p[3]]}, rgb(${gA.on[0]}) then rgb(${gB.on[0]}); going over ${mid[0]} → ${mid[1]} at ${mid[2].toFixed(2)}; the trees refilled ${after.refills - before.refills}×, nothing rebuilt`)
+    })
+
+    await check('crops: the trees of the pasture, the orchards and the lawns stand in their own fields, in their own years', async () => {
+      const out = []
+      const bad = []
+      for (const [c, kind] of [[7, 'orchard'], [6, 'umbrella'], [8, 'umbrella']]) {
+        const k = await ui(`(() => { const m = app.crops.map('oahu'); for (let k = 3; k >= 0; k--) { let n = 0; for (let q = k; q < m.bytes.length; q += 4) if (m.bytes[q] >> 4 === ${c}) n++; if (n > 60) return k } return -1 })()`)
+        if (k < 0) continue
+        const y = await spanMid(k)
+        await offTour3(y)
+        const p = await fieldOf('oahu', c, k)
+        if (!p) {
+          bad.push(`no planted field of ${NAMES[c]}`)
+          continue
+        }
+        await run(`app.rig.jump({ x: ${p[0]}, z: ${p[1]}, distance: 18, yaw: 0.6, pitch: 0.9 }); app.settle()`)
+        await cropsSettle()
+        await frames(2)
+        const r = await ui(`(() => {
+          const near = app.cropTrees.alive(app.timeline.year, ${p[0]}, ${p[1]}, 6)
+          const wrong = near.filter((t) => { const a = app.crops.classAt('oahu', t.x, t.z, ${k}); return !a || (t.kind === 'orchard' ? a[0] !== 7 : a[0] !== 6 && a[0] !== 8) })
+          return { n: near.length, kinds: [...new Set(near.map((t) => t.kind))], wrong: wrong.length, drawn: app.cropTrees.stats().drawn }
+        })()`)
+        if (!r.n || !r.kinds.includes(kind)) bad.push(`over a field of ${NAMES[c]} in ${y}: ${JSON.stringify(r)}`)
+        if (r.wrong) bad.push(`${r.wrong} trees in ${y} stand on a field of another class`)
+        if (!r.drawn) bad.push(`none drawn over ${NAMES[c]}`)
+        // in a keyframe whose field there is of another class, none of this kind
+        const other = await ui(`(() => { for (let q = 0; q < 4; q++) { if (q === ${k}) continue; const a = app.crops.classAt('oahu', ${p[0]}, ${p[1]}, q); if (a && a[0] !== ${c} && a[0] !== (${c} === 6 ? 8 : ${c} === 8 ? 6 : -1)) return q } return -1 })()`)
+        if (other >= 0) {
+          const y2 = await spanMid(other)
+          await offTour3(y2)
+          await run('app.settle()')
+          await cropsSettle()
+          const n2 = await ui(`app.cropTrees.alive(app.timeline.year, ${p[0]}, ${p[1]}, 0.3).filter((t) => t.kind === '${kind}').length`)
+          if (n2) bad.push(`${n2} ${kind} trees on that field in ${y2}, when it is no longer ${NAMES[c]}`)
+        }
+        out.push(`${NAMES[c]} ${y}: ${r.n} trees within 600 m (${r.kinds.join(', ')}), ${r.drawn} drawn${other >= 0 ? `, none of them in ${KF[other]}` : ''}`)
+      }
+      if (bad.length) throw new Error(bad.slice(0, 4).join('; '))
+      console.log(`      ${out.join(' · ')}`)
+    })
+  }
+
+  // a district's loʻi that names rice, with or without crop masks: the one sharing its outline with the most others
+  const ricedLoi = await ui(`(() => {
+    let best = null
+    for (const d of app.districts?.list || []) for (const { index, f } of d.rastered) {
+      const p = f.properties
+      if (p.kind !== 'loi' || p.crop !== 'rice' || !Number.isFinite(p.from)) continue
+      const n = d.members.get(index)?.length ?? 1
+      if (!best || n > best.n) best = { district: d.id, id: f.id, index, from: p.from, to: p.to ?? p.from, n, others: (d.members.get(index) || []).filter((q) => q !== p).map((q) => [q.from ?? null, q.to ?? null, q.crop ?? null]) }
+    }
+    return best
+  })()`)
+  if (ricedLoi) {
+    await check(`crops: a district loʻi that names rice is rice in its own years (${ricedLoi.id}, ${ricedLoi.from}–${ricedLoi.to}), and the loʻi on its outline in theirs${cropsOn ? '; one that names none is taro' : ''}`, async () => {
+      const { district, id, index } = ricedLoi
+      const inner = await ui(`(() => {
+        const d = app.districts.list.find((x) => x.id === '${district}')
+        const f = d.rastered.find((r) => r.f.id === '${id}').f
+        const ring = f.geometry.coordinates[0].map((c) => app.data.proj.toWorld(c))
+        return [ring.reduce((s, p) => s + p[0], 0) / ring.length, ring.reduce((s, p) => s + p[1], 0) / ring.length]
+      })()`)
+      const at = async (y) => {
+        await offTour3(y)
+        await run(`app.rig.jump({ x: ${inner[0]}, z: ${inner[1]}, distance: 9, yaw: 0.6, pitch: 1.45 }); app.settle()`)
+        await page.waitForFunction((id) => { const app = window.__app, D = app.districts; app.settle(); return D.cur?.d.id === id && D.cur.state === 'ready' && D.k > 0.99 }, district, { timeout: 300000 })
+        await cropsSettle()
+        await frames(2)
+        return ui(`[app.shared.uniforms.uFeatCrop.value[${index} >> 2].toArray()[${index} & 3], +app.districts.featK[${index}].toFixed(3), app.districts.cur.aux.some((v, c) => c % 4 === 3 && v === ${index})]`)
+      }
+      const bad = []
+      const yIn = Math.round((ricedLoi.from + ricedLoi.to) / 2)
+      const inYears = await at(yIn)
+      if (inYears[0] !== 2 || inYears[1] !== 1 || !inYears[2]) bad.push(`in ${yIn} the loʻi's crop ${inYears[0]}, weight ${inYears[1]}, on the map ${inYears[2]}`)
+      const rice = await groundColours([inner])
+      // the same, its crop taken away (for one frame drawn by hand: the next takes the year's again): taro
+      const taro = await groundColours([inner], `app.shared.uniforms.uFeatCrop.value[${index} >> 2].setComponent(${index} & 3, 0)`)
+      if (diff(rice.on[0], taro.on[0]) < 12) bad.push(`as rice rgb(${rice.on[0]}), as taro rgb(${taro.on[0]})`)
+      // a taro loʻi on its outline in a year of its own: standing, taro
+      let before = null
+      const other = ricedLoi.others.find(([a, b, c]) => c !== 'rice' && (b === null || b >= (a ?? -Infinity)))
+      if (other) {
+        const y2 = other[1] !== null && other[1] < ricedLoi.from ? other[1] : other[0] !== null && other[0] > ricedLoi.to ? other[0] : null
+        if (y2 !== null) {
+          before = [y2, await at(y2)]
+          const g = await groundColours([inner])
+          if (before[1][0] === 2 || before[1][1] !== 1) bad.push(`in ${y2}, the taro loʻi's year, crop ${before[1][0]} and weight ${before[1][1]}`)
+          if (diff(g.on[0], rice.on[0]) < 12) bad.push(`in ${y2} it reads as the rice of ${yIn}: rgb(${g.on[0]})`)
+          before.push(g.on[0])
+        }
+      }
+      // and the fields' trees kept out of it in all its loʻi's years
+      if (cropsOn) {
+        const clip = await ui(`(() => { const isl = app.cropTrees.islands.get(app.districts.cur.d.parent); return isl ? isl.clip([[-1e5, 1e5]], ${inner[0]}, ${inner[1]}) : null })()`)
+        if (clip && clip.some(([a, b]) => a < ricedLoi.to + 1 && b > ricedLoi.from)) bad.push(`the fields' trees stand there in ${JSON.stringify(clip)}`)
+      }
+      // a loʻi naming none (and standing every year), in a year it stands: taro, as without crops at all
+      let plain = null
+      if (cropsOn) {
+        plain = await ui(`(() => {
+          const D = app.districts, d = D.cur.d
+          for (const { index, f } of d.rastered) {
+            const ms = d.members.get(index) || []
+            if (f.properties.kind !== 'loi' || ms.some((p) => p.crop)) continue
+            const ring = f.geometry.coordinates[0].map((c) => app.data.proj.toWorld(c))
+            const x = ring.reduce((s, q) => s + q[0], 0) / ring.length, z = ring.reduce((s, q) => s + q[1], 0) / ring.length
+            const p = f.properties
+            const y = p.from != null ? p.from : p.to != null ? Math.min(p.to, 1778) : 1778
+            return { id: f.id, x, z, y }
+          }
+          return null
+        })()`)
+        if (plain) {
+          await offTour3(plain.y)
+          await run(`app.rig.jump({ x: ${plain.x}, z: ${plain.z}, distance: 9, yaw: 0.6, pitch: 1.45 }); app.settle()`)
+          await cropsSettle()
+          await frames(2)
+          const g = await groundColours([[plain.x, plain.z]])
+          if (diff(g.on[0], g.off[0]) > 8) bad.push(`${plain.id} in ${plain.y}: rgb(${g.on[0]}) with the crops, rgb(${g.off[0]}) without`)
+        }
+      }
+      if (bad.length) throw new Error(bad.join('; '))
+      console.log(`      ${id} (${ricedLoi.n} loʻi on its outline) in ${yIn}: rice rgb(${rice.on[0]}), with its crop taken away rgb(${taro.on[0]})${before ? `; in ${before[0]} the taro loʻi, rgb(${before[2]})` : ''}${plain ? `; ${plain.id} (no crop named) taro in ${plain.y}, as without crops` : ''}`)
+    })
+  } else console.log('  - no district loʻi names rice: that check skipped')
+}
+// ==== [crops] end ==================================================================
 
 // Patches (DATA.md "Patches, on any pack"): each raises today's sea or sinks
 // today's land to its reef flat in the years before its until, and not after,
@@ -3864,6 +4252,8 @@ await check('perf', async () => {
   out.textures = await ui('app.renderer.info.memory.textures')
   const land = await ui('app.land?.stats?.() ?? null')
   if (land) out.land = land
+  const crops = await ui('app.crops?.available ? { gpuMB: app.crops.stats().gpuMB, maps: app.crops.islands.size, trees: app.cropTrees.stats().drawn } : null')
+  if (crops) out.crops = crops
   console.log('      perf', JSON.stringify(out))
 })
 

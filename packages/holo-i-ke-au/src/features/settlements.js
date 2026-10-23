@@ -99,7 +99,7 @@ import { S, Y, objectMaterial } from './kit.js'
 import { buildKits, KAUHALE, TOWER_H, TOWN_PALETTE } from './buildings.js'
 import { decodeImage } from '../data/image.js'
 import { decodeGrey, settlementCodec } from '../data/layers.js'
-import { holds, spanOf } from '../data/district.js'
+import { holding, spanOf } from '../data/district.js'
 import { patchLevel, fromHalf, ihash } from '../data/district-decode.js'
 import { distanceTransform, blur } from '../data/decode.js'
 import { EARLY } from '../overlay/land.js'
@@ -1430,10 +1430,12 @@ export class Settlements extends Scatter {
     const rec = this.rec
     const breaks = new Set()
     for (const p of [...rec.raise, ...rec.lower]) breaks.add(p.until)
-    for (const [, f] of rec.d.byIndex) {
-      const [a, b] = spanOf(f.properties)
-      if (Number.isFinite(a)) breaks.add(a)
-      if (Number.isFinite(b)) breaks.add(b + 1)
+    for (const ms of rec.d.members.values()) {
+      for (const p of ms) {
+        const [a, b] = spanOf(p)
+        if (Number.isFinite(a)) breaks.add(a)
+        if (Number.isFinite(b)) breaks.add(b + 1)
+      }
     }
     for (const L of this.landmarks) breaks.add(L.from)
     for (const y of this.works?.breaks || []) breaks.add(y)
@@ -1445,7 +1447,7 @@ export class Settlements extends Scatter {
     for (let e = 0; e <= this.edges.length; e++) {
       const y = e === 0 ? y0 : this.edges[e - 1]
       const features = new Set()
-      for (const [i, f] of rec.d.byIndex) if (holds(f.properties, y)) features.add(i)
+      for (const [i] of rec.d.byIndex) if (holding(rec.d, i, y)) features.add(i)
       this.epochs.push({ year: y, state: this.patchState(y), features })
     }
   }

@@ -7,8 +7,9 @@
 // a 17 m heightmap. What it adds: the mountains above the ahupuaʻa island's
 // 1,700 m (subalpine shrub, then cinder and bare lava on the summits), noise
 // faded by pixel size so a 600 km view doesn't sparkle, normals rebuilt at the
-// exaggeration of the moment, and the far view's two overlays: the polity
-// of each moku, and the land in use (cultivation, settlement, forest). An
+// exaggeration of the moment, the far view's two overlays: the polity
+// of each moku, and the land in use (cultivation, settlement, forest), and
+// at the island zooms what grows in the year, by class (crops.glsl.js). An
 // island's heights carry the patches of the chosen year (common.glsl.js
 // patchedMetres), so a harbour dredged since lies as reef flat and a reef
 // filled since goes back under the sea, which draws it as reef.
@@ -21,6 +22,7 @@
 // (district.glsl.js), from the same ground at its edge.
 
 import { constants, noise, world, patches, lighting, polity, land } from './common.glsl.js'
+import { cropGround } from './crops.glsl.js'
 
 // Where the sea meets the land. The sea (ocean.glsl.js) is drawn wherever
 // the heights read per pixel lie more than SEA_EDGE metres under it, and
@@ -257,6 +259,12 @@ ${lighting}
 ${polity}
 ${land}
 ${albedo}
+// (the crops only where a pack has a crop map: overlay/crops.js defines CROPS on its material)
+#ifdef CROPS
+${cropGround}
+uniform sampler2D uOwnCrop; // this island's crop map, a keyframe a channel (overlay/crops.js)
+uniform float uOwnCropOn;  // 1 while it has one
+#endif
 uniform sampler2D uArchN;  // normals at NORMAL_E (rgb), ambient occlusion (a)
 uniform sampler2D uArchL;  // r rain (log), g sand, b riparian, a reserved
 uniform sampler2D uOwnN;
@@ -309,6 +317,15 @@ void main() {
 
   vec3 col = groundAlbedo(xz, metres, rain, sand, rip, nC, px, fwM, 0.0);
 
+  // what grows in the year, by class, over the island's own ground by its weight
+  float cropWater = 0.0;
+#ifdef CROPS
+  if (uOwnCropOn > 0.5 && uSelf >= 0) {
+    col = mix(col, applyCrops(col, uOwnCrop, uOwnRect, xz, dX, dY, px, metres, slope, length(grad), fwM, rain, sand, rip), kSelf);
+    cropWater = gCropWater * kSelf;
+  }
+#endif
+
   // the land view: the archipelago's combined layers, and an island's own
   // over them by its weight, as the maps above (both conditions are
   // uniform, so the mipmapped lookups stay in uniform control flow)
@@ -321,6 +338,9 @@ void main() {
   // (an island's shadow map already holds its blend with the archipelago)
   float vis = texture(uOwnS, uvO).r;
   vec3 lit = shade(col, n, vWorld, ao, vis);
+#ifdef CROPS
+  lit = cropWaterLit(lit, vWorld, xz, px, vis, cropWater);
+#endif
   vec3 lightLevel = uSunColor * max(dot(n, uSunDir), 0.0) * vis + uSkyColor;
   if (metres > 0.0) lit = applyPolity(lit, xz, lightLevel * 0.5);
   if (uDebug == 1) lit = col * 2.0;

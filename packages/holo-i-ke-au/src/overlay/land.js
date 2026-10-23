@@ -146,9 +146,10 @@ export class LandOverlay {
 
   // --- time ---------------------------------------------------------------------
 
-  /** The year an era's layers stand at, as the manifest maps it: a keyframe's, or between two by its weight. */
-  eraYear(era) {
-    const spec = this.manifest.eras?.[era.id]?.cultivation
+  /** The year an era's layers stand at, as the manifest maps it: a keyframe's, or between two by its weight (the crops by their own entry where it has one). */
+  eraYear(era, layer = 'cultivation') {
+    const e = this.manifest.eras?.[era.id]
+    const spec = e?.[layer] ?? e?.cultivation
     const year = (id) => this.keyframes[this.kfIndex.get(id)]?.year
     if (spec?.keyframe && year(spec.keyframe) !== undefined) return year(spec.keyframe)
     if (spec?.from && year(spec.from) !== undefined && year(spec.to) !== undefined) return year(spec.from) + (year(spec.to) - year(spec.from)) * (spec.t ?? 0)
@@ -167,9 +168,9 @@ export class LandOverlay {
    * Keyframe position at the timeline's position: at an era, where the
    * manifest puts it; between two eras, the layers' year moves with the
    * year (so 1853 is the Māhele keyframe itself, wherever the eras fall).
+   * Y: the eras' years on the keyframes (overlay/crops.js has its own).
    */
-  position(s = this.app.timeline.s) {
-    const Y = this.eraYears
+  position(s = this.app.timeline.s, Y = this.eraYears) {
     if (!Y?.length) return 0
     const v = clamp(s, 0, Y.length - 1)
     const i = Math.min(Y.length - 2, Math.floor(v))

@@ -22,9 +22,12 @@
 // And two test districts over the made-up Oʻahu (test-data/districts/), a
 // stand-in for Nuʻuanu and a Koʻolaupoko drawn at c. 1700, 1850 and now,
 // overlapping where the pali is; era layers and zoning for the test Oʻahu
-// (test-data/layers/); a coda era that reaches the present, and
-// coda events whose near stops come down into Koʻolaupoko. Shapes on the
-// made-up shore for trying those paths (tools/smoke.mjs with DATA=fake).
+// (test-data/layers/), with crop masks (DATA.md "Crops, on the era layers":
+// every class somewhere, changing across the four keyframes, and a loʻi in
+// the Koʻolaupoko district that names rice for its years, on a taro loʻi's
+// outline); a coda era that reaches the present, and coda events whose near
+// stops come down into Koʻolaupoko. Shapes on the made-up shore for trying
+// those paths (tools/smoke.mjs with DATA=fake).
 //
 // And test works (DATA.md "Works, dated"; test-data/works/): a base with
 // its land growing in across its construction, a runway, a pier and two
@@ -869,6 +872,8 @@ function districtSpots() {
   s.loiMore = Array.from({ length: 20 }, () => find(-157.75, 21.39, K, lowFlat, 0.4, 12))
   s.loiNuuanu = find(-157.85, 21.29, N, lowFlat)
   s.villageNuuanu = find(-157.86, 21.285, N, lowFlat, 0.8)
+  // (the loʻi that names rice: Waikalua's, on the bay's south shore)
+  s.loiWaikalua = find(-157.79, 21.405, K, lowFlat)
   return s
 }
 
@@ -933,6 +938,9 @@ function testDistricts(spots) {
       F('test-loi-waiahole', 'loi', 'Test loʻi Waiāhole', rectRing(spots.loiWaiahole, 0.28, 0.2, 35)),
       F('test-loi-restored', 'loi', 'Test loʻi, laid again', rectRing(spots.loiRestored, 0.28, 0.2, 35), { from: 2010 }),
       ...spots.loiMore.map((c, n) => F(`test-loi-small-${n + 1}`, 'loi', `Test loʻi ${n + 1}`, rectRing(c, 0.16, 0.11, 35), { to: n % 2 ? 1856 : 1896 })),
+      // rice in an old loʻi for its own years, a second loʻi on the taro one's outline, the taro's years ending where the rice's begin (DATA.md "Crops, on the era layers")
+      F('test-loi-waikalua-rice', 'loi', 'Test loʻi Waikalua', rectRing(spots.loiWaikalua, 0.3, 0.2, 35), { from: 1860, to: 1945, crop: 'rice' }),
+      F('test-loi-waikalua', 'loi', 'Test loʻi Waikalua', rectRing(spots.loiWaikalua, 0.3, 0.2, 35), { to: 1859 }),
       // the ponds on the shore: one filled in 1940, two that stay
       F('test-pond-heeia', 'fishpond', 'Test pond Heʻeia', rectRing(spots.pondHeeia, 0.4, 0.28, seaward(spots.pondHeeia))),
       F('test-pond-filled', 'fishpond', 'Test pond, filled', rectRing(spots.pondFilled, 0.32, 0.22, seaward(spots.pondFilled)), { to: 1939 }),
@@ -959,7 +967,40 @@ function testDistricts(spots) {
   writeFileSync(join(base, 'manifest.json'), JSON.stringify({ districts: entries }, null, 2))
 }
 
-/** Era layers and zoning for the test Oʻahu (DATA.md "Era layers", "Zoning, for the settlements"). */
+/**
+ * What grows on the test Oʻahu, by keyframe (DATA.md "Crops, on the era
+ * layers"): a class for a texel, every class somewhere and each keyframe its
+ * own. At contact loʻi on the wet lowland and dryland fields above, and the
+ * west left to the era's default (cultivated, no class); by the Māhele rice
+ * at Waikalua, cane on the west plain and cattle on the north-east uplands;
+ * by 1896 rice round the bay and in Nuʻuanu, cane west and at Waimānalo,
+ * pineapple on the uplands, pasture, orchards above Kailua; now
+ * pineapple and pasture shrunk, orchards and truck farms where cane was,
+ * lawns at Kailua, a loʻi laid again. Shapes for trying the paths; not a record.
+ */
+function testCrop(kf, { lon, lat, h, r, cult }, spots, B) {
+  const inBox = (b) => lon >= b[0] && lon <= b[2] && lat >= b[1] && lat <= b[3]
+  const km = (q) => Math.hypot(xkm(lon) - xkm(q[0]), zkm(lat) - zkm(q[1]))
+  const low = h < 150
+  const wet = low && r > 0.45
+  const west = lon < -158.0
+  const rice = h < 60 && km(spots.loiWaikalua) < (kf === 'mahele' ? 1.0 : 2.2)
+  const riceNuuanu = h < 40 && inBox(B.nuuanu) && !inBox(B.koolaupoko)
+  const caneWest = west && h < (kf === 'mahele' ? 120 : 220) && (kf !== 'mahele' || lat < 21.45)
+  const caneWaimanalo = inBox(B.koolaupoko) && h < 90 && km(spots.pondPahonu) < 3.5
+  const pine = lon > (kf === 'now' ? -158.06 : -158.1) && lon < -157.92 && h > 120 && h < 420
+  const pastureNE = lat > 21.47 && lon > -157.92 && h > 60 && h < 520
+  const pastureWest = west && h > 300 && h < 700
+  const orchard = inBox(B.koolaupoko) && h > 60 && h < 320 && km(spots.kailua) < 3.0
+  const truck = west && h < 150 && lon < -158.1
+  const lawn = h < 30 && (km(spots.kailua) < 1.6 || km(spots.village) < 0.9)
+  if (kf === 'contact') return cult > 0 ? (west ? 0 : wet ? 1 : 2) : 0
+  if (kf === 'mahele') return rice ? 3 : caneWest ? 4 : pastureNE ? 6 : cult > 0 ? (wet ? 1 : 2) : 0
+  if (kf === 'kingdom') return rice || riceNuuanu ? 3 : caneWest || caneWaimanalo ? 4 : pine ? 5 : pastureNE || pastureWest ? 6 : orchard ? 7 : wet && cult > 0 ? 1 : 0
+  return km(spots.loiRestored) < 0.5 || km(spots.loiWaiahole) < 0.6 ? 1 : lawn ? 8 : pine ? 5 : pastureNE || pastureWest ? 6 : orchard || truck ? 7 : 0
+}
+
+/** Era layers and zoning for the test Oʻahu (DATA.md "Era layers", "Zoning, for the settlements"), and its crop masks. */
 function testLayers(spots, eras) {
   const KF = [
     { id: 'contact', year: 1778, yearPrecision: 30, label: 'test: on the eve of contact', layers: ['cultivation', 'settlement', 'forest'] },
@@ -977,6 +1018,7 @@ function testLayers(spots, eras) {
   const km = (lon, lat, q) => Math.hypot(xkm(lon) - xkm(q[0]), zkm(lat) - zkm(q[1]))
   const dir = join(out, 'layers')
   const islands = {}
+  const cropIslands = {}
   let zoningEntry = null
   // (Oʻahu's alone: the districts are over it, and every other island's towns
   // would only weigh on the frames of checks that have nothing to do with them)
@@ -988,6 +1030,8 @@ function testLayers(spots, eras) {
     const oahu = p.id === 'oahu'
     const zoning = oahu ? new Uint8Array(W * H) : null
     const lud = oahu ? new Uint8Array(W * H) : null
+    const crops = Object.fromEntries(KF.map((k) => [k.id, new Uint8Array(W * H)]))
+    let landTexels = 0
     for (let j = 0; j < H; j++) {
       const lat = n0 - ((j + 0.5) / H) * (n0 - s0)
       for (let i = 0; i < W; i++) {
@@ -1007,6 +1051,8 @@ function testLayers(spots, eras) {
         masks.mahele.cultivation[c] = Math.round(255 * cult * 0.45)
         masks.kingdom.cultivation[c] = Math.round(255 * (low ? 0.35 : 0.04))
         masks.now.cultivation[c] = Math.round(255 * (low && !district ? 0.1 : 0.02))
+        landTexels++
+        for (const k of KF) crops[k.id][c] = testCrop(k.id, { lon, lat, h, r, cult: masks[k.id].cultivation[c] }, spots, B)
         // native forest: the wet uplands, less by 1896, less again now
         const forest = h > 300 ? Math.min(1, 0.3 + r) : h > 150 ? 0.3 : 0.04
         masks.contact.forest[c] = Math.round(255 * forest)
@@ -1037,6 +1083,15 @@ function testLayers(spots, eras) {
       }
     }
     islands[p.id] = { pack: p.id, size: [W, H], bounds: p.bounds, layers }
+    cropIslands[p.id] = { pack: p.id, size: [W, H], bounds: p.bounds, layers: {} }
+    for (const k of KF) {
+      const file = `${p.id}/${k.id}-crop.png`
+      writePNG(join(dir, file), W, H, crops[k.id], 1)
+      const n = {}
+      for (const v of crops[k.id]) if (v) n[v] = (n[v] || 0) + 1
+      const km2 = (p.metresPerTexel[0] * p.metresPerTexel[1]) / 1e6
+      cropIslands[p.id].layers[k.id] = { file, method: METHOD[k.id], stats: { landTexels, classedTexels: Object.values(n).reduce((a, b) => a + b, 0), texels: n, km2: Object.fromEntries(Object.entries(n).map(([v, m]) => [v, +(m * km2).toFixed(2)])) } }
+    }
     if (zoning) {
       writePNG(join(dir, p.id, 'now-zoning.png'), W, H, zoning, 1)
       writePNG(join(dir, p.id, 'lud.png'), W, H, lud, 1)
@@ -1069,9 +1124,22 @@ function testLayers(spots, eras) {
     methods,
     islands,
     zoning: { about: note, islands: zoningEntry ? { oahu: zoningEntry } : {} },
+    crops: {
+      about: note,
+      encoding: {
+        file: '<island>/<keyframe>-crop.png',
+        classes: { 0: 'nothing, or cultivation of no known kind', 1: 'loʻi: wet taro', 2: 'dryland fields', 3: 'rice', 4: 'sugar cane', 5: 'pineapple', 6: 'pasture, ranch land', 7: 'orchard, coffee, macadamia, truck crops', 8: 'lawn: parks, golf, open grounds' },
+        sample: 'nearest',
+      },
+      keyframes: KF.map((k) => k.id),
+      // (each era on the keyframe nearest its year)
+      eras: Object.fromEntries(eras.map((era) => [era.id, { year: era.year, keyframe: KF.reduce((a, k) => (Math.abs(k.year - era.year) < Math.abs(a.year - era.year) ? k : a)).id }])),
+      methods: Object.fromEntries(KF.map((k) => [k.id, { method: METHOD[k.id], ...(METHOD[k.id] === 'mapped' ? {} : { rule: 'test rule: by place, height and rain (tools/fake-data.mjs testCrop)' }), sources: src }])),
+      islands: cropIslands,
+    },
   }
   writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2))
-  console.log(`test layers for ${Object.keys(islands).join(', ')}; zoning for ${zoningEntry ? zoningEntry.pack : 'none'}`)
+  console.log(`test layers for ${Object.keys(islands).join(', ')}; zoning for ${zoningEntry ? zoningEntry.pack : 'none'}; crops ${Object.entries(cropIslands).map(([id, e]) => `${id} ${KF.map((k) => `${k.id} ${Object.keys(e.layers[k.id].stats.texels).join('')}`).join(', ')}`).join('; ')}`)
 }
 // ==== end of the test districts and layers ==========================================
 

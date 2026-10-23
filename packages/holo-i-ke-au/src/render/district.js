@@ -48,7 +48,7 @@ import { DISTRICT, DIST_PATCHES, PATCH_EASE } from '../config.js'
 import { PackTerrain, heightTexture } from './pack.js'
 import { districtVertex, districtFragment, districtShadowFragment } from './shaders/district.glsl.js'
 import { DIST_INDEX, DIST_POND_LEVEL } from './shaders/common.glsl.js'
-import { loadDistricts, DistrictDecoder, districtPatches, holds, spanOf } from '../data/district.js'
+import { loadDistricts, DistrictDecoder, districtPatches, holding, spanOf, cropOf } from '../data/district.js'
 import { fromHalf, loiLevel, patchLevel } from '../data/district-decode.js'
 import { DistrictFeatures } from '../features/index.js'
 
@@ -395,6 +395,7 @@ export class Districts {
     this.featK.fill(0)
     this.featSeen.fill(0)
     for (const v of this.u.uFeatK.value) v.set(0, 0, 0, 0)
+    for (const v of this.u.uFeatCrop.value) v.set(0, 0, 0, 0)
     this.yearWeights(1)
   }
 
@@ -427,6 +428,7 @@ export class Districts {
     u.uDistCarve.value = this.world.dummy
     u.uDistPatch.value = this.world.dummyAux
     u.uDistPatchBox.value.set(0, 0, 0, 0)
+    this.app.crops?.bindDistrict(null)
     if (this.cur?.terrain) this.cur.terrain.group.visible = false
     this.on = false
   }
@@ -477,14 +479,19 @@ export class Districts {
       }
     }
     const fk = this.u.uFeatK.value
+    const fc = this.u.uFeatCrop.value
     if (rec) {
-      for (const [i, f] of rec.d.byIndex) {
-        const want = holds(f.properties, year) ? 1 : 0
+      for (const [i] of rec.d.byIndex) {
+        // (of the loʻi on one outline, the one whose years hold the year: whether it
+        // stands, and what grows in it; while it eases out, what grew in it last)
+        const on = holding(rec.d, i, year)
+        const want = on ? 1 : 0
+        if (on) fc[i >> 2].setComponent(i & 3, cropOf(on) === 'rice' ? 2 : cropOf(on) ? 1 : 0)
         let v = this.featK[i] + (want - this.featK[i]) * ease
         if (Math.abs(v - want) < 0.002) v = want
         this.featK[i] = v
         // (seen: the feature has stood by now, and what it cleared stays clear)
-        const seen = year >= spanOf(f.properties)[0] ? 1 : 0
+        const seen = year >= Math.min(...rec.d.members.get(i).map((p) => spanOf(p)[0])) ? 1 : 0
         let s = this.featSeen[i] + (seen - this.featSeen[i]) * ease
         if (Math.abs(s - seen) < 0.002) s = seen
         this.featSeen[i] = s
@@ -573,6 +580,8 @@ export class Districts {
     pu.uParN.value = parent.normalTex
     pu.uParL.value = parent.landTex
     pu.uParS.value = parent.shadow.texture
+    // (its fields are its island's)
+    this.app.crops?.bindDistrict(parent.pack.id)
     this.on = true
   }
 

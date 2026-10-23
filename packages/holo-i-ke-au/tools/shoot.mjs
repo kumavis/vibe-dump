@@ -231,6 +231,43 @@ mkdirSync(outDir, { recursive: true })
 }
 // ==== [soldiers] end ===============================================================================
 
+// ==== [crops] what grows, by class =================================================================
+// '[{"preset":"crops"}]' (with DATA=fake: the test Oʻahu has every class somewhere) shoots Oʻahu
+// whole at each keyframe in the land view, with its legend; then each class at the first keyframe
+// that has a stretch of it, over the middle of that stretch, close in (1.4 km) and from 4.5 km; and
+// the Koʻolaupoko district's loʻi that names rice, in its years and after them.
+{
+  const ISLE = 'oahu'
+  const CLASSES = [['loi', 1], ['dryland', 2], ['rice', 3], ['cane', 4], ['pineapple', 5], ['pasture', 6], ['orchard', 7], ['lawn', 8]]
+  // (the middle of the biggest stretch of class c in the first keyframe that has one, and that keyframe's middle year)
+  const stretch = (c) =>
+    `(() => { const m = app.crops.map('${ISLE}'), r = app.world.terrains.get('${ISLE}').pack.rect; let best = null, bn = 0; for (let k = 0; k < 4 && !best; k++) for (let j = 3; j < m.H - 3; j += 2) for (let i = 3; i < m.W - 3; i += 2) { let n = 0; for (let dj = -3; dj <= 3; dj++) for (let di = -3; di <= 3; di++) n += m.bytes[((j + dj) * m.W + i + di) * 4 + k] >> 4 === ${c} ? 1 : 0; if (n > bn) { bn = n; best = { k, x: r.x0 + ((i + 0.5) * (r.x1 - r.x0)) / m.W, z: r.z0 + ((j + 0.5) * (r.z1 - r.z0)) / m.H } } } const [a, b] = app.crops.edges[best.k], T = app.timeline; best.y = ((Number.isFinite(a) ? a : T.yearAt(0)) + (Number.isFinite(b) ? b : T.yearAt(T.max))) / 2; return best })()`
+  const isle = `const v = app.tour.islandView('${ISLE}', 0); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`
+  const ready = "app.crops.ready && app.cropTrees.idle"
+  const CROPS = [
+    ...[1778, 1853, 1896, 2020].map((y) => ({ name: `crops-land-${y}`, year: y, eval: `app.ui.card.close(); app.ui.onScrub(); app.setView('land', { user: true }); ${isle}`, until: `app.land.ready && ${ready}`, frames: 4, report: "document.querySelector('.legend').textContent.replace(/\\s+/g, ' ')" })),
+    ...CLASSES.flatMap(([name, c]) =>
+      [14, 45].map((d) => ({
+        name: `crops-${name}-${d}`,
+        eval: `app.setView('chiefdoms', { user: true }); const s = ${stretch(c)}; app.timeline.setYear(s.y); app.rig.jump({ x: s.x, z: s.z, distance: ${d}, yaw: 2.4, pitch: ${d < 20 ? 0.95 : 0.8} })`,
+        until: ready,
+        frames: 3,
+        report: "[app.crops.stats().keyframe, app.cropTrees.stats().drawn]",
+      })),
+    ),
+    ...[1900, 1950].map((y) => ({
+      name: `crops-rice-loi-${y}`,
+      year: y,
+      eval: `const d = app.districts.list.find((q) => q.rastered.some((r) => r.f.properties.crop === 'rice')); const f = d.rastered.find((r) => r.f.properties.crop === 'rice').f; const ring = f.geometry.coordinates[0].map((c) => app.data.proj.toWorld(c)); app.rig.jump({ x: ring[0][0], z: ring[0][1], distance: 9, yaw: 2.4, pitch: 0.8 })`,
+      until: `app.districts.cur?.state === 'ready' && ${ready}`,
+      frames: 4,
+      report: '[app.districts.cur?.d.id, app.districts.k]',
+    })),
+  ]
+  for (let i = shots.length - 1; i >= 0; i--) if (shots[i].preset === 'crops') shots.splice(i, 1, { name: 'crops-boot', eval: `app.ui.card.close(); app.ui.onScrub(); ${isle}`, until: 'app.crops.ready', frames: 2 }, ...CROPS)
+}
+// ==== [crops] end =================================================================================
+
 // ==== [ui6] the sources read, the Māhele, the Kou stop, the shore, the phone's timeline ============
 // '[{"preset":"ui6"}]' shoots a card's sources (only what was read), the Māhele over the chain and over
 // Oʻahu with its legend (and the hover card on an ahupuaʻa), the tour's Māhele step, the Kou stop and

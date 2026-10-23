@@ -98,9 +98,11 @@ export class PackTerrain {
       uArchN: { value: arch.normalTex },
       uArchL: { value: arch.landTex },
       uOwnS: { value: null },
-      // this island's era layers (overlay/land.js attaches them)
+      // this island's era layers (overlay/land.js attaches them), and its crop map (overlay/crops.js)
       uOwnLandA: { value: null },
       uOwnLandB: { value: null },
+      uOwnCrop: { value: null },
+      uOwnCropOn: { value: 0 },
       uSelf: { value: -1 },
       // (an island without its own rain image takes the archipelago's)
       uOwnRain: { value: base && !pack.rainUrl ? 0 : 1 },

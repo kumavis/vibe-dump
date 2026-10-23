@@ -28,9 +28,11 @@ import { Routes, loadRoutes } from './render/routes.js'
 import { PolityOverlay } from './overlay/polity.js'
 import { LandOverlay } from './overlay/land.js'
 import { MaheleOverlay } from './overlay/mahele.js'
+import { CropLayer } from './overlay/crops.js'
 import { Timeline } from './time.js'
 import { Towns } from './features/towns.js'
 import { Works } from './features/works.js'
+import { CropTrees } from './features/crops.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -101,6 +103,8 @@ export class App {
     this.timeline = new Timeline(data.eras)
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
     this.land = new LandOverlay(this)
+    // what grows where, by class, at the island zooms and in the districts
+    this.crops = new CropLayer(this)
     this.mahele = new MaheleOverlay(this)
     // (the moku's map is on the shader's region path to begin with; see region())
     this.regionOn = 'chiefdoms'
@@ -139,6 +143,8 @@ export class App {
     this.towns = new Towns(this)
     // the works of the last century and a half, by their dates, on the islands in their slots (features/works.js)
     this.works = new Works(this)
+    // and the trees of the year's pastures, orchards and lawns (features/crops.js)
+    this.cropTrees = new CropTrees(this)
     this.ocean = new Ocean(this.shared, this.shared.uniforms)
     this.scene.add(this.ocean.mesh)
     this.lines = new Boundaries(this.data, this.shared.uniforms)
@@ -285,6 +291,7 @@ export class App {
   addIsland(pack) {
     const t = this.world.addIsland(pack)
     this.land.attach(t)
+    this.crops.attach(t)
     t.applyRange(this.qset.range)
     if (this.params.get('debug')) t.uniforms.uDebug.value = Number(this.params.get('debug'))
   }
@@ -302,9 +309,12 @@ export class App {
     }
     this.world.update(this.camera, g.distance, 0)
     this.world.settle(this.camera)
+    this.crops.update(0)
+    this.crops.settle()
     this.districts?.settle(this.camera, g.distance)
     this.towns?.settle()
     this.works?.settle()
+    this.cropTrees?.settle()
     this.rig.jump({ x: g.target.x, z: g.target.z })
     const fv = this.farView
     if (fv === 'chiefdoms' || fv === 'mahele') {
@@ -411,6 +421,7 @@ export class App {
     const lk = fv === 'land' ? landZoom(d) : 0
     this.landK += (lk - this.landK) * ease
     this.land.update(dt, this.landK)
+    this.crops.update(dt)
     this.lines.visible = this.overlay.lines
     const L = this.light
     const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)

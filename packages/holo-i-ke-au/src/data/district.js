@@ -56,6 +56,11 @@ export async function loadDistricts(data, warn = console.warn) {
   return out
 }
 
+/** The crop a loʻi names (DATA.md "Crops, on the era layers"): 'taro', 'rice', or null for the class its island's map gives. */
+export function cropOf(p) {
+  return p?.kind === 'loi' && (p.crop === 'taro' || p.crop === 'rice') ? p.crop : null
+}
+
 /** A feature's span of years: [from, to], with open ends as ±Infinity. */
 export function spanOf(p) {
   return [Number.isFinite(p?.from) ? p.from : -Infinity, Number.isFinite(p?.to) ? p.to : Infinity]
@@ -65,6 +70,39 @@ export function spanOf(p) {
 export function holds(p, year) {
   const [a, b] = spanOf(p)
   return year >= a && year < b + 1
+}
+
+/**
+ * The feature of a district's aux index that holds a year (its properties),
+ * or null: of the loʻi on one outline, the one whose years hold it.
+ */
+export function holding(d, index, year) {
+  for (const p of d.members.get(index) || []) if (holds(p, year)) return p
+  return null
+}
+
+/** Bounding box of a feature's outer ring, lon/lat. */
+function boxOf(f) {
+  const r = f.geometry.coordinates[0]
+  let x0 = Infinity
+  let y0 = Infinity
+  let x1 = -Infinity
+  let y1 = -Infinity
+  for (const [x, y] of r) {
+    x0 = Math.min(x0, x)
+    y0 = Math.min(y0, y)
+    x1 = Math.max(x1, x)
+    y1 = Math.max(y1, y)
+  }
+  return [x0, y0, x1, y1]
+}
+
+/** How much two boxes are one: their overlap over their union. */
+function sameBox(a, b) {
+  const w = Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0]))
+  const h = Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]))
+  const u = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - w * h
+  return u > 0 ? (w * h) / u : 0
 }
 
 function describeDistrict(d, features, data, warn) {
@@ -77,23 +115,50 @@ function describeDistrict(d, features, data, warn) {
   // The rastered features, indexed by kind: an index each while a kind has
   // room for them all; past that, those of the kind with the same years share
   // one, since an index carries nothing but its weight in the year (each
-  // keeps its own seed, so a loʻi's terraces are still its own).
+  // keeps its own seed, so a loʻi's terraces are still its own), and of the
+  // same crop, for a loʻi that names one. Loʻi on one outline in years that
+  // never meet (a rice loʻi on a taro one: DATA.md "Crops, on the era
+  // layers") are one loʻi a texel: they take one index, which stands while
+  // any of them holds the year and is drawn as the one that does. Each
+  // index keeps its features' properties (members).
   const next = { loi: DIST_INDEX.loi, pond: DIST_INDEX.pond, other: DIST_INDEX.other }
   const limit = { loi: DIST_INDEX.pond - 1, pond: DIST_INDEX.other - 1, other: DIST_INDEX.max }
   const kindOf = (p) => (p.kind === 'loi' ? 'loi' : p.kind === 'fishpond' ? 'pond' : p.kind === 'village' ? 'other' : null)
   const drawn = (features.features || []).filter((f) => kindOf(f.properties || {}) && f.geometry?.type === 'Polygon')
   const share = Object.fromEntries(Object.keys(next).map((k) => [k, drawn.filter((f) => kindOf(f.properties) === k).length > limit[k] - next[k] + 1]))
+  const outline = new Map()
+  const outlines = []
+  for (const f of drawn) {
+    if (kindOf(f.properties) !== 'loi') continue
+    const box = boxOf(f)
+    const [a, b] = spanOf(f.properties)
+    const meet = (q) => {
+      const [c, e] = spanOf(q.f.properties)
+      return a < e + 1 && c < b + 1
+    }
+    let g = outlines.find((o) => o.some((q) => sameBox(q.box, box) > 0.6) && !o.some(meet))
+    if (!g) outlines.push((g = []))
+    g.push({ f, box })
+    outline.set(f, g)
+  }
+  const keyOf = (f) => {
+    const g = outline.get(f)
+    return (g ? g.map((q) => q.f.properties) : [f.properties]).map((p) => `${spanOf(p).join(' ')} ${cropOf(p) ?? ''}`).sort().join('|')
+  }
   const bySpan = new Map()
+  const byOutline = new Map()
   const raster = []
   const byIndex = new Map()
+  const members = new Map()
   // (every rastered feature with its index, where several may share one)
   const rastered = []
   for (const f of drawn) {
     const p = f.properties
     const kind = kindOf(p)
     const seed = DIST_INDEX[kind] + rastered.filter((r) => kindOf(r.f.properties) === kind).length
-    const span = `${kind} ${spanOf(p).join(' ')}`
-    let index = share[kind] ? bySpan.get(span) : undefined
+    const span = `${kind} ${keyOf(f)}`
+    const g = outline.get(f)
+    let index = share[kind] ? bySpan.get(span) : byOutline.get(g)
     if (index === undefined) {
       if (next[kind] > limit[kind]) {
         warn(`district ${d.id}: more ${p.kind} features in years of their own than the aux map has room for; ${p.name} is not drawn`)
@@ -101,9 +166,13 @@ function describeDistrict(d, features, data, warn) {
       }
       index = next[kind]++
       if (share[kind]) bySpan.set(span, index)
+      if (g) byOutline.set(g, index)
     }
     raster.push({ index, seed, kind: kind === 'other' ? p.kind : kind, rings: f.geometry.coordinates.map((r) => r.map(toGrid)) })
-    if (!byIndex.has(index)) byIndex.set(index, f)
+    if (!byIndex.has(index)) {
+      byIndex.set(index, f)
+      members.set(index, g ? g.map((q) => q.f.properties) : [p])
+    }
     rastered.push({ index, f })
   }
   // its own manifest's patches (DATA.md: kind defaults to lower, depth to -1)
@@ -128,8 +197,9 @@ function describeDistrict(d, features, data, warn) {
     patches: own,
     features,
     raster,
-    // each index's feature (the first of those sharing it), and every rastered feature with its index
+    // each index's feature (the first of those sharing it) and its features' properties (holding), and every rastered feature with its index
     byIndex,
+    members,
     rastered,
     sources: d.sources || [],
   }

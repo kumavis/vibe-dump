@@ -291,6 +291,32 @@ plantation towns in the territory; towers and suburbs now. Density sets how
 close and how large; the era sets what. Where the record gives a town's
 extent (the 1881 and 1899 survey sheets for Honolulu) it bounds the placement.
 
+**Crops by class.** At the island zooms and in a district the ground shows
+what grew in the year (DATA.md "Crops, on the era layers"), from the
+keyframe nearest it: never two classes blended, the fields going over one by
+one when the year crosses into another keyframe. The land is laid out in
+fields of about 110 × 70 m, in strips turned their own way every couple of
+kilometres, and each field takes the class of the crop mask's texel under its
+middle, so a crop's edge follows fields, not the mask's texels; a field is
+planted or lies fallow by the share the cultivation mask gives. Loʻi are
+paddies on terraces a metre of fall apart, most under taro, a few flooded or
+fallow; dryland fields are long plots between low walls, sweet potato,
+straw and bare earth; rice is paddies of a lighter green, seedlings in
+standing water, gold before the harvest; cane is blocks of tall striped
+cane, young cane and stubble, with dirt roads between; pineapple is grey-green
+beds on red earth; pasture is grazed grass with fences and a few wide-crowned
+trees; orchards and coffee are rows of small trees or close hedgerows; lawns
+are mown green with shade trees. A cultivated texel of no class is the era's
+default: loʻi on a wet floor, dryland fields on a slope. All of it fades to
+each class's mean colour as the fields get finer than a pixel, so the
+island from 300 m a pixel shows calm tints and from 30 m the fields. Near the
+camera the trees of the pasture, the orchards and the lawns stand as
+instances on the lattices the ground draws them on from afar, planned every
+keyframe at once so the year can be dragged without planning anything again,
+and the district's own trees stand back from planted fields. A district takes
+its island's crop mask, and a loʻi of its features that names a crop is that
+crop for its own years (rice in old loʻi); one that names none is taro.
+
 ### 5.5 Time: keyframed layers
 
 Each era is a set of masks per island: polity of each moku, cultivation extent,

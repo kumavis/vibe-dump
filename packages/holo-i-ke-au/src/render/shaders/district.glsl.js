@@ -22,11 +22,18 @@
 // texels themselves (the slope of the terraces' risers, the patch's beach)
 // while a texel is bigger than a pixel.
 //
+// What grows in the year is the island's (crops.glsl.js): the district reads
+// its island's crop map, nearest texel, for its fields as the island's ground
+// does, so the two are one at the edge. A loʻi of the features is taro, or
+// the `crop` it names for its own years (uFeatCrop: of loʻi on one outline,
+// the one whose years hold the year).
+//
 // No polity colours and no land view here: the district only takes over once
 // the camera is close enough that both have gone (config.js DISTRICT.rig).
 
 import { constants, noise, world, ground, lighting } from './common.glsl.js'
 import { albedo } from './terrain.glsl.js'
+import { cropGround } from './crops.glsl.js'
 
 export const districtVertex = /* glsl */ `
 ${constants}
@@ -99,6 +106,13 @@ ${world}
 ${ground}
 ${lighting}
 ${albedo}
+// (the crops only while its island has a crop map: overlay/crops.js defines CROPS on its material)
+#ifdef CROPS
+${cropGround}
+uniform sampler2D uDistCrop;  // its island's crop map (overlay/crops.js), over the island's rect
+uniform vec4 uDistCropRect;
+uniform float uDistCropOn;
+#endif
 uniform sampler2D uArchN;
 uniform sampler2D uArchL;
 uniform sampler2D uParN;   // the island's maps, under the district (its slot's own)
@@ -110,6 +124,7 @@ uniform float uParRain;
 uniform sampler2D uDistN;  // the district's normals (today's ground) and occlusion
 uniform sampler2D uDistL;  // r rain, g today's beach, b riparian, a the beach of the patched years
 uniform sampler2D uDistS;  // its cast shadows
+uniform vec4 uFeatCrop[16];   // each rastered loʻi's crop by index: 0 none named, 1 taro, 2 rice
 uniform int uDebug;
 in vec3 vWorld;
 in float vMetres;
@@ -229,6 +244,15 @@ void main() {
   float trod = y.trod * w;
   col = mix(col, srgb(vec3(0.55, 0.45, 0.33)) * (0.85 + 0.3 * vnoiseF(xz * 30.0, px * 30.0)), trod * 0.45);
 
+  // what grows in the year, by class: the island's fields, on the district's ground
+  float cropWater = 0.0;
+#ifdef CROPS
+  if (uDistCropOn > 0.5) {
+    col = applyCrops(col, uDistCrop, uDistCropRect, xz, dX, dY, px, metres, 1.0 - nC.y, length(grad), fwM, land.r, land.g, land.b);
+    cropWater = gCropWater * (1.0 - trod);
+  }
+#endif
+
   // --- the loʻi ------------------------------------------------------------
   // A paddy is a terrace (whole tau) and a column across the valley (whole
   // u); the banks (kuāuna) are where either turns over, a couple of metres of
@@ -237,6 +261,9 @@ void main() {
   // bare, a few fallow. The tread is cut level, so it is lit level.
   float loi = y.loi * w;
   float waterK = 0.0;
+  // (the loʻi under this texel: rice where the one standing in the year names it)
+  int fNear = int(texelFetch(uDistAux, ivec2(distGrid(xz) + 0.5), 0).a * 255.0 + 0.5);
+  bool rice = fNear > 0 && fNear < DIST_POND && uFeatCrop[fNear >> 2][fNear & 3] > 1.5;
   if (loi > 0.002) {
     float h = hash12(vec2(floor(y.tau) + y.cls * 64.0 + 0.5, floor(y.u) + 11.3));
     float fallow = step(h, 0.07);
@@ -253,17 +280,28 @@ void main() {
     vec3 fallowC = srgb(vec3(0.50, 0.50, 0.30)) * (0.85 + 0.3 * vnoiseF(xz * 60.0, px * 60.0));
     vec3 mud = srgb(vec3(0.33, 0.30, 0.20));
     vec3 paddyC = mix(mix(mud, leafC, cover), fallowC, fallow);
+    if (rice) {
+      // rice in the terraces: a lighter green, a field at a time seedlings in
+      // standing water, grown, gone gold, or cut to stubble; never fallow
+      float st = fract(h * 5.13 + 0.21);
+      vec3 green = mix(srgb(vec3(0.50, 0.64, 0.27)), srgb(vec3(0.58, 0.70, 0.31)), fract(h * 11.3));
+      fallow = 0.0;
+      cover = st < 0.25 ? 0.25 : st < 0.7 ? 0.9 : 1.0;
+      cover = mix(cover, cover * (0.85 + 0.2 * rows), 1.0 - smoothstep(0.004, 0.01, px));
+      paddyC = st < 0.25 ? mix(srgb(vec3(0.34, 0.34, 0.24)), green, cover) : st < 0.7 ? green * (0.92 + 0.12 * rows) : st < 0.9 ? srgb(vec3(0.70, 0.64, 0.35)) : srgb(vec3(0.58, 0.52, 0.36));
+    }
     // the banks, antialiased, thinning to nothing as they get finer than a pixel
     float aaT = fwidth(y.tau);
     float aaU = fwidth(y.u);
     float dT = min(fract(y.tau), 1.0 - fract(y.tau));
     float dU = min(fract(y.u), 1.0 - fract(y.u));
-    float wT = 0.07;
-    float wU = 1.3 / 29.0;
+    // (a rice field's bunds narrower than taro's banks)
+    float wT = rice ? 0.05 : 0.07;
+    float wU = (rice ? 0.9 : 1.3) / 29.0;
     float bankT = (1.0 - smoothstep(wT - aaT, wT + aaT, dT)) * (1.0 - smoothstep(0.12, 0.35, aaT));
     float bankU = (1.0 - smoothstep(wU - aaU, wU + aaU, dU)) * (1.0 - smoothstep(0.08, 0.25, aaU));
     float bank = max(bankT, bankU * 0.85);
-    vec3 bankC = srgb(vec3(0.38, 0.47, 0.22)) * (0.9 + 0.2 * h);
+    vec3 bankC = (rice ? srgb(vec3(0.50, 0.50, 0.32)) : srgb(vec3(0.38, 0.47, 0.22))) * (0.9 + 0.2 * h);
     col = mix(col, mix(paddyC, bankC, bank), loi);
     // what is left of the paddy is open water, lit as water below
     waterK = loi * (1.0 - bank) * (1.0 - fallow) * (1.0 - cover);
@@ -272,6 +310,8 @@ void main() {
     g2 += grad * bankT * y.loi * w * 1.5;
     n = normalize(vec3(-g2.x * uExag, 1.0, -g2.y * uExag));
   }
+  // (the fields' paddies outside the loʻi of the features)
+  waterK = max(waterK, cropWater * (1.0 - loi));
 
   // shadows: the island's map under the district's, by its weight
   float vis = mix(texture(uParS, uvP).r, texture(uDistS, uvD).r, w);

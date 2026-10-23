@@ -19,10 +19,13 @@
 // than popping it; the trees stand back from what the town has built in the
 // year (uTownClear, a coverage map over the district); and a few touches for
 // the new materials: clapboard, masonry coursing, storeys of windows, the
-// ribs of an iron roof.
+// ribs of an iron roof. The trees stand back from the fields of the year
+// too (render/shaders/crops.glsl.js, the district's island's crop map): none
+// in a planted field, a few in a pasture, on a lawn or among dry fields.
 
 import * as THREE from 'three'
 import { constants, noise, world, lighting } from '../render/shaders/common.glsl.js'
+import { cropCells } from '../render/shaders/crops.glsl.js'
 import { FEATURE_S, NEAR_EXAG } from '../config.js'
 
 // Presentation scale: world units per metre for things (config.js)
@@ -281,6 +284,22 @@ export function col(hex, j = 0, rand = Math.random) {
 const objectVertex = /* glsl */ `
 ${constants}
 ${world}
+#ifdef CROPS
+${cropCells}
+uniform sampler2D uDistCrop;  // the district's island's crop map, and its rect (overlay/crops.js)
+uniform vec4 uDistCropRect;
+uniform float uDistCropOn;
+// whether a tree at xz gives way to the field it stands in: always in a
+// planted field of a crop, but for a few in a pasture, on a lawn and among
+// dry fields; never in one lying fallow
+float cropClears(vec2 xz) {
+  CropCell c = cropCell(xz);
+  vec2 cs = cropAt(uDistCrop, uDistCropRect, c.centre, c.pickKf);
+  if (c.pick >= cropCover(cs)) return 0.0;
+  float keep = abs(cs.x - 6.0) < 0.5 ? 0.25 : cs.x > 7.5 ? 0.15 : cs.x < 0.5 || abs(cs.x - 2.0) < 0.5 ? 0.2 : 0.0;
+  return step(keep, cropHash(xz * 37.1 + 5.3));
+}
+#endif
 in float aMat;
 in float aFeat;
 #ifdef USE_GROW
@@ -361,6 +380,10 @@ void main() {
   if (cl > 0) fade *= 1.0 - featV(uFeatSeen, cl);
   // (and a tree stands back from what the town has built round it by the year)
   fade *= 1.0 - smoothstep(0.3, 0.7, texture(uTownClear, rectUv(uDistRect, origin.xz)).r);
+  // (and from the fields of the year, where its material has them: overlay/crops.js)
+  #ifdef CROPS
+  if (uDistCropOn > 0.5) fade *= 1.0 - cropClears(origin.xz);
+  #endif
   // and thinner toward the district's edge, as its ground eases into the
   // island's (one tree in so many left out, not every one dissolved; the
   // buildings instead keep their lots inside it, and the island's stand

@@ -1470,3 +1470,39 @@ contract without the bake's libraries: classes 0–8, the pack's grid, nothing
 over sea, stats, every pack and keyframe present or its absence recorded,
 methods with rules and sources, eras in `eras.json`, and every historical
 source in `sources.json`.
+
+**How the app reads them** (accepted extensions):
+
+- **The entry.** Each mask from `crops.islands.<island>.layers.<keyframe>`
+  (`file`), as baked; the app also takes the entry straight under the
+  island (`crops.islands.<island>.<keyframe>`), a bare file name in place of
+  the entry, or a `crop` beside `cultivation` in the island's era layer
+  entry. An island with no crop mask, or a keyframe without one, is drawn as
+  before there were crops; nothing is inferred from cultivation alone. A
+  value above 8 is read as 0. A mask the pack's size is read texel for
+  texel, one of another size by nearest texel across the pack's bounds.
+- **The eras.** `crops.eras.<era>.keyframe` places each era; without it the
+  app takes the layers' own `eras.<era>.crop`, else `cultivation`. Between
+  two eras the year moves on the keyframes as the other layers' does, and
+  the year shows the keyframe nearest it: the change from one keyframe to
+  the next falls half way between the two in those terms.
+- **Share and class.** The cultivation mask of the same keyframe gives a
+  texel's planted share (a keyframe without cultivation takes the nearest
+  that has it), and a field of a class is planted at least half whatever
+  that share is; where the share is 0 under a class (`encoding.uncultivated`:
+  pasture, lawn, cane at `mahele`, orchard at `kingdom`) the class covers its
+  fields whole. So the bake need not raise cultivation where it writes a
+  class, and should not write one where the crop is a minor share of the
+  texel. A cultivated texel of class 0 (the fishpond shore among them) is the
+  era's default.
+- **The legend.** The Land view names the cultivated classes (not pasture or
+  lawn) a keyframe's masks hold, from `stats.km2` (else `texels`, or a
+  `share`) summed over the islands, largest first; without stats it names
+  none.
+- **A district loʻi's `crop`** holds for the feature's own `from` and `to`;
+  with none it is taro, whatever the island's mask says there. Loʻi whose
+  outlines are one (their boxes overlap by more than 60%) in years that never
+  meet are one loʻi a texel: one aux index, standing while any of them holds
+  the year and drawn as the one that does; where their outlines differ a
+  little, the texels of either stand in the years of both. Two loʻi of the
+  same years but different crops never share an index.

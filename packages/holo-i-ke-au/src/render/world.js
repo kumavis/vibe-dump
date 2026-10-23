@@ -68,6 +68,8 @@ export class World {
       uDistRaise: { value: vecs(DIST_PATCHES) },
       uDistRaiseTop: { value: -1e9 },
       uFeatK: { value: vecs(16) },
+      // and the crop each loʻi names, by the same index (0 none, 1 taro, 2 rice)
+      uFeatCrop: { value: vecs(16) },
       // and the islands' patches (render/patches.js)
       ...patchUniforms(),
     }

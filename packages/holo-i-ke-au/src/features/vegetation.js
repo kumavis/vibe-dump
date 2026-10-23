@@ -74,7 +74,7 @@ function dome(B, x, y, z, rx, ry, rz, colour, mat, seed = 0, jit = 0.1, under = 
 }
 
 /** A crown (or a few) on a stick: the far tree of vegetation.js. */
-function farTree(rand, { stick, r0 = 0.4, r1 = 0.25, bark = '#6a6058', limbs = [], crowns }) {
+export function farTree(rand, { stick, r0 = 0.4, r1 = 0.25, bark = '#6a6058', limbs = [], crowns }) {
   const B = new Builder()
   const barkC = col(bark, 0.1, rand)
   if (stick) B.cyl([0, 0, 0], stick, r0, r1, barkC, MAT.wood, 3)
