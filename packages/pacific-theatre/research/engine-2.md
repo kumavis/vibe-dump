@@ -99,8 +99,12 @@ aircraft, then a spare in use):
 slot's id or index), `{ group, station }` (a member in the air that has not
 yet reached its attack, the soonest first, never the leader; a
 `namedCrews` group, or one with no other member left, flies a spare 120 m
-out on the right of a member in the air), `{ group, index, station }`
-(that aircraft). `station` defaults to the unit's first. The role is
+out on the right of a member in the air and 60 m back; soft like any take,
+it keeps that place until the player acts, and given back untouched it
+goes and the box is undiverged), `{ group, index, station }` (that
+aircraft). An aircraft's body starts at its speed on the record, but never
+under 0.8 of its kit's cruise nor over its top speed (its dive's limit
+when diving). `station` defaults to the unit's first. The role is
 resolved and checked before anything changes: a refused take leaves the
 sim as it was (the held unit, if any, is still held). A bookmark's role
 (`{ kind, kit, side, unit | group, name }`, no station or index) takes as
@@ -522,6 +526,14 @@ kept circling the target ship's AA.
     raster reads shallow under the bow of a ship moored at a quay, and
     Nevada taken at her berth at 07:58 was aground, for good, the moment
     the player fired. The first build's check is otherwise unchanged.
+20. **An aircraft taken starts within its kit's speeds** (0.8 of its
+    cruise to its top speed, its dive's limit when diving), not at the
+    record's: some record legs ask more than the kit gives (below, §10),
+    and a Pilot take past the kit's structural limit would fail at once.
+21. **A spare's take is soft too** (§2.1): the contract's untouched rule
+    holds for it as for any unit; before, a spare engaged at once and
+    left the box diverged, so Pearl Harbor's first door could never be
+    given back untouched.
 
 ## 8. Looked at, and measured
 
@@ -539,10 +551,11 @@ frame times are slower than RESEARCH.md §4's):
 | Samar, watching, Johnston selected, 07:20 | 0.76 s | 110 | 74,000 | 23.0 MB | the dashed bracket and her name in the orbit view; the row: Fletcher class, takeable, four stations, "steaming 160° at 25 kn", next "At 07:30: Johnston is hit by heavy shells, then medium ones: …" |
 
 Watching each box in the built app (smoke part 3, `dist/index.html`, the
-last run): Midway 0.47 s, 20.1 MB, 144 calls, 87,000 triangles; Pearl
-Harbor 0.46 s, 20.8 MB, 213 calls, 228,000; Ironbottom Sound 0.44 s,
-17.9 MB, 121 calls, 51,000; Samar 0.47 s, 18.9 MB, 105 calls, 62,000; the
-fixture box after its moments (part 2) 0.66 s and 13.8 MB. The station views draw the near
+last two runs): Midway 0.30–0.47 s, 20.1–20.2 MB, 144 calls, 87,000
+triangles; Pearl Harbor 0.46–0.47 s, 20.8 MB, 213 calls, 228,000;
+Ironbottom Sound 0.44–0.47 s, 17.9 MB, 121 calls, 51,000; Samar
+0.45–0.47 s, 18.9 MB, 105 calls, 62,000; the fixture box after its moments
+(part 2) 0.66 s and 13.8 MB. The station views draw the near
 terrain's finer levels, so a held unit costs 1.5 to 2 times the watch
 view's triangles; the heap grows by about 5 MB with the player's bodies,
 sights and the station HUD. These are the dev server's unminified modules
@@ -557,9 +570,7 @@ aircraft (now under the station bar); "Nevada: aground" at her mooring
 the moment she was taken (the 30 m raster reads shallow under a moored
 bow: a taken ship now runs aground only once she has made her own way).
 
-**The gate** (parts 2 to 6 run on this branch's head; the calibration and
-the replay one commit before, whose change touches only a held ship's eye
-and grounding): `node tools/smoke-battle.mjs`
+**The gate**, every part run on this branch's last code: `node tools/smoke-battle.mjs`
 in its parts (`--calibration-only`; `--browser-only` against this
 worktree's Vite on `PORT=5417`; `--real-only` against the package's own
 `vite build` on `REAL_PORT=5419`; `--takeover-only`), every part passed:
@@ -590,7 +601,7 @@ joins them to this Battle. Every hook, and what to pass:
 | `onAssist(v)` | `battle.assist = v` | App persists it (ui-2: localStorage) and sets it **before** `battle.enter`, so the sim is built with it (Battle passes it to createSim); the 'assist' event follows |
 | the bar's speed list | `battle.speeds`, `battle.play(scale)` | 0.5 accepted; the list changes with the held unit and the setting |
 | the bookmarks on the stop strip | `battle.bookmarks` | a click: `battle.takeMoment(id)`, as before |
-| `onFirstDoor()` | `const fd = battle.firstDoor; battle.take({ ...fd.role, t: fd.t })` | `firstDoor` is null until content-2's battle files carry it; the fixture box has one (tools/fake-battle.mjs) |
+| `onFirstDoor()` | `const fd = battle.firstDoor; battle.take({ ...fd.role, t: fd.t })` | content-2's four first doors (on the base branch now) were each taken with this branch's sim and given back untouched: Midway's Wildcat of the noon CAP at 11:59, Gwin's helm at 23:24, Johnston's at 07:10, and Pearl Harbor's P-40B from Haleʻiwa at 08:31 (a `namedCrews` group, so a spare beside Welch's or Taylor's aircraft); none left the box diverged. On this branch only the fixture box has one (tools/fake-battle.mjs) |
 | 'units' (L while watching) | open the unit list | |
 | the URL | `battle.state.held.id` and `battle.state.station` → `unit=<id>&station=<name>` | on load, after `battle.enter`: `battle.take({ unit: id, station })`; an aircraft's slot id (`kaga-level#3`) is accepted as `unit` |
 | `battle.state` | `{ …, selected, station, held, assist, sortie }` | |
@@ -639,12 +650,19 @@ Also for the integrator:
 - **Sites are not units**: a role naming one throws "a site, not a unit";
   the list does not show them.
 - **The HUD's station bar and ui-2's bar** may both show the stations
-  (§9). The first take's hints are kept once a kind in localStorage.
+  (§9). The first take's hints are kept once a kind (once a station at
+  a gun or the sight) in localStorage.
 - **Frame times** under SwiftShader on a machine shared with the other
   workflows' tests are two to five times RESEARCH.md §4's; a GPU has not
   been measured.
+- **Record legs faster than their kits, and a slow van**: Pearl Harbor's
+  Haleʻiwa P-40s (welch-taylor) climb from their entry at 416–507 kn
+  around 08:32 (their plan's first point is far from where they enter);
+  Gwin's track at Ironbottom Sound has her at 2 kn from 23:20 to 23:30, in
+  the van in the action. Both are the battle files' (content's); a take
+  bounds an aircraft's speed by its kit (§7, 20).
 - **The record’s Torpedo Three at 10:11** flies about 250 kn over the
   ground, past a Devastator’s top speed (about 180 kn): the battle file’s
-  timing (content’s), not the engine’s. A take there starts in overspeed
-  and Assisted slows it; a record speed past a kit’s top speed is worth a
+  timing (content’s), not the engine’s. A take there starts at the kit’s
+  top speed (§7, 20); a record speed past a kit’s top speed is worth a
   check in tools/check/battle.mjs.
