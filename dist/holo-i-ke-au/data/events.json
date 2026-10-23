@@ -508,7 +508,7 @@
         "zoom": "near",
         "year": 1737,
         "camera": {
-          "bearing": 250,
+          "bearing": 50,
           "pitch": 0.35,
           "distance": 50,
           "target": [
@@ -2563,9 +2563,9 @@
         "zoom": "near",
         "year": 1850,
         "camera": {
-          "bearing": 215,
-          "pitch": 0.4,
-          "distance": 28
+          "bearing": 40,
+          "pitch": 0.42,
+          "distance": 26
         }
       },
       {
@@ -3650,7 +3650,7 @@
         "zoom": "near",
         "year": 2001,
         "camera": {
-          "bearing": 250,
+          "bearing": 300,
           "pitch": 0.5,
           "distance": 14
         }
