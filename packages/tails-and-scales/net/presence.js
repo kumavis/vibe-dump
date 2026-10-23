@@ -2,7 +2,7 @@
 // ephemeral channel (handle.broadcast: never stored, never in the log)
 // every 5 s and whenever it changes:
 //
-//   { dev, seat, name, head, n, hash, sel?, tg? }
+//   { dev, seat, name, head, n, hash, sel?, tg?, sels? }
 //
 // dev and name the device's; seat the seat it plays (-1 watching); head,
 // n and hash the Folder's head, how many entries it has accepted and the
@@ -10,8 +10,9 @@
 // differs is out of step: the badge says so, the only cross-check a match
 // with no human seat has, where no `h` ever flows); sel and tg the unit its
 // player has picked up and the one it aims at (the opponent's ghost: a
-// dashed ring, a line to the target). Later steps add keys (F10's `sels`
-// and `ords`), never change what one means. What arrives is a peer's
+// dashed ring, a line to the target); (F10a) sels the units it has picked
+// up together, two or more (at most 120 ids: dashed rings round them).
+// Later steps add keys (F10c's `ords`), never change what one means. What arrives is a peer's
 // say-so: each field is checked and anything else dropped, and none of it
 // touches the match.
 const NAME = /^.{1,64}$/su
@@ -29,6 +30,7 @@ export function readPresence(m) {
     hash: typeof m.hash === 'string' && NAME.test(m.hash) ? m.hash : null,
     sel: id(m.sel),
     tg: id(m.tg),
+    sels: Array.isArray(m.sels) ? m.sels.slice(0, 120).map(id).filter((v) => v !== undefined) : undefined,
   }
 }
 

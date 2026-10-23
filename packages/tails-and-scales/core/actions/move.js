@@ -90,14 +90,21 @@ function planKey(G, u, extra) {
   return k
 }
 
-// May the plan's unit end its move on cell i?
-export function validEnd(G, plan, i) {
+// May the plan's unit end its move on cell i? (F10a) `at`, a Map of id →
+// { x, z }, stands units somewhere else than G has them, as a group's
+// planner (present/orders.js) foresees them: the members it planned
+// before this one where they will have gone. Null: today's question.
+export function validEnd(G, plan, i, at = null) {
   const { u, res, mode, endForbid } = plan
   const nav = G.nav
   if (i < 0 || !isFinite(res.dist[i])) return false
   if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
   const x = nav.x(i), z = nav.z(i)
-  for (const o of G.units) if (o !== u && alive(o) && hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
+  for (const o of G.units) {
+    if (o === u || !alive(o)) continue
+    const p = at?.get(o.id) ?? o.pos
+    if (hypot(p.x - x, p.z - z) < o.r + u.r + 0.08) return false
+  }
   return true
 }
 

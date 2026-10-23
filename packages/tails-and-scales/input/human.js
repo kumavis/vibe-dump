@@ -20,7 +20,8 @@
 // The tools (input/tools/): deploy.js, move.js, shoot.js, charge.js and
 // charge-end.js turn a pick into a body and say what it would do; this file
 // decides which applies, sends, and draws (the overlay, view/overlay.js;
-// the tooltip and the card, ui/).
+// the tooltip and the card, ui/). (F10a) A group, two or more units picked
+// up together (input/group.js), takes a click, a hover and a key first.
 import { CHARGE_RANGE } from '../core/rules.js'
 import { phaseKey } from '../core/queries.js'
 import { sfx, unlock } from '../view/sfx.js'
@@ -47,6 +48,8 @@ export class Human {
     this.mouse = null
     this.pickShown = null
     this.downAt = null
+    // (F10a) the group input (input/group.js), set by app/boot.js
+    this.group = null
   }
 
   get session() {
@@ -90,7 +93,7 @@ export class Human {
   }
   // what the HUD model reads of the input (present/hud-model.js)
   state() {
-    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover }
+    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0 }
   }
 
   // ── Commands ──────────────────────────────────────────────────────────────
@@ -153,6 +156,9 @@ export class Human {
       const why = this.send(this.deploySeat(), { t: 'deployed' })
       if (!why) {
         this.sel = null
+        // (F10a) a pinned formation and its ghosts go with the deployment
+        this.group?.cancel()
+        this.card.group = ''
         this.card.show(null)
         this.flow.refreshUI()
       }
@@ -199,11 +205,13 @@ export class Human {
   // ── The table catches up ──────────────────────────────────────────────────
   // The player has played everything (app/flow.js's idled): the selected
   // unit stays selected while it can still act (a move or a shot spent it;
-  // an advance didn't), and a charge waiting for its end shades the spots
-  // its roll reaches.
+  // an advance didn't), (F10a) and a group its members that can, and a
+  // charge waiting for its end shades the spots its roll reaches.
   idled() {
     const overlay = this.view.overlay
-    if (this.sel && this.myTurn()) this.select(this.ask((G, q) => q.canAct(G, this.sel)) ? this.sel : null)
+    // (F10a) a group keeps its members still able to act
+    if (this.myTurn() && this.group?.isGroup()) this.group.settle()
+    else if (this.sel && this.myTurn()) this.select(this.ask((G, q) => q.canAct(G, this.sel)) ? this.sel : null)
     const pk = this.picking()
     if (pk && this.pickShown !== pk) {
       this.pickShown = pk
@@ -219,16 +227,42 @@ export class Human {
   // on the table's canvas: a click (a press and release that barely moved)
   // picks, the pointer hovers
   listen(dom) {
+    // (F10a) the pointers down now: a second one makes the press a gesture
+    // (two fingers on the camera), never a click when one is lifted
+    const pressed = new Set()
+    let gesture = false
     dom.addEventListener('pointerdown', (e) => {
       unlock()
+      pressed.add(e.pointerId)
+      gesture ||= pressed.size > 1
       this.downAt = { x: e.clientX, y: e.clientY, b: e.button }
+      // (F10a) Shift (or Select mode) drags a box instead of the camera
+      this.group?.down(e, pressed.size > 1)
+    })
+    dom.addEventListener('pointercancel', (e) => {
+      pressed.delete(e.pointerId)
+      if (!pressed.size) gesture = false
+      this.group?.abort(e)
     })
     dom.addEventListener('pointerup', (e) => {
-      if (!this.downAt || e.button !== 0) return
+      pressed.delete(e.pointerId)
+      const two = gesture
+      if (!pressed.size) gesture = false
+      // (F10a) a long press took its unit: the lift is no click
+      const held = this.group?.letGo(e)
+      if (!this.downAt) return
       const moved = Math.hypot(e.clientX - this.downAt.x, e.clientY - this.downAt.y)
+      // (F10a) a right click (no drag: a drag pans) drops a pinned formation
+      if (e.button === 2) {
+        if (moved <= 6) this.group?.rightClick()
+        this.downAt = null
+        return
+      }
+      if (e.button !== 0) return
       this.downAt = null
-      if (moved > 6) return
-      this.click(this.picker.pick(e))
+      if (this.group?.up(e)) return
+      if (moved > 6 || two || held) return
+      this.click(this.picker.pick(e), e)
     })
     dom.addEventListener('pointerleave', () => {
       this.hoverPick = null
@@ -238,13 +272,16 @@ export class Human {
     })
     dom.addEventListener('pointermove', (e) => {
       this.mouse = { x: e.clientX, y: e.clientY }
+      if (this.group?.move(e)) return
       this.hoverPick = this.picker.pick(e)
       this.pointed()
     })
     // Escape puts down the unit picked up (but a charge's end must be
-    // picked); the camera rig keeps the panning keys (view/camera.js)
+    // picked); the camera rig keeps the panning keys (view/camera.js);
+    // (F10a) a group's keys first (input/group.js)
     addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT') return
+      if (!this.picking() && this.group?.key(e)) return
       if (e.key === 'Escape' && !this.picking()) this.select(null)
     })
   }
@@ -253,8 +290,11 @@ export class Human {
   // On a seat's own turn it selects, moves, shoots or charges; while a charge
   // waits for its end it picks the spot; in the deployment it places; any
   // other time it shows the unit's card.
-  click({ unit, ground }) {
+  click({ unit, ground }, e = null) {
     this.tooltip.hide()
+    // (F10a) a group's click first: Shift-click picks, and two or more
+    // picked act together
+    if (!this.picking() && this.group?.click({ unit, ground }, e)) return
     if (this.deploySeat() >= 0) return this.deployClick(unit, ground)
     const pk = this.picking()
     if (pk) {
@@ -303,6 +343,7 @@ export class Human {
     if (unit && unit.side === side) {
       sfx.click()
       this.sel = unit
+      this.group?.selection.set(side, [unit.id])
       this.card.show(unit)
       this.flow.refreshRings()
       return null
@@ -325,11 +366,18 @@ export class Human {
   // Pick up a unit (null: none). On a seat's own turn its move shows where
   // it can go (the move's plan, which the click snaps to), and its shot or
   // charge the range ring.
-  select(u) {
+  // (`fromGroup`: input/group.js's own call, its record already set)
+  select(u, fromGroup = false) {
     const G = this.G, overlay = this.view.overlay
     this.sel = u
     this.reach = null
     overlay.clear()
+    if (!fromGroup && this.group) {
+      const seat = this.localSeat()
+      if (seat >= 0) this.group.selection.set(seat, u ? [u.id] : [])
+      this.group.cancel()
+      this.card.group = ''
+    }
     if (u && G) {
       const ph = phaseKey(G)
       if (G.turn.stage === 'battle' && ph === 'move' && !u.flags.moved) {
@@ -368,6 +416,13 @@ export class Human {
     this.hover = h.unit
     let text = ''
     const sel = this.sel
+    // (F10a) a group's formation where a click would pin it
+    if (!pk && this.group?.isGroup()) {
+      text = this.group.hover(h) ?? ''
+      if (!text && h.unit) text = `${h.unit.t.name}`
+      if (text && this.mouse) this.tooltip.show(text, this.mouse)
+      return
+    }
     // a path, drawn with its end's ghost
     const path = (pts, i, r) => {
       overlay.path(pts)

@@ -70,6 +70,13 @@
 //                back to its seat; and a log that lost an entry the page had
 //                played while it was away (its own copy of the document set
 //                aside) is tamper, said before anything is shown
+//   (F10a)
+//   group        a seat's page picks up three of its units together and
+//                places them in its deployment, then (the seat whose turn
+//                it is) moves three in the movement phase, each a pinned
+//                formation sent: nothing refused, the other page's presence
+//                holding the group (its dashed rings), both pages folding
+//                the same match after each
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -99,7 +106,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -684,6 +691,61 @@ async function runCases(dist, cases) {
         await repo.shutdown?.().catch(() => {})
       }
     },
+
+    async group() {
+      const { host, guest } = await lobbyPair()
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      // three of a seat's units picked up together, their formation pinned
+      // from the first (`ahead`: 3" toward the middle, else 4" along its
+      // edge), and sent; what was sent and refused
+      const groupOrder = (page, seat, ahead) => page.evaluate(async ({ seat, ahead }) => {
+        const ts = window.__ts, ses = ts.session
+        const ids = ses.G.units.filter((u) => u.side === seat && u.alive > 0).slice(0, 3).map((u) => u.id)
+        ts.group.select(ids)
+        const u = ses.G.units.find((x) => x.id === ids[0])
+        ts.group.pinAt(u.pos.x + (ahead ? (u.pos.x < 0 ? 3 : -3) : 0), u.pos.z + (ahead ? 0 : 4))
+        const n0 = ses.count, r0 = ses.rejected.length
+        await ts.group.commit()
+        return { ids, sent: ses.count - n0, refused: ses.rejected.length - r0, pinned: ts.group.pinned() }
+      }, { seat, ahead })
+      // both pages on the same entries and the same match
+      const same = async (what) => {
+        const at = (p) => p.evaluate(() => `${window.__ts.session.accepted.length} ${window.__ts.hash()}`)
+        const t0 = Date.now()
+        let h, g
+        while (Date.now() - t0 < 30000) {
+          ;[h, g] = await Promise.all([at(host), at(guest)])
+          if (h === g) return
+          await sleep(250)
+        }
+        throw new Fail(`after ${what} the pages fold different matches (host ${h}, guest ${g})`)
+      }
+      // seat 0's deployment on the host's page: a group placed
+      await until(host, () => window.__ts.session.G.pending?.k === 'deploy' && window.__ts.session.decisionFor() === 0 && window.__ts.player.idle, null, 60000, "seat 0's deployment on the host's page")
+      const placed = await groupOrder(host, 0, false)
+      must(placed.sent >= 1 && !placed.refused && !placed.pinned, `a group placed in the deployment: ${JSON.stringify(placed)}`)
+      // the guest's page sees the host's group in its presence (the dashed
+      // rings round each), and the same match
+      await until(guest, (ids) => window.__ts.net.presence.live().some((p) => p.seat === 0 && JSON.stringify([...(p.sels ?? [])].sort()) === JSON.stringify([...ids].sort())), placed.ids, 20000, "the host's group in the guest's presence")
+      await same('the placement')
+      // both Begin battle; the seat whose turn it is moves a group
+      for (const p of [host, guest]) {
+        await until(p, () => window.__ts.session.decisionFor() >= 0 && window.__ts.player.idle, null, 30000, 'a seat to deploy')
+        await p.evaluate(() => window.__ts.endPhase())
+      }
+      const mover = await Promise.race([host, guest].map(async (p) => {
+        await until(p, () => window.__ts.session.G.pending?.phase === 'move' && window.__ts.session.decisionFor() >= 0 && window.__ts.player.idle, null, 60000, 'the movement phase')
+        return p
+      }))
+      const seat = await mover.evaluate(() => window.__ts.session.decisionFor())
+      const moved = await groupOrder(mover, seat, true)
+      must(moved.sent >= 1 && !moved.refused && !moved.pinned, `a group moved in the movement phase: ${JSON.stringify(moved)}`)
+      await same('the group move')
+      return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match`
+    },
   }
 
   const out = {}
@@ -753,6 +815,8 @@ const MUTANTS = {
   // (N3's review) Back from a log found tampered with as the page came
   // back leaves the match attached (its badge, its link, its tick)
   'tamper-back-attached': ['kept', 'app/online.js', '        back: () => {\n          this.close()\n', '        back: () => {\n          this.leave()\n'],
+  // (F10a) the page never tells the others what it has picked up together
+  'no-sels': ['group', 'app/online.js', '      if (group.length >= 2) m.sels = group.slice(0, 120).map((u) => u.id)\n', ''],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

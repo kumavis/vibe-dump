@@ -399,6 +399,8 @@ export class Flow {
     this.shownHud = m
     ui.hud.render(m)
     ui.actions.render(m)
+    // (F10a) the group bar, while two or more units are picked up
+    ui.groupbar?.render(this.human.group?.model() ?? { show: false })
     // (F4) the round limit's vote, while a seat played here is still to
     // have its say and the table has caught up; the end screen replaces it
     // (game.over), and play going on takes it down

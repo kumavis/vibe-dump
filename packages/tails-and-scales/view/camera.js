@@ -151,6 +151,20 @@ export class CameraRig {
     }, easeInOut)
   }
 
+  // (F10a) Glide to (x, z), as the player asks (Tab to the next unit to
+  // act): whatever the follow policy says.
+  glide(x, z) {
+    const camera = this.camera, controls = this.controls
+    const t0 = controls.target.clone(), off = camera.position.clone().sub(t0)
+    const tgt = new THREE.Vector3(x, 0, z)
+    const id = (this.focusTween = {})
+    tween(0.6, (k) => {
+      if (this.focusTween !== id) return
+      controls.target.lerpVectors(t0, tgt, k)
+      camera.position.copy(controls.target).add(off)
+    }, easeInOut)
+  }
+
   // keyboard panning, in wall-clock seconds
   panKeys(dt) {
     const camera = this.camera, controls = this.controls, keys = this.keys

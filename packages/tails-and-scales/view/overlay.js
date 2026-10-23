@@ -5,7 +5,8 @@
 // what to show (main.js until R7b's input/ tools); this only draws it, from
 // the nav grid it is handed. (N2) And another player's pick online: a dashed
 // ring round the unit their player has picked up, in their colour, and a
-// line to the one they aim at (app/online.js, from their presence).
+// line to the one they aim at (app/online.js, from their presence). (F10a)
+// A group's formation: a ring where each member would end, and a flag.
 //
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
@@ -125,6 +126,77 @@ export class Overlay {
       line.computeLineDistances()
       line.material.color.set(color)
     }
+  }
+
+  // (F10a) A group's formation: a ring where each member would end (white
+  // when it arrives, amber when it falls short; its own cell, none), and a
+  // flag at the point the group goes to, brighter once pinned. null takes it
+  // away. Made the first time it is shown (a game that never selects a group
+  // makes no more three.js objects, nor their ids' Math.random draws).
+  formation(f) {
+    if (!f) {
+      if (this.rings) {
+        for (const r of this.rings) r.visible = false
+        this.flag.visible = false
+      }
+      return
+    }
+    if (!this.rings) {
+      this.rings = []
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.6, 6), new THREE.MeshBasicMaterial({ color: '#f2e6c8', toneMapped: false }))
+      pole.position.y = 0.8
+      const cloth = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 1.6, 0), new THREE.Vector3(0.75, 1.38, 0), new THREE.Vector3(0, 1.16, 0)]), new THREE.MeshBasicMaterial({ color: '#ffd166', side: THREE.DoubleSide, transparent: true, toneMapped: false }))
+      this.flag = new THREE.Group()
+      this.flag.add(pole, cloth)
+      this.flag.userData.cloth = cloth
+      this.flag.renderOrder = 5
+      this.scene.add(this.flag)
+    }
+    const geo = this.ghost.geometry
+    f.members.forEach((m, k) => {
+      let ring = this.rings[k]
+      if (!ring) {
+        ring = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }))
+        ring.position.y = 0.05
+        ring.renderOrder = 4
+        this.scene.add(ring)
+        this.rings.push(ring)
+      }
+      ring.position.x = m.x
+      ring.position.z = m.z
+      ring.scale.setScalar(m.r)
+      ring.material.color.set(m.short ? '#ffb347' : '#ffffff')
+      ring.visible = true
+    })
+    for (let k = f.members.length; k < this.rings.length; k++) this.rings[k].visible = false
+    this.flag.visible = !!f.anchor
+    if (f.anchor) {
+      this.flag.position.set(f.anchor.x, 0, f.anchor.z)
+      this.flag.userData.cloth.material.opacity = f.pinned ? 1 : 0.5
+    }
+  }
+
+  // (F10a) The rest of another player's group: a dashed ring round each
+  // disc in `list` ({ x, z, r }), in `color`; [] takes them away. Made as
+  // first needed, like the peer's own ring.
+  peerGroup(list, color = '#ffffff') {
+    this.peerRings ??= []
+    // (each a copy of the peer's own ring, which ghost() draws first)
+    if (!this.peerRing) return
+    list.forEach((d, k) => {
+      let ring = this.peerRings[k]
+      if (!ring) {
+        ring = this.peerRing.clone()
+        ring.material = this.peerRing.material.clone()
+        this.scene.add(ring)
+        this.peerRings.push(ring)
+      }
+      ring.position.set(d.x, 0.07, d.z)
+      ring.scale.setScalar(d.r * 1.25)
+      ring.material.color.set(color)
+      ring.visible = true
+    })
+    for (let k = list.length; k < this.peerRings.length; k++) this.peerRings[k].visible = false
   }
 
   // the ghost of a disc of radius r on nav cell i

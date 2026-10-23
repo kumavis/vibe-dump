@@ -1264,3 +1264,106 @@ body.mirror .ulabel.s1.sel {
 body.mirror .ulabel.s1.sel .ct {
   color: var(--gold);
 }
+/* ── (F10a) Group selection: the box, the group bar ───────────────────── */
+#selbox {
+  position: fixed;
+  z-index: 15;
+  pointer-events: none;
+  border: 1.5px dashed var(--gold);
+  background: rgba(255, 210, 120, 0.08);
+  border-radius: 3px;
+}
+#selbox.hidden {
+  display: none;
+}
+#groupbar {
+  position: fixed;
+  right: 10px;
+  bottom: 58px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  padding: 6px 10px;
+  background: rgba(30, 23, 16, 0.92);
+  border: 1px solid rgba(255, 210, 140, 0.3);
+  border-radius: 12px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+#groupbar.hidden {
+  display: none;
+}
+#groupbar .gcount {
+  color: var(--gold);
+  font-weight: bold;
+}
+#groupbar .chip {
+  padding: 3px 8px;
+  font-size: 12px;
+}
+#groupbar .chip.dim {
+  opacity: 0.55;
+}
+#groupbar .gsep {
+  color: var(--dim);
+}
+#groupbar .verb {
+  color: var(--dim);
+}
+#groupbar .verb.on {
+  color: var(--ink);
+}
+#groupbar .gnote {
+  color: var(--dim);
+  font-style: italic;
+}
+#selectMode {
+  display: none;
+}
+@media (pointer: coarse) {
+  body.playing #selectMode {
+    display: inline-block;
+  }
+}
+#selbox {
+  color: var(--gold);
+  font-size: 11px;
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+#groupbar .gadv.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#readyN.hidden {
+  display: none;
+}
+#card .card-group {
+  color: var(--gold);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+#selectMode.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+/* beside the unit card, wrapping upward rather than over it; on a phone the
+   bar is the group's card, and the lead's own card steps aside */
+@media (min-width: 701px) {
+  #groupbar {
+    max-width: calc(100vw - 350px);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 700px) {
+  #groupbar button {
+    min-height: 44px;
+  }
+  body.grouped #card {
+    display: none;
+  }
+}

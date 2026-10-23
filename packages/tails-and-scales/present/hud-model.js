@@ -31,7 +31,8 @@
 //   input    the local human's (input/human.js): { idle, decision (the
 //            pending decision when a seat played here holds it), mode, deploy
 //            (the seat deploying here, or -1), sel, pick (a charge's end
-//            being picked), hover }
+//            being picked), hover, group (how many units are picked up
+//            together: F10a) }
 //   hud      the HUD's own state, kept from the last model: { phaseShown,
 //            buttonsUp, hint, sides (each seat's look: ui/theme.js) }
 //
@@ -77,7 +78,7 @@ const [FIRST] = PHASES.map((p) => p.key)
 export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })
 
 export function hudModel({ G, mirror: M, session, input, hud }) {
-  const { idle, decision: P, deploy, sel, pick: pk } = input
+  const { idle, decision: P, deploy, sel, pick: pk, group = 0 } = input
   const { phaseShown, sides } = hud
   const rounds = G.setup.rounds
   const ask = (fn) => session.preview(fn)
@@ -111,6 +112,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // action: the match has moved on already)
   let hint = hud.hint
   if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
+  else if (deploying && group >= 2) hint = `Deployment — click inside your shaded zone to pin the ${group} units' formation there; Enter or its flag places them.`
   else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name}${sides[M.active].mirror ? ', the AI,' : ' (AI)'} are taking their turn…`
   // (N2) a human seat played on another device: its player's turn, or the
@@ -118,7 +120,14 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // every human seat is played here)
   else if (g && phaseShown && M.stage === 'battle' && !session.localSeats.includes(M.active)) hint = `${sides[M.active].name} are taking their turn…`
   else if (g && M.stage === 'deploy' && g.pending?.k === 'deploy' && session.localSeats.length && !deploying) hint = 'Waiting for the other side to finish deploying…'
-  else if (mine && (idle || !sel)) {
+  else if (mine && idle && group >= 2) {
+    // (F10a) a group's click
+    hint = {
+      move: `${group} units: click the ground to pin their formation (Enter or its flag sends it), or an enemy to approach it.`,
+      shoot: `${group} units: click an enemy — every one of them that can fires at it.`,
+      charge: `${group} units: click an enemy — every one of them that can charges it.`,
+    }[P.phase] || ''
+  } else if (mine && (idle || !sel)) {
     hint = {
       move: sel ? (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',

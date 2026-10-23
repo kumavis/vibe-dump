@@ -74,7 +74,9 @@ the commit, and add whatever the work turned up.
   P-memo, the core's scans held to the scans as they were, on classic and
   the Grand fixture) and `node sim/scale-bench.mjs` (the core's cost on
   classic and Grand, a report failing above 1.5× budget: run it on a quiet
-  machine). A step
+  machine), and from F10a `node sim/macro-check.mjs` (and `--self-test`:
+  P-macro, one-shot group actions over a Session send only what the match
+  takes, and land where their preview drew them). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -103,7 +105,10 @@ the commit, and add whatever the work turned up.
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
   rematch; from N3 the replay bar, replay files and the page that comes
-  back). A step that changes what one of them reads ports it in the same
+  back; from F10a a group placed and moved online), and from F10a
+  `node sim/input-check.mjs` (the group input by mouse, keys and real
+  touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
+  Select mode, long presses, the touch fallback). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -787,16 +792,25 @@ follows N3.
   only the chunks binned where it passes, a plan is made once per apply.
   `sim/scale-check.mjs` holds every scan to the old one on classic and the
   Grand fixture; a Grand AI battle 483 → 366 ms here. DESIGN's S0-S3 notes.)
-- [ ] **F10a** Drag-select a group (Shift-drag; ▭ Select on touch), the group
+- [x] **F10a** Drag-select a group (Shift-drag; ▭ Select on touch), the group
   bar, and group move, approach, fire, charge and place as ordinary commands.
   A group move pins a ghost formation; a second click sends it. No rules
   change.
+  (Box, Shift-click, long press, double click by type, Q and Ready N, Tab,
+  saved groups, Space; a ground click pins, Alt-drag pins a line, the flag
+  or Enter sends, a right click drops; +D6; the bar beside the card; the
+  picker's touch fallback; the group in presence as `sels`. P-macro
+  (`sim/macro-check.mjs`), `sim/input-check.mjs` and lobby-rig's `group`
+  case. DESIGN's F10a notes.)
 - [ ] **V1** Batched playback: units walk together, a batch's advance dice in
   one row.
 - [ ] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
   units you choose.
 - [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
-  out at End or Go; badges, counters, optional auto-End.
+  out at End or Go; badges, counters, optional auto-End. Left from F10a:
+  the pinned formation's handles (move, rotate, stretch into a line: the
+  only way to make a line on touch), its faint paths, and ghosts planned a
+  few per frame once boards grow (F8b).
 - [ ] **F8a** Missions choose the board: `setup.mission`, the setup
   whitelist, `G.board`, the table rebuilt per match. Only the classic
   mission yet.

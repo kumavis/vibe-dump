@@ -108,6 +108,8 @@ export const ALLOW = [
   ['ui/theme.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['ui/screens/races.js', 'b.dataset.race === race', 1, "(F6) the race picker marks the chosen race's button: presentation"],
   ['view/diorama.js', 'had.race === race', 1, '(F6) the race showcase drawn once for a race and colour, not rebuilt: presentation'],
+  ['input/group.js', 'switch (e.key) {', 1, "(F10a) the group's keys (Enter, Escape, Q, Tab): a keyboard key, no unit's: input"],
+  ['input/group.js', 'SPACE.has(e.key)', 1, "(F10a) Space left to a focused button: a keyboard key, no unit's: input"],
   ['ui/screens/races.js', 'if (race !== this.race) {', 1, "(F6) the race picker puts the last race's unit stats away when another race is shown: presentation"],
   ['data/schema.js', "if (w.fx !== undefined && typeof w.fx !== 'string')", 1, 'validates the field: the data must say what fx is'],
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],

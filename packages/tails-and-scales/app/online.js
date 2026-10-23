@@ -577,9 +577,15 @@ export class Online {
     const them = live.find((p) => p.seat >= 0 && !ses.localSeats.includes(p.seat) && p.sel !== undefined)
     const at = them && M.units?.[them.sel]
     // (none on a replay's table: N3)
-    if (!at || at.alive === false || ses.status !== 'live' || this.flow.session !== ses) return overlay.peer(null)
-    const to = them.tg !== undefined && M.units?.[them.tg]?.alive !== false ? M.units?.[them.tg]?.pos ?? null : null
-    overlay.peer({ x: at.pos.x, z: at.pos.z, r: at.r }, to, this.flow.sides[them.seat]?.color ?? '#ffffff')
+    if (!at || !(at.alive > 0) || ses.status !== 'live' || this.flow.session !== ses) {
+      overlay.peerGroup([])
+      return overlay.peer(null)
+    }
+    const to = them.tg !== undefined && M.units?.[them.tg]?.alive > 0 ? M.units[them.tg].pos : null
+    const color = this.flow.sides[them.seat]?.color ?? '#ffffff'
+    overlay.peer({ x: at.pos.x, z: at.pos.z, r: at.r }, to, color)
+    // (F10a) the rest of their group, dashed rings too (at most 24)
+    overlay.peerGroup((them.sels ?? []).filter((id) => id !== them.sel).map((id) => M.units?.[id]).filter((u) => u?.alive > 0).slice(0, 24).map((u) => ({ x: u.pos.x, z: u.pos.z, r: u.r })), color)
   }
 
   // What this page tells the others (net/presence.js).
@@ -593,6 +599,9 @@ export class Online {
     if (ses && sel && ses.localSeats.includes(sel.side)) {
       m.sel = sel.id
       if (hover && hover.side !== sel.side) m.tg = hover.id
+      // (F10a) the units picked up together, two or more
+      const group = this.flow.human.group?.members() ?? []
+      if (group.length >= 2) m.sels = group.slice(0, 120).map((u) => u.id)
     }
     return m
   }
@@ -680,6 +689,7 @@ export class Online {
     this.screen.hide()
     this.dialog.hide()
     this.flow.view.overlay.peer(null)
+    this.flow.view.overlay.peerGroup([])
     $('#rematch').classList.add('hidden')
     if (this.routing || !/[#&]m=/.test(location.hash)) return
     try {

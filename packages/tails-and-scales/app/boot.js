@@ -12,6 +12,8 @@ import { UnitViews } from '../view/units.js'
 import { clock } from '../view/clock.js'
 import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
+import { Selection } from '../input/selection.js'
+import { GroupInput } from '../input/group.js'
 import { seatsOf, sidesFor, isMirror } from '../ui/theme.js'
 import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
@@ -21,6 +23,7 @@ import { Banner } from '../ui/banner.js'
 import { Toast } from '../ui/toast.js'
 import { Hud } from '../ui/hud.js'
 import { Actions } from '../ui/actions.js'
+import { GroupBar } from '../ui/groupbar.js'
 import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
@@ -108,6 +111,7 @@ export function boot(location) {
     toast: new Toast($('#toast')),
     hud: new Hud(),
     actions: new Actions(),
+    groupbar: new GroupBar(),
     title,
     result: new ResultScreen(),
   }
@@ -121,6 +125,13 @@ export function boot(location) {
   const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id) })
   const human = new Human({ flow, view, card: ui.card, tooltip: ui.tooltip, picker })
   const player = flow.play(human)
+  // (F10a) units picked up together, and the bar that says what they do
+  human.group = new GroupInput({ human, view, selection: new Selection(), controls: view.rig.controls, bar: ui.groupbar, tooltip: ui.tooltip })
+  human.group.wireBar()
+  $('#selectMode').onclick = () => {
+    human.group.setSelectMode(!human.group.selectMode)
+    $('#selectMode').classList.toggle('on', human.group.selectMode)
+  }
   human.listen(view.renderer.domElement)
   ui.actions.wire(human)
   ui.hud.wire({ rig: view.rig })
@@ -589,6 +600,35 @@ export function boot(location) {
       // (not promised) the HUD model last put on the page
       get hud() {
         return flow.shownHud
+      },
+      // (F10a, not promised) the units picked up together (their ids), what
+      // the group bar says, and a unit's centre on screen as last drawn
+      // (sim/input-check.mjs)
+      group: {
+        ids: () => human.group.members().map((u) => u.id),
+        bar: () => human.group.model(),
+        pinned: () => !!human.group.selection.of(human.group.seat()).pin,
+        busy: () => human.group.busy,
+        // the pinned formation: its verb, its line (if any) and each
+        // member's cell, as (x, z)
+        pin: () => {
+          const p = human.group.selection.of(human.group.seat()).pin, nav = flow.G?.nav
+          return p && { verb: p.verb, line: p.line, members: p.preview.members.map((m) => ({ id: m.u.id, at: m.cell >= 0 ? { x: nav.x(m.cell), z: nav.z(m.cell) } : null })) }
+        },
+        screen: (id) => view.units.screen.get(id) ?? null,
+        // pick up `ids` together, pin their formation at (x, z) as a ground
+        // click does, send it (a promise: the executor's run), and what the
+        // picker finds at a page point
+        select: (ids) => human.group.setGroup(ids),
+        pinAt: (x, z) => human.group.pinAt(human.group.phase() === 'place' ? 'place' : 'move', { x, z }),
+        commit: () => {
+          const why = human.group.commit()
+          return why ? Promise.resolve(why) : human.group.running
+        },
+        pick: (x, y, pointerType = 'mouse') => {
+          const p = picker.pick({ clientX: x, clientY: y, pointerType })
+          return { unit: p.unit?.id ?? null, ground: !!p.ground }
+        },
       },
       get player() {
         return player

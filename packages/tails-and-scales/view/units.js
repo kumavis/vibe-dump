@@ -52,6 +52,8 @@ export class UnitViews {
     this.colorOf = colorOf
     this.rimOf = rimOf
     this.views = new Map()
+    // (F10a) each standing unit's centre on screen, as last drawn: { x, y, on }
+    this.screen = new Map()
     // bumped by every sync: a playback still running from before it (a walk,
     // a death) touches nothing of the views it left
     this.gen = 0
@@ -333,8 +335,13 @@ export class UnitViews {
           fig.position.x = Math.sin(time * 60) * 0.04 * (m.flash > 0 ? 1 : 0)
         }
       }
-      // the floating label
+      // the floating label; (F10a) and the unit's centre on screen, which a
+      // box selects by and the picker falls back on (input/): a unit fallen,
+      // or nothing drawn, has none
+      if (!(mu.alive > 0) || fast) this.screen.delete(u.id)
       if (mu.alive > 0 && !fast) {
+        tmpV.set(p.x, 0.4, p.z).project(camera)
+        this.screen.set(u.id, { x: (tmpV.x * 0.5 + 0.5) * innerWidth, y: (-tmpV.y * 0.5 + 0.5) * innerHeight, on: tmpV.z < 1 && Math.abs(tmpV.x) <= 1 && Math.abs(tmpV.y) <= 1 })
         tmpV.set(p.x, (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), p.z).project(camera)
         const on = tmpV.z < 1
         v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`

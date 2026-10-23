@@ -1,5 +1,6 @@
 // Picking (DESIGN §1.3): what is under the pointer, a unit (by its hit
-// cylinder) and the board (where on it), from the camera's view.
+// cylinder, else (F10a) the one drawn nearest the pointer on screen) and
+// the board (where on it), from the camera's view.
 import * as THREE from 'three'
 
 export class Picker {
@@ -22,7 +23,25 @@ export class Picker {
     // the units the table shows standing (while the player is behind, the
     // match may have slain some of them already)
     const hits = ray.intersectObjects(this.units.pickables(), false)
-    const unit = hits.length ? this.unitOf(hits[0].object.userData.id) : null
+    let unit = hits.length ? this.unitOf(hits[0].object.userData.id) : null
+    // (F10a) a miss falls back on the unit whose centre on screen is
+    // nearest the pointer, within 14 px (a finger: 24): a far figure is a
+    // few pixels tall
+    if (!unit) {
+      const within = ev.pointerType === 'touch' ? 24 : 14
+      let best = within
+      for (const [id, p] of this.units.screen ?? []) {
+        if (!p.on || !this.units.views?.has(id) || !(this.units.shown?.(id)?.alive > 0)) continue
+        const d = Math.hypot(p.x - ev.clientX, p.y - ev.clientY)
+        if (d < best) {
+          const u = this.unitOf(id)
+          if (u) {
+            best = d
+            unit = u
+          }
+        }
+      }
+    }
     const g = ray.intersectObject(this.board, false)[0]
     return { unit, ground: g ? g.point : null }
   }

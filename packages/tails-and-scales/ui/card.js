@@ -56,6 +56,9 @@ export class Card {
     // the unit the open card shows (app/flow.js redraws it as the table
     // catches up)
     this.unit = null
+    // (F10a) a line above it while units are picked up together: what the
+    // group is (input/group.js)
+    this.group = ''
   }
 
   get open() {
@@ -74,7 +77,8 @@ export class Card {
     // caught up, else from the last action played (the title's backdrop is
     // never behind)
     const mu = this.shown(u), f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]
-    card.innerHTML = `
+    card.innerHTML = `${this.group ? `
+    <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role}</span></div>
     <div class="card-sub">${cardStatus(t, mu, f)}</div>${statsHtml(t)}`
     card.classList.add('show')
