@@ -394,9 +394,16 @@ function buildGroup(g, ctx) {
   const aircraft = []
   for (let k = 0; k < g.count; k++) {
     const keys = [...starts[k].keys]
+    // (a key the aircraft could not reach from the last one at its top speed is left out, unless the attack needs
+    // it: the push-over, the release, the drop. Sōryū's torpedo planes, whose route ends inside their run-in, would
+    // otherwise leap back out sixteen kilometres in fifteen seconds to begin it)
+    const vCap = (model.vMax || vC * 1.4) * 1.05
     const pushKeys = (arr) => {
       for (const q of arr) {
-        if (q.t > keys[keys.length - 1].t + 0.5) keys.push(q)
+        const prev = keys[keys.length - 1]
+        if (q.t <= prev.t + 0.5) continue
+        if (!q.pin && Math.hypot(q.x - prev.x, q.z - prev.z) / (q.t - prev.t) > vCap) continue
+        keys.push(q)
       }
     }
     pushKeys(routeKeys(k))
@@ -439,8 +446,8 @@ function buildGroup(g, ctx) {
         pushKeys([
           { t: ta - 120, x: ax, y: hp + off.up, z: az },
           { t: tp - 25, x: pre.x, y: hp, z: pre.z },
-          { t: tp, x: push.x, y: hp, z: push.z, corner: true },
-          { t: tr, x: rel.x, y: hr, z: rel.z },
+          { t: tp, x: push.x, y: hp, z: push.z, corner: true, pin: true },
+          { t: tr, x: rel.x, y: hr, z: rel.z, pin: true },
           { t: tr + 5, x: rel.x - ux * (vd * 0.34 * 5 + 120), y: bottomY, z: rel.z - uz * (vd * 0.34 * 5 + 120) },
           { t: tr + 35, x: rel.x - ux * 3200, y: 180, z: rel.z - uz * 3200 },
           { t: tr + 200, x: rel.x - ux * 15000, y: 900, z: rel.z - uz * 15000 },
@@ -476,7 +483,7 @@ function buildGroup(g, ctx) {
         pushKeys([
           { t: tHigh, x: hx, y: Math.max(500, (g.alt ?? 1200) * 0.6), z: hz },
           { t: tFar, x: aim.x + ux * far, y: 60, z: aim.z + uz * far },
-          { t: td, x: drop.x, y: dropAlt, z: drop.z },
+          { t: td, x: drop.x, y: dropAlt, z: drop.z, pin: true },
           { t: td + 9, x: drop.x - ux * vr * 9 + px * side * 150, y: 25, z: drop.z - uz * vr * 9 + pz * side * 150 },
           { t: td + 35, x: aim.x - ux * 1200 + px * side * 1800, y: 60, z: aim.z - uz * 1200 + pz * side * 1800 },
           { t: td + 200, x: aim.x - ux * 9000 + px * side * 6000, y: 700, z: aim.z - uz * 9000 + pz * side * 6000 },
@@ -501,7 +508,7 @@ function buildGroup(g, ctx) {
         pushKeys([
           { t: tr - 14000 / v, x: rel.x + ux * 14000, y: h + (low ? 300 : off.up), z: rel.z + uz * 14000 },
           { t: tr - 4000 / v, x: rel.x + ux * 4000, y: h + (low ? 0 : off.up), z: rel.z + uz * 4000 },
-          { t: tr, x: rel.x, y: h + (low ? 0 : off.up), z: rel.z },
+          { t: tr, x: rel.x, y: h + (low ? 0 : off.up), z: rel.z, pin: true },
           { t: tr + 6000 / v, x: rel.x - ux * 6000, y: h + (low ? 250 : off.up), z: rel.z - uz * 6000 },
           { t: tr + 12000 / v, x: rel.x - ux * 12000 + uz * 4000, y: Math.max(800, h), z: rel.z - uz * 12000 - ux * 4000 },
         ])
@@ -760,19 +767,57 @@ function capPlan(ac, keys, g, k, ctx, { vC, R, ta, fromShip }) {
   }
   if (tg && tI1 > tI0 && tg.aircraft.length) {
     const lead = Math.min(k % Math.max(1, tg.count), tg.aircraft.length - 1)
-    o1.t1 = tI0
     const follow = { type: 'follow', t0: tI0 + 45, t1: tI1, leader: { group: tg.index, k: lead }, off: { right: (k % 2 ? 1 : -1) * (150 + 60 * k), back: 350 + 80 * (k % 3), up: 80 }, weave: 0.35, phase: R.next() * 6 }
     const o2 = orbit(tI1 + 90, Math.max(enduranceEnd, tI1 + 600), phase0 + 1)
-    const kUp = [...keys, leadIn(t0, o1)]
-    legs.push({ type: 'keys', t0: kUp[0].t, t1: t0, keys: kUp })
-    legs.push(o1)
-    const pA = legAt(o1, o1.t1, { x: 0, y: 0, z: 0 }, resolve)
-    const pB = legAt(follow, follow.t0, { x: 0, y: 0, z: 0 }, resolve)
-    legs.push({ type: 'keys', t0: o1.t1, t1: follow.t0, keys: [{ t: o1.t1, ...pA }, { t: follow.t0, ...pB }] })
-    legs.push(follow)
-    const pC = legAt(follow, follow.t1, { x: 0, y: 0, z: 0 }, resolve)
-    const pD = legAt(o2, o2.t0, { x: 0, y: 0, z: 0 }, resolve)
-    legs.push({ type: 'keys', t0: follow.t1, t1: o2.t0, keys: [{ t: follow.t1, ...pC }, { t: o2.t0, ...pD }] })
+    // the run from the patrol to the strike takes what its distance needs at the fighter's top speed, so the patrol
+    // is left that much before the fight (no record fighter outruns its kit: VMF-221 met the strike thirty miles out)
+    const vDash = Math.max(vC, (g.model.vMax || vC * 1.3) * 0.9)
+    const at = (leg, t) => legAt(leg, t, { x: 0, y: 0, z: 0 }, resolve)
+    let pB = at(follow, follow.t0)
+    let engage = follow
+    let tLeave = tI0
+    for (let i = 0; i < 4; i++) {
+      const pA = at(o1, tLeave)
+      tLeave = Math.min(tI0, follow.t0 - Math.hypot(pB.x - pA.x, pB.z - pA.z) / vDash)
+    }
+    if (tLeave >= t0 + 30) {
+      o1.t1 = tLeave
+      const kUp = [...keys, leadIn(t0, o1)]
+      legs.push({ type: 'keys', t0: kUp[0].t, t1: t0, keys: kUp })
+      legs.push(o1)
+      const pA = at(o1, o1.t1)
+      legs.push({ type: 'keys', t0: o1.t1, t1: follow.t0, keys: [{ t: o1.t1, ...pA }, { t: follow.t0, ...pB }] })
+    } else {
+      // no time to patrol first (Welch's and Taylor's P-40s, sent from Haleʻiwa straight at the strike over ʻEwa):
+      // from the last key to the strike's tail, as soon as the fighter can be there (the strike moves on meanwhile)
+      const last = keys[keys.length - 1]
+      for (let i = 0; i < 8; i++) {
+        pB = at(follow, follow.t0)
+        follow.t0 = Math.max(tI0 + 45, last.t + Math.hypot(pB.x - last.x, pB.z - last.z) / vDash)
+      }
+      if (follow.t0 > tI1 + 60) {
+        // the strike is gone before the fighter can be on it (Shōkaku's dive bombers strafed ʻEwa on the record, which
+        // their plan does not fly; it takes them home): the fighter patrols where it was sent until the fight's end,
+        // and does not chase them out of the box at twice its speed
+        engage = { type: 'orbit', t0: last.t + r / vC + 5, t1: 0, centre: { point: { x: last.x, z: last.z } }, r, w, alt: alt + (k % 3) * 120, phase: phase0 }
+        engage.t1 = Math.max(engage.t0 + 120, tI1)
+        legs.push({ type: 'keys', t0: keys[0].t, t1: engage.t0, keys: [...keys, leadIn(engage.t0, engage)] })
+      } else {
+        if (follow.t0 > follow.t1 - 30) follow.t1 = follow.t0 + 30
+        pB = at(follow, follow.t0)
+        legs.push({ type: 'keys', t0: keys[0].t, t1: follow.t0, keys: [...keys, { t: follow.t0, ...pB }] })
+      }
+    }
+    legs.push(engage)
+    const pC = legAt(engage, engage.t1, { x: 0, y: 0, z: 0 }, resolve)
+    // (and back to the patrol over the carrier as fast as the fighter can, not in a minute and a half whatever the distance)
+    for (let i = 0; i < 3; i++) {
+      const pD = at(o2, o2.t0)
+      o2.t0 = Math.max(engage.t1 + 90, engage.t1 + Math.hypot(pD.x - pC.x, pD.z - pC.z) / vDash)
+      o2.t1 = Math.max(o2.t1, o2.t0 + 600)
+    }
+    const pD = at(o2, o2.t0)
+    legs.push({ type: 'keys', t0: engage.t1, t1: o2.t0, keys: [{ t: engage.t1, ...pC }, { t: o2.t0, ...pD }] })
     legs.push(o2)
     return o2.t1
   }
@@ -796,9 +841,19 @@ function escortPlan(ac, keys, g, k, ctx, { vC, R, ta }) {
     return tLast
   }
   const lead = tg.aircraft[0]
-  const t0 = Math.max(tLast + 30, (lead.spawnT ?? 0) + 120)
+  let t0 = Math.max(tLast + 30, (lead.spawnT ?? 0) + 120)
+  const follow = { type: 'follow', t0, t1: Infinity, leader: { group: tg.index, k: 0 }, off: { right: (k % 2 ? 1 : -1) * (250 + 40 * k), back: 250, up: 500 + (k % 3) * 60 }, weave: 0.25, phase: R.next() * 6 }
+  // (the slot is joined when the fighter can be there at its top speed: VF-3's six caught Torpedo Three up on the way
+  // out, not in half a minute)
+  const last = keys[keys.length - 1]
+  const vDash = Math.max(vC, (g.model.vMax || vC * 1.3) * 0.9)
+  for (let i = 0; i < 8; i++) {
+    const q = legAt(follow, t0, { x: 0, y: 0, z: 0 }, resolve)
+    t0 = Math.max(t0, tLast + Math.hypot(q.x - last.x, q.z - last.z) / vDash)
+  }
   const t1 = Math.max(t0 + 60, (tg.attack?.t ?? ta) + 90)
-  const follow = { type: 'follow', t0, t1, leader: { group: tg.index, k: 0 }, off: { right: (k % 2 ? 1 : -1) * (250 + 40 * k), back: 250, up: 500 + (k % 3) * 60 }, weave: 0.25, phase: R.next() * 6 }
+  follow.t0 = t0
+  follow.t1 = t1
   const p = legAt(follow, t0, { x: 0, y: 0, z: 0 }, resolve)
   legs.push({ type: 'keys', t0: keys[0].t, t1: t0, keys: [...keys, { t: t0, ...p }] })
   legs.push(follow)
@@ -948,12 +1003,17 @@ export function makeResolve(ctx) {
         out.heading = 0
         return out
       }
-      planPos(ac, t, p, ctx)
-      planPos(ac, t - 1, q, ctx)
-      out.x = p.x
-      out.y = p.y
-      out.z = p.z
+      // (a leader the record loses is followed on along its last line, not down into the sea: the fighters on a
+      // falling aircraft's tail would leap to its fall, as Hiryū's CAP did over Torpedo Three)
+      const tl = ac.lossT != null && t > ac.lossT ? ac.lossT : null
+      const tq = tl ?? t
+      planPos(ac, tq, p, ctx)
+      planPos(ac, tq - 1, q, ctx)
       out.heading = headingOf(p.x - q.x, p.z - q.z)
+      const ahead = tl != null ? t - tl : 0
+      out.x = p.x + (p.x - q.x) * ahead
+      out.y = p.y
+      out.z = p.z + (p.z - q.z) * ahead
       return out
     }
     out.x = 0
