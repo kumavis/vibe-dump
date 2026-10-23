@@ -93,10 +93,19 @@ export class GroupInput {
   // ▭ Select (touch): one finger drags a box, two still pan and pinch (the
   // camera's one-finger orbit set aside while it is on)
   setSelectMode(on) {
-    const c = this.controls
     this.selectMode = on
+    this.touches()
+  }
+
+  // (OrbitControls' touches as Select mode wants them now: one finger the
+  // box's while a seat played here may pick, else the camera's as ever, so
+  // a finger is never dead; model() calls it at every refresh)
+  touches() {
+    const c = this.controls
+    if (!c.touches) return
     this.touches0 ??= { ...c.touches }
-    c.touches = on ? { ...this.touches0, ONE: null } : { ...this.touches0 }
+    const one = this.selectMode && this.seat() >= 0 ? null : this.touches0.ONE
+    if (c.touches.ONE !== one || c.touches.TWO !== this.touches0.TWO) c.touches = { ...this.touches0, ONE: one }
   }
 
   // ── Picking ───────────────────────────────────────────────────────────────
@@ -107,9 +116,8 @@ export class GroupInput {
     const finger = e.pointerType === 'touch'
     // (another pointer down: a gesture, so no long press)
     if (multi) this.letGo(null, false, true)
-    if (this.box && finger && e.pointerId !== this.box.id) {
-      this.box = null
-      this.boxEl.classList.add('hidden')
+    if ((this.box || this.line) && finger && e.pointerId !== (this.box ?? this.line).id) {
+      this.drop()
       return false
     }
     // an Alt-drag on the ground with a group: a line to spread it along
@@ -127,7 +135,21 @@ export class GroupInput {
     }
     this.box = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x1: e.clientX, y1: e.clientY, add: e.ctrlKey || e.metaKey }
     if (!(finger && this.selectMode)) this.controls.enabled = false
+    // (in Select mode a finger held still is a long press all the same: the
+    // box's drag lets it go)
+    if (finger && !multi) this.holdFrom(e)
     return true
+  }
+
+  // a box or a line let go unfinished: the camera free again, the pinned
+  // formation's ghosts (if any) drawn again over the line's
+  drop() {
+    this.box = this.line = null
+    this.boxEl.classList.add('hidden')
+    this.controls.enabled = true
+    const pin = this.rec.pin
+    if (pin) this.draw(pin.preview, pin.target, true)
+    else this.view.overlay.formation(null)
   }
 
   // A finger held still on one of the seat's units: it joins the group, or
@@ -141,6 +163,7 @@ export class GroupInput {
       if (!this.press || seat < 0 || !unit || unit.side !== seat) return
       this.press.done = true
       this.selection.toggle(seat, unit.id)
+      this.selection.of(seat).note = ''
       this.cancel()
       this.syncLead()
       navigator.vibrate?.(10)
@@ -153,7 +176,7 @@ export class GroupInput {
   letGo(e, moved = false, any = false) {
     const p = this.press
     if (!p || (!any && e && e.pointerId !== p.id)) return false
-    if (moved && Math.hypot(e.clientX - p.x, e.clientY - p.y) <= BOX_MIN) return false
+    if (moved && (p.done || Math.hypot(e.clientX - p.x, e.clientY - p.y) <= BOX_MIN)) return false
     clearTimeout(p.timer)
     this.press = null
     return p.done
@@ -163,12 +186,7 @@ export class GroupInput {
   // drawing let go, the camera free again
   abort(e) {
     this.letGo(e)
-    if ((this.box && this.box.id === e.pointerId) || (this.line && this.line.id === e.pointerId)) {
-      this.box = this.line = null
-      this.boxEl.classList.add('hidden')
-      this.controls.enabled = true
-      if (!this.rec.pin) this.view.overlay.formation(null)
-    }
+    if ((this.box && this.box.id === e.pointerId) || (this.line && this.line.id === e.pointerId)) this.drop()
   }
 
   move(e) {
@@ -216,12 +234,13 @@ export class GroupInput {
   up(e) {
     const l = this.line
     if (l && !(e && e.pointerId !== l.id)) {
-      this.line = null
-      this.controls.enabled = true
+      // (an Alt-click too short for a line is a click, the pin as it was)
       if (Math.hypot(e.clientX - l.x0, e.clientY - l.y0) < BOX_MIN || Math.hypot(l.b.x - l.a.x, l.b.z - l.a.z) < 0.5) {
-        this.cancel()
+        this.drop()
         return false
       }
+      this.line = null
+      this.controls.enabled = true
       this.pinAt(l.verb, { x: (l.a.x + l.b.x) / 2, z: (l.a.z + l.b.z) / 2 }, { a: l.a, b: l.b })
       return true
     }
@@ -254,12 +273,43 @@ export class GroupInput {
   settle() {
     const seat = this.seat(), s = this.selection.of(seat)
     const still = this.human.ask((G, q) => this.selection.members(G, seat).filter((u) => q.canAct(G, u)).map((u) => u.id))
-    if (still.length !== s.group.length) {
-      const note = s.note
-      this.selection.set(seat, still, s.lead)
-      s.note = note
-    }
+    // (a pin made before the action: planned again from the match as it
+    // now stands, or dropped if its target fell; a fallen target's note
+    // counts the members kept)
+    const pin = s.pin, note = s.fell ? `Target down${still.length ? ` · ${still.length} still ready` : ''}` : s.note
+    if (still.length !== s.group.length) this.selection.set(seat, still, s.lead)
+    s.note = note
+    s.fell = false
     this.syncLead()
+    const tg = pin?.target.pos ? this.G.units.find((u) => u.id === pin.target.id) : pin?.target
+    if (pin && still.length >= 2 && tg && !(tg.pos && !(tg.alive > 0))) this.pinAt(pin.verb, tg, pin.line)
+    else if (pin) this.cancel()
+  }
+
+  // whether the seat's record holds a group (two or more ids, standing or
+  // not: idled settles it even when a member fell)
+  wasGroup() {
+    return this.seat() >= 0 && this.rec.group.length >= 2
+  }
+
+  // A new match: every seat's selection, saved groups and pin let go.
+  reset() {
+    this.selection.bySeat.clear()
+    this.box = this.line = null
+    this.boxEl.classList.add('hidden')
+    this.controls.enabled = true
+    this.view.overlay.formation(null)
+    this.human.card.group = ''
+  }
+
+  // A seat's deployment over: its group and pin let go (the table's
+  // decision is another seat's by now).
+  dropSeat(seat) {
+    if (seat < 0) return
+    this.selection.clear(seat)
+    this.selection.of(seat).note = ''
+    this.view.overlay.formation(null)
+    this.human.card.group = ''
   }
 
   // the card and the one-unit tools on the group's lead (none for a group:
@@ -270,6 +320,7 @@ export class GroupInput {
     // (the card says what the group is above its lead's own lines)
     const ms = this.members()
     this.human.card.group = ms.length >= 2 ? `${ms.length} selected · ${ms.reduce((n, u) => n + u.alive, 0)} models · the lead:` : ''
+    this.human.card.groupLead = lead?.id ?? null
     if (s.group.length >= 2) {
       this.human.sel = lead
       this.human.reach = null
@@ -288,17 +339,18 @@ export class GroupInput {
     // Shift-click (Ctrl, Cmd) adds or drops one of the seat's units
     if (own && (e?.shiftKey || e?.ctrlKey || e?.metaKey)) {
       this.selection.toggle(seat, unit.id)
+      this.rec.note = ''
       this.cancel()
       this.syncLead()
       sfx.click()
       return true
     }
     if (own) {
-      // a double click on one of the seat's units: every one of its type on
-      // screen; a third, every one on the table
+      // a double click on one of the seat's units (the same unit twice):
+      // every one of its type on screen; a third, every one on the table
       const now = performance.now(), last = this.lastUnit
-      const n = last && last.t === unit.t && now - last.at < DOUBLE ? last.n + 1 : 0
-      this.lastUnit = { t: unit.t, at: now, n }
+      const n = last && last.id === unit.id && now - last.at < DOUBLE ? last.n + 1 : 0
+      this.lastUnit = { id: unit.id, at: now, n }
       if (n >= 1) {
         const all = n >= 2
         this.setGroup(this.G.units.filter((u) => u.side === seat && u.alive > 0 && u.t === unit.t && (all || this.view.units.screen.get(u.id)?.on)).map((u) => u.id))
@@ -408,6 +460,7 @@ export class GroupInput {
     try {
       const r = await runGroup({ session: this.human.session, seat, verb: verb === 'shoot' ? 'fire' : verb, members, target, line, advance: verb === 'move' && s.advance })
       s.note = r.note
+      s.fell = r.fell
       if (r.sent) sfx.click()
     } catch (err) {
       s.note = err.message
@@ -453,6 +506,7 @@ export class GroupInput {
     switch (e.key) {
       case 'Enter':
         if (!s.pin) break
+        e.preventDefault()
         this.commit()
         return true
       case 'Escape':
@@ -487,6 +541,7 @@ export class GroupInput {
         s.note = `Saved as group ${d}`
         this.human.flow.refreshUI()
       } else if (this.selection.recall(this.G, seat, d)) {
+        s.note = ''
         this.cancel()
         this.syncLead()
         // the same group called twice running: the camera goes to it
@@ -527,6 +582,7 @@ export class GroupInput {
   // ── The bar ───────────────────────────────────────────────────────────────
   // the group bar's model (ui/groupbar.js), or { show: false }
   model() {
+    this.touches()
     const ms = this.members(), seat = this.seat()
     // Ready N: on a decision of a seat played here, how many of its units
     // are still to act

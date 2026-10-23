@@ -104,7 +104,8 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // spent, or the deployment, where Begin battle is the only way on
   end.lit = deploying || end.ready
   const advance = {
-    show: !mine ? false : idle ? P.phase === 'move' && !!sel && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
+    // ((F10a) none for a group: its +D6 is the bar's)
+    show: !mine ? false : idle ? P.phase === 'move' && !!sel && group < 2 && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
     label: !sel ? null : sel.t.chargeAfterAdvance ? 'Advance (+D6") — can still charge' : `Advance (+D6") — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`,
     busy: !idle,
   }

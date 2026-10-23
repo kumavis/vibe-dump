@@ -12,7 +12,7 @@
 //               a touch a little off a far figure picks it where a mouse
 //               there finds nothing; in ▭ Select, a finger's box picks
 //               exactly the units inside it with the camera still, and two
-//               fingers turn the camera, the group kept (real touches,
+//               fingers pan the camera, the group kept (real touches,
 //               through CDP); a long press takes a unit out of the group
 //               and puts it back; a right click drops a pin; an Alt-drag
 //               pins the group along a line and Enter sends each member to
@@ -376,7 +376,7 @@ async function check(page, say) {
   say(`picker: a touch 19 px off unit ${fell.u} (its base ${fell.px} px across the radius) picks it; the mouse there picks nothing`)
 
   // ▭ Select on touch (real touches, through CDP): one finger draws a box,
-  // the camera still; two fingers turn the camera and pick nothing
+  // the camera still; two fingers pan the camera and pick nothing
   await rest()
   all = await units()
   const cdp = await page.context().newCDPSession(page)
@@ -406,7 +406,7 @@ async function check(page, say) {
   if ((await camAt()) === cam0) fail('two fingers in Select mode left the camera where it was')
   if (!same(await ids(), want) || !(await ev(() => document.querySelector('#selbox').classList.contains('hidden')))) fail(`two fingers in Select mode changed the group (${JSON.stringify(await ids())}) or left a box up`)
   await ev(() => document.querySelector('#selectMode').click())
-  say(`▭ Select: a finger's box picked exactly the ${want.length} units inside it, the camera still; two fingers turned the camera, the group kept`)
+  say(`▭ Select: a finger's box picked exactly the ${want.length} units inside it, the camera still; two fingers moved the camera, the group kept`)
 
   // a long press on one of the seat's units takes it out of the group (and
   // back in), and its lift is no click

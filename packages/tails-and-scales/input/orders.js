@@ -1,13 +1,14 @@
 // The group executor (DESIGN §4.2.6, F10a): a one-shot group action sent as
 // the ordinary commands it is, one member at a time, each planned again from
 // the match as the last command left it (present/orders.js, in the
-// Session's preview), so the members go where the preview drew them. A
-// command the Session refuses skips its member ("Blocked"), never retried;
-// the members that did nothing stay selected (`left`), so the next click
-// can pick another target. It never waits for the table's animation; on
-// an online log it waits for each entry to be folded before planning the
-// next, and gives up after 10 s ("Orders paused: waiting for the
-// connection"). Client code, run from a UI handler (never a sink's
+// Session's preview), so the members go where the preview drew them (Fire
+// and Charge: only the members it named). A command the Session refuses
+// skips its member ("N blocked"), never retried; `left` lists the members
+// that did nothing (which stay picked is input/group.js's settle(): those
+// still able to act once the table has caught up). It never waits for the
+// table's animation; on an online log it waits for each entry to be folded
+// before planning the next, and gives up after 10 s ("Orders paused:
+// waiting for the connection"). Client code, run from a UI handler (never a sink's
 // events): no rule reads it.
 //
 //   runGroup({ session, seat, verb, members, target, line?, advance? })
@@ -38,6 +39,9 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
   // the formation (kept as each is planned again)
   const first = session.preview((G, q) => previewGroup(G, q, seat, verb, members.map((u) => G.units.find((x) => x.id === u.id)), target, null, opts))
   const order = first.members.map((m) => m.u.id)
+  // (Fire and Charge: only the members the preview named, so what is sent
+  // is what it said; one a shot made able since stays for the next click)
+  const named = new Map(first.members.map((m) => [m.u.id, m.how]))
   const send = async (body, u) => {
     const why = session.legal(seat, body)
     if (why) {
@@ -72,7 +76,7 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
         left.push(u)
         continue
       }
-      if (plan.how === 'none') {
+      if (plan.how === 'none' || named.get(id) !== plan.how) {
         left.push(u)
         continue
       }

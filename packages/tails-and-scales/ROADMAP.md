@@ -794,8 +794,8 @@ follows N3.
   Grand fixture; a Grand AI battle 483 → 366 ms here. DESIGN's S0-S3 notes.)
 - [x] **F10a** Drag-select a group (Shift-drag; ▭ Select on touch), the group
   bar, and group move, approach, fire, charge and place as ordinary commands.
-  A group move pins a ghost formation; a second click sends it. No rules
-  change.
+  A group move pins a ghost formation; a click on its flag (or Enter, ✓)
+  sends it. No rules change.
   (Box, Shift-click, long press, double click by type, Q and Ready N, Tab,
   saved groups, Space; a ground click pins, Alt-drag pins a line, the flag
   or Enter sends, a right click drops; +D6; the bar beside the card; the

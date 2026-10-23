@@ -1,8 +1,8 @@
 // The selection (DESIGN §4.2.6, F10a): which of the seat's own standing
 // units are picked up together, local to this page (never logged; a
 // hotseat's two seats each keep their own). One unit selected is today's
-// `sel`; two or more are a group, whose clicks pin a formation before
-// anything is sent. A unit that falls drops out: the members are the ids
+// `sel`; two or more are a group, whose ground clicks (and an approach)
+// pin a formation before anything is sent; Fire and Charge go at once. A unit that falls drops out: the members are the ids
 // still standing in the match the table shows.
 //
 //   sel.group           the ids picked, in the order they were
@@ -12,6 +12,8 @@
 //                       line }), or null
 //   sel.note            what the bar says of the last thing done (a run's
 //                       "Target down · 3 still ready", "Saved as group 2")
+//   sel.fell            the last run's target fell (the note counts the
+//                       members still picked once the table catches up)
 //   sel.advance         +D6: the seat's group Moves advance first
 export class Selection {
   constructor() {
@@ -21,7 +23,7 @@ export class Selection {
   // the seat's own record, made on first use
   of(seat) {
     let s = this.bySeat.get(seat)
-    if (!s) this.bySeat.set(seat, (s = { group: [], lead: null, saved: {}, pin: null, note: '', advance: false }))
+    if (!s) this.bySeat.set(seat, (s = { group: [], lead: null, saved: {}, pin: null, note: '', fell: false, advance: false }))
     return s
   }
 

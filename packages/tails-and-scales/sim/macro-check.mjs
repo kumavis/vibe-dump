@@ -11,6 +11,8 @@
 //     it (Place, Move and Approach; a wrecker's smash, which reshapes the
 //     board under the members after it, is left out), and move no member
 //     the preview left where it stood;
+//   - never send a member in combat a move or an advance (a group order
+//     never makes it fall back);
 //   - Fire: shoot only with the members the preview said would, at the
 //     target, every one of them unless it falls first; Charge: charge only
 //     with those it said may, each charge that made contact ended (no
@@ -23,9 +25,10 @@
 //   node sim/macro-check.mjs [--probes N] [--seed S] [--self-test]
 //
 // --self-test plants faults in a copy of the planner and the executor (a
-// preview that ignores the members planned before it, an executor that
-// loses the formation's slots as it plans each member again, or its line,
-// a Fire that stops after one shot) and expects each to be caught. (The Session itself
+// preview that ignores the members planned before it, one that lets a
+// member in combat fall back, an executor that loses the formation's slots
+// as it plans each member again, or its line, a Fire that stops after one
+// shot) and expects each to be caught. (The Session itself
 // refuses an illegal command, so an executor that skips its own legality
 // check sends nothing illegal: no fault this can show.) Exit 0 when
 // everything holds.
@@ -104,6 +107,8 @@ async function probe(L, ses, rand, out) {
   const opts = { line, advance }
   const pv = ses.preview((G2, q) => L.previewGroup(G2, q, seat, verb, members.map((u) => G2.units.find((x) => x.id === u.id)), target.pos ? G2.units.find((x) => x.id === target.id) : target, null, opts))
   const rejected = ses.folder.rejected.length, count = ses.count, epoch = G.nav.epoch
+  // (the members in combat before it: a group order never moves them)
+  const engaged = ses.preview((G2, q) => members.filter((u) => q.isEngaged(G2, G2.units.find((x) => x.id === u.id))).map((u) => u.id))
   const t0 = performance.now()
   let r
   try {
@@ -116,6 +121,9 @@ async function probe(L, ses, rand, out) {
   out.sent += r.sent
   if (ses.folder.rejected.length !== rejected) return `${verb}: the Folder rejected ${ses.folder.rejected.length - rejected} of its entries`
   if (ses.count - count !== r.sent) return `${verb}: it says it sent ${r.sent}, the log grew by ${ses.count - count}`
+  if (ms > 1000) return `${verb} took ${ms.toFixed(0)} ms`
+  const fell = ses.store.entries().slice(count).find((e) => (e.t === 'move' || e.t === 'advance') && engaged.includes(e.u))
+  if (fell) return `${verb}: unit ${fell.u}, in combat, was sent ${fell.t === 'move' ? 'a move (a fall back)' : 'an advance'}`
   if (advance) {
     // +D6: every member that advanced then moved (or could not), none
     // moved twice, and a member that didn't advance moved where it would have
@@ -123,25 +131,27 @@ async function probe(L, ses, rand, out) {
     const adv = sent.filter((e) => e.t === 'advance').map((e) => e.u), moves = sent.filter((e) => e.t === 'move').map((e) => e.u)
     if (new Set(moves).size !== moves.length) return 'move +D6: a member moved twice'
     if (moves.some((id) => !members.some((u) => u.id === id)) || adv.some((id) => !members.some((u) => u.id === id))) return 'move +D6: a unit outside the group acted'
-    out.checked += pv.members.length
+    out.once += pv.members.length
     return null
   }
-  if (ms > 1000) return `${verb} took ${ms.toFixed(0)} ms`
   const G2 = ses.G
   if (verb === 'place' || verb === 'move' || verb === 'approach') {
     if (G2.nav.epoch !== epoch || members.some((u) => u.t.wrecker)) return null // (a smash reshaped the board)
     for (const m of pv.members) {
       const u = G2.units.find((x) => x.id === m.u.id)
       if (m.cell >= 0) {
+        out.landed++
         const c = G2.nav.index(u.pos.x, u.pos.z)
         if (c !== m.cell) return `${verb}: ${u.t.short} ${u.id} was previewed to cell ${m.cell} and went to ${c}${process.env.MACRO_DEBUG ? ` (members ${JSON.stringify(pv.members.map((x) => [x.u.id, x.cell, x.how, G2.nav.index(G2.units.find((y) => y.id === x.u.id).pos.x, G2.units.find((y) => y.id === x.u.id).pos.z)]))}; sent ${JSON.stringify(ses.store.entries().slice(count).map((e) => [e.t, e.u, e.c]))}; blocked ${JSON.stringify(r.blocked.map((b) => [b.u.id, b.why]))})` : ''}`
       } else if (u.pos.x !== m.u.pos.x || u.pos.z !== m.u.pos.z) return `${verb}: ${u.t.short} ${u.id} was previewed staying and moved`
+      else out.stayed++
     }
-    out.checked += pv.members.length
   }
   if (verb === 'fire') {
     const may = pv.members.filter((m) => m.how === 'fire').length
     if (r.sent > may) return `fire: ${r.sent} shots sent, the preview had ${may} able`
+    const stray = ses.store.entries().slice(count).find((e) => e.t === 'shoot' && !pv.members.some((m) => m.u.id === e.u && m.how === 'fire'))
+    if (stray) return `fire: unit ${stray.u} fired, the preview didn't name it`
     // (a member the volley left unable, slain by a friend's scattered blast
     // or its sight blocked by new rubble, rightly holds its fire)
     const tg = G2.units.find((x) => x.id === target.id)
@@ -165,7 +175,7 @@ async function run(dir, { probes = 240, seed = 7, say = console.log } = {}) {
   const L = await load(dir)
   const rand = stream(seed)
   const items = loadCorpus().items.filter((it) => it.kind === 'human')
-  const out = { probes: 0, sent: 0, checked: 0, kinds: {}, bad: [], lines: 0, advances: 0 }
+  const out = { probes: 0, sent: 0, landed: 0, stayed: 0, once: 0, kinds: {}, bad: [], lines: 0, advances: 0 }
   for (let p = 0; out.probes < probes && p < probes * 6; p++) {
     const it = rand.pick(items)
     const k = rand.int(it.job.entries.length)
@@ -182,13 +192,14 @@ async function run(dir, { probes = 240, seed = 7, say = console.log } = {}) {
   }
   const kinds = Object.entries(out.kinds).map(([k, n]) => `${k} ${n}`).join(', ')
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.checked} members where their preview drew them${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
 const MUTANTS = [
   ['preview-alone', 'present/orders.js', '      if (leg.cell >= 0) at.set(u.id, { x: G.nav.x(leg.cell), z: G.nav.z(leg.cell) })\n', ''],
   ['slots-lost', 'input/orders.js', 'target, first.slots, opts)', 'target, null, opts)'],
+  ['engaged-falls-back', 'present/orders.js', ": q.isEngaged(G, u) ? 'in combat' : ''", ": ''", 2],
   ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
   ['fire-one', 'input/orders.js', "      if (verb === 'fire') await send({ t: 'shoot', u: id, tg: tg.id }, u)", "      if (verb === 'fire') {\n        await send({ t: 'shoot', u: id, tg: tg.id }, u)\n        break\n      }"],
 ]
@@ -196,18 +207,18 @@ const MUTANTS = [
 if (a['self-test']) {
   console.log('macro-check self-test: each planted fault caught\n')
   let bad = 0
-  for (const [name, file, from, to] of MUTANTS) {
+  for (const [name, file, from, to, times = 1] of MUTANTS) {
     const dir = mkdtempSync(join(tmpdir(), `macro-${name}-`))
     try {
       for (const d of ['core', 'data', 'match', 'present', 'input']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
       writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module', private: true }))
       const p = join(dir, file), text = readFileSync(p, 'utf8')
-      if (text.split(from).length !== 2) {
-        console.log(`  FAIL ${name}: its anchor is not in ${file} exactly once (stale mutant)`)
+      if (text.split(from).length !== times + 1) {
+        console.log(`  FAIL ${name}: its anchor is not in ${file} ${times === 1 ? 'exactly once' : `${times} times`} (stale mutant)`)
         bad++
         continue
       }
-      writeFileSync(p, text.replace(from, () => to))
+      writeFileSync(p, text.split(from).join(to))
       const lines = []
       const failed = await run(dir, { probes: 160, say: (l) => lines.push(l) })
       console.log(`  ${failed ? 'ok  ' : 'FAIL'} ${name.padEnd(14)} ${failed ? `caught: ${lines.join(' ').split('\n')[1]?.trim().slice(0, 100) ?? ''}` : 'not caught'}`)

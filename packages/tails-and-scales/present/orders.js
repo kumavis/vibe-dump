@@ -24,10 +24,11 @@
 //                                    the reachable valid end the field puts
 //                                    nearest the anchor; -1 for none
 //   approachFor(G, q, u, tg, at)     a shooter: -2 where it stands has tg in
-//                                    range and in sight, else the reachable
-//                                    valid end nearest tg from which it
-//                                    has; a brawler: the reachable valid
-//                                    end nearest tg; -1 for none
+//                                    range and in sight, else among the 16
+//                                    reachable valid ends nearest tg the
+//                                    first from which it has; a brawler:
+//                                    the reachable valid end nearest tg; -1
+//                                    for none
 //   placeFor(G, q, u, slot, others)  a placement: the free cell nearest its
 //                                    slot in its zone, -1 for none
 //   previewGroup(G, q, seat, verb, members, target, slots?, { line, advance }?)
@@ -46,7 +47,8 @@
 // `at`: the virtual occupancy the executor will meet, a Map of id → { x, z }:
 // the members planned before stand where they were sent, the rest where
 // they are (G). Members are planned nearest the anchor (or the target)
-// first, then by id: the front of a group goes first and clears the way.
+// first, then by id: the front of a group goes first and clears the way
+// (Fire: the AI's shooting order).
 // Client code (no rule reads it): tuned freely, no bump.
 import { attackCount, expected } from '../core/rules.js'
 

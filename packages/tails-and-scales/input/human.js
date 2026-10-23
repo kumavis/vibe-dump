@@ -153,12 +153,13 @@ export class Human {
   // starts the battle); on a seat's own turn, the phase ends.
   end() {
     if (this.deploySeat() >= 0) {
-      const why = this.send(this.deploySeat(), { t: 'deployed' })
+      const seat = this.deploySeat()
+      const why = this.send(seat, { t: 'deployed' })
       if (!why) {
         this.sel = null
-        // (F10a) a pinned formation and its ghosts go with the deployment
-        this.group?.cancel()
-        this.card.group = ''
+        // (F10a) the seat's group, its pin and their ghosts go with its
+        // deployment
+        this.group?.dropSeat(seat)
         this.card.show(null)
         this.flow.refreshUI()
       }
@@ -210,7 +211,7 @@ export class Human {
   idled() {
     const overlay = this.view.overlay
     // (F10a) a group keeps its members still able to act
-    if (this.myTurn() && this.group?.isGroup()) this.group.settle()
+    if (this.myTurn() && this.group?.wasGroup()) this.group.settle()
     else if (this.sel && this.myTurn()) this.select(this.ask((G, q) => q.canAct(G, this.sel)) ? this.sel : null)
     const pk = this.picking()
     if (pk && this.pickShown !== pk) {
@@ -248,20 +249,21 @@ export class Human {
       pressed.delete(e.pointerId)
       const two = gesture
       if (!pressed.size) gesture = false
-      // (F10a) a long press took its unit: the lift is no click
+      // (F10a) a long press took its unit: the lift is no click; a box or a
+      // line this pointer drew ends, whichever button lifts
       const held = this.group?.letGo(e)
+      const drew = this.group?.up(e)
       if (!this.downAt) return
       const moved = Math.hypot(e.clientX - this.downAt.x, e.clientY - this.downAt.y)
       // (F10a) a right click (no drag: a drag pans) drops a pinned formation
       if (e.button === 2) {
-        if (moved <= 6) this.group?.rightClick()
+        if (moved <= 6 && !drew) this.group?.rightClick()
         this.downAt = null
         return
       }
       if (e.button !== 0) return
       this.downAt = null
-      if (this.group?.up(e)) return
-      if (moved > 6 || two || held) return
+      if (drew || moved > 6 || two || held) return
       this.click(this.picker.pick(e), e)
     })
     dom.addEventListener('pointerleave', () => {
@@ -374,7 +376,10 @@ export class Human {
     overlay.clear()
     if (!fromGroup && this.group) {
       const seat = this.localSeat()
-      if (seat >= 0) this.group.selection.set(seat, u ? [u.id] : [])
+      if (seat >= 0) {
+        this.group.selection.set(seat, u ? [u.id] : [])
+        this.group.selection.of(seat).note = ''
+      }
       this.group.cancel()
       this.card.group = ''
     }

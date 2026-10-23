@@ -465,6 +465,7 @@ export class Flow {
     view.terrain.dispose()
     human.sel = null
     human.reach = null
+    human.group?.reset()
     view.overlay.clear()
     ui.log.clear()
     ui.tray.hide()
@@ -533,6 +534,7 @@ export class Flow {
     this.S.control = [...who]
     human.sel = null
     human.reach = null
+    human.group?.reset()
     this.seatPlayers(seatsOf(setup.seats.map((s) => s.race)))
     // the page's trace starts afresh (?debug), before the match's first line
     this.traceListener?.begin()
@@ -584,6 +586,7 @@ export class Flow {
     this.seatPlayers(seatsOf(G.setup.seats.map((s) => s.race)))
     human.sel = null
     human.reach = null
+    human.group?.reset()
     this.traceListener?.begin()
     this.traceListener?.rejoin?.(G)
     this.acted.length = 0
