@@ -8148,6 +8148,27 @@
       "sources": [{"id":"cincpac-pearl-1942"}]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "aircraft",
+      "kit": "p-40b",
+      "side": "us",
+      "group": "welch-taylor",
+      "station": "pilot",
+      "name": "a P-40B from Haleʻiwa"
+    },
+    "t": "08:31",
+    "start": {
+      "from": "haleiwa",
+      "bearingDeg": 175,
+      "rangeM": 2500,
+      "altM": 600,
+      "speedMs": 75,
+      "headingDeg": 175
+    },
+    "title": "A P-40 out of Haleʻiwa",
+    "text": "A P-40B of the Army’s pursuit squadron climbs away from Haleʻiwa: fly it south down the middle of the island toward ʻEwa and the harbour at your own pace; a fighter carries no bombs, so there is nothing to release."
+  },
   "moments": [
     {
       "id": "kaga-b5n-torpedo",

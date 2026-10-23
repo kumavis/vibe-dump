@@ -39,6 +39,43 @@ LINES = [
 ]
 
 WHERE = {
+    # the prologue (ROUND-2.md §1.3; research/content-2.md): schematic, by the hand regions of build.py's PROLOGUE
+    '1931-09-18': ([{'id': 'morton-1962', 'where': 'ch. II, Japanese Policy and Strategy, 1931 – July 1941'},
+                    {'id': 'jm-144', 'where': 'ch. I: the rights in Manchuria (the leased territory, the railway zones, troops in the railway zones) and the chronology of the Manchurian Incident'},
+                    {'id': 'peace-and-war-1943', 'where': 'ch. II, Japanese Conquest of Manchuria, 1931–1932'}],
+                   'The eve of the Mukden Incident: Japan with Korea, Taiwan and Karafuto; on the mainland the Kwantung Leased Territory at the tip of the Liaotung Peninsula, '
+                   'with Dairen and Port Arthur, and the zone along the South Manchuria Railway to Changchun, where Japan kept troops by treaty; the South Seas Mandate across the central Pacific. '
+                   'Manchuria is China\'s. Schematic.'),
+    '1932-03-01': ([{'id': 'jm-144', 'where': 'ch. I: Mukden, Changchun and Kirin occupied on 18 September 1931, Harbin on 4 February 1932, Manchukuo established on 1 March 1932, Jehol occupied from January to March 1933'},
+                    {'id': 'peace-and-war-1943', 'where': 'ch. II, Japanese Conquest of Manchuria, 1931–1932'},
+                    {'id': 'morton-1962', 'where': 'ch. II, Japanese Policy and Strategy, 1931 – July 1941'}],
+                   'Manchukuo proclaimed: the Kwantung Army has taken Manchuria\'s cities and railways since September, and the new state is drawn with the provinces it claimed, '
+                   'less Jehol, which the army occupies from January to March 1933. Schematic.'),
+    '1937-12-31': ([{'id': 'jm-70', 'where': 'General Reference Maps I and II, the operations in north China, July 1937 – June 1938, and in central and south China, August 1937 – March 1939'},
+                    {'id': 'jm-144', 'where': 'ch. II: the chronology of 1937'},
+                    {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: the extent of occupied China, within which the earlier extent is drawn'}],
+                   'The end of 1937, after the Marco Polo Bridge: Manchukuo with Jehol; the railways and cities of Hopeh and Chahar, Suiyuan to Paotow, northern Shansi to Taiyuan, '
+                   'Shantung north of the Yellow River to Tsinan, and the Shanghai–Nanking–Hangchow corridor, taken from July to December as the Japanese army\'s post-war monographs date them. '
+                   'Occupied China, its cities and railways, is drawn inside the extent the Atlas\'s first page gives it in 1943. Schematic.'),
+    '1938-12-31': ([{'id': 'jm-144', 'where': 'ch. III, p. 42: the front at the end of 1938, and the chronology of 1938'},
+                    {'id': 'jm-70', 'where': 'General Reference Maps I and II; p. 47, northern Kiangsu'},
+                    {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: the extent of occupied China, within which the earlier extent is drawn'}],
+                   'Hankow and Canton taken: the front at the end of 1938 as a Japanese monograph gives it, from Suiyuan down the Yellow River to Tungkwan and Kaifeng, '
+                   'south along the Peiping–Hankow railway to Yochow and east by Yungsiu to Hangchow, with an arc round Canton; northern Kiangsu east of Hsuchow is not yet held. Schematic.'),
+    '1940-09-30': ([{'id': 'peace-and-war-1943', 'where': 'p. 96, Japanese Penetration Into Indochina'},
+                    {'id': 'morton-1962', 'where': 'ch. II: the right to occupy Tonkin Province'},
+                    {'id': 'jm-70', 'where': 'pp. 62–68: Nanning, northern French Indo-China, Chekiang in April 1941'},
+                    {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: occupied China'},
+                    {'id': 'romanus-1953', 'where': 'Map 1, Japanese Plan, December 1941'}],
+                   'Northern Indochina garrisoned: under the agreement of 22 September 1940 Japanese troops enter Tonkin and its airfields; the south of French Indochina has no Japanese troops yet. '
+                   'Occupied China as on the eve of the war, less the coast south of Hangchow taken in April 1941, with the Nanning area, which Japan\'s army holds until November 1940. Schematic.'),
+    '1941-07-31': ([{'id': 'peace-and-war-1943', 'where': 'p. 123, Japanese Occupation of Southern Indochina'},
+                    {'id': 'morton-1962', 'where': 'ch. IV: the move into southern Indochina'},
+                    {'id': 'jm-70', 'where': 'p. 69, Advance into Southern French Indo-China'},
+                    {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: occupied China'},
+                    {'id': 'romanus-1953', 'where': 'Map 1, Japanese Plan, December 1941'}],
+                   'Southern Indochina garrisoned: from about 22 July 1941 Vichy grants Japan the right to keep troops and bases in the south, and Japanese forces move in. '
+                   'Occupied China as on the eve of the war. Schematic.'),
     '1941-12-06': ([{'id': 'morton-1962', 'where': 'Map 1, The Japanese Plan for War, December 1941'}, {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: occupied China'}],
                    'The eve of the war: Japan with Korea, Taiwan, Karafuto and Manchukuo; occupied China drawn from the Atlas\'s first page of July 1943, which is the nearest public-domain map of that front; French Indochina garrisoned under the agreements with Vichy; Thailand neutral. Schematic.'),
     '1942-05-08': ([{'id': 'morton-1962', 'where': 'Map I, The Japanese Offensive, December 1941 – May 1942'}, {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4: occupied China'}],
@@ -68,7 +105,7 @@ WHERE = {
 if __name__ == '__main__':
     fc = {'type': 'FeatureCollection', 'features': LINES}
     json.dump(fc, open(OUT + 'lines.geojson', 'w'), ensure_ascii=False, indent=1)
-    kfs = ['1941-12-06', '1942-05-08', '1942-09-15', '1943-11-01', '1944-08-15', '1945-01-15', '1945-07-01', '1945-09-02']
+    kfs = ['1931-09-18', '1932-03-01', '1937-12-31', '1938-12-31', '1940-09-30', '1941-07-31', '1941-12-06', '1942-05-08', '1942-09-15', '1943-11-01', '1944-08-15', '1945-01-15', '1945-07-01', '1945-09-02']
     man = {'keyframes': [], 'lines': 'fronts/lines.geojson',
            'method': ('Land of 2,500 km² and more (Natural Earth 1:50m), on a 0.1-degree grid. Japan\'s states are assigned by territory, '
                       'today\'s admin-0 borders standing in for those of the 1940s, with Manchukuo and Tibet drawn by hand. From 1943-11-01 '

@@ -12392,6 +12392,19 @@
       ]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "ship",
+      "kit": "fletcher",
+      "side": "us",
+      "unit": "johnston",
+      "station": "helm",
+      "name": "Johnston’s bridge"
+    },
+    "t": "07:10",
+    "title": "Johnston’s helm",
+    "text": "Johnston has turned out of the screen toward the Japanese cruisers: steer her through the rain and her own smoke as she closes; her guns fight on their own, and no torpedo need be launched."
+  },
   "moments": [
     {
       "id": "johnston-kumano",

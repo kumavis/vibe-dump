@@ -5808,6 +5808,19 @@
       "sources": [{"id":"morison-v","where":"0320"},{"id":"trom-kirishima"},{"id":"lundgren-bbaction"}]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "ship",
+      "kit": "gleaves",
+      "side": "us",
+      "unit": "gwin",
+      "station": "helm",
+      "name": "Gwin’s bridge"
+    },
+    "t": "23:24",
+    "title": "Gwin’s helm",
+    "text": "Gwin is fourth in the destroyer column, steaming west below Savo as the night action opens: keep her in her place astern of Preston and steer as the shells come; her guns fight on their own, and nothing need be fired."
+  },
   "moments": [
     {
       "id": "washington-kirishima",

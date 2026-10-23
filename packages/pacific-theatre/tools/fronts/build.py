@@ -16,9 +16,12 @@
 # map holds. The keyframes before the Atlas (1941-12-06, 1942-05-08, 1942-09-15) are schematic: the
 # territories' holders by date, occupied China from the Atlas's first page (1 July 1943), and a few hand
 # regions for the fronts of 1942 (Papua, Guadalcanal, Mindanao, Timor). Where the trace misreads the page
-# and the record says otherwise, the record's state is laid over it (RECORD below).
+# and the record says otherwise, the record's state is laid over it (RECORD below). The prologue's six
+# keyframes (1931-09-18 to 1941-07-31) are schematic too: the holders by date and hand regions with their own
+# sources (PROLOGUE below; research/content-2.md). FRONTS_ONLY=<keyframe>,<keyframe> writes only those.
 import sys, json, math
 import os
+import types
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from paths import OUT, VIEW, downloads
 import numpy as np
@@ -150,7 +153,10 @@ def territories(countries):
 # territories whose holder is a matter of record, not of the page (the page paints Mongolia with China, and
 # its white and pink run over India's and Australia's edges)
 FORCED = {'ussr', 'mongolia', 'tibet', 'himalaya', 'afghanistan', 'iran', 'india', 'ceylon', 'australia', 'nz', 'usa', 'canada', 'pacific-allied', 'japan', 'korea', 'manchukuo', 'karafuto'}
-KF = ['1941-12-06', '1942-05-08', '1942-09-15', '1943-11-01', '1944-08-15', '1945-01-15', '1945-07-01', '1945-09-02']
+EVE = '1941-12-06'
+# the prologue's keyframes (ROUND-2.md §1.3; research/content-2.md): schematic, by hand regions (PROLOGUE below)
+PROLOGUE_KF = ['1931-09-18', '1932-03-01', '1937-12-31', '1938-12-31', '1940-09-30', '1941-07-31']
+KF = PROLOGUE_KF + ['1941-12-06', '1942-05-08', '1942-09-15', '1943-11-01', '1944-08-15', '1945-01-15', '1945-07-01', '1945-09-02']
 ATLAS = {'1943-11-01': 24, '1944-08-15': 62, '1945-01-15': 82, '1945-07-01': 102, '1945-09-02': 104}
 CHINA_1942 = 8  # the Atlas's first page (to 1 July 1943), for occupied China before the Atlas begins
 
@@ -158,6 +164,8 @@ CHINA_1942 = 8  # the Atlas's first page (to 1 July 1943), for occupied China be
 def default_state(tid, kf):
     """who holds a territory (or the part of it off the Atlas page) on a keyframe, by date"""
     early = kf < '1943-11-01'
+    if tid == 'manchukuo' and kf < '1932-03-01':
+        return 'allied'  # Manchuria is China's on the eve of Mukden (the leased territory and the railway zone are PROLOGUE's)
     if tid in ('japan', 'korea', 'taiwan', 'manchukuo', 'karafuto'):
         return 'held'
     if tid == 'andamans':
@@ -169,6 +177,10 @@ def default_state(tid, kf):
     if tid in ('mongolia', 'tibet', 'himalaya', 'afghanistan'):
         return 'neutral'
     if tid == 'indochina':
+        # French, and at war with no one, until Japan's troops come in: the north (Tonkin) from 22 September 1940
+        # is a PROLOGUE region; the whole is garrisoned from the agreement of July 1941 to the coup of 9 March 1945
+        if kf < '1941-07-31':
+            return 'neutral'
         return 'garrisoned' if kf < '1945-03-09' else 'held'
     if tid == 'thailand':
         return 'neutral' if kf < '1941-12-21' else 'allied-with-japan'
@@ -176,9 +188,9 @@ def default_state(tid, kf):
         return 'allied' if kf < '1941-12-25' else 'held'
     if tid in ('malaya', 'borneo', 'nei', 'burma', 'philippines'):
         # held from the first offensive; from 1943-11-01 the page says otherwise where it can
-        return 'allied' if kf == '1941-12-06' else 'held'
+        return 'allied' if kf <= EVE else 'held'
     if tid == 'ptimor':
-        if kf == '1941-12-06':
+        if kf <= EVE:
             return 'neutral'
         return 'contested' if early else 'held'
     if tid == 'china':
@@ -303,6 +315,167 @@ def record_cells(r, land, LON, LAT, inside, tid, state):
     return m
 
 
+# --- the prologue: 1931 to the eve of the war ---------------------------------------------------------
+# Six schematic keyframes (ROUND-2.md §1.3 and §7; research/content-2.md). Every territory takes its holder by
+# date (default_state: the colonies, and Manchukuo from 1932-03-01, held; China and the others as the eve's
+# keyframe has them, so the cross-fade into 1941-12-06 is quiet), and these hand regions lay over it, each
+# with its own sources. Occupied China (Japan's cities and railways, points and lines) is drawn inside the
+# extent the Atlas's first page (1 July 1943) gives it, the one the eve's keyframe draws: the 1937 and 1938
+# regions are cut from it, so the hatch grows into the eve's and never draws past it.
+#
+# The Kwantung Leased Territory, the tip of the Liaodong Peninsula south of Pulandian and Pikou (JM-144 ch. I,
+# "concessions and neutral zones in Kwantung Province"); schematic
+KWANTUNG = P([(120.8, 39.6), (121.6, 39.55), (122.2, 39.58), (122.75, 39.62), (123.1, 39.45), (122.7, 38.5), (120.9, 38.5)])
+# the South Manchuria Railway, Dairen to Changchun, with the Port Arthur, Yingkou and Fushun branches and the
+# Antung–Mukden line (JM-144 ch. I: "South Manchurian railroad and adjacent railroad zones", "right to station
+# troops in railroad zones"); a strip of a texel or two each side, since the zone's own width is under the grid
+SMR = unary_union([LineString(c) for c in (
+    [(121.26, 38.81), (121.6, 38.92), (121.71, 39.1), (122.0, 39.63), (122.35, 40.4), (122.5, 40.63), (122.75, 40.85), (122.99, 41.11), (123.17, 41.27),
+     (123.43, 41.8), (123.84, 42.29), (124.04, 42.54), (124.37, 43.17), (124.82, 43.5), (125.32, 43.88)],
+    [(122.5, 40.63), (122.23, 40.67)],
+    [(123.43, 41.8), (123.95, 41.87)],
+    [(123.43, 41.8), (123.77, 41.3), (124.07, 40.45), (124.39, 40.13)])]).buffer(0.12)
+# Jehol, occupied from January to March 1933 (JM-144 ch. I; Peace and War, ch. II): Manchukuo's south-west, from
+# the Great Wall north to the Hsingan provinces; schematic
+JEHOL = P([(119.85, 39.95), (120.4, 40.55), (121.15, 41.35), (121.8, 42.2), (121.4, 43.3), (120.7, 44.4), (119.3, 45.2), (117.6, 44.6), (115.5, 43.5),
+           (115.5, 40.4), (118.8, 39.9)])
+# Occupied China at the end of 1937, from JM-70's General Reference Maps I and II (the operations' dates) and
+# JM-144's chronology: the Hopeh plain to Anyang and Shantung north of the Yellow River to Tsinan; Chahar and
+# Suiyuan to Paotow (the Mongolian Federal Autonomous Government of 28 October); the railways of northern
+# Shansi to Taiyuan and Pingyao and the Shihchiachuang–Taiyuan line; the Shanghai–Nanking–Hangchow corridor
+REGION_1937 = unary_union([
+    P([(119.9, 40.1), (119.9, 38.6), (118.95, 37.9), (118.2, 37.3), (117.3, 36.75), (116.9, 36.45), (116.2, 36.6), (115.4, 36.2), (114.75, 35.95),
+       (114.2, 36.05), (114.1, 36.6), (114.15, 37.4), (114.25, 38.0), (114.6, 38.7), (115.1, 39.45), (115.6, 39.8), (116.1, 40.1), (117.1, 40.35),
+       (118.3, 40.15), (119.0, 40.0)]),
+    P([(109.3, 40.45), (109.3, 47.0), (118.5, 47.0), (117.0, 41.6), (116.3, 40.5), (115.6, 40.2), (114.5, 39.75), (113.6, 39.6), (112.5, 39.7),
+       (111.4, 40.05), (110.5, 40.35)]),
+    LineString([(113.3, 40.08), (113.1, 39.82), (112.82, 39.52), (112.95, 39.07), (112.7, 38.73), (112.73, 38.42), (112.55, 37.87), (112.73, 37.68),
+                (112.55, 37.42), (112.17, 37.2)]).buffer(0.25),
+    LineString([(114.48, 38.04), (114.15, 38.03), (113.85, 37.95), (113.58, 37.86), (113.17, 37.89), (112.73, 37.68)]).buffer(0.25),
+    LineString([(116.4, 39.9), (116.13, 40.25), (115.5, 40.38), (114.88, 40.82)]).buffer(0.25),  # Peiping–Kalgan, by Nankou (late August)
+    P([(122.2, 31.35), (121.85, 31.7), (121.0, 31.85), (120.3, 31.95), (119.95, 32.2), (119.75, 32.55), (119.1, 32.6), (118.5, 32.45), (118.0, 32.5),
+       (118.0, 32.0), (118.2, 31.35), (118.55, 30.8), (119.5, 30.75), (119.95, 30.1), (120.6, 30.2), (121.3, 30.65), (122.1, 30.85)]),
+])
+# Occupied China at the end of 1938: the front JM-144 (ch. III, p. 42) gives, "west of An-Pei, Sui-Yuan
+# Province, ... southward roughly along the Yellow River, ... east at Tung-Kuan. From Kai-Feng ... southward
+# along the Peiping-Hankow railway line, reaching Yo-Chou ... eastward, passing through Yung-Hsiu ... and
+# reaching Hangchow", with the arc round Canton "to Samshui, ... north of Hua-Hsien and Tsung-Hua, ... to
+# Ping-Hai Peninsula"; less northern Kiangsu east of the Tientsin–Pukow railway, where JM-70 (p. 47) has "no
+# Japanese forces east of Tungshan to the coast" until February 1939
+REGION_1938 = unary_union([
+    REGION_1937,
+    P([(108.3, 47.0), (108.3, 41.3), (108.4, 40.6), (109.5, 40.4), (111.1, 40.25), (111.25, 39.45), (111.0, 38.5), (110.75, 37.4), (110.5, 36.3),
+       (110.55, 35.6), (110.25, 34.6), (111.2, 34.75), (112.4, 34.85), (113.5, 34.95), (114.1, 34.85), (114.35, 34.7), (114.6, 34.3), (115.2, 33.4),
+       (116.0, 32.85), (115.5, 32.4), (114.9, 32.35), (114.0, 32.25), (113.75, 31.6), (113.45, 30.95), (113.5, 30.4), (113.0, 29.6), (112.95, 29.3),
+       (113.6, 29.25), (114.5, 29.45), (115.1, 29.15), (115.75, 28.95), (116.3, 29.4), (116.9, 29.9), (117.6, 30.35), (118.3, 30.65), (119.5, 30.7),
+       (120.0, 30.1), (121.0, 30.4), (123.5, 30.5), (123.5, 38.5), (121.5, 40.6), (118.5, 47.0)]),
+    P([(112.7, 22.45), (112.75, 23.25), (113.15, 23.5), (113.6, 23.68), (114.4, 23.6), (114.8, 23.1), (115.1, 22.6), (114.6, 22.4), (113.9, 22.2),
+       (113.3, 22.1)]),
+]).difference(P([(117.65, 34.2), (118.4, 34.45), (119.4, 34.8), (120.6, 34.6), (121.6, 32.9), (119.8, 32.72), (118.6, 32.85), (117.7, 33.05)]))
+# west of the Salween: the Atlas's page of 1943 holds ground in western Yunnan taken in May 1942, out of place
+# before the war (the eve's keyframe keeps it, with the rest of that page's China)
+WEST_YUNNAN = box(90.0, 20.0, 100.2, 30.0)
+# south of the Ch'ien-t'ang and down the coast to Foochow: taken in April 1941 (JM-70, pp. 66–68 and Map 3:
+# Chuchi, Ningpo, Yuyao, Linhai and Yungchia), so not yet held on 1940-09-30
+SOUTH_OF_QIANTANG = P([(119.6, 30.25), (120.2, 30.22), (120.6, 30.32), (121.0, 30.38), (121.5, 30.3), (123.5, 30.3), (123.5, 24.6), (117.5, 24.6),
+                       (117.5, 27.5), (119.6, 28.5)])
+# the Chinhsien–Nanning area the 22d Army held from November 1939 until IGHQ ordered it back to Canton in
+# November 1940 (JM-70, pp. 62–65), and the road on to the Indochina frontier its 5th Division crossed in
+# September 1940 (inferred from the same pages); schematic
+NANNING = LineString([(108.62, 21.95), (108.35, 22.4), (108.32, 22.82), (107.9, 22.63), (107.37, 22.4), (107.07, 22.13), (106.75, 22.0)]).buffer(0.22)
+# Tonkin, the province of French Indochina Japan's troops entered under the agreement of 22 September 1940
+# (Peace and War, p. 96; Morton, ch. II, "the right to occupy Tonkin Province"): Vietnam north of Annam
+NORTH_OF_ANNAM = P([(101.0, 24.0), (110.0, 24.0), (110.0, 19.9), (106.6, 19.9), (106.05, 19.98), (105.6, 20.25), (105.1, 20.5), (104.3, 20.75), (101.0, 20.9)])
+
+
+def tonkin(G):
+    return G.countries['Vietnam'].buffer(GROW).difference(G.countries['Laos']).intersection(NORTH_OF_ANNAM)
+
+
+def occupied(region=None, less=None):
+    """occupied China's cells: the eve's extent (the Atlas's first page), within region and outside less"""
+    def cells(G):
+        m = G.occ1941.copy()
+        if region is not None:
+            m &= shapely.contains_xy(region, G.LON, G.LAT)
+        if less is not None:
+            m &= ~shapely.contains_xy(less, G.LON, G.LAT)
+        return m
+    return cells
+
+
+S_ATLAS4 = {'id': 'atlas-battle-fronts-1945', 'where': 'p. 4, the period ending 1 July 1943: the extent of occupied China, within which the earlier extent is drawn'}
+S_JM144_1 = {'id': 'jm-144', 'where': 'ch. I: the rights in Manchuria and the chronology of the Manchurian Incident'}
+S_JM70_MAPS = {'id': 'jm-70', 'where': 'General Reference Maps I and II, the operations in north China, July 1937 – June 1938, and in central and south China, August 1937 – March 1939'}
+S_MORTON_2 = {'id': 'morton-1962', 'where': 'ch. II, Japanese Policy and Strategy, 1931 – July 1941'}
+S_PAW_2 = {'id': 'peace-and-war-1943', 'where': 'ch. II, Japanese Conquest of Manchuria, 1931–1932'}
+KW = dict(state='held', name='the Kwantung Leased Territory', region=KWANTUNG, terr=('manchukuo',), sources=[S_JM144_1])
+PROLOGUE = {
+    '1931-09-18': [
+        dict(state='held', name='the South Manchuria Railway zone', region=SMR, terr=('manchukuo',), pointsAndLines=True, sources=[S_JM144_1, S_MORTON_2]),
+        KW,
+    ],
+    '1932-03-01': [
+        dict(state='allied', name='Jehol', region=JEHOL, terr=('manchukuo',),
+             sources=[{'id': 'jm-144', 'where': 'ch. I: Jehol Province occupied from 2 January to March 1933'}, {'id': 'peace-and-war-1943', 'where': 'ch. II: the occupation of Jehol, early in January 1933'}]),
+        KW,
+    ],
+    '1937-12-31': [
+        dict(state='held', name='occupied China', cells=occupied(REGION_1937), terr=('china',), pointsAndLines=True,
+             sources=[S_JM70_MAPS, {'id': 'jm-144', 'where': 'ch. II: the chronology of 1937'}, S_ATLAS4]),
+        KW,
+    ],
+    '1938-12-31': [
+        dict(state='held', name='occupied China', cells=occupied(REGION_1938), terr=('china',), pointsAndLines=True,
+             sources=[{'id': 'jm-144', 'where': 'ch. III, p. 42: the front at the end of 1938, and the chronology of 1938'}, S_JM70_MAPS,
+                      {'id': 'jm-70', 'where': 'p. 47: no Japanese forces east of Hsuchow to the coast until February 1939'}, S_ATLAS4]),
+        KW,
+    ],
+    '1940-09-30': [
+        dict(state='held', name='occupied China', cells=occupied(less=WEST_YUNNAN.union(SOUTH_OF_QIANTANG)), terr=('china',), pointsAndLines=True,
+             sources=[S_ATLAS4, {'id': 'romanus-1953', 'where': 'Map 1, Japanese Plan, December 1941 (Imperial GHQ Army Order No. 575): the areas held'},
+                      {'id': 'jm-70', 'where': 'ch. 3: Hainan, Swatow, Nanchang and Ichang taken in 1939 and 1940; Chekiang south of Hangchow in April 1941 (pp. 66–68)'}]),
+        dict(state='held', name='occupied China: the Nanning area', region=NANNING, terr=('china',), pointsAndLines=True,
+             sources=[{'id': 'jm-70', 'where': 'pp. 62–65: the 22d Army in the Chinhsien–Nanning area until November 1940, and the advance into northern French Indo-China'}]),
+        dict(state='garrisoned', name='Tonkin (French Indochina)', region=tonkin, terr=('indochina',),
+             sources=[{'id': 'peace-and-war-1943', 'where': 'p. 96: the agreement of 22 September 1940, three airfields and the transit of troops'},
+                      {'id': 'morton-1962', 'where': 'ch. II and IV: the right to occupy Tonkin Province'},
+                      {'id': 'jm-70', 'where': 'p. 64, Advance into Northern French Indo-China'}]),
+        KW,
+    ],
+    '1941-07-31': [
+        dict(state='held', name='occupied China', cells=occupied(less=WEST_YUNNAN), terr=('china',), pointsAndLines=True,
+             sources=[S_ATLAS4, {'id': 'romanus-1953', 'where': 'Map 1, Japanese Plan, December 1941 (Imperial GHQ Army Order No. 575): the areas held'},
+                      {'id': 'jm-70', 'where': 'pp. 66–68 and Map 3: Chuchi, Ningpo, Yuyao, Linhai and Yungchia taken in April 1941'}]),
+        KW,
+    ],
+}
+
+
+def prologue_cells(r, G):
+    terr = G.inside & np.isin(G.tid, list(r['terr']))
+    if 'cells' in r:
+        return terr & r['cells'](G)
+    region = r['region'](G) if callable(r['region']) else r['region']
+    return terr & shapely.contains_xy(region, G.LON, G.LAT)
+
+
+def prologue_sources(kf, st, nm):
+    """a prologue keyframe's sources for a territory drawn by its holder on the date"""
+    if nm == 'French Indochina':
+        if kf >= '1941-07-31':
+            return [{'id': 'peace-and-war-1943', 'where': 'p. 123: the right to keep troops and bases in southern Indochina, about 22 July 1941'},
+                    {'id': 'morton-1962', 'where': 'ch. IV: the move into southern Indochina'}, {'id': 'jm-70', 'where': 'p. 69, Advance into Southern French Indo-China'}]
+        if kf >= '1940-09-30':
+            return [{'id': 'morton-1962', 'where': 'ch. II: "in southern Indochina, where there were no Japanese troops"'}, {'id': 'peace-and-war-1943', 'where': 'p. 96'}]
+        return [S_MORTON_2]
+    if nm == 'Manchukuo':
+        return [S_JM144_1, S_PAW_2, S_MORTON_2]
+    if nm == 'Free China':
+        return [S_ATLAS4, S_JM70_MAPS]
+    return [{'id': 'morton-1962', 'where': 'ch. I–II and Map 1: the territories by date'}]
+
+
 # General Order No. 1's zones (keyframe 1945-09-02): what Japanese forces surrendered to whom, by territory
 # and the two parallels
 GO1 = {
@@ -421,9 +594,12 @@ def build():
     print('cells on land', int(inside.sum()), 'without a territory', int(((tid == '') & inside).sum()))
 
     china1942 = atlas_grid(CHINA_1942, LON, LAT, inside)
+    # what the prologue's hand regions read (PROLOGUE, prologue_cells)
+    G = types.SimpleNamespace(LON=LON, LAT=LAT, inside=inside, tid=tid, countries=countries, occ1941=(china1942 == 1) | (china1942 == 4))
     manifest = {'keyframes': [], 'lines': 'fronts/lines.geojson'}
     stats = {}
-    for kf in KF:
+    only = [k for k in os.environ.get('FRONTS_ONLY', '').split(',') if k]  # FRONTS_ONLY=1937-12-31,1938-12-31 writes only those
+    for kf in [k for k in KF if not only or k in only]:
         leaf = ATLAS.get(kf)
         cls = atlas_grid(leaf, LON, LAT, inside) if leaf else None
         state = np.full(LON.shape, '', dtype=object)
@@ -437,6 +613,8 @@ def build():
             st = default_state(k, kf)
             state[m] = st if st else 'allied'
             name[m] = tname
+            if k == 'manchukuo' and st == 'allied':
+                name[m] = 'China'  # Manchuria before Manchukuo
             if cls is not None:
                 c = cls[m]
                 s = state[m]
@@ -459,6 +637,10 @@ def build():
                 state[m] = s
                 name[m] = n
                 mapped[m] = (c != 0) & (k not in FORCED)
+            elif k == 'china' and kf < EVE:
+                # the prologue: China, Free China once the war of 1937 has begun; occupied China is PROLOGUE's
+                state[m] = 'allied'
+                name[m] = 'China' if kf < '1937-07-07' else 'Free China'
             elif k == 'china':
                 c = china1942[m]
                 jp = (c == 1) | (c == 4)
@@ -474,6 +656,16 @@ def build():
         # where the record overrides the trace
         rec_src = {}
         over = np.full(LON.shape, '', dtype=object)
+        # the prologue's hand regions, each with its own sources
+        for r in PROLOGUE.get(kf, []):
+            m = prologue_cells(r, G)
+            if not m.any():
+                sys.exit(f'PROLOGUE {kf} {r["name"]}: no cells')
+            state[m] = r['state']
+            name[m] = r['name']
+            pal[m] = bool(r.get('pointsAndLines'))
+            mapped[m] = False
+            rec_src[r['name']] = list(r['sources'])
         for r in RECORD.get(kf, []):
             m = record_cells(r, land, LON, LAT, inside, tid, state)
             if not m.any():
@@ -562,6 +754,8 @@ def near(m, r):
 
 
 def feature_sources(kf, st, nm, precise):
+    if kf < EVE:
+        return prologue_sources(kf, st, nm) + [{'id': 'natural-earth', 'where': '1:50m land and admin-0 countries'}]
     leaf = ATLAS.get(kf)
     src = []
     if leaf:
