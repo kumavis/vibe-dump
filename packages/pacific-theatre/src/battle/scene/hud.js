@@ -7,6 +7,13 @@
 // torpedo envelope; the time-of-flight countdown and the spotting tags; the
 // checkpoint prompt and the restart offers. Its words name the ship and what
 // happened, never "Kill", "Destroyed" or "Mission accomplished".
+//
+// Round two (ROUND-2.md §4): the station bar (the held unit's stations, the
+// active one marked; a click or Tab switches), the first take's hints (four
+// lines for eight seconds, once: localStorage pt.hints), the bracket on the
+// selected unit, the AA director's and the gunner's reticles with their lead
+// pips, the level sight (the predicted impact and the drift line), and the
+// release cue's window.
 
 import * as THREE from 'three'
 
@@ -35,6 +42,28 @@ const STYLE = `
 .pt-hud .cue { position: absolute; left: 50%; top: 62%; transform: translateX(-50%); padding: 3px 10px; border: 1px solid #f6e3a0; border-radius: 3px; }
 .pt-hud .cue:empty { display: none; }
 .pt-hud .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.95) 75%); opacity: 0; transition: opacity .3s; }
+.pt-hud .stations { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); display: flex; gap: 4px; pointer-events: auto; }
+.pt-hud .stations:empty { display: none; }
+.pt-hud .stations button { font: inherit; color: #e9e4d6; background: rgba(8,10,12,.55); border: 1px solid rgba(233,228,214,.3); border-radius: 3px; padding: 3px 9px; cursor: pointer; min-height: 26px; }
+.pt-hud .stations button[aria-pressed="true"] { border-color: #f6e3a0; color: #f6e3a0; background: rgba(40,36,20,.6); }
+.pt-hud .stations .tab { align-self: center; opacity: .6; font-size: 11px; padding-left: 4px; }
+.pt-hud .hints { position: absolute; left: 50%; top: 58%; transform: translateX(-50%); padding: 8px 14px; background: rgba(8,10,12,.6); border-radius: 4px; white-space: pre-line; text-align: left; line-height: 1.6; }
+.pt-hud .hints:empty { display: none; }
+.pt-hud .sel { border: 1px dashed rgba(246,227,160,.85); border-radius: 3px; }
+.pt-hud .sel span { position: absolute; left: 100%; top: -2px; padding-left: 6px; color: #f6e3a0; }
+.pt-hud .cross { width: 28px; height: 28px; }
+.pt-hud .cross::before, .pt-hud .cross::after { content: ''; position: absolute; background: rgba(255,255,255,.9); }
+.pt-hud .cross::before { left: 13px; top: 0; width: 1px; height: 28px; }
+.pt-hud .cross::after { left: 0; top: 13px; width: 28px; height: 1px; }
+.pt-hud .cross.on::before, .pt-hud .cross.on::after { background: #f6e3a0; }
+.pt-hud .cross.off { opacity: .35; }
+.pt-hud .lead { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #f6e3a0; }
+.pt-hud .lead2 { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(246,227,160,.7); }
+.pt-hud canvas.sightc { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pt-hud .cuewin { position: absolute; left: 50%; top: calc(62% + 28px); transform: translateX(-50%); width: 180px; height: 6px; background: rgba(8,10,12,.5); border: 1px solid rgba(233,228,214,.35); border-radius: 3px; }
+.pt-hud .cuewin b { position: absolute; top: 0; bottom: 0; background: rgba(246,227,160,.35); }
+.pt-hud .cuewin i { position: absolute; top: -3px; width: 2px; height: 12px; background: #fff; }
+.pt-hud .cue.on { background: rgba(246,227,160,.25); }
 `
 
 const KN = 0.514444
@@ -42,7 +71,7 @@ const DEG = Math.PI / 180
 const TELEGRAPH = [
   [-0.75, 'back full'],
   [-0.3, 'back one third'],
-  [-0.02, 'stop'],
+  [0.05, 'stop'],
   [0.4, 'ahead one third'],
   [0.7, 'ahead two thirds'],
   [0.86, 'ahead standard'],
@@ -50,6 +79,7 @@ const TELEGRAPH = [
   [2, 'ahead flank'],
 ]
 const telegraphName = (f) => TELEGRAPH.find(([v]) => f <= v)?.[1] ?? 'ahead flank'
+const STATION_NAMES = { helm: 'Helm', main: 'Main battery', aa: 'Anti-aircraft', torpedoes: 'Torpedoes', pilot: 'Pilot', gunner: 'Gunner', bombardier: 'Bombardier' }
 
 export class Hud {
   constructor(box, { container = document.body } = {}) {
@@ -74,7 +104,15 @@ export class Hud {
       <div class="mark bracket" style="display:none"><span></span></div>
       <div class="mark reticle" style="display:none"><span></span></div>
       <div class="mark pip" style="display:none"></div>
-      <div class="mark ccip" style="display:none"></div>`
+      <div class="mark ccip" style="display:none"></div>
+      <canvas class="sightc" style="display:none"></canvas>
+      <div class="mark sel" style="display:none"><span></span></div>
+      <div class="mark cross" style="display:none"></div>
+      <div class="mark lead" style="display:none"></div>
+      <div class="mark lead2" style="display:none"></div>
+      <div class="cuewin" style="display:none"><b></b><i></i></div>
+      <div class="hints"></div>
+      <nav class="stations" aria-label="Stations"></nav>`
     container.appendChild(el)
     this.el = el
     this.$ = (s) => el.querySelector(s)
@@ -92,6 +130,16 @@ export class Hud {
     this.pip = this.$('.pip')
     this.ccip = this.$('.ccip')
     this.vignette = this.$('.vignette')
+    this.sightc = this.$('.sightc')
+    this.sel = this.$('.sel')
+    this.cross = this.$('.cross')
+    this.lead = this.$('.lead')
+    this.lead2 = this.$('.lead2')
+    this.cuewin = this.$('.cuewin')
+    this.hints = this.$('.hints')
+    this.stationBar = this.$('.stations')
+    this.hintsUntil = 0
+    this.stationKey = ''
     this.beatIndex = 0
     this.lines = []
     this.units = null // null: the unit's own; 'imperial' | 'metric'
@@ -118,6 +166,63 @@ export class Hud {
   showKeys(text, s = 3) {
     this.keys.textContent = text
     this.keysUntil = performance.now() / 1000 + s
+  }
+
+  /**
+   * The station bar for the held unit (or none): a button per station, the
+   * active one pressed; a click switches (Battle.setStation), as Tab does.
+   */
+  setStations(pl) {
+    const bar = this.stationBar
+    const key = pl ? `${pl.unitIndex}:${pl.stations.join(',')}:${pl.station}:${pl.allStations ? 1 : 0}` : ''
+    if (key === this.stationKey) return
+    this.stationKey = key
+    bar.innerHTML = ''
+    if (!pl || pl.stations.length < 1) return
+    for (const st of pl.stations) {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.textContent = STATION_NAMES[st] ?? st
+      b.dataset.station = st
+      b.setAttribute('aria-pressed', String(st === pl.station && !pl.allStations))
+      b.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const battle = this.box.battle
+        try {
+          battle?.setStation?.(st)
+        } catch (err) {
+          this.say(err.message, 2)
+        }
+        e.currentTarget.blur()
+      })
+      bar.appendChild(b)
+    }
+    if (pl.stations.length > 1) {
+      const t = document.createElement('span')
+      t.className = 'tab'
+      t.textContent = 'Tab'
+      bar.appendChild(t)
+    }
+  }
+
+  /** The first take's hints (ROUND-2 §1.2): four lines for eight seconds, once for each kind (localStorage pt.hints). */
+  firstHints(kind, lines) {
+    if (!lines?.length) return false
+    let seen = {}
+    try {
+      seen = JSON.parse(localStorage.getItem('pt.hints') || '{}') || {}
+    } catch {
+      seen = {}
+    }
+    if (seen[kind]) return false
+    this.hints.textContent = lines.join('\n')
+    this.hintsUntil = performance.now() / 1000 + 8
+    try {
+      localStorage.setItem('pt.hints', JSON.stringify({ ...seen, [kind]: true }))
+    } catch {
+      // (no storage: the hints show this once in this page's life)
+    }
+    return true
   }
 
   setVisible(on) {
@@ -173,9 +278,15 @@ export class Hud {
       }
       this.msg.textContent = now < this.messageUntil ? this.message : ''
       if (now > this.keysUntil) this.keys.textContent = ''
+      if (now > this.hintsUntil && this.hints.textContent) this.hints.textContent = ''
     }
     const pl = sim.player
     this.drawPlot(pl)
+    this.setStations(pl)
+    this.drawSelection(pl)
+    for (const m of [this.cross, this.lead, this.lead2]) m.style.display = 'none'
+    this.sightc.style.display = 'none'
+    this.cuewin.style.display = 'none'
     if (!pl || !sim.state.alive[pl.unitIndex]) {
       this.inst.style.display = 'none'
       for (const m of [this.bracket, this.reticle, this.pip, this.ccip]) m.style.display = 'none'
@@ -201,6 +312,10 @@ export class Hud {
           `${st.bombs ? `bombs ${st.bombs}   ` : ''}${st.torpedoes ? `torpedo ${st.torpedoes}   ` : ''}fuel ${Math.floor(st.endurance / 60)} min`,
           st.home ? `home ${hdg(st.home.bearing)} ${imp ? `${(st.home.range / 1852).toFixed(0)} nm` : `${(st.home.range / 1000).toFixed(0)} km`}` : '',
           st.aa > 0 ? '<span class="warn">AA</span>' : '',
+          st.station === 'gunner' && st.gun ? `rear gun ${st.gun.rounds} rounds${st.gun.bears ? '' : '   <span class="warn">does not bear</span>'}` : '',
+          st.station === 'bombardier' ? `bombardier · run-in ${hdg(st.sight?.heading ?? st.heading)}${st.bombs ? `   bombs ${st.bombs}` : ''}` : '',
+          st.assist === 'assisted' && st.assisting?.length ? `assisted: ${st.assisting.join(', ')}` : '',
+          st.engaged === false ? 'on the record until you act' : '',
         ]
         this.inst.innerHTML = lines.filter(Boolean).join('\n')
       }
@@ -221,11 +336,19 @@ export class Hud {
       this.place(this.ccip, showCcip ? this.project(c.x, 0, c.z) : null)
       this.ccip.classList.toggle('on', !!c?.onTarget)
       let cue = ''
-      if (st.release && st.pitch < -20) cue = 'release'
+      const assisted = st.assist === 'assisted' || st.station === 'bombardier'
+      const cw = st.cue
+      if (assisted && cw?.on) cue = 'release now'
+      else if (st.release && st.pitch < -20) cue = 'release'
       else if (st.envelope && st.alt < 120) cue = st.envelope.ok ? 'in the envelope' : st.envelope.why
+      else if (assisted && cw?.kind === 'torpedo' && cw.value != null && cw.value < (cw.hi ?? 0) * 2) cue = cw.envelope?.ok ? 'in the envelope' : cw.envelope?.why ?? ''
       if (cue !== this.cue.textContent) this.cue.textContent = cue
+      this.cue.classList.toggle('on', cue === 'release now' || cue === 'release')
+      this.drawCueWindow(cw, rng)
       this.vignette.style.opacity = st.blackout > 0.9 ? 0.9 : st.blackout > 0.4 ? 0.45 : 0
       this.reticle.style.display = 'none'
+      if (st.station === 'gunner' && st.gun) this.drawGunSight(st.gun, rng)
+      if (st.station === 'bombardier' && st.sight) this.drawLevelSight(st.sight, sim)
     } else {
       if (textNow) {
         const fires = st.fires.reduce((a, b) => a + b, 0)
@@ -240,6 +363,10 @@ export class Hud {
           `damage: fighting ${Math.round(Math.max(0, 1 - st.fight) * 100)} %  afloat ${Math.round(Math.max(0, 1 - st.float) * 100)} %${Math.abs(st.list) > 1 ? `  list ${Math.abs(st.list).toFixed(0)}°` : ''}${fires ? `  fires ${fires}` : ''}`,
           st.systemsOut.length ? `<span class="warn">${st.systemsOut.join(', ')}</span>` : '',
           st.torpedoesReady ? `torpedoes ready: ${st.torpedoesReady}` : '',
+          st.helmHeld ? `helm: ${st.helmHeld === 'record' ? 'on the record’s course' : `holding ${hdg(st.helmHeld.heading)} at ${spd(st.helmHeld.speed)}`}` : '',
+          st.mainTarget >= 0 ? `main battery on ${sim.slots[st.mainTarget]?.name ?? 'its target'}` : '',
+          st.director ? `AA director${st.director.aimed >= 0 ? ` · ${st.director.range != null ? rng(st.director.range) : ''}` : ' · no aircraft on the aim'}${st.director.firing ? '   firing' : ''}` : '',
+          st.engaged === false ? 'on the record until you act' : '',
         ]
         this.inst.innerHTML = lines.filter(Boolean).join('\n')
       }
@@ -254,6 +381,15 @@ export class Hud {
         this.place(this.reticle, this.project(px, 0, pz))
         this.reticle.querySelector('span').textContent = `${rng(inp.aimRange)}${st.aimTof != null ? ` · ${st.aimTof.toFixed(1)} s` : ''}`
       } else this.reticle.style.display = 'none'
+      if (st.director) {
+        this.drawGunSight(st.director, rng)
+        this.reticle.style.display = 'none'
+        this.pip.style.display = 'none'
+        this.ccip.style.display = 'none'
+        this.cue.textContent = ''
+        this.vignette.style.opacity = 0
+        return
+      }
       const t = st.target
       if (t && box.aid !== 'record') {
         this.place(this.bracket, this.project(s.pos[3 * t.index], 12, s.pos[3 * t.index + 2]))
@@ -264,6 +400,133 @@ export class Hud {
       this.cue.textContent = ''
       this.vignette.style.opacity = 0
     }
+  }
+
+  /** The bracket on the selected unit (dashed), with its name; not on the player's own unit seen from it. */
+  drawSelection(pl) {
+    const box = this.box
+    const sim = box.sim
+    const i = box.selected
+    const cm = box.cameraMode
+    if (i == null || !sim || sim.state.alive[i] !== 1 || (pl && pl.unitIndex === i && cm !== 'orbit' && cm !== 'free')) {
+      this.sel.style.display = 'none'
+      return
+    }
+    const s = sim.state
+    const u = sim.slots[i]
+    const p = this.project(s.pos[3 * i], s.pos[3 * i + 1] + (u.kind === 'ship' ? 8 : 0), s.pos[3 * i + 2])
+    if (!p) {
+      this.sel.style.display = 'none'
+      return
+    }
+    let size = 26
+    if (u.kind === 'ship') {
+      const L = sim._X[i].model?.L ?? 100
+      const h = s.heading[i] * DEG
+      const a = this.project(s.pos[3 * i] + Math.sin(h) * L * 0.5, 4, s.pos[3 * i + 2] - Math.cos(h) * L * 0.5)
+      const b = this.project(s.pos[3 * i] - Math.sin(h) * L * 0.5, 4, s.pos[3 * i + 2] + Math.cos(h) * L * 0.5)
+      if (a && b) size = Math.max(26, Math.min(400, Math.hypot(a[0] - b[0], a[1] - b[1]) + 14))
+    }
+    this.place(this.sel, p)
+    this.sel.style.width = `${size}px`
+    this.sel.style.height = `${Math.max(22, u.kind === 'ship' ? size * 0.4 : size)}px`
+    const label = u.kind === 'aircraft' && !u.parked ? u.name : u.name
+    const span = this.sel.querySelector('span')
+    if (span.textContent !== label) span.textContent = label
+  }
+
+  /**
+   * A gun station's sight (the AA director's or the gunner's): the cross on
+   * the aim (the screen's centre when the camera looks along it), the lead
+   * pips on the aimed aircraft, the bracket on it with its range.
+   */
+  drawGunSight(g, rng) {
+    const box = this.box
+    const sim = box.sim
+    const s = sim.state
+    const R = g.range ?? 1500
+    const along = box.cameraMode === 'gun'
+    const c = along ? [innerWidth / 2, innerHeight / 2] : this.project(g.eye[0] + g.dir[0] * R, g.eye[1] + g.dir[1] * R, g.eye[2] + g.dir[2] * R)
+    this.place(this.cross, c)
+    this.cross.classList.toggle('on', g.cone > 0 && g.firing)
+    this.cross.classList.toggle('off', g.bears === false)
+    if (g.aimed >= 0) {
+      const j = g.aimed
+      this.place(this.bracket, this.project(s.pos[3 * j], s.pos[3 * j + 1], s.pos[3 * j + 2]))
+      this.bracket.querySelector('span').textContent = g.range != null ? rng(g.range) : ''
+      const showLead = box.aid !== 'record'
+      this.place(this.lead, showLead && g.lead ? this.project(g.lead[0], g.lead[1], g.lead[2]) : null)
+      this.place(this.lead2, showLead && g.leadLight ? this.project(g.leadLight[0], g.leadLight[1], g.leadLight[2]) : null)
+    } else this.bracket.style.display = 'none'
+  }
+
+  /** The level sight: the predicted impact, the drift line through it along the track, the target's bracket. */
+  drawLevelSight(sight, sim) {
+    const c = this.sightc
+    const W = innerWidth
+    const H = innerHeight
+    if (c.width !== W || c.height !== H) {
+      c.width = W
+      c.height = H
+    }
+    c.style.display = ''
+    const g = c.getContext('2d')
+    g.clearRect(0, 0, W, H)
+    const p = this.project(sight.x, 0, sight.z)
+    const a = this.project(sight.x - sight.drift[0] * 3000, 0, sight.z - sight.drift[1] * 3000)
+    const b = this.project(sight.x + sight.drift[0] * 3000, 0, sight.z + sight.drift[1] * 3000)
+    g.strokeStyle = sight.onTarget ? 'rgba(246,227,160,.95)' : 'rgba(255,255,255,.75)'
+    g.lineWidth = 1
+    if (a && b) {
+      g.beginPath()
+      g.moveTo(a[0], a[1])
+      g.lineTo(b[0], b[1])
+      g.stroke()
+    }
+    if (p) {
+      g.beginPath()
+      g.arc(p[0], p[1], 9, 0, Math.PI * 2)
+      g.moveTo(p[0] - 16, p[1])
+      g.lineTo(p[0] - 5, p[1])
+      g.moveTo(p[0] + 5, p[1])
+      g.lineTo(p[0] + 16, p[1])
+      g.stroke()
+    }
+    const s = sim.state
+    const t = sight.target
+    if (t >= 0 && s.alive[t]) {
+      this.place(this.bracket, this.project(s.pos[3 * t], 10, s.pos[3 * t + 2]))
+      this.bracket.querySelector('span').textContent = sim.slots[t].name
+    }
+  }
+
+  /** The release cue's window (ROUND-2 §1.2): where the release stands against the window (a torpedo's range band, a bomb's miss against the hull). */
+  drawCueWindow(cw, rng) {
+    const el = this.cuewin
+    if (!cw || cw.value == null || cw.hi == null) return
+    let lo
+    let hi
+    let v
+    let span
+    if (cw.kind === 'torpedo') {
+      if (cw.value > cw.hi * 2.5) return
+      span = cw.hi * 1.5
+      lo = cw.lo / span
+      hi = cw.hi / span
+      v = Math.min(1, cw.value / span)
+    } else {
+      if (cw.value > cw.hi * 8) return
+      span = Math.max(1, cw.hi * 4)
+      lo = 0
+      hi = cw.hi / span
+      v = Math.min(1, cw.value / span)
+    }
+    el.style.display = ''
+    const b = el.querySelector('b')
+    b.style.left = `${lo * 100}%`
+    b.style.width = `${Math.max(1, (hi - lo) * 100)}%`
+    el.querySelector('i').style.left = `${v * 100}%`
+    el.title = cw.kind === 'torpedo' ? `range ${rng(cw.value)}` : `${rng(cw.value)} off`
   }
 
   /** The plot inset: radar contacts or what the lookouts see, north up, 30 km to the rim (or 15 nm). */

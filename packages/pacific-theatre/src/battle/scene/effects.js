@@ -398,8 +398,11 @@ export class EffectsRenderer {
         const uy = isLine ? e.dy / len : e.dy
         const uz = isLine ? e.dz / len : e.dz
         const v = 800
-        const n = e.data === 1 ? 6 : 3
-        for (let k = 0; k < n; k++) this.add.add({ x: e.x + ux * k * 30, y: e.y + uy * k * 30, z: e.z + uz * k * 30, vx: ux * v, vy: uy * v, vz: uz * v, born: t + k * 0.05, life: Math.min(1.5, (isLine ? len : 600) / v), s0: 1.6, s1: 1.2, kind: K.spark, r: 1, g: 0.85, b: 0.5 })
+        // (data 2: a gun station's tracer, ROUND-2 §3: more rounds, larger, redder, so a stream reads at the aim point)
+        const aa = e.data === 2
+        const n = aa ? 8 : e.data === 1 ? 6 : 3
+        const sz = aa ? 3.2 : 1.6
+        for (let k = 0; k < n; k++) this.add.add({ x: e.x + ux * k * 30, y: e.y + uy * k * 30, z: e.z + uz * k * 30, vx: ux * v, vy: uy * v, vz: uz * v, born: t + k * 0.05, life: Math.min(aa ? 4 : 1.5, (isLine ? len : 600) / v), s0: sz, s1: sz * 0.75, kind: K.spark, r: 1, g: aa ? 0.55 : 0.85, b: aa ? 0.3 : 0.5 })
         return
       }
       case FX.launch:

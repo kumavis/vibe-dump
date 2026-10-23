@@ -1180,9 +1180,12 @@ function aaDirector(sim, pl, i, x, dt) {
     const side = dir[0] * Math.cos(h) + dir[2] * Math.sin(h) >= 0 ? 1 : -1
     const ox = s.pos[3 * i] + Math.sin(h) * along + Math.cos(h) * side * m.B * 0.4
     const oz = s.pos[3 * i + 2] - Math.cos(h) * along + Math.sin(h) * side * m.B * 0.4
-    const oy = (m.deck ?? 8) + 3
-    const light = Math.min(R, 2000)
-    sim.fx(FX.tracer, ox, oy, oz, { unit: i, dx: eye[0] + dir[0] * light - ox + r.gauss() * light * 0.01, dy: eye[1] + dir[1] * light - oy + r.gauss() * light * 0.01, dz: eye[2] + dir[2] * light - oz + r.gauss() * light * 0.01, size: 1, data: 1 })
+    // (the stream starts 40 m out along the aim, so the eye on the ship's deck sees it go, not a flare at its feet)
+    const ox2 = ox + dir[0] * 40
+    const oy = (m.deck ?? 8) + 3 + dir[1] * 40
+    const oz2 = oz + dir[2] * 40
+    const light = Math.min(R, 2500)
+    sim.fx(FX.tracer, ox2, oy, oz2, { unit: i, dx: eye[0] + dir[0] * light - ox2 + r.gauss() * light * 0.01, dy: eye[1] + dir[1] * light - oy + r.gauss() * light * 0.01, dz: eye[2] + dir[2] * light - oz2 + r.gauss() * light * 0.01, size: 1, data: 2 })
     if (m.aa.some((a) => a.heavy) && R > 600) sim.fx(FX.flash, eye[0] + dir[0] * R + r.gauss() * R * 0.02, eye[1] + dir[1] * R + r.gauss() * R * 0.02, eye[2] + dir[2] * R + r.gauss() * R * 0.02, { unit: i, size: 1, data: 1 })
   }
   if (j < 0 || s.alive[j] !== 1) return
@@ -1777,8 +1780,8 @@ function rearGunner(sim, pl, i, x, dt) {
   pl.gunFxT = (pl.gunFxT ?? 0) - dt
   if (pl.gunFxT <= 0) {
     pl.gunFxT = 0.1
-    const L = 500
-    sim.fx(FX.tracer, eye[0], eye[1], eye[2], { unit: i, dx: dir[0] * L + ov[0] * 0.6, dy: dir[1] * L + ov[1] * 0.6, dz: dir[2] * L + ov[2] * 0.6, size: 0.5, data: 1 })
+    const L = 600
+    sim.fx(FX.tracer, eye[0] + dir[0] * 15, eye[1] + dir[1] * 15, eye[2] + dir[2] * 15, { unit: i, dx: dir[0] * L + ov[0] * 0.6, dy: dir[1] * L + ov[1] * 0.6, dz: dir[2] * L + ov[2] * 0.6, size: 0.5, data: 2 })
   }
   if (j < 0 || s.alive[j] !== 1) return
   const R = Math.hypot(s.pos[3 * j] - eye[0], s.pos[3 * j + 1] - eye[1], s.pos[3 * j + 2] - eye[2])

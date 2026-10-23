@@ -32,15 +32,32 @@
 // (app.setMode('watch')). The promise takeMoment returns resolves with the
 // score and the outcome when the sortie ends or the after-card is asked for
 // (finish()).
+//
+// Round two (ROUND-2.md §4): any unit is a door. select(index) marks a unit
+// (a click or a tap in the box does it too: scene/pick.js); take({ unit |
+// group, index?, station, t? }) takes it at a station at the current time
+// (or t) and resolves, like takeMoment, when the sortie ends, with
+// { sortie, score, outcome, reason }; setStation(name) switches; release()
+// gives it back. bookmarks are the moments; assist is 'assisted' or 'pilot'
+// (App keeps it); firstDoor is the battle file's. The 'battle' events gain
+// 'select', 'take', 'station', 'units' (L) and 'unit-card' (Enter on a
+// selection); 'after' carries the sortie.
 
 import { createSim } from './sim/index.js'
 import { BoxScene } from './scene/box.js'
 import { Input } from './controls/input.js'
-import { AIRCRAFT_HELP, SHIP_HELP, TOUCH_HELP } from './controls/bindings.js'
+import { AIRCRAFT_HELP, SHIP_HELP, TOUCH_HELP, HINTS } from './controls/bindings.js'
 import { poseToBox, poseToTable } from '../geo.js'
 
 const log = (...a) => console.info('[battle]', ...a)
 const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
+// ROUND-2 §3: the speed lists of a held unit
+const AIR_SCALES = { assisted: [0.5, 1, 2], pilot: [1] }
+const SHIP_SCALES = [1, 2, 4, 8]
+const FLY_HOME = [4, 8, 16, 32] // after a bookmark's checkpoint an aircraft may fly home (R7 D11)
+const ASSISTS = ['assisted', 'pilot']
+// the camera each station looks through
+const STATION_CAMERA = { helm: 'bridge', main: 'director', aa: 'gun', torpedoes: 'director', pilot: 'chase', gunner: 'gun', bombardier: 'bombsight' }
 
 export class Battle {
   constructor(app) {
@@ -56,13 +73,192 @@ export class Battle {
     this.aid = 'standard'
     this._state = null
     this._moment = null
+    this._take = null
     this._question = null
     this._keys = new AbortController()
+    this._assist = 'assisted'
+    this.selected = null
   }
 
   get state() {
     if (!this._state) return null
-    return { ...this._state, t: this.sim ? this.sim.t : this._state.t, mode: this.input ? 'moment' : 'watch', momentId: this.momentId ?? this._state.momentId }
+    const pl = this.sim?.player
+    return {
+      ...this._state,
+      t: this.sim ? this.sim.t : this._state.t,
+      mode: this.input ? 'moment' : 'watch',
+      momentId: this.momentId ?? this._state.momentId,
+      selected: this.selected,
+      station: pl?.station ?? null,
+      held: pl ? { index: pl.unitIndex, id: this.sim.slots[pl.unitIndex].id, kind: pl.kind, engaged: pl.engaged, role: pl.role } : null,
+      assist: this._assist,
+      sortie: this.sim?.sortie ?? null,
+    }
+  }
+
+  // --- round two: the settings, the bookmarks and the first door (ROUND-2 §4) ------------------------------
+
+  /** 'assisted' (the default) or 'pilot'; App persists it. A held aircraft's speed list follows it. */
+  get assist() {
+    return this._assist
+  }
+
+  set assist(v) {
+    if (!ASSISTS.includes(v)) throw new Error(`assist “${v}”: one of ${ASSISTS.join(', ')}`)
+    this._assist = v
+    if (this.sim) this.sim.assist = v
+    if (this.input && this.sim?.player?.kind === 'aircraft') {
+      const list = this.speeds
+      if (!list.includes(this.timeScale)) this.timeScale = v === 'assisted' && this.sim.player && !this.sim.momentState ? 0.5 : list.reduce((a, b) => (Math.abs(b - this.timeScale) < Math.abs(a - this.timeScale) ? b : a), list[0])
+    }
+    this.scene?.hud?.say(v === 'assisted' ? 'Assisted flight' : 'Pilot', 1.5)
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'assist', assist: v } }))
+  }
+
+  /** The moments as the bar's marks: { id, title, t, label, role, kind, station, objective, durationS, timeScale }. */
+  get bookmarks() {
+    const sim = this.sim
+    if (!sim) return []
+    return [...sim.record.moments.values()].map((m) => ({
+      id: m.id,
+      title: m.title,
+      t: m.t,
+      label: sim.clock.label(m.t, { seconds: m.t % 60 !== 0 }),
+      role: m.role,
+      kind: m.role?.kind ?? null,
+      station: m.role?.kind === 'aircraft' ? 'pilot' : m.objective?.kind === 'gunnery' ? 'main' : m.objective?.kind === 'torpedo' ? 'torpedoes' : 'helm',
+      objective: m.objective?.kind ?? null,
+      durationS: m.durationS ?? null,
+      timeScale: m.timeScale ?? null,
+    }))
+  }
+
+  /** The battle file's first door (ROUND-2 §7: { role, t, title, text }), or null. */
+  get firstDoor() {
+    const fd = this.loaded?.battle?.firstDoor
+    if (!fd) return null
+    const sim = this.sim
+    let at = null
+    try {
+      at = sim && fd.t != null ? sim.clock.parse(fd.t) : null
+    } catch {
+      at = null
+    }
+    return { ...fd, at }
+  }
+
+  /** The speeds the bar offers now: watching 1× to 60×; a held aircraft ×0.5, ×1, ×2 (Assisted) or ×1 (Pilot); a ship 1× to 8× (a bookmark's own list). */
+  get speeds() {
+    const sim = this.sim
+    const pl = sim?.player
+    if (!this.input || !pl) return WATCH_SCALES
+    const ms = sim.momentState
+    if (pl.kind === 'aircraft') {
+      const base = AIR_SCALES[this._assist] || AIR_SCALES.assisted
+      return ms && ms.checkpoint ? [...base, ...FLY_HOME] : base
+    }
+    if (ms && !ms.done) return [ms.timeScale, ms.timeScale * 2, 4, 8, 16, 32].filter((v, i, a) => v >= ms.timeScale && v <= ms.maxTimeScale && a.indexOf(v) === i).sort((a, b) => a - b)
+    return SHIP_SCALES
+  }
+
+  /** The scale a held unit runs at by default (the threat drop-back returns to it). */
+  baseScale() {
+    const sim = this.sim
+    const pl = sim?.player
+    if (!pl) return 1
+    if (pl.kind === 'aircraft') return this._assist === 'assisted' ? 0.5 : 1
+    return sim.momentState && !sim.momentState.done ? sim.momentState.timeScale : 1
+  }
+
+  // --- round two: select, take, station, release (ROUND-2 §4) --------------------------------------------------
+
+  /** Mark a unit (or none): the bracket, the orbit following it (while watching). Selecting never changes the sim. */
+  select(index, { follow = true } = {}) {
+    const sim = this.sim
+    if (!sim) return null
+    const i = index == null || index < 0 || index >= sim.capacity || !sim.state.alive[index] ? null : index
+    this.selected = i
+    this.scene?.select(i)
+    if (follow && i != null && !this.input && this.scene) this.scene.setCamera('orbit', { unitIndex: i })
+    const row = i == null ? null : sim.units().find((r) => r.index === i) ?? null
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'select', index: i, unit: row } }))
+    return row
+  }
+
+  /**
+   * Take a unit at a station (ROUND-2 §4): { unit } for a ship (its id), {
+   * group } or { group, index } for an aircraft, station, and t (a time to go
+   * to first; a changed box goes back to the record there). Throws the
+   * reason when the unit cannot be taken (sim.takeControl). Resolves with {
+   * sortie, score, outcome, reason } when the sortie ends.
+   */
+  take(role = {}, { scripted = false } = {}) {
+    let sim = this.sim
+    if (!sim) throw new Error('take() comes after enter()')
+    const { t = null, ...r } = role
+    if (this.input) this.release()
+    if (t != null) {
+      const tt = sim.clock.clamp(sim.clock.parse(t))
+      if (Math.abs(tt - sim.t) > 0.5) {
+        if (!sim.diverged || tt > sim.t) sim.setTime(tt)
+        else sim = this.rebuild(tt)
+      }
+    }
+    const pl = sim.takeControl(r)
+    pl.scripted = scripted
+    this.momentId = null
+    this._checkpointSeen = false
+    this.timeScale = pl.kind === 'aircraft' && this._assist === 'assisted' ? 0.5 : 1
+    this.bindPlayer(pl, { scripted })
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'take', role: pl.role, index: pl.unitIndex, station: pl.station } }))
+    log('take', sim.slots[pl.unitIndex].id, pl.station, sim.clock.label(sim.t), pl.engaged ? 'engaged' : 'soft')
+    return new Promise((resolve) => {
+      this._take = { resolve, role: pl.role }
+    })
+  }
+
+  /** The camera, the controls, the HUD and the mode for a unit just taken. */
+  bindPlayer(pl, { scripted = false, cameraMode = null, zoom = 1 } = {}) {
+    const app = this.app
+    const sc = this.scene
+    this.select(pl.unitIndex, { follow: false })
+    sc?.setCamera(cameraMode || STATION_CAMERA[pl.station] || (pl.kind === 'aircraft' ? 'chase' : 'bridge'), { unitIndex: pl.unitIndex, zoom })
+    // (the mode first: Input builds the touch controls only for a live take)
+    app.setMode('moment')
+    this.input?.dispose()
+    this.input = new Input(app, this)
+    if (!scripted && pl.kind === 'aircraft' && pl.station === 'pilot') this.input.requestLock()
+    this.running = true
+    const touch = matchMedia?.('(pointer: coarse)')?.matches
+    if (sc) {
+      sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
+      sc.hud.setStations(pl)
+      if (!scripted) sc.hud.firstHints(pl.kind, touch ? HINTS.touch : HINTS[pl.kind])
+    }
+    if (touch && this.aid === 'standard') this.setAid('guided')
+  }
+
+  /** Switch the held unit's station (Tab, or the bar). */
+  setStation(name) {
+    const sim = this.sim
+    const pl = sim?.player
+    if (!pl) throw new Error('setStation: nobody holds a unit')
+    sim.setStation(name)
+    const sc = this.scene
+    sc?.setCamera(STATION_CAMERA[name] || 'chase', { unitIndex: pl.unitIndex })
+    this.input?.onStation?.(name)
+    sc?.hud.setStations(pl)
+    sc?.hud.say(STATION_WORDS[name] ?? name, 1.5)
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'station', station: name, index: pl.unitIndex } }))
+    return name
+  }
+
+  /** The next (or previous) station of the held unit. */
+  cycleStation(dir = 1) {
+    const pl = this.sim?.player
+    if (!pl || pl.stations.length < 2) return null
+    const k = pl.stations.indexOf(pl.station)
+    return this.setStation(pl.stations[(k + dir + pl.stations.length) % pl.stations.length])
   }
 
   /**
@@ -101,7 +297,7 @@ export class Battle {
       const { battle, kits, pack } = loaded
       if (!battle) throw new Error(`box ${boxId} has no battle.json`)
       // 2. the sim at t
-      const sim = createSim(battle, kits, { seed: momentId ?? '', warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration })
+      const sim = createSim(battle, kits, { seed: momentId ?? '', warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration, assist: this._assist })
       const t0 = t != null ? sim.clock.clamp(sim.clock.parse(t)) : battle.stops?.length ? sim.clock.clamp(sim.clock.parse(battle.stops[0].t)) : 0
       sim.setTime(t0)
       this.sim = sim
@@ -233,14 +429,22 @@ export class Battle {
     this.input?.update(realDt)
     if (!this.running) return
     const ms = sim.momentState
-    if (ms && !ms.done && this.input) {
-      // a threat drops a compressed scale back to the moment's own (R7 §4.1)
-      if (sim.threat && this.timeScale > ms.timeScale) {
-        this.timeScale = ms.timeScale
-        this.scene?.hud.say(`${sim.threatWhy}: back to ×${ms.timeScale}`, 2)
+    if (this.input && sim.player && (!ms || !ms.done)) {
+      // a threat drops a compressed scale back to the held unit's own (R7 §4.1; ×0.5 for an aircraft in Assisted)
+      const base = this.baseScale()
+      if (sim.threat && this.timeScale > base) {
+        this.timeScale = base
+        this.scene?.hud.say(`${sim.threatWhy}: back to ×${base}`, 2)
       }
     }
     sim.advance(Math.min(0.1, realDt) * this.timeScale)
+    if (this._take && this.input) {
+      // a free take ends with the unit's fate (or when something else let go of it)
+      const pl = sim.player
+      if (!pl) this.finish('released')
+      else if (sim.state.alive[pl.unitIndex] !== 1) this.finish(sim._score?.how ?? 'lost')
+      else if (sim.t >= sim.clock.duration) this.finish('clock')
+    }
     if (ms && this.input) {
       if (ms.checkpoint && !this._checkpointSeen) {
         this._checkpointSeen = true
@@ -293,18 +497,19 @@ export class Battle {
     const app = this.app
     const { battle, kits, pack, box } = this.loaded
     if (this.input) this.release()
-    const sim = createSim(battle, kits, { seed, warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration })
+    const sim = createSim(battle, kits, { seed, warn: app.warn, ground: pack, proj: box.proj, exaggeration: box.exaggeration, assist: this._assist })
     sim.setTime(t)
     this.sim = sim
     this.scene.setSim(sim)
+    this.select(null)
     this.scene.hud.beatIndex = sim.beats.length
     return sim
   }
 
   play(timeScale = this.timeScale) {
-    const ms = this.sim?.momentState
-    const max = this.input && ms && !ms.done ? this.maxScale() : 60
-    this.timeScale = Math.max(1, Math.min(max, timeScale))
+    const max = this.input ? this.maxScale() : 60
+    const min = this.input ? Math.min(...this.speeds) : 0.5
+    this.timeScale = Math.max(min, Math.min(max, timeScale))
     this.running = true
   }
 
@@ -313,17 +518,13 @@ export class Battle {
   }
 
   maxScale() {
-    const ms = this.sim?.momentState
-    if (!ms) return 60
-    const air = this.sim.player?.kind === 'aircraft'
-    // after the checkpoint an aircraft may fly home at up to 32× (R7 D11)
-    return air && ms.checkpoint ? 32 : ms.maxTimeScale
+    // (a held unit's list: ROUND-2 §3; after a bookmark's checkpoint an aircraft may fly home at up to 32×, R7 D11)
+    return Math.max(...this.speeds)
   }
 
-  /** Z / + / −: the next time scale (a moment's within its bounds; watching 1× to 60×). */
+  /** Z / + / −: the next time scale (a held unit's list; watching 1× to 60×). */
   cycleTime(dir = 1) {
-    const ms = this.sim?.momentState
-    const list = this.input && ms ? [ms.timeScale, ms.timeScale * 2, 4, 8, 16, 32].filter((v, i, a) => v >= ms.timeScale && v <= this.maxScale() && a.indexOf(v) === i).sort((a, b) => a - b) : WATCH_SCALES
+    const list = this.speeds
     const i = list.findIndex((v) => v >= this.timeScale)
     const j = dir > 0 ? (i + 1) % list.length : (i - 1 + list.length) % list.length
     this.timeScale = list[Math.max(0, j)]
@@ -378,17 +579,11 @@ export class Battle {
     const sc = this.scene
     const obj = m.objective?.kind
     const mode = pl.kind === 'aircraft' ? 'chase' : obj === 'gunnery' ? 'director' : 'bridge'
-    sc.setCamera(mode, { unitIndex: pl.unitIndex, zoom: obj === 'gunnery' ? 4 : 1 })
-    // (the mode first: Input builds the touch controls only for a live moment)
-    app.setMode('moment')
-    this.input = new Input(app, this)
-    if (!scripted && pl.kind === 'aircraft') this.input.requestLock()
-    this.timeScale = sim.momentState.timeScale
-    this.running = true
-    const touch = matchMedia?.('(pointer: coarse)')?.matches
-    sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
+    this._take = null
+    this.bindPlayer(pl, { scripted, cameraMode: mode, zoom: obj === 'gunnery' ? 4 : 1 })
+    // (an aircraft bookmark in Assisted runs at half time, ROUND-2 §1.2)
+    this.timeScale = pl.kind === 'aircraft' && this._assist === 'assisted' ? 0.5 : sim.momentState.timeScale
     if (m.objective?.text) sc.hud.say(m.objective.text, 5)
-    if (touch && this.aid === 'standard') this.setAid('guided')
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'moment', momentId } }))
     log('moment', momentId, pl.kind, sim.slots[pl.unitIndex].name, sim.clock.label(sim.t))
     return new Promise((resolve) => {
@@ -406,13 +601,16 @@ export class Battle {
   /** The end of the sortie (or the card asked for): the promise resolves with the score and the outcome. */
   finish(reason = 'card') {
     const sim = this.sim
-    const mo = this._moment
+    const mo = this._moment || this._take
     if (!sim || !mo) return null
     this._moment = null
-    const result = { score: sim.score, outcome: sim.outcome, reason, momentId: mo.id, restart: sim.momentState?.restart ?? null }
+    this._take = null
+    const result = { score: sim.score, outcome: sim.outcome, reason, momentId: mo.id ?? null, restart: mo.id ? sim.momentState?.restart ?? null : null, sortie: null }
     // (the kind before the controls go back: releasing them lets go of the player)
-    const kind = sim.player?.kind ?? sim.record.moments.get(mo.id)?.role?.kind
+    const kind = sim.player?.kind ?? (mo.id ? sim.record.moments.get(mo.id)?.role?.kind : mo.role?.kind)
     if (this.input) this.releaseControls()
+    else sim.releaseControl()
+    result.sortie = sim.sortie
     this.scene?.hud.say(endLine(sim, reason, kind), 6)
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'after', ...result } }))
     mo.resolve(result)
@@ -421,8 +619,9 @@ export class Battle {
 
   /** Back to watching at the current t; the sim keeps the diverged state until leave(). */
   release() {
-    if (this._moment) return this.finish('released')
+    if (this._moment || this._take) return this.finish('released')
     this.releaseControls()
+    return null
   }
 
   releaseControls() {
@@ -433,6 +632,7 @@ export class Battle {
     sim?.releaseControl()
     this.app.setMode('watch')
     if (this.scene && i >= 0) this.scene.setCamera('orbit', { unitIndex: i, distance: 1500 })
+    this.scene?.hud.setStations(null)
     if (this.timeScale < 1) this.timeScale = 1
     this.running = true
   }
@@ -479,6 +679,24 @@ export class Battle {
           this.keepGoing()
           return
         }
+        if (this.app.mode === 'watch' && !this._question && this.sim && !inField(e)) {
+          // ROUND-2 §4: L the unit list, Enter the selection's card, Tab the next unit (Shift: the previous)
+          if (e.code === 'KeyL' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'units' } }))
+            return
+          }
+          if ((e.code === 'Enter' || e.code === 'NumpadEnter') && this.selected != null && onCanvas(e)) {
+            e.preventDefault()
+            const row = this.sim.units().find((r) => r.index === this.selected) ?? null
+            this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'unit-card', index: this.selected, unit: row } }))
+            return
+          }
+          if (e.code === 'Tab' && onCanvas(e)) {
+            e.preventDefault()
+            this.selectNext(e.shiftKey ? -1 : 1)
+            return
+          }
+        }
         if (this.app.mode !== 'watch' || !this._question) return
         if (e.code === 'KeyY' || e.code === 'Enter') {
           const q = this._question
@@ -495,12 +713,25 @@ export class Battle {
     )
   }
 
+  /** Tab in watch: the next unit of the list that is afloat or in the air (ships first, in the record's order). */
+  selectNext(dir = 1) {
+    const sim = this.sim
+    if (!sim) return null
+    const rows = sim.units().filter((r) => r.alive === 1 && !(r.kind === 'aircraft' && r.state?.parked))
+    if (!rows.length) return null
+    const k = rows.findIndex((r) => r.index === this.selected)
+    const row = rows[(k + dir + rows.length) % rows.length] ?? rows[0]
+    this.select(row.index, { follow: false })
+    this.scene?.setCamera('orbit', { unitIndex: row.index, distance: row.kind === 'ship' ? 2500 : 600 })
+    return row
+  }
+
   /** Back to the table at the battle's date; the box is forgotten. */
   async leave() {
     const app = this.app
     const id = this._state?.boxId ?? this.loaded?.box.id
     log('leave', id)
-    if (this._moment) this.finish('left')
+    if (this._moment || this._take) this.finish('left')
     if (this.input) this.releaseControls()
     const s = this.scene
     const table = app.table && app.table.rig ? app.table : null
@@ -529,6 +760,7 @@ export class Battle {
     }
     if (id) table?.outline?.(id, false)
     this._keys.abort()
+    this.selected = null
     this.sim = null
     this._state = null
     this.loaded = null
@@ -539,6 +771,14 @@ export class Battle {
     app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave', boxId: id } }))
   }
 }
+
+const STATION_WORDS = { helm: 'Helm', main: 'Main battery', aa: 'Anti-aircraft', torpedoes: 'Torpedoes', pilot: 'Pilot', gunner: 'Gunner', bombardier: 'Bombardier' }
+/** Whether a key went to a field of the page (a list's filter, a button) rather than the box. */
+const inField = (e) => {
+  const el = e.target
+  return !!el && el !== document.body && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(el.tagName) || !!el.closest?.('[role="dialog"], [role="listbox"], .card, .unitlist'))
+}
+const onCanvas = (e) => !inField(e)
 
 /** The line the end of a sortie leaves on the screen (the card's is the UI's). */
 function endLine(sim, reason, kind) {

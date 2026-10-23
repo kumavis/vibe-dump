@@ -6,7 +6,10 @@
 // 8×, 16×: fields of 15°, 7.5°, 3.75°) laid along the main battery's aim, and
 // the bomb sight down the nose. Only one drives the camera at a time; the
 // rig is disabled while another does (App's setMode turns it off in a
-// moment as well).
+// moment as well). Round two (ROUND-2 §4): 'gun' looks along a gun
+// station's aim (the AA director's from the ship's deck, the gunner's from
+// the aircraft), and 'bombsight' down at the level sight's predicted
+// impact with the aircraft's track up the screen.
 
 import * as THREE from 'three'
 
@@ -17,7 +20,7 @@ const F = new THREE.Vector3()
 const U = new THREE.Vector3()
 const DEG = Math.PI / 180
 
-export const CAMERA_MODES = ['free', 'orbit', 'chase', 'bridge', 'director', 'sight']
+export const CAMERA_MODES = ['free', 'orbit', 'chase', 'bridge', 'director', 'sight', 'gun', 'bombsight']
 export const ZOOMS = [1, 4, 8, 16]
 
 export class Cameras {
@@ -130,6 +133,32 @@ export class Cameras {
       cam.up.set(0, 1, 0)
       cam.lookAt(W)
       fov = air ? 65 : 55
+    } else if (this.mode === 'gun') {
+      // along the gun station's aim: the AA director's on the ship, the gunner's in the aircraft
+      const inp = sim.player?.unitIndex === i ? sim.player.input : null
+      const air = u.kind === 'aircraft'
+      if (air) {
+        F.set(0, 0, -1).applyQuaternion(Q)
+        U.set(0, 1, 0).applyQuaternion(Q)
+        cam.position.set(x, y, z).addScaledVector(F, -2.5).addScaledVector(U, 1.4)
+      } else cam.position.set(x, y + (m.deck ?? 8) + 7, z)
+      const az = ((inp?.aimAz ?? s.heading[i] + (air ? 180 : 90)) * DEG) + this.look.yaw
+      const el = Math.max(-0.2, Math.min(1.5, (inp?.aimEl ?? 10) * DEG + this.look.pitch))
+      W.set(cam.position.x + Math.sin(az) * Math.cos(el) * 1000, cam.position.y + Math.sin(el) * 1000, cam.position.z - Math.cos(az) * Math.cos(el) * 1000)
+      cam.up.set(0, 1, 0)
+      cam.lookAt(W)
+      fov = (air ? 60 : 50) / Math.max(1, this.zoom)
+    } else if (this.mode === 'bombsight') {
+      // the level sight: down at the predicted impact, the aircraft's track up the screen
+      const st = sim.player?.unitIndex === i ? sim.player.state : null
+      const h = s.heading[i] * DEG
+      cam.position.set(x, y - 2, z)
+      const c = st?.sight || st?.ccip
+      if (c) W.set(c.x, 0, c.z)
+      else W.set(x + Math.sin(h) * y * 0.6, 0, z - Math.cos(h) * y * 0.6)
+      cam.up.set(Math.sin(h), 0, -Math.cos(h))
+      cam.lookAt(W)
+      fov = 34 / Math.max(1, this.zoom)
     } else if (this.mode === 'sight') {
       // down the nose, with the aircraft's roll
       F.set(0, 0, -1).applyQuaternion(Q)
