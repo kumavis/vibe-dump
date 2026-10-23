@@ -617,8 +617,13 @@ Also for the integrator:
   dialog or a listbox); if ui-2's list or card binds the same keys, one of
   the two should give way (ui-2's own focus handling is the better owner of
   Enter and Tab inside its panels).
-- **The station bar** is the HUD's (top centre, its buttons take a click or
-  a tap); ui-2's box bar may show the stations too: both call
+- **The station bar** is the HUD's (top centre, 12 px down, its buttons
+  take a click or a tap), and the first hints stand under it (52 px down).
+  ui-2's held box bar now stands in the same place on a wide screen
+  (style.css `.boxbar[data-mode='held']`, top 12 px): when it shows the
+  stations, the page should set `--pt-stations-display: none` (and, to
+  keep the hints clear of its two rows, `--pt-hints-top: 112px`) on
+  `.pt-hud` or an ancestor, e.g. under `#ui.holding`; both bars call
   `battle.setStation`.
 - **The HUD's message line** ("Return to the record at that time?") and
   the new instrument lines ("on the record until you act", "helm: on the

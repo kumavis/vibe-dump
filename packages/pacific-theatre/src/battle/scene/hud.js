@@ -42,12 +42,14 @@ const STYLE = `
 .pt-hud .cue { position: absolute; left: 50%; top: 62%; transform: translateX(-50%); padding: 3px 10px; border: 1px solid #f6e3a0; border-radius: 3px; }
 .pt-hud .cue:empty { display: none; }
 .pt-hud .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.95) 75%); opacity: 0; transition: opacity .3s; }
-.pt-hud .stations { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); display: flex; gap: 4px; pointer-events: auto; }
+/* the app's own bar may show the stations where this one stands (ui-2's held box bar, top centre): the page sets
+   --pt-stations-display: none and moves the hints below its bar with --pt-hints-top */
+.pt-hud .stations { position: absolute; left: 50%; top: var(--pt-stations-top, 12px); transform: translateX(-50%); display: var(--pt-stations-display, flex); gap: 4px; pointer-events: auto; }
 .pt-hud .stations:empty { display: none; }
 .pt-hud .stations button { font: inherit; color: #e9e4d6; background: rgba(8,10,12,.55); border: 1px solid rgba(233,228,214,.3); border-radius: 3px; padding: 3px 9px; cursor: pointer; min-height: 26px; }
 .pt-hud .stations button[aria-pressed="true"] { border-color: #f6e3a0; color: #f6e3a0; background: rgba(40,36,20,.6); }
 .pt-hud .stations .tab { align-self: center; opacity: .6; font-size: 11px; padding-left: 4px; }
-.pt-hud .hints { position: absolute; left: 50%; top: 52px; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 8px 14px; background: rgba(8,10,12,.6); border-radius: 4px; white-space: pre-line; text-align: left; line-height: 1.6; }
+.pt-hud .hints { position: absolute; left: 50%; top: var(--pt-hints-top, 52px); transform: translateX(-50%); max-width: calc(100% - 32px); padding: 8px 14px; background: rgba(8,10,12,.6); border-radius: 4px; white-space: pre-line; text-align: left; line-height: 1.6; }
 .pt-hud .hints:empty { display: none; }
 .pt-hud .sel { border: 1px dashed rgba(246,227,160,.85); border-radius: 3px; }
 .pt-hud .sel span { position: absolute; left: 100%; top: -2px; padding-left: 6px; color: #f6e3a0; }
