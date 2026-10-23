@@ -19,7 +19,17 @@
 //                                 end.ready, nothing left to do in the
 //                                 seat's phase, and end.lit, End lit for
 //                                 it (F3: ready, or Begin battle in the
-//                                 deployment)
+//                                 deployment); (F10c) end.badge, how many
+//                                 units the orders will act for at End (its
+//                                 label "End Movement ▸ · ⟳ 9"), and
+//                                 end.ready counts the manual units only
+//                                 (an order covering the phase handles its
+//                                 unit); end.counting, Auto-End's countdown
+//                                 drawn on it
+//     go                          (F10c) ▶ Go: { show, n, busy }, the orders
+//                                 now, the phase left open
+//     ordersN                     (F10c) how many of the seat's units hold an
+//                                 order (the actions' Orders N; 0 hides it)
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -32,7 +42,11 @@
 //            pending decision when a seat played here holds it), mode, deploy
 //            (the seat deploying here, or -1), sel, pick (a charge's end
 //            being picked), hover, group (how many units are picked up
-//            together: F10a) }
+//            together: F10a), orders ((F10c) the standing orders' plan on a
+//            phase of a seat played here: { actors, covered }, the ids of the
+//            units whose orders act in it now and of those an order covers
+//            in it; null for none), ordered (how many of the seat's units
+//            hold an order) }
 //   hud      the HUD's own state, kept from the last model: { phaseShown,
 //            buttonsUp, hint, sides (each seat's look: ui/theme.js) }
 //
@@ -69,6 +83,7 @@
 import { PHASES } from '../core/rules.js'
 import { inCover } from '../core/queries.js'
 
+const NOBODY = new Set()
 // a phase's name by its key ('move' → 'Movement')
 export const PHASE_NAME = Object.fromEntries(PHASES.map((p) => [p.key, p.name]))
 // the phase a turn begins with
@@ -78,7 +93,7 @@ const [FIRST] = PHASES.map((p) => p.key)
 export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })
 
 export function hudModel({ G, mirror: M, session, input, hud }) {
-  const { idle, decision: P, deploy, sel, pick: pk, group = 0 } = input
+  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false } = input
   const { phaseShown, sides } = hud
   const rounds = G.setup.rounds
   const ask = (fn) => session.preview(fn)
@@ -92,13 +107,20 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   const buttonsUp = !mine && !charging ? false : idle ? true : hud.buttonsUp
   // (the pick hides them: Shortest move stands in their place)
   const up = buttonsUp && !pk
+  // (F10c) the units the standing orders act for now, and those an order
+  // covers in this phase (whose turn is the orders', not the player's)
+  const badge = mine && idle ? plan?.actors.length ?? 0 : 0
+  const covered = plan?.covered ?? NOBODY
   const end = {
     show: deploying || up,
-    label: deploying ? 'Begin battle ▸' : mine ? `End ${PHASE_NAME[P.phase]} ▸` : null,
+    label: deploying ? 'Begin battle ▸' : mine ? `End ${PHASE_NAME[P.phase]} ▸${badge ? ` · ⟳ ${badge}` : ''}` : null,
     busy: !idle,
-    // nothing left to do in the seat's phase (asked only once the table has
-    // caught up)
-    ready: mine && idle ? !ask((G, q) => q.anyCanAct(G, P.seats[0])) : false,
+    // nothing left to do in the seat's phase but what its orders will do
+    // (asked only once the table has caught up)
+    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !covered.has(u.id) && q.canAct(G, u))) : false,
+    badge,
+    // (F10c) Auto-End counting down on it
+    counting: mine && counting,
   }
   // (F3) End lit when there is nothing else to do: the phase's units all
   // spent, or the deployment, where Begin battle is the only way on
@@ -143,12 +165,14 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     active: M.stage === 'battle' ? M.active : -1,
     end,
     auto: { show: up, busy: !idle },
+    go: { show: up && idle && badge > 0, n: badge, busy: !idle },
+    ordersN: mine || deploying ? ordered : 0,
     advance,
     shortest: { show: !!pk },
     // the deploying seat's zone is lit; in battle both dim
     zones: [0, 1].map((s) => (M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === deploy ? 0.2 : 0.07)),
     hint,
-    rings: ringLooks({ session, input }),
+    rings: ringLooks({ session, input, covered: mine && idle ? covered : NOBODY }),
     buttonsUp,
   }
 }
@@ -159,14 +183,16 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
 // caught up); the one under the pointer. (view) → [colour, opacity], by the
 // unit's view (the ?debug snap check paints a fresh table's rings with it
 // too).
-export function ringLooks({ session, input }) {
+// ((F10c) a unit whose standing order covers the phase: cyan, not white,
+// while it can still act)
+export function ringLooks({ session, input, covered = NOBODY }) {
   const { mode, deploy: dep, pick: pk, sel, hover } = input
   // (unit id → [colour, opacity]) for what the match says, on a seat's turn
   const lit = mode !== 'phase' ? new Map() : session.preview((G, q) => {
     const ph = q.phaseKey(G), out = new Map()
     for (const u of G.units) {
       if (!q.alive(u) || u === sel) continue
-      if (q.canAct(G, u)) out.set(u.id, ['#ffffff', 0.75])
+      if (q.canAct(G, u)) out.set(u.id, covered.has(u.id) ? ['#5fd3ff', 0.85] : ['#ffffff', 0.75])
       else if (sel && ph === 'shoot' && u.side !== sel.side && q.shotInfo(G, sel, u).ok) out.set(u.id, ['#ff5a4a', 0.95])
       else if (sel && ph === 'charge' && u.side !== sel.side && q.chargeTargets(G, sel).includes(u)) out.set(u.id, ['#ffa040', 0.95])
     }

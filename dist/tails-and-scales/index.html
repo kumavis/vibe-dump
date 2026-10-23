@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-DcYcgCwX.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CA0ENIv2.css">
+    <script type="module" crossorigin src="./assets/index-D--yfRjQ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CoT4D2gd.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -27,6 +27,8 @@
       <button id="view" title="Change the view (V) · Home: the whole board from above">🧭</button>
       <button id="follow" title="Camera follows the action on AI turns">🎥</button>
       <button id="batch" title="Units moved together walk together (click: one at a time)">⇉</button>
+      <button id="autoFirst" class="off" title="Autopilot first: off (click: units on autopilot act as your phase opens)">⟳¹</button>
+      <button id="autoEnd" class="off" title="Auto-End: off (click: End presses itself once every unit left is under orders)">⏭</button>
       <button id="mute" title="Sound">🔊</button>
       <button id="helpBtn" title="Rules">?</button>
     </div>
@@ -45,6 +47,8 @@
       <button id="readyN" class="hidden" title="Pick up every unit still to act (Q)">Ready 0</button>
       <button id="selectMode" title="Select mode: drag a box round your units (touch)">▭ Select</button>
       <button id="advance">Advance</button>
+      <button id="ordersN" title="Pick up every unit holding a standing order" style="display: none">Orders 0</button>
+      <button id="goOrders" title="Carry out your standing orders now; the phase stays open" style="display: none">▶ Go</button>
       <button id="autoPhase" title="Let the AI play this phase for you">🤖 Auto</button>
       <button id="closestSpot" title="End the charge with the shortest move (the spot the AI would pick)">Shortest move</button>
       <button id="endPhase">End phase ▸</button>
@@ -111,6 +115,7 @@
         <h2>Controls</h2>
         <p>Click one of your units to pick it up, then click where it goes, or the enemy it shoots or charges. <b>Shift-drag</b> a box round several (Ctrl or Cmd as well: add to them), or <b>Shift-click</b> to add or drop one; on a touch screen press <b>▭ Select</b> and drag one finger (two still pan and zoom), or hold a finger on a unit to add or drop it. A <b>double click</b> on a unit picks every one of its kind on screen, a third the whole table. <b>Q</b> or <b>Ready N</b> picks every unit still to act, <b>Tab</b> the next one, <b>Space</b> takes the camera to the group, <b>Ctrl-1…9</b> saves a group and <b>1…9</b> calls it back (twice: the camera goes there).</p>
         <p>With a group picked, a click on the ground (in the deployment, or the movement phase) <b>pins</b> a formation there: white rings arrive, amber ones fall short. <b>Alt-drag</b> instead to spread it along a line. Click its <b>flag</b>, press <b>Enter</b> or <b>✓</b> to send it (a double click pins and sends); <b>Esc</b>, a right click or <b>✕</b> drops the pin. <b>+D6</b> in the group bar makes a move advance first. In the movement phase a click on an enemy pins an approach (shooters to where it is in range and sight, the rest as near as they can get): click it again, press Enter or ✓ to send it. In the shooting phase every member that can fires at the enemy you click (stopping once it falls), and in the charge phase every member that can charges it. <b>🤖 Auto these</b> lets the AI play the group's moves, shots or charges this phase, leaving the rest of your army to you (<b>🤖 Auto</b> plays the whole phase and ends it). Once the table catches up, the members that can still act stay picked.</p>
+        <p><b>Standing orders</b> stay with your units from turn to turn: <b>➜ March</b> (<b>G</b>, then click where to), <b>🎯 Attack</b> (<b>T</b>, then click the enemy: they go for it until it falls), <b>⚓ Hold</b> (<b>H</b>: stand and shoot), <b>⟳ Autopilot</b> (<b>P</b>: the AI plays them) and <b>⊘</b> (<b>X</b>: back in your hands), from the group bar, the unit card or the keys. They act when you press <b>End</b> (it reads <b>End Movement ▸ · ⟳ 3</b> when three will act), after whatever you played by hand; <b>▶ Go</b> carries them out now and leaves the phase open. A unit you move by hand has simply done its order's work for the phase. A march that arrives holds, one that can get no nearer for two turns comes back to you, and an attack whose target falls goes on autopilot. <b>Orders N</b> picks up every unit holding one.</p>
         <h2>Victory</h2>
         <p>At the end of every round, each objective goes to the side with the most <b>OC</b> (objective control) within 3" — 1 VP each. Most VP after round 5 wins; wiping out the enemy wins at once.</p>
       </div>

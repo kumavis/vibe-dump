@@ -5,8 +5,9 @@
 // click does with it in this phase (Move, Approach, Fire, Charge or Place:
 // a hint; the click on the table is the verb), +D6 in the movement phase,
 // (F10b) 🤖 Auto these (the AI plays the group's phase, which stays open),
-// ⇥ the next ready unit, ✓ to send a pinned formation and ✕ to drop it,
-// and Clear. And the actions' Ready N whenever a seat played here decides:
+// (F10c) the standing orders (➜ March, 🎯 Attack: a click armed; ⚓ Hold,
+// ⟳ Autopilot, ⊘ none: at once), ⇥ the next ready unit, ✓ to send a pinned
+// formation and ✕ to drop it, and Clear. And the actions' Ready N whenever a seat played here decides:
 // every unit of it still to act. Drawn from input/group.js's model().
 const $ = (s) => document.querySelector(s)
 
@@ -20,7 +21,7 @@ export class GroupBar {
   }
 
   // { only(key), drop(key), next(), commit(), cancel(), clear(), save(),
-  // ready(), advance(), pilot() }
+  // ready(), advance(), pilot(), order(k) }
   wire(on) {
     this.on = on
   }
@@ -28,8 +29,9 @@ export class GroupBar {
   // m: { show, ready (Ready N's count; null: not a decision played here),
   // count, models, chips: [{ key, name, n, why }], verbs: [{ k, label, on
   // }], advance (+D6's state; null: not the movement phase), pilot ({ n,
-  // why }: how many of the group can act; null: not a phase), pinned,
-  // summary, note }
+  // why }: how many of the group can act; null: not a phase), orders ({ by:
+  // { kind: n }, armed }: (F10c) the standing orders the members hold),
+  // pinned, summary, note }
   render(m) {
     const r = this.readyBtn
     r.classList.toggle('hidden', !m.ready)
@@ -82,6 +84,24 @@ export class GroupBar {
       auto.disabled = !m.pilot.n
       auto.onclick = () => this.on.pilot()
       parts.push(auto)
+    }
+    if (m.orders) {
+      parts.push(el('span', 'gsep', '│'))
+      const ORDERS = [
+        ['march', '➜ March', 'March: click where to (G); they go a turn at a time, each to its place in the formation'],
+        ['attack', '🎯 Attack', 'Attack: click the enemy they go for until it falls (T)'],
+        ['hold', '⚓ Hold', 'Hold: stand and shoot, the AI picking the shots (H)'],
+        ['auto', '⟳ Autopilot', 'Autopilot: the AI plays them every phase (P)'],
+        ['none', '⊘', 'No orders: back in your hands (X)'],
+      ]
+      for (const [k, label, title] of ORDERS) {
+        const n = m.orders.by[k] ?? 0
+        const b = el('button', `gorder${m.orders.armed === k ? ' on' : ''}${n ? ' held' : ''}`, n && k !== 'none' ? `${label} ${n}` : label)
+        b.title = title
+        b.dataset.k = k
+        b.onclick = () => this.on.order(k)
+        parts.push(b)
+      }
     }
     if (m.pinned) {
       const go = el('button', 'primary', '✓ Send')

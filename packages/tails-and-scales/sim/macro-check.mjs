@@ -45,8 +45,8 @@ const { values: a } = parseArgs({ options: { probes: { type: 'string' }, seed: {
 
 async function load(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [session, store, orders, exec] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js')])
-  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, runGroup: exec.runGroup }
+  const [session, store, orders, exec, standing, book, sti] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null)])
+  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput }
 }
 
 function stream(seed) {
@@ -171,11 +171,222 @@ async function probe(L, ses, rand, out) {
   return null
 }
 
-async function run(dir, { probes = 240, seed = 7, say = console.log } = {}) {
+// (F10c) Standing orders on the same states: a random few of the seat's
+// standing units each given a random order (March a group to a point, its
+// slots the formation's; Attack an enemy; Hold; Autopilot), then carried out
+// as End, Go or Auto would (runOrders). Each run must send only commands the
+// match takes and never throw, within its budget; under Go no unit without
+// an order may act, and none acts for a unit without one.
+async function probeOrders(L, ses, rand, out) {
+  const seat = ses.decisionFor(), G = ses.G, P = G?.pending
+  if (seat < 0 || P?.k !== 'phase') return null
+  const mine = G.units.filter((u) => u.side === seat && u.alive > 0), foes = G.units.filter((u) => u.side !== seat && u.alive > 0)
+  if (!mine.length || !foes.length) return null
+  const orders = new Map()
+  const picked = mine.filter(() => rand.next() < 0.6)
+  const marchers = picked.filter(() => rand.next() < 0.35)
+  if (marchers.length) {
+    const { W, H } = G.nav
+    const anchor = { x: (rand.next() - 0.5) * (W - 4), z: (rand.next() - 0.5) * (H - 4) }
+    const slots = ses.preview((G2) => L.slotsOf(G2, marchers.map((u) => G2.units.find((x) => x.id === u.id)), anchor))
+    const a = G.nav.index(anchor.x, anchor.z)
+    for (const u of marchers) orders.set(u.id, { k: 'march', anchor: a, slot: G.nav.index(slots.get(u.id).x, slots.get(u.id).z) })
+  }
+  for (const u of picked) {
+    if (orders.has(u.id)) continue
+    const k = rand.pick(['attack', 'hold', 'auto'])
+    orders.set(u.id, k === 'attack' ? { k, tg: rand.pick(foes).id } : { k })
+  }
+  if (!orders.size) return null
+  const then = rand.pick([null, 'end', 'auto'])
+  const look = (G2) => G2.units.filter((u) => u.side === seat && !orders.has(u.id)).map((u) => `${u.id}@${u.pos.x},${u.pos.z}:${u.flags.moved ? 1 : 0}${u.flags.shot ? 1 : 0}${u.flags.charged ? 1 : 0}`).join(' ')
+  const before = look(G)
+  const actors = ses.preview((G2, q) => L.standing.actorsOf(G2, q, seat, orders, P.phase))
+  const rejected = ses.folder.rejected.length, count = ses.count
+  const t0 = performance.now()
+  let r
+  try {
+    r = await L.runOrders({ session: ses, seat, orders, then })
+  } catch (err) {
+    return `orders (${then ?? 'go'}) threw: ${err.message}`
+  }
+  const ms = performance.now() - t0
+  out.orders.runs++
+  out.orders.sent += r.sent
+  out.orders.acted += r.acted.length
+  out.orders.actors += actors.length
+  out.orders[P.phase] = (out.orders[P.phase] ?? 0) + 1
+  for (const o of orders.values()) out.orders.kinds[o.k] = (out.orders.kinds[o.k] ?? 0) + 1
+  if (ses.folder.rejected.length !== rejected) return `orders: the Folder rejected ${ses.folder.rejected.length - rejected} of their entries`
+  if (ses.count - count !== r.sent) return `orders: they say they sent ${r.sent}, the log grew by ${ses.count - count}`
+  if (ms > 1000) return `orders took ${ms.toFixed(0)} ms`
+  if (then === null && look(ses.G) !== before) return 'orders (Go) moved, shot or charged with a unit that had none'
+  if (r.acted.some((id) => !orders.has(id))) return 'orders acted for a unit with none'
+  if (r.acted.some((id) => !actors.some((a) => a.u.id === id))) return `orders acted for units the count left out (${r.acted.filter((id) => !actors.some((a) => a.u.id === id)).join(', ')})`
+  return null
+}
+
+// (F10c, play-report's F10c row) A march to a reachable slot: a unit of the
+// seat on the move, a slot between one and three moves away by its goal
+// field, the march its only order; the seat ends each of its phases through
+// its orders, the other seat plays Auto. Arrived within three of the seat's
+// turns? (a march that dies on the way counts for nothing)
+async function marchScenario(L, it, rand, out) {
+  let ses
+  for (let tries = 0; tries < 8 && !ses; tries++) {
+    const k = rand.int(it.job.entries.length)
+    try {
+      const s = sessionAt(L, it, k)
+      if (s.G?.pending?.k === 'phase' && s.G.pending.phase === 'move' && s.decisionFor() >= 0) ses = s
+    } catch {}
+  }
+  if (!ses) return null
+  const seat = ses.decisionFor(), G = ses.G
+  const free = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.flags.moved && !u.flags.advanced && !ses.preview((G2, q) => q.isEngaged(G2, u)))
+  if (!free.length) return null
+  const u0 = rand.pick(free)
+  const field = ses.preview((G2, q) => L.goalField(G2, q, u0.pos, q.moveMode(u0), u0.r))
+  const cand = []
+  for (let i = 0; i < field.length; i++) if (field[i] > u0.t.M + 1 && field[i] <= 3 * u0.t.M) cand.push(i)
+  if (!cand.length) return null
+  const slot = rand.pick(cand)
+  let order = { k: 'march', anchor: slot, slot }
+  let turns = 0, arrived = false, blocked = false, engaged = false
+  for (let k = 0; k < 400 && ses.G.turn.stage !== 'over' && turns < 3 && !arrived && !blocked; k++) {
+    const P = ses.G.pending, who = ses.decisionFor()
+    if (!P || who < 0) break
+    if (!(ses.G.units.find((x) => x.id === u0.id)?.alive > 0)) return null
+    if (P.k === 'deploy') ses.submit(who, { t: 'deployed' })
+    else if (P.k === 'roundLimit') ses.submit(who, { t: 'vote', more: false })
+    else if (P.k === 'chargeEnd') ses.submit(who, { t: 'chargeEnd', c: -1 })
+    else if (who !== seat) ses.submit(who, { t: 'auto' })
+    else {
+      const wasMove = P.phase === 'move'
+      await L.runOrders({ session: ses, seat, orders: new Map([[u0.id, order]]), then: 'end' })
+      const u = ses.G.units.find((x) => x.id === u0.id)
+      if (!(u?.alive > 0)) return null
+      engaged ||= ses.preview((G2, q) => q.isEngaged(G2, u))
+      const done = ses.preview((G2, q) => L.standing.doneOf(G2, q, u, order))
+      if (done) arrived = done.note === 'Arrived'
+      else if (wasMove) {
+        turns++
+        const p = ses.preview((G2, q) => L.standing.progressOf(G2, q, u, order))
+        if (p.blocked) blocked = true
+        else order = p.order
+      }
+    }
+  }
+  // (counted only once it had its three turns, or arrived or was blocked
+  // sooner; a march the enemy caught in combat on the way, or one the
+  // battle's end cut short, is no measure of marching)
+  if (!(ses.G.units.find((x) => x.id === u0.id)?.alive > 0)) return null
+  if (engaged || (!arrived && !blocked && turns < 3)) {
+    out.march.cut++
+    return null
+  }
+  out.march.n++
+  if (arrived) out.march.arrived++
+  if (blocked) out.march.blocked++
+  if (!arrived && process.env.MARCH_DEBUG) {
+    const u = ses.G.units.find((x) => x.id === u0.id)
+    console.error(`miss ${it.id} ${u.t.short} M${u.t.M}: slot ${Math.hypot(u.pos.x - ses.G.nav.x(slot), u.pos.z - ses.G.nav.z(slot)).toFixed(1)}" away after ${turns} turns${blocked ? ' (blocked)' : ''}, engaged ${ses.preview((G2, q) => q.isEngaged(G2, u))}, start ${field[G.nav.index(u0.pos.x, u0.pos.z)]?.toFixed?.(1)} slot field ${field[slot].toFixed(1)}`)
+  }
+  return null
+}
+
+// (F10c) Autopilot first and Auto-End answer only from the Session's
+// settled: a hotseat battle on the log's seeds, seat 0's units all on
+// autopilot with both settings on (the countdown 0 ms), seat 1 ending each
+// of its phases. Every pilot the orders send must be sent from inside the
+// sink's settled (never its events), at most one a phase; and Auto-End must
+// end seat 0's phases (the table caught up: idled), never twice the same.
+async function settledScenario(L, it, out) {
+  const setup = jobSetup(it.job)
+  const hot = { ...setup, overtime: 'never', seats: setup.seats.map((x) => ({ ...x, ctrl: 'human', dev: 'here' })) }
+  let ctx = null, standing = null
+  const ses = new L.Session({ store: new L.LocalStore(), localSeats: [0, 1], dev: 'here', sink: {
+    events: () => {},
+    settled: (s2) => {
+      ctx = 'settled'
+      try {
+        standing?.settled(s2)
+      } finally {
+        ctx = null
+      }
+    },
+  } })
+  const sent = []
+  const submit = ses.submit.bind(ses)
+  ses.submit = (seat, body) => {
+    sent.push({ seat, t: body.t, ctx, at: `${ses.G?.turn.round}:${ses.G?.pending?.phase}` })
+    return submit(seat, body)
+  }
+  const human = {
+    get session() {
+      return ses
+    },
+    get G() {
+      return ses.G
+    },
+    sel: null,
+    ask: (fn) => ses.preview(fn),
+    localSeat: () => ses.decisionFor(),
+    localDecision: () => (ses.decisionFor() >= 0 ? ses.G.pending : null),
+    myTurn: () => ses.decisionFor() >= 0 && ses.G.pending?.k === 'phase',
+    flow: { refreshUI() {}, player: { idle: true } },
+    group: { seat: () => ses.decisionFor(), members: () => [] },
+    end() {
+      ctx = 'auto-end'
+      try {
+        submit(ses.decisionFor(), { t: 'end' })
+        sent.push({ seat: 0, t: 'end', ctx: 'auto-end' })
+      } finally {
+        ctx = null
+      }
+    },
+  }
+  const mem = new Map()
+  const book = new L.OrderBook({ getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v), removeItem: (k) => mem.delete(k) })
+  standing = new L.StandingInput({ human, book, countdown: 0 })
+  standing.autoFirst = standing.autoEnd = true
+  ses.start(hot)
+  book.open('settled-check', { fresh: true })
+  book.set(0, ses.G.units.filter((u) => u.side === 0).map((u) => u.id), { k: 'auto' })
+  for (let k = 0; k < 3000 && ses.G.turn.stage !== 'over'; k++) {
+    const P = ses.G.pending, who = ses.decisionFor()
+    if (!P || who < 0) break
+    if (P.k === 'deploy') submit(who, { t: 'deployed' })
+    else if (P.k === 'roundLimit') submit(who, { t: 'vote', more: false })
+    else if (P.k === 'chargeEnd') submit(who, { t: 'chargeEnd', c: -1 })
+    else if (who === 1) submit(who, { t: 'end' })
+    else {
+      // (the table caught up: Auto-End's countdown, then its End)
+      standing.idled()
+      await new Promise((r) => setTimeout(r, 1))
+      if (ses.decisionFor() === 0 && ses.G.pending === P) {
+        out.settled.manual++
+        submit(0, { t: 'end' })
+      }
+    }
+  }
+  const pilots = sent.filter((x) => x.t === 'pilot')
+  out.settled.battles++
+  out.settled.pilots += pilots.length
+  out.settled.ends += sent.filter((x) => x.ctx === 'auto-end').length
+  const stray = pilots.find((x) => x.ctx !== 'settled')
+  if (stray) return `${it.id}: an autopilot pilot sent from ${stray.ctx ?? 'outside the sink'}`
+  const per = new Map()
+  for (const x of pilots) per.set(x.at, (per.get(x.at) ?? 0) + 1)
+  const twice = [...per].find(([, n]) => n > 1)
+  if (twice) return `${it.id}: ${twice[1]} autopilot pilots in one phase (${twice[0]})`
+  return null
+}
+
+async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.log } = {}) {
   const L = await load(dir)
   const rand = stream(seed)
   const items = loadCorpus().items.filter((it) => it.kind === 'human')
-  const out = { probes: 0, sent: 0, landed: 0, stayed: 0, once: 0, kinds: {}, bad: [], lines: 0, advances: 0 }
+  const out = { probes: 0, sent: 0, landed: 0, stayed: 0, once: 0, kinds: {}, bad: [], lines: 0, advances: 0, orders: { runs: 0, sent: 0, acted: 0, actors: 0, kinds: {} }, march: { n: 0, arrived: 0, blocked: 0, cut: 0 }, settled: { battles: 0, pilots: 0, ends: 0, manual: 0 } }
   for (let p = 0; out.probes < probes && p < probes * 6; p++) {
     const it = rand.pick(items)
     const k = rand.int(it.job.entries.length)
@@ -190,9 +401,36 @@ async function run(dir, { probes = 240, seed = 7, say = console.log } = {}) {
     out.probes++
     if (why && out.bad.length < 8) out.bad.push(`${it.id} at entry ${k}: ${why}`)
   }
+  // (F10c) standing orders: as many runs, on states the corpus passes through
+  if (L.runOrders) {
+    for (let p = 0; out.orders.runs < probes && p < probes * 6; p++) {
+      const it = rand.pick(items)
+      const k = rand.int(it.job.entries.length)
+      let ses
+      try {
+        ses = sessionAt(L, it, k)
+      } catch {
+        continue
+      }
+      const why = await probeOrders(L, ses, rand, out).catch((e) => `threw: ${e.message}`)
+      if (why && out.bad.length < 8) out.bad.push(`${it.id} at entry ${k}: ${why}`)
+    }
+    for (let p = 0; out.march.n < marches && p < marches * 6; p++) await marchScenario(L, rand.pick(items), rand, out).catch((e) => out.bad.length < 8 && out.bad.push(`march threw: ${e.message}`))
+  }
+  // (F10c) the settings, answered from settled: four battles
+  if (L.StandingInput) {
+    for (const it of items.slice(0, 4)) {
+      const why = await settledScenario(L, it, out).catch((e) => `${it.id}: threw: ${e.message}`)
+      if (why && out.bad.length < 8) out.bad.push(why)
+    }
+    if (!out.settled.pilots || !out.settled.ends) out.bad.push(`the settings did nothing: ${out.settled.pilots} autopilot pilots, ${out.settled.ends} Auto-Ends`)
+  }
   const kinds = Object.entries(out.kinds).map(([k, n]) => `${k} ${n}`).join(', ')
-  const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  const O = out.orders, M = out.march
+  const arrive = M.n ? M.arrived / M.n : 0
+  if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
+  const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && M.n >= 10))
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen); marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
@@ -202,6 +440,14 @@ const MUTANTS = [
   ['engaged-falls-back', 'present/orders.js', ": q.isEngaged(G, u) ? 'in combat' : ''", ": ''", 2],
   ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
   ['fire-one', 'input/orders.js', "      if (verb === 'fire') await send({ t: 'shoot', u: id, tg: tg.id }, u)", "      if (verb === 'fire') {\n        await send({ t: 'shoot', u: id, tg: tg.id }, u)\n        break\n      }"],
+  // (F10c) the orders' pilot names every unit of the seat, ordered or not
+  ['pilot-everyone', 'input/orders.js', "orderedUnits(G, q, seat, orders, phase).filter((u) => stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id)", "G.units.filter((u) => u.side === seat && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)"],
+  // a march planned once, not again on its advance's roll (it moves on a
+  // plan made before the roll)
+  ['march-stale-roll', 'input/orders.js', '    for (let k = 0; k < 2 && phaseNow() === phase; k++) {', '    for (let k = 0; k < 1 && phaseNow() === phase; k++) {'],
+  // a march planned on a field from where the unit stands, not its anchor
+  // (away from its slot it finds no way nearer)
+  ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.r)\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.r)\n'],
 ]
 
 if (a['self-test']) {
@@ -220,7 +466,7 @@ if (a['self-test']) {
       }
       writeFileSync(p, text.split(from).join(to))
       const lines = []
-      const failed = await run(dir, { probes: 160, say: (l) => lines.push(l) })
+      const failed = await run(dir, { probes: 240, say: (l) => lines.push(l) })
       console.log(`  ${failed ? 'ok  ' : 'FAIL'} ${name.padEnd(14)} ${failed ? `caught: ${lines.join(' ').split('\n')[1]?.trim().slice(0, 100) ?? ''}` : 'not caught'}`)
       if (!failed) bad++
     } finally {

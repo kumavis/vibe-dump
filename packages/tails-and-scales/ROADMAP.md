@@ -81,7 +81,9 @@ the commit, and add whatever the work turned up.
   every corpus and Grand fixture stream, a Grand AI movement phase within
   8 s; `--browser` with Chromium), and from F10b
   `node sim/pilot-check.mjs` (and `--self-test`: P-auto, a pilot of every
-  standing unit and End play the battle Auto plays, phase by phase). A step
+  standing unit and End play the battle Auto plays, phase by phase), and
+  from F10c `node sim/macro-check.mjs` covers the standing orders too (the
+  march scenarios at 80%, the settings answered from settled). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -826,14 +828,23 @@ follows N3.
   Auto these, the human-bot's `pilot` policy; four `pilot/` logs, recorded
   on F10b's code in a commit of their own, the corpus 46 battles. DESIGN's
   F10b notes.)
-- [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
+- [x] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
   out at End or Go; badges, counters, optional auto-End. Left from F10a:
   the pinned formation's handles (move, rotate, stretch into a line: the
-  only way to make a line on touch), its faint paths, and ghosts planned a
-  few per frame once boards grow (F8b). Left from F10b: merge-sim's bursts
-  of 25 macro entries from one seat with junk between (the orders at End
-  are what sends them), and (at F8b) the play-report threshold: an army on
-  `pilot` every phase reaches melee by round 3 in 3 of 4 Grand battles.
+  only way to make a line on touch), its faint paths. Left from F10b:
+  merge-sim's bursts of 25 macro entries from one seat with junk between.
+  (The order book, `input/book.js`; the planner, `present/standing.js`;
+  `runOrders`; the bar's verbs, the card's row, G T H P X O; End's ⟳ badge,
+  ▶ Go, Orders N, cyan rings, label badges, order lines; Autopilot first
+  and Auto-End; `ords` in presence; the pin's knobs and paths; merge-sim's
+  `burst`. P-macro's standing orders and march scenarios (98% arrive),
+  input-check, the lobby rig's orders at End online. DESIGN's F10c notes.)
+- [ ] **Later (F10's, with F8b):** ghosts planned a few per frame once boards
+  grow; March from the minimap; the play-report's F10b row (an army on
+  `pilot` every phase reaches melee by round 3 in 3 of 4 Grand battles);
+  §4.2.6's richer cues (a race voice and a ring pulse as an order is given,
+  floating text and a minimap ping as one finishes, a dashed turning ring
+  for autopilot).
 - [ ] **F8a** Missions choose the board: `setup.mission`, the setup
   whitelist, `G.board`, the table rebuilt per match. Only the classic
   mission yet.

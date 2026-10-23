@@ -15,7 +15,11 @@
 //              ghosts drawn: white rings arrive, amber fall short), an
 //              Alt-drag pins it spread along a line, a click on its flag,
 //              Enter or ✓ sends it, a double click pins and sends at once,
-//              Esc, a right click or ✕ drops the pin; +D6 in the bar makes a
+//              Esc, a right click or ✕ drops the pin; (F10c) the pin's
+//              handles: drag its flag to move it, its cyan knob to turn the
+//              formation, its gold knob to stretch it into a line (on touch
+//              the only way to make one); its members' paths drawn faintly
+//              (at most 24); +D6 in the bar makes a
 //              Move advance first; in the movement phase a click on an enemy
 //              pins an approach; in the shooting phase a click on an enemy
 //              fires every member that may at it, and in the charge phase
@@ -23,7 +27,7 @@
 //
 // What a group does is ordinary commands (input/orders.js), so nothing here
 // is logged but what they send; the selection is this page's alone.
-import { previewGroup } from '../present/orders.js'
+import { previewGroup, slotsOf } from '../present/orders.js'
 import { runGroup } from './orders.js'
 import { sfx } from '../view/sfx.js'
 
@@ -120,6 +124,17 @@ export class GroupInput {
       this.drop()
       return false
     }
+    // (F10c) a press on the pin's handles: a drag of it (the flag's, once it
+    // moves: a press that stays put on it is still the click that sends)
+    if (!multi && e.button === 0 && this.isGroup() && !e.shiftKey) {
+      const h = this.handleAt(e)
+      if (h) {
+        const g = this.human.picker.pick(e).ground
+        this.drag = { id: e.pointerId, h, pin: this.rec.pin, from: { x: g.x, z: g.z }, x0: e.clientX, y0: e.clientY, live: h !== 'move' }
+        this.controls.enabled = false
+        return true
+      }
+    }
     // an Alt-drag on the ground with a group: a line to spread it along
     const verb = e.altKey && e.button === 0 && this.isGroup() ? this.phase() : null
     if (verb === 'place' || verb === 'move') {
@@ -144,7 +159,7 @@ export class GroupInput {
   // a box or a line let go unfinished: the camera free again, the pinned
   // formation's ghosts (if any) drawn again over the line's
   drop() {
-    this.box = this.line = null
+    this.box = this.line = this.drag = null
     this.boxEl.classList.add('hidden')
     this.controls.enabled = true
     const pin = this.rec.pin
@@ -191,6 +206,13 @@ export class GroupInput {
 
   move(e) {
     if (this.press) this.letGo(e, true)
+    const d = this.drag
+    if (d) {
+      if (e.pointerId !== d.id) return true
+      d.live ||= Math.hypot(e.clientX - d.x0, e.clientY - d.y0) >= BOX_MIN
+      if (d.live) this.dragTo(e)
+      return true
+    }
     const l = this.line
     if (l) {
       if (e.pointerId !== l.id) return true
@@ -232,6 +254,13 @@ export class GroupInput {
   // the box join (or, without Ctrl, make) the group. Returns whether it was
   // a box (a press that barely moved is a click after all).
   up(e) {
+    const d = this.drag
+    if (d && !(e && e.pointerId !== d.id)) {
+      this.drag = null
+      this.controls.enabled = true
+      // (a press on the flag that never moved: its click, which sends)
+      return d.live
+    }
     const l = this.line
     if (l && !(e && e.pointerId !== l.id)) {
       // (an Alt-click too short for a line is a click, the pin as it was)
@@ -282,7 +311,7 @@ export class GroupInput {
     s.fell = false
     this.syncLead()
     const tg = pin?.target.pos ? this.G.units.find((u) => u.id === pin.target.id) : pin?.target
-    if (pin && still.length >= 2 && tg && !(tg.pos && !(tg.alive > 0))) this.pinAt(pin.verb, tg, pin.line)
+    if (pin && still.length >= 2 && tg && !(tg.pos && !(tg.alive > 0))) this.pinAt(pin.verb, tg, pin.line, pin.rot)
     else if (pin) this.cancel()
   }
 
@@ -393,18 +422,73 @@ export class GroupInput {
 
   // A formation pinned (`line`: spread along it): its preview drawn,
   // nothing sent.
-  pinAt(verb, target, line = null) {
+  pinAt(verb, target, line = null, rot = 0) {
     const seat = this.seat()
-    const preview = this.preview(verb, target, line)
-    this.selection.of(seat).pin = { verb, target, preview, line }
+    const preview = this.preview(verb, target, line, rot)
+    this.selection.of(seat).pin = { verb, target, preview, line, rot }
     this.draw(preview, target, true)
     this.selection.of(seat).note = ''
     this.human.flow.refreshUI()
   }
 
-  preview(verb, target, line = null) {
+  // ((F10c) `rot`: the formation turned that far round the point, its slots
+  // given to the planner, as the executor will give them)
+  preview(verb, target, line = null, rot = 0) {
     const seat = this.seat(), ids = this.members().map((u) => u.id)
-    return this.human.ask((G, q) => previewGroup(G, q, seat, verb, this.selection.units(G, ids), target, null, { line, advance: verb === 'move' && this.rec.advance }))
+    return this.human.ask((G, q) => {
+      const us = this.selection.units(G, ids)
+      return previewGroup(G, q, seat, verb, us, target, rot && !line && target.x !== undefined ? turned(G, slotsOf(G, us, target), target, rot, us) : null, { line, advance: verb === 'move' && this.rec.advance })
+    })
+  }
+
+  // ── (F10c) The pin's handles ──────────────────────────────────────────────
+  // where they stand: the flag (move), the turn knob and the line knob, each
+  // a little beyond the formation's edge
+  handles(pin) {
+    if (!pin || pin.target.x === undefined || (pin.verb !== 'move' && pin.verb !== 'place')) return null
+    const a = pin.target, slots = [...(pin.preview.slots?.values() ?? [])]
+    const R = Math.max(2, ...slots.map((p) => Math.hypot(p.x - a.x, p.z - a.z))) + 1.5
+    const ang = pin.line ? Math.atan2(pin.line.b.z - pin.line.a.z, pin.line.b.x - pin.line.a.x) : pin.rot ?? 0
+    // (kept on the table, where a press finds them)
+    const { W, H } = this.G.nav
+    const on = (x, z) => ({ x: Math.max(-W / 2 + 0.6, Math.min(W / 2 - 0.6, x)), z: Math.max(-H / 2 + 0.6, Math.min(H / 2 - 0.6, z)) })
+    return {
+      move: { x: a.x, z: a.z },
+      turn: on(a.x + R * Math.cos(ang), a.z + R * Math.sin(ang)),
+      line: on(a.x + R * Math.cos(ang + Math.PI / 2), a.z + R * Math.sin(ang + Math.PI / 2)),
+    }
+  }
+
+  // a press on one of the pin's handles: the handle, or null
+  handleAt(e) {
+    const hs = this.handles(this.rec.pin), g = hs && this.human.picker.pick(e).ground
+    if (!g) return null
+    const near = (p) => Math.hypot(g.x - p.x, g.z - p.z) < FLAG_R
+    return near(hs.turn) ? 'turn' : near(hs.line) ? 'line' : near(hs.move) ? 'move' : null
+  }
+
+  // the drag: the pin moved, turned or stretched where the pointer is
+  dragTo(e) {
+    const d = this.drag, g = this.human.picker.pick(e).ground
+    if (!g) return
+    const pin = d.pin, a = pin.target
+    if (d.h === 'move') {
+      const dx = g.x - d.from.x, dz = g.z - d.from.z, to = { x: a.x + dx, z: a.z + dz }
+      const line = pin.line ? { a: { x: pin.line.a.x + dx, z: pin.line.a.z + dz }, b: { x: pin.line.b.x + dx, z: pin.line.b.z + dz } } : null
+      this.pinAt(pin.verb, to, line, pin.rot)
+    } else if (d.h === 'turn') {
+      const ang = Math.atan2(g.z - a.z, g.x - a.x)
+      if (pin.line) {
+        const h = Math.hypot(pin.line.b.x - pin.line.a.x, pin.line.b.z - pin.line.a.z) / 2
+        this.pinAt(pin.verb, a, { a: { x: a.x - h * Math.cos(ang), z: a.z - h * Math.sin(ang) }, b: { x: a.x + h * Math.cos(ang), z: a.z + h * Math.sin(ang) } })
+      } else this.pinAt(pin.verb, a, null, ang)
+    } else {
+      // (the knob is a half line's end, a quarter turn from the line)
+      const vx = g.x - a.x, vz = g.z - a.z, h = Math.hypot(vx, vz)
+      if (h < 1) return
+      const ux = vz / h, uz = -vx / h
+      this.pinAt(pin.verb, a, { a: { x: a.x - h * ux, z: a.z - h * uz }, b: { x: a.x + h * ux, z: a.z + h * uz } })
+    }
   }
 
   // +D6 (the bar's toggle): a group Move's members advance first; a pinned
@@ -413,7 +497,7 @@ export class GroupInput {
     const s = this.rec
     s.advance = !s.advance
     const pin = s.pin
-    if (pin?.verb === 'move') this.pinAt('move', pin.target, pin.line)
+    if (pin?.verb === 'move') this.pinAt('move', pin.target, pin.line, pin.rot)
     else this.human.flow.refreshUI()
   }
 
@@ -430,7 +514,19 @@ export class GroupInput {
   draw(p, target, pinned) {
     const nav = this.G.nav
     const members = p.members.filter((m) => m.cell >= 0).map((m) => ({ x: nav.x(m.cell), z: nav.z(m.cell), r: m.u.r, short: m.how === 'short' }))
-    this.view.overlay.formation({ members, anchor: target.pos ? null : target, pinned })
+    // ((F10c) pinned: the members' paths, faint, at most 24, and its handles)
+    const paths = pinned && p.members.some((m) => m.cell >= 0 && m.how !== 'stay' && m.u.flags) && !this.deploying()
+      ? this.human.ask((G, q) => p.members.filter((m) => m.cell >= 0).slice(0, 24).map((m) => {
+        const u = G.units.find((x) => x.id === m.u.id), plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+        return Number.isFinite(plan.res.dist[m.cell]) ? G.nav.path(plan.res, m.cell, u.r, plan.mode === 'fly' ? null : plan.forbid) : null
+      }).filter(Boolean))
+      : []
+    const handles = pinned ? this.handles({ ...this.rec.pin, preview: p, target }) ?? null : null
+    this.view.overlay.formation({ members, anchor: target.pos ? null : target, pinned, paths, handles })
+  }
+
+  deploying() {
+    return this.human.deploySeat() >= 0
   }
 
   cancel() {
@@ -444,7 +540,7 @@ export class GroupInput {
   commit() {
     const seat = this.seat(), pin = seat >= 0 ? this.selection.of(seat).pin : null
     if (!pin) return 'nothing pinned to send'
-    this.running = this.run(pin.verb, pin.target, pin.line)
+    this.running = this.run(pin.verb, pin.target, pin.line, pin.preview.slots && pin.rot && !pin.line ? pin.preview.slots : null)
     return null
   }
 
@@ -465,7 +561,7 @@ export class GroupInput {
 
   // Send the group's commands (input/orders.js); then keep picked the
   // members still able to act.
-  async run(verb, target, line = null) {
+  async run(verb, target, line = null, slots = null) {
     if (this.busy) return
     const seat = this.seat(), members = this.members()
     if (seat < 0 || members.length < 1) return
@@ -473,7 +569,7 @@ export class GroupInput {
     this.cancel()
     const s = this.selection.of(seat)
     try {
-      const r = await runGroup({ session: this.human.session, seat, verb: verb === 'shoot' ? 'fire' : verb, members, target, line, advance: verb === 'move' && s.advance })
+      const r = await runGroup({ session: this.human.session, seat, verb: verb === 'shoot' ? 'fire' : verb, members, target, line, slots, advance: verb === 'move' && s.advance })
       s.note = r.note
       s.fell = r.fell
       if (r.sent) sfx.click()
@@ -622,7 +718,9 @@ export class GroupInput {
     // (F10b) Auto these: in a phase, while one of the group can still act
     const able = ms.length - types.reduce((n, c) => n + c.idle, 0)
     const pilot = verb && verb !== 'place' ? { n: able, why: able ? '' : 'none of them can act now' } : null
-    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pilot, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: s.note }
+    // (F10c) the standing orders the members hold, and the click armed
+    const orders = this.human.standing?.summary(ms) ?? null
+    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pilot, orders, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: this.human.standing?.note || s.note }
   }
 
   // the bar's buttons
@@ -640,6 +738,7 @@ export class GroupInput {
       ready: () => this.setGroup(this.ready().map((u) => u.id)),
       advance: () => this.toggleAdvance(),
       pilot: () => this.pilot(),
+      order: (k) => this.human.standing?.order(k),
       save: () => {
         const seat = this.seat(), s = this.selection.of(seat)
         const k = [1, 2, 3, 4, 5, 6, 7, 8, 9].find((d) => !s.saved[d]) ?? 9
@@ -649,4 +748,15 @@ export class GroupInput {
       },
     })
   }
+}
+
+// (F10c) slots turned by `ang` round `a`, each kept 0.25" inside the table
+function turned(G, slots, a, ang, units) {
+  const { W, H } = G.nav, c = Math.cos(ang), sn = Math.sin(ang), out = new Map()
+  for (const u of units) {
+    const p = slots.get(u.id), dx = p.x - a.x, dz = p.z - a.z
+    const lim = (v, half) => Math.max(-half + u.r + 0.25, Math.min(half - u.r - 0.25, v))
+    out.set(u.id, { x: lim(a.x + dx * c - dz * sn, W / 2), z: lim(a.z + dx * sn + dz * c, H / 2) })
+  }
+  return out
 }

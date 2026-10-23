@@ -24,8 +24,12 @@ export class Hud {
   // The tools: the animation speed (1×, 2×, 4×), the camera's next view and
   // its following the action (`rig`, view/camera.js), (V1) walks together
   // or one at a time (`player`, view/player.js: kept in this browser), the
-  // sound, and the battle log folded.
-  wire({ rig, player }) {
+  // sound, and the battle log folded; (F10c) and the standing orders' two
+  // settings (`standing`, input/standing.js), kept in this browser:
+  // Autopilot first (units on autopilot act as their seat's phase opens)
+  // and Auto-End (End presses itself, after a 1.5 s countdown on it, once
+  // every unit left is under orders).
+  wire({ rig, player, standing = null }) {
     const SPEEDS = [1, 2, 4]
     $('#speed').onclick = () => {
       clock.speed = SPEEDS[(SPEEDS.indexOf(clock.speed) + 1) % SPEEDS.length]
@@ -53,6 +57,27 @@ export class Hud {
         localStorage.setItem(KEY, player.batched ? '0' : '1')
       } catch {}
     }
+    const setting = (id, key, prop, on, off) => {
+      const el = $(id)
+      const show = (v) => {
+        if (standing) standing[prop] = v
+        el.classList.toggle('off', !v)
+        el.title = v ? on : off
+      }
+      let v = false
+      try {
+        v = localStorage.getItem(key) === '1'
+      } catch {}
+      show(v)
+      el.onclick = () => {
+        show(!standing?.[prop])
+        try {
+          localStorage.setItem(key, standing?.[prop] ? '1' : '0')
+        } catch {}
+      }
+    }
+    setting('#autoFirst', 'tails-and-scales:autopilotFirst', 'autoFirst', 'Autopilot first: on (units on autopilot act as your phase opens; click: off)', 'Autopilot first: off (click: units on autopilot act as your phase opens)')
+    setting('#autoEnd', 'tails-and-scales:autoEnd', 'autoEnd', 'Auto-End: on (End presses itself once every unit left is under orders; click: off)', 'Auto-End: off (click: End presses itself once every unit left is under orders)')
     $('#mute').textContent = isMuted() ? '🔇' : '🔊'
     $('#mute').onclick = () => {
       unlock()

@@ -7,6 +7,8 @@
 // ring round the unit their player has picked up, in their colour, and a
 // line to the one they aim at (app/online.js, from their presence). (F10a)
 // A group's formation: a ring where each member would end, and a flag.
+// (F10c) Standing orders' lines: a march's to its slot, an attack's to its
+// target.
 //
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
@@ -133,12 +135,16 @@ export class Overlay {
   // flag at the point the group goes to, brighter once pinned. null takes it
   // away. Made the first time it is shown (a game that never selects a group
   // makes no more three.js objects, nor their ids' Math.random draws).
+  // ((F10c) `paths`: each member's way there, faint, as point lists;
+  // `handles`: the pin's { move, turn, line } knobs, drawn round their spots)
   formation(f) {
     if (!f) {
       if (this.rings) {
         for (const r of this.rings) r.visible = false
         this.flag.visible = false
       }
+      for (const l of this.fPaths ?? []) l.visible = false
+      for (const k of Object.values(this.knobs ?? {})) k.visible = false
       return
     }
     if (!this.rings) {
@@ -174,6 +180,38 @@ export class Overlay {
       this.flag.position.set(f.anchor.x, 0, f.anchor.z)
       this.flag.userData.cloth.material.opacity = f.pinned ? 1 : 0.5
     }
+    // (F10c) the faint paths (made as first needed)
+    const paths = f.paths ?? []
+    this.fPaths ??= []
+    paths.forEach((pts, k) => {
+      let line = this.fPaths[k]
+      if (!line) {
+        line = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.3, toneMapped: false }))
+        line.renderOrder = 3
+        this.scene.add(line)
+        this.fPaths.push(line)
+      }
+      line.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.07, p.z)))
+      line.visible = true
+    })
+    for (let k = paths.length; k < this.fPaths.length; k++) this.fPaths[k].visible = false
+    // (F10c) the pin's knobs: a cyan one turns it, a gold one stretches it
+    // into a line (the flag moves it)
+    const hs = f.handles
+    if (hs && !this.knobs) {
+      const knob = (color) => {
+        const m = new THREE.Mesh(new THREE.RingGeometry(0.45, 0.75, 24).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false }))
+        m.position.y = 0.06
+        m.renderOrder = 5
+        this.scene.add(m)
+        return m
+      }
+      this.knobs = { turn: knob('#5fd3ff'), line: knob('#ffd166') }
+    }
+    for (const [k, m] of Object.entries(this.knobs ?? {})) {
+      m.visible = !!hs?.[k]
+      if (hs?.[k]) m.position.set(hs[k].x, 0.06, hs[k].z)
+    }
   }
 
   // (F10a) The rest of another player's group: a dashed ring round each
@@ -197,6 +235,40 @@ export class Overlay {
       ring.visible = true
     })
     for (let k = list.length; k < this.peerRings.length; k++) this.peerRings[k].visible = false
+  }
+
+  // (F10c) Standing orders' lines: for each in `list` ({ k: 'march' |
+  // 'attack', from: { x, z }, to: { x, z }, r }) a dashed line from the unit
+  // to its slot (cyan, a ghost ring of radius r there) or to its target
+  // (red-orange, a crosshair ring round it); [] takes them away. Made as
+  // first needed (a game with no orders makes no more three.js objects).
+  orderLines(list) {
+    this.ordLines ??= []
+    this.ordRings ??= []
+    list.forEach((o, k) => {
+      let line = this.ordLines[k], ring = this.ordRings[k]
+      if (!line) {
+        line = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineDashedMaterial({ color: '#5fd3ff', dashSize: 0.4, gapSize: 0.3, transparent: true, opacity: 0.85, toneMapped: false }))
+        line.renderOrder = 4
+        ring = new THREE.Mesh(this.ghost.geometry, new THREE.MeshBasicMaterial({ color: '#5fd3ff', transparent: true, opacity: 0.6, depthWrite: false, toneMapped: false }))
+        ring.position.y = 0.05
+        ring.renderOrder = 4
+        this.scene.add(line, ring)
+        this.ordLines.push(line)
+        this.ordRings.push(ring)
+      }
+      const col = o.k === 'attack' ? '#ff6a3d' : '#5fd3ff'
+      line.geometry.setFromPoints([new THREE.Vector3(o.from.x, 0.09, o.from.z), new THREE.Vector3(o.to.x, 0.09, o.to.z)])
+      line.computeLineDistances()
+      line.material.color.set(col)
+      line.visible = true
+      ring.position.x = o.to.x
+      ring.position.z = o.to.z
+      ring.scale.setScalar(o.r)
+      ring.material.color.set(col)
+      ring.visible = true
+    })
+    for (let k = list.length; k < this.ordLines.length; k++) this.ordLines[k].visible = this.ordRings[k].visible = false
   }
 
   // the ghost of a disc of radius r on nav cell i

@@ -53,6 +53,7 @@
 import { Session } from '../match/session.js'
 import { SIMULTANEOUS, knownOf } from '../match/fold.js'
 import { stateHash, createMatch, CORE_VERSION, RULES_ID } from '../core/index.js'
+import { GLYPH } from '../present/standing.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { LobbyScreen } from '../ui/screens/lobby.js'
@@ -576,6 +577,9 @@ export class Online {
     const ses = this.play, M = this.flow.player.mirror, overlay = this.flow.view.overlay
     const them = live.find((p) => p.seat >= 0 && !ses.localSeats.includes(p.seat) && p.sel !== undefined)
     const at = them && M.units?.[them.sel]
+    // (F10c) their standing orders, as badges on their units' labels
+    const ordered = live.find((p) => p.seat >= 0 && !ses.localSeats.includes(p.seat) && p.ords)
+    this.flow.peerBadges = new Map(Object.entries(ordered && this.flow.session === ses ? ordered.ords : {}).map(([id, k]) => [Number(id), GLYPH[k]]))
     // (none on a replay's table: N3)
     if (!at || !(at.alive > 0) || ses.status !== 'live' || this.flow.session !== ses) {
       overlay.peerGroup([])
@@ -603,6 +607,9 @@ export class Online {
       const group = this.flow.human.group?.members() ?? []
       if (group.length >= 2) m.sels = group.slice(0, 120).map((u) => u.id)
     }
+    // (F10c) the seat's standing orders, for the badges on the others' tables
+    const orders = ses && seat >= 0 ? this.flow.human?.standing?.orders(seat) : null
+    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))
     return m
   }
 

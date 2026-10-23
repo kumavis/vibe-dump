@@ -261,6 +261,15 @@ export class UnitViews {
   labelAll() {
     for (const id of this.views.keys()) this.label(id)
   }
+  // (F10c) each unit's standing order on its label, a glyph by unit id (a
+  // Map; units it leaves out hold none): an attribute the label's style
+  // shows, so its HTML stays the match's (the ?debug snap check compares it)
+  badges(glyphs) {
+    for (const v of this.views.values()) {
+      const g = glyphs.get(v.id) ?? ''
+      if ((v.label.dataset.ord ?? '') !== g) v.label.dataset.ord = g
+    }
+  }
 
   // Each standing unit's ring in the colour and strength `look(v)` gives
   // ([colour, opacity]: picked up, a target, can act, under the pointer).

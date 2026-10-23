@@ -271,6 +271,9 @@ function battery(core, G, seat, rand) {
       if (dead >= 0) out.push({ t: 'pilot', m: bit(dead) + (up.length ? bit(up[0]) : 0) })
       const idle = up.filter((j) => !q.canAct(G, mine[j]))
       if (idle.length) out.push({ t: 'pilot', m: mask(idle) })
+      // (and masks past 32 bits, which only exact division reads right: a
+      // bitwise maskUnits drops their high bits and names a unit)
+      out.push({ t: 'pilot', m: 2 ** 32 + 1 }, { t: 'pilot', m: 2 ** 40 + 3 }, { t: 'pilot', m: 2 ** 52 + 1 })
       out.push({ t: 'pilot', m: bit(mine.length) + 1 }, { t: 'pilot', m: 0 }, { t: 'pilot', m: -1 }, { t: 'pilot', m: 2 ** 53 }, { t: 'pilot', m: 1.5 }, { t: 'pilot' }, { t: 'pilot', m: 1, u: mine[0].id })
     }
     // what the labels and flags would show
@@ -290,13 +293,13 @@ function battery(core, G, seat, rand) {
 }
 
 // (F10b) the seat's units outside mask m, each as what a pilot must leave
-// alone: where it stands and what it has done this turn (a unit the AI
-// plays moves, or marks a flag; one shot at or charged by may lose models,
-// which isn't playing it)
+// alone: what it has done this turn (a unit the AI plays moves, shoots or
+// charges, and marks its flag; where it stands is no measure: one hit by a
+// piloted blast's friendly fire closes ranks, which isn't playing it)
 function actorsOutside(core, G, seat, m) {
   const named = new Set(G.units.filter((u) => u.side === seat).filter((u, j) => Math.floor(m / 2 ** j) % 2).map((u) => u.id))
   const f = (u) => ['moved', 'advanced', 'advRoll', 'fellBack', 'shot', 'charged', 'chargeTried', 'chargeTarget', 'fought'].map((k) => `${k}=${u.flags[k] ?? ''}`).join(',')
-  return G.units.filter((u) => u.side === seat && !named.has(u.id)).map((u) => `${u.id}@${u.pos.x},${u.pos.z} ${f(u)}`)
+  return G.units.filter((u) => u.side === seat && !named.has(u.id)).map((u) => `${u.id} ${f(u)}`)
 }
 
 // bodies with a field their kind doesn't take, each of them refused
@@ -770,6 +773,7 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     // has done, and where it stands, before the pilot plays
     const outside = body.t === 'pilot' ? actorsOutside(core, G, by, body.m) : null
     if (body.t === 'pilot') piloted = `${G.turn.round}:${G.turn.active}:${G.turn.ph}`
+    const phaseWas = G.pending?.phase
     try {
       core.apply(G, by, body)
     } catch (e) {
@@ -779,7 +783,7 @@ function randomTask(core, rng, mirror, races, seed, hud) {
       const now = actorsOutside(core, G, by, body.m)
       const moved = outside.find((x, i) => x !== now[i])
       if (moved) throw new Error(`${where}: pilot ${JSON.stringify(body)} played a unit outside its mask: ${moved} became ${now[outside.indexOf(moved)]}`)
-      if (G.turn.stage !== 'over' && (G.pending?.k !== 'phase' || !G.pending.seats.includes(by))) throw new Error(`${where}: pilot ${JSON.stringify(body)} closed seat ${by}'s phase (${JSON.stringify(G.pending)})`)
+      if (G.turn.stage !== 'over' && (G.pending?.k !== 'phase' || G.pending.phase !== phaseWas || !G.pending.seats.includes(by))) throw new Error(`${where}: pilot ${JSON.stringify(body)} closed seat ${by}'s ${phaseWas} phase (${JSON.stringify(G.pending)})`)
     }
     log.push([by, body])
     counts.commands[body.t] = (counts.commands[body.t] ?? 0) + 1
@@ -1158,6 +1162,9 @@ const MUTATIONS = {
   'pilot-stray-bits': ['core/queries.js', '      if (j >= mine.length) return null\n      out.push(mine[j])', '      if (j < mine.length) out.push(mine[j])'],
   // a pilot of units none of which can act is taken
   'pilot-idle-ok': ['core/commands.js', 'return units.some((u) => canAct(G, u)) ? null :', 'return units.length ? null :'],
+  // a mask read bitwise: its bits past 32 dropped, so a stray high bit names
+  // a unit
+  'pilot-bitwise': ['core/queries.js', '    const r = m % 2\n', '    m = m >>> 0\n    const r = m & 1\n'],
   // a pilot ends the phase, as Auto does
   'pilot-ends-phase': ['core/commands.js', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n    G.pending = null\n'],
 }

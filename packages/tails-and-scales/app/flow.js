@@ -70,6 +70,14 @@ const OFFER_CAP = Math.floor(0.8 * MAX_ENTRIES)
 // played alone; online play gives each device its own (N2).
 export const DEVICE = 'local'
 
+// (F10c) the key a battle's order book is kept under: its start entry and
+// its seeds (a game played here writes the same first id every time)
+export function bookKey(session) {
+  const st = session.store.entries().find((e) => e?.t === 'start' && session.accepted.includes(e.id))
+  const s = session.G?.setup
+  return st ? `${st.id}.${s?.board}.${s?.dice}` : null
+}
+
 // What of a setup the table shows before its battle: the board, the terrain
 // set and the races at it (a mission too, once a setup names one). Who plays
 // a seat, the dice and the rounds draw nothing on it.
@@ -201,6 +209,9 @@ export class Flow {
         if (this.online) this.catchUp(ses)
         this.online?.settled?.(ses)
         this.replay?.render()
+        // (F10c) Autopilot first and Auto-End answer here, a change folded
+        // whole (never from an entry's events)
+        this.human?.standing?.settled(ses)
       },
       // The match folded again, some of what was shown undone (a concurrent
       // insert into an online log, §2.6's sync: never in a game played
@@ -412,6 +423,10 @@ export class Flow {
     } else if (ui.result.voting) ui.result.hide()
     view.table.zones(m.zones)
     view.units.paintRings(m.rings)
+    // (F10c) the standing orders on the labels: every seat played here; and
+    // the lines of those picked up (O: all of them)
+    view.units.badges(new Map([...(this.peerBadges ?? []), ...(this.human.standing?.glyphs() ?? [])]))
+    view.overlay.orderLines(this.human.standing?.lines() ?? [])
   }
   // the rings alone (the pointer leaves the table; a unit picked up to
   // deploy)
@@ -419,7 +434,7 @@ export class Flow {
     this.view.units.paintRings(this.rings())
   }
   rings() {
-    return ringLooks({ session: this.session, input: this.human.state() })
+    return ringLooks({ session: this.session, input: this.human.state(), covered: this.human.standing?.plan().covered })
   }
 
   // A battle's units are its table's, id for id (start() snaps the table to
@@ -546,6 +561,9 @@ export class Flow {
     this.session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), dev: DEVICE, sink: this.sink, onTrace: this.onTrace })
     this.battle = this.session
     this.session.start(setup)
+    // (F10c) a new battle, a book of its own (any old one under its key let go)
+    this.human.standing?.reset()
+    this.human.standing?.book.open(bookKey(this.session), { fresh: true })
     if (this.session.status !== 'live' && this.session.status !== 'over') {
       // no battle (a start the core refused leaves the log in its lobby):
       // the title's table again, drawn afresh from the board it showed
@@ -592,6 +610,9 @@ export class Flow {
     this.acted.length = 0
     this.online = online
     session.sink = this.sink
+    // (F10c) the battle's book: a rejoin finds its orders again
+    this.human.standing?.reset()
+    this.human.standing?.book.open(bookKey(session))
     this.player.snap(G, project(G))
     this.relog(session.folder.pushed)
     ui.title.hide()
@@ -676,6 +697,7 @@ export class Flow {
 
   // The online match left: app/online.js lets go of its document.
   leaveOnline() {
+    this.peerBadges = null
     const online = this.online
     this.online = null
     clock.boost = 1

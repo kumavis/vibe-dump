@@ -637,6 +637,52 @@ async function check(page, say) {
   }
   await page.waitForFunction((t2) => window.__ts.session.G.pending?.phase === 'move' && window.__ts.session.G.pending.seats.includes(t2) && window.__ts.player.idle, t2, { timeout: IDLE_MS })
 
+  // (F10c) the pin's handles: two of the seat's units pinned; the cyan knob
+  // dragged a quarter turn round, the gold one out to a line, each a fresh
+  // pin and nothing sent; Esc lets it go
+  {
+    await rest()
+    const two = (await ev((t) => window.__ts.session.preview((G, q) => G.units.filter((u) => u.side === t && u.alive > 0 && q.canAct(G, u) && !q.isEngaged(G, u)).map((u) => ({ id: u.id, x: u.pos.x, z: u.pos.z }))), t2)).slice(0, 2)
+    await ev((xs) => window.__ts.group.select(xs), two.map((u) => u.id))
+    // (where the camera looks, so the knobs are on screen)
+    const [cx0, , cz0] = await ev(() => window.__ts.controls.target.toArray())
+    await ev(({ x, z }) => window.__ts.group.pinAt(x, z), { x: cx0 / 2, z: cz0 / 2 })
+    await sleep(300)
+    n0 = await count()
+    const scr = async (p) => {
+      const [x, y] = await ev(({ x, z }) => window.__ts.screen(x, 0, z), p)
+      return { x, y }
+    }
+    const drag = async (from, to) => {
+      const a = await scr(from), b = await scr(to)
+      if (process.env.HANDLE_DEBUG) console.error('drag', JSON.stringify({ from, to, a, b, at: await ev(({ x, y }) => { const el = document.elementFromPoint(x, y); return el ? `${el.tagName}#${el.id}.${el.className}` : null }, a), pick: await ev(({ x, y }) => window.__ts.group.pick(x, y), a) }))
+      await page.mouse.move(a.x, a.y)
+      await page.mouse.down()
+      for (let k = 1; k <= 6; k++) await page.mouse.move(a.x + ((b.x - a.x) * k) / 6, a.y + ((b.y - a.y) * k) / 6)
+      await page.mouse.up()
+      await sleep(400)
+    }
+    let hs = await ev(() => window.__ts.group.handles())
+    if (!hs) fail('a pinned group move has no handles')
+    const rot0 = (await ev(() => window.__ts.group.pin())).rot
+    const v = { x: hs.turn.x - hs.move.x, z: hs.turn.z - hs.move.z }
+    await drag(hs.turn, { x: hs.move.x - v.z, z: hs.move.z + v.x })
+    const turned = await ev(() => window.__ts.group.pin())
+    const quarter = Math.abs(Math.atan2(Math.sin(turned.rot - rot0 - Math.PI / 2), Math.cos(turned.rot - rot0 - Math.PI / 2)))
+    if (!turned || quarter > 0.35) fail(`the turn knob dragged a quarter turn left the pin turned ${turned ? (turned.rot - rot0).toFixed(2) : 'nowhere'} rad`)
+    hs = await ev(() => window.__ts.group.handles())
+    const w = { x: hs.line.x - hs.move.x, z: hs.line.z - hs.move.z }
+    await drag(hs.line, { x: hs.move.x + w.x * 0.7, z: hs.move.z + w.z * 0.7 })
+    const lined = await ev(() => window.__ts.group.pin())
+    if (!lined?.line) fail('the line knob dragged out made no line')
+    if ((await count()) !== n0) fail('dragging the pin\'s handles sent something')
+    const paths = await ev(() => window.__ts.group.bar().pinned)
+    await page.keyboard.press('Escape')
+    await sleep(250)
+    if (await ev(() => window.__ts.group.pinned())) fail('Esc left the pin')
+    say(`the pin's handles: turned ${(turned.rot - rot0).toFixed(2)} rad, then a line ${Math.hypot(lined.line.b.x - lined.line.a.x, lined.line.b.z - lined.line.a.z).toFixed(1)}" long, nothing sent${paths ? '' : ''}; Esc let it go`)
+  }
+
   // (F10b) 🤖 Auto these: one pilot for the group, its mask the group's,
   // the phase still the seat's, and nobody outside the group moved
   await rest()
@@ -661,8 +707,80 @@ async function check(page, say) {
     const strays = after.filter(([id, x], i) => !crew.includes(id) && x !== before[i][1]).map(([id]) => id)
     if (strays.length) fail(`Auto these moved units outside the group: ${JSON.stringify(strays)}`)
     const went = after.filter(([id, x], i) => crew.includes(id) && x !== before[i][1]).length
+    if (!went) fail(`Auto these moved none of the ${crew.length} units it named`)
     say(`Auto these: one pilot (mask ${want}) for ${crew.length} units, ${went} of them moved, nobody else; the movement phase still the seat's`)
   }
+
+  // (F10c) Standing orders: the keys give and take them; End's ⟳ badge and
+  // ▶ Go count the units they act for; Go sends their commands and leaves
+  // the phase open; End carries out the rest, then ends it
+  await rest()
+  const loose = await ev((t) => window.__ts.session.preview((G, q) => G.units.filter((u) => u.side === t && u.alive > 0 && q.canAct(G, u) && !q.isEngaged(G, u)).map((u) => ({ id: u.id, x: u.pos.x, z: u.pos.z, M: u.t.M }))), t2)
+  if (loose.length < 3) fail(`seat ${t2} has ${loose.length} units left to move, too few for the orders`)
+  const [hold, marcher, pilot] = loose
+  // H on one picked up: Hold; X: none again
+  await ev((id) => window.__ts.group.select([id]), hold.id)
+  await page.keyboard.press('h')
+  if ((await ev(({ t, id }) => window.__ts.orders.book(t)[id]?.k, { t: t2, id: hold.id })) !== 'hold') fail('H gave no Hold')
+  await page.keyboard.press('x')
+  if ((await ev(({ t, id }) => window.__ts.orders.book(t)[id], { t: t2, id: hold.id })) !== undefined) fail('X left an order')
+  await page.keyboard.press('h')
+  // a march about a move ahead (its slot the anchor), and an autopilot
+  const dir = t2 === 0 ? 1 : -1
+  const slot = await ev(({ x, z }) => window.__ts.G.nav.index(x, z), { x: marcher.x + dir * Math.max(3, marcher.M - 1), z: marcher.z })
+  await ev(({ id, slot }) => window.__ts.orders.give([id], { k: 'march', anchor: slot, slot }), { id: marcher.id, slot })
+  await ev((id) => window.__ts.orders.give([id], { k: 'auto' }), pilot.id)
+  await ev(() => window.__ts.group.select([]))
+  await sleep(300)
+  const plan = await ev(() => window.__ts.orders.plan())
+  const hud = await ev(() => ({ end: window.__ts.hud.end.label, go: getComputedStyle(document.querySelector('#goOrders')).display !== 'none' && document.querySelector('#goOrders').textContent, orders: document.querySelector('#ordersN').textContent }))
+  if (plan.covered.includes(hold.id) || !plan.covered.includes(marcher.id) || !plan.covered.includes(pilot.id)) fail(`the orders' plan covers ${JSON.stringify(plan.covered)} in the movement phase (Hold covers none of it)`)
+  if (!plan.actors.length || !hud.end.endsWith(`· ⟳ ${plan.actors.length}`) || hud.go !== `▶ Go (${plan.actors.length})`) fail(`End reads "${hud.end}" and Go "${hud.go}", the orders act for ${plan.actors.length}`)
+  if (hud.orders !== 'Orders 3') fail(`the counter reads "${hud.orders}", three units hold orders`)
+  const stood = await ev((ids) => ids.map((id) => window.__ts.G.units.find((u) => u.id === id)).map((u) => `${u.pos.x},${u.pos.z}`), [hold.id, marcher.id, pilot.id])
+  n0 = await count()
+  await page.click('#goOrders')
+  await page.waitForFunction(() => !window.__ts.orders.busy(), null, { timeout: IDLE_MS })
+  n1 = await settled()
+  const sent = await ev((n) => window.__ts.session.store.entries().slice(n).map((e) => e.t), n0)
+  const now = await ev((ids) => ids.map((id) => window.__ts.G.units.find((u) => u.id === id)).map((u) => `${u.pos.x},${u.pos.z}`), [hold.id, marcher.id, pilot.id])
+  const P2 = await ev(() => window.__ts.session.G.pending)
+  if (P2?.phase !== 'move' || !sent.includes('move') || sent.filter((k) => k === 'pilot').length !== 1 || sent.includes('end')) fail(`Go sent ${JSON.stringify(sent)} and left ${JSON.stringify(P2)}: the march's move and one pilot, the phase still open`)
+  if (now[0] !== stood[0] || now[1] === stood[1]) fail(`after Go the holder moved (${stood[0]} → ${now[0]}) or the marcher didn't (${stood[1]} → ${now[1]})`)
+  say(`orders: H and X by key; End read "${hud.end}", Go "${hud.go}"; Go sent ${sent.join(', ')}, the phase still open`)
+  // every unit still able to move put on autopilot: nothing is left for the
+  // player's own hand, so End lights (end.ready counts manual units only);
+  // (F10c) with Auto-End on, it counts down and presses itself
+  await page.click('#autoEnd')
+  const lit0 = await ev(() => window.__ts.hud.end.ready)
+  const left = await ev((t) => window.__ts.session.preview((G, q) => G.units.filter((u) => u.side === t && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)), t2)
+  await ev((ids) => window.__ts.orders.give(ids, { k: 'auto' }), left)
+  await ev(() => window.__ts.group.select([]))
+  await sleep(300)
+  const lit1 = await ev(() => ({ ready: window.__ts.hud.end.ready, lit: document.querySelector('#endPhase').classList.contains('ready'), label: window.__ts.hud.end.label, counting: document.querySelector('#endPhase').classList.contains('counting') }))
+  if (left.length && (lit0 || !lit1.ready || !lit1.lit)) fail(`End's "nothing left": ${lit0} with ${left.length} units still the player's, then ${JSON.stringify(lit1)} with all of them on autopilot`)
+  if (left.length && !lit1.counting) fail('Auto-End drew no countdown on End')
+  say(`End lit once every unit left (${left.length}) was on autopilot ("${lit1.label}"), Auto-End counting down`)
+  // End presses itself: whatever the orders have left, then the phase's end
+  n0 = await count()
+  if (!left.length) await page.click('#endPhase')
+  await page.waitForFunction((t) => !window.__ts.orders.busy() && window.__ts.player.idle && !(window.__ts.session.G.pending?.phase === 'move' && window.__ts.session.G.pending.seats.includes(t)), t2, { timeout: IDLE_MS })
+  const ended = await ev((n) => window.__ts.session.store.entries().slice(n).map((e) => e.t), n0)
+  if (!ended.includes('end') || (left.length && !ended.includes('pilot'))) fail(`End with orders sent ${JSON.stringify(ended)}: the autopilot's pilot, then the end`)
+  say(`${left.length ? 'Auto-End' : 'End'} with orders sent ${ended.join(', ')}`)
+  await page.click('#autoEnd')
+  // O draws every order's line (an attack's, given here, at least)
+  const foe = await ev((t) => window.__ts.G.units.find((u) => u.side !== t && u.alive > 0)?.id, t2)
+  const att = await ev((t) => window.__ts.G.units.find((u) => u.side === t && u.alive > 0)?.id, t2)
+  await ev(({ att, foe, t }) => window.__ts.orders.give([att], { k: 'attack', tg: foe }, t), { att, foe, t: t2 })
+  await page.keyboard.press('o')
+  await sleep(200)
+  const drawn = await ev(() => window.__ts.orders.lines())
+  await page.keyboard.press('o')
+  await sleep(200)
+  const after0 = await ev(() => window.__ts.orders.lines())
+  if (!drawn || after0) fail(`O drew ${drawn} order lines, then ${after0} once off again`)
+  say(`O drew ${drawn} order line${drawn === 1 ? '' : 's'}, none once off again`)
 }
 
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))

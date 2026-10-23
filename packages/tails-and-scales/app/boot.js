@@ -14,6 +14,8 @@ import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
 import { Selection } from '../input/selection.js'
 import { GroupInput } from '../input/group.js'
+import { OrderBook } from '../input/book.js'
+import { StandingInput } from '../input/standing.js'
 import { seatsOf, sidesFor, isMirror } from '../ui/theme.js'
 import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
@@ -105,7 +107,16 @@ export function boot(location) {
   const ui = {
     tray: new Tray($('#tray')),
     log: new BattleLog($('#logList'), () => flow.traceListener),
-    card: new Card({ el: $('#card'), sides: () => flow.sides, shown: (u) => view.units.shown(u.id), live: () => flow.player.idle, ask: (fn) => preview(flow.atTable(), fn), facts: () => flow.facts }),
+    card: new Card({
+      el: $('#card'), sides: () => flow.sides, shown: (u) => view.units.shown(u.id), live: () => flow.player.idle, ask: (fn) => preview(flow.atTable(), fn), facts: () => flow.facts,
+      // (F10c) its standing order, on the units of a seat played here; its
+      // buttons give the unit on the card one
+      orders: (u) => (flow.session?.localSeats.includes(u.side) && u.alive > 0 ? { k: human.standing.book.get(u.side, u.id)?.k ?? null, can: human.standing.seat() === u.side } : null),
+      onOrder: (u, k) => {
+        if (!human.standing.picked().some((x) => x.id === u.id)) human.select(u)
+        human.standing.order(k)
+      },
+    }),
     tooltip: new Tooltip($('#tooltip')),
     banner: new Banner($('#banner')),
     toast: new Toast($('#toast')),
@@ -128,13 +139,15 @@ export function boot(location) {
   // (F10a) units picked up together, and the bar that says what they do
   human.group = new GroupInput({ human, view, selection: new Selection(), controls: view.rig.controls, bar: ui.groupbar, tooltip: ui.tooltip })
   human.group.wireBar()
+  // (F10c) the standing orders, each seat's in this device's book
+  human.standing = new StandingInput({ human, book: new OrderBook(), toast: ui.toast })
   $('#selectMode').onclick = () => {
     human.group.setSelectMode(!human.group.selectMode)
     $('#selectMode').classList.toggle('on', human.group.selectMode)
   }
   human.listen(view.renderer.domElement)
   ui.actions.wire(human)
-  ui.hud.wire({ rig: view.rig, player })
+  ui.hud.wire({ rig: view.rig, player, standing: human.standing })
   wireHelp()
   // (N2) online play: app/online.js, the net layer and Automerge loaded the
   // first time they are wanted (Play online, a #m= link), never for a game
@@ -613,8 +626,10 @@ export function boot(location) {
         // member's cell, as (x, z)
         pin: () => {
           const p = human.group.selection.of(human.group.seat()).pin, nav = flow.G?.nav
-          return p && { verb: p.verb, line: p.line, members: p.preview.members.map((m) => ({ id: m.u.id, at: m.cell >= 0 ? { x: nav.x(m.cell), z: nav.z(m.cell) } : null })) }
+          return p && { verb: p.verb, line: p.line, rot: p.rot ?? 0, members: p.preview.members.map((m) => ({ id: m.u.id, at: m.cell >= 0 ? { x: nav.x(m.cell), z: nav.z(m.cell) } : null })) }
         },
+        // (F10c) the pin's handles, where they stand on the table
+        handles: () => human.group.handles(human.group.selection.of(human.group.seat()).pin),
         screen: (id) => view.units.screen.get(id) ?? null,
         // pick up `ids` together, pin their formation at (x, z) as a ground
         // click does, send it (a promise: the executor's run), and what the
@@ -713,6 +728,22 @@ export function boot(location) {
       autoPhase: () => {
         must($('#autoPhase').onclick(), 'autoPhase')
         return settle()
+      },
+      // (F10c) the standing orders: give(ids, order) puts ids of the seat
+      // whose turn it is here (or `seat`) under `order` (input/book.js's
+      // shape; null: none) as the bar would; book(seat) the seat's, by id;
+      // plan() what End would act for now ({ actors, covered }, as arrays);
+      // busy() whether a run is under way
+      orders: {
+        give: (ids, order, seat = human.standing.seat()) => human.standing.give(seat, ids, order),
+        // the order lines the table draws now
+        lines: () => human.standing.lines().length,
+        book: (seat) => Object.fromEntries(human.standing.orders(seat)),
+        plan: () => {
+          const p = human.standing.plan()
+          return { actors: [...p.actors], covered: [...p.covered] }
+        },
+        busy: () => human.standing.busy,
       },
       // (F10b) Auto these: the AI plays the units mask m names (bit j: the
       // seat's j-th unit in G.units order), sent as the group bar's button

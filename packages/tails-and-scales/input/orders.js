@@ -11,12 +11,25 @@
 // waiting for the connection"). Client code, run from a UI handler (never a sink's
 // events): no rule reads it.
 //
-//   runGroup({ session, seat, verb, members, target, line?, advance? })
+//   runGroup({ session, seat, verb, members, target, line?, advance?, slots? })
 //            → Promise<{ sent, blocked: [{ u, why }], left: [u], fell: bool,
 //            note }>: `line` the formation's (an Alt-drag), `advance` a Move
 //            whose members each advance first (the roll, then the member
-//            planned again with it)
+//            planned again with it), (F10c) `slots` the formation's own (a
+//            pin its handle turned: id → { x, z })
+//
+// (F10c) runOrders({ session, seat, orders, then? }) → Promise<{ sent,
+// blocked: [{ id, why }], acted: [ids] }>: the seat's standing orders
+// (orders: id → order, input/book.js's) carried out for the phase at hand,
+// in §4.2.6's order: March and Attack first, each unit's commands planned
+// from the match as the last left it (present/standing.js's stepOf; an
+// advance sent alone, the unit then planned again on its roll), in the AI's
+// role order (reversed for shots); then one `pilot` for every unit whose
+// order calls for the AI and that can still act; then `then` ('end' at End,
+// 'auto' at Auto; none at Go, the phase left open). A unit whose command is
+// refused is skipped for the phase ("Blocked"), never retried.
 import { previewGroup } from '../present/orders.js'
+import { stepOf, orderedUnits } from '../present/standing.js'
 
 const WAIT = 10000
 
@@ -31,13 +44,13 @@ async function folded(session, n) {
   return true
 }
 
-export async function runGroup({ session, seat, verb, members, target, line = null, advance = false }) {
+export async function runGroup({ session, seat, verb, members, target, line = null, advance = false, slots = null }) {
   const blocked = [], left = []
   let sent = 0, fell = false
   const opts = { line, advance }
   // the members, in the order the preview plans them, and their places in
   // the formation (kept as each is planned again)
-  const first = session.preview((G, q) => previewGroup(G, q, seat, verb, members.map((u) => G.units.find((x) => x.id === u.id)), target, null, opts))
+  const first = session.preview((G, q) => previewGroup(G, q, seat, verb, members.map((u) => G.units.find((x) => x.id === u.id)), target, slots, opts))
   const order = first.members.map((m) => m.u.id)
   // (Fire and Charge: only the members the preview named, so what is sent
   // is what it said; one a shot made able since stays for the next click)
@@ -99,4 +112,60 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
   }
   const note = fell ? `Target down${left.length ? ` · ${left.length} still ready` : ''}` : blocked.length ? `${blocked.length} blocked` : ''
   return { sent, blocked, left, fell, note }
+}
+
+export async function runOrders({ session, seat, orders, then = null }) {
+  const blocked = [], acted = new Set()
+  let sent = 0
+  const phaseNow = () => {
+    const P = session.G?.pending
+    return P?.k === 'phase' && P.seats.includes(seat) ? P.phase : null
+  }
+  const send = async (body, id) => {
+    const why = session.legal(seat, body)
+    if (why) {
+      blocked.push({ id, why })
+      return false
+    }
+    const n = session.count
+    try {
+      session.submit(seat, body)
+    } catch (err) {
+      blocked.push({ id, why: err.message })
+      return false
+    }
+    sent++
+    if (!(await folded(session, n))) throw new Error('Orders paused: waiting for the connection')
+    return true
+  }
+  const phase = phaseNow()
+  if (!phase) return { sent, blocked, acted: [] }
+  const unit = (G, id) => G.units.find((x) => x.id === id)
+  // 1. March and Attack: their own commands
+  const ids = session.preview((G, q) => orderedUnits(G, q, seat, orders, phase).map((u) => u.id))
+  for (const id of ids) {
+    const o = orders.get(id)
+    if (o.k !== 'march' && o.k !== 'attack') continue
+    // (an advance, then the unit planned again on its roll)
+    for (let k = 0; k < 2 && phaseNow() === phase; k++) {
+      const step = session.preview((G, q) => (unit(G, id) ? stepOf(G, q, unit(G, id), o, phase) : { how: 'none' }))
+      if (step.how !== 'macro') break
+      let ok = true
+      for (const body of step.cmds) {
+        // (a charge that missed opens no end to pick)
+        if (body.t === 'chargeEnd' && !(session.G.pending?.k === 'chargeEnd' && session.decisionFor() === seat)) continue
+        if (!(ok = await send(body, id))) break
+      }
+      if (ok) acted.add(id)
+      if (!ok || step.cmds[0].t !== 'advance') break
+    }
+  }
+  // 2. one pilot: every unit whose order calls for the AI now
+  if (phaseNow() === phase) {
+    const pilots = session.preview((G, q) => orderedUnits(G, q, seat, orders, phase).filter((u) => stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id))
+    if (pilots.length && (await send({ t: 'pilot', m: session.preview((G, q) => q.maskOf(G, seat, pilots)) }, -1))) for (const id of pilots) acted.add(id)
+  }
+  // 3. End, or Auto
+  if (then && phaseNow() === phase) await send({ t: then }, -1)
+  return { sent, blocked, acted: [...acted] }
 }

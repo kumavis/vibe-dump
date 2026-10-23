@@ -1341,6 +1341,51 @@ body.mirror .ulabel.s1.sel .ct {
 #readyN.hidden {
   display: none;
 }
+/* (F10c) standing orders: the bar's verbs, the label's badge, the card's row,
+   Auto-End's countdown on End */
+#endPhase.counting {
+  background-image: linear-gradient(90deg, rgba(95, 211, 255, 0.45), rgba(95, 211, 255, 0.45));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  animation: autoEndCount 1.5s linear forwards;
+}
+@keyframes autoEndCount {
+  to {
+    background-size: 100% 100%;
+  }
+}
+#groupbar .gorder.on {
+  border-color: #5fd3ff;
+  color: #5fd3ff;
+}
+#groupbar .gorder.held {
+  color: #bfeeff;
+}
+.ulabel[data-ord]:not([data-ord=''])::after {
+  content: attr(data-ord);
+  margin-left: 4px;
+  color: #5fd3ff;
+}
+#card .card-orders {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 6px;
+  font-size: 12px;
+  color: var(--dim);
+}
+#card .card-orders span {
+  margin-right: 4px;
+}
+#card .card-orders button {
+  padding: 2px 7px;
+  font-size: 12px;
+}
+#card .card-orders button.on {
+  border-color: #5fd3ff;
+  color: #5fd3ff;
+}
 #card .card-group {
   color: var(--gold);
   font-size: 12px;

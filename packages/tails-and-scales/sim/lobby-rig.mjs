@@ -71,7 +71,10 @@
 //                played while it was away (its own copy of the document set
 //                aside) is tamper, said before anything is shown
 //   (F10a)
-//   group        a seat's page picks up three of its units together and
+//   group        (F10c: and then puts its units still to move on autopilot
+//                and presses End, the orders' pilot and the End sent and
+//                folded alike, the other page seeing them as `ords`) a
+//                seat's page picks up three of its units together and
 //                places them in its deployment, then (the seat whose turn
 //                it is) moves three in the movement phase, each a pinned
 //                formation sent: nothing refused, the other page's presence
@@ -744,7 +747,26 @@ async function runCases(dist, cases) {
       const moved = await groupOrder(mover, seat, true)
       must(moved.sent >= 1 && !moved.refused && !moved.pinned, `a group moved in the movement phase: ${JSON.stringify(moved)}`)
       await same('the group move')
-      return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match`
+      // (F10c) standing orders at End online: every unit still able to move
+      // on autopilot, End pressed; the orders' commands wait on each fold,
+      // none is refused, the other page sees the orders (presence `ords`)
+      // and folds the same match
+      const other = mover === host ? guest : host
+      const ordered = await mover.evaluate((seat) => {
+        const ts = window.__ts, ses = ts.session
+        const ids = ses.preview((G, q) => G.units.filter((u) => u.side === seat && u.alive > 0 && q.canAct(G, u)).map((u) => u.id))
+        ts.orders.give(ids, { k: 'auto' }, seat)
+        return ids
+      }, seat)
+      must(ordered.length > 0, 'no unit left to put on autopilot')
+      await until(other, (seat) => window.__ts.net.presence.live().some((p) => p.seat === seat && Object.keys(p.ords ?? {}).length), seat, 20000, "the mover's standing orders in the other page's presence")
+      const before = await mover.evaluate(() => ({ n: window.__ts.session.count, r: window.__ts.session.rejected.length }))
+      await mover.evaluate(() => window.__ts.endPhase())
+      await until(mover, (seat) => !window.__ts.orders.busy() && !(window.__ts.session.G.pending?.phase === 'move' && window.__ts.session.decisionFor() === seat), seat, 60000, 'the orders and the End')
+      const ran = await mover.evaluate((b) => ({ kinds: window.__ts.session.store.entries().slice(b.n).map((e) => e.t), refused: window.__ts.session.rejected.length - b.r }), before)
+      must(ran.kinds.includes('pilot') && ran.kinds.includes('end') && !ran.refused, `the orders at End sent ${JSON.stringify(ran)}`)
+      await same('the orders at End')
+      return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match; ${ordered.length} units on autopilot carried out at End (${ran.kinds.join(', ')}), seen by the other page, folded alike`
     },
   }
 
@@ -817,6 +839,8 @@ const MUTANTS = {
   'tamper-back-attached': ['kept', 'app/online.js', '        back: () => {\n          this.close()\n', '        back: () => {\n          this.leave()\n'],
   // (F10a) the page never tells the others what it has picked up together
   'no-sels': ['group', 'app/online.js', '      if (group.length >= 2) m.sels = group.slice(0, 120).map((u) => u.id)\n', ''],
+  // (F10c) the standing orders never put in presence
+  'no-ords': ['group', 'app/online.js', '    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))\n', ''],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

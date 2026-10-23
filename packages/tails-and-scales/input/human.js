@@ -50,6 +50,8 @@ export class Human {
     this.downAt = null
     // (F10a) the group input (input/group.js), set by app/boot.js
     this.group = null
+    // (F10c) the standing orders (input/standing.js), set by app/boot.js
+    this.standing = null
   }
 
   get session() {
@@ -93,7 +95,10 @@ export class Human {
   }
   // what the HUD model reads of the input (present/hud-model.js)
   state() {
-    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0 }
+    // ((F10c) and the standing orders: those acting now, those an order
+    // covers in this phase, how many the seat has)
+    const st = this.standing
+    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.orders(this.localSeat()).size : 0, counting: !!st?.counting }
   }
 
   // ── Commands ──────────────────────────────────────────────────────────────
@@ -167,13 +172,31 @@ export class Human {
     }
     if (!this.myTurn()) return 'no phase of a seat played here to end now'
     this.select(null)
+    this.standing?.stopCount()
+    // (F10c) the seat's standing orders first, then the End
+    if (this.standing?.orders(this.localSeat()).size) return this.ordersThen('end')
     return this.send(this.localSeat(), { t: 'end' })
+  }
+  // (F10c) ▶ Go: the standing orders now, the phase left open
+  go() {
+    if (!this.myTurn()) return 'no phase of a seat played here now'
+    if (!this.standing?.plan().actors.length) return 'no orders to carry out now'
+    return this.ordersThen(null)
+  }
+  // the orders run (they send their commands one at a time, each waiting
+  // on the last to be folded online), then `then`
+  ordersThen(then) {
+    if (this.standing.busy) return 'the orders are under way'
+    this.standing.run(then)
+    this.flow.refreshUI()
+    return null
   }
   // Auto: the AI plays the rest of the phase for the seat, then ends it (one
   // command: the match plays it all at once, the table at its pace).
   auto() {
     if (!this.myTurn()) return 'no phase of a seat played here to play out now'
     this.select(null)
+    if (this.standing?.orders(this.localSeat()).size) return this.ordersThen('auto')
     return this.send(this.localSeat(), { t: 'auto' })
   }
   // (F10b) Auto these: the AI plays the rest of the phase for the units
@@ -230,6 +253,8 @@ export class Human {
       overlay.mask(pk.ok, [255, 150, 60], this.G.nav, 150)
       overlay.ghostAt(this.G.nav, pk.cell, pk.u.r)
     }
+    // (F10c) Auto-End's countdown, if the orders leave the player nothing
+    this.standing?.idled()
   }
 
   // ── The pointer and the keys ──────────────────────────────────────────────
@@ -242,6 +267,8 @@ export class Human {
     let gesture = false
     dom.addEventListener('pointerdown', (e) => {
       unlock()
+      // (F10c) a press on the table stops Auto-End's countdown
+      this.standing?.stopCount()
       pressed.add(e.pointerId)
       gesture ||= pressed.size > 1
       this.downAt = { x: e.clientX, y: e.clientY, b: e.button }
@@ -291,6 +318,7 @@ export class Human {
     // (F10a) a group's keys first (input/group.js)
     addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT') return
+      if (!this.picking() && this.standing?.key(e)) return
       if (!this.picking() && this.group?.key(e)) return
       if (e.key === 'Escape' && !this.picking()) this.select(null)
     })
@@ -304,6 +332,7 @@ export class Human {
     this.tooltip.hide()
     // (F10a) a group's click first: Shift-click picks, and two or more
     // picked act together
+    if (!this.picking() && this.standing?.click({ unit, ground })) return
     if (!this.picking() && this.group?.click({ unit, ground }, e)) return
     if (this.deploySeat() >= 0) return this.deployClick(unit, ground)
     const pk = this.picking()

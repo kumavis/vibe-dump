@@ -2,7 +2,7 @@
 // ephemeral channel (handle.broadcast: never stored, never in the log)
 // every 5 s and whenever it changes:
 //
-//   { dev, seat, name, head, n, hash, sel?, tg?, sels? }
+//   { dev, seat, name, head, n, hash, sel?, tg?, sels?, ords? }
 //
 // dev and name the device's; seat the seat it plays (-1 watching); head,
 // n and hash the Folder's head, how many entries it has accepted and the
@@ -11,12 +11,17 @@
 // with no human seat has, where no `h` ever flows); sel and tg the unit its
 // player has picked up and the one it aims at (the opponent's ghost: a
 // dashed ring, a line to the target); (F10a) sels the units it has picked
-// up together, two or more (at most 120 ids: dashed rings round them).
-// Later steps add keys (F10c's `ords`), never change what one means. What arrives is a peer's
+// up together, two or more (at most 120 ids: dashed rings round them);
+// (F10c) ords its seat's standing orders, a kind by unit id (at most 120:
+// the badges on their labels). Later steps add keys, never change what one
+// means. What arrives is a peer's
 // say-so: each field is checked and anything else dropped, and none of it
 // touches the match.
 const NAME = /^.{1,64}$/su
 const id = (v) => (Number.isSafeInteger(v) && v >= 0 ? v : undefined)
+const ORDERS = new Set(['march', 'attack', 'hold', 'auto'])
+// (F10c) a kind by unit id, the rest dropped
+const ords = (o) => (o && typeof o === 'object' && !Array.isArray(o) ? Object.fromEntries(Object.entries(o).slice(0, 120).filter(([k, v]) => /^\d{1,9}$/.test(k) && ORDERS.has(v))) : undefined)
 
 // a message as this page takes it, or null
 export function readPresence(m) {
@@ -31,6 +36,7 @@ export function readPresence(m) {
     sel: id(m.sel),
     tg: id(m.tg),
     sels: Array.isArray(m.sels) ? m.sels.slice(0, 120).map(id).filter((v) => v !== undefined) : undefined,
+    ords: ords(m.ords),
   }
 }
 

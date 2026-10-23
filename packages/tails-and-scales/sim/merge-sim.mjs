@@ -169,7 +169,7 @@
 //                                         flight: `no-queue`)
 //
 // --seeds (default 3) scenarios per human log, the kinds in turn (plain,
-// fork, concede), and one reenter; --only picks the corpus battles (cap, edges, forks and
+// fork, concede), and one reenter and (F10c) one burst; --only picks the corpus battles (cap, edges, forks and
 // the drills run unless --only names battles). One child process per
 // scenario, up to one per CPU. Exit 0 when every check holds (the
 // self-test: when every mutant is caught), 1 otherwise, 2 on bad arguments.
@@ -250,8 +250,8 @@ class Net {
 // its own, which settles), and every entry its Session writes is vetted as
 // it is appended (vet, below).
 class Peer {
-  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null, closing = false }) {
-    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace })
+  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null, closing = false, burst = false }) {
+    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace, burst })
     // (reactive: the command its Session holds queued, and how many it
     // wrote, dropped, and sent from each callback)
     this.queued = null
@@ -593,6 +593,17 @@ function play(net, rand, { cap = 400000, deliver = 3 } = {}) {
     } else if (m[1] === 'act') {
       p.session.submit(m[3].s, m[3].body)
       p.mark(p.fork ? 'fork' : 'honest')
+      // (F10c, burst) a seat's orders at End: up to 25 of its commands
+      // written one after another on its own view, junk of its own between
+      // them now and then, before anything else is delivered
+      for (let k = 1; p.burst && k < 25; k++) {
+        if (rand() < 0.15 && p.session.status === 'live') p.put(JUNK[Math.floor(rand() * JUNK.length)](p.M.E, p, net.ops.length), 'junk')
+        const next = p.canAct()
+        if (!next) break
+        p.session.submit(next.s, next.body)
+        p.mark('honest')
+        p.bursts = (p.bursts ?? 0) + 1
+      }
     } else if (m[1] === 'slip') {
       p.budget--
       slip(p, rand, net.ops.length)
@@ -751,7 +762,7 @@ function humanScenario(M, it, kind, seed) {
   // and an entry the other seat wrote after seeing only the loser, are both
   // refused as stale once the winner is folded before them)
   const forked = kind === 'fork', reactive = kind === 'reenter'
-  const seated = humans.map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], fork: forked, ...(reactive ? { reactive, pace: mulberry32(Math.floor(rand() * 2 ** 32)) } : {}) }))
+  const seated = humans.map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], fork: forked, burst: kind === 'burst', ...(reactive ? { reactive, pace: mulberry32(Math.floor(rand() * 2 ** 32)) } : {}) }))
   const spectator = peer({ name: 'spectator', dev: 'dS' })
   if (forked) peer({ name: `seat ${humans[0]}'`, dev: `d${humans[0]}`, seats: [humans[0]], fork: true })
   for (const p of net.peers) p.budget = 3 + Math.floor(rand() * 4)
@@ -771,7 +782,7 @@ function humanScenario(M, it, kind, seed) {
   // with one device a seat, nothing a peer has shown is ever undone (a reset
   // there only reorders two seats' deployments, which commute)
   const undone = net.peers.reduce((n, p) => n + p.undone, 0)
-  if ((kind === 'plain' || kind === 'reenter') && undone) throw new Error(`${where}: with one device a seat, a reset undid ${undone} entries shown`)
+  if ((kind === 'plain' || kind === 'reenter' || kind === 'burst') && undone) throw new Error(`${where}: with one device a seat, a reset undid ${undone} entries shown`)
   // (reenter) nothing left queued, and every command a seat's peer sent
   // from a callback written (a drop only where the match had moved on)
   let reacted = null
@@ -787,6 +798,7 @@ function humanScenario(M, it, kind, seed) {
   return {
     where, steps, peers: net.peers.length, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length,
     resets: net.peers.reduce((n, p) => n + p.resets, 0), undone, refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), conceded, met, hk, spectator: spectator.name, reacted,
+    bursts: net.peers.reduce((n, p) => n + (p.bursts ?? 0), 0),
   }
 }
 
@@ -1893,6 +1905,8 @@ function tasks({ only, seeds, extras = only === undefined }) {
       for (let k = 0; k < seeds; k++) out.push({ kind: KINDS[k % KINDS.length], id: it.id, seed: k + 1 })
       // (R8b) the seats answering from their sinks' callbacks
       out.push({ kind: 'reenter', id: it.id, seed: 1 })
+      // (F10c) each seat's commands in bursts, as standing orders send them
+      out.push({ kind: 'burst', id: it.id, seed: 1 })
     }
   }
   if (extras) {
@@ -1945,7 +1959,9 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
   const met = {}
   for (const r of res) if (r.ok) for (const [k, n] of Object.entries(r.r.met)) met[k] = (met[k] ?? 0) + n
   const ok = res.filter((r) => r.ok).map((r) => r.r)
-  const sums = { refolds: ok.reduce((n, x) => n + x.refolds, 0), resets: ok.reduce((n, x) => n + x.resets, 0), undone: ok.reduce((n, x) => n + (x.undone ?? 0), 0), entries: ok.reduce((n, x) => n + x.entries, 0) }
+  const sums = { refolds: ok.reduce((n, x) => n + x.refolds, 0), resets: ok.reduce((n, x) => n + x.resets, 0), undone: ok.reduce((n, x) => n + (x.undone ?? 0), 0), entries: ok.reduce((n, x) => n + x.entries, 0), bursts: ok.reduce((n, x) => n + (x.bursts ?? 0), 0) }
+  // (F10c) the burst scenarios: commands written back to back by a seat
+  if (list.some((t) => t.kind === 'burst') && !bad.length && !sums.bursts) bad.push({ error: 'no burst scenario\'s seat ever wrote a command right after another' })
   const hk = {}
   for (const x of ok) for (const [k, n] of Object.entries(x.hk ?? {})) hk[k] = (hk[k] ?? 0) + n
   // (R8b) what the reenter scenarios' seats sent from each callback
@@ -1972,7 +1988,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
   if (list.filter((t) => t.kind === 'drill' && t.how === 'hypot').length >= 3 && !bad.length) {
     for (const how of ['its own hash', 'the desync entry']) if (!drills.some((x) => x.watched === how)) bad.push({ error: `no hypot drill's spectator froze by ${how}` })
   }
-  say(`\n${list.length} scenarios, ${sums.entries} entries folded by every peer, ${sums.refolds} inserts before folded entries, ${sums.resets} resets (${sums.undone} entries shown undone); refused or accepted: ${Object.entries(met).sort().map(([k, n]) => `${k} ${n}`).join(', ')}; held to §0.2 #3's hash rule: ${Object.entries(hk).sort().map(([k, n]) => `${k} ${n}`).join(', ')}${reenters ? `; submitted from a sink's callback (reenter): ${['events', 'reset', 'settled', 'dropped'].map((k) => `${k} ${reacted[k] ?? 0}`).join(', ')}, ${reacted.written ?? 0} written once their change was folded, ${reacted.drops ?? 0} dropped, ${reacted.settles ?? 0} settles` : ''} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${list.length} scenarios, ${sums.entries} entries folded by every peer${sums.bursts ? ` (${sums.bursts} written in bursts)` : ''}, ${sums.refolds} inserts before folded entries, ${sums.resets} resets (${sums.undone} entries shown undone); refused or accepted: ${Object.entries(met).sort().map(([k, n]) => `${k} ${n}`).join(', ')}; held to §0.2 #3's hash rule: ${Object.entries(hk).sort().map(([k, n]) => `${k} ${n}`).join(', ')}${reenters ? `; submitted from a sink's callback (reenter): ${['events', 'reset', 'settled', 'dropped'].map((k) => `${k} ${reacted[k] ?? 0}`).join(', ')}, ${reacted.written ?? 0} written once their change was folded, ${reacted.drops ?? 0} dropped, ${reacted.settles ?? 0} settles` : ''} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 

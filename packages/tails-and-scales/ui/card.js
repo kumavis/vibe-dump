@@ -12,6 +12,7 @@
 // played (present/hud-model.js's facts), so the card never tells of moves
 // and dice the table hasn't played (§2.4).
 import { factOf, cardStatus } from '../present/hud-model.js'
+import { GLYPH, NAME } from '../present/standing.js'
 
 const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 
@@ -45,14 +46,22 @@ export class Card {
   // shown; `live()`: whether the table has caught up with the match;
   // `ask(fn)`: fn(G, q) of the match the table shows, with its dice locked
   // (the core's preview, §4.1 rule 2); `facts()`: the record of the last
-  // action or stop played, by unit id
-  constructor({ el, sides, shown, live, ask, facts }) {
+  // action or stop played, by unit id; (F10c) `orders(u)`: the unit's
+  // standing order ({ k, can: whether the player may change it now }, or
+  // null: none to show), and `onOrder(u, k)`: one of its buttons pressed
+  constructor({ el, sides, shown, live, ask, facts, orders = () => null, onOrder = () => {} }) {
     this.el = el
     this.sides = sides
     this.shown = shown
     this.live = live
     this.ask = ask
     this.facts = facts
+    this.orders = orders
+    this.onOrder = onOrder
+    el.addEventListener('click', (e) => {
+      const k = e.target?.dataset?.order
+      if (k && this.unit) this.onOrder(this.unit, k)
+    })
     // the unit the open card shows (app/flow.js redraws it as the table
     // catches up)
     this.unit = null
@@ -81,7 +90,18 @@ export class Card {
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role}</span></div>
-    <div class="card-sub">${cardStatus(t, mu, f)}</div>${statsHtml(t)}`
+    <div class="card-sub">${cardStatus(t, mu, f)}</div>${this.orderLine(u)}${statsHtml(t)}`
     card.classList.add('show')
+  }
+
+  // (F10c) the unit's standing order, and while the player may change it,
+  // a button for each
+  orderLine(u) {
+    const o = this.orders(u)
+    if (!o || (!o.k && !o.can)) return ''
+    const now = o.k ? `${GLYPH[o.k]} ${NAME[o.k]}` : 'none'
+    const keys = { march: 'G', attack: 'T', hold: 'H', auto: 'P', none: 'X' }
+    const buttons = o.can ? ['march', 'attack', 'hold', 'auto', 'none'].map((k) => `<button data-order="${k}" title="${k === 'none' ? 'No orders' : NAME[k]} (${keys[k]})"${o.k === k ? ' class="on"' : ''}>${k === 'none' ? '⊘' : GLYPH[k]}</button>`).join('') : ''
+    return `<div class="card-orders"><span>Orders: ${now}</span>${buttons}</div>`
   }
 }
