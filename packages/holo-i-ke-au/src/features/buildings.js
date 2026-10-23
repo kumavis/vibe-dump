@@ -79,9 +79,9 @@ const P = TOWN_PALETTE
 
 // --- pieces --------------------------------------------------------------------
 
-/** Plinth: the ground floor's footing, from FOOT under the ground to `top`. */
-function plinth(B, L, W, top, c, x = 0, z = 0) {
-  B.box(x, -FOOT, z, L, top + FOOT, W, c, MAT.stone)
+/** Plinth: the ground floor's footing, from `foot` (FOOT) under the ground to `top`. */
+function plinth(B, L, W, top, c, x = 0, z = 0, foot = FOOT) {
+  B.box(x, -foot, z, L, top + foot, W, c, MAT.stone)
 }
 
 /**
@@ -558,6 +558,12 @@ function clockTower(rand) {
 // `block`: poured concrete and corrugated iron, the walls the colour of the
 // concrete, the roofs grey and green iron. Each is built at a size of its own
 // in metres and fitted to the block's footprint where the file gives one.
+// A footprint can be a hundred metres across on a hillside (Tripler's), so
+// each stands on a footing WORKS_FOOT deep: works.js sets its floor into the
+// slope and the footing takes up the ground falling away under it.
+
+/** How far under its floor a works building's footing reaches, metres. */
+export const WORKS_FOOT = 8
 
 /** A hangar: a broad low vault of iron over concrete walls, its doors across the front. */
 function hangar(rand) {
@@ -567,7 +573,7 @@ function hangar(rand) {
   const L = 60
   const W = 48
   const h = 9
-  plinth(B, L + 0.6, W + 0.6, 0.3, col(P.plinth, 0.08, rand))
+  plinth(B, L + 0.6, W + 0.6, 0.3, col(P.plinth, 0.08, rand), 0, 0, WORKS_FOOT)
   B.box(0, 0.3, 0, L, h, W, wall, MAT.plain)
   // (the vault as three facets a side, the ridge along the length)
   const top = 0.3 + h
@@ -615,7 +621,7 @@ function barracks(rand, storeys) {
   const L = 56
   const W = 16
   const h = storeys * 3.4
-  plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.08, rand))
+  plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.08, rand), 0, 0, WORKS_FOOT)
   B.box(0, 0.6, 0, L, h, W, wall, MAT.windows)
   hip(B, L, W, 0.6 + h, 2.6, 0.9, col([P.ironRed, P.ironGreen, P.iron][Math.floor(rand() * 3)], 0.08, rand))
   door(B, W, 2.4, 2.6, 0.6)
@@ -628,7 +634,7 @@ function lowBlock(rand) {
   const wall = col(P.concrete, 0.06, rand)
   const L = 26
   const W = 14
-  plinth(B, L + 0.4, W + 0.4, 0.4, col(P.plinth, 0.08, rand))
+  plinth(B, L + 0.4, W + 0.4, 0.4, col(P.plinth, 0.08, rand), 0, 0, WORKS_FOOT)
   B.box(0, 0.4, 0, L, 4.2, W, wall, MAT.clap)
   gable(B, L, W, 4.6, 1.6, 0.5, col(P.iron, 0.08, rand), wall, { wallMat: MAT.clap })
   door(B, W, 3.2, 3, 0.4)
@@ -642,7 +648,7 @@ function concreteBlock(rand) {
   const L = 30
   const W = 22
   const h = 4 * 3.6
-  plinth(B, L + 0.4, W + 0.4, 0.5, col(P.plinth, 0.08, rand))
+  plinth(B, L + 0.4, W + 0.4, 0.5, col(P.plinth, 0.08, rand), 0, 0, WORKS_FOOT)
   B.box(0, 0.5, 0, L, h, W, wall, MAT.windows)
   B.box(0, 0.5 + h, 0, L + 0.4, 0.8, W + 0.4, wall.map((c) => c * 0.88), MAT.plain)
   return B
@@ -652,14 +658,16 @@ function concreteBlock(rand) {
  * The works' kits, by kind: a hangar, barracks of two and of three storeys,
  * a low block, and a block of four storeys whose instances stretch to their
  * own. Each as buildKits gives a kind's: geometry, half extents, extents and
- * top, and `L`, `W`, the size it was built at, for fitting to a footprint.
+ * top, `L`, `W`, the size it was built at, for fitting to a footprint, and
+ * `foot`, how far its footing reaches under its floor (metres, before a
+ * block's stretch).
  */
 export function worksKits(rand) {
   const kit = (B, L, W, storeys = 1) => {
     const g = indexed(B.geometry())
     g.computeBoundingBox()
     const ob = g.boundingBox
-    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, L, W, storeys }
+    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, L, W, storeys, foot: WORKS_FOOT }
   }
   return {
     hangar: kit(hangar(rand), 60, 48),

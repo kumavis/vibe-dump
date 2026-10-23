@@ -3613,21 +3613,35 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
             const off = await ui(`(() => { const D = app.districts, t = app.world.islandAt(${at.at[0]}, ${at.at[1]}); let m = 0; for (const [x, z] of ${JSON.stringify(pts)}) m = Math.max(m, Math.abs(D.metresAt(x, z) - app.world.ownMetres(t, x, z))); return m })()`)
             if (!(g.seen >= 6 && g.hit >= g.seen * 0.75)) throw new Error(`${f.id} in ${at.id}: ${g.hit} of ${g.seen} points on the screen drawn where the district's ground is`)
             rows.push(`${f.id} in ${at.id}: ${g.hit} of ${g.seen} points where the district's ground is drawn (the island's ground up to ${off.toFixed(1)} m off it there)`)
-            // the blocks in the district stand on its ground (the highest of it under them, a hand's breadth up)
+            // the blocks in the district stand on its ground: each floor (a hand's breadth up) between the lowest and the highest
+            // of the district's ground under its footprint, at its mean where its footing reaches the lowest, so none floats over
+            // the ground and none shows daylight under it (read under the footprint at points of its own, not the placing's)
             const blocks = await ui(`(() => {
               const v = app.works.islands.get('oahu').view, D = app.districts, out = []
               if (!D.on) return out
-              const r = D.cur.d.rect
+              const r = D.cur.d.rect, E = 1.3 / 100, y = app.timeline.year
               for (const it of v.instances || []) {
                 if (!(it.x > r.x0 + 8 && it.x < r.x1 - 8 && it.z > r.z0 + 8 && it.z < r.z1 - 8)) continue
-                const y = it.mesh.instanceMatrix.array[it.index * 16 + 13]
-                out.push({ kind: it.kind, dy: (y - app.world.metresAt(it.x, it.z) * 1.3 / 100) / (1.3 / 100) })
+                // (those standing in the year: the rest are placed as the year comes to them)
+                if (y < it.span[1] || y > it.span[2]) continue
+                const floor = (it.mesh.instanceMatrix.array[it.index * 16 + 13] - 0.15 * E) / E
+                const c = Math.cos(it.dir), s = Math.sin(it.dir), hx = it.kit.hx * it.sx, hz = it.kit.hz * it.sz
+                const g = []
+                for (let j = 0; j <= 4; j++) for (let i = 0; i <= 4; i++) {
+                  const u = i / 2 - 1, w = j / 2 - 1
+                  g.push(Math.max(0, app.world.metresAt(it.x + u * hx * c - w * hz * s, it.z + u * hx * s + w * hz * c)))
+                }
+                const lo = Math.min(...g), hi = Math.max(...g), mean = g.reduce((a, b) => a + b, 0) / g.length
+                out.push({ kind: it.kind, size: Math.round(Math.max(hx, hz) * 200), floor: +floor.toFixed(2), lo: +lo.toFixed(2), hi: +hi.toFixed(2), mean: +mean.toFixed(2), foot: it.kit.foot * it.stretch })
               }
               return out
             })()`)
-            const lifted = blocks.filter((b) => b.dy < -0.01 || b.dy > 8)
-            if (lifted.length) throw new Error(`blocks off the district's ground in ${at.id}: ${JSON.stringify(lifted)}`)
-            if (blocks.length) rows.push(`${blocks.length} blocks in ${at.id}, each on its ground: ${blocks.map((b) => `${b.kind} +${b.dy.toFixed(1)} m`).join(', ')}`)
+            const astray = blocks.filter((b) => b.floor < b.lo - 0.05 || b.floor > b.hi + 0.05 || b.floor - b.lo > b.foot + 0.5 || (b.lo + b.foot > b.mean + 0.5 && Math.abs(b.floor - b.mean) > Math.max(1.5, (b.hi - b.lo) * 0.25)))
+            if (astray.length) throw new Error(`blocks off the district's ground in ${at.id}: ${JSON.stringify(astray.slice(0, 6))}`)
+            if (blocks.length) {
+              const steep = blocks.reduce((a, b) => (b.hi - b.lo > a.hi - a.lo ? b : a))
+              rows.push(`${blocks.length} blocks in ${at.id}, each on its ground; the steepest a ${steep.kind} ${steep.size} m across, its ground from ${steep.lo.toFixed(1)} to ${steep.hi.toFixed(1)} m and its floor at ${steep.floor.toFixed(1)} (its footing ${steep.foot} m)`)
+            }
           }
           for (const r of rows) console.log(`      ${r}`)
         })
@@ -3757,14 +3771,18 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
       await view("app.tour.islandView('oahu', 0)")
       await worksIn()
       await run("app.works.islands.get('oahu').view.__probe = 1")
-      const before = await ui('[app.renderer.info.memory.geometries, app.works.entries.get("oahu").out.ms]')
+      // (the geometries the works draw, by identity: the renderer's count is everyone's, and a district or a town let go
+      // meanwhile would read as the works changing)
+      const geoms = "(() => { const s = new Set(); app.scene.getObjectByName('works').traverse((o) => { if (o.geometry) s.add(o.geometry.uuid) }); return [...s].sort().join(' ') })()"
+      const before = await ui(`[${geoms}, app.works.entries.get("oahu").out.ms]`)
       for (const y of [1880, 1930, 1945, 1960, 1999, lastY]) {
         await offYear(y)
         await frames(1)
       }
-      const after = await ui('[app.renderer.info.memory.geometries, app.works.islands.get("oahu").view.__probe ?? 0, app.works.entries.get("oahu").out.ms]')
-      if (after[1] !== 1 || after[0] !== before[0] || after[2] !== before[1]) throw new Error(`geometries ${before[0]} → ${after[0]}; the island's works ${after[1] ? 'kept' : 'rebuilt'}`)
-      console.log(`      six years from 1880 to ${lastY}: the same ${after[0]} geometries, the island's works never rebuilt or decoded again`)
+      const after = await ui(`[${geoms}, app.works.islands.get("oahu").view.__probe ?? 0, app.works.entries.get("oahu").out.ms]`)
+      const n = before[0].split(' ').filter(Boolean).length
+      if (after[1] !== 1 || !n || after[0] !== before[0] || after[2] !== before[1]) throw new Error(`the island's works ${after[1] ? 'kept' : 'rebuilt'}; their ${n} geometries ${after[0] === before[0] ? 'the same' : 'changed'}; ${after[2] === before[1] ? 'decoded once' : 'decoded again'}`)
+      console.log(`      six years from 1880 to ${lastY}: the same ${n} geometries of the works, the island's works never rebuilt or decoded again`)
     })
 
     await check('works: let go with the island, and the GPU’s memory with it', async () => {
@@ -3778,16 +3796,27 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
       await frames(2)
       const g1 = await ui('app.renderer.info.memory.geometries')
       const held = await ui("(() => { const s = app.works.islands.get('oahu').view.stats(); return { buffers: s.gpuMB, calls: s.calls } })()")
+      // (each geometry the works draw, counted as it is disposed: the renderer's count is everyone's, and another
+      // system letting something of its own go meanwhile would read as the works giving back more than they took)
+      const own = await ui(`(() => {
+        const s = new Set()
+        app.scene.getObjectByName('works').traverse((o) => { if (o.geometry) s.add(o.geometry) })
+        app.__worksGone = 0
+        for (const g of s) g.addEventListener('dispose', () => app.__worksGone++)
+        return s.size
+      })()`)
       await view('app.tour.chainView()')
       await frames(2)
       // (as LINGER seconds after the island gave its slot up)
       await run('app.works.release()')
       await frames(3)
       const g2 = await ui('app.renderer.info.memory.geometries')
+      const gone = await ui('app.__worksGone')
       const left = await ui('[app.works.islands.size, app.works.entries.size, app.scene.getObjectByName("works").children.length, document.querySelectorAll(".wlabels").length]')
       if (left.some(Boolean)) throw new Error(`still held: ${left.join(', ')} (islands, decodes, groups, name layers)`)
-      if (!(g1 > g0) || g2 !== g0) throw new Error(`geometries ${g0} at the chain, ${g1} with Oʻahu's works, ${g2} once they are let go`)
-      console.log(`      geometries ${g0} at the whole chain, ${g1} with Oʻahu's works (${held.buffers} MB of buffers, ${held.calls} draw calls), ${g2} once they are let go`)
+      if (!(own > 0) || gone !== own) throw new Error(`${gone} of the ${own} geometries the works drew disposed`)
+      if (!(g1 > g0) || g2 > g0) throw new Error(`geometries ${g0} at the chain, ${g1} with Oʻahu's works, ${g2} once they are let go`)
+      console.log(`      geometries ${g0} at the whole chain, ${g1} with Oʻahu's works (${held.buffers} MB of buffers, ${held.calls} draw calls), ${g2} once they are let go; all ${own} of the works' own disposed`)
     })
 
     await check('works: what Oʻahu’s works cost a frame', async () => {
@@ -3824,7 +3853,10 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
         }
         await run('app.works.hidden = false; app.settle()')
         const calls = out.with.calls - out.without.calls
-        if (calls > 14) throw new Error(`${name}: ${calls} draw calls for the works`)
+        // (at most 15: the washes and the boundary, each of the four ribbon looks fine near the camera and coarse beyond,
+        // and each of the five kinds of block, its kit its own instanced geometry; one draw for every block would run
+        // every kit's vertices for each of them, four times the vertex work, to save four calls)
+        if (calls > 15) throw new Error(`${name}: ${calls} draw calls for the works`)
         rows.push(`${name}: ${out.with.ms} ms a frame with the works, ${out.without.ms} without; ${calls} draw calls, ${out.with.tris - out.without.tris} triangles`)
       }
       for (const r of rows) console.log(`      ${r}`)

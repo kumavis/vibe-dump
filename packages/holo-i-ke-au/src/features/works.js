@@ -29,7 +29,9 @@
 // - the blocks: hangars, barracks and concrete blocks (buildings.js
 //   worksKits), by their storeys, instanced, standing on the ground drawn
 //   under them now (world.metresAt, refreshed as the district comes and
-//   goes), near in only, as the towns' buildings are;
+//   goes), each floor set into the slope at the mean of the ground under its
+//   footprint and its footing taking up the fall, near in only, as the
+//   towns' buildings are;
 // - and the names of the military land, the airfields and the named highways
 //   at the island zoom (features/labels.js), clear of the place names.
 //
@@ -65,6 +67,9 @@ const fineReach = (d) => (d < RIBBON_FINE ? Math.max(60, d * 4) : 0)
 // the blocks' scale, world units per metre: a little over life, as a hangar
 // is a large thing already; a footprint from the file is kept at its size
 const WORKS_S = 0.013
+// where a block's ground is read under its footprint, in its half extents:
+// its middle, its corners and the middles of its sides
+const BLOCK_SAMPLES = [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -83,7 +88,8 @@ const LOOK = {
   runway: { mode: 'paved', colour: lin('#aaa69c'), minPx: 1.3, lift: 0.006, alpha: 0.95, marks: true },
   road: { mode: 'paved', colour: lin('#6e6a64'), minPx: 1.0, lift: 0.005, alpha: 0.85 },
   stone: { mode: 'stone', colour: lin('#958b80'), minPx: 1.1, lift: 0.012, alpha: 0.95 },
-  rail: { mode: 'rail', colour: lin('#3b3532'), minPx: 0.8, lift: 0.007, alpha: 0.85 },
+  // (never thinner than about the military land's dashes, 1.5 px, so a railway reads at the island zoom)
+  rail: { mode: 'rail', colour: lin('#2a2522'), minPx: 1.6, lift: 0.007, alpha: 0.9 },
 }
 
 const washVertex = /* glsl */ `
@@ -612,20 +618,39 @@ class IslandWorks {
     this._v = new THREE.Vector3()
     this._s = new THREE.Vector3()
     this._up = new THREE.Vector3(0, 1, 0)
+    // (every one placed once, so none the eased year passes through stands anywhere but on its own ground)
+    this.placeBlocks()
   }
 
-  /** Each block on the ground drawn under it now: the highest of it under its footprint (world.metresAt, the district's where it is down). */
-  placeBlocks() {
+  /**
+   * Each block on the ground drawn under it now (world.metresAt, the
+   * district's where it is down): its floor at the mean of the ground under
+   * its footprint, cut into a slope as a building on a hillside is, its
+   * footing taking up the ground falling away under it; and never further
+   * over the lowest of that ground than its footing reaches. (A town's lot
+   * is small enough to stand over its highest ground; a footprint a hundred
+   * metres across on Tripler's hillside would float metres over the rest.)
+   * With `year`, those standing within a year of it, the rest as the year
+   * comes to them; without, all of them.
+   */
+  placeBlocks(year) {
     const W = this.app.world
     for (const it of this.instances) {
+      if (year !== undefined && (year < it.span[0] - 1 || year > it.span[3] + 1)) continue
       const c = Math.cos(it.dir)
       const s = Math.sin(it.dir)
       const hx = it.kit.hx * it.sx
       const hz = it.kit.hz * it.sz
-      let g = -Infinity
-      for (const [u, v] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]) g = Math.max(g, W.metresAt(it.x + u * hx * c - v * hz * s, it.z + u * hx * s + v * hz * c))
+      let sum = 0
+      let lo = Infinity
+      for (const [u, v] of BLOCK_SAMPLES) {
+        const g = Math.max(0, W.metresAt(it.x + u * hx * c - v * hz * s, it.z + u * hx * s + v * hz * c))
+        sum += g
+        lo = Math.min(lo, g)
+      }
+      const floor = Math.min(sum / BLOCK_SAMPLES.length, lo + it.kit.foot * it.stretch)
       this._q.setFromAxisAngle(this._up, -it.dir)
-      this._v.set(it.x, Y(Math.max(g, 0)) + LIFT, it.z)
+      this._v.set(it.x, Y(floor) + LIFT, it.z)
       this._s.set(it.sx, it.sy, it.sz)
       this._m4.compose(this._v, this._q, this._s)
       this._m4.toArray(it.mesh.instanceMatrix.array, it.index * 16)
@@ -682,10 +707,11 @@ class IslandWorks {
       if (bs > 0.001) {
         // (the ground under them moves as the district comes and goes, and with the patches of the year)
         const D = app.districts
-        const key = `${D?.on ? D.cur?.d.id : ''}:${(D?.on ? D.k : 0).toFixed(2)}:${this.t.k.toFixed(2)}:${Math.round(app.timeline.year)}`
+        const year = Math.round(app.timeline.year)
+        const key = `${D?.on ? D.cur?.d.id : ''}:${(D?.on ? D.k : 0).toFixed(2)}:${this.t.k.toFixed(2)}:${year}`
         if (key !== this.groundKey) {
           this.groundKey = key
-          this.placeBlocks()
+          this.placeBlocks(year)
         }
       }
     }
@@ -721,7 +747,8 @@ class IslandWorks {
   dispose() {
     this.group.parent?.remove(this.group)
     for (const g of this.geometries) g.dispose()
-    for (const kit of Object.values(this.kits || {})) kit.geometry.dispose()
+    // (and the kits no block drew: those that did are among the geometries, each disposed once)
+    for (const kit of Object.values(this.kits || {})) if (!this.geometries.includes(kit.geometry)) kit.geometry.dispose()
     for (const m of this.materials) m.dispose()
     for (const m of this.blockMeshes) m.dispose()
     this.ribbons.dispose()

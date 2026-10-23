@@ -266,10 +266,13 @@ island takes its slot and let go after it leaves, draws every year. Military
 land is control: a translucent wash with a dashed edge and a name at the island
 zoom, a range fainter and hatched, an airfield's field lighter; what stood on
 it is drawn only where it stood (runways and roads paved to their width, piers
-and breakwaters stone on the water, rail a thin dark line, hangars and barracks
-as buildings). Everything is draped in the vertex shader on the ground drawn
-there, the island's or a district's lidar, so a runway at Kāneʻohe lies on the
-lidar as the camera comes down. The settlements keep off the works of their
+and breakwaters stone on the water, rail a thin dark line never under about
+1.5 px, hangars and barracks as buildings). Everything is draped in the vertex
+shader on the ground drawn there, the island's or a district's lidar, so a
+runway at Kāneʻohe lies on the lidar as the camera comes down; a building's
+floor is set into its slope at the mean of the ground under its footprint, a
+deep footing taking up the fall, since a footprint can be a hundred metres
+across on a hillside (Tripler's). The settlements keep off the works of their
 year. At the whole chain nothing of the works is drawn: no island is in a slot
 there, and a reservation is a few pixels against the land layers; the Land
 legend names military land while any of it is drawn on the island in view.
