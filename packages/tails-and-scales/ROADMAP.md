@@ -823,8 +823,9 @@ follows N3.
   (`CORE_VERSION` 3; the mask's bits the seat's units in `G.units` order;
   the AI's phase filtered, the phase left open; the group bar's 🤖 Auto
   these. P-auto (`sim/pilot-check.mjs`), P-pilot in P-prop, input-check's
-  Auto these, the human-bot's `pilot` policy; the `pilot/` logs in a commit
-  of their own. DESIGN's F10b notes.)
+  Auto these, the human-bot's `pilot` policy; four `pilot/` logs, recorded
+  on F10b's code in a commit of their own, the corpus 46 battles. DESIGN's
+  F10b notes.)
 - [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
   out at End or Go; badges, counters, optional auto-End. Left from F10a:
   the pinned formation's handles (move, rotate, stretch into a line: the
