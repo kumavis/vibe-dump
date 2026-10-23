@@ -3823,14 +3823,14 @@
       "launch": "08:45",
       "altM": 450,
       "route": [
-        {"t":"09:45","lonlat":[-177.2814,30.8328],"altM":450,"precision":"narrative","source":"nwc-midway-1948"},
+        {"t":"09:06","lonlat":[-177.2814,30.8328],"altM":450,"precision":"narrative","source":"nwc-midway-1948","note":"at the squadron’s own pace from its launch; Yorktown’s group joined up at 09:45 (NWC) on the next leg"},
         {
-          "t": "10:00",
+          "t": "09:56",
           "lonlat": [-178.826,29.4338],
           "altM": 450,
           "precision": "narrative",
           "source": "nwc-midway-1948",
-          "note": "sighted the force at 345°, 30 to 40 miles"
+          "note": "sighted the force at 345°, 30 to 40 miles (NWC: about 10:00), timed so the run to Hiryū is flown at the squadron’s pace"
         }
       ],
       "attack": {
@@ -4676,6 +4676,19 @@
       ]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "aircraft",
+      "kit": "f4f-4",
+      "side": "us",
+      "group": "vf-3-cap-noon",
+      "station": "pilot",
+      "name": "a Wildcat of Yorktown’s combat air patrol"
+    },
+    "t": "11:59",
+    "title": "A Wildcat over Yorktown",
+    "text": "Yorktown’s radar has Hiryū’s strike coming in from the west: fly a Wildcat of her combat air patrol out to meet it ahead of the carrier; its guns are all it carries, so there is nothing to release."
+  },
   "moments": [
     {
       "id": "vb6-kaga",

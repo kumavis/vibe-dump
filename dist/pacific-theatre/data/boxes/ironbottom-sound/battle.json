@@ -1805,55 +1805,28 @@
           "t": "22:50",
           "lonlat": [159.8919,-9.2653],
           "courseDeg": 276,
-          "speedKn": 9,
+          "speedKn": 6.1,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
           "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
         },
         {
-          "t": "23:00",
+          "t": "23:08",
           "lonlat": [159.8641,-9.2516],
           "courseDeg": 297,
-          "speedKn": 9.9,
+          "speedKn": 6.3,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
+          "sourceNote": "third in the column, 300–500 yards ahead of Gwin; timed so she reaches the place she rolls over at 23:32 at an even speed, all the chart’s track allows"
         },
         {
-          "t": "23:10",
+          "t": "23:22",
           "lonlat": [159.842,-9.2407],
-          "courseDeg": 295,
-          "speedKn": 8.8,
+          "courseDeg": 296,
+          "speedKn": 6.1,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
-        },
-        {
-          "t": "23:20",
-          "lonlat": [159.8195,-9.2309],
-          "courseDeg": 294,
-          "speedKn": 5.6,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
-        },
-        {
-          "t": "23:24",
-          "lonlat": [159.8219,-9.2318],
-          "courseDeg": 109,
-          "speedKn": 2.2,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
-        },
-        {
-          "t": "23:30",
-          "lonlat": [159.8254,-9.2329],
-          "courseDeg": 108,
-          "speedKn": 2.2,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "third in the column, 300–500 yards ahead of Gwin"
+          "sourceNote": "third in the column, 300–500 yards ahead of Gwin; timed so she reaches the place she rolls over at 23:32 at an even speed, all the chart’s track allows"
         },
         {
           "t": "23:32",
@@ -2104,55 +2077,28 @@
           "t": "22:50",
           "lonlat": [159.8949,-9.2668],
           "courseDeg": 271,
-          "speedKn": 8.3,
+          "speedKn": 6.2,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
           "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
         },
         {
-          "t": "23:00",
+          "t": "23:08",
           "lonlat": [159.867,-9.253],
           "courseDeg": 296,
-          "speedKn": 9.9,
+          "speedKn": 6.3,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
+          "sourceNote": "fourth in the column (ONI; Lundgren); timed so she reaches the place she is hit at 23:32 at an even speed, all the chart’s track allows"
         },
         {
-          "t": "23:10",
+          "t": "23:22",
           "lonlat": [159.8449,-9.2423],
-          "courseDeg": 296,
-          "speedKn": 8.8,
+          "courseDeg": 297,
+          "speedKn": 6.4,
           "precision": "narrative",
           "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
-        },
-        {
-          "t": "23:20",
-          "lonlat": [159.8226,-9.232],
-          "courseDeg": 296,
-          "speedKn": 5.7,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
-        },
-        {
-          "t": "23:24",
-          "lonlat": [159.8248,-9.2326],
-          "courseDeg": 109,
-          "speedKn": 2,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
-        },
-        {
-          "t": "23:30",
-          "lonlat": [159.8279,-9.2338],
-          "courseDeg": 111,
-          "speedKn": 2,
-          "precision": "narrative",
-          "source": "oni-cn-guadalcanal-1944",
-          "sourceNote": "fourth in the column, 5,000 yards ahead of Washington (ONI; Lundgren) until the action"
+          "sourceNote": "fourth in the column (ONI; Lundgren); timed so she reaches the place she is hit at 23:32 at an even speed, all the chart’s track allows"
         },
         {
           "t": "23:32",
@@ -5808,6 +5754,19 @@
       "sources": [{"id":"morison-v","where":"0320"},{"id":"trom-kirishima"},{"id":"lundgren-bbaction"}]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "ship",
+      "kit": "gleaves",
+      "side": "us",
+      "unit": "gwin",
+      "station": "helm",
+      "name": "Gwin’s bridge"
+    },
+    "t": "23:24",
+    "title": "Gwin’s helm",
+    "text": "Gwin is fourth in the destroyer column, steaming west below Savo as the night action opens: keep her in her place astern of Preston and steer as the shells come; her guns fight on their own, and nothing need be fired."
+  },
   "moments": [
     {
       "id": "washington-kirishima",

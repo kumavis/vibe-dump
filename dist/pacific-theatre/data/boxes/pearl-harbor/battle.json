@@ -2940,16 +2940,16 @@
           "t": "06:45",
           "lonlat": [-157.985,21.272],
           "courseDeg": 120,
-          "speedKn": 2.2,
+          "speedKn": 16.2,
           "precision": "schematic",
           "source": "ward-ar-1941",
           "sourceNote": "firing at 50–100 yards, then depth charges set for 100 feet"
         },
         {
-          "t": "07:30",
+          "t": "06:51",
           "lonlat": [-157.96,21.2584],
           "courseDeg": 14,
-          "speedKn": 0.8,
+          "speedKn": 0.6,
           "precision": "schematic",
           "source": "ward-ar-1941"
         },
@@ -3299,11 +3299,11 @@
         {
           "t": "07:15",
           "lonlat": [-157.06,24.13],
-          "courseDeg": 355,
+          "courseDeg": 180,
           "speedKn": 9.2,
           "precision": "report",
           "source": "pha-exhibit-8",
-          "sourceNote": "the second launch point, 200 nm 000° from Point Z (computed, R10 §3.2)",
+          "sourceNote": "the second launch point, 200 nm 000° from Point Z (computed, R10 §3.2); still on the run south from the first launch point (thirty miles in seventy-five minutes), the turn north for the recovery after it",
           "sourceClock": "0245",
           "sourceZone": "+09:00",
           "sourceDate": "1941-12-08"
@@ -6894,12 +6894,12 @@
           "note": "split about ten miles east of Kahuku"
         },
         {
-          "t": "08:52",
+          "t": "08:55",
           "lonlat": [-157.79,21.25],
           "altM": 1500,
           "precision": "narrative",
           "source": "aaf-7dec41",
-          "note": "south past Diamond Head and round over the sea"
+          "note": "south past Diamond Head and round over the sea; ten minutes from the split at a B5N’s speed"
         }
       ],
       "attack": {
@@ -6996,7 +6996,7 @@
           "source": "aaf-7dec41",
           "note": "split about ten miles east of Kahuku"
         },
-        {"t":"08:52","lonlat":[-157.79,21.25],"altM":1500,"precision":"narrative","source":"aaf-7dec41"}
+        {"t":"08:55","lonlat":[-157.79,21.25],"altM":1500,"precision":"narrative","source":"aaf-7dec41"}
       ],
       "attack": {
         "t": "09:05",
@@ -7416,12 +7416,12 @@
       "altM": 1500,
       "route": [
         {
-          "t": "08:33",
+          "t": "08:34",
           "lonlat": [-158.0764,21.398],
           "altM": 1500,
           "precision": "narrative",
           "source": "aaf-7dec41",
-          "note": "sent by ground control toward ʻEwa"
+          "note": "sent by ground control toward ʻEwa: 22 km from Haleʻiwa, four minutes after they took off"
         }
       ],
       "attack": {
@@ -8148,6 +8148,27 @@
       "sources": [{"id":"cincpac-pearl-1942"}]
     }
   ],
+  "firstDoor": {
+    "role": {
+      "kind": "aircraft",
+      "kit": "p-40b",
+      "side": "us",
+      "group": "welch-taylor",
+      "station": "pilot",
+      "name": "a P-40B from Haleʻiwa"
+    },
+    "t": "08:31",
+    "start": {
+      "from": "haleiwa",
+      "bearingDeg": 175,
+      "rangeM": 2500,
+      "altM": 600,
+      "speedMs": 75,
+      "headingDeg": 175
+    },
+    "title": "A P-40 out of Haleʻiwa",
+    "text": "A P-40B of the Army’s pursuit squadron climbs away from Haleʻiwa: fly it south down the middle of the island toward ʻEwa and the harbour at your own pace; a fighter carries no bombs, so there is nothing to release."
+  },
   "moments": [
     {
       "id": "kaga-b5n-torpedo",

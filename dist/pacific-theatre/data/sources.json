@@ -1462,12 +1462,12 @@
     "url": "https://www.ibiblio.org/hyperwar/USA/USA-CBI-Mission/index.html",
     "access": "open",
     "opened": true,
-    "read": "title",
+    "read": "part",
     "language": "en",
     "licence": "pd-us-gov",
     "ref": "CMH Pub 9-1",
     "tertiary": false,
-    "note": "Map list opened (R3)."
+    "note": "Map list opened (R3); Map 1, “Japanese Plan, December 1941”, viewed for the prologue front (content-2)."
   },
   {
     "id": "romanus-1956",
@@ -5538,5 +5538,65 @@
     "ref": null,
     "tertiary": false,
     "note": "Nevada’s grounding, through Wikipedia: verify"
+  },
+  {
+    "id": "jm-144",
+    "title": "Political Strategy Prior to Outbreak of War, Part I (Japanese Monograph 144)",
+    "author": "Military History Section, HQ Army Forces Far East",
+    "year": 1952,
+    "url": "https://www.ibiblio.org/pha/monos/144/index.html",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "language": "en (tr. from ja)",
+    "licence": "pd-us-gov",
+    "ref": "JM-144",
+    "tertiary": false,
+    "note": "Content-2 read the preface and chs. I–IV: the rights in Manchuria (the Kwantung leased territory, the South Manchuria Railway and its zones, troops in the railway zones), the chronologies of 1931–1939 (Mukden, Changchun and Kirin on 18 September 1931, Harbin on 4 February 1932, Manchukuo on 1 March 1932, Hailar and Manchouli on 5 December 1932, Jehol from 2 January to March 1933; Peiping, Shanghai, Nanking and Hangchow in 1937; Hsuchow, Hankow and Canton in 1938; Hainan, Nanchang and Nanning in 1939), and the front at the end of 1938 (p. 42). Dates from the Lange encyclopedia are the editor’s insertions."
+  },
+  {
+    "id": "jm-70",
+    "title": "China Area Operations Record (Revised), July 1937 – November 1941 (Japanese Monograph 70)",
+    "author": "Office of the Military History Officer, HQ US Army Japan",
+    "year": 1957,
+    "url": "https://www.ibiblio.org/hyperwar/Japan/Monos/pdfs/JM-70/JM-70.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "language": "en (tr. from ja)",
+    "licence": "pd-us-gov",
+    "ref": "JM-70",
+    "tertiary": false,
+    "note": "Content-2 read the contents, the operations of 1937–1938 and the sections on north Kiangsu (p. 47), Nanning (pp. 62–65), Chekiang in April 1941 (pp. 66–68), and northern and southern French Indo-China (pp. 64, 69), and General Reference Maps I and II (the operations in north China, July 1937 – June 1938, and in central and south China, August 1937 – March 1939, with dates), from which the prologue’s occupied China of 1937 and 1938 is drawn."
+  },
+  {
+    "id": "peace-and-war-1943",
+    "title": "Peace and War: United States Foreign Policy, 1931–1941",
+    "author": "Department of State",
+    "year": 1943,
+    "url": "https://www.ibiblio.org/pha/paw/index.html",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "language": "en",
+    "licence": "pd-us-gov",
+    "ref": null,
+    "tertiary": false,
+    "note": "The narrative read for Manchuria (ch. II, pp. 4–8: the attack of 18 September 1931, South Manchuria by the end of 1931, Jehol early in January 1933) and Indochina (p. 96: the military agreement of 22 September 1940, three airdromes and the transit of troops; p. 123: the right to keep troops and bases in southern Indochina, about 22 July 1941). The HyperWar/PHA transcription keeps the book’s page numbers."
+  },
+  {
+    "id": "lytton-1932",
+    "title": "Appeal by the Chinese Government: Report of the Commission of Enquiry (the Lytton Report)",
+    "author": "League of Nations, Commission of Enquiry (the Earl of Lytton, chairman)",
+    "year": 1932,
+    "url": "https://archive.org/details/service-gdc-gdcwdl-wd-l_-11-60-1-wdl_11601-wdl_11601",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "language": "en",
+    "licence": "unknown",
+    "ref": "C.663.M.320.1932.VII",
+    "tertiary": false,
+    "note": "The World Digital Library’s scan, opened by content-2: the list of maps and ch. IV read. Its fourteen maps (\"inserted in the pocket of the cover\"), among them the military situation in Manchuria before 18 September 1931 and about 1 May 1932, are in neither scan reached (this one, nor the Chūō Kōron translation of 1932 at archive.org/details/lytton-report), and the League’s own copy at UN Geneva sits behind a challenge page; the front is not traced from it, and its licence is not settled here."
   }
 ]
