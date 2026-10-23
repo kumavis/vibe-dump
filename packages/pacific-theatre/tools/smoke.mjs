@@ -41,12 +41,28 @@
 // selects within 24 px; the list at phone width; every string the round adds
 // keeps the voice rules.
 //
+// The box on a phone (style.css's phone layout, scene/hud.js's and
+// controls/touch.js's), on a mobile page with touch: watching, holding an
+// aircraft (Pearl Harbor's first door, the P-40 out of Haleʻiwa; the
+// fixtures' dive bomber), an aircraft at its bombsight (a B5N2) or rear gun,
+// a ship at the anti-aircraft station (Nevada; the fixtures' ship with one)
+// and the same ship at her helm, each at 360×780,
+// 390×844, 412×915 and 412×720 (the owner's phone under the Claude app's
+// header) upright and 844×390 and 915×412 on its side: every visible
+// control and readout (the bar and its buttons and pills, the stick and the
+// sliders, the buttons, the instruments, the subtitle, the plot, the hints,
+// the clock, the tools) is collected by its bounding box, clipped by any
+// scrolling parent, and no two may overlap by more than 2 px nor any leave
+// the screen; the pairs that do are printed. A beat's subtitle (a long one)
+// and the first hints are held on screen while the sizes are measured.
+//
 //   npm run build -w @vibe-dump/pacific-theatre
 //   node tools/fake-data.mjs
 //   node tools/smoke.mjs                 (test-data/ unless DATA=real)
 //   DATA=real node tools/smoke.mjs
 //   CHROMIUM_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome (the default)
 //   MOCK=0 skips the dev page's checks; MOCK=only runs them alone (no build needed)
+//   PHONE=0 skips the phone's bounding-box check; PHONE=only runs it alone
 //
 // Under SwiftShader a frame takes the better part of a second, so the checks
 // settle the camera (app.settle()) rather than wait out flights. Adapted from
@@ -69,6 +85,7 @@ const useTest = process.env.DATA ? process.env.DATA !== 'real' : true
 // the dev page's checks (ROUND-2 §6 against the mock Battle): MOCK=0 skips them, MOCK=only runs them alone
 const MOCK = process.env.MOCK ?? '1'
 const MOCK_ONLY = MOCK === 'only'
+const PHONE_ONLY = process.env.PHONE === 'only'
 if (!useTest && !realReady) throw new Error('DATA=real but public/data/manifest.json does not exist yet')
 if (!MOCK_ONLY && useTest && !existsSync(join(root, 'test-data/manifest.json'))) throw new Error('no test-data/: run node tools/fake-data.mjs first')
 if (!MOCK_ONLY && !existsSync(join(root, 'dist/index.html'))) throw new Error('no dist/: run npm run build -w @vibe-dump/pacific-theatre first')
@@ -120,7 +137,7 @@ const check = async (name, fn) => {
 let perf = null
 // (the built app's checks, the first round's and round two's; MOCK=only goes straight to the dev page's)
 main: {
-if (MOCK_ONLY) break main
+if (MOCK_ONLY || PHONE_ONLY) break main
 const t0 = Date.now()
 await page.goto(`http://127.0.0.1:${port}/dist/index.html${useTest ? '?data=../test-data/' : ''}`)
 await page.waitForSelector('#boot', { state: 'detached', timeout: 180000 })
@@ -638,15 +655,140 @@ await check('perf', async () => {
 })
 } // main
 
-const stats = MOCK_ONLY ? null : await page.evaluate(() => window.__app.stats())
+const stats = MOCK_ONLY || PHONE_ONLY ? null : await page.evaluate(() => window.__app.stats())
 if (stats) console.log('stats', JSON.stringify(stats))
 // (the built app's page lets go of its WebGL before the dev page's checks, so their frames are not starved)
 await page.close()
 
 // ---------------------------------------------------------------------------------------------
+// The box on a phone: no two controls or readouts overlap and none leaves the screen, upright and on its side,
+// watching and holding an aircraft and a ship (style.css's phone layout; scene/hud.js; controls/touch.js).
+if (!MOCK_ONLY && process.env.PHONE !== '0') {
+  const SIZES = [[360, 780], [390, 844], [412, 915], [412, 720], [844, 390], [915, 412]]
+  const PBOX = useTest ? 'test-box' : 'pearl-harbor'
+  const LONG = 'Kaga’s torpedo bombers (2nd Special Attack Unit) come in low over the ʻAiea hills toward Battleship Row'
+  const pp = await browser.newPage({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })
+  listen(pp, 'phone: ')
+  const prun = (body) => pp.evaluate(new Function(`const app = window.__app; return (async () => { ${body} })()`))
+  const pframes = async (n) => {
+    const f0 = await pp.evaluate(() => window.__app.frames)
+    await pp.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 180000 })
+  }
+  /** Every visible control and readout by its box (clipped by scrolling parents), and the pairs that overlap by more than 2 px or leave the screen. */
+  const measure = () =>
+    pp.evaluate(() => {
+      const W = innerWidth
+      const H = innerHeight
+      const shown = (el) => {
+        for (let e = el; e && e !== document.documentElement; e = e.parentElement) {
+          const cs = getComputedStyle(e)
+          if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) < 0.05) return false
+        }
+        return true
+      }
+      const box = (el) => {
+        const r = el.getBoundingClientRect()
+        let [x0, y0, x1, y1] = [r.left, r.top, r.right, r.bottom]
+        for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
+          const cs = getComputedStyle(e)
+          if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue
+          const q = e.getBoundingClientRect()
+          x0 = Math.max(x0, q.left)
+          y0 = Math.max(y0, q.top)
+          x1 = Math.min(x1, q.right)
+          y1 = Math.min(y1, q.bottom)
+        }
+        return [x0, y0, x1, y1]
+      }
+      const items = []
+      const add = (name, el) => {
+        if (!el || !shown(el)) return
+        const b = box(el)
+        if (b[2] - b[0] < 1 || b[3] - b[1] < 1) return
+        items.push({ name, el, b })
+      }
+      const tag = (e, pre) => pre + (e.dataset.station || e.dataset.scale || e.dataset.assist || [...e.classList].find((c) => /^(bb|t)-/.test(c))?.replace(/^(bb|t)-/, '') || e.className)
+      const bar = document.querySelector('#ui > .boxbar')
+      add('bar', bar)
+      bar?.querySelectorAll('button:not(.bb-tick):not(.bb-mark), .bb-stop, .bb-strip, .bb-stations, .bb-speeds, .bb-assist, .bb-check-t').forEach((e) => add(tag(e, 'bar:'), e))
+      document.querySelectorAll('#ui .tools .tool').forEach((e) => add(`tool:${e.dataset.tool}`, e))
+      add('card', document.querySelector('#ui .card.show'))
+      add('list', document.querySelector('#ui .unitlist:not([hidden])'))
+      for (const k of ['clock', 'strip', 'inst', 'plot', 'plot-label', 'subs', 'msg', 'cue', 'cuewin', 'hints', 'keys', 'stations']) add(`hud:${k}`, document.querySelector(`.pt-hud .${k}`))
+      document.querySelectorAll('.pt-touch > *').forEach((e) => add(tag(e, 'touch:'), e))
+      // (the plot's caption stands inside it by design)
+      const together = new Set(['hud:plot|hud:plot-label'])
+      const overlaps = []
+      for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+          const a = items[i]
+          const b = items[j]
+          if (a.el.contains(b.el) || b.el.contains(a.el) || together.has(`${a.name}|${b.name}`) || together.has(`${b.name}|${a.name}`)) continue
+          const w = Math.min(a.b[2], b.b[2]) - Math.max(a.b[0], b.b[0])
+          const h = Math.min(a.b[3], b.b[3]) - Math.max(a.b[1], b.b[1])
+          if (w > 2 && h > 2) overlaps.push(`${a.name} × ${b.name} (${Math.round(w)}×${Math.round(h)} px)`)
+        }
+      }
+      const out = items.filter((t) => t.b[0] < -1 || t.b[1] < -1 || t.b[2] > W + 1 || t.b[3] > H + 1).map((t) => `${t.name} at ${t.b.map(Math.round).join(',')}`)
+      return { names: items.map((t) => t.name), overlaps, out }
+    })
+  // a long subtitle and the first hints held on screen while the sizes are measured
+  const HOLD = `const hud = app.battle.scene.hud; hud.lines = [{ text: ${JSON.stringify(LONG)}, until: performance.now() / 1000 + 3600 }]; hud.textT = 0; if (hud.hints.textContent) hud.hintsUntil = performance.now() / 1000 + 3600`
+  const TAKE_AIR = `const fd = app.battle.firstDoor; if (fd?.role?.kind === 'aircraft') app.ui.onFirstDoor(); else { const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const a = app.battle.sim.units().find((u) => u.kind === 'aircraft' && u.takeable === true && u.stations.includes('pilot')); if (!a) throw new Error('no takeable aircraft'); app.takeUnit({ unit: a.id, station: 'pilot' }) }`
+  const SHIP = `const rows = app.battle.sim.units(); const ok = (u) => u.kind === 'ship' && u.takeable === true && u.stations.includes('aa') && u.stations.includes('helm'); const u = rows.find((u) => ok(u) && u.id === 'nevada') || rows.find(ok)`
+  const STATES = [
+    { name: 'watching', setup: `app.battle.scrub(app.battle.sim.record.stops[0].t, { answer: 'yes' }); app.ui.card.close(); app.ui.unitList?.close(); app.battle.play(1)`, want: ['bar', 'bar:leave', 'bar:strip', 'hud:clock', 'hud:subs'], not: ['hud:plot', 'touch:fire'] },
+    // (the first door where it is an aircraft, Pearl Harbor's; else an aircraft in the air at the record's first aircraft
+    // bookmark, the fixtures' dive bomber)
+    { name: 'an aircraft held', setup: `try { localStorage.removeItem('pt.hints') } catch {} ${TAKE_AIR}; await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.pause(); return app.battle.state.held?.id`, want: ['bar:release', 'bar:more', 'hud:strip', 'hud:plot', 'hud:subs', 'hud:hints', 'touch:stick', 'touch:throttle', 'touch:fire', 'touch:bomb', 'touch:torp', 'touch:pause', 'touch:time', 'touch:cam'], not: ['hud:clock', 'hud:inst', 'touch:release', 'hud:stations'] },
+    // (a crew station: the bombsight where an aircraft in the air offers one, Pearl Harbor's B5N2s; else the rear gun)
+    { name: 'an aircraft at the bombsight or the rear gun', setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const rows = app.battle.sim.units().filter((u) => u.kind === 'aircraft' && u.takeable === true); const a = rows.find((u) => u.stations.includes('bombardier')) || rows.find((u) => u.stations.includes('gunner')); if (!a) throw new Error('no takeable aircraft with a crew station'); const st = a.stations.includes('bombardier') ? 'bombardier' : 'gunner'; app.takeUnit({ unit: a.id, station: st }); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.pause(); return a.id + ' at ' + app.battle.state.station`, want: ['bar:release', 'bar:more', 'hud:strip', 'hud:plot', 'touch:pause', 'touch:cam'], not: ['hud:clock', 'touch:release'] },
+    { name: 'a ship at the AA director', setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.scrub(app.battle.sim.record.stops[0].t, { answer: 'yes' }); try { localStorage.removeItem('pt.hints') } catch {} ${SHIP}; if (!u) throw new Error('no takeable ship with the AA station'); app.takeUnit({ unit: u.id, station: 'aa' }); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.pause(); return app.battle.state.held?.id + ' at ' + app.battle.state.station`, want: ['bar:release', 'bar:aa', 'bar:more', 'hud:strip', 'hud:plot', 'hud:subs', 'hud:hints', 'touch:fire', 'touch:pause', 'touch:time', 'touch:cam'], not: ['hud:clock', 'touch:release'] },
+    { name: 'the same ship at her helm', setup: `app.ui.onStation('helm'); await new Promise((r) => setTimeout(r, 300)); app.battle.pause(); return app.battle.state.station`, want: ['bar:helm', 'hud:strip', 'touch:helm', 'touch:tel', 'touch:salvo', 'touch:torp', 'touch:aa', 'touch:pause'], not: ['hud:clock', 'touch:release'] },
+  ]
+  await pp.goto(`http://127.0.0.1:${port}/dist/index.html${useTest ? '?data=../test-data/' : ''}`)
+  await pp.waitForSelector('#boot', { state: 'detached', timeout: 180000 })
+  await pp.waitForFunction(() => window.__app?.ready, null, { timeout: 120000 })
+  await prun(`await app.battle.enter('${PBOX}', { from: 'url' }); app.ui.card.close()`)
+  await pp.waitForFunction(() => window.__app.mode === 'watch' && window.__app.active === window.__app.battle.scene, null, { timeout: 600000 })
+  for (const st of STATES) {
+    await check(`the box on a phone, ${st.name}: no two controls or readouts overlap by more than 2 px, none leaves the screen (${SIZES.map((z) => z.join('×')).join(', ')})`, async () => {
+      await pp.setViewportSize({ width: SIZES[0][0], height: SIZES[0][1] })
+      const who = await prun(st.setup)
+      const bad = []
+      const seen = new Set()
+      let first = null
+      for (const [w, h] of SIZES) {
+        await pp.setViewportSize({ width: w, height: h })
+        await pframes(2)
+        await prun(HOLD)
+        await pframes(3)
+        const r = await measure()
+        r.names.forEach((n) => seen.add(n))
+        const lacks = st.want.filter((n) => !r.names.includes(n))
+        const stray = st.not.filter((n) => r.names.includes(n))
+        const fails = [...r.overlaps, ...r.out.map((x) => `off screen: ${x}`), ...lacks.map((n) => `missing: ${n}`), ...stray.map((n) => `should not show: ${n}`)]
+        if (fails.length) {
+          bad.push(`${w}×${h}: ${fails.join('; ')}`)
+          await pp.screenshot({ path: join(shots, `smoke-phone-${st.name.replace(/\W+/g, '-')}-${w}x${h}.png`) })
+        }
+        // (what shows at one size and not at the first, and the other way: a box the layout lost or gained)
+        first ??= r.names
+        const diff = [...r.names.filter((n) => !first.includes(n)).map((n) => `+${n}`), ...first.filter((n) => !r.names.includes(n)).map((n) => `−${n}`)]
+        console.log(`      ${w}×${h}: ${r.names.length} boxes${diff.length ? ` (${diff.join(' ')})` : ''}${fails.length ? `, ${fails.length} failing: ${fails.join('; ')}` : ', clear'}`)
+      }
+      await pp.screenshot({ path: join(shots, `smoke-phone-${st.name.replace(/\W+/g, '-')}.png`) })
+      if (bad.length) throw new Error(bad.join(' | '))
+      return `${who ? `${who}; ` : ''}clear at all ${SIZES.length} sizes: ${[...seen].join(', ')}`
+    })
+  }
+  await pp.close()
+}
+
+// ---------------------------------------------------------------------------------------------
 // Round two's interface against the mock Battle (ROUND-2 §6; src/ui/mock-battle.js): the dev page
 // ui.html, served by Vite's dev server (it is not in the build), over the real battle files.
-if (MOCK !== '0') {
+if (MOCK !== '0' && !PHONE_ONLY) {
   const { createServer: viteServer } = await import('vite')
   const vite = await viteServer({ root, configFile: join(root, 'vite.config.js'), logLevel: 'error', clearScreen: false, server: { port: Number(process.env.MOCK_PORT || 5296), host: '127.0.0.1', strictPort: false, hmr: false } })
   await vite.listen()
