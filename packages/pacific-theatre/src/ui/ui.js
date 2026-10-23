@@ -17,6 +17,16 @@
 //   ui.onPrefetch(ev)              a box event's card opened: its pack may start decoding
 //   ui.onStep(dir)                 the tour's keys while a box is open (its own stops)
 //
+// and round two's (ROUND-2.md §5; link.js sets them, with the unit list, ui.unitList):
+//
+//   ui.onSelect(index)             a row of the unit list
+//   ui.onTake(role)                a station's button on the unit card ({ unit | group, index?, station })
+//   ui.onStation(name)             the station bar, Tab, the held unit's card
+//   ui.onRelease()                 Give the controls back
+//   ui.onAssist(value)             Assisted or Pilot, on the bar and the briefing
+//   ui.onFirstDoor()               Start here, on the briefing
+//   ui.onUnits()                   the unit list, from the bar and the unit card
+//
 // and the ways in for the box's side: ui.openBriefing(data), ui.openAfter(data)
 // (plain objects, briefing.js and after.js say their shape), ui.openCredits().
 //
@@ -53,6 +63,13 @@ export class UI {
     this.onRetry = noop
     this.onPrefetch = noop
     this.onStep = noop
+    this.onSelect = noop
+    this.onStation = noop
+    this.onRelease = noop
+    this.onAssist = noop
+    this.onFirstDoor = noop
+    this.onUnits = noop
+    this.unitList = null
     this.overlay = { front: true, routes: true, pins: true, labels: true }
     this.build()
     this.bind()
@@ -172,6 +189,8 @@ export class UI {
     if (mode === 'moment') return
     if (e.key === 'Escape') {
       if (!this.help.classList.contains('hidden')) return this.help.classList.add('hidden')
+      // (the unit list first, then the card, then the box: link.js's panel, ROUND-2 §5)
+      if (this.unitList?.isOpen) return this.unitList.close()
       if (this.card.isOpen) return this.card.close()
       if (mode === 'watch' || mode === 'flying') this.onLeave()
       return

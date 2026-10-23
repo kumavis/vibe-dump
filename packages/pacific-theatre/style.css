@@ -597,3 +597,132 @@ body.snap .label, body.snap .pin, body.snap .cluster, body.snap .halo, body.snap
 /* (in a box the battle's clock stands where the title was) */
 .brand.in-box { display: none; }
 .tools.in-moment { display: none; }
+
+/* --- round two: the unit list, the unit card, the bar's stations, strip, speeds and setting,
+       Start here, the after-card's record (ROUND-2.md §1, §5; src/ui/unitlist.js, card.js, boxbar.js) --- */
+.unitlist {
+  position: absolute; left: 18px; top: 76px; width: min(360px, calc(100vw - 36px)); max-height: calc(100vh - 170px);
+  display: flex; flex-direction: column; padding: 14px 8px 8px 14px; border-radius: 18px;
+  background: var(--glass-strong); backdrop-filter: blur(18px) saturate(1.25); -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35); z-index: 3;
+}
+.unitlist[hidden] { display: none; }
+.ul-head { display: flex; align-items: flex-start; gap: 10px; padding: 0 6px 8px 2px; }
+.ul-titles { flex: 1; min-width: 0; }
+.ul-head h2 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 22px; line-height: 1.1; }
+.ul-sub { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ul-close { width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.06); cursor: pointer; display: grid; place-items: center; color: var(--muted); flex: none; }
+.ul-close:hover { color: var(--ink); background: rgba(255,255,255,0.12); }
+.ul-filter, .assist, .bb-stations, .bb-speeds { display: inline-flex; padding: 2px; gap: 2px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid var(--line); }
+.ul-filter { margin: 0 6px 8px 0; align-self: flex-start; }
+.ul-filter button, .as-opt, .bb-st, .bb-sp {
+  height: 28px; padding: 0 11px; border: 0; border-radius: 999px; background: none; cursor: pointer;
+  font-size: 12.5px; color: var(--muted); white-space: nowrap; transition: background 0.15s, color 0.15s;
+}
+.ul-filter button:hover, .as-opt:hover, .bb-st:hover, .bb-sp:hover { color: var(--ink); }
+.ul-filter button[aria-checked='true'], .as-opt.on, .bb-st.on, .bb-sp.on { background: var(--sand); color: var(--on-sand); font-weight: 600; }
+.ul-body { overflow-y: auto; padding-right: 6px; scrollbar-width: thin; }
+.ul-side + .ul-side { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.ul-side[hidden], .ul-sec[hidden] { display: none; }
+.ul-side h3 { margin: 0 0 4px; font-family: var(--serif); font-weight: 600; font-size: 15px; color: rgba(var(--ink-rgb), 0.92); }
+.ul-side h3 span { font-family: var(--jp); font-weight: 400; font-size: 12px; color: var(--muted); }
+.ul-sec h4 { margin: 8px 0 3px; font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+.ul-row {
+  width: 100%; display: flex; align-items: center; gap: 9px; padding: 6px 8px; margin: 0; border: 1px solid transparent; border-radius: 10px;
+  background: none; color: var(--ink); text-align: left; cursor: pointer; transition: background 0.12s;
+}
+.ul-row:hover, .ul-row:focus-visible { background: rgba(255,255,255,0.07); outline: none; }
+.ul-row:focus-visible { border-color: rgba(var(--sand-rgb), 0.55); }
+.ul-row.sel { background: rgba(var(--sand-rgb), 0.13); border-color: rgba(var(--sand-rgb), 0.5); }
+.ul-row[hidden] { display: none; }
+.ul-ic { flex: none; width: 14px; height: 14px; display: grid; place-items: center; }
+.ul-ic::before { content: ''; display: block; background: var(--side, var(--chart)); }
+.ul-ic.ship::before { width: 13px; height: 5px; border-radius: 1px 5px 5px 1px; }
+.ul-ic.aircraft::before { width: 11px; height: 11px; clip-path: polygon(50% 0, 62% 38%, 100% 55%, 100% 66%, 60% 60%, 58% 86%, 72% 100%, 28% 100%, 42% 86%, 40% 60%, 0 66%, 0 55%, 38% 38%); }
+.ul-side[data-side='jp'] { --side: #d66052; }
+.ul-side[data-side='us'] { --side: #a0c4e6; }
+.ul-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ul-name { display: flex; align-items: baseline; gap: 5px; min-width: 0; white-space: nowrap; overflow: hidden; }
+.ul-name b { font-family: var(--serif); font-weight: 600; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; }
+.ul-hull { font-size: 10.5px; color: var(--faint); letter-spacing: 0.04em; }
+.ul-ja { font-size: 11.5px; color: var(--muted); }
+.ul-n { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ul-line { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ul-why { flex: none; max-width: 42%; font-size: 11px; font-style: italic; color: rgba(var(--sand-rgb), 0.8); text-align: right; line-height: 1.2; }
+.ul-row.grey .ul-name b, .ul-row.grey .ul-line { opacity: 0.55; }
+.ul-row.grey .ul-ic { opacity: 0.45; }
+.ul-row.gone .ul-ic { opacity: 0.25; }
+
+/* the unit card */
+.uc-doing p { margin: 0 0 6px; }
+.uc-k { display: inline-block; min-width: 40px; margin-right: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+.uc-state { font-size: 11.5px; color: var(--sand); letter-spacing: 0.02em; }
+.card-sec h2 .uc-at { margin-left: 4px; font-weight: 400; letter-spacing: 0.04em; text-transform: none; color: var(--muted); }
+.card-sec ul.uc-stations { list-style: none; padding: 0; display: grid; gap: 6px; margin-top: 4px; }
+.card-sec ul.uc-stations li { list-style: none; margin: 0; }
+.nav.uc-st { width: 100%; height: auto; min-height: 42px; justify-content: flex-start; padding: 6px 12px; border-radius: 12px; }
+.nav.uc-st span { display: flex; flex-direction: column; align-items: flex-start; text-align: left; line-height: 1.25; }
+.nav.uc-st b { font-weight: 600; font-size: 13.5px; }
+.nav.uc-st em { font-style: normal; font-weight: 400; font-size: 11.5px; color: rgba(var(--sand-rgb), 0.75); }
+.nav.uc-st.on { background: var(--sand); color: var(--on-sand); border-color: var(--sand); }
+.nav.uc-st.on em { color: rgba(21, 18, 12, 0.7); }
+.uc-why { margin: 10px 0 4px; padding: 9px 12px; border-radius: 12px; border: 1px dashed rgba(var(--sand-rgb), 0.35); font-size: 13px; font-style: italic; color: rgba(var(--sand-rgb), 0.85); }
+.uc-why:empty { display: none; }
+
+/* Start here, and the setting, on the briefing */
+.card-sec.door h2 { color: var(--sand); }
+.door-card { padding: 10px 12px; border-radius: 12px; background: rgba(var(--sand-rgb), 0.1); border: 1px solid rgba(var(--sand-rgb), 0.35); }
+.door-card p { margin: 6px 0 8px; font-size: 13px; line-height: 1.5; color: rgba(var(--ink-rgb), 0.88); }
+.as-line { margin: 6px 0 0; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+
+/* the after-card: the unit's own record over the span */
+.card-sec ul.af-record { list-style: none; padding: 0; margin: 4px 0 6px; }
+.card-sec ul.af-record li { list-style: none; display: flex; gap: 10px; font-size: 13px; color: rgba(var(--ink-rgb), 0.86); }
+.af-t { flex: none; min-width: 40px; font-weight: 600; color: var(--sand); font-variant-numeric: tabular-nums; }
+
+/* the bar while a unit is held; the strip; the speeds; the setting */
+/* (absolutely placed from the middle: without a width of its own the bar would wrap at half the screen) */
+.boxbar { width: max-content; }
+.boxbar .bb-watch { flex-wrap: wrap; justify-content: center; row-gap: 6px; }
+.boxbar .bb-release { display: none; }
+.boxbar[data-mode='held'] .bb-release { display: inline-flex; }
+.boxbar[data-mode='held'] .bb-leave, .boxbar[data-mode='held'] .bb-prev, .boxbar[data-mode='held'] .bb-next, .boxbar[data-mode='held'] .bb-brief { display: none; }
+.boxbar[data-mode='watch'] .bb-sep-a { display: none; }
+.bb-stations[hidden], .bb-speeds[hidden], .bb-speed[hidden] { display: none; }
+.bb-stations .bb-st { height: 26px; font-size: 12px; }
+.bb-speeds .bb-sp { height: 26px; padding: 0 9px; font-variant-numeric: tabular-nums; }
+.bb-assist .as-opt { height: 26px; padding: 0 9px; font-size: 12px; }
+.bb-lab { align-self: center; padding: 0 4px 0 8px; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+.bb-strip { position: relative; width: clamp(140px, 18vw, 240px); height: 32px; display: flex; align-items: center; padding: 0 6px; }
+.bb-track { position: relative; width: 100%; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.12); cursor: pointer; }
+.bb-track::before { content: ''; position: absolute; inset: -12px 0; }
+.bb-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: rgba(var(--sand-rgb), 0.45); pointer-events: none; }
+.bb-now { position: absolute; top: -6px; width: 2px; height: 16px; margin-left: -1px; border-radius: 1px; background: var(--ink); pointer-events: none; box-shadow: 0 0 0 1px rgba(7, 17, 26, 0.6); }
+.bb-marks { position: absolute; inset: 0; }
+.bb-tick { position: absolute; top: -5px; width: 10px; height: 14px; margin-left: -5px; padding: 0; border: 0; background: none; cursor: pointer; }
+.bb-tick::before { content: ''; position: absolute; left: 4px; top: 2px; width: 2px; height: 10px; border-radius: 1px; background: rgba(var(--ink-rgb), 0.45); }
+.bb-mark { position: absolute; top: -13px; width: 14px; height: 14px; margin-left: -7px; padding: 0; border: 0; background: none; cursor: pointer; }
+.bb-mark::before { content: ''; position: absolute; left: 3px; top: 3px; width: 8px; height: 8px; transform: rotate(45deg); background: var(--sand); box-shadow: 0 0 0 1.5px rgba(7, 17, 26, 0.85); }
+.bb-mark.jp::before { background: #e08a74; }
+.bb-mark:hover::before, .bb-mark:focus-visible::before { background: #fff; }
+.bb-mark:focus-visible, .bb-tick:focus-visible { outline: none; }
+.bb-tip {
+  position: absolute; bottom: 30px; transform: translateX(-50%); max-width: 260px; padding: 5px 9px; border-radius: 8px;
+  background: var(--glass-strong); border: 1px solid var(--line); font-size: 12px; line-height: 1.3; color: var(--ink);
+  white-space: normal; width: max-content; pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.bb-tip[hidden] { display: none; }
+@media (max-width: 760px) {
+  .unitlist { left: 10px; right: 10px; top: 52px; bottom: 132px; width: auto; max-height: none; padding: 12px 6px 6px 12px; }
+  .boxbar { border-radius: 18px; width: calc(100vw - 20px); }
+  .boxbar .bb-units span, .boxbar .bb-release span, .boxbar .bb-brief span, .boxbar .bb-leave span, .bb-lab { display: none; }
+  .bb-strip { order: 10; flex: 1 0 100%; width: auto; }
+}
+@media (max-width: 640px) {
+  .boxbar .bb-credits { display: none; }
+}
+
+/* the dev page (ui.html): the plan behind the interface */
+body.mock-page { background: #07111a; }
+#plan { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#mock-status { position: fixed; left: 16px; top: 14px; font-size: 12px; color: var(--muted); pointer-events: none; z-index: 20; }

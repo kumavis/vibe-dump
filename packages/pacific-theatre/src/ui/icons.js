@@ -38,6 +38,11 @@ const P = {
   chapter: '<circle cx="12" cy="12" r="8"/><path d="M12 3.5v17M3.5 12h17"/><path d="M12 7l1.3 3.7L17 12l-3.7 1.3L12 17l-1.3-3.7L7 12l3.7-1.3z"/>',
   // a battle box on the table: a rectangle on the sea
   box: '<rect x="4" y="5" width="16" height="12" rx="1.5"/><path d="M2 20.5c2 0 2-.8 4-.8s2 .8 4 .8 2-.8 4-.8 2 .8 4 .8 2-.8 4-.8"/>',
+  // a unit in a box: a hull seen from the side on the line of the sea; an aircraft seen from above
+  ship: '<path d="M3 14h18l-2.6 3.6H5.6z"/><path d="M8 14v-3h6v3M11 11V8.5h2.5V11M16 14v-2h2"/><path d="M2 20.5c2 0 2-.8 4-.8s2 .8 4 .8 2-.8 4-.8 2 .8 4 .8 2-.8 4-.8"/>',
+  aircraft: '<path d="M12 3.5c.8 0 1.2.9 1.2 2v4.3l7.3 3.4v1.6l-7.3-1.8v4.4l2.3 1.7v1.3L12 19.6l-3.5.8v-1.3l2.3-1.7v-4.4l-7.3 1.8v-1.6l7.3-3.4V5.5c0-1.1.4-2 1.2-2z"/>',
+  units: '<path d="M4 6h3M4 12h3M4 18h3"/><path d="M10 6h10M10 12h10M10 18h7"/>',
+  release: '<path d="M9 7 4 12l5 5"/><path d="M4 12h11a5 5 0 0 1 0 10h-2"/>',
   // controls
   prev: '<path d="M15 5l-7 7 7 7"/>',
   next: '<path d="M9 5l7 7-7 7"/>',
