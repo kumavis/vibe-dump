@@ -135,7 +135,9 @@ export class View {
   // checkpoint, `chunks` G's as they stood).
   rebuild(g, M, to = {}) {
     const { chunks = g.terrain.chunks, terrain = this.terrain, units: uv = this.units, shots: sh = this.shots, effects: marks = this.effects } = to
-    this.owners = null
+    // (a snap of the page's own table lets go of a batch's flags; one into
+    // views off the table, ?debug's snapDiff, leaves them be)
+    if (!to.units) this.owners = null
     terrain.sync(chunks)
     uv.sync(g.units, (s) => edgeOf(g, s))
     sh.clear()

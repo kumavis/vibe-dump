@@ -810,8 +810,12 @@ follows N3.
   (A seat's walks 0.15 s apart, those after a wreck held back to its last
   smash; one tray row; the flags turn as their units arrive; ⇉ for one at
   a time. An AI movement phase 6.0 → 2.6 s on classic, 19.5 → 4.5 s on the
-  Grand fixture (the longest 7.3 s, under 8). `sim/playback-check.mjs`.
-  DESIGN's V1 notes.)
+  Grand fixture (the longest 7.3 s, under 8). A Grand battle 558 → 349 s
+  stays over its 200 s: the shooting, unbatched, is about half of it.
+  `sim/playback-check.mjs`. DESIGN's V1 notes.)
+- [ ] **Later (V1's open budget):** a Grand AI battle plays about 349 s
+  against §4.2.1's 200 s; batch a seat's volleys (or pace a watched
+  battle's shooting faster) before F8b's Grand boards ship.
 - [ ] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
   units you choose.
 - [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried

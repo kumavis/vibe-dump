@@ -40,7 +40,7 @@ export class Hud {
     const batched = (on) => {
       player.batched = on
       $('#batch').classList.toggle('off', !on)
-      $('#batch').title = on ? "A side's units walk together (click: one at a time)" : 'One unit walks at a time (click: a side\'s units together)'
+      $('#batch').title = on ? 'Units moved together walk together (click: one at a time)' : 'One unit walks at a time (click: units moved together walk together)'
     }
     let one = false
     try {

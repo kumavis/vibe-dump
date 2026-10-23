@@ -266,7 +266,7 @@ export class Flow {
       // sim/snap-check.mjs)
       check: (e) => this.checkHook?.(e),
     }
-    this.player = new EventPlayer({ handlers, view, onIdle: (how) => this.idled(how) })
+    this.player = new EventPlayer({ handlers, view, onIdle: (how) => this.idled(how), sideOf: (u) => this.unitById(u)?.side })
     return this.player
   }
 

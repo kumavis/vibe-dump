@@ -47,7 +47,9 @@ export class EventPlayer {
   // `view.rebuild(G, M)`: the table made to show G as it stands (M its
   // mirror); `view.text(pos, str, color)`: text floating on the table (the
   // fallback's)
-  constructor({ handlers, view = null, mirror = null, onIdle = null }) {
+  // (V1) `sideOf(unitId)`: the seat a unit belongs to (the batch rule's: the
+  // mirror holds no seats)
+  constructor({ handlers, view = null, mirror = null, onIdle = null, sideOf = () => undefined }) {
     this.handlers = { fallback: (e, M) => this.fallback(e, M), ...handlers }
     this.view = view
     this.mirror = mirror
@@ -66,11 +68,9 @@ export class EventPlayer {
     // batches have played
     this.batched = true
     this.batches = 0
-  }
-
-  // the seat a unit belongs to, as shown (the batch rule's)
-  sideOf(u) {
-    return this.mirror?.units?.[u]?.side
+    this.sideOf = sideOf
+    // (the batch holding the flags' owners, if any)
+    this.hold = null
   }
 
   get idle() {
@@ -80,14 +80,23 @@ export class EventPlayer {
   // (N2) about how long, in game seconds, what is queued takes to play
   // (PACE.cost's estimate: the elastic catch-up's, app/flow.js)
   backlog() {
-    // ((V1) a batch counted once, at its longest walk)
+    // ((V1) a batch counted once, until its last walk ends)
     return playTime(this.q, (u) => this.sideOf(u), this.batched)
   }
 
   // Queue events; they start playing now if nothing is playing.
   push(events) {
     for (const e of events) this.q.push(e)
-    if (!this.running) this.run()
+    if (this.running) return
+    // (V1) a walk reaching an idle table waits a tick, so the commands sent
+    // with it (a group order's members, one after another) join its batch
+    if (this.batched && events.some((e) => e.t === 'unit.move')) {
+      this.running = true
+      const table = this.table
+      setTimeout(() => table === this.table && this.run(), 0)
+      return
+    }
+    this.run()
   }
 
   // Jump to G as it stands (`shown`: the mirror to show, project(G) unless
@@ -100,6 +109,7 @@ export class EventPlayer {
     this.table++
     this.q.length = 0
     this.running = false
+    this.hold = null
     this.mirror = shown
     this.view?.rebuild(G, shown)
     this.observer?.reset?.(shown)
@@ -145,10 +155,24 @@ export class EventPlayer {
     const h = this.handlers, walks = []
     this.batches++
     // (the flags' owners as shown when the batch starts, each walk's own
-    // shown once it has arrived, in order: the mirror folds them as the walk
-    // sets off)
+    // shown once it has arrived, in order, an objectives before any walk at
+    // once: the mirror folds them as the walk sets off; this batch's hold
+    // only, let go however the batch ends)
+    const hold = (this.hold = {})
     this.view?.holdOwners?.(this.mirror.owners)
     let shown = Promise.resolve()
+    try {
+      await this.playBatch(events, b, table, h, walks, hold, (s) => (shown = s(shown)))
+      await shown
+    } finally {
+      if (this.hold === hold) {
+        this.hold = null
+        this.view?.holdOwners?.(null)
+      }
+    }
+  }
+
+  async playBatch(events, b, table, h, walks, hold, chain) {
     if (b.dice.length) {
       h['tray.open']?.({ t: 'tray.open', title: `Advance · ${b.dice.length} unit${b.dice.length > 1 ? 's' : ''}` }, this.mirror)
       await h.dice?.({ t: 'dice', label: 'D6 each', dice: b.dice, need: 0 }, this.mirror)
@@ -165,9 +189,9 @@ export class EventPlayer {
       this.mirror = applyEvent(this.mirror, e)
       this.observer?.event?.(e, this.mirror)
       if (e.t === 'pause' || e.t === 'tray.open' || e.t === 'dice' || (e.t === 'focus' && focused)) continue
-      if (e.t === 'objectives' && walks.length) {
-        const owners = e.owners
-        shown = Promise.all([shown, walks.at(-1)]).then(() => table === this.table && this.view?.holdOwners?.(owners))
+      if (e.t === 'objectives') {
+        const owners = e.owners, walk = walks.at(-1)
+        chain((shown) => Promise.all([shown, walk]).then(() => this.hold === hold && this.view?.holdOwners?.(owners)))
       }
       if (e.t === 'focus') focused = true
       const r = (h[e.t] ?? h.fallback)(e, this.mirror)
@@ -178,8 +202,6 @@ export class EventPlayer {
       }
     }
     await Promise.all(walks)
-    await shown
-    if (table === this.table) this.view?.holdOwners?.(null)
   }
 
   // An event this table has no visuals for yet: its text over the unit (or
@@ -196,6 +218,10 @@ export class EventPlayer {
   fail(err) {
     this.running = false
     this.q.length = 0
+    if (this.hold) {
+      this.hold = null
+      this.view?.holdOwners?.(null)
+    }
     throw err
   }
 }

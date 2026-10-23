@@ -34,10 +34,15 @@ export const PACE = Object.freeze({
 // ── (V1) The batch rule (DESIGN §4.2.7) ────────────────────────────────────
 // A batch is a run of `unit.move` events from one seat, separated only by
 // instant events: a focus, a pause of 0.2 s or less, objectives, status,
-// act, log, a tray opened, an advance's dice (and, under ?debug, a
-// checkpoint). Its walks start PACE.stagger apart, after one tray row of all
-// its advance dice, and it is over when the longest walk is; the mirror
-// still folds every event in order, so only when animations start changes.
+// act, log, a tray opened, an advance's dice, the match waiting on a seat
+// (`pending`: a batch runs across a human's entries, a group order's
+// members) and, under ?debug, a checkpoint (app/boot.js puts one after each
+// action and stop, for P-present and snap-check). Its walks start
+// PACE.stagger apart, after one tray row of all its advance dice, and it is
+// over when its last walk to finish is; the mirror still folds every event
+// in order, so P-present's checkpoints are unchanged (the player plays one
+// dice row and one focus for a batch, skips its short pauses, and holds the
+// flags until each walk arrives).
 // What breaks a batch: any other event (a charge's dice, a shot, a wound, a
 // phase begun) or another seat's walk. A wrecker's walk that smashes
 // scenery (`smashes`) holds back the walks after it until its last smash
@@ -51,9 +56,10 @@ export const PACE = Object.freeze({
 //   batchesOf(events, sideOf) → the stream cut into steps, each a batch or
 //       { from, to: from + 1 } (one event, played as ever)
 //   playTime(events, sideOf, batched) → about how long the stream plays
-//       (PACE.cost's estimate; a batch counted once, at its longest walk)
+//       (PACE.cost's estimate; a batch counted once, until its last walk
+//       ends)
 // `sideOf(unitId)`: the seat a unit belongs to.
-const INSTANT = new Set(['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check'])
+const INSTANT = new Set(['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check', 'pending'])
 const isAdvanceDice = (e) => e.t === 'dice' && /^Advance/.test(e.label ?? '')
 const quiet = (e) => INSTANT.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.2) || isAdvanceDice(e)
 

@@ -6,27 +6,31 @@
 // fixture (sim/fixtures/grand.mjs, until F8b gives the core a Grand board):
 //   - every batch holds two or more walks of one seat and nothing but walks
 //     and instant events (a focus, a pause of 0.2 s or less, objectives,
-//     status, act, log, a tray opened, an advance's dice, a checkpoint: this
-//     check's own list, not pace.js's); its walks start at least
-//     PACE.stagger apart, and none before the last smash of a wreck before
+//     status, act, log, a tray opened, an advance's dice, the match waiting
+//     on a seat, a checkpoint: this check's own list, not pace.js's); its
+//     walks start at least 0.15 s apart (the spec's, pinned here), and none before the last smash of a wreck before
 //     it has played (the walk's timing worked out here again, as
 //     view/units.js walks); and the steps cut the stream end to end, in
 //     order (the player folds every event in order: nothing is reordered);
-//   - each phase plays no longer batched than one at a time (the report:
-//     the phases the table plays in one go, an AI's or a watched battle's;
-//     a phase played here waits on its player between commands);
-//   - a Grand movement phase plays in 8 s or less, batched (the budget,
-//     DESIGN §4.2.1); the report gives each kind of phase's average and
-//     longest, and a battle's, one at a time and batched.
+//   - each phase plays no longer batched than one at a time;
+//   - a Grand AI movement phase plays in 8 s or less, batched (the budget,
+//     DESIGN §4.2.1). The report gives an AI movement phase's average and
+//     longest, and a battle's, one at a time and batched (the phases the
+//     table plays in one go: a phase played here waits on its player
+//     between commands), and how many batches run across a human's
+//     entries.
 // --browser also watches a battle in Chromium (?debug&fast, a fresh build):
 // it must play batches (the player's count) and end with no page error,
-// and with the HUD's ⇉ off (one at a time) a second battle plays none.
+// the player's own seat lookup must name each unit's seat, and with the
+// HUD's ⇉ off (one at a time) a second battle plays none.
 //
 //   node sim/playback-check.mjs [--browser] [--boards N] [--self-test]
 //
 // --self-test breaks a copy of present/pace.js one way at a time (a batch
 // across seats, walks after a wreck let go before its smashes, a charge's
-// dice let through, a single walk called a batch) and expects each to be caught. Exit 0 when
+// dice let through, a single walk called a batch, the walks started
+// together, a batch swallowing the next unit's opening, its dice taken
+// from past its end) and expects each to be caught. Exit 0 when
 // everything holds.
 import { parseArgs } from 'node:util'
 import { join } from 'node:path'
@@ -40,6 +44,7 @@ import { buildGrand, grandSetup } from './fixtures/grand.mjs'
 const PKG = fileURLToPath(new URL('..', import.meta.url))
 const { values: a } = parseArgs({ options: { browser: { type: 'boolean' }, boards: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const BUDGET = 8
+const STAGGER = 0.15 // the spec's, not the module's
 
 // when a walk's last smash plays (view/units.js's walk: a tween of
 // L / speed + 0.15 s, easeInOut, over L + 0.15·speed inches), found here by
@@ -58,7 +63,7 @@ function lastSmash(e) {
 }
 
 // this check's own idea of what may sit inside a batch
-const quiet = (e) => ['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.2) || (e.t === 'dice' && /^Advance/.test(e.label ?? ''))
+const quiet = (e) => ['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check', 'pending'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.2) || (e.t === 'dice' && /^Advance/.test(e.label ?? ''))
 
 // the event stream of a battle: an AI battle as createMatch plays it, a
 // human log's entries applied one by one
@@ -98,11 +103,12 @@ function judge(P, { events, sideOf }, acc, name) {
     let gate = 0
     for (const [n, j] of b.walks.entries()) {
       const t = b.starts[n]
-      if (n && t < b.starts[n - 1] + P.PACE.stagger - 1e-9) return `${name}: walks ${n - 1} and ${n} of a batch at event ${b.from} start ${(t - b.starts[n - 1]).toFixed(2)} s apart`
+      if (n && t < b.starts[n - 1] + STAGGER - 1e-9) return `${name}: walks ${n - 1} and ${n} of a batch at event ${b.from} start ${(t - b.starts[n - 1]).toFixed(2)} s apart`
       if (t < gate - 1e-6) return `${name}: walk ${n} of a batch at event ${b.from} starts at ${t.toFixed(2)} s, before an earlier wreck's last smash at ${gate.toFixed(2)} s`
       gate = Math.max(gate, t + lastSmash(events[j]))
       if (lastSmash(events[j]) > 0) acc.wrecks++
     }
+    if (events.slice(b.from, b.to).some((e) => e.t === 'pending')) acc.across++
   }
   if (at !== events.length) return `${name}: the steps end at ${at} of ${events.length}`
   // each phase, one at a time and batched
@@ -140,17 +146,21 @@ const CASES = [
   ['a wound', [walk(1), { t: 'unit.wound', u: 9 }, walk(2), walk(3)], [[2, 3]]],
   ['advance dice', [{ t: 'tray.open' }, { t: 'dice', label: 'Advance D6', dice: [4] }, walk(1), { t: 'tray.open' }, { t: 'dice', label: 'Advance D6', dice: [2] }, walk(2)], [[2, 5]]],
   ['a wreck', [walk(1, { smashes: [{ s: 3 }] }), walk(2), walk(3)], [[0, 1, 2]]],
+  ['across entries', [walk(1), { t: 'act' }, { t: 'pending' }, { t: 'log' }, walk(2)], [[0, 4]]],
+  ['its end', [walk(1), walk(2), { t: 'objectives', owners: [] }, { t: 'focus' }, { t: 'tray.open' }, { t: 'dice', label: 'Advance D6', dice: [5] }, { t: 'log' }, { t: 'phase.start' }], [[0, 1]]],
 ]
 const SIDE = (u) => (u < 9 ? 0 : 1)
 function rules(P) {
   for (const [what, events, want] of CASES) {
     const got = P.batchesOf(events, SIDE).filter((b) => b.walks).map((b) => b.walks)
     if (JSON.stringify(got) !== JSON.stringify(want)) return `the rule on "${what}": batches ${JSON.stringify(got)}, should be ${JSON.stringify(want)}`
-    const why = judge(P, { events, sideOf: SIDE }, { batches: 0, walks: 0, wrecks: 0, phases: {}, battles: [] }, what)
+    const why = judge(P, { events, sideOf: SIDE }, { batches: 0, walks: 0, wrecks: 0, across: 0, phases: {}, battles: [] }, what)
     if (why) return why
   }
   const adv = P.batchesOf(CASES[4][1], SIDE).find((b) => b.walks)
   if (JSON.stringify(adv?.dice) !== '[4,2]') return `the rule on "advance dice": the batch's row holds ${JSON.stringify(adv?.dice)}, should be [4,2]`
+  const end = P.batchesOf(CASES[7][1], SIDE).find((b) => b.walks)
+  if (end?.to !== 3 || end.dice.length) return `the rule on "its end": the batch ends at ${end?.to} with dice ${JSON.stringify(end?.dice)}, should end at 3 (before the next unit's focus) with none`
   return null
 }
 
@@ -163,17 +173,17 @@ async function run(paceDir, { boards = 4, say = console.log } = {}) {
   const bad = []
   const why = rules(P)
   if (why) bad.push(why)
-  say(`  ${why ? 'FAIL' : 'ok  '} the rule on ${CASES.length} made-up streams (two seats, a charge's dice, a long pause, a wound, advance dice in one row, a wreck)`)
+  say(`  ${why ? 'FAIL' : 'ok  '} the rule on ${CASES.length} made-up streams (two seats, a charge's dice, a long pause, a wound, advance dice in one row, a wreck, across entries, where a batch ends)`)
   // classic: the corpus
-  const classic = { batches: 0, walks: 0, wrecks: 0, phases: {}, battles: [] }
+  const classic = { batches: 0, walks: 0, wrecks: 0, across: 0, phases: {}, battles: [] }
   for (const it of loadCorpus().items) {
     const why = judge(P, streamOf(core, jobSetup(it.job), it.job.entries ?? []), classic, it.id)
     if (why) bad.push(why)
   }
-  say(`  ${bad.length ? 'FAIL' : 'ok  '} classic, ${classic.battles.length} corpus battles: ${classic.batches} batches (${(classic.walks / Math.max(1, classic.batches)).toFixed(1)} walks each, ${classic.wrecks} wrecks among them), every one a seat's walks and instant events, in order, the walks after a wreck held back to its last smash`)
+  say(`  ${bad.length ? 'FAIL' : 'ok  '} classic, ${classic.battles.length} corpus battles: ${classic.batches} batches (${(classic.walks / Math.max(1, classic.batches)).toFixed(1)} walks each, ${classic.wrecks} wrecks among them, ${classic.across} across a human's entries), every one a seat's walks and instant events, in order, the walks after a wreck held back to its last smash`)
   say(`       an AI's movement phase ${fmt(classic.phases.move)}; a battle ${fmt(classic.battles)}`)
   // Grand: the fixture's AI battles, with the presets
-  const grand = { batches: 0, walks: 0, wrecks: 0, phases: {}, battles: [] }
+  const grand = { batches: 0, walks: 0, wrecks: 0, across: 0, phases: {}, battles: [] }
   const { dir } = await buildGrand({ caps: false, from: PKG })
   const gcore = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
   for (let b = 1; b <= boards; b++) {
@@ -210,6 +220,8 @@ async function browser() {
         return page.evaluate(() => window.__ts.player.batches)
       }
       const one = await watch()
+      // the player's own seat lookup (the rule's in the page)
+      const seats = await page.evaluate(() => window.__ts.G.units.every((u) => window.__ts.player.sideOf(u.id) === u.side))
       await page.click('#again')
       await page.waitForSelector('#title:not(.hidden)')
       // (the HUD's ⇉, pressed from the title, under which it sits: the
@@ -217,8 +229,8 @@ async function browser() {
       await page.evaluate(() => document.querySelector('#batch').click())
       const before = await page.evaluate(() => window.__ts.player.batches)
       const two = (await watch()) - before
-      const ok = one > 0 && two === 0 && !errors.length
-      console.log(`  ${ok ? 'ok  ' : 'FAIL'} Chromium: a watched battle played ${one} batches; with ⇉ off (one at a time) the next played ${two}${errors.length ? `; page errors: ${errors.slice(0, 3).join('; ')}` : ''}`)
+      const ok = one > 0 && two === 0 && seats && !errors.length
+      console.log(`  ${ok ? 'ok  ' : 'FAIL'} Chromium: a watched battle played ${one} batches, the player naming every unit's seat${seats ? '' : ' (IT DID NOT)'}; with ⇉ off (one at a time) the next played ${two}${errors.length ? `; page errors: ${errors.slice(0, 3).join('; ')}` : ''}`)
       return ok ? 0 : 1
     } finally {
       await b.close()
@@ -234,6 +246,9 @@ const MUTANTS = [
   ['smash-ungated', '    gate = Math.max(gate, t + smashDone(events[j]))', '    gate = 0'],
   ['charge-dice', "const isAdvanceDice = (e) => e.t === 'dice' && /^Advance/.test(e.label ?? '')", "const isAdvanceDice = (e) => e.t === 'dice'"],
   ['one-walk', '  if (walks.length < 2) return null', '  if (walks.length < 1) return null'],
+  ['stagger-0', '  stagger: 0.15,', '  stagger: 0,'],
+  ['end-swallows', "    if (walks.length && end === j && !(e.t === 'focus' || e.t === 'tray.open' || isAdvanceDice(e))) end = j + 1", '    if (walks.length && end === j) end = j + 1'],
+  ['dice-past-end', '  for (let j = k; j < end; j++) if (isAdvanceDice(events[j]))', '  for (let j = k; j < events.length; j++) if (isAdvanceDice(events[j]))'],
 ]
 
 if (a['self-test']) {
