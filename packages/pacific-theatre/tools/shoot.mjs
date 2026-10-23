@@ -5,7 +5,9 @@
 //
 //   node tools/shoot.mjs [outdir] ['<json array of shots>' | preset] [extra query]
 //   shot = { name, date, cam: [x, z, distance, yaw, pitch], battle, t, moment, preview, camera,
-//            chapter, event, card, frames, wait, eval, until, keys, click, hover, mouse, settle, element, report }
+//            chapter, event, card, frames, wait, eval, until, keys, click, hover, mouse, settle, element, report,
+//            viewport: [w, h], stay }
+//     viewport: resize the page to it before the shot; stay: keep the box as it is (no leave, no enter)
 //     date: the WarClock's date (YYYY-MM-DD), as #date does
 //     cam: the active rig's pose in its scene's units (km on the table, m in a box), as #cam does
 //     battle, t, moment: enter that box (app.battle.enter, with no fly-down), at that
@@ -32,6 +34,15 @@
 //            a bookmark's title on the strip and the after-card over a span; "ui-air" the same
 //            for an aircraft held at Midway). Any preset whose name starts with "ui", or PAGE=ui,
 //            loads ui.html?box=$BOX&t=$T (pearl-harbor, 08:40) instead of the built app.
+//            "phone-watch", "phone-held-air", "phone-held-ship" (the box on a phone held in portrait at
+//            360×780, 390×844, 412×915 and 412×720, the owner's phone with the Claude app's header): watching
+//            with a beat's subtitle, a held aircraft (Pearl Harbor's first door, the P-40 out of Haleʻiwa;
+//            the fixtures' dive bomber) with its first hints, a held ship (Nevada at the anti-aircraft
+//            station, then her helm; the fixtures' battleship), with the ⋯ sheet, the unit list and the
+//            after-card for the aircraft and the briefing while watching; each with "-land" for the phone on its side
+//            (844×390, 915×412); "phone-held-crew" an aircraft at its bombsight (a B5N2) and its rear gun;
+//            "phone" all of them. A phone preset opens a mobile page (isMobile, hasTouch,
+//            DPR 2 unless DPR says) and resizes it between shots, so one boot serves every size.
 //   DATA=real   load public/data/ (the default once public/data/manifest.json exists)
 //   VIEWPORT=390x844, PORT=5299, DPR=2, CHROMIUM_PATH=...
 //
@@ -63,6 +74,38 @@ const UI_RESET = 'if (app.battle.state?.station) app.ui.onRelease(); app.ui.card
 const UI_SELECT = (id) => `app.ui.onSelect(app.link.units().find((u) => u.id === ${JSON.stringify(id)}).index); await new Promise((r) => setTimeout(r, 100));`
 const UI_BOX = (box, t) => `${UI_RESET} await app.urlBattle(new URLSearchParams('battle=${box}&t=${t}')); app.battle.pause(); app.ui.card.close();`
 const AFTER = "app.ui.openAfter({ momentId: 'test-dive', title: 'A test dive', sortie: [{ label: 'Hits', value: 'one test bomb, aft' }, { label: 'Release', value: '740 m (the record: about 760 m)' }, { label: 'Came back', value: 'landed' }], battle: { rows: [{ what: 'Test Carrier A', record: 'burning from 10:25, sank 19:25', yours: 'burning from 10:24; sinks 19:25 as in the record' }], guesses: ['Test: the sim’s guess; the record has no such event'] }, record: { text: 'Test: the record counts between 1,000 and 1,200 men lost their lives aboard the test carrier.', tellings: [{ source: 'test-source-b', says: 'Test: three hits.' }], sources: ['test-source-a'] }, next: { text: 'Test: what came next.' }, retry: { start: true, checkpoint: true } })"
+const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
+// the box on a phone (style.css's phone layout, scene/hud.js and controls/touch.js under the same query): Pearl Harbor
+// on the real data, the fixtures' box otherwise; the sizes the smoke test's bounding-box check measures, and the owner's
+// phone as the Claude app shows a page (412 wide, about 720 under its header)
+const PHONE_BOX = useTest ? 'test-box' : 'pearl-harbor'
+const PHONE_T = useTest ? '10:15' : '07:57'
+const PORTRAIT = [[360, 780], [390, 844], [412, 915], [412, 720]]
+const LANDSCAPE = [[844, 390], [915, 412]]
+// a beat's subtitle held on screen (a long one, as Pearl Harbor's are) and the first hints kept up while the sizes are shot
+const SUBTITLE = "{ const hud = app.battle.scene.hud; hud.lines = [{ text: 'Kaga’s torpedo bombers (2nd Special Attack Unit) come in low over the ʻAiea hills toward Battleship Row', until: performance.now() / 1000 + 3600 }]; hud.textT = 0 }"
+const HINTS_UP = '{ const hud = app.battle.scene.hud; if (hud.hints.textContent) hud.hintsUntil = performance.now() / 1000 + 3600 }'
+const PHONE_ENTER = `if (app.battle.state?.boxId !== '${PHONE_BOX}') await app.battle.enter('${PHONE_BOX}', { t: '${PHONE_T}', from: 'url' }); if (app.battle.input) { app.ui.onRelease(); await new Promise((r) => setTimeout(r, 400)) } app.ui.card.close(); app.ui.unitList?.close(); try { localStorage.removeItem('pt.hints') } catch {}`
+const PHONE_SETUP = {
+  watch: `${PHONE_ENTER} app.battle.scrub(app.battle.sim.clock.parse('${PHONE_T}'), { answer: 'yes' }); app.ui.card.close(); app.battle.play(1); ${SUBTITLE}`,
+  // (the first door where it is an aircraft, Pearl Harbor's; else an aircraft in the air at the first aircraft bookmark)
+  air: `${PHONE_ENTER} const fd = app.battle.firstDoor; if (fd?.role?.kind === 'aircraft') app.ui.onFirstDoor(); else { const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const a = app.battle.sim.units().find((u) => u.kind === 'aircraft' && u.takeable === true && u.stations.includes('pilot')); app.takeUnit({ unit: a.id, station: 'pilot' }) } app.ui.card.close(); await new Promise((r) => setTimeout(r, 300)); app.battle.pause(); ${SUBTITLE} ${HINTS_UP}`,
+  ship: `${PHONE_ENTER} app.battle.scrub(app.battle.sim.clock.parse('${PHONE_T}'), { answer: 'yes' }); app.takeUnit({ unit: '${useTest ? 'test-bb-b' : 'nevada'}', station: 'aa' }); app.ui.card.close(); await new Promise((r) => setTimeout(r, 300)); app.battle.pause(); ${SUBTITLE} ${HINTS_UP}`,
+  // an aircraft's crew: the bombsight where one in the air offers it (a B5N2), then the rear gun
+  crew: `${PHONE_ENTER} const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const rows = app.battle.sim.units().filter((u) => u.kind === 'aircraft' && u.takeable === true); const a = rows.find((u) => u.stations.includes('bombardier')) || rows.find((u) => u.stations.includes('gunner')); app.takeUnit({ unit: a.id, station: a.stations.includes('bombardier') ? 'bombardier' : 'gunner' }); app.ui.card.close(); await new Promise((r) => setTimeout(r, 300)); app.battle.pause(); ${SUBTITLE} ${HINTS_UP}`,
+  gunner: "if (app.battle.state.station !== 'gunner') app.ui.onStation('gunner'); await new Promise((r) => setTimeout(r, 300)); app.battle.pause();",
+  // the same ship at her helm: the helm and telegraph sliders, salvo, torpedoes and AA
+  helm: "app.ui.onStation('helm'); await new Promise((r) => setTimeout(r, 300)); app.battle.pause();",
+  // the ⋯ sheet open over the held view; then Units from it (the list between the bar and the controls); then Release
+  more: "document.querySelector('.boxbar .bb-more')?.click(); await new Promise((r) => setTimeout(r, 200));",
+  units: "document.querySelector('.boxbar .bb-units')?.click(); await new Promise((r) => setTimeout(r, 400));",
+  // a ship's row in the list while held: its card, between the bar and the controls
+  'unit-card': "document.querySelector('.unitlist .ul-row[data-key^=\"u:\"]')?.click(); await new Promise((r) => setTimeout(r, 400));",
+  after: "app.ui.unitList?.close(); app.ui.card.close(); document.querySelector('.boxbar .bb-release')?.click(); await new Promise((r) => setTimeout(r, 800));",
+  // watching with the briefing open
+  card: "app.link.openBriefing(); await new Promise((r) => setTimeout(r, 400));",
+}
+const phoneShots = (name, sizes, steps) => steps.flatMap(([step, eval_]) => sizes.map(([w, h], i) => ({ name: `${name}${step ? `-${step}` : ''}-${w}x${h}`, battle: PHONE_BOX, stay: true, viewport: [w, h], eval: i === 0 ? eval_ : undefined, settle: true, frames: 3 })))
 const PRESETS = {
   gate: [
     { name: 'gate-table', eval: HOME, frames: 3 },
@@ -102,13 +145,23 @@ const PRESETS = {
     { name: 'ui-air-after', eval: 'app.battle.play(2); await new Promise((r) => setTimeout(r, 5000)); app.ui.onRelease()', frames: 2 },
     { name: 'ui-air-briefing', eval: "app.link.openBriefing(); document.querySelector('.card .door')?.scrollIntoView()", frames: 2 },
   ],
+  // the box on a phone: watching, an aircraft held, a ship held (at the AA director, then the helm, then the ⋯ sheet open)
+  'phone-watch': phoneShots('phone-watch', PORTRAIT, [['', PHONE_SETUP.watch], ['card', PHONE_SETUP.card]]),
+  'phone-held-air': phoneShots('phone-held-air', PORTRAIT, [['', PHONE_SETUP.air], ['more', PHONE_SETUP.more], ['units', PHONE_SETUP.units], ['unit-card', PHONE_SETUP['unit-card']], ['after', PHONE_SETUP.after]]),
+  'phone-held-ship': phoneShots('phone-held-ship', PORTRAIT, [['aa', PHONE_SETUP.ship], ['helm', PHONE_SETUP.helm]]),
+  'phone-held-crew': phoneShots('phone-held-crew', PORTRAIT, [['sight', PHONE_SETUP.crew], ['gunner', PHONE_SETUP.gunner]]),
+  'phone-held-crew-land': phoneShots('phone-held-crew-land', LANDSCAPE, [['sight', PHONE_SETUP.crew], ['gunner', PHONE_SETUP.gunner]]),
+  'phone-watch-land': phoneShots('phone-watch-land', LANDSCAPE, [['', PHONE_SETUP.watch], ['card', PHONE_SETUP.card]]),
+  'phone-held-air-land': phoneShots('phone-held-air-land', LANDSCAPE, [['', PHONE_SETUP.air], ['more', PHONE_SETUP.more], ['units', PHONE_SETUP.units], ['unit-card', PHONE_SETUP['unit-card']], ['after', PHONE_SETUP.after]]),
+  'phone-held-ship-land': phoneShots('phone-held-ship-land', LANDSCAPE, [['aa', PHONE_SETUP.ship], ['helm', PHONE_SETUP.helm]]),
 }
+PRESETS.phone = ['phone-watch', 'phone-watch-land', 'phone-held-air', 'phone-held-air-land', 'phone-held-crew', 'phone-held-crew-land', 'phone-held-ship', 'phone-held-ship-land'].flatMap((k) => PRESETS[k])
 const preset = process.argv[3] || ''
 const UI = preset.startsWith('ui') || process.env.PAGE === 'ui'
+const MOBILE = preset.startsWith('phone') || process.env.MOBILE === '1'
 const shots = PRESETS[preset] || JSON.parse(preset || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
-const useTest = process.env.DATA ? process.env.DATA === 'test' : !existsSync(join(root, 'public/data/manifest.json'))
 mkdirSync(outDir, { recursive: true })
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.geojson': 'application/geo+json', '.png': 'image/png', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' }
@@ -130,8 +183,9 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
   args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
 })
-const [vw, vh] = (process.env.VIEWPORT || '1280x800').split('x').map(Number)
-const page = await browser.newPage({ viewport: { width: vw, height: vh }, deviceScaleFactor: Number(process.env.DPR || 1), hasTouch: vw < 760 })
+const [vw, vh] = process.env.VIEWPORT ? process.env.VIEWPORT.split('x').map(Number) : shots[0]?.viewport || [1280, 800]
+// (a phone preset: a mobile page with touch, as the owner's Android phone; Chromium then matches (pointer: coarse))
+const page = await browser.newPage({ viewport: { width: vw, height: vh }, deviceScaleFactor: Number(process.env.DPR || (MOBILE ? 2 : 1)), hasTouch: MOBILE || vw < 760, isMobile: MOBILE })
 const errors = []
 page.on('console', (m) => {
   if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`)
@@ -166,6 +220,10 @@ const frames = async (n) => {
 }
 
 for (const s of shots) {
+  if (s.viewport && !process.env.VIEWPORT) {
+    const v = page.viewportSize()
+    if (v.width !== s.viewport[0] || v.height !== s.viewport[1]) await page.setViewportSize({ width: s.viewport[0], height: s.viewport[1] })
+  }
   await page.evaluate(async ([s, UI]) => {
     const app = window.__app
     const b = app.battle
@@ -174,7 +232,11 @@ for (const s of shots) {
       if (s.eval) await new Function('app', `return (async () => { ${s.eval} })()`)(app)
       return
     }
-    // a shot without a battle, or with another one, leaves the box it is in
+    // a shot without a battle, or with another one, leaves the box it is in (unless it stays, as a phone's sizes do)
+    if (s.stay && s.battle && b.state?.boxId === s.battle && b.scene) {
+      if (s.eval) await new Function('app', `return (async () => { ${s.eval} })()`)(app)
+      return
+    }
     if (b.state && (!s.battle || s.battle !== b.state.boxId || (b.scene && !s.preview))) await b.leave()
     if (s.date) app.clock.setDate(Date.parse(`${s.date}T00:00:00Z`))
     if (s.battle && b.state?.boxId !== s.battle) await b.enter(s.battle, { t: s.t ?? null, momentId: s.moment ?? null, from: 'url' })
@@ -221,7 +283,9 @@ for (const s of shots) {
     return { mode: a.mode, scene: st.scene, d: st.distance, exag: st.exag, nodes: st.nodes, calls: st.calls, date: new Date(a.clock.date).toISOString().slice(0, 10), battle: a.battle.state, hash: location.hash }
   })
   if (s.report) console.log('report', s.name, JSON.stringify(await page.evaluate(new Function(`const app = window.__app; return ${s.report}`))))
-  console.log('shot', s.name, 'in', Date.now() - t, 'ms', JSON.stringify(info), '→', file)
+  // (a phone's sizes: the name, the size and the mode are enough)
+  if (MOBILE) console.log('shot', s.name, 'in', Date.now() - t, 'ms', JSON.stringify({ mode: info.mode, held: info.battle?.held?.id ?? null, station: info.battle?.station ?? null, t: info.battle?.t != null ? Math.round(info.battle.t) : null }), '→', file)
+  else console.log('shot', s.name, 'in', Date.now() - t, 'ms', JSON.stringify(info), '→', file)
 }
 const perf = await page.evaluate(() => window.__app.stats?.())
 if (perf) console.log('stats', JSON.stringify(perf))
