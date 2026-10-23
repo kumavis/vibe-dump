@@ -66,6 +66,7 @@ sim.assist                                  // 'assisted' (default) | 'pilot'; c
 sim.stationsOf(i) → string[]                // the stations slot i offers (by rule, or its kit's override)
 sim.takeable(i) → true | reason
 sim.roleOf(i, station?) → { unit, station } | { group, index, station } | null   // the role that takes slot i
+sim.groupTakeable(id) → true | reason       // a take as a group ({ group, station }); true also where every row is greyed but a spare flies (a namedCrews group, a lone aircraft's)
 ```
 
 **Row** (one per unit the list can show: the record's ships in their
@@ -83,7 +84,8 @@ aircraft, then a spare in use):
   ja,                // the unit's (or the group's) ja, or null
   kit, kitName,      // the kit id; its short name ("Fletcher class", "Zero", "Dauntless")
   group, groupName,  // an aircraft's group id and name (a ship's formation id, or null)
-  groupIndex,        // an aircraft's index in its group (k; 0 is the leader), −1 for a ship
+  groupIndex, k,     // an aircraft's index in its group (0 is the leader), −1 for a ship; k is the same (ui-2's name)
+  spare,             // true for a spare (a namedCrews group's, or a lone aircraft's)
   alive,             // 0 gone, 1 afloat or flying, 2 sinking or falling
   takeable,          // true, or the reason (§2.2)
   stations,          // ['helm', 'main', 'aa', 'torpedoes'] or ['pilot', 'gunner', 'bombardier'] by rule; [] parked
@@ -149,7 +151,7 @@ before its attack). Closes the sortie and returns it.
 ```js
 {
   held,                 // true while the unit is held (t1 then is now)
-  t0, t1,               // battle seconds: the take and the release (or the unit's fate)
+  t0, t1, span,         // battle seconds: the take and the release (or the unit's fate); span is [t0, t1] (ui-2's name)
   from, to,             // clock labels ("10:21", "10:24")
   durationS,
   unit: { index, id, name, ja, label, kind, side, kit, group, groupName },
@@ -157,13 +159,13 @@ before its attack). Closes the sortie and returns it.
   station, stations,    // the station at the end; every station used, in order
   momentId,             // the bookmark's id, or null
   touched, engagedAt,   // whether the player acted (and when)
-  hits,                 // [{ unit, name, kind: 'bomb' | 'torpedo' | 'shell' | 'near-miss', count, where }]
+  hits,                 // [{ unit, name, kind: 'bomb' | 'torpedo' | 'shell' | 'near-miss' | 'aircraft', count, where }]: an aircraft the player brought down is one 'aircraft' entry, by its one-aircraft name
   downed, torpedoesHit,
   releases: { bombs, torpedoes, salvos, shells, rounds, aaBursts, releaseM, envelope },
   damageTaken,          // ship: { fight, float, list, fires, hits, systemsOut }; aircraft: { damage } (fractions of fatal)
   survived,             // true, false, or null (still in the battle)
   how,                  // 'landed' | 'ditched' | 'lost' | null
-  divergedDuring,       // [{ unit, index, name, kind, side, why, t, at }]: who left the record in the span, the player's own unit excepted
+  divergedDuring,       // [{ unit, index, name, kind, side, why, reason, t, at }]: who left the record in the span, the player's own unit excepted (reason = why, ui-2's name)
 }
 ```
 
@@ -238,7 +240,9 @@ battle.state → { boxId, t, momentId, mode: 'watch' | 'moment', selected, stati
 
 Events on `app.events` ('battle', `detail.kind`): the first build's
 `enter`, `abort`, `moment`, `checkpoint`, `after`, `rebuilt`, `leave`, and
-`select`, `take`, `station`, `assist`, `units` (L while watching: open the
+`select`, `take`, `station`, `assist`, `released` (with the sortie, after
+`after`, at every release: by the player, by Backspace or by the unit's
+fate; ui-2's link opens its after-card on it), `units` (L while watching: open the
 list), `unit-card` (Enter on a selection while watching: `{ index, unit }`).
 The watch keys ignore a key aimed at a field of the page (an input, a
 button, a `.card`, a `.unitlist` or anything in a dialog or listbox).
@@ -551,10 +555,10 @@ frame times are slower than RESEARCH.md §4's):
 | Samar, watching, Johnston selected, 07:20 | 0.76 s | 110 | 74,000 | 23.0 MB | the dashed bracket and her name in the orbit view; the row: Fletcher class, takeable, four stations, "steaming 160° at 25 kn", next "At 07:30: Johnston is hit by heavy shells, then medium ones: …" |
 
 Watching each box in the built app (smoke part 3, `dist/index.html`, the
-last two runs): Midway 0.30–0.47 s, 20.1–20.2 MB, 144 calls, 87,000
+last three runs): Midway 0.30–0.54 s, 20.1–20.2 MB, 144 calls, 87,000
 triangles; Pearl Harbor 0.46–0.47 s, 20.8 MB, 213 calls, 228,000;
-Ironbottom Sound 0.44–0.47 s, 17.9 MB, 121 calls, 51,000; Samar
-0.45–0.47 s, 18.9 MB, 105 calls, 62,000; the fixture box after its moments
+Ironbottom Sound 0.44–0.48 s, 17.9 MB, 121 calls, 51,000; Samar
+0.45–0.48 s, 18.8–18.9 MB, 105 calls, 62,000; the fixture box after its moments
 (part 2) 0.66 s and 13.8 MB. The station views draw the near
 terrain's finer levels, so a held unit costs 1.5 to 2 times the watch
 view's triangles; the heap grows by about 5 MB with the player's bodies,
@@ -605,6 +609,33 @@ joins them to this Battle. Every hook, and what to pass:
 | 'units' (L while watching) | open the unit list | |
 | the URL | `battle.state.held.id` and `battle.state.station` → `unit=<id>&station=<name>` | on load, after `battle.enter`: `battle.take({ unit: id, station })`; an aircraft's slot id (`kaga-level#3`) is accepted as `unit` |
 | `battle.state` | `{ …, selected, station, held, assist, sortie }` | |
+
+ui-2's notes (research/ui-2.md on the base branch) were read against this
+Battle after they landed; what each of their asks finds here:
+
+- **Names**: the rows now carry `k` and `spare`, the sortie `span` and each
+  diverged entry `reason`, the brought-down aircraft are `hits` of kind
+  `aircraft`, and Battle dispatches `released` with the sortie, so
+  link.js's reads find them without a mapping. The row's `state` is an
+  object (§2.1), not a list of words: link.js's `Array.isArray` guard
+  falls back to its `sim.state` words (no fuel); to show fuel and height,
+  read `row.state.fuelS` and `row.state.altM`.
+- **The group rows**: link.js greys a group whose members are all greyed;
+  a `namedCrews` group (Welch's and Taylor's) and a lone aircraft's group
+  (a scout, Chikuma's floatplane) are greyed member by member ("a named
+  crew", "flies the lead") but take as a group, flying a spare: the group
+  row's takeable should be `sim.groupTakeable(group)`.
+- **The fixed fates and the level bombers** (ui-2 §7.1): the first wave's
+  level bombers are takeable; a player's bomb or torpedo on a `fixed` unit
+  registers nothing (ai.js `bombStrike`, `torpedoStrike`, as the first
+  build), and a fixed unit's record events run whatever the player does,
+  so no player is ever the cause of Arizona's loss. Greying those groups
+  instead is the project manager's call; it would be one line in
+  takeover.js `takeability`.
+- **Off-box ships** (the Kidō Butai at Pearl Harbor, 280 km north):
+  takeable; outside the box the terrain reads its nearest edge's (deep sea
+  under the carriers there: 4,000 m), so they steam and fight as on the
+  open sea.
 
 Also for the integrator:
 
