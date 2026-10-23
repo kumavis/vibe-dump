@@ -123,7 +123,16 @@ export class BoxBar {
     const dur = Math.max(1, m?.duration || 1)
     const pct = (t) => `${((Math.max(0, Math.min(dur, t)) / dur) * 100).toFixed(2)}%`
     const ticks = (m?.stops || []).map((s, i) => `<button class="bb-tick" data-stop="${i}" style="left:${pct(s.t)}" data-tip="${esc(`${s.label} · stop ${i + 1}`)}" aria-label="${esc(`Stop ${i + 1}, ${s.label}`)}"></button>`).join('')
-    const marks = (m?.bookmarks || []).map((b) => `<button class="bb-mark${b.side ? ` ${esc(b.side)}` : ''}" data-take="${esc(b.id)}" style="left:${pct(b.t)}" data-tip="${esc(`${b.label} · ${b.title}`)}" aria-label="${esc(`${b.title}, ${b.label}: take the controls`)}"></button>`).join('')
+    // (bookmarks a few minutes apart would sit on one another: a later one steps up a row, so each can be hovered and pressed)
+    const rows = []
+    const placed = [...(m?.bookmarks || [])].sort((a, b) => a.t - b.t).map((b) => {
+      const at = (Math.max(0, Math.min(dur, b.t)) / dur) * 100
+      let r = rows.findIndex((last) => at - last >= 4)
+      if (r < 0) r = rows.length < 3 ? rows.length : rows.indexOf(Math.min(...rows))
+      rows[r] = at
+      return { ...b, row: r }
+    })
+    const marks = placed.map((b) => `<button class="bb-mark${b.side ? ` ${esc(b.side)}` : ''}" data-take="${esc(b.id)}" style="left:${pct(b.t)};--row:${b.row}" data-tip="${esc(`${b.label} · ${b.title}`)}" aria-label="${esc(`${b.title}, ${b.label}: take the controls`)}"></button>`).join('')
     this.$('.bb-marks').innerHTML = ticks + marks
   }
 

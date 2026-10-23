@@ -51,7 +51,7 @@ export class UnitList {
     this.body = this.el.querySelector('.ul-body')
     this.el.addEventListener('click', (e) => {
       if (e.target.closest('.ul-close')) return this.close()
-      const f = e.target.closest('[data-kind]')
+      const f = e.target.closest('.ul-filter [data-kind]')
       if (f) return this.setFilter(f.dataset.kind)
       const r = e.target.closest('.ul-row')
       if (r) this.pick(r)
@@ -113,7 +113,8 @@ export class UnitList {
     for (const s of data.sides) for (const r of [...s.ships, ...s.groups]) this.update(r)
     const sel = data.selected
     for (const { row, el } of this.rows.values()) {
-      const on = !!sel && (sel.key === row.key || (sel.index != null && (row.index === sel.index || row.members?.includes(sel.index))))
+      // (a strict boolean: classList.toggle with undefined would flip the class on every call)
+      const on = !!sel && (sel.key === row.key || (sel.index != null && (row.index === sel.index || !!row.members?.includes(sel.index))))
       el.classList.toggle('sel', on)
       el.setAttribute('aria-selected', String(on))
     }

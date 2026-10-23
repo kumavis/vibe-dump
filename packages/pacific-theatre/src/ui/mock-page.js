@@ -128,6 +128,7 @@ async function start() {
 
   // the plan, and the frame
   const plan = new Plan(document.getElementById('plan'), app)
+  app.plan = plan
   plan.canvas.addEventListener('click', (e) => {
     const i = plan.pick(e.clientX, e.clientY)
     if (i != null) app.battle.select(i)

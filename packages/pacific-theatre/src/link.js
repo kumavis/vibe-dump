@@ -890,8 +890,10 @@ export function link(app, ui) {
           const tid = Array.isArray(a.target) ? a.target[0] : a.target
           const target = rawUnits.get(tid)?.name ?? (groups.get(tid) ? midName(groups.get(tid).name) : (B.sites || []).find((x) => x.id === tid)?.name ?? null)
           add(ta, `${name} ${attackLine(a.profile, target)}`, a.sources)
+          // (the record's losses as a range, said only where it has some: aircraft "did not return", R8 §3.6)
           const lost = (g.losses || [])[0]
-          if (lost != null) add(ta, `${countWords(lost)} of its aircraft did not return`)
+          const most = Math.max(0, ...[].concat(lost ?? []).map(Number).filter(Number.isFinite))
+          if (most > 0) add(ta, `${countWords(lost)} of its aircraft did not return`)
         }
         const rec = at(g.recover?.t)
         if (inSpan(rec)) add(rec, `${name} lands${g.recover?.to ? ` on ${rawUnits.get(g.recover.to)?.name ?? g.recover.to}` : ''}`)

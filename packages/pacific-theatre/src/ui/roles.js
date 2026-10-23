@@ -155,6 +155,7 @@ export function countWords(c) {
   const [a, b] = Array.isArray(c) ? c : [c, c]
   if (a == null) return ''
   if (a === b) return word(a)
+  if (a === 0) return `up to ${word(b)}`
   return b === a + 1 ? `${word(a)} or ${word(b)}` : `${word(a)} to ${word(b)}`
 }
 const plural = (noun, c) => {

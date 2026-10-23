@@ -377,7 +377,18 @@ export class MockBattle {
       })
       step(4, 22, () => (s.damageTaken = 0.3))
     } else {
-      const foe = sim.record.ships.find((r) => r.side !== u.side && !r.hospital && !r.fixed && !r.parked && !(r.fate?.t != null && r.fate.t <= sim.t))
+      // (the nearest ship of the other side within 25 km that can register a hit)
+      const can = (r) => r.side !== u.side && !r.hospital && !r.fixed && !r.parked && !(r.fate?.t != null && r.fate.t <= sim.t)
+      const pos = h.script < 3 && el >= 20 ? sim.positions() : null
+      const me = pos?.find((p) => p.index === h.index)
+      let foe = null
+      let best = 25000
+      for (const p of pos || []) {
+        const r = sim.record.ships[p.index]
+        if (!me || !r || !can(r)) continue
+        const d = Math.hypot(p.x - me.x, p.z - me.z)
+        if (d < best) [foe, best] = [r, d]
+      }
       step(2, 10, () => {
         if (h.station === 'aa') s.releases.push({ kind: 'aa', count: 40, t: sim.t })
         else if (h.station === 'torpedoes') s.releases.push({ kind: 'torpedo', count: 5, t: sim.t })
