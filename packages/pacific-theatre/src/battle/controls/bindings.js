@@ -79,7 +79,7 @@ Mouse lays the main battery; wheel ±100 m (Shift ±400 m); click: salvo, hold: 
 T torpedoes · G narrow/wide spread · Space: the AA at the pointer's aircraft · L star shell
 X battery · C camera · Z zoom · +/− time · U units · Backspace: release the controls`
 
-export const TOUCH_HELP = 'Left: the stick (or the helm and telegraph) · right: fire and ordnance · the buttons: camera and time · release, twice: the controls back'
+export const TOUCH_HELP = 'Left: the stick (or the helm and telegraph) · right: fire and ordnance · the buttons: camera and time · Release, at the top: the controls back'
 
 export const GUN_HELP = `Mouse aims the guns (with the pointer locked; else the pointer's offset turns them)
 Left button or Space: fire · the pip leads the aimed aircraft
@@ -92,7 +92,10 @@ Tab: the next station · Backspace: release the controls`
 export const HINTS = {
   aircraft: ['Stick: the mouse (the nose follows it) or W/S and A/D; let go and the wings level', 'Throttle: R and F', 'Fire: Space or the left button · release: B a bomb, T a torpedo, when the cue says so', 'Backspace twice gives the controls back'],
   ship: ['Helm: A and D (it stays until countered) · telegraph: W and S', 'Aim: the mouse lays the guns on the sea', 'Fire: a click · torpedoes: T · Tab: the next station', 'Backspace twice gives the controls back'],
-  touch: ['Stick: the left pad (let go and the wings level), or the helm and telegraph sliders', 'Throttle: the slider beside it', 'Fire and release: the buttons on the right', 'Release, tapped twice, gives the controls back'],
+  touch: ['Stick: the left pad (let go and the wings level), or the helm and telegraph sliders', 'Throttle: the slider beside it', 'Fire and release: the buttons on the right', 'Release, at the top, gives the controls back'],
+  // a touch screen at a gun or the sight: its controls are not the stick's
+  touchGun: ['Aim: drag anywhere on the view', 'The pip leads the aimed aircraft', 'Fire: hold the button on the right', 'Release, at the top, gives the controls back'],
+  touchSight: ['Steer: ◀ and ▶ bring the track onto the target', 'The sight shows where the stick would fall now', 'Release bombs: when the impact meets the target', 'Release, at the top, gives the controls back'],
   // a first take at a gun or the sight gets that station's four lines, once each (the stick's would mislead there)
   gunner: ['Aim: the mouse turns the rear gun (with the pointer locked; else its offset from the centre)', 'It bears aft and above, not through the tail or the wings', 'Fire: the left button or Space · the pip leads the aimed aircraft', 'Tab: the next station · Backspace twice gives the controls back'],
   aa: ['Aim: the mouse lays the AA director on an aircraft', 'The guns that bear fire where it points; the pip leads the aimed aircraft', 'Fire: the left button or Space · Tab: the next station', 'Backspace twice gives the controls back'],

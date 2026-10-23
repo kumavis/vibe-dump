@@ -53,6 +53,16 @@ import { AIRCRAFT_HELP, SHIP_HELP, TOUCH_HELP, HINTS } from './controls/bindings
 import { poseToBox, poseToTable } from '../geo.js'
 
 const log = (...a) => console.info('[battle]', ...a)
+
+// the first hints' key in pt.hints and their lines: a gun or the sight has its own, on a touch screen too (whose
+// stick lines are keyed by the kind)
+const TOUCH_HINTS = { aa: 'touchGun', gunner: 'touchGun', bombardier: 'touchSight' }
+function hintsFor(station, kind, touch) {
+  if (touch) return TOUCH_HINTS[station] ? [station, HINTS[TOUCH_HINTS[station]]] : [kind, HINTS.touch]
+  const key = HINTS[station] ? station : kind
+  return [key, HINTS[key]]
+}
+
 const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
 // ROUND-2 §3: the speed lists of a held unit
 const AIR_SCALES = { assisted: [0.5, 1, 2], pilot: [1] }
@@ -236,10 +246,7 @@ export class Battle {
     if (sc) {
       sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
       sc.hud.setStations(pl)
-      if (!scripted) {
-        const key = touch ? pl.kind : HINTS[pl.station] ? pl.station : pl.kind
-        sc.hud.firstHints(key, touch ? HINTS.touch : HINTS[key])
-      }
+      if (!scripted) sc.hud.firstHints(...hintsFor(pl.station, pl.kind, touch))
     }
     if (touch && this.aid === 'standard') this.setAid('guided')
   }
@@ -258,10 +265,9 @@ export class Battle {
     // (the station left takes its hints with it; a gun station or the sight shows its own the first time it is manned)
     if (sc && !pl.scripted) {
       sc.hud.clearHints()
-      if (!matchMedia?.('(pointer: coarse)')?.matches) {
-        const key = HINTS[name] ? name : pl.kind
-        sc.hud.firstHints(key, HINTS[key])
-      }
+      const touch = matchMedia?.('(pointer: coarse)')?.matches
+      // (a touch screen's stick lines were shown at the take; a gun or the sight has its own, once)
+      if (!touch || TOUCH_HINTS[name]) sc.hud.firstHints(...hintsFor(name, pl.kind, touch))
     }
     this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'station', station: name, index: pl.unitIndex } }))
     return name
