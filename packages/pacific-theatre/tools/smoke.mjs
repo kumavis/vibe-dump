@@ -188,7 +188,7 @@ const shaderAudit = () =>
 // the whole theatre, the camera straight to it
 const HOME = `const h = app.table.rig.homeView(); app.table.rig.jump({ x: h.target.x, z: h.target.z, distance: h.distance, yaw: h.yaw, pitch: h.pitch }); app.settle()`
 // a fixture's keyframes and the box event (the real data's first two keyframes and first box event otherwise)
-const KF = await ui('[...app.data.fronts.keyframes.keys()]')
+const KF0 = await ui('[...app.data.fronts.keyframes.keys()]')
 const BOX_EV = await ui('app.data.events.find((e) => e.box && app.data.boxById.has(e.box))?.id ?? null')
 
 await check('the table boots on the fixtures and is the active scene', async () => {
@@ -294,6 +294,9 @@ await check('the wheel runs from the whole theatre down to an island group', asy
 })
 
 await check("the front at its keyframes: held land, the hatch, the perimeters, the islands' holders, cross-faded between", async () => {
+  // (the war's first two keyframes, framed over the Pacific: the prologue's, which change only on the mainland, are the round-two check's below)
+  const war = KF0.filter((d) => d >= '1941-12-06')
+  const KF = war.length >= 2 ? war : KF0
   if (KF.length < 2) throw new Error(`${KF.length} keyframes in the data`)
   await run(`app.ui.card.close(); app.ui.onScrub()`)
   await page.mouse.move(5, 795)
@@ -499,7 +502,9 @@ await check('round two: a row of the unit list selects, its card offers the stat
   const st0 = pick.stations.includes('aa') ? 'aa' : pick.stations[1]
   await page.click(`.card.show .uc-st[data-station="${st0}"]`)
   await page.waitForFunction(() => !!window.__app.battle.state.held, null, { timeout: 60000 })
-  await frames(2)
+  // (the clock running, a few frames on: a take after a bookmark once ended at its first frame on the bookmark's done state)
+  await run('app.battle.play(1)')
+  await frames(3)
   const held = await ui(`({ held: app.battle.state.held?.id, station: app.battle.state.station, hash: app.hashNow(), bar: [...document.querySelectorAll('.boxbar .bb-st')].map((b) => b.dataset.station), card: app.ui.card.mode, list: !!document.querySelector('.unitlist:not([hidden])') })`)
   if (held.held !== pick.id || held.station !== st0 || !held.hash.includes(`unit=${encodeURIComponent(pick.id)}&station=${st0}`) || JSON.stringify(held.bar) !== JSON.stringify(pick.stations)) throw new Error(JSON.stringify(held))
   const st1 = pick.stations.find((x) => x !== st0)
@@ -543,7 +548,9 @@ await check('#battle, #t and #moment go straight into the box, the moment offere
   const r = await ui(`({ t: app.battle.sim.clock.label(app.battle.sim.t), card: app.ui.card.mode, focus: document.activeElement?.dataset?.take ?? document.querySelector('.card .take.focus')?.dataset.take, mode: app.mode })`)
   if (r.card !== 'briefing' || r.focus !== m.id || r.mode !== 'watch') throw new Error(JSON.stringify(r))
   await page.click('.boxbar .bb-leave')
-  await page.waitForFunction(() => window.__app.mode === 'table' && !window.__app.battle.scene, null, { timeout: 300000 })
+  // (and link.js's leave done: it reopens the battle's card on the table, which sets the table's date)
+  await page.waitForFunction(() => window.__app.mode === 'table' && !window.__app.battle.scene && !window.__app.link?.busy, null, { timeout: 300000 })
+  await frames(2)
   return `${BOX} at ${r.t} (asked ${m.t}), ${m.id} focused`
 })
 
@@ -570,7 +577,8 @@ await check('round two: the prologue front moves between 1931 and 1941 (Mukden a
   await run(`app.ui.card.close(); app.ui.onScrub()`)
   const at = async (date, name) => {
     // (Manchuria, Korea and north China in the frame: centred between Mukden and Peking)
-    await run(`app.clock.setDate(Date.parse('${date}T12:00:00Z')); const [x, z] = app.data.proj.toWorld([121, 39]); app.table.rig.jump({ x, z, distance: 5000, yaw: 0, pitch: 1.05 }); app.settle()`)
+    // (the timeline's ease to the battle's date, begun when the box was left, let go first: it would set the date back)
+    await run(`app.ui.timeline.finish(); app.clock.setDate(Date.parse('${date}T12:00:00Z')); const [x, z] = app.data.proj.toWorld([121, 39]); app.table.rig.jump({ x, z, distance: 5000, yaw: 0, pitch: 1.05 }); app.settle()`)
     await frames(3)
     const r = await ui(`(() => { const f = app.table.front; const lg = f.legend(); return { pair: f.pair, states: lg?.states.map((s) => s.id + ':' + s.label), keyframe: lg?.keyframe } })()`)
     r.look = await look(name)
