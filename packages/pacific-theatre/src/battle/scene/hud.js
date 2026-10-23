@@ -14,8 +14,25 @@
 // selected unit, the AA director's and the gunner's reticles with their lead
 // pips, the level sight (the predicted impact and the drift line), and the
 // release cue's window.
+//
+// On a phone (700 px wide or less, or a coarse pointer: the page's phone
+// layout, style.css) the instruments are a strip of the four numbers that
+// matter for the kind (an aircraft's speed, height, heading and g; a ship's
+// speed, heading, rudder and the main battery ready), small, docked under
+// the page's bar at the top (beside it on a phone on its side), with the
+// ammunition and the fuel on a second line only once they run low or out
+// and the assist and the like as short tags; the plot shrinks to the top
+// right with its caption inside it; the beat's subtitle is one line just
+// above the touch controls; the first hints stand in the middle. Where the
+// page's bar and the touch controls stand comes from the document's
+// variables (--pt-head, --pt-head-end, --pt-foot: ui/boxbar.js;
+// --pt-controls: controls/touch.js); the plot's place is given back as
+// --pt-plot-top and --pt-plot for the touch controls' camera and time.
 
 import * as THREE from 'three'
+
+// (the page's phone query: style.css and controls/touch.js keep the same one)
+const PHONE = '(max-width: 700px), (pointer: coarse)'
 
 const STYLE = `
 .pt-hud { position: fixed; inset: 0; pointer-events: none; font: 12px/1.35 Inter, system-ui, sans-serif; color: #e9e4d6; text-shadow: 0 1px 2px rgba(0,0,0,.85); z-index: 20; }
@@ -66,8 +83,54 @@ const STYLE = `
 .pt-hud .cuewin b { position: absolute; top: 0; bottom: 0; background: rgba(246,227,160,.35); }
 .pt-hud .cuewin i { position: absolute; top: -3px; width: 2px; height: 12px; background: #fff; }
 .pt-hud .cue.on { background: rgba(246,227,160,.25); }
+/* (the middle's words: placed one by one on a wide screen, stacked in the middle on a phone) */
+.pt-hud .mid { display: contents; }
+.pt-hud .strip { display: none; }
+@media ${PHONE} {
+  /* the plot's place, for the touch controls' camera and time beneath it: under the page's bar, or at the top on a phone on its side */
+  :root { --pt-plot: 96px; --pt-plot-top: max(var(--pt-head, 0px), calc(env(safe-area-inset-top, 0px) + 58px)); }
+  .pt-hud {
+    --head: max(var(--pt-head, 0px), calc(env(safe-area-inset-top, 0px) + 58px));
+    --foot: calc(max(var(--pt-controls, 0px), var(--pt-foot, 0px)) + env(safe-area-inset-bottom, 0px) + 10px);
+    --edge-l: max(8px, env(safe-area-inset-left, 0px));
+    --edge-r: max(8px, env(safe-area-inset-right, 0px));
+    /* the middle: under the plot and the camera and time buttons, over the subtitle */
+    --band-top: calc(var(--pt-plot-top) + var(--pt-plot) + 112px);
+    --band-foot: calc(var(--foot) + 32px);
+  }
+  .pt-hud .clock { display: var(--pt-clock-display, block); left: max(12px, env(safe-area-inset-left, 0px)); top: calc(10px + env(safe-area-inset-top, 0px)); max-width: calc(100vw - 132px); }
+  .pt-hud .clock b { font-size: 17px; }
+  .pt-hud .clock .sub { font-size: 11px; }
+  .pt-hud .inst { display: none !important; }
+  .pt-hud .strip { position: absolute; top: var(--head); left: var(--edge-l); max-width: calc(100vw - var(--edge-l) - var(--edge-r) - var(--pt-plot) - 8px); display: flex; flex-wrap: wrap; align-items: baseline; gap: 1px 10px; padding: 4px 9px; background: rgba(8,10,12,.45); border-radius: 4px; font-size: 11.5px; line-height: 1.45; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pt-hud .strip:empty { display: none; }
+  .pt-hud .strip .tag { padding: 0 5px; border-radius: 3px; background: rgba(233,228,214,.14); font-size: 10.5px; }
+  .pt-hud .strip .warn { color: #f0b860; }
+  .pt-hud .strip .tag.warn { background: rgba(240,184,96,.18); }
+  .pt-hud .strip .l2 { flex: 1 0 100%; display: flex; flex-wrap: wrap; gap: 0 10px; }
+  .pt-hud .plot { top: var(--pt-plot-top); right: var(--edge-r); width: var(--pt-plot); height: var(--pt-plot); }
+  .pt-hud .plot-label { top: calc(var(--pt-plot-top) + var(--pt-plot) - 30px); right: var(--edge-r); width: var(--pt-plot); padding: 0 20px; font-size: 9px; line-height: 1.15; white-space: normal; }
+  .pt-hud .subs { bottom: var(--foot); max-width: calc(100vw - 24px); }
+  .pt-hud .subs div { display: none; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pt-hud .subs div:last-child { display: block; }
+  /* the middle, under the plot and over the subtitle: the first hints (or the keys), a message, the release cue and its
+     window, stacked so that none stands on another */
+  .pt-hud .mid { position: absolute; left: 0; right: 0; top: var(--band-top); bottom: var(--band-foot); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+  .pt-hud .mid > * { position: static; left: auto; right: auto; top: auto; bottom: auto; transform: none; margin: 0; flex: none; }
+  .pt-hud .msg { max-width: calc(100vw - 32px); font-size: 13px; }
+  .pt-hud .hints, .pt-hud .keys { width: max-content; max-width: min(460px, calc(100vw - 32px)); padding: 8px 12px; font-size: 12px; line-height: 1.45; white-space: pre-line; }
+  .pt-hud:has(.hints:not(:empty)) .keys { display: none; }
+  @media (orientation: landscape) {
+    :root { --pt-plot-top: calc(env(safe-area-inset-top, 0px) + 8px); }
+    /* the strip beside the page's bar, short of the plot; the middle starts under the bar */
+    .pt-hud { --band-top: var(--head); }
+    .pt-hud .strip { top: calc(env(safe-area-inset-top, 0px) + 8px); left: max(var(--pt-head-end, 0px), var(--edge-l)); max-width: calc(100vw - max(var(--pt-head-end, 0px), var(--edge-l)) - var(--edge-r) - var(--pt-plot) - 8px); min-height: 44px; align-content: center; }
+    .pt-hud .hints, .pt-hud .keys { max-width: min(520px, calc(100vw - 2 * (var(--pt-plot) + 24px))); }
+  }
+}
 `
 
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 const KN = 0.514444
 const DEG = Math.PI / 180
 const TELEGRAPH = [
@@ -99,10 +162,8 @@ export class Hud {
       <div class="clock"><b></b><div class="sub"></div></div>
       <canvas class="plot" width="168" height="168"></canvas><div class="plot-label"></div>
       <div class="subs"></div>
-      <div class="msg"></div>
-      <div class="cue"></div>
       <div class="inst"></div>
-      <div class="keys"></div>
+      <div class="strip"></div>
       <div class="mark bracket" style="display:none"><span></span></div>
       <div class="mark reticle" style="display:none"><span></span></div>
       <div class="mark pip" style="display:none"></div>
@@ -112,8 +173,7 @@ export class Hud {
       <div class="mark cross" style="display:none"></div>
       <div class="mark lead" style="display:none"></div>
       <div class="mark lead2" style="display:none"></div>
-      <div class="cuewin" style="display:none"><b></b><i></i></div>
-      <div class="hints"></div>
+      <div class="mid"><div class="hints"></div><div class="keys"></div><div class="msg"></div><div class="cue"></div><div class="cuewin" style="display:none"><b></b><i></i></div></div>
       <nav class="stations" aria-label="Stations"></nav>`
     container.appendChild(el)
     this.el = el
@@ -126,6 +186,8 @@ export class Hud {
     this.msg = this.$('.msg')
     this.cue = this.$('.cue')
     this.inst = this.$('.inst')
+    this.strip = this.$('.strip')
+    this.full = new Map() // the most rounds each gun of the held unit has held, for the strip's "low"
     this.keys = this.$('.keys')
     this.bracket = this.$('.bracket')
     this.reticle = this.$('.reticle')
@@ -297,6 +359,11 @@ export class Hud {
     this.cuewin.style.display = 'none'
     if (!pl || !sim.state.alive[pl.unitIndex]) {
       this.inst.style.display = 'none'
+      if (this.stripHTML) {
+        this.strip.textContent = ''
+        this.stripHTML = ''
+      }
+      this.full.clear()
       for (const m of [this.bracket, this.reticle, this.pip, this.ccip]) m.style.display = 'none'
       this.cue.textContent = ''
       this.vignette.style.opacity = 0
@@ -326,6 +393,7 @@ export class Hud {
           st.engaged === false ? 'on the record until you act' : '',
         ]
         this.inst.innerHTML = lines.filter(Boolean).join('\n')
+        this.drawStrip([spd(st.ias), alt(st.alt), hdg(st.heading), `${st.g.toFixed(1)} g`], this.airTags(st, hdg), this.airLow(pl, st))
       }
       // the target, its lead pip, the CCIP and the release cue
       const t = st.target
@@ -377,6 +445,18 @@ export class Hud {
           st.engaged === false ? 'on the record until you act' : '',
         ]
         this.inst.innerHTML = lines.filter(Boolean).join('\n')
+        const rud = Math.abs(st.rudder)
+        const tags = [
+          ...st.systemsOut.map((x) => ['warn', x]),
+          st.station === 'main' && flight ? ['', flight.replace(/^last salvo: /, '')] : null,
+          st.station === 'torpedoes' && st.torpedoesReady ? ['', `tubes ${st.torpedoesReady}`] : null,
+          st.director ? ['', `director${st.director.aimed >= 0 && st.director.range != null ? ` ${rng(st.director.range)}` : ' · no aircraft'}${st.director.firing ? ' · firing' : ''}`] : null,
+          // (a unit on the record until the player acts is on the record's course too: the one tag says it)
+          st.engaged === false ? ['', 'on the record'] : st.helmHeld ? ['', st.helmHeld === 'record' ? 'the record’s course' : `holding ${hdg(st.helmHeld.heading)}`] : null,
+        ]
+        const dmg = Math.max(0, 1 - st.fight) < 0.995 || Math.max(0, 1 - st.float) < 0.995 || Math.abs(st.list) > 1 || fires
+        const low = dmg ? [['warn', `fighting ${Math.round(Math.max(0, 1 - st.fight) * 100)} %`], ['warn', `afloat ${Math.round(Math.max(0, 1 - st.float) * 100)} %`], Math.abs(st.list) > 1 ? ['warn', `list ${Math.abs(st.list).toFixed(0)}°`] : null, fires ? ['warn', `fires ${fires}`] : null] : []
+        this.drawStrip([spd(st.speed), hdg(st.heading), `rudder ${rud.toFixed(0)}°${st.rudder > 0.5 ? ' stbd' : st.rudder < -0.5 ? ' port' : ''}`, `main ${ready.filter((t) => t.ready).length}/${ready.length}`], tags, low)
       }
       const s = sim.state
       const i = pl.unitIndex
@@ -408,6 +488,51 @@ export class Hud {
       this.cue.textContent = ''
       this.vignette.style.opacity = 0
     }
+  }
+
+  /**
+   * A phone's instrument strip: the four numbers, then the tags (a warning or a state in a word or two), and a
+   * second line only for what has run low or out (tags and lines as [cls, text] pairs; empty ones are left out).
+   */
+  drawStrip(nums, tags, low) {
+    const span = ([cls, text]) => `<span class="${cls ? `${cls} ` : ''}tag">${esc(text)}</span>`
+    const tagsHTML = tags.filter((t) => t && t[1]).map(span).join('')
+    const lowHTML = low.filter((t) => t && t[1]).map(([cls, text]) => `<span class="${cls}">${esc(text)}</span>`).join('')
+    const html = `${nums.map((n) => `<span>${esc(n)}</span>`).join('')}${tagsHTML}${lowHTML ? `<div class="l2">${lowHTML}</div>` : ''}`
+    if (html !== this.stripHTML) {
+      this.stripHTML = html
+      this.strip.innerHTML = html
+    }
+  }
+
+  /** An aircraft's tags: its warnings, the AA on it, the gun or the sight it is at, the assist, the record. */
+  airTags(st, hdg) {
+    return [
+      st.stall ? ['warn', 'stall'] : null,
+      st.shake > 0 ? ['warn', 'overspeed'] : null,
+      st.broken ? ['warn', 'controls damaged'] : null,
+      st.aa > 0 ? ['warn', 'AA'] : null,
+      st.station === 'gunner' && st.gun && !st.gun.bears ? ['warn', 'does not bear'] : null,
+      st.station === 'bombardier' ? ['', `run-in ${hdg(st.sight?.heading ?? st.heading)}`] : null,
+      st.assist === 'assisted' && st.assisting?.length ? ['', `assist: ${st.assisting.join(', ')}`] : null,
+      st.engaged === false ? ['', 'on the record'] : null,
+    ]
+  }
+
+  /** What an aircraft has run low on or out of: a gun's rounds under a fifth of the most it held, the fuel under ten minutes. */
+  airLow(pl, st) {
+    const out = []
+    const key = (k) => `${pl.unitIndex}:${k}`
+    st.ammo.forEach((a, k) => {
+      const full = Math.max(this.full.get(key(k)) ?? 0, a.left)
+      this.full.set(key(k), full)
+      if (a.position === 'rear' && st.station !== 'gunner') return
+      if (a.left <= 0 && full > 0) out.push(['warn', `${a.calibreMm} mm out`])
+      else if (a.left <= full * 0.2) out.push(['warn', `${a.calibreMm} mm ${a.left}`])
+    })
+    if (st.endurance <= 0) out.push(['warn', 'fuel out'])
+    else if (st.endurance < 600) out.push(['warn', `fuel ${Math.floor(st.endurance / 60)} min`])
+    return out
   }
 
   /** The bracket on the selected unit (dashed), with its name; not on the player's own unit seen from it. */
@@ -560,7 +685,8 @@ export class Hud {
       g.stroke()
     }
     const radar = (sim._X[pl.unitIndex].model.sensors || []).length > 0
-    this.plotLabel.textContent = `${radar ? 'radar plot' : 'lookouts'} · ${pl.kind === 'aircraft' ? '20 km' : '30 km'}`
+    // (the number and its unit kept together, so the phone's caption inside the small plot breaks between the words)
+    this.plotLabel.textContent = `${radar ? 'radar plot' : 'lookouts'} · ${pl.kind === 'aircraft' ? '20\u00a0km' : '30\u00a0km'}`
     for (const ct of st.contacts || []) {
       if (ct.range > span) continue
       const a = ct.bearing * DEG
