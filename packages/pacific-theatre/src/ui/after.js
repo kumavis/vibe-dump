@@ -26,6 +26,18 @@
 // *Watch on* (ui.onWatchOn()), *Back to the table* (ui.onLeave()), and the
 // restart points (ui.onRetry(momentId, 'start' | 'checkpoint')).
 //
+// Round two (ROUND-2.md §1.1, §5): the card opens whenever the controls are
+// given back or the unit's fate resolves, over the span the controls were
+// held. The title carries the span ("At the controls of a Dauntless of
+// Bombing Six, 10:21–10:24"); a bookmark keeps its own title and sets the
+// span beneath it (`gloss`). *The record* gains the unit's own record over
+// the span, a line each in the stops' voice (`record.lines: [{ t: '10:24',
+// text }]`), after the bookmark's written `after` text where there is one.
+// `retry` is a bookmark's alone.
+//
+//     title: 'At the controls of a Dauntless of Bombing Six, 10:21–10:24', gloss: null,
+//     record: { text, lines: [ { t: '10:24', text: 'Kaga is hit by four or five bombs, amidships' } ], tellings, sources },
+//
 // The rules the card keeps whatever it is handed (DESIGN.md §3.5, §7.4; R8
 // §5.1): no count of people outside *The record* (a line in the first two
 // parts that sets a number beside men, crews, lives, the dead or 人, 名, 命
@@ -70,12 +82,14 @@ export function afterHTML(a, { sourceLine, sourceTitle = (id) => id, warn = cons
   const guesses = (a.battle?.guesses || []).filter((g) => ok(g, 'battle'))
   const recText = a.record?.text && ok(a.record.text, 'record') ? a.record.text : ''
   const tellings = (a.record?.tellings || []).filter((t) => ok(t.says, 'record'))
+  const recLines = (a.record?.lines || []).filter((l) => ok(l.text, 'record'))
   const nextText = a.next?.text && ok(a.next.text, 'next') ? a.next.text : ''
   const ja = a.ja ? `<p class="card-ja"><span lang="ja">${esc(typeof a.ja === 'string' ? a.ja : a.ja.kanji)}</span></p>` : ''
+  const gloss = a.gloss ? `<p class="gloss">${esc(a.gloss)}</p>` : ''
   return `
     <header>
       <div class="card-icon">${icon('take', 26)}</div>
-      <div class="card-titles"><h1>${esc(a.title || '')}</h1>${ja}</div>
+      <div class="card-titles"><h1>${esc(a.title || '')}</h1>${gloss}${ja}</div>
       <button class="card-close" aria-label="Close">${icon('close', 18)}</button>
     </header>
     <section class="card-sec after-part" data-part="sortie">${head('sortie')}
@@ -88,6 +102,8 @@ export function afterHTML(a, { sourceLine, sourceTitle = (id) => id, warn = cons
     </section>
     <section class="card-sec after-part" data-part="record">${head('record')}
       ${recText ? `<div class="card-body"><p>${esc(recText)}</p></div>` : ''}
+      ${recLines.length ? `<ul class="af-record">${recLines.map((l) => `<li>${l.t ? `<span class="af-t">${esc(l.t)}</span>` : ''}${esc(l.text)}</li>`).join('')}</ul>` : ''}
+      ${!recText && !recLines.length && !tellings.length ? '<p class="none">The record has nothing for this unit over these minutes. <span lang="ja">その間の記録はない。</span></p>' : ''}
       ${tellings.length ? `<ul class="tellings">${tellings.map((t) => `<li>${t.source ? `<span class="src-title">${esc(t.sourceTitle || sourceTitle(t.source))}</span>: ` : ''}${esc(t.says)}</li>`).join('')}</ul>` : ''}
       ${(a.record?.sources || []).length ? `<ul class="sources">${a.record.sources.map((s) => sourceLine(s)).join('')}</ul>` : ''}
     </section>

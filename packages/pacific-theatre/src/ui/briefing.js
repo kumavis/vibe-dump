@@ -11,15 +11,31 @@
 //                  objective: 'Put a thousand-pound bomb on Kaga's flight deck.', focus: true }, … ],
 //     sources: [ { title, author, year, url, where, opened } | 'source-id' ],   // ids resolve through sources.json
 //     credit: 'Terrain produced using Copernicus WorldDEM-30 …',               // the box's `credit`, verbatim
+//     door: { title: 'Gwin’s helm', text: '…', role: 'Gwin (DD-433), the helm', t: '23:24' },   // ROUND-2 §1.2: Start here
+//     assist: 'assisted' | 'pilot',                                             // the setting, kept in the browser
 //   })
 //
 // Each moment carries *Take the controls*, which raises ui.onTake(momentId);
 // *Watch* closes the card and raises ui.onWatch(). A moment marked `focus`
 // (the URL's #moment) has its button focused, never pressed: a moment never
 // starts without a click (ENGINEERING §9).
+//
+// Round two (ROUND-2.md §1.2, §5): *Start here*, the box's one gentle first
+// door, stands before the record's turning points, its button raising
+// ui.onFirstDoor(); under it the setting, Assisted or Pilot, with its one
+// line, each a button raising ui.onAssist(value). Nothing prompts a take:
+// watching stays the default and Watch closes the card.
 
 import { esc } from './dom.js'
 import { icon } from './icons.js'
+import { ASSIST, ASSIST_LABEL, ASSIST_LINE } from './roles.js'
+
+/** The setting's two buttons and its line (the briefing's and the bar's look alike). */
+export function assistHTML(value, { line = true } = {}) {
+  const v = ASSIST.includes(value) ? value : 'assisted'
+  const opts = ASSIST.map((a) => `<button class="as-opt${a === v ? ' on' : ''}" role="radio" aria-checked="${a === v}" data-assist="${a}">${esc(ASSIST_LABEL[a])}</button>`).join('')
+  return `<div class="assist" role="radiogroup" aria-label="Flying">${opts}</div>${line ? `<p class="as-line">${esc(ASSIST_LINE)}</p>` : ''}`
+}
 
 /** The briefing's HTML; `sourceLine` renders one source reference as the event card does. */
 export function briefingHTML(b, { sourceLine }) {
@@ -46,6 +62,16 @@ export function briefingHTML(b, { sourceLine }) {
       </li>`,
     )
     .join('')
+  const d = b.door
+  const door = d
+    ? `<div class="card-sec door"><h2>Start here</h2><div class="door-card">
+        <div class="bm-head">${d.t ? `<span class="bm-t">${esc(d.t)}</span>` : ''}<b>${esc(d.title || '')}</b></div>
+        ${d.role ? `<div class="bm-role">${esc(d.role)}</div>` : ''}
+        ${d.text ? `<p>${esc(d.text)}</p>` : ''}
+        <button class="nav take door-take" data-door="1">${icon('take', 16)}<span>Take the controls</span></button>
+      </div></div>`
+    : ''
+  const setting = b.assist ? `<div class="card-sec setting"><h2>Flying</h2>${assistHTML(b.assist)}</div>` : ''
   return `
     <header>
       <div class="card-icon">${icon('box', 26)}</div>
@@ -55,7 +81,8 @@ export function briefingHTML(b, { sourceLine }) {
     ${b.clock ? `<div class="card-clock">${esc(b.clock)}${b.clockNote ? `<span>${esc(b.clockNote)}</span>` : ''}</div>` : ''}
     ${b.situation ? `<div class="card-body"><p>${esc(b.situation)}</p></div>` : ''}
     ${forces ? `<div class="card-sec"><h2>The forces</h2><div class="bf">${forces}</div></div>` : ''}
-    ${moments ? `<div class="card-sec"><h2>Moments</h2><ul class="bms">${moments}</ul></div>` : ''}
+    ${door}${setting}
+    ${moments ? `<div class="card-sec"><h2>${d || b.assist ? 'The record’s turning points' : 'Moments'}</h2><ul class="bms">${moments}</ul></div>` : ''}
     <div class="card-sec"><h2>Sources</h2><ul class="sources">${(b.sources || []).map((s) => sourceLine(s)).join('') || '<li class="none">none listed</li>'}</ul></div>
     <footer class="card-foot">
       <button class="nav watch">${icon('watch', 16)}<span>Watch</span></button>
