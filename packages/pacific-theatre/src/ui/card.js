@@ -1,4 +1,4 @@
-// The card on the right (ENGINEERING.md §11). Six kinds share it:
+// The card on the right (ENGINEERING.md §11, ROUND-2.md §1.1). Seven kinds share it:
 //
 // - `event`: the title with its Japanese name and reading beneath, the gloss;
 //   when, in the zone of the event's own clock, with the clock named and the
@@ -18,6 +18,17 @@
 // - `briefing` and `after`: a box's briefing and a sortie's after-card,
 //   templates fed by plain objects (briefing.js, after.js).
 // - `credits`: the Sources and credits panel (credits.js).
+// - `unit` (ROUND-2 §1.1): a unit in the box, fed by link.js from
+//   sim.units() and the battle file as a plain object: the name in both
+//   languages, the kit's short name, the side, what the record has it doing
+//   now and next, its state, and the stations it offers, each a button that
+//   raises ui.onTake({ ...role, station }) (*Take the controls* at the
+//   current time, at that station). A unit that cannot be taken shows the
+//   reason and no button. While the unit is held the buttons switch
+//   stations (ui.onStation) and *Give the controls back* raises
+//   ui.onRelease(). The card follows the clock in place (openUnit again with
+//   the same unit rewrites only what changed), so a focused button keeps its
+//   focus.
 //
 // The footer steps the tour (tour.js) back and on, as the buttons by the
 // timeline do: it sits where the reading ends.
@@ -37,6 +48,7 @@ import { dayLabel } from './timeline.js'
 import { briefingHTML } from './briefing.js'
 import { afterHTML } from './after.js'
 import { creditsHTML } from './credits.js'
+import { STATION } from './roles.js'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
@@ -59,7 +71,7 @@ export class EventCard {
     this.events = new Map(app.data.events.map((e) => [e.id, e]))
     this.routes = new Map(app.data.routes.map((r) => [r.id, r]))
     this.clocks = app.data.clockById || new Map()
-    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits' | 'stop'
+    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits' | 'stop' | 'unit'
     this.ev = null
     this.stop = -1
     this.chapter = null
@@ -98,6 +110,34 @@ export class EventCard {
 
   openAfter(a) {
     this.set('after', { payload: a })
+  }
+
+  /**
+   * A unit in the box (ROUND-2 §1.1; link.js builds the object):
+   *   { key, index, kind: 'ship' | 'aircraft', name, ja, hull, kitLine, sideName, member,
+   *     now, next, state: ['afloat', 'on fire'], clock: '07:55',
+   *     stations: [{ name: 'helm', label, where }], takeable: true | 'reason',
+   *     held: false | true, station: 'helm' (the one held), role: { unit } | { group, index? } }
+   * Opened again on the same unit, only the lines that changed are rewritten.
+   */
+  openUnit(u, { focus = null } = {}) {
+    const shape = (x) => JSON.stringify([x.key, x.takeable === true, x.held, x.station, (x.stations || []).map((s) => s.name)])
+    if (this.mode === 'unit' && this.payload && shape(this.payload) === shape(u) && this.isOpen) {
+      this.payload = u
+      const put = (sel, text) => {
+        const el = this.el.querySelector(sel)
+        if (el && el.textContent !== text) el.textContent = text
+      }
+      put('.uc-now', u.now || '')
+      put('.uc-next', u.next || '')
+      put('.uc-state', (u.state || []).join(' · '))
+      put('.uc-at', u.clock ? `at ${u.clock}` : '')
+      put('.uc-why', u.takeable === true ? '' : u.takeable)
+      this.el.querySelector('.uc-next-row')?.toggleAttribute('hidden', !u.next)
+      return
+    }
+    this.set('unit', { payload: u })
+    if (focus) this.el.querySelector(`[data-station="${CSS.escape(focus)}"]`)?.focus({ preventScroll: true })
   }
 
   /** A stop inside a box (link.js feeds it from battle.json): its time, its text, its sources, the moment it offers. */
@@ -163,7 +203,15 @@ export class EventCard {
     else if (b.classList.contains('enter')) {
       const ev = this.events.get(b.dataset.enter)
       if (ev) ui.onEnter(ev)
-    } else if (b.dataset.take) ui.onTake(b.dataset.take)
+    } else if (b.dataset.station && this.mode === 'unit') {
+      const u = this.payload || {}
+      if (u.held) ui.onStation?.(b.dataset.station)
+      else ui.onTake({ ...(u.role || {}), station: b.dataset.station })
+    } else if (b.classList.contains('uc-release')) ui.onRelease?.()
+    else if (b.classList.contains('uc-list')) ui.onUnits?.()
+    else if (b.dataset.door) ui.onFirstDoor?.()
+    else if (b.dataset.assist) ui.onAssist?.(b.dataset.assist)
+    else if (b.dataset.take) ui.onTake(b.dataset.take)
     else if (b.classList.contains('watch')) {
       this.close()
       ui.onWatch()
@@ -249,6 +297,7 @@ export class EventCard {
     else if (this.mode === 'after') this.el.innerHTML = afterHTML(this.payload || {}, helpers)
     else if (this.mode === 'credits') this.el.innerHTML = this.creditsHTML()
     else if (this.mode === 'stop') this.el.innerHTML = this.stopHTML(this.payload || {})
+    else if (this.mode === 'unit') this.el.innerHTML = this.unitHTML(this.payload || {})
     else return
     this.el.dataset.mode = this.mode
     this.el.classList.toggle('chapter', this.mode === 'chapter')
@@ -383,6 +432,37 @@ export class EventCard {
         <button class="nav bstop-prev" aria-label="The stop before" title="The stop before (←)" ${st.index > 0 ? '' : 'disabled'}>${icon('prev', 18)}</button>
         <span class="count">${esc(`stop ${st.index + 1} of ${st.count}`)}</span>
         <button class="nav next bstop-next" aria-label="The next stop" title="The next stop (→ or space)" ${st.index < st.count - 1 ? '' : 'disabled'}><span>Next</span>${icon('next', 18)}</button>
+      </footer>`
+  }
+
+  unitHTML(u) {
+    const ja = u.ja ? { kanji: u.ja } : null
+    const title = `${u.name || ''}`
+    const gloss = [u.kitLine, u.member].filter(Boolean).join(', ')
+    const state = (u.state || []).join(' · ')
+    const grey = u.takeable !== true
+    const stations = (u.stations || [])
+      .map((st) => {
+        const on = u.held && st.name === u.station
+        return `<li><button class="nav take uc-st${on ? ' on' : ''}" data-station="${esc(st.name)}" aria-pressed="${on}">${icon(u.held ? 'next' : 'take', 16)}<span><b>${esc(st.label || STATION[st.name]?.label || st.name)}</b><em>${esc(st.where || STATION[st.name]?.where || '')}</em></span></button></li>`
+      })
+      .join('')
+    const take = grey
+      ? `<p class="uc-why">${esc(u.takeable)}</p>`
+      : u.held
+        ? `<div class="card-sec"><h2>At the controls <span class="uc-at">${u.clock ? `at ${esc(u.clock)}` : ''}</span></h2><ul class="uc-stations">${stations}</ul></div>`
+        : `<div class="card-sec"><h2>Take the controls <span class="uc-at">${u.clock ? `at ${esc(u.clock)}` : ''}</span></h2><ul class="uc-stations">${stations}</ul></div>`
+    return `
+      ${this.header(u.kind === 'ship' ? 'ship' : 'aircraft', title, gloss, ja)}
+      <div class="card-meta"><span class="when">${esc(u.sideName || '')}</span>${u.hull ? `<span class="kind">${esc(u.hull)}</span>` : ''}${state ? `<span class="uc-state">${esc(state)}</span>` : '<span class="uc-state"></span>'}</div>
+      <div class="card-body uc-doing">
+        <p><span class="uc-k">Now</span> <span class="uc-now">${esc(u.now || '')}</span></p>
+        <p class="uc-next-row"${u.next ? '' : ' hidden'}><span class="uc-k">Next</span> <span class="uc-next">${esc(u.next || '')}</span></p>
+      </div>
+      ${take}
+      <footer class="card-foot">
+        <button class="nav uc-list">${icon('units', 16)}<span>Units</span></button>
+        ${u.held ? `<button class="nav finish uc-release">${icon('release', 16)}<span>Give the controls back</span></button>` : ''}
       </footer>`
   }
 

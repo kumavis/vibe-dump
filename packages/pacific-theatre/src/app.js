@@ -17,6 +17,15 @@
 // #t, #moment), the query string the tools' switches (?data=, ?q=, ?fixedq,
 // ?debug=). #battle, #t and #moment act through src/link.js (app.urlBattle);
 // entering and leaving a box push a history entry, so Back leaves the box.
+// Round two (ROUND-2.md §5): #unit and #station name a held unit (written on
+// take and release by link.js through app.url, read at boot once the box is
+// entered); a bookmark keeps #moment.
+//
+// The setting (ROUND-2.md §1.2): Assisted or Pilot, the only thing the
+// browser keeps, as localStorage `pt.assist`; read here at boot, handed to
+// the Battle, written by app.setAssist (the bar's and the briefing's
+// buttons, through link.js). A browser that keeps nothing (a private window,
+// storage blocked) flies Assisted.
 
 import * as THREE from 'three'
 import { CLOCK, QUALITY } from './config.js'
@@ -27,9 +36,14 @@ import { MAX_POINT_LIGHTS } from './render/shaders/common.glsl.js'
 import { PackDecoder } from './data/load.js'
 import { TableScene } from './table/index.js'
 import { Battle } from './battle/index.js'
+import { ASSIST_VALUES, loadAssist, saveAssist } from './ui/setting.js'
 
 export const MODES = ['table', 'flying', 'watch', 'moment']
 const pad = (n) => String(n).padStart(2, '0')
+
+/** The hash keys that live only while a box is the scene (a table hash carries none of them). */
+export const BOX_ONLY_KEYS = ['t', 'unit', 'station']
+export const BOX_KEYS = ['battle', 't', 'moment', 'unit', 'station']
 
 /** A battle-clock time for the URL, as BattleClock.parse reads it back: hours from the clock's first midnight (24:07 the next day). */
 export function urlTime(clock, t) {
@@ -99,13 +113,28 @@ export class App {
     this.ready = false
     this.table = null
     this.battle = new Battle(this)
+    // the setting the browser kept, handed to the Battle (ROUND-2 §1.2)
+    this.assist = loadAssist()
+    this.setAssist(this.assist, { save: false })
     this.tour = null
     this.ui = null
     this.active = null
     this.time = 0
     this.frames = 0
     this.updaters = []
-    this.url = { kept: {}, written: null, timer: 0, battle: null, t: null, moment: null }
+    this.url = { kept: {}, written: null, timer: 0, battle: null, t: null, moment: null, unit: null, station: null }
+  }
+
+  /** Assisted or Pilot: to the Battle, and kept in the browser (save: false at boot, where it came from there). */
+  setAssist(v, { save = true } = {}) {
+    if (!ASSIST_VALUES.includes(v)) return this.warn(`assist “${v}”: one of ${ASSIST_VALUES.join(', ')}`)
+    this.assist = v
+    try {
+      if (this.battle) this.battle.assist = v
+    } catch (err) {
+      this.warn(`battle.assist: ${err.message}`)
+    }
+    if (save) saveAssist(v)
   }
 
   /** The table pack is decoded: build the table, make it the active scene, start the frame loop. */
@@ -204,11 +233,11 @@ export class App {
 
   // --- the URL -------------------------------------------------------------
 
-  /** Read the hash (at boot, after the table is ready, and on hashchange): #date and #cam act; #battle, #t, #moment are kept. */
+  /** Read the hash (at boot, after the table is ready, and on hashchange): #date and #cam act; #battle, #t, #moment, #unit, #station are kept. */
   fromUrl() {
     const h = new URLSearchParams(location.hash.replace(/^#/, ''))
     const kept = {}
-    for (const [k, v] of h) if (!['date', 'cam', 'battle', 't', 'moment'].includes(k)) kept[k] = v
+    for (const [k, v] of h) if (!['date', 'cam', ...BOX_KEYS].includes(k)) kept[k] = v
     this.url.kept = kept
     const date = h.get('date')
     if (date) {
@@ -228,7 +257,7 @@ export class App {
         this.active.rig.jump({ x, z, distance, yaw, pitch })
       } else this.warn(`#cam=${cam}: want x,z,distance,yaw,pitch`)
     }
-    for (const k of ['battle', 't', 'moment']) this.url[k] = h.get(k)
+    for (const k of BOX_KEYS) this.url[k] = h.get(k)
     this.urlBattle?.(h)
   }
 
@@ -277,8 +306,8 @@ export class App {
     p.set('date', `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`)
     const s = this.active.rig.goal
     p.set('cam', [s.target.x, s.target.z, s.distance, s.yaw, s.pitch].map((v) => (+v.toFixed(4)).toString()).join(','))
-    // (#t only while a box is the scene: a table hash carries none)
-    for (const k of ['battle', 't', 'moment']) if (this.url[k] && (k !== 't' || inBox)) p.set(k, this.url[k])
+    // (#t, #unit and #station only while a box is the scene: a table hash carries none)
+    for (const k of BOX_KEYS) if (this.url[k] && (!BOX_ONLY_KEYS.includes(k) || inBox)) p.set(k, this.url[k])
     for (const [k, v] of Object.entries(this.url.kept)) p.set(k, v)
     return `#${p.toString().replace(/%2C/g, ',').replace(/%3A/g, ':')}`
   }
