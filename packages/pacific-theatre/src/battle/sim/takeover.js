@@ -8,7 +8,10 @@
 // ship", "tokkō unit", "on the ground", "not yet airborne", and the same
 // register for the rest of §2's cases ("flies the lead", "a named crew",
 // "has landed", "did not return", "no longer afloat", "fate is sealed",
-// "going down", "left the area", "not launched").
+// "going down", "left the area", "not launched"), with the project manager's
+// two for round two: "its target’s fate is fixed" (an aircraft sent at a
+// `fixed` unit: DESIGN.md §3.5, no player causes a fixed fate) and "beyond
+// the box" (an `offBox` ship, the carrier force north of Oʻahu).
 
 import { KN } from './units.js'
 import { headingOf } from './path.js'
@@ -36,6 +39,30 @@ export const REASONS = {
   cancelled: 'not launched',
   site: 'a site, not a unit',
   spare: 'not in the battle',
+  fixedTarget: 'its target’s fate is fixed',
+  offBox: 'beyond the box',
+}
+
+/** The ids the record names as a cause (`by`) of a fixed unit's events: no player role may be one (DESIGN.md §3.5). */
+function fixedCauses(sim) {
+  if (!sim._fixedCauses) {
+    const set = new Set()
+    for (const r of sim.record.ships) if (r.fixed) for (const ev of r.events || []) if (ev.by) set.add(ev.by)
+    sim._fixedCauses = set
+  }
+  return sim._fixedCauses
+}
+
+/**
+ * Whether a group is sent at a fixed unit (its attack's targets name one) or the record names it as the
+ * cause of a fixed unit's events: Pearl Harbor's level bombers on Arizona, Akagi's and Sōryū's torpedo
+ * bombers on Oklahoma and Utah, Shōkaku's dive bombers. The whole group is greyed (decision 19 of the
+ * project manager's notes; DESIGN.md §3.5); a player's weapon on a fixed unit registers nothing in any case.
+ */
+export function groupOnFixed(sim, g) {
+  if (!g) return false
+  if (fixedCauses(sim).has(g.id)) return true
+  return (g.attack?.targets || []).some((x) => x.unit >= 0 && !!sim.record.ships[x.unit]?.fixed)
 }
 
 /** An aircraft model's rear guns: those the kit marks `arc: 'rear'`, else its flexible (not fixed-forward) guns. */
@@ -109,6 +136,8 @@ export function takeability(sim, i) {
     if (r?.fixed) return REASONS.fixed
     if (r?.hospital || x.model?.hospital) return REASONS.hospital
     if (r?.tokko || u.tokko || x.model?.tokko) return REASONS.tokko
+    if (r && fixedCauses(sim).has(r.id)) return REASONS.fixedTarget
+    if (r?.raw?.offBox) return REASONS.offBox
     if (s.alive[i] === 0) return REASONS.sunk
     if (s.alive[i] === 2) return REASONS.sinking
     if (pastFate(sim, i)) return REASONS.sealed
@@ -118,8 +147,11 @@ export function takeability(sim, i) {
   if (u.parked) return REASONS.parked
   if (u.tokko || x.model?.tokko || x.g?.raw?.tokko) return REASONS.tokko
   const g = x.g
+  // (a group sent at a fixed unit, or a cause of its events: a player at its controls would be that fate's cause)
+  if (groupOnFixed(sim, g)) return REASONS.fixedTarget
   if (g?.raw?.namedCrews) return REASONS.named
-  if (g && x.ac?.k === 0) return REASONS.leader
+  // (a group of one, an unnamed scout, is that one aircraft: the leader's rule keeps named leaders out of the seat)
+  if (g && x.ac?.k === 0 && g.aircraft.length > 1) return REASONS.leader
   if (g && sim._cancelled.has(g.index)) return REASONS.cancelled
   if (s.alive[i] === 2) return REASONS.lost
   if (s.alive[i] === 0) return goneReason(sim, i)
@@ -127,7 +159,7 @@ export function takeability(sim, i) {
 }
 
 /** Why an aircraft not in the air is not: before its take-off, lost, landed or out of the box. */
-function goneReason(sim, i) {
+export function goneReason(sim, i) {
   const x = sim._X[i]
   const t = sim.t
   if (x.lostAt != null || x.how === 'lost' || x.how === 'ditched') return REASONS.lost
@@ -138,6 +170,21 @@ function goneReason(sim, i) {
   if (ac.lossT != null && t >= ac.lossT && !x.spared) return REASONS.lost
   if (ac.endHow === 'land' && t >= ac.endT) return REASONS.landed
   return REASONS.left
+}
+
+/**
+ * Why a group has no aircraft to take and no spare to fly: what its aircraft are doing instead (not yet
+ * airborne, has landed, left the area, did not return), in that order of precedence.
+ */
+export function groupGoneReason(sim, g) {
+  const seen = new Set()
+  for (const ac of g.aircraft) {
+    if (ac.slot == null) continue
+    const a = sim.state.alive[ac.slot]
+    seen.add(a === 0 ? goneReason(sim, ac.slot) : a === 2 ? REASONS.lost : null)
+  }
+  for (const r of [REASONS.notYet, REASONS.landed, REASONS.left, REASONS.lost]) if (seen.has(r)) return r
+  return g.aircraft.length && sim.t < Math.min(...g.aircraft.map((a) => a.spawnT)) ? REASONS.notYet : REASONS.lost
 }
 
 /** A ship past her fate: the record's damage at or past her kit's fatal, or the sim's foundering, sinking or doom. */
@@ -305,7 +352,7 @@ function aircraftNow(sim, i) {
   const a = s.alive[i]
   const alt = s.pos[3 * i + 1]
   const body = x.body
-  const state = { airborne: a === 1 && !u.parked, falling: a === 2, altM: Math.round(alt), speedKn: +(s.speed[i] / KN).toFixed(0), headingDeg: Math.round(s.heading[i]), fuelS: body ? Math.round(body.fuelS) : x.model?.enduranceS ?? null, damage: +s.damage[i].toFixed(2), parked: !!u.parked }
+  const state = { airborne: a === 1 && !u.parked, falling: a === 2, altM: Math.round(alt), speedKn: +(s.speed[i] / KN).toFixed(0), headingDeg: Math.round(s.heading[i]), fuelS: body ? Math.round(body.fuelS) : null, damage: +s.damage[i].toFixed(2), parked: !!u.parked }
   const from = g && g.from >= 0 ? sim.record.ships[g.from]?.name : g?.fromSite?.name ?? null
   const home = g?.recover?.to >= 0 ? sim.record.ships[g.recover.to]?.name : from
   const tgtName = (unit) => (unit >= 0 ? sim.record.ships[unit]?.name : null) || g?.attack?.targetSite?.name || g?.attack?.targets?.[0]?.site?.name || 'the target'

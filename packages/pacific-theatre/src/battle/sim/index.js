@@ -35,7 +35,7 @@ import { EffectsRing, FX, dyeCode, eventLine } from './effects.js'
 import { shellOf } from './ballistics.js'
 import * as AI from './ai.js'
 import { computeScore, computeOutcome, openSortie, closeSortie, sortieOf } from './outcome.js'
-import { REASONS, stationsOf, takeability, unitRows, aircraftStations } from './takeover.js'
+import { REASONS, stationsOf, takeability, unitRows, aircraftStations, groupOnFixed, groupGoneReason } from './takeover.js'
 
 const asList = (x) => (Array.isArray(x) ? x : x instanceof Map ? [...x.values()] : x && typeof x === 'object' ? Object.values(x) : [])
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
@@ -1004,7 +1004,7 @@ export function createSim(battle, kits, opts = {}) {
       const g = record.groupById.get(role.group)
       if (!g) throw new Error(`takeControl: no group “${role.group}”`)
       if (role.index != null) {
-        if (role.index === 0) throw reasonError(REASONS.leader)
+        if (role.index === 0 && g.aircraft.length > 1) throw reasonError(REASONS.leader)
         const ac = g.aircraft[role.index]
         if (!ac || ac.slot == null) throw new Error(`takeControl: ${g.id} has no aircraft ${role.index}`)
         const why = takeability(sim, ac.slot)
@@ -1013,17 +1013,23 @@ export function createSim(battle, kits, opts = {}) {
       }
       if (g.raw?.tokko) throw reasonError(REASONS.tokko)
       if (sim._cancelled.has(g.index)) throw reasonError(REASONS.cancelled)
+      // (a group sent at a fixed unit, or a cause of its events, is not a door: its target's fate is fixed)
+      if (groupOnFixed(sim, g)) throw reasonError(REASONS.fixedTarget)
+      const lone = g.aircraft.length === 1
       if (!g.raw?.namedCrews) {
-        // a member in the air that has not yet reached its attack, the soonest to it first; never the leader (k 0)
-        const cand = g.aircraft.filter((ac) => ac.k !== 0 && ac.slot != null && takeability(sim, ac.slot) === true)
+        // a member in the air that has not yet reached its attack, the soonest to it first; never the leader (k 0), unless the group is that one aircraft
+        const cand = g.aircraft.filter((ac) => (ac.k !== 0 || lone) && ac.slot != null && takeability(sim, ac.slot) === true)
         cand.sort((a, b) => (a.releaseT ?? 1e9) - (b.releaseT ?? 1e9))
         const pick = cand.find((ac) => (ac.releaseT ?? Infinity) > sim.t + 15) || cand[0]
         if (pick) return { i: pick.slot, stations: stationsOf(sim, pick.slot) }
       }
-      // a spare of the group's kit beside one of its aircraft in the air (a group whose every crew the record names flies a spare)
+      // a lone aircraft not in the air is not a door, and gives no spare
+      if (lone && !g.raw?.namedCrews) throw reasonError(g.aircraft[0].slot != null ? takeability(sim, g.aircraft[0].slot) : REASONS.notYet)
+      // a spare of the group's kit beside one of its aircraft in the air (a group whose every crew the record names flies a spare);
+      // with a start (a first door's: DATA.md §9 firstDoor.start), where the start puts it
       const beside = g.aircraft.find((ac) => ac.slot != null && state.alive[ac.slot] === 1)
-      if (!beside) throw reasonError(g.aircraft.length && sim.t < Math.min(...g.aircraft.map((a) => a.spawnT)) ? REASONS.notYet : REASONS.lost)
-      return { spare: true, g, beside: beside.slot, stations: aircraftStations(airModelOf(g.kitId), g) }
+      if (!beside && !role.start) throw reasonError(groupGoneReason(sim, g))
+      return { spare: true, g, beside: beside?.slot ?? -1, stations: aircraftStations(airModelOf(g.kitId), g) }
     }
     throw new Error('takeControl: a role names a unit or a group')
   }
@@ -1106,21 +1112,30 @@ export function createSim(battle, kits, opts = {}) {
       kind = 'aircraft'
       i = allocSpare(target.g.kitId, 'aircraft', target.g)
       if (i < 0) throw new Error('takeControl: no slot free')
-      // beside the group's aircraft: 120 m out on its right and 60 m back, at its speed and heading
       const j = target.beside
       const o3 = 3 * i
-      const h = state.heading[j] * DEG
-      state.pos[o3] = state.pos[3 * j] + Math.cos(h) * 120 - Math.sin(h) * 60
-      state.pos[o3 + 1] = state.pos[3 * j + 1]
-      state.pos[o3 + 2] = state.pos[3 * j + 2] + Math.sin(h) * 120 + Math.cos(h) * 60
-      for (let k = 0; k < 3; k++) state.vel[o3 + k] = state.vel[3 * j + k]
-      state.heading[i] = state.heading[j]
-      X[i].bank = 0
-      X[i].body = airBodyFromState(i)
-      state.speed[i] = X[i].body.V
+      if (role.start) {
+        // a first door's spare (Pearl Harbor's P-40 out of Haleʻiwa): where its start puts it, as a moment's (ai.js startAt);
+        // soft, it flies straight on at that height and speed until the player acts
+        X[i].bank = 0
+        X[i].body = airBodyFromState(i)
+        AI.startAt(sim, i, role.start)
+        X[i].spareOf = { free: true }
+      } else {
+        // beside the group's aircraft: 120 m out on its right and 60 m back, at its speed and heading
+        const h = state.heading[j] * DEG
+        state.pos[o3] = state.pos[3 * j] + Math.cos(h) * 120 - Math.sin(h) * 60
+        state.pos[o3 + 1] = state.pos[3 * j + 1]
+        state.pos[o3 + 2] = state.pos[3 * j + 2] + Math.sin(h) * 120 + Math.cos(h) * 60
+        for (let k = 0; k < 3; k++) state.vel[o3 + k] = state.vel[3 * j + k]
+        state.heading[i] = state.heading[j]
+        X[i].bank = 0
+        X[i].body = airBodyFromState(i)
+        state.speed[i] = X[i].body.V
+        // soft like any take: it keeps its place beside that aircraft until the player acts (ai.js playerStep), and goes if given back untouched
+        X[i].spareOf = { j, right: 120, back: 60 }
+      }
       setAlive(i, 1)
-      // soft like any take: it keeps its place beside that aircraft until the player acts (ai.js playerStep), and goes if given back untouched
-      X[i].spareOf = { j, right: 120, back: 60 }
       units[i].authority = 'player'
     } else {
       i = target.i

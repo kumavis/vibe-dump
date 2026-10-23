@@ -827,9 +827,10 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
    * The role is takeable by ROUND-2.md §2 at t, from the file's own flags: a ship not fixed, not a hospital
    * ship, not tokkō, not the cause of a fixed fate, afloat and in the box at t (before its fate); an aircraft
    * of a group (never a parked unit) that is not tokkō, not among Pearl Harbor's first-wave level bombers,
-   * airborne at t (from its launch or entry to its recovery), never index 0; a group whose every crew the
-   * record names (`namedCrews`), or of one aircraft, gives a spare, which starts at the door's `start` if it
-   * has one. The station is in the vocabulary and one the kit offers by §3's rule (stationsOf).
+   * airborne at t (from its launch or entry to its recovery), never index 0 (unless the group is that one
+   * aircraft), never sent at a fixed unit nor the cause of one's events; a group whose every crew the
+   * record names (`namedCrews`) gives a spare, which starts at the door's `start` if it has one. A ship
+   * `offBox` is beyond the box. The station is in the vocabulary and one the kit offers by §3's rule.
    */
   function firstDoor(at, d) {
     if (!d || typeof d !== 'object') return ctx.bad(at, 'is { role, t, title, text }')
@@ -864,6 +865,7 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
         if (u.fixed) why.push('fate is fixed')
         if (u.hospital) why.push('hospital ship')
         if (u.tokko) why.push('tokkō unit')
+        if (u.offBox) why.push('beyond the box')
         if (u.station?.parked) why.push('on the ground')
         for (const { unit, e } of allEvents) if (unit.fixed && e.by === u.id) why.push(`causes ${unit.id}’s fixed fate at ${e.t}`)
         if (tS !== null) {
@@ -882,19 +884,23 @@ function checkBattle(ctx, rel, boxId, frozen, B, ledger) {
         if (r.kit !== undefined && r.kit !== g.kit) ctx.bad(`${at} role`, `kit ${r.kit}; ${g.id} flies ${g.kit}`)
         if (g.tokko || /tokk[oō]|kamikaze|special attack/i.test(g.id)) why.push('tokkō unit')
         if (g.attack?.profile === 'level' && g.wave === 1 && boxId === 'pearl-harbor') why.push('among the first wave’s level bombers (DESIGN.md §3.5)')
+        // (the project manager's decision 19: a group sent at a fixed unit, or a cause of its events, is greyed whole)
+        for (const id of [].concat(g.attack?.target ?? [])) if (units.get(id)?.fixed) why.push(`sent at ${id}, whose fate is fixed`)
+        for (const { unit, e } of allEvents) if (unit.fixed && e.by === g.id) why.push(`causes ${unit.id}’s fixed fate at ${e.t}`)
         if (r.index !== undefined) {
           if (!(Number.isInteger(r.index) && r.index >= 0 && r.index < g.count)) ctx.bad(`${at} role`, `index ${r.index} is not an aircraft of ${g.id} (0..${g.count - 1})`)
-          if (r.index === 0) why.push('the leader stays on the record')
+          if (r.index === 0 && (g.count ?? 0) > 1) why.push('the leader stays on the record')
           if (g.namedCrews) why.push('a named crew’s aircraft: the group gives a spare, with no index')
         }
-        spare = g.namedCrews === true || (g.count ?? 0) < 2
+        // (a group of one, an unnamed scout, is that aircraft: decision 20; only a namedCrews group flies a spare)
+        spare = g.namedCrews === true
         if (tS !== null) {
           const up = g.offBox ? safeParse(clock, g.enter?.t) : safeParse(clock, g.launch)
           const down = g.recover?.t ? safeParse(clock, g.recover.t) : null
           if (up === null || tS < up) why.push('not yet airborne')
           else if (down !== null && tS >= down) why.push('has landed')
         }
-        if (spare && !d.start) ctx.warn(at, `${g.id} gives a spare (${g.namedCrews ? 'its crews are named' : 'it has one aircraft'}): with no start it starts where the engine puts the group`)
+        if (spare && !d.start) ctx.warn(at, `${g.id} gives a spare (its crews are named): with no start it starts beside one of the group's aircraft`)
       }
     }
     if (why.length) ctx.bad(at, `${r.unit || r.group} is not takeable at ${d.t} (ROUND-2.md §2): ${why.join('; ')}`)

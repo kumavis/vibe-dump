@@ -223,8 +223,12 @@ function nearestEnemyAircraft(sim, i, within, ok = null) {
 export function applyStart(sim, m) {
   const pl = sim.player
   if (!pl || pl.kind !== 'aircraft' || !m.start) return
-  const st = m.start
-  const x = sim._X[pl.unitIndex]
+  startAt(sim, pl.unitIndex, m.start)
+}
+
+/** An aircraft's body placed by a start ({ from, bearingDeg, rangeM, altM, speedMs, headingDeg } or lonlat): a moment's, or a first door's spare. */
+export function startAt(sim, i, st) {
+  const x = sim._X[i]
   const b = x.body
   let cx = 0
   let cz = 0
@@ -242,12 +246,12 @@ export function applyStart(sim, m) {
   b.z = cz + uz * (st.rangeM ?? 0)
   b.y = st.altM ?? b.y
   b.V = st.speedMs ?? b.V
-  b.psi = (st.headingDeg ?? sim.state.heading[pl.unitIndex]) * DEG
+  b.psi = (st.headingDeg ?? sim.state.heading[i]) * DEG
   b.gamma = 0
   b.phi = 0
   b.p = 0
-  writeAir(sim, pl.unitIndex)
-  sim._setAlive(pl.unitIndex, 1)
+  writeAir(sim, i)
+  sim._setAlive(i, 1)
 }
 
 // --- writing bodies into the state -----------------------------------------------------------------
@@ -876,8 +880,13 @@ function attackThink(sim, i, x, dt) {
 // --- 3. the player's physics -------------------------------------------------------------------------
 
 /** An untouched spare keeps its place beside its group's aircraft (right and back of it, at its speed and heading); false once that aircraft is gone. */
-function holdSpare(sim, i, sp) {
+function holdSpare(sim, i, sp, dt) {
   const s = sim.state
+  if (sp.free) {
+    // a first door's spare: straight on at its height and speed (its velocity is the start's) until the player acts
+    for (let k = 0; k < 3; k++) s.pos[3 * i + k] += s.vel[3 * i + k] * dt
+    return true
+  }
   const j = sp.j
   if (s.alive[j] !== 1) return false
   const h = s.heading[j] * DEG
@@ -903,7 +912,7 @@ export function playerStep(sim, dt) {
   const x = sim._X[i]
   if (!pl.engaged) {
     // a soft take: the record moves the unit; the first act takes it off the record (ROUND-2 §3)
-    if (x.spareOf && !holdSpare(sim, i, x.spareOf)) return sim._engagePlayer(pl, 'its group gone')
+    if (x.spareOf && !holdSpare(sim, i, x.spareOf, dt)) return sim._engagePlayer(pl, 'its group gone')
     syncPlayerBody(sim, pl)
     if (s.alive[i] !== 1 || !inputTouched(pl)) return
     sim._engagePlayer(pl, 'input')
