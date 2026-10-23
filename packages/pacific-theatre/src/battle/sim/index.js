@@ -264,6 +264,7 @@ export function createSim(battle, kits, opts = {}) {
   const pose = { x: 0, z: 0, vx: 0, vz: 0, heading: 0, speed: 0 }
   const ppos = { x: 0, y: 0, z: 0 }
   const qpos = { x: 0, y: 0, z: 0 }
+  const rpos = { x: 0, y: 0, z: 0 }
   const resolveCtx = { motion: record.motion, groups: record.groups }
 
   /** A record ship (or parked aircraft) at t, written into the state. */
@@ -307,20 +308,34 @@ export function createSim(battle, kits, opts = {}) {
     let vx
     let vy
     let vz
-    if (dtPrev > 0 && x.prev) {
-      vx = (ppos.x - x.prev[0]) / dtPrev
-      vy = (ppos.y - x.prev[1]) / dtPrev
-      vz = (ppos.z - x.prev[2]) / dtPrev
+    // (the time since the last placement, not the step's: watching, record aircraft are placed on the last of a frame's steps only, so a
+    // step's dt would multiply their speed, and their bank, by the steps in the frame; a take reads that speed)
+    const gap = x.prev && x.prevT != null && t > x.prevT ? t - x.prevT : dtPrev
+    if (gap > 0 && gap <= 2 && x.prev) {
+      vx = (ppos.x - x.prev[0]) / gap
+      vy = (ppos.y - x.prev[1]) / gap
+      vz = (ppos.z - x.prev[2]) / gap
     } else {
       planPos(ac, t - 0.25, qpos, resolveCtx)
       vx = (ppos.x - qpos.x) * 4
       vy = (ppos.y - qpos.y) * 4
       vz = (ppos.z - qpos.z) * 4
     }
+    // a stride of more than 2 s (watching at speed): the bank of the turn at t, from the plan's heading a quarter second apart
+    let strideBank = null
+    if (x.prev && !(gap > 0 && gap <= 2)) {
+      planPos(ac, t - 0.5, rpos, resolveCtx)
+      const h1 = headingOf(qpos.x - rpos.x, qpos.z - rpos.z)
+      const h2 = headingOf(ppos.x - qpos.x, ppos.z - qpos.z)
+      const rate = (wrap180(h2 - h1) * DEG) / 0.25
+      strideBank = clamp(Math.atan((rate * Math.hypot(vx, vy, vz)) / 9.81), -1.2, 1.2)
+    }
+    const fresh = !x.prev
     x.prev ||= [0, 0, 0]
     x.prev[0] = ppos.x
     x.prev[1] = ppos.y
     x.prev[2] = ppos.z
+    x.prevT = t
     state.pos[o3] = ppos.x
     state.pos[o3 + 1] = ppos.y
     state.pos[o3 + 2] = ppos.z
@@ -331,10 +346,11 @@ export function createSim(battle, kits, opts = {}) {
     const sp = Math.hypot(hs, vy)
     const hd = hs > 0.5 ? headingOf(vx, vz) : state.heading[i]
     // the bank of a coordinated turn from the heading's rate
-    if (dtPrev > 0) {
-      const rate = (wrap180(hd - state.heading[i]) * DEG) / dtPrev
+    if (strideBank != null) x.bank = strideBank
+    else if (gap > 0 && gap <= 2 && !fresh) {
+      const rate = (wrap180(hd - state.heading[i]) * DEG) / gap
       const want = clamp(Math.atan((rate * sp) / 9.81), -1.2, 1.2)
-      x.bank += (want - x.bank) * Math.min(1, dtPrev * 3)
+      x.bank += (want - x.bank) * Math.min(1, gap * 3)
     }
     state.speed[i] = sp
     state.heading[i] = hd
@@ -1124,6 +1140,8 @@ export function createSim(battle, kits, opts = {}) {
       flown: false,
       director: null,
     }
+    // a free take's first station gets its first aim (the gunner's and the director's on the nearest aircraft they bear on), before the input's baseline
+    if (!moment) AI.enterStation(sim, player, station)
     player.base = AI.snapshotInput(player.input)
     sim.player = player
     sim._score = { hits: [], downed: 0, torpedoesHit: 0, salvos: 0, straddles: 0, shells: 0, bombs: 0, torpedoes: 0, rounds: 0, aaBursts: 0, releaseM: null, envelope: [], objective: false, start: sim.t, lost: null, how: null }
