@@ -4,6 +4,7 @@
 // long-press to drop it; greyed with how many of it can't act now), what a
 // click does with it in this phase (Move, Approach, Fire, Charge or Place:
 // a hint; the click on the table is the verb), +D6 in the movement phase,
+// (F10b) 🤖 Auto these (the AI plays the group's phase, which stays open),
 // ⇥ the next ready unit, ✓ to send a pinned formation and ✕ to drop it,
 // and Clear. And the actions' Ready N whenever a seat played here decides:
 // every unit of it still to act. Drawn from input/group.js's model().
@@ -19,14 +20,15 @@ export class GroupBar {
   }
 
   // { only(key), drop(key), next(), commit(), cancel(), clear(), save(),
-  // ready(), advance() }
+  // ready(), advance(), pilot() }
   wire(on) {
     this.on = on
   }
 
   // m: { show, ready (Ready N's count; null: not a decision played here),
   // count, models, chips: [{ key, name, n, why }], verbs: [{ k, label, on
-  // }], advance (+D6's state; null: not the movement phase), pinned,
+  // }], advance (+D6's state; null: not the movement phase), pilot ({ n,
+  // why }: how many of the group can act; null: not a phase), pinned,
   // summary, note }
   render(m) {
     const r = this.readyBtn
@@ -73,6 +75,13 @@ export class GroupBar {
       adv.title = m.advance ? 'Each member advances first (a D6 more inches; most can\'t shoot or charge after): on' : 'Advance first: each member rolls a D6 more inches (most can\'t shoot or charge after)'
       adv.onclick = () => this.on.advance()
       parts.push(adv)
+    }
+    if (m.pilot) {
+      const auto = el('button', 'gpilot', '🤖 Auto these')
+      auto.title = m.pilot.why || `The AI plays these units' ${m.verbs[0]?.k === 'move' ? 'moves' : m.verbs[0]?.k === 'shoot' ? 'shots' : 'charges'} this phase; the phase stays open for the rest`
+      auto.disabled = !m.pilot.n
+      auto.onclick = () => this.on.pilot()
+      parts.push(auto)
     }
     if (m.pinned) {
       const go = el('button', 'primary', '✓ Send')

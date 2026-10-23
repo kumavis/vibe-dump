@@ -145,7 +145,7 @@ if (a.record) {
     const rec = { n: r.trace.length, trace: hashLines(r.trace), shadow: hashLines(r.shadow), written: hashLines(r.written) }
     Object.assign(it, rec)
     if (it.kind === 'ai') Object.assign(pairs.pairs.find((p) => p.seed === it.seed && p.dice === it.dice), rec)
-    else saveHuman(it.id, humanRecord(it))
+    else saveHuman(it.id, humanRecord(it), it.set)
   })
   pairs.engines = { ...engines, [engine]: running }
   savePairs(pairs)

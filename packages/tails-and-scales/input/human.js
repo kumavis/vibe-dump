@@ -176,6 +176,14 @@ export class Human {
     this.select(null)
     return this.send(this.localSeat(), { t: 'auto' })
   }
+  // (F10b) Auto these: the AI plays the rest of the phase for the units
+  // `ids` (one `pilot`, its mask the match's own door: maskOf), the phase
+  // left open for the rest.
+  pilot(ids) {
+    if (!this.myTurn()) return 'no phase of a seat played here to play now'
+    const seat = this.localSeat()
+    return this.send(seat, { t: 'pilot', m: this.ask((G, q) => q.maskOf(G, seat, ids)) })
+  }
   // (F4) The seats played here still to vote at the round limit.
   voters() {
     const P = this.G?.pending

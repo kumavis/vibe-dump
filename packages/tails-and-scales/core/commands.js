@@ -16,6 +16,10 @@
 //   end {}            ends the phase (the charge phase's end plays the fight,
 //                     the morale, the score and the turns after it, AI included)
 //   auto {}           the AI plays the rest of the phase for the seat, then ends it
+//   pilot {m}         (F10b) the AI plays the rest of the phase for the units
+//                     mask m names (bit j: the seat's j-th unit in G.units
+//                     order, queries.js's maskUnits), now; the phase stays
+//                     open, and nothing is logged of its own
 //   vote {more}       (F4) the round limit reached, under setup.overtime
 //                     'vote': each human seat says whether to play another
 //                     round (more true) or end the battle; play goes on only
@@ -43,7 +47,7 @@ import { ctrl, seatName } from './match.js'
 import { setUnitPos } from './units.js'
 import { placeOk } from './deploy.js'
 import {
-  alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey,
+  alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits,
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
 import { doShoot } from './actions/shoot.js'
@@ -105,6 +109,12 @@ export const HANDLERS = Object.freeze({
     runAI(G, seat, G.pending.phase)
     G.pending = null
   },
+  // (F10b) Auto for some of the seat's units: the AI plays them as it would
+  // the whole army, and the seat keeps its phase (the AI's charges go
+  // straight on to the shortest move, so no chargeEnd opens)
+  pilot(G, seat, { m }) {
+    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))
+  },
   // (F4) a human seat's say on another round: once every seat has had its
   // say, another round if all said more (the step machine runs on from the
   // turn's start), else the battle ends on the score
@@ -152,6 +162,7 @@ export const RULES = deepFreeze({
   chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
   end: { k: 'phase', fields: [] },
   auto: { k: 'phase', fields: [] },
+  pilot: { k: 'phase', fields: ['m'], ok: (G, seat, { m }) => mayPilot(G, seat, m) },
   vote: { k: 'roundLimit', fields: [], bools: ['more'] },
   concede: { k: null, fields: [], ok: (G, seat) => mayConcede(G, seat) },
 })
@@ -241,6 +252,17 @@ function mayShoot(G, u, tg) {
 function mayCharge(G, u, tg) {
   if (!chargeTargets(G, u).includes(tg)) return `${u.t.short} can't charge ${tg.t.short}`
   return chargePlan(G, u, tg) ? null : `${u.t.short} has no way to ${tg.t.short}`
+}
+// (F10b) a mask naming some of the seat's units, all standing, one at least
+// with something left to do in this phase (canAct; whether the AI then
+// chooses to do it is the AI's, so a pilot may play nothing)
+function mayPilot(G, seat, m) {
+  if (!Number.isSafeInteger(m) || m < 1) return 'm is a set of the seat\'s units (a whole number ≥ 1)'
+  const units = maskUnits(G, seat, m)
+  if (units === null) return `m names a unit seat ${seat} doesn't have`
+  const dead = units.find((u) => !alive(u))
+  if (dead) return `unit ${dead.id} is destroyed`
+  return units.some((u) => canAct(G, u)) ? null : `none of these units can act in the ${phaseKey(G)} phase`
 }
 // a spot the roll reaches around the target (chargeSpots), or -1
 function mayEnd(G, P, c) {

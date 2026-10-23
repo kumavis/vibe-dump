@@ -257,6 +257,22 @@ function battery(core, G, seat, rand) {
     out.push({ t: 'chargeEnd', c: -1 }, { t: 'chargeEnd', c: cell() }, { t: 'end' }, { t: 'auto' }, { t: 'concede' })
     // (F4) the round limit's say, either way (legal only there)
     out.push({ t: 'vote', more: true }, { t: 'vote', more: false })
+    // (F10b) pilot masks (bit j: the seat's j-th unit in G.units order):
+    // every standing unit, one, a random few; and what P-pilot requires
+    // refused: a dead unit named, a bit past the seat's last unit, a mask
+    // of nobody able to act (found when there is one), no units, a negative
+    // or unsafe number
+    {
+      const bit = (j) => 2 ** j
+      const up = mine.flatMap((u, j) => (q.alive(u) ? [j] : []))
+      const mask = (js) => js.reduce((m, j) => m + bit(j), 0)
+      if (up.length) out.push({ t: 'pilot', m: mask(up) }, { t: 'pilot', m: bit(up[Math.floor(rand() * up.length)]) }, { t: 'pilot', m: mask(some(up, 1 + Math.floor(rand() * up.length))) })
+      const dead = mine.findIndex((u) => !q.alive(u))
+      if (dead >= 0) out.push({ t: 'pilot', m: bit(dead) + (up.length ? bit(up[0]) : 0) })
+      const idle = up.filter((j) => !q.canAct(G, mine[j]))
+      if (idle.length) out.push({ t: 'pilot', m: mask(idle) })
+      out.push({ t: 'pilot', m: bit(mine.length) + 1 }, { t: 'pilot', m: 0 }, { t: 'pilot', m: -1 }, { t: 'pilot', m: 2 ** 53 }, { t: 'pilot', m: 1.5 }, { t: 'pilot' }, { t: 'pilot', m: 1, u: mine[0].id })
+    }
     // what the labels and flags would show
     q.statusOf(G), q.ownersOf(G), q.anyCanAct(G, seat), q.phaseKey(G)
     // junk: no such command, the AI's own hold, a vote that says neither
@@ -273,9 +289,19 @@ function battery(core, G, seat, rand) {
   })
 }
 
+// (F10b) the seat's units outside mask m, each as what a pilot must leave
+// alone: where it stands and what it has done this turn (a unit the AI
+// plays moves, or marks a flag; one shot at or charged by may lose models,
+// which isn't playing it)
+function actorsOutside(core, G, seat, m) {
+  const named = new Set(G.units.filter((u) => u.side === seat).filter((u, j) => Math.floor(m / 2 ** j) % 2).map((u) => u.id))
+  const f = (u) => ['moved', 'advanced', 'advRoll', 'fellBack', 'shot', 'charged', 'chargeTried', 'chargeTarget', 'fought'].map((k) => `${k}=${u.flags[k] ?? ''}`).join(',')
+  return G.units.filter((u) => u.side === seat && !named.has(u.id)).map((u) => `${u.id}@${u.pos.x},${u.pos.z} ${f(u)}`)
+}
+
 // bodies with a field their kind doesn't take, each of them refused
 const JUNK = [{ t: 'end', c: 0 }, { t: 'chargeEnd', c: -1, u: 0 }, { t: 'shoot', u: 0, tg: 1, c: 0 }]
-const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], vote: ['more'], concede: [] }
+const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [] }
 
 // Judge the battery for `seat` (and some for the other seat and seats that
 // don't exist); every verdict must leave the match exactly as it was.
@@ -323,6 +349,18 @@ function probe(core, G, seat, rand, where) {
   // a body carries its kind's fields and nothing else (§4.1 rule 12)
   const extra = ok.find((b) => Object.keys(b).some((k) => k !== 't' && !KEYS[b.t]?.includes(k)))
   if (extra) throw new Error(`${where}: legal() accepted a body with a field its kind doesn't take: ${JSON.stringify(extra)}`)
+  // (F10b, P-pilot) a pilot names standing units of the seat's, one at
+  // least able to act in this phase, in a phase of its own
+  // (the mask decoded here, not by the core's own maskUnits, which a fault
+  // there would excuse)
+  for (const b of ok.filter((b) => b.t === 'pilot')) {
+    const seats = G.units.filter((u) => u.side === seat)
+    const units = Number.isSafeInteger(b.m) && b.m >= 1 && b.m < 2 ** seats.length ? seats.filter((u, j) => Math.floor(b.m / 2 ** j) % 2) : null
+    if (!units) throw new Error(`${where}: legal() accepted a pilot whose mask names no set of seat ${seat}'s units: ${JSON.stringify(b)}`)
+    if (units.some((u) => !core.q.alive(u))) throw new Error(`${where}: legal() accepted a pilot naming a destroyed unit: ${JSON.stringify(b)}`)
+    if (!units.some((u) => core.q.canAct(G, u))) throw new Error(`${where}: legal() accepted a pilot none of whose units can act: ${JSON.stringify(b)}`)
+    if (G.pending?.k !== 'phase') throw new Error(`${where}: legal() accepted a pilot outside a phase (${JSON.stringify(G.pending)})`)
+  }
   // a wipe-out decides the battle (it ends at the phase's end): nobody
   // concedes it after
   if (G.turn.wiped >= 0 && ok.some((b) => b.t === 'concede')) throw new Error(`${where}: legal() lets seat ${seat} concede a battle seat ${G.turn.wiped}'s wipe-out decided`)
@@ -678,7 +716,7 @@ function randomTask(core, rng, mirror, races, seed, hud) {
   }
   const G = core.createMatch(setup, { out: [], strict: true, onTrace: tap.trace })
   const last = { trace: 0, n: 0 }
-  let conceded = -1
+  let conceded = -1, piloted = ''
   for (let k = 0; G.turn.stage !== 'over'; k++) {
     const where = `${where0} decision ${k}`
     if (k > 3000) throw new Error(`${where}: the battle never ends`)
@@ -708,7 +746,11 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     }
     if (!body) {
       const P = G.pending
-      const acts = ok.filter((b) => !['end', 'auto', 'deployed', 'concede'].includes(b.t))
+      // (F10b) one pilot a phase: a unit the AI chooses to leave (no shot
+      // worth taking, a charge too long) can still act, so a pilot naming
+      // it stays legal and does nothing again
+      const phase = `${G.turn.round}:${G.turn.active}:${G.turn.ph}`
+      const acts = ok.filter((b) => !['end', 'auto', 'deployed', 'concede'].includes(b.t) && !(b.t === 'pilot' && piloted === phase))
       if (P.k === 'deploy') body = acts.length && rand() < 0.7 ? pick(acts) : { t: 'deployed' }
       // (F4) another round now and then, at most two past the setup's
       else if (P.k === 'roundLimit') body = { t: 'vote', more: G.turn.round < G.setup.rounds + 2 && rand() < 0.6 }
@@ -724,10 +766,20 @@ function randomTask(core, rng, mirror, races, seed, hud) {
       conceded = by
       if (by !== seat) counts.offTurn = 1
     }
+    // (F10b, P-pilot) what each of the seat's units outside a pilot's mask
+    // has done, and where it stands, before the pilot plays
+    const outside = body.t === 'pilot' ? actorsOutside(core, G, by, body.m) : null
+    if (body.t === 'pilot') piloted = `${G.turn.round}:${G.turn.active}:${G.turn.ph}`
     try {
       core.apply(G, by, body)
     } catch (e) {
       throw new Error(`${where}: apply(G, ${by}, ${JSON.stringify(body)}) threw: ${e.stack}`)
+    }
+    if (outside) {
+      const now = actorsOutside(core, G, by, body.m)
+      const moved = outside.find((x, i) => x !== now[i])
+      if (moved) throw new Error(`${where}: pilot ${JSON.stringify(body)} played a unit outside its mask: ${moved} became ${now[outside.indexOf(moved)]}`)
+      if (G.turn.stage !== 'over' && (G.pending?.k !== 'phase' || !G.pending.seats.includes(by))) throw new Error(`${where}: pilot ${JSON.stringify(body)} closed seat ${by}'s phase (${JSON.stringify(G.pending)})`)
     }
     log.push([by, body])
     counts.commands[body.t] = (counts.commands[body.t] ?? 0) + 1
@@ -921,6 +973,10 @@ if (a.child) {
 
 // ── The run ─────────────────────────────────────────────────────────────────
 const ME = fileURLToPath(import.meta.url)
+// (F10b) whether the code under test knows `pilot` (code older than F10b,
+// the PIN's before it, is held to everything else)
+const pilots = (pkg) => /^\s*pilot: \{ k: 'phase'/m.test(readFileSync(join(pkg, 'core', 'commands.js'), 'utf8'))
+
 function child(task, pkg) {
   return new Promise((done) => {
     const p = spawn(process.execPath, [ME, '--child', '--dir', pkg], { stdio: ['pipe', 'pipe', 'pipe'] })
@@ -970,12 +1026,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
     if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run
-  const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0 }
+  const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
     if (!r.ok || !r.game) continue
     reached[r.counts.ended]++
     reached.offTurn += r.counts.offTurn ?? 0
-    for (const k of ['chargeEnd', 'auto', 'place', 'vote']) reached[k] += r.counts.commands[k] ?? 0
+    for (const k of ['chargeEnd', 'auto', 'place', 'vote', ...('pilot' in reached ? ['pilot'] : [])]) reached[k] += r.counts.commands[k] ?? 0
     reached.overtime += r.counts.overtime ?? 0
   }
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
@@ -1094,6 +1150,16 @@ const MUTATIONS = {
   'over-any-device': ['match/fold.js', "seat?.ctrl === 'human' && e.d === seat.dev && e.h !== stateHash(this.G)) return this.freeze(e)", "seat?.ctrl === 'human' && e.h !== stateHash(this.G)) return this.freeze(e)"],
   // only a newer build's start is skew: an older one's is folded
   'core-newer-only': ['match/fold.js', 'if (e.core !== CORE_VERSION || e.rules !== RULES_ID) {', 'if (e.core > CORE_VERSION || e.rules !== RULES_ID) {'],
+  // (F10b, P-pilot) the AI under a pilot plays the whole army
+  'pilot-ignores-mask': ['core/ai/policy.js', 'const mask = (u) => !only || only.includes(u)', 'const mask = (u) => true'],
+  // a pilot naming a destroyed unit is taken
+  'pilot-names-dead': ['core/commands.js', '  if (dead) return `unit ${dead.id} is destroyed`\n', ''],
+  // a bit past the seat's last unit is ignored, not refused
+  'pilot-stray-bits': ['core/queries.js', '      if (j >= mine.length) return null\n      out.push(mine[j])', '      if (j < mine.length) out.push(mine[j])'],
+  // a pilot of units none of which can act is taken
+  'pilot-idle-ok': ['core/commands.js', 'return units.some((u) => canAct(G, u)) ? null :', 'return units.length ? null :'],
+  // a pilot ends the phase, as Auto does
+  'pilot-ends-phase': ['core/commands.js', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n    G.pending = null\n'],
 }
 
 if (a['self-test']) {

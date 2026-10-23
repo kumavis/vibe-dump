@@ -103,3 +103,34 @@ export function canAct(G, u) {
   return false
 }
 export const anyCanAct = (G, side) => G.units.some((u) => u.side === side && canAct(G, u))
+
+// ── A set of a seat's units, as one number (F10b's `pilot {m}`) ─────────────
+// Bit j is the seat's j-th unit in G.units order, dead or alive, so a mask
+// means the same units on every peer for the whole battle. maskUnits is the
+// units a mask names, in G.units order, or null when it names a unit the
+// seat doesn't have (a bit past its last); exact division, never a bitwise
+// operator, so a mask may use all 53 bits a safe integer holds (a Grand
+// army's 24 among them).
+export function maskUnits(G, seat, m) {
+  const mine = G.units.filter((u) => u.side === seat), out = []
+  for (let j = 0; m > 0; j++) {
+    const r = m % 2
+    if (r) {
+      if (j >= mine.length) return null
+      out.push(mine[j])
+    }
+    m = (m - r) / 2
+  }
+  return out
+}
+// the mask naming the seat's units among `ids` (bit by doubling: core/
+// keeps out the ** operator)
+export function maskOf(G, seat, ids) {
+  let m = 0, bit = 1
+  for (const u of G.units) {
+    if (u.side !== seat) continue
+    if (ids.includes(u.id)) m += bit
+    bit *= 2
+  }
+  return m
+}

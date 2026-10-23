@@ -49,5 +49,6 @@ export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString
 export const RULES_ID = rulesId()
 
 // (1: the rules as R0 recorded them, unchanged through the refactor; 2: F4's
-// round-limit vote, the vote command and setup.overtime 'vote')
-export const CORE_VERSION = 2
+// round-limit vote, the vote command and setup.overtime 'vote'; 3: F10b's
+// pilot, the AI playing a set of a seat's units)
+export const CORE_VERSION = 3

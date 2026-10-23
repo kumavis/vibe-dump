@@ -199,16 +199,17 @@ export function gameOver(G, conceded = -1) {
 
 // The AI plays seat `seat`'s `phase`: each command its generator yields is
 // applied before it is asked for the next, `via` 'ai' (a charge goes
-// straight on to its shortest move). Also a human's Auto. G.pending stays
+// straight on to its shortest move). Also a human's Auto, and (F10b) a
+// human's `pilot`, the AI playing only the units in `only`. G.pending stays
 // as it was (nothing for an AI seat, the seat's own phase for an Auto): an
 // AI seat never holds a decision there (§2.1). With G.strict (sim/'s
 // P-prop) every command is first judged by legal() against the phase
 // decision the seat would hold were it a human's (legalFor), so the AI
 // never issues one a seat couldn't.
-export function runAI(G, seat, phase) {
+export function runAI(G, seat, phase, only = null) {
   const was = G.pending
   const P = { k: 'phase', seats: [seat], phase }
-  for (const cmd of aiPhase(G, seat, phase)) {
+  for (const cmd of aiPhase(G, seat, phase, only)) {
     if (G.strict) {
       const why = legalFor(G, seat, cmd, P)
       if (why) throw new Error(`the AI (seat ${seat}, ${phase} phase) asked for ${JSON.stringify(cmd)}, which is illegal: ${why}`)

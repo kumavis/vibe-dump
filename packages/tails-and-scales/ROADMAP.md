@@ -79,7 +79,9 @@ the commit, and add whatever the work turned up.
   takes, and land where their preview drew them), and from V1
   `node sim/playback-check.mjs` (and `--self-test`: the batch rule over
   every corpus and Grand fixture stream, a Grand AI movement phase within
-  8 s; `--browser` with Chromium). A step
+  8 s; `--browser` with Chromium), and from F10b
+  `node sim/pilot-check.mjs` (and `--self-test`: P-auto, a pilot of every
+  standing unit and End play the battle Auto plays, phase by phase). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -816,13 +818,21 @@ follows N3.
 - [ ] **Later (V1's open budget):** a Grand AI battle plays about 349 s
   against §4.2.1's 200 s; batch a seat's volleys (or pace a watched
   battle's shooting faster) before F8b's Grand boards ship.
-- [ ] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
+- [x] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
   units you choose.
+  (`CORE_VERSION` 3; the mask's bits the seat's units in `G.units` order;
+  the AI's phase filtered, the phase left open; the group bar's 🤖 Auto
+  these. P-auto (`sim/pilot-check.mjs`), P-pilot in P-prop, input-check's
+  Auto these, the human-bot's `pilot` policy; the `pilot/` logs in a commit
+  of their own. DESIGN's F10b notes.)
 - [ ] **F10c** Standing orders: March, Attack, Hold and Autopilot, carried
   out at End or Go; badges, counters, optional auto-End. Left from F10a:
   the pinned formation's handles (move, rotate, stretch into a line: the
   only way to make a line on touch), its faint paths, and ghosts planned a
-  few per frame once boards grow (F8b).
+  few per frame once boards grow (F8b). Left from F10b: merge-sim's bursts
+  of 25 macro entries from one seat with junk between (the orders at End
+  are what sends them), and (at F8b) the play-report threshold: an army on
+  `pilot` every phase reaches melee by round 3 in 3 of 4 Grand battles.
 - [ ] **F8a** Missions choose the board: `setup.mission`, the setup
   whitelist, `G.board`, the table rebuilt per match. Only the classic
   mission yet.

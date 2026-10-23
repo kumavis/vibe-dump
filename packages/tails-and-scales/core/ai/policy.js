@@ -32,16 +32,22 @@ import { worth, meleeValue, shotValue, bestSpot, fallbackSpot } from './score.js
 export const ORDER = Object.freeze(['melee', 'raider', 'line', 'shooter', 'hero', 'artillery'])
 
 // The commands seat `side` plays in `phase` (the move, shoot and charge
-// phases; the fight and morale phases play themselves).
-export function* aiPhase(G, side, phase) {
-  if (phase === 'move') yield* aiMove(G, side)
-  else if (phase === 'shoot') yield* aiShoot(G, side)
-  else if (phase === 'charge') yield* aiCharge(G, side)
+// phases; the fight and morale phases play themselves). `only` (F10b's
+// `pilot`): the units it plays, a list of the seat's; null, all of them.
+// The filter only drops units from each phase's list, so the units it keeps
+// are played as they would be with the rest, in the same order, with the
+// same draws between the same yields (P-auto: a `pilot` naming every unit,
+// then `end`, is `auto`).
+export function* aiPhase(G, side, phase, only = null) {
+  const mask = (u) => !only || only.includes(u)
+  if (phase === 'move') yield* aiMove(G, side, mask)
+  else if (phase === 'shoot') yield* aiShoot(G, side, mask)
+  else if (phase === 'charge') yield* aiCharge(G, side, mask)
 }
 
 // ── Movement ────────────────────────────────────────────────────────────────
-function* aiMove(G, side) {
-  const mine = G.units.filter((u) => u.side === side && alive(u))
+function* aiMove(G, side, mask) {
+  const mine = G.units.filter((u) => u.side === side && alive(u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   const claimed = new Set()
   for (const u of mine) {
@@ -94,8 +100,8 @@ function* aiMove(G, side) {
 }
 
 // ── Shooting ────────────────────────────────────────────────────────────────
-function* aiShoot(G, side) {
-  const mine = G.units.filter((u) => u.side === side && canShoot(G, u))
+function* aiShoot(G, side, mask) {
+  const mine = G.units.filter((u) => u.side === side && canShoot(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(b.t.ai) - ORDER.indexOf(a.t.ai))
   for (const u of mine) {
     if (!canShoot(G, u)) continue
@@ -129,8 +135,8 @@ function* aiShoot(G, side) {
 // ── Charges ─────────────────────────────────────────────────────────────────
 // (an AI's charge goes straight on to the shortest move: its runner says
 // so, `via` 'ai', and no spot is picked)
-function* aiCharge(G, side) {
-  const mine = G.units.filter((u) => u.side === side && canCharge(G, u))
+function* aiCharge(G, side, mask) {
+  const mine = G.units.filter((u) => u.side === side && canCharge(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   for (const u of mine) {
     if (!canCharge(G, u)) continue

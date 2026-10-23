@@ -714,6 +714,14 @@ export function boot(location) {
         must($('#autoPhase').onclick(), 'autoPhase')
         return settle()
       },
+      // (F10b) Auto these: the AI plays the units mask m names (bit j: the
+      // seat's j-th unit in G.units order), sent as the group bar's button
+      // sends it; for the seat played here whose phase it is
+      pilot: (m) => {
+        const seat = human.localSeat(), ids = flow.G.units.filter((u) => u.side === seat).filter((u, j) => Math.floor(m / 2 ** j) % 2).map((u) => u.id)
+        must(human.pilot(ids), 'pilot')
+        return settle()
+      },
       // (F4) the round limit's vote: the panel's Keep playing (more true) or
       // End the battle, pressed, for every seat played here still to have
       // its say; or, given `seat`, that seat's say alone (sim/'s driver

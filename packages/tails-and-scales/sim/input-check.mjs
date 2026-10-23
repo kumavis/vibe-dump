@@ -623,6 +623,46 @@ async function check(page, say) {
       say(`a group of ${shooters.ours.length} fired ${n1 - n0} shots at unit ${tg.id}; once the table caught up the ${left.length} that hadn't stayed picked ("${(await bar()).note}")`)
     }
   }
+
+
+  // ── The other seat's movement phase ─────────────────────────────────────
+  // End through the rest of the turn (a phase nobody can act in is skipped)
+  const t2 = 1 - t
+  for (let k = 0; k < 4; k++) {
+    const P = await ev(() => ({ phase: window.__ts.session.G.pending?.phase, seats: window.__ts.session.G.pending?.seats }))
+    if (P.phase === 'move' && P.seats?.includes(t2)) break
+    const was = JSON.stringify(P)
+    await page.click('#endPhase')
+    await page.waitForFunction((was) => window.__ts.player.idle && JSON.stringify({ phase: window.__ts.session.G.pending?.phase, seats: window.__ts.session.G.pending?.seats }) !== was, was, { timeout: IDLE_MS })
+  }
+  await page.waitForFunction((t2) => window.__ts.session.G.pending?.phase === 'move' && window.__ts.session.G.pending.seats.includes(t2) && window.__ts.player.idle, t2, { timeout: IDLE_MS })
+
+  // (F10b) 🤖 Auto these: one pilot for the group, its mask the group's,
+  // the phase still the seat's, and nobody outside the group moved
+  await rest()
+  const able = await ev((t) => window.__ts.session.preview((G, q) => G.units.filter((u) => u.side === t && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)), t2)
+  if (able.length < 2) fail(`seat ${t2}'s movement phase opens with ${able.length} units able to move`)
+  else {
+    const crew = able.slice(0, 2)
+    await ev((xs) => window.__ts.group.select(xs), crew)
+    b = await bar()
+    if (!b.pilot?.n) fail(`the bar offers no Auto these for a group that can move: ${JSON.stringify(b.pilot)}`)
+    const look = (t) => window.__ts.G.units.filter((u) => u.side === t).map((u) => [u.id, `${u.pos.x},${u.pos.z},${!!u.flags.moved}`])
+    const before = await ev(look, t2)
+    n0 = await count()
+    await page.click('#groupbar .gpilot')
+    n1 = await settled()
+    const sent = await ev((n) => window.__ts.session.store.entries().slice(n).map(({ t, m }) => ({ t, m })), n0)
+    const want = await ev(({ t, crew }) => window.__ts.session.preview((G, q) => q.maskOf(G, t, crew)), { t: t2, crew })
+    if (sent.length !== 1 || sent[0].t !== 'pilot' || sent[0].m !== want) fail(`Auto these sent ${JSON.stringify(sent)}, not one pilot with mask ${want}`)
+    const P = await ev(() => ({ phase: window.__ts.session.G.pending?.phase, seats: window.__ts.session.G.pending?.seats }))
+    if (P.phase !== 'move' || !P.seats?.includes(t2)) fail(`after Auto these the match waits on ${JSON.stringify(P)}, not seat ${t2}'s movement phase`)
+    const after = await ev(look, t2)
+    const strays = after.filter(([id, x], i) => !crew.includes(id) && x !== before[i][1]).map(([id]) => id)
+    if (strays.length) fail(`Auto these moved units outside the group: ${JSON.stringify(strays)}`)
+    const went = after.filter(([id, x], i) => crew.includes(id) && x !== before[i][1]).length
+    say(`Auto these: one pilot (mask ${want}) for ${crew.length} units, ${went} of them moved, nobody else; the movement phase still the seat's`)
+  }
 }
 
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))

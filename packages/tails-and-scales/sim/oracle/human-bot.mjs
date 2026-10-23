@@ -10,6 +10,9 @@
 //   { s: 0, t: 'chargeEnd', c: 1871 }      ({ c: -1 } is "Shortest move")
 //   { s: 0, t: 'end' }                     { s: 0, t: 'auto' }
 //   { s: 0, t: 'vote', more: true }        (F4) the round limit's say
+//   { s: 0, t: 'pilot', m: 5 }             (F10b) the AI plays the seat's
+//                                          units 0 and 2 (bit j: its j-th
+//                                          unit in G.units order)
 //
 // Each entry goes through the same hook calls a click or a button makes.
 // Before that the driver checks what the UI's own gates check: the entry's
@@ -90,7 +93,7 @@ export function humanDriver(ts, { entries = null, choose = null }) {
   // length when each was applied, so its lines can be found
   const played = [], asked = [], at = []
   let next = 0, busy = null, failed = null
-  const KINDS = { deploy: ['place', 'deployed'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto'], roundLimit: ['vote'] }
+  const KINDS = { deploy: ['place', 'deployed'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto', 'pilot'], roundLimit: ['vote'] }
   // the phase each in-phase command belongs to (end and auto fit any)
   const PHASE = { advance: 'move', move: 'move', shoot: 'shoot', charge: 'charge' }
 
@@ -183,6 +186,18 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         if (typeof e.more !== 'boolean') throw bad('a vote says more, true or false')
         p = ts.vote(e.more, e.s)
         break
+      // (F10b) the group bar's Auto these: standing units of the seat's, one
+      // at least able to act
+      case 'pilot': {
+        if (typeof ts.pilot !== 'function') throw bad('the page has no pilot hook (code older than F10b)')
+        const seat = ts.units.filter((u) => u.side === e.s)
+        if (!Number.isSafeInteger(e.m) || e.m < 1 || e.m >= 2 ** seat.length) throw bad(`m names no set of seat ${e.s}'s units`)
+        const named = seat.filter((u, j) => Math.floor(e.m / 2 ** j) % 2)
+        if (named.some((u) => !q.alive(u))) throw bad('names a destroyed unit')
+        if (!named.some((u) => q.canAct(u))) throw bad('none of its units can act')
+        p = ts.pilot(e.m)
+        break
+      }
     }
     played.push(e)
     asked.push(shortest ? 'chargeEnd at shortest' : d.phase ?? d.k)
@@ -237,13 +252,16 @@ export function mulberry32(seed) {
 // already has.
 // `aggressive`: wipe-seeking. Deploy forward, close on the nearest enemy,
 // shoot the weakest target, charge whatever can be reached, never fall back.
+// `pilot` (F10b): `random`, but now and then (at most once a phase) it puts
+// a random few of the units still to act on autopilot (the group bar's Auto
+// these), before, between or after its own commands.
 export function makePolicy(name, seed) {
   const rand = mulberry32(seed)
   const pick = (a) => a[Math.floor(rand() * a.length)]
-  const aggressive = name === 'aggressive', late = name === 'late'
-  if (!aggressive && !late && name !== 'random') throw new Error(`unknown policy ${name}`)
+  const aggressive = name === 'aggressive', late = name === 'late', pilot = name === 'pilot'
+  if (!aggressive && !late && !pilot && name !== 'random') throw new Error(`unknown policy ${name}`)
   const placing = new Map() // seat → placements left in its deployment
-  let key = '', skipped = new Set(), acted = 0, last = null // `last`: this phase's latest entry
+  let key = '', skipped = new Set(), acted = 0, last = null, piloted = false // `last`: this phase's latest entry
 
   const enemies = (ts, u) => ts.units.filter((e) => e.side !== u.side && ts.q.alive(e))
   const nearest = (ts, u, x, z) => Math.min(...enemies(ts, u).map((e) => Math.hypot(e.pos.x - x, e.pos.z - z) - e.r))
@@ -280,6 +298,7 @@ export function makePolicy(name, seed) {
       skipped = new Set()
       acted = 0
       last = null
+      piloted = false
     }
     const s = d.s
     const end = { s, t: 'end' }
@@ -287,6 +306,18 @@ export function makePolicy(name, seed) {
     if (!aggressive && !acted && rand() < 0.08) return acted++, { s, t: 'auto' }
     if (!aggressive && rand() < 0.03) return end
     const mine = ts.units.filter((u) => u.side === s && q.alive(u) && !skipped.has(u.id))
+    if (pilot && !piloted && rand() < 0.3) {
+      // a random few of the units still to act (each kept on a coin), as a
+      // mask over all the seat's units, dead ones too
+      const ready = mine.filter((u) => q.canAct(u))
+      const few = ready.filter(() => rand() < 0.5)
+      if (ready.length) {
+        piloted = true
+        const named = new Set((few.length ? few : [pick(ready)]).map((u) => u.id))
+        const m = ts.units.filter((u) => u.side === s).reduce((m, u, j) => (named.has(u.id) ? m + 2 ** j : m), 0)
+        return acted++, { s, t: 'pilot', m }
+      }
+    }
     for (;;) {
       const ready = mine.filter((u) => !skipped.has(u.id) && q.canAct(u))
       if (!ready.length) return end

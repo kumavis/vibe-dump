@@ -696,13 +696,13 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // (2, F4: the vote added nothing shadowState prints for a battle that
   // never votes, so the corpus's states hash as under 1; a voting match's
   // pending decision carries its votes, printed as the pending line always
-  // was)
+  // was; 3, F10b: pilot added a command, nothing shadowState prints)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

@@ -9,7 +9,7 @@
 // regenerated on demand from the PIN code (sim/oracle/PIN).
 import { createHash } from 'node:crypto'
 import { spawn } from 'node:child_process'
-import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cpus } from 'node:os'
@@ -205,33 +205,39 @@ export const tag = (v, r) =>
 //                            and `engines`: the Node and Chromium that recorded
 //                            the whole corpus
 // sim/baselines/human/*.json human logs: { setup, bot, why, n, trace, shadow, written, entries }
+// sim/baselines/pilot/*.json (F10b) human logs that put units on autopilot
+//                            (`pilot`), recorded on F10b's code: a log set of
+//                            their own, as each new corpus is (DESIGN §4.2.9)
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each
-// item comes back as { id, kind, mode, job, ...stored fields }, `mode` the
+// item comes back as { id, kind, set, mode, job, ...stored fields } (`set`
+// a log's: human or pilot), `mode` the
 // title screen's for its seats (a log whose seats no button seats is refused
 // here). Whether the page can make the rest of a setup is found where it is
 // played: every page runner holds the battle the page started to the log's
 // setup (oracle/human-bot.mjs's playedAs).
+export const LOG_SETS = Object.freeze(['human', 'pilot'])
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))
-  const hdir = join(BASE, 'human')
-  if (existsSync(hdir)) {
+  for (const set of LOG_SETS) {
+    const hdir = join(BASE, set)
+    if (!existsSync(hdir)) continue
     for (const f of readdirSync(hdir).filter((f) => f.endsWith('.json')).sort()) {
       const h = JSON.parse(readFileSync(join(hdir, f), 'utf8'))
-      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: 'human', mode: pageStart(h.setup).mode, job: { setup: h.setup, entries: h.entries } })
+      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: 'human', set, mode: pageStart(h.setup).mode, job: { setup: h.setup, entries: h.entries } })
     }
   }
   return { pairs, items }
 }
 
 // The battles an --only list names: kinds (ai, human), modes (watch,
-// bushtail, serpent, hotseat) or ids. A token that names nothing is a usage
+// bushtail, serpent, hotseat), a log set (human, pilot) or ids. A token that names nothing is a usage
 // error, so a typo can never pass a gate by selecting no battles.
 export function select(all, only) {
   if (only === undefined) return all
   const tokens = only.split(',').map((s) => s.trim()).filter(Boolean)
-  const hit = (o, it) => o === it.kind || o === it.mode || o === it.id
+  const hit = (o, it) => o === it.kind || o === it.mode || o === it.set || o === it.id
   const unknown = tokens.filter((o) => !all.some((it) => hit(o, it)))
   if (!tokens.length || unknown.length) {
     const modes = [...new Set(all.map((it) => it.mode).filter(Boolean))].join(', ')
@@ -249,7 +255,7 @@ export function savePairs(pairs) {
   writeFileSync(join(BASE, 'pairs.json'), json + '\n')
 }
 
-export function saveHuman(id, log) {
+export function saveHuman(id, log, set = 'human') {
   const { setup, entries, ...rest } = log
   const lines = [
     '{',
@@ -262,7 +268,9 @@ export function saveHuman(id, log) {
   ]
   const text = lines.join('\n') + '\n'
   JSON.parse(text) // never write a log the corpus can't read back
-  writeFileSync(join(BASE, 'human', `${id}.json`), text)
+  if (!LOG_SETS.includes(set)) throw new Error(`no log set ${set}`)
+  mkdirSync(join(BASE, set), { recursive: true })
+  writeFileSync(join(BASE, set, `${id}.json`), text)
 }
 
 // A human log's stored fields, in file order.

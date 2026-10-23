@@ -448,6 +448,21 @@ export class GroupInput {
     return null
   }
 
+  // (F10b) Auto these: one `pilot` for the group's standing members; the
+  // ones the AI leaves (no shot worth taking, a charge too long) stay
+  // picked and ready, as a group order's leftovers do (settle()).
+  pilot() {
+    const seat = this.seat(), ids = this.members().map((u) => u.id)
+    if (seat < 0 || this.busy || !ids.length) return 'no group to put on autopilot now'
+    this.cancel()
+    const why = this.human.pilot(ids)
+    const s = this.selection.of(seat)
+    s.note = why ?? `Autopilot: the AI plays ${ids.length} units this phase`
+    if (!why) sfx.click()
+    this.human.flow.refreshUI()
+    return why
+  }
+
   // Send the group's commands (input/orders.js); then keep picked the
   // members still able to act.
   async run(verb, target, line = null) {
@@ -604,7 +619,10 @@ export class GroupInput {
     this.chipTypes = types.map((c) => c.t)
     const LABEL = { place: 'Place: click the ground', move: 'Move: click the ground · Approach: click an enemy', shoot: 'Fire: click an enemy', charge: 'Charge: click an enemy' }
     const verbs = verb && LABEL[verb] ? [{ k: verb, label: LABEL[verb], on: true }] : [{ k: 'wait', label: 'Orders can be given on your turn', on: false }]
-    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: s.note }
+    // (F10b) Auto these: in a phase, while one of the group can still act
+    const able = ms.length - types.reduce((n, c) => n + c.idle, 0)
+    const pilot = verb && verb !== 'place' ? { n: able, why: able ? '' : 'none of them can act now' } : null
+    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pilot, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: s.note }
   }
 
   // the bar's buttons
@@ -621,6 +639,7 @@ export class GroupInput {
       clear: () => this.setGroup([]),
       ready: () => this.setGroup(this.ready().map((u) => u.id)),
       advance: () => this.toggleAdvance(),
+      pilot: () => this.pilot(),
       save: () => {
         const seat = this.seat(), s = this.selection.of(seat)
         const k = [1, 2, 3, 4, 5, 6, 7, 8, 9].find((d) => !s.saved[d]) ?? 9
