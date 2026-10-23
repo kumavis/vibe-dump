@@ -775,7 +775,9 @@ capture) and `link.js` binds nothing; a key aimed at a field, a button, the
 card, the list or a dialog is the page's. When the box's bar shows the held
 unit's stations the HUD's own station bar stands down and the first hints
 step below it (`--pt-stations-display`, `--pt-hints-top` under
-`#ui.holding`).
+`#ui.holding`). The hints leave with the station they name: a switch takes
+them down (and shows the new station's own the first time it is manned), and
+so does every release.
 
 ## 9. The battle lifecycle (`src/battle/index.js`) and the hand-over (`src/app.js`)
 
@@ -863,7 +865,9 @@ reason }>` (throws as `takeControl`; `t` goes there first), `setStation`,
 `firstDoor` (the battle file's, with `at` parsed), `speeds` (watching 1–60;
 an aircraft held ×0.5 ×1 ×2 in Assisted, ×1 in Pilot, more after a
 bookmark's checkpoint; a ship 1–8) and `baseScale()`; `play(0.5)` is
-accepted; `takeMoment`'s result carries `sortie`; `state` gains `selected`,
+accepted; `takeMoment`'s result carries `sortie`, and a free take drops the
+last bookmark's state and objective, so nothing of a bookmark outlives it;
+`state` gains `selected`,
 `station`, `held`, `assist`, `sortie`. Events on `app.events` `battle`:
 `select`, `take`, `station`, `assist`, `units` (L), `unit-card` (Enter),
 and `released` with the sortie after `after` at every release, by the
