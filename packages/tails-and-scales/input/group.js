@@ -197,11 +197,11 @@ export class GroupInput {
     return p.done
   }
 
-  // a pointer cancelled (the browser took it): a box or a line it was
-  // drawing let go, the camera free again
+  // a pointer cancelled (the browser took it): a box, a line or (F10c) a
+  // pin's handle it was dragging let go, the camera free again
   abort(e) {
     this.letGo(e)
-    if ((this.box && this.box.id === e.pointerId) || (this.line && this.line.id === e.pointerId)) this.drop()
+    if ((this.box && this.box.id === e.pointerId) || (this.line && this.line.id === e.pointerId) || (this.drag && this.drag.id === e.pointerId)) this.drop()
   }
 
   move(e) {
@@ -719,8 +719,11 @@ export class GroupInput {
     const able = ms.length - types.reduce((n, c) => n + c.idle, 0)
     const pilot = verb && verb !== 'place' ? { n: able, why: able ? '' : 'none of them can act now' } : null
     // (F10c) the standing orders the members hold, and the click armed
-    const orders = this.human.standing?.summary(ms) ?? null
-    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pilot, orders, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: this.human.standing?.note || s.note }
+    const st = this.human.standing
+    const orders = st?.summary(ms) ?? null
+    // (the note: the orders' while a click is armed; else the group's own,
+    // then the last order given)
+    return { show: true, ready, count: ms.length, models: ms.reduce((n, u) => n + u.alive, 0), chips, verbs, advance: verb === 'move' ? s.advance : null, pilot, orders, pinned: !!s.pin, summary: s.pin?.preview.summary ?? '', note: (st?.armed ? st.note : s.note || st?.note) ?? '' }
   }
 
   // the bar's buttons

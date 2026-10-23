@@ -201,6 +201,12 @@ async function probeOrders(L, ses, rand, out) {
   const then = rand.pick([null, 'end', 'auto'])
   const look = (G2) => G2.units.filter((u) => u.side === seat && !orders.has(u.id)).map((u) => `${u.id}@${u.pos.x},${u.pos.z}:${u.flags.moved ? 1 : 0}${u.flags.shot ? 1 : 0}${u.flags.charged ? 1 : 0}`).join(' ')
   const before = look(G)
+  // (Auto with orders: the AI plays the units no order holds, so the run
+  // writes no plain auto, and in the movement phase no pilot of its names a
+  // March or a Hold: a Hold stays put, a March in combat never falls back)
+  const n0 = ses.store.entries().length
+  const mineInOrder = G.units.filter((u) => u.side === seat).map((u) => u.id)
+  const posted = new Set(P.phase === 'move' ? [...orders].filter(([, o]) => o.k === 'hold' || o.k === 'march').map(([id]) => id) : [])
   const actors = ses.preview((G2, q) => L.standing.actorsOf(G2, q, seat, orders, P.phase))
   const rejected = ses.folder.rejected.length, count = ses.count
   const t0 = performance.now()
@@ -221,6 +227,14 @@ async function probeOrders(L, ses, rand, out) {
   if (ses.count - count !== r.sent) return `orders: they say they sent ${r.sent}, the log grew by ${ses.count - count}`
   if (ms > 1000) return `orders took ${ms.toFixed(0)} ms`
   if (then === null && look(ses.G) !== before) return 'orders (Go) moved, shot or charged with a unit that had none'
+  if (then === 'auto') {
+    const wrote = ses.store.entries().slice(n0).filter((e) => e?.s === seat)
+    if (wrote.some((e) => e.t === 'auto')) return 'orders (Auto) wrote a plain auto: the AI played every unit, the ordered ones too'
+    const named = (m) => mineInOrder.filter((id, j) => Math.floor(m / 2 ** j) % 2 === 1)
+    const strays = wrote.filter((e) => e.t === 'pilot').flatMap((e) => named(e.m)).filter((id) => posted.has(id))
+    if (strays.length) return `orders (Auto) piloted units a March or Hold holds in the movement phase (${strays.join(', ')})`
+    out.orders.held = (out.orders.held ?? 0) + posted.size
+  }
   if (r.acted.some((id) => !orders.has(id))) return 'orders acted for a unit with none'
   if (r.acted.some((id) => !actors.some((a) => a.u.id === id))) return `orders acted for units the count left out (${r.acted.filter((id) => !actors.some((a) => a.u.id === id)).join(', ')})`
   return null
@@ -429,8 +443,8 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   const O = out.orders, M = out.march
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
-  const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen); marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
@@ -441,13 +455,16 @@ const MUTANTS = [
   ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
   ['fire-one', 'input/orders.js', "      if (verb === 'fire') await send({ t: 'shoot', u: id, tg: tg.id }, u)", "      if (verb === 'fire') {\n        await send({ t: 'shoot', u: id, tg: tg.id }, u)\n        break\n      }"],
   // (F10c) the orders' pilot names every unit of the seat, ordered or not
-  ['pilot-everyone', 'input/orders.js', "orderedUnits(G, q, seat, orders, phase).filter((u) => stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id)", "G.units.filter((u) => u.side === seat && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)"],
+  ['pilot-everyone', 'input/orders.js', "orderedUnits(G, q, seat, orders, phase).filter((u) => !skip.has(u.id) && stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id)", "G.units.filter((u) => u.side === seat && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)"],
   // a march planned once, not again on its advance's roll (it moves on a
   // plan made before the roll)
   ['march-stale-roll', 'input/orders.js', '    for (let k = 0; k < 2 && phaseNow() === phase; k++) {', '    for (let k = 0; k < 1 && phaseNow() === phase; k++) {'],
   // a march planned on a field from where the unit stands, not its anchor
   // (away from its slot it finds no way nearer)
   ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.r)\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.r)\n'],
+  // (F10c's review) Auto with orders sends a plain auto: the AI plays every
+  // unit, a Hold walked off its post, a March in combat fallen back
+  ['auto-plays-ordered', 'input/orders.js', "  if (then === 'auto' && phaseNow() === phase) {", '  if (false) {'],
 ]
 
 if (a['self-test']) {

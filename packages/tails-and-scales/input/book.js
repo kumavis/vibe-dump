@@ -5,24 +5,28 @@
 // storage (`ts.orders.<key>.<seat>`, every access in try/catch: a private
 // window keeps it for the page only), so a reload or a rejoin finds it again.
 //
-//   book = { v: 1, units: { [id]: order }, groups: { 1…9: [ids] } }
+//   book = { v: 1, at, units: { [id]: order } }   (at: when last saved)
 //   order: present/standing.js's ({ k: 'march', anchor, slot, best?, stall? },
 //   { k: 'attack', tg }, { k: 'hold' }, { k: 'auto' })
 //
 //   open(key, { fresh })  the battle's book (fresh: a new battle, its key's
-//                         old orders dropped)
+//                         old orders dropped); the books of all but the
+//                         KEEP most recently saved other battles are let go
 //   orders(seat)          id → order, a Map of the seat's
 //   set(seat, ids, order) each of ids given the order (null: none)
-//   saved(seat)           the seat's saved groups (input/selection.js's)
 //   tidy(G, seat, fn)     each order passed through fn(u, order) → order or
 //                         null; a unit gone from the match (or fallen)
 //                         leaves the book
+// (A seat's saved groups are the selection's, input/selection.js, kept for
+// the page only.)
 const PREFIX = 'ts.orders.'
+// how many battles' books this browser keeps
+const KEEP = 12
 
 export class OrderBook {
   constructor(storage = null) {
     this.storage = storage
-    this.key = null
+    this.id = null
     this.bySeat = new Map()
     // (bumped by every change: what a cached plan was made from)
     this.version = 0
@@ -39,29 +43,45 @@ export class OrderBook {
   }
 
   open(key, { fresh = false } = {}) {
-    this.key = key
+    this.id = key
     this.bySeat.clear()
     this.version++
-    if (!fresh || !key) return
+    if (!key) return
     try {
-      for (const seat of [0, 1]) this.store?.removeItem(`${PREFIX}${key}.${seat}`)
+      if (fresh) for (const seat of [0, 1]) this.store?.removeItem(`${PREFIX}${key}.${seat}`)
+      this.prune()
     } catch {}
   }
 
-  close() {
-    this.key = null
-    this.bySeat.clear()
-    this.version++
+  // the books of all but the KEEP battles saved last (this one's aside) let
+  // go, so finished battles' orders don't pile up in the browser
+  prune() {
+    const st = this.store
+    if (!st) return
+    const at = new Map()
+    for (let i = 0; i < st.length; i++) {
+      const k = st.key(i)
+      if (k?.slice(0, PREFIX.length) !== PREFIX) continue
+      const battle = k.slice(PREFIX.length, k.lastIndexOf('.'))
+      if (battle === this.id) continue
+      let t = 0
+      try {
+        t = JSON.parse(st.getItem(k))?.at ?? 0
+      } catch {}
+      at.set(battle, Math.max(at.get(battle) ?? 0, t))
+    }
+    const old = [...at].sort((a, b) => b[1] - a[1]).slice(KEEP)
+    for (const [battle] of old) for (const seat of [0, 1]) st.removeItem(`${PREFIX}${battle}.${seat}`)
   }
 
   of(seat) {
     let b = this.bySeat.get(seat)
     if (b) return b
-    b = { v: 1, units: {}, groups: {} }
-    if (this.key) {
+    b = { v: 1, units: {} }
+    if (this.id) {
       try {
-        const got = JSON.parse(this.store?.getItem(`${PREFIX}${this.key}.${seat}`) ?? 'null')
-        if (got?.v === 1 && got.units && typeof got.units === 'object') b = { v: 1, units: got.units, groups: got.groups ?? {} }
+        const got = JSON.parse(this.store?.getItem(`${PREFIX}${this.id}.${seat}`) ?? 'null')
+        if (got?.v === 1 && got.units && typeof got.units === 'object') b = { v: 1, units: got.units }
       } catch {}
     }
     this.bySeat.set(seat, b)
@@ -70,9 +90,9 @@ export class OrderBook {
 
   save(seat) {
     this.version++
-    if (!this.key) return
+    if (!this.id) return
     try {
-      this.store?.setItem(`${PREFIX}${this.key}.${seat}`, JSON.stringify(this.of(seat)))
+      this.store?.setItem(`${PREFIX}${this.id}.${seat}`, JSON.stringify({ ...this.of(seat), at: Date.now() }))
     } catch {}
   }
 
@@ -91,10 +111,6 @@ export class OrderBook {
       else delete b.units[id]
     }
     this.save(seat)
-  }
-
-  saved(seat) {
-    return this.of(seat).groups
   }
 
   tidy(G, seat, fn = (u, o) => o) {

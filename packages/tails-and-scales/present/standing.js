@@ -16,7 +16,9 @@
 //                                 unit then planned again on its roll),
 //                                 { how: 'pilot' } (the AI plays it: one
 //                                 `pilot` for every such unit), or
-//                                 { how: 'none', why }
+//                                 { how: 'none', why } (an attack
+//                                 whose target fell: 'pilot', its
+//                                 Autopilot)
 //   actorsOf(G, q, seat, orders)  the seat's ordered units that would act in
 //                                 the phase now (End's ⟳ badge, Go's count):
 //                                 [{ u, how }], in the executor's order
@@ -80,9 +82,10 @@ export function stepOf(G, q, u, o, phase) {
     if (leg.cell < 0 || leg.cell === here) return { how: 'none', why: 'no way nearer' }
     return { how: 'macro', cmds: [{ t: 'move', u: u.id, c: leg.cell }] }
   }
-  // an attack
+  // an attack (its target down, its "then": Autopilot, at once, so a unit
+  // whose target another's shot just felled still plays this phase)
   const tg = G.units.find((x) => x.id === o.tg)
-  if (!tg || !q.alive(tg)) return { how: 'none', why: 'target down' }
+  if (!tg || !q.alive(tg)) return { how: 'pilot' }
   if (phase === 'shoot') return q.canShoot(G, u) && q.shotInfo(G, u, tg).ok ? { how: 'macro', cmds: [{ t: 'shoot', u: u.id, tg: tg.id }] } : { how: 'pilot' }
   if (phase === 'charge') {
     if (!q.canCharge(G, u) || !q.chargeTargets(G, u).includes(tg)) return { how: 'none', why: 'out of reach' }

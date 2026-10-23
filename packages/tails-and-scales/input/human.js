@@ -98,7 +98,7 @@ export class Human {
     // ((F10c) and the standing orders: those acting now, those an order
     // covers in this phase, how many the seat has)
     const st = this.standing
-    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.orders(this.localSeat()).size : 0, counting: !!st?.counting }
+    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.living(this.localSeat()).size : 0, counting: !!st?.counting }
   }
 
   // ── Commands ──────────────────────────────────────────────────────────────
@@ -173,8 +173,9 @@ export class Human {
     if (!this.myTurn()) return 'no phase of a seat played here to end now'
     this.select(null)
     this.standing?.stopCount()
+    this.standing?.disarm()
     // (F10c) the seat's standing orders first, then the End
-    if (this.standing?.orders(this.localSeat()).size) return this.ordersThen('end')
+    if (this.standing?.living(this.localSeat()).size) return this.ordersThen('end')
     return this.send(this.localSeat(), { t: 'end' })
   }
   // (F10c) ▶ Go: the standing orders now, the phase left open
@@ -196,7 +197,11 @@ export class Human {
   auto() {
     if (!this.myTurn()) return 'no phase of a seat played here to play out now'
     this.select(null)
-    if (this.standing?.orders(this.localSeat()).size) return this.ordersThen('auto')
+    this.standing?.stopCount()
+    this.standing?.disarm()
+    // (F10c) the orders first, then the AI plays the units no order holds
+    // (input/orders.js: a pilot of those, then the end)
+    if (this.standing?.living(this.localSeat()).size) return this.ordersThen('auto')
     return this.send(this.localSeat(), { t: 'auto' })
   }
   // (F10b) Auto these: the AI plays the rest of the phase for the units
@@ -267,8 +272,6 @@ export class Human {
     let gesture = false
     dom.addEventListener('pointerdown', (e) => {
       unlock()
-      // (F10c) a press on the table stops Auto-End's countdown
-      this.standing?.stopCount()
       pressed.add(e.pointerId)
       gesture ||= pressed.size > 1
       this.downAt = { x: e.clientX, y: e.clientY, b: e.button }

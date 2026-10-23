@@ -115,7 +115,7 @@ const MUTATIONS = {
   // (until its next phase.start plays)
   'phase-unshown': ['present/hud-model.js', "export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })", 'export const afterSnap = () => ({ phaseShown: false, buttonsUp: false })'],
   // End never ready, whatever is left to do (F3's End never lit)
-  'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => q.anyCanAct(G, P.seats[0])) : false,', '    ready: false,'],
+  'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !covered.has(u.id) && q.canAct(G, u))) : false,', '    ready: false,'],
   // (F3) the model right, but End never lit on the page
   'lit-never': ['ui/actions.js', "    end.classList.toggle('ready', m.end.lit)", "    end.classList.toggle('ready', false)"],
   // (F3) End lit only when ready: Begin battle neutral in the deployment

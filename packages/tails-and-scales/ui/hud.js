@@ -74,6 +74,8 @@ export class Hud {
         try {
           localStorage.setItem(key, standing?.[prop] ? '1' : '0')
         } catch {}
+        // (Auto-End turned off stops its countdown; on, it looks at once)
+        if (prop === 'autoEnd') standing?.recount()
       }
     }
     setting('#autoFirst', 'tails-and-scales:autopilotFirst', 'autoFirst', 'Autopilot first: on (units on autopilot act as your phase opens; click: off)', 'Autopilot first: off (click: units on autopilot act as your phase opens)')

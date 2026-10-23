@@ -115,6 +115,8 @@ export function boot(location) {
       onOrder: (u, k) => {
         if (!human.standing.picked().some((x) => x.id === u.id)) human.select(u)
         human.standing.order(k)
+        // (its row shows the order it now holds)
+        ui.card.show(u)
       },
     }),
     tooltip: new Tooltip($('#tooltip')),

@@ -114,8 +114,8 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
   return { sent, blocked, left, fell, note }
 }
 
-export async function runOrders({ session, seat, orders, then = null }) {
-  const blocked = [], acted = new Set()
+export async function runOrders({ session, seat, orders, then = null, skip = new Set() }) {
+  const blocked = [], acted = new Set(), piloted = []
   let sent = 0
   const phaseNow = () => {
     const P = session.G?.pending
@@ -139,7 +139,7 @@ export async function runOrders({ session, seat, orders, then = null }) {
     return true
   }
   const phase = phaseNow()
-  if (!phase) return { sent, blocked, acted: [] }
+  if (!phase) return { sent, blocked, acted: [], piloted }
   const unit = (G, id) => G.units.find((x) => x.id === id)
   // 1. March and Attack: their own commands
   const ids = session.preview((G, q) => orderedUnits(G, q, seat, orders, phase).map((u) => u.id))
@@ -160,12 +160,24 @@ export async function runOrders({ session, seat, orders, then = null }) {
       if (!ok || step.cmds[0].t !== 'advance') break
     }
   }
-  // 2. one pilot: every unit whose order calls for the AI now
+  // 2. one pilot: every unit whose order calls for the AI now (but those
+  // `skip` names: a pilot already left them as they were this phase)
   if (phaseNow() === phase) {
-    const pilots = session.preview((G, q) => orderedUnits(G, q, seat, orders, phase).filter((u) => stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id))
-    if (pilots.length && (await send({ t: 'pilot', m: session.preview((G, q) => q.maskOf(G, seat, pilots)) }, -1))) for (const id of pilots) acted.add(id)
+    const pilots = session.preview((G, q) => orderedUnits(G, q, seat, orders, phase).filter((u) => !skip.has(u.id) && stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id))
+    if (pilots.length && (await send({ t: 'pilot', m: session.preview((G, q) => q.maskOf(G, seat, pilots)) }, -1))) {
+      for (const id of pilots) acted.add(id)
+      piloted.push(...pilots)
+    }
   }
-  // 3. End, or Auto
+  // 3. End; or Auto: the AI plays the units no order holds (a pilot of
+  // those, then the end: P-auto's pilot and end being Auto), so a unit
+  // under March, Attack or Hold is left as its order left it (never fallen
+  // back from combat, never walked off its post)
+  if (then === 'auto' && phaseNow() === phase) {
+    const rest = session.preview((G, q) => G.units.filter((u) => u.side === seat && !orders.has(u.id) && q.alive(u) && q.canAct(G, u)).map((u) => u.id))
+    if (rest.length) await send({ t: 'pilot', m: session.preview((G, q) => q.maskOf(G, seat, rest)) }, -1)
+    then = 'end'
+  }
   if (then && phaseNow() === phase) await send({ t: then }, -1)
-  return { sent, blocked, acted: [...acted] }
+  return { sent, blocked, acted: [...acted], piloted }
 }

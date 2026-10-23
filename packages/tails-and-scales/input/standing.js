@@ -50,6 +50,15 @@ export class StandingInput {
     this.answered = new Set()
     // Auto-End's countdown: { key, timer, at }, or null
     this.counting = null
+    // the units an orders run piloted that the AI left as they were (no shot
+    // worth taking, a charge too long), by decision: { key, ids }. They no
+    // longer count among the orders' actors there, nor are piloted again
+    this.declined = { at: null, ids: new Set() }
+    // (the plan's cache, plan())
+    this.planned = null
+    // any press on the page stops Auto-End's countdown (the table's, a
+    // button's, the help's): an order given since counts again (give())
+    globalThis.document?.addEventListener('pointerdown', () => this.stopCount(), true)
   }
 
   get session() {
@@ -74,6 +83,21 @@ export class StandingInput {
     return seat >= 0 ? this.book.orders(seat) : new Map()
   }
 
+  // the seat's orders held by units still standing (the book lets a fallen
+  // unit go at the next run's tidy: until then it counts for nothing)
+  living(seat = this.seat()) {
+    const G = this.session?.G
+    if (!G) return new Map()
+    return new Map([...this.orders(seat)].filter(([id]) => G.units.find((u) => u.id === id)?.alive > 0))
+  }
+
+  // the decision the seat is answering here: its deployment or its phase
+  // (an armed click belongs to it, and lapses with it)
+  sigOf(seat) {
+    const T = this.session?.G?.turn, P = this.session?.G?.pending
+    return T && P ? `${P.k}:${T.round}:${T.active}:${P.phase ?? ''}:${seat}` : null
+  }
+
   // ── Giving orders ─────────────────────────────────────────────────────────
   // March and Attack arm a click; the rest apply at once. Returns why not,
   // or null.
@@ -81,8 +105,11 @@ export class StandingInput {
     const seat = this.seat(), units = this.picked()
     if (seat < 0 || !units.length) return 'pick up some of your units first'
     if (k === 'march' || k === 'attack') {
-      this.armed = { k, seat, ids: units.map((u) => u.id) }
-      this.say(k === 'march' ? `March ${units.length === 1 ? units[0].t.short : `${units.length} units`}: click where to` : `Attack: click the enemy ${units.length === 1 ? units[0].t.short : `these ${units.length}`} go for`)
+      this.armed = { k, seat, ids: units.map((u) => u.id), sig: this.sigOf(seat) }
+      const prompt = k === 'march' ? `March ${units.length === 1 ? units[0].t.short : `${units.length} units`}: click where to (Esc: never mind)` : `Attack: click the enemy ${units.length === 1 ? units[0].t.short : `these ${units.length}`} go for (Esc: never mind)`
+      this.say(prompt)
+      // (one unit has no group bar to say so: the toast does)
+      if (units.length === 1) this.toast?.show(prompt, 3000)
       return null
     }
     this.armed = null
@@ -93,13 +120,19 @@ export class StandingInput {
   // the armed click: a place (March) or an enemy (Attack); true if taken
   click({ unit, ground }) {
     const a = this.armed
-    if (!a || a.seat !== this.seat()) return false
+    if (!a) return false
+    // (an armed click lapses with its decision, or once its units are gone:
+    // the click is the table's again)
+    const G = this.human.G, units = G ? a.ids.map((id) => G.units.find((u) => u.id === id)).filter((u) => u?.alive > 0) : []
+    if (a.seat !== this.seat() || a.sig !== this.sigOf(a.seat) || !units.length) {
+      this.disarm()
+      return false
+    }
     if (a.k === 'attack') {
       if (!unit || unit.side === a.seat || !(unit.alive > 0)) return false
-      this.give(a.seat, a.ids, { k: 'attack', tg: unit.id }, unit.t.short)
+      this.give(a.seat, units.map((u) => u.id), { k: 'attack', tg: unit.id }, unit.t.short)
     } else {
       if (!ground) return false
-      const G = this.human.G, units = a.ids.map((id) => G.units.find((u) => u.id === id)).filter((u) => u?.alive > 0)
       const slots = this.human.ask((G2) => slotsOf(G2, units.map((u) => G2.units.find((x) => x.id === u.id)), ground))
       const anchor = G.nav.index(ground.x, ground.z)
       if (anchor < 0) return false
@@ -138,8 +171,9 @@ export class StandingInput {
     const k = typeof order === 'function' ? order(ids[0])?.k : order?.k
     this.book.set(seat, ids, order)
     sfx.click()
-    // (Auto-End looks again: these may be the last units in the player's hands)
-    this.idled()
+    // (Auto-End looks again, from the start: these may be the last units in
+    // the player's hands, or some back in them)
+    this.recount()
     this.say(k ? `${GLYPH[k]} ${NAME[k]}${what ? ` ${what}` : ''}: ${ids.length} unit${ids.length === 1 ? '' : 's'}` : `No orders: ${ids.length} unit${ids.length === 1 ? '' : 's'} back in your hands`)
   }
 
@@ -153,7 +187,7 @@ export class StandingInput {
   pickOrdered() {
     const seat = this.seat(), G = this.human.G
     if (seat < 0 || !G) return 'no seat of yours to pick for now'
-    const ids = [...this.orders(seat).keys()].filter((id) => G.units.find((u) => u.id === id)?.alive > 0)
+    const ids = [...this.living(seat).keys()]
     if (!ids.length) return 'no unit holds an order'
     this.human.group.setGroup(ids)
     return null
@@ -178,14 +212,15 @@ export class StandingInput {
   plan() {
     const h = this.human, seat = h.localSeat(), P = h.localDecision()
     if (seat < 0 || P?.k !== 'phase' || !h.flow.player.idle) return NONE
-    const orders = this.orders(seat)
+    const orders = this.living(seat)
     if (!orders.size) return NONE
     // (made again only when the match, the book or the seat moved on: the
     // HUD asks at every refresh)
     const G = this.session.G, sig = `${this.session.count}|${this.book.version}|${seat}|${P.phase}`
     if (this.planned?.G === G && this.planned.sig === sig) return this.planned.plan
+    const skip = this.skipped(seat)
     const plan = h.ask((G, q) => ({
-      actors: actorsOf(G, q, seat, orders, P.phase).map((a) => a.u.id),
+      actors: actorsOf(G, q, seat, orders, P.phase).filter((a) => !(a.how === 'pilot' && skip.has(a.u.id))).map((a) => a.u.id),
       covered: new Set([...orders].filter(([id, o]) => covers(o, P.phase) && G.units.find((u) => u.id === id)?.alive > 0).map(([id]) => id)),
     }))
     this.planned = { G, sig, plan }
@@ -215,7 +250,7 @@ export class StandingInput {
   // every seat played here's orders, a glyph by unit id (the labels)
   glyphs() {
     const out = new Map()
-    for (const seat of this.session?.localSeats ?? []) for (const [id, o] of this.orders(seat)) out.set(id, GLYPH[o.k])
+    for (const seat of this.session?.localSeats ?? []) for (const [id, o] of this.living(seat)) out.set(id, GLYPH[o.k])
     return out
   }
 
@@ -225,13 +260,22 @@ export class StandingInput {
   async run(then) {
     const h = this.human, seat = h.localSeat(), P = h.localDecision()
     if (this.busy || seat < 0 || P?.k !== 'phase') return null
-    const orders = this.orders(seat)
+    const orders = this.living(seat)
     this.busy = true
     this.armed = null
+    this.stopCount()
     try {
       const n = this.plan().actors.length
       if (n) this.toast?.show(`Your orders: ${n} unit${n === 1 ? '' : 's'}`, 1600)
-      const r = await runOrders({ session: this.session, seat, orders, then })
+      const key = this.keyOf(this.session, seat), skip = this.skipped(seat)
+      const r = await runOrders({ session: this.session, seat, orders, then, skip })
+      // (Go: the units the AI was asked to play and left as they were sit
+      // out the rest of this phase's runs, so Go's count can reach nothing)
+      if (then === null && this.keyOf(this.session, seat) === key) {
+        const still = h.ask((G, q) => actorsOf(G, q, seat, orders, P.phase).filter((a) => a.how === 'pilot').map((a) => a.u.id))
+        const tried = new Set(r.piloted ?? [])
+        this.declined = { at: key, ids: new Set([...skip, ...still.filter((id) => tried.has(id))]) }
+      }
       this.after(seat, P.phase, then, r)
       return r
     } catch (err) {
@@ -251,6 +295,9 @@ export class StandingInput {
   // and seat), and only while the match still waits on that seat there.
   settled(session) {
     if (session !== this.session) return
+    // (an armed click whose decision is over lapses: never a shot taken for
+    // an Attack order the next turn)
+    if (this.armed && this.armed.sig !== this.sigOf(this.armed.seat)) this.disarm()
     const seat = session.decisionFor(), P = session.G?.pending
     if (seat < 0 || P?.k !== 'phase') return this.stopCount()
     const T = session.G.turn, key = `${T.round}:${T.active}:${P.phase}:${seat}`
@@ -272,22 +319,34 @@ export class StandingInput {
   // every unit still able to act is under orders (End lit), drawn on End,
   // once a phase; a key, a press on the table or End itself stops it.
   idled() {
-    const h = this.human, ses = this.session, seat = h.localSeat(), P = h.localDecision()
+    const h = this.human, ses = this.session, seat = h.localSeat()
     const key = this.keyOf(ses, seat)
-    if (!key || !this.autoEnd || this.counting || this.answered.has(`end ${key}`) || !h.flow.player.idle) return
-    if (seat < 0 || P?.k !== 'phase') return
-    const plan = this.plan()
-    const handless = h.ask((G, q) => !G.units.some((u) => u.side === seat && !plan.covered.has(u.id) && q.canAct(G, u)))
-    if (!handless || !plan.covered.size) return
+    if (!key || !this.autoEnd || this.counting || this.answered.has(`end ${key}`)) return
+    if (!this.endable(seat)) return
     this.answered.add(`end ${key}`)
     const timer = setTimeout(() => {
       this.counting = null
-      // (the same decision still, the table still caught up)
-      if (h.localSeat() === seat && this.keyOf(this.session, seat) === key && h.myTurn()) h.end()
-      else h.flow.refreshUI()
+      // (asked again as it fires: the same decision, the table caught up,
+      // the setting still on, no orders under way, nothing in the player's
+      // hands, no dialog open; else it presses nothing, and may count again)
+      if (h.localSeat() === seat && this.keyOf(this.session, seat) === key && this.autoEnd && this.endable(seat) && !globalThis.document?.querySelector('.modal:not(.hidden)')) h.end()
+      else {
+        this.answered.delete(`end ${key}`)
+        h.flow.refreshUI()
+      }
     }, this.countdown)
     this.counting = { key, timer, at: performance.now() }
     h.flow.refreshUI()
+  }
+
+  // whether Auto-End may press End for the seat now: its phase, here, the
+  // table caught up, no orders or group order under way, an order covering
+  // a unit, and none left that the player plays by hand
+  endable(seat) {
+    const h = this.human
+    if (seat < 0 || h.localDecision()?.k !== 'phase' || !h.myTurn() || !h.flow.player.idle || this.busy || h.group?.busy) return false
+    const plan = this.plan()
+    return plan.covered.size > 0 && h.ask((G, q) => !G.units.some((u) => u.side === seat && !plan.covered.has(u.id) && q.canAct(G, u)))
   }
 
   stopCount() {
@@ -297,15 +356,34 @@ export class StandingInput {
     this.human.flow.refreshUI()
   }
 
+  // The orders changed (an order given, the setting turned on or off):
+  // Auto-End's countdown stopped and, this phase's answer taken back,
+  // looked at again.
+  recount() {
+    const key = this.keyOf(this.session, this.human.localSeat())
+    this.stopCount()
+    if (key) this.answered.delete(`end ${key}`)
+    this.idled()
+  }
+
+  // the units the seat's orders sit out in its decision now (declined)
+  skipped(seat) {
+    const at = this.keyOf(this.session, seat)
+    return at && this.declined.at === at ? this.declined.ids : new Set()
+  }
+
   keyOf(session, seat) {
     const T = session?.G?.turn, P = session?.G?.pending
     return T && P?.k === 'phase' ? `${T.round}:${T.active}:${P.phase}:${seat}` : null
   }
 
-  // a new battle: nothing answered, nothing counting
+  // a new battle: nothing answered, armed, counting or said, no plan kept
   reset() {
     this.stopCount()
     this.armed = null
+    this.note = ''
+    this.planned = null
+    this.declined = { at: null, ids: new Set() }
     this.answered.clear()
   }
 
