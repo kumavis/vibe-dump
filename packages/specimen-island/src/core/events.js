@@ -6,7 +6,7 @@
 // Event catalogue (payloads are plain objects):
 //   noise              {x, y, z, radius, kind, source}   anything audible; kind is
 //                      step | shot | gunshot | shutter | distraction | impact | vehicle
-//   weapon:fired       {weapon}
+//   weapon:fired       {weapon}                          a WEAPONS id, or 'tankGun' (the tank's main gun)
 //   weapon:gained      {weapon}
 //   dart:hit           {creature, zone, dose | damage}   a hit-marker label ('NECK', 'ARMOUR');
 //                      darts, bullets and the syringe's jab alike
@@ -30,8 +30,9 @@
 //   mission:complete   {mission}                        its final objective done (the
 //                                                       expedition's too); main.js shows its debrief
 //   blast              {x, y, z, kind, radius, weapon, wet} game/blast.js, after the damage
-//   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
-//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
+//   vehicle:enter / vehicle:exit       {vehicle}         any vehicle on G.vehicles
+//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind (motorbike,
+//                                                        humvee and tank too)
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
 //   vehicle:repaired   {vehicle, field}                  field repair or the pad pump

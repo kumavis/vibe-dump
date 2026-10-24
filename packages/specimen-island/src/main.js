@@ -29,6 +29,9 @@ import { Photos } from './player/photos.js'
 import { Helicopter } from './vehicles/helicopter.js'
 import { Jeep } from './vehicles/jeep.js'
 import { Motorbike } from './vehicles/motorbike.js'
+import { Humvee } from './vehicles/humvee.js'
+import { Tank } from './vehicles/tank.js'
+import { Shells } from './game/shells.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
@@ -98,6 +101,7 @@ async function boot() {
   buildStructures(G)
   G.projectiles = new Projectiles(G)
   G.hazards = G.projectiles
+  G.shells = new Shells(G)
   G.stealth = new Stealth(G)
   G.ecology = new Ecology(G)
   G.ecology.populate(cfg.seed + 99)
@@ -115,6 +119,10 @@ async function boot() {
   G.jeep = Jeep.atStation(G)
   G.motorbike = Motorbike.atDock(G)
   G.vehicles = [G.heli, G.jeep, G.motorbike]
+  // Camp Halvorsen's motor pool
+  G.humvee = Humvee.atBase(G)
+  G.tank = Tank.atBase(G)
+  for (const v of [G.humvee, G.tank]) if (v) G.vehicles.push(v)
   G.audio = new Audio()
   G.hud = new HUD(G)
   G.map = new MapView(G, document.getElementById('map'))
@@ -372,6 +380,7 @@ async function boot() {
       if (!riding && G.player.alive) G.interact.update(dt, G.player.eye, G.player.look, input.pressed('interact'), input.down('interact'))
       if (G.menus.noteOpen) G.noteFrame = G.frame + 1
       G.projectiles.update(dt)
+      G.shells.update(dt)
       G.stealth.update(dt)
       const veh = G.vehicle
       const focus = veh ? veh.pos : G.player.pos

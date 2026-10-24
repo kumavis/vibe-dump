@@ -291,6 +291,28 @@ export class Audio {
         else this.burst({ dur: 0.25, type: 'bandpass', freq: 2400, q: 0.6, vol: 0.5 * k, pos, max: 600 })
         break
       }
+      case 'tankGun': {
+        // the tank's main gun: a slam you feel, a crack on top, the valley
+        // throwing it back for seconds
+        this.tone({ type: 'sine', f0: 58, f1: 20, dur: 1.5, vol: 0.75, pos, max: 1400, echo: 0.9 })
+        this.burst({ dur: 2.2, type: 'lowpass', freq: 520, vol: 1.0, pos, max: 1400, sweep: 0.3, echo: 0.9 })
+        this.burst({ dur: 0.3, type: 'bandpass', freq: 2600, q: 0.5, vol: 0.7, pos, max: 900 })
+        this.tone({ type: 'square', f0: 120, f1: 40, dur: 0.25, vol: 0.2, pos, max: 600, filter: 900 })
+        break
+      }
+      case 'shellLoad':
+        // a shell rammed home and the breech slamming shut
+        this.burst({ dur: 0.12, type: 'bandpass', freq: 900, q: 3, vol: 0.4, pos, max: 50 })
+        this.tone({ type: 'triangle', f0: 420, f1: 300, dur: 0.18, vol: 0.12, pos, max: 50, delay: 0.05 })
+        this.burst({ dur: 0.1, type: 'bandpass', freq: 1800, q: 4, vol: 0.45, pos, max: 50, delay: 0.42 })
+        this.tone({ type: 'square', f0: 180, f1: 90, dur: 0.1, vol: 0.12, pos, max: 50, delay: 0.42, filter: 1200 })
+        break
+      case 'timber':
+        // a trunk splitting, then the crown coming down through the leaves
+        this.burst({ dur: 0.18, type: 'bandpass', freq: 1300, q: 2, vol: 0.45, pos, max: 160 })
+        this.burst({ dur: 0.9, type: 'highpass', freq: 2400, vol: 0.18, pos, max: 120, delay: 0.25 })
+        this.burst({ dur: 0.35, type: 'lowpass', freq: 260, vol: 0.5, pos, max: 160, delay: 0.95 })
+        break
       case 'warning':
         // master-caution chirp; faster and higher when critical
         this.tone({ type: 'square', f0: opts.level ? 1040 : 880, dur: 0.11, vol: 0.07, filter: 3000 })
@@ -455,7 +477,7 @@ export class Audio {
     if (!this.ctx) return
     const t = this.ctx.currentTime
     if (this.rotor) this.rotor.g.gain.setTargetAtTime(0, t, 0.05)
-    for (const engine of [this.engine, this.bikeEngine]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
+    for (const engine of [this.engine, this.bikeEngine, this.humveeEngine, this.tankEngine]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
   }
 
   // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
@@ -463,7 +485,9 @@ export class Audio {
   setEngine(rpm, load, pos, inside, kind = 'jeep') {
     if (!this.ctx) return
     const ctx = this.ctx
-    const key = kind === 'motorbike' ? 'bikeEngine' : 'engine'
+    // each ground vehicle has its own voice, so one winding down never
+    // fights the one being driven
+    const key = { motorbike: 'bikeEngine', humvee: 'humveeEngine', tank: 'tankEngine' }[kind] || 'engine'
     if (!this[key]) {
       const am = ctx.createGain()
       am.gain.value = 0.8
@@ -504,8 +528,10 @@ export class Audio {
     }
     const e = this[key]
     const t = ctx.currentTime
-    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 170)
-    const fire = kind === 'motorbike' ? 45 + rpm * 155 : 26 + rpm * 100
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, kind === 'tank' ? 320 : 170)
+    // firing frequency: a buzzing single, the jeep's four, the humvee's
+    // diesel, the tank's big slow diesel
+    const fire = kind === 'motorbike' ? 45 + rpm * 155 : kind === 'tank' ? 15 + rpm * 48 : kind === 'humvee' ? 21 + rpm * 78 : 26 + rpm * 100
     e.o1.frequency.setTargetAtTime(fire, t, 0.06)
     e.o2.frequency.setTargetAtTime(fire * 0.5, t, 0.06)
     e.lope.frequency.setTargetAtTime(5 + rpm * 30, t, 0.1)

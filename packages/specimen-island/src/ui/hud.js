@@ -1,3 +1,4 @@
+import { Vector3 } from 'three'
 import { VEHICLE_FX } from '../data/vehicles.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 import { doseReadout } from './dose.js'
@@ -9,6 +10,7 @@ import { Viewfinder } from './viewfinder.js'
 // you, and a vitals readout on anything you have catalogued.
 
 const $ = (id) => document.getElementById(id)
+const _proj = new Vector3()
 
 export class HUD {
   constructor(G) {
@@ -17,6 +19,7 @@ export class HUD {
     for (const id of [
       'hud', 'crosshair', 'hitmarker', 'prompt', 'promptText', 'promptRing', 'health', 'stamina', 'eye', 'eyeLabel', 'noise', 'weapon', 'weaponName', 'ammo',
       'gadgets', 'compass', 'compassStrip', 'objectives', 'score', 'clock', 'toasts', 'detect', 'target', 'scope', 'blind', 'vignette', 'heliHud', 'fade', 'hurtArrow',
+      'gunReticle',
     ])
       this.el[id] = $(id)
     this.detectCtx = this.el.detect.getContext('2d')
@@ -124,7 +127,8 @@ export class HUD {
     // crosshair / scope
     const scoped = !flying && !!W.scoped()
     this.el.scope.classList.toggle('show', scoped)
-    this.set('xh', this.el.crosshair, flying ? 'none' : def.kind === 'scanner' ? 'scan' : def.id === 'shotgun' ? 'wide' : 'dot', 'className')
+    // a vehicle with a gun (the tank) keeps the dot: it marks the sight line
+    this.set('xh', this.el.crosshair, flying ? (veh.aimPoint ? 'dot' : 'none') : def.kind === 'scanner' ? 'scan' : def.id === 'shotgun' ? 'wide' : 'dot', 'className')
     this.el.crosshair.style.opacity = scoped ? 0 : 1
     this.hitT -= dt
     if (this.hitT <= 0) this.el.hitmarker.className = ''
@@ -170,6 +174,7 @@ export class HUD {
     this.hullFlash = Math.max(0, this.hullFlash - dt)
     this.el.heliHud.classList.toggle('show', flying)
     if (flying) this.set('veh', this.el.heliHud, this.vehiclePanel(veh), 'html')
+    this.placeGunReticle(veh)
 
     this.drawDetection(camYaw)
     this.targetTimer -= dt
@@ -198,9 +203,40 @@ export class HUD {
       const sinkCls = vs < -v.tune.impact.terrain.min && agl < 15 ? 'warn' : ''
       return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${camera}: camera</div>`
     }
+    if (v.kind === 'tank') return this.tankPanel(v, spd, hull, exit, camera)
     const bike = v.kind === 'motorbike'
     const balance = bike ? '<div>STABILIZER <b>ON</b></div>' : ''
     return `${spd}${hull}${balance}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${camera}: camera</div>`
+  }
+
+  // The tank: the breech and the ready rack, and the turret's heading over
+  // the hull, as a little plan view (hull box, gun line) and in degrees off
+  // the bow.
+  tankPanel(v, spd, hull, exit, camera) {
+    const pad = this.G.input.lastDevice === 'gamepad'
+    const T = v.tune.gun
+    const gun = v.destroyed ? '<b class="warn">OUT</b>' : v.rounds <= 0 ? '<b class="warn">EMPTY</b>' : v.reloadT > 0 ? `<b class="warn">LOADING ${v.reloadT.toFixed(1)}s</b>` : '<b>READY</b>'
+    const deg = Math.round((-v.turretYaw * 180) / Math.PI)
+    const bearing = `${Math.abs(deg).toString().padStart(3, '0')}°${deg === 0 ? '' : deg > 0 ? ' R' : ' L'}`
+    const dial = `<svg class="turret" viewBox="-20 -20 40 40" width="40" height="40"><rect x="-7" y="-13" width="14" height="26" rx="2"/><g transform="rotate(${-((v.turretYaw * 180) / Math.PI).toFixed(1)})"><circle r="5.5"/><line x1="0" y1="0" x2="0" y2="-18"/></g></svg>`
+    return `<div class="tankgun">${dial}<div><div>GUN ${gun}</div><div>SHELLS <b class="${v.rounds <= 2 ? 'warn' : ''}">${v.rounds}</b>/${T.rounds}</div><div>TURRET <b>${bearing}</b></div></div></div>${spd}${hull}<div class="hint">${pad ? 'RT' : 'LMB'}: fire · ${pad ? 'LT' : 'RMB'}: sight · ${pad ? 'A' : 'Space'}: brake · ${pad ? 'RS' : 'F'}: lights · ${v.canExit() ? `${exit}: exit · ` : ''}${camera}: camera</div>`
+  }
+
+  // Where the gun's current lay would land a shell, as a ring on screen; the
+  // dot in the middle is the sight line. When they meet, it will hit.
+  placeGunReticle(veh) {
+    const el = this.el.gunReticle
+    const show = !!(veh && veh.aimPoint && veh.impactOk && !veh.destroyed)
+    if (show) {
+      const p = _proj.copy(veh.impact).project(this.G.camera)
+      if (p.z > 1 || Math.abs(p.x) > 1.2 || Math.abs(p.y) > 1.2) {
+        el.style.opacity = 0
+        return
+      }
+      el.style.transform = `translate(${((p.x + 1) / 2) * innerWidth}px, ${((1 - p.y) / 2) * innerHeight}px) translate(-50%, -50%)`
+      el.classList.toggle('loading', veh.reloadT > 0 || veh.rounds <= 0)
+    }
+    el.style.opacity = show ? 1 : 0
   }
 
   updateCompass(camYaw) {

@@ -364,3 +364,59 @@ export function skinTexture(colors, pattern, seed) {
     )
   })
 }
+
+// Chain-link mesh on a clear background (alpha-tested), galvanising gone
+// to rust in patches. One tile is four diamonds across.
+export function chainLink() {
+  return cached('chain', () => {
+    const rand = mulberry32(83)
+    const c = makeCanvas(128, 128)
+    const ctx = c.getContext('2d')
+    ctx.lineWidth = 3.2
+    for (let k = -4; k <= 8; k++) {
+      for (const dir of [1, -1]) {
+        const r = rand()
+        ctx.strokeStyle = r < 0.35 ? '#7a5a3a' : r < 0.6 ? '#8c8a80' : '#a8a89e'
+        ctx.beginPath()
+        ctx.moveTo(k * 32, dir > 0 ? 0 : 128)
+        ctx.lineTo(k * 32 + 128, dir > 0 ? 128 : 0)
+        ctx.stroke()
+      }
+    }
+    return toTexture(c, { srgb: true })
+  })
+}
+
+// Steel track links seen from outside, one link per tile along u: a raised
+// cleat, the pin between links, rust in the grooves. A track ribbon scrolls
+// it (vehicles/tank.js).
+export function trackTread() {
+  return cached('tread', () => {
+    const n = fractal(64, 91, 3, 4)
+    return toTexture(
+      paint(64, (x, y, i) => {
+        const u = x / 64
+        let v = 52 + 18 * n[i]
+        if (u > 0.12 && u < 0.5 && y > 6 && y < 58) v += 34 // the cleat
+        if (u > 0.86 || u < 0.04) v -= 26 // the pin gap
+        if (y > 28 && y < 36 && u > 0.5) v -= 14 // the centre guide groove
+        const rust = Math.max(0, n[i] - 0.6) * 160
+        return [v + rust * 0.6, v + rust * 0.22, v * 0.92]
+      }),
+    )
+  })
+}
+
+// Weathered burlap for sandbags: a coarse weave, faded and stained.
+export function burlap() {
+  return cached('burlap', () => {
+    const n = fractal(64, 97, 3, 4)
+    return toTexture(
+      paint(64, (x, y, i) => {
+        const weave = (x % 4 < 2) !== (y % 4 < 2) ? 1 : 0.88
+        const v = (0.72 + 0.28 * n[i]) * weave
+        return [150 * v, 132 * v, 96 * v]
+      }),
+    )
+  })
+}

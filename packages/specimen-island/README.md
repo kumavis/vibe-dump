@@ -4,7 +4,8 @@ A first-person field-biology game on a forgotten dinosaur preserve. Sneak throug
 jungle and tall grass, scan and dart animals, draw blood while the sedative wears
 off, photograph them — or go loud with the rifles and watch your score bleed.
 Restore the old infrastructure, ride the stabilized trail bike, drive the ranger jeep and fly the station
-helicopter to the summit relay.
+helicopter to the summit relay — or take the humvee and the tank from the abandoned army camp on the far side
+of the island, the loudest way there is to lose points.
 
 Everything is procedural: terrain, rivers, jungle, buildings, dinosaurs (rigged
 and animated from data), textures and sound. No assets are downloaded.
@@ -32,6 +33,9 @@ click the page once to allow browser audio playback.
 | Vehicle: left / right stick | drive and steer or pitch and slide / look or turn |
 | Vehicle: Y / LB | board or exit / seat or chase camera |
 | Jeep: A; helicopter: A / B | handbrake; climb / descend |
+| Humvee | as the jeep |
+| Tank: left stick / right stick | drive, and turn on the spot / aim the turret (it follows the sight) |
+| Tank: RT / LT / A / click right stick | fire the main gun / gunner's sight zoom / brake / headlights |
 | Menus: D-pad or left stick, A, B | navigate, select, back |
 | Menus: left / right, right stick | adjust settings, scroll long sheets and journal |
 
@@ -59,8 +63,10 @@ they can trigger gameplay actions.
 | any vehicle | E at a door to board, E to get out once stopped or landed, V camera (seat / chase) |
 | jeep | W/S drive and reverse, A/D steer, Space handbrake, F headlights, mouse look |
 | helicopter | Space/Shift collective, W/S pitch, A/D slide, mouse yaw |
+| humvee | as the jeep: W/S drive and reverse, A/D steer, Space handbrake, F headlights |
+| tank | W/S drive, A/D turn on the spot, mouse aims the turret, LMB fire, RMB gunner's sight (zoom), Space brake, F headlights |
 
-Boarding either vehicle also shows its controls for a few seconds, and the Settings
+Boarding any vehicle also shows its controls for a few seconds, and the Settings
 sheet (from the title or the pause menu) lists them all. Settings holds Graphics
 (Auto, Low, Medium, High), mouse sensitivity, volume and invert-Y; they are kept
 in `localStorage`.
@@ -101,6 +107,32 @@ returns to centre. The exposed green flywheel spins and the HUD shows
 sound, damage, field repair and recovery; the Field Lab pump can service it.
 The stabilizer prevents tipping, but collisions and deep water still matter.
 
+### Camp Halvorsen: the humvee and the tank
+
+The Foundation's security detachment camped on the north-east plateau, at the
+end of the road that leaves the paddock road for the far side of the island
+(the map marks it ✪). They were withdrawn years ago and the camp is abandoned
+rather than destroyed: rusting chain-link and razor wire with a breach in the
+back fence, split sandbags, a guard tower, barracks, a command post, a comms
+mast, a helipad, an ammunition bunker under its berm, and an open motor pool
+where the **humvee** and the **tank** still stand, nose-out to the yard. Two
+notes (the standing orders and the motor pool board) tell why they came and
+why they left.
+
+The **humvee** is the jeep's handling, heavier and wider, with an armoured
+closed cab that keeps most of a blow off the driver. The **tank** is tracked
+and skid-steered: it turns on the spot, wades 1.5 m, climbs what the jeep
+can't, pushes saplings, palms and pines over (the jungle giants stop it) and
+runs anything smaller than a hadrosaur under its tracks — a kill on the ledger,
+like the jeep's. Its turret follows the sight: wherever you look, the turret
+slews toward it and the gun elevates to the arc that reaches it; the HUD rings
+where a shell fired now would land, and the dot is the sight line. The shell
+flies with travel time and drop and goes off as a blast (`data/blasts.js`
+`shell`). Five seconds to reload, a ready rack of 12 (six left aboard); park by
+the bunker door and hold E there to fill it. Each shot is heard across the
+island, and the tyrant comes to see what made the noise. Killing with it costs
+what any kill costs.
+
 ## Architecture
 
 The game is built as **data + services + systems**, so most iteration is editing
@@ -119,27 +151,32 @@ src/
     quality.js       graphics autodetect: a first guess from the GPU name, cores
                      and screen, then a frame-time TierController (pure, testable)
   data/              everything a designer touches
-    species.js       body plan, temperament, senses, sedation, science values
+    species.js       body plan, temperament, senses, sedation, science values,
+                     and a `lure` for the tyrant (big bangs draw her from afar)
     weapons.js       guns, darts, the Field Camera, the jumbo syringe, hit zones,
                      throwables, and PHOTO (how a photograph is graded)
-    vehicles.js      the helicopter's and jeep's tune tables: hull and damage,
-                     colliders, feedback, surfaces, spawn, ecology streaming
+    vehicles.js      every vehicle's tune table (helicopter, jeep, trail bike,
+                     humvee, tank): hull, armour and damage, colliders, feedback,
+                     surfaces, spawn, ecology streaming, the tank's tracks and gun
     blasts.js        explosions: radius, damage, hull damage, knock, noise, shake
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, restocking stores, loot tables
     objectives.js    the missions (the expedition, then the Full Survey) as
                      unlock/complete rules
-    world.js         island layout: mountain, river, lake, POIs, roads, cleared lots
+    world.js         island layout: mountain, river, lake, POIs (Camp Halvorsen
+                     among them), roads, cleared lots
     lore.js          notes left by the last team (each teaches a system)
   world/
     island.js        heightfield + water + biomes + vegetation density + cover
                      grids (pure data, no three.js)
     terrain.js water.js sky.js textures.js fx.js
     vegetation.js    instanced plants: big-tier LODs and streamed undergrowth,
-                     dithered LOD fades, wind sway and parting in the shader
+                     dithered LOD fades, wind sway and parting in the shader;
+                     fell() topples a tree something heavy drove into
     structures.js    prefabs built with the Kit (merged geometry + colliders +
                      E actions): dock, station, lab, towers, keeper's shed,
-                     bridge, wrecks…
+                     bridge, wrecks, Camp Halvorsen (chain-link, sandbags,
+                     motor pool, ammo bunker, guard tower, mast, helipad)…
     physics.js       heightfield + cylinders + rotated boxes; boxes double as floors
   actors/
     rig.js           species body plan -> bones + one skinned mesh
@@ -150,7 +187,9 @@ src/
     brain.js         temperament-driven state machine; lays siege to quarry it
                      cannot reach, then lies in wait
     creature.js      composes the above; locomotion and steering
-    ecology.js       herds, persistent records, load/unload around the player
+    ecology.js       herds, persistent records, load/unload around the player,
+                     lure (a species drawn to a loud enough bang from afar, to
+                     the shore if it went off over water)
   player/
     player.js        first-person body: walk, sprint, crouch, swim, footsteps
     weapons.js       selection, aiming, firing, reloads, scanner, camera, gadgets
@@ -161,7 +200,9 @@ src/
     science.js interaction.js inventory.js
   game/              stealth model, flags/stats, scoring, the missions/objectives runner,
                      blast.js — one explosion (data/blasts.js): fire or spray, noise,
-                     damage falling off to animals, the player and vehicles, shake
+                     damage falling off to animals, the player and vehicles, shake;
+                     shells.js — shells in flight (ballistic arc, tracer, smoke) that
+                     go off through blast.js where they stop
   vehicles/
     vehicle.js       the shared base: boarding/exit, colliders, cameras, AI noise,
                      damage feedback, field repair
@@ -169,6 +210,10 @@ src/
     jeep.js          shared ground handling and ranger 4x4 model
     motorbike.js     trail-bike model, rider, two wheels and active gyro balance
     stabilizer.js    bounded turn lean and automatic return upright
+    humvee.js        the camp's humvee: the jeep with its own tune table and body
+    tank.js          the camp's tank: tracked drive, felling, fire control, the gun
+    tracks.js        skid steering and hill climbing as plain numbers (tested)
+    gunnery.js       launch angle, arc and turret/gun slewing (tested)
   audio/
     audio.js         procedural Web Audio (guns, voices, ambience, rotor, engine)
     footsteps.js     synthesised footsteps per surface
@@ -200,7 +245,11 @@ src/
   `player/viewmodels.js`, a sound case in `audio/audio.js` and a `slotN`
   binding in `core/input.js`; `ui/dose.js` says a melee syringe's dose in jabs.
 - **Add a vehicle:** subclass `Vehicle` (`vehicles/vehicle.js`) with a tune
-  table in `data/vehicles.js` (`kind`, `hull`, `door`, colliders, `load`, …).
+  table in `data/vehicles.js` (`kind`, `hull`, `door`, colliders, `load`, …;
+  `armour` scales every hull hit, `mapLabel` names it on the map). A ground
+  vehicle can subclass `Jeep` instead and only build its own model with its own
+  tune table, as `motorbike.js` and `humvee.js` do; `tank.js` also replaces
+  `drive()` (tracks) and `update()` (the gun), and fires through `G.shells`.
   Implement `buildModel()`, `boardLabel()` and `update(dt, input)` — read input
   only while `occupied`, call `updateCommon(dt, noiseRadius)` and then `sync()`
   to place the model — and override `onEnter()`, `canExit()`, `seatCamera()` /
@@ -285,7 +334,9 @@ otherwise always look like the slowest machine.
 Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
 (`tests/reach.test.js` covers the reach bands: roofs, towers, crates, hovering
 helicopters, roofs overhead — and when a hunter that gave up on a roof comes
-back).
+back; `tank.test.js` the skid steering, hill climbing, the fire-control sums
+and an armoured hull's share of an animal's blow; `lure.test.js` which bangs
+bring the tyrant, and that she stops at the shore).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and

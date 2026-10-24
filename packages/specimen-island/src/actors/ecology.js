@@ -8,6 +8,37 @@ import { Vitals } from './vitals.js'
 // is any road's centreline within r of (x, z)?
 const nearRoad = (isl, x, z, r) => isl.roads.some((rd) => rd.pts.some(([px, pz]) => Math.abs(px - x) < r && Math.abs(pz - z) < r && Math.hypot(px - x, pz - z) < r))
 
+// Where a herd at (hx, hz) drawn to a noise at (x, z) can stand to look: the
+// noise itself on dry land, or else the first dry ground on the line back
+// toward the herd — the water's edge on its own side of a shell that went
+// into the sea or the lake. Null if the line never leaves the water.
+export function landfall(x, z, hx, hz, isLand, step = 4) {
+  const n = Math.max(1, Math.ceil(Math.hypot(hx - x, hz - z) / step))
+  for (let k = 0; k <= n; k++) {
+    const px = x + ((hx - x) * k) / n
+    const pz = z + ((hz - z) * k) / n
+    if (isLand(px, pz)) return { x: px, z: pz }
+  }
+  return null
+}
+
+// Which way a virtual herd centred at (x, z) can go `m` m along (ux, uz)
+// without walking into water deeper than `wade`, as a loaded animal's
+// feelers would: straight on, else bent ever wider either side. A step that
+// gets it shallower is always allowed. Null if every way is too deep.
+export function wadeable(x, z, ux, uz, m, wade, depthAt) {
+  const here = depthAt(x, z)
+  for (const off of [0, 0.6, -0.6, 1.2, -1.2]) {
+    const c = Math.cos(off)
+    const s = Math.sin(off)
+    const dx = ux * c - uz * s
+    const dz = ux * s + uz * c
+    const d = depthAt(x + dx * m, z + dz * m)
+    if (d <= wade || d < here) return { x: dx, z: dz }
+  }
+  return null
+}
+
 // The island's population. Every animal has a persistent record; herds near the
 // player (or the attract camera) are "loaded" as full Creatures, distant herds
 // are simulated cheaply as a drifting centre. Walk away from a darted trike and
@@ -25,6 +56,27 @@ export class Ecology {
     this.maxActive = 44
     this.focus = { x: 0, z: 0 }
     this.virtualTimer = 0
+    G.events.on('noise', (n) => this.lure(n))
+  }
+
+  // A species with a `lure` (data/species.js) comes to see what made a big
+  // enough bang: its herd's goal becomes the noise (or the nearest shore on
+  // its way, for a bang over water), held there for a while, and a herd that
+  // is not loaded travels to it at a fraction of its run. A loaded animal
+  // hears it the ordinary way too (Perception).
+  lure(n) {
+    if (n.source !== 'player') return
+    const isl = this.G.island
+    for (const h of this.herds) {
+      const L = SPECIES[h.species].lure
+      if (!L || n.radius < L.noise || Math.hypot(h.x - n.x, h.z - n.z) > L.range) continue
+      if (!h.records.some((r) => r.state !== 'dead' && r.state !== 'unconscious')) continue
+      const goal = landfall(n.x, n.z, h.x, h.z, (x, z) => isl.isLand(x, z, -0.4))
+      if (!goal) continue
+      h.goal = goal
+      h.goalTimer = L.hold
+      h.luredUntil = this.G.time + L.hold
+    }
   }
 
   populate(seed) {
@@ -284,13 +336,19 @@ export class Ecology {
         const d = Math.hypot(dx, dz)
         const anyDown = h.records.some((r) => r.state === 'unconscious')
         if (d > 2 && !anyDown) {
-          const m = Math.min(d, sp.speed.walk * 0.6 * step)
-          h.x += (dx / d) * m
-          h.z += (dz / d) * m
-          for (const r of h.records) {
-            if (r.state === 'unconscious' || r.state === 'dead') continue
-            r.x += (dx / d) * m
-            r.z += (dz / d) * m
+          const lured = h.luredUntil > G.time
+          const m = Math.min(d, (lured ? sp.speed.run * sp.lure.pace : sp.speed.walk * 0.6) * step)
+          // round deep water, not through it: a herd loaded mid-lake would
+          // stand on the bottom
+          const way = wadeable(h.x, h.z, dx / d, dz / d, m, sp.body.hipH * 0.7, (x, z) => G.island.depthAt(x, z))
+          if (way) {
+            h.x += way.x * m
+            h.z += way.z * m
+            for (const r of h.records) {
+              if (r.state === 'unconscious' || r.state === 'dead') continue
+              r.x += way.x * m
+              r.z += way.z * m
+            }
           }
         }
         for (const r of h.records) {

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard, helipad } from './textures.js'
+import { concrete, planks, corrugated, paintedMetal, rustedPaint, signBoard, helipad, chainLink, burlap } from './textures.js'
 import { Rng } from '../core/rng.js'
 import { CACHES, CRATE, ITEMS, LOOT, RESTOCKS } from '../data/items.js'
 import { LORE } from '../data/lore.js'
@@ -41,6 +41,13 @@ function mats() {
     tire: L({ color: 0x1a1918 }),
     seat: L({ color: 0x3a2e24 }),
     moss: L({ color: 0x4a6a2c, side: THREE.DoubleSide }),
+    // Camp Halvorsen
+    chain: L({ map: chainLink(), transparent: true, alphaTest: 0.5, side: THREE.DoubleSide }),
+    sandbag: L({ map: burlap() }),
+    olive: L({ map: rustedPaint([92, 98, 66]) }),
+    brass: L({ color: 0x9a7a3a }),
+    earth: L({ color: 0x5b5537 }),
+    tarp: L({ color: 0x6b6646, side: THREE.DoubleSide }),
   }
   return MATS
 }
@@ -74,7 +81,7 @@ const V4 = new THREE.Vector3()
 const S4 = new THREE.Vector3(1, 1, 1)
 
 // What a kit material sounds like underfoot (player footsteps via physics.groundInfo).
-const SURFACE = { wood: 'wood', darkWood: 'wood', concrete: 'concrete', helipad: 'concrete', metal: 'metal', rust: 'metal', roof: 'metal', orange: 'metal', yellow: 'metal', green: 'metal', white: 'metal', black: 'metal' }
+const SURFACE = { wood: 'wood', darkWood: 'wood', concrete: 'concrete', helipad: 'concrete', metal: 'metal', rust: 'metal', roof: 'metal', orange: 'metal', yellow: 'metal', green: 'metal', white: 'metal', black: 'metal', olive: 'metal', sandbag: 'dirt', earth: 'dirt' }
 
 export class Kit {
   constructor(G, x, y, z, yaw = 0, name = 'prefab') {
@@ -1306,6 +1313,459 @@ export function buildPoles(G, road, rng) {
   kit.finish()
 }
 
+// ---------------------------------------------------------------- Camp Halvorsen
+
+// The Foundation Security Detachment's camp on the north-east plateau,
+// abandoned rather than destroyed: chain-link and razor wire gone to rust,
+// sandbags split and sprouting, vines up every wall, and the motor pool still
+// holding the humvee and the tank the barge never came back for. It is laid
+// out in the camp's own frame, +Z toward the road that comes in through the
+// gate (data/world.js); the road runs on into the yard along x = 0, so
+// nothing solid stands within 4.5 m of that line. Each part is a small helper
+// over the Kit, placed from this table.
+const CAMP = {
+  fence: { hx: 40, hz: 34, gate: 5.8, span: 3.2, h: 2.4, wireStep: 0.4 },
+  breach: [0.56, 0.7], // the stretch of the back fence something big went through
+  gateBooth: { cx: 10.5, cz: 28 },
+  motorPool: { x0: -35, x1: -19, z0: -10.5, z1: 6.5, h: 4.8 },
+  bays: { tank: [-27.6, -5.9], humvee: [-27.2, 2.7] }, // both facing +X, out to the yard
+  barracks: { cx: -22, cz: -24, w: 18, d: 7.5, h: 3 },
+  command: { cx: 22, cz: -22, w: 12, d: 9, h: 3.4 },
+  bunker: { cx: 31, cz: -5, w: 8, d: 6, h: 2.7 },
+  tower: { x: -34.5, z: 28.5, top: 6.5 },
+  mast: { x: 3, z: -25, h: 20 },
+  // the helipad: 12 m round its centre is kept clear for a rotor
+  pad: { x: 24, z: 18, r: 8 },
+  lights: [[-12, 12], [14, -9], [-8, -14]],
+  flag: [7, -14],
+  truck: { x: -29, z: 17 }, // the convoy's last truck, stripped for parts
+}
+
+// A blade-of-grass geometry for a tuft at (cx, cz): weeds through cracks, at
+// the foot of walls and fences.
+function tuft(kit, cx, cz, rng, n = 7, tall = 1) {
+  const ty = kit.ground(cx, cz) - 0.03
+  const blades = []
+  for (let k = 0; k < n; k++) {
+    const ba = rng.range(0, Math.PI * 2)
+    const h = rng.range(0.35, 0.9) * tall
+    const lean = rng.range(0.05, 0.35)
+    const w = 0.045
+    const bx = cx + rng.range(-0.18, 0.18)
+    const bz = cz + rng.range(-0.18, 0.18)
+    blades.push(bx - Math.sin(ba) * w, ty, bz + Math.cos(ba) * w, bx + Math.sin(ba) * w, ty, bz - Math.cos(ba) * w, bx + Math.cos(ba) * lean, ty + h, bz + Math.sin(ba) * lean)
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.Float32BufferAttribute(blades, 3))
+  g.computeVertexNormals()
+  kit.push('moss', g, 0, 0, 0)
+}
+
+// A round bar from a to b (local [x, y, z]): guy wires, bracing, rails.
+function bar(kit, mat, r, a, b) {
+  const A = new THREE.Vector3(...a)
+  const B = new THREE.Vector3(...b)
+  const dir = B.clone().sub(A)
+  const g = new THREE.CylinderGeometry(r, r, dir.length(), 4)
+  g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize()))
+  const m = A.add(B).multiplyScalar(0.5)
+  kit.push(mat, g, m.x, m.y, m.z)
+}
+
+// A box hinged at its base and leaned `lean` radians about its own length
+// axis (local X before the yaw `ry`): sagging panels, leaning posts.
+function leaned(kit, mat, w, h, d, lx, ly, lz, ry, lean, tex = 2) {
+  kit.push(mat, boxGeo(w, h, d, tex).translate(0, h / 2, 0).rotateX(lean), lx, ly, lz, 0, ry, 0)
+}
+
+// A run of chain-link from (ax, az) to (bx, bz): steel posts every few
+// metres, mesh panels, razor wire coiled along the top. Weather has sagged
+// some panels out of true and leaned a post or two; `breach` ([from, to] as
+// shares of the run) is where something went through, and leaves a gap with
+// the mesh trampled flat and the wire in a tangle. Standing panels are
+// walls; a gap is not.
+function chainFence(G, kit, ax, az, bx, bz, rng, breach = null) {
+  const F = CAMP.fence
+  const len = Math.hypot(bx - ax, bz - az)
+  const n = Math.max(1, Math.round(len / F.span))
+  const ux = (bx - ax) / len
+  const uz = (bz - az) / len
+  const ry = -Math.atan2(uz, ux)
+  // which way is out (away from the camp's centre), as the sign of local +Z
+  const out = -uz * (ax + bx) + ux * (az + bz) > 0 ? 1 : -1
+  const [b0, b1] = breach || [2, 2]
+  const wire = (x, y, z, tilt) => kit.push('metal', new THREE.TorusGeometry(0.22, 0.012, 3, 9), x, y, z, 0, ry + Math.PI / 2 + tilt, 0)
+  for (let i = 0; i < n; i++) {
+    const t0 = i / n
+    const t1 = (i + 1) / n
+    const sl = len / n
+    const px = ax + (bx - ax) * t0
+    const pz = az + (bz - az) * t0
+    const mx = ax + (bx - ax) * (t0 + t1) * 0.5
+    const mz = az + (bz - az) * (t0 + t1) * 0.5
+    const g = kit.ground(mx, mz)
+    const broken = t1 > b0 && t0 < b1
+    const sag = !broken && rng.chance(0.18) ? rng.range(0.12, 0.32) * (rng.chance(0.7) ? out : -out) : 0
+    // the post at the start of this span
+    if (broken && rng.chance(0.5)) leaned(kit, 'metal', 0.09, F.h + 0.4, 0.09, px, kit.ground(px, pz) - 0.1, pz, ry, out * rng.range(1.2, 1.5))
+    else if (sag) leaned(kit, 'metal', 0.09, F.h + 0.5, 0.09, px, kit.ground(px, pz) - 0.3, pz, ry, sag * 0.6)
+    else kit.post(0.09, kit.ground(px, pz) + F.h + 0.4, 'metal', px, pz)
+    if (broken) {
+      // the mesh flattened into the grass, the wire in a tangle on top of it
+      if (rng.chance(0.7)) kit.push('chain', planeUV(sl * 0.9, F.h, 0.6).rotateX(-Math.PI / 2), mx + -uz * out * 1.4, g + 0.05, mz + ux * out * 1.4, 0, ry + rng.range(-0.3, 0.3), 0)
+      for (let k = 0; k < 6; k++) kit.push('metal', new THREE.TorusGeometry(0.24, 0.012, 3, 9), mx + rng.range(-1.4, 1.4) * ux, g + 0.2, mz + rng.range(-1.4, 1.4) * uz, rng.range(0, 3), rng.range(0, 3), 0)
+      for (let k = 0; k < 2; k++) tuft(kit, mx + rng.range(-1.2, 1.2) * ux, mz + rng.range(-1.2, 1.2) * uz, rng, 9, 1.3)
+      continue
+    }
+    // the mesh, hung a hand's width off the ground, and its top rail
+    const panel = planeUV(sl, F.h, 0.6).translate(0, F.h / 2, 0).rotateX(sag)
+    kit.push('chain', panel, mx, g + 0.12, mz, 0, ry, 0)
+    if (!sag) {
+      kit.box(sl, 0.05, 0.05, 'metal', mx, g + F.h + 0.15, mz, { ry, collide: false })
+      for (let s = F.wireStep / 2; s < sl; s += F.wireStep) wire(px + ux * s, g + F.h + 0.45, pz + uz * s, (Math.round(s / F.wireStep) % 2 ? 0.35 : -0.35))
+    } else {
+      // the wire has slid down the sagging panel
+      for (let s = F.wireStep / 2; s < sl; s += F.wireStep * 1.5) wire(px + ux * s - uz * out * 0.5, g + F.h * 0.6, pz + uz * s + ux * out * 0.5, rng.range(-0.5, 0.5))
+    }
+    const [wx, wz] = kit.world(mx, mz)
+    G.physics.addBox(wx, wz, sl / 2, 0.12, kit.yaw + ry, kit.y + g - 0.4, kit.y + g + F.h + 0.6, { walkable: false, tag: 'fence' })
+    if (rng.chance(0.3)) kit.vines(mx, g + F.h + 0.1, mz, sl * 0.6, F.h * 0.8, ry, rng)
+    if (rng.chance(0.6)) tuft(kit, mx + rng.range(-1, 1) * ux, mz + rng.range(-1, 1) * uz, rng, 8)
+  }
+  kit.post(0.09, kit.ground(bx, bz) + F.h + 0.4, 'metal', bx, bz)
+}
+
+// A plane with its UVs in tiles of `tile` metres.
+function planeUV(w, h, tile) {
+  const g = new THREE.PlaneGeometry(w, h)
+  const uv = g.attributes.uv
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (uv.getX(i) * w) / tile, (uv.getY(i) * h) / tile)
+  return g
+}
+
+// A wall of sandbags centred at (cx, cz) along `ry`, `rows` high, on the
+// ground or on `base` (a platform). Bags settle and split; the odd one has
+// sprouted. One collider for the wall: the low ones a tank rolls over.
+function sandbags(G, kit, cx, cz, len, ry, rows, rng, base = null) {
+  const g = base ?? kit.ground(cx, cz)
+  const bag = 0.62
+  const c = Math.cos(ry)
+  const s = Math.sin(ry)
+  for (let r = 0; r < rows; r++) {
+    const off = r % 2 ? bag / 2 : 0
+    for (let a = -len / 2 + bag / 2 + off; a <= len / 2 - bag / 2 + 1e-6; a += bag) {
+      if (r === rows - 1 && rng.chance(0.12)) continue // a bag gone from the top
+      const sunk = rng.chance(0.15) ? 0.06 : 0
+      kit.push('sandbag', boxGeo(bag - 0.04, 0.24 - sunk, 0.4, 0.6), cx + c * a, g + 0.12 + r * 0.235 - sunk / 2, cz - s * a, 0, ry + rng.range(-0.08, 0.08), rng.range(-0.04, 0.04))
+    }
+  }
+  if (rng.chance(0.5)) tuft(kit, cx + c * rng.range(-len / 2, len / 2), cz - s * rng.range(-len / 2, len / 2), rng, 6, 0.8)
+  const [wx, wz] = kit.world(cx, cz)
+  G.physics.addBox(wx, wz, len / 2, 0.22, kit.yaw + ry, kit.y + g - 0.2, kit.y + g + rows * 0.235, { material: 'dirt' })
+}
+
+// The gate: two posts either side of the road, one leaf hanging open off its
+// last hinge outside the fence, the other flat in the weeds; a sentry booth,
+// sandbags and a sign, all clear of the road.
+function campGate(G, kit, rng) {
+  const F = CAMP.fence
+  const gz = F.hz
+  for (const x of [-F.gate, F.gate]) kit.box(0.3, F.h + 1, 0.3, 'olive', x, F.h / 2 + 0.3, gz)
+  // the right leaf swung out and dropped against the fence
+  const leaf = (lx, ly, lz, rx, ry, rz) => {
+    kit.push('chain', planeUV(F.gate - 0.4, F.h - 0.2, 0.6), lx, ly, lz, rx, ry, rz)
+    kit.push('metal', boxGeo(F.gate - 0.4, 0.06, 0.06), lx, ly + (F.h - 0.2) / 2, lz, rx, ry, rz)
+  }
+  leaf(F.gate + 2.8, F.h / 2 + 0.05, gz + 0.9, 0, 0.3, 0.12)
+  // ...the left one lies in the grass inside, gone green
+  leaf(-F.gate - 2.2, 0.06, gz - 3.5, -Math.PI / 2, 0.15, 0)
+  for (let k = 0; k < 3; k++) tuft(kit, -F.gate - 2.2 + rng.range(-2, 2), gz - 3.5 + rng.range(-1, 1), rng, 9, 1.2)
+  // sentry booth and its sandbags
+  const B = CAMP.gateBooth
+  building(kit, 2.6, 2.6, 2.5, { cx: B.cx, cz: B.cz, mat: 'olive', roof: 'rust', door: 0.9, hole: false, rng })
+  sandbags(G, kit, B.cx - 3.6, B.cz + 2.2, 2.6, Math.PI / 2, 3, rng)
+  sandbags(G, kit, -8.5, gz - 4.5, 3.8, 0.3, 3, rng)
+  // concrete barriers staggered down the approach, either side of the road
+  for (const [x, z, ry] of [[-7.4, gz + 7, 0.1], [7.6, gz + 12, -0.15], [-7.6, gz + 17, 0]]) kit.box(0.6, 0.85, 2.0, 'concrete', x, kit.ground(x, z) + 0.42, z, { ry })
+  sign(G, kit, ['CAMP HALVORSEN', 'FOUNDATION SECURITY DETACHMENT', 'RESTRICTED AREA'], 10.5, gz + 5, 0, { bg: '#4a5236' })
+}
+
+// The motor pool: an open-fronted steel canopy, a corrugated back wall, a
+// bench and the junk of a vehicle shop. The humvee and the tank stand in its
+// two bays nose-out to the yard (CAMP.bays, read back through poi.bays).
+function motorPool(G, kit, poi, rng) {
+  const M = CAMP.motorPool
+  const xm = (M.x0 + M.x1) / 2
+  const zm = (M.z0 + M.z1) / 2
+  const w = M.x1 - M.x0
+  const d = M.z1 - M.z0
+  kit.box(w, 0.1, d, 'concrete', xm, 0.05, zm, { tex: 3 })
+  for (const [x, z] of [[M.x0, M.z0], [xm, M.z0], [M.x1, M.z0], [M.x0, M.z1], [xm, M.z1], [M.x1, M.z1]]) kit.box(0.26, M.h, 0.26, 'olive', x, M.h / 2, z)
+  kit.box(0.14, M.h, d, 'rust', M.x0 + 0.1, M.h / 2, zm, { tex: 3 })
+  for (const z of [M.z0, M.z1]) kit.box(w / 2, 1.6, 0.12, 'rust', M.x0 + w / 4, 0.8, z, { tex: 3 })
+  // the roof: three sheets, the front one of the middle row gone (a sapling
+  // has come up through the gap) and one hanging by a corner
+  const sheet = d / 3
+  for (let i = 0; i < 3; i++) {
+    const z = M.z0 + sheet * (i + 0.5)
+    if (i === 1) {
+      kit.box(w * 0.55, 0.12, sheet + 0.2, 'rust', M.x0 + w * 0.275, M.h + 0.06, z, { tex: 3 })
+      kit.box(2.4, 0.05, 1.5, 'rust', M.x1 - w * 0.33, M.h - 0.95, z + 0.4, { rz: 1.15, collide: false, tex: 3 })
+    } else kit.box(w + 0.6, 0.12, sheet + 0.2, 'rust', xm + 0.3, M.h + 0.06 - i * 0.02, z, { tex: 3 })
+  }
+  for (const z of [M.z0, M.z1]) kit.box(w, 0.2, 0.2, 'olive', xm, M.h - 0.1, z, { collide: false })
+  const sx = M.x1 - w * 0.2
+  const sz = M.z0 + sheet * 1.5 + 1.5
+  kit.cyl(0.1, M.h + 1.6, 'darkWood', sx, (M.h + 1.6) / 2, sz, { rTop: 0.05, seg: 5, collide: false })
+  kit.push('vine', new THREE.IcosahedronGeometry(1.3, 0), sx + 0.2, M.h + 1.7, sz)
+  kit.push('vine', new THREE.IcosahedronGeometry(0.8, 0), sx - 0.4, M.h + 1.0, sz + 0.5)
+  // the shop along the back wall
+  kit.box(2.6, 0.9, 0.8, 'darkWood', M.x0 + 0.8, 0.45, zm + 4.5, { ry: Math.PI / 2 })
+  kit.box(0.5, 0.3, 0.35, 'olive', M.x0 + 0.8, 1.05, zm + 5.2, { collide: false })
+  kit.box(0.3, 0.02, 0.22, 'white', M.x0 + 0.85, 0.91, zm + 3.9, { collide: false })
+  lore(G, kit, 'campMotorPool', 'Read the motor pool board', M.x0 + 1.3, 1.2, zm + 3.9)
+  for (let i = 0; i < 5; i++) kit.cyl(0.3, 0.9, i % 2 ? 'olive' : 'rust', M.x0 + 0.8 + (i % 2) * 0.68, 0.45, M.z0 + 1.2 + Math.floor(i / 2) * 0.68, { seg: 10 })
+  for (let i = 0; i < 4; i++) kit.cyl(0.48, 0.3, 'tire', M.x0 + 1.0, 0.15 + i * 0.3, M.z1 - 1.3, { seg: 12, open: false })
+  // a spare track run leaning on the wall, an engine on its stand, jerrycans
+  leaned(kit, 'black', 0.5, 2.6, 0.08, M.x0 + 0.5, 0, zm - 1, Math.PI / 2, 0.25)
+  kit.box(1.0, 0.8, 0.7, 'black', M.x0 + 2.6, 0.75, zm + 0.5)
+  kit.box(1.2, 0.35, 0.9, 'metal', M.x0 + 2.6, 0.17, zm + 0.5)
+  for (let i = 0; i < 3; i++) kit.box(0.18, 0.46, 0.34, 'olive', M.x0 + 0.5, 0.23, zm + 6.6 - i * 0.4, { collide: false })
+  for (let i = 0; i < 4; i++) {
+    const oil = new THREE.CircleGeometry(rng.range(0.4, 0.9), 10).rotateX(-Math.PI / 2)
+    kit.push('black', oil, rng.range(M.x0 + 4, M.x1 - 2), 0.105 + i * 0.002, rng.range(M.z0 + 2, M.z1 - 2))
+  }
+  kit.vines(M.x0 + 0.2, M.h, zm - 3, d * 0.4, M.h * 0.7, Math.PI / 2, rng)
+  kit.vines(xm, M.h, M.z1 + 0.15, w * 0.5, M.h * 0.6, 0, rng)
+  for (let k = 0; k < 8; k++) tuft(kit, rng.range(M.x0, M.x1), rng.chance(0.5) ? M.z0 - 0.3 : M.z1 + 0.3, rng)
+  // the bays, in the world, facing out of the open front
+  poi.bays = {}
+  for (const [id, [x, z]] of Object.entries(CAMP.bays)) poi.bays[id] = { pos: kit.point(x, 0.1, z), yaw: kit.yaw - Math.PI / 2 }
+}
+
+// The ammunition bunker: a squat concrete box under an earth berm gone to
+// grass, its blast door rusted half open. Inside, racks of the tank's shells
+// and a crate of small-arms rounds; at the door, the ready rack of a tank
+// parked within reach is filled back up (TANK.gun.rearm).
+function ammoBunker(G, kit, rng) {
+  const B = CAMP.bunker
+  const t = 0.4
+  const z0 = B.cz - B.d / 2
+  const z1 = B.cz + B.d / 2
+  const door = 2.4
+  kit.box(B.w, 0.2, B.d, 'concrete', B.cx, 0.1, B.cz)
+  kit.box(B.w, B.h, t, 'concrete', B.cx, B.h / 2, z0 + t / 2)
+  for (const s of [-1, 1]) kit.box(t, B.h, B.d, 'concrete', B.cx + s * (B.w / 2 - t / 2), B.h / 2, B.cz)
+  const side = (B.w - door) / 2
+  for (const s of [-1, 1]) kit.box(side, B.h, t, 'concrete', B.cx + s * (door / 2 + side / 2), B.h / 2, z1 - t / 2)
+  kit.box(door, B.h - 2.2, t, 'concrete', B.cx, 2.2 + (B.h - 2.2) / 2, z1 - t / 2)
+  kit.box(B.w + 0.4, 0.35, B.d + 0.4, 'concrete', B.cx, B.h + 0.17, B.cz)
+  // the berm: earth heaped over the back and sides, grass on top
+  for (const s of [-1, 1]) kit.box(2.2, B.h + 0.6, B.d + 1.2, 'earth', B.cx + s * (B.w / 2 + 0.7), B.h / 2 - 0.5, B.cz - 0.3, { rz: -s * 0.55, collide: false })
+  kit.box(B.w + 2, B.h + 0.6, 2.4, 'earth', B.cx, B.h / 2 - 0.5, z0 - 0.8, { rx: 0.55, collide: false })
+  kit.box(B.w + 0.6, 0.4, B.d + 0.2, 'earth', B.cx, B.h + 0.45, B.cz - 0.1, { collide: false })
+  for (let k = 0; k < 14; k++) tuft(kit, B.cx + rng.range(-B.w / 2 - 1, B.w / 2 + 1), B.cz + rng.range(-B.d / 2 - 1, B.d / 2 - 0.5), rng, 7, 1.1)
+  for (let k = 0; k < 6; k++) kit.push('moss', new THREE.CircleGeometry(rng.range(0.4, 0.8), 6).rotateX(-Math.PI / 2), B.cx + rng.range(-3, 3), B.h + 0.66 + k * 0.002, B.cz + rng.range(-2, 2))
+  // the blast door, seized a third open on its hinge
+  kit.box(door - 0.1, 2.15, 0.12, 'olive', B.cx - door / 2 - 0.5, 1.1, z1 + 1.0, { ry: 1.1 })
+  // shell racks: shelves of brass down both walls, ammo boxes, the crate
+  for (const s of [-1, 1]) {
+    const x = B.cx + s * (B.w / 2 - 0.75)
+    for (const y of [0.55, 1.25]) {
+      kit.box(0.7, 0.06, B.d - 1.6, 'darkWood', x, y, B.cz - 0.4, { collide: false })
+      for (let k = 0; k < 7; k++) if (rng.chance(s < 0 ? 0.8 : 0.35)) kit.cyl(0.08, 0.7, 'brass', x, y + 0.04, B.cz - 2.1 + k * 0.5, { rx: Math.PI / 2, collide: false, seg: 8 })
+    }
+    G.physics.addBox(...kit.world(x, B.cz - 0.4), 0.35, (B.d - 1.6) / 2, kit.yaw, kit.y, kit.y + 1.3, { walkable: false, material: 'wood' })
+  }
+  for (let i = 0; i < 3; i++) kit.box(0.6, 0.35, 0.3, 'olive', B.cx - 0.6 + i * 0.65, 0.375, z0 + 0.7)
+  crate(G, kit, B.cx + 0.6, z0 + 1.6, 'crate:campBunker', { items: { shell: 6, rifleRound: 5 } }, rng, 0.2)
+  const { texture, width, height } = signBoard(['AMMUNITION', 'NO NAKED FLAMES'], { bg: '#8a6a20', fg: '#1a1a1a', minWidth: 1.4, maxWidth: 2.2, minHeight: 0.5, maxHeight: 0.6 })
+  const face = new THREE.MeshLambertMaterial({ map: texture })
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(width, height, 0.04), [mats().metal, mats().metal, mats().metal, mats().metal, face, face])
+  plate.position.set(B.cx, 2.45, z1 + 0.03)
+  plate.rotation.z = -0.04
+  kit.add(plate)
+  // the ready rack: a tank parked at the door, nobody aboard
+  const at = kit.point(B.cx, 0, z1)
+  const parked = () => (G.vehicles || []).find((v) => v.tune.gun && v.rearm && !v.occupied && v.pos.distanceTo(at) <= v.tune.gun.rearm)
+  kit.interact(
+    {
+      id: 'campAmmo',
+      label: () => {
+        const v = parked()
+        return v ? `Load shells into the ${v.tune.name} (${v.rounds}/${v.tune.gun.rounds})` : 'Ammunition bunker'
+      },
+      hold: 3,
+      radius: 2.6,
+      enabled: () => {
+        const v = parked()
+        if (!v) return 'Park the tank by the bunker door'
+        if (v.rounds >= v.tune.gun.rounds) return 'Ready rack full'
+        return true
+      },
+      onUse: (G) => {
+        const v = parked()
+        const got = v.rearm()
+        G.toast(`Ready rack loaded: +${got} shells (${v.rounds}/${v.tune.gun.rounds}).`, 'loot')
+        G.audio?.play('shellLoad', { pos: at })
+      },
+    },
+    B.cx + door / 2 + 0.6,
+    1.2,
+    z1 + 0.6,
+  )
+}
+
+// A watchtower in a fence corner: steel legs, a plank platform behind a
+// sandbag parapet, a tin roof and a dead searchlight, the ladder on the yard
+// side.
+function guardTower(G, kit, rng) {
+  const T = CAMP.tower
+  const top = T.top
+  const h = 1.8
+  for (const [x, z] of [[-h, -h], [h, -h], [-h, h], [h, h]]) kit.post(0.22, top + 2.6, 'olive', T.x + x, T.z + z)
+  for (const y of [1.8, 4.2]) {
+    bar(kit, 'olive', 0.04, [T.x - h, y, T.z - h], [T.x + h, y + 2, T.z - h])
+    bar(kit, 'olive', 0.04, [T.x - h, y, T.z + h], [T.x - h, y + 2, T.z - h])
+    bar(kit, 'olive', 0.04, [T.x + h, y, T.z + h], [T.x - h, y + 2, T.z + h])
+  }
+  kit.box(2 * h + 0.6, 0.2, 2 * h + 0.6, 'wood', T.x, top, T.z, { tex: 1.5 })
+  // sandbags on the three outward sides, the ladder's side open
+  sandbags(G, kit, T.x, T.z - h - 0.05, 2 * h + 0.4, 0, 4, rng, top + 0.1)
+  sandbags(G, kit, T.x, T.z + h + 0.05, 2 * h + 0.4, 0, 4, rng, top + 0.1)
+  sandbags(G, kit, T.x - h - 0.05, T.z, 2 * h - 0.4, Math.PI / 2, 4, rng, top + 0.1)
+  kit.box(2 * h + 1.2, 0.12, 2 * h + 1.2, 'rust', T.x, top + 2.65, T.z, { rx: 0.06, rz: -0.05, tex: 3 })
+  kit.cyl(0.28, 0.45, 'metal', T.x - 0.8, top + 1.4, T.z + 0.8, { rx: 1.2, collide: false, seg: 10 })
+  kit.box(0.1, 0.9, 0.1, 'metal', T.x - 0.8, top + 0.6, T.z + 0.8, { collide: false })
+  // ladder on the +X (yard) side
+  const lx = T.x + h + 0.35
+  for (const z of [-0.35, 0.35]) kit.box(0.07, top + 1, 0.07, 'metal', lx, top / 2, T.z + z, { collide: false })
+  for (let y = 0.4; y < top; y += 0.4) kit.box(0.04, 0.04, 0.7, 'metal', lx, y, T.z, { collide: false })
+  kit.interact({ id: 'climb:campTower', label: 'Climb ladder', hold: 0, radius: 2.0, onUse: (G) => G.player.teleport(kit.point(T.x + 0.9, top + 0.1, T.z), null, 0.6) }, lx + 0.4, 1.2, T.z)
+  kit.interact({ id: 'descend:campTower', label: 'Climb down', hold: 0, radius: 1.6, onUse: (G) => G.player.teleport(kit.point(lx + 1.2, kit.ground(lx + 1.2, T.z) + 0.05, T.z), null, 0) }, T.x + h - 0.4, top + 1.0, T.z)
+  kit.vines(T.x - h, top - 0.2, T.z - h - 0.05, 1.4, 3.5, 0, rng)
+  for (let k = 0; k < 4; k++) tuft(kit, T.x + rng.range(-h, h), T.z + rng.range(-h, h), rng, 9, 1.3)
+}
+
+// The comms mast behind the yard: a lattice tower with a dish and whips, its
+// beacon long dead, held up by guy wires.
+function commsMast(G, kit, rng) {
+  const M = CAMP.mast
+  const a = 0.7
+  for (const [x, z] of [[-a, -a], [a, -a], [-a, a], [a, a]]) kit.post(0.1, M.h, 'olive', M.x + x, M.z + z)
+  for (let y = 1.2; y < M.h - 1; y += 2.0) {
+    kit.box(2 * a, 0.05, 0.05, 'olive', M.x, y, M.z - a, { collide: false, rz: 0.9 })
+    kit.box(2 * a, 0.05, 0.05, 'olive', M.x, y, M.z + a, { collide: false, rz: -0.9 })
+    kit.box(0.05, 0.05, 2 * a, 'olive', M.x - a, y + 1, M.z, { collide: false, rx: 0.9 })
+    kit.box(0.05, 0.05, 2 * a, 'olive', M.x + a, y + 1, M.z, { collide: false, rx: -0.9 })
+  }
+  kit.cyl(0.9, 0.18, 'white', M.x + 0.4, M.h - 4, M.z + 1.0, { rx: 1.35, collide: false, seg: 14 })
+  for (const s of [-1, 1]) kit.cyl(0.03, 4, 'black', M.x + s * 0.4, M.h + 2, M.z, { collide: false, seg: 4 })
+  kit.push('bulb', new THREE.SphereGeometry(0.22, 8, 6), M.x, M.h + 0.25, M.z)
+  for (const ang of [0.9, 3.0, 4.9]) {
+    const gx = M.x + Math.cos(ang) * 5.5
+    const gz = M.z + Math.sin(ang) * 5.5
+    bar(kit, 'metal', 0.012, [M.x, M.h - 2, M.z], [gx, kit.ground(gx, gz) + 0.3, gz])
+    kit.box(0.5, 0.5, 0.5, 'concrete', gx, kit.ground(gx, gz) + 0.1, gz)
+  }
+  kit.box(1.2, 1.4, 0.8, 'olive', M.x + 1.6, 0.7, M.z)
+  kit.vines(M.x - a, 5, M.z + a + 0.05, 1.2, 4.5, 0, rng)
+}
+
+// The helipad beside the yard, for whatever flies in to use the camp: a
+// concrete disc with its markings and a walkable top (`poi.pad`, `padYaw`
+// face a parked machine out over the yard), rim lights, a windsock. 12 m
+// round its centre stays clear of anything solid.
+function campHelipad(G, kit, poi) {
+  const P = CAMP.pad
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(P.r, P.r + 0.2, 0.35, 32), [mats().concrete, mats().helipad, mats().concrete])
+  disc.position.set(P.x, 0.17, P.z)
+  disc.receiveShadow = true
+  kit.add(disc)
+  G.physics.addBox(...kit.world(P.x, P.z), 5.8, 5.8, kit.yaw, kit.y - 0.5, kit.y + 0.35, { material: 'concrete' })
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2
+    kit.push('bulb', new THREE.SphereGeometry(0.12, 6, 4), P.x + Math.cos(a) * (P.r - 0.3), 0.42, P.z + Math.sin(a) * (P.r - 0.3))
+  }
+  // the windsock, out past the rotor's reach
+  const wx = P.x + 12.5
+  const wz = P.z + 9
+  kit.cyl(0.07, 5, 'white', wx, 2.5, wz, { seg: 6 })
+  kit.push('orange', new THREE.CylinderGeometry(0.28, 0.12, 1.6, 8, 1, true).rotateZ(Math.PI / 2 - 0.5), wx - 0.85, 4.6, wz)
+  poi.pad = kit.point(P.x, 0.35, P.z)
+  poi.padYaw = kit.yaw + Math.PI / 2
+}
+
+// Floodlight poles, long dark.
+function floodlight(kit, x, z) {
+  kit.cyl(0.12, 8, 'olive', x, 4, z, { seg: 6 })
+  kit.box(1.4, 0.1, 0.1, 'metal', x, 7.9, z, { collide: false })
+  for (const s of [-1, 1]) kit.box(0.4, 0.3, 0.25, 'black', x + s * 0.55, 7.7, z, { collide: false, rx: 0.4 })
+}
+
+export function buildCamp(G, poi, rng, yaw) {
+  const kit = new Kit(G, poi.x, poi.y, poi.z, yaw, 'camp')
+  const F = CAMP.fence
+  // the perimeter: the front either side of the gate, the back with its breach
+  chainFence(G, kit, -F.hx, F.hz, -F.gate - 0.15, F.hz, rng)
+  chainFence(G, kit, F.gate + 0.15, F.hz, F.hx, F.hz, rng)
+  chainFence(G, kit, F.hx, F.hz, F.hx, -F.hz, rng)
+  chainFence(G, kit, F.hx, -F.hz, -F.hx, -F.hz, rng, CAMP.breach)
+  chainFence(G, kit, -F.hx, -F.hz, -F.hx, F.hz, rng)
+  campGate(G, kit, rng)
+  motorPool(G, kit, poi, rng)
+  // barracks: bunks, lockers, a hole in the roof
+  const Br = CAMP.barracks
+  building(kit, Br.w, Br.d, Br.h, { cx: Br.cx, cz: Br.cz, mat: 'olive', roof: 'rust', door: 1.6, rng })
+  for (let i = 0; i < 5; i++) {
+    const x = Br.cx - Br.w / 2 + 2 + i * 3.4
+    kit.box(0.9, 0.5, 2.0, 'olive', x, 0.55, Br.cz - Br.d / 2 + 1.3)
+    kit.box(0.9, 0.08, 2.0, 'tarp', x, 1.7, Br.cz - Br.d / 2 + 1.3, { collide: false })
+    for (const s of [-1, 1]) kit.box(0.05, 1.8, 0.05, 'metal', x + s * 0.42, 0.9, Br.cz - Br.d / 2 + 2.25, { collide: false })
+  }
+  for (let i = 0; i < 4; i++) kit.box(0.5, 1.9, 0.5, 'olive', Br.cx + Br.w / 2 - 0.6, 1.1, Br.cz - 2.4 + i * 0.6)
+  crate(G, kit, Br.cx - 4, Br.cz + 1.6, 'crate:campBarracks', null, rng, 0.3)
+  sandbags(G, kit, Br.cx + 3.6, Br.cz + Br.d / 2 + 1.5, 3.2, 0, 2, rng)
+  // command post: the radio desk with the standing orders, a map table
+  const C = CAMP.command
+  building(kit, C.w, C.d, C.h, { cx: C.cx, cz: C.cz, door: 1.7, hole: false, rng })
+  kit.box(2.4, 0.85, 0.9, 'darkWood', C.cx - 3, 0.72, C.cz - C.d / 2 + 0.9)
+  kit.box(0.6, 0.4, 0.45, 'olive', C.cx - 3.6, 1.35, C.cz - C.d / 2 + 0.8)
+  kit.box(0.3, 0.02, 0.22, 'white', C.cx - 2.6, 1.16, C.cz - C.d / 2 + 0.9, { collide: false })
+  lore(G, kit, 'campOrders', 'Read the standing orders', C.cx - 2.6, 1.4, C.cz - C.d / 2 + 1.3)
+  kit.box(2.2, 0.85, 1.4, 'darkWood', C.cx + 2, 0.72, C.cz)
+  const mapTable = new THREE.Mesh(new THREE.PlaneGeometry(2, 1.2), new THREE.MeshLambertMaterial({ map: G.mapTexture }))
+  mapTable.rotation.x = -Math.PI / 2
+  mapTable.position.set(C.cx + 2, 1.16, C.cz)
+  kit.add(mapTable)
+  for (let i = 0; i < 3; i++) kit.box(0.5, 1.3, 0.6, 'olive', C.cx + C.w / 2 - 0.6, 0.8, C.cz - 2 + i * 0.65)
+  for (const s of [-1, 1]) kit.cyl(0.03, 5, 'black', C.cx + s * 3.5, C.h + 2.6, C.cz - 2, { collide: false, seg: 4 })
+  sandbags(G, kit, C.cx - 3.8, C.cz + C.d / 2 + 1.6, 3.4, 0, 3, rng)
+  ammoBunker(G, kit, rng)
+  guardTower(G, kit, rng)
+  commsMast(G, kit, rng)
+  campHelipad(G, kit, poi)
+  for (const [x, z] of CAMP.lights) floodlight(kit, x, z)
+  // the yard: a flagpole with what is left of the flag (out of the way of
+  // anything leaving the motor pool), weeds in the cracks
+  const flagAt = CAMP.flag
+  kit.cyl(0.06, 9, 'white', flagAt[0], 4.5, flagAt[1], { seg: 6 })
+  const flag = new THREE.PlaneGeometry(1.4, 0.8, 4, 1)
+  const fp = flag.attributes.position
+  for (let i = 0; i < fp.count; i++) fp.setZ(i, Math.sin(fp.getX(i) * 3) * 0.12)
+  kit.push('tarp', flag.translate(0.7, 0, 0), flagAt[0], 8.4, flagAt[1], 0, 0.4, 0)
+  for (let k = 0; k < 40; k++) {
+    const x = rng.range(-F.hx + 2, F.hx - 2)
+    const z = rng.range(-F.hz + 2, F.hz - 2)
+    tuft(kit, x, z, rng, rng.int(4, 9), rng.range(0.6, 1.2))
+  }
+  kit.finish()
+  // the stripped truck, as the wrecks by the roads are built
+  const T = CAMP.truck
+  buildWreck(G, ...kit.world(T.x, T.z), yaw + Math.PI / 2, rng, false, 'truck', 1)
+  return kit
+}
+
 // ---------------------------------------------------------------- assembly
 
 function roadFacing(island, poi) {
@@ -1335,6 +1795,8 @@ export function buildStructures(G) {
   // its own stream, like the poles, so the shed never reshuffles the wrecks
   if (isl.lots.keeperShed) buildKeeperShed(G, isl.lots.keeperShed, new Rng(isl.cfg.seed + 507))
   buildRelay(G, P.summit, rng)
+  // its own stream too, so the camp never reshuffles the wrecks
+  if (P.milbase) buildCamp(G, P.milbase, new Rng(isl.cfg.seed + 508), roadFacing(isl, P.milbase))
   for (const b of isl.bridges) buildBridge(G, b, rng)
   // the poles draw from their own streams, so moving one never reshuffles
   // the wrecks

@@ -1,6 +1,7 @@
-// Vehicle tuning: the numbers a designer would tweak about the helicopter and
-// the ranger jeep (handling, damage, hitboxes, sounds, recovery). The flight
-// and suspension models in vehicles/*.js read these tables; only small
+// Vehicle tuning: the numbers a designer would tweak about the helicopter, the
+// ranger jeep, the trail bike and Camp Halvorsen's humvee and tank (handling,
+// damage, hitboxes, sounds, recovery, the tank's tracks and gun). The flight,
+// suspension and track models in vehicles/*.js read these tables; only small
 // smoothing constants stay inline there.
 //
 // Local frames match the models: forward is -Z, +X is the right-hand side,
@@ -248,5 +249,144 @@ export const MOTORBIKE = {
     0: 'Motorbike wrecked. Dismount and hold the interact button beside it to repair.',
     fieldRepaired: 'Ride to the field lab pump for a full service.',
     stuck: 'Stuck. Dismount and hold the interact button beside the bike to recover it.',
+  },
+}
+
+// The security detachment's armoured utility vehicle, left in Camp
+// Halvorsen's motor pool: the jeep's handling, heavier and wider, on big
+// tyres, with a closed cab that keeps most of a blow off the driver. Its roof
+// gun rusted solid years ago.
+export const HUMVEE = {
+  ...JEEP,
+  kind: 'humvee', name: 'humvee', hudName: 'HUMVEE', mapLabel: 'HUMVEE',
+  exitBlocked: 'Stop the humvee first',
+  mass: 3500, visibility: 1.7,
+  armour: 0.6, // every hull hit, relative to the jeep's (Vehicle.damage)
+  strikeMul: 0.45, strikeThrough: 0.1, // a closed, armoured cab
+  paint: [92, 98, 66], // faded olive drab
+  // body: 4.9 m long, 2.2 m wide, roof at 1.9 m
+  halfLength: 2.45, halfWidth: 1.1,
+  wheel: { r: 0.47, width: 0.36, x: 0.93, z: 1.66, travel: 0.22 },
+  top: { road: 21, offroad: 14, reverse: 6 },
+  accel: 5.4, reverseAccel: 5, brake: 13, handbrake: 8,
+  coverDrag: 0.22, // it bulls through more undergrowth than the jeep
+  steer: { max: 0.55, falloff: 10, rate: 6 },
+  grip: { road: 15, offroad: 11, handbrake: 1.4, redirect: 0.9 },
+  handbrakeYaw: 0.7,
+  stepUp: 0.85,
+  bump: { road: 0.008, offroad: 0.05 },
+  suspension: { k: 62, c: 12, liftK: 110, liftC: 15 },
+  wade: 1.0,
+  hitbox: [{ z: -1.5, r: 1.1 }, { z: 0, r: 1.1 }, { z: 1.5, r: 1.1 }],
+  hitY: [0.4, 1.9],
+  impact: { min: 4.5, k: 2.4, bounce: 0.3, scrub: 0.8, maxHit: 50 },
+  creatures: { ...JEEP.creatures, smallMass: 500, hitK: 8, heavyK: 2.6 },
+  noise: { idle: 30, max: 90, every: 0.5 },
+  door: { x: 1.3, y: 1.1, z: 0.0, radius: 2.8 },
+  exits: [[-2.0, 0.0], [2.0, 0.0], [0, 3.4], [0, -3.4], [-2.0, -1.8], [2.0, 1.8]],
+  parked: [
+    { x: 0, z: 0, hx: 1.1, hz: 2.45, y0: 0.35, y1: 1.95 }, // body, cab and wheels
+    { x: 0, z: 0.1, hx: 0.5, hz: 0.5, y0: 1.95, y1: 2.6 }, // the roof gun's shield
+  ],
+  enginePoint: [0, 1.25, -1.7],
+  seat: [-0.5, 1.75, 0.05],
+  chase: { back: 8.5, up: 3.2, lookAhead: 4, follow: 4 },
+  toasts: {
+    50: 'Humvee hull at 50% — the armour is holding, the engine less so.',
+    25: 'Humvee hull at 25%! Coolant everywhere — get it out of trouble.',
+    0: 'The humvee is wrecked. Climb out and hold E beside it to patch it up.',
+    fieldRepaired: 'Drive it to the pump on the field lab helipad for a proper service.',
+    stuck: 'Stuck. Climb out and hold E beside the humvee to winch it free.',
+  },
+}
+
+// The detachment's light tank. Tracked and skid-steered: W/S drive both
+// tracks, A/D drive them against each other, so it turns on the spot. Slow,
+// heavy and very hard to stop: it climbs what a jeep can't, fells saplings and
+// palms, wades deep, and anything smaller than a hadrosaur goes under the
+// tracks (a kill on the ledger, like the jeep's). The turret follows where
+// you look and the gun lays itself on whatever is under the sight; LMB fires
+// a high-explosive shell with travel time and drop that goes off through
+// game/blast.js. It is the loudest thing on the island, and the tyrant comes
+// to see what made the noise (data/species.js `lure`).
+//
+// Its local frame matches the others: forward is -Z, y = 0 under the tracks.
+export const TANK = {
+  ...JEEP,
+  kind: 'tank', name: 'tank', hudName: 'TANK', mapLabel: 'TANK',
+  exitBlocked: 'Stop the tank first',
+  hull: 100,
+  armour: 0.3, // hull hits (shells, rams, landings) count this much
+  mass: 32000,
+  visibility: 2,
+  strikeMul: 0.15, strikeThrough: 0, // a dinosaur's blow barely scratches it
+  exitSpeed: 1.0,
+  load: { radius: 260, unload: 320 },
+  paint: [86, 92, 60],
+  // hull 7.2 m long, 3.4 m over the tracks; deck at 1.8 m, turret roof at 2.75
+  halfLength: 3.6, halfWidth: 1.7,
+  // the four corner contacts settle() parks it on, and the road wheels'
+  // size (the tracks animate from them)
+  wheel: { r: 0.36, width: 0.56, x: 1.38, z: 2.5, travel: 0.1 },
+  track: { x: 1.38, width: 0.56, z: [-2.65, 0, 2.65], pitch: 0.17 }, // ground contacts along each track
+  top: { road: 11, offroad: 8.5, reverse: 4 },
+  accel: 2.6, reverseAccel: 2.2, brake: 7, coast: 1.6, handbrake: 9,
+  rolling: { road: 0.4, offroad: 0.7 },
+  coverDrag: 0.05, // undergrowth is nothing to it
+  // skid steering: turn rate on the spot (rad/s), the share of it lost at
+  // top speed, how fast the tracks spin up to it, and how hard the tracks
+  // hold against sliding sideways
+  turn: { pivot: 0.62, speedLoss: 0.45, rate: 1.6 },
+  grip: { road: 22, offroad: 18, handbrake: 22, redirect: 0 },
+  // hills (vehicles/tracks.js onGrade): the tracks hold it on anything up to
+  // tan = `grip` (~40°, where the jeep stalls near 35°), and `power` (W/kg)
+  // sets the crawl up one: ~5 m/s up 15°, ~3 m/s up 23°, ~2 m/s up 35°
+  climb: { grip: 0.85, power: 12 },
+  stepUp: 0.95,
+  bump: { road: 0.004, offroad: 0.018 },
+  suspension: { k: 90, c: 18, liftK: 160, liftC: 22 },
+  follow: { down: 12, up: 4 },
+  wade: 1.5,
+  hitbox: [{ z: -2.0, r: 1.7 }, { z: -0.7, r: 1.7 }, { z: 0.7, r: 1.7 }, { z: 2.0, r: 1.7 }],
+  hitY: [1.0, 2.6], // anything lower it rolls over or crushes
+  impact: { min: 3, k: 2, bounce: 0.15, scrub: 0.6, maxHit: 40 },
+  landing: { min: 6, k: 4 },
+  // trees with a trunk this thin go over (world/vegetation.js fell); the
+  // jungle giants stop it. Each one costs this share of its speed.
+  fell: { trunk: 0.42, drag: 0.15 },
+  creatures: { smallMass: 2600, hitMin: 0.8, hitK: 60, heavyMin: 2.5, heavyK: 1.2, bounce: 0.1 },
+  noise: { idle: 70, max: 170, every: 0.5 },
+  lights: { ...JEEP.lights, intensity: 600, range: 70 },
+  // The main gun. The shell flies a ballistic arc at `muzzle` m/s and goes off
+  // as BLASTS[blast] wherever it stops. The turret slews at `traverse` rad/s,
+  // the gun elevates at `elevate` between `depress` and `raise` (radians, off
+  // the hull's deck). `rounds` is the ready rack (Camp Halvorsen's ammo
+  // bunker refills it within `rearm` m of its door); `start` is what the
+  // detachment left in it. The shot itself is heard `noise` m away.
+  gun: {
+    blast: 'shell', weapon: 'tankGun',
+    muzzle: 190, gravity: 9.8, life: 8, range: 900,
+    reload: 5, rounds: 12, start: 6, rearm: 14,
+    traverse: 0.9, elevate: 0.45, depress: -0.14, raise: 0.38,
+    recoil: 0.45, kick: 0.9, shake: 0.9, noise: 450,
+  },
+  // the gunner's sight (RMB / LT): zoom per camera
+  sight: { seat: 3.2, chase: 1.6 },
+  door: { x: 2.1, y: 1.4, z: 0.4, radius: 3.4 },
+  exits: [[-2.7, 0.4], [2.7, 0.4], [-2.7, -1.8], [2.7, -1.8], [0, 5.0], [0, -5.2]],
+  parked: [
+    { x: 0, z: 0, hx: 1.7, hz: 3.6, y0: 0.3, y1: 1.85 }, // hull and tracks
+    { x: 0, z: 0.3, hx: 1.25, hz: 1.4, y0: 1.85, y1: 2.8 }, // turret
+  ],
+  enginePoint: [0, 1.9, 2.6],
+  seat: [-0.45, 2.55, 0.0], // the gunner's sight, on the turret's left
+  chase: { back: 12, up: 4.6, lookAhead: 6, follow: 10 },
+  toasts: {
+    50: 'Tank hull at 50% — the armour has taken a beating.',
+    25: 'Tank hull at 25%! The engine deck is on fire.',
+    0: 'The tank is knocked out. Climb out and hold E beside it to patch it up.',
+    fieldRepaired: 'Drive it to the pump on the field lab helipad for a proper service.',
+    stuck: 'Stuck. Climb out and hold E beside the tank to winch it free.',
+    empty: 'Ready rack empty — Camp Halvorsen’s ammo bunker holds more shells.',
   },
 }

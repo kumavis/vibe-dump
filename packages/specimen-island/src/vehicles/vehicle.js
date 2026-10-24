@@ -252,11 +252,13 @@ export class Vehicle {
   // Every hit is loud and sparky, and announced on the bus: the camera shake
   // and the HUD (vignette, flashing hull readout) listen for 'vehicle:damaged'.
   // `at` is the contact point. `injure`: a hard enough smash hurts whoever is
-  // inside (strike() does its own accounting for animal blows).
+  // inside (strike() does its own accounting for animal blows). An armoured
+  // hull (tune.armour) counts every hit at that share.
   damage(amount, at = null, injure = true) {
     const G = this.G
     const F = VEHICLE_FX
     if (!(amount > 0)) return
+    amount *= this.tune.armour ?? 1
     const before = this.health
     this.health = Math.max(0, this.health - amount)
     const p = at || this.modelPoint([0, 1.2, 0], new THREE.Vector3())
@@ -276,12 +278,12 @@ export class Vehicle {
   onDestroyed() {}
 
   // An animal's blow aimed at whoever is inside. The hull soaks it at
-  // strikeMul; an open cab still lets strikeThrough of it reach the rider,
-  // and whatever the hull can no longer soak (a wreck soaks nothing) lands
-  // on them at full, on-foot weight.
+  // strikeMul (and its armour, as damage() counts it); an open cab still lets
+  // strikeThrough of it reach the rider, and whatever the hull can no longer
+  // soak (a wreck soaks nothing) lands on them at full, on-foot weight.
   strike(damage, knock, from, at) {
     const T = this.tune
-    const soaked = Math.min(damage, this.health / T.strikeMul)
+    const soaked = Math.min(damage, this.health / (T.strikeMul * (T.armour ?? 1)))
     this.shove(from, knock * 0.4)
     this.damage(damage * T.strikeMul, at, false)
     const hurt = damage - soaked + soaked * (T.strikeThrough || 0)

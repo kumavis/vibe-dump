@@ -70,7 +70,21 @@ export function reliefTexture(canvas) {
   return t
 }
 
-const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡' }
+const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡', base: '✪' }
+
+// The baseline for a label `w` px wide centred on x at baseline y, stepped up
+// a line (`h` px) at a time off any label already in `taken`: vehicles parked
+// side by side (the camp's tank and humvee, 8 m apart, are 3 px on the map)
+// read as two words, not one smudge.
+function stackLabel(taken, x, y, w, h) {
+  for (;;) {
+    const hit = taken.find((b) => Math.abs(b.x - x) < (b.w + w) / 2 && Math.abs(b.y - y) < h)
+    if (!hit) break
+    y = hit.y - h // always above the one it hit, so this ends
+  }
+  taken.push({ x, y, w })
+  return y
+}
 
 export class MapView {
   constructor(G, el) {
@@ -148,6 +162,7 @@ export class MapView {
     }
     // parked vehicles, so you can find your way back to them
     ctx.font = '700 10px system-ui, sans-serif'
+    const labels = []
     for (const v of G.vehicles || []) {
       if (v.occupied) continue
       const [x, y] = this.w2m(v.pos.x, v.pos.z)
@@ -156,7 +171,8 @@ export class MapView {
       ctx.lineWidth = 2
       ctx.fillRect(x - 5, y - 5, 10, 10)
       ctx.strokeRect(x - 5, y - 5, 10, 10)
-      ctx.fillText(v.kind === 'heli' ? 'HELI' : v.kind === 'motorbike' ? 'BIKE' : 'JEEP', x, y - 9)
+      const label = v.tune.mapLabel || (v.kind === 'heli' ? 'HELI' : v.kind === 'motorbike' ? 'BIKE' : 'JEEP')
+      ctx.fillText(label, x, stackLabel(labels, x, y - 9, ctx.measureText(label).width + 4, 11))
     }
     // the player (or the vehicle they are in)
     const pp = G.vehicle ? G.vehicle.pos : G.player.pos

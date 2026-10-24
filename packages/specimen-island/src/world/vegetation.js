@@ -677,7 +677,40 @@ export class Vegetation {
     this.placeBig()
     this.small = new Map()
     this.smallChunk = 48
+    this.falling = []
     this.initNear()
+  }
+
+  // A big plant pushed over by something heavy (the tank): it topples away
+  // along (dx, dz) about its foot over a second, and stays down. The caller
+  // takes its trunk out of the physics.
+  fell(it, dx, dz) {
+    if (it.fall || it.type === 'rock') return
+    const l = Math.hypot(dx, dz) || 1
+    const chunk = this.chunkAt.get(Math.floor(it.x / this.bigChunk) * 1000 + Math.floor(it.z / this.bigChunk))
+    it.fall = { t: 0, axis: new THREE.Vector3(dz / l, 0, -dx / l), base: it.matrix.clone(), chunk, part: chunk?.parts.find((p) => p.items.includes(it)) }
+    this.falling.push(it)
+  }
+
+  updateFalling(dt) {
+    const m = new THREE.Matrix4()
+    for (let i = this.falling.length - 1; i >= 0; i--) {
+      const it = this.falling[i]
+      const F = it.fall
+      F.t = Math.min(1, F.t + dt / 1.1)
+      // slow to start, quick to land
+      const a = F.t * F.t * 1.45
+      m.makeTranslation(it.x, it.y, it.z).multiply(new THREE.Matrix4().makeRotationAxis(F.axis, a)).multiply(new THREE.Matrix4().makeTranslation(-it.x, -it.y, -it.z))
+      it.matrix.multiplyMatrices(m, F.base)
+      // its chunk and the near set redraw it
+      if (F.chunk) F.chunk.key = null
+      if (F.part) {
+        F.part.mid.count = 0
+        if (F.part.far) F.part.far.count = 0
+      }
+      this.nearAt.x = Infinity
+      if (F.t >= 1) this.falling.splice(i, 1)
+    }
   }
 
   setBands() {
@@ -761,7 +794,8 @@ export class Vegetation {
           ;(c.lists[name] ||= []).push(inst)
           if (meta.r > 0) {
             const r = meta.r * s
-            this.physics.addCylinder(px, pz, r, y - 1, y + meta.h * s, { tag: name === 'rock' ? 'rock' : 'tree' })
+            // the trunk knows its tree, so something heavy can fell it (fell())
+            this.physics.addCylinder(px, pz, r, y - 1, y + meta.h * s, { tag: name === 'rock' ? 'rock' : 'tree', ref: inst })
           }
         }
       }
@@ -822,6 +856,7 @@ export class Vegetation {
   }
 
   update(dt, cam, wind = 1) {
+    if (this.falling.length) this.updateFalling(dt)
     this.uniforms.uTime.value += dt
     this.uniforms.uWind.value = wind
     this.uniforms.uCam.value.copy(cam)
