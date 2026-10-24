@@ -54,6 +54,27 @@ export const LORE = {
       'you can seat the second cartridge. Jab and get clear.\n\n' +
       'Spare cartridges are in the lab cold store. No generator, no cold store.',
   },
+  campOrders: {
+    title: 'Standing orders — Camp Halvorsen',
+    text:
+      'Foundation Security Detachment, north sector. After the Paddock C breach the insurers would not cover the ' +
+      'preserve without an armed response on the island, so the board hired one: keep poachers off the north ' +
+      'coast, keep T-01 north of the river, and keep a gun between her and the field teams.\n\n' +
+      'Rules of engagement: lethal force as the last resort, every round accounted for. The charter counts each ' +
+      'carcass against the programme, and the board counts it against us.\n\n' +
+      'Day 41. Three animals down in a month, two of them by mistake. The board has invoked the charter and we are ' +
+      'withdrawn by sea. Small arms go with us. The armour stays until the barge comes for it.',
+  },
+  campMotorPool: {
+    title: 'Motor pool board — Sgt. D. Ruiz',
+    text:
+      'Humvee: serviceable. Roof gun seized solid, don’t bother with it. Tank: serviceable, tracks retensioned, ' +
+      'half a ready rack aboard. The rest of her shells are in the bunker — park her by the door and load from there.\n\n' +
+      'She turns on the spot: W/S drive both tracks, A/D turn her. The turret follows wherever the gunner looks and ' +
+      'the sight works out the drop for you; RMB brings the sight in close. Five seconds a round.\n\n' +
+      'Every shot is heard from the volcano to the sea, and Matron comes to see what made it. Fire, then move.\n\n' +
+      'Barge postponed. Again.',
+  },
   'tower:easttower': {
     title: 'Field notes — East Plains Tower',
     text:

@@ -45,6 +45,9 @@ export const WORLD = {
     { id: 'southtower', name: 'Marsh Tower', x: 300, z: 470, flat: 10, icon: 'tower' },
     { id: 'paddock', name: 'Old Paddock C', x: 210, z: -280, flat: 0, icon: 'fence', fence: { radius: 58, sides: 16, gate: 2 } },
     { id: 'summit', name: 'Summit Relay', summit: true, flat: 16, icon: 'relay' },
+    // the security detachment's camp on the far (north-east) plateau; its
+    // prefab faces down the road that comes in through its gate
+    { id: 'milbase', name: 'Camp Halvorsen', x: 465, z: -372, flat: 52, icon: 'base' },
   ],
 
   // Dirt roads, as control points: a POI id (its centre), a bare [x, z]
@@ -58,6 +61,9 @@ export const WORLD = {
     [{ at: 'station', local: [12, 14] }, [120, 470], [250, 340], [330, 180], [345, 60], [352, -30], [290, -150], { at: 'paddock', gate: true }],
     ['fieldlab', [-380, 40], { at: 'westtower', stop: 12 }],
     [{ at: 'station', local: [12, 14] }, [200, 520], { at: 'southtower', stop: 12 }],
+    // off the paddock road up onto the plateau; the last three points are in
+    // line, so it runs straight in through Camp Halvorsen's gate to the yard
+    [[290, -150], [340, -212], [393, -276], [423, -316], { at: 'milbase', stop: 6 }],
   ],
 
   // Cleared lots for small prefabs beside a POI: plants are kept off a circle
