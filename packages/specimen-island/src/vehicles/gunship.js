@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { clamp, dampAngle, lerp, yawDirX, yawDirZ } from '../core/mathx.js'
+import { clamp, dampAngle, lerp, yawDirX, yawDirZ, yawTo } from '../core/mathx.js'
 import { GUNSHIP } from '../data/vehicles.js'
 import { MISSILES } from '../data/missiles.js'
 import { paintedMetal } from '../world/textures.js'
@@ -25,13 +25,11 @@ const _probe = { x: 0, z: 0 }
 export class Gunship extends Helicopter {
   // On the military base's pad (poi.milbase.pad / padYaw) when the island has
   // one; else on the nearest clear, level patch to tune.spawn, with room all
-  // round for the rotor.
+  // round for the rotor (findPad).
   static atBase(G, tune = GUNSHIP) {
     const base = G.island.poi.milbase
     if (base?.pad) return new Gunship(G, base.pad.clone(), base.padYaw ?? 0, tune)
-    const S = tune.spawn
-    const from = new THREE.Vector3(S.x, G.island.heightAt(S.x, S.z), S.z)
-    const spot = findWinchSpot(G, from, S.range, S.clearance) || { pos: from, yaw: 0 }
+    const spot = findPad(G, tune.spawn)
     return new Gunship(G, spot.pos, spot.yaw, tune)
   }
 
@@ -51,11 +49,9 @@ export class Gunship extends Helicopter {
     return this.fuel > this.tune.dry ? `${base} · ${this.missiles}/${this.tune.weapons.rails.length} missiles` : base
   }
 
-  // its own pad counts as a pad for the reserve tank (it rearms there; fuel
-  // comes from the Field Lab pump)
-  pads() {
-    return [...super.pads(), this.home]
-  }
+  // Its own pad is only where it rearms: there is no pump there, so it is not
+  // one of pads() — run dry at home and the reserve tank gets it to the Field
+  // Lab pump like anywhere else.
   atHome() {
     return this.onGround && this.pos.distanceTo(this.home) <= this.tune.rearm.range
   }
@@ -93,8 +89,8 @@ export class Gunship extends Helicopter {
     this.G.audio?.setSeeker(sk.mode, sk.progress)
   }
 
-  // One missile off the next rail: at the locked target, or unguided along
-  // the sight.
+  // One missile off the next rail: at the locked target, or unguided at the
+  // middle of the screen (the sight mark).
   fire() {
     const G = this.G
     if (this.reloadT > 0 || this.destroyed) return
@@ -108,7 +104,10 @@ export class Gunship extends Helicopter {
     this.railMissiles[i].visible = false
     const from = this.modelPoint(rails[i], new THREE.Vector3())
     const target = this.seeker.locked ? this.seeker.target : null
-    G.missiles.launch(this, from, this.vel, _sight.copy(this.seeker.axis), target, this.weapon)
+    // locked, it leaves along the sight and steers itself; unguided, it is
+    // aimed off the rail to cross the sight where the sight meets the ground
+    const dir = target ? _sight.copy(this.seeker.axis) : G.missiles.boresight(from, this.vel, G.camera.position, this.seeker.axis, this.weapon, _sight)
+    G.missiles.launch(this, from, this.vel, dir, target, this.weapon)
     this.missiles--
     this.reloadT = this.weapon.reload
     if (!target) G.toast('No lock — missile away unguided.', 'info', 2.5)
@@ -143,9 +142,9 @@ export class Gunship extends Helicopter {
 
   // ------------------------------------------------------------ munitions point
   // A trolley of missile crates at the edge of the pad (tune.rearm.at, in the
-  // pad's frame — or the first clear spot round the pad at that distance),
-  // registered here rather than with the base's prefab so the gunship brings
-  // it wherever it is parked.
+  // pad's frame — or the first clear spot round the pad at that distance,
+  // level with the pad if any is), registered here rather than with the
+  // base's prefab so the gunship brings it wherever it is parked.
   buildRearmPoint() {
     const G = this.G
     const R = this.tune.rearm
@@ -153,18 +152,30 @@ export class Gunship extends Helicopter {
     const s = Math.sin(this.homeYaw)
     const r = Math.hypot(R.at[0], R.at[1])
     const a0 = Math.atan2(R.at[0], R.at[1])
-    let x, y, z
+    let spot = null
     for (let k = 0; k < 12; k++) {
       const a = a0 + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * (Math.PI / 6)
       const lx = Math.sin(a) * r
       const lz = Math.cos(a) * r
-      x = this.home.x + lx * c + lz * s
-      z = this.home.z - lx * s + lz * c
-      y = G.physics.groundAt(x, z, this.home.y + 2)
-      _probe.x = x
-      _probe.z = z
-      if (!G.physics.collideCircle(_probe, 1.2, y + 0.3, y + 1.6) && G.island.depthAt(x, z) < 0.1) break
+      const px = this.home.x + lx * c + lz * s
+      const pz = this.home.z - lx * s + lz * c
+      const py = G.physics.groundAt(px, pz, this.home.y + 2)
+      _probe.x = px
+      _probe.z = pz
+      if (G.physics.collideCircle(_probe, 1.2, py + 0.3, py + 1.6) || G.island.depthAt(px, pz) >= 0.1) continue
+      spot ||= [px, py, pz]
+      if (Math.abs(py - this.home.y) < R.level) {
+        spot = [px, py, pz]
+        break
+      }
     }
+    // nowhere clear round the pad at all: the designed spot regardless
+    if (!spot) {
+      const px = this.home.x + R.at[0] * c + R.at[1] * s
+      const pz = this.home.z - R.at[0] * s + R.at[1] * c
+      spot = [px, G.physics.groundAt(px, pz, this.home.y + 2), pz]
+    }
+    const [x, y, z] = spot
     const olive = drab(0x525a3a)
     const dark = new THREE.MeshLambertMaterial({ color: 0x22251f })
     const yellow = new THREE.MeshLambertMaterial({ color: 0xc9a634 })
@@ -224,6 +235,7 @@ export class Gunship extends Helicopter {
     const black = L({ color: 0x121312 })
     const sensor = new THREE.MeshPhongMaterial({ color: 0x1a1f24, shininess: 90, specular: 0x667788 })
     const glass = new THREE.MeshPhongMaterial({ color: 0x2a3a3a, transparent: true, opacity: 0.6, shininess: 120, specular: 0x99bbbb, depthWrite: false })
+    const frame = L({ color: 0x1b1d1a })
     const g = new THREE.Group()
     g.rotation.order = 'YXZ'
     const P = new Parts()
@@ -231,11 +243,22 @@ export class Gunship extends Helicopter {
     // fuselage: a slim keel, the rounded nose, the spine behind the cockpit
     P.box(olive, 1.12, 1.05, 4.3, 0, 1.12, -0.55)
     P.add(olive, new THREE.SphereGeometry(1, 16, 10).scale(0.56, 0.52, 1.05), 0, 1.12, -2.7)
-    P.box(olive, 0.92, 0.62, 2.7, 0, 1.92, 0.45)
-    P.box(olive, 0.98, 0.3, 1.0, 0, 1.6, -1.45) // cockpit sills
-    // tandem canopies: the gunner low in front, the pilot raised behind
+    P.box(olive, 0.92, 0.62, 2.3, 0, 1.92, 0.65) // spine, from behind the pilot's seat
+    P.box(olive, 0.98, 0.3, 1.45, 0, 1.6, -1.225) // cockpit sills
+    // tandem canopies: the gunner low in front, the pilot raised behind, each
+    // on a dark frame (the pilot's open at the top front, so his sight is clear)
     P.box(glass, 0.9, 0.5, 1.15, 0, 1.97, -2.05, 0.12)
-    P.box(glass, 0.9, 0.66, 1.05, 0, 2.15, -0.92, 0.06)
+    P.box(glass, 0.9, 0.74, 1.05, 0, 2.19, -0.92, 0.06)
+    canopyFrame(P, frame, [0.9, 0.5, 1.15], [0, 1.97, -2.05], 0.12, FRAME_EDGES)
+    canopyFrame(P, frame, [0.9, 0.74, 1.05], [0, 2.19, -0.92], 0.06, FRAME_EDGES.slice(0, -1))
+    // the front seat: the gunner's instrument shroud and his empty seat, seen
+    // over the pilot's own glare shield and panel (T.seat looks out over them)
+    P.box(dark, 0.7, 0.08, 0.3, 0, 1.98, -2.32)
+    P.box(dark, 0.42, 0.5, 0.08, 0, 1.86, -1.62)
+    P.box(black, 0.26, 0.16, 0.1, 0, 2.1, -1.62)
+    P.box(dark, 0.8, 0.045, 0.2, 0, 2.15, -1.37) // the pilot's glare shield
+    P.box(dark, 0.78, 0.35, 0.04, 0, 1.8, -1.17)
+    P.box(dark, 0.86, 0.03, 0.67, 0, 1.765, -0.835) // his footwell
     // chin turret: the seeker's window, and a cannon under it
     P.add(sensor, new THREE.SphereGeometry(0.27, 14, 10), 0, T.sensor[1], T.sensor[2])
     P.cyl(dark, 0.07, 0.07, 1.3, 8, 0, 0.62, -2.6, Math.PI / 2)
@@ -271,6 +294,11 @@ export class Gunship extends Helicopter {
     P.build(g)
     // the canopy glass, which the pilot's own view looks out through rather than at
     this.glass = g.children.find((o) => o.material === glass)
+    // the pilot's instruments, tilted up to his eye and lit from within
+    const panel = new THREE.Mesh(new THREE.PlaneGeometry(0.74, 0.24), new THREE.MeshBasicMaterial({ map: instrumentPanel(), color: 0xb8b8b8 }))
+    panel.position.set(0, 2.02, -1.24)
+    panel.rotation.x = -0.5
+    g.add(panel)
 
     // the missiles on their rails, hidden as they are fired
     this.railMissiles = T.weapons.rails.map(([x, y, z]) => {
@@ -327,6 +355,126 @@ export class Gunship extends Helicopter {
     this.G.scene.add(g)
     this.sync()
   }
+}
+
+// ------------------------------------------------------------ somewhere to park
+
+// With no base on the island: the clear-ground search the jeep uses round
+// S.x, S.z, if what it finds is clear under the whole rotor disc; failing
+// that, rings out to S.search taking the nearest spot that is (padCost 0), or
+// on an island with none the best of them — never the raw point, which on a
+// rough seed is a jungle slope with a palm through the rotor.
+function findPad(G, S) {
+  const isl = G.island
+  const from = new THREE.Vector3(S.x, isl.heightAt(S.x, S.z), S.z)
+  const strict = findWinchSpot(G, from, S.range, S.clearance)
+  if (strict && padCost(G, strict.pos.x, strict.pos.z, S.pad) === 0) return strict
+  let best = null
+  let bestCost = Infinity
+  for (let r = S.step; r <= S.search; r += S.step) {
+    const n = Math.max(8, Math.round((2 * Math.PI * r) / S.step))
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2
+      const x = S.x + Math.sin(a) * r
+      const z = S.z + Math.cos(a) * r
+      const cost = padCost(G, x, z, S.pad)
+      if (cost < bestCost) {
+        bestCost = cost
+        best = { pos: new THREE.Vector3(x, isl.heightAt(x, z), z), yaw: yawTo(S.x, S.z, x, z) }
+        if (cost === 0) return best
+      }
+    }
+  }
+  return best || { pos: from, yaw: 0 }
+}
+
+// How bad a pad (x, z) would be, 0 for a good one: ground under the disc
+// (centre and two rings) more than P.level off level, trunks or walls within
+// P.radius standing into the rotor's sweep, road underneath; wet ground, a
+// roof overhead or the island's edge rule it out.
+function padCost(G, x, z, P) {
+  const isl = G.island
+  if (Math.abs(x) > isl.half - P.edge || Math.abs(z) > isl.half - P.edge) return Infinity
+  const y = isl.heightAt(x, z)
+  if (G.physics.ceilingAt(x, z, y + 0.5) < y + 5) return Infinity
+  let spread = 0
+  let road = 0
+  for (let k = 0; k <= 16; k++) {
+    const r = k === 0 ? 0 : k <= 8 ? P.radius / 2 : P.radius
+    const a = (k * Math.PI) / 4
+    const px = x + Math.sin(a) * r
+    const pz = z + Math.cos(a) * r
+    if (isl.depthAt(px, pz) > 0) return Infinity
+    spread = Math.max(spread, Math.abs(isl.heightAt(px, pz) - y))
+    if (isl.sample(isl.road, px, pz) > 0.05) road++
+  }
+  let blocked = 0
+  for (const c of G.physics.nearby(x, z, P.radius + 2)) {
+    if (c.y1 < y + 0.4 || c.y0 > y + 4) continue
+    let d
+    if (c.type === 'cyl') d = Math.hypot(x - c.x, z - c.z) - c.r
+    else {
+      const [lx, lz] = G.physics.toLocal(c, x, z)
+      d = Math.hypot(Math.max(0, Math.abs(lx) - c.hx), Math.max(0, Math.abs(lz) - c.hz))
+    }
+    if (d < P.radius) blocked++
+  }
+  return Math.max(0, spread - P.level) * 4 + blocked * 3 + road * 2
+}
+
+// The edges of a canopy box ([w, h, d] at [x, y, z], tipped rx about X) as
+// frame tubes. Corners are numbered by bits: x+ (1), top (2), back (4). The
+// front bow comes last, so slice(0, -1) leaves a canopy open at the top front.
+const FRAME_EDGES = [
+  [0, 2], [1, 3], [4, 6], [5, 7], // pillars
+  [0, 4], [1, 5], // sills
+  [2, 6], [3, 7], // roof rails
+  [6, 7], // rear bow
+  [2, 3], // front bow
+]
+const _e = new THREE.Euler()
+function canopyFrame(P, mat, [w, h, d], [x, y, z], rx, edges) {
+  _e.set(rx, 0, 0)
+  const at = (i) => new THREE.Vector3(i & 1 ? w / 2 : -w / 2, i & 2 ? h / 2 : -h / 2, i & 4 ? d / 2 : -d / 2).applyEuler(_e).add(new THREE.Vector3(x, y, z)).toArray()
+  for (const [a, b] of edges) P.tube(mat, 0.018, at(a), at(b))
+}
+
+// The pilot's panel: two dim green displays, flight and weapons.
+function instrumentPanel() {
+  const c = document.createElement('canvas')
+  c.width = 256
+  c.height = 84
+  const ctx = c.getContext('2d')
+  ctx.fillStyle = '#1b1e1b'
+  ctx.fillRect(0, 0, 256, 84)
+  for (const x of [14, 146]) {
+    ctx.fillStyle = '#0b1a10'
+    ctx.fillRect(x, 6, 96, 72)
+    ctx.strokeStyle = '#5fe07a'
+    ctx.lineWidth = 1.5
+    ctx.beginPath()
+    if (x < 100) {
+      // attitude: a horizon, a pitch ladder and the aircraft mark
+      ctx.moveTo(x + 6, 44)
+      ctx.lineTo(x + 90, 40)
+      for (const dy of [-14, 14]) {
+        ctx.moveTo(x + 36, 42 + dy)
+        ctx.lineTo(x + 60, 42 + dy)
+      }
+      ctx.moveTo(x + 38, 42)
+      ctx.lineTo(x + 46, 42)
+      ctx.lineTo(x + 48, 46)
+      ctx.lineTo(x + 50, 42)
+      ctx.lineTo(x + 58, 42)
+    } else {
+      // the weapons page: the rails, two rows of four
+      for (let i = 0; i < 4; i++) for (const row of [18, 46]) ctx.rect(x + 12 + i * 20, row, 12, 16)
+    }
+    ctx.stroke()
+  }
+  const t = new THREE.CanvasTexture(c)
+  t.colorSpace = THREE.SRGBColorSpace
+  return t
 }
 
 // Olive drab gone matt in the sun: light painted metal under an olive tint,

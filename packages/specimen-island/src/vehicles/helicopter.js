@@ -58,7 +58,8 @@ export class Helicopter extends Vehicle {
     if (this.fuel <= this.tune.dry) return this.G.flags.get('labPower') ? 'Refuel at the pad pump' : 'No fuel — the pump needs power'
     return true
   }
-  // The pads it can be refuelled on: the Field Lab's pump (and a subclass's own).
+  // The pads it can be refuelled on: the Field Lab's pump (a subclass adds any
+  // other pad with a pump; one without would strand it dry, see recovery()).
   pads() {
     return [this.G.island.poi.fieldlab.pad]
   }

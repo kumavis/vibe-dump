@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { flyMissile, track, seekerSignal, closestApproach, bodyHeat } from '../src/game/guidance.js'
+import { flyMissile, track, seekerSignal, closestApproach, bodyHeat, aimUnguided } from '../src/game/guidance.js'
 import { MISSILES, SEEKER, HEAT } from '../src/data/missiles.js'
 
 const M = MISSILES.heatseeker
@@ -69,6 +69,33 @@ test('an unguided missile flies straight off the rail and misses a crossing targ
   assert.ok(Math.abs(m.pos.x - (target.x + tVel.x * t)) > 5 || m.pos.z > target.z)
 })
 
+test('an unguided shot aimed off the rail lands where the sight meets the ground', () => {
+  // the chase camera sits on the line of the sight 18 m back from a point
+  // 8.5 m over a gunship at 60 m (Gunship.chaseCamera), looking down 0.22 rad
+  // at flat ground; the rail is under the stub wing
+  const flyTo = (from, vel, dir) => {
+    const m = { pos: { ...from }, vel: { x: vel.x, y: vel.y - M.eject, z: vel.z }, dir: { ...dir }, speed: 0, age: 0, lit: false }
+    while (m.pos.y > 0 && m.age < M.life) flyMissile(m, M, 1 / 120, null)
+    return m.pos
+  }
+  // hovering and in forward flight; inside the motor's burn and past it, where
+  // the coast sags
+  for (const [pitch, vz] of [[0.22, 0], [0.22, -40], [0.12, 0], [0.12, -40]]) {
+    const vel = { x: 0, y: 0, z: vz }
+    const axis = unit(0, -Math.sin(pitch), -Math.cos(pitch))
+    const eye = { x: 0, y: 60 + 8.5 - axis.y * 18, z: -axis.z * 18 }
+    const t = eye.y / -axis.y
+    const aim = { x: eye.x + axis.x * t, y: 0, z: eye.z + axis.z * t }
+    const from = { x: 2.25, y: 61, z: 0.15 }
+    const hit = flyTo(from, vel, aimUnguided(from, vel, aim, M, {}))
+    const miss = Math.hypot(hit.x - aim.x, hit.z - aim.z)
+    assert.ok(miss < 3, `landed ${miss.toFixed(1)} m from the sight point ${Math.round(-aim.z)} m out`)
+    // sent parallel to the sight, from the rail metres below it, it fell far short
+    const short = flyTo(from, vel, axis)
+    assert.ok(Math.hypot(short.x - aim.x, short.z - aim.z) > 15)
+  }
+})
+
 test('the seeker only acquires sources inside its cone, in range and in sight', () => {
   const origin = { x: 0, y: 50, z: 0 }
   const axis = unit(0, -0.2, -1)
@@ -93,25 +120,46 @@ test('the seeker only acquires sources inside its cone, in range and in sight', 
 
 test('a hotter flare in the cone takes the lock; one outside it, or a cooler one, does not', () => {
   const origin = { x: 0, y: 60, z: 0 }
-  const trike = { ref: 'trike', x: 0, y: 2, z: -300, heat: bodyHeat(6000, HEAT.creature) }
+  const trike = { kind: 'creature', ref: 'trike', x: 0, y: 2, z: -300, heat: bodyHeat(6000, HEAT.creature) }
   const axis = unit(trike.x, trike.y - origin.y, trike.z)
   const lock = { ref: 'trike', signal: 0, lostT: 0, acquire: false }
   assert.equal(track(lock, [trike], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
   // a herd-mate of the same size beside it does not pull the missile off
-  const mate = { ref: 'mate', x: 6, y: 2, z: -296, heat: trike.heat * 1.1 }
+  const mate = { kind: 'creature', ref: 'mate', x: 6, y: 2, z: -296, heat: trike.heat * 1.1 }
   assert.equal(track(lock, [trike, mate], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
   // a flare burning outside the missile's view changes nothing
-  const behind = { ref: 'flare', x: 0, y: 60, z: 300, heat: HEAT.flare }
+  const behind = { kind: 'flare', ref: 'flare', x: 0, y: 60, z: 300, heat: HEAT.flare }
   assert.equal(track(lock, [trike, behind], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
   // nor does a bigger animal elsewhere in its view, outside the window round the target
-  const brachio = { ref: 'brachio', x: 120, y: 4, z: -320, heat: bodyHeat(30000, HEAT.creature) }
+  const brachio = { kind: 'creature', ref: 'brachio', x: 120, y: 4, z: -320, heat: bodyHeat(30000, HEAT.creature) }
   assert.ok(seekerSignal(brachio, origin, axis, M.gimbal, SEEKER) > trike.heat * SEEKER.decoy * 0.2)
   assert.equal(track(lock, [trike, brachio], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
   // a flare inside it, hotter than the trike, steals the lock
-  const flare = { ref: 'flare', x: 25, y: 1, z: -290, heat: HEAT.flare }
+  const flare = { kind: 'flare', ref: 'flare', x: 25, y: 1, z: -290, heat: HEAT.flare }
   assert.ok(flare.heat > trike.heat * SEEKER.decoy)
   assert.equal(track(lock, [trike, flare], origin, axis, M.gimbal, SEEKER, 0.08), 'switch')
   assert.equal(lock.ref, 'flare')
+})
+
+test('a flare decoys from anywhere in the missile\'s view, not only beside the target', () => {
+  // closing on a trike 80 m out: a flare burning 15–25 m beside it is 10–16°
+  // off the nose — outside the window round the target, well inside the gimbal
+  const origin = { x: 0, y: 30, z: 0 }
+  const trike = { kind: 'creature', ref: 'trike', x: 0, y: 2, z: -80, heat: bodyHeat(6000, HEAT.creature) }
+  const axis = unit(trike.x - origin.x, trike.y - origin.y, trike.z - origin.z)
+  const off = (s) => Math.acos((s.x * axis.x + (s.y - origin.y) * axis.y + s.z * axis.z) / Math.hypot(s.x, s.y - origin.y, s.z))
+  for (const side of [15, 25]) {
+    const flare = { kind: 'flare', ref: 'flare', x: side, y: 0.3, z: -80, heat: HEAT.flare }
+    assert.ok(off(flare) > SEEKER.gate && off(flare) < M.gimbal)
+    const lock = { ref: 'trike', src: trike, signal: 0, lostT: 0, acquire: false }
+    assert.equal(track(lock, [trike], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
+    assert.equal(track(lock, [trike, flare], origin, axis, M.gimbal, SEEKER, 0.08), 'switch', `flare ${side} m beside`)
+    // the same heat in an animal there leaves the missile on its target
+    const big = { ...flare, kind: 'creature', ref: 'big' }
+    const held = { ref: 'trike', src: trike, signal: 0, lostT: 0, acquire: false }
+    track(held, [trike], origin, axis, M.gimbal, SEEKER, 0.08)
+    assert.equal(track(held, [trike, big], origin, axis, M.gimbal, SEEKER, 0.08), 'hold')
+  }
 })
 
 test('a lock survives a moment behind cover, then is lost for good', () => {

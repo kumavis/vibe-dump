@@ -3,12 +3,14 @@
 // { x, y, z } objects; game/missiles.js feeds in the island's heat sources
 // and turns the results into smoke, sound and blasts.
 //
-// A heat source is { ref, x, y, z, heat }: `ref` is whatever it stands for
-// (an animal, a flare, an engine) and is what a lock holds on to.
+// A heat source is { kind, ref, x, y, z, heat }: `ref` is whatever it stands
+// for (an animal, a flare, an engine) and is what a lock holds on to; `kind`
+// ('creature' | 'flare' | 'vehicle') picks its tracking window (SEEKER.gates).
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
 const always = () => true
 const _a = { x: 0, y: 0, z: 0 }
+const _b = { x: 0, y: 0, z: 0 }
 
 // What a seeker at `origin` looking along unit `axis` reads off `src` through
 // a cone of half-angle `cone`: 0 outside the cone or beyond range, else its
@@ -33,9 +35,10 @@ export function seekerSignal(src, origin, axis, cone, S) {
 // line-of-sight test, run only on sources that pass the cheap ones.
 //
 // A held lock is kept until something within `S.gate` of it (the seeker's
-// tracking window round the target) reads `S.decoy` times hotter than the
-// target did — a flare burning beside it — or until the target has been out
-// of the cone or behind cover for `S.grace` seconds. Returns what happened:
+// tracking window round the target; `S.gates[kind]` widens it for a kind —
+// a flare pulls from anywhere in view) reads `S.decoy` times hotter than the
+// target did, or until the target has been out of the cone or behind cover
+// for `S.grace` seconds. Returns what happened:
 // 'none' | 'acquire' | 'hold' | 'blind' | 'switch' | 'lost'; the source in
 // view, when there is one, is left in `lock.src`.
 export function track(lock, sources, origin, axis, cone, S, dt, visible = always) {
@@ -54,17 +57,17 @@ export function track(lock, sources, origin, axis, cone, S, dt, visible = always
     gy = (at.y - origin.y) / d
     gz = (at.z - origin.z) / d
   }
-  const cosGate = Math.cos(S.gate)
   for (const s of sources) {
     const sig = seekerSignal(s, origin, axis, cone, S)
     if (sig < S.minSignal) continue
     const mine = lock.ref != null && s.ref === lock.ref
-    if (at && !mine) {
+    const gate = S.gates?.[s.kind] ?? S.gate
+    if (at && !mine && gate < Math.PI) {
       // while it holds a target, only what is beside it can take its place
       const dx = s.x - origin.x
       const dy = s.y - origin.y
       const dz = s.z - origin.z
-      if ((dx * gx + dy * gy + dz * gz) / (Math.hypot(dx, dy, dz) || 1) < cosGate) continue
+      if ((dx * gx + dy * gy + dz * gz) / (Math.hypot(dx, dy, dz) || 1) < Math.cos(gate)) continue
     }
     if (!visible(s)) continue
     if (mine) {
@@ -150,6 +153,40 @@ export function flyMissile(m, M, dt, aim = null) {
   m.pos.x += m.vel.x * dt
   m.pos.y += m.vel.y * dt
   m.pos.z += m.vel.z * dt
+}
+
+// Where a missile let go at `from`, inheriting the launcher's `vel`, will be
+// when its motor lights: the fall off the rail flyMissile flies first.
+export function ignitionPoint(from, vel, M, out) {
+  const t = M.drop
+  out.x = from.x + vel.x * t
+  out.y = from.y + (vel.y - M.eject) * t - 0.5 * M.gravity * t * t
+  out.z = from.z + vel.z * t
+  return out
+}
+
+// The nose direction that puts an unguided missile let go at `from` through
+// `aim`: straight at it from where the motor lights, then raised by however
+// far a trial flight passes it (after burnout the coast sags) — twice over.
+// Into `out`.
+export function aimUnguided(from, vel, aim, M, out, dt = 1 / 60) {
+  const p = ignitionPoint(from, vel, M, _b)
+  const range = Math.hypot(aim.x - p.x, aim.y - p.y, aim.z - p.z)
+  let ax = aim.x
+  let ay = aim.y
+  let az = aim.z
+  for (let i = 0; ; i++) {
+    const l = Math.hypot(ax - p.x, ay - p.y, az - p.z) || 1
+    out.x = (ax - p.x) / l
+    out.y = (ay - p.y) / l
+    out.z = (az - p.z) / l
+    if (i === 2) return out
+    const m = { pos: { x: from.x, y: from.y, z: from.z }, vel: { x: vel.x, y: vel.y - M.eject, z: vel.z }, dir: { x: out.x, y: out.y, z: out.z }, speed: 0, age: 0, lit: false }
+    while (m.age < M.life && (m.pos.x - p.x) * out.x + (m.pos.y - p.y) * out.y + (m.pos.z - p.z) * out.z < range) flyMissile(m, M, dt, null)
+    ax += aim.x - m.pos.x
+    ay += aim.y - m.pos.y
+    az += aim.z - m.pos.z
+  }
 }
 
 // Proportional navigation: an acceleration across the line of sight, N times

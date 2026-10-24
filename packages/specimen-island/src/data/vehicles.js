@@ -309,7 +309,7 @@ export const GUNSHIP = {
   flownFlag: 'gunshipFlown',
   heat: 7,
   enginePoint: [0, 2.35, 1.75], // the exhausts: where the smoke pours out and the seekers look
-  seat: [0, 2.4, -0.75], // the raised rear seat, looking over the empty gunner's seat ahead
+  seat: [0, 2.42, -0.7], // the raised rear seat: over his glare shield, the gunner's empty seat and canopy ahead
   sensor: [0, 1.05, -3.35], // the nose turret the seeker looks out of
   chase: { back: 18, up: 8.5 }, // on the line of the sight, above the rotor (Gunship.chaseCamera)
   noise: { radius: 170, every: 0.6 },
@@ -330,9 +330,12 @@ export const GUNSHIP = {
   },
   // The munitions point beside its pad: hold E there with the gunship parked
   // within `range` to load all eight rails.
-  rearm: { hold: 5, range: 16, at: [10.5, 2.5] }, // `at`: pad frame (x right of the pad's heading, z behind)
-  // No base on the map: a clear, level patch near here instead.
-  spawn: { x: 425, z: -430, range: 90, clearance: { halfWidth: 6.5, halfLength: 7.5 } },
+  rearm: { hold: 5, range: 16, at: [10.5, 2.5], level: 1 }, // `at`: pad frame (x right of the pad's heading, z behind); within `level` m of the pad's height if it can
+  // No base on the map: a clear, level patch near here instead — the jeep's
+  // search out to `range`, else rings every `step` m out to `search`, wanting
+  // ground within `pad.level` of level under the disc and nothing standing
+  // within `pad.radius` (rotor and tail), `pad.edge` in from the island's edge.
+  spawn: { x: 425, z: -430, range: 90, clearance: { halfWidth: 6.5, halfLength: 7.5 }, search: 320, step: 6, pad: { radius: 8.5, level: 1, edge: 60 } },
   controls: {
     keyboard: 'Space/Shift: climb/descend · W/S: pitch · A/D: slide · Mouse: turn · hold RMB: seeker · LMB: fire missile · V: camera · E: exit (landed)',
     gamepad: 'A/B: climb/descend · Left stick: pitch / slide · Right stick: turn · hold LT: seeker · RT: fire missile · LB: camera · Y: exit (landed)',

@@ -1251,6 +1251,29 @@ button:focus, select:focus, input:focus {
 #seekerHud.show {
   display: block;
 }
+/* the sight mark in the middle of the screen: where an unguided missile goes */
+#seekerHud .sk-pip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 1.5px solid rgba(170, 255, 190, 0.7);
+  border-radius: 50%;
+  display: none;
+}
+#seekerHud .sk-pip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%;
+  background: rgba(170, 255, 190, 0.9);
+}
 #seekerHud .sk-cone {
   position: absolute;
   left: 0;

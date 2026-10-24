@@ -194,23 +194,25 @@ export class HUD {
     const hullCls = hit ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
     const hull = `<div class="hull${hit ? ' hit' : ''}">HULL <b class="${hullCls}">${Math.round(v.health)}%</b></div>`
     const spd = `<div>SPD <b>${Math.round(v.speed * 3.6)}</b> km/h</div>`
+    // anything carrying a missile seeker shows its rails and seeker
+    const arms = v.seeker ? this.weaponsPanel(v) : ''
+    const fire = v.seeker ? (pad ? 'LT: seeker · RT: fire · ' : 'RMB: seeker · LMB: fire · ') : ''
     if (v.aircraft) {
       const agl = v.pos.y - Math.max(G.island.heightAt(v.pos.x, v.pos.z), G.island.waterAt(v.pos.x, v.pos.z))
       // sinking faster than a skid landing can take, close to the ground: red
       const vs = v.onGround ? 0 : v.vel.y
       const sinkCls = vs < -v.tune.impact.terrain.min && agl < 15 ? 'warn' : ''
-      const armed = v.kind === 'gunship'
-      const arms = armed ? this.weaponsPanel(v) : ''
-      const fire = armed ? (pad ? 'LT: seeker · RT: fire · ' : 'RMB: seeker · LMB: fire · ') : ''
       return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}${arms}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${fire}${camera}: camera</div>`
     }
     const bike = v.kind === 'motorbike'
     const balance = bike ? '<div>STABILIZER <b>ON</b></div>' : ''
-    return `${spd}${hull}${balance}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${camera}: camera</div>`
+    return `${spd}${hull}${balance}${arms}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${fire}${camera}: camera</div>`
   }
 
-  // The gunship's rails and seeker: missiles left, what the seeker is doing
-  // and the tone it plays, and what it holds.
+  // A launcher's rails and seeker (the gunship's, or any vehicle carrying a
+  // `seeker`, a `weapon` from MISSILES, `missiles` left and tune.weapons.rails):
+  // missiles left, what the seeker is doing and the tone it plays, and what
+  // it holds.
   weaponsPanel(v) {
     const G = this.G
     const sk = v.seeker
@@ -222,9 +224,9 @@ export class HUD {
     let held = ''
     if (t) {
       const name = t.kind === 'creature' ? (G.science.known(t.ref.sp.id) ? t.ref.sp.name : 'Unknown animal') : t.kind === 'flare' ? 'Flare' : `${t.ref.tune.name} engine`
-      held = `<div class="tgt">${name} · ${Math.round(Math.hypot(t.x - v.pos.x, t.y - v.pos.y, t.z - v.pos.z))} m</div>`
+      held = `<div class="tgt">${name} · ${Math.round(sk.range)} m</div>`
     }
-    return `<div>MSL <b class="${v.missiles ? '' : 'warn'}">${v.missiles}</b>/${n} <span class="pips">${pips}</span></div><div class="seek s-${sk.mode}">SEEKER <b>${state}</b> <small>tone: ${tone}</small></div>${held}`
+    return `<div>${v.weapon.hudName} <b class="${v.missiles ? '' : 'warn'}">${v.missiles}</b>/${n} <span class="pips">${pips}</span></div><div class="seek s-${sk.mode}">SEEKER <b>${state}</b> <small>tone: ${tone}</small></div>${held}`
   }
 
   updateCompass(camYaw) {

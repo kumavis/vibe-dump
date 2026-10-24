@@ -31,6 +31,7 @@ export const MISSILES = {
     pursuit: 1.2,
     turn: 1.7,
     gimbal: 0.75, // half-angle off the nose its own seeker can see
+    converge: 600, // unguided: aimed to cross the sight where it meets the ground, or this far down it
     fuse: 2.5, // proximity fuse, metres beyond the target's girth: it fires at the closest pass inside that
     // the smoke: a ribbon through every point it passes, `width` at the motor
     // and spreading `spread` m/s, fading over `life`; puffs along it give it
@@ -53,7 +54,10 @@ export const SEEKER = {
   strong: 5, // a source this many times minSignal locks at full speed;
   slowest: 0.4, // a faint one no slower than this fraction of it
   decoy: 1.25, // to steal a held lock a source must read this much hotter than the target did,
-  gate: 0.12, // and be within this angle of it: the tracking window round the target
+  gate: 0.12, // and be within this angle of it: the tracking window round the target,
+  // so a herd-mate or a bigger animal across the valley cannot take it — but
+  // a flare is made to pull a seeker off: from anywhere in its view (by kind)
+  gates: { flare: Math.PI },
   grace: 0.45, // s a lock survives with its target out of sight
   scan: 0.1, // s between the launcher's sweeps
   missileScan: 0.08, // and a missile's own

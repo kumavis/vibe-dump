@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { MISSILES, SEEKER, HEAT } from '../data/missiles.js'
 import { clamp, damp } from '../core/mathx.js'
-import { bodyHeat, closestApproach, flyMissile, track } from './guidance.js'
+import { aimUnguided, bodyHeat, closestApproach, flyMissile, track } from './guidance.js'
 import { blast } from './blast.js'
 
 // Heat-seeking missiles as a system: what is hot on the island right now
@@ -24,6 +24,7 @@ const _p = new THREE.Vector3()
 const _v = new THREE.Vector3()
 const _n = new THREE.Vector3()
 const _prev = new THREE.Vector3()
+const _r = new THREE.Vector3()
 const NOSE = new THREE.Vector3(0, 0, -1)
 
 // ---------------------------------------------------------------- model
@@ -73,7 +74,8 @@ export function missileModel() {
 // `origin` — the owner sets both before update() — and holds on to the
 // strongest heat source in view; a held source locks once `progress` reaches
 // 1, quicker for a strong signal. `mode` is off | search | track | locked,
-// which is also what the lock tone plays.
+// which is also what the lock tone plays; `range` is how far off what it
+// holds is now, from `origin` (the one range the HUD shows).
 export class Seeker {
   constructor(G, launcher, S = SEEKER) {
     this.G = G
@@ -83,6 +85,7 @@ export class Seeker {
     this.lock = { ref: null, src: null, signal: 0, lostT: 0, acquire: true }
     this.progress = 0
     this.scanT = 0
+    this.range = 0
     this.origin = new THREE.Vector3()
     this.axis = new THREE.Vector3(0, 0, -1)
   }
@@ -101,6 +104,7 @@ export class Seeker {
     this.lock.signal = this.lock.lostT = 0
     this.progress = 0
     this.scanT = 0
+    this.range = 0
   }
 
   update(dt, on) {
@@ -128,6 +132,8 @@ export class Seeker {
       }
       this.mode = this.progress >= 1 ? 'locked' : 'track'
     }
+    const src = this.lock.src
+    this.range = src ? this.origin.distanceTo(M.locate(src, _r) || _r.set(src.x, src.y, src.z)) : 0
   }
 }
 
@@ -154,11 +160,15 @@ function trailMaterial() {
 
 // A missile's smoke trail: a ribbon through the points it has passed, turned
 // to face the camera, widening and fading as each point ages. It outlives the
-// missile and is dropped once the last of it has faded.
+// missile and is dropped once the last of it has faded. The points live in a
+// ring (oldest at `head`) and the strip is rewritten in place every frame, so
+// a ripple of eight trails makes no garbage.
 class Trail {
   constructor(scene, T) {
     this.T = T
-    this.pts = [] // [x, y, z, born, thickness]
+    this.pts = new Float64Array(TRAIL_MAX * 5) // x, y, z, born, thickness
+    this.head = 0
+    this.n = 0
     this.pos = new Float32Array(TRAIL_MAX * 6)
     this.col = new Float32Array(TRAIL_MAX * 8)
     const uv = new Float32Array(TRAIL_MAX * 4)
@@ -179,46 +189,75 @@ class Trail {
     scene.add(this.mesh)
   }
 
+  // where the i-th point from the oldest starts in `pts`
+  at(i) {
+    return ((this.head + i) % TRAIL_MAX) * 5
+  }
+
   add(x, y, z, t, thick = 1) {
-    if (this.pts.length >= TRAIL_MAX) this.pts.shift()
-    this.pts.push([x, y, z, t, thick])
+    if (this.n === TRAIL_MAX) {
+      this.head = (this.head + 1) % TRAIL_MAX
+      this.n--
+    }
+    const k = this.at(this.n++)
+    const P = this.pts
+    P[k] = x
+    P[k + 1] = y
+    P[k + 2] = z
+    P[k + 3] = t
+    P[k + 4] = thick
   }
 
   // Rebuild the strip for this frame; false once it has all faded.
   update(cam, now, light) {
     const T = this.T
-    const pts = this.pts
-    while (pts.length && now - pts[0][3] > T.life) pts.shift()
-    const n = pts.length
+    const P = this.pts
+    while (this.n && now - P[this.head * 5 + 3] > T.life) {
+      this.head = (this.head + 1) % TRAIL_MAX
+      this.n--
+    }
+    const n = this.n
     const g = this.mesh.geometry
     if (n < 2) {
       g.setDrawRange(0, 0)
       return n > 0
     }
+    const pos = this.pos
+    const col = this.col
+    const c = 0.86 * light
     for (let i = 0; i < n; i++) {
-      const p = pts[i]
-      const a = pts[Math.max(0, i - 1)]
-      const b = pts[Math.min(n - 1, i + 1)]
+      const p = this.at(i)
+      const a = this.at(Math.max(0, i - 1))
+      const b = this.at(Math.min(n - 1, i + 1))
       // across the trail and square to the line of sight
-      const tx = b[0] - a[0]
-      const ty = b[1] - a[1]
-      const tz = b[2] - a[2]
-      const vx = cam.x - p[0]
-      const vy = cam.y - p[1]
-      const vz = cam.z - p[2]
+      const tx = P[b] - P[a]
+      const ty = P[b + 1] - P[a + 1]
+      const tz = P[b + 2] - P[a + 2]
+      const vx = cam.x - P[p]
+      const vy = cam.y - P[p + 1]
+      const vz = cam.z - P[p + 2]
       let sx = ty * vz - tz * vy
       let sy = tz * vx - tx * vz
       let sz = tx * vy - ty * vx
-      const age = now - p[3]
-      const w = ((T.width + T.spread * age) * p[4]) / 2 / (Math.hypot(sx, sy, sz) || 1)
+      const age = now - P[p + 3]
+      const thick = P[p + 4]
+      const w = ((T.width + T.spread * age) * thick) / 2 / (Math.hypot(sx, sy, sz) || 1)
       sx *= w
       sy *= w
       sz *= w
-      this.pos.set([p[0] - sx, p[1] - sy, p[2] - sz, p[0] + sx, p[1] + sy, p[2] + sz], i * 6)
+      const o = i * 6
+      pos[o] = P[p] - sx
+      pos[o + 1] = P[p + 1] - sy
+      pos[o + 2] = P[p + 2] - sz
+      pos[o + 3] = P[p] + sx
+      pos[o + 4] = P[p + 1] + sy
+      pos[o + 5] = P[p + 2] + sz
       const f = 1 - age / T.life
-      const alpha = T.alpha * f * f * Math.min(1, p[4] * 1.4)
-      const c = 0.86 * light
-      this.col.set([c, c, c * 0.98, alpha, c, c, c * 0.98, alpha], i * 8)
+      const alpha = T.alpha * f * f * Math.min(1, thick * 1.4)
+      const q = i * 8
+      col[q] = col[q + 1] = col[q + 4] = col[q + 5] = c
+      col[q + 2] = col[q + 6] = c * 0.98
+      col[q + 3] = col[q + 7] = alpha
     }
     g.attributes.position.needsUpdate = true
     g.attributes.color.needsUpdate = true
@@ -338,6 +377,17 @@ export class Missiles {
     G.events.emit('weapon:fired', { weapon: 'missile' })
     G.events.emit('missile:launched', { missile: m, launcher, target, cost: M.cost })
     return m
+  }
+
+  // The launch line for an unguided shot. The rail sits metres below the
+  // sight (the chase camera rides above the rotor), so a missile sent along
+  // the sight lands well short of what it is looking at: aim it off the rail
+  // through wherever the sight meets the ground or a static, or `M.converge`
+  // metres down the sight when it meets nothing (aimUnguided). Into `out`.
+  boresight(from, vel, eye, axis, M, out) {
+    const hit = this.G.physics.raycast(eye.x, eye.y, eye.z, axis.x, axis.y, axis.z, M.converge)
+    const d = hit ? hit.t : M.converge
+    return aimUnguided(from, vel, _p.copy(eye).addScaledVector(axis, d), M, out)
   }
 
   // ---- per frame
