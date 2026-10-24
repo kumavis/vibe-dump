@@ -64,6 +64,9 @@ export class Weapons {
   }
 
   zoomFactor() {
+    // aboard, a vehicle with a sight (the tank's gunner's sight) sets the zoom
+    const v = this.G.vehicle
+    if (v) return v.sightZoom || 1
     const d = this.def
     const max = d.kind === 'camera' ? this.camZoomNow : d.zoom || 1
     return 1 + (max - 1) * this.aim

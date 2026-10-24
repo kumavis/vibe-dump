@@ -12,6 +12,7 @@
 //   passive    ignores the player; dangerous only underfoot
 //
 // sedation: ko = dose that drops it, lethal = overdose, metab = units/s cleared.
+// lure (optional): the noise that brings it from afar (actors/ecology.js).
 
 export const SPECIES = {
   compsognathus: {
@@ -333,6 +334,10 @@ export const SPECIES = {
     health: 650,
     speed: { walk: 2.2, run: 9, turn: 1.6 },
     senses: { sight: 75, fov: 200, hearing: 1.1, smell: 1.4, motion: 1.6 },
+    // a bang louder than `noise` (m) within `range` m draws her to it at
+    // `pace` of her run, for `hold` s, even from the far side of the island
+    // (actors/ecology.js lure): the tank's gun, a shell or missile going off
+    lure: { noise: 300, range: 1100, hold: 150, pace: 0.5 },
     sedation: { ko: 260, lethal: 560, metab: 1.37 },
     herd: [1, 1],
     habitat: { highland: 0.8, jungle: 0.7, grass: 0.5 },

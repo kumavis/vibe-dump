@@ -252,11 +252,13 @@ export class Vehicle {
   // Every hit is loud and sparky, and announced on the bus: the camera shake
   // and the HUD (vignette, flashing hull readout) listen for 'vehicle:damaged'.
   // `at` is the contact point. `injure`: a hard enough smash hurts whoever is
-  // inside (strike() does its own accounting for animal blows).
+  // inside (strike() does its own accounting for animal blows). An armoured
+  // hull (tune.armour) counts every hit at that share.
   damage(amount, at = null, injure = true) {
     const G = this.G
     const F = VEHICLE_FX
     if (!(amount > 0)) return
+    amount *= this.tune.armour ?? 1
     const before = this.health
     this.health = Math.max(0, this.health - amount)
     const p = at || this.modelPoint([0, 1.2, 0], new THREE.Vector3())

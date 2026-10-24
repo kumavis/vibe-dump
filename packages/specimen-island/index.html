@@ -18,6 +18,7 @@
 
       <canvas id="detect" width="240" height="240"></canvas>
       <div id="crosshair" class="dot"></div>
+      <div id="gunReticle"></div>
       <div id="hitmarker"></div>
       <div id="target"></div>
       <div id="hurtArrow">▲</div>
@@ -41,7 +42,7 @@
     </div>
     <div id="fade"></div>
 
-    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals · HELI / JEEP / BIKE: parked vehicles (orange: wrecked)</div></div></div>
+    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals · HELI / JEEP / BIKE / HUMVEE / TANK: parked vehicles (orange: wrecked)</div></div></div>
     <div id="journal" class="overlay"><div class="inner"></div></div>
     <div id="note" class="overlay"><div class="inner paper"><h2></h2><p></p><button class="btn" data-close>Close</button></div></div>
 
@@ -92,6 +93,7 @@
           <div><b>View</b> journal · <b>Menu</b> pause / resume</div>
           <div>Vehicles: <b>Left stick</b> drive / steer or pitch / slide · <b>Right stick</b> look / turn · <b>Y</b> board / exit · <b>LB</b> camera</div>
           <div>Jeep: <b>A</b> handbrake. Motorbike: <b>A</b> brake; automatic stabilizer. Helicopter: <b>A / B</b> climb / descend.</div>
+          <div>Humvee: as the jeep. Tank: <b>Left stick</b> drive / turn on the spot · <b>Right stick</b> aim the turret · <b>RT</b> fire · <b>LT</b> gunner’s sight · <b>A</b> brake</div>
           <div>Menus: <b>D-pad / left stick</b> navigate · <b>← / →</b> adjust settings · <b>A</b> select · <b>B</b> back · <b>Right stick</b> scroll</div>
           <div>Connect or pair in your system settings, then press a controller button here. Wireless requires OS/browser support. If sound is silent, click the page once.</div>
         </div>
@@ -105,12 +107,14 @@
           <div><span><b>M</b> map</span> · <span><b>J</b> / <b>Tab</b> journal</span> · <span><b>Esc</b> pause</span></div>
         </div>
         <h3>Vehicles</h3>
-        <p>The stabilized trail bike waits at the inland end of the Supply Dock (BIKE on the map). It balances automatically and leans into turns.</p>
+        <p>The stabilized trail bike waits at the inland end of the Supply Dock (BIKE on the map). It balances automatically and leans into turns. A humvee and a tank stand in the motor pool at Camp Halvorsen, on the north-east plateau; the tank's shells restock at the camp's ammo bunker.</p>
         <div class="controls">
           <div><span><b>E</b> board at a door</span> · <span><b>E</b> exit, once stopped or landed</span> · <span><b>V</b> camera</span></div>
           <div><span>Jeep:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span> · <span><b>Mouse</b> look</span></div>
           <div><span>Motorbike:</span> <span><b>W/S</b> ride / reverse</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> brake</span> · <span><b>F</b> headlight</span> · <span><b>V</b> camera</span> · <span><b>E</b> mount / dismount when stopped</span></div>
           <div><span>Helicopter:</span> <span><b>Space</b> climb</span> · <span><b>Shift</b> descend</span> · <span><b>W/S</b> pitch</span> · <span><b>A/D</b> slide</span> · <span><b>Mouse</b> turn</span></div>
+          <div><span>Humvee:</span> <span>as the jeep</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span></div>
+          <div><span>Tank:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> turn on the spot</span> · <span><b>Mouse</b> aim the turret</span> · <span><b>LMB</b> fire</span> · <span><b>RMB</b> gunner’s sight</span> · <span><b>Space</b> brake</span></div>
         </div>
         <div class="sheet-foot"><button class="btn primary" data-close>Done</button></div>
       </div>

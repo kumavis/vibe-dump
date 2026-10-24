@@ -25,6 +25,23 @@ export class Ecology {
     this.maxActive = 44
     this.focus = { x: 0, z: 0 }
     this.virtualTimer = 0
+    G.events.on('noise', (n) => this.lure(n))
+  }
+
+  // A species with a `lure` (data/species.js) comes to see what made a big
+  // enough bang: its herd's goal becomes the noise, held there for a while,
+  // and a herd that is not loaded travels to it at a fraction of its run. A
+  // loaded animal hears it the ordinary way too (Perception).
+  lure(n) {
+    if (n.source !== 'player') return
+    for (const h of this.herds) {
+      const L = SPECIES[h.species].lure
+      if (!L || n.radius < L.noise || Math.hypot(h.x - n.x, h.z - n.z) > L.range) continue
+      if (!h.records.some((r) => r.state !== 'dead' && r.state !== 'unconscious')) continue
+      h.goal = { x: n.x, z: n.z }
+      h.goalTimer = L.hold
+      h.luredUntil = this.G.time + L.hold
+    }
   }
 
   populate(seed) {
@@ -284,7 +301,8 @@ export class Ecology {
         const d = Math.hypot(dx, dz)
         const anyDown = h.records.some((r) => r.state === 'unconscious')
         if (d > 2 && !anyDown) {
-          const m = Math.min(d, sp.speed.walk * 0.6 * step)
+          const lured = h.luredUntil > G.time
+          const m = Math.min(d, (lured ? sp.speed.run * sp.lure.pace : sp.speed.walk * 0.6) * step)
           h.x += (dx / d) * m
           h.z += (dz / d) * m
           for (const r of h.records) {
