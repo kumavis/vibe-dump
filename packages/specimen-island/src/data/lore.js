@@ -24,7 +24,7 @@ export const LORE = {
     text:
       'Adult female Tyrannosaurus. Collar battery dead since the evacuation; last fix in the northern ' +
       'highlands. Hunts by movement and scent — freeze when she looks your way, and keep the wind in your face.\n\n' +
-      'Knockout needs six or seven rifle darts. Neck and head shots carry more. Do NOT stand in front of her ' +
+      'Knockout takes eight rifle darts to the body, fewer placed in the neck or head. Do NOT stand in front of her ' +
       'while the sedative takes hold.',
   },
   hangarClipboard: {
