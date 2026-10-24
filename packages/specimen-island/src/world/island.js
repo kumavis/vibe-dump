@@ -84,10 +84,11 @@ export class Island {
     this.slope = f()
     this.road = f()
     this.clear = f() // 1 = keep clear of vegetation (POIs, roads)
+    this.reef = f() // 1 on a reef's crown (shapeSeabed): rock, corals and kelp
     this.w = {} // biome weights
     for (const b of BIOME_NAMES) this.w[b] = f()
     this.d = {} // vegetation densities, 0..1
-    for (const v of ['canopy', 'palm', 'broadleaf', 'pine', 'fern', 'bush', 'grass', 'reed', 'rock', 'bigleaf', 'log'])
+    for (const v of ['canopy', 'palm', 'broadleaf', 'pine', 'fern', 'bush', 'grass', 'reed', 'rock', 'bigleaf', 'log', 'kelp', 'seagrass', 'coral'])
       this.d[v] = f()
     this.cover = f()
 
@@ -107,12 +108,17 @@ export class Island {
     this.carveLake()
     this.settleWater()
     this.placePois()
+    // after the POIs have flattened their ground, so the shaping never mixes
+    // into a coastal flatten; then whatever stands out at sea
+    this.shapeSeabed()
+    for (const p of this.pois) if (p.def.offshore) this.placeOffshore(p, p.def)
     this.buildRoads()
     this.settleWater() // the roads re-shape some banks
     this.placeLots()
     this.computeSlope()
     this.computeBiomes()
     this.computeDensities()
+    this.computeMarine()
     this.placeWrecks()
   }
 
@@ -249,6 +255,60 @@ export class Island {
         // squash the band just above sea level into wide, gentle beaches
         if (h > 0 && h < 6) h = 6 * Math.pow(h / 6, 1.7)
         this.h[this.idx(i, j)] = h
+      }
+    }
+  }
+
+  // Reefs, a trench, dunes and a swell on the seabed (cfg.seabed). Only ground
+  // already deeper than below[0] is touched, fading in to full by below[1],
+  // and a reef's crown stays under -6 m: every coast, beach and shallow is
+  // left exactly as the generator, the river and the POIs made it, so
+  // nothing placed on land moves.
+  shapeSeabed() {
+    const S = this.cfg.seabed
+    if (!S) return
+    const [b0, b1] = S.below
+    const n = this.noise
+    const nb = this.noiseB
+    const T = S.trench
+    for (let j = 0; j < this.n; j++) {
+      const z = this.xOf(j)
+      for (let i = 0; i < this.n; i++) {
+        const id = this.idx(i, j)
+        const h0 = this.h[id]
+        if (h0 >= b0) continue
+        const x = this.xOf(i)
+        let h = h0
+        // the deep flat rolls instead of lying dead level
+        h += S.swell.height * n.fbm(x * S.swell.scale + 31, z * S.swell.scale - 17, 3) * smoothstep(-12, -22, h0)
+        // sand waves, their crests swinging round with the noise
+        const a = nb.noise(x * 0.004, z * 0.004) * 1.4
+        const u = x * Math.cos(a) + z * Math.sin(a)
+        h += S.dunes.height * Math.sin((u / S.dunes.length) * Math.PI * 2 + nb.noise(x * 0.02, z * 0.02) * 2)
+        let reef = 0
+        for (const R of S.reefs) {
+          const d = Math.hypot(x - R.x, z - R.z) / R.r
+          if (d >= 1) continue
+          // a broad crown that falls away steeply at the rim, cut into spurs
+          // and pinnacles by ridged noise
+          const p = (1 - smoothstep(0.3, 1, d)) * (1 - R.rough + R.rough * nb.ridged(x * 0.05 + R.x, z * 0.05 + R.z, 3))
+          const crown = Math.min(R.top, -6)
+          if (crown > h) h = lerp(h, crown, p)
+          reef = Math.max(reef, p)
+        }
+        if (T) {
+          let d = Infinity
+          for (let k = 0; k < T.points.length - 1; k++) {
+            const [ax, az] = T.points[k]
+            const [bx, bz] = T.points[k + 1]
+            d = Math.min(d, segDist(x, z, ax, az, bx, bz).d)
+          }
+          const t = d / (T.width / 2)
+          if (t < 1.4) h -= T.depth * (1 - smoothstep(0.55, 1.2, t)) * (0.85 + 0.15 * n.noise(x * 0.05, z * 0.05))
+        }
+        const k = smoothstep(b0, b1, h0)
+        this.h[id] = h0 + (h - h0) * k
+        this.reef[id] = reef * k
       }
     }
   }
@@ -658,11 +718,45 @@ export class Island {
         poi.y = Math.max(sum / cnt, this.sea + 1.6)
         this.flatten(poi.x, poi.z, def.flat, poi.y, def.summit ? 1.3 : 1.8)
       }
-      poi.y = this.heightAt(poi.x, poi.z)
+      poi.y = def.offshore ? this.sea : this.heightAt(poi.x, poi.z)
       byId[def.id] = poi
       this.pois.push(poi)
     }
     this.poi = byId
+  }
+
+  // Out at sea (data/world.js `offshore`), placed once the seabed is shaped:
+  // the first point along `dir` from the island centre where it lies `depth`
+  // m down. The POI faces the
+  // shore (+Z), `seabed` is the depth there and `coast` where a pier walking
+  // back along +Z first meets dry sand, `s` m from the centre. `clear` keeps
+  // the plants off that beach.
+  placeOffshore(poi, def) {
+    const [ox, oz] = def.offshore.dir
+    const l = Math.hypot(ox, oz)
+    const dx = ox / l
+    const dz = oz / l
+    let s = 200
+    while (s < this.half - 60 && this.heightAt(dx * s, dz * s) > this.sea - def.offshore.depth) s += 1
+    poi.x = dx * s
+    poi.z = dz * s
+    poi.seaDir = [dx, dz]
+    poi.yaw = Math.atan2(-dx, -dz)
+    poi.seabed = this.sea - this.heightAt(poi.x, poi.z)
+    let c = 0
+    while (c < s && this.heightAt(poi.x - dx * c, poi.z - dz * c) < this.sea) c += 0.5
+    poi.coast = { x: poi.x - dx * c, z: poi.z - dz * c, s: c }
+    const r = def.clear || 0
+    if (!r) return
+    const ax = poi.coast.x + dx * 10
+    const az = poi.coast.z + dz * 10
+    const bx = poi.coast.x - dx * r
+    const bz = poi.coast.z - dz * r
+    const reach = r + 18
+    this.forEachInBox(poi.coast.x - reach, poi.coast.z - reach, poi.coast.x + reach, poi.coast.z + reach, (id, px, pz) => {
+      const { d } = segDist(px, pz, ax, az, bx, bz)
+      this.clear[id] = Math.max(this.clear[id], 1 - smoothstep(r * 0.5, r, d))
+    })
   }
 
   // Resolve a road's control points (see data/world.js roads) to [x, z].
@@ -922,6 +1016,31 @@ export class Island {
         d.log[id] = open * w.jungle[id] * 0.25
 
         this.cover[id] = clamp(d.fern[id] * 0.85 + d.grass[id] * 0.95 + d.bush[id] * 0.5 + d.reed[id] * 0.85 + d.bigleaf[id] * 0.5, 0, 1)
+      }
+    }
+  }
+
+  // Plants under the sea: seagrass meadows on the sandy shallows, kelp on
+  // rock (reefs, trench walls, steep ground) and corals on the reef crowns.
+  // Drawn only while the camera is under water (Vegetation `marine` types).
+  computeMarine() {
+    const n = this.noise
+    const nb = this.noiseB
+    const d = this.d
+    for (let j = 0; j < this.n; j++) {
+      const z = this.xOf(j)
+      for (let i = 0; i < this.n; i++) {
+        const id = this.idx(i, j)
+        const depth = this.sea - this.h[id]
+        if (depth < 1.5) continue
+        const x = this.xOf(i)
+        const reef = this.reef[id]
+        const rocky = Math.max(reef, smoothstep(0.35, 0.8, this.slope[id]))
+        const patch = n.noise(x * 0.018 - 21, z * 0.018 + 5)
+        const clump = nb.noise(x * 0.06 + 2, z * 0.06 - 9)
+        d.seagrass[id] = (1 - rocky) * smoothstep(2, 4, depth) * (1 - smoothstep(11, 16, depth)) * smoothstep(-0.1, 0.45, patch + 0.3 * clump)
+        d.kelp[id] = smoothstep(0.15, 0.5, rocky) * smoothstep(5, 8, depth) * (1 - smoothstep(26, 34, depth)) * clamp(0.55 + 0.6 * clump, 0, 1)
+        d.coral[id] = smoothstep(0.35, 0.75, reef) * (1 - smoothstep(15, 21, depth)) * clamp(0.6 + 0.5 * patch, 0, 1)
       }
     }
   }

@@ -45,6 +45,13 @@ export const WORLD = {
     { id: 'southtower', name: 'Marsh Tower', x: 300, z: 470, flat: 10, icon: 'tower' },
     { id: 'paddock', name: 'Old Paddock C', x: 210, z: -280, flat: 0, icon: 'fence', fence: { radius: 58, sides: 16, gate: 2 } },
     { id: 'summit', name: 'Summit Relay', summit: true, flat: 16, icon: 'relay' },
+    // Out on the west shelf, where nothing else goes: the supply boat runs
+    // south from the dock, the river mouth is south-east, every tower and road
+    // is inland. It stands where the seabed along `dir` (from the island
+    // centre) first lies `depth` m down, and its pier runs back to the beach
+    // about 450 m west of the Field Lab's helipad. `clear` keeps the plants off
+    // that beach: that many metres either side of the pier and inland of it.
+    { id: 'sealab', name: 'Foundation Sea Lab', offshore: { dir: [-1, 0.035], depth: 19.5 }, clear: 9, icon: 'sealab' },
   ],
 
   // Dirt roads, as control points: a POI id (its centre), a bare [x, z]
@@ -79,4 +86,31 @@ export const WORLD = {
   ],
 
   wind: { angle: 0.6, strength: 0.6 }, // radians; gusts wobble around this
+
+  // The seabed off the coast (Island.shapeSeabed). It is only reshaped where
+  // the bed already lies deeper than below[0] m, fully past below[1], so no
+  // beach, shallows or coastline moves. A reef rises to its crown `top` (m,
+  // never above -6) over radius `r`, broken up by ridged noise (`rough`); the
+  // trench is cut `depth` m into the bed along its points, `width` wide with
+  // steep walls; dunes are sand waves (`height` m, `length` m apart) and the
+  // swell rolls the deep flat beyond the shelf.
+  seabed: {
+    below: [-4, -9],
+    dunes: { height: 0.6, length: 24 },
+    swell: { height: 2.6, scale: 0.006 },
+    reefs: [
+      // round the sea lab
+      { x: -845, z: -70, r: 46, top: -9, rough: 0.5 },
+      { x: -770, z: 96, r: 26, top: -8, rough: 0.4 },
+      { x: -905, z: 92, r: 18, top: -11, rough: 0.6 },
+      { x: -760, z: -96, r: 20, top: -9, rough: 0.5 },
+      { x: -930, z: -20, r: 24, top: -13, rough: 0.6 },
+      // elsewhere round the island, for whoever takes the sub that far
+      { x: 70, z: 835, r: 30, top: -10, rough: 0.5 },
+      { x: 800, z: -70, r: 40, top: -9, rough: 0.5 },
+      { x: -120, z: -830, r: 34, top: -10, rough: 0.5 },
+      { x: 620, z: 610, r: 22, top: -10, rough: 0.6 },
+    ],
+    trench: { points: [[-815, 112], [-860, 150], [-910, 205], [-960, 268], [-1010, 330]], width: 26, depth: 21 },
+  },
 }

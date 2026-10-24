@@ -41,6 +41,9 @@ function mats() {
     tire: L({ color: 0x1a1918 }),
     seat: L({ color: 0x3a2e24 }),
     moss: L({ color: 0x4a6a2c, side: THREE.DoubleSide }),
+    // the sea lab
+    deck: L({ map: rustedPaint([118, 124, 116]) }),
+    weed: L({ color: 0x3e4a26, side: THREE.DoubleSide }),
   }
   return MATS
 }
@@ -74,7 +77,7 @@ const V4 = new THREE.Vector3()
 const S4 = new THREE.Vector3(1, 1, 1)
 
 // What a kit material sounds like underfoot (player footsteps via physics.groundInfo).
-const SURFACE = { wood: 'wood', darkWood: 'wood', concrete: 'concrete', helipad: 'concrete', metal: 'metal', rust: 'metal', roof: 'metal', orange: 'metal', yellow: 'metal', green: 'metal', white: 'metal', black: 'metal' }
+const SURFACE = { wood: 'wood', darkWood: 'wood', concrete: 'concrete', helipad: 'concrete', metal: 'metal', rust: 'metal', roof: 'metal', orange: 'metal', yellow: 'metal', green: 'metal', white: 'metal', black: 'metal', deck: 'metal' }
 
 export class Kit {
   constructor(G, x, y, z, yaw = 0, name = 'prefab') {
@@ -1305,6 +1308,344 @@ export function buildPoles(G, road, rng) {
   kit.finish()
 }
 
+
+// ---------------------------------------------------------------- sea lab
+
+// A railing from (ax, az) to (bx, bz) in the kit's frame, standing on `y`:
+// posts, a top and a mid rail, and a wall the player can't step through.
+function rail(G, kit, ax, az, bx, bz, y, mat = 'yellow') {
+  const len = Math.hypot(bx - ax, bz - az)
+  const ry = -Math.atan2(bz - az, bx - ax)
+  const mx = (ax + bx) / 2
+  const mz = (az + bz) / 2
+  for (const h of [1.0, 0.55]) kit.box(len, 0.06, 0.06, mat, mx, y + h, mz, { ry, collide: false })
+  const n = Math.max(1, Math.round(len / 2.4))
+  for (let i = 0; i <= n; i++) kit.box(0.07, 1.04, 0.07, mat, ax + ((bx - ax) * i) / n, y + 0.52, az + ((bz - az) * i) / n, { collide: false })
+  G.physics.addBox(...kit.world(mx, mz), len / 2, 0.05, kit.yaw + ry, kit.y + y, kit.y + y + 1.1, { walkable: false, material: 'metal' })
+}
+
+// A round bar from a to b (kit-local [x, y, z]), merged into the kit.
+function strut(kit, mat, a, b, r) {
+  const A = new THREE.Vector3(...a)
+  const B = new THREE.Vector3(...b)
+  const dir = B.clone().sub(A)
+  const geo = new THREE.CylinderGeometry(r, r, dir.length(), 8)
+  geo.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize()))
+  geo.translate((A.x + B.x) / 2, (A.y + B.y) / 2, (A.z + B.z) / 2)
+  kit.push(mat, geo, 0, 0, 0)
+}
+
+// A ladder up out of the sea onto a deck at `top`: rails and rungs down into
+// the water, "Climb the ladder" for a swimmer at its foot and "Climb down"
+// at its head (which leaves you swimming). `out` is the side the sea is on.
+function seaLadder(G, kit, id, lx, lz, top, out, onDeck) {
+  const sea = G.island.sea - kit.y
+  const [ox, oz] = out
+  const px = lx + ox * 0.25
+  const pz = lz + oz * 0.25
+  const sx = Math.abs(oz) * 0.3
+  const sz = Math.abs(ox) * 0.3
+  for (const s of [-1, 1]) kit.box(0.07, top - sea + 1.8, 0.07, 'metal', px + sx * s, (top + sea - 1.8) / 2 + 0.5, pz + sz * s, { collide: false })
+  for (let y = sea - 1.6; y < top; y += 0.35) kit.box(0.06 + sx * 2, 0.04, 0.06 + sz * 2, 'metal', px, y, pz, { collide: false })
+  kit.interact({ id: 'climb:' + id, label: 'Climb the ladder', hold: 0, radius: 2.2, onUse: (G) => G.player.teleport(kit.point(onDeck[0], top + 0.05, onDeck[1]), null, 0.7) }, px + ox * 0.6, sea + 0.4, pz + oz * 0.6)
+  kit.interact({ id: 'dive:' + id, label: 'Climb down into the sea', hold: 0, radius: 1.5, onUse: (G) => G.player.teleport(kit.point(px + ox * 1.2, sea - 1.45, pz + oz * 1.2), null, 0.7) }, lx - ox * 0.3, top + 1.0, lz - oz * 0.3)
+}
+
+// The Foundation's marine station out on the west shelf, on steel legs in
+// about twenty metres of water: a wet-lab hangar whose floor opens on the
+// moon pool (the submersible hangs there in its cradle under the gantry),
+// the dry lab beside it, a helipad on the hangar roof up an outside stair, a
+// crane on the back deck, and a long timber pier back to the beach. The local
+// frame faces the shore (+Z), so the pier runs out along +Z; +X is north.
+// Rust, weed and missing planks: nobody has been out here in eleven years.
+export function buildSeaLab(G, poi, rng) {
+  const kit = new Kit(G, poi.x, G.island.sea, poi.z, poi.yaw, 'sealab')
+  const D = 2.6 // main deck
+  const W = 1.4 // wet deck, inside the hangar round the moon pool
+  const R = 7.7 // hangar roof: the helipad
+  const pool = { x: -6, z: 0, hw: 2.6, hl: 4.2 }
+  const deck = (x0, x1, z0, z1, y, mat = 'deck') => kit.box(x1 - x0, 0.3, z1 - z0, mat, (x0 + x1) / 2, y - 0.15, (z0 + z1) / 2, { tex: 4 })
+
+  // ---- legs into the seabed, braced at two levels round the outside, with
+  // a band of weed and barnacles where the swell washes them
+  const legsX = [-14.6, -0.3, 14.6]
+  const legsZ = [-12.6, 0, 12.6]
+  for (const x of legsX) {
+    for (const z of legsZ) {
+      const g = kit.ground(x, z) - 1
+      const top = (x < 0 && z === 0 ? W : D) - 0.3 // under the hangar's wet deck, or a main deck
+      kit.cyl(0.6, top - g, 'rustOrange', x, (top + g) / 2, z, { seg: 12 })
+      kit.cyl(0.68, 1.5, 'weed', x, -0.15, z, { seg: 12, collide: false, open: true })
+    }
+  }
+  for (const y of [-1.6, -12]) {
+    for (const z of [legsZ[0], legsZ[2]]) kit.box(29.2, 0.4, 0.4, 'rustOrange', 0, y, z)
+    for (const x of [legsX[0], legsX[2]]) kit.box(0.4, 0.4, 25.2, 'rustOrange', x, y, 0)
+  }
+  // beams under the decks
+  for (const z of [-11, -5, 5, 11]) kit.box(30, 0.35, 0.25, 'rust', 0, W - 0.5, z, { collide: false })
+
+  // ---- decks: the landing in front, the east deck, the back deck (cast
+  // slabs), and the steel wet deck round the pool, a step down inside the hangar
+  deck(-15, 15, 9, 13, D, 'concrete')
+  deck(0, 15, -13, 9, D, 'concrete')
+  deck(-15, 0, -13, -9, D, 'concrete')
+  deck(-15, pool.x - pool.hw, -9, 9, W)
+  deck(pool.x + pool.hw, 0, -9, 9, W)
+  deck(pool.x - pool.hw, pool.x + pool.hw, -9, pool.z - pool.hl, W)
+  deck(pool.x - pool.hw, pool.x + pool.hw, pool.z + pool.hl, 9, W)
+  // steps down into the hangar across its open front
+  for (let i = 1; i <= 3; i++) kit.box(12, 0.3 * i + 0.3, 0.5, 'deck', -7, W + (0.3 * i - 0.3) / 2, 7.5 + (i - 0.5) * 0.5)
+  // the pool's steel coaming, and the skirt of its well down to the water
+  for (const sz of [-1, 1]) kit.box(pool.hw * 2 + 0.3, 0.2, 0.15, 'yellow', pool.x, W + 0.1, pool.z + sz * pool.hl, { collide: false })
+  for (const sx of [-1, 1]) kit.box(0.15, 0.2, pool.hl * 2, 'yellow', pool.x + sx * pool.hw, W + 0.1, pool.z, { collide: false })
+  for (const sz of [-1, 1]) kit.box(pool.hw * 2, W + 0.5, 0.08, 'rust', pool.x, (W - 0.3) / 2 - 0.25, pool.z + sz * (pool.hl + 0.04), { collide: false })
+  for (const sx of [-1, 1]) kit.box(0.08, W + 0.5, pool.hl * 2, 'rust', pool.x + sx * (pool.hw + 0.04), (W - 0.3) / 2 - 0.25, pool.z, { collide: false })
+
+  // From under the sea the platform's shadow lies on the surface, and the
+  // moon pool is the one bright hole in it: a dark sheet just under the
+  // water, facing down (from above it is never seen).
+  const shadeGeo = mergeGeometries(
+    [
+      [-15, pool.x - pool.hw, -13, 13],
+      [pool.x + pool.hw, 15, -13, 13],
+      [pool.x - pool.hw, pool.x + pool.hw, -13, pool.z - pool.hl],
+      [pool.x - pool.hw, pool.x + pool.hw, pool.z + pool.hl, 13],
+    ].map(([x0, x1, z0, z1]) => new THREE.PlaneGeometry(x1 - x0, z1 - z0).rotateX(Math.PI / 2).translate((x0 + x1) / 2, G.island.sea - kit.y - 0.15, (z0 + z1) / 2)),
+  )
+  const shade = new THREE.Mesh(shadeGeo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.55, depthWrite: false }))
+  shade.renderOrder = 1
+  kit.add(shade)
+
+  // ---- railings: the deck's outer edges (gaps for the pier and the ladder),
+  // three sides of the pool (its east side is where you board), the roof
+  rail(G, kit, -15, 13, -12.7, 13, D)
+  rail(G, kit, -11.3, 13, 3, 13, D)
+  rail(G, kit, 6, 13, 15, 13, D)
+  rail(G, kit, 15, 13, 15, -13, D)
+  rail(G, kit, 15, -13, -15, -13, D)
+  rail(G, kit, -15, -13, -15, -9, D)
+  rail(G, kit, -15, 9, -15, 13, D)
+  rail(G, kit, pool.x - pool.hw, pool.z - pool.hl - 0.2, pool.x + pool.hw, pool.z - pool.hl - 0.2, W)
+  rail(G, kit, pool.x - pool.hw, pool.z + pool.hl + 0.2, pool.x + pool.hw, pool.z + pool.hl + 0.2, W)
+  rail(G, kit, pool.x - pool.hw - 0.2, pool.z - pool.hl, pool.x - pool.hw - 0.2, pool.z + 2.2, W)
+
+  // ---- the hangar: corrugated walls, open across the front, the roof a pad
+  const H = R - 0.3
+  kit.box(0.2, H - W, 18, 'rust', -15, (H + W) / 2, 0, { tex: 3 })
+  kit.box(15, H - W, 0.2, 'rust', -7.5, (H + W) / 2, -9, { tex: 3 })
+  kit.box(0.2, H - W, 18, 'rust', 0, (H + W) / 2, 0, { tex: 3 })
+  for (const [x0, x1] of [
+    [-15, -13],
+    [-1, 0],
+  ])
+    kit.box(x1 - x0, H - W, 0.2, 'rust', (x0 + x1) / 2, (H + W) / 2, 9, { tex: 3 })
+  kit.box(12, 1.2, 0.2, 'rust', -7, H - 0.6, 9, { tex: 3 })
+  // a wall panel torn loose and hanging, for the weather to get in
+  kit.box(2.4, 2.6, 0.06, 'rust', -14.75, 4.4, -4.5, { ry: Math.PI / 2, rz: 0.35, collide: false, tex: 3 })
+  kit.box(15.6, 0.3, 18.6, 'concrete', -7.5, R - 0.15, 0, { tex: 3 })
+  const pad = new THREE.Mesh(new THREE.CylinderGeometry(6.2, 6.2, 0.06, 32), [mats().concrete, mats().helipad, mats().concrete])
+  pad.position.set(-7.5, R + 0.03, 0)
+  pad.rotation.y = Math.PI / 2
+  pad.receiveShadow = true
+  kit.add(pad)
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2
+    kit.push('bulb', new THREE.SphereGeometry(0.1, 6, 4), -7.5 + Math.cos(a) * 6.8, R + 0.12, Math.sin(a) * 6.8)
+  }
+  rail(G, kit, -15.2, -9.2, 0.2, -9.2, R)
+  rail(G, kit, -15.2, 9.2, 0.2, 9.2, R)
+  rail(G, kit, -15.2, -9.2, -15.2, 9.2, R)
+  rail(G, kit, 0.2, -9.2, 0.2, -2.6, R)
+  rail(G, kit, 0.2, 0.25, 0.2, 9.2, R)
+  // the stair up the hangar's east side to the pad: risers the player can
+  // walk (0.29 m on 0.5 m treads), a landing at the top, a rail on its open side
+  const steps = 17
+  const rise = (R - D) / steps
+  for (let i = 1; i <= steps; i++) {
+    const top = D + rise * i
+    const z = 8.75 - (i - 0.5) * 0.5
+    kit.box(1.8, top - D + 0.3, 0.5, 'deck', 1.2, (top + D - 0.3) / 2, z)
+    G.physics.addBox(...kit.world(2.18, z), 0.04, 0.25, kit.yaw, kit.y + top, kit.y + top + 1.05, { walkable: false, material: 'metal' })
+  }
+  kit.box(1.8, 0.3, 2.85, 'deck', 1.2, R - 0.15, -1.175)
+  strut(kit, 'yellow', [2.18, D + 1.0, 8.75], [2.18, R + 1.0, 0.25], 0.03)
+  rail(G, kit, 2.18, 0.25, 2.18, -2.6, R)
+  rail(G, kit, 2.18, -2.6, 0.3, -2.6, R)
+
+  // ---- the moon pool's gantry, hoist and cradle (where the sub hangs)
+  for (const z of [-5, 5]) {
+    for (const x of [pool.x - pool.hw - 0.7, pool.x + pool.hw + 0.7]) kit.box(0.3, 5.0, 0.3, 'yellow', x, W + 2.5, z)
+    kit.box(pool.hw * 2 + 1.7, 0.4, 0.35, 'yellow', pool.x, W + 5.1, z, { collide: false })
+  }
+  kit.box(0.35, 0.45, 10.4, 'yellow', pool.x, W + 4.75, pool.z, { collide: false })
+  const sea = G.island.sea - kit.y
+  for (const z of [-1.8, 1.8]) {
+    kit.box(0.6, 0.5, 0.6, 'black', pool.x, W + 4.3, z, { collide: false })
+    for (const s of [-1, 1]) strut(kit, 'black', [pool.x, W + 4.1, z], [pool.x + s * 1.15, sea + 1.75, z], 0.02)
+    kit.box(2.5, 0.08, 0.14, 'orange', pool.x, sea + 1.7, z, { collide: false })
+  }
+  for (const s of [-1, 1]) kit.box(0.12, 0.12, 4.0, 'orange', pool.x + s * 1.15, sea + 1.72, pool.z, { collide: false })
+  // the pool ladder for anyone who falls in, the winch panel, the dive board
+  seaLadder(G, kit, 'moonpool', pool.x - pool.hw, pool.z + 3, W, [1, 0], [pool.x - pool.hw - 1.0, pool.z + 3])
+  kit.box(0.9, 1.4, 0.5, 'yellow', -1.0, W + 0.7, -6.5)
+  kit.box(0.5, 0.3, 0.06, 'black', -1.0, W + 1.2, -6.24, { collide: false })
+  const charge = new THREE.Mesh(new THREE.SphereGeometry(0.05, 6, 4), mats().bulb.clone())
+  charge.material.emissive.setHex(0x30d070)
+  charge.position.set(-0.75, W + 1.25, -6.22)
+  kit.add(charge)
+  kit.interact(
+    {
+      id: 'subWinch',
+      label: () => (G.sub && G.sub.needsService() ? 'Winch the submersible up — patch the hull' : 'Moon pool winch'),
+      hold: 3,
+      radius: 2.4,
+      enabled: (G) => {
+        const sub = G.sub
+        if (!sub || !sub.inPool()) return 'Bring the submersible into the moon pool'
+        if (sub.occupied) return 'Climb out of her first'
+        if (!sub.needsService()) return 'She is sound — nothing to patch'
+        return true
+      },
+      onUse: (G) => {
+        G.sub.service()
+        G.toast('Winched up, patched and lowered back — the submersible’s hull is sound again.', 'info', 6)
+        G.audio?.play('pump', { pos: G.sub.pos })
+        G.audio?.play('repair', { pos: G.sub.pos })
+      },
+    },
+    -1.0,
+    W + 1.2,
+    -6.0,
+  )
+  kit.box(1.6, 1.1, 0.05, 'white', -2.2, W + 1.7, -8.85, { collide: false })
+  lore(G, kit, 'sealabBoard', 'Read the dive board', -2.2, W + 1.5, -8.4)
+
+  // ---- the wet lab: specimen tanks along the west wall, a bench, buoys
+  for (let i = 0; i < 3; i++) {
+    const z = -6.2 + i * 4.6
+    kit.box(2.2, 0.6, 3.6, 'metal', -13.4, W + 0.3, z)
+    kit.push('tank', new THREE.BoxGeometry(2.0, 1.6, 3.4), -13.4, W + 1.4, z)
+    G.physics.addBox(...kit.world(-13.4, z), 1.0, 1.7, kit.yaw, kit.y + W, kit.y + W + 2.2, { walkable: false, material: 'metal' })
+    kit.box(2.1, 0.08, 3.5, 'black', -13.4, W + 2.24, z, { collide: false })
+    // what is left in them: weed, and a shell on the gravel
+    kit.vines(-13.4, W + 2.1, z, 1.6, 1.3, Math.PI / 2, rng)
+    if (i !== 1) kit.cyl(0.25, 0.12, 'rustWhite', -13.2, W + 0.7, z + 0.6, { collide: false, rx: Math.PI / 2, seg: 10 })
+  }
+  kit.box(1.0, 0.9, 4, 'white', -10.2, W + 0.45, -6)
+  for (let i = 0; i < 5; i++) kit.cyl(0.08, 0.22, 'glass', -10.2, W + 1.0, -7.5 + i * 0.6, { collide: false, seg: 8 })
+  for (let i = 0; i < 4; i++) kit.cyl(0.32, 0.9, i % 2 ? 'orange' : 'rust', -12.6 + (i % 2) * 0.75, W + 0.45, 6.6 - Math.floor(i / 2) * 0.75, { seg: 10 })
+  lifeRing(kit, -0.12, W + 2.2, 3.6, Math.PI / 2)
+  crate(G, kit, -11, 2.4, 'crate:sealab', { items: { medkit: 1, flare: 2, rifleDart: 4 } }, rng, W)
+
+  // ---- the dry lab, up on the east deck
+  const lab = new Kit(G, kit.x, kit.y + D, kit.z, kit.yaw, 'sealab-lab')
+  building(lab, 10, 11, 3.4, { cx: 9, cz: -3, door: 1.8, rng })
+  for (let i = 0; i < 2; i++) lab.box(3, 0.9, 0.8, 'white', 7 + i * 4, 0.75, -7.6)
+  for (let i = 0; i < 3; i++) lab.box(0.25, 0.4, 0.3, 'black', 6 + i * 1.6, 1.4, -7.7, { collide: false })
+  lab.box(1.1, 1.0, 0.7, 'metal', 12.6, 0.8, 1.2)
+  lore(G, lab, 'sealabLog', 'Read the station log', 12.6, 1.4, 0.8)
+  lab.box(0.8, 1.9, 0.7, 'white', 4.7, 1.25, -7.5)
+  // the survey chart pinned to the back wall, the sea shelf circled
+  if (G.mapTexture) {
+    const chart = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5), new THREE.MeshLambertMaterial({ map: G.mapTexture }))
+    chart.position.set(10, 2.0, -8.17)
+    lab.add(chart)
+  }
+  lab.finish()
+
+  // ---- the crane on the back deck, its boom out over the sea
+  kit.cyl(0.75, 1.6, 'yellow', -11, D + 0.8, -11.2, { seg: 12 })
+  kit.box(2.4, 0.4, 2.4, 'yellow', -11, D + 1.8, -11.2)
+  kit.box(1.5, 1.7, 1.6, 'yellow', -10.6, D + 2.85, -10.6)
+  kit.box(1.2, 0.7, 0.05, 'glass', -10.6, D + 3.1, -11.42, { collide: false })
+  kit.box(1.8, 1.2, 1.0, 'rust', -11.6, D + 2.6, -10.2, { collide: false })
+  const boomLen = 13
+  const lift = 0.62
+  kit.box(0.5, 0.5, boomLen, 'yellow', -11.4, D + 2.6 + (Math.sin(lift) * boomLen) / 2, -11.6 - (Math.cos(lift) * boomLen) / 2, { rx: lift, collide: false })
+  const tipY = D + 2.6 + Math.sin(lift) * boomLen
+  const tipZ = -11.6 - Math.cos(lift) * boomLen
+  strut(kit, 'black', [-11.4, tipY, tipZ], [-11.4, D + 3.6, tipZ], 0.02)
+  kit.box(0.4, 0.5, 0.3, 'black', -11.4, D + 3.4, tipZ, { collide: false })
+  // lamp posts, dead since the generator stopped
+  for (const [x, z] of [
+    [13.6, 11.6],
+    [13.6, -11.6],
+  ]) {
+    kit.cyl(0.1, 5, 'metal', x, D + 2.5, z, { seg: 6 })
+    kit.push('bulb', new THREE.SphereGeometry(0.18, 8, 6), x - 0.6, D + 4.9, z)
+    kit.box(0.9, 0.06, 0.06, 'metal', x - 0.35, D + 5.0, z, { collide: false })
+  }
+  lifeRing(kit, 15.1, D + 0.7, 6, Math.PI / 2)
+  lifeRing(kit, -3, D + 0.7, 13.1, 0)
+  // weed hanging off the deck edges where the spray reaches
+  for (const [x, z, w, ry] of [
+    [-6, 13.1, 10, 0],
+    [8, 13.1, 8, 0],
+    [15.1, 0, 16, Math.PI / 2],
+    [0, -13.1, 20, 0],
+  ])
+    kit.vines(x, D - 0.3, z, w, 1.3, ry, rng)
+  seaLadder(G, kit, 'sealab', -12, 13, D, [0, 1], [-12, 11.6])
+
+  // ---- the pier back to the beach: timber on paired piles, rails both
+  // sides with a couple of spans gone, a few planks missing
+  const px = 4.5
+  let end = 13
+  for (let z = 13; z < 260; z += 0.5) {
+    if (kit.ground(px, z) > D - 0.25) {
+      end = z + 1
+      break
+    }
+  }
+  const len = end - 13
+  for (let z = 13; z < end; z += 3.2) {
+    const l = Math.min(3.0, end - z)
+    if (rng.chance(0.12) && z > 20 && z < end - 8) {
+      // a section with its middle planks gone (the joists still hold you)
+      for (const x of [-1.2, 1.2]) kit.box(0.7, 0.2, l, 'wood', px + x, D - 0.1, z + l / 2, { collide: false, tex: 1.5 })
+      kit.box(3.1, 0.12, 0.2, 'darkWood', px, D - 0.3, z + l / 2, { collide: false })
+    } else kit.box(3.1, 0.2, l, 'wood', px, D - 0.1, z + l / 2, { collide: false, tex: 1.5 })
+  }
+  G.physics.addBox(...kit.world(px, 13 + len / 2), 1.55, len / 2, kit.yaw, kit.y + D - 0.4, kit.y + D, { material: 'wood' })
+  for (let z = 15; z < end - 0.5; z += 6) {
+    for (const x of [-1.45, 1.45]) {
+      const g = kit.ground(px + x, z) - 0.8
+      kit.cyl(0.2, D - 0.2 - g, 'darkWood', px + x, (D - 0.2 + g) / 2, z, { seg: 7 })
+    }
+  }
+  for (let z = 13; z < end - 3; z += 6) {
+    for (const side of [-1, 1]) {
+      const x = px + side * 1.55
+      const z1 = Math.min(z + 6, end - 1)
+      kit.box(0.12, 1.1, 0.12, 'darkWood', x, D + 0.55, z, { collide: false })
+      // two spans have lost their rail: nothing stops you going over there
+      if ((side < 0 && z > 40 && z < 47) || (side > 0 && z > 64 && z < 71)) continue
+      kit.box(0.08, 0.08, z1 - z, 'darkWood', x, D + 1.05, (z + z1) / 2, { collide: false })
+      G.physics.addBox(...kit.world(x, (z + z1) / 2), 0.06, (z1 - z) / 2, kit.yaw, kit.y + D, kit.y + D + 1.1, { walkable: false, material: 'wood' })
+    }
+  }
+  sign(G, kit, ['FOUNDATION SEA LAB', 'MARINE STATION SL-2'], px - 3.4, end + 1.5, 0, { bg: '#2f4a5a' })
+
+  kit.finish()
+  const [mx, mz] = kit.world(pool.x, pool.z)
+  poi.moonpool = {
+    x: mx,
+    z: mz,
+    yaw: kit.yaw, // the sub lies in it nose to sea
+    hw: pool.hw,
+    hl: pool.hl,
+    exit: kit.point(pool.x + pool.hw + 1.1, W, pool.z + 0.5),
+  }
+  poi.pad = kit.point(-7.5, R, 0)
+  return kit
+}
+
+// An orange life ring hung on a rail or a wall.
+function lifeRing(kit, x, y, z, ry) {
+  kit.push('orange', new THREE.TorusGeometry(0.34, 0.08, 6, 16), x, y, z, 0, ry, 0)
+}
+
 // ---------------------------------------------------------------- assembly
 
 function roadFacing(island, poi) {
@@ -1341,4 +1682,6 @@ export function buildStructures(G) {
   buildPoles(G, isl.roads[1], new Rng(isl.cfg.seed + 506))
   // wrecks along the roads, where Island.placeWrecks found room for them
   for (const w of isl.wrecks) buildWreck(G, w.x, w.z, w.yaw, rng, w.crate, w.kind, w.roadSide)
+  // its own stream, so the sea lab never reshuffles anything on land
+  if (P.sealab) buildSeaLab(G, P.sealab, new Rng(isl.cfg.seed + 611))
 }

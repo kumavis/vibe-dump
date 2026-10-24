@@ -70,7 +70,7 @@ export function reliefTexture(canvas) {
   return t
 }
 
-const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡' }
+const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡', sealab: '≋' }
 
 export class MapView {
   constructor(G, el) {
@@ -156,7 +156,7 @@ export class MapView {
       ctx.lineWidth = 2
       ctx.fillRect(x - 5, y - 5, 10, 10)
       ctx.strokeRect(x - 5, y - 5, 10, 10)
-      ctx.fillText(v.kind === 'heli' ? 'HELI' : v.kind === 'motorbike' ? 'BIKE' : 'JEEP', x, y - 9)
+      ctx.fillText(v.tune.mapLabel || (v.kind === 'heli' ? 'HELI' : v.kind === 'motorbike' ? 'BIKE' : 'JEEP'), x, y - 9)
     }
     // the player (or the vehicle they are in)
     const pp = G.vehicle ? G.vehicle.pos : G.player.pos

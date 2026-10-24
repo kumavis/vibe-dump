@@ -22,6 +22,8 @@ const PAL = {
   road: new THREE.Color('#8a6e4a'),
   mud: new THREE.Color('#5a4a34'),
   seabed: new THREE.Color('#c2b37f'),
+  reef: new THREE.Color('#6e6a52'), // reef crowns, trench walls: weed-grown rock
+  silt: new THREE.Color('#8f8a6c'), // the deep flat beyond the shelf
 }
 
 export function buildTerrain(island) {
@@ -124,6 +126,7 @@ function vertexColors(island) {
   const out = new Float32Array(n * n * 3)
   const tmp = new THREE.Color()
   const acc = new THREE.Color()
+  const bed = new THREE.Color()
   const noise = island.noise
   for (let j = 0; j < n; j++) {
     const z = island.xOf(j)
@@ -161,7 +164,14 @@ function vertexColors(island) {
       }
       // underwater: fade to sandy seabed
       const depth = island.waterAt(x, z) - h
-      if (depth > 0) acc.lerp(PAL.seabed, clamp(depth / 3, 0, 0.85)).multiplyScalar(1 - clamp(depth / 30, 0, 0.5))
+      if (depth > 0) {
+        // sand in the shallows, silt out deep, rock wherever the bed is reef
+        // or too steep for sand to lie on
+        bed.copy(PAL.seabed).lerp(PAL.silt, smoothstep(14, 26, depth))
+        const rocky = Math.max(island.reef[id], smoothstep(0.35, 0.8, island.slope[id])) * smoothstep(3, 6, depth)
+        if (rocky > 0) bed.lerp(tmp.copy(PAL.reef).multiplyScalar(0.85 + jitter * 0.3), rocky)
+        acc.lerp(bed, clamp(depth / 3, 0, 0.85)).multiplyScalar(1 - clamp(depth / 30, 0, 0.5))
+      }
       const v = 1 + jitter * 0.07
       out[id * 3] = acc.r * v * 1.12
       out[id * 3 + 1] = acc.g * v * 1.12
