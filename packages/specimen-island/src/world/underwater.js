@@ -34,6 +34,10 @@ const DEEP = new THREE.Color(U.deep)
 const BLACK = new THREE.Color(0x000000)
 const _look = {}
 const _v2 = new THREE.Vector2()
+const _m = new THREE.Matrix4()
+const _q = new THREE.Quaternion()
+const _s = new THREE.Vector3()
+const _p = new THREE.Vector3()
 
 export class Underwater {
   // `terrain` is the terrain group (caustics go into its material), `water`
@@ -97,7 +101,9 @@ export class Underwater {
   // rippling, with the sun in it; outside the window the surface is a mirror
   // of the water. It is fogged like everything else, so far off it is water.
   buildSurface() {
-    const geo = new THREE.PlaneGeometry(U.surface.size, U.surface.size, 48, 48).rotateX(Math.PI / 2)
+    const n = 48
+    this.surfaceCell = U.surface.size / n
+    const geo = new THREE.PlaneGeometry(U.surface.size, U.surface.size, n, n).rotateX(Math.PI / 2)
     const sky = this.G.sky.uniforms
     const mat = new THREE.ShaderMaterial({
       uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.fog]),
@@ -392,7 +398,12 @@ export class Underwater {
     sky.hemi.color.lerp(this.color, 0.5)
     sky.hemi.groundColor.copy(this.color).multiplyScalar(0.6)
 
-    this.surface.position.set(cam.x, sea, cam.z)
+    // the sheet keeps up with the camera a whole cell at a time: centred on
+    // it, one vertex would sit straight overhead, on the eye's own plane
+    // whenever the view is level, and the cells round it would smear a hard
+    // pale quad across the top of the view
+    const cell = this.surfaceCell
+    this.surface.position.set(Math.round(cam.x / cell) * cell, sea, Math.round(cam.z / cell) * cell)
     this.backdrop.position.copy(cam)
     this.uniforms.uCam.value.copy(cam)
     const h = G.renderer.getDrawingBufferSize(_v2).y
@@ -409,10 +420,6 @@ export class Underwater {
     const fx = -Math.sin(yaw)
     const fz = -Math.cos(yaw)
     this.rays.material.uniforms.uStrength.value = R.strength * look.light * look.bright * smoothstep(0.35, 0.6, this.G.sky.light)
-    const m = new THREE.Matrix4()
-    const q = new THREE.Quaternion()
-    const s = new THREE.Vector3()
-    const p = new THREE.Vector3()
     for (let i = 0; i < n; i++) {
       const r = this.rayAt[i]
       const dx = r.x - cam.x
@@ -428,9 +435,9 @@ export class Underwater {
         r.live = true
       }
       r.x += Math.sin(this.uniforms.uTime.value * 0.2 + i) * dt * 0.3
-      q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, Math.atan2(cam.x - r.x, cam.z - r.z))
-      m.compose(p.set(r.x, sea, r.z), q, s.set(r.w, R.length, 1))
-      this.rays.setMatrixAt(i, m)
+      _q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, Math.atan2(cam.x - r.x, cam.z - r.z))
+      _m.compose(_p.set(r.x, sea, r.z), _q, _s.set(r.w, R.length, 1))
+      this.rays.setMatrixAt(i, _m)
     }
     this.rays.instanceMatrix.needsUpdate = true
   }

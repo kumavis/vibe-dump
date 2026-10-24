@@ -72,6 +72,9 @@ export const LORE = {
       'Space blows the tanks and she rises; Shift floods them and she dives. Let go and she trims herself ' +
       'neutral and holds her depth. W/S thrusters, A/D turn on the spot, F lamps, R ping — the ping gives you the ' +
       'bottom, the nearest contact and the bearing home. V swaps the bubble for the outside view.\n\n' +
+      'Going out: flood a touch until she is under the deck and drive straight on along the pool, either end — ' +
+      'the upper bracing in that bay was cut away for her. Anywhere else the braces run at two and twelve metres, ' +
+      'so cross under the platform\'s edge between four and ten on the gauge.\n' +
       'Come up inside the pool and the cradle takes her; climb out onto the catwalk. Bang her into the legs and ' +
       'winch her up here at the panel to patch the hull. If she ever goes dead down there the tanks blow by ' +
       'themselves — open the hatch when she breaks surface and swim for the ladder.\n\n' +

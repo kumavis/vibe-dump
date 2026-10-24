@@ -22,7 +22,13 @@ import { waveAt } from '../world/underwater.js'
 
 const _c = { x: 0, z: 0 }
 const _n = new THREE.Vector3()
+const _at = new THREE.Vector3() // where a knock lands (damage and sound read it there and then)
 const _state = { y: 0, vy: 0 }
+// the two thrusters' prop hubs on the model, where her bubbles come from
+const PROPS = [
+  [-1.25, 1.0, 2.0],
+  [1.25, 1.0, 2.0],
+]
 
 export class Submarine extends Vehicle {
   // In her cradle in the sea lab's moon pool (world/structures.js buildSeaLab).
@@ -297,7 +303,7 @@ export class Submarine extends Vehicle {
     this.rpm = damp(this.rpm, this.occupied && alive ? 0.15 + 0.85 * Math.abs(this.throttle) : 0, 3, dt)
     this.propAngle += this.rpm * dt * 30
     for (const p of this.props) p.rotation.z = this.propAngle
-    if (this.share > 0.98 && this.rpm > 0.3 && Math.random() < this.rpm * 0.6) this.bubbles(this.modelPoint([Math.random() < 0.5 ? -1.25 : 1.25, 1.0, 2.0]), 1)
+    if (this.share > 0.98 && this.rpm > 0.3 && Math.random() < this.rpm * 0.6) this.bubbles(this.modelPoint(PROPS[Math.random() < 0.5 ? 0 : 1]), 1)
     // kelp parts round her
     if (this.occupied) G.veg?.setPush(this.pos.x, this.pos.z, 5, 0.15 + Math.min(0.2, speed * 0.04))
 
@@ -353,7 +359,8 @@ export class Submarine extends Vehicle {
     const T = this.tune
     let nx = 0
     let nz = 0
-    let hit = null
+    let hx = 0
+    let hz = 0
     for (const b of T.hitbox) {
       const w = this.toWorld(0, b.z)
       _c.x = w.x
@@ -366,11 +373,12 @@ export class Submarine extends Vehicle {
       nx += dx
       nz += dz
       const l = Math.hypot(dx, dz) || 1
-      hit = { x: w.x - (dx / l) * b.r, z: w.z - (dz / l) * b.r }
+      hx = w.x - (dx / l) * b.r
+      hz = w.z - (dz / l) * b.r
     }
     const nl = Math.hypot(nx, nz)
     if (nl < 1e-6) return
-    this.knock(nx / nl, 0, nz / nl, new THREE.Vector3(hit.x, this.pos.y + 1.0, hit.z))
+    this.knock(nx / nl, 0, nz / nl, _at.set(hx, this.pos.y + 1.0, hz))
   }
 
   // The seabed under the keel points: a gentle rise lifts her over it, a
@@ -380,8 +388,9 @@ export class Submarine extends Vehicle {
     const T = this.tune
     const isl = G.island
     let lift = 0
-    let wall = null
-    let at = null
+    let wall = false
+    let wx = 0
+    let wz = 0
     for (const [lx, lz] of T.keel) {
       const w = this.toWorld(lx, lz)
       const pen = isl.heightAt(w.x, w.z) - this.pos.y
@@ -393,8 +402,10 @@ export class Submarine extends Vehicle {
         const k = Math.min(pen, 0.4)
         this.pos.x += (_n.x / l) * k
         this.pos.z += (_n.z / l) * k
-        wall = { x: _n.x / l, z: _n.z / l }
-        at = new THREE.Vector3(w.x, this.pos.y + 0.4, w.z)
+        wall = true
+        wx = _n.x / l
+        wz = _n.z / l
+        _at.set(w.x, this.pos.y + 0.4, w.z)
       }
     }
     this.bottomed = lift > 0
@@ -409,7 +420,7 @@ export class Submarine extends Vehicle {
       this.vel.x *= 0.97
       this.vel.z *= 0.97
     }
-    if (wall) this.knock(wall.x, 0, wall.z, at)
+    if (wall) this.knock(wx, 0, wz, _at)
   }
 
   // A contact with outward normal n: bounce, scrub, and charge the hit.

@@ -1379,7 +1379,15 @@ export function buildSeaLab(G, poi, rng) {
     }
   }
   for (const y of [-1.6, -12]) {
-    for (const z of [legsZ[0], legsZ[2]]) kit.box(29.2, 0.4, 0.4, 'rustOrange', 0, y, z)
+    for (const z of [legsZ[0], legsZ[2]]) {
+      for (let i = 0; i < 2; i++) {
+        const [x0, x1] = [legsX[i], legsX[i + 1]]
+        // the upper ring leaves the moon pool's bay open at both ends: the
+        // submersible's lane in and out, just under the decks
+        if (y > -5 && x0 < pool.x && pool.x < x1) continue
+        kit.box(x1 - x0, 0.4, 0.4, 'rustOrange', (x0 + x1) / 2, y, z)
+      }
+    }
     for (const x of [legsX[0], legsX[2]]) kit.box(0.4, 0.4, 25.2, 'rustOrange', x, y, 0)
   }
   // beams under the decks

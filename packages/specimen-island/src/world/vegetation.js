@@ -610,7 +610,7 @@ const TYPES = {
   grass: { builder: grass, tier: 'small', spacing: 1.6, scale: [0.8, 1.2], sink: 0, variants: 3 },
   reed: { builder: reed, tier: 'small', spacing: 1.7, scale: [0.8, 1.2], sink: 0, variants: 2 },
   log: { builder: log, tier: 'small', spacing: 14, scale: [0.8, 1.2], sink: 0.15, variants: 2 },
-  // marine: drawn only while the camera is under water (setUnderwater)
+  // marine: built and drawn only once the camera is under water (setUnderwater)
   kelp: { builder: kelp, tier: 'small', spacing: 3.2, scale: [0.7, 1.3], sink: 0.1, variants: 2, marine: true },
   seagrass: { builder: seagrass, tier: 'small', spacing: 1.7, scale: [0.8, 1.3], sink: 0, variants: 2, marine: true },
   coral: { builder: coral, tier: 'small', spacing: 2.4, scale: [0.6, 1.5], sink: 0.1, variants: 3, marine: true },
@@ -1022,8 +1022,15 @@ export class Vegetation {
         if (Math.hypot(mx - cam.x, mz - cam.z) > R + cs * 0.71) continue
         const k = cx * 100000 + cz
         want.add(k)
-        if (!this.small.has(k) && built < 2) {
-          this.small.set(k, this.buildSmall(cx, cz))
+        let c = this.small.get(k)
+        if (!c && built < 2) {
+          c = this.buildSmall(cx, cz)
+          this.small.set(k, c)
+          built++
+        }
+        // the sea's plants only once someone is down there to see them
+        if (c && !c.sea && this.underwater && built < 2) {
+          this.buildSmall(cx, cz, true, c)
           built++
         }
       }
@@ -1231,16 +1238,19 @@ export class Vegetation {
     for (const list of Object.values(this.nearMeshes)) for (const m of list) setCount(m, m.count)
   }
 
-  // Generate one small-tier chunk deterministically.
-  buildSmall(cx, cz) {
+  // Generate one small-tier chunk deterministically: its land plants, or
+  // (`marine`) the sea's, added to chunk `c` the first time the camera is
+  // under water near it. Each type draws from its own seed, so the two
+  // halves land the same whichever is built first.
+  buildSmall(cx, cz, marine = false, c = { cx, cz, meshes: [], sea: false }) {
     const isl = this.island
     const cs = this.smallChunk
-    const c = { cx, cz, meshes: [] }
     const m4 = new THREE.Matrix4()
+    if (marine) c.sea = true
     let ti = 0
     for (const [name, t] of Object.entries(TYPES)) {
       ti++
-      if (t.tier !== 'small') continue
+      if (t.tier !== 'small' || !!t.marine !== marine) continue
       const rng = new Rng(hash2(cx, cz, this.seed + ti * 131))
       const grid = isl.d[name]
       const perVariant = []
@@ -1288,6 +1298,8 @@ export class Vegetation {
 
   // Kelp, seagrass and coral are only drawn from below the surface: from
   // above the sea is too opaque to see them, and they would cost the same.
+  // Nor are they built until then (update); surfacing only hides them, and
+  // they go with their chunks once the camera has moved on.
   setUnderwater(on) {
     this.underwater = on
   }

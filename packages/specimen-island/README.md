@@ -122,7 +122,10 @@ blown, so she rides high). **W/S** and **A/D** (left stick) are the thrusters,
 nearest contact, the bearing home), **V / LB** the bubble or the chase view. She
 cannot leave the water, she bumps the seabed and the station's legs (hard knocks
 cost hull), and you get out only surfaced: in the moon pool onto the catwalk, or
-anywhere else into the sea, swimming. To dock, dive under the platform; the HUD
+anywhere else into the sea, swimming. To leave the pool, dive a little and
+drive straight on along it (either end): the legs' upper bracing ring, two
+metres down, is left out of that bay; anywhere else cross under the platform's
+edge between four and ten metres down. To dock, dive under the platform; the HUD
 says **MOON POOL OVERHEAD** under the well, and blowing the tanks brings her up
 into it, where the cradle squares her up. The winch panel by the pool patches
 her hull. Left alone (or wrecked) her tanks blow and she surfaces; stranded, the
