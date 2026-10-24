@@ -6,6 +6,14 @@ import { playStep, makeNoise } from './footsteps.js'
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
 
+// Rotor loops per aircraft kind: the chop's low-pass, how fast it beats per
+// rpm, the turbine whine's pitch [at rest, added at full rpm] and its level.
+// The gunship's four blades beat faster and its twin turbines whine higher.
+const ROTOR_VOICES = {
+  heli: { key: 'rotor', cutoff: 380, chop: 9, whine: [300, 900], vol: 1 },
+  gunship: { key: 'gunshipRotor', cutoff: 460, chop: 14, whine: [420, 1250], vol: 1.1 },
+}
+
 export class Audio {
   constructor() {
     this.ctx = null
@@ -291,6 +299,22 @@ export class Audio {
         else this.burst({ dur: 0.25, type: 'bandpass', freq: 2400, q: 0.6, vol: 0.5 * k, pos, max: 600 })
         break
       }
+      case 'missile': {
+        // game/missiles.js: the clunk off the rail, the motor catching with a
+        // tearing roar, and the rush of it going away down the valley
+        this.burst({ dur: 0.08, type: 'lowpass', freq: 600, vol: 0.4, pos, max: 120 })
+        this.burst({ dur: 0.5, type: 'bandpass', freq: 1500, q: 0.5, vol: 0.55, pos, max: 500, delay: 0.26, echo: 0.3 })
+        this.burst({ dur: 2.2, type: 'lowpass', freq: 900, vol: 0.45, pos, max: 500, delay: 0.3, sweep: 0.3, echo: 0.4 })
+        this.tone({ type: 'sawtooth', f0: 180, f1: 60, dur: 1.6, vol: 0.06, pos, max: 300, delay: 0.3, filter: 900 })
+        break
+      }
+      case 'rearm':
+        // rails loaded one by one: a clank and a latch per missile
+        for (let i = 0; i < 4; i++) {
+          this.burst({ dur: 0.06, type: 'bandpass', freq: 900, q: 3, vol: 0.3, pos, max: 40, delay: i * 0.22 })
+          this.burst({ dur: 0.03, type: 'bandpass', freq: 3200, q: 6, vol: 0.2, pos, max: 40, delay: i * 0.22 + 0.09 })
+        }
+        break
       case 'warning':
         // master-caution chirp; faster and higher when critical
         this.tone({ type: 'square', f0: opts.level ? 1040 : 880, dur: 0.11, vol: 0.07, filter: 3000 })
@@ -409,16 +433,20 @@ export class Audio {
     this.loops.push({ g, p, pos, max: 45, vol: 0.35 })
   }
 
-  setRotor(rpm, pos, inside) {
+  // A rotor loop per aircraft (`kind` picks a ROTOR_VOICES entry), so two
+  // helicopters in the air at once each keep their own.
+  setRotor(rpm, pos, inside, kind = 'heli') {
     if (!this.ctx) return
     const ctx = this.ctx
-    if (!this.rotor) {
+    const V = ROTOR_VOICES[kind] || ROTOR_VOICES.heli
+    const key = V.key
+    if (!this[key]) {
       const src = ctx.createBufferSource()
       src.buffer = this.noise
       src.loop = true
       const f = ctx.createBiquadFilter()
       f.type = 'lowpass'
-      f.frequency.value = 380
+      f.frequency.value = V.cutoff
       const chop = ctx.createGain()
       const lfo = ctx.createOscillator()
       lfo.type = 'square'
@@ -439,14 +467,49 @@ export class Audio {
       src.start()
       lfo.start()
       whine.start()
-      this.rotor = { g, p, lfo, whine }
+      this[key] = { g, p, lfo, whine }
     }
-    const r = this.rotor
+    const r = this[key]
     const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 450)
-    r.g.gain.setTargetAtTime(rpm * s.gain * (inside ? 0.9 : 1.4), ctx.currentTime, 0.1)
+    r.g.gain.setTargetAtTime(rpm * s.gain * (inside ? 0.9 : 1.4) * V.vol, ctx.currentTime, 0.1)
     r.p.pan.setTargetAtTime(s.pan, ctx.currentTime, 0.1)
-    r.lfo.frequency.setTargetAtTime(2 + rpm * 9, ctx.currentTime, 0.2)
-    r.whine.frequency.setTargetAtTime(300 + rpm * 900, ctx.currentTime, 0.3)
+    r.lfo.frequency.setTargetAtTime(2 + rpm * V.chop, ctx.currentTime, 0.2)
+    r.whine.frequency.setTargetAtTime(V.whine[0] + rpm * V.whine[1], ctx.currentTime, 0.3)
+  }
+
+  // The missile seeker's tone in the headset: a low growl while it searches,
+  // a pulse that climbs as it builds a lock (`progress` 0..1), one steady
+  // high note once locked; silent when off.
+  setSeeker(mode, progress = 0) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    if (!this.seeker) {
+      const o = ctx.createOscillator()
+      o.type = 'square'
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.frequency.value = 2400
+      const am = ctx.createGain()
+      am.gain.value = 0.5
+      const lfo = ctx.createOscillator()
+      lfo.type = 'square'
+      const depth = ctx.createGain()
+      depth.gain.value = 0
+      lfo.connect(depth).connect(am.gain)
+      const g = ctx.createGain()
+      g.gain.value = 0
+      o.connect(f).connect(am).connect(g).connect(this.master)
+      o.start()
+      lfo.start()
+      this.seeker = { o, lfo, depth, g }
+    }
+    const k = this.seeker
+    const t = ctx.currentTime
+    const tone = { off: [0, 220, 0, 1], search: [0.025, 230, 0.5, 13], track: [0.04, 420 + 700 * progress, 0.5, 3 + 9 * progress], locked: [0.05, 1350, 0, 1] }[mode] || [0, 220, 0, 1]
+    k.g.gain.setTargetAtTime(tone[0], t, 0.03)
+    k.o.frequency.setTargetAtTime(tone[1], t, 0.04)
+    k.depth.gain.setTargetAtTime(tone[2], t, 0.02)
+    k.lfo.frequency.setTargetAtTime(tone[3], t, 0.05)
   }
 
   // Paused (menu, map, journal): the engine and rotor loops go quiet. The
@@ -454,7 +517,8 @@ export class Audio {
   pauseVehicles() {
     if (!this.ctx) return
     const t = this.ctx.currentTime
-    if (this.rotor) this.rotor.g.gain.setTargetAtTime(0, t, 0.05)
+    for (const V of Object.values(ROTOR_VOICES)) if (this[V.key]) this[V.key].g.gain.setTargetAtTime(0, t, 0.05)
+    if (this.seeker) this.seeker.g.gain.setTargetAtTime(0, t, 0.05)
     for (const engine of [this.engine, this.bikeEngine]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
   }
 
@@ -549,7 +613,8 @@ export class Audio {
     if (!this.ctx || this.ctx.state !== 'running') return
     const t = this.ctx.currentTime
     const day = G.sky.light
-    const alt = G.vehicle?.kind === 'heli' ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
+    const air = G.vehicle?.aircraft ? G.vehicle : null
+    const alt = air ? air.pos.y - G.island.heightAt(air.pos.x, air.pos.z) : 0
     this.wind.g.gain.setTargetAtTime(0.03 + 0.03 * Math.sin(t * 0.13) + 0.02 * Math.sin(t * 0.41) + Math.min(0.08, alt / 2000), t, 0.5)
     this.insects.g.gain.setTargetAtTime((1.4 - day) * 0.014, t, 1)
     const L = this.listener

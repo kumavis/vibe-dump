@@ -14,6 +14,7 @@
 
 export const BLASTS = {
   shell: { radius: 9, damage: 420, vehicle: 0.35, knock: 9, noise: 420, shake: 1.2, shakeRadius: 70, size: 1.3 },
-  missile: { radius: 7, damage: 360, vehicle: 0.4, knock: 8, noise: 380, shake: 1.0, shakeRadius: 60, size: 1.1 },
+  // the gunship's IR missile: a near miss kills a triceratops, a tyrant needs a direct hit
+  missile: { radius: 8, damage: 700, vehicle: 0.2, knock: 8, noise: 380, shake: 1.0, shakeRadius: 60, size: 1.4 },
   grenade: { radius: 5, damage: 160, vehicle: 0.25, knock: 6, noise: 260, shake: 0.7, shakeRadius: 35, size: 0.7 },
 }

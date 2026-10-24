@@ -1,4 +1,4 @@
-// Vehicle tuning: the numbers a designer would tweak about the helicopter and
+// Vehicle tuning: the numbers a designer would tweak about the helicopters and
 // the ranger jeep (handling, damage, hitboxes, sounds, recovery). The flight
 // and suspension models in vehicles/*.js read these tables; only small
 // smoothing constants stay inline there.
@@ -95,6 +95,18 @@ export const HELI = {
   // enough to limp home (about 40 s of flight).
   reserve: { hold: 6, fuel: 0.1 },
   serviceRange: 14, // the pad pump reaches it this close to the pad
+  // Flight model (vehicles/helicopter.js): the attitude full stick tilts it
+  // to and how quickly it gets there, thrust per radian of tilt, air drag,
+  // collective climb and vertical damping, mouse yaw, rotor spool-up and the
+  // ceiling. Top speed is about thrust × pitch / drag (here ~40 m/s).
+  handling: { pitch: 0.32, roll: 0.28, attitude: 3, thrust: 42, drag: 0.33, climb: 9, sink: 1.1, yawRate: 1.1, spool: 0.7, ceiling: 430 },
+  rotor: { speed: 38, tail: 1.7, sound: 'heli' }, // blade turns per rpm, tail rotor ratio, audio voice
+  flownFlag: 'heliFlown', // set on its first flight above 8 m (the Rotor Wash objective)
+  heat: 6, // a turbine: how hot it reads to a missile seeker once it has been running (data/missiles.js)
+  controls: {
+    keyboard: 'Space: climb · Shift: descend · W/S: pitch · A/D: slide · Mouse: turn · V: camera · E: exit (landed)',
+    gamepad: 'A: climb · B: descend · Left stick: pitch / slide · Right stick: turn · LB: camera · Y: exit (landed)',
+  },
   toasts: {
     50: 'Helicopter hull at 50% — the airframe is groaning. Set down and service it at the pad.',
     25: 'Helicopter hull at 25%! Warning lights everywhere — land now.',
@@ -170,6 +182,7 @@ export const JEEP = {
   // the nearest clear, dry ground within `range`.
   winch: { stuckAfter: 4, hold: 4, range: 40 },
   serviceRange: 22, // the pad pump reaches it this close to the pad
+  heat: 2.5, // engine heat for a missile seeker (data/missiles.js)
   door: { x: 1.15, y: 1.0, z: 0.1, radius: 2.6 },
   exits: [
     [-1.8, 0.1],
@@ -235,6 +248,7 @@ export const MOTORBIKE = {
   hitY: [0.25, 1.45],
   creatures: { ...JEEP.creatures, smallMass: 70, hitK: 4 },
   noise: { idle: 16, max: 65, every: 0.5 },
+  heat: 1.2,
   lights: { ...JEEP.lights, intensity: 430, range: 65, angle: 0.48 },
   door: { x: 0.55, y: 0.9, z: 0.2, radius: 2.3 },
   exits: [[-1.3, 0.2], [1.3, 0.2], [0, 2], [0, -2]],
@@ -248,5 +262,87 @@ export const MOTORBIKE = {
     0: 'Motorbike wrecked. Dismount and hold the interact button beside it to repair.',
     fieldRepaired: 'Ride to the field lab pump for a full service.',
     stuck: 'Stuck. Dismount and hold the interact button beside the bike to recover it.',
+  },
+}
+
+// The attack helicopter abandoned at the military base: the station heli's
+// flight model, tuned faster and twitchier, a tandem cockpit, stub wings with
+// eight heat-seeking missiles (data/missiles.js) and armour that soaks a
+// share of every hit. It burns fuel faster, refuels at the Field Lab pump like
+// the station heli, and rearms at the munitions point beside its own pad.
+export const GUNSHIP = {
+  ...HELI,
+  kind: 'gunship',
+  name: 'gunship',
+  hudName: 'GUNSHIP',
+  mapLabel: 'GUNSHIP',
+  armour: 0.6, // share of every hit that reaches the hull
+  strikeMul: 0.4,
+  startFuel: 0.55, // what was left in the tank when the garrison flew out
+  fuelBurn: 1 / 300,
+  door: { x: 0.95, y: 1.35, z: -1.1, radius: 3.6 },
+  exits: [
+    [-3.1, -1.4],
+    [3.1, -1.4],
+    [0, -5.2],
+    [-3.1, 2.4],
+    [3.1, 2.4],
+  ],
+  // Parked: the slim fuselage, the stub wings, the boom and the fin.
+  parked: [
+    { x: 0, z: -1.0, hx: 0.62, hz: 2.4, y0: 0.35, y1: 2.6 },
+    { x: 0, z: 0.35, hx: 2.45, hz: 0.5, y0: 0.95, y1: 1.85 },
+    { x: 0, z: 3.9, hx: 0.34, hz: 2.6, y0: 1.3, y1: 2.2 },
+    { x: 0, z: 7.0, hx: 0.75, hz: 0.25, y0: 1.4, y1: 1.9 },
+    { x: -0.1, z: 7.25, hx: 0.16, hz: 0.55, y0: 1.5, y1: 3.2 },
+  ],
+  flight: [
+    { part: 'cabin', group: 'cabin', x: 0, z: -2.0, r: 1.0, y0: 0.35, y1: 2.9 },
+    { part: 'cabin', group: 'cabin', x: 0, z: 0.3, r: 1.3, y0: 0.35, y1: 3.2 },
+    { part: 'cabin', group: 'cabin', x: -2.0, z: 0.35, r: 0.6, y0: 0.9, y1: 1.9 },
+    { part: 'cabin', group: 'cabin', x: 2.0, z: 0.35, r: 0.6, y0: 0.9, y1: 1.9 },
+    { part: 'boom', group: 'tail', z0: 1.7, z1: 6.9, r0: 0.36, r1: 0.2, y0: 1.3, y1: 2.2 },
+    { part: 'tail', group: 'tail', x: -0.1, z: 7.3, r: 0.7, y0: 1.4, y1: 3.2 },
+  ],
+  handling: { pitch: 0.38, roll: 0.34, attitude: 4.6, thrust: 50, drag: 0.31, climb: 11, sink: 1.2, yawRate: 1.4, spool: 0.95, ceiling: 430 },
+  rotor: { speed: 44, tail: 1.9, sound: 'gunship', blur: 0.12 }, // a lighter blur: the chase camera looks down through it
+  flownFlag: 'gunshipFlown',
+  heat: 7,
+  enginePoint: [0, 2.35, 1.75], // the exhausts: where the smoke pours out and the seekers look
+  seat: [0, 2.4, -0.75], // the raised rear seat, looking over the empty gunner's seat ahead
+  sensor: [0, 1.05, -3.35], // the nose turret the seeker looks out of
+  chase: { back: 18, up: 8.5 }, // on the line of the sight, above the rotor (Gunship.chaseCamera)
+  noise: { radius: 170, every: 0.6 },
+  // Eight rails, four under each stub wing, fired outside-in, left and right
+  // in turn (model frame, the missile's centre).
+  weapons: {
+    missile: 'heatseeker',
+    rails: [
+      [-2.25, 1.02, 0.15],
+      [2.25, 1.02, 0.15],
+      [-2.25, 0.76, 0.15],
+      [2.25, 0.76, 0.15],
+      [-1.75, 1.02, 0.15],
+      [1.75, 1.02, 0.15],
+      [-1.75, 0.76, 0.15],
+      [1.75, 0.76, 0.15],
+    ],
+  },
+  // The munitions point beside its pad: hold E there with the gunship parked
+  // within `range` to load all eight rails.
+  rearm: { hold: 5, range: 16, at: [10.5, 2.5] }, // `at`: pad frame (x right of the pad's heading, z behind)
+  // No base on the map: a clear, level patch near here instead.
+  spawn: { x: 425, z: -430, range: 90, clearance: { halfWidth: 6.5, halfLength: 7.5 } },
+  controls: {
+    keyboard: 'Space/Shift: climb/descend · W/S: pitch · A/D: slide · Mouse: turn · hold RMB: seeker · LMB: fire missile · V: camera · E: exit (landed)',
+    gamepad: 'A/B: climb/descend · Left stick: pitch / slide · Right stick: turn · hold LT: seeker · RT: fire missile · LB: camera · Y: exit (landed)',
+    seconds: 9,
+  },
+  toasts: {
+    50: 'Gunship hull at 50% — the armour is cracking. Set down and service it at a pad.',
+    25: 'Gunship hull at 25%! Warning lights everywhere — land now.',
+    0: 'Engine failure! Autorotating...',
+    grounded: 'The gunship is wrecked. Climb out and hold E beside it to patch it up.',
+    fieldRepaired: 'Fly it to the Field Lab pump for a proper service.',
   },
 }

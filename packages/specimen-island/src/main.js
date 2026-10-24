@@ -29,6 +29,8 @@ import { Photos } from './player/photos.js'
 import { Helicopter } from './vehicles/helicopter.js'
 import { Jeep } from './vehicles/jeep.js'
 import { Motorbike } from './vehicles/motorbike.js'
+import { Gunship } from './vehicles/gunship.js'
+import { Missiles } from './game/missiles.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
@@ -98,6 +100,7 @@ async function boot() {
   buildStructures(G)
   G.projectiles = new Projectiles(G)
   G.hazards = G.projectiles
+  G.missiles = new Missiles(G)
   G.stealth = new Stealth(G)
   G.ecology = new Ecology(G)
   G.ecology.populate(cfg.seed + 99)
@@ -115,6 +118,9 @@ async function boot() {
   G.jeep = Jeep.atStation(G)
   G.motorbike = Motorbike.atDock(G)
   G.vehicles = [G.heli, G.jeep, G.motorbike]
+  // the attack helicopter on the military base's pad (or clear ground near it)
+  G.gunship = Gunship.atBase(G)
+  G.vehicles.push(G.gunship)
   G.audio = new Audio()
   G.hud = new HUD(G)
   G.map = new MapView(G, document.getElementById('map'))
@@ -372,6 +378,7 @@ async function boot() {
       if (!riding && G.player.alive) G.interact.update(dt, G.player.eye, G.player.look, input.pressed('interact'), input.down('interact'))
       if (G.menus.noteOpen) G.noteFrame = G.frame + 1
       G.projectiles.update(dt)
+      G.missiles.update(dt)
       G.stealth.update(dt)
       const veh = G.vehicle
       const focus = veh ? veh.pos : G.player.pos
@@ -425,8 +432,8 @@ async function boot() {
     const wa = G.wind.angle + Math.sin(G.time / 90) * 0.5
     G.wind.x = Math.cos(wa)
     G.wind.z = Math.sin(wa)
-    const flyingNow = G.vehicle?.kind === 'heli'
-    const alt = flyingNow ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
+    const flyingNow = !!G.vehicle?.aircraft
+    const alt = flyingNow ? G.vehicle.pos.y - G.island.heightAt(G.vehicle.pos.x, G.vehicle.pos.z) : 0
     G.sky.fogBoost = smoothstep(0.2, 0.8, G.island.sample(G.island.d.canopy, cam.x, cam.z)) * (flyingNow ? 0 : 1)
     tmpFocus.copy(playing ? (G.vehicle ? G.vehicle.pos : G.player.pos) : cam)
     G.sky.update(playing && !G.paused ? dt : dt * 0.2, tmpFocus, { altitude: alt, camera: cam })

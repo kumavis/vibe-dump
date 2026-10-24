@@ -30,11 +30,21 @@
 //   mission:complete   {mission}                        its final objective done (the
 //                                                       expedition's too); main.js shows its debrief
 //   blast              {x, y, z, kind, radius, weapon, wet} game/blast.js, after the damage
+//   seeker:lock        {launcher, target}                a launcher's seeker locked a heat source
+//                                                        (target: {kind, ref, x, y, z, heat, radius})
+//   seeker:lost        {launcher}                        the lock it held is gone
+//   missile:launched   {missile, launcher, target, cost} target null: unguided; scoring bills `cost`
+//   missile:decoyed    {missile, by}                     something hotter in its view (a flare) took it
+//   missile:lost       {missile}                         its target out of view too long: it flies on
+//   missile:detonated  {missile, x, y, z, cause, armed, target, hits, kills}
+//                                                        cause proximity | impact | animal | water |
+//                                                        selfdestruct; unarmed (too soon) is a dud
 //   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
-//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
+//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind (gunship:, motorbike: too)
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
 //   vehicle:repaired   {vehicle, field}                  field repair or the pad pump
+//   vehicle:rearmed    {vehicle, missiles}               the gunship's rails loaded
 
 export class EventBus {
   constructor() {

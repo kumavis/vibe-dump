@@ -32,6 +32,8 @@ export class Scoring {
       const pen = creature.sp.killPenalty
       this.add(-pen, cause === 'overdose' ? `Overdose: ${creature.sp.name}` : `Killed: ${creature.sp.name}`, 'penalty')
     })
+    // ordnance is never free: every missile launched is billed, hit or miss
+    ev.on('missile:launched', ({ cost }) => this.add(-(cost || 0), 'Ordnance: missile fired', 'penalty'))
     ev.on('player:died', () => this.add(-250, 'Medical evacuation', 'penalty'))
     ev.on('objective:done', ({ objective }) => this.add(objective.final ? 500 : 100, `Objective: ${objective.title}`, 'bonus'))
     ev.on('mission:complete', ({ mission }) => this.add(mission.bonus || 0, `${mission.title} complete`, 'bonus'))

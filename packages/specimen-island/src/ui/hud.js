@@ -2,6 +2,7 @@ import { VEHICLE_FX } from '../data/vehicles.js'
 import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 import { doseReadout } from './dose.js'
 import { Viewfinder } from './viewfinder.js'
+import { LockBox } from './lockbox.js'
 
 // The heads-up display. Reads game state each frame and writes the DOM only
 // when something changed. Deus Ex-ish information: an eye that shows how
@@ -36,6 +37,7 @@ export class HUD {
     })
     this.buildCompass()
     this.viewfinder = new Viewfinder(G)
+    this.lockbox = new LockBox(G)
     addEventListener('resize', () => this.placeToasts())
   }
 
@@ -105,7 +107,7 @@ export class HUD {
     this.set('eyeOpen', this.el.eye, `scaleY(${open.toFixed(2)})`, 'style.transform')
     const col = vis < 0.25 ? '#6fd08c' : vis < 0.6 ? '#d8d070' : '#ff7a50'
     this.set('eyeCol', this.el.eye, col, 'style.background')
-    this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.kind === 'heli' ? 'AIRBORNE' : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
+    this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.aircraft ? 'AIRBORNE' : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
     this.set('noise', this.el.noise, `${clamp(G.stealth.playerNoise / 25, 0, 1) * 100}%`, 'style.width')
 
     // weapon
@@ -129,6 +131,7 @@ export class HUD {
     this.hitT -= dt
     if (this.hitT <= 0) this.el.hitmarker.className = ''
     this.viewfinder.update(dt)
+    this.lockbox.update(dt)
 
     // score / clock
     this.set('score', this.el.score, `${G.scoring.total} <span>pts</span>`, 'html')
@@ -191,16 +194,37 @@ export class HUD {
     const hullCls = hit ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
     const hull = `<div class="hull${hit ? ' hit' : ''}">HULL <b class="${hullCls}">${Math.round(v.health)}%</b></div>`
     const spd = `<div>SPD <b>${Math.round(v.speed * 3.6)}</b> km/h</div>`
-    if (v.kind === 'heli') {
+    if (v.aircraft) {
       const agl = v.pos.y - Math.max(G.island.heightAt(v.pos.x, v.pos.z), G.island.waterAt(v.pos.x, v.pos.z))
       // sinking faster than a skid landing can take, close to the ground: red
       const vs = v.onGround ? 0 : v.vel.y
       const sinkCls = vs < -v.tune.impact.terrain.min && agl < 15 ? 'warn' : ''
-      return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${camera}: camera</div>`
+      const armed = v.kind === 'gunship'
+      const arms = armed ? this.weaponsPanel(v) : ''
+      const fire = armed ? (pad ? 'LT: seeker · RT: fire · ' : 'RMB: seeker · LMB: fire · ') : ''
+      return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}${arms}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${fire}${camera}: camera</div>`
     }
     const bike = v.kind === 'motorbike'
     const balance = bike ? '<div>STABILIZER <b>ON</b></div>' : ''
     return `${spd}${hull}${balance}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${camera}: camera</div>`
+  }
+
+  // The gunship's rails and seeker: missiles left, what the seeker is doing
+  // and the tone it plays, and what it holds.
+  weaponsPanel(v) {
+    const G = this.G
+    const sk = v.seeker
+    const n = v.tune.weapons.rails.length
+    const pips = '▮'.repeat(v.missiles) + '▯'.repeat(n - v.missiles)
+    const state = { off: 'OFF', search: 'SEARCH', track: `TRACK ${Math.round(sk.progress * 100)}%`, locked: 'LOCKED' }[sk.mode]
+    const tone = { off: 'silent', search: 'growl', track: 'rising', locked: 'steady' }[sk.mode]
+    const t = sk.target
+    let held = ''
+    if (t) {
+      const name = t.kind === 'creature' ? (G.science.known(t.ref.sp.id) ? t.ref.sp.name : 'Unknown animal') : t.kind === 'flare' ? 'Flare' : `${t.ref.tune.name} engine`
+      held = `<div class="tgt">${name} · ${Math.round(Math.hypot(t.x - v.pos.x, t.y - v.pos.y, t.z - v.pos.z))} m</div>`
+    }
+    return `<div>MSL <b class="${v.missiles ? '' : 'warn'}">${v.missiles}</b>/${n} <span class="pips">${pips}</span></div><div class="seek s-${sk.mode}">SEEKER <b>${state}</b> <small>tone: ${tone}</small></div>${held}`
   }
 
   updateCompass(camYaw) {
