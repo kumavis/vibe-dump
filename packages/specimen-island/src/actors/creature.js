@@ -7,12 +7,14 @@ import { Animator } from './animator.js'
 import { Vitals } from './vitals.js'
 import { Perception } from './perception.js'
 import { Brain } from './brain.js'
+import { reachBand, inReach } from './reach.js'
 
 // One live animal: composes rig + animator (looks), vitals (body), perception
 // (senses) and brain (decisions), and owns locomotion — steering around trunks
 // and walls, avoiding deep water and cliffs, standing on the ground.
 
 const _v = new THREE.Vector3()
+const _span = [0, 0]
 
 export class Creature {
   constructor(G, rec, herd) {
@@ -28,6 +30,7 @@ export class Creature {
     this.mesh.rotation.order = 'YXZ'
     this.mesh.userData.creature = this
     this.radius = this.sp.radius * this.scale
+    this.reach = reachBand(this.sp, this.scale) // how high its blows land (actors/reach.js)
     this.pos = new THREE.Vector3(rec.x, 0, rec.z)
     this.pos.y = G.physics.groundAt(rec.x, rec.z, G.island.heightAt(rec.x, rec.z) + 1)
     this.yaw = rec.yaw
@@ -44,6 +47,12 @@ export class Creature {
     this.stuck = { t: 0, x: rec.x, z: rec.z, detour: 0, until: 0 }
     this.trampleCool = 0
     this.underT = 0 // how long the player has been under its feet
+    // the way into a building it walked into, to leave by (locomote): the
+    // last open ground, the first step under the roof, the first indoors
+    this.lastOut = { x: rec.x, z: rec.z }
+    this.threshold = null
+    this.wayIn = null
+    this.wayT = 0
     this.disposed = false
 
     this.vitals = new Vitals(this.sp, rec)
@@ -89,11 +98,50 @@ export class Creature {
   center() {
     return new THREE.Vector3(this.pos.x, this.pos.y + this.sp.body.hipH * this.scale, this.pos.z)
   }
-  // Is `p` under the feet of an animal that tramples — inside the ring where it
-  // hurts you whenever it walks? (The HUD warns of it too.)
-  underfoot(p) {
+  // Is someone standing at `p`, `h` tall, under the feet of an animal that
+  // tramples — inside the ring where it hurts you whenever it walks, and low
+  // enough for a foot to come down on? (The HUD warns of it too.)
+  underfoot(p, h = this.G.player.height) {
     if (this.sp.attack?.kind !== 'trample') return false
-    return Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < this.radius * 1.3 && p.y < this.pos.y + 2
+    return Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < this.radius * 1.3 && this.reaches(p.y, p.y + h)
+  }
+
+  // ------------------------------------------------------------ reach
+  // The vertical half of every melee test (actors/reach.js); the horizontal
+  // half stays with each attack. Can a blow from where it stands touch a
+  // body spanning heights lo..hi? Not up through a roof over its head.
+  reaches(lo, hi) {
+    if (!this.reach) return false
+    const ceil = this.G.physics.ceilingAt(this.pos.x, this.pos.z, this.pos.y + 0.4)
+    return inReach(this.reach, this.pos.y, lo, hi, ceil)
+  }
+  // The heights a target's body spans: another animal's flank, the hull of
+  // the vehicle the player sits in, or the player standing or crouched.
+  span(G, tObj) {
+    if (tObj) {
+      _span[0] = tObj.pos.y
+      _span[1] = tObj.pos.y + (tObj.sp.body.hipH + tObj.sp.body.torsoH) * tObj.scale
+    } else if (G.vehicle) G.vehicle.reachSpan(_span)
+    else {
+      _span[0] = G.player.pos.y
+      _span[1] = G.player.pos.y + G.player.height
+    }
+    return _span
+  }
+  // Within reach from where it stands — may it strike? (`tObj` null: the player)
+  reachesTarget(G, tObj = null) {
+    const s = this.span(G, tObj)
+    return this.reaches(s[0], s[1])
+  }
+  // Could it get at them at all: from here, or from the ground beneath them
+  // once it got there? Someone on a slope above it is only further up the
+  // hill; someone on a roof or up a tower is out of reach of all but the
+  // tallest, and the brain lays siege instead (Brain.besiege).
+  canGetAt(G, tObj = null) {
+    const s = this.span(G, tObj)
+    if (this.reaches(s[0], s[1])) return true
+    const p = tObj ? tObj.pos : G.vehicle ? G.vehicle.pos : G.player.pos
+    return inReach(this.reach, G.physics.groundAt(p.x, p.z, s[0] - 0.45), s[0], s[1])
   }
 
   vocalize(kind) {
@@ -121,15 +169,14 @@ export class Creature {
     this.flushVitals(G)
   }
 
-  // A blow aimed at the player lands on whatever vehicle they are in — unless
-  // it is a helicopter hovering out of reach. The vehicle decides how much of
-  // it gets through to them (Vehicle.strike).
+  // A blow aimed at the player lands on whatever vehicle they are in — if it
+  // can reach them at all: not a helicopter hovering overhead, nor anyone up
+  // on a roof or a tower above its reach. The vehicle decides how much of it
+  // gets through to them (Vehicle.strike).
   strikePlayer(G, damage, knock) {
+    if (!this.reachesTarget(G)) return
     const v = G.vehicle
-    if (v) {
-      if (v.pos.y > this.pos.y + this.sp.body.hipH * this.scale * 2 + 1) return
-      return v.strike(damage, knock, this.pos, this.center())
-    }
+    if (v) return v.strike(damage, knock, this.pos, this.center())
     G.player.damage(damage, this.pos, knock)
   }
 
@@ -175,6 +222,18 @@ export class Creature {
     this.rec.yaw = this.yaw
   }
 
+  // Indoors: under a roof, and a stride inside its edge (an eave is not).
+  // Open: no roof here nor a stride around (a hole in one is not open).
+  roofed(x, z) {
+    return this.G.physics.ceilingAt(x, z, this.pos.y + 0.4) < this.pos.y + 6
+  }
+  indoorsAt(x, z) {
+    return this.roofed(x, z) && this.roofed(x + 1, z) && this.roofed(x - 1, z) && this.roofed(x, z + 1) && this.roofed(x, z - 1)
+  }
+  openAt(x, z) {
+    return !this.roofed(x, z) && !this.roofed(x + 1.5, z) && !this.roofed(x - 1.5, z) && !this.roofed(x, z + 1.5) && !this.roofed(x, z - 1.5)
+  }
+
   locomote(dt) {
     const G = this.G
     const sp = this.sp
@@ -182,12 +241,26 @@ export class Creature {
     let want = this.targetSpeed * mul
     let desiredYaw = this.yaw
     if (this.target) {
-      const dx = this.target.x - this.pos.x
-      const dz = this.target.z - this.pos.z
+      let tx = this.target.x
+      let tz = this.target.z
+      // indoors and bound outside: leave the way it came in — back to its
+      // first step indoors, through the doorway, out to the open ground it
+      // came from. Steering alone rarely finds a doorway from the inside.
+      const w = this.wayIn
+      if (w && !this.indoorsAt(tx, tz)) {
+        const p = w.path[w.stage]
+        if (Math.hypot(p.x - this.pos.x, p.z - this.pos.z) < 0.8 && ++w.stage === w.path.length) this.wayIn = null
+        else {
+          tx = w.path[w.stage].x
+          tz = w.path[w.stage].z
+        }
+      }
+      const dx = tx - this.pos.x
+      const dz = tz - this.pos.z
       const d = Math.hypot(dx, dz)
       if (d < 0.6) want = 0
       else {
-        desiredYaw = yawTo(this.pos.x, this.pos.z, this.target.x, this.target.z)
+        desiredYaw = yawTo(this.pos.x, this.pos.z, tx, tz)
         if (d < 3) want *= d / 3
       }
       // stuck? pick a detour for a moment
@@ -249,6 +322,22 @@ export class Creature {
     }
     // ground and body pitch
     this.pos.y = G.physics.groundAt(this.pos.x, this.pos.z, this.pos.y + 1.2)
+    // remember the way in: the first step under a roof (every frame, so it
+    // is in the doorway), then a few times a second the last open ground
+    // and the first step indoors
+    if (!this.threshold && this.roofed(this.pos.x, this.pos.z)) this.threshold = { x: this.pos.x, z: this.pos.z }
+    this.wayT -= dt
+    if (this.wayT <= 0) {
+      this.wayT = 0.15
+      if (this.openAt(this.pos.x, this.pos.z)) {
+        this.lastOut.x = this.pos.x
+        this.lastOut.z = this.pos.z
+        this.threshold = this.wayIn = null
+      } else if (!this.wayIn && this.indoorsAt(this.pos.x, this.pos.z)) {
+        const at = { x: this.pos.x, z: this.pos.z }
+        this.wayIn = { path: [at, this.threshold || at, { ...this.lastOut }], stage: 0 }
+      }
+    }
     const L = (sp.body.torsoLen + sp.body.pelvisLen) * this.scale * 0.5
     const fx = yawDirX(this.yaw) * L
     const fz = yawDirZ(this.yaw) * L

@@ -309,6 +309,17 @@ export class Vehicle {
     }
   }
 
+  // The heights its hull spans, into `out` [lo, hi], for an animal's reach
+  // (Creature.span, actors/reach.js): the tune's hitY, else the span of its
+  // parked colliders.
+  reachSpan(out) {
+    const T = this.tune
+    const hy = (this._hullY ??= T.hitY || (T.parked?.length ? [Math.min(...T.parked.map((b) => b.y0)), Math.max(...T.parked.map((b) => b.y1))] : [0.3, 2]))
+    out[0] = this.pos.y + hy[0]
+    out[1] = this.pos.y + hy[1]
+    return out
+  }
+
   // A charge or kick from something big.
   shove(from, amount) {
     const dx = this.pos.x - from.x

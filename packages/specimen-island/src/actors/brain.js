@@ -1,4 +1,9 @@
 import { clamp, wrapAngle, yawTo } from '../core/mathx.js'
+import { OBLIVIOUS } from './perception.js'
+
+// Up on something — a roof, a tower, a crate, a deck, a hovering helicopter —
+// where height, walls or stilts may keep a hunter off.
+const aloft = (G, p) => p.y - G.island.heightAt(p.x, p.z) > 0.5
 
 // Behaviour as a small state machine. `think()` runs a few times a second and
 // picks the state from what the animal perceives (awareness, threats, hunger,
@@ -7,6 +12,11 @@ import { clamp, wrapAngle, yawTo } from '../core/mathx.js'
 //
 // States: graze, alert, investigate, flee, threaten, charge, hunt, attack,
 //         spit, feed, groggy, down, dead
+//
+// Every blow first asks whether it can reach (Creature.reachesTarget,
+// actors/reach.js). A hunter whose quarry is up out of its reach — a roof, a
+// tower — lays siege instead (hunt -> besiege), and past its patience lies in
+// wait nearby (investigate with `wait`) until they come down.
 
 export class Brain {
   constructor(creature, rng) {
@@ -22,6 +32,13 @@ export class Brain {
     this.roarCool = rng.range(2, 6)
     this.idleTimer = rng.range(2, 8)
     this.alarmSeen = -1 // the herd alarm a bold herd last scattered for
+    // a quarry out of reach: seconds spent besieging it, how often it has
+    // given up (each time it gives up sooner and waits longer), and until
+    // when it waits the player out rather than pressing
+    this.balk = 0
+    this.balks = 0
+    this.patience = rng.range(16, 26)
+    this.sulk = -1
   }
 
   set(state, data = {}) {
@@ -108,6 +125,13 @@ export class Brain {
     const player = G.vehicle ? G.vehicle.pos : G.player.pos
     const dPlayer = Math.hypot(player.x - c.pos.x, player.z - c.pos.z)
 
+    // a player it has given up besieging is waited out from cover — until
+    // they come back within reach, or shoot it (onHurt)
+    if (temper === 'aggressive' && aw >= OBLIVIOUS && this.sulking(G)) {
+      if (s !== 'investigate' || !this.data.wait) this.lieInWait(G, player)
+      return
+    }
+
     if (aw >= 1) {
       if (temper === 'skittish') {
         if (bold) return this.boldReact(G, player, bold)
@@ -132,7 +156,7 @@ export class Brain {
       }
       if (temper === 'defensive') {
         const space = sp.personalSpace || 12
-        if (this.anger > 0.7 && dPlayer < space * 2.5) {
+        if (this.anger > 0.7 && dPlayer < space * 2.5 && c.canGetAt(G)) {
           if (s !== 'charge') this.set('charge', { target: 'player' })
           return
         }
@@ -140,7 +164,7 @@ export class Brain {
           if (s !== 'flee') this.fleeFrom(player, 8)
           return
         }
-        if (dPlayer < space * 1.6) {
+        if (dPlayer < space * 1.6 && !this.sulking(G)) {
           if (s !== 'threaten') this.set('threaten', { target: 'player' })
         } else if (s !== 'alert' && s !== 'threaten') this.set('alert')
         if (s === 'threaten' && dPlayer > space * 2.2 && this.t > 3) this.set('alert')
@@ -163,7 +187,7 @@ export class Brain {
       }
       if (temper === 'aggressive' || (temper === 'defensive' && aw > 0.6)) {
         if (s !== 'investigate' && s !== 'hunt') this.set('investigate', { at: { ...P.lastKnown } })
-        else if (s === 'investigate') this.data.at = { ...P.lastKnown }
+        else if (s === 'investigate' && !this.data.wait) this.data.at = { ...P.lastKnown }
         return
       }
       if (temper !== 'passive' && s !== 'alert' && s !== 'flee') this.set('alert')
@@ -224,12 +248,54 @@ export class Brain {
     }
   }
 
+  // Waiting out a player it gave up besieging, while they stay up there —
+  // unless they are right there within a strike.
+  sulking(G) {
+    if (G.time >= this.sulk) return false
+    const c = this.c
+    const p = G.vehicle ? G.vehicle.pos : G.player.pos
+    const strike = Math.hypot(p.x - c.pos.x, p.z - c.pos.z) < (c.sp.attack?.range ?? 2) + c.radius + 0.4 && c.reachesTarget(G)
+    return aloft(G, p) && !strike
+  }
+
+  // Out of patience under a quarry it cannot reach: give up — sooner each
+  // time — and, for the player, wait them out (think() keeps it waiting
+  // while they stay up there; longer each time).
+  giveUp(G, from) {
+    this.balk = 0
+    this.balks++
+    this.patience = Math.max(8, this.rng.range(16, 26) * Math.pow(0.7, this.balks))
+    this.sulk = G.time + this.rng.range(45, 75) * (1 + this.balks * 0.5)
+    if (this.c.sp.temperament === 'aggressive') this.lieInWait(G, from)
+    else this.set('alert')
+  }
+
+  // Back off into the best cover 16-26 m from them, on its own side, and
+  // watch from there (investigate with `wait`).
+  lieInWait(G, from) {
+    const c = this.c
+    const isl = G.island
+    const away = Math.atan2(c.pos.z - from.z, c.pos.x - from.x)
+    let best = null
+    for (let i = -3; i <= 3; i++) {
+      const a = away + i * 0.45
+      const r = this.rng.range(16, 26)
+      const x = from.x + Math.cos(a) * r
+      const z = from.z + Math.sin(a) * r
+      if (isl.depthAt(x, z) > c.sp.body.hipH * c.scale * 0.7) continue
+      const score = isl.coverAt(x, z) + this.rng.next() * 0.15
+      if (!best || score > best.score) best = { x, z, score }
+    }
+    this.set('investigate', { at: best ? { x: best.x, z: best.z } : { x: c.pos.x, z: c.pos.z }, wait: this.rng.range(25, 40) })
+  }
+
   // Something hurt it. Called by the creature when a dart or bullet lands.
   onHurt(G, from, lethal) {
     const c = this.c
     const t = c.sp.temperament
     c.perception.alertTo(from, 1.3)
     this.anger += lethal ? 0.9 : 0.5
+    this.sulk = -1 // shot at from up there: it comes back to the foot of the climb
     if (t === 'skittish') {
       this.fleeFrom(from, 9)
       this.alarmHerd(G, from)
@@ -291,10 +357,23 @@ export class Brain {
     if (!at) return this.set('graze')
     const d = Math.hypot(at.x - c.pos.x, at.z - c.pos.z)
     const stalker = c.sp.temperament === 'aggressive'
-    if (d > 3 && this.t < 25) {
+    if (d > 3 && this.t < (this.data.wait ? 45 : 25)) {
       c.goTo(at.x, at.z, c.sp.speed.walk * (stalker ? 0.9 : 0.8))
       c.intent.crouch = stalker ? 0.8 : 0
       c.intent.look = at
+    } else if (this.data.wait) {
+      // lying in wait: low in the cover, eyes on where it last saw you
+      c.halt()
+      c.intent.crouch = 1
+      const lk = c.perception.lastKnown
+      if (lk) {
+        c.face(lk.x, lk.z)
+        c.intent.look = lk
+      }
+      if (this.t - (this.data.arrived ??= this.t) > this.data.wait) {
+        c.perception.awareness = Math.min(c.perception.awareness, 0.3)
+        this.set('graze')
+      }
     } else {
       c.halt()
       c.intent.alert = 1
@@ -327,8 +406,9 @@ export class Brain {
     c.halt()
     const sp = c.sp
     const behind = Math.abs(wrapAngle(yawTo(c.pos.x, c.pos.z, tgt.x, tgt.z) - c.yaw)) > 1.6
+    const tObj = this.data.target === 'player' ? null : this.data.target
     // tail fighters swing at what is behind them; everyone else turns to face it
-    if (sp.attack?.kind === 'tail' && behind && d < sp.attack.range + c.radius && this.cool <= 0) {
+    if (sp.attack?.kind === 'tail' && behind && d < sp.attack.range + c.radius && this.cool <= 0 && c.reachesTarget(G, tObj)) {
       return this.set('attack', { target: this.data.target })
     }
     c.face(tgt.x, tgt.z)
@@ -339,6 +419,12 @@ export class Brain {
       c.vocalize('threat')
     }
     c.intent.roar = c.roaring
+    if (!c.canGetAt(G, tObj)) {
+      // up out of its reach: a display is all it has, and it tires of that
+      this.balk += dt
+      if (this.balk > this.patience) this.giveUp(G, tgt)
+      return
+    }
     const space = sp.personalSpace || 12
     if (this.data.target === 'player' && d < space * 0.6 && this.t > 1.2) {
       this.anger += 0.3
@@ -365,7 +451,7 @@ export class Brain {
     c.intent.attack = 0.4
     const d = Math.hypot(tgt.x - c.pos.x, tgt.z - c.pos.z)
     const reach = c.radius + (sp.attack ? sp.attack.range * 0.5 : 1)
-    if (!this.data.hit && d < reach) {
+    if (!this.data.hit && d < reach && c.reachesTarget(G, tgtObj)) {
       this.data.hit = true
       if (tgtObj) tgtObj.takeHit(G, { damage: (sp.attack?.damage || 30) * 2, zone: 'torso', from: c.pos, cause: 'predation' })
       else c.strikePlayer(G, sp.attack?.damage || 30, 9)
@@ -405,6 +491,28 @@ export class Brain {
       c.intent.roar = c.roaring
       return
     }
+    if (sp.attack?.spit && targetPlayer && P.sees && d < sp.attack.spit.range && d > 5 && this.spitCool <= 0) {
+      return this.set('spit')
+    }
+    const range = sp.attack ? sp.attack.range : 2
+    const close = d < range + c.radius + 0.4
+    const inReach = c.reachesTarget(G, tObj)
+    // Quarry up on something may be out of its reach, or walls may hold it
+    // off short of striking range. Then it lays siege rather than stand below
+    // biting air — once it has come as close as it can, been held off a
+    // moment, or got near enough to see nothing will get it up there — and
+    // keeps at it until a blow would land, or they come down.
+    const D = this.data
+    const up = aloft(G, targetPlayer ? (G.vehicle ? G.vehicle.pos : G.player.pos) : tObj.pos)
+    // held off: pressing in, but no nearer for a couple of seconds
+    if (D.near == null || d < D.near - 0.3) {
+      D.near = d
+      D.nearT = this.t
+    }
+    const held = !close && d < range + c.radius + 4 && this.t - D.nearT > 2
+    if (up && !(close && inReach) && (D.siege || close || held || (d < range + c.radius + 5.5 && !c.canGetAt(G, tObj)))) {
+      return this.besiege(dt, G, tgt, targetPlayer)
+    }
     // pack members fan out around the target until close
     let gx = tgt.x
     let gz = tgt.z
@@ -415,18 +523,73 @@ export class Brain {
       gx += Math.cos(ang) * 7
       gz += Math.sin(ang) * 7
     }
-    const range = sp.attack ? sp.attack.range : 2
     const stalking = targetPlayer ? P.awareness < 1 : d > 18 && !tObj?.perception?.threat
     const speed = stalking ? sp.speed.walk * 1.1 : d > 5 ? sp.speed.run : sp.speed.walk * 1.6
     c.intent.crouch = stalking ? 0.7 : 0
     c.goTo(gx, gz, speed)
     c.intent.look = tgt
-    if (sp.attack?.spit && targetPlayer && P.sees && d < sp.attack.spit.range && d > 5 && this.spitCool <= 0) {
-      return this.set('spit')
-    }
-    if (d < range + c.radius + 0.4 && this.cool <= 0) this.set('attack', { target: this.data.target })
+    if (close && this.cool <= 0) this.set('attack', { target: this.data.target })
     if (targetPlayer && P.awareness < 0.6) this.set('investigate', { at: P.lastKnown ? { ...P.lastKnown } : { x: tgt.x, z: tgt.z } })
     if (!targetPlayer && this.t > 40) this.set('graze')
+  }
+
+  // The quarry is up out of reach, or the walls hold it off. It does not
+  // stand below biting air: it paces its own stretch of a ring at the foot
+  // of the climb (a pack spreads round it), head up at them, snarling now
+  // and then; every so often it rushes in to try the walls from where it
+  // is (soon and often if a blow could land from closer in), until it gets
+  // no nearer; and it tires of it (giveUp), sooner each time. Darting it
+  // from up there is fair game — it keeps moving.
+  besiege(dt, G, tgt, targetPlayer) {
+    const c = this.c
+    const sp = c.sp
+    const D = this.data
+    const ring = (sp.attack ? sp.attack.range : 2) + c.radius + 2.5
+    const reachable = c.reachesTarget(G, targetPlayer ? null : D.target)
+    if (!D.siege) {
+      D.siege = true
+      D.ang = Math.atan2(c.pos.z - tgt.z, c.pos.x - tgt.x)
+      D.pace = this.rng.sign()
+      D.turn = this.t + this.rng.range(3, 7)
+      D.rush = this.t + (reachable ? this.rng.range(2, 4) : this.rng.range(4, 9))
+      D.rushEnd = 0
+    }
+    this.balk += dt
+    if (this.balk > this.patience) {
+      if (targetPlayer) return this.giveUp(G, tgt)
+      this.balk = 0
+      return this.set('graze') // prey up out of reach: find other prey
+    }
+    // lost track of them: go and look, as a hunt does
+    if (targetPlayer && c.perception.awareness < 0.6) return this.set('investigate', { at: c.perception.lastKnown ? { ...c.perception.lastKnown } : { x: tgt.x, z: tgt.z } })
+    if (this.t > D.turn) {
+      D.pace = -D.pace
+      D.turn = this.t + this.rng.range(3, 7)
+    }
+    c.intent.crouch = 0
+    // hunt() keeps D.near, the nearest it has got, and when
+    if (this.t < D.rushEnd && this.t - D.nearT < 1.2) c.goTo(tgt.x, tgt.z, sp.speed.run * 0.6)
+    else {
+      if (this.t > D.rush) {
+        D.rushEnd = this.t + 4
+        D.rush = this.t + (reachable ? this.rng.range(4, 7) : this.rng.range(7, 12))
+        D.near = Infinity
+      }
+      D.ang += ((D.pace * sp.speed.walk * 1.2) / ring) * dt
+      // the foot of the climb is out in the open: past the eaves of a roof
+      const ca = Math.cos(D.ang)
+      const sa = Math.sin(D.ang)
+      let r = ring
+      while (r < ring + 12 && G.physics.ceilingAt(tgt.x + ca * r, tgt.z + sa * r, c.pos.y + 0.4) < c.pos.y + 6) r += 1
+      c.goTo(tgt.x + ca * r, tgt.z + sa * r, sp.speed.walk * 1.4)
+    }
+    // look up at them, not at their feet
+    c.intent.look = targetPlayer ? (G.vehicle ? G.vehicle.pos : G.player.eye) : tgt
+    if (this.roarCool <= 0) {
+      this.roarCool = this.rng.range(2.5, 5)
+      c.vocalize('threat')
+    }
+    c.intent.roar = c.roaring
   }
 
   attack(dt, G) {
@@ -456,7 +619,8 @@ export class Brain {
       c.vocalize('attack')
       const d = Math.hypot(tgt.x - c.pos.x, tgt.z - c.pos.z)
       const inArc = a.kind === 'tail' ? ang > 1.2 : ang < 1.3
-      if (d < a.range + c.radius + 0.6 && inArc) {
+      if (d < a.range + c.radius + 0.6 && inArc && c.reachesTarget(G, tObj)) {
+        this.balk = this.balks = 0
         if (tObj) tObj.takeHit(G, { damage: a.damage * 3, zone: 'neck', from: c.pos, cause: 'predation' })
         else c.strikePlayer(G, a.damage, a.kind === 'tail' ? 10 : 5)
       }
@@ -478,9 +642,12 @@ export class Brain {
     if (!this.data.fired && this.t > 0.7) {
       this.data.fired = true
       c.vocalize('spit')
-      G.fx?.spit(c.eyePos(), G.player.eye)
+      const eye = c.eyePos()
+      const to = G.player.eye
+      G.fx?.spit(eye, to)
+      // ranged, but it has to see you now: a roof's edge or a wall in the way takes it
       const d = Math.hypot(tgt.x - c.pos.x, tgt.z - c.pos.z)
-      if (d < c.sp.attack.spit.range && c.perception.sees) {
+      if (d < c.sp.attack.spit.range && G.physics.lineOfSight(eye.x, eye.y, eye.z, to.x, to.y, to.z)) {
         setTimeout(() => G.player.blind(4.5, c.pos), 350)
       }
     }

@@ -146,7 +146,9 @@ src/
     animator.js      intents (speed, look, graze, roar, down...) -> bone poses
     vitals.js        health and the sedation model (absorb, KO, wake, overdose)
     perception.js    sight (FOV, LOS, visibility), hearing (noise bus), smell (wind)
-    brain.js         temperament-driven state machine
+    reach.js         how high an attack reaches, from the body (pure, testable)
+    brain.js         temperament-driven state machine; lays siege to quarry it
+                     cannot reach, then lies in wait
     creature.js      composes the above; locomotion and steering
     ecology.js       herds, persistent records, load/unload around the player
   player/
@@ -184,6 +186,9 @@ src/
   `SPECIES_ORDER`). The `body` block drives the rig — `plan: 'biped' | 'quad'`,
   proportions, and `features` such as `frill`, `horns`, `plates`, `club`,
   `crest`, `quills`. `herds` and `habitat` place it; `temperament` picks its AI;
+  `attack.range` is its horizontal reach, and `attack.kind` (bite, charge, tail,
+  trample) the body part that lands the blow — `actors/reach.js` derives how
+  high that reaches from the same proportions;
   `sedation` sets the dart maths (the readout and journal derive their dart
   counts from it by running `actors/vitals.js` forward); `science.photo` is what
   its best photograph can earn.
@@ -232,6 +237,29 @@ see a still player), hearing (footsteps, shots, thrown stones) and scent (only
 downwind). Below 0.35 it is oblivious, up to 1 it investigates, at 1 it has
 detected you and its temperament takes over.
 
+### Up high: reach
+
+An animal can only hurt what overlaps its vertical reach. `actors/reach.js`
+derives that band from the body plan, by attack kind: a bite rears and stretches
+neck and jaws straight up, a charge rams with the head at the shoulder, a tail
+sweeps from the hip, a trampler's foot comes down from half its hip height. One
+test (`Creature.reachesTarget`) gates every melee path — the brain's bites,
+charges and tail swings, trampling and the jumbo syringe's UNDERFOOT readout, a
+blow on a vehicle's hull — and nothing reaches up through a roof over the
+animal's own head. A raptor cannot touch a player on the Ranger Station roof
+(3.4 m) or a watchtower (8 m); a T. rex still takes someone off a low roof; a
+crate or a rock is no height at all. The dilophosaurus's spit stays ranged but
+needs a clear line of sight when it lets fly.
+
+A hunter whose quarry is up out of reach, or held off by walls short of striking
+range, lays siege from the `hunt` state instead of biting air: it paces a ring at
+the foot of the climb (out past the eaves), head up and snarling, rushes in now
+and then to try the walls, and after its patience runs out lies in wait in the
+best cover 16-26 m off (`investigate` with `wait`). It comes on again the moment
+the player is back within reach, or when shot at; each time it gives up sooner
+and waits longer. An animal that followed the player indoors leaves the way it
+came in (`Creature.wayIn`).
+
 ### Graphics: Auto
 
 `core/quality.js` makes a first guess from the WebGL renderer string, core count,
@@ -246,7 +274,9 @@ otherwise always look like the slowest machine.
 
 ### Controller checks
 
-Run `node --test packages/specimen-island/tests/*.test.js` from the repo root.
+Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
+(`tests/reach.test.js` covers the reach bands: roofs, towers, crates, hovering
+helicopters, roofs overhead).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and

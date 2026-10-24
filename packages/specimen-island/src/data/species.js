@@ -12,6 +12,9 @@
 //   passive    ignores the player; dangerous only underfoot
 //
 // sedation: ko = dose that drops it, lethal = overdose, metab = units/s cleared.
+//
+// attack: range is how far it strikes, horizontally; how high a blow lands
+// comes from the body and the attack's kind (actors/reach.js), not a number here.
 
 export const SPECIES = {
   compsognathus: {
