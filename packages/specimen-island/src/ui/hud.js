@@ -219,7 +219,7 @@ export class HUD {
     const deg = Math.round((-v.turretYaw * 180) / Math.PI)
     const bearing = `${Math.abs(deg).toString().padStart(3, '0')}°${deg === 0 ? '' : deg > 0 ? ' R' : ' L'}`
     const dial = `<svg class="turret" viewBox="-20 -20 40 40" width="40" height="40"><rect x="-7" y="-13" width="14" height="26" rx="2"/><g transform="rotate(${-((v.turretYaw * 180) / Math.PI).toFixed(1)})"><circle r="5.5"/><line x1="0" y1="0" x2="0" y2="-18"/></g></svg>`
-    return `<div class="tankgun">${dial}<div><div>GUN ${gun}</div><div>SHELLS <b class="${v.rounds <= 2 ? 'warn' : ''}">${v.rounds}</b>/${T.rounds}</div><div>TURRET <b>${bearing}</b></div></div></div>${spd}${hull}<div class="hint">${pad ? 'RT' : 'LMB'}: fire · ${pad ? 'LT' : 'RMB'}: sight · ${pad ? 'A' : 'Space'}: brake · ${v.canExit() ? `${exit}: exit · ` : ''}${camera}: camera</div>`
+    return `<div class="tankgun">${dial}<div><div>GUN ${gun}</div><div>SHELLS <b class="${v.rounds <= 2 ? 'warn' : ''}">${v.rounds}</b>/${T.rounds}</div><div>TURRET <b>${bearing}</b></div></div></div>${spd}${hull}<div class="hint">${pad ? 'RT' : 'LMB'}: fire · ${pad ? 'LT' : 'RMB'}: sight · ${pad ? 'A' : 'Space'}: brake · ${pad ? 'RS' : 'F'}: lights · ${v.canExit() ? `${exit}: exit · ` : ''}${camera}: camera</div>`
   }
 
   // Where the gun's current lay would land a shell, as a ring on screen; the

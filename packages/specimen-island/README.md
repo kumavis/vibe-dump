@@ -35,7 +35,7 @@ click the page once to allow browser audio playback.
 | Jeep: A; helicopter: A / B | handbrake; climb / descend |
 | Humvee | as the jeep |
 | Tank: left stick / right stick | drive, and turn on the spot / aim the turret (it follows the sight) |
-| Tank: RT / LT / A | fire the main gun / gunner's sight zoom / brake |
+| Tank: RT / LT / A / click right stick | fire the main gun / gunner's sight zoom / brake / headlights |
 | Menus: D-pad or left stick, A, B | navigate, select, back |
 | Menus: left / right, right stick | adjust settings, scroll long sheets and journal |
 
@@ -186,7 +186,8 @@ src/
     brain.js         temperament-driven state machine
     creature.js      composes the above; locomotion and steering
     ecology.js       herds, persistent records, load/unload around the player,
-                     lure (a species drawn to a loud enough bang from afar)
+                     lure (a species drawn to a loud enough bang from afar, to
+                     the shore if it went off over water)
   player/
     player.js        first-person body: walk, sprint, crouch, swim, footsteps
     weapons.js       selection, aiming, firing, reloads, scanner, camera, gadgets
@@ -209,7 +210,7 @@ src/
     stabilizer.js    bounded turn lean and automatic return upright
     humvee.js        the camp's humvee: the jeep with its own tune table and body
     tank.js          the camp's tank: tracked drive, felling, fire control, the gun
-    tracks.js        skid steering as plain numbers (tested)
+    tracks.js        skid steering and hill climbing as plain numbers (tested)
     gunnery.js       launch angle, arc and turret/gun slewing (tested)
   audio/
     audio.js         procedural Web Audio (guns, voices, ambience, rotor, engine)
@@ -295,7 +296,9 @@ otherwise always look like the slowest machine.
 ### Controller checks
 
 Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
-(`tank.test.js` covers the skid steering and the fire-control sums).
+(`tank.test.js` covers the skid steering, hill climbing, the fire-control sums
+and an armoured hull's share of an animal's blow; `lure.test.js` which bangs
+bring the tyrant, and that she stops at the shore).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and

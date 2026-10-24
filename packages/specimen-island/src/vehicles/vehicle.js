@@ -278,12 +278,12 @@ export class Vehicle {
   onDestroyed() {}
 
   // An animal's blow aimed at whoever is inside. The hull soaks it at
-  // strikeMul; an open cab still lets strikeThrough of it reach the rider,
-  // and whatever the hull can no longer soak (a wreck soaks nothing) lands
-  // on them at full, on-foot weight.
+  // strikeMul (and its armour, as damage() counts it); an open cab still lets
+  // strikeThrough of it reach the rider, and whatever the hull can no longer
+  // soak (a wreck soaks nothing) lands on them at full, on-foot weight.
   strike(damage, knock, from, at) {
     const T = this.tune
-    const soaked = Math.min(damage, this.health / T.strikeMul)
+    const soaked = Math.min(damage, this.health / (T.strikeMul * (T.armour ?? 1)))
     this.shove(from, knock * 0.4)
     this.damage(damage * T.strikeMul, at, false)
     const hurt = damage - soaked + soaked * (T.strikeThrough || 0)

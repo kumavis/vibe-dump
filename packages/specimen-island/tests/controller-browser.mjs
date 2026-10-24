@@ -158,8 +158,8 @@ try {
   assert.equal(await run(() => __G.input.down('descend')), true)
   await button(1, false)
   // Tank: the right stick turns the sight and the turret follows it, RT
-  // fires one shell per pull, LT brings the gunner's sight in, the left stick
-  // pivots it on the spot.
+  // fires one shell per pull, LT brings the gunner's sight in, RS switches
+  // its lamps, the left stick pivots it on the spot.
   await run(() => { __G.heli.exit(true); __G.tank.enter() })
   await tick()
   assert.equal(await run(() => __G.vehicle?.kind), 'tank')
@@ -177,6 +177,9 @@ try {
   await run(() => __step(0.6))
   assert.ok(await run(() => __G.tank.sightZoom) > 1.3, 'LT brings the sight in')
   await button(6, false)
+  const lamps = await run(() => __G.tank.lights)
+  await tap(11)
+  assert.notEqual(await run(() => __G.tank.lights), lamps, 'RS switches its headlights')
   const hull = await run(() => __G.tank.yaw)
   await run(() => { testPads[0].axes = [-0.9, 0, 0, 0]; __step(1) })
   assert.ok(await run(() => __G.tank.yaw) - hull > 0.2, 'left stick pivots it')

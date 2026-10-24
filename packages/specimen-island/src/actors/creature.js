@@ -219,6 +219,7 @@ export class Creature {
     this.speed += clamp(want - this.speed, -accel * 1.6 * dt, accel * dt)
     if (!this.vitals.conscious) this.speed = 0
     const step = this.speed * dt
+    const depth0 = G.island.depthAt(this.pos.x, this.pos.z)
     if (step > 0) {
       this.pos.x += yawDirX(this.yaw) * step
       this.pos.z += yawDirZ(this.yaw) * step
@@ -226,10 +227,11 @@ export class Creature {
     // collisions with statics (big animals shoulder through slender trunks)
     const big = sp.mass > 2000
     G.physics.collideCircle(this.pos, this.radius, this.pos.y + 0.4, this.pos.y + sp.body.hipH * this.scale, big ? (c) => !(c.tag === 'tree' && c.r < 0.6) : null)
-    // keep out of deep water
+    // keep out of deep water: only a step deeper is undone, so an animal
+    // that finds itself out of its depth can still wade back out
     const depth = G.island.depthAt(this.pos.x, this.pos.z)
     const wade = sp.body.hipH * this.scale * 0.8
-    if (depth > wade) {
+    if (depth > wade && depth > depth0) {
       this.pos.x -= yawDirX(this.yaw) * step * 1.2
       this.pos.z -= yawDirZ(this.yaw) * step * 1.2
     }

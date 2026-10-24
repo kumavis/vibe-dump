@@ -26,6 +26,20 @@ export function hullMotion(left, right, half) {
   return { forward: (left + right) / 2, yawRate: (right - left) / (2 * half) }
 }
 
+// What a grade does to a tracked hull pitched `slope` rad (nose up +). The
+// tracks' grip holds it on anything up to tan(slope) = `climb.grip`, so on
+// a hill it neither rolls back nor runs away; past that it slides at what the
+// grip can't hold (`slip`, m/s², + back along the hull). Going up, the
+// engine's `climb.power` (W/kg: speed times the grade's pull) sets the pace,
+// `cap` m/s: a crawl up a bank the jeep spins out on, but never a stall.
+// `pull` is the grade's own pull, m/s², + back.
+export function onGrade(slope, tune) {
+  const pull = 9.8 * Math.sin(slope)
+  const hold = 9.8 * Math.cos(slope) * tune.climb.grip
+  const slip = Math.sign(pull) * Math.max(0, Math.abs(pull) - hold)
+  return { pull, slip, cap: tune.climb.power / Math.max(Math.abs(pull), 1e-6) }
+}
+
 // Move `current` toward `target` by at most `maxStep`.
 export function approach(current, target, maxStep) {
   return current < target ? Math.min(target, current + maxStep) : Math.max(target, current - maxStep)

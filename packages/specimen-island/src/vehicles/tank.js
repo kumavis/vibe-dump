@@ -4,7 +4,7 @@ import { clamp, damp, lerp, wrapAngle, yawTo } from '../core/mathx.js'
 import { rustedPaint, trackTread } from '../world/textures.js'
 import { TANK } from '../data/vehicles.js'
 import { Jeep, Parts } from './jeep.js'
-import { approach, skidSteer, trackSpeeds } from './tracks.js'
+import { approach, onGrade, skidSteer, trackSpeeds } from './tracks.js'
 import { launchAngle, layGun } from './gunnery.js'
 
 // Camp Halvorsen's light tank (data/vehicles.js TANK has every number). It
@@ -76,8 +76,8 @@ export class Tank extends Jeep {
     G.audio?.play('ignition', { pos: this.pos })
     G.toast(
       G.input.lastDevice === 'gamepad'
-        ? 'Tank · Left stick: drive / turn on the spot · Right stick: aim the turret · RT: fire · LT: gunner’s sight · A: brake · LB: camera · Y: exit (stopped)'
-        : 'Tank · W/S: drive · A/D: turn on the spot · Mouse: aim the turret · LMB: fire · RMB: gunner’s sight · Space: brake · V: camera · E: exit (stopped)',
+        ? 'Tank · Left stick: drive / turn on the spot · Right stick: aim the turret · RT: fire · LT: gunner’s sight · A: brake · RS: headlights · LB: camera · Y: exit (stopped)'
+        : 'Tank · W/S: drive · A/D: turn on the spot · Mouse: aim the turret · LMB: fire · RMB: gunner’s sight · Space: brake · F: headlights · V: camera · E: exit (stopped)',
       'info',
       9,
     )
@@ -167,13 +167,19 @@ export class Tank extends Jeep {
     let yawRate = this.yawRate
     if (grounded) {
       const want = alive && !brake ? skidSteer(throttle, steer, top, T) : { forward: 0, yawRate: 0 }
+      // up a grade the engine sets the pace (tracks.js onGrade), and the
+      // grade itself is what slows it to that
+      const grade = onGrade(this.slope || 0, T)
+      let target = want.forward
+      const climbing = target * grade.pull > 0
+      if (climbing) target = Math.sign(target) * Math.min(Math.abs(target), grade.cap)
       let rate
       if (brake || !alive) rate = T.brake
-      else if (Math.abs(vf) > 0.2 && Math.sign(want.forward - vf) !== Math.sign(vf)) rate = throttle === 0 ? T.coast : T.brake // slowing
-      else rate = (want.forward >= 0 ? T.accel : T.reverseAccel) * (1 - 0.6 * Math.min(1, (vf / top) ** 2)) // speeding up
-      vf = approach(vf, want.forward, rate * dt)
-      // the slope pulls at it; the low gears hold off most of it
-      vf -= 9.8 * Math.sin(this.slope || 0) * T.slopeK * dt
+      else if (Math.abs(vf) > 0.2 && Math.sign(target - vf) !== Math.sign(vf)) rate = climbing ? Math.abs(grade.pull) : throttle === 0 ? T.coast : T.brake // slowing
+      else rate = (target >= 0 ? T.accel : T.reverseAccel) * (1 - 0.6 * Math.min(1, (vf / top) ** 2)) // speeding up
+      vf = approach(vf, target, rate * dt)
+      // the tracks hold it on the hill; too steep, and it slides back down
+      vf -= grade.slip * dt
       const drag = lerp(T.rolling.offroad, T.rolling.road, road) + wading * 2
       vf -= Math.sign(vf) * Math.min(Math.abs(vf), drag * dt)
       yawRate = approach(yawRate, want.yawRate, T.turn.rate * dt)

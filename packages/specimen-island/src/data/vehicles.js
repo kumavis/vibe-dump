@@ -338,7 +338,10 @@ export const TANK = {
   // hold against sliding sideways
   turn: { pivot: 0.62, speedLoss: 0.45, rate: 1.6 },
   grip: { road: 22, offroad: 18, handbrake: 22, redirect: 0 },
-  slopeK: 0.55, // share of a slope's pull the low gears and tracks don't hold off
+  // hills (vehicles/tracks.js onGrade): the tracks hold it on anything up to
+  // tan = `grip` (~40°, where the jeep stalls near 35°), and `power` (W/kg)
+  // sets the crawl up one: ~5 m/s up 15°, ~3 m/s up 23°, ~2 m/s up 35°
+  climb: { grip: 0.85, power: 12 },
   stepUp: 0.95,
   bump: { road: 0.004, offroad: 0.018 },
   suspension: { k: 90, c: 18, liftK: 160, liftC: 22 },
