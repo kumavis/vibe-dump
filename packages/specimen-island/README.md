@@ -5,7 +5,8 @@ jungle and tall grass, scan and dart animals, draw blood while the sedative wear
 off, photograph them — or go loud with the rifles and watch your score bleed.
 Restore the old infrastructure, ride the stabilized trail bike, drive the ranger jeep and fly the station
 helicopter to the summit relay — or take the humvee and the tank from the abandoned army camp on the far side
-of the island, the loudest way there is to lose points.
+of the island, or the gunship the garrison left behind, and lock its heat-seeking
+missiles onto anything warm: the loudest ways there are to lose points.
 
 Everything is procedural: terrain, rivers, jungle, buildings, dinosaurs (rigged
 and animated from data), textures and sound. No assets are downloaded.
@@ -36,6 +37,7 @@ click the page once to allow browser audio playback.
 | Humvee | as the jeep |
 | Tank: left stick / right stick | drive, and turn on the spot / aim the turret (it follows the sight) |
 | Tank: RT / LT / A / click right stick | fire the main gun / gunner's sight zoom / brake / headlights |
+| Gunship: LT (hold) / RT | missile seeker / fire a missile |
 | Menus: D-pad or left stick, A, B | navigate, select, back |
 | Menus: left / right, right stick | adjust settings, scroll long sheets and journal |
 
@@ -65,6 +67,7 @@ they can trigger gameplay actions.
 | helicopter | Space/Shift collective, W/S pitch, A/D slide, mouse yaw |
 | humvee | as the jeep: W/S drive and reverse, A/D steer, Space handbrake, F headlights |
 | tank | W/S drive, A/D turn on the spot, mouse aims the turret, LMB fire, RMB gunner's sight (zoom), Space brake, F headlights |
+| gunship | as the helicopter; hold RMB for the missile seeker, LMB fires a missile (unguided at the sight mark without a lock); hold E at the munitions point by its pad to rearm |
 
 Boarding any vehicle also shows its controls for a few seconds, and the Settings
 sheet (from the title or the pause menu) lists them all. Settings holds Graphics
@@ -133,6 +136,39 @@ the bunker door and hold E there to fill it. Each shot is heard across the
 island, and the tyrant comes to see what made the noise. Killing with it costs
 what any kill costs.
 
+### Gunship and heat-seeking missiles
+
+An attack helicopter waits on the far side of the island — on the military
+base's helipad, or on the nearest clear, level ground to the north-east plateau —
+marked **GUNSHIP** on the map. It flies like the station helicopter (same
+controls), only faster and twitchier, armoured against a share of every hit, and
+thirstier: it starts with half a tank and refuels at the Field Lab pad pump. Its
+own pad has no pump, so run dry there (or anywhere but the Field Lab pad) and the
+reserve tank is hand-pumped through to get it home. Eight missiles hang under its
+stub wings.
+
+Hold **RMB / LT** and the seeker looks along your sight — the middle of the
+screen, in the chase view or the cockpit — through a ring as wide as its lock
+cone. It picks the strongest heat source in line of sight: big animals glow,
+small ones barely register (a compy never locks), leaves hide some of it, a
+burning flare outshines anything alive and an engine that has been running stays
+hot for minutes after it stops. The headset growls while it searches, pulses
+higher as it builds a lock, and holds one steady note once locked; brackets on
+screen follow the target, with its range from the nose. **LMB / RT** fires: at
+the lock, or unguided at the sight mark in the middle of the screen when there is
+none — the missile is aimed off its rail to come down where the sight meets the
+ground. A missile drops off its rail, lights its motor, steers by proportional
+navigation, trails smoke and goes off at its closest pass or on impact through
+the shared explosion. A flare burning hotter than the target anywhere in the
+missile's view pulls it off (another animal must be right beside the target to);
+a target that stays out of view for half a second is lost, and the missile flies
+on until it self-destructs.
+
+The Foundation bills every launch (−50, hit or miss) and every animal a missile
+kills costs that species' kill penalty, so the ledger shows exactly what going
+loud cost. Land on its pad, climb out, and hold **E / Y** at the munitions point
+beside it to load all eight rails again.
+
 ## Architecture
 
 The game is built as **data + services + systems**, so most iteration is editing
@@ -155,9 +191,12 @@ src/
                      and a `lure` for the tyrant (big bangs draw her from afar)
     weapons.js       guns, darts, the Field Camera, the jumbo syringe, hit zones,
                      throwables, and PHOTO (how a photograph is graded)
-    vehicles.js      every vehicle's tune table (helicopter, jeep, trail bike,
+    vehicles.js      every vehicle's tune table (helicopters, jeep, trail bike,
                      humvee, tank): hull, armour and damage, colliders, feedback,
-                     surfaces, spawn, ecology streaming, the tank's tracks and gun
+                     flight handling, surfaces, spawn, ecology streaming, engine
+                     heat, the tank's tracks and gun, GUNSHIP's rails and munitions point
+    missiles.js      missile airframes and motors, the launcher's seeker (cone,
+                     signal, lock time, decoy margin) and heat signatures
     blasts.js        explosions: radius, damage, hull damage, knock, noise, shake
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, restocking stores, loot tables
@@ -203,10 +242,17 @@ src/
                      damage falling off to animals, the player and vehicles, shake;
                      shells.js — shells in flight (ballistic arc, tracer, smoke) that
                      go off through blast.js where they stop
+                     guidance.js — pure seeker and missile maths (signal, lock
+                     tracking with decoys, proportional navigation, proximity fuse)
+                     missiles.js — heat sources, the Seeker a launcher carries, and
+                     missiles in flight: guidance, smoke trail, fuses, blasts
   vehicles/
     vehicle.js       the shared base: boarding/exit, colliders, cameras, AI noise,
                      damage feedback, field repair
-    helicopter.js    arcade flight, fuel, landings, rotor
+    helicopter.js    arcade flight, fuel, landings, rotor — every aircraft, from its
+                     tune table (`handling`, `rotor`, `controls`)
+    gunship.js       the attack helicopter: model, armour, seeker and missile rails,
+                     sight-line chase camera, the munitions point beside its pad
     jeep.js          shared ground handling and ranger 4x4 model
     motorbike.js     trail-bike model, rider, two wheels and active gyro balance
     stabilizer.js    bounded turn lean and automatic return upright
@@ -219,6 +265,8 @@ src/
     footsteps.js     synthesised footsteps per surface
   ui/
     hud.js           HUD: visibility eye, awareness arcs, target readout, vehicle panel
+    lockbox.js       the missile seeker's ring and lock brackets, and what the last
+                     missile did
     dose.js          dart (and jab) arithmetic for the target readout and the
                      journal
     viewfinder.js    the camera's frame, focus box, live estimate and polaroid
@@ -255,7 +303,24 @@ src/
   to place the model — and override `onEnter()`, `canExit()`, `seatCamera()` /
   `chaseCamera()` as needed. Create it in `main.js` and push it onto
   `G.vehicles`; boarding, exit, damage feedback, field repair and the map marker
-  come from the base class. The HUD's vehicle panel switches on `kind`.
+  come from the base class. The HUD's vehicle panel switches on `kind`; one that
+  carries a missile `seeker` also gets the weapons lines and the sight mark.
+- **Add an aircraft:** a tune table spread from `HELI` with its own `kind`,
+  `handling` (attitude, thrust, drag, climb, yaw), `rotor` (blade speed, sound
+  voice — add one to `ROTOR_VOICES` in `audio/audio.js`), `controls` and
+  colliders, and a subclass of `Helicopter` that overrides `buildModel()` (it
+  must set `rotor`, `tail`, `disc` and `model`). Anything that flies is
+  `aircraft`, which the HUD, sky and wind read.
+- **Add a missile or a heat source:** a `MISSILES` entry in `data/missiles.js`
+  (motor, turn rate, gimbal, fuse, `blast` preset, `cost`, `hudName`) launched
+  with `G.missiles.launch(launcher, from, vel, dir, target, M)` — an unguided
+  shot's `dir` from `G.missiles.boresight(...)`, so it lands on the sight; a
+  launcher carries a `Seeker` (`game/missiles.js`) as `seeker`, sets its
+  `origin`/`axis`, calls `update(dt, on)`, and exposes `weapon` (its `MISSILES`
+  entry), `missiles` and `tune.weapons.rails` for the HUD. A vehicle's engine
+  heat is its tune's `heat`; anything else hot goes into `Missiles.sources()`
+  with a `kind` and a `locate()` case (`SEEKER.gates[kind]` widens how far from
+  the target it may steal a lock, as a flare's does).
 - **Add an objective:** append to `data/objectives.js`; `done` is a `reach`,
   `flag`, `item` or `stat` test, `allSpecies` (every species in a stats set such
   as `speciesBlood`; the HUD counts it and its `need` labels what each missing
@@ -337,6 +402,9 @@ helicopters, roofs overhead — and when a hunter that gave up on a roof comes
 back; `tank.test.js` the skid steering, hill climbing, the fire-control sums
 and an armoured hull's share of an animal's blow; `lure.test.js` which bangs
 bring the tyrant, and that she stops at the shore).
+`tests/missiles.test.js` flies the guidance against moving targets, lands
+unguided shots on the sight, and checks the seeker's cone, cover and decoy rules
+(a flare anywhere in a missile's view, an animal only beside the target).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and
@@ -349,7 +417,9 @@ simulation without rendering, which is how the headless playtests drive it.
 `?play` skips the title screen, `?god` makes the player invulnerable, `?seed=N`
 grows a different island. `__G.gfx` holds the autodetect's state (`gpu`,
 `guess`, `ladder`, `auto` — the live TierController — and the current `tier` and
-`pixelRatio`). `__G.objectives.start('survey')` takes up the Full Survey
+`pixelRatio`). `__G.gunship.seeker` is the missile seeker (`mode`, `progress`, `target`, `range`),
+`__G.missiles.flying` the missiles in the air and `__G.missiles.sources()` what
+they can see. `__G.objectives.start('survey')` takes up the Full Survey
 without finishing the expedition first. `__G.photos.evaluate()` grades the
 current view as the shutter would, and `__G.audio.renderStep(surface)` renders
 one footstep offline so its envelope can be measured.

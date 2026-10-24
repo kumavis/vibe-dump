@@ -4,6 +4,9 @@ import { doseCard, jabCard } from './dose.js'
 import { starHtml } from '../player/photos.js'
 import { formatTime } from '../core/mathx.js'
 
+// Every lethal round fired: the guns marked lethal, and every missile launched.
+const lethalShots = (G) => Object.keys(WEAPONS).reduce((n, id) => n + (WEAPONS[id].lethal ? G.stats.get(`shots:${id}`) : 0), G.stats.get('shots:missile'))
+
 // Field journal: the species catalogue (filled in by scanning), what you have
 // collected from each, the photo album (each species' best shot), and the
 // Foundation's running ledger of your conduct.
@@ -92,7 +95,7 @@ export class Journal {
       body = `<div class="ledger"><div class="tot">${G.scoring.total} pts — <b>${G.scoring.rank()}</b></div>
         <div class="cats">Science ${G.scoring.byCategory.science || 0} · Photos ${G.scoring.byCategory.photo || 0} · Objectives ${G.scoring.byCategory.bonus || 0} · Penalties ${G.scoring.byCategory.penalty || 0}</div>
         ${L.map((e) => `<div class="row ${e.delta < 0 ? 'bad' : ''}"><span>${e.reason}</span><b>${e.delta > 0 ? '+' : ''}${e.delta}</b></div>`).join('') || '<p>No entries yet.</p>'}
-        <div class="cats">Shots fired: ${G.stats.get('shots:pistol') + G.stats.get('shots:rifle')} darts · ${G.stats.get('shots:hunting') + G.stats.get('shots:shotgun')} lethal · Knockouts ${G.stats.get('knockouts')} · Times spotted ${G.stats.get('detections')}</div></div>`
+        <div class="cats">Shots fired: ${G.stats.get('shots:pistol') + G.stats.get('shots:rifle')} darts · ${lethalShots(G)} lethal · Knockouts ${G.stats.get('knockouts')} · Times spotted ${G.stats.get('detections')}</div></div>`
     } else {
       body = `<div class="manual">
         <h3>The charter</h3><p>Scan, sedate, sample, release. Science earns points; every animal that dies by your hand — bullet or overdose — costs points. A procedure on an animal that never noticed you is worth half again.</p>

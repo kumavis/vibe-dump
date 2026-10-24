@@ -17,6 +17,7 @@ export const BLASTS = {
   // miss anything hadrosaur-sized or smaller; the tyrant and the brachiosaurs
   // can take one
   shell: { radius: 10, damage: 720, vehicle: 0.3, knock: 10, noise: 450, shake: 1.2, shakeRadius: 80, size: 1.4 },
-  missile: { radius: 7, damage: 360, vehicle: 0.4, knock: 8, noise: 380, shake: 1.0, shakeRadius: 60, size: 1.1 },
+  // the gunship's IR missile: a near miss kills a triceratops, a tyrant needs a direct hit
+  missile: { radius: 8, damage: 700, vehicle: 0.2, knock: 8, noise: 380, shake: 1.0, shakeRadius: 60, size: 1.4 },
   grenade: { radius: 5, damage: 160, vehicle: 0.25, knock: 6, noise: 260, shake: 0.7, shakeRadius: 35, size: 0.7 },
 }

@@ -10,6 +10,12 @@ import { Vehicle } from './vehicle.js'
 // cushions the last few metres, so holding Shift sets you down — and is very
 // loud: every animal for 150 m hears it coming.
 //
+// Every aircraft on the island is this class driven by its tune table
+// (data/vehicles.js: HELI, GUNSHIP): `handling` is the flight model, `rotor`
+// the blades and their sound, `controls` the boarding toast. A subclass
+// brings its own model (buildModel) and whatever it carries — the gunship's
+// missiles live in vehicles/gunship.js.
+//
 // Parked, it is a cabin + boom + tail of colliders traced off the model; in
 // flight the cabin, the whole boom and the tail rotor test the trunks and
 // walls they pass, so clipping a tree with the tail hurts and spins you.
@@ -25,29 +31,40 @@ let _only = null
 const onlyThat = (c) => c === _only
 
 export class Helicopter extends Vehicle {
-  constructor(G, pos, yaw) {
-    super(G, HELI, pos, yaw)
+  constructor(G, pos, yaw, tune = HELI) {
+    super(G, tune, pos, yaw)
     this.rpm = 0
-    this.fuel = 0
+    this.fuel = tune.startFuel ?? 0
     this.spin = 0 // yaw rate left over from a tail strike
     this.sputter = 0
     this.sputterT = 0
     this.rotorAngle = 0
-    this.reserveAction = { label: 'Tank dry — hand-pump the reserve tank through', hold: HELI.reserve.hold, use: () => this.pumpReserve() }
+    this.reserveAction = { label: 'Tank dry — hand-pump the reserve tank through', hold: tune.reserve.hold, use: () => this.pumpReserve() }
     this.buildModel()
     this.park()
-    this.registerBoard('heli')
+    this.registerBoard(tune.kind)
+  }
+
+  // for the systems that treat anything that flies alike (sky, wind, HUD)
+  get aircraft() {
+    return true
   }
 
   boardLabel() {
-    return this.fuel > this.tune.dry ? 'Board helicopter' : 'Helicopter — tank is dry'
+    const name = this.tune.name
+    return this.fuel > this.tune.dry ? `Board ${name}` : `${name.charAt(0).toUpperCase()}${name.slice(1)} — tank is dry`
   }
   canBoard() {
     if (this.fuel <= this.tune.dry) return this.G.flags.get('labPower') ? 'Refuel at the pad pump' : 'No fuel — the pump needs power'
     return true
   }
+  // The pads it can be refuelled on: the Field Lab's pump (a subclass adds any
+  // other pad with a pump; one without would strand it dry, see recovery()).
+  pads() {
+    return [this.G.island.poi.fieldlab.pad]
+  }
   onPad() {
-    return this.pos.distanceTo(this.G.island.poi.fieldlab.pad) <= this.tune.serviceRange
+    return this.pads().some((p) => this.pos.distanceTo(p) <= this.tune.serviceRange)
   }
   // Wrecked: the field repair. Dry anywhere but the pad: the reserve tank.
   recovery() {
@@ -141,7 +158,8 @@ export class Helicopter extends Vehicle {
 
   onEnter() {
     this.spin = 0
-    this.G.toast(this.G.input.lastDevice === 'gamepad' ? 'A: climb · B: descend · Left stick: pitch / slide · Right stick: turn · LB: camera · Y: exit (landed)' : 'Space: climb · Shift: descend · W/S: pitch · A/D: slide · Mouse: turn · V: camera · E: exit (landed)', 'info', 7)
+    const C = this.tune.controls
+    this.G.toast(this.G.input.lastDevice === 'gamepad' ? C.gamepad : C.keyboard, 'info', C.seconds || 7)
   }
 
   onExit() {
@@ -165,6 +183,7 @@ export class Helicopter extends Vehicle {
     const G = this.G
     const isl = G.island
     const T = this.tune
+    const H = T.handling
     const working = this.fuel > 0 && this.health > 0
     // a dying engine coughs: the rotor loses revs in random dips
     let rpmT = this.occupied && working ? 1 : 0
@@ -177,11 +196,11 @@ export class Helicopter extends Vehicle {
       }
       rpmT -= this.sputter
     } else this.sputter = 0
-    this.rpm = damp(this.rpm, rpmT, this.occupied ? (this.sputter ? 2.5 : 0.7) : 0.4, dt)
-    this.rotorAngle += this.rpm * dt * 38
+    this.rpm = damp(this.rpm, rpmT, this.occupied ? (this.sputter ? 2.5 : H.spool) : 0.4, dt)
+    this.rotorAngle += this.rpm * dt * T.rotor.speed
     this.rotor.rotation.y = this.rotorAngle
-    this.tail.rotation.x = this.rotorAngle * 1.7
-    this.disc.material.opacity = clamp((this.rpm - 0.5) * 0.5, 0, 0.22)
+    this.tail.rotation.x = this.rotorAngle * T.rotor.tail
+    this.disc.material.opacity = clamp((this.rpm - 0.5) * 0.5, 0, T.rotor.blur ?? 0.22)
     for (const c of this.rotor.children) if (c.isGroup) c.visible = this.rpm < 0.85 || Math.random() < 0.5
 
     let fz = 0
@@ -193,7 +212,7 @@ export class Helicopter extends Vehicle {
       coll = (input.down('ascend') ? 1 : 0) - (input.down('descend') ? 1 : 0)
       const look = input.look()
       G.player.lastLook = look
-      this.yaw -= look.dx * 1.1 * Math.max(0.15, this.rpm)
+      this.yaw -= look.dx * H.yawRate * Math.max(0.15, this.rpm)
       this.lookPitch = clamp(this.lookPitch - look.dy, -0.9, 0.6)
       if (input.pressed('camera')) this.toggleView()
       if (input.pressed('interact')) this.exit()
@@ -204,7 +223,7 @@ export class Helicopter extends Vehicle {
     if (this.parked && !this.occupied && this.rpm < 0.01) {
       // sitting still with the rotor stopped: nothing to simulate
       this.updateCommon(dt, 0)
-      G.audio?.setRotor(0, this.pos, false)
+      G.audio?.setRotor(0, this.pos, false, T.rotor.sound)
       this.sync()
       return
     }
@@ -212,22 +231,22 @@ export class Helicopter extends Vehicle {
     this.yaw += this.spin * dt
     this.spin = damp(this.spin, 0, this.onGround ? 6 : 1.2, dt)
     const lift = this.rpm
-    const pitchT = this.onGround ? 0 : fz * 0.32
-    const rollT = this.onGround ? 0 : fx * 0.28
-    this.pitch = damp(this.pitch, pitchT, 3, dt)
-    this.roll = damp(this.roll, rollT, 3, dt)
+    const pitchT = this.onGround ? 0 : fz * H.pitch
+    const rollT = this.onGround ? 0 : fx * H.roll
+    this.pitch = damp(this.pitch, pitchT, H.attitude, dt)
+    this.roll = damp(this.roll, rollT, H.attitude, dt)
     // forces: tilt pushes, collective lifts, air drags
     const fwdX = yawDirX(this.yaw)
     const fwdZ = yawDirZ(this.yaw)
     const rightX = Math.cos(this.yaw)
     const rightZ = -Math.sin(this.yaw)
-    const ax = (fwdX * this.pitch + rightX * this.roll) * 42 * lift
-    const az = (fwdZ * this.pitch + rightZ * this.roll) * 42 * lift
-    let ay = -9.8 + 9.8 * lift + coll * 9 * lift
+    const ax = (fwdX * this.pitch + rightX * this.roll) * H.thrust * lift
+    const az = (fwdZ * this.pitch + rightZ * this.roll) * H.thrust * lift
+    let ay = -9.8 + 9.8 * lift + coll * H.climb * lift
     if (!working && !this.onGround) ay = -6 - this.vel.y * 0.8 // autorotation
-    this.vel.x += (ax - this.vel.x * 0.33) * dt
-    this.vel.z += (az - this.vel.z * 0.33) * dt
-    this.vel.y += (ay - this.vel.y * 1.1) * dt
+    this.vel.x += (ax - this.vel.x * H.drag) * dt
+    this.vel.z += (az - this.vel.z * H.drag) * dt
+    this.vel.y += (ay - this.vel.y * H.sink) * dt
     // ground cushion: near the ground a healthy rotor eases the sink rate, so
     // holding Shift all the way down is a landing, not a crash
     const C = T.cushion
@@ -236,7 +255,7 @@ export class Helicopter extends Vehicle {
       if (below < C.agl) this.vel.y = Math.max(this.vel.y, -lerp(C.sink, C.from, Math.max(0, below) / C.agl))
     }
     this.pos.addScaledVector(this.vel, dt)
-    this.pos.y = Math.min(this.pos.y, 430)
+    this.pos.y = Math.min(this.pos.y, H.ceiling)
     this.pos.x = clamp(this.pos.x, -isl.half + 30, isl.half - 30)
     this.pos.z = clamp(this.pos.z, -isl.half + 30, isl.half - 30)
 
@@ -259,7 +278,7 @@ export class Helicopter extends Vehicle {
       this.vel.z *= Math.max(0, 1 - dt * 4)
     } else this.onGround = this.pos.y - gnd < 0.05
     const agl = this.pos.y - gnd
-    if (this.occupied && agl > 8 && !G.flags.get('heliFlown')) G.flags.set('heliFlown')
+    if (this.occupied && agl > 8 && T.flownFlag && !G.flags.get(T.flownFlag)) G.flags.set(T.flownFlag)
 
     // noise, dust and rotor wash
     let noise = 0
@@ -269,7 +288,7 @@ export class Helicopter extends Vehicle {
       if (this.occupied) G.veg.setPush(this.pos.x, this.pos.z, 22, this.rpm * clamp(1.5 - agl / 25, 0, 1.5))
     }
     this.updateCommon(dt, noise)
-    G.audio?.setRotor(this.rpm, this.pos, this.inside)
+    G.audio?.setRotor(this.rpm, this.pos, this.inside, T.rotor.sound)
     this.sync()
   }
 
