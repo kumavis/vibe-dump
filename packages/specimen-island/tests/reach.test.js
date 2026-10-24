@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { reachBand, inReach } from '../src/actors/reach.js'
 import { SPECIES } from '../src/data/species.js'
+import { Brain } from '../src/actors/brain.js'
 
 // Heights from the island (metres above the ground an animal stands on).
 const STATION_ROOF = 3.42 // structures.js building(): 3.2 walls + 0.22 roof
@@ -73,4 +74,56 @@ test('the band comes from the body, not a per-species number', () => {
   // an animal without an attack reaches nothing
   assert.equal(reachBand(SPECIES.gallimimus), null)
   assert.equal(inReach(reachBand(SPECIES.gallimimus), 0, 0, STAND), false)
+})
+
+// A hunter that gave up besieging the player (Brain.giveUp), stubbed down to
+// what Brain.sulking asks of a creature: where it stands and, through the
+// reach band, what it can get at. Animal and the ground under the player at 0.
+function sulker(sp) {
+  const band = big(sp)
+  const G = { time: 0, vehicle: null, player: { pos: { x: 0, y: STATION_ROOF, z: 0 } }, island: { heightAt: () => 0, depthAt: () => 0, coverAt: () => 0 } }
+  const c = { sp, scale: sp.scale[1], radius: sp.radius * sp.scale[1], pos: { x: 20, y: 0, z: 0 } } // in cover
+  const feet = () => G.player.pos.y
+  c.reachesTarget = () => inReach(band, c.pos.y, feet(), feet() + STAND)
+  c.canGetAt = () => c.reachesTarget() || inReach(band, 0, feet(), feet() + STAND)
+  const brain = new Brain(c, { range: (a, b) => (a + b) / 2, next: () => 0.5, sign: () => 1 })
+  brain.giveUp(G, G.player.pos)
+  const at = (x, y) => {
+    G.player.pos = { x, y, z: 0 }
+    return brain.sulking(G)
+  }
+  return { G, brain, c, at }
+}
+
+test('a pack that gave up on the roof waits it out, and comes back for a crate', () => {
+  const { G, brain, at } = sulker(SPECIES.velociraptor)
+  assert.equal(brain.state, 'investigate') // lying in wait in cover
+  assert.ok(brain.data.wait)
+  assert.equal(at(0, STATION_ROOF), true)
+  assert.equal(at(-4, STATION_ROOF), true) // anywhere up there
+  assert.equal(at(-4, 0.75), false) // down on the crate: no height at all
+  assert.equal(at(-4, 0), false)
+  assert.equal(at(0, STATION_ROOF), true)
+  G.time = brain.sulk // and it does not wait for ever
+  assert.equal(at(0, STATION_ROOF), false)
+})
+
+test('a T. rex held off by walls waits while the player stays put, not once they move', () => {
+  // it could reach the roof; the walls kept it from getting close enough
+  const { at } = sulker(SPECIES.tyrannosaurus)
+  assert.equal(at(0, STATION_ROOF), true)
+  assert.equal(at(0.5, STATION_ROOF), true)
+  assert.equal(at(4, STATION_ROOF), false) // off along the roof: try again
+  assert.equal(at(4, 0.75), false)
+})
+
+test('one that gave up still strikes at a player it finds right there', () => {
+  const { c, at } = sulker(SPECIES.tyrannosaurus)
+  assert.equal(at(0, STATION_ROOF), true)
+  c.pos.x = 3 // not yet off to its cover, and a bite would land
+  assert.equal(at(0, STATION_ROOF), false)
+  // a raptor below the roof edge cannot, whatever the distance
+  const r = sulker(SPECIES.velociraptor)
+  r.c.pos.x = 1
+  assert.equal(r.at(0, STATION_ROOF), true)
 })

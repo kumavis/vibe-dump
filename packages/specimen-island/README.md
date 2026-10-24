@@ -224,6 +224,9 @@ src/
   actions) and place it from `buildStructures`, or add a POI in `data/world.js`
   — or, for a small prefab beside one, a cleared lot (`lots`), which keeps the
   plants off it before anything grows and tells the prefab where to stand.
+  Walls and a roof come from `building()`, whose roof boxes are tagged
+  `roof: true` (`kit.box` opts); tag a hand-built enclosure's roof the same way,
+  so an animal that wanders in knows it is indoors and leaves by the door.
 - **Add a plant:** a builder plus a `TYPES` row in `world/vegetation.js`, and a
   density grid in `Island.computeDensities` (which also feeds stealth cover).
 
@@ -256,9 +259,14 @@ range, lays siege from the `hunt` state instead of biting air: it paces a ring a
 the foot of the climb (out past the eaves), head up and snarling, rushes in now
 and then to try the walls, and after its patience runs out lies in wait in the
 best cover 16-26 m off (`investigate` with `wait`). It comes on again the moment
-the player is back within reach, or when shot at; each time it gives up sooner
-and waits longer. An animal that followed the player indoors leaves the way it
-came in (`Creature.wayIn`).
+the player is back within reach — down off the roof, or only onto a crate — or
+when shot at; each time it gives up sooner and waits longer. (One that walls
+held off from a quarry it could reach waits while the player stays put.) An
+animal that followed the player into a building leaves the way it came in
+(`Creature.wayIn`): back through the door and straight on out past the eaves.
+Only a building's roof makes it indoors — `building()` tags its roof boxes
+`roof: true` — so a bridge deck or a dock overhead does not, and the bank under
+the bridge stays a way through.
 
 ### Graphics: Auto
 
@@ -276,7 +284,8 @@ otherwise always look like the slowest machine.
 
 Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
 (`tests/reach.test.js` covers the reach bands: roofs, towers, crates, hovering
-helicopters, roofs overhead).
+helicopters, roofs overhead — and when a hunter that gave up on a roof comes
+back).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and

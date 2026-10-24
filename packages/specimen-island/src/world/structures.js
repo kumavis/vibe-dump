@@ -112,11 +112,11 @@ export class Kit {
     ;(this.buckets[matKey] ||= []).push(geo)
   }
   box(w, h, d, matKey, lx, ly, lz, opts = {}) {
-    const { ry = 0, rx = 0, rz = 0, collide = true, walkable = true, tex = 2 } = opts
+    const { ry = 0, rx = 0, rz = 0, collide = true, walkable = true, roof = false, tex = 2 } = opts
     this.push(matKey, boxGeo(w, h, d, tex), lx, ly, lz, rx, ry, rz)
     if (collide && !rx && !rz) {
       const [x, z] = this.world(lx, lz)
-      const c = this.G.physics.addBox(x, z, w / 2, d / 2, this.yaw + ry, this.y + ly - h / 2, this.y + ly + h / 2, { walkable })
+      const c = this.G.physics.addBox(x, z, w / 2, d / 2, this.yaw + ry, this.y + ly - h / 2, this.y + ly + h / 2, { walkable, roof })
       c.material = SURFACE[matKey]
     }
   }
@@ -382,15 +382,16 @@ function building(kit, w, d, h, opts = {}) {
     glass.rotation.y = Math.PI / 2
     if (!hole || sx > 0) kit.add(glass)
   }
-  // roof, with a collapsed strip when `hole`
+  // roof, with a collapsed strip when `hole` — tagged a roof, so an animal
+  // under it knows it is indoors and leaves by the door (Creature.wayIn)
   if (hole) {
     const gap = 1.6
     const left = w * 0.62
-    kit.box(left, 0.22, d + 0.6, roof, cx - w / 2 + left / 2 - 0.3, h + 0.11, cz, { tex: 3 })
-    kit.box(w - left - gap + 0.6, 0.22, d + 0.6, roof, cx + w / 2 - (w - left - gap) / 2 + 0.3, h + 0.11, cz, { tex: 3 })
+    kit.box(left, 0.22, d + 0.6, roof, cx - w / 2 + left / 2 - 0.3, h + 0.11, cz, { tex: 3, roof: true })
+    kit.box(w - left - gap + 0.6, 0.22, d + 0.6, roof, cx + w / 2 - (w - left - gap) / 2 + 0.3, h + 0.11, cz, { tex: 3, roof: true })
     kit.box(gap + 0.4, 0.12, d * 0.5, roof, cx - w / 2 + left + gap / 2, h * 0.55, cz + d * 0.15, { rz: 0.6, collide: false, tex: 3 })
   } else {
-    kit.box(w + 0.6, 0.22, d + 0.6, roof, cx, h + 0.11, cz, { tex: 3 })
+    kit.box(w + 0.6, 0.22, d + 0.6, roof, cx, h + 0.11, cz, { tex: 3, roof: true })
   }
   if (rng) {
     kit.vines(cx - w / 4, h, cz + d / 2 + 0.05, w * 0.4, h * 0.8, 0, rng)

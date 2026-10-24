@@ -16,7 +16,7 @@ const aloft = (G, p) => p.y - G.island.heightAt(p.x, p.z) > 0.5
 // Every blow first asks whether it can reach (Creature.reachesTarget,
 // actors/reach.js). A hunter whose quarry is up out of its reach — a roof, a
 // tower — lays siege instead (hunt -> besiege), and past its patience lies in
-// wait nearby (investigate with `wait`) until they come down.
+// wait nearby (investigate with `wait`) until they are back within reach.
 
 export class Brain {
   constructor(creature, rng) {
@@ -34,11 +34,13 @@ export class Brain {
     this.alarmSeen = -1 // the herd alarm a bold herd last scattered for
     // a quarry out of reach: seconds spent besieging it, how often it has
     // given up (each time it gives up sooner and waits longer), and until
-    // when it waits the player out rather than pressing
+    // when it waits the player out rather than pressing — and where they
+    // were when it gave up
     this.balk = 0
     this.balks = 0
     this.patience = rng.range(16, 26)
     this.sulk = -1
+    this.sulkAt = null
   }
 
   set(state, data = {}) {
@@ -186,7 +188,8 @@ export class Brain {
         return
       }
       if (temper === 'aggressive' || (temper === 'defensive' && aw > 0.6)) {
-        if (s !== 'investigate' && s !== 'hunt') this.set('investigate', { at: { ...P.lastKnown } })
+        // lying in wait for someone now back within reach: go and look
+        if ((s !== 'investigate' && s !== 'hunt') || (this.data.wait && c.canGetAt(G))) this.set('investigate', { at: { ...P.lastKnown } })
         else if (s === 'investigate' && !this.data.wait) this.data.at = { ...P.lastKnown }
         return
       }
@@ -248,14 +251,19 @@ export class Brain {
     }
   }
 
-  // Waiting out a player it gave up besieging, while they stay up there —
-  // unless they are right there within a strike.
+  // Waiting out a player it gave up besieging: while they stay out of its
+  // reach (Creature.canGetAt) — not merely up on something, as a crate or a
+  // desk is no height at all — or stay put where the walls held it off.
+  // Back within reach, or right there within a strike, it comes on again.
   sulking(G) {
     if (G.time >= this.sulk) return false
     const c = this.c
+    if (!c.canGetAt(G)) return true
     const p = G.vehicle ? G.vehicle.pos : G.player.pos
+    const at = this.sulkAt
+    const put = Math.hypot(p.x - at.x, p.z - at.z) < 2 && Math.abs(p.y - at.y) < 0.4
     const strike = Math.hypot(p.x - c.pos.x, p.z - c.pos.z) < (c.sp.attack?.range ?? 2) + c.radius + 0.4 && c.reachesTarget(G)
-    return aloft(G, p) && !strike
+    return put && !strike
   }
 
   // Out of patience under a quarry it cannot reach: give up — sooner each
@@ -266,6 +274,8 @@ export class Brain {
     this.balks++
     this.patience = Math.max(8, this.rng.range(16, 26) * Math.pow(0.7, this.balks))
     this.sulk = G.time + this.rng.range(45, 75) * (1 + this.balks * 0.5)
+    const p = G.vehicle ? G.vehicle.pos : G.player.pos
+    this.sulkAt = { x: p.x, y: p.y, z: p.z }
     if (this.c.sp.temperament === 'aggressive') this.lieInWait(G, from)
     else this.set('alert')
   }

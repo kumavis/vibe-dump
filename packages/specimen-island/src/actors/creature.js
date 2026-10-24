@@ -48,8 +48,7 @@ export class Creature {
     this.trampleCool = 0
     this.underT = 0 // how long the player has been under its feet
     // the way into a building it walked into, to leave by (locomote): the
-    // last open ground, the first step under the roof, the first indoors
-    this.lastOut = { x: rec.x, z: rec.z }
+    // first step under the roof, the first indoors
     this.threshold = null
     this.wayIn = null
     this.wayT = 0
@@ -222,10 +221,12 @@ export class Creature {
     this.rec.yaw = this.yaw
   }
 
-  // Indoors: under a roof, and a stride inside its edge (an eave is not).
-  // Open: no roof here nor a stride around (a hole in one is not open).
+  // Indoors: under a building's roof, and a stride inside its edge (an eave
+  // is not). Open: no roof here nor a stride around (a hole in one is not
+  // open). A bridge deck or a dock overhead is no roof: there is no wall to
+  // find a door in, and the way on is straight ahead.
   roofed(x, z) {
-    return this.G.physics.ceilingAt(x, z, this.pos.y + 0.4) < this.pos.y + 6
+    return this.G.physics.ceilingAt(x, z, this.pos.y + 0.4, true) < this.pos.y + 6
   }
   indoorsAt(x, z) {
     return this.roofed(x, z) && this.roofed(x + 1, z) && this.roofed(x - 1, z) && this.roofed(x, z + 1) && this.roofed(x, z - 1)
@@ -244,8 +245,8 @@ export class Creature {
       let tx = this.target.x
       let tz = this.target.z
       // indoors and bound outside: leave the way it came in — back to its
-      // first step indoors, through the doorway, out to the open ground it
-      // came from. Steering alone rarely finds a doorway from the inside.
+      // first step indoors, through the doorway and on out past the eaves.
+      // Steering alone rarely finds a doorway from the inside.
       const w = this.wayIn
       if (w && !this.indoorsAt(tx, tz)) {
         const p = w.path[w.stage]
@@ -323,19 +324,21 @@ export class Creature {
     // ground and body pitch
     this.pos.y = G.physics.groundAt(this.pos.x, this.pos.z, this.pos.y + 1.2)
     // remember the way in: the first step under a roof (every frame, so it
-    // is in the doorway), then a few times a second the last open ground
-    // and the first step indoors
+    // is in the doorway), then a few times a second the first step indoors
     if (!this.threshold && this.roofed(this.pos.x, this.pos.z)) this.threshold = { x: this.pos.x, z: this.pos.z }
     this.wayT -= dt
     if (this.wayT <= 0) {
       this.wayT = 0.15
-      if (this.openAt(this.pos.x, this.pos.z)) {
-        this.lastOut.x = this.pos.x
-        this.lastOut.z = this.pos.z
-        this.threshold = this.wayIn = null
-      } else if (!this.wayIn && this.indoorsAt(this.pos.x, this.pos.z)) {
+      if (this.openAt(this.pos.x, this.pos.z)) this.threshold = this.wayIn = null
+      else if (!this.wayIn && this.indoorsAt(this.pos.x, this.pos.z)) {
+        // out is straight on along the line it came in by, 2.5 m past the
+        // doorway into the open — a line out through the door clears the
+        // walls, where one back to the last open ground it stood on is as
+        // often round a corner and through them
         const at = { x: this.pos.x, z: this.pos.z }
-        this.wayIn = { path: [at, this.threshold || at, { ...this.lastOut }], stage: 0 }
+        const th = this.threshold || at
+        const k = 2.5 / (Math.hypot(th.x - at.x, th.z - at.z) || 1)
+        this.wayIn = { path: [at, th, { x: th.x + (th.x - at.x) * k, z: th.z + (th.z - at.z) * k }], stage: 0 }
       }
     }
     const L = (sp.body.torsoLen + sp.body.pelvisLen) * this.scale * 0.5

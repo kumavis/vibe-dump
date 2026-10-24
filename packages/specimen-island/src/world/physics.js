@@ -39,6 +39,10 @@ export class Physics {
       tag: opts.tag || 'static',
       ref: opts.ref || null,
       material: opts.material || null,
+      // the roof over a building's walls (structures.js building()): what an
+      // animal counts as being indoors under, unlike a bridge deck or a dock
+      // it can walk out from under (Creature.indoorsAt)
+      roof: !!opts.roof,
     }
     const ex = Math.abs(hx * c.cos) + Math.abs(hz * c.sin)
     const ez = Math.abs(hx * c.sin) + Math.abs(hz * c.cos)
@@ -98,13 +102,14 @@ export class Physics {
     return { y, collider }
   }
 
-  // Lowest ceiling above y at (x, z) — keeps heads out of roofs.
-  ceilingAt(x, z, y) {
+  // Lowest ceiling above y at (x, z) — keeps heads out of roofs. `roofs`:
+  // only a building's roof counts, not a deck overhead.
+  ceilingAt(x, z, y, roofs = false) {
     let ceil = Infinity
     const list = this.grid.cellItems(Math.floor(x / 16), Math.floor(z / 16))
     if (!list) return ceil
     for (const c of list) {
-      if (c.type !== 'box' || c.y0 < y) continue
+      if (c.type !== 'box' || c.y0 < y || (roofs && !c.roof)) continue
       const [lx, lz] = this.toLocal(c, x, z)
       if (Math.abs(lx) <= c.hx && Math.abs(lz) <= c.hz) ceil = Math.min(ceil, c.y0)
     }
