@@ -141,7 +141,7 @@ export class Helicopter extends Vehicle {
 
   onEnter() {
     this.spin = 0
-    this.G.toast('Space: climb · Shift: descend · W/S: pitch · A/D: slide · Mouse: turn · V: camera · E: exit (landed)', 'info', 7)
+    this.G.toast(this.G.input.lastDevice === 'gamepad' ? 'A: climb · B: descend · Left stick: pitch / slide · Right stick: turn · LB: camera · Y: exit (landed)' : 'Space: climb · Shift: descend · W/S: pitch · A/D: slide · Mouse: turn · V: camera · E: exit (landed)', 'info', 7)
   }
 
   onExit() {

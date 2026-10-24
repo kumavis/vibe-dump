@@ -28,6 +28,7 @@ import { Science } from './player/science.js'
 import { Photos } from './player/photos.js'
 import { Helicopter } from './vehicles/helicopter.js'
 import { Jeep } from './vehicles/jeep.js'
+import { Motorbike } from './vehicles/motorbike.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
@@ -110,7 +111,8 @@ async function boot() {
   const lab = G.island.poi.fieldlab
   G.heli = new Helicopter(G, lab.pad, lab.padYaw)
   G.jeep = Jeep.atStation(G)
-  G.vehicles = [G.heli, G.jeep]
+  G.motorbike = Motorbike.atDock(G)
+  G.vehicles = [G.heli, G.jeep, G.motorbike]
   G.audio = new Audio()
   G.hud = new HUD(G)
   G.map = new MapView(G, document.getElementById('map'))
@@ -174,6 +176,7 @@ async function boot() {
     showAutoTier()
     input.sensitivity = 0.0022 * s.sensitivity
     input.invertY = s.invertY
+    input.gamepad.sensitivity = s.controllerSensitivity
     G.audio.setVolume(s.volume)
   }
   // Auto's frame clock: its own rAF callback sees the same frame intervals as
@@ -226,7 +229,10 @@ async function boot() {
     if (G.mode !== 'play' || G.paused) return
     setPaused(true)
     G.menus.show('pause')
+    input.unlock()
   }
+  addEventListener('blur', pause)
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause() })
   const showNote = (entry) => {
     G.menus.showNote(entry)
     setPaused(true)
@@ -239,17 +245,20 @@ async function boot() {
     input.lock()
     G.player.fade = 1.5
     G.objectives.refresh()
+    const pad = input.lastDevice === 'gamepad'
     const tips = [
+      [`A trail bike with an automatic stabilizer waits at the inland end of the Supply Dock. ${pad ? 'Y' : 'E'} to ride.`, 'info', 9],
       ['Day 1, 07:30. The boat leaves at dusk the day you call for it. Make the trip count.', 'info', 7],
-      ['Field Scanner [1] catalogues species. Tranq Pistol [2] for small animals. J opens the journal.', 'info', 9],
-      ['Compys scavenge the beach where the pier comes ashore. Field Camera [6]: hold RMB to raise it, wheel zooms, click shoots.', 'info', 10],
-      ['Crouch [C] in ferns and tall grass. The eye bottom-left shows how visible you are.', 'info', 10],
+      [pad ? 'Field Scanner catalogues species. LB/RB switch tools; Tranq Pistol for small animals. View opens the journal.' : 'Field Scanner [1] catalogues species. Tranq Pistol [2] for small animals. J opens the journal.', 'info', 9],
+      [pad ? 'Compys scavenge the beach where the pier comes ashore. Field Camera: hold LT to raise it, LB/RB zoom, RT shoots.' : 'Compys scavenge the beach where the pier comes ashore. Field Camera [6]: hold RMB to raise it, wheel zooms, click shoots.', 'info', 10],
+      [`Crouch [${pad ? 'B' : 'C'}] in ferns and tall grass. The eye bottom-left shows how visible you are.`, 'info', 10],
     ]
     tips.forEach(([t, k, s], i) => setTimeout(() => G.toast(t, k, s), 1500 + i * 3500))
   }
   G.menus = new Menus(G, {
     start,
     resume,
+    pause,
     respawn: () => {
       G.menus.show('death', false)
       G.vehicle?.exit(true)
@@ -272,7 +281,10 @@ async function boot() {
     if (!locked && G.mode === 'play' && !G.paused && !anyOverlay()) pause()
   }
   canvas.addEventListener('click', () => {
-    if (G.mode === 'play' && !G.paused) input.lock()
+    if (G.mode === 'play' && !G.paused) {
+      input.lock()
+      G.audio.init()
+    }
   })
   addEventListener('keydown', (e) => {
     if (e.code !== 'Escape' || G.mode !== 'play') return
@@ -324,10 +336,17 @@ async function boot() {
   const tmpFocus = new THREE.Vector3()
   function simulate(dt) {
     G.frame++
+    const menuRoot = G.menus.controllerRoot()
+    input.beginFrame(dt, { menu: !!menuRoot, vehicle: !!G.vehicle })
+    if (input.gamepad.disconnected) {
+      pause()
+      G.toast('Controller disconnected. Reconnect or use keyboard and mouse, then resume.', 'warn', 7)
+    }
+    const menuFrame = G.menus.updateController(dt, input.gamepad, menuRoot)
     const playing = G.mode === 'play'
 
     // overlay toggles work even while paused
-    if (playing && G.player.alive) {
+    if (playing && G.player.alive && (!menuRoot || ['map', 'journal', 'note'].includes(menuRoot.id))) {
       if (input.pressed('map') && !G.journal.open && !G.menus.noteOpen) {
         G.map.toggle()
         setPaused(anyOverlay())
@@ -339,7 +358,7 @@ async function boot() {
       if (G.menus.noteOpen && input.pressed('interact') && G.frame > (G.noteFrame || 0)) G.menus.closeNote()
     }
 
-    if (playing && !G.paused) {
+    if (playing && !G.paused && !menuFrame) {
       G.time += dt
       // read once: the E that steps you out of a vehicle must not board it again
       const riding = G.vehicle

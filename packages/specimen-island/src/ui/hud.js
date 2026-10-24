@@ -91,6 +91,7 @@ export class HUD {
     const G = this.G
     const p = G.player
     const W = G.weapons
+    const pad = G.input.lastDevice === 'gamepad'
     const veh = G.vehicle
     const flying = !!veh // in any vehicle, the helicopter or the jeep
     const camYaw = veh ? veh.camYaw : p.yaw
@@ -118,7 +119,7 @@ export class HUD {
     const slots = W.owned()
       .map((w) => `<b class="${w.id === W.current ? 'on' : ''}">${w.slot}</b>`)
       .join('')
-    this.set('gad', this.el.gadgets, `${slots}<i>G</i> stone ×${G.inventory.count('stone')} <i>T</i> flare ×${G.inventory.count('flare')} <i>H</i> med ×${G.inventory.count('medkit')}`, 'html')
+    this.set('gad', this.el.gadgets, `${slots}${pad ? '<i>LB/RB</i>' : ''}<i>${pad ? '←' : 'G'}</i> stone ×${G.inventory.count('stone')} <i>${pad ? '→' : 'T'}</i> flare ×${G.inventory.count('flare')} <i>${pad ? '↓' : 'H'}</i> med ×${G.inventory.count('medkit')}`, 'html')
 
     // crosshair / scope
     const scoped = !flying && !!W.scoped()
@@ -150,7 +151,7 @@ export class HUD {
     const pr = flying ? null : G.interact.prompt()
     if (pr) {
       this.el.prompt.classList.add('show')
-      this.set('prt', this.el.promptText, pr.blocked ? `<em>${pr.label}</em><br><span class="blocked">${pr.blocked}</span>` : `<b>E</b> ${pr.hold ? 'hold · ' : ''}${pr.label}`, 'html')
+      this.set('prt', this.el.promptText, pr.blocked ? `<em>${pr.label}</em><br><span class="blocked">${pr.blocked}</span>` : `<b>${G.input.lastDevice === 'gamepad' ? 'Y' : 'E'}</b> ${pr.hold ? 'hold · ' : ''}${pr.label}`, 'html')
       this.el.promptRing.style.setProperty('--p', (pr.progress * 100).toFixed(1))
       this.el.promptRing.style.display = pr.hold && !pr.blocked ? 'block' : 'none'
     } else this.el.prompt.classList.remove('show')
@@ -182,6 +183,9 @@ export class HUD {
   // fresh hit flashes the hull readout red; a failing hull keeps blinking.
   vehiclePanel(v) {
     const G = this.G
+    const pad = G.input.lastDevice === 'gamepad'
+    const exit = pad ? 'Y' : 'E'
+    const camera = pad ? 'LB' : 'V'
     const blink = (hz) => Math.sin(G.time * hz * Math.PI * 2) > 0
     const hit = this.hullFlash > 0
     const hullCls = hit ? (blink(6) ? 'flash' : 'warn') : v.health < VEHICLE_FX.warnBelow ? (blink(1.5) ? 'warn' : '') : v.health < VEHICLE_FX.smokeBelow ? 'warn' : ''
@@ -192,9 +196,11 @@ export class HUD {
       // sinking faster than a skid landing can take, close to the ground: red
       const vs = v.onGround ? 0 : v.vel.y
       const sinkCls = vs < -v.tune.impact.terrain.min && agl < 15 ? 'warn' : ''
-      return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? 'E: exit · ' : ''}V: camera</div>`
+      return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${camera}: camera</div>`
     }
-    return `${spd}${hull}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? 'E: exit · ' : ''}Space: handbrake · F: lights · V: camera</div>`
+    const bike = v.kind === 'motorbike'
+    const balance = bike ? '<div>STABILIZER <b>ON</b></div>' : ''
+    return `${spd}${hull}${balance}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${camera}: camera</div>`
   }
 
   updateCompass(camYaw) {

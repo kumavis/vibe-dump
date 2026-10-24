@@ -210,3 +210,43 @@ export const JEEP = {
     stuck: 'Stuck. Climb out and hold E beside the jeep to winch it free.',
   },
 }
+
+
+// A compact trail bike. The gyroscope is always on: at rest it holds the
+// frame upright; in motion it limits lean and damps wobble. The shared ground
+// solver samples the left/right edges of each of its two tyres.
+export const MOTORBIKE = {
+  ...JEEP,
+  kind: 'motorbike', name: 'motorbike', hudName: 'TRAIL BIKE',
+  exitBlocked: 'Stop the motorbike first',
+  mass: 240, visibility: 1.25, strikeMul: 0.9, strikeThrough: 0.7,
+  halfLength: 1.25, halfWidth: 0.38,
+  wheel: { r: 0.38, width: 0.18, x: 0.09, z: 0.85, travel: 0.14 },
+  top: { road: 24, offroad: 15, reverse: 3 },
+  accel: 8, reverseAccel: 3, brake: 18, handbrake: 22,
+  steer: { max: 0.5, falloff: 8, rate: 6 },
+  grip: { road: 20, offroad: 15, handbrake: 12, redirect: 0.95 },
+  handbrakeYaw: 0,
+  bump: { road: 0.006, offroad: 0.035 },
+  suspension: { k: 65, c: 14, liftK: 120, liftC: 18 },
+  stabilizer: { maxLean: 0.38, response: 7, gravity: 9.8 },
+  wade: 0.5,
+  hitbox: [{ z: -0.8, r: 0.38 }, { z: 0, r: 0.38 }, { z: 0.8, r: 0.38 }],
+  hitY: [0.25, 1.45],
+  creatures: { ...JEEP.creatures, smallMass: 70, hitK: 4 },
+  noise: { idle: 16, max: 65, every: 0.5 },
+  lights: { ...JEEP.lights, intensity: 430, range: 65, angle: 0.48 },
+  door: { x: 0.55, y: 0.9, z: 0.2, radius: 2.3 },
+  exits: [[-1.3, 0.2], [1.3, 0.2], [0, 2], [0, -2]],
+  parked: [{ x: 0, z: 0, hx: 0.38, hz: 1.25, y0: 0.25, y1: 1.4 }],
+  seat: [0, 1.7, 0.2],
+  enginePoint: [0, 0.65, 0],
+  chase: { back: 5.4, up: 2.7, lookAhead: 3, follow: 5 },
+  toasts: {
+    50: 'Motorbike at 50% — the engine is rattling. The stabilizer is still holding.',
+    25: 'Motorbike at 25%! Stop and repair it before the engine gives out.',
+    0: 'Motorbike wrecked. Dismount and hold the interact button beside it to repair.',
+    fieldRepaired: 'Ride to the field lab pump for a full service.',
+    stuck: 'Stuck. Dismount and hold the interact button beside the bike to recover it.',
+  },
+}

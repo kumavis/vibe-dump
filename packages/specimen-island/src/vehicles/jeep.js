@@ -36,8 +36,8 @@ export class Jeep extends Vehicle {
     return new Jeep(G, pos, yaw)
   }
 
-  constructor(G, pos, yaw) {
-    super(G, JEEP, pos, yaw)
+  constructor(G, pos, yaw, tune = JEEP) {
+    super(G, tune, pos, yaw)
     this.steer = 0
     this.yawRate = 0
     this.rpm = 0
@@ -58,12 +58,12 @@ export class Jeep extends Vehicle {
     this.stuckToast = false
     this.engineQuiet = true
     this.wheelH = [pos.y, pos.y, pos.y, pos.y]
-    this.surface = { road: 1, cover: 0, wading: 0, top: JEEP.top.road }
-    this.winchAction = { label: 'Winch the jeep out onto firm ground', hold: JEEP.winch.hold, use: () => this.winchOut() }
+    this.surface = { road: 1, cover: 0, wading: 0, top: tune.top.road }
+    this.winchAction = { label: `Recover the ${tune.name} onto firm ground`, hold: tune.winch.hold, use: () => this.winchOut() }
     this.buildModel()
     this.settle()
     this.park()
-    this.registerBoard('jeep')
+    this.registerBoard(tune.kind)
   }
 
   boardLabel() {
@@ -81,7 +81,7 @@ export class Jeep extends Vehicle {
   // wherever it was stuck.
   winchOut() {
     const G = this.G
-    const spot = findWinchSpot(G, this.pos, this.tune.winch.range)
+    const spot = findWinchSpot(G, this.pos, this.tune.winch.range, this.tune)
     if (!spot) {
       // let the driver have another go rather than lock them out of it
       this.stuckT = 0
@@ -300,7 +300,7 @@ export class Jeep extends Vehicle {
     this.warmLights()
     if (G.sky && G.sky.light < 0.35 && !this.lights) this.setLights(true)
     G.audio?.play('ignition', { pos: this.pos })
-    G.toast('W/S: drive · A/D: steer · Space: handbrake · F: headlights · V: camera · Mouse: look · E: exit (stopped)', 'info', 7)
+    G.toast(G.input.lastDevice === 'gamepad' ? 'Left stick: drive / steer · A: handbrake · RS: headlights · LB: camera · Right stick: look · Y: exit (stopped)' : 'W/S: drive · A/D: steer · Space: handbrake · F: headlights · V: camera · Mouse: look · E: exit (stopped)', 'info', 7)
   }
 
   // Climbing out of a stopped jeep leaves it parked (Vehicle.exit). Thrown
@@ -523,6 +523,8 @@ export class Jeep extends Vehicle {
     this.liftV += (-S.liftK * this.lift - S.liftC * this.liftV) * dt
     this.lift = clamp(this.lift + this.liftV * dt, -0.15, 0.15)
 
+    this.stabilize(dt)
+
     // ---- wheels, dust, splashes, the grass parting
     this.spinAngle += (vf / W.r) * dt
     const speed = Math.abs(vf)
@@ -551,10 +553,13 @@ export class Jeep extends Vehicle {
     this.placeWheels()
   }
 
+  // Optional active balance for narrower ground vehicles.
+  stabilize() {}
+
   engineAudio(load) {
     if (this.rpm < 0.002 && this.engineQuiet) return
     this.engineQuiet = this.rpm < 0.002
-    this.G.audio?.setEngine(this.rpm, load, this.pos, this.inside)
+    this.G.audio?.setEngine(this.rpm, load, this.pos, this.inside, this.kind)
   }
 
   // Trunks, rocks, walls, fences: bounce off, and get hurt by the closing speed.
@@ -636,7 +641,7 @@ export class Jeep extends Vehicle {
           G.fx?.blood(contact)
           G.audio?.play('fleshHit', { pos: contact })
           // deliberately on the player's account: it scores as a kill
-          cr.takeHit(G, { damage: closing * CR.hitK, zone: 'torso', from: this.pos, cause: 'weapon', weapon: 'jeep' })
+          cr.takeHit(G, { damage: closing * CR.hitK, zone: 'torso', from: this.pos, cause: 'weapon', weapon: this.kind })
         }
       } else {
         this.pos.x -= nx * pen * share
@@ -758,7 +763,7 @@ const UP = new THREE.Vector3(0, 1, 0)
 
 // Collects posed geometry per material and merges it: one draw call per
 // material for the whole body.
-class Parts {
+export class Parts {
   constructor() {
     this.buckets = new Map()
   }
@@ -886,9 +891,9 @@ function roadFacing(G, x, z, floorY) {
 }
 
 // Is a jeep-sized rectangle (plus a margin to walk round it) free here?
-function footprintClear(G, x, z, yaw, floorY) {
-  const hx = JEEP.halfWidth + 0.3
-  const hz = JEEP.halfLength + 0.3
+export function footprintClear(G, x, z, yaw, floorY, tune = JEEP) {
+  const hx = tune.halfWidth + 0.3
+  const hz = tune.halfLength + 0.3
   const c = Math.cos(yaw)
   const s = Math.sin(yaw)
   for (let lx = -hx; lx <= hx + 1e-6; lx += hx / 2) {
@@ -904,7 +909,7 @@ function footprintClear(G, x, z, yaw, floorY) {
 
 // The nearest clear, dry, level patch a jeep fits on within `range` of
 // `from`, out from under any roof, facing away from `from`.
-function findWinchSpot(G, from, range) {
+export function findWinchSpot(G, from, range, tune = JEEP) {
   for (let r = 4; r <= range; r += 2) {
     const n = Math.max(12, Math.round(r * 1.5))
     for (let i = 0; i < n; i++) {
@@ -914,7 +919,7 @@ function findWinchSpot(G, from, range) {
       const y = G.island.heightAt(x, z)
       if (G.island.depthAt(x, z) > 0.05 || G.physics.ceilingAt(x, z, y + 0.5) < y + 3) continue
       const yaw = yawTo(from.x, from.z, x, z)
-      if (footprintClear(G, x, z, yaw, y)) return { pos: new THREE.Vector3(x, y, z), yaw }
+      if (footprintClear(G, x, z, yaw, y, tune)) return { pos: new THREE.Vector3(x, y, z), yaw }
     }
   }
   return null

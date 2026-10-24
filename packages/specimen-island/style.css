@@ -1232,3 +1232,10 @@ body.playing #title {
     background: rgba(6, 10, 5, 0.7);
   }
 }
+
+/* Controller navigation must remain visible after programmatic focus. */
+button:focus, select:focus, input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.controller-status { color: var(--dim); font-size: 13px; line-height: 1.5; }

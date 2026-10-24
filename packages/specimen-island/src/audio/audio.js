@@ -445,15 +445,16 @@ export class Audio {
     if (!this.ctx) return
     const t = this.ctx.currentTime
     if (this.rotor) this.rotor.g.gain.setTargetAtTime(0, t, 0.05)
-    if (this.engine) this.engine.g.gain.setTargetAtTime(0, t, 0.05)
+    for (const engine of [this.engine, this.bikeEngine]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
   }
 
   // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
   // pitched by rpm, opened up by throttle, with a lope at idle.
-  setEngine(rpm, load, pos, inside) {
+  setEngine(rpm, load, pos, inside, kind = 'jeep') {
     if (!this.ctx) return
     const ctx = this.ctx
-    if (!this.engine) {
+    const key = kind === 'motorbike' ? 'bikeEngine' : 'engine'
+    if (!this[key]) {
       const am = ctx.createGain()
       am.gain.value = 0.8
       const lope = ctx.createOscillator()
@@ -489,12 +490,12 @@ export class Audio {
       const p = ctx.createStereoPanner()
       am.connect(f).connect(g).connect(p).connect(this.master)
       for (const n of [lope, o1, o2, src]) n.start()
-      this.engine = { g, f, p, o1, o2, lope, nf }
+      this[key] = { g, f, p, o1, o2, lope, nf }
     }
-    const e = this.engine
+    const e = this[key]
     const t = ctx.currentTime
     const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 170)
-    const fire = 26 + rpm * 100
+    const fire = kind === 'motorbike' ? 45 + rpm * 155 : 26 + rpm * 100
     e.o1.frequency.setTargetAtTime(fire, t, 0.06)
     e.o2.frequency.setTargetAtTime(fire * 0.5, t, 0.06)
     e.lope.frequency.setTargetAtTime(5 + rpm * 30, t, 0.1)

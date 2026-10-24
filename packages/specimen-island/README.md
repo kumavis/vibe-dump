@@ -3,13 +3,44 @@
 A first-person field-biology game on a forgotten dinosaur preserve. Sneak through
 jungle and tall grass, scan and dart animals, draw blood while the sedative wears
 off, photograph them — or go loud with the rifles and watch your score bleed.
-Restore the old infrastructure, drive the ranger jeep and fly the station
+Restore the old infrastructure, ride the stabilized trail bike, drive the ranger jeep and fly the station
 helicopter to the summit relay.
 
 Everything is procedural: terrain, rivers, jungle, buildings, dinosaurs (rigged
 and animated from data), textures and sound. No assets are downloaded.
 
 ## Playing
+
+Xbox controllers work through the browser's standard Gamepad API, using USB or
+wireless (Bluetooth or an Xbox wireless adapter where supported by your OS and
+browser). Connect/pair in the operating system first, open the game over HTTPS
+or localhost, and press a controller button to let the browser discover it.
+The title and Settings show connection status. Controllers with a nonstandard
+mapping are reported rather than assigned guessed bindings. If audio is silent,
+click the page once to allow browser audio playback.
+
+| Xbox control | action |
+| --- | --- |
+| Left stick / click left stick | analog movement / hold to sprint |
+| Right stick / click right stick | look / flashlight or jeep headlights |
+| A / B | jump / toggle crouch |
+| Y (hold) / X | interact / reload |
+| LT / RT | aim / fire, scan, photograph or jab |
+| LB / RB | previous / next tool; zoom in / out with the Field Camera raised |
+| D-pad up / down / left / right | map / medkit / stone / flare |
+| View / Menu | journal / pause or resume |
+| Vehicle: left / right stick | drive and steer or pitch and slide / look or turn |
+| Vehicle: Y / LB | board or exit / seat or chase camera |
+| Jeep: A; helicopter: A / B | handbrake; climb / descend |
+| Menus: D-pad or left stick, A, B | navigate, select, back |
+| Menus: left / right, right stick | adjust settings, scroll long sheets and journal |
+
+Controller look sensitivity and invert-Y are in Settings. Both sticks have a
+radial deadzone to prevent drift. Keyboard and mouse remain usable alongside the
+controller. Disconnecting or leaving the page pauses play; reconnect and resume
+explicitly. Held menu buttons and reconnecting triggers must be released before
+they can trigger gameplay actions.
+
 
 | key | action |
 | --- | --- |
@@ -54,6 +85,21 @@ island, so a species wiped out before its blood was drawn owes a tissue sample
 from a carcass instead, and the HUD and journal say so. Finishing pays a bonus
 into the ledger and opens a second debrief, "Survey complete". **New expedition**
 on either debrief starts over.
+
+### Stabilized trail bike
+
+A rideable motorbike waits on clear ground at the inland end of the Supply Dock,
+marked **BIKE** on the map. Approach it and press **E / Xbox Y** to mount.
+Use **W/S + A/D / left stick** to ride, reverse and steer; **Space / A** brakes;
+**F / right-stick click** controls the headlight; **V / LB** switches between
+rider and chase cameras. Stop before pressing **E / Y** to dismount.
+
+Its automatic gyroscopic stabilizer is always on. It holds the bike upright at
+rest, banks into turns up to 22 degrees, damps wobble and levels out as steering
+returns to centre. The exposed green flywheel spins and the HUD shows
+**STABILIZER ON**. The bike has suspension, narrow collision geometry, an engine
+sound, damage, field repair and recovery; the Field Lab pump can service it.
+The stabilizer prevents tipping, but collisions and deep water still matter.
 
 ## Architecture
 
@@ -115,7 +161,9 @@ src/
     vehicle.js       the shared base: boarding/exit, colliders, cameras, AI noise,
                      damage feedback, field repair
     helicopter.js    arcade flight, fuel, landings, rotor
-    jeep.js          4x4 handling, fording, headlights, run-overs
+    jeep.js          shared ground handling and ranger 4x4 model
+    motorbike.js     trail-bike model, rider, two wheels and active gyro balance
+    stabilizer.js    bounded turn lean and automatic return upright
   audio/
     audio.js         procedural Web Audio (guns, voices, ambience, rotor, engine)
     footsteps.js     synthesised footsteps per surface
@@ -192,6 +240,14 @@ median) are ignored. After that only a severe slowdown moves it. An automated
 browser (`navigator.webdriver`, as in the gallery thumbnail shot and the headless
 playtests) is pinned to Medium and does not adapt — a software rasteriser would
 otherwise always look like the slowest machine.
+
+### Controller checks
+
+Run `node --test packages/specimen-island/tests/*.test.js` from the repo root.
+For the browser integration check, build this package and run
+`node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
+required). The checks simulate standard Gamepad API input; a physical USB and
+wireless controller should also be checked on the target OS/browser.
 
 ### Testing hooks
 

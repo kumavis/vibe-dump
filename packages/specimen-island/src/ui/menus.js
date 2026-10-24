@@ -17,7 +17,7 @@ const $ = (id) => document.getElementById(id)
 const KEY = 'specimen-island:settings'
 
 function loadSettings() {
-  const d = { quality: 'auto', sensitivity: 1, volume: 0.8, invertY: false, v: 2 }
+  const d = { quality: 'auto', sensitivity: 1, controllerSensitivity: 1, volume: 0.8, invertY: false, v: 2 }
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || '{}')
     // before v2 Medium was the default and got saved along with any other
@@ -87,6 +87,69 @@ export class Menus {
     const i = items.indexOf(document.activeElement)
     const next = i < 0 ? (dir > 0 ? 0 : items.length - 1) : (i + dir + items.length) % items.length
     items[next].focus()
+    items[next].scrollIntoView({ block: 'nearest' })
+  }
+
+  controllerRoot() {
+    for (const id of ['settings', 'death', 'debrief', 'note', 'journal', 'map', 'pause']) {
+      if ($(id).classList.contains('show')) return $(id)
+    }
+    return this.G.mode === 'title' ? $('title') : null
+  }
+
+  updateController(dt, pad, root) {
+    if (pad.status !== this.padStatus) {
+      this.padStatus = pad.status
+      for (const el of document.querySelectorAll('.controller-status')) el.textContent = pad.status
+    }
+    const menuButton = pad.edges.has(9)
+    const back = pad.edges.has(1)
+    if (!root) {
+      if (menuButton) this.hooks.pause()
+      return menuButton
+    }
+    // Menu/View and the overlay's shortcut can close it, even though gameplay
+    // actions are suppressed while a menu has focus.
+    const closeOverlay = (root.id === 'map' && pad.edges.has(12)) || (root.id === 'journal' && pad.edges.has(8))
+    if (back || menuButton || closeOverlay) {
+      if (root.id === 'settings') this.closeSettings()
+      else if (root.id === 'note') this.closeNote()
+      else if (['map', 'journal', 'pause'].includes(root.id)) this.hooks.resume()
+      return true
+    }
+    if (!pad.active) {
+      this.navDirection = null
+      this.navWait = 0
+      return true
+    }
+    const items = [...root.querySelectorAll(FOCUSABLE)].filter(el => !el.disabled && el.offsetParent !== null)
+    if (items.length && !items.includes(document.activeElement)) items[0].focus()
+    const x = (pad.buttons.has(15) ? 1 : 0) - (pad.buttons.has(14) ? 1 : 0) || (Math.abs(pad.move.x) > 0.5 ? Math.sign(pad.move.x) : 0)
+    const y = (pad.buttons.has(13) ? 1 : 0) - (pad.buttons.has(12) ? 1 : 0) || (Math.abs(pad.move.y) > 0.5 ? Math.sign(pad.move.y) : 0)
+    const direction = y ? `y${y}` : x ? `x${x}` : null
+    this.navWait = (this.navWait || 0) - dt
+    if (direction && (direction !== this.navDirection || this.navWait <= 0)) {
+      const el = document.activeElement
+      if (!y && el?.matches('select, input[type="range"]')) {
+        if (el.tagName === 'SELECT') el.selectedIndex = Math.max(0, Math.min(el.options.length - 1, el.selectedIndex + x))
+        else el.value = String(Math.max(Number(el.min), Math.min(Number(el.max), Number(el.value) + x * Number(el.step || 1))))
+        el.dispatchEvent(new Event('input', { bubbles: true }))
+      } else this.cycleFocus(root, y || x)
+      this.navWait = direction !== this.navDirection ? 0.35 : 0.12
+    }
+    this.navDirection = direction
+    const scroll = root.querySelector('.ledger') || root.querySelector('.inner')
+    if (scroll && pad.turn.y) scroll.scrollTop += pad.turn.y * dt * 600
+    if (pad.edges.has(0)) {
+      const el = document.activeElement
+      if (root.contains(el) && el.matches('button, input[type="checkbox"]')) {
+        const tab = el.dataset.tab
+        el.click()
+        // Journal tabs rebuild their DOM after selection.
+        if (tab) root.querySelector(`[data-tab="${tab}"]`)?.focus()
+      }
+    }
+    return true
   }
 
   openSettings(opener) {
@@ -121,6 +184,7 @@ export class Menus {
         .map(([k, q]) => `<option value="${k}" ${k === s.quality ? 'selected' : ''}>${q.label}</option>`)
         .join('')}</select>
       <label for="${id('sensitivity')}">Mouse</label><div class="range"><input id="${id('sensitivity')}" type="range" data-k="sensitivity" min="0.3" max="2.5" step="0.05" value="${s.sensitivity}"><output></output></div>
+      <label for="${id('controllerSensitivity')}">Controller look</label><div class="range"><input id="${id('controllerSensitivity')}" type="range" data-k="controllerSensitivity" min="0.3" max="2.5" step="0.05" value="${s.controllerSensitivity}"><output></output></div>
       <label for="${id('volume')}">Volume</label><div class="range"><input id="${id('volume')}" type="range" data-k="volume" min="0" max="1" step="0.05" value="${s.volume}"><output></output></div>
       <label for="${id('invertY')}">Invert Y</label><div><input id="${id('invertY')}" type="checkbox" data-k="invertY" ${s.invertY ? 'checked' : ''}></div>`
     this.showValues(el)
@@ -137,8 +201,9 @@ export class Menus {
   // slider readouts
   showValues(el) {
     const s = this.settings
-    const [mouse, volume] = el.querySelectorAll('output')
+    const [mouse, controller, volume] = el.querySelectorAll('output')
     mouse.textContent = `${s.sensitivity.toFixed(2)}×`
+    controller.textContent = `${s.controllerSensitivity.toFixed(2)}×`
     volume.textContent = `${Math.round(s.volume * 100)}%`
   }
 
