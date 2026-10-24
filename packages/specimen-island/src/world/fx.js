@@ -163,6 +163,24 @@ export class FX {
       this.normal.emit(from.x, from.y, from.z, dx * k * 0.35 + (Math.random() - 0.5), dy * k * 0.35 + 1.5 + Math.random(), dz * k * 0.35 + (Math.random() - 0.5), 0.6, 0.09, 0.45, 0.6, 0.15, 4)
     }
   }
+  // game/blast.js: a fireball with a dark column above it and clods thrown
+  // out, or on water a spout of spray; `k` scales the lot
+  explosion(p, k = 1, wet = false) {
+    this.flashLight.position.copy(p)
+    this.flashLight.intensity = 400 * k
+    this.flashT = 0.12
+    if (wet) {
+      this.burst(this.normal, p, Math.round(40 * k), 5 * k, 14 * k, 1.4, 0.3 * k, [0.85, 0.9, 0.94], 9, 0.4)
+      this.burst(this.normal, p, Math.round(10 * k), 3 * k, 3, 2.2, 0.6 * k, [0.8, 0.86, 0.9], 1, 1.2)
+      return
+    }
+    this.burst(this.add, p, Math.round(26 * k), 7 * k, 5 * k, 0.45, 0.9 * k, [1, 0.55, 0.18], -1, 2.4)
+    this.burst(this.add, p, Math.round(12 * k), 3 * k, 3 * k, 0.25, 1.4 * k, [1, 0.85, 0.5], 0, 3)
+    this.burst(this.normal, p, Math.round(18 * k), 3 * k, 4 * k, 3.5, 0.8 * k, [0.18, 0.17, 0.16], -0.6, 1.4)
+    this.burst(this.normal, p, Math.round(26 * k), 11 * k, 9 * k, 1.4, 0.12 * k, [0.3, 0.25, 0.18], 12)
+    this.sparks(p)
+  }
+
   muzzle(p, big) {
     this.flashLight.position.copy(p)
     this.flashLight.intensity = big ? 60 : 8

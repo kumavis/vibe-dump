@@ -281,6 +281,16 @@ export class Audio {
         }
         break
       }
+      case 'explosion': {
+        // game/blast.js: a deep thump, the tearing crack on top, rolling echo
+        // off the hills; on water the crack goes and a slap of spray comes in
+        const k = opts.intensity ?? 1
+        this.tone({ type: 'sine', f0: 70, f1: 24, dur: 0.9 + k * 0.4, vol: 0.55 * k, pos, max: 900, echo: 0.6 })
+        this.burst({ dur: 1.4 + k * 0.6, type: 'lowpass', freq: 420, vol: 0.8 * k, pos, max: 900, sweep: 0.4, echo: 0.7 })
+        if (opts.wet) this.burst({ dur: 0.9, type: 'bandpass', freq: 1800, q: 0.7, vol: 0.35 * k, pos, max: 300, delay: 0.05 })
+        else this.burst({ dur: 0.25, type: 'bandpass', freq: 2400, q: 0.6, vol: 0.5 * k, pos, max: 600 })
+        break
+      }
       case 'warning':
         // master-caution chirp; faster and higher when critical
         this.tone({ type: 'square', f0: opts.level ? 1040 : 880, dur: 0.11, vol: 0.07, filter: 3000 })

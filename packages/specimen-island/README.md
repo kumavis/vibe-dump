@@ -124,6 +124,7 @@ src/
                      throwables, and PHOTO (how a photograph is graded)
     vehicles.js      the helicopter's and jeep's tune tables: hull and damage,
                      colliders, feedback, surfaces, spawn, ecology streaming
+    blasts.js        explosions: radius, damage, hull damage, knock, noise, shake
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, restocking stores, loot tables
     objectives.js    the missions (the expedition, then the Full Survey) as
@@ -156,7 +157,9 @@ src/
     photos.js        the Field Camera: framing, visibility (physics rays + a small
                      ID render), grading, the album, the shutter's payout
     science.js interaction.js inventory.js
-  game/              stealth model, flags/stats, scoring, the missions/objectives runner
+  game/              stealth model, flags/stats, scoring, the missions/objectives runner,
+                     blast.js — one explosion (data/blasts.js): fire or spray, noise,
+                     damage falling off to animals, the player and vehicles, shake
   vehicles/
     vehicle.js       the shared base: boarding/exit, colliders, cameras, AI noise,
                      damage feedback, field repair

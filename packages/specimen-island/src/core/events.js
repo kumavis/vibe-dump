@@ -29,6 +29,7 @@
 //                                                       taken up: the debrief's Continue
 //   mission:complete   {mission}                        its final objective done (the
 //                                                       expedition's too); main.js shows its debrief
+//   blast              {x, y, z, kind, radius, weapon, wet} game/blast.js, after the damage
 //   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
 //   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen

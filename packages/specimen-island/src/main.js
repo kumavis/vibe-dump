@@ -35,6 +35,7 @@ import { MapView, paintRelief, reliefTexture } from './ui/map.js'
 import { Journal } from './ui/journal.js'
 import { Menus, QUALITY } from './ui/menus.js'
 import { buildLadder, detectRung, readGpuInfo, TierController } from './core/quality.js'
+import { blast } from './game/blast.js'
 
 // Composition root. Builds every service onto one shared context `G`, then
 // runs the frame loop. Systems only know each other through G and the event
@@ -90,6 +91,7 @@ async function boot() {
   G.veg = new Vegetation(G.island, G.physics, scene, cfg.seed)
   G.fx = new FX(scene, camera)
   G.shake = new CameraShake(G.events)
+  G.blast = (at, kind, opts) => blast(G, at, kind, opts)
   G.player = new Player(G)
   G.ui = { showNote: (entry) => showNote(entry) }
   G.toast = (text, kind, seconds) => G.hud?.toast(text, kind, seconds)
