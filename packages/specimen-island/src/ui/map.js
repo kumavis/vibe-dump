@@ -70,7 +70,7 @@ export function reliefTexture(canvas) {
   return t
 }
 
-const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡', base: '✪' }
+const ICONS = { dock: '⚓', station: '⌂', lab: '⚗', tower: '♜', fence: '⚠', relay: '📡', base: '✪', sealab: '≋' }
 
 // The baseline for a label `w` px wide centred on x at baseline y, stepped up
 // a line (`h` px) at a time off any label already in `taken`: vehicles parked

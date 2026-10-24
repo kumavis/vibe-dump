@@ -75,6 +75,32 @@ export const LORE = {
       'Every shot is heard from the volcano to the sea, and Matron comes to see what made it. Fire, then move.\n\n' +
       'Barge postponed. Again.',
   },
+  sealabLog: {
+    title: 'Station log — Dr. I. Varga, SL-2',
+    text:
+      'What we came out here for: the marine half of the charter. Ammonite brood counts on the north reef, ' +
+      'plankton tows twice a day, and M-3 — the big marine reptile that hunts the shelf edge. Eleven metres at ' +
+      'the last sonar fix, more by the bite marks on the trench buoys. Never in clear water; it stays where the ' +
+      'murk turns blue-black, and you only see the shape of it.\n\n' +
+      'Why we are leaving: the board cut the marine budget first. Then the storm took out the generator room and ' +
+      'the pier lights, and nobody came to fix them. Last boat Thursday. Nereid stays in the pool on trickle ' +
+      'charge — the solar panel will keep her batteries up for years if the gulls let it.',
+  },
+  sealabBoard: {
+    title: 'Dive board — moon pool',
+    text:
+      'NEREID — pre-dive: hatch dogged, lamps tested, sonar pinging.\n' +
+      'Space blows the tanks and she rises; Shift floods them and she dives. Let go and she trims herself ' +
+      'neutral and holds her depth. W/S thrusters, A/D turn on the spot, F lamps, R ping — the ping gives you the ' +
+      'bottom, the nearest contact and the bearing home. V swaps the bubble for the outside view.\n\n' +
+      'Going out: flood a touch until she is under the deck and drive straight on along the pool, either end — ' +
+      'the upper bracing in that bay was cut away for her. Anywhere else the braces run at two and twelve metres, ' +
+      'so cross under the platform\'s edge between four and ten on the gauge.\n' +
+      'Come up inside the pool and the cradle takes her; climb out onto the catwalk. Bang her into the legs and ' +
+      'winch her up here at the panel to patch the hull. If she ever goes dead down there the tanks blow by ' +
+      'themselves — open the hatch when she breaks surface and swim for the ladder.\n\n' +
+      'DO NOT chase M-3.',
+  },
   'tower:easttower': {
     title: 'Field notes — East Plains Tower',
     text:

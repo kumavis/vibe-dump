@@ -110,7 +110,7 @@ export class HUD {
     this.set('eyeOpen', this.el.eye, `scaleY(${open.toFixed(2)})`, 'style.transform')
     const col = vis < 0.25 ? '#6fd08c' : vis < 0.6 ? '#d8d070' : '#ff7a50'
     this.set('eyeCol', this.el.eye, col, 'style.background')
-    this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.aircraft ? 'AIRBORNE' : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
+    this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.aircraft ? 'AIRBORNE' : veh.kind === 'sub' ? (veh.surfaced ? 'SURFACED' : 'SUBMERGED') : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
     this.set('noise', this.el.noise, `${clamp(G.stealth.playerNoise / 25, 0, 1) * 100}%`, 'style.width')
 
     // weapon
@@ -210,6 +210,7 @@ export class HUD {
       return `<div>ALT <b>${Math.round(agl)}</b> m</div><div>V/S <b class="${sinkCls}">${Math.abs(vs) < 0.05 ? '0.0' : (vs > 0 ? '+' : '') + vs.toFixed(1)}</b> m/s</div>${spd}<div>FUEL <b class="${v.fuel < 0.2 ? 'warn' : ''}">${Math.round(v.fuel * 100)}%</b></div>${hull}${arms}<div class="hint">${v.onGround ? `${exit}: exit · ` : ''}${pad ? 'A/B: climb/descend · ' : ''}${fire}${camera}: camera</div>`
     }
     if (v.kind === 'tank') return this.tankPanel(v, spd, hull, exit, camera)
+    if (v.kind === 'sub') return this.subPanel(v, spd, hull)
     const bike = v.kind === 'motorbike'
     const balance = bike ? '<div>STABILIZER <b>ON</b></div>' : ''
     return `${spd}${hull}${balance}${arms}<div>LIGHTS <b>${v.lights ? 'ON' : 'OFF'}</b></div><div class="hint">${v.canExit() ? `${exit}: exit · ` : ''}${pad ? 'A' : 'Space'}: ${bike ? 'brake' : 'handbrake'} · ${pad ? 'RS' : 'F'}: lights · ${fire}${camera}: camera</div>`
@@ -263,6 +264,30 @@ export class HUD {
       el.classList.toggle('loading', veh.reloadT > 0 || veh.rounds <= 0)
     }
     el.style.opacity = show ? 1 : 0
+  }
+
+  // The submersible: depth and the water under her keel, heading, the
+  // ballast she is carrying, and the last sonar ping while it is fresh.
+  subPanel(v, spd, hull) {
+    const G = this.G
+    const pad = G.input.lastDevice === 'gamepad'
+    const deg = (a) => String(Math.round(a)).padStart(3, '0')
+    const depth = Math.max(0, G.island.sea - v.pos.y - v.tune.float.y1)
+    const bottom = v.pos.y - G.island.heightAt(v.pos.x, v.pos.z)
+    const b = v.ballast
+    const ballast = Math.abs(b) < 0.04 ? 'NEUTRAL' : b > 0 ? `BLOW +${Math.round(b * 100)}%` : `FLOOD ${Math.round(b * 100)}%`
+    let sonar = ''
+    const s = v.sonar
+    if (s && G.time - s.t < v.tune.sonar.show) {
+      const c = s.contact
+      const contact = c ? (c.kind === 'large' ? ` · <b class="warn">LARGE CONTACT</b> ${Math.round(c.d)} m ${deg(c.bearing)}°` : ` · school ${Math.round(c.d)} m ${deg(c.bearing)}°`) : ''
+      sonar = `<div>SONAR <b>${Math.round(s.bottom)} m</b> to bottom${contact} · lab ${Math.round(s.home.d)} m ${deg(s.home.bearing)}°</div>`
+    }
+    const heading = (((-v.yaw * 180) / Math.PI) % 360 + 360) % 360
+    const keys = pad ? 'A/B: blow / flood · RS: lamps · X: sonar · LB: camera' : 'Space/Shift: blow / flood · F: lamps · R: sonar · V: camera'
+    // under the station's well: the only way up into it
+    if (!v.surfaced && v.inPool()) sonar += `<div><b>MOON POOL OVERHEAD</b> — ${pad ? 'A' : 'Space'} to come up into it</div>`
+    return `<div>DEPTH <b>${depth.toFixed(1)}</b> m</div><div>UNDER KEEL <b class="${bottom < 2 ? 'warn' : ''}">${bottom.toFixed(1)}</b> m</div><div>HDG <b>${deg(heading)}°</b></div>${spd}<div>BALLAST <b>${ballast}</b></div>${hull}<div>LAMPS <b>${v.lights ? 'ON' : 'OFF'}</b></div>${sonar}<div class="hint">${v.canExit() ? `${pad ? 'Y' : 'E'}: exit · ` : ''}${keys}</div>`
   }
 
   updateCompass(camYaw) {

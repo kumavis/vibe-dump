@@ -476,6 +476,121 @@ function log(rng) {
   return { geo: b.build() }
 }
 
+// ---------------------------------------------------------------- under the sea
+
+// Kelp: a few tall stipes from one holdfast, each hung with long golden
+// blades, swaying more the higher they reach. Its tips sway half a metre in
+// the swell (a land plant's sway is a fraction of that).
+const KELP_SWAY = 3.5
+function kelp(rng) {
+  const b = new Builder()
+  const hold = jitterVerts(new THREE.IcosahedronGeometry(0.22, 0), rng.int(1, 1e6), 0.1)
+  b.add(hold, mat(0, 0.08, 0, 0, 0, 0, 1, 0.5, 1), col('#3a3418', rng))
+  b.both = true
+  const n = rng.int(2, 4)
+  const base = col('#5a5422', rng, 0.1)
+  const tip = col('#b8a448', rng, 0.12)
+  const segs = 8
+  for (let k = 0; k < n; k++) {
+    const H = rng.range(4.5, 10)
+    const a = rng.range(0, Math.PI * 2)
+    const lean = rng.range(0.05, 0.2)
+    const ph = rng.range(0, 6)
+    const at = (t) => [Math.cos(a) * lean * t * H + Math.sin(t * 5 + ph) * 0.25, t * H, Math.sin(a) * lean * t * H + Math.cos(t * 4 + ph) * 0.2]
+    const px = -Math.sin(a)
+    const pz = Math.cos(a)
+    for (let i = 0; i < segs; i++) {
+      const t0 = i / segs
+      const t1 = (i + 1) / segs
+      const p0 = at(t0)
+      const p1 = at(t1)
+      const c0 = base.clone().lerp(tip, t0)
+      const c1 = base.clone().lerp(tip, t1)
+      const w = 0.04
+      // the stipe
+      b.quad([p0[0] - px * w, p0[1], p0[2] - pz * w], [p0[0] + px * w, p0[1], p0[2] + pz * w], [p1[0] + px * w, p1[1], p1[2] + pz * w], [p1[0] - px * w, p1[1], p1[2] - pz * w], [c0, c0, c1, c1], t0 * KELP_SWAY, t0 * KELP_SWAY, t1 * KELP_SWAY, t1 * KELP_SWAY)
+      // a blade off it, turning round the stipe as it climbs: a long leaf
+      // rising and falling away from its stalk
+      const ba = a + i * 2.4 + rng.range(-0.4, 0.4)
+      const dx = Math.cos(ba)
+      const dz = Math.sin(ba)
+      const L = rng.range(0.8, 1.5) * (1 - t0 * 0.35)
+      const bw = rng.range(0.12, 0.2)
+      const mid = [p1[0] + dx * L * 0.5, p1[1] + L * 0.25, p1[2] + dz * L * 0.5]
+      const end = [p1[0] + dx * L, p1[1] + L * 0.1 - 0.15, p1[2] + dz * L]
+      const sx = -dz * bw
+      const sz = dx * bw
+      const leaf = c1.clone().lerp(tip, 0.5)
+      const sw = t1 * KELP_SWAY
+      b.quad(p1, [mid[0] - sx, mid[1], mid[2] - sz], end, [mid[0] + sx, mid[1], mid[2] + sz], [c1, leaf, tip, leaf], sw, sw * 1.15, sw * 1.3, sw * 1.15)
+    }
+  }
+  return { geo: b.build() }
+}
+
+// Seagrass: long, soft blades in a tuft.
+function seagrass(rng) {
+  const b = new Builder()
+  b.both = true
+  const n = rng.int(10, 16)
+  const base = new THREE.Color('#33582a')
+  const tip = new THREE.Color(rng.chance(0.5) ? '#7f9a3e' : '#6a8a44')
+  for (let k = 0; k < n; k++) {
+    const a = rng.range(0, Math.PI * 2)
+    const r = rng.range(0, 0.3)
+    const x = Math.cos(a) * r
+    const z = Math.sin(a) * r
+    const h = rng.range(0.45, 1.05)
+    const lean = rng.range(0.15, 0.45)
+    const w = 0.035
+    const px = -Math.sin(a) * w
+    const pz = Math.cos(a) * w
+    const mx = x + Math.cos(a) * lean * 0.4
+    const mz = z + Math.sin(a) * lean * 0.4
+    const mid = base.clone().lerp(tip, 0.5)
+    b.quad([x - px, 0, z - pz], [x + px, 0, z + pz], [mx + px, h * 0.55, mz + pz], [mx - px, h * 0.55, mz - pz], [base, base, mid, mid], 0, 0, 0.6, 0.6)
+    b.tri([mx - px, h * 0.55, mz - pz], [mx + px, h * 0.55, mz + pz], [x + Math.cos(a) * lean, h, z + Math.sin(a) * lean], [mid, mid, tip], 0.6, 0.6, 1.2)
+  }
+  return { geo: b.build() }
+}
+
+// Corals: staghorn branches, a brain-coral boulder or a sea fan by variant.
+const CORAL_TONES = ['#c0705e', '#d0a046', '#9a6aa8', '#d88a70', '#b8b070']
+function coral(rng, lod, variant) {
+  const b = new Builder()
+  const tone = new THREE.Color(CORAL_TONES[rng.int(0, CORAL_TONES.length - 1)])
+  if (variant === 0) {
+    const branch = (x, y, z, rx, rz, len, r, depth) => {
+      const g = new THREE.CylinderGeometry(r * 0.6, r, len, 5, 1)
+      g.translate(0, len / 2, 0)
+      const m = mat(x, y, z, rx, 0, rz)
+      b.add(g, m, (nx, ny, nz, cx, cy, cz) => shade(tone, 0.9 + cy * 0.12, cx, cy, cz, 0.12))
+      if (depth <= 0) return
+      const tip = new THREE.Vector3(0, len, 0).applyMatrix4(m)
+      for (let k = 0; k < 2; k++) branch(tip.x, tip.y, tip.z, rx + rng.range(-0.6, 0.6), rz + rng.range(-0.6, 0.6), len * 0.7, r * 0.7, depth - 1)
+    }
+    for (let k = 0; k < rng.int(3, 5); k++) branch(rng.range(-0.3, 0.3), 0, rng.range(-0.3, 0.3), rng.range(-0.5, 0.5), rng.range(-0.5, 0.5), rng.range(0.35, 0.6), 0.07, 2)
+  } else if (variant === 1) {
+    const ico = jitterVerts(new THREE.IcosahedronGeometry(0.7, 1), rng.int(1, 1e6), 0.12)
+    b.add(ico, mat(0, 0.25, 0, 0, rng.range(0, 3), 0, 1, 0.6, 1), (nx, ny, nz, cx, cy, cz) => shade(tone, ny > 0.4 ? 1 : 0.75, cx, cy, cz, 0.15))
+  } else {
+    b.both = true
+    const H = rng.range(0.8, 1.4)
+    const fan = 9
+    const ry = rng.range(0, Math.PI)
+    const ux = Math.cos(ry)
+    const uz = Math.sin(ry)
+    const stem = tone.clone().multiplyScalar(0.7)
+    for (let k = 0; k < fan; k++) {
+      const a0 = -1.1 + (k / fan) * 2.2
+      const a1 = -1.1 + ((k + 1) / fan) * 2.2
+      const p = (a) => [ux * Math.sin(a) * H * 0.8, Math.cos(a) * H * 0.9 + 0.1, uz * Math.sin(a) * H * 0.8]
+      b.tri([0, 0.05, 0], p(a0), p(a1), [stem, tone, tone], 0, 0.5, 0.5)
+    }
+  }
+  return { geo: b.build() }
+}
+
 // ---------------------------------------------------------------- type table
 
 // spacing: jitter-grid cell size at density 1 (m). sink: push into ground.
@@ -495,6 +610,10 @@ const TYPES = {
   grass: { builder: grass, tier: 'small', spacing: 1.6, scale: [0.8, 1.2], sink: 0, variants: 3 },
   reed: { builder: reed, tier: 'small', spacing: 1.7, scale: [0.8, 1.2], sink: 0, variants: 2 },
   log: { builder: log, tier: 'small', spacing: 14, scale: [0.8, 1.2], sink: 0.15, variants: 2 },
+  // marine: built and drawn only once the camera is under water (setUnderwater)
+  kelp: { builder: kelp, tier: 'small', spacing: 3.2, scale: [0.7, 1.3], sink: 0.1, variants: 2, marine: true },
+  seagrass: { builder: seagrass, tier: 'small', spacing: 1.7, scale: [0.8, 1.3], sink: 0, variants: 2, marine: true },
+  coral: { builder: coral, tier: 'small', spacing: 2.4, scale: [0.6, 1.5], sink: 0.1, variants: 3, marine: true },
 }
 
 // LOD bands in metres. near: LOD0 hands over to LOD1; mid: LOD1 to LOD2 ends
@@ -626,6 +745,7 @@ export class Vegetation {
     this.farDist = FADE.farFog[1]
     this.smallRadius = 95
     this.shadowDist = 110
+    this.underwater = false // marine types show only while the camera is under the sea
     this.bands = {}
     this.mats = {}
     for (const k of ['near', 'mid', 'far', 'small']) {
@@ -937,8 +1057,15 @@ export class Vegetation {
         if (Math.hypot(mx - cam.x, mz - cam.z) > R + cs * 0.71) continue
         const k = cx * 100000 + cz
         want.add(k)
-        if (!this.small.has(k) && built < 2) {
-          this.small.set(k, this.buildSmall(cx, cz))
+        let c = this.small.get(k)
+        if (!c && built < 2) {
+          c = this.buildSmall(cx, cz)
+          this.small.set(k, c)
+          built++
+        }
+        // the sea's plants only once someone is down there to see them
+        if (c && !c.sea && this.underwater && built < 2) {
+          this.buildSmall(cx, cz, true, c)
           built++
         }
       }
@@ -946,7 +1073,7 @@ export class Vegetation {
     for (const [k, c] of this.small) {
       // past the fade-out radius a chunk has nothing left to draw
       const near = Math.hypot(Math.max(0, Math.abs((c.cx + 0.5) * cs - cam.x) - cs / 2), Math.max(0, Math.abs((c.cz + 0.5) * cs - cam.z) - cs / 2))
-      for (const m of c.meshes) m.visible = near < R
+      for (const m of c.meshes) m.visible = near < R && (this.underwater || !m.userData.marine)
       if (!want.has(k)) {
         const mx = (c.cx + 0.5) * cs
         const mz = (c.cz + 0.5) * cs
@@ -1146,16 +1273,19 @@ export class Vegetation {
     for (const list of Object.values(this.nearMeshes)) for (const m of list) setCount(m, m.count)
   }
 
-  // Generate one small-tier chunk deterministically.
-  buildSmall(cx, cz) {
+  // Generate one small-tier chunk deterministically: its land plants, or
+  // (`marine`) the sea's, added to chunk `c` the first time the camera is
+  // under water near it. Each type draws from its own seed, so the two
+  // halves land the same whichever is built first.
+  buildSmall(cx, cz, marine = false, c = { cx, cz, meshes: [], sea: false }) {
     const isl = this.island
     const cs = this.smallChunk
-    const c = { cx, cz, meshes: [] }
     const m4 = new THREE.Matrix4()
+    if (marine) c.sea = true
     let ti = 0
     for (const [name, t] of Object.entries(TYPES)) {
       ti++
-      if (t.tier !== 'small') continue
+      if (t.tier !== 'small' || !!t.marine !== marine) continue
       const rng = new Rng(hash2(cx, cz, this.seed + ti * 131))
       const grid = isl.d[name]
       const perVariant = []
@@ -1184,6 +1314,8 @@ export class Vegetation {
         mesh.boundingSphere.radius += 3
         mesh.matrixAutoUpdate = false
         mesh.receiveShadow = true
+        mesh.userData.marine = !!t.marine
+        mesh.visible = !t.marine || this.underwater
         this.group.add(mesh)
         c.meshes.push(mesh)
       })
@@ -1197,6 +1329,14 @@ export class Vegetation {
       m.dispose()
     }
     c.meshes.length = 0
+  }
+
+  // Kelp, seagrass and coral are only drawn from below the surface: from
+  // above the sea is too opaque to see them, and they would cost the same.
+  // Nor are they built until then (update); surfacing only hides them, and
+  // they go with their chunks once the camera has moved on.
+  setUnderwater(on) {
+    this.underwater = on
   }
 
   // Something pushing through the foliage (player, rotor wash).

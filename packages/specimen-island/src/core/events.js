@@ -41,11 +41,12 @@
 //                                                        selfdestruct; unarmed (too soon) is a dud
 //   vehicle:enter / vehicle:exit       {vehicle}         any vehicle on G.vehicles
 //   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind (motorbike, humvee,
-//                                                        tank and gunship too)
+//                                                        tank, gunship and sub too)
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
-//   vehicle:repaired   {vehicle, field}                  field repair or the pad pump
+//   vehicle:repaired   {vehicle, field}                  field repair, the pad pump or the moon pool winch
 //   vehicle:rearmed    {vehicle, missiles}               the gunship's rails loaded
+//   sonar              {x, y, z, range}                  the submersible's ping; the sea life scatters
 
 export class EventBus {
   constructor() {
