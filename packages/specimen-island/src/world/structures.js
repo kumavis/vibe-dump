@@ -563,7 +563,7 @@ export function buildFieldLab(G, poi, rng, yaw) {
         const here = atPad()
         const todo = here.filter((v) => v.needsService())
         if (!todo.length) return here.length ? `${cap(names(here))} ready — nothing to service` : 'Vehicle service pump'
-        return `Service ${names(todo)} (${todo.some((v) => v === G.heli) ? 'refuel + repair' : 'repair'})`
+        return `Service ${names(todo)} (${todo.some((v) => v.aircraft) ? 'refuel + repair' : 'repair'})`
       },
       hold: 2.5,
       radius: 2.4,
@@ -583,10 +583,11 @@ export function buildFieldLab(G, poi, rng, yaw) {
           const hurt = v.health < v.tune.hull
           repaired ||= hurt
           v.service()
-          if (v === G.heli) {
+          // anything that flies also takes on fuel; the station heli's is the expedition's
+          if (v.aircraft) {
             heli = true
-            G.flags.set('heliFueled')
-            done.push(hurt ? 'helicopter repaired and refuelled' : 'helicopter refuelled')
+            if (v === G.heli) G.flags.set('heliFueled')
+            done.push(hurt ? `${v.tune.name} repaired and refuelled` : `${v.tune.name} refuelled`)
           } else done.push(`${v.tune.name} repaired to 100%`)
         }
         G.toast(`${cap(done.join(', '))}.${heli ? ' Climb aboard with E.' : ''}`, 'info')
