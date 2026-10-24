@@ -3,8 +3,8 @@
 A first-person field-biology game on a forgotten dinosaur preserve. Sneak through
 jungle and tall grass, scan and dart animals, draw blood while the sedative wears
 off, photograph them — or go loud with the rifles and watch your score bleed.
-Restore the old infrastructure, ride the stabilized trail bike, drive the ranger jeep and fly the station
-helicopter to the summit relay.
+Restore the old infrastructure, ride the stabilized trail bike, drive the ranger jeep, fly the station
+helicopter to the summit relay, and take the sea lab's submersible down to the reefs off the west coast.
 
 Everything is procedural: terrain, rivers, jungle, buildings, dinosaurs (rigged
 and animated from data), textures and sound. No assets are downloaded.
@@ -32,6 +32,7 @@ click the page once to allow browser audio playback.
 | Vehicle: left / right stick | drive and steer or pitch and slide / look or turn |
 | Vehicle: Y / LB | board or exit / seat or chase camera |
 | Jeep: A; helicopter: A / B | handbrake; climb / descend |
+| Submersible: A / B, X, RS | blow / flood the ballast (let go to hold depth), sonar ping, floodlights |
 | Menus: D-pad or left stick, A, B | navigate, select, back |
 | Menus: left / right, right stick | adjust settings, scroll long sheets and journal |
 
@@ -59,6 +60,7 @@ they can trigger gameplay actions.
 | any vehicle | E at a door to board, E to get out once stopped or landed, V camera (seat / chase) |
 | jeep | W/S drive and reverse, A/D steer, Space handbrake, F headlights, mouse look |
 | helicopter | Space/Shift collective, W/S pitch, A/D slide, mouse yaw |
+| submersible | W/S thrust, A/D turn, Space/Shift blow / flood the ballast (let go and she holds her depth), F floodlights, R sonar ping, V bubble or chase view, mouse look; E in or out only in the moon pool or surfaced |
 
 Boarding either vehicle also shows its controls for a few seconds, and the Settings
 sheet (from the title or the pause menu) lists them all. Settings holds Graphics
@@ -101,6 +103,39 @@ returns to centre. The exposed green flywheel spins and the HUD shows
 sound, damage, field repair and recovery; the Field Lab pump can service it.
 The stabilizer prevents tipping, but collisions and deep water still matter.
 
+### The sea lab and the submersible
+
+The Foundation's marine station stands on steel legs in twenty metres of water
+off the west coast, where nothing else goes (the supply boat runs south from the
+dock, the river mouth is south-east). Walk out to it along the 90 m pier from the
+beach about 450 m west of the Field Lab, or fly the helicopter in and set it down
+on the pad on the hangar roof. The hangar's floor opens on the moon pool, where
+the research submersible **Nereid** hangs in its cradle under the gantry; the
+dry lab, the dive board and the station log say what the marine team studied
+and why they left.
+
+Press **E / Y** at the hatch from the catwalk to climb in. **Shift / B** floods
+the ballast and she dives, **Space / A** blows it and she rises; let go and she
+trims herself neutral and holds her depth (break the surface and the tanks stay
+blown, so she rides high). **W/S** and **A/D** (left stick) are the thrusters,
+**F / RS** the floodlights, **R / X** a sonar ping (depth under the keel, the
+nearest contact, the bearing home), **V / LB** the bubble or the chase view. She
+cannot leave the water, she bumps the seabed and the station's legs (hard knocks
+cost hull), and you get out only surfaced: in the moon pool onto the catwalk, or
+anywhere else into the sea, swimming. To dock, dive under the platform; the HUD
+says **MOON POOL OVERHEAD** under the well, and blowing the tanks brings her up
+into it, where the cradle squares her up. The winch panel by the pool patches
+her hull. Left alone (or wrecked) her tanks blow and she surfaces; stranded, the
+board prompt has the station tow her home.
+
+Below the surface the world is seen through water: fog that thickens and darkens
+with depth, sunlight failing, the surface overhead as a bright window of sky in a
+mirror of water, caustics and sand ripples on the bed, shafts of light, marine
+snow. The seabed has reefs, a trench and sand waves (`seabed` in `data/world.js`),
+grown with kelp, seagrass and corals; fish schools, jellies and ammonites keep to
+the water round you, and now and then a marine reptile crosses at the edge of the
+murk. None of it is a surveyed species.
+
 ## Architecture
 
 The game is built as **data + services + systems**, so most iteration is editing
@@ -122,24 +157,33 @@ src/
     species.js       body plan, temperament, senses, sedation, science values
     weapons.js       guns, darts, the Field Camera, the jumbo syringe, hit zones,
                      throwables, and PHOTO (how a photograph is graded)
-    vehicles.js      the helicopter's and jeep's tune tables: hull and damage,
-                     colliders, feedback, surfaces, spawn, ecology streaming
+    vehicles.js      the helicopter's, jeep's, bike's and submersible's tune tables:
+                     hull and damage, colliders, feedback, surfaces, spawn, ecology
+                     streaming, the sub's buoyancy and thrusters
+    sea.js           below the surface: the underwater look, the sea life, and
+                     what each graphics tier affords of them
     blasts.js        explosions: radius, damage, hull damage, knock, noise, shake
     encounters.js    guaranteed early herds in sight of the pier and the station
     items.js         inventory caps, start kit, caches, restocking stores, loot tables
     objectives.js    the missions (the expedition, then the Full Survey) as
                      unlock/complete rules
-    world.js         island layout: mountain, river, lake, POIs, roads, cleared lots
+    world.js         island layout: mountain, river, lake, POIs (the sea lab offshore),
+                     roads, cleared lots, the seabed's reefs, trench and dunes
     lore.js          notes left by the last team (each teaches a system)
   world/
     island.js        heightfield + water + biomes + vegetation density + cover
-                     grids (pure data, no three.js)
+                     grids, the seabed shaped below the coasts and its marine
+                     plant grids (pure data, no three.js)
     terrain.js water.js sky.js textures.js fx.js
     vegetation.js    instanced plants: big-tier LODs and streamed undergrowth,
-                     dithered LOD fades, wind sway and parting in the shader
+                     dithered LOD fades, wind sway and parting in the shader;
+                     kelp, seagrass and corals drawn only under water
+    underwater.js    below the surface: fog and light by depth, the surface seen
+                     from beneath (Snell's window), caustics, light shafts, snow
+    sealife.js       ambient fish schools, jellies, ammonites, a passing reptile
     structures.js    prefabs built with the Kit (merged geometry + colliders +
                      E actions): dock, station, lab, towers, keeper's shed,
-                     bridge, wrecks…
+                     bridge, wrecks, the sea lab with its moon pool…
     physics.js       heightfield + cylinders + rotated boxes; boxes double as floors
   actors/
     rig.js           species body plan -> bones + one skinned mesh
@@ -167,6 +211,9 @@ src/
     jeep.js          shared ground handling and ranger 4x4 model
     motorbike.js     trail-bike model, rider, two wheels and active gyro balance
     stabilizer.js    bounded turn lean and automatic return upright
+    submarine.js     the sea lab's submersible: thrusters, ballast, seabed and
+                     pile contacts, docking in the moon pool, bubble and chase views
+    ballast.js       its buoyancy and depth control (pure, tested)
   audio/
     audio.js         procedural Web Audio (guns, voices, ambience, rotor, engine)
     footsteps.js     synthesised footsteps per surface
@@ -221,6 +268,11 @@ src/
   plants off it before anything grows and tells the prefab where to stand.
 - **Add a plant:** a builder plus a `TYPES` row in `world/vegetation.js`, and a
   density grid in `Island.computeDensities` (which also feeds stealth cover).
+  An underwater plant is `marine: true` with its grid in `Island.computeMarine`;
+  it is drawn only while the camera is below the surface.
+- **Shape the seabed:** add a reef (`{ x, z, r, top, rough }`) or move the trench
+  in `seabed` in `data/world.js`. Only ground already deeper than `below[0]` is
+  touched, so no coast moves; `tests/sea.test.js` checks that.
 
 ### Stealth in one paragraph
 
@@ -246,11 +298,14 @@ otherwise always look like the slowest machine.
 
 ### Controller checks
 
-Run `node --test packages/specimen-island/tests/*.test.js` from the repo root.
+Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
+(the submersible's depth model is in `submarine.test.js`; the seabed shaping and
+the underwater look in `sea.test.js`).
 For the browser integration check, build this package and run
 `node packages/specimen-island/tests/controller-browser.mjs` (Playwright Chromium
 required). The checks simulate standard Gamepad API input; a physical USB and
-wireless controller should also be checked on the target OS/browser.
+wireless controller should also be checked on the target OS/browser. The browser
+check boards the submersible at the moon pool and runs its pad controls too.
 
 ### Testing hooks
 
@@ -259,7 +314,8 @@ simulation without rendering, which is how the headless playtests drive it.
 `?play` skips the title screen, `?god` makes the player invulnerable, `?seed=N`
 grows a different island. `__G.gfx` holds the autodetect's state (`gpu`,
 `guess`, `ladder`, `auto` — the live TierController — and the current `tier` and
-`pixelRatio`). `__G.objectives.start('survey')` takes up the Full Survey
+`pixelRatio`). `__G.sub` is the submersible and `__G.underwater.active` says whether the camera
+is below the surface. `__G.objectives.start('survey')` takes up the Full Survey
 without finishing the expedition first. `__G.photos.evaluate()` grades the
 current view as the shutter would, and `__G.audio.renderStep(surface)` renders
 one footstep offline so its envelope can be measured.

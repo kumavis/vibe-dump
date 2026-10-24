@@ -17,6 +17,7 @@ export class Audio {
     this.roarT = 30
     this.heartT = 0
     this.frogT = 3
+    this.under = 0 // 1 with the listener under the sea: everything muffled, the island hushed
   }
 
   init() {
@@ -32,7 +33,11 @@ export class Audio {
     const comp = ctx.createDynamicsCompressor()
     comp.threshold.value = -14
     comp.ratio.value = 4
-    this.master.connect(comp).connect(ctx.destination)
+    // wide open in air; closes down under water (setUnderwater)
+    this.muffle = ctx.createBiquadFilter()
+    this.muffle.type = 'lowpass'
+    this.muffle.frequency.value = 20000
+    this.master.connect(this.muffle).connect(comp).connect(ctx.destination)
     // a shared second of white noise
     const len = ctx.sampleRate * 2
     this.noise = ctx.createBuffer(1, len, ctx.sampleRate)
@@ -316,7 +321,65 @@ export class Audio {
       case 'toast':
         this.tone({ f0: 1200, dur: 0.06, vol: 0.05 })
         break
+      case 'sonar':
+        // the submersible's ping and its echoes coming back off the bottom
+        this.tone({ f0: 1480, f1: 1420, dur: 0.9, vol: 0.16, attack: 0.004 })
+        for (let i = 1; i <= 3; i++) this.tone({ f0: 1450, f1: 1400, dur: 0.5, vol: 0.06 / i, delay: 0.35 + i * 0.42, filter: 2400 })
+        break
     }
+  }
+
+  // Under the sea the world goes dull and close: a lowpass over everything
+  // and the island's ambience hushed. k: 0 in air .. 1 in the water (a
+  // submersible's cabin is in between: its own pings and whine come through).
+  setUnderwater(k) {
+    if (this.under === k) return
+    this.under = k
+    if (this.muffle) this.muffle.frequency.setTargetAtTime(20000 * Math.pow(600 / 20000, k), this.ctx.currentTime, 0.08)
+  }
+
+  // The submersible's thrusters: an electric whine that climbs with the
+  // throttle over the wash of water past the ducts.
+  setThrusters(rpm, load, pos, inside) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    if (!this.thrusters) {
+      const whine = ctx.createOscillator()
+      whine.type = 'triangle'
+      const wg = ctx.createGain()
+      wg.gain.value = 0.25
+      const hum = ctx.createOscillator()
+      hum.type = 'sine'
+      hum.frequency.value = 60
+      const hg = ctx.createGain()
+      hg.gain.value = 0.5
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      const nf = ctx.createBiquadFilter()
+      nf.type = 'bandpass'
+      nf.Q.value = 0.8
+      const ng = ctx.createGain()
+      ng.gain.value = 0.6
+      const g = ctx.createGain()
+      g.gain.value = 0
+      const p = ctx.createStereoPanner()
+      whine.connect(wg).connect(g)
+      hum.connect(hg).connect(g)
+      src.connect(nf).connect(ng).connect(g)
+      g.connect(p).connect(this.master)
+      for (const n of [whine, hum, src]) n.start()
+      this.thrusters = { g, p, whine, nf, ng }
+    }
+    const e = this.thrusters
+    const t = ctx.currentTime
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 120)
+    e.whine.frequency.setTargetAtTime(180 + rpm * 620, t, 0.15)
+    e.nf.frequency.setTargetAtTime(200 + rpm * 500, t, 0.2)
+    e.ng.gain.setTargetAtTime(0.2 + load * 0.8, t, 0.2)
+    const vol = rpm > 0.01 ? 0.05 + rpm * 0.12 + load * 0.08 : 0
+    e.g.gain.setTargetAtTime(vol * s.gain * (inside ? 0.9 : 1.2), t, 0.12)
+    e.p.pan.setTargetAtTime(s.pan, t, 0.1)
   }
 
   // The player's own footstep (audio/footsteps.js): heel, toe and the surface
@@ -455,7 +518,7 @@ export class Audio {
     if (!this.ctx) return
     const t = this.ctx.currentTime
     if (this.rotor) this.rotor.g.gain.setTargetAtTime(0, t, 0.05)
-    for (const engine of [this.engine, this.bikeEngine]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
+    for (const engine of [this.engine, this.bikeEngine, this.thrusters]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
   }
 
   // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
@@ -550,11 +613,14 @@ export class Audio {
     const t = this.ctx.currentTime
     const day = G.sky.light
     const alt = G.vehicle?.kind === 'heli' ? G.heli.pos.y - G.island.heightAt(G.heli.pos.x, G.heli.pos.z) : 0
-    this.wind.g.gain.setTargetAtTime(0.03 + 0.03 * Math.sin(t * 0.13) + 0.02 * Math.sin(t * 0.41) + Math.min(0.08, alt / 2000), t, 0.5)
-    this.insects.g.gain.setTargetAtTime((1.4 - day) * 0.014, t, 1)
+    this.setUnderwater(G.underwater?.active ? (G.vehicle?.inside ? 0.55 : 1) : 0)
+    const dry = this.under ? 0 : 1 // wind, insects and birds don't reach under the sea
+    this.wind.g.gain.setTargetAtTime((0.03 + 0.03 * Math.sin(t * 0.13) + 0.02 * Math.sin(t * 0.41) + Math.min(0.08, alt / 2000)) * dry, t, 0.5)
+    this.insects.g.gain.setTargetAtTime((1.4 - day) * 0.014 * dry, t, 1)
     const L = this.listener
     const coast = Math.hypot(L.x, L.z) > 560 && G.island.heightAt(L.x, L.z) < 12 ? 1 : 0
-    this.surf.g.gain.setTargetAtTime(coast * (0.05 + 0.04 * Math.sin(t * 0.35)), t, 1.5)
+    // under water the surf becomes the low roll of the sea all round
+    this.surf.g.gain.setTargetAtTime(this.under ? 0.07 : coast * (0.05 + 0.04 * Math.sin(t * 0.35)), t, 1.5)
     for (const l of this.loops) {
       const s = this.spatial(l.pos, l.max)
       l.g.gain.setTargetAtTime(s.gain * l.vol, t, 0.2)
@@ -562,7 +628,7 @@ export class Audio {
     }
     // birds by day, frogs by night
     this.birdT -= dt
-    if (this.birdT <= 0) {
+    if (this.birdT <= 0 && !this.under) {
       this.birdT = 0.8 + Math.random() * 3.5
       const a = Math.random() * Math.PI * 2
       const pos = { x: L.x + Math.cos(a) * 30, y: L.y + 10, z: L.z + Math.sin(a) * 30 }

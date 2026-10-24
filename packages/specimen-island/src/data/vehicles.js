@@ -250,3 +250,84 @@ export const MOTORBIKE = {
     stuck: 'Stuck. Dismount and hold the interact button beside the bike to recover it.',
   },
 }
+
+// The sea lab's research submersible: a yellow two-tonne boat with an acrylic
+// bubble for a bow. Local frame as the others: forward is -Z, y = 0 is the
+// bottom of its skids. Its depth is the ballast model in vehicles/ballast.js.
+export const SUB = {
+  kind: 'sub',
+  name: 'submersible',
+  hudName: 'SUBMERSIBLE',
+  mapLabel: 'SUB',
+  exitBlocked: 'Surface and stop first — or bring her up in the moon pool',
+  hull: 100,
+  mass: 2600,
+  visibility: 0.4, // a land animal has no idea what it is looking at
+  strikeMul: 0.4,
+  strikeThrough: 0,
+  exitSpeed: 0.8,
+  seatView: 'seat',
+  load: { radius: 200, unload: 260 },
+  halfLength: 2.4,
+  halfWidth: 1.3,
+  // The float body: its share under water grows from y0 to y1 over the keel.
+  // Neutral she floats with her waterline at y1, the seat's eye 0.35 m clear.
+  float: { y0: 0.1, y1: 1.0 },
+  // reserve: extra lift of blown tanks (share of her weight); rate and trim:
+  // how fast Space/Shift move the ballast and letting go trims it back (per
+  // second) — to neutral under water, to `float` once she is breaking the
+  // surface, so she stays up riding high; drag: water drag on her climb or
+  // dive (about 1.5 m/s at most)
+  ballast: { reserve: 0.25, rate: 0.9, trim: 0.6, float: 0.6, drag: 1.3, drag2: 0.25 },
+  // thrust: forward and reverse push (m/s²), linear and quadratic drag (about
+  // 4.8 m/s flat out), how fast sideways drift dies, yaw rate and response
+  thrust: { forward: 1.6, reverse: 0.4, drag: 0.12, drag2: 0.045, side: 2.4, yaw: 0.7, response: 2.5 },
+  // Collisions: circles along the spine spanning hitY over the keel against
+  // piles and walls; keel points that feel the seabed. A rise under one
+  // shallower than `climb` lifts her over it, anything steeper is a wall.
+  hitbox: [
+    { z: -1.35, r: 0.98 },
+    { z: 0.1, r: 1.0 },
+    { z: 1.6, r: 0.85 },
+  ],
+  hitY: [0.15, 2.35],
+  keel: [
+    [0, -2.1],
+    [0, 2.3],
+    [-0.9, 0],
+    [0.9, 0],
+    [0, 0],
+  ],
+  climb: 0.6,
+  impact: { min: 2.0, k: 9, bounce: 0.25, maxHit: 45 },
+  bottom: { min: 1.7, k: 10 }, // settling onto the bed faster than this hurts
+  // the moon pool's cradle eases her in once she is surfaced, slow and inside it
+  dock: { speed: 1.4, pull: 1.2 },
+  // Stranded (beached, or wedged under something for `stuckAfter` s): the
+  // board prompt has the station tow her home to the cradle.
+  recover: { hold: 5, stuckAfter: 5 },
+  sonar: { cooldown: 2.5, show: 6, range: 160 },
+  noise: { idle: 5, max: 16, every: 0.7 },
+  // one beam from the lamp bar under the bow; only in the scene while it's on
+  lights: { intensity: 1100, range: 46, angle: 0.62, penumbra: 0.55, decay: 1.15, warmRange: 60 },
+  // the hatch, offered on whichever shoulder of the hull you are beside
+  door: { x: 0.8, y: 1.9, z: -0.2, radius: 3.8 },
+  exits: [
+    [-2.5, 0],
+    [2.5, 0],
+    [0, -3.6],
+    [0, 3.6],
+  ],
+  parked: [{ x: 0, z: 0.1, hx: 1.15, hz: 2.3, y0: 0.1, y1: 2.0 }],
+  enginePoint: [0, 1.2, 2.4],
+  seat: [0, 1.35, -1.25],
+  chase: { back: 9, up: 3, lookAhead: 4, follow: 3 },
+  toasts: {
+    50: 'Submersible hull at 50% — she is weeping at the seals. Take her back to the moon pool.',
+    25: 'Submersible hull at 25%! Alarms on every panel — surface now.',
+    0: 'Hull breach! The emergency ballast has blown — she is coming up.',
+    grounded: 'The submersible is crippled. Climb out and hold E beside her to patch the hull.',
+    fieldRepaired: 'Bring her back to the moon pool and winch her up for a proper service.',
+    stranded: 'She is stranded. Climb out and hold E beside her to have the station tow her home.',
+  },
+}

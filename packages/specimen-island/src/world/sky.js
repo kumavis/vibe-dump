@@ -108,6 +108,7 @@ export class Sky {
 
     scene.fog = new THREE.FogExp2(0xaac0cc, 0.0022)
     this.baseFog = 0.0022
+    this.fogDensity = 0.0022 // the sky's own; whatever sits under water may override scene.fog after us
     this.fogBoost = 0
     this.update(0, new THREE.Vector3())
   }
@@ -169,7 +170,8 @@ export class Sky {
     // the jungle closes in; altitude opens the view back up
     const alt = opts.altitude || 0
     const target = this.baseFog * (1 + this.fogBoost * 1.6) * lerp(1, 0.45, smoothstep(20, 160, alt))
-    this.scene.fog.density = lerp(this.scene.fog.density, target, Math.min(1, dt * 1.5))
+    this.fogDensity = lerp(this.fogDensity, target, Math.min(1, dt * 1.5))
+    this.scene.fog.density = this.fogDensity
 
     // keep the sun's shadow box centred on the player, snapped to texels
     if (focus) {

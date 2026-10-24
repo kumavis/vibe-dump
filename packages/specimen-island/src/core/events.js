@@ -30,11 +30,12 @@
 //   mission:complete   {mission}                        its final objective done (the
 //                                                       expedition's too); main.js shows its debrief
 //   blast              {x, y, z, kind, radius, weapon, wet} game/blast.js, after the damage
-//   vehicle:enter / vehicle:exit       {vehicle}         the helicopter or the jeep
-//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind
+//   vehicle:enter / vehicle:exit       {vehicle}         any vehicle (heli, jeep, motorbike, sub)
+//   heli:enter / heli:exit / jeep:enter / jeep:exit {}   the same, per kind (also sub:enter / sub:exit)
 //   vehicle:damaged    {vehicle, amount, hull, at}       camera shake and HUD listen
 //   vehicle:destroyed  {vehicle}
-//   vehicle:repaired   {vehicle, field}                  field repair or the pad pump
+//   vehicle:repaired   {vehicle, field}                  field repair, the pad pump or the moon pool winch
+//   sonar              {x, y, z, range}                  the submersible's ping; the sea life scatters
 
 export class EventBus {
   constructor() {

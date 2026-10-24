@@ -29,6 +29,9 @@ import { Photos } from './player/photos.js'
 import { Helicopter } from './vehicles/helicopter.js'
 import { Jeep } from './vehicles/jeep.js'
 import { Motorbike } from './vehicles/motorbike.js'
+import { Submarine } from './vehicles/submarine.js'
+import { Underwater } from './world/underwater.js'
+import { SeaLife } from './world/sealife.js'
 import { Audio } from './audio/audio.js'
 import { HUD } from './ui/hud.js'
 import { MapView, paintRelief, reliefTexture } from './ui/map.js'
@@ -81,7 +84,8 @@ async function boot() {
   G.inventory = new Inventory(G.events)
   G.interact = new Interaction(G)
   G.physics = new Physics(G.island)
-  scene.add(buildTerrain(G.island))
+  const terrain = buildTerrain(G.island)
+  scene.add(terrain)
   const water = buildWater(G.island)
   scene.add(water.group)
   G.sky = new Sky(scene, { hours: 7.4 })
@@ -90,6 +94,9 @@ async function boot() {
   await nextFrame()
   G.veg = new Vegetation(G.island, G.physics, scene, cfg.seed)
   G.fx = new FX(scene, camera)
+  // below the surface: the look of the water from inside it, and what swims there
+  G.underwater = new Underwater(G, { terrain, water })
+  G.sealife = new SeaLife(G)
   G.shake = new CameraShake(G.events)
   G.blast = (at, kind, opts) => blast(G, at, kind, opts)
   G.player = new Player(G)
@@ -115,6 +122,11 @@ async function boot() {
   G.jeep = Jeep.atStation(G)
   G.motorbike = Motorbike.atDock(G)
   G.vehicles = [G.heli, G.jeep, G.motorbike]
+  // the sea lab's submersible, in its cradle in the moon pool
+  if (G.island.poi.sealab?.moonpool) {
+    G.sub = Submarine.atSeaLab(G)
+    G.vehicles.push(G.sub)
+  }
   G.audio = new Audio()
   G.hud = new HUD(G)
   G.map = new MapView(G, document.getElementById('map'))
@@ -148,6 +160,8 @@ async function boot() {
       const q = QUALITY[tier]
       G.sky.setShadowSize(q.shadows)
       G.veg.setQuality(q)
+      G.underwater.setTier(tier)
+      G.sealife.setTier(tier)
       G.gfx.tier = tier
     }
     if (G.gfx.pixelRatio !== pixelRatio) {
@@ -430,7 +444,9 @@ async function boot() {
     G.sky.fogBoost = smoothstep(0.2, 0.8, G.island.sample(G.island.d.canopy, cam.x, cam.z)) * (flyingNow ? 0 : 1)
     tmpFocus.copy(playing ? (G.vehicle ? G.vehicle.pos : G.player.pos) : cam)
     G.sky.update(playing && !G.paused ? dt : dt * 0.2, tmpFocus, { altitude: alt, camera: cam })
+    G.underwater.update(dt, cam) // after the sky: under the sea it overrides the fog and light
     G.veg.update(dt, cam, 0.8 + 0.4 * Math.sin(G.time * 0.3) * G.wind.strength)
+    G.sealife.update(G.paused ? 0 : dt, cam, G.underwater.active)
     water.uniforms.uTime.value += dt
     G.fx.update(G.paused ? 0 : dt)
     if (G.boat) G.boat.position.y = Math.sin(G.time * 0.9) * 0.12 - 0.05
