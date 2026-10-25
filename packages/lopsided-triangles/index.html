@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Lopsided Triangles</title>
+    <meta
+      name="description"
+      content="How a recursion pruned down to the wanted entries of a thin matrix product refutes the 3SUM and APSP hypotheses. An interactive tour of Alman and Vassilevska Williams, arXiv:2610.06783, with the algorithm running live in your browser."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  </head>
+  <body>
+    <nav id="rail" aria-label="Chapters"><ol></ol></nav>
+
+    <!-- ───────────────────────────────────────────── hero -->
+    <header class="hero" id="top">
+      <div class="hero__text">
+        <p class="eyebrow">Alman &amp; Vassilevska Williams · arXiv:2610.06783 · 5 October 2026</p>
+        <h1 class="hero__title">Lopsided Triangles</h1>
+        <div class="scores" aria-label="3SUM now runs in time n to the 1.9992; APSP in time n to the 2.9995">
+          <div class="score">
+            <span class="score__name">3SUM</span>
+            <span class="score__was" aria-hidden="true"><var>n</var><sup>2</sup></span>
+            <span class="score__now" aria-hidden="true"><var>n</var><sup class="odo" data-from="2.0000" data-to="1.9992">1.9992</sup></span>
+          </div>
+          <div class="score">
+            <span class="score__name">APSP</span>
+            <span class="score__was" aria-hidden="true"><var>n</var><sup>3</sup></span>
+            <span class="score__now" aria-hidden="true"><var>n</var><sup class="odo" data-from="3.0000" data-to="2.9995">2.9995</sup></span>
+          </div>
+        </div>
+        <p class="hero__lede">
+          For decades, a large part of complexity theory rested on a bet that
+          these two textbook running times could not be beaten by any polynomial
+          factor. A new algorithm beats both. Claude found it; Josh Alman and
+          Virginia Vassilevska Williams simplified, strengthened and extended it,
+          and wrote the paper.
+        </p>
+        <p class="hero__sub">
+          This page follows the result from the problems it settles down to the
+          one new idea underneath, a matrix recursion that skips almost
+          everything, and then runs that recursion on a small instance in your
+          browser, checking every answer.
+        </p>
+      </div>
+      <figure class="hero__fig" aria-hidden="true">
+        <canvas id="hero-tree"></canvas>
+        <figcaption>
+          Three levels of the recursion, ten branches per call. The few bold
+          paths are the only calls a sparse set of wanted entries needs.
+        </figcaption>
+      </figure>
+    </header>
+
+    <main>
+      <!-- ───────────────────────────────────────────── 1. bounds -->
+      <section class="chapter" id="ch-bounds" data-chapter="The textbook bounds">
+        <div class="chapter__head">
+          <p class="eyebrow">1 · paper §1</p>
+          <h2>Two running times nobody could beat</h2>
+        </div>
+        <div class="prose">
+          <p>
+            <b>3SUM</b> asks whether some three of <var>n</var> given numbers add up
+            to zero. The textbook answer sorts the numbers, then, for each number
+            in turn, walks two pointers inward from the ends of the rest of the
+            list. If the three numbers sum to less than zero, the left pointer
+            moves right; if more, the right pointer moves left. That is about
+            <span class="m"><var>n</var><sup>2</sup>/2</span> steps.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-3sum">
+          <div class="threesum">
+            <div class="threesum__row" id="ts-row" aria-live="off"></div>
+            <p class="threesum__readout" id="ts-readout" aria-live="polite"></p>
+            <div class="threesum__meter"><span id="ts-meter"></span></div>
+          </div>
+          <div class="controls">
+            <button type="button" id="ts-step">Step</button>
+            <button type="button" id="ts-run" class="primary">Run</button>
+            <button type="button" id="ts-new">New numbers</button>
+            <label class="check"><input type="checkbox" id="ts-plant" checked /> hide a zero triple</label>
+          </div>
+          <figcaption>
+            The outer number is boxed; the two pointers are <i>j</i> and <i>k</i>.
+            The bar counts steps against the
+            <span class="m">(<var>n</var>−1)(<var>n</var>−2)/2</span> the method can take.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            <b>All-pairs shortest paths</b> (APSP) asks for the distance between
+            every pair of vertices in a graph with weighted edges. Floyd and
+            Warshall's triple loop takes <span class="m"><var>n</var><sup>3</sup></span>
+            steps on <var>n</var> vertices.
+          </p>
+          <p>
+            Decades of work shaved these bounds only by factors that grow slower
+            than any power of <var>n</var>: logarithms for 3SUM, and a factor of
+            <span class="m">2<sup>Ω(√log <var>n</var>)</sup></span> for APSP. Fine-grained
+            complexity turned the failure into two hypotheses.
+          </p>
+          <ul class="hyps">
+            <li>
+              <b>The 3SUM hypothesis.</b> 3SUM on <var>n</var> integers of
+              polynomial size needs <span class="m"><var>n</var><sup>2−<i>o</i>(1)</sup></span> time.
+            </li>
+            <li>
+              <b>The APSP hypothesis.</b> APSP with polynomially bounded integer
+              weights needs <span class="m"><var>n</var><sup>3−<i>o</i>(1)</sup></span> time.
+            </li>
+          </ul>
+          <p>
+            The <span class="m"><i>o</i>(1)</span> in the exponent lets through any
+            speedup whose effect on the exponent fades to nothing, such as
+            dividing by a logarithm. What the hypotheses rule out is a
+            <em>truly</em> subquadratic algorithm, one that runs in
+            <span class="m"><var>n</var><sup>2−<var>δ</var></sup></span> time for a
+            fixed <span class="m"><var>δ</var> &gt; 0</span>. The new paper gives
+            one, with <span class="m"><var>δ</var> = 0.0008</span>.
+          </p>
+        </div>
+
+        <figure class="panel panel--chart" id="panel-truly">
+          <div class="chart" id="truly-chart"></div>
+          <figcaption>
+            Speedup over <span class="m"><var>n</var><sup>2</sup></span> as <var>n</var> grows,
+            both on a doubling scale. A polynomial factor
+            <span class="m"><var>n</var><sup>0.0008</sup></span> eventually beats any
+            logarithmic one. Here it overtakes
+            <span class="m">log<sup>2</sup><var>n</var></span> when <var>n</var> has about
+            11,450 digits.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            In practice that exponent buys nothing. The factor
+            <span class="m"><var>n</var><sup>0.0008</sup></span> reaches 2 only when
+            <var>n</var> has 377 digits, and the constant factors the algorithm hides are
+            enormous. The result matters because the hypotheses were claims
+            about exponents, and a great deal of theory was built on them.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 2. web -->
+      <section class="chapter" id="ch-web" data-chapter="A web of reductions">
+        <div class="chapter__head">
+          <p class="eyebrow">2 · paper §1, Figure 1</p>
+          <h2>A web of reductions</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Fine-grained complexity connects problems by <b>reductions</b>. A
+            reduction from problem A to problem B is an algorithm for A that
+            calls a solver for B, with overheads small enough that a polynomially
+            faster algorithm for B gives one for A. Read in one direction, a
+            reduction moves hardness: if A is hard, B must be hard too. Read in
+            the other, it moves speed.
+          </p>
+          <p>
+            Over the years the field tied dozens of problems to 3SUM and APSP
+            this way. Both of them reduce to <b>Exact Triangle</b>: does a
+            weighted tripartite graph contain a triangle whose three weights sum
+            to zero? Exact Triangle reduces in turn to a question about
+            triangles in an unweighted graph that is sparse and lopsided. That
+            question sits at the bottom of the web, so a faster algorithm for it
+            speeds up everything above.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-web">
+          <div class="controls controls--top">
+            <div class="seg" role="radiogroup" aria-label="Read the arrows as">
+              <button type="button" role="radio" aria-checked="true" data-mode="hard">Read as hardness</button>
+              <button type="button" role="radio" aria-checked="false" data-mode="fast">Read as algorithms</button>
+            </div>
+            <button type="button" id="web-play" class="primary">Plug in the new algorithm</button>
+          </div>
+          <p class="scroll-hint">The figure is wider than your screen: scroll it sideways.</p>
+          <div class="web">
+            <div class="web__scroll"><svg id="web-svg" role="img" aria-label="Diagram of reductions among 3SUM, APSP, Exact Triangle, Lopsided All-Edges Sparse Triangle and related problems"></svg></div>
+            <aside class="web__info" id="web-info" aria-live="polite"></aside>
+          </div>
+          <figcaption id="web-caption">
+            Each arrow points from a problem to one it reduces to. Click a box
+            for its members and new running times.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 3. lopsided -->
+      <section class="chapter" id="ch-lopsided" data-chapter="Lopsided triangles">
+        <div class="chapter__head">
+          <p class="eyebrow">3 · paper §1.1, §3.1</p>
+          <h2>Triangles in a lopsided graph</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The problem at the bottom is <b>Lopsided All-Edges Sparse Triangle</b>.
+            Take a graph with three parts: two big parts <var>A</var> and
+            <var>B</var> of <var>n</var> vertices each, and a small middle part of
+            <var>D</var> vertices, where <span class="m"><var>D</var> = <var>n</var><sup><var>ε</var></sup></span>
+            for some small <var>ε</var>. You are given a set <var>W</var> of
+            <em>query pairs</em> <span class="m">(<var>a</var>, <var>b</var>)</span>. For each
+            one, decide whether <var>a</var> and <var>b</var> have a common
+            neighbour in the middle, which would close a triangle through the
+            edge <span class="m"><var>a</var>–<var>b</var></span>.
+          </p>
+          <p>
+            In matrix terms, let <var>X</var> be the <span class="m"><var>n</var>×<var>D</var></span>
+            0/1 matrix of edges between <var>A</var> and the middle, and <var>Y</var>
+            the <span class="m"><var>D</var>×<var>n</var></span> matrix of edges between the
+            middle and <var>B</var>. The entry
+            <span class="m">(<var>XY</var>)[<var>a</var>, <var>b</var>]</span> counts the
+            common neighbours of <var>a</var> and <var>b</var>. So the task is to
+            compute the entries of the product <var>XY</var> at the positions in
+            <var>W</var>, the <em>wanted</em> entries. With <var>D</var> far smaller
+            than <var>n</var>, the matrices are <em>thin</em>.
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-lop">
+          <div class="lop">
+            <div class="lop__graph"><svg id="lop-svg" role="img" aria-label="A tripartite graph with parts A, M and B and highlighted query pairs"></svg></div>
+            <div class="lop__mats" id="lop-mats"></div>
+          </div>
+          <p class="readout" id="lop-readout" aria-live="polite"></p>
+          <figcaption>
+            Eight vertices on each side, three in the middle, six query pairs.
+            Click a query pair (a square in <var>XY</var>, or an orange edge) to
+            see its triangles and the inner product that counts them.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            There were two ways to do this. Compute each wanted entry as an
+            inner product of length <var>D</var>, for
+            <span class="m">|<var>W</var>|·<var>D</var></span> operations. Or compute the
+            whole product with fast rectangular matrix multiplication, about
+            <span class="m"><var>n</var><sup>2</sup></span> operations whether or not you
+            want all of it. The reductions produce instances with about
+            <span class="m"><var>n</var><sup>2</sup>/√<var>D</var></span> query pairs, where the
+            first way costs <span class="m"><var>n</var><sup>2</sup>√<var>D</var></span>.
+            Either way you pay at least one operation per entry of the product.
+          </p>
+          <p>
+            The new algorithm pays
+            <span class="m"><var>n</var><sup>2</sup>/<var>D</var><sup>0.063</sup></span>, fewer
+            operations than there are entries in a product it never writes
+            down. This holds whenever <span class="m"><var>D</var> ≤ <var>n</var><sup>1/18</sup></span>,
+            and with smaller savings up to about
+            <span class="m"><var>D</var> = <var>n</var><sup>0.12</sup></span>.
+          </p>
+        </div>
+
+        <figure class="panel panel--chart" id="panel-cost">
+          <div class="controls controls--top">
+            <label class="slider">
+              <span>size <var>n</var></span>
+              <input id="cost-n" type="range" min="6" max="60" step="1" value="18" />
+              <output id="cost-n-out"></output>
+            </label>
+            <label class="slider">
+              <span>middle <var>D</var> = <var>n</var><sup><var>ε</var></sup></span>
+              <input id="cost-eps" type="range" min="9" max="100" step="1" value="100" />
+              <output id="cost-eps-out"></output>
+            </label>
+          </div>
+          <div class="chart" id="cost-chart"></div>
+          <figcaption>
+            Operations for <span class="m">|<var>W</var>| = <var>n</var><sup>2</sup>/√<var>D</var></span>
+            query pairs, ignoring constant factors, on a scale of powers of ten.
+            The new bound is Corollary 26 of the paper and needs
+            <span class="m"><var>n</var> ≥ <var>D</var><sup>18</sup></span>.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 4. hashing -->
+      <section class="chapter" id="ch-hash" data-chapter="Weights become wiring">
+        <div class="chapter__head">
+          <p class="eyebrow">4 · paper §3.2</p>
+          <h2>Weights become wiring</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Exact Triangle has weights on its edges. The lopsided problem has
+            none. The reduction between them removes the weights by working
+            modulo a prime <var>p</var> of about <span class="m">√<var>D</var></span>.
+          </p>
+          <p>
+            A triangle <span class="m"><var>a</var>, <var>b</var>, <var>c</var></span> has weight
+            <span class="m"><var>S</var> = <var>w</var>(<var>a</var>,<var>b</var>) + <var>w</var>(<var>b</var>,<var>c</var>) + <var>w</var>(<var>a</var>,<var>c</var>)</span>.
+            Group the query pairs by <span class="m"><var>ρ</var> = <var>w</var>(<var>a</var>,<var>b</var>) mod <var>p</var></span>.
+            Make a middle vertex <span class="m">(<var>c</var>, <var>σ</var>)</span> for each
+            vertex <var>c</var> on the third side and each residue
+            <span class="m"><var>σ</var> &lt; <var>p</var></span>. Join <var>a</var> to
+            <span class="m">(<var>c</var>, <var>w</var>(<var>a</var>,<var>c</var>) + <var>ρ</var>)</span> and
+            <var>b</var> to <span class="m">(<var>c</var>, −<var>w</var>(<var>b</var>,<var>c</var>))</span>,
+            both mod <var>p</var>. Then <var>a</var> and <var>b</var> share the
+            neighbour <span class="m">(<var>c</var>, <var>σ</var>)</span> exactly when
+            <span class="m"><var>S</var>(<var>a</var>,<var>b</var>,<var>c</var>) ≡ 0 (mod <var>p</var>)</span>.
+            Each of <var>a</var> and <var>b</var> has one edge per <var>c</var>, so
+            for each <var>c</var> the question is whether their edges land on
+            the same residue.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-hash">
+          <div class="controls controls--top">
+            <label class="select">
+              <span>query pair</span>
+              <select id="hash-pair"></select>
+            </label>
+            <div class="seg" role="radiogroup" aria-label="Prime" id="hash-primes"></div>
+            <button type="button" id="hash-new">New weights</button>
+          </div>
+          <div class="hash">
+            <div class="hash__graph"><svg id="hash-svg" role="img" aria-label="Lopsided graph built from an Exact Triangle instance by hashing modulo a prime"></svg></div>
+            <div class="hash__side">
+              <div id="hash-table"></div>
+              <div class="chart chart--small" id="hash-fp"></div>
+            </div>
+          </div>
+          <p class="readout" id="hash-readout" aria-live="polite"></p>
+          <figcaption>
+            Six vertices per side, weights between −40 and 40, one zero
+            triangle hidden. Blue edges leave <var>a</var>, orange edges leave
+            <var>b</var>; a shared middle vertex is a candidate triangle.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Every zero triangle shows up as a shared neighbour, and so do some
+            <em>false positives</em>: triangles whose weight is a nonzero
+            multiple of <var>p</var>. The reduction checks each candidate exactly.
+            To keep false positives rare without randomness, it counts them for
+            every prime between <span class="m">√<var>D</var>/2</span> and
+            <span class="m">√<var>D</var></span> (one matrix product with polynomial
+            entries per prime) and uses the prime with the fewest. The middle
+            part has one vertex per pair <span class="m">(<var>c</var>, <var>σ</var>)</span>,
+            so the third side is cut into pieces of at most
+            <span class="m">√<var>D</var></span> vertices, each with its own instances,
+            to keep the middle part within <var>D</var>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 5. strassen -->
+      <section class="chapter" id="ch-strassen" data-chapter="Seven products">
+        <div class="chapter__head">
+          <p class="eyebrow">5 · paper §2.1</p>
+          <h2>Seven products instead of eight</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The new algorithm is a fast matrix multiplication algorithm with
+            most of its work skipped. Its skeleton is Strassen's from 1969, which
+            multiplies two <span class="m">2×2</span> matrices with seven
+            multiplications instead of eight:
+          </p>
+        </div>
+
+        <figure class="panel" id="panel-strassen">
+          <div class="strassen">
+            <div class="strassen__eqs m" id="strassen-eqs"></div>
+            <svg class="strassen__tree" id="strassen-svg" role="img" aria-label="Strassen's recursion tree: one call makes seven calls, down to 7 to the L leaves that each multiply two numbers"></svg>
+          </div>
+          <figcaption>
+            On the way down each call forms seven pairs of block combinations,
+            the <em>encoding</em>. The products happen at the leaves. On the way
+            up each call adds them back into the four blocks, the
+            <em>decoding</em>.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            For <span class="m"><var>N</var>×<var>N</var></span> matrices, cut each into
+            <span class="m">2×2</span> blocks and apply the identity to the blocks, recursing
+            on each of the seven block products. After
+            <span class="m"><var>L</var> = log<sub>2</sub><var>N</var></span> levels the tree has
+            <span class="m">7<sup><var>L</var></sup> = <var>N</var><sup>2.81</sup></span> leaves, and each
+            leaf multiplies two numbers. Two facts carry over to everything
+            below. The multiplications happen only at the leaves. And the
+            encoding of <var>A</var> depends only on <var>A</var>, the encoding of
+            <var>B</var> only on <var>B</var>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 6. schönhage -->
+      <section class="chapter" id="ch-schonhage" data-chapter="Ten products">
+        <div class="chapter__head">
+          <p class="eyebrow">6 · paper §2.2, Lemma 6</p>
+          <h2>Ten products for the price of thirteen</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The new algorithm replaces Strassen's identity with one Arnold
+            Schönhage found in 1981. It computes two unrelated things at once.
+            The <b>outer product</b> of <span class="m">(<var>x</var><sub>1</sub>, <var>x</var><sub>2</sub>, <var>x</var><sub>3</sub>)</span>
+            and <span class="m">(<var>y</var><sub>1</sub>, <var>y</var><sub>2</sub>, <var>y</var><sub>3</sub>)</span>
+            is the nine numbers <span class="m"><var>x</var><sub><var>i</var></sub><var>y</var><sub><var>j</var></sub></span>.
+            The <b>inner product</b> of four <var>p</var>'s and four <var>q</var>'s is the one
+            number <span class="m">Σ <var>p</var><sub><var>ij</var></sub><var>q</var><sub><var>ij</var></sub></span>.
+            Separately they take <span class="m">9 + 4 = 13</span> multiplications.
+            Schönhage needs ten.
+          </p>
+          <p>
+            Pad the <var>p</var>'s into a <span class="m">3×3</span> matrix
+            <span class="m"><var>p̂</var></span> whose columns sum to zero, and the
+            <var>q</var>'s into <span class="m"><var>q̂</var></span> whose rows sum to zero.
+            The ten products are
+          </p>
+          <p class="display m">
+            <span><var>P</var><sub><var>ij</var></sub> = (<var>x</var><sub><var>i</var></sub> + <var>p̂</var><sub><var>ij</var></sub>)(<var>y</var><sub><var>j</var></sub> + <var>q̂</var><sub><var>ij</var></sub>)</span>
+            <span class="display__gap">for <var>i</var>, <var>j</var> = 1, 2, 3</span>
+            <span><var>P</var><sub>0</sub> = −(<var>x</var><sub>1</sub> + <var>x</var><sub>2</sub> + <var>x</var><sub>3</sub>)(<var>y</var><sub>1</sub> + <var>y</var><sub>2</sub> + <var>y</var><sub>3</sub>)</span>
+          </p>
+          <p>
+            and the outputs are <span class="m"><var>z</var><sub><var>ij</var></sub> = <var>P</var><sub><var>ij</var></sub></span>
+            for the outer product and
+            <span class="m"><var>z</var><sub>0</sub> = <var>P</var><sub>0</sub> + Σ <var>P</var><sub><var>ij</var></sub></span>
+            for the inner product. Change any input and watch:
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-sch">
+          <div class="sch">
+            <div class="sch__inputs" id="sch-inputs"></div>
+            <div class="sch__terms" id="sch-terms"></div>
+            <div class="sch__outputs" id="sch-outputs"></div>
+          </div>
+          <div class="controls">
+            <button type="button" id="sch-rand" class="primary">Random inputs</button>
+            <button type="button" id="sch-outer">Outer product only</button>
+            <button type="button" id="sch-inner">Inner product only</button>
+          </div>
+          <figcaption>
+            Each product card multiplies one combination of left inputs by one
+            combination of right inputs. Red marks the error each
+            <span class="m"><var>z</var><sub><var>ij</var></sub></span> carries.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            The inner product comes out exact. The <span class="m"><var>x</var><sub><var>i</var></sub><var>y</var><sub><var>j</var></sub></span>
+            terms cancel against <span class="m"><var>P</var><sub>0</sub></span>, and the cross
+            terms vanish because of the zero sums. The outer product comes out
+            with an error: <span class="m"><var>z</var><sub><var>ij</var></sub></span> carries
+            <span class="m"><var>x</var><sub><var>i</var></sub><var>q̂</var><sub><var>ij</var></sub> + <var>p̂</var><sub><var>ij</var></sub><var>y</var><sub><var>j</var></sub> + <var>p̂</var><sub><var>ij</var></sub><var>q̂</var><sub><var>ij</var></sub></span>.
+            Every error term multiplies at least one inner-product input, a
+            <var>p</var> or a <var>q</var>, into an outer-product output. That is what
+            will make the error harmless.
+          </p>
+          <p>
+            One more property, and it is the one the new algorithm lives on.
+            Only one product, <span class="m"><var>P</var><sub><var>ij</var></sub></span>, feeds
+            the output <span class="m"><var>z</var><sub><var>ij</var></sub></span>. All ten feed
+            <span class="m"><var>z</var><sub>0</sub></span>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 7. strings -->
+      <section class="chapter" id="ch-strings" data-chapter="Strings and rectangles">
+        <div class="chapter__head">
+          <p class="eyebrow">7 · paper §2.3, Lemma 9</p>
+          <h2>Recursion turns it into thin rectangles</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Use the identity recursively for <var>L</var> levels, as Strassen
+            did. The inputs become arrays indexed by <em>strings</em> of
+            <var>L</var> variables, one per level. A left string such as
+            <code>x1 p11 x2 x3 p22 x1</code> picks a left variable at each level; an
+            output string such as <code>z13 z0 z21 z33 z0 z12</code> picks an
+            output variable at each level. The leaves are strings of
+            <var>L</var> products, <span class="m">10<sup><var>L</var></sup></span> of them.
+          </p>
+          <p>
+            Each level can serve the outer product or the inner one. Fix a set
+            <var>Q</var> of <var>m</var> levels to serve the inner product. The left
+            strings with <var>p</var>'s exactly on <var>Q</var> are the entries of an
+            <span class="m"><var>N</var><sub>0</sub>×<var>D</var></span> matrix
+            <span class="m"><var>X</var><sub><var>Q</var></sub></span>: the <var>x</var>'s
+            elsewhere pick one of <span class="m"><var>N</var><sub>0</sub> = 3<sup><var>L</var>−<var>m</var></sup></span>
+            rows and the <var>p</var>'s on <var>Q</var> pick one of
+            <span class="m"><var>D</var> = 4<sup><var>m</var></sup></span> columns. The right
+            strings form a <span class="m"><var>D</var>×<var>N</var><sub>0</sub></span> matrix
+            <span class="m"><var>Y</var><sub><var>Q</var></sub></span>, and the output strings
+            with <span class="m"><var>z</var><sub>0</sub></span> exactly on <var>Q</var> are the entries
+            of the product <span class="m"><var>X</var><sub><var>Q</var></sub><var>Y</var><sub><var>Q</var></sub></span>.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-strings">
+          <div class="strs" id="strs"></div>
+          <figcaption>
+            <var>L</var> = 6 levels with <var>m</var> = 2 of them inner, as in
+            Figure 4 of the paper. Click a level number to move it in or out of
+            <var>Q</var>; click a variable to change it.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Now set every input string whose inner set does not have exactly
+            <var>m</var> elements to zero. To feed an output with
+            <span class="m"><var>z</var><sub>0</sub></span> on the levels of <var>Q</var>, an
+            input string needs a <var>p</var> (or a <var>q</var>) on each of them,
+            which uses up all <var>m</var> of its inner variables. Everywhere else
+            it has an <var>x</var> (or a <var>y</var>). The error terms need an inner
+            variable at a level where the output has some
+            <span class="m"><var>z</var><sub><var>ij</var></sub></span>, so they never appear
+            (Lemma 9), and one run of the recursion computes all
+            <span class="m"><var>K</var> = <span class="binom"><span><span><var>L</var></span><span><var>m</var></span></span></span></span>
+            products <span class="m"><var>X</var><sub><var>Q</var></sub><var>Y</var><sub><var>Q</var></sub></span>
+            at once, each independent of the others. With <var>m</var> much
+            smaller than <var>L</var> they are thin: <var>D</var> is tiny next to
+            <span class="m"><var>N</var><sub>0</sub></span>.
+          </p>
+          <p>
+            To multiply a large thin <var>X</var> by <var>Y</var>, cut <var>X</var>
+            into row blocks and <var>Y</var> into column blocks of
+            <span class="m"><var>N</var><sub>0</sub></span>, and give each block product its own
+            set <var>Q</var>. A square <em>tile</em> of up to <var>K</var> block
+            products is one run of the recursion. The rest of this page uses
+            <var>L</var> = 6 and <var>m</var> = 2: fifteen sets <var>Q</var>, nine of
+            them used by a 3×3 tile of 81×16 by 16×81 block products.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 8. leaves -->
+      <section class="chapter" id="ch-leaves" data-chapter="A hundred leaves">
+        <div class="chapter__head">
+          <p class="eyebrow">8 · paper §2.4.3, Figure 6</p>
+          <h2>A hundred leaves under every entry</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Which leaves does one entry need? The decoding sends
+            <span class="m"><var>P</var><sub><var>ij</var></sub></span> only to
+            <span class="m"><var>z</var><sub><var>ij</var></sub></span> and
+            <span class="m"><var>z</var><sub>0</sub></span>. So an output string <var>w</var>
+            is fed by exactly the leaves that choose
+            <span class="m"><var>P</var><sub><var>ij</var></sub></span> wherever <var>w</var> has
+            <span class="m"><var>z</var><sub><var>ij</var></sub></span>, and any of the ten
+            products on the <var>m</var> levels where <var>w</var> has
+            <span class="m"><var>z</var><sub>0</sub></span>. That is
+            <span class="m">10<sup><var>m</var></sup></span> leaves: 100 here, for an entry that
+            is an inner product of length 16. In general
+            <span class="m">10<sup><var>m</var></sup> = <var>D</var><sup>1.66</sup></span>, worse than
+            computing the entry directly.
+          </p>
+          <p>
+            What rescues it is sharing. Sort the leaves under <var>w</var> by
+            their <b>order</b>: the number of levels of <var>Q</var> at which they
+            choose one of the nine <span class="m"><var>P</var><sub><var>ij</var></sub></span>
+            instead of <span class="m"><var>P</var><sub>0</sub></span>. The leaf of order 0
+            chooses <span class="m"><var>P</var><sub>0</sub></span> everywhere on <var>Q</var>. It is
+            the <b>private leaf</b> of <var>w</var>, and no other entry uses it. A
+            leaf of order <var>d</var> is shared by
+            <span class="m"><span class="binom"><span><span><var>L</var>−<var>m</var>+<var>d</var></span><span><var>d</var></span></span></span></span>
+            entries, one in each product whose set <var>Q</var> contains the
+            levels where the leaf chose <span class="m"><var>P</var><sub>0</sub></span>.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-leaves">
+          <div class="leaves" id="leaves"></div>
+          <figcaption>
+            Left: the 100 leaves of the chosen entry, by what they pick at the two
+            levels of its <var>Q</var>. Right: where the selected leaf's products
+            go: one entry in each of the fifteen products whose set
+            <var>Q</var> fits it. Six of the fifteen products are not used by the
+            3×3 tile.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Under each entry there are
+            <span class="m"><var>α</var><sub><var>d</var></sub> = <span class="binom"><span><span><var>m</var></span><span><var>d</var></span></span></span>·9<sup><var>d</var></sup></span>
+            leaves of order <var>d</var>: 1, 18 and 81 here. High orders are
+            numerous under each entry but shared widely. Low orders are few but
+            nearly private. Across the whole tile there are
+            <span class="m"><var>β</var><sub><var>d</var></sub> = <span class="binom"><span><span><var>L</var></span><span><var>m</var>−<var>d</var></span></span></span>·9<sup><var>L</var>−<var>m</var>+<var>d</var></sup></span>
+            leaves of order <var>d</var>. When <var>L</var> is large next to
+            <var>m</var> (the paper takes <span class="m"><var>L</var> = 19<var>m</var></span>),
+            each step up in order more than halves that count:
+            <span class="m"><var>β</var><sub><var>d</var></sub> ≤ 2<sup>−<var>d</var></sup><var>M</var></span>, where
+            <var>M</var> is the number of entries in the tile.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 9. run -->
+      <section class="chapter" id="ch-run" data-chapter="Run it">
+        <div class="chapter__head">
+          <p class="eyebrow">9 · paper §2.4.1–2.4.2, Lemma 10</p>
+          <h2>Run it</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The new algorithm makes two changes to the plain recursion. First,
+            it computes the <b>encodings</b> once: the number each leaf multiplies
+            depends on <var>X</var> alone or on <var>Y</var> alone, so each band of
+            blocks is encoded once and shared by every tile it touches. Second,
+            it runs the recursion <b>pruned</b>. Each call receives the set of
+            wanted outputs below it and makes a child call only if that child
+            feeds one of them. By Lemma 10 the pruned recursion visits exactly
+            the leaves that feed some wanted entry, and visits each of them
+            once, however many entries share it.
+          </p>
+          <p>
+            Below is a real instance: a lopsided graph with 243 + 16 + 243
+            vertices, so <var>X</var> is 243×16 and <var>Y</var> is 16×243,
+            multiplied as one tile with <var>L</var> = 6 and <var>m</var> = 2. Pick query
+            pairs and run it. Your browser computes both encodings (a million
+            numbers each), runs the pruned recursion, and checks every answer
+            against a direct count of common neighbours.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-run">
+          <div class="controls controls--top">
+            <div class="seg" role="radiogroup" aria-label="Wanted set" id="run-patterns"></div>
+            <button type="button" id="run-go" class="primary">Run the pruned recursion</button>
+          </div>
+          <div class="run">
+            <div class="run__matrix">
+              <canvas id="run-xy" aria-label="The 243 by 243 product XY with wanted entries marked"></canvas>
+              <p class="cap" id="run-xy-cap">The product <var>XY</var>, 243×243, in nine blocks. Drag to add wanted entries.</p>
+            </div>
+            <div class="run__tree">
+              <canvas id="run-icicle" aria-label="The recursion tree, level by level, shaded by how much of it the pruned run visited"></canvas>
+              <p class="cap">The recursion, one row per level. Each row is cut into its 10, 100, …, 10<sup>6</sup> calls; ink shows the share the pruned run made.</p>
+            </div>
+          </div>
+          <div class="tiles" id="run-tiles"></div>
+          <div class="chart" id="run-orders"></div>
+          <p class="readout" id="run-readout" aria-live="polite"></p>
+          <figcaption>
+            Bars: leaves visited at each order. Ticks mark the two caps from the
+            text, <span class="m">|<var>W</var>|·<var>α</var><sub><var>d</var></sub></span>
+            (no sharing at all) and <span class="m"><var>β</var><sub><var>d</var></sub></span>
+            (every leaf of that order in the run, all fifteen products).
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            At this size the pruning does not pay. Six levels are too few for
+            sharing to beat a hundred leaves per entry, and the 16-term inner
+            products would be cheaper done directly. The saving appears only
+            when <var>L</var> is many times <var>m</var> and <var>m</var> is large, at
+            sizes nobody will ever run. The count, though, can be done at any
+            size.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 10. scale -->
+      <section class="chapter" id="ch-scale" data-chapter="At full size">
+        <div class="chapter__head">
+          <p class="eyebrow">10 · paper §2.4.3, Lemma 11, Figure 7</p>
+          <h2>Counting at full size</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Lemma 11 bounds the leaves a wanted set <var>U</var> needs, order by
+            order. There are at most
+            <span class="m">|<var>U</var>|·<var>α</var><sub><var>d</var></sub></span> of order
+            <var>d</var> (charge each wanted entry for its own) and at most
+            <span class="m"><var>β</var><sub><var>d</var></sub></span> (take every leaf of that
+            order). Take the smaller at each order and add. Low orders are cheap
+            to charge; high orders are cheap to take whole.
+          </p>
+        </div>
+
+        <figure class="panel panel--wide" id="panel-scale">
+          <div class="controls controls--top">
+            <label class="slider">
+              <span>inner levels <var>m</var></span>
+              <input id="sc-m" type="range" min="0" max="1000" step="1" value="700" />
+              <output id="sc-m-out"></output>
+            </label>
+            <label class="slider">
+              <span>depth <var>L</var> = <var>c</var>·<var>m</var></span>
+              <input id="sc-c" type="range" min="10" max="40" step="0.5" value="19" />
+              <output id="sc-c-out"></output>
+            </label>
+            <label class="slider">
+              <span>wanted |<var>U</var>| = <var>M</var>/<var>D</var><sup><var>κ</var></sup></span>
+              <input id="sc-k" type="range" min="0.05" max="1" step="0.01" value="0.5" />
+              <output id="sc-k-out"></output>
+            </label>
+          </div>
+          <div class="chart chart--tall" id="scale-chart"></div>
+          <div class="tiles" id="scale-tiles"></div>
+          <figcaption>
+            Every count is drawn as a power of <var>D</var> relative to
+            <var>M</var>, the number of entries in a tile, so that 0 means one
+            leaf per entry. The shaded region is the bound: the smaller of the
+            two curves at each order.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            With <span class="m"><var>L</var> = 19<var>m</var></span> and
+            <span class="m">|<var>U</var>| = <var>M</var>/√<var>D</var></span>, the density the
+            reductions produce, the total sits below <var>M</var> by a factor that
+            grows like a power of <var>D</var>. The paper proves a factor of
+            <span class="m"><var>D</var><sup>1/18</sup></span> with a deliberately simple
+            estimate, splitting at order <span class="m"><var>m</var>/9</span>; the exact
+            minimum plotted here does a little better. Shrink <var>L</var> toward
+            <span class="m">10<var>m</var></span> and the falling curve flattens at the
+            start: the low orders each hold nearly <var>M</var> leaves, and the
+            saving all but disappears. The ratio
+            <span class="m"><var>L</var>/<var>m</var></span> also sets how thin the product must
+            be: the encodings cost <span class="m">10<sup><var>L</var></sup></span> per band, which
+            fits the budget only when <var>N</var> is a large enough power of
+            <var>D</var>. That trade-off is why the technique stops near
+            <span class="m"><var>D</var> = <var>N</var><sup>0.12</sup></span>.
+          </p>
+          <p>
+            Adding it up (Theorem 5): the encodings cost
+            <span class="m"><var>O</var>(10<sup><var>L</var></sup>)</span> per band, the pruned
+            recursion <span class="m"><var>O</var>(<var>L</var><sup>2</sup>)</span> per leaf it
+            visits, and the total for any
+            <span class="m"><var>N</var><sup>2</sup>/√<var>D</var></span> wanted entries is
+            <span class="m"><var>O</var>(<var>N</var><sup>2</sup> log<sup>2</sup><var>D</var> / <var>D</var><sup>1/18</sup>)</span>.
+            Turning the same counts into a data structure, which adds up the
+            high-order leaves into precomputed boxes ahead of time, improves the
+            saving to <span class="m"><var>D</var><sup>0.063</sup></span> and answers single
+            entries not known in advance in
+            <span class="m"><var>O</var>(<var>D</var><sup>0.437</sup>)</span> time.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 11. chain -->
+      <section class="chapter" id="ch-chain" data-chapter="Back up the chain">
+        <div class="chapter__head">
+          <p class="eyebrow">11 · paper §3.3–3.4, Figure 8</p>
+          <h2>Back up the chain</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The saving then climbs the reductions, and each reduction keeps only
+            part of it. They were designed to prove hardness, where any
+            polynomial saving was enough.
+          </p>
+        </div>
+
+        <figure class="panel panel--chart" id="panel-chain">
+          <div class="chart" id="chain-chart"></div>
+          <figcaption>
+            The saving <var>δ</var> in the exponent at each step, so that the
+            running time is the baseline divided by <span class="m"><var>n</var><sup><var>δ</var></sup></span>.
+            The matrix step is Corollary 26 at <span class="m"><var>D</var> = <var>n</var><sup>1/18</sup></span>.
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Exact Triangle balances the number of instances against the cost of
+            checking candidates, which keeps half of the matrix saving:
+            <span class="m"><var>O</var>(<var>n</var><sup>3−0.00175</sup> log <var>n</var>)</span>.
+            3SUM reduces to about <span class="m">√<var>n</var></span> Exact Triangle instances
+            on <span class="m">√<var>n</var></span> vertices, keeping half again:
+            <span class="m"><var>O</var>(<var>n</var><sup>1.9992</sup>)</span>. APSP and the
+            (min,+)-product go through Exact Triangle on
+            <span class="m"><var>n</var><sup>1/3</sup></span> vertices and keep a third:
+            <span class="m"><var>Õ</var>(<var>n</var><sup>3−0.00058</sup>) ≤ <var>O</var>(<var>n</var><sup>2.99942</sup>)</span>.
+          </p>
+          <p>
+            The authors note gains they left out to keep the paper simple, such
+            as solving the all-edges version of Exact Triangle directly so that
+            APSP keeps all of its saving instead of a third. Now that these
+            reductions are being used as algorithms, how much of a saving they
+            keep has become a research question of its own.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 12. found -->
+      <section class="chapter" id="ch-found" data-chapter="How it was found">
+        <div class="chapter__head">
+          <p class="eyebrow">12 · Acknowledgments and Methodology</p>
+          <h2>How it was found</h2>
+        </div>
+        <div class="prose">
+          <p>
+            The paper's methodology section records the history. An Anthropic
+            employee was using an internal research model on open problems in
+            the theory of cryptography. One problem was about cryptographic
+            constructions based on the average-case hardness of Zero-<var>k</var>-Clique.
+            Claude was asked to verify and improve those constructions, and
+            instead developed this algorithm, first for the average case and then
+            for the worst case. The session used 16 million output tokens with
+            no human input.
+          </p>
+          <dl class="facts">
+            <div><dt>Found</dt><dd>by Claude, in a single unattended session of 16M output tokens</dd></div>
+            <div><dt>Shared</dt><dd>with the authors in September 2026, under a confidentiality agreement</dd></div>
+            <div><dt>As shared</dt><dd>essentially the algorithm of §2, with other parameters and a different reduction from Exact Triangle</dd></div>
+            <div><dt>Added by the authors</dt><dd>the known reductions used instead, the data structure of §4, Hinted OMv, many further consequences</dd></div>
+            <div><dt>Checked</dt><dd>main theorems formalized in Lean 4 with Mathlib, with every lemma and prior result they rely on</dd></div>
+          </dl>
+          <p>
+            After the paper was written, Anthropic used an internal research
+            model to formalize its main results in the Lean 4 proof assistant:
+            Exact Triangle in <span class="m"><var>O</var>(<var>n</var><sup>2.9983</sup>)</span>,
+            3SUM in <span class="m"><var>O</var>(<var>n</var><sup>1.9992</sup>)</span>, APSP and the
+            (min,+)-product in <span class="m"><var>O</var>(<var>n</var><sup>2.99942</sup>)</span>,
+            and Zero-Weight <var>k</var>-Clique. The formalization is public at
+            <a href="https://github.com/anthropics/formal-math/tree/main/3sum-apsp" rel="noopener">anthropics/formal-math</a>.
+            The authors state that they take full responsibility for the paper.
+          </p>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────── 13. still -->
+      <section class="chapter" id="ch-still" data-chapter="What still stands">
+        <div class="chapter__head">
+          <p class="eyebrow">13 · paper §1, §6</p>
+          <h2>What still stands</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Not everything fell. The Strong Exponential Time Hypothesis and
+            Orthogonal Vectors are untouched, since neither is known to reduce
+            to a triangle problem. So are <var>k</var>-SUM for
+            <span class="m"><var>k</var> ≥ 4</span>, 3SUM-Indexing, and OMv without hints.
+            The balanced version of All-Edges Sparse Triangle, conjectured to
+            need <span class="m"><var>m</var><sup>4/3−<i>o</i>(1)</sup></span> time on
+            graphs with <var>m</var> edges, is not sped up either, and the authors
+            suggest it as a replacement hypothesis. Problems that were only
+            known to be 3SUM-hard, such as deciding whether <var>n</var> points in
+            the plane include three on a line, get no faster algorithm; for
+            them the question is simply open again.
+          </p>
+          <p>
+            The authors read the result as a success for fine-grained
+            complexity. The web of reductions was built to explain why problems
+            were hard, and it is exactly what let one new algorithm speed up
+            dozens of them at once.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>
+        Josh Alman and Virginia Vassilevska Williams.
+        <cite>Truly Subquadratic 3SUM and Truly Subcubic APSP via Triangles in Sparse Lopsided Graphs.</cite>
+        <a href="https://arxiv.org/abs/2610.06783" rel="noopener">arXiv:2610.06783</a> [cs.DS], 5 October 2026.
+      </p>
+      <p>
+        Every number on this page that is not quoted from the paper is computed
+        in your browser. The recursion in chapters 7 to 9 is the algorithm of
+        Section 2 at <var>L</var> = 6, <var>m</var> = 2, in exact integer arithmetic.
+        Set in Computer Modern and Concrete.
+      </p>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
