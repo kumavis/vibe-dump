@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Specimen Island</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+
+    <div id="hud">
+      <div id="compass"><div id="compassStrip"></div><div class="caret"></div></div>
+      <div id="objectives"></div>
+      <div id="scorebox"><div id="score">0</div><div id="clock">07:30</div></div>
+      <div id="toasts"></div>
+
+      <canvas id="detect" width="240" height="240"></canvas>
+      <div id="crosshair" class="dot"></div>
+      <div id="gunReticle"></div>
+      <div id="hitmarker"></div>
+      <div id="target"></div>
+      <div id="hurtArrow">▲</div>
+
+      <div id="prompt"><div id="promptRing"></div><div id="promptText"></div></div>
+
+      <div id="vitals">
+        <div class="stealth"><div class="eyewrap"><div id="eye"></div></div><div><div id="eyeLabel">HIDDEN</div><div class="noisebar"><i id="noise"></i></div></div></div>
+        <div class="bar hp"><i id="health"></i></div>
+        <div class="bar st"><i id="stamina"></i></div>
+      </div>
+      <div id="weapon"><div id="weaponName"></div><div id="ammo"></div><div id="gadgets"></div></div>
+      <div id="heliHud"></div>
+
+      <div id="scope"><div class="reticle"></div></div>
+      <div id="viewfinder"><div class="vf-frame"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><div class="vf-focus"></div><div class="vf-top"><span class="vf-rec">● FIELD CAMERA</span><span class="vf-count"></span><span class="vf-zoom"></span></div><div class="vf-subject"></div></div></div>
+      <div id="photoFlash"></div>
+      <div id="photoCard"><img alt="" /><div class="pc-cap"></div></div>
+      <div id="blind"></div>
+      <div id="vignette"></div>
+    </div>
+    <div id="fade"></div>
+
+    <div id="map" class="overlay"><div class="inner"><h2>Island Map</h2><canvas width="720" height="720"></canvas><div class="foot">[M] close · ◆ objective · yellow dots: tagged animals · HELI / JEEP / BIKE / HUMVEE / TANK / GUNSHIP / SUB: parked vehicles (orange: wrecked)</div></div></div>
+    <div id="journal" class="overlay"><div class="inner"></div></div>
+    <div id="note" class="overlay"><div class="inner paper"><h2></h2><p></p><button class="btn" data-close>Close</button></div></div>
+
+    <div id="pause" class="overlay">
+      <div class="inner menu">
+        <h2>Paused</h2>
+        <button class="btn primary" id="resume">Resume</button>
+        <button class="btn" data-settings>Settings</button>
+        <button class="btn" id="openJournal">Field journal</button>
+      </div>
+    </div>
+    <div id="death" class="overlay">
+      <div class="inner menu">
+        <h2>Medical evacuation</h2>
+        <p>The Foundation’s medevac found you. It will be noted in your file (−250).</p>
+        <button class="btn primary" id="respawn">Return to Ranger Station Alpha</button>
+      </div>
+    </div>
+    <div id="debrief" class="overlay"><div class="inner menu wide"></div></div>
+
+    <div id="title">
+      <div class="panel">
+        <div class="kicker">The Foundation · Island Preserve 7</div>
+        <h1>Specimen<br />Island</h1>
+        <p class="lede">The last field team left eleven years ago. The animals stayed. Sneak, sedate and sample them — or go loud, and answer for every carcass.</p>
+        <p class="kbd-note">Play with keyboard and mouse or an Xbox controller (USB or wireless).</p>
+        <p class="controller-status"></p>
+        <div class="actions">
+          <button class="btn primary big" id="start">Begin expedition</button>
+          <button class="btn big ghost" data-settings>Settings</button>
+        </div>
+      </div>
+    </div>
+    <div id="settings" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="inner sheet">
+        <div class="sheet-head">
+          <h2 id="settingsTitle">Settings</h2>
+          <button class="btn close" data-close aria-label="Close settings">×</button>
+        </div>
+        <div class="settings"></div>
+        <h3>Xbox controller · USB / wireless</h3>
+        <p class="controller-status"></p>
+        <div class="controls">
+          <div><b>Left stick</b> move · <b>Right stick</b> look · <b>Click left stick</b> sprint</div>
+          <div><b>A</b> jump · <b>B</b> crouch · <b>Y</b> interact (hold) · <b>X</b> reload</div>
+          <div><b>LT</b> aim · <b>RT</b> fire / scan / photo · <b>LB / RB</b> previous / next tool (zoom when camera is raised)</div>
+          <div><b>Click right stick</b> flashlight / headlights · <b>D-pad ↑</b> map · <b>↓</b> medkit · <b>←</b> stone · <b>→</b> flare</div>
+          <div><b>View</b> journal · <b>Menu</b> pause / resume</div>
+          <div>Vehicles: <b>Left stick</b> drive / steer or pitch / slide · <b>Right stick</b> look / turn · <b>Y</b> board / exit · <b>LB</b> camera</div>
+          <div>Jeep: <b>A</b> handbrake. Motorbike: <b>A</b> brake; automatic stabilizer. Helicopter: <b>A / B</b> climb / descend.</div>
+          <div>Humvee: as the jeep. Tank: <b>Left stick</b> drive / turn on the spot · <b>Right stick</b> aim the turret · <b>RT</b> fire · <b>LT</b> gunner’s sight · <b>A</b> brake · <b>Click right stick</b> headlights</div>
+          <div>Gunship: as the helicopter · <b>LT</b> hold for the missile seeker · <b>RT</b> fire a missile (no lock: at the sight mark) · <b>Y</b> hold at the munitions point to rearm</div>
+          <div>Submersible: <b>A / B</b> blow / flood the ballast (let go to hold depth) · <b>X</b> sonar · <b>Click right stick</b> floodlights · <b>Y</b> in / out in the moon pool or surfaced</div>
+          <div>Menus: <b>D-pad / left stick</b> navigate · <b>← / →</b> adjust settings · <b>A</b> select · <b>B</b> back · <b>Right stick</b> scroll</div>
+          <div>Connect or pair in your system settings, then press a controller button here. Wireless requires OS/browser support. If sound is silent, click the page once.</div>
+        </div>
+        <h3>Keyboard and mouse</h3>
+        <div class="controls">
+          <div><span><b>WASD</b> move</span> · <span><b>Shift</b> sprint</span> · <span><b>C</b> crouch</span> · <span><b>Space</b> jump</span></div>
+          <div><span><b>Mouse</b> look</span> · <span><b>LMB</b> fire</span> · <span><b>RMB</b> aim</span> · <span><b>R</b> reload</span> · <span><b>1–7</b>, <b>wheel</b> weapons</span></div>
+          <div><span><b>6</b> Field Camera:</span> <span><b>RMB</b> raise</span> · <span><b>wheel</b> zoom</span> · <span><b>LMB</b> shoot</span></div>
+          <div><span><b>7</b> Jumbo syringe:</span> <span><b>LMB</b> thrust, reach under 3 m</span></div>
+          <div><span><b>E</b> interact (hold)</span> · <span><b>G</b> stone</span> · <span><b>T</b> flare</span> · <span><b>H</b> medkit</span> · <span><b>F</b> flashlight</span></div>
+          <div><span><b>M</b> map</span> · <span><b>J</b> / <b>Tab</b> journal</span> · <span><b>Esc</b> pause</span></div>
+        </div>
+        <h3>Vehicles</h3>
+        <p>The stabilized trail bike waits at the inland end of the Supply Dock (BIKE on the map). It balances automatically and leans into turns. A humvee and a tank stand in the motor pool at Camp Halvorsen, on the north-east plateau; the tank's shells restock at the camp's ammo bunker. The sea lab's submersible hangs in the moon pool of the station off the west coast (SUB on the map): walk the pier out from the beach west of the Field Lab, or land on its roof.</p>
+        <div class="controls">
+          <div><span><b>E</b> board at a door</span> · <span><b>E</b> exit, once stopped or landed</span> · <span><b>V</b> camera</span></div>
+          <div><span>Jeep:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span> · <span><b>Mouse</b> look</span></div>
+          <div><span>Motorbike:</span> <span><b>W/S</b> ride / reverse</span> · <span><b>A/D</b> steer</span> · <span><b>Space</b> brake</span> · <span><b>F</b> headlight</span> · <span><b>V</b> camera</span> · <span><b>E</b> mount / dismount when stopped</span></div>
+          <div><span>Helicopter:</span> <span><b>Space</b> climb</span> · <span><b>Shift</b> descend</span> · <span><b>W/S</b> pitch</span> · <span><b>A/D</b> slide</span> · <span><b>Mouse</b> turn</span></div>
+          <div><span>Humvee:</span> <span>as the jeep</span> · <span><b>Space</b> handbrake</span> · <span><b>F</b> headlights</span></div>
+          <div><span>Tank:</span> <span><b>W/S</b> drive</span> · <span><b>A/D</b> turn on the spot</span> · <span><b>Mouse</b> aim the turret</span> · <span><b>LMB</b> fire</span> · <span><b>RMB</b> gunner’s sight</span> · <span><b>Space</b> brake</span> · <span><b>F</b> headlights</span></div>
+          <div><span>Gunship:</span> <span>as the helicopter</span> · <span><b>RMB</b> hold: missile seeker</span> · <span><b>LMB</b> fire a missile (no lock: at the sight mark)</span> · <span><b>E</b> hold at the munitions point: rearm</span></div>
+          <div><span>Submersible:</span> <span><b>W/S</b> thrust</span> · <span><b>A/D</b> turn</span> · <span><b>Space</b> blow ballast, rise</span> · <span><b>Shift</b> flood, dive</span> · <span>let go to hold depth</span> · <span><b>F</b> floodlights</span> · <span><b>R</b> sonar</span> · <span><b>E</b> in / out in the moon pool or surfaced</span></div>
+        </div>
+        <div class="sheet-foot"><button class="btn primary" data-close>Done</button></div>
+      </div>
+    </div>
+    <div id="boot"><div><div class="spin"></div>Growing the island…</div></div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
