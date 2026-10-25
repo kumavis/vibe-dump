@@ -85,6 +85,8 @@ export function ambush(g, side, n) {
   synth.tone({ type: 'triangle', from: 300, to: 520, dur: 0.5, vol: 0.06, at: 0.32 }, 'neb-ambush2', 0.3)
   for (let i = 0; i < n; i++) {
     g.later(0.8 + i * 0.35, () => {
+      // the boss that called them may be gone by the time they'd arrive
+      if (g.phase === 'clear' || g.phase === 'victory' || g.boss?.dying) return
       const hx = side < 0 ? g.rand(g.W * 0.08, g.W * 0.24) + 40 : g.W - g.rand(g.W * 0.08, g.W * 0.24) - 40
       g.spawn('nebulaLurker', side < 0 ? -50 : g.W + 50, ys[i], { kind: 'ambush', side, hx, hy: ys[i] })
     })
@@ -133,7 +135,7 @@ export const lurker = {
         break
       case 'lurk':
         glide(e, tx, ty, dt, 260)
-        if (g.phase === 'victory' || g.boss?.dying) break
+        if (g.phase === 'victory' || g.phase === 'clear' || g.boss?.dying) break
         if (sq ? g.time >= sq.fireAt + e.slot * RIPPLE : e.st_t > e.wait / g.mission.fire) {
           if (e.rounds >= K.rounds) next(e, 'leave')
           else {

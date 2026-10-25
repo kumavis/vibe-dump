@@ -95,10 +95,11 @@ let menuSel = 0
 let menuRow = 0 // 0: how many players, 1: the store button
 let mapSel = 0
 let save = loadSave()
-// Missions get added to the map over time; anything after the furthest one a
-// player has already cleared stays open to them.
+// Missions get added to the map over time. Whatever a save had already played
+// stays open, and so does the mission after any it has cleared.
 MISSIONS.forEach((m, i) => {
-  if (save.missions.cleared[m.id]) save.missions.unlocked = Math.max(save.missions.unlocked, Math.min(MISSIONS.length, i + 2))
+  const open = save.missions.cleared[m.id] ? i + 2 : save.missions.best[m.id] != null ? i + 1 : 0
+  save.missions.unlocked = Math.max(save.missions.unlocked, Math.min(MISSIONS.length, open))
 })
 let mission = MISSIONS[0]
 let missionIdx = 0
@@ -412,8 +413,10 @@ function updatePlayer(p, dt) {
   let tvx
   let tvy
   if (cutscene) {
+    // hold still, but rise clear of the bottom letterbox bar so the kid can
+    // see their own ship through the scene
     tvx = 0
-    tvy = 0
+    tvy = clamp((H - 130 - p.y) * 6, -sp, 0)
     p.invuln = Math.max(p.invuln, 0.4)
   } else if (p.touch) {
     tvx = clamp((p.touch.x - p.x) * 9, -sp, sp)
@@ -1442,6 +1445,7 @@ function payOut(cleared) {
 
 function endMission(cleared) {
   if (mode !== 'play') return
+  cutscene = null // no letterbox or "skip" hint over an end panel
   payOut(cleared)
   const screen = !cleared ? 'over' : mission.final ? 'win' : 'done'
   mode = screen
@@ -1837,7 +1841,7 @@ function drawParticles() {
     ctx.strokeStyle = r.color
     ctx.lineWidth = r.w
     ctx.beginPath()
-    ctx.arc(r.x, r.y, r.r, 0, TAU)
+    ctx.arc(r.x, r.y, Math.max(0, r.r), 0, TAU)
     ctx.stroke()
   }
   ctx.globalAlpha = 1
@@ -2171,7 +2175,7 @@ function renderMap() {
     }
     card.querySelector('.mblurb').textContent = locked ? `Clear mission ${i} to unlock` : m.blurb
     const best = save.missions.best[m.id]
-    card.querySelector('.mbest').textContent = cleared ? `Cleared · best ${(best ?? 0).toLocaleString()}` : best ? `Best ${best.toLocaleString()}` : ''
+    card.querySelector('.mbest').textContent = locked ? '' : cleared ? `Cleared · best ${(best ?? 0).toLocaleString()}` : best ? `Best ${best.toLocaleString()}` : ''
     card.addEventListener('mouseenter', () => selectMission(i))
     card.addEventListener('click', () => {
       unlockAudio()
@@ -2276,7 +2280,6 @@ function resume() {
   if (mode !== 'pause') return
   mode = 'play'
   showScreen(null)
-  last = performance.now()
 }
 
 // Leaving mid-mission still pays for what you did — and once the boss is
@@ -2484,12 +2487,18 @@ function paintLegend() {
 }
 
 let last = performance.now()
+// The next frame is always queued, even if this one throws: one bad frame
+// should cost a frame, not freeze the game until a reload. The step can't go
+// negative either — a rAF timestamp can trail the clock it's measured against.
 function frame(now) {
-  const dt = Math.min(0.033, (now - last) / 1000)
+  const dt = clamp((now - last) / 1000, 0, 0.033)
   last = now
-  if (mode !== 'pause') update(dt)
-  draw()
-  requestAnimationFrame(frame)
+  try {
+    if (mode !== 'pause') update(dt)
+    draw()
+  } finally {
+    requestAnimationFrame(frame)
+  }
 }
 
 resize()

@@ -506,6 +506,9 @@ export const swarmLevel = {
       }
     }
     tickStats(g, dt)
+    // once the Queen is going down, nothing new hatches: a spiral or river
+    // still pouring would carry on into the "Mission complete!" screen
+    if (g.boss?.dying || g.phase === 'clear' || g.phase === 'victory') for (const G of groups) G.emit = 0
     updateGroups(g, dt)
     updateQueenFx(g, dt)
     lv.mayhem = Math.max(0, lv.mayhem - (g.phase === 'main' ? 0 : dt))
