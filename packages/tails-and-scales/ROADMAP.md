@@ -86,7 +86,10 @@ the commit, and add whatever the work turned up.
   march scenarios at 80%, the settings answered from settled), and from F8a
   P-prop's setups task holds P-mission, and from F7a P-prop holds P-height
   and P-level (two random games in five on fortified boards, and the
-  `height` task), terrain-check holds the fortified set and P-climb (its
+  `height` task: since F7a's review its scenes, and P-level on Grand-sized
+  boards too), scale-check's P-scan the fortified boards (the `fort/` AI
+  pairs, the Grand fixture's `--fortified`, and the box with height),
+  terrain-check holds the fortified set and P-climb (its
   sections 6 and 7, and the self-test's fortified edits), parity folds the
   `fort/` log set (AI pairs as logs with no entries) beside the rest, and
   `node sim/play-report.mjs` (the step's AI corpus against §4.2.9's
@@ -103,7 +106,8 @@ the commit, and add whatever the work turned up.
   it judges: renderer.info flat over 5 rematches, the page's own heap not
   growing a rematch (R7b: from heap snapshots, V8's compiled code left
   out), and no shader program linked twice between a title and a battle's
-  end), `node sim/title-shot.mjs` (the title at 1200 ms against the
+  end; from F7a's review also `--terrain fortified`, the same over
+  fortified battles), `node sim/title-shot.mjs` (the title at 1200 ms against the
   previous commit; exit 3 is a timeout, not a verdict: run it again),
   `node sim/terrain-shots.mjs` (the five boards against R0, run at every
   step that touched the view since R3, listed here from R7a) and, from
@@ -890,7 +894,14 @@ follows N3.
   terrain-check's fortified rows and P-climb, P-height and P-level,
   data-check's set and footprint rows, scale-bench's fortified rows,
   `sim/play-report.mjs`, corpus-add's `--mode watch`, `--terrain` and
-  height needs; the `fort/` corpus, 8 battles. DESIGN's F7a notes.)
+  height needs; the `fort/` corpus, 8 battles. DESIGN's F7a notes. The
+  review's fixes: `levelDist` exact over the gate graph with decks as
+  shortcuts and stairs walked down, `scanBox` widened by the ladders'
+  savings, fliers' straight lines, a charge's other enemies by level, the
+  planner's fields climbing, walks on the table's tops; the play-report's
+  row judged by a move and the AI tuned to it; P-scan fortified, P-level
+  on Grand-sized boards, P-height's scenes, rematch-memory's
+  `--terrain`; `fort/`'s AI pairs re-recorded.)
 - [ ] **F7b** Parapets with cover at deck level; reading heights: drop
   lines, the climbing cost, line of sight with its reasons, see-through
   walls. F7a left it: the parapet piece (a comment block in recipes.js, each

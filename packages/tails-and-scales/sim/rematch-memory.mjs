@@ -60,7 +60,7 @@
 // in use as a whole is reported, not judged (until R7b a flat 2 MB allowed
 // for it, which the code's warming up crept toward).
 //
-//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full]
+//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full] [--terrain fortified]
 //   node sim/rematch-memory.mjs --self-test   each of SELF_TESTS' edits, made
 //                                             in a copy of the working tree,
 //                                             must fail it: R7a's first
@@ -77,7 +77,12 @@
 // --ref measures another commit's build instead of the working tree's (the
 // code before R7, HEAD as it stands, leaks: its geometries grow with every
 // rematch). --full plays without ?lowfi (shadows on, the full pixel ratio:
-// the shadow map's render target and its programs too). Exit 0 when nothing
+// the shadow map's render target and its programs too). (F7a's review)
+// --terrain plays the battles on that set (the page's ?terrain=, which each
+// rematch keeps): `fortified` draws the decks, stairs, ladders and posts,
+// the deck overlay's tops, the drop lines and the climbs, each of which
+// must be freed with its table as the rest is (the title stays classic).
+// Exit 0 when nothing
 // grows and no program is linked twice (the self-test: when every edit is
 // caught so), 1 otherwise, 2 on bad arguments. Set CHROMIUM_PATH to the
 // pre-installed Chromium if Playwright's own isn't installed.
@@ -121,10 +126,11 @@ const SELF_TESTS = {
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, terrain: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
   if (a.ref && a['self-test']) throw new Error('--self-test edits the working tree: no --ref')
+  if (a.terrain !== undefined && !/^[a-z]+$/.test(a.terrain)) throw new Error(`--terrain takes a set's name (classic, fortified), not ${JSON.stringify(a.terrain)}`)
 } catch (e) {
-  console.error(`rematch-memory: ${e.message}\nusage: node sim/rematch-memory.mjs [--ref <git ref> | --self-test] [--board 4242] [--dice 99] [--full]`)
+  console.error(`rematch-memory: ${e.message}\nusage: node sim/rematch-memory.mjs [--ref <git ref> | --self-test] [--board 4242] [--dice 99] [--full] [--terrain fortified]`)
   process.exit(2)
 }
 // a battle and five rematches
@@ -188,7 +194,7 @@ async function play(code, work, { battles, snap, what }) {
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(`(${drawAlways})()`)
     const cdp = await page.context().newCDPSession(page)
-    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}`)
+    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}${a.terrain ? `&terrain=${a.terrain}` : ''}`)
     await page.waitForFunction(() => window.__ts)
     // The heap as a snapshot sums it: { own, kinds }, `own` the bytes of the
     // page's own objects, `kinds` theirs by (type, constructor); what V8 and
@@ -324,7 +330,7 @@ try {
     console.log(`\n${verdicts.join('\n')}`)
     console.log(failed ? '\nrematch-memory self-test FAILED: an edit was not caught' : '\nrematch-memory self-test passed: every edit is caught')
   } else {
-    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: a.ref ? `ref ${a.ref}` : 'the working tree' })
+    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: `${a.ref ? `ref ${a.ref}` : 'the working tree'}${a.terrain ? `, on the ${a.terrain} set` : ''}` })
     failed = grew.length > 0
     console.log(failed ? `\nrematch-memory FAILED: ${grew.join('; ')}` : `\nrematch-memory passed: after each of ${BATTLES - 1} rematches the title holds the same ${titles[0].geometries} geometries and ${titles[0].textures} textures, each battle's end the same ${ends[0].geometries} and ${ends[0].textures}, and the page's own heap on the title ${(slope / 1024).toFixed(1)} KB a rematch (at most ${OWN_SLOPE / 1024} KB); ${linked.length} shader programs linked in all, none twice between two rows, each rematch's battle ${ends[1].links} and each title after a battle ${titles[0].links}`)
   }

@@ -12,8 +12,8 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd, levelDist, floorAt } from '../queries.js'
-import { climbs } from '../actions/move.js'
+import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt } from '../queries.js'
+import { climbs, moveMode } from '../actions/move.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -55,7 +55,15 @@ export function shotValue(G, u, e, from, moved, pre = null) {
 // within its `max` of the start, the path being no shorter than the
 // straight line), so a scan over a plan's cells may skip the rest of the
 // board, in the same order, and draw where it drew.
+//
+// (F7a's review) With height a ladder may carry a climber farther than it
+// costs (nav.linkSave, the most any link does: a bastion's 0.75" and more),
+// and a plan of `reach` takes at most floor(reach / nav.linkMin) links, so
+// the box grows by that many savings: still every finite cell inside it,
+// and still the whole board's scan. On a board with no such link it is the
+// box it always was.
 export function scanBox(nav, x, z, reach) {
+  if (nav.hasHeight && nav.linkSave > 0) reach += nav.linkSave * Math.floor(reach / nav.linkMin)
   const span = reach + nav.cell
   return {
     x0: Math.max(0, Math.floor((x - span + nav.W / 2) / nav.cell)), x1: Math.min(nav.nx - 1, Math.floor((x + span + nav.W / 2) / nav.cell)),
@@ -125,21 +133,43 @@ export function fallbackSpot(G, u, plan) {
   return best
 }
 
+// (F7a's review) The nearest of `enemies` from `from` by levelDist, measuring
+// only those whose straight line, less any shortcut (levelSlack), could
+// still beat the nearest so far: the same minimum, Infinity for none.
+function nearestBy(G, from, enemies, climb) {
+  const slack = levelSlack(G, climb)
+  let best = Infinity
+  for (const e of enemies) {
+    if (hypot(e.pos.x - from.x, e.pos.z - from.z) - slack >= best) continue
+    const d = levelDist(G, from, e.pos, climb)
+    if (d < best) best = d
+  }
+  return best
+}
+
 // How good (x, z) is for `u`, by its role. Leaves what it found in ctx.last:
 // whether the spot is on an objective (and which), and whether u could
 // shoot from it.
 //
 // (F7a, DESIGN §4.2.4's AI; rule 10: it bumps with F7a) With height the
-// objective and approach terms measure the way there (levelDist: up the
-// stairs, or the ladders for a climber, rather than through the wall), and
+// objective and approach terms measure the way there for a walker
+// (levelDist: up the stairs, or the ladders for a climber, rather than
+// through the wall; a flier's is the straight line it flies), and
 // shooters and artillery like raised ground: +0.25 an inch of floor, up to
 // 4". What climbing costs reaches the score through the plan's distances
-// (validEnd's), already paid for; nothing else changes.
+// (validEnd's), already paid for. (The review's tuning, DESIGN §4.2.9's
+// play-report: the AI met its F7a row only with the units deployed onto
+// the works counted) The charge term and the brawlers' danger measure their
+// ways so too, each walker's by levelDist: a deck's defenders are as far
+// from a brawler at the wall's foot as its stairs make them, both ways.
 export function score(G, u, x, z, ctx, moving) {
   const { enemies, friends, owners, claimed, role, pre } = ctx
   const t = u.t
   const from = { x, z }
-  const high = G.nav.hasHeight, climb = high && climbs(u)
+  // (the review) the way up is a walker's: a flier's move is a circle that
+  // ignores the terrain (nav.reach's fly mode), so it measures the straight
+  // line, as on the flat
+  const high = G.nav.hasHeight, climb = high && climbs(u), walks = high && moveMode(u) !== 'fly'
   const moved = moving && hypot(x - u.pos.x, z - u.pos.z) > 0.3
   let s = 0
   let onObjective = false, obj = -1
@@ -148,7 +178,10 @@ export function score(G, u, x, z, ctx, moving) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
     for (const o of G.objectives) {
-      const d = high ? levelDist(G, from, o, climb) : hypot(o.x - x, o.z - z)
+      // (with height: an objective the straight line, less any shortcut,
+      // puts 18.6" off or more is worth nothing by the way too: v is 0)
+      if (walks && hypot(o.x - x, o.z - z) - levelSlack(G, climb) >= 18.6) continue
+      const d = walks ? levelDist(G, from, o, climb) : hypot(o.x - x, o.z - z)
       const want = owners[o.i] === u.side ? 0.45 : 1
       const taken = claimed.has(o.i) ? 0.25 : 1
       let v
@@ -181,7 +214,12 @@ export function score(G, u, x, z, ctx, moving) {
   if (role === 'melee' || role === 'line' || role === 'raider' || role === 'hero') {
     let best = 0
     for (const e of enemies) {
-      const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+      // (F7a's review, the play-report's tuning) with height a charge walks
+      // to its spot, up the stairs (or a ladder) to a defender on a deck
+      // (an enemy the straight line puts out of reach by more than any
+      // shortcut, levelSlack, is out of it by the way too: not measured)
+      if (walks && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - levelSlack(G, climb) > CHARGE_RANGE) continue
+      const g = (walks ? levelDist(G, from, e.pos, climb) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
       if (g > CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
       const back = pre.get(e).back * 0.4
@@ -192,14 +230,20 @@ export function score(G, u, x, z, ctx, moving) {
     s += best * w
     // far from everything: just close the distance
     if (best === 0 && role !== 'hero') {
-      const near = high ? Math.min(...enemies.map((e) => levelDist(G, from, e.pos, climb))) : Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
+      const near = walks ? nearestBy(G, from, enemies, climb) : Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
       s -= near * (role === 'melee' ? 0.12 : 0.05)
     }
   }
   // danger: enemy brawlers who could reach here next turn, guns that can see us
   const fragile = role === 'shooter' || role === 'artillery' || role === 'hero'
   for (const e of enemies) {
-    const g = hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+    // (F7a's review, the play-report's tuning) with height an enemy walker
+    // comes by its own way here: a brawler at a wall's foot is as far from
+    // its top as the stairs (or, climbing, a ladder) make it (only a
+    // brawler the straight line, less levelSlack, leaves within reach is
+    // measured: the rest add nothing either way)
+    if (high && !(e.t.brawler && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - (moveMode(e) !== 'fly' ? levelSlack(G, climbs(e)) : 0) < e.t.M + 7)) continue
+    const g = (high && moveMode(e) !== 'fly' ? levelDist(G, e.pos, from, climbs(e)) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
     if (e.t.brawler && g < e.t.M + 7) s -= pre.get(e).back * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put

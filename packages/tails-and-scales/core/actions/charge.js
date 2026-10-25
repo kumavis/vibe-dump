@@ -46,7 +46,10 @@ export function chargeTargets(G, u) {
 // a roll that beats it may end on any spot it reaches. Null when no spot can
 // be reached at all. (F7a) With height a spot must also lie within HIGH of
 // the floor the target stands on: no charge ends at the foot of the wall
-// its target holds.
+// its target holds. (The review) And another enemy bars a spot only within
+// HIGH of its own floor, as it engages (engagedWith) and forbids
+// (forbidMask) only there: one on the ground below a deck doesn't keep a
+// charge off the deck's top.
 export function chargePlan(G, u, target) {
   refreshNav(G)
   const nav = G.nav
@@ -56,6 +59,7 @@ export function chargePlan(G, u, target) {
   const forbid = forbidMask(G, u, ENGAGE + 0.05, [target])
   const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u) })
   const ty = nav.hasHeight ? groundY(G, target) : 0
+  const oy = nav.hasHeight ? others.map((e) => groundY(G, e)) : null
   const spots = []
   let best = -1, bd = Infinity
   const want = target.r + u.r + ENGAGE - 0.08
@@ -72,7 +76,9 @@ export function chargePlan(G, u, target) {
     if (dd > want || dd < target.r + u.r + 0.02) continue
     if (nav.hasHeight && Math.abs(nav.floor[i] - ty) > HIGH) continue
     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
-    if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
+    if (nav.hasHeight) {
+      if (others.some((e, k) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
+    } else if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
     if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
     spots.push({ i, d })
     if (d < bd) {

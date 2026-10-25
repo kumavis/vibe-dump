@@ -136,7 +136,7 @@ const WHY = {
 const DRAWS = /^core\/(rng\.js|engine\.js|commands\.js|actions\/|ai\/)/
 const CROSS = {
   'core/queries.js': [
-    'moveMode', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
+    'moveMode', 'climbs', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
     'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which

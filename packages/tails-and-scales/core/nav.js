@@ -17,8 +17,11 @@ import { hypot, sin, cos } from './dmath.js'
 // cell; `link`, the ladders, each joining a foot cell to a top cell; `cliff`,
 // the distance from every cell to the nearest ledge (a cell with a neighbour
 // more than STEP above or below it), which a disc must keep clear of as it
-// keeps clear of obstacles; `level`, which raised region a cell is on; and
-// `gates`, every way up and down (core/queries.js's levelDist reads them).
+// keeps clear of obstacles; `level`, which raised region a cell is on;
+// `gates`, every way up and down (core/queries.js's levelDist reads them,
+// with `rampOf`, the stair a raised cell stands on); and `linkSave` and
+// `linkMin`, how much farther than it costs a link may carry a climber
+// (core/ai/score.js's scanBox widens by them).
 // Every rule that reads it sits behind `hasHeight` (§4.1 rule 18), its own
 // code path: classic and `open` boards never build a floor, and the code
 // they run is the code they always ran.
@@ -321,16 +324,29 @@ export class NavGrid {
       this.ledge = new Uint8Array(N)
       this.cliff = new Float32Array(N)
       this.level = new Int32Array(N)
+      this.rampOf = new Int32Array(N)
     }
     const { floor, link, linkCost, ledge, level, nx, nz } = this
     floor.fill(0)
-    for (const c of chunks) if (c.alive && c.surface) this.rasterFloor(c.shape, c.surface)
+    this.rampOf.fill(-1)
+    for (const c of chunks) if (c.alive && c.surface) this.rasterFloor(c.shape, c.surface, c.id)
     link.fill(-1)
     linkCost.fill(0)
     // a cell more than one ladder joins (a watchtower's top, which both its
     // ladders reach): the first in link and linkCost, the rest here, cell →
     // [[cell, cost]…] in chunk order; null when no cell has two
     this.linkMore = null
+    // (the review) a link costs LADDER_MUL × its height, but joins a foot
+    // 2.25" out from its face to a top on its deck's centreline: a rampart's
+    // or platform's ladder carries a climber some 0.5" farther than it costs,
+    // a bastion's 0.75" (more, cell centre to cell centre), so a plan's
+    // finite cells are no longer all within its max of the start. linkSave
+    // is the most any alive link carries beyond its cost (0 when none does)
+    // and linkMin the least a link costs (Infinity with none): a plan of max
+    // m takes at most floor(m / linkMin) links, so no cell of it lies more
+    // than m + linkSave × that from its start (scanBox's bound)
+    this.linkSave = 0
+    this.linkMin = Infinity
     for (const c of chunks) {
       if (!c.alive || !c.link) continue
       const { foot, top, h } = c.link
@@ -338,6 +354,9 @@ export class NavGrid {
       if (i < 0 || j < 0) continue
       this.joinCells(i, j, LADDER_MUL * h)
       this.joinCells(j, i, LADDER_MUL * h)
+      const save = hypot(this.x(i) - this.x(j), this.z(i) - this.z(j)) - LADDER_MUL * h
+      if (save > this.linkSave) this.linkSave = save
+      if (LADDER_MUL * h < this.linkMin) this.linkMin = LADDER_MUL * h
     }
     // a ledge: a cell with an 8-neighbour more than STEP above or below it
     // (on both sides of every edge, so a rim of ledge cells runs round each):
@@ -385,6 +404,8 @@ export class NavGrid {
     // centres, costing its length) and ladder (its foot and top, costing
     // LADDER_MUL × its height), with the level its high end is on
     this.gates = []
+    // (the review) each stair's gate by its chunk's id, for rampOf's cells
+    this.stairGate = new Map()
     for (const c of chunks) {
       if (!c.alive) continue
       if (c.surface?.ramp) {
@@ -392,6 +413,7 @@ export class NavGrid {
         const h = axis === 'x' ? s.hx : s.hz, up = y1 >= y0 ? 1 : -1
         const end = (k) => this.local(s, axis === 'x' ? k * h : 0, axis === 'z' ? k * h : 0)
         const lo = end(-up), hi = end(up)
+        this.stairGate.set(c.id, this.gates.length)
         this.gates.push({ id: c.id, lo, hi, level: this.levelAt(hi.x, hi.z), cost: 2 * h, ladder: false })
       } else if (c.link) {
         const { foot, top, h } = c.link
@@ -454,8 +476,11 @@ export class NavGrid {
 
   // A surface's floor on the cells whose centres its shape covers: a deck's
   // y, a ramp's height lerped along its axis from y0 at its own − end to y1
-  // at its + end, quantised; the highest so far wins.
-  rasterFloor(s, surf) {
+  // at its + end, quantised; the highest so far wins. (The review) rampOf
+  // keeps, for each cell, the id of the stair whose ramp gave it its floor
+  // (−1 where a deck's, or nothing's, did): a unit standing partway up a
+  // stair walks down it, not round by its top (queries.js levelDist).
+  rasterFloor(s, surf, id) {
     const reach = hypot(s.hx, s.hz) + this.cell
     const c = cos(s.yaw), sn = sin(s.yaw)
     const ramp = surf.ramp
@@ -477,7 +502,10 @@ export class NavGrid {
           y = ramp.y0 + (ramp.y1 - ramp.y0) * t
         }
         y = quant(y)
-        if (y > this.floor[i]) this.floor[i] = y
+        if (y > this.floor[i]) {
+          this.floor[i] = y
+          this.rampOf[i] = ramp ? id : -1
+        }
       }
     }
   }

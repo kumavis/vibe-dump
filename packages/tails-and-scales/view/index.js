@@ -68,7 +68,8 @@ export class View {
   // (view/overlay.js: one texel per nav cell, `grid` every match's grid
   // size).
   figures({ mirror, colorOf, rimOf, W, H, grid }) {
-    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W })
+    // ((F7a's review) a walk's figures on the tops they cross: floorAt)
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) a template marked, landing and scorching on the top it falls on)
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) the overlay shades the battlefield's deck tops too)

@@ -5,11 +5,17 @@
 // Skirmish fortified board):
 //   - in ≥ 50% of battles some unit stands on a deck by the end of round 3
 //     (at the end of round 1, 2 or 3, some unit standing has a floor above
-//     the nav's STEP under it);
+//     the nav's STEP under it), (the review) having got there by a move of
+//     its own: a walk or a charge from below onto the deck, not deployed
+//     there (every battle has its works, decks in each zone, so the units
+//     deployed onto them met the row whether or not anything could climb;
+//     that count is reported beside it);
 //   - where the keep stands, its objective is held from the top in ≥ 1
-//     battle of 6 (at a round's end the centre objective is held: with
-//     height a model counts only within 1.2" of the objective's floor, the
-//     keep's top, core/queries.js controlOf).
+//     battle of 6 (at a round's end the centre objective is held, with
+//     height a model counting only within 1.2" of the objective's floor,
+//     core/queries.js controlOf, and (the review) a model of the holding
+//     seat within its range stands on the keep's top: held from below by a
+//     rule that ignored the height, it would not count).
 // Beside the thresholds it reports what else the battles did with height
 // (the units deployed onto the works, ladders climbed, moves onto a deck,
 // fights on one), read off the match as it is folded (sim/height-probe.mjs:
@@ -65,18 +71,18 @@ for (const b of battles) {
     continue
   }
   rows.push({ id: b.id, ...p, rounds: res.over?.round })
-  console.log(`  ${b.id.padEnd(28)} deck at the end of rounds ${p.deckRounds.join(',') || '-'}${p.deckBy3 ? ' (by 3)' : ''}; deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
+  console.log(`  ${b.id.padEnd(28)} on a deck by a move at the end of rounds ${p.movedRounds.join(',') || '-'}${p.movedBy3 ? ' (by 3)' : ''} (any unit: ${p.deckRounds.join(',') || '-'}); deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
 }
 for (const f of failed) console.log(`  FAILED ${f}`)
 
 const n = rows.length
-const deck = rows.filter((r) => r.deckBy3).length
+const deck = rows.filter((r) => r.movedBy3).length, anyDeck = rows.filter((r) => r.deckBy3).length
 const keeps = rows.filter((r) => r.keep), held = keeps.filter((r) => r.keepHeld > 0).length
 const sum = (k) => rows.reduce((s, r) => s + r[k], 0)
 const pct = (x, y) => (y ? `${Math.round((100 * x) / y)}%` : '-')
 console.log(`\n  ${n} battles: units deployed onto decks ${sum('deployed')}, ladders climbed ${sum('climbs')} (${sum('up')} up) in ${rows.filter((r) => r.climbs).length} battles, moves onto a deck ${sum('ontoDeck')} in ${rows.filter((r) => r.ontoDeck).length}, fights on a deck in ${rows.filter((r) => r.deckFights).length}`)
 const checks = [
-  { name: 'a unit on a deck by the end of round 3', ok: n > 0 && deck * 2 >= n, got: `${deck} of ${n} battles (${pct(deck, n)})`, want: '≥ 50%' },
+  { name: 'a unit on a deck by a move of its own by the end of round 3', ok: n > 0 && deck * 2 >= n, got: `${deck} of ${n} battles (${pct(deck, n)}; counting the units deployed on decks, ${anyDeck})`, want: '≥ 50%' },
   { name: 'the keep\'s objective held from its top', ok: keeps.length > 0 && held * 6 >= keeps.length, got: keeps.length ? `${held} of the ${keeps.length} battles the keep stands in (${pct(held, keeps.length)})` : 'no battle has the keep, so this cannot be judged', want: '≥ 1 battle of 6' },
 ]
 for (const c of checks) console.log(`  ${c.ok ? 'ok  ' : 'FAIL'} ${c.name}: ${c.got}, against ${c.want}`)

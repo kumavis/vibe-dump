@@ -146,7 +146,7 @@ for (const c of chosen) {
   const over = c.res.trace.filter((l) => /^log -1 Overtime: round/.test(l)).length
   // ((F7a) what it did with the height: sim/height-probe.mjs's counts)
   const h = c.res.height
-  const high = h?.height && [h.works === 2 && 'works', h.keep && `keep held at ${h.keepHeld} round end${h.keepHeld === 1 ? '' : 's'}`, h.deployed && `deployed on decks ${h.deployed}`, h.deckRounds.length && `on a deck at the end of rounds ${h.deckRounds.join(' ')}`, h.climbs && `ladders ${h.climbs} (${h.up} up)`, h.ontoDeck && `onto a deck ${h.ontoDeck}`, h.deckFights && `deck fights ${h.deckFights}`].filter(Boolean).join(', ')
+  const high = h?.height && [h.works === 2 && 'works', h.keep && `keep held at ${h.keepHeld} round end${h.keepHeld === 1 ? '' : 's'}`, h.deployed && `deployed on decks ${h.deployed}`, h.deckRounds.length && `on a deck at the end of rounds ${h.deckRounds.join(' ')}`, h.movedRounds?.length && `by a move at the end of rounds ${h.movedRounds.join(' ')}`, h.climbs && `ladders ${h.climbs} (${h.up} up)`, h.ontoDeck && `onto a deck ${h.ontoDeck}`, h.deckFights && `deck fights ${h.deckFights}`].filter(Boolean).join(', ')
   const why = [votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 && `wipe ${c.res.over.wiped}`, high, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
   if (!a.dry) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries: c.res.entries }, a.set ?? 'human')

@@ -89,10 +89,13 @@ export class UnitViews {
   // `mirror()`: the mirror the table shows (the player's); `colorOf(seat)`
   // a seat's colour, `rimOf(seat)` (F6) how broad its bases' rims are (a
   // mirror match's east army: broader); `labels` the element the floating
-  // labels go in; `W` the board's width (a fleeing figure runs off it)
-  constructor({ scene, labels, fx, mirror, colorOf, rimOf = () => 1, W }) {
+  // labels go in; `W` the board's width (a fleeing figure runs off it);
+  // (F7a's review) `floorAt(x, z)` the height of the table's walkable top
+  // there (view/terrain.js), which a walk's figures stand on as they go
+  constructor({ scene, labels, fx, mirror, colorOf, rimOf = () => 1, W, floorAt = () => 0 }) {
     this.scene = scene
     this.W = W
+    this.floorAt = floorAt
     this.labels = labels
     this.effects = fx
     this.mirror = mirror
@@ -577,7 +580,13 @@ export class UnitViews {
   // the walk spends its length and its height on it, and the figures go up
   // or down it in file (climbOf), their file's length added, so the last of
   // them is off the ladder before the walk goes on. A path with no climb is
-  // walked exactly as before.
+  // walked exactly as before. (F7a's review) Off the ladders a walker's
+  // figures stand on the table's own top under them (floorAt), not on the
+  // line between the vertices' heights: string-pulling lets one segment run
+  // off a deck and down its stair, where that line sank them into the deck
+  // or floated them over the ground (up to 0.95"). A flier's goes from one
+  // height to the other, as it flies over what lies between; a path
+  // without heights (no height layer) as ever.
   async walk(e, M, smash) {
     const v = this.views.get(e.u), gen = this.gen
     const { path: pts, L, speed, fly, smashes } = e
@@ -596,6 +605,8 @@ export class UnitViews {
     }
     // (the length walked: the event's, or with a climb, the segments' own)
     const len = seg.some((q) => q.c) ? acc : L
+    // (a walker's path on a table with height: its points carry their floors)
+    const tops = !fly && pts.length > 0 && 'y' in pts[0]
     let next = 0
     const play = ({ ev }) => {
       smash(ev)
@@ -617,7 +628,8 @@ export class UnitViews {
       } else {
         v.climb = null
         v.facing = Math.atan2(s.b.x - s.a.x, s.b.z - s.a.z)
-        v.at = { x: lerp(s.a.x, s.b.x, f), y: lerp(s.a.y ?? 0, s.b.y ?? 0, f), z: lerp(s.a.z, s.b.z, f) }
+        const x = lerp(s.a.x, s.b.x, f), z = lerp(s.a.z, s.b.z, f)
+        v.at = { x, y: tops ? this.floorAt(x, z) : lerp(s.a.y ?? 0, s.b.y ?? 0, f), z }
       }
       this.disc(e.u)
       if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)

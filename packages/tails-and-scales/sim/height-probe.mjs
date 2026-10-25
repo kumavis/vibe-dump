@@ -15,8 +15,17 @@
 //   deckRounds the rounds (1, 2, …) at whose end ("round N", traced as the
 //              round is scored) some unit standing stood on a deck (its
 //              floor above STEP)
-//   deckBy3    one of rounds 1-3 ended so: F7a's play-report row, "some
-//              unit stands on a deck by the end of round 3"
+//   deckBy3    one of rounds 1-3 ended so (a unit deployed on its works
+//              counts: the row as F7a first judged it)
+//   movedRounds, movedBy3  the same, counting only a unit that got onto its
+//              deck by a move of its own in the battle (seen at the trace
+//              lines: its floor at or below STEP at one, above it at a later
+//              one; the events can't tell, as an AI battle's arrive all at
+//              once, after its last line), not one standing where it was
+//              deployed: (the review) F7a's
+//              play-report row, "some unit stands on a deck by the end of
+//              round 3", judged on these, as the units deployed onto the
+//              works stand on decks whether or not anyone can climb
 //   deployed   units standing on a deck as the battle began (the first
 //              phase traced: the works' decks are in each seat's zone)
 //   climbs     the moves that took a ladder (a unit.move whose path has a
@@ -32,17 +41,23 @@
 //              whose front face is on a zone's edge: its centre 2.25" behind
 //              it, recipes.js works), 2 when the works were placed
 //   keep       the keep stands (a chunk of its recipe), and keepHeld the
-//              rounds at whose end its objective (the centre's) was held:
-//              with height a model counts toward it only within HIGH of
-//              its floor, the keep's top (q.controlOf), so a seat that
-//              holds it holds it from the top
-const STEP = 0.4
+//              rounds at whose end its objective (the centre's) was held
+//              from the top: q.controlOf gives it to a seat (with height a
+//              model counts toward it only within HIGH of its floor), and
+//              (the review) some model of that seat within its range
+//              (OBJECTIVE_RANGE and the model's base, as controlOf counts)
+//              stands on the keep's top, above STEP: a controlOf that let
+//              the ground at the keep's foot hold it would hold it from
+//              below, and is not counted
+const STEP = 0.4, OBJECTIVE_RANGE = 3
 
 export function heightProbe(q) {
-  const r = { height: false, deckRounds: [], deckBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0 }
-  let first = true, battle = false
-  // each unit's floor as the events have it (unit id → y)
-  const ys = new Map()
+  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0 }
+  let first = true, battle = false, rounds = 0
+  // each unit's floor as the events have it (unit id → y); each one's as
+  // the last trace line found it, and the units that have since come up
+  // onto a deck from below
+  const ys = new Map(), was = new Map(), movedUp = new Set()
   const standing = (u) => q.alive(u)
   const raised = (G, u) => q.groundY(G, u) > STEP
   return {
@@ -60,16 +75,34 @@ export function heightProbe(q) {
         battle = true
         r.deployed = G.units.filter((u) => standing(u) && raised(G, u)).length
       }
+      if (battle) {
+        for (const u of G.units) {
+          if (!standing(u)) continue
+          const up = raised(G, u)
+          if (up && was.get(u.id) === false) {
+            movedUp.add(u.id)
+            if (rounds < 3) r.upBy3 = true
+          }
+          was.set(u.id, up)
+        }
+      }
       const round = /^round (\d+) /.exec(line)
       if (round) {
         const n = Number(round[1])
+        rounds = n
         if (G.units.some((u) => standing(u) && raised(G, u))) {
           r.deckRounds.push(n)
           if (n <= 3) r.deckBy3 = true
         }
+        if (G.units.some((u) => standing(u) && raised(G, u) && movedUp.has(u.id))) {
+          r.movedRounds.push(n)
+          if (n <= 3) r.movedBy3 = true
+        }
         if (r.keep) {
           const o = G.objectives.find((x) => x.x === 0 && x.z === 0)
-          if (o && q.controlOf(G, o) >= 0) r.keepHeld++
+          const s = o ? q.controlOf(G, o) : -1
+          const top = (u) => u.models.some((m) => m.alive && Math.hypot(q.mx(u, m) - o.x, q.mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base && q.floorAt(G, q.mx(u, m), q.mz(u, m)) > STEP)
+          if (s >= 0 && G.units.some((u) => u.side === s && standing(u) && top(u))) r.keepHeld++
         }
       }
     },
@@ -89,6 +122,6 @@ export function heightProbe(q) {
         if ((e.path[0].y ?? 0) <= STEP && (e.to?.y ?? 0) > STEP) r.ontoDeck++
       }
     },
-    result: () => ({ ...r, deckRounds: [...r.deckRounds] }),
+    result: () => ({ ...r, deckRounds: [...r.deckRounds], movedRounds: [...r.movedRounds] }),
   }
 }
