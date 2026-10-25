@@ -8,8 +8,8 @@
 //      whose dice all come up differently (a CLI that skipped itself would
 //      pass everything, silently).
 //   3. A build that spins forever without yielding (the fight alternation
-//      guard of 30 removed) is killed at the oracle deadline, and parity
-//      names the battle instead of hanging.
+//      guard removed: 30, and since F8b max(30, 2·units + 2)) is killed at
+//      the oracle deadline, and parity names the battle instead of hanging.
 //   4. A build that never writes a destroyed unit's line to the battle log
 //      fails parity, though every trace line is unchanged.
 //   5. With --browser: a build whose title-screen buttons start nothing fails
@@ -100,7 +100,7 @@ if (dice) {
 // ── 3. A loop that never yields ─────────────────────────────────────────────
 console.log('3. a battle that spins forever is stopped and named')
 const spin = mutant('spin', 'core/actions/fight.js',
-  `  for (let guard = 0; guard < 30; guard++) {
+  `  for (let guard = 0; guard < guards; guard++) {
     const next = G.units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(G, u))
     const other = G.units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(G, u))`,
   `  for (let guard = 0; ; guard++) { // MUTANT: no guard, and the fought flag ignored

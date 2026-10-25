@@ -161,7 +161,8 @@ export class View {
   // frame and zones (Table.resize), the objectives (place), the overlay's
   // texture (resize), the edge a fleeing figure runs off, the camera's
   // reach and far plane (the rig's setBoard), the fog and shadows (the
-  // stage's fit). Only when it differs from the board shown: between two
+  // stage's fit); (F8b) and on a larger board the terrain's tiles and the
+  // figures' far stand-ins. Only when it differs from the board shown: between two
   // classic matches nothing is made or drawn again (the title's frame, its
   // Math.random draws, stay as they were). True when it rebuilt.
   setBoard({ W, H, deploy }, objectives, grid) {
@@ -175,6 +176,12 @@ export class View {
     if (this.units) this.units.W = W
     this.rig.setBoard({ W, H })
     this.stage.fit({ W, H })
+    // (F8b) drawing at scale, on a board larger than classic's: the
+    // terrain in tiles, the far figures' stand-ins (classic's table drawn
+    // exactly as ever: DESIGN §4.2.7)
+    const big = W * H > 40 * 28
+    this.terrain.tiling(big)
+    if (this.units) this.units.lod = big
     return true
   }
 

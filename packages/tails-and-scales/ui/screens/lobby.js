@@ -7,7 +7,10 @@
 // (the picker's buttons) and your Ready; a free seat offers Sit here, with
 // the race it would bring. What's shown is drawn from the lobby each time
 // it changes (render), never kept here; a name is a peer's say-so, so it is
-// only ever written as text.
+// only ever written as text. (F8b) The battle size (the mission: Skirmish,
+// Field, Grand, with their boards and points) is the host's to choose, beside
+// the battlefield; a change un-readies both seats (net/lobby.js's
+// editBattle), and a lobby written before F8b reads as Skirmish.
 import { RacePicker } from './races.js'
 
 const $ = (s) => document.querySelector(s)
@@ -56,9 +59,19 @@ export class LobbyScreen {
   }
 
   // `on`: { claim(i), leave(i), name(text), race(key), ready(bool),
-  // board(n), reroll(), copy(), secondTab(), back(), fit(text, typing) }
+  // board(n), (F8b) mission(key), reroll(), copy(), secondTab(), back(),
+  // fit(text, typing) }
   wire(on) {
     this.on = on
+    // (F8b) the size's select, made once beside the battlefield's box
+    if (!$('#lobbySize')) {
+      const label = el('label', 'sizePick', 'Battle size ')
+      const pick = el('select')
+      pick.id = 'lobbySize'
+      label.append(pick)
+      $('#lobby .seedrow').prepend(label)
+    }
+    $('#lobbySize').onchange = () => on.mission?.($('#lobbySize').value)
     $('#copyLink').onclick = () => on.copy()
     $('#secondTab').onclick = () => on.secondTab()
     $('#lobbyReroll').onclick = () => on.reroll()
@@ -77,12 +90,13 @@ export class LobbyScreen {
     for (const p of this.pickers) p?.picker.close()
     this.nameBox = null
     $('#lobbyLink').value = ''
-    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard']) $(id).disabled = true
+    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbySize']) $(id).disabled = true
   }
 
-  // m: { status, link, board, host (the battle is yours to change), seats:
-  // [{ name, race (a free seat's: the race it would bring), color (its
-  // bases' rims), ready, mine, free, canSit }] }
+  // m: { status, link, board, host (the battle is yours to change), (F8b)
+  // mission and sizes ([{ mission, name, W, H, points }]), seats: [{ name, race
+  // (a free seat's: the race it would bring), color (its bases' rims),
+  // ready, mine, free, canSit }] }
   render(m) {
     this.show()
     $('#lobbyStatus').textContent = m.status
@@ -91,6 +105,20 @@ export class LobbyScreen {
     const board = $('#lobbyBoard')
     if (document.activeElement !== board) board.value = m.board ?? ''
     board.disabled = $('#lobbyReroll').disabled = !m.host
+    // (F8b) the battle size: every size offered, the lobby's chosen (a
+    // name no size has, a peer's, shown as it is)
+    const size = $('#lobbySize'), sizes = m.sizes ?? []
+    const opts = sizes.some((s) => s.mission === m.mission) ? sizes : [...sizes, { mission: m.mission, name: String(m.mission) }]
+    if (size.dataset.shown !== JSON.stringify(opts)) {
+      size.replaceChildren(...opts.map((s) => {
+        const o = el('option', '', s.W ? `${s.name} · ${s.W}×${s.H}, ${s.points.toLocaleString('en')} pts` : s.name)
+        o.value = s.mission
+        return o
+      }))
+      size.dataset.shown = JSON.stringify(opts)
+    }
+    if (document.activeElement !== size) size.value = m.mission
+    size.disabled = !m.host
     m.seats.forEach((s, i) => this.seat(this.root.querySelector(`.seat[data-seat="${i}"]`), s, i))
   }
 

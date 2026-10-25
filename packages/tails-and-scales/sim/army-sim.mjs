@@ -2,16 +2,32 @@
 // army-sim row): AI-against-AI battles between random legal lists, played
 // headless by the pure core (core/index.js's createMatch, every seat `ai`,
 // so the whole battle runs inside the start), and what they say about each
-// unit's `cost`.
+// unit's `cost` (and, F8b, each mission's own prices, below).
 //
-//   node sim/army-sim.mjs --check [--mission classic] [--n 1500] [--fit-n 2400] [--jobs 2] [--seed S]
-//   node sim/army-sim.mjs --fit   [--mission classic] [--n 2400] [--jobs 2] [--seed S]
+//   node sim/army-sim.mjs --check [--mission classic,field,grand] [--n N] [--fit-n N] [--jobs 2] [--seed S]
+//   node sim/army-sim.mjs --fit   [--mission classic,field,grand] [--n N] [--jobs 2] [--seed S]
 //   (either with --dir <packageDir>: another copy of the code, for a
-//   before-and-after; the default is this package's working tree)
+//   before-and-after or a price table tried; the default is this
+//   package's working tree)
 //
-// --n is the score gate's battles per pair and set under --check (--fit-n
-// its fit's), and the fit's under --fit. Exit 0 when every gate holds, 1
-// when one fails (or a battle throws), 2 on a bad command line.
+// (F8b) --mission names one mission or a comma-separated few; without it a
+// run takes every mission, in MISSIONS order: the Skirmish (classic), the
+// Field and the Grand battle, each on every set it offers. --n is the score
+// gate's battles per pair and set under --check (--fit-n its fit's), and
+// the fit's under --fit; each defaults to its size's N in §4.2.8.2's gate
+// table (NS below: the score gate 1,500 / 900 / 625, the fit 2,400 / 900 /
+// 600). Classic's battles keep F11a's seeds; a larger mission's stream
+// names it, so its battles draw seeds of their own. Exit 0 when every gate
+// holds, 1 when one fails (or a battle throws), 2 on a bad command line.
+//
+// (F8b) The prices. A list is priced as the fold prices it, by core/army.js
+// priceOf under the mission's list rules: a unit's `cost`, or the
+// mission's own price where its list sets one (`list.prices`, §4.2.8.2's
+// fallback for a unit whose worth no one table holds at every size). The
+// fit's exchange rate, each unit's cost in the per-unit gate and the
+// proposed table are all that mission's prices. Where the heroes are fitted
+// (Field and Grand: a list holds one to three) the intercept is printed as
+// the race-level edge in points, which the heroes' prices answer.
 //
 // A battle: a board seed and a dice seed, the mission, one of the sets it
 // offers, both seats `ai`, each seat's `army` a count string that
@@ -23,26 +39,33 @@
 // G.turn.result once createMatch returns (core/engine.js gameOver: `win`
 // the seat, -1 a draw).
 //
-// --check is the gate, every row of §4.2.8.2's gate table that Skirmish
-// carries, for every pair of races on every set the mission offers (one
-// pair and one set today; F5a and F7a grow both):
-//   (a) the score gate: N (1,500 at Skirmish, SE 1.3) battles between the
-//       random legal lists a Random seat fields (autoList at the mission's
-//       own limit, so each ends within its cheapest unit of it); it holds
-//       when |score − 50%| ≤ the size's band (4 points at Skirmish). A
+// --check is the gate, every row of §4.2.8.2's gate table, for every
+// pair of races on every set each mission offers (one pair and one set a
+// mission today; F5a and F7a grow both):
+//   (a) the score gate: N (1,500 at Skirmish, SE 1.3; 900 at Field, SE
+//       1.7; 625 at Grand, SE 2.0) battles between the random legal lists
+//       a Random seat fields (autoList at the mission's own limit, so each
+//       ends within its cheapest unit of it); it holds when |score − 50%|
+//       ≤ the size's band (4 points at Skirmish, 5 at Field, 6 at Grand). A
 //       balanced table fails it about 0.3% of the time, so a failing gate
 //       is played again once on fresh seeds (its own stream), and only that
 //       second run counts;
-//   (b) the per-unit gate: the fit below (2,400 battles at Skirmish); each
-//       unit's fitted value lies within max(2 SE, 20%) of its cost. A unit
-//       whose count never varies over the fit's lists (the hero: a Skirmish
-//       list holds exactly one) can't be told from the intercept and is
-//       exempt, as §4.2.8.2 exempts the heroes at Skirmish;
-//   (c) each race's classic list costs at most the mission's limit;
+//   (b) the per-unit gate: the fit below (2,400 battles at Skirmish, 900
+//       at Field, 600 at Grand); each unit's fitted value lies within
+//       max(2 SE, 20%) of its price there. A unit whose count never varies
+//       over the fit's lists (the hero: a Skirmish list holds exactly one)
+//       can't be told from the intercept and is exempt, as §4.2.8.2
+//       exempts the heroes at Skirmish;
+//   (c) each race's classic list costs at most the Skirmish's limit (once a
+//       run, with (d));
 //   (d) each mission's own preset is legal for every race (armyOf, the
-//       fold's own refusal).
+//       fold's own refusal), as a seat naming no army plays it and as one
+//       naming it; and (F8b) every preset of every race is legal for each
+//       mission whose `army` names it, so a race's field and grand presets
+//       are held at Field and Grand, its classic one at Skirmish, whichever
+//       mission the run is for.
 // It prints the score ± SE, each unit's fitted value ± SE against its cost,
-// and each gate's verdict.
+// and each gate's verdict, and ends on every battle gate's verdict again.
 //
 // --fit is the report: the fitted price table, beside today's costs. A
 // quasi-binomial logistic model of the first race's score on an
@@ -94,7 +117,7 @@ const SELF = fileURLToPath(import.meta.url)
 const { values: a } = parseArgs({
   options: {
     check: { type: 'boolean' }, fit: { type: 'boolean' }, worker: { type: 'boolean' },
-    mission: { type: 'string', default: 'classic' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
+    mission: { type: 'string' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
     jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' },
   },
 })
@@ -143,7 +166,7 @@ function play(task) {
   // the first race's seat this battle
   const mine = swap ? 1 : 0
   const y = win === -1 ? 0.5 : win === mine ? 1 : 0
-  return { i: task.i, y, swap, counts: lists.map((l) => l.counts), spent: lists.map((l) => A.listCost(RACES[l.race], l.counts)), why: G.turn.result.why, ms }
+  return { i: task.i, y, swap, counts: lists.map((l) => l.counts), spent: lists.map((l) => A.listCost(RACES[l.race], l.counts, MISSIONS[task.mission].list)), why: G.turn.result.why, ms }
 }
 
 // Play `tasks` over `jobs` processes (in this one with jobs 1), in chunks;
@@ -273,7 +296,9 @@ function fitOf(pair, results, rules) {
   // over the units the fit identifies (a gradient vector g, rate = g · beta)
   const classic = races.map((race) => race.roster.map((key) => race.army.filter((k) => k === key).length))
   const grad = cols.map((c) => (c.key ? classic[c.side][c.k] : 0))
-  const cost = cols.reduce((s, c) => s + (c.key ? classic[c.side][c.k] * races[c.side].units[c.key].cost : 0), 0)
+  // ((F8b) every price the mission's: priceOf, its list's own where it sets one)
+  const price = (side, key) => A.priceOf(races[side], key, rules)
+  const cost = cols.reduce((s, c) => s + (c.key ? classic[c.side][c.k] * price(c.side, c.key) : 0), 0)
   const worth = grad.reduce((s, gj, j) => s + gj * beta[j], 0)
   const rate = worth / cost
   // 2. each unit's value, coefficient / rate, its SE by the delta method:
@@ -283,20 +308,25 @@ function fitOf(pair, results, rules) {
   races.forEach((race, side) => race.roster.forEach((key, k) => {
     const j = cols.findIndex((c) => c.side === side && c.k === k)
     const t = race.units[key]
-    if (j < 0) return units.push({ side, k, key, race, cost: t.cost, value: null, se: null, role: t.role, fitted: false })
+    if (j < 0) return units.push({ side, k, key, race, cost: price(side, key), value: null, se: null, role: t.role, fitted: false })
     const v = beta[j] / rate
     const d = cols.map((_, m) => ((m === j ? 1 : 0) - (v * grad[m]) / cost) / rate)
-    units.push({ side, k, key, race, cost: t.cost, value: v, se: vecSE(d), role: t.role, fitted: true })
+    units.push({ side, k, key, race, cost: price(side, key), value: v, se: vecSE(d), role: t.role, fitted: true })
   }))
   // 3. the units the fit can't separate (each side's hero at Skirmish):
   // the intercept is their difference, in points over the rate, split about
   // today's mean of their prices
+  // ((F8b) the intercept in points is reported whether or not the heroes
+  // are fitted: at Field and Grand, where they are, it is the race-level
+  // edge no unit's count explains, which the heroes' prices answer, as
+  // §4.2.8.2 step 3 has them do)
   const fixed = units.filter((u) => u.value === null)
   let handicap = null
+  const diff = beta[0] / rate
+  const dEdge = cols.map((_, m) => ((m === 0 ? 1 : 0) - (diff * grad[m]) / cost) / rate)
+  const edge = { diff, se: vecSE(dEdge) }
   if (fixed.length === 2 && fixed[0].side !== fixed[1].side) {
-    const diff = beta[0] / rate
-    const d = cols.map((_, m) => ((m === 0 ? 1 : 0) - (diff * grad[m]) / cost) / rate)
-    handicap = { diff, se: vecSE(d) }
+    handicap = edge
     const mean = (fixed[0].cost + fixed[1].cost) / 2
     fixed[0].value = mean + diff / 2
     fixed[1].value = mean - diff / 2
@@ -314,7 +344,7 @@ function fitOf(pair, results, rules) {
       over.proposed -= 5
     }
   }
-  return { cols: cols.map((c) => c.name), beta, phi, iters, rate, units, handicap, classic: [0, 1].map((side) => ({ today: A.listCost(races[side], classic[side]), proposed: classicAt(side) })) }
+  return { cols: cols.map((c) => c.name), beta, phi, iters, rate, units, handicap, edge, classic: [0, 1].map((side) => ({ today: A.listCost(races[side], classic[side], rules), proposed: classicAt(side) })) }
 }
 
 // ── Reports ─────────────────────────────────────────────────────────────────
@@ -336,6 +366,7 @@ const pairs = () => {
 function printFit(pair, fit, { gate = false } = {}) {
   console.log(`\n  the fit (${pair.map((r) => RACES[r].short).join(' vs ')}): IRLS in ${fit.iters} steps, dispersion ${fit.phi.toFixed(3)}, exchange rate ${(1000 * fit.rate).toFixed(3)} logits per 1,000 points`)
   if (fit.handicap) console.log(`  the heroes' difference (the intercept): ${fit.handicap.diff.toFixed(1)} ± ${fit.handicap.se.toFixed(1)} points to the ${RACES[pair[0]].short}`)
+  else console.log(`  the race-level edge (the intercept; the heroes fitted): ${fit.edge.diff.toFixed(1)} ± ${fit.edge.se.toFixed(1)} points to the ${RACES[pair[0]].short}`)
   console.log(`  ${'unit'.padEnd(34)} ${'role'.padEnd(10)}   cost  fitted ±  SE   proposed${gate ? '   gate' : ''}`)
   let failed = 0
   for (const u of fit.units) {
@@ -358,92 +389,137 @@ function failErrors(r) {
   return true
 }
 
+// The battles per gate, by size (§4.2.8.2's gate table): the score gate's N
+// per pair and set (each band at least 3 SE, SE = 50/√N), and the per-unit
+// fit's. A size the table doesn't name gets Skirmish's.
+const NS = { Skirmish: { n: 1500, fit: 2400 }, Field: { n: 900, fit: 900 }, Grand: { n: 625, fit: 600 } }
+
+// A battle's stream names its mission (F8b): classic's streams keep F11a's
+// names, so a Skirmish run plays the very battles it played, and a larger
+// mission's draw seeds of their own rather than classic's again.
+const streamOf = (mission, stream) => (mission === 'classic' ? stream : `${mission}:${stream}`)
+
 async function main() {
-  const name = a.mission
-  const mission = MISSIONS[name]
-  if (!mission) {
-    console.error(`army-sim: no mission ${JSON.stringify(name)} (there are ${Object.keys(MISSIONS).join(', ')})`)
+  // (F8b) every mission by default, in MISSIONS order; --mission names one
+  // or a comma-separated few
+  const names = a.mission === undefined ? Object.keys(MISSIONS) : a.mission.split(',').map((s) => s.trim())
+  const unknown = names.filter((m) => !MISSIONS[m])
+  if (!names.length || unknown.length) {
+    console.error(`army-sim: no mission ${unknown.map((m) => JSON.stringify(m)).join(', ') || '""'} (there are ${Object.keys(MISSIONS).join(', ')})`)
     process.exit(2)
   }
   if (!a.check && !a.fit) {
     console.error('army-sim: --check (the gates) or --fit (the fitted price table)')
     process.exit(2)
   }
-  const rules = mission.list
   const T0 = performance.now()
-  const fitN = Number(a.fit ? a.n : a['fit-n']) || 2400
-  const tasksOf = (stream, n, pair, budget, set) => Array.from({ length: n }, (_, i) => ({ stream, i, mission: name, set: set ?? mission.sets[Math.floor(i / 2) % mission.sets.length], pair, budget }))
-  console.log(`army-sim: the ${name} mission (a ${size(rules)}, ${rules.points} points), seed ${a.seed}, ${a.jobs} job(s), on ${a.dir ? DIR : 'the working tree'}`)
-
-  if (a.fit) {
-    for (const pair of pairs()) {
-      const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `fit ${pair.join('-')}`)
-      if (failErrors(r)) process.exit(1)
-      console.log(`\n${pair.map((r) => RACES[r].short).join(' vs ')}, budgets 80-120% of the limit (played at most at it): ${pct(scoreOf(r.results))}; ${runtime(r)}`)
-      printFit(pair, fitOf(pair, r.results, rules))
-    }
-    console.log(`\narmy-sim --fit: ${((performance.now() - T0) / 1000).toFixed(0)} s`)
-    return
-  }
+  console.log(`army-sim: ${a.check ? '--check' : '--fit'} on the ${names.join(', ')} mission${names.length === 1 ? '' : 's'}, seed ${a.seed}, ${a.jobs} job(s), on ${a.dir ? DIR : 'the working tree'}`)
 
   let failed = 0
   const gate = (ok, what) => {
     if (!ok) failed++
     console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}`)
   }
-  // (c) and (d): the price table and the presets, before any battle
-  console.log('\nthe lists')
-  for (const race of Object.values(RACES)) {
-    const counts = race.roster.map((key) => race.army.filter((k) => k === key).length)
-    const c = A.listCost(race, counts)
-    gate(c <= rules.points, `${race.name}: the classic list (${A.listText(counts)}) costs ${c}, the limit ${rules.points}`)
-  }
-  for (const [m, M] of Object.entries(MISSIONS)) {
-    for (const race of Object.keys(RACES)) {
-      let why = null
-      try {
-        A.armyOf({ mission: m, seats: [{ race, ctrl: 'ai' }] }, 0)
-      } catch (e) {
-        why = e.message
+  const verdicts = []
+
+  // (c) and (d), once a run: the price table and the presets, before any
+  // battle (they read every mission, whichever the run plays)
+  if (a.check) {
+    console.log('\nthe lists')
+    for (const race of Object.values(RACES)) {
+      const counts = race.roster.map((key) => race.army.filter((k) => k === key).length)
+      const c = A.listCost(race, counts)
+      gate(c <= MISSIONS.classic.list.points, `${race.name}: the classic list (${A.listText(counts)}) costs ${c}, the Skirmish limit ${MISSIONS.classic.list.points}`)
+    }
+    for (const [m, M] of Object.entries(MISSIONS)) {
+      for (const race of Object.keys(RACES)) {
+        // (a seat naming none, then one naming the preset)
+        for (const army of [undefined, M.army]) {
+          let why = null, cost = null
+          try {
+            cost = A.listCost(RACES[race], A.armyOf({ mission: m, seats: [{ race, ctrl: 'ai', ...(army ? { army } : {}) }] }, 0).counts, M.list)
+          } catch (e) {
+            why = e.message
+          }
+          gate(!why, `the ${m} mission's preset, ${JSON.stringify(M.army)}, is legal for the ${RACES[race].name}${army ? ' named' : ' (a seat naming none)'}${why ? `: ${why}` : `: ${cost} of ${M.list.points} points`}`)
+        }
       }
-      gate(!why, `the ${m} mission's preset, ${JSON.stringify(M.army)}, is legal for the ${RACES[race].name}${why ? `: ${why}` : ''}`)
+    }
+    // (F8b) every preset of every race, at the missions whose army names it
+    for (const r of Object.values(RACES)) {
+      for (const name of Object.keys(r.armies)) {
+        const at = Object.entries(MISSIONS).filter(([, M]) => M.army === name).map(([m]) => m)
+        gate(at.length > 0, `the ${r.name}' preset ${name} is some mission's army${at.length ? ` (${at.join(', ')})` : ': no mission plays it'}`)
+        for (const m of at) {
+          const why = A.checkList(r, MISSIONS[m].list, [...r.armies[name]].map(Number))
+          gate(why === null, `the ${r.name}' preset ${name} ('${r.armies[name]}') passes the ${m} mission's list rules${why ? `: ${why}` : ''}`)
+        }
+      }
     }
   }
 
-  // (a) the score gates, per pair and set; a failure played again once
-  const band = BAND[size(rules)] ?? BAND.Skirmish
-  const N = Number(a.n) || 1500
-  for (const pair of pairs()) {
-    for (const set of mission.sets) {
-      const what = `${pair.map((r) => RACES[r].short).join(' vs ')} on ${set}`
-      console.log(`\nthe score gate: ${what}, random legal lists at the limit, |score − 50%| ≤ ${band}`)
-      let r = await playAll(tasksOf(`score:${pair}:${set}`, N, pair, 'limit', set), `score ${what}`)
-      if (failErrors(r)) process.exit(1)
-      let s = scoreOf(r.results)
-      console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
-      if (Math.abs(s.score - 50) > band) {
-        console.log(`  outside the band: played again once on fresh seeds, and that run counts`)
-        r = await playAll(tasksOf(`score-again:${pair}:${set}`, N, pair, 'limit', set), `score again ${what}`)
+  for (const name of names) {
+    const mission = MISSIONS[name], rules = mission.list
+    const ns = NS[size(rules)] ?? NS.Skirmish
+    const N = Number(a.n) || ns.n
+    const fitN = Number(a.fit ? a.n : a['fit-n']) || ns.fit
+    const tasksOf = (stream, n, pair, budget, set) => Array.from({ length: n }, (_, i) => ({ stream: streamOf(name, stream), i, mission: name, set: set ?? mission.sets[Math.floor(i / 2) % mission.sets.length], pair, budget }))
+    console.log(`\n━━ the ${name} mission: a ${size(rules)}, ${mission.board.W}×${mission.board.H}, ${rules.points} points, on ${mission.sets.join(', ')} ━━`)
+
+    if (a.fit) {
+      for (const pair of pairs()) {
+        const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `${name} fit ${pair.join('-')}`)
         if (failErrors(r)) process.exit(1)
-        s = scoreOf(r.results)
-        console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
+        console.log(`\n${pair.map((r) => RACES[r].short).join(' vs ')}, budgets 80-120% of the limit (played at most at it): ${pct(scoreOf(r.results))}; ${runtime(r)}`)
+        printFit(pair, fitOf(pair, r.results, rules))
       }
-      gate(Math.abs(s.score - 50) <= band, `the score gate, ${what}: ${s.score.toFixed(1)}% is ${Math.abs(s.score - 50).toFixed(1)} points from even`)
+      continue
     }
-  }
 
-  // (b) the per-unit gate, from the fit
-  for (const pair of pairs()) {
-    const what = pair.map((r) => RACES[r].short).join(' vs ')
-    console.log(`\nthe per-unit gate: ${what}, the fit on budgets 80-120% of the limit (played at most at it); each unit within max(2 SE, 20%) of its cost`)
-    const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `fit ${what}`)
-    if (failErrors(r)) process.exit(1)
-    console.log(`  ${RACES[pair[0]].short} score over the fit's battles ${pct(scoreOf(r.results))}; ${runtime(r)}`)
-    const bad = printFit(pair, fitOf(pair, r.results, rules), { gate: true })
-    gate(!bad, `the per-unit gate, ${what}: ${bad ? `${bad} unit(s) priced outside their band` : 'every unit within its band'}`)
+    // (a) the score gates, per pair and set; a failure played again once
+    const band = BAND[size(rules)] ?? BAND.Skirmish
+    for (const pair of pairs()) {
+      for (const set of mission.sets) {
+        const what = `${pair.map((r) => RACES[r].short).join(' vs ')} on ${set}`
+        console.log(`\nthe score gate (${name}): ${what}, random legal lists at the limit, |score − 50%| ≤ ${band}`)
+        let r = await playAll(tasksOf(`score:${pair}:${set}`, N, pair, 'limit', set), `${name} score ${what}`)
+        if (failErrors(r)) process.exit(1)
+        let s = scoreOf(r.results)
+        console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
+        if (Math.abs(s.score - 50) > band) {
+          console.log(`  outside the band: played again once on fresh seeds, and that run counts`)
+          r = await playAll(tasksOf(`score-again:${pair}:${set}`, N, pair, 'limit', set), `${name} score again ${what}`)
+          if (failErrors(r)) process.exit(1)
+          s = scoreOf(r.results)
+          console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
+        }
+        const ok = Math.abs(s.score - 50) <= band
+        gate(ok, `the score gate, ${name}, ${what}: ${s.score.toFixed(1)}% is ${Math.abs(s.score - 50).toFixed(1)} points from even`)
+        verdicts.push(`${ok ? 'ok  ' : 'FAIL'} ${name} score ${what}: ${s.score.toFixed(1)}% ± ${s.se.toFixed(1)} (N = ${s.n}, band ${band})`)
+      }
+    }
+
+    // (b) the per-unit gate, from the fit
+    for (const pair of pairs()) {
+      const what = pair.map((r) => RACES[r].short).join(' vs ')
+      console.log(`\nthe per-unit gate (${name}): ${what}, the fit on budgets 80-120% of the limit (played at most at it); each unit within max(2 SE, 20%) of its cost`)
+      const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `${name} fit ${what}`)
+      if (failErrors(r)) process.exit(1)
+      console.log(`  ${RACES[pair[0]].short} score over the fit's battles ${pct(scoreOf(r.results))}; ${runtime(r)}`)
+      const bad = printFit(pair, fitOf(pair, r.results, rules), { gate: true })
+      gate(!bad, `the per-unit gate, ${name}, ${what}: ${bad ? `${bad} unit(s) priced outside their band` : 'every unit within its band'}`)
+      verdicts.push(`${bad ? 'FAIL' : 'ok  '} ${name} per-unit ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit within its band'} (fit N = ${fitN})`)
+    }
   }
 
   const secs = (performance.now() - T0) / 1000
+  if (a.fit) {
+    console.log(`\narmy-sim --fit: ${secs.toFixed(0)} s`)
+    return
+  }
+  // (every battle gate again, together, so a run over three sizes ends on
+  // what it found)
+  console.log(`\nthe battle gates\n${verdicts.map((v) => `  ${v}`).join('\n')}`)
   console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds (${secs.toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }

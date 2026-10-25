@@ -39,9 +39,25 @@
 // per-unit trays left out, and the flags' owners each walk changes shown
 // once it has arrived (the view's holdOwners). What breaks a batch plays
 // as ever.
+//
+// (F8b) Attack batches (present/pace.js's attacksAt): a run of one seat's
+// shots or blows plays in one tray, each attack one row, the attacks
+// PACE.brisk apart (or once a blast's throw or a spell has played), each
+// volley waited on PACE.lead before its wounds, every event folded in
+// order as its attack plays. A phase with nothing in it (briefAt) shows its
+// banner PACE.brief (the handler's third argument, { brief: true }). As a
+// batch of either kind opens, the handlers' `frame` is told where its
+// members stand and where they go (the camera's batch framing,
+// view/camera.js's frame) and, if the camera framed them, the batch's
+// focus events are left out. With ⇉ off none of this: one event at a time,
+// as before V1.
 import { applyEvent, project } from '../present/mirror.js'
-import { PACE, batchAt, playTime } from '../present/pace.js'
+import { PACE, batchAt, attacksAt, briefAt, playTime } from '../present/pace.js'
 import { wait } from './clock.js'
+
+// (F8b) the events that make a batch of attacks, and so wait a tick on an
+// idle table, as a walk does: a group Fire's members join one batch
+const STARTS_BATCH = new Set(['unit.move', 'volley', 'melee', 'blast.fire', 'spell.cast'])
 
 export class EventPlayer {
   // `view.rebuild(G, M)`: the table made to show G as it stands (M its
@@ -68,6 +84,10 @@ export class EventPlayer {
     // batches have played
     this.batched = true
     this.batches = 0
+    // ((F8b) of them, how many were attacks, and how many banners played
+    // brief)
+    this.attackBatches = 0
+    this.briefs = 0
     this.sideOf = sideOf
     // (the batch holding the flags' owners, if any)
     this.hold = null
@@ -90,7 +110,7 @@ export class EventPlayer {
     if (this.running) return
     // (V1) a walk reaching an idle table waits a tick, so the commands sent
     // with it (a group order's members, one after another) join its batch
-    if (this.batched && events.some((e) => e.t === 'unit.move')) {
+    if (this.batched && events.some((e) => STARTS_BATCH.has(e.t))) {
       this.running = true
       const table = this.table
       setTimeout(() => table === this.table && this.run(), 0)
@@ -130,10 +150,22 @@ export class EventPlayer {
           )
           return
         }
+        // (F8b) a batch of attacks from here
+        const a = this.batched ? attacksAt(this.q, 0, (u) => this.sideOf(u)) : null
+        if (a) {
+          this.attacks(this.q.splice(0, a.to), a, table).then(
+            () => table === this.table && this.run(),
+            (err) => table === this.table && this.fail(err),
+          )
+          return
+        }
+        // ((F8b) a phase with nothing in it: its banner brief)
+        const brief = this.batched && briefAt(this.q, 0)
+        if (brief) this.briefs++
         const e = this.q.shift()
         this.mirror = applyEvent(this.mirror, e)
         this.observer?.event?.(e, this.mirror)
-        const r = (this.handlers[e.t] ?? this.handlers.fallback)(e, this.mirror)
+        const r = (this.handlers[e.t] ?? this.handlers.fallback)(e, this.mirror, brief ? { brief: true } : undefined)
         if (r && typeof r.then === 'function') {
           r.then(() => table === this.table && this.run(), (err) => table === this.table && this.fail(err))
           return
@@ -178,7 +210,9 @@ export class EventPlayer {
       await h.dice?.({ t: 'dice', label: 'D6 each', dice: b.dice, need: 0 }, this.mirror)
       if (table !== this.table) return
     }
-    let focused = false
+    // ((F8b) the camera framing the batch's walkers, from where they stand
+    // to where they go, or its first focus followed)
+    let focused = this.frame(events)
     for (const e of events) {
       // (each walk at its start: PACE.stagger after the last, later if a
       // wreck before it is still breaking scenery)
@@ -202,6 +236,69 @@ export class EventPlayer {
       }
     }
     await Promise.all(walks)
+  }
+
+  // (F8b) A batch of attacks (`events`, attacksAt's `b` over them): one
+  // tray, each attack's events in order as it plays (its first dice its
+  // row, labelled with who attacks whom, not waited on; its other dice,
+  // trays and pauses folded and left out; a volley waited on PACE.lead,
+  // anything else that takes time, a blast's scatter and throw, a spell,
+  // waited on to its end), the next attack PACE.brisk after this one began
+  // at the soonest; the last row and every flight at the end. One focus, as
+  // a walk batch has, unless the camera framed it. A snap in between ends
+  // it.
+  async attacks(events, b, table) {
+    const h = this.handlers, tails = []
+    this.batches++
+    this.attackBatches++
+    let focused = this.frame(events)
+    h['tray.open']?.({ t: 'tray.open', title: `${b.melee ? 'Fighting' : 'Shooting'} · ${b.attacks.length} units` }, this.mirror)
+    for (const [n, a] of b.attacks.entries()) {
+      const brisk = n + 1 < b.attacks.length ? wait(PACE.brisk) : null
+      for (let j = a.from; j < a.to; j++) {
+        const e = events[j]
+        this.mirror = applyEvent(this.mirror, e)
+        this.observer?.event?.(e, this.mirror)
+        if (e.t === 'pause' || e.t === 'tray.open') continue
+        if (e.t === 'dice') {
+          if (e === a.row) tails.push(h.dice?.({ ...e, label: a.title || e.label }, this.mirror))
+          continue
+        }
+        if (e.t === 'focus') {
+          if (focused) continue
+          focused = true
+        }
+        const r = (h[e.t] ?? h.fallback)(e, this.mirror)
+        if (!r || typeof r.then !== 'function') continue
+        if (e.t === 'volley') {
+          tails.push(r)
+          await Promise.race([r, wait(PACE.lead)])
+        } else await r
+        if (table !== this.table) return
+      }
+      if (brisk) {
+        await brisk
+        if (table !== this.table) return
+      }
+    }
+    await Promise.all(tails)
+  }
+
+  // (F8b) The camera told where a batch's members stand (as shown, before
+  // any of it is folded) and where they go: a walk's end, an attack's
+  // target or a template's landing. True if it framed them (its handler's
+  // say: the follow policy, and whether they are all on screen already).
+  frame(events) {
+    const f = this.handlers.frame
+    if (!f) return false
+    const units = this.mirror?.units ?? {}, points = []
+    const at = (id) => units[id]?.pos
+    for (const e of events) {
+      if (e.u !== undefined && at(e.u)) points.push(at(e.u))
+      if (e.tg !== undefined && at(e.tg)) points.push(at(e.tg))
+      if (e.to && Number.isFinite(e.to.x)) points.push(e.to)
+    }
+    return points.length > 0 && f({ t: 'frame', points: points.map((p) => ({ x: p.x, z: p.z })) }, this.mirror) === true
   }
 
   // An event this table has no visuals for yet: its text over the unit (or

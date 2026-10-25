@@ -31,6 +31,14 @@
 //   shooting    the bar says Fire; a group fires at an enemy only some of
 //               it can reach, and the rest stay picked once the table has
 //               caught up
+//   (F8b) Grand a hotseat battle on the grand mission, the seat whose
+//               movement phase opens picking up its whole army (21 units):
+//               the pointer resting on the ground ahead plans its ghosts a
+//               few members a frame (input/standing.js's GhostPlanner: over
+//               more than one frame; at a second place, the page's code and
+//               fields warm, no frame's planning over 15 ms, DESIGN §4.2.1's
+//               preview at rest), the tooltip then the whole plan's
+//               summary, and nothing sent
 // and no page error throughout.
 //
 //   node sim/input-check.mjs [--dist <dir>] [--shots <dir>]
@@ -781,6 +789,48 @@ async function check(page, say) {
   const after0 = await ev(() => window.__ts.orders.lines())
   if (!drawn || after0) fail(`O drew ${drawn} order lines, then ${after0} once off again`)
   say(`O drew ${drawn} order line${drawn === 1 ? '' : 's'}, none once off again`)
+
+  // (F8b) Ghosts a few a frame on a Grand board
+  {
+    await ev(() => window.__ts.view.mission('grand'))
+    await ev(() => window.__ts.start('hotseat'))
+    await page.waitForFunction(() => window.__ts.session?.G?.board?.W === 80 && window.__ts.player.idle, null, { timeout: IDLE_MS })
+    for (let k = 0; k < 6; k++) {
+      const P = await ev(() => window.__ts.session.G.pending)
+      if (P?.phase === 'move') break
+      if ((await seatNow()) >= 0) await ev(() => window.__ts.endPhase())
+      await page.waitForFunction(() => window.__ts.player.idle, null, { timeout: IDLE_MS })
+    }
+    const gs = await seatNow()
+    if ((await ev(() => window.__ts.session.G.pending?.phase)) !== 'move' || gs < 0) fail('the Grand battle never reached a movement phase played here')
+    await rest()
+    const army = await ev((t) => window.__ts.G.units.filter((u) => u.side === t && u.alive > 0).map((u) => ({ id: u.id, x: u.pos.x, z: u.pos.z })), gs)
+    await ev((xs) => window.__ts.group.select(xs), army.map((u) => u.id))
+    const g0 = await ev(() => window.__ts.group.ghosts())
+    // the ground ahead of the army's middle, on screen
+    const ahead = { x: army.reduce((n, u) => n + u.x, 0) / army.length + (gs === 0 ? 6 : -6), z: army.reduce((n, u) => n + u.z, 0) / army.length }
+    const [gx, gy] = await ev(({ x, z }) => window.__ts.screen(x, 0, z), ahead)
+    n0 = await count()
+    await page.mouse.move(gx - 3, gy - 3)
+    await page.mouse.move(gx, gy)
+    await page.waitForFunction(() => !window.__ts.group.ghosts().busy && /^Move \d+/.test(window.__ts.group.ghosts().note), null, { timeout: IDLE_MS }).catch(() => {})
+    const g1 = await ev(() => window.__ts.group.ghosts())
+    const tip = await ev(() => (document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : ''))
+    if (army.length <= 10) fail(`the Grand army picked up holds ${army.length} units`)
+    if (!/^Move \d+/.test(g1.note) || g1.busy) fail(`the Grand group's ghosts never finished planning: ${JSON.stringify(g1)}`)
+    if (g1.spread <= g0.spread) fail(`the Grand group's ghosts planned in one frame (${JSON.stringify(g1)}): not a few a frame`)
+    if (tip !== g1.note) fail(`the tooltip reads "${tip}", the plan's summary "${g1.note}"`)
+    // a second place, 4" on: the steady state (the first plan pays for the
+    // page's first whole-board fields, its code not yet compiled hot)
+    const [hx, hy] = await ev(({ x, z }) => window.__ts.screen(x, 0, z), { x: ahead.x, z: ahead.z + 4 })
+    await page.mouse.move(hx, hy)
+    await page.waitForFunction((n) => !window.__ts.group.ghosts().busy && window.__ts.group.ghosts().spread > n, g1.spread, { timeout: IDLE_MS }).catch(() => {})
+    const g2 = await ev(() => window.__ts.group.ghosts())
+    if (g2.spread <= g1.spread || !/^Move \d+/.test(g2.note)) fail(`the second place's ghosts never finished planning over frames: ${JSON.stringify(g2)}`)
+    if (g2.lastMs > 15) fail(`a frame's planning took ${g2.lastMs.toFixed(1)} ms at the second place, over the preview's 15 ms at rest (the first plan's longest ${g1.lastMs.toFixed(1)} ms)`)
+    if ((await count()) !== n0) fail('hovering the Grand group sent something')
+    say(`Grand: ${army.length} units picked up, their ghosts planned over ${g1.frames - g0.frames} frames, then ${g2.frames - g1.frames} at a second place (its longest frame's planning ${g2.lastMs.toFixed(1)} ms; the page's first plan's ${g1.lastMs.toFixed(1)} ms), the tooltip "${tip}", nothing sent`)
+  }
 }
 
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))

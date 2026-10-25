@@ -13,6 +13,10 @@ export default {
   // the roster is append-only (a new unit goes at the end; data-check pins
   // its start). `army` above, the classic list, is in roster order.
   roster: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine'],
+  // (F8b) the presets of the larger battles, as counts in roster order: the
+  // classic list twice over for a Field battle, three times for a Grand one
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
+  armies: { field: '224222', grand: '336333' },
   units: {
     scaleguard: {
       name: 'Scaleguard', short: 'Scaleguard', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 10, cost: 70,

@@ -105,7 +105,7 @@ export function missingHooks(ts) {
 // and only while a human seat has a decision in front of it. Injected into
 // the browser page by sim/chromium.mjs, so it may only use its arguments.
 export function humanDriver(ts, { entries = null, choose = null }) {
-  const S = ts.S, q = ts.q, nav = ts.nav
+  const S = ts.S, q = ts.q
   // the entries applied; the decision each answered ('chargeEnd at shortest'
   // for a picked spot that is the shortest move's own cell); and the trace
   // length when each was applied, so its lines can be found
@@ -152,6 +152,10 @@ export function humanDriver(ts, { entries = null, choose = null }) {
       case 'place': {
         const u = own(e.u)
         ts.deployClick(u, null)
+        // ((F8b) the match's own grid, read as each unit is placed: the
+        // ?debug hooks' nav before the start is the title's, classic's, so a
+        // Field or Grand log's cell read through it lands elsewhere)
+        const nav = ts.nav
         ts.deployClick(null, { x: nav.x(e.c), z: nav.z(e.c) })
         if (u.pos.x !== nav.x(e.c) || u.pos.z !== nav.z(e.c)) throw bad('not a free spot in the deployment zone')
         break

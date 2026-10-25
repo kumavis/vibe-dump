@@ -60,7 +60,17 @@
 // in use as a whole is reported, not judged (until R7b a flat 2 MB allowed
 // for it, which the code's warming up crept toward).
 //
-//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full]
+// (F8b) Across missions: by default the battles alternate between the
+// grand mission and the classic one (grand first, so whatever only a Grand
+// table makes, made once and kept, its tiles' materials and the mat's
+// detail texture, is made before the first row compared), the title always
+// classic's. Each title after a battle must hold what the first did, each
+// battle's end what the first battle of its mission did, and no program be
+// linked twice between two rows: a classic → Grand → classic round trip
+// makes the table over twice and leaves nothing behind. --classic plays
+// the classic mission alone (as before F8b; the self-test's edits do).
+//
+//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full] [--classic]
 //   node sim/rematch-memory.mjs --self-test   each of SELF_TESTS' edits, made
 //                                             in a copy of the working tree,
 //                                             must fail it: R7a's first
@@ -121,7 +131,7 @@ const SELF_TESTS = {
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, classic: { type: 'boolean' }, 'self-test': { type: 'boolean' } } }))
   if (a.ref && a['self-test']) throw new Error('--self-test edits the working tree: no --ref')
 } catch (e) {
   console.error(`rematch-memory: ${e.message}\nusage: node sim/rematch-memory.mjs [--ref <git ref> | --self-test] [--board 4242] [--dice 99] [--full]`)
@@ -177,7 +187,7 @@ const drawAlways = () => {
 // rematches (`battles` in all), measured at each battle's end and on each
 // title after it (`snap`: the titles' heap snapshotted too). Returns what
 // grew (why it fails, [] when nothing did) and the rows that say so.
-async function play(code, work, { battles, snap, what }) {
+async function play(code, work, { battles, snap, what, missions = ['classic'] }) {
   const dist = await buildApp(code, join(work, 'dist'))
   const { url, close } = await startStaticServer(dist)
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
@@ -249,19 +259,36 @@ async function play(code, work, { battles, snap, what }) {
       rows.push({ what, ...m })
       console.log(`  ${what.padEnd(26)} geometries ${String(m.geometries).padStart(4)}  textures ${String(m.textures).padStart(2)}  programs ${String(m.programs).padStart(2)} (${String(m.links).padStart(2)} linked)  scene ${String(m.scene).padStart(4)}  terrain ${String(m.terrain).padStart(3)}  figures ${String(m.figures).padStart(2)}  labels ${String(m.labels).padStart(3)}  heap ${(m.heap / 1048576).toFixed(2)} MB${m.own === null ? '' : ` (the page's own ${(m.own / 1048576).toFixed(3)} MB)`}`)
     }
-    console.log(`rematch-memory: board ${board}, dice ${dice}, a watched battle and ${battles - 1} rematch${battles === 2 ? '' : 'es'} in one page${a.full ? ' without ?lowfi' : ''}, on ${what} (Chromium ${browser.version()})`)
+    console.log(`rematch-memory: board ${board}, dice ${dice}, a watched battle and ${battles - 1} rematch${battles === 2 ? '' : 'es'} in one page${a.full ? ' without ?lowfi' : ''}, ${missions.length > 1 ? `the missions in turn (${missions.join(', ')}), ` : ''}on ${what} (Chromium ${browser.version()})`)
     row('the title', await measure())
+    const missionOf = (i) => missions[(i - 1) % missions.length]
     for (let i = 1; i <= battles; i++) {
+      // ((F8b) the mission the battle is fought for: ?debug's view.mission,
+      // as ?mission= names one at load)
+      if (missions.length > 1) await page.evaluate((m) => window.__ts.view.mission(m), missionOf(i))
       await page.click('[data-mode="watch"]')
       await page.click('#setupStart')
-      await page.waitForFunction(() => window.__ts.S.stage === 'over' && window.__ts.player.idle, null, { timeout: 600000, polling: 500 })
-      row(`battle ${i}'s end`, await measure())
+      // ((F8b) a Grand battle drawn every frame takes several times a
+      // classic one's frames: up to 45 minutes on a busy machine)
+      await page.waitForFunction(() => window.__ts.S.stage === 'over' && window.__ts.player.idle, null, { timeout: missionOf(i) === 'grand' ? 2700000 : 900000, polling: 500 })
+      if (missions.length > 1) {
+        const W = await page.evaluate(() => window.__ts.view.board().W)
+        if (W !== (missionOf(i) === 'grand' ? 80 : 40)) throw new Error(`battle ${i} (${missionOf(i)}) was fought on a table ${W}" wide`)
+      }
+      row(`battle ${i}'s end${missions.length > 1 ? ` (${missionOf(i)})` : ''}`, await measure())
       await page.click('#again')
       row(`the title after battle ${i}`, await measure({ snap }))
     }
     if (errors.length) throw new Error(errors.join('; '))
-    const titles = rows.filter((r) => r.what.startsWith('the title after')), ends = rows.filter((r) => r.what.endsWith('end'))
+    // ((F8b) across missions, from the end of the first round of them: a
+    // shared shape or material a mission's battle makes the first time it
+    // draws it is made in that mission's first battle, so until each has
+    // been fought once the table may still gain one; the titles after, and
+    // each mission's ends from its second battle, must then stay flat)
+    const settled = (r, i) => missions.length === 1 || i + 1 >= missions.length
+    const titles = rows.filter((r) => r.what.startsWith('the title after')).filter(settled), ends = rows.filter((r) => /^battle \d+'s end/.test(r.what))
     const grew = []
+    if (ends.length !== battles || titles.length < 2) grew.push(`only ${ends.length} battles' ends and ${titles.length} titles read: nothing to compare`)
     // the programs linked since the last row: none twice, and each
     // rematch's as many as the first rematch's
     const linked = await page.evaluate(() => window.__linked)
@@ -273,13 +300,16 @@ async function play(code, work, { battles, snap, what }) {
     // (what each row after the first linked, by material type)
     const named = rows.slice(1).map((r, i) => `${r.what} ${linked.slice(rows[i].linked, r.linked).map((p) => p.name).join(', ') || 'none'}`)
     console.log(`  programs linked since the row before: ${named.join('; ')}`)
-    const rematch = (list) => list.slice(1)
-    for (const [what, list] of [["a rematch's battle", rematch(ends)], ['a title after a battle', titles]]) {
+    // (a rematch: each battle but its mission's first)
+    const rematch = (list) => list.filter((r) => !missions.some((m, j) => r === ends[j]))
+    // ((F8b) each battle's end against the first of its own mission's)
+    const byMission = missions.filter((m, i) => missions.indexOf(m) === i).map((m) => [m, ends.filter((r, i) => missionOf(i + 1) === m && (missions.length === 1 || i + 1 > missions.length || m === missions.at(-1)))])
+    for (const [what, list] of [...byMission.map(([m, list]) => [`a rematch's battle${missions.length > 1 ? ` (${m})` : ''}`, rematch(list)]), ['a title after a battle', titles]]) {
       if (list.some((r) => r.links !== list[0].links)) grew.push(`programs linked by ${what}: ${list.map((r) => r.links).join(' → ')}`)
     }
     for (const k of ['geometries', 'textures', 'programs', 'scene', 'terrain', 'figures', 'labels']) {
       if (titles.some((r) => r[k] !== titles[0][k])) grew.push(`${k} on the title: ${titles.map((r) => r[k]).join(' → ')}`)
-      if (ends.some((r) => r[k] !== ends[0][k])) grew.push(`${k} at a battle's end: ${ends.map((r) => r[k]).join(' → ')}`)
+      for (const [m, list] of byMission) if (list.some((r) => r[k] !== list[0][k])) grew.push(`${k} at a${missions.length > 1 ? ` ${m}` : ''} battle's end: ${list.map((r) => r[k]).join(' → ')}`)
     }
     const heapGrowth = titles.at(-1).heap - titles[0].heap
     // the page's own heap on the title, a rematch at a time: its slope
@@ -324,9 +354,9 @@ try {
     console.log(`\n${verdicts.join('\n')}`)
     console.log(failed ? '\nrematch-memory self-test FAILED: an edit was not caught' : '\nrematch-memory self-test passed: every edit is caught')
   } else {
-    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: a.ref ? `ref ${a.ref}` : 'the working tree' })
+    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: a.ref ? `ref ${a.ref}` : 'the working tree', missions: a.classic || a.ref ? ['classic'] : ['grand', 'classic'] })
     failed = grew.length > 0
-    console.log(failed ? `\nrematch-memory FAILED: ${grew.join('; ')}` : `\nrematch-memory passed: after each of ${BATTLES - 1} rematches the title holds the same ${titles[0].geometries} geometries and ${titles[0].textures} textures, each battle's end the same ${ends[0].geometries} and ${ends[0].textures}, and the page's own heap on the title ${(slope / 1024).toFixed(1)} KB a rematch (at most ${OWN_SLOPE / 1024} KB); ${linked.length} shader programs linked in all, none twice between two rows, each rematch's battle ${ends[1].links} and each title after a battle ${titles[0].links}`)
+    console.log(failed ? `\nrematch-memory FAILED: ${grew.join('; ')}` : `\nrematch-memory passed: after each of ${BATTLES - 1} rematches the title holds the same ${titles[0].geometries} geometries and ${titles[0].textures} textures, each battle's end ${ends.length && ends.every((r) => r.geometries === ends[0].geometries) ? `the same ${ends[0].geometries}` : `as its mission's (${[...new Set(ends.map((r) => r.geometries))].join(' or ')} geometries)`}, and the page's own heap on the title ${(slope / 1024).toFixed(1)} KB a rematch (at most ${OWN_SLOPE / 1024} KB); ${linked.length} shader programs linked in all, none twice between two rows, each rematch's battle ${ends.at(-1).links} and each title after a battle ${titles[0].links}`)
   }
 } finally {
   rmSync(work, { recursive: true, force: true })

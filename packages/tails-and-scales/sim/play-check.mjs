@@ -16,6 +16,11 @@
 //   serpent   the same from seat 1
 //   hotseat   both seats: each seat's deployment adjusted by clicks and
 //             begun in turn, then the seats taking turns
+//   grand     (F8b) vs. the AI from seat 0 on a Grand board, picked on the
+//             battle-setup panel's size line (its note naming the board,
+//             points and rounds): the deployment adjusted by clicks, Begin
+//             battle, moves, shots and End into round 2; the first turn
+//             with more than 10 units gives its one-time tip (the toast)
 // (F4) A lane with a seat played here that reaches the round limit (--rounds
 // 5) is asked to play on: the panel must say which round is over, and Keep
 // playing must take it down and the HUD into round 6, overtime.
@@ -26,10 +31,12 @@
 // rounds or the end; and must play moves and Ends. The title must be up
 // 1200 ms after the page loads.
 //
-//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat] [--rounds R] [--full] [--dist <dir>] [--parallel N]
+//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand] [--rounds R] [--full] [--dist <dir>] [--parallel N]
 //
 // ?lowfi by default (--full: without); board 4242; the dice per lane
-// (bushtail 99, serpent 7, hotseat 1, watch 99); 1280×800. --parallel runs
+// (bushtail 99, serpent 7, hotseat 1, watch 99, grand 5); 1280×800; the
+// grand lane plays round 1 only (--rounds caps it), a Grand AI turn taking
+// minutes at SwiftShader's frame rate. --parallel runs
 // that many lanes at once (default 1: SwiftShader draws at about 2 fps on
 // this machine). Exit 0 when every lane plays, 1 otherwise, 2 on bad
 // arguments. Set CHROMIUM_PATH to the pre-installed Chromium if
@@ -43,8 +50,8 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, pool } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
-const LANES = ['watch', 'bushtail', 'serpent', 'hotseat']
-const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1 }
+const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand']
+const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5 }
 let a
 try {
   ({ values: a } = parseArgs({ options: { lanes: { type: 'string' }, rounds: { type: 'string' }, full: { type: 'boolean' }, dist: { type: 'string' }, parallel: { type: 'string' } } }))
@@ -131,7 +138,7 @@ async function lane(browser, url, name) {
     throw new Error('the camera never came to rest')
   }
   // a point on the table clear of the HUD's panels and buttons
-  const onTable = (q) => page.evaluate(({ x, y }) => x > 40 && x < innerWidth - 40 && y > 110 && y < innerHeight - 50 && ['#hud', '#hint', '#log', '#card', '#tray', '#actions', '#tools'].every((s) => {
+  const onTable = (q) => page.evaluate(({ x, y }) => x > 40 && x < innerWidth - 40 && y > 110 && y < innerHeight - 50 && ['#hud', '#hint', '#log', '#card', '#tray', '#actions', '#tools', '#roster', '#minimap'].every((s) => {
     const el = document.querySelector(s)
     if (!el || getComputedStyle(el).display === 'none') return true
     const r = el.getBoundingClientRect()
@@ -150,6 +157,16 @@ async function lane(browser, url, name) {
       await sleep(1000)
     }
   }
+  // ((F8b) the Grand lane's: the labels clear of the HUD's panels, the
+  // roster and the minimap among them, nearest the middle of the screen
+  // first; the other lanes' as ever, in the labels' order)
+  const pickable = async (seat) => {
+    const ls = await labels(seat)
+    if (name !== 'grand') return ls
+    const free = []
+    for (const l of ls) if (await onTable({ x: l.x, y: l.y + 22 })) free.push(l)
+    return free.sort((p, q) => Math.abs(p.x - 640) - Math.abs(q.x - 640))
+  }
   const stats = { placed: [0, 0], moves: 0, advances: 0, shots: 0, charges: 0, picks: 0, shortest: 0, autos: 0, ends: 0, decisions: 0, votes: 0 }
 
   // The deployment of `seat`, once the camera is at rest: units picked up
@@ -161,7 +178,7 @@ async function lane(browser, url, name) {
     if (!(await text('#hint')).startsWith('Deployment')) throw new Error(`no deployment hint for seat ${seat}: "${await text('#hint')}"`)
     await rest()
     let tries = 0
-    for (const l of (await labels(seat)).slice(0, 6)) {
+    for (const l of (await pickable(seat)).slice(0, 6)) {
       if (stats.placed[seat] >= 2) break
       const p = await unitAt(l, (t) => /models|wounds/.test(t))
       if (!p) continue
@@ -198,7 +215,7 @@ async function lane(browser, url, name) {
     const enemy = 1 - mine
     if (phase === 'Movement') {
       let k = 0
-      for (const l of (await labels(mine)).slice(0, 3)) {
+      for (const l of (await pickable(mine)).slice(0, 3)) {
         const p = await unitAt(l, (t) => /models|wounds/.test(t))
         if (!p) continue
         await click(p)
@@ -227,7 +244,7 @@ async function lane(browser, url, name) {
         stats.autos++
         return
       }
-      for (const l of (await labels(mine)).slice(0, 4)) {
+      for (const l of (await pickable(mine)).slice(0, 4)) {
         const p = await unitAt(l, (t) => /models|wounds/.test(t))
         if (!p) continue
         await click(p)
@@ -242,7 +259,7 @@ async function lane(browser, url, name) {
         }
       }
     } else if (phase === 'Charge') {
-      for (const l of (await labels(mine)).slice(0, 5)) {
+      for (const l of (await pickable(mine)).slice(0, 5)) {
         const p = await unitAt(l, (t) => /models|wounds/.test(t))
         if (!p) continue
         await click(p)
@@ -319,10 +336,23 @@ async function lane(browser, url, name) {
       log('second watched battle:', await text('#round'), 'log entries:', await page.evaluate(() => document.querySelector('#logList').children.length))
       if (!/Round [2-5]/.test(await text('#round'))) problems.push(`the second watched battle never reached round 2 (${await text('#round')})`)
     } else {
-      await page.click(`[data-mode="${name}"]`)
+      await page.click(`[data-mode="${name === 'grand' ? 'bushtail' : name}"]`)
+      // ((F8b) the Grand lane picks its size on the panel, and keeps every
+      // toast the page shows: the one-time tips among them)
+      if (name === 'grand') {
+        await page.click('#setupSize button[data-size="grand"]')
+        const size = await page.evaluate(() => ({ on: document.querySelector('#setupSize button.on')?.dataset.size, note: document.querySelector('#setupSizeNote')?.textContent }))
+        log('size line:', size.on, '|', size.note)
+        if (size.on !== 'grand' || !/80×56 board, 1,500 points a side, 7 rounds/.test(size.note ?? '')) problems.push(`the size line after a click on Grand: ${JSON.stringify(size)}`)
+        await page.evaluate(() => {
+          window.__toasts = []
+          new MutationObserver(() => window.__toasts.push(document.querySelector('#toast').textContent)).observe(document.querySelector('#toast'), { childList: true, characterData: true, subtree: true })
+        })
+      }
       await page.click('#setupStart')
       await pace()
-      const seats = name === 'bushtail' ? [0] : name === 'serpent' ? [1] : [0, 1]
+      const seats = name === 'serpent' ? [1] : name === 'hotseat' ? [0, 1] : [0]
+      const rounds = name === 'grand' ? Math.min(ROUNDS, 1) : ROUNDS
       log('started', name)
       let n = 0, deployed = 0
       for (;;) {
@@ -355,13 +385,20 @@ async function lane(browser, url, name) {
           continue
         }
         const round = await text('#round')
-        if (Number(/Round (\d)/.exec(round)?.[1]) > ROUNDS) break
+        if (Number(/Round (\d)/.exec(round)?.[1]) > rounds) break
         const active = (await page.evaluate(() => document.querySelector('#sideB').classList.contains('active'))) ? 1 : 0
         if (!seats.includes(active)) throw new Error(`End up on seat ${active}'s turn`)
         log(round, `seat ${active}`, r)
         await decide(active, n++)
       }
       log('stopped at', await text('#round'), JSON.stringify(stats))
+      if (name === 'grand') {
+        const toasts = await page.evaluate(() => window.__toasts)
+        log('toasts:', JSON.stringify([...new Set(toasts)].slice(0, 6)))
+        if (!toasts.includes('Shift-drag (▭ on touch) to select a group')) problems.push(`no one-time tip for a turn of more than 10 units: ${JSON.stringify([...new Set(toasts)])}`)
+        const board = await text('#round')
+        if (!/\/ 7/.test(board)) problems.push(`the HUD's round line names no seventh round ("${board}"): not a Grand battle`)
+      }
       const missing = seats.filter((s) => !stats.placed[s])
       if (missing.length) problems.push(`seat(s) ${missing.join(', ')} placed nothing by a click in the deployment`)
       if (!stats.decisions) problems.push('no decision was played')

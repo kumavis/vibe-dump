@@ -1,6 +1,8 @@
 // The scale hygiene's checks (DESIGN §4.2.2, §4.2.9; S0-S3): the core's
 // faster scans hold to the scans as they were (sim/oracle/scan-ref.mjs), on
-// the classic board and on Grand (the Grand fixture, sim/fixtures/grand.mjs).
+// the classic board and on Grand: since F8b the `grand` mission (80×56, the
+// `open` set, each seat its ×3 preset '336333'), the working tree's own
+// code; before, the Grand fixture, a patched copy of it, retired with F8b.
 //
 //   P-scan  On states sampled from AI battles (the corpus's boards, and
 //           Grand ones), for a unit at random: bestSpot (S0's bounded
@@ -26,8 +28,8 @@
 //
 //   node sim/scale-check.mjs [--dir <code>] [--quick] [--self-test]
 //
-// --dir checks another copy of the code (its own Grand fixture is not
-// built: classic only); --quick samples less. --self-test builds broken
+// --dir checks another copy of the code (classic only); --quick samples
+// less. --self-test builds broken
 // copies of the code, each a scan that would change a battle (a lattice box
 // too tight, a lattice row's offset swapped, the fall back's odd cells, a
 // zone's columns cut short, two facts hoisted wrong, chunks binned short or
@@ -44,21 +46,31 @@ import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:f
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus } from './lib.mjs'
 import { foldJob, jobSetup } from './run.mjs'
-import { buildGrand, grandSetup } from './fixtures/grand.mjs'
 import * as ref from './oracle/scan-ref.mjs'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
 const { values: a } = parseArgs({ options: { dir: { type: 'string' }, quick: { type: 'boolean' }, 'self-test': { type: 'boolean' } } })
 
-// the code under test: its core's entry and the modules the scans live in
-async function coreOf(dir) {
+// A Grand AI battle on `board` with `dice`: the grand mission on its set,
+// each seat its race's ×3 preset (by its counts, as a list names it)
+const GRAND_ARMY = '336333'
+const grandSetup = (board, dice) => ({
+  board, dice, mission: 'grand', terrain: 'open',
+  seats: [{ race: 'squirrel', ctrl: 'ai', army: GRAND_ARMY }, { race: 'serpent', ctrl: 'ai', army: GRAND_ARMY }],
+})
+
+// the code under test: its core's entry and the modules the scans live in,
+// and the mission its P-los boards are scattered for (with its first set)
+async function coreOf(dir, name = 'classic') {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
   const [index, score, move, deploy, queries, rng, dmath, terrain, geom, mission] = await Promise.all([
     at('core/index.js'), at('core/ai/score.js'), at('core/actions/move.js'), at('core/deploy.js'), at('core/queries.js'),
     at('core/rng.js'), at('core/dmath.js'), at('core/terrain/terrain.js'), at('core/terrain/geom.js'), at('data/mission.js'),
   ])
   const M = { ...queries, ...move, ...deploy, ...score, draw: rng.draw, hypot: dmath.hypot, segmentHitsBox: geom.segmentHitsBox }
-  return { core: index, M, Terrain: terrain.Terrain, mission: mission.MISSIONS.classic, rules: await at('core/rules.js') }
+  const m = mission.MISSIONS[name]
+  if (!m) throw new Error(`scale-check: ${dir} has no ${name} mission`)
+  return { core: index, M, Terrain: terrain.Terrain, mission: m, set: m.sets[0], rules: await at('core/rules.js') }
 }
 
 // a small seeded stream of the check's own (never the match's)
@@ -253,7 +265,7 @@ function pLos(C, seeds, perBoard, rand) {
   let n = 0
   for (const seed of seeds) {
     const T = new C.Terrain(W, H)
-    T.generate(seed, C.mission.objectives, C.mission.deploy, 'classic')
+    T.generate(seed, C.mission.objectives, C.mission.deploy, C.set)
     for (let k = rand.int(6); k > 0; k--) T.blast((rand.next() - 0.5) * W, (rand.next() - 0.5) * H, 1 + rand.next() * 2.5, 1 + rand.int(4))
     for (let k = 0; k < perBoard; k++) {
       // a tenth of the ends off the table, by up to 4"
@@ -285,12 +297,11 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
   const want = (k) => !only || only.includes(k)
   let G_ = null
   if (grand) {
-    const { dir: gdir, lists } = await buildGrand({ caps: false })
-    G_ = await coreOf(gdir)
-    // (a fixture whose battles field fewer units than its lists is checking
-    // classic armies: refused)
-    const n = G_.core.createMatch(grandSetup(1, 7)).units.length, want = Object.values(lists).reduce((k, l) => k + l.units, 0)
-    if (n !== want) throw new Error(`the Grand fixture's battles field ${n} units, its lists ${want}: the fixture didn't take (sim/fixtures/grand.mjs)`)
+    G_ = await coreOf(dir, 'grand')
+    // (battles that field other armies than the ×3 presets, or on another
+    // board, would be checking something else: refused)
+    const G = G_.core.createMatch(grandSetup(1, 7)), n = G.units.length
+    if (n !== 42 || G.board.W !== 80 || G.board.H !== 56) throw new Error(`the grand mission's battles field ${n} units on ${G.board.W}×${G.board.H}, not the ×3 presets' 42 on 80×56`)
   }
   const grandSetups = [[1, 7], [2, 11], [3, 5], [4, 9]].slice(0, quick ? 1 : 4).map(([b, d]) => [`Grand ${b}-${d}`, grandSetup(b, d)])
 
@@ -379,7 +390,7 @@ async function selfTest() {
 
 if (a['self-test']) process.exit((await selfTest()) ? 1 : 0)
 const dir = a.dir ?? PKG
-console.log(`scale-check: S0-S3's scans against the whole board's, on ${a.dir ? dir : 'the working tree'}${a.dir ? '' : ' and the Grand fixture'}${a.quick ? ' (quick)' : ''}\n`)
+console.log(`scale-check: S0-S3's scans against the whole board's, on ${a.dir ? dir : 'the working tree'}${a.dir ? '' : ', classic and the grand mission'}${a.quick ? ' (quick)' : ''}\n`)
 const t0 = performance.now()
 const failed = await run(dir, { quick: a.quick, grand: !a.dir })
 console.log(failed ? `\nscale-check FAILED: ${failed} problem(s)` : `\nscale-check passed: the bounded scans, the line-of-sight bins and the plan memo change nothing (${((performance.now() - t0) / 1000).toFixed(0)} s)`)

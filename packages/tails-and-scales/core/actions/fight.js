@@ -60,10 +60,14 @@ export function fight(G, u) {
 export function fightPhase(G, active) {
   const chargers = G.units.filter((u) => u.side === active && u.flags.charged && alive(u))
   for (const u of chargers) fight(G, u)
-  // then the rest, defender first, alternating (the guard of 30 is
-  // behaviour: DESIGN §4.1 rule 6)
+  // then the rest, defender first, alternating (the guard is behaviour:
+  // DESIGN §4.1 rule 6). (F8b) It grows with the armies, max(30, 2·units +
+  // 2), so a Grand melee of 48 units plays out: every unit can fight once
+  // and each side's turn may pass once over; for every classic battle (14
+  // units) it is the 30 it always was.
   let side = 1 - active
-  for (let guard = 0; guard < 30; guard++) {
+  const guards = Math.max(30, 2 * G.units.length + 2)
+  for (let guard = 0; guard < guards; guard++) {
     const next = G.units.find((u) => u.side === side && alive(u) && !u.flags.fought && isEngaged(G, u))
     const other = G.units.find((u) => u.side === 1 - side && alive(u) && !u.flags.fought && isEngaged(G, u))
     if (!next && !other) break

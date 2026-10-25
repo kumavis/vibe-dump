@@ -387,6 +387,10 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
 // its place, and if every spacing rule passes, its turn and its own seed,
 // built twice, the copy turned half round the centre. Returns the
 // footprints placed. Every draw comes from the one stream, in this order.
+//
+// (F8b's `open`) A set with `scale: 'area'` scales its pair counts and
+// attempts with the table's area. The branch is reached only for a set that
+// has the field, so classic's draws are untouched.
 export function scatter(T, S, seed, objectives, deployDepth) {
   const rng = mulberry32(seed)
   const { W, H } = T
@@ -399,9 +403,17 @@ export function scatter(T, S, seed, objectives, deployDepth) {
 
   const KINDS = S.kinds
   const total = KINDS.reduce((s, k) => s + k[2], 0)
-  const want = S.pairs[0] + Math.floor(rng() * S.pairs[1])
+  let want, attempts
+  if (S.scale === 'area') {
+    const s = areaScale(T)
+    want = Math.round(S.pairs[0] * s) + Math.floor(rng() * Math.round(S.pairs[1] * s))
+    attempts = Math.round(S.attempts * s)
+  } else {
+    want = S.pairs[0] + Math.floor(rng() * S.pairs[1])
+    attempts = S.attempts
+  }
   let pairs = 0
-  for (let attempt = 0; attempt < S.attempts && pairs < want; attempt++) {
+  for (let attempt = 0; attempt < attempts && pairs < want; attempt++) {
     let w = rng() * total, kind = KINDS[0]
     for (const k of KINDS) if ((w -= k[2]) <= 0) { kind = k; break }
     const [name, r] = kind
@@ -424,11 +436,17 @@ export function scatter(T, S, seed, objectives, deployDepth) {
   return placed
 }
 
+// (F8b's `open`, built with F7a) A table's area over classic's 40 × 28.
+export const areaScale = (T) => (T.W * T.H) / (40 * 28)
+
 // What a set must hold for scatter to read it (sets.js runs this on every set
 // at load, so a bad name fails on every board, not only on the boards whose
 // draws land on it). Throws, naming the set and the field.
 const SET_FIELDS = Object.freeze(['centre', 'kinds', 'pairs', 'attempts', 'mirror', 'margin', 'selfGap', 'deployMargin', 'bigNotInDeploy', 'notInDeploy', 'objectiveGap', 'gap'])
+// (F8b) the fields a set may have besides: the area scale
+const OPTIONAL_FIELDS = Object.freeze(['scale'])
 const MIRRORS = Object.freeze(['point']) // the only symmetry scatter knows
+const SCALES = Object.freeze(['area']) // and the only scaling
 export function checkSet(name, S) {
   const bad = (why) => {
     throw new Error(`terrain set "${name}": ${why}`)
@@ -436,7 +454,7 @@ export function checkSet(name, S) {
   const num = (v) => typeof v === 'number' && Number.isFinite(v)
   const int = (v) => Number.isInteger(v) && v >= 0
   if (!S || typeof S !== 'object') bad('is not a table')
-  for (const k of Object.keys(S)) if (!SET_FIELDS.includes(k)) bad(`unknown field "${k}"`)
+  for (const k of Object.keys(S)) if (!SET_FIELDS.includes(k) && !OPTIONAL_FIELDS.includes(k)) bad(`unknown field "${k}"`)
   for (const k of SET_FIELDS) if (!(k in S)) bad(`no "${k}"`)
   if (!Array.isArray(S.kinds) || !S.kinds.length) bad('kinds must list at least one feature')
   S.kinds.forEach((k, i) => {
@@ -458,5 +476,6 @@ export function checkSet(name, S) {
   for (const k of ['margin', 'selfGap', 'deployMargin', 'bigNotInDeploy', 'objectiveGap', 'gap']) if (!num(S[k])) bad(`${k} ${S[k]} must be a finite number`)
   if (!Array.isArray(S.notInDeploy)) bad('notInDeploy must be a list of features')
   for (const f of S.notInDeploy) if (!(f in FEATURES)) bad(`notInDeploy: no feature "${f}"`)
+  if ('scale' in S && !SCALES.includes(S.scale)) bad(`scale "${S.scale}" is not one scatter knows (${SCALES.join(', ')})`)
   return S
 }

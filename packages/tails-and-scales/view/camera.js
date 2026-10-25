@@ -10,12 +10,20 @@
 //
 // R7 moved it out of main.js unchanged: the same camera, controls and
 // numbers, so every view a player sees is today's (sim/camera-check.mjs).
+//
+// (F8b) Navigation at scale (DESIGN §4.2.7): the keys pan faster as the
+// camera pulls back (panSpeed); with 🎥 on, a batch opening with a member
+// off screen is framed whole (frame: the circle round where its members
+// stand and go); a cluster of chips is zoomed onto (frameOn); and the
+// bookmark: End pressed in a seat's phase keeps the camera's pose, and that
+// seat's next phase glides back to it (bookmark, resume).
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { PRESETS, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf } from '../present/camera-presets.js'
+import { PRESETS, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf, panSpeed, circleOf, framePose, frames } from '../present/camera-presets.js'
 import { clock, tween, easeInOut, lerp } from './clock.js'
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2])
+const xyzOf = (v) => [v.x, v.y, v.z]
 // how far the player may dolly out (OrbitControls clamps the camera's
 // distance to it every frame): today's, unless a preset fitted farther
 // (F8a: or a larger board's overview, setBoard)
@@ -55,6 +63,11 @@ export class CameraRig {
     // mission chooses another: setBoard) and how far the dolly reaches on it
     this.rect = BOARD_RECT
     this.dolly = MAX_DISTANCE
+    // (F8b) the bookmark: { seat, pos, target } where the camera was as that
+    // seat pressed End, until its next phase begins; and how often a batch
+    // was framed
+    this.mark = null
+    this.framed = 0
     // the keys held for panning; V the next view, Home the overview
     this.keys = new Set()
     addEventListener('keydown', (e) => {
@@ -149,6 +162,7 @@ export class CameraRig {
   // Back to the title's orbit, picking it up where it would be now.
   toTitle() {
     this.views = []
+    this.mark = null
     this.titleSpin = true
     this.controls.maxDistance = MAX_DISTANCE
     this.titleAngle -= clock.time * PRESETS.title.orbit.speed
@@ -188,6 +202,74 @@ export class CameraRig {
     }, easeInOut)
   }
 
+  // ── (F8b) Framing, the bookmark ─────────────────────────────────────────
+  // A batch opens (view/player.js's frame: `points`, where its members stand
+  // and go): with 🎥 on and the turn one the camera follows (or the seat's
+  // own orders, played after its End: the bookmark's seat), if any of them
+  // is off screen, the camera glides to frame the circle round them all,
+  // looking the way it looks. True if it does (the batch's focus events are
+  // then left out).
+  frame(points, { stage, active, localSeats }) {
+    if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.mark?.seat ?? -1 })) return false
+    if (!this.offScreen(points)) return false
+    this.framed++
+    this.toPose(framePose(circleOf(points), this.pose(), innerWidth / innerHeight, { min: this.controls.minDistance * 2, max: this.controls.maxDistance }), 0.9)
+    return true
+  }
+
+  // Zoom onto a circle on the table (x, z, r): a cluster of chips tapped
+  // (ui/chips.js), whatever the follow policy says.
+  frameOn(x, z, r = 4) {
+    this.toPose(framePose({ cx: x, cz: z, r: Math.max(4, r) }, this.pose(), innerWidth / innerHeight, { min: this.controls.minDistance * 2, max: this.controls.maxDistance }), 0.6)
+  }
+
+  // whether any point is outside the screen (its middle 90%, the HUD's
+  // edges counted out) or behind the camera
+  offScreen(points) {
+    const cam = this.camera
+    cam.updateMatrixWorld()
+    const v = new THREE.Vector3()
+    return points.some((p) => {
+      v.set(p.x, 0, p.z).project(cam)
+      return !(v.z < 1 && Math.abs(v.x) <= 0.9 && Math.abs(v.y) <= 0.9)
+    })
+  }
+
+  // the camera's pose now
+  pose() {
+    return { pos: xyzOf(this.camera.position), target: xyzOf(this.controls.target) }
+  }
+
+  // glide onto a pose (its pos and target) in `seconds`
+  toPose(pose, seconds) {
+    const camera = this.camera, controls = this.controls
+    const p0 = camera.position.clone(), t0 = controls.target.clone()
+    const pos = v3(pose.pos), target = v3(pose.target)
+    const id = (this.focusTween = {})
+    tween(seconds, (k) => {
+      if (this.focusTween !== id) return
+      camera.position.lerpVectors(p0, pos, k)
+      controls.target.lerpVectors(t0, target, k)
+    }, easeInOut)
+  }
+
+  // End pressed in `seat`'s phase: the pose kept, the seat's orders at End
+  // framed as they play
+  bookmark(seat) {
+    if (!this.views.length) return
+    this.mark = { seat, ...this.pose() }
+  }
+
+  // A phase of `seat` begins: back to the pose it pressed End at, if it
+  // did. True if the camera glides there.
+  resume(seat) {
+    const m = this.mark
+    if (!m || m.seat !== seat) return false
+    this.mark = null
+    this.toPose(m, 0.9)
+    return true
+  }
+
   // keyboard panning, in wall-clock seconds
   panKeys(dt) {
     const camera = this.camera, controls = this.controls, keys = this.keys
@@ -199,7 +281,8 @@ export class CameraRig {
     if (keys.has('d') || keys.has('arrowright')) v.add(right)
     if (keys.has('a') || keys.has('arrowleft')) v.sub(right)
     if (v.lengthSq()) {
-      v.normalize().multiplyScalar(dt * 18)
+      // ((F8b) faster as the camera pulls back: panSpeed)
+      v.normalize().multiplyScalar(dt * panSpeed(camera.position.distanceTo(controls.target)))
       controls.target.add(v)
       camera.position.add(v)
     }

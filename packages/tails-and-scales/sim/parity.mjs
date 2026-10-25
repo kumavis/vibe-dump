@@ -144,7 +144,8 @@ if (a.record) {
     const r = results[i]
     const rec = { n: r.trace.length, trace: hashLines(r.trace), shadow: hashLines(r.shadow), written: hashLines(r.written) }
     Object.assign(it, rec)
-    if (it.kind === 'ai') Object.assign(pairs.pairs.find((p) => p.seed === it.seed && p.dice === it.dice), rec)
+    // (a pair is pairs.json's; every log, an AI pair's of F11a's army/ too, its set's file)
+    if (it.set === undefined) Object.assign(pairs.pairs.find((p) => p.seed === it.seed && p.dice === it.dice), rec)
     else saveHuman(it.id, humanRecord(it), it.set)
   })
   pairs.engines = { ...engines, [engine]: running }

@@ -38,6 +38,24 @@
 // shapes) and a scuffed chunk's own material, at the next clear, sync or
 // dispose().
 //
+// (F8b) On a board larger than classic's (tiling(), view/index.js's
+// setBoard) the standing chunks are drawn by tiles: one mesh per (8" tile,
+// material class) whose geometry is its chunks' meshes merged, in world
+// space, each vertex in its mesh's colour (DESIGN §4.2.7's "Drawing at
+// scale" 1: about 70 tiles at Grand, 150-odd draw calls against about
+// 1,000). Each chunk keeps its own mesh, in the group as ever but hidden
+// (`visible` false: what sync, state and the checks read is unchanged), and
+// the tile draws it. A chunk an event touches (hurt, broken, dropped, a
+// tree felled) is promoted out of its tile first, its own mesh shown while
+// it animates, its tile merged again without it, and taken back once it
+// rests (settle()); a rubble pile, a fallen log and anything shared are
+// never tiled. Classic stays untiled: its 500-odd draw calls are within
+// budget, and its title and boards stay the R0 code's pixel for pixel
+// (sim/title-shot.mjs, sim/terrain-shots.mjs): a merged mesh draws in
+// another order and rounds its vertices once more. tileCheck() holds every
+// tiled chunk's drawn shape and colour to its own mesh's (terrain-check's
+// view half and sim/snap-check.mjs).
+//
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
 // for mesh, and plays destruction on both, folding the terrain's reports
@@ -46,6 +64,7 @@
 // events built.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { pick, tween, easeIn, bounce } from './clock.js'
 import { STYLES, WOOD } from '../core/terrain/recipes.js'
 import { sfx } from './sfx.js'
@@ -249,6 +268,14 @@ export class TerrainView {
     this.items = new Map()
     // a cleared table's items, kept aside for the adds that follow (clear())
     this.spares = new Map()
+    // (F8b) whether standing chunks are drawn by tiles (tiling()), the tiles
+    // by key, the ones to merge again (flush()), and their group (made the
+    // first time a board is tiled: classic's table makes no more objects,
+    // nor their ids' Math.random draws, than it did)
+    this.tiled = false
+    this.tiles = new Map()
+    this.dirty = new Set()
+    this.tileGroup = null
   }
 
   // the object a chunk is drawn with
@@ -274,6 +301,7 @@ export class TerrainView {
   // clear, sync or dispose).
   clear() {
     this.freeSpares()
+    this.dropTiles()
     this.scene.remove(this.group)
     this.group = new THREE.Group()
     this.scene.add(this.group)
@@ -287,20 +315,25 @@ export class TerrainView {
     const spare = this.spares.get(c.id)
     if (spare?.obj && !spare.touched && !spare.shared && sameDef(spare.c, c, true)) {
       this.spares.delete(c.id)
-      this.items.set(c.id, { ...spare, c })
+      // (shown: clear() took every item out of its tile first)
+      const item = { ...spare, c, tile: null }
+      this.items.set(c.id, item)
       this.group.add(spare.obj)
+      this.tile(item)
       return
     }
     if (c.look.piece === 'fallen') return this.fell(c)
     const item = { c, ...PIECES[c.look.piece](c) }
     this.items.set(c.id, item)
     this.group.add(item.obj)
+    this.tile(item)
   }
 
   // everything off the table and freed (a new table drawn from scratch, in a
   // new group, as a terrain.clear's)
   dispose() {
     this.freeSpares()
+    this.dropTiles()
     for (const item of this.items.values()) this.free(item)
     this.items.clear()
     this.scene.remove(this.group)
@@ -331,9 +364,14 @@ export class TerrainView {
         // first stood doesn't take this mesh back down here)
         if (c.alive && SET_Y.has(c.look.piece)) {
           kept.fall = null
+          kept.anims = 0
+          if (kept.obj.position.y !== c.shape.y) this.untile(kept)
           kept.obj.position.y = c.shape.y
           kept.c = defOf(c)
         }
+        // ((F8b) a chunk promoted out of its tile by an event whose
+        // playback the snap cut short: back in it)
+        this.tile(kept)
         continue
       }
       if (!c.alive) {
@@ -349,9 +387,11 @@ export class TerrainView {
       const item = { c: def, ...PIECES[c.look.piece](def) }
       this.items.set(c.id, item)
       this.group.add(item.obj)
+      this.tile(item)
       // a rubble pile: a heap of pieces for each block of its column broken
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
     }
+    this.flush()
   }
 
   // whether an item shows its chunk standing (a tree with its canopy)
@@ -370,11 +410,229 @@ export class TerrainView {
     return { shown, x: o.position.x, y: o.position.y, z: o.position.z, q: o.quaternion.toArray() }
   }
 
+  // ── Tiles (F8b) ───────────────────────────────────────────────────────────
+  // Whether standing chunks are drawn by tiles from now on (view/index.js's
+  // setBoard: a board larger than classic's). Turned off, every chunk shows
+  // its own mesh again and the tiles are freed.
+  tiling(on) {
+    if (this.tiled === on) return
+    this.tiled = on
+    if (!on) {
+      for (const item of this.items.values()) this.untile(item)
+      this.dropTiles()
+      return
+    }
+    for (const item of this.items.values()) this.tile(item)
+    this.flush()
+  }
+
+  // Whether an item may be drawn by its tile: tiling on, its mesh standing
+  // on the table, not shared (a fallen tree's), not a rubble pile (its
+  // pieces come with each break) and not animating.
+  tileable(item) {
+    return this.tiled && !!item.obj && item.obj.parent === this.group && !item.shared && item.c.kind !== 'rubble' && item.c.look.piece !== 'fallen' && !(item.anims > 0) && this.shows(item)
+  }
+
+  // An item into its tile (the 8" square its chunk stands in): its own mesh
+  // hidden, the tile merged again before the next frame (flush(), from a
+  // microtask: a table's adds come in a run).
+  tile(item) {
+    if (item.tile || !this.tileable(item)) return
+    const { x, z } = item.c.shape
+    const at = `${Math.floor(x / TILE)},${Math.floor(z / TILE)}`
+    let t = this.tiles.get(at)
+    if (!t) this.tiles.set(at, (t = { at, ids: new Set(), meshes: [], parts: new Map() }))
+    t.ids.add(item.c.id)
+    item.tile = t
+    item.obj.visible = false
+    this.mark(t)
+  }
+
+  // An item out of its tile, its own mesh shown (at once: the tile is
+  // merged again without it straight away, so it never shows twice or
+  // not at all).
+  untile(item) {
+    const t = item.tile
+    if (!t) return
+    t.ids.delete(item.c.id)
+    item.tile = null
+    if (item.obj) item.obj.visible = true
+    this.mark(t)
+  }
+
+  // An item an event animates: out of its tile until settle() says it
+  // rests (a count, as a block may be hurt while it falls).
+  promote(item) {
+    if (!item) return
+    item.anims = (item.anims ?? 0) + 1
+    if (item.tile) {
+      this.untile(item)
+      this.flush()
+    }
+  }
+  // its animation over: back in its tile once none is left (and while it
+  // is still the item of chunk `id`, standing)
+  settle(id, item) {
+    if (item.anims > 0) item.anims--
+    if (this.items.get(id) === item) this.tile(item)
+  }
+
+  mark(t) {
+    if (!this.dirty.size && !this.pending) {
+      this.pending = true
+      queueMicrotask(() => {
+        this.pending = false
+        this.flush()
+      })
+    }
+    this.dirty.add(t)
+  }
+
+  // Merge every tile marked again: per (material class, casts a shadow),
+  // its chunks' meshes in world space (the group stands at the origin),
+  // each vertex in its mesh's colour (the class's material is white and
+  // takes vertex colours, as a baked figure's: view/models/bake.js). A
+  // tile left with no chunk goes.
+  flush() {
+    if (!this.dirty.size) return
+    if (!this.tileGroup) {
+      this.tileGroup = new THREE.Group()
+      this.scene.add(this.tileGroup)
+    }
+    for (const t of this.dirty) {
+      for (const m of t.meshes) {
+        this.tileGroup.remove(m)
+        m.geometry.dispose()
+      }
+      t.meshes = []
+      t.parts = new Map()
+      if (!t.ids.size) {
+        if (this.tiles.get(t.at) === t) this.tiles.delete(t.at)
+        continue
+      }
+      const classes = new Map()
+      for (const id of [...t.ids].sort((a, b) => a - b)) {
+        const item = this.items.get(id)
+        item.obj.updateMatrixWorld(true)
+        item.obj.traverse((o) => {
+          if (!o.isMesh || !visibleIn(o, item.obj)) return
+          const key = `${tileClass(o.material)}|${o.castShadow ? 1 : 0}`
+          if (!classes.has(key)) classes.set(key, { material: o.material, cast: o.castShadow, geos: [], spans: [], n: 0 })
+          const k = classes.get(key), geo = worldShape(o), last = k.spans[k.spans.length - 1]
+          // (a chunk's meshes of one class, merged one after another: one span)
+          if (last?.[0] === id) last[2] += geo.attributes.position.count
+          else k.spans.push([id, k.n, geo.attributes.position.count])
+          k.n += geo.attributes.position.count
+          k.geos.push(geo)
+        })
+      }
+      for (const [key, k] of classes) {
+        const m = new THREE.Mesh(mergeGeometries(k.geos), tileMat(key, k.material))
+        for (const g of k.geos) g.dispose()
+        m.castShadow = k.cast
+        m.receiveShadow = true
+        m.matrixAutoUpdate = false
+        m.userData.tile = t.at
+        this.tileGroup.add(m)
+        t.meshes.push(m)
+        for (const [id, start, count] of k.spans) {
+          if (!t.parts.has(id)) t.parts.set(id, [])
+          t.parts.get(id).push({ mesh: m, start, count })
+        }
+      }
+    }
+    this.dirty.clear()
+  }
+
+  // every tile freed (a new table, or tiling turned off); the items keep
+  // their own meshes, shown again by untile() or the next tile()
+  dropTiles() {
+    for (const t of this.tiles.values()) for (const m of t.meshes) {
+      this.tileGroup.remove(m)
+      m.geometry.dispose()
+    }
+    for (const item of this.items.values()) if (item.tile) {
+      item.tile = null
+      if (item.obj) item.obj.visible = true
+    }
+    this.tiles.clear()
+    this.dirty.clear()
+  }
+
+  // (F8b, for sim/: terrain-check's view half and snap-check) How the tiles
+  // stand: their count, their meshes (draw calls), the chunks they draw,
+  // and every tiled chunk whose drawn shape or colour differs from its own
+  // mesh's (each vertex in world space, to 1e-4", and its colour, to
+  // 1e-6), or that its tile draws though it no longer stands as tiled
+  // (its own mesh moved, shown, or off the table).
+  tileCheck() {
+    this.flush()
+    const bad = []
+    let tiled = 0, meshes = 0
+    for (const t of this.tiles.values()) {
+      meshes += t.meshes.length
+      for (const id of t.ids) {
+        tiled++
+        const item = this.items.get(id)
+        if (!item || item.tile !== t || item.obj?.visible !== false || item.obj.parent !== this.group) {
+          bad.push(`chunk ${id}: drawn by tile ${t.at} but not as tiled (${!item ? 'no item' : item.obj?.visible ? 'its own mesh shown too' : 'off the table'})`)
+          continue
+        }
+        // its own mesh's shape, read here vertex by vertex (not by the
+        // merge's own worldShape: a slip there shows), by class
+        const want = new Map()
+        item.obj.updateMatrixWorld(true)
+        item.obj.traverse((o) => {
+          if (!o.isMesh || !visibleIn(o, item.obj)) return
+          const key = tileClass(o.material) + (o.castShadow ? '|1' : '|0')
+          if (!want.has(key)) want.set(key, [])
+          const pos = o.geometry.attributes.position, idx = o.geometry.index, n = idx ? idx.count : pos.count
+          const flip = o.matrixWorld.determinant() < 0, c = o.material.color, v = new THREE.Vector3()
+          for (let i = 0; i < n; i++) {
+            const corner = flip && i % 3 ? i + (i % 3 === 1 ? 1 : -1) : i
+            v.fromBufferAttribute(pos, idx ? idx.getX(corner) : corner).applyMatrix4(o.matrixWorld)
+            want.get(key).push(v.x, v.y, v.z, c.r, c.g, c.b)
+          }
+        })
+        const parts = t.parts.get(id) ?? []
+        const got = new Map()
+        for (const p of parts) got.set(p.mesh.material.userData.tileKey, p)
+        for (const [key, ref] of want) {
+          const p = got.get(key), n = ref.length / 6
+          if (!p || p.count !== n) {
+            bad.push(`chunk ${id}: its tile ${t.at} draws ${p ? p.count : 0} vertices of class ${key}, its own mesh ${n}`)
+            continue
+          }
+          const pos = p.mesh.geometry.attributes.position, col = p.mesh.geometry.attributes.color
+          let worst = 0, cworst = 0
+          for (let j = 0; j < n; j++) {
+            const i = p.start + j, r = j * 6
+            worst = Math.max(worst, Math.abs(ref[r] - pos.getX(i)), Math.abs(ref[r + 1] - pos.getY(i)), Math.abs(ref[r + 2] - pos.getZ(i)))
+            cworst = Math.max(cworst, Math.abs(ref[r + 3] - col.getX(i)), Math.abs(ref[r + 4] - col.getY(i)), Math.abs(ref[r + 5] - col.getZ(i)))
+          }
+          if (worst > 1e-4) bad.push(`chunk ${id}: its tile ${t.at} draws it up to ${worst.toFixed(4)}" from its own mesh (class ${key})`)
+          if (cworst > 1e-6) bad.push(`chunk ${id}: its tile ${t.at} draws it in another colour (class ${key}, off by ${cworst.toExponential(2)})`)
+        }
+        for (const key of got.keys()) if (!want.has(key)) bad.push(`chunk ${id}: its tile ${t.at} draws a class (${key}) its own mesh has none of`)
+      }
+      // a chunk the tile's meshes still draw that has left it
+      for (const id of t.parts.keys()) if (!t.ids.has(id)) bad.push(`chunk ${id}: drawn by tile ${t.at}, which it has left`)
+    }
+    // a standing chunk that could be tiled and isn't, or is hidden untiled
+    for (const [id, item] of this.items) {
+      if (!item.obj || item.obj.parent !== this.group || item.shared) continue
+      if (!item.tile && !item.obj.visible) bad.push(`chunk ${id}: neither in a tile nor shown`)
+      if (this.tiled && !item.tile && this.tileable(item)) bad.push(`chunk ${id}: standing at rest but not in a tile`)
+    }
+    return { tiles: this.tiles.size, meshes, tiled, bad }
+  }
+
   // ── Freeing ───────────────────────────────────────────────────────────────
   // An item off the table, and what only it used freed: its geometry (but
   // the shared box and log shapes) and a scuffed chunk's own material. (A
   // fallen tree's item shares its mesh with its log's, which frees it.)
   free(item) {
+    this.untile(item)
     // (a felled tree's canopy, gone up in leaves, is no longer in its mesh)
     if (item.canopy && item.canopy.parent !== item.obj) freeShapes(item.canopy)
     item.canopy = null
@@ -399,6 +657,7 @@ export class TerrainView {
   hurt(c, from, at) {
     const v = this.items.get(c.id), m = v.obj
     v.touched = true
+    this.promote(v)
     if (m.isMesh) {
       if (!v.ownMat) {
         m.material = m.material.clone()
@@ -415,12 +674,15 @@ export class TerrainView {
       m.position.x = p0.x
       m.position.z = p0.z
     })
+      // ((F8b) at rest: back in its tile)
+      .then(() => this.settle(c.id, v))
     this.effects.debris(at.x, at.y, at.z, [c.look.chip || '#888', '#666'], 3, { from, power: 3, size: 0.08 })
   }
 
   destroy(c, from, at) {
     const v = this.items.get(c.id)
     v.touched = true
+    this.promote(v)
     const s = at
     const fx = this.effects
     switch (c.kind) {
@@ -471,11 +733,14 @@ export class TerrainView {
       const item = this.items.get(id)
       const { c: b, obj: m } = item
       item.touched = true
+      this.promote(item)
       const rest = M.chunks[id].y
       const y0 = m.position.y, y1 = rest
       const fall = (item.fall = {})
       tween(0.18 + dy * 0.15, (k) => item.fall === fall && (m.position.y = y0 + (y1 - y0) * k), bounce).then(() => {
         this.effects.debris(b.shape.x, rest - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
+        // (at rest: back in a tile, unless it fell again since)
+        this.settle(id, item)
       })
     }
   }
@@ -504,6 +769,7 @@ export class TerrainView {
   // along the log's (dx, dz) and is the log from then on.
   fell(c) {
     const tree = this.items.get(c.look.tree)
+    this.promote(tree)
     const t = tree.c, s = t.shape, trunk = t.look.trunk
     const { dx, dz } = c.look
     const g = tree.obj
@@ -528,6 +794,58 @@ export class TerrainView {
     this.items.set(t.id, { c: t, obj: g, canopy, shared: true })
     this.items.set(c.id, { c, obj: g, touched: true })
     this.group.add(g)
+  }
+}
+
+// (F8b) The tiles: 8" squares (DESIGN §4.2.7), and one white material per
+// class of mesh material (all but the colour: a tile's vertices carry
+// their meshes' colours), shared by every tile, made the first time a
+// board is tiled and kept (two or three of them: their programs never
+// linked again).
+const TILE = 8
+const tileMats = new Map()
+const tileClass = (m) => [m.flatShading ? 1 : 0, m.metalness, m.roughness].join(',')
+function tileMat(key, m) {
+  if (!tileMats.has(key)) {
+    const mat = new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: m.roughness, metalness: m.metalness, flatShading: m.flatShading })
+    mat.userData.tileKey = key
+    tileMats.set(key, mat)
+  }
+  return tileMats.get(key)
+}
+// whether a mesh shows, as far as its own object goes (a part hidden in
+// its chunk's object is no part of its tile: the object's own `visible`,
+// false while tiled, is not asked)
+function visibleIn(o, root) {
+  for (let p = o; p && p !== root; p = p.parent) if (!p.visible) return false
+  return true
+}
+// A mesh's geometry in world space, unindexed, with its normals (the
+// floor's are smooth) and each vertex in the mesh's colour; its winding
+// turned back where its transform mirrors it (as view/models/bake.js's).
+const tmpM = new THREE.Matrix4()
+function worldShape(o) {
+  const src = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', src.getAttribute('position').clone())
+  geo.setAttribute('normal', src.getAttribute('normal').clone())
+  if (src !== o.geometry) src.dispose()
+  geo.applyMatrix4(tmpM.copy(o.matrixWorld))
+  if (tmpM.determinant() < 0) flipWinding(geo)
+  const n = geo.attributes.position.count, c = o.material.color
+  const col = new Float32Array(n * 3)
+  for (let i = 0; i < n; i++) (col[i * 3] = c.r), (col[i * 3 + 1] = c.g), (col[i * 3 + 2] = c.b)
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3))
+  return geo
+}
+function flipWinding(geo) {
+  for (const name of ['position', 'normal']) {
+    const a = geo.getAttribute(name)
+    for (let i = 0; i < a.count; i += 3) {
+      const x = a.getX(i + 1), y = a.getY(i + 1), z = a.getZ(i + 1)
+      a.setXYZ(i + 1, a.getX(i + 2), a.getY(i + 2), a.getZ(i + 2))
+      a.setXYZ(i + 2, x, y, z)
+    }
   }
 }
 

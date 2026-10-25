@@ -5,6 +5,16 @@
 // stays on Math.random: the mat's and the wood's paint as the table is made,
 // the tufts and flowers each new table (scatterTufts).
 //
+// (F8b) A board larger than classic's draws its mat with a second texture
+// over the paint: a detail tile, one per 4" (DESIGN §4.2.3's "The mat": one
+// more sampler, no more draw calls), so the grass keeps its grain however
+// far the 2048 px paint is stretched. It is a material of its own
+// (detailMaterial: the mat's, with the detail multiplied in), made the first
+// time a larger board is shown and kept, so a round trip to classic and
+// back links no shader again; classic's mat is the material it always was.
+// The tile is painted from a fixed hash, not Math.random: the cosmetic
+// stream's draws stay where they were.
+//
 // R7 moved it out of main.js unchanged (the same draws, in the same order).
 // (F8a) A mission's board may be larger: resize() makes the table over for
 // it, in place (the mat, picked by the pointer's ray, stays the same mesh),
@@ -54,6 +64,63 @@ function paintMat(W, H, renderer, k = 1) {
   t.anisotropy = renderer.capabilities.getMaxAnisotropy()
   return t
 }
+// (F8b) The mat's detail tile: 256 px of grain about mid-grey (the
+// shader multiplies the paint by twice it, so grey leaves it as it was):
+// short blades light and dark, and a soft mottle, wrapping at its edges.
+function paintDetail() {
+  const c = document.createElement('canvas')
+  c.width = c.height = 256
+  const g = c.getContext('2d')
+  g.fillStyle = '#808080'
+  g.fillRect(0, 0, 256, 256)
+  // a fixed hash in [0, 1): the same tile every time, no Math.random
+  let h = 0x9e3779b9
+  const rnd = () => {
+    h ^= h << 13
+    h ^= h >>> 17
+    h ^= h << 5
+    return (h >>> 0) / 4294967296
+  }
+  for (let i = 0; i < 70; i++) {
+    const x = rnd() * 256, y = rnd() * 256, r = 10 + rnd() * 28, v = 112 + rnd() * 32
+    g.globalAlpha = 0.35
+    g.fillStyle = `rgb(${v},${v},${v})`
+    for (const [dx, dy] of [[0, 0], [256, 0], [-256, 0], [0, 256], [0, -256]]) {
+      g.beginPath()
+      g.arc(x + dx, y + dy, r, 0, Math.PI * 2)
+      g.fill()
+    }
+  }
+  for (let i = 0; i < 2600; i++) {
+    const x = rnd() * 256, y = rnd() * 256, v = rnd() < 0.5 ? 70 + rnd() * 30 : 160 + rnd() * 40
+    g.globalAlpha = 0.5
+    g.fillStyle = `rgb(${v},${v},${v})`
+    g.fillRect(x, y, 1.5, 3 + rnd() * 4)
+  }
+  g.globalAlpha = 1
+  const t = new THREE.CanvasTexture(c)
+  t.wrapS = t.wrapT = THREE.RepeatWrapping
+  return t
+}
+// (F8b) The mat's material on a larger board: `base`'s (the paint as its
+// map), with the detail tile multiplied in at `repeat` tiles across and
+// down (one per 4"). Its program is its own (customProgramCacheKey).
+function detailMaterial(base, renderer) {
+  const m = base.clone()
+  const detail = paintDetail()
+  detail.anisotropy = renderer.capabilities.getMaxAnisotropy()
+  const uniforms = { detailMap: { value: detail }, detailRepeat: { value: new THREE.Vector2(10, 7) } }
+  m.userData.detail = uniforms
+  m.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms)
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform sampler2D detailMap;\nuniform vec2 detailRepeat;')
+      .replace('#include <map_fragment>', '#include <map_fragment>\n\tdiffuseColor.rgb *= mix( vec3( 1.0 ), texture2D( detailMap, vMapUv * detailRepeat ).rgb * 2.0, 0.6 );')
+  }
+  m.customProgramCacheKey = () => 'tails-mat-detail'
+  return m
+}
+
 function paintWood() {
   const c = document.createElement('canvas')
   c.width = c.height = 512
@@ -99,7 +166,7 @@ export class Table {
     this.W = W
     this.H = H
     this.deploy = deploy
-    const boardMat = new THREE.MeshStandardMaterial({ map: paintMat(W, H, renderer), roughness: 0.95 })
+    const boardMat = (this.plainMat = new THREE.MeshStandardMaterial({ map: paintMat(W, H, renderer), roughness: 0.95 }))
     // the mat: what the pointer's ray finds the ground on
     const board = (this.board = new THREE.Mesh(new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2), boardMat))
     board.receiveShadow = true
@@ -169,9 +236,18 @@ export class Table {
   resize({ W, H, deploy }) {
     Object.assign(this, { W, H, deploy })
     const k = areaOf(W, H)
-    const mat = this.board.material
-    mat.map.dispose()
-    mat.map = paintMat(W, H, this.renderer, k)
+    const old = this.board.material.map
+    old.dispose()
+    const map = paintMat(W, H, this.renderer, k)
+    // (F8b) the detail tile over a larger board's paint, one per 4"; the
+    // classic mat as it always was
+    if (k > 1) {
+      this.detailMat ??= detailMaterial(this.plainMat, this.renderer)
+      this.detailMat.userData.detail.detailRepeat.value.set(W / 4, H / 4)
+    }
+    const mat = k > 1 ? this.detailMat : this.plainMat
+    for (const m of [this.plainMat, this.detailMat]) if (m) m.map = map
+    this.board.material = mat
     mat.needsUpdate = true
     regeom(this.board, new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2))
     const parts = [
@@ -185,6 +261,11 @@ export class Table {
       this.frame[i].position.set(x, -0.22, z)
     })
     regeom(this.under, new THREE.BoxGeometry(W, 0.6, H))
+    // ((F8b) on a larger board the box under the mat sits a little lower:
+    // from a larger board's farthest views (a phone's overview, 150" and
+    // more) the depth buffer can't tell its top, 0.01" under the mat, from
+    // the mat, and the two fought in stripes; classic's stays where it was)
+    this.under.position.y = k > 1 ? -0.36 : -0.31
     for (const s of [0, 1]) {
       const sx = this.edges[s]
       regeom(this.zoneMeshes[s], new THREE.PlaneGeometry(deploy, H).rotateX(-Math.PI / 2))

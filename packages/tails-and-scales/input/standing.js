@@ -21,7 +21,7 @@
 // player ("Blocked"); an attack whose target fell goes on autopilot
 // ("Target down"); a unit that fell leaves the book.
 import { NAME, GLYPH, covers, actorsOf, doneOf, progressOf } from '../present/standing.js'
-import { slotsOf } from '../present/orders.js'
+import { slotsOf, previewSteps } from '../present/orders.js'
 import { runOrders } from './orders.js'
 import { sfx } from '../view/sfx.js'
 
@@ -407,5 +407,113 @@ export class StandingInput {
     const said = [...notes, ...(blocked ? [`${blocked} order${blocked === 1 ? '' : 's'} blocked`] : [])]
     if (said.length) this.toast?.show(said.slice(0, 4).join(' · ') + (said.length > 4 ? ` · ${said.length - 4} more` : ''), 3000)
     this.note = ''
+  }
+}
+
+// ── (F8b) Ghosts a few a frame (DESIGN §4.2.1's group preview budget) ─────
+// On a board larger than classic's a group's formation (the ghosts where a
+// click would pin it) costs 20-100 ms to plan for a Grand army's 21
+// members, so the pointer moving over the table would stall the page. The
+// GhostPlanner plans it a few members a frame instead (present/orders.js's
+// previewSteps, run under the Session's preview as a whole preview is, its
+// steps until `budget` ms have gone), handing each frame's preview so far
+// to `part` (the ghosts drawn as they come) and the whole one to `done`. A
+// new pointer place starts it over (start: the last plan let go), and so
+// does the match changing under it (`sig()`, the Session's count: a
+// command folded mid-plan would mix two states); cancel() lets it go.
+// Classic's boards and a small group plan at once, as before (wanted).
+const GHOST_BUDGET = 6 // ms of planning a frame
+const GHOST_MEMBERS = 10 // a group larger than this plans over frames
+
+export class GhostPlanner {
+  // `ask(fn)`: the Session's preview (input/human.js's); `sig()`: what
+  // changes when the match does; `frame(fn)`: the next frame (rAF);
+  // `now()`: ms
+  constructor({ ask, sig = () => 0, budget = GHOST_BUDGET, frame = (fn) => requestAnimationFrame(fn), now = () => performance.now() }) {
+    Object.assign(this, { ask, sig, budget, frame, now })
+    this.run = null
+    // (how many plans ran over more than one frame, their frames, the
+    // longest a frame's planning took, ms, and the last plan's longest)
+    this.spread = 0
+    this.frames = 0
+    this.maxMs = 0
+    this.lastMs = 0
+    this.note = ''
+  }
+
+  // whether a group of `n` members on match G's board plans over frames
+  wanted(G, n) {
+    return n > GHOST_MEMBERS || (G?.board?.W ?? 40) * (G?.board?.H ?? 28) > 40 * 28
+  }
+
+  // plan `sign` (its pointer place: a plan of the same sign goes on), the
+  // generator made by `make(G, q)`; `part(preview)` each frame, `done(preview)`
+  // once. True if this is a new plan.
+  start(sign, make, { part = () => {}, done = () => {} } = {}) {
+    if (this.run?.sign === sign) return false
+    const run = (this.run = { sign, sig: this.sig(), steps: null, part, done, frames: 0, ms: 0 })
+    this.ask((G, q) => (run.steps = make(G, q)))
+    this.step(run)
+    return true
+  }
+
+  // a frame's worth of steps, then the next frame's, until it is done
+  step(run) {
+    if (this.run !== run) return
+    if (this.sig() !== run.sig) return this.cancel()
+    run.frames++
+    const t0 = this.now()
+    let r = null
+    this.ask(() => {
+      do {
+        r = run.steps.next()
+      } while (!r.done && this.now() - t0 < this.budget)
+    })
+    run.ms = Math.max(run.ms, this.now() - t0)
+    this.maxMs = Math.max(this.maxMs, run.ms)
+    if (r.done) {
+      this.run = null
+      this.lastMs = run.ms
+      if (run.frames > 1) {
+        this.spread++
+        this.frames += run.frames
+      }
+      return run.done(r.value)
+    }
+    run.part(r.value)
+    this.frame(() => this.step(run))
+  }
+
+  cancel() {
+    this.run = null
+  }
+
+  // The group input's hover (input/group.js), planned here: `verb` at
+  // `target` (a point on the ground, to the half inch, or an enemy) for the
+  // group's members, the ghosts drawn as they come and the tooltip given
+  // the summary once the plan is whole; nothing drawn once the group has a
+  // pin, or is busy sending. → the summary so far.
+  hover(group, verb, target) {
+    const seat = group.seat(), ids = group.members().map((u) => u.id), advance = verb === 'move' && !!group.rec?.advance
+    const at = target.x !== undefined ? [Math.round(target.x * 2) / 2, Math.round(target.z * 2) / 2] : target.id
+    const sign = JSON.stringify([seat, verb, ids, at, advance])
+    if (this.run?.sign === sign) return this.note
+    this.note = 'Planning…'
+    const quiet = () => !!group.rec?.pin || group.busy || group.seat() !== seat
+    this.start(sign, (G, q) => previewSteps(G, q, seat, verb, group.selection.units(G, ids), target, null, { advance }), {
+      part: (p) => {
+        if (quiet()) return this.cancel()
+        group.draw(p, target, false)
+        this.note = p.summary
+      },
+      done: (p) => {
+        if (quiet()) return
+        group.draw(p, target, false)
+        this.note = p.summary
+        const mouse = group.human?.mouse
+        if (mouse && p.summary) group.tooltip?.show(p.summary, mouse)
+      },
+    })
+    return this.note
   }
 }

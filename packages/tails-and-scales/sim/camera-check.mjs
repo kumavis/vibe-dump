@@ -26,6 +26,18 @@
 // says), not pulled in by the controls' dolly limit; stepped through a
 // battle's views by nextView and toOverview; and back on the title, the
 // limit is today's again and there are no views to step through.
+// (F8b) Navigation at scale: on a Field or Grand board the behind view fits
+// the seat's own half (its zone to the centre line), 45-46" away, its target
+// the half's middle (held at 46", slid toward its edge, which then sits at
+// the foot of the view), while the broadside and the overview still take in the
+// whole board (classic's every pose as it was); the keys pan at
+// dt · 18 · max(1, d/50); a batch with a member off screen is framed whole
+// (the circle round its members' starts and ends inside the view, looking
+// the way the camera looked), but not with 🎥 off, not with everyone on
+// screen, never during the turn of the one seat played here, and yes for
+// that seat's own orders after its End (the bookmark's seat); the bookmark
+// takes the camera back to where End was pressed at that seat's next phase,
+// once; and a cluster's zoom frames its circle.
 //
 //   node sim/camera-check.mjs
 //
@@ -167,7 +179,8 @@ for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', P
   }
   // (F8's) another board, off centre: looked at from its own centre, whole
   const rect = { cx: 5, cz: -3, w: 60, h: 40 }
-  const p = fitPose({ ...preset, max: 500 }, 1.6, rect)
+  // ((F8b) the whole rectangle: behind's half rule left out)
+  const p = fitPose({ ...preset, max: 500, half: undefined }, 1.6, rect)
   const cam = new THREE.PerspectiveCamera(p.fov, 1.6, 0.1, 800)
   cam.position.set(...p.pos)
   cam.lookAt(new THREE.Vector3(...p.target))
@@ -176,7 +189,8 @@ for (const [name, preset] of [['broadside', PRESETS.broadside], ['behind(-1)', P
   check(inside && p.target[0] === 5 && p.target[1] === 0 && p.target[2] === -3, `fitPose(${name}) of a 60×40 board centred at (5, -3) looks at its centre and sees it whole`, `${p.pos} → ${p.target}`)
   // (F8a) a mission's board: the preset's max, scaled by the board's reach,
   // takes it in whole down to a 412×915 portrait phone, as classic's does
-  for (const [bw, bh] of [[60, 40], [80, 56]]) {
+  // ((F8b) the broadside and the overview: behind fits the seat's half, below)
+  for (const [bw, bh] of preset.half ? [] : [[60, 40], [80, 56]]) {
     const r = boardRect({ W: bw, H: bh })
     for (const aspect of [16 / 9, 4 / 3, 1, 9 / 16, PHONE]) {
       const q = fitPose(preset, aspect, r)
@@ -280,10 +294,149 @@ check(fartherThanToday > 0, 'some preset the rig was swung onto rests beyond the
   check(!rig.views.length && close(xyz(rig.camera.position), still), 'on the title there are no views: nextView and toOverview do nothing')
 }
 
+// ── (F8b) Navigation at scale ──────────────────────────────────────────────
+const { panSpeed, circleOf, framePose, frames } = await imp('present/camera-presets.js')
+const dist = (p) => Math.hypot(p.pos[0] - p.target[0], p.pos[1] - p.target[1], p.pos[2] - p.target[2])
+// a camera made at a pose: whether ground points show inside its middle
+// `k` of the screen
+const seen = (p, aspect, pts, k = 1) => {
+  const c = new THREE.PerspectiveCamera(p.fov ?? fovFor(aspect), aspect, 0.1, 2000)
+  c.position.set(...p.pos)
+  c.lookAt(new THREE.Vector3(...p.target))
+  c.updateMatrixWorld()
+  return pts.every(([x, z]) => {
+    const v = new THREE.Vector3(x, 0, z).project(c)
+    return Math.abs(v.x) <= k && Math.abs(v.y) <= k && v.z < 1
+  })
+}
+// the behind view on Field and Grand: the seat's own half, 45-46" away (its
+// `half`; DESIGN planned 45-60, the figures measured 14 px at 60), and held
+// there, from its own edge on
+for (const [bw, bh] of [[60, 40], [80, 56]]) {
+  const r = boardRect({ W: bw, H: bh })
+  for (const edge of [-1, 1]) for (const aspect of [21 / 9, 16 / 9, 1.6, 4 / 3, 1, 9 / 16, PHONE]) {
+    const p = fitPose(PRESETS.behind(edge), aspect, r), d = dist(p)
+    const half = [[(edge * bw) / 2, -bh / 2], [(edge * bw) / 2, bh / 2], [0, -bh / 2], [0, bh / 2]]
+    const el = Math.atan2(p.pos[1] - p.target[1], Math.hypot(p.pos[0] - p.target[0], p.pos[2] - p.target[2]))
+    const back = Math.sign(p.pos[0] - p.target[0]) === edge
+    // (its target the half's middle; or, held at its far distance, slid
+    // toward its own edge until the edge's middle sits at the view's foot,
+    // 1/1.12 of the way down)
+    const c = new THREE.PerspectiveCamera(p.fov, aspect, 0.1, 2000)
+    c.position.set(...p.pos)
+    c.lookAt(new THREE.Vector3(...p.target))
+    c.updateMatrixWorld()
+    const foot = new THREE.Vector3((edge * bw) / 2, 0, 0).project(c).y
+    const middle = p.target[0] === (edge * bw) / 4
+    const slid = !middle && Math.abs(foot + 1 / 1.12) < 1e-6 && Math.abs(p.target[0]) > bw / 4 && Math.abs(p.target[0]) < bw / 2
+    check((middle ? foot >= -1 / 1.12 - 1e-9 : slid) && p.target[1] === 0 && p.target[2] === 0 && back && Math.abs(el - 0.9) < 1e-9, `(F8b) behind(${edge}) on a ${bw}×${bh} board, aspect ${aspect.toFixed(2)}: it looks ${middle ? "at its own half's middle" : 'from its own edge on, the edge at the foot of the view'} (${p.target[0].toFixed(2)}, 0) from behind its edge, at its elevation`, `${p.pos.map((x) => x.toFixed(1))} → ${p.target}; the edge at y ${foot.toFixed(3)}`)
+    const [near, far] = PRESETS.behind(edge).half
+    check(near === 45 && far === 46 && d >= near - 1e-9 && d <= far + 1e-9 && (d >= far - 1e-9 || (middle && seen(p, aspect, half, 1 + 1e-9))), `(F8b) behind(${edge}) on a ${bw}×${bh} board, aspect ${aspect.toFixed(2)}: ${d.toFixed(1)}" away, in 45-46, its half (zone to centre line) whole unless held at 46`, `distance ${d.toFixed(2)}`)
+  }
+  // the broadside and the overview: the whole board, as F8a fitted them
+  for (const [name, preset] of [['broadside', PRESETS.broadside], ['overview', PRESETS.overview]]) for (const aspect of [16 / 9, 1, PHONE]) {
+    const p = fitPose(preset, aspect, r)
+    check(seen(p, aspect, [[-bw / 2, -bh / 2], [bw / 2, -bh / 2], [-bw / 2, bh / 2], [bw / 2, bh / 2]], 1 + 1e-9) && p.target.every((x) => x === 0), `(F8b) ${name} on a ${bw}×${bh} board, aspect ${aspect.toFixed(2)}: the whole board`)
+  }
+}
+// classic's behind is classic's fit: half or not, the same numbers
+for (const aspect of [16 / 9, 1, PHONE]) for (const edge of [-1, 1]) {
+  const { half, ...plain } = PRESETS.behind(edge)
+  check(key(fitPose(PRESETS.behind(edge), aspect)) === key(fitPose(plain, aspect)) && Array.isArray(half), `(F8b) behind(${edge}) on classic's board, aspect ${aspect.toFixed(2)}: the pose it had before F8b (its half rule reaches only a larger board)`)
+}
+// the keys' pan speed
+check(panSpeed(0) === 18 && panSpeed(30) === 18 && panSpeed(50) === 18 && panSpeed(100) === 36 && panSpeed(75) === 27, '(F8b) the keys pan 18"/s up to 50" away, then 18 · d/50', [0, 30, 50, 75, 100].map(panSpeed).join(', '))
+// the batch's circle and the pose that frames it
+{
+  const pts = [{ x: -30, z: -20 }, { x: -10, z: 4 }, { x: 22, z: 18 }, { x: 5, z: -2 }]
+  const c = circleOf(pts)
+  check(pts.every((p) => Math.hypot(p.x - c.cx, p.z - c.cz) <= c.r - 3 + 1e-9) && c.cx === -4 && c.cz === -1, "(F8b) circleOf: its box's centre, every point inside it and 3\" to spare", JSON.stringify(c))
+  for (const aspect of [16 / 9, 1, PHONE]) {
+    const from = fitPose(PRESETS.broadside, aspect, boardRect({ W: 80, H: 56 }))
+    const p = framePose(c, from, aspect)
+    const dir = (q) => q.pos.map((x, i) => (x - q.target[i]) / dist(q))
+    check(seen(p, aspect, pts.map((q) => [q.x, q.z])) && close(dir(p), dir(from)) && p.target[0] === c.cx && p.target[2] === c.cz, `(F8b) framePose on aspect ${aspect.toFixed(2)}: every member inside the view, the camera looking the way it looked, at the circle's centre`, `${p.pos.map((x) => x.toFixed(1))} → ${p.target}`)
+    const capped = framePose(c, from, aspect, { max: 20 })
+    check(Math.abs(dist(capped) - 20) < 1e-9, `(F8b) framePose on aspect ${aspect.toFixed(2)}: no farther than the dolly's limit`, dist(capped).toFixed(2))
+  }
+}
+// the framing policy: 🎥 on, in battle, a turn the camera follows, or the
+// seat's own orders after its End
+for (const [ctx, want, what] of [
+  [{ follow: true, stage: 'battle', active: 1, localSeats: [0] }, true, "the AI's turn, 🎥 on"],
+  [{ follow: false, stage: 'battle', active: 1, localSeats: [0] }, false, "the AI's turn, 🎥 off"],
+  [{ follow: true, stage: 'battle', active: 0, localSeats: [0] }, false, 'the turn of the one seat played here (its own decision)'],
+  [{ follow: true, stage: 'battle', active: 0, localSeats: [0], ended: 0 }, true, "that seat's orders after its End"],
+  [{ follow: true, stage: 'battle', active: 0, localSeats: [0], ended: 1 }, false, "that seat's turn, another seat's End kept"],
+  [{ follow: true, stage: 'deploy', active: 1, localSeats: [0] }, false, 'the deployment'],
+  [{ follow: true, stage: 'battle', active: 0, localSeats: [] }, true, 'a watched battle'],
+  [{ follow: true, stage: 'battle', active: 1, localSeats: [0, 1] }, true, 'hotseat'],
+]) check(frames(ctx) === want, `(F8b) a batch is ${want ? '' : 'not '}framed in ${what}`)
+// the rig: frame, the bookmark, frameOn, the keys
+{
+  globalThis.innerWidth = 1280
+  globalThis.innerHeight = 800
+  const rig = new CameraRig({ domElement: canvas })
+  const settle = () => {
+    for (let i = 0; i < 30; i++) stepTweens(0.1)
+    for (let i = 0; i < 5; i++) rig.update(0)
+    return rig.pose()
+  }
+  rig.setBoard({ W: 80, H: 56 })
+  rig.setViews(viewsFor({ localSeats: [0], edges: [-1, 1] }))
+  const start = settle()
+  check(Math.abs(dist(start) - dist(fitPose(PRESETS.behind(-1), 1280 / 800, boardRect({ W: 80, H: 56 })))) < 1e-6 && dist(start) >= 45 && dist(start) <= 46, `(F8b) a Grand battle opens behind the seat played here, ${dist(start).toFixed(1)}" away`)
+  const AI = { stage: 'battle', active: 1, localSeats: [0] }, MINE = { stage: 'battle', active: 0, localSeats: [0] }
+  const near = [{ x: start.target[0], z: start.target[2] }, { x: start.target[0] + 2, z: start.target[2] - 2 }]
+  const far = [{ x: 30, z: 20 }, { x: 34, z: 24 }, { x: 26, z: 18 }]
+  check(rig.frame(near, AI) === false && close(settle().pos, start.pos), '(F8b) frame: every member on screen, the camera stays')
+  check(rig.frame(far, MINE) === false && close(settle().pos, start.pos), '(F8b) frame: never during the turn of the one seat played here')
+  rig.follow = false
+  check(rig.frame(far, AI) === false && close(settle().pos, start.pos), '(F8b) frame: not with 🎥 off')
+  rig.follow = true
+  const want = framePose(circleOf(far), start, 1280 / 800, { min: rig.controls.minDistance * 2, max: rig.controls.maxDistance })
+  check(rig.frame(far, AI) === true, "(F8b) frame: members off screen on the AI's turn are framed")
+  const got = settle()
+  check(close(got.pos, want.pos) && close(got.target, want.target) && seen({ ...got, fov: fovFor(1280 / 800) }, 1280 / 800, far.map((p) => [p.x, p.z])), '(F8b) frame: the camera rests where framePose puts it, the members in view', `${got.pos.map((x) => x.toFixed(1))} → ${got.target.map((x) => x.toFixed(1))}`)
+  // the bookmark: End pressed at a pose, the camera moved away, back at the
+  // seat's next phase, once
+  // (the camera where the last framing left it, over the far cluster)
+  const marked = settle()
+  rig.bookmark(0)
+  check(rig.frame([{ x: -30, z: -24 }, { x: -36, z: -20 }], MINE) === true, "(F8b) frame: the seat's own orders after its End are framed")
+  settle()
+  rig.nextView()
+  settle()
+  check(rig.resume(1) === false, "(F8b) resume: another seat's phase takes the camera nowhere")
+  check(rig.resume(0) === true && close(settle().pos, marked.pos) && close(rig.pose().target, marked.target), "(F8b) resume: the seat's next phase glides back to where it pressed End")
+  rig.nextView()
+  const elsewhere = settle()
+  check(rig.resume(0) === false && close(settle().pos, elsewhere.pos), '(F8b) resume: the bookmark is spent once')
+  rig.bookmark(0)
+  rig.toTitle()
+  check(rig.mark === null, '(F8b) the title lets the bookmark go')
+  // a cluster's zoom
+  rig.setViews(viewsFor({ localSeats: [0], edges: [-1, 1] }))
+  settle()
+  const before = rig.pose()
+  rig.frameOn(12, -8, 5)
+  const z = settle()
+  check(close(z.target, [12, 0, -8]) && Math.abs(dist(z) - dist(framePose({ cx: 12, cz: -8, r: 5 }, before, 1280 / 800, { min: rig.controls.minDistance * 2, max: rig.controls.maxDistance }))) < 1e-6, "(F8b) frameOn: a cluster's circle framed", `${z.pos.map((x) => x.toFixed(1))} → ${z.target}`)
+  // the keys: 0.5 s of W moves the camera and its target dt · panSpeed(d)
+  // (from the overview, well past 50")
+  rig.toOverview()
+  const p0 = settle(), d0 = dist(p0)
+  rig.keys.add('w')
+  rig.panKeys(0.5)
+  rig.keys.clear()
+  const p1 = rig.pose(), moved = Math.hypot(p1.target[0] - p0.target[0], p1.target[2] - p0.target[2])
+  check(Math.abs(moved - 0.5 * panSpeed(d0)) < 1e-6 && Math.abs(p1.target[1] - p0.target[1]) < 1e-12 && d0 > 50, `(F8b) 0.5 s of W pans ${moved.toFixed(2)}" at ${d0.toFixed(1)}" away (dt · 18 · max(1, d/50))`)
+}
+
 // pure: nothing but the board's size from core/
 const src = readFileSync(join(PKG, 'present', 'camera-presets.js'), 'utf8')
 const imports = [...src.matchAll(/^import .* from '([^']+)'/gm)].map((m) => m[1])
 check(imports.join() === '../core/rules.js', 'present/camera-presets.js imports only core/rules.js (pure: no three.js, no DOM)', imports.join(', '))
 
-console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the camera at load, the field of view, the title's orbit and the follow rule are the R0 code's, a battle opens behind the seat played here or broadside, and the presets keep their own promises`)
+console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the camera at load, the field of view, the title's orbit and the follow rule are the R0 code's, a battle opens behind the seat played here or broadside, and the presets keep their own promises; (F8b) a larger board opens on the seat's half, the keys pan with the distance, batches are framed as the policy says, and the bookmark takes the camera back`)
 process.exit(bad ? 1 : 0)
