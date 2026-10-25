@@ -1,0 +1,753 @@
+import { playStep, makeNoise } from './footsteps.js'
+
+// Procedural sound: every gunshot, footstep, roar and cricket is synthesised
+// with Web Audio at runtime — no samples. Positional sounds get distance
+// attenuation, stereo pan and distance muffling from the listener's pose.
+
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
+
+// Rotor loops per aircraft kind: the chop's low-pass, how fast it beats per
+// rpm, the turbine whine's pitch [at rest, added at full rpm] and its level.
+// The gunship's four blades beat faster and its twin turbines whine higher.
+const ROTOR_VOICES = {
+  heli: { key: 'rotor', cutoff: 380, chop: 9, whine: [300, 900], vol: 1 },
+  gunship: { key: 'gunshipRotor', cutoff: 460, chop: 14, whine: [420, 1250], vol: 1.1 },
+}
+
+export class Audio {
+  constructor() {
+    this.ctx = null
+    this.enabled = true
+    this.volume = 0.8
+    this.listener = { x: 0, y: 0, z: 0, yaw: 0 }
+    this.loops = []
+    this.birdT = 2
+    this.roarT = 30
+    this.heartT = 0
+    this.frogT = 3
+    this.under = 0 // 1 with the listener under the sea: everything muffled, the island hushed
+  }
+
+  init() {
+    if (this.ctx) {
+      if (this.ctx.state === 'suspended') this.ctx.resume()
+      return
+    }
+    const AC = window.AudioContext || window.webkitAudioContext
+    if (!AC) return
+    const ctx = (this.ctx = new AC())
+    this.master = ctx.createGain()
+    this.master.gain.value = this.volume
+    const comp = ctx.createDynamicsCompressor()
+    comp.threshold.value = -14
+    comp.ratio.value = 4
+    // wide open in air; closes down under water (setUnderwater)
+    this.muffle = ctx.createBiquadFilter()
+    this.muffle.type = 'lowpass'
+    this.muffle.frequency.value = 20000
+    this.master.connect(this.muffle).connect(comp).connect(ctx.destination)
+    // a shared second of white noise
+    const len = ctx.sampleRate * 2
+    this.noise = ctx.createBuffer(1, len, ctx.sampleRate)
+    const d = this.noise.getChannelData(0)
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1
+    // echo bus for gunshots and roars
+    this.echo = ctx.createDelay(1)
+    this.echo.delayTime.value = 0.32
+    const fb = ctx.createGain()
+    fb.gain.value = 0.32
+    const ef = ctx.createBiquadFilter()
+    ef.type = 'lowpass'
+    ef.frequency.value = 1400
+    this.echo.connect(ef).connect(fb).connect(this.echo)
+    ef.connect(this.master)
+    this.startAmbience()
+  }
+
+  setVolume(v) {
+    this.volume = v
+    if (this.master) this.master.gain.value = v
+  }
+
+  setListener(pos, yaw) {
+    this.listener.x = pos.x
+    this.listener.y = pos.y
+    this.listener.z = pos.z
+    this.listener.yaw = yaw
+  }
+
+  // Gain/pan/muffle for a world position.
+  spatial(pos, maxDist) {
+    if (!pos) return { gain: 1, pan: 0, cutoff: 20000 }
+    const L = this.listener
+    const dx = pos.x - L.x
+    const dz = pos.z - L.z
+    const dy = (pos.y ?? L.y) - L.y
+    const d = Math.hypot(dx, dy, dz)
+    const g = Math.pow(clamp(1 - d / maxDist, 0, 1), 1.7)
+    // right vector of a camera with this yaw
+    const rx = Math.cos(L.yaw)
+    const rz = -Math.sin(L.yaw)
+    const pan = d > 0.5 ? clamp((dx * rx + dz * rz) / d, -1, 1) * 0.85 : 0
+    return { gain: g, pan, cutoff: clamp(18000 - d * 40, 600, 18000) }
+  }
+
+  // Route a source node to the master through gain/pan/filter.
+  out(node, pos, maxDist, volume, echo = 0) {
+    const ctx = this.ctx
+    const s = this.spatial(pos, maxDist)
+    if (s.gain * volume < 0.002) return null
+    const g = ctx.createGain()
+    g.gain.value = s.gain * volume
+    const f = ctx.createBiquadFilter()
+    f.type = 'lowpass'
+    f.frequency.value = s.cutoff
+    const p = ctx.createStereoPanner()
+    p.pan.value = s.pan
+    node.connect(f).connect(g).connect(p).connect(this.master)
+    if (echo) {
+      const e = ctx.createGain()
+      e.gain.value = echo * s.gain * volume
+      p.connect(e).connect(this.echo)
+    }
+    return g
+  }
+
+  burst({ dur = 0.1, type = 'bandpass', freq = 1000, q = 1, vol = 0.5, attack = 0.002, pos, max = 60, echo = 0, sweep = 0, delay = 0 }) {
+    const ctx = this.ctx
+    const t = ctx.currentTime + delay
+    const src = ctx.createBufferSource()
+    src.buffer = this.noise
+    src.playbackRate.value = 0.8 + Math.random() * 0.4
+    const f = ctx.createBiquadFilter()
+    f.type = type
+    f.frequency.setValueAtTime(freq, t)
+    if (sweep) f.frequency.exponentialRampToValueAtTime(Math.max(40, freq * sweep), t + dur)
+    f.Q.value = q
+    const env = ctx.createGain()
+    env.gain.setValueAtTime(0.0001, t)
+    env.gain.exponentialRampToValueAtTime(1, t + attack)
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+    src.connect(f).connect(env)
+    if (!this.out(env, pos, max, vol, echo)) return
+    src.start(t, Math.random() * 1.5)
+    src.stop(t + dur + 0.05)
+  }
+
+  tone({ type = 'sine', f0 = 440, f1 = f0, dur = 0.2, vol = 0.3, attack = 0.005, pos, max = 60, echo = 0, delay = 0, vibrato = 0, filter = 0 }) {
+    const ctx = this.ctx
+    const t = ctx.currentTime + delay
+    const o = ctx.createOscillator()
+    o.type = type
+    o.frequency.setValueAtTime(f0, t)
+    o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur)
+    if (vibrato) {
+      const lfo = ctx.createOscillator()
+      lfo.frequency.value = 5.5
+      const lg = ctx.createGain()
+      lg.gain.value = f0 * vibrato
+      lfo.connect(lg).connect(o.frequency)
+      lfo.start(t)
+      lfo.stop(t + dur + 0.05)
+    }
+    const env = ctx.createGain()
+    env.gain.setValueAtTime(0.0001, t)
+    env.gain.exponentialRampToValueAtTime(1, t + attack)
+    env.gain.setValueAtTime(1, t + Math.max(attack, dur * 0.6))
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+    let node = o
+    if (filter) {
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.frequency.value = filter
+      o.connect(f)
+      node = f
+    }
+    node.connect(env)
+    if (!this.out(env, pos, max, vol, echo)) return
+    o.start(t)
+    o.stop(t + dur + 0.05)
+  }
+
+  play(name, opts = {}) {
+    if (!this.ctx || !this.enabled) return
+    const pos = opts.pos
+    switch (name) {
+      case 'pistol':
+        this.burst({ dur: 0.09, type: 'highpass', freq: 1800, vol: 0.35 })
+        this.tone({ type: 'square', f0: 900, f1: 300, dur: 0.03, vol: 0.05 })
+        break
+      case 'rifle':
+        this.burst({ dur: 0.16, type: 'bandpass', freq: 900, q: 0.7, vol: 0.5, sweep: 0.4 })
+        this.tone({ f0: 140, f1: 60, dur: 0.1, vol: 0.25 })
+        break
+      case 'hunting':
+        this.burst({ dur: 0.6, type: 'lowpass', freq: 3500, vol: 1, echo: 0.8, sweep: 0.15 })
+        this.tone({ f0: 110, f1: 35, dur: 0.35, vol: 0.7 })
+        this.burst({ dur: 0.08, type: 'highpass', freq: 3000, vol: 0.12, delay: 0.55 })
+        break
+      case 'shotgun':
+        this.burst({ dur: 0.7, type: 'lowpass', freq: 2600, vol: 1, echo: 0.9, sweep: 0.12 })
+        this.tone({ f0: 90, f1: 30, dur: 0.4, vol: 0.8 })
+        this.burst({ dur: 0.06, type: 'bandpass', freq: 1400, q: 3, vol: 0.2, delay: 0.42 })
+        this.burst({ dur: 0.06, type: 'bandpass', freq: 1100, q: 3, vol: 0.2, delay: 0.55 })
+        break
+      case 'syringe':
+        // the pole driven forward: a heavy swish and the clink of the barrel
+        this.burst({ dur: 0.28, type: 'bandpass', freq: 380, q: 1.3, vol: 0.18, attack: 0.07, sweep: 2.6 })
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 2900, q: 7, vol: 0.06, delay: 0.05 })
+        break
+      case 'inject':
+        // the needle thumps in, then the gas charge hisses the cartridge empty
+        this.tone({ f0: 170, f1: 70, dur: 0.09, vol: 0.35, pos, max: 40 })
+        this.burst({ dur: 0.75, type: 'highpass', freq: 3400, vol: 0.2, attack: 0.04, sweep: 0.55, pos, max: 30, delay: 0.05 })
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 2500, q: 6, vol: 0.16, pos, max: 30, delay: 0.82 })
+        break
+      case 'reload':
+        for (let i = 0; i < 3; i++) this.burst({ dur: 0.04, type: 'bandpass', freq: 2200 + i * 400, q: 6, vol: 0.18, delay: i * 0.28 + 0.1 })
+        break
+      case 'empty':
+      case 'click':
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 3000, q: 8, vol: 0.2 })
+        break
+      case 'switch':
+        this.burst({ dur: 0.06, type: 'bandpass', freq: 1200, q: 3, vol: 0.12 })
+        break
+      case 'dartHit':
+        this.tone({ f0: 220, f1: 90, dur: 0.07, vol: 0.4, pos, max: 70 })
+        break
+      case 'dartMiss':
+        this.burst({ dur: 0.05, type: 'bandpass', freq: 900, q: 2, vol: 0.3, pos, max: 50 })
+        break
+      case 'ricochet':
+        this.tone({ f0: 2600, f1: 1100, dur: 0.25, vol: 0.2, pos, max: 70 })
+        break
+      case 'fleshHit':
+        this.burst({ dur: 0.12, type: 'lowpass', freq: 500, vol: 0.5, pos, max: 120 })
+        break
+      case 'stone':
+        this.burst({ dur: 0.04, type: 'bandpass', freq: 1700, q: 5, vol: 0.5, pos, max: 70 })
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 1300, q: 5, vol: 0.3, pos, max: 70, delay: 0.09 })
+        break
+      case 'flare':
+        this.burst({ dur: 1.4, type: 'highpass', freq: 2800, vol: 0.35, pos, max: 60, attack: 0.05 })
+        break
+      case 'throw':
+        this.burst({ dur: 0.18, type: 'bandpass', freq: 600, q: 1, vol: 0.12, sweep: 2 })
+        break
+      case 'scan':
+        this.tone({ f0: 880, dur: 0.08, vol: 0.12 })
+        this.tone({ f0: 1320, dur: 0.12, vol: 0.12, delay: 0.1 })
+        break
+      case 'shutter':
+        // mirror slap, then the curtain closing
+        this.burst({ dur: 0.03, type: 'bandpass', freq: 4200, q: 3, vol: 0.3 })
+        this.tone({ type: 'square', f0: 1900, f1: 1300, dur: 0.018, vol: 0.04 })
+        this.burst({ dur: 0.05, type: 'bandpass', freq: 2300, q: 2.5, vol: 0.22, delay: 0.075 })
+        break
+      case 'sample':
+        this.tone({ f0: 660, dur: 0.25, vol: 0.14 })
+        this.tone({ f0: 990, dur: 0.4, vol: 0.12, delay: 0.12 })
+        break
+      case 'objective':
+        this.tone({ type: 'triangle', f0: 523, dur: 0.3, vol: 0.15 })
+        this.tone({ type: 'triangle', f0: 659, dur: 0.3, vol: 0.15, delay: 0.15 })
+        this.tone({ type: 'triangle', f0: 784, dur: 0.6, vol: 0.15, delay: 0.3 })
+        break
+      case 'penalty':
+        this.tone({ type: 'sawtooth', f0: 220, f1: 110, dur: 0.6, vol: 0.12, filter: 900 })
+        break
+      case 'hurt':
+        this.burst({ dur: 0.15, type: 'lowpass', freq: 400, vol: 0.6 })
+        this.tone({ type: 'sawtooth', f0: 160, f1: 95, dur: 0.22, vol: 0.12, filter: 800 })
+        break
+      case 'splash':
+        this.burst({ dur: 0.6, type: 'lowpass', freq: 1300, vol: 0.5, pos, max: 60, sweep: 0.4 })
+        break
+      case 'jump':
+        this.burst({ dur: 0.08, type: 'lowpass', freq: 500, vol: 0.12 })
+        break
+      case 'land':
+        this.burst({ dur: 0.12, type: 'lowpass', freq: 380, vol: 0.35 })
+        break
+      case 'crate':
+      case 'locker':
+        this.burst({ dur: 0.2, type: 'bandpass', freq: 600, q: 4, vol: 0.4 })
+        this.tone({ type: 'square', f0: 180, f1: 150, dur: 0.12, vol: 0.06, filter: 1200 })
+        break
+      case 'medkit':
+        this.burst({ dur: 0.3, type: 'highpass', freq: 2500, vol: 0.15, sweep: 0.6 })
+        break
+      case 'pump':
+        this.tone({ type: 'sawtooth', f0: 70, f1: 95, dur: 2.2, vol: 0.12, filter: 500, pos, max: 40 })
+        break
+      // ---- vehicles
+      case 'crash': {
+        // a metallic crunch: body thump, tearing panel, rattling bits
+        const k = opts.intensity ?? 0.6
+        this.burst({ dur: 0.22 + k * 0.35, type: 'lowpass', freq: 1100, vol: 0.45 + k * 0.55, pos, max: 160, sweep: 0.25, echo: 0.35 * k })
+        this.burst({ dur: 0.15 + k * 0.25, type: 'bandpass', freq: 2300, q: 2.2, vol: 0.3 + k * 0.4, pos, max: 160, delay: 0.01 })
+        this.tone({ type: 'square', f0: 110, f1: 38, dur: 0.22 + k * 0.15, vol: 0.12 + k * 0.25, pos, max: 160, filter: 700 })
+        for (let i = 0, n = 2 + Math.round(k * 4); i < n; i++) {
+          const f = 1500 + Math.random() * 3200
+          this.tone({ type: 'triangle', f0: f, f1: f * (0.55 + Math.random() * 0.3), dur: 0.08 + Math.random() * 0.25, vol: 0.05 + 0.07 * k, pos, max: 120, delay: 0.03 + i * 0.045 + Math.random() * 0.04 })
+        }
+        break
+      }
+      case 'explosion': {
+        // game/blast.js: a deep thump, the tearing crack on top, rolling echo
+        // off the hills; on water the crack goes and a slap of spray comes in
+        const k = opts.intensity ?? 1
+        this.tone({ type: 'sine', f0: 70, f1: 24, dur: 0.9 + k * 0.4, vol: 0.55 * k, pos, max: 900, echo: 0.6 })
+        this.burst({ dur: 1.4 + k * 0.6, type: 'lowpass', freq: 420, vol: 0.8 * k, pos, max: 900, sweep: 0.4, echo: 0.7 })
+        if (opts.wet) this.burst({ dur: 0.9, type: 'bandpass', freq: 1800, q: 0.7, vol: 0.35 * k, pos, max: 300, delay: 0.05 })
+        else this.burst({ dur: 0.25, type: 'bandpass', freq: 2400, q: 0.6, vol: 0.5 * k, pos, max: 600 })
+        break
+      }
+      case 'tankGun': {
+        // the tank's main gun: a slam you feel, a crack on top, the valley
+        // throwing it back for seconds
+        this.tone({ type: 'sine', f0: 58, f1: 20, dur: 1.5, vol: 0.75, pos, max: 1400, echo: 0.9 })
+        this.burst({ dur: 2.2, type: 'lowpass', freq: 520, vol: 1.0, pos, max: 1400, sweep: 0.3, echo: 0.9 })
+        this.burst({ dur: 0.3, type: 'bandpass', freq: 2600, q: 0.5, vol: 0.7, pos, max: 900 })
+        this.tone({ type: 'square', f0: 120, f1: 40, dur: 0.25, vol: 0.2, pos, max: 600, filter: 900 })
+        break
+      }
+      case 'shellLoad':
+        // a shell rammed home and the breech slamming shut
+        this.burst({ dur: 0.12, type: 'bandpass', freq: 900, q: 3, vol: 0.4, pos, max: 50 })
+        this.tone({ type: 'triangle', f0: 420, f1: 300, dur: 0.18, vol: 0.12, pos, max: 50, delay: 0.05 })
+        this.burst({ dur: 0.1, type: 'bandpass', freq: 1800, q: 4, vol: 0.45, pos, max: 50, delay: 0.42 })
+        this.tone({ type: 'square', f0: 180, f1: 90, dur: 0.1, vol: 0.12, pos, max: 50, delay: 0.42, filter: 1200 })
+        break
+      case 'timber':
+        // a trunk splitting, then the crown coming down through the leaves
+        this.burst({ dur: 0.18, type: 'bandpass', freq: 1300, q: 2, vol: 0.45, pos, max: 160 })
+        this.burst({ dur: 0.9, type: 'highpass', freq: 2400, vol: 0.18, pos, max: 120, delay: 0.25 })
+        this.burst({ dur: 0.35, type: 'lowpass', freq: 260, vol: 0.5, pos, max: 160, delay: 0.95 })
+        break
+      case 'missile': {
+        // game/missiles.js: the clunk off the rail, the motor catching with a
+        // tearing roar, and the rush of it going away down the valley
+        this.burst({ dur: 0.08, type: 'lowpass', freq: 600, vol: 0.4, pos, max: 120 })
+        this.burst({ dur: 0.5, type: 'bandpass', freq: 1500, q: 0.5, vol: 0.55, pos, max: 500, delay: 0.26, echo: 0.3 })
+        this.burst({ dur: 2.2, type: 'lowpass', freq: 900, vol: 0.45, pos, max: 500, delay: 0.3, sweep: 0.3, echo: 0.4 })
+        this.tone({ type: 'sawtooth', f0: 180, f1: 60, dur: 1.6, vol: 0.06, pos, max: 300, delay: 0.3, filter: 900 })
+        break
+      }
+      case 'rearm':
+        // rails loaded one by one: a clank and a latch per missile
+        for (let i = 0; i < 4; i++) {
+          this.burst({ dur: 0.06, type: 'bandpass', freq: 900, q: 3, vol: 0.3, pos, max: 40, delay: i * 0.22 })
+          this.burst({ dur: 0.03, type: 'bandpass', freq: 3200, q: 6, vol: 0.2, pos, max: 40, delay: i * 0.22 + 0.09 })
+        }
+        break
+      case 'warning':
+        // master-caution chirp; faster and higher when critical
+        this.tone({ type: 'square', f0: opts.level ? 1040 : 880, dur: 0.11, vol: 0.07, filter: 3000 })
+        this.tone({ type: 'square', f0: opts.level ? 780 : 660, dur: 0.11, vol: 0.07, filter: 3000, delay: 0.15 })
+        break
+      case 'sputter':
+        this.burst({ dur: 0.12, type: 'lowpass', freq: 320, vol: 0.5, pos, max: 120 })
+        this.tone({ type: 'sawtooth', f0: 70, f1: 32, dur: 0.18, vol: 0.18, pos, max: 120, filter: 400 })
+        break
+      case 'ignition':
+        // starter cranking, then the engine catching
+        for (let i = 0; i < 4; i++) this.burst({ dur: 0.09, type: 'bandpass', freq: 380, q: 2, vol: 0.25, pos, max: 60, delay: i * 0.13 })
+        this.tone({ type: 'sawtooth', f0: 40, f1: 75, dur: 0.5, vol: 0.2, pos, max: 60, filter: 500, delay: 0.5 })
+        break
+      case 'repair':
+        for (let i = 0; i < 5; i++) this.burst({ dur: 0.04, type: 'bandpass', freq: 2600 + Math.random() * 900, q: 7, vol: 0.2, pos, max: 40, delay: i * 0.11 })
+        this.tone({ type: 'triangle', f0: 1800, f1: 1500, dur: 0.3, vol: 0.06, pos, max: 40, delay: 0.6 })
+        break
+      case 'heartbeat':
+        this.tone({ f0: 62, f1: 40, dur: 0.12, vol: 0.35 })
+        this.tone({ f0: 58, f1: 38, dur: 0.12, vol: 0.25, delay: 0.22 })
+        break
+      case 'toast':
+        this.tone({ f0: 1200, dur: 0.06, vol: 0.05 })
+        break
+      case 'sonar':
+        // the submersible's ping and its echoes coming back off the bottom
+        this.tone({ f0: 1480, f1: 1420, dur: 0.9, vol: 0.16, attack: 0.004 })
+        for (let i = 1; i <= 3; i++) this.tone({ f0: 1450, f1: 1400, dur: 0.5, vol: 0.06 / i, delay: 0.35 + i * 0.42, filter: 2400 })
+        break
+    }
+  }
+
+  // Under the sea the world goes dull and close: a lowpass over everything
+  // and the island's ambience hushed. k: 0 in air .. 1 in the water (a
+  // submersible's cabin is in between: its own pings and whine come through).
+  setUnderwater(k) {
+    if (this.under === k) return
+    this.under = k
+    if (this.muffle) this.muffle.frequency.setTargetAtTime(20000 * Math.pow(600 / 20000, k), this.ctx.currentTime, 0.08)
+  }
+
+  // The submersible's thrusters: an electric whine that climbs with the
+  // throttle over the wash of water past the ducts.
+  setThrusters(rpm, load, pos, inside) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    if (!this.thrusters) {
+      const whine = ctx.createOscillator()
+      whine.type = 'triangle'
+      const wg = ctx.createGain()
+      wg.gain.value = 0.25
+      const hum = ctx.createOscillator()
+      hum.type = 'sine'
+      hum.frequency.value = 60
+      const hg = ctx.createGain()
+      hg.gain.value = 0.5
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      const nf = ctx.createBiquadFilter()
+      nf.type = 'bandpass'
+      nf.Q.value = 0.8
+      const ng = ctx.createGain()
+      ng.gain.value = 0.6
+      const g = ctx.createGain()
+      g.gain.value = 0
+      const p = ctx.createStereoPanner()
+      whine.connect(wg).connect(g)
+      hum.connect(hg).connect(g)
+      src.connect(nf).connect(ng).connect(g)
+      g.connect(p).connect(this.master)
+      for (const n of [whine, hum, src]) n.start()
+      this.thrusters = { g, p, whine, nf, ng }
+    }
+    const e = this.thrusters
+    const t = ctx.currentTime
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 120)
+    e.whine.frequency.setTargetAtTime(180 + rpm * 620, t, 0.15)
+    e.nf.frequency.setTargetAtTime(200 + rpm * 500, t, 0.2)
+    e.ng.gain.setTargetAtTime(0.2 + load * 0.8, t, 0.2)
+    const vol = rpm > 0.01 ? 0.05 + rpm * 0.12 + load * 0.08 : 0
+    e.g.gain.setTargetAtTime(vol * s.gain * (inside ? 0.9 : 1.2), t, 0.12)
+    e.p.pan.setTargetAtTime(s.pan, t, 0.1)
+  }
+
+  // The player's own footstep (audio/footsteps.js): heel, toe and the surface
+  // underfoot. `intensity` is 0.35 crouched … 1 sprinting; `side` is the foot
+  // that lands (-1 left, 1 right; alternates if not given); `tune` keeps one
+  // deck or bench at one pitch.
+  step(surface, intensity, side, tune) {
+    if (!this.ctx || !this.enabled) return
+    this.stepSide = side ?? (this.stepSide > 0 ? -1 : 1)
+    playStep(this.ctx, this.master, this.noise, surface, { intensity, side: this.stepSide, tune })
+  }
+
+  // Test hook: the same footstep rendered offline, to measure its envelope.
+  renderStep(surface, intensity = 0.65, seconds = 0.5, tune) {
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext
+    const ctx = new OAC(2, Math.ceil(44100 * seconds), 44100)
+    playStep(ctx, ctx.destination, makeNoise(ctx), surface, { intensity, side: 1, t: 0.01, tune })
+    return ctx.startRendering()
+  }
+
+  // Dinosaur voices from a few synthesis recipes, pitched by body size.
+  voice(sp, kind, pos) {
+    if (!this.ctx || !this.enabled) return
+    const s = sp.sound
+    const p = s.pitch * (0.9 + Math.random() * 0.2)
+    const max = 120 + s.size * 380
+    const vol = 0.25 + s.size * 0.6
+    const short = kind === 'attack' || kind === 'alarm'
+    switch (s.voice) {
+      case 'roar': {
+        const dur = short ? 0.7 : 2.4
+        this.tone({ type: 'sawtooth', f0: 140 * p, f1: 70 * p, dur, vol: vol * 0.8, attack: 0.15, pos, max, echo: 0.6, filter: 700, vibrato: 0.04 })
+        this.tone({ type: 'sawtooth', f0: 70 * p, f1: 45 * p, dur, vol: vol * 0.8, attack: 0.2, pos, max, filter: 400 })
+        this.burst({ dur, type: 'bandpass', freq: 420 * p, q: 1.2, vol: vol * 0.7, attack: 0.15, pos, max, sweep: 0.6 })
+        break
+      }
+      case 'bellow': {
+        const dur = short ? 0.5 : 1.3
+        this.tone({ type: 'sawtooth', f0: 170 * p, f1: 120 * p, dur, vol: vol * 0.6, attack: 0.08, pos, max, filter: 650, echo: 0.3 })
+        this.burst({ dur, type: 'bandpass', freq: 300 * p, q: 2, vol: vol * 0.5, attack: 0.1, pos, max })
+        break
+      }
+      case 'horn': {
+        const dur = short ? 0.6 : 1.6
+        this.tone({ type: 'triangle', f0: 230 * p, f1: 210 * p, dur, vol: vol * 0.7, attack: 0.25, pos, max, echo: 0.5, vibrato: 0.02 })
+        this.tone({ type: 'sine', f0: 460 * p, f1: 420 * p, dur, vol: vol * 0.25, attack: 0.3, pos, max })
+        break
+      }
+      case 'honk':
+        this.tone({ type: 'square', f0: 520 * p, f1: 380 * p, dur: 0.22, vol: vol * 0.3, pos, max, filter: 1800 })
+        if (!short) this.tone({ type: 'square', f0: 560 * p, f1: 400 * p, dur: 0.2, vol: vol * 0.25, pos, max, filter: 1800, delay: 0.28 })
+        break
+      case 'screech':
+        this.tone({ type: 'sawtooth', f0: 700 * p, f1: 1100 * p, dur: short ? 0.25 : 0.55, vol: vol * 0.45, pos, max, filter: 3500, vibrato: 0.08, echo: 0.2 })
+        this.burst({ dur: 0.4, type: 'bandpass', freq: 2200, q: 2, vol: vol * 0.3, pos, max })
+        break
+      case 'chirp':
+        for (let i = 0; i < 3; i++) this.tone({ f0: 2200 * p * 0.5, f1: 3200 * p * 0.5, dur: 0.07, vol: vol * 0.4, pos, max, delay: i * 0.1 })
+        break
+      case 'hiss':
+        this.burst({ dur: short ? 0.4 : 0.9, type: 'highpass', freq: 2800, vol: vol * 0.6, attack: 0.05, pos, max })
+        this.tone({ type: 'square', f0: 340 * p, f1: 300 * p, dur: 0.6, vol: vol * 0.12, pos, max, filter: 1500, vibrato: 0.3 })
+        break
+      case 'grunt':
+        this.tone({ type: 'sawtooth', f0: 110 * p, f1: 75 * p, dur: short ? 0.3 : 0.6, vol: vol * 0.6, pos, max, filter: 500 })
+        break
+    }
+  }
+
+  // Persistent positional loop (generator hum).
+  loopAt(kind, pos) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    const g = ctx.createGain()
+    g.gain.value = 0
+    const f = ctx.createBiquadFilter()
+    f.type = 'lowpass'
+    f.frequency.value = 320
+    for (const fr of [50, 100, 150]) {
+      const o = ctx.createOscillator()
+      o.type = 'sawtooth'
+      o.frequency.value = fr + Math.random()
+      const og = ctx.createGain()
+      og.gain.value = 0.3 / (fr / 50)
+      o.connect(og).connect(f)
+      o.start()
+    }
+    const p = ctx.createStereoPanner()
+    f.connect(g).connect(p).connect(this.master)
+    this.loops.push({ g, p, pos, max: 45, vol: 0.35 })
+  }
+
+  // A rotor loop per aircraft (`kind` picks a ROTOR_VOICES entry), so two
+  // helicopters in the air at once each keep their own.
+  setRotor(rpm, pos, inside, kind = 'heli') {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    const V = ROTOR_VOICES[kind] || ROTOR_VOICES.heli
+    const key = V.key
+    if (!this[key]) {
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.frequency.value = V.cutoff
+      const chop = ctx.createGain()
+      const lfo = ctx.createOscillator()
+      lfo.type = 'square'
+      const lg = ctx.createGain()
+      lg.gain.value = 0.5
+      lfo.connect(lg).connect(chop.gain)
+      chop.gain.value = 0.5
+      const whine = ctx.createOscillator()
+      whine.type = 'sine'
+      const wg = ctx.createGain()
+      wg.gain.value = 0.04
+      const g = ctx.createGain()
+      g.gain.value = 0
+      const p = ctx.createStereoPanner()
+      src.connect(f).connect(chop).connect(g)
+      whine.connect(wg).connect(g)
+      g.connect(p).connect(this.master)
+      src.start()
+      lfo.start()
+      whine.start()
+      this[key] = { g, p, lfo, whine }
+    }
+    const r = this[key]
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, 450)
+    r.g.gain.setTargetAtTime(rpm * s.gain * (inside ? 0.9 : 1.4) * V.vol, ctx.currentTime, 0.1)
+    r.p.pan.setTargetAtTime(s.pan, ctx.currentTime, 0.1)
+    r.lfo.frequency.setTargetAtTime(2 + rpm * V.chop, ctx.currentTime, 0.2)
+    r.whine.frequency.setTargetAtTime(V.whine[0] + rpm * V.whine[1], ctx.currentTime, 0.3)
+  }
+
+  // The missile seeker's tone in the headset: a low growl while it searches,
+  // a pulse that climbs as it builds a lock (`progress` 0..1), one steady
+  // high note once locked; silent when off.
+  setSeeker(mode, progress = 0) {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    if (!this.seeker) {
+      const o = ctx.createOscillator()
+      o.type = 'square'
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.frequency.value = 2400
+      const am = ctx.createGain()
+      am.gain.value = 0.5
+      const lfo = ctx.createOscillator()
+      lfo.type = 'square'
+      const depth = ctx.createGain()
+      depth.gain.value = 0
+      lfo.connect(depth).connect(am.gain)
+      const g = ctx.createGain()
+      g.gain.value = 0
+      o.connect(f).connect(am).connect(g).connect(this.master)
+      o.start()
+      lfo.start()
+      this.seeker = { o, lfo, depth, g }
+    }
+    const k = this.seeker
+    const t = ctx.currentTime
+    const tone = { off: [0, 220, 0, 1], search: [0.025, 230, 0.5, 13], track: [0.04, 420 + 700 * progress, 0.5, 3 + 9 * progress], locked: [0.05, 1350, 0, 1] }[mode] || [0, 220, 0, 1]
+    k.g.gain.setTargetAtTime(tone[0], t, 0.03)
+    k.o.frequency.setTargetAtTime(tone[1], t, 0.04)
+    k.depth.gain.setTargetAtTime(tone[2], t, 0.02)
+    k.lfo.frequency.setTargetAtTime(tone[3], t, 0.05)
+  }
+
+  // Paused (menu, map, journal): the engine and rotor loops go quiet. The
+  // vehicles set them again on their next update.
+  pauseVehicles() {
+    if (!this.ctx) return
+    const t = this.ctx.currentTime
+    for (const V of Object.values(ROTOR_VOICES)) if (this[V.key]) this[V.key].g.gain.setTargetAtTime(0, t, 0.05)
+    if (this.seeker) this.seeker.g.gain.setTargetAtTime(0, t, 0.05)
+    for (const engine of [this.engine, this.bikeEngine, this.humveeEngine, this.tankEngine, this.thrusters]) if (engine) engine.g.gain.setTargetAtTime(0, t, 0.05)
+  }
+
+  // The jeep's engine: two saws an octave apart and a lumpy noise rumble,
+  // pitched by rpm, opened up by throttle, with a lope at idle.
+  setEngine(rpm, load, pos, inside, kind = 'jeep') {
+    if (!this.ctx) return
+    const ctx = this.ctx
+    // each ground vehicle has its own voice, so one winding down never
+    // fights the one being driven
+    const key = { motorbike: 'bikeEngine', humvee: 'humveeEngine', tank: 'tankEngine' }[kind] || 'engine'
+    if (!this[key]) {
+      const am = ctx.createGain()
+      am.gain.value = 0.8
+      const lope = ctx.createOscillator()
+      lope.frequency.value = 7
+      const lg = ctx.createGain()
+      lg.gain.value = 0.25
+      lope.connect(lg).connect(am.gain)
+      const o1 = ctx.createOscillator()
+      o1.type = 'sawtooth'
+      const o2 = ctx.createOscillator()
+      o2.type = 'sawtooth'
+      const g1 = ctx.createGain()
+      g1.gain.value = 0.5
+      const g2 = ctx.createGain()
+      g2.gain.value = 0.6
+      o1.connect(g1).connect(am)
+      o2.connect(g2).connect(am)
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      const nf = ctx.createBiquadFilter()
+      nf.type = 'bandpass'
+      nf.frequency.value = 160
+      nf.Q.value = 1.2
+      const ng = ctx.createGain()
+      ng.gain.value = 0.7
+      src.connect(nf).connect(ng).connect(am)
+      const f = ctx.createBiquadFilter()
+      f.type = 'lowpass'
+      f.Q.value = 1.5
+      const g = ctx.createGain()
+      g.gain.value = 0
+      const p = ctx.createStereoPanner()
+      am.connect(f).connect(g).connect(p).connect(this.master)
+      for (const n of [lope, o1, o2, src]) n.start()
+      this[key] = { g, f, p, o1, o2, lope, nf }
+    }
+    const e = this[key]
+    const t = ctx.currentTime
+    const s = inside ? { gain: 1, pan: 0 } : this.spatial(pos, kind === 'tank' ? 320 : 170)
+    // firing frequency: a buzzing single, the jeep's four, the humvee's
+    // diesel, the tank's big slow diesel
+    const fire = kind === 'motorbike' ? 45 + rpm * 155 : kind === 'tank' ? 15 + rpm * 48 : kind === 'humvee' ? 21 + rpm * 78 : 26 + rpm * 100
+    e.o1.frequency.setTargetAtTime(fire, t, 0.06)
+    e.o2.frequency.setTargetAtTime(fire * 0.5, t, 0.06)
+    e.lope.frequency.setTargetAtTime(5 + rpm * 30, t, 0.1)
+    e.nf.frequency.setTargetAtTime(120 + rpm * 260, t, 0.1)
+    e.f.frequency.setTargetAtTime(260 + rpm * 900 + load * 700, t, 0.08)
+    const vol = rpm > 0.01 ? 0.1 + rpm * 0.22 + load * 0.12 : 0
+    e.g.gain.setTargetAtTime(vol * s.gain * (inside ? 0.85 : 1.3), t, 0.08)
+    e.p.pan.setTargetAtTime(s.pan, t, 0.1)
+  }
+
+  startAmbience() {
+    const ctx = this.ctx
+    const mk = (type, freq, q, vol) => {
+      const src = ctx.createBufferSource()
+      src.buffer = this.noise
+      src.loop = true
+      src.playbackRate.value = 0.5 + Math.random() * 0.2
+      const f = ctx.createBiquadFilter()
+      f.type = type
+      f.frequency.value = freq
+      f.Q.value = q
+      const g = ctx.createGain()
+      g.gain.value = vol
+      src.connect(f).connect(g).connect(this.master)
+      src.start()
+      return { g, f }
+    }
+    this.wind = mk('lowpass', 380, 0.5, 0.05)
+    this.surf = mk('lowpass', 520, 0.7, 0)
+    this.insects = mk('bandpass', 4600, 9, 0.012)
+    const trem = ctx.createOscillator()
+    trem.frequency.value = 17
+    const tg = ctx.createGain()
+    tg.gain.value = 0.008
+    trem.connect(tg).connect(this.insects.g.gain)
+    trem.start()
+  }
+
+  // Ambience and positional loops, once per frame.
+  update(dt, G) {
+    if (!this.ctx || this.ctx.state !== 'running') return
+    const t = this.ctx.currentTime
+    const day = G.sky.light
+    const air = G.vehicle?.aircraft ? G.vehicle : null
+    const alt = air ? air.pos.y - G.island.heightAt(air.pos.x, air.pos.z) : 0
+    this.setUnderwater(G.underwater?.active ? (G.vehicle?.inside ? 0.55 : 1) : 0)
+    const dry = this.under ? 0 : 1 // wind, insects and birds don't reach under the sea
+    this.wind.g.gain.setTargetAtTime((0.03 + 0.03 * Math.sin(t * 0.13) + 0.02 * Math.sin(t * 0.41) + Math.min(0.08, alt / 2000)) * dry, t, 0.5)
+    this.insects.g.gain.setTargetAtTime((1.4 - day) * 0.014 * dry, t, 1)
+    const L = this.listener
+    const coast = Math.hypot(L.x, L.z) > 560 && G.island.heightAt(L.x, L.z) < 12 ? 1 : 0
+    // under water the surf becomes the low roll of the sea all round
+    this.surf.g.gain.setTargetAtTime(this.under ? 0.07 : coast * (0.05 + 0.04 * Math.sin(t * 0.35)), t, 1.5)
+    for (const l of this.loops) {
+      const s = this.spatial(l.pos, l.max)
+      l.g.gain.setTargetAtTime(s.gain * l.vol, t, 0.2)
+      l.p.pan.setTargetAtTime(s.pan, t, 0.2)
+    }
+    // birds by day, frogs by night
+    this.birdT -= dt
+    if (this.birdT <= 0 && !this.under) {
+      this.birdT = 0.8 + Math.random() * 3.5
+      const a = Math.random() * Math.PI * 2
+      const pos = { x: L.x + Math.cos(a) * 30, y: L.y + 10, z: L.z + Math.sin(a) * 30 }
+      if (day > 0.5) {
+        const f = 1800 + Math.random() * 2500
+        const n = 1 + Math.floor(Math.random() * 4)
+        for (let i = 0; i < n; i++) this.tone({ f0: f, f1: f * (0.7 + Math.random() * 0.8), dur: 0.08 + Math.random() * 0.1, vol: 0.06, pos, max: 80, delay: i * 0.13 })
+      } else {
+        this.tone({ type: 'square', f0: 180 + Math.random() * 80, f1: 140, dur: 0.12, vol: 0.05, pos, max: 80, filter: 700 })
+      }
+    }
+    // the island reminds you it is not empty
+    this.roarT -= dt
+    if (this.roarT <= 0) {
+      this.roarT = 35 + Math.random() * 60
+      const pool = ['tyrannosaurus', 'parasaurolophus', 'triceratops', 'velociraptor', 'brachiosaurus']
+      const sp = G.species[pool[Math.floor(Math.random() * pool.length)]]
+      const a = Math.random() * Math.PI * 2
+      this.voice(sp, 'roar', { x: L.x + Math.cos(a) * 300, y: L.y, z: L.z + Math.sin(a) * 300 })
+    }
+    // heartbeat when something is hunting you
+    const hunted = G.ecology.active.some((c) => c.brain.state === 'hunt' && c.brain.data.target === 'player' && Math.hypot(c.pos.x - L.x, c.pos.z - L.z) < 45)
+    if (hunted) {
+      this.heartT -= dt
+      if (this.heartT <= 0) {
+        this.heartT = 0.62
+        this.play('heartbeat')
+      }
+    }
+  }
+}

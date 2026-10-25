@@ -11,8 +11,12 @@ packages/*/public/vendor/
 .DS_Store
 *.log
 packages/*/tools/shots/
+# cold-boot's narrated-cut renders: gigabytes of frames, plus the narration and mp4
+packages/cold-boot/out/
 # scratch harnesses used while verifying a change in a real browser
 /.probe-*.mjs
 /.probe/
 _probe*.mjs
 __probe*.mjs
+# the Grand fixture tails-and-scales builds for its scale checks, fresh on every run
+packages/tails-and-scales/sim/.fixtures/

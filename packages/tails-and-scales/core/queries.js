@@ -1,0 +1,136 @@
+// Read-only questions about the match: who is alive, engaged, in cover, in
+// sight; who holds an objective; who can still act. Each one that needs the
+// match takes G first; the ones that read only their arguments (alive, dist,
+// gap, mx/mz, eyeY/chestY) don't. None of them changes anything but the nav
+// cache (movePlan and chargePlan refresh it, as they always have), and none
+// draws a die.
+//
+// This module is also the query set the ?debug surface and the AI reach for:
+// it re-exports the move, shoot, charge and deploy queries and the dice
+// stream's fingerprint (rngState).
+import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
+import { hypot } from './dmath.js'
+import { canShoot, shootTargets } from './actions/shoot.js'
+import { canCharge, chargeTargets } from './actions/charge.js'
+
+export { moveMode, forbidMask, movePlan, validEnd, nearestValid } from './actions/move.js'
+export { canShoot, shotInfo, shootTargets } from './actions/shoot.js'
+export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
+export { freeSpot } from './deploy.js'
+export { rngState } from './rng.js'
+
+export const alive = (u) => u.alive > 0
+export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e))
+export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u)
+export const dist = (a, b) => hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
+export const gap = (a, b) => dist(a, b) - a.r - b.r
+export const engagedWith = (G, u) => enemiesOf(G, u).filter((e) => gap(u, e) <= ENGAGE + 0.05)
+// Where a model stands as far as the rules are concerned: its slot in the
+// formation, not wherever its figure has animated to this frame.
+export const mx = (u, m) => u.pos.x + m.ox
+export const mz = (u, m) => u.pos.z + m.oz
+export const isEngaged = (G, u) => engagedWith(G, u).length > 0
+
+// ── Line of sight, cover, control ───────────────────────────────────────────
+export const eyeY = (u) => u.t.eye
+export const chestY = (u) => u.t.chest
+
+export function inCover(G, u) {
+  const live = u.models.filter((m) => m.alive)
+  if (u.t.fly) return false
+  let n = 0
+  for (const m of live) if (G.nav.cover[G.nav.index(mx(u, m), mz(u, m))]) n++
+  return n * 2 >= live.length && n > 0
+}
+
+// Can `a` see `b`? Rays from a's centre to each of b's models. (S1)
+// `bCover`, when given, is inCover(G, b), worked out once by a caller that
+// asks from many places (the AI's lattice scan, core/ai/score.js).
+export function sight(G, a, b, from = a.pos, bCover = undefined) {
+  const eye = { x: from.x, y: eyeY(a), z: from.z }
+  let seen = 0, obsc = 0, total = 0
+  for (const m of b.models) {
+    if (!m.alive) continue
+    total++
+    const r = G.terrain.los(eye, { x: mx(b, m), y: chestY(b), z: mz(b, m) })
+    if (!r.blocked) {
+      seen++
+      if (r.obscure) obsc++
+    }
+  }
+  return { visible: seen > 0, cover: seen > 0 && (obsc > 0 || seen < total || (bCover ?? inCover(G, b))), seen, total }
+}
+
+export function leadership(G, u) {
+  let ld = u.t.Ld
+  for (const f of friendsOf(G, u)) if (f.t.hero && dist(u, f) <= AURA + u.r) ld = Math.max(ld, f.t.Ld)
+  return ld
+}
+
+// Who holds objective `o`: the seat with more OC within range, -1 for nobody.
+export function controlOf(G, o) {
+  const oc = [0, 0]
+  for (const u of G.units) {
+    if (!alive(u)) continue
+    for (const m of u.models) if (m.alive && hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
+  }
+  return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
+}
+
+// What the table shows at the end of an action (DESIGN §2.3's `objectives`
+// and `status` events): who holds each objective, and which units are in
+// combat or mesmerized (by id).
+export const ownersOf = (G) => G.objectives.map((o) => controlOf(G, o))
+export const statusOf = (G) => ({
+  engaged: G.units.filter((u) => alive(u) && isEngaged(G, u)).map((u) => u.id),
+  mesmerized: G.units.filter((u) => u.mesmerized).map((u) => u.id),
+})
+
+// ── Who can act ─────────────────────────────────────────────────────────────
+// The key of the turn's phase ('move' … 'morale'). G.turn.ph is its index in
+// PHASES; once a turn's last phase is over (the engine's turn end and round
+// scoring) it is one past the end, and the phase is still the last one run.
+export const phaseKey = (G) => PHASES[Math.min(G.turn.ph, PHASES.length - 1)].key
+
+// Something left to do for `u` in the current phase of its own turn.
+export function canAct(G, u) {
+  if (!alive(u) || u.side !== G.turn.active) return false
+  switch (phaseKey(G)) {
+    case 'move': return !u.flags.moved
+    case 'shoot': return canShoot(G, u) && shootTargets(G, u).length > 0
+    case 'charge': return canCharge(G, u) && chargeTargets(G, u).length > 0
+  }
+  return false
+}
+export const anyCanAct = (G, side) => G.units.some((u) => u.side === side && canAct(G, u))
+
+// ── A set of a seat's units, as one number (F10b's `pilot {m}`) ─────────────
+// Bit j is the seat's j-th unit in G.units order, dead or alive, so a mask
+// means the same units on every peer for the whole battle. maskUnits is the
+// units a mask names, in G.units order, or null when it names a unit the
+// seat doesn't have (a bit past its last); exact division, never a bitwise
+// operator, so a mask may use all 53 bits a safe integer holds (a Grand
+// army's 24 among them).
+export function maskUnits(G, seat, m) {
+  const mine = G.units.filter((u) => u.side === seat), out = []
+  for (let j = 0; m > 0; j++) {
+    const r = m % 2
+    if (r) {
+      if (j >= mine.length) return null
+      out.push(mine[j])
+    }
+    m = (m - r) / 2
+  }
+  return out
+}
+// the mask naming the seat's units among `ids` (bit by doubling: core/
+// keeps out the ** operator)
+export function maskOf(G, seat, ids) {
+  let m = 0, bit = 1
+  for (const u of G.units) {
+    if (u.side !== seat) continue
+    if (ids.includes(u.id)) m += bit
+    bit *= 2
+  }
+  return m
+}

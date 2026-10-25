@@ -1,0 +1,398 @@
+{
+  "title": "Cold Boot — narrated cut",
+  "fps": 30,
+  "size": [
+    1920,
+    1080
+  ],
+  "voice": "af_heart",
+  "speed": 1.0,
+  "lead": 0.7,
+  "gap": 0.35,
+  "tail": 1.1,
+  "segments": [
+    {
+      "name": "standby",
+      "step": 0,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "A PC that's switched off is still sipping power.",
+        "A coin cell keeps its clock ticking, and the power supply's standby rail keeps part of the chipset awake, with one small chip watching the power button."
+      ]
+    },
+    {
+      "name": "press",
+      "step": 1,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        "Press it, and a single green wire tells the power supply to switch on."
+      ]
+    },
+    {
+      "name": "power-good",
+      "step": 2,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "The supply ramps its rails, then deliberately waits up to a quarter of a second before promising the power is stable.",
+        "It's the longest single wait before the CPU runs anything."
+      ]
+    },
+    {
+      "name": "csme",
+      "step": 3,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "Inside the chipset, another computer boots first: Intel's security engine, a 32-bit core based on the 486.",
+          "Inside the chipset, another computer boots first: Intel's security engine, a thirty-two-bit core based on the four eighty-six."
+        ],
+        [
+          "It loads signed firmware from the same flash chip as the BIOS, sets up the clocks, and only then lets the main processor out of reset.",
+          "It loads signed firmware from the same flash chip as the bye-oss, sets up the clocks, and only then lets the main processor out of reset."
+        ]
+      ]
+    },
+    {
+      "name": "reset",
+      "step": 4,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        "Reset lifts, and every core runs its reset microcode.",
+        "One hardware thread is chosen to lead: the bootstrap processor.",
+        [
+          "The other 31 halt, powered and listening, until software sends them a start-up message.",
+          "The other thirty-one halt, powered and listening, until software sends them a start-up message."
+        ]
+      ]
+    },
+    {
+      "name": "microcode",
+      "step": 5,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "Before its very first instruction, the processor patches itself.",
+        "It finds a table in flash and loads a microcode update into every thread, on every boot, because a hard reset wipes the last one."
+      ]
+    },
+    {
+      "name": "boot-guard",
+      "step": 6,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "On PCs with Boot Guard, an Intel-signed module runs next, from inside the cache, and checks the firmware before letting it run.",
+        [
+          "So on those machines, the first x86 code isn't 16-bit at all.",
+          "So on those machines, the first x eighty-six code isn't sixteen-bit at all."
+        ]
+      ]
+    },
+    {
+      "name": "first-fetch",
+      "step": 8,
+      "p0": 0.0,
+      "p1": 0.999,
+      "shot": [
+        [
+          0,
+          "bsp"
+        ],
+        [
+          "@2",
+          "fetch"
+        ]
+      ],
+      "inset": [
+        [
+          0,
+          null
+        ],
+        [
+          "@2",
+          {
+            "shot": "dieLeft",
+            "label": "ON THE DIE: CORE → RING → DMI"
+          }
+        ]
+      ],
+      "drift": 1.2,
+      "say": [
+        [
+          "The reset is over. One thread, on one core, starts out in 16-bit real mode, just like an 8086 from 1978.",
+          "The reset is over. One thread, on one core, starts out in sixteen-bit real mode, just like an eighty eighty-six from nineteen seventy-eight."
+        ],
+        [
+          "Its first instruction sits sixteen bytes below 4 GiB.",
+          "Its first instruction sits sixteen bytes below four gigabytes."
+        ],
+        [
+          "There's no RAM yet, and the caches are off. So the fetch leaves the die, crosses to the chipset, and is read out of the flash chip that holds the firmware.",
+          "There's no ram yet, and the caches are off. So the fetch leaves the die, crosses to the chipset, and is read out of the flash chip that holds the firmware."
+        ]
+      ]
+    },
+    {
+      "name": "far-jump",
+      "step": 10,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "The code wears 1978 clothes, but already reaches for 1985 parts.",
+          "The code wears nineteen seventy-eight clothes, but already reaches for nineteen eighty-five parts."
+        ],
+        "It loads a tiny table of segments, sets one bit in a control register, and makes a far jump.",
+        "About twenty instructions in, real mode is over."
+      ]
+    },
+    {
+      "name": "cache-as-ram",
+      "step": 13,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "It's a 386 now, but it still has no RAM to put anything in.",
+          "It's a three eighty-six now, but it still has no ram to put anything in."
+        ],
+        "So the firmware borrows the cache.",
+        "It points it at addresses where no memory exists, then switches on No-Eviction Mode, so those lines can never be thrown out.",
+        [
+          "768 KiB of RAM, made of cache.",
+          "Seven hundred and sixty-eight kilobytes of ram, made of cache."
+        ]
+      ]
+    },
+    {
+      "name": "first-call",
+      "step": 14,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "Now there's a stack, and for the first time since reset, the processor makes a call.",
+        "From here on, the firmware is written in C."
+      ]
+    },
+    {
+      "name": "eye",
+      "step": 21,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 0.6,
+      "say": [
+        [
+          "Next it has to teach the DDR5 memory to talk.",
+          "Next it has to teach the D D R five memory to talk."
+        ],
+        [
+          "At these speeds a bit lasts under 180 picoseconds, so every byte lane needs its own timing.",
+          "At these speeds a bit lasts under a hundred and eighty picoseconds, so every byte lane needs its own timing."
+        ],
+        "The firmware sweeps timing and voltage, testing at each setting, and parks each lane in the middle of the passing region: the eye."
+      ]
+    },
+    {
+      "name": "first-boot",
+      "step": 22,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "With about fifty training steps, a first boot with new DDR5 typically sits on a black screen for tens of seconds.",
+          "With about fifty training steps, a first boot with new D D R five typically sits on a black screen for tens of seconds."
+        ],
+        "On a normal boot, the saved results are simply restored."
+      ]
+    },
+    {
+      "name": "leave-cache",
+      "step": 24,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "Memory works, and everything worth keeping is copied into it.",
+        "Then the firmware does something no normal program ever should: it throws away the entire cache, without writing anything back."
+      ]
+    },
+    {
+      "name": "doorbell",
+      "step": 25,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "Now it wakes the other 31 threads, all at once.",
+          "Now it wakes the other thirty-one threads, all at once."
+        ],
+        [
+          "Each starts as an 8086, climbs to 32-bit protected mode in about a dozen instructions, reports in, and parks.",
+          "Each starts as an eighty eighty-six, climbs to thirty-two-bit protected mode in about a dozen instructions, reports in, and parks."
+        ]
+      ]
+    },
+    {
+      "name": "smm",
+      "step": 26,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        "Then, one at a time, each is sent into System Management Mode to move its private save area.",
+        "Entering that mode drops a thread back to something like real mode, so every future visit repeats the climb."
+      ]
+    },
+    {
+      "name": "long-mode",
+      "step": 27,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "On this board, everything so far, even memory training, ran as 32-bit code.",
+          "On this board, everything so far, even memory training, ran as thirty-two-bit code."
+        ],
+        [
+          "At the hand-off to DXE, the boot processor builds page tables, switches on long mode, and becomes a 2003 AMD64.",
+          "At the hand-off to dixie, the boot processor builds page tables, switches on long mode, and becomes a two thousand three AMD sixty-four."
+        ]
+      ]
+    },
+    {
+      "name": "wake-again",
+      "step": 28,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "The other threads are woken yet again, and this time climb all the way to 64-bit.",
+          "The other threads are woken yet again, and this time climb all the way to sixty-four-bit."
+        ],
+        "For each of them, that's at least the third climb this boot."
+      ]
+    },
+    {
+      "name": "dxe",
+      "step": 29,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "DXE is a small operating system in its own right: on this board, 260 drivers, inflated from flash into memory.",
+          "Dixie is a small operating system in its own right: on this board, two hundred and sixty drivers, inflated from flash into memory."
+        ],
+        "And all of it runs on one thread, of one core."
+      ]
+    },
+    {
+      "name": "pcie",
+      "step": 30,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "Then it walks the PCI Express buses, reading the first four bytes of every possible device.",
+          "Then it walks the P C I Express buses, reading the first four bytes of every possible device."
+        ],
+        [
+          "All ones means nobody's home; anything else is a vendor and device ID.",
+          "All ones means nobody's home; anything else is a vendor and device ID."
+        ]
+      ]
+    },
+    {
+      "name": "gop",
+      "step": 33,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        "Once the firmware has locked itself down, the graphics card's own driver runs, on the CPU, not the GPU.",
+        "The boot logo is just pixels written into the card's memory."
+      ]
+    },
+    {
+      "name": "boot-loader",
+      "step": 35,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        "Then it picks something to boot, checks its signature, and runs the boot loader, still leaning on the firmware to read the disk."
+      ]
+    },
+    {
+      "name": "exit",
+      "step": 36,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        [
+          "The kernel calls ExitBootServices, and the firmware steps aside.",
+          "The kernel calls Exit Boot Services, and the firmware steps aside."
+        ],
+        [
+          "The other 31 threads sit in a tiny halt loop, waiting to be woken again.",
+          "The other thirty-one threads sit in a tiny halt loop, waiting to be woken again."
+        ]
+      ]
+    },
+    {
+      "name": "linux-wakes",
+      "step": 38,
+      "p0": 0.0,
+      "p1": 0.999,
+      "say": [
+        [
+          "Linux wakes them one more time, and each starts over as an 8086, in a trampoline the kernel copied below one megabyte.",
+          "Linux wakes them one more time, and each starts over as an eighty eighty-six, in a trampoline the kernel copied below one megabyte."
+        ],
+        [
+          "About eighty instructions later it's a 386, and about twenty more make it an AMD64.",
+          "About eighty instructions later it's a three eighty-six, and about twenty more make it an AMD sixty-four."
+        ],
+        [
+          "1978 to 2003, 31 more times.",
+          "Nineteen seventy-eight to two thousand three, thirty-one more times."
+        ]
+      ]
+    },
+    {
+      "name": "one-machine",
+      "step": 40,
+      "p0": 0.0,
+      "p1": 0.999,
+      "drift": 1.0,
+      "say": [
+        "Biology has a phrase for an embryo replaying its ancestors' forms: ontogeny recapitulates phylogeny.",
+        "It turned out to be wrong for embryos.",
+        [
+          "For an x86 PC, it's very nearly true, every single boot.",
+          "For an x eighty-six P C, it's very nearly true, every single boot."
+        ],
+        [
+          "This walkthrough follows LaurieWired's thread, checked against Intel's manuals and the coreboot, EDK2 and Linux sources.",
+          "This walkthrough follows Laurie Wired's thread, checked against Intel's manuals, and the core boot, E D K two, and Linux sources."
+        ]
+      ]
+    }
+  ]
+}

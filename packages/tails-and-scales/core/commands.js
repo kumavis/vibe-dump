@@ -1,0 +1,272 @@
+// Commands (DESIGN §2.2): what a seat can do, as plain data, and whether it
+// may do it now. A command body carries its kind `t` and integers only: units
+// by per-match id (`u`, `tg`), places by nav cell index on the half-inch grid
+// (`c`), so a float from the view never enters a match's log (§4.1 rule 12).
+//
+//   place {u, c}      deploy: put one of the seat's units on a cell of its zone
+//   deployed {}       deploy: the seat is done (the last one starts the battle)
+//   advance {u}       move phase: a D6 more inches (no shooting unless assault,
+//                     no charge unless it may charge after advancing)
+//   move {u, c}       move phase: move, advance's move, or fall back, to cell c
+//   shoot {u, tg}     shoot phase
+//   charge {u, tg}    charge phase: declare and roll; on contact a seat's own
+//                     charge waits for chargeEnd (the AI's moves the shortest way)
+//   chargeEnd {c}     where the charge ends: a cell the roll reaches, -1 for
+//                     the shortest move
+//   end {}            ends the phase (the charge phase's end plays the fight,
+//                     the morale, the score and the turns after it, AI included)
+//   auto {}           the AI plays the rest of the phase for the seat, then ends it
+//   pilot {m}         (F10b) the AI plays the rest of the phase for the units
+//                     mask m names (bit j: the seat's j-th unit in G.units
+//                     order, queries.js's maskUnits), now; the phase stays
+//                     open, and nothing is logged of its own
+//   vote {more}       (F4) the round limit reached, under setup.overtime
+//                     'vote': each human seat says whether to play another
+//                     round (more true) or end the battle; play goes on only
+//                     if every one says more
+//   concede {}        out of band: a human seat gives up, at any time until
+//                     the battle is decided (a side wiped out has lost)
+// (The AI's `hold` is its own, never a command: core/ai/policy.js.)
+//
+// legal(G, seat, body) answers null, or why not: the body carries its kind's
+// fields and nothing else (`fields` whole numbers, every one; `opt` whole
+// numbers or left out; `bools` true or false, every one), the seat holds the
+// pending decision, the command
+// answers that kind of decision (and, in a phase, belongs to it), then the
+// per-command rule, which is the check the old click handlers made (§2.2's
+// table). It runs under the dice's lock (rng.js
+// lock: a draw throws), so asking can never roll a die; it changes nothing
+// but the nav cache (a plan refreshes it, which is idempotent: nav is never
+// dirty between commands, §4.1 rule 9). HANDLERS[t](G, seat, body, via) plays
+// a legal one; `via` is 'seat' for a seat's own command, 'ai' for the AI's
+// (an AI seat's, or a human's Auto).
+import { lock, unlock } from './rng.js'
+import { deepFreeze } from './util.js'
+import { emit, log } from './journal.js'
+import { ctrl, seatName } from './match.js'
+import { setUnitPos } from './units.js'
+import { placeOk } from './deploy.js'
+import {
+  alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits,
+} from './queries.js'
+import { doMove, doAdvance } from './actions/move.js'
+import { doShoot } from './actions/shoot.js'
+import { declareCharge, finishCharge } from './actions/charge.js'
+import { finishAction, gameOver, runAI } from './engine.js'
+
+const unitOf = (G, id) => G.units.find((u) => u.id === id)
+
+// ── Playing a command ───────────────────────────────────────────────────────
+// Actions inside a phase leave the phase's decision pending: the seat goes
+// on until it ends the phase. A seat's charge on contact replaces it with
+// the chargeEnd decision, which gives it back.
+export const HANDLERS = Object.freeze({
+  place(G, seat, { u, c }) {
+    const unit = unitOf(G, u)
+    setUnitPos(unit, G.nav.x(c), G.nav.z(c))
+    emit(G, 'unit.place', { u, x: unit.pos.x, z: unit.pos.z })
+  },
+  deployed(G, seat) {
+    // the deployments are simultaneous: one seat done leaves the others theirs
+    const left = G.pending.seats.filter((s) => s !== seat)
+    G.pending = left.length ? { ...G.pending, seats: left } : null
+  },
+  advance(G, seat, { u }) {
+    doAdvance(G, unitOf(G, u))
+  },
+  move(G, seat, { u, c }) {
+    // (doMove makes the plan afresh from the unit's flags, as legal's)
+    doMove(G, unitOf(G, u), c)
+    finishAction(G)
+  },
+  shoot(G, seat, { u, tg }) {
+    doShoot(G, unitOf(G, u), unitOf(G, tg))
+    finishAction(G)
+  },
+  // The charge splits where a seat picks its spot (§2.2): nothing is drawn
+  // between the halves. A miss, or the AI's charge (which declareCharge
+  // takes straight on to the shortest move), ends here; a seat's contact
+  // asks it where, with what the pick needs (the roll, and the shortest
+  // move's cell for -1).
+  charge(G, seat, { u, tg }, via) {
+    const pick = declareCharge(G, unitOf(G, u), unitOf(G, tg), via)
+    if (!pick) return finishAction(G)
+    G.pending = { k: 'chargeEnd', seats: [seat], u, tg, rolled: pick.rolled, cell: pick.plan.cell }
+  },
+  // the charge's second half: the plan is made again from the unchanged
+  // match (finishCharge), and the seat gets its phase back
+  chargeEnd(G, seat, { c }) {
+    const P = G.pending
+    finishCharge(G, unitOf(G, P.u), unitOf(G, P.tg), c === -1 ? P.cell : c)
+    G.pending = { k: 'phase', seats: P.seats, phase: phaseKey(G) }
+    finishAction(G)
+  },
+  // (the step machine stands at the phase's end already)
+  end(G) {
+    G.pending = null
+  },
+  auto(G, seat) {
+    runAI(G, seat, G.pending.phase)
+    G.pending = null
+  },
+  // (F10b) Auto for some of the seat's units: the AI plays them as it would
+  // the whole army, and the seat keeps its phase (the AI's charges go
+  // straight on to the shortest move, so no chargeEnd opens)
+  pilot(G, seat, { m }) {
+    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))
+  },
+  // (F4) a human seat's say on another round: once every seat has had its
+  // say, another round if all said more (the step machine runs on from the
+  // turn's start), else the battle ends on the score
+  vote(G, seat, { more }) {
+    const P = G.pending
+    const votes = { ...P.votes, [seat]: more }
+    const left = P.seats.filter((s) => s !== seat)
+    emit(G, 'vote', { seat, more })
+    if (left.length) {
+      G.pending = { ...P, seats: left, votes }
+      return
+    }
+    // the says are logged as the vote closes, in seat order: the seats vote
+    // at once, so the battle's log is the same whichever say folds first
+    // (the panel shows each as it comes, from G.pending.votes)
+    for (const s of Object.keys(votes).map(Number).sort((a, b) => a - b)) log(G, s, `<b>${seatName(G, s)}</b> ${votes[s] ? 'want to keep playing' : 'want to end the battle'}.`)
+    G.pending = null
+    const T = G.turn
+    if (!Object.values(votes).every(Boolean)) return gameOver(G)
+    T.round++
+    T.overtime++
+    T.t = 0
+    T.step = 'turnStart'
+    log(G, -1, `Overtime: round ${T.round}.`, 'big')
+  },
+  concede(G, seat) {
+    gameOver(G, seat)
+  },
+})
+
+// ── Whether a command is legal now ──────────────────────────────────────────
+// Each kind: the decision it answers (`k`; `phase`: the phase it belongs to;
+// none for concede, which comes out of band), its fields (`fields`, whole
+// numbers it must carry; `opt`, whole numbers it may; `bools`, true or false,
+// which it must), and its own rule. (Exported, frozen, for sim/data-check.mjs's lints: no field may
+// bear a name an envelope keeps for itself, and concede alone answers no
+// decision. KINDS below is its keys; nothing above the core reads it.)
+export const RULES = deepFreeze({
+  place: { k: 'deploy', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? (placeOk(G, unitOf(G, u), c) ? null : `cell ${c} is no free spot in seat ${seat}'s zone for unit ${u}`) },
+  deployed: { k: 'deploy', fields: [] },
+  advance: { k: 'phase', phase: 'move', fields: ['u'], ok: (G, seat, { u }) => mine(G, seat, u) ?? mayAdvance(G, unitOf(G, u)) },
+  move: { k: 'phase', phase: 'move', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? mayMove(G, unitOf(G, u), c) },
+  shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg)) },
+  charge: { k: 'phase', phase: 'charge', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayCharge(G, unitOf(G, u), unitOf(G, tg)) },
+  chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
+  end: { k: 'phase', fields: [] },
+  auto: { k: 'phase', fields: [] },
+  pilot: { k: 'phase', fields: ['m'], ok: (G, seat, { m }) => mayPilot(G, seat, m) },
+  vote: { k: 'roundLimit', fields: [], bools: ['more'] },
+  concede: { k: null, fields: [], ok: (G, seat) => mayConcede(G, seat) },
+})
+
+// the kinds of command there are (match/envelope.js decodes no other)
+export const KINDS = Object.freeze(Object.keys(RULES))
+
+// null when `seat` may play `body` now, else why not; never draws a die
+// (the dice are locked while it asks) and never changes the match.
+export function legal(G, seat, body) {
+  return legalFor(G, seat, body, G.pending)
+}
+
+// legal() against decision P instead of G.pending: the engine's runAI asks
+// it for an AI seat's commands, with the phase decision the seat would hold
+// were it a human's, so G.pending is only ever a human seat's (§2.1). Not
+// part of the API (core/index.js).
+export function legalFor(G, seat, body, P) {
+  const was = G.rng.locked
+  lock(G.rng)
+  try {
+    return why(G, seat, body, P)
+  } finally {
+    if (!was) unlock(G.rng)
+  }
+}
+
+function why(G, seat, body, P) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return 'not a command'
+  const rule = typeof body.t === 'string' && Object.hasOwn(RULES, body.t) ? RULES[body.t] : null
+  if (!rule) return `no command "${body.t}"`
+  if (!Number.isInteger(seat) || seat < 0 || seat >= G.seats.length) return `no seat ${seat}`
+  // its own fields and nothing else: whole numbers and booleans (§4.1 rule
+  // 12: a float or a string never enters a match's log)
+  const opt = rule.opt ?? [], bools = rule.bools ?? []
+  for (const k of Object.keys(body)) if (k !== 't' && !rule.fields.includes(k) && !opt.includes(k) && !bools.includes(k)) return `${body.t} takes no field "${k}"`
+  for (const f of rule.fields) if (!Number.isInteger(body[f])) return `${body.t} takes a whole number ${f}`
+  for (const f of opt) if (body[f] !== undefined && !Number.isInteger(body[f])) return `${body.t} takes a whole number ${f}, or none`
+  for (const f of bools) if (typeof body[f] !== 'boolean') return `${body.t} takes ${f} true or false`
+  if (G.turn.stage === 'over') return 'the battle is over'
+  if (rule.k) {
+    if (!P || !P.seats.includes(seat)) return `seat ${seat} has no decision to make now`
+    if (P.k !== rule.k) return `${body.t} doesn't answer the ${P.k} decision`
+    if (rule.phase && P.phase !== rule.phase) return `${body.t} belongs to the ${rule.phase} phase, not the ${P.phase}`
+    return rule.ok?.(G, seat, body, P) ?? null
+  }
+  return rule.ok(G, seat, body)
+}
+
+// one of the seat's own units, still standing
+function mine(G, seat, id) {
+  const u = unitOf(G, id)
+  return u && alive(u) && u.side === seat ? null : `unit ${id} is no standing unit of seat ${seat}`
+}
+// a standing enemy of the seat
+function foe(G, seat, id) {
+  const u = unitOf(G, id)
+  return u && alive(u) && u.side !== seat ? null : `unit ${id} is no standing enemy of seat ${seat}`
+}
+const inGrid = (G, c) => c >= 0 && c < G.nav.N
+
+// a human seat, while the battle is undecided: a side wiped out mid-phase
+// has lost already (the battle ends at the phase's end), so neither seat
+// can turn that into a concession
+function mayConcede(G, seat) {
+  if (ctrl(G, seat) !== 'human') return `seat ${seat} is the AI's: only a human seat concedes`
+  return G.turn.wiped >= 0 ? `the battle is decided: seat ${G.turn.wiped} is wiped out` : null
+}
+
+function mayAdvance(G, u) {
+  if (u.flags.moved) return `${u.t.short} has moved`
+  if (u.flags.advanced) return `${u.t.short} has advanced`
+  return isEngaged(G, u) ? `${u.t.short} is in combat` : null
+}
+// Its move this phase (an advance's move on its roll, a fall back when in
+// combat): ending on c, as the plan the move itself will make has it.
+function mayMove(G, u, c) {
+  if (u.flags.moved) return `${u.t.short} has moved`
+  if (!inGrid(G, c) || !validEnd(G, movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), c)) return `${u.t.short} can't end its move on cell ${c}`
+  return null
+}
+function mayShoot(G, u, tg) {
+  if (!canShoot(G, u)) return `${u.t.short} can't shoot now`
+  const info = shotInfo(G, u, tg)
+  return info.ok ? null : `${u.t.short} can't shoot ${tg.t.short}: ${info.why}`
+}
+function mayCharge(G, u, tg) {
+  if (!chargeTargets(G, u).includes(tg)) return `${u.t.short} can't charge ${tg.t.short}`
+  return chargePlan(G, u, tg) ? null : `${u.t.short} has no way to ${tg.t.short}`
+}
+// (F10b) a mask naming some of the seat's units, all standing, one at least
+// with something left to do in this phase (canAct; whether the AI then
+// chooses to do it is the AI's, so a pilot may play nothing)
+function mayPilot(G, seat, m) {
+  if (!Number.isSafeInteger(m) || m < 1) return 'm is a set of the seat\'s units (a whole number ≥ 1)'
+  const units = maskUnits(G, seat, m)
+  if (units === null) return `m names a unit seat ${seat} doesn't have`
+  const dead = units.find((u) => !alive(u))
+  if (dead) return `unit ${dead.id} is destroyed`
+  return units.some((u) => canAct(G, u)) ? null : `none of these units can act in the ${phaseKey(G)} phase`
+}
+// a spot the roll reaches around the target (chargeSpots), or -1
+function mayEnd(G, P, c) {
+  if (c === -1) return null
+  const plan = inGrid(G, c) && chargePlan(G, unitOf(G, P.u), unitOf(G, P.tg))
+  return plan && chargeSpots(plan, P.rolled)[c] ? null : `the charge can't end on cell ${c} (rolled ${P.rolled}")`
+}

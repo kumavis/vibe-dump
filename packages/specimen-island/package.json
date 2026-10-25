@@ -1,0 +1,29 @@
+{
+  "name": "@vibe-dump/specimen-island",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Specimen Island",
+    "description": "First-person field biology on a forgotten dinosaur preserve: creep through jungle and tall grass, dart and sample raptors, trikes and a tyrant without killing them — or go loud and pay for it in points. Photograph the wildlife, ride the trail bike, take the sea lab's submarine down to the reefs, or raid the abandoned army camp for a tank and a heat-seeking gunship. Three.js.",
+    "tags": [
+      "game"
+    ],
+    "status": "wip",
+    "models": [
+      "Opus 5.5"
+    ],
+    "thinking": "ultracode",
+    "thumbnail": {
+      "waitFor": "!#boot",
+      "settle": 4000
+    }
+  }
+}
