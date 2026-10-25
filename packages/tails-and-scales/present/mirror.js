@@ -4,12 +4,14 @@
 // R6) before the first die is shown, so the view never reads G for any of
 // it: it reads this, folded from the same events it plays, one at a time.
 //
-//   M = { units: { id → { pos: { x, z }, r, models: [{ w, alive, ox, oz }],
+//   M = { units: { id → { pos: { x, z }, y, r, models: [{ w, alive, ox, oz }],
 //                         alive, mesmerized, engaged } },
 //         chunks: { id → { alive, y } },
 //         owners: [seat or -1, per objective], vp: [a, b],
 //         round, active, phase, stage, board: { W, H } }  (F8a: board the
 //         match's, fixed for its whole battle)
+//   (F7a) a unit's `y`: the floor it stands on (core/queries.js groundY), 0
+//   on a board without height, whose events carry none
 //
 // project(G) is the mirror of a match that is not running ahead of its view
 // (a new table, or a snap); applyEvent(M, e) folds one event into it. Once
@@ -25,7 +27,7 @@
 // read-only queries. But applyEvent folds in place: whoever keeps a mirror
 // across events copies it, and whoever is handed the player's (a handler,
 // an observer) only reads it.
-import { alive, isEngaged, controlOf, phaseKey } from '../core/queries.js'
+import { alive, isEngaged, controlOf, phaseKey, groundY } from '../core/queries.js'
 
 // who holds each objective, as the table shows it: nobody before the battle
 const owners = (G) => G.objectives.map((o) => (G.turn.stage === 'battle' || G.turn.stage === 'over' ? controlOf(G, o) : -1))
@@ -35,7 +37,7 @@ export function project(G) {
   const units = {}
   for (const u of G.units) {
     units[u.id] = {
-      pos: { x: u.pos.x, z: u.pos.z }, r: u.r,
+      pos: { x: u.pos.x, z: u.pos.z }, y: groundY(G, u), r: u.r,
       models: u.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })),
       alive: u.alive, mesmerized: u.mesmerized, engaged: alive(u) && isEngaged(G, u),
     }
@@ -56,17 +58,22 @@ export const blankMirror = () => ({ units: {}, chunks: {}, owners: [], vp: [0, 0
 export function applyEvent(M, e) {
   const u = e.u === undefined ? null : M.units[e.u]
   switch (e.t) {
+    // (F7a: a place, a walk's end and a formation's place carry the floor, y,
+    // only with height; without it the unit stands at 0)
     case 'unit.place':
       u.pos = { x: e.x, z: e.z }
+      u.y = e.y ?? 0
       break
     // a walk: where it ends, and what it smashed on the way (the view breaks
     // each as the walker passes it; the mirror holds them all at once)
     case 'unit.move':
       u.pos = { x: e.to.x, z: e.to.z }
+      u.y = e.to.y ?? 0
       for (const { ev } of e.smashes) for (const x of ev) applyEvent(M, x)
       break
     case 'unit.formation':
       u.pos = { x: e.pos.x, z: e.pos.z }
+      u.y = e.pos.y ?? 0
       u.r = e.r
       e.offs.forEach(([ox, oz], k) => {
         u.models[k].ox = ox

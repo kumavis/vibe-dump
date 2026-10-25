@@ -47,7 +47,7 @@ import { ctrl, seatName } from './match.js'
 import { setUnitPos } from './units.js'
 import { placeOk } from './deploy.js'
 import {
-  alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits,
+  alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits, groundY,
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
 import { doShoot } from './actions/shoot.js'
@@ -61,10 +61,12 @@ const unitOf = (G, id) => G.units.find((u) => u.id === id)
 // on until it ends the phase. A seat's charge on contact replaces it with
 // the chargeEnd decision, which gives it back.
 export const HANDLERS = Object.freeze({
+  // (F7a: with height the place carries the floor it stands on, `y`; a
+  // classic place doesn't grow)
   place(G, seat, { u, c }) {
     const unit = unitOf(G, u)
     setUnitPos(unit, G.nav.x(c), G.nav.z(c))
-    emit(G, 'unit.place', { u, x: unit.pos.x, z: unit.pos.z })
+    emit(G, 'unit.place', { u, x: unit.pos.x, z: unit.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, unit) } : {}) })
   },
   deployed(G, seat) {
     // the deployments are simultaneous: one seat done leaves the others theirs

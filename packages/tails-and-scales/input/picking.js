@@ -1,16 +1,23 @@
 // Picking (DESIGN §1.3): what is under the pointer, a unit (by its hit
 // cylinder, else (F10a) the one drawn nearest the pointer on screen) and
-// the board (where on it), from the camera's view.
+// the board (where on it), from the camera's view. (F7a) Where on the
+// board is the first walkable top the ray meets (a deck's, a ramp's: the
+// battlefield's quads on them, view/terrain.js's tops, 30-60 of them on a
+// fortified board, cast at one by one with no broadphase), else the board's
+// plane: a click on a deck is a click on its top, not on the ground under it.
+// The point carries its height (y), and the tools read its x and z.
 import * as THREE from 'three'
 
 export class Picker {
   // `units`: the figures (view/units.js); `board`: the board's mesh
-  // (view/table.js); `unitOf(id)`: the unit of the match the table shows
-  constructor({ camera, units, board, unitOf }) {
+  // (view/table.js); `unitOf(id)`: the unit of the match the table shows;
+  // (F7a) `tops()`: the walkable tops' quads the table shows
+  constructor({ camera, units, board, unitOf, tops = () => [] }) {
     this.camera = camera
     this.units = units
     this.board = board
     this.unitOf = unitOf
+    this.tops = tops
     this.ray = new THREE.Raycaster()
     this.ptr = new THREE.Vector2()
   }
@@ -42,7 +49,8 @@ export class Picker {
         }
       }
     }
-    const g = ray.intersectObject(this.board, false)[0]
+    const tops = this.tops()
+    const g = (tops.length ? ray.intersectObjects(tops, false)[0] : null) ?? ray.intersectObject(this.board, false)[0]
     return { unit, ground: g ? g.point : null }
   }
 }

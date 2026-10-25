@@ -19,6 +19,17 @@
 // battle first); a busy machine reads high, so a failure on one is run
 // again on a quiet one before it is believed.
 //
+// (F7a) The fortified rows: the same on the fortified set, the classic
+// mission's board (Skirmish) and the Grand fixture's (its --fortified: the
+// setups name the set, which scales itself by the table's area), the Grand
+// ones against the same budget; and the height layer's own cost at Grand,
+// over every fortified Grand board: nav.rebuild with the height layer
+// (floor, links, ledges and cliff, levels and gates, the rasters by level),
+// against 3 ms on average (§4.2.4's cost: S4 comes in past it), beside the
+// flat rebuild of the same board without its fortifications, and reach's
+// cost per plan with height against that flat board's (a report: the
+// estimate was +10%).
+//
 //   node sim/scale-bench.mjs [--boards N] [--dir <code>] [--json]
 //
 // --dir measures another copy of the code (the fixture built from it), for
@@ -102,6 +113,52 @@ for (const caps of [false, true]) {
   if (r.units !== want) throw new Error(`the Grand fixture's battles field ${r.units} units, its lists ${want}: the fixture didn't take (sim/fixtures/grand.mjs)`)
   out[caps ? 'grandCaps' : 'grand'] = { ...r, lists: Object.fromEntries(Object.entries(lists).map(([r, l]) => [r, `${l.units} units, ${l.models} models`])) }
 }
+// (F7a) the fortified rows, for code whose mission is fought on the set
+const FORT = (await import(pathToFileURL(join(CODE, 'data', 'mission.js')).href)).MISSIONS.classic.sets.includes('fortified')
+if (FORT) {
+  out.classicFort = await row(CODE, classicSetups, (seed, dice) => ({ ...jobSetup({ seed, dice }), terrain: 'fortified' }))
+  for (const caps of [false, true]) {
+    const { dir } = await buildGrand({ caps, fortified: true, from: CODE })
+    const r = await row(dir, grandBoards, (b, d) => grandSetup(b, d, true))
+    out[caps ? 'grandFortCaps' : 'grandFort'] = r
+    if (!caps) out.height = await heightCost(dir, grandBoards)
+  }
+}
+
+// (F7a) The height layer's cost on each fortified Grand board (its table as
+// a match makes it): nav.rebuild with it, timed REPS times; the flat rebuild
+// of the same table without its fortifications' pieces (decks, stairs,
+// ladders, posts), the rest of the rebuild's work; and reach (a squad's disc,
+// a move of 8") from 40 standable cells of each, with height and on the flat
+// table.
+async function heightCost(dir, boards) {
+  const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
+  const { NavGrid } = await import(pathToFileURL(join(dir, 'core', 'nav.js')).href)
+  const REPS = 20, PIECES = new Set(['deck', 'stair', 'ladder', 'post'])
+  const time = (f) => {
+    const t0 = performance.now()
+    for (let k = 0; k < REPS; k++) f()
+    return (performance.now() - t0) / REPS
+  }
+  const rebuild = [], flat = [], reachH = [], reachF = []
+  for (const [b, d] of boards) {
+    const G = core.createMatch({ ...grandSetup(b, d, true), seats: grandSetup(b, d, true).seats.map((x) => ({ ...x, ctrl: 'human' })) })
+    const { W, H, cell } = G.nav, chunks = G.terrain.chunks, rest = chunks.filter((c) => !PIECES.has(c.kind))
+    const nav = new NavGrid(W, H, cell), plain = new NavGrid(W, H, cell)
+    nav.rebuild(chunks)
+    plain.rebuild(rest)
+    if (!nav.hasHeight || plain.hasHeight) throw new Error(`scale-bench: fortified Grand board ${b} built ${nav.hasHeight ? '' : 'no '}height, its flat copy ${plain.hasHeight ? 'height' : 'none'}`)
+    rebuild.push(time(() => nav.rebuild(chunks)))
+    flat.push(time(() => plain.rebuild(rest)))
+    const starts = []
+    for (let i = 0; i < nav.N && starts.length < 40; i += 97) if (nav.standable(i, 1.06, 'walk') && plain.standable(i, 1.06, 'walk')) starts.push(i)
+    const opts = { r: 1.06, max: 8, mode: 'walk', climb: true }
+    reachH.push(time(() => starts.forEach((i) => nav.reach(nav.x(i), nav.z(i), opts))) / starts.length)
+    reachF.push(time(() => starts.forEach((i) => plain.reach(plain.x(i), plain.z(i), opts))) / starts.length)
+  }
+  const avg = (xs) => xs.reduce((s, x) => s + x, 0) / xs.length
+  return { rebuild: avg(rebuild), rebuildMax: Math.max(...rebuild), flat: avg(flat), flatMax: Math.max(...flat), reach: avg(reachH), reachFlat: avg(reachF), boards: boards.length }
+}
 
 if (a.json) console.log(JSON.stringify(out, null, 2))
 console.log(`scale-bench: the core at scale, on ${a.dir ? CODE : 'the working tree'} (ms; medians over boards, movement phases over every AI phase played)\n`)
@@ -110,16 +167,31 @@ const line = (name, r) => console.log(`  ${name.padEnd(22)} ${String(r.units).pa
 line('classic', out.classic)
 line('Grand, ×3 presets', out.grand)
 line('Grand, cap lists', out.grandCaps)
+if (FORT) {
+  line('classic, fortified', out.classicFort)
+  line('Grand fort, ×3 presets', out.grandFort)
+  line('Grand fort, cap lists', out.grandFortCaps)
+}
 console.log(`\n  Grand lists at the caps: ${Object.entries(out.grandCaps.lists).map(([r, l]) => `${r} ${l}`).join('; ')}`)
 let failed = 0
 console.log(`\nGrand against its budget (fails above ${OVER}×): createMatch ${BUDGET.create} ms, a movement phase's p90 ${BUDGET.moveP90} ms, a battle ${BUDGET.battle} ms`)
-for (const k of ['grand', 'grandCaps']) {
+const NAMES = { grand: 'presets', grandCaps: 'cap lists', grandFort: 'fort ×3', grandFortCaps: 'fort caps' }
+for (const k of ['grand', 'grandCaps', ...(FORT ? ['grandFort', 'grandFortCaps'] : [])]) {
   const r = out[k]
   for (const [what, v, b] of [['createMatch', r.create, BUDGET.create], ['move p90', r.move.p90, BUDGET.moveP90], ['battle', r.battle, BUDGET.battle]]) {
     const ok = v <= b * OVER
     if (!ok) failed++
-    console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${(k === 'grand' ? 'presets' : 'cap lists').padEnd(9)} ${what.padEnd(11)} ${ms(v).padStart(7)} ms  (${(v / b).toFixed(2)}× budget)`)
+    console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${NAMES[k].padEnd(9)} ${what.padEnd(11)} ${ms(v).padStart(7)} ms  (${(v / b).toFixed(2)}× budget)`)
   }
+}
+if (FORT) {
+  // (F7a) the height layer at Grand: its rebuild against 3 ms on average
+  const h = out.height, HEIGHT_BUDGET = 3
+  const ok = h.rebuild <= HEIGHT_BUDGET
+  if (!ok) failed++
+  console.log(`\nThe height layer at Grand (fortified, ${h.boards} boards; ms, the average and the worst board's)`)
+  console.log(`  ${ok ? 'ok  ' : 'FAIL'} nav.rebuild with height ${ms(h.rebuild)} (max ${ms(h.rebuildMax)}) against ${HEIGHT_BUDGET} ms: the flat rebuild of the same table without its fortifications ${ms(h.flat)} (max ${ms(h.flatMax)}), so the height layer ${ms(h.rebuild - h.flat)}`)
+  console.log(`  report: reach (r 1.06, 8") ${h.reach.toFixed(3)} ms a plan with height, ${h.reachFlat.toFixed(3)} ms on the flat table (${((h.reach / h.reachFlat - 1) * 100).toFixed(0)}%)`)
 }
 console.log(failed ? `\nscale-bench FAILED: ${failed} row(s) over ${OVER}× budget (on a busy machine? run it again on a quiet one)` : '\nscale-bench passed: Grand inside its budget')
 process.exit(failed ? 1 : 0)

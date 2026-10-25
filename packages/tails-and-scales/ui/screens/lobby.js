@@ -5,10 +5,12 @@
 // their stats) and whether they're ready; your own seat takes your name
 // (fitted as you type: net/ids.js's fitName, which `on.fit` is), your race
 // (the picker's buttons) and your Ready; a free seat offers Sit here, with
-// the race it would bring. What's shown is drawn from the lobby each time
-// it changes (render), never kept here; a name is a peer's say-so, so it is
-// only ever written as text.
+// the race it would bring. (F7a) The terrain is the host's to choose too,
+// from the sets the mission is fought on. What's shown is drawn from the
+// lobby each time it changes (render), never kept here; a name is a peer's
+// say-so, so it is only ever written as text.
 import { RacePicker } from './races.js'
+import { terrainName } from './setup.js'
 
 const $ = (s) => document.querySelector(s)
 const el = (tag, cls, text) => {
@@ -56,13 +58,15 @@ export class LobbyScreen {
   }
 
   // `on`: { claim(i), leave(i), name(text), race(key), ready(bool),
-  // board(n), reroll(), copy(), secondTab(), back(), fit(text, typing) }
+  // board(n), (F7a) terrain(set), reroll(), copy(), secondTab(), back(),
+  // fit(text, typing) }
   wire(on) {
     this.on = on
     $('#copyLink').onclick = () => on.copy()
     $('#secondTab').onclick = () => on.secondTab()
     $('#lobbyReroll').onclick = () => on.reroll()
     $('#lobbyBoard').onchange = () => on.board((Number($('#lobbyBoard').value) || 1) >>> 0)
+    $('#lobbyTerrain').onchange = () => on.terrain($('#lobbyTerrain').value)
     $('#lobbyBack').onclick = () => on.back()
   }
 
@@ -77,10 +81,11 @@ export class LobbyScreen {
     for (const p of this.pickers) p?.picker.close()
     this.nameBox = null
     $('#lobbyLink').value = ''
-    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard']) $(id).disabled = true
+    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbyTerrain']) $(id).disabled = true
   }
 
-  // m: { status, link, board, host (the battle is yours to change), seats:
+  // m: { status, link, board, (F7a) terrain and terrains (the set chosen and
+  // the mission's sets), host (the battle is yours to change), seats:
   // [{ name, race (a free seat's: the race it would bring), color (its
   // bases' rims), ready, mine, free, canSit }] }
   render(m) {
@@ -91,6 +96,15 @@ export class LobbyScreen {
     const board = $('#lobbyBoard')
     if (document.activeElement !== board) board.value = m.board ?? ''
     board.disabled = $('#lobbyReroll').disabled = !m.host
+    // (F7a) the terrain: the mission's sets, the lobby's chosen
+    const terrain = $('#lobbyTerrain')
+    const opts = (m.terrains ?? [m.terrain]).filter(Boolean)
+    if (terrain.dataset.opts !== opts.join()) {
+      terrain.replaceChildren(...opts.map((set) => Object.assign(document.createElement('option'), { value: set, textContent: terrainName(set) })))
+      terrain.dataset.opts = opts.join()
+    }
+    if (document.activeElement !== terrain) terrain.value = m.terrain ?? ''
+    terrain.disabled = !m.host || opts.length < 2
     m.seats.forEach((s, i) => this.seat(this.root.querySelector(`.seat[data-seat="${i}"]`), s, i))
   }
 

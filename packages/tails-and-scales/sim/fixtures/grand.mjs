@@ -15,6 +15,12 @@
 //   the armies   each race's `army` becomes its ×3 list (the classic list
 //                three times over, in the race's roster order: 21 units),
 //                or with `caps` its cap list (below)
+//   (F7a) with `fortified`, the battles are fought on the `fortified` set
+//                (grandSetup's terrain): the set scales its own counts with
+//                the table's area (its `scale: 'area'`, core/terrain/
+//                recipes.js), so its table needs no patch; the copy's
+//                mission must offer the set (F7a's data/mission.js does),
+//                or the fixture refuses to build
 //
 // A cap list (§4.2.1) fields 24 units, or as many as 90 models allow, with
 // every slot but Troops full (the grand list rules: Hero 3, Elite 4, Fast 4,
@@ -30,12 +36,14 @@
 // in sim/).
 //
 //   import { buildGrand } from './fixtures/grand.mjs'
-//   const { dir, lists } = await buildGrand({ caps })   the copy's
-//                                        directory (import its core/index.js)
-//                                        and each race's list: { list,
-//                                        units, models }
-//   node sim/fixtures/grand.mjs [--caps]   builds it and prints a Grand
-//                                        battle's size and its cost
+//   const { dir, lists } = await buildGrand({ caps, fortified })   the
+//                                        copy's directory (import its
+//                                        core/index.js) and each race's list:
+//                                        { list, units, models }
+//   grandSetup(board, dice, fortified)   a setup for it
+//   node sim/fixtures/grand.mjs [--caps] [--fortified]   builds it and
+//                                        prints a Grand battle's size and
+//                                        its cost
 import { cpSync, rmSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -104,8 +112,8 @@ export function capsOf(race) {
 
 // Builds the fixture (fresh): its directory and each race's list.
 // `from`: another copy of the code to build it from (scale-bench's --dir).
-export async function buildGrand({ caps = false, from = PKG } = {}) {
-  const dir = join(FIXTURES, `${from === PKG ? '' : 'other-'}${caps ? 'grand-caps' : 'grand'}`)
+export async function buildGrand({ caps = false, fortified = false, from = PKG } = {}) {
+  const dir = join(FIXTURES, `${from === PKG ? '' : 'other-'}${caps ? 'grand-caps' : 'grand'}${fortified ? '-fortified' : ''}`)
   rmSync(dir, { recursive: true, force: true })
   mkdirSync(dir, { recursive: true })
   for (const d of ['core', 'data', 'match']) cpSync(join(from, d), join(dir, d), { recursive: true })
@@ -130,6 +138,8 @@ export async function buildGrand({ caps = false, from = PKG } = {}) {
 ${objectives.map(([x, z]) => `      { x: ${x}, z: ${z} },`).join('\n')}
     ],`)
   patch(dir, 'core/terrain/sets.js', '    pairs: [6, 3],\n    attempts: 1200,\n', `    pairs: [${pairs.join(', ')}],\n    attempts: ${attempts},\n`)
+  // (F7a) the fortified set must be one the copy's mission is fought on
+  if (fortified && !/\n {4}sets: \[[^\]]*'fortified'/.test(readFileSync(join(dir, 'data/mission.js'), 'utf8'))) throw new Error("the Grand fixture can't fight on the fortified set: the copy's classic mission doesn't offer it (code from before F7a? sim/fixtures/grand.mjs)")
   return { dir, lists: await armies(dir, caps, from) }
 }
 
@@ -154,17 +164,21 @@ async function armies(dir, caps, from) {
   return out
 }
 
-// A Grand setup for the fixture's core: an AI battle on `board` with `dice`.
-export const grandSetup = (board, dice) => ({ board, dice, seats: [{ race: 'squirrel', ctrl: 'ai' }, { race: 'serpent', ctrl: 'ai' }] })
+// A Grand setup for the fixture's core: an AI battle on `board` with `dice`
+// (F7a: on the fortified set with `fortified`; classic's setup otherwise,
+// naming no terrain, as ever).
+export const grandSetup = (board, dice, fortified = false) => ({
+  board, dice, ...(fortified ? { terrain: 'fortified' } : {}), seats: [{ race: 'squirrel', ctrl: 'ai' }, { race: 'serpent', ctrl: 'ai' }],
+})
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const { values: a } = parseArgs({ options: { caps: { type: 'boolean' } } })
-  const { dir, lists } = await buildGrand({ caps: !!a.caps })
+  const { values: a } = parseArgs({ options: { caps: { type: 'boolean' }, fortified: { type: 'boolean' } } })
+  const { dir, lists } = await buildGrand({ caps: !!a.caps, fortified: !!a.fortified })
   const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
-  console.log(`Grand fixture (${a.caps ? 'cap lists' : '×3 presets'}) in ${dir}`)
+  console.log(`Grand fixture (${a.caps ? 'cap lists' : '×3 presets'}${a.fortified ? ', fortified' : ''}) in ${dir}`)
   for (const [race, l] of Object.entries(lists)) console.log(`  ${race.padEnd(9)} ${l.units} units, ${l.models} models`)
   const t0 = performance.now()
-  const G = core.createMatch(grandSetup(7, 11))
+  const G = core.createMatch(grandSetup(7, 11, !!a.fortified))
   const ms = performance.now() - t0
   console.log(`  a battle on board 7, dice 11: ${G.units.length} units, ${G.terrain.chunks.length} chunks, ${G.turn.stage === 'over' ? `over in round ${G.turn.round}` : G.turn.stage}, in ${ms.toFixed(0)} ms`)
 }

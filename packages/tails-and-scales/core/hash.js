@@ -26,7 +26,8 @@
 //
 // What is not match state is left out: G.out, G.onTrace and G.strict (the
 // I/O fields, §0.2 #12), the nav grid (derived from the terrain, refreshed
-// at fixed sites, never dirty between commands), the setup (fixed at the
+// at fixed sites, never dirty between commands; F7a's height layer, its
+// floor, links, ledges, levels and gates, with it), the setup (fixed at the
 // start), the journal (the trace is a function of the commands; its
 // pendingLog is empty between commands) and the units' type records (the
 // rules data, RULES_ID's).

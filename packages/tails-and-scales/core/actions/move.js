@@ -21,15 +21,29 @@ import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { setUnitPos } from '../units.js'
 import { pathLength } from '../nav.js'
-import { alive, enemiesOf, isEngaged, ownersOf, statusOf } from '../queries.js'
+import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
 
 export function moveMode(u) {
   return u.t.move
 }
 
+// (F7a) Whether `u` climbs ladders (data/schema.js's derived `climb`:
+// infantry, not big units, fliers or (F9a) vehicles): the plans' mode setup
+// (movePlan, chargePlan) is the one reader, so the nav's reach takes it
+// with the mode. Read only with height.
+export function climbs(u) {
+  return u.t.climb
+}
+
 // Cells a unit may not enter: within 1" of an enemy (or just their bases when
 // falling back / charging). `onlyBodies` lists whose bases only count.
+//
+// (F7a) With height an enemy's bubble (and base) forbids only the cells
+// within HIGH of the floor it stands on, and its disc carries that floor
+// (`y`) for nav.walkable's shortcuts: a unit walks the foot of a wall whose
+// top an enemy holds.
 export function forbidMask(G, u, pad, onlyBodies = []) {
+  if (G.nav.hasHeight) return forbidHigh(G, u, pad, onlyBodies)
   // (the grid's own size, S0: the board the match is played on)
   const nav = G.nav, { W, H } = nav
   const f = new Uint8Array(nav.N)
@@ -42,6 +56,22 @@ export function forbidMask(G, u, pad, onlyBodies = []) {
     for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
       const i = iz * nav.nx + ix
       if (hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < R) f[i] = 1
+    }
+  }
+  return f
+}
+function forbidHigh(G, u, pad, onlyBodies) {
+  const nav = G.nav, { W, H } = nav
+  const f = new Uint8Array(nav.N)
+  f.discs = []
+  for (const e of enemiesOf(G, u)) {
+    const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad), y = groundY(G, e)
+    f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02, y })
+    const i0x = Math.max(0, Math.floor((e.pos.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((e.pos.x + R + W / 2) / nav.cell))
+    const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
+    for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
+      const i = iz * nav.nx + ix
+      if (hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < R && Math.abs(nav.floor[i] - y) <= HIGH) f[i] = 1
     }
   }
   return f
@@ -71,7 +101,7 @@ export function movePlan(G, u, extra = 0) {
   // any other move's mask is the end's, made once
   const endForbid = forbidMask(G, u, ENGAGE + 0.05)
   const forbid = fallback ? forbidMask(G, u, ENGAGE + 0.05, enemies) : endForbid
-  const res = G.nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid })
+  const res = G.nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u) })
   const plan = { u, res, max, mode, forbid, endForbid, fallback }
   if (memo) {
     memo.sig = key
@@ -145,7 +175,8 @@ export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.fl
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   u.flags.moved = true
   if (plan.fallback) u.flags.fellBack = true
-  const L = pathLength(pts)
+  // (F7a: with height a climb counts what it costs, not the ground it spans)
+  const L = G.nav.hasHeight ? walkCost(pts) : pathLength(pts)
   log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
   resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
@@ -172,6 +203,14 @@ export function hold(G, u) {
   u.flags.moved = true
 }
 
+// (F7a) A path's length, each climb (a point marked `climb`: nav.path) at its
+// link's cost, the rest as pathLength measures it.
+export function walkCost(pts) {
+  let L = 0
+  for (let i = 1; i < pts.length; i++) L += pts[i].climb ? pts[i].cost : hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
+  return L
+}
+
 // ── The walk ────────────────────────────────────────────────────────────────
 // A unit goes along `pts` (DESIGN §2.3's resolveWalk, §4.1 rule 7), all at
 // once: a wrecker smashes what it passes at fixed 0.25" samples along the
@@ -181,6 +220,9 @@ export function hold(G, u) {
 // pts.at(-1)). A path under 0.05" moves nothing and smashes nothing.
 //
 //   unit.move { u, path: [{ x, z }], L, speed, fly, stomp, smashes: [{ s, ev }], to: { x, z } }
+//   (F7a, with height) path: [{ x, y, z, climb? }], to: { x, y, z }: each
+//   vertex's floor, and `climb` on a ladder's far end (the segment into it
+//   is the climb); classic's events don't grow
 //
 // The view walks the unit along `path` (L long, at `speed` inches a second,
 // flying or not, stomping off as it sets out when `stomp`: each of them is
@@ -206,7 +248,8 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
     // (a path of 0.05" or more has a last segment)
     const last = seg[seg.length - 1]
     samples.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: atan2(last.b.x - last.a.x, last.b.z - last.a.z) })
-    // (a quiet run, G.out null, keeps no events: the smashing is the same)
+    // (a quiet run, G.out null, keeps no events: the smashing is the same;
+    // a wrecker is big, so never a climber, and no sample lies on a climb)
     for (const p of samples) {
       const ev = G.out ? [] : null
       if (smashAround(G, u, p, ev) && ev) smashes.push({ s: p.s, ev })
@@ -219,7 +262,10 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
   // the walk, then the flags (who holds what) and the labels (who is in
   // combat) as it left them
   if (G.out) {
-    emit(G, 'unit.move', { u: u.id, path: pts.map((p) => ({ x: p.x, z: p.z })), L, speed, fly, stomp, smashes, to: { x: u.pos.x, z: u.pos.z } })
+    // (one emit, its path and its end with their floors only with height)
+    const high = G.nav.hasHeight
+    const path = high ? pts.map((p) => (p.climb ? { x: p.x, y: floorAt(G, p.x, p.z), z: p.z, climb: true } : { x: p.x, y: floorAt(G, p.x, p.z), z: p.z })) : pts.map((p) => ({ x: p.x, z: p.z }))
+    emit(G, 'unit.move', { u: u.id, path, L, speed, fly, stomp, smashes, to: high ? { x: u.pos.x, y: groundY(G, u), z: u.pos.z } : { x: u.pos.x, z: u.pos.z } })
     emit(G, 'objectives', { owners: ownersOf(G) })
     emit(G, 'status', statusOf(G))
   }
@@ -230,10 +276,16 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
 // live chunk list (§4.1 rule 6), so a log a tree it felled leaves in its
 // path is smashed in the same sweep. The terrain's events go into `out`
 // (nowhere when it is null). Returns how many chunks it hit.
+//
+// (F7a) With height it skips a chunk whose base (the floor it stands on, 0
+// when absent) isn't within HIGH of the sample's floor: a Brute on the
+// ground doesn't smash the parapets on a deck beside it.
 export function smashAround(G, u, { x, z, dir }, out) {
   let n = 0
+  const y = G.nav.hasHeight ? floorAt(G, x, z) : 0
   for (const c of G.terrain.chunks) {
     if (!c.alive || !c.destructible) continue
+    if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
       G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out)

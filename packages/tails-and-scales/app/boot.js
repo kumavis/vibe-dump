@@ -56,8 +56,11 @@ import { Session } from '../match/session.js'
 // and a pixel ratio of 1, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
-// battle started here is fought for. The fragment `#m=<id>` (N2) opens an
-// online match (`&dev=<id>` plays it as that device, `&sync=` through that
+// battle started here is fought for; (F7a) ?terrain=<set> the terrain set
+// a battle started here is fought on (the battle-setup panel's default; the
+// title's table stays the mission's first set's). The fragment
+// `#m=<id>` (N2) opens an online match (`&dev=<id>` plays it as that
+// device, `&sync=` through that
 // server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
 
@@ -87,6 +90,21 @@ function missionPick(params, title) {
   console.warn(`${msg}: playing the classic mission`)
   title.note(`${msg}, so this is the classic mission.`)
   return 'classic'
+}
+
+// (F7a) The terrain set a battle started here is fought on, the
+// battle-setup panel's default: each mission's first, or one a
+// ?terrain=<set> URL names, as ?mission= names the
+// mission (the door sim/'s Chromium runs start a fortified battle by). A set
+// the mission isn't fought on gets its first and a line on the title card.
+function terrainPick(params, title, mission) {
+  if (!params.has('terrain')) return null
+  const pick = params.get('terrain').trim().toLowerCase(), sets = MISSIONS[mission].sets
+  if (sets.includes(pick)) return pick
+  const msg = `?terrain= takes one of ${sets.join(', ')} (the ${mission} mission's terrain), not "${params.get('terrain')}"`
+  console.warn(`${msg}: playing on ${sets[0]}`)
+  title.note(`${msg}, so a battle here is fought on ${sets[0]}.`)
+  return null
 }
 
 function racePick(params, title) {
@@ -148,14 +166,15 @@ export function boot(location) {
     title,
     result: new ResultScreen(),
   }
-  flow = new Flow({ view, ui, params, seed, races, mission: missionPick(params, title) })
+  const mission = missionPick(params, title)
+  flow = new Flow({ view, ui, params, seed, races, mission, terrain: terrainPick(params, title, mission) })
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
   view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL) })
 
   // ── The local human (input/), the player, the buttons ─────────────────────
-  const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id) })
+  const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id), tops: () => view.terrain.tops() })
   const human = new Human({ flow, view, card: ui.card, tooltip: ui.tooltip, picker })
   const player = flow.play(human)
   // (F10a) units picked up together, and the bar that says what they do
@@ -217,12 +236,13 @@ export function boot(location) {
   const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
   const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
   let picking = null
+  // ((F7a) and the terrain line: the mission's sets, the table's picked)
   const showSetup = () => {
     const { mode, races } = picking, seats = seatsOf(races), sides = sidesFor(seats)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats) })
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), terrain: { sets: MISSIONS[flow.mission].sets, pick: picking.terrain } })
   }
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races] }
+    picking = { mode, races: [...flow.races], terrain: flow.terrainOf() }
     title.away()
     showSetup()
   }
@@ -231,10 +251,14 @@ export function boot(location) {
       picking.races[s] = race
       showSetup()
     },
+    terrain: (set) => {
+      picking.terrain = set
+      showSetup()
+    },
     start: () => {
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races)
+        flow.start(picking.mode, picking.races, picking.terrain)
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)
@@ -662,9 +686,10 @@ export function boot(location) {
           const why = human.group.commit()
           return why ? Promise.resolve(why) : human.group.running
         },
+        // ((F7a) and the height of the ground found: a deck's top, or 0)
         pick: (x, y, pointerType = 'mouse') => {
           const p = picker.pick({ clientX: x, clientY: y, pointerType })
-          return { unit: p.unit?.id ?? null, ground: !!p.ground }
+          return { unit: p.unit?.id ?? null, ground: !!p.ground, y: p.ground ? p.ground.y : null }
         },
       },
       get player() {
@@ -840,6 +865,13 @@ export function boot(location) {
         mission(name) {
           if (!(name in MISSIONS)) throw new Error(`?debug view.mission: no mission "${name}"`)
           flow.mission = name
+        },
+        // (F7a) the terrain set a battle started here is fought on, the
+        // panel's default, from now on (as ?terrain= names one at load; null: each
+        // mission's first)
+        terrain(set) {
+          if (set !== null && !Object.values(MISSIONS).some((m) => m.sets.includes(set))) throw new Error(`?debug view.terrain: no mission is fought on "${set}"`)
+          flow.terrain = set
         },
       },
     }

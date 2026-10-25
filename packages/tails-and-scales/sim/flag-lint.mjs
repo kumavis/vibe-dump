@@ -96,7 +96,7 @@ export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
   ['view/effects/shots.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
-  ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')", 1, "the explosion's look: presentation"],
+  ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire'", 1, "the explosion's look: presentation"],
   ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
   ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
   ['ui/card.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],

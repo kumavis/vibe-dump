@@ -114,9 +114,11 @@ export function editSeat(handle, i, dev, fields) {
   return true
 }
 
-// The host changes the battle (the board, the mission): both seats
-// un-readied. A new mission lets the old one's terrain and rounds go: the
-// start's setup takes the new mission's first set and its rounds.
+// The host changes the battle (the board, the mission, (F7a) the terrain):
+// both seats un-readied. A new mission lets the old one's terrain and rounds
+// go: the start's setup takes the new mission's first set and its rounds,
+// unless the same change names a terrain (one of the new mission's sets:
+// the lobby screen offers no other, and the start's check refuses any).
 export function editBattle(handle, fields) {
   handle.change((d) => {
     if (fields.board !== undefined) d.lobby.board = fields.board
@@ -125,6 +127,7 @@ export function editBattle(handle, fields) {
       delete d.lobby.terrain
       delete d.lobby.rounds
     }
+    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })
 }

@@ -30,7 +30,9 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     deploy: BOARD.deploy,
     rounds: ROUNDS,
     army: 'classic',
-    sets: ['classic'],
+    // (F7a) and `fortified`, the fortifications to climb, which F7a adds to
+    // every mission's sets (the first stays each mission's default)
+    sets: ['classic', 'fortified'],
     // the centre, and one pair in each half, the table's point mirror
     objectives: [
       { x: 0, z: 0 },

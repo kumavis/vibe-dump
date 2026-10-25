@@ -22,7 +22,8 @@ import { ENGAGE } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import { relayout, setUnitPos } from '../units.js'
-import { alive, dist, gap, engagedWith, isEngaged, mx, mz, ownersOf, statusOf } from '../queries.js'
+import { moveMode } from './move.js'
+import { alive, dist, gap, engagedWith, isEngaged, mx, mz, ownersOf, statusOf, groundY } from '../queries.js'
 
 // Allocate `n` wounds of `D` damage to `u`, finishing off wounded models
 // first and preferring the models actually under a template. Returns the
@@ -65,6 +66,9 @@ export function damage(G, u, n, D, attacker, prefer = null) {
 
 // Survivors close ranks — and pile in, so a squad thinned out in melee doesn't
 // shrink out of the fight it was in.
+//
+//   (F7a, with height) unit.formation's pos is { x, y, z }, y the floor the
+//   unit stands on; classic's doesn't grow
 export function closeRanks(G, u) {
   const foes = engagedWith(G, u)
   relayout(u)
@@ -72,9 +76,13 @@ export function closeRanks(G, u) {
     const f = foes.reduce((a, b) => (gap(u, a) < gap(u, b) ? a : b))
     const d = dist(u, f)
     const step = gap(u, f) - (ENGAGE - 0.3)
-    setUnitPos(u, u.pos.x + ((f.pos.x - u.pos.x) / d) * step, u.pos.z + ((f.pos.z - u.pos.z) / d) * step)
+    const x = u.pos.x + ((f.pos.x - u.pos.x) / d) * step, z = u.pos.z + ((f.pos.z - u.pos.z) / d) * step
+    // (F7a) no pile-in where the new place isn't standable: off a wall's
+    // top, or onto a ledge's band
+    if (!G.nav.hasHeight) setUnitPos(u, x, z)
+    else if (G.nav.standable(G.nav.index(x, z), u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk')) setUnitPos(u, x, z)
   }
-  emit(G, 'unit.formation', { u: u.id, offs: u.models.map((m) => [m.ox, m.oz]), r: u.r, pos: { x: u.pos.x, z: u.pos.z } })
+  emit(G, 'unit.formation', { u: u.id, offs: u.models.map((m) => [m.ox, m.oz]), r: u.r, pos: { x: u.pos.x, z: u.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, u) } : {}) } })
 }
 
 // Model `m` of `u` falls to `attacker` (dmg: the number its last wound shows).

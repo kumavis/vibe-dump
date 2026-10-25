@@ -47,14 +47,22 @@ export function jobSetup(job) {
 // How the page starts a setup: the title screen's button for who sits in
 // each seat, and the URL that carries the rest (app/boot.js and app/flow.js
 // read ?seed, ?dice, ?races, ?overtime and, from F8a, ?mission (named only
-// when it isn't classic); a log recorded before F4 never
+// when it isn't classic), and from F7a ?terrain (named only when it isn't
+// the mission's first set, so a classic setup's URL is the one it always
+// was); a log recorded before F4 never
 // voted, so its overtime is 'never'). The page builds its own setup from
 // these, and playedAs (below) says whether it built this one: a setup the
 // page can't make (other terrain, rounds or dice) is found there.
+// (Each mission's first set, here for want of an import: this module
+// imports nothing, its functions being injected into pages and run against
+// older code. A mission not listed names its terrain whenever its setup
+// does.)
+const FIRST_SET = { classic: 'classic' }
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}` }
+  const terrain = setup.terrain && setup.terrain !== FIRST_SET[setup.mission ?? 'classic'] ? `&terrain=${setup.terrain}` : ''
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${terrain}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:

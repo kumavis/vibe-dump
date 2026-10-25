@@ -131,6 +131,8 @@ export class Online {
       race: (key) => this.editMine({ race: key }),
       ready: (on) => this.editMine({ ready: on }),
       board: (n) => this.isHost() && N.editBattle(this.handle, { board: n }),
+      // (F7a) the terrain, one of the mission's sets
+      terrain: (set) => this.isHost() && N.editBattle(this.handle, { terrain: set }),
       reroll: () => this.isHost() && N.editBattle(this.handle, { board: (Math.random() * 1e6) | 0 }),
       copy: () => this.copy(),
       fit: (text, typing) => N.fitName(text, { typing }),
@@ -189,7 +191,7 @@ export class Online {
     const { repo, ws } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
     Object.assign(this, { repo, ws })
-    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, mission: this.flow.mission, terrain: MISSIONS[this.flow.mission].sets[0], rounds: MISSIONS[this.flow.mission].rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
+    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, mission: this.flow.mission, terrain: this.flow.terrainOf(), rounds: MISSIONS[this.flow.mission].rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
     this.id = handle.documentId
     try {
@@ -297,8 +299,12 @@ export class Online {
     // doesn't know, a peer's, shows no figures)
     const races = L.seats.map((r, i) => (r ? r.race : this.freeRace(L, i)))
     const sides = races.every((race) => Object.hasOwn(RACES, race)) ? sidesFor(seatsOf(races)) : null
+    // ((F7a) the terrain: the lobby's, else its mission's first set, and the
+    // sets the mission is fought on, the host's to choose from; a mission
+    // no game here knows, a peer's, offers only what the lobby names)
+    const sets = MISSIONS[L.mission]?.sets ?? [L.terrain ?? 'classic']
     const m = {
-      status, link: this.linkFor(this.id), board: L.board, host: this.isHost(),
+      status, link: this.linkFor(this.id), board: L.board, host: this.isHost(), terrain: L.terrain ?? sets[0], terrains: [...sets],
       seats: L.seats.map((r, i) => ({ ...(r ? { name: r.name, ready: r.ready, mine: r.dev === this.dev } : { free: true, canSit: true }), race: races[i], color: sides?.[i].color ?? '#9a8a70' })),
     }
     // (drawn again only when it changed: a picker left open stays open)

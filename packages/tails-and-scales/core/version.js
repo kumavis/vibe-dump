@@ -52,5 +52,6 @@ export const RULES_ID = rulesId()
 // round-limit vote, the vote command and setup.overtime 'vote'; 3: F10b's
 // pilot, the AI playing a set of a seat's units; 4: F8a's missions, the
 // setup naming the mission that chooses the board and refusing a field it
-// doesn't know)
-export const CORE_VERSION = 4
+// doesn't know; 5: F11a's army lists, landing beside this; 6: F7a's height:
+// the nav's floor, links and ledges, and the rules' height branches)
+export const CORE_VERSION = 6

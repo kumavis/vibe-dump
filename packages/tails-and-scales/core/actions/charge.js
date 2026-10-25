@@ -25,8 +25,8 @@ import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { alive, enemiesOf, gap, isEngaged } from '../queries.js'
-import { moveMode, forbidMask, resolveWalk } from './move.js'
+import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
+import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
 
 export function canCharge(G, u) {
   if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
@@ -44,7 +44,9 @@ export function chargeTargets(G, u) {
 // any other enemy, not on top of a friend — each with the length of the
 // shortest route there. The closest one sets the distance the dice must beat;
 // a roll that beats it may end on any spot it reaches. Null when no spot can
-// be reached at all.
+// be reached at all. (F7a) With height a spot must also lie within HIGH of
+// the floor the target stands on: no charge ends at the foot of the wall
+// its target holds.
 export function chargePlan(G, u, target) {
   refreshNav(G)
   const nav = G.nav
@@ -52,7 +54,8 @@ export function chargePlan(G, u, target) {
   const mode = moveMode(u)
   // the target's 1" bubble is fine to enter, its base is not
   const forbid = forbidMask(G, u, ENGAGE + 0.05, [target])
-  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid })
+  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u) })
+  const ty = nav.hasHeight ? groundY(G, target) : 0
   const spots = []
   let best = -1, bd = Infinity
   const want = target.r + u.r + ENGAGE - 0.08
@@ -67,6 +70,7 @@ export function chargePlan(G, u, target) {
     if (!isFinite(d)) continue
     const dd = hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
     if (dd > want || dd < target.r + u.r + 0.02) continue
+    if (nav.hasHeight && Math.abs(nav.floor[i] - ty) > HIGH) continue
     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
     if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
     if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue

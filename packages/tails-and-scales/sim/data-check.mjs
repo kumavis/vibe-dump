@@ -45,7 +45,17 @@
 //    radius, weight or threshold out of range, falling thresholds, bad
 //    pairs, an unknown mirror, a spacing rule that isn't a number, an unknown
 //    or missing field. So a slip in a new set (F7's `fortified`) fails at
-//    load, not only on the boards whose draws reach it. (F8a) And the
+//    load, not only on the boards whose draws reach it. (F7a) It passes
+//    `fortified` too, and refuses a copy of it with a broken fort field: a
+//    fortKind under its recipe's footprint or not a number, one naming the
+//    keep (the centre's only) or no recipe, forts not a pair of whole
+//    numbers, works not 0 or 1, facing naming a recipe the set doesn't
+//    scatter, a negative fortGap or fortObjectiveGap, fractional
+//    fortAttempts, a fort phase missing a field, facing with no fort phase,
+//    an unknown scale; classic has none of the new fields (its draws are
+//    frozen); and each recipe's footprint is at least its reach measured on
+//    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
+//    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
 //    loads) passes each and refuses one with an odd or fractional board, a
 //    zone reaching within 6" of the centre line, an objective under 1"
@@ -126,7 +136,7 @@ const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
 const { MISSIONS, CLASSIC, checkMission } = await imp(PKG, 'data/mission.js')
 const { BOARD, ROUNDS } = await imp(PKG, 'core/rules.js')
-const { checkSet } = await imp(PKG, 'core/terrain/recipes.js')
+const { checkSet, FOOTPRINT, reachOf, FORTS } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
 const raw = { squirrel: (await imp(PKG, 'data/races/squirrel.js')).default, serpent: (await imp(PKG, 'data/races/serpent.js')).default }
 
@@ -200,6 +210,8 @@ function expected(key, L) {
     deployRow: L.role === 'Artillery' ? 'back' : L.hero ? 'mid' : 'front',
     eye: L.big ? 1.9 : L.fly ? 1.5 : 0.95,
     chest: L.big ? 1.0 : L.fly ? 1.0 : 0.55,
+    // (F7a: derived, no R0 test to restate: infantry climb ladders)
+    climb: !L.big && !L.fly,
   }
 }
 const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).sort()
@@ -218,6 +230,20 @@ for (const key of legacyKeys) {
   if (!(Object.isFrozen(t) && Object.isFrozen(t.melee) && (!t.ranged || Object.isFrozen(t.ranged)))) why.push('not frozen')
   const flags = ['ai', 'brawler', 'noCharge', 'chargeAfterAdvance', 'move', 'deployRow'].map((k) => `${k} ${t[k]}`).join(', ')
   check(!why.some(Boolean), `${key.padEnd(11)} ${t.name.padEnd(22)} ${flags}${t.ranged?.corrodes ? ', corrodes' : ''}`, why.filter(Boolean).join('; '))
+}
+// (F7a, DESIGN §4.2.9) every climber's disc, its full strength's (the
+// largest it has: a squad's ring only shrinks as it loses models), is at
+// most CLIMB_R, the largest every deck top, stair and ladder end admits; the
+// others are listed, with why they don't climb
+{
+  const { CLIMB_R } = await imp(PKG, 'core/nav.js')
+  const { formation } = await imp(PKG, 'core/units.js')
+  const { hypot } = await imp(PKG, 'core/dmath.js')
+  const r = (t) => formation(t.models, t.base).reduce((m, [x, z]) => Math.max(m, hypot(x, z)), 0) + t.base
+  const climbers = ALL.filter((t) => t.climb), over = climbers.filter((t) => !(r(t) <= CLIMB_R))
+  check(!over.length, `every climber's disc is at most CLIMB_R ${CLIMB_R}: ${climbers.map((t) => `${t.key} ${r(t).toFixed(3)}`).join(', ')}`, over.map((t) => `${t.key}'s r ${r(t)}`).join(', '))
+  const others = ALL.filter((t) => !t.climb)
+  check(others.every((t) => t.big || t.fly), `the units that climb no ladder are big or fly: ${others.map((t) => `${t.key} (${t.big ? 'big' : 'fly'}, r ${r(t).toFixed(3)})`).join(', ')}`, others.filter((t) => !t.big && !t.fly).map((t) => t.key).join(', '))
 }
 
 // ── 2. races ────────────────────────────────────────────────────────────────
@@ -455,7 +481,7 @@ const brokenSets = [
   ['a weight that is not a number', /weight 2/, (c) => (c.kinds[4][2] = '2')],
   ['a negative weight', /weight -1/, (c) => (c.kinds[5][2] = -1)],
   ['no features at all', /at least one feature/, (c) => (c.kinds = [])],
-  ['a centre piece that does not exist', /no centre piece "keep"/, (c) => (c.centre[0][0] = 'keep')],
+  ['a centre piece that does not exist', /no centre piece "moat"/, (c) => (c.centre[0][0] = 'moat')],
   ['a centre threshold above 1', /threshold 1.2/, (c) => (c.centre[1][1] = 1.2)],
   ['centre thresholds that fall', /must rise/, (c) => c.centre.reverse()],
   ['fractional pairs', /pairs must be/, (c) => (c.pairs[1] = 2.5)],
@@ -473,6 +499,47 @@ for (const [what, want, edit] of brokenSets) {
   const err = setError(c)
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
 }
+// (F7a) the fortified set's own fields, broken one at a time on a copy
+const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale']
+check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
+const brokenForts = [
+  ['a fortKind under its footprint (rampart 6, its footprint 7.1)', /fortKinds\[0\] \(rampart\): radius 6 must be a number, at least its footprint 7\.1/, (c) => (c.fortKinds[0][1] = 6)],
+  ['a fortKind radius that is not a number', /fortKinds\[1\] \(bastion\): radius 6\.3 must be/, (c) => (c.fortKinds[1][1] = '6.3')],
+  ['a fortKind that is the keep (the centre only)', /no fortification "keep" to scatter/, (c) => (c.fortKinds[2][0] = 'keep')],
+  ['a fortKind naming no recipe', /no fortification "moat" to scatter/, (c) => (c.fortKinds[3][0] = 'moat')],
+  ['a fortKind without its weight', /fortKinds\[2\] must be \[fortification, radius, weight\]/, (c) => c.fortKinds[2].pop()],
+  ['a fortKind weight of 0', /fortKinds\[3\] \(platform\): weight 0/, (c) => (c.fortKinds[3][2] = 0)],
+  ['no fortKinds at all', /fortKinds must list at least one/, (c) => (c.fortKinds = [])],
+  ['forts not a pair', /forts must be two whole numbers/, (c) => (c.forts = [1])],
+  ['fractional forts', /forts must be two whole numbers/, (c) => (c.forts = [1, 0.5])],
+  ['works of 2', /works 2 must be 0 or 1/, (c) => (c.works = 2)],
+  ['works that are not a number', /works true must be 0 or 1/, (c) => (c.works = true)],
+  ['facing naming an unknown recipe', /facing: no fortification "moat" in fortKinds/, (c) => c.facing.push('moat')],
+  ['facing naming a recipe the set does not scatter', /facing: no fortification "bastion" in fortKinds/, (c) => c.fortKinds.splice(1, 1)],
+  ['a negative fortGap', /fortGap -1 must be a finite number, 0 or more/, (c) => (c.fortGap = -1)],
+  ['a fortObjectiveGap that is not a number', /fortObjectiveGap NaN must be/, (c) => (c.fortObjectiveGap = NaN)],
+  ['fractional fortAttempts', /fortAttempts 600\.5 must be a whole number/, (c) => (c.fortAttempts = 600.5)],
+  ['a fort phase missing a field', /the fort phase needs .*: no "fortGap"/, (c) => delete c.fortGap],
+  ['facing with no fort phase', /facing names fortKinds, and the set has none/, (c) => ['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'].forEach((k) => delete c[k])],
+  ['an unknown scale', /scale "length" is not one scatter knows/, (c) => (c.scale = 'length')],
+  ['a misspelt fort field', /unknown field "fortGapp"/, (c) => (c.fortGapp = 3.2)],
+]
+for (const [what, want, edit] of brokenForts) {
+  const c = structuredClone(SETS.fortified)
+  edit(c)
+  const err = setError(c)
+  check(err && want.test(err), `refuses fortified with ${what}`, err ?? 'accepted')
+}
+// (F7a) each recipe's footprint holds its reach as built, on seeds 1-500
+// (DESIGN §4.2.4: its chunks' corners and its ladders' feet, plus 0.25", to
+// the nearest tenth as the recipe table rounds; and its gates). Measured
+// here rather than as recipes.js loads, where it cost every page 120-200 ms.
+const SEEDS_500 = Array.from({ length: 500 }, (_, i) => i + 1)
+for (const name of Object.keys(FORTS)) {
+  const { r, gate } = reachOf(name, SEEDS_500), need = Math.round((r + 0.25) * 10) / 10
+  check(FOOTPRINT[name] >= need && FOOTPRINT[name] >= gate, `the ${name}'s footprint ${FOOTPRINT[name]}" holds its reach ${r.toFixed(3)}" + 0.25" (${need}") and its gates (${gate.toFixed(3)}")`, `footprint ${FOOTPRINT[name]}`)
+}
+for (const [name, r] of SETS.fortified.fortKinds) check(r === FOOTPRINT[name], `fortified's ${name} radius is its footprint (${FOOTPRINT[name]})`, `${r}`)
 // (F8a) the missions, as the sets
 const missionError = (m) => {
   try {
@@ -494,7 +561,7 @@ const brokenMissions = [
   ['an objective without its point mirror', /no point mirror/, (m) => (m.objectives[1].z = 9)],
   ['no objectives', /no objectives/, (m) => (m.objectives = [])],
   ['fractional rounds', /2.5 rounds/, (m) => (m.rounds = 2.5)],
-  ['a set that does not exist', /aren't terrain sets/, (m) => m.sets.push('fortified')],
+  ['a set that does not exist', /aren't terrain sets/, (m) => m.sets.push('moated')],
   ['a set named by an Object.prototype member', /aren't terrain sets/, (m) => (m.sets = ['toString'])],
   ['no sets', /aren't terrain sets/, (m) => (m.sets = [])],
   ['no army', /army has no name/, (m) => delete m.army],
@@ -747,7 +814,11 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1 }
+  // (5, F11a: army lists in the setup, which a classic setup names none of;
+  // 6, F7a: the height layer, derived from the chunks like the nav grid and
+  // never hashed, and classic boards build none: the format is unchanged
+  // for classic matches)
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

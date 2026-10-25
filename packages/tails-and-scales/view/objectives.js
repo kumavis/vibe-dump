@@ -58,6 +58,13 @@ export class ObjectivesView {
     })
   }
 
+  // (F7a) Each marker at the height of the top it stands on (`heights`, one
+  // per objective: the keep's centre objective is on its deck; 0 on the
+  // ground, as every classic one is).
+  raise(heights) {
+    for (const o of this.items) o.g.position.y = heights[o.i] ?? 0
+  }
+
   // Flag and ring in the colours of whoever holds the objective (-1: nobody).
   paint(o, c) {
     o.owner = c

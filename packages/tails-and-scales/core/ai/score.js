@@ -12,7 +12,8 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd } from '../queries.js'
+import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd, levelDist, floorAt } from '../queries.js'
+import { climbs } from '../actions/move.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -127,10 +128,18 @@ export function fallbackSpot(G, u, plan) {
 // How good (x, z) is for `u`, by its role. Leaves what it found in ctx.last:
 // whether the spot is on an objective (and which), and whether u could
 // shoot from it.
+//
+// (F7a, DESIGN §4.2.4's AI; rule 10: it bumps with F7a) With height the
+// objective and approach terms measure the way there (levelDist: up the
+// stairs, or the ladders for a climber, rather than through the wall), and
+// shooters and artillery like raised ground: +0.25 an inch of floor, up to
+// 4". What climbing costs reaches the score through the plan's distances
+// (validEnd's), already paid for; nothing else changes.
 export function score(G, u, x, z, ctx, moving) {
   const { enemies, friends, owners, claimed, role, pre } = ctx
   const t = u.t
   const from = { x, z }
+  const high = G.nav.hasHeight, climb = high && climbs(u)
   const moved = moving && hypot(x - u.pos.x, z - u.pos.z) > 0.3
   let s = 0
   let onObjective = false, obj = -1
@@ -139,7 +148,7 @@ export function score(G, u, x, z, ctx, moving) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
     for (const o of G.objectives) {
-      const d = hypot(o.x - x, o.z - z)
+      const d = high ? levelDist(G, from, o, climb) : hypot(o.x - x, o.z - z)
       const want = owners[o.i] === u.side ? 0.45 : 1
       const taken = claimed.has(o.i) ? 0.25 : 1
       let v
@@ -183,7 +192,7 @@ export function score(G, u, x, z, ctx, moving) {
     s += best * w
     // far from everything: just close the distance
     if (best === 0 && role !== 'hero') {
-      const near = Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
+      const near = high ? Math.min(...enemies.map((e) => levelDist(G, from, e.pos, climb))) : Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
       s -= near * (role === 'melee' ? 0.12 : 0.05)
     }
   }
@@ -197,6 +206,8 @@ export function score(G, u, x, z, ctx, moving) {
   const ci = G.nav.index(x, z)
   if (ci >= 0 && G.nav.cover[ci]) s += fragile ? 1.5 : 0.5
   if (role === 'artillery' && moved) s -= 2.5
+  // (F7a) the high ground, for the guns
+  if (high && (role === 'shooter' || role === 'artillery')) s += 0.25 * Math.min(4, floorAt(G, x, z))
   // heroes like company
   if (role === 'hero') {
     let n = 0

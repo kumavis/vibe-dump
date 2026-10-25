@@ -54,6 +54,39 @@
 //     core/terrain/terrain.js's, which core doesn't export: a sync builds
 //     and keys the table by the copy, an add by the def the event carries,
 //     so a field one has and the other lacks would part the two tables).
+//  6. (F7a, DESIGN §4.2.4) the `fortified` set, on the same seeds, on the
+//     Skirmish board (the classic mission's 40×28, its objectives and zones)
+//     and the Grand fixture's (sim/fixtures/grand.mjs: 80×56, zones 14", nine
+//     objectives), each board built by the working tree's Terrain alone
+//     (there is no R0 code to hold it to): every board built twice, with
+//     Math.random made to throw, gives the same adds (every def, its look and
+//     its height fields) and the same footprints, so every look is made of
+//     recorded draws; every add's def carries the chunk's surface, link,
+//     base, supports, fallsAt and on as the chunk has them, and nothing it
+//     lacks; every deck, stair, ladder and post is exactly point-symmetric
+//     with its partner (the copy's place the negation of the first's, bit
+//     for bit, its yaw the first's plus π, its surface, look and size the
+//     same, its link's foot and top negated, its supports and deck its
+//     partner's), the keep and the keep's deck their own, and every other
+//     chunk symmetric within 1e-9; every such piece lies inside the footprint
+//     of the fortification it belongs to (each corner, each link's foot and
+//     each stair's gate within its radius), and every fortification placed
+//     has its pieces; the works' decks have their front face on the zone's
+//     edge and their ladders' feet 2.25" out; facing pieces face the other
+//     zone (±0.3) and the keep's stairs the zones (±0.2). Over 100 boards or
+//     more it also judges the rates against DESIGN's measurements (§4.2.4,
+//     the prototype's seeds 1-200): the works on ≥ 95% of boards, the keep on
+//     45-55%, and the fort pairs besides the works per board (Skirmish 0-1,
+//     on average under 0.5; Grand at least 2 and at most the 7 the rule can
+//     want there, on average 3.5-4.5). Fewer boards than that make a rate
+//     noise: it prints them and judges only the exact rows. And the view of
+//     every such board (TerrainView: its decks, stairs, ladders and posts
+//     drawn from their looks): each add's def is the view's defOf of its
+//     chunk, height fields and all (the view's list of them held to core's),
+//     a table synced from the chunks is the table the adds built (5.'s
+//     rows), the walkable tops it lists (the overlay's tints, the picker's
+//     quads) are exactly the chunks with a surface, and the board's adds
+//     played again take back every mesh.
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -198,7 +231,9 @@ legacy.smash = (S, x, z, dir, r) => {
 }
 const mine = { ...(await imp(PKG, 'view/clock.js')), make: (scene, fx) => new Now(scene, fx) }
 mine.smash = (S, x, z, dir, r) => {
-  smashAround({ terrain: S.terrain }, { r }, { x, z, dir }, S.out)
+  // (a match of just the terrain: a board with no height layer, F7a's
+  // smash test skipped as on every classic board)
+  smashAround({ terrain: S.terrain, nav: { hasHeight: false } }, { r }, { x, z, dir }, S.out)
   S.drain()
 }
 
@@ -240,9 +275,12 @@ const realRandom = Math.random
 let mismatches = 0
 const shown = []
 class Stop extends Error {}
+// (what the two sides are called: the R0 code's and the working tree's, or
+// in section 6, where there is no R0 code, what a row wants and what it got)
+let sides = ['R0', 'now']
 function differ(where, a, b) {
   mismatches++
-  if (shown.length < MAX) shown.push(`${where}: R0 ${fmt(a)} | now ${fmt(b)}`)
+  if (shown.length < MAX) shown.push(`${where}: ${sides[0]} ${fmt(a)} | ${sides[1]} ${fmt(b)}`)
   throw new Stop()
 }
 const fmt = (v) => (typeof v === 'number' && Object.is(v, -0) ? '-0' : typeof v === 'string' ? JSON.stringify(v) : v && typeof v === 'object' ? JSON.stringify(v)?.slice(0, 120) : String(v))
@@ -617,8 +655,247 @@ console.log(`  synced from the chunks as they stand, ${stats.synced} chunks matc
 console.log(`  synced after destruction, cleared and the board added again: ${stats.replayed} chunks as a fresh table shows them (${stats.replayBroken} broken on the old table, ${stats.replayLower} standing lower on it; ${stats.replayTaken} meshes taken back)`)
 console.log(`  ${stats.defs} adds played, each one's def the view's defOf of its chunk (the copy sync builds and keys the table by)`)
 console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} chunks (standing, height); ${globalThis.__dustMoved ?? 0} of ${globalThis.__dustAll ?? 0} collapse dust puffs rise where their own drop left the block, not lower where a later drop in the same op took it (R5's rule; R0 read the place when the fall ended)`)
-if (failedSeeds) {
-  console.log(`MISMATCH on ${failedSeeds} board(s):`)
+
+// ── 6. The fortified set (F7a) ──────────────────────────────────────────────
+const { GRAND } = await import('./fixtures/grand.mjs')
+const { SETS } = await imp(PKG, 'core/terrain/sets.js')
+const { FOOTPRINT, GATE_OUT, LADDER_OUT } = await imp(PKG, 'core/terrain/recipes.js')
+// the height fields an add's def carries where its chunk has them (DESIGN
+// §4.2.4's terrain.add), named here and held to core's list, so an edit that
+// drops one from core's list alike is a difference, not a pass
+const HEIGHT = ['surface', 'link', 'base', 'supports', 'fallsAt', 'on']
+const { HEIGHT_FIELDS } = await imp(PKG, 'core/terrain/terrain.js')
+// (and the view's copy of that list, which its defOf carries: view/terrain.js
+// can't import core's, terrain.js being no door of the core's)
+const { HEIGHT_FIELDS: VIEW_HEIGHT } = await imp(PKG, 'view/terrain.js')
+const { sin: dsin, cos: dcos } = await imp(PKG, 'core/dmath.js')
+const FORT_PIECES = new Set(['deck', 'stair', 'ladder', 'post'])
+const FACING = new Set(SETS.fortified.facing)
+const FORT_BOARDS = [
+  { label: 'Skirmish', W, H, deploy: MISSIONS.classic.deploy, objectives: OBJ_POS, pairs: [0, 1], avg: [0, 0.5] },
+  // (s = 4 there: forts [1, 1] want 4 + a draw below 4, so 7 at most)
+  { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.board.deploy, objectives: GRAND.objectives.map(([x, z]) => ({ x, z })), pairs: [2, 7], avg: [3.5, 4.5] },
+]
+// a yaw's distance from another, the turn between them folded into [0, π]
+const turn = (a, b) => {
+  const d = Math.abs(a - b) % (2 * Math.PI)
+  return d > Math.PI ? 2 * Math.PI - d : d
+}
+const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 0, pairs: 0, selfPairs: 0, others: 0, defs: 0, viewed: 0, synced: 0, tops: 0, taken: 0 }
+const fortRows = []
+// a board, built twice; the differences thrown as `differ` does
+function fortBoard(B, seed) {
+  const where = `fortified ${B.label} seed ${seed}`
+  const build = () => {
+    const T = new Terrain(B.W, B.H), out = []
+    const random = Math.random, STUB = Symbol('Math.random')
+    Math.random = () => {
+      // (made here, so its stack names the caller)
+      throw Object.assign(new Error('Math.random'), { [STUB]: true })
+    }
+    try {
+      T.generate(seed, B.objectives, B.deploy, 'fortified', out)
+    } catch (e) {
+      if (!e?.[STUB]) throw e
+      differ(`${where}: the build's draws (a look is made of the layout stream's recorded draws)`, 'none from Math.random', `Math.random called: ${e.stack.split('\n')[2]?.trim()}`)
+    } finally {
+      Math.random = random
+    }
+    return { T, out }
+  }
+  const a = build(), b = build()
+  same(`${where} adds (built twice)`, a.out.length, b.out.length)
+  a.out.forEach((e, i) => deep(`${where} add ${i} (built twice)`, e, b.out[i]))
+  deep(`${where} footprints (built twice)`, a.T.features, b.T.features)
+  const { T, out } = a
+  const chunks = T.chunks
+  fort.chunks += chunks.length
+  // every add's def: the chunk's place and look, and its height fields as
+  // the chunk has them
+  for (const e of out) {
+    if (e.t !== 'terrain.add') continue
+    const c = chunks.find((x) => x.id === e.def.id)
+    const want = { id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look }
+    for (const k of HEIGHT) if (c[k] !== undefined) want[k] = c[k]
+    deep(`${where} chunk ${c.id} (${c.kind})'s def`, want, e.def)
+    // (and the view's defOf of it, which a snap's sync builds and keys by)
+    deep(`${where} chunk ${c.id} (${c.kind})'s def (the add's | the view's defOf)`, e.def, viewDefOf(c))
+    fort.defs++
+  }
+  fortView(where, T, out)
+  // the point mirror
+  const key = (kind, x, z) => `${kind}:${x}:${z}`
+  const byPlace = new Map()
+  for (const c of chunks) if (FORT_PIECES.has(c.kind)) byPlace.set(key(c.kind, c.shape.x, c.shape.z), c)
+  const partner = new Map()
+  for (const c of chunks) {
+    if (!FORT_PIECES.has(c.kind)) continue
+    fort.pieces[c.kind] = (fort.pieces[c.kind] ?? 0) + 1
+    if (c.surface) fort.surfaces++
+    if (c.link) fort.links++
+    const m = byPlace.get(key(c.kind, -c.shape.x, -c.shape.z))
+    const w = `${where} ${c.look.recipe}'s ${c.kind} ${c.id} at (${c.shape.x}, ${c.shape.z})`
+    if (!m) differ(`${w}: its point mirror`, 'a piece at its negation', 'none')
+    partner.set(c.id, m.id)
+  }
+  for (const c of chunks) {
+    if (!FORT_PIECES.has(c.kind)) continue
+    const m = chunks.find((x) => x.id === partner.get(c.id))
+    const w = `${where} ${c.look.recipe}'s ${c.kind} ${c.id} and its mirror ${m.id}`
+    if (m === c) {
+      // (only a deck at the centre may be its own: a box turned by π is the
+      // same box, and a deck's top has no way up or down)
+      if (c.kind !== 'deck') differ(`${w}: its own mirror`, 'a deck', c.kind)
+      fort.selfPairs++
+      continue
+    }
+    if (c.id < m.id) {
+      fort.pairs++
+      same(`${w}: yaw + π`, c.shape.yaw + Math.PI, m.shape.yaw)
+    }
+    for (const k of ['y', 'hx', 'hy', 'hz']) same(`${w}: shape.${k}`, c.shape[k], m.shape[k])
+    deep(`${w}: surface`, c.surface, m.surface)
+    deep(`${w}: look`, c.look, m.look)
+    same(`${w}: base`, c.base, m.base)
+    same(`${w}: fallsAt`, c.fallsAt, m.fallsAt)
+    if (c.link || m.link) {
+      if (!c.link || !m.link) differ(`${w}: link`, !!c.link, !!m.link)
+      for (const end of ['foot', 'top']) for (const k of ['x', 'z']) same(`${w}: link.${end}.${k} negated`, -c.link[end][k], m.link[end][k])
+      same(`${w}: link.h`, c.link.h, m.link.h)
+    }
+    same(`${w}: supports, its partners`, (c.supports ?? []).map((id) => partner.get(id)).join(), (m.supports ?? []).join())
+    same(`${w}: its deck, its partner`, c.on === undefined ? undefined : partner.get(c.on), m.on)
+  }
+  // every other chunk: a partner of its kind at its negation, within 1e-9
+  for (const c of chunks) {
+    if (FORT_PIECES.has(c.kind)) continue
+    const m = chunks.find((x) => x.kind === c.kind && Math.abs(x.shape.x + c.shape.x) <= 1e-9 && Math.abs(x.shape.z + c.shape.z) <= 1e-9 &&
+      Math.abs(x.shape.hx - c.shape.hx) <= 1e-9 && Math.abs(x.shape.hz - c.shape.hz) <= 1e-9 && Math.abs(x.shape.y - c.shape.y) <= 1e-9)
+    if (!m) differ(`${where} ${c.kind} ${c.id} at (${c.shape.x}, ${c.shape.z}): its point mirror within 1e-9`, 'a chunk of its kind and size', 'none')
+    fort.others++
+  }
+  // every piece inside the footprint of the fortification it belongs to
+  const forts = T.features.filter((f) => f.fort)
+  const held = new Map(forts.map((f) => [f, 0]))
+  for (const c of chunks) {
+    if (!FORT_PIECES.has(c.kind)) continue
+    const s = c.shape
+    const pts = corners(s)
+    if (c.link) pts.push([c.link.foot.x, c.link.foot.z])
+    // (a stair's gate: GATE_OUT past its foot, the low end of its own x)
+    if (c.kind === 'stair') pts.push([s.x - (s.hx + GATE_OUT) * dcos(s.yaw), s.z + (s.hx + GATE_OUT) * dsin(s.yaw)])
+    const f = forts.find((f) => pts.every(([x, z]) => hypot(x - f.x, z - f.z) <= f.r + 1e-9))
+    if (!f) differ(`${where} ${c.look.recipe}'s ${c.kind} ${c.id}: inside a footprint`, 'every corner, foot and gate inside one', JSON.stringify(pts.map((p) => p.map((v) => +v.toFixed(3)))))
+    if (f.fort !== c.look.recipe) differ(`${where} ${c.kind} ${c.id}: the fortification whose footprint holds it`, c.look.recipe, f.fort)
+    held.set(f, held.get(f) + 1)
+    if (c.kind !== 'deck') continue
+    if (f.works !== undefined) {
+      // the works: the front face on the zone's edge, the deck inside it
+      const xs = pts.slice(0, 4).map(([x]) => (f.works === 0 ? x : -x))
+      const edge = -B.W / 2 + B.deploy
+      if (Math.abs(Math.max(...xs) - edge) > 1e-9) differ(`${where} works ${f.works}'s deck: its front face on the zone's edge`, edge, Math.max(...xs))
+      if (Math.abs(Math.min(...xs) - (edge - c.look.d)) > 1e-9) differ(`${where} works ${f.works}'s deck: inside the zone`, edge - c.look.d, Math.min(...xs))
+    }
+    if (FACING.has(f.fort)) {
+      const want = f.x < 0 ? -Math.PI / 2 : Math.PI / 2
+      if (turn(s.yaw, want) > (f.works !== undefined ? 1e-12 : 0.3 + 1e-12)) differ(`${where} ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its front toward the other zone`, want, s.yaw)
+    }
+    if (f.fort === 'keep' && turn(s.yaw, 0) > 0.2 + 1e-12 && turn(s.yaw, Math.PI) > 0.2 + 1e-12) differ(`${where} the keep: its stairs toward the zones`, '|yaw| ≤ 0.2', s.yaw)
+  }
+  for (const c of chunks) {
+    if (c.kind !== 'ladder') continue
+    const f = forts.find((f) => hypot(c.link.foot.x - f.x, c.link.foot.z - f.z) <= f.r)
+    if (f.works === undefined) continue
+    const x = f.works === 0 ? c.link.foot.x : -c.link.foot.x
+    if (Math.abs(x - (-B.W / 2 + B.deploy + LADDER_OUT)) > 1e-9) differ(`${where} works ${f.works}'s ladder: its foot ${LADDER_OUT}" out from the zone`, -B.W / 2 + B.deploy + LADDER_OUT, x)
+  }
+  for (const [f, n] of held) if (!n) differ(`${where} the ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its pieces`, 'some', 'none')
+  for (const f of forts) if (f.r !== FOOTPRINT[f.fort]) differ(`${where} the ${f.fort}'s footprint`, FOOTPRINT[f.fort], f.r)
+  return {
+    works: forts.some((f) => f.works === 0) && forts.some((f) => f.works === 1),
+    keep: forts.some((f) => f.fort === 'keep'),
+    pairs: forts.filter((f) => f.works === undefined && f.fort !== 'keep').length / 2,
+    kinds: forts.filter((f) => f.works === undefined && f.fort !== 'keep').map((f) => f.fort),
+    chunks: chunks.length,
+  }
+}
+// The view of a fortified board (TerrainView, view/terrain.js): its adds
+// played into a table as the player plays them; a table synced from the
+// chunks is that table (syncCheck: every chunk shown alike, every mesh where
+// it stands and the same mesh); the walkable tops it lists (surfaces, and the
+// picker's quads on them, tops) are exactly the chunks with a surface, one
+// quad each; and the table cleared and its adds played again takes every
+// mesh back (a battle started on the title's fortified table builds nothing).
+function fortView(where, T, out) {
+  const view = new TerrainView(new THREE.Scene(), recorder().proxy), mirror = blankMirror()
+  for (const e of out) view.apply(e, applyEvent(mirror, e))
+  syncCheck(`${where} synced`, { terrain: T, view }, null, false)
+  fort.synced += T.chunks.length
+  const want = T.chunks.filter((c) => c.surface).map((c) => c.id).join()
+  same(`${where} the view's walkable tops (surfaces)`, want, view.surfaces().map((c) => c.id).join())
+  same(`${where} the picker's quads on them (tops)`, T.chunks.filter((c) => c.surface).length, view.tops().length)
+  fort.tops += view.tops().length
+  const before = new Map([...view.items].map(([id, it]) => [id, it.obj]))
+  for (const e of out) view.apply(e, applyEvent(mirror, e))
+  for (const [id, obj] of before) same(`${where} chunk ${id} mesh taken back (cleared and added again)`, true, view.items.get(id)?.obj === obj)
+  same(`${where} spares left (cleared and added again)`, 0, view.spares.size)
+  fort.taken += before.size
+  fort.viewed++
+  view.dispose()
+}
+// (the corners of a box on the table, as core/terrain/geom.js measures them)
+const { corners } = await imp(PKG, 'core/terrain/geom.js')
+const tf0 = Date.now()
+sides = ['want', 'got']
+try {
+  same("core's HEIGHT_FIELDS (core/terrain/terrain.js)", HEIGHT.join(), HEIGHT_FIELDS.join())
+  same("the view's HEIGHT_FIELDS (view/terrain.js)", HEIGHT.join(), VIEW_HEIGHT.join())
+} catch (e) {
+  if (!(e instanceof Stop)) throw e
+  fort.failed++
+}
+for (const B of FORT_BOARDS) {
+  const got = []
+  for (let seed = lo; seed <= hi; seed++) {
+    fort.boards++
+    try {
+      got.push(fortBoard(B, seed))
+    } catch (e) {
+      Math.random = realRandom
+      if (!(e instanceof Stop)) throw e
+      fort.failed++
+    }
+  }
+  if (!got.length) continue
+  const n = got.length, sum = (f) => got.reduce((s, g) => s + f(g), 0)
+  const pairs = got.map((g) => g.pairs), chunks = got.map((g) => g.chunks)
+  const kinds = {}
+  for (const g of got) for (const k of g.kinds) kinds[k] = (kinds[k] ?? 0) + 0.5
+  const row = { B, n, works: sum((g) => g.works), keep: sum((g) => g.keep), pairs, avg: sum((g) => g.pairs) / n, chunks, kinds }
+  fortRows.push(row)
+  if (n < 100) continue
+  // the rates, against DESIGN §4.2.4's measurements
+  const judge = (ok, what, a, b) => {
+    if (ok) return
+    fort.failed++
+    if (shown.length < MAX) shown.push(`fortified ${B.label}, seeds ${lo}-${hi}: ${what}: DESIGN ${a} | now ${b}`)
+  }
+  judge(row.works >= 0.95 * n, 'the works on ≥ 95% of boards', `≥ ${Math.ceil(0.95 * n)} of ${n}`, row.works)
+  judge(row.keep >= 0.45 * n && row.keep <= 0.55 * n, 'the keep on about half the boards', `${Math.ceil(0.45 * n)}-${Math.floor(0.55 * n)} of ${n}`, row.keep)
+  judge(Math.min(...pairs) >= B.pairs[0] && Math.max(...pairs) <= B.pairs[1], 'fort pairs besides the works, per board', `${B.pairs[0]}-${B.pairs[1]}`, `${Math.min(...pairs)}-${Math.max(...pairs)}`)
+  judge(row.avg >= B.avg[0] && row.avg <= B.avg[1], 'fort pairs besides the works, on average', `${B.avg[0]}-${B.avg[1]}`, row.avg.toFixed(2))
+}
+const stat = (a) => `${Math.min(...a)} / ${(a.reduce((s, x) => s + x, 0) / a.length).toFixed(2)} / ${Math.max(...a)}`
+console.log(`\nP-terrain, fortified (F7a): boards ${lo}-${hi} on ${FORT_BOARDS.map((B) => `${B.label} ${B.W}×${B.H}`).join(' and ')} (${((Date.now() - tf0) / 1000).toFixed(1)} s)`)
+for (const r of fortRows) {
+  console.log(`  ${r.B.label}: the works on ${r.n ? r.works : 0} of ${r.n} boards, the keep on ${r.keep}; fort pairs besides the works (min / avg / max) ${stat(r.pairs)} (${Object.entries(r.kinds).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}); chunks ${stat(r.chunks)}${r.n < 100 ? ' (under 100 boards: the rates not judged)' : ''}`)
+}
+console.log(`  ${fort.chunks} chunks built twice alike, Math.random never called; ${fort.defs} adds' defs carrying the chunk's height fields; pieces ${Object.entries(fort.pieces).map(([k, v]) => `${k} ${v}`).join(', ')} (${fort.surfaces} surfaces, ${fort.links} links)`)
+console.log(`  ${fort.pairs} mirrored pairs of pieces exact (and ${fort.selfPairs} decks their own mirror), ${fort.others} other chunks within 1e-9; every piece, foot and gate inside its fortification's footprint`)
+console.log(`  the view: ${fort.viewed} boards' adds played into a TerrainView, each add's def the view's defOf of its chunk; ${fort.synced} chunks synced alike; ${fort.tops} walkable tops listed, a picker's quad on each; ${fort.taken} meshes taken back by the board's adds played again`)
+
+if (failedSeeds || fort.failed) {
+  console.log(`MISMATCH on ${[failedSeeds && `${failedSeeds} classic board(s)`, fort.failed && `${fort.failed} fortified board(s) or rate(s)`].filter(Boolean).join(' and ')}:`)
   for (const s of shown) console.log(`  ${s}`)
   process.exit(1)
 }
@@ -627,8 +904,162 @@ if (!boards || !stats.chunks) {
   console.log(`terrain-check: VACUOUS: ${boards} board(s), ${stats.chunks} chunks compared`)
   process.exit(2)
 }
+if (!fort.chunks || !fort.pairs || !fort.links || !fort.viewed || !fort.tops) {
+  console.log(`terrain-check: VACUOUS: ${fort.boards} fortified board(s), ${fort.chunks} chunks, ${fort.pairs} mirrored pairs of pieces, ${fort.links} links checked`)
+  process.exit(2)
+}
 if (OPS > 0 && !stats.ops) {
   console.log(`terrain-check: VACUOUS: --ops ${OPS} but no destruction op ran`)
   process.exit(2)
 }
-console.log(`all ${boards} board${boards === 1 ? '' : 's'} identical: layout draws, chunks, looks against the old meshes, destruction, line of sight`)
+console.log(`all ${boards} board${boards === 1 ? '' : 's'} identical: layout draws, chunks, looks against the old meshes, destruction, line of sight; the fortified boards built alike twice, point-symmetric and inside their footprints`)
+
+// ── 7. P-climb (F7a, DESIGN §4.2.9) ─────────────────────────────────────────
+// The height layer core/nav.js builds on every fortified board above, each
+// board's nav grid rebuilt from its chunks (as a match's refreshNav does): the
+// expected matrix of who climbs what, the decks' room, and the layer's
+// symmetry.
+//  - From the ground in seat 0's zone (the standable ground cell nearest its
+//    middle), a climber's reach (r CLIMB_R, ladders taken) finds every deck's
+//    top; a big walker's (the Trebuchet's 1.05 and the Brute's 0.95, no
+//    ladders) every top a stair rises to (the rampart's, the bastion's, the
+//    keep's) and none that only a ladder reaches (the watchtower's, the
+//    platform's). (Ground hulls never climb: F9a's vehicles have no unit
+//    yet, so their column is empty.)
+//  - Every ladder is climbable: both its ends standable for an r CLIMB_R
+//    disc, and a climber at its foot reaches its top over the link alone
+//    (at its cost, LADDER_MUL × its height); every stair takes a big walker
+//    from its gate up onto its deck.
+//  - Every deck top hosts an r CLIMB_R disc (every climber's r is at most
+//    it, sim/data-check.mjs), and every flier's own disc: they land on
+//    every top.
+//  - The floor and the links are exactly point-symmetric (cell i and cell
+//    N − 1 − i: the same floor, and a link from one where the other has the
+//    mirror link, at the same cost); the cliff field within 1e-4 (its two
+//    chamfer passes sum in the board's order).
+//  - The works stand on ≥ 95% of boards (judged over 100 boards or more).
+// A failure names the board, the piece and the row.
+const { NavGrid, CLIMB_R, STEP, LADDER_MUL } = await imp(PKG, 'core/nav.js')
+const { RACES } = await imp(PKG, 'data/schema.js')
+const { formation } = await imp(PKG, 'core/units.js')
+const radius = (t) => formation(t.models, t.base).reduce((m, [x, z]) => Math.max(m, hypot(x, z)), 0) + t.base
+const UNITS = Object.values(RACES).flatMap((r) => Object.values(r.units))
+const BIG = [1.05, 0.95]
+const FLIERS = [...new Set(UNITS.filter((t) => t.fly).map(radius))]
+const STAIRED = new Set(['rampart', 'bastion', 'keep'])
+const climb = { boards: 0, failed: 0, decks: 0, staired: 0, ladderOnly: 0, ladders: 0, stairs: 0, cells: 0, works: {} }
+const tc0 = Date.now()
+const climbShown = []
+const fail = (where, what) => {
+  climb.failed++
+  if (climbShown.length < MAX) climbShown.push(`${where}: ${what}`)
+}
+function climbBoard(B, seed) {
+  const where = `P-climb ${B.label} seed ${seed}`
+  const T = new Terrain(B.W, B.H)
+  T.generate(seed, B.objectives, B.deploy, 'fortified', null)
+  const nav = new NavGrid(B.W, B.H, 0.5)
+  nav.rebuild(T.chunks)
+  if (!nav.hasHeight) return fail(where, 'a fortified board built no height layer')
+  climb.boards++
+  if (T.features.some((f) => f.works === 0)) climb.works[B.label] = (climb.works[B.label] ?? 0) + 1
+  const { N } = nav
+  // the floor and the links, exactly point-symmetric; the cliff within 1e-4
+  for (let i = 0; i < N; i++) {
+    const m = N - 1 - i
+    if (!Object.is(nav.floor[i], nav.floor[m])) return fail(where, `the floor at cell ${i} (${nav.x(i)}, ${nav.z(i)}) is ${nav.floor[i]}, its mirror cell ${m}'s ${nav.floor[m]}`)
+    if (Math.abs(nav.cliff[i] - nav.cliff[m]) > 1e-4) return fail(where, `the cliff at cell ${i} is ${nav.cliff[i]}, its mirror cell's ${nav.cliff[m]} (over 1e-4 apart)`)
+    const j = nav.link[i]
+    if ((j < 0) !== (nav.link[m] < 0) || (j >= 0 && (nav.link[m] !== N - 1 - j || nav.linkCost[m] !== nav.linkCost[i]))) return fail(where, `cell ${i}'s link is ${j} (cost ${nav.linkCost[i]}), its mirror cell ${m}'s ${nav.link[m]} (cost ${nav.linkCost[m]}), not ${j < 0 ? -1 : N - 1 - j}`)
+    const more = nav.linkMore?.get(i), mm = nav.linkMore?.get(m)
+    if (JSON.stringify(more?.map(([k, c]) => [N - 1 - k, c]) ?? null) !== JSON.stringify(mm ?? null)) return fail(where, `cell ${i}'s further links ${JSON.stringify(more)} aren't the mirror of cell ${m}'s ${JSON.stringify(mm)}`)
+  }
+  climb.cells += N
+  // where each deck's top is: its level, and whether a stair rises to it
+  const decks = T.chunks.filter((c) => c.kind === 'deck')
+  const levelOf = (c) => nav.level[nav.index(c.shape.x, c.shape.z)]
+  for (const d of decks) {
+    const L = levelOf(d)
+    if (!L) return fail(where, `deck ${d.id} (${d.look.recipe}) has no raised level at its centre (floor ${nav.floor[nav.index(d.shape.x, d.shape.z)]})`)
+    // its top hosts a climber, and every flier
+    for (const r of [CLIMB_R, ...FLIERS]) {
+      let ok = false
+      for (let i = 0; i < N && !ok; i++) ok = nav.level[i] === L && nav.standable(i, r, 'walk')
+      if (!ok) return fail(where, `deck ${d.id} (${d.look.recipe}, level ${L}) has no cell an r ${r} disc stands on`)
+    }
+  }
+  // the reaches from seat 0's zone
+  let start = -1, bd = Infinity
+  const zx = -B.W / 2 + B.deploy / 2
+  for (let i = 0; i < N; i++) {
+    if (nav.level[i] || !nav.standable(i, CLIMB_R, 'walk')) continue
+    const d = hypot(nav.x(i) - zx, nav.z(i))
+    if (d < bd) [bd, start] = [d, i]
+  }
+  if (start < 0) return fail(where, `no ground cell in seat 0's zone hosts an r ${CLIMB_R} disc`)
+  const from = (r, climbs) => nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk', climb: climbs })
+  const reached = (res) => {
+    const got = new Set()
+    for (let i = 0; i < N; i++) if (nav.level[i] && isFinite(res.dist[i])) got.add(nav.level[i])
+    return got
+  }
+  const climber = reached(from(CLIMB_R, true))
+  const walkers = BIG.map((r) => [r, reached(from(r, false))])
+  for (const d of decks) {
+    const L = levelOf(d), recipe = d.look.recipe
+    climb.decks++
+    if (!climber.has(L)) fail(where, `deck ${d.id} (${recipe}) isn't reached from seat 0's zone by a climber (r ${CLIMB_R}, ladders and stairs)`)
+    for (const [r, got] of walkers) {
+      if (STAIRED.has(recipe) && !got.has(L)) fail(where, `deck ${d.id} (${recipe}, a stair's) isn't reached from seat 0's zone by a big walker (r ${r}, stairs only)`)
+      if (!STAIRED.has(recipe) && got.has(L)) fail(where, `deck ${d.id} (${recipe}, a ladder's only) is reached by a big walker (r ${r}, which takes no ladder)`)
+    }
+    if (STAIRED.has(recipe)) climb.staired++
+    else climb.ladderOnly++
+  }
+  // every ladder climbable over its link alone; every stair walked up from
+  // its gate by a big walker
+  for (const g of nav.gates) {
+    const lo = nav.index(g.lo.x, g.lo.z), hi = nav.index(g.hi.x, g.hi.z)
+    if (g.ladder) {
+      climb.ladders++
+      if (!nav.standable(lo, CLIMB_R, 'walk') || !nav.standable(hi, CLIMB_R, 'walk')) {
+        fail(where, `ladder ${g.id}: its foot (cell ${lo}, cliff ${nav.cliff[lo]?.toFixed(2)}) or top (cell ${hi}, cliff ${nav.cliff[hi]?.toFixed(2)}) holds no r ${CLIMB_R} disc`)
+        continue
+      }
+      const res = nav.reach(nav.x(lo), nav.z(lo), { r: CLIMB_R, max: g.cost + 0.001, mode: 'walk', climb: true })
+      if (res.prev[hi] !== lo || res.dist[hi] !== g.cost || g.cost !== LADDER_MUL * T.chunks.find((c) => c.id === g.id).link.h) fail(where, `ladder ${g.id}: a climber at its foot reaches its top ${isFinite(res.dist[hi]) ? `in ${res.dist[hi]}` : 'not at all'}, not over the link at its cost ${g.cost}`)
+    } else {
+      climb.stairs++
+      const gate = T.chunks.find((c) => c.id === g.id)
+      // (the stair's gate: GATE_OUT past its foot, along its own axis)
+      const k = hypot(g.lo.x - g.hi.x, g.lo.z - g.hi.z)
+      const gx = g.lo.x + ((g.lo.x - g.hi.x) / k) * GATE_OUT, gz = g.lo.z + ((g.lo.z - g.hi.z) / k) * GATE_OUT
+      const res = nav.reach(gx, gz, { r: BIG[0], max: g.cost * 3 + 6, mode: 'walk', climb: false })
+      const L = g.level
+      let up = false
+      for (let i = 0; i < N && !up; i++) up = nav.level[i] === L && isFinite(res.dist[i])
+      if (!L || !up) fail(where, `stair ${g.id} (${gate.look.recipe}) doesn't take a big walker (r ${BIG[0]}) from its gate up onto level ${L}`)
+    }
+  }
+}
+for (const B of FORT_BOARDS) {
+  for (let seed = lo; seed <= hi; seed++) {
+    try {
+      climbBoard(B, seed)
+    } catch (e) {
+      fail(`P-climb ${B.label} seed ${seed}`, `threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`)
+    }
+  }
+  const n = hi - lo + 1, w = climb.works[B.label] ?? 0
+  if (n >= 100 && w < 0.95 * n) fail(`P-climb ${B.label}, seeds ${lo}-${hi}`, `the works stand on ${w} of ${n} boards, not ≥ 95%`)
+}
+console.log(`\nP-climb (F7a): ${climb.boards} fortified boards' height layers (${((Date.now() - tc0) / 1000).toFixed(1)} s): ${climb.decks} decks (${climb.staired} a stair rises to, ${climb.ladderOnly} only ladders reach), each reached by a climber (r ${CLIMB_R}) from seat 0's zone, the stair decks by big walkers (r ${BIG.join(', ')}) and no ladder-only deck; ${climb.ladders} ladders climbed over their links, ${climb.stairs} stairs walked up from their gates; every top hosts r ${CLIMB_R} and the fliers' r ${FLIERS.map((r) => r.toFixed(3)).join(', ')}; ${climb.cells} cells' floor and links point-symmetric exactly, the cliff within 1e-4; the works on ${FORT_BOARDS.map((B) => `${climb.works[B.label] ?? 0} ${B.label}`).join(' and ')} boards of ${hi - lo + 1}`)
+if (climb.failed) {
+  console.log(`MISMATCH: P-climb failed ${climb.failed} time(s):`)
+  for (const s of climbShown) console.log(`  ${s}`)
+  process.exit(1)
+}
+if (!climb.decks || !climb.ladders || !climb.stairs) {
+  console.log(`terrain-check: VACUOUS: P-climb met ${climb.decks} decks, ${climb.ladders} ladders and ${climb.stairs} stairs`)
+  process.exit(2)
+}
