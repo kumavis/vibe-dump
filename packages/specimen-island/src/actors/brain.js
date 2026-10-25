@@ -1,4 +1,4 @@
-import { clamp, wrapAngle, yawTo } from '../core/mathx.js'
+import { clamp, wrapAngle, yawTo, yawDirX, yawDirZ } from '../core/mathx.js'
 import { OBLIVIOUS } from './perception.js'
 
 // Up on something — a roof, a tower, a crate, a deck, a hovering helicopter —
@@ -6,10 +6,38 @@ import { OBLIVIOUS } from './perception.js'
 const aloft = (G, p) => p.y - G.island.heightAt(p.x, p.z) > 0.5
 
 // How a motion hunter searches where it lost the player (Brain.search): it
-// pulls up `pullUp` m past its flank short of the spot, casts `cast` m out
-// from it at `spread` radians either side of the way it came in, lingers
+// pulls up `pullUp` m past its flank short of the spot (swerving past it if
+// braking would carry it more than `overrun` m on, pullUp()), casts `cast` m
+// out from it at `spread` radians either side of the way it came in, lingers
 // `linger` s once there and moves on `leave` m back the way it came.
-export const SEARCH = { pullUp: 1.6, cast: [5, 7], spread: [0.35, 0.8], linger: [14, 22], leave: [18, 26] }
+export const SEARCH = { pullUp: 1.6, overrun: 0.5, cast: [5, 7], spread: [0.35, 0.8], linger: [14, 22], leave: [18, 26] }
+
+// How a hunter closing on `at` pulls up `short` m from it (Brain.closeOn):
+// no faster than it could still stop from in the room left, braking at
+// `brake` m/s². One carrying too much speed to stop short — a charge cut off
+// by a player freezing in front of it — swerves instead, braking all the
+// while, for the tangent to the circle `short` m round the spot on whichever
+// side it is already heading (`side`, ±1, holds it there), and once level
+// with it coasts straight on: it thunders past whoever froze there, not
+// through them. Returns the point to steer for (null: brake straight on),
+// the speed it may go and the side it is passing on (0: not swerving).
+export function pullUp(pos, yaw, speed, brake, at, short, side = 0) {
+  const ux = pos.x - at.x
+  const uz = pos.z - at.z
+  const d = Math.hypot(ux, uz)
+  const room = d - short
+  if (!side && (speed * speed) / (2 * brake) <= room + SEARCH.overrun) return { steer: at, speed: Math.sqrt(2 * brake * Math.max(0, room)), side: 0 }
+  const fx = yawDirX(yaw)
+  const fz = yawDirZ(yaw)
+  if (d <= short) return { steer: null, speed: 0, side: side || 1 }
+  const ca = short / d
+  const sa = Math.sqrt(1 - ca * ca)
+  const tangent = (s) => ({ x: at.x + (short * (ca * ux - s * sa * uz)) / d, z: at.z + (short * (ca * uz + s * sa * ux)) / d })
+  const ahead = (T) => ((T.x - pos.x) * fx + (T.z - pos.z) * fz) / (Math.hypot(T.x - pos.x, T.z - pos.z) || 1)
+  if (!side) side = ahead(tangent(1)) >= ahead(tangent(-1)) ? 1 : -1
+  const T = tangent(side)
+  return { steer: ahead(T) > 0 ? T : null, speed: 0, side }
+}
 
 // Behaviour as a small state machine. `think()` runs a few times a second and
 // picks the state from what the animal perceives (awareness, threats, hunger,
@@ -29,7 +57,9 @@ export const SEARCH = { pullUp: 1.6, cast: [5, 7], spread: [0.35, 0.8], linger: 
 // it last had them and searches there (investigate with `search`) — sniffing,
 // turning, casting about — until it sees them move again, noses them out, or
 // loses interest. One that went up out of its reach it besieges all the same:
-// it saw where they went.
+// it saw where they went. From the first look that misses them (doubts) it
+// strikes at nothing and pulls up short of the spot, swerving past it if it
+// is going too fast to stop (closeOn), so a freeze in front of a charge holds.
 
 export class Brain {
   constructor(creature, rng) {
@@ -326,12 +356,17 @@ export class Brain {
   // A motion hunter that has lost the player searches where it last had
   // them; once searching, whatever its ears or nose tell it drags the search
   // over (a stone's clatter, the next footstep), its nose's rough guesses
-  // averaging out on where they stand.
+  // averaging out on where they stand. It searches on the side it came in
+  // from (`from`), even if a charge carried it past the spot (closeOn).
   searchFor(G) {
-    const lk = this.c.perception.lastKnown || this.c.pos
+    const c = this.c
+    const P = c.perception
+    const lk = P.lastKnown || c.pos
+    const from = (x, z) => Math.atan2(c.pos.z - z, c.pos.x - x)
     if (this.state !== 'investigate' || !this.data.search) {
-      this.set('investigate', { at: { x: lk.x, z: lk.z }, search: true })
-      G.events.emit('creature:lost', { creature: this.c })
+      this.set('investigate', { at: { x: lk.x, z: lk.z }, search: true, from: from(lk.x, lk.z), swerve: this.data.swerve })
+      // it had them a moment ago — not just a bang heard from afar
+      if (G.time - P.lastFix < 3) G.events.emit('creature:lost', { creature: c })
       return
     }
     const at = this.data.at
@@ -340,7 +375,29 @@ export class Brain {
     at.x += (lk.x - at.x) * k
     at.z += (lk.z - at.z) * k
     // somewhere new to search: it takes its time over it
-    if (far) this.data.arrived = this.data.linger = null
+    if (far) {
+      this.data.arrived = this.data.linger = this.data.cast = null
+      this.data.from = from(at.x, at.z)
+    }
+  }
+
+  // Close on `at`, at up to `speed`, and pull up `short` m from it (pullUp):
+  // braking in time, or swerving past at a run. True once pulled up there,
+  // facing it.
+  closeOn(at, short, speed) {
+    const c = this.c
+    const D = this.data
+    if (!D.swerve && Math.hypot(at.x - c.pos.x, at.z - c.pos.z) <= short + 0.3) {
+      c.halt()
+      c.face(at.x, at.z)
+      return true
+    }
+    const p = pullUp(c.pos, c.yaw, c.speed, c.brake, at, short, D.swerve)
+    // a swerve lasts until it has run off its speed; then it turns back
+    D.swerve = p.side && c.speed > c.sp.speed.walk ? p.side : 0
+    if (p.steer) c.goTo(p.steer.x, p.steer.z, Math.min(speed, p.speed))
+    else c.goTo(c.pos.x + yawDirX(c.yaw) * 10, c.pos.z + yawDirZ(c.yaw) * 10, 0)
+    return false
   }
 
   // Something hurt it. Called by the creature when a dart or bullet lands.
@@ -460,19 +517,18 @@ export class Brain {
     P.awareness = Math.max(P.awareness, 0.4)
     // a sound — a footstep, a stone — and it whips round to it, head up:
     // move again now and it has you
+    const short = c.radius + SEARCH.pullUp
     if (G.time - P.heardT < 1.5 && P.lastKnown) {
-      c.halt()
-      c.face(P.lastKnown.x, P.lastKnown.z)
+      // (pulling up first if it is still running)
+      this.closeOn(P.lastKnown, short, 0)
       c.intent.look = P.lastKnown
       c.intent.alert = 1
       return
     }
-    const short = c.radius + SEARCH.pullUp
     // a lead that dragged the spot off elsewhere: go there first
     if (D.cast && d > 9) D.cast = null
     if (!D.cast) {
-      if (d > short + 0.3 && this.t < 30) {
-        c.goTo(at.x, at.z, clamp((d - short) * 0.7, sp.speed.walk * 0.8, sp.speed.run * 0.6))
+      if (this.t < 30 && !this.closeOn(at, short, clamp((d - short) * 0.7, sp.speed.walk * 0.8, sp.speed.run * 0.6))) {
         c.intent.crouch = 0.5
         c.intent.sniff = d < 12 ? 0.5 : 0
         c.intent.look = at
@@ -480,8 +536,11 @@ export class Brain {
       }
       D.arrived ??= this.t
       D.linger ??= this.rng.range(...SEARCH.linger)
-      D.side ??= this.rng.sign()
-      D.from = Math.atan2(c.pos.z - at.z, c.pos.x - at.x)
+      D.from ??= Math.atan2(c.pos.z - at.z, c.pos.x - at.x)
+      // the first cast on whichever side of the way in it pulled up (a
+      // charge that swerved past ends up off to one side of it)
+      const lat = Math.cos(D.from) * (c.pos.z - at.z) - Math.sin(D.from) * (c.pos.x - at.x)
+      D.side ??= Math.abs(lat) > 1 ? -Math.sign(lat) : this.rng.sign()
       D.cast = { x: c.pos.x, z: c.pos.z }
     }
     if (this.t - D.arrived > D.linger || this.t > 50) {
@@ -509,7 +568,11 @@ export class Brain {
       const lz = c.pos.z + Math.sin(a) * 4
       c.face(lx, lz)
       c.intent.look = { x: lx, y: c.pos.y, z: lz }
-      if (this.rng.next() < dt * 0.8) c.vocalize('sniff')
+      // a snuffle every second or two
+      if (this.t > (k.snuff ??= this.t + this.rng.range(0.2, 0.8))) {
+        k.snuff = this.t + this.rng.range(1.1, 1.8)
+        c.vocalize('sniff')
+      }
       return
     }
     // on to the next cast, over to the other side of the line it came in on
@@ -625,6 +688,15 @@ export class Brain {
         c.vocalize('threat')
       }
       c.intent.roar = c.roaring
+      return
+    }
+    // a motion hunter whose last look did not find them moving is no longer
+    // sure of them: it eases off to pull up short of where it last had them
+    // (or, too fast to stop, thunders past) and strikes at nothing
+    if (targetPlayer && P.doubts(G) && c.canGetAt(G)) {
+      const at = P.lastKnown || tgt
+      this.closeOn(at, c.radius + SEARCH.pullUp, P.awareness < 1 ? sp.speed.walk * 1.1 : sp.speed.run)
+      c.intent.look = at
       return
     }
     if (sp.attack?.spit && targetPlayer && P.sees && d < sp.attack.spit.range && d > 5 && this.spitCool <= 0) {

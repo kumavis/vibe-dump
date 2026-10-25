@@ -1,9 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { motionSight, SETTLE, LOSE, Perception } from '../src/actors/perception.js'
-import { Brain, SEARCH } from '../src/actors/brain.js'
+import { Brain, SEARCH, pullUp } from '../src/actors/brain.js'
 import { Stealth, bodyMoving } from '../src/game/stealth.js'
 import { SPECIES } from '../src/data/species.js'
+import { clamp, stepAngle, wrapAngle, yawTo, yawDirX, yawDirZ, segDist } from '../src/core/mathx.js'
 
 const rex = SPECIES.tyrannosaurus
 const R = rex.senses
@@ -68,10 +69,66 @@ test('a search casts to and fro, never across the spot itself', () => {
   assert.ok(SEARCH.spread[1] < Math.PI / 2)
 })
 
+// Her pull-up (pullUp) driven through a stand-in for Creature.locomote:
+// heading straight in at the spot from `d0` m at `v0` m/s, turning at her
+// rate (quicker braking), braking and getting going as anything over 2000 kg.
+function pullingUp(d0, v0) {
+  const short = radius + SEARCH.pullUp
+  const brake = 3 * 1.6
+  const pos = { x: 0, z: d0 } // yaw 0 faces -Z: at the spot
+  let yaw = 0
+  let speed = v0
+  let side = 0
+  let swerved = false
+  let minD = d0
+  const dt = 1 / 60
+  for (let i = 0; i < 1200; i++) {
+    if (!side && Math.hypot(pos.x, pos.z) <= short + 0.3) break // pulled up (Brain.closeOn)
+    const p = pullUp(pos, yaw, speed, brake, { x: 0, z: 0 }, short, side)
+    side = p.side && speed > rex.speed.walk ? p.side : 0
+    swerved ||= !!p.side
+    let want = Math.min(rex.speed.run, p.speed)
+    const goal = p.steer ? yawTo(pos.x, pos.z, p.steer.x, p.steer.z) : yaw
+    if (Math.abs(wrapAngle(goal - yaw)) > 1.2) want *= 0.35
+    yaw = stepAngle(yaw, goal, rex.speed.turn * (want > 0.2 ? 1 : 1.3) * dt)
+    speed += clamp(want - speed, -brake * dt, 3 * dt)
+    pos.x += yawDirX(yaw) * speed * dt
+    pos.z += yawDirZ(yaw) * speed * dt
+    minD = Math.min(minD, Math.hypot(pos.x, pos.z))
+  }
+  return { pos, minD, swerved, d: Math.hypot(pos.x, pos.z) }
+}
+
+test('a charge cut off by a freeze pulls up short of you, or thunders past', () => {
+  const short = radius + SEARCH.pullUp
+  // room to stop: she brakes in time and pulls up a stride short, head over you
+  for (const d0 of [20, 14, 12]) {
+    const r = pullingUp(d0, rex.speed.run)
+    assert.equal(r.swerved, false, `${d0} m`)
+    assert.ok(r.minD > short - 0.1 && r.d < short + 0.35, `${d0} m: ${r.d.toFixed(2)}`)
+  }
+  // walking up there is no question of it
+  assert.equal(pullingUp(10, rex.speed.walk).swerved, false)
+  // too close to stop: she swerves by, never near enough to make you out or
+  // smell you in the eddy, and pulls up beside you — not downwind of you,
+  // when it is the wind in your face she came in on
+  const G = { events: { on() {} }, player: { pos: { x: 0, y: 0, z: 0 } }, wind: { x: 0, z: -1, strength: 0.6 } }
+  const S = new Stealth(G)
+  for (const d0 of [10, 8, 6]) {
+    const r = pullingUp(d0, rex.speed.run)
+    assert.ok(r.swerved, `${d0} m`)
+    assert.ok(r.minD > radius + R.still + 0.5 && r.minD > R.eddy + 0.5, `${d0} m: came within ${r.minD.toFixed(2)} m`)
+    assert.equal(S.scentAt(r.pos.x, r.pos.z, 40 * R.smell, R.eddy), 0, `${d0} m: smells you from ${r.pos.x.toFixed(1)}, ${r.pos.z.toFixed(1)}`)
+  }
+})
+
 // A creature stubbed down to what think() reads, with a real Perception.
 function hunter(sp) {
-  const G = { time: 10, vehicle: null, player: { pos: { x: 0, y: 0, z: 0 } }, events: { emit: (e) => (G.emitted = e) } }
-  const c = { sp, radius: sp.radius, pos: { x: 12, y: 0, z: 0 }, vitals: { rec: { health: sp.health } }, vocalize: (k) => (c.voiced = k), canGetAt: () => c.reach }
+  const G = { time: 10, vehicle: null, player: { pos: { x: 0, y: 0, z: 0 }, alive: true }, island: { heightAt: () => 0 }, events: { emit: (e) => (G.emitted = e) } }
+  const c = { sp, radius: sp.radius, pos: { x: 12, y: 0, z: 0 }, yaw: 0, speed: 0, brake: 4.8, intent: {}, vitals: { rec: { health: sp.health } }, vocalize: (k) => (c.voiced = k), canGetAt: () => c.reach, reachesTarget: () => c.reach }
+  c.goTo = (x, z, speed) => (c.going = { x, z, speed })
+  c.halt = () => (c.going = null)
+  c.face = () => {}
   c.reach = true
   c.perception = new Perception(c, rng)
   c.brain = new Brain(c, rng)
@@ -121,4 +178,51 @@ test('a raptor that has not seen you for a while still hunts as it always did', 
   assert.equal(P.lost(G), false)
   B.think(G)
   assert.equal(B.state, 'hunt')
+})
+
+test('the first look that misses you, she doubts: she eases off and strikes at nothing', () => {
+  const { G, c, P, B } = hunter(rex)
+  c.pos.x = 5 // within a lunge
+  B.cool = -1
+  P.lastFix = G.time // she had you a moment ago, but not on this look
+  assert.equal(P.doubts(G), true)
+  assert.equal(P.lost(G), false)
+  B.hunt(1 / 60, G)
+  assert.equal(B.state, 'hunt')
+  assert.ok(c.going.speed < rex.speed.run, 'braking to pull up short')
+  // the next look finds you moving: she lunges
+  P.fixed = true
+  B.hunt(1 / 60, G)
+  assert.equal(B.state, 'attack')
+  // anything else strikes at what it saw last as ever
+  const raptor = hunter(SPECIES.velociraptor)
+  assert.equal(raptor.P.doubts(raptor.G), false)
+})
+
+test('a bang from afar sends her searching, but she never had sight of you to lose', () => {
+  const { G, P, B } = hunter(rex)
+  G.time = 120 // no fix on you, ever: she only heard a shot
+  B.think(G)
+  assert.ok(B.data.search)
+  assert.equal(G.emitted, undefined)
+  // whereas one she had a moment ago she has lost
+  const h = hunter(rex)
+  h.P.lastFix = h.G.time - LOSE - 0.3
+  h.B.think(h.G)
+  assert.equal(h.G.emitted, 'creature:lost')
+})
+
+test('swerved past you, she searches back on the side she came in on, clear of you', () => {
+  const { G, c, B } = hunter(rex)
+  const at = { x: 0, z: 0 }
+  // she came in from +z and swerved by on the -x side
+  c.pos = { x: -(radius + SEARCH.pullUp), y: 0, z: 0 }
+  B.set('investigate', { at, search: true, from: Math.PI / 2 })
+  B.search(1 / 60, G, at) // pulled up: a sniff where she stands
+  B.t += 5
+  B.search(1 / 60, G, at) // and on to her first cast
+  const k = B.data.cast
+  assert.ok(k.x < 0 && k.z > 0, `first cast at ${k.x.toFixed(1)}, ${k.z.toFixed(1)}`)
+  assert.ok(Math.abs(Math.atan2(k.z, k.x) - Math.PI / 2) <= SEARCH.spread[1] + 1e-9, 'within a cast of the way in')
+  assert.ok(segDist(at.x, at.z, c.pos.x, c.pos.z, k.x, k.z).d > radius + R.still + 0.5)
 })

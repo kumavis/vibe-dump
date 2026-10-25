@@ -8,9 +8,10 @@ import { wrapAngle, yawTo } from '../core/mathx.js'
 // noticed plainly (no stealth between dinosaurs).
 //
 // A motion hunter (senses.motion > 1) sees only movement: a player who holds
-// still is invisible to it unless it all but walks into them, and once it
-// has had no fix on them for LOSE s it has lost them (lost()) and the brain
-// casts about where it last saw them move.
+// still is invisible to it unless it all but walks into them. The first look
+// that does not find them it doubts (doubts(): it eases off and strikes at
+// nothing), and once it has had no fix on them for LOSE s it has lost them
+// (lost()) and the brain casts about where it last saw them move.
 
 // Awareness below this: the animal has not noticed anyone (photos and scans
 // of an unaware animal earn a bonus).
@@ -49,6 +50,7 @@ export class Perception {
     this.lastKnown = null // {x, y, z}
     this.lastSeen = -99
     this.lastFix = -99 // last time it had the player exactly: in sight, heard or nosed out close by
+    this.fixed = false // and whether its last look did
     this.sees = false
     this.timer = rng.range(0, 0.25)
     this.lastHeard = 0
@@ -75,6 +77,7 @@ export class Perception {
     const eye = c.eyePos()
     let stimulus = false
     this.sees = false
+    this.fixed = false
     // a motion hunter hunts by ear and nose where its eyes fail: within a
     // lunge of it, a sound or a whiff has the player as surely as sight would
     const lunge = S.motion > 1 ? c.radius + (sp.attack?.range ?? 2) : 0
@@ -102,7 +105,7 @@ export class Perception {
           this.awareness += rate * dt
           stimulus = true
           if (this.awareness > 0.6) {
-            this.sees = true
+            this.sees = this.fixed = true
             this.lastSeen = this.lastFix = G.time
             this.lastKnown = { x: target.x, y: target.y, z: target.z }
           } else if (!this.lastKnown || this.awareness > 0.3) {
@@ -124,7 +127,11 @@ export class Perception {
       const err = h.d * 0.08
       this.lastKnown = { x: h.n.x + (Math.random() - 0.5) * err, y: h.n.y, z: h.n.z + (Math.random() - 0.5) * err }
       if (!fromPlayer) this.distractedBy = { ...this.lastKnown, t: G.time }
-      else if (h.d < lunge) this.lastFix = G.time // a shot or a step right under its head
+      else if (h.d < lunge) {
+        // a shot or a step right under its head
+        this.lastFix = G.time
+        this.fixed = true
+      }
       this.heardT = G.time
       stimulus = true
     }
@@ -138,6 +145,7 @@ export class Perception {
         if (this.awareness > 0.4) this.lastKnown = { x: p.x + (Math.random() - 0.5) * 10, y: p.y, z: p.z + (Math.random() - 0.5) * 10 }
         if (this.awareness > 0.6 && Math.hypot(p.x - c.pos.x, p.z - c.pos.z) < lunge) {
           this.lastFix = G.time
+          this.fixed = true
           this.lastKnown = { x: p.x, y: p.y, z: p.z }
         }
         stimulus = true
@@ -174,6 +182,11 @@ export class Perception {
   // they froze or got out of its sight? (A vehicle it never loses.)
   lost(G) {
     return this.c.sp.senses.motion > 1 && !G.vehicle && G.time - this.lastFix > LOSE
+  }
+  // Did a motion hunter's last look fail to find the player (they froze, or
+  // went out of sight)? Not yet lost: just no longer sure where they are.
+  doubts(G) {
+    return this.c.sp.senses.motion > 1 && !G.vehicle && !this.fixed
   }
 
   alertTo(pos, level = 1) {

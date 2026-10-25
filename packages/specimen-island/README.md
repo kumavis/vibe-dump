@@ -418,12 +418,18 @@ shot; not turning to look or aim (`Stealth.still` counts how long the player has
 still). Movement is `motion` times as visible to it, so it reacquires at once,
 but a player who has held still for a beat is invisible to it unless within
 `still` m of its flank, and its `eddy` is only 2 m, so it smells them only from
-downwind. Once it has had no fix on them for 0.6 s — none by eye, nor by ear or
+downwind. The first look that does not find them it doubts (`Perception.doubts`):
+it strikes at nothing and eases off so as to pull up a stride short of where it
+last had them, braking in time from a run; if it is too close to stop it swerves
+to thunder past at that distance rather than through them (`pullUp` in
+`brain.js`). Once it has had no fix on them for 0.6 s — none by eye, nor by ear or
 nose within a lunge — it has lost them (`Perception.lost`): rather than close on where
 they stand, it goes to where it last had them and searches there (`investigate`
-with `search`), nose down, casting to and fro across the way it came in and
-following any noise or whiff, then moves on. It can stand over someone frozen
-beneath its head and never know. While it is after you the HUD's stealth panel
+with `search`), nose down, casting to and fro across the way it came in (even
+when a charge carried it past the spot) and following any noise or whiff, then
+moves on. It can stand over someone frozen beneath its head and never know.
+Freezing needs a little room: a charge still a dozen metres out is lunging
+before it has noticed you stopped. While it is after you the HUD's stealth panel
 says MOTION HUNTER · FREEZE as you move, and whether freezing is working when you
 do not.
 
@@ -475,8 +481,8 @@ helicopters, roofs overhead — and when a hunter that gave up on a roof comes
 back; `tank.test.js` the skid steering, hill climbing, the fire-control sums
 and an armoured hull's share of an animal's blow; `lure.test.js` which bangs
 bring the tyrant, and that she stops at the shore; `motion.test.js` what the
-tyrant's eye makes of a player moving, stopping and frozen, and what counts as
-moving).
+tyrant's eye makes of a player moving, stopping and frozen, what counts as
+moving, and how a charge cut off by a freeze pulls up short or swerves past).
 `tests/missiles.test.js` flies the guidance against moving targets, lands
 unguided shots on the sight, and checks the seeker's cone, cover and decoy rules
 (a flare anywhere in a missile's view, an animal only beside the target). The
