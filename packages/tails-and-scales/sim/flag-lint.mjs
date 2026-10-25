@@ -26,6 +26,24 @@
 // stat line and weapons, the derived fields, and a seat's `edge`. Those are
 // rule-bearing (RULES_ID hashes them), so testing them is the point.
 //
+// (F11a, DESIGN §4.2.9) Two fields have one reader each in the consensus
+// code (core/ and data/; OWNED below), whatever the route (`.x`, `['x']`,
+// destructured):
+//   cost, roster, armies, a mission's `list` and an `army` (a race's
+//   classic list, a seat's or a mission's preset)   core/army.js alone: the
+//                                         army builder's data decides which
+//                                         units newState makes and nothing
+//                                         else, so no rule reads a price
+//   pts                                   core/ai/score.js alone (and
+//                                         core/rules.js's `expected`, listed
+//                                         below): the AI's own appraisal,
+//                                         which the builder's prices never
+//                                         replace without a re-record
+// data/schema.js validating and copying them, data/mission.js checking a
+// mission's list and preset name, and fullSetup filling in a seat's army
+// are listed in ALLOW, as the .fx and .abilities lines are. The view may
+// read them all (the card shows a unit's cost).
+//
 // It covers main.js and ai.js (rules code until R5-R6 moved the rest of it
 // into core/; R6a moved ai.js to core/ai/, so only an older checkout has
 // one), the root rules.js where a checkout has one (the R0 code's, for
@@ -91,6 +109,18 @@ export const BANNED = [
   [/(?<![=!<>])=\s*[\w$?[\]]+(?:\.[\w$?[\]]+)*\.(key|race)\s*(?:[;,)]|$)/, 'a key or race aliased'],
 ]
 
+// (F11a) Fields of the consensus code's that one module alone reads:
+// [pattern, the files that may, what a read elsewhere is]. Checked over
+// core/ and data/ only (the view shows them); a read is a member (`.cost`),
+// by name (`['cost']`) or destructured (`{ cost } = t`).
+const reads = (names) => new RegExp(String.raw`\.(${names})\b|\[\s*['"\x60](${names})['"\x60]\s*\]|\{(?:[^{}]*,)?\s*(${names})\s*(?:[,:][^{}]*|=(?!=)[^{}]*)?\}\s*=(?!=)`)
+export const OWNED = [
+  [reads('cost|roster|armies|list|army'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list, an army) read outside core/army.js"],
+  [reads('pts'), ['core/ai/score.js'], "the AI's appraisal (pts) read outside core/ai/score.js"],
+]
+// the patterns that apply to file `f`
+const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
+
 // [file, exact text on the line, how many lines hold it, why it is allowed]
 export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
@@ -115,6 +145,18 @@ export const ALLOW = [
   ['data/schema.js', "if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string'))", 1, 'validates the card text is text'],
   ['data/schema.js', 'abilities: [...def.abilities]', 1, 'copies the card text into the normalised type'],
   ['data/schema.js', 'const { key } = def', 1, "reads the race definition's own key, to validate and register it"],
+  // (F11a, OWNED) the army builder's data and pts, validated and copied by
+  // defineRace, a mission's list and preset name checked by checkMission, a
+  // seat's army filled in by fullSetup, and the AI's value of a shot
+  ['data/schema.js', 'def.pts', 2, 'validates pts and copies it into the normalised type'],
+  ['data/schema.js', 'def.cost', 2, 'validates cost and copies it into the normalised type'],
+  ['data/schema.js', 'def.army', 6, 'validates the classic army (its units, its roster order), copies it, and derives the classic preset from it'],
+  ['data/schema.js', 'def.roster', 3, 'validates the roster (each unit once) and copies it'],
+  ['data/schema.js', 'def.armies', 1, "reads the race file's presets, to validate them"],
+  ['data/mission.js', 'm.army', 1, "checkMission: the mission names its preset"],
+  ['data/mission.js', 'checkListRules(m.list, bad)', 1, "checkMission hands the mission's list rules to their check"],
+  ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
+  ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
 ]
@@ -139,6 +181,7 @@ const code = (l) => l.replace(/(^|\s)\/\/.*$/, '')
 // allow entries); each allow entry that excuses a line adds one to `used`.
 export function lintSource(f, text, used) {
   const hits = []
+  const rules = rulesFor(f)
   let inBlock = false
   text.split('\n').forEach((raw, i) => {
     let l = raw
@@ -155,7 +198,7 @@ export function lintSource(f, text, used) {
       if (end < 0) inBlock = true
       l = l.slice(0, start) + (end < 0 ? '' : l.slice(end + 2))
     }
-    if (!BANNED.some(([re]) => re.test(l))) return
+    if (!rules.some(([re]) => re.test(l))) return
     // each allowed text on the line excuses itself only: cut it out, then
     // lint what is left
     for (const a of ALLOW) {
@@ -163,7 +206,7 @@ export function lintSource(f, text, used) {
       used.set(a, (used.get(a) ?? 0) + 1)
       l = l.split(a[1]).join(' ')
     }
-    const what = BANNED.filter(([re]) => re.test(l)).map(([, w]) => w)
+    const what = rules.filter(([re]) => re.test(l)).map(([, w]) => w)
     if (what.length) hits.push({ f, line: i + 1, what: [...new Set(what)].join(', '), text: raw.trim() })
   })
   return hits
@@ -251,6 +294,22 @@ if (main && args['self-test']) {
     ['main.js', 'const { abilities } = u.t'],
     ['ai.js', 'const k = u.key'],
     ['main.js', 'let race = G.seats[s].race;'],
+    // (F11a, OWNED) the army builder's data read by rules code, and pts
+    // outside the AI's appraisal, by every route
+    ['core/ai/score.js', 'export const worth = (u) => (u.t.cost * u.alive) / u.t.models'],
+    ['core/match.js', 'for (const key of raceOf(G, side).army) G.units.push(makeUnit(G, key, side))'],
+    ['core/deploy.js', 'const order = race.roster.indexOf(u.key)'],
+    ['core/engine.js', 'if (race.armies.field) x()'],
+    ['core/engine.js', 'const cap = missionOf(G.setup).list.units'],
+    ['core/index.js', 'const army = s.seats[0].army'],
+    ['core/queries.js', "const price = u.t['cost']"],
+    ['core/queries.js', 'const { cost, models } = u.t'],
+    ['core/actions/shoot.js', 'const v = e.t.pts * e.alive'],
+    ['core/rules.js', 'const bonus = t.pts + 1'],
+    ['core/rules.js', '  return { wounds, kills, value: kills * t.pts + u.t.pts }'],
+    ['data/mission.js', 'const n = m.list.points'],
+    ['data/schema.js', 'const price = t.cost'],
+    ['core/index.js', 's.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army })); const r = x.roster'],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -271,6 +330,18 @@ if (main && args['self-test']) {
     ['core/version.js', 'export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key) } = {}) {'],
     ['main.js', 'const look = RACES[u.race].look'],
     ['data/schema.js', 'if (!KEY.test(k)) throw bad(`unit key "${k}" must be lower-case letters, digits and dashes`)'],
+    // (F11a, OWNED) the one reader of each, its allowed sites, and the view
+    ['core/army.js', 'export const listCost = (race, counts) => race.roster.reduce((sum, k, i) => sum + (counts[i] ?? 0) * race.units[k].cost, 0)'],
+    ['core/army.js', 'const why = checkList(race, mission.list, counts)'],
+    ['core/army.js', 'const army = rec.army ?? mission.army'],
+    ['core/ai/score.js', 'export const worth = (u) => (u.t.pts * u.alive) / u.t.models'],
+    ['core/rules.js', '  return { wounds, kills, value: kills * t.pts }'],
+    ['core/index.js', '  s.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army }))'],
+    ['data/schema.js', "  if (!Number.isInteger(def.cost) || def.cost <= 0 || def.cost % 5 !== 0) throw bad('cost')"],
+    ['ui/card.js', 'el.textContent = `${u.t.cost} pts`'],
+    ['ui/screens/muster.js', 'const left = mission.list.points - army.listCost(race, counts)'],
+    ['app/flow.js', 'const preset = race.armies[name] ?? race.army'],
+    ['core/units.js', 'const costly = (u) => u.t.costs + u.t.rosterOrder'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -289,11 +360,11 @@ if (main && args['self-test']) {
 if (main && !args['self-test']) {
   const { hits, stale, n } = lint(PKG)
   const roots = ['main.js', 'ai.js', 'rules.js'].filter((f) => existsSync(join(PKG, f)))
-  console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/', 'match/', 'present/', 'view/', 'input/', 'ui/', 'app/'].join(', ')}), ${ALLOW.length} allowed presentation sites`)
+  console.log(`flag-lint: ${n} files (${[...roots, 'core/', 'data/', 'match/', 'present/', 'view/', 'input/', 'ui/', 'app/'].join(', ')}), ${OWNED.length} one-reader fields over core/ and data/, ${ALLOW.length} allowed sites`)
   for (const h of hits) console.log(`  FAIL ${h.f}:${h.line} ${h.what}: ${h.text}`)
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, and (F11a) the army builder\'s data and pts each have their one reader in core/ and data/')
   process.exit(bad ? 1 : 0)
 }

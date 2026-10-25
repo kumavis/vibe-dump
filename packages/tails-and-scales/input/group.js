@@ -346,9 +346,12 @@ export class GroupInput {
   syncLead() {
     const seat = this.seat(), s = this.selection.of(seat), G = this.G
     const lead = s.lead !== null ? G.units.find((u) => u.id === s.lead) : null
-    // (the card says what the group is above its lead's own lines)
+    // (the card says what the group is above its lead's own lines: (F11a)
+    // with the points it has standing, each unit's cost × alive / models,
+    // the total rounded: display only, DESIGN §4.2.8.2)
     const ms = this.members()
-    this.human.card.group = ms.length >= 2 ? `${ms.length} selected · ${ms.reduce((n, u) => n + u.alive, 0)} models · the lead:` : ''
+    const pts = Math.round(ms.reduce((n, u) => n + (u.t.cost * u.alive) / u.t.models, 0))
+    this.human.card.group = ms.length >= 2 ? `${ms.length} selected · ${ms.reduce((n, u) => n + u.alive, 0)} models · ${pts} pts standing · the lead:` : ''
     this.human.card.groupLead = lead?.id ?? null
     if (s.group.length >= 2) {
       this.human.sel = lead

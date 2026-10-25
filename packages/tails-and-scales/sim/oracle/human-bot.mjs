@@ -46,25 +46,41 @@ export function jobSetup(job) {
 
 // How the page starts a setup: the title screen's button for who sits in
 // each seat, and the URL that carries the rest (app/boot.js and app/flow.js
-// read ?seed, ?dice, ?races, ?overtime and, from F8a, ?mission (named only
-// when it isn't classic); a log recorded before F4 never
-// voted, so its overtime is 'never'). The page builds its own setup from
-// these, and playedAs (below) says whether it built this one: a setup the
-// page can't make (other terrain, rounds or dice) is found there.
+// read ?seed, ?dice, ?races, ?overtime, from F8a ?mission (named only
+// when it isn't classic) and from F11a ?armies (named only when a seat
+// names an army: both seats' then, positionally, a seat that names none
+// giving its mission's preset by name, which plays the same units); a log
+// recorded before F4 never voted, so its overtime is 'never'). The page
+// builds its own setup from these, and playedAs (below) says whether it
+// built this one: a setup the page can't make (other terrain, rounds or
+// dice) is found there. Uses only its arguments (and modeOf), as playedAs.
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}` }
+  // (each mission's preset, as playedAs has it)
+  const PRESET = { classic: 'classic' }, m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
+  const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:
 // every field alike, but the seats' devices (the page's own), an absent
-// overtime, which is 'never', and (F8a) an absent mission, which is
-// 'classic'. Injected into the browser page by sim/chromium.mjs, so it may
-// only use its arguments.
+// overtime, which is 'never', (F8a) an absent mission, which is 'classic',
+// and (F11a) a seat's absent army, which is its mission's preset (the
+// page's G.setup names it, fullSetup filling it in): PRESET below, each
+// mission's `army` (data/mission.js) written out, since this is injected
+// into the browser page by sim/chromium.mjs and may only use its
+// arguments; a mission it doesn't list is taken to name a preset of its
+// own name (F8b's field and grand do). Any army named is compared as
+// written: 'classic' and '112111' field the same units, but they are not
+// the same setup.
 export function playedAs(played, setup) {
+  const PRESET = { classic: 'classic' }
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
-  const plain = (s) => ({ ...s, overtime: s.overtime ?? 'never', mission: s.mission ?? 'classic', seats: s.seats.map(({ dev, ...seat }) => seat) })
+  const plain = (s) => {
+    const mission = s.mission ?? 'classic', preset = Object.hasOwn(PRESET, mission) ? PRESET[mission] : mission
+    return { ...s, overtime: s.overtime ?? 'never', mission, seats: s.seats.map(({ dev, ...seat }) => ({ ...seat, army: seat.army ?? preset })) }
+  }
   if (!played?.seats) return 'the page has no battle setup to read (G.setup): code older than R6?'
   const a = canon(plain(played)), b = canon(plain(setup))
   return a === b ? null : `the page started ${a}, not the log's ${b}`

@@ -212,12 +212,13 @@ const HASHED = ['phase', 'chargeEnd'], UNHASHED = ['deploy', 'roundLimit']
 // ── The code under test ─────────────────────────────────────────────────────
 async function modulesOf(pkg) {
   const imp = (f) => import(pathToFileURL(join(pkg, f)).href)
-  const [core, E, F, S, mirror] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/session.js', 'present/mirror.js'].map(imp))
+  const [core, E, F, S, mirror, schema] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/session.js', 'present/mirror.js', 'data/schema.js'].map(imp))
   // each op decoded once per module set: a peer's store hands out the same
   // entry object for the same list element every time (per op, never per
   // index: an insert shifts every later index), as N1's AutomergeStore
-  // must cache per element or text
-  return { core, E, F, S, mirror, folding: { envelope: E, fold: F }, cache: new WeakMap() }
+  // must cache per element or text; (F11a) and the races, which the lists
+  // scenario builds its armies for
+  return { core, E, F, S, mirror, RACES: schema.RACES, folding: { envelope: E, fold: F }, cache: new WeakMap() }
 }
 
 // ── The shared list ─────────────────────────────────────────────────────────
@@ -509,6 +510,9 @@ const ALLOWED = {
   offturn: ['turn', 'stale', 'inert'],
   device: ['device', 'turn', 'inert'],
   spoof: ['device', 'seat', 'inert'],
+  // (F11a) a start whose lists the rules refuse: refused as a start, by
+  // createMatch's own words (the lists scenario)
+  badstart: ['start'],
 }
 const PRIMARY = { junk: 'envelope', dup: 'envelope', stray: 'illegal', stale: 'stale', offturn: 'turn', device: 'device', spoof: 'device' }
 
@@ -822,6 +826,76 @@ function aiScenario(M, it, seed) {
   // (after the end every later entry is inert, junk included: decode's
   // verdict still comes first)
   return { where, steps, peers: 3, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length, resets: 0, refolds: 0, met: fates(net, fate, where) }
+}
+
+// (F11a) Starts carrying two lists: an AI pair's board and dice, each seat
+// naming a legal list of counts (autoList, on budgets from 60% of the
+// limit; seed 2 a mirror match, its seat 0 naming the classic preset), so
+// every peer folds the whole battle inside the start, alike, its armies the
+// lists'. Before it in every list (the host holds them when it writes its
+// start), the spectators' starts with lists the rules refuse, each with
+// the error every peer must give (createMatch's, as the Folder's begin
+// carries it: `start: …`; the Bushtails in seat 0, the Coil in seat 1): a
+// list over the points, a hero too many,
+// 'toString' as a preset (no preset's name: neither name nor counts),
+// '0112111' (a leading zero: seven counts for six roster entries), a
+// preset the race lacks, a number, and both seats' lists illegal (seat
+// 0's reason). Refused alike on every peer, the match waiting in its lobby
+// until the good start.
+const BAD_LISTS = [
+  ['over the points', ['100233', null], /^start: seat 0's army: 505 points, over the Skirmish limit of 500$/],
+  ['a hero too many', [null, '2011'], /^start: seat 1's army: 2 Hero units; at most 1 in a Skirmish$/],
+  ["'toString' as a preset", [null, 'toString'], /^start: seat 1's army "toString" is neither a preset nor a list of counts$/],
+  ["'0112111'", ['0112111', null], /^start: seat 0's list "0112111" counts 7 kinds of unit; the Bushtail Clans muster 6 \(elder oakguard nutkin grenadier glider trebuchet\)$/],
+  ['a preset the race lacks', ['constructor', null], /^start: the Bushtail Clans have no army "constructor" \(there (is|are) classic\)$/],
+  ['a number', [112111, '1121'], /^start: seat 0's army is a preset's name or a list of counts, not 112111$/],
+  ["both seats' lists illegal: seat 0's reason", ['11', '2011'], /^start: seat 0's army: no Troops unit; a Skirmish army needs at least 1$/],
+]
+function listsScenario(M, it, seed) {
+  const rand = mulberry32(seed * 7919 + it.id.length * 31 + 5)
+  const where = `${it.id} #${seed} (lists)`
+  const net = new Net()
+  const A = M.core.army, rules = M.core.missionOf({}).list
+  const [host, ...watchers] = ['host', 'spectator a', 'spectator b'].map((name, i) => new Peer(net, { name, actor: nameFrom(rand), dev: `d${i}`, M, rand: () => nameFrom(rand, 3) }))
+  const races = seed % 2 ? ['squirrel', 'serpent'] : ['serpent', 'serpent']
+  const listOf = (race) => A.listText(A.autoList(M.RACES[race], { ...rules, points: rules.points - 5 * Math.floor(rand() * (rules.points / 12.5)) }, Math.floor(rand() * 2 ** 32)))
+  const armies = races.map((race, i) => (seed % 2 === 0 && i === 0 ? 'classic' : listOf(race)))
+  const { board, dice } = jobSetup(it.job)
+  const setupOf = (army, of = races) => ({ board, dice, seats: of.map((race, i) => ({ race, ctrl: 'ai', ...(army[i] == null ? {} : { army: army[i] }) })) })
+  // the spectators' starts the rules refuse, written before the host's
+  BAD_LISTS.forEach(([, army], k) => {
+    const p = watchers[k % watchers.length]
+    p.put(M.E.encode({ id: `${p.dev}.bad${k}`, s: -1, d: p.dev, t: 'start', core: M.core.CORE_VERSION, rules: M.core.RULES_ID, setup: setupOf(army, ['squirrel', 'serpent']) }), 'badstart')
+  })
+  host.receive(net.ops.filter((op) => !host.ops.has(op.key)))
+  if (host.session.status !== 'lobby' || !host.session.error) throw new Error(`${where}: the host, holding only starts with illegal lists, is ${host.session.status}${host.session.error ? '' : ' with no error saying why'}`)
+  const setup = setupOf(armies)
+  host.session.start(setup)
+  host.mark('start')
+  for (const p of [host, ...watchers]) for (let j = 0; j < 2; j++) p.put(JUNK[Math.floor(rand() * JUNK.length)](M.E, p, 100 + j), 'junk')
+  const steps = play(net, rand)
+  const { ref, fate } = judge(net, M, { where })
+  const met = fates(net, fate, where)
+  // each refused start's error, the same on every peer (judge: their
+  // rejected lists alike) and the one its lists earn
+  const p0 = net.peers[0]
+  const bad = p0.order.filter((key) => net.why.get(key)?.kind === 'badstart')
+  if (bad.length !== BAD_LISTS.length) throw new Error(`${where}: ${bad.length} starts with illegal lists in the list, not ${BAD_LISTS.length}`)
+  for (const key of bad) {
+    const id = p0.decoded(p0.ops.get(key)).id, r = ref.rejected.find((x) => x.id === id)
+    const [what, , want] = BAD_LISTS[Number(id.split('.bad')[1])]
+    if (!r || !want.test(r.why)) throw new Error(`${where}: the start with ${what} is ${r ? `refused as "${r.why}"` : 'not refused'}, not ${want}`)
+  }
+  // the battle the good start made: the lists' units, seat 0's then seat
+  // 1's, each in roster order; and the battle the start's setup plays alone
+  const want = setup.seats.flatMap((x, side) => A.keysOf(M.RACES[x.race], x.army).map((key) => `${side}:${key}`)).join()
+  for (const p of net.peers) {
+    const got = p.G.units.map((u) => `${u.side}:${u.key}`).join()
+    if (got !== want) throw new Error(`${where}: ${p.name}'s match fields ${got}, not the start's lists (${armies.join(', ')}): ${want}`)
+  }
+  const alone = M.core.createMatch(setup)
+  if (alone.journal.trace.join('\n') !== ref.G.journal.trace.join('\n') || M.core.stateHash(alone) !== M.core.stateHash(ref.G)) throw new Error(`${where}: the peers' battle is not the start's setup played alone`)
+  return { where, steps, peers: 3, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length, resets: 0, refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), met, armies, refusedStarts: bad.length, units: ref.G.units.length }
 }
 
 // The cap: a spectator floods the log past MAX_ENTRIES while a seat plays.
@@ -1855,6 +1929,7 @@ if (a.child) {
     else if (task.kind === 'forks') r = forks(M, it)
     else if (task.kind === 'cap') r = capScenario(M, it)
     else if (task.kind === 'ai') r = aiScenario(M, it, task.seed)
+    else if (task.kind === 'lists') r = listsScenario(M, it, task.seed)
     else r = humanScenario(M, it, task.kind, task.seed)
     out = { ok: true, r }
   } catch (e) {
@@ -1912,6 +1987,10 @@ function tasks({ only, seeds, extras = only === undefined }) {
   if (extras) {
     const vsAi = items.find((x) => x.kind === 'human' && x.job.setup.seats.some((s) => s.ctrl === 'ai'))
     out.push({ kind: 'cap', id: vsAi.id }, { kind: 'edges', id: vsAi.id })
+    // (F11a) starts carrying two lists, on two AI pairs' boards (the second
+    // a mirror match naming the classic preset beside a list)
+    const pairs = items.filter((x) => x.kind === 'ai')
+    out.push({ kind: 'lists', id: pairs[0].id, seed: 1 }, { kind: 'lists', id: pairs[1].id, seed: 2 })
     // (F4) the round limit's vote from both seats at once, on a hotseat log
     // that ends on its rounds
     out.push({ kind: 'votes', id: 'hotseat-late-8' })
@@ -1945,6 +2024,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
       ? t.kind === 'drill' && x.how === 'closing' ? `ok   all 3 peers froze on a final (${x.finals} said; at ${x.at}), found by ${x.found}, the spectator by ${x.watched}, reported (${x.steps} steps)`
         : t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
+        : t.kind === 'lists' ? `ok   3 peers fold the start's lists (${x.armies.join(' v ')}, ${x.units} units) alike, and refuse ${x.refusedStarts} starts with illegal lists alike, each with its reason`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
           : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move, (N3) kept entries held across a reload (honest, gone, replaced, out of order, rejected then gone)`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`
@@ -2255,10 +2335,11 @@ for (const b of bad) if (!b.r) console.log(`  FAIL ${b.error}`)
 const ran = new Set(list.map((t) => t.kind))
 const said = ['every peer folds the same list to the same accepted, refused and hashed match, the single-process fold of it, whatever order the entries reached it in']
 if (ran.has('cap')) said.push('a flooded log freezes alike everywhere')
+if (ran.has('lists')) said.push('starts carrying two lists fold alike, and starts with illegal lists are refused alike with the same error')
 if (ran.has('edges')) said.push("the Folder's edges hold")
 if (ran.has('forks')) said.push("a same-seat fork's loser is stale everywhere")
 if (ran.has('votes')) said.push("both seats' say at the round limit folds alike in either order")
 if (ran.has('drill')) said.push('a peer whose maths drifted, early or late, freezes with the others at the same entry, reported (and, drifting inside the last entry, every peer on a final: N2\'s closing check)')
-const skipped = ['cap', 'edges', 'forks', 'votes', 'drill'].filter((k) => !ran.has(k))
+const skipped = ['cap', 'edges', 'forks', 'votes', 'drill', 'lists'].filter((k) => !ran.has(k))
 console.log(bad.length ? `\nmerge-sim FAILED: ${bad.length} problem(s)` : `\nmerge-sim passed: ${said.join('; ')}${skipped.length ? ` (not run: ${skipped.join(', ')}${a.only ? ', as --only names battles' : ''})` : ''}`)
 process.exit(bad.length ? 1 : 0)

@@ -95,7 +95,10 @@ const out = {}
 out.classic = await row(CODE, classicSetups, (seed, dice) => jobSetup({ seed, dice }))
 for (const caps of [false, true]) {
   const { dir, lists } = await buildGrand({ caps, from: CODE })
-  const r = await row(dir, grandBoards, grandSetup)
+  // (F11a: the setups name the fixture's lists, the ×3 presets or the cap
+  // lists; on code from before F11a they name none, the copy's army lines
+  // patched instead)
+  const r = await row(dir, grandBoards, (b, d) => grandSetup(b, d, lists))
   // (a fixture whose battles field fewer units than its lists would be
   // measuring classic armies on a big board: refused)
   const want = Object.values(lists).reduce((n, l) => n + l.units, 0)

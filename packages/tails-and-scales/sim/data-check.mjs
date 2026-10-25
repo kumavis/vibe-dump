@@ -103,11 +103,41 @@
 //      (a doctored table shows a unit at its default hashing as before).
 // (The setup's key whitelist, the spec's item 8, comes with F8a/F11, when
 // the mission's and the army's keys land.)
+// 11. (F11a, DESIGN §4.2.8, §4.2.9) The army builder's data:
+//    - prices: every unit has `cost`, a whole multiple of 5 above 0; each
+//      race's classic list costs what the v6 table says (485 and 495), at
+//      most its mission's limit (500);
+//    - rosters: each race's lists each of its units once, and starts with
+//      the roster pinned below (ROSTER_PIN: a reorder or an insert would
+//      silently change what every recorded and saved list means, so it
+//      fails by name; an append passes), its classic army in roster order,
+//      and its classic preset expanding to exactly that army;
+//    - presets: every preset a count string no longer than the roster, and
+//      legal for each mission whose `army` names it; every mission's own
+//      preset there, and legal, for every race;
+//    - missions: each as shipped passes checkMission, its `list` included;
+//      checkMission takes a slot maximum of 10, a [0, 0] slot and a Grand
+//      Troops [3, 14], and refuses each broken list rule by name (a
+//      perKind of 10, a slot with min > max or max > units, minimums
+//      summing past units, fractional points, …);
+//    - every race fields a legal list at every mission: autoList on 100
+//      seeds, each held to checkList;
+//    - RULES_ID moves on a cost, the roster's order, a preset's digits or a
+//      new preset, and a mission's list rules (and, section 5, stays on a
+//      rename);
+//    - defineRace refuses a unit without cost, a cost not a multiple of 5,
+//      a roster missing a unit, listing one twice or one the race lacks,
+//      an army out of roster order, a preset with trailing zeros, longer
+//      than the roster, not a string, and a hand-given classic;
+//    - the army/ corpus (sim/baselines/army/*.json, once recorded): every
+//      list a setup in it names is legal under today's prices and costs at
+//      most 90% of its mission's limit, so a retune of up to 10% keeps the
+//      corpus playable (the row says how many lists it checked).
 //
 //   node sim/data-check.mjs
 //
 // Exit 0 when everything holds, else 1.
-import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
@@ -208,7 +238,9 @@ check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit k
 for (const key of legacyKeys) {
   const L = legacy.TYPES[key], t = TYPES[key]
   if (!t) continue
-  const why = [diffPath(t, expected(key, L))]
+  // ((F11a) `cost`, the army builder's price, is new: the R0 code had none)
+  const { cost, ...legacyShaped } = t
+  const why = [diffPath(legacyShaped, expected(key, L))]
   // the derivations stand on their own, without the explicit flags: hero is
   // role Hero, no unit sits in two deploy rows, and the schema's brawler rule
   // gives what ai.js's key test gave
@@ -353,7 +385,8 @@ const moves = [
   ['the AI role (Oak Guard as line)', () => variant('squirrel', (d) => (d.units.oakguard.ai = 'line'))],
   ['points (Nutkin 7 → 8)', () => variant('squirrel', (d) => (d.units.nutkin.pts = 8))],
   ['a base (Brute 0.95 → 1)', () => variant('serpent', (d) => (d.units.brute.base = 1))],
-  ['the army order', () => variant('squirrel', (d) => d.army.reverse())],
+  // ((F11a) the army stays in roster order, so the roster turns with it)
+  ['the army order', () => variant('squirrel', (d) => d.army.reverse() && d.roster.reverse())],
   ['a constant (AURA 6 → 7)', () => rulesId({ constants: { ...CONSTANTS, AURA: 7 } })],
   ['the board (deploy 8 → 9)', () => rulesId({ constants: { ...CONSTANTS, BOARD: { ...CONSTANTS.BOARD, deploy: 9 } } })],
   ['the phase order', () => rulesId({ phases: ['move', 'charge', 'shoot', 'fight', 'morale'] })],
@@ -390,6 +423,8 @@ check(MISSIONS.classic.board.W === BOARD.W && MISSIONS.classic.board.H === BOARD
 const retune = (t) => (t.stats = t.stats.replace('M6', 'M7'))
 const withUnit = (key, edit = () => {}) => variant('serpent', (d) => {
   d.units[key] = structuredClone(d.units.brute)
+  // ((F11a) a new unit joins the roster, at its end)
+  d.roster.push(key)
   edit(d.units[key])
 })
 const withRace = (key, edit = () => {}) => {
@@ -741,13 +776,15 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // never votes, so the corpus's states hash as under 1; a voting match's
   // pending decision carries its votes, printed as the pending line always
   // was; 3, F10b: pilot added a command, nothing shadowState prints; 4, F8a:
-  // the setup names its mission, and G.board stays out of the hash)
+  // the setup names its mission, and G.board stays out of the hash; 5,
+  // F11a: the seats name their armies, which decide only which units
+  // newState makes, and the classic preset makes the classic armies)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -783,5 +820,206 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   }
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, and the seams allow what the large battles need')
+// ── 11. The army builder's data (F11a) ─────────────────────────────────────
+console.log("\n11. the army builder's data: prices, rosters, presets, the missions' list rules (F11a)")
+{
+  const A = await imp(PKG, 'core/army.js')
+  const { fullSetup } = await imp(PKG, 'core/index.js')
+  const { LIST } = await imp(PKG, 'data/schema.js')
+  const why = (f) => {
+    try {
+      f()
+      return null
+    } catch (e) {
+      return e.message
+    }
+  }
+  const countsOf = (text) => [...text].map(Number)
+  // prices
+  const unpriced = ALL.filter((t) => !Number.isInteger(t.cost) || t.cost <= 0 || t.cost % 5 !== 0)
+  check(!unpriced.length, `every one of the ${ALL.length} units has a cost, a whole multiple of 5 above 0 (${Object.values(RACES).map((r) => r.roster.map((k) => `${k} ${r.units[k].cost}`).join(', ')).join('; ')})`, unpriced.map((t) => `${t.key}: ${t.cost}`).join(', '))
+  // the v6 table's classic lists (DESIGN §4.2.8.2): a retune re-pins them
+  // here, and each stays within its mission's limit (army-sim's gate)
+  const CLASSIC_COST = { squirrel: 485, serpent: 495 }
+  for (const [key, want] of Object.entries(CLASSIC_COST)) {
+    const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))
+    check(cost === want && cost <= MISSIONS.classic.list.points, `the ${r.short}' classic list ('${r.armies.classic}') costs ${cost}, the v6 table's ${want}, within the Skirmish limit of ${MISSIONS.classic.list.points}`, cost !== want ? 'a price changed: re-pin CLASSIC_COST with the retune (and run sim/army-sim.mjs --check)' : 'over the limit')
+  }
+  // rosters: each race's as it stood when its first list was recorded. A
+  // roster may grow at its end (F9a appends 'warcart', F9b 'howdah'); its
+  // first entries never move. A new race pins its own (F5a).
+  const ROSTER_PIN = {
+    squirrel: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet'],
+    serpent: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine'],
+  }
+  const rosterWhy = (key, roster) => {
+    const pin = ROSTER_PIN[key]
+    if (!pin) return `no pinned roster for ${key}: pin today's in ROSTER_PIN before any list of it is recorded`
+    const at = pin.findIndex((k, i) => roster[i] !== k)
+    return at < 0 ? null : `entry ${at} is ${JSON.stringify(roster[at])}, the pin's ${JSON.stringify(pin[at])}: a roster only grows at its end (a reorder or an insert changes what every recorded and saved list means)`
+  }
+  for (const r of Object.values(RACES)) {
+    const keys = Object.keys(r.units)
+    const once = r.roster.length === keys.length && new Set(r.roster).size === keys.length && keys.every((k) => r.roster.includes(k))
+    check(once, `the ${r.short}' roster lists each of its ${keys.length} units once (${r.roster.join(' ')})`, `roster ${r.roster.join(',')}, units ${keys.join(',')}`)
+    check(!rosterWhy(r.key, r.roster), `the ${r.short}' roster starts with its pin (${(ROSTER_PIN[r.key] ?? []).length} entries)`, rosterWhy(r.key, r.roster))
+    const order = r.army.map((k) => r.roster.indexOf(k))
+    check(order.every((x, i) => !i || x >= order[i - 1]), `the ${r.short}' classic army is in roster order`, r.army.join(','))
+    check(isDeepStrictEqual(A.keysOf(r, 'classic'), [...r.army]) && isDeepStrictEqual(A.keysOf(r, r.armies.classic), [...r.army]), `the ${r.short}' classic preset ('${r.armies.classic}') expands to exactly its army`, A.keysOf(r, 'classic').join(','))
+  }
+  // the pin's own controls: a reorder and an insert fail by name, an append
+  // passes
+  const pinned = ROSTER_PIN.squirrel
+  const swapped = [pinned[0], pinned[2], pinned[1], ...pinned.slice(3)]
+  check(/entry 1 is "nutkin", the pin's "oakguard"/.test(rosterWhy('squirrel', swapped) ?? ''), 'control: a roster with two entries swapped fails the pin, naming the first moved', rosterWhy('squirrel', swapped) ?? 'passes')
+  check(/entry 1 is "warcart"/.test(rosterWhy('squirrel', [pinned[0], 'warcart', ...pinned.slice(1)]) ?? ''), 'control: a unit inserted inside the roster fails the pin', 'passes')
+  check(rosterWhy('squirrel', [...pinned, 'warcart']) === null, 'control: a unit appended at the roster\'s end passes the pin')
+  check(/no pinned roster for beetle/.test(rosterWhy('beetle', ['grub']) ?? ''), 'control: a race with no pinned roster fails, asking for one', 'passes')
+  // presets: count strings, legal where a mission names them; and every
+  // mission's own preset there and legal, for every race
+  for (const r of Object.values(RACES)) {
+    check(Object.getPrototypeOf(r.armies) === null && Object.hasOwn(r.armies, 'classic'), `the ${r.short}' presets have no prototype and hold classic (${Object.keys(r.armies).join(', ')})`)
+    for (const [name, text] of Object.entries(r.armies)) {
+      const ok = typeof text === 'string' && LIST.test(text) && text.length <= r.roster.length
+      check(ok, `the ${r.short}' preset ${name} ('${text}') is a list of counts no longer than its roster`)
+      for (const [m, mission] of Object.entries(MISSIONS)) {
+        if (mission.army !== name || !ok) continue
+        const broken = A.checkList(r, mission.list, countsOf(text))
+        check(broken === null, `the ${r.short}' preset ${name} is legal for the ${m} mission, whose preset it is (${A.listCost(r, countsOf(text))} of ${mission.list.points} points)`, broken)
+      }
+    }
+  }
+  for (const [m, mission] of Object.entries(MISSIONS)) {
+    const missing = Object.values(RACES).filter((r) => !Object.hasOwn(r.armies, mission.army)).map((r) => r.key)
+    check(!missing.length, `every race has the ${m} mission's preset, ${mission.army}`, `missing for ${missing.join(', ')}`)
+  }
+  // the missions: as shipped, and the list rules checkMission takes and
+  // refuses (each edit to a copy of classic's list)
+  for (const [m, mission] of Object.entries(MISSIONS)) check(!!mission.list && missionError(mission) === null, `the ${m} mission has list rules and passes checkMission (${mission.list.size ?? 'unsized'}: ${mission.list.points} points, ${mission.list.units} units, ${mission.list.models} models, ${mission.list.perKind} of one unit)`, missionError(mission) ?? 'no list')
+  const withList = (edit) => {
+    const m = structuredClone(MISSIONS.classic)
+    edit(m.list, m)
+    return missionError(m)
+  }
+  const takes = [
+    ['a slot maximum of 10 (Troops [1, 10])', (l) => (l.roles.Troops = [1, 10])],
+    ['a [0, 0] slot (no Monster)', (l) => (l.roles.Monster = [0, 0])],
+    ["Grand's Troops [3, 14] with 24 units", (l) => Object.assign(l, { units: 24, roles: { ...l.roles, Troops: [3, 14] } })],
+    ['a list with no size', (l) => delete l.size],
+    ['perKind 9', (l) => (l.perKind = 9)],
+  ]
+  for (const [what, edit] of takes) check(withList(edit) === null, `checkMission takes ${what}`, withList(edit))
+  const brokenLists = [
+    ['a perKind of 10 (a count is one digit)', /perKind is 10, not a whole number from 1 to 9/, (l) => (l.perKind = 10)],
+    ['a perKind of 0', /perKind is 0/, (l) => (l.perKind = 0)],
+    ['a slot with min > max', /Troops slot is \[2,1\]/, (l) => (l.roles.Troops = [2, 1])],
+    ['a slot with max > units', /Elite slot is \[0,11\], not \[min, max\] with 0 ≤ min ≤ max ≤ 10 units/, (l) => (l.roles.Elite = [0, 11])],
+    ['a slot of fractions', /Fast slot is \[0,1.5\]/, (l) => (l.roles.Fast = [0, 1.5])],
+    ['a negative minimum', /Hero slot is \[-1,1\]/, (l) => (l.roles.Hero = [-1, 1])],
+    ['minimums summing past units', /slot minimums sum to 11 units, over its 10/, (l) => Object.assign(l.roles, { Hero: [1, 1], Troops: [4, 6], Elite: [2, 2], Fast: [2, 2], Monster: [1, 1], Artillery: [1, 1] })],
+    ['fractional points', /points limit is 500.5, not a whole number above 0/, (l) => (l.points = 500.5)],
+    ['no points', /points limit is 0/, (l) => (l.points = 0)],
+    ['units past the envelope', /units is 25, not a whole number from 1 to 24/, (l) => (l.units = 25)],
+    ['models past the envelope', /models is 91, not a whole number from 1 to 90/, (l) => (l.models = 91)],
+    ['a role without a slot', /Artillery slot is undefined/, (l) => delete l.roles.Artillery],
+    ['a role that is no role', /roles name "Beast", which is no role/, (l) => (l.roles.Beast = [0, 1])],
+    ['a field the list rules take not', /list takes no field "prices"/, (l) => (l.prices = {})],
+    ['a size that is no name', /size is 5, not a name/, (l) => (l.size = 5)],
+    ['no list', /has no list/, (l, m) => delete m.list],
+  ]
+  for (const [what, want, edit] of brokenLists) {
+    const err = withList(edit)
+    check(err && want.test(err), `checkMission refuses ${what}`, err ?? 'accepted')
+  }
+  // every race fields a legal list at every mission, autoList on 100 seeds
+  for (const [m, mission] of Object.entries(MISSIONS)) {
+    for (const r of Object.values(RACES)) {
+      const wrong = [], spent = []
+      for (let seed = 1; seed <= 100; seed++) {
+        const counts = A.autoList(r, mission.list, seed)
+        const broken = A.checkList(r, mission.list, counts)
+        if (broken) wrong.push(`seed ${seed} '${A.listText(counts)}': ${broken}`)
+        spent.push(A.listCost(r, counts))
+      }
+      check(!wrong.length, `the ${r.name} field a legal list at the ${m} mission on 100 seeds (autoList: ${Math.min(...spent)}-${Math.max(...spent)} of ${mission.list.points} points)`, wrong.slice(0, 3).join('; '))
+    }
+  }
+  // RULES_ID: the prices, the roster's order, the presets, the list rules
+  const reroster = (key, roster) => rulesId({ races: { ...RACES, [key]: { ...RACES[key], roster } } })
+  const preset = (digits) => variant('serpent', (d) => (d.armies = { field: digits }))
+  const armyMoves = [
+    ['a cost (Nutkin 75 → 80)', () => variant('squirrel', (d) => (d.units.nutkin.cost = 80))],
+    ['a cost (Venom Engine 65 → 60)', () => variant('serpent', (d) => (d.units.engine.cost = 60))],
+    // (the race as defineRace made it, its roster alone turned: no race
+    // file can turn its roster without its classic army, whose order is
+    // the army order's own row in section 5)
+    ["the roster's order (Oak Guard after Nutkin)", () => reroster('squirrel', swapped)],
+    ['a preset added (field, 224222)', () => preset('224222')],
+    ["the mission's points (500 → 505)", () => mission((m) => (m.list.points = 505))],
+    ["the mission's most of one unit (3 → 4)", () => mission((m) => (m.list.perKind = 4))],
+    ["a role's slot (Hero [1, 1] → [1, 2])", () => mission((m) => (m.list.roles.Hero = [1, 2]))],
+    ["the mission's most models (36 → 40)", () => mission((m) => (m.list.models = 40))],
+  ]
+  for (const [what, id] of armyMoves) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
+  check(preset('224222') !== preset('224221'), "RULES_ID moves on a preset's digits (field 224222 → 224221)")
+  check(reroster('squirrel', [...RACES.squirrel.roster]) === RULES_ID, "RULES_ID stays on a copy of the roster (the control for the roster's order)")
+  check(variant('squirrel', (d) => (d.units.nutkin.name = 'Nutkin Slingers')) === RULES_ID, 'RULES_ID stays on a unit renamed, its cost and roster place kept')
+  // defineRace refuses broken builder data
+  breakIt('defineRace refuses a unit without cost', (d) => delete d.units.brute.cost, /unit brute: cost must be a whole multiple of 5 above 0 .*not undefined/)
+  breakIt('defineRace refuses a cost of 7 (not a multiple of 5)', (d) => (d.units.brute.cost = 7), /unit brute: cost must be a whole multiple of 5.*not 7/)
+  breakIt('defineRace refuses a cost of 0', (d) => (d.units.spitter.cost = 0), /unit spitter: cost must be a whole multiple of 5 above 0/)
+  breakIt('defineRace refuses a cost as text', (d) => (d.units.spitter.cost = '65'), /unit spitter: cost must be a whole multiple of 5/)
+  breakIt('defineRace refuses no roster', (d) => delete d.roster, /needs a roster/)
+  breakIt('defineRace refuses a roster missing a unit', (d) => d.roster.pop(), /roster leaves out "engine"/)
+  breakIt('defineRace refuses a roster listing a unit twice', (d) => d.roster.push('brute'), /roster lists "brute" twice/)
+  breakIt('defineRace refuses a roster listing a unit the race lacks', (d) => d.roster.push('nutkin'), /roster lists "nutkin", which is not one of its units/)
+  breakIt('defineRace refuses a roster listing an Object.prototype name', (d) => d.roster.push('constructor'), /roster lists "constructor", which is not one of its units/)
+  breakIt('defineRace refuses an army out of roster order', (d) => d.army.reverse(), /army is not in roster order/)
+  breakIt('defineRace refuses an army fielding 10 of one unit (a count is one digit)', (d) => (d.army = Array(10).fill('scaleguard')), /fields 10 "scaleguard": a list's count of one unit is one digit/)
+  breakIt('defineRace refuses a preset with trailing zeros', (d) => (d.armies = { field: '2242220' }), /armies\.field is "2242220", not a list of counts/)
+  breakIt('defineRace refuses a preset longer than the roster', (d) => (d.armies = { field: '2242221' }), /armies\.field "2242221" counts 7 kinds of unit; the roster has 6/)
+  breakIt('defineRace refuses a preset that is no string', (d) => (d.armies = { field: 224222 }), /armies\.field is 224222, not a list of counts/)
+  breakIt('defineRace refuses a preset named by no key', (d) => (d.armies = { Field: '224222' }), /a preset's name "Field" must be lower-case/)
+  breakIt('defineRace refuses a preset named __proto__', (d) => (d.armies = JSON.parse('{"__proto__": "1"}')), /a preset's name "__proto__" must be lower-case/)
+  breakIt('defineRace refuses a classic preset given by hand', (d) => (d.armies = { classic: '112111' }), /armies gives "classic", which is derived from its army/)
+  breakIt('defineRace refuses presets that are a list', (d) => (d.armies = ['224222']), /armies is a record of presets by name/)
+  check(!!defineRace({ ...structuredClone(raw.serpent), armies: { field: '224222', grand: '336333' } }), "defineRace takes F8b's presets as count strings (field '224222', grand '336333')")
+  // the army/ corpus (recorded after F11a's code, in a commit of its own):
+  // every list a setup there names, legal under today's prices and within
+  // 90% of its mission's limit
+  const ARMY = join(PKG, 'sim', 'baselines', 'army')
+  const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
+  // (every object with a seats list is a setup, wherever the file keeps it)
+  const setupsIn = (v, out = []) => {
+    if (Array.isArray(v)) v.forEach((x) => setupsIn(x, out))
+    else if (v && typeof v === 'object') {
+      if (Array.isArray(v.seats) && v.seats.every((x) => x && typeof x === 'object' && 'race' in x)) out.push(v)
+      else Object.values(v).forEach((x) => setupsIn(x, out))
+    }
+    return out
+  }
+  let lists = 0
+  const wrong = []
+  for (const f of files) {
+    const setups = setupsIn(JSON.parse(readFileSync(join(ARMY, f), 'utf8')))
+    if (!setups.length) wrong.push(`${f}: no setup in it (this row reads every object with a seats list)`)
+    for (const setup of setups) {
+      const err = why(() => fullSetup(setup))
+      if (err) {
+        wrong.push(`${f}: its setup is refused today: ${err}`)
+        continue
+      }
+      const s = fullSetup(setup), rules = MISSIONS[s.mission].list
+      setup.seats.forEach((x, i) => {
+        if (x.army == null) return
+        lists++
+        const { counts } = A.armyOf(s, i), cost = A.listCost(RACES[x.race], counts)
+        if (cost > Math.floor(0.9 * rules.points)) wrong.push(`${f}: seat ${i}'s ${JSON.stringify(x.army)} costs ${cost}, over 90% of the ${s.mission} limit (${Math.floor(0.9 * rules.points)} of ${rules.points})`)
+      })
+    }
+  }
+  check(!wrong.length, files.length ? `the army/ corpus: ${lists} lists in ${files.length} files, each legal under today's prices and within 90% of its mission's limit` : 'the army/ corpus: not recorded yet (sim/baselines/army/ has no logs): 0 lists checked', wrong.slice(0, 4).join('; '))
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, and (F11a) the army builder\'s prices, rosters, presets and list rules hold')
 process.exit(failed ? 1 : 0)

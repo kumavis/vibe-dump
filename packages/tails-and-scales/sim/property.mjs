@@ -86,6 +86,13 @@
 //    takes the edges of what they can. And G has §2.1's shape from the
 //    start: `pending` null, never missing, at every trace line of an all-AI
 //    battle (the engine's runs never set it), and `strict` a boolean.
+//    (F8a) P-mission: the setup whitelist and the missions. (F11a) And the
+//    armies: every refusal of DESIGN §4.2.8.4 with its exact message, by
+//    fullSetup and by createMatch alike, seat-major (both seats broken:
+//    seat 0's first rule) and in the table's order within a seat; no army,
+//    a null one, 'classic' and '112111' one match (stateHash, units and
+//    trace, at the deployment and through an all-AI battle); checkMission's
+//    list rules taken and refused at their edges.
 // 9. The Session (R6b: match/session.js over match/store.js's LocalStore,
 //    which every mode plays through) folds a log as the core does. Each
 //    corpus battle is played again through one, the human logs' entries
@@ -130,6 +137,14 @@
 //    one in the deployment included), resultOf(G) must be exactly that
 //    event's win, why, score and rounds. (Code without present/hud-model.js
 //    skips it.)
+// 11. (F11a) P-army, on code with core/army.js (the block above its tasks
+//    below says what each holds): 100,000 fuzzed armies refused with a
+//    seat's reason or taken in their one spelling, never a crash;
+//    autoList's lists legal over seeds 1-1,000 × races × missions; a classic
+//    match's shadowState unchanged, whichever way its army is spelt, and
+//    its stateHash data-check's pin; and per mission 50 random legal lists
+//    played to the end under strict, 40 AI against AI and 10 with a human
+//    seat answered at random as (3)'s games are.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -678,10 +693,14 @@ function sameResult(hud, G, over, where) {
 // A random game: a random setup, its human seats played at random among
 // the legal commands. Returns what it reached, and its command log.
 const MIXES = [['ai', 'ai'], ['human', 'ai'], ['ai', 'human'], ['human', 'human']]
-function randomTask(core, rng, mirror, races, seed, hud) {
+// (F11a, P-army) `lists`: { mission, RACES, MISSIONS } for a game whose
+// seats field random legal lists at that mission (autoList on budgets from
+// 60% of the limit, drawn from a stream of their own, so the game's own
+// draws are a plain game's), one seat at least a human's
+function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const rand = mulberry32(seed * 2654435761)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
-  const ctrl = seed < 4 ? MIXES[seed] : pick(MIXES)
+  const ctrl = lists ? MIXES[1 + (seed % 3)] : seed < 4 ? MIXES[seed] : pick(MIXES)
   const aggressive = seed % 2 === 0
   const r = rand()
   const setup = {
@@ -691,6 +710,14 @@ function randomTask(core, rng, mirror, races, seed, hud) {
   }
   // (F4) half the games with a human seat vote at their round limit
   if (ctrl.includes('human') && rand() < 0.5) setup.overtime = 'vote'
+  if (lists) {
+    const pickList = mulberry32(seed * 40503 + 7), rules = lists.MISSIONS[lists.mission].list
+    setup.mission = lists.mission
+    for (const x of setup.seats) {
+      const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
+      x.army = core.army.listText(core.army.autoList(lists.RACES[x.race], { ...rules, points: budget }, Math.floor(pickList() * 2 ** 32)))
+    }
+  }
   const where0 = `game ${seed} (${JSON.stringify(setup)})`
   const counts = { games: 1, probes: 0, commands: {}, ended: null, aggressive }
   // how far from the nearest enemy a body's move ends (Infinity if it isn't one)
@@ -718,6 +745,7 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     tap.fold(G, events, where)
   }
   const G = core.createMatch(setup, { out: [], strict: true, onTrace: tap.trace })
+  if (lists) unitsAre(core, G, lists.RACES, where0)
   const last = { trace: 0, n: 0 }
   let conceded = -1, piloted = ''
   for (let k = 0; G.turn.stage !== 'over'; k++) {
@@ -812,6 +840,11 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     throw new Error(`${where0}: game.over ${JSON.stringify(over)} should say ${JSON.stringify({ ...T.result, vp: T.vp, rounds })} (${seen.scored} rounds scored)`)
   }
   counts.results = sameResult(hud, G, over, where0)
+  if (lists) {
+    const bad = traceShape(G)
+    if (bad) throw new Error(`${where0}: ${bad}`)
+    counts.listGames = 1
+  }
   const trace = h10(G.journal.trace.join('\n'))
   if (log.length) {
     refold(core, setup, log, trace, where0)
@@ -885,7 +918,8 @@ const BAD_SETUPS = {
 // keys and is held to none of them.
 const BAD_MISSION_SETUPS = {
   'a field no setup takes': [{ colour: 'red' }, /^a setup takes no field "colour"$/],
-  "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], army: '224222' }, SETUP.seats[1]] }, /^seat 0 takes no field "army"$/],
+  // ((F11a) a seat's `army` is a field it takes: a stray one is another's)
+  "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], colour: 'red' }, SETUP.seats[1]] }, /^seat 0 takes no field "colour"$/],
   'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
   'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
   'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there (is|are) classic/],
@@ -935,6 +969,151 @@ function missionTask(core, MISSIONS) {
   return n
 }
 
+// (F11a) P-mission's armies: every refusal of DESIGN §4.2.8.4, each with
+// its own message, seat-major (every check of seat 0's before any of seat
+// 1's) and, within a seat, in the table's order: the army a string, a
+// preset of the race's, else a list of counts no longer than the roster,
+// then checkList's points, units, models, each role in ROLES order (its
+// minimum, then its maximum) and the most of one unit. [seat 0's army,
+// seat 1's, the message] (undefined: the seat names none); SETUP's seats
+// are the Bushtails' and the Coil's. Code without core/army.js takes no
+// army and is held to none of them.
+const NO = undefined
+const ARMY_REFUSALS = {
+  'a number': [NO, 7, /^seat 1's army is a preset's name or a list of counts, not 7$/],
+  'a list of digits': [['1', '1'], NO, /^seat 0's army is a preset's name or a list of counts, not \["1","1"\]$/],
+  'a record of counts': [{ elder: 1 }, NO, /^seat 0's army is a preset's name or a list of counts, not \{"elder":1\}$/],
+  'true': [true, NO, /^seat 0's army is a preset's name or a list of counts, not true$/],
+  // (the plural is the orchestrator's call while each race has one
+  // preset: either agreement passes)
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there (is|are) classic\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there (is|are) classic\)$/],
+  // ('toString' has a capital: no preset's name, so not a list either)
+  "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
+  "F8b's preset, not yet shipped": ['field', NO, /^the Bushtail Clans have no army "field" \(there (is|are) classic\)$/],
+  'neither a name nor counts': ['11a', NO, /^seat 0's army "11a" is neither a preset nor a list of counts$/],
+  'an empty army': ['', NO, /^seat 0's army "" is neither a preset nor a list of counts$/],
+  'a list with a trailing zero': [NO, '1121110', /^seat 1's army "1121110" is neither a preset nor a list of counts$/],
+  '__proto__': ['__proto__', NO, /^seat 0's army "__proto__" is neither a preset nor a list of counts$/],
+  'a capitalised preset': ['Classic', NO, /^seat 0's army "Classic" is neither a preset nor a list of counts$/],
+  'fullwidth digits': ['１１２', NO, /^seat 0's army "１１２" is neither a preset nor a list of counts$/],
+  'a list longer than the roster': ['1121113', NO, /^seat 0's list "1121113" counts 7 kinds of unit; the Bushtail Clans muster 6 \(elder oakguard nutkin grenadier glider trebuchet\)$/],
+  'a leading zero past the roster': [NO, '0112111', /^seat 1's list "0112111" counts 7 kinds of unit; the Coil of Ssithra muster 6 \(hierophant brute scaleguard spitter sidewinder engine\)$/],
+  '515 points': [NO, '100034', /^seat 1's army: 515 points, over the Skirmish limit of 500$/],
+  '505 points': ['100233', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
+  'points before a role (540 points, no hero)': ['033', NO, /^seat 0's army: 540 points, over the Skirmish limit of 500$/],
+  '37 models': [NO, '106', /^seat 1's army: 37 models; a Skirmish army has at most 36$/],
+  'models before a role (41 models, no hero)': [NO, '0061', /^seat 1's army: 41 models; a Skirmish army has at most 36$/],
+  'no Troops unit': ['11', NO, /^seat 0's army: no Troops unit; a Skirmish army needs at least 1$/],
+  '3 Elite units': ['1301', NO, /^seat 0's army: 3 Elite units; at most 2 in a Skirmish$/],
+  '3 Fast units': [NO, '10013', /^seat 1's army: 3 Fast units; at most 2 in a Skirmish$/],
+  'no Hero unit': ['001', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  '2 Hero units': ['201', NO, /^seat 0's army: 2 Hero units; at most 1 in a Skirmish$/],
+  '2 Monster units': [NO, '1201', /^seat 1's army: 2 Monster units; at most 1 in a Skirmish$/],
+  '2 Artillery units': ['100102', NO, /^seat 0's army: 2 Artillery units; at most 1 in a Skirmish$/],
+  // (ROLES: Troops, Elite, Fast, Hero, Monster, Artillery)
+  'the roles in ROLES order (no Troops and 2 Monster units)': [NO, '12', /^seat 1's army: no Troops unit; a Skirmish army needs at least 1$/],
+  'the roles in ROLES order (no Hero and 2 Artillery units)': ['000102', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  '4 Nutkin': ['104', NO, /^seat 0's army: 4 Nutkin; at most 3 of one unit in a Skirmish army$/],
+  '4 Spitters': [NO, '1004', /^seat 1's army: 4 Spitters; at most 3 of one unit in a Skirmish army$/],
+  'a role before the most of one unit (4 Nutkin, no hero)': ['004', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  // seat-major: seat 0's first broken rule, however late a check, before
+  // seat 1's, however early
+  "both seats broken: seat 0's late rule first": ['11', 7, /^seat 0's army: no Troops unit/],
+  "both seats broken: seat 0's list, seat 1's preset": ['1121113', 'grnad', /^seat 0's list "1121113" counts 7 kinds/],
+  'both seats broken alike': ['11a', '11a', /^seat 0's army "11a" is neither/],
+  'seat 0 legal, seat 1 broken': ['112111', '104', /^seat 1's army: 4 Scaleguard; at most 3 of one unit in a Skirmish army$/],
+}
+// [what, the Bushtails' counts (for checkList with the points lifted: no
+// Skirmish list reaches 11 units under 500 points), the reason]: the units
+// before the models
+const LIFTED = [
+  ['11 units (and 47 models)', [1, 0, 3, 3, 3, 1], /^11 units; a Skirmish army has at most 10$/],
+  ['37 models in 7 units', [1, 0, 6], /^37 models; a Skirmish army has at most 36$/],
+]
+function armyTask(core, { MISSIONS, checkMission }, RACES) {
+  let n = 0
+  const A = core.army
+  const seatsOf = (a0, a1) => SETUP.seats.map((x, i) => {
+    const army = i ? a1 : a0
+    return army === NO ? { ...x } : { ...x, army }
+  })
+  for (const [name, [a0, a1, want]] of Object.entries(ARMY_REFUSALS)) {
+    const setup = { ...SETUP, seats: seatsOf(a0, a1) }
+    const written = JSON.stringify(setup)
+    // fullSetup itself, then createMatch, each refusing with the message
+    for (const [how, f] of [['fullSetup', core.fullSetup], ['createMatch', core.createMatch]]) {
+      let why = null
+      try {
+        f(setup)
+      } catch (e) {
+        if (!(e instanceof Error) || e instanceof TypeError || e instanceof RangeError) throw new Error(`P-mission: ${how} crashes on a setup with ${name} instead of refusing it: ${e?.message ?? e}`)
+        why = e.message
+      }
+      if (why === null) throw new Error(`P-mission: ${how} takes a setup with ${name} (${JSON.stringify(setup.seats.map((x) => x.army))})`)
+      if (!want.test(why)) throw new Error(`P-mission: a setup with ${name} is refused by ${how} as "${why}", not ${want}`)
+    }
+    if (JSON.stringify(setup) !== written) throw new Error(`P-mission: refusing a setup with ${name} changed it`)
+    n++
+  }
+  const rules = MISSIONS.classic.list, lifted = { ...rules, points: 9999 }
+  for (const [what, counts, want] of LIFTED) {
+    const why = A.checkList(RACES.squirrel, lifted, counts)
+    if (!want.test(why ?? '')) throw new Error(`P-mission: checkList (points lifted) gives ${JSON.stringify(why)} for ${what}, not ${want}`)
+    n++
+  }
+  // the classic preset named, its counts and no army: one battle, unit for
+  // unit and hash for hash; a null army is a field left out. The start's
+  // setup as written keeps no army; the filled-in one names the preset
+  const spellings = [['no army', NO], ['null', null], ["'classic'", 'classic'], ["'112111'", '112111']]
+  const played = spellings.map(([what, army]) => {
+    const setup = { ...SETUP, seats: SETUP.seats.map((x) => (army === NO ? { ...x } : { ...x, army })) }
+    const G = core.createMatch(setup)
+    if (army == null && setup.seats.some((x) => x.army != null)) throw new Error(`P-mission: createMatch wrote an army into the setup as written (${what})`)
+    const want = army ?? 'classic'
+    if (G.setup.seats.some((x) => x.army !== want)) throw new Error(`P-mission: a setup with ${what} plays seats naming ${JSON.stringify(G.setup.seats.map((x) => x.army))}, not ${JSON.stringify(want)}`)
+    return { what, hash: core.stateHash(G), keys: G.units.map((u) => `${u.id}:${u.side}:${u.key}`).join(' '), trace: G.journal.trace.join('\n') }
+  })
+  for (const p of played.slice(1)) {
+    if (p.hash !== played[0].hash || p.keys !== played[0].keys || p.trace !== played[0].trace) throw new Error(`P-mission: a setup with ${p.what} makes another match than one with no army (stateHash ${p.hash} against ${played[0].hash}; units ${p.keys === played[0].keys ? 'alike' : 'apart'})`)
+  }
+  // ... and an all-AI battle to its end, alike
+  const ai = spellings.map(([what, army]) => {
+    const G = core.createMatch({ board: 64, dice: 89, seats: SETUP.seats.map((x) => ({ ...x, ctrl: 'ai', ...(army === NO ? {} : { army }) })) })
+    return { what, hash: core.stateHash(G), n: G.journal.trace.length }
+  })
+  for (const p of ai.slice(1)) if (p.hash !== ai[0].hash || p.n !== ai[0].n) throw new Error(`P-mission: board 64, dice 89 with ${p.what} ends ${p.hash} after ${p.n} trace lines, with no army ${ai[0].hash} after ${ai[0].n}`)
+  n += spellings.length
+  // checkMission's list rules (the slot table F8b and F9a extend): takes a
+  // slot maximum of 10 and a [0, 0] slot; refuses a perKind of 10, a slot
+  // with min > max or max > units, minimums summing past units
+  const edit = (f) => {
+    const m = structuredClone(MISSIONS.classic)
+    f(m.list)
+    try {
+      checkMission('test', m)
+      return null
+    } catch (e) {
+      return e.message
+    }
+  }
+  for (const [what, f] of [['a slot maximum of 10', (l) => (l.roles.Troops = [1, 10])], ['a [0, 0] slot', (l) => (l.roles.Monster = [0, 0])]]) {
+    const why = edit(f)
+    if (why !== null) throw new Error(`P-mission: checkMission refuses ${what}: ${why}`)
+    n++
+  }
+  for (const [what, f, want] of [
+    ['a perKind of 10', (l) => (l.perKind = 10), /perKind is 10/],
+    ['a slot with min > max', (l) => (l.roles.Fast = [2, 1]), /Fast slot is \[2,1\]/],
+    ['a slot with max > units', (l) => (l.roles.Troops = [1, 11]), /Troops slot is \[1,11\]/],
+    ['minimums summing past units', (l) => Object.assign(l.roles, { Troops: [6, 6], Elite: [2, 2], Fast: [2, 2], Hero: [1, 1] }), /minimums sum to 11 units, over its 10/],
+  ]) {
+    const why = edit(f)
+    if (!want.test(why ?? '')) throw new Error(`P-mission: checkMission ${why ? `refuses ${what} as "${why}"` : `takes ${what}`}, not ${want}`)
+    n++
+  }
+  return n
+}
 function setupTask(core) {
   for (const [name, change] of Object.entries(BAD_SETUPS)) {
     const setup = { ...SETUP, ...change }
@@ -961,6 +1140,307 @@ function setupTask(core) {
   const G = core.createMatch({ ...SETUP, seats: SETUP.seats.map((x) => ({ ...x, ctrl: 'ai' })) }, { onTrace: shape })
   if (G.turn.stage !== 'over' || !lines) throw new Error(`the all-AI battle stopped at stage ${G.turn.stage} after ${lines} trace lines`)
   return Object.keys(BAD_SETUPS).length
+}
+
+// ── (F11a) P-army ───────────────────────────────────────────────────────────
+// A seat's `army` is a field any peer may write (a lobby's, a start's), so
+// whatever it holds must come back refused for a reason or taken in its one
+// spelling, never crash the fold; and every list the builder's tools make
+// plays (DESIGN §4.2.9's P-army row):
+//   fuzz    `n` fuzzed armies (numbers, bigints, arrays, records, records
+//           with no prototype or a throwing toJSON, cycles, a deep nest, a
+//           Proxy, symbols, functions, letters, unicode and lone
+//           surrogates, digit strings with leading and trailing zeros,
+//           over-long ones, Object.prototype's names, presets misspelt,
+//           and legal lists among them), in one seat or both, through
+//           fullSetup. A refusal is an Error (never a TypeError or a
+//           RangeError, nor anything else thrown) whose message starts
+//           "seat N's" or "the <race> have no army", N the seat fuzzed;
+//           with both seats fuzzed it is seat 0's own refusal if seat 0
+//           has one, else seat 1's (seat-major). A taking is a string (or
+//           nothing: the preset): a preset's name or a list of counts, and
+//           it round-trips (listText(armyOf(…).counts) is the list, or the
+//           preset's digits), its units the digit sum, in roster order;
+//           the first 60 lists taken made into matches, each seat's units
+//           those keys, ids from 1
+//   sweep   autoList over seeds 1-1,000 × every race × every mission: legal
+//           (checkList), deterministic, its text a list, its units the
+//           digit sum in roster order (armyOf's keys, keysOf's)
+//   shadow  three corpus battles (an AI pair, a hotseat log, a vs-AI log)
+//           folded with no army, 'classic' and '112111' on every seat: the
+//           same shadowState before every entry and at the end, and the
+//           stateHash data-check pins for them (V1, unchanged through
+//           CORE_VERSION 5: F11a moved nothing in the hash)
+//   games   random legal lists (autoList on random budgets from 60% to
+//           100% of the limit, mirror matches included) played to the end
+//           under `strict`: AI against AI (each seat's units its list's,
+//           G's invariants at the end, the result the score's or the
+//           wipe's, every trace line in the trace's format), and some with
+//           a human seat answered at random as (3)'s games are, with
+//           P-prop's invariants at every command boundary
+// (the stateHash pins of data-check's section 10, V1: the classic corpus
+// hashes as under CORE_VERSION 1 through every version since)
+const V1_PINS = {
+  '64-89': { end: 'chz79qx8m5' },
+  'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
+  'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
+}
+const PINNED_UNDER = [1, 2, 3, 4, 5]
+
+// Every trace line in the format core/journal.js writes (DESIGN §4.1: the
+// trace is frozen): a battle-log line, or a state line (act, a phase, a
+// round, over) listing every unit of the match by id from 1, its position
+// to 3 decimals and each model's wounds, then the chunks, the score and the
+// dice. Returns the first line that isn't, or null.
+const LOG_LINE = /^log -?\d+ [\s\S]*rng:\d+#[0-9a-z]+$/
+const STATE_LINE = /^(act|over|round \d+|phase [01]:[a-z]+) ((?:\d+:-?\d+\.\d{3},-?\d+\.\d{3},\d+(?:\/\d+)* ?)+) chunks:\d+ vp:\d+-\d+ rng:\d+#[0-9a-z]+$/
+function traceShape(G) {
+  for (const [i, l] of G.journal.trace.entries()) {
+    if (LOG_LINE.test(l)) continue
+    const m = STATE_LINE.exec(l)
+    const ids = m ? m[2].trim().split(' ').map((u) => Number(u.split(':')[0])) : null
+    if (!ids || ids.length !== G.units.length || ids.some((id, k) => id !== k + 1)) return `trace line ${i + 1} isn't in the trace's format: ${l.slice(0, 100)}`
+  }
+  return null
+}
+
+// each seat's units against its list: G.units seat 0's then seat 1's, each
+// in roster order (§4.1 rule 23), ids from 1
+function unitsAre(core, G, RACES, where) {
+  const want = G.setup.seats.flatMap((x, side) => core.army.keysOf(RACES[x.race], x.army).map((key) => `${side}:${key}`))
+  const got = G.units.map((u) => `${u.side}:${u.key}`)
+  if (got.join() !== want.join()) throw new Error(`${where}: the match fields ${got.join(' ')}, not its lists' ${want.join(' ')}`)
+  if (G.units.some((u, i) => u.id !== i + 1)) throw new Error(`${where}: unit ids ${G.units.map((u) => u.id).join(',')}, not counting from 1`)
+}
+
+// A fuzzed army (`list`: a legal list of the seat's race, as text, which
+// some of the values are made from).
+const NAMES = ['__proto__', 'constructor', 'toString', 'hasOwnProperty', 'valueOf', 'prototype', 'classic', 'Classic', 'classic ', ' classic', 'CLASSIC', 'field', 'grand', 'auto', 'random', 'null', 'undefined', 'NaN', 'Infinity', '', ' ', '\u0000', '-', 'a', 'z9', 'a-', '1e3', '0x1', '+1', '-1', '1.5', ' 1', '1 ', '١١٢', '１２', '1\n', '​1']
+function fuzzValue(rand, list) {
+  const int = (n) => Math.floor(rand() * n)
+  const digits = (n, lo = 0) => Array.from({ length: n }, () => String(lo + int(10 - lo))).join('')
+  switch (int(26)) {
+    case 0: return int(2e6) - 1e6
+    case 1: return (rand() - 0.5) * Math.pow(10, int(15))
+    case 2: return [NaN, Infinity, -Infinity, -0, 0, 1, 112111, Number.MAX_VALUE, Number.MIN_VALUE, 2 ** 53, -(2 ** 53)][int(11)]
+    case 3: return BigInt(int(1e9)) * 1000n
+    case 4: return rand() < 0.5
+    case 5: return Array.from({ length: int(8) }, () => (rand() < 0.5 ? int(10) : String(int(10))))
+    case 6: return list.split('').map(Number)
+    case 7: return { [NAMES[int(NAMES.length)] || 'x']: int(4), elder: int(3) }
+    case 8: return Object.assign(Object.create(null), { list, n: int(9) })
+    case 9: return { toString: () => list, valueOf: () => Number(list), toJSON: () => list }
+    case 10: return { toJSON() {
+      throw new Error('no JSON')
+    } }
+    case 11: {
+      const o = { list }
+      o.self = o
+      return o
+    }
+    case 12: {
+      let v = list
+      for (let k = 0; k < 4000; k++) v = [v]
+      return v
+    }
+    case 13: return new Proxy({}, { ownKeys() {
+      throw new Error('a trap')
+    }, get() {
+      throw new Error('a trap')
+    } })
+    case 14: return rand() < 0.5 ? Symbol(list) : () => list
+    case 15: return new String(list)
+    case 16: return Array.from({ length: 1 + int(12) }, () => String.fromCharCode(97 + int(26))).join('')
+    case 17: return Array.from({ length: 1 + int(8) }, () => String.fromCodePoint(rand() < 0.3 ? 0xd800 + int(0x800) : int(0x110000))).join('')
+    case 18: return digits(int(13))
+    case 19: return '0'.repeat(1 + int(3)) + list
+    case 20: return list + '0'.repeat(1 + int(3))
+    case 21: return digits(14 + int(200), 1)
+    case 22: return NAMES[int(NAMES.length)]
+    case 23: {
+      // a legal list nudged: a digit changed, one dropped, one added
+      const at = int(list.length), d = String(int(10))
+      return [list.slice(0, at) + d + list.slice(at + 1), list.slice(0, -1), list + d, d + list][int(4)]
+    }
+    case 24: return rand() < 0.5 ? null : undefined
+    default: return rand() < 0.3 ? 'classic' : list
+  }
+}
+
+// The fuzz: `n` cases, `seed`'s stream. Returns its counts.
+function fuzzTask(core, RACES, MISSIONS, n, seed) {
+  const A = core.army, rand = mulberry32(seed)
+  const races = Object.keys(RACES), missions = Object.keys(MISSIONS)
+  const int = (k) => Math.floor(rand() * k)
+  const counts = { fuzzed: 0, refused: 0, taken: 0, roundTrips: 0, both: 0, made: 0 }
+  // a legal list of `race` at `mission`, as text (from 60% of the limit)
+  const legal = (race, mission) => {
+    const rules = MISSIONS[mission].list
+    return A.listText(A.autoList(RACES[race], { ...rules, points: rules.points - 5 * int(rules.points / 12.5) }, int(2 ** 32)))
+  }
+  // fullSetup's verdict: the setup, or the error thrown
+  const verdict = (setup) => {
+    try {
+      return { s: core.fullSetup(setup) }
+    } catch (e) {
+      return { e }
+    }
+  }
+  const show = (v) => {
+    try {
+      return typeof v === 'string' ? JSON.stringify(v).slice(0, 40) : typeof v === 'object' && v !== null ? `a ${Array.isArray(v) ? 'list' : 'record'}` : String(v).slice(0, 40)
+    } catch {
+      return typeof v
+    }
+  }
+  for (let k = 0; k < n; k++) {
+    const mission = missions[int(missions.length)]
+    const race = [0, 1].map(() => (rand() < 0.6 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
+    const lists = race.map((r) => legal(r, mission))
+    const seat = int(2), both = rand() < 0.2
+    const army = [0, 1].map((i) => (i === seat || both ? fuzzValue(rand, lists[i]) : rand() < 0.5 ? lists[i] : undefined))
+    const setupOf = (a) => ({ board: 1 + int(1e6), dice: 1 + int(1e9), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'human', ...(a[i] === undefined && rand() < 0.5 ? {} : { army: a[i] }) })) })
+    const setup = setupOf(army)
+    const where = `P-army fuzz case ${k} (seat ${both ? '0 and 1' : seat}: ${army.map(show).join(' | ')}, ${race.join(' v ')})`
+    const v = verdict(setup)
+    counts.fuzzed++
+    if (v.e) {
+      const e = v.e
+      if (!(e instanceof Error) || e instanceof TypeError || e instanceof RangeError) throw new Error(`${where}: fullSetup crashes (${e?.constructor?.name ?? typeof e}: ${e?.message ?? String(e)}) instead of refusing the army`)
+      const by = (i) => `seat ${i}'s `, raceSays = (i) => `the ${RACES[race[i]].name} have no army `
+      const named = [0, 1].filter((i) => e.message.startsWith(by(i)) || e.message.startsWith(raceSays(i)))
+      if (!named.length) throw new Error(`${where}: refused as "${e.message.slice(0, 120)}", which names no seat's army`)
+      if (!both && !named.includes(seat)) throw new Error(`${where}: refused as "${e.message.slice(0, 120)}", naming another seat than the one fuzzed`)
+      if (both) {
+        // seat-major: seat 0's own refusal (seat 1 at its preset) if it has
+        // one, else seat 1's (seat 0 at its preset)
+        counts.both++
+        const alone0 = verdict(setupOf([army[0], undefined])), alone1 = verdict(setupOf([undefined, army[1]]))
+        const want = alone0.e ?? alone1.e
+        if (!want || want.message !== e.message) throw new Error(`${where}: both seats fuzzed, refused as "${e.message.slice(0, 100)}", not seat-major ("${want?.message.slice(0, 100) ?? 'taken'}")`)
+      }
+      counts.refused++
+      continue
+    }
+    // taken: each seat's army a string (absent: the preset), in its one spelling
+    counts.taken++
+    for (const i of [0, 1]) {
+      const r = RACES[race[i]], given = army[i], filled = v.s.seats[i].army
+      if (given != null && typeof given !== 'string') throw new Error(`${where}: fullSetup takes seat ${i}'s army ${show(given)}, which is no string`)
+      if (filled !== (given ?? MISSIONS[mission].army)) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
+      const got = A.armyOf(v.s, i)
+      const text = A.listText(got.counts)
+      const preset = Object.hasOwn(r.armies, filled) ? filled : null
+      if (got.preset !== preset || text !== (preset ? r.armies[preset] : filled)) throw new Error(`${where}: seat ${i}'s ${show(filled)} reads back as '${text}' (preset ${got.preset}), not in its one spelling`)
+      const sum = [...text].reduce((s, d) => s + Number(d), 0)
+      const order = got.keys.map((key) => r.roster.indexOf(key))
+      if (got.keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1]))) throw new Error(`${where}: seat ${i}'s '${text}' fields ${got.keys.join(' ')}: not ${sum} units in roster order`)
+      if (A.checkList(r, MISSIONS[mission].list, got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, MISSIONS[mission].list, got.counts)}`)
+      counts.roundTrips++
+    }
+    // the first lists taken, made into matches (human seats: each stops at
+    // its deployment)
+    if (counts.made < 60 && army.some((x) => typeof x === 'string' && x !== 'classic')) {
+      const G = core.createMatch(setup)
+      unitsAre(core, G, RACES, where)
+      counts.made++
+    }
+  }
+  if (!counts.refused || !counts.taken || !counts.both || (n >= 1000 && counts.made < 10)) throw new Error(`P-army: the fuzz never met every outcome (${JSON.stringify(counts)})`)
+  return counts
+}
+
+// The sweep: autoList over seeds 1-1,000 × every race × every mission.
+function sweepTask(core, RACES, MISSIONS) {
+  const A = core.army
+  let n = 0
+  for (const [mission, m] of Object.entries(MISSIONS)) {
+    for (const [key, r] of Object.entries(RACES)) {
+      for (let seed = 1; seed <= 1000; seed++) {
+        const where = `P-army: autoList(${key}, ${mission}, ${seed})`
+        const counts = A.autoList(r, m.list, seed)
+        const why = A.checkList(r, m.list, counts)
+        if (why !== null) throw new Error(`${where} is illegal: ${why}`)
+        if (A.autoList(r, m.list, seed).join() !== counts.join()) throw new Error(`${where} draws another list the second time`)
+        const text = A.listText(counts)
+        if (!A.LIST.test(text) || text.length > r.roster.length) throw new Error(`${where} writes '${text}', which is no list of counts`)
+        const sum = counts.reduce((s, x) => s + x, 0)
+        const { keys } = A.armyOf({ mission, seats: [{ race: key, ctrl: 'ai', army: text }, { race: key, ctrl: 'ai' }] }, 0)
+        const order = keys.map((k) => r.roster.indexOf(k))
+        if (keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1])) || A.keysOf(r, text).join() !== keys.join()) throw new Error(`${where}: '${text}' fields ${keys.join(' ')}: not its ${sum} units in roster order`)
+        n++
+      }
+    }
+  }
+  return n
+}
+
+// The shadow: corpus battles folded under three spellings of the classic
+// army, against each other and data-check's pins.
+function shadowTask(core) {
+  const { items } = loadCorpus()
+  let n = 0
+  for (const [id, pins] of Object.entries(V1_PINS)) {
+    const job = items.find((x) => x.id === id).job, entries = job.entries ?? []
+    const states = [undefined, 'classic', '112111'].map((army) => {
+      const setup = jobSetup(job)
+      const G = core.createMatch(army ? { ...setup, seats: setup.seats.map((x) => ({ ...x, army })) } : setup, { out: null })
+      const out = []
+      for (let k = 0; k <= entries.length; k++) {
+        out.push([k, core.shadowState(G), core.stateHash(G)])
+        if (k < entries.length) {
+          const { s, ...b } = entries[k]
+          core.apply(G, s, b)
+        }
+      }
+      return out
+    })
+    for (const [j, what] of [[1, "'classic'"], [2, "'112111'"]]) {
+      const k = states[j].findIndex(([, sh], i) => sh !== states[0][i][1])
+      if (k >= 0) throw new Error(`P-army: ${id} with ${what} on every seat prints another shadowState than with no army, before entry ${k}`)
+    }
+    if (PINNED_UNDER.includes(core.CORE_VERSION)) {
+      for (const [at, want] of Object.entries(pins)) {
+        const k = at === 'end' ? entries.length : Number(at)
+        if (states[0][k][2] !== want) throw new Error(`P-army: ${id}'s stateHash ${at === 'end' ? 'at its end' : `before entry ${k}`} is ${states[0][k][2]}, not ${want} as data-check pins it: a classic match's shadowState moved`)
+        n++
+      }
+    }
+    n++
+  }
+  return n
+}
+
+// `n` AI-against-AI battles between random legal lists at `mission`, from
+// `seed`'s stream.
+function armyGamesTask(core, RACES, MISSIONS, mission, n, seed) {
+  const A = core.army, rand = mulberry32(seed * 2246822519 + 3)
+  const int = (k) => Math.floor(rand() * k)
+  const races = Object.keys(RACES), rules = MISSIONS[mission].list
+  const ends = { score: 0, wipe: 0 }, budgets = []
+  for (let k = 0; k < n; k++) {
+    const race = [0, 1].map(() => (rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
+    const army = race.map((r) => {
+      const budget = rules.points - 5 * int(rules.points / 12.5)
+      budgets.push(budget)
+      return A.listText(A.autoList(RACES[r], { ...rules, points: budget }, int(2 ** 32)))
+    })
+    const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'ai', army: army[i] })) }
+    const where = `P-army game ${seed}.${k} (${JSON.stringify(setup)})`
+    let G
+    try {
+      G = core.createMatch(setup, { out: [], strict: true })
+    } catch (e) {
+      throw new Error(`${where}: ${e.stack}`)
+    }
+    if (G.turn.stage !== 'over') throw new Error(`${where}: an AI battle stopped at ${G.turn.stage}`)
+    unitsAre(core, G, RACES, where)
+    invariants(core, G, `${where} at its end`)
+    ends[result(G, where, -1)]++
+    const bad = traceShape(G)
+    if (bad) throw new Error(`${where}: ${bad}`)
+  }
+  return { listGames: n, ends, budgets: [Math.min(...budgets), Math.max(...budgets)] }
 }
 
 // Two games' logs played interleaved in one process, command by command:
@@ -1005,6 +1485,7 @@ if (a.child) {
     if (match.folding) Object.assign(match, match.folding.envelope, match.folding.fold)
     FOLDING = match.folding
   }
+  const missionsOf = async () => (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS
   // the HUD model's resultOf (R7b on; null for older code)
   const hud = existsSync(join(dir, 'present', 'hud-model.js')) ? await import(pathToFileURL(join(dir, 'present', 'hud-model.js')).href) : null
   let out
@@ -1013,7 +1494,8 @@ if (a.child) {
       const it = loadCorpus().items.find((x) => x.id === task.id)
       out = { ok: true, counts: corpusTask(core, rng, mirror, it, match, hud) }
     } else if (task.kind === 'random') {
-      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud)
+      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf() } : null
+      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud, lists)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
     } else if (task.kind === 'interleave') {
       const [A, B] = task.games
@@ -1022,9 +1504,16 @@ if (a.child) {
     } else if (task.kind === 'offturn') {
       out = { ok: true, counts: { offTurn: 2, results: offTurnTask(core, hud) } }
     } else if (task.kind === 'setups') {
-      // (F8a: P-mission, on code whose setups name their mission)
-      const missions = core.SETUP_KEYS ? (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS : null
-      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions) : 0 } }
+      // (F8a: P-mission, on code whose setups name their mission; F11a: and
+      // its armies, on code with core/army.js)
+      const missions = core.SETUP_KEYS ? await import(pathToFileURL(join(dir, 'data', 'mission.js')).href) : null
+      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions.MISSIONS) : 0, armies: core.army ? armyTask(core, missions, RACES) : 0 } }
+    } else if (task.kind === 'army') {
+      // (F11a) P-army's fuzz, sweep and shadow
+      const MISSIONS = await missionsOf()
+      out = { ok: true, counts: { fuzz: fuzzTask(core, RACES, MISSIONS, task.fuzz, task.seed), sweep: sweepTask(core, RACES, MISSIONS), shadow: shadowTask(core) } }
+    } else if (task.kind === 'armyGames') {
+      out = { ok: true, counts: armyGamesTask(core, RACES, await missionsOf(), task.mission, task.n, task.seed) }
     }
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
@@ -1058,15 +1547,35 @@ function child(task, pkg) {
   })
 }
 
-async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
+// (F11a) P-army's workload: fuzzed armies, and per mission the random
+// legal lists played AI against AI (in children of 10) and with a human seat
+const ARMY = { fuzz: 100000, ai: 40, human: 10 }
+
+async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
   const { items: all } = loadCorpus()
   const items = only === 'none' ? [] : select(all, only)
   const tasks = [...items.map((it) => ({ kind: 'corpus', id: it.id })), ...Array.from({ length: games }, (_, i) => ({ kind: 'random', seed: seed + i }))]
+  // (code with core/army.js: P-army)
+  const lists = existsSync(join(pkg, 'core', 'army.js'))
+  if (lists) {
+    const missions = Object.keys((await import(pathToFileURL(join(pkg, 'data', 'mission.js')).href)).MISSIONS)
+    tasks.unshift({ kind: 'army', fuzz: army.fuzz, seed })
+    for (const [m, mission] of missions.entries()) {
+      for (let k = 0; k < army.ai; k += 10) tasks.push({ kind: 'armyGames', mission, n: Math.min(10, army.ai - k), seed: seed * 1000 + m * 100 + k })
+      for (let k = 0; k < army.human; k++) tasks.push({ kind: 'random', seed: 900000 + seed * 1000 + m * 100 + k, lists: mission })
+    }
+  }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
-    say(`  ${t.kind === 'corpus' ? `${t.id.padEnd(24)}` : `game ${String(t.seed).padEnd(19)}`} ${r.ok ? `ok   ${t.kind === 'corpus' ? `${r.counts.probes} decisions probed` : `${r.counts.ended}, ${r.counts.probes} decisions, ${Object.entries(r.counts.commands).map(([k, n]) => `${k} ${n}`).join(', ')}`}` : `FAIL ${r.error}`}`)
+    const c = r.counts
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
+      : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
+        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})`
+          : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}`
+    say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
     return r
   })
   const bad = res.filter((r) => !r.ok)
@@ -1084,10 +1593,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   // 8. setups the rules can't play, and G's shape
   {
     const r = await child({ kind: 'setups' }, pkg)
-    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle${r.counts.missions ? `; (P-mission) ${r.counts.missions} mission setups and missions held` : ''}` : `FAIL ${r.error}`}`)
+    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle${r.counts.missions ? `; (P-mission) ${r.counts.missions} mission setups and missions held` : ''}${r.counts.armies ? `, ${r.counts.armies} army refusals, spellings and list rules` : ''}` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
     // (code with SETUP_KEYS whitelists its setups: P-mission must have run)
     else if (existsSync(join(pkg, 'data', 'mission.js')) && /SETUP_KEYS/.test(readFileSync(join(pkg, 'core', 'match.js'), 'utf8')) && !r.counts.missions) bad.push({ error: 'the code whitelists its setups, but P-mission held nothing' })
+    // (code with core/army.js names its armies: P-mission's must have run)
+    else if (lists && !r.counts.armies) bad.push({ error: 'the code has core/army.js, but P-mission held no army refusal' })
   }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
@@ -1108,13 +1619,23 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   if (existsSync(join(pkg, 'match', 'fold.js')) && sessions[0] !== corpusOk) bad.push({ error: `the code has a Folder, but ${sessions[0]} of ${corpusOk} corpus battles went through the Session` })
   // 10. (code with present/hud-model.js holds resultOf to every end played)
   const results = [...res, offTurn].reduce((s, r) => s + (r.ok ? r.counts?.results ?? 0 : 0), 0)
-  const ends = res.filter((r) => r.ok).length + (offTurn.ok ? 2 : 0)
+  const ends = res.filter((r, i) => r.ok && ['corpus', 'random'].includes(tasks[i].kind)).length + (offTurn.ok ? 2 : 0)
   if (existsSync(join(pkg, 'present', 'hud-model.js')) && results !== ends) bad.push({ error: `the code has present/hud-model.js, but resultOf(G) was held to the game.over at ${results} of ${ends} ends` })
   if (coverage && games >= 8) {
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends (${Math.round((Date.now() - t0) / 1000)} s)`)
+  // (F11a) P-army: what it held, over the run
+  let armySaid = ''
+  if (lists) {
+    const fz = res.find((r, i) => r.ok && tasks[i].kind === 'army')?.counts
+    const ai = res.filter((r, i) => r.ok && tasks[i].kind === 'armyGames').reduce((n, r) => n + r.counts.listGames, 0)
+    const human = res.filter((r, i) => r.ok && tasks[i].lists).length
+    const want = tasks.filter((t) => t.kind === 'armyGames').reduce((n, t) => n + t.n, 0)
+    if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
+    if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
+  }
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -1146,6 +1667,23 @@ const MUTATIONS = {
   'mission-unchecked': ['core/index.js', "  if (typeof s.mission !== 'string' || !(s.mission in MISSIONS)) throw new Error(`no mission ${JSON.stringify(s.mission)} (there ${Object.keys(MISSIONS).length === 1 ? 'is' : 'are'} ${Object.keys(MISSIONS).join(', ')})`)\n", ''],
   // a set the mission isn't fought on taken (as long as it exists)
   'set-unchecked': ['core/index.js', "  if (!mission.sets.includes(s.terrain)) throw new Error(`the ${s.mission} mission is fought on ${mission.sets.join(' or ')}, not ${JSON.stringify(s.terrain)}`)\n", ''],
+  // (F11a, P-mission and P-army) fullSetup leaves the armies to newState:
+  // createMatch still refuses them, with the same words, but fullSetup (the
+  // lobby's and the Muster screen's check) takes any
+  'army-unchecked': ['core/index.js', '  for (let i = 0; i < s.seats.length; i++) armyOf(s, i)\n', ''],
+  // checkList lets a list over the points limit through
+  'points-unchecked': ['core/army.js', '  if (cost > rules.points) return `${cost} points, over the ${S} limit of ${rules.points}`\n', ''],
+  // the seats checked seat 1 first: a setup with both seats broken is
+  // refused with seat 1's reason, on one peer's build and not another's
+  'seat-1-first': ['core/index.js', 'for (let i = 0; i < s.seats.length; i++) armyOf(s, i)', 'for (let i = s.seats.length - 1; i >= 0; i--) armyOf(s, i)'],
+  // the roles judged out of ROLES order
+  'roles-reversed': ['core/army.js', '  for (const r of ROLES) {\n    const [min, max] = rules.roles[r], got = role[r]', '  for (const r of [...ROLES].reverse()) {\n    const [min, max] = rules.roles[r], got = role[r]'],
+  // a list with trailing zeros taken: two spellings of one army
+  'list-trailing-zeros': ['data/schema.js', 'export const LIST = Object.freeze(/^[0-9]*[1-9]$/)', 'export const LIST = Object.freeze(/^[0-9]+$/)'],
+  // newState builds the race's classic army whatever the seat names: the
+  // classic corpus (no army: the classic preset) can't see it, P-army's
+  // lists do
+  'newstate-race-army': ['core/match.js', 'for (const key of armyOf(G.setup, side).keys)', 'for (const key of raceOf(G, side).army)'],
   // a preview the fold never runs draws a die (a tool's nearest valid end)
   'preview-draws': ['core/actions/move.js', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n  roll(G, 1)\n'],
   // asking leaves a mark on the match
@@ -1240,7 +1778,8 @@ const MUTATIONS = {
 
 if (a['self-test']) {
   const work = join(tmpdir(), `tails-and-scales-prop-${process.pid}`)
-  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false }
+  // (F11a: P-army's workload cut down, its fuzz a fifth and a few list battles)
+  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1 } }
   const clean = await run(copyCode(dir, join(work, 'unbroken')), load)
   if (clean.length) {
     console.log(`property self-test: the unbroken copy fails the same workload, so no mutation can be judged: ${clean[0].error}`)
@@ -1271,5 +1810,5 @@ if (a['self-test']) {
 console.log(`property: the pure core of ${dir === PKG ? 'the working tree' : dir}`)
 const bad = await run(dir, { games: GAMES, seed: SEED, only: a.only })
 for (const b of bad) if (!b.id) console.log(`  FAIL ${b.error}`)
-console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, and a setup the rules can\'t play is refused')
+console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, a setup the rules can\'t play is refused, and (F11a) a seat\'s army is refused for its own reason or played as its list says')
 process.exit(bad.length ? 1 : 0)

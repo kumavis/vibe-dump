@@ -31,6 +31,10 @@
 //   cyrb53                the string hash RULES_ID and stateHash use
 //                         (core/util.js): the Folder's head after a
 //                         simultaneous decision closes
+//   army                  (F11a) the army lists (core/army.js): armyOf,
+//                         checkList, listCost, listText, keysOf, autoList
+//                         and LIST, for the Muster screen, the lobby and
+//                         the desync report; pure, and it draws nothing
 //
 // G.out is where the match's events go (DESIGN §2.3; null keeps none, for a
 // quiet fold), and G.onTrace(line, G) hears each trace line as it is
@@ -39,7 +43,8 @@
 // it); `strict` checks every AI command with legal() before it is applied,
 // and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
 // state: the rules don't read them, and stateHash leaves them out.
-import { newState, missionOf, seatName, SETUP_KEYS, SEAT_KEYS } from './match.js'
+import { newState, missionOf, seatName, makeSeats, SETUP_KEYS, SEAT_KEYS } from './match.js'
+import { armyOf } from './army.js'
 import { MISSIONS } from '../data/mission.js'
 import { lock, unlock } from './rng.js'
 import { emit, log } from './journal.js'
@@ -53,6 +58,7 @@ export { RULES_ID, CORE_VERSION } from './version.js'
 export { stateHash, shadowState } from './hash.js'
 export { canonicalJSON, cyrb53 } from './util.js'
 export { SETUP_KEYS, SEAT_KEYS, missionOf } from './match.js'
+export * as army from './army.js'
 
 // (a copy: whoever sorts or edits the answer leaves the match's decision be)
 export const pendingSeats = (G) => [...(G.pending?.seats ?? [])]
@@ -66,7 +72,7 @@ const MAX_ROUNDS = 99
 // A setup with its defaults filled in, refused unless the rules can play it.
 //   { board, dice, mission: 'classic', terrain, rounds, overtime: 'never' |
 //     'vote', diceMode: 'shared', seats: [{ race, ctrl: 'human' | 'ai',
-//     dev?, name?, nonce? }, …] }
+//     dev?, name?, nonce?, army }, …] }
 // overtime 'vote' (F4): once the rounds are played, the human seats vote on
 // another round, and again after each one (a battle with no human seat ends
 // on its rounds all the same).
@@ -77,8 +83,14 @@ const MAX_ROUNDS = 99
 // or a lobby's empty field) takes its default. The setup's own fields come
 // first, in its order, then the defaults it left out. (F8a) A field outside
 // SETUP_KEYS, or a seat's outside SEAT_KEYS, is refused (one left null is
-// left out, as ever), in the order the checks below make. (The races and
-// controllers are checked as the seats are made, core/match.js.)
+// left out, as ever), in the order the checks below make. Then the seats'
+// races and controllers (makeSeats's refusals, core/match.js, as newState
+// makes the seats) and (F11a) their armies: each seat's `army` defaults to
+// the mission's preset (mission.army), as terrain and rounds default, and
+// armyOf (core/army.js) refuses one the seat's race can't field under the
+// mission's list rules, seat 0's every check before seat 1's (§4.2.8.4).
+// The seats are copies: the setup as written (a start entry's) is left as
+// it was, and only the filled-in one, G.setup, names each army.
 export function fullSetup(setup) {
   // (the whitelist reads the setup's own fields before any is copied: a
   // `__proto__` field, an own key of a parsed log entry, would otherwise set
@@ -107,6 +119,9 @@ export function fullSetup(setup) {
   if (s.overtime !== 'never' && s.overtime !== 'vote') throw new Error(`overtime "${s.overtime}": a battle ends after its rounds ('never') or its human seats vote on more ('vote')`)
   if (s.diceMode !== 'shared') throw new Error(`dice mode "${s.diceMode}": only 'shared' dice so far`)
   if (!Array.isArray(s.seats)) throw new Error('a setup names its seats')
+  makeSeats(s.seats.map((x) => x.race), s.seats.map((x) => x.ctrl))
+  s.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army }))
+  for (let i = 0; i < s.seats.length; i++) armyOf(s, i)
   return s
 }
 

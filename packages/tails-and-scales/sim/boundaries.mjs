@@ -23,10 +23,11 @@
 //      module, through `import *`, `export * from` or import()):
 //        the view         index.js but apply, queries.js, rules.js but d6
 //                         and roll, match.js, nav.js, dmath.js, util.js,
-//                         terrain/recipes.js
-//        match/           index.js
+//                         terrain/recipes.js, (F11a) army.js
+//        match/           index.js, (F11a) army.js
 //        present/         queries.js, rules.js but d6 and roll, index.js
-//                         but createMatch and apply ("read-only queries")
+//                         but createMatch and apply ("read-only queries"),
+//                         (F11a) army.js
 //        net/             index.js but createMatch and apply
 //      so core/rng.js, engine.js, commands.js, actions/ and ai/ (the code
 //      that draws) are on no layer's surface; index.js's createMatch and
@@ -38,7 +39,13 @@
 //      or ai/ but the queries CROSS lists (queries.js's, index.js's legal,
 //      and, R8, commands.js's list of kinds, KINDS, for the envelope),
 //      and all of a module (`export *`, a namespace) only if it is a door
-//      itself. No module of core/ or data/ passes on anything of core/rng.js
+//      itself (so index.js's `export * as army from './army.js'` passes, and
+//      `export * from './units.js'` doesn't). (F11a) A pure door imports only
+//      what PURE lists for it: core/army.js, the army lists the Muster
+//      screen asks as the fold does, imports data/schema.js, data/mission.js
+//      and core/util.js and nothing else, so nothing that draws (rng.js, a
+//      rules.js die) can reach the view through it. No module of core/ or
+//      data/ passes on anything of core/rng.js
 //      but its rngState query. A binding is followed through `export {…}`
 //      (with or without `from`), `export const x = name` (or `ns.name`),
 //      `export default name`, and a module-level `const x = name` alias;
@@ -82,7 +89,9 @@
 //   4. sim/flag-lint.mjs's key/text/fx ban over core/ and data/, with its
 //      allow-list (data/schema.js names .fx and .abilities to validate them;
 //      core/actions/shoot.js carries a weapon's look to the view), each
-//      entry for those files matching exactly its count.
+//      entry for those files matching exactly its count; (F11a) and its
+//      one-reader fields (OWNED: the army builder's data read by
+//      core/army.js alone, pts by the AI's appraisal), the same way.
 // The top level is told by indentation (the code puts module-level
 // declarations at column 0, and everything nested deeper).
 //
@@ -97,7 +106,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { join, posix } from 'node:path'
 import { parseArgs } from 'node:util'
 import { dirFromArgs } from './oracle/pin.mjs'
-import { BANNED, ALLOW, lintSource } from './flag-lint.mjs'
+import { BANNED, OWNED, ALLOW, lintSource } from './flag-lint.mjs'
 
 const LAYERS = ['core', 'data', 'match', 'present', 'net', 'view', 'input', 'ui', 'app']
 const VIEW = new Set(['view', 'input', 'ui', 'app', 'root'])
@@ -116,13 +125,16 @@ const MAY = {
 // consensus code may import, each with the names it may not take from it.
 const DICE = ['d6', 'roll']
 const FOLDS = ['createMatch', 'apply']
+// (F11a) core/army.js, the army lists (armyOf, checkList, autoList…), is
+// pure and draws nothing: the Muster screen, the lobby and the desync
+// report ask it as the fold does
 const VIEW_CORE = {
   'core/index.js': ['apply'], 'core/queries.js': [], 'core/rules.js': DICE, 'core/match.js': [],
-  'core/nav.js': [], 'core/dmath.js': [], 'core/util.js': [], 'core/terrain/recipes.js': [],
+  'core/nav.js': [], 'core/dmath.js': [], 'core/util.js': [], 'core/terrain/recipes.js': [], 'core/army.js': [],
 }
 const SURFACE = {
-  match: { 'core/index.js': [] },
-  present: { 'core/queries.js': [], 'core/rules.js': DICE, 'core/index.js': FOLDS },
+  match: { 'core/index.js': [], 'core/army.js': [] },
+  present: { 'core/queries.js': [], 'core/rules.js': DICE, 'core/index.js': FOLDS, 'core/army.js': [] },
   net: { 'core/index.js': FOLDS },
 }
 for (const l of VIEW) SURFACE[l] = VIEW_CORE
@@ -144,6 +156,12 @@ const CROSS = {
   'core/index.js': ['legal', 'KINDS'],
 }
 const isDoor = (f) => f.startsWith('data/') || Object.values(SURFACE).some((s) => f in s)
+// (F11a) the pure doors: each imports only the modules listed, whose
+// exports draw nothing (data/mission.js imports core/rules.js for its
+// constants, and its own surface is held as data/'s, above)
+const PURE = {
+  'core/army.js': ['data/schema.js', 'data/mission.js', 'core/util.js'],
+}
 
 const DOM = [/\bdocument\b/, /\bwindow\b/, /\blocation\b/, /\blocalStorage\b/, /\brequestAnimationFrame\b/]
 const ASYNC = [/\basync\b/, /\bawait\b/, /\bPromise\b/]
@@ -348,6 +366,7 @@ export function check(files) {
       }
       const target = layerOf(to)
       if (MAY[layer] && !MAY[layer].layers.includes(target)) say(f, line, `imports ${to}: ${layer}/ may import only ${MAY[layer].layers.map((l) => `${l}/`).join(', ')}`)
+      if (PURE[f] && !PURE[f].includes(to)) say(f, line, `imports ${to}${DRAWS.test(to) ? ', which draws' : ''}: ${f} is a pure door of the core's surface (the view asks it as the fold does), which imports only ${PURE[f].join(', ')} (DESIGN §4.2.8.4)`)
       if (VIEW.has(layer) && target === 'net' && !dynamic) say(f, line, `imports ${to} statically: the view reaches net/ only through import()`)
       // 2. the core's surface
       const surface = SURFACE[layer]
@@ -520,6 +539,29 @@ if (a['self-test']) {
     ['main.js reaching net/ through import()', both(add('net/repo.js', 'export const repo = 1\n'), append('main.js', "const net = () => import('./net/repo.js')")), false],
     ['net/ importing Automerge', add('net/repo.js', "import * as A from '@automerge/automerge'\nexport const repo = A\n"), false],
     ['the view importing Automerge', append('main.js', "import * as A from '@automerge/automerge'"), true, /only net\/ may name Automerge/],
+    // (F11a) core/army.js, the army lists: on the present/, view/, input/,
+    // ui/, app/ and match/ surfaces, whole or in part, while what draws
+    // stays off them; a copy of it that imports anything that draws, or a
+    // package, or draws itself, fails; index.js's namespace of it passes
+    ['ui/ importing the army lists (core/army.js)', append('ui/card.js', "import { listCost, checkList } from '../core/army.js'"), false],
+    ['input/ taking all of core/army.js', append('input/human.js', "import * as army from '../core/army.js'"), false],
+    ['app/ importing autoList and armyOf', append('app/flow.js', "import { autoList, armyOf, LIST } from '../core/army.js'"), false],
+    ['view/ importing keysOf', append('view/units.js', "import { keysOf } from '../core/army.js'"), false],
+    ['present/ importing checkList', append('present/hud-model.js', "import { checkList, listText } from '../core/army.js'"), false],
+    ['match/ importing armyOf', append('match/session.js', "import { armyOf } from '../core/army.js'"), false],
+    ['the view taking the army lists through core/index.js', append('ui/hud.js', "import { army } from '../core/index.js'"), false],
+    ['ui/ importing the army lists and the engine beside them', append('ui/card.js', "import { listCost } from '../core/army.js'\nimport { rollOff } from '../core/engine.js'"), true, /imports core\/engine\.js, which draws: the view \(ui\/\) may import from core\/ only/],
+    ['present/ importing the army lists and an action', append('present/hud-model.js', "import { checkList } from '../core/army.js'\nimport { doShoot } from '../core/actions/shoot.js'"), true, /imports core\/actions\/shoot\.js, which draws/],
+    ['net/ importing core/army.js (not its surface)', add('net/lists.js', "import { checkList } from '../core/army.js'\nexport const c = checkList\n"), true, /net\/ may import from core\/ only index\.js/],
+    ['a copy of core/army.js importing core/rng.js', append('core/army.js', "import { draw } from './rng.js'"), true, /core\/army\.js:\d+ imports core\/rng\.js, which draws: core\/army\.js is a pure door/],
+    ['a copy of core/army.js importing the dice of core/rules.js', append('core/army.js', "import { d6 } from './rules.js'"), true, /core\/army\.js:\d+ imports core\/rules\.js: core\/army\.js is a pure door/],
+    ['a copy of core/army.js importing the AI', append('core/army.js', "import { aiPhase } from './ai/policy.js'"), true, /core\/army\.js:\d+ imports core\/ai\/policy\.js, which draws: core\/army\.js is a pure door/],
+    ['a copy of core/army.js importing three.js', append('core/army.js', "import * as THREE from 'three'"), true, /core\/army\.js:\d+ imports the package three/],
+    ['a copy of core/army.js rolling Math.random', append('core/army.js', 'export const pick = (n) => Math.floor(Math.random() * n)'), true, /core\/army\.js:\d+ core\/ contains Math\.random/],
+    ['a copy of core/army.js reading the clock for a seed', append('core/army.js', 'export const seed = () => Date.now() % 4294967296'), true, /core\/army\.js:\d+ core\/ contains Date/],
+    ['index.js passing on the army lists as a namespace (export * as)', append('core/index.js', "export * as lists from './army.js'"), false],
+    ['index.js passing on the army lists whole (export *)', append('core/index.js', "export * from './army.js'"), false],
+    ['index.js passing on the army lists, and all of units.js beside them', append('core/index.js', "export * as lists from './army.js'\nexport * from './units.js'"), true, /re-exports all of core\/units\.js, which is no door/],
     ['core/ with a module-level let', append('core/rules.js', 'let rolled = 0'), true, /module-level let or var/],
     ['core/ with an exported module-level let', append('core/rules.js', 'export let rolled = 0'), true, /module-level let or var/],
     ['core/ with a module-level cache', append('core/queries.js', 'const memo = new Map()'), true, /module-level Map or WeakMap/],
@@ -534,6 +576,9 @@ if (a['self-test']) {
     ['a default parameter (no module-level state)', append('core/rules.js', 'export const f = (a, seen = new Map()) => seen.get(a)'), false],
     ['core/ testing a unit key', append('core/actions/move.js', "export const brute = (u) => u.key === 'brute'"), true, /a key test \(flag-lint's ban\)/],
     ['core/ reading ability text', append('core/actions/charge.js', 'export const sidewind = (u) => u.t.abilities.length'), true, /reads ability text/],
+    // (F11a) flag-lint's one-reader fields, over core/ and data/ here too
+    ["core/ reading a unit's cost", append('core/ai/score.js', 'export const price = (u) => u.t.cost'), true, /army builder's data .* read outside core\/army\.js \(flag-lint's ban\)/],
+    ['core/ reading pts outside the AI', append('core/actions/shoot.js', 'export const value = (u) => u.t.pts'), true, /the AI's appraisal \(pts\) read outside core\/ai\/score\.js/],
     ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 2/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
@@ -558,7 +603,7 @@ if (!existsSync(join(dir, 'core'))) {
 const files = sources(dir)
 const { problems, edges } = check(files)
 const count = (l) => [...files.keys()].filter((f) => layerOf(f) === l).length
-console.log(`boundaries: ${files.size} files (${[...LAYERS, 'root'].map((l) => [l, count(l)]).filter(([, n]) => n).map(([l, n]) => `${l === 'root' ? 'the root' : `${l}/`} ${n}`).join(', ')}), ${edges} imports, ${BANNED.length} flag-lint patterns over core/ and data/`)
+console.log(`boundaries: ${files.size} files (${[...LAYERS, 'root'].map((l) => [l, count(l)]).filter(([, n]) => n).map(([l, n]) => `${l === 'root' ? 'the root' : `${l}/`} ${n}`).join(', ')}), ${edges} imports, ${BANNED.length} flag-lint patterns and ${OWNED.length} one-reader fields over core/ and data/`)
 for (const p of problems) console.log(`  FAIL ${p}`)
 console.log(problems.length ? `\nboundaries FAILED: ${problems.length} problem(s)` : '\nboundaries passed: every layer imports only what it may, and the consensus code holds none of what it must not')
 process.exit(problems.length ? 1 : 0)

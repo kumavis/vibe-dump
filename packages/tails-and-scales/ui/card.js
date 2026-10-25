@@ -1,5 +1,7 @@
-// The unit card (DESIGN §1.3): a unit's name, seat and role, what of it
-// stands, what it has done this turn, its stats, weapons and abilities.
+// The unit card (DESIGN §1.3): a unit's name, seat and role, (F11a) what
+// it costs to field (its type's `cost`, the army builder's price: display
+// only, DESIGN §4.2.8.2), what of it stands, what it has done this turn,
+// its stats, weapons and abilities.
 // Opened by a click on a figure (or as a unit is picked up), closed by
 // showing nothing.
 //
@@ -89,7 +91,7 @@ export class Card {
     const mu = this.shown(u), f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
-    <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role}</span></div>
+    <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${t.cost} pts</span></div>
     <div class="card-sub">${cardStatus(t, mu, f)}</div>${this.orderLine(u)}${statsHtml(t)}`
     card.classList.add('show')
   }

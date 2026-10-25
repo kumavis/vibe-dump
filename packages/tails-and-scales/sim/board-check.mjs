@@ -47,6 +47,10 @@ const GRAND = `  grand: {
     deploy: 14,
     rounds: 7,
     army: 'classic',
+    list: {
+      size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
+      roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3] },
+    },
     sets: ['classic'],
     objectives: [
 ${[[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z]) => `      { x: ${x}, z: ${z} },`).join('\n')}

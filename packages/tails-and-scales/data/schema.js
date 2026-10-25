@@ -1,11 +1,12 @@
 // ---------------------------------------------------------------------------
 // Race data: how a race file is written, and what the rules read from it.
 //
-// A race file (data/races/*.js) is plain data: names, colours, the army list
-// and each unit's stat line, weapons and ability flags. defineRace checks it
-// and normalises it into the unit types the rules read as `u.t`: the stat
-// line parsed into flat numbers (so `u.t.M` still works), every flag a
-// boolean, plus the fields derived from the rest. Abilities are flags here,
+// A race file (data/races/*.js) is plain data: names, colours, the classic
+// army list, (F11a) the roster and each unit's cost, and each unit's stat
+// line, weapons and ability flags. defineRace checks it and normalises it
+// into the unit types the rules read as `u.t`: the stat line parsed into
+// flat numbers (so `u.t.M` still works), every flag a boolean, plus the
+// fields derived from the rest. Abilities are flags here,
 // each read by exactly one rules module; the ability text is card copy and
 // nothing reads it. The result is frozen, and it is consensus data: RULES_ID
 // (core/version.js) hashes the rule-bearing part of it.
@@ -17,8 +18,9 @@
 //
 //   defineRace({ key, name, short, icon,
 //                look: { team, dark, alt, gore: [a, b], voice, models, anim },
-//                army: [unitKey…], units: { [key]: UnitDef } })
-//   UnitDef = { name, short, role, ai, models, base, pts,
+//                army: [unitKey…], roster: [unitKey…], armies?: { [name]: counts },
+//                units: { [key]: UnitDef } })
+//   UnitDef = { name, short, role, ai, models, base, pts, cost,
 //               stats: 'M7 WS4 BS4 S3 T3 W1 A1 Ld6 Sv6 OC2',
 //               ranged: Weapon | null, melee: Weapon, abilities: [text…],
 //               fly?, big?, hero?, wrecker?, burrow?, chargeAfterAdvance?,
@@ -33,6 +35,19 @@
 //   deployRow = Artillery ? 'back' : hero ? 'mid' : 'front'
 //   eye      = big ? 1.9 : fly ? 1.5 : 0.95    (line-of-sight heights)
 //   chest    = big ? 1.0 : fly ? 1.0 : 0.55
+//
+// (F11a, DESIGN §4.2.8) The army builder's data. `cost` is what a unit costs
+// to field at full strength: a whole multiple of 5, with no default (the
+// obvious one, pts × models, prices the classic matchup unfairly; `pts`
+// stays the AI's own appraisal). `roster` lists each of the race's units
+// exactly once, in the builder's order, and is append-only: a list of
+// counts carries one digit per roster entry, so the order is what a list
+// means. `army` (the classic list, unchanged) must be in roster order, so
+// the classic preset expands to exactly `army`. `armies` holds the race's
+// presets by name, each a count string (LIST: one digit per roster entry,
+// no trailing zeros, no longer than the roster); the frozen race always
+// has `classic`, derived from `army`, which a race file may not give by
+// hand. core/army.js reads all of it; the rules read only `army` there.
 // ---------------------------------------------------------------------------
 
 import { deepFreeze } from '../core/util.js'
@@ -47,7 +62,7 @@ export const AI_ROLES = Object.freeze(['melee', 'raider', 'line', 'shooter', 'he
 // unit flags; each is a boolean on every normalised type
 export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler'])
 
-const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'stats', 'ranged', 'melee', 'abilities',
+const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'cost', 'stats', 'ranged', 'melee', 'abilities',
   ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop'])
 const WEAPON_NUMS = ['range', 'shots', 'S', 'AP', 'D', 'blast', 'scenery', 'poison', 'spell']
 const WEAPON_BOOLS = ['assault', 'heavy', 'indirect', 'corrodes', 'mesmerize']
@@ -58,6 +73,12 @@ const COLOUR = /^#[0-9a-f]{6}$/i
 // a race's or unit's key: it names the race in a seat and the unit in an army
 // list, and becomes part of URLs and, later, of a lobby a peer writes
 const KEY = /^[a-z][a-z0-9-]*$/
+// (F11a) an army list as counts: one digit per roster entry, in roster
+// order, no trailing zeros (so every army has exactly one spelling, and one
+// field carries a preset's name or a list: a name starts with a letter).
+// core/army.js passes it on as its LIST. (Frozen, as every exported table
+// is: a pattern's lastIndex is state, and nothing may write it.)
+export const LIST = Object.freeze(/^[0-9]*[1-9]$/)
 
 // 'M7 WS4 BS4 S3 T3 W1 A1 Ld6 Sv6 OC2' → { M: 7, WS: 4, … }: every stat once,
 // each a whole number.
@@ -107,6 +128,7 @@ function unitType(race, key, def) {
   if (!Number.isInteger(def.models) || def.models < 1) throw bad('models must be a whole number ≥ 1')
   if (!(Number.isFinite(def.base) && def.base > 0)) throw bad('base must be a radius > 0')
   if (!Number.isInteger(def.pts) || def.pts < 0) throw bad('pts must be a whole number ≥ 0')
+  if (!Number.isInteger(def.cost) || def.cost <= 0 || def.cost % 5 !== 0) throw bad(`cost must be a whole multiple of 5 above 0 (what the unit costs to field), not ${def.cost}`)
   if (!Array.isArray(def.abilities) || def.abilities.some((a) => typeof a !== 'string')) throw bad('abilities is a list of card text')
   for (const k of FLAGS) if (def[k] !== undefined && typeof def[k] !== 'boolean') throw bad(`${k} must be true or false`)
   if (def.move !== undefined && !MOVES.includes(def.move)) throw bad(`move must be one of ${MOVES.join(', ')}`)
@@ -127,7 +149,7 @@ function unitType(race, key, def) {
   const fly = flag('fly', false), big = flag('big', false), wrecker = flag('wrecker', false), burrow = flag('burrow', false)
   const hero = flag('hero', def.role === 'Hero')
   const t = {
-    key, race, name: def.name, short: def.short, role: def.role, ai: def.ai, models: def.models, base: def.base, pts: def.pts,
+    key, race, name: def.name, short: def.short, role: def.role, ai: def.ai, models: def.models, base: def.base, pts: def.pts, cost: def.cost,
     ...stats,
     ranged, melee, abilities: [...def.abilities],
     fly, big, hero, wrecker, burrow,
@@ -145,15 +167,15 @@ function unitType(race, key, def) {
 }
 
 // Check a race definition and normalise it: { key, name, short, icon, look,
-// army, units: { [key]: type } }, deeply frozen. Throws, naming the race and
-// unit, on anything malformed, so a typo in a race file fails at load
-// instead of playing a different game.
+// army, roster, armies, units: { [key]: type } }, deeply frozen. Throws,
+// naming the race and unit, on anything malformed, so a typo in a race file
+// fails at load instead of playing a different game.
 export function defineRace(def) {
   if (!def || typeof def !== 'object') throw new Error('defineRace needs a race object')
   const { key } = def
   if (typeof key !== 'string' || !KEY.test(key)) throw new Error(`race key "${key}" must be lower-case letters, digits and dashes`)
   const bad = (why) => new Error(`race ${key}: ${why}`)
-  for (const k of Object.keys(def)) if (!['key', 'name', 'short', 'icon', 'look', 'army', 'units'].includes(k)) throw bad(`unknown field "${k}"`)
+  for (const k of Object.keys(def)) if (!['key', 'name', 'short', 'icon', 'look', 'army', 'roster', 'armies', 'units'].includes(k)) throw bad(`unknown field "${k}"`)
   for (const k of ['name', 'short', 'icon']) if (typeof def[k] !== 'string' || !def[k]) throw bad(`needs a ${k}`)
   const look = def.look
   if (!look || typeof look !== 'object') throw bad('needs a look')
@@ -170,12 +192,55 @@ export function defineRace(def) {
   }
   if (!Array.isArray(def.army) || !def.army.length) throw bad('needs an army list')
   for (const k of def.army) if (!units[k]) throw bad(`army lists "${k}", which is not one of its units`)
+  const roster = rosterOf(def, units, bad)
   return deepFreeze({
     key, name: def.name, short: def.short, icon: def.icon,
     look: { ...look, gore: [...look.gore] },
     army: [...def.army],
+    roster,
+    armies: armiesOf(def, roster, bad),
     units,
   })
+}
+
+// (F11a) The race's roster, checked: every unit once, nothing else, and the
+// classic army in its order (each army entry at or after the one before it
+// in the roster), so the classic preset's counts expand to exactly `army`.
+function rosterOf(def, units, bad) {
+  if (!Array.isArray(def.roster) || !def.roster.length) throw bad("needs a roster: each of its units once, in the army builder's order")
+  const at = Object.create(null)
+  def.roster.forEach((k, i) => {
+    if (typeof k !== 'string' || !units[k]) throw bad(`roster lists ${JSON.stringify(k)}, which is not one of its units`)
+    if (at[k] !== undefined) throw bad(`roster lists "${k}" twice`)
+    at[k] = i
+  })
+  for (const k of Object.keys(units)) if (at[k] === undefined) throw bad(`roster leaves out "${k}"`)
+  def.army.forEach((k, i) => {
+    if (i && at[k] < at[def.army[i - 1]]) throw bad(`army is not in roster order: "${k}" comes after "${def.army[i - 1]}"`)
+  })
+  return [...def.roster]
+}
+
+// (F11a) The race's presets by name, as count strings: `classic` derived
+// from the army (one digit per roster entry, trailing zeros dropped), then
+// any the race file gives (F8b's field and grand), each checked. A registry
+// with no prototype, so a preset named 'toString' finds nothing.
+function armiesOf(def, roster, bad) {
+  const counts = roster.map((k) => def.army.filter((x) => x === k).length)
+  const over = counts.findIndex((n) => n > 9)
+  if (over >= 0) throw bad(`its army fields ${counts[over]} "${roster[over]}": a list's count of one unit is one digit, 9 at most`)
+  const armies = Object.create(null)
+  armies.classic = counts.join('').replace(/0+$/, '')
+  const given = def.armies ?? {}
+  if (given === null || typeof given !== 'object' || Array.isArray(given)) throw bad('armies is a record of presets by name, each a list of counts')
+  for (const [name, list] of Object.entries(given)) {
+    if (!KEY.test(name)) throw bad(`a preset's name "${name}" must be lower-case letters, digits and dashes`)
+    if (name === 'classic') throw bad('armies gives "classic", which is derived from its army')
+    if (typeof list !== 'string' || !LIST.test(list)) throw bad(`armies.${name} is ${JSON.stringify(list)}, not a list of counts (a digit per roster entry, no trailing zeros)`)
+    if (list.length > roster.length) throw bad(`armies.${name} "${list}" counts ${list.length} kinds of unit; the roster has ${roster.length}`)
+    armies[name] = list
+  }
+  return armies
 }
 
 // The registry of the races in `defs`, by key, each through defineRace. Two

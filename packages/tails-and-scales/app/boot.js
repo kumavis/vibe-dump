@@ -3,7 +3,7 @@ import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
 import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
-import { preview, q, stateHash } from '../core/index.js'
+import { preview, q, stateHash, army } from '../core/index.js'
 import { gridSize } from '../core/nav.js'
 import { project } from '../present/mirror.js'
 import { View } from '../view/index.js'
@@ -56,7 +56,8 @@ import { Session } from '../match/session.js'
 // and a pixel ratio of 1, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
-// battle started here is fought for. The fragment `#m=<id>` (N2) opens an
+// battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
+// armies its seats field. The fragment `#m=<id>` (N2) opens an
 // online match (`&dev=<id>` plays it as that device, `&sync=` through that
 // server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
@@ -87,6 +88,43 @@ function missionPick(params, title) {
   console.warn(`${msg}: playing the classic mission`)
   title.note(`${msg}, so this is the classic mission.`)
   return 'classic'
+}
+
+// (F11a) The armies a battle started here fields: none named (each seat
+// its mission's preset, mission.army), or what an ?armies=<seat 0>,<seat 1>
+// URL names, each a preset's name of that seat's race or a list of unit
+// counts in its roster's order (DESIGN §4.2.8.4: ?armies=classic,1221).
+// DESIGN §4.2.8.8 lists it under F11b's Muster screen; as with ?mission=,
+// it is built here, with the setup's lists, as the door sim/'s Chromium
+// runs start battles with lists by. Each value is judged as the fold will
+// judge it, by core/army.js's armyOf on a trial setup of the page's
+// mission and races, so a value the rules would refuse gets that seat's
+// preset (null: the setup names no army) and a line on the title card
+// saying why, not a battle that never starts. → null when no seat names
+// an army, else [seat 0's | null, seat 1's | null].
+function armiesPick(params, title, races, mission) {
+  if (!params.has('armies')) return null
+  const raw = params.get('armies'), pick = raw.split(',').map((a) => a.trim().toLowerCase())
+  const preset = MISSIONS[mission].army
+  if (pick.length !== 2) {
+    const msg = `?armies= takes two armies, comma-separated (a preset's name or a list of counts each), not "${raw}"`
+    console.warn(`${msg}: each seat plays the ${preset} preset`)
+    title.note(`${msg}, so each seat plays the ${preset} preset.`)
+    return null
+  }
+  const trial = { mission, seats: races.map((race, s) => ({ race, army: pick[s] })) }
+  const armies = pick.map((a, s) => {
+    try {
+      army.armyOf(trial, s)
+      return a
+    } catch (err) {
+      const msg = `?armies= for seat ${s}: ${err.message}`
+      console.warn(`${msg}: it plays the ${preset} preset`)
+      title.note(`${msg}, so it plays the ${preset} preset.`)
+      return null
+    }
+  })
+  return armies.some((a) => a !== null) ? armies : null
 }
 
 function racePick(params, title) {
@@ -148,7 +186,8 @@ export function boot(location) {
     title,
     result: new ResultScreen(),
   }
-  flow = new Flow({ view, ui, params, seed, races, mission: missionPick(params, title) })
+  const mission = missionPick(params, title)
+  flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission) })
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)

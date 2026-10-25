@@ -152,7 +152,7 @@ export const MUTATIONS = {
   'no-stage-battle': ['/core/engine.js', "        emit(G, 'stage', { stage: 'battle' })", '        // (dropped)'],
   // the roll-off's second row never shown: seat 1's die (the line naming
   // the winner then follows seat 0's alone)
-  'no-rolloff-row': ['/core/engine.js', "    emit(G, 'dice', { label: raceOf(G, 1).short,", "    if (false) emit(G, 'dice', { label: raceOf(G, 1).short,"],
+  'no-rolloff-row': ['/core/engine.js', "    emit(G, 'dice', { label: seatName(G, 1, 'short'),", "    if (false) emit(G, 'dice', { label: seatName(G, 1, 'short'),"],
   // a phase's start never reported: the round, the seat and the phase shown
   // stay where they were
   'no-phase-start': ['/core/engine.js', "        emit(G, 'phase.start',", "        if (false) emit(G, 'phase.start',"],
