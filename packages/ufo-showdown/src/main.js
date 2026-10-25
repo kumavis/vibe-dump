@@ -23,6 +23,7 @@ import { starReward, loadout } from './catalog.js'
 import { loadSave, writeSave } from './save.js'
 import { drawShipModel, drawDrone } from './ships.js'
 import { openStore, storeKey } from './store/store.js'
+import { connectedPads, padVector, pollPads, rumble } from './gamepad.js'
 import asteroidsPack from './content/asteroids/index.js'
 import racePack from './content/race/index.js'
 import nebulaPack from './content/nebula/index.js'
@@ -379,6 +380,13 @@ function dronePositions(p) {
   return out
 }
 
+// Controllers by player: solo, any controller flies the one ship; with two
+// players the first controller is Player 1's and the second Player 2's.
+const padsFor = (id) => {
+  const pads = connectedPads()
+  return numPlayers === 1 ? pads : pads[id] ? [pads[id]] : []
+}
+
 function steer(p) {
   let dx = 0
   let dy = 0
@@ -388,6 +396,12 @@ function steer(p) {
     if (keys.has(k.right)) dx += 1
     if (keys.has(k.up)) dy -= 1
     if (keys.has(k.down)) dy += 1
+  }
+  // a controller's stick is analog: half a push, half speed
+  for (const pad of padsFor(p.id)) {
+    const v = padVector(pad)
+    dx += v.dx
+    dy += v.dy
   }
   return { dx: clamp(dx, -1, 1), dy: clamp(dy, -1, 1) }
 }
@@ -483,6 +497,7 @@ function hurtPlayer(p) {
     splash(p.x, p.y, POWERS.shield.color)
     const left = powerLevel(p.powers, 'shield')
     popText(p.x, p.y - 50, left ? `Shield blocked it! ×${left} left` : 'Shield saved you!', POWERS.shield.color, 15)
+    rumble(padsFor(p.id), 0.35, 120)
     return
   }
   if (p.phoenix) {
@@ -500,6 +515,7 @@ function hurtPlayer(p) {
   p.powers.length = 0
   level?.onShipDown?.(g, p)
   explode(p.x, p.y, p.pal.main, 1.6)
+  rumble(padsFor(p.id), 0.9, 380)
   sfx.hurt()
   shake = Math.max(shake, 16)
   if (p.lives > 0) {
@@ -586,6 +602,7 @@ function collect(p, b) {
 }
 
 function nova(p) {
+  rumble(padsFor(p.id), 0.5, 260)
   sfx.nova()
   flash = 0.5
   shake = Math.max(shake, 12)
@@ -814,6 +831,7 @@ function startBossDeath(b) {
   b.hp = 0
   b.dying = 2.6
   b.boomT = 0
+  rumble(connectedPads(), 1, 700)
   for (const s of eShots) sparks(s.x, s.y, '#ffffff', 2)
   eShots = []
   lasers = []
@@ -2106,6 +2124,7 @@ function setMenuSel(i) {
   if (i !== menuSel) sfx.select()
   menuSel = i
   numPlayers = i + 1
+  showPads()
   save.players = numPlayers
   document.querySelectorAll('.choice').forEach((b, j) => b.classList.toggle('sel', j === i && menuRow === 0))
   document.body.classList.toggle('solo', i === 0)
@@ -2322,6 +2341,12 @@ window.addEventListener('keydown', (e) => {
   unlockAudio()
   if (GAME_KEYS.has(e.code) && mode !== 'store') e.preventDefault()
   keys.add(e.code)
+  handleKey(e)
+})
+
+// What a key press means right now. Real keys and controller buttons (as the
+// keys they stand for) both come through here.
+function handleKey(e) {
   if (e.repeat && mode !== 'map' && mode !== 'store') return
   if (e.code === 'KeyM' && mode !== 'store') toggleMute()
 
@@ -2361,6 +2386,64 @@ window.addEventListener('keydown', (e) => {
     else if (LEFT.has(e.code) || RIGHT.has(e.code)) moveButton(sc, LEFT.has(e.code) ? -1 : 1)
     else if (OK.has(e.code)) act(activeButton(sc).dataset.act)
   }
+}
+
+// ---------------------------------------------------------------- controllers
+//
+// Each button stands for the key the current screen already understands:
+// A is Enter, B is Escape, Start pauses, Y opens the store (or switches player
+// inside it), the bumpers flip store tabs, and the D-pad or stick moves through
+// menus. In flight the stick steers instead (see steer), so directions mean
+// nothing to the key handler there.
+function padCode(name) {
+  const inFlight = mode === 'play'
+  switch (name) {
+    case 'A':
+      return 'Enter'
+    case 'B':
+      return inFlight ? null : 'Escape'
+    case 'START':
+    case 'VIEW':
+      return inFlight || mode === 'pause' ? 'KeyP' : name === 'START' ? 'Enter' : null
+    case 'Y':
+      return mode === 'store' ? 'KeyP' : mode === 'menu' || mode === 'map' || mode === 'over' || mode === 'done' || mode === 'win' ? 'KeyT' : null
+    case 'LB':
+      return mode === 'store' ? 'KeyQ' : null
+    case 'RB':
+      return mode === 'store' ? 'KeyE' : null
+    case 'UP':
+    case 'DOWN':
+    case 'LEFT':
+    case 'RIGHT':
+      return inFlight ? null : 'Arrow' + name[0] + name.slice(1).toLowerCase()
+  }
+  return null
+}
+
+function onPadPress(name, padIndex, repeat) {
+  const code = padCode(name)
+  if (!code) return
+  unlockAudio()
+  handleKey({ code, key: '', repeat, shiftKey: false, ctrlKey: false, metaKey: false, altKey: false, preventDefault() {} })
+}
+
+function showPads() {
+  const pads = connectedPads()
+  document.querySelectorAll('.pad .ctl').forEach((el) => {
+    const id = Number(el.dataset.player)
+    el.hidden = !(numPlayers === 1 && id === 0 ? pads.length : pads[id])
+  })
+}
+
+window.addEventListener('gamepadconnected', (e) => {
+  const n = connectedPads().findIndex((p) => p.index === e.gamepad.index)
+  toast(`Controller ${n + 1} connected${numPlayers === 2 ? ` · Player ${Math.min(n, 1) + 1}` : ''}`)
+  showPads()
+})
+window.addEventListener('gamepaddisconnected', () => {
+  toast('Controller disconnected')
+  showPads()
+  pause()
 })
 window.addEventListener('keyup', (e) => keys.delete(e.code))
 window.addEventListener('blur', () => {
@@ -2494,6 +2577,7 @@ function frame(now) {
   const dt = clamp((now - last) / 1000, 0, 0.033)
   last = now
   try {
+    pollPads(dt, onPadPress)
     if (mode !== 'pause') update(dt)
     draw()
   } finally {
