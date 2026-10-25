@@ -29,7 +29,8 @@
 //   code, sim/height-probe.mjs: the trace has no floors, and nothing is
 //   added to it)
 //   deck       a unit standing on a deck at a round's end
-//   climb      a ladder taken (a move along a nav link)
+//   climb      a ladder taken (a move along a nav link); climbup: one
+//              taken up, from its foot to its deck
 //   deckfight  a blow struck in a fight with a unit on a deck
 //   works      both seats' own ramparts stand
 //   keep       the keep stands round the centre objective; nokeep: it doesn't
@@ -57,12 +58,13 @@ const NEEDS = {
   // (F7a: the probe's, r.height)
   deck: (r) => r.height.deckRounds.length > 0,
   climb: (r) => r.height.climbs > 0,
+  climbup: (r) => r.height.up > 0,
   deckfight: (r) => r.height.deckFights > 0,
   works: (r) => r.height.works === 2,
   keep: (r) => r.height.keep,
   nokeep: (r) => r.height.height && !r.height.keep,
 }
-const HEIGHT_NEEDS = ['deck', 'climb', 'deckfight', 'works', 'keep', 'nokeep']
+const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
