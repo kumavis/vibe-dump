@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Rng, hash2 } from '../core/rng.js'
+import { FOOT, BUTTRESS, buttress, flare } from './roots.js'
 
 // Vegetation: procedural low-poly plants, scattered from the island's density
 // grids. Two tiers:
@@ -165,9 +166,91 @@ function strip(b, base, dirX, dirZ, len, segs, lift, width, colA, colB, fold = 0
   }
 }
 
+// A surface of revolution through rings [y, radius, turn, toe] (bottom up)
+// of `sides` corners, open at both ends. A ring turned half a step (turn
+// 0.5) from the next zigzags the faces between them into triangles; with an
+// even number of sides, `toe` pushes every other corner out by that share
+// (and pulls the rest in by half as much), splaying a foot into toes.
+function lathe(rings, sides) {
+  const pos = []
+  const at = ([y, r, turn = 0, toe = 0], j) => {
+    const a = ((j + turn) / sides) * Math.PI * 2
+    const k = sides % 2 ? 1 : 1 + toe * ((j % sides) % 2 ? -0.5 : 1)
+    return [r * k * Math.sin(a), y, r * k * Math.cos(a)]
+  }
+  for (let k = 1; k < rings.length; k++) {
+    const lo = rings[k - 1]
+    const hi = rings[k]
+    for (let j = 0; j < sides; j++) {
+      const a = at(lo, j)
+      const b = at(lo, j + 1)
+      const c = at(hi, j + 1)
+      const d = at(hi, j)
+      // split along the shorter diagonal
+      if ((hi[2] || 0) >= (lo[2] || 0)) pos.push(...a, ...b, ...d, ...b, ...c, ...d)
+      else pos.push(...a, ...b, ...c, ...a, ...c, ...d)
+    }
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  return geo
+}
+
+// A trunk tapering from its foot's radius at the plant's origin to `top` at
+// the last of `ys`, its rings, standing on its foot (footRings).
+function trunkGeo(foot, lod, ground, ys, top, sides) {
+  return lathe(footRings(foot, lod, ground, ys, (y) => foot.r + ((top - foot.r) * y) / ys[ys.length - 1]), sides)
+}
+
+// The rings of a trunk of radius `radius(y)` through heights `ys` on its foot
+// (roots.js): where this LOD cuts the foot, the foot's rings take the place
+// of the low ones and the trunk flares out there, reaching below the ground,
+// every other ring turned by the foot's `turn` and its toes splayed at the
+// ground, drawn in up the flare. LOD2 keeps the plain taper.
+function footRings(foot, lod, ground, ys, radius) {
+  const tip = foot.flare[foot.flare.length - 1][0]
+  const us = foot.rings[lod]
+  // counted down from the top ring, which is always turned: the faces above
+  // the ground zigzag both below it and up to the trunk's next ring
+  const rings = us.map((u, k) => [ground + u, radius(ground + u) * flare(foot.flare, u), ((us.length - k) % 2) * foot.turn, foot.toes * Math.min(1, Math.max(0, 1 - u / tip))])
+  const top = rings.length ? rings[rings.length - 1][0] : -Infinity
+  return rings.concat(ys.filter((y) => y > top).map((y) => [y, radius(y) * (rings.length ? flare(foot.flare, y - ground) : 1)]))
+}
+
+// A buttress fin (roots.js) in its trunk's frame, along azimuth `a`: sharp
+// along its top, its two sides falling to the buried underside and meeting
+// at its buried point. Its inner end is inside the trunk, so left open.
+function finGeo(stations, a, ground) {
+  const dx = Math.cos(a)
+  const dz = Math.sin(a)
+  const at = (st, side) => {
+    const l = st.lat + side * st.w
+    return [dx * st.r - dz * l, ground + (side ? st.keel : st.top), dz * st.r + dx * l]
+  }
+  const pos = []
+  for (let i = 1; i < stations.length; i++) {
+    const [t0, l0, r0] = [at(stations[i - 1], 0), at(stations[i - 1], -1), at(stations[i - 1], 1)]
+    const [t1, l1, r1] = [at(stations[i], 0), at(stations[i], -1), at(stations[i], 1)]
+    // a side is a quad down to the underside, or a triangle into the point
+    if (stations[i].w > 0) pos.push(...t0, ...t1, ...l1, ...t0, ...l1, ...l0, ...t0, ...r0, ...r1, ...t0, ...r1, ...t1)
+    else pos.push(...t0, ...t1, ...l0, ...t0, ...r0, ...t1)
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  return geo
+}
+
+// `segs` even ring heights from 0 up to `h`
+const ringsUp = (h, segs) => Array.from({ length: segs + 1 }, (_, i) => (h * i) / segs)
+
 // ------------------------------------------------------------------- builders
 
-function canopyTree(rng, lod) {
+// builder(rng, lod, variant, type) draws one LOD of one variant; `type` is
+// its TYPES row, whose `sink` is where the ground meets the trunk.
+
+const BARK_UP = new THREE.Color('#7a6a52') // a canopy trunk's bark, high up
+
+function canopyTree(rng, lod, variant, type) {
   const b = new Builder()
   const H = rng.range(14, 20)
   const bend = rng.range(-0.8, 0.8)
@@ -176,26 +259,32 @@ function canopyTree(rng, lod) {
     const a = (k / 5) * Math.PI * 2 + rng.range(0, 1)
     crowns.push({ r: rng.range(2.6, 4.2), a, off: k === 0 ? 0 : rng.range(1.8, 3.2), y: H * rng.range(0.8, 0.95), ry: rng.range(0, 3), sy: rng.range(0.5, 0.65), seed: rng.int(1, 1e6) })
   }
-  const fins = [0, 1, 2, 3].map((k) => (k / 4) * Math.PI * 2 + rng.range(-0.3, 0.3))
+  const B = BUTTRESS
+  const fins = []
+  const nFins = rng.int(B.count[0], B.count[1])
+  for (let k = 0; k < nFins; k++) {
+    fins.push({ a: ((k + rng.range(-0.3, 0.3)) / nFins) * Math.PI * 2, reach: rng.range(...B.reach), rise: rng.range(...B.rise), bow: rng.range(...B.bow), swing: rng.range(-B.swing, B.swing), thick: rng.range(...B.thick) })
+  }
   const branches = [0, 1, 2].map(() => [rng.range(0, Math.PI * 2), H * rng.range(0.55, 0.72)])
   const vines = [0, 1, 2, 3, 4].map(() => [rng.range(0, Math.PI * 2), rng.range(1.5, 3.4), rng.range(4, 9)])
   const d = detailRng(rng)
   const tone = crowns.map(() => 1 + (d.next() * 2 - 1) * 0.1)
   const bark = col('#5c4c3a', d, 0.1)
   const vineCol = vines.map(() => col('#3d5f22', d))
-  // the trunk keeps enough rings at LOD1 to follow LOD0's bow
-  const trunk = new THREE.CylinderGeometry(0.3, 0.55, H * 0.8, [7, 5, 4][lod], [4, 2, 1][lod], true)
-  trunk.translate(0, H * 0.4, 0)
-  const p = trunk.attributes.position
-  for (let i = 0; i < p.count; i++) p.setX(i, p.getX(i) + Math.sin((p.getY(i) / H) * Math.PI) * bend)
-  b.add(trunk, new THREE.Matrix4(), (nx, ny, nz, cx, cy, cz) => shade('#5c4c3a', 1, cx, cy, cz, 0.08).lerp(new THREE.Color('#7a6a52'), cy / H))
+  const ground = type.sink
+  // the trunk and its buttresses bow together
+  const bow = (geo) => {
+    const p = geo.attributes.position
+    for (let i = 0; i < p.count; i++) p.setX(i, p.getX(i) + Math.sin((p.getY(i) / H) * Math.PI) * bend)
+    return geo
+  }
+  const barkAt = (nx, ny, nz, cx, cy, cz) => shade('#5c4c3a', 1, cx, cy, cz, 0.08).lerp(BARK_UP, Math.max(0, cy / H))
+  // the trunk keeps enough rings at LOD1 to follow LOD0's bow; its foot
+  // flares, and at LOD1 that flare stands in for the buttresses
+  b.add(bow(trunkGeo(FOOT.canopy, lod, ground, ringsUp(H * 0.8, [4, 2, 1][lod]), 0.3, [7, 5, 4][lod])), new THREE.Matrix4(), barkAt)
   if (!lod) {
     b.detail = 2 // the buttresses fold into the trunk rather than dissolve
-    for (const a of fins) {
-      const fin = new THREE.BoxGeometry(0.14, 2.4, 1.5)
-      fin.translate(0, 1.0, 0.75)
-      b.add(fin, mat(0, 0, 0, -0.18, a, 0), bark.clone().multiplyScalar(0.85))
-    }
+    for (const f of fins) b.add(bow(finGeo(buttress(f, 4), f.a, ground)), new THREE.Matrix4(), barkAt)
     b.detail = 1
     for (const [a, y] of branches) {
       const br = new THREE.CylinderGeometry(0.08, 0.16, 3.6, 4, 1, true)
@@ -232,7 +321,7 @@ function canopyTree(rng, lod) {
   return { geo: b.build(), r: 0.55, h: H }
 }
 
-function palm(rng, lod) {
+function palm(rng, lod, variant, type) {
   const b = new Builder()
   const H = rng.range(6, 10)
   const lean = rng.range(0.12, 0.4)
@@ -254,6 +343,10 @@ function palm(rng, lod) {
     cyl.translate(0, len / 2, 0)
     b.add(cyl, mat(a[0], a[1], 0, 0, 0, -Math.atan2(dx, dy)), ringCol[i % 2], () => (i / segs) * 0.15)
   }
+  // its foot: a collar of roots flaring into the ground, tucked into the
+  // trunk at the top; too fine to see at LOD2
+  const foot = FOOT.palm
+  if (foot.rings[lod].length) b.add(lathe(footRings(foot, lod, type.sink, [], () => foot.r), lod ? 4 : 6), new THREE.Matrix4(), ringCol[0])
   const top = pt(1)
   // far out, every other frond, wider, keeps the same starburst
   const keep = lod === 2 ? fronds.filter((f, k) => k % 2 === 0) : fronds
@@ -288,7 +381,7 @@ function palm(rng, lod) {
   return { geo: b.build(), r: 0.28, h: H }
 }
 
-function broadleaf(rng, lod, variant) {
+function broadleaf(rng, lod, variant, type) {
   const b = new Builder()
   const flat = variant === 1
   const H = flat ? rng.range(5, 7) : rng.range(6, 9)
@@ -298,9 +391,7 @@ function broadleaf(rng, lod, variant) {
   }
   const d = detailRng(rng)
   const tone = crowns.map(() => 1 + (d.next() * 2 - 1) * 0.1)
-  const trunk = new THREE.CylinderGeometry(0.16, 0.3, H * 0.7, lod ? 4 : 6, 1, true)
-  trunk.translate(0, H * 0.35, 0)
-  b.add(trunk, new THREE.Matrix4(), col('#5e4e3c', d))
+  b.add(trunkGeo(FOOT.broadleaf, lod, type.sink, [0, H * 0.7], 0.16, lod ? 4 : 6), new THREE.Matrix4(), col('#5e4e3c', d))
   crowns.forEach((c, k) => {
     const geo = lod === 2 ? new THREE.OctahedronGeometry(c.r * 1.2, 0) : new THREE.IcosahedronGeometry(c.r, lod ? 0 : 1)
     jitterVerts(geo, c.seed, 0.4)
@@ -315,15 +406,13 @@ function broadleaf(rng, lod, variant) {
   return { geo: b.build(), r: 0.3, h: H }
 }
 
-function pine(rng, lod) {
+function pine(rng, lod, variant, type) {
   const b = new Builder()
   const H = rng.range(7, 12)
   const spins = [0, 1, 2, 3, 4].map(() => rng.range(0, 3))
   const d = detailRng(rng)
   const tone = spins.map(() => 1 + (d.next() * 2 - 1) * 0.08)
-  const trunk = new THREE.CylinderGeometry(0.12, 0.25, H, lod === 2 ? 4 : 5, 1, true)
-  trunk.translate(0, H / 2, 0)
-  b.add(trunk, new THREE.Matrix4(), col('#4e3e30', d))
+  b.add(trunkGeo(FOOT.pine, lod, type.sink, [0, H], 0.12, lod === 2 ? 4 : 5), new THREE.Matrix4(), col('#4e3e30', d))
   // five tiers near; far out three taller ones fill the same cone. Each tier
   // is capped underneath, since only front faces are drawn.
   const tiers = lod === 2 ? [0, 2, 4] : [0, 1, 2, 3, 4]
@@ -776,15 +865,17 @@ export class Vegetation {
         // keep the near one's height, crowns and proportions
         const vseed = Math.floor(hash2(v, ti, seed) * 1e9)
         for (let lod = 0; lod < (t.tier === 'big' ? 3 : 1); lod++) {
-          const out = t.builder(new Rng(vseed), lod, v)
+          const out = t.builder(new Rng(vseed), lod, v, t)
           lods.push(out.geo)
           if (!meta) meta = out
         }
-        // pivot height, and how far the plant reaches from it (shadow picks)
+        // pivot height, and how far the plant reaches from it (shadow picks);
+        // what lies below its origin (roots, the foot of a trunk) is buried
+        // and casts no shadow anyone sees
         const py = (t.pivot || 0) * (meta.h || 0)
         let reach = 0
         const pos = lods[0].attributes.position
-        for (let i = 0; i < pos.count; i++) reach = Math.max(reach, Math.hypot(pos.getX(i), pos.getY(i) - py, pos.getZ(i)))
+        for (let i = 0; i < pos.count; i++) if (pos.getY(i) >= 0) reach = Math.max(reach, Math.hypot(pos.getX(i), pos.getY(i) - py, pos.getZ(i)))
         for (const g of lods) g.attributes.aPivot.array.fill(py)
         this.geos[name].push(lods)
         this.meta[name].push({ r: meta.r || 0, h: meta.h || 1, py, reach })

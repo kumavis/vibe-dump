@@ -257,6 +257,9 @@ src/
                      dithered LOD fades, wind sway and parting in the shader;
                      fell() topples a tree something heavy drove into;
                      kelp, seagrass and corals drawn only under water
+    roots.js         tree roots as plain numbers (tested): the flared foot of
+                     each trunk and the canopy giants' buttress fins, sunk deep
+                     enough that no slope a tree grows on lifts them clear
     underwater.js    below the surface: fog and light by depth, the surface seen
                      from beneath (Snell's window), caustics, light shafts, snow
     sealife.js       ambient fish schools, jellies, ammonites, a passing reptile
@@ -396,7 +399,9 @@ src/
 - **Add a plant:** a builder plus a `TYPES` row in `world/vegetation.js`, and a
   density grid in `Island.computeDensities` (which also feeds stealth cover).
   An underwater plant is `marine: true` with its grid in `Island.computeMarine`;
-  it is drawn only while the camera is below the surface.
+  it is drawn only while the camera is below the surface. A tree's trunk can
+  stand on a flared foot: a `FOOT` entry in `world/roots.js`, built by
+  `trunkGeo` (`tests/roots.test.js` checks it stays buried on steep ground).
 - **Shape the seabed:** add a reef (`{ x, z, r, top, rough }`) or move the trench
   in `seabed` in `data/world.js`. Only ground already deeper than `below[0]` is
   touched, so no coast moves; `tests/sea.test.js` checks that.
