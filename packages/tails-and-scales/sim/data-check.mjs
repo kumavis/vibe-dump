@@ -124,7 +124,7 @@
 //      seeds, each held to checkList;
 //    - RULES_ID moves on a cost, the roster's order, a preset's digits or a
 //      new preset, and a mission's list rules (and, section 5, stays on a
-//      rename);
+//      rename; here, on a unit's and on the list's size, its name);
 //    - defineRace refuses a unit without cost, a cost not a multiple of 5,
 //      a roster missing a unit, listing one twice or one the race lacks,
 //      an army out of roster order, a preset with trailing zeros, longer
@@ -132,7 +132,9 @@
 //    - the army/ corpus (sim/baselines/army/*.json, once recorded): every
 //      list a setup in it names is legal under today's prices and costs at
 //      most 90% of its mission's limit, so a retune of up to 10% keeps the
-//      corpus playable (the row says how many lists it checked).
+//      corpus playable (the row says how many lists it checked); and every
+//      seat there names one (the AI pairs' and the bot's alike, §4.2.9),
+//      so a log the row reads no list from fails, never passes unchecked.
 //
 //   node sim/data-check.mjs
 //
@@ -413,7 +415,15 @@ const moves = [
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
-check(rulesData().missions === MISSIONS, 'hashes the missions (data/mission.js)')
+// (whole, every field the very value data/mission.js holds, but for (F11a)
+// each list's size, a name, left out)
+const hashedMissions = rulesData().missions
+const sameKeys = (x, y) => JSON.stringify(Object.keys(x)) === JSON.stringify(Object.keys(y))
+const sameRecord = (hashed, m, skip = []) => sameKeys(hashed, Object.fromEntries(Object.entries(m).filter(([k]) => !skip.includes(k)))) && Object.keys(hashed).every((k) => hashed[k] === m[k])
+check(sameKeys(hashedMissions, MISSIONS) && Object.entries(MISSIONS).every(([k, m]) => {
+  const h = hashedMissions[k]
+  return m.list ? sameRecord({ ...h, list: m.list }, m) && sameRecord(h.list, m.list, ['size']) : sameRecord(h, m)
+}), "hashes the missions (data/mission.js), each whole but for its list's size")
 check(MISSIONS.classic.rounds === ROUNDS && MISSIONS.classic.deploy === BOARD.deploy, "the classic mission's rounds and depth are the ruleset's ROUNDS and BOARD.deploy")
 // (F8a) classic's board is the ruleset's BOARD, so every classic battle
 // computes the same doubles as before missions chose the board
@@ -964,6 +974,7 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   check(preset('224222') !== preset('224221'), "RULES_ID moves on a preset's digits (field 224222 → 224221)")
   check(reroster('squirrel', [...RACES.squirrel.roster]) === RULES_ID, "RULES_ID stays on a copy of the roster (the control for the roster's order)")
   check(variant('squirrel', (d) => (d.units.nutkin.name = 'Nutkin Slingers')) === RULES_ID, 'RULES_ID stays on a unit renamed, its cost and roster place kept')
+  check(mission((m) => (m.list.size = 'Skirmish battle')) === RULES_ID, "RULES_ID stays on the size renamed (Skirmish → Skirmish battle: the refusals' word for it, presentation)")
   // defineRace refuses broken builder data
   breakIt('defineRace refuses a unit without cost', (d) => delete d.units.brute.cost, /unit brute: cost must be a whole multiple of 5 above 0 .*not undefined/)
   breakIt('defineRace refuses a cost of 7 (not a multiple of 5)', (d) => (d.units.brute.cost = 7), /unit brute: cost must be a whole multiple of 5.*not 7/)
@@ -1011,7 +1022,7 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
       }
       const s = fullSetup(setup), rules = MISSIONS[s.mission].list
       setup.seats.forEach((x, i) => {
-        if (x.army == null) return
+        if (x.army == null) return wrong.push(`${f}: seat ${i} names no army (every army/ battle names both seats' lists)`)
         lists++
         const { counts } = A.armyOf(s, i), cost = A.listCost(RACES[x.race], counts)
         if (cost > Math.floor(0.9 * rules.points)) wrong.push(`${f}: seat ${i}'s ${JSON.stringify(x.army)} costs ${cost}, over 90% of the ${s.mission} limit (${Math.floor(0.9 * rules.points)} of ${rules.points})`)

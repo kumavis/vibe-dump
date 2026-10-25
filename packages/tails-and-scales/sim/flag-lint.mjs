@@ -40,9 +40,14 @@
 //                                         which the builder's prices never
 //                                         replace without a re-record
 // data/schema.js validating and copying them, data/mission.js checking a
-// mission's list and preset name, and fullSetup filling in a seat's army
-// are listed in ALLOW, as the .fx and .abilities lines are. The view may
-// read them all (the card shows a unit's cost).
+// mission's list and preset name, fullSetup filling in a seat's army and
+// core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are. The view may
+// read them all (the card shows a unit's cost). A member read may space its
+// dot (`race . roster`), and a destructuring may run over several lines, as
+// a formatter writes a long one (`const {⏎ cost,⏎ } = u.t`): every rule is
+// matched once more over the file's code joined line to line, and a match
+// that spans lines is reported at its first. Out of reach, as for every
+// rule here: a field read through Reflect.get or a computed name.
 //
 // It covers main.js and ai.js (rules code until R5-R6 moved the rest of it
 // into core/; R6a moved ai.js to core/ai/, so only an older checkout has
@@ -113,7 +118,7 @@ export const BANNED = [
 // [pattern, the files that may, what a read elsewhere is]. Checked over
 // core/ and data/ only (the view shows them); a read is a member (`.cost`),
 // by name (`['cost']`) or destructured (`{ cost } = t`).
-const reads = (names) => new RegExp(String.raw`\.(${names})\b|\[\s*['"\x60](${names})['"\x60]\s*\]|\{(?:[^{}]*,)?\s*(${names})\s*(?:[,:][^{}]*|=(?!=)[^{}]*)?\}\s*=(?!=)`)
+const reads = (names) => new RegExp(String.raw`\.\s*(${names})\b|\[\s*['"\x60](${names})['"\x60]\s*\]|\{(?:[^{}]*,)?\s*(${names})\s*(?:[,:][^{}]*|=(?!=)[^{}]*)?\}\s*=(?!=)`)
 export const OWNED = [
   [reads('cost|roster|armies|list|army'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list, an army) read outside core/army.js"],
   [reads('pts'), ['core/ai/score.js'], "the AI's appraisal (pts) read outside core/ai/score.js"],
@@ -147,7 +152,8 @@ export const ALLOW = [
   ['data/schema.js', 'const { key } = def', 1, "reads the race definition's own key, to validate and register it"],
   // (F11a, OWNED) the army builder's data and pts, validated and copied by
   // defineRace, a mission's list and preset name checked by checkMission, a
-  // seat's army filled in by fullSetup, and the AI's value of a shot
+  // seat's army filled in by fullSetup, RULES_ID's copy of a list without
+// its size's name, and the AI's value of a shot
   ['data/schema.js', 'def.pts', 2, 'validates pts and copies it into the normalised type'],
   ['data/schema.js', 'def.cost', 2, 'validates cost and copies it into the normalised type'],
   ['data/schema.js', 'def.army', 6, 'validates the classic army (its units, its roster order), copies it, and derives the classic preset from it'],
@@ -156,6 +162,7 @@ export const ALLOW = [
   ['data/mission.js', 'm.army', 1, "checkMission: the mission names its preset"],
   ['data/mission.js', 'checkListRules(m.list, bad)', 1, "checkMission hands the mission's list rules to their check"],
   ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
+  ['core/version.js', '(m.list ? { ...m, list: listRules(m.list) } : m)', 1, "rulesData hashes a mission's list rules without the size's name (presentation)"],
   ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
@@ -183,7 +190,9 @@ export function lintSource(f, text, used) {
   const hits = []
   const rules = rulesFor(f)
   let inBlock = false
-  text.split('\n').forEach((raw, i) => {
+  // (each line's code, comments cut, for the joined pass below)
+  const lines = text.split('\n'), clean = lines.map(() => '')
+  lines.forEach((raw, i) => {
     let l = raw
     if (inBlock) {
       const end = l.indexOf('*/')
@@ -198,6 +207,7 @@ export function lintSource(f, text, used) {
       if (end < 0) inBlock = true
       l = l.slice(0, start) + (end < 0 ? '' : l.slice(end + 2))
     }
+    clean[i] = l
     if (!rules.some(([re]) => re.test(l))) return
     // each allowed text on the line excuses itself only: cut it out, then
     // lint what is left
@@ -209,6 +219,20 @@ export function lintSource(f, text, used) {
     const what = rules.filter(([re]) => re.test(l)).map(([, w]) => w)
     if (what.length) hits.push({ f, line: i + 1, what: [...new Set(what)].join(', '), text: raw.trim() })
   })
+  // every rule again over the code joined line to line (comments out), for
+  // a read that spans lines; a match within one line is the pass above's
+  const joined = clean.join('\n')
+  const lineOf = (at) => joined.slice(0, at).split('\n').length
+  const spans = new Map()
+  for (const [re, w] of rules) {
+    for (const m of joined.matchAll(new RegExp(re.source, re.flags.replace('g', '') + 'g'))) {
+      if (!m[0].includes('\n')) continue
+      const at = lineOf(m.index)
+      if (!spans.has(at)) spans.set(at, new Set())
+      spans.get(at).add(w)
+    }
+  }
+  for (const [at, what] of spans) hits.push({ f, line: at, what: [...what].join(', '), text: lines.slice(at - 1, at + 2).map((x) => x.trim()).join(' ') })
   return hits
 }
 
@@ -310,6 +334,12 @@ if (main && args['self-test']) {
     ['data/mission.js', 'const n = m.list.points'],
     ['data/schema.js', 'const price = t.cost'],
     ['core/index.js', 's.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army })); const r = x.roster'],
+    // a dot spaced, and a destructuring over several lines, as a formatter
+    // writes a long one
+    ['core/match.js', 'const order = race . roster'],
+    ['core/ai/score.js', 'const {\n    cost,\n    models,\n  } = u.t'],
+    ['core/engine.js', 'const {\n  list: rules,\n} = missionOf(G.setup)'],
+    ['core/engine.js', 'const {\n  fx,\n} = w'],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -342,16 +372,20 @@ if (main && args['self-test']) {
     ['ui/screens/muster.js', 'const left = mission.list.points - army.listCost(race, counts)'],
     ['app/flow.js', 'const preset = race.armies[name] ?? race.army'],
     ['core/units.js', 'const costly = (u) => u.t.costs + u.t.rosterOrder'],
+    // an object written over several lines, and a destructuring of other
+    // fields
+    ['core/engine.js', 'emit(G, \'deploy\', {\n  army: 1,\n  list: 2,\n})'],
+    ['core/engine.js', 'const {\n  models,\n  role,\n} = u.t'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
     const h = lintSource(f, line, new Map())
-    say(h.length, `${f}: ${line}${h.length ? `  (${h[0].what})` : '  NOT FLAGGED'}`)
+    say(h.length, `${f}: ${line.replaceAll('\n', '⏎ ')}${h.length ? `  (${h[0].what})` : '  NOT FLAGGED'}`)
   }
   console.log('3. lines that must pass')
   for (const [f, line] of PASS) {
     const h = lintSource(f, line, new Map())
-    say(!h.length, `${f}: ${line}${h.length ? `  FLAGGED (${h[0].what})` : ''}`)
+    say(!h.length, `${f}: ${line.replaceAll('\n', '⏎ ')}${h.length ? `  FLAGGED (${h[0].what})` : ''}`)
   }
   console.log(bad ? `\nflag-lint self-test FAILED: ${bad} wrong verdict(s)` : '\nflag-lint self-test passed')
   process.exit(bad ? 1 : 0)

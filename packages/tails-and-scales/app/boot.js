@@ -96,12 +96,16 @@ function missionPick(params, title) {
 // counts in its roster's order (DESIGN §4.2.8.4: ?armies=classic,1221).
 // DESIGN §4.2.8.8 lists it under F11b's Muster screen; as with ?mission=,
 // it is built here, with the setup's lists, as the door sim/'s Chromium
-// runs start battles with lists by. Each value is judged as the fold will
-// judge it, by core/army.js's armyOf on a trial setup of the page's
-// mission and races, so a value the rules would refuse gets that seat's
-// preset (null: the setup names no army) and a line on the title card
-// saying why, not a battle that never starts. → null when no seat names
-// an army, else [seat 0's | null, seat 1's | null].
+// runs start battles with lists by. Each value is trimmed and lower-cased
+// first, as ?races= is (a convenience for a hand-typed URL: ?armies=Classic
+// plays 'classic', and ?armies=toString is noted as the preset 'tostring'
+// the race lacks); then the value as folded is judged as the fold will
+// judge it, and is what the setup names: by core/army.js's armyOf on a
+// trial setup of the page's mission and races, so a value the rules would
+// refuse gets that seat's preset (null: the setup names no army) and a
+// line on the title card saying why, not a battle that never starts.
+// → null when no seat names an army, else [seat 0's | null, seat 1's |
+// null].
 function armiesPick(params, title, races, mission) {
   if (!params.has('armies')) return null
   const raw = params.get('armies'), pick = raw.split(',').map((a) => a.trim().toLowerCase())

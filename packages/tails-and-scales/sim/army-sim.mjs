@@ -8,10 +8,27 @@
 //   node sim/army-sim.mjs --fit   [--mission classic] [--n 2400] [--jobs 2] [--seed S]
 //   (either with --dir <packageDir>: another copy of the code, for a
 //   before-and-after; the default is this package's working tree)
+//   node sim/army-sim.mjs --self-test [--jobs 2]
 //
 // --n is the score gate's battles per pair and set under --check (--fit-n
-// its fit's), and the fit's under --fit. Exit 0 when every gate holds, 1
-// when one fails (or a battle throws), 2 on a bad command line.
+// its fit's), and the fit's under --fit; each, and --jobs, a whole number
+// above 0. Exit 0 when every gate holds, 1 when one fails (or a battle
+// throws), 2 on a bad command line (an unknown option, a count that is no
+// whole number).
+//
+// --self-test holds the gates to broken price tables, as every standing
+// harness holds its own: three copies of the package's code, each run with
+// --check at a small N (300 score battles, 600 fit; the default seed):
+//   sound         the working tree as it is: every gate holds (the control:
+//                 at this N, too, the gates can pass);
+//   cheap-nutkin  the Nutkin at 30 points, not 75: the score gate and the
+//                 per-unit gate fail, the latter on the Nutkin, while the
+//                 lists' gates (c) and (d) hold;
+//   coil-over     the Brute at 125, not 100, so the Coil's classic list
+//                 costs 520: gates (c) and (d) fail (its battles at a
+//                 smaller N still, since only the lists' gates are judged).
+// Each mutation is an exact-anchor edit of the copy's race file, failing
+// loudly when the anchor is gone. Exit 0 when every case gets its verdict.
 //
 // A battle: a board seed and a dice seed, the mission, one of the sets it
 // offers, both seats `ai`, each seat's `army` a count string that
@@ -83,21 +100,37 @@
 // processes (2 by default: the machine is shared), in chunks, and the
 // report reads the results in battle order, so it doesn't depend on how
 // the battles were spread. A battle that throws fails the run, named.
-import { fork } from 'node:child_process'
+import { fork, spawn } from 'node:child_process'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseArgs } from 'node:util'
+import { copyCode } from './lib.mjs'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
 const SELF = fileURLToPath(import.meta.url)
 
-const { values: a } = parseArgs({
-  options: {
-    check: { type: 'boolean' }, fit: { type: 'boolean' }, worker: { type: 'boolean' },
-    mission: { type: 'string', default: 'classic' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
-    jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' },
-  },
-})
+// A bad command line is exit 2, never a run on defaults or a gate's exit 1.
+const usage = (why) => {
+  console.error(`army-sim: ${why}`)
+  process.exit(2)
+}
+let a
+try {
+  ({ values: a } = parseArgs({
+    options: {
+      check: { type: 'boolean' }, fit: { type: 'boolean' }, worker: { type: 'boolean' }, 'self-test': { type: 'boolean' },
+      mission: { type: 'string', default: 'classic' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
+      jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' },
+    },
+  }))
+} catch (e) {
+  usage(e.message)
+}
+for (const k of ['n', 'fit-n', 'jobs']) {
+  if (a[k] !== undefined && !/^[1-9][0-9]*$/.test(a[k])) usage(`--${k} takes a whole number above 0, not ${JSON.stringify(a[k])}`)
+}
 const DIR = a.dir ? resolve(a.dir) : PKG
 const load = (f) => import(pathToFileURL(join(DIR, f)).href)
 const [core, { RACES }, { MISSIONS }, { mulberry32, cyrb53 }] = await Promise.all([load('core/index.js'), load('data/schema.js'), load('data/mission.js'), load('core/util.js')])
@@ -366,7 +399,7 @@ async function main() {
     process.exit(2)
   }
   if (!a.check && !a.fit) {
-    console.error('army-sim: --check (the gates) or --fit (the fitted price table)')
+    console.error('army-sim: --check (the gates), --fit (the fitted price table) or --self-test')
     process.exit(2)
   }
   const rules = mission.list
@@ -448,12 +481,81 @@ async function main() {
   process.exit(failed ? 1 : 0)
 }
 
+// ── The self-test ───────────────────────────────────────────────────────────
+// The header's three cases: each a copy of the package's code, mutated by an
+// exact anchor, run with --check, and held to its exit code and the
+// verdicts its gate lines print.
+const GATE_LINES = {
+  c: / the classic list \(/,
+  d: / mission's preset, /,
+  a: / the score gate, /,
+  b: / the per-unit gate, /,
+}
+const SELF_TESTS = [
+  { name: 'sound', n: 300, fitN: 600, exit: 0, want: { c: 'ok', d: 'ok', a: 'ok', b: 'ok' } },
+  {
+    name: 'cheap-nutkin', n: 300, fitN: 600, exit: 1, want: { c: 'ok', d: 'ok', a: 'FAIL', b: 'FAIL' },
+    edit: ['data/races/squirrel.js', 'pts: 7, cost: 75,', 'pts: 7, cost: 30,'], also: [/Nutkin Skirmishers .*FAIL \(within/, 'the per-unit gate fails on the Nutkin'],
+  },
+  {
+    name: 'coil-over', n: 100, fitN: 200, exit: 1, want: { c: 'FAIL', d: 'FAIL' },
+    edit: ['data/races/serpent.js', 'pts: 125, cost: 100,', 'pts: 125, cost: 125,'], also: [/FAIL Coil[^:]*: the classic list \(\d+\) costs 520/, "the Coil's classic list is named at 520"],
+  },
+]
+
+async function selfTest() {
+  const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-army-sim-'))
+  let bad = 0
+  const say = (ok, what) => {
+    if (!ok) bad++
+    console.log(`  ${ok ? 'ok  ' : 'BAD '} ${what}`)
+  }
+  const T0 = performance.now()
+  console.log(`army-sim self-test: ${SELF_TESTS.length} copies of the code under --check, seed ${a.seed}, ${a.jobs} job(s)`)
+  try {
+    for (const t of SELF_TESTS) {
+      const dir = copyCode(PKG, join(work, t.name))
+      if (t.edit) {
+        const [file, from, to] = t.edit, path = join(dir, file), text = readFileSync(path, 'utf8')
+        const at = text.split(from).length - 1
+        if (at !== 1) throw new Error(`self-test ${t.name}: the anchor ${JSON.stringify(from)} is in ${file} ${at} time(s), not once: port the mutation`)
+        writeFileSync(path, text.replace(from, to))
+      }
+      const args = [SELF, '--check', '--dir', dir, '--n', String(t.n), '--fit-n', String(t.fitN), '--jobs', a.jobs, '--seed', a.seed, '--mission', a.mission]
+      const t1 = performance.now()
+      const { code, out } = await new Promise((done) => {
+        const child = spawn(process.execPath, args, { stdio: ['ignore', 'pipe', 'inherit'] })
+        let out = ''
+        child.stdout.on('data', (d) => (out += d))
+        child.on('close', (code) => done({ code, out }))
+      })
+      const lines = out.split('\n')
+      console.log(`\n${t.name}${t.edit ? ` (${t.edit[0]}: ${t.edit[1]} → ${t.edit[2]})` : ' (unmutated)'}, N ${t.n} / ${t.fitN}: exit ${code}, ${((performance.now() - t1) / 1000).toFixed(0)} s`)
+      say(code === t.exit, `exits ${t.exit}${code === t.exit ? '' : `, not ${code}`}`)
+      for (const [g, verdict] of Object.entries(t.want)) {
+        const got = lines.filter((l) => /^ {2}(ok {2}|FAIL) /.test(l) && GATE_LINES[g].test(l)).map((l) => l.slice(2, 6).trim())
+        const ok = got.length > 0 && (verdict === 'ok' ? got.every((v) => v === 'ok') : got.includes('FAIL'))
+        say(ok, `gate (${g}): ${verdict === 'ok' ? 'holds' : 'fails'} (${got.length ? got.join(', ') : 'no gate line printed'})`)
+      }
+      if (t.also) say(lines.some((l) => t.also[0].test(l)), t.also[1])
+      if (bad) console.log(out.split('\n').filter((l) => /^ {2}(ok {2}|FAIL) |threw/.test(l)).map((l) => `      | ${l}`).join('\n'))
+    }
+  } finally {
+    rmSync(work, { recursive: true, force: true })
+  }
+  const secs = ((performance.now() - T0) / 1000).toFixed(0)
+  console.log(bad ? `\narmy-sim self-test FAILED: ${bad} wrong verdict(s) (${secs} s)` : `\narmy-sim self-test passed: the gates hold on the sound table and fail on both broken ones (${secs} s)`)
+  process.exit(bad ? 1 : 0)
+}
+
 // ── The worker, or the run ──────────────────────────────────────────────────
 // A child process (--worker) plays each chunk of tasks it is sent and sends
 // back their results, until its parent hangs up.
 if (a.worker) {
   process.on('message', ({ id, tasks }) => process.send({ id, results: tasks.map(play) }))
   process.on('disconnect', () => process.exit(0))
+} else if (a['self-test']) {
+  await selfTest()
 } else {
   await main()
 }

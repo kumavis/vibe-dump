@@ -10,11 +10,14 @@
 // and the spacing rules every board is scattered by) and the missions
 // (data/mission.js: the board, the objectives, the default rounds, the
 // deployment depth, the sets, the army's name and, from F11a, the list
-// rules, `list`, whole: its size's name among them, which the refusals
-// print). A stat or price retune changes it, so a match started under other
-// rules can be told apart instead of silently playing differently (a peer
-// whose prices or rosters differ opens it as 'skew', never as a desync); a
-// renamed unit doesn't.
+// rules, `list`, less its `size`: the battle size's name, which the
+// refusals and the builder print as they print a race's name and a unit's
+// short one, is presentation like them). A stat or price retune changes
+// it, so a match started under other rules can be told apart instead of
+// silently playing differently (a peer whose prices or rosters differ
+// opens it as 'skew', never as a desync); a renamed unit, race or size
+// doesn't (refusal text is a peer's own: the Folder's error and a refused
+// entry's why are local, and stateHash leaves them out).
 //
 // CORE_VERSION is the other half: a whole number bumped by hand whenever the
 // rules code itself changes what a battle does (an action, the engine, the
@@ -44,9 +47,13 @@ export const CONSTANTS = Object.freeze({ BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_
 // their records lose presentation fields, never a key (a unit keyed 'look' is
 // rules like any other). The terrain sets and the missions are rules through
 // and through (every number in them places scenery, an objective or a
-// zone), so they go in whole.
+// zone), so they go in whole, but for (F11a) the one name a mission holds:
+// its list's `size`, presentation, left out by that key alone (a list is a
+// mission's record, never a map keyed by a name).
+const listRules = ({ size, ...rules }) => rules
+const missionRules = (m) => (m.list ? { ...m, list: listRules(m.list) } : m)
 export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS, missions = MISSIONS } = {}) {
-  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions }
+  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions: mapVals(missions, missionRules) }
 }
 
 export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString(36)

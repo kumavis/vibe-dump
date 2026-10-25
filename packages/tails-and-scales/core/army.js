@@ -22,8 +22,12 @@
 // and core/util.js, so the layers above the consensus code may import it
 // (sim/boundaries.mjs: a door on the present/, view/, input/, ui/ and app/
 // surfaces, and match/'s), and the Muster screen asks the same checkList
-// the fold refuses by. Every check is whole-number arithmetic in a fixed
-// order, so every peer refuses the same setups with the same text.
+// the fold refuses by. ("Only" is its own imports, which boundaries' PURE
+// rule holds: data/mission.js loads core/rules.js for BOARD and ROUNDS,
+// and rules.js imports the dice's `draw`, so core/rng.js is in the graph a
+// door's importer loads, but nothing on any path from here calls it.)
+// Every check is whole-number arithmetic in a fixed order, so every peer
+// refuses the same setups with the same text.
 //
 //   LIST                      the count string's pattern
 //   armyOf(setup, seat)       → { preset: name | null, counts: [per roster
@@ -45,7 +49,9 @@ export { LIST }
 const NAME = /^[a-z][a-z0-9-]*$/
 
 // A value as a refusal shows it: JSON's text where it has one, cut short
-// (an army is a seat's field, which any peer may write), or its type.
+// (an army is a seat's field, which any peer may write), or its type. The
+// cut is at 47 UTF-16 units, one fewer where the 47th would leave half a
+// surrogate pair (an emoji), so the text never holds a lone surrogate.
 function shown(v) {
   let text
   try {
@@ -54,7 +60,17 @@ function shown(v) {
     text = undefined
   }
   if (typeof text !== 'string') return typeof v
-  return text.length > 48 ? `${text.slice(0, 47)}…` : text
+  if (text.length <= 48) return text
+  const cut = /[\ud800-\udbff]/.test(text[46]) ? 46 : 47
+  return `${text.slice(0, cut)}…`
+}
+
+// counts a list's tools take: whole numbers, at least 0 (a missing or null
+// one is 0), or why not
+const countsWhy = (counts) => {
+  if (!Array.isArray(counts)) return `a list's counts are an array, not ${shown(counts)}`
+  const bad = counts.find((n) => n != null && !(Number.isInteger(n) && n >= 0))
+  return bad === undefined ? null : `a list's counts are whole numbers from 0, not ${shown(bad)}`
 }
 
 // The list rules' size, as the refusals name it ("a Skirmish army"): the
@@ -69,6 +85,10 @@ const units = (n, what) => `${n} ${what} unit${n === 1 ? '' : 's'}`
 // ROLES order, its minimum then its maximum; each roster entry against
 // perKind.
 export function checkList(race, rules, counts) {
+  // (only a client can hand it anything but digits: the fold's counts are
+  // a count string's)
+  const odd = countsWhy(counts)
+  if (odd) return odd
   const S = sizeOf(rules)
   const n = (i) => counts[i] ?? 0
   const cost = listCost(race, counts)
@@ -117,8 +137,15 @@ export function keysOf(race, list) {
     if (!LIST.test(text) || text.length > race.roster.length) throw new Error(`the ${race.name} have no army ${shown(list)}`)
     counts = countsOf(race, text)
   }
+  const odd = countsWhy(counts)
+  if (odd) throw new Error(odd)
   return race.roster.flatMap((k, i) => Array(counts[i] ?? 0).fill(k))
 }
+
+// A registry's entry by name, looked up only for a string: an object's own
+// toString never runs (MISSIONS and RACES have no prototype, so only an own
+// name finds anything).
+const byName = (table, name) => (typeof name === 'string' ? table[name] : undefined)
 
 // The army seat `seat` of a filled-in setup takes, or the refusal (§4.2.8.4,
 // in its order): the army a string (absent, the mission's preset); a
@@ -127,11 +154,12 @@ export function keysOf(race, list) {
 // (fullSetup has refused an unknown mission, race or controller first; a
 // caller that hasn't is refused here too.)
 export function armyOf(setup, seat) {
-  const mission = MISSIONS[setup?.mission ?? 'classic']
-  if (!mission) throw new Error(`no mission ${shown(setup.mission)}`)
+  const name = setup?.mission ?? 'classic'
+  const mission = byName(MISSIONS, name)
+  if (!mission) throw new Error(`no mission ${shown(name)}`)
   const rec = setup.seats?.[seat]
-  // (RACES has no prototype; fullSetup has refused a race that is no name)
-  const race = RACES[rec?.race]
+  // (fullSetup has refused a race that is no name)
+  const race = byName(RACES, rec?.race)
   if (!race) throw new Error(`seat ${seat}: no race ${shown(rec?.race)}`)
   const army = rec.army ?? mission.army
   if (typeof army !== 'string') throw new Error(`seat ${seat}'s army is a preset's name or a list of counts, not ${shown(army)}`)

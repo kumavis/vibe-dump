@@ -3,8 +3,9 @@
 // none, and how deep each seat's deployment zone runs from its edge.
 //
 // Consensus data, like the races: RULES_ID (core/version.js) hashes every
-// mission whole, so a match started under a mission whose objectives have
-// since moved is told apart instead of silently playing another battle.
+// mission whole (but for its list's `size`, a name), so a match started
+// under a mission whose objectives have since moved is told apart instead
+// of silently playing another battle.
 // (F8a) A setup names its mission (`setup.mission`, `classic` when it names
 // none: core/index.js fullSetup), and the mission chooses the board: its
 // size, how deep each seat's deployment zone runs from its edge, the
