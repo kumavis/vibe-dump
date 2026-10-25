@@ -84,7 +84,14 @@ the commit, and add whatever the work turned up.
   standing unit and End play the battle Auto plays, phase by phase), and
   from F10c `node sim/macro-check.mjs` covers the standing orders too (the
   march scenarios at 80%, the settings answered from settled), and from F8a
-  P-prop's setups task holds P-mission. A step
+  P-prop's setups task holds P-mission, and from F11a
+  `node sim/army-sim.mjs --check` (and `--self-test`: the Skirmish gates,
+  the score within 4 points of even and each unit's price within its fitted
+  band; 3,900 battles, so run it on a quiet machine, about 3 minutes, its
+  self-test as long), P-army in P-prop (fuzzed armies, autoList, battles
+  between random lists) and P-mission's refusals, data-check's prices,
+  rosters, presets and list rules, the `army/` set in parity (52 battles)
+  and merge-sim's `lists`. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -859,14 +866,38 @@ follows N3.
   Grand fixture on `MISSIONS.classic`. DESIGN's F8a notes.)
 - [ ] **Later (F8a's, with F8b):** the mat's tiled detail texture and shadows
   fitted to the view (a larger board's are coarser until then).
-- [ ] **F11a** Army lists in the setup: each seat names a preset or a list of
+- [x] **F11a** Army lists in the setup: each seat names a preset or a list of
   unit counts, checked against the mission's points limit and slot table;
   prices (`cost`) tuned by `sim/army-sim.mjs`; AI seats play presets (or a
   seeded random list); the classic battles unchanged.
+  (`CORE_VERSION` 5; each unit's `cost` and each race's `roster`, the
+  `classic` preset derived from its army, `MISSIONS.classic.list` and
+  `checkMission`'s list checks; `core/army.js` (`armyOf`, `checkList`,
+  `autoList`, the eight refusals in seat-major order); `fullSetup` filling
+  in each seat's `army`, `newState` fielding the lists; `?armies=` (F11b's,
+  built as the checks' door); the card's cost, the group line's points
+  standing. `sim/army-sim.mjs` (`--check`, `--fit`, `--self-test`): the v6
+  prices pass unchanged, the Bushtails 52.4% ± 1.2 and every unit within
+  its band. P-army and P-mission's refusals in P-prop, data-check's rows,
+  flag-lint's one-reader rule, boundaries' pure door, merge-sim's `lists`;
+  six `army/` battles, recorded on F11a's code in a commit of their own,
+  the corpus 52. The review's nine fixes, `RULES_ID` leaving out the size's
+  name. DESIGN's F11a notes.)
+- [ ] **Later (F11a's, with F8b):** the Grand fixture's cap lists cost
+  1,575 and 1,670 against Grand's 1,500 (under `--caps` the fixture lifts
+  its limit to 2,000): when the fixture retires, build the cap lists within
+  the limit or give scale-bench's cap rows a test mission with it lifted.
+  army-sim's fit plays no list over the limit (§4.2.8.2's 80-120% budgets
+  clamped at 100%); a copy with the limit lifted would fit the top too, if
+  F8b's retune wants it.
 - [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
   race resets the army.
+  (Built at F11a: the `?armies=` door, checked by the fold's own `armyOf`,
+  a race change on the panel already dropping that seat's list; the unit
+  card's cost and the group line's points standing. Still F11b's: the
+  cost on F6's race picker, the deployment's points banner.)
 - [ ] **F7a** Climbable fortifications: decks, stairs and ladders sized for
   whole squads; ramparts, bastions, watchtowers, timber platforms and a keep
   on the centre objective; each side's own rampart at its zone's front (the
