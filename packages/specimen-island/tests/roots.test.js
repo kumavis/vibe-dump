@@ -1,6 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { ROOT_SLOPE, FOOT, BUTTRESS, flare, buttress } from '../src/world/roots.js'
+import { TYPES, TUCK } from '../src/world/vegetation.js'
+import { Rng } from '../src/core/rng.js'
 
 // every corner of the buttress ranges
 const B = BUTTRESS
@@ -38,26 +40,45 @@ test('a buttress leaves the trunk tall, sweeps down and out, and runs to a point
   }
 })
 
-test('no root floats where the ground falls away as steeply as ROOT_SLOPE', () => {
+test('no root, as built, floats where the ground falls away as steeply as ROOT_SLOPE', () => {
   // whichever way a slope falls, the ground at (x, z) from the trunk is at
-  // least -ROOT_SLOPE * hypot(x, z): every underside corner lies below that
-  for (const f of fins) {
-    for (const s of buttress(f, 4)) {
-      for (const side of [-1, 1]) {
-        const out = Math.hypot(s.r, s.lat + side * s.w)
-        assert.ok(s.keel <= -ROOT_SLOPE * out, `underside ${s.keel} at ${out} m out`)
+  // least ROOT_SLOPE * hypot(x, z) below where it meets the trunk (`sink` up
+  // from the plant's origin). Every corner a builder sinks into the ground -
+  // the bottom ring of a foot, toes splayed, and a fin's underside - lies
+  // below that in the geometry as drawn, bowed and tapered, for any tree.
+  // (A palm's leaning trunk dips the rim of its base a few cm below its
+  // origin, but inside its collar, so only what is half a metre down counts.)
+  for (const name of Object.keys(FOOT)) {
+    const t = TYPES[name]
+    for (let seed = 1; seed <= 12; seed++) {
+      for (let v = 0; v < t.variants; v++) {
+        for (const lod of [0, 1]) {
+          const p = t.builder(new Rng(seed * 7919), lod, v, t).geo.attributes.position
+          let buried = 0
+          let worst = -Infinity
+          for (let i = 0; i < p.count; i++) {
+            if (p.getY(i) > t.sink - 0.5) continue
+            buried++
+            worst = Math.max(worst, p.getY(i) - t.sink + ROOT_SLOPE * Math.hypot(p.getX(i), p.getZ(i)))
+          }
+          assert.ok(buried > 0, `${name} LOD${lod} has a buried foot`)
+          assert.ok(worst <= 1e-4, `${name} seed ${seed} v${v} LOD${lod}: a corner ${worst.toFixed(3)} above the slope`)
+        }
       }
     }
   }
-  // and the bottom ring of every flared foot, its toes splayed, too
-  for (const [name, foot] of Object.entries(FOOT)) {
-    for (const rings of foot.rings) {
-      if (!rings.length) continue
-      const u = rings[0]
-      const out = foot.r * flare(foot.flare, u) * (1 + foot.toes)
-      assert.ok(u <= -ROOT_SLOPE * out, `${name}: foot ${u} deep, ${out.toFixed(2)} m out`)
-    }
-  }
+})
+
+test('a felled tree draws its buried foot in, and a leaning rock never does', () => {
+  // the shader draws in what lies below a plant's origin as its uprightness
+  // falls from TUCK[0] to TUCK[1]; fell() lays a tree over to 1.45 rad
+  // (updateFalling), and a rock leans at most `tilt` about each level axis,
+  // which leaves it at least cos(2 tilt) upright
+  assert.ok(Math.cos(1.45) < TUCK[1])
+  assert.ok(TUCK[0] > TUCK[1])
+  const leaning = Object.values(TYPES).filter((t) => t.tilt)
+  assert.ok(leaning.length)
+  for (const t of leaning) assert.ok(Math.cos(2 * t.tilt) > TUCK[0], `tilt ${t.tilt}`)
 })
 
 test('the near and far feet meet the ground at the same width, so the LOD swap does not pop', () => {

@@ -6,22 +6,29 @@
 
 // The steepest ground a root is built for (rise over run). The foot of every
 // trunk and the underside of every fin reach this far below the ground, so
-// ground falling away from a tree never shows them floating; the steepest
-// spot anything big grows on is about 1.3.
-export const ROOT_SLOPE = 1.3
+// ground falling away from a tree never shows them floating. Canopy,
+// broadleaf and pine thin out where the island's slope grid passes 0.65 and
+// are gone by 1.0 (island.js computeDensities), but the drawn ground under a
+// trunk can be steeper than its grid cell: up to 1.5 under the odd pine on
+// the seeds tried. A tree right on the lip of a cliff can still show the rim
+// of its foot.
+export const ROOT_SLOPE = 1.5
 
 // Root flares, per plant: `r` the foot of the trunk's own taper, `flare` how
 // much wider (× r) it grows by height above the ground (linear between, held
 // past the ends), and `rings` the heights each LOD cuts it at. A flared trunk
 // carries on up from its last ring; LOD2 (a few pixels wide) has none. Every
-// other ring, the top one first, is turned by `turn` of a side, and `toes`
-// splays every other corner out at the ground (an even-sided trunk only).
-// The palm's ring of roots is a separate collar, tucked into its trunk.
+// other ring, the top one first, is turned by `turn` of a side, `toes`
+// splays every other corner out at the ground (an even-sided trunk only),
+// and `rag` (× its height) lifts or drops each corner of a ring above the
+// ground, so the flare's creases don't run level round the trunk like the
+// edge of a plinth. The palm's ring of roots is a separate collar, tucked
+// into its trunk.
 export const FOOT = {
-  canopy: { r: 0.55, flare: [[-2, 2.7], [0, 1.5], [0.7, 1.17], [2.2, 1]], rings: [[-2, 0, 0.7], [-2, 0.3], []], turn: 0.5, toes: 0 },
-  broadleaf: { r: 0.3, flare: [[-1.15, 2.3], [0, 1.55], [0.45, 1.22], [1.4, 1]], rings: [[-1.15, 0, 0.45, 1.1], [-1.15, 0.3], []], turn: 0, toes: 0.22 },
-  pine: { r: 0.25, flare: [[-0.75, 2.05], [0, 1.5], [0.5, 1.15], [1.2, 1]], rings: [[-0.75, 0, 0.5], [-0.75, 0.3], []], turn: 0.5, toes: 0 },
-  palm: { r: 0.2, flare: [[-0.8, 2.45], [0, 1.6], [0.3, 1.2], [0.6, 0.82]], rings: [[-0.8, 0, 0.3, 0.6], [-0.8, 0.3, 0.6], []], turn: 0, toes: 0.2 },
+  canopy: { r: 0.55, flare: [[-2.3, 2.7], [0, 1.55], [0.35, 1.32], [1, 1.12], [2.4, 1]], rings: [[-2.3, 0, 0.35, 1], [-2.3, 0.3], []], turn: 0.5, toes: 0, rag: 0.45 },
+  broadleaf: { r: 0.3, flare: [[-1.3, 2.3], [0, 1.55], [0.45, 1.22], [1.4, 1]], rings: [[-1.3, 0, 0.45, 1.1], [-1.3, 0.3], []], turn: 0, toes: 0.22, rag: 0 },
+  pine: { r: 0.25, flare: [[-0.8, 2.05], [0, 1.5], [0.5, 1.15], [1.2, 1]], rings: [[-0.8, 0, 0.5], [-0.8, 0.3], []], turn: 0.5, toes: 0, rag: 0 },
+  palm: { r: 0.2, flare: [[-0.9, 2.45], [0, 1.6], [0.3, 1.2], [0.6, 0.82]], rings: [[-0.9, 0, 0.3, 0.6], [-0.9, 0, 0.6], []], turn: 0, toes: 0.2, rag: 0 },
 }
 
 // The flare (× the trunk's radius) at height u above the ground.

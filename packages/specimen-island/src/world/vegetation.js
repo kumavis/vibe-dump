@@ -166,17 +166,19 @@ function strip(b, base, dirX, dirZ, len, segs, lift, width, colA, colB, fold = 0
   }
 }
 
-// A surface of revolution through rings [y, radius, turn, toe] (bottom up)
-// of `sides` corners, open at both ends. A ring turned half a step (turn
+// A surface of revolution through rings [y, radius, turn, toe, rag] (bottom
+// up) of `sides` corners, open at both ends. A ring turned half a step (turn
 // 0.5) from the next zigzags the faces between them into triangles; with an
 // even number of sides, `toe` pushes every other corner out by that share
-// (and pulls the rest in by half as much), splaying a foot into toes.
+// (and pulls the rest in by half as much), splaying a foot into toes; `rag`
+// lifts or drops each corner by up to that much (a hash of the corner, so
+// the faces either side share it), so the ring doesn't run level.
 function lathe(rings, sides) {
   const pos = []
-  const at = ([y, r, turn = 0, toe = 0], j) => {
+  const at = ([y, r, turn = 0, toe = 0, rag = 0], j) => {
     const a = ((j + turn) / sides) * Math.PI * 2
     const k = sides % 2 ? 1 : 1 + toe * ((j % sides) % 2 ? -0.5 : 1)
-    return [r * k * Math.sin(a), y, r * k * Math.cos(a)]
+    return [r * k * Math.sin(a), y + rag * (hash2(j % sides, Math.round(y * 64), 523) * 2 - 1), r * k * Math.cos(a)]
   }
   for (let k = 1; k < rings.length; k++) {
     const lo = rings[k - 1]
@@ -197,22 +199,25 @@ function lathe(rings, sides) {
 }
 
 // A trunk tapering from its foot's radius at the plant's origin to `top` at
-// the last of `ys`, its rings, standing on its foot (footRings).
+// the last of `ys`, its rings, standing on its foot (footRings). Below the
+// origin it is all root, and holds the foot's radius, so the buried rings
+// are just as wide as roots.js says.
 function trunkGeo(foot, lod, ground, ys, top, sides) {
-  return lathe(footRings(foot, lod, ground, ys, (y) => foot.r + ((top - foot.r) * y) / ys[ys.length - 1]), sides)
+  return lathe(footRings(foot, lod, ground, ys, (y) => foot.r + ((top - foot.r) * Math.max(0, y)) / ys[ys.length - 1]), sides)
 }
 
 // The rings of a trunk of radius `radius(y)` through heights `ys` on its foot
 // (roots.js): where this LOD cuts the foot, the foot's rings take the place
 // of the low ones and the trunk flares out there, reaching below the ground,
-// every other ring turned by the foot's `turn` and its toes splayed at the
-// ground, drawn in up the flare. LOD2 keeps the plain taper.
+// every other ring turned by the foot's `turn`, its toes splayed at the
+// ground, drawn in up the flare, and the rings above the ground ragged by
+// the foot's `rag`. LOD2 keeps the plain taper.
 function footRings(foot, lod, ground, ys, radius) {
   const tip = foot.flare[foot.flare.length - 1][0]
   const us = foot.rings[lod]
   // counted down from the top ring, which is always turned: the faces above
   // the ground zigzag both below it and up to the trunk's next ring
-  const rings = us.map((u, k) => [ground + u, radius(ground + u) * flare(foot.flare, u), ((us.length - k) % 2) * foot.turn, foot.toes * Math.min(1, Math.max(0, 1 - u / tip))])
+  const rings = us.map((u, k) => [ground + u, radius(ground + u) * flare(foot.flare, u), ((us.length - k) % 2) * foot.turn, foot.toes * Math.min(1, Math.max(0, 1 - u / tip)), foot.rag * Math.max(0, u)])
   const top = rings.length ? rings[rings.length - 1][0] : -Infinity
   return rings.concat(ys.filter((y) => y > top).map((y) => [y, radius(y) * (rings.length ? flare(foot.flare, y - ground) : 1)]))
 }
@@ -272,10 +277,11 @@ function canopyTree(rng, lod, variant, type) {
   const bark = col('#5c4c3a', d, 0.1)
   const vineCol = vines.map(() => col('#3d5f22', d))
   const ground = type.sink
-  // the trunk and its buttresses bow together
+  // the trunk and its buttresses bow together; what is buried below the
+  // origin holds still, where roots.js put it
   const bow = (geo) => {
     const p = geo.attributes.position
-    for (let i = 0; i < p.count; i++) p.setX(i, p.getX(i) + Math.sin((p.getY(i) / H) * Math.PI) * bend)
+    for (let i = 0; i < p.count; i++) p.setX(i, p.getX(i) + Math.sin((Math.max(0, p.getY(i)) / H) * Math.PI) * bend)
     return geo
   }
   const barkAt = (nx, ny, nz, cx, cy, cz) => shade('#5c4c3a', 1, cx, cy, cz, 0.08).lerp(BARK_UP, Math.max(0, cy / H))
@@ -686,13 +692,14 @@ function coral(rng, lod, variant) {
 // pivot: where on the plant (fraction of its height) LOD distance is measured
 // to — the crown, so a canopy seen from a helicopter above it counts as near.
 // noFar: no LOD2 — the type just fades out at the draw distance (boulders
-// are a few pixels by then).
-const TYPES = {
+// are a few pixels by then). tilt: leans up to this far (rad) about either
+// level axis.
+export const TYPES = {
   canopy: { builder: canopyTree, tier: 'big', spacing: 8.5, scale: [0.8, 1.25], sink: 0.4, variants: 2, shadow: true, pivot: 0.75 },
   palm: { builder: palm, tier: 'big', spacing: 9.5, scale: [0.85, 1.2], sink: 0.2, variants: 2, shadow: true, pivot: 0.8 },
   broadleaf: { builder: broadleaf, tier: 'big', spacing: 13, scale: [0.8, 1.25], sink: 0.2, variants: 2, shadow: true, pivot: 0.7 },
   pine: { builder: pine, tier: 'big', spacing: 9, scale: [0.8, 1.3], sink: 0.2, variants: 2, shadow: true, pivot: 0.55 },
-  rock: { builder: rock, tier: 'big', spacing: 15, scale: [0.6, 2.6], sink: 0.35, variants: 2, shadow: true, tilt: true, noFar: true, pivot: 0.35 },
+  rock: { builder: rock, tier: 'big', spacing: 15, scale: [0.6, 2.6], sink: 0.35, variants: 2, shadow: true, tilt: 0.4, noFar: true, pivot: 0.35 },
   fern: { builder: fern, tier: 'small', spacing: 2.3, scale: [0.75, 1.3], sink: 0, variants: 2 },
   bigleaf: { builder: bigleaf, tier: 'small', spacing: 3.2, scale: [0.8, 1.4], sink: 0, variants: 2 },
   bush: { builder: bush, tier: 'small', spacing: 4.2, scale: [0.7, 1.4], sink: 0.1, variants: 2 },
@@ -719,13 +726,22 @@ const TYPES = {
 // so the picks only need rebuilding every slack / 2 the box moves.
 const FADE = { near: [30, 38], mid: 18, far: 100, small: 14, detail: 8, margin: { near: 4, far: 8 }, farFog: [1.4, 1100, 1450], shadowSlack: 6 }
 
+// A big plant pushed over (fell()) would swing what is buried below its
+// origin (the foot of a trunk) up out of the ground with it, so that draws
+// in to the origin as it goes over: from the first of these uprightnesses
+// (the cosine of its lean; 53° over) to the second (72°), leaving a felled
+// trunk a log's butt. A felled tree ends at 0.12; rocks, the only plants
+// that stand leaning (tilt), never get below cos(2 tilt), 0.70.
+export const TUCK = [0.6, 0.3]
+
 // ---------------------------------------------------------------- material
 
-// Wind sway, parting where something pushes through, and the LOD fade. Each
-// material owns a band (in0, in1, out0, out1): an instance fades in between
-// in0 and in1 metres from the camera and out between out0 and out1, measured
-// from its pivot (aPivot up its own axis), so a whole plant fades as one; the
-// undergrowth (uFlat 0) measures it across the ground, as it is streamed.
+// Wind sway, parting where something pushes through, a felled plant's foot
+// drawn in (TUCK), and the LOD fade. Each material owns a band (in0, in1,
+// out0, out1): an instance fades in between in0 and in1 metres from the
+// camera and out between out0 and out1, measured from its pivot (aPivot up
+// its own axis), so a whole plant fades as one; the undergrowth (uFlat 0)
+// measures it across the ground, as it is streamed.
 // The fade is an ordered 8x8 Bayer dither with discard, shifted per instance
 // so neighbouring plants don't share one screen-door; a fade-in uses the
 // complement of the threshold, so where one LOD fades out over a band and the
@@ -760,10 +776,13 @@ function vegShader(shader, u, band, flat) {
       '#include <begin_vertex>',
       `#include <begin_vertex>
        #ifdef USE_INSTANCING
-         vec3 iw = (modelMatrix * instanceMatrix * vec4(0.0, aPivot, 0.0, 1.0)).xyz;
+         mat4 plantM = modelMatrix * instanceMatrix;
        #else
-         vec3 iw = (modelMatrix * vec4(0.0, aPivot, 0.0, 1.0)).xyz;
+         mat4 plantM = modelMatrix;
        #endif
+       vec3 iw = (plantM * vec4(0.0, aPivot, 0.0, 1.0)).xyz;
+       // a felled plant's buried foot draws in as it goes over (TUCK)
+       if (position.y < 0.0) transformed *= smoothstep(${TUCK[1].toFixed(2)}, ${TUCK[0].toFixed(2)}, normalize(plantM[1].xyz).y);
        vec2 ip = iw.xz;
        float ph = ip.x * 0.37 + ip.y * 0.23;
        float sw = aSway * uWind;
@@ -1000,7 +1019,7 @@ export class Vegetation {
           if (isl.sample(isl.road, px, pz) > 0.02 || isl.sample(isl.clear, px, pz) > 0.35) continue
           const y = isl.heightAt(px, pz) - t.sink * s
           const meta = this.meta[name][v]
-          const inst = { x: px, y, z: pz, py: y + meta.py * s, reach: meta.reach * s, yaw, s, v, tilt: t.tilt ? [rng.range(-0.4, 0.4), rng.range(-0.4, 0.4)] : null }
+          const inst = { x: px, y, z: pz, py: y + meta.py * s, reach: meta.reach * s, yaw, s, v, tilt: t.tilt ? [rng.range(-t.tilt, t.tilt), rng.range(-t.tilt, t.tilt)] : null }
           const c = getChunk(px, pz)
           ;(c.lists[name] ||= []).push(inst)
           if (meta.r > 0) {

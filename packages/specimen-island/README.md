@@ -255,11 +255,13 @@ src/
     terrain.js water.js sky.js textures.js fx.js
     vegetation.js    instanced plants: big-tier LODs and streamed undergrowth,
                      dithered LOD fades, wind sway and parting in the shader;
-                     fell() topples a tree something heavy drove into;
+                     fell() topples a tree something heavy drove into (its
+                     buried foot drawing in as it goes over);
                      kelp, seagrass and corals drawn only under water
     roots.js         tree roots as plain numbers (tested): the flared foot of
                      each trunk and the canopy giants' buttress fins, sunk deep
-                     enough that no slope a tree grows on lifts them clear
+                     enough that ground falling away at up to ROOT_SLOPE never
+                     lifts them clear
     underwater.js    below the surface: fog and light by depth, the surface seen
                      from beneath (Snell's window), caustics, light shafts, snow
     sealife.js       ambient fish schools, jellies, ammonites, a passing reptile
@@ -401,7 +403,8 @@ src/
   An underwater plant is `marine: true` with its grid in `Island.computeMarine`;
   it is drawn only while the camera is below the surface. A tree's trunk can
   stand on a flared foot: a `FOOT` entry in `world/roots.js`, built by
-  `trunkGeo` (`tests/roots.test.js` checks it stays buried on steep ground).
+  `trunkGeo` (`tests/roots.test.js` builds every tree and checks its foot
+  stays buried on steep ground).
 - **Shape the seabed:** add a reef (`{ x, z, r, top, rough }`) or move the trench
   in `seabed` in `data/world.js`. Only ground already deeper than `below[0]` is
   touched, so no coast moves; `tests/sea.test.js` checks that.
