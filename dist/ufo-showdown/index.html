@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UFO Showdown</title>
-<meta name="description" content="Seven missions of saucers, asteroids, ring races, fog and lightning, six bosses, and a star store full of ships, paint jobs, drones and upgrades — solo or two players on one keyboard.">
+<meta name="description" content="Eight missions of saucers, asteroids, hyperspace, fog, lightning and a crazy swarm, seven bosses, and a star store full of ships, paint jobs, drones and upgrades — solo or two players on one keyboard.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23090620'/><ellipse cx='16' cy='13' rx='6' ry='6' fill='%239ff0ff' opacity='.85'/><circle cx='16' cy='12' r='3' fill='%2373e05a'/><ellipse cx='16' cy='17' rx='13' ry='4.6' fill='%23b9c7d8'/><circle cx='9' cy='18' r='1.3' fill='%23ffe23d'/><circle cx='16' cy='19.6' r='1.3' fill='%23ffe23d'/><circle cx='23' cy='18' r='1.3' fill='%23ffe23d'/></svg>">
-  <script type="module" crossorigin src="./assets/index-DkvOYR_j.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-A03RpFmc.css">
+  <script type="module" crossorigin src="./assets/index-DgnGIwRt.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-S2sPhv41.css">
 </head>
 <body>
 <canvas id="game" aria-label="UFO Showdown play field"></canvas>
@@ -34,7 +34,7 @@
       <div class="pad p1">
         <canvas class="shipicon" data-player="0" width="120" height="108"></canvas>
         <div>
-          <div class="who">Player 1</div>
+          <div class="who">Player 1 <span class="ctl" data-player="0" hidden><svg viewBox="0 0 24 16" width="18" height="12" aria-hidden="true"><path d="M6 1h12a5 5 0 0 1 4.9 4l1 6a3.5 3.5 0 0 1-6.4 2.4L16 11H8l-1.5 2.4A3.5 3.5 0 0 1 .1 11l1-6A5 5 0 0 1 6 1z" fill="currentColor"/></svg></span></div>
           <div class="keys">
             <span class="row"><kbd>W</kbd></span>
             <span class="row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
@@ -44,7 +44,7 @@
       <div class="pad p2">
         <canvas class="shipicon" data-player="1" width="120" height="108"></canvas>
         <div>
-          <div class="who">Player 2</div>
+          <div class="who">Player 2 <span class="ctl" data-player="1" hidden><svg viewBox="0 0 24 16" width="18" height="12" aria-hidden="true"><path d="M6 1h12a5 5 0 0 1 4.9 4l1 6a3.5 3.5 0 0 1-6.4 2.4L16 11H8l-1.5 2.4A3.5 3.5 0 0 1 .1 11l1-6A5 5 0 0 1 6 1z" fill="currentColor"/></svg></span></div>
           <div class="keys">
             <span class="row"><kbd aria-label="Up"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(0deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
             <span class="row"><kbd aria-label="Left"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Down"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(180deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Right"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
@@ -57,6 +57,7 @@
     <p class="stack-note">Carry up to <b>3</b> power-ups. Catch the same one again to stack it, up to <b>×3</b>!</p>
 
     <p class="hint">Your ship fires on its own — you just steer and dodge! Every mission earns <b class="star">★</b> stars for the store. <span class="nowrap"><kbd class="sm">P</kbd> pause</span> <span class="nowrap"><kbd class="sm">M</kbd> sound</span></p>
+    <p class="hint pad-hint">Xbox controller: stick to fly · <kbd class="xbtn xa">A</kbd> choose · <kbd class="xbtn xb">B</kbd> back · <kbd class="xbtn xy">Y</kbd> store · <kbd class="sm">Start</kbd> pause</p>
   </div>
 </section>
 
