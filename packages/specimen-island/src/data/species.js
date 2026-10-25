@@ -13,6 +13,14 @@
 //
 // sedation: ko = dose that drops it, lethal = overdose, metab = units/s cleared.
 //
+// senses: sight (m) and fov (degrees), hearing and smell (multipliers), and
+// motion, how much movement catches its eye. Past 1 it is a motion hunter
+// (actors/perception.js): movement registers `motion` times over, a person
+// holding still not at all unless within `still` m of its flank, and one who
+// freezes is lost — it casts about where it last saw them move. eddy
+// (optional, m, default 6): how near the player must be for it to smell them
+// whatever the wind.
+//
 // attack: range is how far it strikes, horizontally; how high a blow lands
 // comes from the body and the attack's kind (actors/reach.js), not a number here.
 // lure (optional): the noise that brings it from afar (actors/ecology.js).
@@ -336,7 +344,9 @@ export const SPECIES = {
     radius: 1.6,
     health: 650,
     speed: { walk: 2.2, run: 9, turn: 1.6 },
-    senses: { sight: 75, fov: 200, hearing: 1.1, smell: 1.4, motion: 1.6 },
+    // she can stand over someone frozen beneath her head and not know it; her
+    // nose rides 4 m up, so only what the wind carries reaches it
+    senses: { sight: 75, fov: 200, hearing: 1.1, smell: 1.4, motion: 1.6, still: 0.6, eddy: 2 },
     // a bang louder than `noise` (m) within `range` m draws her to it at
     // `pace` of her run, for `hold` s, even from the far side of the island
     // (actors/ecology.js lure): the tank's gun, a shell or missile going off.

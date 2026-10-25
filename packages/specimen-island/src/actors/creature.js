@@ -37,10 +37,14 @@ export class Creature {
     this.pitch = 0
     this.speed = 0
     this.targetSpeed = 0
+    // how hard it gets going and pulls up, m/s² (locomote): the heavy are
+    // slow at both, so a charging giant needs room to stop (Brain.closeOn)
+    this.accel = this.sp.mass > 2000 ? 3 : 7
+    this.brake = this.accel * 1.6
     this.target = null
     this.faceYaw = null
     this.turnRate = 0
-    this.intent = { graze: 0, alert: 0, roar: 0, attack: 0, crouch: 0, eat: 0, look: null }
+    this.intent = { graze: 0, alert: 0, roar: 0, attack: 0, crouch: 0, eat: 0, sniff: 0, look: null }
     this.roaring = 0
     this.voiceCool = this.rng.range(0, 3)
     this.avoid = { yaw: 0, until: 0 }
@@ -145,7 +149,9 @@ export class Creature {
 
   vocalize(kind) {
     if (this.voiceCool > 0 && kind !== 'alarm' && kind !== 'attack') return
-    this.voiceCool = this.rng.range(1.5, 3)
+    // a sniff is breath, not a call: it waits for the voice to be free but
+    // does not hold it, so the roar when a search finds you is not lost
+    if (kind !== 'sniff') this.voiceCool = this.rng.range(1.5, 3)
     if (kind === 'roar' || kind === 'threat' || kind === 'alarm') this.roaring = 1
     this.G.audio?.voice(this.sp, kind, this.eyePos())
   }
@@ -279,7 +285,15 @@ export class Creature {
       if (G.time < this.stuck.until) desiredYaw += this.stuck.detour
       // feelers: steer around water, cliffs and obstacles ahead
       if (want > 0.3) desiredYaw = this.steer(desiredYaw, want)
-    } else if (this.faceYaw != null) desiredYaw = this.faceYaw
+    } else {
+      // standing still is not being stuck: count afresh from where it moves
+      // off, or a pause (a sniff, a look round) sends it on a detour — in a
+      // search, onto whoever froze there
+      this.stuck.t = 0
+      this.stuck.x = this.pos.x
+      this.stuck.z = this.pos.z
+      if (this.faceYaw != null) desiredYaw = this.faceYaw
+    }
 
     // turn, slower when fast and heavy
     const turnMax = sp.speed.turn * (want > 0.2 ? 1 : 1.3) * (0.6 + 0.4 * mul) * dt
@@ -289,8 +303,7 @@ export class Creature {
     // big turns cost speed
     const misalign = Math.abs(wrapAngle(desiredYaw - this.yaw))
     if (misalign > 1.2) want *= 0.35
-    const accel = sp.mass > 2000 ? 3 : 7
-    this.speed += clamp(want - this.speed, -accel * 1.6 * dt, accel * dt)
+    this.speed += clamp(want - this.speed, -this.brake * dt, this.accel * dt)
     if (!this.vitals.conscious) this.speed = 0
     const step = this.speed * dt
     const depth0 = G.island.depthAt(this.pos.x, this.pos.z)
@@ -400,6 +413,7 @@ export class Creature {
     a.attack = I.attack
     a.crouch = I.crouch
     a.eat = I.eat
+    a.sniff = I.sniff
     a.drowsy = this.vitals.state === 'drowsy' ? Math.min(1, (this.vitals.sedation - 0.35) * 2 + 0.3) : 0
     if (I.look && this.vitals.conscious) {
       const e = this.pos

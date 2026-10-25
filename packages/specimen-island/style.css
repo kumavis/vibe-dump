@@ -318,6 +318,7 @@ body.playing #hud {
   color: var(--bad);
 }
 #target .s-alerted,
+#target .s-searching,
 #target .s-fleeing {
   color: #ffb070;
 }
@@ -474,6 +475,31 @@ body.playing #hud {
   display: block;
   height: 100%;
   background: #ffd070;
+}
+/* a motion hunter on your trail: is freezing working? */
+#motionHint {
+  margin-top: 5px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+#motionHint:empty {
+  display: none;
+}
+#motionHint .bad {
+  color: var(--bad);
+  animation: motionPulse 0.7s ease-in-out infinite alternate;
+}
+#motionHint .warn {
+  color: #ffb070;
+}
+#motionHint .good {
+  color: var(--good);
+}
+@keyframes motionPulse {
+  to {
+    opacity: 0.45;
+  }
 }
 .bar {
   height: 8px;

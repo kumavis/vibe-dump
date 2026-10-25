@@ -278,7 +278,8 @@ src/
     perception.js    sight (FOV, LOS, visibility), hearing (noise bus), smell (wind)
     reach.js         how high an attack reaches, from the body (pure, testable)
     brain.js         temperament-driven state machine; lays siege to quarry it
-                     cannot reach, then lies in wait
+                     cannot reach, then lies in wait; a motion hunter searches
+                     where it lost a player who froze
     creature.js      composes the above; locomotion and steering
     ecology.js       herds, persistent records, load/unload around the player,
                      lure (a species drawn to a loud enough bang from afar, to
@@ -414,10 +415,31 @@ src/
 `game/stealth.js` computes the player's visibility each frame from stance,
 speed, the cover grid under them, daylight and the flashlight, and keeps the
 recent noise events. Each animal's `Perception` builds `awareness` from sight
-(gated by field of view and line of sight; motion hunters like the tyrant barely
-see a still player), hearing (footsteps, shots, thrown stones) and scent (only
-downwind). Below 0.35 it is oblivious, up to 1 it investigates, at 1 it has
-detected you and its temperament takes over.
+(gated by field of view and line of sight), hearing (footsteps, shots, thrown
+stones) and scent (only downwind, but for an eddy of 6 m round it). Below 0.35
+it is oblivious, up to 1 it investigates, at 1 it has detected you and its
+temperament takes over.
+
+A motion hunter (`senses.motion` over 1: the tyrant) sees only movement —
+walking, crouch-walking, dropping into a crouch or rising, a jump, a ladder, a
+shot; not turning to look or aim (`Stealth.still` counts how long the player has held
+still). Movement is `motion` times as visible to it, so it reacquires at once,
+but a player who has held still for a beat is invisible to it unless within
+`still` m of its flank, and its `eddy` is only 2 m, so it smells them only from
+downwind. The first look that does not find them it doubts (`Perception.doubts`):
+it strikes at nothing and eases off so as to pull up a stride short of where it
+last had them, braking in time from a run; if it is too close to stop it swerves
+to thunder past at that distance rather than through them (`pullUp` in
+`brain.js`). Once it has had no fix on them for 0.6 s — none by eye, nor by ear or
+nose within a lunge — it has lost them (`Perception.lost`): rather than close on where
+they stand, it goes to where it last had them and searches there (`investigate`
+with `search`), nose down, casting to and fro across the way it came in (even
+when a charge carried it past the spot) and following any noise or whiff, then
+moves on. It can stand over someone frozen beneath its head and never know.
+Freezing needs a little room: a charge still a dozen metres out is lunging
+before it has noticed you stopped. While it is after you the HUD's stealth panel
+says MOTION HUNTER · FREEZE as you move, and whether freezing is working when you
+do not.
 
 ### Up high: reach
 
@@ -466,7 +488,9 @@ Run `node --test packages/specimen-island/tests/*.test.js` from the repo root
 helicopters, roofs overhead — and when a hunter that gave up on a roof comes
 back; `tank.test.js` the skid steering, hill climbing, the fire-control sums
 and an armoured hull's share of an animal's blow; `lure.test.js` which bangs
-bring the tyrant, and that she stops at the shore).
+bring the tyrant, and that she stops at the shore; `motion.test.js` what the
+tyrant's eye makes of a player moving, stopping and frozen, what counts as
+moving, and how a charge cut off by a freeze pulls up short or swerves past).
 `tests/missiles.test.js` flies the guidance against moving targets, lands
 unguided shots on the sight, and checks the seeker's cone, cover and decoy rules
 (a flare anywhere in a missile's view, an animal only beside the target). The

@@ -4,6 +4,7 @@ import { clamp, wrapAngle, yawTo, formatTime } from '../core/mathx.js'
 import { doseReadout } from './dose.js'
 import { Viewfinder } from './viewfinder.js'
 import { LockBox } from './lockbox.js'
+import { SETTLE } from '../actors/perception.js'
 
 // The heads-up display. Reads game state each frame and writes the DOM only
 // when something changed. Deus Ex-ish information: an eye that shows how
@@ -20,7 +21,7 @@ export class HUD {
     for (const id of [
       'hud', 'crosshair', 'hitmarker', 'prompt', 'promptText', 'promptRing', 'health', 'stamina', 'eye', 'eyeLabel', 'noise', 'weapon', 'weaponName', 'ammo',
       'gadgets', 'compass', 'compassStrip', 'objectives', 'score', 'clock', 'toasts', 'detect', 'target', 'scope', 'blind', 'vignette', 'heliHud', 'fade', 'hurtArrow',
-      'gunReticle',
+      'gunReticle', 'motionHint',
     ])
       this.el[id] = $(id)
     this.detectCtx = this.el.detect.getContext('2d')
@@ -37,6 +38,13 @@ export class HUD {
       if (!vehicle.occupied) return
       this.vignette = Math.min(1, this.vignette + amount * VEHICLE_FX.vignettePerHp)
       this.hullFlash = VEHICLE_FX.flashTime
+    })
+    // the first sign that freezing works: a motion hunter has lost you
+    this.lostT = -99
+    G.events.on('creature:lost', ({ creature }) => {
+      if (G.time - this.lostT < 45) return
+      this.lostT = G.time
+      this.toast(`${G.science.known(creature.sp.id) ? creature.sp.name : 'It'} lost sight of you — hold still`, 'info')
     })
     this.buildCompass()
     this.viewfinder = new Viewfinder(G)
@@ -112,6 +120,7 @@ export class HUD {
     this.set('eyeCol', this.el.eye, col, 'style.background')
     this.set('eyeLbl', this.el.eyeLabel, flying ? (veh.aircraft ? 'AIRBORNE' : veh.kind === 'sub' ? (veh.surfaced ? 'SURFACED' : 'SUBMERGED') : 'DRIVING') : vis < 0.25 ? 'HIDDEN' : vis < 0.6 ? 'LOW PROFILE' : 'EXPOSED')
     this.set('noise', this.el.noise, `${clamp(G.stealth.playerNoise / 25, 0, 1) * 100}%`, 'style.width')
+    this.set('motion', this.el.motionHint, flying ? '' : this.motionHint(), 'html')
 
     // weapon
     const def = W.def
@@ -185,6 +194,29 @@ export class HUD {
       this.targetTimer = 0.1
       this.updateTarget()
     }
+  }
+
+  // While a motion hunter (senses.motion > 1) hunts the player, or searches
+  // where it lost them, the stealth panel says what freezing is doing: it
+  // sees you moving; you are holding still and it cannot see you; or you are
+  // still but the wind carries your scent to it.
+  motionHint() {
+    const G = this.G
+    const p = G.player.pos
+    let near = null
+    let nd = 90
+    for (const c of G.ecology.active) {
+      const B = c.brain
+      if (!c.vitals.conscious || !(c.sp.senses.motion > 1)) continue
+      if (!(((B.state === 'hunt' || B.state === 'attack') && (B.data.target ?? 'player') === 'player') || B.data.search)) continue
+      const d = Math.hypot(c.pos.x - p.x, c.pos.z - p.z)
+      if (d < nd) [near, nd] = [c, d]
+    }
+    if (!near) return ''
+    if (G.stealth.still < SETTLE) return '<b class="bad">MOTION HUNTER · FREEZE</b>'
+    const S = near.sp.senses
+    if (G.stealth.scentAt(near.pos.x, near.pos.z, 40 * S.smell, S.eddy) > 0) return '<b class="warn">FROZEN · BUT IT SMELLS YOU</b>'
+    return '<b class="good">FROZEN · IT CANNOT SEE YOU</b>'
   }
 
   // Speed, hull and (for the helicopter) altitude, climb rate and fuel. A
@@ -390,6 +422,7 @@ export class HUD {
     else if (c.brain.state === 'flee') state = 'FLEEING'
     else if (['hunt', 'attack', 'charge', 'spit'].includes(c.brain.state)) state = 'HOSTILE'
     else if (c.brain.state === 'threaten') state = 'THREATENED'
+    else if (c.brain.data.search) state = 'SEARCHING'
     else if (P.awareness >= 1) state = 'ALERTED'
     else if (P.awareness >= 0.35) state = 'SUSPICIOUS'
     else state = 'UNAWARE'
@@ -400,6 +433,7 @@ export class HUD {
     const under = v.conscious && !G.vehicle && c.underfoot(G.player.pos)
     const reach = (held.kind === 'melee' && hit.t <= held.reach ? ' · IN REACH' : '') + (under ? ' · <span class="bad">UNDERFOOT</span>' : '')
     let html = `<div class="tname">${known ? c.sp.name : 'Unknown species'}<small>${Math.round(hit.t)} m · ${hit.zone === 'armor' ? 'ARMOUR' : hit.zone.toUpperCase()}${reach}</small></div><div class="tstate s-${state.split(' ')[0].toLowerCase()}">${state}</div>`
+    if (known && v.conscious && c.sp.senses.motion > 1) html += `<div class="dose">Motion hunter: freeze and it cannot see you · downwind it smells you</div>`
     if (under) html += `<div class="dose"><span class="bad">Underfoot — it tramples you when it walks. Back off</span></div>`
     if (known && v.alive) {
       const sp = c.sp.sedation
