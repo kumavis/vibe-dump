@@ -40,7 +40,7 @@ export class Creature {
     this.target = null
     this.faceYaw = null
     this.turnRate = 0
-    this.intent = { graze: 0, alert: 0, roar: 0, attack: 0, crouch: 0, eat: 0, look: null }
+    this.intent = { graze: 0, alert: 0, roar: 0, attack: 0, crouch: 0, eat: 0, sniff: 0, look: null }
     this.roaring = 0
     this.voiceCool = this.rng.range(0, 3)
     this.avoid = { yaw: 0, until: 0 }
@@ -400,6 +400,7 @@ export class Creature {
     a.attack = I.attack
     a.crouch = I.crouch
     a.eat = I.eat
+    a.sniff = I.sniff
     a.drowsy = this.vitals.state === 'drowsy' ? Math.min(1, (this.vitals.sedation - 0.35) * 2 + 0.3) : 0
     if (I.look && this.vitals.conscious) {
       const e = this.pos

@@ -454,6 +454,15 @@ export class Audio {
     const max = 120 + s.size * 380
     const vol = 0.25 + s.size * 0.6
     const short = kind === 'attack' || kind === 'alarm'
+    // a search's snuffling is breath, not voice: two or three quick draws
+    // through the nose, deeper the bigger the animal, heard only close by
+    if (kind === 'sniff') {
+      const n = 2 + Math.floor(Math.random() * 2)
+      const near = 25 + s.size * 20
+      for (let i = 0; i < n; i++) this.burst({ dur: 0.16, type: 'bandpass', freq: 380 + 900 * p, q: 1.6, vol: vol * 0.32, attack: 0.05, pos, max: near, sweep: 1.5, delay: i * 0.22 })
+      this.burst({ dur: 0.5, type: 'lowpass', freq: 500 + 600 * p, vol: vol * 0.2, attack: 0.08, pos, max: near, sweep: 0.5, delay: n * 0.22 + 0.1 })
+      return
+    }
     switch (s.voice) {
       case 'roar': {
         const dur = short ? 0.7 : 2.4
@@ -740,8 +749,8 @@ export class Audio {
       const a = Math.random() * Math.PI * 2
       this.voice(sp, 'roar', { x: L.x + Math.cos(a) * 300, y: L.y, z: L.z + Math.sin(a) * 300 })
     }
-    // heartbeat when something is hunting you
-    const hunted = G.ecology.active.some((c) => c.brain.state === 'hunt' && c.brain.data.target === 'player' && Math.hypot(c.pos.x - L.x, c.pos.z - L.z) < 45)
+    // heartbeat when something is hunting you, or searching for you where it lost you
+    const hunted = G.ecology.active.some((c) => ((c.brain.state === 'hunt' && c.brain.data.target === 'player') || c.brain.data.search) && Math.hypot(c.pos.x - L.x, c.pos.z - L.z) < 45)
     if (hunted) {
       this.heartT -= dt
       if (this.heartT <= 0) {
