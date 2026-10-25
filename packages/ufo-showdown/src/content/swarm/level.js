@@ -16,7 +16,7 @@ const LENGTH = 76 // seconds of swarm before the Queen
 
 // How many swarmlets the sky should hold, [seconds in, count]: the rain tops
 // the flocks and rivers up to this. Killing fast just means more to kill.
-const CROWD = [[0, 16], [8, 34], [20, 62], [34, 92], [46, 120], [60, 148], [76, 162]]
+const CROWD = [[0, 14], [8, 30], [20, 52], [34, 76], [46, 96], [60, 112], [76, 122]]
 
 const RIVERS = ['side', 'snake', 'swoop', 'side', 'swoop', 'snake']
 
@@ -83,7 +83,7 @@ function tip(g, key, text, color = '#cfeeff') {
 
 function spitters(g, n) {
   const live = g.enemies.filter((e) => e.type === 'swarmspitter').length
-  n = Math.min(n, (g.numPlayers === 2 ? 5 : 4) - live)
+  n = Math.min(n, (g.numPlayers === 2 ? 4 : 3) - live)
   for (let i = 0; i < n; i++) g.later(i * 0.35, () => spitter(g, g.W * ((i + 0.5 + Math.random() * 0.6 - 0.3) / n)))
   if (n > 0) tip(g, 'spit', 'Red bugs shoot back. Watch their stingers glow!', '#ffb3a8')
 }
@@ -91,6 +91,9 @@ function spitters(g, n) {
 function rings(g, all) {
   const ships = g.alive()
   const targets = all ? ships : ships.length ? [g.pick(ships)] : []
+  // a shield bubble drops in right where each ring is closing, so a kid who
+  // gets caught has a second chance
+  for (const p of targets) g.dropBubble(g.clamp(p.x, 40, g.W - 40), g.playerTop() - 40, 'shield')
   targets.forEach((p, i) => g.later(i * 0.5, () => ring(g, p, { pal: (lv.riverI + i * 2) % PALS_N })))
   if (targets.length) tip(g, 'ring', 'They are surrounding you! Fly out through the gap!', '#ffe9a8')
 }
@@ -131,13 +134,13 @@ const SCRIPT = [
     river(g, { style: 'side', dir: 1, y: 120, n: 28 })
     river(g, { style: 'side', dir: -1, y: 260, n: 28 })
     g.dropBubble(g.W * 0.3, -30, 'triple')
+    g.later(1.2, () => g.dropBubble(g.W * 0.7, -30, 'heart'))
     synth.tone({ type: 'sawtooth', from: 220, to: 660, dur: 0.5, vol: 0.08 }, 'swarm-surge', 1)
   }],
   [49, (g) => {
     spiral(g, { x: g.W * 0.27, y: 170, arms: 2, turn: 1.3 })
     spiral(g, { x: g.W * 0.73, y: 170, arms: 2, turn: -1.3 })
   }],
-  [53, (g) => rings(g, false)],
   [55.5, (g) => wall(g, { rows: 2, gaps: 2, vy: 96 })],
   [57, (g) => {
     spitters(g, 3)
@@ -183,7 +186,7 @@ function updateMain(g, dt) {
     river(g, { style: RIVERS[lv.riverI++ % RIVERS.length], n: Math.round(18 + t / 4) })
   }
   if (t > 22 && (lv.spitT -= dt) <= 0) {
-    lv.spitT = lerp(8, 4.5, u)
+    lv.spitT = lerp(9.5, 5.5, u)
     spitters(g, t > 50 ? 2 : 1)
   }
 

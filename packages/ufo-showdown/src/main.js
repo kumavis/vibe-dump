@@ -847,7 +847,9 @@ const BOSSES = {
   zorb: {
     name: 'Captain Zorb',
     create() {
-      const hp = Math.round(70 * hpMult())
+      // the first boss a kid ever meets stays the gentlest: barely tougher
+      // than before the game got harder, and in no hurry
+      const hp = Math.round(70 * (numPlayers === 2 ? 1.5 : 1.1))
       return { x: W / 2, y: -140, ty: 170, r: 150, hp, maxHp: hp, sway: 0, fanT: 2.2, aimT: 1.4, ringT: 3, spawnT: 7 }
     },
     update(b, dt) {
@@ -862,13 +864,13 @@ const BOSSES = {
 
       if ((b.fanT -= dt) <= 0) {
         fan(b.x, b.y + 30, angry ? 9 : 7, 1.2, 210, '#7dff5a')
-        b.fanT = angry ? 1.8 : 2.4
+        b.fanT = angry ? 2.1 : 2.8
       }
       if ((b.aimT -= dt) <= 0) {
         aimed(b.x, b.y + 30, 3, 0.18, 270, '#ffe23d')
-        b.aimT = angry ? 1.2 : 1.6
+        b.aimT = angry ? 1.4 : 1.9
       }
-      if (angry && (b.ringT -= dt) <= 0) {
+      if (b.hp < b.maxHp * 0.35 && (b.ringT -= dt) <= 0) {
         ringShot(b.x, b.y, 14, 150, '#9ff0ff', b.t)
         b.ringT = 3.6
       }
@@ -1805,7 +1807,9 @@ function drawBars() {
 
 function drawPlayer(p) {
   if (!p.alive) return
-  if (p.invuln > 0 && Math.floor(time * 14) % 2 === 0) ctx.globalAlpha = 0.35
+  // the just-hit blink — but not through a cutscene, where the ship is only
+  // being kept safe and the kid should see it plainly
+  if (p.invuln > 0 && !cutscene && Math.floor(time * 14) % 2 === 0) ctx.globalAlpha = 0.35
   const moving = Math.min(1, Math.hypot(p.vx, p.vy) / 400)
   for (const [dx, dy] of dronePositions(p)) drawDrone(ctx, dx, dy, p.paint, time + p.id)
   drawShipModel(ctx, p.x, p.y, p.ship, p.paint, { tilt: p.tilt, t: time + p.id, thrust: 0.4 + moving * 0.6 - Math.max(0, p.vy / 800) })

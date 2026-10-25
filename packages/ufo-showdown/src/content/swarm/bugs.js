@@ -77,7 +77,9 @@ export function tally(g, e, owner, pts) {
     const p = g.players[owner] ?? g.players[0]
     const bonus = n
     g.addScore(owner, bonus)
-    if (p?.alive) stats.shout = say(g, stats.shout, p.x, p.y - 64, `×${n} COMBO! +${bonus}`, '#ff9be6', 17, 1.2)
+    // shouted up under the zap counter rather than over the ship, where it would
+    // land on top of the pickup text in a busy moment
+    if (p?.alive) stats.shout = say(g, stats.shout, g.W / 2, 132, `×${n} COMBO! +${bonus}`, '#ff9be6', 17, 1.2)
     synth.tone({ type: 'square', from: 660 + Math.min(stats.ci, 8) * 60, to: 1320, dur: 0.12, vol: 0.06 }, 'swarm-combo', 0.1)
   }
   if (stats.sinceDrop >= DROP_EVERY && stats.dropT <= 0) {

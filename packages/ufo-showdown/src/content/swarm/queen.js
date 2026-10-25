@@ -112,7 +112,8 @@ export const hivequeen = {
 
     if (!b.rage && b.hp <= b.maxHp * 0.5) {
       b.rage = true
-      g.popText(b.x, b.y + 190 * b.k, 'The Hive Queen is FURIOUS!', '#ff8a8a', 22, 2)
+      // a line below "Her armour is open!", which often lands the same moment
+      g.popText(b.x, b.y + 236 * b.k, 'The Hive Queen is FURIOUS!', '#ff8a8a', 22, 2)
       g.shake(10)
       screech()
     }
