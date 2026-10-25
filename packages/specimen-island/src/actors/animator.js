@@ -27,8 +27,9 @@ export class Animator {
     this.drowsy = 0
     this.crouch = 0
     this.eat = 0
+    this.sniff = 0 // nose down, snuffling: a hunter searching for something it lost
     // smoothed copies
-    this.s = { graze: 0, alert: 0, roar: 0, attack: 0, down: 0, drowsy: 0, crouch: 0, lookYaw: 0, lookPitch: 0, amp: 0, eat: 0, turn: 0 }
+    this.s = { graze: 0, alert: 0, roar: 0, attack: 0, down: 0, drowsy: 0, crouch: 0, lookYaw: 0, lookPitch: 0, amp: 0, eat: 0, turn: 0, sniff: 0 }
     const legLen = this.B.hipH
     this.stride = legLen * (this.B.plan === 'quad' ? 1.5 : 1.7)
   }
@@ -45,6 +46,7 @@ export class Animator {
     k('drowsy', 2)
     k('crouch', 4)
     k('eat', 4)
+    k('sniff', 2.5)
     k('turn', 4)
     s.lookYaw = damp(s.lookYaw, clamp(this.lookYaw, -1.2, 1.2), 5, dt)
     s.lookPitch = damp(s.lookPitch, clamp(this.lookPitch, -0.7, 0.6), 5, dt)
@@ -127,7 +129,9 @@ export class Animator {
     // ---- neck + head
     const nn = R.neck.length
     const grazeAngle = this.sp.browse ? -0.25 : biped ? 1.25 : 0.95
-    const pitchAdd = s.graze * grazeAngle - s.alert * 0.3 - s.roar * 0.45 + s.attack * 0.35 + s.drowsy * 0.6 + s.crouch * 0.25 + s.lookPitch
+    // sniffing: the head held low over the ground, jerking with each draw of breath
+    const snuff = s.sniff * (0.6 * grazeAngle + Math.max(0, Math.sin(t * 7)) * 0.06)
+    const pitchAdd = s.graze * grazeAngle - s.alert * 0.3 - s.roar * 0.45 + s.attack * 0.35 + s.drowsy * 0.6 + s.crouch * 0.25 + snuff + s.lookPitch
     const yawAdd = s.lookYaw + s.drowsy * Math.sin(t * 0.7) * 0.25
     R.neck.forEach((bone, i) => {
       const r = rest(bone)

@@ -23,7 +23,8 @@ export const LORE = {
     title: 'Terminal — Specimen T-01 “Matron”',
     text:
       'Adult female Tyrannosaurus. Collar battery dead since the evacuation; last fix in the northern ' +
-      'highlands. Hunts by movement and scent — freeze when she looks your way, and keep the wind in your face.\n\n' +
+      'highlands. Hunts by movement and scent — freeze when she looks your way, and keep the wind in your face. ' +
+      'She cannot see what keeps still, not even with her head right over it.\n\n' +
       'Knockout takes eight rifle darts to the body, fewer placed in the neck or head. Do NOT stand in front of her ' +
       'while the sedative takes hold.',
   },

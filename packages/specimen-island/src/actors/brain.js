@@ -1,9 +1,43 @@
-import { clamp, wrapAngle, yawTo } from '../core/mathx.js'
+import { clamp, wrapAngle, yawTo, yawDirX, yawDirZ } from '../core/mathx.js'
 import { OBLIVIOUS } from './perception.js'
 
 // Up on something — a roof, a tower, a crate, a deck, a hovering helicopter —
 // where height, walls or stilts may keep a hunter off.
 const aloft = (G, p) => p.y - G.island.heightAt(p.x, p.z) > 0.5
+
+// How a motion hunter searches where it lost the player (Brain.search): it
+// pulls up `pullUp` m past its flank short of the spot (swerving past it if
+// braking would carry it more than `overrun` m on, pullUp()), casts `cast` m
+// out from it at `spread` radians either side of the way it came in, lingers
+// `linger` s once there and moves on `leave` m back the way it came.
+export const SEARCH = { pullUp: 1.6, overrun: 0.5, cast: [5, 7], spread: [0.35, 0.8], linger: [14, 22], leave: [18, 26] }
+
+// How a hunter closing on `at` pulls up `short` m from it (Brain.closeOn):
+// no faster than it could still stop from in the room left, braking at
+// `brake` m/s². One carrying too much speed to stop short — a charge cut off
+// by a player freezing in front of it — swerves instead, braking all the
+// while, for the tangent to the circle `short` m round the spot on whichever
+// side it is already heading (`side`, ±1, holds it there), and once level
+// with it coasts straight on: it thunders past whoever froze there, not
+// through them. Returns the point to steer for (null: brake straight on),
+// the speed it may go and the side it is passing on (0: not swerving).
+export function pullUp(pos, yaw, speed, brake, at, short, side = 0) {
+  const ux = pos.x - at.x
+  const uz = pos.z - at.z
+  const d = Math.hypot(ux, uz)
+  const room = d - short
+  if (!side && (speed * speed) / (2 * brake) <= room + SEARCH.overrun) return { steer: at, speed: Math.sqrt(2 * brake * Math.max(0, room)), side: 0 }
+  const fx = yawDirX(yaw)
+  const fz = yawDirZ(yaw)
+  if (d <= short) return { steer: null, speed: 0, side: side || 1 }
+  const ca = short / d
+  const sa = Math.sqrt(1 - ca * ca)
+  const tangent = (s) => ({ x: at.x + (short * (ca * ux - s * sa * uz)) / d, z: at.z + (short * (ca * uz + s * sa * ux)) / d })
+  const ahead = (T) => ((T.x - pos.x) * fx + (T.z - pos.z) * fz) / (Math.hypot(T.x - pos.x, T.z - pos.z) || 1)
+  if (!side) side = ahead(tangent(1)) >= ahead(tangent(-1)) ? 1 : -1
+  const T = tangent(side)
+  return { steer: ahead(T) > 0 ? T : null, speed: 0, side }
+}
 
 // Behaviour as a small state machine. `think()` runs a few times a second and
 // picks the state from what the animal perceives (awareness, threats, hunger,
@@ -17,6 +51,15 @@ const aloft = (G, p) => p.y - G.island.heightAt(p.x, p.z) > 0.5
 // actors/reach.js). A hunter whose quarry is up out of its reach — a roof, a
 // tower — lays siege instead (hunt -> besiege), and past its patience lies in
 // wait nearby (investigate with `wait`) until they are back within reach.
+//
+// A motion hunter that has lost the player (Perception.lost: they froze, or
+// got out of its sight) does not close on where they are: it goes to where
+// it last had them and searches there (investigate with `search`) — sniffing,
+// turning, casting about — until it sees them move again, noses them out, or
+// loses interest. One that went up out of its reach it besieges all the same:
+// it saw where they went. From the first look that misses them (doubts) it
+// strikes at nothing and pulls up short of the spot, swerving past it if it
+// is going too fast to stop (closeOn), so a freeze in front of a charge holds.
 
 export class Brain {
   constructor(creature, rng) {
@@ -73,7 +116,7 @@ export class Brain {
       }
     }
     const I = c.intent
-    I.graze = I.alert = I.roar = I.attack = I.crouch = I.eat = 0
+    I.graze = I.alert = I.roar = I.attack = I.crouch = I.eat = I.sniff = 0
     I.look = null
     this[this.state](dt, G)
   }
@@ -123,6 +166,9 @@ export class Brain {
       }
     }
 
+    // searching for a player it lost, it sees them move (or noses them out):
+    // no more doubt about it
+    if (s === 'investigate' && this.data.search && !this.lostPlayer(G)) P.awareness = Math.max(P.awareness, 1)
     const aw = P.awareness
     const player = G.vehicle ? G.vehicle.pos : G.player.pos
     const dPlayer = Math.hypot(player.x - c.pos.x, player.z - c.pos.z)
@@ -149,6 +195,7 @@ export class Brain {
           if (s !== 'flee') this.fleeFrom(player, 10)
           return
         }
+        if (this.lostPlayer(G)) return this.searchFor(G)
         if (s !== 'hunt' || this.data.target !== 'player') {
           this.set('hunt', { target: 'player' })
           c.vocalize('roar')
@@ -188,6 +235,7 @@ export class Brain {
         return
       }
       if (temper === 'aggressive' || (temper === 'defensive' && aw > 0.6)) {
+        if (s === 'investigate' && this.data.search) return this.searchFor(G)
         // lying in wait for someone now back within reach: go and look
         if ((s !== 'investigate' && s !== 'hunt') || (this.data.wait && c.canGetAt(G))) this.set('investigate', { at: { ...P.lastKnown } })
         else if (s === 'investigate' && !this.data.wait) this.data.at = { ...P.lastKnown }
@@ -299,6 +347,59 @@ export class Brain {
     this.set('investigate', { at: best ? { x: best.x, z: best.z } : { x: c.pos.x, z: c.pos.z }, wait: this.rng.range(25, 40) })
   }
 
+  // Has a motion hunter lost a player it could get at (one up a tower it
+  // besieges whether it can see them or not)?
+  lostPlayer(G) {
+    return this.c.perception.lost(G) && this.c.canGetAt(G)
+  }
+
+  // A motion hunter that has lost the player searches where it last had
+  // them; once searching, whatever its ears or nose tell it drags the search
+  // over (a stone's clatter, the next footstep), its nose's rough guesses
+  // averaging out on where they stand. It searches on the side it came in
+  // from (`from`), even if a charge carried it past the spot (closeOn).
+  searchFor(G) {
+    const c = this.c
+    const P = c.perception
+    const lk = P.lastKnown || c.pos
+    const from = (x, z) => Math.atan2(c.pos.z - z, c.pos.x - x)
+    if (this.state !== 'investigate' || !this.data.search) {
+      this.set('investigate', { at: { x: lk.x, z: lk.z }, search: true, from: from(lk.x, lk.z), swerve: this.data.swerve })
+      // it had them a moment ago — not just a bang heard from afar
+      if (G.time - P.lastFix < 3) G.events.emit('creature:lost', { creature: c })
+      return
+    }
+    const at = this.data.at
+    const far = Math.hypot(lk.x - at.x, lk.z - at.z) > 12
+    const k = far ? 1 : 0.3
+    at.x += (lk.x - at.x) * k
+    at.z += (lk.z - at.z) * k
+    // somewhere new to search: it takes its time over it
+    if (far) {
+      this.data.arrived = this.data.linger = this.data.cast = null
+      this.data.from = from(at.x, at.z)
+    }
+  }
+
+  // Close on `at`, at up to `speed`, and pull up `short` m from it (pullUp):
+  // braking in time, or swerving past at a run. True once pulled up there,
+  // facing it.
+  closeOn(at, short, speed) {
+    const c = this.c
+    const D = this.data
+    if (!D.swerve && Math.hypot(at.x - c.pos.x, at.z - c.pos.z) <= short + 0.3) {
+      c.halt()
+      c.face(at.x, at.z)
+      return true
+    }
+    const p = pullUp(c.pos, c.yaw, c.speed, c.brake, at, short, D.swerve)
+    // a swerve lasts until it has run off its speed; then it turns back
+    D.swerve = p.side && c.speed > c.sp.speed.walk ? p.side : 0
+    if (p.steer) c.goTo(p.steer.x, p.steer.z, Math.min(speed, p.speed))
+    else c.goTo(c.pos.x + yawDirX(c.yaw) * 10, c.pos.z + yawDirZ(c.yaw) * 10, 0)
+    return false
+  }
+
   // Something hurt it. Called by the creature when a dart or bullet lands.
   onHurt(G, from, lethal) {
     const c = this.c
@@ -329,6 +430,9 @@ export class Brain {
   // ------------------------------------------------------------ states
   graze(dt, G) {
     const c = this.c
+    const L = this.data.leave
+    // moving on from somewhere it gave up on (a search) before it settles
+    if (L && this.t < 15 && Math.hypot(L.x - c.pos.x, L.z - c.pos.z) > 2) return c.goTo(L.x, L.z, c.sp.speed.walk)
     const h = c.herd
     const goal = h ? { x: h.goal.x + c.rec.offset.dx * c.radius * 3, z: h.goal.z + c.rec.offset.dz * c.radius * 3 } : c.pos
     const d = Math.hypot(goal.x - c.pos.x, goal.z - c.pos.z)
@@ -365,6 +469,7 @@ export class Brain {
     const c = this.c
     const at = this.data.at
     if (!at) return this.set('graze')
+    if (this.data.search) return this.search(dt, G, at)
     const d = Math.hypot(at.x - c.pos.x, at.z - c.pos.z)
     const stalker = c.sp.temperament === 'aggressive'
     if (d > 3 && this.t < (this.data.wait ? 45 : 25)) {
@@ -393,6 +498,88 @@ export class Brain {
         this.set('graze')
       }
     }
+  }
+
+  // Searching for a player it lost (searchFor). To the spot — quick from far
+  // off, stalking the last stretch — and pulls up short of it: whoever froze
+  // there is usually still standing in it, under its head. Then nose down:
+  // sniffs, turns, and casts to and fro across the way it came in, a few
+  // metres out — never through the spot, nor round to its far side — until
+  // it loses interest and moves on back the way it came.
+  search(dt, G, at) {
+    const c = this.c
+    const sp = c.sp
+    const D = this.data
+    const P = c.perception
+    const d = Math.hypot(at.x - c.pos.x, at.z - c.pos.z)
+    // it is looking for someone all the while (no unaware bonus here), the
+    // keener the fresher the loss
+    P.awareness = Math.max(P.awareness, 0.4)
+    // a sound — a footstep, a stone — and it whips round to it, head up:
+    // move again now and it has you
+    const short = c.radius + SEARCH.pullUp
+    if (G.time - P.heardT < 1.5 && P.lastKnown) {
+      // (pulling up first if it is still running)
+      this.closeOn(P.lastKnown, short, 0)
+      c.intent.look = P.lastKnown
+      c.intent.alert = 1
+      return
+    }
+    // a lead that dragged the spot off elsewhere: go there first
+    if (D.cast && d > 9) D.cast = null
+    if (!D.cast) {
+      if (this.t < 30 && !this.closeOn(at, short, clamp((d - short) * 0.7, sp.speed.walk * 0.8, sp.speed.run * 0.6))) {
+        c.intent.crouch = 0.5
+        c.intent.sniff = d < 12 ? 0.5 : 0
+        c.intent.look = at
+        return
+      }
+      D.arrived ??= this.t
+      D.linger ??= this.rng.range(...SEARCH.linger)
+      D.from ??= Math.atan2(c.pos.z - at.z, c.pos.x - at.x)
+      // the first cast on whichever side of the way in it pulled up (a
+      // charge that swerved past ends up off to one side of it)
+      const lat = Math.cos(D.from) * (c.pos.z - at.z) - Math.sin(D.from) * (c.pos.x - at.x)
+      D.side ??= Math.abs(lat) > 1 ? -Math.sign(lat) : this.rng.sign()
+      D.cast = { x: c.pos.x, z: c.pos.z }
+    }
+    if (this.t - D.arrived > D.linger || this.t > 50) {
+      P.awareness = Math.min(P.awareness, 0.3)
+      const r = this.rng.range(...SEARCH.leave)
+      return this.set('graze', { leave: { x: at.x + Math.cos(D.from) * r, z: at.z + Math.sin(D.from) * r } })
+    }
+    const k = D.cast
+    c.intent.sniff = 1
+    if (k.until == null && Math.hypot(k.x - c.pos.x, k.z - c.pos.z) > 1.2) {
+      c.goTo(k.x, k.z, sp.speed.walk * 0.6)
+      c.intent.look = { x: k.x, y: c.pos.y, z: k.z }
+      return
+    }
+    if (k.until == null) {
+      // there: sniff a while, facing back over the spot
+      k.until = this.t + this.rng.range(1.8, 3)
+      k.face = Math.atan2(at.z - c.pos.z, at.x - c.pos.x) + this.rng.range(-0.5, 0.5)
+    }
+    if (this.t < k.until) {
+      // nose down where it stands, turning its head over the ground about it
+      c.halt()
+      const a = k.face + Math.sin((this.t - k.until) * 0.9) * 0.8
+      const lx = c.pos.x + Math.cos(a) * 4
+      const lz = c.pos.z + Math.sin(a) * 4
+      c.face(lx, lz)
+      c.intent.look = { x: lx, y: c.pos.y, z: lz }
+      // a snuffle every second or two
+      if (this.t > (k.snuff ??= this.t + this.rng.range(0.2, 0.8))) {
+        k.snuff = this.t + this.rng.range(1.1, 1.8)
+        c.vocalize('sniff')
+      }
+      return
+    }
+    // on to the next cast, over to the other side of the line it came in on
+    D.side = -D.side
+    const a = D.from + D.side * this.rng.range(...SEARCH.spread)
+    const r = this.rng.range(...SEARCH.cast)
+    D.cast = { x: at.x + Math.cos(a) * r, z: at.z + Math.sin(a) * r }
   }
 
   flee(dt, G) {
@@ -483,6 +670,8 @@ export class Brain {
     let tgt
     if (targetPlayer) {
       if (!G.player.alive) return this.set('graze')
+      // a motion hunter goes for no one it has lost: it searches instead
+      if (this.lostPlayer(G)) return this.searchFor(G)
       tgt = P.sees || G.time - P.lastSeen < 2 ? G.player.pos : P.lastKnown || G.player.pos
     } else tgt = tObj.pos
     const dx = tgt.x - c.pos.x
@@ -499,6 +688,15 @@ export class Brain {
         c.vocalize('threat')
       }
       c.intent.roar = c.roaring
+      return
+    }
+    // a motion hunter whose last look did not find them moving is no longer
+    // sure of them: it eases off to pull up short of where it last had them
+    // (or, too fast to stop, thunders past) and strikes at nothing
+    if (targetPlayer && P.doubts(G) && c.canGetAt(G)) {
+      const at = P.lastKnown || tgt
+      this.closeOn(at, c.radius + SEARCH.pullUp, P.awareness < 1 ? sp.speed.walk * 1.1 : sp.speed.run)
+      c.intent.look = at
       return
     }
     if (sp.attack?.spit && targetPlayer && P.sees && d < sp.attack.spit.range && d > 5 && this.spitCool <= 0) {
