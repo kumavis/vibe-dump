@@ -24,12 +24,24 @@
 // (--pt-head: the line under a bar at the top; --pt-head-end: its right
 // edge; --pt-foot: the height of a bar at the foot).
 //
+// Round three (ROUND-3.md §4–5): watching a box that has a wargame, the bar
+// offers *Wargame* (the door: the start sheet, on.wargame()); while a
+// wargame runs (mode `wargame`) it holds the table, the held unit's
+// stations, play or pause, Units and beside it the hop button (on.hop(): the
+// next friendly unit of the same kind, as Tab), and none of the record's
+// parts (no stops, strip, speeds, setting or Release: a wargame is always
+// held and runs at 1×). An element marked data-pt-head (the Wargame's HUD
+// block, ui/wargame.js) stands under the bar as part of its head: --pt-head
+// is published under whichever of them ends lower, so the box's HUD and
+// touch controls stand beneath both.
+//
 // A plain DOM template fed by plain objects and raising callbacks, so the UI
 // never imports the sim (src/link.js feeds it from Battle).
 
 import { h, esc } from './dom.js'
 import { icon } from './icons.js'
 import { ASSIST, ASSIST_LABEL } from './roles.js'
+import { HOP_ICON, WARGAME_ICON } from './wargame.js'
 
 const PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>'
 const PAUSE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5.5" width="4" height="13" rx="1"/><rect x="13.5" y="5.5" width="4" height="13" rx="1"/></svg>'
@@ -39,7 +51,7 @@ const scaleText = (v) => `×${v === 0.5 ? '½' : v}`
 export class BoxBar {
   /**
    * on: { leave, step(dir), play, pause, speed(dir), setSpeed(v), briefing, credits, keepGoing, card,
-   *       units, station(name), release, assist(value), take(momentId), goStop(i), scrub(t) }
+   *       units, station(name), release, assist(value), take(momentId), goStop(i), scrub(t), wargame, hop }
    */
   constructor(root, on) {
     this.on = on
@@ -66,7 +78,9 @@ export class BoxBar {
           <div class="bb-speeds" role="radiogroup" aria-label="Speed"></div>
           <span class="bb-sep"></span>
           <button class="nav bb-units" title="Units (L)">${icon('units', 16)}<span>Units</span></button>
+          <button class="nav bb-hop" title="The next ship or aircraft of the same kind (Tab)" aria-label="The next ship or aircraft of the same kind">${HOP_ICON}<span>Next</span></button>
           <button class="nav bb-brief" title="The briefing and the record’s turning points">${icon('take', 16)}<span>Briefing</span></button>
+          <button class="nav bb-wargame" title="Play it as a wargame" hidden>${WARGAME_ICON}<span>Wargame</span></button>
           <div class="assist bb-assist" role="radiogroup" aria-label="Flying"><span class="bb-lab" aria-hidden="true">Flying</span>${ASSIST.map((a) => `<button class="as-opt" role="radio" data-assist="${a}" title="${a === 'assisted' ? 'Assisted flight holds the aircraft for you' : 'Pilot is the real thing'}">${esc(ASSIST_LABEL[a])}</button>`).join('')}</div>
           <button class="nav bb-credits" aria-label="Sources and credits" title="Sources and credits">${icon('sources', 16)}</button>
         </div>
@@ -100,6 +114,8 @@ export class BoxBar {
       else if (b.dataset.take) on.take?.(b.dataset.take)
       else if (b.dataset.stop) on.goStop?.(Number(b.dataset.stop))
       else if (c.contains('bb-units')) on.units?.()
+      else if (c.contains('bb-hop')) on.hop?.()
+      else if (c.contains('bb-wargame')) on.wargame?.()
       else if (c.contains('bb-brief')) on.briefing()
       else if (c.contains('bb-credits')) on.credits()
       else if (c.contains('bb-go')) on.keepGoing()
@@ -136,6 +152,12 @@ export class BoxBar {
     addEventListener('resize', () => this.publish())
   }
 
+  /** Another element of the head (data-pt-head: the Wargame's HUD block): watched, so --pt-head follows its size. */
+  observe(el) {
+    this.ro?.observe(el)
+    this.publish()
+  }
+
   /** The phone's sheet (⋯) open or closed. */
   sheet(open) {
     this.el.classList.toggle('sheet', open)
@@ -145,7 +167,8 @@ export class BoxBar {
   /**
    * Where the bar stands, for the box's HUD and touch controls (scene/hud.js, controls/touch.js): --pt-head is the
    * line under a bar at the top (with a 6 px gap), --pt-head-end the bar's right edge (with 8), --pt-foot the room a
-   * bar at the foot takes from the bottom; 0 for the side it is not on, and all three 0 while it is hidden.
+   * bar at the foot takes from the bottom; 0 for the side it is not on, and all three 0 while it is hidden. With the
+   * head's other parts (data-pt-head) --pt-head is under the lowest of them, and --pt-bar-head under the bar alone.
    */
   publish() {
     let head = 0
@@ -160,11 +183,19 @@ export class BoxBar {
         } else foot = Math.ceil(innerHeight - r.top)
       }
     }
-    const key = `${head},${end},${foot}`
+    // (the head's other parts, under the bar: the Wargame's HUD block, which stands at --pt-bar-head, the bar's own line)
+    const bar = head
+    for (const el of document.querySelectorAll('[data-pt-head]')) {
+      if (el.closest('[hidden]')) continue
+      const r = el.getBoundingClientRect()
+      if (r.height > 0 && r.top + r.height / 2 < innerHeight / 2) head = Math.max(head, Math.ceil(r.bottom + 6))
+    }
+    const key = `${head},${end},${foot},${bar}`
     if (key === this.placed) return
     this.placed = key
     const st = document.documentElement.style
     st.setProperty('--pt-head', `${head}px`)
+    st.setProperty('--pt-bar-head', `${bar}px`)
     st.setProperty('--pt-head-end', `${end}px`)
     st.setProperty('--pt-foot', `${foot}px`)
   }
@@ -202,9 +233,9 @@ export class BoxBar {
   }
 
   /**
-   * state: null (hidden) or { mode: 'watch' | 'held' | 'checkpoint' | 'moment' (hidden), clock, where,
+   * state: null (hidden) or { mode: 'watch' | 'held' | 'checkpoint' | 'wargame' | 'moment' (hidden), clock, where,
    *   stop: [i, n], running, scale, scales: [..], t, duration, assist, air (a held aircraft),
-   *   held: { name, station, stations: [{ name, label }] } | null }
+   *   held: { name, station, stations: [{ name, label }] } | null, door: true (the box has a wargame: *Wargame*) }
    */
   set(state) {
     this.state = state
@@ -214,8 +245,10 @@ export class BoxBar {
     this.el.hidden = !state || state.mode === 'moment'
     if (!state || this.el.dataset.mode !== state.mode) this.sheet(false)
     if (!state) return this.publish()
-    const held = state.mode === 'held'
+    // (a wargame holds a unit as the held bar does: its stations, its name in the sheet's head)
+    const held = state.mode === 'held' || state.mode === 'wargame'
     this.el.dataset.mode = state.mode
+    this.$('.bb-wargame').hidden = !(state.door && state.mode === 'watch')
     // (the seconds, the speed and a pause show on a phone, where the bar's clock stands in for the HUD's: style.css)
     const sec = state.clockS && state.clock && state.clockS.startsWith(state.clock) ? state.clockS.slice(state.clock.length) : ''
     this.$('.bb-clock').innerHTML = `${esc(state.clock || '')}<span class="bb-sec">${esc(sec)}</span>`

@@ -29,6 +29,16 @@
 //   ui.onRelease(). The card follows the clock in place (openUnit again with
 //   the same unit rewrites only what changed), so a focused button keeps its
 //   focus.
+// - `wargame` and `wargame-end` (ROUND-3.md §1, §5): the Wargame's start
+//   sheet (the two sides with their forces and main goals, the label, the
+//   buttons *Japan* and *United States*, raising ui.onWargameStart(side))
+//   and its end card (the result, both tallies, the reel of stills, a tap
+//   enlarging one, the record's sentence, *Play again* and *Play the other
+//   side* raising ui.onWargameRestart(side), *Back to the table*
+//   ui.onLeave()); wargame.js holds both templates. A box event's footer
+//   offers *Play it as a wargame* beside *Enter the battle* where its box
+//   has a wargame (ui.wargameFor(ev), set by link.js), raising
+//   ui.onWargame(scenarioId).
 //
 // The footer steps the tour (tour.js) back and on, as the buttons by the
 // timeline do: it sits where the reading ends.
@@ -49,6 +59,7 @@ import { briefingHTML } from './briefing.js'
 import { afterHTML } from './after.js'
 import { creditsHTML } from './credits.js'
 import { STATION } from './roles.js'
+import { startSheetHTML, endCardHTML, WARGAME_ICON } from './wargame.js'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
@@ -71,7 +82,7 @@ export class EventCard {
     this.events = new Map(app.data.events.map((e) => [e.id, e]))
     this.routes = new Map(app.data.routes.map((r) => [r.id, r]))
     this.clocks = app.data.clockById || new Map()
-    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits' | 'stop' | 'unit'
+    this.mode = null // 'event' | 'chapter' | 'cluster' | 'briefing' | 'after' | 'credits' | 'stop' | 'unit' | 'wargame' | 'wargame-end'
     this.ev = null
     this.stop = -1
     this.chapter = null
@@ -140,6 +151,40 @@ export class EventCard {
     if (focus) this.el.querySelector(`[data-station="${CSS.escape(focus)}"]`)?.focus({ preventScroll: true })
   }
 
+  /** The Wargame's start sheet (wargame.js says the shape); the side the URL named has its button focused, never pressed. */
+  openWargame(s) {
+    this.set('wargame', { payload: s })
+    this.el.querySelector('.wg-start.focus')?.focus({ preventScroll: true })
+  }
+
+  /** The Wargame's end card (wargame.js says the shape). */
+  openWargameEnd(e) {
+    this.set('wargame-end', { payload: e })
+  }
+
+  /** A still of the end card's reel, large over the screen (a tap or Esc closes it). */
+  zoom(i) {
+    const r = this.payload?.reel?.[i]
+    if (!this.zoomEl) {
+      this.zoomEl = h('div', { class: 'wg-zoom', hidden: '', role: 'dialog', 'aria-label': 'A still of the reel' })
+      this.zoomEl.addEventListener('click', () => this.zoom(null))
+      addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.zoomEl && !this.zoomEl.hidden) {
+          e.preventDefault()
+          e.stopImmediatePropagation()
+          this.zoom(null)
+        }
+      }, true)
+      this.el.parentElement.appendChild(this.zoomEl)
+    }
+    if (!r) {
+      this.zoomEl.hidden = true
+      return
+    }
+    this.zoomEl.innerHTML = `<figure><img src="${esc(r.src)}" alt="${esc(r.caption)}"><figcaption>${esc(r.caption)}</figcaption></figure>`
+    this.zoomEl.hidden = false
+  }
+
   /** A stop inside a box (link.js feeds it from battle.json): its time, its text, its sources, the moment it offers. */
   openStop(st) {
     this.set('stop', { payload: st })
@@ -172,6 +217,7 @@ export class EventCard {
     }
     const was = this.ev
     const mode = this.mode
+    if (this.zoomEl) this.zoomEl.hidden = true
     this.letGoFocus()
     this.el.classList.remove('show')
     this.el.inert = true
@@ -203,7 +249,11 @@ export class EventCard {
     else if (b.classList.contains('enter')) {
       const ev = this.events.get(b.dataset.enter)
       if (ev) ui.onEnter(ev)
-    } else if (b.dataset.station && this.mode === 'unit') {
+    } else if (b.dataset.wargame) ui.onWargame?.(b.dataset.wargame)
+    else if (b.dataset.wgSide) ui.onWargameStart?.(b.dataset.wgSide)
+    else if (b.dataset.wgRestart) ui.onWargameRestart?.(b.dataset.wgRestart)
+    else if (b.dataset.shot) this.zoom(Number(b.dataset.shot))
+    else if (b.dataset.station && this.mode === 'unit') {
       const u = this.payload || {}
       if (u.held) ui.onStation?.(b.dataset.station)
       else ui.onTake({ ...(u.role || {}), station: b.dataset.station })
@@ -264,7 +314,8 @@ export class EventCard {
   /** Back and Next, and where the tour stands, for a card the tour is showing (and a box event's way in). */
   footer() {
     const tour = this.ui.tour
-    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>` : ''
+    const wg = this.mode === 'event' && this.ev?.box ? this.ui.wargameFor?.(this.ev) : null
+    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>${wg ? `<button class="nav wg-door" data-wargame="${esc(wg)}">${WARGAME_ICON}<span>Play it as a wargame</span></button>` : ''}` : ''
     if (!tour?.active) return enter ? `<footer>${enter}</footer>` : ''
     const ch = tour.current
     let count
@@ -298,6 +349,8 @@ export class EventCard {
     else if (this.mode === 'credits') this.el.innerHTML = this.creditsHTML()
     else if (this.mode === 'stop') this.el.innerHTML = this.stopHTML(this.payload || {})
     else if (this.mode === 'unit') this.el.innerHTML = this.unitHTML(this.payload || {})
+    else if (this.mode === 'wargame') this.el.innerHTML = startSheetHTML(this.payload || {})
+    else if (this.mode === 'wargame-end') this.el.innerHTML = endCardHTML(this.payload || {})
     else return
     this.el.dataset.mode = this.mode
     this.el.classList.toggle('chapter', this.mode === 'chapter')
