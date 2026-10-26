@@ -33,15 +33,15 @@
       ],
       "formation": {
         "kind": "columns",
-        "intervalM": 400,
+        "intervalM": 300,
         "columns": [
           { "ships": ["yamato", "nagato", "kongo", "haruna"], "atM": [0, 0] },
           { "ships": ["haguro", "chokai"], "atM": [1200, 0] },
-          { "ships": ["kumano", "suzuya", "chikuma", "tone"], "atM": [-1200, 0] },
-          { "ships": ["noshiro", "shimakaze", "hayashimo", "akishimo", "kishinami", "okinami", "hamanami", "fujinami"], "atM": [1800, 1000] },
-          { "ships": ["yahagi", "nowaki", "urakaze", "yukikaze", "isokaze"], "atM": [-1800, 1000] }
+          { "ships": ["kumano", "suzuya", "chikuma", "tone"], "atM": [-1200, 300] },
+          { "ships": ["noshiro", "shimakaze", "hayashimo", "akishimo", "kishinami", "okinami", "hamanami", "fujinami"], "atM": [1800, 1500] },
+          { "ships": ["yahagi", "nowaki", "urakaze", "yukikaze", "isokaze"], "atM": [-1800, 1200] }
         ],
-        "note": "Kurita's own sketch of his disposition at contact (USSBS Nav 9, Plate 9-3): BatDiv 1 leading the centre column with BatDiv 3 astern, CruDiv 5 with Chōkai to starboard, CruDiv 7 to port, DesRon 2 on the starboard bow and DesRon 10 on the port bow; the columns about 4 km apart in the record, 1,200 m in the arena, all on 110° as Kurita turned them up-wind of the carriers. atM is the first ship of each column from the guide, metres to starboard and ahead."
+        "note": "Kurita's own sketch of his disposition at contact (USSBS Nav 9, Plate 9-3): BatDiv 1 leading the centre column with BatDiv 3 astern, CruDiv 5 with Chōkai to starboard, CruDiv 7 to port, DesRon 2 on the starboard bow and DesRon 10 on the port bow; the columns about 4 km apart in the record, 1,200 m in the arena with 300 m between ships, the destroyer squadrons drawn forward so the columns' tails stay near the arena, all on 110° as Kurita turned them up-wind of the carriers. atM is the first ship of each column from the guide, metres to starboard and ahead."
       },
       "aircraft": [],
       "maxAirborne": 30,

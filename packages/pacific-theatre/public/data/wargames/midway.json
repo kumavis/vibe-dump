@@ -36,7 +36,7 @@
         "acrossM": 1600,
         "ring": ["kaga", "soryu", "hiryu"],
         "screen": ["haruna", "kirishima", "tone", "chikuma", "nagara", "nowaki", "arashi", "hagikaze", "maikaze", "kazagumo", "yugumo", "makigumo", "urakaze", "isokaze", "tanikaze", "hamakaze"],
-        "note": "The four carriers in a box 6 to 9 km on a side in the record (R4 §3.2; the box's stations round Akagi), drawn in as a circle round the guide 1,600 m across, with the battleships, cruisers and destroyers on the screen ring; all on 135°, as Akagi steams at 07:00 in the box."
+        "note": "The other three carriers 6 to 9 km from Akagi in the record (the box's stations after R4 §3.2), drawn in to a circle round the guide 1,600 m across, with the battleships, cruisers and destroyers on the screen ring; all on 135°, as Akagi steams at 07:00 in the box."
       },
       "aircraft": [
         { "carrier": "akagi", "kit": "a6m2", "count": 18, "profile": "cap", "airborne": 6, "note": "the morning combat air patrol (the box's cap-morning)" },

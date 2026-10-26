@@ -36,12 +36,11 @@
         "kind": "columns",
         "intervalM": 400,
         "columns": [
-          { "ships": ["atago", "takao", "kirishima"], "atM": [0, 800] },
-          { "ships": ["teruzuki", "asagumo"], "atM": [-500, 1200] },
-          { "ships": ["nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki"], "atM": [400, 2400] },
-          { "ships": ["sendai", "shikinami", "uranami", "ayanami"], "atM": [-900, -600] }
+          { "ships": ["asagumo", "teruzuki", "atago", "takao", "kirishima"], "atM": [0, 1600] },
+          { "ships": ["nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki"], "atM": [300, 3600] },
+          { "ships": ["sendai", "shikinami", "uranami", "ayanami"], "atM": [-700, 3200] }
         ],
-        "note": "Kondō's four units as the box has them: the bombardment unit (Atago leading Takao and Kirishima) with its direct escort, the screening unit under Nagara ahead and the sweeping unit under Sendai; in the record they came round both sides of Savo, in the arena they come on together on 130°, Kirishima's course at midnight in the box. Tanaka's Oyashio and Kagerō, of the reinforcement unit, stay out."
+        "note": "Kondō's column at 23:48 as Morison has it, Asagumo and Teruzuki leading Atago, Takao and Kirishima, the guide astern; the screening unit under Nagara and the sweeping unit under Sendai ahead of it, as Kondō's order put them some 10 km ahead (Lundgren; R5 §3.2), in the arena 2 km; in the record the units came round both sides of Savo, in the arena they come on together on 130°, Kirishima's course at midnight in the box. Tanaka's Oyashio and Kagerō, of the reinforcement unit, stay out."
       },
       "aircraft": [],
       "goal": { "kind": "sink", "type": "bb", "count": 1, "text": "Sink an American battleship before 10:00." },
@@ -69,10 +68,10 @@
         "kind": "columns",
         "intervalM": 400,
         "columns": [
-          { "ships": ["walke", "benham", "preston", "gwin"], "atM": [0, 1200] },
+          { "ships": ["walke", "benham", "preston", "gwin"], "atM": [0, 2000] },
           { "ships": ["washington", "south-dakota"], "atM": [0, 0] }
         ],
-        "note": "Lee's single column, the four destroyers some 5,000 yards ahead of the battleships in the record and 1,200 m in the arena; on 295°, Washington's course before midnight in the box."
+        "note": "Lee's single column, the four destroyers 300 yards apart and some 5,000 yards ahead of the battleships in the record (ONI Part III), in the arena 400 m apart with Gwin 800 m ahead of Washington; on 295°, Washington's course before midnight in the box."
       },
       "aircraft": [],
       "goal": { "kind": "sink", "type": "bb", "count": 1, "also": [{ "kind": "sink", "type": "ca", "types": ["ca", "cl"], "count": 2 }], "text": "Sink Kirishima and two cruisers before 10:00." },
