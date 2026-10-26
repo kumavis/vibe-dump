@@ -1216,3 +1216,7 @@ a file it does not own writes a note in its report instead of editing it.
 ## Round two
 
 The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md); its "as built" is folded into §5, §8, §9 and §11 above, and research/engine-2.md and research/ui-2.md hold the detail.
+
+## Round three
+
+The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md), which wins where it differs from this file until its "as built" is folded in.

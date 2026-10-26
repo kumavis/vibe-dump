@@ -978,3 +978,7 @@ pass's own references by report, with the URLs requested and their status.
 ## Round two
 
 The second round (any unit takeable at any time with stations, assisted flight by default, the prologue front) is specified in [ROUND-2.md](./ROUND-2.md); its "as built" is folded into §3.1, §5.7 and §12 above.
+
+## Round three
+
+The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md), which wins where it differs from this file until its "as built" is folded in.

@@ -1014,6 +1014,31 @@
     "assist": [
       "assisted",
       "pilot"
+    ],
+    "wargameGoalKinds": [
+      "sink",
+      "hit",
+      "survive",
+      "shoot-down",
+      "reach"
+    ],
+    "wargameGoalTypes": [
+      "cve",
+      "cv",
+      "bb",
+      "ca",
+      "cl",
+      "dd",
+      "de",
+      "ship",
+      "aircraft"
+    ],
+    "hopKinds": [
+      "carrier",
+      "capital",
+      "destroyer",
+      "aircraft",
+      "next"
     ]
   },
   "fixtures": {
@@ -1121,5 +1146,10 @@
     "malaya-1941": "Malaya time, 1941",
     "ijn-zm8": "one hour behind Item: the early entries in some Japanese tabular records at Leyte",
     "gct": "Greenwich civil time, as the US primaries of 7 December 1941 sometimes give it"
-  }
+  },
+  "wargames": [
+    "samar",
+    "midway",
+    "ironbottom-sound"
+  ]
 }
