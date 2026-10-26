@@ -4,13 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Unit Controls (dev)</title>
-    <meta name="description" content="Dev-only: the round-two interface of a battle box (the unit list, the unit card, the box's bar, the briefing's Start here, the after-card) driven by a mock of the Battle API over a real battle file. ?box=pearl-harbor&t=07:55; #unit=&station= as the app's. Not in the build." />
+    <meta name="description" content="Dev-only: the interface of a battle box (round two: the unit list, the unit card, the box's bar, the briefing's Start here, the after-card; round three: the Wargame's door, start sheet, HUD layer and end card) driven by mocks of the Battle API and of the arena over a real battle file. ?box=pearl-harbor&t=07:55; #unit=&station= and #wargame=&side= as the app's; &scrub for the wargame's clock. Not in the build." />
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="mock-page">
     <canvas id="plan" aria-label="A plan of the box: the units at the battle's time"></canvas>
+    <canvas id="arena" aria-label="The wargame's arena from above"></canvas>
     <div id="mock-status" aria-live="polite"></div>
+    <div id="mock-dev" hidden><label>mock clock <input type="range" min="0" max="600" step="1" value="0" /></label><output>0:00</output></div>
     <script type="module" src="./src/ui/mock-page.js"></script>
+    <script type="module" src="./src/ui/mock-arena.js"></script>
   </body>
 </html>
