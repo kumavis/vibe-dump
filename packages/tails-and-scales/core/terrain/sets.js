@@ -66,6 +66,16 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
     // round the centre objective: the keep under 0.5, the ruined tower ring
     // under 0.8, else open ground
     centre: [['keep', 0.5], ['tower', 0.8]],
+    // (the merged build's gate) on a table larger than classic's (Field,
+    // Grand) the box of rock piles stands where the tower ring would, as in
+    // `open`: the ring's doors (about 1.25") let no squad in, so on those
+    // boards no r 1.18 squad came within the 4.18" it needs of the centre
+    // objective (terrain-check's connectivity rows failed 160 of 500
+    // fortified boards at each size, every one a tower board; with the
+    // rock box all 1,000 pass). The same draw picks it, so the keep stands
+    // on the same boards; the Skirmish's table keeps `centre`, its draws
+    // frozen with the fort/ corpus.
+    largeCentre: [['keep', 0.5], ['rockbox', 0.8]],
     // a rampart per seat on its zone's front edge (recipes.js works)
     works: 1,
     // the fort phase, before the features: forts[0] + a draw below forts[1]
