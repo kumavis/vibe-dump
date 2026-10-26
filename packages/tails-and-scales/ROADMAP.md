@@ -89,30 +89,31 @@ the commit, and add whatever the work turned up.
   march scenarios at 80%, the settings answered from settled), and from F8a
   P-prop's setups task holds P-mission, and from F11a
   `node sim/army-sim.mjs --check` (and `--self-test`: the Skirmish gates,
-  the score within 4 points of even and each unit's price within its fitted
-  band; 3,900 battles, so run it on a quiet machine, about 3 minutes, its
-  self-test as long), P-army in P-prop (fuzzed armies, autoList, battles
-  between random lists) and P-mission's refusals, data-check's prices,
-  rosters, presets and list rules, the `army/` set in parity and
-  merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
+  the score within 4 points of even on every set the mission offers, from
+  F7a `fortified` with `classic` (`--terrain <set>` plays one), and each
+  unit's price within its fitted band; 5,400 battles, so run it on a quiet
+  machine, about 4 minutes, its self-test, on one set, about 3), P-army
+  in P-prop (fuzzed armies, autoList, battles between random lists) and
+  P-mission's refusals, data-check's prices, rosters, presets and list
+  rules, the `army/` set in parity and merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
   random games in five on fortified boards, and the `height` task: since
   F7a's review its scenes, and P-level on Grand-sized boards too),
   scale-check's P-scan the fortified boards (the `fort/` AI pairs, the
   Grand fixture's `--fortified`, and the box with height), terrain-check
   holds the fortified set and P-climb (its sections 6 and 7, and the
   self-test's fortified edits), parity folds the `fort/` log set (AI pairs
-  as logs with no entries) beside the rest (with `army/`, 60 battles),
+  as logs with no entries) beside the rest (with `army/`, 60 battles), and
   `node sim/play-report.mjs` (the step's AI corpus against §4.2.9's
   thresholds: F7a's over the `fort/` AI pairs, its counts read off the
-  match by `sim/height-probe.mjs`) passes, and army-sim's Skirmish gates
-  hold on `fortified` as on `classic` (its `--check` plays every set the
-  mission offers), and from
+  match by `sim/height-probe.mjs`) passes, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
   every Field and Grand board of seeds 1-500; its `--self-test` plants a
   wall and a ring), army-sim's gates at all three sizes (Skirmish, Field
   and Grand, the score and per-unit gates: about 15-20 minutes with
-  `--jobs 2`; a step that moves balance runs it), `node sim/play-report.mjs`
+  `--jobs 2`; a step that moves balance runs it; Grand's rows are played
+  and reported, not judged, until the Grand rebalance below is settled),
+  `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
   set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
   P-peers' `--only scale`). A step
@@ -989,8 +990,10 @@ follows N3.
   box at the centre (the tower ring walls the objective off from every
   squad); the fight guard `max(30, 2·units + 2)`. One price table couldn't
   hold all three sizes, so each larger mission's list carries its own
-  `prices` (§4.2.8.2's fallback); army-sim's gates pass at all three:
-  Skirmish 52.4%, Field 47.2% (on its one re-run), Grand 45.4%. Terrain
+  `prices` (§4.2.8.2's fallback); army-sim's gates pass at Skirmish and
+  Field (the review re-fitted Field on three seeds pooled and judged it on
+  a fourth: Skirmish 51.7%, Field 48.2% on seed 4444); Grand is reported,
+  not judged (the next item). Terrain
   tiles, shadows fitted to the view, the mat's detail, figure LOD, chips,
   the minimap and the roster: a Grand whole-board frame 1,562 → 351 main
   draw calls. The camera behind your half at 45-46", batch framing, the
@@ -1005,6 +1008,23 @@ follows N3.
   re-recorded on `fortified`, with army-sim's Field and Grand gates and the
   connectivity rows run there too. Left: the gates below, in an item of
   their own. DESIGN's F8b notes.)
+- [ ] **Grand rebalance.** At Grand the points don't bind the Bushtails'
+  lists (the slot table and the 90-model cap do: points bind 14 of 1,000
+  Random lists, a median 1,325 spent, against the Coil's 900 and 1,480),
+  so they field less than the Coil and score 41-48% on `open`: the table
+  as shipped 45.4%, 44.1% and 47.6% on seeds 1111, 2222 and 4444 (N 625,
+  the band ±6); the tables tried in F8b's review 44.3-44.6% on seeds
+  1111, 2222 and 3333 pooled (N 1,875), and the one of them that passed
+  its per-unit gate there 42.2% and 41.0% on seeds 1111 and 5555 alone,
+  and 46.2% on 4444 with 7 of 12 units outside their bands (a seed it
+  wasn't tuned on). The per-unit fit at Grand is weakly identified (columns
+  move 40-100 points between seeds; standard errors of 24-87 points a
+  unit). Options, a design call: move the slot table or the presets at
+  Grand, a `prices` override on the Coil (the simplest that passed pooled
+  seeds read as nonsense: a hero at 5), or a better-identified fit (more
+  seeds; lists that vary the heroes). Until then army-sim reports Grand
+  and judges Skirmish and Field. Playtest first. (DESIGN's F8b notes, the
+  review.)
 - [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
   what it built and checked; these gates of its row in DESIGN §4 (the
   migration table) are not done, and stay open here until they are
