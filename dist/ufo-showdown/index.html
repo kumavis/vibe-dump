@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UFO Showdown</title>
+<meta name="description" content="Eight missions of saucers, asteroids, hyperspace, fog, lightning and a crazy swarm, seven bosses, and a star store full of ships, paint jobs, drones and upgrades — solo or two players on one keyboard.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23090620'/><ellipse cx='16' cy='13' rx='6' ry='6' fill='%239ff0ff' opacity='.85'/><circle cx='16' cy='12' r='3' fill='%2373e05a'/><ellipse cx='16' cy='17' rx='13' ry='4.6' fill='%23b9c7d8'/><circle cx='9' cy='18' r='1.3' fill='%23ffe23d'/><circle cx='16' cy='19.6' r='1.3' fill='%23ffe23d'/><circle cx='23' cy='18' r='1.3' fill='%23ffe23d'/></svg>">
+  <script type="module" crossorigin src="./assets/index-DgnGIwRt.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-S2sPhv41.css">
+</head>
+<body>
+<canvas id="game" aria-label="UFO Showdown play field"></canvas>
+
+<div id="wallet" aria-label="Your stars"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg><span class="n">0</span></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<section id="menu" class="screen show" aria-label="Home screen">
+  <div class="panel menu">
+    <h1 class="logo"><span class="l1">UFO</span><span class="l2">Showdown</span></h1>
+    <p class="tag">Dodge the saucers · pop the bubbles · beat the Mothership</p>
+
+    <div class="choices" role="group" aria-label="How many players?">
+      <button type="button" class="choice sel" data-players="1">
+        <span class="big">1</span><span class="what">Player</span>
+      </button>
+      <button type="button" class="choice" data-players="2">
+        <span class="big">2</span><span class="what">Players</span>
+      </button>
+    </div>
+    <button type="button" id="storeBtn" class="store-btn"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg><span>Store</span><span class="bal" data-wallet>0</span></button>
+
+    <div class="pads">
+      <div class="pad p1">
+        <canvas class="shipicon" data-player="0" width="120" height="108"></canvas>
+        <div>
+          <div class="who">Player 1 <span class="ctl" data-player="0" hidden><svg viewBox="0 0 24 16" width="18" height="12" aria-hidden="true"><path d="M6 1h12a5 5 0 0 1 4.9 4l1 6a3.5 3.5 0 0 1-6.4 2.4L16 11H8l-1.5 2.4A3.5 3.5 0 0 1 .1 11l1-6A5 5 0 0 1 6 1z" fill="currentColor"/></svg></span></div>
+          <div class="keys">
+            <span class="row"><kbd>W</kbd></span>
+            <span class="row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
+          </div>
+        </div>
+      </div>
+      <div class="pad p2">
+        <canvas class="shipicon" data-player="1" width="120" height="108"></canvas>
+        <div>
+          <div class="who">Player 2 <span class="ctl" data-player="1" hidden><svg viewBox="0 0 24 16" width="18" height="12" aria-hidden="true"><path d="M6 1h12a5 5 0 0 1 4.9 4l1 6a3.5 3.5 0 0 1-6.4 2.4L16 11H8l-1.5 2.4A3.5 3.5 0 0 1 .1 11l1-6A5 5 0 0 1 6 1z" fill="currentColor"/></svg></span></div>
+          <div class="keys">
+            <span class="row"><kbd aria-label="Up"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(0deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
+            <span class="row"><kbd aria-label="Left"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(-90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Down"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(180deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd><kbd aria-label="Right"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="transform:rotate(90deg)"><path d="M8 2.5 13.5 11h-11z" fill="currentColor"/></svg></kbd></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="legend" aria-label="Power-up bubbles"></ul>
+    <p class="stack-note">Carry up to <b>3</b> power-ups. Catch the same one again to stack it, up to <b>×3</b>!</p>
+
+    <p class="hint">Your ship fires on its own — you just steer and dodge! Every mission earns <b class="star">★</b> stars for the store. <span class="nowrap"><kbd class="sm">P</kbd> pause</span> <span class="nowrap"><kbd class="sm">M</kbd> sound</span></p>
+    <p class="hint pad-hint">Xbox controller: stick to fly · <kbd class="xbtn xa">A</kbd> choose · <kbd class="xbtn xb">B</kbd> back · <kbd class="xbtn xy">Y</kbd> store · <kbd class="sm">Start</kbd> pause</p>
+  </div>
+</section>
+
+<div id="banner" aria-live="polite"><div class="sub"></div><div class="title"></div></div>
+
+<section id="map" class="screen" aria-label="Missions">
+  <div class="panel map">
+    <h2>Missions</h2>
+    <p class="lead">Clear a mission to unlock the next one. Every run earns stars — even if you lose.</p>
+    <div class="missions" role="group" aria-label="Missions"></div>
+    <div class="buttons">
+      <button type="button" data-act="home">Back</button>
+      <button type="button" data-act="store">Store</button>
+    </div>
+    <p class="hint"><kbd class="sm">Enter</kbd> fly · <kbd class="sm">T</kbd> store · <kbd class="sm">Esc</kbd> back</p>
+  </div>
+</section>
+
+<section id="store" class="screen" aria-label="Store"></section>
+
+<section id="pause" class="screen" aria-label="Paused">
+  <div class="panel small">
+    <h2>Paused</h2>
+    <div class="buttons">
+      <button type="button" data-act="resume" class="sel">Resume</button>
+      <button type="button" data-act="quit">Quit mission</button>
+    </div>
+    <p class="hint"><kbd class="sm">P</kbd> resume · <kbd class="sm">Q</kbd> quit — you keep the stars you've earned</p>
+  </div>
+</section>
+
+<section id="over" class="screen" aria-label="Game over">
+  <div class="panel small">
+    <h2 class="bad">Game Over</h2>
+    <p class="lead">The aliens got away this time…</p>
+    <div class="scores"></div>
+    <ul class="reward" aria-label="Stars earned"></ul>
+    <p class="wallet-line"></p>
+    <div class="buttons">
+      <button type="button" data-act="again" class="sel">Try again</button>
+      <button type="button" data-act="map">Missions</button>
+      <button type="button" data-act="store">Store</button>
+    </div>
+  </div>
+</section>
+
+<section id="done" class="screen" aria-label="Mission complete">
+  <div class="panel small">
+    <h2 class="good">Mission complete!</h2>
+    <div class="scores"></div>
+    <ul class="reward" aria-label="Stars earned"></ul>
+    <p class="wallet-line"></p>
+    <div class="buttons">
+      <button type="button" data-act="next" class="sel">Next mission</button>
+      <button type="button" data-act="map">Missions</button>
+      <button type="button" data-act="store">Store</button>
+    </div>
+  </div>
+</section>
+
+<section id="win" class="screen" aria-label="You win">
+  <div class="panel small">
+    <h2 class="good">You saved the galaxy!</h2>
+    <p class="lead">The Commander is beaten and the Mothership is space dust.</p>
+    <div class="scores"></div>
+    <ul class="reward" aria-label="Stars earned"></ul>
+    <p class="wallet-line"></p>
+    <div class="buttons">
+      <button type="button" data-act="map" class="sel">Missions</button>
+      <button type="button" data-act="store">Store</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

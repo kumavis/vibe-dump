@@ -15,6 +15,8 @@
 //   creature:woke      {creature}
 //   creature:died      {creature, cause}                 'weapon' | 'overdose' | 'predation'
 //   creature:detected  {creature}                        first time it spots the player
+//   creature:lost      {creature}                        a motion hunter lost the player (they
+//                                                        froze, or got out of its sight): it searches
 //   science:done       {creature, procedure, points, ghost}
 //   science:scan       {creature, first, points, unaware}
 //   photo:taken        {creature, species, quality, stars, points, first}
