@@ -131,7 +131,7 @@ const RESHOOTS = 2
 const KINDS = ['table', 'wrecked']
 // (F7b) the fortified boards' reference: F7b's code commit, once it lands
 // (null until then: the working tree against itself, the header)
-const FORT_REF = null
+const FORT_REF = 'a556cfc'
 
 function usage(why) {
   console.error(`terrain-shots: ${why}\nusage: node sim/terrain-shots.mjs [--ref <git ref>] [--seeds 1,4242,90210,411,22392] [--full] [--out <dir>]`)
