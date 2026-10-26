@@ -43,6 +43,12 @@
 //            (844×390, 915×412); "phone-held-crew" an aircraft at its bombsight (a B5N2) and its rear gun;
 //            "phone" all of them. A phone preset opens a mobile page (isMobile, hasTouch,
 //            DPR 2 unless DPR says) and resizes it between shots, so one boot serves every size.
+//            "wargame-start", "wargame-hud", "wargame-end" (round three's Wargame on ui.html against the mock
+//            arena, src/ui/mock-arena.js, on Samar: the start sheet; the HUD layer mid-game with hit markers, then
+//            the respawn line after a lost aircraft; the end card with its reel, then a still enlarged), "wargame"
+//            all three; "wargame-phone" and "wargame-phone-land" the same on a mobile page at the phone sizes
+//            upright and on its side (the box's HUD and touch controls built from their real classes as
+//            stand-ins). A preset whose name starts with "wargame" loads ui.html (BOX=samar, T=07:00).
 //   DATA=real   load public/data/ (the default once public/data/manifest.json exists)
 //   VIEWPORT=390x844, PORT=5299, DPR=2, CHROMIUM_PATH=...
 //
@@ -105,6 +111,20 @@ const PHONE_SETUP = {
   // watching with the briefing open
   card: "app.link.openBriefing(); await new Promise((r) => setTimeout(r, 400));",
 }
+// round three on ui.html: the Wargame on Samar against the mock arena (the start sheet, the HUD layer with markers, the
+// respawn line, the end card and a still enlarged); the game run on to a condition and held there
+const WG_IN = (side = 'us') => `if (!app.link.wg) { try { localStorage.removeItem('pt.hints') } catch {} app.ui.card.close(); await app.link.openStartSheet('samar'); await app.link.startWargame('samar', '${side}') }`
+const WG_RUN = (t, cond) => `app.ui.card.close(); app.battle.arena.seek(${t}); app.battle.play(1); const t0 = performance.now(); while (!(${cond}) && performance.now() - t0 < 30000) await new Promise((r) => setTimeout(r, 100)); app.battle.pause();`
+const WG = {
+  start: `${UI_RESET} if (app.link.wg) await app.leaveBox(); if (!app.battle.sim) await app.urlBattle(new URLSearchParams('battle=samar&t=07:00')); app.battle.pause(); try { localStorage.removeItem('pt.hints') } catch {} await app.link.openStartSheet('samar'); await new Promise((r) => setTimeout(r, 300))`,
+  hud: `${WG_IN()} ${WG_RUN(148, "document.querySelectorAll('.wg-mark').length >= 2")}`,
+  respawn: `${WG_IN()} app.ui.onHop('aircraft'); ${WG_RUN(209.5, "document.querySelector('.wg-say.show')")}`,
+  end: `${WG_IN()} ${WG_RUN(598, "app.ui.card.mode === 'wargame-end'")} await new Promise((r) => setTimeout(r, 400))`,
+  zoom: "document.querySelector('.wg-shot')?.click(); await new Promise((r) => setTimeout(r, 300))",
+  // (between a phone's sizes: the hints and the respawn line held, a fresh marker on the nearest ship of the other side)
+  hold: "{ const h = app.link.hud; if (h?.hintsEl.textContent) h.hintUntil = performance.now() / 1000 + 3600; if (h?.sayEl.textContent) h.sayUntil = performance.now() / 1000 + 3600; const a = app.battle.arena; if (a && !a.result) { const me = a.player.unitIndex; const d = (u) => Math.hypot(a.state.pos[3 * u.index] - a.state.pos[3 * me], a.state.pos[3 * u.index + 2] - a.state.pos[3 * me + 2]); const t = a.u.filter((u) => u.side !== a.side && u.alive === 1 && u.kind === 'ship').sort((p, q) => d(p) - d(q))[0]; if (t) a.events.push({ id: 700000 + a.events.length, t: a.t, kind: 'hit', target: t.index, text: t.name + ': hit forward, fire', mine: true }) } }",
+}
+const wgShots = (name, sizes, steps) => steps.flatMap(([step, eval_]) => sizes.map(([w, h], i) => ({ name: `${name}-${step}-${w}x${h}`, viewport: [w, h], eval: i === 0 ? eval_ : WG.hold, frames: 2 })))
 const phoneShots = (name, sizes, steps) => steps.flatMap(([step, eval_]) => sizes.map(([w, h], i) => ({ name: `${name}${step ? `-${step}` : ''}-${w}x${h}`, battle: PHONE_BOX, stay: true, viewport: [w, h], eval: i === 0 ? eval_ : undefined, settle: true, frames: 3 })))
 const PRESETS = {
   gate: [
@@ -155,10 +175,18 @@ const PRESETS = {
   'phone-held-air-land': phoneShots('phone-held-air-land', LANDSCAPE, [['', PHONE_SETUP.air], ['more', PHONE_SETUP.more], ['units', PHONE_SETUP.units], ['unit-card', PHONE_SETUP['unit-card']], ['after', PHONE_SETUP.after]]),
   'phone-held-ship-land': phoneShots('phone-held-ship-land', LANDSCAPE, [['aa', PHONE_SETUP.ship], ['helm', PHONE_SETUP.helm]]),
 }
+// round three: the Wargame on ui.html
+PRESETS['wargame-start'] = [{ name: 'wargame-start', eval: WG.start, frames: 2 }]
+PRESETS['wargame-hud'] = [{ name: 'wargame-hud', eval: WG.hud, frames: 1 }, { name: 'wargame-respawn', eval: WG.respawn, frames: 1 }]
+PRESETS['wargame-end'] = [{ name: 'wargame-end', eval: WG.end, frames: 2 }, { name: 'wargame-zoom', eval: WG.zoom, frames: 1 }]
+PRESETS.wargame = [...PRESETS['wargame-start'], ...PRESETS['wargame-hud'], ...PRESETS['wargame-end']]
+PRESETS['wargame-phone'] = wgShots('wargame-phone', PORTRAIT, [['start', WG.start], ['hud', WG.hud], ['respawn', WG.respawn], ['end', WG.end]])
+PRESETS['wargame-phone-land'] = wgShots('wargame-phone-land', LANDSCAPE, [['start', WG.start], ['hud', WG.hud], ['respawn', WG.respawn], ['end', WG.end]])
 PRESETS.phone = ['phone-watch', 'phone-watch-land', 'phone-held-air', 'phone-held-air-land', 'phone-held-crew', 'phone-held-crew-land', 'phone-held-ship', 'phone-held-ship-land'].flatMap((k) => PRESETS[k])
 const preset = process.argv[3] || ''
-const UI = preset.startsWith('ui') || process.env.PAGE === 'ui'
-const MOBILE = preset.startsWith('phone') || process.env.MOBILE === '1'
+const WARGAME = preset.startsWith('wargame')
+const UI = preset.startsWith('ui') || WARGAME || process.env.PAGE === 'ui'
+const MOBILE = preset.startsWith('phone') || preset.includes('-phone') || process.env.MOBILE === '1'
 const shots = PRESETS[preset] || JSON.parse(preset || '[{"name":"default"}]')
 const extra = process.argv[4] || ''
 const port = Number(process.env.PORT || 5299)
@@ -202,7 +230,7 @@ if (UI) {
   const { createServer: viteServer } = await import('vite')
   vite = await viteServer({ root, configFile: join(root, 'vite.config.js'), logLevel: 'error', clearScreen: false, server: { port: port + 1, host: '127.0.0.1', strictPort: false, hmr: false } })
   await vite.listen()
-  const q = [`box=${process.env.BOX || 'pearl-harbor'}`, `t=${process.env.T || '08:40'}`, 'paused', extra].filter(Boolean).join('&')
+  const q = [`box=${process.env.BOX || (WARGAME ? 'samar' : 'pearl-harbor')}`, `t=${process.env.T || (WARGAME ? '07:00' : '08:40')}`, 'paused', extra].filter(Boolean).join('&')
   await page.goto(`http://127.0.0.1:${vite.httpServer.address().port}/ui.html?${q}`)
   await page.waitForFunction(() => window.__app?.ready && window.__app.battle?.sim, null, { timeout: 180000 })
   console.log('the dev page up after', Date.now() - t0, 'ms (the mock Battle over the real battle file)')
