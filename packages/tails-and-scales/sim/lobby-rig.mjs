@@ -80,6 +80,18 @@
 //                formation sent: nothing refused, the other page's presence
 //                holding the group (its dashed rings), both pages folding
 //                the same match after each
+//   (F7a)
+//   terrain      the host's lobby offers the terrain sets the mission is
+//                fought on (classic chosen); the host picks fortified, the
+//                guest's lobby shows it (not the guest's to change), and the
+//                battle both pages start is fought on it, its works standing
+//   (F8b)
+//   size         the host's page picks the battle size (Field) with both
+//                seats ready: both seats un-ready, the lobby's terrain and
+//                rounds and each seat's army let go, the guest's page shows
+//                the size and can't change it; once both are ready again the
+//                battle starts on the size's board (60×40), its start
+//                naming the mission; a rematch keeps the size
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -109,7 +121,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -352,6 +364,22 @@ async function runCases(dist, cases) {
       const L = JSON.parse(x)
       must(L.seats.s0.race === 'serpent' && L.seats.s1.race === 'squirrel', 'holding both changes')
       return 'both seats changed at once, one lobby on both pages'
+    },
+
+    async terrain() {
+      const { host, guest } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      const offer = await host.evaluate(() => ({ opts: [...document.querySelectorAll('#lobbyTerrain option')].map((o) => o.value), value: document.querySelector('#lobbyTerrain').value, disabled: document.querySelector('#lobbyTerrain').disabled }))
+      must(offer.opts.join() === 'classic,fortified' && offer.value === 'classic' && !offer.disabled, `the host's lobby offers the classic mission's sets, classic chosen, its to change: ${JSON.stringify(offer)}`)
+      await host.selectOption('#lobbyTerrain', 'fortified')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.terrain === 'fortified' && document.querySelector('#lobbyTerrain').value === 'fortified', null, 30000, "the host's terrain on the guest's lobby")
+      must(await guest.evaluate(() => document.querySelector('#lobbyTerrain').disabled), "the terrain is the host's to change, not the guest's")
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const fought = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ terrain: window.__ts.G.setup.terrain, decks: window.__ts.G.terrain.chunks.filter((c) => c.kind === 'deck').length }))))
+      must(fought.every((f) => f.terrain === 'fortified' && f.decks >= 2), `both pages' battle is fought on fortified, its works standing: ${JSON.stringify(fought)}`)
+      return 'the host chose fortified, and both pages fight on it'
     },
 
     async altered() {
@@ -768,6 +796,46 @@ async function runCases(dist, cases) {
       await same('the orders at End')
       return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match; ${ordered.length} units on autopilot carried out at End (${ran.kinds.join(', ')}), seen by the other page, folded alike`
     },
+
+    async size() {
+      const { host, guest, link } = await lobbyPair()
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      // (the host starts it by hand: Ready on both, then the size changed)
+      await host.evaluate(() => (window.__ts.net.autoStart = false))
+      await until(host, () => { const L = window.__ts.net.handle.doc().lobby; return L.seats.s0?.ready && L.seats.s1?.ready }, null, 30000, 'both seats ready on the host')
+      // (an army on each seat, as F11b's lists will ride: the size lets it go)
+      await host.evaluate(() => window.__ts.net.handle.change((d) => {
+        for (const k of ['s0', 's1']) d.lobby.seats[k].army = 'classic'
+        d.lobby.terrain = 'classic'
+        d.lobby.rounds = 5
+      }))
+      const offered = await host.$$eval('#lobbySize option', (os) => os.map((o) => o.value))
+      must(offered.join() === 'classic,field,grand', `the host's page offers every size: ${offered.join(', ')}`)
+      await host.selectOption('#lobbySize', 'field')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
+      const L = JSON.parse(await lobbyNow(guest))
+      must(!L.seats.s0.ready && !L.seats.s1.ready, `a size change un-readies both seats: ${JSON.stringify(L.seats)}`)
+      must(!('terrain' in L) && !('rounds' in L) && !('army' in L.seats.s0) && !('army' in L.seats.s1), `a size change lets the terrain, the rounds and each seat's army go: ${JSON.stringify(L)}`)
+      const shown = await guest.evaluate(() => ({ value: document.querySelector('#lobbySize').value, disabled: document.querySelector('#lobbySize').disabled }))
+      must(shown.value === 'field' && shown.disabled, `the guest's page shows the size, not its to change: ${JSON.stringify(shown)}`)
+      // ready again: the battle on the size's board, its start naming it
+      await host.evaluate(() => (window.__ts.net.autoStart = true))
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const got = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ mission: window.__ts.G.setup.mission, terrain: window.__ts.G.setup.terrain, rounds: window.__ts.G.setup.rounds, W: window.__ts.G.board.W, H: window.__ts.G.board.H }))))
+      must(got.every((g) => g.mission === 'field' && g.W === 60 && g.H === 40 && g.terrain === 'open' && g.rounds === 6), `the start names the size, its board, set and rounds: ${JSON.stringify(got)}`)
+      // a rematch keeps it
+      await guest.evaluate(() => window.__ts.session.submit(1, { t: 'concede' }))
+      await until(host, () => window.__ts.session.status === 'over' && !document.querySelector('#rematch').classList.contains('hidden'), null, 30000, "the host's Rematch button")
+      await host.click('#rematch')
+      const link2 = await linkOf(host, link)
+      const L2 = JSON.parse(await lobbyNow(host))
+      must(link2 !== link && L2.mission === 'field' && (await host.$eval('#lobbySize', (e) => e.value)) === 'field', `the rematch's lobby keeps the size: ${JSON.stringify({ mission: L2.mission })}`)
+      return `Field picked by the host: both seats un-readied, terrain, rounds and armies let go, the guest shown it; the battle on 60×40 (${got[0].terrain}, ${got[0].rounds} rounds); the rematch kept it`
+    },
   }
 
   const out = {}
@@ -797,6 +865,8 @@ async function runCases(dist, cases) {
 
 // Broken copies the self-test builds; each must fail the case named.
 const MUTANTS = {
+  // (F7a) the host's terrain never reaches the lobby
+  'terrain-unwired': ['terrain', 'net/lobby.js', '    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain\n', ''],
   // (F4's leftover) a snap past the end keeps a vote panel up
   'vote-blocks-end': ['vote-blocks-end', 'app/flow.js', "if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", "if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))"],
   // verifyStart compares the nonce alone
@@ -841,6 +911,9 @@ const MUTANTS = {
   'no-sels': ['group', 'app/online.js', '      if (group.length >= 2) m.sels = group.slice(0, 120).map((u) => u.id)\n', ''],
   // (F10c) the standing orders never put in presence
   'no-ords': ['group', 'app/online.js', '    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))\n', ''],
+  // (F8b) a size change keeps the seats' armies, or never reaches the lobby
+  'size-keeps-army': ['size', 'net/lobby.js', "      for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army\n", ''],
+  'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

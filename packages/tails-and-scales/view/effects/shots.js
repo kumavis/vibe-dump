@@ -45,11 +45,14 @@ const GLOW = new Map()
 const glow = (c) => GLOW.get(c) ?? GLOW.set(c, new THREE.MeshBasicMaterial({ color: c, toneMapped: false })).get(c)
 
 export class Shots {
-  // `units`: the figures (view/units.js)
-  constructor({ scene, fx, units }) {
+  // `units`: the figures (view/units.js); (F7a) `floorAt(x, z)`: the height
+  // of the walkable top the table shows there (view/terrain.js's: a deck's,
+  // 0 on the ground), which a template marks, lands and scorches on
+  constructor({ scene, fx, units, floorAt = () => 0 }) {
     this.scene = scene
     this.effects = fx
     this.units = units
+    this.floorAt = floorAt
     // each projectile style's shape, shared by every shot
     this.projGeo = projShapes()
     // the thorns of an eruption share a shape (made at the first)
@@ -93,8 +96,9 @@ export class Shots {
     for (let i = 0; i < n; i++) {
       const s = shooters[i % shooters.length]
       const v = victims[(Math.random() * victims.length) | 0]
-      const a = { x: s.x, y: eyeY(u) * 0.8 + s.lift, z: s.z }
-      const b = { x: v.x + (Math.random() - 0.5) * 0.6, y: chestY(target) * 0.8, z: v.z + (Math.random() - 0.5) * 0.6 }
+      // ((F7a) each figure from the height it stands at: a deck's top)
+      const a = { x: s.x, y: (s.y ?? 0) + eyeY(u) * 0.8 + s.lift, z: s.z }
+      const b = { x: v.x + (Math.random() - 0.5) * 0.6, y: (v.y ?? 0) + chestY(target) * 0.8, z: v.z + (Math.random() - 0.5) * 0.6 }
       flights.push(wait(i * 0.06).then(() => {
         if (gone()) return
         sfx.shot()
@@ -112,14 +116,15 @@ export class Shots {
   // (blast.scatter); the throw (blast.fire); then where it lands
   // (blast.land).
   aimed(e) {
-    this.blastMarker = this.effects.ring(e.x, e.z, e.r, '#ffffff', { hold: true, fill: 0.12 })
+    this.blastMarker = this.effects.ring(e.x, e.z, e.r, '#ffffff', { hold: true, fill: 0.12, y: this.floorAt(e.x, e.z) })
   }
 
   // (it moves its own marker only: a table since replaced has taken that away)
   async scattered(e) {
     const marker = this.blastMarker
-    this.effects.text({ x: e.from.x, y: 1.5, z: e.from.z }, `scatter ${e.d}"`, '#ffd36e', { size: 15 })
-    await tween(0.35, (t) => marker?.position.set(lerp(e.from.x, e.to.x, t), 0.05, lerp(e.from.z, e.to.z, t)), easeOut)
+    const y0 = this.floorAt(e.from.x, e.from.z), y1 = this.floorAt(e.to.x, e.to.z)
+    this.effects.text({ x: e.from.x, y: y0 + 1.5, z: e.from.z }, `scatter ${e.d}"`, '#ffd36e', { size: 15 })
+    await tween(0.35, (t) => marker?.position.set(lerp(e.from.x, e.to.x, t), lerp(y0, y1, t) + 0.05, lerp(e.from.z, e.to.z, t)), easeOut)
   }
 
   async fired(e) {
@@ -152,7 +157,7 @@ export class Shots {
       src.lunge = 1
       src.lungeDir = Math.atan2(land.x - src.x, land.z - src.z)
     }
-    const a = { x: src.x, y: u.t.big ? 1.8 : 0.9, z: src.z }, b = { x: land.x, y: 0.15, z: land.z }
+    const a = { x: src.x, y: (src.y ?? 0) + (u.t.big ? 1.8 : 0.9), z: src.z }, b = { x: land.x, y: this.floorAt(land.x, land.z) + 0.15, z: land.z }
     sfx.shot()
     await this.fly(a, b, e.fx)
     if (gone()) return
@@ -161,13 +166,14 @@ export class Shots {
 
   // Where a template lands: an explosion and a boom (a thornburst's thorns
   // have made their own), and the template's ring, which fades.
+  // ((F7a) on the top it lands on: a deck's, or the ground)
   landed(e) {
-    const fx = this.effects
+    const fx = this.effects, y = this.floorAt(e.x, e.z)
     if (e.fx !== 'thorns') {
-      fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')
+      fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire', y)
       sfx.boom(e.r / 2)
     }
-    fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })
+    fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2, y })
   }
 
   // A spell cast (its sound), or fizzled (a sound and the word over the

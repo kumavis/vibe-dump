@@ -1,5 +1,8 @@
-// The unit card (DESIGN §1.3): a unit's name, seat and role, what of it
-// stands, what it has done this turn, its stats, weapons and abilities.
+// The unit card (DESIGN §1.3): a unit's name, seat and role, (F11a) what
+// it costs to field (its type's `cost`, the army builder's price: display
+// only, DESIGN §4.2.8.2; (F8b) its battle's own price, the mission's where
+// its list sets one: core/army.js unitPrice), what of it stands, what it has done this turn,
+// its stats, weapons and abilities.
 // Opened by a click on a figure (or as a unit is picked up), closed by
 // showing nothing.
 //
@@ -13,6 +16,7 @@
 // and dice the table hasn't played (§2.4).
 import { factOf, cardStatus } from '../present/hud-model.js'
 import { GLYPH, NAME } from '../present/standing.js'
+import { unitPrice } from '../core/army.js'
 
 const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 
@@ -87,11 +91,23 @@ export class Card {
     // caught up, else from the last action played (the title's backdrop is
     // never behind)
     const mu = this.shown(u), f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]
+    // ((F8b) the price in this battle: the setup never changes, so the
+    // match asked is the same whether the table has caught up or not)
+    const price = this.ask((G) => unitPrice(G.setup, u))
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
-    <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role}</span></div>
-    <div class="card-sub">${cardStatus(t, mu, f)}</div>${this.orderLine(u)}${statsHtml(t)}`
+    <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${price} pts</span></div>
+    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.orderLine(u)}${statsHtml(t)}`
     card.classList.add('show')
+  }
+
+  // (F7a) a unit standing on a deck or high on a stair (the mirror's `y`, its
+  // floor: over the nav's 0.4" step) is on high ground: it sees over hedges
+  // and ruins. After the status line's own text, in a span of its own (the
+  // ?debug card hook reads the line's text up to it).
+  height(mu) {
+    const y = mu?.y ?? 0
+    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · ▲ high ground, ${+y.toFixed(1)}" up</span>` : ''
   }
 
   // (F10c) the unit's standing order, and while the player may change it,

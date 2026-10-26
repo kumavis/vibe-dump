@@ -15,7 +15,16 @@ export function zone(G, side) {
 // May `u` be put on nav cell i during seat `side`'s deployment, with
 // `others` where they stand? Inside the zone, standable, and clear of every
 // other unit by 0.4". (freeSpot's test, cell by cell; the `place` command's
-// legality, core/commands.js.)
+// legality, core/commands.js.) (F7a) With height, standable keeps a base
+// off every ledge's band, so a unit may be put on a deck's top (each
+// seat's works stand in its zone) and never astride its edge or on its
+// solid body; the spacing is horizontal, as ever.
+//
+// deployArmies's rows are unchanged on a fortified board: a row's spot
+// that falls on a deck resolves through freeSpot to the nearest cell it may
+// be put on, most often the deck's own top, a rim's width in from the edge
+// (in 50 fortified AI battles, 312 of 700 units started on the works'
+// decks: the front rows, 1.8" in from the zone's edge, run along them).
 export function fits(G, u, i, { minX, maxX }, others) {
   const nav = G.nav
   const cx = nav.x(i), cz = nav.z(i)

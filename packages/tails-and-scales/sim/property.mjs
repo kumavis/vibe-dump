@@ -86,6 +86,19 @@
 //    takes the edges of what they can. And G has §2.1's shape from the
 //    start: `pending` null, never missing, at every trace line of an all-AI
 //    battle (the engine's runs never set it), and `strict` a boolean.
+//    (F8a) P-mission: the setup whitelist and the missions. (F11a) And the
+//    armies: every refusal of DESIGN §4.2.8.4 with its exact message, by
+//    fullSetup and by createMatch alike, seat-major (both seats broken:
+//    seat 0's first rule) and in the table's order within a seat; no army,
+//    a null one, 'classic' and '112111' one match (stateHash, units and
+//    trace, at the deployment and through an all-AI battle); checkMission's
+//    list rules taken and refused at their edges. (F8b) The three
+//    missions (classic, field, grand) named in every refusal that lists
+//    them, the larger ones refused the classic set and classic refused
+//    `open`, the larger battles' presets refused in a Skirmish by its
+//    points; and each race's preset at each mission, the army a seat
+//    naming none plays, filled in by name, legal, fielded unit for unit,
+//    and the same match whether the seats name it, its counts or nothing.
 // 9. The Session (R6b: match/session.js over match/store.js's LocalStore,
 //    which every mode plays through) folds a log as the core does. Each
 //    corpus battle is played again through one, the human logs' entries
@@ -130,6 +143,14 @@
 //    one in the deployment included), resultOf(G) must be exactly that
 //    event's win, why, score and rounds. (Code without present/hud-model.js
 //    skips it.)
+// 11. (F11a) P-army, on code with core/army.js (the block above its tasks
+//    below says what each holds): 100,000 fuzzed armies refused with a
+//    seat's reason or taken in their one spelling, never a crash;
+//    autoList's lists legal over seeds 1-1,000 × races × missions; a classic
+//    match's shadowState unchanged, whichever way its army is spelt, and
+//    its stateHash data-check's pin; and per mission 50 random legal lists
+//    played to the end under strict, 40 AI against AI and 10 with a human
+//    seat answered at random as (3)'s games are.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -678,10 +699,14 @@ function sameResult(hud, G, over, where) {
 // A random game: a random setup, its human seats played at random among
 // the legal commands. Returns what it reached, and its command log.
 const MIXES = [['ai', 'ai'], ['human', 'ai'], ['ai', 'human'], ['human', 'human']]
-function randomTask(core, rng, mirror, races, seed, hud) {
+// (F11a, P-army) `lists`: { mission, RACES, MISSIONS } for a game whose
+// seats field random legal lists at that mission (autoList on budgets from
+// 60% of the limit, drawn from a stream of their own, so the game's own
+// draws are a plain game's), one seat at least a human's
+function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const rand = mulberry32(seed * 2654435761)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
-  const ctrl = seed < 4 ? MIXES[seed] : pick(MIXES)
+  const ctrl = lists ? MIXES[1 + (seed % 3)] : seed < 4 ? MIXES[seed] : pick(MIXES)
   const aggressive = seed % 2 === 0
   const r = rand()
   const setup = {
@@ -691,6 +716,20 @@ function randomTask(core, rng, mirror, races, seed, hud) {
   }
   // (F4) half the games with a human seat vote at their round limit
   if (ctrl.includes('human') && rand() < 0.5) setup.overtime = 'vote'
+  if (lists) {
+    const pickList = mulberry32(seed * 40503 + 7), rules = lists.MISSIONS[lists.mission].list
+    setup.mission = lists.mission
+    for (const x of setup.seats) {
+      const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
+      x.army = core.army.listText(core.army.autoList(lists.RACES[x.race], { ...rules, points: budget }, Math.floor(pickList() * 2 ** 32)))
+    }
+  }
+  // (F7a) two games in five on the fortified boards, for code whose mission
+  // is fought on them (P-height's rules after every command): (F11a) a
+  // P-army game with a human seat too, its lists drawn from their own
+  // stream above, so the draw here is a plain game's
+  const fortified = !!core.q.levelDist && core.missionOf?.(setup).sets.includes('fortified')
+  if (fortified && rand() < 0.4) setup.terrain = 'fortified'
   const where0 = `game ${seed} (${JSON.stringify(setup)})`
   const counts = { games: 1, probes: 0, commands: {}, ended: null, aggressive }
   // how far from the nearest enemy a body's move ends (Infinity if it isn't one)
@@ -715,15 +754,18 @@ function randomTask(core, rng, mirror, races, seed, hud) {
       else if (e.t === 'stage' && e.stage === 'battle') seen.battle = true
       else if (e.t === 'game.over') seen.over.push(e)
     }
+    if (fortified) heightEvents(G, events, where)
     tap.fold(G, events, where)
   }
   const G = core.createMatch(setup, { out: [], strict: true, onTrace: tap.trace })
+  if (lists) unitsAre(core, G, lists.RACES, where0)
   const last = { trace: 0, n: 0 }
   let conceded = -1, piloted = ''
   for (let k = 0; G.turn.stage !== 'over'; k++) {
     const where = `${where0} decision ${k}`
     if (k > 3000) throw new Error(`${where}: the battle never ends`)
     invariants(core, G, where, last)
+    if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, where, rand)
     if (k === 0) lockCheck(core, rng, G, where)
     take(where)
     const seat = core.pendingSeats(G)[Math.floor(rand() * core.pendingSeats(G).length)]
@@ -789,6 +831,7 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     counts.commands[body.t] = (counts.commands[body.t] ?? 0) + 1
   }
   invariants(core, G, `${where0} at its end`, last)
+  if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, `${where0} at its end`, rand)
   take(`${where0} at its end`)
   counts.mirrored = tap.counts()
   counts.ended = result(G, where0, conceded)
@@ -812,6 +855,11 @@ function randomTask(core, rng, mirror, races, seed, hud) {
     throw new Error(`${where0}: game.over ${JSON.stringify(over)} should say ${JSON.stringify({ ...T.result, vp: T.vp, rounds })} (${seen.scored} rounds scored)`)
   }
   counts.results = sameResult(hud, G, over, where0)
+  if (lists) {
+    const bad = traceShape(G)
+    if (bad) throw new Error(`${where0}: ${bad}`)
+    counts.listGames = 1
+  }
   const trace = h10(G.journal.trace.join('\n'))
   if (log.length) {
     refold(core, setup, log, trace, where0)
@@ -885,13 +933,23 @@ const BAD_SETUPS = {
 // keys and is held to none of them.
 const BAD_MISSION_SETUPS = {
   'a field no setup takes': [{ colour: 'red' }, /^a setup takes no field "colour"$/],
-  "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], army: '224222' }, SETUP.seats[1]] }, /^seat 0 takes no field "army"$/],
+  // ((F11a) a seat's `army` is a field it takes: a stray one is another's)
+  "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], colour: 'red' }, SETUP.seats[1]] }, /^seat 0 takes no field "colour"$/],
   'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
   'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
-  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there (is|are) classic/],
+  // ((F8b) the three missions, named in their order)
+  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand\)$/],
+  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand\)$/],
   'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
   'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
-  'a set the mission is not fought on': [{ terrain: 'fortified' }, /^the classic mission is fought on classic, not "fortified"$/],
+  // ((F7a) the classic mission is fought on fortified too, so a set it isn't
+  // fought on is one that doesn't exist)
+  'a set the mission is not fought on': [{ terrain: 'moated' }, /^the classic mission is fought on classic or fortified, not "moated"$/],
+  // ((F8b) the larger missions are fought on open (and, F7a, fortified),
+  // never classic's set, nor open on the classic mission)
+  'the grand mission on the classic set': [{ mission: 'grand', terrain: 'classic' }, /^the grand mission is fought on open or fortified, not "classic"$/],
+  'the field mission on the classic set': [{ mission: 'field', terrain: 'classic' }, /^the field mission is fought on open or fortified, not "classic"$/],
+  'the classic mission on the open set': [{ terrain: 'open' }, /^the classic mission is fought on classic or fortified, not "open"$/],
   'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
   // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
   // for the setup's prototype (its fields would slip past the whitelist)
@@ -930,11 +988,178 @@ function missionTask(core, MISSIONS) {
     }
     const G = core.createMatch({ ...SETUP, mission: name })
     if (G.board.W !== W || G.board.H !== H || G.nav.W !== W || G.nav.H !== H || G.objectives.length !== m.objectives.length || G.setup.rounds !== m.rounds || G.setup.terrain !== m.sets[0]) throw new Error(`P-mission: a match of ${name} is on ${JSON.stringify(G.board)}, ${G.objectives.length} objectives, ${G.setup.rounds} rounds, terrain ${G.setup.terrain}`)
+    // (F11a, F8b) each race's preset for it, the army a seat naming none
+    // plays, legal there: the match fields its counts, unit for unit, in
+    // roster order, each seat naming it as it filled it in; and the same
+    // match when the seats name the preset, or its counts
+    if (core.army) {
+      const keys = (X) => X.units.map((u) => `${u.side}:${u.key}`).join(' ')
+      for (const [s, { race }] of SETUP.seats.entries()) {
+        const want = G.units.filter((u) => u.side === s).map((u) => u.key).join(' ')
+        if (G.setup.seats[s].army !== m.army) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${m.army}`)
+        const text = core.army.listText(core.army.armyOf(G.setup, s).counts)
+        if (want !== core.army.armyOf(G.setup, s).keys.join(' ')) throw new Error(`P-mission: a match of ${name} fields ${want} for seat ${s}, not its preset's units`)
+        for (const army of [m.army, text]) {
+          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x) => ({ ...x, army })) })
+          if (keys(H2) !== keys(G) || core.stateHash(H2) !== core.stateHash(G)) throw new Error(`P-mission: a match of ${name} with every seat naming ${JSON.stringify(army)} differs from one naming no army (${race}'s preset)`)
+        }
+        n++
+      }
+    }
     n++
   }
   return n
 }
 
+// (F11a) P-mission's armies: every refusal of DESIGN §4.2.8.4, each with
+// its own message, seat-major (every check of seat 0's before any of seat
+// 1's) and, within a seat, in the table's order: the army a string, a
+// preset of the race's, else a list of counts no longer than the roster,
+// then checkList's points, units, models, each role in ROLES order (its
+// minimum, then its maximum) and the most of one unit. [seat 0's army,
+// seat 1's, the message] (undefined: the seat names none); SETUP's seats
+// are the Bushtails' and the Coil's. Code without core/army.js takes no
+// army and is held to none of them.
+const NO = undefined
+const ARMY_REFUSALS = {
+  'a number': [NO, 7, /^seat 1's army is a preset's name or a list of counts, not 7$/],
+  'a list of digits': [['1', '1'], NO, /^seat 0's army is a preset's name or a list of counts, not \["1","1"\]$/],
+  'a record of counts': [{ elder: 1 }, NO, /^seat 0's army is a preset's name or a list of counts, not \{"elder":1\}$/],
+  'true': [true, NO, /^seat 0's army is a preset's name or a list of counts, not true$/],
+  // (the plural is the orchestrator's call while each race has one
+  // preset: either agreement passes)
+  // ((F8b) every race's three presets, named in their order)
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand\)$/],
+  // ('toString' has a capital: no preset's name, so not a list either)
+  "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
+  // ((F8b) a larger battle's preset is a preset like any, held to the
+  // mission's own limit: a Skirmish can't field the ×2 or ×3 list)
+  "the field preset in a Skirmish": ['field', NO, /^seat 0's army: 970 points, over the Skirmish limit of 500$/],
+  "the grand preset in a Skirmish": [NO, 'grand', /^seat 1's army: 1485 points, over the Skirmish limit of 500$/],
+  'neither a name nor counts': ['11a', NO, /^seat 0's army "11a" is neither a preset nor a list of counts$/],
+  'an empty army': ['', NO, /^seat 0's army "" is neither a preset nor a list of counts$/],
+  'a list with a trailing zero': [NO, '1121110', /^seat 1's army "1121110" is neither a preset nor a list of counts$/],
+  '__proto__': ['__proto__', NO, /^seat 0's army "__proto__" is neither a preset nor a list of counts$/],
+  'a capitalised preset': ['Classic', NO, /^seat 0's army "Classic" is neither a preset nor a list of counts$/],
+  'fullwidth digits': ['１１２', NO, /^seat 0's army "１１２" is neither a preset nor a list of counts$/],
+  'a list longer than the roster': ['1121113', NO, /^seat 0's list "1121113" counts 7 kinds of unit; the Bushtail Clans muster 6 \(elder oakguard nutkin grenadier glider trebuchet\)$/],
+  'a leading zero past the roster': [NO, '0112111', /^seat 1's list "0112111" counts 7 kinds of unit; the Coil of Ssithra muster 6 \(hierophant brute scaleguard spitter sidewinder engine\)$/],
+  '515 points': [NO, '100034', /^seat 1's army: 515 points, over the Skirmish limit of 500$/],
+  '505 points': ['100233', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
+  'points before a role (540 points, no hero)': ['033', NO, /^seat 0's army: 540 points, over the Skirmish limit of 500$/],
+  '37 models': [NO, '106', /^seat 1's army: 37 models; a Skirmish army has at most 36$/],
+  'models before a role (41 models, no hero)': [NO, '0061', /^seat 1's army: 41 models; a Skirmish army has at most 36$/],
+  'no Troops unit': ['11', NO, /^seat 0's army: no Troops unit; a Skirmish army needs at least 1$/],
+  '3 Elite units': ['1301', NO, /^seat 0's army: 3 Elite units; at most 2 in a Skirmish$/],
+  '3 Fast units': [NO, '10013', /^seat 1's army: 3 Fast units; at most 2 in a Skirmish$/],
+  'no Hero unit': ['001', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  '2 Hero units': ['201', NO, /^seat 0's army: 2 Hero units; at most 1 in a Skirmish$/],
+  '2 Monster units': [NO, '1201', /^seat 1's army: 2 Monster units; at most 1 in a Skirmish$/],
+  '2 Artillery units': ['100102', NO, /^seat 0's army: 2 Artillery units; at most 1 in a Skirmish$/],
+  // (ROLES: Troops, Elite, Fast, Hero, Monster, Artillery)
+  'the roles in ROLES order (no Troops and 2 Monster units)': [NO, '12', /^seat 1's army: no Troops unit; a Skirmish army needs at least 1$/],
+  'the roles in ROLES order (no Hero and 2 Artillery units)': ['000102', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  '4 Nutkin': ['104', NO, /^seat 0's army: 4 Nutkin; at most 3 of one unit in a Skirmish army$/],
+  '4 Spitters': [NO, '1004', /^seat 1's army: 4 Spitters; at most 3 of one unit in a Skirmish army$/],
+  'a role before the most of one unit (4 Nutkin, no hero)': ['004', NO, /^seat 0's army: no Hero unit; a Skirmish army needs at least 1$/],
+  // seat-major: seat 0's first broken rule, however late a check, before
+  // seat 1's, however early
+  "both seats broken: seat 0's late rule first": ['11', 7, /^seat 0's army: no Troops unit/],
+  "both seats broken: seat 0's list, seat 1's preset": ['1121113', 'grnad', /^seat 0's list "1121113" counts 7 kinds/],
+  'both seats broken alike': ['11a', '11a', /^seat 0's army "11a" is neither/],
+  'seat 0 legal, seat 1 broken': ['112111', '104', /^seat 1's army: 4 Scaleguard; at most 3 of one unit in a Skirmish army$/],
+}
+// [what, the Bushtails' counts (for checkList with the points lifted: no
+// Skirmish list reaches 11 units under 500 points), the reason]: the units
+// before the models
+const LIFTED = [
+  ['11 units (and 47 models)', [1, 0, 3, 3, 3, 1], /^11 units; a Skirmish army has at most 10$/],
+  ['37 models in 7 units', [1, 0, 6], /^37 models; a Skirmish army has at most 36$/],
+]
+function armyTask(core, { MISSIONS, checkMission }, RACES) {
+  let n = 0
+  const A = core.army
+  const seatsOf = (a0, a1) => SETUP.seats.map((x, i) => {
+    const army = i ? a1 : a0
+    return army === NO ? { ...x } : { ...x, army }
+  })
+  for (const [name, [a0, a1, want]] of Object.entries(ARMY_REFUSALS)) {
+    const setup = { ...SETUP, seats: seatsOf(a0, a1) }
+    const written = JSON.stringify(setup)
+    // fullSetup itself, then createMatch, each refusing with the message
+    for (const [how, f] of [['fullSetup', core.fullSetup], ['createMatch', core.createMatch]]) {
+      let why = null
+      try {
+        f(setup)
+      } catch (e) {
+        if (!(e instanceof Error) || e instanceof TypeError || e instanceof RangeError) throw new Error(`P-mission: ${how} crashes on a setup with ${name} instead of refusing it: ${e?.message ?? e}`)
+        why = e.message
+      }
+      if (why === null) throw new Error(`P-mission: ${how} takes a setup with ${name} (${JSON.stringify(setup.seats.map((x) => x.army))})`)
+      if (!want.test(why)) throw new Error(`P-mission: a setup with ${name} is refused by ${how} as "${why}", not ${want}`)
+    }
+    if (JSON.stringify(setup) !== written) throw new Error(`P-mission: refusing a setup with ${name} changed it`)
+    n++
+  }
+  const rules = MISSIONS.classic.list, lifted = { ...rules, points: 9999 }
+  for (const [what, counts, want] of LIFTED) {
+    const why = A.checkList(RACES.squirrel, lifted, counts)
+    if (!want.test(why ?? '')) throw new Error(`P-mission: checkList (points lifted) gives ${JSON.stringify(why)} for ${what}, not ${want}`)
+    n++
+  }
+  // the classic preset named, its counts and no army: one battle, unit for
+  // unit and hash for hash; a null army is a field left out. The start's
+  // setup as written keeps no army; the filled-in one names the preset
+  const spellings = [['no army', NO], ['null', null], ["'classic'", 'classic'], ["'112111'", '112111']]
+  const played = spellings.map(([what, army]) => {
+    const setup = { ...SETUP, seats: SETUP.seats.map((x) => (army === NO ? { ...x } : { ...x, army })) }
+    const G = core.createMatch(setup)
+    if (army == null && setup.seats.some((x) => x.army != null)) throw new Error(`P-mission: createMatch wrote an army into the setup as written (${what})`)
+    const want = army ?? 'classic'
+    if (G.setup.seats.some((x) => x.army !== want)) throw new Error(`P-mission: a setup with ${what} plays seats naming ${JSON.stringify(G.setup.seats.map((x) => x.army))}, not ${JSON.stringify(want)}`)
+    return { what, hash: core.stateHash(G), keys: G.units.map((u) => `${u.id}:${u.side}:${u.key}`).join(' '), trace: G.journal.trace.join('\n') }
+  })
+  for (const p of played.slice(1)) {
+    if (p.hash !== played[0].hash || p.keys !== played[0].keys || p.trace !== played[0].trace) throw new Error(`P-mission: a setup with ${p.what} makes another match than one with no army (stateHash ${p.hash} against ${played[0].hash}; units ${p.keys === played[0].keys ? 'alike' : 'apart'})`)
+  }
+  // ... and an all-AI battle to its end, alike
+  const ai = spellings.map(([what, army]) => {
+    const G = core.createMatch({ board: 64, dice: 89, seats: SETUP.seats.map((x) => ({ ...x, ctrl: 'ai', ...(army === NO ? {} : { army }) })) })
+    return { what, hash: core.stateHash(G), n: G.journal.trace.length }
+  })
+  for (const p of ai.slice(1)) if (p.hash !== ai[0].hash || p.n !== ai[0].n) throw new Error(`P-mission: board 64, dice 89 with ${p.what} ends ${p.hash} after ${p.n} trace lines, with no army ${ai[0].hash} after ${ai[0].n}`)
+  n += spellings.length
+  // checkMission's list rules (the slot table F8b and F9a extend): takes a
+  // slot maximum of 10 and a [0, 0] slot; refuses a perKind of 10, a slot
+  // with min > max or max > units, minimums summing past units
+  const edit = (f) => {
+    const m = structuredClone(MISSIONS.classic)
+    f(m.list)
+    try {
+      checkMission('test', m)
+      return null
+    } catch (e) {
+      return e.message
+    }
+  }
+  for (const [what, f] of [['a slot maximum of 10', (l) => (l.roles.Troops = [1, 10])], ['a [0, 0] slot', (l) => (l.roles.Monster = [0, 0])]]) {
+    const why = edit(f)
+    if (why !== null) throw new Error(`P-mission: checkMission refuses ${what}: ${why}`)
+    n++
+  }
+  for (const [what, f, want] of [
+    ['a perKind of 10', (l) => (l.perKind = 10), /perKind is 10/],
+    ['a slot with min > max', (l) => (l.roles.Fast = [2, 1]), /Fast slot is \[2,1\]/],
+    ['a slot with max > units', (l) => (l.roles.Troops = [1, 11]), /Troops slot is \[1,11\]/],
+    ['minimums summing past units', (l) => Object.assign(l.roles, { Troops: [6, 6], Elite: [2, 2], Fast: [2, 2], Hero: [1, 1] }), /minimums sum to 11 units, over its 10/],
+  ]) {
+    const why = edit(f)
+    if (!want.test(why ?? '')) throw new Error(`P-mission: checkMission ${why ? `refuses ${what} as "${why}"` : `takes ${what}`}, not ${want}`)
+    n++
+  }
+  return n
+}
 function setupTask(core) {
   for (const [name, change] of Object.entries(BAD_SETUPS)) {
     const setup = { ...SETUP, ...change }
@@ -963,6 +1188,310 @@ function setupTask(core) {
   return Object.keys(BAD_SETUPS).length
 }
 
+// ── (F11a) P-army ───────────────────────────────────────────────────────────
+// A seat's `army` is a field any peer may write (a lobby's, a start's), so
+// whatever it holds must come back refused for a reason or taken in its one
+// spelling, never crash the fold; and every list the builder's tools make
+// plays (DESIGN §4.2.9's P-army row):
+//   fuzz    `n` fuzzed armies (numbers, bigints, arrays, records, records
+//           with no prototype or a throwing toJSON, cycles, a deep nest, a
+//           Proxy, symbols, functions, letters, unicode and lone
+//           surrogates, digit strings with leading and trailing zeros,
+//           over-long ones, Object.prototype's names, presets misspelt,
+//           and legal lists among them), in one seat or both, through
+//           fullSetup. A refusal is an Error (never a TypeError or a
+//           RangeError, nor anything else thrown) whose message starts
+//           "seat N's" or "the <race> have no army", N the seat fuzzed;
+//           with both seats fuzzed it is seat 0's own refusal if seat 0
+//           has one, else seat 1's (seat-major). A taking is a string (or
+//           nothing: the preset): a preset's name or a list of counts, and
+//           it round-trips (listText(armyOf(…).counts) is the list, or the
+//           preset's digits), its units the digit sum, in roster order;
+//           the first 60 lists taken made into matches, each seat's units
+//           those keys, ids from 1
+//   sweep   autoList over seeds 1-1,000 × every race × every mission: legal
+//           (checkList), deterministic, its text a list, its units the
+//           digit sum in roster order (armyOf's keys, keysOf's)
+//   shadow  three corpus battles (an AI pair, a hotseat log, a vs-AI log)
+//           folded with no army, 'classic' and '112111' on every seat: the
+//           same shadowState before every entry and at the end, and the
+//           stateHash data-check pins for them (V1, unchanged through
+//           CORE_VERSION 5: F11a moved nothing in the hash)
+//   games   random legal lists (autoList on random budgets from 60% to
+//           100% of the limit, mirror matches included) played to the end
+//           under `strict`: AI against AI (each seat's units its list's,
+//           G's invariants at the end, the result the score's or the
+//           wipe's, every trace line in the trace's format), and some with
+//           a human seat answered at random as (3)'s games are, with
+//           P-prop's invariants at every command boundary
+// (the stateHash pins of data-check's section 10, V1: the classic corpus
+// hashes as under CORE_VERSION 1 through every version since)
+const V1_PINS = {
+  '64-89': { end: 'chz79qx8m5' },
+  'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
+  'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
+}
+// (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
+// F8b's missions, open set and fight guard, which a classic battle meets as
+// before)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7]
+
+// Every trace line in the format core/journal.js writes (DESIGN §4.1: the
+// trace is frozen): a battle-log line, or a state line (act, a phase, a
+// round, over) listing every unit of the match by id from 1, its position
+// to 3 decimals and each model's wounds, then the chunks, the score and the
+// dice. Returns the first line that isn't, or null.
+const LOG_LINE = /^log -?\d+ [\s\S]*rng:\d+#[0-9a-z]+$/
+const STATE_LINE = /^(act|over|round \d+|phase [01]:[a-z]+) ((?:\d+:-?\d+\.\d{3},-?\d+\.\d{3},\d+(?:\/\d+)* ?)+) chunks:\d+ vp:\d+-\d+ rng:\d+#[0-9a-z]+$/
+function traceShape(G) {
+  for (const [i, l] of G.journal.trace.entries()) {
+    if (LOG_LINE.test(l)) continue
+    const m = STATE_LINE.exec(l)
+    const ids = m ? m[2].trim().split(' ').map((u) => Number(u.split(':')[0])) : null
+    if (!ids || ids.length !== G.units.length || ids.some((id, k) => id !== k + 1)) return `trace line ${i + 1} isn't in the trace's format: ${l.slice(0, 100)}`
+  }
+  return null
+}
+
+// each seat's units against its list: G.units seat 0's then seat 1's, each
+// in roster order (§4.1 rule 23), ids from 1
+function unitsAre(core, G, RACES, where) {
+  const want = G.setup.seats.flatMap((x, side) => core.army.keysOf(RACES[x.race], x.army).map((key) => `${side}:${key}`))
+  const got = G.units.map((u) => `${u.side}:${u.key}`)
+  if (got.join() !== want.join()) throw new Error(`${where}: the match fields ${got.join(' ')}, not its lists' ${want.join(' ')}`)
+  if (G.units.some((u, i) => u.id !== i + 1)) throw new Error(`${where}: unit ids ${G.units.map((u) => u.id).join(',')}, not counting from 1`)
+}
+
+// A fuzzed army (`list`: a legal list of the seat's race, as text, which
+// some of the values are made from).
+const NAMES = ['__proto__', 'constructor', 'toString', 'hasOwnProperty', 'valueOf', 'prototype', 'classic', 'Classic', 'classic ', ' classic', 'CLASSIC', 'field', 'grand', 'auto', 'random', 'null', 'undefined', 'NaN', 'Infinity', '', ' ', '\u0000', '-', 'a', 'z9', 'a-', '1e3', '0x1', '+1', '-1', '1.5', ' 1', '1 ', '١١٢', '１２', '1\n', '​1']
+function fuzzValue(rand, list) {
+  const int = (n) => Math.floor(rand() * n)
+  const digits = (n, lo = 0) => Array.from({ length: n }, () => String(lo + int(10 - lo))).join('')
+  switch (int(26)) {
+    case 0: return int(2e6) - 1e6
+    case 1: return (rand() - 0.5) * Math.pow(10, int(15))
+    case 2: return [NaN, Infinity, -Infinity, -0, 0, 1, 112111, Number.MAX_VALUE, Number.MIN_VALUE, 2 ** 53, -(2 ** 53)][int(11)]
+    case 3: return BigInt(int(1e9)) * 1000n
+    case 4: return rand() < 0.5
+    case 5: return Array.from({ length: int(8) }, () => (rand() < 0.5 ? int(10) : String(int(10))))
+    case 6: return list.split('').map(Number)
+    case 7: return { [NAMES[int(NAMES.length)] || 'x']: int(4), elder: int(3) }
+    case 8: return Object.assign(Object.create(null), { list, n: int(9) })
+    case 9: return { toString: () => list, valueOf: () => Number(list), toJSON: () => list }
+    case 10: return { toJSON() {
+      throw new Error('no JSON')
+    } }
+    case 11: {
+      const o = { list }
+      o.self = o
+      return o
+    }
+    case 12: {
+      let v = list
+      for (let k = 0; k < 4000; k++) v = [v]
+      return v
+    }
+    case 13: return new Proxy({}, { ownKeys() {
+      throw new Error('a trap')
+    }, get() {
+      throw new Error('a trap')
+    } })
+    case 14: return rand() < 0.5 ? Symbol(list) : () => list
+    case 15: return new String(list)
+    case 16: return Array.from({ length: 1 + int(12) }, () => String.fromCharCode(97 + int(26))).join('')
+    case 17: return Array.from({ length: 1 + int(8) }, () => String.fromCodePoint(rand() < 0.3 ? 0xd800 + int(0x800) : int(0x110000))).join('')
+    case 18: return digits(int(13))
+    case 19: return '0'.repeat(1 + int(3)) + list
+    case 20: return list + '0'.repeat(1 + int(3))
+    case 21: return digits(14 + int(200), 1)
+    case 22: return NAMES[int(NAMES.length)]
+    case 23: {
+      // a legal list nudged: a digit changed, one dropped, one added
+      const at = int(list.length), d = String(int(10))
+      return [list.slice(0, at) + d + list.slice(at + 1), list.slice(0, -1), list + d, d + list][int(4)]
+    }
+    case 24: return rand() < 0.5 ? null : undefined
+    default: return rand() < 0.3 ? 'classic' : list
+  }
+}
+
+// The fuzz: `n` cases, `seed`'s stream. Returns its counts.
+function fuzzTask(core, RACES, MISSIONS, n, seed) {
+  const A = core.army, rand = mulberry32(seed)
+  const races = Object.keys(RACES), missions = Object.keys(MISSIONS)
+  const int = (k) => Math.floor(rand() * k)
+  const counts = { fuzzed: 0, refused: 0, taken: 0, roundTrips: 0, both: 0, made: 0 }
+  // a legal list of `race` at `mission`, as text (from 60% of the limit)
+  const legal = (race, mission) => {
+    const rules = MISSIONS[mission].list
+    return A.listText(A.autoList(RACES[race], { ...rules, points: rules.points - 5 * int(rules.points / 12.5) }, int(2 ** 32)))
+  }
+  // fullSetup's verdict: the setup, or the error thrown
+  const verdict = (setup) => {
+    try {
+      return { s: core.fullSetup(setup) }
+    } catch (e) {
+      return { e }
+    }
+  }
+  const show = (v) => {
+    try {
+      return typeof v === 'string' ? JSON.stringify(v).slice(0, 40) : typeof v === 'object' && v !== null ? `a ${Array.isArray(v) ? 'list' : 'record'}` : String(v).slice(0, 40)
+    } catch {
+      return typeof v
+    }
+  }
+  for (let k = 0; k < n; k++) {
+    const mission = missions[int(missions.length)]
+    const race = [0, 1].map(() => (rand() < 0.6 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
+    const lists = race.map((r) => legal(r, mission))
+    const seat = int(2), both = rand() < 0.2
+    const army = [0, 1].map((i) => (i === seat || both ? fuzzValue(rand, lists[i]) : rand() < 0.5 ? lists[i] : undefined))
+    const setupOf = (a) => ({ board: 1 + int(1e6), dice: 1 + int(1e9), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'human', ...(a[i] === undefined && rand() < 0.5 ? {} : { army: a[i] }) })) })
+    const setup = setupOf(army)
+    const where = `P-army fuzz case ${k} (seat ${both ? '0 and 1' : seat}: ${army.map(show).join(' | ')}, ${race.join(' v ')})`
+    const v = verdict(setup)
+    counts.fuzzed++
+    if (v.e) {
+      const e = v.e
+      if (!(e instanceof Error) || e instanceof TypeError || e instanceof RangeError) throw new Error(`${where}: fullSetup crashes (${e?.constructor?.name ?? typeof e}: ${e?.message ?? String(e)}) instead of refusing the army`)
+      const by = (i) => `seat ${i}'s `, raceSays = (i) => `the ${RACES[race[i]].name} have no army `
+      const named = [0, 1].filter((i) => e.message.startsWith(by(i)) || e.message.startsWith(raceSays(i)))
+      if (!named.length) throw new Error(`${where}: refused as "${e.message.slice(0, 120)}", which names no seat's army`)
+      if (!both && !named.includes(seat)) throw new Error(`${where}: refused as "${e.message.slice(0, 120)}", naming another seat than the one fuzzed`)
+      if (both) {
+        // seat-major: seat 0's own refusal (seat 1 at its preset) if it has
+        // one, else seat 1's (seat 0 at its preset)
+        counts.both++
+        const alone0 = verdict(setupOf([army[0], undefined])), alone1 = verdict(setupOf([undefined, army[1]]))
+        const want = alone0.e ?? alone1.e
+        if (!want || want.message !== e.message) throw new Error(`${where}: both seats fuzzed, refused as "${e.message.slice(0, 100)}", not seat-major ("${want?.message.slice(0, 100) ?? 'taken'}")`)
+      }
+      counts.refused++
+      continue
+    }
+    // taken: each seat's army a string (absent: the preset), in its one spelling
+    counts.taken++
+    for (const i of [0, 1]) {
+      const r = RACES[race[i]], given = army[i], filled = v.s.seats[i].army
+      if (given != null && typeof given !== 'string') throw new Error(`${where}: fullSetup takes seat ${i}'s army ${show(given)}, which is no string`)
+      if (filled !== (given ?? MISSIONS[mission].army)) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
+      const got = A.armyOf(v.s, i)
+      const text = A.listText(got.counts)
+      const preset = Object.hasOwn(r.armies, filled) ? filled : null
+      if (got.preset !== preset || text !== (preset ? r.armies[preset] : filled)) throw new Error(`${where}: seat ${i}'s ${show(filled)} reads back as '${text}' (preset ${got.preset}), not in its one spelling`)
+      const sum = [...text].reduce((s, d) => s + Number(d), 0)
+      const order = got.keys.map((key) => r.roster.indexOf(key))
+      if (got.keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1]))) throw new Error(`${where}: seat ${i}'s '${text}' fields ${got.keys.join(' ')}: not ${sum} units in roster order`)
+      if (A.checkList(r, MISSIONS[mission].list, got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, MISSIONS[mission].list, got.counts)}`)
+      counts.roundTrips++
+    }
+    // the first lists taken, made into matches (human seats: each stops at
+    // its deployment)
+    if (counts.made < 60 && army.some((x) => typeof x === 'string' && x !== 'classic')) {
+      const G = core.createMatch(setup)
+      unitsAre(core, G, RACES, where)
+      counts.made++
+    }
+  }
+  if (!counts.refused || !counts.taken || !counts.both || (n >= 1000 && counts.made < 10)) throw new Error(`P-army: the fuzz never met every outcome (${JSON.stringify(counts)})`)
+  return counts
+}
+
+// The sweep: autoList over seeds 1-1,000 × every race × every mission.
+function sweepTask(core, RACES, MISSIONS) {
+  const A = core.army
+  let n = 0
+  for (const [mission, m] of Object.entries(MISSIONS)) {
+    for (const [key, r] of Object.entries(RACES)) {
+      for (let seed = 1; seed <= 1000; seed++) {
+        const where = `P-army: autoList(${key}, ${mission}, ${seed})`
+        const counts = A.autoList(r, m.list, seed)
+        const why = A.checkList(r, m.list, counts)
+        if (why !== null) throw new Error(`${where} is illegal: ${why}`)
+        if (A.autoList(r, m.list, seed).join() !== counts.join()) throw new Error(`${where} draws another list the second time`)
+        const text = A.listText(counts)
+        if (!A.LIST.test(text) || text.length > r.roster.length) throw new Error(`${where} writes '${text}', which is no list of counts`)
+        const sum = counts.reduce((s, x) => s + x, 0)
+        const { keys } = A.armyOf({ mission, seats: [{ race: key, ctrl: 'ai', army: text }, { race: key, ctrl: 'ai' }] }, 0)
+        const order = keys.map((k) => r.roster.indexOf(k))
+        if (keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1])) || A.keysOf(r, text).join() !== keys.join()) throw new Error(`${where}: '${text}' fields ${keys.join(' ')}: not its ${sum} units in roster order`)
+        n++
+      }
+    }
+  }
+  return n
+}
+
+// The shadow: corpus battles folded under three spellings of the classic
+// army, against each other and data-check's pins.
+function shadowTask(core) {
+  const { items } = loadCorpus()
+  let n = 0
+  for (const [id, pins] of Object.entries(V1_PINS)) {
+    const job = items.find((x) => x.id === id).job, entries = job.entries ?? []
+    const states = [undefined, 'classic', '112111'].map((army) => {
+      const setup = jobSetup(job)
+      const G = core.createMatch(army ? { ...setup, seats: setup.seats.map((x) => ({ ...x, army })) } : setup, { out: null })
+      const out = []
+      for (let k = 0; k <= entries.length; k++) {
+        out.push([k, core.shadowState(G), core.stateHash(G)])
+        if (k < entries.length) {
+          const { s, ...b } = entries[k]
+          core.apply(G, s, b)
+        }
+      }
+      return out
+    })
+    for (const [j, what] of [[1, "'classic'"], [2, "'112111'"]]) {
+      const k = states[j].findIndex(([, sh], i) => sh !== states[0][i][1])
+      if (k >= 0) throw new Error(`P-army: ${id} with ${what} on every seat prints another shadowState than with no army, before entry ${k}`)
+    }
+    if (PINNED_UNDER.includes(core.CORE_VERSION)) {
+      for (const [at, want] of Object.entries(pins)) {
+        const k = at === 'end' ? entries.length : Number(at)
+        if (states[0][k][2] !== want) throw new Error(`P-army: ${id}'s stateHash ${at === 'end' ? 'at its end' : `before entry ${k}`} is ${states[0][k][2]}, not ${want} as data-check pins it: a classic match's shadowState moved`)
+        n++
+      }
+    }
+    n++
+  }
+  return n
+}
+
+// `n` AI-against-AI battles between random legal lists at `mission`, from
+// `seed`'s stream.
+function armyGamesTask(core, RACES, MISSIONS, mission, n, seed) {
+  const A = core.army, rand = mulberry32(seed * 2246822519 + 3)
+  const int = (k) => Math.floor(rand() * k)
+  const races = Object.keys(RACES), rules = MISSIONS[mission].list
+  const ends = { score: 0, wipe: 0 }, budgets = []
+  for (let k = 0; k < n; k++) {
+    const race = [0, 1].map(() => (rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
+    const army = race.map((r) => {
+      const budget = rules.points - 5 * int(rules.points / 12.5)
+      budgets.push(budget)
+      return A.listText(A.autoList(RACES[r], { ...rules, points: budget }, int(2 ** 32)))
+    })
+    const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'ai', army: army[i] })) }
+    const where = `P-army game ${seed}.${k} (${JSON.stringify(setup)})`
+    let G
+    try {
+      G = core.createMatch(setup, { out: [], strict: true })
+    } catch (e) {
+      throw new Error(`${where}: ${e.stack}`)
+    }
+    if (G.turn.stage !== 'over') throw new Error(`${where}: an AI battle stopped at ${G.turn.stage}`)
+    unitsAre(core, G, RACES, where)
+    invariants(core, G, `${where} at its end`)
+    ends[result(G, where, -1)]++
+    const bad = traceShape(G)
+    if (bad) throw new Error(`${where}: ${bad}`)
+  }
+  return { listGames: n, ends, budgets: [Math.min(...budgets), Math.max(...budgets)] }
+}
+
 // Two games' logs played interleaved in one process, command by command:
 // each must trace exactly as it did alone, in its own process (its trace's
 // hash), and as it does alone here, before the interleaving.
@@ -985,6 +1514,569 @@ function interleave(core, A, B) {
   }
 }
 
+// ── P-height and P-level (F7a, DESIGN §4.2.9) ───────────────────────────────
+// What a board with a height layer must keep (code from F7a on: its queries
+// have levelDist; older code is held to none of it):
+//  - classic boards build no height array (no nav.floor, hasHeight false),
+//    every unit's groundY and every floorAt is 0, and levelDist is the
+//    straight line; a fortified board builds one;
+//  - (heightRules, after every command of every random game on a fortified
+//    board) no unit stands straddling a ledge (its cell's cliff ≥ r − 0.06),
+//    no enemy engaged across more than HIGH, and sight from a deck cell, as
+//    the AI scores it (sight's `from`), is sight with the unit standing
+//    there, and sightInfo's verdict sight's; (heightEvents) no non-climber's
+//    walk ever takes a link, and a board's events carry `y` exactly where it
+//    has height (classic's don't grow); (no ground vehicle stands above
+//    STEP: F9a's vehicles have no unit yet);
+//  - (heightTask, on fortified boards of its own) reach's every step: a
+//    neighbour's floor within STEP and its cell standable, a link only for
+//    a climber and at its cost (a disc of r 0.05, which no ledge's band
+//    stops, as well as the units' own: so a reach that steps up a wall is
+//    seen even where the cliff would have hidden it); standable never on a
+//    ledge's band; movePlan takes a ladder for exactly the climbers; across a
+//    ledge (a unit on a deck top, an enemy at its foot within 1"): not
+//    engaged, the deck's bubble no ground cell's, no charge spot off the
+//    target's level; the same pair on one level engaged;
+//  - (F7a's review, heightTask too) the rules the random games pass by
+//    without judging, each on a scene of its own: the keep's objective held
+//    from its top and not from its foot (controlOf); a template landing on a
+//    deck sparing the models on the ground below it within its horizontal
+//    reach (blastLands, in 3D); a wrecker's smash on the ground skipping a
+//    piece standing on a deck (smashAround, by `base`); a pile-in onto a
+//    ledge's band refused, one onto open deck taken (closeRanks); and a
+//    charge onto a deck's top taken beside an enemy on the ground below
+//    (chargePlan's other enemies, at their own level only);
+//  - P-level: levelDist equals a reference Dijkstra over the gate graph
+//    (every gate's two ends, a and b; the straight line between any two on
+//    one level, each gate at its cost; the ladders only for a climber; (the
+//    review) a point partway up a stair joined to its foot too; no way at
+//    all, the straight line), for a climber and a non-climber, on
+//    LEVEL_PAIRS random point pairs per fortified board (half of the points
+//    on raised cells), to 1e-9: on HEIGHT_BOARDS Skirmish boards, and (the
+//    review) on GRAND_LEVEL Grand-sized ones (the Grand fixture's table,
+//    80×56 with its 14" zones and nine objectives, built straight from the
+//    code's Terrain and NavGrid), where bastions stand and a deck can be a
+//    shortcut between two ground points.
+const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12
+// a charge spot's reach of another enemy: its base and the charger's, and
+// ENGAGE (core/actions/charge.js's test)
+const R0 = (e, u) => e.r + u.r + 1
+const GRAND_TABLE = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z], i) => ({ i, x, z })) }
+
+// a fortified game's state, between two commands
+function heightRules(core, G, where, rand) {
+  const q = core.q, nav = G.nav
+  if (G.setup.terrain !== 'fortified') {
+    if (nav.hasHeight || nav.floor !== undefined) throw new Error(`${where}: a ${G.setup.terrain} board built a height layer`)
+    for (const u of G.units) if (q.groundY(G, u) !== 0) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)} on a ${G.setup.terrain} board`)
+    return 0
+  }
+  if (!nav.hasHeight) throw new Error(`${where}: a fortified board built no height layer`)
+  const live = G.units.filter((u) => q.alive(u))
+  for (const u of live) {
+    const i = nav.index(u.pos.x, u.pos.z)
+    if (!(nav.cliff[i] >= u.r - 0.06)) throw new Error(`${where}: unit ${u.id} (${u.t.short}, r ${u.r.toFixed(3)}) straddles a ledge at (${u.pos.x}, ${u.pos.z}): cliff ${nav.cliff[i]}`)
+    for (const e of q.engagedWith(G, u)) {
+      const dy = Math.abs(q.groundY(G, u) - q.groundY(G, e))
+      if (dy > q.HIGH) throw new Error(`${where}: unit ${u.id} is engaged with unit ${e.id} ${dy}" below or above it`)
+    }
+  }
+  // sight from a deck cell is sight standing there (one shooter, one target,
+  // one cell, each picked at random)
+  const shooters = live.filter((u) => u.t.ranged)
+  if (!shooters.length) return 1
+  const u = shooters[Math.floor(rand() * shooters.length)]
+  const foes = live.filter((e) => e.side !== u.side)
+  if (!foes.length) return 1
+  const e = foes[Math.floor(rand() * foes.length)]
+  const decks = []
+  for (let i = 0; i < nav.N; i++) if (nav.level[i] && nav.standable(i, u.r, 'walk')) decks.push(i)
+  if (!decks.length) return 1
+  const c = decks[Math.floor(rand() * decks.length)], at = { x: nav.x(c), z: nav.z(c) }
+  const from = JSON.stringify(q.sight(G, u, e, at)), info = q.sightInfo(G, u, e, at)
+  const was = { x: u.pos.x, z: u.pos.z }
+  u.pos.x = at.x
+  u.pos.z = at.z
+  let there
+  try {
+    there = JSON.stringify(q.sight(G, u, e))
+  } finally {
+    u.pos.x = was.x
+    u.pos.z = was.z
+  }
+  if (from !== there) throw new Error(`${where}: unit ${u.id}'s sight of unit ${e.id} from deck cell ${c} is ${from}, standing there ${there}`)
+  const s = JSON.parse(from)
+  if (info.ok !== s.visible || info.cover !== s.cover) throw new Error(`${where}: sightInfo of unit ${e.id} from cell ${c} says ${JSON.stringify(info)}, sight ${from}`)
+  return 1
+}
+
+// a batch of a game's events, against the board they were played on
+function heightEvents(G, events, where) {
+  const high = G.nav.hasHeight
+  for (const e of events) {
+    if (e.t === 'unit.move') {
+      const u = G.units.find((x) => x.id === e.u)
+      if (e.path.some((p) => p.climb) && !u.t.climb) throw new Error(`${where}: unit ${u.id} (${u.t.short}), no climber, took a ladder: ${JSON.stringify(e.path)}`)
+      if (high !== ('y' in e.to) || e.path.some((p) => high !== ('y' in p))) throw new Error(`${where}: a walk ${high ? 'without' : 'with'} heights on a board ${high ? 'with' : 'without'} them: ${JSON.stringify(e).slice(0, 160)}`)
+    } else if (e.t === 'unit.place' || e.t === 'unit.formation') {
+      const has = e.t === 'unit.place' ? 'y' in e : 'y' in e.pos
+      if (high !== has) throw new Error(`${where}: a ${e.t} ${high ? 'without' : 'with'} its floor on a board ${high ? 'with' : 'without'} height: ${JSON.stringify(e).slice(0, 160)}`)
+    }
+  }
+}
+
+// the reference: Dijkstra over the gate graph's nodes (a, b and every gate's
+// two ends), O(n²), with no shortcut of levelDist's: (the review) every way
+// the graph has, a deck crossed as a shortcut between two ground points
+// included, and a point partway up a stair (its cell's floor that stair's,
+// nav.rampOf, the stair rising to the point's level) joined straight to the
+// stair's foot as well
+function gateDijkstra(nav, a, b, climb) {
+  const nodes = [{ p: a, L: nav.levelAt(a.x, a.z) }, { p: b, L: nav.levelAt(b.x, b.z) }]
+  const gates = nav.gates.filter((g) => climb || !g.ladder)
+  for (const g of gates) nodes.push({ p: g.lo, L: 0 }, { p: g.hi, L: g.level })
+  // (a and b's own stairs: [node, gate's foot node] each)
+  const extra = []
+  for (const e of [0, 1]) {
+    const { p, L } = nodes[e], i = nav.index(p.x, p.z)
+    if (!L || i < 0 || !nav.rampOf || nav.rampOf[i] < 0) continue
+    const k = gates.findIndex((g) => !g.ladder && g.id === nav.rampOf[i])
+    if (k >= 0 && gates[k].level === L) extra.push([e, 2 + 2 * k])
+  }
+  const n = nodes.length, d = new Array(n).fill(Infinity), done = new Array(n).fill(false)
+  const dist = (u, v) => Math.hypot(nodes[u].p.x - nodes[v].p.x, nodes[u].p.z - nodes[v].p.z)
+  d[0] = 0
+  for (;;) {
+    let u = -1
+    for (let i = 0; i < n; i++) if (!done[i] && (u < 0 || d[i] < d[u])) u = i
+    if (u < 0 || !isFinite(d[u])) break
+    done[u] = true
+    for (let v = 0; v < n; v++) if (nodes[v].L === nodes[u].L) d[v] = Math.min(d[v], d[u] + dist(u, v))
+    if (u >= 2) {
+      const k = (u - 2) >> 1, v = (u - 2) % 2 ? u - 1 : u + 1
+      d[v] = Math.min(d[v], d[u] + gates[k].cost)
+    }
+    for (const [x, y] of extra) {
+      if (u === x) d[y] = Math.min(d[y], d[u] + dist(x, y))
+      else if (u === y) d[x] = Math.min(d[x], d[u] + dist(x, y))
+    }
+  }
+  return isFinite(d[1]) ? d[1] : Math.hypot(a.x - b.x, a.z - b.z)
+}
+
+// P-level over one board's nav: LEVEL_PAIRS random pairs (half the points
+// on raised cells), climbing and not, against the reference
+function levelPairs(q, G, nav, rand, where, counts) {
+  const raised = []
+  for (let i = 0; i < nav.N; i++) if (nav.level[i]) raised.push(i)
+  const point = () => {
+    if (raised.length && rand() < 0.5) {
+      const i = raised[Math.floor(rand() * raised.length)]
+      return { x: nav.x(i) + (rand() - 0.5) * 0.4, z: nav.z(i) + (rand() - 0.5) * 0.4 }
+    }
+    return { x: (rand() - 0.5) * nav.W, z: (rand() - 0.5) * nav.H }
+  }
+  for (let k = 0; k < LEVEL_PAIRS; k++) {
+    const p = point(), b = point()
+    for (const climb of [true, false]) {
+      const got = q.levelDist(G, p, b, climb), want = gateDijkstra(nav, p, b, climb)
+      if (!(Math.abs(got - want) <= 1e-9)) throw new Error(`${where}: levelDist from (${p.x}, ${p.z}) (level ${nav.levelAt(p.x, p.z)}) to (${b.x}, ${b.z}) (level ${nav.levelAt(b.x, b.z)}), ${climb ? 'climbing' : 'by stairs'}, is ${got}; over the gate graph ${want}`)
+      counts.pairs++
+    }
+  }
+}
+
+// (F7a's review) Run fn with only the units in `keep` standing (the rest's
+// counts set to 0 and back, with every unit's place, whatever fn does)
+function only(G, keep, fn) {
+  const saved = G.units.map((u) => ({ u, alive: u.alive, x: u.pos.x, z: u.pos.z, r: u.r, models: u.models.map((m) => ({ ...m })) }))
+  for (const u of G.units) if (!keep.includes(u)) u.alive = 0
+  try {
+    return fn()
+  } finally {
+    for (const { u, alive, x, z, r, models } of saved) {
+      u.alive = alive
+      u.pos.x = x
+      u.pos.z = z
+      u.r = r
+      models.forEach((m, k) => Object.assign(u.models[k], m))
+    }
+  }
+}
+
+// (F7a's review) The height rules the random games pass by without judging,
+// each on a scene of its own on one fortified board (G: a fresh match, its
+// scene changed and put back; the blast and the smash on a match of their
+// own, `fresh`, as they change the table): what each found goes in counts
+function heightScenes(core, mods, G, fresh, where, counts) {
+  const q = core.q, nav = G.nav, HIGH = q.HIGH, STEP = mods.nav.STEP
+  const put = (u, x, z) => {
+    u.pos.x = x
+    u.pos.z = z
+  }
+  const cells = (pred) => {
+    const out = []
+    for (let i = 0; i < nav.N; i++) if (pred(i)) out.push(i)
+    return out
+  }
+  const climbers = (side) => G.units.filter((u) => u.side === side && !u.t.fly && u.t.climb)
+  // the keep's objective held from its top (its foot is out of range: the
+  // deck's 3" half-width and the ledge's band keep every model on the ground
+  // 0.6" or more past OBJECTIVE_RANGE and its base; a deck beside a ground
+  // objective, which the height rule parts, is the Grand-sized boards'
+  // scene, controlScene)
+  const keep = G.terrain.chunks.find((c) => c.kind === 'deck' && c.look?.recipe === 'keep')
+  const o = G.objectives.find((x) => x.x === 0 && x.z === 0)
+  if (keep && o) {
+    const oy = q.floorAt(G, o.x, o.z), u = climbers(0)[0]
+    const near = (i) => u.models.some((m) => m.alive && Math.hypot(nav.x(i) + m.ox - o.x, nav.z(i) + m.oz - o.z) <= 3 + u.t.base)
+    const top = cells((i) => Math.abs(nav.floor[i] - oy) <= HIGH && nav.level[i] && nav.standable(i, u.r, 'walk') && near(i))
+    if (top.length) {
+      only(G, [u], () => {
+        put(u, nav.x(top[0]), nav.z(top[0]))
+        if (q.controlOf(G, o) !== u.side) throw new Error(`${where}: unit ${u.id} (${u.t.short}) on the keep's top (cell ${top[0]}) doesn't hold its objective: ${q.controlOf(G, o)}`)
+        counts.keepTop++
+      })
+    }
+  }
+  // a pile-in onto a ledge's band refused, onto open deck taken: a squad on a
+  // deck cut to one model, its foe on the same deck (closeRanks piles it in
+  // toward the foe, by its gap less ENGAGE − 0.3)
+  const sq = climbers(0).filter((u) => u.models.length >= 3).reduce((x, y) => (!x || y.r > x.r ? y : x), null)
+  const foe = climbers(1).reduce((x, y) => (!x || y.r < x.r ? y : x), null)
+  if (sq && foe) {
+    const r1 = sq.t.base, deck = cells((i) => nav.level[i] && nav.floor[i] > STEP)
+    let refused = null, taken = null
+    for (let k = 0; k < deck.length && !(refused && taken); k += 3) {
+      const i = deck[k]
+      if (!(nav.cliff[i] >= r1 - 0.06)) continue
+      for (const j of deck) {
+        if (Math.abs(nav.floor[j] - nav.floor[i]) > HIGH) continue
+        const d = Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j))
+        if (d - sq.r - foe.r > 1.05 || d - sq.r - foe.r < 0.1 || d - r1 - foe.r <= 1.05) continue
+        const step = d - r1 - foe.r - 0.7, x = nav.x(i) + ((nav.x(j) - nav.x(i)) / d) * step, z = nav.z(i) + ((nav.z(j) - nav.z(i)) / d) * step
+        const ok = nav.standable(nav.index(x, z), r1, 'walk')
+        if (!ok && !refused) refused = [i, j]
+        else if (ok && !taken) taken = [i, j]
+        if (refused && taken) break
+      }
+    }
+    for (const [pair, want] of [[refused, false], [taken, true]]) {
+      if (!pair) continue
+      only(G, [sq, foe], () => {
+        put(sq, nav.x(pair[0]), nav.z(pair[0]))
+        put(foe, nav.x(pair[1]), nav.z(pair[1]))
+        if (!q.engagedWith(G, sq).includes(foe)) throw new Error(`${where}: the pile-in scene's two units (cells ${pair[0]} and ${pair[1]}) aren't engaged`)
+        for (const m of sq.models.slice(1)) m.alive = false
+        sq.alive = 1
+        mods.damage.closeRanks(G, sq)
+        const moved = sq.pos.x !== nav.x(pair[0]) || sq.pos.z !== nav.z(pair[0])
+        if (moved !== want) throw new Error(`${where}: closeRanks ${moved ? 'piled' : "didn't pile"} unit ${sq.id} in from deck cell ${pair[0]} toward cell ${pair[1]}${want ? ', onto standable deck' : ', onto a ledge\'s band'} (it stands at (${sq.pos.x}, ${sq.pos.z}))`)
+        counts[want ? 'pileIn' : 'pileRefused']++
+      })
+    }
+  }
+  // a charge onto a deck's top beside an enemy on the ground below: the
+  // target on a deck's rim, the charger on the same deck; then the other
+  // enemy put on the ground below one of the charge's spots, within 1" of
+  // it across the ledge: the spot stays one, and no spot lies within 1" of
+  // an enemy at its own level
+  // (the target and the charger the smallest climbers, so they stand nearest
+  // the rim; the enemy below the biggest walker: the ledges' bands keep a
+  // small base on the ground more than 1" from any on the deck above, and
+  // only a big one's reaches within it, by a few hundredths)
+  const small = (us) => us.reduce((x, y) => (!x || y.r < x.r ? y : x), null)
+  const other = G.units.filter((e) => e.side === 1 && !e.t.fly).reduce((x, y) => (!x || y.r > x.r ? y : x), null)
+  const ch = small(climbers(0)), tg = small(climbers(1).filter((e) => e !== other))
+  if (ch && tg && other) {
+    const tops = cells((i) => nav.level[i] && nav.floor[i] > HIGH && nav.standable(i, tg.r, 'walk') && nav.cliff[i] < tg.r + 0.5)
+    let found = false
+    for (let k = 0; k < tops.length && k < 400 && !found; k++) {
+      const t = tops[k]
+      const near = (c) => Math.hypot(nav.x(c) - nav.x(t), nav.z(c) - nav.z(t))
+      const from = cells((c) => nav.level[c] === nav.level[t] && nav.standable(c, ch.r, 'walk') && near(c) > tg.r + ch.r + 2).sort((x, y) => near(x) - near(y))
+      if (!from.length) continue
+      only(G, [ch, tg, other], () => {
+        put(tg, nav.x(t), nav.z(t))
+        put(ch, nav.x(from[0]), nav.z(from[0]))
+        // (the other enemy far off while the spots are found)
+        put(other, -nav.W, -nav.H)
+        const first = q.chargePlan(G, ch, tg)
+        for (const sp of first?.spots ?? []) {
+          const sx = nav.x(sp.i), sz = nav.z(sp.i), R = R0(other, ch) - 0.01
+          const j = cells((c) => nav.floor[c] <= STEP && Math.abs(nav.floor[sp.i] - nav.floor[c]) > HIGH && nav.standable(c, other.r, 'walk') && Math.hypot(nav.x(c) - sx, nav.z(c) - sz) < R)[0]
+          if (j === undefined) continue
+          put(other, nav.x(j), nav.z(j))
+          const plan = q.chargePlan(G, ch, tg)
+          if (!plan?.spots.some((x) => x.i === sp.i)) throw new Error(`${where}: a charge's spot on deck cell ${sp.i} (floor ${nav.floor[sp.i]}) is refused for an enemy on the ground below at cell ${j} (floor ${nav.floor[j]}), ${Math.hypot(nav.x(j) - sx, nav.z(j) - sz).toFixed(2)}" off`)
+          for (const x of plan.spots) if (Math.hypot(nav.x(x.i) - other.pos.x, nav.z(x.i) - other.pos.z) < R0(other, ch) && Math.abs(nav.floor[x.i] - q.groundY(G, other)) <= HIGH) throw new Error(`${where}: a charge may end on cell ${x.i} within 1" of another enemy at its level`)
+          found = true
+          counts.chargeOver++
+          break
+        }
+      })
+    }
+  }
+  // a template on a deck spares the ground below it within its horizontal
+  // reach, and hits the deck (on a match of its own: it rolls and scars)
+  {
+    const H = fresh(), nh = H.nav
+    const gun = H.units.find((u) => u.t.ranged?.blast && u.t.ranged.blast + 0.3 < 2)
+    const v = H.units.find((u) => u.side === 1 && !u.t.fly && !u.t.big), w2 = H.units.find((u) => u.side === 1 && u !== v && u.t.climb && !u.t.fly)
+    if (gun && v && w2) {
+      const w = gun.t.ranged, R = (u) => w.blast + u.t.base * 0.6
+      // (the template on a deck's rim cell; a deck unit with a model under
+      // it, and a ground unit with a model within its reach horizontally)
+      const within = (u, j, at, reach) => u.models.some((m) => m.alive && Math.hypot(nh.x(j) + m.ox - nh.x(at), nh.z(j) + m.oz - nh.z(at)) <= reach)
+      let scene = null
+      for (let at = 0; at < nh.N && !scene; at++) {
+        if (!(nh.floor[at] >= 2) || nh.cliff[at] > 0.3) continue
+        let up = -1, down = -1
+        for (let j = 0; j < nh.N && (up < 0 || down < 0); j++) {
+          if (up < 0 && nh.floor[j] === nh.floor[at] && nh.standable(j, w2.r, 'walk') && within(w2, j, at, R(w2) - 0.05)) up = j
+          if (down < 0 && nh.floor[j] === 0 && nh.standable(j, v.r, 'walk') && within(v, j, at, R(v) - 0.05)) down = j
+        }
+        if (up >= 0 && down >= 0) scene = [up, down, at]
+      }
+      if (scene) {
+        only(H, [gun, v, w2], () => {
+          put(w2, nh.x(scene[0]), nh.z(scene[0]))
+          put(v, nh.x(scene[1]), nh.z(scene[1]))
+          H.out = []
+          try {
+            mods.shoot.blastLands(H, gun, { x: nh.x(scene[2]), z: nh.z(scene[2]) }, w)
+            const hit = (u) => H.out.some((e) => e.t === 'dice' && typeof e.label === 'string' && e.label.replace(/^⚠ /, '').startsWith(`${u.t.short}: `))
+            if (hit(v)) throw new Error(`${where}: a template landing on deck cell ${scene[2]} (floor ${nh.floor[scene[2]]}) hit unit ${v.id} (${v.t.short}) on the ground below it at cell ${scene[1]}`)
+            if (!hit(w2)) throw new Error(`${where}: a template landing on deck cell ${scene[2]} missed unit ${w2.id} (${w2.t.short}) standing under it at cell ${scene[0]}`)
+          } finally {
+            H.out = null
+          }
+          counts.blastSpared++
+        })
+      }
+    }
+    // a wrecker's smash on the ground skips a piece standing on a deck, and
+    // takes one on the ground (a piece of the scene's own, put beside the
+    // sample and taken away again)
+    const brute = H.units.find((u) => u.t.wrecker)
+    const ground = cells((i) => nh.floor[i] === 0 && nh.standable(i, 1, 'walk'))
+    if (brute && ground.length) {
+      const at = { x: nh.x(ground[0]), z: nh.z(ground[0]), dir: 0 }
+      for (const [base, want] of [[2, false], [0, true]]) {
+        const piece = { id: -1, kind: 'scene', alive: true, destructible: true, hp: 999, base, shape: { x: at.x + 0.5, z: at.z, hx: 0.5, hz: 0.5, yaw: 0, y: base + 0.5, hy: 0.5, reach: 0.71 } }
+        H.terrain.chunks.push(piece)
+        try {
+          mods.move.smashAround(H, brute, at, null)
+        } finally {
+          H.terrain.chunks.pop()
+        }
+        if ((piece.hp < 999) !== want) throw new Error(`${where}: a wrecker's smash on the ground at (${at.x}, ${at.z}) ${want ? 'spared' : 'hit'} a piece standing at ${base}"`)
+        counts[want ? 'smashHit' : 'smashSkipped']++
+      }
+    }
+  }
+}
+// (F7a's review) controlOf with height on a Grand-sized board (`nav`, its
+// objectives): a unit on a deck whose models in an objective's horizontal
+// range all stand more than HIGH off its floor doesn't hold it; the same
+// unit on the ground in range does. `u` is a unit of a Skirmish match, put
+// on this board alone ({ nav, units: [u] }, all controlOf reads)
+function controlScene(q, nav, objectives, u, where, counts) {
+  const G = { nav, units: [u], objectives }
+  const was = { x: u.pos.x, z: u.pos.z }
+  const inRange = (i, o) => u.models.filter((m) => m.alive && Math.hypot(nav.x(i) + m.ox - o.x, nav.z(i) + m.oz - o.z) <= 3 + u.t.base)
+  try {
+    for (const o of objectives) {
+      const oy = q.floorAt(G, o.x, o.z)
+      let deck = -1, ground = -1
+      for (let i = 0; i < nav.N && (deck < 0 || ground < 0); i++) {
+        if (!nav.standable(i, u.r, 'walk')) continue
+        const ms = inRange(i, o)
+        if (!ms.length) continue
+        const off = ms.every((m) => Math.abs(q.floorAt(G, nav.x(i) + m.ox, nav.z(i) + m.oz) - oy) > q.HIGH)
+        if (off && nav.level[i] && deck < 0) deck = i
+        else if (ms.every((m) => Math.abs(q.floorAt(G, nav.x(i) + m.ox, nav.z(i) + m.oz) - oy) <= q.HIGH) && ground < 0) ground = i
+      }
+      if (deck < 0) continue
+      u.pos.x = nav.x(deck)
+      u.pos.z = nav.z(deck)
+      if (q.controlOf(G, o) !== -1) throw new Error(`${where}: unit ${u.id} (${u.t.short}) on a deck at cell ${deck} (floor ${nav.floor[deck]}) holds the objective at (${o.x}, ${o.z}) (floor ${oy}) from above`)
+      counts.controlAbove++
+      if (ground >= 0) {
+        u.pos.x = nav.x(ground)
+        u.pos.z = nav.z(ground)
+        if (q.controlOf(G, o) !== u.side) throw new Error(`${where}: unit ${u.id} (${u.t.short}) at cell ${ground}, in range of the objective at (${o.x}, ${o.z}) on its level, doesn't hold it`)
+      }
+    }
+  } finally {
+    u.pos.x = was.x
+    u.pos.z = was.z
+  }
+}
+
+function heightTask(core, mods) {
+  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0 }
+  const nav0 = mods.nav, { STEP } = nav0
+  const SEATS = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
+  // classic: no height anywhere
+  for (const board of [1, 2, 3]) {
+    const G = core.createMatch({ board, dice: 1, seats: SEATS })
+    const where = `P-height, classic board ${board}`
+    if (G.nav.hasHeight || G.nav.floor !== undefined || G.nav.cliff !== undefined) throw new Error(`${where}: it built a height layer`)
+    for (const u of G.units) if (q.groundY(G, u) !== 0) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)}`)
+    if (q.floorAt(G, 3, 2) !== 0 || q.levelDist(G, { x: -5, z: 1 }, { x: 4, z: -3 }, true) !== Math.hypot(9, 4)) throw new Error(`${where}: floorAt or levelDist isn't the flat table's`)
+  }
+  for (let board = 1; board <= HEIGHT_BOARDS; board++) {
+    const where = `P-height, fortified board ${board}`
+    const G = core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS })
+    const nav = G.nav, rand = mulberry32(board * 7907)
+    if (!nav.hasHeight) throw new Error(`${where}: no height layer`)
+    counts.boards++
+    const raised = []
+    for (let i = 0; i < nav.N; i++) if (nav.level[i]) raised.push(i)
+    // standable never on a ledge's band
+    for (const r of [0.42, 0.95, 1.05, 1.22]) {
+      for (let i = 0; i < nav.N; i++) if (nav.standable(i, r, 'walk') && !(nav.cliff[i] >= r - 0.06)) throw new Error(`${where}: cell ${i} is standable for r ${r} with cliff ${nav.cliff[i]}`)
+    }
+    counts.cells += nav.N
+    // reach's steps, from the ground and from deck tops
+    const starts = []
+    for (let k = 0; k < 6; k++) {
+      const pool = k % 2 && raised.length ? raised : null
+      starts.push(pool ? pool[Math.floor(rand() * pool.length)] : Math.floor(rand() * nav.N))
+    }
+    for (const s of starts) {
+      for (const [r, climb] of [[0.05, true], [0.05, false], [0.42, true], [1.05, false], [1.22, true]]) {
+        // (from a cell the disc stands on: one squeezed may wriggle out
+        // through its own footprint, ledges' bands and all, as on the flat)
+        if (!nav.standable(s, r, 'walk')) continue
+        const res = nav.reach(nav.x(s), nav.z(s), { r, max: 30, mode: 'walk', climb })
+        for (let j = 0; j < nav.N; j++) {
+          const i = res.prev[j]
+          if (i < 0) continue
+          counts.steps++
+          const near = Math.abs((i % nav.nx) - (j % nav.nx)) <= 1 && Math.abs(Math.floor(i / nav.nx) - Math.floor(j / nav.nx)) <= 1
+          if (near) {
+            if (Math.abs(nav.floor[j] - nav.floor[i]) > STEP) throw new Error(`${where}: reach (r ${r}) steps from cell ${i} (floor ${nav.floor[i]}) to cell ${j} (floor ${nav.floor[j]}), more than STEP`)
+            if (r > 0.06 && !(nav.cliff[j] >= r - 0.06)) throw new Error(`${where}: reach (r ${r}) steps onto cell ${j}, on a ledge's band (cliff ${nav.cliff[j]})`)
+          } else {
+            counts.links++
+            const cost = nav.linkCostOf(i, j)
+            if (!climb) throw new Error(`${where}: a reach that doesn't climb (r ${r}) went from cell ${i} to cell ${j} over a ladder`)
+            if (cost < 0 || res.dist[j] !== res.dist[i] + cost) throw new Error(`${where}: reach (r ${r}) jumped from cell ${i} to cell ${j} (${res.dist[i]} → ${res.dist[j]}), which no link (${cost}) joins at that cost`)
+          }
+        }
+      }
+    }
+    // movePlan takes a ladder for exactly the climbers: each unit put at a
+    // ladder's foot it stands on
+    for (const g of nav.gates.filter((x) => x.ladder)) {
+      const foot = nav.index(g.lo.x, g.lo.z), top = nav.index(g.hi.x, g.hi.z)
+      for (const u of G.units) {
+        if (!nav.standable(foot, u.r, 'walk') || !nav.standable(top, u.r, 'walk')) continue
+        const was = { x: u.pos.x, z: u.pos.z }
+        u.pos.x = nav.x(foot)
+        u.pos.z = nav.z(foot)
+        try {
+          const plan = q.movePlan(G, u, 20)
+          const up = plan.res.prev[top] === foot
+          // (an enemy's bubble over the top, or the foot, bars the way: the
+          // works' decks hold their seat's army)
+          if (plan.forbid?.[top] || plan.forbid?.[foot]) continue
+          counts.plans++
+          if (plan.mode !== 'fly' && up !== !!u.t.climb) throw new Error(`${where}: ${u.t.short}'s move plan from ladder ${g.id}'s foot ${up ? 'climbs it' : "doesn't climb it"}, ${u.t.climb ? 'a climber' : 'no climber'}`)
+        } finally {
+          u.pos.x = was.x
+          u.pos.z = was.z
+        }
+      }
+    }
+    // across a ledge or up a stair: a seat 0 unit and a seat 1 unit within
+    // 1" (base to base) more than HIGH apart in height; then the same pair
+    // on one level. (Each side of an edge, the ledges' bands keep two discs
+    // 0.88" apart or more, and at the grid's cells usually more than 1":
+    // the pairs the height rule parts are found on the stairs too, where
+    // 2.4" of a stair rises 1.2", which two squads' bases span.) The
+    // biggest climbers, so their bases span most.
+    const big = (side) => G.units.filter((u) => u.side === side && !u.t.fly && u.t.climb).reduce((x, y) => (y.r > x.r ? y : x))
+    const a = big(0), e = big(1)
+    const put = (u, i) => {
+      u.pos.x = nav.x(i)
+      u.pos.z = nav.z(i)
+    }
+    const pa = { ...a.pos }, pe = { ...e.pos }
+    let across = null, flat = null
+    const R = Math.ceil((a.r + e.r + 1) / nav.cell)
+    for (let i = 0; i < nav.N && !(across && flat); i++) {
+      if (!nav.floor[i] || !nav.standable(i, a.r, 'walk')) continue
+      const ix = i % nav.nx, iz = Math.floor(i / nav.nx)
+      for (let dz = -R; dz <= R && !(across && flat); dz++) {
+        for (let dx = -R; dx <= R; dx++) {
+          const jx = ix + dx, jz = iz + dz
+          if (jx < 0 || jz < 0 || jx >= nav.nx || jz >= nav.nz) continue
+          const j = jz * nav.nx + jx
+          if (i === j || !nav.standable(j, e.r, 'walk')) continue
+          const g = Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j)) - a.r - e.r
+          if (g < 0.1 || g > 1) continue
+          if (!across && Math.abs(nav.floor[i] - nav.floor[j]) > q.HIGH) across = [i, j]
+          else if (!flat && nav.level[i] && nav.floor[i] === nav.floor[j]) flat = [i, j]
+        }
+      }
+    }
+    try {
+      if (across) {
+        put(a, across[0])
+        put(e, across[1])
+        if (q.engagedWith(G, a).includes(e) || q.engagedWith(G, e).includes(a)) throw new Error(`${where}: two enemies under 1" apart, one at floor ${nav.floor[across[0]]} (cell ${across[0]}), one at ${nav.floor[across[1]]} (cell ${across[1]}), are engaged`)
+        // (every cell e may not enter lies in the bubble of an enemy of its
+        // within HIGH of that enemy's floor)
+        const f = q.forbidMask(G, e, 1.05), theirs = q.enemiesOf(G, e)
+        for (let i = 0; i < nav.N; i++) {
+          if (f[i] && !theirs.some((o) => Math.hypot(nav.x(i) - o.pos.x, nav.z(i) - o.pos.z) < o.r + e.r + 1.05 && Math.abs(nav.floor[i] - q.groundY(G, o)) <= q.HIGH)) throw new Error(`${where}: cell ${i} at floor ${nav.floor[i]} is forbidden, in no enemy's bubble at its level`)
+        }
+        const plan = q.chargePlan(G, e, a)
+        for (const s of plan?.spots ?? []) if (Math.abs(nav.floor[s.i] - q.groundY(G, a)) > q.HIGH) throw new Error(`${where}: a charge on the unit at floor ${q.groundY(G, a)} may end on cell ${s.i} at floor ${nav.floor[s.i]}`)
+        counts.ledges++
+      }
+      if (flat) {
+        put(a, flat[0])
+        put(e, flat[1])
+        if (!q.engagedWith(G, a).includes(e)) throw new Error(`${where}: two enemies on one level (cells ${flat[0]} and ${flat[1]}, floor ${nav.floor[flat[0]]}) under 1" apart aren't engaged`)
+        counts.flat++
+      }
+    } finally {
+      Object.assign(a.pos, pa)
+      Object.assign(e.pos, pe)
+    }
+    // (F7a's review) the scenes
+    heightScenes(core, mods, G, () => core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS }), where, counts)
+    // P-level
+    levelPairs(q, G, nav, rand, where, counts)
+  }
+  if (!counts.ledges || !counts.flat || !counts.links || !counts.plans) throw new Error(`P-height met no ${!counts.ledges ? 'pair across a ledge' : !counts.flat ? 'pair on one level' : !counts.links ? 'link in a reach' : 'unit at a ladder\'s foot'} on ${HEIGHT_BOARDS} boards`)
+  // (F7a's review) every scene met at least once
+  const scenes = { keepTop: "a unit on the keep's top", pileIn: 'a pile-in onto open deck', pileRefused: "a pile-in onto a ledge's band", chargeOver: 'a charge spot on a deck within 1" of an enemy below', blastSpared: 'a template on a deck over the ground', smashSkipped: "a wrecker's smash beside a raised piece", smashHit: "a wrecker's smash beside a piece on the ground" }
+  for (const [k, what] of Object.entries(scenes)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
+  // (F7a's review) P-level on Grand-sized fortified boards, where bastions
+  // stand (Skirmish never fits one): the code's own Terrain and NavGrid
+  // (and controlOf's scene, which needs a deck beside a ground objective:
+  // the works' fronts stand 2" from the Grand table's (±24, 0))
+  const { W, H, deploy, objectives } = GRAND_TABLE
+  const sq = core.createMatch({ board: 1, dice: 1, terrain: 'fortified', seats: SEATS }).units.find((u) => u.side === 0 && !u.t.fly && u.models.length >= 3)
+  for (let seed = 1; seed <= GRAND_LEVEL; seed++) {
+    const T = new mods.terrain.Terrain(W, H)
+    T.generate(seed, objectives, deploy, 'fortified')
+    const nav = new nav0.NavGrid(W, H, 0.5)
+    nav.rebuild(T.chunks)
+    if (!nav.hasHeight) throw new Error(`P-level, Grand-sized board ${seed}: no height layer`)
+    controlScene(q, nav, objectives, sq, `P-height, Grand-sized board ${seed}`, counts)
+    levelPairs(q, { nav }, nav, mulberry32(seed * 7919), `P-level, Grand-sized board ${seed}`, counts)
+    counts.grand++
+  }
+  if (!counts.controlAbove) throw new Error(`P-height met no deck beside a ground objective on ${GRAND_LEVEL} Grand-sized boards`)
+  return counts
+}
+
 // (the child's match/ modules that fold a log, R8's: refold's)
 let FOLDING = null
 
@@ -1005,6 +2097,7 @@ if (a.child) {
     if (match.folding) Object.assign(match, match.folding.envelope, match.folding.fold)
     FOLDING = match.folding
   }
+  const missionsOf = async () => (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS
   // the HUD model's resultOf (R7b on; null for older code)
   const hud = existsSync(join(dir, 'present', 'hud-model.js')) ? await import(pathToFileURL(join(dir, 'present', 'hud-model.js')).href) : null
   let out
@@ -1013,7 +2106,8 @@ if (a.child) {
       const it = loadCorpus().items.find((x) => x.id === task.id)
       out = { ok: true, counts: corpusTask(core, rng, mirror, it, match, hud) }
     } else if (task.kind === 'random') {
-      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud)
+      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf() } : null
+      const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud, lists)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
     } else if (task.kind === 'interleave') {
       const [A, B] = task.games
@@ -1021,10 +2115,22 @@ if (a.child) {
       out = { ok: true, counts: { interleaved: 2 } }
     } else if (task.kind === 'offturn') {
       out = { ok: true, counts: { offTurn: 2, results: offTurnTask(core, hud) } }
+    } else if (task.kind === 'height') {
+      // (F7a: P-height's boards of its own, and P-level)
+      const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
+      const [nav, damage, shoot, move, terrain] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js')])
+      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain }) }
     } else if (task.kind === 'setups') {
-      // (F8a: P-mission, on code whose setups name their mission)
-      const missions = core.SETUP_KEYS ? (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS : null
-      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions) : 0 } }
+      // (F8a: P-mission, on code whose setups name their mission; F11a: and
+      // its armies, on code with core/army.js)
+      const missions = core.SETUP_KEYS ? await import(pathToFileURL(join(dir, 'data', 'mission.js')).href) : null
+      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions.MISSIONS) : 0, armies: core.army ? armyTask(core, missions, RACES) : 0 } }
+    } else if (task.kind === 'army') {
+      // (F11a) P-army's fuzz, sweep and shadow
+      const MISSIONS = await missionsOf()
+      out = { ok: true, counts: { fuzz: fuzzTask(core, RACES, MISSIONS, task.fuzz, task.seed), sweep: sweepTask(core, RACES, MISSIONS), shadow: shadowTask(core) } }
+    } else if (task.kind === 'armyGames') {
+      out = { ok: true, counts: armyGamesTask(core, RACES, await missionsOf(), task.mission, task.n, task.seed) }
     }
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
@@ -1058,15 +2164,35 @@ function child(task, pkg) {
   })
 }
 
-async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
+// (F11a) P-army's workload: fuzzed armies, and per mission the random
+// legal lists played AI against AI (in children of 10) and with a human seat
+const ARMY = { fuzz: 100000, ai: 40, human: 10 }
+
+async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
   const { items: all } = loadCorpus()
   const items = only === 'none' ? [] : select(all, only)
   const tasks = [...items.map((it) => ({ kind: 'corpus', id: it.id })), ...Array.from({ length: games }, (_, i) => ({ kind: 'random', seed: seed + i }))]
+  // (code with core/army.js: P-army)
+  const lists = existsSync(join(pkg, 'core', 'army.js'))
+  if (lists) {
+    const missions = Object.keys((await import(pathToFileURL(join(pkg, 'data', 'mission.js')).href)).MISSIONS)
+    tasks.unshift({ kind: 'army', fuzz: army.fuzz, seed })
+    for (const [m, mission] of missions.entries()) {
+      for (let k = 0; k < army.ai; k += 10) tasks.push({ kind: 'armyGames', mission, n: Math.min(10, army.ai - k), seed: seed * 1000 + m * 100 + k })
+      for (let k = 0; k < army.human; k++) tasks.push({ kind: 'random', seed: 900000 + seed * 1000 + m * 100 + k, lists: mission })
+    }
+  }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
-    say(`  ${t.kind === 'corpus' ? `${t.id.padEnd(24)}` : `game ${String(t.seed).padEnd(19)}`} ${r.ok ? `ok   ${t.kind === 'corpus' ? `${r.counts.probes} decisions probed` : `${r.counts.ended}, ${r.counts.probes} decisions, ${Object.entries(r.counts.commands).map(([k, n]) => `${k} ${n}`).join(', ')}`}` : `FAIL ${r.error}`}`)
+    const c = r.counts
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
+      : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
+        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})`
+          : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}`
+    say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
     return r
   })
   const bad = res.filter((r) => !r.ok)
@@ -1084,10 +2210,18 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   // 8. setups the rules can't play, and G's shape
   {
     const r = await child({ kind: 'setups' }, pkg)
-    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle${r.counts.missions ? `; (P-mission) ${r.counts.missions} mission setups and missions held` : ''}` : `FAIL ${r.error}`}`)
+    say(`  setups and G's shape: ${r.ok ? `ok   ${r.counts.refused} bad setups refused, the edges taken, pending null through an all-AI battle${r.counts.missions ? `; (P-mission) ${r.counts.missions} mission setups and missions held` : ''}${r.counts.armies ? `, ${r.counts.armies} army refusals, spellings and list rules` : ''}` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
     // (code with SETUP_KEYS whitelists its setups: P-mission must have run)
     else if (existsSync(join(pkg, 'data', 'mission.js')) && /SETUP_KEYS/.test(readFileSync(join(pkg, 'core', 'match.js'), 'utf8')) && !r.counts.missions) bad.push({ error: 'the code whitelists its setups, but P-mission held nothing' })
+    // (code with core/army.js names its armies: P-mission's must have run)
+    else if (lists && !r.counts.armies) bad.push({ error: 'the code has core/army.js, but P-mission held no army refusal' })
+  }
+  // (F7a) P-height's own boards and P-level, for code with a height layer
+  if (/export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
+    const r = await child({ kind: 'height' }, pkg)
+    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
@@ -1099,6 +2233,9 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
     reached.overtime += r.counts.overtime ?? 0
   }
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
+  // (F7a) the fortified games' decisions P-height held
+  const heights = res.reduce((s, r) => s + (r.counts?.heights ?? 0), 0)
+  if (coverage && games >= 8 && /export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8')) && !heights) bad.push({ error: 'the random games played no fortified board for P-height (more --games?)' })
   const quietly = res.reduce((s, r) => s + (r.counts?.quiet ?? 0), 0)
   const refolded = res.reduce((s, r) => s + (r.counts?.refolded ?? 0), 0)
   const sessions = res.reduce((s, r) => [s[0] + (r.counts?.sessions ?? 0), s[1] + (r.counts?.junk ?? 0), s[2] + (r.counts?.handed ?? 0), s[3] + (r.counts?.gaps ?? 0)], [0, 0, 0, 0])
@@ -1108,13 +2245,23 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
   if (existsSync(join(pkg, 'match', 'fold.js')) && sessions[0] !== corpusOk) bad.push({ error: `the code has a Folder, but ${sessions[0]} of ${corpusOk} corpus battles went through the Session` })
   // 10. (code with present/hud-model.js holds resultOf to every end played)
   const results = [...res, offTurn].reduce((s, r) => s + (r.ok ? r.counts?.results ?? 0 : 0), 0)
-  const ends = res.filter((r) => r.ok).length + (offTurn.ok ? 2 : 0)
+  const ends = res.filter((r, i) => r.ok && ['corpus', 'random'].includes(tasks[i].kind)).length + (offTurn.ok ? 2 : 0)
   if (existsSync(join(pkg, 'present', 'hud-model.js')) && results !== ends) bad.push({ error: `the code has present/hud-model.js, but resultOf(G) was held to the game.over at ${results} of ${ends} ends` })
   if (coverage && games >= 8) {
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends (${Math.round((Date.now() - t0) / 1000)} s)`)
+  // (F11a) P-army: what it held, over the run
+  let armySaid = ''
+  if (lists) {
+    const fz = res.find((r, i) => r.ok && tasks[i].kind === 'army')?.counts
+    const ai = res.filter((r, i) => r.ok && tasks[i].kind === 'armyGames').reduce((n, r) => n + r.counts.listGames, 0)
+    const human = res.filter((r, i) => r.ok && tasks[i].lists).length
+    const want = tasks.filter((t) => t.kind === 'armyGames').reduce((n, t) => n + t.n, 0)
+    if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
+    if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
+  }
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -1137,6 +2284,27 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true }) {
 // `missing-h-accepted`, `over-any-device` and `core-newer-only` (no honest
 // log writes those entries: only (9)'s replays do).
 const MUTATIONS = {
+  // (F7a) P-height and P-level: a reach that steps up a wall (the cliff
+  // hides it from a unit's own disc: only heightTask's r 0.05 reach sees
+  // it), a standable that ignores the ledges, a levelDist that misses a
+  // gate, an engagement across a ledge, and a plan that lets every unit
+  // climb; (F7a's review) a levelDist with no stair underfoot or no deck as
+  // a shortcut (the second seen only on the Grand-sized boards, where
+  // bastions stand), an objective held from a deck beside it, a template
+  // that hits through a deck, a smash at any level, a pile-in anywhere, and
+  // another enemy that bars a charge's spot whatever its level
+  'reach-ignores-step': ['core/nav.js', '          if (Math.abs(floor[j] - fi) > STEP) continue\n', ''],
+  'standable-ignores-cliff': ['core/nav.js', " >= r - 0.06 && this.cliff[i] >= r - 0.06\n", ' >= r - 0.06\n'],
+  'leveldist-misses-a-gate': ['core/queries.js', '    const L = la || lb, g0 = la ? b : a, g1 = la ? a : b\n    for (const k of gg.at.get(L) ?? []) {', '    const L = la || lb, g0 = la ? b : a, g1 = la ? a : b\n    for (const k of (gg.at.get(L) ?? []).slice(1)) {'],
+  'leveldist-no-stair': ['core/queries.js', '  if (i < 0 || nav.rampOf[i] < 0) return -1\n', '  return -1\n'],
+  'leveldist-no-shortcut': ['core/queries.js', '      short.push([u, v, d])\n', ''],
+  'control-ignores-height': ['core/queries.js', ' <= OBJECTIVE_RANGE + u.t.base && Math.abs(floorAt(G, x, z) - y) <= HIGH) oc[u.side] += u.t.OC', ' <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC'],
+  'blast-flat': ['core/actions/shoot.js', 'hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z)', 'hypot(mx(v, m) - land.x, mz(v, m) - land.z)'],
+  'smash-any-level': ['core/actions/move.js', '    if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue\n', ''],
+  'pile-in-anywhere': ['core/actions/damage.js', "    else if (G.nav.standable(G.nav.index(x, z), u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk')) setUnitPos(u, x, z)", '    else setUnitPos(u, x, z)'],
+  'charge-others-flat': ['core/actions/charge.js', ' && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue', ')) continue'],
+  'engaged-ignores-height': ['core/queries.js', 'gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)', 'gap(u, e) <= ENGAGE + 0.05)'],
+  'everyone-climbs': ['core/actions/move.js', 'forbid: mode === \'fly\' ? null : forbid, climb: climbs(u) })', 'forbid: mode === \'fly\' ? null : forbid, climb: true })'],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a
@@ -1146,6 +2314,23 @@ const MUTATIONS = {
   'mission-unchecked': ['core/index.js', "  if (typeof s.mission !== 'string' || !(s.mission in MISSIONS)) throw new Error(`no mission ${JSON.stringify(s.mission)} (there ${Object.keys(MISSIONS).length === 1 ? 'is' : 'are'} ${Object.keys(MISSIONS).join(', ')})`)\n", ''],
   // a set the mission isn't fought on taken (as long as it exists)
   'set-unchecked': ['core/index.js', "  if (!mission.sets.includes(s.terrain)) throw new Error(`the ${s.mission} mission is fought on ${mission.sets.join(' or ')}, not ${JSON.stringify(s.terrain)}`)\n", ''],
+  // (F11a, P-mission and P-army) fullSetup leaves the armies to newState:
+  // createMatch still refuses them, with the same words, but fullSetup (the
+  // lobby's and the Muster screen's check) takes any
+  'army-unchecked': ['core/index.js', '  for (let i = 0; i < s.seats.length; i++) armyOf(s, i)\n', ''],
+  // checkList lets a list over the points limit through
+  'points-unchecked': ['core/army.js', '  if (cost > rules.points) return `${cost} points, over the ${S} limit of ${rules.points}`\n', ''],
+  // the seats checked seat 1 first: a setup with both seats broken is
+  // refused with seat 1's reason, on one peer's build and not another's
+  'seat-1-first': ['core/index.js', 'for (let i = 0; i < s.seats.length; i++) armyOf(s, i)', 'for (let i = s.seats.length - 1; i >= 0; i--) armyOf(s, i)'],
+  // the roles judged out of ROLES order
+  'roles-reversed': ['core/army.js', '  for (const r of ROLES) {\n    const [min, max] = rules.roles[r], got = role[r]', '  for (const r of [...ROLES].reverse()) {\n    const [min, max] = rules.roles[r], got = role[r]'],
+  // a list with trailing zeros taken: two spellings of one army
+  'list-trailing-zeros': ['data/schema.js', 'export const LIST = Object.freeze(/^[0-9]*[1-9]$/)', 'export const LIST = Object.freeze(/^[0-9]+$/)'],
+  // newState builds the race's classic army whatever the seat names: the
+  // classic corpus (no army: the classic preset) can't see it, P-army's
+  // lists do
+  'newstate-race-army': ['core/match.js', 'for (const key of armyOf(G.setup, side).keys)', 'for (const key of raceOf(G, side).army)'],
   // a preview the fold never runs draws a die (a tool's nearest valid end)
   'preview-draws': ['core/actions/move.js', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n', 'export function nearestValid(G, plan, x, z, within = 2.4) {\n  roll(G, 1)\n'],
   // asking leaves a mark on the match
@@ -1240,7 +2425,8 @@ const MUTATIONS = {
 
 if (a['self-test']) {
   const work = join(tmpdir(), `tails-and-scales-prop-${process.pid}`)
-  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false }
+  // (F11a: P-army's workload cut down, its fuzz a fifth and a few list battles)
+  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1 } }
   const clean = await run(copyCode(dir, join(work, 'unbroken')), load)
   if (clean.length) {
     console.log(`property self-test: the unbroken copy fails the same workload, so no mutation can be judged: ${clean[0].error}`)
@@ -1271,5 +2457,5 @@ if (a['self-test']) {
 console.log(`property: the pure core of ${dir === PKG ? 'the working tree' : dir}`)
 const bad = await run(dir, { games: GAMES, seed: SEED, only: a.only })
 for (const b of bad) if (!b.id) console.log(`  FAIL ${b.error}`)
-console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, and a setup the rules can\'t play is refused')
+console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, a setup the rules can\'t play is refused, and (F11a) a seat\'s army is refused for its own reason or played as its list says')
 process.exit(bad.length ? 1 : 0)

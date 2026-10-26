@@ -208,15 +208,35 @@ export const tag = (v, r) =>
 // sim/baselines/pilot/*.json (F10b) human logs that put units on autopilot
 //                            (`pilot`), recorded on F10b's code: a log set of
 //                            their own, as each new corpus is (DESIGN §4.2.9)
+// sim/baselines/army/*.json  (F11a) battles whose seats name army lists, each
+//                            built by core/army.js's autoList at 90% of the
+//                            mission's points: AI pairs, stored as logs with
+//                            no entries (the whole battle runs inside the
+//                            start), and human-bot hotseat logs
+// sim/baselines/fort/*.json  (F7a) battles on the fortified board, recorded on
+//                            F7a's code: AI pairs (both seats AI, so a log
+//                            with no entries: the whole battle runs inside
+//                            its start) and human-bot logs
+// sim/baselines/scale/*.json (F8b) battles on the larger boards, recorded on
+//                            F8b's code: Field and Grand AI pairs (logs with
+//                            no entries, as army/'s) and human-bot logs, each
+//                            seat's list built at 90% of its mission's points
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each
 // item comes back as { id, kind, set, mode, job, ...stored fields } (`set`
-// a log's: human or pilot), `mode` the
-// title screen's for its seats (a log whose seats no button seats is refused
-// here). Whether the page can make the rest of a setup is found where it is
+// a log's: human, pilot, army, fort or scale), `mode` the title screen's for
+// its seats (a log whose seats no button seats is refused here) and `kind`
+// who sits in them: 'ai' for pairs.json's pairs and for a log whose seats
+// are both AI (F11a's army/, F7a's fort/ and F8b's scale/ all keep AI pairs
+// as logs, because their setups name what a seed pair can't: lists and seat
+// races, a terrain set, a board), 'human' for a log with a human seat. So
+// `--only ai` takes every AI battle, a pair or a log, and `--only army`,
+// `--only fort` or `--only scale` a set's whole; a consumer that needs a
+// pair's seeds reads `it.set` (undefined for a pair) or `it.job.seed`.
+// Whether the page can make the rest of a setup is found where it is
 // played: every page runner holds the battle the page started to the log's
 // setup (oracle/human-bot.mjs's playedAs).
-export const LOG_SETS = Object.freeze(['human', 'pilot'])
+export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort', 'scale'])
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))
@@ -225,15 +245,17 @@ export function loadCorpus() {
     if (!existsSync(hdir)) continue
     for (const f of readdirSync(hdir).filter((f) => f.endsWith('.json')).sort()) {
       const h = JSON.parse(readFileSync(join(hdir, f), 'utf8'))
-      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: 'human', set, mode: pageStart(h.setup).mode, job: { setup: h.setup, entries: h.entries } })
+      const mode = pageStart(h.setup).mode
+      items.push({ ...h, id: f.replace(/\.json$/, ''), kind: mode === 'watch' ? 'ai' : 'human', set, mode, job: { setup: h.setup, entries: h.entries } })
     }
   }
   return { pairs, items }
 }
 
 // The battles an --only list names: kinds (ai, human), modes (watch,
-// bushtail, serpent, hotseat), a log set (human, pilot) or ids. A token that names nothing is a usage
-// error, so a typo can never pass a gate by selecting no battles.
+// bushtail, serpent, hotseat), a log set (LOG_SETS: human, pilot, army,
+// fort, scale) or ids. A token that names nothing is a usage error, so a typo can
+// never pass a gate by selecting no battles.
 export function select(all, only) {
   if (only === undefined) return all
   const tokens = only.split(',').map((s) => s.trim()).filter(Boolean)
@@ -241,7 +263,7 @@ export function select(all, only) {
   const unknown = tokens.filter((o) => !all.some((it) => hit(o, it)))
   if (!tokens.length || unknown.length) {
     const modes = [...new Set(all.map((it) => it.mode).filter(Boolean))].join(', ')
-    console.error(`--only ${unknown.length ? `${unknown.join(', ')}: matches no battle` : 'is empty'}; use a kind (ai, human), a mode (${modes}) or a battle id`)
+    console.error(`--only ${unknown.length ? `${unknown.join(', ')}: matches no battle` : 'is empty'}; use a kind (ai, human), a mode (${modes}), a log set (${LOG_SETS.join(', ')}) or a battle id`)
     process.exit(2)
   }
   return all.filter((it) => tokens.some((o) => hit(o, it)))
@@ -261,9 +283,8 @@ export function saveHuman(id, log, set = 'human') {
     '{',
     ` "setup": ${JSON.stringify(setup)},`,
     ...Object.entries(rest).filter(([, v]) => v !== undefined).map(([k, v]) => ` ${JSON.stringify(k)}: ${JSON.stringify(v)},`),
-    ' "entries": [',
-    entries.map((e) => '  ' + JSON.stringify(e)).join(',\n'),
-    ' ]',
+    // (an AI pair's log has none: the whole battle runs inside its start)
+    ...(entries.length ? [' "entries": [', entries.map((e) => '  ' + JSON.stringify(e)).join(',\n'), ' ]'] : [' "entries": []']),
     '}',
   ]
   const text = lines.join('\n') + '\n'

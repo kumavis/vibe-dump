@@ -114,17 +114,24 @@ export function editSeat(handle, i, dev, fields) {
   return true
 }
 
-// The host changes the battle (the board, the mission): both seats
-// un-readied. A new mission lets the old one's terrain and rounds go: the
-// start's setup takes the new mission's first set and its rounds.
+// The host changes the battle (the board, the mission, (F7a) the terrain):
+// both seats un-readied. A new mission lets the old one's terrain and rounds
+// go: the start's setup takes the new mission's first set and its rounds,
+// unless the same change names a terrain (one of the new mission's sets:
+// the lobby screen offers no other, and the start's check refuses any).
+// (F8b) It is the battle's size (Skirmish, Field, Grand), so it lets each
+// seat's army go too (F11b's lists, judged against the old size's limits):
+// each seat its new mission's preset.
 export function editBattle(handle, fields) {
   handle.change((d) => {
     if (fields.board !== undefined) d.lobby.board = fields.board
-    if (fields.mission !== undefined && fields.mission !== d.lobby.mission) {
+    if (fields.mission !== undefined && fields.mission !== (d.lobby.mission ?? 'classic')) {
       d.lobby.mission = fields.mission
       delete d.lobby.terrain
       delete d.lobby.rounds
+      for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army
     }
+    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })
 }

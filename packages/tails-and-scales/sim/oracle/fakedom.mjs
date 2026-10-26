@@ -3,8 +3,10 @@
 // a handler main.js assigns (`$('#endPhase').onclick = …`) can be called later.
 // Import this before main.js; requestAnimationFrame only queues, and the
 // runner pumps frames itself with takeFrame().
+// ((F7a) and a text's measure, which the overlay's ladder tags size their
+// canvas by: nothing is drawn, so 0 wide)
 const ctx2d = new Proxy({}, {
-  get: (t, k) => (k in t ? t[k] : k === 'createRadialGradient' || k === 'createLinearGradient' ? () => ({ addColorStop() {} }) : () => {}),
+  get: (t, k) => (k in t ? t[k] : k === 'createRadialGradient' || k === 'createLinearGradient' ? () => ({ addColorStop() {} }) : k === 'measureText' ? () => ({ width: 0 }) : () => {}),
   set: (t, k, v) => ((t[k] = v), true),
 })
 class El {

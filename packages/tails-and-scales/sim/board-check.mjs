@@ -1,10 +1,12 @@
 // P-board (F8a, DESIGN §4.2.3 and §4.2.9's snap-check and rematch-memory
 // rows): the table is made for the board its match's mission chose, and
-// made over only when that board changes. Only the classic mission ships
-// until F8b, so this runs a build of a copy of the working tree with a
-// second mission added (`grand`: 80×56, zones 14" deep, nine objectives,
-// the classic sets and armies), in one Chromium page (?debug, ?fast,
-// ?lowfi):
+// made over only when that board changes. It runs a build of the working
+// tree's code, in one Chromium page (?debug, ?fast, ?lowfi), on the
+// classic mission and on the grand one (80×56, zones 14" deep, nine
+// objectives; since F8b the shipped mission, on its `open` set with its ×3
+// presets: until F8b, when only classic shipped, a test mission of that
+// board patched into a copy of data/mission.js, on the classic set and
+// armies):
 //
 //   - the title is the classic table, whatever ?mission= says: the mat
 //     40×28, five objectives, the overlay's grid 80×56 cells, the dolly 75,
@@ -41,19 +43,18 @@ import { PKG } from './oracle/pin.mjs'
 
 const { values: a } = parseArgs({ options: { 'self-test': { type: 'boolean' } } })
 
-// the test mission, added after classic (data/mission.js)
-const GRAND = `  grand: {
-    board: { W: 80, H: 56 },
-    deploy: 14,
-    rounds: 7,
-    army: 'classic',
-    sets: ['classic'],
-    objectives: [
-${[[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z]) => `      { x: ${x}, z: ${z} },`).join('\n')}
-    ],
-  },
-`
-const ANCHOR = '    ],\n  },\n}))\n'
+// the grand mission's board, which the checks below hold the table to (the
+// shipped mission's, data/mission.js: refused at once if it is not this)
+const GRAND = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]] }
+{
+  const { MISSIONS } = await import(new URL('../data/mission.js', import.meta.url).href)
+  const m = MISSIONS.grand
+  const got = m && { W: m.board.W, H: m.board.H, deploy: m.deploy, objectives: m.objectives.map((o) => [o.x, o.z]) }
+  if (JSON.stringify(got) !== JSON.stringify(GRAND)) {
+    console.error(`board-check: the grand mission is ${JSON.stringify(got)}, not the board this check holds the table to (${JSON.stringify(GRAND)}): port the check`)
+    process.exit(1)
+  }
+}
 
 // one exact substitution in file f of the copy, which must match once
 function patch(dir, f, from, to) {
@@ -116,7 +117,7 @@ async function run(browser, url) {
     if (title.builds !== 0) bad.push(`the title made the table over ${title.builds} times`)
     const g1 = await battle('grand')
     holds(g1, grand, 'a grand battle')
-    const want9 = [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]]
+    const want9 = GRAND.objectives
     if (JSON.stringify(g1.objectives) !== JSON.stringify(want9)) bad.push(`a grand battle's objectives stand at ${JSON.stringify(g1.objectives)}`)
     if (!(g1.dolly > 75) || !(g1.far > 400) || !(g1.fog[0] > 70) || !(g1.shadow[1] > 27)) bad.push(`a grand battle keeps the classic camera, fog or shadows: dolly ${g1.dolly}, far ${g1.far}, fog ${g1.fog}, shadow ${g1.shadow}`)
     const g2 = await battle('grand')
@@ -152,7 +153,6 @@ let failed = 0
 try {
   const build = async (name, edit) => {
     const dir = copyCode(PKG, join(work, name))
-    patch(dir, 'data/mission.js', ANCHOR, `    ],\n  },\n${GRAND}}))\n`)
     if (edit) patch(dir, ...edit)
     return startStaticServer(await buildApp(dir, join(work, `${name}-dist`)))
   }

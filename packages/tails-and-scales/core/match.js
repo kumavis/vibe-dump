@@ -25,6 +25,7 @@ import { NavGrid } from './nav.js'
 import { Terrain } from './terrain/terrain.js'
 import { makeUnit } from './units.js'
 import { deployArmies } from './deploy.js'
+import { armyOf } from './army.js'
 
 export const EDGES = Object.freeze([-1, 1])
 
@@ -38,9 +39,11 @@ export const missionOf = (setup) => MISSIONS[setup?.mission ?? 'classic']
 // (F8a) The fields a setup may have, and a seat's record: core/index.js
 // fullSetup refuses any other, so a field a newer build adds (an army list,
 // a mission) is never quietly dropped by an older one that would then play
-// another battle (DESIGN §4.2.10 item 8). F11a adds `army` to a seat's.
+// another battle (DESIGN §4.2.10 item 8). (F11a) A seat's `army` names the
+// army it fields: a preset of its race or a list of counts (core/army.js;
+// none, the mission's preset).
 export const SETUP_KEYS = Object.freeze(['board', 'dice', 'terrain', 'rounds', 'overtime', 'diceMode', 'seats', 'mission'])
-export const SEAT_KEYS = Object.freeze(['race', 'ctrl', 'dev', 'name', 'nonce'])
+export const SEAT_KEYS = Object.freeze(['race', 'ctrl', 'dev', 'name', 'nonce', 'army'])
 
 // the nav grid's cell, in inches
 export const NAV_CELL = 0.5
@@ -73,7 +76,7 @@ export const seatName = (G, s, form = 'name') => {
 export const ctrl = (G, s) => G.seats[s].ctrl
 
 // A new match on a new table:
-//   setup  { board, dice, terrain: 'classic', rounds, diceMode, seats: [{ race, ctrl }, …] }
+//   setup  { board, dice, terrain: 'classic', rounds, diceMode, seats: [{ race, ctrl, army }, …] }
 //          (core/index.js's createMatch fills in the defaults and checks it)
 //   out    where the match's events go, the terrain's reports of what it
 //          builds and breaks among them (the view plays them; null for a
@@ -83,8 +86,10 @@ export const ctrl = (G, s) => G.seats[s].ctrl
 //          and ?debug's trace; it never draws or changes G, and the rules
 //          never read it)
 // The board is scattered around the mission's objectives, the nav grid built
-// from it, and both armies made and deployed, seat 0's first. The turn
-// starts at the deployment, the engine's next step the roll-off
+// from it, and both armies made and deployed, seat 0's first: (F11a) each
+// seat's army as armyOf expands it, in roster order (so the classic preset
+// makes the race's classic army unit for unit), unit ids counting from 1.
+// The turn starts at the deployment, the engine's next step the roll-off
 // (createMatch asks the human seats to adjust their deployment first).
 export function newState(setup, { out = null, onTrace = null } = {}) {
   const mission = missionOf(setup)
@@ -123,7 +128,7 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
   }
   G.terrain.generate(setup.board, G.objectives, mission.deploy, setup.terrain, out)
   refreshNav(G)
-  for (const side of [0, 1]) for (const key of raceOf(G, side).army) G.units.push(makeUnit(G, key, side))
+  for (const side of [0, 1]) for (const key of armyOf(G.setup, side).keys) G.units.push(makeUnit(G, key, side))
   deployArmies(G)
   return G
 }

@@ -79,6 +79,27 @@ export const MUTATIONS = {
   // defOf lacks (as F7's deck and stair pieces might): no mesh reads it, so
   // only the defs compared catch it
   'def-drift': ['/core/terrain/terrain.js', 'const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })', 'const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look, hp: c.hp })', '1-3'],
+  // ── (F7a) the fortified rows (section 6, P-climb) ──
+  // a fortification's copy turned by π about the centre, as a feature's is,
+  // instead of negated: its places an ulp or so off the exact mirror
+  'fort-mirror-turned': ['/core/terrain/recipes.js', 'p: (lx, lz) => ({ x: -(frame.x + c * lx + s * lz), z: -(frame.z - s * lx + c * lz) }),', 'p: (lx, lz) => ({ x: -frame.x + cos(frame.yaw + Math.PI) * lx + sin(frame.yaw + Math.PI) * lz, z: -frame.z - sin(frame.yaw + Math.PI) * lx + cos(frame.yaw + Math.PI) * lz }),', '1-5'],
+  // a rampart's colour drawn from Math.random, not the layout stream
+  'fort-look-random': ['/core/terrain/recipes.js', 'const color = pick(EARTH, rng)', 'const color = pick(EARTH, Math.random)', '1-3'],
+  // a ladder's add leaving its link out of the def the view draws from
+  'fort-def-link': ['/core/terrain/terrain.js', 'for (const k of HEIGHT_FIELDS) if (c[k] !== undefined) def[k] = copy(c[k])', "for (const k of HEIGHT_FIELDS) if (c[k] !== undefined && k !== 'link') def[k] = copy(c[k])", '1-3'],
+  // the works a quarter inch behind the zone's edge
+  'works-off-edge': ['/core/terrain/recipes.js', 'const RAMPART_FACE = 1.125', 'const RAMPART_FACE = 1.375', '1-3'],
+  // the facing pieces turned anywhere, not toward the other zone
+  'facing-ignored': ['/core/terrain/recipes.js', 'const yaw = S.facing?.includes(name) ?', 'const yaw = false ?', '1-25'],
+  // (F8b, the tiles: terrain-check's last section) a chunk promoted out of
+  // its tile leaves the tile as it was: the tile still draws it, and its
+  // own mesh too
+  'tile-stale': ['/view/terrain.js', '    item.tile = null\n    if (item.obj) item.obj.visible = true\n    this.mark(t)\n', '    item.tile = null\n    if (item.obj) item.obj.visible = true\n', '1-3'],
+  // (F8b) a chunk that rests after an event is never taken back into its tile
+  'tile-never-back': ['/view/terrain.js', '    if (this.items.get(id) === item) this.tile(item)', '    if (false) this.tile(item)', '1-3'],
+  // (F8b) the merge places a part by its own matrix, not its world one: a
+  // tree's canopy, a hedge's tufts, drawn about the origin
+  'tile-matrix': ['/view/terrain.js', '  geo.applyMatrix4(tmpM.copy(o.matrixWorld))', '  geo.applyMatrix4(tmpM.copy(o.matrix))', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws

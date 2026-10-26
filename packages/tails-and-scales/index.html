@@ -73,7 +73,7 @@
           <label>Battlefield <input id="seed" type="number" min="0" max="4294967295" step="1" /></label>
           <button id="reroll">🎲 New battlefield</button>
         </div>
-        <p class="small">Five rounds. Hold the glowing objectives at the end of each round for victory points, or wipe the other side off the table. Drag to orbit · right-drag or WASD to pan · scroll to zoom.</p>
+        <p class="small">Five rounds. Hold the glowing objectives at the end of each round for victory points, or wipe the other side off the table. Drag to orbit · right-drag or WASD to pan · scroll to zoom · Shift-drag to select several.</p>
       </div>
     </div>
 
@@ -85,6 +85,7 @@
           <div class="setupSeat" data-seat="1"><div class="seatHead"><span class="who"></span><span class="edge">east edge</span></div><div class="picker"></div></div>
         </div>
         <p id="setupMirror" class="small hidden">A mirror match: the east army takes its race's other colours.</p>
+        <div id="setupTerrain" class="terrainLine hidden"><span class="lbl">Terrain</span><span class="opts"></span><span class="what small"></span></div>
         <div class="row">
           <button id="setupBack">Back</button>
           <button id="setupStart" class="primary">Start the battle</button>
@@ -110,8 +111,19 @@
         <p>Blast weapons drop a circular template. On a hit it lands on the target; on a miss it <b>scatters</b> D6+1" in a random direction. Every model under it takes a hit — <b>friends included</b> — and the blast damages scenery: walls lose blocks (and the blocks above fall into the gap), trees topple into logs, hedges, crates and mushrooms burst. Rubble and logs still give cover. Rocks are forever.</p>
         <p>Line of sight is real: walls block it, one tree or hedge in the way gives cover, two block it. <b>Indirect</b> weapons can fire without sight at −1 to hit. <b>Heavy</b> weapons are −1 to hit after moving. The <b>Constrictor Brute</b> simply walks through walls.</p>
         <h2>The camera</h2>
-        <p>Drag to orbit, right-drag or WASD to pan, scroll to zoom. A battle opens behind your own army (side-on when you watch, or share one screen); <b>🧭</b> or <b>V</b> steps through the other views, and <b>Home</b> shows the whole board from above. Units moved together (an AI's turn, a group order, catching up) walk together; <b>⇉</b> makes them go one at a time.</p>
+        <p>Drag to orbit, right-drag or WASD to pan, scroll to zoom. A battle opens behind your own army (side-on when you watch, or share one screen); <b>🧭</b> or <b>V</b> steps through the other views, and <b>Home</b> shows the whole board from above. On a Field or Grand board the battle opens behind your half, the keys pan faster the farther out you are, the 🗺 minimap and the roster down the left reach the rest, and after you press End the camera comes back to where you were for your next phase. Units moved together (an AI's turn, a group order, catching up) walk together, and a side's shots and blows play in one tray; <b>⇉</b> makes them go one at a time.</p>
         <h2>Controls</h2>
+        <!-- F8b: camera and UI -->
+        <table class="ctl">
+          <tr><th></th><th>Mouse</th><th>Keys</th><th>Touch</th></tr>
+          <tr><th>Pick up a unit</th><td>click it</td><td>Tab: the next to act</td><td>tap it</td></tr>
+          <tr><th>Select several</th><td>Shift-drag a box · Shift-click one</td><td>Q: every one still to act</td><td>▭ Select, then drag one finger · hold a finger on one</td></tr>
+          <tr><th>All of one kind</th><td>double click (a third: the table)</td><td>Ctrl-1…9 saves a group, 1…9 calls it</td><td>–</td></tr>
+          <tr><th>Pin a formation</th><td>click the ground · Alt-drag a line</td><td>Enter sends it, Esc drops it</td><td>tap the ground, then the flag</td></tr>
+          <tr><th>The camera</th><td>drag orbits, right-drag pans, scroll zooms</td><td>WASD or arrows pan · V the views · Home the whole board · Space the group</td><td>two fingers pan and zoom</td></tr>
+          <tr><th>Elsewhere on the board</th><td>click or drag the 🗺 minimap · a row of the roster (its header folds it)</td><td>M the minimap · R the roster</td><td>tap the minimap · a chip</td></tr>
+        </table>
+        <p class="glyphs">Orders on a unit's label: <b>➜</b> March · <b>🎯</b> Attack · <b>⚓</b> Hold · <b>⟳</b> Autopilot · <b>⊘</b> none. On End: <b>⟳ 3</b> units will act. A white ghost ring arrives, an amber one falls short; a cyan ring is a unit under orders.</p>
         <p>Click one of your units to pick it up, then click where it goes, or the enemy it shoots or charges. <b>Shift-drag</b> a box round several (Ctrl or Cmd as well: add to them), or <b>Shift-click</b> to add or drop one; on a touch screen press <b>▭ Select</b> and drag one finger (two still pan and zoom), or hold a finger on a unit to add or drop it. A <b>double click</b> on a unit picks every one of its kind on screen, a third the whole table. <b>Q</b> or <b>Ready N</b> picks every unit still to act, <b>Tab</b> the next one, <b>Space</b> takes the camera to the group, <b>Ctrl-1…9</b> saves a group and <b>1…9</b> calls it back (twice: the camera goes there).</p>
         <p>With a group picked, a click on the ground (in the deployment, or the movement phase) <b>pins</b> a formation there: white rings arrive, amber ones fall short. <b>Alt-drag</b> instead to spread it along a line. Click its <b>flag</b>, press <b>Enter</b> or <b>✓</b> to send it (a double click pins and sends); <b>Esc</b>, a right click or <b>✕</b> drops the pin. <b>+D6</b> in the group bar makes a move advance first. In the movement phase a click on an enemy pins an approach (shooters to where it is in range and sight, the rest as near as they can get): click it again, press Enter or ✓ to send it. In the shooting phase every member that can fires at the enemy you click (stopping once it falls), and in the charge phase every member that can charges it. <b>🤖 Auto these</b> lets the AI play the group's moves, shots or charges this phase, leaving the rest of your army to you (<b>🤖 Auto</b> plays the whole phase and ends it). Once the table catches up, the members that can still act stay picked.</p>
         <p><b>Standing orders</b> stay with your units from turn to turn: <b>➜ March</b> (<b>G</b>, then click where to), <b>🎯 Attack</b> (<b>T</b>, then click the enemy: they go for it until it falls), <b>⚓ Hold</b> (<b>H</b>: stand and shoot), <b>⟳ Autopilot</b> (<b>P</b>: the AI plays them) and <b>⊘</b> (<b>X</b>: back in your hands), from the group bar, the unit card or the keys. They act when you press <b>End</b> (it reads <b>End Movement ▸ · ⟳ 3</b> when three will act), after whatever you played by hand; <b>▶ Go</b> carries them out now and leaves the phase open. A unit you move by hand has simply done its order's work for the phase. A march that arrives holds, one that can get no nearer for two turns comes back to you, and an attack whose target falls goes on autopilot. <b>Orders N</b> picks up every unit holding one.</p>
@@ -148,6 +160,7 @@
           <div class="seedrow">
             <label>Battlefield <input id="lobbyBoard" type="number" min="0" max="4294967295" step="1" /></label>
             <button id="lobbyReroll">🎲 New battlefield</button>
+            <label>Terrain <select id="lobbyTerrain"></select></label>
           </div>
         </div>
         <div class="seats">

@@ -56,13 +56,72 @@ export class Stage {
   // shadow camera classic's ±27 by ±22 (in the sun's own view, where
   // classic's corners need about ±24.4 by ±20.5) and 90" deep, each times
   // k, so a larger board's corners cast and catch shadows too (classic's
-  // exactly as ever). (Shadows fitted to the view, so a larger board's keep
-  // their sharpness, are F8b's: DESIGN §4.2.7.)
+  // exactly as ever). (F8b) On a larger board that is only where the shadow
+  // camera starts: once the camera settles it is fitted to the view
+  // (fitShadow), so the 2048 map's texels cover what is on screen.
   fit({ W, H }) {
     const k = Math.max(1, Math.hypot(W, H) / Math.hypot(40, 28))
     Object.assign(this.scene.fog, { near: 70 * k, far: 140 * k })
-    Object.assign(this.sun.shadow.camera, { left: -27 * k, right: 27 * k, top: 22 * k, bottom: -22 * k, far: 90 * k })
+    // ((F8b) its near plane too: a fit to the view moves it)
+    Object.assign(this.sun.shadow.camera, { left: -27 * k, right: 27 * k, top: 22 * k, bottom: -22 * k, near: 5, far: 90 * k })
     this.sun.shadow.camera.updateProjectionMatrix()
+    // (F8b) fitted to the view on a board larger than classic's (classic
+    // keeps its fixed ±27/±22: its title and boards drawn as ever)
+    this.board = k > 1 ? { W, H } : null
+    this.fitted = null
+    this.lastPose = null
+    this.fits = 0
+  }
+
+  // (F8b, DESIGN §4.2.3 and §4.2.7's "Drawing at scale" 2) The sun's shadow
+  // camera fitted to the ground the view frustum takes in, clamped to the
+  // board: the four rays through the screen's corners met with the table
+  // (a ray at or above the horizon taken as far as the fog's end), the
+  // quadrilateral clipped to the board (and its frame), and its corners in
+  // the sun's own view bounding the shadow camera, with a little room. In
+  // the sun's orthographic view a caster above the ground stands where its
+  // shadow falls, so the ground's bounds are the casters' too; only the
+  // depth must reach the tallest (MARGIN_Y above the table). Asked by the
+  // frame loop once the camera has settled (never every frame); a board no
+  // larger than classic's never asks it.
+  fitShadow(camera) {
+    if (!this.board) return false
+    const { W, H } = this.board
+    camera.updateMatrixWorld()
+    const far = this.scene.fog.far
+    const o = camera.position
+    const pts = []
+    for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      const d = tmpA.set(sx, sy, 0.5).unproject(camera).sub(o).normalize()
+      let t = d.y < -1e-6 ? -o.y / d.y : far
+      t = Math.min(t, far)
+      pts.push([o.x + d.x * t, o.z + d.z * t])
+    }
+    // (the board and its frame: 1" all round)
+    const poly = clipRect(pts, -W / 2 - 1, W / 2 + 1, -H / 2 - 1, H / 2 + 1)
+    if (poly.length < 3) return false
+    const sc = this.sun.shadow.camera
+    // the sun's view, as three.js's DirectionalLightShadow sets it
+    sc.position.setFromMatrixPosition(this.sun.matrixWorld)
+    tmpB.setFromMatrixPosition(this.sun.target.matrixWorld)
+    sc.lookAt(tmpB)
+    sc.updateMatrixWorld()
+    const inv = sc.matrixWorldInverse
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity
+    for (const [x, z] of poly) for (const y of [-0.7, MARGIN_Y]) {
+      tmpA.set(x, y, z).applyMatrix4(inv)
+      x0 = Math.min(x0, tmpA.x), x1 = Math.max(x1, tmpA.x)
+      y0 = Math.min(y0, tmpA.y), y1 = Math.max(y1, tmpA.y)
+      z0 = Math.min(z0, tmpA.z), z1 = Math.max(z1, tmpA.z)
+    }
+    // a little room (a figure at the edge of the view keeps its shadow),
+    // and never smaller than 12" across (a close view's texels stay round)
+    const pad = 1.5, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2
+    const hx = Math.max(6, (x1 - x0) / 2 + pad), hy = Math.max(6, (y1 - y0) / 2 + pad)
+    Object.assign(sc, { left: cx - hx, right: cx + hx, bottom: cy - hy, top: cy + hy, near: Math.max(0.1, -z1 - 2), far: -z0 + 2 })
+    sc.updateProjectionMatrix()
+    this.fits++
+    return true
   }
 
   // Run the table: `parts(dt, time)` each frame after the tweens (the
@@ -85,9 +144,59 @@ export class Stage {
       stepTweens(dt)
       parts(dt, clock.time)
       rig.update(raw)
+      // (F8b) the shadows fitted to the view once the camera has rested
+      // SETTLE frames (a larger board's only: fit())
+      if (this.board && !this.fast) this.settleShadow(rig.camera)
       rig.render(this.renderer, this.scene, shake(), !this.fast)
       if (after && !this.fast) after((performance.now() - t0) / 1000)
     }
     frame()
   }
+
+  // (F8b) Whether the camera has rested SETTLE frames since it last moved
+  // (its world matrix and projection unchanged), and if so, and the view
+  // is not the one the shadows were fitted to, fit them (fitShadow): once
+  // per rest, never per frame.
+  settleShadow(camera) {
+    camera.updateMatrixWorld()
+    const key = [...camera.matrixWorld.elements, ...camera.projectionMatrix.elements].map((v) => v.toFixed(4)).join()
+    if (key !== this.lastPose) {
+      this.lastPose = key
+      this.still = 0
+      return
+    }
+    if (++this.still === SETTLE && key !== this.fitted) {
+      this.fitted = key
+      this.fitShadow(camera)
+    }
+  }
+}
+
+// (F8b) how many frames the camera rests before the shadows are fitted to
+// it, and how tall above the table a caster may stand (a tree's top)
+const SETTLE = 8
+const MARGIN_Y = 12
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3()
+
+// A convex polygon ([[x, z]]) clipped to the rectangle x0..x1 by z0..z1
+// (Sutherland-Hodgman, an edge at a time).
+function clipRect(poly, x0, x1, z0, z1) {
+  const edge = (pts, inside, cut) => {
+    const out = []
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i], b = pts[(i + 1) % pts.length]
+      const ia = inside(a), ib = inside(b)
+      if (ia) out.push(a)
+      if (ia !== ib) out.push(cut(a, b))
+    }
+    return out
+  }
+  const atX = (x) => (a, b) => [x, a[1] + ((b[1] - a[1]) * (x - a[0])) / (b[0] - a[0])]
+  const atZ = (z) => (a, b) => [a[0] + ((b[0] - a[0]) * (z - a[1])) / (b[1] - a[1]), z]
+  let p = poly
+  p = edge(p, (q) => q[0] >= x0, atX(x0))
+  p = edge(p, (q) => q[0] <= x1, atX(x1))
+  p = edge(p, (q) => q[1] >= z0, atZ(z0))
+  p = edge(p, (q) => q[1] <= z1, atZ(z1))
+  return p
 }

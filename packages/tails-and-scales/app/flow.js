@@ -79,11 +79,14 @@ export function bookKey(session) {
 }
 
 // What of a setup the table shows before its battle: the board seed, (F8a)
-// the mission that chose the board, the terrain set and the races at it.
-// Who plays a seat, the dice and the rounds draw nothing on it.
+// the mission that chose the board, the terrain set, the races at it and
+// (F11a) the armies they field, each seat's as fullSetup fills it in (the
+// mission's preset where the setup names none, so a setup naming no army
+// and one naming 'classic' are on one table). Who plays a seat, the dice
+// and the rounds draw nothing on it.
 export const tableOf = (setup) => {
   const s = fullSetup(setup)
-  return { board: s.board, mission: s.mission, terrain: s.terrain, races: s.seats.map((x) => x.race) }
+  return { board: s.board, mission: s.mission, terrain: s.terrain, races: s.seats.map((x) => x.race), armies: s.seats.map((x) => x.army) }
 }
 const sameTable = (a, b) => JSON.stringify(tableOf(a)) === JSON.stringify(tableOf(b))
 
@@ -96,13 +99,25 @@ export class Flow {
   // hud, actions, title, result }), `params` (the page's URL parameters:
   // ?dice), `seed` (the title's board seed) and `races` (the races at the
   // table: the classic matchup, or ?races'), (F8a) `mission` the mission a
-  // battle started here is fought for (classic, or ?mission's)
-  constructor({ view, ui, params, seed, races, mission = 'classic' }) {
+  // battle started here is fought for (classic, or ?mission's), (F11a)
+  // `armies` the armies its seats field: null, each its mission's preset,
+  // or ?armies' [seat 0's | null, seat 1's | null] (app/boot.js has judged
+  // each against the races and the mission; null, the preset), (F7a)
+  // `terrain` the terrain set the table is drawn on (null: each mission's
+  // first set; or ?terrain's)
+  constructor({ view, ui, params, seed, races, mission = 'classic', armies = null, terrain = null }) {
     this.view = view
     this.ui = ui
     this.params = params
     this.races = races
     this.mission = mission
+    this.armies = armies
+    // (F7a) the terrain set a battle started here is fought on, where its
+    // mission is fought on it (terrainOf): ?terrain's, then the
+    // battle-setup panel's last choice, as the races are; null, each
+    // mission's first set. (The title's table is always the first set's:
+    // showTable.)
+    this.terrain = terrain
     // The table's and the screen's own state: the board seed and who plays
     // each seat as the title screen has them. (Every seed the page takes is
     // made a whole number from 0 to 2^32 - 1, as a setup's must be, with
@@ -271,13 +286,17 @@ export class Flow {
       // the flow: a stage of the battle, a phase begun, a round scored, the
       // end
       stage: (e) => this.staged(e),
-      'phase.start': (e) => this.phaseBegun(e),
+      'phase.start': (e, M, how) => this.phaseBegun(e, how),
       'round.scored': (e) => this.scored(e),
       'game.over': (e) => this.over(e),
       // (?debug) a checkpoint for sim/present-check.mjs (and, should the
       // ?debug block's view.pauseAtChecks ask, a pause there for
       // sim/snap-check.mjs)
       check: (e) => this.checkHook?.(e),
+      // (F8b) a batch opens (view/player.js's frame): the camera frames
+      // where its members stand and go, as the follow policy says, the
+      // stage and the seat to act as the table shows them
+      frame: (e, M) => view.rig.frame(e.points, { stage: M.stage, active: M.active, localSeats: this.session?.localSeats ?? [] }),
     }
     this.player = new EventPlayer({ handlers, view, onIdle: (how) => this.idled(how), sideOf: (u) => this.unitById(u)?.side })
     return this.player
@@ -321,16 +340,24 @@ export class Flow {
   }
 
   // A phase begins: its banner, which the table waits on (longer when the
-  // seat shown is played here, or outside the battle). A seat's first phase
-  // begins its turn: its units have done nothing yet (the card's record).
-  phaseBegun(e) {
+  // seat shown is played here, or outside the battle; (F8b) PACE.brief when
+  // the player has it queued to its end with nothing in it, `how.brief`). A
+  // seat's first phase begins its turn: its units have done nothing yet
+  // (the card's record). (F8b) A phase of a seat played here takes the
+  // camera back to where that seat pressed End (the bookmark), and a turn
+  // begun with more than 10 units gives the selection's one-time tip.
+  phaseBegun(e, how) {
     this.facts = turnBegun(this.facts, e)
     this.hud.phaseShown = true
     this.human.select(null)
     this.ui.tray.hide()
     this.refreshUI()
     const M = this.player.mirror
-    return this.ui.banner.show(`${this.sides[e.side].icon} ${this.sides[e.side].name}`, PHASE_NAME[e.phase], this.ink(e.side), PACE.phaseStart(this.local(M.active), M.stage))
+    if (this.local(e.side)) {
+      this.view.rig.resume(e.side)
+      if (e.phase === 'move' && this.atTable().units.filter((u) => u.side === e.side && M.units[u.id]?.alive > 0).length > 10) this.ui.toast?.tip?.('select')
+    }
+    return this.ui.banner.show(`${this.sides[e.side].icon} ${this.sides[e.side].name}`, PHASE_NAME[e.phase], this.ink(e.side), how?.brief ? PACE.brief : PACE.phaseStart(this.local(M.active), M.stage))
   }
 
   // A round scored: a ring in the holder's colours on each objective held,
@@ -440,10 +467,10 @@ export class Flow {
   }
 
   // A battle's units are its table's, id for id (start() snaps the table to
-  // the backdrop, on the battle's board and terrain with its races: those
-  // deploy the same armies the same way, newState being a pure function of
-  // the setup, and neither who plays a seat nor the dice move a unit before
-  // the battle starts), so the figures on show are its figures. A unit the
+  // the backdrop, on the battle's board and terrain with its races and
+  // (F11a) its armies: those deploy the same units the same way, newState
+  // being a pure function of the setup, and neither who plays a seat nor
+  // the dice move a unit before the battle starts), so the figures on show are its figures. A unit the
   // table has no figure for is a bug in that, so it throws. (By type and
   // seat only: G has run on past its start by now, a watched battle's to
   // its end, so where its units stood then is no longer in it.)
@@ -455,6 +482,15 @@ export class Flow {
   }
 
   // ── Setup ───────────────────────────────────────────────────────────────
+  // (F7a) The terrain set a battle of `mission` started here is fought on
+  // (the battle-setup panel's and the lobby's default): the page's
+  // (?terrain=, or the panel's last choice), where the mission is fought on
+  // it, else the mission's first set.
+  terrainOf(mission = this.mission) {
+    const sets = MISSIONS[mission].sets
+    return sets.includes(this.terrain) ? this.terrain : sets[0]
+  }
+
   // The title screen's table for a board seed: its board and both armies
   // where any battle on it deploys them, drawn from a match that is never
   // played (both seats human, so it waits at its deployment having drawn
@@ -464,13 +500,22 @@ export class Flow {
   // the races at the table: the title stays on the classic board, F8a).
   // (F8a) A battle's mission may choose another board: the snap rebuilds
   // the table for it (view/index.js's setBoard), and the title's next snap
-  // the classic one again.
-  showTable(board, { mission = 'classic', terrain = MISSIONS[mission].sets[0], races = this.races } = {}) {
+  // the classic one again. (F11a) `armies`, each seat's army (null, or a
+  // seat's null: the mission's preset): a battle with lists is drawn on a
+  // table that fields them; the title's names none, so it shows the
+  // presets, as before lists (its 1200 ms frame unchanged).
+  // (F7a) Its terrain set the mission's first, whatever ?terrain= or the
+  // battle-setup panel chose (those are the battle's: start() draws its
+  // table afresh for it), so the title is always the classic table, as at
+  // 1200 ms (DESIGN §4.2.3: the title stays on the classic table), Back
+  // from a fortified battle included.
+  showTable(board, { mission = 'classic', terrain = MISSIONS[mission].sets[0], races = this.races, armies = null } = {}) {
     const { view, ui, human } = this
     // the new table first: if building it throws, the last one stays whole
     // (a quiet match: none of what it did is played, the table being drawn
     // from it as it stands)
-    const next = createMatch({ board, dice: 0, mission, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: null })
+    const seats = races.map((race, i) => (armies?.[i] == null ? { race, ctrl: 'human' } : { race, ctrl: 'human', army: armies[i] }))
+    const next = createMatch({ board, dice: 0, mission, terrain, seats }, { out: null })
     this.session?.close()
     this.session = null
     this.battle = null
@@ -509,17 +554,42 @@ export class Flow {
 
   // A battle: the whole setup (the board on the title screen, a fresh dice
   // stream, who plays each seat, each human seat played from this device,
-  // (F6) the races the battle-setup panel chose, else the table's), a
-  // LocalStore whose first entry starts it, and a Session over it for the
-  // seats played here. The match runs on at once: to each human seat's
-  // deployment, or (watch) to its end, and the table plays it from there.
-  start(mode, races = this.races) {
+  // (F6) the races the battle-setup panel chose, else the table's, (F11a)
+  // each seat's army only where ?armies= named one, (F8b) the mission (the
+  // battle size) the panel chose, else the table's), a LocalStore whose
+  // first entry starts it, and a Session over it for the seats played
+  // here. The match runs on at once: to each human seat's deployment, or
+  // (watch) to its end, and the table plays it from there.
+  // (F7a) Fought on `terrain`, the battle-setup panel's choice of the
+  // mission's sets (else the table's), which is the table's from then on;
+  // (F8b) of the mission `size`, the panel's battle size.
+  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size)) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
     if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
     if (races.length !== 2 || !races.every((r) => Object.hasOwn(RACES, r))) throw new Error(`a battle takes two races of ${Object.keys(RACES).join(', ')}, not ${races.join(', ')}`)
+    if (!Object.hasOwn(MISSIONS, size)) throw new Error(`no mission "${size}" (there are ${Object.keys(MISSIONS).join(', ')})`)
+    if (!MISSIONS[size].sets.includes(terrain)) throw new Error(`the ${size} mission is fought on ${MISSIONS[size].sets.join(' or ')}, not ${JSON.stringify(terrain)}`)
     const who = MODES[mode]
+    // (F8b) the battle size the panel chose is the flow's from now on (its
+    // next default); armies ?armies= named for another mission's limits
+    // let go, each seat its new mission's preset
+    if (size !== this.mission) {
+      this.armies = null
+      this.mission = size
+    }
+    // (F11a) A list's digits mean other units in another race's roster, so
+    // a seat whose race the panel changed from the one ?armies= was judged
+    // for (the table's races, ?races') lets its army go: it plays its
+    // mission's preset from then on, back to the URL's race or not (F11b's
+    // army line resets the same way, DESIGN §4.2.8.8)
+    if (this.armies) {
+      const kept = this.armies.map((a, i) => (races[i] === this.races[i] ? a : null))
+      this.armies = kept.some((a) => a !== null) ? kept : null
+    }
+    // (F7a) and its terrain the table's
+    this.terrain = terrain
     // (F6) the races the battle-setup panel chose are the table's from now
     // on (the title's backdrop after it, the panel's next defaults)
     this.races = [...races]
@@ -530,24 +600,32 @@ export class Flow {
     // (a battle starts on a fresh table: a second start without the end
     // screen's Back would find the last battle's on show; (F8a) the fresh
     // one is the battle's mission's, so its board is made once)
-    if (this.session) this.showTable(this.S.seed, { mission: this.mission })
+    if (this.session) this.showTable(this.S.seed, { mission: this.mission, terrain, armies: this.armies })
     // a fresh logic-dice stream per battle; ?dice=N replays one exactly
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     // (F4) a battle with a seat played by a human asks to play on past its
     // rounds ('vote'), unless ?overtime=never says not (sim/'s replays of a
     // log made without the vote); a watched one ends on its rounds
     const overtime = who.includes('human') && this.params.get('overtime') !== 'never' ? 'vote' : 'never'
-    // (F8a) the mission chooses the board: its first terrain set, its rounds
+    // (F8a) the mission chooses the board and its rounds; (F7a) the terrain
+    // is one of its sets, the panel's; (F11a) a seat names its `army` only
+    // when ?armies= named one, so a setup naming none plays its mission's
+    // preset, as every battle before lists did (the classic corpus's setups
+    // among them)
     const mission = MISSIONS[this.mission]
+    const armyOf = (i) => (this.armies?.[i] == null ? {} : { army: this.armies[i] })
     const setup = {
-      board: this.S.seed, dice, mission: this.mission, terrain: mission.sets[0], rounds: mission.rounds, overtime, diceMode: 'shared',
-      seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE } : { race, ctrl: who[i] })),
+      board: this.S.seed, dice, mission: this.mission, terrain, rounds: mission.rounds, overtime, diceMode: 'shared',
+      seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE, ...armyOf(i) } : { race, ctrl: who[i], ...armyOf(i) })),
     }
     // The battle starts on the table shown, which must be its own: the
-    // backdrop, on the same board and terrain with the same races and
-    // untouched since it was drawn, is that match's table before anything
-    // has happened (else it is drawn afresh from the battle's setup first:
-    // today the title's always is the battle's). So the table is snapped to
+    // backdrop, on the same board and terrain with the same races, (F11a)
+    // fielding the same armies (sameTable: a battle with lists is never on
+    // the title's table, which fields the presets), and untouched since it
+    // was drawn, is that match's table before anything has happened (else
+    // it is drawn afresh from the battle's setup first: today the title's
+    // always is the battle's, but with ?armies= or (F7a) on a set other
+    // than the mission's first, which the title never shows). So the table is snapped to
     // it as it stands (the figures and meshes on show kept, every one being
     // the battle's), and the battle's events play on from there: its
     // board's adds take back the meshes they find untouched

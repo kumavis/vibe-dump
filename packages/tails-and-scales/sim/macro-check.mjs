@@ -259,7 +259,7 @@ async function marchScenario(L, it, rand, out) {
   const free = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.flags.moved && !u.flags.advanced && !ses.preview((G2, q) => q.isEngaged(G2, u)))
   if (!free.length) return null
   const u0 = rand.pick(free)
-  const field = ses.preview((G2, q) => L.goalField(G2, q, u0.pos, q.moveMode(u0), u0.r))
+  const field = ses.preview((G2, q) => L.goalField(G2, q, u0.pos, q.moveMode(u0), u0.r, q.climbs?.(u0)))
   const cand = []
   for (let i = 0; i < field.length; i++) if (field[i] > u0.t.M + 1 && field[i] <= 3 * u0.t.M) cand.push(i)
   if (!cand.length) return null
@@ -461,7 +461,7 @@ const MUTANTS = [
   ['march-stale-roll', 'input/orders.js', '    for (let k = 0; k < 2 && phaseNow() === phase; k++) {', '    for (let k = 0; k < 1 && phaseNow() === phase; k++) {'],
   // a march planned on a field from where the unit stands, not its anchor
   // (away from its slot it finds no way nearer)
-  ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.r)\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.r)\n'],
+  ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.r, q.climbs(u))\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.r, q.climbs(u))\n'],
   // (F10c's review) Auto with orders sends a plain auto: the AI plays every
   // unit, a Hold walked off its post, a March in combat fallen back
   ['auto-plays-ordered', 'input/orders.js', "  if (then === 'auto' && phaseNow() === phase) {", '  if (false) {'],

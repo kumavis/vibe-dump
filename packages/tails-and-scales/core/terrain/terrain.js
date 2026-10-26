@@ -24,6 +24,9 @@
 //                                               log): def is { id, kind,
 //                                               shape, look }, a copy of its
 //                                               place and look as it joined
+//                                               (F7a: and its surface, link,
+//                                               base, supports, fallsAt and
+//                                               on, where it has them)
 //   terrain.hurt     { id, from, at }           it took damage and stands
 //   terrain.destroy  { id, kind, from, at }     it broke (then its consequences)
 //   terrain.collapse { drops: [{ id, dy }], by }   blocks fell into a gap
@@ -54,6 +57,21 @@ const place = (c) => ({ x: c.shape.x, y: c.shape.y, z: c.shape.z })
 // a chunk as it joins: what the view draws it from (a copy, so a later
 // collapse lowering the chunk can't reach back into an event)
 const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
+// (F7a, DESIGN §4.2.4) and, for the pieces that have them (decks, stairs,
+// ladders, posts: recipes.js), the height data the view draws them with and
+// sim/terrain-check.mjs reads: `surface` (the walkable top), `link` (a
+// ladder's foot and top), `base` (the floor a piece stands on), `supports`
+// and `fallsAt` (a timber deck's posts) and `on` (a ladder's deck), copied
+// like the shape. A chunk without them (every classic one) joins with the
+// def it always had. (view/terrain.js's copy of defOf must carry the same,
+// for a snap's sync to key the table by what an add carries.)
+export const HEIGHT_FIELDS = Object.freeze(['surface', 'link', 'base', 'supports', 'fallsAt', 'on'])
+const copy = (v) => (Array.isArray(v) ? v.map(copy) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, copy(x)])) : v)
+const addDef = (c) => {
+  const def = defOf(c)
+  for (const k of HEIGHT_FIELDS) if (c[k] !== undefined) def[k] = copy(c[k])
+  return def
+}
 
 // (S0b, DESIGN §4.2.2) The line-of-sight broadphase's bins: BIN-inch
 // squares over the table, each listing (by place in `chunks`) every chunk
@@ -103,7 +121,7 @@ export class Terrain {
     const [x0, x1] = this.binSpan(s.x - s.reach - PAD, s.x + s.reach + PAD, this.W, this.nbx)
     const [z0, z1] = this.binSpan(s.z - s.reach - PAD, s.z + s.reach + PAD, this.H, this.nbz)
     for (let bz = z0; bz <= z1; bz++) for (let bx = x0; bx <= x1; bx++) this.bins[bz * this.nbx + bx].push(at)
-    emitTo(out, 'terrain.add', { def: defOf(c) })
+    emitTo(out, 'terrain.add', { def: addDef(c) })
     return c
   }
 
@@ -119,7 +137,11 @@ export class Terrain {
   // its recipes (recipes.js scatter: the centre piece, then mirrored pairs of
   // features, every placement and every look drawn from the one layout
   // stream in a fixed order). The recipes add their chunks through `T.add`,
-  // here this terrain's, reporting into `out`.
+  // here this terrain's, reporting into `out`. (F7a) A set with works, forts
+  // or an area scale reaches scatter's branches for them; classic never does.
+  // A deck, stair, ladder or post carries its height fields on the chunk as
+  // its def gave them (Object spread, below in add), so core/nav.js reads
+  // them from the chunks.
   generate(seed, objectives, deployDepth, set = 'classic', out = null) {
     // (SETS has no prototype, so only a set's own name is in it)
     if (!(set in SETS)) throw new Error(`no terrain set "${set}" (there are ${Object.keys(SETS).join(', ')})`)
@@ -139,7 +161,12 @@ export class Terrain {
   // the chunks' own order (so a blocker still returns as soon as it is met,
   // and `obscure`, a count, is what it was); with an end off the table,
   // every chunk is.
-  los(a, b, ignoreR = 1.3) {
+  //
+  // (F7a) `why`, when given ({ block, obscure: [] }), hears the reasons as
+  // they are met: the solid chunk that stopped the ray (its id), and each
+  // obscuring chunk counted (its id). core/queries.js's sightInfo asks; the
+  // verdict is the same either way.
+  los(a, b, ignoreR = 1.3, why = null) {
     let obscure = 0
     const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z
     const L2 = dx * dx + dz * dz
@@ -154,9 +181,13 @@ export class Terrain {
       const px = a.x + dx * t - s.x, pz = a.z + dz * t - s.z
       if (px * px + pz * pz > s.reach * s.reach) continue
       if (!segmentHitsBox(a, dx, dy, dz, s)) continue
-      if (c.los === 'block') return { blocked: true, obscure }
+      if (c.los === 'block') {
+        if (why) why.block = c.id
+        return { blocked: true, obscure }
+      }
       if (hypot(s.x - a.x, s.z - a.z) < ignoreR + s.reach * 0.5) continue
       obscure++
+      if (why) why.obscure.push(c.id)
     }
     return { blocked: obscure >= 2, obscure }
   }
@@ -214,12 +245,15 @@ export class Terrain {
   // (half that out at the rim). Returns the chunks that broke. It walks a
   // copy of the chunk list (DESIGN §4.1 rule 6), so the rubble and logs it
   // makes are not hit by the same blast; a wrecker's smashing walks the live
-  // list instead (core/actions/move.js smashAround).
-  blast(x, z, r, dmg, { acid = false } = {}, out = null) {
+  // list instead (core/actions/move.js smashAround). (F7a) `y`, the height
+  // the blast is measured from: half an inch over the floor it lands on
+  // (core/actions/shoot.js blastLands: 0.5 on a board without height, as it
+  // always was).
+  blast(x, z, r, dmg, { acid = false, y = 0.5 } = {}, out = null) {
     const broken = []
     for (const c of [...this.chunks]) {
       if (!c.alive || !c.destructible) continue
-      const d = distToBox(x, 0.5, z, c.shape)
+      const d = distToBox(x, y, z, c.shape)
       if (d > r) continue
       let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)
       if (acid && c.kind === 'block') amount += 1

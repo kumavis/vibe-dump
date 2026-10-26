@@ -205,7 +205,9 @@ async function factsFold(dir, job, setup) {
     side: u.side, moved: !!u.flags.moved, fellBack: !!u.flags.fellBack, advanced: !!u.flags.advanced, advRoll: u.flags.advRoll,
     shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u),
   }]))
-  const table = core.createMatch({ board: setup.board, dice: 0, terrain: setup.terrain, seats: setup.seats.map((x) => ({ race: x.race, ctrl: 'human' })) }, { out: null })
+  // ((F8b) on the battle's own mission, each seat its own army: a Field or
+  // Grand table is its own, as app/flow.js's showTable makes it)
+  const table = core.createMatch({ board: setup.board, dice: 0, ...(setup.mission ? { mission: setup.mission } : {}), terrain: setup.terrain, seats: setup.seats.map((x) => ({ race: x.race, ctrl: 'human', ...(x.army != null ? { army: x.army } : {}) })) }, { out: null })
   const acts = [], stops = []
   const G = core.createMatch(setup, { out: null, onTrace: (line, g) => line.startsWith('act ') && acts.push(factsOf(g)) })
   const stop = () => G.pending && stops.push({ k: G.pending.k, facts: factsOf(G) })
@@ -264,7 +266,12 @@ async function page(dir) {
     // the next act line's facts and the next stop's
     let facts = null, nextAct = 0, nextStop = 0
     const miss = (why) => (out.mismatch ??= why)
-    const order = eventOrder((id) => ts.G.units.find((u) => u.id === id))
+    // ((F7a) what a ladder costs an inch it climbs, and the measure the move
+    // line's sum is made with: the code's own)
+    // (code older than either has no climb, and so no use for them)
+    const { LADDER_MUL = 2 } = await import(pathToFileURL(join(dir, 'core', 'nav.js')).href).catch(() => ({}))
+    const { hypot = Math.hypot } = await import(pathToFileURL(join(dir, 'core', 'dmath.js')).href).catch(() => ({}))
+    const order = eventOrder((id) => ts.G.units.find((u) => u.id === id), LADDER_MUL, hypot)
     ts.present.listen({
       // a new table: the mirror it is shown from (a copy: the player's own
       // is folded in place)
@@ -381,8 +388,11 @@ async function page(dir) {
 // never came; `seen` counts the lines held to their events, by kind.
 // `unitOf(id)` is the unit (its short name is how the trays and the battle
 // log name it; its type says whether it is a wrecker, whether it flies and
-// its weapon's look).
-function eventOrder(unitOf) {
+// its weapon's look). (F7a) `ladderMul`: a climb's cost an inch of height
+// (core/nav.js's LADDER_MUL): with height a move's line says what the walk
+// cost, each climb (a path point marked `climb`) at its link's cost, not
+// the ground its segment spans, which is the walk's L (the view's).
+function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const nameOf = (id) => unitOf(id)?.t.short
   let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll
   // how many lines (or templates, or walks) of each kind were held to their
@@ -530,7 +540,9 @@ function eventOrder(unitOf) {
     // more than 0.1"; a charge's never stomps
     if (e.t === 'unit.move') {
       const mv = moving
-      if (mv && (nameOf(e.u) !== mv.name || e.L.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${e.L.toFixed(1)}")`
+      // (F7a: with a climb, what the walk cost)
+      const cost = e.path.some((p) => p.climb) ? e.path.reduce((L, p, i) => (i ? L + (p.climb ? ladderMul * Math.abs(p.y - e.path[i - 1].y) : hypot(p.x - e.path[i - 1].x, p.z - e.path[i - 1].z)) : 0), 0) : e.L
+      if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
       const stomp = !!mv && !!unitOf(e.u)?.t.wrecker && e.L > 0.1
       if (e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (${mv ? 'a move' : 'not a move'}) has stomp ${e.stomp}, not ${stomp}`
       // flying exactly when its unit flies; a move's pace, or a charge's

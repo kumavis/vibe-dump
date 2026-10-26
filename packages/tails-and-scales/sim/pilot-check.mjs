@@ -10,12 +10,19 @@
 //   - every corpus human log, played as it is by A and by B, but for each
 //     `auto` B sends `pilot` and `end` instead: an Auto part-way through a
 //     phase (after the seat's own moves, an advance's roll held) is held to
-//     the pilot too.
+//     the pilot too;
+//   - (F8b) 4 Grand battles (GRAND: the grand mission on open, each seat
+//     its ×3 preset, 21 units a side, seats swapped on every other board),
+//     both seats the human's and every phase Auto'd, as the first row: the
+//     mask's bits over a Grand army, its units dying as the battle goes.
 // After each phase (each `auto`, and B's pair) the two must agree; at the
 // end they must have played as many phases, and the pilots must have done
 // something (a check that pilots nothing passes nothing).
 //
 //   node sim/pilot-check.mjs [--only ids] [--self-test]
+//
+// --only picks corpus battles (sim/lib.mjs's select), and `grand` the Grand
+// battles; with no --only, every corpus battle and the Grand ones.
 //
 // --self-test plants faults in a copy of the core (a pilot that leaves out
 // a named unit, one that rolls a die of its own, one that logs a line, a
@@ -94,13 +101,25 @@ function pair(core, setup, entries, out) {
   return B.turn.stage === 'over' ? apart(core, A, B, 'the end') : `auto's battle is over, pilot's is ${B.turn.stage}`
 }
 
+// (F8b) the Grand battles: [board, dice] each, the Bushtails in seat 0 on
+// odd boards and the Coil on even ones
+const GRAND = [[1, 7], [2, 11], [3, 5], [4, 9]]
+const grandItems = () => GRAND.map(([board, dice], k) => {
+  const races = k % 2 ? ['serpent', 'squirrel'] : ['squirrel', 'serpent']
+  return { id: `grand-${board}-${dice}`, kind: 'grand', setup: { board, dice, mission: 'grand', terrain: 'open', seats: races.map((race) => ({ race, ctrl: 'ai', army: '336333' })) } }
+})
+
 async function run(dir, { only, say = console.log } = {}) {
   const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
-  const items = select(loadCorpus().items, only)
+  const names = only ? only.split(',') : null
+  const rest = names && names.filter((x) => x !== 'grand').join(',')
+  const items = [...(names && !rest ? [] : select(loadCorpus().items, rest || undefined)), ...(!names || names.includes('grand') ? grandItems() : [])]
   const out = { phases: 0, pilots: 0, acted: 0, idle: 0, bad: [] }
   const t0 = Date.now()
+  let grand = 0
   for (const it of items) {
-    const setup = jobSetup(it.job)
+    if (it.kind === 'grand') grand++
+    const setup = it.setup ?? jobSetup(it.job)
     const all = { ...setup, overtime: 'never', seats: setup.seats.map((s) => ({ ...s, ctrl: 'human' })) }
     for (const [what, s, entries] of [['every phase', all, null], ...(it.kind === 'human' ? [['its log', setup, it.job.entries]] : [])]) {
       let why
@@ -113,7 +132,7 @@ async function run(dir, { only, say = console.log } = {}) {
     }
   }
   const ok = !out.bad.length && out.acted > 0
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${items.length} battles, ${out.phases} phases: ${out.pilots} pilots (${out.acted} played something), ${out.idle} with nobody able to act, each the same battle as its Auto (${((Date.now() - t0) / 1000).toFixed(0)} s)${out.bad.length ? `\n         ${out.bad.slice(0, 6).join('\n         ')}` : ''}${!out.acted ? '\n         no pilot played anything' : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${items.length} battles (${items.length - grand} of the corpus, ${grand} Grand), ${out.phases} phases: ${out.pilots} pilots (${out.acted} played something), ${out.idle} with nobody able to act, each the same battle as its Auto (${((Date.now() - t0) / 1000).toFixed(0)} s)${out.bad.length ? `\n         ${out.bad.slice(0, 6).join('\n         ')}` : ''}${!out.acted ? '\n         no pilot played anything' : ''}`)
   return ok ? 0 : 1
 }
 
@@ -148,7 +167,7 @@ if (a['self-test']) {
   console.log(bad ? `\npilot-check self-test FAILED: ${bad} problem(s)` : `\npilot-check self-test passed: ${MUTANTS.length} faults, each caught`)
   process.exit(bad ? 1 : 0)
 }
-console.log('pilot-check (P-auto): a pilot naming every standing unit, then End, against Auto, on every corpus battle\n')
+console.log('pilot-check (P-auto): a pilot naming every standing unit, then End, against Auto, on every corpus battle and 4 Grand ones\n')
 const failed = await run(PKG, { only: a.only })
 console.log(failed ? '\npilot-check FAILED' : '\npilot-check passed: a pilot of the whole army and End play the battle Auto plays, phase by phase')
 process.exit(failed)

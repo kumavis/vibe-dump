@@ -86,7 +86,11 @@ export function fullLos(M, terrain, a, b, ignoreR = 1.3) {
 
 // shotValue and score as they were before S1 (core/ai/score.js): every
 // per-enemy fact asked afresh, p2D6 counted, so P-scan judges S1's hoisting
-// too, not only S0's bounds
+// too, not only S0's bounds. (F7a's review) With height, F7a's terms as
+// score has them (DESIGN §4.2.4's AI and the play-report's tuning): a
+// walker's way by levelDist in the objective, charge and approach terms, an
+// enemy walker's in the danger term (a flier's the straight line), and the
+// guns' +0.25 an inch of floor, so P-scan can judge a fortified board
 const count2D6 = (need) => {
   let ok = 0
   for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (a + b >= need) ok++
@@ -120,6 +124,7 @@ export function refScore(M, R, G, u, x, z, ctx, moving) {
   const { enemies, friends, owners, claimed, role } = ctx
   const t = u.t
   const from = { x, z }
+  const high = G.nav.hasHeight, climb = high && M.climbs(u), walks = high && M.moveMode(u) !== 'fly'
   const moved = moving && M.hypot(x - u.pos.x, z - u.pos.z) > 0.3
   let s = 0
   let onObjective = false, obj = -1
@@ -128,7 +133,7 @@ export function refScore(M, R, G, u, x, z, ctx, moving) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
     for (const o of G.objectives) {
-      const d = M.hypot(o.x - x, o.z - z)
+      const d = walks ? M.levelDist(G, from, o, climb) : M.hypot(o.x - x, o.z - z)
       const want = owners[o.i] === u.side ? 0.45 : 1
       const taken = claimed.has(o.i) ? 0.25 : 1
       let v
@@ -161,7 +166,7 @@ export function refScore(M, R, G, u, x, z, ctx, moving) {
   if (role === 'melee' || role === 'line' || role === 'raider' || role === 'hero') {
     let best = 0
     for (const e of enemies) {
-      const g = M.hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+      const g = (walks ? M.levelDist(G, from, e.pos, climb) : M.hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
       if (g > R.CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : count2D6(Math.ceil(g))
       const back = M.meleeValue(e, u) * 0.4
@@ -172,20 +177,21 @@ export function refScore(M, R, G, u, x, z, ctx, moving) {
     s += best * w
     // far from everything: just close the distance
     if (best === 0 && role !== 'hero') {
-      const near = Math.min(...enemies.map((e) => M.hypot(e.pos.x - x, e.pos.z - z)))
+      const near = Math.min(...enemies.map((e) => (walks ? M.levelDist(G, from, e.pos, climb) : M.hypot(e.pos.x - x, e.pos.z - z))))
       s -= near * (role === 'melee' ? 0.12 : 0.05)
     }
   }
   // danger: enemy brawlers who could reach here next turn, guns that can see us
   const fragile = role === 'shooter' || role === 'artillery' || role === 'hero'
   for (const e of enemies) {
-    const g = M.hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r
+    const g = (high && M.moveMode(e) !== 'fly' ? M.levelDist(G, e.pos, from, M.climbs(e)) : M.hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
     if (e.t.brawler && g < e.t.M + 7) s -= M.meleeValue(e, u) * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put
   const ci = G.nav.index(x, z)
   if (ci >= 0 && G.nav.cover[ci]) s += fragile ? 1.5 : 0.5
   if (role === 'artillery' && moved) s -= 2.5
+  if (high && (role === 'shooter' || role === 'artillery')) s += 0.25 * Math.min(4, M.floorAt(G, x, z))
   // heroes like company
   if (role === 'hero') {
     let n = 0

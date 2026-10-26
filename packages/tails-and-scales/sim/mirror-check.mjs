@@ -179,7 +179,10 @@ for (let k = 0; k < jobs.length; k++) {
 
 // the classic matchup through the URL, against the corpus
 const { items } = loadCorpus()
-const pairs = items.filter((it) => it.kind === 'ai')
+// (pairs.json's: an AI log of F11a's army/ seats its own races and lists,
+// which ?races= can't swap under it, a list's digits meaning another race's
+// units)
+const pairs = items.filter((it) => it.kind === 'ai' && it.set === undefined)
 console.log(`\nthe classic matchup asked for by URL (?races=squirrel,serpent): ${pairs.length} corpus AI battles`)
 const res = await pool(pairs, CPUS, (it) => runOracle({ ...it.job, races: ['squirrel', 'serpent'] }, dir))
 let same = 0

@@ -3,7 +3,7 @@ import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
 import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
-import { preview, q, stateHash } from '../core/index.js'
+import { preview, q, stateHash, army } from '../core/index.js'
 import { gridSize } from '../core/nav.js'
 import { project } from '../present/mirror.js'
 import { View } from '../view/index.js'
@@ -15,7 +15,7 @@ import { Human } from '../input/human.js'
 import { Selection } from '../input/selection.js'
 import { GroupInput } from '../input/group.js'
 import { OrderBook } from '../input/book.js'
-import { StandingInput } from '../input/standing.js'
+import { StandingInput, GhostPlanner } from '../input/standing.js'
 import { seatsOf, sidesFor, isMirror } from '../ui/theme.js'
 import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
@@ -31,6 +31,10 @@ import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
 import { SetupScreen } from '../ui/screens/setup.js'
+// (F8b) drawing at scale: the chips, the roster, the minimap
+import { Chips } from '../ui/chips.js'
+import { Roster } from '../ui/roster.js'
+import { Minimap } from '../view/minimap.js'
 import { Flow, MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
 import { Session } from '../match/session.js'
@@ -56,8 +60,11 @@ import { Session } from '../match/session.js'
 // and a pixel ratio of 1, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
-// battle started here is fought for. The fragment `#m=<id>` (N2) opens an
-// online match (`&dev=<id>` plays it as that device, `&sync=` through that
+// battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
+// armies its seats field; (F7a) ?terrain=<set> the terrain set a battle
+// started here is fought on (the battle-setup panel's default; the title's
+// table stays the mission's first set's). The fragment `#m=<id>` (N2) opens
+// an online match (`&dev=<id>` plays it as that device, `&sync=` through that
 // server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
 
@@ -67,6 +74,9 @@ import { Session } from '../match/session.js'
 // setBoard, from the snap)
 const { W, H } = MISSIONS.classic.board
 const $ = (s) => document.querySelector(s)
+// (F8b) the battle sizes the setup panel and the lobby offer: each mission,
+// its list's size name, its board, points and rounds
+export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
@@ -87,6 +97,62 @@ function missionPick(params, title) {
   console.warn(`${msg}: playing the classic mission`)
   title.note(`${msg}, so this is the classic mission.`)
   return 'classic'
+}
+
+// (F11a) The armies a battle started here fields: none named (each seat
+// its mission's preset, mission.army), or what an ?armies=<seat 0>,<seat 1>
+// URL names, each a preset's name of that seat's race or a list of unit
+// counts in its roster's order (DESIGN §4.2.8.4: ?armies=classic,1221).
+// DESIGN §4.2.8.8 lists it under F11b's Muster screen; as with ?mission=,
+// it is built here, with the setup's lists, as the door sim/'s Chromium
+// runs start battles with lists by. Each value is trimmed and lower-cased
+// first, as ?races= is (a convenience for a hand-typed URL: ?armies=Classic
+// plays 'classic', and ?armies=toString is noted as the preset 'tostring'
+// the race lacks); then the value as folded is judged as the fold will
+// judge it, and is what the setup names: by core/army.js's armyOf on a
+// trial setup of the page's mission and races, so a value the rules would
+// refuse gets that seat's preset (null: the setup names no army) and a
+// line on the title card saying why, not a battle that never starts.
+// → null when no seat names an army, else [seat 0's | null, seat 1's |
+// null].
+function armiesPick(params, title, races, mission) {
+  if (!params.has('armies')) return null
+  const raw = params.get('armies'), pick = raw.split(',').map((a) => a.trim().toLowerCase())
+  const preset = MISSIONS[mission].army
+  if (pick.length !== 2) {
+    const msg = `?armies= takes two armies, comma-separated (a preset's name or a list of counts each), not "${raw}"`
+    console.warn(`${msg}: each seat plays the ${preset} preset`)
+    title.note(`${msg}, so each seat plays the ${preset} preset.`)
+    return null
+  }
+  const trial = { mission, seats: races.map((race, s) => ({ race, army: pick[s] })) }
+  const armies = pick.map((a, s) => {
+    try {
+      army.armyOf(trial, s)
+      return a
+    } catch (err) {
+      const msg = `?armies= for seat ${s}: ${err.message}`
+      console.warn(`${msg}: it plays the ${preset} preset`)
+      title.note(`${msg}, so it plays the ${preset} preset.`)
+      return null
+    }
+  })
+  return armies.some((a) => a !== null) ? armies : null
+}
+
+// (F7a) The terrain set a battle started here is fought on, the
+// battle-setup panel's default: each mission's first, or one a
+// ?terrain=<set> URL names, as ?mission= names the
+// mission (the door sim/'s Chromium runs start a fortified battle by). A set
+// the mission isn't fought on gets its first and a line on the title card.
+function terrainPick(params, title, mission) {
+  if (!params.has('terrain')) return null
+  const pick = params.get('terrain').trim().toLowerCase(), sets = MISSIONS[mission].sets
+  if (sets.includes(pick)) return pick
+  const msg = `?terrain= takes one of ${sets.join(', ')} (the ${mission} mission's terrain), not "${params.get('terrain')}"`
+  console.warn(`${msg}: playing on ${sets[0]}`)
+  title.note(`${msg}, so a battle here is fought on ${sets[0]}.`)
+  return null
 }
 
 function racePick(params, title) {
@@ -148,14 +214,15 @@ export function boot(location) {
     title,
     result: new ResultScreen(),
   }
-  flow = new Flow({ view, ui, params, seed, races, mission: missionPick(params, title) })
+  const mission = missionPick(params, title)
+  flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission), terrain: terrainPick(params, title, mission) })
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
   view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL) })
 
   // ── The local human (input/), the player, the buttons ─────────────────────
-  const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id) })
+  const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id), tops: () => view.terrain.tops() })
   const human = new Human({ flow, view, card: ui.card, tooltip: ui.tooltip, picker })
   const player = flow.play(human)
   // (F10a) units picked up together, and the bar that says what they do
@@ -163,11 +230,92 @@ export function boot(location) {
   human.group.wireBar()
   // (F10c) the standing orders, each seat's in this device's book
   human.standing = new StandingInput({ human, book: new OrderBook(), toast: ui.toast })
+  // (F8b) the camera's bookmark (view/camera.js): End (or 🤖 Auto, which
+  // ends the phase too) pressed in a phase of a seat played here keeps the
+  // camera's pose, for that seat's next phase to glide back to; the
+  // orders it carries out at End are framed as they play. (Kept as it is
+  // pressed, before anything it sends plays; let go if it was refused.)
+  for (const verb of ['end', 'auto']) {
+    const press = human[verb].bind(human)
+    human[verb] = () => {
+      const seat = human.myTurn() ? human.localSeat() : -1
+      if (seat >= 0) view.rig.bookmark(seat)
+      const why = press()
+      if (why && seat >= 0) view.rig.marks.delete(seat)
+      return why
+    }
+  }
+  // (F8b) a larger board's ghosts planned a few members a frame
+  // (input/standing.js's GhostPlanner), the plan let go as the match changes
+  human.group.ghosts = new GhostPlanner({ ask: (fn) => human.ask(fn), sig: () => flow.session?.count ?? -1 })
+  // (F8b) the one-time tips (ui/toast.js; the third, a turn begun with more
+  // than 10 units, is the flow's): the first group pinned, the first
+  // standing order given
+  const pinAt = human.group.pinAt.bind(human.group)
+  human.group.pinAt = (...args) => {
+    pinAt(...args)
+    ui.toast.tip('pin')
+  }
+  const give = human.standing.give.bind(human.standing)
+  human.standing.give = (seat, ids, order, ...rest) => {
+    const r = give(seat, ids, order, ...rest)
+    if (order) ui.toast.tip('order')
+    return r
+  }
   $('#selectMode').onclick = () => {
     human.group.setSelectMode(!human.group.selectMode)
     $('#selectMode').classList.toggle('on', human.group.selectMode)
   }
   human.listen(view.renderer.domElement)
+  // (F8b) Drawing at scale (DESIGN §4.2.7): the chips at the Strategic tier
+  // (a tap is a click on the unit, as the board's; a cluster's asks the
+  // camera to frame it), the roster (a row picks the unit up and glides to it) and the
+  // minimap (a click or a drag looks there; a right-click or a long press
+  // pins the group's move or march there, an armed March's click takes it)
+  const glideTo = (x, z) => view.rig.glide(x, z)
+  view.units.chips = new Chips({
+    pick: (id) => {
+      const u = flow.unitById(id)
+      if (u?.alive > 0) human.click({ unit: u, ground: null })
+    },
+    // ((F8b) the camera zooms onto the cluster: view/camera.js's frameOn)
+    zoom: (x, z, r) => view.rig.frameOn(x, z, r),
+  })
+  ui.roster = new Roster({
+    units: view.units, mirror: () => player.mirror, board: () => (player.mirror?.stage === 'title' ? null : player.mirror?.board ?? null), colorOf, fast: FAST,
+    // (the battle's own prices: the table's match's setup names its mission)
+    setup: () => flow.atTable()?.setup ?? null,
+    seats: () => flow.session?.localSeats ?? [],
+    phase: () => human.myTurn(),
+    pick: (id) => {
+      const u = flow.unitById(id), at = player.mirror?.units[id]
+      if (!(u?.alive > 0) || !at) return
+      if (human.myTurn() || human.deploySeat() >= 0) human.select(u)
+      else ui.card.show(u)
+      glideTo(at.pos.x, at.pos.z)
+    },
+  })
+  ui.minimap = new Minimap({
+    units: view.units, terrain: view.terrain, mirror: () => player.mirror, camera: view.camera, colorOf, fast: FAST,
+    board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
+    selected: () => human.standing?.picked().map((u) => u.id) ?? [],
+    lines: () => human.standing?.lines() ?? [],
+    pan: glideTo,
+    ground: (g, how) => {
+      const st = human.standing, grp = human.group
+      // an armed March: its click, here as on the table
+      if (st?.armed?.k === 'march') return st.click({ unit: null, ground: g })
+      if (how !== 'pin' || !st) return false
+      // the group's move (or its placing) pinned, to be sent by its flag
+      if (grp?.isGroup() && ['move', 'place'].includes(grp.phase())) {
+        grp.pinAt(grp.phase(), g)
+        return true
+      }
+      // else a march for the units picked up
+      if (!st.picked().length || st.order('march')) return false
+      return st.click({ unit: null, ground: g })
+    },
+  })
   ui.actions.wire(human)
   ui.hud.wire({ rig: view.rig, player, standing: human.standing })
   wireHelp()
@@ -217,12 +365,15 @@ export function boot(location) {
   const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
   const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
   let picking = null
+  // ((F7a) and the terrain line: the mission's sets, the table's picked)
   const showSetup = () => {
-    const { mode, races } = picking, seats = seatsOf(races), sides = sidesFor(seats)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats) })
+    const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain } })
   }
+  // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
+  // else classic; then the last chosen)
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races] }
+    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf() }
     title.away()
     showSetup()
   }
@@ -231,10 +382,21 @@ export function boot(location) {
       picking.races[s] = race
       showSetup()
     },
+    terrain: (set) => {
+      picking.terrain = set
+      showSetup()
+    },
+    // (F8b) a battle size: its mission; (F7a) the terrain picked stays where
+    // the new size is fought on it, else the size's own default
+    size: (mission) => {
+      picking.mission = mission
+      if (!MISSIONS[mission].sets.includes(picking.terrain)) picking.terrain = flow.terrainOf(mission)
+      showSetup()
+    },
     start: () => {
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races)
+        flow.start(picking.mode, picking.races, picking.mission, picking.terrain)
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)
@@ -641,6 +803,9 @@ export function boot(location) {
       // (sim/input-check.mjs)
       group: {
         ids: () => human.group.members().map((u) => u.id),
+        // ((F8b's review) the units an order would go to: the group, or the
+        // one unit picked up, sim/input-check.mjs's chips and roster rows)
+        picked: () => human.standing?.picked().map((u) => u.id) ?? [],
         bar: () => human.group.model(),
         pinned: () => !!human.group.selection.of(human.group.seat()).pin,
         busy: () => human.group.busy,
@@ -653,6 +818,15 @@ export function boot(location) {
         // (F10c) the pin's handles, where they stand on the table
         handles: () => human.group.handles(human.group.selection.of(human.group.seat()).pin),
         screen: (id) => view.units.screen.get(id) ?? null,
+        // (F8b) the ghosts planned a few a frame (input/standing.js's
+        // GhostPlanner): plans spread over frames, their frames, the longest
+        // frame's planning (ms; the last plan's, lastMs), a plan under way,
+        // and the summary so far
+        ghosts: () => {
+          const g = human.group.ghosts
+          // ((F8b's review) and the formation's rings showing on the table)
+          return { spread: g.spread, frames: g.frames, maxMs: g.maxMs, lastMs: g.lastMs, busy: !!g.run, note: g.note, rings: (view.overlay.rings ?? []).filter((r) => r.visible).length }
+        },
         // pick up `ids` together, pin their formation at (x, z) as a ground
         // click does, send it (a promise: the executor's run), and what the
         // picker finds at a page point
@@ -662,9 +836,10 @@ export function boot(location) {
           const why = human.group.commit()
           return why ? Promise.resolve(why) : human.group.running
         },
+        // ((F7a) and the height of the ground found: a deck's top, or 0)
         pick: (x, y, pointerType = 'mouse') => {
           const p = picker.pick({ clientX: x, clientY: y, pointerType })
-          return { unit: p.unit?.id ?? null, ground: !!p.ground }
+          return { unit: p.unit?.id ?? null, ground: !!p.ground, y: p.ground ? p.ground.y : null }
         },
       },
       get player() {
@@ -835,11 +1010,74 @@ export function boot(location) {
             dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
           }
         },
+        // (F8b, not promised) the drawing at scale (sim/render-bench.mjs,
+        // sim/snap-check.mjs): the zoom's tier and pixels per inch, the
+        // label and chip writes of the last frame, the figures drawn by
+        // their stand-ins, the terrain's tiles (tileCheck: every tiled
+        // chunk's drawn shape held to its own mesh), the shadow camera's
+        // fits, the minimap's last redraw and the roster's model
+        drawing: () => {
+          let lo = 0, figs = 0
+          for (const v of view.units.views.values()) for (const m of v.models) if (m.mesh?.parent) (figs++, (lo += m.lo ? 1 : 0))
+          const sc = view.stage.sun.shadow.camera
+          return {
+            tier: view.units.tier, ppi: view.units.ppi, writes: view.units.writes, lod: view.units.lod, lo, figs,
+            tiles: view.terrain.tileCheck(), shadow: { fits: view.stage.fits ?? 0, box: [sc.left, sc.right, sc.bottom, sc.top, sc.near, sc.far] },
+            minimap: { up: ui.minimap.up(), ms: ui.minimap.ms, paintMs: ui.minimap.paintMs, redraws: ui.minimap.redraws }, roster: ui.roster.model(),
+            chips: document.querySelectorAll('#chips .chip:not([style*="display: none"])').length,
+          }
+        },
+        // ((F8b's review, not promised) the chips shown, each its units'
+        // ids and its place on the page (sim/input-check.mjs taps them), and
+        // the minimap redrawn `n` times running, each a whole redraw (its
+        // signature forgotten first), brought up for it if it is folded:
+        // each redraw's ms (sim/render-bench.mjs)
+        chips: () => (view.units.chips?.pool ?? []).filter((c) => c.c && !c.last.hidden).map((c) => ({ ids: c.c.ids, x: c.last.x, y: c.last.y })),
+        minimapRedraws: (n) => {
+          const m = ui.minimap, was = m.wanted, out = []
+          if (!m.up()) m.toggle()
+          for (let i = 0; i < n; i++) {
+            m.sig = ''
+            m.tick()
+            out.push(m.ms)
+          }
+          m.wanted = was
+          m.sig = ''
+          m.tick()
+          return out
+        },
+        // (F8b, not promised) the camera at scale (sim/play-check.mjs, the
+        // opening view's shots): its pose and distance, how many batches it
+        // framed, its bookmark, and each figure's height on screen in CSS px
+        // (its box's top and bottom at its middle, projected), for the
+        // figures in front of the camera and on screen
+        camera: () => {
+          const pose = rig.pose(), box = new THREE.Box3(), v = new THREE.Vector3()
+          const heights = []
+          scene.updateMatrixWorld()
+          scene.traverse((o) => {
+            if (!o.userData.fig || !o.visible) return
+            box.setFromObject(o)
+            if (box.isEmpty()) return
+            const c = box.getCenter(new THREE.Vector3())
+            const top = v.set(c.x, box.max.y, c.z).project(camera).clone(), bot = v.set(c.x, box.min.y, c.z).project(camera).clone()
+            if (top.z >= 1 || bot.z >= 1 || Math.abs(bot.x) > 1 || Math.abs(bot.y) > 1) return
+            heights.push(((top.y - bot.y) / 2) * innerHeight)
+          })
+          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, marks: [...rig.marks.keys()], heights }
+        },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)
         mission(name) {
           if (!(name in MISSIONS)) throw new Error(`?debug view.mission: no mission "${name}"`)
           flow.mission = name
+        },
+        // (F7a) the terrain set a battle started here is fought on, the
+        // panel's default, from now on (as ?terrain= names one at load; null: each
+        // mission's first)
+        terrain(set) {
+          if (set !== null && !Object.values(MISSIONS).some((m) => m.sets.includes(set))) throw new Error(`?debug view.terrain: no mission is fought on "${set}"`)
+          flow.terrain = set
         },
       },
     }

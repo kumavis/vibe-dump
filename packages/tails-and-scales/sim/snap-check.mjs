@@ -38,6 +38,18 @@
 // and hold none of fx's scorch and acid marks (view state outside the
 // mirror, which the battle as built keeps and a snap takes away).
 //
+// (F8b) And the Grand row (DESIGN §4.2.9's snap-check row): in one page a
+// watched battle of the grand mission started from the classic title, then
+// a classic one: the table made over for each board as its battle starts
+// (classic → Grand → classic, view.board()'s builds), the table built event
+// by event a fresh snap's at every checkpoint as the corpus battles' are,
+// and its terrain tiles (view/terrain.js: a Grand table's chunks drawn by
+// 8" tiles) drawn as their chunks at each of them (view.drawing().tiles,
+// the tileCheck: every tiled chunk's drawn shape and colour its own
+// mesh's, vertex for vertex); the battle snapped in place at its end; and
+// back on the classic table, no tile left. It runs by default and with
+// --only grand; the self-test's tile edits run on it.
+//
 //   node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]
 //   node sim/snap-check.mjs --self-test    each edit of MUTATIONS (the view
 //                                          broken one way at a time, in a
@@ -75,8 +87,11 @@ try {
 }
 const DEFAULT = '64-89,4242-99,1-2,64886-198528,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1'
 let items
+// ((F8b) the Grand row: by default, or named in --only)
+const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
+const GRAND_ROW = !a.only || only.includes('grand')
 try {
-  items = select(loadCorpus().items, a.only ?? DEFAULT)
+  items = only.filter((x) => x !== 'grand').length ? select(loadCorpus().items, only.filter((x) => x !== 'grand').join(',')) : []
 } catch (e) {
   console.error(`snap-check: ${e.message}`)
   process.exit(2)
@@ -115,6 +130,13 @@ const MUTATIONS = {
   // (R7a's fixer, round 3) a snap that leaves fx's scorch and acid marks on
   // the table, from a timeline it left (caught by the snap in place)
   'marks-kept': ['view/index.js', '    sh.clear()\n    marks.clearDecals()\n', '    sh.clear()\n'],
+  // (F8b, on the Grand row) a chunk promoted out of its tile as a shot
+  // hurts it leaves the tile as it was: drawn twice, by its tile and itself
+  'tile-stale': ['view/terrain.js', '    item.tile = null\n    if (item.obj) item.obj.visible = true\n    this.mark(t)\n', '    item.tile = null\n    if (item.obj) item.obj.visible = true\n', 'grand'],
+  // (F8b, on the Grand row) a classic battle after a Grand one keeps the
+  // Grand table's terrain tiles: the classic table drawn otherwise than
+  // ever
+  'tiles-kept': ['view/index.js', '    this.terrain.tiling(big)\n', '    this.terrain.tiling(big || this.terrain.tiled)\n', 'grand'],
 }
 const SELF_TEST_ON = 'hotseat-aggressive-103'
 
@@ -243,6 +265,94 @@ async function run(browser, url, item) {
   }
 }
 
+// (F8b) The Grand row: a watched grand battle from the classic title, then
+// a classic one, in one page (above). Returns { checks, error, ... } as run
+// does, judged by judgeGrand.
+async function grandRow(browser, url) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+  try {
+    const page = await ctx.newPage()
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    await page.addInitScript(`(${(settle) => {
+      const sim = (window.__grand = { checks: [], error: null })
+      addEventListener('error', (e) => (sim.error ??= String(e.error?.stack ?? e.message)))
+      addEventListener('unhandledrejection', (e) => (sim.error ??= String(e.reason?.stack ?? e.reason)))
+      // at every checkpoint the player waits while the figures settle, and
+      // the table and its tiles are held to the match as it stood there
+      const hook = () => {
+        if (!window.__ts) return void requestAnimationFrame(hook)
+        window.__ts.view.pauseAtChecks((e) => new Promise((resolve) => {
+          let n = settle
+          const f = () => {
+            if (--n > 0) return void requestAnimationFrame(f)
+            try {
+              const d = window.__ts.view.snapDiff(e.proj), t = window.__ts.view.drawing().tiles
+              sim.checks.push({ mark: `check at trace line ${window.__ts.trace.length}`, board: window.__ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks })
+            } catch (err) {
+              sim.error ??= String(err.stack ?? err)
+            }
+            resolve()
+          }
+          requestAnimationFrame(f)
+        }))
+      }
+      hook()
+    }})(${SETTLE})`)
+    await page.goto(`${url}/?debug&fast&seed=4242&dice=99`)
+    await page.waitForFunction(() => window.__ts)
+    const t0 = Date.now()
+    const board = () => page.evaluate(() => ({ ...window.__ts.view.board(), tiles: window.__ts.view.drawing().tiles }))
+    const boards = [['the title', await board()]]
+    const battle = async (mission) => {
+      await page.evaluate((m) => window.__ts.view.mission(m), mission)
+      await page.click('[data-mode="watch"]', { timeout: 30000 })
+      await page.click('#setupStart', { timeout: 30000 })
+      await page.waitForFunction(() => window.__grand.error || (window.__ts.S.stage === 'over' && window.__ts.player.idle), null, { timeout: 900000, polling: 500 })
+      // the page's own table snapped in place, then held to a fresh snap
+      const end = await page.evaluate((settle) => new Promise((resolve) => {
+        const ts = window.__ts
+        ts.player.snap(ts.G)
+        let n = settle
+        const f = () => {
+          if (--n > 0) return void requestAnimationFrame(f)
+          const d = ts.view.snapDiff(), t = ts.view.drawing().tiles
+          resolve({ mark: 'snapped in place', board: ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks })
+        }
+        requestAnimationFrame(f)
+      }), SETTLE)
+      await page.evaluate((c) => window.__grand.checks.push(c), end)
+      boards.push([`the ${mission} battle`, await board()])
+      await page.click('#again', { timeout: 30000 })
+    }
+    await battle('grand')
+    await battle('classic')
+    boards.push(['the title again', await board()])
+    const r = await page.evaluate(() => ({ checks: window.__grand.checks, error: window.__grand.error }))
+    if (!r.error && errors.length) r.error = errors.join('\n')
+    r.boards = boards
+    r.secs = Math.round((Date.now() - t0) / 1000)
+    return r
+  } finally {
+    await ctx.close()
+  }
+}
+// what the Grand row says is wrong ('' when nothing is)
+function judgeGrand(r) {
+  if (r.error) return r.error.split('\n')[0]
+  const [title, grand, classic, again] = r.boards.map(([, b]) => b)
+  const why = []
+  if (title.W !== 40 || title.builds !== 0) why.push(`the title's table is ${title.W}" wide, made over ${title.builds} times (classic's, never)`)
+  if (grand.W !== 80 || grand.H !== 56 || grand.builds !== 1) why.push(`the grand battle's table is ${grand.W}×${grand.H}, made over ${grand.builds} times (80×56, once)`)
+  if (classic.W !== 40 || classic.H !== 28 || classic.builds !== 2) why.push(`the classic battle after it is on a ${classic.W}×${classic.H} table, made over ${classic.builds} times (40×28, twice)`)
+  if (classic.tiles.tiles || again.tiles.tiles) why.push(`a classic table holds ${classic.tiles.tiles || again.tiles.tiles} terrain tiles (none)`)
+  const grandChecks = r.checks.filter((c) => c.board === 80)
+  if (!grandChecks.length || !grandChecks.every((c) => c.tiled > 0)) why.push(`${grandChecks.length} checks on the Grand table, ${grandChecks.filter((c) => !c.tiled).length} of them with no chunk in a tile`)
+  const bad = r.checks.filter((c) => c.n)
+  if (bad.length) why.push(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} on the ${bad[0].board === 80 ? 'Grand' : 'classic'} table (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  return why.length ? `${why[0].includes('checks differ') ? '' : 'board: '}${why.join('; ')}` : ''
+}
+
 // what one battle's run says is wrong ('' when nothing is)
 function judge(it, r) {
   const v = r.error ? null : verdict(it, r)
@@ -264,7 +374,7 @@ if (a['self-test']) {
   console.log(`snap-check self-test: ${Object.keys(MUTATIONS).length} edits of the view, each on ${SELF_TEST_ON} unless it names another, after the unedited code on ${battles.join(' and ')}`)
   try {
     for (const [k, [name, id]] of runs.entries()) {
-      const it = corpus.find((x) => x.id === id)
+      const it = id === 'grand' ? null : corpus.find((x) => x.id === id)
       const dir = copyCode(PKG, join(work, `${k}`))
       if (name !== 'unedited') {
         const [f, from, to] = MUTATIONS[name]
@@ -275,14 +385,14 @@ if (a['self-test']) {
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
       let r
       try {
-        r = await run(browser, served.url, it)
+        r = it ? await run(browser, served.url, it) : await grandRow(browser, served.url)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
         served.close()
       }
-      const why = judge(it, r)
-      const ok = name === 'unedited' ? !why : /checks differ/.test(why)
+      const why = it ? judge(it, r) : judgeGrand(r)
+      const ok = name === 'unedited' ? !why : /checks differ|^board: /.test(why)
       if (!ok) missed++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(16)} ${id.padEnd(23)} ${(why || `the same at ${r.checks.length} checks`).slice(0, 220)}`)
       if (name === 'unedited' && !ok) break
@@ -315,10 +425,23 @@ try {
     if (last) (figures += last.figures), (chunks += last.chunks)
     console.log(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${drained} drained queues and ${held} checkpoints, and snapped in place (${snapped.marks} fx marks taken away) (at the end ${last.units} units, ${last.figures} figures standing, ${last.shown} of ${last.chunks} chunks shown; ${r.secs} s)`}`)
   }
+  if (GRAND_ROW) {
+    let r
+    try {
+      r = await grandRow(browser, url)
+    } catch (e) {
+      r = { error: e.message, checks: [], boards: [] }
+    }
+    const why = judgeGrand(r)
+    if (why) failed++
+    checks += r.checks.length
+    const g = r.checks.filter((c) => c.board === 80)
+    console.log(`  grand ${'classic → Grand → classic'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the table made over for each board (${r.boards.map(([w, b]) => `${w} ${b.W}×${b.H}`).join(', ')}), the same at ${g.length} Grand checkpoints and ${r.checks.length - g.length} classic ones, the tiles drawn as their chunks at each (${g.at(-1)?.tiled} chunks in ${g.at(-1)?.tiles} tiles at the end), and none left on the classic table (${r.secs} s)`}`)
+  }
 } finally {
   await browser.close()
   close()
   rmSync(work, { recursive: true, force: true })
 }
-console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length} battles` : `\nsnap-check passed: ${checks} checks over ${items.length} battles, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
+console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
 process.exit(failed ? 1 : 0)

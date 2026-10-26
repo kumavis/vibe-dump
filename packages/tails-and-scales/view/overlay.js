@@ -10,13 +10,41 @@
 // (F10c) Standing orders' lines: a march's to its slot, an attack's to its
 // target.
 //
+// (F7a, DESIGN §4.2.4) On a fortified board the reach overlay climbs the
+// decks: the board's plane is under them, so each deck or ramp top the table
+// shows (TerrainView.surfaces) gets a thin mesh of its own just over it,
+// sampling the same texture by world x, z (one more draw call per deck while
+// the overlay shows, none otherwise; made as first shown, so a classic table
+// makes none), and a ladder whose top the plan reaches by climbing it glows
+// at its foot with what the climb costs ("⤒ 4""). The path, the ghost and
+// the range ring stand at the floor they are drawn over (the nav's, where
+// the match has height). F7b adds the cliff rims and the climbing tooltip.
+//
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
 
+// the floor at (x, z) of a match's nav grid (F7a's height layer: 0 on the
+// ground, and on a board with no height, every board before F7a's)
+const floorOf = (nav, x, z) => {
+  if (!nav?.hasHeight) return 0
+  const i = nav.index(x, z)
+  return i < 0 ? 0 : nav.floor[i]
+}
+
 export class Overlay {
-  // `grid`: the nav grid's size ({ nx, nz }: every match's grid has it)
-  constructor(scene, { W, H, grid }) {
+  // `grid`: the nav grid's size ({ nx, nz }: every match's grid has it);
+  // (F7a) `terrain` the battlefield's meshes (view/terrain.js), whose
+  // walkable tops the overlay shades too
+  constructor(scene, { W, H, grid, terrain = null }) {
     this.scene = scene
+    this.W = W
+    this.H = H
+    this.terrain = terrain
+    // (F7a) the tints on the deck tops, by def id: { c, mesh }; the ladders'
+    // glows
+    this.tops = new Map()
+    this.glows = []
+    this.nav = null
     this.data = new Uint8Array(grid.nx * grid.nz * 4)
     const tex = (this.tex = new THREE.DataTexture(this.data, grid.nx, grid.nz, THREE.RGBAFormat))
     tex.magFilter = THREE.LinearFilter
@@ -58,6 +86,102 @@ export class Overlay {
     this.mesh.geometry.dispose()
     this.mesh.geometry = new THREE.PlaneGeometry(W, H).rotateX(-Math.PI / 2)
     this.mesh.visible = false
+    // (F7a) the tints' texture coordinates are the board's: made again
+    this.W = W
+    this.H = H
+    this.dropTops()
+    this.glow([])
+  }
+
+  // ── (F7a) The deck tops ───────────────────────────────────────────────────
+  // A tint for each walkable top the table shows (the decks and stairs of
+  // view/terrain.js), a quad just over it whose texture coordinates are its
+  // corners' place on the board, so it samples the overlay's texel for the
+  // nav cell under it, as the board's plane does: what the reach shades on
+  // a deck shows on the deck. Kept while their tops stand; one off the table
+  // is freed.
+  syncTops() {
+    const shown = this.terrain?.surfaces() ?? []
+    const ids = new Set(shown.map((c) => c.id))
+    for (const [id, t] of this.tops) {
+      if (ids.has(id) && t.c === shown.find((c) => c.id === id)) continue
+      this.scene.remove(t.mesh)
+      t.mesh.geometry.dispose()
+      this.tops.delete(id)
+    }
+    for (const c of shown) {
+      if (this.tops.has(c.id)) continue
+      const mesh = new THREE.Mesh(this.topGeometry(c), this.mesh.material)
+      mesh.renderOrder = 2
+      mesh.visible = false
+      this.scene.add(mesh)
+      this.tops.set(c.id, { c, mesh })
+    }
+  }
+  // a top's quad, on the table: its corners turned and placed as the chunk
+  // is (core/terrain/geom.js's frame), 0.035" over a deck, and over a ramp's
+  // steps (their tops stand up to half a step over its line)
+  topGeometry(c) {
+    const s = c.shape, co = Math.cos(s.yaw), sn = Math.sin(s.yaw)
+    const ramp = c.surface.ramp
+    const pos = [], uv = []
+    const lift = ramp ? 0.035 + c.surface.y / Math.max(2, Math.round((2 * s.hx) / 0.5)) / 2 : 0.035
+    for (const [i, k] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      const lx = i * s.hx, lz = k * s.hz
+      const x = s.x + lx * co + lz * sn, z = s.z - lx * sn + lz * co
+      const t = ramp ? ((ramp.axis === 'z' ? k : i) + 1) / 2 : 0
+      const y = ramp ? ramp.y0 + (ramp.y1 - ramp.y0) * t : c.surface.y
+      pos.push(x, y + lift, z)
+      // (the board plane's: u along x from its −x edge, v from its +z edge)
+      uv.push((x + this.W / 2) / this.W, 0.5 - z / this.H)
+    }
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
+    // (facing up: a yaw turns the corners without mirroring them)
+    g.setIndex([0, 2, 1, 0, 3, 2])
+    return g
+  }
+  // every tint shown or not, as the board's plane is
+  showTops(on) {
+    if (on) this.syncTops()
+    for (const t of this.tops.values()) t.mesh.visible = on
+  }
+  dropTops() {
+    for (const t of this.tops.values()) {
+      this.scene.remove(t.mesh)
+      t.mesh.geometry.dispose()
+    }
+    this.tops.clear()
+  }
+
+  // The ladders a plan climbs (`list`: [{ x, z, y, text }], each its foot
+  // and what climbing it costs): a ring glowing at each foot and the cost
+  // over it; [] takes them away. Made as first needed.
+  glow(list) {
+    list.forEach((g, k) => {
+      let it = this.glows[k]
+      if (!it) {
+        const ring = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.62, 28).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffe27a', transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }))
+        ring.renderOrder = 4
+        const tag = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthTest: false, depthWrite: false, toneMapped: false }))
+        tag.renderOrder = 6
+        this.scene.add(ring, tag)
+        it = this.glows[k] = { ring, tag, text: null }
+      }
+      it.ring.position.set(g.x, g.y + 0.05, g.z)
+      it.tag.position.set(g.x, g.y + 1.1, g.z)
+      if (it.text !== g.text) {
+        it.tag.material.map?.dispose()
+        it.tag.material.map = textTexture(g.text)
+        it.tag.material.needsUpdate = true
+        const img = it.tag.material.map.image
+        it.tag.scale.set((1.0 * img.width) / img.height, 1.0, 1)
+        it.text = g.text
+      }
+      it.ring.visible = it.tag.visible = true
+    })
+    for (let k = list.length; k < this.glows.length; k++) this.glows[k].ring.visible = this.glows[k].tag.visible = false
   }
 
   // The shaded area is everywhere the unit could stand; spots overlapping a
@@ -69,6 +193,24 @@ export class Overlay {
     const ok = new Uint8Array(nav.N)
     for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
     this.mask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255], nav)
+    this.glow(this.climbs(plan, nav))
+  }
+
+  // (F7a) The ladders plan `plan` climbs: each whose top the search reached
+  // from its foot (the plan's prev chain steps from the foot's cell to the
+  // top's, the nav's link), or its foot from its top (down), its foot and
+  // the climb's cost, twice its height (DESIGN §4.2.4's LADDER_MUL). None on
+  // a board with no height.
+  climbs(plan, nav) {
+    if (!nav?.hasHeight || !plan.res?.prev || !this.terrain) return []
+    const out = []
+    for (const c of this.terrain.ladders()) {
+      const f = nav.index(c.link.foot.x, c.link.foot.z), t = nav.index(c.link.top.x, c.link.top.z)
+      if (f < 0 || t < 0) continue
+      const up = plan.res.prev[t] === f && isFinite(plan.res.dist[t]), down = plan.res.prev[f] === t && isFinite(plan.res.dist[f])
+      if (up || down) out.push({ x: c.link.foot.x, y: floorOf(nav, c.link.foot.x, c.link.foot.z), z: c.link.foot.z, text: `${up ? '⤒' : '⤓'} ${+(2 * c.link.h).toFixed(1)}"` })
+    }
+    return out
   }
 
   // Shade the cells `ok` marks in colour `col`, their rim strong.
@@ -87,6 +229,10 @@ export class Overlay {
     }
     this.tex.needsUpdate = true
     this.mesh.visible = true
+    this.nav = nav
+    this.showTops(true)
+    // (a charge's spots, or a plan's: the climbs are the plan's, reach's)
+    this.glow([])
   }
 
   // nothing shaded, no ring, no path
@@ -94,12 +240,15 @@ export class Overlay {
     this.mesh.visible = false
     this.pathLine.visible = false
     this.rangeRing.visible = false
+    if (this.tops.size) this.showTops(false)
+    if (this.glows.length) this.glow([])
   }
 
   // a ring `range` beyond the unit's disc at (x, z), radius r
   range({ x, z }, r, range, color) {
     const rangeRing = this.rangeRing
     rangeRing.position.x = x
+    rangeRing.position.y = 0.04 + floorOf(this.nav, x, z)
     rangeRing.position.z = z
     rangeRing.scale.setScalar(r + range)
     rangeRing.material.color.set(color)
@@ -107,8 +256,9 @@ export class Overlay {
   }
 
   // the path a move would take, drawn just over the table
+  // ((F7a) at the height of each point: its own, or the floor under it)
   path(pts) {
-    this.pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08, p.z)))
+    this.pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08 + (p.y ?? floorOf(this.nav, p.x, p.z)), p.z)))
     this.pathLine.visible = true
   }
 
@@ -292,9 +442,34 @@ export class Overlay {
   // the ghost of a disc of radius r on nav cell i
   ghostAt(nav, i, r) {
     const ghost = this.ghost
+    this.nav = nav
     ghost.position.x = nav.x(i)
+    ghost.position.y = 0.05 + (nav.hasHeight ? nav.floor[i] : 0)
     ghost.position.z = nav.z(i)
     ghost.scale.setScalar(r)
     ghost.visible = true
   }
+}
+
+// (F7a) a line of text on a canvas, for a sprite over the table (a ladder's
+// climb cost): pale, on a dark rounded tag
+function textTexture(text) {
+  const c = document.createElement('canvas')
+  const ctx = c.getContext('2d')
+  const font = '600 44px system-ui, sans-serif'
+  ctx.font = font
+  const w = Math.ceil(ctx.measureText(text).width) + 36
+  c.width = w
+  c.height = 64
+  ctx.font = font
+  ctx.fillStyle = 'rgba(20, 16, 10, 0.72)'
+  ctx.beginPath()
+  ctx.roundRect(2, 4, w - 4, 56, 18)
+  ctx.fill()
+  ctx.fillStyle = '#ffe27a'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(text, 18, 33)
+  const t = new THREE.CanvasTexture(c)
+  t.colorSpace = THREE.SRGBColorSpace
+  return t
 }

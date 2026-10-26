@@ -46,25 +46,49 @@ export function jobSetup(job) {
 
 // How the page starts a setup: the title screen's button for who sits in
 // each seat, and the URL that carries the rest (app/boot.js and app/flow.js
-// read ?seed, ?dice, ?races, ?overtime and, from F8a, ?mission (named only
-// when it isn't classic); a log recorded before F4 never
+// read ?seed, ?dice, ?races, ?overtime, from F8a ?mission (named only
+// when it isn't classic), from F11a ?armies (named only when a seat names
+// an army: both seats' then, positionally, a seat that names none giving
+// its mission's preset by name, which plays the same units) and from F7a
+// ?terrain (named only when it isn't the mission's first set, so a classic
+// setup's URL is the one it always was); a log recorded before F4 never
 // voted, so its overtime is 'never'). The page builds its own setup from
 // these, and playedAs (below) says whether it built this one: a setup the
-// page can't make (other terrain, rounds or dice) is found there.
+// page can't make (other terrain, rounds or dice) is found there. Uses
+// only its arguments (and modeOf), as playedAs: each mission's preset and
+// first set are written out here for want of an import (this module
+// imports nothing, its functions being injected into pages and run against
+// older code). A mission PRESET doesn't list names a preset of its own
+// name, as playedAs has it; one FIRST_SET doesn't list names its terrain
+// whenever its setup does.
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}` }
+  const PRESET = { classic: 'classic' }, FIRST_SET = { classic: 'classic' }
+  const m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
+  const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
+  const terrain = setup.terrain && setup.terrain !== (Object.hasOwn(FIRST_SET, m) ? FIRST_SET[m] : undefined) ? `&terrain=${setup.terrain}` : ''
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}${terrain}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:
 // every field alike, but the seats' devices (the page's own), an absent
-// overtime, which is 'never', and (F8a) an absent mission, which is
-// 'classic'. Injected into the browser page by sim/chromium.mjs, so it may
-// only use its arguments.
+// overtime, which is 'never', (F8a) an absent mission, which is 'classic',
+// and (F11a) a seat's absent army, which is its mission's preset (the
+// page's G.setup names it, fullSetup filling it in): PRESET below, each
+// mission's `army` (data/mission.js) written out, since this is injected
+// into the browser page by sim/chromium.mjs and may only use its
+// arguments; a mission it doesn't list is taken to name a preset of its
+// own name (F8b's field and grand do). Any army named is compared as
+// written: 'classic' and '112111' field the same units, but they are not
+// the same setup.
 export function playedAs(played, setup) {
+  const PRESET = { classic: 'classic' }
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
-  const plain = (s) => ({ ...s, overtime: s.overtime ?? 'never', mission: s.mission ?? 'classic', seats: s.seats.map(({ dev, ...seat }) => seat) })
+  const plain = (s) => {
+    const mission = s.mission ?? 'classic', preset = Object.hasOwn(PRESET, mission) ? PRESET[mission] : mission
+    return { ...s, overtime: s.overtime ?? 'never', mission, seats: s.seats.map(({ dev, ...seat }) => ({ ...seat, army: seat.army ?? preset })) }
+  }
   if (!played?.seats) return 'the page has no battle setup to read (G.setup): code older than R6?'
   const a = canon(plain(played)), b = canon(plain(setup))
   return a === b ? null : `the page started ${a}, not the log's ${b}`
@@ -89,7 +113,7 @@ export function missingHooks(ts) {
 // and only while a human seat has a decision in front of it. Injected into
 // the browser page by sim/chromium.mjs, so it may only use its arguments.
 export function humanDriver(ts, { entries = null, choose = null }) {
-  const S = ts.S, q = ts.q, nav = ts.nav
+  const S = ts.S, q = ts.q
   // the entries applied; the decision each answered ('chargeEnd at shortest'
   // for a picked spot that is the shortest move's own cell); and the trace
   // length when each was applied, so its lines can be found
@@ -136,6 +160,10 @@ export function humanDriver(ts, { entries = null, choose = null }) {
       case 'place': {
         const u = own(e.u)
         ts.deployClick(u, null)
+        // ((F8b) the match's own grid, read as each unit is placed: the
+        // ?debug hooks' nav before the start is the title's, classic's, so a
+        // Field or Grand log's cell read through it lands elsewhere)
+        const nav = ts.nav
         ts.deployClick(null, { x: nav.x(e.c), z: nav.z(e.c) })
         if (u.pos.x !== nav.x(e.c) || u.pos.z !== nav.z(e.c)) throw bad('not a free spot in the deployment zone')
         break

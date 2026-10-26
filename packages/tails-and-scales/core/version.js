@@ -2,14 +2,22 @@
 //
 // RULES_ID is a hash of the rule-bearing data, computed at load: every race
 // with its army and unit types (stat lines, weapons, flags and the derived
-// fields), minus what is only presentation (`name`, `short`, `icon`,
-// `look`, `abilities` text and a weapon's `fx`), plus the table constants,
-// the phase order, the terrain sets (core/terrain/sets.js: the feature
-// table, the centre rule and the spacing rules every board is scattered
-// by) and the missions (data/mission.js: the board, the objectives, the
-// default rounds, the deployment depth, the sets and the army's name). A stat retune changes it, so a match started
-// under other rules can be told apart instead of silently playing
-// differently; a renamed unit doesn't.
+// fields; from F11a each unit's `cost`, and the race's `roster`, as an
+// array, so its order is in the hash, and its presets, `armies`), minus
+// what is only presentation (`name`, `short`, `icon`, `look`, `abilities`
+// text and a weapon's `fx`), plus the table constants, the phase order, the
+// terrain sets (core/terrain/sets.js: the feature table, the centre rule
+// and the spacing rules every board is scattered by) and the missions
+// (data/mission.js: the board, the objectives, the default rounds, the
+// deployment depth, the sets, the army's name and, from F11a, the list
+// rules, `list`, less its `size`: the battle size's name, which the
+// refusals and the builder print as they print a race's name and a unit's
+// short one, is presentation like them). A stat or price retune changes
+// it, so a match started under other rules can be told apart instead of
+// silently playing differently (a peer whose prices or rosters differ
+// opens it as 'skew', never as a desync); a renamed unit, race or size
+// doesn't (refusal text is a peer's own: the Folder's error and a refused
+// entry's why are local, and stateHash leaves them out).
 //
 // CORE_VERSION is the other half: a whole number bumped by hand whenever the
 // rules code itself changes what a battle does (an action, the engine, the
@@ -39,9 +47,13 @@ export const CONSTANTS = Object.freeze({ BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_
 // their records lose presentation fields, never a key (a unit keyed 'look' is
 // rules like any other). The terrain sets and the missions are rules through
 // and through (every number in them places scenery, an objective or a
-// zone), so they go in whole.
+// zone), so they go in whole, but for (F11a) the one name a mission holds:
+// its list's `size`, presentation, left out by that key alone (a list is a
+// mission's record, never a map keyed by a name).
+const listRules = ({ size, ...rules }) => rules
+const missionRules = (m) => (m.list ? { ...m, list: listRules(m.list) } : m)
 export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS, missions = MISSIONS } = {}) {
-  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions }
+  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions: mapVals(missions, missionRules) }
 }
 
 export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString(36)
@@ -52,5 +64,9 @@ export const RULES_ID = rulesId()
 // round-limit vote, the vote command and setup.overtime 'vote'; 3: F10b's
 // pilot, the AI playing a set of a seat's units; 4: F8a's missions, the
 // setup naming the mission that chooses the board and refusing a field it
-// doesn't know)
-export const CORE_VERSION = 4
+// doesn't know; 5: F11a's army lists: the setup's seats name a preset or
+// a list of counts, which newState builds the armies from; 6: F7a's
+// height: the nav's floor, links and ledges, and the rules' height
+// branches; 7: F8b's missions field and grand, the open set (the scatter's
+// area scale) and the fight guard, max(30, 2·units + 2))
+export const CORE_VERSION = 7
