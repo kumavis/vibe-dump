@@ -46,6 +46,7 @@
 // events built.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { pick, tween, easeIn, bounce } from './clock.js'
 import { STYLES, WOOD } from '../core/terrain/recipes.js'
 import { sfx } from './sfx.js'
@@ -224,6 +225,167 @@ const PIECES = {
     return { obj: g, pieces: 0 }
   },
 }
+// ── Fortifications (F7a, DESIGN §4.2.4) ─────────────────────────────────────
+// Decks, stairs, ladders and posts, each built from its look (the recipe's
+// recorded draws: its colour, its size in its own frame, w along its own x,
+// d along its own z, h tall) and its place and yaw, in a group turned as the
+// chunk is (shape.yaw: a box's own frame, as core/terrain/geom.js reads it).
+// A piece's small parts (planks, flagstones, steps, rungs, braces) are boxes
+// merged into one geometry per material, so a rampart is a handful of draw
+// calls, not a hundred. Nothing here draws from Math.random: every board of
+// a seed looks alike, and a snap builds what the events built.
+//
+// Each walkable top (a deck's, a stair's ramp) also carries an invisible
+// quad on it, `userData.top`, which the picker casts at (input/picking.js:
+// a click on a deck lands on its top, not on the board under it), and
+// TerrainView.surfaces() lists the tops for the reach overlay's deck tints
+// (view/overlay.js). They are made only for these pieces, as their chunks
+// are built: a classic table makes none (nor their ids' Math.random draws).
+//
+// What a piece's own frame means is recipes.js's: a deck's walkable top is
+// at h, a stair rises from the ground at its own −x end to h at its +x end
+// (look.rise '+x'), and a ladder's own −z is the side it leans out to, away
+// from its deck's face (look.face '-z').
+
+// (made at the first fortification built, never as the module loads: three.js
+// draws Math.random for every object's uuid)
+let fortKit = null
+const kit = () => (fortKit ??= { pick: new THREE.MeshBasicMaterial({ visible: false }) })
+// a colour lighter or darker by k (a deck's top and rim against its body)
+const shade = (color, k) => `#${new THREE.Color(color).multiplyScalar(k).getHexString()}`
+// a w × h × d box centred at (x, y, z), turned ry about y
+function boxAt(w, h, d, x, y, z, ry = 0) {
+  const g = new THREE.BoxGeometry(w, h, d)
+  if (ry) g.rotateY(ry)
+  return g.translate(x, y, z)
+}
+// a beam t thick (u across, v deep) from point a to point b ([x, y, z] each)
+function beam(a, b, tu, tv = tu) {
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b)
+  const dir = B.clone().sub(A), L = dir.length()
+  const g = new THREE.BoxGeometry(tu, L, tv)
+  g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize()))
+  return g.translate((A.x + B.x) / 2, (A.y + B.y) / 2, (A.z + B.z) / 2)
+}
+// parts merged into one mesh of colour `color`
+const merged = (parts, color, opts) => mesh(mergeGeometries(parts), mat(color, opts))
+// the group a piece is built in: at its place on the table, turned its way
+function framed(c) {
+  const g = new THREE.Group()
+  g.position.set(c.shape.x, 0, c.shape.z)
+  g.rotation.y = c.shape.yaw
+  return g
+}
+// the invisible quad on a walkable top (the picker's, and the overlay's
+// shape for it): a deck's flat at h, a ramp's tilted up its own +x
+function topQuad(g, w, d, h, ramp) {
+  const len = ramp ? Math.hypot(w, h) : w
+  const geo = new THREE.PlaneGeometry(len, d).rotateX(-Math.PI / 2)
+  if (ramp) geo.rotateZ(Math.atan2(h, w))
+  geo.translate(0, ramp ? h / 2 : h, 0)
+  const q = new THREE.Mesh(geo, kit().pick)
+  q.userData.top = true
+  g.add(q)
+}
+
+const FORT_PIECES = {
+  // A deck: its body (earth or stone, or a timber platform's open frame on
+  // its posts), a rim round its top, and its walk (planks along the deck's
+  // length on earth and timber, flagstones on stone).
+  deck(c) {
+    const { w, d, h, material, color } = c.look
+    const g = framed(c)
+    const T = 0.1, RIM = 0.16
+    if (c.supports) {
+      // a timber platform: a slab on its posts (the post chunks, beside it),
+      // two joists under it and an X of braces down each side between them
+      const P = 0.2
+      const slab = boxAt(w, 0.24, d, 0, h - T - 0.12, 0)
+      const joists = [-1, 1].map((s) => boxAt(w - 0.3, 0.22, 0.26, 0, h - T - 0.35, s * (d / 2 - 0.5)))
+      const braces = []
+      const lo = 0.35, hi = h - T - 0.3
+      for (const [ax, az, bx, bz] of [[-1, -1, 1, -1], [1, -1, 1, 1], [1, 1, -1, 1], [-1, 1, -1, -1]]) {
+        const x0 = ax * (w / 2 - P), z0 = az * (d / 2 - P), x1 = bx * (w / 2 - P), z1 = bz * (d / 2 - P)
+        braces.push(beam([x0, lo, z0], [x1, hi, z1], 0.12, 0.08), beam([x0, hi, z0], [x1, lo, z1], 0.12, 0.08))
+      }
+      g.add(merged([slab, ...joists], shade(color, 0.85)), merged(braces, shade(color, 0.7)))
+    } else {
+      // the body, and on stone a darker plinth course and a string course
+      g.add(mesh(boxAt(w, h - T, d, 0, (h - T) / 2, 0), mat(color)))
+      if (material === 'stone') g.add(merged([boxAt(w + 0.1, 0.32, d + 0.1, 0, 0.16, 0), boxAt(w + 0.06, 0.12, d + 0.06, 0, h * 0.55, 0)], shade(color, 0.78)))
+      else g.add(merged([0.33, 0.66].map((f) => boxAt(w + 0.04, 0.14, d + 0.04, 0, h * f, 0)), '#6f5234'))
+    }
+    // the walk: planks across its width (along its length) or flagstones
+    const top = []
+    if (material === 'stone') {
+      const n = Math.max(2, Math.round(w / 1.1)), m = Math.max(2, Math.round(d / 1.1))
+      for (let i = 0; i < n; i++) for (let j = 0; j < m; j++) {
+        const tw = w / n, td = d / m
+        top.push(boxAt(tw - 0.07, T, td - 0.07, -w / 2 + (i + 0.5) * tw, h - T / 2, -d / 2 + (j + 0.5) * td))
+      }
+      g.add(merged(top, shade(color, 1.18)), mesh(boxAt(w - 0.02, T * 0.6, d - 0.02, 0, h - T * 0.7, 0), mat(shade(color, 0.6))))
+    } else {
+      const n = Math.max(2, Math.round(d / 0.55))
+      for (let j = 0; j < n; j++) {
+        const pd = d / n
+        top.push(boxAt(w - 0.04, T, pd - 0.06, 0, h - T / 2, -d / 2 + (j + 0.5) * pd))
+      }
+      g.add(merged(top, material === 'timber' ? shade(color, 1.15) : '#a07a4c'), mesh(boxAt(w - 0.02, T * 0.6, d - 0.02, 0, h - T * 0.7, 0), mat('#4a3420')))
+    }
+    // the rim: a lip round the top's edge
+    const rim = [boxAt(w + 0.08, RIM, 0.16, 0, h + RIM / 2 - 0.06, -d / 2), boxAt(w + 0.08, RIM, 0.16, 0, h + RIM / 2 - 0.06, d / 2),
+      boxAt(0.16, RIM, d, -w / 2, h + RIM / 2 - 0.06, 0), boxAt(0.16, RIM, d, w / 2, h + RIM / 2 - 0.06, 0)]
+    g.add(merged(rim, shade(material === 'stone' ? color : '#7a5232', 0.8)))
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+  // A stair: solid steps, each topped where the ramp's line crosses its
+  // middle (so a figure walking the ramp's height stands on them), and an
+  // up-arrow: a pale chevron on every other step, pointing up the stair.
+  stair(c) {
+    const { w: len, d: width, h, color } = c.look
+    const g = framed(c)
+    const n = Math.max(2, Math.round(len / 0.5)), run = len / n
+    const steps = [], arrows = []
+    for (let i = 0; i < n; i++) {
+      const y = ((i + 0.5) * h) / n, x = -len / 2 + (i + 0.5) * run
+      steps.push(boxAt(run + 0.01, y, width, x, y / 2, 0))
+      if (i % 2 === 1 || i === n - 1) arrows.push(chevron(x, y + 0.012))
+    }
+    // its cheeks: a low wall up each side, following the ramp
+    const cheeks = [-1, 1].map((s) => beam([-len / 2, 0.06, s * (width / 2 + 0.06)], [len / 2, h + 0.06, s * (width / 2 + 0.06)], 0.22, 0.14))
+    g.add(merged(steps, color), merged(cheeks, shade(color, 0.75)), merged(arrows, '#f4ead0', { flatShading: false }))
+    topQuad(g, len, width, h, true)
+    return { obj: g }
+  },
+  // A ladder against its deck's face: two rails leaning out to its own −z
+  // (where its foot is), standing proud of the deck's top, and rungs.
+  ladder(c) {
+    const { w, d, h, color } = c.look
+    const g = framed(c)
+    const top = h + 0.4, out = 0.45, x = w / 2 - 0.12
+    // (the face is at the strip's own +z side, d/2 from its centre)
+    const at = (y) => -out + (out + d / 2 - 0.05) * (y / top)
+    const parts = [-1, 1].map((s) => beam([s * x, 0, at(0)], [s * x, top, at(top)], 0.09, 0.09))
+    for (let y = 0.3; y < h + 0.15; y += 0.33) parts.push(boxAt(2 * x, 0.06, 0.07, 0, y, at(y)))
+    g.add(merged(parts, color))
+    return { obj: g }
+  },
+  // A timber deck's post, square, the deck's height.
+  post(c) {
+    const { w, d, h, color } = c.look
+    const g = framed(c)
+    g.add(mesh(boxAt(w, h, d, 0, h / 2, 0), mat(shade(color, 0.8))))
+    return { obj: g }
+  },
+}
+// an up-arrow on a step's top at x, y (pointing up the stair's own +x)
+function chevron(x, y) {
+  const s = new THREE.Shape([[-0.2, -0.62], [0.16, 0], [-0.2, 0.62], [-0.42, 0.62], [-0.08, 0], [-0.42, -0.62]].map(([a, b]) => new THREE.Vector2(a, b)))
+  return new THREE.ShapeGeometry(s).rotateX(-Math.PI / 2).translate(x, y, 0)
+}
+Object.assign(PIECES, FORT_PIECES)
+
 function block(c, geo) {
   const { look, shape: s } = c
   const m = mesh(geo, mat(look.color))
@@ -352,6 +514,42 @@ export class TerrainView {
       // a rubble pile: a heap of pieces for each block of its column broken
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
     }
+  }
+
+  // (F7a) The walkable tops the table shows standing: the defs of its decks
+  // and stairs (the reach overlay tints each, view/overlay.js), and the
+  // invisible quads on them the picker casts at (input/picking.js).
+  surfaces() {
+    const out = []
+    for (const item of this.items.values()) if (item.c.surface && this.shows(item)) out.push(item.c)
+    return out
+  }
+  // (each quad's world matrix brought up to date: a table drawn under ?fast
+  // renders nothing, which is what would otherwise do it)
+  tops() {
+    const out = []
+    for (const item of this.items.values()) {
+      if (!item.c.surface || !this.shows(item)) continue
+      for (const o of item.obj.children) {
+        if (!o.userData.top) continue
+        o.updateWorldMatrix(true, false)
+        out.push(o)
+      }
+    }
+    return out
+  }
+  // the ladders the table shows standing: their defs (each with its link)
+  ladders() {
+    const out = []
+    for (const item of this.items.values()) if (item.c.link && this.shows(item)) out.push(item.c)
+    return out
+  }
+  // the highest walkable top the table shows at (x, z), 0 on the ground (the
+  // objectives' markers stand on it: the keep's on its top)
+  floorAt(x, z) {
+    let y = 0
+    for (const c of this.surfaces()) y = Math.max(y, topAt(c, x, z) ?? 0)
+    return y
   }
 
   // whether an item shows its chunk standing (a tree with its canopy)
@@ -549,13 +747,43 @@ const SET_Y = new Set(['box', 'log', 'cap'])
 // adds carry and this lacks would leave a synced table short of it, and its
 // spares never taken back): sim/terrain-check.mjs holds every add's def to
 // this one.
-export const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
+// (F7a) And, for the pieces that have them (decks, stairs, ladders, posts),
+// the height fields core's adds carry (core/terrain/terrain.js's
+// HEIGHT_FIELDS, which the view can't import: terrain.js is no door of the
+// core's, sim/boundaries.mjs), copied like the shape: what a timber deck is
+// drawn on (its `supports`) and what sync keys the table by.
+// sim/terrain-check.mjs holds this list to core's, and every fortified
+// board's adds to this defOf, as it does classic's.
+export const HEIGHT_FIELDS = Object.freeze(['surface', 'link', 'base', 'supports', 'fallsAt', 'on'])
+const copy = (v) => (Array.isArray(v) ? v.map(copy) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, copy(x)])) : v)
+export const defOf = (c) => {
+  const def = { id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look }
+  for (const k of HEIGHT_FIELDS) if (c[k] !== undefined) def[k] = copy(c[k])
+  return def
+}
 
 // whether two defs are the same chunk drawn the same (the height too, or
-// not: a dropped block is the same block, lower)
+// not: a dropped block is the same block, lower; (F7a) and its height
+// fields, which a classic chunk has none of)
 function sameDef(a, b, withY) {
-  const key = (d) => JSON.stringify({ id: d.id, kind: d.kind, look: d.look, shape: withY ? d.shape : { ...d.shape, y: 0 } })
+  const key = (d) => JSON.stringify({ id: d.id, kind: d.kind, look: d.look, shape: withY ? d.shape : { ...d.shape, y: 0 }, height: HEIGHT_FIELDS.map((k) => d[k]) })
   return key(a) === key(b)
+}
+
+// (F7a) How high a walkable top `c` (a def with a surface) stands over the
+// table at (x, z), or null where its footprint doesn't cover the point: a
+// deck's y, a ramp's height along its own x (from y0 at its −x end).
+// Presentation only (the objectives' markers, the overlay's fallback): the
+// rules read their own floor, core/nav.js's, cell by cell.
+export function topAt(c, x, z) {
+  const s = c.shape, co = Math.cos(s.yaw), sn = Math.sin(s.yaw)
+  const dx = x - s.x, dz = z - s.z
+  const lx = dx * co - dz * sn, lz = dx * sn + dz * co
+  if (Math.abs(lx) > s.hx || Math.abs(lz) > s.hz) return null
+  const r = c.surface.ramp
+  if (!r) return c.surface.y
+  const t = ((r.axis === 'z' ? lz / s.hz : lx / s.hx) + 1) / 2
+  return r.y0 + (r.y1 - r.y0) * t
 }
 
 // The fall of a tree's group along the log's (dx, dz), as a tween step:

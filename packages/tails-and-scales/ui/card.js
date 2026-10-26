@@ -92,8 +92,17 @@ export class Card {
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${t.cost} pts</span></div>
-    <div class="card-sub">${cardStatus(t, mu, f)}</div>${this.orderLine(u)}${statsHtml(t)}`
+    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.orderLine(u)}${statsHtml(t)}`
     card.classList.add('show')
+  }
+
+  // (F7a) a unit standing on a deck or high on a stair (the mirror's `y`, its
+  // floor: over the nav's 0.4" step) is on high ground: it sees over hedges
+  // and ruins. After the status line's own text, in a span of its own (the
+  // ?debug card hook reads the line's text up to it).
+  height(mu) {
+    const y = mu?.y ?? 0
+    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · ▲ high ground, ${+y.toFixed(1)}" up</span>` : ''
   }
 
   // (F10c) the unit's standing order, and while the player may change it,

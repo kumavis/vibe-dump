@@ -184,11 +184,12 @@ async function parent() {
     const from = pageStart(setup).mode
     const others = Object.keys(MODES).filter((m) => m !== from)
     // (the page's URL still carries the first battle's dice, races and
-    // overtime, so the third battle has them too: a watched one never votes)
-    return { from, dice: setup.dice, races: setup.seats.map((s) => s.race), overtime: setup.overtime ?? 'never', mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
+    // overtime, so the third battle has them too: a watched one never votes;
+    // (F7a) and its terrain, ?terrain=, which the battle-setup panel keeps)
+    return { from, dice: setup.dice, races: setup.seats.map((s) => s.race), overtime: setup.overtime ?? 'never', terrain: setup.terrain ?? 'classic', mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
   }
   // the setup the third battle must be played under
-  const thirdSetup = (sw, board) => jobSetup({ setup: setupFor(sw.mode, board, sw.dice, sw.mode === 'watch' ? undefined : sw.overtime), races: sw.races })
+  const thirdSetup = (sw, board) => jobSetup({ setup: { ...setupFor(sw.mode, board, sw.dice, sw.mode === 'watch' ? undefined : sw.overtime), terrain: sw.terrain }, races: sw.races })
 
   console.log(`rematch-check: ${items.length} battles, each played twice in one page (Again between them), then a third on a new board in another mode; on ${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}`)
   const t0 = Date.now()

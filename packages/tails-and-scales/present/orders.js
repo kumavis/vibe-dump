@@ -15,10 +15,12 @@
 //                                    0.25" inside the table); with a line
 //                                    ({ a, b }: an Alt-drag), spread along
 //                                    it in ranks instead
-//   goalField(G, q, anchor, mode, r) the distance from `anchor` to every
+//   goalField(G, q, anchor, mode, r, climb)
+//                                    the distance from `anchor` to every
 //                                    cell for a walker of base r (a whole
-//                                    board's reach), the last 12 cached per
-//                                    match
+//                                    board's reach; (F7a's review) up the
+//                                    ladders too for a climber, q.climbs),
+//                                    the last 12 cached per match
 //   legFor(G, q, u, slot, field, at) the cell u ends its move on: the valid
 //                                    end nearest its slot within 1.5", else
 //                                    the reachable valid end the field puts
@@ -111,19 +113,22 @@ function lineSlots(G, members, { a, b }) {
 
 // (a whole board's reach from the anchor, for a walker of the base's class:
 // cached in a WeakMap keyed by the match, then by the anchor's cell, the nav
-// grid's epoch, the mode and the base, so a refold's new match never meets
-// an old field; the last FIELDS kept, as a hover crosses cell after cell)
+// grid's epoch, the mode, the base and (F7a's review) whether it climbs, so
+// a refold's new match never meets an old field; the last FIELDS kept, as a
+// hover crosses cell after cell. A climber's field goes up the ladders, as
+// its own plans do (q.climbs): a squad sent onto a deck that only a ladder
+// reaches finds the way)
 const FIELDS = 12
-export function goalField(G, q, anchor, mode, r) {
+export function goalField(G, q, anchor, mode, r, climb = false) {
   let byG = fields.get(G)
   if (!byG) fields.set(G, (byG = new Map()))
   const cell = G.nav.index(anchor.x, anchor.z)
-  const key = `${cell}|${G.nav.epoch}|${mode}|${Math.ceil(r * 10)}`
+  const key = `${cell}|${G.nav.epoch}|${mode}|${Math.ceil(r * 10)}|${climb ? 'climb' : 'walk'}`
   let f = byG.get(key)
   if (f) byG.delete(key)
   else {
     const m = mode === 'fly' ? 'fly' : mode === 'wreck' ? 'wreck' : 'walk'
-    f = G.nav.reach(G.nav.x(cell), G.nav.z(cell), { r: Math.ceil(r * 10) / 10, max: Infinity, mode: m }).dist
+    f = G.nav.reach(G.nav.x(cell), G.nav.z(cell), { r: Math.ceil(r * 10) / 10, max: Infinity, mode: m, climb }).dist
     if (byG.size >= FIELDS) byG.delete(byG.keys().next().value)
   }
   byG.set(key, f)
@@ -225,7 +230,7 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, { 
         continue
       }
       const slot = slots.get(u.id)
-      const field = goalField(G, q, target, q.moveMode(u), u.r)
+      const field = goalField(G, q, target, q.moveMode(u), u.r, q.climbs(u))
       const leg = legFor(G, q, u, slot, field, at)
       if (leg.cell >= 0) at.set(u.id, { x: G.nav.x(leg.cell), z: G.nav.z(leg.cell) })
       out.push({ u, cell: leg.cell, slot, how: leg.cell < 0 ? 'none' : leg.arrive ? 'arrive' : 'short', why: leg.cell < 0 ? 'no way nearer' : '' })

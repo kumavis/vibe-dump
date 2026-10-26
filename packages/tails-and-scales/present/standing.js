@@ -74,7 +74,7 @@ export function stepOf(G, q, u, o, phase) {
     if (q.isEngaged(G, u)) return { how: 'none', why: 'in combat' }
     const slot = at(G, o.slot), anchor = at(G, o.anchor)
     if (dist(u.pos, slot) <= ARRIVED) return { how: 'none', why: 'arrived' }
-    const field = goalField(G, q, anchor, q.moveMode(u), u.r)
+    const field = goalField(G, q, anchor, q.moveMode(u), u.r, q.climbs(u))
     const here = G.nav.index(u.pos.x, u.pos.z)
     // (further than a move from its slot, nothing for its gun: a D6 more)
     if (!u.flags.advanced && dist(u.pos, slot) > u.t.M && !targetInRange(G, q, u)) return { how: 'macro', cmds: [{ t: 'advance', u: u.id }] }
@@ -137,7 +137,7 @@ export function doneOf(G, q, u, o) {
 // (after the seat's movement phase: how far the march's field puts it from
 // its anchor, against the best it has done)
 export function progressOf(G, q, u, o) {
-  const field = goalField(G, q, at(G, o.anchor), q.moveMode(u), u.r)
+  const field = goalField(G, q, at(G, o.anchor), q.moveMode(u), u.r, q.climbs(u))
   const v = field[G.nav.index(u.pos.x, u.pos.z)]
   const best = o.best ?? Infinity
   if (Number.isFinite(v) && v < best - 0.5) return { order: { ...o, best: v, stall: 0 }, blocked: false }

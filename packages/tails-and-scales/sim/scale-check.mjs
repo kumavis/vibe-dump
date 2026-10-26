@@ -8,7 +8,12 @@
 //           lattice did, with the facts asked afresh at every cell, and
 //           leaves the dice where it did; the fall back's scan
 //           (fallbackSpot) and freeSpot return the cell the whole board's
-//           scan found.
+//           scan found. (F7a's review) On fortified boards too, the `fort/`
+//           AI pairs' and the Grand fixture's (--fortified), its reference
+//           scoring with F7a's height terms; and the box itself on
+//           Grand-sized fortified boards: every cell a climber's reach from
+//           a ladder's foot or top makes finite lies inside scanBox, the
+//           ladders' savings (nav.linkSave) included.
 //   P-los   On terrain from board seeds 1-500 (Grand: 1-100) after random
 //           blasts, the broadphase line of sight (S0b's bins) returns what
 //           the scan over every chunk did, { blocked, obscure }, over
@@ -30,7 +35,9 @@
 // built: classic only); --quick samples less. --self-test builds broken
 // copies of the code, each a scan that would change a battle (a lattice box
 // too tight, a lattice row's offset swapped, the fall back's odd cells, a
-// zone's columns cut short, two facts hoisted wrong, chunks binned short or
+// zone's columns cut short, two facts hoisted wrong, (F7a's review) the
+// guns' height term dropped, a box that forgets the ladders' savings,
+// chunks binned short or
 // met out of order, a memo key that forgets the other units, a memo left
 // open by a throw) and expects the checks to fail each. (A key without the
 // nav grid's epoch is no fault a fold can show: nothing rebuilds the grid
@@ -53,12 +60,12 @@ const { values: a } = parseArgs({ options: { dir: { type: 'string' }, quick: { t
 // the code under test: its core's entry and the modules the scans live in
 async function coreOf(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [index, score, move, deploy, queries, rng, dmath, terrain, geom, mission] = await Promise.all([
+  const [index, score, move, deploy, queries, rng, dmath, terrain, geom, mission, nav] = await Promise.all([
     at('core/index.js'), at('core/ai/score.js'), at('core/actions/move.js'), at('core/deploy.js'), at('core/queries.js'),
-    at('core/rng.js'), at('core/dmath.js'), at('core/terrain/terrain.js'), at('core/terrain/geom.js'), at('data/mission.js'),
+    at('core/rng.js'), at('core/dmath.js'), at('core/terrain/terrain.js'), at('core/terrain/geom.js'), at('data/mission.js'), at('core/nav.js'),
   ])
   const M = { ...queries, ...move, ...deploy, ...score, draw: rng.draw, hypot: dmath.hypot, segmentHitsBox: geom.segmentHitsBox }
-  return { core: index, M, Terrain: terrain.Terrain, mission: mission.MISSIONS.classic, rules: await at('core/rules.js') }
+  return { core: index, M, Terrain: terrain.Terrain, NavGrid: nav.NavGrid, mission: mission.MISSIONS.classic, rules: await at('core/rules.js') }
 }
 
 // a small seeded stream of the check's own (never the match's)
@@ -245,6 +252,62 @@ function throwingApply(C) {
   return G.nav.memo === null ? [] : ['an apply that threw left G.nav.memo open']
 }
 
+// ── P-scan's box with height (F7a's review) ────────────────────────────────
+// A ladder carries a climber farther than it costs, so scanBox widens by
+// the ladders' savings (core/ai/score.js); this holds the box to the claim
+// it rests on, every finite cell of a plan inside it, where the savings
+// count: from every ladder's foot and top on Grand-sized fortified boards
+// (the Grand fixture's table, 80×56 with its 14" zones and nine
+// objectives, built straight from the code's own Terrain and NavGrid, so a
+// broken copy's box is judged too), for three discs and four reaches each.
+// `wide` counts the plans with a cell outside the box a board without
+// height would have drawn: the savings were needed there.
+const GRAND_TABLE = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z], i) => ({ i, x, z })) }
+function boxHeight(C, seeds) {
+  const { W, H, deploy, objectives } = GRAND_TABLE
+  const out = { plans: 0, wide: 0, bad: [] }
+  const inside = (b, nav, i) => {
+    const ix = i % nav.nx, iz = (i / nav.nx) | 0
+    return ix >= b.x0 && ix <= b.x1 && iz >= b.z0 && iz <= b.z1
+  }
+  for (const seed of seeds) {
+    const T = new C.Terrain(W, H)
+    T.generate(seed, objectives, deploy, 'fortified')
+    const nav = new C.NavGrid(W, H, 0.5)
+    nav.rebuild(T.chunks)
+    for (const g of nav.gates.filter((x) => x.ladder)) {
+      for (const p of [g.lo, g.hi]) {
+        const c = nav.index(p.x, p.z)
+        for (const r of [0.42, 0.89, 1.22]) {
+          if (!nav.standable(c, r, 'walk')) continue
+          for (const max of [6, 8, 10, 12]) {
+            const res = nav.reach(nav.x(c), nav.z(c), { r, max, climb: true })
+            out.plans++
+            const box = C.M.scanBox(nav, res.sx, res.sz, max)
+            // (the box a board without height draws: scanBox's own rows and
+            // columns for a span of max and a cell)
+            const span = max + nav.cell, flat = {
+              x0: Math.floor((res.sx - span + W / 2) / nav.cell), x1: Math.floor((res.sx + span + W / 2) / nav.cell),
+              z0: Math.floor((res.sz - span + H / 2) / nav.cell), z1: Math.floor((res.sz + span + H / 2) / nav.cell),
+            }
+            let wide = false
+            for (let i = 0; i < nav.N; i++) {
+              if (!isFinite(res.dist[i])) continue
+              if (!wide && !inside(flat, nav, i)) wide = true
+              if (!inside(box, nav, i) && out.bad.length < 6) {
+                out.bad.push(`board ${seed}, ladder ${g.id}'s ${p === g.lo ? 'foot' : 'top'} (cell ${c}), r ${r}, max ${max}: cell ${i} is reached (${res.dist[i].toFixed(3)}) but lies outside scanBox (columns ${box.x0}-${box.x1}, rows ${box.z0}-${box.z1})`)
+                break
+              }
+            }
+            if (wide) out.wide++
+          }
+        }
+      }
+    }
+  }
+  return out
+}
+
 // ── P-los ───────────────────────────────────────────────────────────────────
 function pLos(C, seeds, perBoard, rand) {
   // (F8a) the board the mission chooses
@@ -280,10 +343,14 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
     say(`  ${ok ? 'ok  ' : 'FAIL'} ${what}${bad.length ? `\n         ${bad.slice(0, 4).join('\n         ')}` : ''}`)
   }
   const { items } = loadCorpus()
-  const ai = items.filter((it) => it.kind === 'ai').slice(0, quick ? 4 : 12)
+  const ai = items.filter((it) => it.kind === 'ai' && it.set !== 'fort').slice(0, quick ? 4 : 12)
   const classic = ai.map((it) => [`classic ${it.id}`, jobSetup(it.job)])
+  // (F7a's review) the fortified boards: the fort/ AI pairs, on code whose
+  // mission offers the set
+  const fortified = C.mission.sets?.includes('fortified')
+  const fort = !fortified ? [] : items.filter((it) => it.kind === 'ai' && it.set === 'fort').slice(0, quick ? 2 : 6).map((it) => [`fortified ${it.id}`, jobSetup(it.job)])
   const want = (k) => !only || only.includes(k)
-  let G_ = null
+  let G_ = null, GF = null
   if (grand) {
     const { dir: gdir, lists } = await buildGrand({ caps: false })
     G_ = await coreOf(gdir)
@@ -291,8 +358,11 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
     // classic armies: refused)
     const n = G_.core.createMatch(grandSetup(1, 7)).units.length, want = Object.values(lists).reduce((k, l) => k + l.units, 0)
     if (n !== want) throw new Error(`the Grand fixture's battles field ${n} units, its lists ${want}: the fixture didn't take (sim/fixtures/grand.mjs)`)
+    // (F7a's review) and its fortified battles (--fortified)
+    if (fortified) GF = await coreOf((await buildGrand({ caps: false, fortified: true })).dir)
   }
   const grandSetups = [[1, 7], [2, 11], [3, 5], [4, 9]].slice(0, quick ? 1 : 4).map(([b, d]) => [`Grand ${b}-${d}`, grandSetup(b, d)])
+  const grandFort = [[1, 7], [2, 11]].slice(0, quick ? 1 : 2).map(([b, d]) => [`Grand fortified ${b}-${d}`, grandSetup(b, d, undefined, true)])
 
   if (want('scan')) {
     const s1 = sample(C, classic, quick ? 9 : 4, [scanProbe], rand)
@@ -300,6 +370,16 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
     if (G_) {
       const s2 = sample(G_, grandSetups, quick ? 30 : 7, [scanProbe], rand)
       report(!s2.bad.length && s2.states >= (quick ? 20 : 400), `P-scan, Grand: ${s2.states} states, the same`, s2.bad)
+    }
+    if (fortified) {
+      const s3 = sample(C, fort, quick ? 9 : 4, [scanProbe], rand)
+      report(!s3.bad.length && s3.states >= (quick ? 20 : 250), `P-scan, fortified: ${s3.states} states on ${fort.length} fort/ boards, the reference scoring with the height terms`, s3.bad)
+      if (GF) {
+        const s4 = sample(GF, grandFort, quick ? 30 : 7, [scanProbe], rand)
+        report(!s4.bad.length && s4.states >= (quick ? 20 : 200), `P-scan, Grand fortified: ${s4.states} states, the same`, s4.bad)
+      }
+      const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 1))
+      report(!b.bad.length && b.wide > 0, `P-scan, the box with height: ${b.plans} climbers' plans from ladders' feet and tops on 40 Grand-sized fortified boards, every reached cell inside scanBox (${b.wide} reaching past the box a flat board would draw)`, b.bad.length ? b.bad : b.wide ? [] : ['no plan reached past the flat box: the probe met no ladder that carries farther than it costs'])
     }
   }
   if (want('los')) {
@@ -340,6 +420,10 @@ const MUTANTS = [
   ['zone-columns', 'scan', 'core/deploy.js', 'Math.floor((box.minX + nav.W / 2) / nav.cell) - 1', 'Math.floor((box.minX + nav.W / 2) / nav.cell) + 4'],
   ['hoist-cover', 'scan', 'core/ai/score.js', 'cover: inCover(G, e)', 'cover: false'],
   ['hoist-back', 'scan', 'core/ai/score.js', 'const back = pre.get(e).back * 0.4', 'const back = pre.get(e).hit * 0.4'],
+  // (F7a's review) the guns' height term dropped, and a box that forgets
+  // what a ladder carries beyond its cost
+  ['height-term', 'scan', 'core/ai/score.js', "  if (high && (role === 'shooter' || role === 'artillery')) s += 0.25 * Math.min(4, floorAt(G, x, z))\n", ''],
+  ['box-no-climb', 'scan', 'core/ai/score.js', '  if (nav.hasHeight && nav.linkSave > 0) reach += nav.linkSave * Math.floor(reach / nav.linkMin)\n', ''],
   ['bins-short', 'los', 'core/terrain/terrain.js', 'this.binSpan(s.x - s.reach - PAD, s.x + s.reach + PAD, this.W, this.nbx)', 'this.binSpan(s.x - s.reach * 0.3, s.x + s.reach * 0.3, this.W, this.nbx)'],
   ['bins-order', 'los', 'core/terrain/terrain.js', 'while (j >= 0 && met[j] > v)', 'while (j >= 0 && met[j] < v)'],
   ['memo-key', 'memo', 'core/actions/move.js', '  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}`\n', ''],

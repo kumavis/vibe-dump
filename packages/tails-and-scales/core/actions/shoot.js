@@ -35,10 +35,10 @@
 // are kept exactly.
 import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
-import { hypot, sin, cos } from '../dmath.js'
+import { hypot, hypot3, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf } from '../queries.js'
+import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt } from '../queries.js'
 import { damage } from './damage.js'
 
 export function canShoot(G, u) {
@@ -162,12 +162,20 @@ export function eruption(G, u, target, w) {
 // belongs to; then the blast chews the scenery, and the nav grid follows.
 // Every victim is found first, in unit order; a big one takes D3+1 hits,
 // that D6 rolled before its wound roll (§4.1 rule 4).
+//
+// (F7a) With height the template lands on the floor where it falls (land.y),
+// a model is under it by its distance in 3D from there (its own floor's
+// height off the template's), and the scenery is chewed from half an inch
+// over that floor; without height, the flat test and 0.5 as ever.
 export function blastLands(G, u, land, w) {
   emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })
   const victims = []
+  const ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
   for (const v of G.units) {
     if (!alive(v)) continue
-    const under = v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
+    const under = G.nav.hasHeight
+      ? v.models.filter((m) => m.alive && hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
+      : v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
     if (under.length) victims.push({ v, under })
   }
   for (const { v, under } of victims) {
@@ -188,7 +196,9 @@ export function blastLands(G, u, land, w) {
     log(G, u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) emit(G, 'pause', { s: 0.25 })
-  const broke = G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
+  const broke = G.nav.hasHeight
+    ? G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes, y: ly + 0.5 }, G.out)
+    : G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
   if (broke.length) log(G, u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   // (the nav follows the scenery, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)

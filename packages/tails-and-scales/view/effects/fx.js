@@ -212,9 +212,10 @@ export class FX {
     tween(dur, (k) => (slot.l.intensity = intensity * (1 - k) * (1 - k)))
   }
 
-  decal(x, z, r, tex, opacity = 0.8) {
+  // ((F7a) `y`: the top it lies on, a deck's; 0 the table)
+  decal(x, z, r, tex, opacity = 0.8, y = 0) {
     const m = new THREE.Mesh(this.decalGeo, new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity, polygonOffset: true, polygonOffsetFactor: -2 }))
-    m.position.set(x, 0.015 + this.decals.length * 0.0004, z)
+    m.position.set(x, y + 0.015 + this.decals.length * 0.0004, z)
     m.rotation.y = Math.random() * 6
     m.scale.setScalar(r)
     m.renderOrder = 1
@@ -237,12 +238,13 @@ export class FX {
   }
 
   // A ring on the table: blast templates, scatter landings, objective pings.
-  ring(x, z, r, color, { life = 1.2, fill = 0.18, hold = false } = {}) {
+  // ((F7a) `y`: the top it lies on, a deck's; 0 the table)
+  ring(x, z, r, color, { life = 1.2, fill = 0.18, hold = false, y = 0 } = {}) {
     const g = new THREE.Group()
     const ring = new THREE.Mesh(this.ringGeo, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false }))
     const disc = new THREE.Mesh(this.discGeo, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: fill, depthWrite: false, toneMapped: false }))
     g.add(ring, disc)
-    g.position.set(x, 0.05, z)
+    g.position.set(x, y + 0.05, z)
     g.scale.setScalar(r)
     g.renderOrder = 3
     this.scene.add(g)
@@ -262,7 +264,8 @@ export class FX {
   }
 
   // Explosion at (x, z) with a blast of radius r. style picks the palette.
-  explode(x, z, r, style = 'fire') {
+  // ((F7a) `y`: the top it goes off on, a deck's; 0 the table)
+  explode(x, z, r, style = 'fire', y = 0) {
     const pal = {
       fire: { flash: 0xffc46b, glow: ['#ffd36e', '#ff8a2a', '#ff5a1f', '#fff2b0'], light: 0xff9a4a, smoke: '#4a4038' },
       acid: { flash: 0x9dff6a, glow: ['#b8ff6a', '#5be04a', '#d8ff9a', '#2fbf4a'], light: 0x8aff5a, smoke: '#3f5a2a' },
@@ -270,7 +273,7 @@ export class FX {
       dust: { flash: 0xfff0d0, glow: ['#ffe9b0', '#ffd080'], light: 0xffe0a0, smoke: '#8a7a64' },
     }[style]
     const flash = new THREE.Mesh(this.flashGeo, new THREE.MeshBasicMaterial({ color: pal.flash, transparent: true, opacity: 0.9, toneMapped: false, depthWrite: false }))
-    flash.position.set(x, 0.3, z)
+    flash.position.set(x, y + 0.3, z)
     this.scene.add(flash)
     tween(0.45, (k) => {
       flash.scale.setScalar(0.2 + r * 0.85 * easeOut(k))
@@ -279,25 +282,25 @@ export class FX {
       this.scene.remove(flash)
       flash.material.dispose()
     })
-    this.flashLight(x, 1.5, z, pal.light, 9 + r * 6, 0.7)
+    this.flashLight(x, y + 1.5, z, pal.light, 9 + r * 6, 0.7)
     const n = Math.round(18 + r * 14)
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, s = (2 + Math.random() * 6) * (0.6 + r * 0.25)
       this.mote({
-        x, y: 0.3, z, vx: Math.cos(a) * s, vy: 2 + Math.random() * 6, vz: Math.sin(a) * s, g: 9, drag: 2.2,
+        x, y: y + 0.3, z, vx: Math.cos(a) * s, vy: 2 + Math.random() * 6, vz: Math.sin(a) * s, g: 9, drag: 2.2,
         size: 0.07 + Math.random() * 0.12, color: pal.glow[i % pal.glow.length], life: 0.5 + Math.random() * 0.7,
       })
     }
     for (let i = 0; i < 6 + r * 3; i++) {
       const a = Math.random() * Math.PI * 2, d = Math.random() * r * 0.6
       this.smoke({
-        x: x + Math.cos(a) * d, y: 0.3 + Math.random() * 0.4, z: z + Math.sin(a) * d,
+        x: x + Math.cos(a) * d, y: y + 0.3 + Math.random() * 0.4, z: z + Math.sin(a) * d,
         vx: Math.cos(a) * 1.2, vy: 1 + Math.random() * 1.5, vz: Math.sin(a) * 1.2,
         size: 0.25 + Math.random() * 0.25 * r, color: pal.smoke, life: 1.6 + Math.random() * 1.4,
       })
     }
-    this.debris(x, 0.1, z, ['#5b4630', '#6f8a3a', '#4a3a28'], Math.round(6 + r * 4), { power: 5 + r, size: 0.1 })
-    this.decal(x, z, r * 0.7, style === 'acid' ? this.acidTex : this.scorchTex, style === 'acid' ? 0.6 : 0.45)
+    this.debris(x, y + 0.1, z, ['#5b4630', '#6f8a3a', '#4a3a28'], Math.round(6 + r * 4), { power: 5 + r, size: 0.1 })
+    this.decal(x, z, r * 0.7, style === 'acid' ? this.acidTex : this.scorchTex, style === 'acid' ? 0.6 : 0.45, y)
     this.shake = Math.max(this.shake, 0.05 + r * 0.06)
   }
 

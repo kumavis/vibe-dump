@@ -171,14 +171,18 @@ export async function loadMatch(dir) {
 // null, keeping no events (as a catch-up or a peer folds), so it writes no
 // battle log; `mirror` (present/mirror.js's module, not with `quiet`) holds
 // the match's events to the match as they are taken (mirrorTap), and the
-// result's `mirrored` says how often. Never throws: a run that stops short
-// says why in `error`, with what it got that far.
-export function foldJob(core, job, { on = null, strict = false, before = null, quiet = false, mirror = null, match = null } = {}) {
+// result's `mirrored` says how often; (F7a) `probe` ({ trace(line, G),
+// events(G, events) }, sim/height-probe.mjs's) looks at the match at each
+// trace line and at its events as they are taken, and writes nothing (what
+// it counts is the caller's: never a trace line). Never throws: a run that
+// stops short says why in `error`, with what it got that far.
+export function foldJob(core, job, { on = null, strict = false, before = null, quiet = false, mirror = null, match = null, probe = null } = {}) {
   const t0 = performance.now()
   const rec = { trace: [], shadow: [], written: [], entries: job.entries ? [] : null }
   const tap = mirror && !quiet ? mirrorTap(mirror) : null
   const onTrace = (line, G) => {
     tap?.trace(line, G)
+    probe?.trace(line, G)
     rec.trace.push(line)
     on?.('l', line)
     if (line.startsWith('log ')) return
@@ -192,6 +196,7 @@ export function foldJob(core, job, { on = null, strict = false, before = null, q
     if (!G.out) return
     const events = G.out.splice(0)
     tap?.fold(G, events, where)
+    probe?.events(G, events)
     for (const e of events) {
       if (e.t !== 'log') continue
       const w = writtenOf(e)

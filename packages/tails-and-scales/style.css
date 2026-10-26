@@ -1412,3 +1412,51 @@ body.mirror .ulabel.s1.sel .ct {
     display: none;
   }
 }
+
+/* ── (F7a) Heights and the terrain line ──────────────────────────────── */
+/* a raised unit's height on its label, and on its card */
+.ulabel .st.hi {
+  color: #ffe9a8;
+  font-weight: bold;
+}
+.card-high {
+  color: #ffe9a8;
+}
+/* the battle-setup panel's terrain line: a button per set the mission is
+   fought on, the one picked lit, and what is on it */
+#setup .terrainLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 23, 16, 0.94);
+  border: 1px solid rgba(255, 210, 140, 0.25);
+  border-radius: 12px;
+  padding: 8px 16px;
+}
+#setup .terrainLine .lbl {
+  color: var(--gold);
+  font-weight: bold;
+}
+#setup .terrainLine .opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#setup .terrainLine button.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#setup .terrainLine .what {
+  color: var(--dim);
+}
+/* the lobby's terrain choice, the host's to change */
+.seedrow select {
+  margin-left: 6px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 4px 6px;
+}

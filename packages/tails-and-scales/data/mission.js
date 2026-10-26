@@ -43,7 +43,9 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       size: 'Skirmish', points: 500, units: 10, models: 36, perKind: 3,
       roles: { Hero: [1, 1], Troops: [1, 6], Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1] },
     },
-    sets: ['classic'],
+    // (F7a) and `fortified`, the fortifications to climb, which F7a adds to
+    // every mission's sets (the first stays each mission's default)
+    sets: ['classic', 'fortified'],
     // the centre, and one pair in each half, the table's point mirror
     objectives: [
       { x: 0, z: 0 },

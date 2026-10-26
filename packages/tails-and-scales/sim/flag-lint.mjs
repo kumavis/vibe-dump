@@ -41,7 +41,10 @@
 //                                         replace without a re-record
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
-// core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are. The view may
+// core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
+// the height layer's reads of a ladder's climbing cost, a nav field that
+// shares its name with a unit's price (core/queries.js's levelDist and
+// gateGraph, core/actions/move.js's walkCost). The view may
 // read them all (the card shows a unit's cost). A member read may space its
 // dot (`race . roster`), and a destructuring may run over several lines, as
 // a formatter writes a long one (`const {⏎ cost,⏎ } = u.t`): every rule is
@@ -131,7 +134,7 @@ export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
   ['view/effects/shots.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
-  ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire')", 1, "the explosion's look: presentation"],
+  ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire'", 1, "the explosion's look: presentation"],
   ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
   ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
   ['ui/card.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
@@ -164,6 +167,17 @@ export const ALLOW = [
   ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
   ['core/version.js', '(m.list ? { ...m, list: listRules(m.list) } : m)', 1, "rulesData hashes a mission's list rules without the size's name (presentation)"],
   ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
+  // (F7a, met at its merge onto F11a) a ladder's climbing cost, the nav's
+  // `cost` on a path's climb vertex and on a level's gate (its link's 2·h):
+  // the height layer's own field, which shares its name with a unit's
+  // price, never a unit type's or a list's, so the one-reader rule's
+  // `cost` is not what these read
+  ['core/actions/move.js', 'pts[i].cost', 1, "walkCost: a walk's climb vertex at its ladder's cost (the nav's link cost, F7a), not a unit's price"],
+  ['core/queries.js', 'gs[k].cost', 1, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
+  ['core/queries.js', 'gs[m].cost', 1, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
+  ['core/queries.js', 'g.cost', 2, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
+  ['core/queries.js', 'k2.cost', 1, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
+  ['core/queries.js', 'gates[k].cost', 1, "gateGraph: a gate's climbing cost, Floyd's first step (the nav's link cost, F7a), not a unit's price"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
 ]

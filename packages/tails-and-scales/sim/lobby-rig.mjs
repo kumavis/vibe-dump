@@ -80,6 +80,11 @@
 //                formation sent: nothing refused, the other page's presence
 //                holding the group (its dashed rings), both pages folding
 //                the same match after each
+//   (F7a)
+//   terrain      the host's lobby offers the terrain sets the mission is
+//                fought on (classic chosen); the host picks fortified, the
+//                guest's lobby shows it (not the guest's to change), and the
+//                battle both pages start is fought on it, its works standing
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -109,7 +114,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -352,6 +357,22 @@ async function runCases(dist, cases) {
       const L = JSON.parse(x)
       must(L.seats.s0.race === 'serpent' && L.seats.s1.race === 'squirrel', 'holding both changes')
       return 'both seats changed at once, one lobby on both pages'
+    },
+
+    async terrain() {
+      const { host, guest } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      const offer = await host.evaluate(() => ({ opts: [...document.querySelectorAll('#lobbyTerrain option')].map((o) => o.value), value: document.querySelector('#lobbyTerrain').value, disabled: document.querySelector('#lobbyTerrain').disabled }))
+      must(offer.opts.join() === 'classic,fortified' && offer.value === 'classic' && !offer.disabled, `the host's lobby offers the classic mission's sets, classic chosen, its to change: ${JSON.stringify(offer)}`)
+      await host.selectOption('#lobbyTerrain', 'fortified')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.terrain === 'fortified' && document.querySelector('#lobbyTerrain').value === 'fortified', null, 30000, "the host's terrain on the guest's lobby")
+      must(await guest.evaluate(() => document.querySelector('#lobbyTerrain').disabled), "the terrain is the host's to change, not the guest's")
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const fought = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ terrain: window.__ts.G.setup.terrain, decks: window.__ts.G.terrain.chunks.filter((c) => c.kind === 'deck').length }))))
+      must(fought.every((f) => f.terrain === 'fortified' && f.decks >= 2), `both pages' battle is fought on fortified, its works standing: ${JSON.stringify(fought)}`)
+      return 'the host chose fortified, and both pages fight on it'
     },
 
     async altered() {
@@ -797,6 +818,8 @@ async function runCases(dist, cases) {
 
 // Broken copies the self-test builds; each must fail the case named.
 const MUTANTS = {
+  // (F7a) the host's terrain never reaches the lobby
+  'terrain-unwired': ['terrain', 'net/lobby.js', '    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain\n', ''],
   // (F4's leftover) a snap past the end keeps a vote panel up
   'vote-blocks-end': ['vote-blocks-end', 'app/flow.js', "if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", "if (M.stage === 'over' && !this.ui.result.up) this.over(resultOf(G))"],
   // verifyStart compares the nonce alone

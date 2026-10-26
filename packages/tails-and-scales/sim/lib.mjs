@@ -213,21 +213,26 @@ export const tag = (v, r) =>
 //                            mission's points: AI pairs, stored as logs with
 //                            no entries (the whole battle runs inside the
 //                            start), and human-bot hotseat logs
+// sim/baselines/fort/*.json  (F7a) battles on the fortified board, recorded on
+//                            F7a's code: AI pairs (both seats AI, so a log
+//                            with no entries: the whole battle runs inside
+//                            its start) and human-bot logs
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each
 // item comes back as { id, kind, set, mode, job, ...stored fields } (`set`
-// a log's: human, pilot or army), `mode` the title screen's for its seats (a
-// log whose seats no button seats is refused here) and `kind` who sits in
-// them: 'ai' for pairs.json's pairs and for a log whose seats are both AI
-// (from F11a's army/, an AI pair kept as a log because its setup names what
-// a seed pair can't: its lists, its seat races), 'human' for a log with a
-// human seat. So `--only ai` takes every AI battle, a pair or a log, and
-// `--only army` a set's whole; a consumer that needs a pair's seeds reads
-// `it.set` (undefined for a pair) or `it.job.seed`. Whether the page can
-// make the rest of a setup is found where it is played: every page runner
-// holds the battle the page started to the log's setup (oracle/human-bot.mjs's
+// a log's: human, pilot, army or fort), `mode` the title screen's for its
+// seats (a log whose seats no button seats is refused here) and `kind` who
+// sits in them: 'ai' for pairs.json's pairs and for a log whose seats are
+// both AI (F11a's army/ and F7a's fort/ both keep AI pairs as logs, because
+// their setups name what a seed pair can't: lists and seat races, a
+// terrain set), 'human' for a log with a human seat. So `--only ai` takes
+// every AI battle, a pair or a log, and `--only army` or `--only fort` a
+// set's whole; a consumer that needs a pair's seeds reads `it.set`
+// (undefined for a pair) or `it.job.seed`. Whether the page can make the
+// rest of a setup is found where it is played: every page runner holds the
+// battle the page started to the log's setup (oracle/human-bot.mjs's
 // playedAs).
-export const LOG_SETS = Object.freeze(['human', 'pilot', 'army'])
+export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort'])
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))
@@ -244,9 +249,9 @@ export function loadCorpus() {
 }
 
 // The battles an --only list names: kinds (ai, human), modes (watch,
-// bushtail, serpent, hotseat), a log set (LOG_SETS: human, pilot, army) or
-// ids. A token that names nothing is a usage error, so a typo can never pass
-// a gate by selecting no battles.
+// bushtail, serpent, hotseat), a log set (LOG_SETS: human, pilot, army,
+// fort) or ids. A token that names nothing is a usage error, so a typo can
+// never pass a gate by selecting no battles.
 export function select(all, only) {
   if (only === undefined) return all
   const tokens = only.split(',').map((s) => s.trim()).filter(Boolean)

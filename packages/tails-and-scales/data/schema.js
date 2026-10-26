@@ -24,13 +24,15 @@
 //               stats: 'M7 WS4 BS4 S3 T3 W1 A1 Ld6 Sv6 OC2',
 //               ranged: Weapon | null, melee: Weapon, abilities: [text…],
 //               fly?, big?, hero?, wrecker?, burrow?, chargeAfterAdvance?,
-//               noCharge?, brawler?, swarm?: { min }, swoop?: { chargeS } }
+//               noCharge?, brawler?, climb?, swarm?: { min }, swoop?: { chargeS } }
 //   Weapon  = { name, range?, shots?, S, AP, D, assault?, heavy?, indirect?,
 //               blast?, scenery?, poison?, corrodes?, spell?, mesmerize?, fx? }
 //
 // Derived, unless the unit sets them itself:
 //   hero     = role is Hero                 noCharge = role is Artillery
 //   brawler  = !ranged || wrecker           (what the AI fears in melee)
+//   climb    = !big && !fly                 (F7a: climbs ladders; F9a's
+//                                            vehicles join as && !vehicle)
 //   move     = fly ? 'fly' : wrecker ? 'wreck' : burrow ? 'burrow' : 'walk'
 //   deployRow = Artillery ? 'back' : hero ? 'mid' : 'front'
 //   eye      = big ? 1.9 : fly ? 1.5 : 0.95    (line-of-sight heights)
@@ -60,7 +62,7 @@ export const ROLES = Object.freeze(['Troops', 'Elite', 'Fast', 'Hero', 'Monster'
 // core/ai/policy.js's ORDER)
 export const AI_ROLES = Object.freeze(['melee', 'raider', 'line', 'shooter', 'hero', 'artillery'])
 // unit flags; each is a boolean on every normalised type
-export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler'])
+export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler', 'climb'])
 
 const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'cost', 'stats', 'ranged', 'melee', 'abilities',
   ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop'])
@@ -156,6 +158,10 @@ function unitType(race, key, def) {
     chargeAfterAdvance: flag('chargeAfterAdvance', false),
     noCharge: flag('noCharge', def.role === 'Artillery'),
     brawler: flag('brawler', !ranged || wrecker),
+    // (F7a) infantry climb ladders: not big units or fliers (F9a: nor
+    // vehicles, `&& !vehicle` joining here); read only by the plans' mode
+    // setup (core/actions/move.js climbs)
+    climb: flag('climb', !big && !fly),
     move: def.move ?? (fly ? 'fly' : wrecker ? 'wreck' : burrow ? 'burrow' : 'walk'),
     deployRow: def.deployRow ?? (def.role === 'Artillery' ? 'back' : hero ? 'mid' : 'front'),
     eye: def.eye ?? (big ? 1.9 : fly ? 1.5 : 0.95),

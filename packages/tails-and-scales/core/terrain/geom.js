@@ -33,3 +33,16 @@ export function distToBox(x, y, z, s) {
   const qx = Math.max(0, Math.abs(lx) - s.hx), qy = Math.max(0, Math.abs(oy) - s.hy), qz = Math.max(0, Math.abs(lz) - s.hz)
   return hypot3(qx, qy, qz)
 }
+
+// (F7a) The four corners of a box's footprint on the table, [x, z] each, in
+// its own frame's order (−x−z, +x−z, +x+z, −x+z): what a fortification's
+// footprint radius is measured over (recipes.js reachOf, and terrain-check's
+// rows that hold every placed piece inside its footprint).
+export function corners(s) {
+  const c = cos(s.yaw), sn = sin(s.yaw)
+  return [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([i, k]) => {
+    const lx = i * s.hx, lz = k * s.hz
+    // (back out of its own frame: the inverse of segmentHitsBox's turn)
+    return [s.x + lx * c + lz * sn, s.z - lx * sn + lz * c]
+  })
+}

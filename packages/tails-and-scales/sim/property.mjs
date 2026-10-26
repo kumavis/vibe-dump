@@ -718,6 +718,12 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
       x.army = core.army.listText(core.army.autoList(lists.RACES[x.race], { ...rules, points: budget }, Math.floor(pickList() * 2 ** 32)))
     }
   }
+  // (F7a) two games in five on the fortified boards, for code whose mission
+  // is fought on them (P-height's rules after every command): (F11a) a
+  // P-army game with a human seat too, its lists drawn from their own
+  // stream above, so the draw here is a plain game's
+  const fortified = !!core.q.levelDist && core.missionOf?.(setup).sets.includes('fortified')
+  if (fortified && rand() < 0.4) setup.terrain = 'fortified'
   const where0 = `game ${seed} (${JSON.stringify(setup)})`
   const counts = { games: 1, probes: 0, commands: {}, ended: null, aggressive }
   // how far from the nearest enemy a body's move ends (Infinity if it isn't one)
@@ -742,6 +748,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
       else if (e.t === 'stage' && e.stage === 'battle') seen.battle = true
       else if (e.t === 'game.over') seen.over.push(e)
     }
+    if (fortified) heightEvents(G, events, where)
     tap.fold(G, events, where)
   }
   const G = core.createMatch(setup, { out: [], strict: true, onTrace: tap.trace })
@@ -752,6 +759,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     const where = `${where0} decision ${k}`
     if (k > 3000) throw new Error(`${where}: the battle never ends`)
     invariants(core, G, where, last)
+    if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, where, rand)
     if (k === 0) lockCheck(core, rng, G, where)
     take(where)
     const seat = core.pendingSeats(G)[Math.floor(rand() * core.pendingSeats(G).length)]
@@ -817,6 +825,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     counts.commands[body.t] = (counts.commands[body.t] ?? 0) + 1
   }
   invariants(core, G, `${where0} at its end`, last)
+  if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, `${where0} at its end`, rand)
   take(`${where0} at its end`)
   counts.mirrored = tap.counts()
   counts.ended = result(G, where0, conceded)
@@ -925,7 +934,9 @@ const BAD_MISSION_SETUPS = {
   'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there (is|are) classic/],
   'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
   'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
-  'a set the mission is not fought on': [{ terrain: 'fortified' }, /^the classic mission is fought on classic, not "fortified"$/],
+  // ((F7a) the classic mission is fought on fortified too, so a set it isn't
+  // fought on is one that doesn't exist)
+  'a set the mission is not fought on': [{ terrain: 'moated' }, /^the classic mission is fought on classic or fortified, not "moated"$/],
   'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
   // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
   // for the setup's prototype (its fields would slip past the whitelist)
@@ -1185,7 +1196,8 @@ const V1_PINS = {
   'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
   'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
 }
-const PINNED_UNDER = [1, 2, 3, 4, 5]
+// (6, F7a's height, as data-check's PINNED: classic boards build none)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6]
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a
@@ -1465,6 +1477,569 @@ function interleave(core, A, B) {
   }
 }
 
+// ── P-height and P-level (F7a, DESIGN §4.2.9) ───────────────────────────────
+// What a board with a height layer must keep (code from F7a on: its queries
+// have levelDist; older code is held to none of it):
+//  - classic boards build no height array (no nav.floor, hasHeight false),
+//    every unit's groundY and every floorAt is 0, and levelDist is the
+//    straight line; a fortified board builds one;
+//  - (heightRules, after every command of every random game on a fortified
+//    board) no unit stands straddling a ledge (its cell's cliff ≥ r − 0.06),
+//    no enemy engaged across more than HIGH, and sight from a deck cell, as
+//    the AI scores it (sight's `from`), is sight with the unit standing
+//    there, and sightInfo's verdict sight's; (heightEvents) no non-climber's
+//    walk ever takes a link, and a board's events carry `y` exactly where it
+//    has height (classic's don't grow); (no ground vehicle stands above
+//    STEP: F9a's vehicles have no unit yet);
+//  - (heightTask, on fortified boards of its own) reach's every step: a
+//    neighbour's floor within STEP and its cell standable, a link only for
+//    a climber and at its cost (a disc of r 0.05, which no ledge's band
+//    stops, as well as the units' own: so a reach that steps up a wall is
+//    seen even where the cliff would have hidden it); standable never on a
+//    ledge's band; movePlan takes a ladder for exactly the climbers; across a
+//    ledge (a unit on a deck top, an enemy at its foot within 1"): not
+//    engaged, the deck's bubble no ground cell's, no charge spot off the
+//    target's level; the same pair on one level engaged;
+//  - (F7a's review, heightTask too) the rules the random games pass by
+//    without judging, each on a scene of its own: the keep's objective held
+//    from its top and not from its foot (controlOf); a template landing on a
+//    deck sparing the models on the ground below it within its horizontal
+//    reach (blastLands, in 3D); a wrecker's smash on the ground skipping a
+//    piece standing on a deck (smashAround, by `base`); a pile-in onto a
+//    ledge's band refused, one onto open deck taken (closeRanks); and a
+//    charge onto a deck's top taken beside an enemy on the ground below
+//    (chargePlan's other enemies, at their own level only);
+//  - P-level: levelDist equals a reference Dijkstra over the gate graph
+//    (every gate's two ends, a and b; the straight line between any two on
+//    one level, each gate at its cost; the ladders only for a climber; (the
+//    review) a point partway up a stair joined to its foot too; no way at
+//    all, the straight line), for a climber and a non-climber, on
+//    LEVEL_PAIRS random point pairs per fortified board (half of the points
+//    on raised cells), to 1e-9: on HEIGHT_BOARDS Skirmish boards, and (the
+//    review) on GRAND_LEVEL Grand-sized ones (the Grand fixture's table,
+//    80×56 with its 14" zones and nine objectives, built straight from the
+//    code's Terrain and NavGrid), where bastions stand and a deck can be a
+//    shortcut between two ground points.
+const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12
+// a charge spot's reach of another enemy: its base and the charger's, and
+// ENGAGE (core/actions/charge.js's test)
+const R0 = (e, u) => e.r + u.r + 1
+const GRAND_TABLE = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z], i) => ({ i, x, z })) }
+
+// a fortified game's state, between two commands
+function heightRules(core, G, where, rand) {
+  const q = core.q, nav = G.nav
+  if (G.setup.terrain !== 'fortified') {
+    if (nav.hasHeight || nav.floor !== undefined) throw new Error(`${where}: a ${G.setup.terrain} board built a height layer`)
+    for (const u of G.units) if (q.groundY(G, u) !== 0) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)} on a ${G.setup.terrain} board`)
+    return 0
+  }
+  if (!nav.hasHeight) throw new Error(`${where}: a fortified board built no height layer`)
+  const live = G.units.filter((u) => q.alive(u))
+  for (const u of live) {
+    const i = nav.index(u.pos.x, u.pos.z)
+    if (!(nav.cliff[i] >= u.r - 0.06)) throw new Error(`${where}: unit ${u.id} (${u.t.short}, r ${u.r.toFixed(3)}) straddles a ledge at (${u.pos.x}, ${u.pos.z}): cliff ${nav.cliff[i]}`)
+    for (const e of q.engagedWith(G, u)) {
+      const dy = Math.abs(q.groundY(G, u) - q.groundY(G, e))
+      if (dy > q.HIGH) throw new Error(`${where}: unit ${u.id} is engaged with unit ${e.id} ${dy}" below or above it`)
+    }
+  }
+  // sight from a deck cell is sight standing there (one shooter, one target,
+  // one cell, each picked at random)
+  const shooters = live.filter((u) => u.t.ranged)
+  if (!shooters.length) return 1
+  const u = shooters[Math.floor(rand() * shooters.length)]
+  const foes = live.filter((e) => e.side !== u.side)
+  if (!foes.length) return 1
+  const e = foes[Math.floor(rand() * foes.length)]
+  const decks = []
+  for (let i = 0; i < nav.N; i++) if (nav.level[i] && nav.standable(i, u.r, 'walk')) decks.push(i)
+  if (!decks.length) return 1
+  const c = decks[Math.floor(rand() * decks.length)], at = { x: nav.x(c), z: nav.z(c) }
+  const from = JSON.stringify(q.sight(G, u, e, at)), info = q.sightInfo(G, u, e, at)
+  const was = { x: u.pos.x, z: u.pos.z }
+  u.pos.x = at.x
+  u.pos.z = at.z
+  let there
+  try {
+    there = JSON.stringify(q.sight(G, u, e))
+  } finally {
+    u.pos.x = was.x
+    u.pos.z = was.z
+  }
+  if (from !== there) throw new Error(`${where}: unit ${u.id}'s sight of unit ${e.id} from deck cell ${c} is ${from}, standing there ${there}`)
+  const s = JSON.parse(from)
+  if (info.ok !== s.visible || info.cover !== s.cover) throw new Error(`${where}: sightInfo of unit ${e.id} from cell ${c} says ${JSON.stringify(info)}, sight ${from}`)
+  return 1
+}
+
+// a batch of a game's events, against the board they were played on
+function heightEvents(G, events, where) {
+  const high = G.nav.hasHeight
+  for (const e of events) {
+    if (e.t === 'unit.move') {
+      const u = G.units.find((x) => x.id === e.u)
+      if (e.path.some((p) => p.climb) && !u.t.climb) throw new Error(`${where}: unit ${u.id} (${u.t.short}), no climber, took a ladder: ${JSON.stringify(e.path)}`)
+      if (high !== ('y' in e.to) || e.path.some((p) => high !== ('y' in p))) throw new Error(`${where}: a walk ${high ? 'without' : 'with'} heights on a board ${high ? 'with' : 'without'} them: ${JSON.stringify(e).slice(0, 160)}`)
+    } else if (e.t === 'unit.place' || e.t === 'unit.formation') {
+      const has = e.t === 'unit.place' ? 'y' in e : 'y' in e.pos
+      if (high !== has) throw new Error(`${where}: a ${e.t} ${high ? 'without' : 'with'} its floor on a board ${high ? 'with' : 'without'} height: ${JSON.stringify(e).slice(0, 160)}`)
+    }
+  }
+}
+
+// the reference: Dijkstra over the gate graph's nodes (a, b and every gate's
+// two ends), O(n²), with no shortcut of levelDist's: (the review) every way
+// the graph has, a deck crossed as a shortcut between two ground points
+// included, and a point partway up a stair (its cell's floor that stair's,
+// nav.rampOf, the stair rising to the point's level) joined straight to the
+// stair's foot as well
+function gateDijkstra(nav, a, b, climb) {
+  const nodes = [{ p: a, L: nav.levelAt(a.x, a.z) }, { p: b, L: nav.levelAt(b.x, b.z) }]
+  const gates = nav.gates.filter((g) => climb || !g.ladder)
+  for (const g of gates) nodes.push({ p: g.lo, L: 0 }, { p: g.hi, L: g.level })
+  // (a and b's own stairs: [node, gate's foot node] each)
+  const extra = []
+  for (const e of [0, 1]) {
+    const { p, L } = nodes[e], i = nav.index(p.x, p.z)
+    if (!L || i < 0 || !nav.rampOf || nav.rampOf[i] < 0) continue
+    const k = gates.findIndex((g) => !g.ladder && g.id === nav.rampOf[i])
+    if (k >= 0 && gates[k].level === L) extra.push([e, 2 + 2 * k])
+  }
+  const n = nodes.length, d = new Array(n).fill(Infinity), done = new Array(n).fill(false)
+  const dist = (u, v) => Math.hypot(nodes[u].p.x - nodes[v].p.x, nodes[u].p.z - nodes[v].p.z)
+  d[0] = 0
+  for (;;) {
+    let u = -1
+    for (let i = 0; i < n; i++) if (!done[i] && (u < 0 || d[i] < d[u])) u = i
+    if (u < 0 || !isFinite(d[u])) break
+    done[u] = true
+    for (let v = 0; v < n; v++) if (nodes[v].L === nodes[u].L) d[v] = Math.min(d[v], d[u] + dist(u, v))
+    if (u >= 2) {
+      const k = (u - 2) >> 1, v = (u - 2) % 2 ? u - 1 : u + 1
+      d[v] = Math.min(d[v], d[u] + gates[k].cost)
+    }
+    for (const [x, y] of extra) {
+      if (u === x) d[y] = Math.min(d[y], d[u] + dist(x, y))
+      else if (u === y) d[x] = Math.min(d[x], d[u] + dist(x, y))
+    }
+  }
+  return isFinite(d[1]) ? d[1] : Math.hypot(a.x - b.x, a.z - b.z)
+}
+
+// P-level over one board's nav: LEVEL_PAIRS random pairs (half the points
+// on raised cells), climbing and not, against the reference
+function levelPairs(q, G, nav, rand, where, counts) {
+  const raised = []
+  for (let i = 0; i < nav.N; i++) if (nav.level[i]) raised.push(i)
+  const point = () => {
+    if (raised.length && rand() < 0.5) {
+      const i = raised[Math.floor(rand() * raised.length)]
+      return { x: nav.x(i) + (rand() - 0.5) * 0.4, z: nav.z(i) + (rand() - 0.5) * 0.4 }
+    }
+    return { x: (rand() - 0.5) * nav.W, z: (rand() - 0.5) * nav.H }
+  }
+  for (let k = 0; k < LEVEL_PAIRS; k++) {
+    const p = point(), b = point()
+    for (const climb of [true, false]) {
+      const got = q.levelDist(G, p, b, climb), want = gateDijkstra(nav, p, b, climb)
+      if (!(Math.abs(got - want) <= 1e-9)) throw new Error(`${where}: levelDist from (${p.x}, ${p.z}) (level ${nav.levelAt(p.x, p.z)}) to (${b.x}, ${b.z}) (level ${nav.levelAt(b.x, b.z)}), ${climb ? 'climbing' : 'by stairs'}, is ${got}; over the gate graph ${want}`)
+      counts.pairs++
+    }
+  }
+}
+
+// (F7a's review) Run fn with only the units in `keep` standing (the rest's
+// counts set to 0 and back, with every unit's place, whatever fn does)
+function only(G, keep, fn) {
+  const saved = G.units.map((u) => ({ u, alive: u.alive, x: u.pos.x, z: u.pos.z, r: u.r, models: u.models.map((m) => ({ ...m })) }))
+  for (const u of G.units) if (!keep.includes(u)) u.alive = 0
+  try {
+    return fn()
+  } finally {
+    for (const { u, alive, x, z, r, models } of saved) {
+      u.alive = alive
+      u.pos.x = x
+      u.pos.z = z
+      u.r = r
+      models.forEach((m, k) => Object.assign(u.models[k], m))
+    }
+  }
+}
+
+// (F7a's review) The height rules the random games pass by without judging,
+// each on a scene of its own on one fortified board (G: a fresh match, its
+// scene changed and put back; the blast and the smash on a match of their
+// own, `fresh`, as they change the table): what each found goes in counts
+function heightScenes(core, mods, G, fresh, where, counts) {
+  const q = core.q, nav = G.nav, HIGH = q.HIGH, STEP = mods.nav.STEP
+  const put = (u, x, z) => {
+    u.pos.x = x
+    u.pos.z = z
+  }
+  const cells = (pred) => {
+    const out = []
+    for (let i = 0; i < nav.N; i++) if (pred(i)) out.push(i)
+    return out
+  }
+  const climbers = (side) => G.units.filter((u) => u.side === side && !u.t.fly && u.t.climb)
+  // the keep's objective held from its top (its foot is out of range: the
+  // deck's 3" half-width and the ledge's band keep every model on the ground
+  // 0.6" or more past OBJECTIVE_RANGE and its base; a deck beside a ground
+  // objective, which the height rule parts, is the Grand-sized boards'
+  // scene, controlScene)
+  const keep = G.terrain.chunks.find((c) => c.kind === 'deck' && c.look?.recipe === 'keep')
+  const o = G.objectives.find((x) => x.x === 0 && x.z === 0)
+  if (keep && o) {
+    const oy = q.floorAt(G, o.x, o.z), u = climbers(0)[0]
+    const near = (i) => u.models.some((m) => m.alive && Math.hypot(nav.x(i) + m.ox - o.x, nav.z(i) + m.oz - o.z) <= 3 + u.t.base)
+    const top = cells((i) => Math.abs(nav.floor[i] - oy) <= HIGH && nav.level[i] && nav.standable(i, u.r, 'walk') && near(i))
+    if (top.length) {
+      only(G, [u], () => {
+        put(u, nav.x(top[0]), nav.z(top[0]))
+        if (q.controlOf(G, o) !== u.side) throw new Error(`${where}: unit ${u.id} (${u.t.short}) on the keep's top (cell ${top[0]}) doesn't hold its objective: ${q.controlOf(G, o)}`)
+        counts.keepTop++
+      })
+    }
+  }
+  // a pile-in onto a ledge's band refused, onto open deck taken: a squad on a
+  // deck cut to one model, its foe on the same deck (closeRanks piles it in
+  // toward the foe, by its gap less ENGAGE − 0.3)
+  const sq = climbers(0).filter((u) => u.models.length >= 3).reduce((x, y) => (!x || y.r > x.r ? y : x), null)
+  const foe = climbers(1).reduce((x, y) => (!x || y.r < x.r ? y : x), null)
+  if (sq && foe) {
+    const r1 = sq.t.base, deck = cells((i) => nav.level[i] && nav.floor[i] > STEP)
+    let refused = null, taken = null
+    for (let k = 0; k < deck.length && !(refused && taken); k += 3) {
+      const i = deck[k]
+      if (!(nav.cliff[i] >= r1 - 0.06)) continue
+      for (const j of deck) {
+        if (Math.abs(nav.floor[j] - nav.floor[i]) > HIGH) continue
+        const d = Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j))
+        if (d - sq.r - foe.r > 1.05 || d - sq.r - foe.r < 0.1 || d - r1 - foe.r <= 1.05) continue
+        const step = d - r1 - foe.r - 0.7, x = nav.x(i) + ((nav.x(j) - nav.x(i)) / d) * step, z = nav.z(i) + ((nav.z(j) - nav.z(i)) / d) * step
+        const ok = nav.standable(nav.index(x, z), r1, 'walk')
+        if (!ok && !refused) refused = [i, j]
+        else if (ok && !taken) taken = [i, j]
+        if (refused && taken) break
+      }
+    }
+    for (const [pair, want] of [[refused, false], [taken, true]]) {
+      if (!pair) continue
+      only(G, [sq, foe], () => {
+        put(sq, nav.x(pair[0]), nav.z(pair[0]))
+        put(foe, nav.x(pair[1]), nav.z(pair[1]))
+        if (!q.engagedWith(G, sq).includes(foe)) throw new Error(`${where}: the pile-in scene's two units (cells ${pair[0]} and ${pair[1]}) aren't engaged`)
+        for (const m of sq.models.slice(1)) m.alive = false
+        sq.alive = 1
+        mods.damage.closeRanks(G, sq)
+        const moved = sq.pos.x !== nav.x(pair[0]) || sq.pos.z !== nav.z(pair[0])
+        if (moved !== want) throw new Error(`${where}: closeRanks ${moved ? 'piled' : "didn't pile"} unit ${sq.id} in from deck cell ${pair[0]} toward cell ${pair[1]}${want ? ', onto standable deck' : ', onto a ledge\'s band'} (it stands at (${sq.pos.x}, ${sq.pos.z}))`)
+        counts[want ? 'pileIn' : 'pileRefused']++
+      })
+    }
+  }
+  // a charge onto a deck's top beside an enemy on the ground below: the
+  // target on a deck's rim, the charger on the same deck; then the other
+  // enemy put on the ground below one of the charge's spots, within 1" of
+  // it across the ledge: the spot stays one, and no spot lies within 1" of
+  // an enemy at its own level
+  // (the target and the charger the smallest climbers, so they stand nearest
+  // the rim; the enemy below the biggest walker: the ledges' bands keep a
+  // small base on the ground more than 1" from any on the deck above, and
+  // only a big one's reaches within it, by a few hundredths)
+  const small = (us) => us.reduce((x, y) => (!x || y.r < x.r ? y : x), null)
+  const other = G.units.filter((e) => e.side === 1 && !e.t.fly).reduce((x, y) => (!x || y.r > x.r ? y : x), null)
+  const ch = small(climbers(0)), tg = small(climbers(1).filter((e) => e !== other))
+  if (ch && tg && other) {
+    const tops = cells((i) => nav.level[i] && nav.floor[i] > HIGH && nav.standable(i, tg.r, 'walk') && nav.cliff[i] < tg.r + 0.5)
+    let found = false
+    for (let k = 0; k < tops.length && k < 400 && !found; k++) {
+      const t = tops[k]
+      const near = (c) => Math.hypot(nav.x(c) - nav.x(t), nav.z(c) - nav.z(t))
+      const from = cells((c) => nav.level[c] === nav.level[t] && nav.standable(c, ch.r, 'walk') && near(c) > tg.r + ch.r + 2).sort((x, y) => near(x) - near(y))
+      if (!from.length) continue
+      only(G, [ch, tg, other], () => {
+        put(tg, nav.x(t), nav.z(t))
+        put(ch, nav.x(from[0]), nav.z(from[0]))
+        // (the other enemy far off while the spots are found)
+        put(other, -nav.W, -nav.H)
+        const first = q.chargePlan(G, ch, tg)
+        for (const sp of first?.spots ?? []) {
+          const sx = nav.x(sp.i), sz = nav.z(sp.i), R = R0(other, ch) - 0.01
+          const j = cells((c) => nav.floor[c] <= STEP && Math.abs(nav.floor[sp.i] - nav.floor[c]) > HIGH && nav.standable(c, other.r, 'walk') && Math.hypot(nav.x(c) - sx, nav.z(c) - sz) < R)[0]
+          if (j === undefined) continue
+          put(other, nav.x(j), nav.z(j))
+          const plan = q.chargePlan(G, ch, tg)
+          if (!plan?.spots.some((x) => x.i === sp.i)) throw new Error(`${where}: a charge's spot on deck cell ${sp.i} (floor ${nav.floor[sp.i]}) is refused for an enemy on the ground below at cell ${j} (floor ${nav.floor[j]}), ${Math.hypot(nav.x(j) - sx, nav.z(j) - sz).toFixed(2)}" off`)
+          for (const x of plan.spots) if (Math.hypot(nav.x(x.i) - other.pos.x, nav.z(x.i) - other.pos.z) < R0(other, ch) && Math.abs(nav.floor[x.i] - q.groundY(G, other)) <= HIGH) throw new Error(`${where}: a charge may end on cell ${x.i} within 1" of another enemy at its level`)
+          found = true
+          counts.chargeOver++
+          break
+        }
+      })
+    }
+  }
+  // a template on a deck spares the ground below it within its horizontal
+  // reach, and hits the deck (on a match of its own: it rolls and scars)
+  {
+    const H = fresh(), nh = H.nav
+    const gun = H.units.find((u) => u.t.ranged?.blast && u.t.ranged.blast + 0.3 < 2)
+    const v = H.units.find((u) => u.side === 1 && !u.t.fly && !u.t.big), w2 = H.units.find((u) => u.side === 1 && u !== v && u.t.climb && !u.t.fly)
+    if (gun && v && w2) {
+      const w = gun.t.ranged, R = (u) => w.blast + u.t.base * 0.6
+      // (the template on a deck's rim cell; a deck unit with a model under
+      // it, and a ground unit with a model within its reach horizontally)
+      const within = (u, j, at, reach) => u.models.some((m) => m.alive && Math.hypot(nh.x(j) + m.ox - nh.x(at), nh.z(j) + m.oz - nh.z(at)) <= reach)
+      let scene = null
+      for (let at = 0; at < nh.N && !scene; at++) {
+        if (!(nh.floor[at] >= 2) || nh.cliff[at] > 0.3) continue
+        let up = -1, down = -1
+        for (let j = 0; j < nh.N && (up < 0 || down < 0); j++) {
+          if (up < 0 && nh.floor[j] === nh.floor[at] && nh.standable(j, w2.r, 'walk') && within(w2, j, at, R(w2) - 0.05)) up = j
+          if (down < 0 && nh.floor[j] === 0 && nh.standable(j, v.r, 'walk') && within(v, j, at, R(v) - 0.05)) down = j
+        }
+        if (up >= 0 && down >= 0) scene = [up, down, at]
+      }
+      if (scene) {
+        only(H, [gun, v, w2], () => {
+          put(w2, nh.x(scene[0]), nh.z(scene[0]))
+          put(v, nh.x(scene[1]), nh.z(scene[1]))
+          H.out = []
+          try {
+            mods.shoot.blastLands(H, gun, { x: nh.x(scene[2]), z: nh.z(scene[2]) }, w)
+            const hit = (u) => H.out.some((e) => e.t === 'dice' && typeof e.label === 'string' && e.label.replace(/^⚠ /, '').startsWith(`${u.t.short}: `))
+            if (hit(v)) throw new Error(`${where}: a template landing on deck cell ${scene[2]} (floor ${nh.floor[scene[2]]}) hit unit ${v.id} (${v.t.short}) on the ground below it at cell ${scene[1]}`)
+            if (!hit(w2)) throw new Error(`${where}: a template landing on deck cell ${scene[2]} missed unit ${w2.id} (${w2.t.short}) standing under it at cell ${scene[0]}`)
+          } finally {
+            H.out = null
+          }
+          counts.blastSpared++
+        })
+      }
+    }
+    // a wrecker's smash on the ground skips a piece standing on a deck, and
+    // takes one on the ground (a piece of the scene's own, put beside the
+    // sample and taken away again)
+    const brute = H.units.find((u) => u.t.wrecker)
+    const ground = cells((i) => nh.floor[i] === 0 && nh.standable(i, 1, 'walk'))
+    if (brute && ground.length) {
+      const at = { x: nh.x(ground[0]), z: nh.z(ground[0]), dir: 0 }
+      for (const [base, want] of [[2, false], [0, true]]) {
+        const piece = { id: -1, kind: 'scene', alive: true, destructible: true, hp: 999, base, shape: { x: at.x + 0.5, z: at.z, hx: 0.5, hz: 0.5, yaw: 0, y: base + 0.5, hy: 0.5, reach: 0.71 } }
+        H.terrain.chunks.push(piece)
+        try {
+          mods.move.smashAround(H, brute, at, null)
+        } finally {
+          H.terrain.chunks.pop()
+        }
+        if ((piece.hp < 999) !== want) throw new Error(`${where}: a wrecker's smash on the ground at (${at.x}, ${at.z}) ${want ? 'spared' : 'hit'} a piece standing at ${base}"`)
+        counts[want ? 'smashHit' : 'smashSkipped']++
+      }
+    }
+  }
+}
+// (F7a's review) controlOf with height on a Grand-sized board (`nav`, its
+// objectives): a unit on a deck whose models in an objective's horizontal
+// range all stand more than HIGH off its floor doesn't hold it; the same
+// unit on the ground in range does. `u` is a unit of a Skirmish match, put
+// on this board alone ({ nav, units: [u] }, all controlOf reads)
+function controlScene(q, nav, objectives, u, where, counts) {
+  const G = { nav, units: [u], objectives }
+  const was = { x: u.pos.x, z: u.pos.z }
+  const inRange = (i, o) => u.models.filter((m) => m.alive && Math.hypot(nav.x(i) + m.ox - o.x, nav.z(i) + m.oz - o.z) <= 3 + u.t.base)
+  try {
+    for (const o of objectives) {
+      const oy = q.floorAt(G, o.x, o.z)
+      let deck = -1, ground = -1
+      for (let i = 0; i < nav.N && (deck < 0 || ground < 0); i++) {
+        if (!nav.standable(i, u.r, 'walk')) continue
+        const ms = inRange(i, o)
+        if (!ms.length) continue
+        const off = ms.every((m) => Math.abs(q.floorAt(G, nav.x(i) + m.ox, nav.z(i) + m.oz) - oy) > q.HIGH)
+        if (off && nav.level[i] && deck < 0) deck = i
+        else if (ms.every((m) => Math.abs(q.floorAt(G, nav.x(i) + m.ox, nav.z(i) + m.oz) - oy) <= q.HIGH) && ground < 0) ground = i
+      }
+      if (deck < 0) continue
+      u.pos.x = nav.x(deck)
+      u.pos.z = nav.z(deck)
+      if (q.controlOf(G, o) !== -1) throw new Error(`${where}: unit ${u.id} (${u.t.short}) on a deck at cell ${deck} (floor ${nav.floor[deck]}) holds the objective at (${o.x}, ${o.z}) (floor ${oy}) from above`)
+      counts.controlAbove++
+      if (ground >= 0) {
+        u.pos.x = nav.x(ground)
+        u.pos.z = nav.z(ground)
+        if (q.controlOf(G, o) !== u.side) throw new Error(`${where}: unit ${u.id} (${u.t.short}) at cell ${ground}, in range of the objective at (${o.x}, ${o.z}) on its level, doesn't hold it`)
+      }
+    }
+  } finally {
+    u.pos.x = was.x
+    u.pos.z = was.z
+  }
+}
+
+function heightTask(core, mods) {
+  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0 }
+  const nav0 = mods.nav, { STEP } = nav0
+  const SEATS = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
+  // classic: no height anywhere
+  for (const board of [1, 2, 3]) {
+    const G = core.createMatch({ board, dice: 1, seats: SEATS })
+    const where = `P-height, classic board ${board}`
+    if (G.nav.hasHeight || G.nav.floor !== undefined || G.nav.cliff !== undefined) throw new Error(`${where}: it built a height layer`)
+    for (const u of G.units) if (q.groundY(G, u) !== 0) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)}`)
+    if (q.floorAt(G, 3, 2) !== 0 || q.levelDist(G, { x: -5, z: 1 }, { x: 4, z: -3 }, true) !== Math.hypot(9, 4)) throw new Error(`${where}: floorAt or levelDist isn't the flat table's`)
+  }
+  for (let board = 1; board <= HEIGHT_BOARDS; board++) {
+    const where = `P-height, fortified board ${board}`
+    const G = core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS })
+    const nav = G.nav, rand = mulberry32(board * 7907)
+    if (!nav.hasHeight) throw new Error(`${where}: no height layer`)
+    counts.boards++
+    const raised = []
+    for (let i = 0; i < nav.N; i++) if (nav.level[i]) raised.push(i)
+    // standable never on a ledge's band
+    for (const r of [0.42, 0.95, 1.05, 1.22]) {
+      for (let i = 0; i < nav.N; i++) if (nav.standable(i, r, 'walk') && !(nav.cliff[i] >= r - 0.06)) throw new Error(`${where}: cell ${i} is standable for r ${r} with cliff ${nav.cliff[i]}`)
+    }
+    counts.cells += nav.N
+    // reach's steps, from the ground and from deck tops
+    const starts = []
+    for (let k = 0; k < 6; k++) {
+      const pool = k % 2 && raised.length ? raised : null
+      starts.push(pool ? pool[Math.floor(rand() * pool.length)] : Math.floor(rand() * nav.N))
+    }
+    for (const s of starts) {
+      for (const [r, climb] of [[0.05, true], [0.05, false], [0.42, true], [1.05, false], [1.22, true]]) {
+        // (from a cell the disc stands on: one squeezed may wriggle out
+        // through its own footprint, ledges' bands and all, as on the flat)
+        if (!nav.standable(s, r, 'walk')) continue
+        const res = nav.reach(nav.x(s), nav.z(s), { r, max: 30, mode: 'walk', climb })
+        for (let j = 0; j < nav.N; j++) {
+          const i = res.prev[j]
+          if (i < 0) continue
+          counts.steps++
+          const near = Math.abs((i % nav.nx) - (j % nav.nx)) <= 1 && Math.abs(Math.floor(i / nav.nx) - Math.floor(j / nav.nx)) <= 1
+          if (near) {
+            if (Math.abs(nav.floor[j] - nav.floor[i]) > STEP) throw new Error(`${where}: reach (r ${r}) steps from cell ${i} (floor ${nav.floor[i]}) to cell ${j} (floor ${nav.floor[j]}), more than STEP`)
+            if (r > 0.06 && !(nav.cliff[j] >= r - 0.06)) throw new Error(`${where}: reach (r ${r}) steps onto cell ${j}, on a ledge's band (cliff ${nav.cliff[j]})`)
+          } else {
+            counts.links++
+            const cost = nav.linkCostOf(i, j)
+            if (!climb) throw new Error(`${where}: a reach that doesn't climb (r ${r}) went from cell ${i} to cell ${j} over a ladder`)
+            if (cost < 0 || res.dist[j] !== res.dist[i] + cost) throw new Error(`${where}: reach (r ${r}) jumped from cell ${i} to cell ${j} (${res.dist[i]} → ${res.dist[j]}), which no link (${cost}) joins at that cost`)
+          }
+        }
+      }
+    }
+    // movePlan takes a ladder for exactly the climbers: each unit put at a
+    // ladder's foot it stands on
+    for (const g of nav.gates.filter((x) => x.ladder)) {
+      const foot = nav.index(g.lo.x, g.lo.z), top = nav.index(g.hi.x, g.hi.z)
+      for (const u of G.units) {
+        if (!nav.standable(foot, u.r, 'walk') || !nav.standable(top, u.r, 'walk')) continue
+        const was = { x: u.pos.x, z: u.pos.z }
+        u.pos.x = nav.x(foot)
+        u.pos.z = nav.z(foot)
+        try {
+          const plan = q.movePlan(G, u, 20)
+          const up = plan.res.prev[top] === foot
+          // (an enemy's bubble over the top, or the foot, bars the way: the
+          // works' decks hold their seat's army)
+          if (plan.forbid?.[top] || plan.forbid?.[foot]) continue
+          counts.plans++
+          if (plan.mode !== 'fly' && up !== !!u.t.climb) throw new Error(`${where}: ${u.t.short}'s move plan from ladder ${g.id}'s foot ${up ? 'climbs it' : "doesn't climb it"}, ${u.t.climb ? 'a climber' : 'no climber'}`)
+        } finally {
+          u.pos.x = was.x
+          u.pos.z = was.z
+        }
+      }
+    }
+    // across a ledge or up a stair: a seat 0 unit and a seat 1 unit within
+    // 1" (base to base) more than HIGH apart in height; then the same pair
+    // on one level. (Each side of an edge, the ledges' bands keep two discs
+    // 0.88" apart or more, and at the grid's cells usually more than 1":
+    // the pairs the height rule parts are found on the stairs too, where
+    // 2.4" of a stair rises 1.2", which two squads' bases span.) The
+    // biggest climbers, so their bases span most.
+    const big = (side) => G.units.filter((u) => u.side === side && !u.t.fly && u.t.climb).reduce((x, y) => (y.r > x.r ? y : x))
+    const a = big(0), e = big(1)
+    const put = (u, i) => {
+      u.pos.x = nav.x(i)
+      u.pos.z = nav.z(i)
+    }
+    const pa = { ...a.pos }, pe = { ...e.pos }
+    let across = null, flat = null
+    const R = Math.ceil((a.r + e.r + 1) / nav.cell)
+    for (let i = 0; i < nav.N && !(across && flat); i++) {
+      if (!nav.floor[i] || !nav.standable(i, a.r, 'walk')) continue
+      const ix = i % nav.nx, iz = Math.floor(i / nav.nx)
+      for (let dz = -R; dz <= R && !(across && flat); dz++) {
+        for (let dx = -R; dx <= R; dx++) {
+          const jx = ix + dx, jz = iz + dz
+          if (jx < 0 || jz < 0 || jx >= nav.nx || jz >= nav.nz) continue
+          const j = jz * nav.nx + jx
+          if (i === j || !nav.standable(j, e.r, 'walk')) continue
+          const g = Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j)) - a.r - e.r
+          if (g < 0.1 || g > 1) continue
+          if (!across && Math.abs(nav.floor[i] - nav.floor[j]) > q.HIGH) across = [i, j]
+          else if (!flat && nav.level[i] && nav.floor[i] === nav.floor[j]) flat = [i, j]
+        }
+      }
+    }
+    try {
+      if (across) {
+        put(a, across[0])
+        put(e, across[1])
+        if (q.engagedWith(G, a).includes(e) || q.engagedWith(G, e).includes(a)) throw new Error(`${where}: two enemies under 1" apart, one at floor ${nav.floor[across[0]]} (cell ${across[0]}), one at ${nav.floor[across[1]]} (cell ${across[1]}), are engaged`)
+        // (every cell e may not enter lies in the bubble of an enemy of its
+        // within HIGH of that enemy's floor)
+        const f = q.forbidMask(G, e, 1.05), theirs = q.enemiesOf(G, e)
+        for (let i = 0; i < nav.N; i++) {
+          if (f[i] && !theirs.some((o) => Math.hypot(nav.x(i) - o.pos.x, nav.z(i) - o.pos.z) < o.r + e.r + 1.05 && Math.abs(nav.floor[i] - q.groundY(G, o)) <= q.HIGH)) throw new Error(`${where}: cell ${i} at floor ${nav.floor[i]} is forbidden, in no enemy's bubble at its level`)
+        }
+        const plan = q.chargePlan(G, e, a)
+        for (const s of plan?.spots ?? []) if (Math.abs(nav.floor[s.i] - q.groundY(G, a)) > q.HIGH) throw new Error(`${where}: a charge on the unit at floor ${q.groundY(G, a)} may end on cell ${s.i} at floor ${nav.floor[s.i]}`)
+        counts.ledges++
+      }
+      if (flat) {
+        put(a, flat[0])
+        put(e, flat[1])
+        if (!q.engagedWith(G, a).includes(e)) throw new Error(`${where}: two enemies on one level (cells ${flat[0]} and ${flat[1]}, floor ${nav.floor[flat[0]]}) under 1" apart aren't engaged`)
+        counts.flat++
+      }
+    } finally {
+      Object.assign(a.pos, pa)
+      Object.assign(e.pos, pe)
+    }
+    // (F7a's review) the scenes
+    heightScenes(core, mods, G, () => core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS }), where, counts)
+    // P-level
+    levelPairs(q, G, nav, rand, where, counts)
+  }
+  if (!counts.ledges || !counts.flat || !counts.links || !counts.plans) throw new Error(`P-height met no ${!counts.ledges ? 'pair across a ledge' : !counts.flat ? 'pair on one level' : !counts.links ? 'link in a reach' : 'unit at a ladder\'s foot'} on ${HEIGHT_BOARDS} boards`)
+  // (F7a's review) every scene met at least once
+  const scenes = { keepTop: "a unit on the keep's top", pileIn: 'a pile-in onto open deck', pileRefused: "a pile-in onto a ledge's band", chargeOver: 'a charge spot on a deck within 1" of an enemy below', blastSpared: 'a template on a deck over the ground', smashSkipped: "a wrecker's smash beside a raised piece", smashHit: "a wrecker's smash beside a piece on the ground" }
+  for (const [k, what] of Object.entries(scenes)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
+  // (F7a's review) P-level on Grand-sized fortified boards, where bastions
+  // stand (Skirmish never fits one): the code's own Terrain and NavGrid
+  // (and controlOf's scene, which needs a deck beside a ground objective:
+  // the works' fronts stand 2" from the Grand table's (±24, 0))
+  const { W, H, deploy, objectives } = GRAND_TABLE
+  const sq = core.createMatch({ board: 1, dice: 1, terrain: 'fortified', seats: SEATS }).units.find((u) => u.side === 0 && !u.t.fly && u.models.length >= 3)
+  for (let seed = 1; seed <= GRAND_LEVEL; seed++) {
+    const T = new mods.terrain.Terrain(W, H)
+    T.generate(seed, objectives, deploy, 'fortified')
+    const nav = new nav0.NavGrid(W, H, 0.5)
+    nav.rebuild(T.chunks)
+    if (!nav.hasHeight) throw new Error(`P-level, Grand-sized board ${seed}: no height layer`)
+    controlScene(q, nav, objectives, sq, `P-height, Grand-sized board ${seed}`, counts)
+    levelPairs(q, { nav }, nav, mulberry32(seed * 7919), `P-level, Grand-sized board ${seed}`, counts)
+    counts.grand++
+  }
+  if (!counts.controlAbove) throw new Error(`P-height met no deck beside a ground objective on ${GRAND_LEVEL} Grand-sized boards`)
+  return counts
+}
+
 // (the child's match/ modules that fold a log, R8's: refold's)
 let FOLDING = null
 
@@ -1503,6 +2078,11 @@ if (a.child) {
       out = { ok: true, counts: { interleaved: 2 } }
     } else if (task.kind === 'offturn') {
       out = { ok: true, counts: { offTurn: 2, results: offTurnTask(core, hud) } }
+    } else if (task.kind === 'height') {
+      // (F7a: P-height's boards of its own, and P-level)
+      const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
+      const [nav, damage, shoot, move, terrain] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js')])
+      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
@@ -1600,6 +2180,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     // (code with core/army.js names its armies: P-mission's must have run)
     else if (lists && !r.counts.armies) bad.push({ error: 'the code has core/army.js, but P-mission held no army refusal' })
   }
+  // (F7a) P-height's own boards and P-level, for code with a height layer
+  if (/export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
+    const r = await child({ kind: 'height' }, pkg)
+    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
@@ -1610,6 +2196,9 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     reached.overtime += r.counts.overtime ?? 0
   }
   const probes = res.reduce((s, r) => s + (r.counts?.probes ?? 0), 0)
+  // (F7a) the fortified games' decisions P-height held
+  const heights = res.reduce((s, r) => s + (r.counts?.heights ?? 0), 0)
+  if (coverage && games >= 8 && /export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8')) && !heights) bad.push({ error: 'the random games played no fortified board for P-height (more --games?)' })
   const quietly = res.reduce((s, r) => s + (r.counts?.quiet ?? 0), 0)
   const refolded = res.reduce((s, r) => s + (r.counts?.refolded ?? 0), 0)
   const sessions = res.reduce((s, r) => [s[0] + (r.counts?.sessions ?? 0), s[1] + (r.counts?.junk ?? 0), s[2] + (r.counts?.handed ?? 0), s[3] + (r.counts?.gaps ?? 0)], [0, 0, 0, 0])
@@ -1635,7 +2224,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
     if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed, every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -1658,6 +2247,27 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
 // `missing-h-accepted`, `over-any-device` and `core-newer-only` (no honest
 // log writes those entries: only (9)'s replays do).
 const MUTATIONS = {
+  // (F7a) P-height and P-level: a reach that steps up a wall (the cliff
+  // hides it from a unit's own disc: only heightTask's r 0.05 reach sees
+  // it), a standable that ignores the ledges, a levelDist that misses a
+  // gate, an engagement across a ledge, and a plan that lets every unit
+  // climb; (F7a's review) a levelDist with no stair underfoot or no deck as
+  // a shortcut (the second seen only on the Grand-sized boards, where
+  // bastions stand), an objective held from a deck beside it, a template
+  // that hits through a deck, a smash at any level, a pile-in anywhere, and
+  // another enemy that bars a charge's spot whatever its level
+  'reach-ignores-step': ['core/nav.js', '          if (Math.abs(floor[j] - fi) > STEP) continue\n', ''],
+  'standable-ignores-cliff': ['core/nav.js', " >= r - 0.06 && this.cliff[i] >= r - 0.06\n", ' >= r - 0.06\n'],
+  'leveldist-misses-a-gate': ['core/queries.js', '    const L = la || lb, g0 = la ? b : a, g1 = la ? a : b\n    for (const k of gg.at.get(L) ?? []) {', '    const L = la || lb, g0 = la ? b : a, g1 = la ? a : b\n    for (const k of (gg.at.get(L) ?? []).slice(1)) {'],
+  'leveldist-no-stair': ['core/queries.js', '  if (i < 0 || nav.rampOf[i] < 0) return -1\n', '  return -1\n'],
+  'leveldist-no-shortcut': ['core/queries.js', '      short.push([u, v, d])\n', ''],
+  'control-ignores-height': ['core/queries.js', ' <= OBJECTIVE_RANGE + u.t.base && Math.abs(floorAt(G, x, z) - y) <= HIGH) oc[u.side] += u.t.OC', ' <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC'],
+  'blast-flat': ['core/actions/shoot.js', 'hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z)', 'hypot(mx(v, m) - land.x, mz(v, m) - land.z)'],
+  'smash-any-level': ['core/actions/move.js', '    if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue\n', ''],
+  'pile-in-anywhere': ['core/actions/damage.js', "    else if (G.nav.standable(G.nav.index(x, z), u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk')) setUnitPos(u, x, z)", '    else setUnitPos(u, x, z)'],
+  'charge-others-flat': ['core/actions/charge.js', ' && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue', ')) continue'],
+  'engaged-ignores-height': ['core/queries.js', 'gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)', 'gap(u, e) <= ENGAGE + 0.05)'],
+  'everyone-climbs': ['core/actions/move.js', 'forbid: mode === \'fly\' ? null : forbid, climb: climbs(u) })', 'forbid: mode === \'fly\' ? null : forbid, climb: true })'],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a

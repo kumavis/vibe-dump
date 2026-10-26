@@ -47,20 +47,28 @@ export function jobSetup(job) {
 // How the page starts a setup: the title screen's button for who sits in
 // each seat, and the URL that carries the rest (app/boot.js and app/flow.js
 // read ?seed, ?dice, ?races, ?overtime, from F8a ?mission (named only
-// when it isn't classic) and from F11a ?armies (named only when a seat
-// names an army: both seats' then, positionally, a seat that names none
-// giving its mission's preset by name, which plays the same units); a log
-// recorded before F4 never voted, so its overtime is 'never'). The page
-// builds its own setup from these, and playedAs (below) says whether it
-// built this one: a setup the page can't make (other terrain, rounds or
-// dice) is found there. Uses only its arguments (and modeOf), as playedAs.
+// when it isn't classic), from F11a ?armies (named only when a seat names
+// an army: both seats' then, positionally, a seat that names none giving
+// its mission's preset by name, which plays the same units) and from F7a
+// ?terrain (named only when it isn't the mission's first set, so a classic
+// setup's URL is the one it always was); a log recorded before F4 never
+// voted, so its overtime is 'never'). The page builds its own setup from
+// these, and playedAs (below) says whether it built this one: a setup the
+// page can't make (other terrain, rounds or dice) is found there. Uses
+// only its arguments (and modeOf), as playedAs: each mission's preset and
+// first set are written out here for want of an import (this module
+// imports nothing, its functions being injected into pages and run against
+// older code). A mission PRESET doesn't list names a preset of its own
+// name, as playedAs has it; one FIRST_SET doesn't list names its terrain
+// whenever its setup does.
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  // (each mission's preset, as playedAs has it)
-  const PRESET = { classic: 'classic' }, m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
+  const PRESET = { classic: 'classic' }, FIRST_SET = { classic: 'classic' }
+  const m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
   const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}` }
+  const terrain = setup.terrain && setup.terrain !== (Object.hasOwn(FIRST_SET, m) ? FIRST_SET[m] : undefined) ? `&terrain=${setup.terrain}` : ''
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}${terrain}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:

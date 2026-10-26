@@ -90,8 +90,20 @@ the commit, and add whatever the work turned up.
   band; 3,900 battles, so run it on a quiet machine, about 3 minutes, its
   self-test as long), P-army in P-prop (fuzzed armies, autoList, battles
   between random lists) and P-mission's refusals, data-check's prices,
-  rosters, presets and list rules, the `army/` set in parity (52 battles)
-  and merge-sim's `lists`. A step
+  rosters, presets and list rules, the `army/` set in parity and
+  merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
+  random games in five on fortified boards, and the `height` task: since
+  F7a's review its scenes, and P-level on Grand-sized boards too),
+  scale-check's P-scan the fortified boards (the `fort/` AI pairs, the
+  Grand fixture's `--fortified`, and the box with height), terrain-check
+  holds the fortified set and P-climb (its sections 6 and 7, and the
+  self-test's fortified edits), parity folds the `fort/` log set (AI pairs
+  as logs with no entries) beside the rest (with `army/`, 60 battles),
+  `node sim/play-report.mjs` (the step's AI corpus against §4.2.9's
+  thresholds: F7a's over the `fort/` AI pairs, its counts read off the
+  match by `sim/height-probe.mjs`) passes, and army-sim's Skirmish gates
+  hold on `fortified` as on `classic` (its `--check` plays every set the
+  mission offers). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -103,7 +115,8 @@ the commit, and add whatever the work turned up.
   it judges: renderer.info flat over 5 rematches, the page's own heap not
   growing a rematch (R7b: from heap snapshots, V8's compiled code left
   out), and no shader program linked twice between a title and a battle's
-  end), `node sim/title-shot.mjs` (the title at 1200 ms against the
+  end; from F7a's review also `--terrain fortified`, the same over
+  fortified battles), `node sim/title-shot.mjs` (the title at 1200 ms against the
   previous commit; exit 3 is a timeout, not a verdict: run it again),
   `node sim/terrain-shots.mjs` (the five boards against R0, run at every
   step that touched the view since R3, listed here from R7a) and, from
@@ -898,14 +911,46 @@ follows N3.
   a race change on the panel already dropping that seat's list; the unit
   card's cost and the group line's points standing. Still F11b's: the
   cost on F6's race picker, the deployment's points banner.)
-- [ ] **F7a** Climbable fortifications: decks, stairs and ladders sized for
+- [x] **F7a** Climbable fortifications: decks, stairs and ladders sized for
   whole squads; ramparts, bastions, watchtowers, timber platforms and a keep
   on the centre objective; each side's own rampart at its zone's front (the
   `fortified` set, on every mission).
+  (`CORE_VERSION` 6; the deck, stair, ladder and post pieces and five
+  recipes, exact point mirrors, `gatesOf`; `SETS.fortified` with the works,
+  the fort phase and the area scale; the nav's height layer (floor, links,
+  cliff, levels, gates) behind `hasHeight`, and height in sight
+  (`sightInfo`), engagement, forbid, charge, control, blast, smash and
+  pile-in; `climb`; `levelDist` and the height term; `y` in the events and
+  the mirror; decks, stairs and ladders drawn, units at their height,
+  climbs in file, drop lines, the deck overlay, picking tops; the terrain
+  line, `?terrain=`, the lobby's terrain; the title stays classic.
+  terrain-check's fortified rows and P-climb, P-height and P-level,
+  data-check's set and footprint rows, scale-bench's fortified rows,
+  `sim/play-report.mjs`, corpus-add's `--mode watch`, `--terrain` and
+  height needs; the `fort/` corpus, 8 battles. DESIGN's F7a notes. The
+  review's fixes: `levelDist` exact over the gate graph with decks as
+  shortcuts and stairs walked down, `scanBox` widened by the ladders'
+  savings, fliers' straight lines, a charge's other enemies by level, the
+  planner's fields climbing, walks on the table's tops; the play-report's
+  row judged by a move and the AI tuned to it; P-scan fortified, P-level
+  on Grand-sized boards, P-height's scenes, rematch-memory's
+  `--terrain`; `fort/`'s AI pairs re-recorded.)
 - [ ] **F7b** Parapets with cover at deck level; reading heights: drop
   lines, the climbing cost, line of sight with its reasons, see-through
-  walls.
-- [ ] **F7c** Timber platforms that collapse under their defenders.
+  walls. F7a left it: the parapet piece (a comment block in recipes.js, each
+  recipe noting where its own go) and its level-aware cover raster (the
+  rasters already apply by `base`); `sightInfo` (`{ok, block, obscure,
+  cover, high}`) for the ray and its reasons; `nav.linkCostOf` for the
+  move tooltip's climbing cost; cliff rims; see-through occluders and Alt;
+  `blast.land` with no `y` (the view takes a template's height from its own
+  tops); the play-report's F7b row (a shooter fires from a deck in ≥ 50% of
+  `fort/`), with `fort/` re-recorded. Drop lines and the "▲2"" label landed
+  in F7a.
+- [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
+  draws the platform as an open slab on braced posts while its deck's
+  line-of-sight body is solid from the ground, as the piece table says: a
+  thin timber body, or the view closing the gap, goes with the posts made
+  breakable.)
 - [ ] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
   battles: their presets and list limits, prices retuned on the real
   boards, the `open` set, a minimap (March from it), semantic zoom, terrain

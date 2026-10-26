@@ -68,9 +68,12 @@ export class View {
   // (view/overlay.js: one texel per nav cell, `grid` every match's grid
   // size).
   figures({ mirror, colorOf, rimOf, W, H, grid }) {
-    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W })
-    this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units })
-    this.overlay = new Overlay(this.scene, { W, H, grid })
+    // ((F7a's review) a walk's figures on the tops they cross: floorAt)
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z) })
+    // ((F7a) a template marked, landing and scorching on the top it falls on)
+    this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
+    // ((F7a) the overlay shades the battlefield's deck tops too)
+    this.overlay = new Overlay(this.scene, { W, H, grid, terrain: this.terrain })
   }
 
   // The view's handlers for the player (view/player.js): each kind of event
@@ -151,6 +154,9 @@ export class View {
     // depth and the objectives from the match)
     if (!to.units) this.setBoard({ ...g.board, ...M.board }, g.objectives, g.nav)
     terrain.sync(chunks)
+    // ((F7a) each objective's marker on the top it stands on: the keep's
+    // centre objective is held from its top)
+    if (!to.units) this.objectives.raise(g.objectives.map((o) => terrain.floorAt(o.x, o.z)))
     uv.sync(g.units, (s) => edgeOf(g, s))
     sh.clear()
     marks.clearDecals()
