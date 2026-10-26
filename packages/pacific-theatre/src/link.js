@@ -1495,7 +1495,8 @@ export function link(app, ui) {
     const to = rows.find((u) => u.index === e.to)
     if (from?.kind === 'aircraft') {
       const short = kitShort(kitFor(from), from.kit)
-      return `Your ${short} did not return. ${to && to.group === from.group ? 'The next one is yours.' : to ? `${to.kind === 'aircraft' ? `A ${kitShort(kitFor(to), to.kit)}` : to.name} is yours.` : ''}`.trim()
+      const other = to?.kind === 'aircraft' ? asSentence(aircraftRole(kitShort(kitFor(to), to.kit), to.groupName || to.name || '')).replace(/\.$/, '') : to?.name
+      return `Your ${short} did not return. ${to && to.group === from.group ? 'The next one is yours.' : to ? `${other} is yours.` : ''}`.trim()
     }
     return `${from?.name ?? 'Your ship'} is sinking.${to ? ` ${to.name} is yours.` : ''}`
   }

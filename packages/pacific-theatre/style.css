@@ -953,6 +953,8 @@ body.mock-page { background: #07111a; }
 .wg-hints .wg-hop-ic svg { vertical-align: -3px; }
 /* (the box's own first hints first: these wait while those show) */
 body:has(.pt-hud .hints:not(:empty)) .wg-hints { display: none; }
+/* (one word in the middle at a time: the respawn line, when it comes, stands for the hints) */
+.wg-say.show ~ .wg-hints { display: none; }
 
 /* the start sheet and the end card: the card's frame, wider, in the middle */
 .card[data-mode='wargame'], .card[data-mode='wargame-end'] { width: min(720px, calc(100vw - 36px)); right: max(18px, calc((100vw - 720px) / 2)); }
@@ -1022,6 +1024,8 @@ body:has(.pt-hud .hints:not(:empty)) .wg-hints { display: none; }
   .boxbar[data-mode='wargame'] .nav.bb-units span { display: none; }
   .boxbar[data-mode='wargame'] .nav.bb-hop { flex: none; padding: 0 12px; background: rgba(var(--sand-rgb), 0.16); border-color: rgba(var(--sand-rgb), 0.6); color: var(--sand); }
   .boxbar[data-mode='wargame'] .nav.bb-hop span { display: none; }
+  /* (the box's clock stands down: the block's timer is the game's, and the bar's row has the corner) */
+  body:has(> #ui > .boxbar[data-mode='wargame']:not([hidden])) .pt-hud { --pt-clock-display: none; }
   /* the block: under the bar's row, the whole width */
   .wg-board { left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px)); width: auto; transform: none; padding: 5px 10px 5px; border-radius: 12px; }
   .wg-top { gap: 8px; }
@@ -1040,7 +1044,7 @@ body:has(.pt-hud .hints:not(:empty)) .wg-hints { display: none; }
   .wg-hints { bottom: calc(var(--pt-controls, 150px) + 44px); font-size: 12px; line-height: 1.5; padding: 7px 12px; }
   /* the end card over everything, the game being over; the start sheet over the bar at the foot (watching) or the table */
   #ui.wargame .card[data-mode='wargame-end'] { top: calc(var(--pt-bar-head, 60px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); max-height: none; }
-  .card[data-mode='wargame'] { max-height: calc(100vh - 160px); }
+  .card[data-mode='wargame'] { max-height: calc(100vh - 200px); }
   body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .card[data-mode='wargame'] { max-height: calc(100vh - var(--pt-foot, 136px) - 60px); }
 }
 @media (max-width: 700px) and (orientation: landscape), (pointer: coarse) and (orientation: landscape) {

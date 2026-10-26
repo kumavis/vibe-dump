@@ -588,7 +588,7 @@ export class MockArena {
           const next = this.u.find((u) => u.group === lost.group && u.alive === 1) || this.nearestFriendly(lost, (u) => u.kind === 'aircraft') || this.nearestFriendly(lost, () => true)
           if (!next) return
           this.possess(next, { quiet: true })
-          this.push({ kind: 'respawn', from: lost.index, to: next.index, target: next.index, mine: true, text: `Your ${lost.short} did not return. ${next.group === lost.group ? 'The next one is yours.' : `${next.kind === 'aircraft' ? `A ${next.short} of ${next.groupName.replace(/’s .*$/, '')}` : next.name} is yours.`}` })
+          this.push({ kind: 'respawn', from: lost.index, to: next.index, target: next.index, mine: true, text: `Your ${lost.short} did not return. ${next.group === lost.group ? 'The next one is yours.' : `${next.kind === 'aircraft' ? `${/^[AEIOU]/.test(next.short) ? 'An' : 'A'} ${next.short} from ${next.groupName.replace(/’s .*$/, '')}` : next.name} is yours.`}` })
         },
       })
     }

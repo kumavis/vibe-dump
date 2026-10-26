@@ -219,11 +219,13 @@ export class WargameHud {
       seen.add(m.id)
       const n = stack.get(m.key) ?? 0
       stack.set(m.key, n + 1)
-      const x = Math.max(70, Math.min(W - 70, m.x))
-      let yy = Math.max(24, Math.min(H - 24, m.y - 16 - n * 19))
-      // (markers on ships close together step up past one another, so each can be read)
       el._w ||= el.offsetWidth || 120
+      // (kept whole on the screen: a ship at the edge has its words just inside it)
+      const x = Math.max(el._w / 2 + 8, Math.min(W - el._w / 2 - 8, m.x))
+      let yy = Math.max(32, Math.min(H - 8, m.y - 16 - n * 19))
+      // (markers on ships close together step up past one another, so each can be read)
       for (let k = 0; k < 6 && placed.some((p) => Math.abs(p.x - x) < (p.w + el._w) / 2 && Math.abs(p.y - yy) < 19); k++) yy -= 19
+      yy = Math.max(32, yy)
       placed.push({ x, y: yy, w: el._w })
       el.style.transform = `translate(${x.toFixed(1)}px, ${yy.toFixed(1)}px) translate(-50%, -100%)`
       el.style.opacity = String(m.age > 1.1 ? Math.max(0, (1.5 - m.age) / 0.4) : 1)
