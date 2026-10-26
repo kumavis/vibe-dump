@@ -1094,7 +1094,12 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 //  - so does an r SQUAD_R (1.18", the largest squad's) disc, and it controls
 //    every objective: it reaches a standable cell within OBJECTIVE_RANGE + r
 //    of it (core/queries.js counts a model within OBJECTIVE_RANGE plus its
-//    base; a disc of r holds its models).
+//    base; a disc of r holds its models), (the merged build's gate) at its
+//    level on a board with height: a cell whose floor is within HIGH of the
+//    floor under the objective, as controlOf counts a model there (the
+//    keep's objective held from its top), the start a ground cell. (The
+//    reach stays a walker's, stairs but no ladders: stricter than the
+//    squad's own, a climber's.)
 // Every row must pass on every board: a failure names the mission, the set,
 // the seed, the seat, the disc and the zone or objective it couldn't reach.
 // The classic mission's boards are measured too and only reported (their
@@ -1105,6 +1110,7 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 // (F9b, F5b add a row per footprint: the hull on its lattice.)
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
+const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
 const CONTROL = process.env.CONNECT_MUTATE ?? null
 const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
@@ -1126,12 +1132,16 @@ function connectBoard(name, m, set, seed) {
   if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
   const edge = BW / 2 - m.deploy
   const why = []
+  // (the merged build's gate) with height: the ground, and an objective's
+  // level, the floor under it (core/queries.js floorAt)
+  const ground = (i) => !nav.hasHeight || !nav.level[i]
+  const atLevel = (i, o) => !nav.hasHeight || Math.abs(nav.floor[i] - nav.floor[nav.index(o.x, o.z)]) <= HIGH
   for (const seat of [0, 1]) {
     const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk')) continue
+        if (!(sgn * nav.x(i) > edge) || !ground(i) || !nav.standable(i, r, 'walk')) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (d < bd) [bd, start] = [d, i]
       }
@@ -1147,8 +1157,8 @@ function connectBoard(name, m, set, seed) {
       if (r !== SQUAD_R) continue
       for (const o of m.objectives) {
         let held = false
-        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r
-        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})`)
+        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && atLevel(i, o)
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${nav.hasHeight ? ` at its level (within ${HIGH}" of its floor, ${nav.floor[nav.index(o.x, o.z)]}")` : ''}`)
       }
     }
   }
