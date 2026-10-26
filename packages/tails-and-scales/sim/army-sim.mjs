@@ -4,8 +4,8 @@
 // so the whole battle runs inside the start), and what they say about each
 // unit's `cost` (and, F8b, each mission's own prices, below).
 //
-//   node sim/army-sim.mjs --check [--mission classic,field,grand] [--n N] [--fit-n N] [--jobs 2] [--seed S[,S…]]
-//   node sim/army-sim.mjs --fit   [--mission classic,field,grand] [--n N] [--jobs 2] [--seed S[,S…]]
+//   node sim/army-sim.mjs --check [--mission classic,field,grand] [--terrain <set>] [--n N] [--fit-n N] [--jobs 2] [--seed S[,S…]]
+//   node sim/army-sim.mjs --fit   [--mission classic,field,grand] [--terrain <set>] [--n N] [--jobs 2] [--seed S[,S…]]
 //   (either with --dir <packageDir>: another copy of the code, for a
 //   before-and-after or a price table tried; the default is this
 //   package's working tree)
@@ -30,15 +30,27 @@
 // (Field and Grand: a list holds one to three) the intercept is printed as
 // the race-level edge in points, which the heroes' prices answer.
 //
-//   node sim/army-sim.mjs --self-test [--jobs 2]
+//   node sim/army-sim.mjs --self-test [--terrain <set>] [--jobs 2]
 //
 // (F11a's review) --n, --fit-n and --jobs are each a whole number above 0.
 // Exit 2 on a bad command line (an unknown option, a count that is no
-// whole number).
+// whole number, (F7a's merge) a set a mission run doesn't offer).
+//
+// --terrain (F7a's merge) plays one of the sets each mission run offers,
+// alone: its score gate, and the fit's battles all on it. Without it
+// --check plays every set the mission offers (DESIGN §4.2.8.2 step 5:
+// classic and, from F7a, fortified at Skirmish; open and fortified at
+// Field and Grand), a score gate on each and the fit's battles spread over
+// them, two by two (a seat-swapped pair on one set). The streams are named
+// by set, so `--terrain classic` plays exactly the battles F11a's one set
+// did, and a set's score gate is the same battles with or without it.
 //
 // --self-test holds the gates to broken price tables, as every standing
 // harness holds its own: three copies of the package's code, each run with
-// --check at a small N (300 score battles, 600 fit; the default seed):
+// --check at a small N (300 score battles, 600 fit; the default seed), on
+// one set (--terrain's, else the mission's first: a broken price table
+// shows on any set, and at this N a sound one sits closer to a second
+// set's band than the control should be asked to):
 //   sound         the working tree as it is: every gate holds (the control:
 //                 at this N, too, the gates can pass);
 //   cheap-nutkin  the Nutkin at 30 points, not 75: the score gate and the
@@ -163,7 +175,7 @@ try {
   ({ values: a } = parseArgs({
     options: {
       check: { type: 'boolean' }, fit: { type: 'boolean' }, worker: { type: 'boolean' }, 'self-test': { type: 'boolean' },
-      mission: { type: 'string' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
+      mission: { type: 'string' }, terrain: { type: 'string' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
       jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' },
     },
   }))
@@ -487,6 +499,15 @@ function bindOf(race, rules) {
 // (F8b's review) the master seeds, one or a comma-separated few, pooled
 const SEEDS = a.seed.split(',').map((s) => s.trim())
 
+// (F7a's merge) The sets a run plays on `mission` (named `name`):
+// --terrain's alone, else every set the mission offers (a set it doesn't
+// offer is a bad command line).
+function setsOf(mission, name) {
+  if (a.terrain === undefined) return mission.sets
+  if (!mission.sets.includes(a.terrain)) usage(`--terrain takes a set the ${name} mission offers (${mission.sets.join(', ')}), not ${JSON.stringify(a.terrain)}`)
+  return [a.terrain]
+}
+
 async function main() {
   // (F8b) every mission by default, in MISSIONS order; --mission names one
   // or a comma-separated few
@@ -504,6 +525,8 @@ async function main() {
     console.error(`army-sim: --seed ${JSON.stringify(a.seed)} names an empty or repeated seed (one seed, or a comma-separated few, each once)`)
     process.exit(2)
   }
+  // ((F7a's merge) --terrain checked on every mission run before any battle)
+  for (const name of names) setsOf(MISSIONS[name], name)
   const T0 = performance.now()
   console.log(`army-sim: ${a.check ? '--check' : '--fit'} on the ${names.join(', ')} mission${names.length === 1 ? '' : 's'}, ${SEEDS.length === 1 ? `seed ${SEEDS[0]}` : `seeds ${SEEDS.join(', ')} pooled`}, ${a.jobs} job(s), on ${a.dir ? DIR : 'the working tree'}`)
 
@@ -551,13 +574,13 @@ async function main() {
   }
 
   for (const name of names) {
-    const mission = MISSIONS[name], rules = mission.list
+    const mission = MISSIONS[name], rules = mission.list, sets = setsOf(mission, name)
     const ns = NS[size(rules)] ?? NS.Skirmish
     const N = Number(a.n) || ns.n
     const fitN = Number(a.fit ? a.n : a['fit-n']) || ns.fit
     // (each seed's n battles, the seeds in the order given)
-    const tasksOf = (stream, n, pair, budget, set) => SEEDS.flatMap((seed) => Array.from({ length: n }, (_, i) => ({ seed, stream: streamOf(name, stream), i, mission: name, set: set ?? mission.sets[Math.floor(i / 2) % mission.sets.length], pair, budget })))
-    console.log(`\n━━ the ${name} mission: a ${size(rules)}, ${mission.board.W}×${mission.board.H}, ${rules.points} points, on ${mission.sets.join(', ')} ━━`)
+    const tasksOf = (stream, n, pair, budget, set) => SEEDS.flatMap((seed) => Array.from({ length: n }, (_, i) => ({ seed, stream: streamOf(name, stream), i, mission: name, set: set ?? sets[Math.floor(i / 2) % sets.length], pair, budget })))
+    console.log(`\n━━ the ${name} mission: a ${size(rules)}, ${mission.board.W}×${mission.board.H}, ${rules.points} points, on ${sets.join(', ')}${a.terrain ? ' (--terrain)' : ''} ━━`)
     // ((F8b's review) what binds a Random seat's list, reported, never
     // judged: §4.2.8.3 wants the points to, and at Grand the Bushtails'
     // slots and models do)
@@ -580,7 +603,7 @@ async function main() {
     const report = REPORTED[size(rules)]
     if (report) console.log(`\n  the ${size(rules)} gates below are ${report}`)
     for (const pair of pairs()) {
-      for (const set of mission.sets) {
+      for (const set of sets) {
         const what = `${pair.map((r) => RACES[r].short).join(' vs ')} on ${set}`
         console.log(`\nthe score gate (${name}): ${what}, random legal lists at the limit, |score − 50%| ≤ ${band}${report ? ` (${report})` : ''}`)
         let r = await playAll(tasksOf(`score:${pair}:${set}`, N, pair, 'limit', set), `${name} score ${what}`)
@@ -631,7 +654,7 @@ async function main() {
   // (every battle gate again, together, so a run over three sizes ends on
   // what it found)
   console.log(`\nthe battle gates\n${verdicts.map((v) => `  ${v}`).join('\n')}`)
-  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds (${secs.toFixed(0)} s)`)
+  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds${verdicts.some((v) => v.startsWith('info')) ? ' (the reported rows judged by none)' : ''} (${secs.toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }
 
@@ -658,6 +681,11 @@ const SELF_TESTS = [
 ]
 
 async function selfTest() {
+  // (the header's one set: --terrain's, else the mission's first; the
+  // Skirmish's unless --mission names one)
+  const mname = a.mission ?? 'classic', mission = MISSIONS[mname]
+  if (!mission) usage(`no mission ${JSON.stringify(mname)} (there are ${Object.keys(MISSIONS).join(', ')})`)
+  const set = setsOf(mission, mname)[0]
   const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-army-sim-'))
   let bad = 0
   const say = (ok, what) => {
@@ -665,7 +693,7 @@ async function selfTest() {
     console.log(`  ${ok ? 'ok  ' : 'BAD '} ${what}`)
   }
   const T0 = performance.now()
-  console.log(`army-sim self-test: ${SELF_TESTS.length} copies of the code under --check, seed ${a.seed}, ${a.jobs} job(s)`)
+  console.log(`army-sim self-test: ${SELF_TESTS.length} copies of the code under --check on ${set}, seed ${a.seed}, ${a.jobs} job(s)`)
   try {
     for (const t of SELF_TESTS) {
       const dir = copyCode(PKG, join(work, t.name))
@@ -675,7 +703,7 @@ async function selfTest() {
         if (at !== 1) throw new Error(`self-test ${t.name}: the anchor ${JSON.stringify(from)} is in ${file} ${at} time(s), not once: port the mutation`)
         writeFileSync(path, text.replace(from, to))
       }
-      const args = [SELF, '--check', '--dir', dir, '--n', String(t.n), '--fit-n', String(t.fitN), '--jobs', a.jobs, '--seed', a.seed, '--mission', a.mission ?? 'classic']
+      const args = [SELF, '--check', '--dir', dir, '--n', String(t.n), '--fit-n', String(t.fitN), '--jobs', a.jobs, '--seed', a.seed, '--mission', a.mission ?? 'classic', '--terrain', set]
       const t1 = performance.now()
       const { code, out } = await new Promise((done) => {
         const child = spawn(process.execPath, args, { stdio: ['ignore', 'pipe', 'inherit'] })
