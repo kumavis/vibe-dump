@@ -27,7 +27,8 @@
 // no-rolloff-row. The rest (no-formation through no-move-status, no-place
 // and on) are caught by the mirror; so (F9a) are no-embark, no-embark-phase,
 // no-carry and no-place-carry, by the mirror of the battles with War-Carts
-// present-check plays in Node (no corpus battle has a rider yet). And three
+// present-check plays in Node, and no-embark-owners by the vehicle/
+// corpus's logs. And three
 // edits of the page, not of an
 // event, caught by the check's card test at a checkpoint: card-reads-match,
 // the unit card telling of what the match did ahead of the table; and
@@ -175,7 +176,12 @@ export const MUTATIONS = {
   // boarding in a phase never reported; a hull's walk that leaves its
   // riders behind in the mirror; a hull's placement that does
   'no-embark': ['/core/actions/transport.js', "    emit(G, 'unit.embark', { u: u.id, v: v.id })\n    return", '    return'],
-  'no-embark-phase': ['/core/actions/transport.js', "  emit(G, 'unit.embark', { u: u.id, v: v.id })\n  log(", '  log('],
+  // (an embark in a phase: its event, before the flags it leaves)
+  'no-embark-phase': ['/core/actions/transport.js', "  emit(G, 'unit.embark', { u: u.id, v: v.id })\n  // (F9a's integration)", "  // (F9a's integration)"],
+  // (F9a's integration) an embark in a phase leaving the flags its walk
+  // took at the hull's side (the vehicle/ corpus's rearranged log: the
+  // rider held an objective there)
+  'no-embark-owners': ['/core/actions/transport.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n  log(G, u.side, `<b>${u.t.short}</b> board", "  log(G, u.side, `<b>${u.t.short}</b> board"],
   'no-carry': ['/present/mirror.js', '      u.y = e.to.y ?? 0\n      carry(M, e.u, u)', '      u.y = e.to.y ?? 0'],
   'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
   'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],

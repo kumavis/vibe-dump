@@ -141,8 +141,10 @@ const MUTATIONS = {
   'collapse-hangs': ['view/terrain.js', 'const y0 = m.position.y, y1 = rest', 'const y0 = m.position.y, y1 = y0', '64886-198528'],
   // a hurt block's shudder holding it at the height it was hit at, over its
   // fall (R0's: the block 64886-198528's blast drops and then hurts is left
-  // a level up)
-  'shudder-holds': ['view/terrain.js', '    }).then(() => {\n      m.position.x = p0.x\n      m.position.z = p0.z\n    })\n', '    }).then(() => m.position.copy(p0))\n', '64886-198528'],
+  // a level up). ((F8b's review) The shudder's end now carries the token a
+  // snap stops it by, which a fall leaves alone: the edit keeps it and puts
+  // the whole place back, the height with x and z)
+  'shudder-holds': ['view/terrain.js', '    }).then(() => {\n      if (v.shake !== shake) return\n      v.shake = null\n      m.position.x = p0.x\n      m.position.z = p0.z\n    })\n', '    }).then(() => {\n      if (v.shake !== shake) return\n      v.shake = null\n      m.position.copy(p0)\n    })\n', '64886-198528'],
   // a template's marker left on the table once it is thrown (R7a's fixer:
   // the shooting's view state, which a snap clears, compared too)
   'marker-held': ['view/effects/shots.js', '    if (units.gone(e.u, v, gen)) return\n    this.blastMarker?.userData.remove()\n    this.blastMarker = null\n', '    if (units.gone(e.u, v, gen)) return\n'],

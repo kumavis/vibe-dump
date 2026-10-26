@@ -3302,7 +3302,10 @@ const MUTATIONS = {
   'control-ignores-height': ['core/queries.js', ' <= OBJECTIVE_RANGE + u.t.base && Math.abs(floorAt(G, x, z) - y) <= HIGH) oc[u.side] += u.t.OC', ' <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC'],
   'blast-flat': ['core/actions/shoot.js', 'hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z)', 'hypot(mx(v, m) - land.x, mz(v, m) - land.z)'],
   'smash-any-level': ['core/actions/move.js', '    if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue\n', ''],
-  'pile-in-anywhere': ['core/actions/damage.js', "    else if (G.nav.standable(G.nav.index(x, z), u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk')) setUnitPos(u, x, z)", '    else setUnitPos(u, x, z)'],
+  // ((F9a) the pile-in's test, its ground vehicles kept off raised floors
+  // beside it, and its place set by moveUnitTo, which carries a hull's
+  // riders)
+  'pile-in-anywhere': ['core/actions/damage.js', "      if (G.nav.standable(i, u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk') && !(groundOnly(u) && G.nav.floor[i] > STEP)) moveUnitTo(G, u, x, z)", '      moveUnitTo(G, u, x, z)'],
   'charge-others-flat': ['core/actions/charge.js', ' && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue', ')) continue'],
   'engaged-ignores-height': ['core/queries.js', 'gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)', 'gap(u, e) <= ENGAGE + 0.05)'],
   'everyone-climbs': ['core/actions/move.js', 'forbid: mode === \'fly\' ? null : forbid, climb: climbs(u) })', 'forbid: mode === \'fly\' ? null : forbid, climb: true })'],
