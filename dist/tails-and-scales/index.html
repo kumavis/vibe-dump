@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-9L_mcfiO.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CoT4D2gd.css">
+    <script type="module" crossorigin src="./assets/index-zYUvtsjs.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CDkS9QbU.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -86,6 +86,7 @@
           <div class="setupSeat" data-seat="1"><div class="seatHead"><span class="who"></span><span class="edge">east edge</span></div><div class="picker"></div></div>
         </div>
         <p id="setupMirror" class="small hidden">A mirror match: the east army takes its race's other colours.</p>
+        <div id="setupTerrain" class="terrainLine hidden"><span class="lbl">Terrain</span><span class="opts"></span><span class="what small"></span></div>
         <div class="row">
           <button id="setupBack">Back</button>
           <button id="setupStart" class="primary">Start the battle</button>
@@ -149,6 +150,7 @@
           <div class="seedrow">
             <label>Battlefield <input id="lobbyBoard" type="number" min="0" max="4294967295" step="1" /></label>
             <button id="lobbyReroll">🎲 New battlefield</button>
+            <label>Terrain <select id="lobbyTerrain"></select></label>
           </div>
         </div>
         <div class="seats">
