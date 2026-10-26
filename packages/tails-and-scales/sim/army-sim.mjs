@@ -594,7 +594,7 @@ async function main() {
   // (every battle gate again, together, so a run over three sizes ends on
   // what it found)
   console.log(`\nthe battle gates\n${verdicts.map((v) => `  ${v}`).join('\n')}`)
-  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds (${secs.toFixed(0)} s)`)
+  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds${verdicts.some((v) => v.startsWith('info')) ? ' (the reported rows judged by none)' : ''} (${secs.toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }
 
