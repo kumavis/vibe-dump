@@ -1553,15 +1553,23 @@ function interleave(core, A, B) {
 //    all, the straight line), for a climber and a non-climber, on
 //    LEVEL_PAIRS random point pairs per fortified board (half of the points
 //    on raised cells), to 1e-9: on HEIGHT_BOARDS Skirmish boards, and (the
-//    review) on GRAND_LEVEL Grand-sized ones (the Grand fixture's table,
-//    80×56 with its 14" zones and nine objectives, built straight from the
-//    code's Terrain and NavGrid), where bastions stand and a deck can be a
-//    shortcut between two ground points.
+//    review) on GRAND_LEVEL Grand-sized ones (the grand mission's table,
+//    80×56 with its 14" zones and nine objectives, from the code's own
+//    data/mission.js, built straight from its Terrain and NavGrid; until the
+//    merged build's gate a copy of the Grand fixture's table, the same
+//    board), where bastions stand and a deck can be a shortcut between two
+//    ground points.
 const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12
 // a charge spot's reach of another enemy: its base and the charger's, and
 // ENGAGE (core/actions/charge.js's test)
 const R0 = (e, u) => e.r + u.r + 1
-const GRAND_TABLE = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z], i) => ({ i, x, z })) }
+// the grand mission's table (its board, zones and objectives as
+// core/match.js makes G.objectives of them)
+const grandTable = (MISSIONS) => {
+  const m = MISSIONS?.grand
+  if (!m) throw new Error('P-level needs the grand mission for its Grand-sized boards (code from before F8b has none)')
+  return { W: m.board.W, H: m.board.H, deploy: m.deploy, objectives: m.objectives.map((p, i) => ({ i, x: p.x, z: p.z })) }
+}
 
 // a fortified game's state, between two commands
 function heightRules(core, G, where, rand) {
@@ -2061,7 +2069,7 @@ function heightTask(core, mods) {
   // stand (Skirmish never fits one): the code's own Terrain and NavGrid
   // (and controlOf's scene, which needs a deck beside a ground objective:
   // the works' fronts stand 2" from the Grand table's (±24, 0))
-  const { W, H, deploy, objectives } = GRAND_TABLE
+  const { W, H, deploy, objectives } = grandTable(mods.MISSIONS)
   const sq = core.createMatch({ board: 1, dice: 1, terrain: 'fortified', seats: SEATS }).units.find((u) => u.side === 0 && !u.t.fly && u.models.length >= 3)
   for (let seed = 1; seed <= GRAND_LEVEL; seed++) {
     const T = new mods.terrain.Terrain(W, H)
@@ -2119,7 +2127,7 @@ if (a.child) {
       // (F7a: P-height's boards of its own, and P-level)
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
       const [nav, damage, shoot, move, terrain] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js')])
-      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain }) }
+      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain, MISSIONS: await missionsOf() }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)

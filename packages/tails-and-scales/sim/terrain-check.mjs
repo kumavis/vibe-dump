@@ -56,8 +56,10 @@
 //     so a field one has and the other lacks would part the two tables).
 //  6. (F7a, DESIGN §4.2.4) the `fortified` set, on the same seeds, on the
 //     Skirmish board (the classic mission's 40×28, its objectives and zones)
-//     and the Grand fixture's (sim/fixtures/grand.mjs: 80×56, zones 14", nine
-//     objectives), each board built by the working tree's Terrain alone
+//     and the grand mission's (data/mission.js: 80×56, zones 14", nine
+//     objectives; until the merged build's gate, the Grand fixture's copy of
+//     the same table, sim/fixtures/grand.mjs, retired since), each board
+//     built as a match builds it, by the working tree's Terrain alone
 //     (there is no R0 code to hold it to): every board built twice, with
 //     Math.random made to throw, gives the same adds (every def, its look and
 //     its height fields) and the same footprints, so every look is made of
@@ -668,7 +670,9 @@ console.log(`  ${stats.defs} adds played, each one's def the view's defOf of its
 console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} chunks (standing, height); ${globalThis.__dustMoved ?? 0} of ${globalThis.__dustAll ?? 0} collapse dust puffs rise where their own drop left the block, not lower where a later drop in the same op took it (R5's rule; R0 read the place when the fall ended)`)
 
 // ── 6. The fortified set (F7a) ──────────────────────────────────────────────
-const { GRAND } = await import('./fixtures/grand.mjs')
+// (the grand mission's table: its board, zones and objectives, as
+// core/match.js scatters a Grand battle's terrain around them)
+const GRAND = MISSIONS.grand
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
 const { FOOTPRINT, GATE_OUT, LADDER_OUT } = await imp(PKG, 'core/terrain/recipes.js')
 // the height fields an add's def carries where its chunk has them (DESIGN
@@ -685,7 +689,7 @@ const FACING = new Set(SETS.fortified.facing)
 const FORT_BOARDS = [
   { label: 'Skirmish', W, H, deploy: MISSIONS.classic.deploy, objectives: OBJ_POS, pairs: [0, 1], avg: [0, 0.5] },
   // (s = 4 there: forts [1, 1] want 4 + a draw below 4, so 7 at most)
-  { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.board.deploy, objectives: GRAND.objectives.map(([x, z]) => ({ x, z })), pairs: [2, 7], avg: [3.5, 4.5] },
+  { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.deploy, objectives: GRAND.objectives, pairs: [2, 7], avg: [3.5, 4.5] },
 ]
 // a yaw's distance from another, the turn between them folded into [0, π]
 const turn = (a, b) => {
