@@ -86,24 +86,23 @@ the commit, and add whatever the work turned up.
   march scenarios at 80%, the settings answered from settled), and from F8a
   P-prop's setups task holds P-mission, and from F11a
   `node sim/army-sim.mjs --check` (and `--self-test`: the Skirmish gates,
-  the score within 4 points of even and each unit's price within its fitted
-  band; 3,900 battles, so run it on a quiet machine, about 3 minutes, its
-  self-test as long), P-army in P-prop (fuzzed armies, autoList, battles
-  between random lists) and P-mission's refusals, data-check's prices,
-  rosters, presets and list rules, the `army/` set in parity and
-  merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
+  the score within 4 points of even on every set the mission offers, from
+  F7a `fortified` with `classic` (`--terrain <set>` plays one), and each
+  unit's price within its fitted band; 5,400 battles, so run it on a quiet
+  machine, about 4 minutes, its self-test, on one set, about 3), P-army
+  in P-prop (fuzzed armies, autoList, battles between random lists) and
+  P-mission's refusals, data-check's prices, rosters, presets and list
+  rules, the `army/` set in parity and merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
   random games in five on fortified boards, and the `height` task: since
   F7a's review its scenes, and P-level on Grand-sized boards too),
   scale-check's P-scan the fortified boards (the `fort/` AI pairs, the
   Grand fixture's `--fortified`, and the box with height), terrain-check
   holds the fortified set and P-climb (its sections 6 and 7, and the
   self-test's fortified edits), parity folds the `fort/` log set (AI pairs
-  as logs with no entries) beside the rest (with `army/`, 60 battles),
+  as logs with no entries) beside the rest (with `army/`, 60 battles), and
   `node sim/play-report.mjs` (the step's AI corpus against §4.2.9's
   thresholds: F7a's over the `fort/` AI pairs, its counts read off the
-  match by `sim/height-probe.mjs`) passes, and army-sim's Skirmish gates
-  hold on `fortified` as on `classic` (its `--check` plays every set the
-  mission offers). A step
+  match by `sim/height-probe.mjs`) passes. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
