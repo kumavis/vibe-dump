@@ -5598,5 +5598,20 @@
     "ref": "C.663.M.320.1932.VII",
     "tertiary": false,
     "note": "The World Digital Library’s scan, opened by content-2: the list of maps and ch. IV read. Its fourteen maps (\"inserted in the pocket of the cover\"), among them the military situation in Manchuria before 18 September 1931 and about 1 May 1932, are in neither scan reached (this one, nor the Chūō Kōron translation of 1932 at archive.org/details/lytton-report), and the League’s own copy at UN Geneva sits behind a challenge page; the front is not traced from it, and its licence is not settled here."
+  },
+  {
+    "id": "danfs-white-plains",
+    "title": "White Plains (CVE-66) (Dictionary of American Naval Fighting Ships)",
+    "author": "Naval History Division",
+    "year": 1981,
+    "url": "https://www.ibiblio.org/hyperwar/USN/ships/dafs/CVE/cve66.html",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "language": "en",
+    "licence": "pd-us-gov",
+    "ref": null,
+    "tertiary": false,
+    "note": "Read by content-3 for the Samar wargame: VC-4, her composite squadron from April 1944, of sixteen Wildcats and twelve Avengers. The year is DANFS volume VIII’s; the transcription does not print it."
   }
 ]

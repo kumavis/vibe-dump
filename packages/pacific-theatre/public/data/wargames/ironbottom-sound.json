@@ -1,0 +1,100 @@
+{
+  "id": "ironbottom-sound",
+  "box": "ironbottom-sound",
+  "title": "Ironbottom Sound as a wargame",
+  "ja": { "kanji": "第三次ソロモン海戦", "romaji": "Dai-sanji Soromon kaisen" },
+  "label": "A wargame played with the real forces. The record is on the other side of the table.",
+  "arena": {
+    "centre": [159.654, -9.139],
+    "radiusM": 3000,
+    "separationM": 2500,
+    "skyAt": "24:00",
+    "night": true,
+    "starShells": true,
+    "visibilityM": 5500,
+    "note": "West of Savo, some 1,100 m of water, 15 km from Savo and Cape Esperance: the midpoint of Washington and Kirishima at midnight, when Washington opened fire on the battleship in Atago's searchlights at 8,400 yards on 008° (ONI Part III); 2.5 km apart in the arena, on that bearing. The sky is the box's after moonset at 23:58, visibility about five miles (the box's weather)."
+  },
+  "durationS": 600,
+  "sides": {
+    "japan": {
+      "side": "jp",
+      "name": "The Emergency Bombardment Force",
+      "leader": "Vice Admiral KONDŌ Nobutake 近藤信竹",
+      "first": "kirishima",
+      "firstStation": "main",
+      "bearingDeg": 8,
+      "headingDeg": 130,
+      "guide": "kirishima",
+      "screenM": 1200,
+      "ships": [
+        "kirishima", "atago", "takao",
+        "teruzuki", "asagumo",
+        "nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki",
+        "sendai", "shikinami", "uranami", "ayanami"
+      ],
+      "formation": {
+        "kind": "columns",
+        "intervalM": 400,
+        "columns": [
+          { "ships": ["asagumo", "teruzuki", "atago", "takao", "kirishima"], "atM": [0, 1600] },
+          { "ships": ["nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki"], "atM": [200, 3500] },
+          { "ships": ["sendai", "shikinami", "uranami", "ayanami"], "atM": [-500, 3100] }
+        ],
+        "note": "Kondō's column at 23:48 as Morison has it, Asagumo and Teruzuki leading Atago, Takao and Kirishima, the guide astern; the screening unit under Nagara and the sweeping unit under Sendai ahead of it, as Kondō's order put them some 10 km ahead (Lundgren; R5 §3.2), in the arena 2 km; in the record the units came round both sides of Savo, in the arena they come on together on 130°, Kirishima's course at midnight in the box. Tanaka's Oyashio and Kagerō, of the reinforcement unit, stay out."
+      },
+      "aircraft": [],
+      "goal": { "kind": "sink", "type": "bb", "count": 1, "text": "Sink an American battleship before 10:00." },
+      "phases": [
+        { "t": 0, "title": "Kirishima opens fire", "goal": { "kind": "hit", "type": "bb", "count": 2, "withinS": 90, "weapon": "shell" }, "text": "Kirishima's lookouts find a battleship lying dark in the night: put two shells into her." },
+        { "t": 100, "title": "Torpedoes from the screen", "goal": { "kind": "hit", "type": "dd", "count": 1, "withinS": 110, "weapon": "torpedo" }, "text": "Nagara's destroyers fire spreads at the American destroyers: put a torpedo into one." },
+        { "t": 220, "title": "Searchlights", "goal": { "kind": "hit", "type": "bb", "count": 3, "withinS": 100, "weapon": "shell" }, "text": "Atago switches on her searchlights and holds a battleship in them: put three shells into her." },
+        { "t": 330, "title": "Atago's torpedoes", "goal": { "kind": "hit", "type": "bb", "count": 1, "withinS": 120, "weapon": "torpedo" }, "text": "Atago and Takao fire spreads of Type 93 torpedoes: put one into a battleship." },
+        { "t": 460, "title": "Finish her", "goal": { "kind": "sink", "type": "bb", "count": 1, "withinS": 130 }, "text": "A battleship is burning and blind: sink her." }
+      ],
+      "admiral": { "aggression": 0.7, "turnAwayAt": 0.5, "launchEveryS": null, "waveGrowth": 0, "waveSize": 0 }
+    },
+    "usa": {
+      "side": "us",
+      "name": "TF 64",
+      "leader": "Rear Admiral Willis A. Lee",
+      "first": "washington",
+      "firstStation": "main",
+      "bearingDeg": 188,
+      "headingDeg": 295,
+      "guide": "washington",
+      "screenM": 1200,
+      "ships": ["washington", "south-dakota", "walke", "benham", "preston", "gwin"],
+      "formation": {
+        "kind": "columns",
+        "intervalM": 400,
+        "columns": [
+          { "ships": ["walke", "benham", "preston", "gwin"], "atM": [0, 2000] },
+          { "ships": ["washington", "south-dakota"], "atM": [0, 0] }
+        ],
+        "note": "Lee's single column, the four destroyers 300 yards apart and some 5,000 yards ahead of the battleships in the record (ONI Part III), in the arena 400 m apart with Gwin 800 m ahead of Washington; on 295°, Washington's course before midnight in the box."
+      },
+      "aircraft": [],
+      "goal": { "kind": "sink", "type": "bb", "count": 1, "also": [{ "kind": "sink", "type": "ca", "types": ["ca", "cl"], "count": 2 }], "text": "Sink Kirishima and two cruisers before 10:00." },
+      "phases": [
+        { "t": 0, "title": "Radar contact", "goal": { "kind": "hit", "type": "cl", "count": 1, "withinS": 90, "weapon": "shell" }, "text": "Washington has the leading ship on her radar: put a shell into a light cruiser." },
+        { "t": 100, "title": "The destroyers' fight", "goal": { "kind": "hit", "type": "dd", "count": 2, "withinS": 110, "by": "dd" }, "text": "Walke, Benham, Preston and Gwin trade fire with the Japanese destroyers ahead: hit two of them." },
+        { "t": 220, "title": "Searchlights", "goal": { "kind": "survive", "type": "bb", "count": 2, "withinS": 100 }, "text": "Searchlights fix South Dakota: keep both battleships afloat." },
+        { "t": 330, "title": "Washington unseen", "goal": { "kind": "hit", "type": "bb", "count": 4, "withinS": 120, "weapon": "shell", "by": "bb" }, "text": "Washington is dark and unseen beyond the glare: put four 16-inch shells into Kirishima." },
+        { "t": 460, "title": "Turn away from the torpedoes", "goal": { "kind": "survive", "type": "bb", "count": 1, "withinS": 130 }, "text": "The last Japanese torpedoes are in the water: keep a battleship afloat to the end." }
+      ],
+      "admiral": { "aggression": 0.8, "turnAwayAt": 0.3, "launchEveryS": null, "waveGrowth": 0, "waveSize": 0 }
+    }
+  },
+  "footnote": "In the night of 14–15 November 1942 Walke and Preston were sunk, Benham was lost the next afternoon and South Dakota was badly damaged; Kirishima, wrecked by Washington's radar-directed 16-inch fire, capsized at about 03:20, and Ayanami was scuttled.",
+  "sources": [
+    { "id": "oni-cn-guadalcanal-1944", "where": "Part III: Washington's fire at midnight, 008°, 8,400 yards; the destroyers' fight; chart p. 63" },
+    { "id": "morison-v", "where": "the forces; Kirishima's end at 03:20; Benham's" },
+    { "id": "lundgren-bbaction", "where": "the illuminations and the torpedo salvos" },
+    { "id": "lundgren-wash-gunfire" },
+    { "id": "ar-south-dakota-1942" },
+    { "id": "wdr-south-dakota-1942" },
+    { "id": "trom-kirishima" },
+    { "id": "jacar-atago-1942" },
+    { "id": "ussbs-nav33" }
+  ]
+}

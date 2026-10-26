@@ -1,0 +1,129 @@
+{
+  "id": "midway",
+  "box": "midway",
+  "title": "Midway as a wargame",
+  "ja": { "kanji": "ミッドウェー海戦", "romaji": "Middowē kaisen" },
+  "label": "A wargame played with the real forces. The record is on the other side of the table.",
+  "arena": {
+    "centre": [-178.262, 30.954],
+    "radiusM": 3000,
+    "separationM": 5000,
+    "skyAt": "10:20",
+    "note": "Open sea, some 5,000 m deep: the midpoint of the two carrier forces at 05:52, when the Catalina's report of carriers steaming south-east is the first contact in the box, 350 km apart in the record and 5 km in the arena, on the bearing between them then (the Kidō Butai 252° from TF 16 and TF 17, the box's tracks)."
+  },
+  "durationS": 600,
+  "sides": {
+    "japan": {
+      "side": "jp",
+      "name": "The Kidō Butai",
+      "ja": "機動部隊",
+      "leader": "Vice Admiral NAGUMO Chūichi 南雲忠一",
+      "first": "a6m2",
+      "firstStation": "pilot",
+      "bearingDeg": 252,
+      "headingDeg": 135,
+      "guide": "akagi",
+      "screenM": 1000,
+      "ships": [
+        "akagi", "kaga", "soryu", "hiryu",
+        "haruna", "kirishima", "tone", "chikuma", "nagara",
+        "nowaki", "arashi", "hagikaze", "maikaze",
+        "kazagumo", "yugumo", "makigumo",
+        "urakaze", "isokaze", "tanikaze", "hamakaze"
+      ],
+      "formation": {
+        "kind": "circle",
+        "acrossM": 1000,
+        "ring": ["kaga", "soryu", "hiryu"],
+        "screen": ["haruna", "kirishima", "tone", "chikuma", "nagara", "nowaki", "arashi", "hagikaze", "maikaze", "kazagumo", "yugumo", "makigumo", "urakaze", "isokaze", "tanikaze", "hamakaze"],
+        "note": "The other three carriers 6 to 9 km from Akagi in the record (the box's stations after R4 §3.2), drawn in to a circle round the guide 1,000 m across, with the battleships, cruisers and destroyers on the screen ring; all on 135°, as Akagi steams at 07:00 in the box."
+      },
+      "aircraft": [
+        { "carrier": "akagi", "kit": "a6m2", "count": 18, "profile": "cap", "airborne": 6, "note": "the morning combat air patrol (the box's cap-morning)" },
+        { "carrier": "akagi", "kit": "a6m2", "count": 9, "profile": "escort", "airborne": 0, "note": "the Midway strike's escort (strike-akagi-a6m)" },
+        { "carrier": "akagi", "kit": "d3a1", "count": 18, "profile": "dive", "airborne": 0, "note": "the Midway strike's dive bombers (strike-akagi-d3a), armed against ships in the arena" },
+        { "carrier": "kaga", "kit": "a6m2", "count": 18, "profile": "cap", "airborne": 6, "note": "the patrol that met Torpedo Eight (cap-vt8)" },
+        { "carrier": "kaga", "kit": "a6m2", "count": 9, "profile": "escort", "airborne": 0, "note": "strike-kaga-a6m" },
+        { "carrier": "kaga", "kit": "d3a1", "count": 18, "profile": "dive", "airborne": 0, "note": "strike-kaga-d3a, armed against ships in the arena" },
+        { "carrier": "soryu", "kit": "a6m2", "count": 9, "profile": "escort", "airborne": 0, "note": "strike-soryu-a6m" },
+        { "carrier": "soryu", "kit": "b5n2", "count": 18, "profile": "torpedo", "airborne": 0, "note": "the Midway strike's level bombers (strike-soryu-b5n), with torpedoes in the arena" },
+        { "carrier": "hiryu", "kit": "a6m2", "count": 18, "profile": "cap", "airborne": 6, "note": "the patrol that met Torpedo Three, Hiryū's and the others' (cap-vt3)" },
+        { "carrier": "hiryu", "kit": "a6m2", "count": 12, "profile": "escort", "airborne": 0, "note": "the escorts of Hiryū's first and second strikes (hiryu-a6m-1, hiryu-a6m-2)" },
+        { "carrier": "hiryu", "kit": "d3a1", "count": 18, "profile": "dive", "airborne": 0, "note": "Hiryū's first strike, on Yorktown at 12:05 (hiryu-d3a-1)" },
+        { "carrier": "hiryu", "kit": "b5n2", "count": 10, "profile": "torpedo", "airborne": 0, "note": "Hiryū's second strike, on Yorktown at 14:44 (hiryu-b5n-2)" }
+      ],
+      "maxAirborne": 30,
+      "goal": { "kind": "sink", "type": "cv", "count": 2, "outOfAction": true, "text": "Put two of the three American carriers out of action before 10:00." },
+      "phases": [
+        { "t": 0, "title": "Break up the torpedo attacks", "goal": { "kind": "shoot-down", "type": "aircraft", "count": 6, "withinS": 110 }, "text": "American torpedo planes come in low and slow, one squadron after another: shoot down six of them." },
+        { "t": 120, "title": "Dive bombers overhead", "goal": { "kind": "survive", "type": "cv", "count": 4, "withinS": 90 }, "text": "Dive bombers are over the fleet while the fighters are down low: keep all four carriers afloat." },
+        { "t": 220, "title": "Launch the counterstrike", "goal": { "kind": "reach", "type": "cv", "count": 6, "withinS": 120, "rangeM": 1500, "by": "aircraft" }, "text": "The counterstrike is away: get six aircraft through to within 1,500 m of an American carrier." },
+        { "t": 350, "title": "Bombs on the carrier", "goal": { "kind": "hit", "type": "cv", "count": 3, "withinS": 100, "weapon": "bomb", "by": "aircraft" }, "text": "The dive bombers push over on the nearest carrier: put three bombs on her deck." },
+        { "t": 460, "title": "The torpedo planes", "goal": { "kind": "hit", "type": "cv", "count": 2, "withinS": 130, "weapon": "torpedo", "by": "aircraft" }, "text": "The torpedo planes split to come in on both bows: put two torpedoes into a carrier." }
+      ],
+      "admiral": { "aggression": 0.6, "turnAwayAt": 0.4, "launchEveryS": 80, "waveGrowth": 0.25, "waveSize": 9 }
+    },
+    "usa": {
+      "side": "us",
+      "name": "TF 16 and TF 17",
+      "leader": "Rear Admirals Frank Jack Fletcher and Raymond A. Spruance",
+      "first": "sbd-3",
+      "firstStation": "pilot",
+      "bearingDeg": 72,
+      "headingDeg": 135,
+      "guide": "enterprise",
+      "screenM": 1000,
+      "ships": [
+        "enterprise", "hornet", "yorktown",
+        "northampton", "vincennes", "pensacola", "minneapolis", "new-orleans", "portland", "astoria", "atlanta",
+        "balch", "benham", "aylwin", "monaghan", "phelps", "maury", "ellet", "worden", "conyngham",
+        "morris", "hammann", "russell", "hughes", "anderson"
+      ],
+      "formation": {
+        "kind": "circle",
+        "acrossM": 1000,
+        "ring": ["hornet", "yorktown"],
+        "screen": ["northampton", "vincennes", "pensacola", "minneapolis", "new-orleans", "portland", "astoria", "atlanta", "balch", "benham", "aylwin", "monaghan", "phelps", "maury", "ellet", "worden", "conyngham", "morris", "hammann", "russell", "hughes", "anderson"],
+        "note": "TF 16 and TF 17 steamed apart in the record, each a carrier ring of cruisers and destroyers; the arena draws them as one circle round Enterprise, the carriers 1,000 m across and the screen on the ring; all on 135°, into the south-east wind to launch, as Enterprise steams at 07:00 in the box."
+      },
+      "aircraft": [
+        { "carrier": "enterprise", "kit": "sbd-3", "count": 33, "profile": "dive", "airborne": 8, "note": "Scouting Six with the group commander's section, Bombing Six and its leading section (the box's vs-6, vb-6, vb-6-akagi)" },
+        { "carrier": "enterprise", "kit": "tbd-1", "count": 14, "profile": "torpedo", "airborne": 4, "note": "Torpedo Six (vt-6)" },
+        { "carrier": "enterprise", "kit": "f4f-4", "count": 10, "profile": "escort", "airborne": 4, "note": "Fighting Six (vf-6)" },
+        { "carrier": "enterprise", "kit": "f4f-4", "count": 16, "profile": "cap", "airborne": 3, "note": "TF 16's fighters sent to TF 17 at noon (tf16-cap-noon)" },
+        { "carrier": "hornet", "kit": "sbd-3", "count": 35, "profile": "dive", "airborne": 0, "note": "Bombing Eight, Scouting Eight and the group commander (hornet-sbd), who did not find the carriers in the record" },
+        { "carrier": "hornet", "kit": "tbd-1", "count": 15, "profile": "torpedo", "airborne": 8, "note": "Torpedo Eight (vt-8), the first to reach the carriers in the record" },
+        { "carrier": "hornet", "kit": "f4f-4", "count": 10, "profile": "escort", "airborne": 0, "note": "Fighting Eight (vf-8)" },
+        { "carrier": "yorktown", "kit": "sbd-3", "count": 17, "profile": "dive", "airborne": 0, "note": "Bombing Three (vb-3)" },
+        { "carrier": "yorktown", "kit": "sbd-3", "count": 10, "profile": "dive", "airborne": 0, "note": "Scouting Five, kept back for the searches in the record (vs-5-search)" },
+        { "carrier": "yorktown", "kit": "tbd-1", "count": 12, "profile": "torpedo", "airborne": 0, "note": "Torpedo Three (vt-3)" },
+        { "carrier": "yorktown", "kit": "f4f-4", "count": 6, "profile": "escort", "airborne": 0, "note": "Fighting Three's escort of Torpedo Three (vf-3-escort)" },
+        { "carrier": "yorktown", "kit": "f4f-4", "count": 20, "profile": "cap", "airborne": 3, "note": "Yorktown's combat air patrols at noon and at 14:40 (vf-3-cap-noon, vf-3-cap-1430)" }
+      ],
+      "maxAirborne": 30,
+      "goal": { "kind": "sink", "type": "cv", "count": 3, "outOfAction": true, "text": "Put three of the four Japanese carriers out of action before 10:00." },
+      "phases": [
+        { "t": 0, "title": "The torpedo squadrons go in", "goal": { "kind": "hit", "type": "cv", "count": 1, "withinS": 110, "weapon": "torpedo", "by": "aircraft" }, "text": "Hornet's, Enterprise's and Yorktown's torpedo planes come in low from different sides: put a torpedo into a carrier." },
+        { "t": 120, "title": "The dive bombers arrive", "goal": { "kind": "hit", "type": "cv", "count": 3, "withinS": 100, "weapon": "bomb", "by": "aircraft" }, "text": "The Zeros are down low chasing the torpedo planes: push over and put three bombs on the carriers' decks." },
+        { "t": 230, "title": "The counterstrike", "goal": { "kind": "shoot-down", "type": "aircraft", "count": 6, "withinS": 120 }, "text": "Japanese dive bombers and fighters are inbound on the carriers: shoot down six of them before they push over." },
+        { "t": 360, "title": "Find the last carrier", "goal": { "kind": "hit", "type": "cv", "count": 2, "withinS": 120, "weapon": "bomb", "by": "aircraft" }, "text": "A Japanese carrier is still launching: put two bombs on her deck." },
+        { "t": 490, "title": "Hold on", "goal": { "kind": "survive", "type": "cv", "count": 2, "withinS": 110 }, "text": "Keep two of the three carriers afloat to the end." }
+      ],
+      "admiral": { "aggression": 0.6, "turnAwayAt": 0.4, "launchEveryS": 70, "waveGrowth": 0.3, "waveSize": 10 }
+    }
+  },
+  "footnote": "On 4 June 1942 dive bombers from Enterprise and Yorktown set Kaga, Akagi and Sōryū ablaze between 10:22 and 10:26 and Hiryū at about 17:00, and all four were lost; Yorktown, hit by Hiryū's dive bombers and torpedo planes, was torpedoed by the submarine I-168 on 6 June and sank the next morning.",
+  "sources": [
+    { "id": "nwc-midway-1948", "where": "the dispositions and the carriers' fates; Yorktown's sinking, p. 185" },
+    { "id": "nagumo-1947", "where": "the Kidō Butai's strikes and patrols; the carriers' ends, Table 3" },
+    { "id": "cincpac-midway-1942", "where": "the US strikes and patrols" },
+    { "id": "ctf16-midway-1942" },
+    { "id": "cv6-midway-1942" },
+    { "id": "cv8-midway-1942" },
+    { "id": "cv5-midway-1942", "where": "Yorktown's patrols; I-168's torpedoes on 6 June" },
+    { "id": "trom-akagi" },
+    { "id": "trom-kaga" },
+    { "id": "trom-soryu" },
+    { "id": "trom-hiryu" }
+  ]
+}
