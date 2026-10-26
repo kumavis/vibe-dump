@@ -55,11 +55,13 @@
 //     and keys the table by the copy, an add by the def the event carries,
 //     so a field one has and the other lacks would part the two tables).
 //  6. (F7a, DESIGN §4.2.4) the `fortified` set, on the same seeds, on the
-//     Skirmish board (the classic mission's 40×28, its objectives and zones)
-//     and the grand mission's (data/mission.js: 80×56, zones 14", nine
-//     objectives; until the merged build's gate, the Grand fixture's copy of
-//     the same table, sim/fixtures/grand.mjs, retired since), each board
-//     built as a match builds it, by the working tree's Terrain alone
+//     Skirmish board (the classic mission's 40×28, its objectives and zones),
+//     (the merged build's gate) the field mission's (60×40, zones 12", seven
+//     objectives) and the grand mission's (data/mission.js: 80×56, zones
+//     14", nine objectives; until the merged build's gate, the Grand
+//     fixture's copy of the same table, sim/fixtures/grand.mjs, retired
+//     since), each board built as a match builds it, by the working tree's
+//     Terrain alone
 //     (there is no R0 code to hold it to): every board built twice, with
 //     Math.random made to throw, gives the same adds (every def, its look and
 //     its height fields) and the same footprints, so every look is made of
@@ -79,7 +81,8 @@
 //     more it also judges the rates against DESIGN's measurements (§4.2.4,
 //     the prototype's seeds 1-200): the works on ≥ 95% of boards, the keep on
 //     45-55%, and the fort pairs besides the works per board (Skirmish 0-1,
-//     on average under 0.5; Grand at least 2 and at most the 7 the rule can
+//     on average under 0.5; Field at most the 3 the rule can want there, on
+//     average 0.5-1.0; Grand at least 2 and at most the 7 the rule can
 //     want there, on average 3.5-4.5). Fewer boards than that make a rate
 //     noise: it prints them and judges only the exact rows. And the view of
 //     every such board (TerrainView: its decks, stairs, ladders and posts
@@ -689,6 +692,11 @@ const FACING = new Set(SETS.fortified.facing)
 const FORT_BOARDS = [
   { label: 'Skirmish', W, H, deploy: MISSIONS.classic.deploy, objectives: OBJ_POS, pairs: [0, 1], avg: [0, 0.5] },
   // (s = 4 there: forts [1, 1] want 4 + a draw below 4, so 7 at most)
+  // ((the merged build's gate) the field mission's table too, as §4.2.9's
+  // P-climb runs on every mission: s = 60·40/1120 ≈ 2.14, so the rule asks
+  // for 2 + a draw below 2 pairs, 3 at most; on seeds 1-500 0 / 0.73 / 2,
+  // so judged on average 0.5-1.0, as the Grand row is about its own)
+  { label: 'Field', W: MISSIONS.field.board.W, H: MISSIONS.field.board.H, deploy: MISSIONS.field.deploy, objectives: MISSIONS.field.objectives, pairs: [0, 3], avg: [0.5, 1.0] },
   { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.deploy, objectives: GRAND.objectives, pairs: [2, 7], avg: [3.5, 4.5] },
 ]
 // a yaw's distance from another, the turn between them folded into [0, π]
