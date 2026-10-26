@@ -21,7 +21,8 @@
 //   terrain.clear    {}                         a new table
 //   terrain.add      { def }                    a chunk joined (a board's, a
 //                                               rubble pile's, a fallen tree's
-//                                               log): def is { id, kind,
+//                                               log, (F9a) a hull's wreck):
+//                                               def is { id, kind,
 //                                               shape, look }, a copy of its
 //                                               place and look as it joined
 //                                               (F7a: and its surface, link,
@@ -322,6 +323,25 @@ export class Terrain {
       this.dirty = true
     }
     emitTo(out, 'terrain.rubble', { id: r.id, from })
+  }
+
+  // (F9a, DESIGN §4.2.5) A destroyed hull's burning wreck: a box of the
+  // hull's `wreck` half-sizes at its place, standing on `base` (the floor the
+  // hull stood on: 0 without height), difficult ground that gives cover and
+  // obscures sight, as rubble does, but breakable (hp 6: a blast chips it,
+  // a wrecker ploughs through it). `look` is the view's ({ piece: 'wreck',
+  // race }: the hull's race, for its colours). core/actions/transport.js
+  // hullDestroyed adds it, then refreshes the nav (§4.1 rule 16); it is
+  // reported as any chunk joining (`terrain.add`, its def carrying `base`).
+  wreck({ x, z, base, hx, hy, hz, yaw = 0, look }, out = null) {
+    const c = this.add({
+      kind: 'wreck', hp: 6,
+      shape: { x, y: base + hy, z, hx, hy, hz, yaw },
+      navKind: 'diff', los: 'obscure', cover: true, base,
+      look,
+    }, out)
+    this.dirty = true
+    return c
   }
 
   // The tree keels over, away from the blow, into a log lying where it fell.

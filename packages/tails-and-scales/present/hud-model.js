@@ -116,8 +116,10 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     label: deploying ? 'Begin battle ▸' : mine ? `End ${PHASE_NAME[P.phase]} ▸${badge ? ` · ⟳ ${badge}` : ''}` : null,
     busy: !idle,
     // nothing left to do in the seat's phase but what its orders will do
-    // (asked only once the table has caught up)
-    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !covered.has(u.id) && q.canAct(G, u))) : false,
+    // (asked only once the table has caught up); (F9a, DESIGN §4.2.5's
+    // canAct note) a rider left out: it may step off, but riding on is a
+    // choice, not something left undone
+    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !u.aboard && !covered.has(u.id) && q.canAct(G, u))) : false,
     badge,
     // (F10c) Auto-End counting down on it
     counting: mine && counting,
@@ -127,7 +129,8 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   end.lit = deploying || end.ready
   const advance = {
     // ((F10a) none for a group: its +D6 is the bar's)
-    show: !mine ? false : idle ? P.phase === 'move' && !!sel && group < 2 && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
+    // ((F9a) never a rider's: it steps off, it doesn't advance)
+    show: !mine ? false : idle ? P.phase === 'move' && !!sel && group < 2 && !sel.aboard && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
     label: !sel ? null : sel.t.chargeAfterAdvance ? 'Advance (+D6") — can still charge' : `Advance (+D6") — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`,
     busy: !idle,
   }
@@ -152,7 +155,8 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     }[P.phase] || ''
   } else if (mine && (idle || !sel)) {
     hint = {
-      move: sel ? (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
+      // ((F9a) a rider picked up steps off)
+      move: sel ? sel.aboard ? `Click inside the blue area beside the ${ask((G, q) => q.hullOf(G, sel)).t.short} to step off: that is its move.` : (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
     }[P.phase] || ''

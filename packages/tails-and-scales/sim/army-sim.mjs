@@ -71,7 +71,11 @@
 // swapped on odd ones. The score is the pair's first race's (the
 // Bushtails' today): a win 1, a draw 0.5, a loss 0, from the match's
 // G.turn.result once createMatch returns (core/engine.js gameOver: `win`
-// the seat, -1 a draw).
+// the seat, -1 a draw). (F9a) autoList draws a vehicle like any unit whose
+// one more fits, so the War-Cart comes into a Field or Grand list wherever
+// its Vehicle slot has room (0 to 2 a list) and never into a Skirmish one
+// (the slot [0, 0]): the fit's lists vary its count, and the Skirmish's
+// battles are the ones they were before it.
 //
 // --check is the gate, every row of §4.2.8.2's gate table, for every
 // pair of races on every set each mission offers (one pair and one set a
@@ -89,7 +93,9 @@
 //       max(2 SE, 20%) of its price there. A unit whose count never varies
 //       over the fit's lists (the hero: a Skirmish list holds exactly one)
 //       can't be told from the intercept and is exempt, as §4.2.8.2
-//       exempts the heroes at Skirmish;
+//       exempts the heroes at Skirmish; (F9a) and so is a unit the size
+//       doesn't offer (the War-Cart at Skirmish, its Vehicle slot [0, 0]:
+//       "at every size that offers it"), named so;
 //   (c) each race's classic list costs at most the Skirmish's limit (once a
 //       run, with (d));
 //   (d) each mission's own preset is legal for every race (armyOf, the
@@ -372,7 +378,9 @@ function fitOf(pair, results, rules) {
   races.forEach((race, side) => race.roster.forEach((key, k) => {
     const j = cols.findIndex((c) => c.side === side && c.k === k)
     const t = race.units[key]
-    if (j < 0) return units.push({ side, k, key, race, cost: price(side, key), value: null, se: null, role: t.role, fitted: false })
+    // ((F9a) a unit this size doesn't offer, its slot's most 0: the
+    // War-Cart in a Skirmish, never in a list, so never in the fit)
+    if (j < 0) return units.push({ side, k, key, race, cost: price(side, key), value: null, se: null, role: t.role, fitted: false, absent: rules.roles[t.role][1] === 0 })
     const v = beta[j] / rate
     const d = cols.map((_, m) => ((m === j ? 1 : 0) - (v * grad[m]) / cost) / rate)
     units.push({ side, k, key, race, cost: price(side, key), value: v, se: vecSE(d), role: t.role, fitted: true })
@@ -452,7 +460,7 @@ function printFit(pair, fit, { gate = false, report = false } = {}) {
     if (!ok) failed++
     // (a reported size's rows say where each unit lies against the band,
     // never ok or FAIL)
-    const verdict = !gate ? '' : exempt ? '   exempt (its count never varies: the intercept)' : report ? `   ${ok ? 'inside' : 'outside'} (band ${band.toFixed(0)})` : `   ${ok ? 'ok  ' : 'FAIL'} (within ${band.toFixed(0)})`
+    const verdict = !gate ? '' : u.absent ? `   exempt (none in this size's lists: its ${u.role} slot is [0, 0])` : exempt ? '   exempt (its count never varies: the intercept)' : report ? `   ${ok ? 'inside' : 'outside'} (band ${band.toFixed(0)})` : `   ${ok ? 'ok  ' : 'FAIL'} (within ${band.toFixed(0)})`
     console.log(`  ${`${u.race.short}: ${u.race.units[u.key].name}`.padEnd(34)} ${u.role.padEnd(10)} ${num(u.cost)}  ${num(u.value)} ± ${num(u.se, 3)}   ${num(u.proposed, 6)}${verdict}`)
   }
   console.log(`  classic lists: ${fit.classic.map((c, s) => `${RACES[pair[s]].short} ${c.today} today, ${c.proposed} proposed`).join('; ')}`)

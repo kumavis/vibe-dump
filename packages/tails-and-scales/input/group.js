@@ -27,6 +27,12 @@
 //
 // What a group does is ordinary commands (input/orders.js), so nothing here
 // is logged but what they send; the selection is this page's alone.
+//
+// (F9a, DESIGN §4.2.5) Riders. A box catches a hull, never its riders (a
+// rider has no place on screen: view/units.js); R adds the riders of the
+// group's hulls (input/human.js). A group Move or Approach moves its hulls
+// and leaves its riders out (`movers`): they ride along, and the preview
+// says so; a rider steps off alone (its own tool).
 import { previewGroup, slotsOf } from '../present/orders.js'
 import { runGroup } from './orders.js'
 import { unitPrice } from '../core/army.js'
@@ -79,6 +85,16 @@ export class GroupInput {
   members() {
     const s = this.seat()
     return s >= 0 && this.G ? this.selection.members(this.G, s) : []
+  }
+  // (F9a) the members a Move or an Approach sends: all but the riders
+  movers() {
+    return this.members().filter((u) => !u.aboard)
+  }
+  // (F9a) what a Move or an Approach's preview adds when the group holds a
+  // hull with riders, or riders: they ride along
+  rideAlong() {
+    const ms = this.members(), G = this.G
+    return ms.some((u) => u.aboard || (u.t.transport && G.units.some((r) => r.aboard === u.id && r.alive > 0))) ? ' · riders ride along' : ''
   }
 
   isGroup() {
@@ -438,12 +454,16 @@ export class GroupInput {
 
   // ((F10c) `rot`: the formation turned that far round the point, its slots
   // given to the planner, as the executor will give them)
+  // ((F9a) a Move or an Approach for the movers, riders riding along)
   preview(verb, target, line = null, rot = 0) {
-    const seat = this.seat(), ids = this.members().map((u) => u.id)
-    return this.human.ask((G, q) => {
+    const go = verb === 'move' || verb === 'approach'
+    const seat = this.seat(), ids = (go ? this.movers() : this.members()).map((u) => u.id)
+    const p = this.human.ask((G, q) => {
       const us = this.selection.units(G, ids)
       return previewGroup(G, q, seat, verb, us, target, rot && !line && target.x !== undefined ? turned(G, slotsOf(G, us, target), target, rot, us) : null, { line, advance: verb === 'move' && this.rec.advance })
     })
+    if (go && p.summary) p.summary += this.rideAlong()
+    return p
   }
 
   // ── (F10c) The pin's handles ──────────────────────────────────────────────
@@ -575,7 +595,8 @@ export class GroupInput {
   // members still able to act.
   async run(verb, target, line = null, slots = null) {
     if (this.busy) return
-    const seat = this.seat(), members = this.members()
+    // ((F9a) a Move or an Approach sends the movers: the riders ride along)
+    const seat = this.seat(), members = verb === 'move' || verb === 'approach' ? this.movers() : this.members()
     if (seat < 0 || members.length < 1) return
     this.busy = true
     this.cancel()
@@ -622,8 +643,15 @@ export class GroupInput {
     }
     // ((F8b) on a board larger than classic's, or for a group of more than
     // 10, the ghosts are planned a few members a frame: input/standing.js's
-    // GhostPlanner, app/boot.js's `ghosts`)
-    if (this.ghosts?.wanted(this.G, this.members().length)) return this.ghosts.hover(this, v, target)
+    // GhostPlanner, app/boot.js's `ghosts`; (F9a) for the movers only, the
+    // group as it is otherwise)
+    if (this.ghosts?.wanted(this.G, this.members().length)) {
+      // (the planner's own tooltip, once its plan is whole, says it too)
+      const tip = { show: (t, at) => this.tooltip?.show(t + this.rideAlong(), at), hide: () => this.tooltip?.hide() }
+      const moving = Object.create(this, { members: { value: () => this.movers() }, tooltip: { value: tip } })
+      const note = this.ghosts.hover(moving, v, target)
+      return note && note !== 'Planning…' ? note + this.rideAlong() : note
+    }
     const p = this.preview(v, target)
     this.draw(p, target, false)
     return p.summary

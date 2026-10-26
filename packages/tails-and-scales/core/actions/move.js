@@ -19,8 +19,8 @@ import { hypot, sin, cos, atan2 } from '../dmath.js'
 import { lerp } from '../util.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { setUnitPos } from '../units.js'
-import { pathLength } from '../nav.js'
+import { moveUnitTo } from '../units.js'
+import { pathLength, STEP } from '../nav.js'
 import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
 
 export function moveMode(u) {
@@ -33,6 +33,16 @@ export function moveMode(u) {
 // with the mode. Read only with height.
 export function climbs(u) {
   return u.t.climb
+}
+
+// (F9a, DESIGN §4.2.5) Whether `u` keeps to the ground: a ground vehicle
+// (data/schema.js `vehicle`) never stands on a floor above STEP, so it takes
+// no stair onto a deck (P-height's rule). The plans' mode setup, with
+// climbs: its one rules reader, which the forbid mask (with height, the
+// raised cells forbidden to it: forbidHigh), the deployment (core/deploy.js
+// fits) and a pile-in ask. Read only with height.
+export function groundOnly(u) {
+  return u.t.vehicle
 }
 
 // Cells a unit may not enter: within 1" of an enemy (or just their bases when
@@ -64,6 +74,10 @@ function forbidHigh(G, u, pad, onlyBodies) {
   const nav = G.nav, { W, H } = nav
   const f = new Uint8Array(nav.N)
   f.discs = []
+  // (F9a) a ground vehicle never enters a cell whose floor is above STEP:
+  // the reach, the path's shortcuts (nav.walkable reads the mask) and the
+  // end (standable) all keep it on the ground
+  if (groundOnly(u)) for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
   for (const e of enemiesOf(G, u)) {
     const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad), y = groundY(G, e)
     f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02, y })
@@ -112,18 +126,22 @@ export function movePlan(G, u, extra = 0) {
 
 // What a plan reads, as a memo's key: the unit, where it stands, its base,
 // the extra inches, the nav grid's epoch, and every live unit's place and
-// base (numbers exactly, -0 apart from 0).
+// base (numbers exactly, -0 apart from 0); (F9a) and which hull a rider
+// rides (aboard), where one does: a rider stands in nobody's way, so the
+// plan reads it too (a key without riders is the key it always was).
 const num = (n) => (Object.is(n, -0) ? '-0' : String(n))
 function planKey(G, u, extra) {
   let k = `${u.id}@${num(u.pos.x)},${num(u.pos.z)} r${num(u.r)} +${num(extra)} e${G.nav.epoch}`
-  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}`
+  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${o.aboard ? ` a${o.aboard}` : ''}`
   return k
 }
 
 // May the plan's unit end its move on cell i? (F10a) `at`, a Map of id →
 // { x, z }, stands units somewhere else than G has them, as a group's
 // planner (present/orders.js) foresees them: the members it planned
-// before this one where they will have gone. Null: today's question.
+// before this one where they will have gone. Null: today's question. (F9a)
+// A rider is off the table: it neither ends a move here nor stands in
+// anyone's way (a hull's own riders stand at its centre).
 export function validEnd(G, plan, i, at = null) {
   const { u, res, mode, endForbid } = plan
   const nav = G.nav
@@ -131,7 +149,7 @@ export function validEnd(G, plan, i, at = null) {
   if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
   const x = nav.x(i), z = nav.z(i)
   for (const o of G.units) {
-    if (o === u || !alive(o)) continue
+    if (o === u || !alive(o) || o.aboard) continue
     const p = at?.get(o.id) ?? o.pos
     if (hypot(p.x - x, p.z - z) < o.r + u.r + 0.08) return false
   }
@@ -223,6 +241,8 @@ export function walkCost(pts) {
 //   (F7a, with height) path: [{ x, y, z, climb? }], to: { x, y, z }: each
 //   vertex's floor, and `climb` on a ladder's far end (the segment into it
 //   is the climb); classic's events don't grow
+//   (F9a) a hull's riders go with it, to `to`: the mirror carries them
+//   (present/mirror.js), so the event doesn't grow
 //
 // The view walks the unit along `path` (L long, at `speed` inches a second,
 // flying or not, stomping off as it sets out when `stomp`: each of them is
@@ -255,10 +275,11 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
       if (smashAround(G, u, p, ev) && ev) smashes.push({ s: p.s, ev })
     }
   }
-  // the walk's last frame: k = 1, so the distance along is L itself
+  // the walk's last frame: k = 1, so the distance along is L itself (F9a:
+  // and a hull's riders with it, moveUnitTo)
   const end = seg.find((q) => L <= q.s + q.l) || seg[seg.length - 1]
   const f = end.l > 0 ? (L - end.s) / end.l : 1
-  setUnitPos(u, lerp(end.a.x, end.b.x, f), lerp(end.a.z, end.b.z, f))
+  moveUnitTo(G, u, lerp(end.a.x, end.b.x, f), lerp(end.a.z, end.b.z, f))
   // the walk, then the flags (who holds what) and the labels (who is in
   // combat) as it left them
   if (G.out) {

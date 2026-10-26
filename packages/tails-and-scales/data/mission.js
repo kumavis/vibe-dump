@@ -45,10 +45,12 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     rounds: ROUNDS,
     army: 'classic',
     // (F11a) a Skirmish: 500 points, exactly one hero, at least one Troops
-    // unit, at most 3 of any one unit (the classic lists cost 485 and 495)
+    // unit, at most 3 of any one unit (the classic lists cost 485 and 495);
+    // (F9a) no vehicle (the Skirmish's lanes are too tight for a hull:
+    // DESIGN §4.2.5's measurements)
     list: {
       size: 'Skirmish', points: 500, units: 10, models: 36, perKind: 3,
-      roles: { Hero: [1, 1], Troops: [1, 6], Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1] },
+      roles: { Hero: [1, 1], Troops: [1, 6], Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1], Vehicle: [0, 0] },
     },
     // (F7a) and `fortified`, the fortifications to climb, which F7a adds to
     // every mission's sets (the first stays each mission's default)
@@ -69,10 +71,11 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     rounds: 6,
     army: 'field',
     // 1,000 points, one or two heroes, at least 2 Troops units, at most 5
-    // of any one unit (the ×2 presets cost 980 and 950 at its prices)
+    // of any one unit (the ×2 presets cost 980 and 950 at its prices);
+    // (F9a) at most two vehicles
     list: {
       size: 'Field', points: 1000, units: 18, models: 70, perKind: 5,
-      roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2] },
+      roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
       // (F8b, DESIGN §4.2.8.2's fallback) a Field battle's own prices,
       // fitted by sim/army-sim.mjs on its boards: no one table priced the
       // Brute, the Grenadiers and the artillery at every size, so the
@@ -107,10 +110,11 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     rounds: 7,
     army: 'grand',
     // 1,500 points, one to three heroes, at least 3 Troops units, at most 7
-    // of any one unit (the ×3 presets cost 1,350 and 1,485 at its prices)
+    // of any one unit (the ×3 presets cost 1,350 and 1,485 at its prices);
+    // (F9a) at most two vehicles
     list: {
       size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
-      roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3] },
+      roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
       // (F8b, the fallback as at Field) a Grand battle's own prices. The
       // Coil's big units are worth more here than its ×3 preset may cost
       // within 1,500 points, so the units the AI makes least of at this
@@ -121,8 +125,14 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // tuned on; the Bushtails' lists are held by their slots and models
       // here, not their points. army-sim reports Grand and judges it not:
       // the Grand rebalance is a ROADMAP item, DESIGN's F8b notes.)
+      // ((F9a) The War-Cart at 150 here, its Field 40: one model and one
+      // unit, it filled the slots and models the Bushtails' points left
+      // over, so at 40 they scored 60.6% on open and 67.0% fortified (seed
+      // 1111) and the fit put it at 103 ± 39; at 150 the points bind their
+      // lists again (612 of 1,000), open is 47.2%, fortified 57.2%, and
+      // every unit sits inside its band, the cart 112 ± 30.)
       prices: {
-        squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15 },
+        squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
         serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
       },
     },
@@ -182,7 +192,8 @@ export function checkMission(name, m) {
 // bounded by `units`, not 9); and a slot [min, max] for every role in ROLES
 // and no other, whole numbers with 0 ≤ min ≤ max ≤ units, the minimums
 // summing to at most `units` (so a Grand Troops [3, 14] and F9a's Skirmish
-// Vehicle [0, 0] are both legal). (F8b) And `prices`, when given (DESIGN
+// Vehicle [0, 0] are both legal: every mission names the Vehicle slot, a
+// role of ROLES since F9a). (F8b) And `prices`, when given (DESIGN
 // §4.2.8.2's fallback: the mission's own price for a unit whose worth one
 // table can't hold at every size, core/army.js priceOf): a record by race
 // key, each a record by that race's unit keys, each price a whole multiple

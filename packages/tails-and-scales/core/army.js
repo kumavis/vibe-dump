@@ -90,8 +90,10 @@ const units = (n, what) => `${n} ${what} unit${n === 1 ? '' : 's'}`
 // (one whole number per roster entry, missing ones 0) breaks, as the text
 // a refusal carries after "seat i's army: ", or null when the list is
 // legal. In order: the points; the units, then the models; each role in
-// ROLES order, its minimum then its maximum; each roster entry against
-// perKind.
+// ROLES order, its minimum then its maximum (F9a: Vehicle last, a slot like
+// any, [0, 0] in a Skirmish: "1 Vehicle; none in a Skirmish"); each roster
+// entry against perKind. (autoList draws a vehicle like any unit, where its
+// slot has room: none at Skirmish, so a Skirmish list draws as it did.)
 export function checkList(race, rules, counts) {
   // (only a client can hand it anything but digits: the fold's counts are
   // a count string's)

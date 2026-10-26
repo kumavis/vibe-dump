@@ -1772,3 +1772,82 @@ body:not(.playing) #roster {
     flex: 1 1 30%;
   }
 }
+
+/* F9a */
+/* transports (view/units.js, ui/card.js, ui/chips.js): a hull's label says
+   who rides it, each squad a chip that picks it up; a hull the unit picked
+   up may board shows ⤒ on its count; its card lists its riders; its
+   Strategic chip a dot per rider squad */
+.ulabel .cg {
+  color: #fff1c4;
+  font-weight: bold;
+}
+.ulabel .rd {
+  color: #e8dcc0;
+}
+.ulabel .rd i {
+  font-style: normal;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 0 3px;
+  border-radius: 6px;
+  background: rgba(255, 241, 196, 0.12);
+}
+.ulabel .rd i:hover {
+  background: rgba(255, 230, 128, 0.35);
+  color: #fff;
+}
+.ulabel.board {
+  border-color: #7fe0ff;
+  box-shadow: 0 0 6px rgba(127, 224, 255, 0.7);
+}
+.ulabel.board .ct::before {
+  content: '⤒ ';
+  color: #7fe0ff;
+}
+#labels[data-tier='tactical'] .ulabel .rd {
+  display: none;
+}
+#card .card-ride {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #fff1c4;
+}
+#card .card-riders {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--edge);
+  font-size: 12px;
+}
+#card .card-riders .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+#card .card-riders button {
+  font: inherit;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 9px;
+  border: 1px solid var(--edge);
+  background: rgba(255, 241, 196, 0.1);
+  color: inherit;
+  cursor: pointer;
+}
+#card .card-riders button:hover {
+  background: rgba(255, 230, 128, 0.3);
+}
+#card .card-riders em {
+  display: block;
+  opacity: 0.75;
+}
+#chips .chip s {
+  text-decoration: none;
+  color: #fff1c4;
+  letter-spacing: -2px;
+  margin-left: 1px;
+}
+#chips .chip s:empty {
+  display: none;
+}

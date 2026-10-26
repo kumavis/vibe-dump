@@ -90,8 +90,9 @@ export class View {
       // as shown: a focus event plays while the match has run ahead, a whole
       // AI turn or more; never during the turn of the one seat played here)
       focus: (e, M) => rig.focus(e.x, e.z, { stage: M.stage, active: M.active, localSeats: localSeats() }),
-      // the figures
-      'unit.place': (e) => units.disc(e.u),
+      // the figures ((F9a) a placed rider steps off its hull; a placed hull
+      // carries its riders, on its deck)
+      'unit.place': (e) => units.placed(e),
       'unit.formation': (e) => {
         units.disc(e.u)
         units.label(e.u)
@@ -101,6 +102,10 @@ export class View {
       'unit.flee': (e) => units.fled(e),
       'unit.destroyed': (e, M) => units.destroyed(e, M),
       'unit.face': (e) => units.face(e),
+      // ((F9a) riders board a hull and step off it, or bail out of its
+      // wreck: view/units.js's deck)
+      'unit.embark': (e) => units.embarked(e),
+      'unit.disembark': (e) => units.disembarked(e),
       // (what a wrecker smashed breaks as the walker passes it)
       'unit.move': (e, M) => units.walk(e, M, (ev) => {
         for (const x of ev) terrain.apply(x, M)
@@ -212,6 +217,8 @@ export class View {
     this.stage.run({
       parts: (dt, time) => {
         effects.update(dt)
+        // ((F9a) a wreck's smoke and embers)
+        if (!this.fast) this.terrain.animate(dt, time)
         units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
         objectives.animate(dt, time, this.owners ?? mirror().owners)
       },

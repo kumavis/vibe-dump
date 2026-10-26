@@ -78,6 +78,9 @@ export function buildModel(kit, key, t, sideColor, rim = 1) {
   fig.userData.y0 = fig.position.y
   root.add(fig)
   root.userData.fig = fig
+  // ((F9a) its base, which a rider's figure hides while it stands on a
+  // hull's deck: view/units.js)
+  root.userData.base = b
   root.userData.anim = fig.userData.anim
   root.userData.phase = Math.random() * 10
   root.userData.drawn = draws
@@ -139,7 +142,7 @@ function lowPoly(root) {
   const cells = new Map(), px = [], col = [], cnt = [], tris = []
   const v = new THREE.Vector3()
   root.traverse((o) => {
-    if (!o.isMesh || o.userData.lod) return
+    if (!o.isMesh || o.userData.lod || onDeck(o, root)) return
     const g = o.geometry, pos = g.attributes.position, c = g.attributes.color, idx = g.index
     const mc = o.material.color
     rel.multiplyMatrices(inv, o.matrixWorld)
@@ -174,6 +177,14 @@ function lowPoly(root) {
   geo.setIndex(tris)
   geo.computeBoundingSphere()
   return geo
+}
+
+// (F9a) whether a mesh stands on a hull's deck (view/units.js's deck group,
+// in the hull's root: its riders' figures), which the hull's stand-in
+// leaves out (they are their own units', and hide with the deck at range)
+function onDeck(o, root) {
+  for (let p = o; p && p !== root; p = p.parent) if (p.userData.deck) return true
+  return false
 }
 
 // A copy of a baked miniature sharing its geometry and materials (Mesh.clone

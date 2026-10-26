@@ -16,6 +16,15 @@
 // measures how far a place is by the way up to it (levelDist). Each rule's
 // height is its own code path behind hasHeight (§4.1 rule 18): the classic
 // expressions are the ones they always were, never the height one plus 0.
+//
+// (F9a, DESIGN §4.2.5) Riders. A unit aboard a vehicle (u.aboard, its id) is
+// off the table for every spatial rule, friendly ones included (§4.1 rule
+// 19): enemiesOf and friendsOf leave it out, so it is never in a forbid
+// mask, an engagement, a charge's or a shot's targets, the AI's threat sums,
+// a fight or a leadership aura; it engages nobody itself, and holds no
+// objective (its hull's own OC counts: 0 for every vehicle so far). Each
+// test is reached only where a unit is aboard: with nobody riding, every
+// filter keeps what it always kept, in the same order.
 import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
 import { hypot } from './dmath.js'
 import { STEP } from './nav.js'
@@ -26,17 +35,20 @@ export { moveMode, climbs, forbidMask, movePlan, validEnd, nearestValid } from '
 export { canShoot, shotInfo, shootTargets } from './actions/shoot.js'
 export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
 export { freeSpot } from './deploy.js'
+export { groundOnly } from './actions/move.js'
+export { hullOf, riders, room, mayBoard, embarkSpot, landing, isTransport } from './actions/transport.js'
 export { rngState } from './rng.js'
 
 export const alive = (u) => u.alive > 0
-export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e))
-export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u)
+// (F9a: a rider is neither: it is off the table)
+export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e) && !e.aboard)
+export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u && !e.aboard)
 export const dist = (a, b) => hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
 export const gap = (a, b) => dist(a, b) - a.r - b.r
 // (F7a) with height, an enemy within 1" engages only within HIGH of the floor
 // it stands on: a unit at the foot of a 2" wall can't fight the defenders on
-// top
-export const engagedWith = (G, u) => G.nav.hasHeight
+// top. (F9a) A rider engages nobody: [] while it is aboard.
+export const engagedWith = (G, u) => u.aboard ? [] : G.nav.hasHeight
   ? enemiesOf(G, u).filter((e) => gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)
   : enemiesOf(G, u).filter((e) => gap(u, e) <= ENGAGE + 0.05)
 // Where a model stands as far as the rules are concerned: its slot in the
@@ -57,8 +69,8 @@ export function floorAt(G, x, z) {
   const i = G.nav.index(x, z)
   return i < 0 ? 0 : G.nav.floor[i]
 }
-// The floor a unit stands on (F9: a rider's will be its hull's plus the
-// deck's height).
+// The floor a unit stands on (a rider's is its hull's, where it stands: F9c's
+// firing deck adds the deck's height for its eye, not here).
 export const groundY = (G, u) => floorAt(G, u.pos.x, u.pos.z)
 
 // ── Line of sight, cover, control ───────────────────────────────────────────
@@ -151,12 +163,13 @@ export function leadership(G, u) {
 
 // Who holds objective `o`: the seat with more OC within range, -1 for nobody.
 // (F7a) With height a model counts only within HIGH of the objective's floor
-// too: the keep's objective is held from its top.
+// too: the keep's objective is held from its top. (F9a) Riders hold
+// nothing: an aboard unit is skipped, and its hull's own OC counts.
 export function controlOf(G, o) {
   if (G.nav.hasHeight) return controlHigh(G, o)
   const oc = [0, 0]
   for (const u of G.units) {
-    if (!alive(u)) continue
+    if (!alive(u) || u.aboard) continue
     for (const m of u.models) if (m.alive && hypot(mx(u, m) - o.x, mz(u, m) - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
   }
   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
@@ -164,7 +177,7 @@ export function controlOf(G, o) {
 function controlHigh(G, o) {
   const oc = [0, 0], y = floorAt(G, o.x, o.z)
   for (const u of G.units) {
-    if (!alive(u)) continue
+    if (!alive(u) || u.aboard) continue
     for (const m of u.models) {
       if (!m.alive) continue
       const x = mx(u, m), z = mz(u, m)
@@ -400,7 +413,10 @@ export const statusOf = (G) => ({
 // scoring) it is one past the end, and the phase is still the last one run.
 export const phaseKey = (G) => PHASES[Math.min(G.turn.ph, PHASES.length - 1)].key
 
-// Something left to do for `u` in the current phase of its own turn.
+// Something left to do for `u` in the current phase of its own turn. (F9a)
+// A rider can still act in the movement phase while it hasn't moved (it may
+// disembark: `!moved`, as for any unit), and never in the shooting or the
+// charge phase while aboard (canShoot and canCharge refuse it).
 export function canAct(G, u) {
   if (!alive(u) || u.side !== G.turn.active) return false
   switch (phaseKey(G)) {

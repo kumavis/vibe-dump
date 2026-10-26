@@ -3,6 +3,9 @@
 import { hypot } from './dmath.js'
 import { edgeOf } from './match.js'
 import { setUnitPos } from './units.js'
+import { STEP } from './nav.js'
+import { groundOnly } from './actions/move.js'
+import { autoload } from './actions/transport.js'
 
 // The deployment zone of seat `side`: the strip the mission's depth deep
 // along its seat's edge, as x bounds (G.board: the mission's board).
@@ -25,12 +28,17 @@ export function zone(G, side) {
 // be put on, most often the deck's own top, a rim's width in from the edge
 // (in 50 fortified AI battles, 312 of 700 units started on the works'
 // decks: the front rows, 1.8" in from the zone's edge, run along them).
+//
+// (F9a) A rider in `others` stands in nobody's way (it is off the table, at
+// its hull's place), and a ground vehicle is never put on a floor above
+// STEP (with height: the works' decks are its riders', not its own).
 export function fits(G, u, i, { minX, maxX }, others) {
   const nav = G.nav
   const cx = nav.x(i), cz = nav.z(i)
   if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) return false
   if (!nav.standable(i, u.r, 'walk')) return false
-  if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false
+  if (nav.hasHeight && groundOnly(u) && nav.floor[i] > STEP) return false
+  if (others.some((o) => !o.aboard && hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false
   return true
 }
 
@@ -64,7 +72,12 @@ export function freeSpot(G, u, x, z, side, others) {
 }
 
 // Both armies in their zones, seat 0's first: a front row, the heroes
-// behind it, the artillery at the back.
+// behind it, the artillery at the back. (F9a) Then the autoload: each
+// vehicle boards its seat's Troops (core/actions/transport.js autoload,
+// DESIGN §4.2.8.7), drawing nothing; an army without a vehicle (every
+// preset) deploys exactly as before. (A hull is placed as any unit is; its
+// riders are placed in their rows first, then board, so a rider's row spot
+// is left empty.)
 export function deployArmies(G) {
   const { W, H, deploy } = G.board
   for (const side of [0, 1]) {
@@ -89,4 +102,5 @@ export function deployArmies(G) {
       })
     }
   }
+  autoload(G)
 }

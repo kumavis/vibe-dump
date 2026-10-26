@@ -57,8 +57,10 @@ const val = (v) => (typeof v === 'number' ? num(v) : String(v))
 const flagsOf = (f) => Object.keys(f).filter((k) => f[k] !== undefined).sort().map((k) => `${k}=${String(f[k])}`).join(',')
 
 // The unit fields features add beyond the classic ones, each with its
-// default: none yet (F9's `aboard: 0` will be the first).
-export const UNIT_EXTRAS = Object.freeze({})
+// default: (F9a) `aboard`, the carrying vehicle's id, 0 on the table, so
+// `aboard=<id>` prints only for a rider and a match without riders hashes
+// as before (F9b's `f`, a long hull's facing, joins it).
+export const UNIT_EXTRAS = Object.freeze({ aboard: 0 })
 
 // A unit's extras as shadowState prints them: `key=value` in sorted keys,
 // each only where the unit holds a value other than its default (a field

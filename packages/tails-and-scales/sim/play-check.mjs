@@ -29,6 +29,13 @@
 //             clears that score (#vp1); on Grand in landscape, with a unit
 //             picked up and its card showing, the roster stops above the
 //             minimap raised over the card
+//   cart      (F9a) vs. the AI from seat 0 in a Field battle whose
+//             Bushtails field two War-Carts (?mission=field&armies=): the
+//             deployment adjusted by clicks, Begin battle, and in the first
+//             movement phase a rider stepped off by the DOM alone (its chip
+//             on the cart's label, "▣ n/12 ⟨…⟩", clicked, then the ground
+//             beside the cart where the tooltip offers "⤓ Step off"), then
+//             moves, shots and End into round 2
 // (F4) A lane with a seat played here that reaches the round limit (--rounds
 // 5) is asked to play on: the panel must say which round is over, and Keep
 // playing must take it down and the HUD into round 6, overtime.
@@ -39,10 +46,11 @@
 // rounds or the end; and must play moves and Ends. The title must be up
 // 1200 ms after the page loads.
 //
-//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand] [--rounds R] [--full] [--dist <dir>] [--parallel N]
+//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand,layout,cart] [--rounds R] [--full] [--dist <dir>] [--parallel N]
 //
 // ?lowfi by default (--full: without); board 4242; the dice per lane
-// (bushtail 99, serpent 7, hotseat 1, watch 99, grand 5); 1280×800; the
+// (bushtail 99, serpent 7, hotseat 1, watch 99, grand 5, cart 99);
+// 1280×800; the cart lane plays two rounds at most; the
 // grand lane plays round 1 only (--rounds caps it), a Grand AI turn taking
 // minutes at SwiftShader's frame rate. --parallel runs
 // that many lanes at once (default 1: SwiftShader draws at about 2 fps on
@@ -58,8 +66,10 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, pool } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
-const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand', 'layout']
-const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5, layout: 1 }
+const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand', 'layout', 'cart']
+const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5, layout: 1, cart: 99 }
+// (F9a) the cart lane's battle: Field, the Bushtails with two War-Carts
+const CART_QUERY = 'mission=field&armies=1222112,field'
 let a
 try {
   ({ values: a } = parseArgs({ options: { lanes: { type: 'string' }, rounds: { type: 'string' }, full: { type: 'boolean' }, dist: { type: 'string' }, parallel: { type: 'string' } } }))
@@ -170,12 +180,42 @@ async function lane(browser, url, name) {
   // first; the other lanes' as ever, in the labels' order)
   const pickable = async (seat) => {
     const ls = await labels(seat)
-    if (name !== 'grand') return ls
+    if (name !== 'grand' && name !== 'cart') return ls
     const free = []
     for (const l of ls) if (await onTable({ x: l.x, y: l.y + 22 })) free.push(l)
     return free.sort((p, q) => Math.abs(p.x - 640) - Math.abs(q.x - 640))
   }
-  const stats = { placed: [0, 0], moves: 0, advances: 0, shots: 0, charges: 0, picks: 0, shortest: 0, autos: 0, ends: 0, decisions: 0, votes: 0 }
+  const stats = { placed: [0, 0], moves: 0, advances: 0, shots: 0, charges: 0, picks: 0, shortest: 0, autos: 0, ends: 0, decisions: 0, votes: 0, steps: 0, cargo: '' }
+
+  // (F9a, the cart lane) A rider stepped off by the DOM: its chip on its
+  // cart's label clicked (picking it up), then the ground round the cart
+  // (under its label) tried until the tooltip offers a step-off, and
+  // clicked. True once the table has caught up with it.
+  async function stepOff(e) {
+    const chips = await page.evaluate(() => [...document.querySelectorAll('#labels .ulabel.s0 .rd i')].map((c) => {
+      const r = c.getBoundingClientRect(), l = c.closest('.ulabel').getBoundingClientRect()
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2, lx: l.left + l.width / 2, ly: l.bottom, cargo: c.closest('.ulabel').querySelector('.cg')?.textContent ?? '' }
+    }).filter((c) => c.x > 30 && c.x < innerWidth - 30 && c.y > 60 && c.y < innerHeight - 60))
+    for (const c of chips) {
+      stats.cargo ||= c.cargo
+      await click(c)
+      if (!/Step off|blue/.test(await text('#hint')) && !(await page.evaluate(() => document.querySelector('#card.show')?.textContent.includes('Aboard the')))) continue
+      // the cart stands under its label: round it, about 2-3" out on screen
+      for (const r of [70, 95, 55, 120]) for (let k = 0; k < 12; k++) {
+        const a = (k / 12) * Math.PI * 2, q = { x: c.lx + Math.cos(a) * r, y: c.ly + 40 + Math.sin(a) * r * 0.7 }
+        if (!(await onTable(q))) continue
+        await page.mouse.move(q.x, q.y)
+        await sleep(300)
+        if (!(await tooltip()).startsWith('⤓ Step off')) continue
+        await page.mouse.click(q.x, q.y)
+        stats.steps++
+        log('a rider stepped off by its chip and a click beside its cart')
+        if ((await idle()) !== e.text) return true
+        return true
+      }
+    }
+    return false
+  }
 
   // The deployment of `seat`, once the camera is at rest: units picked up
   // by a click on them and put down by a click on the ground elsewhere in
@@ -222,6 +262,11 @@ async function lane(browser, url, name) {
     stats.decisions++
     const enemy = 1 - mine
     if (phase === 'Movement') {
+      // ((F9a) the cart lane: a rider stepped off first, once)
+      if (name === 'cart' && !stats.steps) {
+        await stepOff(e)
+        if ((await btn('#endPhase')).text !== e.text) return
+      }
       let k = 0
       for (const l of (await pickable(mine)).slice(0, 3)) {
         const p = await unitAt(l, (t) => /models|wounds/.test(t))
@@ -313,7 +358,7 @@ async function lane(browser, url, name) {
 
   const problems = []
   try {
-    await page.goto(`${url}/?${a.full ? '' : 'lowfi&'}seed=4242&dice=${DICE[name]}`)
+    await page.goto(`${url}/?${a.full ? '' : 'lowfi&'}seed=4242&dice=${DICE[name]}${name === 'cart' ? `&${CART_QUERY}` : ''}`)
     await page.waitForSelector('#title:not(.hidden)')
     await sleep(1200)
     if (!(await page.isVisible('#title .panel'))) problems.push('the title is not up at 1200 ms')
@@ -344,7 +389,7 @@ async function lane(browser, url, name) {
       log('second watched battle:', await text('#round'), 'log entries:', await page.evaluate(() => document.querySelector('#logList').children.length))
       if (!/Round [2-5]/.test(await text('#round'))) problems.push(`the second watched battle never reached round 2 (${await text('#round')})`)
     } else {
-      await page.click(`[data-mode="${name === 'grand' ? 'bushtail' : name}"]`)
+      await page.click(`[data-mode="${name === 'grand' || name === 'cart' ? 'bushtail' : name}"]`)
       // ((F8b) the Grand lane picks its size on the panel, and keeps every
       // toast the page shows: the one-time tips among them)
       if (name === 'grand') {
@@ -360,7 +405,7 @@ async function lane(browser, url, name) {
       await page.click('#setupStart')
       await pace()
       const seats = name === 'serpent' ? [1] : name === 'hotseat' ? [0, 1] : [0]
-      const rounds = name === 'grand' ? Math.min(ROUNDS, 1) : ROUNDS
+      const rounds = name === 'grand' ? Math.min(ROUNDS, 1) : name === 'cart' ? Math.min(ROUNDS, 2) : ROUNDS
       log('started', name)
       let n = 0, deployed = 0
       for (;;) {
@@ -407,6 +452,9 @@ async function lane(browser, url, name) {
         const board = await text('#round')
         if (!/\/ 7/.test(board)) problems.push(`the HUD's round line names no seventh round ("${board}"): not a Grand battle`)
       }
+      // ((F9a) the cart lane: a rider stepped off by the DOM, its cart's
+      // label counting its riders)
+      if (name === 'cart' && (!stats.steps || !/^▣ \d+\/12$/.test(stats.cargo))) problems.push(`the cart lane stepped ${stats.steps} riders off by their chips (one at least), the cart's label reading "${stats.cargo}" (▣ n/12)`)
       const missing = seats.filter((s) => !stats.placed[s])
       if (missing.length) problems.push(`seat(s) ${missing.join(', ')} placed nothing by a click in the deployment`)
       if (!stats.decisions) problems.push('no decision was played')

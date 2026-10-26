@@ -17,9 +17,13 @@
 //   node sim/corpus-add.mjs --set fort --mode watch --terrain fortified --tag fort --need works,keep --count 3
 //   node sim/corpus-add.mjs --set scale --mission grand --terrain open --mode watch --tag grand --auto-armies 90 --count 2
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
+//   node sim/corpus-add.mjs --set vehicle --mission field --mode watch --tag carts --races squirrel,serpent --auto-armies 90 --carts 1 --count 3
+//   node sim/corpus-add.mjs --set vehicle --mission field --mode hotseat --policy ride --tag ride --races squirrel,squirrel --auto-armies 90 --carts 2 --need embark,disembark,rearranged
+//   node sim/corpus-add.mjs --set vehicle --mission field --mode bushtail --policy aggressive --tag bail --auto-armies 90 --carts 2 --need bailout
 //
 // --mode bushtail, serpent, hotseat or watch; --policy (not with watch)
-// random, late, aggressive or pilot (sim/oracle/human-bot.mjs); --overtime
+// random, late, aggressive, pilot or (F9a) ride (sim/oracle/human-bot.mjs);
+// --overtime
 // the setup's (F4: 'vote'); --races <seat 0>,<seat 1> the seats' races
 // (default squirrel,serpent, the title screen's: serpent,squirrel puts the
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
@@ -85,6 +89,20 @@
 //   deckfight  a blow struck in a fight with a unit on a deck
 //   works      both seats' own ramparts stand
 //   keep       the keep stands round the centre objective; nokeep: it doesn't
+//   (F9a, the vehicle/ corpus's human logs: the first two read off the log,
+//   the last two off the match as the log is folded again in Node on the
+//   PIN code, sim/rider-probe.mjs, as the height needs are)
+//   embark     a unit boarding a hull in a movement phase among its entries
+//   disembark  a rider stepping off among its entries
+//   bailout    a hull destroyed with riders aboard who bailed out, at the
+//              cost of models (a 1 on a bail-out's dice, or a rider lost
+//              with nowhere to stand)
+//   rearranged the autoload re-arranged in the deployment (a rider placed
+//              off its hull, or a unit boarding there)
+// --carts <n> (F9a, with --auto-armies) each seat whose race fields a
+// transport draws its list again (autoList on k + 1000·j, j = 1, 2, …)
+// until it holds n War-Carts at least: the vehicle/ corpus's lists
+// (DESIGN §4.2.9: War-Carts against the Coil, and Bushtail mirrors).
 // --from <k> the first candidate seed (default 1): candidate k plays board
 // and dice drawn from mulberry32(9000 + k), and the bot's policy seed k.
 // Logs are named <mode>-<policy>-<tag>-<k> (watch: watch-<tag>-<k>); an
@@ -99,6 +117,7 @@ import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32, MODES } from './oracle/human-bot.mjs'
 import { foldJob, loadMatch } from './run.mjs'
 import { heightProbe } from './height-probe.mjs'
+import { riderProbe } from './rider-probe.mjs'
 
 // (each played result's `entries` is a list, an AI pair's empty: below)
 const NEEDS = {
@@ -119,14 +138,20 @@ const NEEDS = {
   works: (r) => r.height.works === 2,
   keep: (r) => r.height.keep,
   nokeep: (r) => r.height.height && !r.height.keep,
+  // (F9a: the log's own, and the probe's, r.rides)
+  embark: (r) => (r.entries ?? []).some((e, i) => e.t === 'embark' && r.asked[i] === 'move'),
+  disembark: (r) => (r.entries ?? []).some((e) => e.t === 'disembark'),
+  bailout: (r) => r.rides.bailed > 0 && r.rides.bailDeaths > 0,
+  rearranged: (r) => r.rides.rearranged > 0,
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
+const RIDE_NEEDS = ['bailout', 'rearranged']
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
     count: { type: 'string' }, tries: { type: 'string' }, dry: { type: 'boolean' }, set: { type: 'string' },
     races: { type: 'string' }, armies: { type: 'string' }, 'auto-armies': { type: 'string' }, from: { type: 'string' },
-    mission: { type: 'string' }, terrain: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' },
+    mission: { type: 'string' }, terrain: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, carts: { type: 'string' },
   },
 })
 const need = (a.need ?? '').split(',').filter(Boolean)
@@ -135,11 +160,12 @@ const watch = a.mode === 'watch'
 const races = (a.races ?? 'squirrel,serpent').split(',')
 const armies = a.armies === undefined ? null : a.armies.split(',')
 const PCT = a['auto-armies'] === undefined ? null : Number(a['auto-armies'])
+const CARTS = a.carts === undefined ? 0 : Number(a.carts)
 const bad = [
   !Object.keys(MODES).includes(a.mode) && `--mode takes ${Object.keys(MODES).join(', ')}`,
   watch && a.policy !== undefined && '--mode watch records an AI pair: no bot plays it, so it takes no --policy',
   watch && a.overtime !== undefined && '--mode watch has no human seat to vote, so it takes no --overtime',
-  !watch && !['random', 'late', 'aggressive', 'pilot'].includes(a.policy) && '--policy takes random, late, aggressive or pilot',
+  !watch && !['random', 'late', 'aggressive', 'pilot', 'ride'].includes(a.policy) && '--policy takes random, late, aggressive, pilot or ride',
   !LOG_SETS.includes(a.set ?? 'human') && `--set takes ${LOG_SETS.join(' or ')}`,
   !/^[a-z]+(-[a-z]+)*$/.test(a.tag ?? '') && '--tag takes lowercase words joined by hyphens (it names the logs)',
   need.some((n) => !NEEDS[n]) && `--need takes ${Object.keys(NEEDS).join(', ')}`,
@@ -149,6 +175,8 @@ const bad = [
   armies && armies.length !== 2 && '--armies takes two armies, <seat 0>,<seat 1>',
   armies && PCT !== null && '--armies and --auto-armies are one or the other',
   PCT !== null && !(Number.isInteger(PCT) && PCT > 0 && PCT <= 100) && '--auto-armies takes a whole percentage, 1-100',
+  a.carts !== undefined && !(Number.isInteger(CARTS) && CARTS >= 1 && CARTS <= 2) && '--carts takes 1 or 2 (War-Carts a Bushtail list holds at least)',
+  a.carts !== undefined && PCT === null && '--carts draws the lists --auto-armies builds: give both',
   (a.ref !== undefined || a.dir !== undefined) && !a.dry && '--ref and --dir take another code than the PIN only with --dry (a corpus is recorded on the PIN)',
   a.ref !== undefined && a.dir !== undefined && '--ref and --dir are one or the other',
 ].filter(Boolean)
@@ -200,10 +228,16 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n)) || a.terrain === 'fortified' ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n)) || a.terrain === 'fortified' ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)
+  const r = foldJob(pinCore, log, { match: pinMatch, probe })
+  return r.error ? { error: r.error, ...probe.result() } : probe.result()
+}
+// (F9a) the same for the transports: sim/rider-probe.mjs's counts
+const ridesOf = (log) => {
+  const probe = riderProbe()
   const r = foldJob(pinCore, log, { match: pinMatch, probe })
   return r.error ? { error: r.error, ...probe.result() } : probe.result()
 }
@@ -213,8 +247,17 @@ const heightOf = (log) => {
 const listsOf = (setup, k) => {
   if (armies) return armies
   if (PCT === null) return null
-  const rules = MISSIONS[setup.mission ?? 'classic'].list
-  return races.map((race) => army.listText(army.autoList(RACES[race], { ...rules, points: Math.floor((PCT * rules.points) / 100) }, k)))
+  const rules = MISSIONS[setup.mission ?? 'classic'].list, at = { ...rules, points: Math.floor((PCT * rules.points) / 100) }
+  // ((F9a) --carts: drawn again until a transport race's list holds them)
+  return races.map((race) => {
+    const R = RACES[race], cart = R.roster.findIndex((key) => R.units[key].transport)
+    let counts = army.autoList(R, at, k)
+    for (let j = 1; CARTS && cart >= 0 && (counts[cart] ?? 0) < CARTS; j++) {
+      if (j > 200) throw new Error(`corpus-add: no ${race} list of ${at.points} points holds ${CARTS} War-Carts on seeds ${k} + 1000·j, j ≤ 200`)
+      counts = army.autoList(R, at, k + 1000 * j)
+    }
+    return army.listText(counts)
+  })
 }
 // a seat's army as the log's why says it: its digits and their cost
 const costOf = (setup, i) => {
@@ -247,8 +290,10 @@ const cands = Array.from({ length: TRIES }, (_, i) => {
 const played = (await run(cands.map((c) => c.job))).map((r) => (r.error ? r : { ...r, entries: r.entries ?? [] }))
 // (F7a) the height the battle played with, where a need or the terrain asks
 if (pinCore) played.forEach((r, i) => !r.error && (r.height = heightOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
+// (F9a) and with its transports, where a need asks
+if (need.some((n) => RIDE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.rides = ridesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 const fits = cands.map((c, i) => ({ ...c, res: played[i] })).filter((c) => {
-  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
+  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
   const end = c.res.error ? '' : c.res.over.wiped >= 0 ? `seat ${c.res.over.wiped} wiped out` : `${c.res.over.vp.join('-')} on the score`
   console.log(`  ${c.label.padEnd(30)} ${miss ? (c.res.error ? miss : `lacks ${miss}`) : 'fits'}${end ? `  (${end}${c.job.setup.seats.some((s) => s.army != null) ? `; ${c.job.setup.seats.map((s) => s.army ?? '-').join(' v ')}` : ''})` : ''}  [played in ${c.res.secs.toFixed(1)} s]`)
   return !miss
@@ -284,7 +329,10 @@ for (const c of chosen) {
   // ((F7a) what it did with the height: sim/height-probe.mjs's counts)
   const h = c.res.height
   const high = h?.height && [h.works === 2 && 'works', h.keep && `keep held at ${h.keepHeld} round end${h.keepHeld === 1 ? '' : 's'}`, h.deployed && `deployed on decks ${h.deployed}`, h.deckRounds.length && `on a deck at the end of rounds ${h.deckRounds.join(' ')}`, h.movedRounds?.length && `by a move at the end of rounds ${h.movedRounds.join(' ')}`, h.climbs && `ladders ${h.climbs} (${h.up} up)`, h.ontoDeck && `onto a deck ${h.ontoDeck}`, h.deckFights && `deck fights ${h.deckFights}`].filter(Boolean).join(', ')
-  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, describe(features(c.res.trace))].filter(Boolean).join(', ')
+  // ((F9a) what it did with its transports: sim/rider-probe.mjs's counts)
+  const rd = c.res.rides
+  const rides = rd && [rd.rearranged && `re-arranged ${rd.rearranged}`, rd.embarks && `embarks ${rd.embarks} (${rd.embarkPhase} in a phase)`, rd.steps && `steps off ${rd.steps}`, rd.bailed && `bail-outs ${rd.bailed} (${rd.bailDeaths} models lost)`, rd.lost && `riders lost ${rd.lost}`].filter(Boolean).join(', ')
+  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
   if (!a.dry) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, a.set ?? 'human')
 }

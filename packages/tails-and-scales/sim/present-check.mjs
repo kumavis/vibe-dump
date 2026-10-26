@@ -137,7 +137,23 @@
 // (--only) just notes the kinds it held none of: one battle may well have
 // no fizzle, no gaze or no eruption.
 //
-//   node sim/present-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
+// (F9a, DESIGN §4.2.9's P-present row) And the riders: with no battle of
+// the corpus yet carrying a War-Cart (the vehicle/ corpus is recorded
+// after F9a's code), battles with transports are played in Node through
+// the core alone (RIDES below: AI battles at Field, Bushtail mirrors and
+// Bushtails against the Coil, and hotseat games played by a script that
+// re-arranges the autoload in the deployment, boards and steps off in
+// every movement phase and leaves the rest to Auto), the module hooks of
+// the self-test registered, so its edits reach them too. Their mirror,
+// folded from every event from the battle's start, must equal project(G)
+// at every act and every stop, `aboard` among it (a rider's hull, its
+// place with its hull's): so a unit.embark dropped, or a rider left behind
+// by its hull's walk, placement or pile-in in the mirror, fails there.
+// Such a battle must show riders aboard at some act and (the scripted ones)
+// an embark and a step off, or it held nothing. They run with every run,
+// and with --only only when it names `riders` (--only riders: them alone).
+//
+//   node sim/present-check.mjs [--only ai,hotseat,4242-99,riders] [--ref <ref> | --dir <packageDir>]
 //   node sim/present-check.mjs --self-test     each edit in present-hooks.mjs's
 //                                              MUTATIONS must fail it
 //                              [--mutations a,b]   only these of them
@@ -164,13 +180,26 @@ import { readFileSync, existsSync } from 'node:fs'
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, riders: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
 } catch (e) {
   console.error(`present-check: ${e.message}\nusage: node sim/present-check.mjs [--only <kinds, modes or ids>] [--ref <ref> | --dir <packageDir>] | --self-test [--mutations <names>] [--only <kinds, modes or ids>]`)
   process.exit(2)
 }
 
+// (F9a) The battles with transports: [id, setup, scripted]. The lists are the
+// races' own autoList's on fixed seeds, the first of each holding War-Carts
+// (two for the scripted games), found as the child loads the code.
+const RIDES = [
+  ['riders-field-mirror-1', { board: 31, dice: 7, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'] }, false],
+  ['riders-field-coil-2', { board: 52, dice: 11, mission: 'field', terrain: 'open', races: ['squirrel', 'serpent'] }, false],
+  ['riders-field-fort-3', { board: 77, dice: 5, mission: 'field', terrain: 'fortified', races: ['serpent', 'squirrel'] }, false],
+  ['riders-grand-coil-4', { board: 19, dice: 3, mission: 'grand', terrain: 'open', races: ['squirrel', 'serpent'] }, false],
+  ['riders-hotseat-5', { board: 4242, dice: 99, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'] }, true],
+  ['riders-hotseat-6', { board: 808, dice: 41, mission: 'field', terrain: 'fortified', races: ['squirrel', 'serpent'] }, true],
+]
+
 if (a.child) await page(a.child)
+else if (a.riders) await ridersChild(a.riders)
 else if (a['self-test']) await selfTest()
 else process.exit(await parent())
 
@@ -394,13 +423,13 @@ async function page(dir) {
 // the ground its segment spans, which is the walk's L (the view's).
 function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const nameOf = (id) => unitOf(id)?.t.short
-  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll
+  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll, boarding
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
   const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0 }
   const reset = () => {
-    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = null
+    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = boarding = null
     melees = 0
     pause = false
   }
@@ -414,6 +443,16 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const event = (e) => {
     let why = ''
     const held = e.t === 'log' && !e.traced
+    // ((F9a) a walk no move line came before: a charge's, at its pace, or
+    // an embark's (core/actions/transport.js doEmbark: the walk, its flags
+    // and labels, then unit.embark, the line after it), at a move's; told
+    // apart by the first event past the walk's flags)
+    if (boarding && !(e.t === 'objectives' || e.t === 'status' || held)) {
+      const w = boarding.e, embark = e.t === 'unit.embark' && e.u === w.u, speed = embark ? 7 : 11
+      if (w.stomp) why ||= `${nameOf(w.u)}'s walk of ${w.L.toFixed(2)}" (${embark ? 'an embark\'s' : 'not a move'}) has stomp ${w.stomp}, not false`
+      if (w.speed !== speed) why ||= `${nameOf(w.u)}'s walk (${embark ? 'an embark\'s' : 'not a move'}) goes at ${w.speed}"/s, not ${speed}`
+      boarding = null
+    }
     // ── the roll-off: its tray after the battle's stage and flags, its rows
     // in pairs until one isn't a tie, then the line naming the winner ──
     if (e.t === 'tray.open' && e.title === 'Roll-off for the first turn') {
@@ -544,13 +583,15 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       const cost = e.path.some((p) => p.climb) ? e.path.reduce((L, p, i) => (i ? L + (p.climb ? ladderMul * Math.abs(p.y - e.path[i - 1].y) : hypot(p.x - e.path[i - 1].x, p.z - e.path[i - 1].z)) : 0), 0) : e.L
       if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
       const stomp = !!mv && !!unitOf(e.u)?.t.wrecker && e.L > 0.1
-      if (e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (${mv ? 'a move' : 'not a move'}) has stomp ${e.stomp}, not ${stomp}`
+      if (mv && e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (a move) has stomp ${e.stomp}, not ${stomp}`
       // flying exactly when its unit flies; a move's pace, or a charge's
       const fly = unitOf(e.u)?.t.move === 'fly'
       if (e.fly !== fly) why ||= `${nameOf(e.u)}'s walk has fly ${e.fly}, not ${fly}`
       if (fly) seen.flights++
-      const speed = mv ? 7 : 11
-      if (e.speed !== speed) why ||= `${nameOf(e.u)}'s walk (${mv ? 'a move' : 'not a move'}) goes at ${e.speed}"/s, not ${speed}`
+      // (no move line before it: a charge's or (F9a) an embark's walk, judged
+      // at the next event that tells which: `boarding`, above)
+      if (mv && e.speed !== 7) why ||= `${nameOf(e.u)}'s walk (a move) goes at ${e.speed}"/s, not 7`
+      if (!mv) boarding = { e }
       moving = null
     } else if (moving && !(e.t === 'log' && !e.traced)) {
       // (a line of 0.0" walks nowhere: under 0.05" nothing moves)
@@ -613,10 +654,127 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   return { event, reset, end, seen }
 }
 
-function child(dir, job, env = process.env) {
+// ── (F9a) The riders, in Node ───────────────────────────────────────────────
+
+// One of RIDES, played in this child through the core of `dir` (the self-
+// test's edit applied as the code loads: present-hooks.mjs), its events
+// folded into a mirror from the battle's start (sim/run.mjs mirrorTap's:
+// the table as the start shows it), held to project(G) at every act (as the
+// act line was written) and every stop. Writes { acts, stops, events,
+// kinds, aboard, mismatch, error }.
+async function ridersChild(dir) {
+  const { register } = await import('node:module')
+  register('./present-hooks.mjs', import.meta.url)
+  const [id, spec, scripted] = JSON.parse(readFileSync(0, 'utf8'))
+  const at = (f) => import(pathToFileURL(join(dir, f)).href)
+  const [core, mirror, { RACES }, { MISSIONS }] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('data/schema.js'), at('data/mission.js')])
+  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, mismatch: null, error: null }
+  const miss = (why) => (out.mismatch ??= why)
+  try {
+    const A = core.army, rules = MISSIONS[spec.mission].list
+    const army = (race) => {
+      const k = RACES[race].roster.findIndex((key) => RACES[race].units[key].transport)
+      for (let seed = 1; seed < 400; seed++) {
+        const counts = A.autoList(RACES[race], rules, seed)
+        if (k < 0 || (counts[k] ?? 0) >= (scripted ? 2 : 1)) return A.listText(counts)
+      }
+      throw new Error(`no ${race} list with War-Carts at ${spec.mission} on seeds 1-399`)
+    }
+    const setup = { board: spec.board, dice: spec.dice, mission: spec.mission, terrain: spec.terrain, seats: spec.races.map((race) => ({ race, ctrl: scripted ? 'human' : 'ai', army: army(race) })) }
+    let M = null
+    const projs = []
+    const onTrace = (line, G) => {
+      M ??= { ...mirror.project(G), stage: 'title', owners: G.objectives.map(() => -1), chunks: {} }
+      if (line.startsWith('act ')) projs.push(mirror.project(G))
+    }
+    const G = core.createMatch(setup, { out: [], onTrace })
+    M ??= { ...mirror.project(G), stage: 'title', owners: G.objectives.map(() => -1), chunks: {} }
+    // the events since, folded; each act held to its line's projection,
+    // and the stop to the match
+    const look = (where) => {
+      for (const e of G.out.splice(0)) {
+        mirror.applyEvent(M, e)
+        out.events++
+        out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
+        if (e.t !== 'act') continue
+        const proj = projs.shift()
+        out.acts++
+        if (Object.values(proj.units).some((u) => u.aboard)) out.aboard++
+        const d = differ(M, proj)
+        if (d) return miss(`act ${out.acts} (${where}): the mirror folded from the events differs from the match: ${d}`)
+      }
+      if (projs.length) return miss(`${projs.length} act line(s) traced with no act event (${where})`)
+      out.stops++
+      const d = differ(M, mirror.project(G))
+      if (d) miss(`stop ${out.stops} (${where}): the mirror folded from the events differs from the match: ${d}`)
+    }
+    look('the start')
+    // (the scripted seats: the deployment re-arranged, a board and a step
+    // off a movement phase where they may, Auto for the rest)
+    const q = core.q
+    for (let k = 0; G.turn.stage !== 'over' && !out.mismatch; k++) {
+      if (k > 4000) throw new Error('the scripted battle never ends')
+      const P = G.pending, s = P.seats[0]
+      const send = (body) => {
+        const why = core.legal(G, s, body)
+        if (why) throw new Error(`the script's ${JSON.stringify(body)} for seat ${s} is refused: ${why}`)
+        core.apply(G, s, body)
+        look(`${JSON.stringify(body)} for seat ${s}`)
+      }
+      const mine = G.units.filter((u) => u.side === s && u.alive > 0)
+      if (P.k === 'deploy') {
+        const hulls = mine.filter((u) => u.t.transport)
+        if (hulls.length) {
+          // a rider placed off its hull, then boarded again; the hull
+          // placed elsewhere, its riders with it
+          const v = hulls[0], p = q.riders(G, v)[0]
+          if (p) {
+            const spot = q.freeSpot(G, p, v.pos.x, v.pos.z + 5, s, G.units.filter((o) => o !== p))
+            if (spot) send({ t: 'place', u: p.id, c: G.nav.index(spot.x, spot.z) })
+            if (!p.aboard) send({ t: 'embark', u: p.id, v: v.id })
+          }
+          const to = q.freeSpot(G, v, v.pos.x, v.pos.z - 6, s, G.units.filter((o) => o !== v))
+          if (to) send({ t: 'place', u: v.id, c: G.nav.index(to.x, to.z) })
+        }
+        send({ t: 'deployed' })
+        continue
+      }
+      if (P.k === 'phase' && P.phase === 'move') {
+        // a rider steps off (the first that may), a unit boards (the first
+        // that may), a hull moves 3" with its riders; then Auto
+        const p = mine.find((u) => u.aboard && !u.flags.moved)
+        const cells = p ? q.landing(G, p, G.units.find((v) => v.id === p.aboard)) : []
+        if (cells.length) send({ t: 'disembark', u: p.id, c: cells[0] })
+        let boarded = false
+        for (const v of mine.filter((x) => x.t.transport)) for (const u of mine) if (!boarded && !u.aboard && core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null) {
+          send({ t: 'embark', u: u.id, v: v.id })
+          boarded = true
+        }
+        const v = mine.find((x) => x.t.transport && !x.flags.moved && q.riders(G, x).length && !q.isEngaged(G, x))
+        if (v) {
+          const plan = q.movePlan(G, v, 0), c = q.nearestValid(G, plan, v.pos.x - G.seats[s].edge * 3, v.pos.z)
+          if (c >= 0) send({ t: 'move', u: v.id, c })
+        }
+        if (G.pending?.k === 'phase') send({ t: 'auto' })
+        continue
+      }
+      if (P.k === 'chargeEnd') send({ t: 'chargeEnd', c: -1 })
+      else if (P.k === 'roundLimit') send({ t: 'vote', more: false })
+      else send({ t: 'auto' })
+    }
+    look('the end')
+    if (!out.aboard) miss('no act of the battle had a rider aboard: it held no rider to the mirror')
+    if (scripted && !(out.kinds['unit.embark'] && out.kinds['unit.disembark'])) miss(`the scripted battle met ${out.kinds['unit.embark'] ?? 0} embarks and ${out.kinds['unit.disembark'] ?? 0} steps off: it held too little`)
+  } catch (e) {
+    out.error = String(e?.stack ?? e)
+  }
+  process.stdout.write(JSON.stringify(out))
+}
+
+function child(dir, job, env = process.env, mode = '--child') {
   const self = fileURLToPath(import.meta.url)
   return new Promise((done) => {
-    const p = spawn(process.execPath, [self, '--child', dir], { stdio: ['pipe', 'pipe', 'pipe'], env })
+    const p = spawn(process.execPath, [self, mode, dir], { stdio: ['pipe', 'pipe', 'pipe'], env })
     let out = '', err = ''
     // decoded as a stream: a character split across two chunks stays whole
     p.stdout.setEncoding('utf8')
@@ -640,11 +798,16 @@ async function parent({ env = process.env, quiet = false } = {}) {
   const { loadCorpus, select, verdict, pool, CPUS } = await import('./lib.mjs')
   const { dirFromArgs } = await import('./oracle/pin.mjs')
   const dir = a.dir ? resolve(a.dir) : dirFromArgs({ ref: a.ref ?? 'WORKTREE' })
-  // (whole: every battle of the corpus is selected)
+  // (whole: every battle of the corpus is selected; (F9a) `riders`, a
+  // token of this check's own, selects RIDES, which run unless --only
+  // names battles without it)
   let items, whole
+  const tokens = a.only === undefined ? null : a.only.split(',').map((x) => x.trim()).filter(Boolean)
+  const rides = (tokens === null || tokens.includes('riders')) && existsSync(join(dir, 'core', 'actions', 'transport.js'))
   try {
     const all = loadCorpus().items
-    items = select(all, a.only)
+    const rest = tokens?.filter((x) => x !== 'riders')
+    items = rest === undefined ? all : rest.length ? select(all, rest.join(',')) : []
     whole = items.length === all.length
   } catch (e) {
     console.error(`present-check: ${e.message}`)
@@ -674,6 +837,22 @@ async function parent({ env = process.env, quiet = false } = {}) {
     for (const [k, n] of Object.entries(r.kinds ?? {})) total.kinds[k] = (total.kinds[k] ?? 0) + n
     say(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.checks).padStart(3)} checks, ${String(r.events).padStart(5)} events: the mirror is the match`}`)
   })
+  // (F9a) the riders, in Node (their battles' lines read as the corpus's do)
+  if (rides) {
+    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0 }
+    await pool(RIDES, CPUS, async (job) => {
+      const r = await child(dir, job, env, '--riders')
+      const why = r.error ?? r.mismatch
+      if (why) failed++
+      held.acts += r.acts ?? 0
+      held.stops += r.stops ?? 0
+      held.aboard += r.aboard ?? 0
+      held.embarks += r.kinds?.['unit.embark'] ?? 0
+      held.steps += r.kinds?.['unit.disembark'] ?? 0
+      say(`  ${(job[2] ? 'human' : 'ai').padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.stops).padStart(3)} stops, ${String(r.events).padStart(5)} events: the mirror is the match, riders aboard at ${r.aboard} acts`}`)
+    })
+    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)`)
+  }
   const kinds = Object.entries(total.kinds).filter(([k]) => /^(unit|terrain|blast|spell)\.|^(smashed|melee|charge\.result|volley)$/.test(k)).sort().map(([k, n]) => `${k} ${n}`).join(', ')
   const ordered = Object.entries(total.ordered)
   say(`  folded ${total.events} events (${kinds}) and compared ${total.acts} acts and ${total.checks} checks (${total.cards} unit cards read at them, ${total.told} telling what a unit did this turn or of its cover); held to their events' order: ${ordered.map(([k, n]) => `${n} ${k}`).join(', ')}`)
@@ -688,7 +867,8 @@ async function parent({ env = process.env, quiet = false } = {}) {
       say(`  FAIL: the event order held no ${none.join(', ') || 'line'} at all (have their texts changed?)`)
     }
   }
-  say(failed ? `\npresent-check FAILED: ${failed} of ${items.length}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order (${Math.round((Date.now() - t0) / 1000)} s)`)
+  const n = items.length + (rides ? RIDES.length : 0)
+  say(failed ? `\npresent-check FAILED: ${failed} of ${n}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order${rides ? `; and (F9a) at every act and stop of ${RIDES.length} battles with War-Carts, riders aboard among it` : ''} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return failed ? 1 : 0
 }
 

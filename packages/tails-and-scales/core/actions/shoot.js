@@ -41,9 +41,12 @@ import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt } from '../queries.js'
 import { damage } from './damage.js'
 
+// (F9a) A rider can't shoot while aboard: the firing deck, from which up to
+// `fire` rider units shoot from the deck's height, is F9c's (DESIGN §4.2.5),
+// and a rider is off the table until then.
 export function canShoot(G, u) {
   const w = u.t.ranged
-  if (!w || !alive(u) || u.flags.shot) return false
+  if (!w || !alive(u) || u.flags.shot || u.aboard) return false
   if (u.mesmerized || u.flags.fellBack || isEngaged(G, u)) return false
   if (u.flags.advanced && !w.assault) return false
   return true
@@ -167,12 +170,17 @@ export function eruption(G, u, target, w) {
 // a model is under it by its distance in 3D from there (its own floor's
 // height off the template's), and the scenery is chewed from half an inch
 // over that floor; without height, the flat test and 0.5 as ever.
+//
+// (F9a) Riders are off the table: a template over a hull hits the hull (a
+// big target: D3+1 hits), never the riders on its deck. A hull it destroys
+// bails its riders out mid-volley (core/actions/transport.js), after the
+// victims were all found, so no rider is among this template's.
 export function blastLands(G, u, land, w) {
   emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })
   const victims = []
   const ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
   for (const v of G.units) {
-    if (!alive(v)) continue
+    if (!alive(v) || v.aboard) continue
     const under = G.nav.hasHeight
       ? v.models.filter((m) => m.alive && hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
       : v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)

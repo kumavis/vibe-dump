@@ -62,6 +62,15 @@
 // into a mirror and applying them here one by one, as the player does; and
 // (R7) holds a table synced from the chunks as they stand to the one the
 // events built.
+//
+// (F9a, DESIGN §4.2.5) A transport destroyed leaves a burning wreck: a
+// terrain chunk of its own (kind 'wreck', look.piece 'wreck', its def
+// carrying `base`, the floor it stands on), drawn here as the charred cup
+// split open and tipped over, a wheel thrown off, splintered planks and
+// embers, built from its def alone (no Math.random: a snap builds what the
+// event built); smoke rises from it every frame it stands (animate(), the
+// view's: cosmetic, on Math.random), and the embers flicker. It is never
+// tiled (tileable(): it burns), and a blast that breaks it scatters it.
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -241,6 +250,79 @@ const PIECES = {
     const g = new THREE.Group()
     g.position.set(c.shape.x, 0, c.shape.z)
     return { obj: g, pieces: 0 }
+  },
+  // (F9a) A hull's burning wreck, on the floor it stood on (`base`), within
+  // its box (hx, hy, hz): a scorch mark, the cup split open and slumped
+  // over, its cupules charred, a wheel thrown flat and another leaning on
+  // it, planks strewn, and flames licking out of the char among embers.
+  // Turned by the chunk's id (a golden-angle step), so two wrecks don't lie
+  // alike.
+  wreck(c) {
+    const { shape: s } = c
+    const g = new THREE.Group()
+    g.position.set(s.x, c.base ?? 0, s.z)
+    g.rotation.y = (s.yaw ?? 0) + ((c.id * 2.399963) % (Math.PI * 2))
+    const k = Math.min(s.hx, s.hz) / 1.4, H = Math.min(1, (s.hy * 2) / 1.2)
+    const wood = mat('#5e3d25'), char = mat('#2e231c'), scorched = mat('#46301f')
+    const ember = mat('#ff8a2a', { emissive: '#ff5a10', emissiveIntensity: 1.4 })
+    // the scorch mark under it all
+    const burn = mesh(new THREE.CircleGeometry(1.35 * k, 18).rotateX(-Math.PI / 2), mat('#221c18'), { shadow: false })
+    burn.position.y = 0.014
+    g.add(burn)
+    // the cup, split open (a lathe short of a full turn) and slumped over
+    const prof = [[0.28, 0], [0.66, 0.04], [0.92, 0.16], [1.08, 0.32], [1.14, 0.5], [1.12, 0.64]].map(([r, y]) => new THREE.Vector2(r * k, y * k * H))
+    const cup = new THREE.Group()
+    cup.add(mesh(new THREE.LatheGeometry(prof, 16, 0.9, Math.PI * 1.3), mat('#432d1d', { side: THREE.DoubleSide })))
+    // its cupules, charred, in two rows round what is left of it
+    for (const [r, y, n] of [[0.8, 0.1, 9], [1.06, 0.34, 11]]) for (let i = 0; i < n; i++) {
+      const a = 0.9 + ((i + 0.5) / n) * Math.PI * 1.3
+      const sc = mesh(new THREE.IcosahedronGeometry(0.1 * k, 0), i % 2 ? char : scorched)
+      sc.scale.set(1, 0.7, 0.4)
+      sc.position.set(Math.sin(a) * (r + 0.02) * k, y * k * H, Math.cos(a) * (r + 0.02) * k)
+      sc.rotation.y = a
+      cup.add(sc)
+    }
+    cup.rotation.set(0.5, 0, 0.12)
+    cup.position.set(0.1 * k, 0.16, -0.12 * k)
+    g.add(cup)
+    // a wheel thrown flat, another leaning on the cup, and a broken axle
+    const wheel = (x, y, z, rx, rz) => {
+      const w = mesh(new THREE.CylinderGeometry(0.38 * k, 0.38 * k, 0.11, 12), char)
+      w.position.set(x, y, z)
+      w.rotation.set(rx, 0, rz)
+      const tyre = mesh(new THREE.TorusGeometry(0.38 * k, 0.034, 4, 14).rotateX(Math.PI / 2), mat('#4a4e54', { metalness: 0.5 }))
+      tyre.position.copy(w.position)
+      tyre.rotation.copy(w.rotation)
+      g.add(w, tyre)
+    }
+    wheel(-0.85 * k, 0.07, 0.62 * k, 0.1, 0.06)
+    wheel(0.98 * k, 0.36 * k, 0.5 * k, 0.15, 1.15)
+    const axle = mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.2 * k, 6), mat('#3a3a3a', { metalness: 0.4 }))
+    axle.position.set(-0.15 * k, 0.12, 0.85 * k)
+    axle.rotation.set(0, 0.4, Math.PI / 2 - 0.1)
+    g.add(axle)
+    // splintered planks, strewn
+    const planks = [[-0.95, 0.05, -0.55, 0.3], [0.8, 0.05, 0.95, -0.7], [-0.3, 0.07, 1.0, 1.2], [1.05, 0.05, -0.7, 0.15], [-1.05, 0.06, 0.1, -1.1], [0.2, 0.08, -1.05, 0.9]]
+    for (const [x, y, z, a] of planks) {
+      const p = mesh(BOX, a > 0 ? wood : scorched)
+      p.scale.set(0.2 * k, 0.04, 0.8 * k)
+      p.position.set(x * k, y, z * k)
+      p.rotation.set(0.06, a, 0.05)
+      g.add(p)
+    }
+    // flames out of the char, and embers glowing in it (both flicker:
+    // animate())
+    for (const [x, z, h, r] of [[0.05, -0.1, 0.8, 0.22], [0.35, 0.15, 0.6, 0.17], [-0.3, -0.3, 0.55, 0.16], [0.15, -0.45, 0.45, 0.14], [-0.55, 0.55, 0.32, 0.1], [0.55, -0.2, 0.4, 0.12]]) {
+      const f = mesh(new THREE.ConeGeometry(r * k, h * H, 6).translate(0, (h * H) / 2, 0), ember, { shadow: false })
+      f.position.set(x * k, 0.1, z * k)
+      g.add(f)
+    }
+    for (const [x, y, z] of [[0.1, 0.12, 0.05], [0.45, 0.2, -0.25], [-0.2, 0.08, -0.35], [0.6, 0.1, 0.3], [-0.45, 0.06, 0.4], [-0.7, 0.05, -0.2]]) {
+      const e = mesh(new THREE.IcosahedronGeometry(0.08 * k, 0), ember, { shadow: false })
+      e.position.set(x * k, y, z * k)
+      g.add(e)
+    }
+    return { obj: g, ember }
   },
 }
 // ── Fortifications (F7a, DESIGN §4.2.4) ─────────────────────────────────────
@@ -630,8 +712,29 @@ export class TerrainView {
   // Whether an item may be drawn by its tile: tiling on, its mesh standing
   // on the table, not shared (a fallen tree's), not a rubble pile (its
   // pieces come with each break) and not animating.
+  // ((F9a) nor a wreck: it burns, its embers flickering)
   tileable(item) {
-    return this.tiled && !!item.obj && item.obj.parent === this.group && !item.shared && item.c.kind !== 'rubble' && item.c.look.piece !== 'fallen' && !(item.anims > 0) && this.shows(item)
+    return this.tiled && !!item.obj && item.obj.parent === this.group && !item.shared && item.c.kind !== 'rubble' && item.c.kind !== 'wreck' && item.c.look.piece !== 'fallen' && !(item.anims > 0) && this.shows(item)
+  }
+
+  // (F9a) Each frame the table draws (view/index.js's run; never under
+  // ?fast): smoke rising from every wreck standing, now and then a spark,
+  // and their embers flickering. Cosmetic, on Math.random.
+  animate(dt, time) {
+    let any = false
+    for (const item of this.items.values()) {
+      if (item.c.kind !== 'wreck' || !this.shows(item)) continue
+      any = true
+      item.puff = (item.puff ?? Math.random() * 0.2) - dt
+      if (item.puff > 0) continue
+      item.puff = 0.12 + Math.random() * 0.1
+      const s = item.c.shape, y = (item.c.base ?? 0) + 0.5
+      const fx = this.effects
+      fx.smoke({ x: s.x + (Math.random() - 0.5) * 0.8, y, z: s.z + (Math.random() - 0.5) * 0.8, vx: (Math.random() - 0.5) * 0.3, vy: 0.7 + Math.random() * 0.5, vz: (Math.random() - 0.5) * 0.3, size: 0.18 + Math.random() * 0.14, color: Math.random() < 0.4 ? '#6a625c' : '#4a4440', life: 2 + Math.random() * 1.2 })
+      if (Math.random() < 0.25) fx.mote({ x: s.x + (Math.random() - 0.5) * 0.8, y: y - 0.2, z: s.z + (Math.random() - 0.5) * 0.8, vx: (Math.random() - 0.5) * 0.8, vy: 1.6 + Math.random() * 1.4, vz: (Math.random() - 0.5) * 0.8, size: 0.05, color: Math.random() < 0.5 ? '#ff8a2a' : '#ffd36e', life: 0.9, g: -0.6 })
+    }
+    // (the embers' one material, shared by every wreck)
+    if (any) for (const item of this.items.values()) if (item.ember) item.ember.emissiveIntensity = 1.1 + Math.sin(time * 7.3) * 0.25 + Math.sin(time * 13.1) * 0.15
   }
 
   // An item into its tile (the 8" square its chunk stands in): its own mesh
@@ -920,6 +1023,12 @@ export class TerrainView {
       case 'log':
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
+        break
+      // ((F9a) a wreck blown apart: charred splinters, a last cloud)
+      case 'wreck':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, ['#2b211b', '#4a3020', '#ff7a2a'], 16, { from, power: 6, size: 0.12 })
+        fx.smoke({ x: s.x, y: s.y + 0.4, z: s.z, size: 0.7, color: '#2e2a28', life: 2 })
         break
     }
     // the break's sound: stone crumbles, the rest thwacks

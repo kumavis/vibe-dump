@@ -79,7 +79,10 @@ const ms = (v) => (Number.isFinite(v) ? v.toFixed(1) : '–')
 const GRAND_RACES = ['squirrel', 'serpent']
 // the ×3 presets as each seat names them, and the cap lists (above)
 const PRESETS = { squirrel: '336333', serpent: '336333' }
-const CAPS = { squirrel: '343643', serpent: '317543' }
+// ((F9a) the Bushtails' with two War-Carts: 24 units and 90 models, the
+// caps, at 1,460 points (the cart at Grand's 150); the search grew to 8^7
+// count vectors, about 8 s)
+const CAPS = { squirrel: '3157332', serpent: '317543' }
 // A Grand AI battle on `board` with `dice`, each seat naming its list
 // ((F7a, at the WIP merge) on the fortified set when `fortified`)
 const grandSetup = (board, dice, lists, fortified = false) => ({

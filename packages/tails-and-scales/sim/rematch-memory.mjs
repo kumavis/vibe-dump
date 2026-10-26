@@ -70,7 +70,7 @@
 // makes the table over twice and leaves nothing behind. --classic plays
 // the classic mission alone (as before F8b; the self-test's edits do).
 //
-//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full] [--classic] [--terrain fortified]
+//   node sim/rematch-memory.mjs [--ref <git ref>] [--board 4242] [--dice 99] [--full] [--classic] [--terrain fortified] [--carts]
 //   node sim/rematch-memory.mjs --self-test   each of SELF_TESTS' edits, made
 //                                             in a copy of the working tree,
 //                                             must fail it: R7a's first
@@ -92,6 +92,11 @@
 // rematch keeps): `fortified` draws the decks, stairs, ladders and posts,
 // the deck overlay's tops, the drop lines and the climbs, each of which
 // must be freed with its table as the rest is (the title stays classic).
+// (F9a) --carts plays Field battles alone, the Bushtails with two War-Carts
+// (the page's ?mission=field&armies=): the cart's figure from its template,
+// its riders' figures parented to its deck, the capacity pips, the wrecks
+// and the bail-outs, each freed with its table (a wreck's meshes) or made
+// once and kept (the pips' shapes, the cart's template), as the rest are.
 // Exit 0 when nothing
 // grows and no program is linked twice (the self-test: when every edit is
 // caught so), 1 otherwise, 2 on bad arguments. Set CHROMIUM_PATH to the
@@ -136,7 +141,8 @@ const SELF_TESTS = {
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, classic: { type: 'boolean' }, terrain: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, classic: { type: 'boolean' }, terrain: { type: 'string' }, carts: { type: 'boolean' }, 'self-test': { type: 'boolean' } } }))
+  if (a.carts && (a.classic || a.ref)) throw new Error('--carts plays Field battles: no --classic or --ref')
   if (a.ref && a['self-test']) throw new Error('--self-test edits the working tree: no --ref')
   if (a.terrain !== undefined && !/^[a-z]+$/.test(a.terrain)) throw new Error(`--terrain takes a set's name (classic, fortified), not ${JSON.stringify(a.terrain)}`)
 } catch (e) {
@@ -145,6 +151,8 @@ try {
 }
 // a battle and five rematches
 const BATTLES = 6
+// (F9a) --carts' battles: Field, seat 0's Bushtails with two War-Carts
+const CARTS = 'mission=field&armies=1222112,field'
 const board = Number(a.board ?? 4242), dice = Number(a.dice ?? 99)
 if (!Number.isInteger(board) || !Number.isInteger(dice)) {
   console.error('rematch-memory: --board and --dice take whole numbers')
@@ -204,7 +212,8 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(`(${drawAlways})()`)
     const cdp = await page.context().newCDPSession(page)
-    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}${a.terrain ? `&terrain=${a.terrain}` : ''}`)
+    // ((F9a) --carts: Field battles with War-Carts, from the page's URL)
+    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}${a.terrain ? `&terrain=${a.terrain}` : ''}${a.carts ? `&${CARTS}` : ''}`)
     await page.waitForFunction(() => window.__ts)
     // The heap as a snapshot sums it: { own, kinds }, `own` the bytes of the
     // page's own objects, `kinds` theirs by (type, constructor); what V8 and
@@ -276,7 +285,7 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
       await page.click('#setupStart')
       // ((F8b) a Grand battle drawn every frame takes several times a
       // classic one's frames: up to 45 minutes on a busy machine)
-      await page.waitForFunction(() => window.__ts.S.stage === 'over' && window.__ts.player.idle, null, { timeout: missionOf(i) === 'grand' ? 2700000 : 900000, polling: 500 })
+      await page.waitForFunction(() => window.__ts.S.stage === 'over' && window.__ts.player.idle, null, { timeout: missionOf(i) === 'grand' || a.carts ? 2700000 : 900000, polling: 500 })
       if (missions.length > 1) {
         const W = await page.evaluate(() => window.__ts.view.board().W)
         if (W !== (missionOf(i) === 'grand' ? 80 : 40)) throw new Error(`battle ${i} (${missionOf(i)}) was fought on a table ${W}" wide`)
@@ -360,7 +369,7 @@ try {
     console.log(`\n${verdicts.join('\n')}`)
     console.log(failed ? '\nrematch-memory self-test FAILED: an edit was not caught' : '\nrematch-memory self-test passed: every edit is caught')
   } else {
-    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: `${a.ref ? `ref ${a.ref}` : 'the working tree'}${a.terrain ? `, on the ${a.terrain} set` : ''}`, missions: a.classic || a.ref ? ['classic'] : ['grand', 'classic'] })
+    const { grew, titles, ends, linked, slope } = await play(a.ref ? codeDir(a.ref) : PKG, work, { battles: BATTLES, snap: true, what: `${a.ref ? `ref ${a.ref}` : 'the working tree'}${a.terrain ? `, on the ${a.terrain} set` : ''}${a.carts ? ', Field battles with War-Carts' : ''}`, missions: a.classic || a.ref ? ['classic'] : a.carts ? ['field'] : ['grand', 'classic'] })
     failed = grew.length > 0
     console.log(failed ? `\nrematch-memory FAILED: ${grew.join('; ')}` : `\nrematch-memory passed: after each of ${BATTLES - 1} rematches the title holds the same ${titles[0].geometries} geometries and ${titles[0].textures} textures, each battle's end ${ends.length && ends.every((r) => r.geometries === ends[0].geometries) ? `the same ${ends[0].geometries}` : `as its mission's (${[...new Set(ends.map((r) => r.geometries))].join(' or ')} geometries)`}, and the page's own heap on the title ${(slope / 1024).toFixed(1)} KB a rematch (at most ${OWN_SLOPE / 1024} KB); ${linked.length} shader programs linked in all, none twice between two rows, each rematch's battle ${ends.at(-1).links} and each title after a battle ${titles[0].links}`)
   }

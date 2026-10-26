@@ -79,17 +79,14 @@ export function scanBox(nav, x, z, reach) {
 // own rows and columns: row iz a multiple of the step, its columns from
 // its offset (1 on odd lattice rows) in steps, as the whole board's scan
 // visited them.
-export function bestSpot(G, u, plan, claimed) {
+//
+// (F9a) `role`: the role the unit plays as, its own but for a hull's
+// (core/ai/policy.js hullRole: a raider while brawlers ride it, else a line
+// unit). (Friends never count riders: friendsOf leaves them out, so a hull
+// isn't pushed off by its own.)
+export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const { nav } = G
-  const enemies = enemiesOf(G, u)
-  const friends = friendsOf(G, u)
-  const owners = G.objectives.map((o) => controlOf(G, o))
-  const role = u.t.ai
-  // (S1, DESIGN §4.2.2) what the scan asks of each enemy at every cell, none
-  // of which a cell changes, worked out once: whether it is engaged and in
-  // cover, and the fight's value either way
-  const pre = new Map(enemies.map((e) => [e, { engaged: isEngaged(G, e), cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u) }]))
-  const ctx = { enemies, friends, owners, claimed, role, pre }
+  const ctx = scoring(G, u, claimed, role)
   // stay put is always an option
   let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
@@ -104,6 +101,37 @@ export function bestSpot(G, u, plan, claimed) {
       const x = nav.x(i), z = nav.z(i)
       const sc = score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
+    }
+  }
+  return best
+}
+
+// What score asks of the match for `u`, worked out once for a whole scan:
+// its enemies and friends (riders left out), who holds each objective, and
+// (S1, DESIGN §4.2.2) what the scan asks of each enemy at every cell, none
+// of which a cell changes: whether it is engaged and in cover, and the
+// fight's value either way.
+function scoring(G, u, claimed, role) {
+  const enemies = enemiesOf(G, u)
+  const friends = friendsOf(G, u)
+  const owners = G.objectives.map((o) => controlOf(G, o))
+  const pre = new Map(enemies.map((e) => [e, { engaged: isEngaged(G, e), cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u) }]))
+  return { enemies, friends, owners, claimed, role, pre }
+}
+
+// (F9a) Where rider `u` steps off to, of `cells` (its landing cells, in
+// index order: core/actions/transport.js landing): the one it scores best
+// on as a mover of its own role, ties to the lowest index, with no draw (the
+// AI chooses only whether it steps off by the rules of core/ai/policy.js's
+// transports; this is where). -1 for none.
+export function bestLanding(G, u, cells, claimed) {
+  const ctx = scoring(G, u, claimed, u.t.ai)
+  let best = -1, bs = -Infinity
+  for (const i of cells) {
+    const sc = score(G, u, G.nav.x(i), G.nav.z(i), ctx, true)
+    if (sc > bs) {
+      bs = sc
+      best = i
     }
   }
   return best

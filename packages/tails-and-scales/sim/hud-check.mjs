@@ -52,8 +52,10 @@
 // And the HUD model's end.ready, read off the ?debug block's `hud` (the
 // model last put on the page): after each snap in a phase, and wherever the
 // player is idle on a seat played here holding its phase decision, it must
-// be exactly "no unit of the seat can act" (the core's anyCanAct, asked
-// with the dice locked), and (F3) the page must show it: End lit (its
+// be exactly "no unit of the seat can act" (the core's canAct over the
+// seat's units, asked with the dice locked; (F9a) riders left out, as
+// DESIGN §4.2.5 has it: a rider may step off, but riding on leaves nothing
+// undone), and (F3) the page must show it: End lit (its
 // `.ready` class) exactly then, and Begin battle lit wherever it shows in
 // the deployment. Over the default battles it must have been true somewhere
 // (a seat with nothing left to do in its phase, before its End) as well as
@@ -115,7 +117,7 @@ const MUTATIONS = {
   // (until its next phase.start plays)
   'phase-unshown': ['present/hud-model.js', "export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })", 'export const afterSnap = () => ({ phaseShown: false, buttonsUp: false })'],
   // End never ready, whatever is left to do (F3's End never lit)
-  'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !covered.has(u.id) && q.canAct(G, u))) : false,', '    ready: false,'],
+  'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !u.aboard && !covered.has(u.id) && q.canAct(G, u))) : false,', '    ready: false,'],
   // (F3) the model right, but End never lit on the page
   'lit-never': ['ui/actions.js', "    end.classList.toggle('ready', m.end.lit)", "    end.classList.toggle('ready', false)"],
   // (F3) End lit only when ready: Begin battle neutral in the deployment
@@ -208,7 +210,9 @@ function pageHarness(job, mode, settle, names) {
   }
   // nothing left for the seat whose phase decision the match holds to do
   // (what end.ready must say)
-  const done = (g) => !ts.session.preview((G, q) => q.anyCanAct(G, g.pending.seats[0]))
+  // ((F9a) a rider left out, as the HUD model leaves it: riding on is no
+  // action left undone)
+  const done = (g) => !ts.session.preview((G, q) => G.units.some((u) => u.side === g.pending.seats[0] && !u.aboard && q.canAct(G, u)))
   const read = () => ({
     end: shown('#endPhase'), auto: shown('#autoPhase'), shortest: shown('#closestSpot'), ready: ts.hud?.end.ready ?? null, zones: ts.hud?.zones ?? null, shading: shading(),
     hint: getComputedStyle(document.querySelector('#hint')).display === 'none' ? '' : document.querySelector('#hint').textContent,

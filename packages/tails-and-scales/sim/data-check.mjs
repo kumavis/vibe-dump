@@ -168,6 +168,19 @@
 //
 //   node sim/data-check.mjs
 //
+// 13. (F9a, DESIGN §4.2.5) Vehicles: the War-Cart's record as DESIGN's
+//    data block gives it (stats, flags, transport, weapons) and what the
+//    schema derives from it, its cost a whole multiple of 5 and its card
+//    promising no firing deck (F9c's); every other unit no vehicle with no
+//    transport field; the transport record's rules (defineRace refuses each
+//    broken field, a transport on a non-vehicle, a vehicle of two models,
+//    not big, or climbing; takes the edges, a hull with no wreck or no
+//    transport, and copies the record); the Vehicle slot (0 / 2 / 2) and
+//    checkMission and checkList judging it; RULES_ID moving on every
+//    transport field, the cost and the slot, staying on the card text; and
+//    the deck slots (present/deck.js deckSlots(t, capacity, 0.8) ≥ capacity
+//    for every transport, inside the deck, apart; DESIGN's slot table).
+//
 // Exit 0 when everything holds, else 1.
 import { readFileSync, readdirSync, mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
@@ -264,9 +277,15 @@ function expected(key, L) {
     chest: L.big ? 1.0 : L.fly ? 1.0 : 0.55,
     // (F7a: derived, no R0 test to restate: infantry climb ladders)
     climb: !L.big && !L.fly,
+    // (F9a: derived too; no R0 unit is a vehicle)
+    vehicle: false,
   }
 }
-const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).sort()
+// (the units a step has added since R0, each appended to its race's roster:
+// F9a's War-Cart. They have no legacy record to be held to; their own rows
+// are the step's)
+const ADDED = ['warcart']
+const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).filter((k) => !ADDED.includes(k)).sort()
 check(new Set(ALL.map((t) => t.key)).size === ALL.length, 'no two races share a unit key', 'look their types up by race')
 check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit keys`, `got ${keys.join(',')}`)
 for (const key of legacyKeys) {
@@ -314,7 +333,7 @@ for (const side of [0, 1]) {
   const want = { ...wantSide, ...LEGACY_LOOK[side] }
   check(!diffPath(got, want), `seat ${side}: ${r.name}`, diffPath(got, want))
   check(isDeepStrictEqual(r.army, legacy.ARMIES[side]) && isDeepStrictEqual(ARMIES[side], legacy.ARMIES[side]), `seat ${side}: the army`, `got ${r.army.join(',')}`)
-  check(Object.values(r.units).every((t) => legacy.TYPES[t.key]?.side === side), `seat ${side}: every unit was side ${side}'s`)
+  check(Object.values(r.units).every((t) => ADDED.includes(t.key) || legacy.TYPES[t.key]?.side === side), `seat ${side}: every unit was side ${side}'s (or added since: ${ADDED.join(', ')})`)
   const view = { name: SIDES[side].name, short: SIDES[side].short, icon: SIDES[side].icon, color: SIDES[side].color, dark: SIDES[side].dark }
   check(!diffPath(view, wantSide), `seat ${side}: the classic SIDES view`, diffPath(view, wantSide))
 }
@@ -340,7 +359,9 @@ const mute = Object.values(RACES).filter((r) => !kit.includes(r.look.voice))
 check(kit.length && !mute.length, `every race's voice is one view/sfx.js plays (${Object.values(RACES).map((r) => `${r.key} ${r.look.voice}`).join(', ')})`, kit.length ? mute.map((r) => `${r.key}: no "${r.look.voice}" in ${kit.join(', ')}`).join('; ') : "no `const VOICES = {` in view/sfx.js")
 const { ORDER } = await imp(PKG, 'core/ai/policy.js')
 const order = [...ORDER]
-check(isDeepStrictEqual(order, literal(legacyAi, 'ORDER')), "the AI's role order (core/ai/policy.js ORDER) is the legacy ai.js's")
+// ((F9a) the transports play first, every other role in the R0 order: each
+// index moved up one alike, so the stable sorts keep the classic order)
+check(order[0] === 'transport' && isDeepStrictEqual(order.slice(1), literal(legacyAi, 'ORDER')), "the AI's role order (core/ai/policy.js ORDER) is the legacy ai.js's, F9a's transports first")
 check(isDeepStrictEqual([...AI_ROLES].sort(), [...order].sort()), 'the schema accepts exactly the AI roles the AI orders by', `${AI_ROLES} v ${order}`)
 
 // ── 3. validation ───────────────────────────────────────────────────────────
@@ -900,13 +921,15 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // F7a: the height layer, derived like the nav grid and never hashed, and
   // classic boards build none; 7, F8b: the missions field and grand, the
   // open set and the fight guard, none of which a classic match reaches or
-  // shadowState prints: the format is unchanged for classic matches)
+  // shadowState prints: the format is unchanged for classic matches; 9, F9a:
+  // `aboard`, printed only for a rider (UNIT_EXTRAS), and a wreck's chunk,
+  // only where a hull is destroyed: neither in a match without vehicles)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 9: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -928,17 +951,21 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     check(!apart.length, `stateHash of ${Object.values(pins).reduce((n, w) => n + Object.keys(w).length, 0)} corpus matches is the one pinned under CORE_VERSION ${core.CORE_VERSION}`, `${apart.join('; ')}: shadowState's output changed, which bumps CORE_VERSION (§2.6), then pin the new hashes under it`)
   }
   // the extras
-  check(Object.isFrozen(UNIT_EXTRAS) && !Object.keys(UNIT_EXTRAS).length, `UNIT_EXTRAS is frozen and names no field yet (${Object.keys(UNIT_EXTRAS).join(', ') || 'none'})`)
+  // ((F9a) the first: `aboard`, 0 for a unit on the table)
+  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, { aboard: 0 }), `UNIT_EXTRAS is frozen and names F9a's aboard alone, at 0 (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
   const extras = Object.freeze({ zeta: false, aboard: 0 })
   check(unitExtras({}, extras) === '' && unitExtras({ aboard: 0, zeta: false }, extras) === '' && unitExtras({ aboard: 3 }, extras) === 'aboard=3' && unitExtras({ zeta: true, aboard: -0 }, extras) === 'aboard=-0,zeta=true', 'a unit\'s extras print only where they aren\'t their default, in sorted key=value (-0 apart from 0)')
   {
     const G = new Session({ store: new LocalStore([E.encode({ id: 'here.0.0', s: -1, d: 'here', t: 'start', core: core.CORE_VERSION, rules: core.RULES_ID, setup: { board: 4242, dice: 99, seats: [{ race: 'squirrel', ctrl: 'human', dev: 'here' }, { race: 'serpent', ctrl: 'ai' }] } })]), localSeats: [] }).G
-    const before = shadowState(G), plain = shadowState(G, extras)
+    // ((F9a) `none`, a table without aboard: what it prints never moves)
+    const none = Object.freeze({ zeta: false })
+    const before = shadowState(G), plain = shadowState(G, extras), bare = shadowState(G, none)
     G.units[2].aboard = 0
     const held = shadowState(G, extras)
     G.units[2].aboard = 4
     const moved = shadowState(G, extras)
-    check(plain === before && held === before && moved !== before && moved.includes(`[aboard=4]`) && shadowState(G) === before, 'a doctored table of extras leaves a match that never uses them, or holds their defaults, hashing as before; a unit off its default moves the hash; a field the table doesn\'t name prints nothing')
+    check(plain === before && bare === before && held === before && moved !== before && moved.includes(`[aboard=4]`) && shadowState(G, none) === before && shadowState(G) === moved, 'a doctored table of extras leaves a match that never uses them, or holds their defaults, hashing as before; a unit off its default moves the hash; a field the table doesn\'t name prints nothing')
+    G.units[2].aboard = 0
   }
 }
 
@@ -1236,5 +1263,199 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
   }
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, and (F8b) every mission, preset and set is inside the size envelope')
+// ── 13. Vehicles (F9a) ──────────────────────────────────────────────────────
+console.log("\n13. vehicles: the War-Cart's record, the transport rules, the Vehicle slot, the deck (F9a, DESIGN §4.2.5)")
+{
+  const A = await imp(PKG, 'core/army.js')
+  const { ROLES, FLAGS } = await imp(PKG, 'data/schema.js')
+  const cart = RACES.squirrel.units.warcart
+  // the record DESIGN §4.2.5's data block gives, field for field, and what
+  // the schema derives from it (a wrecker is a brawler; a big unit's eye)
+  const WANT = {
+    name: 'Acorn War-Cart', short: 'War-Cart', role: 'Vehicle', ai: 'transport', models: 1, base: 1.5, pts: 120,
+    M: 8, WS: 5, BS: 4, S: 5, T: 7, W: 10, A: 3, Ld: 8, Sv: 3, OC: 0,
+    big: true, wrecker: true, vehicle: true, fly: false, climb: false, hero: false, noCharge: false, brawler: true, move: 'wreck', deployRow: 'front', eye: 1.9,
+  }
+  const got = cart && Object.fromEntries(Object.keys(WANT).map((k) => [k, cart[k]]))
+  check(!!cart && isDeepStrictEqual(got, WANT), "the War-Cart's record is DESIGN's: a Vehicle, the transport AI, one model on a 1.5\" base, M8 … T7 W10 … Sv3 OC0, big, a wrecker and a vehicle (so a brawler that wrecks as it moves, deployed in the front row, its eye 1.9\", no climber)", cart ? diffPath(got, WANT) : 'the Bushtails have no warcart')
+  check(isDeepStrictEqual(cart?.transport, { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } }) && Object.isFrozen(cart.transport) && Object.isFrozen(cart.transport.wreck), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 2, deck 1.4\", a wreck 2.8 × 1.2 × 2.8\"), copied and frozen", JSON.stringify(cart?.transport))
+  const w = cart?.ranged, m = cart?.melee
+  check(w?.name === 'Bolt thrower' && w.range === 24 && w.shots === 2 && w.S === 6 && w.AP === 2 && w.D === 2 && w.heavy === true && w.fx === 'bolt' && m?.name === 'Spiked wheels' && m.S === 5 && m.AP === 1 && m.D === 1, "its weapons are DESIGN's: a Bolt thrower 24\", 2 shots, S6 AP2 D2, heavy, its look 'bolt'; Spiked wheels S5 AP1 D1", JSON.stringify({ ranged: w, melee: m }))
+  check(Number.isInteger(cart?.cost) && cart.cost > 0 && cart.cost % 5 === 0, `its cost (${cart?.cost}) is a whole multiple of 5 above 0, as the builder's prices are (army-sim's fit sets it: DESIGN §4.2.5's data)`)
+  // (F9a's firing deck is F9c's: the card promises nothing it can't do yet)
+  const deckFire = (cart?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
+  check(cart?.abilities?.length > 0 && !deckFire.length, `its card text (${cart?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
+  check(ROLES.at(-1) === 'Vehicle' && FLAGS.includes('vehicle') && AI_ROLES.includes('transport'), "the schema knows the Vehicle role (ROLES' last, so every earlier role keeps its index), the vehicle flag and the transport AI role", `${ROLES} / ${FLAGS} / ${AI_ROLES}`)
+  const others = ALL.filter((t) => t !== cart)
+  check(others.every((t) => t.vehicle === false && !Object.hasOwn(t, 'transport')), `every other unit (${others.length}) is no vehicle and carries no transport field at all (its type as before but for vehicle: false)`, others.filter((t) => t.vehicle !== false || Object.hasOwn(t, 'transport')).map((t) => t.key).join(', '))
+  check(ALL.filter((t) => t.transport).every((t) => t.vehicle && t.models === 1 && t.big && !t.climb), 'every transport is a vehicle: one big model that never climbs')
+
+  // the transport record's rules (data/schema.js transportOf, defineRace),
+  // each one broken on a copy of the Bushtails' War-Cart
+  const cartDef = (edit) => {
+    const def = structuredClone(raw.squirrel)
+    edit(def.units.warcart, def)
+    return def
+  }
+  const refuse = (what, edit, want) => {
+    let err = null
+    try {
+      defineRace(cartDef(edit))
+    } catch (e) {
+      err = e.message
+    }
+    check(err && want.test(err), `defineRace refuses ${what}`, err ? `wrong error: ${err}` : 'accepted')
+  }
+  const takes = (what, edit, test = () => true) => {
+    let r = null, err = null
+    try {
+      r = defineRace(cartDef(edit))
+    } catch (e) {
+      err = e.message
+    }
+    check(!!r && test(r.units.warcart), `defineRace takes ${what}`, err ?? 'taken, but not as given')
+  }
+  const T = /unit warcart, transport: /
+  refuse('a capacity of 0', (u) => (u.transport.capacity = 0), new RegExp(`${T.source}capacity is the models it carries, a whole number from 1 to 12, not 0`))
+  refuse('a capacity of 13', (u) => (u.transport.capacity = 13), /transport: capacity .*not 13/)
+  refuse('a capacity of 1.5', (u) => (u.transport.capacity = 1.5), /transport: capacity .*not 1\.5/)
+  refuse('a capacity as text', (u) => (u.transport.capacity = '12'), /transport: capacity .*not 12/)
+  refuse('a maxBase of 0', (u) => (u.transport.maxBase = 0), /transport: maxBase is the largest base it takes aboard, a radius above 0, not 0/)
+  refuse('a negative maxBase', (u) => (u.transport.maxBase = -0.45), /transport: maxBase .*not -0\.45/)
+  refuse('a maxBase that is no number (NaN)', (u) => (u.transport.maxBase = NaN), /transport: maxBase .*not NaN/)
+  refuse('a fire of -1', (u) => (u.transport.fire = -1), /transport: fire is the rider units that shoot from the deck, a whole number from 0, not -1/)
+  refuse('a fire of 1.5', (u) => (u.transport.fire = 1.5), /transport: fire .*not 1\.5/)
+  refuse('a deck below 0', (u) => (u.transport.deck = -0.1), /transport: deck is the deck's height, a number from 0, not -0\.1/)
+  refuse('a deck of Infinity', (u) => (u.transport.deck = Infinity), /transport: deck .*not Infinity/)
+  refuse('a wreck of true', (u) => (u.transport.wreck = true), /transport: wreck is false or the box it leaves, \{ hx, hy, hz \}, each a half-size above 0/)
+  refuse('a wreck missing a half-size', (u) => delete u.transport.wreck.hz, /transport: wreck is false or the box/)
+  refuse('a wreck with a half-size of 0', (u) => (u.transport.wreck.hy = 0), /transport: wreck is false or the box/)
+  refuse('a wreck with a fourth field', (u) => (u.transport.wreck.yaw = 0), /transport: wreck is false or the box/)
+  refuse('no wreck at all (it must say false)', (u) => delete u.transport.wreck, /transport: wreck is false or the box/)
+  refuse('siege as text', (u) => (u.transport.siege = 'yes'), /transport: siege must be true or false/)
+  refuse('enclosed as a number', (u) => (u.transport.enclosed = 1), /transport: enclosed must be true or false/)
+  refuse('a transport field it takes not', (u) => (u.transport.seats = 12), /transport: unknown field "seats"/)
+  refuse('a transport that is a number', (u) => (u.transport = 12), /transport: must be \{ capacity, maxBase, fire, deck, wreck \}/)
+  refuse('a transport that is a list', (u) => (u.transport = [12]), /transport: must be/)
+  refuse('a transport of null', (u) => (u.transport = null), /transport: must be/)
+  refuse('a transport on a unit that is no vehicle (the Nutkin)', (u, d) => (d.units.nutkin.transport = structuredClone(u.transport)), /unit nutkin: a transport is a vehicle \(vehicle: true\)/)
+  refuse('a vehicle of two models', (u) => (u.models = 2), /unit warcart: a vehicle is one model \(models: 1\)/)
+  refuse('a vehicle that is not big', (u) => (u.big = false), /unit warcart: a vehicle is big \(big: true\)/)
+  refuse('a vehicle that climbs', (u) => (u.climb = true), /unit warcart: a vehicle never climbs \(climb: true is refused\)/)
+  refuse('a vehicle flag that is no boolean', (u) => (u.vehicle = 'yes'), /unit warcart: vehicle must be true or false/)
+  takes('a hull that leaves no wreck (wreck: false)', (u) => (u.transport.wreck = false), (t) => t.transport.wreck === false)
+  takes('the optional siege and enclosed, true', (u) => Object.assign(u.transport, { siege: true, enclosed: true }), (t) => t.transport.siege === true && t.transport.enclosed === true)
+  takes('the edges: capacity 1 and 12, fire 0, deck 0', (u) => Object.assign(u.transport, { capacity: 1, fire: 0, deck: 0 }), (t) => t.transport.capacity === 1 && t.transport.fire === 0 && t.transport.deck === 0)
+  takes('a vehicle that carries nobody (no transport)', (u) => delete u.transport, (t) => t.vehicle && !Object.hasOwn(t, 'transport') && !t.climb)
+  takes('a vehicle saying climb: false itself', (u) => (u.climb = false), (t) => t.climb === false)
+  {
+    // the normalised record is a copy: the def edited after leaves it be
+    const def = cartDef(() => {})
+    const t = defineRace(def).units.warcart
+    def.units.warcart.transport.capacity = 1
+    def.units.warcart.transport.wreck.hx = 9
+    check(t.transport.capacity === 12 && t.transport.wreck.hx === 1.4 && t.transport !== def.units.warcart.transport, "the type's transport is a copy of the def's (the def changed after defineRace leaves the type as it was)")
+  }
+
+  // the Vehicle slot (data/mission.js, DESIGN §4.2.8.3): none in a
+  // Skirmish, at most two in a Field or Grand battle; checkMission wants
+  // it as it wants every role's
+  const SLOTS = { classic: [0, 0], field: [0, 2], grand: [0, 2] }
+  for (const [name, want] of Object.entries(SLOTS)) check(isDeepStrictEqual([...(MISSIONS[name]?.list.roles.Vehicle ?? [])], want), `the ${name} mission's Vehicle slot is [${want}]`, JSON.stringify(MISSIONS[name]?.list.roles.Vehicle))
+  for (const name of ['classic', 'field', 'grand']) {
+    const m = structuredClone(MISSIONS[name])
+    delete m.list.roles.Vehicle
+    const err = missionError(m)
+    check(err && /Vehicle slot is undefined/.test(err), `checkMission refuses the ${name} mission with no Vehicle slot`, err ?? 'accepted')
+  }
+  {
+    const m = structuredClone(MISSIONS.field)
+    m.list.roles.Vehicle = [0, 19]
+    const err = missionError(m)
+    check(err && /Vehicle slot is \[0,19\], not \[min, max\] with 0 ≤ min ≤ max ≤ 18 units/.test(err), 'checkMission refuses a Vehicle slot past the units (Field [0, 19])', err ?? 'accepted')
+  }
+  // a list's carts against the slot (checkList, each list otherwise legal:
+  // an Elder, three Nutkin squads, Grand's least Troops; the points lifted
+  // where the slot is what is judged, as P-mission's refusals lift them)
+  const r = RACES.squirrel, at = (k) => r.roster.indexOf(k)
+  const list = (carts) => r.roster.map((k) => (k === 'elder' ? 1 : k === 'nutkin' ? 3 : k === 'warcart' ? carts : 0))
+  const lifted = (name) => ({ ...MISSIONS[name].list, points: 99999 })
+  const verdicts = [
+    ['field', 3, lifted('field'), /^3 Vehicle units; at most 2 in a Field$/],
+    ['grand', 3, lifted('grand'), /^3 Vehicle units; at most 2 in a Grand$/],
+    ['classic', 1, lifted('classic'), /^1 Vehicle; none in a Skirmish$/],
+    ['classic', 2, lifted('classic'), /^2 Vehicle units; none in a Skirmish$/],
+    // (at its own points a Skirmish list with a cart meets the points first)
+    ['classic', 1, MISSIONS.classic.list, /^\d+ points, over the Skirmish limit of 500$/],
+  ]
+  for (const [name, n, rules, want] of verdicts) {
+    const counts = [...list(n)]
+    if (name === 'classic' && rules === MISSIONS.classic.list) counts[at('oakguard')] = 1, counts[at('grenadier')] = 1, counts[at('glider')] = 1, counts[at('trebuchet')] = 1
+    const err = A.checkList(r, rules, counts)
+    check(err && want.test(err), `checkList refuses ${n} War-Cart${n === 1 ? '' : 's'} in a ${MISSIONS[name].list.size} list ('${A.listText(counts)}'${rules.points === 99999 ? ', the points lifted' : ''})`, err ?? 'accepted')
+  }
+  for (const name of ['field', 'grand']) {
+    const err = A.checkList(r, MISSIONS[name].list, list(2))
+    check(err === null, `checkList takes two War-Carts in a ${MISSIONS[name].list.size} list at its own points ('${A.listText(list(2))}', ${A.listCost(r, list(2), MISSIONS[name].list)} of ${MISSIONS[name].list.points})`, err)
+  }
+  // what autoList fields (data-check's every-race row holds them legal):
+  // carts per list at each mission over seeds 1-200, reported
+  const carts = Object.entries(MISSIONS).map(([name, mm]) => {
+    let n = 0, most = 0
+    for (let seed = 1; seed <= 200; seed++) {
+      const c = A.autoList(r, mm.list, seed)[at('warcart')] ?? 0
+      n += c
+      most = Math.max(most, c)
+    }
+    return { name, mean: n / 200, most }
+  })
+  check(carts.every((c) => c.most <= SLOTS[c.name][1]), `autoList fields War-Carts within the slot (seeds 1-200: ${carts.map((c) => `${c.name} ${c.mean.toFixed(2)} a list, at most ${c.most}`).join('; ')})`)
+
+  // RULES_ID: every transport field is a rule; a vehicle's flag, its cost
+  // and the slot are too; its card text and name are not
+  const cartId = (edit) => variant('squirrel', (d) => edit(d.units.warcart, d))
+  const fieldId = (edit) => {
+    const f = structuredClone(MISSIONS.field)
+    edit(f.list)
+    return rulesId({ missions: { ...MISSIONS, field: f } })
+  }
+  const rideMoves = [
+    ['the capacity (12 → 11)', () => cartId((u) => (u.transport.capacity = 11))],
+    ['the largest base aboard (0.45 → 0.5)', () => cartId((u) => (u.transport.maxBase = 0.5))],
+    ["the deck's fire slots (2 → 3)", () => cartId((u) => (u.transport.fire = 3))],
+    ["the deck's height (1.4 → 1.5)", () => cartId((u) => (u.transport.deck = 1.5))],
+    ["the wreck's height (0.6 → 0.7)", () => cartId((u) => (u.transport.wreck.hy = 0.7))],
+    ['no wreck (wreck: false)', () => cartId((u) => (u.transport.wreck = false))],
+    ['siege added', () => cartId((u) => (u.transport.siege = true))],
+    ['enclosed added', () => cartId((u) => (u.transport.enclosed = true))],
+    ['the transport dropped (a hull that carries nobody)', () => cartId((u) => delete u.transport)],
+    [`the War-Cart's cost (${RACES.squirrel.units.warcart?.cost} → +5)`, () => cartId((u) => (u.cost = u.cost + 5))],
+    ['the Field Vehicle slot ([0, 2] → [0, 1])', () => fieldId((l) => (l.roles.Vehicle = [0, 1]))],
+  ]
+  for (const [what, id] of rideMoves) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
+  check(cartId((u) => (u.abilities = ['A cart.'])) === RULES_ID && cartId((u) => (u.name = 'Acorn Chariot')) === RULES_ID, "RULES_ID stays on the War-Cart's card text and its name")
+  check(cartId(() => {}) === RULES_ID, 'RULES_ID stays on an unchanged copy of the War-Cart (the control)')
+
+  // the deck slots (present/deck.js, the view's, pure: DESIGN §4.2.5's
+  // View): every transport's capacity fits its deck at the 0.8 scale the
+  // table draws riders at, each slot inside the deck by maxBase and no two
+  // nearer than a scaled base; and the War-Cart's counts are DESIGN's slot
+  // table (7 at full scale, 13 at 0.8, 19 at 0.7)
+  if (!existsSync(join(PKG, 'present', 'deck.js'))) check(false, 'deckSlots(t, capacity, 0.8) ≥ capacity for every transport', 'present/deck.js (the view\'s deck slots) is missing')
+  else {
+    const deck = await imp(PKG, 'present/deck.js')
+    for (const t of ALL.filter((x) => x.transport)) {
+      const { capacity, maxBase, deck: rim } = t.transport, slots = deck.deckSlots(t, capacity, 0.8)
+      const pitch = 2 * (deck.SLOT_BASE ?? 0.32) * 0.8
+      let close = Infinity
+      for (let i = 0; i < slots.length; i++) for (let j = i + 1; j < slots.length; j++) close = Math.min(close, Math.hypot(slots[i].x - slots[j].x, slots[i].z - slots[j].z))
+      const out = slots.filter((p) => Math.hypot(p.x, p.z) > rim - maxBase + 1e-9)
+      check(slots.length >= capacity && !out.length && close >= pitch - 1e-9, `the ${t.short}'s deck holds its capacity at 0.8: deckSlots(t, ${capacity}, 0.8) gives ${slots.length} slots, each within ${(rim - maxBase).toFixed(2)}" of its centre, none nearer another than ${pitch.toFixed(3)}"`, slots.length < capacity ? `only ${slots.length} of ${capacity}` : out.length ? `${out.length} past the deck's rim less maxBase` : `two slots ${close.toFixed(3)}" apart`)
+    }
+    const counts = [1, 0.8, 0.7].map((s) => deck.deckCount(cart, s))
+    check(isDeepStrictEqual(counts, [7, 13, 19]), `the War-Cart's deck holds DESIGN's slot table: 7 at full scale, 13 at 0.8, 19 at 0.7 (${counts.join(', ')})`)
+  }
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, (F8b) every mission, preset and set is inside the size envelope, and (F9a) the War-Cart, its transport and the Vehicle slot are as the rules have them, its riders fitting its deck')
 process.exit(failed ? 1 : 0)

@@ -69,6 +69,11 @@ export class Shots {
       case 'acorn': return { mesh: new THREE.Mesh(projGeo.acorn, M('#8a5a2a')), arc: 0.08, speed: 28 }
       case 'dart': return { mesh: new THREE.Mesh(projGeo.dart, M('#4a6a2a')), arc: 0.03, speed: 34, spin: 0 }
       case 'javelin': return { mesh: new THREE.Mesh(projGeo.javelin, M('#8a6a3a')), arc: 0.18, speed: 20, spin: 0 }
+      // ((F9a) a War-Cart's bolt: flat and fast, a streak of splinters
+      // behind it; its shape made at the first bolt shot, never with the
+      // others as the view is made: one object more then would shift the
+      // Math.random draws the title is painted from, its uuid's)
+      case 'bolt': return { mesh: new THREE.Mesh((projGeo.bolt ??= new THREE.CylinderGeometry(0.025, 0.025, 0.75, 5).rotateX(Math.PI / 2)), M('#5a4430')), arc: 0.05, speed: 40, spin: 0, trail: (p) => Math.random() < 0.4 && fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.035, color: '#e8d8b0', life: 0.25, g: 4 }) }
       case 'spit': return { mesh: new THREE.Mesh(projGeo.spit, glow('#9aff5a')), arc: 0.12, speed: 18, trail: (p) => fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.04, color: '#7aef4a', life: 0.4, g: 6 }) }
       case 'bomb': return { mesh: new THREE.Mesh(projGeo.bomb, M('#7a4a22')), arc: 0.45, speed: 14, trail: (p) => fx.mote({ x: p.x, y: p.y + 0.1, z: p.z, size: 0.05, color: '#ffb030', life: 0.3, g: -1 }) }
       case 'pinecone': return { mesh: new THREE.Mesh(projGeo.pinecone, M('#6b4a26', { emissive: '#ff5a10', emissiveIntensity: 0.6 })), arc: 0.55, speed: 18, trail: (p) => { fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.12, color: Math.random() < 0.5 ? '#ff8a2a' : '#ffd36e', life: 0.4, g: -2 }); fx.smoke({ x: p.x, y: p.y, z: p.z, size: 0.14, color: '#3a3430', life: 0.9 }) } }

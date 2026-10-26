@@ -46,9 +46,23 @@
 // pressing End (no pilot) must miss the threshold, or the row can't tell
 // a pilot that charges from one that doesn't.
 //
+// F9a's row, over the `vehicle/` AI pairs (War-Carts against the Coil, and
+// Bushtail mirrors): riders disembark in ≥ 50% of battles (a rider of
+// either seat stepping off of its own accord, a unit.disembark not forced:
+// a bail-out is no disembark the AI chose), read off the match as it is
+// folded (sim/rider-probe.mjs). Until the vehicle/ corpus is recorded (in
+// its own commit after F9a's code) it sweeps 12 Field AI battles with
+// War-Carts instead, seeded as corpus-add's candidates are, half Bushtail
+// mirrors and half against the Coil (either seat), half open and half
+// fortified, each Bushtail list autoList's at 90% of the points holding a
+// War-Cart at least (the vehicle/ corpus's lists, as the army/ corpus's
+// are built). Beside the threshold it says what else the battles did with
+// their transports: the riders autoloaded, the rounds they stepped off in,
+// the hulls destroyed, the bail-outs and the riders lost.
+//
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f10b; comma-separated for more)
-//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's row: a seeded sweep of fortified AI battles instead
+//   node sim/play-report.mjs --row f10b         one row (f7a, f9a, f10b; comma-separated for more)
+//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's and F9a's rows: a seeded sweep of AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
 // F7a's row: with no fort/ AI pair in the corpus (before F7a's corpus
@@ -67,7 +81,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f10b']
+const ROWS = ['f7a', 'f9a', 'f10b']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -128,6 +142,60 @@ async function f7a() {
   const checks = [
     { name: 'a unit on a deck by a move of its own by the end of round 3', ok: n > 0 && deck * 2 >= n, got: `${deck} of ${n} battles (${pct(deck, n)}; counting the units deployed on decks, ${anyDeck})`, want: '≥ 50%' },
     { name: 'the keep\'s objective held from its top', ok: keeps.length > 0 && held * 6 >= keeps.length, got: keeps.length ? `${held} of the ${keeps.length} battles the keep stands in (${pct(held, keeps.length)})` : 'no battle has the keep, so this cannot be judged', want: '≥ 1 battle of 6' },
+  ]
+  return { checks, failed }
+}
+
+// ── F9a: riders step off ────────────────────────────────────────────────────
+// { checks, failed }, or null when the code has no transport
+async function f9a() {
+  if (!existsSync(join(dir, 'core', 'actions', 'transport.js'))) return null
+  const { riderProbe } = await import(pathToFileURL(fileURLToPath(new URL('./rider-probe.mjs', import.meta.url))).href)
+  const { RACES } = await import(at('data/schema.js'))
+  const match = await loadMatch(dir)
+  const pairs = loadCorpus().items.filter((it) => it.set === 'vehicle' && it.kind === 'ai')
+  // the sweep: board and dice drawn from the seed's own stream, as
+  // corpus-add's candidates are; each Bushtail list holding a War-Cart
+  const sweep = (n) => Array.from({ length: n }, (_, i) => {
+    const r = mulberry32(Number(a.seed ?? 9000) + i + 1)
+    const board = 1 + Math.floor(r() * 99999), dice = 1 + Math.floor(r() * 999999)
+    const m = MISSIONS.field, rules = { ...m.list, points: Math.floor((90 * m.list.points) / 100) }
+    const races = i % 2 === 0 ? ['squirrel', 'squirrel'] : i % 4 === 1 ? ['squirrel', 'serpent'] : ['serpent', 'squirrel']
+    const seats = races.map((race, s) => {
+      const R = RACES[race], k = R.roster.findIndex((key) => R.units[key].transport)
+      let counts = core.army.autoList(R, rules, i * 2 + s + 1)
+      for (let j = 1; k >= 0 && !(counts[k] >= 1) && j < 200; j++) counts = core.army.autoList(R, rules, 1000 * j + i * 2 + s + 1)
+      return { race, ctrl: 'ai', army: core.army.listText(counts) }
+    })
+    const setup = { board, dice, mission: 'field', terrain: m.sets[Math.floor(i / 2) % m.sets.length], rounds: m.rounds, seats }
+    return { id: `sweep-${i + 1}-${board}-${dice}`, job: { setup, entries: [] } }
+  })
+  const battles = SWEEP !== null || !pairs.length ? sweep(SWEEP ?? 12) : pairs
+  const what = SWEEP !== null || !pairs.length ? `a sweep of ${battles.length} Field AI battles with War-Carts (no vehicle/ AI pair is in the corpus${SWEEP !== null ? ', or --sweep' : ''})` : `the ${battles.length} vehicle/ AI pairs`
+  console.log(`\nF9a's row: ${what}`)
+  const rows = [], failed = []
+  for (const b of battles) {
+    const probe = riderProbe()
+    const res = foldJob(core, b.job, { match, probe })
+    const p = probe.result()
+    if (res.error) {
+      failed.push(`${b.id}: ${res.error.split('\n')[0]}`)
+      continue
+    }
+    if (!p.hulls) {
+      failed.push(`${b.id}: it fields no hull that carries riders`)
+      continue
+    }
+    rows.push({ id: b.id, ...p })
+    const seats = b.job.setup.seats.map((x) => `${x.race === 'squirrel' ? 'Bushtails' : 'Coil'} ${x.army ?? ''}`.trim()).join(' v ')
+    console.log(`  ${b.id.padEnd(26)} ${seats.padEnd(34)} ${b.job.setup.terrain.padEnd(9)} hulls ${p.hulls}, autoloaded ${p.autoloaded}; riders stepped off ${p.steps} times${p.steps ? ` (rounds ${p.stepRounds.join(',')})` : ''}; hulls destroyed with riders ${p.hullsDown} (${p.bailed} bailed out, ${p.lost} lost, ${p.bailDeaths} models lost to it); wrecks ${p.wrecks}`)
+  }
+  for (const f of failed) console.log(`  FAILED ${f}`)
+  const n = rows.length, stepped = rows.filter((r) => r.steps > 0).length
+  const sum = (k) => rows.reduce((s, r) => s + r[k], 0)
+  console.log(`\n  ${n} battles: ${sum('hulls')} hulls, ${sum('autoloaded')} riders autoloaded, ${sum('steps')} steps off, ${sum('hullsDown')} hulls destroyed with riders aboard (${sum('bailed')} riders bailed out, ${sum('lost')} lost), ${sum('wrecks')} wrecks`)
+  const checks = [
+    { name: 'riders disembark (of their own accord, either seat\'s)', ok: n === battles.length && stepped * 2 >= n, got: `in ${stepped} of ${n} battles (${pct(stepped, n)})${n < battles.length ? `, ${battles.length - n} failed` : ''}`, want: '≥ 50%' },
   ]
   return { checks, failed }
 }
@@ -237,9 +305,9 @@ async function f10b() {
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : await f10b()
+  const r = row === 'f7a' ? await f7a() : row === 'f9a' ? await f9a() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7a' ? "F7a's row: not judged: this code has no fortified set" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'f7a' ? "F7a's row: not judged: this code has no fortified set" : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : "F10b's row: not judged: this code has no grand mission"}`)
     continue
   }
   judged++

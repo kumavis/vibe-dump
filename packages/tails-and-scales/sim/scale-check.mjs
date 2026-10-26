@@ -439,7 +439,8 @@ const MUTANTS = [
   ['box-no-climb', 'scan', 'core/ai/score.js', '  if (nav.hasHeight && nav.linkSave > 0) reach += nav.linkSave * Math.floor(reach / nav.linkMin)\n', ''],
   ['bins-short', 'los', 'core/terrain/terrain.js', 'this.binSpan(s.x - s.reach - PAD, s.x + s.reach + PAD, this.W, this.nbx)', 'this.binSpan(s.x - s.reach * 0.3, s.x + s.reach * 0.3, this.W, this.nbx)'],
   ['bins-order', 'los', 'core/terrain/terrain.js', 'while (j >= 0 && met[j] > v)', 'while (j >= 0 && met[j] < v)'],
-  ['memo-key', 'memo', 'core/actions/move.js', '  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}`\n', ''],
+  // ((F9a) the key's unit line names a rider's hull too)
+  ['memo-key', 'memo', 'core/actions/move.js', "  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${o.aboard ? ` a${o.aboard}` : ''}`\n", ''],
   ['memo-leak', 'memo', 'core/index.js', '  try {\n    return fn()\n  } finally {\n    G.nav.memo = null\n  }', '  const r = fn()\n  G.nav.memo = null\n  return r'],
 ]
 

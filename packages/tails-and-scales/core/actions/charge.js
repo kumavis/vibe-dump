@@ -28,8 +28,10 @@ import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
 import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
 
+// (F9a) A rider charges nobody while aboard, nor once it has stepped off a
+// hull that had moved this turn (`rode`: DESIGN §4.2.5's disembarking).
 export function canCharge(G, u) {
-  if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
+  if (!alive(u) || u.flags.charged || u.flags.chargeTried || u.aboard || u.flags.rode) return false
   if (u.t.noCharge || u.mesmerized || u.flags.fellBack || isEngaged(G, u)) return false
   if (u.flags.advanced && !u.t.chargeAfterAdvance) return false
   return true
@@ -79,7 +81,8 @@ export function chargePlan(G, u, target) {
     if (nav.hasHeight) {
       if (others.some((e, k) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
     } else if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
-    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
+    // (a friend's spacing; F9a: a rider stands in nobody's way)
+    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && !o.aboard && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
     spots.push({ i, d })
     if (d < bd) {
       best = i

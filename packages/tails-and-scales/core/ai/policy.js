@@ -18,18 +18,47 @@
 // between the same yields as the old awaits, and any change to what it
 // decides bumps CORE_VERSION and re-baselines. The role sorts are stable,
 // ascending for moves and charges and reversed for shots (rule 6).
-import { p2D6 } from '../rules.js'
+//
+// (F9a, DESIGN §4.2.5's AI; rule 10: it bumps with F9a) Transports. A hull
+// (role 'transport') moves first, and its riders with it: before it moves,
+// each brawler rider with an enemy within CHARGE_RANGE − 2 of the hull's
+// edge steps off toward that enemy; the hull then moves as a 'raider' while
+// brawlers ride it, else as a 'line' unit; after it moves, each other rider
+// steps off toward an objective its seat doesn't hold within
+// OBJECTIVE_RANGE + 2 of the hull's edge, and the riders past the deck's
+// firing slots step off once an enemy is within their weapon's range + 3,
+// each where it scores best (no slot before F9c's firing deck, so every
+// rider with a gun: core/actions/transport.js fireSlots). Every pick is draw-free (the nearest or best
+// cell, ties to the lowest index); the hull's own move takes bestSpot's
+// tie-break draws, as any unit's, inside the transport branch. Riders are
+// skipped by the movement loop (they move only with their hull, and step
+// off only if `only` names them) and by the charges (canCharge refuses
+// them); the shots reach them through canShoot, which refuses them too
+// until F9c's firing deck. The AI never boards a hull after the deployment
+// (the autoload fills them, core/actions/transport.js).
+import { p2D6, CHARGE_RANGE, OBJECTIVE_RANGE } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import {
   alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
+  ownersOf, riders, landing,
 } from '../queries.js'
 import { hold } from '../actions/move.js'
-import { worth, meleeValue, shotValue, bestSpot, fallbackSpot } from './score.js'
+import { fireSlots, nearestCell } from '../actions/transport.js'
+import { worth, meleeValue, shotValue, bestSpot, fallbackSpot, bestLanding } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
-// in this order, brawlers first and the guns last.
-export const ORDER = Object.freeze(['melee', 'raider', 'line', 'shooter', 'hero', 'artillery'])
+// in this order, brawlers first and the guns last. (F9a) The transports
+// before them all, so a hull's riders step off before the rest of the army
+// moves; every other role's index moves up one alike, so the stable sorts
+// keep their order.
+export const ORDER = Object.freeze(['transport', 'melee', 'raider', 'line', 'shooter', 'hero', 'artillery'])
+
+// (F9a) The role a hull plays as: a raider while brawlers ride it (it takes
+// them to the fight), else a line unit.
+export const hullRole = (G, v) => (riders(G, v).some((p) => p.t.brawler) ? 'raider' : 'line')
+// the role `u` plays as (a hull's by its riders)
+const roleOf = (G, u) => (u.t.ai === 'transport' ? hullRole(G, u) : u.t.ai)
 
 // The commands seat `side` plays in `phase` (the move, shoot and charge
 // phases; the fight and morale phases play themselves). `only` (F10b's
@@ -47,55 +76,130 @@ export function* aiPhase(G, side, phase, only = null) {
 
 // ── Movement ────────────────────────────────────────────────────────────────
 function* aiMove(G, side, mask) {
-  const mine = G.units.filter((u) => u.side === side && alive(u) && mask(u))
+  // (F9a: riders move only with their hull, below)
+  const mine = G.units.filter((u) => u.side === side && alive(u) && mask(u) && !u.aboard)
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   const claimed = new Set()
   for (const u of mine) {
-    if (!alive(u) || u.flags.moved) continue
-    const role = u.t.ai
-    if (isEngaged(G, u)) {
-      // brawlers stay stuck in; anyone else gets out if the fight is going badly
-      const foes = engagedWith(G, u)
-      const theirs = foes.reduce((s, e) => s + meleeValue(e, u), 0)
-      const ours = foes.reduce((s, e) => Math.max(s, meleeValue(u, e)), 0)
-      if (role === 'melee' || role === 'line' || ours >= theirs * 0.8) continue
-      const best = fallbackSpot(G, u, movePlan(G, u))
-      if (best >= 0) {
-        emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
-        yield { t: 'move', u: u.id, c: best }
-      }
+    if (!alive(u) || u.aboard) continue
+    if (u.t.ai === 'transport') {
+      yield* aiTransport(G, u, mask, claimed)
       continue
     }
-    // a unit its player already advanced (before pressing Auto) moves on that
-    // roll; it never advances twice
-    let plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
-    let pick = bestSpot(G, u, plan, claimed)
-    // Advance when the extra inches are worth more than what it forfeits:
-    // brawlers still far from a charge, shooters with nothing to shoot yet.
-    const nearest = Math.min(...enemiesOf(G, u).map((e) => gap(u, e)))
-    let advance = false
-    if (role === 'melee' || role === 'line' || role === 'raider') {
-      advance = nearest > u.t.M + 8 && !(role === 'line' && pick.onObjective) && !(role === 'raider' && pick.canShoot)
-    } else if (role === 'shooter') {
-      advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
-    }
-    if (advance && !u.flags.advanced) {
+    if (u.flags.moved) continue
+    yield* aiMoveOne(G, u, u.t.ai, claimed)
+  }
+}
+
+// One unit's move, playing `role` (its own; a hull's by its riders): the
+// movement loop's body, unchanged but for the role it is handed.
+function* aiMoveOne(G, u, role, claimed) {
+  if (isEngaged(G, u)) {
+    // brawlers stay stuck in; anyone else gets out if the fight is going badly
+    const foes = engagedWith(G, u)
+    const theirs = foes.reduce((s, e) => s + meleeValue(e, u), 0)
+    const ours = foes.reduce((s, e) => Math.max(s, meleeValue(u, e)), 0)
+    if (role === 'melee' || role === 'line' || ours >= theirs * 0.8) return
+    const best = fallbackSpot(G, u, movePlan(G, u))
+    if (best >= 0) {
       emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
-      yield { t: 'advance', u: u.id }
-      // (the roll is the unit's now: its advRoll)
-      plan = movePlan(G, u, u.flags.advRoll)
-      const adv = bestSpot(G, u, plan, claimed)
-      if (adv.cell >= 0) pick = adv
+      yield { t: 'move', u: u.id, c: best }
     }
-    if (pick.obj >= 0) claimed.add(pick.obj)
-    if (pick.cell >= 0 && pick.dist > 0.4) {
-      emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
-      yield { t: 'move', u: u.id, c: pick.cell }
-    } else if (u.flags.advanced) {
-      // an advanced unit staying put has spent its move all the same
-      hold(G, u)
+    return
+  }
+  // a unit its player already advanced (before pressing Auto) moves on that
+  // roll; it never advances twice
+  let plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+  let pick = bestSpot(G, u, plan, claimed, role)
+  // Advance when the extra inches are worth more than what it forfeits:
+  // brawlers still far from a charge, shooters with nothing to shoot yet.
+  const nearest = Math.min(...enemiesOf(G, u).map((e) => gap(u, e)))
+  let advance = false
+  if (role === 'melee' || role === 'line' || role === 'raider') {
+    advance = nearest > u.t.M + 8 && !(role === 'line' && pick.onObjective) && !(role === 'raider' && pick.canShoot)
+  } else if (role === 'shooter') {
+    advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
+  }
+  if (advance && !u.flags.advanced) {
+    emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
+    yield { t: 'advance', u: u.id }
+    // (the roll is the unit's now: its advRoll)
+    plan = movePlan(G, u, u.flags.advRoll)
+    const adv = bestSpot(G, u, plan, claimed, role)
+    if (adv.cell >= 0) pick = adv
+  }
+  if (pick.obj >= 0) claimed.add(pick.obj)
+  if (pick.cell >= 0 && pick.dist > 0.4) {
+    emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
+    yield { t: 'move', u: u.id, c: pick.cell }
+  } else if (u.flags.advanced) {
+    // an advanced unit staying put has spent its move all the same
+    hold(G, u)
+  }
+  emit(G, 'pause', { s: 0.05 })
+}
+
+// (F9a) A transport `v` and its riders. Before it moves (when it hasn't:
+// a hull its player moved before pressing Auto only steps riders off),
+// each brawler rider (not yet moved, and in `only`) with an enemy within
+// CHARGE_RANGE − 2 of the hull's edge steps off onto the landing cell
+// nearest the nearest such enemy, to charge it this turn. The hull moves as
+// its riders make it (hullRole). After it moves, each rider in G.units
+// order that isn't a brawler steps off onto the landing cell nearest the
+// nearest objective its seat doesn't hold within OBJECTIVE_RANGE + 2 of
+// the hull's edge (the objectives as they stand when it does); then the
+// riders still aboard past the deck's firing slots (fireSlots: none until
+// F9c, so every rider still aboard; in G.units order) step
+// off where they score best (bestLanding) once an enemy is within their
+// weapon's range + 3. No draws but the hull's own move's.
+function* aiTransport(G, v, mask, claimed) {
+  if (!v.flags.moved) {
+    for (const p of riders(G, v)) {
+      if (!mask(p) || p.flags.moved || !p.t.brawler) continue
+      let foe = null, fd = CHARGE_RANGE - 2
+      for (const e of enemiesOf(G, v)) {
+        const g = hypot(e.pos.x - v.pos.x, e.pos.z - v.pos.z) - v.r - e.r
+        if (g <= fd && (foe === null || g < fd)) {
+          fd = g
+          foe = e
+        }
+      }
+      if (!foe) continue
+      const c = nearestCell(G, landing(G, p, v), foe.pos.x, foe.pos.z)
+      if (c < 0) continue
+      emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
+      yield { t: 'disembark', u: p.id, c }
     }
-    emit(G, 'pause', { s: 0.05 })
+    yield* aiMoveOne(G, v, hullRole(G, v), claimed)
+  }
+  for (const p of riders(G, v)) {
+    if (!mask(p) || p.flags.moved || p.t.brawler) continue
+    const owners = ownersOf(G)
+    let obj = null, od = OBJECTIVE_RANGE + 2
+    for (const o of G.objectives) {
+      if (owners[o.i] === v.side) continue
+      const d = hypot(o.x - v.pos.x, o.z - v.pos.z) - v.r
+      if (d <= od && (obj === null || d < od)) {
+        od = d
+        obj = o
+      }
+    }
+    if (!obj) continue
+    const c = nearestCell(G, landing(G, p, v), obj.x, obj.z)
+    if (c < 0) continue
+    claimed.add(obj.i)
+    emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
+    yield { t: 'disembark', u: p.id, c }
+  }
+  const aboard = riders(G, v)
+  for (let k = fireSlots(v); k < aboard.length; k++) {
+    const p = aboard[k], w = p.t.ranged
+    if (!mask(p) || p.flags.moved || !w) continue
+    if (!enemiesOf(G, p).some((e) => gap(p, e) <= w.range + 3)) continue
+    const c = bestLanding(G, p, landing(G, p, v), claimed)
+    if (c < 0) continue
+    emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
+    yield { t: 'disembark', u: p.id, c }
   }
 }
 
@@ -112,8 +216,9 @@ function* aiShoot(G, side, mask) {
       const w = u.t.ranged
       if (w.blast) {
         // count the cost of a scatter landing on our own lads
+        // (F9a: a rider is out of a template's reach, its hull in it)
         for (const f of G.units) {
-          if (f.side !== u.side || !alive(f)) continue
+          if (f.side !== u.side || !alive(f) || f.aboard) continue
           const g = hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
           if (g < w.blast + 2.5) v -= worth(f) * 0.25 * (1 - Math.max(0, g) / (w.blast + 2.5))
         }
@@ -140,7 +245,8 @@ function* aiCharge(G, side, mask) {
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
   for (const u of mine) {
     if (!canCharge(G, u)) continue
-    const role = u.t.ai
+    // (F9a: a hull charges as the role its riders make it)
+    const role = roleOf(G, u)
     let best = null, bs = 0
     for (const e of chargeTargets(G, u)) {
       const plan = chargePlan(G, u, e)

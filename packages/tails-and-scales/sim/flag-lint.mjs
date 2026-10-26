@@ -40,6 +40,24 @@
 //                                         below): the AI's own appraisal,
 //                                         which the builder's prices never
 //                                         replace without a re-record
+//   (F9a, DESIGN §4.2.5's one-reader table) transport   core/actions/
+//                                         transport.js alone, the autoload
+//                                         included (deployArmies calls it):
+//                                         a hull's capacity, maxBase, deck
+//                                         and wreck are the transports' own
+//                                         rules, so no other rule reads them
+//   vehicle                               the derived climb (data/schema.js,
+//                                         by its local), the plans' mode
+//                                         setup (core/actions/move.js
+//                                         groundOnly: a ground hull keeps
+//                                         to the ground) and transport.js's
+//                                         legality (a vehicle rides nothing)
+//   climb                                 the plans' mode setup alone
+//                                         (core/actions/move.js climbs)
+//   enclosed                              the view alone (present/deck.js:
+//                                         riders shown as pips and chips),
+//                                         so no file of core/ or data/ but
+//                                         the schema's check reads it
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
 // core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
@@ -126,6 +144,15 @@ const reads = (names) => new RegExp(String.raw`\.\s*(${names})\b|\[\s*['"\x60]($
 export const OWNED = [
   [reads('cost|roster|armies|list|army|prices'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list or its prices, an army) read outside core/army.js"],
   [reads('pts'), ['core/ai/score.js'], "the AI's appraisal (pts) read outside core/ai/score.js"],
+  // (F9a) the transports' record, the ground rule, the climbing flag and
+  // the view's enclosed deck, each with its own reader (DESIGN §4.2.5's
+  // table): core/actions/move.js's mode setup also reads a path vertex's
+  // `climb` (a ladder taken) and core/queries.js its gate graph's cache
+  // slot of that name (ALLOW below), neither of them the unit's flag
+  [reads('transport'), ['core/actions/transport.js'], "a hull's transport record read outside core/actions/transport.js"],
+  [reads('vehicle'), ['core/actions/move.js', 'core/actions/transport.js'], 'the vehicle flag read outside the plans\' mode setup (core/actions/move.js groundOnly) and core/actions/transport.js\'s legality'],
+  [reads('climb'), ['core/actions/move.js'], 'the climb flag read outside the plans\' mode setup (core/actions/move.js climbs)'],
+  [reads('enclosed'), [], "an enclosed deck read by the rules (the view's alone: present/deck.js)"],
 ]
 // the patterns that apply to file `f`
 const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
@@ -185,6 +212,13 @@ export const ALLOW = [
   // costs in that battle, never a rule of it (no draw, nothing in the match)
   ['core/army.js', 'const own = rules?.prices && Object.hasOwn(rules.prices, race.key) ? rules.prices[race.key] : null', 1, "priceOf: the mission's prices for the race, by its key (the fallback's table)"],
   ['core/army.js', 'return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost', 1, "priceOf: the mission's price for the unit, by its key, else the unit's cost"],
+  // (F9a, OWNED) the schema checking and copying a transport, and refusing
+  // a vehicle that climbs; the nav memo's gate graph for climbers, a cache
+  // slot named for the climbers' graph (F7a), not the unit's flag
+  ['data/schema.js', 'def.transport', 2, 'refuses a transport on a unit that is no vehicle, and checks and copies the record (transportOf)'],
+  ['data/schema.js', 't.transport = transport', 1, 'the normalised type carries the checked transport record, only where the def gives one'],
+  ['data/schema.js', 'def.climb === true', 1, 'refuses a vehicle that sets climb: true (a hull never climbs)'],
+  ['core/queries.js', 'memo.climb', 1, "gateGraph: the climbers' gate graph's cache slot in the nav's memo (F7a), not a unit's climb flag"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
 ]
@@ -361,6 +395,20 @@ if (main && args['self-test']) {
     ['core/ai/score.js', 'const {\n    cost,\n    models,\n  } = u.t'],
     ['core/engine.js', 'const {\n  list: rules,\n} = missionOf(G.setup)'],
     ['core/engine.js', 'const {\n  fx,\n} = w'],
+    // (F9a, OWNED) the transport record, the ground rule, the climbing flag
+    // and the enclosed deck read outside their one reader, by every route
+    ['core/ai/policy.js', 'const cap = v.t.transport.capacity'],
+    ['core/deploy.js', "const wreck = u.t['transport']?.wreck"],
+    ['core/commands.js', 'const { transport } = v.t'],
+    ['core/actions/damage.js', 'if (v.t.transport) bail(G, v)'],
+    ['core/deploy.js', 'if (u.t.vehicle) return false'],
+    ['core/queries.js', 'const ground = !!u.t.vehicle'],
+    ['core/ai/score.js', 'const {\n  vehicle,\n} = u.t'],
+    ['core/queries.js', 'if (u.t.climb) up()'],
+    ['core/nav.js', 'const climber = t.climb && !t.big'],
+    ['core/actions/transport.js', 'if (tr.enclosed) return 0'],
+    ['data/mission.js', "const hidden = t.transport?.enclosed"],
+    ['core/actions/transport.js', "const sealed = tr['enclosed']"],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -397,6 +445,16 @@ if (main && args['self-test']) {
     // fields
     ['core/engine.js', 'emit(G, \'deploy\', {\n  army: 1,\n  list: 2,\n})'],
     ['core/engine.js', 'const {\n  models,\n  role,\n} = u.t'],
+    // (F9a, OWNED) each one's own reader, the AI's role name, the view
+    ['core/actions/transport.js', 'const tr = v.t.transport'],
+    ['core/actions/transport.js', 'if (u.t.vehicle) return `${u.t.short} is a vehicle`'],
+    ['core/actions/move.js', 'return u.t.vehicle'],
+    ['core/actions/move.js', 'return u.t.climb'],
+    ['core/ai/policy.js', "const roleOf = (G, u) => (u.t.ai === 'transport' ? hullRole(G, u) : u.t.ai)"],
+    ['core/actions/transport.js', 'const { capacity, maxBase } = v.t.transport'],
+    ['present/deck.js', 'if (t.transport.enclosed) return []'],
+    ['view/units.js', 'const rides = u.t.transport && !u.t.transport.enclosed'],
+    ['core/actions/move.js', 'L += pts[i].climb ? pts[i].cost : 1'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -420,6 +478,6 @@ if (main && !args['self-test']) {
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, and (F11a) the army builder\'s data and pts each have their one reader in core/ and data/')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck')
   process.exit(bad ? 1 : 0)
 }

@@ -68,5 +68,8 @@ export const RULES_ID = rulesId()
 // a list of counts, which newState builds the armies from; 6: F7a's
 // height: the nav's floor, links and ledges, and the rules' height
 // branches; 7: F8b's missions field and grand, the open set (the scatter's
-// area scale) and the fight guard, max(30, 2·units + 2))
-export const CORE_VERSION = 7
+// area scale) and the fight guard, max(30, 2·units + 2); 8: F7b's parapets
+// and cover, landing beside this; 9: F9a's transports: riders aboard a
+// vehicle, embark and disembark, the deployment's autoload, a hull's wreck
+// and the bail-out, and the AI's transports)
+export const CORE_VERSION = 9

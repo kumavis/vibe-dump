@@ -25,7 +25,10 @@
 // (present-check.mjs's eventOrder), each where the next event or line
 // breaks it: no-stomp through walk-speed, no-melee through land-fx, and
 // no-rolloff-row. The rest (no-formation through no-move-status, no-place
-// and on) are caught by the mirror. And three edits of the page, not of an
+// and on) are caught by the mirror; so (F9a) are no-embark, no-embark-phase,
+// no-carry and no-place-carry, by the mirror of the battles with War-Carts
+// present-check plays in Node (no corpus battle has a rider yet). And three
+// edits of the page, not of an
 // event, caught by the check's card test at a checkpoint: card-reads-match,
 // the unit card telling of what the match did ahead of the table; and
 // (R7b) card-facts-stale, card-stop-stale and card-turn-kept, the card's
@@ -166,6 +169,15 @@ export const MUTATIONS = {
   // behind: it tells of moves, shots, charges and cover not yet played
   // (ui/card.js since R7b, main.js before; caught by the card check at a
   // checkpoint, not by an event)
+  // (F9a) the riders, caught by the mirror of present-check's battles
+  // with War-Carts (in Node): a unit boarding in the deployment never
+  // reported (it stands where it stood in the mirror, riding nothing); one
+  // boarding in a phase never reported; a hull's walk that leaves its
+  // riders behind in the mirror; a hull's placement that does
+  'no-embark': ['/core/actions/transport.js', "    emit(G, 'unit.embark', { u: u.id, v: v.id })\n    return", '    return'],
+  'no-embark-phase': ['/core/actions/transport.js', "  emit(G, 'unit.embark', { u: u.id, v: v.id })\n  log(", '  log('],
+  'no-carry': ['/present/mirror.js', '      u.y = e.to.y ?? 0\n      carry(M, e.u, u)', '      u.y = e.to.y ?? 0'],
+  'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
   'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],
   // (R7b) the card's record of what each unit did this turn kept from the
   // battle's start: an action's end never updates it (app/flow.js)

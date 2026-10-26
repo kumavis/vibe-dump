@@ -4,7 +4,9 @@
 // ▣), its models standing (a single model's wounds) and its order badge.
 // The rings are hidden then, so the chip's border carries their state: the
 // colour the input painted the ring (picked up, a target, can act), gold
-// when picked up, red when in combat, else a dark rim. A tap selects
+// when picked up, red when in combat, else a dark rim. (F9a) A transport's
+// chip carries a dot per rider squad aboard (its riders have no chip: they
+// stand on its deck, view/units.js). A tap selects
 // (`pick(id)`), which beats casting a ray at an 11 px figure. Chips within
 // 18 px of each other (28 px on a touch screen: (F8b's review) its chips
 // are 28 px discs, so at 18 two of them 18-28 px apart neither stacked nor
@@ -48,7 +50,7 @@ export class Chips {
   }
 
   // Show `units` ([{ id, x, y, wx, wz, side, color, glyph, n, ord, sel,
-  // engaged, look }], in G.units order), clustered; null shows none.
+  // engaged, look, riders }], in G.units order), clustered; null shows none.
   // Returns how many style or text writes it made.
   draw(units) {
     let writes = 0
@@ -69,6 +71,8 @@ export class Chips {
         border: us.some((u) => u.sel) ? '#ffe680' : us.find((u) => u.look)?.look ?? (us.some((u) => u.engaged) ? '#ff6a4a' : 'rgba(20,16,12,0.85)'),
         text: many ? `×${us.length}` : `${lead.glyph}${lead.n}`,
         ord: many ? '' : lead.ord,
+        // ((F9a) a transport's rider squads, a dot each)
+        dots: many ? '' : '•'.repeat(lead.riders ?? 0),
         title: many ? `${us.length} units: tap to zoom in` : null,
       }
       let slot = this.pool[k]
@@ -76,7 +80,7 @@ export class Chips {
         const el = document.createElement('div')
         el.className = 'chip'
         el.dataset.k = k
-        el.innerHTML = '<b></b><i></i>'
+        el.innerHTML = '<b></b><i></i><s></s>'
         this.el.appendChild(el)
         slot = this.pool[k] = { el, last: {} }
       }
@@ -86,7 +90,8 @@ export class Chips {
       if (last.bg !== look.bg) (el.style.background = look.bg), writes++
       if (last.border !== look.border) (el.style.borderColor = look.border), writes++
       if (last.text !== look.text) (el.firstChild.textContent = look.text), writes++
-      if (last.ord !== look.ord) (el.lastChild.textContent = look.ord), writes++
+      if (last.ord !== look.ord) (el.children[1].textContent = look.ord), writes++
+      if (last.dots !== look.dots) (el.children[2].textContent = look.dots), writes++
       if (last.many !== many) el.classList.toggle('many', many), writes++
       if (last.title !== look.title) (look.title ? (el.title = look.title) : el.removeAttribute('title')), writes++
       if (last.hidden !== false) (el.style.display = ''), writes++

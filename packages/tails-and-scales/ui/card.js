@@ -6,6 +6,12 @@
 // Opened by a click on a figure (or as a unit is picked up), closed by
 // showing nothing.
 //
+// (F9a, DESIGN §4.2.5) A transport's card, after its stats, says who rides
+// it ("Riders: 2 squads · 11/12 models"), each squad a chip that picks it up
+// (to step it off, or in the deployment to place it), and that riders ride
+// under cover, firing decks to come (F9c); a rider's says what it rides.
+// Both read the mirror (`riders(u)`, `aboard(u)`), as the label does.
+//
 // It reads the unit as shown (the mirror's: what stands, what wounds are
 // left, mesmerized, in combat), like its label. What the unit has done this
 // turn and whether it stands in cover read the match itself once the table
@@ -52,8 +58,11 @@ export class Card {
   // (the core's preview, §4.1 rule 2); `facts()`: the record of the last
   // action or stop played, by unit id; (F10c) `orders(u)`: the unit's
   // standing order ({ k, can: whether the player may change it now }, or
-  // null: none to show), and `onOrder(u, k)`: one of its buttons pressed
-  constructor({ el, sides, shown, live, ask, facts, orders = () => null, onOrder = () => {} }) {
+  // null: none to show), and `onOrder(u, k)`: one of its buttons pressed;
+  // (F9a) `riders(u)`: the squads the mirror shows aboard transport u
+  // ([{ id, short, alive }]), `aboard(u)`: the hull rider u rides as shown
+  // ({ id, short }, or null), and `onRider(id)`: a rider's chip pressed
+  constructor({ el, sides, shown, live, ask, facts, orders = () => null, onOrder = () => {}, riders = () => [], aboard = () => null, onRider = () => {} }) {
     this.el = el
     this.sides = sides
     this.shown = shown
@@ -62,9 +71,15 @@ export class Card {
     this.facts = facts
     this.orders = orders
     this.onOrder = onOrder
+    this.riders = riders
+    this.aboard = aboard
+    this.onRider = onRider
     el.addEventListener('click', (e) => {
       const k = e.target?.dataset?.order
       if (k && this.unit) this.onOrder(this.unit, k)
+      // ((F9a) a rider's chip: that squad picked up)
+      const r = e.target?.closest?.('[data-rider]')?.dataset.rider
+      if (r) this.onRider(Number(r))
     })
     // the unit the open card shows (app/flow.js redraws it as the table
     // catches up)
@@ -97,8 +112,24 @@ export class Card {
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${price} pts</span></div>
-    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.orderLine(u)}${statsHtml(t)}`
+    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.ride(u, mu)}${this.orderLine(u)}${statsHtml(t)}${this.cargo(u)}`
     card.classList.add('show')
+  }
+
+  // (F9a) a rider's line: the hull it rides, as shown
+  ride(u, mu) {
+    const h = mu?.aboard ? this.aboard(u) : null
+    return h ? `<div class="card-ride">▣ Aboard the ${h.short} · steps off as its move</div>` : ''
+  }
+  // (F9a) a transport's riders, after its stats: how many squads and models
+  // of its capacity, a chip per squad (pressed, it picks the squad up), and
+  // what riding means until the firing decks come
+  cargo(u) {
+    const tr = u.t.transport
+    if (!tr) return ''
+    const rs = this.riders(u), n = rs.reduce((k, r) => k + r.alive, 0)
+    const chips = rs.map((r) => `<button data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</button>`).join('')
+    return `<div class="card-riders"><div><b>Riders:</b> ${rs.length} squad${rs.length === 1 ? '' : 's'} · ${n}/${tr.capacity} models</div>${chips ? `<div class="chips">${chips}</div>` : ''}<em>Riders ride under cover; firing decks come later.</em></div>`
   }
 
   // (F7a) a unit standing on a deck or high on a stair (the mirror's `y`, its

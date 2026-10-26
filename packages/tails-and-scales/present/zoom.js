@@ -62,7 +62,8 @@ export function tierOf(ppi, from = null) {
 // ⚔ ➶ ★ ✈ ⛭ ▣): by the unit's slot role (data/schema.js's ROLES) where it
 // says enough (a Hero, a Fast unit, Artillery, a Monster), else (Troops and
 // Elite) by how the AI plays it: a shooter's bow, everyone else's blade.
-export const GLYPHS = Object.freeze({ Hero: '★', Fast: '✈', Artillery: '⛭', Monster: '▣', shooter: '➶', melee: '⚔' })
+// ((F9a) a Vehicle a big unit's ▣, as a Monster's)
+export const GLYPHS = Object.freeze({ Hero: '★', Fast: '✈', Artillery: '⛭', Monster: '▣', Vehicle: '▣', shooter: '➶', melee: '⚔' })
 export const glyphOf = (t) => GLYPHS[t?.role] ?? (t?.ai === 'shooter' ? GLYPHS.shooter : GLYPHS.melee)
 
 // Chips within `px` of each other on screen stack into one cluster ("×3").

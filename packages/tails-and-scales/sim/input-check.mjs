@@ -45,9 +45,24 @@
 //               a roster row's click picks its unit up; and on a 412×915
 //               phone's overview (Strategic) a chip's tap picks its unit up
 //               and a cluster's zooms in
+//   (F9a) carts a second page, a hotseat Field battle whose Bushtails field
+//               two War-Carts (DESIGN §4.2.5's tools): in the deployment a
+//               cart picked up and R picks up its first rider, a click in
+//               the zone places it (off the cart, the cart's count down),
+//               the cart then badged ⤒ for it and a click on the cart boards
+//               it again; in the movement phase a rider's chip on its cart's
+//               label picks it up and a click beside the cart steps it off,
+//               R does the same for the other cart's rider, Tab reaches a
+//               rider still aboard and a click steps it off; a unit that may
+//               board shows the ⤒ on the cart, hovering the cart says
+//               "Board War-Cart · …" and a click boards it; a Shift-drag box
+//               over a loaded cart picks the cart, not its riders, R adds
+//               them, and the group Move's hover says "riders ride along"
 // and no page error throughout.
 //
-//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>]
+//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--carts]
+//
+// --carts runs the F9a page alone.
 //
 // 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step.
 // Exit 0 when every step holds. Set CHROMIUM_PATH to the pre-installed
@@ -62,7 +77,7 @@ import { buildApp } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { IDLE_MS } from './chromium.mjs'
 
-const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' } } })
+const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, carts: { type: 'boolean' } } })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const same = (xs, ys) => JSON.stringify([...xs].sort((p, q) => p - q)) === JSON.stringify([...ys].sort((p, q) => p - q))
 
@@ -975,6 +990,318 @@ async function check(page, say) {
   }
 }
 
+// (F9a) The transport tools by mouse and keys, on a hotseat Field battle
+// whose seat 0 fields two War-Carts (the page's URL: ?mission=field&armies=).
+async function checkCarts(page, say) {
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  const fail = (m) => {
+    throw new Error(`carts: ${m}`)
+  }
+  const count = () => ev(() => window.__ts.session.count)
+  const picked = () => ev(() => window.__ts.group.picked())
+  const ids = () => ev(() => window.__ts.group.ids())
+  const seatNow = () => ev(() => window.__ts.session.decisionFor())
+  const unit = (id) => ev((id) => {
+    const u = window.__ts.G.units.find((x) => x.id === id)
+    return u && { id: u.id, key: u.key, side: u.side, aboard: u.aboard, moved: !!u.flags.moved, alive: u.alive, pos: { x: u.pos.x, z: u.pos.z }, r: u.r }
+  }, id)
+  const riders = (hull) => ev((h) => window.__ts.G.units.filter((u) => u.aboard === h && u.alive > 0).map((u) => u.id), hull)
+  const toScreen = async (x, z, y = 0) => {
+    const [sx, sy] = await ev(({ x, y, z }) => window.__ts.screen(x, y, z), { x, y, z })
+    return { x: sx, y: sy }
+  }
+  const idle = () => page.waitForFunction(() => window.__ts.player.idle && !window.__ts.group.busy(), null, { timeout: IDLE_MS })
+  // a click's command folded and the table caught up
+  const sent = async (n0, what) => {
+    const ok = await page.waitForFunction((n) => window.__ts.session.count > n && window.__ts.player.idle, n0, { timeout: 60000 }).then(() => true, () => false)
+    if (!ok) fail(`${what}: nothing was sent (picked ${JSON.stringify(await picked())}, the hint "${await ev(() => document.querySelector('#hint').textContent)}")`)
+    await sleep(600)
+  }
+  // the camera at rest: its place the same over a second, three times
+  // running (a Tab's glide, a view's, may still be under way: under load a
+  // frame steps it 0.05 s at most)
+  const still = async () => {
+    let was = '', same = 0
+    for (let k = 0; k < 120 && same < 3; k++) {
+      const now = await ev(() => window.__ts.camera.position.toArray().map((v) => v.toFixed(3)).join())
+      same = now === was ? same + 1 : 0
+      was = now
+      await sleep(1000)
+    }
+  }
+  // the camera close over (x, z), from the seat's side, held there: set
+  // again until it has stayed put three looks running (a glide still under
+  // way writes it every frame)
+  const over = async (x, z) => {
+    await still()
+    let held = 0
+    for (let k = 0; k < 150 && held < 3; k++) {
+      const ok = await ev(({ x, z }) => {
+        const ts = window.__ts, want = { x: x - 7, y: 14, z: z + 8 }
+        const was = ts.camera.position.distanceTo(want) < 0.01 && Math.hypot(ts.controls.target.x - x, ts.controls.target.z - z) < 0.01
+        ts.controls.target.set(x, 0, z)
+        ts.camera.position.set(want.x, want.y, want.z)
+        ts.controls.update()
+        return was
+      }, { x, z })
+      held = ok ? held + 1 : 0
+      await sleep(500)
+    }
+    if (held < 3) fail(`the camera never held still over (${x.toFixed(1)}, ${z.toFixed(1)})`)
+  }
+  // a click on `q`, the pointer moved there first and the tooltip read
+  // again: still `want` (the camera held still since `beside` found it)
+  const clickAt = async (q, want) => {
+    await page.mouse.move(q.x - 3, q.y)
+    await page.mouse.move(q.x, q.y)
+    await sleep(350)
+    const tip = await ev(() => (document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : ''))
+    if (want && !want.test(tip)) fail(`the pointer back at (${Math.round(q.x)}, ${Math.round(q.y)}) reads "${tip}": the camera moved since`)
+    await page.mouse.click(q.x, q.y)
+  }
+  // a ground point beside hull `h` for rider `u` to step off onto (or, in
+  // the deployment, to be placed on): the pointer's tooltip says so, or
+  // (`any`) the ground there is clear of figures
+  const beside = async (h, u, want, ok = () => true) => {
+    const why = { off: 0, unit: 0, tip: [] }
+    for (const d of [1.6, 2.4, 1.0, 3.2]) for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2, x = h.pos.x + Math.cos(a) * (h.r + u.r + d), z = h.pos.z + Math.sin(a) * (h.r + u.r + d)
+      if (!ok(x, z)) continue
+      const q = await toScreen(x, z)
+      if (q.x < 250 || q.x > 1020 || q.y < 110 || q.y > 660) {
+        why.off++
+        continue
+      }
+      const hit = await ev(({ x, y }) => window.__ts.group.pick(x, y), q)
+      if (hit.unit !== null || !hit.ground) {
+        why.unit++
+        continue
+      }
+      await page.mouse.move(q.x - 3, q.y)
+      await page.mouse.move(q.x, q.y)
+      await sleep(350)
+      const tip = await ev(() => (document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : ''))
+      if (!want || want.test(tip)) return { ...q, tip }
+      if (why.tip.length < 3) why.tip.push(tip)
+    }
+    const c = await toScreen(h.pos.x, h.pos.z)
+    beside.why = `${why.off} points off the screen's middle, ${why.unit} on a unit, tooltips ${JSON.stringify(why.tip)}; the cart on screen at (${Math.round(c.x)}, ${Math.round(c.y)}), the camera at ${await ev(() => window.__ts.camera.position.toArray().map((v) => v.toFixed(1)).join(', '))}`
+    return null
+  }
+
+  await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  // (seat 0's deployment, the Bushtails': the other seat done first if it
+  // holds the decision here)
+  for (let k = 0; k < 3 && (await seatNow()) !== 0; k++) await ev(() => window.__ts.endPhase())
+  if ((await seatNow()) !== 0) fail('seat 0 never held the deployment here')
+  const carts = await ev(() => window.__ts.G.units.filter((u) => u.key === 'warcart' && u.side === 0).map((u) => u.id))
+  if (carts.length !== 2) fail(`seat 0 fields ${carts.length} War-Carts, not 2`)
+  let cart = await unit(carts[0])
+  const load0 = await riders(cart.id)
+  if (load0.length !== 2) fail(`the first War-Cart carries ${load0.length} squads after the autoload, not 2`)
+  await over(cart.pos.x, cart.pos.z)
+
+  // ── the deployment: R, a placement, an embark ──
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), cart.id)
+  await sleep(300)
+  // (the roster's own R, ui/roster.js, must not fire too: its open state kept)
+  const rosterOpen = () => ev(() => document.querySelector('#roster')?.classList.contains('open') ?? null)
+  const open0 = await rosterOpen()
+  await page.keyboard.press('KeyR')
+  await sleep(400)
+  let p = await picked()
+  if (p.length !== 1 || p[0] !== load0[0]) fail(`R with the cart picked up picked ${JSON.stringify(p)}, not its first rider ${load0[0]}`)
+  if ((await rosterOpen()) !== open0) fail(`R picking a rider also folded the roster (open ${open0} → ${await rosterOpen()})`)
+  const r0 = await unit(load0[0])
+  // (inside seat 0's zone: the board's west strip, its depth the mission's)
+  const zoneX = await ev(() => -window.__ts.G.board.W / 2 + window.__ts.G.board.deploy - 0.6)
+  const spot = await beside(cart, r0, null, (x) => x < zoneX - r0.r)
+  if (!spot) fail(`no clear ground beside the cart to place its rider on (${beside.why})`)
+  let n0 = await count()
+  await page.mouse.click(spot.x, spot.y)
+  await sent(n0, 'the placement of a rider')
+  if ((await unit(r0.id)).aboard) fail(`unit ${r0.id} placed beside the cart still rides it`)
+  const cg = await ev(() => [...document.querySelectorAll('.ulabel .cg')].map((e) => e.textContent))
+  if (!cg.some((t) => /▣ 6\/12/.test(t))) fail(`after its Nutkin were placed off it, no cart's label reads ▣ 6/12 (${JSON.stringify(cg)})`)
+  say(`carts: in the deployment R picked up the cart's first rider (unit ${r0.id}) and a click placed it beside the cart, off it (${cg.join(', ')})`)
+  // the cart badged ⤒ for it; a click on the cart boards it again
+  const badged = await ev(() => document.querySelectorAll('.ulabel.board').length)
+  if (badged < 1) fail(`with unit ${r0.id} picked up beside the cart, ${badged} carts show ⤒`)
+  cart = await unit(cart.id)
+  let q = await toScreen(cart.pos.x, cart.pos.z, 0.5)
+  await page.mouse.move(q.x - 3, q.y)
+  await page.mouse.move(q.x, q.y)
+  await sleep(400)
+  let tip = await ev(() => document.querySelector('#tooltip').textContent)
+  if (!/Board War-Cart/.test(tip)) fail(`hovering the badged cart in the deployment says "${tip}", not "Board War-Cart"`)
+  n0 = await count()
+  await page.mouse.click(q.x, q.y)
+  await sent(n0, 'the deployment\'s embark')
+  if ((await unit(r0.id)).aboard !== cart.id) fail(`a click on the badged cart left unit ${r0.id} aboard ${(await unit(r0.id)).aboard}, not the cart ${cart.id}`)
+  say(`carts: the cart showed ⤒ for it, hovering said "${tip}", and a click on the cart boarded it again`)
+
+  // ── on to seat 0's movement phase ──
+  for (let k = 0; k < 4 && (await ev(() => window.__ts.session.G.pending?.k)) === 'deploy'; k++) await ev(() => window.__ts.endPhase())
+  for (let k = 0; k < 12; k++) {
+    const P = await ev(() => {
+      const P = window.__ts.session.G.pending
+      return P && { k: P.k, phase: P.phase, seat: P.seats[0] }
+    })
+    if (P?.k === 'phase' && P.phase === 'move' && P.seat === 0) break
+    await ev(() => window.__ts.endPhase())
+  }
+  await idle()
+  if ((await ev(() => window.__ts.session.G.pending?.phase)) !== 'move' || (await seatNow()) !== 0) fail("the battle never reached seat 0's movement phase here")
+  cart = await unit(carts[0])
+  await over(cart.pos.x, cart.pos.z)
+
+  // a rider's chip on the cart's label picks it up; a click steps it off
+  const load1 = await riders(cart.id)
+  const chip = await ev((id) => {
+    const el = document.querySelector(`.ulabel .rd [data-rider="${id}"]`)
+    const r = el?.getBoundingClientRect()
+    return r?.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null
+  }, load1[1])
+  if (!chip) fail(`no chip for unit ${load1[1]} on its cart's label`)
+  await page.mouse.click(chip.x, chip.y)
+  await sleep(500)
+  p = await picked()
+  if (p.length !== 1 || p[0] !== load1[1]) fail(`a click on unit ${load1[1]}'s chip picked up ${JSON.stringify(p)}`)
+  let ru = await unit(load1[1])
+  let off = await beside(cart, ru, /Step off the War-Cart/)
+  if (!off) fail(`no point beside the cart where the tooltip offers unit ${ru.id} a step off (${beside.why})`)
+  n0 = await count()
+  await clickAt(off, /Step off the War-Cart/)
+  await sent(n0, 'a disembark by chip')
+  ru = await unit(ru.id)
+  if (ru.aboard || !ru.moved) fail(`after its step-off click unit ${ru.id} is aboard ${ru.aboard}, moved ${ru.moved}`)
+  say(`carts: unit ${ru.id}'s chip on the cart's label picked it up, the pointer beside the cart said "${off.tip}", and a click stepped it off (its move spent)`)
+
+  // R with the other cart picked up: its first rider; a click steps it off
+  const cart2 = await unit(carts[1])
+  await over(cart2.pos.x, cart2.pos.z)
+  const load2 = await riders(cart2.id)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), cart2.id)
+  await sleep(300)
+  await page.keyboard.press('KeyR')
+  await sleep(400)
+  p = await picked()
+  if (p.length !== 1 || p[0] !== load2[0]) fail(`R with the second cart picked up picked ${JSON.stringify(p)}, not its first rider ${load2[0]}`)
+  ru = await unit(load2[0])
+  off = await beside(cart2, ru, /Step off the War-Cart/)
+  if (!off) fail(`no point beside the second cart where unit ${ru.id} may step off (${beside.why})`)
+  n0 = await count()
+  await clickAt(off, /Step off the War-Cart/)
+  await sent(n0, 'a disembark by R')
+  if ((await unit(ru.id)).aboard) fail(`unit ${ru.id} still rides after its step-off click`)
+  say(`carts: R with the second cart picked up picked its first rider (unit ${ru.id}), and a click stepped it off`)
+
+  // Tab reaches a rider still aboard; a click steps it off
+  await ev(() => window.__ts.select(null))
+  let tabbed = null
+  for (let k = 0; k < 16 && !tabbed; k++) {
+    await page.keyboard.press('Tab')
+    await sleep(250)
+    const [id] = await picked()
+    if (id !== undefined && (await unit(id)).aboard) tabbed = id
+  }
+  if (!tabbed) fail('Tab never picked up a rider still aboard')
+  ru = await unit(tabbed)
+  const host = await unit(ru.aboard)
+  await over(host.pos.x, host.pos.z)
+  off = await beside(host, ru, /Step off the War-Cart/)
+  if (!off) fail(`no point beside cart ${host.id} where unit ${ru.id} may step off (${beside.why})`)
+  n0 = await count()
+  await clickAt(off, /Step off the War-Cart/)
+  await sent(n0, 'a disembark after Tab')
+  if ((await unit(ru.id)).aboard) fail(`unit ${ru.id} still rides after its step-off click`)
+  say(`carts: Tab picked up unit ${ru.id} riding cart ${host.id}, and a click stepped it off`)
+
+  // a unit that may board: the cart shows ⤒, hovering says so, a click boards
+  const room = await ev((carts) => carts.map((id) => {
+    const h = window.__ts.G.units.find((u) => u.id === id)
+    return { id, room: 12 - window.__ts.G.units.filter((u) => u.aboard === id && u.alive > 0).reduce((n, u) => n + u.alive, 0), x: h.pos.x, z: h.pos.z }
+  }), carts)
+  const board = await ev((room) => {
+    const G = window.__ts.G
+    for (const u of G.units) {
+      if (u.side !== 0 || !(u.alive > 0) || u.aboard || u.t.vehicle || u.t.base > 0.45 || u.flags.moved) continue
+      const h = room.find((c) => c.room >= u.alive && Math.hypot(c.x - u.pos.x, c.z - u.pos.z) < 9)
+      if (h) return { u: u.id, v: h.id }
+    }
+    return null
+  }, room)
+  if (!board) fail(`no unit of seat 0 near a cart with room to board it (${JSON.stringify(room)})`)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), board.u)
+  await sleep(500)
+  const v = await unit(board.v)
+  await over(v.pos.x, v.pos.z)
+  if (!(await ev(() => document.querySelectorAll('.ulabel.board').length))) fail(`with unit ${board.u} picked up no cart shows ⤒`)
+  q = await toScreen(v.pos.x, v.pos.z, 0.5)
+  await page.mouse.move(q.x - 3, q.y)
+  await page.mouse.move(q.x, q.y)
+  await sleep(500)
+  tip = await ev(() => document.querySelector('#tooltip').textContent)
+  if (!/^⤒ Board War-Cart · \d+\.\d" of \d+"$/.test(tip)) fail(`hovering the cart with unit ${board.u} picked up says "${tip}", not "⤒ Board War-Cart · 4.2" of 7""`)
+  n0 = await count()
+  await page.mouse.click(q.x, q.y)
+  await sent(n0, 'an embark by click')
+  const bu = await unit(board.u)
+  if (bu.aboard !== board.v || !bu.moved) fail(`after the click on the cart unit ${board.u} rides ${bu.aboard} (moved ${bu.moved}), not cart ${board.v}`)
+  say(`carts: unit ${board.u} picked up, the cart showed ⤒, hovering it said "${tip}", and a click boarded it`)
+
+  // a box over a loaded cart picks the cart alone; R adds its riders; the
+  // group Move's hover says they ride along
+  const loaded = (await ev((carts) => carts.find((id) => window.__ts.G.units.some((u) => u.aboard === id && u.alive > 0)), carts))
+  if (!loaded) fail('no cart still carries anyone for the box')
+  const lc = await unit(loaded)
+  await over(lc.pos.x, lc.pos.z)
+  await ev(() => window.__ts.select(null))
+  const c0 = await toScreen(lc.pos.x, lc.pos.z, 0.4)
+  const box = [c0.x - 30, c0.y - 30, c0.x + 30, c0.y + 30]
+  await page.keyboard.down('Shift')
+  await page.mouse.move(box[0], box[1])
+  await page.mouse.down()
+  await page.mouse.move(c0.x, c0.y, { steps: 3 })
+  await page.mouse.move(box[2], box[3], { steps: 3 })
+  await page.mouse.up()
+  await page.keyboard.up('Shift')
+  await sleep(400)
+  let g = await ids()
+  const aboard = await riders(loaded)
+  if (!g.includes(loaded) || g.some((id) => aboard.includes(id))) fail(`a box over cart ${loaded} picked ${JSON.stringify(g)} (the cart, none of its riders ${JSON.stringify(aboard)})`)
+  // (another unit of the seat with it, so the group stands at two)
+  if (g.length < 2) {
+    const other = await ev((l) => window.__ts.G.units.find((u) => u.side === 0 && u.alive > 0 && !u.aboard && u.id !== l && !u.flags.moved)?.id, loaded)
+    await ev((xs) => window.__ts.group.select(xs), [loaded, other])
+    await sleep(300)
+    g = await ids()
+  }
+  await page.keyboard.press('KeyR')
+  await sleep(400)
+  const g2 = await ids()
+  if (!aboard.every((id) => g2.includes(id))) fail(`R with the group ${JSON.stringify(g)} left it ${JSON.stringify(g2)}: the cart's riders ${JSON.stringify(aboard)} join it`)
+  // (open ground ahead of the cart: no unit under the pointer)
+  let ahead = null
+  for (const [dx, dz] of [[5, 0], [5, 3], [5, -3], [7, 0], [4, 5], [4, -5], [8, 4], [8, -4]]) {
+    const q = await toScreen(lc.pos.x + dx, lc.pos.z + dz)
+    const hit = await ev(({ x, y }) => window.__ts.group.pick(x, y), q)
+    if (hit.unit === null && hit.ground && q.x > 250 && q.x < 1020 && q.y > 110 && q.y < 660) {
+      ahead = q
+      break
+    }
+  }
+  if (!ahead) fail('no open ground ahead of the loaded cart to hover a group Move over')
+  await page.mouse.move(ahead.x - 3, ahead.y)
+  await page.mouse.move(ahead.x, ahead.y)
+  await page.waitForFunction(() => /riders ride along/.test(document.querySelector('#tooltip').textContent), null, { timeout: 30000 }).catch(() => {})
+  tip = await ev(() => document.querySelector('#tooltip').textContent)
+  if (!/riders ride along/.test(tip)) fail(`the group Move's hover with cart ${loaded} and its riders says "${tip}"`)
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Escape')
+  say(`carts: a box over cart ${loaded} picked it and none of its riders, R added the ${aboard.length} riding it, and the group Move's hover said "${tip}"`)
+}
+
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false
@@ -989,12 +1316,21 @@ try {
     page.on('pageerror', (e) => errors.push(e.message))
     page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
     console.log('input-check (F10a): the group input in Chromium, by mouse and keys\n')
-    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1`)
-    await page.waitForSelector('#title:not(.hidden)')
-    await page.click('[data-mode="hotseat"]')
-    await page.click('#setupStart')
+    if (!a.carts) {
+      await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1`)
+      await page.waitForSelector('#title:not(.hidden)')
+      await page.click('[data-mode="hotseat"]')
+      await page.click('#setupStart')
+    }
     try {
-      await check(page, (l) => console.log(`  ok   ${l}`))
+      if (!a.carts) await check(page, (l) => console.log(`  ok   ${l}`))
+      // ((F9a) the transport tools, on a page of their own: a Field battle
+      // with War-Carts)
+      await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1&mission=field&armies=1222112,field`)
+      await page.waitForSelector('#title:not(.hidden)')
+      await page.click('[data-mode="hotseat"]')
+      await page.click('#setupStart')
+      await checkCarts(page, (l) => console.log(`  ok   ${l}`))
       ok = !errors.length
     } catch (e) {
       console.log(`  FAIL ${e.message}`)
@@ -1007,5 +1343,5 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-console.log(ok ? '\ninput-check passed: box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, by mouse, keys and fingers' : '\ninput-check FAILED')
+console.log(ok ? `\ninput-check passed: ${a.carts ? '' : 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, by mouse, keys and fingers; '}the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)

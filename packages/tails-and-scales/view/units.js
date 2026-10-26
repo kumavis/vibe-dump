@@ -45,12 +45,35 @@
 // comes from the template cache and what only it used is freed as it leaves
 // the table, and that a view keeps the unit's id and static look rather
 // than being rebound to each match's unit object (main.js's bindViews).
+//
+// (F9a, DESIGN §4.2.5 "View, input, UI") Riders. A unit the mirror shows
+// aboard a hull (its `aboard`, the hull's id) has no ring, no hit cylinder,
+// no label and no place on screen (a box, the picker's fallback and the
+// chips pass it by): its figures stand on the hull's deck, parented to the
+// hull's figure (a `deck` group at its model's deck height) at
+// present/deck.js's slots, at RIDER_SCALE (0.8), facing the hull's front,
+// so they ride with it wherever it walks, turns or piles in, and need no
+// tween of their own. The slots are handed out to the hull's riders in id
+// order (the mirror's, G.units's), each squad's standing models in turn
+// (layDeck), so a table built event by event and a snap seat them alike.
+// Boarding (unit.embark) the figures hop on from where their walk ended;
+// stepping off (unit.disembark, a placement in the deployment) they hop
+// down from the deck and walk to their slots; a hull destroyed throws its
+// riders off before it bursts (its wreck is the terrain's: view/terrain.js),
+// and a bail-out (`forced`) is the same hop, "bail out!" over the squad,
+// the dice row after it. A transport's ring carries capacity pips (an arc
+// lit per 2 models aboard, of capacity / 2), its label the riders aboard
+// ("▣ 11/12", then each squad as a chip that picks it up:
+// ⟨Nutkin 6 · Grenadiers 5⟩) and, while the unit picked up may board it, a
+// ⤒ on its count (boardable(): a class, so the label's HTML stays the
+// mirror's for the snap check); its chip a dot per rider squad.
 import * as THREE from 'three'
 import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
 import { LADDER_OUT } from '../core/terrain/recipes.js'
 import { PACE } from '../present/pace.js'
 import { buildModel, disposeFigure, lodOf } from './models/cache.js'
+import { deckSlots, RIDER_SCALE } from '../present/deck.js'
 import { pxPerInch, tierOf, glyphOf } from '../present/zoom.js'
 import { tween, wait, easeOut, easeInOut, wrapAngle, lerp } from './clock.js'
 import { sfx } from './sfx.js'
@@ -62,6 +85,23 @@ import { sfx } from './sfx.js'
 let shapes = null
 const ringShapes = () => (shapes ??= { ring: new THREE.RingGeometry(0.88, 1, 48).rotateX(-Math.PI / 2), hit: new THREE.CylinderGeometry(1, 1, 1, 12) })
 const tmpV = new THREE.Vector3()
+// (F9a) a transport's capacity pips: an arc per two models of its capacity,
+// just outside its ring (the ring's children: its place, scale and
+// visibility theirs), each lit while two models (or the odd one) ride;
+// shapes by count, the two materials shared, all made at the first
+// transport's view and kept (a classic table makes none)
+const PIP_LIT = '#ffe28a', PIP_DIM = '#2a221a'
+let pipKit = null
+const pipShapes = (n) => {
+  pipKit ??= { shapes: new Map(), lit: new THREE.MeshBasicMaterial({ color: PIP_LIT, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false }), dim: new THREE.MeshBasicMaterial({ color: PIP_DIM, transparent: true, opacity: 0.5, depthWrite: false, toneMapped: false }) }
+  if (!pipKit.shapes.has(n)) {
+    const gap = Math.min(0.12, Math.PI / n / 3), arc = (Math.PI * 2) / n
+    pipKit.shapes.set(n, Array.from({ length: n }, (_, k) => new THREE.RingGeometry(1.025, 1.075, 8, 1, Math.PI / 2 - (k + 1) * arc + gap / 2, arc - gap).rotateX(-Math.PI / 2)))
+  }
+  return pipKit
+}
+// how long a figure's hop onto or off a deck takes (s), and how high it goes
+const HOP = 0.4, HOP_H = 0.55
 // (F8b) past how far from the camera a unit's figures are its far
 // stand-ins, and how near it must come again to be drawn in full (so a
 // unit on the line doesn't flicker)
@@ -208,11 +248,23 @@ export class UnitViews {
     // ((F8b) its role's glyph, which a Tactical label shows for its name)
     v.label.dataset.glyph = glyphOf(u.t)
     v.ring.material.visible = this.tier !== 'strategic'
+    // ((F9a) a transport's capacity pips, on its ring)
+    if (u.t.transport) {
+      const kit = pipShapes(Math.ceil(u.t.transport.capacity / 2))
+      v.pips = kit.shapes.get(Math.ceil(u.t.transport.capacity / 2)).map((g) => {
+        const m = new THREE.Mesh(g, kit.dim)
+        m.renderOrder = 2
+        m.visible = this.tier !== 'strategic'
+        v.ring.add(m)
+        return m
+      })
+    }
     this.labels.appendChild(v.label)
     this.views.set(u.id, v)
     this.disc(u.id)
-    this.stands(v, mu.alive > 0)
-    // the figures stand in their slots from the start
+    this.stands(v, mu.alive > 0 && !mu.aboard)
+    // the figures stand in their slots from the start ((F9a) a rider's on
+    // its hull's deck, once the hull's view is made: layDeck, sync's)
     this.place(v)
     return v
   }
@@ -227,12 +279,16 @@ export class UnitViews {
   }
 
   // Each figure standing exactly in its model's slot as shown, turned the
-  // unit's way, nothing of a lunge, a lift or a flinch left on it.
+  // unit's way, nothing of a lunge, a lift or a flinch left on it. ((F9a) A
+  // rider's stand on its hull's deck instead: layDeck's; one off a deck is
+  // back on the table, full size.)
   place(v) {
     const mu = this.shown(v.id), y = yOf(mu)
+    if (mu.aboard) return
     mu.models.forEach((m, k) => {
       const f = v.models[k]
       if (!f.mesh) return
+      this.offDeck(f)
       f.x = mu.pos.x + m.ox
       f.z = mu.pos.z + m.oz
       f.y = y
@@ -241,14 +297,18 @@ export class UnitViews {
     })
   }
 
-  // A figure off the table for good: what only it used is freed.
+  // A figure off the table for good: what only it used is freed. ((F9a)
+  // From whatever holds it: the scene, or a hull's deck.)
   unfigure(f) {
     if (!f.mesh) return
-    this.scene.remove(f.mesh)
+    f.mesh.parent?.remove(f.mesh)
+    f.deck = null
     disposeFigure(f.mesh)
   }
 
   drop(v) {
+    // ((F9a) a hull's riders off its deck first: their own views keep them)
+    if (v.deck) this.dismount(v.id, false)
     for (const f of v.models) this.unfigure(f)
     if (v.dropLine) this.scene.remove(v.dropLine)
     this.scene.remove(v.ring, v.hit)
@@ -321,10 +381,189 @@ export class UnitViews {
         if (a?.globe) a.globe.visible = true
       })
       this.disc(u.id)
-      this.stands(v, mu.alive > 0)
+      this.stands(v, mu.alive > 0 && !mu.aboard)
       this.place(v)
     }
+    // ((F9a) then each hull's riders onto its deck, every hull's view made)
+    this.layDecks(false)
     this.labelAll()
+  }
+
+  // ── (F9a) Riders on deck ──────────────────────────────────────────────────
+  // The deck a hull's riders stand on: a group in the hull's figure, at its
+  // model's deck height (made again if the figure was), or null while the
+  // hull has no standing figure.
+  deckOf(hv) {
+    const f = hv?.models[0]
+    if (!f?.mesh || f.dying || !hv.u.t.transport) return null
+    if (hv.deck?.parent !== f.mesh) {
+      hv.deck = new THREE.Group()
+      hv.deck.userData.deck = hv.id
+      const fig = f.mesh.userData.fig
+      hv.deck.position.y = (fig?.userData.y0 ?? 0) + (f.mesh.userData.anim?.deck ?? 0.6)
+      f.mesh.add(hv.deck)
+    }
+    return hv.deck
+  }
+  // Seat hull `hullId`'s riders (the mirror's, in id order: each squad's
+  // standing models in turn) on its deck's slots (present/deck.js). A figure
+  // not on this deck yet hops on from where it stands (`hop`; a snap seats
+  // it at once). An enclosed hull (F5b) shows none of them: its pips and
+  // label say who rides.
+  layDeck(hullId, hop = true) {
+    const M = this.mirror(), hv = this.views.get(hullId), deck = this.deckOf(hv)
+    if (!deck) return
+    const riders = [...this.views.values()].filter((r) => M.units[r.id]?.aboard === hullId && M.units[r.id].alive > 0).sort((a, b) => a.id - b.id)
+    const n = riders.reduce((k, r) => k + M.units[r.id].models.filter((m) => m.alive).length, 0)
+    const slots = deckSlots(hv.u.t, n), hidden = !!hv.u.t.transport.enclosed
+    let k = 0
+    for (const r of riders) {
+      const mu = M.units[r.id]
+      r.models.forEach((f, i) => {
+        if (!f.mesh || !mu.models[i].alive) return
+        // (more riders than slots never happens within capacity: the last
+        // slot then holds the rest, as data-check holds every deck to its
+        // capacity)
+        const s = slots[Math.min(k++, slots.length - 1)] ?? { x: 0, z: 0 }
+        if (f.mesh.parent !== deck) {
+          if (hop && f.mesh.parent) {
+            f.mesh.updateWorldMatrix(true, false)
+            tmpV.setFromMatrixPosition(f.mesh.matrixWorld)
+            deck.updateWorldMatrix(true, false)
+            deck.worldToLocal(tmpV)
+            f.hopFrom = { x: tmpV.x, y: tmpV.y, z: tmpV.z }
+            f.hop = 1
+          } else f.hop = 0
+          deck.add(f.mesh)
+        }
+        f.deck = hullId
+        f.slot = s
+        f.mesh.userData.rider = r.id
+        if (f.lo) this.lo(f, false)
+        f.mesh.visible = !hidden
+        // (standing on the deck itself: its base hidden)
+        if (f.mesh.userData.base) f.mesh.userData.base.visible = false
+        if (!(f.hop > 0)) f.mesh.position.set(s.x, 0, s.z)
+        f.mesh.rotation.y = 0
+        f.mesh.scale.setScalar(RIDER_SCALE)
+        Object.assign(f, { lunge: 0, lift: 0, flash: 0, look: undefined })
+      })
+    }
+  }
+  // every hull's riders seated (a sync's second pass, `hop` false)
+  layDecks(hop) {
+    for (const v of this.views.values()) if (v.u.t.transport) this.layDeck(v.id, hop)
+  }
+  // A figure on the table again (not on a deck), full size: `keep` where it
+  // stands in the world now (a hop down from a deck), else wherever its
+  // caller puts it.
+  offDeck(f, keep = false) {
+    if (!f.mesh) return
+    if (f.mesh.parent !== this.scene) {
+      if (keep && f.mesh.parent) {
+        f.mesh.updateWorldMatrix(true, false)
+        tmpV.setFromMatrixPosition(f.mesh.matrixWorld)
+        f.x = tmpV.x
+        f.y = tmpV.y
+        f.z = tmpV.z
+        // (turned as the hull it rode: its own yaw plus the hull's)
+        const hv = this.views.get(f.deck)
+        f.yaw = hv?.models[0]?.yaw ?? f.yaw
+        f.hop = 1
+        f.hopFrom = null
+      }
+      this.scene.add(f.mesh)
+      if (keep) {
+        f.mesh.position.set(f.x, f.y, f.z)
+        f.mesh.rotation.y = f.yaw
+      }
+    }
+    f.deck = null
+    f.slot = null
+    f.mesh.visible = true
+    if (f.mesh.userData.base) f.mesh.userData.base.visible = true
+    delete f.mesh.userData.rider
+    if (!keep) {
+      f.hop = 0
+      f.mesh.scale.setScalar(1)
+    }
+  }
+  // The riders of hull `hullId` (or, `only`, the one rider) off its deck,
+  // each figure where it stands in the world (`keep`: a hop down follows),
+  // or simply back in the scene.
+  dismount(hullId, keep = true, only = null) {
+    for (const r of this.views.values()) {
+      if (only !== null && r.id !== only) continue
+      for (const f of r.models) if (f.mesh && f.deck === hullId) this.offDeck(f, keep)
+    }
+  }
+  // the riders the mirror shows aboard hull `id`: [{ id, short, alive }] in
+  // id order (the label's chips, the card's: ui/card.js)
+  ridersOf(id) {
+    const M = this.mirror(), out = []
+    for (const v of this.views.values()) {
+      const mu = M.units[v.id]
+      if (mu?.aboard === id && mu.alive > 0) out.push({ id: v.id, short: v.u.t.short, alive: mu.alive })
+    }
+    return out.sort((a, b) => a.id - b.id)
+  }
+  // the figures standing on decks (input/picking.js casts at them: a rider
+  // is picked up by its figure, never by a cylinder), each root carrying
+  // its rider's id (userData.rider)
+  deckFigures() {
+    const out = []
+    for (const v of this.views.values()) for (const f of v.models) if (f.mesh && f.deck && f.mesh.visible && !f.dying) out.push(f.mesh)
+    return out
+  }
+  // (F9a's embark tool) the transports the unit picked up may board now,
+  // their ids: each one's label shows ⤒ (a class: the label's HTML stays
+  // the mirror's)
+  boardable(ids) {
+    for (const v of this.views.values()) {
+      const on = ids.has(v.id)
+      if (v.label.classList.contains('board') !== on) v.label.classList.toggle('board', on)
+    }
+  }
+
+  // A unit boards a hull (unit.embark): off the table, onto its deck.
+  embarked(e) {
+    const v = this.views.get(e.u)
+    this.stands(v, false)
+    this.layDeck(e.v)
+    sfx.click()
+    this.labelAll()
+  }
+  // A unit steps off its hull, or (`forced`) bails out of its wreck
+  // (unit.disembark): each figure hops down from the deck and walks to its
+  // slot at `to` (the mirror's place by now), its ring and cylinder back
+  // with it; the riders left closing up on the deck. A bail-out's hop is
+  // waited on, then its dice row (the core's dice event, next) shows.
+  disembarked(e) {
+    const v = this.views.get(e.u)
+    this.dismount(e.v, true, e.u)
+    this.disc(e.u)
+    this.stands(v, this.shown(e.u).alive > 0)
+    this.layDeck(e.v)
+    this.labelAll()
+    if (e.forced) {
+      this.effects.text(this.top(e.u), 'bail out!', '#ffb36a', { size: 16 })
+      sfx.thwack()
+    }
+    return wait(e.forced ? HOP + 0.2 : 0.2)
+  }
+  // A unit placed (unit.place): a rider placed steps off its hull (the
+  // deployment's re-arranging), the hull's deck closing up; a hull placed
+  // takes its riders along (they stand on its deck).
+  placed(e) {
+    const v = this.views.get(e.u)
+    const from = v.models.find((f) => f.deck)?.deck
+    if (from) {
+      this.dismount(from, true, e.u)
+      this.layDeck(from)
+      this.stands(v, this.shown(e.u).alive > 0)
+      this.labelAll()
+    }
+    this.disc(e.u)
   }
 
   // ── The disc and the label ────────────────────────────────────────────────
@@ -371,8 +610,21 @@ export class UnitViews {
     // (F7a) a raised unit's height ("▲2"": on a deck 2" up)
     v.labelY = heightOf(mu)
     if (v.labelY) html += `<span class="st hi" title="On high ground, ${v.labelY}&quot; up">▲${v.labelY}"</span>`
+    // ((F9a) a transport: the models aboard of its capacity, and each squad
+    // riding it as a chip that picks it up; its ring's pips lit to match)
+    if (u.t.transport) html += this.cargo(v, u.t.transport)
     v.label.innerHTML = html
-    v.label.style.display = mu.alive > 0 ? '' : 'none'
+    // ((F9a) a rider's label hides while it rides: its hull's says it)
+    v.label.style.display = mu.alive > 0 && !mu.aboard ? '' : 'none'
+  }
+  // (F9a) a transport's cargo for its label, its pips lit to match
+  cargo(v, tr) {
+    const rs = this.ridersOf(v.id), n = rs.reduce((k, r) => k + r.alive, 0)
+    const lit = Math.ceil(n / 2)
+    v.pips?.forEach((m, k) => (m.material = k < lit ? pipKit.lit : pipKit.dim))
+    let html = `<span class="cg" title="Riders aboard: ${n} of ${tr.capacity} models">▣ ${n}/${tr.capacity}</span>`
+    if (rs.length) html += `<span class="rd">⟨${rs.map((r) => `<i data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</i>`).join(' · ')}⟩</span>`
+    return html
   }
   labelAll() {
     for (const id of this.views.keys()) this.label(id)
@@ -403,8 +655,9 @@ export class UnitViews {
 
   // the hit cylinders of the units the table shows standing (while the
   // player is behind, the match may have slain some of them already)
+  // ((F9a) a rider's none: its deck figures are picked instead, deckFigures)
   pickables() {
-    return [...this.views.values()].filter((v) => this.shown(v.id).alive > 0).map((v) => v.hit)
+    return [...this.views.values()].filter((v) => this.shown(v.id).alive > 0 && !this.shown(v.id).aboard).map((v) => v.hit)
   }
 
   // ── Each frame ────────────────────────────────────────────────────────────
@@ -432,8 +685,26 @@ export class UnitViews {
       for (const [i, model] of mu.models.entries()) {
         const m = v.models[i]
         if (!model.alive && !m.dying) continue
+        // ((F9a) on a hull's deck: it rides, standing at its slot (after its
+        // hop on), turned the hull's way; the hull's LOD hides the deck)
+        if (m.deck && model.alive) {
+          this.ride(m, dt, M)
+          if (m.mesh.userData.anim?.kind === 'squirrel' && !m.lo) {
+            const fig = m.mesh.userData.fig
+            fig.position.y = fig.userData.y0
+            fig.scale.y = 1 + Math.sin((time + m.mesh.userData.phase) * 2.4) * 0.018
+            fig.rotation.x = 0
+          }
+          continue
+        }
         if (m.lo || v.far) this.lo(m, v.far && !m.dying && !(m.flash > 0))
         const a = m.mesh.userData.anim
+        // ((F9a) a figure off a deck grows back to its size, and hops down)
+        if (m.mesh.scale.x !== 1) m.mesh.scale.setScalar(Math.abs(m.mesh.scale.x - 1) < 0.005 ? 1 : m.mesh.scale.x + (1 - m.mesh.scale.x) * (1 - Math.exp(-dt * 10)))
+        if (m.hop > 0) {
+          m.hop = Math.max(0, m.hop - dt / HOP)
+          m.lift = Math.sin((1 - m.hop) * Math.PI) * HOP_H
+        }
         if (model.alive && v.climb) {
           // (F7a) up or down a ladder, in file: each figure GAP behind the
           // one before it, facing the face
@@ -474,6 +745,8 @@ export class UnitViews {
           }
           m.mesh.position.set(m.x + lx, (m.y ?? 0) + (m.lift || 0), m.z + lz)
           m.mesh.rotation.y = m.yaw
+          // ((F9a) a hop down from a deck ends on the table)
+          if (m.hop === 0 && m.lift && !v.models.some((x) => x.flying)) m.lift = 0
         }
         if (!a || !model.alive || m.lo) continue
         const t = time + m.mesh.userData.phase
@@ -498,8 +771,9 @@ export class UnitViews {
       // the floating label; (F10a) and the unit's centre on screen, which a
       // box selects by and the picker falls back on (input/): a unit fallen,
       // or nothing drawn, has none
-      if (!(mu.alive > 0) || fast) this.screen.delete(u.id)
-      if (mu.alive > 0 && !fast) {
+      // ((F9a) a rider has none: its hull stands for it)
+      if (!(mu.alive > 0) || fast || mu.aboard) this.screen.delete(u.id)
+      if (mu.alive > 0 && !fast && !mu.aboard) {
         tmpV.set(p.x, py + 0.4, p.z).project(camera)
         const sx = (tmpV.x * 0.5 + 0.5) * innerWidth, sy = (-tmpV.y * 0.5 + 0.5) * innerHeight
         const onScreen = tmpV.z < 1 && Math.abs(tmpV.x) <= 1 && Math.abs(tmpV.y) <= 1
@@ -532,6 +806,31 @@ export class UnitViews {
     if (this.chips && !fast) this.writes += this.chips.draw(this.tier === 'strategic' && M.stage !== 'title' ? this.chipsOf(M, sel) : null)
   }
 
+  // (F9a) A rider's figure on its hull's deck, this frame: at its slot, or
+  // on its hop there from where it boarded (an arc up and over the rim),
+  // facing the hull's front, at RIDER_SCALE; its world place (what a text
+  // over it reads) the hull's.
+  ride(m, dt, M) {
+    const s = m.slot ?? { x: 0, z: 0 }
+    if (m.hop > 0 && m.hopFrom) {
+      m.hop = Math.max(0, m.hop - dt / HOP)
+      const k = easeOut(1 - m.hop), a = m.hopFrom
+      m.mesh.position.set(lerp(a.x, s.x, k), lerp(a.y, 0, k) + Math.sin(k * Math.PI) * HOP_H, lerp(a.z, s.z, k))
+    } else {
+      m.hop = 0
+      m.mesh.position.set(s.x, 0, s.z)
+    }
+    m.mesh.rotation.y = 0
+    if (m.mesh.scale.x !== RIDER_SCALE) m.mesh.scale.setScalar(RIDER_SCALE)
+    const hv = this.views.get(m.deck), h = hv?.models[0]
+    if (h) {
+      m.x = h.x
+      m.y = (h.y ?? 0) + (hv.deck?.position.y ?? 0)
+      m.z = h.z
+      m.yaw = h.yaw
+    }
+  }
+
   // ── (F8b) Drawing at scale ───────────────────────────────────────────────
   // The semantic zoom's tier for the camera as it stands (present/zoom.js:
   // pixels per inch where its line of sight meets the table, or at its
@@ -553,7 +852,11 @@ export class UnitViews {
     }
     if (tier === this.tier) return
     this.tier = tier
-    for (const v of this.views.values()) v.ring.material.visible = tier !== 'strategic'
+    for (const v of this.views.values()) {
+      v.ring.material.visible = tier !== 'strategic'
+      // ((F9a) a transport's pips go with its ring)
+      for (const p of v.pips ?? []) p.visible = tier !== 'strategic'
+    }
   }
 
   // What the chips show (ui/chips.js's draw): each standing unit on screen,
@@ -571,6 +874,8 @@ export class UnitViews {
         id: v.id, x: at.x, y: at.y, wx: p.x, wz: p.z, side: v.u.side, color: v.color, glyph: v.label.dataset.glyph,
         n: v.u.t.models > 1 ? mu.alive : mu.models.find((m) => m.alive)?.w ?? 0, ord: v.label.dataset.ord ?? '',
         sel: v.id === sel, engaged: !!mu.engaged, look: v.look ?? null,
+        // ((F9a) a transport's rider squads: a dot each on its chip)
+        riders: v.u.t.transport ? this.ridersOf(v.id).length : 0,
       })
     }
     return out
@@ -598,6 +903,11 @@ export class UnitViews {
   slain(e, M) {
     const v = this.views.get(e.u), u = v.u, f = v.models[e.m], fy = f.y ?? 0
     this.effects.text({ x: f.x, y: fy + (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
+    // ((F9a) a vehicle bursts: its riders thrown off the deck first, where
+    // they stood, and its wreck (the terrain's, next) takes its place)
+    if (u.t.vehicle) return this.burst(v, f)
+    // ((F9a) a figure still on a deck, a rider lost with its hull: off it)
+    if (f.deck) this.offDeck(f, true)
     f.dying = true
     // the race's own voice and gore
     const look = RACES[u.race].look
@@ -639,6 +949,23 @@ export class UnitViews {
       this.unfigure(f)
       f.dying = false
     })
+  }
+
+  // (F9a) A vehicle destroyed: its riders off the deck (each figure where it
+  // stood: its bail-out's hop, or its fall, plays from there), a burst of
+  // fire, smoke and splinters, and the figure gone at once: the burning
+  // wreck the terrain adds next stands where it stood.
+  burst(v, f) {
+    const fy = f.y ?? 0
+    if (v.deck) this.dismount(v.id, true)
+    const fx = this.effects
+    fx.explode?.(f.x, f.z, Math.max(1.2, v.u.t.base), 'fire', fy)
+    fx.debris(f.x, fy + 0.8, f.z, ['#86552c', '#5a3820', '#c49a62', '#3a2a1e'], 18, { power: 6, size: 0.16 })
+    fx.smoke({ x: f.x, y: fy + 1, z: f.z, size: 0.9, color: '#3a3430', life: 2.4 })
+    fx.shake = Math.max(fx.shake ?? 0, 0.12)
+    sfx.boom?.(0.8)
+    this.unfigure(f)
+    v.deck = null
   }
 
   // A unit gone: its label, ring and hit cylinder go, and the table says so

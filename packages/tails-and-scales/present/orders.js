@@ -246,8 +246,9 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
     const slots = given ?? slotsOf(G, members, target, line)
     for (const u of byNearness(members, target)) {
       // (a unit in combat is left where it is: a group order never makes
-      // it fall back)
-      const stuck = u.flags.moved || !q.canAct(G, u) ? 'already moved' : q.isEngaged(G, u) ? 'in combat' : ''
+      // it fall back; (F9a) a rider rides along with its hull, DESIGN
+      // §4.2.5's groups: it is sent nothing)
+      const stuck = u.aboard ? 'with the hull' : u.flags.moved || !q.canAct(G, u) ? 'already moved' : q.isEngaged(G, u) ? 'in combat' : ''
       if (stuck) {
         out.push({ u, cell: -1, slot: slots.get(u.id), how: 'none', why: stuck })
         continue
@@ -267,7 +268,7 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
   }
   if (verb === 'approach') {
     for (const u of byNearness(members, target.pos)) {
-      const stuck = u.flags.moved || !q.canAct(G, u) ? 'already moved' : q.isEngaged(G, u) ? 'in combat' : ''
+      const stuck = u.aboard ? 'with the hull' : u.flags.moved || !q.canAct(G, u) ? 'already moved' : q.isEngaged(G, u) ? 'in combat' : ''
       if (stuck) {
         out.push({ u, cell: -1, how: 'none', why: stuck })
         continue

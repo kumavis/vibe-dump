@@ -14,7 +14,9 @@ export default {
   // of counts (core/army.js) carries one digit per entry, in this order, so
   // the roster is append-only (a new unit goes at the end; data-check pins
   // its start). `army` above, the classic list, is in roster order.
-  roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet'],
+  // (F9a: the Acorn War-Cart appended, so every list written before it
+  // means what it meant)
+  roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet', 'warcart'],
   // (F8b) the presets of the larger battles, as counts in roster order: the
   // classic list twice over for a Field battle, three times for a Grand one
   // (data/mission.js names them; sim/data-check.mjs holds each legal there)
@@ -61,6 +63,38 @@ export default {
       ranged: { name: 'Thornburst', spell: 6, range: 18, shots: 1, blast: 2.4, S: 5, AP: 2, D: 1, scenery: 2, fx: 'thorns' },
       melee: { name: 'Rootwood staff', S: 5, AP: 1, D: 2 },
       abilities: [`Spell — cast on 2D6 ≥ 6: thorns erupt under the target, no scatter.`, `Grey whiskers — friends within ${AURA}" use his Ld 9.`],
+    },
+    // (F9a, DESIGN §4.2.5) the clan's transport: a giant acorn cup on spiked
+    // wheels, pushed by its crew. Round (one disc, base 1.5: no footprint),
+    // M8, turning freely; its deck carries two squads (12 models, bases up
+    // to 0.45: the Nutkin and the Grenadiers make 11), loaded at the
+    // deployment by the autoload (core/actions/transport.js). Destroyed, it
+    // leaves a burning wreck the size of its cup (`wreck`'s half-sizes), and
+    // its riders bail out. `fire` is the deck's two firing slots, F9c's:
+    // nothing reads it yet. None in a Skirmish, at most two a side in a
+    // Field or Grand battle (the Vehicle slot, data/mission.js).
+    warcart: {
+      name: 'Acorn War-Cart', short: 'War-Cart', role: 'Vehicle', ai: 'transport', models: 1, base: 1.5, pts: 120,
+      // (F9a, fitted at Field by sim/army-sim.mjs, §4.2.8.2: seeds 1111 and
+      // 2222 at a trial 60, 46 ± 16 and 33 ± 13 points, so 40; judged on
+      // 4444 at 40, both sets: 58 ± 12, inside its band, every unit in
+      // its own, the score 48.3% open and 52.9% fortified. Its riders step
+      // off to shoot once an enemy is in reach (core/ai/policy.js, with no
+      // firing deck before F9c: core/actions/transport.js fireSlots); kept
+      // aboard they fitted the cart about 0 and the Nutkin 20 under. Its
+      // price at Field; at Grand data/mission.js's `prices` say 150.)
+      cost: 40,
+      stats: 'M8 WS5 BS4 S5 T7 W10 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
+      transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },
+      ranged: { name: 'Bolt thrower', range: 24, shots: 2, S: 6, AP: 2, D: 2, heavy: true, fx: 'bolt' },
+      melee: { name: 'Spiked wheels', S: 5, AP: 1, D: 1 },
+      abilities: [
+        'Transport — carries two squads (12 models) on its deck; a unit boards or steps off it as its move.',
+        'Riders — ride along, can’t be shot or charged, and hold no objectives.',
+        'Spiked wheels — ploughs through anything breakable in its way.',
+        'Heavy — −1 to hit after moving.',
+        'Burning wreck — destroyed, it leaves a wreck; each rider bails out, a 1 is a mortal wound.',
+      ],
     },
   },
 }

@@ -50,6 +50,20 @@
 // back on the classic table, no tile left. It runs by default and with
 // --only grand; the self-test's tile edits run on it.
 //
+// (F9a) And the cart row (DESIGN §4.2.5's view: riders on deck, the hull's
+// pips and label, the wreck and the bail-out): a watched Field battle,
+// both seats' lists given (CART_ARMIES: the Bushtails with two War-Carts,
+// whose deployment's autoload seats their Troops on the decks), the table
+// built event by event a fresh snap's at every checkpoint (every rider's
+// figures where its hull's deck seats them, every bail-out's on the table),
+// and snapped in place at its end. The row must have seen riders aboard at
+// some checkpoint, riders stepping off a deck and a War-Cart wrecked (its
+// wreck a chunk of the table), or it proves nothing. (F9a's integration:
+// the AI's riders step off by their first turns, so its hulls die empty;
+// the bail-out's hop and dice are the vehicle/ corpus's bail-out log's, a
+// default row.) It runs by default and with --only cart; the self-test's
+// deck edits run on it.
+//
 //   node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]
 //   node sim/snap-check.mjs --self-test    each edit of MUTATIONS (the view
 //                                          broken one way at a time, in a
@@ -90,8 +104,11 @@ let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
 const GRAND_ROW = !a.only || only.includes('grand')
+// ((F9a) the cart row: by default, or named in --only)
+const CART_ROW = !a.only || only.includes('cart')
+const ROWS = new Set(['grand', 'cart'])
 try {
-  items = only.filter((x) => x !== 'grand').length ? select(loadCorpus().items, only.filter((x) => x !== 'grand').join(',')) : []
+  items = only.filter((x) => !ROWS.has(x)).length ? select(loadCorpus().items, only.filter((x) => !ROWS.has(x)).join(',')) : []
 } catch (e) {
   console.error(`snap-check: ${e.message}`)
   process.exit(2)
@@ -115,7 +132,7 @@ const MUTATIONS = {
   // a slain model's figure left standing
   'dead-standing': ['view/units.js', '      .then(() => {\n        this.unfigure(f)\n        f.dying = false\n      })\n  }\n\n  // A model flees', '      .then(() => {\n        f.dying = false\n      })\n  }\n\n  // A model flees'],
   // a placed unit's ring and hit cylinder left where the unit stood
-  'place-unmoved': ['view/index.js', "      'unit.place': (e) => units.disc(e.u),", "      'unit.place': () => {},"],
+  'place-unmoved': ['view/index.js', "      'unit.place': (e) => units.placed(e),", "      'unit.place': () => {},"],
   // a broken chunk's mesh left up
   'broken-standing': ['view/terrain.js', "      case 'block': {\n        this.group.remove(v.obj)\n", "      case 'block': {\n"],
   // a block over a broken one left hanging where it stood
@@ -137,7 +154,16 @@ const MUTATIONS = {
   // Grand table's terrain tiles: the classic table drawn otherwise than
   // ever
   'tiles-kept': ['view/index.js', '    this.terrain.tiling(big)\n', '    this.terrain.tiling(big || this.terrain.tiled)\n', 'grand'],
+  // (F9a, on the cart row) a rider stepping off left standing on its
+  // hull's deck, riding on with it
+  'stays-aboard': ['view/units.js', '    this.dismount(e.v, true, e.u)\n    this.disc(e.u)\n', '    this.disc(e.u)\n', 'cart'],
+  // (F9a, on the cart row) a rider stepped off left without its ring and
+  // hit cylinder, as it rode
+  'ringless-off': ['view/units.js', '    this.stands(v, this.shown(e.u).alive > 0)\n    this.layDeck(e.v)\n', '    this.layDeck(e.v)\n', 'cart'],
 }
+// (F9a) the cart row's battle: the Field mission, seat 0's Bushtails with
+// two War-Carts (950 points), seat 1 its preset
+const CART_ARMIES = '1222112,field'
 const SELF_TEST_ON = 'hotseat-aggressive-103'
 
 // In the page, before main.js: catch window.__ts, record (the shadow and
@@ -337,6 +363,89 @@ async function grandRow(browser, url) {
     await ctx.close()
   }
 }
+// (F9a) The cart row: a watched Field battle with War-Carts (above).
+// Returns { checks, error, ... }, judged by judgeCart.
+async function cartRow(browser, url) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+  try {
+    const page = await ctx.newPage()
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    await page.addInitScript(`(${(settle) => {
+      const sim = (window.__cart = { checks: [], error: null })
+      addEventListener('error', (e) => (sim.error ??= String(e.error?.stack ?? e.message)))
+      addEventListener('unhandledrejection', (e) => (sim.error ??= String(e.reason?.stack ?? e.reason)))
+      // at every checkpoint the player waits while the figures settle, and
+      // the table is held to the match as it stood there: how many units
+      // rode then, and how many wrecks stood (the chunks of kind 'wreck'
+      // the checkpoint's projection holds standing)
+      const hook = () => {
+        if (!window.__ts) return void requestAnimationFrame(hook)
+        window.__ts.view.pauseAtChecks((e) => new Promise((resolve) => {
+          let n = settle
+          const f = () => {
+            if (--n > 0) return void requestAnimationFrame(f)
+            try {
+              const ts = window.__ts, d = ts.view.snapDiff(e.proj)
+              const riders = Object.values(e.proj.units).filter((u) => u.aboard && u.alive > 0).length
+              const wrecks = ts.G.terrain.chunks.filter((c) => c.kind === 'wreck' && e.proj.chunks[c.id]?.alive).length
+              sim.checks.push({ mark: `check at trace line ${ts.trace.length}`, n: d.n, diffs: d.diffs, riders, wrecks, figures: d.figures })
+            } catch (err) {
+              sim.error ??= String(err.stack ?? err)
+            }
+            resolve()
+          }
+          requestAnimationFrame(f)
+        }))
+        // every bail-out played (a forced unit.disembark)
+        const obs = window.__ts.player.observer
+        sim.bails = 0
+        window.__ts.present.listen({ ...obs, event: (ev, M) => (ev.t === 'unit.disembark' && (sim[ev.forced ? 'bails' : 'steps'] = (sim[ev.forced ? 'bails' : 'steps'] ?? 0) + 1), obs?.event?.(ev, M)), reset: (M) => obs?.reset?.(M) })
+      }
+      hook()
+    }})(${SETTLE})`)
+    await page.goto(`${url}/?debug&fast&seed=4242&dice=99&mission=field&armies=${CART_ARMIES}`)
+    await page.waitForFunction(() => window.__ts)
+    const t0 = Date.now()
+    await page.click('[data-mode="watch"]', { timeout: 30000 })
+    await page.click('#setupStart', { timeout: 30000 })
+    await page.waitForFunction(() => window.__cart.error || (window.__ts.S.stage === 'over' && window.__ts.player.idle), null, { timeout: 1800000, polling: 500 })
+    const end = await page.evaluate((settle) => new Promise((resolve) => {
+      const ts = window.__ts
+      ts.player.snap(ts.G)
+      let n = settle
+      const f = () => {
+        if (--n > 0) return void requestAnimationFrame(f)
+        const d = ts.view.snapDiff()
+        resolve({ mark: 'snapped in place', n: d.n, diffs: d.diffs, riders: 0, wrecks: 0 })
+      }
+      requestAnimationFrame(f)
+    }), SETTLE)
+    const r = await page.evaluate(() => ({ checks: window.__cart.checks, error: window.__cart.error, bails: window.__cart.bails ?? 0, steps: window.__cart.steps ?? 0, carts: window.__ts.G.units.filter((u) => u.key === 'warcart').length, mission: window.__ts.G.setup.mission }))
+    r.checks.push(end)
+    if (!r.error && errors.length) r.error = errors.join('\n')
+    r.secs = Math.round((Date.now() - t0) / 1000)
+    return r
+  } finally {
+    await ctx.close()
+  }
+}
+// what the cart row says is wrong ('' when nothing is)
+function judgeCart(r) {
+  if (r.error) return r.error.split('\n')[0]
+  const why = []
+  if (r.mission !== 'field' || r.carts < 1) why.push(`board: the battle was a ${r.mission} one with ${r.carts} War-Carts (a Field battle, two)`)
+  if (!r.checks.some((c) => c.riders > 0)) why.push('board: no checkpoint had a unit aboard a War-Cart')
+  // ((F9a's integration) riders stepping off, not bailing out: the AI's
+  // riders step off to shoot by their first turns, so in its battles a hull
+  // dies with nobody aboard; the bail-out is the vehicle/ corpus's log's,
+  // a default row)
+  if (!r.checks.some((c) => c.wrecks > 0) || !(r.steps + r.bails)) why.push(`board: ${r.checks.some((c) => c.wrecks > 0) ? 'a wreck' : 'no wreck'} and ${r.steps} step-offs and ${r.bails} bail-outs (a wreck, and riders off a deck)`)
+  const bad = r.checks.filter((c) => c.n)
+  if (bad.length) why.unshift(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  return why.join('; ')
+}
+
 // what the Grand row says is wrong ('' when nothing is)
 function judgeGrand(r) {
   if (r.error) return r.error.split('\n')[0]
@@ -374,7 +483,7 @@ if (a['self-test']) {
   console.log(`snap-check self-test: ${Object.keys(MUTATIONS).length} edits of the view, each on ${SELF_TEST_ON} unless it names another, after the unedited code on ${battles.join(' and ')}`)
   try {
     for (const [k, [name, id]] of runs.entries()) {
-      const it = id === 'grand' ? null : corpus.find((x) => x.id === id)
+      const it = ROWS.has(id) ? null : corpus.find((x) => x.id === id)
       const dir = copyCode(PKG, join(work, `${k}`))
       if (name !== 'unedited') {
         const [f, from, to] = MUTATIONS[name]
@@ -385,13 +494,13 @@ if (a['self-test']) {
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
       let r
       try {
-        r = it ? await run(browser, served.url, it) : await grandRow(browser, served.url)
+        r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
         served.close()
       }
-      const why = it ? judge(it, r) : judgeGrand(r)
+      const why = it ? judge(it, r) : id === 'cart' ? judgeCart(r) : judgeGrand(r)
       const ok = name === 'unedited' ? !why : /checks differ|^board: /.test(why)
       if (!ok) missed++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(16)} ${id.padEnd(23)} ${(why || `the same at ${r.checks.length} checks`).slice(0, 220)}`)
@@ -438,10 +547,22 @@ try {
     const g = r.checks.filter((c) => c.board === 80)
     console.log(`  grand ${'classic → Grand → classic'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the table made over for each board (${r.boards.map(([w, b]) => `${w} ${b.W}×${b.H}`).join(', ')}), the same at ${g.length} Grand checkpoints and ${r.checks.length - g.length} classic ones, the tiles drawn as their chunks at each (${g.at(-1)?.tiled} chunks in ${g.at(-1)?.tiles} tiles at the end), and none left on the classic table (${r.secs} s)`}`)
   }
+  if (CART_ROW) {
+    let r
+    try {
+      r = await cartRow(browser, url)
+    } catch (e) {
+      r = { error: e.message, checks: [] }
+    }
+    const why = judgeCart(r)
+    if (why) failed++
+    checks += r.checks.length
+    console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, and snapped in place (${r.secs} s)`}`)
+  }
 } finally {
   await browser.close()
   close()
   rmSync(work, { recursive: true, force: true })
 }
-console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
+console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
 process.exit(failed ? 1 : 0)

@@ -286,7 +286,8 @@ export class Minimap {
     const sel = new Set(this.selected())
     for (const v of this.units.views.values()) {
       const mu = M.units[v.id]
-      if (!(mu?.alive > 0)) continue
+      // ((F9a) a rider is its hull's dot)
+      if (!(mu?.alive > 0) || mu.aboard) continue
       const [x, y] = this.toPx(mu.pos.x, mu.pos.z)
       g.beginPath()
       g.arc(x, y, Math.max(1.5, mu.r * k), 0, Math.PI * 2)

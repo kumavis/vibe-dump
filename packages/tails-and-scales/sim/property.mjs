@@ -151,10 +151,25 @@
 //    its stateHash data-check's pin; and per mission 50 random legal lists
 //    played to the end under strict, 40 AI against AI and 10 with a human
 //    seat answered at random as (3)'s games are.
+// 12. (F9a) P-riders, on code with core/actions/transport.js (the block
+//    above its tasks below says what each holds): a rider's state after
+//    every entry and at every trace line of the AI battles with War-Carts
+//    (8, Field and Grand, open and fortified), riders hidden from every
+//    spatial rule (each query with and without them), the bail-outs as
+//    they are emitted, the autoload, and every embark and disembark legal()
+//    takes held to DESIGN §4.2.5's table, over those battles, 6 random
+//    games with War-Carts and a human seat (embark and disembark among the
+//    battery) and P-army's list battles; the scenes (a bail-out by an
+//    enemy's 1" and one with nowhere to stand, a template over a hull, the
+//    AI's friendly fire round one, the deployment's re-arranging, a phase's
+//    embark and disembark, `rode`); P-pilot's F9a row (a mask naming a
+//    rider without its hull in the movement phase refused); and P-army's
+//    deployment at the caps with two War-Carts a side (60 boards).
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
 //                                         MUTATIONS below must fail it
+//                         [--mutations a,b]   only these of them
 // The self-test first runs the same small workload (three corpus battles,
 // ten games) on an unbroken copy, which must pass; a mutation counts as
 // caught only on a property's own failure, never on what the games failed
@@ -172,7 +187,7 @@ import { tmpdir } from 'node:os'
 import { readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus, select, verdict, pool, CPUS, copyCode, h10 } from './lib.mjs'
-import { foldJob, shadowPartsG, mirrorTap, jobSetup, loadMatch, seatDevices } from './run.mjs'
+import { foldJob, shadowPartsG, mirrorTap, jobSetup, loadMatch, seatDevices, differ } from './run.mjs'
 import { shadowString } from './oracle/shadow.mjs'
 import { mulberry32 } from './oracle/human-bot.mjs'
 import { codeDir, PKG } from './oracle/pin.mjs'
@@ -182,11 +197,11 @@ try {
   ({ values: a } = parseArgs({
     options: {
       games: { type: 'string' }, seed: { type: 'string' }, only: { type: 'string' }, dir: { type: 'string' }, ref: { type: 'string' },
-      child: { type: 'boolean' }, 'self-test': { type: 'boolean' },
+      child: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' },
     },
   }))
 } catch (e) {
-  console.error(`property: ${e.message}\nusage: node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids> | none] [--dir <packageDir> | --ref <ref>] | --self-test`)
+  console.error(`property: ${e.message}\nusage: node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids> | none] [--dir <packageDir> | --ref <ref>] | --self-test [--mutations <names>]`)
   process.exit(2)
 }
 const whole = (v, d, name) => {
@@ -297,6 +312,31 @@ function battery(core, G, seat, rand) {
       out.push({ t: 'pilot', m: 2 ** 32 + 1 }, { t: 'pilot', m: 2 ** 40 + 3 }, { t: 'pilot', m: 2 ** 52 + 1 })
       out.push({ t: 'pilot', m: bit(mine.length) + 1 }, { t: 'pilot', m: 0 }, { t: 'pilot', m: -1 }, { t: 'pilot', m: 2 ** 53 }, { t: 'pilot', m: 1.5 }, { t: 'pilot' }, { t: 'pilot', m: 1, u: mine[0].id })
     }
+    // (F9a) boarding and stepping off, on code with transports and only
+    // where a hull stands on the table (so a battle without one draws no
+    // more here): every own unit that is no vehicle onto each own hull, a
+    // unit onto the enemy's hull, a hull onto a hull, an enemy onto one;
+    // each rider onto cells of its landing, onto its hull's own cell and a
+    // random one, and a unit riding nothing; and (P-pilot's F9a row) a mask
+    // naming a rider without its hull, and with it
+    if (q.isTransport && G.units.some((u) => q.alive(u) && q.isTransport(u))) {
+      const hulls = mine.filter((u) => q.alive(u) && q.isTransport(u)), foreign = theirs.filter((u) => q.alive(u) && q.isTransport(u))
+      for (const u of mine.filter((u) => q.alive(u) && !u.t.vehicle)) for (const v of hulls) out.push({ t: 'embark', u: u.id, v: v.id })
+      for (const v of foreign.slice(0, 1)) for (const u of some(mine.filter((x) => q.alive(x)), 2)) out.push({ t: 'embark', u: u.id, v: v.id })
+      if (hulls.length > 1) out.push({ t: 'embark', u: hulls[0].id, v: hulls[1].id })
+      const foe = theirs.find((u) => q.alive(u))
+      if (hulls.length && foe) out.push({ t: 'embark', u: foe.id, v: hulls[0].id })
+      for (const p of mine.filter((u) => u.aboard)) {
+        const v = G.units.find((x) => x.id === p.aboard)
+        for (const c of some(q.landing(G, p, v), 3)) out.push({ t: 'disembark', u: p.id, c })
+        out.push({ t: 'disembark', u: p.id, c: nav.index(v.pos.x, v.pos.z) }, { t: 'disembark', u: p.id, c: cell() })
+      }
+      for (const u of some(mine.filter((x) => q.alive(x) && !x.aboard), 1)) out.push({ t: 'disembark', u: u.id, c: nav.index(u.pos.x, u.pos.z) })
+      for (const p of mine.filter((u) => u.aboard && q.alive(u)).slice(0, 2)) {
+        const j = mine.indexOf(p), h = mine.findIndex((x) => x.id === p.aboard)
+        out.push({ t: 'pilot', m: 2 ** j }, { t: 'pilot', m: 2 ** j + 2 ** h })
+      }
+    }
     // what the labels and flags would show
     q.statusOf(G), q.ownersOf(G), q.anyCanAct(G, seat), q.phaseKey(G)
     // junk: no such command, the AI's own hold, a vote that says neither
@@ -325,7 +365,7 @@ function actorsOutside(core, G, seat, m) {
 
 // bodies with a field their kind doesn't take, each of them refused
 const JUNK = [{ t: 'end', c: 0 }, { t: 'chargeEnd', c: -1, u: 0 }, { t: 'shoot', u: 0, tg: 1, c: 0 }]
-const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [] }
+const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [], embark: ['u', 'v'], disembark: ['u', 'c'] }
 
 // Judge the battery for `seat` (and some for the other seat and seats that
 // don't exist); every verdict must leave the match exactly as it was.
@@ -384,6 +424,21 @@ function probe(core, G, seat, rand, where) {
     if (units.some((u) => !core.q.alive(u))) throw new Error(`${where}: legal() accepted a pilot naming a destroyed unit: ${JSON.stringify(b)}`)
     if (!units.some((u) => core.q.canAct(G, u))) throw new Error(`${where}: legal() accepted a pilot none of whose units can act: ${JSON.stringify(b)}`)
     if (G.pending?.k !== 'phase') throw new Error(`${where}: legal() accepted a pilot outside a phase (${JSON.stringify(G.pending)})`)
+  }
+  // (F9a) every embark and disembark legal() takes is one DESIGN §4.2.5's
+  // table allows, judged here from the match (rideWrong), not by the
+  // core's own mayBoard and mayLand; and (P-pilot's F9a row) in the
+  // movement phase a mask naming a rider names its hull too
+  for (const b of ok.filter((b) => b.t === 'embark' || b.t === 'disembark')) {
+    const why = rideWrong(core, G, seat, b)
+    if (why) throw new Error(`${where}: legal() accepted ${JSON.stringify(b)}, which ${why}`)
+  }
+  if (G.pending?.k === 'phase' && G.pending.phase === 'move') {
+    for (const b of ok.filter((b) => b.t === 'pilot')) {
+      const seats = G.units.filter((u) => u.side === seat), named = seats.filter((u, j) => Math.floor(b.m / 2 ** j) % 2)
+      const loose = named.find((u) => u.aboard && !named.some((h) => h.id === u.aboard))
+      if (loose) throw new Error(`${where}: legal() accepted a pilot in the movement phase naming unit ${loose.id}, which rides unit ${loose.aboard}, without its hull: ${JSON.stringify(b)}`)
+    }
   }
   // a wipe-out decides the battle (it ends at the phase's end): nobody
   // concedes it after
@@ -702,7 +757,12 @@ const MIXES = [['ai', 'ai'], ['human', 'ai'], ['ai', 'human'], ['human', 'human'
 // (F11a, P-army) `lists`: { mission, RACES, MISSIONS } for a game whose
 // seats field random legal lists at that mission (autoList on budgets from
 // 60% of the limit, drawn from a stream of their own, so the game's own
-// draws are a plain game's), one seat at least a human's
+// draws are a plain game's), one seat at least a human's. (F9a, P-riders)
+// With `lists.mods` (code with transports) a list game with a hull on the
+// table is held to P-riders at every decision (the state, the autoload as
+// it deploys, the riders hidden at half of them, the bail-outs as they are
+// emitted); `lists.rides` makes it one: the Bushtails in seat 0, against
+// Bushtails or the Coil, each Bushtail list holding War-Carts.
 function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const rand = mulberry32(seed * 2654435761)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
@@ -719,9 +779,11 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   if (lists) {
     const pickList = mulberry32(seed * 40503 + 7), rules = lists.MISSIONS[lists.mission].list
     setup.mission = lists.mission
+    if (lists.rides) setup.seats.forEach((x, i) => (x.race = i === 0 || seed % 2 === 0 ? 'squirrel' : 'serpent'))
     for (const x of setup.seats) {
       const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
-      x.army = core.army.listText(core.army.autoList(lists.RACES[x.race], { ...rules, points: budget }, Math.floor(pickList() * 2 ** 32)))
+      const at = { ...rules, points: budget }
+      x.army = (lists.rides && cartList(core.army, lists.RACES[x.race], at, pickList)) || core.army.listText(core.army.autoList(lists.RACES[x.race], at, Math.floor(pickList() * 2 ** 32)))
     }
   }
   // (F7a) two games in five on the fortified boards, for code whose mission
@@ -750,6 +812,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const take = (where) => {
     const events = G.out.splice(0)
     for (const e of events) {
+      if (rides && e.t === 'unit.disembark' && !e.forced) counts.rides.steps++
       if (e.t === 'round.scored') seen.scored++
       else if (e.t === 'stage' && e.stage === 'battle') seen.battle = true
       else if (e.t === 'game.over') seen.over.push(e)
@@ -757,8 +820,17 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     if (fortified) heightEvents(G, events, where)
     tap.fold(G, events, where)
   }
-  const G = core.createMatch(setup, { out: [], strict: true, onTrace: tap.trace })
+  // ((F9a) the match's out watched, for the bail-outs, on code with
+  // transports)
+  const mods = lists?.mods ?? null
+  const out = mods ? new Watched() : [], watch = mods ? bailWatch(core, mods) : null
+  if (watch) out.watch = watch.event
+  const G = core.createMatch(setup, { out, strict: true, onTrace: watch ? (line, g) => ((watch.G = g), tap.trace(line, g)) : tap.trace })
+  if (watch) watch.G = G
+  const rides = !!watch && G.units.some((u) => u.t.transport)
   if (lists) unitsAre(core, G, lists.RACES, where0)
+  if (lists?.rides && !rides) throw new Error(`${where0}: a P-riders game fields no War-Cart (its lists ${setup.seats.map((x) => x.army).join(', ')})`)
+  if (rides) counts.rides = { games: 1, autoloaded: 0, hidden: 0, embarkDeploy: 0, embarkPhase: 0, disembarks: 0, steps: 0, bailed: 0, lost: 0 }
   const last = { trace: 0, n: 0 }
   let conceded = -1, piloted = ''
   for (let k = 0; G.turn.stage !== 'over'; k++) {
@@ -768,6 +840,15 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, where, rand)
     if (k === 0) lockCheck(core, rng, G, where)
     take(where)
+    // (F9a, P-riders) the state, the autoload as the deployment opens, the
+    // bail-outs settled, and the riders hidden at half the decisions
+    if (rides) {
+      watch.where = where
+      watch.settle(where)
+      ridersState(core, mods, G, where)
+      if (k === 0) counts.rides.autoloaded = autoloadCheck(G, where)
+      if (rand() < 0.5) counts.rides.hidden += ridersHidden(core, mods, G, where)
+    }
     const seat = core.pendingSeats(G)[Math.floor(rand() * core.pendingSeats(G).length)]
     const ok = probe(core, G, seat, rand, where)
     counts.probes++
@@ -816,6 +897,8 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     const outside = body.t === 'pilot' ? actorsOutside(core, G, by, body.m) : null
     if (body.t === 'pilot') piloted = `${G.turn.round}:${G.turn.active}:${G.turn.ph}`
     const phaseWas = G.pending?.phase
+    if (rides && body.t === 'embark') counts.rides[G.pending.k === 'deploy' ? 'embarkDeploy' : 'embarkPhase']++
+    if (rides && body.t === 'disembark') counts.rides.disembarks++
     try {
       core.apply(G, by, body)
     } catch (e) {
@@ -833,6 +916,11 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   invariants(core, G, `${where0} at its end`, last)
   if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, `${where0} at its end`, rand)
   take(`${where0} at its end`)
+  if (rides) {
+    watch.settle(`${where0} at its end`)
+    ridersState(core, mods, G, `${where0} at its end`)
+    Object.assign(counts.rides, { bailed: watch.counts.bailed, lost: watch.counts.lost })
+  }
   counts.mirrored = tap.counts()
   counts.ended = result(G, where0, conceded)
   // (F4) the overtime rounds a vote bought, held to the rounds the setup
@@ -1043,7 +1131,8 @@ const ARMY_REFUSALS = {
   '__proto__': ['__proto__', NO, /^seat 0's army "__proto__" is neither a preset nor a list of counts$/],
   'a capitalised preset': ['Classic', NO, /^seat 0's army "Classic" is neither a preset nor a list of counts$/],
   'fullwidth digits': ['１１２', NO, /^seat 0's army "１１２" is neither a preset nor a list of counts$/],
-  'a list longer than the roster': ['1121113', NO, /^seat 0's list "1121113" counts 7 kinds of unit; the Bushtail Clans muster 6 \(elder oakguard nutkin grenadier glider trebuchet\)$/],
+  // (F9a: the Bushtails' roster is seven long, the War-Cart appended)
+  'a list longer than the roster': ['11211131', NO, /^seat 0's list "11211131" counts 8 kinds of unit; the Bushtail Clans muster 7 \(elder oakguard nutkin grenadier glider trebuchet warcart\)$/],
   'a leading zero past the roster': [NO, '0112111', /^seat 1's list "0112111" counts 7 kinds of unit; the Coil of Ssithra muster 6 \(hierophant brute scaleguard spitter sidewinder engine\)$/],
   '515 points': [NO, '100034', /^seat 1's army: 515 points, over the Skirmish limit of 500$/],
   '505 points': ['100233', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
@@ -1066,7 +1155,7 @@ const ARMY_REFUSALS = {
   // seat-major: seat 0's first broken rule, however late a check, before
   // seat 1's, however early
   "both seats broken: seat 0's late rule first": ['11', 7, /^seat 0's army: no Troops unit/],
-  "both seats broken: seat 0's list, seat 1's preset": ['1121113', 'grnad', /^seat 0's list "1121113" counts 7 kinds/],
+  "both seats broken: seat 0's list, seat 1's preset": ['11211131', 'grnad', /^seat 0's list "11211131" counts 8 kinds/],
   'both seats broken alike': ['11a', '11a', /^seat 0's army "11a" is neither/],
   'seat 0 legal, seat 1 broken': ['112111', '104', /^seat 1's army: 4 Scaleguard; at most 3 of one unit in a Skirmish army$/],
 }
@@ -1233,8 +1322,10 @@ const V1_PINS = {
 }
 // (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
 // F8b's missions, open set and fight guard, which a classic battle meets as
-// before)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7]
+// before; 9, F9a's `aboard`, printed only for a rider, and its wreck, only
+// where a hull falls: DESIGN §4.2.9's P-prop row, a classic match's
+// shadowState unchanged across F9a; 8 is F7b's, landing beside it)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 9]
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a
@@ -1462,11 +1553,15 @@ function shadowTask(core) {
 
 // `n` AI-against-AI battles between random legal lists at `mission`, from
 // `seed`'s stream.
-function armyGamesTask(core, RACES, MISSIONS, mission, n, seed) {
+// (F9a) On code with transports (`mods`), a battle whose lists field a hull
+// is held to P-riders' state at every trace line and its bail-outs as they
+// are emitted (the Field and Grand lists draw War-Carts).
+function armyGamesTask(core, RACES, MISSIONS, mission, n, seed, mods = null) {
   const A = core.army, rand = mulberry32(seed * 2246822519 + 3)
   const int = (k) => Math.floor(rand() * k)
   const races = Object.keys(RACES), rules = MISSIONS[mission].list
   const ends = { score: 0, wipe: 0 }, budgets = []
+  let hulls = 0, bailed = 0
   for (let k = 0; k < n; k++) {
     const race = [0, 1].map(() => (rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
     const army = race.map((r) => {
@@ -1477,19 +1572,33 @@ function armyGamesTask(core, RACES, MISSIONS, mission, n, seed) {
     const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'ai', army: army[i] })) }
     const where = `P-army game ${seed}.${k} (${JSON.stringify(setup)})`
     let G
+    const out = mods ? new Watched() : [], watch = mods ? bailWatch(core, mods) : null
+    if (watch) {
+      out.watch = watch.event
+      watch.where = where
+    }
+    const onTrace = watch ? (line, g) => {
+      watch.G = g
+      if (!line.startsWith('log ')) ridersState(core, mods, g, `${where} at trace line ${g.journal.trace.length}`)
+    } : null
     try {
-      G = core.createMatch(setup, { out: [], strict: true })
+      G = core.createMatch(setup, { out, strict: true, onTrace })
     } catch (e) {
       throw new Error(`${where}: ${e.stack}`)
     }
     if (G.turn.stage !== 'over') throw new Error(`${where}: an AI battle stopped at ${G.turn.stage}`)
+    if (watch) {
+      watch.settle(`${where} at its end`)
+      hulls += G.units.filter((u) => u.t.transport).length
+      bailed += watch.counts.bailed
+    }
     unitsAre(core, G, RACES, where)
     invariants(core, G, `${where} at its end`)
     ends[result(G, where, -1)]++
     const bad = traceShape(G)
     if (bad) throw new Error(`${where}: ${bad}`)
   }
-  return { listGames: n, ends, budgets: [Math.min(...budgets), Math.max(...budgets)] }
+  return { listGames: n, ends, budgets: [Math.min(...budgets), Math.max(...budgets)], hulls, bailed }
 }
 
 // Two games' logs played interleaved in one process, command by command:
@@ -2078,6 +2187,849 @@ function heightTask(core, mods) {
 }
 
 // (the child's match/ modules that fold a log, R8's: refold's)
+// ── (F9a) P-riders (DESIGN §4.2.5's invariants; §4.2.9's P-riders, P-pilot
+// and P-army rows) ────────────────────────────────────────────────────────
+// What a battle with transports keeps, on code with core/actions/
+// transport.js (older code has no rider, and is held to none of it):
+//   state     after every entry, and in the AI's battles at every trace
+//             line: a unit aboard is standing, rides a standing hull of its
+//             own seat that carries riders (a transport) and rides nothing
+//             itself, stands exactly where its hull does, and its bases fit
+//             the hull (maxBase); no vehicle rides; each hull's riders'
+//             models sum to at most its capacity; a destroyed unit rides
+//             nothing; and with height no ground vehicle stands on a floor
+//             above STEP (P-height's vehicle rule)
+//   hidden    a rider is off the table for every spatial rule (§4.1 rule
+//             19): engagedWith never names one (and one engages nobody),
+//             enemiesOf and friendsOf (the auras, the AI's threat sums and
+//             friend terms) never list one, nor do chargeTargets and
+//             shootTargets; and controlOf, forbidMask, validEnd (the hull's
+//             own plan among them, which its riders at its centre would
+//             otherwise pen in), freeSpot (fits: placeOk's), chargePlan's
+//             friend spacing and the AI's score of a cell come out the same
+//             with the riders taken out of G.units altogether
+//   bail-out  a hull destroyed with riders aboard bails them out in
+//             G.units order, each watched as its event is emitted (the
+//             match then is the one its spot was found in): onto a landing
+//             cell (a cell centre, standable, within 3" of the hull's edge)
+//             clear of every unit on the table by o.r + u.r + 0.08, outside
+//             every enemy's 1" while a landing cell outside them is left
+//             (the rule's fallback), the one nearest the hull's centre,
+//             ties to the lowest index; then its dice, a D6 a model
+//             standing; a rider with no spot is lost, every model slain;
+//             none rides the wreck
+//   autoload  the deployment leaves each hull, in G.units order, carrying
+//             exactly the Troops a reference autoload boards (its seat's,
+//             on the table, bases within maxBase, not big, not a wrecker,
+//             whole, in G.units order while they fit)
+//   commands  every embark legal() takes is one DESIGN §4.2.5's table
+//             allows (the seat's own standing unit, no vehicle, not aboard,
+//             not moved, not engaged, bases within maxBase, in a phase
+//             reaching a valid end within 1" of the hull; onto a standing
+//             transport of its seat's, riding nothing, not engaged, with
+//             room; in the deployment or the movement phase); every
+//             disembark one of a rider of the seat's not yet moved, onto a
+//             cell of its landing, in the movement phase; and (P-pilot) no
+//             mask naming a rider without its hull in the movement phase
+// The games: AI battles with War-Cart lists (Field and Grand, open and
+// fortified, Bushtail mirrors and Bushtails against the Coil), held at
+// their trace lines; random games with a human seat (randomTask's, lists
+// holding carts, embark and disembark among the battery); and the scenes
+// below, which reach each rule on a board of their own whatever the games
+// do (a bail-out by an enemy's 1", one with nowhere to stand, a template
+// over a hull, the AI's friendly fire round a hull, the deployment's
+// re-arranging, a phase's embark and disembark, `rode`).
+const unitById = (G, id) => G.units.find((u) => u.id === id)
+const riding = (G) => G.units.some((u) => u.aboard)
+
+// An event list that hands each event to `watch` as it is pushed (the
+// match's out: core/journal.js emitTo pushes), so a check can look at the
+// match as the event is emitted. (Its copies, splice's and slice's, watch
+// nothing.)
+class Watched extends Array {
+  push(...xs) {
+    for (const x of xs) this.watch?.(x)
+    return super.push(...xs)
+  }
+}
+
+// state, as above
+function ridersState(core, mods, G, where) {
+  const q = core.q
+  for (const u of G.units) {
+    if (!u.aboard) continue
+    const v = unitById(G, u.aboard), name = `unit ${u.id} (${u.t.short})`
+    if (!q.alive(u)) throw new Error(`${where}: ${name} is destroyed, but still rides unit ${u.aboard}`)
+    if (!v) throw new Error(`${where}: ${name} rides unit ${u.aboard}, which the match has not`)
+    if (!q.alive(v)) throw new Error(`${where}: ${name} rides unit ${v.id} (${v.t.short}), which is destroyed`)
+    if (v.side !== u.side) throw new Error(`${where}: ${name} of seat ${u.side} rides seat ${v.side}'s unit ${v.id}`)
+    if (!v.t.transport) throw new Error(`${where}: ${name} rides unit ${v.id} (${v.t.short}), which carries nobody (no transport)`)
+    if (v.aboard) throw new Error(`${where}: ${name} rides unit ${v.id}, itself aboard unit ${v.aboard}`)
+    if (u.t.vehicle) throw new Error(`${where}: ${name}, a vehicle, rides unit ${v.id}`)
+    if (u.pos.x !== v.pos.x || u.pos.z !== v.pos.z) throw new Error(`${where}: ${name} rides unit ${v.id} but stands at (${u.pos.x}, ${u.pos.z}), not its hull's (${v.pos.x}, ${v.pos.z})`)
+    if (u.t.base > v.t.transport.maxBase) throw new Error(`${where}: ${name}'s ${u.t.base}" bases ride unit ${v.id}, which takes ${v.t.transport.maxBase}" at most`)
+  }
+  for (const v of G.units) {
+    const tr = v.t.transport
+    if (!tr) continue
+    const load = G.units.filter((p) => p.aboard === v.id).reduce((s, p) => s + p.alive, 0)
+    if (load > tr.capacity) throw new Error(`${where}: unit ${v.id} (${v.t.short}) carries ${load} models, over its capacity of ${tr.capacity}`)
+  }
+  // (P-height, F9a) a ground vehicle keeps to the ground
+  if (G.nav.hasHeight) for (const v of G.units) {
+    if (!q.alive(v) || !v.t.vehicle || v.t.fly) continue
+    const y = G.nav.floor[G.nav.index(v.pos.x, v.pos.z)]
+    if (y > mods.nav.STEP) throw new Error(`${where}: unit ${v.id} (${v.t.short}), a ground vehicle, stands on a floor ${y}" up, above STEP (${mods.nav.STEP}")`)
+  }
+}
+
+// fn() with every rider out of G.units (each put back, in order, after)
+function unridden(G, fn) {
+  const all = G.units.slice()
+  G.units.length = 0
+  for (const u of all) if (!u.aboard) G.units.push(u)
+  try {
+    return fn()
+  } finally {
+    G.units.length = 0
+    for (const u of all) G.units.push(u)
+  }
+}
+
+// the cells within `R` of (x, z), in index order
+function cellsWithin(nav, x, z, R) {
+  const out = []
+  const x0 = Math.max(0, Math.floor((x - R + nav.W / 2) / nav.cell)), x1 = Math.min(nav.nx - 1, Math.floor((x + R + nav.W / 2) / nav.cell))
+  const z0 = Math.max(0, Math.floor((z - R + nav.H / 2) / nav.cell)), z1 = Math.min(nav.nz - 1, Math.floor((z + R + nav.H / 2) / nav.cell))
+  for (let iz = z0; iz <= z1; iz++) for (let ix = x0; ix <= x1; ix++) {
+    const i = iz * nav.nx + ix
+    if (Math.hypot(nav.x(i) - x, nav.z(i) - z) <= R) out.push(i)
+  }
+  return out
+}
+
+// What the AI's score makes of `cells` for `u` (its own role; a hull's as
+// a line unit), its context built as core/ai/score.js's scoring builds it:
+// the numbers, as text
+function scoreText(core, mods, G, u, cells) {
+  const q = core.q
+  const enemies = q.enemiesOf(G, u), friends = q.friendsOf(G, u)
+  const owners = G.objectives.map((o) => q.controlOf(G, o))
+  const pre = new Map(enemies.map((e) => [e, { engaged: q.isEngaged(G, e), cover: q.inCover(G, e), hit: mods.score.meleeValue(u, e), back: mods.score.meleeValue(e, u) }]))
+  const ctx = { enemies, friends, owners, claimed: new Set(), role: u.t.ai === 'transport' ? 'line' : u.t.ai, pre }
+  return cells.map((i) => String(mods.score.score(G, u, G.nav.x(i), G.nav.z(i), ctx, true))).join(',')
+}
+
+// hidden, as above: returns how many queries it held (0 with nobody aboard,
+// or while the nav waits for its own site to follow the terrain: a check
+// may not refresh it early, §4.1 rule 9). Asked under preview() (the dice
+// locked: none of it draws) and with the plan memo shut, so nothing it
+// plans feeds the match's own plans.
+function ridersHidden(core, mods, G, where) {
+  if (!riding(G) || G.terrain.dirty) return 0
+  const memo = G.nav.memo
+  G.nav.memo = null
+  try {
+    return core.preview(G, () => hiddenBattery(core, mods, G, where))
+  } finally {
+    G.nav.memo = memo
+  }
+}
+function hiddenBattery(core, mods, G, where) {
+  const q = core.q, nav = G.nav, ENGAGE = mods.rules.ENGAGE
+  const riders = G.units.filter((u) => u.aboard)
+  const isRider = (u) => !!u.aboard
+  const standing = G.units.filter((u) => q.alive(u) && !u.aboard)
+  const ridden = new Set(riders.map((p) => p.side))
+  let n = 0
+  // never named
+  for (const e of standing) {
+    const asks = [['engagedWith', () => q.engagedWith(G, e)], ['friendsOf', () => q.friendsOf(G, e)], ['enemiesOf', () => q.enemiesOf(G, e)]]
+    // (shots and charges only at a seat with riders to aim at)
+    if ([...ridden].some((s) => s !== e.side)) asks.push(['chargeTargets', () => q.chargeTargets(G, e)], ['shootTargets', () => q.shootTargets(G, e)])
+    for (const [what, ask] of asks) {
+      const p = ask().find(isRider)
+      if (p) throw new Error(`${where}: ${what}(unit ${e.id}, ${e.t.short}) names unit ${p.id} (${p.t.short}), which rides unit ${p.aboard}: a rider is off the table (§4.1 rule 19)`)
+      n++
+    }
+  }
+  for (const p of riders) {
+    const xs = q.engagedWith(G, p)
+    if (xs.length) throw new Error(`${where}: engagedWith(unit ${p.id}, ${p.t.short}, aboard unit ${p.aboard}) is [${xs.map((e) => e.id)}], not []: a rider engages nobody`)
+    n++
+  }
+  // the same with the riders on the table and with them off it
+  const same = (what, ask) => {
+    const a = ask(), b = unridden(G, ask)
+    if (a !== b) {
+      const k = [...a].findIndex((ch, i) => ch !== b[i])
+      throw new Error(`${where}: ${what} is one thing with the riders aboard and another with them taken off the table (from character ${k}: ${a.slice(Math.max(0, k - 20), k + 40)} | ${b.slice(Math.max(0, k - 20), k + 40)}): a rider counts there (§4.1 rule 19)`)
+    }
+    n++
+  }
+  same('controlOf over every objective', () => G.objectives.map((o) => q.controlOf(G, o)).join(','))
+  const hulls = [...new Set(riders.map((p) => p.aboard))].map((id) => unitById(G, id))
+  for (const v of hulls) {
+    // the hull itself, and the standing units nearest it (either seat's)
+    const near = standing.filter((e) => e !== v).map((e) => [Math.hypot(e.pos.x - v.pos.x, e.pos.z - v.pos.z), e]).sort((x, y) => x[0] - y[0] || x[1].id - y[1].id).slice(0, 2).map(([, e]) => e)
+    for (const e of [v, ...near]) {
+      const round = cellsWithin(nav, v.pos.x, v.pos.z, v.r + e.r + 1.5)
+      same(`forbidMask(unit ${e.id}, ${e.t.short})`, () => {
+        const f = q.forbidMask(G, e, ENGAGE + 0.05)
+        return `${Array.from(f).join('')}|${JSON.stringify(f.discs)}`
+      })
+      same(`validEnd round unit ${v.id} for unit ${e.id} (${e.t.short})`, () => {
+        const plan = q.movePlan(G, e, 0)
+        return round.map((i) => (isFinite(plan.res.dist[i]) && q.validEnd(G, plan, i) ? 1 : 0)).join('')
+      })
+      same(`freeSpot by unit ${v.id} for unit ${e.id} (${e.t.short})`, () => JSON.stringify(q.freeSpot(G, e, v.pos.x, v.pos.z, e.side, G.units.filter((o) => o !== e))))
+      same(`the AI's score round unit ${v.id} for unit ${e.id} (${e.t.short})`, () => scoreText(core, mods, G, e, round.filter((i, k) => k % 5 === 0)))
+    }
+    // a charge's spots: the hull's own (its riders at its start), and a
+    // friend's beside it
+    for (const e of [v, ...near.filter((x) => x.side === v.side)]) {
+      for (const tg of q.chargeTargets(G, e).slice(0, 2)) {
+        same(`chargePlan(unit ${e.id}, unit ${tg.id})'s spots`, () => {
+          const plan = q.chargePlan(G, e, tg)
+          return plan ? q.chargeSpots(plan, 12).map((x) => (x ? 1 : 0)).join('') : 'none'
+        })
+      }
+    }
+  }
+  return n
+}
+
+// The bail-out, watched as the match emits it (`w.G` the match, once
+// known; `w.event` its out's watch). settle(where) closes the hulls seen
+// destroyed: each rider either bailed out or was lost, none rides.
+function bailWatch(core, mods) {
+  const q = core.q
+  const w = { G: null, hulls: new Map(), dice: null, counts: { hullsDown: 0, bailed: 0, lost: 0, ones: 0, nearest: 0, fallbacks: 0, dirty: 0 } }
+  const fail = (why) => {
+    throw new Error(`${w.where ?? 'the bail-out'}: ${why}`)
+  }
+  w.event = (e) => {
+    const G = w.G
+    if (!G) return
+    if (e.t === 'unit.destroyed') {
+      const v = unitById(G, e.u)
+      if (!v?.t.transport) return
+      const on = G.units.filter((p) => p.aboard === v.id && q.alive(p)).map((p) => p.id)
+      if (on.length) {
+        w.hulls.set(v.id, { on, next: 0, landed: [] })
+        w.counts.hullsDown++
+      }
+      return
+    }
+    if (e.t === 'dice' && / bail out, 1s wound$/.test(e.label ?? '')) {
+      const d = w.dice
+      w.dice = null
+      if (!d || !e.label.startsWith(`${d.short}: `)) fail(`a bail-out's dice row "${e.label}" not straight after its rider's forced step off (${JSON.stringify(d)})`)
+      if (e.dice.length !== d.alive) fail(`unit ${d.u} bailed out with ${d.alive} models standing but rolled ${e.dice.length} dice (a D6 a model)`)
+      if (e.need !== 2) fail(`a bail-out's row needs ${e.need}, not 2 (a 1 wounds)`)
+      w.counts.ones += e.dice.filter((x) => x === 1).length
+      return
+    }
+    if (w.dice) fail(`unit ${w.dice.u}'s bail-out rolled no dice (${e.t} came next)`)
+    if (e.t !== 'unit.disembark' || !e.forced) return
+    const h = w.hulls.get(e.v)
+    if (!h) fail(`unit ${e.u} bailed out of unit ${e.v}, which wasn't destroyed with it aboard`)
+    const at = h.on.indexOf(e.u)
+    if (at < 0) fail(`unit ${e.u} bailed out of unit ${e.v}, which it wasn't riding as it was destroyed (${h.on})`)
+    if (at < h.next) fail(`unit ${e.u} bailed out of unit ${e.v} after unit ${h.on[h.next - 1]}: not in G.units order (${h.on})`)
+    h.next = at + 1
+    h.landed.push(e.u)
+    const p = unitById(G, e.u), v = unitById(G, e.v), nav = G.nav
+    if (p.aboard || !q.alive(p)) fail(`unit ${p.id} bailed out, but ${p.aboard ? `still rides unit ${p.aboard}` : 'is destroyed'}`)
+    if (q.alive(v)) fail(`unit ${p.id} bailed out of unit ${v.id}, which still stands`)
+    if (p.pos.x !== e.to.x || p.pos.z !== e.to.z) fail(`unit ${p.id}'s bail-out says (${e.to.x}, ${e.to.z}), but it stands at (${p.pos.x}, ${p.pos.z})`)
+    const i = nav.index(p.pos.x, p.pos.z)
+    if (nav.x(i) !== p.pos.x || nav.z(i) !== p.pos.z) fail(`unit ${p.id} bailed out to (${p.pos.x}, ${p.pos.z}), no cell's centre`)
+    const reach = Math.hypot(p.pos.x - v.pos.x, p.pos.z - v.pos.z) - v.r - p.r
+    if (reach > 3 + 1e-9) fail(`unit ${p.id} bailed out ${reach.toFixed(3)}" from its hull's edge, past the 3" of a landing`)
+    if (!nav.standable(i, p.r, 'walk')) fail(`unit ${p.id} bailed out onto cell ${i}, where its base can't stand`)
+    const crowd = G.units.find((o) => o !== p && q.alive(o) && !o.aboard && Math.hypot(o.pos.x - p.pos.x, o.pos.z - p.pos.z) < o.r + p.r + 0.08)
+    if (crowd) fail(`unit ${p.id} bailed out onto cell ${i}, within unit ${crowd.id}'s spacing (${Math.hypot(crowd.pos.x - p.pos.x, crowd.pos.z - p.pos.z).toFixed(3)}" apart, centre to centre)`)
+    if (G.terrain.dirty) {
+      w.counts.dirty++
+    } else {
+      // the nearest landing cell outside the enemies' 1" (their bubbles:
+      // the mask of the code under test, the bail-out's rule being what is
+      // held here), else the nearest without them
+      const inBubble = !!q.forbidMask(G, p, mods.rules.ENGAGE + 0.05)[i]
+      const free = q.landing(G, p, v)
+      const pool = free.length ? free : q.landing(G, p, v, false)
+      if (free.length && inBubble) fail(`unit ${p.id} bailed out onto cell ${i}, inside an enemy's 1", while ${free.length} landing cells outside the enemies' 1" were free`)
+      let best = -1, bd = Infinity
+      for (const c of pool) {
+        const d = Math.hypot(nav.x(c) - v.pos.x, nav.z(c) - v.pos.z)
+        if (d < bd) [best, bd] = [c, d]
+      }
+      if (best !== i) fail(`unit ${p.id} bailed out onto cell ${i}, not the landing cell nearest its hull's centre ${free.length ? 'outside the enemies\' 1"' : '(none outside the enemies\' 1" left)'} (cell ${best}, ${bd.toFixed(3)}" off, against ${Math.hypot(p.pos.x - v.pos.x, p.pos.z - v.pos.z).toFixed(3)}")`)
+      w.counts[free.length ? 'nearest' : 'fallbacks']++
+    }
+    w.dice = { u: p.id, alive: p.alive, short: p.t.short }
+    w.counts.bailed++
+  }
+  w.settle = (where) => {
+    if (w.dice) throw new Error(`${where}: unit ${w.dice.u}'s bail-out rolled no dice`)
+    for (const [vid, h] of w.hulls) {
+      for (const id of h.on) {
+        const p = unitById(w.G, id)
+        if (p.aboard) throw new Error(`${where}: unit ${id} still rides unit ${p.aboard} after unit ${vid}, the hull it rode, was destroyed`)
+        if (!h.landed.includes(id)) {
+          if (q.alive(p)) throw new Error(`${where}: unit ${id} rode unit ${vid} as it was destroyed, never bailed out, and stands with ${p.alive} models: a rider with nowhere to stand is lost`)
+          w.counts.lost++
+        }
+      }
+    }
+    w.hulls.clear()
+  }
+  return w
+}
+
+// The units DESIGN §4.2.8.7's autoload boards, by id → hull id: each hull
+// in G.units order, its seat's Troops in G.units order, on the table, bases
+// within maxBase, neither big nor a wrecker, whole, while they fit (a squad
+// that doesn't is passed over)
+function autoloadWant(G) {
+  const want = new Map()
+  for (const v of G.units) {
+    const tr = v.t.transport
+    if (!tr || v.alive <= 0) continue
+    let left = tr.capacity
+    for (const u of G.units) {
+      if (u.side !== v.side || u.t.role !== 'Troops' || want.has(u.id) || u.alive <= 0) continue
+      if (u.t.base > tr.maxBase || u.t.big || u.t.wrecker || u.alive > left) continue
+      want.set(u.id, v.id)
+      left -= u.alive
+    }
+  }
+  return want
+}
+function autoloadCheck(G, where) {
+  const want = autoloadWant(G)
+  for (const u of G.units) {
+    const w = want.get(u.id) ?? 0
+    if (u.aboard !== w) throw new Error(`${where}: the deployment left unit ${u.id} (${u.t.short}) ${u.aboard ? `aboard unit ${u.aboard}` : 'on the table'}, where the autoload's rule puts it ${w ? `aboard unit ${w}` : 'on the table'} (each hull in G.units order boarding its seat's eligible Troops in G.units order while they fit: DESIGN §4.2.8.7)`)
+  }
+  return want.size
+}
+
+// Why an embark or disembark legal() took for `seat` breaks DESIGN
+// §4.2.5's table, judged from the match here (null: it doesn't)
+function rideWrong(core, G, seat, b) {
+  const q = core.q, P = G.pending
+  const u = unitById(G, b.u)
+  if (!u || u.side !== seat || !q.alive(u)) return `names no standing unit of seat ${seat}'s`
+  if (b.t === 'embark') {
+    const v = unitById(G, b.v), tr = v?.t.transport
+    const phase = P.k === 'phase' && P.phase === 'move'
+    if (P.k !== 'deploy' && !phase) return `answers a ${P.k}${P.phase ? ` (${P.phase})` : ''} decision: a unit boards in the deployment or the movement phase`
+    if (u.t.vehicle) return 'boards a vehicle onto a vehicle'
+    if (u.aboard) return `boards unit ${u.id}, which rides unit ${u.aboard} already`
+    if (u.flags.moved) return `boards unit ${u.id}, which has moved`
+    if (q.isEngaged(G, u)) return `boards unit ${u.id}, which is in combat`
+    if (!v || v.side !== seat || !q.alive(v) || !tr) return `boards onto no standing transport of seat ${seat}'s`
+    if (v.aboard) return `boards onto unit ${v.id}, which rides unit ${v.aboard}`
+    if (q.isEngaged(G, v)) return `boards onto unit ${v.id}, which is in combat`
+    if (u.t.base > tr.maxBase) return `boards ${u.t.base}" bases onto a hull taking ${tr.maxBase}" at most`
+    const load = G.units.filter((p) => p.aboard === v.id && q.alive(p)).reduce((s, p) => s + p.alive, 0)
+    if (load + u.alive > tr.capacity) return `boards ${u.alive} models onto a hull carrying ${load} of ${tr.capacity}`
+    if (phase) {
+      // (a valid end of its move within 1" of the hull: its own plan's)
+      const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+      // (a hair's grace on the radius: the rule's measure is dmath's)
+      const reach = cellsWithin(G.nav, v.pos.x, v.pos.z, v.r + u.r + 1 + 1e-9).some((i) => isFinite(plan.res.dist[i]) && q.validEnd(G, plan, i))
+      if (!reach) return `boards unit ${u.id}, whose move reaches no valid end within 1" of unit ${v.id}`
+    }
+    return null
+  }
+  if (!(P.k === 'phase' && P.phase === 'move')) return 'steps off outside the movement phase'
+  if (!u.aboard) return `steps unit ${u.id} off, which rides nothing`
+  if (u.flags.moved) return `steps unit ${u.id} off, which has moved`
+  const v = unitById(G, u.aboard)
+  if (!q.landing(G, u, v).includes(b.c)) return `steps unit ${u.id} off onto cell ${b.c}, which is none of its landing cells`
+  return null
+}
+
+// A list holding War-Carts for `race` at `rules` (autoList on the stream's
+// seeds until one fields at least `least` of them, at most 64 tries), as
+// its text, or null when the race has no transport (the Coil, before F9b)
+function cartList(A, race, rules, rand, least = 1) {
+  const k = race.roster.findIndex((key) => race.units[key].transport)
+  if (k < 0) return null
+  for (let n = 0; n < 64; n++) {
+    const counts = A.autoList(race, rules, Math.floor(rand() * 2 ** 32))
+    if ((counts[k] ?? 0) >= least) return A.listText(counts)
+  }
+  return null
+}
+
+// One AI battle with War-Carts, held to P-riders at its trace lines (the
+// state at every state line, the autoload at the first, the riders hidden
+// at a sample of act lines), the bail-outs as they are emitted, the
+// mirror at every act (P-present: `aboard` among it) and P-prop's
+// invariants and result at its end. Returns what it played.
+function ridesBattle(core, mods, mirror, setup, where, rand) {
+  const q = core.q
+  const out = new Watched(), watch = bailWatch(core, mods), tap = mirrorTap(mirror)
+  out.watch = watch.event
+  watch.where = where
+  const seen = { lines: 0, hidden: 0, autoload: -1 }
+  const onTrace = (line, G) => {
+    watch.G = G
+    tap.trace(line, G)
+    if (line.startsWith('log ')) return
+    const at = `${where} at trace line ${G.journal.trace.length}`
+    if (seen.autoload < 0) seen.autoload = autoloadCheck(G, at)
+    ridersState(core, mods, G, at)
+    seen.lines++
+    if (line.startsWith('act ') && rand() < 0.12) seen.hidden += ridersHidden(core, mods, G, at)
+  }
+  let G
+  try {
+    G = core.createMatch(setup, { out, strict: true, onTrace })
+  } catch (e) {
+    throw new Error(`${where}: ${e.stack}`)
+  }
+  if (G.turn.stage !== 'over') throw new Error(`${where}: an AI battle stopped at ${G.turn.stage}`)
+  watch.settle(`${where} at its end`)
+  ridersState(core, mods, G, `${where} at its end`)
+  invariants(core, G, `${where} at its end`)
+  const events = G.out.splice(0)
+  if (G.nav.hasHeight) heightEvents(G, events, where)
+  tap.fold(G, events, where)
+  const ends = result(G, where, -1)
+  const bad = traceShape(G)
+  if (bad) throw new Error(`${where}: ${bad}`)
+  const c = { battles: 1, ends, embarks: 0, steps: 0, stepped: 0, bailed: watch.counts.bailed, lost: watch.counts.lost, hullsDown: watch.counts.hullsDown, wrecks: 0, lines: seen.lines, hidden: seen.hidden, autoloaded: seen.autoload, acts: tap.counts().acts }
+  for (const e of events) {
+    if (e.t === 'unit.embark') c.embarks++
+    else if (e.t === 'unit.disembark' && !e.forced) c.steps++
+    else if (e.t === 'terrain.add' && e.def?.kind === 'wreck') c.wrecks++
+  }
+  c.stepped = c.steps ? 1 : 0
+  return c
+}
+
+// `n` such battles from `seed`'s stream at `mission`: the Bushtails with
+// carts in seat 0 or 1, against Bushtails (with carts) or the Coil
+function ridesTask(core, mods, mirror, RACES, MISSIONS, mission, n, seed) {
+  const A = core.army, rand = mulberry32(seed * 2654435761 + 11), m = MISSIONS[mission]
+  const sum = {}
+  for (let k = 0; k < n; k++) {
+    const mirrorMatch = (seed + k) % 2 === 0, swap = rand() < 0.5
+    const races = mirrorMatch ? ['squirrel', 'squirrel'] : swap ? ['serpent', 'squirrel'] : ['squirrel', 'serpent']
+    const seats = races.map((race) => {
+      const text = cartList(A, RACES[race], m.list, rand) ?? A.listText(A.autoList(RACES[race], m.list, Math.floor(rand() * 2 ** 32)))
+      return { race, ctrl: 'ai', army: text }
+    })
+    const setup = { board: Math.floor(rand() * 2 ** 32), dice: Math.floor(rand() * 2 ** 32), mission, terrain: m.sets[Math.floor(rand() * m.sets.length)], seats }
+    const c = ridesBattle(core, mods, mirror, setup, `P-riders ${mission} battle ${seed}.${k} (${JSON.stringify(setup)})`, rand)
+    for (const [key, v] of Object.entries(c)) if (typeof v === 'number') sum[key] = (sum[key] ?? 0) + v
+    sum[c.ends] = (sum[c.ends] ?? 0) + 1
+  }
+  return sum
+}
+
+// ── The scenes ──────────────────────────────────────────────────────────────
+// A Field battle on its own board, both seats human (the deployment
+// pending, the autoload done), each Bushtail seat fielding SCENE_LIST: an
+// Elder, three Nutkin, two Grenadiers, a Trebuchet and two War-Carts.
+const SCENE_LIST = '1032012'
+// look(where): the events since, folded into a mirror of the match (P-
+// present: `aboard` and the riders' places among it) that must then be the
+// match, the bail-outs settled and P-riders' state held; snap(): the mirror
+// taken from the match afresh (after a scene stands units somewhere by
+// hand, which no event reports)
+// (`battle`: both seats' deployments closed, the battle begun: a scene
+// whose blows land there, as they only can)
+function sceneMatch(core, mods, mirror, { other = 'squirrel', board = 4242, terrain = 'open', battle = false } = {}) {
+  const out = new Watched(), watch = bailWatch(core, mods)
+  out.watch = watch.event
+  const setup = { board, dice: 99, mission: 'field', terrain, seats: [{ race: 'squirrel', ctrl: 'human', army: SCENE_LIST }, { race: other, ctrl: 'human', ...(other === 'squirrel' ? { army: SCENE_LIST } : {}) }] }
+  const G = core.createMatch(setup, { out })
+  watch.G = G
+  if (battle) for (const s of [0, 1]) core.apply(G, s, { t: 'deployed' })
+  let M = null
+  const snap = () => {
+    G.out.splice(0)
+    M = mirror.project(G)
+  }
+  const look = (where) => {
+    watch.where = where
+    watch.settle(where)
+    ridersState(core, mods, G, where)
+    for (const e of G.out.splice(0)) mirror.applyEvent(M, e)
+    const d = differ(M, mirror.project(G))
+    if (d) throw new Error(`${where}: the mirror of the match's events differs from the match: ${d}`)
+  }
+  snap()
+  return { G, watch, look, snap, setup }
+}
+const hullsOf = (G, side) => G.units.filter((u) => u.side === side && u.alive > 0 && u.t.transport)
+// a point on the table no unit stands within `R` of (the board's centre
+// line first), or null
+function emptySpot(G, R, skip = []) {
+  const { W, H } = G.nav
+  for (let r = 0; r < 20; r += 0.5) for (let k = 0; k < 16; k++) {
+    const x = r * Math.cos((k * Math.PI) / 8), z = r * Math.sin((k * Math.PI) / 8)
+    if (Math.abs(x) > W / 2 - R || Math.abs(z) > H / 2 - R) continue
+    const i = G.nav.index(x, z)
+    if (!G.nav.standable(i, 1.6, 'walk')) continue
+    if (G.units.every((u) => skip.includes(u) || u.aboard || u.alive <= 0 || Math.hypot(u.pos.x - G.nav.x(i), u.pos.z - G.nav.z(i)) > R + u.r)) return { x: G.nav.x(i), z: G.nav.z(i) }
+  }
+  return null
+}
+
+function ridesScenes(core, mods, mirror, RACES, MISSIONS) {
+  const q = core.q, A = core.army, c = { scenes: 0 }
+  const legalOk = (G, s, b, where) => {
+    const why = core.legal(G, s, b)
+    if (why !== null) throw new Error(`${where}: legal() refuses ${JSON.stringify(b)} for seat ${s}: ${why}`)
+  }
+  const refused = (G, s, b, want, where) => {
+    const why = core.legal(G, s, b)
+    if (why === null || !want.test(why)) throw new Error(`${where}: legal() ${why === null ? 'takes' : `refuses with "${why}"`} ${JSON.stringify(b)} for seat ${s}, not refusing it with ${want}`)
+  }
+  {
+    // (the scenes' fixed list, legal at Field)
+    const why = A.checkList(RACES.squirrel, MISSIONS.field.list, [...SCENE_LIST].map(Number))
+    if (why) throw new Error(`the scenes' list ${SCENE_LIST} is refused at Field: ${why}`)
+  }
+
+  // 1. the deployment: the autoload, the riders hidden, and the
+  // re-arranging (a rider placed off its hull, boarded again, its hull
+  // placed elsewhere with its riders)
+  {
+    const where = 'scene: the deployment'
+    const { G, look } = sceneMatch(core, mods, mirror)
+    c.autoloaded = autoloadCheck(G, where)
+    if (!c.autoloaded) throw new Error(`${where}: the autoload boarded nobody`)
+    look(where)
+    c.hidden = ridersHidden(core, mods, G, where)
+    const v = hullsOf(G, 0)[0], p = G.units.find((u) => u.aboard === v.id)
+    const spot = q.freeSpot(G, p, v.pos.x, v.pos.z + 6, 0, G.units.filter((o) => o !== p))
+    const cell = G.nav.index(spot.x, spot.z)
+    legalOk(G, 0, { t: 'place', u: p.id, c: cell }, where)
+    core.apply(G, 0, { t: 'place', u: p.id, c: cell })
+    if (p.aboard || p.pos.x !== spot.x || p.pos.z !== spot.z) throw new Error(`${where}: a rider placed at (${spot.x}, ${spot.z}) stands at (${p.pos.x}, ${p.pos.z}), aboard ${p.aboard}: a place takes a rider off its hull`)
+    look(`${where}, a rider placed off its hull`)
+    legalOk(G, 0, { t: 'embark', u: p.id, v: v.id }, where)
+    core.apply(G, 0, { t: 'embark', u: p.id, v: v.id })
+    if (p.aboard !== v.id) throw new Error(`${where}: the deployment's embark left unit ${p.id} aboard ${p.aboard}, not unit ${v.id}`)
+    look(`${where}, the rider boarded again`)
+    const to = q.freeSpot(G, v, v.pos.x, v.pos.z - 7, 0, G.units.filter((o) => o !== v))
+    const hc = G.nav.index(to.x, to.z)
+    legalOk(G, 0, { t: 'place', u: v.id, c: hc }, where)
+    core.apply(G, 0, { t: 'place', u: v.id, c: hc })
+    look(`${where}, the hull placed elsewhere (its riders with it)`)
+    // the refusals: a vehicle boarding, the enemy's hull, a full hull, and
+    // a disembark in the deployment
+    refused(G, 0, { t: 'embark', u: hullsOf(G, 0)[1].id, v: v.id }, /is a vehicle/, where)
+    refused(G, 0, { t: 'embark', u: G.units.find((u) => u.side === 0 && !u.aboard && !u.t.vehicle).id, v: hullsOf(G, 1)[0].id }, /no standing vehicle of its own seat/, where)
+    refused(G, 0, { t: 'disembark', u: p.id, c: hc }, /doesn't answer the deploy decision/, where)
+    const big = G.units.find((u) => u.side === 0 && u.t.base > v.t.transport.maxBase && !u.t.vehicle)
+    if (big) refused(G, 0, { t: 'embark', u: big.id, v: v.id }, /bases are too large/, where)
+    c.scenes++
+  }
+
+  // 2. an enemy beside a hull, the hull on an objective, a template on it
+  {
+    const where = 'scene: an enemy beside a hull, the hull on an objective'
+    const { G, look } = sceneMatch(core, mods, mirror)
+    const v = hullsOf(G, 0)[0]
+    const o = [...G.objectives].sort((a, b) => Math.abs(a.x) + Math.abs(a.z) - Math.abs(b.x) - Math.abs(b.z))[0]
+    mods.units.moveUnitTo(G, v, o.x, o.z)
+    ridersState(core, mods, G, where)
+    if (q.controlOf(G, o) !== -1) throw new Error(`${where}: a War-Cart (OC0) on objective ${o.i} with ${q.riders(G, v).length} rider units aboard holds it for seat ${q.controlOf(G, o)}: riders hold nothing`)
+    const e = G.units.find((u) => u.side === 1 && u.alive > 0 && !u.aboard && !u.t.transport && u.t.models > 1)
+    mods.units.setUnitPos(e, v.pos.x + v.r + e.r + 0.5, v.pos.z)
+    if (!q.engagedWith(G, v).includes(e)) throw new Error(`${where}: an enemy 0.5" from the hull doesn't engage it`)
+    c.hidden += ridersHidden(core, mods, G, where)
+    // and 2" off: the hull may charge it (its own riders at its start in
+    // nobody's way)
+    mods.units.setUnitPos(e, v.pos.x + v.r + e.r + 2, v.pos.z)
+    c.hidden += ridersHidden(core, mods, G, `${where} (the enemy 2" off)`)
+    // a template on the hull: the hull hit, its riders untouched
+    const shooter = G.units.find((u) => u.side === 1 && u.t.ranged?.blast)
+    const was = q.riders(G, v).map((p) => JSON.stringify(p.models.map((m) => [m.w, m.alive])))
+    mods.units.setUnitPos(e, v.pos.x + 12, v.pos.z)
+    G.out.splice(0)
+    mods.shoot.blastLands(G, shooter, { x: v.pos.x, z: v.pos.z }, { ...shooter.t.ranged, S: 3, D: 1 })
+    const now = q.riders(G, v).map((p) => JSON.stringify(p.models.map((m) => [m.w, m.alive])))
+    if (JSON.stringify(was) !== JSON.stringify(now)) throw new Error(`${where}: a template on the hull wounded its riders (${was} → ${now}): it hits the hull, never the riders`)
+    if (!G.out.some((x) => x.t === 'dice' && x.label?.includes(`${v.t.short}: `))) throw new Error(`${where}: a template on the hull rolled no hits on it`)
+    G.out.splice(0)
+    c.scenes++
+  }
+
+  // 3. a bail-out by an enemy's 1": the cell the first rider would bail out
+  // onto with no enemy near (found on a twin of the scene, its hull
+  // destroyed alike: the wreck where the hull stood, the hull itself off
+  // the table) put inside an enemy's 1", so the rider takes the nearest
+  // cell outside it. (A friend stands on the hull's centre in both, so
+  // that cell is no centre one: an enemy's 1" over the hull's centre
+  // would bar the riders' walk off from its first step, and the rule's
+  // fallback, with no bubble, rightly takes the nearest cell then)
+  {
+    const where = "scene: a hull destroyed by an enemy's 1\""
+    const twin = sceneMatch(core, mods, mirror, { battle: true }).G
+    const tv = hullsOf(twin, 0)[0], tspot = emptySpot(twin, 9, [tv])
+    mods.units.moveUnitTo(twin, tv, tspot.x, tspot.z)
+    const friendOf = (G) => G.units.find((u) => u.side === 0 && u.alive > 0 && !u.aboard && !u.t.transport && u.t.models > 1)
+    mods.units.setUnitPos(friendOf(twin), tspot.x, tspot.z)
+    const tp = q.riders(twin, tv)[0]
+    twin.out.splice(0)
+    mods.damage.damage(twin, tv, 1, 99, twin.units.find((u) => u.side === 1 && u.alive > 0 && !u.aboard))
+    const first = twin.out.find((x) => x.t === 'unit.disembark' && x.forced && x.u === tp.id)
+    if (!first) throw new Error(`${where}: on the twin, its first rider never bailed out`)
+    const { G, look, watch, snap } = sceneMatch(core, mods, mirror, { battle: true })
+    const v = hullsOf(G, 0)[0], spot = emptySpot(G, 9, [v])
+    mods.units.moveUnitTo(G, v, spot.x, spot.z)
+    mods.units.setUnitPos(friendOf(G), spot.x, spot.z)
+    const p = q.riders(G, v)[0]
+    if (spot.x !== tspot.x || spot.z !== tspot.z || p.id !== tp.id) throw new Error(`${where}: the twin isn't the scene's (${JSON.stringify([spot, tspot, p.id, tp.id])})`)
+    // (the enemy a hand beyond that cell, outward from the hull: the cell
+    // inside its 1" but clear of its base)
+    const e = G.units.find((u) => u.side === 1 && u.alive > 0 && !u.aboard && !u.t.transport && u.t.models > 1)
+    // (a cell at the hull's very centre, on the wreck, has no outward: +x)
+    const cx = first.to.x, cz = first.to.z, d0 = Math.hypot(cx - v.pos.x, cz - v.pos.z)
+    const ux = d0 ? (cx - v.pos.x) / d0 : 1, uz = d0 ? (cz - v.pos.z) / d0 : 0, reach = e.r + p.r + 0.5
+    mods.units.setUnitPos(e, cx + ux * reach, cz + uz * reach)
+    snap()
+    watch.where = where
+    mods.damage.damage(G, v, 1, 99, e)
+    const bailed = G.out.find((x) => x.t === 'unit.disembark' && x.forced && x.u === p.id)
+    if (!bailed || (bailed.to.x === cx && bailed.to.z === cz)) throw new Error(`${where}: the first rider bailed out ${bailed ? `onto (${cx}, ${cz}), inside the enemy's 1"` : 'nowhere'}`)
+    look(where)
+    const wreck = G.terrain.chunks.find((x) => x.kind === 'wreck')
+    if (!wreck || wreck.shape.x !== v.pos.x || wreck.shape.z !== v.pos.z || wreck.hp !== 6 || wreck.look?.piece !== 'wreck') throw new Error(`${where}: no wreck where the hull stood (${JSON.stringify(wreck ?? null)})`)
+    if (watch.counts.bailed < 2) throw new Error(`${where}: ${watch.counts.bailed} riders bailed out of a hull carrying two squads in the open`)
+    c.bailed = watch.counts.bailed
+    c.scenes++
+  }
+
+  // 4. a bail-out with nowhere to stand: the field's other units (the
+  // Coil's whole army among them) stood one by one on the landing cell
+  // nearest the hull, each rider's in turn, the smallest base first, until
+  // none is left
+  {
+    const where = 'scene: a hull destroyed with nowhere to stand'
+    const { G, look, watch, snap } = sceneMatch(core, mods, mirror, { battle: true, other: 'serpent' })
+    const v = hullsOf(G, 0)[0], spot = emptySpot(G, 9, [v])
+    mods.units.moveUnitTo(G, v, spot.x, spot.z)
+    const blockers = G.units.filter((u) => u !== v && u.alive > 0 && !u.aboard && !u.t.transport)
+    const on = q.riders(G, v).sort((a, b) => a.r - b.r || a.id - b.id)
+    let used = 0
+    for (const p of on) {
+      for (;;) {
+        const cells = q.landing(G, p, v, false)
+        if (!cells.length || used >= blockers.length) break
+        let c0 = cells[0], d0 = Infinity
+        for (const i of cells) {
+          const d = Math.hypot(G.nav.x(i) - v.pos.x, G.nav.z(i) - v.pos.z)
+          if (d < d0) [c0, d0] = [i, d]
+        }
+        mods.units.setUnitPos(blockers[used++], G.nav.x(c0), G.nav.z(c0))
+      }
+    }
+    snap()
+    watch.where = where
+    const killer = blockers.find((u) => u.side === 1)
+    mods.damage.damage(G, v, 1, 99, killer)
+    look(where)
+    if (!watch.counts.lost) throw new Error(`${where}: every rider found a spot among ${used} units packed round the hull (the scene reaches no lost rider)`)
+    c.lost = watch.counts.lost
+    c.scenes++
+  }
+
+  // 5. the movement phase: a pilot naming a rider alone refused; a rider
+  // stepping off before its hull moved, a unit boarding the hull, the hull
+  // moving its riders, a rider stepping off after it (`rode`: no charge)
+  {
+    const where = 'scene: the movement phase'
+    const { G, look } = sceneMatch(core, mods, mirror)
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    look(`${where}, the battle begun`)
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`${where}: the battle begins at ${JSON.stringify(G.pending)}, not a movement phase`)
+    const s = G.pending.seats[0], mine = G.units.filter((u) => u.side === s)
+    const v = hullsOf(G, s)[0], [p, p2] = q.riders(G, v)
+    const bit = (u) => 2 ** mine.indexOf(u)
+    refused(G, s, { t: 'pilot', m: bit(p) }, /rides unit \d+: a rider moves only with its hull/, where)
+    legalOk(G, s, { t: 'pilot', m: bit(p) + bit(v) }, where)
+    refused(G, s, { t: 'move', u: p.id, c: G.nav.index(p.pos.x + 3, p.pos.z) }, /aboard a vehicle: disembark first/, where)
+    refused(G, s, { t: 'advance', u: p.id }, /aboard a vehicle: disembark first/, where)
+    const land = q.landing(G, p, v)
+    if (!land.length) throw new Error(`${where}: rider unit ${p.id} has no landing cell beside its hull in the deployment's rows`)
+    legalOk(G, s, { t: 'disembark', u: p.id, c: land[0] }, where)
+    core.apply(G, s, { t: 'disembark', u: p.id, c: land[0] })
+    if (p.aboard || !p.flags.moved || p.flags.rode) throw new Error(`${where}: a rider stepping off an unmoved hull is aboard ${p.aboard}, moved ${p.flags.moved}, rode ${p.flags.rode} (want 0, true, unset)`)
+    refused(G, s, { t: 'disembark', u: p.id, c: land[0] }, /rides no vehicle/, where)
+    look(`${where}, a rider stepped off`)
+    // a unit of the seat's boards the hull this move (the first that may)
+    let board = null
+    for (const u of mine) if (!board && core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null) board = u
+    if (!board) throw new Error(`${where}: no unit of seat ${s}'s may board unit ${v.id} with ${q.room(G, v)} models' room (the scene reaches no embark in a phase)`)
+    core.apply(G, s, { t: 'embark', u: board.id, v: v.id })
+    if (board.aboard !== v.id || !board.flags.moved || board.pos.x !== v.pos.x || board.pos.z !== v.pos.z) throw new Error(`${where}: unit ${board.id} boarding in the phase is aboard ${board.aboard}, moved ${board.flags.moved}, at (${board.pos.x}, ${board.pos.z}): want aboard unit ${v.id}, moved, at its hull`)
+    refused(G, s, { t: 'disembark', u: board.id, c: q.landing(G, board, v)[0] ?? 0 }, /has moved/, where)
+    look(`${where}, a unit boarded`)
+    // the hull moves 4" toward the enemy, its riders with it
+    const plan = q.movePlan(G, v, 0), sx = G.seats[s].edge
+    const to = q.nearestValid(G, plan, v.pos.x - sx * 4, v.pos.z)
+    if (to < 0) throw new Error(`${where}: unit ${v.id} has nowhere to move`)
+    core.apply(G, s, { t: 'move', u: v.id, c: to })
+    look(`${where}, the hull moved`)
+    legalOk(G, s, { t: 'disembark', u: p2.id, c: q.landing(G, p2, v)[0] }, where)
+    core.apply(G, s, { t: 'disembark', u: p2.id, c: q.landing(G, p2, v)[0] })
+    if (!p2.flags.rode || q.canCharge(G, p2)) throw new Error(`${where}: a rider stepping off a hull that had moved has rode ${p2.flags.rode}, and canCharge says ${q.canCharge(G, p2)}: it may not charge this turn`)
+    look(`${where}, a rider stepped off a moved hull`)
+    c.scenes++
+  }
+
+  // 6. the AI's friendly fire round a hull: a Trebuchet choosing between an
+  // enemy squad beside its own War-Cart and a weaker one standing alone,
+  // the first walked away from the cart a hundredth of an inch at a time.
+  // Its choice must be the one it makes with the cart's riders off the
+  // table (they are out of a template's reach), at every step; and the
+  // sweep must cross where the choice turns, or it shows nothing.
+  {
+    const where = "scene: the AI's friendly fire round a hull"
+    const { G } = sceneMatch(core, mods, mirror)
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    const s = G.pending.seats[0]
+    const T = G.units.find((u) => u.side === s && u.t.ai === 'artillery'), v = hullsOf(G, s)[0]
+    // (two enemy Nutkin squads, taken off their hulls by hand if they ride)
+    const [E, F] = G.units.filter((u) => u.side !== s && u.alive > 0 && u.t.short === 'Nutkin')
+    if (!T || !E || !F) throw new Error(`${where}: no Trebuchet, or fewer than two enemy Nutkin squads`)
+    E.aboard = F.aboard = 0
+    // (set in the movement phase, then End: the shooting phase opens with
+    // the targets in range) everything else of the enemy's far off, out of
+    // the Trebuchet's range; its own cart forward, the weaker squad apart
+    const sx = G.seats[s].edge, W = G.nav.W, H = G.nav.H
+    for (const u of G.units) if (u.side !== s && u !== E && u !== F && u.alive > 0 && !u.aboard) mods.units.moveUnitTo(G, u, -sx * (W / 2 - 2), u.pos.z > 0 ? H / 2 - 2 : -(H / 2 - 2))
+    const X = { x: T.pos.x - sx * 20, z: -7 }, Y = { x: T.pos.x - sx * 20, z: 7 }
+    mods.units.moveUnitTo(G, v, X.x, X.z)
+    mods.units.setUnitPos(F, Y.x, Y.z)
+    mods.units.setUnitPos(E, X.x - sx * 8, X.z)
+    for (const m of F.models.slice(1)) m.alive = false
+    F.alive = 1
+    mods.units.relayout(F)
+    core.apply(G, s, { t: 'end' })
+    if (G.pending?.phase !== 'shoot' || G.pending.seats[0] !== s) throw new Error(`${where}: seat ${s}'s End led to ${JSON.stringify(G.pending)}, not its shooting phase`)
+    const first = () => {
+      const out = G.out
+      G.out = null
+      try {
+        return core.preview(G, () => JSON.stringify(mods.policy.aiPhase(G, s, 'shoot').next().value ?? null))
+      } finally {
+        G.out = out
+      }
+    }
+    const chosen = new Set()
+    for (let k = 0; k <= 650; k++) {
+      const D = v.r + E.r - 1 + k * 0.01
+      mods.units.setUnitPos(E, X.x - sx * D, X.z)
+      const a = first(), b = unridden(G, first)
+      if (a !== b) throw new Error(`${where}: with an enemy squad ${D.toFixed(2)}" from the War-Cart the AI shoots ${a}, and ${b} with the cart's riders off the table: its friendly fire counts the riders, whom a template can't reach`)
+      chosen.add(a)
+    }
+    const tgs = [...chosen].map((x) => JSON.parse(x)?.tg)
+    if (!tgs.includes(E.id) || !tgs.includes(F.id)) throw new Error(`${where}: the sweep never turned the Trebuchet's choice between unit ${E.id} (beside the cart) and unit ${F.id} (alone): it chose ${[...chosen].join(' and ')}, so it can't tell`)
+    c.sweep = 651
+    c.scenes++
+  }
+  return c
+}
+// ── P-army: the deployment at the caps with hulls (F9a) ──────────────────────
+// Field and Grand random cap lists (the unit, model, role and per-unit caps
+// filled at random from the minimums, points unlimited: DESIGN §4.2.8.7's
+// measurement, with two War-Carts on every Bushtail side), Bushtail mirrors
+// and Bushtails against the Coil, half on open boards and half fortified:
+// the armies made and deployed as newState makes and deploys them
+// (core/units.js makeUnit, core/deploy.js deployArmies, the autoload
+// among it), on a match whose deployment is pending; then every unit
+// placed where `place` would accept it (legal() at its own cell, standing
+// on that cell's centre), every rider aboard as the autoload's rule has it
+// and boarding as `embark` would take it, and P-riders' state.
+function capCounts(race, rules, ROLES, rand, carts) {
+  const roster = race.roster, n = roster.length
+  const counts = Array(n).fill(0)
+  const t = (i) => race.units[roster[i]]
+  const cart = roster.findIndex((k) => race.units[k].transport)
+  const units = () => counts.reduce((s, x) => s + x, 0), models = () => counts.reduce((s, x, i) => s + x * t(i).models, 0)
+  const role = (r) => counts.reduce((s, x, i) => s + (t(i).role === r ? x : 0), 0)
+  const fits = (i) => counts[i] < rules.perKind && role(t(i).role) < rules.roles[t(i).role][1] && units() < rules.units && models() + t(i).models <= rules.models
+  if (cart >= 0) counts[cart] = carts
+  for (const r of ROLES) {
+    const of = roster.map((k, i) => i).filter((i) => t(i).role === r && i !== cart)
+    while (of.length && role(r) < rules.roles[r][0]) counts[of[Math.floor(rand() * of.length)]]++
+  }
+  for (;;) {
+    const ok = roster.map((k, i) => i).filter((i) => i !== cart && fits(i))
+    if (!ok.length) break
+    counts[ok[Math.floor(rand() * ok.length)]]++
+  }
+  return counts
+}
+function hullDeployTask(core, mods, RACES, MISSIONS, mission, n, seed) {
+  const q = core.q, A = core.army, rand = mulberry32(seed * 40503 + 17), m = MISSIONS[mission]
+  const lifted = { ...m.list, points: 1e9 }
+  const c = { boards: 0, units: 0, riders: 0, hulls: 0, sets: {} }
+  for (let k = 0; k < n; k++) {
+    const races = k % 2 ? ['squirrel', 'serpent'] : ['squirrel', 'squirrel']
+    const lists = races.map((race) => capCounts(RACES[race], m.list, mods.schema.ROLES, rand, 2))
+    lists.forEach((x, i) => {
+      const why = A.checkList(RACES[races[i]], lifted, x)
+      if (why) throw new Error(`P-army hull deployment: the ${races[i]} cap list ${A.listText(x)} at ${mission} breaks a cap: ${why}`)
+    })
+    const terrain = m.sets[k % m.sets.length]
+    const setup = { board: Math.floor(rand() * 2 ** 32), dice: 7, mission, terrain, seats: races.map((race) => ({ race, ctrl: 'human' })) }
+    const where = `P-army hull deployment ${mission} board ${seed}.${k} (${JSON.stringify({ ...setup, lists: lists.map((x) => A.listText(x)) })})`
+    const G = core.createMatch(setup, { out: null })
+    // the cap lists' units in place of the preset's, made and deployed as
+    // newState does
+    G.units.length = 0
+    G.nextUnitId = 1
+    races.forEach((race, side) => {
+      for (const key of A.keysOf(RACES[race], A.listText(lists[side]))) G.units.push(mods.units.makeUnit(G, key, side))
+    })
+    mods.deploy.deployArmies(G)
+    if (G.pending?.k !== 'deploy') throw new Error(`${where}: the match waits on ${JSON.stringify(G.pending)}, not its deployment`)
+    const hulls = G.units.filter((u) => u.t.transport)
+    if (hulls.filter((u) => u.side === 0).length !== 2) throw new Error(`${where}: seat 0 fields ${hulls.filter((u) => u.side === 0).length} War-Carts, not two`)
+    c.riders += autoloadCheck(G, where)
+    ridersState(core, mods, G, where)
+    for (const u of G.units) {
+      if (u.aboard) {
+        // aboard as `embark` would board it: off, then judged
+        const v = unitById(G, u.aboard)
+        u.aboard = 0
+        let why
+        try {
+          why = core.legal(G, u.side, { t: 'embark', u: u.id, v: v.id })
+        } finally {
+          u.aboard = v.id
+        }
+        if (why !== null) throw new Error(`${where}: unit ${u.id} (${u.t.short}) rides unit ${v.id}, but embark would refuse it: ${why}`)
+        continue
+      }
+      const cell = G.nav.index(u.pos.x, u.pos.z)
+      const why = core.legal(G, u.side, { t: 'place', u: u.id, c: cell })
+      if (why !== null || G.nav.x(cell) !== u.pos.x || G.nav.z(cell) !== u.pos.z) throw new Error(`${where}: unit ${u.id} (${u.t.short}${u.t.transport ? ', a hull' : ''}, seat ${u.side}) was deployed at (${u.pos.x}, ${u.pos.z}), where place would refuse it: ${why ?? 'no cell centre'}`)
+      c.units++
+    }
+    c.hulls += hulls.length
+    c.boards++
+    c.sets[terrain] = (c.sets[terrain] ?? 0) + 1
+  }
+  return c
+}
+
 let FOLDING = null
 
 if (a.child) {
@@ -2098,6 +3050,15 @@ if (a.child) {
     FOLDING = match.folding
   }
   const missionsOf = async () => (await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)).MISSIONS
+  // (F9a) what P-riders reaches below the core's door, on code with
+  // transports (null for older code): the units' places, damage and a
+  // template, the AI's shots and scores, the deployment, the constants
+  const ridesMods = async () => {
+    if (!existsSync(join(dir, 'core', 'actions', 'transport.js'))) return null
+    const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+    const [units, damage, shoot, policy, score, deploy, rules, nav, schema] = await Promise.all([at('core', 'units.js'), at('core', 'actions', 'damage.js'), at('core', 'actions', 'shoot.js'), at('core', 'ai', 'policy.js'), at('core', 'ai', 'score.js'), at('core', 'deploy.js'), at('core', 'rules.js'), at('core', 'nav.js'), at('data', 'schema.js')])
+    return { units, damage, shoot, policy, score, deploy, rules, nav, schema }
+  }
   // the HUD model's resultOf (R7b on; null for older code)
   const hud = existsSync(join(dir, 'present', 'hud-model.js')) ? await import(pathToFileURL(join(dir, 'present', 'hud-model.js')).href) : null
   let out
@@ -2106,7 +3067,7 @@ if (a.child) {
       const it = loadCorpus().items.find((x) => x.id === task.id)
       out = { ok: true, counts: corpusTask(core, rng, mirror, it, match, hud) }
     } else if (task.kind === 'random') {
-      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf() } : null
+      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf(), mods: await ridesMods(), rides: !!task.rides } : null
       const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud, lists)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
     } else if (task.kind === 'interleave') {
@@ -2130,7 +3091,15 @@ if (a.child) {
       const MISSIONS = await missionsOf()
       out = { ok: true, counts: { fuzz: fuzzTask(core, RACES, MISSIONS, task.fuzz, task.seed), sweep: sweepTask(core, RACES, MISSIONS), shadow: shadowTask(core) } }
     } else if (task.kind === 'armyGames') {
-      out = { ok: true, counts: armyGamesTask(core, RACES, await missionsOf(), task.mission, task.n, task.seed) }
+      out = { ok: true, counts: armyGamesTask(core, RACES, await missionsOf(), task.mission, task.n, task.seed, await ridesMods()) }
+    } else if (task.kind === 'rides') {
+      // (F9a) P-riders: AI battles with War-Carts
+      out = { ok: true, counts: ridesTask(core, await ridesMods(), mirror, RACES, await missionsOf(), task.mission, task.n, task.seed) }
+    } else if (task.kind === 'ridesScene') {
+      out = { ok: true, counts: ridesScenes(core, await ridesMods(), mirror, RACES, await missionsOf()) }
+    } else if (task.kind === 'hullDeploy') {
+      // (F9a) P-army: the deployment at the caps with hulls
+      out = { ok: true, counts: hullDeployTask(core, await ridesMods(), RACES, await missionsOf(), task.mission, task.n, task.seed) }
     }
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
@@ -2165,8 +3134,11 @@ function child(task, pkg) {
 }
 
 // (F11a) P-army's workload: fuzzed armies, and per mission the random
-// legal lists played AI against AI (in children of 10) and with a human seat
-const ARMY = { fuzz: 100000, ai: 40, human: 10 }
+// legal lists played AI against AI (in children of 10) and with a human
+// seat; (F9a) P-riders': AI battles with War-Carts by mission (in children
+// of 2), random games with War-Carts and a human seat, the scenes, and
+// P-army's deployments at the caps with hulls by mission
+const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20 } }
 
 async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
@@ -2183,15 +3155,27 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
       for (let k = 0; k < army.human; k++) tasks.push({ kind: 'random', seed: 900000 + seed * 1000 + m * 100 + k, lists: mission })
     }
   }
+  // (F9a, code with transports: P-riders, and P-army's deployment at the
+  // caps with hulls)
+  const rides = existsSync(join(pkg, 'core', 'actions', 'transport.js'))
+  if (rides) {
+    tasks.unshift({ kind: 'ridesScene' })
+    for (const [k, [mission, n]] of Object.entries(army.ridesAI ?? {}).entries()) for (let j = 0; j < n; j += 2) tasks.push({ kind: 'rides', mission, n: Math.min(2, n - j), seed: seed * 1000 + k * 100 + j })
+    for (let j = 0; j < (army.ridesHuman ?? 0); j++) tasks.push({ kind: 'random', seed: 800000 + seed * 1000 + j, lists: j % 3 === 2 ? 'grand' : 'field', rides: true })
+    for (const [mission, n] of Object.entries(army.hullDeploy ?? {})) if (n) tasks.push({ kind: 'hullDeploy', mission, n, seed })
+  }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
       : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
-        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})`
-          : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}`
+        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
+          : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts`
+            : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places`
+              : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls, ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
+                : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}${c.rides ? ` (P-riders: ${c.rides.autoloaded} autoloaded, ${c.rides.hidden} hidden-rider queries, embark ${c.rides.embarkDeploy} in the deployment and ${c.rides.embarkPhase} in a phase, ${c.rides.steps} steps off, ${c.rides.bailed} bailed out, ${c.rides.lost} lost)` : ''}`
     say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
     return r
   })
@@ -2251,17 +3235,34 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
+  // (F9a) P-riders: what it held, over the run, and what the games must
+  // have reached (the scenes reach the rest whatever the games do)
+  let ridesSaid = ''
+  if (rides) {
+    const of = (kind) => res.filter((r, i) => r.ok && tasks[i].kind === kind).map((r) => r.counts)
+    const ai = of('rides').reduce((s, c) => ({ battles: s.battles + c.battles, stepped: s.stepped + c.stepped, steps: s.steps + c.steps, bailed: s.bailed + c.bailed, lines: s.lines + c.lines }), { battles: 0, stepped: 0, steps: 0, bailed: 0, lines: 0 })
+    const human = res.filter((r, i) => r.ok && tasks[i].rides).map((r) => r.counts.rides ?? {})
+    const sum = (k) => human.reduce((n, c) => n + (c[k] ?? 0), 0)
+    const scenes = of('ridesScene')[0], deploys = of('hullDeploy')
+    if (coverage && !bad.length) {
+      const wantAI = Object.values(army.ridesAI ?? {}).reduce((a, b) => a + b, 0)
+      if (ai.battles !== wantAI) bad.push({ error: `P-riders ran short: ${ai.battles} of ${wantAI} AI battles with War-Carts` })
+      else if (wantAI >= 2 && !ai.steps) bad.push({ error: `P-riders: in ${ai.battles} AI battles with War-Carts no rider ever stepped off (the AI's transports never reached)` })
+      if ((army.ridesHuman ?? 0) >= 4 && (!sum('embarkDeploy') + !sum('embarkPhase') + !sum('disembarks'))) bad.push({ error: `P-riders: the random games with a human seat never sent ${[!sum('embarkDeploy') && 'an embark in the deployment', !sum('embarkPhase') && 'an embark in a phase', !sum('disembarks') && 'a disembark'].filter(Boolean).join(', ')} (more games?)` })
+    }
+    ridesSaid = `; (P-riders) ${ai.battles} AI battles with War-Carts (${ai.lines} trace lines held, riders stepping off ${ai.steps} times in ${ai.stepped} of them, ${ai.bailed} bail-outs) and ${human.length} random games with a human seat (embark ${sum('embarkDeploy')} in the deployment and ${sum('embarkPhase')} in a phase, disembark ${sum('disembarks')}, ${sum('hidden')} hidden-rider queries), ${scenes ? `${scenes.scenes} scenes` : 'no scenes'}; (P-army) ${deploys.reduce((n, c) => n + c.boards, 0)} deployments at the caps with hulls placed legally`
+  }
   // (F11a) P-army: what it held, over the run
   let armySaid = ''
   if (lists) {
     const fz = res.find((r, i) => r.ok && tasks[i].kind === 'army')?.counts
     const ai = res.filter((r, i) => r.ok && tasks[i].kind === 'armyGames').reduce((n, r) => n + r.counts.listGames, 0)
-    const human = res.filter((r, i) => r.ok && tasks[i].lists).length
+    const human = res.filter((r, i) => r.ok && tasks[i].lists && !tasks[i].rides).length
     const want = tasks.filter((t) => t.kind === 'armyGames').reduce((n, t) => n + t.n, 0)
-    if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
+    if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists && !t.rides).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
     if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -2421,12 +3422,62 @@ const MUTATIONS = {
   'pilot-bitwise': ['core/queries.js', '    const r = m % 2\n', '    m = m >>> 0\n    const r = m & 1\n'],
   // a pilot ends the phase, as Auto does
   'pilot-ends-phase': ['core/commands.js', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n', '    runAI(G, seat, G.pending.phase, maskUnits(G, seat, m))\n    G.pending = null\n'],
+  // (F9a, P-riders) a hull's move leaves its riders where it stood
+  'rider-left-behind': ['core/units.js', '  for (const o of G.units) if (o.aboard === u.id) setUnitPos(o, x, z)\n', ''],
+  // a place leaves a rider aboard its hull, wherever it is put
+  'place-keeps-aboard': ['core/commands.js', '    unit.aboard = 0\n    moveUnitTo(G, unit, G.nav.x(c), G.nav.z(c))', '    moveUnitTo(G, unit, G.nav.x(c), G.nav.z(c))'],
+  // the autoload boards squads past the hull's capacity
+  'autoload-overfills': ['core/actions/transport.js', '      if (u.t.base > tr.maxBase || u.t.big || u.t.wrecker || u.alive > left) continue\n', '      if (u.t.base > tr.maxBase || u.t.big || u.t.wrecker) continue\n'],
+  // the autoload boards any unit, not only Troops (the Elder among them)
+  'autoload-any-role': ['core/actions/transport.js', "      if (u.side !== v.side || u.t.role !== 'Troops' || u.aboard || !alive(u)) continue", '      if (u.side !== v.side || u.aboard || !alive(u) || u.t.vehicle) continue'],
+  // embark takes bases too large for the hull (the Trebuchet aboard)
+  'board-any-base': ['core/actions/transport.js', "  if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short} (${u.t.base}\" over its ${tr.maxBase}\")`\n", ''],
+  // a rider is the enemy's to see: in every bubble, fight and target list
+  'enemies-see-riders': ['core/queries.js', 'export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e) && !e.aboard)', 'export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e))'],
+  // riders lend auras and count among the AI's friends
+  'friends-see-riders': ['core/queries.js', 'export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u && !e.aboard)', 'export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u)'],
+  // a rider engages whoever stands by its hull
+  'rider-engages': ['core/queries.js', 'export const engagedWith = (G, u) => u.aboard ? [] : G.nav.hasHeight', 'export const engagedWith = (G, u) => G.nav.hasHeight'],
+  // riders hold objectives from the deck
+  'riders-hold': ['core/queries.js', '    if (!alive(u) || u.aboard) continue\n    for (const m of u.models) if (m.alive && hypot(', '    if (!alive(u)) continue\n    for (const m of u.models) if (m.alive && hypot('],
+  // a template over a hull wounds the riders on its deck
+  'blast-hits-riders': ['core/actions/shoot.js', '    if (!alive(v) || v.aboard) continue\n', '    if (!alive(v)) continue\n'],
+  // a hull's riders at its centre pen in its own move's ends
+  'riders-block-ends': ['core/actions/move.js', '    if (o === u || !alive(o) || o.aboard) continue', '    if (o === u || !alive(o)) continue'],
+  // and its placement (fits), and its charge's spots (a friend's spacing)
+  'riders-block-place': ['core/deploy.js', 'if (others.some((o) => !o.aboard && hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false', 'if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false'],
+  'riders-block-charge': ['core/actions/charge.js', 'o.side === u.side && !o.aboard && hypot(', 'o.side === u.side && hypot('],
+  // the AI's friendly fire counts the riders, whom no template reaches
+  'aishoot-fears-riders': ['core/ai/policy.js', '          if (f.side !== u.side || !alive(f) || f.aboard) continue', '          if (f.side !== u.side || !alive(f)) continue'],
+  // the bail-out runs backwards through G.units
+  'bail-reversed': ['core/actions/transport.js', '  for (const p of G.units.filter((o) => o.aboard === v.id && alive(o))) {', '  for (const p of G.units.filter((o) => o.aboard === v.id && alive(o)).reverse()) {'],
+  // the bail-out ignores the enemies' 1"
+  'bail-into-bubbles': ['core/actions/transport.js', '  const c = nearestCell(G, landing(G, p, v), v.pos.x, v.pos.z)', '  const c = nearestCell(G, landing(G, p, v, false), v.pos.x, v.pos.z)'],
+  // a landing (a step off, a bail-out) crowds onto other units' bases
+  'landing-crowds': ['core/actions/transport.js', '    if (others.some((o) => hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08)) continue\n', ''],
+  // a rider with nowhere to stand survives the wreck
+  'lost-rider-lives': ['core/actions/transport.js', '      for (const m of p.models) if (m.alive) killModel(G, p, m, v, m.w)\n', ''],
+  // (P-pilot, F9a) a mask naming a rider without its hull is taken
+  'pilot-rider-alone': ['core/commands.js', '  if (loose) return `unit ${loose.id} rides unit ${loose.aboard}: a rider moves only with its hull, so m names both`\n', ''],
+  // a rider off a hull that had moved may still charge
+  'rode-forgotten': ['core/actions/transport.js', '  if (v.flags.moved) u.flags.rode = true\n', ''],
+  // boarding in a phase isn't the unit's move: it may step off again
+  'embark-unmoved': ['core/actions/transport.js', '  moveUnitTo(G, u, v.pos.x, v.pos.z)\n  u.flags.moved = true\n', '  moveUnitTo(G, u, v.pos.x, v.pos.z)\n'],
 }
 
 if (a['self-test']) {
   const work = join(tmpdir(), `tails-and-scales-prop-${process.pid}`)
-  // (F11a: P-army's workload cut down, its fuzz a fifth and a few list battles)
-  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1 } }
+  // (F11a: P-army's workload cut down, its fuzz a fifth and a few list
+  // battles; F9a: P-riders' too, a battle with War-Carts, a game with a
+  // human seat, the scenes and a few deployments at the caps)
+  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1, ridesAI: { field: 1 }, ridesHuman: 1, hullDeploy: { field: 4, grand: 2 } } }
+  // (--mutations a,b: only those, by name)
+  const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(MUTATIONS)
+  const unknown = names.filter((x) => !Object.hasOwn(MUTATIONS, x))
+  if (unknown.length) {
+    console.error(`property: no mutation ${unknown.join(', ')} (there are ${Object.keys(MUTATIONS).join(', ')})`)
+    process.exit(2)
+  }
   const clean = await run(copyCode(dir, join(work, 'unbroken')), load)
   if (clean.length) {
     console.log(`property self-test: the unbroken copy fails the same workload, so no mutation can be judged: ${clean[0].error}`)
@@ -2435,7 +3486,7 @@ if (a['self-test']) {
   }
   console.log('  unbroken       passes (three corpus battles, ten games)')
   let missed = 0
-  for (const [name, [file, from, to]] of Object.entries(MUTATIONS)) {
+  for (const [name, [file, from, to]] of Object.entries(MUTATIONS).filter(([x]) => names.includes(x))) {
     const pkg = copyCode(dir, join(work, name))
     const f = join(pkg, file)
     const src = readFileSync(f, 'utf8')
@@ -2450,7 +3501,7 @@ if (a['self-test']) {
     if (!bad.length) missed++
   }
   rmSync(work, { recursive: true, force: true })
-  console.log(missed ? `\nproperty self-test FAILED: ${missed} mutation(s) missed or stale` : `\nproperty self-test passed: all ${Object.keys(MUTATIONS).length} mutations caught`)
+  console.log(missed ? `\nproperty self-test FAILED: ${missed} mutation(s) missed or stale` : `\nproperty self-test passed: all ${names.length} mutations caught${names.length < Object.keys(MUTATIONS).length ? ` (--mutations: ${names.length} of ${Object.keys(MUTATIONS).length})` : ''}`)
   process.exit(missed ? 1 : 0)
 }
 

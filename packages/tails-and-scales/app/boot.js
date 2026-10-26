@@ -204,6 +204,14 @@ export function boot(location) {
         // (its row shows the order it now holds)
         ui.card.show(u)
       },
+      // (F9a) a transport's riders as shown, a rider's hull, and a rider's
+      // chip pressed: that squad picked up (input/human.js)
+      riders: (u) => view.units.ridersOf(u.id),
+      aboard: (u) => {
+        const h = view.units.shown(u.id)?.aboard
+        return h ? { id: h, short: view.units.unit(h).t.short } : null
+      },
+      onRider: (id) => human.pickRider(id),
     }),
     tooltip: new Tooltip($('#tooltip')),
     banner: new Banner($('#banner')),
@@ -439,7 +447,10 @@ export function boot(location) {
     // shootTargets and chargeTargets arrays of the units[] objects themselves;
     // shotInfo(u, tg).ok; chargePlan(u, tg) null when no spot is reachable,
     // else a plan with .need; freeSpot(...) null or {x, z}; movePlan(u, extra)
-    // the plan validEnd takes; rngState() as the trace prints it. Replaying a
+    // the plan validEnd takes; rngState() as the trace prints it; (F9a) the
+    // embark(u, v) and disembark(u, c) hooks, units[].aboard, t.transport,
+    // q.landing(u) the cells a rider may step off onto and q.mayBoard(u, v)
+    // null or why not (the ride policy's). Replaying a
     // log needs the hooks, alive, isEngaged, canAct, shotInfo().ok,
     // chargeTargets, chargePlan's null and rngState(); the rest feeds only the
     // corpus policies (run on the PIN), so parity won't notice a reshape of
@@ -921,6 +932,18 @@ export function boot(location) {
         must(human.placeCharge(c), 'placeCharge')
         return settle()
       },
+      // (F9a) a unit boarding hull v (its ⤒ badge's click; in the deployment
+      // where the unit stands) and a rider stepping off onto cell c (a
+      // shaded landing cell's click), sent as those clicks send them
+      // (sim/oracle/human-bot.mjs's embark and disembark entries)
+      embark: (u, v) => {
+        must(human.embark(u, v), 'embark')
+        return settle()
+      },
+      disembark: (u, c) => {
+        must(human.disembark(u, c), 'disembark')
+        return settle()
+      },
       deployClick: (unit, ground) => must(human.deployClick(unit, ground), 'deployClick'),
       endPhase: () => {
         must($('#endPhase').onclick(), 'endPhase')
@@ -973,6 +996,14 @@ export function boot(location) {
         shotInfo: (u, tg) => asked((g) => shotInfo(g, u, tg)),
         chargeTargets: (u) => asked((g) => chargeTargets(g, u)),
         chargePlan: (u, tg) => asked((g) => chargePlan(g, u, tg)),
+        // (F9a) a rider's landing cells (its hull's), and why u may not
+        // board v now, null when it may (in a phase, or the deployment, as
+        // the decision is): the bot's ride policy
+        landing: (u) => asked((g, qq) => {
+          const v = g.units.find((x) => x.id === u.aboard)
+          return v ? qq.landing(g, u, v) : []
+        }),
+        mayBoard: (u, v) => asked((g, qq) => qq.mayBoard(g, u, v, g.pending?.k === 'phase')),
         rngState: () => (serving ? serving.rng : rngState(atTable().rng)),
       },
       screen(x, y, z) {

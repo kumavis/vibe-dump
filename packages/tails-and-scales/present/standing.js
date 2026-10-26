@@ -52,8 +52,9 @@ const COVERS = { march: ['move', 'shoot'], attack: ['move', 'shoot', 'charge'], 
 export const covers = (o, phase) => !!o && (COVERS[o.k] ?? []).includes(phase)
 
 // the AI's role order: moves and charges in it, shots reversed (as the AI's
-// own phases go)
-const ROLES = ['melee', 'raider', 'line', 'shooter', 'hero', 'artillery']
+// own phases go; (F9a) a transport first, as core/ai/policy.js's ORDER has
+// it, every other role a place on alike)
+const ROLES = ['transport', 'melee', 'raider', 'line', 'shooter', 'hero', 'artillery']
 // (a march is there within its leg's own reach of its slot: legFor ends on
 // the valid end nearest the slot within 1.5", so a slot crowded by others
 // still counts)
@@ -66,7 +67,14 @@ const targetInRange = (G, q, u) => !!u.t.ranged && G.units.some((e) => e.side !=
 const brawler = (u) => !u.t.ranged || u.t.ai === 'melee'
 
 export function stepOf(G, q, u, o, phase) {
-  if (!q.alive(u) || !covers(o, phase)) return { how: 'none', why: '' }
+  if (!q.alive(u)) return { how: 'none', why: '' }
+  // (F9a, DESIGN §4.2.6's Riders note) a rider holds no movement order of
+  // its own, whatever order it holds (a Hold's, which covers no movement
+  // phase, reads so too): it moves with its hull (the hull's order, or the
+  // player's own move of it), and steps off only by the player's hand, so
+  // the executor sends it nothing and End's ⟳ leaves it out
+  if (phase === 'move' && u.aboard) return { how: 'none', why: 'with the hull' }
+  if (!covers(o, phase)) return { how: 'none', why: '' }
   if (!q.canAct(G, u)) return { how: 'none', why: phase === 'move' ? 'already moved' : 'nothing to do' }
   if (o.k === 'hold' || o.k === 'auto') return { how: 'pilot' }
   if (o.k === 'march') {
