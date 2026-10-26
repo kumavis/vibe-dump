@@ -499,7 +499,9 @@ export class GhostPlanner {
     const sign = JSON.stringify([seat, verb, ids, at, advance])
     if (this.run?.sign === sign) return this.note
     this.note = 'Planning…'
-    const quiet = () => !!group.rec?.pin || group.busy || group.seat() !== seat
+    // (quiet: drawing no more; (F8b's review) the group let go counts too,
+    // as group.js's cancel() also lets the run go)
+    const quiet = () => !!group.rec?.pin || group.busy || group.seat() !== seat || !group.isGroup()
     this.start(sign, (G, q) => previewSteps(G, q, seat, verb, group.selection.units(G, ids), target, null, { advance }), {
       part: (p) => {
         if (quiet()) return this.cancel()

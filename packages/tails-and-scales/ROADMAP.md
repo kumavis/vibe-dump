@@ -928,9 +928,16 @@ follows N3.
   `['open', 'fortified']` (the refusal then reads "fought on open or
   fortified"), and half the `scale/` AI pairs (2 Field, 2 Grand) are
   re-recorded on `fortified`, with army-sim's Field and Grand gates and the
-  connectivity rows run there too. Left: army/'s Field and Grand pairs,
-  pilot/'s two Grand logs, the minimap's deck rims, stair arrows and ladder
-  ticks, a Grand battle played on a phone by hand. DESIGN's F8b notes.)
+  connectivity rows run there too. Left: the gates below, in an item of
+  their own. DESIGN's F8b notes.)
+- [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
+  what it built and checked; these gates of its row in DESIGN §4 (the
+  migration table) are not done, and stay open here until they are
+  (F8b's review): army/'s Field and Grand pairs (army/ lives on main with
+  F11a's corpus: recorded at the merge, in a commit of their own);
+  pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
+  minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
+  merge).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.

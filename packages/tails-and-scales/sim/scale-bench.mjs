@@ -9,20 +9,21 @@
 // units and then models, within every rule of the grand mission's list
 // (1,500 points, 24 units, 90 models, 7 of one unit, the slot table).
 // CAPS records them, and the bench measures exactly those; capList (below)
-// is the deterministic greedy that found them (each role's minimum from its
-// cheapest units, then the cheapest unit that still fits, ties to the one
-// with more models, then roster order), run again each time: if a price
-// retune moves its answer the bench says so, and CAPS is recorded anew.
-// Each unit is priced as the grand mission prices it (its list's own
-// `prices`, core/army.js priceOf). At those prices the Bushtails' is
-// '305743', 22 units and 87 models (1,085 points, held by the model cap),
-// and the Coil's '315743', 23 units and 88 models (1,340 points: a 24th
-// unit of 4 models or more passes 90 models, a second Brute 1,500 points,
-// and the heroes and the artillery are at their slots' 3). (At the
-// v6 prices, before F8b's retune, both were '305743'.) The fixture's cap lists (the
-// Bushtails' 23 units and 89 models, the Coil's 24 and 84) cost 1,575 and
-// 1,670, so it lifted the points limit to 2,000 to field them; on the real
-// mission no list over 1,500 is legal, so these are its caps.
+// finds them, run again each time, and a CAPS it doesn't find again fails
+// the bench (a price retune or a rule moved: record CAPS anew). (F8b's
+// review) It searches every list: each count vector up to perKind of every
+// roster entry (8^6, 262,144 for six units at Grand), each held to
+// core/army.js's checkList at the mission's prices (its list's own
+// `prices`, priceOf), the largest by units, then models, then the
+// non-Troops units fielded (§4.2.1's "every slot but Troops full", as far
+// as the units and models leave room), then the points spent, then the
+// count string, so one list wins. (Its first form, a greedy taking the
+// cheapest unit that fit, stopped short: '305743', 22 units and 87 models,
+// for the Bushtails with no Elite, where '333743' fields 23 and 90.) The
+// fixture's cap lists (the Bushtails' 23 units and 89 models, the Coil's 24
+// and 84) cost 1,575 and 1,670, so it lifted the points limit to 2,000 to
+// field them; on the real mission no list over 1,500 is legal, so CAPS's
+// are its caps (their sizes and points are printed with the rows).
 //
 //   createMatch   a hotseat match made, to its deployment (the board, its
 //                 terrain and nav, both armies placed)
@@ -40,6 +41,7 @@
 // again on a quiet one before it is believed.
 //
 //   node sim/scale-bench.mjs [--boards N] [--dir <code>] [--json]
+//   node sim/scale-bench.mjs --caps [--dir <code>]   (the search's cap lists, to record CAPS anew)
 //
 // --dir measures another copy of the code, for a before-and-after (on code
 // with no `grand` mission, from before F8b, its classic row alone).
@@ -50,7 +52,7 @@ import { loadCorpus } from './lib.mjs'
 import { jobSetup } from './run.mjs'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const { values: a } = parseArgs({ options: { boards: { type: 'string' }, dir: { type: 'string' }, json: { type: 'boolean' } } })
+const { values: a } = parseArgs({ options: { boards: { type: 'string' }, dir: { type: 'string' }, json: { type: 'boolean' }, caps: { type: 'boolean' } } })
 const CODE = a.dir ?? PKG
 const BUDGET = { create: 40, moveP90: 35, battle: 350 }
 const OVER = 1.5
@@ -66,39 +68,44 @@ const ms = (v) => (Number.isFinite(v) ? v.toFixed(1) : '–')
 const GRAND_RACES = ['squirrel', 'serpent']
 // the ×3 presets as each seat names them, and the cap lists (above)
 const PRESETS = { squirrel: '336333', serpent: '336333' }
-const CAPS = { squirrel: '305743', serpent: '315743' }
+const CAPS = { squirrel: '343643', serpent: '317543' }
 // A Grand AI battle on `board` with `dice`, each seat naming its list
 const grandSetup = (board, dice, lists) => ({
   board, dice, mission: 'grand', terrain: 'open',
   seats: GRAND_RACES.map((race) => ({ race, ctrl: 'ai', army: lists[race] })),
 })
 
-// The greedy that finds a race's cap list under `rules` (a mission's list):
-// counts in roster order, each unit at its price there (`priceOf`,
-// core/army.js's: the mission's own where its list sets one, else its cost).
-export function capList(race, rules, priceOf = (r, key) => r.units[key].cost) {
-  const ro = race.roster.map((key, k) => ({ key, k, t: race.units[key], cost: priceOf(race, key, rules) }))
-  const counts = ro.map(() => 0)
-  const fits = (e) => {
-    let units = 0, models = 0, points = 0, role = 0
-    ro.forEach((x, k) => {
-      units += counts[k]
-      models += counts[k] * x.t.models
-      points += counts[k] * x.cost
-      if (x.t.role === e.t.role) role += counts[k]
-    })
-    return units < rules.units && models + e.t.models <= rules.models && points + e.cost <= rules.points && counts[e.k] < rules.perKind && role < rules.roles[e.t.role][1]
+// A race's cap list under `rules` (a mission's list), by the search above:
+// counts in roster order. `A` is core/army.js (checkList, listCost: each
+// unit at the mission's price for it).
+export function capList(race, rules, A) {
+  const n = race.roster.length, top = rules.perKind
+  const counts = new Array(n).fill(0)
+  const t = race.roster.map((key) => race.units[key])
+  let best = null
+  const score = (c) => [
+    c.reduce((s, x) => s + x, 0),
+    c.reduce((s, x, k) => s + x * t[k].models, 0),
+    c.reduce((s, x, k) => s + (t[k].role === 'Troops' ? 0 : x), 0),
+    A.listCost(race, c, rules),
+  ]
+  const better = (x, y) => {
+    for (let k = 0; k < x.length; k++) if (x[k] !== y[k]) return x[k] > y[k]
+    return false
   }
-  const cheapest = (es) => es.filter(fits).sort((x, y) => x.cost - y.cost || y.t.models - x.t.models || x.k - y.k)[0]
-  for (const [role, [min]] of Object.entries(rules.roles)) {
-    for (let n = 0; n < min; n++) {
-      const e = cheapest(ro.filter((x) => x.t.role === role))
-      if (!e) throw new Error(`capList: the ${race.name} can't field the ${min} ${role} a list needs`)
-      counts[e.k]++
+  for (;;) {
+    if (A.checkList(race, rules, counts) === null) {
+      const sc = score(counts)
+      if (!best || better(sc, best.sc) || (!better(best.sc, sc) && counts.join('') > best.c.join(''))) best = { c: [...counts], sc }
     }
+    // the next count vector, the last entry fastest
+    let k = n - 1
+    while (k >= 0 && counts[k] === top) counts[k--] = 0
+    if (k < 0) break
+    counts[k]++
   }
-  for (let e; (e = cheapest(ro)); ) counts[e.k]++
-  return counts
+  if (!best) throw new Error(`capList: the ${race.name} field no legal list at all`)
+  return best.c
 }
 
 // One row: `setups` [[board, dice], …] on the core in `dir`
@@ -145,6 +152,17 @@ async function row(dir, setups, setupOf) {
   return { create: median(create), move: { p50: pct(move, 0.5), p90: pct(move, 0.9), max: Math.max(...move) }, battle: median(battle), battles: setups.length, phases: move.length, units }
 }
 
+// (--caps: the search's cap lists, and nothing timed)
+if (a.caps) {
+  const at = (f) => import(pathToFileURL(join(CODE, f)).href)
+  const [{ MISSIONS }, { RACES }, A] = await Promise.all([at('data/mission.js'), at('data/schema.js'), at('core/army.js')])
+  for (const race of GRAND_RACES) {
+    const r = RACES[race], c = capList(r, MISSIONS.grand.list, A)
+    console.log(`${race}: '${A.listText(c)}', ${c.reduce((s, x) => s + x, 0)} units, ${c.reduce((s, x, k) => s + x * r.units[r.roster[k]].models, 0)} models, ${A.listCost(r, c, MISSIONS.grand.list)} points (CAPS records '${CAPS[race]}')`)
+  }
+  process.exit(0)
+}
+
 const { items } = loadCorpus()
 const n = Number(a.boards) || 8
 const classicSetups = items.filter((it) => it.kind === 'ai').slice(0, 24).map((it) => [it.job.seed, it.job.dice])
@@ -174,9 +192,15 @@ if (grand) {
       }
     }
   }
+  // ((F8b's review) a CAPS the search doesn't find again fails: the rows
+  // would measure a lighter load than the caps, and the cap lists' rows are
+  // the AI count budget's trigger)
   for (const race of GRAND_RACES) {
-    const got = A.listText(capList(RACES[race], grand.list, A.priceOf))
-    if (got !== CAPS[race]) notes.push(`note: capList now gives the ${RACES[race].short} '${got}' (${JSON.stringify(sizeOf(race, got))}), CAPS records '${CAPS[race]}': a price or rule moved; record CAPS anew`)
+    const got = A.listText(capList(RACES[race], grand.list, A))
+    if (got !== CAPS[race]) {
+      failed++
+      notes.push(`FAIL capList finds the ${RACES[race].short}' cap list '${got}' (${JSON.stringify(sizeOf(race, got))}), CAPS records '${CAPS[race]}'${A.checkList(RACES[race], grand.list, [...CAPS[race]].map(Number)) ? '' : ` (${JSON.stringify(sizeOf(race, CAPS[race]))})`}: a price or rule moved, or CAPS was never the largest; record CAPS anew`)
+    }
   }
   for (const [key, lists] of [['grand', PRESETS], ['grandCaps', CAPS]]) {
     const r = await row(CODE, grandBoards, (b, d) => grandSetup(b, d, lists))

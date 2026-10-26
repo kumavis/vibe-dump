@@ -6,7 +6,10 @@
 // colour the input painted the ring (picked up, a target, can act), gold
 // when picked up, red when in combat, else a dark rim. A tap selects
 // (`pick(id)`), which beats casting a ray at an 11 px figure. Chips within
-// 18 px of each other stack into one cluster, "×3", and a tap zooms the
+// 18 px of each other (28 px on a touch screen: (F8b's review) its chips
+// are 28 px discs, so at 18 two of them 18-28 px apart neither stacked nor
+// stood clear, overlapping where tapping one matters most) stack into one
+// cluster, "×3", and a tap zooms the
 // camera onto it (`zoom(x, z, r)`: the table's point and the radius its
 // units take; the app wires it to the camera rig).
 //
@@ -16,7 +19,11 @@
 // "label and chip style writes per frame").
 import { clusters } from '../present/zoom.js'
 
-const PX = 18
+// the cluster's reach: §4.2.7's 18 px, or a coarse pointer's chip, 28 px
+// (style.css's @media (pointer: coarse)), asked each draw (a screen can
+// change pointers)
+const COARSE = typeof matchMedia === 'function' ? matchMedia('(pointer: coarse)') : null
+const PX = () => (COARSE?.matches ? 28 : 18)
 
 export class Chips {
   // `pick(id)`: a unit's chip tapped; `zoom(x, z, r)`: a cluster's
@@ -45,7 +52,7 @@ export class Chips {
   // Returns how many style or text writes it made.
   draw(units) {
     let writes = 0
-    const cs = units ? clusters(units, PX) : []
+    const cs = units ? clusters(units, PX()) : []
     const byId = units ? new Map(units.map((u) => [u.id, u])) : null
     cs.forEach((c, k) => {
       const us = c.ids.map((id) => byId.get(id))

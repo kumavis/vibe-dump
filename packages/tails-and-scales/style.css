@@ -1414,15 +1414,6 @@ body.mirror .ulabel.s1.sel .ct {
 }
 
 /* F8b: drawing at scale */
-/* the tools' toggles for the roster and the minimap (shown in battle) */
-#tools button.hidden {
-  display: none;
-}
-#tools #rosterBtn.on,
-#tools #minimapBtn.on {
-  border-color: var(--gold);
-  color: var(--gold);
-}
 /* semantic zoom (view/units.js): Tactical labels are short (the role's
    glyph for the name, the count, the order badge); Strategic shows chips */
 #labels[data-tier='tactical'] .ulabel .nm,
@@ -1523,6 +1514,40 @@ body:not(.playing) #minimap {
   bottom: auto !important;
   top: 100px;
 }
+/* (F8b's review) its own toggle: a tab on the map's corner while it is up,
+   the map's place while it is folded (never one of the tools) */
+#minimap .mmfold {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+  padding: 0;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1;
+}
+#minimap .mmfold.on {
+  border-color: var(--gold);
+}
+#minimap.folded {
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+#minimap.folded canvas {
+  display: none;
+}
+#minimap.folded .mmfold {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: inherit;
+}
 /* the roster (ui/roster.js): down the left, under the score */
 #roster {
   position: fixed;
@@ -1531,6 +1556,10 @@ body:not(.playing) #minimap {
   z-index: 5;
   width: 220px;
   max-height: calc(100vh - 380px);
+  /* ((F8b's review) and never down over the minimap, which rises above the
+     unit card on the left too: view/minimap.js sets --minimap-top while it
+     shows in landscape) */
+  max-height: min(calc(100vh - 380px), calc(var(--minimap-top, 100vh) - 74px));
   min-height: 0;
   display: flex;
   flex-direction: column;

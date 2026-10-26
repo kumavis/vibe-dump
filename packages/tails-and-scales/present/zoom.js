@@ -18,12 +18,15 @@
 //   Strategic  < 6            chips only (ui/chips.js); rings hidden, the
 //                             chip's border carrying the state
 //
-// Classic is unchanged: its landscape view is 22.7 px per inch at 1280×696
-// and its portrait one 13.6 at 412×915, both Close (dollied all the way
-// out, 75", a 1280×800 screen is still Close at 14.6; a portrait phone's
-// broadside, out to 105", reads Tactical, as on any board). A Grand
-// overview is Tactical on a desktop screen (about 11.5) and Strategic on a
-// portrait phone.
+// Classic is unchanged because the view keys the tiers on a board larger
+// than classic's (view/units.js's zoom, as LOD and the tiles are), not
+// because its views are all Close: at rest they read 15.8-24.7 px per inch
+// on a laptop (1280×696 to 1280×800), but 8.3-11.0 on a 412×915 portrait
+// phone (its broadside 8.3, its overview 9.0, behind a seat 11.0), which
+// would be Tactical; on classic's board the labels stay Close on every
+// screen (camera-check holds it). A Grand overview is Tactical on a desktop
+// screen (about 11.5) and Strategic on a portrait phone. (F8b's review: the
+// 13.6 this note once gave for classic's portrait view was never measured.)
 // To keep a camera resting on a boundary from flickering between two tiers,
 // a tier is left only once pxPerInch is HYST past its edge (tierOf's
 // `from`).

@@ -453,6 +453,14 @@ export class Human {
     const h = this.hoverPick
     const pk = this.picking()
     if (!h) {
+      // ((F8b's review) off the table mid-plan: a group's ghosts still
+      // coming are let go with what they drew so far; a whole plan stays
+      // drawn, as a small group's always has)
+      const ghosts = this.group?.ghosts
+      if (ghosts?.run) {
+        ghosts.cancel()
+        overlay.formation(null)
+      }
       // off the board mid-pick: show where "Shortest move" would put the
       // unit
       if (pk) overlay.ghostAt(G.nav, pk.cell, pk.u.r)

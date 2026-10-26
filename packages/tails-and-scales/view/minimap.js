@@ -34,8 +34,15 @@
 // state, the order lines and the camera's pose); `ms` keeps the last
 // redraw's time for render-bench (`paintMs` the last one that painted the
 // terrain's footprints again: a new board, a chunk broken). It is hidden on a board no larger than
-// classic's unless toggled (the 🗺 button, or M), and draws nothing under
-// ?fast.
+// classic's unless toggled (M), and draws nothing under ?fast.
+//
+// (F8b's review) Its toggle, 🗺, is its own, at its own corner, not one of
+// the tools': two more buttons there widened the row over the other seat's
+// score at a laptop's width, and over the phase hint on a phone, on every
+// board. On a larger board the 🗺 shows in battle, a tab on the map's
+// corner while it is up and the map's place itself while it is folded; on
+// classic's it shows only once M has brought the map up, so classic's
+// screen is as it was.
 import * as THREE from 'three'
 
 const W_PX = 160, H_PX = 112
@@ -59,18 +66,14 @@ export class Minimap {
     wrap.id = 'minimap'
     wrap.className = 'hidden'
     const canvas = (this.canvas = document.createElement('canvas'))
+    // the toggle, at the map's own corner (above)
+    const btn = (this.button = document.createElement('button'))
+    btn.id = 'minimapBtn'
+    btn.className = 'mmfold'
+    btn.textContent = '🗺'
+    wrap.appendChild(btn)
     wrap.appendChild(canvas)
     document.body.appendChild(wrap)
-    // the toggle: the tools' 🗺 (index.html), or one of its own (on a
-    // classic board it shows the map; folded in portrait it opens it)
-    let btn = document.querySelector('#minimapBtn')
-    if (!btn) {
-      btn = document.createElement('button')
-      btn.id = 'minimapBtn'
-      btn.textContent = '🗺'
-      document.body.appendChild(btn)
-    }
-    this.button = btn
     btn.title = 'Minimap (M): the whole board; click it to look there, right-click or long-press to march a group there'
     btn.onclick = () => this.toggle()
     addEventListener('keydown', (e) => {
@@ -142,21 +145,39 @@ export class Minimap {
 
   // ── Each tick (≤ 10 Hz) ──────────────────────────────────────────────────
   tick() {
-    const up = this.up()
-    this.el.classList.toggle('hidden', !up)
+    const up = this.up(), M = this.mirror(), b0 = this.board()
+    // (the map or its folded 🗺 in battle on a larger board; on classic's
+    // only while brought up)
+    const larger = !!b0 && b0.W * b0.H > 40 * 28
+    const shown = up || (larger && !!M && M.stage !== 'title')
+    this.el.classList.toggle('hidden', !shown)
+    this.el.classList.toggle('folded', !up)
     this.button.classList.toggle('on', up)
-    // (the button shows in battle only)
-    const M = this.mirror()
-    this.button.classList.toggle('hidden', !M || M.stage === 'title' || !this.board())
+    const portrait = innerWidth < innerHeight
+    // ((F8b's review) where the map's top stands, landscape: the roster
+    // above it, also down the left, stops short of it (style.css's
+    // --minimap-top), so the map raised over the card never covers its
+    // last rows; its place as it comes to rest, whatever its slide)
+    const card = document.querySelector('#card')
+    const lift = !portrait && card?.classList.contains('show') ? card.offsetHeight + 20 : 10
+    const top = shown && !portrait ? `${Math.round(innerHeight - lift - this.el.offsetHeight)}px` : ''
+    if (this.top !== top) {
+      this.top = top
+      if (top) document.documentElement.style.setProperty('--minimap-top', top)
+      else document.documentElement.style.removeProperty('--minimap-top')
+    }
+    if (!shown) {
+      this.sig = ''
+      return
+    }
+    this.el.classList.toggle('portrait', portrait)
+    // (above the unit card while it shows, which also lives bottom-left)
+    if (this.lift !== lift) this.el.style.bottom = `${(this.lift = lift)}px`
     if (!up) {
       this.sig = ''
       return
     }
     const b = this.fit()
-    // (above the unit card while it shows, which also lives bottom-left)
-    const card = document.querySelector('#card')
-    const lift = !this.portrait && card?.classList.contains('show') ? card.offsetHeight + 20 : 10
-    if (this.lift !== lift) this.el.style.bottom = `${(this.lift = lift)}px`
     const sig = this.signature(M, b)
     this.watch(M)
     if (sig === this.sig && !this.pings.length) return

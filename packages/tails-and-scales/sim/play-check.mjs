@@ -21,6 +21,14 @@
 //             points and rounds): the deployment adjusted by clicks, Begin
 //             battle, moves, shots and End into round 2; the first turn
 //             with more than 10 units gives its one-time tip (the toast)
+//   layout    (F8b's review) the battle's chrome in place: a hotseat battle
+//             on classic and on Grand, at 1280×800, 1366×768 and a 412×915
+//             phone, once the deployment's camera has rested: the tools row
+//             holds only its eight buttons of before F8b (no ☰ or 🗺 in
+//             it: they widened it over the other seat's score), and it
+//             clears that score (#vp1); on Grand in landscape, with a unit
+//             picked up and its card showing, the roster stops above the
+//             minimap raised over the card
 // (F4) A lane with a seat played here that reaches the round limit (--rounds
 // 5) is asked to play on: the panel must say which round is over, and Keep
 // playing must take it down and the HUD into round 6, overtime.
@@ -50,8 +58,8 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, pool } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
-const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand']
-const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5 }
+const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand', 'layout']
+const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5, layout: 1 }
 let a
 try {
   ({ values: a } = parseArgs({ options: { lanes: { type: 'string' }, rounds: { type: 'string' }, full: { type: 'boolean' }, dist: { type: 'string' }, parallel: { type: 'string' } } }))
@@ -412,6 +420,72 @@ async function lane(browser, url, name) {
   return { name, ok: !problems.length, problems, lines, stats }
 }
 
+// ((F8b's review) the layout lane: the chrome's boxes on three screens)
+const TOOLS = ['speed', 'view', 'follow', 'batch', 'autoFirst', 'autoEnd', 'mute', 'helpBtn']
+async function layoutLane(browser, url) {
+  const lines = [], problems = [], errors = []
+  for (const [w, h] of [[1280, 800], [1366, 768], [412, 915]]) {
+    for (const mission of ['classic', 'grand']) {
+      const page = await (await browser.newContext({ viewport: { width: w, height: h } })).newPage()
+      page.setDefaultTimeout(300000)
+      page.on('pageerror', (e) => errors.push(e.message))
+      const at = `${mission} at ${w}×${h}`
+      try {
+        await page.goto(`${url}/?seed=4242&dice=${DICE.layout}${a.full ? '' : '&lowfi'}${mission === 'classic' ? '' : `&mission=${mission}`}`)
+        await page.waitForSelector('#title:not(.hidden)')
+        await page.click('[data-mode="hotseat"]')
+        await page.waitForSelector('#setupStart')
+        await sleep(300)
+        await page.click('#setupStart')
+        // (the deployment's: Begin battle up for the seat placing)
+        await page.waitForFunction(() => {
+          const e = document.querySelector('#endPhase')
+          return document.body.classList.contains('playing') && getComputedStyle(e).display !== 'none' && !e.disabled && e.textContent.startsWith('Begin battle')
+        }, null, { timeout: 300000 })
+        await sleep(4000)
+        const box = (s) => page.evaluate((s) => {
+          const el = document.querySelector(s)
+          if (!el || getComputedStyle(el).display === 'none' || el.classList.contains('hidden')) return null
+          const r = el.getBoundingClientRect()
+          return r.width && r.height ? { l: r.left, t: r.top, r: r.right, b: r.bottom } : null
+        }, s)
+        const meets = (p, q) => !!p && !!q && p.l < q.r && q.l < p.r && p.t < q.b && q.t < p.b
+        const shown = await page.evaluate(() => [...document.querySelectorAll('#tools button')].filter((b) => getComputedStyle(b).display !== 'none').map((b) => b.id))
+        const tools = await box('#tools'), score = await box('#vp1')
+        if (shown.join() !== TOOLS.join()) problems.push(`${at}: the tools row shows ${shown.join(', ')}, not its eight of before F8b (${TOOLS.join(', ')})`)
+        if (!tools || !score) problems.push(`${at}: no tools row or no score for the other seat on the page`)
+        else if (meets(tools, score)) problems.push(`${at}: the tools row (${Math.round(tools.l)}-${Math.round(tools.r)} px) covers the other seat's score (${Math.round(score.l)}-${Math.round(score.r)} px)`)
+        let card = ''
+        if (mission === 'grand' && w > h) {
+          // a unit of the seat placing picked up by a click on its label's
+          // unit, so its card shows and the minimap rises over it
+          const ls = await page.evaluate(() => [...document.querySelectorAll('#labels .ulabel.s0')].map((l) => l.getBoundingClientRect()).filter((r) => r.width && r.left > 260 && r.right < innerWidth - 40 && r.top > 120 && r.bottom < innerHeight - 120).map((r) => ({ x: r.left + r.width / 2, y: r.bottom })))
+          for (const l of ls.slice(0, 6)) {
+            await page.mouse.click(l.x, l.y + 20)
+            await sleep(700)
+            if (await box('#card.show')) break
+          }
+          await sleep(1200)
+          const c = await box('#card.show'), mm = await box('#minimap'), ro = await box('#roster')
+          if (!c) problems.push(`${at}: no unit's card showed after clicks on six units`)
+          else if (!mm || !ro) problems.push(`${at}: the minimap or the roster isn't up on a Grand board`)
+          else {
+            if (meets(ro, mm)) problems.push(`${at}: with the card up the minimap (${Math.round(mm.t)}-${Math.round(mm.b)} px) covers the roster's last rows (it runs ${Math.round(ro.t)}-${Math.round(ro.b)} px)`)
+            if (meets(mm, c)) problems.push(`${at}: the minimap (${Math.round(mm.t)}-${Math.round(mm.b)} px) covers the card (${Math.round(c.t)}-${Math.round(c.b)} px)`)
+            card = `; the card up (${Math.round(c.t)}-${Math.round(c.b)} px), the minimap ${Math.round(mm.t)}-${Math.round(mm.b)}, the roster ${Math.round(ro.t)}-${Math.round(ro.b)}`
+          }
+        }
+        lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${card}`)
+      } catch (e) {
+        problems.push(`${at}: ${e.message.split('\n')[0]}`)
+      }
+      await page.context().close()
+    }
+  }
+  problems.push(...errors.map((x) => `page error: ${x}`))
+  return { name: 'layout', ok: !problems.length, problems, lines, stats: {} }
+}
+
 const work = mkdtempSync(join(tmpdir(), 'ts-play-'))
 try {
   const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
@@ -419,7 +493,7 @@ try {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   console.log(`play-check: ${a.dist ? dist : 'a fresh build of the working tree'} in Chromium ${browser.version()}, ${a.full ? 'full' : '?lowfi'}, lanes ${lanes.join(', ')}`)
   const res = await pool(lanes, PARALLEL, async (name) => {
-    const r = await lane(browser, url, name)
+    const r = name === 'layout' ? await layoutLane(browser, url) : await lane(browser, url, name)
     console.log(`\n  ${name}: ${r.ok ? 'ok' : 'FAIL'}\n${r.lines.map((l) => `    ${l}`).join('\n')}${r.ok ? '' : `\n${r.problems.map((p) => `    FAIL ${p}`).join('\n')}`}`)
     return r
   })

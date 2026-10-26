@@ -220,7 +220,7 @@ export function boot(location) {
       const seat = human.myTurn() ? human.localSeat() : -1
       if (seat >= 0) view.rig.bookmark(seat)
       const why = press()
-      if (why && seat >= 0 && view.rig.mark?.seat === seat) view.rig.mark = null
+      if (why && seat >= 0) view.rig.marks.delete(seat)
       return why
     }
   }
@@ -774,6 +774,9 @@ export function boot(location) {
       // (sim/input-check.mjs)
       group: {
         ids: () => human.group.members().map((u) => u.id),
+        // ((F8b's review) the units an order would go to: the group, or the
+        // one unit picked up, sim/input-check.mjs's chips and roster rows)
+        picked: () => human.standing?.picked().map((u) => u.id) ?? [],
         bar: () => human.group.model(),
         pinned: () => !!human.group.selection.of(human.group.seat()).pin,
         busy: () => human.group.busy,
@@ -792,7 +795,8 @@ export function boot(location) {
         // and the summary so far
         ghosts: () => {
           const g = human.group.ghosts
-          return { spread: g.spread, frames: g.frames, maxMs: g.maxMs, lastMs: g.lastMs, busy: !!g.run, note: g.note }
+          // ((F8b's review) and the formation's rings showing on the table)
+          return { spread: g.spread, frames: g.frames, maxMs: g.maxMs, lastMs: g.lastMs, busy: !!g.run, note: g.note, rings: (view.overlay.rings ?? []).filter((r) => r.visible).length }
         },
         // pick up `ids` together, pin their formation at (x, z) as a ground
         // click does, send it (a promise: the executor's run), and what the
@@ -993,6 +997,25 @@ export function boot(location) {
             chips: document.querySelectorAll('#chips .chip:not([style*="display: none"])').length,
           }
         },
+        // ((F8b's review, not promised) the chips shown, each its units'
+        // ids and its place on the page (sim/input-check.mjs taps them), and
+        // the minimap redrawn `n` times running, each a whole redraw (its
+        // signature forgotten first), brought up for it if it is folded:
+        // each redraw's ms (sim/render-bench.mjs)
+        chips: () => (view.units.chips?.pool ?? []).filter((c) => c.c && !c.last.hidden).map((c) => ({ ids: c.c.ids, x: c.last.x, y: c.last.y })),
+        minimapRedraws: (n) => {
+          const m = ui.minimap, was = m.wanted, out = []
+          if (!m.up()) m.toggle()
+          for (let i = 0; i < n; i++) {
+            m.sig = ''
+            m.tick()
+            out.push(m.ms)
+          }
+          m.wanted = was
+          m.sig = ''
+          m.tick()
+          return out
+        },
         // (F8b, not promised) the camera at scale (sim/play-check.mjs, the
         // opening view's shots): its pose and distance, how many batches it
         // framed, its bookmark, and each figure's height on screen in CSS px
@@ -1011,7 +1034,7 @@ export function boot(location) {
             if (top.z >= 1 || bot.z >= 1 || Math.abs(bot.x) > 1 || Math.abs(bot.y) > 1) return
             heights.push(((top.y - bot.y) / 2) * innerHeight)
           })
-          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, mark: rig.mark?.seat ?? null, heights }
+          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, marks: [...rig.marks.keys()], heights }
         },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)

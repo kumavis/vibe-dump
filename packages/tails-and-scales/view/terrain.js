@@ -365,8 +365,12 @@ export class TerrainView {
         if (c.alive && SET_Y.has(c.look.piece)) {
           kept.fall = null
           kept.anims = 0
-          if (kept.obj.position.y !== c.shape.y) this.untile(kept)
-          kept.obj.position.y = c.shape.y
+          // ((F8b's review) and a hurt's shudder still under way stops, the
+          // block back at its own x and z: tiled now, the tile would keep
+          // the shaken place, up to 0.03" off, once the shudder ended)
+          kept.shake = null
+          if (kept.obj.position.y !== c.shape.y || kept.obj.position.x !== c.shape.x || kept.obj.position.z !== c.shape.z) this.untile(kept)
+          kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)
           kept.c = defOf(c)
         }
         // ((F8b) a chunk promoted out of its tile by an event whose
@@ -666,11 +670,17 @@ export class TerrainView {
       m.material.color.multiplyScalar(0.8)
     }
     const p0 = m.position.clone()
+    // ((F8b's review) a token, as a fall's: a snap that stops the shudder
+    // (sync) leaves the block where it put it)
+    const shake = (v.shake = {})
     tween(0.25, (k) => {
+      if (v.shake !== shake) return
       const a = (1 - k) * 0.06
       m.position.x = p0.x + (Math.random() - 0.5) * a
       m.position.z = p0.z + (Math.random() - 0.5) * a
     }).then(() => {
+      if (v.shake !== shake) return
+      v.shake = null
       m.position.x = p0.x
       m.position.z = p0.z
     })

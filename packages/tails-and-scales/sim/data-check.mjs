@@ -892,8 +892,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   }
   // (F8b) the larger battles' presets at those missions' own prices (the
   // fallback's `list.prices`, as F8b's retune fitted them, DESIGN
-  // §4.2.8.2): a retune of a mission's prices re-pins them here
-  const PRESET_COST = { field: { squirrel: 990, serpent: 950 }, grand: { squirrel: 1350, serpent: 1485 } }
+  // §4.2.8.2): a retune of a mission's prices re-pins them here ((F8b's
+  // review) Field's re-pinned with its retune)
+  const PRESET_COST = { field: { squirrel: 980, serpent: 950 }, grand: { squirrel: 1350, serpent: 1485 } }
   for (const [m, by] of Object.entries(PRESET_COST)) {
     const mission = MISSIONS[m]
     for (const [key, want] of Object.entries(by)) {
