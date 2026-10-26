@@ -244,7 +244,7 @@ const PIECES = {
   },
 }
 // ── Fortifications (F7a, DESIGN §4.2.4) ─────────────────────────────────────
-// Decks, stairs, ladders and posts, each built from its look (the recipe's
+// Decks, stairs, ladders, posts and (F7b) parapets, each built from its look (the recipe's
 // recorded draws: its colour, its size in its own frame, w along its own x,
 // d along its own z, h tall) and its place and yaw, in a group turned as the
 // chunk is (shape.yaw: a box's own frame, as core/terrain/geom.js reads it).
@@ -396,6 +396,32 @@ const FORT_PIECES = {
     g.add(mesh(boxAt(w, h, d, 0, h / 2, 0), mat(shade(color, 0.8))))
     return { obj: g }
   },
+  // (F7b) A parapet: a thin crenellated wall standing on its deck's top
+  // (def.base, the deck's y), w long along its own x, d thick, h tall, its
+  // outer face its own −z (look.face '-z', on the deck's edge). In the
+  // deck's material: on stone a wall of the deck's colour with a darker
+  // coping course and merlons over it; on earth (a rampart's) a bank of
+  // the deck's earth with a timber rail and wooden merlons. The crenels
+  // are drawn only: the rules' body is the whole 0.7" box, which obscures a
+  // ray crossing it below its top (core/terrain/recipes.js). Two meshes, so
+  // a keep's ten are twenty draw calls (fewer once tiled).
+  parapet(c) {
+    const { w, d, h, material, color } = c.look
+    const y0 = c.base ?? 0
+    const g = framed(c)
+    const stone = material === 'stone'
+    const wall = stone ? 0.48 : 0.44, rail = 0.07, top = h - wall - rail
+    const body = [boxAt(w, wall, d, 0, y0 + wall / 2, 0)]
+    const trim = [boxAt(w + 0.04, rail, d + 0.06, 0, y0 + wall + rail / 2, 0)]
+    // merlons: n of them and n − 1 crenels between, alike in width, a
+    // merlon at each end
+    const n = Math.max(2, Math.round((w + 0.3) / 0.6)), seg = w / (2 * n - 1)
+    const merlons = []
+    for (let i = 0; i < n; i++) merlons.push(boxAt(seg, top, stone ? d : d * 0.7, -w / 2 + seg * (2 * i + 0.5), y0 + wall + rail + top / 2, 0))
+    if (stone) g.add(merged([...body, ...merlons], color), merged(trim, shade(color, 0.72)))
+    else g.add(merged(body, shade(color, 0.92)), merged([...trim, ...merlons], '#7a5232'))
+    return { obj: g }
+  },
 }
 // an up-arrow on a step's top at x, y (pointing up the stair's own +x)
 function chevron(x, y) {
@@ -462,6 +488,9 @@ export class TerrainView {
   // clear, sync or dispose).
   clear() {
     this.freeSpares()
+    // ((F7b) every chunk drawn solid again: a spare taken back by the next
+    // table's add is the chunk as it stands, not as the last one saw it)
+    for (const item of this.items.values()) this.solid(item)
     this.dropTiles()
     this.scene.remove(this.group)
     this.group = new THREE.Group()
@@ -630,8 +659,10 @@ export class TerrainView {
   // Whether an item may be drawn by its tile: tiling on, its mesh standing
   // on the table, not shared (a fallen tree's), not a rubble pile (its
   // pieces come with each break) and not animating.
+  // ((F7b) nor seen through: a faded chunk draws its own mesh, in its faded
+  // materials, until it is solid again)
   tileable(item) {
-    return this.tiled && !!item.obj && item.obj.parent === this.group && !item.shared && item.c.kind !== 'rubble' && item.c.look.piece !== 'fallen' && !(item.anims > 0) && this.shows(item)
+    return this.tiled && !!item.obj && item.obj.parent === this.group && !item.shared && item.c.kind !== 'rubble' && item.c.look.piece !== 'fallen' && !(item.anims > 0) && !item.faded && this.shows(item)
   }
 
   // An item into its tile (the 8" square its chunk stands in): its own mesh
@@ -828,11 +859,101 @@ export class TerrainView {
     return { tiles: this.tiles.size, meshes, tiled, bad }
   }
 
+  // ── See-through walls (F7b, DESIGN §4.2.4's "View, input, UI") ──────────
+  // The chunks the table shows standing that stand between the camera's
+  // `eye` and any of the points `pts` ({ x, y, z }: on the units the player
+  // is looking at, view/index.js), by id; with `all`, every tall chunk too
+  // (Alt held). "Between": the segment from the eye to the point passes
+  // through the chunk's box in the world (its object's, made once and kept
+  // until the object moves: a drop, a shudder, a fall), which is the
+  // spec's "its screen box covers the unit" with the depth asked too, so a
+  // wall behind a unit stays solid. A flat chunk (a forest's floor, a
+  // rubble pile) hides nothing, and a walkable top a point stands on (its
+  // deck or stair under the unit) is never in front of it.
+  occluders(eye, pts, all = false) {
+    const out = new Set()
+    for (const item of this.items.values()) {
+      if (!this.shows(item) || item.shared || FLAT.has(item.c.kind)) continue
+      const b = this.boxOf(item)
+      if (all && b.max.y > TALL) {
+        out.add(item.c.id)
+        continue
+      }
+      if (b.max.y < 0.3) continue
+      for (const p of pts) {
+        if (item.c.surface && topAt(item.c, p.x, p.z) !== null) continue
+        if (segmentMeets(eye, p, b)) {
+          out.add(item.c.id)
+          break
+        }
+      }
+    }
+    return out
+  }
+  // the box an item's object fills in the world (kept on the item until its
+  // object moves)
+  boxOf(item) {
+    const o = item.obj, at = `${o.position.x},${o.position.y},${o.position.z},${o.quaternion.y},${o.quaternion.w}`
+    if (item.box?.at !== at) {
+      o.updateMatrixWorld(true)
+      item.box = { at, b: new THREE.Box3().setFromObject(o) }
+    }
+    return item.box.b
+  }
+  // Show the chunks `ids` names faded (35% of their pixels drawn, in a
+  // fixed 4×4 dither: no transparency sort, and what they hid shows
+  // through the gaps), every other one solid again. A faded chunk leaves
+  // its tile (its own mesh shows, its tile merged again without it) and
+  // goes back once solid. The faded materials are made once per material
+  // and kept (fadeOf), so seeing through links one program per kind of
+  // material, once.
+  seeThrough(ids) {
+    for (const item of this.items.values()) {
+      const want = ids.has(item.c.id) && this.shows(item) && !item.shared
+      if (want === !!item.faded) continue
+      if (want) {
+        if (item.tile) {
+          this.untile(item)
+          this.flush()
+        }
+        item.faded = true
+        item.obj.traverse((o) => {
+          if (!o.isMesh || o.userData.top || o.material?.visible === false) return
+          o.userData.solid = o.material
+          o.material = fadeOf(o.material)
+        })
+      } else this.solid(item)
+    }
+  }
+  // an item drawn solid again (and back in its tile)
+  solid(item) {
+    if (!item.faded) return
+    item.faded = false
+    item.obj?.traverse((o) => {
+      if (!o.userData.solid) return
+      o.material = o.userData.solid
+      o.userData.solid = undefined
+    })
+    this.tile(item)
+  }
+  // the ids of the chunks shown faded now (sim/'s, through the scene: each
+  // faded mesh's material carries userData.seeThrough)
+  faded() {
+    return [...this.items.values()].filter((item) => item.faded).map((item) => item.c.id)
+  }
+
   // ── Freeing ───────────────────────────────────────────────────────────────
   // An item off the table, and what only it used freed: its geometry (but
   // the shared box and log shapes) and a scuffed chunk's own material. (A
   // fallen tree's item shares its mesh with its log's, which frees it.)
+  // ((F7b) A faded one drawn solid first, and its own material's faded
+  // copy freed with it.)
   free(item) {
+    this.solid(item)
+    if (item.ownMat && item.obj?.material && fades.has(item.obj.material)) {
+      fades.get(item.obj.material).dispose()
+      fades.delete(item.obj.material)
+    }
     this.untile(item)
     // (a felled tree's canopy, gone up in leaves, is no longer in its mesh)
     if (item.canopy && item.canopy.parent !== item.obj) freeShapes(item.canopy)
@@ -858,6 +979,9 @@ export class TerrainView {
   hurt(c, from, at) {
     const v = this.items.get(c.id), m = v.obj
     v.touched = true
+    // ((F7b) solid first: its scuffed colour is its own material's; the
+    // next frame's see-through fades it again if it is still in the way)
+    this.solid(v)
     this.promote(v)
     if (m.isMesh) {
       if (!v.ownMat) {
@@ -921,9 +1045,19 @@ export class TerrainView {
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
         break
+      // (F7b) a parapet leaves no rubble piece (core's terrain adds none: it
+      // had no nav effect): its stones or its earth and timber spill off
+      // the deck, with a puff of dust
+      case 'parapet': {
+        this.group.remove(v.obj)
+        const stone = c.look.material === 'stone'
+        fx.debris(s.x, s.y, s.z, stone ? [c.look.chip, c.look.chip, '#5a5650'] : [c.look.chip, '#7a5232', '#5f3e24'], 14, { from, power: 5, size: 0.1 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: stone ? '#a09a8a' : '#8a7458', life: 1.3 })
+        break
+      }
     }
     // the break's sound: stone crumbles, the rest thwacks
-    if (c.kind === 'block') sfx.crumble()
+    if (c.kind === 'block' || (c.kind === 'parapet' && c.look.material === 'stone')) sfx.crumble()
     else sfx.thwack()
   }
 
@@ -1058,6 +1192,56 @@ function flipWinding(geo) {
       a.setXYZ(i + 2, x, y, z)
     }
   }
+}
+
+// (F7b) Seeing through. FLAT chunks hide nothing; a TALL one (its box
+// higher than this over the table: a wall, a tree, a deck, a parapet on a
+// deck) fades while Alt is held. fadeOf(m) is m's faded copy: the same
+// material whose fragments are kept only where a 4×4 ordered dither's
+// threshold is under FADE (6 of every 16 pixels: 37.5%, the spec's "35%"),
+// so it needs no transparency sort and writes depth where it draws; made
+// once per material and kept (a scuffed chunk's own material's copy is
+// freed with it: free()). One program per kind of material (its cache key
+// names the dither), linked the first time something is seen through.
+const FLAT = new Set(['floor', 'rubble'])
+const TALL = 1.0
+const FADE = 0.35
+const fades = new WeakMap()
+const DITHER_FN = `
+float seeThroughBayer2(vec2 a) { a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }
+float seeThroughBayer4(vec2 a) { return seeThroughBayer2(0.5 * a) * 0.25 + seeThroughBayer2(a); }`
+function fadeOf(m) {
+  let f = fades.get(m)
+  if (f) return f
+  f = m.clone()
+  f.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>${DITHER_FN}`)
+      .replace('#include <dithering_fragment>', `#include <dithering_fragment>\n\tif (seeThroughBayer4(gl_FragCoord.xy) >= ${FADE.toFixed(2)}) discard;`)
+  }
+  f.customProgramCacheKey = () => 'see-through'
+  f.userData.seeThrough = true
+  fades.set(m, f)
+  return f
+}
+// whether the segment from a to b ({ x, y, z } each) passes through box `b`
+// (a Box3) short of b's end (the slab test; a point inside the box at the
+// far end counts: the unit stands in it)
+function segmentMeets(a, p, b) {
+  let t0 = 0, t1 = 1
+  for (const k of ['x', 'y', 'z']) {
+    const d = p[k] - a[k]
+    if (Math.abs(d) < 1e-9) {
+      if (a[k] < b.min[k] || a[k] > b.max[k]) return false
+      continue
+    }
+    let u = (b.min[k] - a[k]) / d, v = (b.max[k] - a[k]) / d
+    if (u > v) [u, v] = [v, u]
+    if (u > t0) t0 = u
+    if (v < t1) t1 = v
+    if (t0 > t1) return false
+  }
+  return t1 > 0
 }
 
 // every geometry of an object and its children freed, but the shared box

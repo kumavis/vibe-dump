@@ -101,8 +101,21 @@ export function sight(G, a, b, from = a.pos, bCover = undefined) {
 // sight with height, and with the reasons when `why` is given ({ block,
 // obscure }: the chunk that stopped the first ray stopped by a solid one,
 // and every obscuring chunk a ray passed, by id, each once in the order met)
+//
+// (F7b) A parapet obscures a ray that crosses it below its top (the
+// terrain's segment test is 3D: a ray from the ground up to a deck's
+// defenders meets it, one from a deck over it doesn't), but not the rays of
+// a shooter standing on its own deck at its level (nav.onLevel: the level
+// of the deck it stands on, and its base within STEP of the shooter's
+// floor), who fires over it: from the middle of a 4.5" walk the parapets
+// are 2" off, past the 1.3" an obscurer is hugged at (Terrain.los), and a
+// ray down to the ground within some 20" would cross them below their top,
+// so without this a deck's own parapets gave its enemies cover.
 function look(G, a, b, from, bCover, why) {
-  const eye = G.nav.hasHeight ? { x: from.x, y: floorAt(G, from.x, from.z) + eyeY(a), z: from.z } : { x: from.x, y: eyeY(a), z: from.z }
+  const fy = G.nav.hasHeight ? floorAt(G, from.x, from.z) : 0
+  const eye = G.nav.hasHeight ? { x: from.x, y: fy + eyeY(a), z: from.z } : { x: from.x, y: eyeY(a), z: from.z }
+  const L = G.nav.hasHeight ? G.nav.levelAt(from.x, from.z) : 0, onLevel = G.nav.onLevel
+  const over = L && onLevel?.size ? (c) => onLevel.get(c.id) === L && Math.abs(c.base - fy) <= STEP : null
   let seen = 0, obsc = 0, total = 0
   const ray = why && { block: null, obscure: [] }
   for (const m of b.models) {
@@ -114,7 +127,7 @@ function look(G, a, b, from, bCover, why) {
       ray.block = null
       ray.obscure.length = 0
     }
-    const r = G.terrain.los(eye, { x, y, z }, undefined, ray)
+    const r = G.terrain.los(eye, { x, y, z }, undefined, ray, over)
     if (why) {
       if (r.blocked && ray.block !== null && why.block === null) why.block = ray.block
       for (const id of ray.obscure) if (!why.obscure.includes(id)) why.obscure.push(id)
@@ -133,9 +146,13 @@ function look(G, a, b, from, bCover, why) {
 // with their reasons: `block`, the id of the solid chunk that stopped the
 // first ray a solid chunk stopped (null when none did: two obscurers in a
 // row block too); `obscure`, the ids of the obscuring chunks the rays
-// passed; `high`, the eye's floor more than STEP above the target's (it
-// looks down from raised ground). F7b's line of sight with its reasons
-// reads it. Under the lock, like every query here.
+// passed (a parapet among them where a ray crossed it below its top, and
+// never the parapets of the shooter's own deck, which it fires over);
+// `high`, the eye's floor more than STEP above the target's (it looks down
+// from raised ground). F7b's line of sight with its reasons reads it (the
+// view's tooltip: "Visible · target behind a parapet (cover)", "Blocked by
+// the keep", "High ground: sees over the hedge"). Under the lock, like
+// every query here.
 export function sightInfo(G, u, tg, from = u.pos) {
   const why = { block: null, obscure: [] }
   const s = look(G, u, tg, from, undefined, why)

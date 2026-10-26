@@ -476,11 +476,79 @@ function post(T, F, lx, lz, h, color, recipe) {
   })
 }
 
-// (F7b, DESIGN §4.2.4's piece table) A parapet: a thin wall 0.7" tall on a
-// deck's edge, navKind null (it stands in the ledge band that already stops
-// movement), los 'obscure', its cover band 1.5" deep behind it rastered at its
-// base level, `base` the deck's y, hp 3, no rubble when it breaks. Not built
-// yet: each recipe below notes where its parapets go.
+// (F7b, DESIGN §4.2.4's piece table) A parapet: a thin wall PARAPET_H tall
+// and PARAPET_T thick standing on a deck's top, its outer face on the deck's
+// edge, so it stands inside the ledge band that already keeps every disc off
+// the rim (no cell its footprint holds is one a unit stands on: navKind
+// null, it has no nav effect at all). Line of sight: 'obscure', so a ray
+// crossing it below its top (core/terrain/geom.js is 3D) gives its target
+// cover, and one passing over it doesn't. Cover: its band, PARAPET_BAND deep
+// behind its inner face, rastered at its `base` (the deck's y: core/nav.js
+// rasters a chunk's cover only on cells whose floor is within STEP of its
+// base), so a parapet covers the deck, not the ditch below it. The band is
+// its `coverShape`: nav pads every cover shape by COVER_PAD, so the shape
+// runs from the outer face to PARAPET_BAND − COVER_PAD behind the inner one,
+// and its pad takes it the rest of the way (and 0.6" past each end, over the
+// crenels, as every cover piece's pad does). `on` is its deck's id, as a
+// ladder's is. hp 3, so blasts and smashes break it (a wrecker only on its
+// level: core/actions/move.js's smashAround reads `base`); a broken one
+// leaves no rubble (core/terrain/terrain.js: it had no nav effect, and the
+// view spills debris). It draws nothing from the stream: its colour and
+// material are its deck's, already drawn.
+//
+// `face` names the deck's face it stands on, in the recipe's own frame:
+// '-z' (the front), '+z', '-x' or '+x'. Its own frame is the recipe's
+// turned by `ly` so that its own −z points out of the deck (`look.face`:
+// '-z', as a ladder's), its own x along the face; `n` is the inward normal
+// in the recipe's frame, exact (0 and ±1, so the keep's two sides are each
+// other's negation to the bit).
+export const PARAPET_H = 0.7
+export const PARAPET_T = 0.4
+export const PARAPET_BAND = 1.5
+const COVER_PAD = 0.6
+// the gap left in a run of parapets where a ladder's top comes over the
+// face (the ladder's own width and a quarter-inch each side), the gap at a
+// face's end where a stair joins the deck, and the crenels between the
+// parapets of one run
+export const PARAPET_LADDER_GAP = LADDER_W / 2 + 0.25
+export const PARAPET_END_GAP = 0.25
+const CRENEL = 0.25
+const FACES = Object.freeze({
+  '-z': { ly: 0, n: [0, 1] },
+  '+z': { ly: Math.PI, n: [0, -1] },
+  '-x': { ly: Math.PI / 2, n: [1, 0] },
+  '+x': { ly: -Math.PI / 2, n: [-1, 0] },
+})
+function parapet(T, F, deck, { lx, lz, len, face, recipe }) {
+  const { ly, n } = FACES[face]
+  const { material, color } = deck.look, base = deck.surface.y
+  const p = F.p(lx, lz), yaw = F.yaw(ly)
+  const back = (PARAPET_BAND - COVER_PAD) / 2, band = F.p(lx + n[0] * back, lz + n[1] * back)
+  return T.add({
+    kind: 'parapet', hp: 3,
+    shape: { x: p.x, y: base + PARAPET_H / 2, z: p.z, hx: len / 2, hy: PARAPET_H / 2, hz: PARAPET_T / 2, yaw },
+    coverShape: { x: band.x, z: band.z, hx: len / 2, hz: (PARAPET_T + PARAPET_BAND - COVER_PAD) / 2, yaw },
+    navKind: null, los: 'obscure', cover: true,
+    base, on: deck.id,
+    look: { piece: 'parapet', recipe, material, w: len, d: PARAPET_T, h: PARAPET_H, face: '-z', color, chip: color },
+  })
+}
+// A run of k parapets along a deck's face from a to b (along the recipe's x
+// for a ±z face, its z for a ±x face), the face at `at` across it, the
+// parapets parted by crenels. With `twin` each is followed by its point
+// mirror through the recipe's origin, on the opposite face (the keep, its
+// own mirror: the negated places to the bit, as its second stair is).
+function parapetRun(T, F, deck, { face, at, a, b, k, recipe, twin = false }) {
+  const len = (b - a - (k - 1) * CRENEL) / k
+  const along = face === '-z' || face === '+z'
+  const inset = face[0] === '-' ? PARAPET_T / 2 : -PARAPET_T / 2
+  for (let i = 0; i < k; i++) {
+    const s = a + len / 2 + i * (len + CRENEL), c = at + inset
+    const lx = along ? s : c, lz = along ? c : s
+    parapet(T, F, deck, { lx, lz, len, face, recipe })
+    if (twin) parapet(T, F, deck, { lx: -lx, lz: -lz, len, face: (face[0] === '-' ? '+' : '-') + face[1], recipe })
+  }
+}
 
 // ── Recipes ─────────────────────────────────────────────────────────────────
 // Each returns its gates in chunk order (each stair's low end, GATE_OUT past
@@ -490,7 +558,10 @@ function post(T, F, lx, lz, h, color, recipe) {
 // one end (drawn) and a scaling ladder on the front face (drawn along it).
 // 12 × 6.75" all told: the stair's end x = ±6, the deck from z = −1.125
 // (its front face) to 3.375, the ladder's foot at z = −3.375.
-// (F7b: four parapets along the front.)
+// (F7b) Four parapets along the front, two each side of the ladder's gap,
+// the run kept PARAPET_END_GAP short of the end the stair joins: placed by
+// the draws already made (where the stair and the ladder are), none of
+// their own.
 function rampart(T, F, rng) {
   const color = pick(EARTH, rng)
   const end = rng() < 0.5 ? 1 : -1
@@ -503,13 +574,19 @@ function rampart(T, F, rng) {
   stair(T, F, { lx: end * 4, lz: dz, ly: end > 0 ? Math.PI : 0, len: 4, w: 4.5, h, material: 'earth', color, recipe: 'rampart' })
   const lx = dx + off
   ladder(T, F, { lx, lz: dz - 2.25, ly: 0, h, color: wood, recipe: 'rampart', foot: [lx, dz - 2.25 - LADDER_OUT], top: [lx, dz], on: d.id })
+  const lo = dx - 4 + (end < 0 ? PARAPET_END_GAP : 0), hi = dx + 4 - (end > 0 ? PARAPET_END_GAP : 0)
+  parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lo, b: lx - PARAPET_LADDER_GAP, k: 2, recipe: 'rampart' })
+  parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lx + PARAPET_LADDER_GAP, b: hi, k: 2, recipe: 'rampart' })
   return [{ ...F.p(end * (6 + GATE_OUT), dz), by: 'stair' }, { ...F.p(lx, dz - 2.25 - LADDER_OUT), by: 'ladder' }]
 }
 
 // A square stone platform, 5 × 5", 2" high, a 4.5"-wide stair 4" long at the
 // back and a ladder on the front. 5 × 11.25": the deck from z = −3.375 to
 // 1.625, the stair on to 5.625, the ladder's foot at −5.625.
-// (F7b: six parapets, front and sides.)
+// (F7b) Six parapets: one each side of the ladder's gap on the front, two
+// down each side, the side runs starting behind the front's (no two
+// parapets share a corner) and kept PARAPET_END_GAP short of the back, where
+// the stair joins.
 function bastion(T, F, rng) {
   const color = pick(DECK_STONE, rng)
   const wood = pick(WOOD, rng)
@@ -518,6 +595,9 @@ function bastion(T, F, rng) {
   // (rising toward the deck: up its own +x, the recipe's −z)
   stair(T, F, { lx: 0, lz: 3.625, ly: Math.PI / 2, len: 4, w: 4.5, h, material: 'stone', color, recipe: 'bastion' })
   ladder(T, F, { lx: 0, lz: -3.375, ly: 0, h, color: wood, recipe: 'bastion', foot: [0, -3.375 - LADDER_OUT], top: [0, dz], on: d.id })
+  parapetRun(T, F, d, { face: '-z', at: -3.375, a: -2.5, b: -PARAPET_LADDER_GAP, k: 1, recipe: 'bastion' })
+  parapetRun(T, F, d, { face: '-z', at: -3.375, a: PARAPET_LADDER_GAP, b: 2.5, k: 1, recipe: 'bastion' })
+  for (const [face, at] of [['-x', -2.5], ['+x', 2.5]]) parapetRun(T, F, d, { face, at, a: -3.375 + PARAPET_T, b: 1.625 - PARAPET_END_GAP, k: 2, recipe: 'bastion' })
   return [{ ...F.p(0, 5.625 + GATE_OUT), by: 'stair' }, { ...F.p(0, -3.375 - LADDER_OUT), by: 'ladder' }]
 }
 
@@ -525,7 +605,8 @@ function bastion(T, F, rng) {
 // back. 4.5 × 9": the ladders' feet at z = ∓4.5. Both ladders' tops are the
 // deck's centre (its centreline, at either ladder): a 4.5" deck admits a
 // CLIMB_R disc only near its middle.
-// (F7b: eight parapets, all round.)
+// (F7b) Eight parapets, all round: one each side of the ladder's gap, front
+// and back, and two down each side, between them.
 function watchtower(T, F, rng) {
   const color = pick(DECK_STONE, rng)
   const wood = pick(WOOD, rng)
@@ -533,6 +614,11 @@ function watchtower(T, F, rng) {
   const d = deck(T, F, { lx: 0, lz: 0, w: 4.5, d: 4.5, h, material: 'stone', color, recipe: 'watchtower' })
   ladder(T, F, { lx: 0, lz: -2.25, ly: 0, h, color: wood, recipe: 'watchtower', foot: [0, -2.25 - LADDER_OUT], top: [0, 0], on: d.id })
   ladder(T, F, { lx: 0, lz: 2.25, ly: Math.PI, h, color: wood, recipe: 'watchtower', foot: [0, 2.25 + LADDER_OUT], top: [0, 0], on: d.id })
+  for (const [face, at] of [['-z', -2.25], ['+z', 2.25]]) {
+    parapetRun(T, F, d, { face, at, a: -2.25, b: -PARAPET_LADDER_GAP, k: 1, recipe: 'watchtower' })
+    parapetRun(T, F, d, { face, at, a: PARAPET_LADDER_GAP, b: 2.25, k: 1, recipe: 'watchtower' })
+  }
+  for (const [face, at] of [['-x', -2.25], ['+x', 2.25]]) parapetRun(T, F, d, { face, at, a: -2.25 + PARAPET_T, b: 2.25 - PARAPET_T, k: 2, recipe: 'watchtower' })
   return [{ ...F.p(0, -2.25 - LADDER_OUT), by: 'ladder' }, { ...F.p(0, 2.25 + LADDER_OUT), by: 'ladder' }]
 }
 
@@ -555,14 +641,16 @@ function platform(T, F, rng) {
 // along its own x, so (the keep turned at most 0.2 off the table's long
 // axis: CENTRES.keep) they face the two zones. 16 × 6". The keep is its own
 // point mirror, exactly: the second stair is the first's negation.
-// (F7b: ten parapets on the other sides.)
+// (F7b) Ten parapets on the other two sides, five along each, the +z side's
+// each the −z side's negation (its twin), so the keep stays its own mirror.
 function keep(T, F, rng) {
   const color = pick(DECK_STONE, rng)
   const h = 2.5, len = h / STAIR_SLOPE
-  deck(T, F, { lx: 0, lz: 0, w: 6, d: 6, h, material: 'stone', color, recipe: 'keep' })
+  const d = deck(T, F, { lx: 0, lz: 0, w: 6, d: 6, h, material: 'stone', color, recipe: 'keep' })
   const at = 3 + len / 2
   stair(T, F, { lx: -at, lz: 0, ly: 0, len, w: 4.5, h, material: 'stone', color, recipe: 'keep' })
   stair(T, F, { lx: at, lz: 0, ly: Math.PI, len, w: 4.5, h, material: 'stone', color, recipe: 'keep' })
+  parapetRun(T, F, d, { face: '-z', at: -3, a: -3, b: 3, k: 5, recipe: 'keep', twin: true })
   return [{ ...F.p(-(3 + len + GATE_OUT), 0), by: 'stair' }, { ...F.p(3 + len + GATE_OUT, 0), by: 'stair' }]
 }
 

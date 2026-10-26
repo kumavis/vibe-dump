@@ -25,6 +25,13 @@
 // fights on one), read off the match as it is folded (sim/height-probe.mjs:
 // never the trace, which has no floors).
 //
+// F7b's row, over the same battles (each folded once for both rows): a
+// shooter fires from a deck in ≥ 50% of them (a volley or a template fired
+// by a unit standing on a deck, its floor above STEP: the probe's
+// deckShots, the units deployed onto the works counting, as the row asks
+// only that the decks are fired from). Beside it, the shots and the
+// volleys fired from decks, and the battles with a volley from one.
+//
 // F10b's row (at F8b, on the Grand boards): 4 Grand battles with one army
 // on `pilot` every phase; that army reaches melee by round 3 in ≥ 3 of 4.
 // The pilot army's seat is the human's, and every phase it is handed a
@@ -47,12 +54,12 @@
 // a pilot that charges from one that doesn't.
 //
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f10b; comma-separated for more)
-//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's row: a seeded sweep of fortified AI battles instead
+//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f10b; comma-separated for more)
+//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's and F7b's rows: a seeded sweep of fortified AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
-// F7a's row: with no fort/ AI pair in the corpus (before F7a's corpus
-// commit) it sweeps 24. Each battle is folded in this process through the
+// F7a's and F7b's rows: with no fort/ AI pair in the corpus (before F7a's
+// corpus commit) they sweep 24. Each battle is folded in this process through the
 // code's own Folder (sim/run.mjs foldJob), as parity folds it. F10b's row
 // folds through the code's createMatch and apply, `strict` (every AI
 // command held to legal()). A battle that stops short is a failure, named.
@@ -67,7 +74,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f10b']
+const ROWS = ['f7a', 'f7b', 'f10b']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -88,9 +95,13 @@ const { MISSIONS } = await import(at('data/mission.js'))
 const pct = (x, y) => (y ? `${Math.round((100 * x) / y)}%` : '-')
 
 // ── F7a: height played ──────────────────────────────────────────────────────
-// { checks, failed }, or null when the code has no fortified set
-async function f7a() {
+// The fortified battles F7a's and F7b's rows read, each folded once with
+// the height probe: { what, rows, failed, n }, or null when the code has no
+// fortified set (made the first time a row asks)
+let fortRun = null
+async function fortBattles() {
   if (!Object.hasOwn(SETS, 'fortified')) return null
+  if (fortRun) return fortRun
   // (sim/height-probe.mjs is F7a's, beside this file)
   const { heightProbe } = await import(pathToFileURL(fileURLToPath(new URL('./height-probe.mjs', import.meta.url))).href)
   const match = await loadMatch(dir)
@@ -104,7 +115,7 @@ async function f7a() {
   })
   const battles = SWEEP !== null || !pairs.length ? sweep(SWEEP ?? 24) : pairs
   const what = SWEEP !== null || !pairs.length ? `a sweep of ${battles.length} fortified AI battles (no fort/ AI pair is in the corpus${SWEEP !== null ? ', or --sweep' : ''})` : `the ${battles.length} fort/ AI pairs`
-  console.log(`\nF7a's row: ${what}`)
+  console.log(`\nF7a's and F7b's rows: ${what}`)
 
   const rows = [], failed = []
   for (const b of battles) {
@@ -116,10 +127,18 @@ async function f7a() {
       continue
     }
     rows.push({ id: b.id, ...p, rounds: res.over?.round })
-    console.log(`  ${b.id.padEnd(28)} on a deck by a move at the end of rounds ${p.movedRounds.join(',') || '-'}${p.movedBy3 ? ' (by 3)' : ''} (any unit: ${p.deckRounds.join(',') || '-'}); deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
+    console.log(`  ${b.id.padEnd(28)} on a deck by a move at the end of rounds ${p.movedRounds.join(',') || '-'}${p.movedBy3 ? ' (by 3)' : ''} (any unit: ${p.deckRounds.join(',') || '-'}); deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}; shots from a deck ${p.deckShots} (${p.deckVolleys} volleys)${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
   }
   for (const f of failed) console.log(`  FAILED ${f}`)
+  fortRun = { what, rows, failed, n: battles.length }
+  return fortRun
+}
 
+// { checks, failed }, or null when the code has no fortified set
+async function f7a() {
+  const run = await fortBattles()
+  if (!run) return null
+  const { rows, failed } = run
   const n = rows.length
   const deck = rows.filter((r) => r.movedBy3).length, anyDeck = rows.filter((r) => r.deckBy3).length
   const keeps = rows.filter((r) => r.keep), held = keeps.filter((r) => r.keepHeld > 0).length
@@ -130,6 +149,23 @@ async function f7a() {
     { name: 'the keep\'s objective held from its top', ok: keeps.length > 0 && held * 6 >= keeps.length, got: keeps.length ? `${held} of the ${keeps.length} battles the keep stands in (${pct(held, keeps.length)})` : 'no battle has the keep, so this cannot be judged', want: '≥ 1 battle of 6' },
   ]
   return { checks, failed }
+}
+
+// ── F7b: decks fired from ───────────────────────────────────────────────────
+// { checks, failed }, or null when the code has no fortified set (its
+// failures are F7a's row's, the same battles: counted once)
+async function f7b() {
+  const run = await fortBattles()
+  if (!run) return null
+  const played = run.rows, n = played.length
+  const fired = played.filter((r) => r.deckShots > 0).length, volleyed = played.filter((r) => r.deckVolleys > 0).length
+  const sum = (k) => played.reduce((s, r) => s + r[k], 0)
+  console.log(`\nF7b's row: shots fired from a deck ${sum('deckShots')} (${sum('deckVolleys')} volleys) over ${n} battles; a volley from a deck in ${volleyed} (${pct(volleyed, n)})`)
+  const checks = [
+    { name: 'a shooter fires from a deck', ok: n > 0 && n === run.n && fired * 2 >= n, got: `${fired} of ${n} battles (${pct(fired, n)})${n < run.n ? `, ${run.n - n} failed` : ''}`, want: '≥ 50%' },
+  ]
+  // (the battles that failed are F7a's row's too: counted there when it runs)
+  return { checks, failed: rows.includes('f7a') ? [] : run.failed }
 }
 
 // ── F10b: autopilot reaches the fight ───────────────────────────────────────
@@ -237,9 +273,9 @@ async function f10b() {
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : await f10b()
+  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7a' ? "F7a's row: not judged: this code has no fortified set" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'f10b' ? "F10b's row: not judged: this code has no grand mission" : `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set`}`)
     continue
   }
   judged++

@@ -67,6 +67,8 @@ const tmpV = new THREE.Vector3()
 // unit on the line doesn't flicker)
 const LOD_FAR = 60
 const LOD_NEAR = 57
+// (F7b) how strongly a ring shows through what hides it (xray())
+const XRAY = 0.4
 
 // (F7a, DESIGN §4.2.4) Units on decks. A unit stands at the height the
 // mirror gives it (`y`: its floor, 0 on the ground; a unit.move's path
@@ -145,6 +147,10 @@ export class UnitViews {
     this.lod = false
     this.chips = null
     this.writes = 0
+    // (F7b) whether a seat is played here (input/human.js sets it: the
+    // Session's local seats), whose units' rings show through what hides
+    // them (xray())
+    this.own = () => false
   }
 
   // the view of unit `id`, and the unit it shows (its static look)
@@ -222,6 +228,7 @@ export class UnitViews {
   stands(v, standing) {
     v.ring.visible = standing
     v.hit.visible = standing
+    if (v.xray) v.xray.visible = standing && v.xray.userData.lit
     if (standing && !v.hit.parent) this.scene.add(v.hit)
     if (!standing) this.scene.remove(v.hit)
   }
@@ -251,6 +258,10 @@ export class UnitViews {
   drop(v) {
     for (const f of v.models) this.unfigure(f)
     if (v.dropLine) this.scene.remove(v.dropLine)
+    if (v.xray) {
+      this.scene.remove(v.xray)
+      v.xray.material.dispose()
+    }
     this.scene.remove(v.ring, v.hit)
     v.ring.material.dispose()
     v.hit.material.dispose()
@@ -344,6 +355,10 @@ export class UnitViews {
     v.ring.position.z = v.hit.position.z = p.z
     v.ring.position.y = 0.04 + y
     v.hit.position.y = y + v.hit.scale.y / 2
+    if (v.xray) {
+      v.xray.position.copy(v.ring.position)
+      v.xray.scale.copy(v.ring.scale)
+    }
     const raised = y > RAISED && mu.alive > 0
     if (raised && !v.dropLine) {
       const { geo, mat } = dropShapes()
@@ -398,7 +413,44 @@ export class UnitViews {
       v.ring.material.color.set(col)
       // ((F8b) what a chip's border shows when the rings are hidden)
       v.look = op > 0.15 ? col : null
+      this.xray(v, op > 0.15 && this.own(v.u.side) ? col : null)
     }
+  }
+
+  // (F7b, DESIGN §4.2.4's see-through) The rings of the seats played here
+  // show through what hides them: a copy of a lit ring drawn at 40% where
+  // something stands in front of it (its depth test turned round,
+  // GreaterDepth: only where the depth buffer already holds something
+  // nearer, so the ring shows through a wall and nowhere else, the
+  // per-pixel "when occluded"; it writes no depth). `col` null puts it
+  // out. Made the first time a ring of a seat played here is lit (a game
+  // nobody plays here, the title's and a watched battle's, makes none, nor
+  // their ids' draws). The chips (ui/chips.js) are the page's, over the
+  // table: nothing on it hides them.
+  xray(v, col) {
+    if (!col && !v.xray) return
+    if (!v.xray) {
+      v.xray = new THREE.Mesh(ringShapes().ring, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: XRAY, depthWrite: false, depthFunc: THREE.GreaterDepth, toneMapped: false }))
+      v.xray.renderOrder = 3
+      v.xray.position.copy(v.ring.position)
+      v.xray.scale.copy(v.ring.scale)
+      v.xray.material.visible = this.tier !== 'strategic'
+      this.scene.add(v.xray)
+    }
+    v.xray.userData.lit = !!col
+    if (col) v.xray.material.color.set(col)
+    v.xray.visible = !!col && v.ring.visible
+  }
+
+  // (F7b) Where unit `id` is drawn now, and what of it the see-through looks
+  // for ({ x, y, z } points: its feet and head at its centre, and round its
+  // disc at its middle), or null for a unit the table doesn't show standing.
+  spots(id) {
+    const v = this.views.get(id), mu = v && this.shown(id)
+    if (!mu || !(mu.alive > 0)) return null
+    const p = v.at ?? mu.pos, y = v.at ? (v.at.y ?? 0) : yOf(mu), r = mu.r * 0.8
+    const tall = v.u.t.big ? 2.4 : v.u.t.fly ? 1.8 : 1.3
+    return [{ x: p.x, y: y + 0.3, z: p.z }, { x: p.x, y: y + tall * 0.9, z: p.z }, ...[[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dz]) => ({ x: p.x + dx * r, y: y + tall * 0.5, z: p.z + dz * r }))]
   }
 
   // the hit cylinders of the units the table shows standing (while the
@@ -553,7 +605,10 @@ export class UnitViews {
     }
     if (tier === this.tier) return
     this.tier = tier
-    for (const v of this.views.values()) v.ring.material.visible = tier !== 'strategic'
+    for (const v of this.views.values()) {
+      v.ring.material.visible = tier !== 'strategic'
+      if (v.xray) v.xray.material.visible = tier !== 'strategic'
+    }
   }
 
   // What the chips show (ui/chips.js's draw): each standing unit on screen,
@@ -647,6 +702,7 @@ export class UnitViews {
     const v = this.views.get(e.u), u = v.u, p = M.units[e.u].pos
     v.label.style.display = 'none'
     v.ring.visible = false
+    if (v.xray) v.xray.visible = false
     v.hit.visible = false
     this.scene.remove(v.hit)
     if (v.dropLine?.parent) this.scene.remove(v.dropLine)

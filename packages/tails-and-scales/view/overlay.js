@@ -18,10 +18,19 @@
 // makes none), and a ladder whose top the plan reaches by climbing it glows
 // at its foot with what the climb costs ("⤒ 4""). The path, the ghost and
 // the range ring stand at the floor they are drawn over (the nav's, where
-// the match has height). F7b adds the cliff rims and the climbing tooltip.
+// the match has height). (F7b) The cliff rims under the unit's radius, a
+// hard red edge (rims()), and the line of sight: the rays a shot is judged
+// by, eye to chest, in the verdict's colour (los()).
 //
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
+
+// (F7b) the cliff rims' red, and the drop that makes a ledge (core/nav.js's
+// STEP: a neighbour more than this below)
+const RIM_COLOR = '#ff2a1c'
+const RIM_STEP = 0.4
+// (F7b) scratch for the LOS beams
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), UP = new THREE.Vector3(0, 1, 0)
 
 // the floor at (x, z) of a match's nav grid (F7a's height layer: 0 on the
 // ground, and on a board with no height, every board before F7a's)
@@ -194,6 +203,68 @@ export class Overlay {
     for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
     this.mask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255], nav)
     this.glow(this.climbs(plan, nav))
+    this.rims(ok, u.r, nav)
+  }
+
+  // (F7b, DESIGN §4.2.4) The cliff rims under the unit's radius: on a board
+  // with height, each ledge cell on the high side of a drop (a deck's or a
+  // stair's edge: a cell with a neighbour more than STEP below it) within
+  // the unit's radius (and a cell) of a cell the plan lets it stand on, on
+  // the same raised level, drawn a hard red: the base would hang over the
+  // edge there ("a ledge: no way down here", the move tooltip's). Not in the
+  // overlay's texture, whose texels blend into their neighbours: a mesh of
+  // its own, a flat square on each rim cell just over its floor, all of
+  // them one geometry (made again for each plan, the last one freed; the
+  // mesh and its material made as first needed and kept). Kept as `rim` (a
+  // 1 per cell) for the tooltip; a ground unit's plan has none (the foot of
+  // a wall is no ledge it could go down).
+  rims(ok, r, nav) {
+    this.rim = null
+    if (this.rimMesh) this.rimMesh.visible = false
+    if (!nav?.hasHeight) return
+    const { nx, nz, floor, ledge, level } = nav, R = Math.ceil((r + nav.cell) / nav.cell), reach2 = (r + nav.cell) * (r + nav.cell)
+    const rim = new Uint8Array(nav.N), pos = [], h = nav.cell / 2
+    let any = false
+    for (let i = 0; i < nav.N; i++) {
+      if (!ledge[i] || !level[i]) continue
+      const ix = i % nx, iz = (i / nx) | 0
+      let drop = false
+      for (let oz = -1; oz <= 1 && !drop; oz++) for (let ox = -1; ox <= 1; ox++) {
+        const jx = ix + ox, jz = iz + oz
+        if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+        if (floor[i] - floor[jz * nx + jx] > RIM_STEP) drop = true
+      }
+      if (!drop) continue
+      let near = false
+      for (let oz = -R; oz <= R && !near; oz++) for (let ox = -R; ox <= R; ox++) {
+        const jx = ix + ox, jz = iz + oz
+        if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+        const j = jz * nx + jx
+        if (ok[j] && level[j] === level[i] && (ox * ox + oz * oz) * nav.cell * nav.cell <= reach2) {
+          near = true
+          break
+        }
+      }
+      if (!near) continue
+      rim[i] = 1
+      any = true
+      const x = nav.x(i), z = nav.z(i), y = floor[i] + 0.045
+      pos.push(x - h, y, z - h, x - h, y, z + h, x + h, y, z + h, x - h, y, z - h, x + h, y, z + h, x + h, y, z - h)
+    }
+    if (!any) return
+    this.rim = rim
+    if (!this.rimMesh) {
+      this.rimMesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: RIM_COLOR, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false }))
+      this.rimMesh.renderOrder = 3
+      this.scene.add(this.rimMesh)
+    }
+    this.rimMesh.geometry.dispose()
+    this.rimMesh.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+    this.rimMesh.visible = true
+  }
+  // (F7b) whether nav cell i is a rim the last plan shaded
+  rimAt(i) {
+    return !!this.rim && i >= 0 && this.rim[i] === 1
   }
 
   // (F7a) The ladders plan `plan` climbs: each whose top the search reached
@@ -217,6 +288,9 @@ export class Overlay {
   mask(ok, col, nav, fill = 80) {
     const ovData = this.data
     ovData.fill(0)
+    // ((F7b) a plan's rims are drawn after it: reach())
+    this.rim = null
+    if (this.rimMesh) this.rimMesh.visible = false
     for (let i = 0; i < nav.N; i++) {
       if (!ok[i]) continue
       const ix = i % nav.nx, iz = (i / nav.nx) | 0
@@ -240,6 +314,8 @@ export class Overlay {
     this.mesh.visible = false
     this.pathLine.visible = false
     this.rangeRing.visible = false
+    this.los(null)
+    if (this.rimMesh) this.rimMesh.visible = false
     if (this.tops.size) this.showTops(false)
     if (this.glows.length) this.glow([])
   }
@@ -437,6 +513,54 @@ export class Overlay {
       ring.visible = true
     })
     for (let k = list.length; k < this.ordLines.length; k++) this.ordLines[k].visible = this.ordRings[k].visible = false
+  }
+
+  // (F7b, DESIGN §4.2.4's line of sight with its reasons) The rays a shot
+  // would be judged by (`rays`: [{ a, b }], each from the shooter's eye to a
+  // target model's chest, { x, y, z } in inches: core/queries.js's own),
+  // drawn as thin beams in `color` (green clear, amber obscured or in
+  // cover, red blocked: the tool chooses, from sightInfo); null takes them
+  // away. Each beam is two meshes on one shape: one drawn as anything is,
+  // so it vanishes into the wall that stops it, and a faint copy drawn only
+  // where something stands in front of it (GreaterDepth, as the rings'
+  // see-through), so a blocked ray still reads through the wall. Made as
+  // first needed and kept, a pool grown to the most models a target has
+  // had (a game that never aims makes none, nor their ids' Math.random).
+  los(rays, color = '#5be37a') {
+    if (!rays) {
+      for (const b of this.beams ?? []) b.solid.visible = b.ghost.visible = false
+      return
+    }
+    if (!this.beams) {
+      this.beams = []
+      this.beamShape = new THREE.CylinderGeometry(0.025, 0.025, 1, 6, 1).translate(0, 0.5, 0)
+      this.beamMats = {
+        solid: new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false }),
+        ghost: new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.35, depthWrite: false, depthFunc: THREE.GreaterDepth, toneMapped: false }),
+      }
+    }
+    this.beamMats.solid.color.set(color)
+    this.beamMats.ghost.color.set(color)
+    rays.forEach((ray, k) => {
+      let b = this.beams[k]
+      if (!b) {
+        b = { solid: new THREE.Mesh(this.beamShape, this.beamMats.solid), ghost: new THREE.Mesh(this.beamShape, this.beamMats.ghost) }
+        b.solid.renderOrder = 6
+        b.ghost.renderOrder = 6
+        b.solid.userData.losRay = b.ghost.userData.losRay = true
+        this.scene.add(b.solid, b.ghost)
+        this.beams.push(b)
+      }
+      const a = tmpA.set(ray.a.x, ray.a.y, ray.a.z), d = tmpB.set(ray.b.x - ray.a.x, ray.b.y - ray.a.y, ray.b.z - ray.a.z)
+      const len = d.length()
+      for (const m of [b.solid, b.ghost]) {
+        m.position.copy(a)
+        m.quaternion.setFromUnitVectors(UP, d.clone().normalize())
+        m.scale.set(1, Math.max(1e-3, len), 1)
+        m.visible = true
+      }
+    })
+    for (let k = rays.length; k < this.beams.length; k++) this.beams[k].solid.visible = this.beams[k].ghost.visible = false
   }
 
   // the ghost of a disc of radius r on nav cell i

@@ -31,6 +31,10 @@ import { wait } from './clock.js'
 // (F8a) what of a board the table is made for: its size, its zones' depth
 // and where its objectives stand
 const boardKey = ({ W, H, deploy }, objectives) => JSON.stringify([W, H, deploy, objectives.map((o) => [o.x, o.z])])
+// (F7b) nobody looked at, nothing faded; and how often, at most, what
+// stands in front of them is worked out again
+const NOBODY = Object.freeze({ ids: [], all: false })
+const SEE_EVERY = 150
 
 export class View {
   // The table: `W`, `H` the board's size, `deploy` the deployment's depth
@@ -60,6 +64,11 @@ export class View {
     // plays each report (the terrain.* handlers) when it reaches it in those
     // events, in order (a wrecker's smashes as its walk passes them).
     this.terrain = new TerrainView(scene, this.effects)
+    // (F7b) the chunks seen through now (see()), and what they were worked
+    // out for
+    this.seen = new Set()
+    this.seeKey = ''
+    this.focus = null
   }
 
   // The figures (view/units.js: each unit's view by unit id, following the
@@ -74,6 +83,44 @@ export class View {
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) the overlay shades the battlefield's deck tops too)
     this.overlay = new Overlay(this.scene, { W, H, grid, terrain: this.terrain })
+  }
+
+  // (F7b, DESIGN §4.2.4's see-through walls) What the player is looking at,
+  // each frame: `focus()` gives { ids, all }, the units whose figures
+  // nothing should hide (the one picked up, the one under the pointer, a
+  // group's members: input/human.js sets it) and whether every tall chunk
+  // fades (Alt held). The chunks standing between the camera and any of
+  // those units fade (view/terrain.js's occluders and seeThrough), the rest
+  // stand solid. Worked out again only when the camera, the units looked
+  // at, their places or the table change; nothing at all while nobody looks
+  // at anything (the title, a watched battle), and never under ?fast,
+  // which draws nothing.
+  see() {
+    const f = this.focus?.() ?? NOBODY
+    const pts = []
+    for (const id of f.ids) {
+      const s = this.units.spots(id)
+      if (s) pts.push(...s)
+    }
+    const eye = this.camera.position
+    if (!pts.length && !f.all) {
+      if (this.seen.size) this.seen = new Set()
+      this.seeKey = ''
+    } else {
+      const r = (n) => Math.round(n * 100)
+      let key = `${f.all ? 1 : 0}|${this.terrain.items.size}|${r(eye.x)},${r(eye.y)},${r(eye.z)}`
+      for (const p of pts) key += `|${r(p.x)},${r(p.y)},${r(p.z)}`
+      // (at most every SEE_EVERY ms while the camera or the units move: a
+      // chunk faded or made solid on a larger board leaves or rejoins its
+      // tile, merged again)
+      const now = performance.now()
+      if (key !== this.seeKey && !(now - this.seeAt < SEE_EVERY)) {
+        this.seeKey = key
+        this.seeAt = now
+        this.seen = this.terrain.occluders(eye, pts, f.all)
+      }
+    }
+    this.terrain.seeThrough(this.seen)
   }
 
   // The view's handlers for the player (view/player.js): each kind of event
@@ -213,6 +260,8 @@ export class View {
       parts: (dt, time) => {
         effects.update(dt)
         units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
+        // ((F7b) the walls in front of what the player is looking at)
+        if (!this.fast) this.see()
         objectives.animate(dt, time, this.owners ?? mirror().owners)
       },
       rig: this.rig,

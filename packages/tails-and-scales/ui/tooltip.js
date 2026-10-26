@@ -22,6 +22,33 @@ export class Tooltip {
   }
 }
 
+// (F7b, DESIGN §4.2.4's line of sight with its reasons) The colours the LOS
+// ray is drawn in, by verdict, and the reasons under a shot's odds: `los`
+// is input/tools/shoot.js's sightOf (sightInfo's answer, the chunks by
+// name, what high ground sees over). A line each:
+//   "Blocked by the keep" (the solid chunk that stopped a ray; two
+//   obscurers in a row stop it too: "Blocked by the hedge and the trees"),
+//   "Visible · target behind a parapet (cover)", "Visible · 3/5 models in
+//   sight (cover)", "Visible · target in cover" (standing in a cover band:
+//   a wood, a ruin, a deck behind its parapets), "Visible · clear shot",
+//   and on a deck, "High ground: sees over the hedge".
+// In a block the style colours by verdict (style.css's F7b block).
+export const LOS_COLORS = Object.freeze({ clear: '#5be37a', cover: '#ffb347', blocked: '#ff5a4a' })
+export function losText(los) {
+  const names = (ids) => {
+    const ns = [...new Set(ids.map(los.name))]
+    return ns.length > 2 ? `${ns.slice(0, 2).join(', ')} and more` : ns.join(' and ')
+  }
+  const lines = []
+  if (!los.ok) lines.push(los.block !== null ? `Blocked by ${los.name(los.block)}` : los.obscure.length ? `Blocked by ${names(los.obscure)}` : 'Blocked')
+  else if (los.obscure.length) lines.push(`Visible · target behind ${names(los.obscure)}${los.cover ? ' (cover)' : ''}`)
+  else if (los.cover && los.seen < los.total) lines.push(`Visible · ${los.seen}/${los.total} models in sight (cover)`)
+  else if (los.cover) lines.push('Visible · target in cover')
+  else lines.push('Visible · clear shot')
+  if (los.high) lines.push(los.over.length ? `High ground: sees over ${names(los.over)}` : 'High ground')
+  return `<div class="los los-${los.verdict}">${lines.join('<br>')}</div>`
+}
+
 // A shot's odds: unit u's ranged weapon at `target`, `info` the match's
 // shotInfo for the pair (its range, cover, sight and hit roll).
 export function oddsText(u, target, info) {

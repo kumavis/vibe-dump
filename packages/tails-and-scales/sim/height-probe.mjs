@@ -37,6 +37,11 @@
 //              another) where either stood on a deck at the time (its floor
 //              followed through the events that move it: a place's `y`, a
 //              walk's end, a formation's, from where G stood them first)
+//   deckShots  (F7b) the shots fired from a deck: a `volley` or a
+//              `blast.fire` (a shooter's or an artillery piece's) whose unit
+//              stood on a deck as it fired (its floor above STEP, followed
+//              through the events as deckFights' are), and deckVolleys the
+//              volleys among them
 //   works      how many of the seats' own ramparts stand (a rampart's deck
 //              whose front face is on a zone's edge: its centre 2.25" behind
 //              it, recipes.js works), 2 when the works were placed
@@ -52,7 +57,7 @@
 const STEP = 0.4, OBJECTIVE_RANGE = 3
 
 export function heightProbe(q) {
-  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0 }
+  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, deckShots: 0, deckVolleys: 0, works: 0, keep: false, keepHeld: 0 }
   let first = true, battle = false, rounds = 0
   // each unit's floor as the events have it (unit id → y); each one's as
   // the last trace line found it, and the units that have since come up
@@ -112,6 +117,10 @@ export function heightProbe(q) {
         if (e.t === 'unit.place') ys.set(e.u, e.y ?? 0)
         else if (e.t === 'unit.formation') ys.set(e.u, e.pos.y ?? 0)
         else if (e.t === 'melee' && ((ys.get(e.u) ?? 0) > STEP || (ys.get(e.tg) ?? 0) > STEP)) r.deckFights++
+        else if ((e.t === 'volley' || e.t === 'blast.fire') && (ys.get(e.u) ?? 0) > STEP) {
+          r.deckShots++
+          if (e.t === 'volley') r.deckVolleys++
+        }
         if (e.t !== 'unit.move' || !e.path?.length) continue
         ys.set(e.u, e.to?.y ?? 0)
         const k = e.path.findIndex((p) => p.climb)

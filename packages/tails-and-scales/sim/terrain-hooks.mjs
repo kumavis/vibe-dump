@@ -73,8 +73,10 @@ export const MUTATIONS = {
   'spare-placeholder': ['/view/terrain.js', 'if (spare?.obj && !spare.touched', 'if (spare && !spare.touched'],
   // (R7) a sync sets a dropped block at its height but leaves its item the
   // def it was built from: an add of the block where it first stood takes
-  // it back at the height it dropped to (boards 1, 7 and 23)
-  'spare-height': ['/view/terrain.js', '          kept.obj.position.y = c.shape.y\n          kept.c = defOf(c)\n', '          kept.obj.position.y = c.shape.y\n'],
+  // it back at the height it dropped to (boards 1, 7 and 23). ((F7b) The
+  // anchor follows F8b's tiles, which set the whole place: x and z too,
+  // back from a hurt's shudder)
+  'spare-height': ['/view/terrain.js', '          kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)\n          kept.c = defOf(c)\n', '          kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)\n'],
   // (R7a's fixer, round 3) core's adds carry a field the view's copy of
   // defOf lacks (as F7's deck and stair pieces might): no mesh reads it, so
   // only the defs compared catch it
@@ -91,6 +93,19 @@ export const MUTATIONS = {
   'works-off-edge': ['/core/terrain/recipes.js', 'const RAMPART_FACE = 1.125', 'const RAMPART_FACE = 1.375', '1-3'],
   // the facing pieces turned anywhere, not toward the other zone
   'facing-ignored': ['/core/terrain/recipes.js', 'const yaw = S.facing?.includes(name) ?', 'const yaw = false ?', '1-25'],
+  // ── (F7b) the parapets (section 6's rows, P-climb's) ──
+  // parapets set a few tenths in from the deck's edge, off its rim
+  'parapet-off-rim': ['/core/terrain/recipes.js', "  const inset = face[0] === '-' ? PARAPET_T / 2 : -PARAPET_T / 2", "  const inset = face[0] === '-' ? PARAPET_T : -PARAPET_T", '1-3'],
+  // no gap left for a ladder's top: the parapets run up to its climb
+  'parapet-on-ladder': ['/core/terrain/recipes.js', 'export const PARAPET_LADDER_GAP = LADDER_W / 2 + 0.25', 'export const PARAPET_LADDER_GAP = 0.25', '1-3'],
+  // a rampart one parapet short
+  'parapet-count': ['/core/terrain/recipes.js', "parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lo, b: lx - PARAPET_LADDER_GAP, k: 2, recipe: 'rampart' })", "parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lo, b: lx - PARAPET_LADDER_GAP, k: 1, recipe: 'rampart' })", '1-3'],
+  // a band half an inch deeper than the piece table's 1.5"
+  'parapet-band-deep': ['/core/terrain/recipes.js', 'const back = (PARAPET_BAND - COVER_PAD) / 2', 'const back = (PARAPET_BAND + 0.5 - COVER_PAD) / 2', '1-3'],
+  // a parapet's cover band rastered at every level: the ditch below in cover
+  'parapet-cover-flat': ['/core/nav.js', '      if (c.cover) this.rasterAt(c.coverShape || s, 0.6, this.cover, base)\n', '      if (c.cover) this.raster(c.coverShape || s, 0.6, this.cover)\n', '1-3'],
+  // a parapet that blocks movement (soft: a Brute's way through it)
+  'parapet-nav': ['/core/terrain/recipes.js', "    navKind: null, los: 'obscure', cover: true,\n    base, on: deck.id,", "    navKind: 'soft', los: 'obscure', cover: true,\n    base, on: deck.id,", '1-3'],
   // (F8b, the tiles: terrain-check's last section) a chunk promoted out of
   // its tile leaves the tile as it was: the tile still draws it, and its
   // own mesh too

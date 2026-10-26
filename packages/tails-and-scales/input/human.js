@@ -52,6 +52,24 @@ export class Human {
     this.group = null
     // (F10c) the standing orders (input/standing.js), set by app/boot.js
     this.standing = null
+    // (F7b, DESIGN §4.2.4's see-through walls) Alt held (every tall chunk
+    // fades), and what the view keeps clear each frame: the unit picked up,
+    // the one under the pointer and a group's members (view/index.js's
+    // see()), in a battle only; and whose rings show through what hides
+    // them: the seats played here (view/units.js's xray)
+    this.alt = false
+    view.focus = () => this.looking()
+    if (view.units) view.units.own = (seat) => !!this.session?.localSeats.includes(seat)
+  }
+
+  // (F7b) the units the player is looking at, and whether Alt is held
+  looking() {
+    if (!this.G) return { ids: [], all: false }
+    const ids = new Set()
+    if (this.sel) ids.add(this.sel.id)
+    if (this.hover) ids.add(this.hover.id)
+    for (const u of this.group?.members() ?? []) ids.add(u.id)
+    return { ids: [...ids], all: this.alt }
   }
 
   get session() {
@@ -316,6 +334,20 @@ export class Human {
       this.hoverPick = this.picker.pick(e)
       this.pointed()
     })
+    // ((F7b) Alt held fades every tall chunk: read off every key's down and
+    // up (its altKey: held or not), and let go when the page loses the
+    // keyboard; Alt's own default, the browser's menu bar, kept off the
+    // table)
+    const altKey = (e) => e.code === 'AltLeft' || e.code === 'AltRight'
+    addEventListener('keydown', (e) => {
+      this.alt = e.altKey
+      if (altKey(e)) e.preventDefault()
+    })
+    addEventListener('keyup', (e) => {
+      this.alt = e.altKey
+      if (altKey(e)) e.preventDefault()
+    })
+    addEventListener('blur', () => (this.alt = false))
     // Escape puts down the unit picked up (but a charge's end must be
     // picked); the camera rig keeps the panning keys (view/camera.js);
     // (F10a) a group's keys first (input/group.js)
@@ -450,6 +482,8 @@ export class Human {
     this.tooltip.hide()
     overlay.pathLine.visible = false
     overlay.ghost.visible = false
+    // ((F7b) the LOS rays: drawn again below while an enemy is aimed at)
+    overlay.los(null)
     const h = this.hoverPick
     const pk = this.picking()
     if (!h) {
@@ -490,8 +524,9 @@ export class Human {
     } else if (this.myTurn() && sel) {
       text = this.ask((G, q) => {
         const ph = q.phaseKey(G)
-        if (ph === 'move' && this.reach && h.ground && !h.unit) return move.preview(G, q, this.reach, sel, h.ground, path)
-        if (ph === 'shoot' && h.unit && h.unit.side !== sel.side) return shoot.preview(G, q, sel, h.unit)
+        if (ph === 'move' && this.reach && h.ground && !h.unit) return move.preview(G, q, this.reach, sel, h.ground, path, (i) => overlay.rimAt(i))
+        // ((F7b) with its rays, eye to chest, in the verdict's colour)
+        if (ph === 'shoot' && h.unit && h.unit.side !== sel.side) return shoot.preview(G, q, sel, h.unit, sel.t.ranged ? (rays, color) => overlay.los(rays, color) : null)
         if (ph === 'charge' && h.unit && h.unit.side !== sel.side) return charge.preview(G, q, sel, h.unit)
         return ''
       })

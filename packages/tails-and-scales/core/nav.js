@@ -308,11 +308,14 @@ export class NavGrid {
   // rebuild(chunks) for a board with something to stand on, in the spec's
   // order: (1) the floor raster, in chunk order, the highest surface winning;
   // (2) the links; (3) the ledges, then the cliff field; (4) the levels and
-  // the gates; (5) the hard, soft and difficult rasters, and (6) the cover,
-  // each chunk's only on the cells whose floor is within STEP of the floor it
+  // the gates (and, F7b, the level each parapet's deck is on: onLevel);
+  // (5) the hard, soft and difficult rasters, and (6) the cover, each
+  // chunk's only on the cells whose floor is within STEP of the floor it
   // stands on (`base`, 0 when absent: a parapet on a deck covers the deck,
-  // not the ditch below); then the clearance fields, as ever. (7, F9b: the
-  // hull memo is cleared.)
+  // not the ditch below; F7b's parapets, the first chunks with a base, are
+  // the first whose cover this parts, and their cover is the band behind
+  // them, their `coverShape`); then the clearance fields, as ever. (7, F9b:
+  // the hull memo is cleared.)
   rebuildHeight(chunks) {
     const N = this.N
     if (!this.hasHeight) {
@@ -419,6 +422,19 @@ export class NavGrid {
         const { foot, top, h } = c.link
         this.gates.push({ id: c.id, lo: { x: foot.x, z: foot.z }, hi: { x: top.x, z: top.z }, level: this.levelAt(top.x, top.z), cost: LADDER_MUL * h, ladder: true })
       }
+    }
+    // (F7b) the level of the deck each alive piece standing on one is on (a
+    // chunk with a `base` and its deck's id, `on`: a parapet), chunk id →
+    // level: the region its deck's centre is in. A shooter on that level, at
+    // the piece's base, looks over it (core/queries.js sight: defenders fire
+    // over their own parapets), as anyone looks over an obscurer it hugs.
+    // (A deck comes before what stands on it, in its recipe's order.)
+    const deckLevel = new Map()
+    this.onLevel = new Map()
+    for (const c of chunks) {
+      if (!c.alive) continue
+      if (c.surface && !c.surface.ramp) deckLevel.set(c.id, this.levelAt(c.shape.x, c.shape.z))
+      else if (c.base !== undefined && c.on !== undefined) this.onLevel.set(c.id, deckLevel.get(c.on) ?? 0)
     }
     // today's rasters, each by its chunk's level
     this.hard.fill(0)

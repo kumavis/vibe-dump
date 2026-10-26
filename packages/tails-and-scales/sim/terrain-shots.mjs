@@ -88,6 +88,28 @@
 // colours), the blasts must break something, and each side's wrecked frame
 // must differ from its own table frame by at least MIN_WRECKED pixels;
 // otherwise the board fails as vacuous.
+//
+// (F7b) And the fortified boards (DESIGN §4.2.4; F7b's migration row:
+// "terrain-shots plus fortified boards"): R0 has no fortified set, so they
+// are held to a reference of their own, FORT_REF below, the commit whose
+// code drew them first in full (F7b's: the decks, stairs, ladders, posts
+// and, new, the parapets), as classic's are held to R0. The title stays on
+// the classic table (F7a), so each is a battle's table: the page opened at
+// ?debug&seed=<board>&dice=1&terrain=fortified, Math.random seeded as for
+// classic and seeded again just before the battle starts, a hotseat battle
+// started (?debug's start) and shot at its deployment, nothing yet moved
+// (the units hidden as classic's figures are; the deploying seat's zone
+// lit); one `table` shot a board, from the same fixed pose. Until FORT_REF
+// names a commit (it is F7b's own code commit, set once that lands: the
+// working tree can't name the commit it is about to become), each board is
+// shot twice by the working tree in fresh pages and must come out the same
+// both times (SwiftShader's determinism, the control) and a real frame
+// with parapets on it (MIN_COLOURS, and the board's parapets counted), and
+// its PNGs are kept as F7b's references: the frames to look at, and what
+// the next step's run against FORT_REF must reproduce. --fort-seeds picks
+// the boards ('' for none), --fort-ref another reference.
+//
+//   node sim/terrain-shots.mjs [...] [--fort-seeds 1,2,3,4,5] [--fort-ref <git ref>]
 import { parseArgs } from 'node:util'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -107,6 +129,9 @@ const MIN_WRECKED = 2000
 // how many more times a board whose shots differ is shot on both sides
 const RESHOOTS = 2
 const KINDS = ['table', 'wrecked']
+// (F7b) the fortified boards' reference: F7b's code commit, once it lands
+// (null until then: the working tree against itself, the header)
+const FORT_REF = null
 
 function usage(why) {
   console.error(`terrain-shots: ${why}\nusage: node sim/terrain-shots.mjs [--ref <git ref>] [--seeds 1,4242,90210,411,22392] [--full] [--out <dir>]`)
@@ -114,27 +139,35 @@ function usage(why) {
 }
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, seeds: { type: 'string' }, full: { type: 'boolean' }, out: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, seeds: { type: 'string' }, full: { type: 'boolean' }, out: { type: 'string' }, 'fort-seeds': { type: 'string' }, 'fort-ref': { type: 'string' } } }))
 } catch (e) {
   usage(e.message)
 }
 const ref = a.ref ?? LEGACY_REF
 // 411 has log walls, trees and mushrooms, 22392 hedges and trees: the three
 // boards before them have neither
-const seedList = (a.seeds ?? '1,4242,90210,411,22392').split(',')
+const seedList = (a.seeds ?? '1,4242,90210,411,22392').split(',').filter(Boolean)
 if (!seedList.every((v) => /^\d+$/.test(v))) usage(`--seeds ${a.seeds}: give whole numbers, comma-separated`)
 const seeds = seedList.map(Number)
+// (F7b) the fortified boards: five by default, each with the works (both
+// ramparts and their parapets)
+const fortList = (a['fort-seeds'] ?? '1,2,3,4,5').split(',').filter(Boolean)
+if (!fortList.every((v) => /^\d+$/.test(v))) usage(`--fort-seeds ${a['fort-seeds']}: give whole numbers, comma-separated`)
+const fortSeeds = fortList.map(Number)
+const fortRef = a['fort-ref'] ?? FORT_REF
 // per run, so two runs side by side never share a build or a PNG
 const out = a.out ?? mkdtempSync(join(tmpdir(), 'tails-and-scales-shots-'))
 mkdirSync(out, { recursive: true })
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-shots-build-'))
 
-let sides
+let sides, fortSide = null
 try {
   sides = [
     { name: ref === LEGACY_REF ? 'R0' : ref.slice(0, 9), dir: await buildApp(codeDir(ref), join(work, 'ref')) },
     { name: 'now', dir: await buildApp(PKG, join(work, 'now')) },
   ]
+  // ((F7b) the fortified boards' reference, when it names a commit)
+  if (fortSeeds.length && fortRef) fortSide = { name: fortRef.slice(0, 9), dir: await buildApp(codeDir(fortRef), join(work, 'fort-ref')) }
 } catch (e) {
   rmSync(work, { recursive: true, force: true })
   if (!a.out) rmSync(out, { recursive: true, force: true })
@@ -279,6 +312,38 @@ function differing(f, g) {
   return n
 }
 
+// (F7b) one fortified board on one side (the header): a hotseat battle's
+// table at its deployment, Math.random seeded at load and again just
+// before the start
+let fortServer = null, fortKept = false
+async function shootFort(seed, name, url) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 })
+  try {
+    const page = await ctx.newPage()
+    page.setDefaultTimeout(IDLE_MS)
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    await page.addInitScript(`(${seedRandom})(${seed * 7919 + 1})`)
+    await page.goto(`${url}/?debug&seed=${seed}&dice=1&terrain=fortified`, { timeout: IDLE_MS })
+    await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
+    await page.evaluate(`(${seedRandom})(${seed * 7919 + 2}); window.__ts.start('hotseat')`)
+    await page.waitForFunction(() => window.__ts.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+    await frames(page, 30)
+    await freeze(page)
+    const table = await page.evaluate(shoot, !!a.full)
+    if (errors.length) throw new Error(`${name}: ${errors.join('; ')}`)
+    const { chunks, parapets, terrain } = await page.evaluate(() => {
+      const cs = window.__ts.scenery.chunks
+      return { chunks: cs.length, parapets: cs.filter((c) => c.kind === 'parapet').length, terrain: window.__ts.G.setup.terrain }
+    })
+    return { table, chunks, parapets, terrain }
+  } catch (e) {
+    throw new Error(`${name}: ${e.message}`)
+  } finally {
+    await ctx.close()
+  }
+}
+
 // one pass over a board: both sides shot, in fresh pages
 async function pass(seed) {
   const shots = []
@@ -378,13 +443,73 @@ try {
       console.log(`${where} VACUOUS: ${vacuous.join('; ')}`)
     }
   }
+  // ── (F7b) The fortified boards ────────────────────────────────────────────
+  if (fortSeeds.length) {
+    const nowUrl = servers[1].url
+    fortServer = fortSide && (await startStaticServer(fortSide.dir))
+    const refName = fortSide ? fortSide.name : 'now (again)'
+    console.log(`\nfortified boards: ${fortSide ? `${fortSide.name} (FORT_REF) against the working tree` : 'no FORT_REF yet (F7b\'s code commit, once it lands): the working tree against itself, in fresh pages, its frames kept as the references'}, a hotseat battle's table at its deployment, the figures hidden`)
+    for (const seed of fortSeeds) {
+      const where = `  fort ${String(seed).padEnd(6)}`
+      // (a page that times out, on a machine others share, is shot again,
+      // up to twice: a timeout is no verdict on the frame)
+      const tries = async (...args) => {
+        for (let k = 0; ; k++) {
+          try {
+            return await shootFort(...args)
+          } catch (e) {
+            if (k >= 2 || !/Timeout/.test(e.message)) throw e
+            console.log(`${where} ${args[1]} timed out (${e.message.split('\n')[0].slice(0, 120)}): shot again`)
+          }
+        }
+      }
+      let A, B
+      try {
+        A = await tries(seed, refName, fortSide ? fortServer.url : nowUrl)
+        B = await tries(seed, 'now', nowUrl)
+      } catch (e) {
+        failed++
+        console.log(`${where} NOT RUN: ${String(e.message ?? e).split('\n')[0].slice(0, 300)}`)
+        continue
+      }
+      const pa = Buffer.from(A.table.px, 'base64'), pb = Buffer.from(B.table.px, 'base64')
+      let diff = 0, max = 0
+      const mask = Buffer.alloc(pa.length)
+      for (let p = 0; p < pa.length; p += 4) {
+        const d = Math.max(Math.abs(pa[p] - pb[p]), Math.abs(pa[p + 1] - pb[p + 1]), Math.abs(pa[p + 2] - pb[p + 2]), Math.abs(pa[p + 3] - pb[p + 3]))
+        if (d) diff++
+        if (d > max) max = d
+        if (d) mask.set([255, 0, 0, 255], p)
+        else mask.set([pa[p] >> 2, pa[p + 1] >> 2, pa[p + 2] >> 2, 255], p)
+      }
+      const base = join(out, `fort${seed}-table`)
+      writeFileSync(`${base}-${fortSide ? fortSide.name : 'ref'}.png`, png(A.table.w, A.table.h, pa))
+      writeFileSync(`${base}-now.png`, png(B.table.w, B.table.h, pb))
+      if (diff) writeFileSync(`${base}-diff.png`, png(A.table.w, A.table.h, mask))
+      fortKept = true
+      const vac = []
+      for (const [name, sh] of [[refName, A], ['now', B]]) {
+        if (colours(sh.table) < MIN_COLOURS) vac.push(`${name}: ${colours(sh.table)} colours`)
+        if (!sh.parapets) vac.push(`${name}: no parapet on the board`)
+        if (sh.terrain !== 'fortified') vac.push(`${name}: fought on ${sh.terrain}`)
+      }
+      console.log(`${where} table    ${A.table.w}x${A.table.h}: ${diff ? `${diff} pixels differ (max channel delta ${max})` : 'identical'} (${colours(A.table)}/${colours(B.table)} colours; ${B.chunks} chunks, ${B.parapets} of them parapets)`)
+      if (diff) failed++
+      if (vac.length) {
+        failed++
+        console.log(`${where} VACUOUS: ${vac.join('; ')}`)
+      }
+    }
+  }
 } finally {
+  fortServer?.close()
   servers.forEach((s) => s.close())
   await browser.close()
   rmSync(work, { recursive: true, force: true })
 }
-// a fresh PNG dir nobody asked for is kept only when there is something to see
-const kept = a.out || failed || looked
+// a fresh PNG dir nobody asked for is kept only when there is something to
+// see ((F7b) or the fortified boards' references were shot into it)
+const kept = a.out || failed || looked || fortKept
 if (!kept) rmSync(out, { recursive: true, force: true })
 const pngs = kept ? ` (PNGs in ${out})` : ''
 const noise = noisy ? `; ${noisy} board(s) differed on a pass and not on a re-shoot: noise, not counted (above)` : ''

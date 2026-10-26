@@ -1876,6 +1876,176 @@ function heightScenes(core, mods, G, fresh, where, counts) {
     }
   }
 }
+// (F7b) The parapets, each rule on a scene of its own on a fortified board
+// (G: a fresh match, its units put about and put back): what each found
+// goes in counts. Code with no parapet (before F7b) meets none of them.
+//  - A parapet never blocks movement: the board's nav built without its
+//    parapets is this one, cell for cell, but for the cover (hard, soft,
+//    difficult, both clearances, floor, cliff, levels, links), and reach
+//    from a deck and from the ground (r 0.42 and 1.06, climbing) is the
+//    same with them as without.
+//  - It covers its deck and not the ditch: a one-model unit on a cell its
+//    band alone covers is in cover (inCover), and on a cell under its band
+//    (its coverShape padded as the nav pads it) whose floor is more than
+//    STEP off its base, the ground below the deck, that nothing else
+//    covers, not.
+//  - A unit on a deck outside every band, behind a parapet, is in cover
+//    from a shooter on the ground whose rays cross the parapet below its
+//    top (sightInfo: visible, the parapet among its obscurers, cover), and
+//    from a shooter on its own deck, at its level, no parapet of that deck
+//    is ever an obscurer (they fire over their own breastwork): somewhere
+//    on it the target is visible and not in cover. And a shooter on a deck
+//    looking down at a unit on the ground never has its own deck's parapets
+//    among its obscurers, though somewhere its ray crosses one below its
+//    top, beyond the reach of the hug rule.
+const PARAPET_NAV = ['hard', 'soft', 'diff', 'clearAll', 'clearHard', 'floor', 'cliff', 'level', 'link']
+function parapetScenes(core, mods, G, where, counts) {
+  const q = core.q, nav = G.nav, STEP = mods.nav.STEP
+  const ps = G.terrain.chunks.filter((c) => c.alive && c.kind === 'parapet')
+  if (!ps.length) return
+  const put = (u, i) => {
+    u.pos.x = nav.x(i)
+    u.pos.z = nav.z(i)
+  }
+  // never blocks movement
+  const bare = new mods.nav.NavGrid(nav.W, nav.H, nav.cell)
+  bare.rebuild(G.terrain.chunks.filter((c) => c.kind !== 'parapet'))
+  for (const k of PARAPET_NAV) {
+    for (let i = 0; i < nav.N; i++) if (!Object.is(nav[k][i], bare[k][i])) throw new Error(`${where}: the parapets moved nav.${k} at cell ${i} (${nav.x(i)}, ${nav.z(i)}): ${bare[k][i]} without them, ${nav[k][i]} with them`)
+  }
+  const deckOf = (p) => G.terrain.chunks.find((c) => c.id === p.on)
+  const levelOf = (p) => {
+    const d = deckOf(p)
+    return d ? nav.levelAt(d.shape.x, d.shape.z) : 0
+  }
+  // (from the first cell of a deck an r 0.42 disc stands on, the middle one
+  // of those an r 1.06 disc stands on, and the first ground cell one does)
+  const starts = (r, up) => {
+    const out = []
+    for (let i = 0; i < nav.N; i++) if (!nav.level[i] === !up && nav.standable(i, r, 'walk')) out.push(i)
+    return out
+  }
+  const up4 = starts(0.42, true), up10 = starts(1.06, true), down = starts(1.06, false)
+  for (const [r, s] of [[0.42, up4[0]], [1.06, up10[up10.length >> 1]], [1.06, down[0]]]) {
+    if (s === undefined) continue
+    const a = nav.reach(nav.x(s), nav.z(s), { r, max: 24, mode: 'walk', climb: true }), b = bare.reach(bare.x(s), bare.z(s), { r, max: 24, mode: 'walk', climb: true })
+    for (let i = 0; i < nav.N; i++) if (!Object.is(a.dist[i], b.dist[i])) throw new Error(`${where}: reach (r ${r}) from cell ${s} costs ${a.dist[i]} to cell ${i} with the parapets, ${b.dist[i]} without them`)
+    counts.parapetMoves++
+  }
+  // the band covers the deck, not the ditch
+  const hero = G.units.find((u) => u.models.length === 1 && !u.t.fly && u.t.climb)
+  const band = new Uint8Array(nav.N), ditch = new Uint8Array(nav.N)
+  for (const p of ps) {
+    const cs = p.coverShape, c = Math.cos(cs.yaw), sn = Math.sin(cs.yaw), PAD = 0.6
+    for (let i = 0; i < nav.N; i++) {
+      const dx = nav.x(i) - cs.x, dz = nav.z(i) - cs.z
+      if (Math.abs(dx) > cs.hx + cs.hz + 2 || Math.abs(dz) > cs.hx + cs.hz + 2) continue
+      const lx = dx * c - dz * sn, lz = dx * sn + dz * c
+      // (a hair inside the pad, so a cell on its edge counts either way)
+      if (Math.abs(lx) > cs.hx + PAD - 1e-6 || Math.abs(lz) > cs.hz + PAD - 1e-6) continue
+      if (Math.abs(nav.floor[i] - p.base) <= STEP) band[i] = 1
+      else ditch[i] = 1
+    }
+  }
+  if (hero) {
+    let on = -1, off = -1
+    // (on the deck, a cell the unit stands on; in the ditch any cell: the
+    // ledge's band below the rim, where no disc stands, is most of what a
+    // band's pad reaches there, and inCover reads only the cells its models
+    // are on)
+    for (let i = 0; i < nav.N && (on < 0 || off < 0); i++) {
+      if (bare.cover[i]) continue
+      if (on < 0 && band[i] && nav.standable(i, hero.r, 'walk')) on = i
+      if (off < 0 && ditch[i] && !band[i]) off = i
+    }
+    only(G, [hero], () => {
+      if (on >= 0) {
+        put(hero, on)
+        if (!q.inCover(G, hero)) throw new Error(`${where}: unit ${hero.id} (${hero.t.short}) on deck cell ${on} (floor ${nav.floor[on]}), in a parapet's band, isn't in cover`)
+        counts.parapetCover++
+      }
+      if (off >= 0) {
+        put(hero, off)
+        if (q.inCover(G, hero)) throw new Error(`${where}: unit ${hero.id} (${hero.t.short}) on ground cell ${off} (floor ${nav.floor[off]}), under a parapet's band on the deck above, is in cover`)
+        counts.parapetDitch++
+      }
+    })
+  }
+  // the rays: from the ground, and from the deck itself
+  const u = G.units.find((x) => x.side === 0 && x.t.ranged && !x.t.fly && x.t.climb && x.models.length > 1)
+  const tg = G.units.find((x) => x.side === 1 && x.models.length === 1 && !x.t.fly && x.t.climb)
+  if (!u || !tg) return
+  const levels = new Set(ps.map(levelOf).filter(Boolean))
+  const isParapet = new Map(ps.map((p) => [p.id, p]))
+  const dist = (i, j) => Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j))
+  only(G, [u, tg], () => {
+    let ground = false, deck = false
+    for (let t = 0; t < nav.N && !(ground && deck); t += 3) {
+      if (!levels.has(nav.level[t]) || band[t] || nav.cover[t] || !nav.standable(t, tg.r, 'walk')) continue
+      put(tg, t)
+      const L = nav.level[t]
+      if (!ground) {
+        for (let i = 0; i < nav.N; i += 5) {
+          if (nav.level[i] || nav.floor[i] > STEP || !nav.standable(i, u.r, 'walk')) continue
+          const d = dist(i, t)
+          if (d < 4 || d > 24) continue
+          const info = q.sightInfo(G, u, tg, { x: nav.x(i), z: nav.z(i) })
+          const hit = info.obscure.filter((id) => isParapet.has(id))
+          if (!info.ok || !hit.length) continue
+          if (!info.cover) throw new Error(`${where}: unit ${tg.id} on deck cell ${t} is seen past parapet ${hit[0]} by a shooter on the ground at cell ${i}, and isn't in cover: ${JSON.stringify(info)}`)
+          if (info.high) throw new Error(`${where}: a shooter on the ground at cell ${i} is high above unit ${tg.id} on deck cell ${t}`)
+          ground = true
+          counts.parapetGround++
+          break
+        }
+      }
+      let clear = false
+      for (let i = 0; i < nav.N; i += 2) {
+        if (nav.level[i] !== L || Math.abs(nav.floor[i] - nav.floor[t]) > STEP || !nav.standable(i, u.r, 'walk') || dist(i, t) < u.r + tg.r + 1.2) continue
+        const info = q.sightInfo(G, u, tg, { x: nav.x(i), z: nav.z(i) })
+        const own = info.obscure.find((id) => isParapet.has(id) && levelOf(isParapet.get(id)) === L && Math.abs(isParapet.get(id).base - nav.floor[i]) <= STEP)
+        if (own !== undefined) throw new Error(`${where}: a shooter on deck cell ${i} (level ${L}) has its own deck's parapet ${own} among its obscurers of unit ${tg.id} at cell ${t}: ${JSON.stringify(info)}`)
+        counts.parapetOwn++
+        if (info.ok && !info.cover) clear = true
+      }
+      if (clear && !deck) {
+        deck = true
+        counts.parapetDeck++
+      }
+    }
+    // down from a deck past its own parapets, at a unit on the ground: none
+    // of them is ever an obscurer, and somewhere a ray crossed one below its
+    // top, past the reach an obscurer is hugged at (Terrain.los), where
+    // only their being the shooter's own lets it through
+    let over = false
+    for (const L of levels) {
+      const mine = ps.filter((p) => levelOf(p) === L)
+      const from = [], below = []
+      for (let i = 0; i < nav.N && from.length < 12; i += 3) if (nav.level[i] === L && nav.standable(i, u.r, 'walk')) from.push(i)
+      for (let i = 0; i < nav.N; i += 7) if (!nav.level[i] && nav.floor[i] <= STEP && nav.standable(i, tg.r, 'walk')) below.push(i)
+      for (const i of from) {
+        const eye = { x: nav.x(i), y: nav.floor[i] + u.t.eye, z: nav.z(i) }
+        const own = mine.filter((p) => Math.abs(p.base - nav.floor[i]) <= STEP)
+        for (const j of below) {
+          const d = dist(i, j)
+          if (d < 3 || d > 16) continue
+          put(tg, j)
+          const info = q.sightInfo(G, u, tg, { x: eye.x, z: eye.z })
+          const bad = info.obscure.find((id) => own.some((p) => p.id === id))
+          if (bad !== undefined) throw new Error(`${where}: a shooter on deck cell ${i} (level ${L}) has its own deck's parapet ${bad} among its obscurers of unit ${tg.id} on the ground at cell ${j}: ${JSON.stringify(info)}`)
+          counts.parapetOwn++
+          if (over || !info.ok) continue
+          const m = tg.models[0], chest = { x: nav.x(j) + m.ox, y: nav.floor[j] + tg.t.chest, z: nav.z(j) + m.oz }
+          const crossed = own.some((p) => mods.geom.segmentHitsBox(eye, chest.x - eye.x, chest.y - eye.y, chest.z - eye.z, p.shape) && Math.hypot(p.shape.x - eye.x, p.shape.z - eye.z) >= 1.3 + p.shape.reach * 0.5)
+          if (crossed) {
+            over = true
+            counts.parapetOver++
+          }
+        }
+      }
+    }
+  })
+}
 // (F7a's review) controlOf with height on a Grand-sized board (`nav`, its
 // objectives): a unit on a deck whose models in an objective's horizontal
 // range all stand more than HIGH off its floor doesn't hold it; the same
@@ -1915,7 +2085,7 @@ function controlScene(q, nav, objectives, u, where, counts) {
 }
 
 function heightTask(core, mods) {
-  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0 }
+  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0, parapets: 0, parapetMoves: 0, parapetCover: 0, parapetDitch: 0, parapetGround: 0, parapetDeck: 0, parapetOwn: 0, parapetOver: 0 }
   const nav0 = mods.nav, { STEP } = nav0
   const SEATS = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
   // classic: no height anywhere
@@ -2050,6 +2220,9 @@ function heightTask(core, mods) {
     }
     // (F7a's review) the scenes
     heightScenes(core, mods, G, () => core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS }), where, counts)
+    // (F7b) the parapets' scenes
+    counts.parapets += G.terrain.chunks.filter((c) => c.kind === 'parapet').length
+    parapetScenes(core, mods, G, where, counts)
     // P-level
     levelPairs(q, G, nav, rand, where, counts)
   }
@@ -2057,6 +2230,9 @@ function heightTask(core, mods) {
   // (F7a's review) every scene met at least once
   const scenes = { keepTop: "a unit on the keep's top", pileIn: 'a pile-in onto open deck', pileRefused: "a pile-in onto a ledge's band", chargeOver: 'a charge spot on a deck within 1" of an enemy below', blastSpared: 'a template on a deck over the ground', smashSkipped: "a wrecker's smash beside a raised piece", smashHit: "a wrecker's smash beside a piece on the ground" }
   for (const [k, what] of Object.entries(scenes)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
+  // (F7b) and, on code with parapets, every parapet scene
+  const parapetWants = { parapetMoves: 'a reach the same without the parapets', parapetCover: "a unit in a parapet's band on its deck", parapetDitch: "a unit on the ground under a parapet's band", parapetGround: 'a shooter on the ground seeing past a parapet', parapetDeck: 'a shooter on a deck seeing a unit on it out of cover', parapetOwn: "a shooter on a deck with its own parapets about it", parapetOver: "a shooter on a deck firing down over its own parapet" }
+  if (counts.parapets) for (const [k, what] of Object.entries(parapetWants)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
   // (F7a's review) P-level on Grand-sized fortified boards, where bastions
   // stand (Skirmish never fits one): the code's own Terrain and NavGrid
   // (and controlOf's scene, which needs a deck beside a ground objective:
@@ -2118,8 +2294,8 @@ if (a.child) {
     } else if (task.kind === 'height') {
       // (F7a: P-height's boards of its own, and P-level)
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
-      const [nav, damage, shoot, move, terrain] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js')])
-      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain }) }
+      const [nav, damage, shoot, move, terrain, geom] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js'), mod('terrain', 'geom.js')])
+      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain, geom }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
@@ -2220,7 +2396,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   // (F7a) P-height's own boards and P-level, for code with a height layer
   if (/export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
     const r = await child({ kind: 'height' }, pkg)
-    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs` : `FAIL ${r.error}`}`)
+    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below${r.counts.parapets ? `; (F7b) ${r.counts.parapets} parapets: ${r.counts.parapetMoves} reaches the same without them, ${r.counts.parapetCover} units in cover in their bands and ${r.counts.parapetDitch} out of it under them on the ground, ${r.counts.parapetGround} deck units in cover from the ground behind one, ${r.counts.parapetDeck} seen out of cover from their own deck (${r.counts.parapetOwn} sights from a deck, its own parapets never in the way, ${r.counts.parapetOver} boards' rays down over one)` : ''}; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run
@@ -2305,6 +2481,14 @@ const MUTATIONS = {
   'charge-others-flat': ['core/actions/charge.js', ' && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue', ')) continue'],
   'engaged-ignores-height': ['core/queries.js', 'gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)', 'gap(u, e) <= ENGAGE + 0.05)'],
   'everyone-climbs': ['core/actions/move.js', 'forbid: mode === \'fly\' ? null : forbid, climb: climbs(u) })', 'forbid: mode === \'fly\' ? null : forbid, climb: true })'],
+  // (F7b) P-height's parapet scenes: a shooter's own deck's parapets
+  // obscuring its rays (no looking over them), a parapet's band rastered
+  // at every level (the ditch below in cover), a parapet that blocks sight,
+  // and one that blocks movement
+  'parapet-own-obscures': ['core/queries.js', '  const over = L && onLevel?.size ? (c) => onLevel.get(c.id) === L && Math.abs(c.base - fy) <= STEP : null\n', '  const over = null\n'],
+  'parapet-cover-flat': ['core/nav.js', '      if (c.cover) this.rasterAt(c.coverShape || s, 0.6, this.cover, base)\n', '      if (c.cover) this.raster(c.coverShape || s, 0.6, this.cover)\n'],
+  'parapet-blocks': ['core/terrain/recipes.js', "    navKind: null, los: 'obscure', cover: true,\n    base, on: deck.id,", "    navKind: null, los: 'block', cover: true,\n    base, on: deck.id,"],
+  'parapet-hard': ['core/terrain/recipes.js', "    navKind: null, los: 'obscure', cover: true,\n    base, on: deck.id,", "    navKind: 'hard', los: 'obscure', cover: true,\n    base, on: deck.id,"],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a

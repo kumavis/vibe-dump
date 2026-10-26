@@ -68,5 +68,6 @@ export const RULES_ID = rulesId()
 // a list of counts, which newState builds the armies from; 6: F7a's
 // height: the nav's floor, links and ledges, and the rules' height
 // branches; 7: F8b's missions field and grand, the open set (the scatter's
-// area scale) and the fight guard, max(30, 2·units + 2))
-export const CORE_VERSION = 7
+// area scale) and the fight guard, max(30, 2·units + 2); 8: F7b's
+// parapets: cover on the decks, a new piece on every fortified board)
+export const CORE_VERSION = 8

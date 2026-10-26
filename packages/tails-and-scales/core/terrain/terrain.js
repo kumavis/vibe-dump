@@ -58,12 +58,13 @@ const place = (c) => ({ x: c.shape.x, y: c.shape.y, z: c.shape.z })
 // collapse lowering the chunk can't reach back into an event)
 const defOf = (c) => ({ id: c.id, kind: c.kind, shape: { ...c.shape }, look: c.look })
 // (F7a, DESIGN §4.2.4) and, for the pieces that have them (decks, stairs,
-// ladders, posts: recipes.js), the height data the view draws them with and
-// sim/terrain-check.mjs reads: `surface` (the walkable top), `link` (a
-// ladder's foot and top), `base` (the floor a piece stands on), `supports`
-// and `fallsAt` (a timber deck's posts) and `on` (a ladder's deck), copied
-// like the shape. A chunk without them (every classic one) joins with the
-// def it always had. (view/terrain.js's copy of defOf must carry the same,
+// ladders, posts and, F7b, parapets: recipes.js), the height data the view
+// draws them with and sim/terrain-check.mjs reads: `surface` (the walkable
+// top), `link` (a ladder's foot and top), `base` (the floor a piece stands
+// on: a parapet's, its deck's y), `supports` and `fallsAt` (a timber deck's
+// posts) and `on` (a ladder's deck, and a parapet's), copied like the
+// shape. A chunk without them (every classic one) joins with the def it
+// always had. (view/terrain.js's copy of defOf must carry the same,
 // for a snap's sync to key the table by what an add carries.)
 export const HEIGHT_FIELDS = Object.freeze(['surface', 'link', 'base', 'supports', 'fallsAt', 'on'])
 const copy = (v) => (Array.isArray(v) ? v.map(copy) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, copy(x)])) : v)
@@ -166,7 +167,13 @@ export class Terrain {
   // they are met: the solid chunk that stopped the ray (its id), and each
   // obscuring chunk counted (its id). core/queries.js's sightInfo asks; the
   // verdict is the same either way.
-  los(a, b, ignoreR = 1.3, why = null) {
+  //
+  // (F7b) `over`, when given (a board with height: core/queries.js's sight),
+  // names the obscurers the shooter looks over wherever they stand: over(c)
+  // true for a parapet on the deck the shooter stands on, at its level
+  // (defenders fire over their own breastwork, as anyone sees out of the
+  // cover it hugs). Such a chunk neither obscures nor is counted.
+  los(a, b, ignoreR = 1.3, why = null, over = null) {
     let obscure = 0
     const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z
     const L2 = dx * dx + dz * dz
@@ -186,6 +193,7 @@ export class Terrain {
         return { blocked: true, obscure }
       }
       if (hypot(s.x - a.x, s.z - a.z) < ignoreR + s.reach * 0.5) continue
+      if (over && over(c)) continue
       obscure++
       if (why) why.obscure.push(c.id)
     }
@@ -287,6 +295,9 @@ export class Terrain {
       case 'tree':
         this.topple(c, from, out)
         break
+      // (F7b) a parapet leaves nothing: it had no nav effect, and the view
+      // spills its debris; its cover band goes with it at the nav's rebuild
+      // (dirty, above)
     }
   }
 

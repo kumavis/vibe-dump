@@ -1772,3 +1772,24 @@ body:not(.playing) #roster {
     flex: 1 1 30%;
   }
 }
+
+/* F7b: reading heights (DESIGN §4.2.4's line of sight with its reasons, the
+   move tooltip's ledge). The reasons under a shot's odds, coloured as the ray
+   is drawn: green clear, amber obscured or in cover, red blocked. */
+#tooltip .los {
+  margin-top: 3px;
+  padding-left: 7px;
+  border-left: 3px solid #5be37a;
+  color: #cfeed6;
+}
+#tooltip .los-cover {
+  border-left-color: #ffb347;
+  color: #ffe2b8;
+}
+#tooltip .los-blocked {
+  border-left-color: #ff5a4a;
+  color: #ffc8c0;
+}
+#tooltip .ledge {
+  color: #ff8a7a;
+}

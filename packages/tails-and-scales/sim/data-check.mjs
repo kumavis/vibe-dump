@@ -55,7 +55,9 @@
 //    an unknown scale; classic has none of the new fields (its draws are
 //    frozen); and each recipe's footprint is at least its reach measured on
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
-//    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8b) It passes
+//    feet) plus 0.25", to the nearest tenth, and holds its gates. (F7b)
+//    Each recipe stands the recipe table's parapets on its deck, each the
+//    piece table's, and draws nothing for them. (F8b) It passes
 //    `open` too, refuses a copy of it with an unknown scale, and classic
 //    has no `scale` (its draws are frozen). (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
@@ -612,6 +614,45 @@ for (const name of Object.keys(FORTS)) {
   check(FOOTPRINT[name] >= need && FOOTPRINT[name] >= gate, `the ${name}'s footprint ${FOOTPRINT[name]}" holds its reach ${r.toFixed(3)}" + 0.25" (${need}") and its gates (${gate.toFixed(3)}")`, `footprint ${FOOTPRINT[name]}`)
 }
 for (const [name, r] of SETS.fortified.fortKinds) check(r === FOOTPRINT[name], `fortified's ${name} radius is its footprint (${FOOTPRINT[name]})`, `${r}`)
+// (F7b) the parapets (DESIGN §4.2.4's piece and recipe tables), each recipe
+// built at the origin from seeds 1-200 with its own stream counted: as many
+// on its deck as the recipe table says (the rampart 4, the bastion 6, the
+// watchtower 8, the platform none, the keep 10); each one the piece table's
+// row (navKind null, los 'obscure', cover, hp 3, `base` its deck's top,
+// `on` its deck, standing on the deck, 0.7" tall, a cover band); and none
+// of them drawing from the stream: every draw a recipe makes is made before
+// its first parapet joins, so the draws it made before F7b are the draws it
+// makes now (none appended, none moved). Code before F7b has none, and is
+// held to none.
+const { mulberry32 } = await imp(PKG, 'core/util.js')
+const PARAPETS = { rampart: 4, bastion: 6, watchtower: 8, platform: 0, keep: 10 }
+if ('PARAPET_H' in (await imp(PKG, 'core/terrain/recipes.js'))) {
+  const F0 = { p: (lx, lz) => ({ x: lx, z: lz }), yaw: (ly = 0) => ly }
+  for (const name of Object.keys(FORTS)) {
+    const bad = []
+    let n = 0, late = 0
+    for (let seed = 1; seed <= 200; seed++) {
+      const rand = mulberry32(seed)
+      let draws = 0, first = -1
+      const rng = () => (draws++, rand())
+      const defs = []
+      FORTS[name]({ add: (def) => (defs.push(def), def.kind === 'parapet' && first < 0 && (first = draws), { ...def, id: defs.length }) }, F0, rng)
+      if (first >= 0 && draws !== first) late++
+      for (const d of defs.filter((x) => x.kind === 'deck')) {
+        const ps = defs.filter((x) => x.kind === 'parapet' && x.on === defs.indexOf(d) + 1)
+        if (ps.length !== PARAPETS[name]) bad.push(`seed ${seed}: ${ps.length} parapets on its deck`)
+        for (const p of ps) {
+          n++
+          const want = { navKind: null, los: 'obscure', cover: true, hp: 3, base: d.surface.y }
+          for (const [k, v] of Object.entries(want)) if (p[k] !== v) bad.push(`seed ${seed}: a parapet's ${k} ${JSON.stringify(p[k])}, not ${JSON.stringify(v)}`)
+          if (p.shape.y - p.shape.hy !== d.surface.y || 2 * p.shape.hy !== 0.7 || !p.coverShape) bad.push(`seed ${seed}: a parapet not 0.7" tall on its deck's top with a cover band`)
+        }
+      }
+      if (defs.some((x) => x.kind === 'parapet' && !(x.on >= 1 && defs[x.on - 1].kind === 'deck'))) bad.push(`seed ${seed}: a parapet on no deck`)
+    }
+    check(!bad.length && !late, `the ${name} stands ${PARAPETS[name]} parapets on its deck, each the piece table's (${n} on seeds 1-200), and draws nothing for them (every draw made before the first joins)`, [...bad.slice(0, 3), late ? `${late} builds drew after a parapet joined` : ''].filter(Boolean).join('; '))
+  }
+}
 // (F8b) the open set's own field, `scale`: only 'area' scatters; classic
 // has none (its draws are frozen)
 check(!('scale' in SETS.classic), "classic has no scale: its pair count and attempts are classic's own", JSON.stringify(SETS.classic.scale))
@@ -900,13 +941,15 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // F7a: the height layer, derived like the nav grid and never hashed, and
   // classic boards build none; 7, F8b: the missions field and grand, the
   // open set and the fight guard, none of which a classic match reaches or
-  // shadowState prints: the format is unchanged for classic matches)
+  // shadowState prints: the format is unchanged for classic matches; 8,
+  // F7b: the parapets, new chunks on fortified boards only, hashed as every
+  // chunk always was, and nothing shadowState prints changed its form)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

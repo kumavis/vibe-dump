@@ -86,7 +86,12 @@
 //     a table synced from the chunks is the table the adds built (5.'s
 //     rows), the walkable tops it lists (the overlay's tints, the picker's
 //     quads) are exactly the chunks with a surface, and the board's adds
-//     played again take back every mesh.
+//     played again take back every mesh. (F7b) The parapets are pieces like
+//     the rest (point-symmetric exactly, their cover bands too, inside
+//     their footprints), each deck stands its recipe's count of them, each
+//     on its deck's rim, its band PARAPET_BAND deep behind it, clear of
+//     every stair's top and ladder's climb (parapetRows); P-climb holds them
+//     to the nav (parapetNav).
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -671,6 +676,12 @@ console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} c
 const { GRAND } = await import('./fixtures/grand.mjs')
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
 const { FOOTPRINT, GATE_OUT, LADDER_OUT } = await imp(PKG, 'core/terrain/recipes.js')
+// (F7b) the parapets' sizes, and how many each recipe stands on its deck
+// (DESIGN §4.2.4's recipe table): older code has none, and is held to none
+const PARAPET = await imp(PKG, 'core/terrain/recipes.js').then((m) => ('PARAPET_H' in m ? { H: m.PARAPET_H, T: m.PARAPET_T, BAND: m.PARAPET_BAND } : null))
+const PARAPETS = Object.freeze({ rampart: 4, bastion: 6, watchtower: 8, platform: 0, keep: 10 })
+// the pad core/nav.js rasters every cover shape with (its raster's 0.6)
+const COVER_PAD = 0.6
 // the height fields an add's def carries where its chunk has them (DESIGN
 // §4.2.4's terrain.add), named here and held to core's list, so an edit that
 // drops one from core's list alike is a difference, not a pass
@@ -680,7 +691,7 @@ const { HEIGHT_FIELDS } = await imp(PKG, 'core/terrain/terrain.js')
 // can't import core's, terrain.js being no door of the core's)
 const { HEIGHT_FIELDS: VIEW_HEIGHT } = await imp(PKG, 'view/terrain.js')
 const { sin: dsin, cos: dcos } = await imp(PKG, 'core/dmath.js')
-const FORT_PIECES = new Set(['deck', 'stair', 'ladder', 'post'])
+const FORT_PIECES = new Set(['deck', 'stair', 'ladder', 'post', 'parapet'])
 const FACING = new Set(SETS.fortified.facing)
 const FORT_BOARDS = [
   { label: 'Skirmish', W, H, deploy: MISSIONS.classic.deploy, objectives: OBJ_POS, pairs: [0, 1], avg: [0, 0.5] },
@@ -692,7 +703,7 @@ const turn = (a, b) => {
   const d = Math.abs(a - b) % (2 * Math.PI)
   return d > Math.PI ? 2 * Math.PI - d : d
 }
-const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 0, pairs: 0, selfPairs: 0, others: 0, defs: 0, viewed: 0, synced: 0, tops: 0, taken: 0 }
+const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 0, pairs: 0, selfPairs: 0, others: 0, defs: 0, viewed: 0, synced: 0, tops: 0, taken: 0, parapets: 0 }
 const fortRows = []
 // a board, built twice; the differences thrown as `differ` does
 function fortBoard(B, seed) {
@@ -775,6 +786,13 @@ function fortBoard(B, seed) {
       same(`${w}: link.h`, c.link.h, m.link.h)
     }
     same(`${w}: supports, its partners`, (c.supports ?? []).map((id) => partner.get(id)).join(), (m.supports ?? []).join())
+    // (F7b) a parapet's cover band, negated as its place is
+    if (c.coverShape || m.coverShape) {
+      if (!c.coverShape || !m.coverShape) differ(`${w}: coverShape`, !!c.coverShape, !!m.coverShape)
+      for (const k of ['x', 'z']) same(`${w}: coverShape.${k} negated`, -c.coverShape[k], m.coverShape[k])
+      for (const k of ['hx', 'hz']) same(`${w}: coverShape.${k}`, c.coverShape[k], m.coverShape[k])
+      same(`${w}: coverShape.yaw, its shape's`, m.shape.yaw, m.coverShape.yaw)
+    }
     same(`${w}: its deck, its partner`, c.on === undefined ? undefined : partner.get(c.on), m.on)
   }
   // every other chunk: a partner of its kind at its negation, within 1e-9
@@ -820,6 +838,7 @@ function fortBoard(B, seed) {
     const x = f.works === 0 ? c.link.foot.x : -c.link.foot.x
     if (Math.abs(x - (-B.W / 2 + B.deploy + LADDER_OUT)) > 1e-9) differ(`${where} works ${f.works}'s ladder: its foot ${LADDER_OUT}" out from the zone`, -B.W / 2 + B.deploy + LADDER_OUT, x)
   }
+  if (PARAPET) parapetRows(where, chunks)
   for (const [f, n] of held) if (!n) differ(`${where} the ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its pieces`, 'some', 'none')
   for (const f of forts) if (f.r !== FOOTPRINT[f.fort]) differ(`${where} the ${f.fort}'s footprint`, FOOTPRINT[f.fort], f.r)
   return {
@@ -830,6 +849,106 @@ function fortBoard(B, seed) {
     chunks: chunks.length,
   }
 }
+// (F7b, DESIGN §4.2.4's piece and recipe tables) The parapets of a fortified
+// board: each deck stands as many as its recipe's row says (the rampart 4,
+// the bastion 6, the watchtower 8, the platform none, the keep 10), each
+// one on its deck (`on`), a thin wall PARAPET_H tall standing on the deck's
+// top (`base` the deck's surface y, its box from there up), navKind null,
+// los 'obscure', cover, hp 3 and breakable; on the deck's rim (its box
+// inside the deck's footprint, its outer face's middle on one of the deck's
+// edges: section 7 finds every cell it stands on a ledge cell, inside the
+// band that stops every disc); its cover band (`coverShape`, turned as it
+// is) along its length and from its outer face to PARAPET_BAND behind its
+// inner one once the nav's cover pad is added; and never across a stair's
+// top or a ladder's: its box clear of every stair's box grown by 0.05" and
+// of every ladder's strip, and more than half a ladder's width from the
+// ladder's climb (its link, foot to top) everywhere.
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1]]
+// the corners of box s in the frame of box d (x, z each)
+const inFrame = (pts, d) => {
+  const c = dcos(d.yaw), sn = dsin(d.yaw)
+  return pts.map(([x, z]) => {
+    const dx = x - d.x, dz = z - d.z
+    return [dx * c - dz * sn, dx * sn + dz * c]
+  })
+}
+// two boxes' footprints overlap (separating axes; b grown by `grow`)
+function overlaps(a, b, grow = 0) {
+  const B = { ...b, hx: b.hx + grow, hz: b.hz + grow }
+  const A = corners(a), Bc = corners(B)
+  for (const s of [a, B]) {
+    const c = dcos(s.yaw), sn = dsin(s.yaw)
+    // its own x and z axes on the table
+    for (const ax of [[c, -sn], [sn, c]]) {
+      const pa = A.map(([x, z]) => x * ax[0] + z * ax[1]), pb = Bc.map(([x, z]) => x * ax[0] + z * ax[1])
+      if (Math.max(...pa) < Math.min(...pb) || Math.max(...pb) < Math.min(...pa)) return false
+    }
+  }
+  return true
+}
+// the least distance on the table from segment p→q to box s (sampled every
+// 0.02", the box measured flat)
+function segToBox(p, q, s) {
+  const L = hypot(q.x - p.x, q.z - p.z), n = Math.max(1, Math.ceil(L / 0.02))
+  let d = Infinity
+  for (let k = 0; k <= n; k++) d = Math.min(d, distToBox(p.x + ((q.x - p.x) * k) / n, s.y, p.z + ((q.z - p.z) * k) / n, s))
+  return d
+}
+function parapetRows(where, chunks) {
+  const decks = chunks.filter((c) => c.kind === 'deck')
+  for (const d of decks) {
+    const n = chunks.filter((c) => c.kind === 'parapet' && c.on === d.id).length
+    same(`${where} the ${d.look.recipe}'s deck ${d.id}: its parapets`, PARAPETS[d.look.recipe], n)
+  }
+  const stairs = chunks.filter((c) => c.kind === 'stair'), ladders = chunks.filter((c) => c.kind === 'ladder')
+  for (const p of chunks) {
+    if (p.kind !== 'parapet') continue
+    fort.parapets++
+    const w = `${where} parapet ${p.id}`, s = p.shape
+    const d = chunks.find((c) => c.id === p.on)
+    if (d?.kind !== 'deck') differ(`${w}: on a deck`, 'a deck', d?.kind)
+    same(`${w}: its recipe, its deck's`, d.look.recipe, p.look.recipe)
+    same(`${w}: navKind (no nav effect)`, null, p.navKind)
+    same(`${w}: los`, 'obscure', p.los)
+    same(`${w}: cover`, true, p.cover)
+    same(`${w}: hp`, 3, p.hp)
+    same(`${w}: destructible`, true, p.destructible)
+    same(`${w}: base, its deck's top`, d.surface.y, p.base)
+    same(`${w}: its height`, PARAPET.H, 2 * s.hy)
+    same(`${w}: its thickness`, PARAPET.T, 2 * s.hz)
+    same(`${w}: standing on its base`, p.base + s.hy, s.y)
+    // on the rim: inside the deck, its outer face on an edge
+    const D = d.shape, eps = 1e-9
+    const inside = inFrame(corners(s), D).every(([x, z]) => Math.abs(x) <= D.hx + eps && Math.abs(z) <= D.hz + eps)
+    if (!inside) differ(`${w}: inside its deck's footprint`, 'every corner', JSON.stringify(inFrame(corners(s), D).map((q) => q.map((v) => +v.toFixed(3)))))
+    const c = dcos(s.yaw), sn = dsin(s.yaw)
+    // (its own −z side, out of its own frame as geom.js's corners are)
+    const [[ox, oz]] = inFrame([[s.x - s.hz * sn, s.z - s.hz * c]], D)
+    const onEdge = Math.abs(Math.abs(ox) - D.hx) <= eps || Math.abs(Math.abs(oz) - D.hz) <= eps
+    if (!onEdge) differ(`${w}: its outer face on its deck's edge`, `|x| ${D.hx} or |z| ${D.hz} in the deck's frame`, `(${ox}, ${oz})`)
+    // its band: along its length, from its outer face to BAND behind its inner one, padded
+    const cs = p.coverShape
+    if (!cs) {
+      differ(`${w}: its cover band (coverShape)`, 'a box', 'none')
+      continue
+    }
+    same(`${w}: its band turned as it is`, s.yaw, cs.yaw)
+    same(`${w}: its band its length`, s.hx, cs.hx)
+    const [[bx, bz]] = inFrame([[cs.x, cs.z]], { ...s, yaw: s.yaw })
+    // (the band's centre in the parapet's own frame: on its axis, behind it)
+    if (Math.abs(bx) > eps) differ(`${w}: its band centred along it`, 0, bx)
+    near(`${w}: its band from its outer face`, -s.hz, bz - cs.hz)
+    near(`${w}: its band ${PARAPET.BAND}" behind its inner face, padded`, PARAPET.BAND, bz + cs.hz + COVER_PAD - s.hz)
+    // clear of every stair's top and every ladder's
+    for (const st of stairs) if (overlaps(s, st.shape, 0.05)) differ(`${w}: clear of stair ${st.id}`, 'apart by 0.05" or more', 'overlapping')
+    for (const l of ladders) {
+      if (overlaps(s, l.shape)) differ(`${w}: clear of ladder ${l.id}'s strip`, 'apart', 'overlapping')
+      const g = segToBox(l.link.foot, l.link.top, s)
+      if (g <= l.shape.hx) differ(`${w}: clear of ladder ${l.id}'s climb`, `more than ${l.shape.hx}" off it`, `${g.toFixed(3)}"`)
+    }
+  }
+}
+
 // The view of a fortified board (TerrainView, view/terrain.js): its adds
 // played into a table as the player plays them; a table synced from the
 // chunks is that table (syncCheck: every chunk shown alike, every mesh where
@@ -903,6 +1022,7 @@ for (const r of fortRows) {
 }
 console.log(`  ${fort.chunks} chunks built twice alike, Math.random never called; ${fort.defs} adds' defs carrying the chunk's height fields; pieces ${Object.entries(fort.pieces).map(([k, v]) => `${k} ${v}`).join(', ')} (${fort.surfaces} surfaces, ${fort.links} links)`)
 console.log(`  ${fort.pairs} mirrored pairs of pieces exact (and ${fort.selfPairs} decks their own mirror), ${fort.others} other chunks within 1e-9; every piece, foot and gate inside its fortification's footprint`)
+if (PARAPET) console.log(`  (F7b) ${fort.parapets} parapets, each recipe's count on its deck, on its deck's rim, its band ${PARAPET.BAND}" deep behind it, clear of every stair's top and ladder's climb`)
 console.log(`  the view: ${fort.viewed} boards' adds played into a TerrainView, each add's def the view's defOf of its chunk; ${fort.synced} chunks synced alike; ${fort.tops} walkable tops listed, a picker's quad on each; ${fort.taken} meshes taken back by the board's adds played again`)
 
 if (failedSeeds || fort.failed) {
@@ -915,7 +1035,7 @@ if (!boards || !stats.chunks) {
   console.log(`terrain-check: VACUOUS: ${boards} board(s), ${stats.chunks} chunks compared`)
   process.exit(2)
 }
-if (!fort.chunks || !fort.pairs || !fort.links || !fort.viewed || !fort.tops) {
+if (!fort.chunks || !fort.pairs || !fort.links || !fort.viewed || !fort.tops || (PARAPET && !fort.parapets)) {
   console.log(`terrain-check: VACUOUS: ${fort.boards} fortified board(s), ${fort.chunks} chunks, ${fort.pairs} mirrored pairs of pieces, ${fort.links} links checked`)
   process.exit(2)
 }
@@ -949,6 +1069,15 @@ console.log(`all ${boards} board${boards === 1 ? '' : 's'} identical: layout dra
 //    mirror link, at the same cost); the cliff field within 1e-4 (its two
 //    chamfer passes sum in the board's order).
 //  - The works stand on ≥ 95% of boards (judged over 100 boards or more).
+//  - (F7b) The parapets: every cell whose centre a parapet stands over is a
+//    ledge cell (cliff 0: no disc stands there, so it is inside the band
+//    that already stops movement); the board's nav built without its
+//    parapets is this one, cell for cell (hard, soft, difficult, both
+//    clearances, floor, cliff, levels, links, ledges), but for the cover;
+//    and the cover is that board's and each parapet's band exactly: the
+//    cells its coverShape (padded as the nav pads every cover shape) holds
+//    whose floor is within STEP of its base, the deck's, and none in the
+//    ditch below (a parapet covers the deck, not the ditch).
 // A failure names the board, the piece and the row.
 const { NavGrid, CLIMB_R, STEP, LADDER_MUL } = await imp(PKG, 'core/nav.js')
 const { RACES } = await imp(PKG, 'data/schema.js')
@@ -958,7 +1087,7 @@ const UNITS = Object.values(RACES).flatMap((r) => Object.values(r.units))
 const BIG = [1.05, 0.95]
 const FLIERS = [...new Set(UNITS.filter((t) => t.fly).map(radius))]
 const STAIRED = new Set(['rampart', 'bastion', 'keep'])
-const climb = { boards: 0, failed: 0, decks: 0, staired: 0, ladderOnly: 0, ladders: 0, stairs: 0, cells: 0, works: {} }
+const climb = { boards: 0, failed: 0, decks: 0, staired: 0, ladderOnly: 0, ladders: 0, stairs: 0, cells: 0, works: {}, parapets: 0, onCells: 0, band: 0, ditch: 0 }
 const tc0 = Date.now()
 const climbShown = []
 const fail = (where, what) => {
@@ -986,6 +1115,7 @@ function climbBoard(B, seed) {
     if (JSON.stringify(more?.map(([k, c]) => [N - 1 - k, c]) ?? null) !== JSON.stringify(mm ?? null)) return fail(where, `cell ${i}'s further links ${JSON.stringify(more)} aren't the mirror of cell ${m}'s ${JSON.stringify(mm)}`)
   }
   climb.cells += N
+  if (PARAPET && parapetNav(where, T, nav) === false) return
   // where each deck's top is: its level, and whether a stair rises to it
   const decks = T.chunks.filter((c) => c.kind === 'deck')
   const levelOf = (c) => nav.level[nav.index(c.shape.x, c.shape.z)]
@@ -1053,6 +1183,56 @@ function climbBoard(B, seed) {
     }
   }
 }
+// (F7b) the parapets' rows above; false when one failed
+const NAV_ARRAYS = ['hard', 'soft', 'diff', 'clearAll', 'clearHard', 'floor', 'cliff', 'level', 'link', 'linkCost', 'ledge']
+function parapetNav(where, T, nav) {
+  const ps = T.chunks.filter((c) => c.alive && c.kind === 'parapet')
+  const bare = new NavGrid(T.W, T.H, 0.5)
+  bare.rebuild(T.chunks.filter((c) => c.kind !== 'parapet'))
+  for (const k of NAV_ARRAYS) {
+    const a = nav[k], b = bare[k]
+    for (let i = 0; i < nav.N; i++) if (!Object.is(a[i], b[i])) return fail(where, `the parapets moved nav.${k} at cell ${i} (${nav.x(i)}, ${nav.z(i)}): ${b[i]} without them, ${a[i]} with them`) ?? false
+  }
+  const band = new Uint8Array(nav.N), ditch = new Uint8Array(nav.N)
+  // the cells near box s (its reach and `pad` round its centre), each with
+  // its centre in s's own frame
+  const near = (s, pad, f) => {
+    const reach = hypot(s.hx, s.hz) + pad, c = dcos(s.yaw), sn = dsin(s.yaw)
+    const at = (v, size, n) => Math.min(n - 1, Math.max(0, Math.floor((v + size / 2) / nav.cell)))
+    for (let iz = at(s.z - reach, nav.H, nav.nz); iz <= at(s.z + reach, nav.H, nav.nz); iz++) {
+      for (let ix = at(s.x - reach, nav.W, nav.nx); ix <= at(s.x + reach, nav.W, nav.nx); ix++) {
+        const i = iz * nav.nx + ix, dx = nav.x(i) - s.x, dz = nav.z(i) - s.z
+        f(i, dx * c - dz * sn, dx * sn + dz * c)
+      }
+    }
+  }
+  for (const p of ps) {
+    climb.parapets++
+    let bad = -1
+    near(p.shape, 0, (i, lx, lz) => {
+      if (Math.abs(lx) > p.shape.hx || Math.abs(lz) > p.shape.hz) return
+      climb.onCells++
+      if (!nav.ledge[i] && bad < 0) bad = i
+    })
+    if (bad >= 0) return fail(where, `parapet ${p.id} (${p.look.recipe}) stands over cell ${bad} (${nav.x(bad)}, ${nav.z(bad)}), no ledge cell (cliff ${nav.cliff[bad]}): a disc may stand in it`) ?? false
+    const cs = p.coverShape
+    near(cs, COVER_PAD, (i, lx, lz) => {
+      if (Math.abs(lx) > cs.hx + COVER_PAD || Math.abs(lz) > cs.hz + COVER_PAD) return
+      if (Math.abs(nav.floor[i] - p.base) <= STEP) {
+        if (!band[i]) climb.band++
+        band[i] = 1
+      } else if (!ditch[i]) {
+        climb.ditch++
+        ditch[i] = 1
+      }
+    })
+  }
+  for (let i = 0; i < nav.N; i++) {
+    const want = bare.cover[i] || band[i]
+    if (nav.cover[i] !== want) return fail(where, `cell ${i} (${nav.x(i)}, ${nav.z(i)}, floor ${nav.floor[i]}) is ${nav.cover[i] ? '' : 'not '}in cover; without the parapets it is${bare.cover[i] ? '' : ' not'}, and it is ${band[i] ? '' : 'in no '}parapet's band on its deck`) ?? false
+  }
+  return true
+}
 for (const B of FORT_BOARDS) {
   for (let seed = lo; seed <= hi; seed++) {
     try {
@@ -1065,12 +1245,13 @@ for (const B of FORT_BOARDS) {
   if (n >= 100 && w < 0.95 * n) fail(`P-climb ${B.label}, seeds ${lo}-${hi}`, `the works stand on ${w} of ${n} boards, not ≥ 95%`)
 }
 console.log(`\nP-climb (F7a): ${climb.boards} fortified boards' height layers (${((Date.now() - tc0) / 1000).toFixed(1)} s): ${climb.decks} decks (${climb.staired} a stair rises to, ${climb.ladderOnly} only ladders reach), each reached by a climber (r ${CLIMB_R}) from seat 0's zone, the stair decks by big walkers (r ${BIG.join(', ')}) and no ladder-only deck; ${climb.ladders} ladders climbed over their links, ${climb.stairs} stairs walked up from their gates; every top hosts r ${CLIMB_R} and the fliers' r ${FLIERS.map((r) => r.toFixed(3)).join(', ')}; ${climb.cells} cells' floor and links point-symmetric exactly, the cliff within 1e-4; the works on ${FORT_BOARDS.map((B) => `${climb.works[B.label] ?? 0} ${B.label}`).join(' and ')} boards of ${hi - lo + 1}`)
+if (PARAPET) console.log(`  (F7b) ${climb.parapets} parapets standing over ${climb.onCells} cells, every one a ledge cell; the nav without them the same but for the cover, which is their bands' ${climb.band} deck cells and none of the ${climb.ditch} ditch cells under their bands`)
 if (climb.failed) {
   console.log(`MISMATCH: P-climb failed ${climb.failed} time(s):`)
   for (const s of climbShown) console.log(`  ${s}`)
   process.exit(1)
 }
-if (!climb.decks || !climb.ladders || !climb.stairs) {
+if (!climb.decks || !climb.ladders || !climb.stairs || (PARAPET && (!climb.parapets || !climb.band || !climb.ditch))) {
   console.log(`terrain-check: VACUOUS: P-climb met ${climb.decks} decks, ${climb.ladders} ladders and ${climb.stairs} stairs`)
   process.exit(2)
 }
