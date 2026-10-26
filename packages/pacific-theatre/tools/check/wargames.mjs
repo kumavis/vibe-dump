@@ -169,6 +169,9 @@ function checkScenario(ctx, rel, fileId, W, env) {
     ctx.bad(`${rel} sides`, `bearings ${J.bearingDeg}° and ${U.bearingDeg}° are not reciprocal: each side stands on its bearing from the centre, the other on the opposite one`)
   }
 
+  // --- the start, laid out from the formations (when both sides give one)
+  if (J?.formation && U?.formation && W.arena?.radiusM) checkStart(ctx, rel, W)
+
   // --- the goals, the phases, the admiral, the first unit
   for (const key of Object.keys(SIDES)) {
     const S = sides[key]
@@ -371,6 +374,63 @@ function checkFormation(ctx, at, F, own, guide) {
     once.add(id)
   }
   for (const s of own.ships) if (!once.has(s.id)) ctx.bad(at, `“${s.id}” has no place in the formation`)
+}
+
+/**
+ * Each side's start, by the formation's own rule: the guide on its bearing from the centre at half the
+ * separation (5 km when none is given), heading headingDeg (toward the other side when none); a circle's
+ * ring evenly round the guide at half acrossM from the bow, its screen evenly at screenM from the bearing
+ * of the other side; a column's first ship atM [starboard, ahead] from the guide and the rest astern at
+ * intervalM. No two ships within 150 m, and none starting more than 1 km outside the arena (the bound
+ * tools/smoke-arena.mjs holds the sim to, ROUND-3.md §3).
+ */
+export function layout(W) {
+  const rad = (d) => (d * Math.PI) / 180
+  const v = (deg, m) => [Math.sin(rad(deg)) * m, Math.cos(rad(deg)) * m]
+  const sep = W.arena.separationM ?? 5000
+  const out = []
+  for (const [key, S] of Object.entries(W.sides || {})) {
+    const F = S?.formation
+    if (!F) continue
+    const g = v(S.bearingDeg, sep / 2)
+    const h = S.headingDeg ?? (S.bearingDeg + 180) % 360
+    const put = (id, d) => out.push({ key, id, p: [g[0] + d[0], g[1] + d[1]] })
+    if (F.kind === 'circle') {
+      put(S.guide, [0, 0])
+      const ring = F.ring || []
+      ring.forEach((id, i) => put(id, v(h + (360 * i) / ring.length, (F.acrossM || 0) / 2)))
+      const screen = F.screen || []
+      screen.forEach((id, i) => put(id, v((S.bearingDeg + 180) % 360 + (360 * i) / screen.length, S.screenM)))
+    } else if (F.kind === 'columns') {
+      for (const c of F.columns || []) {
+        ;(c.ships || []).forEach((id, i) => {
+          const a = v(h + 90, c.atM?.[0] ?? 0)
+          const b = v(h, (c.atM?.[1] ?? 0) - i * (F.intervalM || 0))
+          put(id, [a[0] + b[0], a[1] + b[1]])
+        })
+      }
+    }
+  }
+  return out
+}
+
+function checkStart(ctx, rel, W) {
+  const at = layout(W)
+  const R = W.arena.radiusM
+  let worst = null
+  for (const x of at) {
+    const d = Math.hypot(x.p[0], x.p[1])
+    if (!worst || d > worst.d) worst = { ...x, d }
+  }
+  if (worst && worst.d > R + 1000) ctx.bad(`${rel} sides.${worst.key} formation`, `${worst.id} starts ${Math.round(worst.d)} m from the centre, more than 1 km outside the ${R} m arena`)
+  else if (worst && worst.d > R) ctx.warn(`${rel} sides.${worst.key} formation`, `${worst.id} starts ${Math.round(worst.d - R)} m outside the arena`)
+  for (let i = 0; i < at.length; i++) {
+    for (let j = i + 1; j < at.length; j++) {
+      const d = Math.hypot(at[i].p[0] - at[j].p[0], at[i].p[1] - at[j].p[1])
+      if (d < 150) ctx.bad(`${rel} sides.${at[i].key} formation`, `${at[i].id} and ${at[j].id} start ${Math.round(d)} m apart`)
+    }
+  }
+  ctx.count('wargame ships laid out', at.length)
 }
 
 // --- goals, phases, the admiral, the first unit ------------------------------------

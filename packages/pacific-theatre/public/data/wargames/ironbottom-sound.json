@@ -37,8 +37,8 @@
         "intervalM": 400,
         "columns": [
           { "ships": ["asagumo", "teruzuki", "atago", "takao", "kirishima"], "atM": [0, 1600] },
-          { "ships": ["nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki"], "atM": [300, 3600] },
-          { "ships": ["sendai", "shikinami", "uranami", "ayanami"], "atM": [-700, 3200] }
+          { "ships": ["nagara", "samidare", "inazuma", "shirayuki", "hatsuyuki"], "atM": [200, 3500] },
+          { "ships": ["sendai", "shikinami", "uranami", "ayanami"], "atM": [-500, 3100] }
         ],
         "note": "Kondō's column at 23:48 as Morison has it, Asagumo and Teruzuki leading Atago, Takao and Kirishima, the guide astern; the screening unit under Nagara and the sweeping unit under Sendai ahead of it, as Kondō's order put them some 10 km ahead (Lundgren; R5 §3.2), in the arena 2 km; in the record the units came round both sides of Savo, in the arena they come on together on 130°, Kirishima's course at midnight in the box. Tanaka's Oyashio and Kagerō, of the reinforcement unit, stay out."
       },
