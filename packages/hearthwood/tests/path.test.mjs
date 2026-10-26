@@ -438,3 +438,37 @@ test('generated 256 map: service paths match the sync solver and stay within bud
   }
   assert.equal(T_GRASS, 0)
 })
+
+test('incremental region labels after single placements/demolitions match a full relabel', () => {
+  const w = new World(64, 64)
+  // a few walls with gaps so placements can genuinely split regions
+  fill(w, 20, 0, 1, 64, T_CLIFF)
+  fill(w, 40, 0, 1, 64, T_CLIFF)
+  w.setTerrain(w.idx(20, 30), T_GRASS); w.setTerrain(w.idx(20, 31), T_GRASS)
+  w.setTerrain(w.idx(40, 10), T_GRASS)
+  const ps = new PathService(w)
+  const rng = new RNG(99)
+  const placed = []
+  let ids = 0
+  ps.sameRegion(0, 1) // initial full labelling
+  for (let step = 0; step < 400; step++) {
+    if (placed.length > 0 && rng.int(3) === 0) {
+      const [x, y, bw, bh] = placed.splice(rng.int(placed.length), 1)[0]
+      w.vacate(x, y, bw, bh, -1)
+    } else {
+      const bw = 1 + rng.int(3), bh = 1 + rng.int(3)
+      // bias placements toward the gaps so splits and merges happen
+      const x = rng.int(3) === 0 ? 19 + rng.int(3) - 1 : rng.int(64 - bw)
+      const y = rng.int(3) === 0 ? 29 + rng.int(4) - 1 : rng.int(64 - bh)
+      if (x < 0 || y < 0 || !w.areaFree(x, y, bw, bh)) continue
+      w.occupy(x, y, bw, bh, ids++, -1)
+      placed.push([x, y, bw, bh])
+    }
+    const ref = new PathService(w)
+    for (let k = 0; k < 24; k++) {
+      const a = rng.int(w.size), b = rng.int(w.size)
+      assert.equal(ps.sameRegion(a, b), ref.sameRegion(a, b), `step ${step}: ${a} vs ${b}`)
+    }
+  }
+  assert.ok(ps.relabels.local > 100, `most changes patched locally (${ps.relabels.local} local, ${ps.relabels.full} full)`)
+})

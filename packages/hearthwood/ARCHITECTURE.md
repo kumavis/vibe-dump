@@ -157,11 +157,16 @@ To implement:
 Doors: every building type has a door offset (`BUILDINGS[t].door`, also `B_DOOR_DX/DY`)
 outside the footprint, touching its bottom edge (`[floor(w/2), h]`). The door tile must
 be walkable at placement and stays clear forever after because `areaFree` rejects door
-tiles. Couriers, raiders and trained units path to door tiles.
+tiles. Couriers and trained units path to door tiles; Blight attacking a building path to its door when
+it is in their region, else to any reachable tile on the ring around the footprint (`buildingApproach`).
 
 Rendering invalidation: renderer caches terrain per chunk and rebakes when
-`world.chunkVersion[c]` differs from its cached copy. `takeResource` bumps it only when
-a tile depletes (tree felled), not on every harvested unit.
+`world.chunkVersion[c] - world.chunkResVersion[c]` (own + 4 neighbours) changes.
+`takeResource` bumps chunkVersion AND chunkResVersion only when a tile depletes (tree
+felled) and appends the tile to `world.resLog`; the terrain cache repaints such tiles in
+place (clip rect: ground, wash, water, cliffs, overlapping decals) instead of re-baking.
+`occupy` / `vacate` log their rect in `world.navLog*`, so PathService patches region labels
+locally (one change since the last labelling) instead of re-flooding the map.
 
 ## 6. CellGrid (world.js) — owner: world
 
@@ -177,7 +182,9 @@ queryRect(x0, y0, x1, y1, out: Int32Array) -> count   // ids in overlapping cell
 queryRing(cx, cy, r, out) -> count                     // ids in cells at Chebyshev ring r
 ```
 Items of cell c: `items[cellStart[c] .. cellStart[c+1]-1]` in insertion order (ascending id
-when added in id order). Readers MUST re-check `alive` and state for every id: units can die
+when added in id order). `clear()`/`add()` only stage ids; `cellStart`/`items` keep answering
+queries for the previous `build()` until the next `build()` (tickUnits relies on this: separation
+reads last tick's grid while the new one is staged). Readers MUST re-check `alive` and state for every id: units can die
 after the grid was built (combat runs after tickUnits).
 
 Nearest search pattern (allocation-free):
@@ -291,9 +298,11 @@ lowest free id first (deterministic), `free` pushes back (LIFO reuse) and bumps 
 ### 9.1 Placement
 `canPlace(ctx,type,tx,ty,{free}) → P_*` checks, in order: `P_NOT_BUILDABLE` (Hearth, unless
 free), `P_TIER` (`B_TIER[type] > ctx.tier`, unless free), `P_UNIQUE` (typeCount > 0 for
-unique types), `P_OOB`, `P_BLOCKED` (`!world.areaFree`), `P_DOOR` (door tile OOB, not
+unique types), `P_OOB` (footprint only), `P_BLOCKED` (`!world.areaFree`), `P_DOOR` (door tile OOB, not
 walkable, or occupied), `P_NO_RESOURCE` (extractor and `countResource == 0`), `P_COST`
-(unless free). Pure.
+(unless free), with `P_ENCLOSE` just before `P_COST` (player placement only: the footprint would
+split its surroundings so that a door ends up in a closed pocket; local flood fill, see
+`wouldEnclose`). Pure.
 
 `placeBuilding(ctx,type,tx,ty,{free}) → id | -1`: canPlace → payCost → `alloc` → tx/ty/door
 → `world.occupy` → `linkChunk(id, world.chunkOfXY(tx,ty))` → caps (`courierCap`,
@@ -341,8 +350,13 @@ else:
     addItems(b, out, outQty, false); progress = 0
 ```
 Den (`BF_DEN`): if paused → BS_PAUSED. If `units.typeCount[U_COURIER] >= ctx.courierCap` →
-BS_IDLE, progress = 0. Else progress++; at `courierSpawn.ticks`: `payCost` → `spawnUnit(U_COURIER,
-door centre)` + EV_COURIER_SPAWNED, progress = 0; on failure BS_NO_STOCK and hold.
+BS_IDLE, progress = 0. If more than 3 couriers stand idle and they are over a quarter of all
+couriers → BS_IDLE (no planks spent on couriers nobody needs). Else progress++; at
+`courierSpawn.ticks`: `payCost` → `spawnUnit(U_COURIER, door centre)` + EV_COURIER_SPAWNED,
+progress = 0; on failure BS_NO_STOCK and hold.
+Hearth (`BF_CORE`) rescue: while fewer than 2 couriers are alive and no Den can pay for one
+(no Den, or stock short of the spawn cost), the Hearth spawns a free courier every 200 ticks,
+so a raid that wipes the swarm while planks sit in producer buffers is never a soft-lock.
 Shrine (`BF_SHRINE`): offering = `TIERS[ctx.tier].offering`; when every `inv >= qty`, take
 them, `ctx.tier++`, EV_TIER_UP(a=tier); reaching `WIN_TIER` sets `ctx.won` + EV_WIN.
 Halls and towers: combat.js.
@@ -388,9 +402,11 @@ for each input item of b (shrine: items of the current offering):
   free = freeSpaceIn(b, item); if free <= 0: continue
   if free < COURIER_CAP and inv + resIn >= B_IN_QTY: continue     // not starving: wait for a full load of space
   want = min(free, COURIER_CAP)
-  src = findProvider(item, b, want)            // producers first, storage last
+  reserve = CRAFT_RESERVE[item] (40 for raw items buildings cost; 0 for the shrine / no storage)
+  if stock[item] < reserve: continue           // construction first: let producers refill storage
+  src = findProvider(item, b, want)            // producers first, storage last (never below reserve)
   if src < 0: continue
-  q = min(want, availableOut(src, item))
+  q = min(want, availableOut(src, item)); storage src: q = min(q, stock[item] - reserve)
   u = findIdleCourier(src.door); if u < 0: stop BOTH passes this tick
   assign(u, src, b, item, q)                   // at most one job per (requester,item) per visit
 ```
@@ -403,12 +419,15 @@ buckets with unlimited radius (whole map).
 **Push pass** — `visits = min(LOG_PUSH_PER_TICK, provCount)`:
 ```
 p = provList[provCursor]; advance
-a = availableOut(p, out); if a < outCap / 2: continue          // consumers get first claim below half
+a = availableOut(p, out); if a < threshold: continue
+   // threshold = min(COURIER_CAP, outCap/2) while > 1/4 of couriers idle, else outCap/2
 s = nearest storage (storage buckets) with freeSpaceIn >= min(a, COURIER_CAP), same region
 u = findIdleCourier(p.door); if u < 0: stop
 assign(u, p, s, out, min(a, COURIER_CAP, freeSpaceIn(s)))
 ```
-Storage is therefore the **low-priority sink** (push only when a producer is half full)
+(The pass is skipped outright when no storage has any free space.)
+Storage is therefore the **low-priority sink** (push only when a producer is half full, or
+holds a courier load while couriers stand idle)
 and **last-resort provider** (pull falls back to it). Storage never requests from storage.
 
 `assign(u,src,dst,item,q)`: `reserveOut(src,item,q)`, `reserveIn(dst,item,q)`, set job
@@ -479,11 +498,13 @@ Per non-courier unit:
    `U_ATTACK * (building ? U_VS_BUILDING : 1)` applied **instantly**; emit `U_FX[type]`
    (x0,y0 = attacker, x1,y1 = target centre); `cooldown = U_COOLDOWN`. Out of range:
    `O_HOLD` drops the target; otherwise chase with `orderMove` to the target's tile
-   (building: its door) at most every `CHASE_REPATH_TICKS` (`repathAt`). Player `O_NONE`
+   (building: its door, or the nearest reachable ring tile via `buildingApproach`) at most every `CHASE_REPATH_TICKS` (`repathAt`). Player `O_NONE`
    leash: drop target beyond `1.5 * sight`.
 5. No target: `O_MOVE / O_ATTACK_MOVE / O_RAID` keep walking to `orderTile` (re-issue
    `orderMove` if M_IDLE). On M_ARRIVED: move orders → `O_NONE`; `O_RAID` → raid the
    `nearestBuilding` from here (any type), or `O_NONE` if none. On M_FAILED: same as arrival.
+   Blight left standing in `O_NONE` with no target re-raid (`commandRaid(…, -1)`) every 128 ticks,
+   staggered by id.
 
 Towers (`BF_TOWER`, `BUILDINGS[t].tower`): from footprint centre, nearest Blight unit within
 `range` (retarget staggered like units), fire on `cooldown` with `tower.fx`.
@@ -503,7 +524,7 @@ update `nextPoints = wavePoints(ctx, number+1)`; at `nextTick - warnTicks` emit
 EV_WAVE_WARNING(a=n, b=ticks left) once; at `nextTick` `spawnWave`. Points formula and
 spawning rules are in the stub (WAVES table in content.js). Spawned Blight get
 `commandRaid(nearestBuilding from spawn point)`. Interval:
-`max(minInterval, interval - intervalStep*(number-1))`. First wave at 5:00. All choices via
+`max(minInterval, interval - intervalStep*(number-1))`. First wave at 4:00, spawned at most 56 tiles from the Hearth. All choices via
 `ctx.rng` → deterministic.
 
 ## 14. Per-tick order and frame loop
@@ -530,13 +551,13 @@ game.ctx, alpha, overlay)` → `minimap.update(ctx)` + `minimap.draw(camera)` �
 | caller | may import |
 | --- | --- |
 | buildings.js | logistics: `registerBuilding, unregisterBuilding`; units: `spawnUnit` |
-| logistics.js | buildings: inventory helpers, `availableOut, freeSpaceIn`; units: `orderMove, stopUnit`; world `CellGrid` |
+| logistics.js | buildings: inventory helpers, `availableOut, freeSpaceIn, recipeInputCount, recipeInputItem`; units: `orderMove, stopUnit`; world `CellGrid` |
 | units.js | logistics: `abortJob`; path: `PATH_PENDING, PATH_NONE` |
-| combat.js | units: `spawnUnit, despawnUnit, orderMove, stopUnit`; buildings: `destroyBuilding, payCost, refundCost, nearestBuilding` |
+| combat.js | units: `spawnUnit, despawnUnit, orderMove, stopUnit`; buildings: `destroyBuilding, payCost, refundCost, nearestBuilding`; world `CellGrid` (private Blight grid) |
 | waves.js | units: `spawnUnit`; combat: `commandRaid`; buildings: `nearestBuilding` |
-| game.js | context, buildings (`placeBuilding, addItems`), units (`spawnUnit`), mapgen via context |
+| game.js | context, buildings (`placeBuilding, addItems, canPlace`), units (`spawnUnit`), mapgen via context |
 | input.js | buildings (`canPlace, placeBuilding, demolishBuilding, buildingAtTile, setPaused`), units (`unitsInRect, unitAt`), combat (commands), camera, overlay |
-| ui.js | content, constants, buildings (`canAfford, setPaused, demolishBuilding`), combat (`enqueueTraining, cancelTraining`), sprites (`itemIconURL, buildingIconURL`) |
+| ui.js | content, constants, buildings (`canAfford, setPaused, demolishBuilding`), combat (`enqueueTraining, cancelTraining`), sprites (`itemIconURL, buildingIconURL`), app-hud (pure helpers) |
 | render.js / minimap.js / sprites.js | constants, content, rng, each other. **No sim functions** (read ctx fields only) |
 
 Everything may import `constants.js`, `content.js`, `rng.js`, `fx.js`. ESM import cycles
@@ -662,6 +683,9 @@ within ~1 s at zoom 1 centred on the Hearth (package.json thumbnail settle 3000 
   `placeBuilding(ctx, type, tx, ty, {free:true})` and seed stock with `addItems`.
 - Your suite will import other areas' modules through context.js; until integration they may
   still be stubs. Write the tests against the contract anyway; the integrator runs them all.
+- End-to-end browser smoke (integrator): `npx vite build && node tests/smoke.playwright.mjs`
+  (not picked up by `node --test`; serves dist/, drives Chromium through boot, economy, placement,
+  selection, orders, stress, reset and a 512 map; prints JSON, exit 1 on any failure or console error).
 - Expected coverage: world — map resource mix + walkable connected clearing + determinism;
   path — optimal around obstacles, budget splits a search across updates, cache returns the same
   Int32Array and revalidates/invalidates after `occupy`; sim — lodge produces wood, courier

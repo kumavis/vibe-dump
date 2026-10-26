@@ -23,7 +23,7 @@ import {
   COURIER_CAP, LOG_REQ_PER_TICK, LOG_PUSH_PER_TICK, LOG_RADIUS_CHUNKS, IDLE_RADIUS_CELLS,
   PICK_TICKS, DROP_TICKS,
 } from './constants.js'
-import { B_FLAGS, B_OUT_ITEM, B_SLOT_CAP, B_IN_QTY, TIERS, WIN_TIER } from './content.js'
+import { B_FLAGS, B_OUT_ITEM, B_SLOT_CAP, B_IN_QTY, TIERS, WIN_TIER, ITEMS, BUILDINGS } from './content.js'
 import { CellGrid } from './world.js'
 import {
   addItems, takeItems, reserveOut, releaseOut, reserveIn, releaseIn, availableOut, freeSpaceIn,
@@ -45,6 +45,23 @@ for (let t = 0; t < TIERS.length; t++) {
 
 /** Score penalty for a provider that cannot fill the whole load. */
 const PARTIAL_PENALTY = 64
+
+/**
+ * Construction reserve for RAW items that buildings cost (heartwood, mossstone). Without it
+ * the starting Sawmill (30 logs/min) out-eats the starting Lumber Lodge (24/min), turns every
+ * log in the Hearth into planks and the player can never afford anything that costs wood.
+ *  - while stored stock is below the reserve, crafters do not pull that item at all, so
+ *    producers' output flows to storage (push pass) until the reserve is back;
+ *  - crafters never pull it out of storage below the reserve.
+ * Shrine offerings are exempt.
+ */
+export const CRAFT_RESERVE = new Int32Array(ITEM_STRIDE)
+for (let t = 1; t < BUILDINGS.length; t++) {
+  for (const e of BUILDINGS[t].cost) if (ITEMS[e.item].raw) CRAFT_RESERVE[e.item] = 40
+}
+
+/** Push any producer holding a courier load once idle couriers exceed this share (1/n). */
+const IDLE_SHARE = 4
 
 /**
  * Logistics state, ctx.log. Public READ-ONLY fields for HUD/__hw: jobCount, idleCount,
@@ -356,7 +373,7 @@ function nearestStorage(ctx, fromTile, need, exclude) {
  * Score = Manhattan door distance + PARTIAL_PENALTY when it cannot fill `want`.
  * @returns {number} building id or -1
  */
-function findProvider(ctx, item, b, toDoor, want) {
+function findProvider(ctx, item, b, toDoor, want, reserve) {
   const L = ctx.log
   const world = ctx.world
   const pool = ctx.buildings
@@ -395,8 +412,9 @@ function findProvider(ctx, item, b, toDoor, want) {
     }
   }
   if (best >= 0) return best
-  // last resort: storage anywhere (skip the scan when no storage holds any unreserved item)
-  if (ctx.stock[item] <= 0 || L.storageCount === 0) return -1
+  // last resort: storage anywhere (skip the scan when no storage holds any unreserved item,
+  // or when what is left is the construction reserve)
+  if (ctx.stock[item] <= reserve || L.storageCount === 0) return -1
   const rMax = cw > chh ? cw : chh
   const sHead = L.sHead, sNext = L.sNext
   for (let r = 0; r <= rMax; r++) {
@@ -453,10 +471,12 @@ function findIdleCourier(ctx, tile) {
   if (grid.cw - 1 - cx > rEdge) rEdge = grid.cw - 1 - cx
   if (grid.ch - 1 - cy > rEdge) rEdge = grid.ch - 1 - cy
   const rMax = rEdge < IDLE_RADIUS_CELLS ? rEdge : IDLE_RADIUS_CELLS
+  const near2 = cs * cs // inside one cell, "nearest" stops mattering
   for (let r = 0; r <= rMax; r++) {
     if (best >= 0) {
       const lim = (r - 1) * cs
       if (lim > 0 && lim * lim > bestD2) break
+      if (bestD2 <= near2) break
     }
     const n = grid.queryRing(cx, cy, r, scratch)
     for (let k = 0; k < n; k++) {
@@ -467,6 +487,8 @@ function findIdleCourier(ctx, tile) {
       if (d2 > bestD2 || (d2 === bestD2 && u > best)) continue
       if (!path.sameRegion(unitTileOf(ctx, u), tile)) continue
       best = u; bestD2 = d2
+      // an idle pile on a door can hold thousands: take the first one close enough
+      if (d2 <= near2) break
     }
   }
   if (best >= 0) return best
@@ -646,11 +668,14 @@ function pullPass(ctx) {
         const ik = (b << ITEM_SHIFT) | item
         if (inv[ik] + resIn[ik] >= B_IN_QTY[(type << ITEM_SHIFT) | item]) continue // not starving
       }
+      const reserve = shrine || L.storageCount === 0 ? 0 : CRAFT_RESERVE[item]
+      if (reserve > 0 && ctx.stock[item] < reserve) continue // construction first
       const want = free < COURIER_CAP ? free : COURIER_CAP
-      const src = findProvider(ctx, item, b, door, want)
+      const src = findProvider(ctx, item, b, door, want, reserve)
       if (src < 0) continue
       const avail = availableOut(ctx, src, item)
-      const q = want < avail ? want : avail
+      let q = want < avail ? want : avail
+      if (reserve > 0 && (B_FLAGS[pool.type[src]] & BF_STORAGE) && q > ctx.stock[item] - reserve) q = ctx.stock[item] - reserve
       if (q <= 0) continue
       const u = findIdleCourier(ctx, pool.door[src])
       if (u < 0) return false
@@ -661,11 +686,30 @@ function pullPass(ctx) {
   return true
 }
 
+/** Largest freeSpaceIn over all storage (walks the storage buckets once). */
+function maxStorageFree(ctx) {
+  const L = ctx.log
+  const head = L.sHead, next = L.sNext
+  let best = 0
+  for (let c = 0; c < head.length; c++) {
+    for (let s = head[c]; s >= 0; s = next[s]) {
+      const f = freeSpaceIn(ctx, s, 0)
+      if (f > best) { best = f; if (best >= COURIER_CAP) return best }
+    }
+  }
+  return best
+}
+
 function pushPass(ctx) {
   const L = ctx.log
   const pool = ctx.buildings
   const count = L.provCount
   if (count === 0 || L.storageCount === 0) return
+  // every storage full: skip the pass instead of scanning all storage per visit
+  if (maxStorageFree(ctx) <= 0) return
+  // plenty of idle couriers: move any full courier load (the top bar should tick up from the
+  // first Quarry load); scarce couriers: leave outputs to consumers until half full
+  const loose = L.idleCount * IDLE_SHARE > L.idleCount + L.jobCount
   const visits = count < LOG_PUSH_PER_TICK ? count : LOG_PUSH_PER_TICK
   for (let v = 0; v < visits; v++) {
     if (L.provCursor >= L.provCount) L.provCursor = 0
@@ -677,7 +721,7 @@ function pushPass(ctx) {
     if (out === 0) continue
     const a = availableOut(ctx, p, out)
     const outCap = B_SLOT_CAP[(type << ITEM_SHIFT) | out]
-    if (a < (outCap >> 1) || a <= 0) continue // consumers get first claim below half
+    if (a <= 0 || a < (loose ? (COURIER_CAP < (outCap >> 1) ? COURIER_CAP : outCap >> 1) : outCap >> 1)) continue
     const need = a < COURIER_CAP ? a : COURIER_CAP
     const door = pool.door[p]
     const s = nearestStorage(ctx, door, need, p)

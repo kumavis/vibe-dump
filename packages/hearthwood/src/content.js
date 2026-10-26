@@ -249,7 +249,7 @@ export const UNITS = deepFreeze([
 
 // ---------------------------------------------------------------- waves
 export const WAVES = deepFreeze({
-  firstTick: 5 * 60 * TICK_RATE, // first wave at 5:00
+  firstTick: 4 * 60 * TICK_RATE, // first wave at 4:00 (spawns ~56 tiles out, contact ~4:30)
   warnTicks: 30 * TICK_RATE, // EV_WAVE_WARNING this long before a wave
   interval: 150 * TICK_RATE, // gap after wave 1
   intervalStep: 5 * TICK_RATE, // gap shrinks by this per wave

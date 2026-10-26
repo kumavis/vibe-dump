@@ -219,3 +219,130 @@ button:disabled, .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   #selpanel { width: 200px; bottom: 132px; }
   .build-btn { width: 44px; height: 44px; }
 }
+@media (max-width: 640px) {
+  .build-btn { width: 46px; height: 50px; }
+  .build-btn .bico { width: 22px; height: 22px; }
+  .build-btn .cost { font-size: 8px; line-height: 9px; }
+}
+
+/* ------------------------------------------------------------------ app module additions */
+kbd {
+  font: 10px/1 var(--font);
+  padding: 1px 4px;
+  border: 1px solid var(--edge-hi);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--amber);
+  background: rgba(0, 0, 0, 0.25);
+}
+.dim { color: var(--text-dim); }
+.blight { color: #d9a2ff; }
+.good { color: var(--ok); }
+.short { color: var(--danger); }
+.ico { width: 14px; height: 14px; vertical-align: -3px; image-rendering: auto; }
+.stock-item b { font-weight: 600; min-width: 2ch; }
+.stock-cap { color: var(--text-dim); font-variant-numeric: tabular-nums; padding-left: 6px; border-left: 1px solid var(--edge); }
+.stock-cap.full { color: var(--danger); }
+#couriers b { color: #bff2ff; }
+.tier-name { color: var(--teal); font-weight: 600; }
+.offer { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
+.offer.met { color: var(--ok); }
+#wave b { color: var(--text); font-variant-numeric: tabular-nums; }
+#wave.warn, #wave.warn b { color: var(--danger); }
+#wave .blight { margin-left: 6px; display: inline-flex; gap: 3px; align-items: center; }
+#speed button { min-width: 30px; padding: 3px 6px; }
+body.paused #speed button:first-child { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 14px rgba(255, 181, 74, 0.7); } }
+
+/* build menu buttons */
+.build-btn { justify-content: center; gap: 2px; }
+.build-btn .bico { width: 30px; height: 30px; flex: none; image-rendering: auto; pointer-events: none; }
+.build-btn .swatch {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 80%, white), var(--c) 55%, color-mix(in srgb, var(--c) 45%, black));
+  color: rgba(0, 0, 0, 0.65); font-weight: 700; font-size: 14px;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+.build-btn { width: 60px; height: 60px; padding: 2px; }
+.build-btn .cost { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 3px; font-size: 9px; line-height: 10px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.build-btn .cost span { display: inline-flex; align-items: center; gap: 1px; }
+.build-btn .cost .dot { width: 6px; height: 6px; box-shadow: none; }
+.build-btn .cost .ico { width: 9px; height: 9px; vertical-align: 0; }
+.build-btn.active { background: linear-gradient(#3a3020, #241c12); }
+.tooltip b { color: var(--amber); }
+.tooltip .costs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+.tooltip .costs span { display: inline-flex; align-items: center; gap: 3px; }
+.tooltip .recipe { margin-top: 3px; display: flex; align-items: center; gap: 2px; }
+
+/* selection panel */
+#selpanel h3 { display: flex; align-items: center; gap: 6px; }
+#selpanel .actions { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; }
+#selpanel .actions button { font-size: 11px; padding: 2px 6px; display: inline-flex; align-items: center; gap: 3px; }
+#selpanel .actions button.danger:hover { border-color: var(--danger); color: #ffc7c0; }
+#selpanel .actions button.locked { opacity: 0.45; }
+#selpanel .actions .cost { color: var(--text-dim); font-size: 10px; display: inline-flex; align-items: center; gap: 1px; }
+#selpanel .actions .cost .dot { width: 6px; height: 6px; box-shadow: none; }
+.kv { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-top: 2px; }
+.kv > span:first-child { color: var(--text-dim); }
+.st1, .st2, .st3, .st5 { color: var(--amber); }
+.st4 { color: var(--text-dim); }
+.slots { margin: 6px 0 4px; align-items: center; }
+.slot { flex-direction: column; gap: 1px; font-size: 11px; width: 44px; height: 44px; }
+.slot b { font-weight: 600; }
+.slot small { color: var(--text-dim); font-weight: 400; }
+.slot i.in, .slot i.out { position: absolute; top: -6px; font-style: normal; font-size: 9px; padding: 0 3px; border-radius: 6px; }
+.slot i.in { right: -4px; background: #1f4a2a; color: var(--ok); }
+.slot i.out { left: -4px; background: #4a3a1f; color: var(--amber); }
+.slot.empty { opacity: 0.35; }
+.slots.queue .slot { width: 28px; height: 28px; }
+.slots .arrow { color: var(--text-dim); font-size: 16px; }
+
+/* hints */
+#hints { padding-right: 24px; }
+#hints .x {
+  position: absolute; top: 3px; right: 4px; padding: 0 5px; font-size: 13px; line-height: 16px;
+  background: none; border: none; color: var(--text-dim);
+}
+#hints .step { color: var(--amber-dim); font-size: 10px; margin-right: 2px; }
+#hints .controls { margin-top: 4px; font-size: 10.5px; }
+
+/* toasts */
+.toast.clickable { pointer-events: auto; cursor: pointer; }
+
+/* banner */
+#banner {
+  position: absolute; left: 50%; top: 32%; transform: translate(-50%, -50%);
+  min-width: 300px; max-width: 90vw; padding: 18px 26px; text-align: center;
+  background: var(--panel-solid); border: 1px solid var(--edge-hi); border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 181, 74, 0.15);
+}
+#banner h2 { margin: 0 0 6px; font-size: 22px; color: var(--amber); }
+#banner.lost h2 { color: var(--danger); }
+#banner p { margin: 0 0 12px; color: var(--text-dim); }
+#banner .actions { display: flex; gap: 8px; justify-content: center; }
+
+/* perf line (F3 / ?debug) */
+#perf {
+  position: absolute; right: 8px; bottom: 208px; padding: 3px 8px; font-size: 11px;
+  color: var(--text-dim); background: var(--panel); border-radius: 6px; font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  #perf { bottom: 136px; }
+  #hints .controls { display: none; }
+}
+
+/* layout glue: ui.js publishes the measured top-bar height as --topbar-h */
+#hints, #toasts { top: calc(var(--topbar-h, 46px) + 10px); }
+#selpanel { max-height: calc(100vh - var(--topbar-h, 46px) - 120px); overflow-y: auto; }
+@media (max-width: 640px) {
+  #topbar { gap: 6px 10px; padding: 4px 8px; font-size: 11.5px; }
+  #stock { gap: 6px; }
+  #bottombar { left: 4px; right: 132px; bottom: 4px; justify-content: flex-start; }
+  #buildmenu { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; max-width: 100%; padding: 4px; gap: 4px; }
+  .build-btn { flex: none; }
+  #selpanel { left: 4px; bottom: 66px; width: min(240px, calc(100vw - 140px)); padding: 6px 8px; max-height: 38vh; }
+  #hints { left: 4px; right: 4px; max-width: none; }
+  #minimap { right: 4px; bottom: 4px; }
+}

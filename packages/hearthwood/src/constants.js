@@ -151,17 +151,18 @@ export const JOB_NAMES = Object.freeze(['idle', 'to pickup', 'picking', 'to drop
 
 // ---------------------------------------------------------------- placement results (canPlace)
 export const P_OK = 0
-export const P_OOB = 1 // footprint or door outside the map
+export const P_OOB = 1 // footprint outside the map (an off-map door is P_DOOR, see canPlace)
 export const P_BLOCKED = 2 // footprint on water/cliff/building/door tile
-export const P_DOOR = 3 // door tile not walkable or occupied
+export const P_DOOR = 3 // door tile off the map, not walkable or occupied
 export const P_NO_RESOURCE = 4 // extractor with zero matching resource tiles in reach
 export const P_COST = 5 // cannot afford
 export const P_TIER = 6 // tier too low
 export const P_UNIQUE = 7 // unique building already exists
 export const P_NOT_BUILDABLE = 8 // e.g. the Hearth
+export const P_ENCLOSE = 9 // would wall a building door into a pocket couriers cannot reach (player placement only)
 export const PLACE_REASONS = Object.freeze([
   'ok', 'out of bounds', 'blocked', 'door blocked', 'needs resource nearby',
-  'cannot afford', 'tier locked', 'only one allowed', 'not buildable',
+  'cannot afford', 'tier locked', 'only one allowed', 'not buildable', 'would wall in a door',
 ])
 
 // ---------------------------------------------------------------- pools

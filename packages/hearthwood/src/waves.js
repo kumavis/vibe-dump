@@ -4,7 +4,7 @@
 // tickWaves is O(1) except on the spawn tick (O(units spawned) + a few nearestBuilding calls).
 
 import { WAVES, UNITS } from './content.js'
-import { TICK_RATE, F_BLIGHT, EV_WAVE_WARNING, EV_WAVE_SPAWNED } from './constants.js'
+import { TICK_RATE, F_BLIGHT, EV_WAVE_WARNING, EV_WAVE_SPAWNED, B_HEARTH } from './constants.js'
 import { spawnUnit } from './units.js'
 import { commandRaid } from './combat.js'
 import { nearestBuilding } from './buildings.js'
@@ -27,6 +27,30 @@ const TICKS_PER_MIN = 60 * TICK_RATE
 const ANCHOR_TRIES = 8
 /** scatter attempts per unit before falling back to the group anchor */
 const SCATTER_TRIES = 4
+/**
+ * Waves emerge at most this many tiles from the Hearth (along the line to the chosen edge
+ * spot) instead of at the map edge itself: on a 256 map the edge is ~125 tiles out, which
+ * left a minute of nothing between the warning and contact (and far worse on 512 maps).
+ */
+const SPAWN_DIST = 56
+
+/** Pull an edge tile in toward the Hearth to within SPAWN_DIST (walkable result). */
+function pullIn(ctx, tile) {
+  const world = ctx.world, B = ctx.buildings, mask = world.mask, shift = world.shift
+  let hx, hy
+  if (B.typeCount[B_HEARTH] > 0) {
+    const h = B.typeList[B_HEARTH][0]
+    hx = B.tx[h] + B.w[h] * 0.5; hy = B.ty[h] + B.h[h] * 0.5
+  } else if (world.start >= 0) {
+    hx = (world.start & mask) + 0.5; hy = (world.start >> shift) + 0.5
+  } else return tile
+  const dx = (tile & mask) + 0.5 - hx, dy = (tile >> shift) + 0.5 - hy
+  const d = Math.sqrt(dx * dx + dy * dy)
+  if (d <= SPAWN_DIST) return tile
+  const f = SPAWN_DIST / d
+  const t = world.nearestWalkable((hx + dx * f) | 0, (hy + dy * f) | 0, 8)
+  return t >= 0 ? t : tile
+}
 
 /**
  * ctx.waves — PUBLIC read-only fields for the HUD:
@@ -96,12 +120,14 @@ export function spawnWave(ctx, points) {
     for (let a = 0; a < ANCHOR_TRIES; a++) {
       const s = rng.int(4)
       const t = rng.frange(0.08, 0.92)
-      const tile = world.edgeTile(s, t)
-      if (tile < 0) continue
-      const b = nearestBuilding(ctx, (tile & mask) + 0.5, (tile >> shift) + 0.5, null, 0)
-      if (anchor < 0 || b < 0 || ctx.path.sameRegion(tile, B.door[b])) {
+      const edge = world.edgeTile(s, t)
+      if (edge < 0) continue
+      const tile = pullIn(ctx, edge)
+      // nearest building a raider from this tile can actually get at (any side, not just its door)
+      const b = nearestBuilding(ctx, (tile & mask) + 0.5, (tile >> shift) + 0.5, null, 0, tile)
+      if (b >= 0 || anchor < 0) {
         anchor = tile; side = s; target = b
-        if (b < 0 || ctx.path.sameRegion(tile, B.door[b])) break
+        if (b >= 0 || B.count === 0) break
       }
     }
     if (anchor < 0) continue

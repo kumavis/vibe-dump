@@ -27,7 +27,7 @@ import {
 } from './content.js'
 import { CellGrid } from './world.js'
 import { spawnUnit, despawnUnit, orderMove, stopUnit } from './units.js'
-import { destroyBuilding, payCost, refundCost, nearestBuilding } from './buildings.js'
+import { destroyBuilding, payCost, refundCost, nearestBuilding, buildingApproach, onBuildingRing } from './buildings.js'
 
 /** @typedef {import('./context.js').Ctx} Ctx */
 
@@ -79,6 +79,18 @@ const SPIRAL_DY = new Int8Array(SPIRAL_N)
 
 /** Ticks between building scans for a unit with no target (staggered by id). */
 const BSCAN_MASK = 3
+/** Idle Blight (O_NONE, no target, standing) re-raid every 128 ticks, staggered by id. */
+const BLIGHT_RERAID_MASK = 127
+
+/** Candidates examined before a target search may settle for "close enough" (crowds). */
+const CROWD_SCAN = 32
+/** "Close enough" distance squared (tiles²) for the crowd shortcut. */
+const NEAR_ENOUGH2 = 1
+/** Candidates examined before a target search settles for the best one so far. */
+const CROWD_CAP = 192
+/** Candidates examined with nothing in range before a search gives up (retried later). */
+const CROWD_GIVEUP = 512
+
 /** Player O_NONE / raid leash on unit targets, as a multiple of sight. */
 const LEASH = 1.5
 
@@ -87,7 +99,7 @@ export function createCombat(ctx) {
   const cap = ctx.units ? ctx.units.capacity : MAX_UNITS
   const w = ctx.world ? ctx.world.w : 256, h = ctx.world ? ctx.world.h : 256
   return {
-    scratch: new Int32Array(4096),
+    scratch: new Int32Array(cap), // a ring query can return every unit: never truncate
     stats: { shots: 0, kills: 0, buildingKills: 0 },
     /** cumulative counters (never reset) */
     totals: { shots: 0, kills: 0, buildingKills: 0, trained: 0 },
@@ -207,17 +219,24 @@ export function commandRaid(ctx, id, building) {
   if (!isCombatant(u, id) || u.faction[id] !== F_BLIGHT) return
   const B = ctx.buildings
   clearTarget(u, id)
-  if (!(building >= 0 && building < B.capacity && B.alive[building] === 1)) {
-    building = nearestBuilding(ctx, u.x[id], u.y[id], null, 0)
+  const from = unitTileOf(ctx, id)
+  let goal = -1
+  if (building >= 0 && building < B.capacity && B.alive[building] === 1) goal = buildingApproach(ctx, building, from)
+  if (goal < 0) {
+    // no (reachable) target given: the nearest building this raider can actually get at
+    building = nearestBuilding(ctx, u.x[id], u.y[id], null, 0, from)
+    if (building >= 0) goal = buildingApproach(ctx, building, from)
   }
-  if (building < 0) {
+  if (building < 0 || goal < 0) {
     u.order[id] = O_NONE
     u.orderTile[id] = -1
     return
   }
   u.order[id] = O_RAID
-  u.orderTile[id] = B.door[building]
-  moveToTile(ctx, id, B.door[building])
+  u.orderTile[id] = goal
+  setBuildingTarget(ctx, id, building)
+  u.repathAt[id] = 0
+  moveToTile(ctx, id, goal)
 }
 
 /**
@@ -382,37 +401,68 @@ function tickHalls(ctx) {
 
 // ------------------------------------------------------------------ searches
 
+// nearestUnitIn scan state (module scratch; never held across calls)
+let _best = -1, _bestD2 = 0, _seen = 0, _stop = false
+
+/** Scan grid.items[a, b) for the nearest unit of `faction`; sets _stop once a crowd shortcut applies. */
+function scanSpan(items, a, b, alive, fac, X, Y, x, y, faction, self) {
+  for (let q = a; q < b; q++) {
+    const j = items[q]
+    if (j === self || alive[j] === 0 || fac[j] !== faction) continue
+    const dx = X[j] - x, dy = Y[j] - y
+    const d2 = dx * dx + dy * dy
+    if (d2 < _bestD2 || (d2 === _bestD2 && (_best < 0 || j < _best))) { _best = j; _bestD2 = d2 }
+    // crowds (a courier pile): any prey within a tile will do; past CROWD_CAP candidates
+    // the best so far will; past CROWD_GIVEUP with nothing in range, give up for this scan
+    if (++_seen >= CROWD_SCAN && (_bestD2 <= NEAR_ENOUGH2 || (_best >= 0 ? _seen >= CROWD_CAP : _seen >= CROWD_GIVEUP))) {
+      _stop = true
+      return
+    }
+  }
+}
+
 /**
  * Nearest alive unit of `faction` in `grid` within maxR of (x,y), excluding `self`.
- * Ring search with early exit. Ties -> lower id.
+ * Ring search reading the grid's cell spans in place (a cell can hold thousands of
+ * couriers), skipping cells whose rect is farther than the best so far, with early exit.
+ * Ties -> lower id. In a crowd it settles early (see scanSpan), so the result is "a near
+ * one" rather than the exact nearest once more than CROWD_SCAN candidates were examined.
  */
 function nearestUnitIn(ctx, grid, x, y, maxR, faction, self) {
   const u = ctx.units
-  const scr = ctx.combat.scratch
   const alive = u.alive, fac = u.faction, X = u.x, Y = u.y
-  const cs = grid.cellSize
+  const cs = grid.cellSize, cw = grid.cw, ch = grid.ch
+  const start = grid.cellStart, items = grid.items
   const cx = grid.cellX(x), cy = grid.cellY(y)
   const maxRing = ((maxR / cs) | 0) + 1
-  let best = -1, bestD2 = maxR * maxR
+  _best = -1; _bestD2 = maxR * maxR; _seen = 0; _stop = false
   for (let r = 0; r <= maxRing; r++) {
-    if (best >= 0) { const lim = (r - 1) * cs; if (lim > 0 && lim * lim > bestD2) break }
-    const n = grid.queryRing(cx, cy, r, scr)
-    for (let k = 0; k < n; k++) {
-      const j = scr[k]
-      if (j === self || alive[j] === 0 || fac[j] !== faction) continue
-      const dx = X[j] - x, dy = Y[j] - y
-      const d2 = dx * dx + dy * dy
-      if (d2 < bestD2 || (d2 === bestD2 && (best < 0 || j < best))) { best = j; bestD2 = d2 }
+    if (_best >= 0) { const lim = (r - 1) * cs; if (lim > 0 && lim * lim > _bestD2) break }
+    for (let yy = cy - r; yy <= cy + r; yy++) {
+      if (yy < 0 || yy >= ch) continue
+      const edge = yy === cy - r || yy === cy + r
+      const ry0 = yy * cs, ry1 = ry0 + cs
+      const ddy = y < ry0 ? ry0 - y : y > ry1 ? y - ry1 : 0
+      const step = edge || r === 0 ? 1 : 2 * r
+      for (let xx = cx - r; xx <= cx + r; xx += step) {
+        if (xx < 0 || xx >= cw) continue
+        const rx0 = xx * cs, rx1 = rx0 + cs
+        const ddx = x < rx0 ? rx0 - x : x > rx1 ? x - rx1 : 0
+        if (ddx * ddx + ddy * ddy > _bestD2) continue // whole cell out of range / farther than best
+        const c = yy * cw + xx
+        scanSpan(items, start[c], start[c + 1], alive, fac, X, Y, x, y, faction, self)
+        if (_stop) return _best
+      }
     }
   }
-  return best
+  return _best
 }
 
 /**
  * Nearest building (point-to-footprint distance) within maxR of (x,y), scanning world.occ
  * in Chebyshev rings with early exit. Ties -> lower id.
  */
-function nearestBuildingIn(ctx, x, y, maxR) {
+function nearestBuildingIn(ctx, x, y, maxR, fromTile) {
   const world = ctx.world
   const occ = world.occ, shift = world.shift, W = world.w, H = world.h
   const tx = x | 0, ty = y | 0
@@ -431,7 +481,10 @@ function nearestBuildingIn(ctx, x, y, maxR) {
         if (b < 0) continue
         const dx = x < xx ? xx - x : x > xx + 1 ? x - xx - 1 : 0
         const d2 = dx * dx + dy * dy
-        if (d2 < bestD2 || (d2 === bestD2 && (best < 0 || b < best))) { best = b; bestD2 = d2 }
+        if (d2 < bestD2 || (d2 === bestD2 && (best < 0 || b < best))) {
+          if (b !== best && buildingApproach(ctx, b, fromTile) < 0) continue // no side reachable
+          best = b; bestD2 = d2
+        }
       }
     }
   }
@@ -506,7 +559,7 @@ function acquire(ctx, i, ord, scanBuildings) {
   // Blight: player units (couriers included) first, else buildings; Husks the other way round.
   const bFirst = U_VS_BUILDING[t] >= 2
   if (bFirst && scanBuildings && ord !== O_HOLD) {
-    const b = nearestBuildingIn(ctx, x, y, radius)
+    const b = nearestBuildingIn(ctx, x, y, radius, unitTileOf(ctx, i))
     if (b >= 0) { setBuildingTarget(ctx, i, b); return true }
   }
   if (!bFirst || scanBuildings) {
@@ -514,7 +567,7 @@ function acquire(ctx, i, ord, scanBuildings) {
     if (e >= 0) { u.target[i] = e; u.targetGen[i] = u.gen[e]; u.targetKind[i] = TK_UNIT; return true }
   }
   if (!bFirst && scanBuildings) {
-    const b = nearestBuildingIn(ctx, x, y, radius)
+    const b = nearestBuildingIn(ctx, x, y, radius, unitTileOf(ctx, i))
     if (b >= 0) { setBuildingTarget(ctx, i, b); return true }
   }
   return false
@@ -531,9 +584,11 @@ function setBuildingTarget(ctx, i, b) {
 function arrive(ctx, i, ord, failed) {
   const u = ctx.units
   if (ord === O_RAID && !failed) {
-    const b = nearestBuilding(ctx, u.x[i], u.y[i], null, 0)
-    if (b >= 0) {
-      u.orderTile[i] = ctx.buildings.door[b]
+    const from = unitTileOf(ctx, i)
+    const b = nearestBuilding(ctx, u.x[i], u.y[i], null, 0, from)
+    const goal = b >= 0 ? buildingApproach(ctx, b, from) : -1
+    if (goal >= 0) {
+      u.orderTile[i] = goal
       setBuildingTarget(ctx, i, b)
       return
     }
@@ -628,7 +683,18 @@ export function tickCombat(ctx) {
       } else {
         d2 = rectD2(B, tg, x, y)
         tx = B.tx[tg] + B.w[tg] * 0.5; ty = B.ty[tg] + B.h[tg] * 0.5
-        chaseTile = B.door[tg]
+        // walk to any reachable side of the footprint, not only the door: a building whose
+        // door faces into a sealed base must still be attackable from outside
+        const gi = goal[i]
+        if (gi >= 0 && world.pass[gi] === 1 && onBuildingRing(ctx, tg, gi) &&
+          (ms === M_MOVING || ms === M_WAIT_PATH || ms === M_ARRIVED)) chaseTile = gi
+        else chaseTile = d2 <= U_RANGE[t] * U_RANGE[t] ? B.door[tg] : buildingApproach(ctx, tg, unitTileOf(ctx, i))
+        if (chaseTile < 0) {
+          clearTarget(u, i) // no side reachable from here
+          if (ord === O_ATTACK) { order[i] = O_NONE; orderTile[i] = -1 }
+          if (ord === O_ATTACK || ord === O_NONE) stopUnit(ctx, i)
+          continue
+        }
       }
       const range = U_RANGE[t]
       if (d2 <= range * range) {
@@ -680,6 +746,10 @@ export function tickCombat(ctx) {
       }
     } else if (ord === O_HOLD && (ms === M_MOVING || ms === M_WAIT_PATH)) {
       stopUnit(ctx, i) // hold never walks
+    } else if (ord === O_NONE && fac[i] === F_BLIGHT && ms !== M_MOVING && ms !== M_WAIT_PATH &&
+      ((tick + i) & BLIGHT_RERAID_MASK) === 0 && B.count > 0) {
+      // idle Blight (raid path failed, or it outlived its targets) goes looking again
+      commandRaid(ctx, i, -1)
     }
     // O_NONE without a target keeps whatever raw orderMove a script gave it (sticky arrival)
   }

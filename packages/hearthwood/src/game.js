@@ -5,7 +5,7 @@
 import { createContext, stepSim } from './context.js'
 import {
   TICK_MS, MAX_STEPS_PER_FRAME, F_PLAYER, F_BLIGHT, U_COURIER, P_OK,
-  B_HEARTH, B_LUMBER_LODGE, B_SAWMILL, B_STOREHOUSE, B_QUARRY, BF_STORAGE, I_WOOD,
+  B_HEARTH, B_LUMBER_LODGE, B_SAWMILL, B_STOREHOUSE, B_QUARRY, BF_STORAGE, I_WOOD, I_PLANK,
   MAP_W, MAP_H, ITEM_COUNT,
 } from './constants.js'
 import { START, B_W, B_H, B_FLAGS, B_DOOR_DX, B_DOOR_DY } from './content.js'
@@ -183,9 +183,11 @@ export function setupStart(ctx) {
   for (const s of START.buildings) {
     let id = placeBuilding(ctx, s.type, sx + s.dx, sy + s.dy, free)
     if (id < 0) id = placeNear(ctx, s.type, sx + s.dx, sy + s.dy, 8, free)
-    // Give the lodge a head start so the very first jobs are lodge -> sawmill hauls
-    // (producers are preferred over storage), not just Hearth -> sawmill.
-    if (id >= 0 && s.type === B_LUMBER_LODGE) addItems(ctx, id, I_WOOD, 10, false)
+    // Head start for the opening shot: full output buffers mean the very first scheduler pass
+    // sends couriers lodge -> sawmill (pull) AND lodge/sawmill -> Hearth (push of surplus),
+    // so the first second already shows goods flowing both ways.
+    if (id >= 0 && s.type === B_LUMBER_LODGE) addItems(ctx, id, I_WOOD, 20, false)
+    if (id >= 0 && s.type === B_SAWMILL) addItems(ctx, id, I_PLANK, 15, false)
   }
   for (const e of START.stock) addItems(ctx, hearth, e.item, e.qty, false)
   for (let k = 0; k < START.couriers; k++) {
@@ -204,8 +206,9 @@ export function setupStart(ctx) {
  *
  * `buildings` counts BUILDINGS (not clusters). Candidates lie on a lattice (pitch 3 x 3)
  * scanned in square rings around the Hearth, so every door opens onto a corridor row and
- * every column keeps a 1-tile alley. Each cluster slot tries a Lumber Lodge first (only valid
- * near trees), then Sawmill, then Storehouse in a rotation; quarries take rock sites.
+ * every column keeps a 1-tile alley. Slots cycle lodge / sawmill / lodge / storehouse; a slot
+ * whose preferred type is invalid there (lodge without trees) takes the next valid type,
+ * and lodge slots on rock become quarries.
  * @param {Game} game
  * @param {{buildings?:number, couriers?:number}} [opts]
  * @returns {{buildings:number, couriers:number}} actually placed/spawned
@@ -226,7 +229,8 @@ export function stress(game, opts = {}) {
   const PX = 3, PY = 3
   const ox = ctx.rng.int(PX), oy = ctx.rng.int(PY)
   const maxR = Math.ceil(Math.max(world.w, world.h) / Math.min(PX, PY)) + 1
-  const rot = [B_SAWMILL, B_STOREHOUSE, B_SAWMILL]
+  // lodge (quarry on rock), sawmill, lodge, storehouse: ~half extractors, all with consumers/sinks
+  const MIX = [B_LUMBER_LODGE, B_SAWMILL, B_LUMBER_LODGE, B_STOREHOUSE]
   let k = 0
   for (let r = 3; r <= maxR && placed < wantB; r++) {
     for (let gy = -r; gy <= r && placed < wantB; gy++) {
@@ -235,14 +239,14 @@ export function stress(game, opts = {}) {
       for (let gx = -r; gx <= r && placed < wantB; gx += step) {
         const tx = cx + gx * PX + ox, ty = cy + gy * PY + oy
         if (tx >= 1 && ty >= 1 && tx + 3 < world.w && ty + 4 < world.h) {
+          // preferred type for this slot, then the rest of the mix as fallbacks
           let id = -1
-          if (canPlace(ctx, B_LUMBER_LODGE, tx, ty, free) === P_OK) id = placeBuilding(ctx, B_LUMBER_LODGE, tx, ty, free)
-          else if (canPlace(ctx, B_QUARRY, tx, ty, free) === P_OK) id = placeBuilding(ctx, B_QUARRY, tx, ty, free)
-          if (id < 0) {
-            const t = rot[k % rot.length]
-            if (canPlace(ctx, t, tx, ty, free) === P_OK) { id = placeBuilding(ctx, t, tx, ty, free); k++ }
+          for (let j = 0; j < 4 && id < 0; j++) {
+            const t = MIX[(k + j) & 3]
+            if (canPlace(ctx, t, tx, ty, free) === P_OK) id = placeBuilding(ctx, t, tx, ty, free)
+            else if (t === B_LUMBER_LODGE && canPlace(ctx, B_QUARRY, tx, ty, free) === P_OK) id = placeBuilding(ctx, B_QUARRY, tx, ty, free)
           }
-          if (id >= 0) placed++
+          if (id >= 0) { placed++; k++ }
         }
         if (step === 0) break
       }

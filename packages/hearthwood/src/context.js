@@ -6,7 +6,7 @@
 // reads/writes only what its contract says. Cross-module FUNCTION imports are
 // allowed exactly where ARCHITECTURE.md lists them.
 
-import { MAP_W, MAP_H, MAX_UNITS, MAX_BUILDINGS, ITEM_STRIDE, UNIT_CELL_SHIFT } from './constants.js'
+import { MAP_W, MAP_H, MAX_UNITS, MAX_BUILDINGS, ITEM_STRIDE, UNIT_CELL_SHIFT, PATH_CACHE_SIZE } from './constants.js'
 import { RNG } from './rng.js'
 import { World, CellGrid } from './world.js'
 import { generateMap } from './mapgen.js'
@@ -30,6 +30,7 @@ import { FxRing, EventRing } from './fx.js'
  * @property {UnitPool} units
  * @property {BuildingPool} buildings
  * @property {CellGrid} unitGrid      all alive units, rebuilt at the end of tickUnits
+ * @property {CellGrid} sepGrid       alive NON-courier units, rebuilt with unitGrid (separation)
  * @property {import('./logistics.js').LogisticsState} log
  * @property {import('./combat.js').CombatState} combat
  * @property {import('./waves.js').WaveState} waves
@@ -75,10 +76,13 @@ export function createContext(opts = {}) {
     seed,
     rng: new RNG((seed ^ 0x5eed1e55) >>> 0),
     world,
-    path: new PathService(world, opts.path),
+    // big maps carry many more distinct door-to-door pairs: give the LRU room for them
+    path: new PathService(world, { cacheSize: w * h > MAP_W * MAP_H ? PATH_CACHE_SIZE * 4 : PATH_CACHE_SIZE, ...opts.path }),
     units,
     buildings,
     unitGrid: new CellGrid(w, h, UNIT_CELL_SHIFT, units.capacity),
+    /** non-courier units only (soldiers + Blight), rebuilt with unitGrid: separation scans */
+    sepGrid: new CellGrid(w, h, UNIT_CELL_SHIFT, units.capacity),
     log: /** @type {any} */ (null),
     combat: /** @type {any} */ (null),
     waves: /** @type {any} */ (null),

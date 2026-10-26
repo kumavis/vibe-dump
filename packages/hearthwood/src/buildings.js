@@ -11,8 +11,8 @@ import {
   BUILDING_COUNT, ITEM_SHIFT, ITEM_STRIDE, ITEM_COUNT, CHUNK_SHIFT, CHUNK,
   BF_STORAGE, BF_PRODUCER, BF_EXTRACTOR, BF_DEN, BF_SHRINE, BF_CORE,
   BS_OK, BS_STARVED, BS_OUTPUT_FULL, BS_DEPLETED, BS_PAUSED, BS_NO_STOCK, BS_IDLE,
-  P_OK, P_BLOCKED, P_DOOR, P_NO_RESOURCE, P_COST, P_TIER, P_UNIQUE, P_NOT_BUILDABLE, P_OOB,
-  U_COURIER, FX_BUILD, FX_DESTROY,
+  P_OK, P_BLOCKED, P_DOOR, P_NO_RESOURCE, P_COST, P_TIER, P_UNIQUE, P_NOT_BUILDABLE, P_OOB, P_ENCLOSE,
+  U_COURIER, FX_BUILD, FX_DESTROY, B_SPRITE_DEN,
   EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE, EV_COURIER_SPAWNED,
 } from './constants.js'
 import {
@@ -71,6 +71,14 @@ export function recipeInputItem(type, k) { return IN_ITEMS[type * 4 + k] }
 /** Offering qty needed for `item` to advance from `tier` (0 if none). */
 export function offeringQty(tier, item) { return tier >= 0 && tier < TIERS.length ? OFFER_QTY[(tier << ITEM_SHIFT) | item] : 0 }
 
+/** Hearth rescue couriers: spawned free while fewer than RESCUE_MIN couriers are alive. */
+const RESCUE_MIN = 2
+const RESCUE_TICKS = 200
+const DEN_COST = BUILDINGS[B_SPRITE_DEN].courierSpawn.cost
+/** Dens hold off while more than this many couriers stand idle (and > 1/IDLE_SHARE of all). */
+const DEN_IDLE_MIN = 3
+const DEN_IDLE_SHARE = 4
+
 // Building currently being destroyed: refundCost must not deposit into it.
 let dyingBuilding = -1
 
@@ -106,8 +114,83 @@ export function canPlace(ctx, type, tx, ty, opts) {
   if (B_FLAGS[type] & BF_EXTRACTOR) {
     if (world.countResource(tx, ty, w, h, EX_REACH[type], EX_RES[type]) === 0) return P_NO_RESOURCE
   }
+  if (!free && wouldEnclose(world, tx, ty, w, h, door)) return P_ENCLOSE
   if (!free && !canAfford(ctx, d.cost)) return P_COST
   return P_OK
+}
+
+// ------------------------------------------------------------------ enclosure check
+// A footprint can cut a door off from the rest of the map (doors themselves are protected,
+// the corridor to them is not). Before placement every walkable tile orthogonally beside the
+// footprint is connected THROUGH it, so the placement disconnects something iff the tiles
+// around it fall into more than one component afterwards. We flood-fill (4-connected, which
+// equals the pathfinder's 8-connected no-corner-cut rule) inside a window of ENC_R tiles
+// around the footprint; a component that reaches an interior window edge counts as open.
+// Reject when a closed component holds a door (an existing one or the new building's).
+// Pockets larger than the window and bridges cut between two open sides are not detected.
+const ENC_R = 12
+const ENC_MAX = (2 * ENC_R + 4) * (2 * ENC_R + 4)
+const encStamp = new Uint32Array(ENC_MAX)
+const encQueue = new Int32Array(ENC_MAX)
+let encGen = 0
+
+function wouldEnclose(world, tx, ty, w, h, newDoor) {
+  const x0 = tx - ENC_R > 0 ? tx - ENC_R : 0, y0 = ty - ENC_R > 0 ? ty - ENC_R : 0
+  const x1 = tx + w + ENC_R < world.w ? tx + w + ENC_R : world.w // exclusive
+  const y1 = ty + h + ENC_R < world.h ? ty + h + ENC_R : world.h
+  const ww = x1 - x0
+  // edges of the window that lie inside the map lead somewhere; map edges do not
+  const openL = x0 > 0, openT = y0 > 0, openR = x1 < world.w, openB = y1 < world.h
+  const pass = world.pass, doorCount = world.doorCount, shift = world.shift
+  // stamps: base+1.. = component ids of this call; footprint tiles are excluded by bounds test
+  if (encGen > 0xfffff000) { encStamp.fill(0); encGen = 0 }
+  const base = encGen
+  let comps = 0, closedDoor = false, open = 0
+  // seeds: the four sides of the footprint (corners excluded), door first
+  const seeds = 2 * (w + h)
+  for (let s = -1; s < seeds; s++) {
+    let sx, sy
+    if (s < 0) { sx = (newDoor & world.mask); sy = newDoor >> shift }
+    else if (s < w) { sx = tx + s; sy = ty - 1 }
+    else if (s < 2 * w) { sx = tx + s - w; sy = ty + h }
+    else if (s < 2 * w + h) { sx = tx - 1; sy = ty + s - 2 * w }
+    else { sx = tx + w; sy = ty + s - 2 * w - h }
+    if (sx < x0 || sy < y0 || sx >= x1 || sy >= y1) continue
+    const si = (sy << shift) | sx
+    if (pass[si] !== 1) continue
+    const sl = (sy - y0) * ww + (sx - x0)
+    if (encStamp[sl] > base) continue
+    const id = base + ++comps
+    encStamp[sl] = id
+    let head = 0, tail = 0
+    encQueue[tail++] = sl
+    let reachesEdge = false, hasDoor = false
+    while (head < tail) {
+      const l = encQueue[head++]
+      const lx = l % ww, ly = (l - lx) / ww
+      const x = lx + x0, y = ly + y0
+      const i = (y << shift) | x
+      if (doorCount[i] > 0 || i === newDoor) hasDoor = true
+      if ((lx === 0 && openL) || (ly === 0 && openT) || (x === x1 - 1 && openR) || (y === y1 - 1 && openB)) reachesEdge = true
+      // 4 neighbours inside the window, walkable, not the footprint
+      for (let k = 0; k < 4; k++) {
+        const nx = k === 0 ? x - 1 : k === 1 ? x + 1 : x
+        const ny = k === 2 ? y - 1 : k === 3 ? y + 1 : y
+        if (nx < x0 || ny < y0 || nx >= x1 || ny >= y1) continue
+        if (nx >= tx && nx < tx + w && ny >= ty && ny < ty + h) continue
+        if (pass[(ny << shift) | nx] !== 1) continue
+        const nl = (ny - y0) * ww + (nx - x0)
+        if (encStamp[nl] > base) continue
+        encStamp[nl] = id
+        encQueue[tail++] = nl
+      }
+    }
+    if (reachesEdge) open++
+    else if (hasDoor) closedDoor = true
+  }
+  encGen = base + comps
+  // one component (open or a whole small island) = nothing was split
+  return comps > 1 && closedDoor
 }
 
 /**
@@ -397,14 +480,58 @@ export function buildingAtTile(ctx, tx, ty) {
 }
 
 /**
+ * Walkable tile from which an attacker standing at `fromTile` can hit building b: the door
+ * when it is in fromTile's region, else the ring tile (any of the 8-neighbourhood ring around
+ * the footprint) in that region nearest to fromTile. -1 when no side of b is reachable.
+ * O(footprint perimeter); region lookups are O(1).
+ */
+export function buildingApproach(ctx, b, fromTile) {
+  const pool = ctx.buildings
+  const world = ctx.world
+  const path = ctx.path
+  const door = pool.door[b]
+  if (door >= 0 && world.pass[door] === 1 && path.sameRegion(door, fromTile)) return door
+  const tx = pool.tx[b], ty = pool.ty[b], w = pool.w[b], h = pool.h[b]
+  const fx = fromTile & world.mask, fy = fromTile >> world.shift
+  const pass = world.pass, shift = world.shift
+  let best = -1, bestD = 0x7fffffff
+  for (let y = ty - 1; y <= ty + h; y++) {
+    if (y < 0 || y >= world.h) continue
+    const edgeRow = y === ty - 1 || y === ty + h
+    for (let x = tx - 1; x <= tx + w; x += edgeRow ? 1 : w + 1) {
+      if (x < 0 || x >= world.w) continue
+      const i = (y << shift) | x
+      if (pass[i] !== 1) continue
+      const d = (x > fx ? x - fx : fx - x) + (y > fy ? y - fy : fy - y)
+      if (d >= bestD) continue
+      if (!path.sameRegion(i, fromTile)) continue
+      best = i; bestD = d
+    }
+  }
+  return best
+}
+
+/** True if tile i lies on the 1-tile ring around building b's footprint. Pure, O(1). */
+export function onBuildingRing(ctx, b, i) {
+  const pool = ctx.buildings
+  const x = i & ctx.world.mask, y = i >> ctx.world.shift
+  const tx = pool.tx[b], ty = pool.ty[b], w = pool.w[b], h = pool.h[b]
+  if (x < tx - 1 || y < ty - 1 || x > tx + w || y > ty + h) return false
+  return x === tx - 1 || y === ty - 1 || x === tx + w || y === ty + h
+}
+
+/**
  * Nearest alive building (by distance from (x,y) to its footprint rect) whose type flags
  * intersect `flagMask` (0 = any), searching chunk rings out to `maxChunks`. Ties -> lower id.
  * Used by waves (raid targets), combat (blight building targets), logistics (fallback storage).
+ * With `fromTile` >= 0 only buildings an attacker at fromTile can reach (buildingApproach)
+ * count; the check runs only for candidates that would become the best.
  * @param {number} x world tile units
  * @param {number} y
+ * @param {number} [fromTile=-1]
  * @returns {number} id or -1
  */
-export function nearestBuilding(ctx, x, y, maxChunks, flagMask) {
+export function nearestBuilding(ctx, x, y, maxChunks, flagMask, fromTile = -1) {
   const world = ctx.world
   const pool = ctx.buildings
   const cw = world.chunksW, chh = world.chunksH
@@ -436,7 +563,10 @@ export function nearestBuilding(ctx, x, y, maxChunks, flagMask) {
             const dx = x < bx ? bx - x : x > ex ? x - ex : 0
             const dy = y < by ? by - y : y > ey ? y - ey : 0
             const d2 = dx * dx + dy * dy
-            if (d2 < bestD2 || (d2 === bestD2 && b < best)) { best = b; bestD2 = d2 }
+            if (d2 < bestD2 || (d2 === bestD2 && b < best)) {
+              if (fromTile >= 0 && buildingApproach(ctx, b, fromTile) < 0) continue
+              best = b; bestD2 = d2
+            }
           }
         }
         if (step === 0) break
@@ -562,7 +692,11 @@ export function tickBuildings(ctx) {
     }
     if (f & BF_DEN) {
       if (pool.paused[b]) { pool.status[b] = BS_PAUSED; continue }
-      if (ctx.units.typeCount[U_COURIER] >= ctx.courierCap) { pool.status[b] = BS_IDLE; pool.progress[b] = 0; continue }
+      const nc = ctx.units.typeCount[U_COURIER]
+      if (nc >= ctx.courierCap) { pool.status[b] = BS_IDLE; pool.progress[b] = 0; continue }
+      // plenty of couriers standing around: don't spend planks on more
+      const idle = ctx.log ? ctx.log.idleCount : 0
+      if (idle > DEN_IDLE_MIN && idle * DEN_IDLE_SHARE > nc) { pool.status[b] = BS_IDLE; continue }
       const ticks = DEN_TICKS[type]
       if (pool.progress[b] < ticks) pool.progress[b]++
       if (pool.progress[b] >= ticks) {
@@ -574,6 +708,23 @@ export function tickBuildings(ctx) {
         pool.progress[b] = 0
       }
       pool.status[b] = BS_OK
+      continue
+    }
+    if (f & BF_CORE) {
+      // Rescue: Dens pay planks FROM STORAGE, and only couriers fill storage. If a raid wipes
+      // out the swarm while storage is short of planks, nothing could ever move again. The
+      // Hearth therefore coaxes out a free courier every RESCUE_TICKS while fewer than
+      // RESCUE_MIN are alive.
+      const n = ctx.units.typeCount[U_COURIER]
+      if (n < RESCUE_MIN && n < ctx.courierCap && (pool.typeCount[B_SPRITE_DEN] === 0 || !canAfford(ctx, DEN_COST))) {
+        ctx.rescueTimer = (ctx.rescueTimer | 0) + 1
+        if (ctx.rescueTimer >= RESCUE_TICKS) {
+          ctx.rescueTimer = 0
+          const door = pool.door[b]
+          const u = spawnUnit(ctx, U_COURIER, (door & world.mask) + 0.5, (door >> world.shift) + 0.5)
+          if (u >= 0) ctx.events.emit(EV_COURIER_SPAWNED, u, 0, tick)
+        }
+      } else ctx.rescueTimer = 0
       continue
     }
     if (f & BF_SHRINE) {

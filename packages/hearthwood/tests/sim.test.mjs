@@ -1,16 +1,10 @@
 // Sim suite: entity pools, buildings/production, inventories, logistics scheduler and
 // courier jobs. OWNER: sim implementer.
 //
-// The suite drives the real stepSim. While another area's module (units / combat /
-// waves) still contains stubs, the suite loads a private copy of the module graph
-// (`?simfake` query) in which ONLY the still-stubbed modules are swapped for tiny fakes
-// (a straight-line-on-path mover for units, no-ops for combat/waves). Once those
-// modules are implemented nothing is faked and the real graph is used.
+// The suite drives the real stepSim over the real module graph.
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
-import { register } from 'node:module'
 import { fillTerrain, paintResource } from './helpers.mjs'
 import {
   I_WOOD, I_STONE, I_PLANK, I_INGOT, ITEM_SHIFT, ITEM_COUNT,
@@ -23,142 +17,13 @@ import {
 } from '../src/constants.js'
 import { BUILDINGS, B_FLAGS, B_SLOT_CAP, B_IN_QTY, B_STORAGE } from '../src/content.js'
 
-// ------------------------------------------------------------------ module graph selection
-const SRC = new URL('../src/', import.meta.url)
-const STUB_RE = /not implemented'\)/
-const FAKEABLE = ['units', 'combat', 'waves']
-const stubbed = FAKEABLE.filter((n) => STUB_RE.test(readFileSync(new URL(n + '.js', SRC), 'utf8')))
-const Q = stubbed.length ? '?simfake' : ''
-const abs = (f) => new URL(f, SRC).href
-
-function exportNames(name) {
-  const src = readFileSync(new URL(name + '.js', SRC), 'utf8')
-  const out = []
-  for (const m of src.matchAll(/^export (?:async )?function (\w+)/gm)) out.push(m[1])
-  for (const m of src.matchAll(/^export (?:const|let|class) (\w+)/gm)) out.push(m[1])
-  return out
-}
-
-const FAKE_SRC = {
-  units: `
-import { M_IDLE, M_WAIT_PATH, M_MOVING, M_ARRIVED, M_FAILED, J_NONE, FX_SPAWN, FX_DEATH } from '${abs('constants.js')}'
-import { UNITS, U_SPEED } from '${abs('content.js')}'
-import { PATH_PENDING, PATH_NONE } from '${abs('path.js')}?simfake'
-import { abortJob } from '${abs('logistics.js')}?simfake'
-export function spawnUnit(ctx, type, x, y, faction) {
-  const u = ctx.units
-  const id = u.alloc(type, faction ?? UNITS[type].faction)
-  if (id < 0) return -1
-  u.x[id] = u.px[id] = x; u.y[id] = u.py[id] = y
-  ctx.fx.emit(FX_SPAWN, x, y, x, y, ctx.tick)
-  return id
-}
-export function despawnUnit(ctx, id, died = false) {
-  const u = ctx.units
-  if (!u.alive[id]) return
-  if (u.job[id] !== J_NONE) abortJob(ctx, id)
-  if (died) ctx.fx.emit(FX_DEATH, u.x[id], u.y[id], u.x[id], u.y[id], ctx.tick)
-  u.free(id)
-}
-export function unitTile(ctx, id) {
-  const w = ctx.world
-  return (Math.floor(ctx.units.y[id]) << w.shift) | Math.floor(ctx.units.x[id])
-}
-export function stopUnit(ctx, id) {
-  const u = ctx.units
-  u.mstate[id] = M_IDLE; u.path[id] = null; u.goal[id] = -1
-}
-function take(u, id, r) {
-  if (r === PATH_PENDING) { u.mstate[id] = M_WAIT_PATH; return }
-  if (r === PATH_NONE) { u.mstate[id] = M_FAILED; u.path[id] = null; return }
-  if (r.length <= 1) { u.mstate[id] = M_ARRIVED; u.path[id] = null; return }
-  u.path[id] = r; u.pathIdx[id] = 1; u.mstate[id] = M_MOVING
-}
-export function orderMove(ctx, id, tx, ty) {
-  const u = ctx.units, w = ctx.world
-  tx = Math.max(0, Math.min(w.w - 1, tx | 0)); ty = Math.max(0, Math.min(w.h - 1, ty | 0))
-  const g = (ty << w.shift) | tx
-  const ms = u.mstate[id]
-  if ((ms === M_MOVING || ms === M_WAIT_PATH) && u.goal[id] === g) return
-  u.goal[id] = g; u.path[id] = null
-  const cur = unitTile(ctx, id)
-  if (cur === g) { u.mstate[id] = M_ARRIVED; return }
-  if (w.pass[g] !== 1) { u.mstate[id] = M_FAILED; return }
-  const job = ctx.path.request(cur, g)
-  u.pathJob[id] = job
-  take(u, id, ctx.path.poll(job))
-}
-export function tickUnits(ctx) {
-  const u = ctx.units, w = ctx.world
-  for (let id = 0; id < u.hi; id++) {
-    if (!u.alive[id]) continue
-    u.px[id] = u.x[id]; u.py[id] = u.y[id]
-    if (u.mstate[id] === M_WAIT_PATH) take(u, id, ctx.path.poll(u.pathJob[id]))
-    if (u.mstate[id] !== M_MOVING) { u.vx[id] = u.vy[id] = 0; continue }
-    const p = u.path[id]
-    let s = U_SPEED[u.type[id]]
-    while (s > 0 && u.pathIdx[id] < p.length) {
-      const t = p[u.pathIdx[id]]
-      const cx = (t & w.mask) + 0.5, cy = (t >> w.shift) + 0.5
-      const dx = cx - u.x[id], dy = cy - u.y[id]
-      const d = Math.hypot(dx, dy)
-      if (d <= s) { u.x[id] = cx; u.y[id] = cy; s -= d; u.pathIdx[id]++ }
-      else { u.x[id] += dx / d * s; u.y[id] += dy / d * s; s = 0 }
-    }
-    if (u.pathIdx[id] >= p.length) { u.mstate[id] = M_ARRIVED; u.path[id] = null }
-    u.vx[id] = u.x[id] - u.px[id]; u.vy[id] = u.y[id] - u.py[id]
-  }
-  const g = ctx.unitGrid
-  g.clear()
-  for (let id = 0; id < u.hi; id++) if (u.alive[id]) g.add(id, u.x[id], u.y[id])
-  g.build()
-}
-`,
-  combat: `
-export function createCombat(ctx) { return { scratch: new Int32Array(64), stats: { shots: 0, kills: 0, buildingKills: 0 } } }
-export function tickCombat(ctx) {}
-`,
-  waves: `
-export function createWaves(ctx) { return { number: 0, nextTick: 1e9, nextPoints: 0, warned: false, enabled: false, lastSide: -1 } }
-export function tickWaves(ctx) {}
-`,
-}
-
-if (stubbed.length) {
-  const fakes = {}
-  for (const n of stubbed) {
-    let src = FAKE_SRC[n]
-    const defined = new Set([...src.matchAll(/export function (\w+)/g)].map((m) => m[1]))
-    for (const e of exportNames(n)) if (!defined.has(e)) src += `\nexport function ${e}() { return -1 }`
-    fakes[abs(n + '.js')] = 'data:text/javascript,' + encodeURIComponent(src)
-  }
-  const loader = `
-let fakes = {}
-export function initialize(data) { fakes = data.fakes }
-export async function resolve(spec, context, next) {
-  const parent = context.parentURL || ''
-  if (!spec.includes('?simfake') && !parent.includes('?simfake')) return next(spec, context)
-  const r = await next(spec, context)
-  if (!r.url.startsWith('file:')) return r
-  const clean = r.url.split('?')[0]
-  if (fakes[clean]) return { url: fakes[clean], shortCircuit: true }
-  return { ...r, url: clean + '?simfake', shortCircuit: true }
-}`
-  register('data:text/javascript,' + encodeURIComponent(loader), { data: { fakes } })
-}
-
-const ctxMod = await import(abs('context.js') + Q)
-const B = await import(abs('buildings.js') + Q)
-const Lg = await import(abs('logistics.js') + Q)
-const Un = await import(abs('units.js') + Q)
-const { stepSim, createContext } = ctxMod
-const {
+import { stepSim, createContext } from '../src/context.js'
+import {
   placeBuilding, canPlace, demolishBuilding, destroyBuilding, addItems, takeItems, availableOut, freeSpaceIn,
-  setPaused, recomputeStock, buildingAtTile, nearestBuilding, payCost, canAfford,
-} = B
-const { spawnUnit, despawnUnit } = Un
-
-if (stubbed.length) console.log(`# sim.test: faking still-stubbed modules: ${stubbed.join(', ')}`)
+  setPaused, recomputeStock, buildingAtTile, nearestBuilding, payCost, canAfford, tickBuildings,
+} from '../src/buildings.js'
+import { tickLogistics } from '../src/logistics.js'
+import { spawnUnit, despawnUnit, tickUnits } from '../src/units.js'
 
 // ------------------------------------------------------------------ helpers
 function mk(opts = {}) {
@@ -434,6 +299,7 @@ test('abortJob (courier death) releases both reservations; a dead requester rero
   checkInvariants(ctx)
 
   const st = placeBuilding(ctx, B_STOREHOUSE, 20, 24, { free: true })
+  addItems(ctx, st, I_WOOD, 40, false) // construction reserve met: crafters may pull wood again
   const [v] = couriers(ctx, 1, 20.5, 18.5)
   assert.ok(runUntil(ctx, () => ctx.units.job[v] === J_TO_DROPOFF && ctx.units.jobDst[v] === s, 1000) >= 0)
   assert.equal(demolishBuilding(ctx, s), true)
@@ -443,31 +309,33 @@ test('abortJob (courier death) releases both reservations; a dead requester rero
   assert.equal(resIn(ctx, st, I_WOOD), 5)
   checkInvariants(ctx)
   assert.ok(runUntil(ctx, () => ctx.units.job[v] === J_NONE, 1000) >= 0)
-  assert.equal(inv(ctx, st, I_WOOD), 5 + 7, 'cargo + demolition refund landed in storage')
+  // cargo + demolition refund, then the lodge's last load (idle couriers push any full load)
+  assert.equal(inv(ctx, st, I_WOOD), 40 + 5 + 7 + 5, 'cargo + demolition refund landed in storage')
   checkInvariants(ctx)
 })
 
 // ------------------------------------------------------------------ storage priority
 
 test('storage is a low-priority sink and a last-resort provider', () => {
-  // (a) a producer below half output is never drained into storage
+  // (a) a producer holding less than a courier load is never drained into storage
+  // (couriers plentiful: the push threshold drops from half the output cap to one load)
   const ctx = mk()
   const l = lodgeOnGrove(ctx, 10, 10)
   setPaused(ctx, l, true)
-  addItems(ctx, l, I_WOOD, 9, false)
+  addItems(ctx, l, I_WOOD, 4, false)
   const st = placeBuilding(ctx, B_STOREHOUSE, 20, 24, { free: true })
   couriers(ctx, 3, 20.5, 18.5)
   run(ctx, 200)
   assert.equal(inv(ctx, st, I_WOOD), 0)
   assert.equal(ctx.log.stats.totalAssigned, 0)
-  // (b) at half full the surplus above half is pushed, one courier load at a time
+  // (b) at a full load it is pushed, one courier load at a time
   addItems(ctx, l, I_WOOD, 1, false)
   run(ctx, 1)
   assert.equal(ctx.log.stats.assigned, 1)
   assert.equal(resOut(ctx, l, I_WOOD), 5)
   assert.ok(runUntil(ctx, () => inv(ctx, st, I_WOOD) === 5, 2000) >= 0)
   run(ctx, 300)
-  assert.equal(inv(ctx, st, I_WOOD), 5, 'stops pushing once below half')
+  assert.equal(inv(ctx, st, I_WOOD), 5, 'stops pushing once below a load')
   assert.equal(ctx.stock[I_WOOD], 5)
   checkInvariants(ctx)
 
@@ -543,7 +411,6 @@ test('scheduler cost per tick is bounded (K visits) at scale', () => {
   for (let i = 0; i < 600; i++) spawnUnit(ctx, U_COURIER, 60 + (i % 40) * 0.7, 80 + ((i / 40) | 0) * 0.7)
   let maxPull = 0, maxPush = 0, maxAssigned = 0, maxScans = 0
   let ms = 0
-  const { tickLogistics } = Lg
   for (let t = 0; t < 1200; t++) {
     stepSim(ctx)
     const s = ctx.log.stats
@@ -649,8 +516,6 @@ test('per-tick cost at target scale (5k couriers, ~2k buildings) stays within bu
   ctx.courierCapExtra += 5000
   ctx.courierCap += 5000
   for (let i = 0; i < 5000; i++) spawnUnit(ctx, U_COURIER, 2.5 + (i * 7919 % 250), 18.5 + ((i * 104729) % 12) * 20)
-  const { tickBuildings } = B
-  const { tickLogistics } = Lg
   run(ctx, 300) // warm up: jobs in flight, outputs filling
   const now = () => performance.now()
   let tb = 0, tl = 0
@@ -669,5 +534,5 @@ test('per-tick cost at target scale (5k couriers, ~2k buildings) stays within bu
   assert.ok(tl < 4, `tickLogistics ${tl.toFixed(3)} ms`)
 })
 
-/** The units system alone (tickUnits from whichever units module is loaded). */
-function stepUnitsOnly(ctx) { Un.tickUnits(ctx) }
+/** The units system alone. */
+function stepUnitsOnly(ctx) { tickUnits(ctx) }

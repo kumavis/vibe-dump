@@ -9,6 +9,12 @@
 import { CHUNK_SHIFT, CHUNK, MAP_W, MAP_H, T_GRASS, TERRAIN_WALKABLE, R_NONE } from './constants.js'
 import { B_DOOR_DX, B_DOOR_DY } from './content.js'
 
+/** Footprint-change log length (power of two); see World.navLogVer. */
+export const NAV_LOG_SIZE = 64
+export const NAV_LOG_MASK = NAV_LOG_SIZE - 1
+/** Depleted-tile log length (power of two); see World.resLog. */
+export const RES_LOG_SIZE = 1024
+
 export class World {
   /**
    * @param {number} w  map width in tiles; power of two, multiple of CHUNK (>= 32)
@@ -38,6 +44,24 @@ export class World {
     this.chunkNavVersion = new Uint32Array(this.chunkCount)
     /** bumped whenever any tile's `pass` changes (path cache / regions key) */
     this.navVersion = 0
+    /**
+     * Ring log of footprint changes, so PathService can patch region labels locally instead
+     * of re-flooding the whole map. Slot = navVersion & NAV_LOG_MASK; navLogVer[slot] is the
+     * navVersion the entry produced (any version without a matching entry = full relabel).
+     * navLogRect[slot*4..] = tx, ty, w, h. Kind: 1 occupy, 2 vacate.
+     */
+    this.navLogVer = new Int32Array(NAV_LOG_SIZE).fill(-1)
+    this.navLogKind = new Uint8Array(NAV_LOG_SIZE)
+    this.navLogRect = new Int32Array(NAV_LOG_SIZE * 4)
+    /**
+     * per-chunk count of chunkVersion bumps caused by resource DEPLETION (takeResource). The
+     * renderer keys full re-bakes on chunkVersion - chunkResVersion and repaints depleted tiles
+     * locally from resLog instead.
+     */
+    this.chunkResVersion = new Uint32Array(this.chunkCount)
+    /** ring of depleted packed tiles; resLogN counts every append (slot = n & (RES_LOG_SIZE - 1)) */
+    this.resLog = new Int32Array(RES_LOG_SIZE)
+    this.resLogN = 0
     /** packed start tile (Hearth centre) set by generateMap, -1 before */
     this.start = -1
     /** generation seed (informational) */
@@ -86,7 +110,14 @@ export class World {
     const have = this.resAmt[i]
     const t = have < amount ? have : amount
     this.resAmt[i] = have - t
-    if (have - t === 0) { this.res[i] = R_NONE; this.chunkVersion[this.chunkOf(i)]++ }
+    if (have - t === 0) {
+      this.res[i] = R_NONE
+      const c = this.chunkOf(i)
+      this.chunkVersion[c]++
+      this.chunkResVersion[c]++
+      this.resLog[this.resLogN & (RES_LOG_SIZE - 1)] = i
+      this.resLogN++
+    }
     return t
   }
 
@@ -102,6 +133,7 @@ export class World {
     }
     if (doorTile >= 0) this.doorCount[doorTile]++
     this.navVersion++
+    this._logNav(1, tx, ty, w, h)
   }
 
   /** Clear a footprint and unregister its door. Bumps navVersion. */
@@ -113,6 +145,15 @@ export class World {
     }
     if (doorTile >= 0 && this.doorCount[doorTile] > 0) this.doorCount[doorTile]--
     this.navVersion++
+    this._logNav(2, tx, ty, w, h)
+  }
+
+  _logNav(kind, tx, ty, w, h) {
+    const s = this.navVersion & NAV_LOG_MASK
+    this.navLogVer[s] = this.navVersion
+    this.navLogKind[s] = kind
+    const o = s * 4
+    this.navLogRect[o] = tx; this.navLogRect[o + 1] = ty; this.navLogRect[o + 2] = w; this.navLogRect[o + 3] = h
   }
 
   /** True if every footprint tile is in bounds, walkable terrain, unoccupied and not a door tile. */

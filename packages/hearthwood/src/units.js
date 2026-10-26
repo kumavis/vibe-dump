@@ -158,18 +158,23 @@ export function tickUnits(ctx) {
   const world = ctx.world
   const pathSvc = ctx.path
   const grid = ctx.unitGrid
+  // separation only ever looks at non-couriers: query a grid that holds nothing else, so a
+  // soldier standing in a courier pile costs O(soldiers nearby), not O(couriers nearby)
+  const sep = ctx.sepGrid || null
+  const sepRead = sep !== null ? sep : grid
   const pass = world.pass, shift = world.shift, mask = world.mask, W = world.w, H = world.h
   const alive = u.alive, type = u.type, X = u.x, Y = u.y, PX = u.px, PY = u.py, VX = u.vx, VY = u.vy
   const mstate = u.mstate, paths = u.path, pathIdx = u.pathIdx, goal = u.goal, pathJob = u.pathJob
   const hi = u.hi
   const st = unitStats
   st.moved = st.arrived = st.repaths = st.ejected = st.separated = 0
-  // scratch for separation queries
-  const scr = scratch(8192)
+  // scratch for separation queries (sized to the pool: a cell can never overflow it)
+  const scr = scratch(u.capacity)
   const sepR = SEPARATION_RADIUS, sepPush = SEPARATION_PUSH
-  const doSep = grid.count > 0 // grid from last tick has something in it
+  const doSep = sepRead.count > 0 // grid from last tick has something in it
 
   grid.clear()
+  if (sep !== null) sep.clear()
   for (let i = 0; i < hi; i++) {
     if (alive[i] === 0) continue
     let x = X[i], y = Y[i]
@@ -251,7 +256,7 @@ export function tickUnits(ctx) {
     // ---- 5. soft separation (soldiers/blight standing or fighting; couriers never)
     const t = type[i]
     if (doSep && t !== U_COURIER && ms !== M_MOVING) {
-      const n = grid.queryRect(x - 1, y - 1, x + 1, y + 1, scr)
+      const n = sepRead.queryRect(x - 1, y - 1, x + 1, y + 1, scr)
       const ri = U_RADIUS[t]
       let ax = 0, ay = 0
       for (let q = 0; q < n; q++) {
@@ -288,8 +293,10 @@ export function tickUnits(ctx) {
     VX[i] = X[i] - PX[i]; VY[i] = Y[i] - PY[i] // from the stored Float32 values
     // ---- 6. stage into the new grid
     grid.add(i, x, y)
+    if (sep !== null && t !== U_COURIER) sep.add(i, x, y)
   }
   grid.build()
+  if (sep !== null) sep.build()
 }
 
 /**

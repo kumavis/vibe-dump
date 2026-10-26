@@ -30,6 +30,8 @@ export const PATH_PENDING = Object.freeze(new Int32Array(0))
 export const PATH_NONE = Object.freeze(new Int32Array(0))
 
 const JOB_MASK = (1 << 30) - 1
+/** Half-size of the flood window used to patch region labels after a placement. */
+const LOCAL_R = 16
 const NB_DX = Int8Array.from([1, -1, 0, 0, 1, -1, 1, -1])
 const NB_DY = Int8Array.from([0, 0, 1, -1, 1, 1, -1, -1])
 
@@ -402,6 +404,12 @@ export class PathService {
     this._label = new Int32Array(world.size)
     this._labelNav = -1
     this._bfs = new Int32Array(world.size)
+    // local flood window for incremental relabelling (see _syncLabels)
+    const lw = 2 * LOCAL_R + 8
+    this._locStamp = new Uint32Array(lw * lw)
+    this._locGen = 0
+    /** counters: full flood fills vs. locally patched footprint changes (debug / tests) */
+    this.relabels = { full: 0, local: 0 }
     /** number of regions at the last labelling */ this.regionCount = 0
   }
 
@@ -514,7 +522,7 @@ export class PathService {
   sameRegion(a, b) {
     const world = this.world
     if (!(a >= 0 && b >= 0 && a < world.size && b < world.size)) return false
-    if (this._labelNav !== world.navVersion) this._relabel()
+    if (this._labelNav !== world.navVersion) this._syncLabels()
     const L = this._label
     const la = L[a], lb = L[b]
     if (la >= 0 && lb >= 0) return la === lb
@@ -529,7 +537,7 @@ export class PathService {
 
   /** Region label of a walkable tile (-1 for blocked), refreshed lazily. Debug/logistics helper. */
   regionOf(i) {
-    if (this._labelNav !== this.world.navVersion) this._relabel()
+    if (this._labelNav !== this.world.navVersion) this._syncLabels()
     return i >= 0 && i < this.world.size ? this._label[i] : -1
   }
 
@@ -711,8 +719,129 @@ export class PathService {
     return x >= 0 && y >= 0 && x < world.w && y < world.h ? this._label[(y << world.shift) | x] : -1
   }
 
+  /**
+   * Bring region labels up to world.navVersion. When exactly one building footprint changed
+   * since the last labelling (world.navLog), patch the labels locally:
+   *  - occupy: the footprint tiles leave their region; the region can only split if the
+   *    walkable tiles on the 1-tile ring around the footprint form more than one arc AND a
+   *    bounded flood from one arc fails to reach the others. Otherwise labels stay valid.
+   *  - vacate: the freed tiles join the single region around them (or a new one); when
+   *    they touch two different regions (a wall plug was removed) fall back to a full fill.
+   * Anything else (terrain edits, several changes at once, ambiguity) = full relabel.
+   */
+  _syncLabels() {
+    const world = this.world
+    const v = world.navVersion
+    if (this._labelNav >= 0 && v === this._labelNav + 1 && world.navLogVer) {
+      const s = v & (world.navLogVer.length - 1)
+      if (world.navLogVer[s] === v) {
+        const o = s * 4, R = world.navLogRect
+        const ok = world.navLogKind[s] === 1
+          ? this._patchOccupy(R[o], R[o + 1], R[o + 2], R[o + 3])
+          : this._patchVacate(R[o], R[o + 1], R[o + 2], R[o + 3])
+        if (ok) { this._labelNav = v; this.relabels.local++; return }
+      }
+    }
+    this._relabel()
+  }
+
+  /** Perimeter tile k (clockwise from the top-left corner) of the ring around a w x h rect. */
+  _ringTile(tx, ty, w, h, k) {
+    const top = w + 2, right = h + 1, bottom = w + 1
+    let x, y
+    if (k < top) { x = tx - 1 + k; y = ty - 1 }
+    else if (k < top + right) { x = tx + w; y = ty + (k - top) }
+    else if (k < top + right + bottom) { x = tx + w - 1 - (k - top - right); y = ty + h }
+    else { x = tx - 1; y = ty + h - 1 - (k - top - right - bottom) }
+    const world = this.world
+    if (x < 0 || y < 0 || x >= world.w || y >= world.h) return -1
+    return (y << world.shift) | x
+  }
+
+  _patchOccupy(tx, ty, w, h) {
+    const world = this.world, pass = world.pass, L = this._label, shift = world.shift
+    for (let y = ty; y < ty + h; y++) for (let x = tx; x < tx + w; x++) {
+      const i = (y << shift) | x
+      if (pass[i] === 1) return false // not actually blocked (defensive)
+      L[i] = -1
+    }
+    // walkable arcs on the ring (the ring is a 4-connected cycle)
+    const n = 2 * (w + h) + 4
+    let arcs = 0, first = -1
+    let prevWalk = false
+    { const t = this._ringTile(tx, ty, w, h, n - 1); prevWalk = t >= 0 && pass[t] === 1 }
+    let allWalk = true
+    for (let k = 0; k < n; k++) {
+      const t = this._ringTile(tx, ty, w, h, k)
+      const wk = t >= 0 && pass[t] === 1
+      if (!wk) allWalk = false
+      if (wk && !prevWalk) { arcs++; if (first < 0) first = t }
+      prevWalk = wk
+    }
+    if (allWalk || arcs <= 1) return true
+    // several arcs: are they still joined by a path around the footprint (bounded window)?
+    const lw = 2 * LOCAL_R + 8
+    const x0 = tx - LOCAL_R, y0 = ty - LOCAL_R
+    const x1 = x0 + lw, y1 = y0 + lw // exclusive
+    if (w > 6 || h > 6) return false
+    const st = this._locStamp
+    if (this._locGen > 0xfffffff0) { st.fill(0); this._locGen = 0 }
+    const gen = ++this._locGen
+    const q = this._bfs
+    let head = 0, tail = 0
+    q[tail++] = first
+    st[((first >> shift) - y0) * lw + ((first & world.mask) - x0)] = gen
+    const W = world.w, H = world.h
+    while (head < tail) {
+      const i = q[head++]
+      const x = i & world.mask, y = i >> shift
+      for (let k = 0; k < 4; k++) {
+        const nx = k === 0 ? x - 1 : k === 1 ? x + 1 : x
+        const ny = k === 2 ? y - 1 : k === 3 ? y + 1 : y
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H || nx < x0 || ny < y0 || nx >= x1 || ny >= y1) continue
+        const ni = (ny << shift) | nx
+        if (pass[ni] !== 1) continue
+        const l = (ny - y0) * lw + (nx - x0)
+        if (st[l] === gen) continue
+        st[l] = gen
+        q[tail++] = ni
+      }
+    }
+    for (let k = 0; k < n; k++) {
+      const t = this._ringTile(tx, ty, w, h, k)
+      if (t < 0 || pass[t] !== 1) continue
+      if (st[((t >> shift) - y0) * lw + ((t & world.mask) - x0)] !== gen) return false // maybe split
+    }
+    return true
+  }
+
+  _patchVacate(tx, ty, w, h) {
+    const world = this.world, pass = world.pass, L = this._label, shift = world.shift
+    for (let y = ty; y < ty + h; y++) for (let x = tx; x < tx + w; x++) {
+      if (pass[(y << shift) | x] !== 1) return false
+    }
+    // labels of the walkable 4-neighbours of the footprint (ring sides, corners excluded)
+    let lab = -1
+    const n = 2 * (w + h) + 4
+    for (let k = 0; k < n; k++) {
+      const t = this._ringTile(tx, ty, w, h, k)
+      if (t < 0 || pass[t] !== 1) continue
+      const x = t & world.mask, y = t >> shift
+      const corner = (x === tx - 1 || x === tx + w) && (y === ty - 1 || y === ty + h)
+      if (corner) continue
+      const l = L[t]
+      if (l < 0) return false
+      if (lab < 0) lab = l
+      else if (l !== lab) return false // joins two regions
+    }
+    if (lab < 0) lab = this.regionCount++
+    for (let y = ty; y < ty + h; y++) for (let x = tx; x < tx + w; x++) L[(y << shift) | x] = lab
+    return true
+  }
+
   /** Flood-fill 4-connected walkable components. O(size). */
   _relabel() {
+    this.relabels.full++
     const world = this.world, pass = world.pass, L = this._label, q = this._bfs
     const W = world.w, H = world.h, mask = world.mask, shift = world.shift, size = world.size
     L.fill(-1)

@@ -357,12 +357,16 @@ export function createInput(canvas, game, camera, overlay, hooks = {}) {
     selected()
   }
 
+  function holdSelected() { const n = soldiers(); for (let k = 0; k < n; k++) commandHold(game.ctx, cmdBuf[k]) }
+  function stopSelected() { const n = soldiers(); for (let k = 0; k < n; k++) commandStop(game.ctx, cmdBuf[k]) }
+
   function cancel() {
     if (overlay.ghostType) { overlay.ghostType = 0; lastGhostType = 0; return }
     if (overlay.attackMoveArmed) { overlay.attackMoveArmed = 0; return }
     if (overlay.dragActive) { overlay.dragActive = false; leftDown = false; dragging = false; return }
     if (overlay.selCount > 0 || overlay.selBuilding >= 0) { clearSelection(); selected(); return }
-    if (api.buildMenuOpen) api.buildMenuOpen = false
+    // Esc never hides the build bar: a stray Esc after placing would otherwise lose the whole
+    // menu behind an undocumented key. B is the only toggle.
   }
 
   // ---------------------------------------------------------------- listeners
@@ -462,8 +466,9 @@ export function createInput(canvas, game, camera, overlay, hooks = {}) {
     else if (ctrl || e.altKey) handled = false // leave browser shortcuts alone
     else if (code === 'KeyB') api.buildMenuOpen = !api.buildMenuOpen
     else if (code === 'KeyA' && soldiers() > 0) { overlay.attackMoveArmed = 1; overlay.ghostType = 0 }
-    else if (code === 'KeyH') { const n = soldiers(); for (let k = 0; k < n; k++) commandHold(game.ctx, cmdBuf[k]) }
-    else if (code === 'KeyX') { const n = soldiers(); for (let k = 0; k < n; k++) commandStop(game.ctx, cmdBuf[k]) }
+    else if (code === 'KeyH') holdSelected()
+    else if (code === 'KeyX') stopSelected()
+    else if (code === 'F3') api.showPerf = !api.showPerf
     else if (code === 'KeyP') togglePauseSelected()
     else if (code === 'Backquote') overlay.showGrid = !overlay.showGrid
     else if (code === 'Backslash') overlay.showPaths = !overlay.showPaths
@@ -616,6 +621,13 @@ export function createInput(canvas, game, camera, overlay, hooks = {}) {
     clearSelection: () => { clearSelection(); selected() },
     demolishSelected,
     togglePauseSelected,
+    holdSelected,
+    stopSelected,
+    /** the camera this input drives (UI uses it to jump to toasts / units) */
+    camera,
+    /** F3 perf line toggle (UI reads it); main.js writes loopStats {fps, frameMs} */
+    showPerf: false,
+    loopStats: null,
     /** number of selected player soldiers (fresh) */
     soldierCount: soldiers,
     /** currently held key codes (debug) */
