@@ -54,6 +54,8 @@ export class CameraRig {
     this.titleAngle = PRESETS.title.orbit.angle
     this.viewShift = 1
     this.focusTween = null
+    // ((F8b's review) the view swing's token: goTo)
+    this.goTween = null
     // (F1, F2) the battle's views, which the view button and V step through
     // (present/camera-presets.js viewsFor: the battle's own first), and the
     // one the camera last went to; none on the title
@@ -63,10 +65,12 @@ export class CameraRig {
     // mission chooses another: setBoard) and how far the dolly reaches on it
     this.rect = BOARD_RECT
     this.dolly = MAX_DISTANCE
-    // (F8b) the bookmark: { seat, pos, target } where the camera was as that
-    // seat pressed End, until its next phase begins; and how often a batch
-    // was framed
-    this.mark = null
+    // (F8b) the bookmarks: seat → { seat, pos, target }, where the camera
+    // was as that seat pressed End, until its next phase begins ((F8b's
+    // review) one per seat: with one slot, hotseat's other seat's End wrote
+    // over the first's before its next phase could glide back); and how
+    // often a batch was framed
+    this.marks = new Map()
     this.framed = 0
     // the keys held for panning; V the next view, Home the overview
     this.keys = new Set()
@@ -145,6 +149,11 @@ export class CameraRig {
   // from under the title's panel. A preset fitted farther than the dolly's
   // limit (a portrait broadside's, up to 105") raises it to its max, or the
   // controls would pull the camera back in on the first frame.
+  // ((F8b's review) A glide the player or the table asks for since (toPose:
+  // a cluster's zoom, a batch framed, the bookmark; glide: Tab) takes the
+  // camera from it: before, the swing went on writing the camera until it
+  // ended, so a cluster tapped during Home's glide zoomed in and was then
+  // pulled back out. Only the camera: the table's slide still finishes.)
   goTo(preset, seconds = 1.4) {
     this.titleSpin = false
     const camera = this.camera, controls = this.controls
@@ -152,8 +161,12 @@ export class CameraRig {
     controls.maxDistance = Math.max(this.dolly, (preset.max ?? 0) * reachOf(this.rect))
     const p0 = camera.position.clone(), t0 = controls.target.clone()
     const pos = v3(pose.pos), target = v3(pose.target)
+    // (and it takes the camera from any glide before it, the same way)
+    this.focusTween = null
+    const id = (this.goTween = {})
     tween(seconds, (k) => {
       this.viewShift = 1 - k
+      if (this.goTween !== id) return
       camera.position.lerpVectors(p0, pos, k)
       controls.target.lerpVectors(t0, target, k)
     }, easeInOut)
@@ -162,7 +175,7 @@ export class CameraRig {
   // Back to the title's orbit, picking it up where it would be now.
   toTitle() {
     this.views = []
-    this.mark = null
+    this.marks.clear()
     this.titleSpin = true
     this.controls.maxDistance = MAX_DISTANCE
     this.titleAngle -= clock.time * PRESETS.title.orbit.speed
@@ -194,6 +207,7 @@ export class CameraRig {
     const camera = this.camera, controls = this.controls
     const t0 = controls.target.clone(), off = camera.position.clone().sub(t0)
     const tgt = new THREE.Vector3(x, 0, z)
+    this.goTween = null
     const id = (this.focusTween = {})
     tween(0.6, (k) => {
       if (this.focusTween !== id) return
@@ -210,7 +224,7 @@ export class CameraRig {
   // looking the way it looks. True if it does (the batch's focus events are
   // then left out).
   frame(points, { stage, active, localSeats }) {
-    if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.mark?.seat ?? -1 })) return false
+    if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.marks.has(active) ? active : -1 })) return false
     if (!this.offScreen(points)) return false
     this.framed++
     this.toPose(framePose(circleOf(points), this.pose(), innerWidth / innerHeight, { min: this.controls.minDistance * 2, max: this.controls.maxDistance }), 0.9)
@@ -245,6 +259,7 @@ export class CameraRig {
     const camera = this.camera, controls = this.controls
     const p0 = camera.position.clone(), t0 = controls.target.clone()
     const pos = v3(pose.pos), target = v3(pose.target)
+    this.goTween = null
     const id = (this.focusTween = {})
     tween(seconds, (k) => {
       if (this.focusTween !== id) return
@@ -257,15 +272,16 @@ export class CameraRig {
   // framed as they play
   bookmark(seat) {
     if (!this.views.length) return
-    this.mark = { seat, ...this.pose() }
+    this.marks.set(seat, { seat, ...this.pose() })
   }
 
   // A phase of `seat` begins: back to the pose it pressed End at, if it
-  // did. True if the camera glides there.
+  // did (its own bookmark, spent; another seat's kept). True if the camera
+  // glides there.
   resume(seat) {
-    const m = this.mark
-    if (!m || m.seat !== seat) return false
-    this.mark = null
+    const m = this.marks.get(seat)
+    if (!m) return false
+    this.marks.delete(seat)
     this.toPose(m, 0.9)
     return true
   }

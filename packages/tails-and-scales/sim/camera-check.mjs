@@ -37,7 +37,9 @@
 // screen, never during the turn of the one seat played here, and yes for
 // that seat's own orders after its End (the bookmark's seat); the bookmark
 // takes the camera back to where End was pressed at that seat's next phase,
-// once; and a cluster's zoom frames its circle.
+// once; and a cluster's zoom frames its circle. (F8b's review) The semantic
+// zoom on classic's board: Close on every view of every mode, on a laptop
+// and portrait phones, though some of those poses are under 12 px per inch.
 //
 //   node sim/camera-check.mjs
 //
@@ -412,9 +414,27 @@ for (const [ctx, want, what] of [
   rig.nextView()
   const elsewhere = settle()
   check(rig.resume(0) === false && close(settle().pos, elsewhere.pos), '(F8b) resume: the bookmark is spent once')
+  // ((F8b's review) hotseat: each seat's End keeps its own bookmark; the
+  // other seat's phases and End leave it, and each seat's next phase
+  // glides back to its own)
+  rig.nextView()
+  const at0 = settle()
   rig.bookmark(0)
+  rig.nextView()
+  check(rig.resume(1) === false, "(F8b's review) resume: seat 1's phase with only seat 0's bookmark takes the camera nowhere, the bookmark kept")
+  const at1 = settle()
+  rig.bookmark(1)
+  rig.nextView()
+  settle()
+  check(rig.resume(0) === true && close(settle().pos, at0.pos), "(F8b's review) hotseat: seat 0's next phase glides back to its own End's pose though seat 1 pressed End since")
+  rig.nextView()
+  settle()
+  check(rig.resume(1) === true && close(settle().pos, at1.pos), "(F8b's review) hotseat: and seat 1's to its own")
+  check(rig.marks.size === 0, "(F8b's review) both bookmarks spent")
+  rig.bookmark(0)
+  rig.bookmark(1)
   rig.toTitle()
-  check(rig.mark === null, '(F8b) the title lets the bookmark go')
+  check(rig.marks.size === 0, '(F8b) the title lets the bookmarks go')
   // a cluster's zoom
   rig.setViews(viewsFor({ localSeats: [0], edges: [-1, 1] }))
   settle()
@@ -422,6 +442,21 @@ for (const [ctx, want, what] of [
   rig.frameOn(12, -8, 5)
   const z = settle()
   check(close(z.target, [12, 0, -8]) && Math.abs(dist(z) - dist(framePose({ cx: 12, cz: -8, r: 5 }, before, 1280 / 800, { min: rig.controls.minDistance * 2, max: rig.controls.maxDistance }))) < 1e-6, "(F8b) frameOn: a cluster's circle framed", `${z.pos.map((x) => x.toFixed(1))} → ${z.target}`)
+  // ((F8b's review) a cluster tapped while a view's swing is still under
+  // way: the zoom takes the camera, the swing writes it no more; and a
+  // swing asked after a glide takes it back)
+  rig.toOverview()
+  stepTweens(0.2)
+  const mid = rig.pose()
+  rig.frameOn(-10, 6, 5)
+  const zm = settle()
+  check(close(zm.target, [-10, 0, 6]) && Math.abs(dist(zm) - dist(framePose({ cx: -10, cz: 6, r: 5 }, mid, 1280 / 800, { min: rig.controls.minDistance * 2, max: rig.controls.maxDistance }))) < 1e-6, "(F8b's review) a cluster's zoom during Home's swing holds: the swing stops writing the camera", `${zm.pos.map((x) => x.toFixed(1))} → ${zm.target}`)
+  rig.frameOn(4, 4, 5)
+  stepTweens(0.2)
+  rig.toOverview()
+  const ov = settle()
+  rig.toOverview()
+  check(close(ov.pos, settle().pos), "(F8b's review) and Home pressed during a zoom ends on the overview, the zoom's glide let go")
   // the keys: 0.5 s of W moves the camera and its target dt · panSpeed(d)
   // (from the overview, well past 50")
   rig.toOverview()
@@ -431,6 +466,58 @@ for (const [ctx, want, what] of [
   rig.keys.clear()
   const p1 = rig.pose(), moved = Math.hypot(p1.target[0] - p0.target[0], p1.target[2] - p0.target[2])
   check(Math.abs(moved - 0.5 * panSpeed(d0)) < 1e-6 && Math.abs(p1.target[1] - p0.target[1]) < 1e-12 && d0 > 50, `(F8b) 0.5 s of W pans ${moved.toFixed(2)}" at ${d0.toFixed(1)}" away (dt · 18 · max(1, d/50))`)
+}
+
+// ── (F8b's review) The semantic zoom's tier on classic's board ─────────────
+// view/units.js's zoom (the view's own method, run over a stand-in of the
+// views: no figures, a labels container's dataset) for the camera at rest
+// on every view a classic battle offers (vs. the AI from either seat,
+// watched, hotseat; each seat's views and the overview) on a laptop and on
+// portrait phones: Close, and the labels' data-tier unset, on every one, so
+// classic's labels are as they always were. The rule must bite: some of
+// those poses are under Close's 12 px per inch (a portrait phone's), where
+// a larger board's tiers would read Tactical; and on the grand board a
+// phone's overview still reads Strategic.
+{
+  const { UnitViews } = await imp('view/units.js')
+  const { tierOf } = await imp('present/zoom.js')
+  const tierAt = (camera, lod) => {
+    const v = { lod, tier: 'close', ppi: Infinity, labels: { dataset: {} }, views: new Map() }
+    UnitViews.prototype.zoom.call(v, camera)
+    return v
+  }
+  const cases = [['vs. the AI, seat 0', [0]], ['vs. the AI, seat 1', [1]], ['watched', []], ['hotseat', [0, 1]]]
+  let poses = 0, under = 0, wrong = []
+  for (const [w, h] of [[1280, 800], [412, 915], [390, 845]]) {
+    globalThis.innerWidth = w
+    globalThis.innerHeight = h
+    for (const [mode, localSeats] of cases) {
+      const rig = new CameraRig({ domElement: canvas })
+      const views = [...viewsFor({ localSeats, edges: [-1, 1] }), PRESETS.overview]
+      for (const [k, view] of views.entries()) {
+        rig.goTo(view)
+        for (let i = 0; i < 30; i++) stepTweens(0.1)
+        for (let i = 0; i < 5; i++) rig.update(0)
+        rig.camera.updateMatrixWorld()
+        const z = tierAt(rig.camera, false)
+        poses++
+        if (tierOf(z.ppi) !== 'close') under++
+        if (z.tier !== 'close' || 'tier' in z.labels.dataset) wrong.push(`${mode}, view ${k} on ${w}×${h}: ${z.ppi.toFixed(1)} px per inch, tier ${z.tier}, data-tier ${z.labels.dataset.tier}`)
+      }
+    }
+  }
+  check(!wrong.length, `(F8b's review) every classic battle's view at rest, on 1280×800, 412×915 and 390×845 (${poses} poses), keeps the labels Close, data-tier unset`, wrong.slice(0, 3).join('; '))
+  check(under > 0, `(F8b's review) the tier row bites: ${under} of those ${poses} classic poses are under 12 px per inch, where a larger board's labels would go Tactical`)
+  globalThis.innerWidth = 412
+  globalThis.innerHeight = 915
+  const rig = new CameraRig({ domElement: canvas })
+  rig.setBoard({ W: 80, H: 56 })
+  rig.goTo(PRESETS.overview)
+  for (let i = 0; i < 30; i++) stepTweens(0.1)
+  for (let i = 0; i < 5; i++) rig.update(0)
+  rig.camera.updateMatrixWorld()
+  const g = tierAt(rig.camera, true)
+  check(g.tier === 'strategic' && g.labels.dataset.tier === 'strategic', `(F8b's review) the grand board's overview on a 412×915 phone reads Strategic (${g.ppi.toFixed(1)} px per inch, data-tier ${g.labels.dataset.tier}): the tiers still work where they are keyed on`)
 }
 
 // pure: nothing but the board's size from core/

@@ -58,7 +58,7 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
   },
   // (F8b, DESIGN §4.2.3) The larger tables' battlefield: classic's feature
   // table, the pair count and attempts scaled with the table's area
-  // (`scale`: classic's density, so 24-35 pairs at Grand's 80×56 and 13-20
+  // (`scale`: classic's density, so 24-35 pairs at Grand's 80×56 and 13-18
   // at Field's 60×40), spaced wider (objectiveGap 2.6, gap 3.2) so a round
   // hull of r 1.5 finds a lane from zone to zone and a squad of r 1.18
   // controls every objective (sim/terrain-check.mjs's connectivity rows:

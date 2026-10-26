@@ -94,7 +94,9 @@ the commit, and add whatever the work turned up.
   every Field and Grand board of seeds 1-500; its `--self-test` plants a
   wall and a ring), army-sim's gates at all three sizes (Skirmish, Field
   and Grand, the score and per-unit gates: about 15-20 minutes with
-  `--jobs 2`; a step that moves balance runs it), `node sim/play-report.mjs`
+  `--jobs 2`; a step that moves balance runs it; Grand's rows are played
+  and reported, not judged, until the Grand rebalance below is settled),
+  `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
   set in every check that reads the corpus (parity's 56 battles, P-auto,
   P-peers' `--only scale`). A step
@@ -914,8 +916,10 @@ follows N3.
   box at the centre (the tower ring walls the objective off from every
   squad); the fight guard `max(30, 2·units + 2)`. One price table couldn't
   hold all three sizes, so each larger mission's list carries its own
-  `prices` (§4.2.8.2's fallback); army-sim's gates pass at all three:
-  Skirmish 52.4%, Field 47.2% (on its one re-run), Grand 45.4%. Terrain
+  `prices` (§4.2.8.2's fallback); army-sim's gates pass at Skirmish and
+  Field (the review re-fitted Field on three seeds pooled and judged it on
+  a fourth: Skirmish 51.7%, Field 48.2% on seed 4444); Grand is reported,
+  not judged (the next item). Terrain
   tiles, shadows fitted to the view, the mat's detail, figure LOD, chips,
   the minimap and the roster: a Grand whole-board frame 1,562 → 351 main
   draw calls. The camera behind your half at 45-46", batch framing, the
@@ -928,9 +932,33 @@ follows N3.
   `['open', 'fortified']` (the refusal then reads "fought on open or
   fortified"), and half the `scale/` AI pairs (2 Field, 2 Grand) are
   re-recorded on `fortified`, with army-sim's Field and Grand gates and the
-  connectivity rows run there too. Left: army/'s Field and Grand pairs,
-  pilot/'s two Grand logs, the minimap's deck rims, stair arrows and ladder
-  ticks, a Grand battle played on a phone by hand. DESIGN's F8b notes.)
+  connectivity rows run there too. Left: the gates below, in an item of
+  their own. DESIGN's F8b notes.)
+- [ ] **Grand rebalance.** At Grand the points don't bind the Bushtails'
+  lists (the slot table and the 90-model cap do: points bind 14 of 1,000
+  Random lists, a median 1,325 spent, against the Coil's 900 and 1,480),
+  so they field less than the Coil and score 41-48% on `open`: the table
+  as shipped 45.4%, 44.1% and 47.6% on seeds 1111, 2222 and 4444 (N 625,
+  the band ±6); the tables tried in F8b's review 44.3-44.6% on seeds
+  1111, 2222 and 3333 pooled (N 1,875), and the one of them that passed
+  its per-unit gate there 42.2% and 41.0% on seeds 1111 and 5555 alone,
+  and 46.2% on 4444 with 7 of 12 units outside their bands (a seed it
+  wasn't tuned on). The per-unit fit at Grand is weakly identified (columns
+  move 40-100 points between seeds; standard errors of 24-87 points a
+  unit). Options, a design call: move the slot table or the presets at
+  Grand, a `prices` override on the Coil (the simplest that passed pooled
+  seeds read as nonsense: a hero at 5), or a better-identified fit (more
+  seeds; lists that vary the heroes). Until then army-sim reports Grand
+  and judges Skirmish and Field. Playtest first. (DESIGN's F8b notes, the
+  review.)
+- [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
+  what it built and checked; these gates of its row in DESIGN §4 (the
+  migration table) are not done, and stay open here until they are
+  (F8b's review): army/'s Field and Grand pairs (army/ lives on main with
+  F11a's corpus: recorded at the merge, in a commit of their own);
+  pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
+  minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
+  merge).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.

@@ -4,8 +4,8 @@
 // so the whole battle runs inside the start), and what they say about each
 // unit's `cost` (and, F8b, each mission's own prices, below).
 //
-//   node sim/army-sim.mjs --check [--mission classic,field,grand] [--n N] [--fit-n N] [--jobs 2] [--seed S]
-//   node sim/army-sim.mjs --fit   [--mission classic,field,grand] [--n N] [--jobs 2] [--seed S]
+//   node sim/army-sim.mjs --check [--mission classic,field,grand] [--n N] [--fit-n N] [--jobs 2] [--seed S[,S…]]
+//   node sim/army-sim.mjs --fit   [--mission classic,field,grand] [--n N] [--jobs 2] [--seed S[,S…]]
 //   (either with --dir <packageDir>: another copy of the code, for a
 //   before-and-after or a price table tried; the default is this
 //   package's working tree)
@@ -18,7 +18,8 @@
 // table (NS below: the score gate 1,500 / 900 / 625, the fit 2,400 / 900 /
 // 600). Classic's battles keep F11a's seeds; a larger mission's stream
 // names it, so its battles draw seeds of their own. Exit 0 when every gate
-// holds, 1 when one fails (or a battle throws), 2 on a bad command line.
+// holds, 1 when one fails (or a battle throws), 2 on a bad command line
+// (Grand's battle gates, reported, never fail it: below).
 //
 // (F8b) The prices. A list is priced as the fold prices it, by core/army.js
 // priceOf under the mission's list rules: a unit's `cost`, or the
@@ -64,6 +65,15 @@
 //       mission whose `army` names it, so a race's field and grand presets
 //       are held at Field and Grand, its classic one at Skirmish, whichever
 //       mission the run is for.
+// (F8b's review) And before each mission's gates, a report, never judged:
+// what binds each race's Random lists (bindOf: the points, or the units,
+// models and slots), since §4.2.8.3 wants the points to and at Grand the
+// Bushtails' slots and models do (DESIGN's F8b notes, the deviation).
+// (F8b's review, the project owner's decision) At Grand, (a) and (b) are
+// played and printed in full but reported, not judged (REPORTED below): no
+// price table tried there passed a seed it wasn't tuned on, and the Grand
+// rebalance is a ROADMAP item. A run exits 0 whatever Grand scores; (c)
+// and (d) are judged at every size.
 // It prints the score ± SE, each unit's fitted value ± SE against its cost,
 // and each gate's verdict, and ends on every battle gate's verdict again.
 //
@@ -102,7 +112,12 @@
 // Everything is seeded: one master seed (--seed; fixed by default) names
 // every battle's board, dice, budgets and autoList seeds, through
 // mulberry32(cyrb53(`<seed>:<stream>:<battle>`)), per battle, so a battle is
-// the same whichever process plays it. --jobs N plays them over N child
+// the same whichever process plays it. (F8b's review) --seed takes a
+// comma-separated few, 1111,2222,3333: every gate and fit then plays its N
+// battles under each seed and pools them (N per seed, so the SEs shrink by
+// √seeds), because one seed's fit is a sample, and a table tuned until one
+// seed's gates pass has been selected on that sample: tune on pooled seeds,
+// then judge the table on a seed the tuning never saw. --jobs N plays them over N child
 // processes (2 by default: the machine is shared), in chunks, and the
 // report reads the results in battle order, so it doesn't depend on how
 // the battles were spread. A battle that throws fails the run, named.
@@ -132,8 +147,8 @@ const A = core.army
 // `budget` 'limit' builds both lists at the mission's limit (a Random
 // seat's); 'fit' draws each side's from 80-120% of it, played at most at it
 // (the header's "budgets of the fit").
-function battleOf({ stream, i, mission, set, pair, budget }) {
-  const rng = mulberry32(cyrb53(`${a.seed}:${stream}:${i}`))
+function battleOf({ seed, stream, i, mission, set, pair, budget }) {
+  const rng = mulberry32(cyrb53(`${seed}:${stream}:${i}`))
   const u32 = () => Math.floor(rng() * 4294967296)
   const board = u32(), dice = u32()
   const rules = MISSIONS[mission].list
@@ -158,7 +173,7 @@ function play(task) {
     G = core.createMatch(setup)
     if (G.turn.stage !== 'over' || !G.turn.result) throw new Error(`an AI battle stopped short of its end (stage ${G.turn.stage}, waiting on ${JSON.stringify(G.pending)})`)
   } catch (e) {
-    error = `battle ${task.stream} #${task.i} (${JSON.stringify(setup)}): ${String(e?.stack ?? e)}`
+    error = `battle ${task.stream} #${task.i}, seed ${task.seed} (${JSON.stringify(setup)}): ${String(e?.stack ?? e)}`
   }
   const ms = performance.now() - t0
   if (error) return { i: task.i, error, ms }
@@ -166,7 +181,7 @@ function play(task) {
   // the first race's seat this battle
   const mine = swap ? 1 : 0
   const y = win === -1 ? 0.5 : win === mine ? 1 : 0
-  return { i: task.i, y, swap, counts: lists.map((l) => l.counts), spent: lists.map((l) => A.listCost(RACES[l.race], l.counts, MISSIONS[task.mission].list)), why: G.turn.result.why, ms }
+  return { i: task.i, seed: task.seed, y, swap, counts: lists.map((l) => l.counts), spent: lists.map((l) => A.listCost(RACES[l.race], l.counts, MISSIONS[task.mission].list)), why: G.turn.result.why, ms }
 }
 
 // Play `tasks` over `jobs` processes (in this one with jobs 1), in chunks;
@@ -355,6 +370,18 @@ const size = (rules) => rules.size ?? 'battle'
 // (§4.2.8.2's gate table; a size it doesn't name gets Skirmish's)
 const BAND = { Skirmish: 4, Field: 5, Grand: 6 }
 
+// (F8b's review) The sizes whose battle gates are reported, not judged: at
+// Grand no price table tried passed a seed it wasn't tuned on (its fit is
+// weakly identified, whole columns moving 40-100 points between seeds) and
+// the Bushtails' lists are held by their slots and models, not their
+// points, so its balance is a design call, the Grand rebalance, a ROADMAP
+// item (the project owner's decision; DESIGN's F8b notes record it as a
+// deviation from §4.2.8.2's gates there). Its score and every unit's fit
+// are still played and printed in full, each with what the gate would have
+// said; a run's exit and its verdict count only the judged sizes, so
+// Skirmish and Field keep both gates as the spec has them.
+const REPORTED = { Grand: 'reported, not judged: the Grand rebalance is a ROADMAP item (DESIGN\'s F8b notes)' }
+
 // The races' pairs: every two distinct races, in RACES order (the first's
 // score is the one reported)
 const pairs = () => {
@@ -363,7 +390,7 @@ const pairs = () => {
   return out
 }
 
-function printFit(pair, fit, { gate = false } = {}) {
+function printFit(pair, fit, { gate = false, report = false } = {}) {
   console.log(`\n  the fit (${pair.map((r) => RACES[r].short).join(' vs ')}): IRLS in ${fit.iters} steps, dispersion ${fit.phi.toFixed(3)}, exchange rate ${(1000 * fit.rate).toFixed(3)} logits per 1,000 points`)
   if (fit.handicap) console.log(`  the heroes' difference (the intercept): ${fit.handicap.diff.toFixed(1)} ± ${fit.handicap.se.toFixed(1)} points to the ${RACES[pair[0]].short}`)
   else console.log(`  the race-level edge (the intercept; the heroes fitted): ${fit.edge.diff.toFixed(1)} ± ${fit.edge.se.toFixed(1)} points to the ${RACES[pair[0]].short}`)
@@ -374,7 +401,9 @@ function printFit(pair, fit, { gate = false } = {}) {
     const band = Math.max(2 * (u.se ?? 0), 0.2 * u.cost)
     const ok = exempt || Math.abs(u.value - u.cost) <= band
     if (!ok) failed++
-    const verdict = !gate ? '' : exempt ? '   exempt (its count never varies: the intercept)' : `   ${ok ? 'ok  ' : 'FAIL'} (within ${band.toFixed(0)})`
+    // (a reported size's rows say where each unit lies against the band,
+    // never ok or FAIL)
+    const verdict = !gate ? '' : exempt ? '   exempt (its count never varies: the intercept)' : report ? `   ${ok ? 'inside' : 'outside'} (band ${band.toFixed(0)})` : `   ${ok ? 'ok  ' : 'FAIL'} (within ${band.toFixed(0)})`
     console.log(`  ${`${u.race.short}: ${u.race.units[u.key].name}`.padEnd(34)} ${u.role.padEnd(10)} ${num(u.cost)}  ${num(u.value)} ± ${num(u.se, 3)}   ${num(u.proposed, 6)}${verdict}`)
   }
   console.log(`  classic lists: ${fit.classic.map((c, s) => `${RACES[pair[s]].short} ${c.today} today, ${c.proposed} proposed`).join('; ')}`)
@@ -399,6 +428,28 @@ const NS = { Skirmish: { n: 1500, fit: 2400 }, Field: { n: 900, fit: 900 }, Gran
 // mission's draw seeds of their own rather than classic's again.
 const streamOf = (mission, stream) => (mission === 'classic' ? stream : `${mission}:${stream}`)
 
+// (F8b's review) What binds a Random seat's lists (autoList at the
+// mission's limit, seeds 1-1,000, as §4.2.8.3's "points must be what
+// binds" reads them): a list is held by its points when one unit more would
+// pass every rule but the points limit, else by the rest (the units, the
+// models, a slot or perKind leave nothing to add). One line, with the
+// points spent (p10, median, the least and the most).
+function bindOf(race, rules) {
+  const free = { ...rules, points: Infinity }
+  let points = 0
+  const spent = []
+  for (let seed = 1; seed <= 1000; seed++) {
+    const c = A.autoList(race, rules, seed)
+    spent.push(A.listCost(race, c, rules))
+    if (race.roster.some((_, k) => A.checkList(race, free, c.map((x, j) => x + (j === k ? 1 : 0))) === null)) points++
+  }
+  spent.sort((x, y) => x - y)
+  return `what binds the ${race.short}' Random lists (1,000 seeds): the points in ${points}, the units, models or slots in ${1000 - points}; spent ${spent[100]} (p10), ${spent[500]} (median), ${spent[0]}-${spent[999]} of ${rules.points}`
+}
+
+// (F8b's review) the master seeds, one or a comma-separated few, pooled
+const SEEDS = a.seed.split(',').map((s) => s.trim())
+
 async function main() {
   // (F8b) every mission by default, in MISSIONS order; --mission names one
   // or a comma-separated few
@@ -412,8 +463,12 @@ async function main() {
     console.error('army-sim: --check (the gates) or --fit (the fitted price table)')
     process.exit(2)
   }
+  if (SEEDS.some((x) => !x) || new Set(SEEDS).size !== SEEDS.length) {
+    console.error(`army-sim: --seed ${JSON.stringify(a.seed)} names an empty or repeated seed (one seed, or a comma-separated few, each once)`)
+    process.exit(2)
+  }
   const T0 = performance.now()
-  console.log(`army-sim: ${a.check ? '--check' : '--fit'} on the ${names.join(', ')} mission${names.length === 1 ? '' : 's'}, seed ${a.seed}, ${a.jobs} job(s), on ${a.dir ? DIR : 'the working tree'}`)
+  console.log(`army-sim: ${a.check ? '--check' : '--fit'} on the ${names.join(', ')} mission${names.length === 1 ? '' : 's'}, ${SEEDS.length === 1 ? `seed ${SEEDS[0]}` : `seeds ${SEEDS.join(', ')} pooled`}, ${a.jobs} job(s), on ${a.dir ? DIR : 'the working tree'}`)
 
   let failed = 0
   const gate = (ok, what) => {
@@ -463,8 +518,13 @@ async function main() {
     const ns = NS[size(rules)] ?? NS.Skirmish
     const N = Number(a.n) || ns.n
     const fitN = Number(a.fit ? a.n : a['fit-n']) || ns.fit
-    const tasksOf = (stream, n, pair, budget, set) => Array.from({ length: n }, (_, i) => ({ stream: streamOf(name, stream), i, mission: name, set: set ?? mission.sets[Math.floor(i / 2) % mission.sets.length], pair, budget }))
+    // (each seed's n battles, the seeds in the order given)
+    const tasksOf = (stream, n, pair, budget, set) => SEEDS.flatMap((seed) => Array.from({ length: n }, (_, i) => ({ seed, stream: streamOf(name, stream), i, mission: name, set: set ?? mission.sets[Math.floor(i / 2) % mission.sets.length], pair, budget })))
     console.log(`\n━━ the ${name} mission: a ${size(rules)}, ${mission.board.W}×${mission.board.H}, ${rules.points} points, on ${mission.sets.join(', ')} ━━`)
+    // ((F8b's review) what binds a Random seat's list, reported, never
+    // judged: §4.2.8.3 wants the points to, and at Grand the Bushtails'
+    // slots and models do)
+    if (a.check) for (const r of Object.values(RACES)) console.log(`  ${bindOf(r, rules)}`)
 
     if (a.fit) {
       for (const pair of pairs()) {
@@ -477,16 +537,20 @@ async function main() {
     }
 
     // (a) the score gates, per pair and set; a failure played again once
+    // (a reported size's is played once: there is no verdict for a re-run
+    // to absorb a fluke of)
     const band = BAND[size(rules)] ?? BAND.Skirmish
+    const report = REPORTED[size(rules)]
+    if (report) console.log(`\n  the ${size(rules)} gates below are ${report}`)
     for (const pair of pairs()) {
       for (const set of mission.sets) {
         const what = `${pair.map((r) => RACES[r].short).join(' vs ')} on ${set}`
-        console.log(`\nthe score gate (${name}): ${what}, random legal lists at the limit, |score − 50%| ≤ ${band}`)
+        console.log(`\nthe score gate (${name}): ${what}, random legal lists at the limit, |score − 50%| ≤ ${band}${report ? ` (${report})` : ''}`)
         let r = await playAll(tasksOf(`score:${pair}:${set}`, N, pair, 'limit', set), `${name} score ${what}`)
         if (failErrors(r)) process.exit(1)
         let s = scoreOf(r.results)
         console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
-        if (Math.abs(s.score - 50) > band) {
+        if (!report && Math.abs(s.score - 50) > band) {
           console.log(`  outside the band: played again once on fresh seeds, and that run counts`)
           r = await playAll(tasksOf(`score-again:${pair}:${set}`, N, pair, 'limit', set), `${name} score again ${what}`)
           if (failErrors(r)) process.exit(1)
@@ -494,6 +558,11 @@ async function main() {
           console.log(`  ${RACES[pair[0]].short} score ${pct(s)}; ${runtime(r)}`)
         }
         const ok = Math.abs(s.score - 50) <= band
+        if (report) {
+          console.log(`  the score, ${name}, ${what}: ${s.score.toFixed(1)}% ± ${s.se.toFixed(1)} is ${Math.abs(s.score - 50).toFixed(1)} points from even, ${ok ? 'inside' : 'outside'} the band of ${band}: ${report}`)
+          verdicts.push(`info ${name} score ${what}: ${s.score.toFixed(1)}% ± ${s.se.toFixed(1)} (N = ${s.n}, ${ok ? 'inside' : 'outside'} the band of ${band}), ${report}`)
+          continue
+        }
         gate(ok, `the score gate, ${name}, ${what}: ${s.score.toFixed(1)}% is ${Math.abs(s.score - 50).toFixed(1)} points from even`)
         verdicts.push(`${ok ? 'ok  ' : 'FAIL'} ${name} score ${what}: ${s.score.toFixed(1)}% ± ${s.se.toFixed(1)} (N = ${s.n}, band ${band})`)
       }
@@ -502,13 +571,18 @@ async function main() {
     // (b) the per-unit gate, from the fit
     for (const pair of pairs()) {
       const what = pair.map((r) => RACES[r].short).join(' vs ')
-      console.log(`\nthe per-unit gate (${name}): ${what}, the fit on budgets 80-120% of the limit (played at most at it); each unit within max(2 SE, 20%) of its cost`)
+      console.log(`\nthe per-unit gate (${name}): ${what}, the fit on budgets 80-120% of the limit (played at most at it); each unit within max(2 SE, 20%) of its cost${report ? ` (${report})` : ''}`)
       const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `${name} fit ${what}`)
       if (failErrors(r)) process.exit(1)
       console.log(`  ${RACES[pair[0]].short} score over the fit's battles ${pct(scoreOf(r.results))}; ${runtime(r)}`)
-      const bad = printFit(pair, fitOf(pair, r.results, rules), { gate: true })
+      const bad = printFit(pair, fitOf(pair, r.results, rules), { gate: true, report: !!report })
+      if (report) {
+        console.log(`  the per-unit fit, ${name}, ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit inside its band'}: ${report}`)
+        verdicts.push(`info ${name} per-unit ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit inside its band'} (fit N = ${fitN * SEEDS.length}), ${report}`)
+        continue
+      }
       gate(!bad, `the per-unit gate, ${name}, ${what}: ${bad ? `${bad} unit(s) priced outside their band` : 'every unit within its band'}`)
-      verdicts.push(`${bad ? 'FAIL' : 'ok  '} ${name} per-unit ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit within its band'} (fit N = ${fitN})`)
+      verdicts.push(`${bad ? 'FAIL' : 'ok  '} ${name} per-unit ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit within its band'} (fit N = ${fitN * SEEDS.length})`)
     }
   }
 
@@ -520,7 +594,7 @@ async function main() {
   // (every battle gate again, together, so a run over three sizes ends on
   // what it found)
   console.log(`\nthe battle gates\n${verdicts.map((v) => `  ${v}`).join('\n')}`)
-  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds (${secs.toFixed(0)} s)`)
+  console.log(failed ? `\narmy-sim --check FAILED: ${failed} gate(s) (${secs.toFixed(0)} s)` : `\narmy-sim --check passed: every gate holds${verdicts.some((v) => v.startsWith('info')) ? ' (the reported rows judged by none)' : ''} (${secs.toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }
 

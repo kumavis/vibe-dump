@@ -14,10 +14,11 @@
 // mirror. `seats()` names the seats whose units are "yours" (the seats
 // played here; for a watched battle, none: only the totals show); `phase()`
 // whether one of them is in its own phase now (outside it nothing is
-// "acted"). It is folded to its header (the totals) unless opened (the
-// tools' ☰, or R), open by default on a board larger than classic's (not on
-// a phone), and rewritten at most four times a second, only when what it
-// shows changed.
+// "acted"). It is folded to its header (the totals) unless opened (its
+// header's ▸, or R), open by default on a board larger than classic's (not
+// on a phone), and rewritten at most four times a second, only when what
+// it shows changed. ((F8b's review) Its header is its one toggle: a ☰ in the
+// tools as well widened the row over the other seat's score.)
 import { glyphOf } from '../present/zoom.js'
 import { unitPrice } from '../core/army.js'
 
@@ -33,17 +34,9 @@ export class Roster {
     document.body.appendChild(el)
     this.head = el.querySelector('.rtot')
     this.list = el.querySelector('.rlist')
-    el.querySelector('.rhead').onclick = () => this.toggle()
-    let btn = document.querySelector('#rosterBtn')
-    if (!btn) {
-      btn = document.createElement('button')
-      btn.id = 'rosterBtn'
-      btn.textContent = '☰'
-      document.body.appendChild(btn)
-    }
-    this.button = btn
-    btn.title = 'Roster (R): your units, and both armies on the table'
-    btn.onclick = () => this.toggle()
+    const head = el.querySelector('.rhead')
+    head.title = 'Roster (R): your units, and both armies on the table'
+    head.onclick = () => this.toggle()
     addEventListener('keydown', (e) => {
       if (e.code !== 'KeyR' || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return
       if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target?.tagName ?? '') || document.querySelector('.modal:not(.hidden)')) return
@@ -98,7 +91,6 @@ export class Roster {
     const M = this.mirror()
     const battle = !!M && M.stage !== 'title' && !!this.board()
     this.el.classList.toggle('hidden', !battle)
-    this.button.classList.toggle('hidden', !battle)
     if (!battle) return
     const open = this.open()
     const m = this.model()
@@ -106,7 +98,6 @@ export class Roster {
     if (sig === this.sig) return
     this.sig = sig
     this.el.classList.toggle('open', open)
-    this.button.classList.toggle('on', open)
     this.el.querySelector('.rfold').textContent = open ? '▾' : '▸'
     this.head.innerHTML = [0, 1].map((s) => `<span class="rpts" style="color:${this.colorOf(s)}" title="On the table: ${m.worth[s]} of ${m.full[s]} points">${m.worth[s].toLocaleString('en-GB')}</span>`).join('<span class="rvs">·</span>') + '<span class="rlbl">pts</span>'
     this.list.innerHTML = !open ? '' : m.rows.map((r) => `<li data-id="${r.id}" class="${[r.acted ? 'acted' : '', r.sel ? 'sel' : '', r.engaged ? 'engaged' : ''].join(' ').trim()}" style="--side:${this.colorOf(r.side)}"><span class="rg">${r.glyph}</span><span class="rn">${r.name}</span><span class="rc">${r.n}</span><span class="rs">${r.engaged ? '<span title="In combat">⚔</span>' : ''}${r.ord ? `<span class="ro" title="Standing order">${r.ord}</span>` : ''}${r.acted ? '<span title="Done this phase">✓</span>' : ''}</span></li>`).join('')

@@ -539,6 +539,13 @@ export class GroupInput {
     if (seat >= 0) this.selection.of(seat).pin = null
     this.view.overlay.formation(null)
     this.hoverPreview = null
+    // ((F8b's review) and a plan of the ghosts still coming lets go, or its
+    // next frames draw them again over the table the group has left; its
+    // "Planning 3 of 21…" goes with it)
+    if (this.ghosts?.run) {
+      this.ghosts.cancel()
+      this.tooltip?.hide()
+    }
   }
 
   // Send the pinned formation (`running`: the run's promise, for ?debug).
@@ -592,7 +599,12 @@ export class GroupInput {
   // where a click would pin it (none once pinned: the pin stays drawn).
   hover({ unit, ground }) {
     const seat = this.seat()
-    if (!this.isGroup() || this.selection.of(seat).pin || this.busy) return null
+    // ((F8b's review) every way out of the hover lets a plan still coming
+    // go: no group, a pin, a send, nowhere to plan for, a shot or charge)
+    if (!this.isGroup() || this.selection.of(seat).pin || this.busy) {
+      this.ghosts?.cancel()
+      return null
+    }
     const verb = this.phase()
     let target = null, v = verb
     if ((verb === 'place' || verb === 'move') && ground && !unit) target = { x: ground.x, z: ground.z }
@@ -600,9 +612,11 @@ export class GroupInput {
       target = unit
       v = 'approach'
     } else if ((verb === 'shoot' || verb === 'charge') && unit && unit.side !== seat) {
+      this.ghosts?.cancel()
       return this.preview(verb === 'shoot' ? 'fire' : 'charge', unit).summary
     }
     if (!target) {
+      this.ghosts?.cancel()
       this.view.overlay.formation(null)
       return null
     }

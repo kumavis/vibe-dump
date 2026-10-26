@@ -66,7 +66,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     rounds: 6,
     army: 'field',
     // 1,000 points, one or two heroes, at least 2 Troops units, at most 5
-    // of any one unit (the ×2 presets cost 990 and 950 at its prices)
+    // of any one unit (the ×2 presets cost 980 and 950 at its prices)
     list: {
       size: 'Field', points: 1000, units: 18, models: 70, perKind: 5,
       roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2] },
@@ -74,9 +74,11 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // fitted by sim/army-sim.mjs on its boards: no one table priced the
       // Brute, the Grenadiers and the artillery at every size, so the
       // races' `cost` stays the Skirmish's and these are the Field's. The
-      // heroes carry the race-level handicap (§4.2.8.2 step 3).
+      // heroes carry the race-level handicap (§4.2.8.2 step 3). ((F8b's
+      // review) The Nutkin and the Trebuchet moved to the fit pooled over
+      // three seeds, 80 → 70 and 40 → 55, and judged on a fourth.)
       prices: {
-        squirrel: { elder: 75, oakguard: 115, nutkin: 80, grenadier: 45, glider: 60, trebuchet: 40 },
+        squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
         serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
       },
     },
@@ -109,7 +111,12 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // Coil's big units are worth more here than its ×3 preset may cost
       // within 1,500 points, so the units the AI makes least of at this
       // size (the Hierophant past the first, the Venom Engine, the
-      // Trebuchet) are priced down to keep both presets legal.
+      // Trebuchet) are priced down to keep both presets legal. ((F8b's
+      // review) Kept as shipped: these pass Grand's gates on the seed they
+      // were tuned on only, and no table tried passed a seed it wasn't
+      // tuned on; the Bushtails' lists are held by their slots and models
+      // here, not their points. army-sim reports Grand and judges it not:
+      // the Grand rebalance is a ROADMAP item, DESIGN's F8b notes.)
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15 },
         serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },

@@ -29,11 +29,16 @@
 // four (their boards, dice, races, armies and terrain, the pilot in seat
 // 0), else four fixed Grand boards on `open` with the mission's presets,
 // the pilot army the Bushtails on odd boards and the Coil on even ones
-// (seat 0 either way). Reaching melee is a fight: a fight line in the trace
-// (core/actions/fight.js's "X fight Y: …", every blow of which is between
-// the two armies) while the round is at most 3. The row also says, per
-// battle, the round of the first fight, which army struck first, and the
-// pilot army's charges by round 3 (made contact / declared).
+// (seat 0 either way). Reaching melee is the pilot army's own: (F8b's
+// review) one of its charges making contact while the round is at most 3
+// (a charge line of seat 0's in the trace, "X charge Y — roll …
+// Contact!"), not any fight by then, which the AI's charge into a pilot
+// that never charges would have counted too. The row also says, per
+// battle, the round of the first fight and which army struck first, and
+// the pilot army's charges by round 3 (made contact / declared). And it
+// holds itself to a control: the same battles with the pilot army only
+// pressing End (no pilot) must miss the threshold, or the row can't tell
+// a pilot that charges from one that doesn't.
 //
 //   node sim/play-report.mjs                    every row, on the working tree's core
 //   node sim/play-report.mjs --row f10b         one row (f7a, f10b; comma-separated for more)
@@ -136,7 +141,8 @@ function pilotAll(G, seat) {
 }
 
 // One battle, the pilot army in seat 0: what its fights and charges were
-function pilotBattle(setup) {
+// (`pilot` false: the control, seat 0 pressing End alone)
+function pilotBattle(setup, { pilot = true } = {}) {
   const seen = { fight: null, first: null, charges: 0, contacts: 0, pilots: 0, acted: 0 }
   const onTrace = (line, G) => {
     const round = G.turn.round
@@ -160,7 +166,7 @@ function pilotBattle(setup) {
       continue
     }
     if (P.k !== 'phase') throw new Error(`decision ${k}: a ${P.k} decision, which the pilot army doesn't take`)
-    const p = pilotAll(G, 0)
+    const p = pilot ? pilotAll(G, 0) : null
     if (p) {
       const before = core.q.rngState(G.rng) + G.journal.trace.length
       core.apply(G, 0, p)
@@ -197,16 +203,25 @@ async function f10b() {
       continue
     }
     const secs = (performance.now() - t0) / 1000
-    const melee = r.fight !== null && r.fight <= BY
-    out.push({ ...r, melee })
+    const melee = r.contacts > 0
+    // (the control: the same battle, End alone)
+    let ctl = null
+    try {
+      ctl = pilotBattle(setup, { pilot: false })
+    } catch (e) {
+      failed.push(`${b.id}, the control (End alone): ${String(e?.message ?? e).split('\n')[0]}`)
+    }
+    out.push({ ...r, melee, ctl: ctl && ctl.contacts > 0 })
     const end = r.result ? (r.result.win === -1 ? 'a draw' : r.result.win === 0 ? 'the pilot army won' : 'the AI won') : 'no result'
-    console.log(`  ${b.id.padEnd(16)} pilot ${setup.seats[0].race.padEnd(8)} first fight ${r.fight === null ? 'never' : `in round ${r.fight}, struck by the ${r.first === 0 ? 'pilot army' : 'AI'}`}${melee ? ' (by 3)' : ''}; the pilot army's charges by round ${BY}: ${r.contacts} made contact of ${r.charges}; ${r.pilots} pilots (${r.acted} played something); ${end} after ${r.round} rounds (${secs.toFixed(1)} s)`)
+    console.log(`  ${b.id.padEnd(16)} pilot ${setup.seats[0].race.padEnd(8)} first fight ${r.fight === null ? 'never' : `in round ${r.fight}, struck by the ${r.first === 0 ? 'pilot army' : 'AI'}`}; the pilot army's charges by round ${BY}: ${r.contacts} made contact of ${r.charges}${melee ? ' (melee by 3)' : ''}; ${r.pilots} pilots (${r.acted} played something); ${end} after ${r.round} rounds (${secs.toFixed(1)} s); the control, End alone: ${ctl ? `${ctl.contacts} contacts by round ${BY}, first fight ${ctl.fight === null ? 'never' : `in round ${ctl.fight}`}` : 'failed'}`)
   }
   for (const f of failed) console.log(`  FAILED ${f}`)
-  const n = out.length, hit = out.filter((r) => r.melee).length
+  const n = out.length, hit = out.filter((r) => r.melee).length, ctl = out.filter((r) => r.ctl).length
   const acted = out.reduce((s, r) => s + r.acted, 0)
   const checks = [
-    { name: `the pilot army reaches melee by round ${BY}`, ok: n === battles.length && hit * 4 >= 3 * n, got: `${hit} of ${n} battles (${pct(hit, n)})${n < battles.length ? `, ${battles.length - n} failed` : ''}`, want: '≥ 3 of 4' },
+    { name: `the pilot army reaches melee by round ${BY} (its own charge's contact)`, ok: n === battles.length && hit * 4 >= 3 * n, got: `${hit} of ${n} battles (${pct(hit, n)})${n < battles.length ? `, ${battles.length - n} failed` : ''}`, want: '≥ 3 of 4' },
+    // ((F8b's review) the control must miss: End alone never charges)
+    { name: `the control, End alone in the pilot's seat, misses it`, ok: n === battles.length && ctl * 4 < 3 * n, got: `${ctl} of ${n} battles with a contact of its own by round ${BY}`, want: 'under 3 of 4' },
     // (a pilot that plays nothing passes nothing)
     { name: 'its pilots played something', ok: acted > 0, got: `${acted} pilots that moved the match`, want: 'some' },
   ]

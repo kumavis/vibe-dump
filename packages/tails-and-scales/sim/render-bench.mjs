@@ -17,12 +17,18 @@
 //   label writes   the label and chip style writes in a frame, the camera
 //                  and the battle still (the most over FRAMES frames)
 //                                                              budget ≤ 20
-//   minimap        a redraw's time, the camera nudged every 50 ms for 4 s
-//                  so it redraws as often as it may (the median of its
-//                  redraws, as render JS's; the most reported), and how many
-//                  it made a second                   budget ≤ 1 ms, ≤ 10 Hz
+//   minimap        a redraw's time: (F8b's review) MINIMAP whole redraws
+//                  driven back to back (?debug's view.minimapRedraws: the
+//                  signature forgotten before each, the map brought up
+//                  where it is folded), their 90th percentile judged (the
+//                  median and the longest reported)   budget ≤ 1 ms
 //                  (the terrain's footprints, painted into its cache only
-//                  when the board or the terrain changes, reported apart)
+//                  when the board or the terrain changes, reported apart).
+//                  Its rate, ≤ 10 Hz, holds by construction (view/
+//                  minimap.js looks at most HZ = 10 times a second and
+//                  redraws only when its signature changed), so it is not
+//                  a row: the bench's old rate row, redraws over a nudged
+//                  camera's 4 s, could not exceed the poll and never failed.
 //
 // with what the drawing at scale did (view/units.js, view/terrain.js,
 // view/stage.js, ui/chips.js: ?debug's view.drawing()): the zoom's tier and
@@ -49,7 +55,9 @@ import { DIST, IDLE_MS } from './chromium.mjs'
 
 const { values: a } = parseArgs({ options: { seed: { type: 'string' }, frames: { type: 'string' }, json: { type: 'boolean' } } })
 const SEED = Number(a.seed ?? 7), FRAMES = Number(a.frames ?? 15)
-const BUDGET = { main: 600, shadow: 600, tris: 400000, js: 1.3, writes: 20, minimapMs: 1, minimapHz: 10 }
+const BUDGET = { main: 600, shadow: 600, tris: 400000, js: 1.3, writes: 20, minimapMs: 1 }
+// the minimap's redraws driven per mission (its row's sample)
+const MINIMAP = 40
 const OVER = 1.25
 if (!existsSync(join(DIST, 'index.html'))) {
   console.error(`render-bench: no build at ${DIST} (run npx vite build first)`)
@@ -77,7 +85,7 @@ async function measure(browser, url, mission) {
     await page.waitForFunction(() => window.__ts.clock.time > 0, null, { timeout: IDLE_MS })
     const t0 = await page.evaluate(() => window.__ts.clock.time)
     await page.waitForFunction((t) => window.__ts.clock.time > t + 1.5, t0, { timeout: IDLE_MS })
-    return await page.evaluate(async ({ FRAMES }) => {
+    return await page.evaluate(async ({ FRAMES, MINIMAP }) => {
       const ts = window.__ts, r = ts.renderer, info = r.info, sm = r.shadowMap, scene = ts.scenery.scene, cam = ts.camera
       const frame = () => new Promise((res) => requestAnimationFrame(() => res()))
       const frames = async (n) => {
@@ -115,33 +123,17 @@ async function measure(browser, url, mission) {
         await frame()
         writes = Math.max(writes, ts.view.drawing().writes)
       }
-      // the minimap, the camera nudged every 50 ms for 4 s (shown for the
-      // bench on a board where it is folded by default)
-      const mm = document.querySelector('#minimapBtn')
-      const wasUp = ts.view.drawing().minimap.up
-      if (!wasUp) mm.click()
-      const before = ts.view.drawing().minimap.redraws
-      const times = []
-      let seen = before
-      const start = performance.now()
-      for (let i = 0; i < 80; i++) {
-        // (a drift, never back where it was a tick before)
-        cam.position.x += 0.15
-        ts.controls.target.x += 0.15
-        await new Promise((res) => setTimeout(res, 50))
-        const m = ts.view.drawing().minimap
-        if (m.redraws !== seen) (seen = m.redraws), times.push(m.ms)
-      }
-      const secs = (performance.now() - start) / 1000
-      const redraws = ts.view.drawing().minimap.redraws - before
+      // the minimap: MINIMAP whole redraws back to back (each a redraw, the
+      // terrain's cache kept), the 90th percentile judged
+      const times = ts.view.minimapRedraws(MINIMAP)
+      const sorted = [...times].sort((x, y) => x - y)
       const paintMs = ts.view.drawing().minimap.paintMs
-      if (!wasUp) mm.click()
       return {
-        main, shadow: all - main, tris, js: js[js.length >> 1], writes, minimapMs: times.length ? [...times].sort((x, y) => x - y)[times.length >> 1] : 0, minimapMax: Math.max(0, ...times), minimapN: times.length, minimapHz: redraws / secs, paintMs,
+        main, shadow: all - main, tris, js: js[js.length >> 1], writes, minimapMs: sorted[Math.min(sorted.length - 1, Math.floor(0.9 * sorted.length))], minimapMed: sorted[sorted.length >> 1], minimapMax: sorted[sorted.length - 1], minimapN: times.length, paintMs,
         tier: drawn.tier, ppi: drawn.ppi, lo: drawn.lo, figs: drawn.figs, tiles: drawn.tiles.tiles, tileMeshes: drawn.tiles.meshes, tiled: drawn.tiles.tiled,
         tileBad: drawn.tiles.bad, fits: drawn.shadow.fits, d: cam.position.distanceTo(ts.controls.target), units: ts.G.units.length,
       }
-    }, { FRAMES })
+    }, { FRAMES, MINIMAP })
   } finally {
     if (errors.length) console.log(`  (${mission}: the page threw: ${errors.slice(0, 2).join(' | ')})`)
     await page.close()
@@ -172,7 +164,6 @@ const judge = (who, key, v, budget, fmt) => {
 const n = (v) => String(Math.round(v))
 const k = (v) => `${(v / 1000).toFixed(0)} K`
 const ms = (v) => `${v.toFixed(2)} ms`
-const hz = (v) => `${v.toFixed(1)} Hz`
 console.log(`render-bench: a watched battle's whole-board frame at 1280×800 (board seed ${SEED}), §4.2.1's drawing rows; a row fails above ${OVER}× its budget`)
 console.log(`  ${'row'.padEnd(15)} ${'classic'.padEnd(19)} ${'Grand'.padEnd(19)} budget`)
 const row = (name, key, budget, fmt) => console.log(`  ${name.padEnd(15)} ${judge('classic', key, C[key], budget, fmt).padEnd(19)} ${judge('Grand', key, G[key], budget, fmt).padEnd(19)} ${fmt(budget)}`)
@@ -186,10 +177,9 @@ row('triangles', 'tris', BUDGET.tris, k)
   console.log(`  ${'render JS'.padEnd(15)} ${ms(C.js).padEnd(19)} ${`${ms(G.js)} (${ratio.toFixed(2)}× classic)`.padEnd(19)} ${BUDGET.js}× classic${bad ? ' FAIL' : ''}`)
 }
 row('label writes', 'writes', BUDGET.writes, n)
-row('minimap redraw', 'minimapMs', BUDGET.minimapMs, ms)
-row('minimap rate', 'minimapHz', BUDGET.minimapHz, hz)
+row('minimap p90', 'minimapMs', BUDGET.minimapMs, ms)
 for (const [who, r] of [['classic', C], ['Grand', G]]) {
-  console.log(`  ${who}: ${r.units} units, the camera ${r.d.toFixed(0)}" out (${r.ppi.toFixed(1)} px per inch, ${r.tier}); ${r.lo} of ${r.figs} figures drawn by their stand-ins; ${r.tiled ? `${r.tiled} chunks in ${r.tiles} tiles (${r.tileMeshes} meshes)` : 'the terrain untiled'}; the shadows fitted to the view ${r.fits} time(s); the minimap's terrain painted in ${r.paintMs.toFixed(2)} ms, its ${r.minimapN} redraws ${r.minimapMax.toFixed(2)} ms at most`)
+  console.log(`  ${who}: ${r.units} units, the camera ${r.d.toFixed(0)}" out (${r.ppi.toFixed(1)} px per inch, ${r.tier}); ${r.lo} of ${r.figs} figures drawn by their stand-ins; ${r.tiled ? `${r.tiled} chunks in ${r.tiles} tiles (${r.tileMeshes} meshes)` : 'the terrain untiled'}; the shadows fitted to the view ${r.fits} time(s); the minimap's terrain painted in ${r.paintMs.toFixed(2)} ms, its ${r.minimapN} redraws ${r.minimapMed.toFixed(2)} ms the median, ${r.minimapMax.toFixed(2)} ms the longest`)
   for (const b of r.tileBad.slice(0, 3)) problems.push(`${who} tiles: ${b}`)
 }
 if (problems.length) {

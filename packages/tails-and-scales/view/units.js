@@ -21,6 +21,10 @@
 //   material, so its place, size and colour stay what the snap check
 //   reads) and hands each unit's place on screen to the chips (`chips`,
 //   ui/chips.js, wired by the app), whose borders carry the rings' state.
+//   ((F8b's review) Keyed on a board larger than classic's, as LOD and the
+//   tiles are: on classic's the tier stays Close and data-tier unset, so
+//   classic's labels are as ever on every screen; a portrait phone's view
+//   of classic's board is 8-11 px per inch, which would read Tactical.)
 // - A label (and the screen place a box selects by) is written only when
 //   its projected place moved half a pixel or more, or it turned visible or
 //   hidden, or picked: a still camera writes none.
@@ -439,10 +443,17 @@ export class UnitViews {
     camera.getWorldDirection(tmpV)
     const d = tmpV.y < -1e-3 ? camera.position.y / -tmpV.y : camera.position.length()
     this.ppi = pxPerInch(innerHeight, d, camera.fov)
-    const tier = tierOf(this.ppi, this.tier)
+    // ((F8b's review) on classic's board, Close whatever the screen: the
+    // tiers are a larger board's, `lod` its key; the label container's
+    // data-tier unset there, so classic's labels draw as they always did)
+    const tier = this.lod ? tierOf(this.ppi, this.tier) : 'close'
+    const key = this.lod ? tier : ''
+    if ((this.labels.dataset.tier ?? '') !== key) {
+      if (key) this.labels.dataset.tier = key
+      else delete this.labels.dataset.tier
+    }
     if (tier === this.tier) return
     this.tier = tier
-    this.labels.dataset.tier = tier
     for (const v of this.views.values()) v.ring.material.visible = tier !== 'strategic'
   }
 
