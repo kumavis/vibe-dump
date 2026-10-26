@@ -45,7 +45,7 @@
       "aircraft": [],
       "goal": { "kind": "sink", "type": "bb", "count": 1, "text": "Sink an American battleship before 10:00." },
       "phases": [
-        { "t": 0, "title": "Kirishima opens fire", "goal": { "kind": "hit", "type": "bb", "count": 2, "withinS": 90, "weapon": "shell" }, "text": "Star shells burst over the American column and Kirishima's lookouts find a battleship: put two shells into her." },
+        { "t": 0, "title": "Kirishima opens fire", "goal": { "kind": "hit", "type": "bb", "count": 2, "withinS": 90, "weapon": "shell" }, "text": "Kirishima's lookouts find a battleship lying dark in the night: put two shells into her." },
         { "t": 100, "title": "Torpedoes from the screen", "goal": { "kind": "hit", "type": "dd", "count": 1, "withinS": 110, "weapon": "torpedo" }, "text": "Nagara's destroyers fire spreads at the American destroyers: put a torpedo into one." },
         { "t": 220, "title": "Searchlights", "goal": { "kind": "hit", "type": "bb", "count": 3, "withinS": 100, "weapon": "shell" }, "text": "Atago switches on her searchlights and holds a battleship in them: put three shells into her." },
         { "t": 330, "title": "Atago's torpedoes", "goal": { "kind": "hit", "type": "bb", "count": 1, "withinS": 120, "weapon": "torpedo" }, "text": "Atago and Takao fire spreads of Type 93 torpedoes: put one into a battleship." },
