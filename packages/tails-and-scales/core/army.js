@@ -33,7 +33,15 @@
 //   armyOf(setup, seat)       → { preset: name | null, counts: [per roster
 //                             entry], keys: [unit key…] }; throws why not
 //   checkList(race, rules, counts)   → null | why: the first rule broken
-//   listCost(race, counts)    Σ counts[i] × the roster entry's cost
+//   priceOf(race, key, rules) what one unit costs under the list rules:
+//                             (F8b) the mission's own price where its list
+//                             names one (`rules.prices`), else the unit's cost
+//   listCost(race, counts, rules)   Σ counts[i] × the roster entry's price
+//                             (rules left out: its cost, the classic battle's)
+//   unitPrice(setup, u)       (F8b) what unit u (a match's: its race and key)
+//                             costs in the battle `setup` is fought (its
+//                             mission's list's prices): the card's, the
+//                             roster's and the group card's price
 //   listText(counts)          the canonical digits (trailing zeros dropped)
 //   keysOf(race, list)        unit keys in roster order, for the UI and the
 //                             desync report
@@ -91,7 +99,7 @@ export function checkList(race, rules, counts) {
   if (odd) return odd
   const S = sizeOf(rules)
   const n = (i) => counts[i] ?? 0
-  const cost = listCost(race, counts)
+  const cost = listCost(race, counts, rules)
   if (cost > rules.points) return `${cost} points, over the ${S} limit of ${rules.points}`
   let unitsIn = 0, models = 0
   const role = Object.create(null)
@@ -115,8 +123,29 @@ export function checkList(race, rules, counts) {
   return null
 }
 
-// What a list costs: each roster entry's count times the unit's cost.
-export const listCost = (race, counts) => race.roster.reduce((sum, k, i) => sum + (counts[i] ?? 0) * race.units[k].cost, 0)
+// (F8b, DESIGN §4.2.8.2's fallback) What unit `key` of `race` costs to
+// field under the list rules `rules` (a mission's `list`): the price the
+// mission's list sets for it (`prices: { <race>: { <unit>: cost } }`, its
+// own table for the units whose worth one table can't hold at every size;
+// data/mission.js checks it), else the unit's `cost`. Own fields only (the
+// tables are frozen data, but a race or unit named like an Object.prototype
+// member must find nothing), and whole numbers either way.
+export function priceOf(race, key, rules) {
+  const own = rules?.prices && Object.hasOwn(rules.prices, race.key) ? rules.prices[race.key] : null
+  return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost
+}
+
+// What a list costs under the list rules `rules`: each roster entry's count
+// times the unit's price there (priceOf; `rules` left out, each unit's
+// cost).
+export const listCost = (race, counts, rules) => race.roster.reduce((sum, k, i) => sum + (counts[i] ?? 0) * priceOf(race, k, rules), 0)
+
+// (F8b) What unit `u` of a match (its race's key and its unit key) costs in
+// the battle fought on `setup` (a match's G.setup: its mission, classic when
+// it names none): its mission's price for it (priceOf), the price the
+// view shows on the card, the roster and the group card, so a Field or
+// Grand battle shows its own prices, never the Skirmish's.
+export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, MISSIONS[setup?.mission ?? 'classic']?.list)
 
 // A list's one spelling: a digit per count, trailing zeros dropped (so a
 // list of no units is '', which LIST refuses).
@@ -196,16 +225,18 @@ export function autoList(race, rules, seed, { troops = 1.5 } = {}) {
   const roleOf = (i) => race.units[race.roster[i]].role
   const ofRole = (r) => race.roster.reduce((n, k, i) => n + (roleOf(i) === r ? counts[i] : 0), 0)
   let cost = 0, unitsIn = 0, models = 0
+  // (each unit at its price under these rules, priceOf)
+  const price = race.roster.map((k) => priceOf(race, k, rules))
   const take = (i) => {
     const t = race.units[race.roster[i]]
     counts[i]++
-    cost += t.cost
+    cost += price[i]
     unitsIn++
     models += t.models
   }
   const fits = (i) => {
     const t = race.units[race.roster[i]]
-    return cost + t.cost <= rules.points && unitsIn < rules.units && models + t.models <= rules.models &&
+    return cost + price[i] <= rules.points && unitsIn < rules.units && models + t.models <= rules.models &&
       ofRole(t.role) < rules.roles[t.role][1] && counts[i] < rules.perKind
   }
   const all = race.roster.map((k, i) => i)

@@ -72,14 +72,17 @@ the commit, and add whatever the work turned up.
   and opened again, held to what a page kept), and from S0-S3
   `node sim/scale-check.mjs` (and `--self-test`: P-scan, P-los and
   P-memo, the core's scans held to the scans as they were, on classic and
-  the Grand fixture) and `node sim/scale-bench.mjs` (the core's cost on
+  Grand: the Grand fixture until F8b, the `grand` mission since) and
+  `node sim/scale-bench.mjs` (the core's cost on
   classic and Grand, a report failing above 1.5× budget: run it on a quiet
   machine), and from F10a `node sim/macro-check.mjs` (and `--self-test`:
   P-macro, one-shot group actions over a Session send only what the match
   takes, and land where their preview drew them), and from V1
   `node sim/playback-check.mjs` (and `--self-test`: the batch rule over
-  every corpus and Grand fixture stream, a Grand AI movement phase within
-  8 s; `--browser` with Chromium), and from F10b
+  every corpus and Grand stream, a Grand AI movement phase within
+  8 s; since F8b the attack batches and brief banners too, a Grand AI
+  battle within 200 s as watched, and the `scale/` streams; `--browser`
+  with Chromium), and from F10b
   `node sim/pilot-check.mjs` (and `--self-test`: P-auto, a pilot of every
   standing unit and End play the battle Auto plays, phase by phase), and
   from F10c `node sim/macro-check.mjs` covers the standing orders too (the
@@ -103,7 +106,16 @@ the commit, and add whatever the work turned up.
   thresholds: F7a's over the `fort/` AI pairs, its counts read off the
   match by `sim/height-probe.mjs`) passes, and army-sim's Skirmish gates
   hold on `fortified` as on `classic` (its `--check` plays every set the
-  mission offers). A step
+  mission offers), and from
+  F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
+  r 1.18 cross zone to zone, and the squad controls every objective, on
+  every Field and Grand board of seeds 1-500; its `--self-test` plants a
+  wall and a ring), army-sim's gates at all three sizes (Skirmish, Field
+  and Grand, the score and per-unit gates: about 15-20 minutes with
+  `--jobs 2`; a step that moves balance runs it), `node sim/play-report.mjs`
+  (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
+  set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
+  P-peers' `--only scale`). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -138,7 +150,11 @@ the commit, and add whatever the work turned up.
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
-  for each match's board across missions, flat over round trips). A step that changes what one of them reads ports it in the same
+  for each match's board across missions, flat over round trips), and from
+  F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
+  whole-board frame, a report failing above 1.25× budget: build first, run
+  it on a quiet machine; rematch-memory alternates Grand and classic
+  battles now, 50-80 minutes, `--classic` the old run). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -840,9 +856,14 @@ follows N3.
   Grand fixture (the longest 7.3 s, under 8). A Grand battle 558 → 349 s
   stays over its 200 s: the shooting, unbatched, is about half of it.
   `sim/playback-check.mjs`. DESIGN's V1 notes.)
-- [ ] **Later (V1's open budget):** a Grand AI battle plays about 349 s
+- [x] **Later (V1's open budget):** a Grand AI battle plays about 349 s
   against §4.2.1's 200 s; batch a seat's volleys (or pace a watched
   battle's shooting faster) before F8b's Grand boards ship.
+  (Settled by F8b: attack batches, a seat's shots and blows in one tray
+  0.3 s apart, and a 0.25 s banner for an empty phase; a Grand AI battle
+  watched plays 174 s on average, 185 s at most, on the grand mission, and
+  177 / 186 s over the `scale/` pairs. By PACE.cost's flat 0.9 s a banner,
+  which the online backlog's estimate still counts, 205-215 s.)
 - [x] **F10b** Autopilot in the rules: `pilot {m}`, the AI playing the
   units you choose.
   (`CORE_VERSION` 3; the mask's bits the seat's units in `G.units` order;
@@ -868,6 +889,11 @@ follows N3.
   §4.2.6's richer cues (a race voice and a ring pulse as an order is given,
   floating text and a minimap ping as one finishes, a dashed turning ring
   for autopilot).
+  (F8b settled the first three: `previewSteps` and the GhostPlanner, March
+  by a right-click or long press on the minimap, and the F10b row, 4 of 4
+  over the `scale/` Grand pairs (three first fights in round 3, one in 2).
+  Open: §4.2.6's richer cues; the ghost planner's first plan on a fresh
+  page, 20-31 ms in one frame.)
 - [x] **F8a** Missions choose the board: `setup.mission`, the setup
   whitelist, `G.board`, the table rebuilt per match. Only the classic
   mission yet.
@@ -877,8 +903,10 @@ follows N3.
   the lobby's `mission`. P-mission in P-prop, P-board
   (`sim/board-check.mjs`), camera-check's mission boards, data-check; the
   Grand fixture on `MISSIONS.classic`. DESIGN's F8a notes.)
-- [ ] **Later (F8a's, with F8b):** the mat's tiled detail texture and shadows
+- [x] **Later (F8a's, with F8b):** the mat's tiled detail texture and shadows
   fitted to the view (a larger board's are coarser until then).
+  (Built in F8b: a detail tile per 4", and the shadow camera fitted to the
+  view's ground once the camera rests, on a board larger than classic's.)
 - [x] **F11a** Army lists in the setup: each seat names a preset or a list of
   unit counts, checked against the mission's points limit and slot table;
   prices (`cost`) tuned by `sim/army-sim.mjs`; AI seats play presets (or a
@@ -951,10 +979,40 @@ follows N3.
   line-of-sight body is solid from the ground, as the piece table says: a
   thin timber body, or the view closing the gap, goes with the posts made
   breakable.)
-- [ ] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
+- [x] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
   battles: their presets and list limits, prices retuned on the real
   boards, the `open` set, a minimap (March from it), semantic zoom, terrain
   tiles and LOD.
+  (6507f10; `CORE_VERSION` 7, F7a's 6 beside it; the classic corpus
+  byte-identical. `field` and `grand` with their lists and every race's
+  ×2 and ×3 presets; `open`, classic's pieces scaled with the area, a rock
+  box at the centre (the tower ring walls the objective off from every
+  squad); the fight guard `max(30, 2·units + 2)`. One price table couldn't
+  hold all three sizes, so each larger mission's list carries its own
+  `prices` (§4.2.8.2's fallback); army-sim's gates pass at all three:
+  Skirmish 52.4%, Field 47.2% (on its one re-run), Grand 45.4%. Terrain
+  tiles, shadows fitted to the view, the mat's detail, figure LOD, chips,
+  the minimap and the roster: a Grand whole-board frame 1,562 → 351 main
+  draw calls. The camera behind your half at 45-46", batch framing, the
+  bookmark; the size on the setup panel and in the lobby. The Grand
+  fixture retired; connectivity 1,000 of 1,000 boards; render-bench;
+  play-report's F10b row 4 of 4. scale-bench's Grand battle sits at
+  1.0-1.2× its 350 ms on `open` already: the AI count budget's trigger,
+  for F9b. The `scale/` corpus, 4 Field and 4 Grand AI pairs and 2
+  human-bot logs on `open`, in 2223665, the corpus 56 battles. **For F7a's merge:** both missions' sets become
+  `['open', 'fortified']` (the refusal then reads "fought on open or
+  fortified"), and half the `scale/` AI pairs (2 Field, 2 Grand) are
+  re-recorded on `fortified`, with army-sim's Field and Grand gates and the
+  connectivity rows run there too. Left: the gates below, in an item of
+  their own. DESIGN's F8b notes.)
+- [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
+  what it built and checked; these gates of its row in DESIGN §4 (the
+  migration table) are not done, and stay open here until they are
+  (F8b's review): army/'s Field and Grand pairs (army/ lives on main with
+  F11a's corpus: recorded at the merge, in a commit of their own);
+  pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
+  minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
+  merge).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.

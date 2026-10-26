@@ -29,7 +29,8 @@
 // (F11a, DESIGN §4.2.9) Two fields have one reader each in the consensus
 // code (core/ and data/; OWNED below), whatever the route (`.x`, `['x']`,
 // destructured):
-//   cost, roster, armies, a mission's `list` and an `army` (a race's
+//   cost, roster, armies, a mission's `list` (and, F8b, a list's own
+//   `prices`) and an `army` (a race's
 //   classic list, a seat's or a mission's preset)   core/army.js alone: the
 //                                         army builder's data decides which
 //                                         units newState makes and nothing
@@ -123,7 +124,7 @@ export const BANNED = [
 // by name (`['cost']`) or destructured (`{ cost } = t`).
 const reads = (names) => new RegExp(String.raw`\.\s*(${names})\b|\[\s*['"\x60](${names})['"\x60]\s*\]|\{(?:[^{}]*,)?\s*(${names})\s*(?:[,:][^{}]*|=(?!=)[^{}]*)?\}\s*=(?!=)`)
 export const OWNED = [
-  [reads('cost|roster|armies|list|army'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list, an army) read outside core/army.js"],
+  [reads('cost|roster|armies|list|army|prices'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list or its prices, an army) read outside core/army.js"],
   [reads('pts'), ['core/ai/score.js'], "the AI's appraisal (pts) read outside core/ai/score.js"],
 ]
 // the patterns that apply to file `f`
@@ -164,6 +165,7 @@ export const ALLOW = [
   ['data/schema.js', 'def.armies', 1, "reads the race file's presets, to validate them"],
   ['data/mission.js', 'm.army', 1, "checkMission: the mission names its preset"],
   ['data/mission.js', 'checkListRules(m.list, bad)', 1, "checkMission hands the mission's list rules to their check"],
+  ['data/mission.js', 'const prices = l.prices', 1, "(F8b) checkListRules reads a mission's own prices (DESIGN §4.2.8.2's fallback) to check them"],
   ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
   ['core/version.js', '(m.list ? { ...m, list: listRules(m.list) } : m)', 1, "rulesData hashes a mission's list rules without the size's name (presentation)"],
   ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
@@ -178,6 +180,11 @@ export const ALLOW = [
   ['core/queries.js', 'g.cost', 2, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
   ['core/queries.js', 'k2.cost', 1, "levelDist: a gate's climbing cost (the nav's link cost, F7a), not a unit's price"],
   ['core/queries.js', 'gates[k].cost', 1, "gateGraph: a gate's climbing cost, Floyd's first step (the nav's link cost, F7a), not a unit's price"],
+  // (F8b) a mission's own prices (DESIGN §4.2.8.2's fallback, `list.prices`),
+  // a table by race and unit key read by the army builder alone: what a list
+  // costs in that battle, never a rule of it (no draw, nothing in the match)
+  ['core/army.js', 'const own = rules?.prices && Object.hasOwn(rules.prices, race.key) ? rules.prices[race.key] : null', 1, "priceOf: the mission's prices for the race, by its key (the fallback's table)"],
+  ['core/army.js', 'return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost', 1, "priceOf: the mission's price for the unit, by its key, else the unit's cost"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
 ]

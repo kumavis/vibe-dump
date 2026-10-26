@@ -286,13 +286,17 @@ export class Flow {
       // the flow: a stage of the battle, a phase begun, a round scored, the
       // end
       stage: (e) => this.staged(e),
-      'phase.start': (e) => this.phaseBegun(e),
+      'phase.start': (e, M, how) => this.phaseBegun(e, how),
       'round.scored': (e) => this.scored(e),
       'game.over': (e) => this.over(e),
       // (?debug) a checkpoint for sim/present-check.mjs (and, should the
       // ?debug block's view.pauseAtChecks ask, a pause there for
       // sim/snap-check.mjs)
       check: (e) => this.checkHook?.(e),
+      // (F8b) a batch opens (view/player.js's frame): the camera frames
+      // where its members stand and go, as the follow policy says, the
+      // stage and the seat to act as the table shows them
+      frame: (e, M) => view.rig.frame(e.points, { stage: M.stage, active: M.active, localSeats: this.session?.localSeats ?? [] }),
     }
     this.player = new EventPlayer({ handlers, view, onIdle: (how) => this.idled(how), sideOf: (u) => this.unitById(u)?.side })
     return this.player
@@ -336,16 +340,24 @@ export class Flow {
   }
 
   // A phase begins: its banner, which the table waits on (longer when the
-  // seat shown is played here, or outside the battle). A seat's first phase
-  // begins its turn: its units have done nothing yet (the card's record).
-  phaseBegun(e) {
+  // seat shown is played here, or outside the battle; (F8b) PACE.brief when
+  // the player has it queued to its end with nothing in it, `how.brief`). A
+  // seat's first phase begins its turn: its units have done nothing yet
+  // (the card's record). (F8b) A phase of a seat played here takes the
+  // camera back to where that seat pressed End (the bookmark), and a turn
+  // begun with more than 10 units gives the selection's one-time tip.
+  phaseBegun(e, how) {
     this.facts = turnBegun(this.facts, e)
     this.hud.phaseShown = true
     this.human.select(null)
     this.ui.tray.hide()
     this.refreshUI()
     const M = this.player.mirror
-    return this.ui.banner.show(`${this.sides[e.side].icon} ${this.sides[e.side].name}`, PHASE_NAME[e.phase], this.ink(e.side), PACE.phaseStart(this.local(M.active), M.stage))
+    if (this.local(e.side)) {
+      this.view.rig.resume(e.side)
+      if (e.phase === 'move' && this.atTable().units.filter((u) => u.side === e.side && M.units[u.id]?.alive > 0).length > 10) this.ui.toast?.tip?.('select')
+    }
+    return this.ui.banner.show(`${this.sides[e.side].icon} ${this.sides[e.side].name}`, PHASE_NAME[e.phase], this.ink(e.side), how?.brief ? PACE.brief : PACE.phaseStart(this.local(M.active), M.stage))
   }
 
   // A round scored: a ring in the holder's colours on each objective held,
@@ -543,20 +555,30 @@ export class Flow {
   // A battle: the whole setup (the board on the title screen, a fresh dice
   // stream, who plays each seat, each human seat played from this device,
   // (F6) the races the battle-setup panel chose, else the table's, (F11a)
-  // each seat's army only where ?armies= named one), a LocalStore whose
+  // each seat's army only where ?armies= named one, (F8b) the mission (the
+  // battle size) the panel chose, else the table's), a LocalStore whose
   // first entry starts it, and a Session over it for the seats played
   // here. The match runs on at once: to each human seat's deployment, or
   // (watch) to its end, and the table plays it from there.
   // (F7a) Fought on `terrain`, the battle-setup panel's choice of the
-  // mission's sets (else the table's), which is the table's from then on.
-  start(mode, races = this.races, terrain = this.terrainOf()) {
+  // mission's sets (else the table's), which is the table's from then on;
+  // (F8b) of the mission `size`, the panel's battle size.
+  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size)) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
     if (!Object.hasOwn(MODES, mode)) throw new Error(`no mode "${mode}" (there are ${Object.keys(MODES).join(', ')})`)
     if (races.length !== 2 || !races.every((r) => Object.hasOwn(RACES, r))) throw new Error(`a battle takes two races of ${Object.keys(RACES).join(', ')}, not ${races.join(', ')}`)
-    if (!MISSIONS[this.mission].sets.includes(terrain)) throw new Error(`the ${this.mission} mission is fought on ${MISSIONS[this.mission].sets.join(' or ')}, not ${JSON.stringify(terrain)}`)
+    if (!Object.hasOwn(MISSIONS, size)) throw new Error(`no mission "${size}" (there are ${Object.keys(MISSIONS).join(', ')})`)
+    if (!MISSIONS[size].sets.includes(terrain)) throw new Error(`the ${size} mission is fought on ${MISSIONS[size].sets.join(' or ')}, not ${JSON.stringify(terrain)}`)
     const who = MODES[mode]
+    // (F8b) the battle size the panel chose is the flow's from now on (its
+    // next default); armies ?armies= named for another mission's limits
+    // let go, each seat its new mission's preset
+    if (size !== this.mission) {
+      this.armies = null
+      this.mission = size
+    }
     // (F11a) A list's digits mean other units in another race's roster, so
     // a seat whose race the panel changed from the one ?armies= was judged
     // for (the table's races, ?races') lets its army go: it plays its

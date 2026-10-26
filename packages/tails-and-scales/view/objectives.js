@@ -23,11 +23,23 @@ export class ObjectivesView {
   // the table and freed (the stone's and pole's materials are the kit's,
   // shared, and stay), the new ones nobody's. view/index.js's setBoard calls
   // it only when a match's objectives differ from those shown.
+  // ((F8b) One old marker's materials are kept back, unfreed, until the
+  // next place(): three.js frees a shader program with the last material
+  // using it, and the gem's glow is the only material of its kind, so each
+  // round trip between two missions' boards linked it anew (a stall at
+  // every table made over; sim/rematch-memory.mjs across missions). The
+  // new markers' materials take the program over before the kept ones go.
+  // Sharing one gem material instead would make fewer objects as the
+  // title loads, and so move its Math.random draws.)
   place(places) {
+    for (const m of this.kept ?? []) m.dispose()
+    this.kept = null
     for (const o of this.items) {
       this.scene.remove(o.g)
       o.g.traverse((m) => m.geometry?.dispose())
-      for (const m of [o.gem.material, o.flagMat, o.ring.material]) m.dispose()
+      const mats = [o.gem.material, o.flagMat, o.ring.material]
+      if (!this.kept) this.kept = mats
+      else for (const m of mats) m.dispose()
     }
     this.items = this.make(places)
   }

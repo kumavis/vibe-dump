@@ -139,6 +139,17 @@ if (args['self-test']) {
     const first = r.stdout.split('\n').find((l) => l.startsWith('  seed')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
     console.log(`  ${caught ? 'caught' : 'MISSED'} ${name.padEnd(17)} ${first.trim().slice(0, 150)}`)
   }
+  // (F8b) the connectivity rows' controls: a wall of cells across the
+  // centre line, and a ring round one objective, each planted in the grid
+  // of every Field and Grand board, must fail a connectivity row (and the
+  // classic part, untouched, still pass)
+  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no ground within/]]) {
+    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '1-3', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
+    const caught = r.status === 1 && /MISMATCH: connectivity/.test(r.stdout) && want.test(r.stdout)
+    if (!caught) missed++
+    const first = r.stdout.split('\n').find((l) => l.startsWith('  connectivity')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
+    console.log(`  ${caught ? 'caught' : 'MISSED'} ${`connect-${control}`.padEnd(17)} ${first.trim().slice(0, 150)}`)
+  }
   console.log(missed ? `\nterrain-check self-test FAILED: ${missed} mutation(s) passed` : '\nterrain-check self-test passed: every mutation fails the check')
   process.exit(missed ? 1 : 0)
 }
@@ -1063,3 +1074,251 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
   console.log(`terrain-check: VACUOUS: P-climb met ${climb.decks} decks, ${climb.ladders} ladders and ${climb.stairs} stairs`)
   process.exit(2)
 }
+
+// ── Connectivity (F8b, DESIGN §4.2.3 and §4.2.9) ────────────────────────────
+// Lanes are checked, not assumed: a footprint circle over-states some pieces
+// and under-states none, so the scatter's `gap` alone neither proves nor
+// rules out a lane. On every set a Field or Grand mission offers, on the
+// same seeds (1-500 by default), each board built as newState builds it
+// (core/terrain/terrain.js's generate on the mission's board, objectives and
+// depth, then a NavGrid rebuilt from the chunks, as refreshNav does) and,
+// from the standable ground cell nearest the middle of each seat's zone
+// (|x| > W/2 − deploy), the rules' own reach (core/nav.js, mode 'walk',
+// unbounded):
+//  - a round hull disc (r HULL_R, 1.5", ground only) reaches a standable
+//    cell in the other seat's zone;
+//  - so does an r SQUAD_R (1.18", the largest squad's) disc, and it controls
+//    every objective: it reaches a standable cell within OBJECTIVE_RANGE + r
+//    of it (core/queries.js counts a model within OBJECTIVE_RANGE plus its
+//    base; a disc of r holds its models).
+// Every row must pass on every board: a failure names the mission, the set,
+// the seed, the seat, the disc and the zone or objective it couldn't reach.
+// The classic mission's boards are measured too and only reported (their
+// lanes are the Skirmish's, frozen with its draws). It prints each board
+// size's chunk counts (§4.2.3 expects 250-300 at Grand). Its controls
+// (--self-test, below) plant a wall of cells across the centre line, and a
+// ring of them round one objective, into the grid: each must fail a row.
+// (F9b, F5b add a row per footprint: the hull on its lattice.)
+// (NavGrid: imported for P-climb, above)
+const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
+const HULL_R = 1.5, SQUAD_R = 1.18
+const CONTROL = process.env.CONNECT_MUTATE ?? null
+const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
+const connShown = []
+const tn0 = Date.now()
+// one board's rows: null when every row holds, else what failed
+function connectBoard(name, m, set, seed) {
+  const { W: BW, H: BH } = m.board
+  const T = new Terrain(BW, BH)
+  T.generate(seed, m.objectives, m.deploy, set, null)
+  const nav = new NavGrid(BW, BH, 0.5)
+  nav.rebuild(T.chunks)
+  // (the controls: cells made unstandable in the grid, as a wall of scenery
+  // would; never in a run that judges)
+  const block = (pred) => {
+    for (let i = 0; i < nav.N; i++) if (pred(nav.x(i), nav.z(i))) nav.clearAll[i] = nav.clearHard[i] = 0
+  }
+  if (CONTROL === 'wall') block((x) => Math.abs(x) < 1)
+  if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
+  const edge = BW / 2 - m.deploy
+  const why = []
+  for (const seat of [0, 1]) {
+    const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
+    for (const r of [HULL_R, SQUAD_R]) {
+      let start = -1, bd = Infinity
+      for (let i = 0; i < nav.N; i++) {
+        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk')) continue
+        const d = hypot(nav.x(i) - mid, nav.z(i))
+        if (d < bd) [bd, start] = [d, i]
+      }
+      if (start < 0) {
+        why.push(`seat ${seat}'s zone has no cell an r ${r} disc stands on`)
+        continue
+      }
+      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk' })
+      conn.reaches++
+      let crossed = false
+      for (let i = 0; i < nav.N && !crossed; i++) crossed = -sgn * nav.x(i) > edge && isFinite(res.dist[i])
+      if (!crossed) why.push(`an r ${r} disc from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) reaches no cell of seat ${1 - seat}'s`)
+      if (r !== SQUAD_R) continue
+      for (const o of m.objectives) {
+        let held = false
+        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})`)
+      }
+    }
+  }
+  return { why, chunks: T.chunks.length }
+}
+for (const [name, m] of Object.entries(MISSIONS)) {
+  for (const set of m.sets) {
+    const key = `${name} on ${set}`
+    const counts = []
+    for (let seed = lo; seed <= hi; seed++) {
+      let r
+      try {
+        r = connectBoard(name, m, set, seed)
+      } catch (e) {
+        r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], chunks: 0 }
+      }
+      counts.push(r.chunks)
+      if (name === 'classic') {
+        // (reported, never judged: the Skirmish's lanes are its frozen draws')
+        const c = conn.classic
+        c.boards++
+        if (!r.why.some((w) => w.includes(`r ${HULL_R} disc`))) c.hull++
+        if (!r.why.some((w) => w.includes(`r ${SQUAD_R} disc`))) c.squad++
+        if (!r.why.some((w) => w.includes('objective'))) c.objectives++
+        continue
+      }
+      conn.boards++
+      if (r.why.length) {
+        conn.failed++
+        if (connShown.length < MAX) connShown.push(`connectivity ${key}, seed ${seed}: ${r.why.join('; ')}`)
+      }
+    }
+    counts.sort((a, b) => a - b)
+    conn.chunks[key] = `${counts[0]}-${counts[counts.length - 1]} (median ${counts[counts.length >> 1]}, mean ${(counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(0)})`
+  }
+}
+console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}")${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
+for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
+const C = conn.classic
+console.log(`  (reported, not judged) classic: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
+if (conn.failed) {
+  console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s):`)
+  for (const s of connShown) console.log(`  ${s}`)
+  process.exit(1)
+}
+if (!conn.boards) {
+  console.log('terrain-check: VACUOUS: no Field or Grand board checked for connectivity (no mission offers them?)')
+  process.exit(2)
+}
+console.log(`every Field and Grand board connected: ${conn.boards} of ${conn.boards}`)
+
+// ── Tiles (F8b, DESIGN §4.2.7's "Drawing at scale" 1) ──────────────────────
+// The view's half of the larger boards. On a board larger than classic's
+// the standing chunks are drawn by 8" tiles (view/terrain.js's tiling():
+// one merged mesh per tile and material class, each chunk's own mesh kept
+// but hidden). On every set a Field or Grand mission offers, on the first
+// TILE_SEEDS seeds of the run, a board is generated as newState generates
+// it and played, event by event and folded into a mirror, into a tiled
+// TerrainView and an untiled one, which must agree:
+//  - every tiled chunk's drawn shape and colour, vertex for vertex in world
+//    space, is its own mesh's (tileCheck: none drawn by a tile it has left,
+//    none hidden and untiled, none standing untouched and untiled);
+//  - every chunk's state (shown or not, where its object stands) is the
+//    untiled table's;
+// on the fresh table, mid-destruction (blasts played, their tweens not yet
+// stepped: each chunk they touched promoted out of its tile, the tiles
+// merged again without it) and after it (every animation ended: back in
+// their tiles); then on a tiled table synced from the chunks as they stand
+// (the snap's), and on the event-built one with tiling turned off (back to
+// classic: every chunk its own mesh again, no tile left). It prints the
+// tiles and their draw calls per board (§4.2.7 expects about 70 tiles and
+// 150 calls at Grand).
+const TILE_SEEDS = Number(process.env.TILE_SEEDS ?? 12)
+const tiles = { boards: 0, failed: 0, checks: 0, promoted: 0, rows: {} }
+const tileShown = []
+const tt0 = Date.now()
+const tmine = { ...(await imp(PKG, 'view/clock.js')) }
+// where two tables' chunks differ (shown, place, turn)
+function sameStates(T, a, b) {
+  const out = []
+  for (const c of T.chunks) {
+    const x = a.state(c.id), y = b.state(c.id)
+    if (x.shown !== y.shown) out.push(`chunk ${c.id} (${c.kind}) shown ${x.shown} tiled, ${y.shown} untiled`)
+    else if (x.shown && ['x', 'y', 'z'].some((k) => Math.abs(x[k] - y[k]) > 1e-9)) out.push(`chunk ${c.id} (${c.kind}) at (${x.x}, ${x.y}, ${x.z}) tiled, (${y.x}, ${y.y}, ${y.z}) untiled`)
+  }
+  return out
+}
+async function tileBoard(name, m, set, seed) {
+  const { W: BW, H: BH } = m.board
+  const T = new Terrain(BW, BH)
+  const out = []
+  const mirror = blankMirror()
+  const tiled = new TerrainView(new THREE.Scene(), recorder().proxy)
+  tiled.tiling(true)
+  const plain = new TerrainView(new THREE.Scene(), recorder().proxy)
+  const play = () => {
+    for (const e of out.splice(0)) {
+      const M = applyEvent(mirror, e)
+      tiled.apply(e, M)
+      plain.apply(e, M)
+    }
+  }
+  const why = []
+  const check = (when, view = tiled, ref = plain) => {
+    const r = view.tileCheck()
+    tiles.checks++
+    for (const b of r.bad) why.push(`${when}: ${b}`)
+    for (const d of sameStates(T, view, ref)) why.push(`${when}: ${d}`)
+    return r
+  }
+  Math.random = mulberry(seed ^ 0x711e)
+  T.generate(seed, m.objectives, m.deploy, set, out)
+  play()
+  await Promise.resolve()
+  const fresh = check('fresh')
+  // blasts on the destructible chunks, checked as they play and once settled
+  const plan = mulberry(seed ^ 0xb1a57)
+  const targets = T.chunks.filter((c) => c.destructible)
+  for (let k = 0; k < 4 && targets.length; k++) {
+    const t = targets[Math.floor(plan() * targets.length)].shape
+    T.blast(t.x + (plan() - 0.5) * 2, t.z + (plan() - 0.5) * 2, [1.6, 2.4, 3][Math.floor(plan() * 3)], 1 + Math.floor(plan() * 4), { acid: plan() < 0.3 }, out)
+    play()
+    tiles.promoted += [...tiled.items.values()].filter((it) => it.anims > 0).length
+    check(`blast ${k + 1}, playing`)
+  }
+  await settle(tmine)
+  check('blasts settled')
+  // a snap's table, tiled, synced from the chunks as they stand
+  const synced = new TerrainView(new THREE.Scene(), recorder().proxy)
+  synced.tiling(true)
+  synced.sync(T.chunks)
+  check('synced', synced, plain)
+  // back to an untiled table: every chunk its own mesh again
+  tiled.tiling(false)
+  const off = tiled.tileCheck()
+  if (off.tiles || off.meshes || off.tiled) why.push(`tiling off: ${off.tiles} tiles and ${off.meshes} meshes left`)
+  for (const b of off.bad) why.push(`tiling off: ${b}`)
+  for (const d of sameStates(T, tiled, plain)) why.push(`tiling off: ${d}`)
+  for (const v of [tiled, plain, synced]) v.dispose()
+  return { why, chunks: T.chunks.length, tiles: fresh.tiles, meshes: fresh.meshes }
+}
+for (const [name, m] of Object.entries(MISSIONS)) {
+  if (m.board.W * m.board.H <= W * H) continue
+  for (const set of m.sets) {
+    const key = `${name} on ${set}`, row = (tiles.rows[key] = { tiles: [], meshes: [], chunks: [] })
+    for (let seed = lo; seed <= Math.min(hi, lo + TILE_SEEDS - 1); seed++) {
+      let r
+      try {
+        r = await tileBoard(name, m, set, seed)
+      } catch (e) {
+        r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], tiles: 0, meshes: 0, chunks: 0 }
+      }
+      tiles.boards++
+      row.tiles.push(r.tiles)
+      row.meshes.push(r.meshes)
+      row.chunks.push(r.chunks)
+      if (r.why.length) {
+        tiles.failed++
+        if (tileShown.length < MAX) tileShown.push(`tiles ${key}, seed ${seed}: ${r.why.slice(0, 3).join('; ')}${r.why.length > 3 ? ` (and ${r.why.length - 3} more)` : ''}`)
+      }
+    }
+  }
+}
+Math.random = realRandom
+const span = (a) => `${Math.min(...a)}-${Math.max(...a)} (mean ${(a.reduce((x, y) => x + y, 0) / a.length).toFixed(0)})`
+console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, mid-blast, settled, synced and untiled again`)
+for (const [key, r] of Object.entries(tiles.rows)) console.log(`  ${key}: ${span(r.chunks)} chunks in ${span(r.tiles)} tiles, ${span(r.meshes)} draw calls`)
+if (tiles.failed) {
+  console.log(`MISMATCH: tiles failed on ${tiles.failed} of ${tiles.boards} board(s):`)
+  for (const s of tileShown) console.log(`  ${s}`)
+  process.exit(1)
+}
+if (!tiles.boards) {
+  console.log('terrain-check: VACUOUS: no Field or Grand board tiled (no mission larger than classic?)')
+  process.exit(2)
+}
+console.log(`every Field and Grand board's tiles drawn as their chunks: ${tiles.boards} of ${tiles.boards}`)

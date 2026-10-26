@@ -28,6 +28,13 @@ export const BOARD_RECT = boardRect(BOARD)
 // by it, so each preset can still take in the whole of a larger board.
 export const reachOf = (rect = BOARD_RECT) => Math.max(1, Math.hypot(rect.w, rect.h) / Math.hypot(BOARD.W, BOARD.H))
 
+// (F8b) the distances the behind view of a larger board is held to.
+// DESIGN §4.2.7 planned 45-60"; measured in Chromium (a Grand battle's
+// opening at 1280×800), the Bushtails' figures in their zone stand a median
+// 14.3 px tall at 60" and 17.5 px at 48", so the far end is 46" (Field's
+// half fits from 45.5" on a 16:9 screen)
+const HALF = Object.freeze([45, 46])
+
 export const PRESETS = Object.freeze({
   // the title screen: a slow drift around (centre) from behind seat 0's
   // lines (the west edge), across toward seat 1's; `angle` where it starts,
@@ -41,8 +48,14 @@ export const PRESETS = Object.freeze({
   // (F2) one army left, one right: seat 0 (west) on the left. Its max lets
   // a portrait phone take in the whole board (about 104" at 412×915)
   broadside: Object.freeze({ azimuth: 0, elevation: 0.77, max: 105 }),
-  // (F1) from behind the seat played here, its own army in front
-  behind: (edge) => Object.freeze({ azimuth: edge < 0 ? -Math.PI / 2 : Math.PI / 2, elevation: 0.9, max: 80 }),
+  // (F1) from behind the seat played here, its own army in front. (F8b) On
+  // a board larger than classic's (Field, Grand) it fits the seat's own
+  // half, its zone to the centre line, at a distance held to `half` (45-46",
+  // where the army's figures stand 18-22 px tall on a 1280×800 screen: the
+  // half of a Grand board, 61-77" away on a laptop, would leave them 14 px;
+  // held there, it looks from the seat's own edge on, toEdge): the whole
+  // board is the broadside's and the overview's (fitPose)
+  behind: (edge) => Object.freeze({ azimuth: edge < 0 ? -Math.PI / 2 : Math.PI / 2, elevation: 0.9, max: 80, half: HALF }),
   // the whole board from nearly overhead (the view button's last, and the
   // Home key)
   overview: Object.freeze({ azimuth: 0, elevation: 1.45, max: 100 }),
@@ -99,8 +112,55 @@ export const follows = ({ follow, stage, active, localSeats }) => !!follow && st
 // goTo go through it. Each fitted preset's max takes in the whole classic
 // board on every screen down to a 412×915 portrait phone; sim/camera-check
 // says so.)
+// (F8b) A preset with a `half` ([near, far]: behind) on a board larger than
+// classic's fits the half on its own side of the centre line instead (the
+// seat's zone to the centre line, its army in front), no nearer than near
+// and no farther than far; classic's (reach 1) is fitted as ever.
 export function fitPose(preset, aspect, rect = BOARD_RECT) {
   if (preset.pos) return preset
+  if (preset.half && reachOf(rect) > 1) {
+    const edge = Math.sin(preset.azimuth) < 0 ? -1 : 1
+    const half = { cx: rect.cx + (edge * rect.w) / 4, cz: rect.cz, w: rect.w / 2, h: rect.h }
+    const [near, far] = preset.half
+    const pose = fitIn(preset, aspect, half, far, near)
+    const d = Math.hypot(pose.pos[0] - pose.target[0], pose.pos[1], pose.pos[2] - pose.target[2])
+    return d < far - 1e-9 ? pose : toEdge(preset, pose, rect.cx + (edge * rect.w) / 2, far)
+  }
+  return fitIn(preset, aspect, rect, preset.max * reachOf(rect), 1)
+}
+
+// (F8b) A half held at its far distance shows only part of it: the target
+// slides from the half's middle toward the seat's own edge (`ex`, its x)
+// until that edge sits at the foot of the view (the HUD's 12% left below
+// it), so the army in its zone shows whole, and the view runs on from it as
+// far toward the centre line as the distance lets it.
+function toEdge(preset, pose, ex, d) {
+  const tv = Math.tan((pose.fov * Math.PI) / 360)
+  const { azimuth: az, elevation: el } = preset
+  const dir = [Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)]
+  const fwd = dir.map((x) => -x)
+  const up = cross(norm([-fwd[2], 0, fwd[0]]), fwd)
+  const cz = pose.target[2]
+  // where on the screen the edge's middle lands, the target at x = tx (-1:
+  // the foot of the view, 1 its top)
+  const yOf = (tx) => {
+    const v = [ex - tx - dir[0] * d, -dir[1] * d, -dir[2] * d]
+    return dot(v, up) / (dot(v, fwd) * tv)
+  }
+  const foot = -1 / 1.12
+  if (yOf(pose.target[0]) >= foot) return pose
+  let a = pose.target[0], b = ex
+  for (let i = 0; i < 60; i++) {
+    const mid = (a + b) / 2
+    if (yOf(mid) >= foot) b = mid
+    else a = mid
+  }
+  return { pos: [b + dir[0] * d, dir[1] * d, cz + dir[2] * d], target: [b, 0, cz], fov: pose.fov }
+}
+
+// the nearest distance from which the rectangle shows whole, from `min` to
+// `max` (classic's every view: from 1 to the preset's max)
+function fitIn(preset, aspect, rect, max, min) {
   const fov = fovFor(aspect)
   const tv = Math.tan((fov * Math.PI) / 360), th = tv * aspect
   const { azimuth: az, elevation: el } = preset
@@ -118,15 +178,61 @@ export function fitPose(preset, aspect, rect = BOARD_RECT) {
     const depth = dot(v, fwd)
     return depth > 0 && Math.abs(dot(v, right)) * 1.12 <= depth * th && Math.abs(dot(v, up)) * 1.12 <= depth * tv
   })
-  let lo = 1, hi = preset.max * reachOf(rect)
+  let lo = 1, hi = max
   if (fits(lo)) hi = lo
   else if (fits(hi)) for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2
     if (fits(mid)) hi = mid
     else lo = mid
   }
+  if (hi < min) hi = min
   return { pos: [cx + dir[0] * hi, dir[1] * hi, cz + dir[2] * hi], target: [cx, 0, cz], fov }
 }
+
+// ── (F8b) Navigation at scale (DESIGN §4.2.7) ─────────────────────────────
+// The keys' pan speed, in inches a second, for a camera `d` inches from
+// what it looks at: classic's 18 up close, faster as it pulls back (80" of
+// Grand board crossed in about 4 s from the overview, not 5).
+export const panSpeed = (d) => 18 * Math.max(1, d / 50)
+
+// The circle round a batch's members, where they stand and where they go
+// (`points`, [{ x, z }]): the centre of their box, and a radius reaching
+// the farthest and `pad` beyond (a unit's base and a little ground).
+export function circleOf(points, pad = 3) {
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity
+  for (const p of points) {
+    x0 = Math.min(x0, p.x)
+    x1 = Math.max(x1, p.x)
+    z0 = Math.min(z0, p.z)
+    z1 = Math.max(z1, p.z)
+  }
+  const cx = (x0 + x1) / 2, cz = (z0 + z1) / 2
+  let r = 0
+  for (const p of points) r = Math.max(r, Math.hypot(p.x - cx, p.z - cz))
+  return { cx, cz, r: r + pad }
+}
+
+// A pose that frames a circle on the table (`c`: { cx, cz, r }) looking the
+// way the camera looks now (`from`: its pos and target), as near as takes
+// it in whole with room for the HUD (the circle as a ball of its radius,
+// 12% each way, the narrower of the view's two angles) and from `min` to
+// `max` inches away (the dolly's own limits).
+export function framePose(c, from, aspect, { min = 12, max = Infinity } = {}) {
+  const fov = fovFor(aspect)
+  const tv = Math.tan((fov * Math.PI) / 360), th = tv * aspect
+  const half = Math.atan(Math.min(tv, th))
+  const d = Math.min(max, Math.max(min, (c.r * 1.12) / Math.sin(half)))
+  const v = [from.pos[0] - from.target[0], from.pos[1] - from.target[1], from.pos[2] - from.target[2]]
+  const l = Math.hypot(v[0], v[1], v[2]) || 1
+  return { pos: [c.cx + (v[0] / l) * d, (v[1] / l) * d, c.cz + (v[2] / l) * d], target: [c.cx, 0, c.cz], fov }
+}
+
+// Whether the camera frames a batch as it opens (DESIGN §4.2.7's batch
+// framing): with 🎥 on, in battle, when the camera follows that turn
+// (follows: never during the turn of the one seat played here) or the batch
+// is that seat's own orders, played after it pressed End (`ended`: the seat
+// whose End the camera keeps a bookmark for, view/camera.js's).
+export const frames = ({ follow, stage, active, localSeats, ended = -1 }) => !!follow && stage === 'battle' && (follows({ follow, stage, active, localSeats }) || (ended >= 0 && ended === active))
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
 const norm = (a) => {

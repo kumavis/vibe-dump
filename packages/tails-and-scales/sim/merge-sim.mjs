@@ -847,7 +847,7 @@ const BAD_LISTS = [
   ['a hero too many', [null, '2011'], /^start: seat 1's army: 2 Hero units; at most 1 in a Skirmish$/],
   ["'toString' as a preset", [null, 'toString'], /^start: seat 1's army "toString" is neither a preset nor a list of counts$/],
   ["'0112111'", ['0112111', null], /^start: seat 0's list "0112111" counts 7 kinds of unit; the Bushtail Clans muster 6 \(elder oakguard nutkin grenadier glider trebuchet\)$/],
-  ['a preset the race lacks', ['constructor', null], /^start: the Bushtail Clans have no army "constructor" \(there (is|are) classic\)$/],
+  ['a preset the race lacks', ['constructor', null], /^start: the Bushtail Clans have no army "constructor" \(there (is|are) classic(, field, grand)?\)$/],
   ['a number', [112111, '1121'], /^start: seat 0's army is a preset's name or a list of counts, not 112111$/],
   ["both seats' lists illegal: seat 0's reason", ['11', '2011'], /^start: seat 0's army: no Troops unit; a Skirmish army needs at least 1$/],
 ]

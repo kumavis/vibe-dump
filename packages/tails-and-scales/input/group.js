@@ -29,6 +29,7 @@
 // is logged but what they send; the selection is this page's alone.
 import { previewGroup, slotsOf } from '../present/orders.js'
 import { runGroup } from './orders.js'
+import { unitPrice } from '../core/army.js'
 import { sfx } from '../view/sfx.js'
 
 const FLAG_R = 1.2 // a click this near the pinned flag sends the formation
@@ -348,9 +349,10 @@ export class GroupInput {
     const lead = s.lead !== null ? G.units.find((u) => u.id === s.lead) : null
     // (the card says what the group is above its lead's own lines: (F11a)
     // with the points it has standing, each unit's cost × alive / models,
-    // the total rounded: display only, DESIGN §4.2.8.2)
+    // the total rounded: display only, DESIGN §4.2.8.2; (F8b) each at its
+    // battle's own price, core/army.js unitPrice)
     const ms = this.members()
-    const pts = Math.round(ms.reduce((n, u) => n + (u.t.cost * u.alive) / u.t.models, 0))
+    const pts = Math.round(ms.reduce((n, u) => n + (unitPrice(G.setup, u) * u.alive) / u.t.models, 0))
     this.human.card.group = ms.length >= 2 ? `${ms.length} selected · ${ms.reduce((n, u) => n + u.alive, 0)} models · ${pts} pts standing · the lead:` : ''
     this.human.card.groupLead = lead?.id ?? null
     if (s.group.length >= 2) {
@@ -537,6 +539,13 @@ export class GroupInput {
     if (seat >= 0) this.selection.of(seat).pin = null
     this.view.overlay.formation(null)
     this.hoverPreview = null
+    // ((F8b's review) and a plan of the ghosts still coming lets go, or its
+    // next frames draw them again over the table the group has left; its
+    // "Planning 3 of 21…" goes with it)
+    if (this.ghosts?.run) {
+      this.ghosts.cancel()
+      this.tooltip?.hide()
+    }
   }
 
   // Send the pinned formation (`running`: the run's promise, for ?debug).
@@ -590,7 +599,12 @@ export class GroupInput {
   // where a click would pin it (none once pinned: the pin stays drawn).
   hover({ unit, ground }) {
     const seat = this.seat()
-    if (!this.isGroup() || this.selection.of(seat).pin || this.busy) return null
+    // ((F8b's review) every way out of the hover lets a plan still coming
+    // go: no group, a pin, a send, nowhere to plan for, a shot or charge)
+    if (!this.isGroup() || this.selection.of(seat).pin || this.busy) {
+      this.ghosts?.cancel()
+      return null
+    }
     const verb = this.phase()
     let target = null, v = verb
     if ((verb === 'place' || verb === 'move') && ground && !unit) target = { x: ground.x, z: ground.z }
@@ -598,12 +612,18 @@ export class GroupInput {
       target = unit
       v = 'approach'
     } else if ((verb === 'shoot' || verb === 'charge') && unit && unit.side !== seat) {
+      this.ghosts?.cancel()
       return this.preview(verb === 'shoot' ? 'fire' : 'charge', unit).summary
     }
     if (!target) {
+      this.ghosts?.cancel()
       this.view.overlay.formation(null)
       return null
     }
+    // ((F8b) on a board larger than classic's, or for a group of more than
+    // 10, the ghosts are planned a few members a frame: input/standing.js's
+    // GhostPlanner, app/boot.js's `ghosts`)
+    if (this.ghosts?.wanted(this.G, this.members().length)) return this.ghosts.hover(this, v, target)
     const p = this.preview(v, target)
     this.draw(p, target, false)
     return p.summary

@@ -11,6 +11,29 @@
 // same unit of another match on the same table (the title's backdrop and
 // the battle started on it, §2.9).
 //
+// (F8b, DESIGN §4.2.7's "Drawing at scale" 3 and 4) Drawing at scale:
+// - Semantic zoom. Each frame (never under ?fast) the tier is chosen from
+//   pixels per inch where the camera looks (present/zoom.js): Close shows
+//   the labels and rings as ever; Tactical the short labels (the role's
+//   glyph, the count, the order badge: the labels' container carries the
+//   tier, data-tier, and the style does the rest, so a label's HTML stays
+//   the match's); Strategic hides the labels and the rings (each ring's
+//   material, so its place, size and colour stay what the snap check
+//   reads) and hands each unit's place on screen to the chips (`chips`,
+//   ui/chips.js, wired by the app), whose borders carry the rings' state.
+//   ((F8b's review) Keyed on a board larger than classic's, as LOD and the
+//   tiles are: on classic's the tier stays Close and data-tier unset, so
+//   classic's labels are as ever on every screen; a portrait phone's view
+//   of classic's board is 8-11 px per inch, which would read Tactical.)
+// - A label (and the screen place a box selects by) is written only when
+//   its projected place moved half a pixel or more, or it turned visible or
+//   hidden, or picked: a still camera writes none.
+// - Figure LOD (`lod`, set for a board larger than classic's by
+//   view/index.js's setBoard): a unit more than LOD_FAR from the camera is
+//   drawn by its figures' far stand-ins (view/models/cache.js's lodOf: one
+//   mesh each), without their idle animation; a figure dying, fleeing or
+//   flinching keeps its own.
+//
 // It plays the figures' events (unit.wound, unit.slain, unit.flee,
 // unit.destroyed, unit.face, unit.move, melee, charge.result) as the
 // EventPlayer hands them over (view/player.js), and is made afresh, or
@@ -27,7 +50,8 @@ import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
 import { LADDER_OUT } from '../core/terrain/recipes.js'
 import { PACE } from '../present/pace.js'
-import { buildModel, disposeFigure } from './models/cache.js'
+import { buildModel, disposeFigure, lodOf } from './models/cache.js'
+import { pxPerInch, tierOf, glyphOf } from '../present/zoom.js'
 import { tween, wait, easeOut, easeInOut, wrapAngle, lerp } from './clock.js'
 import { sfx } from './sfx.js'
 
@@ -38,6 +62,11 @@ import { sfx } from './sfx.js'
 let shapes = null
 const ringShapes = () => (shapes ??= { ring: new THREE.RingGeometry(0.88, 1, 48).rotateX(-Math.PI / 2), hit: new THREE.CylinderGeometry(1, 1, 1, 12) })
 const tmpV = new THREE.Vector3()
+// (F8b) past how far from the camera a unit's figures are its far
+// stand-ins, and how near it must come again to be drawn in full (so a
+// unit on the line doesn't flicker)
+const LOD_FAR = 60
+const LOD_NEAR = 57
 
 // (F7a, DESIGN §4.2.4) Units on decks. A unit stands at the height the
 // mirror gives it (`y`: its floor, 0 on the ground; a unit.move's path
@@ -107,6 +136,15 @@ export class UnitViews {
     // bumped by every sync: a playback still running from before it (a walk,
     // a death) touches nothing of the views it left
     this.gen = 0
+    // (F8b) the semantic zoom's tier shown, pixels per inch where the
+    // camera looks, figure LOD on (setBoard's: a larger board), the chips
+    // (ui/chips.js, the app's: null until wired) and how many label and
+    // chip style writes the last frame made (render-bench's)
+    this.tier = 'close'
+    this.ppi = Infinity
+    this.lod = false
+    this.chips = null
+    this.writes = 0
   }
 
   // the view of unit `id`, and the unit it shows (its static look)
@@ -167,6 +205,9 @@ export class UnitViews {
     this.scene.add(v.hit)
     v.label = document.createElement('div')
     v.label.className = `ulabel s${u.side}`
+    // ((F8b) its role's glyph, which a Tactical label shows for its name)
+    v.label.dataset.glyph = glyphOf(u.t)
+    v.ring.material.visible = this.tier !== 'strategic'
     this.labels.appendChild(v.label)
     this.views.set(u.id, v)
     this.disc(u.id)
@@ -355,6 +396,8 @@ export class UnitViews {
       const [col, op] = look(v)
       v.ring.material.opacity = op
       v.ring.material.color.set(col)
+      // ((F8b) what a chip's border shows when the rings are hidden)
+      v.look = op > 0.15 ? col : null
     }
   }
 
@@ -372,15 +415,24 @@ export class UnitViews {
   // up (`sel`, an id) marked.
   animate(dt, time, { fast, camera, sel }) {
     const M = this.mirror()
+    if (!fast) this.zoom(camera)
+    this.writes = 0
+    const lodOn = this.lod && !fast
     for (const v of this.views.values()) {
       // (a unit walking a unit.move is drawn where its walk has got to)
       const u = v.u, mu = M.units[u.id], p = v.at ?? mu.pos
       // (F7a) the height the figures stand at: the walk's, else the mirror's
       const py = v.at ? (v.at.y ?? 0) : yOf(mu)
       let file = 0
+      // ((F8b) far: its figures drawn by their stand-ins)
+      if (lodOn) {
+        const d = Math.hypot(camera.position.x - p.x, camera.position.y, camera.position.z - p.z)
+        v.far = d > (v.far ? LOD_NEAR : LOD_FAR)
+      } else v.far = false
       for (const [i, model] of mu.models.entries()) {
         const m = v.models[i]
         if (!model.alive && !m.dying) continue
+        if (m.lo || v.far) this.lo(m, v.far && !m.dying && !(m.flash > 0))
         const a = m.mesh.userData.anim
         if (model.alive && v.climb) {
           // (F7a) up or down a ladder, in file: each figure GAP behind the
@@ -423,7 +475,7 @@ export class UnitViews {
           m.mesh.position.set(m.x + lx, (m.y ?? 0) + (m.lift || 0), m.z + lz)
           m.mesh.rotation.y = m.yaw
         }
-        if (!a || !model.alive) continue
+        if (!a || !model.alive || m.lo) continue
         const t = time + m.mesh.userData.phase
         const fig = m.mesh.userData.fig
         if (a.kind === 'squirrel') {
@@ -449,14 +501,87 @@ export class UnitViews {
       if (!(mu.alive > 0) || fast) this.screen.delete(u.id)
       if (mu.alive > 0 && !fast) {
         tmpV.set(p.x, py + 0.4, p.z).project(camera)
-        this.screen.set(u.id, { x: (tmpV.x * 0.5 + 0.5) * innerWidth, y: (-tmpV.y * 0.5 + 0.5) * innerHeight, on: tmpV.z < 1 && Math.abs(tmpV.x) <= 1 && Math.abs(tmpV.y) <= 1 })
+        const sx = (tmpV.x * 0.5 + 0.5) * innerWidth, sy = (-tmpV.y * 0.5 + 0.5) * innerHeight
+        const onScreen = tmpV.z < 1 && Math.abs(tmpV.x) <= 1 && Math.abs(tmpV.y) <= 1
+        const at = this.screen.get(u.id)
+        // ((F8b) kept while it moved under half a pixel: the same record)
+        if (!at || at.on !== onScreen || Math.abs(at.x - sx) >= 0.5 || Math.abs(at.y - sy) >= 0.5) this.screen.set(u.id, { x: sx, y: sy, on: onScreen })
         tmpV.set(p.x, py + (u.t.big ? 2.7 : u.t.fly ? 2.3 : 1.7), p.z).project(camera)
         const on = tmpV.z < 1
-        v.label.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`
-        v.label.style.visibility = on && M.stage !== 'title' ? 'visible' : 'hidden'
-        v.label.classList.toggle('sel', u.id === sel)
+        const lx = (tmpV.x * 0.5 + 0.5) * innerWidth, ly = (-tmpV.y * 0.5 + 0.5) * innerHeight
+        // ((F8b) each write only when it changes: the place when it moved
+        // half a pixel or more)
+        if (!(Math.abs(lx - v.lx) < 0.5 && Math.abs(ly - v.ly) < 0.5)) {
+          v.label.style.transform = `translate(${lx}px, ${ly}px) translate(-50%, -100%)`
+          v.lx = lx
+          v.ly = ly
+          this.writes++
+        }
+        const vis = on && M.stage !== 'title' ? 'visible' : 'hidden'
+        if (v.lvis !== vis) {
+          v.label.style.visibility = v.lvis = vis
+          this.writes++
+        }
+        const picked = u.id === sel
+        if (v.lsel !== picked) {
+          v.label.classList.toggle('sel', (v.lsel = picked))
+          this.writes++
+        }
       }
     }
+    if (this.chips && !fast) this.writes += this.chips.draw(this.tier === 'strategic' && M.stage !== 'title' ? this.chipsOf(M, sel) : null)
+  }
+
+  // ── (F8b) Drawing at scale ───────────────────────────────────────────────
+  // The semantic zoom's tier for the camera as it stands (present/zoom.js:
+  // pixels per inch where its line of sight meets the table, or at its
+  // distance from the table's centre should it look above the horizon),
+  // shown on the labels' container (data-tier: the style's) and on the
+  // rings (hidden at Strategic) when it changes.
+  zoom(camera) {
+    camera.getWorldDirection(tmpV)
+    const d = tmpV.y < -1e-3 ? camera.position.y / -tmpV.y : camera.position.length()
+    this.ppi = pxPerInch(innerHeight, d, camera.fov)
+    // ((F8b's review) on classic's board, Close whatever the screen: the
+    // tiers are a larger board's, `lod` its key; the label container's
+    // data-tier unset there, so classic's labels draw as they always did)
+    const tier = this.lod ? tierOf(this.ppi, this.tier) : 'close'
+    const key = this.lod ? tier : ''
+    if ((this.labels.dataset.tier ?? '') !== key) {
+      if (key) this.labels.dataset.tier = key
+      else delete this.labels.dataset.tier
+    }
+    if (tier === this.tier) return
+    this.tier = tier
+    for (const v of this.views.values()) v.ring.material.visible = tier !== 'strategic'
+  }
+
+  // What the chips show (ui/chips.js's draw): each standing unit on screen,
+  // in G.units order (the views', a sync's), with its place on the table
+  // and on screen, its seat's colour, its role's glyph, its models standing
+  // (a single model's wounds left), its order badge and its state (picked
+  // up, in combat, the ring's colour as the input painted it).
+  chipsOf(M, sel) {
+    const out = []
+    for (const v of this.views.values()) {
+      const mu = M.units[v.id], at = this.screen.get(v.id)
+      if (!(mu.alive > 0) || !at?.on) continue
+      const p = v.at ?? mu.pos
+      out.push({
+        id: v.id, x: at.x, y: at.y, wx: p.x, wz: p.z, side: v.u.side, color: v.color, glyph: v.label.dataset.glyph,
+        n: v.u.t.models > 1 ? mu.alive : mu.models.find((m) => m.alive)?.w ?? 0, ord: v.label.dataset.ord ?? '',
+        sel: v.id === sel, engaged: !!mu.engaged, look: v.look ?? null,
+      })
+    }
+    return out
+  }
+
+  // A figure drawn by its far stand-in (lo) or in full.
+  lo(m, lo) {
+    if (!!m.lo === lo) return
+    m.lo = lo
+    const root = m.mesh, stand = lodOf(root)
+    for (const c of root.children) c.visible = lo ? c === stand : c !== stand
   }
 
   // ── Playing the figures' events ───────────────────────────────────────────

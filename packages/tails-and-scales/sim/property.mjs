@@ -92,7 +92,13 @@
 //    seat 0's first rule) and in the table's order within a seat; no army,
 //    a null one, 'classic' and '112111' one match (stateHash, units and
 //    trace, at the deployment and through an all-AI battle); checkMission's
-//    list rules taken and refused at their edges.
+//    list rules taken and refused at their edges. (F8b) The three
+//    missions (classic, field, grand) named in every refusal that lists
+//    them, the larger ones refused the classic set and classic refused
+//    `open`, the larger battles' presets refused in a Skirmish by its
+//    points; and each race's preset at each mission, the army a seat
+//    naming none plays, filled in by name, legal, fielded unit for unit,
+//    and the same match whether the seats name it, its counts or nothing.
 // 9. The Session (R6b: match/session.js over match/store.js's LocalStore,
 //    which every mode plays through) folds a log as the core does. Each
 //    corpus battle is played again through one, the human logs' entries
@@ -931,12 +937,19 @@ const BAD_MISSION_SETUPS = {
   "a seat's field no seat takes": [{ seats: [{ ...SETUP.seats[0], colour: 'red' }, SETUP.seats[1]] }, /^seat 0 takes no field "colour"$/],
   'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
   'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
-  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there (is|are) classic/],
+  // ((F8b) the three missions, named in their order)
+  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand\)$/],
+  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand\)$/],
   'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
   'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
   // ((F7a) the classic mission is fought on fortified too, so a set it isn't
   // fought on is one that doesn't exist)
   'a set the mission is not fought on': [{ terrain: 'moated' }, /^the classic mission is fought on classic or fortified, not "moated"$/],
+  // ((F8b) the larger missions are fought on open (and, F7a, fortified),
+  // never classic's set, nor open on the classic mission)
+  'the grand mission on the classic set': [{ mission: 'grand', terrain: 'classic' }, /^the grand mission is fought on open or fortified, not "classic"$/],
+  'the field mission on the classic set': [{ mission: 'field', terrain: 'classic' }, /^the field mission is fought on open or fortified, not "classic"$/],
+  'the classic mission on the open set': [{ terrain: 'open' }, /^the classic mission is fought on classic or fortified, not "open"$/],
   'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
   // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
   // for the setup's prototype (its fields would slip past the whitelist)
@@ -975,6 +988,24 @@ function missionTask(core, MISSIONS) {
     }
     const G = core.createMatch({ ...SETUP, mission: name })
     if (G.board.W !== W || G.board.H !== H || G.nav.W !== W || G.nav.H !== H || G.objectives.length !== m.objectives.length || G.setup.rounds !== m.rounds || G.setup.terrain !== m.sets[0]) throw new Error(`P-mission: a match of ${name} is on ${JSON.stringify(G.board)}, ${G.objectives.length} objectives, ${G.setup.rounds} rounds, terrain ${G.setup.terrain}`)
+    // (F11a, F8b) each race's preset for it, the army a seat naming none
+    // plays, legal there: the match fields its counts, unit for unit, in
+    // roster order, each seat naming it as it filled it in; and the same
+    // match when the seats name the preset, or its counts
+    if (core.army) {
+      const keys = (X) => X.units.map((u) => `${u.side}:${u.key}`).join(' ')
+      for (const [s, { race }] of SETUP.seats.entries()) {
+        const want = G.units.filter((u) => u.side === s).map((u) => u.key).join(' ')
+        if (G.setup.seats[s].army !== m.army) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${m.army}`)
+        const text = core.army.listText(core.army.armyOf(G.setup, s).counts)
+        if (want !== core.army.armyOf(G.setup, s).keys.join(' ')) throw new Error(`P-mission: a match of ${name} fields ${want} for seat ${s}, not its preset's units`)
+        for (const army of [m.army, text]) {
+          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x) => ({ ...x, army })) })
+          if (keys(H2) !== keys(G) || core.stateHash(H2) !== core.stateHash(G)) throw new Error(`P-mission: a match of ${name} with every seat naming ${JSON.stringify(army)} differs from one naming no army (${race}'s preset)`)
+        }
+        n++
+      }
+    }
     n++
   }
   return n
@@ -997,11 +1028,15 @@ const ARMY_REFUSALS = {
   'true': [true, NO, /^seat 0's army is a preset's name or a list of counts, not true$/],
   // (the plural is the orchestrator's call while each race has one
   // preset: either agreement passes)
-  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there (is|are) classic\)$/],
-  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there (is|are) classic\)$/],
+  // ((F8b) every race's three presets, named in their order)
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand\)$/],
   // ('toString' has a capital: no preset's name, so not a list either)
   "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
-  "F8b's preset, not yet shipped": ['field', NO, /^the Bushtail Clans have no army "field" \(there (is|are) classic\)$/],
+  // ((F8b) a larger battle's preset is a preset like any, held to the
+  // mission's own limit: a Skirmish can't field the ×2 or ×3 list)
+  "the field preset in a Skirmish": ['field', NO, /^seat 0's army: 970 points, over the Skirmish limit of 500$/],
+  "the grand preset in a Skirmish": [NO, 'grand', /^seat 1's army: 1485 points, over the Skirmish limit of 500$/],
   'neither a name nor counts': ['11a', NO, /^seat 0's army "11a" is neither a preset nor a list of counts$/],
   'an empty army': ['', NO, /^seat 0's army "" is neither a preset nor a list of counts$/],
   'a list with a trailing zero': [NO, '1121110', /^seat 1's army "1121110" is neither a preset nor a list of counts$/],
@@ -1196,8 +1231,10 @@ const V1_PINS = {
   'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
   'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
 }
-// (6, F7a's height, as data-check's PINNED: classic boards build none)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6]
+// (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
+// F8b's missions, open set and fight guard, which a classic battle meets as
+// before)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7]
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a

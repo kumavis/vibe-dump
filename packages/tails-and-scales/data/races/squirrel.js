@@ -15,6 +15,10 @@ export default {
   // the roster is append-only (a new unit goes at the end; data-check pins
   // its start). `army` above, the classic list, is in roster order.
   roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet'],
+  // (F8b) the presets of the larger battles, as counts in roster order: the
+  // classic list twice over for a Field battle, three times for a Grand one
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
+  armies: { field: '224222', grand: '336333' },
   units: {
     nutkin: {
       name: 'Nutkin Skirmishers', short: 'Nutkin', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 7, cost: 75,

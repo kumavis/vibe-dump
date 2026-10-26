@@ -79,7 +79,11 @@ const MAX_ROUNDS = 99
 // board and dice are the two seeds (whole numbers, 0 to 2^32 - 1). (F8a)
 // The mission (data/mission.js) chooses the board; terrain defaults to its
 // first set and must be one of its sets; rounds defaults to its rounds, and
-// runs from 1 to MAX_ROUNDS. A field left out, null or undefined (a form's
+// runs from 1 to MAX_ROUNDS. (F8b: three missions, so an unknown one reads
+// `no mission "raid" (there are classic, field, grand)`, and a set the
+// mission isn't fought on `the grand mission is fought on open or
+// fortified, not "classic"`; with one mission, or a mission of one set, the first line
+// reads "there is" and the second names that set alone.) A field left out, null or undefined (a form's
 // or a lobby's empty field) takes its default. The setup's own fields come
 // first, in its order, then the defaults it left out. (F8a) A field outside
 // SETUP_KEYS, or a seat's outside SEAT_KEYS, is refused (one left null is

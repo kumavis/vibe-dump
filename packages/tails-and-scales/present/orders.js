@@ -45,6 +45,17 @@
 //                                    whose members advance first (+D6 each:
 //                                    the preview plans the plain move, the
 //                                    executor each member after its roll)
+//   previewSteps(…the same…)          (F8b) the same preview as a generator:
+//                                    it yields after each member planned
+//                                    ({ members so far, slots, summary:
+//                                    "Planning 8 of 21…", of }) and returns
+//                                    previewGroup's result, member for
+//                                    member (previewGroup drains it), so a
+//                                    larger board's ghosts can be planned a
+//                                    few a frame (input/standing.js's
+//                                    GhostPlanner); each step must run
+//                                    inside the Session's preview, as a
+//                                    whole preview does
 //
 // `at`: the virtual occupancy the executor will meet, a Map of id → { x, z }:
 // the members planned before stand where they were sent, the rest where
@@ -203,7 +214,18 @@ export function placeFor(G, q, u, slot, others) {
 // The order the members go in: nearest the point first, then by id.
 const byNearness = (members, p) => [...members].sort((a, b) => Math.hypot(a.pos.x - p.x, a.pos.z - p.z) - Math.hypot(b.pos.x - p.x, b.pos.z - p.z) || a.id - b.id)
 
-export function previewGroup(G, q, seat, verb, members, target, given = null, { line = null, advance = false } = {}) {
+export function previewGroup(G, q, seat, verb, members, target, given = null, opts = {}) {
+  const steps = previewSteps(G, q, seat, verb, members, target, given, opts)
+  for (;;) {
+    const r = steps.next()
+    if (r.done) return r.value
+  }
+}
+
+// (a member planned: the preview so far)
+const partial = (out, slots, of) => ({ members: out.slice(), slots, summary: `Planning ${out.length} of ${of}…`, of })
+
+export function* previewSteps(G, q, seat, verb, members, target, given = null, { line = null, advance = false } = {}) {
   const out = []
   const at = new Map()
   if (verb === 'place') {
@@ -215,6 +237,7 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, { 
       const cell = placeFor(G, q, u, slot, others)
       if (cell >= 0) at.set(u.id, { x: G.nav.x(cell), z: G.nav.z(cell) })
       out.push({ u, cell, slot, how: cell >= 0 ? 'arrive' : 'none', why: cell >= 0 ? '' : 'no room in the zone' })
+      yield partial(out, slots, members.length)
     }
     const n = out.filter((m) => m.cell >= 0).length
     return { members: out, slots, summary: `Place ${members.length} · ${n} fit${n < members.length ? ` · ${members.length - n} don't` : ''}` }
@@ -231,9 +254,13 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, { 
       }
       const slot = slots.get(u.id)
       const field = goalField(G, q, target, q.moveMode(u), u.r, q.climbs(u))
+      // ((F8b) a frame for the field, a whole-board walk when it is a new
+      // one, and one for the leg)
+      yield partial(out, slots, members.length)
       const leg = legFor(G, q, u, slot, field, at)
       if (leg.cell >= 0) at.set(u.id, { x: G.nav.x(leg.cell), z: G.nav.z(leg.cell) })
       out.push({ u, cell: leg.cell, slot, how: leg.cell < 0 ? 'none' : leg.arrive ? 'arrive' : 'short', why: leg.cell < 0 ? 'no way nearer' : '' })
+      yield partial(out, slots, members.length)
     }
     const arrive = out.filter((m) => m.how === 'arrive').length, short = out.filter((m) => m.how === 'short').length
     return { members: out, slots, summary: `Move ${members.length}${advance ? ' (+D6 each)' : ''} · ${arrive} arrive${short ? ` · ${short} fall short` : ''}` }
@@ -248,6 +275,7 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, { 
       const ap = approachFor(G, q, u, target, at)
       if (ap.cell >= 0) at.set(u.id, { x: G.nav.x(ap.cell), z: G.nav.z(ap.cell) })
       out.push({ u, cell: ap.cell, how: ap.cell === -2 ? 'stay' : ap.cell >= 0 ? 'arrive' : 'none', why: ap.cell === -1 ? 'no way in range' : '' })
+      yield partial(out, undefined, members.length)
     }
     const go = out.filter((m) => m.how === 'arrive').length
     return { members: out, summary: `Approach ${target.t.short} · ${go} move${out.some((m) => m.how === 'stay') ? ` · ${out.filter((m) => m.how === 'stay').length} already in range` : ''}` }

@@ -55,7 +55,9 @@
 //    an unknown scale; classic has none of the new fields (its draws are
 //    frozen); and each recipe's footprint is at least its reach measured on
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
-//    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8a) And the
+//    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8b) It passes
+//    `open` too, refuses a copy of it with an unknown scale, and classic
+//    has no `scale` (its draws are frozen). (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
 //    loads) passes each and refuses one with an odd or fractional board, a
 //    zone reaching within 6" of the centre line, an objective under 1"
@@ -116,7 +118,9 @@
 // 11. (F11a, DESIGN §4.2.8, §4.2.9) The army builder's data:
 //    - prices: every unit has `cost`, a whole multiple of 5 above 0; each
 //      race's classic list costs what the v6 table says (485 and 495), at
-//      most its mission's limit (500);
+//      most its mission's limit (500); (F8b) and each race's Field and
+//      Grand presets what F8b's retune of those missions' own prices says
+//      (990 and 950, 1,350 and 1,485), within their limits;
 //    - rosters: each race's lists each of its units once, and starts with
 //      the roster pinned below (ROSTER_PIN: a reorder or an insert would
 //      silently change what every recorded and saved list means, so it
@@ -129,7 +133,11 @@
 //      checkMission takes a slot maximum of 10, a [0, 0] slot and a Grand
 //      Troops [3, 14], and refuses each broken list rule by name (a
 //      perKind of 10, a slot with min > max or max > units, minimums
-//      summing past units, fractional points, …);
+//      summing past units, fractional points, …); (F8b) it takes a
+//      mission's own prices (DESIGN §4.2.8.2's fallback, `list.prices`) and
+//      refuses each malformed one, RULES_ID moves on one, and core/army.js
+//      prices a list by them (priceOf, listCost, checkList), never by a
+//      prototype's; each mission's prices are listed with its presets' cost;
 //    - every race fields a legal list at every mission: autoList on 100
 //      seeds, each held to checkList;
 //    - RULES_ID moves on a cost, the roster's order, a preset's digits or a
@@ -139,12 +147,24 @@
 //      a roster missing a unit, listing one twice or one the race lacks,
 //      an army out of roster order, a preset with trailing zeros, longer
 //      than the roster, not a string, and a hand-given classic;
-//    - the army/ corpus (sim/baselines/army/*.json, once recorded): every
-//      list a setup in it names is legal under today's prices and costs at
-//      most 90% of its mission's limit, so a retune of up to 10% keeps the
-//      corpus playable (the row says how many lists it checked); and every
-//      seat there names one (the AI pairs' and the bot's alike, §4.2.9),
-//      so a log the row reads no list from fails, never passes unchecked.
+//    - the army/ corpus (sim/baselines/army/*.json, once recorded), and
+//      (F8b) the scale/ one: every seat of every setup in it names a list,
+//      legal under today's prices (its mission's own, where its list sets
+//      them) and costing at most 90% of its mission's limit, so a retune of
+//      up to 10% keeps the corpus playable (the row says how many lists it
+//      checked); and every seat there names one (the AI pairs' and the
+//      bot's alike, §4.2.9), so a log the row reads no list from fails,
+//      never passes unchecked.
+// 12. (F8b, DESIGN §4.2.1) The capacity check: every mission, preset, list
+//    rule and set inside the size envelope. Each mission's board at most
+//    80×56 (its nav grid's last cell index at most 17,919), its rounds at
+//    most 7 and its points limit at most 1,500 (500 / 1,000 / 1,500 by
+//    size: the field and grand missions held to theirs, 60×40 and 80×56,
+//    6 and 7 rounds), its list's units and models at most 24 and 90; each
+//    race's preset for it within its list rules; and every set it offers
+//    scattering at most 450 chunks on its worst board over seeds 1-200, on
+//    the mission's own board, objectives and zones (the count printed:
+//    §4.2.3 expects 250-300 at Grand).
 //
 //   node sim/data-check.mjs
 //
@@ -427,6 +447,9 @@ const moves = [
   ['a spacing rule (classic gap 2.1 → 2.0)', () => classic((c) => (c.gap = 2.0))],
   ['the forest kept out of deployment no more', () => classic((c) => (c.notInDeploy = []))],
   ['a new terrain set', () => rulesId({ sets: { ...SETS, fortified: structuredClone(SETS.classic) } })],
+  // (F8b) the open set: its spacing and its area scale
+  ['a spacing rule (open gap 3.2 → 3.1)', () => rulesId({ sets: { ...SETS, open: { ...structuredClone(SETS.open), gap: 3.1 } } })],
+  ["the open set's area scale dropped", () => rulesId({ sets: { ...SETS, open: (({ scale, ...o }) => o)(structuredClone(SETS.open)) } })],
   // the missions (R6a): where the objectives stand, the rounds, the zones
   ['an objective moved (classic centre 0,0 → 0,1)', () => mission((m) => (m.objectives[0].z = 1))],
   ['an objective added', () => mission((m) => m.objectives.push({ x: 0, z: 10 }))],
@@ -438,6 +461,10 @@ const moves = [
   ['the board (classic 40×28 → 40×30)', () => mission((m) => (m.board.H = 30))],
   ['the sets a mission is fought on', () => mission((m) => m.sets.push('fortified'))],
   ["the mission's army (classic → field)", () => mission((m) => (m.army = 'field'))],
+  // (F8b) the larger missions are rules like classic
+  ['the grand board (80×56 → 80×54)', () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), board: { W: 80, H: 54 } } } })],
+  ["the field mission's points (1,000 → 1,005)", () => rulesId({ missions: { ...MISSIONS, field: (({ list, ...m }) => ({ ...m, list: { ...list, points: 1005 } }))(structuredClone(MISSIONS.field)) } })],
+  ['the field mission dropped', () => rulesId({ missions: (({ field, ...m }) => m)(MISSIONS) })],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
@@ -585,6 +612,20 @@ for (const name of Object.keys(FORTS)) {
   check(FOOTPRINT[name] >= need && FOOTPRINT[name] >= gate, `the ${name}'s footprint ${FOOTPRINT[name]}" holds its reach ${r.toFixed(3)}" + 0.25" (${need}") and its gates (${gate.toFixed(3)}")`, `footprint ${FOOTPRINT[name]}`)
 }
 for (const [name, r] of SETS.fortified.fortKinds) check(r === FOOTPRINT[name], `fortified's ${name} radius is its footprint (${FOOTPRINT[name]})`, `${r}`)
+// (F8b) the open set's own field, `scale`: only 'area' scatters; classic
+// has none (its draws are frozen)
+check(!('scale' in SETS.classic), "classic has no scale: its pair count and attempts are classic's own", JSON.stringify(SETS.classic.scale))
+check(SETS.open.scale === 'area', "open scales with the table's area", JSON.stringify(SETS.open.scale))
+for (const [what, want, edit] of [
+  ['an unknown scale', /scale "length" is not one scatter knows \(area\)/, (c) => (c.scale = 'length')],
+  ['a scale that is no name', /scale "true" is not one scatter knows/, (c) => (c.scale = true)],
+  ['a misspelt scale field', /unknown field "scaled"/, (c) => (c.scaled = 'area')],
+]) {
+  const c = structuredClone(SETS.open)
+  edit(c)
+  const err = setError(c)
+  check(err && want.test(err), `refuses open with ${what}`, err ?? 'accepted')
+}
 // (F8a) the missions, as the sets
 const missionError = (m) => {
   try {
@@ -856,15 +897,16 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // the setup names its mission, and G.board stays out of the hash; 5,
   // F11a: the seats name their armies, which decide only which units
   // newState makes, and the classic preset makes the classic armies; 6,
-  // F7a: the height layer, derived from the chunks like the nav grid and
-  // never hashed, and classic boards build none: the format is unchanged
-  // for classic matches)
+  // F7a: the height layer, derived like the nav grid and never hashed, and
+  // classic boards build none; 7, F8b: the missions field and grand, the
+  // open set and the fight guard, none of which a classic match reaches or
+  // shadowState prints: the format is unchanged for classic matches)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -925,6 +967,19 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))
     check(cost === want && cost <= MISSIONS.classic.list.points, `the ${r.short}' classic list ('${r.armies.classic}') costs ${cost}, the v6 table's ${want}, within the Skirmish limit of ${MISSIONS.classic.list.points}`, cost !== want ? 'a price changed: re-pin CLASSIC_COST with the retune (and run sim/army-sim.mjs --check)' : 'over the limit')
   }
+  // (F8b) the larger battles' presets at those missions' own prices (the
+  // fallback's `list.prices`, as F8b's retune fitted them, DESIGN
+  // §4.2.8.2): a retune of a mission's prices re-pins them here ((F8b's
+  // review) Field's re-pinned with its retune)
+  const PRESET_COST = { field: { squirrel: 980, serpent: 950 }, grand: { squirrel: 1350, serpent: 1485 } }
+  for (const [m, by] of Object.entries(PRESET_COST)) {
+    const mission = MISSIONS[m]
+    for (const [key, want] of Object.entries(by)) {
+      const r = RACES[key], text = r.armies[mission?.army]
+      const cost = mission && text ? A.listCost(r, countsOf(text), mission.list) : NaN
+      check(cost === want && cost <= mission.list.points, `the ${r.short}' ${m} preset ('${text}') costs ${cost} at the ${m} mission's prices, F8b's retune's ${want}, within its limit of ${mission?.list.points}`, cost !== want ? `a price changed: re-pin PRESET_COST with the retune (and run sim/army-sim.mjs --check --mission ${m})` : 'over the limit')
+    }
+  }
   // rosters: each race's as it stood when its first list was recorded. A
   // roster may grow at its end (F9a appends 'warcart', F9b 'howdah'); its
   // first entries never move. A new race pins its own (F5a).
@@ -965,7 +1020,7 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
       for (const [m, mission] of Object.entries(MISSIONS)) {
         if (mission.army !== name || !ok) continue
         const broken = A.checkList(r, mission.list, countsOf(text))
-        check(broken === null, `the ${r.short}' preset ${name} is legal for the ${m} mission, whose preset it is (${A.listCost(r, countsOf(text))} of ${mission.list.points} points)`, broken)
+        check(broken === null, `the ${r.short}' preset ${name} is legal for the ${m} mission, whose preset it is (${A.listCost(r, countsOf(text), mission.list)} of ${mission.list.points} points)`, broken)
       }
     }
   }
@@ -987,6 +1042,8 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     ["Grand's Troops [3, 14] with 24 units", (l) => Object.assign(l, { units: 24, roles: { ...l.roles, Troops: [3, 14] } })],
     ['a list with no size', (l) => delete l.size],
     ['perKind 9', (l) => (l.perKind = 9)],
+    // (F8b, §4.2.8.2's fallback) a mission's own prices for some units
+    ["a mission's own prices (Bushtail Grenadiers 40, Coil Brute 125)", (l) => (l.prices = { squirrel: { grenadier: 40 }, serpent: { brute: 125 } })],
   ]
   for (const [what, edit] of takes) check(withList(edit) === null, `checkMission takes ${what}`, withList(edit))
   const brokenLists = [
@@ -1003,7 +1060,17 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     ['models past the envelope', /models is 91, not a whole number from 1 to 90/, (l) => (l.models = 91)],
     ['a role without a slot', /Artillery slot is undefined/, (l) => delete l.roles.Artillery],
     ['a role that is no role', /roles name "Beast", which is no role/, (l) => (l.roles.Beast = [0, 1])],
-    ['a field the list rules take not', /list takes no field "prices"/, (l) => (l.prices = {})],
+    ['a field the list rules take not', /list takes no field "price"/, (l) => (l.price = {})],
+    // (F8b) the prices a mission may set
+    ['prices that are a list', /list's prices are \[40\], not a record of prices by race/, (l) => (l.prices = [40])],
+    ['prices for no race', /list prices "beetle", which is no race/, (l) => (l.prices = { beetle: { grub: 40 } })],
+    ['prices for a race named toString', /list prices "toString", which is no race/, (l) => (l.prices = JSON.parse('{"toString": {"brute": 40}}'))],
+    ["a race's prices that are no record", /list's prices for squirrel are 40, not a record of prices by unit/, (l) => (l.prices = { squirrel: 40 })],
+    ["a race's prices naming no unit", /list's prices for squirrel are \{\}, not a record/, (l) => (l.prices = { squirrel: {} })],
+    ["a price for another race's unit", /list prices squirrel's "brute", which is no unit of theirs/, (l) => (l.prices = { squirrel: { brute: 125 } })],
+    ['a price not a multiple of 5', /list prices serpent's brute at 123, not a whole multiple of 5 above 0/, (l) => (l.prices = { serpent: { brute: 123 } })],
+    ['a price of 0', /list prices serpent's brute at 0/, (l) => (l.prices = { serpent: { brute: 0 } })],
+    ['a price as text', /list prices serpent's brute at "125"/, (l) => (l.prices = { serpent: { brute: '125' } })],
     ['a size that is no name', /size is 5, not a name/, (l) => (l.size = 5)],
     ['no list', /has no list/, (l, m) => delete m.list],
   ]
@@ -1019,7 +1086,7 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
         const counts = A.autoList(r, mission.list, seed)
         const broken = A.checkList(r, mission.list, counts)
         if (broken) wrong.push(`seed ${seed} '${A.listText(counts)}': ${broken}`)
-        spent.push(A.listCost(r, counts))
+        spent.push(A.listCost(r, counts, mission.list))
       }
       check(!wrong.length, `the ${r.name} field a legal list at the ${m} mission on 100 seeds (autoList: ${Math.min(...spent)}-${Math.max(...spent)} of ${mission.list.points} points)`, wrong.slice(0, 3).join('; '))
     }
@@ -1039,12 +1106,36 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     ["the mission's most of one unit (3 → 4)", () => mission((m) => (m.list.perKind = 4))],
     ["a role's slot (Hero [1, 1] → [1, 2])", () => mission((m) => (m.list.roles.Hero = [1, 2]))],
     ["the mission's most models (36 → 40)", () => mission((m) => (m.list.models = 40))],
+    // (F8b) the fallback's prices are the mission's, hashed with it
+    ["a mission's own price (Grenadiers 40 in the Skirmish)", () => mission((m) => (m.list.prices = { squirrel: { grenadier: 40 } }))],
   ]
   for (const [what, id] of armyMoves) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
   check(preset('224222') !== preset('224221'), "RULES_ID moves on a preset's digits (field 224222 → 224221)")
   check(reroster('squirrel', [...RACES.squirrel.roster]) === RULES_ID, "RULES_ID stays on a copy of the roster (the control for the roster's order)")
   check(variant('squirrel', (d) => (d.units.nutkin.name = 'Nutkin Slingers')) === RULES_ID, 'RULES_ID stays on a unit renamed, its cost and roster place kept')
   check(mission((m) => (m.list.size = 'Skirmish battle')) === RULES_ID, "RULES_ID stays on the size renamed (Skirmish → Skirmish battle: the refusals' word for it, presentation)")
+  check(mission((m) => (m.list.prices = { squirrel: { grenadier: 40 } })) !== mission((m) => (m.list.prices = { squirrel: { grenadier: 45 } })), "RULES_ID moves on a mission's price (Grenadiers 40 → 45)")
+  // (F8b) a mission's prices are what its lists cost (core/army.js priceOf):
+  // a price set for a unit, the unit's cost for the rest, nothing found for
+  // a race or unit named like an Object.prototype member; and every price
+  // the shipped missions set, with what each race's preset there costs
+  {
+    const r = RACES.squirrel, gren = r.roster.indexOf('grenadier'), elder = r.roster.indexOf('elder')
+    const rules = { ...MISSIONS.classic.list, prices: { squirrel: { grenadier: 40 } } }
+    const one = (k) => r.roster.map((_, i) => (i === k ? 1 : 0))
+    check(A.listCost(r, one(gren), rules) === 40 && A.listCost(r, one(gren)) === r.units.grenadier.cost && A.listCost(r, one(elder), rules) === r.units.elder.cost, `priceOf: a mission's price for a unit is what it costs there (a Grenadier 40 under a price of 40, ${r.units.grenadier.cost} with none), the rest their cost (an Elder ${r.units.elder.cost})`, `${A.listCost(r, one(gren), rules)}, ${A.listCost(r, one(gren))}, ${A.listCost(r, one(elder), rules)}`)
+    check(A.priceOf(r, 'elder', { prices: Object.create({ squirrel: { elder: 5 } }) }) === r.units.elder.cost && A.priceOf(r, 'elder', { prices: { squirrel: Object.create({ elder: 5 }) } }) === r.units.elder.cost, "priceOf reads a mission's own prices only, never one an object's prototype lends")
+    // (a lone Grenadier is refused for want of a hero either way: the
+    // points come first, so they are what tells the two apart)
+    const at40 = A.checkList(r, { ...rules, points: 40 }, one(gren)), at45 = A.checkList(r, { ...rules, points: 40, prices: { squirrel: { grenadier: 45 } } }, one(gren))
+    check(!/points, over/.test(at40 ?? '') && /^45 points, over/.test(at45 ?? ''), "checkList judges a list by the mission's prices (a Grenadier at 40 is within 40 points; at 45 it isn't)", `${at40}; ${at45}`)
+    for (const [m, mission] of Object.entries(MISSIONS)) {
+      const p = mission.list.prices
+      const said = p ? Object.entries(p).map(([race, units]) => `${RACES[race].short} ${Object.entries(units).map(([k, v]) => `${k} ${v} (cost ${RACES[race].units[k].cost})`).join(', ')}`).join('; ') : 'none: every unit at its cost'
+      const presets = Object.values(RACES).map((x) => `${x.short}' ${mission.army} ${A.listCost(x, countsOf(x.armies[mission.army]), mission.list)}`).join(', ')
+      check(true, `the ${m} mission's own prices: ${said} (${presets} of ${mission.list.points} points)`)
+    }
+  }
   // defineRace refuses broken builder data
   breakIt('defineRace refuses a unit without cost', (d) => delete d.units.brute.cost, /unit brute: cost must be a whole multiple of 5 above 0 .*not undefined/)
   breakIt('defineRace refuses a cost of 7 (not a multiple of 5)', (d) => (d.units.brute.cost = 7), /unit brute: cost must be a whole multiple of 5.*not 7/)
@@ -1065,11 +1156,11 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   breakIt('defineRace refuses a classic preset given by hand', (d) => (d.armies = { classic: '112111' }), /armies gives "classic", which is derived from its army/)
   breakIt('defineRace refuses presets that are a list', (d) => (d.armies = ['224222']), /armies is a record of presets by name/)
   check(!!defineRace({ ...structuredClone(raw.serpent), armies: { field: '224222', grand: '336333' } }), "defineRace takes F8b's presets as count strings (field '224222', grand '336333')")
-  // the army/ corpus (recorded after F11a's code, in a commit of its own):
-  // every list a setup there names, legal under today's prices and within
-  // 90% of its mission's limit
-  const ARMY = join(PKG, 'sim', 'baselines', 'army')
-  const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
+  // the army/ corpus (recorded after F11a's code, in a commit of its own),
+  // and (F8b) the scale/ one (the Field and Grand battles, recorded after
+  // F8b's): every list a setup there names, legal under today's prices (its
+  // mission's: core/army.js priceOf) and within 90% of its mission's limit
+  // (every one of their battles names both seats' lists)
   // (every object with a seats list is a setup, wherever the file keeps it)
   const setupsIn = (v, out = []) => {
     if (Array.isArray(v)) v.forEach((x) => setupsIn(x, out))
@@ -1079,28 +1170,71 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     }
     return out
   }
-  let lists = 0
-  const wrong = []
-  for (const f of files) {
-    const setups = setupsIn(JSON.parse(readFileSync(join(ARMY, f), 'utf8')))
-    if (!setups.length) wrong.push(`${f}: no setup in it (this row reads every object with a seats list)`)
-    for (const setup of setups) {
-      const err = why(() => fullSetup(setup))
-      if (err) {
-        wrong.push(`${f}: its setup is refused today: ${err}`)
-        continue
+  for (const set of ['army', 'scale']) {
+    const ARMY = join(PKG, 'sim', 'baselines', set)
+    const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
+    let lists = 0
+    const wrong = []
+    for (const f of files) {
+      const setups = setupsIn(JSON.parse(readFileSync(join(ARMY, f), 'utf8')))
+      if (!setups.length) wrong.push(`${f}: no setup in it (this row reads every object with a seats list)`)
+      for (const setup of setups) {
+        const err = why(() => fullSetup(setup))
+        if (err) {
+          wrong.push(`${f}: its setup is refused today: ${err}`)
+          continue
+        }
+        const s = fullSetup(setup), rules = MISSIONS[s.mission].list
+        setup.seats.forEach((x, i) => {
+          if (x.army == null) return wrong.push(`${f}: seat ${i} names no army (every ${set}/ battle names both seats' lists)`)
+          lists++
+          const { counts } = A.armyOf(s, i), cost = A.listCost(RACES[x.race], counts, rules)
+          if (cost > Math.floor(0.9 * rules.points)) wrong.push(`${f}: seat ${i}'s ${JSON.stringify(x.army)} costs ${cost}, over 90% of the ${s.mission} limit (${Math.floor(0.9 * rules.points)} of ${rules.points})`)
+        })
       }
-      const s = fullSetup(setup), rules = MISSIONS[s.mission].list
-      setup.seats.forEach((x, i) => {
-        if (x.army == null) return wrong.push(`${f}: seat ${i} names no army (every army/ battle names both seats' lists)`)
-        lists++
-        const { counts } = A.armyOf(s, i), cost = A.listCost(RACES[x.race], counts)
-        if (cost > Math.floor(0.9 * rules.points)) wrong.push(`${f}: seat ${i}'s ${JSON.stringify(x.army)} costs ${cost}, over 90% of the ${s.mission} limit (${Math.floor(0.9 * rules.points)} of ${rules.points})`)
-      })
     }
+    check(!wrong.length, files.length ? `the ${set}/ corpus: ${lists} lists in ${files.length} files, each legal under today's prices and within 90% of its mission's limit` : `the ${set}/ corpus: not recorded yet (sim/baselines/${set}/ has no logs): 0 lists checked`, wrong.slice(0, 4).join('; '))
   }
-  check(!wrong.length, files.length ? `the army/ corpus: ${lists} lists in ${files.length} files, each legal under today's prices and within 90% of its mission's limit` : 'the army/ corpus: not recorded yet (sim/baselines/army/ has no logs): 0 lists checked', wrong.slice(0, 4).join('; '))
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, and (F11a) the army builder\'s prices, rosters, presets and list rules hold')
+// ── 12. The capacity check (F8b) ────────────────────────────────────────────
+console.log('\n12. the size envelope: every mission, preset, list rule and set inside it (F8b, §4.2.1)')
+{
+  const A = await imp(PKG, 'core/army.js')
+  const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+  const { gridSize } = await imp(PKG, 'core/nav.js')
+  const ENV = { W: 80, H: 56, cells: 17919, rounds: 7, points: 1500, units: 24, models: 90, chunks: 450 }
+  // the sizes §4.2.1 and §4.2.3 give each mission
+  const SIZES = {
+    classic: { W: 40, H: 28, deploy: 8, rounds: 5, points: 500, size: 'Skirmish', objectives: 5 },
+    field: { W: 60, H: 40, deploy: 12, rounds: 6, points: 1000, size: 'Field', objectives: 7 },
+    grand: { W: 80, H: 56, deploy: 14, rounds: 7, points: 1500, size: 'Grand', objectives: 9 },
+  }
+  check(isDeepStrictEqual(Object.keys(MISSIONS), Object.keys(SIZES)), `the missions are ${Object.keys(SIZES).join(', ')} (${Object.keys(MISSIONS).join(', ')})`)
+  for (const [name, m] of Object.entries(MISSIONS)) {
+    const { nx, nz } = gridSize(m.board.W, m.board.H, 0.5), last = nx * nz - 1
+    const inside = m.board.W <= ENV.W && m.board.H <= ENV.H && last <= ENV.cells && m.rounds <= ENV.rounds && m.list.points <= ENV.points && m.list.units <= ENV.units && m.list.models <= ENV.models
+    check(inside, `the ${name} mission is inside the envelope: ${m.board.W}×${m.board.H} (cells 0-${last}), ${m.rounds} rounds, ${m.list.points} points, ${m.list.units} units, ${m.list.models} models`, `the envelope: ≤ ${ENV.W}×${ENV.H}, cells ≤ ${ENV.cells}, ≤ ${ENV.rounds} rounds, ≤ ${ENV.points} points, ≤ ${ENV.units} units, ≤ ${ENV.models} models`)
+    const want = SIZES[name]
+    const got = want && { W: m.board.W, H: m.board.H, deploy: m.deploy, rounds: m.rounds, points: m.list.points, size: m.list.size, objectives: m.objectives.length }
+    check(!!want && isDeepStrictEqual(got, want), `the ${name} mission is the ${want?.size ?? '?'} of §4.2.3 (${want ? `${want.W}×${want.H}, zones ${want.deploy}", ${want.rounds} rounds, ${want.points} points, ${want.objectives} objectives` : 'no size'})`, JSON.stringify(got))
+    for (const r of Object.values(RACES)) {
+      const counts = [...(r.armies[m.army] ?? '')].map(Number)
+      const units = counts.reduce((a, b) => a + b, 0), models = counts.reduce((a, n, k) => a + n * r.units[r.roster[k]].models, 0)
+      check(units <= m.list.units && models <= m.list.models, `the ${r.short}' ${m.army} preset: ${units} units and ${models} models, within ${m.list.units} and ${m.list.models} (${A.listCost(r, counts, m.list)} points of ${m.list.points})`)
+    }
+    for (const set of m.sets) {
+      let worst = 0, at = 0, sum = 0
+      for (let seed = 1; seed <= 200; seed++) {
+        const T = new Terrain(m.board.W, m.board.H)
+        T.generate(seed, m.objectives, m.deploy, set, null)
+        sum += T.chunks.length
+        if (T.chunks.length > worst) [worst, at] = [T.chunks.length, seed]
+      }
+      check(worst <= ENV.chunks, `the ${name} mission on ${set}: at most ${worst} chunks over seeds 1-200 (seed ${at}; mean ${(sum / 200).toFixed(0)}), within ${ENV.chunks}`)
+    }
+  }
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, and (F8b) every mission, preset and set is inside the size envelope')
 process.exit(failed ? 1 : 0)

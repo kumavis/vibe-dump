@@ -110,6 +110,13 @@ const FROZEN = {
   skew: (r) => ['A different version of the game', `This battle was made with a different version of the game than this page plays (${r?.why ?? ''}). Reload both pages to play it on the same version.`],
 }
 
+// (F8b) the battle sizes the lobby offers: each mission, its list's size
+// name, its board and points
+// (F7a with F8b) the terrain a lobby keeps through a size change: its own,
+// where the new size is fought on it (fortified, on every size)
+const keptTerrain = (L, name) => (L.terrain && MISSIONS[name].sets.includes(L.terrain) ? { terrain: L.terrain } : {})
+const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
+
 export class Online {
   // `flow` (app/flow.js), `params` (the page's URL parameters: ?sync=
   // names the server a battle hosted from here uses)
@@ -133,6 +140,9 @@ export class Online {
       board: (n) => this.isHost() && N.editBattle(this.handle, { board: n }),
       // (F7a) the terrain, one of the mission's sets
       terrain: (set) => this.isHost() && N.editBattle(this.handle, { terrain: set }),
+      // (F8b) the battle size: a mission this page knows (the terrain chosen
+      // kept where the new size is fought on it)
+      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),
       reroll: () => this.isHost() && N.editBattle(this.handle, { board: (Math.random() * 1e6) | 0 }),
       copy: () => this.copy(),
       fit: (text, typing) => N.fitName(text, { typing }),
@@ -305,6 +315,7 @@ export class Online {
     const sets = MISSIONS[L.mission]?.sets ?? [L.terrain ?? 'classic']
     const m = {
       status, link: this.linkFor(this.id), board: L.board, host: this.isHost(), terrain: L.terrain ?? sets[0], terrains: [...sets],
+      mission: L.mission, sizes: SIZES,
       seats: L.seats.map((r, i) => ({ ...(r ? { name: r.name, ready: r.ready, mine: r.dev === this.dev } : { free: true, canSit: true }), race: races[i], color: sides?.[i].color ?? '#9a8a70' })),
     }
     // (drawn again only when it changed: a picker left open stays open)
