@@ -91,15 +91,19 @@ the commit, and add whatever the work turned up.
   `node sim/army-sim.mjs --check` (and `--self-test`: the Skirmish gates,
   the score within 4 points of even on every set the mission offers, from
   F7a `fortified` with `classic` (`--terrain <set>` plays one), and each
-  unit's price within its fitted band; 5,400 battles, so run it on a quiet
-  machine, about 4 minutes, its self-test, on one set, about 3), P-army
+  unit's price within its fitted band; at the Skirmish 5,400 battles, two
+  score gates of 1,500 and a fit of 2,400, about 12 minutes with `--jobs 2`
+  on a machine shared at load 15-40, so run it on a quiet one; its
+  self-test, on one set, about 11 minutes at load 70), P-army
   in P-prop (fuzzed armies, autoList, battles between random lists) and
   P-mission's refusals, data-check's prices, rosters, presets and list
   rules, the `army/` set in parity and merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
   random games in five on fortified boards, and the `height` task: since
   F7a's review its scenes, and P-level on Grand-sized boards too),
   scale-check's P-scan the fortified boards (the `fort/` AI pairs, the
-  Grand fixture's `--fortified`, and the box with height), terrain-check
+  `grand` mission's fortified boards, the Grand fixture's `--fortified`
+  until the merged build's gate retired it, and the box with height),
+  terrain-check
   holds the fortified set and P-climb (its sections 6 and 7, and the
   self-test's fortified edits), parity folds the `fort/` log set (AI pairs
   as logs with no entries) beside the rest (with `army/`, 60 battles), and
@@ -108,14 +112,20 @@ the commit, and add whatever the work turned up.
   match by `sim/height-probe.mjs`) passes, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
-  every Field and Grand board of seeds 1-500; its `--self-test` plants a
+  every Field and Grand board of seeds 1-500, on every set the mission
+  offers, `open` and `fortified`, since the merged build's gate each
+  objective at its level; its `--self-test` plants a
   wall and a ring), army-sim's gates at all three sizes (Skirmish, Field
-  and Grand, the score and per-unit gates: about 15-20 minutes with
-  `--jobs 2`; a step that moves balance runs it; Grand's rows are played
+  and Grand, the score and per-unit gates, on every set each mission
+  offers: 9,950 battles, Skirmish 5,400, Field 2,700 (two score gates of
+  900, a fit of 900) and Grand 1,850 (two of 625, a fit of 600), 77 minutes
+  with `--jobs 2` at load 40-72 on 4 CPUs, so run it on a quiet machine;
+  a step that moves balance runs it; Grand's rows are played
   and reported, not judged, until the Grand rebalance below is settled),
   `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
-  set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
+  set in every check that reads the corpus (parity's 74 battles with `army/` and `fort/`, since the
+  merged build's gate scale/'s four fortified pairs among them, P-auto,
   P-peers' `--only scale`). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
@@ -925,13 +935,16 @@ follows N3.
   six `army/` battles, recorded on F11a's code in a commit of their own,
   the corpus 52. The review's nine fixes, `RULES_ID` leaving out the size's
   name. DESIGN's F11a notes.)
-- [ ] **Later (F11a's, with F8b):** the Grand fixture's cap lists cost
+- [x] **Later (F11a's, with F8b):** the Grand fixture's cap lists cost
   1,575 and 1,670 against Grand's 1,500 (under `--caps` the fixture lifts
   its limit to 2,000): when the fixture retires, build the cap lists within
   the limit or give scale-bench's cap rows a test mission with it lifted.
   army-sim's fit plays no list over the limit (§4.2.8.2's 80-120% budgets
   clamped at 100%); a copy with the limit lifted would fit the top too, if
   F8b's retune wants it.
+  (F8b's scale-bench builds its cap lists within the grand mission's limit
+  by an exhaustive search, `capList`; F8b's retune never wanted the lifted
+  fit; the fixture itself was deleted at the merged build's gate.)
 - [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
@@ -1008,6 +1021,30 @@ follows N3.
   re-recorded on `fortified`, with army-sim's Field and Grand gates and the
   connectivity rows run there too. Left: the gates below, in an item of
   their own. DESIGN's F8b notes.)
+- [x] **The merged build's gate.** F11a, F7a and F8b went to `main` as a
+  playtest build (2f10015) ahead of their standing checks, by the
+  project owner's choice; the checks then ran in full on it, every fix a
+  commit of its own. (Every corpus replayed as merged, 70 of 70 in Node,
+  `--page` and Chromium; the PIN on 2f10015, then on the one
+  play-affecting fix: on Field and Grand fortified boards the ruined tower
+  ring at the centre walled the objective off from every squad (the
+  connectivity rows, never run on fortified, failed 320 of 2,000 boards),
+  so fortified's `largeCentre` stands the rock box there, as `open` does
+  (ad911bf; `RULES_ID` moved, no bump, no corpus battle changed). The
+  connectivity rows judge each objective at its level, and P-terrain's
+  fortified rows and P-climb run on the Field table too; two self-test
+  anchors F8b's review had moved followed it (terrain-check's, snap-check's);
+  rematch-memory tells V8's dependent-code lists from the page's heap
+  (`--terrain fortified` read 22 KB a rematch, all of it V8's, the page's
+  own 3.9); play-check's waits follow SwiftShader's frames, its layout
+  lane run for the first time; the Grand fixture deleted, its last rows on
+  the `grand` mission; scale/'s fortified pairs, 2 Field and 2 Grand, the
+  corpus 74; army-sim's gates on every set (Skirmish and Field pass on
+  `fortified` too: 46.6% and 49.0%), and the model-cap experiment in the
+  item below. Left: scale-bench on a quiet machine (on this shared box
+  the Grand rows read 1.6-2.75× their budgets, its classic row 1.6-2.1×
+  F8b's: against it a Grand battle is 5.6-7.2 classic ones, F8b's 5.7-6.4).
+  DESIGN's "The merged build, as gated".)
 - [ ] **Grand rebalance.** At Grand the points don't bind the Bushtails'
   lists (the slot table and the 90-model cap do: points bind 14 of 1,000
   Random lists, a median 1,325 spent, against the Coil's 900 and 1,480),
@@ -1025,6 +1062,37 @@ follows N3.
   seeds; lists that vary the heroes). Until then army-sim reports Grand
   and judges Skirmish and Field. Playtest first. (DESIGN's F8b notes, the
   review.)
+  **The first option, measured** (the merged build's gate; scratch copies
+  of the code with grand's `list.models` raised, nothing shipped;
+  `army-sim --check --mission grand --terrain open --jobs 2`, seed 1111,
+  N 625 a score gate and 600 a fit; "binds" is army-sim's bindOf over
+  autoList's seeds 1-1,000, Bushtails / Coil):
+  | models | Bushtails' score | points bind | Bushtails spend (p10 / median) | units outside their band |
+  |---|---|---|---|---|
+  | 90 (shipped) | 45.4% ± 1.9 (fortified 43.6%) | 14 / 900 | 1,160 / 1,325 | none (bands of 42-228) |
+  | 95 | 55.2% ± 1.9 | 61 / 882 | 1,250 / 1,385 | none |
+  | 100 | 57.0% ± 1.9 | 211 / 858 | 1,300 / 1,455 | Brute 273 ± 43 (170), Sidewinders 142 ± 24 (80) |
+  | 110 | 58.4% ± 1.9 | 258 / 858 | 1,345 / 1,470 | as at 120 |
+  | 120 | 58.3% ± 1.9 | 258 / 858 | 1,345 / 1,470 | Elder −60 ± 56 (75), Oak Guard 74 ± 24 (130), Brute 294 ± 47 (170), Sidewinders 146 ± 25 (80) |
+
+  The score turns between 90 and 95 models (even near 92, by
+  interpolation, on one seed) and is flat
+  past 100: there the 24-unit cap binds the Bushtails instead (their
+  Random lists 21.7 units and 89.0 models at 90, 23.6 and 99.0 at 110 and
+  120, where 997 of 1,000 lists are the same; the Coil's 22.1 and 81.4,
+  then 22.3 and 82.6, held by their points in 858-900 of 1,000 at every
+  cap). So the model cap is a lever about as sharp as the prices: past
+  92 or so the Bushtails' bigger lists win, and raising it alone makes the
+  points bind them in at most a quarter of their lists. Cost: the cap lists grow
+  from 180 models on the table (46 units) to 190 at 95, 199 at 100 and
+  210 at 120 (48 units), so stateHash's string at a Grand deployment from
+  15,311 characters to 15,773, 16,193 and 16,690 (+9% at 120), a blast's
+  per-model test (every model on the table, core/actions/shoot.js
+  blastLands) +6% / +11% / +17%, and the Random lists' models a side
+  170 → 182 (+7%); scale-bench at the new cap lists (24 units, 190-210
+  models; at load about 20, so inside its noise): a Grand battle 552-728
+  ms on `open` and 535-763 on `fortified`, against 621 and 547 at 90 the
+  same hour (the classic row, the load's gauge, 80-103 ms across the runs).
 - [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
   what it built and checked; these gates of its row in DESIGN §4 (the
   migration table) are not done, and stay open here until they are
