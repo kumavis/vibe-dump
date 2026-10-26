@@ -148,7 +148,8 @@
 //      an army out of roster order, a preset with trailing zeros, longer
 //      than the roster, not a string, and a hand-given classic;
 //    - the army/ corpus (sim/baselines/army/*.json, once recorded), and
-//      (F8b) the scale/ one: every seat of every setup in it names a list,
+//      (F8b) the scale/ one and (F9a) the vehicle/ one: every seat of
+//      every setup in it names a list,
 //      legal under today's prices (its mission's own, where its list sets
 //      them) and costing at most 90% of its mission's limit, so a retune of
 //      up to 10% keeps the corpus playable (the row says how many lists it
@@ -1197,7 +1198,8 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     }
     return out
   }
-  for (const set of ['army', 'scale']) {
+  // ((F9a) and the vehicle/ one, its War-Cart lists among them)
+  for (const set of ['army', 'scale', 'vehicle']) {
     const ARMY = join(PKG, 'sim', 'baselines', set)
     const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
     let lists = 0

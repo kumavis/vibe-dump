@@ -27,7 +27,8 @@
 // the setup's (F4: 'vote'); --races <seat 0>,<seat 1> the seats' races
 // (default squirrel,serpent, the title screen's: serpent,squirrel puts the
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
-// default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's).
+// default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's;
+// vehicle, F9a's).
 //
 // The board (F8b): --mission <name> the setup's mission (the code's
 // data/mission.js; classic, the default, is named by none, so a classic
