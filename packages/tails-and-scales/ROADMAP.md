@@ -1041,14 +1041,20 @@ follows N3.
   ruined tower ring at the centre (32% of them), not the keep: on all 502
   keep boards a squad walks up a stair and holds the objective from the
   top. F8b dropped the ring from `open` for walling the objective off;
-  the fix, consensus, is proposed in `sim/notes/keep-connectivity.diff`
+  the fix, consensus, was proposed in `sim/notes/keep-connectivity.diff`
   (a `largeCentre` for `fortified`, the rock box in the ring's place on
   the larger tables, the Skirmish's boards untouched: connectivity 2,000
   of 2,000 and parity 70 of 70 with it applied) for the step that holds
   the core and the corpus. The rows were also made to judge as the rules
   do, the hull on the ground and the objective held at its level, and to
   name the centre piece. Left: that patch, and lobby-rig's `group` and
-  `catch-up` under load. DESIGN's "Inherited failures as built".)
+  `catch-up` under load. DESIGN's "Inherited failures as built".
+  The patch landed with F19a, in a commit of its own before F19a's:
+  `fortified`'s `largeCentre`, the rock box where the ring stood on Field
+  and Grand from the same one draw, checked by checkSet and data-check;
+  terrain-check exits 0, connectivity 2,000 of 2,000, parity 70 of 70
+  byte-identical, `RULES_ID` moved; F19a's `CORE_VERSION` 10 covers it.
+  Left: lobby-rig's `group` and `catch-up` under load.)
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.

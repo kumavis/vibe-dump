@@ -674,8 +674,10 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
 // pairs before the features (forts, below), so the big pieces get the space;
 // the features then keep clear of their footprints and their gates' aprons
 // alike. (F8b's `open`, and `fortified`) A set with `scale: 'area'` scales
-// its pair counts and attempts with the table's area. Each branch is reached
-// only for a set that has its field, so classic's draws are untouched.
+// its pair counts and attempts with the table's area. (`fortified`) A set
+// with a `largeCentre` reads it in place of `centre` on a table larger than
+// classic's, from the same one draw. Each branch is reached only for a set
+// that has its field, so classic's draws are untouched.
 export function scatter(T, S, seed, objectives, deployDepth) {
   const rng = mulberry32(seed)
   const { W, H } = T
@@ -683,7 +685,8 @@ export function scatter(T, S, seed, objectives, deployDepth) {
 
   // The middle of the table: something wrapped around the centre objective.
   const centre = rng()
-  const middle = S.centre.find(([, below]) => centre < below)
+  const rule = S.largeCentre && areaScale(T) > 1 ? S.largeCentre : S.centre
+  const middle = rule.find(([, below]) => centre < below)
   if (middle) CENTRES[middle[0]](T, rng, placed)
 
   if (S.works) works(T, S, rng, placed, deployDepth)
@@ -811,9 +814,10 @@ function forts(T, S, rng, placed, objectives, deployDepth) {
 // draws land on it). Throws, naming the set and the field.
 const SET_FIELDS = Object.freeze(['centre', 'kinds', 'pairs', 'attempts', 'mirror', 'margin', 'selfGap', 'deployMargin', 'bigNotInDeploy', 'notInDeploy', 'objectiveGap', 'gap'])
 // (F7a, F8b) the fields a set may have besides: the works, the fort phase's
-// (all of them or none, `facing` with them) and the area scale
+// (all of them or none, `facing` with them), the area scale and the larger
+// tables' centre rule
 const FORT_FIELDS = Object.freeze(['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'])
-const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale'])
+const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale', 'largeCentre'])
 const MIRRORS = Object.freeze(['point']) // the only symmetry scatter knows
 const SCALES = Object.freeze(['area']) // and the only scaling
 export function checkSet(name, S) {
@@ -832,13 +836,18 @@ export function checkSet(name, S) {
     if (!num(k[1]) || k[1] <= 0) bad(`kinds[${i}] (${k[0]}): radius ${k[1]} must be a number above 0`)
     if (!num(k[2]) || k[2] <= 0) bad(`kinds[${i}] (${k[0]}): weight ${k[2]} must be a number above 0`)
   })
-  if (!Array.isArray(S.centre)) bad('centre must be a list of [piece, threshold]')
-  S.centre.forEach((c, i) => {
-    if (!Array.isArray(c) || c.length !== 2) bad(`centre[${i}] must be [piece, threshold]`)
-    if (!(c[0] in CENTRES)) bad(`centre[${i}]: no centre piece "${c[0]}" (there are ${Object.keys(CENTRES).join(', ')})`)
-    if (!num(c[1]) || c[1] <= 0 || c[1] > 1) bad(`centre[${i}] (${c[0]}): threshold ${c[1]} must be in (0, 1]`)
-    if (i && c[1] <= S.centre[i - 1][1]) bad(`centre[${i}] (${c[0]}): thresholds must rise (the first one above the draw wins)`)
-  })
+  // (a centre rule: `centre`, and a `largeCentre` alike)
+  const centreRule = (k) => {
+    if (!Array.isArray(S[k])) bad(`${k} must be a list of [piece, threshold]`)
+    S[k].forEach((c, i) => {
+      if (!Array.isArray(c) || c.length !== 2) bad(`${k}[${i}] must be [piece, threshold]`)
+      if (!(c[0] in CENTRES)) bad(`${k}[${i}]: no centre piece "${c[0]}" (there are ${Object.keys(CENTRES).join(', ')})`)
+      if (!num(c[1]) || c[1] <= 0 || c[1] > 1) bad(`${k}[${i}] (${c[0]}): threshold ${c[1]} must be in (0, 1]`)
+      if (i && c[1] <= S[k][i - 1][1]) bad(`${k}[${i}] (${c[0]}): thresholds must rise (the first one above the draw wins)`)
+    })
+  }
+  centreRule('centre')
+  if ('largeCentre' in S) centreRule('largeCentre')
   if (!Array.isArray(S.pairs) || S.pairs.length !== 2 || !S.pairs.every(int)) bad('pairs must be two whole numbers, 0 or more')
   if (!int(S.attempts)) bad(`attempts ${S.attempts} must be a whole number, 0 or more`)
   if (!MIRRORS.includes(S.mirror)) bad(`mirror "${S.mirror}" is not one scatter knows (${MIRRORS.join(', ')})`)

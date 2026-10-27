@@ -57,7 +57,10 @@
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
 //    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8b) It passes
 //    `open` too, refuses a copy of it with an unknown scale, and classic
-//    has no `scale` (its draws are frozen). (F8a) And the
+//    has no `scale` (its draws are frozen). (The tower ring's fix, with
+//    F19a) It refuses a fortified copy whose `largeCentre`, the larger
+//    tables' centre rule, is broken as a centre rule can be, classic has
+//    none, and RULES_ID moves on it. (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
 //    loads) passes each and refuses one with an odd or fractional board, a
 //    zone reaching within 6" of the centre line, an objective under 1"
@@ -450,6 +453,9 @@ const moves = [
   // (F8b) the open set: its spacing and its area scale
   ['a spacing rule (open gap 3.2 → 3.1)', () => rulesId({ sets: { ...SETS, open: { ...structuredClone(SETS.open), gap: 3.1 } } })],
   ["the open set's area scale dropped", () => rulesId({ sets: { ...SETS, open: (({ scale, ...o }) => o)(structuredClone(SETS.open)) } })],
+  // (the tower ring's fix) the fortified set's centre rule on the larger tables
+  ["fortified's largeCentre (the rock box under 0.8 → 0.75)", () => rulesId({ sets: { ...SETS, fortified: (({ largeCentre, ...o }) => ({ ...o, largeCentre: [largeCentre[0], ['rockbox', 0.75]] }))(structuredClone(SETS.fortified)) } })],
+  ["fortified's largeCentre dropped", () => rulesId({ sets: { ...SETS, fortified: (({ largeCentre, ...o }) => o)(structuredClone(SETS.fortified)) } })],
   // the missions (R6a): where the objectives stand, the rounds, the zones
   ['an objective moved (classic centre 0,0 → 0,1)', () => mission((m) => (m.objectives[0].z = 1))],
   ['an objective added', () => mission((m) => m.objectives.push({ x: 0, z: 10 }))],
@@ -572,8 +578,8 @@ for (const [what, want, edit] of brokenSets) {
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
 }
 // (F7a) the fortified set's own fields, broken one at a time on a copy
-const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale']
-check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
+const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale', 'largeCentre']
+check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale, largeCentre): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
 const brokenForts = [
   ['a fortKind under its footprint (rampart 6, its footprint 7.1)', /fortKinds\[0\] \(rampart\): radius 6 must be a number, at least its footprint 7\.1/, (c) => (c.fortKinds[0][1] = 6)],
   ['a fortKind radius that is not a number', /fortKinds\[1\] \(bastion\): radius 6\.3 must be/, (c) => (c.fortKinds[1][1] = '6.3')],
@@ -595,6 +601,12 @@ const brokenForts = [
   ['facing with no fort phase', /facing names fortKinds, and the set has none/, (c) => ['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'].forEach((k) => delete c[k])],
   ['an unknown scale', /scale "length" is not one scatter knows/, (c) => (c.scale = 'length')],
   ['a misspelt fort field', /unknown field "fortGapp"/, (c) => (c.fortGapp = 3.2)],
+  // (the tower ring's fix) the larger tables' centre rule, checked as `centre` is
+  ['a largeCentre that is no list', /largeCentre must be a list of \[piece, threshold\]/, (c) => (c.largeCentre = 'rockbox')],
+  ['a largeCentre piece that does not exist', /largeCentre\[1\]: no centre piece "moat"/, (c) => (c.largeCentre[1][0] = 'moat')],
+  ['a largeCentre threshold above 1', /largeCentre\[1\] \(rockbox\): threshold 1\.5/, (c) => (c.largeCentre[1][1] = 1.5)],
+  ['largeCentre thresholds that fall', /largeCentre\[1\] \(keep\): thresholds must rise/, (c) => c.largeCentre.reverse()],
+  ['a largeCentre entry without its threshold', /largeCentre\[0\] must be \[piece, threshold\]/, (c) => c.largeCentre[0].pop()],
 ]
 for (const [what, want, edit] of brokenForts) {
   const c = structuredClone(SETS.fortified)
