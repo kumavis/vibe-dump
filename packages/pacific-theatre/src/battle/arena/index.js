@@ -444,7 +444,17 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   }
   ar.addSmoke = (x0, z0, x1, z1, by, hides = true) => {
     ar.smoke.push({ x0, z0, x1, z1, born: ar.t, until: ar.t + A.smokeS, by, hides })
-    ar.fx(FX.smoke, x0, 0, z0, { unit: by, dx: x1 - x0, dz: z1 - z0, size: A.smokeS, data: 1 })
+    // (drawn a line at a time, every 150 m of trail or 20 s: the effect lays two dozen puffs on each line it is given,
+    // and one per 5 s segment stood a white wall along every layer's track)
+    const run = (ar._smokeRun ||= new Map())
+    const r = run.get(by)
+    if (!r || ar.t - r.t > 30) {
+      run.set(by, { x: x0, z: z0, t: ar.t })
+      return
+    }
+    if (Math.hypot(x1 - r.x, z1 - r.z) < A.smokeDrawM && ar.t - r.t < 20) return
+    ar.fx(FX.smoke, r.x, 0, r.z, { unit: by, dx: x1 - r.x, dz: z1 - r.z, size: A.smokeS, data: 1 })
+    run.set(by, { x: x1, z: z1, t: ar.t })
   }
   /**
    * Whether ship j is hidden from ship i by smoke: a screen (drifting with the
@@ -587,6 +597,9 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
         const born = -k * 5
         ar.smoke.push({ x0: b.x - Math.sin(h) * d0, z0: b.z + Math.cos(h) * d0, x1: b.x - Math.sin(h) * d1, z1: b.z + Math.cos(h) * d1, born, until: born + A.smokeS, by: i })
       }
+      // (and drawn: one line along the trail, its life what is left of the screens')
+      const d6 = 6 * 5 * b.V
+      ar.fx(FX.smoke, b.x - Math.sin(h) * d6, 0, b.z + Math.cos(h) * d6, { unit: i, dx: Math.sin(h) * d6, dz: -Math.cos(h) * d6, size: A.smokeS - 30, data: 1 })
     }
   }
   // the aircraft already up: instant action. The scenario's `airborne` counts when it gives them (content-3): the

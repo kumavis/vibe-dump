@@ -82,6 +82,7 @@ export const A = {
   zigzagDeg: 40,
   smokeS: 150, // a screen's life (drawn, drifting); it hides only while thick
   smokeThickS: 100,
+  smokeDrawM: 150, // a smoke trail is drawn a line at a time, every this many metres (the hiding is by every segment)
   smokeR: 250,
   smokeFirstS: 90, // the weaker side's smoke from the start
   smokeWindowS: 60, // a side pressed makes smoke this long, and not again for as long after

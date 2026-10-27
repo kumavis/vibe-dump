@@ -8,6 +8,8 @@
 import { A } from './params.js'
 import { FX } from '../sim/effects.js'
 
+const DEG = Math.PI / 180
+
 /** A ship's hit points by type (contract: escort carrier 10, destroyer 6, cruiser 14, battleship 30, fleet carrier 18). */
 export const shipHp = (model) => A.hp[model.type] ?? A.hp.default
 
@@ -62,7 +64,14 @@ export function hitShip(ar, i, dmg, info) {
   const kind = info.weapon === 'torpedo' ? 'torpedo hit' : info.weapon === 'bomb' ? 'bomb hit' : 'hit'
   const text = magazine ? `${u.name}: a magazine explodes` : `${u.name}: ${kind} ${where}${said && said !== 'going down' ? `, ${said}` : said === 'going down' ? ', going down' : ''}`
   const o = 3 * i
-  if (info.weapon === 'torpedo') ar.fx(FX.splash, s.pos[o], 0, s.pos[o + 2], { unit: i, size: 70 })
+  if (info.weapon === 'torpedo') {
+    // the column at her side where the torpedo struck (inside the hull's middle it stood hidden behind her)
+    const h = s.heading[i] * DEG
+    const side = (info.lx ?? 1) < 0 ? -1 : 1
+    const off = side * (m.B * 0.5 + 6)
+    const al = Math.max(-m.L * 0.4, Math.min(m.L * 0.4, info.lz ?? 0))
+    ar.fx(FX.splash, s.pos[o] + Math.cos(h) * off + Math.sin(h) * al, 0, s.pos[o + 2] + Math.sin(h) * off - Math.cos(h) * al, { unit: i, size: 90 })
+  }
   if (magazine) ar.fx(FX.explode, s.pos[o], 20, s.pos[o + 2], { unit: i, size: 5 })
   if (x.hp <= 0) startSinking(ar, i, info.by ?? -1, magazine)
   return { said, sank: x.hp <= 0, where, text, magazine, kind }
