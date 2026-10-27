@@ -21,7 +21,7 @@
 // (tools/shots/battle-*.png); prints frame time and heap.
 //
 //   node tools/fake-data.mjs && node tools/fake-battle.mjs
-//   node tools/smoke-battle.mjs [--calibration-only] [--browser-only] [--real-only] [--no-real] [--quick]
+//   node tools/smoke-battle.mjs [--calibration-only] [--browser-only] [--real-only] [--no-real] [--quick] [--box <id> ...]
 //
 // Part 3, after the integration, in Chromium under SwiftShader against the
 // built app (npm run build first): each real box booted from
@@ -102,6 +102,7 @@ const band = (v, lo, hi, what) => {
 // Part 1: the calibration batches (R7 §8)
 // ===========================================================================================
 const REAL_ONLY = args.has('--real-only')
+const BOX_ONLY = process.argv.slice(2).flatMap((a, i, v) => (a === '--box' ? [v[i + 1]] : []))
 const TAKEOVER_ONLY = args.has('--takeover-only')
 const doCal = !args.has('--browser-only') && !REAL_ONLY && !TAKEOVER_ONLY
 const doBrowser = !args.has('--calibration-only') && !REAL_ONLY && !TAKEOVER_ONLY
@@ -1227,6 +1228,8 @@ if (doReal) {
   }`
   const man = J('public/data/boxes/manifest.json')
   for (const box of list(man, 'boxes')) {
+    // (--box <id> ...: these boxes alone, so the real part can be run a box or two at a time inside a time limit)
+    if (BOX_ONLY.length && !BOX_ONLY.includes(box.id)) continue
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
     const errors = []
     page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
