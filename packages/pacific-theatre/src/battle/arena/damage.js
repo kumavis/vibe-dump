@@ -45,6 +45,7 @@ export function hitShip(ar, i, dmg, info) {
   if (info.weapon === 'shell' && (info.calibreMm ?? 0) >= 330 && ar.rngs.dmg.next() < A.magazineP) magazine = true
   x.hp = magazine ? 0 : Math.max(0, x.hp - dmg)
   x.lastHitBy = info.by ?? -1
+  x.lastHitWeapon = info.weapon
   x.lastHitT = ar.t
   x.hits = (x.hits || 0) + 1
   const frac = x.hp / x.hpMax
