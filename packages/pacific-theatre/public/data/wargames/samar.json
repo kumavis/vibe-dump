@@ -53,7 +53,7 @@
         { "t": 340, "title": "The Avengers come in", "goal": { "kind": "shoot-down", "type": "aircraft", "count": 4, "withinS": 100 }, "text": "Avengers and Wildcats dive out of the cloud on the cruisers: shoot down four of them." },
         { "t": 450, "title": "Finish them", "goal": { "kind": "sink", "type": "cve", "count": 1, "withinS": 140 }, "text": "A carrier is falling astern, burning: sink her." }
       ],
-      "admiral": { "aggression": 0.7, "turnAwayAt": 0.5, "launchEveryS": null, "waveGrowth": 0, "waveSize": 0 }
+      "admiral": { "aggression": 0.2, "press": 0.6, "turnAwayAt": 0.81, "launchEveryS": null, "waveGrowth": 0, "waveSize": 0 }
     },
     "usa": {
       "side": "us",
@@ -107,7 +107,7 @@
         { "t": 330, "title": "Hold them off", "goal": { "kind": "survive", "type": "cve", "count": 5, "withinS": 120 }, "text": "Kurita's heavy cruisers are on the carriers' port quarter and closing: keep five carriers afloat." },
         { "t": 460, "title": "Kurita turns away", "goal": { "kind": "sink", "type": "ca", "count": 1, "withinS": 130 }, "text": "Kurita's force is scattered and under air attack: sink a cruiser before he can gather it again." }
       ],
-      "admiral": { "aggression": 0.5, "turnAwayAt": 0.4, "launchEveryS": 75, "waveGrowth": 0.3, "waveSize": 8 }
+      "admiral": { "aggression": 0.5, "turnAwayAt": 0.4, "launchEveryS": 60, "waveGrowth": 0.45, "waveSize": 14 }
     }
   },
   "footnote": "In the surface action off Samar on 25 October 1944 Taffy 3 lost Gambier Bay, Hoel, Johnston and Samuel B. Roberts; Chōkai, Chikuma and Suzuya were crippled and lost later that day; and at 09:11 Vice Admiral KURITA Takeo 栗田健男 turned his force north.",

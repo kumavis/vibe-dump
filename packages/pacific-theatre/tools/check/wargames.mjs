@@ -553,6 +553,7 @@ function checkAdmiral(ctx, at, A, own) {
   if (!num(A.aggression, 0, 1)) ctx.bad(at, `aggression ${A.aggression}: 0 to 1`)
   if (!num(A.turnAwayAt, 0, 1)) ctx.bad(at, `turnAwayAt ${A.turnAwayAt}: the strength (0 to 1) at which it turns away`)
   if (!num(A.waveGrowth, 0, 2)) ctx.bad(at, `waveGrowth ${A.waveGrowth}: 0 to 2`)
+  if (A.press !== undefined && !num(A.press, 0, 1)) ctx.bad(at, `press ${A.press}: how far the aggression rises by the end, 0 to 1`)
   if (A.waveSize !== undefined && !(isInt(A.waveSize) && A.waveSize >= 0 && A.waveSize <= MAX_AIRBORNE)) ctx.bad(at, `waveSize ${A.waveSize}: 0 to ${MAX_AIRBORNE}`)
   const flies = own.aircraft.length > 0
   if (flies) {

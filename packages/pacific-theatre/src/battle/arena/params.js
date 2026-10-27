@@ -50,7 +50,8 @@ export const A = {
   torpedoArmM: 150, // estimate: armed after 150 m (the wide window)
   aaK: 3, // contract: AA as the hazard model × 3
   // the AI's ranging (estimate; research/engine-3.md §5: the lead is solved exactly, the range is walked in)
-  aiGun: { startPct: 40, startMils: 80, improve: 0.2, floorPct: 22, floorMils: 35, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 30, medium: 40, heavy: 40 }, lightM: 2500, goalK: 0.55 },
+  // (the intervals 45 s and 50 s for the medium and heavy guns are the integrator's, from the balance runs: research/engine-3.md §8)
+  aiGun: { startPct: 40, startMils: 80, improve: 0.2, floorPct: 22, floorMils: 35, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 30, medium: 45, heavy: 50 }, lightM: 2500, goalK: 0.55 },
   chaseS: [10, 18], // a ship under fire (a fall within 250 m in the last 20 s) weaves ±chaseDeg: it chases the salvos
   chaseDeg: 30,
   // the AI's air-to-air bursts (estimate)
@@ -89,6 +90,7 @@ export const A = {
   smokeLayers: 2, // escorts laying smoke at once, a side (the carriers make their own only while their main body is being hit)
   squallSeeOutM: 2000, // a ship inside a squall sees out this far (and is seen from no further than squall.hideM)
   rangeFor: (aggression) => 5600 - 3000 * aggression, // the range the admiral keeps to the enemy's main body (0.6: 3.8 km)
+  pressFromS: 120, // an admiral's `press` (the integrator's, for the balance) raises its aggression from here to the end of the clock
   freeTorpedoS: 120, // a cruiser or destroyer outside an attack fires at a carrier or capital ship on its beam no oftener than this
   surviveRangeM: 5200, // a side that must keep its ships afloat keeps away (beyond the arena's width: it runs, and the edge turns it)
   waveBase: 3, // the first wave: at least three, or a sixth of the strike aircraft a side has

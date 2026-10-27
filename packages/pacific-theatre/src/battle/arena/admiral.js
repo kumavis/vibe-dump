@@ -40,6 +40,8 @@ export function createAdmiral(ar, side) {
   const p = side.def.admiral || {}
   return {
     aggression: p.aggression ?? 0.5,
+    // (the integrator's: how far the aggression rises by the end of the ten minutes, from A.pressFromS on)
+    press: p.press ?? 0,
     turnAwayAt: p.turnAwayAt ?? 0.4,
     launchEveryS: p.launchEveryS ?? null,
     waveGrowth: p.waveGrowth ?? 0,
@@ -61,6 +63,12 @@ export function createAdmiral(ar, side) {
     turnedAt: null,
     log: [],
   }
+}
+
+/** The admiral's aggression now: the scenario's, rising by its `press` from A.pressFromS to the end of the clock. */
+export function aggressionNow(ar, adm) {
+  const k = Math.max(0, Math.min(1, (ar.t - A.pressFromS) / Math.max(1, ar.durationS - A.pressFromS)))
+  return Math.min(1, adm.aggression + (adm.press || 0) * k)
 }
 
 /** The centroid of a side's core ships afloat (or of any ship afloat). */
@@ -245,8 +253,11 @@ export function admiralTick(ar, side) {
   const gz = s.pos[3 * g + 2]
   adm.threat = bearingOf(eb.x - gx, eb.z - gz)
   adm.range = Math.hypot(eb.x - gx, eb.z - gz)
-  // the turn-away, at the scenario's strength (contract: "turns away at half strength")
-  if (adm.state !== 'turn-away' && side.strength.fraction < adm.turnAwayAt) {
+  // the turn-away, at the scenario's strength (contract: "turns away at half strength"); an admiral one ship short of a goal of
+  // several presses home for the last instead (the integrator's: a game ends on a goal met or held, not one ship short of both)
+  const gs = side.goalState
+  const lastOne = gs?.status === 'open' && gs.kind !== 'survive' && gs.count > 0 && gs.need - gs.count === 1
+  if (adm.state !== 'turn-away' && side.strength.fraction < adm.turnAwayAt && !lastOne) {
     adm.state = 'turn-away'
     adm.turnedAt = ar.t
     adm.ddAttack = false
@@ -254,8 +265,10 @@ export function admiralTick(ar, side) {
     note(ar, side, 'turn-away')
     ar._onTurnAway(side)
   }
-  // a side whose goal is to keep its ships afloat keeps its distance (Taffy 3 ran under its smoke); the rest hold the range their aggression asks
-  const want = side.def.goal?.kind === 'survive' ? Math.max(A.rangeFor(adm.aggression), A.surviveRangeM) : A.rangeFor(adm.aggression)
+  // a side whose goal is to keep its ships afloat keeps its distance (Taffy 3 ran under its smoke); the rest hold the range their
+  // aggression asks, and an admiral who presses closes it as the clock runs (the scenario's `press`: so a game is decided late)
+  const agg = aggressionNow(ar, adm)
+  const want = side.def.goal?.kind === 'survive' ? Math.max(A.rangeFor(agg), A.surviveRangeM) : A.rangeFor(agg)
   // which way round: the side of the threat axis that points more toward the arena's centre
   const toCentre = bearingOf(ar.centre.x - gx, ar.centre.z - gz)
   const pick = (a, b) => (Math.abs(wrap180(a - toCentre)) <= Math.abs(wrap180(b - toCentre)) ? a : b)
@@ -361,7 +374,7 @@ function destroyers(ar, side, enemy, ob, eb) {
     return
   }
   if (adm.state === 'turn-away' || !attackers.length || ar.t - adm.ddDoneT < 120) return
-  const near = Math.hypot(ob.x - eb.x, ob.z - eb.z) < A.ddAttackM && adm.aggression >= 0.3
+  const near = Math.hypot(ob.x - eb.x, ob.z - eb.z) < A.ddAttackM && aggressionNow(ar, adm) >= 0.3
   const losing = ar.t > A.ddAttackAfterS && side.strength.fraction < enemy.strength.fraction
   if (!near && !losing) return
   const targets = targetsFor(ar, side, enemy)
