@@ -38,7 +38,7 @@ import { draw } from '../rng.js'
 import { hypot, hypot3, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt } from '../queries.js'
+import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt, groundY } from '../queries.js'
 import { damage } from './damage.js'
 
 export function canShoot(G, u) {
@@ -49,17 +49,51 @@ export function canShoot(G, u) {
   return true
 }
 
+// (F17, DESIGN §4.2.4) Lobbing from height. A lobbed weapon (a blast or an
+// indirect one, but never a spell: the thorns erupt under the target and the
+// gaze is no lob) carries farther from higher ground, as a thrown thing
+// does: with R its printed range and h the drop (the shooter's floor less
+// the target's, negative firing up), it reaches √(R² + 2hR), the farthest a
+// projectile launched at the speed that carries it R on the flat lands from
+// h higher, at its best angle (scale-free, so the table's inches serve).
+// Direct fire (a sling's, a spit's, a javelin's: flat arcs) reaches its
+// printed range from anywhere.
+export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)
+
+// How far `u`'s ranged weapon reaches `tg` from `from` (where it stands, by
+// default; the AI scores the cells it might move to), or with no `tg` the
+// ground under it (the overlay's ring: h its own floor). Without height the
+// printed range itself, the classic expression (§4.1 rule 18: a path of its
+// own, never the formula with h = 0); with it, a lobbed weapon's reach as
+// above (level, the printed range exactly), anything else the printed range.
+// A drop so far below that nothing reaches (R² + 2hR ≤ 0: firing up more
+// than half the range) reaches 0. Pure, under the lock like every query:
+// shotInfo's range test reads it, and the AI's (core/ai/score.js), and
+// through the queries the tooltip's inches and the overlay's ring.
+export function rangeOf(G, u, tg = null, from = u.pos) {
+  const w = u.t.ranged
+  if (!G.nav.hasHeight || !lobbed(w)) return w.range
+  const R = w.range, h = floorAt(G, from.x, from.z) - (tg ? groundY(G, tg) : 0)
+  if (h === 0) return R
+  const q = R * R + 2 * h * R
+  return q > 0 ? Math.sqrt(q) : 0
+}
+
+// May `u` shoot `target`, and at what odds: { ok, range, reach, visible,
+// cover, seen, total, mod, need }, or { ok: false, why }. (F17) `range` is
+// the gap between the two bases, `reach` how far the weapon carries to this
+// target (rangeOf: the printed range but for a lob from or at height).
 export function shotInfo(G, u, target) {
   const w = u.t.ranged
-  const range = gap(u, target)
-  if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
+  const range = gap(u, target), reach = rangeOf(G, u, target)
+  if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
   if (isEngaged(G, target) && !w.spell) return { ok: false, why: 'locked in combat' }
   const s = sight(G, u, target)
   if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
   let mod = 0
   if (w.heavy && u.flags.moved) mod++
   if (w.indirect && !s.visible) mod++
-  return { ok: true, range, ...s, mod, need: hitNeed(u.t.BS, mod) }
+  return { ok: true, range, reach, ...s, mod, need: hitNeed(u.t.BS, mod) }
 }
 
 export function shootTargets(G, u) {

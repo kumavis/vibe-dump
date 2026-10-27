@@ -1233,8 +1233,8 @@ const V1_PINS = {
 }
 // (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
 // F8b's missions, open set and fight guard, which a classic battle meets as
-// before)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7]
+// before; 8, F17's lobbing from height, which needs height)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8]
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a
@@ -1556,8 +1556,19 @@ function interleave(core, A, B) {
 //    review) on GRAND_LEVEL Grand-sized ones (the Grand fixture's table,
 //    80×56 with its 14" zones and nine objectives, built straight from the
 //    code's Terrain and NavGrid), where bastions stand and a deck can be a
-//    shortcut between two ground points.
-const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12
+//    shortcut between two ground points;
+//  - (F17, code with rangeOf) lobbing from height, lobPairs on every
+//    fortified board: each unit with a ranged weapon put on random cells,
+//    raised and on the ground, against an enemy on others (LOB_PAIRS a
+//    unit): rangeOf is the physics' reach bit for bit (a lobbed weapon,
+//    blast or indirect and no spell, √(R² + 2hR), h the shooter's floor less
+//    the target's; anything else its printed range); shotInfo refuses as
+//    out of range exactly the gaps past it; the AI's shotValue is 0 past
+//    it; and the scenes only the lob decides: from a deck at the ground past
+//    the printed range, a shot taken (and the AI valuing it, an indirect
+//    weapon at an enemy in no fight), and up at a deck within the printed
+//    range, refused.
+const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12, LOB_PAIRS = 40
 // a charge spot's reach of another enemy: its base and the charger's, and
 // ENGAGE (core/actions/charge.js's test)
 const R0 = (e, u) => e.r + u.r + 1
@@ -1914,8 +1925,95 @@ function controlScene(q, nav, objectives, u, where, counts) {
   }
 }
 
+// (F17) Lobbing from height on one fortified board (G, its nav): see the
+// header's last row. The reference is the physics restated, never the
+// code's rangeOf: a lobbed weapon is a blast or an indirect one that isn't
+// a spell, and its reach √(R² + 2hR) (level, R; nothing reaching, 0).
+function lobPairs(q, mods, G, nav, rand, where, counts) {
+  if (!q.rangeOf) return
+  const STEP = mods.nav.STEP
+  const lobs = (w) => !w.spell && !!(w.blast || w.indirect)
+  const ref = (w, h) => {
+    if (!lobs(w) || h === 0) return w.range
+    const x = w.range * w.range + 2 * h * w.range
+    return x > 0 ? Math.sqrt(x) : 0
+  }
+  const raised = [], ground = []
+  for (let i = 0; i < nav.N; i++) {
+    if (nav.floor[i] > STEP) raised.push(i)
+    else if (nav.floor[i] === 0) ground.push(i)
+  }
+  if (!raised.length || !ground.length) return
+  const any = (xs) => xs[Math.floor(rand() * xs.length)]
+  const at = (u, i) => {
+    u.pos.x = nav.x(i)
+    u.pos.z = nav.z(i)
+  }
+  const gapAt = (u, e, i, j) => Math.hypot(nav.x(i) - nav.x(j), nav.z(i) - nav.z(j)) - u.r - e.r
+  for (const u of G.units.filter((x) => q.alive(x) && x.t.ranged)) {
+    const w = u.t.ranged, e = G.units.find((x) => x.side !== u.side && q.alive(x))
+    const pu = { ...u.pos }, pe = { ...e.pos }
+    try {
+      // random pairs, half the shooters raised and half the targets
+      for (let k = 0; k < LOB_PAIRS; k++) {
+        const i = any(k % 2 ? raised : ground), j = any(k % 4 < 2 ? ground : raised)
+        at(u, i)
+        at(e, j)
+        const h = nav.floor[i] - nav.floor[j], want = ref(w, h), got = q.rangeOf(G, u, e)
+        if (!Object.is(got, want)) throw new Error(`${where}: ${w.name} (${w.range}") from cell ${i} (floor ${nav.floor[i]}) at cell ${j} (floor ${nav.floor[j]}) reaches ${got}", not ${want}"`)
+        const g = q.gap(u, e), info = q.shotInfo(G, u, e), out = !info.ok && info.why.startsWith('out of range')
+        if (out !== g > want) throw new Error(`${where}: ${w.name} at ${g.toFixed(3)}" against a reach of ${want}" (cell ${i} at ${j}) is ${out ? '' : 'not '}refused as out of range${info.ok ? '' : ` (${info.why})`}`)
+        if (g > want && mods.score.shotValue(G, u, e, u.pos, false) !== 0) throw new Error(`${where}: the AI values ${w.name} at ${g.toFixed(3)}", past its reach of ${want}" (cell ${i} at ${j})`)
+        counts.lobPairs++
+      }
+      if (!lobs(w)) continue
+      // from a deck at the ground, past the printed range but within the
+      // reach: taken (not out of range); the AI values it, an indirect
+      // weapon at an enemy in no fight
+      for (let tries = 0; tries < 30; tries++) {
+        const i = any(raised), R = w.range, far = ref(w, nav.floor[i])
+        const j = ground.find((c) => {
+          const g = gapAt(u, e, i, c)
+          return g > R + 0.05 && g < far - 0.05
+        })
+        if (j === undefined) continue
+        at(u, i)
+        at(e, j)
+        const info = q.shotInfo(G, u, e)
+        if (!info.ok && info.why.startsWith('out of range')) throw new Error(`${where}: ${w.name} (${R}") from cell ${i}, ${nav.floor[i]}" up, refuses a target on the ground ${q.gap(u, e).toFixed(2)}" off, within its reach of ${far.toFixed(2)}": ${info.why}`)
+        if (info.ok && info.reach !== far) throw new Error(`${where}: ${w.name}'s shotInfo gives a reach of ${info.reach}", not ${far}"`)
+        counts.lobDown++
+        if (w.indirect && !q.isEngaged(G, e)) {
+          if (!(mods.score.shotValue(G, u, e, u.pos, false) > 0)) throw new Error(`${where}: the AI values nothing in ${w.name} from cell ${i}, ${nav.floor[i]}" up, at an enemy ${q.gap(u, e).toFixed(2)}" off on the ground, within its reach of ${far.toFixed(2)}"`)
+          counts.lobValued++
+        }
+        break
+      }
+      // from the ground up at a deck, within the printed range but past
+      // the reach: refused
+      for (let tries = 0; tries < 30; tries++) {
+        const i = any(raised), R = w.range, near = ref(w, -nav.floor[i])
+        const j = ground.find((c) => {
+          const g = gapAt(u, e, c, i)
+          return g > near + 0.05 && g < R - 0.05
+        })
+        if (j === undefined) continue
+        at(u, j)
+        at(e, i)
+        const info = q.shotInfo(G, u, e)
+        if (info.ok || !info.why.startsWith('out of range')) throw new Error(`${where}: ${w.name} (${R}") from the ground at cell ${j} takes a target ${nav.floor[i]}" up at cell ${i}, ${q.gap(u, e).toFixed(2)}" off, past its reach of ${near.toFixed(2)}" firing up${info.ok ? '' : `: ${info.why}`}`)
+        counts.lobUp++
+        break
+      }
+    } finally {
+      Object.assign(u.pos, pu)
+      Object.assign(e.pos, pe)
+    }
+  }
+}
+
 function heightTask(core, mods) {
-  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0 }
+  const q = core.q, counts = { boards: 0, pairs: 0, steps: 0, links: 0, cells: 0, plans: 0, ledges: 0, flat: 0, grand: 0, keepTop: 0, controlAbove: 0, pileIn: 0, pileRefused: 0, chargeOver: 0, blastSpared: 0, smashSkipped: 0, smashHit: 0, lobPairs: 0, lobDown: 0, lobUp: 0, lobValued: 0 }
   const nav0 = mods.nav, { STEP } = nav0
   const SEATS = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
   // classic: no height anywhere
@@ -2052,11 +2150,18 @@ function heightTask(core, mods) {
     heightScenes(core, mods, G, () => core.createMatch({ board, dice: 1, terrain: 'fortified', seats: SEATS }), where, counts)
     // P-level
     levelPairs(q, G, nav, rand, where, counts)
+    // (F17) lobbing from height
+    lobPairs(q, mods, G, nav, rand, where, counts)
   }
   if (!counts.ledges || !counts.flat || !counts.links || !counts.plans) throw new Error(`P-height met no ${!counts.ledges ? 'pair across a ledge' : !counts.flat ? 'pair on one level' : !counts.links ? 'link in a reach' : 'unit at a ladder\'s foot'} on ${HEIGHT_BOARDS} boards`)
   // (F7a's review) every scene met at least once
   const scenes = { keepTop: "a unit on the keep's top", pileIn: 'a pile-in onto open deck', pileRefused: "a pile-in onto a ledge's band", chargeOver: 'a charge spot on a deck within 1" of an enemy below', blastSpared: 'a template on a deck over the ground', smashSkipped: "a wrecker's smash beside a raised piece", smashHit: "a wrecker's smash beside a piece on the ground" }
   for (const [k, what] of Object.entries(scenes)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
+  // (F17) and the lob's, on code that lobs
+  if (q.rangeOf) {
+    const lobScenes = { lobDown: 'a lobbed shot from a deck past its printed range', lobUp: 'a lobbed shot up at a deck within its printed range', lobValued: 'an indirect weapon on a deck valued by the AI past its printed range' }
+    for (const [k, what] of Object.entries(lobScenes)) if (!counts[k]) throw new Error(`P-height met no scene with ${what} on ${HEIGHT_BOARDS} boards`)
+  }
   // (F7a's review) P-level on Grand-sized fortified boards, where bastions
   // stand (Skirmish never fits one): the code's own Terrain and NavGrid
   // (and controlOf's scene, which needs a deck beside a ground objective:
@@ -2118,8 +2223,8 @@ if (a.child) {
     } else if (task.kind === 'height') {
       // (F7a: P-height's boards of its own, and P-level)
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
-      const [nav, damage, shoot, move, terrain] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js')])
-      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain }) }
+      const [nav, damage, shoot, move, terrain, score] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js'), mod('ai', 'score.js')])
+      out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain, score }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
@@ -2220,7 +2325,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   // (F7a) P-height's own boards and P-level, for code with a height layer
   if (/export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
     const r = await child({ kind: 'height' }, pkg)
-    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs` : `FAIL ${r.error}`}`)
+    say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs${r.counts.lobPairs ? `; (F17) rangeOf the physics' reach, shotInfo's and the AI's range tests by it, on ${r.counts.lobPairs} shooter-target pairs, ${r.counts.lobDown} lobs from a deck past the printed range taken (${r.counts.lobValued} valued by the AI), ${r.counts.lobUp} up at a deck within it refused` : ''}` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run
@@ -2305,6 +2410,12 @@ const MUTATIONS = {
   'charge-others-flat': ['core/actions/charge.js', ' && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue', ')) continue'],
   'engaged-ignores-height': ['core/queries.js', 'gap(u, e) <= ENGAGE + 0.05 && Math.abs(groundY(G, u) - groundY(G, e)) <= HIGH)', 'gap(u, e) <= ENGAGE + 0.05)'],
   'everyone-climbs': ['core/actions/move.js', 'forbid: mode === \'fly\' ? null : forbid, climb: climbs(u) })', 'forbid: mode === \'fly\' ? null : forbid, climb: true })'],
+  // (F17) lobbing from height: a reach that ignores the height, direct
+  // fire (and spells) lobbing too, and an AI that weighs the printed range
+  // while the rules take the lob
+  'lob-flat': ['core/actions/shoot.js', '  if (!G.nav.hasHeight || !lobbed(w)) return w.range\n', '  return w.range\n'],
+  'lob-direct': ['core/actions/shoot.js', 'export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)', 'export const lobbed = (w) => !!w'],
+  'lob-ai-flat': ['core/ai/score.js', '  if (g > rangeOf(G, u, e, from)) return 0\n', '  if (g > w.range) return 0\n'],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a

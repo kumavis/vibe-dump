@@ -949,8 +949,21 @@ console.log(`all ${boards} board${boards === 1 ? '' : 's'} identical: layout dra
 //    mirror link, at the same cost); the cliff field within 1e-4 (its two
 //    chamfer passes sum in the board's order).
 //  - The works stand on ≥ 95% of boards (judged over 100 boards or more).
+//  - (F17, DESIGN §4.2.4) Lobbing from height, over every deck: a lobbed
+//    weapon (blast or indirect, never a spell) on the deck's top reaches a
+//    target on the ground √(R² + 2hR) away, h the top's floor, and one on the
+//    ground reaches a target on the top √(R² − 2hR) (rangeOf, bit for bit
+//    that expression); its reach to the ground (no target: the overlay's
+//    ring) is the first; direct fire and spells reach their printed range
+//    both ways; and a board without height gives every weapon its printed
+//    range exactly. The roadmap's numbers to a tenth: the Trebuchet's 36"
+//    is 37.9" from a 2" deck (a rampart's, a bastion's) and 38.4" from the
+//    keep's 2.5", 33.9" firing up at a 2" one; the Venom Engine's 30" is
+//    31.9" from 2"; the Grenadiers' 12" is 13.9" from 2" and 14.7" from the
+//    watchtower's 3".
 // A failure names the board, the piece and the row.
 const { NavGrid, CLIMB_R, STEP, LADDER_MUL } = await imp(PKG, 'core/nav.js')
+const { rangeOf } = await imp(PKG, 'core/queries.js')
 const { RACES } = await imp(PKG, 'data/schema.js')
 const { formation } = await imp(PKG, 'core/units.js')
 const radius = (t) => formation(t.models, t.base).reduce((m, [x, z]) => Math.max(m, hypot(x, z)), 0) + t.base
@@ -959,6 +972,17 @@ const BIG = [1.05, 0.95]
 const FLIERS = [...new Set(UNITS.filter((t) => t.fly).map(radius))]
 const STAIRED = new Set(['rampart', 'bastion', 'keep'])
 const climb = { boards: 0, failed: 0, decks: 0, staired: 0, ladderOnly: 0, ladders: 0, stairs: 0, cells: 0, works: {} }
+// (F17) the lob rows: the weapons (a lobbed one of each kind, direct fire, a
+// blast spell and a gaze), the decks they were held on, and the numbers the
+// roadmap gives, each met at least once
+const UNIT = (race, key) => ({ ...RACES[race].units[key], key })
+const LOBS = [UNIT('squirrel', 'trebuchet'), UNIT('serpent', 'engine'), UNIT('squirrel', 'grenadier')]
+const FLAT = [UNIT('squirrel', 'nutkin'), UNIT('serpent', 'spitter'), UNIT('squirrel', 'elder'), UNIT('serpent', 'hierophant')]
+const NUMBERS = [
+  ['trebuchet', 2, 'down', '37.9'], ['trebuchet', 2.5, 'down', '38.4'], ['trebuchet', 2, 'up', '33.9'],
+  ['engine', 2, 'down', '31.9'], ['grenadier', 2, 'down', '13.9'], ['grenadier', 3, 'down', '14.7'],
+]
+const lob = { decks: 0, pairs: 0, met: new Set() }
 const tc0 = Date.now()
 const climbShown = []
 const fail = (where, what) => {
@@ -999,6 +1023,8 @@ function climbBoard(B, seed) {
       if (!ok) return fail(where, `deck ${d.id} (${d.look.recipe}, level ${L}) has no cell an r ${r} disc stands on`)
     }
   }
+  // (F17) lobbing from each deck's top at the ground, and up at it
+  lobDecks(where, nav, decks)
   // the reaches from seat 0's zone
   let start = -1, bd = Infinity
   const zx = -B.W / 2 + B.deploy / 2
@@ -1053,6 +1079,41 @@ function climbBoard(B, seed) {
     }
   }
 }
+// (F17) every deck's top against the ground: the cell at the deck's centre
+// (its floor the deck's height) and the first ground cell (floor 0), a
+// shooter of each weapon at one and a target at the other, both ways
+function lobDecks(where, nav, decks) {
+  const G = { nav }
+  const at = (t, i) => ({ t, pos: { x: nav.x(i), z: nav.z(i) }, r: 1 })
+  let ground = -1
+  for (let i = 0; i < nav.N && ground < 0; i++) if (nav.floor[i] === 0) ground = i
+  if (ground < 0) return fail(where, 'the board has no ground cell')
+  for (const d of decks) {
+    const top = nav.index(d.shape.x, d.shape.z), h = nav.floor[top]
+    lob.decks++
+    for (const t of [...LOBS, ...FLAT]) {
+      const w = t.ranged, R = w.range, lobbed = LOBS.includes(t)
+      const down = rangeOf(G, at(t, top), at(t, ground)), up = rangeOf(G, at(t, ground), at(t, top)), ring = rangeOf(G, at(t, top))
+      const wantDown = lobbed ? Math.sqrt(R * R + 2 * h * R) : R, wantUp = lobbed ? Math.sqrt(R * R - 2 * h * R) : R
+      lob.pairs++
+      if (!Object.is(down, wantDown)) fail(where, `${w.name} (${R}") on deck ${d.id} (${d.look.recipe}, ${h}" up) reaches ${down}" at the ground, not ${wantDown}"`)
+      if (!Object.is(up, wantUp)) fail(where, `${w.name} (${R}") on the ground reaches ${up}" at deck ${d.id} (${d.look.recipe}, ${h}" up), not ${wantUp}"`)
+      if (!Object.is(ring, down)) fail(where, `${w.name}'s ring on deck ${d.id} (${d.look.recipe}) is ${ring}", not its reach to the ground, ${down}"`)
+      for (const [key, hh, way, tenth] of NUMBERS) {
+        if (t.key !== key || h !== hh) continue
+        const got = (way === 'down' ? down : up).toFixed(1)
+        if (got !== tenth) fail(where, `${w.name} ${way === 'down' ? `from ${hh}" up at the ground` : `at ${hh}" up from the ground`} reaches ${got}", not the roadmap's ${tenth}"`)
+        else lob.met.add(`${key} ${hh} ${way}`)
+      }
+    }
+  }
+  // without height, the printed range itself
+  const flat = { nav: { hasHeight: false } }
+  for (const t of [...LOBS, ...FLAT]) {
+    const u = { t, pos: { x: 0, z: 0 }, r: 1 }, v = { t, pos: { x: 5, z: 5 }, r: 1 }
+    if (!Object.is(rangeOf(flat, u, v), t.ranged.range) || !Object.is(rangeOf(flat, u), t.ranged.range)) fail(where, `${t.ranged.name} reaches ${rangeOf(flat, u, v)}" on a board without height, not its printed ${t.ranged.range}"`)
+  }
+}
 for (const B of FORT_BOARDS) {
   for (let seed = lo; seed <= hi; seed++) {
     try {
@@ -1065,6 +1126,12 @@ for (const B of FORT_BOARDS) {
   if (n >= 100 && w < 0.95 * n) fail(`P-climb ${B.label}, seeds ${lo}-${hi}`, `the works stand on ${w} of ${n} boards, not ≥ 95%`)
 }
 console.log(`\nP-climb (F7a): ${climb.boards} fortified boards' height layers (${((Date.now() - tc0) / 1000).toFixed(1)} s): ${climb.decks} decks (${climb.staired} a stair rises to, ${climb.ladderOnly} only ladders reach), each reached by a climber (r ${CLIMB_R}) from seat 0's zone, the stair decks by big walkers (r ${BIG.join(', ')}) and no ladder-only deck; ${climb.ladders} ladders climbed over their links, ${climb.stairs} stairs walked up from their gates; every top hosts r ${CLIMB_R} and the fliers' r ${FLIERS.map((r) => r.toFixed(3)).join(', ')}; ${climb.cells} cells' floor and links point-symmetric exactly, the cliff within 1e-4; the works on ${FORT_BOARDS.map((B) => `${climb.works[B.label] ?? 0} ${B.label}`).join(' and ')} boards of ${hi - lo + 1}`)
+console.log(`Lobbing (F17): ${lob.pairs} weapon-deck rows on ${lob.decks} decks: the lobbed weapons (${LOBS.map((t) => `${t.short} ${t.ranged.range}"`).join(', ')}) reach √(R² ± 2hR) down from each top and up at it, the ring the reach down, direct fire and spells (${FLAT.map((t) => t.short).join(', ')}) their printed range, every weapon its printed range on a board without height; the roadmap's numbers met: ${NUMBERS.filter(([k, h, way]) => lob.met.has(`${k} ${h} ${way}`)).map(([k, h, way, tenth]) => `${k} ${way === 'down' ? 'from' : 'up at'} ${h}" ${tenth}"`).join(', ') || 'none'}`)
+// (a deck of each height stands on most runs of seeds: 2" the works, 2.5"
+// the keep on half the boards, 3" a watchtower on a few; a short run may
+// meet none of the rarer ones, which is reported, not failed)
+const lobMissed = NUMBERS.filter(([k, h, way]) => !lob.met.has(`${k} ${h} ${way}`))
+if (lobMissed.length) console.log(`  (not met on these boards: ${lobMissed.map(([k, h, way]) => `${k} ${way} ${h}"`).join(', ')})`)
 if (climb.failed) {
   console.log(`MISMATCH: P-climb failed ${climb.failed} time(s):`)
   for (const s of climbShown) console.log(`  ${s}`)

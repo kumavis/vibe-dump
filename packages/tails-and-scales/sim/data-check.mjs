@@ -900,13 +900,15 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // F7a: the height layer, derived like the nav grid and never hashed, and
   // classic boards build none; 7, F8b: the missions field and grand, the
   // open set and the fight guard, none of which a classic match reaches or
-  // shadowState prints: the format is unchanged for classic matches)
+  // shadowState prints: the format is unchanged for classic matches; 8,
+  // F17: lobbing from height, a range test only, which classic boards
+  // (no height) take as before and shadowState never prints)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

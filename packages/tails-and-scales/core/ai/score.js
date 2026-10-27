@@ -12,7 +12,7 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt } from '../queries.js'
+import { enemiesOf, friendsOf, isEngaged, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 
 // a unit's points still standing
@@ -26,11 +26,18 @@ export function meleeValue(a, d) {
 // Expected points of `e` removed by `u` shooting from `from`. (S1) `pre`,
 // when given, is what bestSpot worked out about `e` once for its whole
 // scan (its `engaged` and `cover`: the same values, asked once).
+//
+// (F17; rule 10: it bumps with F17) The range is shotInfo's: rangeOf, the
+// printed range but for a lobbed weapon with height, measured from the
+// floor of the cell scored (`from`), so a gun weighs the deck it could
+// climb to by the reach it would have there. Nothing here is bounded by a
+// weapon's range (S0's boxes bound the move's plan, never the targets), so
+// no bound needs the extra inches.
 export function shotValue(G, u, e, from, moved, pre = null) {
   const w = u.t.ranged
   if (!w) return 0
   const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
-  if (g > w.range) return 0
+  if (g > rangeOf(G, u, e, from)) return 0
   if ((pre ? pre.engaged : isEngaged(G, e)) && !w.spell) return 0
   const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0

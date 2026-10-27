@@ -23,7 +23,9 @@ export class Tooltip {
 }
 
 // A shot's odds: unit u's ranged weapon at `target`, `info` the match's
-// shotInfo for the pair (its range, cover, sight and hit roll).
+// shotInfo for the pair (its range, cover, sight and hit roll). (F17) The
+// inches are the gap against the reach to this target (`info.reach`: the
+// printed range, or a lob's from or at height, said so beside it).
 export function oddsText(u, target, info) {
   const w = u.t.ranged
   if (w.mesmerize) return `Mesmerize: cast ${w.spell}+ on 2D6 (${Math.round(p2D6(w.spell) * 100)}%) · D3 mortal wounds`
@@ -34,7 +36,9 @@ export function oddsText(u, target, info) {
   const sn = saveNeed(target.t.Sv, w.AP, info.cover)
   lines.push(`${n} ${w.blast ? `template${n > 1 ? 's' : ''} (${w.blast}")` : 'shots'} · hit ${w.spell ? 'auto' : info.need + '+'} · wound ${wn}+ · save ${sn > 6 ? '—' : sn + '+'}`)
   const flags = []
-  flags.push(`${info.range.toFixed(1)}"`)
+  const reach = info.reach ?? w.range
+  const lob = reach > w.range ? ` (${w.range}", lobbed down)` : reach < w.range ? ` (${w.range}", lobbed up)` : ''
+  flags.push(`${info.range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}"${lob}`)
   if (info.cover) flags.push('cover')
   if (!info.visible) flags.push('unseen (indirect −1)')
   else if (info.seen < info.total) flags.push(`${info.seen}/${info.total} visible`)
