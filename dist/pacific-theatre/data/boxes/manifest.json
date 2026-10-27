@@ -555,6 +555,7 @@
       "exaggeration": 1,
       "sea": "gmrt",
       "battle": "boxes/samar/battle.json",
+      "wargame": "wargames/samar.json",
       "clock": "usn-item",
       "stats": {
         "landFraction": 0.1106,
