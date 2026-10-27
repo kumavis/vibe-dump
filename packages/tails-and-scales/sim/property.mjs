@@ -151,6 +151,16 @@
 //    its stateHash data-check's pin; and per mission 50 random legal lists
 //    played to the end under strict, 40 AI against AI and 10 with a human
 //    seat answered at random as (3)'s games are.
+// 12. (F18) P-fight, on code with fightOf: shooting into a fight, on scenes
+//    of its own (fightTask below says what each holds): a target locked in
+//    combat legal for every ranged weapon of both races; a volley's dice
+//    held draw for draw, one draw per miss after the hit roll and before
+//    the wound roll, the strays the misses that drew under the friends'
+//    share, the target's rows and line before the friend's, the stray hits
+//    on the friend with the most models (ties the first in G.units order);
+//    a clear shot (no friend in the fight) drawing no stray die; and the
+//    AI's shot value net of its friendly fire, the Venom Engine holding its
+//    fire rather than shell its own Brute.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -1233,8 +1243,11 @@ const V1_PINS = {
 }
 // (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
 // F8b's missions, open set and fight guard, which a classic battle meets as
-// before; 8, F17's lobbing from height, which needs height)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8]
+// before; 8, F17's lobbing from height, which needs height; 9, F18's
+// shooting into a fight, the format unchanged, but 64-89 another battle
+// under it: its end data-check's V9)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const PINS_UNDER = (v) => (v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a
@@ -1429,7 +1442,7 @@ function sweepTask(core, RACES, MISSIONS) {
 function shadowTask(core) {
   const { items } = loadCorpus()
   let n = 0
-  for (const [id, pins] of Object.entries(V1_PINS)) {
+  for (const id of Object.keys(V1_PINS)) {
     const job = items.find((x) => x.id === id).job, entries = job.entries ?? []
     const states = [undefined, 'classic', '112111'].map((army) => {
       const setup = jobSetup(job)
@@ -1449,7 +1462,7 @@ function shadowTask(core) {
       if (k >= 0) throw new Error(`P-army: ${id} with ${what} on every seat prints another shadowState than with no army, before entry ${k}`)
     }
     if (PINNED_UNDER.includes(core.CORE_VERSION)) {
-      for (const [at, want] of Object.entries(pins)) {
+      for (const [at, want] of Object.entries(PINS_UNDER(core.CORE_VERSION)[id])) {
         const k = at === 'end' ? entries.length : Number(at)
         if (states[0][k][2] !== want) throw new Error(`P-army: ${id}'s stateHash ${at === 'end' ? 'at its end' : `before entry ${k}`} is ${states[0][k][2]}, not ${want} as data-check pins it: a classic match's shadowState moved`)
         n++
@@ -1566,8 +1579,8 @@ function interleave(core, A, B) {
 //    out of range exactly the gaps past it; the AI's shotValue is 0 past
 //    it; and the scenes only the lob decides: from a deck at the ground past
 //    the printed range, a shot taken (and the AI valuing it, an indirect
-//    weapon at an enemy in no fight), and up at a deck within the printed
-//    range, refused.
+//    weapon at an enemy in no fight, (F18) none of its own under the
+//    template there), and up at a deck within the printed range, refused.
 const HEIGHT_BOARDS = 12, LEVEL_PAIRS = 1000, GRAND_LEVEL = 12, LOB_PAIRS = 40
 // a charge spot's reach of another enemy: its base and the charger's, and
 // ENGAGE (core/actions/charge.js's test)
@@ -1969,7 +1982,8 @@ function lobPairs(q, mods, G, nav, rand, where, counts) {
       if (!lobs(w)) continue
       // from a deck at the ground, past the printed range but within the
       // reach: taken (not out of range); the AI values it, an indirect
-      // weapon at an enemy in no fight
+      // weapon at an enemy in no fight ((F18) and none of its own under the
+      // template there, whose loss the AI nets)
       for (let tries = 0; tries < 30; tries++) {
         const i = any(raised), R = w.range, far = ref(w, nav.floor[i])
         const j = ground.find((c) => {
@@ -1983,7 +1997,7 @@ function lobPairs(q, mods, G, nav, rand, where, counts) {
         if (!info.ok && info.why.startsWith('out of range')) throw new Error(`${where}: ${w.name} (${R}") from cell ${i}, ${nav.floor[i]}" up, refuses a target on the ground ${q.gap(u, e).toFixed(2)}" off, within its reach of ${far.toFixed(2)}": ${info.why}`)
         if (info.ok && info.reach !== far) throw new Error(`${where}: ${w.name}'s shotInfo gives a reach of ${info.reach}", not ${far}"`)
         counts.lobDown++
-        if (w.indirect && !q.isEngaged(G, e)) {
+        if (w.indirect && !q.isEngaged(G, e) && !info.under?.length) {
           if (!(mods.score.shotValue(G, u, e, u.pos, false) > 0)) throw new Error(`${where}: the AI values nothing in ${w.name} from cell ${i}, ${nav.floor[i]}" up, at an enemy ${q.gap(u, e).toFixed(2)}" off on the ground, within its reach of ${far.toFixed(2)}"`)
           counts.lobValued++
         }
@@ -2182,6 +2196,260 @@ function heightTask(core, mods) {
   return counts
 }
 
+// (F18) P-fight: shooting into a fight (DESIGN §4.1 rule 27), on scenes of
+// its own, since the random games and the corpus pass a fight by without
+// judging the dice it draws. On FIGHT_BOARDS classic boards, each race in
+// each seat, a hotseat match is played to the movement phase of the seat
+// the roll-off gives the first turn; every other unit is taken off the
+// table (its count set to 0: the match is thrown away after) and a scene
+// set up before End, so the shooting phase opens on it. For each of the
+// seat's units with a ranged weapon:
+//  - the fight: an enemy with one of the shooter's friends engaged with it
+//    (0.4" apart) and the shooter clear of both, in range and in sight
+//    (placements tried until shotInfo takes the pair): legal() takes the
+//    shot and shootTargets offers the enemy (every ranged weapon, blast,
+//    spell and gaze alike: no "locked in combat"); the shot played through
+//    apply(), its dice held draw for draw to a copy of the stream: a plain
+//    volley's n hit dice, then one draw per miss in the order of the misses
+//    (a stray when under F / (F + T): the stray count the misses that drew
+//    under the share, and the ⚠ row's), then the target's wound and save
+//    dice, then the friend's wound and save dice, and nothing else drawn;
+//    the target's rows and log line before the friend's (its ⚠ row and its
+//    "Friendly fire!" line), the friend's wounds and deaths its own; a
+//    template or a spell strays nothing (no stray row);
+//  - the clear shot: the same with the friend 4" off, out of the fight
+//    (F = 0): a volley draws its hit, wound and save dice and nothing else;
+//  - the tie: the shooter's two units of one type (each army fields two:
+//    the Nutkin, the Scaleguard) both engaged with the enemy, a direct
+//    weapon of another unit shooting: the strays strike the first of the
+//    two in G.units order (fightOf's onto, and the wounds the rows play),
+//    and the second once the first has lost a model (the most models);
+//  - the AI's value (core/ai/score.js): a volley into the fight is worth
+//    less than the same shot with the friend gone, and a template with a
+//    friend under it less than without (ownUnder counts it); and the
+//    Coil's Venom Engine never shells its own Brute: with the Brute engaged
+//    with (and under the template on) the only enemy it can see, its shot's
+//    value nets the Brute's loss, and where that leaves it at or under the
+//    AI's floor (0.4) the AI's shooting phase fires nothing.
+// Every ranged unit type of both races must meet the fight and the clear
+// shot, the tie both armies, and a stray must be rolled, or the run says
+// what it never met and fails.
+const FIGHT_BOARDS = 6
+function fightTask(core, mods) {
+  const q = core.q
+  const counts = { legal: 0, volleys: 0, clear: 0, templates: 0, misses: 0, strays: 0, ties: 0, values: 0, brute: 0, bruteDeclined: 0 }
+  const met = { fight: new Set(), clear: new Set(), tie: new Set() }
+  const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
+  const at = (u, x, z) => {
+    u.pos.x = x
+    u.pos.z = z
+  }
+  // a hotseat match at the movement phase of the seat with the first turn,
+  // every unit but `keep(G, seat)`'s taken off; returns null when the seat
+  // can't field the scene
+  const fresh = (board, races) => {
+    const G = core.createMatch({ board, dice: board, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`P-fight, board ${board}: no movement phase after the deployment`)
+    return { G, s: G.pending.seats[0] }
+  }
+  const only_ = (G, keep) => {
+    for (const u of G.units) if (!keep.includes(u)) u.alive = 0
+  }
+  // End the movement phase into the shooting phase on the scene
+  const toShoot = (G, s, where) => {
+    core.apply(G, s, { t: 'end' })
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'shoot' || G.pending.seats[0] !== s) throw new Error(`${where}: the shooting phase didn't open on the scene (pending ${JSON.stringify(G.pending)})`)
+    G.out.length = 0
+  }
+  // place e at a random open point, `friends` round it at `gapF`, u behind
+  // it at a gap within its range; until shotInfo takes the pair
+  const place = (G, rand, u, e, friends, gapF) => {
+    const { W, H } = G.board, w = u.t.ranged
+    for (let tries = 0; tries < 60; tries++) {
+      const x = (rand() - 0.5) * (W - 12), z = (rand() - 0.5) * (H - 12), a = rand() * Math.PI * 2
+      at(e, x, z)
+      friends.forEach((f, k) => {
+        const b = a + k * Math.PI * 0.5
+        at(f, x + Math.cos(b) * (e.r + f.r + gapF), z + Math.sin(b) * (e.r + f.r + gapF))
+      })
+      const D = 1.6 + rand() * (Math.min(w.range, 12) - 2.2)
+      at(u, x - Math.cos(a + Math.PI * 0.25) * (e.r + u.r + D), z - Math.sin(a + Math.PI * 0.25) * (e.r + u.r + D))
+      if (q.isEngaged(G, u) || friends.some((f) => q.gap(u, f) < 0.2)) continue
+      // (a scene is tried again only for the terrain's reasons: no line of
+      // sight, or a placement past the range; any other refusal is the
+      // rule's)
+      const info = q.shotInfo(G, u, e)
+      if (info.ok) return true
+      if (!/^(no line of sight|out of range)/.test(info.why)) throw new Error(`P-fight, board ${G.setup.board}: shotInfo refuses ${u.t.short} (${w.name}) at ${e.t.short}${q.isEngaged(G, e) ? ', locked in combat with ours,' : ''} ${q.gap(u, e).toFixed(2)}" off: ${info.why}`)
+    }
+    return false
+  }
+  // the shot through apply(), its dice held to the stream's copy: returns
+  // what it found (the rows, the log, the strays)
+  const shoot = (G, s, u, e, where) => {
+    const info = q.shotInfo(G, u, e), w = u.t.ranged
+    const fight = info.fight
+    const r = { ...G.rng }
+    const why = core.legal(G, s, { t: 'shoot', u: u.id, tg: e.id })
+    if (why) throw new Error(`${where}: legal() refuses ${u.t.short} shooting ${e.t.short}${fight ? ', locked in combat,' : ''}: ${why}`)
+    if (!q.shootTargets(G, u).includes(e)) throw new Error(`${where}: shootTargets doesn't offer ${e.t.short} to ${u.t.short}`)
+    counts.legal++
+    core.apply(G, s, { t: 'shoot', u: u.id, tg: e.id })
+    const rows = G.out.filter((x) => x.t === 'dice'), logs = G.out.filter((x) => x.t === 'log').map((x) => x.html.replace(/<[^>]+>/g, ''))
+    const strayRow = rows.findIndex((x) => /stray hit/.test(x.label))
+    if (w.blast || w.spell) {
+      if (strayRow >= 0 || logs.some((l) => /stray shot/.test(l))) throw new Error(`${where}: ${w.name}, a ${w.spell ? 'spell' : 'template'}, strays as a volley does`)
+      if (w.blast) counts.templates++
+      return { rows, logs, stray: 0 }
+    }
+    // the volley, draw for draw
+    const n = rows[0].dice.length, need = info.need
+    const hits = Array.from({ length: n }, () => d6(r))
+    if (rows[0].label !== `Hit ${need}+` || JSON.stringify(hits) !== JSON.stringify(rows[0].dice)) throw new Error(`${where}: the hit row ${JSON.stringify(rows[0])} isn't the stream's first ${n} dice ${JSON.stringify(hits)}`)
+    let stray = 0, misses = 0
+    if (fight) {
+      const share = fight.F / (fight.F + fight.T)
+      for (const d of hits) if (d < need) {
+        misses++
+        if (mods.rng.draw(r) < share) stray++
+      }
+    }
+    const h = hits.filter((d) => d >= need).length
+    let k = 1
+    const next = (m, label, what) => {
+      const dice = Array.from({ length: m }, () => d6(r))
+      if (!label) return dice
+      const row = rows[k]
+      if (!row || !label.test(row.label) || (!/No save/.test(row.label) && JSON.stringify(row.dice) !== JSON.stringify(dice))) throw new Error(`${where}: ${what}: row ${k} is ${JSON.stringify(row)}, the stream's next ${m} dice ${JSON.stringify(dice)}`)
+      k++
+      return dice
+    }
+    const wn = h ? next(h, /^Wound \d\+$/, "the target's wound roll") : []
+    const wounds = wn.filter((d) => d >= rows[1]?.need).length
+    next(wounds, wounds ? /^(Save \d\+|No save)/ : null, "the target's save roll")
+    if (logs[0] === undefined || !logs[0].includes(` shoot ${e.t.short}:`)) throw new Error(`${where}: the first log line is ${JSON.stringify(logs[0])}, not the target's`)
+    if (stray) {
+      if (strayRow !== k) throw new Error(`${where}: ${stray} strays, but the ⚠ row is row ${strayRow}, not row ${k} after the target's`)
+      if (!rows[k].label.startsWith(`⚠ ${fight.onto.t.short}: ${stray} stray hit${stray > 1 ? 's' : ''} · wound `)) throw new Error(`${where}: the ⚠ row says ${JSON.stringify(rows[k].label)} for ${stray} strays onto ${fight.onto.t.short}`)
+      const fw = next(stray, /^⚠ /, "the friend's wound roll")
+      const fwounds = fw.filter((d) => d >= rows[k - 1].need).length
+      next(fwounds, fwounds ? /^(Save \d\+|No save)/ : null, "the friend's save roll")
+      if (!logs.some((l, i) => i > 0 && l.startsWith(`Friendly fire! ${stray} stray shot${stray > 1 ? 's' : ''} hit ${fight.onto.t.short}:`))) throw new Error(`${where}: no "Friendly fire!" line after the target's for ${stray} strays: ${JSON.stringify(logs)}`)
+      // the friend's wounds and deaths are its own: every unit.wound and
+      // unit.slain after the ⚠ row is onto's
+      const after = G.out.slice(G.out.indexOf(rows[strayRow])).filter((x) => x.t === 'unit.wound' || x.t === 'unit.slain')
+      if (after.some((x) => x.u !== fight.onto.id)) throw new Error(`${where}: a stray's wound landed on unit ${after.find((x) => x.u !== fight.onto.id).u}, not ${fight.onto.id}`)
+    } else if (strayRow >= 0 || logs.some((l) => /stray shot/.test(l))) throw new Error(`${where}: no miss strayed by the stream, but the rows or the log say one did`)
+    if (r.n !== G.rng.n || r.h !== G.rng.h || r.a !== G.rng.a) throw new Error(`${where}: the shot drew ${G.rng.n - (r.n - 0)} more than its dice (the stream's copy at ${r.n}, the match's at ${G.rng.n})${fight ? '' : ': a stray die with no friend in the fight?'}`)
+    counts.volleys++
+    counts.misses += misses
+    counts.strays += stray
+    return { rows, logs, stray }
+  }
+  for (let board = 1; board <= FIGHT_BOARDS; board++) {
+    for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
+      const rand = mulberry32(board * 104729 + (races[0] === 'squirrel' ? 0 : 1))
+      const probe = fresh(board, races)
+      const shooters = probe.G.units.filter((u) => u.side === probe.s && u.t.ranged).map((u) => u.id)
+      for (const uid of shooters) {
+        for (const kind of ['fight', 'clear']) {
+          const { G, s } = fresh(board, races)
+          const u = G.units.find((x) => x.id === uid), w = u.t.ranged
+          const where = `P-fight, board ${board} (${races.join(' v ')}), ${u.t.short} (${w.name}), ${kind}`
+          const e = G.units.find((x) => x.side !== s && x.models.length > 1 && !x.t.fly)
+          const f = G.units.find((x) => x.side === s && x !== u && x.models.length > 1)
+          only_(G, [u, e, f])
+          if (!place(G, rand, u, e, [f], kind === 'fight' ? 0.4 : 4)) continue
+          const fight = q.fightOf(G, u, e)
+          if (kind === 'fight' && !(fight && fight.F === f.alive && fight.T === e.alive && fight.onto === f && fight.friends.length === 1)) throw new Error(`${where}: fightOf says ${JSON.stringify(fight && { F: fight.F, T: fight.T, onto: fight.onto.id })}, not ${f.alive} of ours against ${e.alive} with ${f.id}`)
+          if (kind === 'clear' && fight) throw new Error(`${where}: fightOf finds a fight with the friend 4" off`)
+          // the AI's value nets the friendly fire (before the shot: it
+          // changes the table)
+          if (kind === 'fight' && !w.mesmerize) {
+            const v = mods.score.shotValue(G, u, e, u.pos, false)
+            const fa = f.alive
+            f.alive = 0
+            const bare = mods.score.shotValue(G, u, e, u.pos, false)
+            f.alive = fa
+            const own = w.blast ? mods.score.ownUnder(G, u, e) : 1
+            if (own > 0 && !(v < bare)) throw new Error(`${where}: the AI values the shot at ${v} with ${f.t.short} ${w.blast ? 'under the template' : 'in the fight'}, ${bare} without: no friendly fire weighed`)
+            counts.values++
+          }
+          toShoot(G, s, where)
+          shoot(G, s, u, e, where)
+          met[kind].add(u.t.key)
+          if (kind === 'clear') counts.clear++
+        }
+      }
+      // the tie: the seat's two units of one type round the enemy, a direct
+      // weapon of another unit shooting
+      for (const drop of [false, true]) {
+        const { G, s } = fresh(board, races)
+        const mine = G.units.filter((x) => x.side === s)
+        const twin = mine.find((x) => mine.some((y) => y !== x && y.t === x.t && x.models.length > 1))
+        const f1 = twin, f2 = twin && mine.find((y) => y !== twin && y.t === twin.t)
+        const u = twin && mine.find((x) => x.t !== twin.t && x.t.ranged && !x.t.ranged.blast && !x.t.ranged.spell)
+        const e = G.units.find((x) => x.side !== s && x.models.length > 1 && !x.t.fly)
+        if (!u || !f2) continue
+        const where = `P-fight, board ${board} (${races.join(' v ')}), the tie${drop ? ' broken' : ''}: ${u.t.short} at ${e.t.short} with two ${f1.t.short}`
+        only_(G, [u, e, f1, f2])
+        if (!place(G, rand, u, e, [f1, f2], 0.4)) continue
+        if (drop) {
+          f1.models[0].alive = false
+          f1.models[0].w = 0
+          f1.alive--
+        }
+        const fight = q.fightOf(G, u, e), want = drop ? f2 : f1
+        if (!fight || fight.friends.length !== 2 || fight.F !== f1.alive + f2.alive || fight.onto !== want) throw new Error(`${where}: fightOf's onto is ${fight?.onto.id}, not ${want.id} (${drop ? 'the most models' : 'the first in G.units order of two alike'})`)
+        toShoot(G, s, where)
+        shoot(G, s, u, e, where)
+        met.tie.add(races[s])
+        counts.ties++
+      }
+      // the Brute: the Coil's Venom Engine, the Brute engaged with the only
+      // enemy, under the template there
+      {
+        const { G, s } = fresh(board, races)
+        const u = G.units.find((x) => x.side === s && x.t.ranged?.blast && !x.t.ranged.spell && x.t.ai === 'artillery')
+        const brute = G.units.find((x) => x.side === s && x.t.big && !x.t.ranged)
+        const e = G.units.find((x) => x.side !== s && x.models.length > 1 && !x.t.fly)
+        if (u && brute) {
+          const where = `P-fight, board ${board} (${races.join(' v ')}), the ${u.t.short} at ${e.t.short} locked with the ${brute.t.short}`
+          only_(G, [u, e, brute])
+          if (place(G, rand, u, e, [brute], 0.4)) {
+            if (!(mods.score.ownUnder(G, u, e) > 0)) throw new Error(`${where}: the ${brute.t.short}, 0.4" from ${e.t.short}, isn't under the template (ownUnder 0)`)
+            const v = mods.score.shotValue(G, u, e, u.pos, false)
+            brute.alive = 0
+            const bare = mods.score.shotValue(G, u, e, u.pos, false)
+            brute.alive = 1
+            if (!(v < bare)) throw new Error(`${where}: the AI values shelling its own ${brute.t.short} at ${v}, no less than ${bare} without it`)
+            toShoot(G, s, where)
+            const cmds = [...mods.policy.aiPhase(G, s, 'shoot')]
+            if (v <= 0.4 && cmds.some((c) => c.t === 'shoot' && c.tg === e.id)) throw new Error(`${where}: the AI shells its own ${brute.t.short} (the shot worth ${v} with it, ${bare} without)`)
+            counts.brute++
+            if (!cmds.length) counts.bruteDeclined++
+          }
+        }
+      }
+    }
+  }
+  // what the scenes must have met
+  const RANGED = (race) => Object.values(RACES_F[race].units).filter((t) => t.ranged).map((t) => t.key)
+  const never = []
+  for (const race of ['squirrel', 'serpent']) {
+    for (const key of RANGED(race)) for (const k of ['fight', 'clear']) if (!met[k].has(key)) never.push(`${race} ${key} ${k}`)
+  }
+  if (met.tie.size < 2) never.push(`the tie in both armies (met ${[...met.tie].join(', ') || 'none'})`)
+  if (!counts.strays) never.push('a stray')
+  if (!counts.bruteDeclined) never.push('the Venom Engine declining to shell its own Brute')
+  if (never.length) throw new Error(`P-fight never met: ${never.join('; ')} (on ${FIGHT_BOARDS} boards)`)
+  return counts
+}
+// (the races, for P-fight's coverage: the child's)
+let RACES_F = null
+
 // (the child's match/ modules that fold a log, R8's: refold's)
 let FOLDING = null
 
@@ -2225,6 +2493,12 @@ if (a.child) {
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
       const [nav, damage, shoot, move, terrain, score] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js'), mod('ai', 'score.js')])
       out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain, score }) }
+    } else if (task.kind === 'fight') {
+      // (F18: P-fight's scenes)
+      const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
+      const [score, policy] = await Promise.all([mod('ai', 'score.js'), mod('ai', 'policy.js')])
+      RACES_F = RACES
+      out = { ok: true, counts: fightTask(core, { rng, score, policy }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
@@ -2328,6 +2602,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs${r.counts.lobPairs ? `; (F17) rangeOf the physics' reach, shotInfo's and the AI's range tests by it, on ${r.counts.lobPairs} shooter-target pairs, ${r.counts.lobDown} lobs from a deck past the printed range taken (${r.counts.lobValued} valued by the AI), ${r.counts.lobUp} up at a deck within it refused` : ''}` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (F18) P-fight's scenes, for code that shoots into a fight
+  if (/export function fightOf/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
+    const r = await child({ kind: 'fight' }, pkg)
+    say(`  P-fight: ${r.ok ? `ok   ${r.counts.legal} shots at a target locked in combat or clear of it, every ranged weapon of both races legal; ${r.counts.volleys} volleys held die for die (${r.counts.misses} misses into a fight, ${r.counts.strays} strayed by the share), the clear shots drawing no stray die, the target's rows and line before the friend's; ${r.counts.templates} templates straying nothing; ${r.counts.ties} ties and broken ties striking the right friend; ${r.counts.values} AI values net of the friendly fire; the Venom Engine at its own Brute's foe ${r.counts.brute} times, holding its fire ${r.counts.bruteDeclined}` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
@@ -2416,6 +2696,21 @@ const MUTATIONS = {
   'lob-flat': ['core/actions/shoot.js', '  if (!G.nav.hasHeight || !lobbed(w)) return w.range\n', '  return w.range\n'],
   'lob-direct': ['core/actions/shoot.js', 'export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)', 'export const lobbed = (w) => !!w'],
   'lob-ai-flat': ['core/ai/score.js', '  if (g > rangeOf(G, u, e, from)) return 0\n', '  if (g > w.range) return 0\n'],
+  // (F18) P-fight: a target in a fight refused again, a stray die drawn
+  // with no friend in the fight, a stray per hit rather than per miss, the
+  // share the target's, the strays' draws after the target's wound roll,
+  // the friend's rows before the target's, a tie struck on the last of two
+  // alike, and an AI that weighs neither a volley's strays nor a template's
+  // friends under it
+  'fight-barred': ['core/actions/shoot.js', "  const s = sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n", "  if (isEngaged(G, target) && !w.spell) return { ok: false, why: 'locked in combat' }\n  const s = sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n"],
+  'stray-draws-clear': ['core/actions/shoot.js', '  if (fight) {\n    const share = fight.F / (fight.F + fight.T)\n', '  {\n    const share = fight ? fight.F / (fight.F + fight.T) : 0\n'],
+  'stray-per-hit': ['core/actions/shoot.js', 'if (d < info.need && draw(G.rng) < share) stray++', 'if (d >= info.need && draw(G.rng) < share) stray++'],
+  'stray-share-flipped': ['core/actions/shoot.js', '    const share = fight.F / (fight.F + fight.T)\n', '    const share = fight.T / (fight.F + fight.T)\n'],
+  'stray-after-wound': ['core/actions/shoot.js', '  if (fight) {\n    const share = fight.F / (fight.F + fight.T)\n    for (const d of hits) if (d < info.need && draw(G.rng) < share) stray++\n  }\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n  if (fight) {\n    const share = fight.F / (fight.F + fight.T)\n    for (const d of hits) if (d < info.need && draw(G.rng) < share) stray++\n  }\n'],
+  'friend-rows-first': ['core/actions/shoot.js', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  if (stray) (strayHits(G, u, fight.onto, stray, w), stray = 0)\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n'],
+  'stray-tie-last': ['core/queries.js', '    if (f.alive > onto.alive) onto = f\n', '    if (f.alive >= onto.alive) onto = f\n'],
+  'ai-ignores-strays': ['core/ai/score.js', ' - (fight ? strayCost(n, need, w, fight) : 0)', ''],
+  'ai-ignores-own-template': ['core/ai/score.js', ' - (pre ? pre.own : ownUnder(G, u, e)))', ')'],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a

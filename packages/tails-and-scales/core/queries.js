@@ -44,6 +44,24 @@ export const engagedWith = (G, u) => G.nav.hasHeight
 export const mx = (u, m) => u.pos.x + m.ox
 export const mz = (u, m) => u.pos.z + m.oz
 export const isEngaged = (G, u) => engagedWith(G, u).length > 0
+// (F18, DESIGN §4.1 rule 27) The fight `tg` is locked in, as `u`'s side
+// sees it when it shoots there: `friends`, u's own units engaged with tg
+// (G.units order); F their living models and T the target's, a stray
+// shot's odds being F in F + T; `onto`, the friend a stray strikes, the one
+// with the most living models (a tie keeps the first in G.units order); and
+// whether that one is in cover (its save's). null when none of u's units is
+// in the fight (F = 0: a unit nobody of u's is fighting), which draws no
+// stray die.
+export function fightOf(G, u, tg) {
+  const friends = engagedWith(G, tg).filter((f) => f.side === u.side)
+  if (!friends.length) return null
+  let F = 0, onto = friends[0]
+  for (const f of friends) {
+    F += f.alive
+    if (f.alive > onto.alive) onto = f
+  }
+  return { friends, F, T: tg.alive, onto, cover: inCover(G, onto) }
+}
 
 // ── Height (F7a) ────────────────────────────────────────────────────────────
 // How far apart in height two things may be and still fight, hold an
