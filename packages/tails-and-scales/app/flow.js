@@ -223,7 +223,9 @@ export class Flow {
     // while this battle is played under it ({ seat }: start(), follow();
     // null without: hotseat, a watched battle, a watcher, a replay file);
     // `fogPick` the battle-setup panel's toggle (app/boot.js: ?fog, else
-    // the page's last choice); `fogLast` the fog as the Session has handed
+    // the page's last choice; under ?debug it may name a seat instead, the
+    // fog then kept for that seat whatever the mode: sim/present-check.mjs's
+    // hotseat battles, the scenery a seat can't see); `fogLast` the fog as the Session has handed
     // the table its entries (each entry's sight asked as the sink takes
     // it), `fogShown` as the table shows it (the last `fog` event played:
     // what the minimap and the roster read), and `fogCache` the sight
@@ -720,7 +722,8 @@ export class Flow {
   // mission's sets (else the table's), which is the table's from then on;
   // (F8b) of the mission `size`, the panel's battle size; (F16) under the
   // courtesy fog when `fog` (the panel's toggle) and the mode is against
-  // the AI (FOG_MODES: never hotseat, one screen, nor a watched battle).
+  // the AI (FOG_MODES: never hotseat, one screen, nor a watched battle), or
+  // for the seat `fog` names (a number: ?debug's door, any mode).
   start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
@@ -802,7 +805,7 @@ export class Flow {
     // deployment's first, take it on from there, P-present holding each)
     this.player.snap(this.backdrop, onTitle(this.backdrop))
     // ((F16) the fog for the seat played here, from the start entry on)
-    this.fog = fog && FOG_MODES.includes(mode) ? { seat: who.indexOf('human') } : null
+    this.fog = Number.isInteger(fog) && (fog === 0 || fog === 1) ? { seat: fog } : fog === true && FOG_MODES.includes(mode) ? { seat: who.indexOf('human') } : null
     this.fogReset()
     this.fogLast = this.fog && fogStart(this.fog.seat)
     const store = new LocalStore()

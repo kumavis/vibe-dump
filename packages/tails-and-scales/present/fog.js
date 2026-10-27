@@ -68,7 +68,8 @@
 //           at its top centre, 0.1" up: the ray from a friendly eye
 //           unblocked through the same G.terrain.los the unit rays take (a
 //           chunk the eye stands below, its own face in the way, is not
-//           seen); unchanged chunks need no answer
+//           seen; a fallen log and its tree are seen together); unchanged
+//           chunks need no answer
 //   lands:  each template's landing (blast.land, spell.thorns) in the
 //           entry, by sight to a stand-in on the floor there, 0.5" up
 // A stand-in is a unit as sight reads one: its type's chest, its models'
@@ -140,6 +141,14 @@ export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = 
   for (const id of chunks) {
     const c = chunkOf.get(id)
     if (c && probe(point(c.shape.x, c.shape.z, c.shape.y + c.shape.hy + 0.1))) chunksSeen.add(id)
+  }
+  // (a fallen log and the tree it was are seen together: the one is the
+  // other keeled over, drawn by one mesh)
+  for (const id of chunks) {
+    const c = chunkOf.get(id), t = c?.look?.piece === 'fallen' ? c.look.tree : undefined
+    if (t === undefined || !(chunksSeen.has(id) || chunksSeen.has(t))) continue
+    chunksSeen.add(id)
+    if (chunks.includes(t)) chunksSeen.add(t)
   }
   return { units, places: placesSeen, chunks: chunksSeen, lands: lands.map((p) => probe(point(p.x, p.z, q.floorAt(G, p.x, p.z) + 0.5))) }
 }

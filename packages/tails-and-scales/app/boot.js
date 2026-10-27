@@ -1128,8 +1128,11 @@ export function boot(location) {
             figures: v.models.filter((f) => f.mesh && f.mesh.visible).length, ring: v.ring.visible, hit: !!v.hit.parent,
             label: v.label.style.display !== 'none', picked: view.units.pickables().includes(v.hit),
           }))
+          // (each chunk the table draws standing, by id: view/terrain.js's
+          // state)
+          const drawn = Object.keys(M.chunks).map(Number).filter((id) => view.terrain.state(id).shown)
           return {
-            seat: flow.fog.seat, over: !!L?.over,
+            seat: flow.fog.seat, over: !!L?.over, drawn, table: S?.F?.table ? [...S.F.table].map(([id, r]) => [id, r.alive, r.y]) : null,
             last: L && { seen: [...L.seen], ghosts: [...L.last.keys()].filter((id) => !L.seen.has(id)), known: Object.fromEntries(L.known), stale: stale(L) },
             shown: S && { hide: [...S.hide], ghosts: [...S.ghosts.keys()], stale: stale(S.F) },
             units, ghosts: view.ghosts.state(), dots: ui.minimap.dots(M), roster: ui.roster.model(),
@@ -1144,6 +1147,13 @@ export function boot(location) {
               return ids
             })(),
           }
+        },
+        // ((F16, not promised) the next battle started here kept under the
+        // fog for `seat` whatever its mode (null: the panel's own choice
+        // again): sim/present-check.mjs's hotseat battles, whose scenery a
+        // seat loses sight of)
+        fogFor(seat) {
+          flow.fogPick = seat === null ? fogPick(params) : seat
         },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)
