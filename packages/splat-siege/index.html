@@ -10,9 +10,16 @@
     <canvas id="c"></canvas>
     <div id="hud">
       <div id="stats">
-        <span class="label">garden destroyed</span>
-        <span id="pct">0.0%</span>
-        <span class="dim"><span id="splats">0</span> splats · <span id="rockets">0</span> rockets</span>
+        <div class="row">
+          <span class="label">paths tidy</span>
+          <span id="tidy" class="big">0%</span>
+          <span class="dim"><span id="mess">0</span> petals on the gravel</span>
+        </div>
+        <div class="row">
+          <span class="label">garden destroyed</span>
+          <span id="pct" class="big">0.0%</span>
+          <span class="dim"><span id="splats">0</span> strokes · <span id="rockets">0</span> rockets</span>
+        </div>
       </div>
       <div id="fps"></div>
       <div id="crosshair"></div>
@@ -22,7 +29,8 @@
       </div>
       <div id="overlay">
         <h1>Splat Siege</h1>
-        <p>Monet's garden at Giverny, in eighty thousand Gaussian brush strokes. Every one of them comes loose.</p>
+        <p>Monet's garden at Giverny, in a hundred thousand Gaussian brush strokes. Every one of them comes loose.</p>
+        <p class="hint">Keep the gravel clear with the blower, if you like. The breeze never stops dropping petals.</p>
         <p class="keys">
           <kbd>click</kbd> to play · <kbd>W A S D</kbd> move · <kbd>space</kbd> jump · <kbd>shift</kbd> sprint ·
           <kbd>mouse</kbd> fire · <kbd>1</kbd> rockets · <kbd>2</kbd> leaf blower · <kbd>R</kbd> replant · <kbd>esc</kbd> release

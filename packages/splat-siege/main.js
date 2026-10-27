@@ -5,7 +5,7 @@
 // tumbling debris, and the blower pushes whatever is loose around the garden.
 import * as THREE from 'three'
 import { SplatStore, KIND } from './splats.js'
-import { buildGarden, mulberry32, SUN, WORLD_HALF, pondDist, POND } from './garden.js'
+import { buildGarden, mulberry32, SUN, WORLD_HALF, pondDist, onPath, terrainY, POND } from './garden.js'
 import { Sfx } from './audio.js'
 
 const CAPACITY = 130000
@@ -23,7 +23,7 @@ const BLOWER_FORCE = 42
 const WIND = new THREE.Vector3(0.95, 0, 0.3).normalize()
 const GRAVITY = 18
 const DEBRIS_GRAVITY = 13
-const EYE = 1.6
+const EYE = 1.72
 const POND_DEPTH = 0.75
 const FOG = new THREE.Color(0.86, 0.83, 0.88)
 const SPAWN = new THREE.Vector3(14, 0, 34)
@@ -277,12 +277,18 @@ class Effects {
 // Owns the garden's splats: which are standing, which are flying, which lie
 // loose. Explosions, the blower and the debris simulation all live here.
 class World {
-  constructor(store, grid, sceneCount, rng, effects) {
+  constructor(store, grid, garden, rng, effects) {
+    const sceneCount = garden.count
     this.store = store
     this.grid = grid
     this.sceneCount = sceneCount
     this.rng = rng
     this.effects = effects
+    this.sources = garden.sources
+    this.pick = garden.pick
+    this.reserve = garden.reserve
+    this.petalNext = 0
+    this.dropAcc = 0
     const n = store.capacity
     this.state = new Uint8Array(n) // 0 standing, 1 flying, 2 loose (rubble, litter, lily pads)
     this.vel = new Float32Array(n * 3)
@@ -301,6 +307,7 @@ class World {
       quat: store.quat.slice(0, sceneCount * 4),
       color: store.color.slice(0, sceneCount * 4),
       sway: store.sway.slice(0, sceneCount),
+      alive: store.alive.slice(0, sceneCount),
     }
     this.initStates()
   }
@@ -325,10 +332,12 @@ class World {
     store.quat.set(snap.quat)
     store.color.set(snap.color)
     store.sway.set(snap.sway)
-    store.alive.fill(1, 0, this.sceneCount)
+    store.alive.set(snap.alive)
     this.vel.fill(0)
     this.flyingCount = 0
     this.destroyed = 0
+    this.petalNext = 0
+    this.dropAcc = 0
     this.initStates()
     this.effects.clear()
     store.packAll()
@@ -450,6 +459,56 @@ class World {
     return gust
   }
 
+  // The breeze shakes petals off the roses, blossom off the orchard and
+  // leaves off the willows; they drift down onto whatever lies beneath,
+  // which, for the arches, is the gravel of the allée.
+  dropPetals(dt, gust) {
+    this.dropAcc += dt * (0.7 + 3.5 * gust * gust)
+    const { store, rng, state } = this
+    const [start, end] = this.reserve, n = end - start
+    while (this.dropAcc >= 1) {
+      this.dropAcc -= 1
+      let i = -1
+      for (let tries = 0; tries < 8; tries++) {
+        const c = start + (this.petalNext++ % n)
+        if (store.alive[c] === 0) { i = c; break }
+        if (state[c] === 2 && !onPath(store.pos[c * 3], store.pos[c * 3 + 2])) { i = c; break }
+      }
+      if (i < 0) return
+      const src = this.sources[(rng() * this.sources.length) | 0]
+      const a = rng() * Math.PI * 2, rr = Math.sqrt(rng()) * src[3]
+      const p = i * 3, q = i * 4
+      store.pos[p] = src[0] + Math.cos(a) * rr
+      store.pos[p + 1] = src[1] + rng() * 0.8 - 0.8
+      store.pos[p + 2] = src[2] + Math.sin(a) * rr
+      const c = this.pick(src[4])
+      store.color[q] = c[0] * 255; store.color[q + 1] = c[1] * 255; store.color[q + 2] = c[2] * 255; store.color[q + 3] = 255
+      const ax = rng() - 0.5, ay = rng() - 0.5, az = rng() - 0.5, aw = rng() - 0.5
+      const il = 1 / Math.hypot(ax, ay, az, aw)
+      store.quat[q] = ax * il; store.quat[q + 1] = ay * il; store.quat[q + 2] = az * il; store.quat[q + 3] = aw * il
+      const r = 0.07 + rng() * 0.06
+      store.scale[p] = r; store.scale[p + 1] = r * 0.7; store.scale[p + 2] = 0.02
+      store.alive[i] = 1
+      state[i] = 2
+      this.launch(i, (rng() - 0.5) * 0.6, -0.2, (rng() - 0.5) * 0.6)
+    }
+  }
+
+  // How much litter lies on the gravel, against how much lies anywhere.
+  tidiness() {
+    const { store, state } = this
+    const pos = store.pos, alive = store.alive
+    let onGravel = 0, total = 0
+    for (let i = 0; i < this.sceneCount; i++) {
+      if (alive[i] === 0 || state[i] !== 2) continue
+      const p = i * 3
+      if (pos[p + 1] > 0.3) continue
+      total++
+      if (onPath(pos[p], pos[p + 2])) onGravel++
+    }
+    return { onGravel, total }
+  }
+
   update(dt, gust = 0) {
     const { store, grid, rng, state, vel, ang, flying } = this
     const pos = store.pos, quat = store.quat, alive = store.alive
@@ -458,26 +517,28 @@ class World {
     let w = 0
     for (let k = 0; k < this.flyingCount; k++) {
       const i = flying[k], p = i * 3, q = i * 4
-      const light = store.kind[i] === KIND.LOOSE || store.kind[i] === KIND.FLORA
-      vel[p + 1] -= (light ? DEBRIS_GRAVITY * 0.55 : DEBRIS_GRAVITY) * dt
+      const kindI = store.kind[i]
+      const petal = kindI === KIND.LOOSE, light = petal || kindI === KIND.FLORA
+      vel[p + 1] -= (petal ? 3.2 : light ? DEBRIS_GRAVITY * 0.55 : DEBRIS_GRAVITY) * dt
       if (light) {
         vel[p] += windX
         vel[p + 2] += windZ
       }
-      const dr = light ? Math.max(0, 1 - 1.4 * dt) : drag
+      const dr = petal ? Math.max(0, 1 - 2.2 * dt) : light ? Math.max(0, 1 - 1.4 * dt) : drag
       vel[p] *= dr; vel[p + 1] *= dr; vel[p + 2] *= dr
       const x = pos[p], y = pos[p + 1], z = pos[p + 2]
       let nx = x + vel[p] * dt, ny = y + vel[p + 1] * dt, nz = z + vel[p + 2] * dt
-      if (nx < -GRID_HALF - 6 || nx > GRID_HALF + 6 || nz < -GRID_HALF - 6 || nz > GRID_HALF + 6 || ny < -8) {
+      if (nx < -260 || nx > 260 || nz < -260 || nz > 260 || ny < -8) {
         alive[i] = 0
         state[i] = 2
         continue
       }
       let rest = false
-      if (ny < 0.03) {
+      const floor = terrainY(nx, nz) + 0.03
+      if (ny < floor) {
         const speed = Math.hypot(vel[p], vel[p + 1], vel[p + 2])
-        if (speed > 5 && rng() < 0.12 && !light) this.effects.dust(nx, 0, nz)
-        ny = 0.03
+        if (speed > 5 && rng() < 0.12 && !light) this.effects.dust(nx, floor, nz)
+        ny = floor
         vel[p + 1] = -vel[p + 1] * (light ? 0.1 : 0.3)
         vel[p] *= 0.55; vel[p + 2] *= 0.55
         ang[p] *= 0.5; ang[p + 1] *= 0.5; ang[p + 2] *= 0.5
@@ -492,7 +553,7 @@ class World {
       pos[p] = nx; pos[p + 1] = ny; pos[p + 2] = nz
       if (rest) {
         vel[p] = 0; vel[p + 1] = 0; vel[p + 2] = 0
-        if (ny <= 0.031) pos[p + 1] = 0.02 + rng() * 0.06
+        if (ny <= floor + 0.001) pos[p + 1] = floor - 0.01 + rng() * 0.06
         state[i] = 2
         store.pack(i)
         continue
@@ -659,7 +720,7 @@ function boot() {
   const rng = mulberry32(99)
   const effects = new Effects(store, POOL, rng)
   const grid = new Grid()
-  const world = new World(store, grid, garden.count, rng, effects)
+  const world = new World(store, grid, garden, rng, effects)
   store.packAll()
   store.flush()
   scene.add(store.mesh)
@@ -788,6 +849,7 @@ function boot() {
     player.yaw = SPAWN_YAW
     player.pitch = -0.05
     rocketsFired = 0
+    measureTidiness()
     updateHud()
   }
 
@@ -859,7 +921,8 @@ function boot() {
         r.vel.y -= 2.0 * sdt
         r.pos.addScaledVector(r.vel, sdt)
         r.dist += speed * sdt
-        if (r.pos.y <= 0.05) hit = [r.pos.x, 0.05, r.pos.z]
+        const ground = terrainY(r.pos.x, r.pos.z)
+        if (r.pos.y <= ground + 0.05) hit = [r.pos.x, ground + 0.05, r.pos.z]
         else if (grid.solid(r.pos.x, r.pos.y, r.pos.z)) hit = [r.pos.x, r.pos.y, r.pos.z]
         else if (r.dist - r.lastPuff > 0.45) {
           r.lastPuff = r.dist
@@ -908,7 +971,7 @@ function boot() {
   }
 
   // --- player physics against the grid
-  const HW = 0.3, PH = 1.7
+  const HW = 0.3, PH = 1.85
   const collides = (x, y, z) => grid.boxSolid(x - HW, y + 0.05, z - HW, x + HW, y + PH, z + HW)
 
   function moveAxis(axis, d) {
@@ -1000,12 +1063,23 @@ function boot() {
 
   // --- hud
   const pctEl = $('pct'), splatsEl = $('splats'), rocketsEl = $('rockets'), fpsEl = $('fps')
+  const tidyEl = $('tidy'), messEl = $('mess')
+  let tidy = { onGravel: 0, total: 0 }
   function updateHud() {
     const pct = world.totalStructure ? (100 * world.destroyed) / world.totalStructure : 0
     pctEl.textContent = pct.toFixed(1) + '%'
     splatsEl.textContent = world.destroyed.toLocaleString()
     rocketsEl.textContent = String(rocketsFired)
+    const t = tidy.total ? 1 - tidy.onGravel / tidy.total : 1
+    tidyEl.textContent = Math.round(t * 100) + '%'
+    tidyEl.style.color = `hsl(${Math.round(30 + 95 * t)} 70% 62%)`
+    messEl.textContent = tidy.onGravel.toLocaleString()
   }
+  let tidyTime = 0
+  function measureTidiness() {
+    tidy = world.tidiness()
+  }
+  measureTidiness()
   updateHud()
 
   // --- resize
@@ -1062,6 +1136,7 @@ function boot() {
     updateRockets(dt)
     stepBlower(dt)
     const gust = world.breeze(dt, simTime)
+    world.dropPetals(dt, gust)
     world.update(dt, gust)
     effects.update(dt)
     store.uniforms.uTime.value = simTime
@@ -1100,6 +1175,11 @@ function boot() {
     renderer.render(weaponScene, camera)
 
     hudTime += dt
+    tidyTime += dt
+    if (tidyTime > 0.6) {
+      tidyTime = 0
+      measureTidiness()
+    }
     if (hudTime > 0.2) {
       hudTime = 0
       updateHud()
@@ -1113,7 +1193,7 @@ function boot() {
   }
   requestAnimationFrame(frame)
 
-  window.__siege = { store, world, effects, player, rockets, explode, fireRocket, grid, setWeapon, get simTime() { return simTime }, get intro() { return intro }, get weapon() { return weapon }, set firing(v) { firing = v }, set hasLock(v) { hasLock = v }, get blown() { return blown } }
+  window.__siege = { store, world, effects, player, rockets, explode, fireRocket, grid, setWeapon, get simTime() { return simTime }, get intro() { return intro }, get weapon() { return weapon }, set firing(v) { firing = v }, set hasLock(v) { hasLock = v }, get blown() { return blown }, get tidy() { return tidy } }
 }
 
 try {

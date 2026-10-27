@@ -37,6 +37,21 @@ export function pondDist(x, z) {
   return Math.sqrt(dx * dx + dz * dz)
 }
 
+// Rolling hills beyond the hedge. Flat inside the garden, rising over the
+// first fifty metres outside it into a loose, Monet-ish countryside.
+const smoothstep = (a, b, t) => {
+  const u = Math.min(1, Math.max(0, (t - a) / (b - a)))
+  return u * u * (3 - 2 * u)
+}
+export function terrainY(x, z) {
+  const d = Math.max(Math.abs(x), Math.abs(z)) - WORLD_HALF - 3
+  if (d <= 0) return 0
+  const ramp = smoothstep(0, 50, d)
+  const big = 0.5 + 0.5 * Math.sin(x * 0.021 + 1.3) * Math.cos(z * 0.017 - 0.4)
+  const mid = Math.sin(x * 0.055 + z * 0.02) * Math.cos(z * 0.047 - x * 0.013)
+  return ramp * (5 + 15 * big + 4 * mid + 1.5 * Math.sin(x * 0.11) * Math.sin(z * 0.09))
+}
+
 export function onPath(x, z) {
   if (Math.abs(x) < 2.3 && z > -35 && z < 9) return true // the grand allée
   if (Math.abs(z - 7) < 1.6 && Math.abs(x) < 30) return true // cross path
@@ -90,6 +105,11 @@ const PAL = {
   iron: [[0.25, 0.35, 0.3], [0.3, 0.4, 0.33]],
   cloud: [[0.98, 0.94, 0.95], [0.92, 0.9, 0.97]],
   dark: [[0.22, 0.28, 0.28], [0.26, 0.3, 0.32]],
+  meadow: [[0.55, 0.66, 0.3], [0.65, 0.7, 0.35], [0.45, 0.6, 0.38], [0.7, 0.68, 0.4], [0.5, 0.62, 0.45]],
+  hillFar: [[0.4, 0.52, 0.5], [0.45, 0.5, 0.64], [0.35, 0.5, 0.45], [0.55, 0.55, 0.66]],
+  poppyField: [[0.9, 0.3, 0.2], [0.95, 0.42, 0.25], [0.8, 0.25, 0.3]],
+  hillTree: [[0.25, 0.4, 0.3], [0.3, 0.45, 0.4], [0.22, 0.36, 0.36], [0.35, 0.5, 0.32]],
+  hillBush: [[0.35, 0.5, 0.3], [0.42, 0.55, 0.35], [0.3, 0.45, 0.38]],
 }
 
 class Painter {
@@ -292,15 +312,15 @@ class Painter {
   // ---- trees
 
   willow(x, z) {
-    const h = this.rand(3.8, 5.2), lean = [this.rand(-0.12, 0.12), this.rand(-0.12, 0.12)]
-    this.cylinder(x, 0, z, 0.34, h, PAL.bark, { spacing: 0.26, lean, taper: 0.4 })
+    const h = this.rand(5.2, 6.8), lean = [this.rand(-0.12, 0.12), this.rand(-0.12, 0.12)]
+    this.cylinder(x, 0, z, 0.42, h, PAL.bark, { spacing: 0.28, lean, taper: 0.4 })
     const tx = x + lean[0] * h, tz = z + lean[1] * h
-    this.blob(tx, h + 0.4, tz, 2.6, 1.1, 2.6, PAL.willow, 220, { long: 0.4, short: 0.14, sway: 0.25 })
-    this.shadeSpots.push([x, z, 4.5])
-    for (let k = 0; k < 85; k++) {
-      const a = this.rand(0, Math.PI * 2), rr = this.rand(1.0, 2.7)
+    this.blob(tx, h + 0.5, tz, 3.3, 1.4, 3.3, PAL.willow, 260, { long: 0.45, short: 0.16, sway: 0.25 })
+    this.shadeSpots.push([x, z, 5.5])
+    for (let k = 0; k < 100; k++) {
+      const a = this.rand(0, Math.PI * 2), rr = this.rand(1.2, 3.4)
       let px = tx + Math.cos(a) * rr, pz = tz + Math.sin(a) * rr
-      const top = h + this.rand(-0.2, 0.7), len = this.rand(2.4, Math.min(5.2, top - 0.3))
+      const top = h + this.rand(-0.2, 0.9), len = this.rand(3.2, Math.min(6.8, top - 0.4))
       const steps = Math.round(len / 0.33)
       const drift = this.rand(0.02, 0.09)
       for (let s = 0; s < steps; s++) {
@@ -313,24 +333,24 @@ class Painter {
   }
 
   fruitTree(x, z) {
-    const h = this.rand(1.9, 2.6)
-    this.cylinder(x, 0, z, 0.17, h, PAL.bark, { spacing: 0.24, taper: 0.3 })
-    this.blob(x, h + 1.3, z, 2.0, 1.5, 2.0, PAL.canopy, 230, { mix: [PAL.blossom, 0.35], long: 0.3, short: 0.2, sway: 0.25 })
-    this.shadeSpots.push([x, z, 3.2])
+    const h = this.rand(2.4, 3.2)
+    this.cylinder(x, 0, z, 0.2, h, PAL.bark, { spacing: 0.24, taper: 0.3 })
+    this.blob(x, h + 1.6, z, 2.5, 1.9, 2.5, PAL.canopy, 280, { mix: [PAL.blossom, 0.35], long: 0.32, short: 0.2, sway: 0.25 })
+    this.shadeSpots.push([x, z, 3.8])
   }
 
   poplar(x, z) {
-    const h = this.rand(4, 5.5)
-    this.cylinder(x, 0, z, 0.22, h, PAL.bark, { spacing: 0.28, taper: 0.3 })
-    const ch = this.rand(5, 7.5)
-    this.blob(x, h + ch * 0.55, z, 1.7, ch * 0.6, 1.7, PAL.poplar, 300, { dir: UP, long: 0.45, short: 0.18, sway: 0.2 })
-    this.shadeSpots.push([x, z, 3])
+    const h = this.rand(5.5, 7.5)
+    this.cylinder(x, 0, z, 0.26, h, PAL.bark, { spacing: 0.3, taper: 0.3 })
+    const ch = this.rand(8, 11)
+    this.blob(x, h + ch * 0.55, z, 2.0, ch * 0.6, 2.0, PAL.poplar, 360, { dir: UP, long: 0.5, short: 0.2, sway: 0.2 })
+    this.shadeSpots.push([x, z, 3.5])
   }
 
   bamboo(x, z) {
     for (let k = 0; k < 14; k++) {
       const a = this.rand(0, Math.PI * 2), rr = this.rand(0, 0.9)
-      const bx = x + Math.cos(a) * rr, bz = z + Math.sin(a) * rr, h = this.rand(2.6, 4.8)
+      const bx = x + Math.cos(a) * rr, bz = z + Math.sin(a) * rr, h = this.rand(3.2, 5.8)
       const lx = this.rand(-0.05, 0.05), lz = this.rand(-0.05, 0.05)
       for (let y = 0.2; y < h; y += 0.38) {
         this.dab(bx + lx * y, y, bz + lz * y, [Math.cos(a), 0, Math.sin(a)], UP, 0.3, 0.05, 0.03, this.pick(PAL.bamboo), 255, KIND.FLORA, [Math.cos(a), 0, Math.sin(a)], 0.1 + y * 0.12)
@@ -343,7 +363,7 @@ class Painter {
     }
   }
 
-  hedgeRow(x0, z0, x1, z1, h = 1.5) {
+  hedgeRow(x0, z0, x1, z1, h = 1.8) {
     const len = Math.hypot(x1 - x0, z1 - z0), n = Math.round(len / 0.8)
     for (let k = 0; k <= n; k++) {
       const t = k / n
@@ -363,29 +383,29 @@ class Painter {
     this.dab(x, y, z, n, null, r, r * this.rand(0.6, 0.9), 0.03, this.pick(pal), 255, KIND.FLORA, n, 0.15 + y * 0.45)
   }
   iris(x, z) {
-    for (let k = 0; k < 4; k++) this.stroke(x + this.rand(-0.15, 0.15), this.rand(0.2, 0.4), z + this.rand(-0.15, 0.15), 0.3, PAL.irisLeaf)
+    for (let k = 0; k < 4; k++) this.stroke(x + this.rand(-0.15, 0.15), this.rand(0.18, 0.36), z + this.rand(-0.15, 0.15), 0.28, PAL.irisLeaf)
     const n = 1 + (this.rng() < 0.5 ? 1 : 0)
-    for (let k = 0; k < n; k++) this.flower(x + this.rand(-0.15, 0.15), this.rand(0.6, 0.9), z + this.rand(-0.15, 0.15), 0.14, PAL.iris)
+    for (let k = 0; k < n; k++) this.flower(x + this.rand(-0.15, 0.15), this.rand(0.55, 0.8), z + this.rand(-0.15, 0.15), 0.09, PAL.iris)
   }
   tulip(x, z) {
-    this.stroke(x, 0.22, z, 0.22, PAL.stem)
-    this.flower(x, 0.44, z, 0.1, PAL.tulip)
+    this.stroke(x, 0.2, z, 0.2, PAL.stem)
+    this.flower(x, 0.4, z, 0.07, PAL.tulip)
   }
   poppy(x, z) {
-    this.stroke(x, 0.3, z, 0.3, PAL.stem)
-    this.flower(x + this.rand(-0.08, 0.08), 0.6, z + this.rand(-0.08, 0.08), 0.13, PAL.poppy)
+    this.stroke(x, 0.28, z, 0.28, PAL.stem)
+    this.flower(x + this.rand(-0.08, 0.08), 0.55, z + this.rand(-0.08, 0.08), 0.09, PAL.poppy)
   }
   peony(x, z) {
-    for (let k = 0; k < 5; k++) this.flower(x + this.rand(-0.35, 0.35), this.rand(0.15, 0.5), z + this.rand(-0.35, 0.35), 0.16, PAL.stem)
-    for (let k = 0; k < 3; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.5, 0.75), z + this.rand(-0.3, 0.3), 0.17, PAL.peony)
+    for (let k = 0; k < 5; k++) this.flower(x + this.rand(-0.35, 0.35), this.rand(0.15, 0.45), z + this.rand(-0.35, 0.35), 0.13, PAL.stem)
+    for (let k = 0; k < 3; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.45, 0.68), z + this.rand(-0.3, 0.3), 0.12, PAL.peony)
   }
   dahlia(x, z) {
-    for (let k = 0; k < 3; k++) this.stroke(x + this.rand(-0.2, 0.2), this.rand(0.3, 0.8), z + this.rand(-0.2, 0.2), 0.4, PAL.stem)
-    for (let k = 0; k < 4; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.9, 1.3), z + this.rand(-0.3, 0.3), 0.14, PAL.dahlia)
+    for (let k = 0; k < 3; k++) this.stroke(x + this.rand(-0.2, 0.2), this.rand(0.3, 0.7), z + this.rand(-0.2, 0.2), 0.36, PAL.stem)
+    for (let k = 0; k < 4; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.8, 1.1), z + this.rand(-0.3, 0.3), 0.1, PAL.dahlia)
   }
   nasturtium(x, z) {
-    for (let k = 0; k < 4; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.06, 0.2), z + this.rand(-0.3, 0.3), 0.15, PAL.nastLeaf)
-    for (let k = 0; k < 2; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.15, 0.3), z + this.rand(-0.3, 0.3), 0.08, PAL.nasturtium)
+    for (let k = 0; k < 4; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.06, 0.2), z + this.rand(-0.3, 0.3), 0.13, PAL.nastLeaf)
+    for (let k = 0; k < 2; k++) this.flower(x + this.rand(-0.3, 0.3), this.rand(0.15, 0.3), z + this.rand(-0.3, 0.3), 0.06, PAL.nasturtium)
   }
 
   bed(x0, z0, x1, z1, plant, density) {
@@ -404,8 +424,8 @@ class Painter {
       const n = 2 + (this.rng() < 0.6 ? 1 : 0)
       for (let k = 0; k < n; k++) {
         const ox = this.rand(-0.38, 0.38), oy = this.rand(-0.3, 0.3), oz = this.rand(-0.35, 0.35)
-        if (this.rng() < 0.55) this.flower(px + ox, py + oy, z + oz, 0.12, PAL.rose)
-        else this.flower(px + ox, py + oy, z + oz, 0.14, PAL.nastLeaf)
+        if (this.rng() < 0.55) this.flower(px + ox, py + oy, z + oz, 0.085, PAL.rose)
+        else this.flower(px + ox, py + oy, z + oz, 0.12, PAL.nastLeaf)
       }
     }
     for (let y = 0.2; y < legH; y += 0.22) {
@@ -498,6 +518,64 @@ class Painter {
     }
   }
 
+  hills() {
+    const normal = (x, z) => {
+      const e = 0.8
+      const nx = terrainY(x - e, z) - terrainY(x + e, z), nz = terrainY(x, z - e) - terrainY(x, z + e)
+      const l = Math.hypot(nx, 2 * e, nz)
+      return [nx / l, (2 * e) / l, nz / l]
+    }
+    const inner = WORLD_HALF + 2
+    const bands = [[inner, 110, 2.3], [110, 250, 6]]
+    for (const [r0, r1, spacing] of bands) {
+      const n = Math.round((2 * r1) / spacing)
+      for (let j = 0; j < n; j++) {
+        for (let i = 0; i < n; i++) {
+          const x = -r1 + (i + 0.5 + this.rand(-0.35, 0.35)) * spacing
+          const z = -r1 + (j + 0.5 + this.rand(-0.35, 0.35)) * spacing
+          const d = Math.max(Math.abs(x), Math.abs(z))
+          if (d < r0 || d >= r1) continue
+          const y = terrainY(x, z)
+          const nrm = normal(x, z)
+          const far = smoothstep(60, 220, d)
+          const poppies = x > 70 && z < -30 && z > -140 && this.rng() < 0.3 + 0.2 * Math.sin(x * 0.08)
+          const a = this.pick(poppies ? PAL.poppyField : PAL.meadow), b = this.pick(PAL.hillFar)
+          const c = [lerp(a[0], b[0], far), lerp(a[1], b[1], far), lerp(a[2], b[2], far)]
+          this.dab(x, y, z, nrm, [1, 0, this.rand(-0.5, 0.5)], spacing * 0.85, spacing * 0.4, 0.05, c, 255, KIND.GROUND, nrm)
+        }
+      }
+    }
+    // trees and bushes, thicker in the folds between hills
+    for (let k = 0; k < 420; k++) {
+      const x = this.rand(-240, 240), z = this.rand(-240, 240)
+      const d = Math.max(Math.abs(x), Math.abs(z))
+      if (d < inner + 2 || d > 240) continue
+      const y = terrainY(x, z)
+      const tall = this.rng() < 0.3
+      const h = tall ? this.rand(7, 11) : this.rand(3, 5)
+      this.dab(x, y + h * 0.35, z, [1, 0, 0], UP, h * 0.4, 0.3, 0.05, this.pick(PAL.bark), 255, KIND.FOLIAGE)
+      const r = tall ? this.rand(1.6, 2.4) : this.rand(2.2, 3.6)
+      this.blob(x, y + h * 0.8, z, r, tall ? r * 2 : r * 0.8, r, PAL.hillTree, tall ? 14 : 12, { long: 1.1, short: 0.5, sway: 0.15, dir: tall ? UP : null })
+    }
+    for (let k = 0; k < 700; k++) {
+      const x = this.rand(-240, 240), z = this.rand(-240, 240)
+      const d = Math.max(Math.abs(x), Math.abs(z))
+      if (d < inner + 1 || d > 240) continue
+      const y = terrainY(x, z), r = this.rand(0.9, 1.8)
+      this.blob(x, y + r * 0.6, z, r, r * 0.7, r, PAL.hillBush, 5, { long: 0.9, short: 0.45, sway: 0.1 })
+    }
+  }
+
+  // Petals the breeze will shake loose later: allocated now, asleep until used.
+  reservePetals(n) {
+    const start = this.store.count
+    for (let k = 0; k < n; k++) {
+      const i = this.dab(0, -10, 0, UP, null, 0.1, 0.07, 0.02, [1, 1, 1], 255, KIND.LOOSE, null)
+      this.store.alive[i] = 0
+    }
+    return [start, this.store.count]
+  }
+
   // Fallen petals and leaves: loose from the start, so the blower can lift them.
   litter() {
     const petal = (x, z) => {
@@ -509,10 +587,18 @@ class Painter {
       if (pondDist(x, z) < 1.0) continue
       petal(x, z)
     }
-    // drifts along the paths, where the blower will find them
-    for (let k = 0; k < 7000; k++) {
+    // drifts on and beside the paths, where the blower will find them
+    let onGravel = 0, beside = 0
+    for (let k = 0; k < 400000 && (onGravel < 4200 || beside < 2500); k++) {
       const x = this.rand(-WORLD_HALF, WORLD_HALF), z = this.rand(-WORLD_HALF, WORLD_HALF)
-      if (!onPath(x + this.rand(-1.5, 1.5), z + this.rand(-1.5, 1.5)) || pondDist(x, z) < 1.0) continue
+      if (pondDist(x, z) < 1.0) continue
+      if (onPath(x, z)) {
+        if (onGravel >= 4200) continue
+        onGravel++
+      } else {
+        if (beside >= 2500 || !onPath(x + this.rand(-1.5, 1.5), z + this.rand(-1.5, 1.5))) continue
+        beside++
+      }
       petal(x, z)
     }
     for (const s of this.shadeSpots) {
@@ -529,10 +615,13 @@ class Painter {
 export function buildGarden(store, seed = 1337) {
   const rng = mulberry32(seed)
   const P = new Painter(store, rng)
+  const willows = [[-16, 14], [-20, 27], [-15, 37], [17, 37], [23, 29], [23, 14]]
+  const orchard = [[-20, -26], [-26, -18], [-21, -8], [-27, 1], [20, -27], [26, -16], [22, -6], [27, 3], [-33, 10], [34, 8]]
+  const arches = [-30, -24, -18, -12, -6, 0]
 
   // Trees first: the ground wants to know where their shade falls.
-  for (const [x, z] of [[-16, 14], [-20, 27], [-15, 37], [17, 37], [23, 29], [23, 14]]) P.willow(x, z)
-  for (const [x, z] of [[-20, -26], [-26, -18], [-21, -8], [-27, 1], [20, -27], [26, -16], [22, -6], [27, 3], [-33, 10], [34, 8]]) P.fruitTree(x, z)
+  for (const [x, z] of willows) P.willow(x, z)
+  for (const [x, z] of orchard) P.fruitTree(x, z)
   for (let k = 0; k < 16; k++) {
     const a = (k / 16) * Math.PI * 2 + 0.2
     const x = Math.cos(a) * 42, z = Math.sin(a) * 42
@@ -544,7 +633,7 @@ export function buildGarden(store, seed = 1337) {
   P.ground()
   P.house()
 
-  for (const z of [-30, -24, -18, -12, -6, 0]) P.roseArch(z)
+  for (const z of arches) P.roseArch(z)
   for (let z = -31; z < 7; z += 0.36) {
     P.nasturtium(-(2.4 - rng() * 1.3), z)
     P.nasturtium(2.4 - rng() * 1.3, z)
@@ -584,5 +673,17 @@ export function buildGarden(store, seed = 1337) {
 
   P.litter()
   P.clouds()
-  return { count: store.count }
+  P.hills()
+  const reserve = P.reservePetals(3000)
+  return {
+    count: store.count,
+    reserve,
+    // where the breeze finds petals to drop: [x, y, z, radius, palette]
+    sources: [
+      ...arches.map((z) => [0, 4.0, z, 2.2, PAL.rose]),
+      ...orchard.map(([x, z]) => [x, 4.4, z, 2.4, PAL.blossom]),
+      ...willows.map(([x, z]) => [x, 5.5, z, 3.0, PAL.leaf]),
+    ],
+    pick: (pal) => P.pick(pal),
+  }
 }

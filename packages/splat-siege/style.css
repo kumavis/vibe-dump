@@ -17,12 +17,13 @@ body {
 #hud { position: fixed; inset: 0; pointer-events: none; }
 #stats {
   position: absolute; top: 14px; left: 16px;
-  padding: 8px 12px; border-radius: 8px; background: var(--panel);
-  backdrop-filter: blur(6px); display: flex; align-items: baseline; gap: 10px;
+  padding: 6px 12px; border-radius: 8px; background: var(--panel);
+  backdrop-filter: blur(6px); display: flex; flex-direction: column; gap: 2px;
   font-size: 13px; letter-spacing: 0.02em;
 }
-#stats .label { color: var(--dim); text-transform: uppercase; font-size: 11px; letter-spacing: 0.12em; }
-#stats #pct { font-size: 20px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+#stats .row { display: flex; align-items: baseline; gap: 10px; }
+#stats .label { color: var(--dim); text-transform: uppercase; font-size: 11px; letter-spacing: 0.12em; min-width: 132px; }
+#stats .big { font-size: 20px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; min-width: 58px; }
 #stats .dim { color: var(--dim); font-variant-numeric: tabular-nums; }
 #fps {
   position: absolute; top: 14px; right: 16px; font-size: 11px; color: var(--dim);
@@ -62,6 +63,7 @@ body {
 }
 #overlay p { margin: 4px 0; font-size: 13px; color: var(--ink); line-height: 1.5; }
 #overlay p.keys { color: var(--dim); font-size: 12px; }
+#overlay p.hint { color: var(--dim); font-size: 12px; font-style: italic; }
 kbd {
   display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px;
   background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); color: var(--ink);
