@@ -226,8 +226,8 @@ with each fall the battery sees (to 22 % and 35 mils), and opens again on
 a new target or on the firer's own turn of more than 20°; each turret
 takes 0.87 of the battery's error plus its own share. A battery waits for
 its fall before the next salvo, and fires no oftener than every 30 s (guns
-under 150 mm), 40 s (medium and heavy; a heavy battery's reload when
-slower, Yamato's 35 s being faster); guns under 150 mm fire at ships only
+under 150 mm), 45 s (medium) and 50 s (heavy; a heavy battery's reload when
+slower; the integrator's from 40 and 40, §8); guns under 150 mm fire at ships only
 inside 2.5 km; secondaries take the escorts inside 4.5 km. The target is
 the nearest in arc, the damaged first (contract), with a ship of a type
 the side's main goal (or its further terms) would have it sink or hit
@@ -256,8 +256,9 @@ diamond fires at the battery's own reload.
 
 The contract's table has no entry for guns on a ship. A strafing run
 (approach at 600 m, in from 1,500 m at up to 35°, the guns from 900 m,
-a pull-out at 300 m) does no damage: the ship's AA is beaten down to 0.4
-of itself for 8 s and a marker says *Kumano: strafed* when a run first
+a pull-out at 300 m) does no damage: the ship's AA is beaten down to half
+for 10 s, an escort carrier launches nothing as long (the project
+manager's decision 34; engine-3 had 0.4 for 8 s), and a marker says *Kumano: strafed* when a run first
 finds her. The player's rounds on a ship of the other side do the same.
 
 ## 5. The admiral and the units' AI (`arena/admiral.js`, `ai.js`)
@@ -354,8 +355,13 @@ weather has, each a drifting disc 700–1,000 m across for 150–220 s, its
 middle passing near the arena's middle third; a ship inside one is hidden
 from a ship beyond a kilometre and sees out to 2 km. A night box (the
 scenario's `night`, or the hour) draws white splashes, and a scenario's
-`visibilityM` hides every ship beyond it from the gunnery. Star shells
-(content-3's `starShells`) are not drawn.
+`visibilityM` hides every ship beyond it from the gunnery. At night (the
+integrator's, the project manager's decision 36) a side's cruiser holds
+the nearest capital ship of the other side in a searchlight for 40 s, one
+a side at a time, and where the scenario says `starShells` its cruisers
+and destroyers fire a star shell over the enemy nearest its main body
+about every 30 s: the record's effects, drawn as the record draws them;
+they light and hide or show nothing.
 
 ## 7. The objectives (`arena/objectives.js`) and content-3's fields
 
@@ -531,7 +537,7 @@ more, or reads an unsaid detail one way, it is listed here.
     *End now*.
 22. **The HUD's endurance is the kit's**: the arena flies no fuel.
 23. **The AI fires at a pace** (§4.2): a salvo no oftener than every 30 s
-    (guns under 150 mm) or 40 s (the rest), whatever the gun's reload, and
+    (guns under 150 mm), 45 s (medium) or 50 s (heavy), whatever the gun's reload, and
     torpedoes outside a destroyer attack no oftener than every 120 s. The
     contract says nothing of the AI's rate of fire; at the guns' own rates
     a ten-minute game was over in three. The player's guns keep their
@@ -644,7 +650,9 @@ and Ironbottom Sound's fights past the entry (their balance runs only).
   (50 % and 45 %) and ships; Midway and Ironbottom Sound do not, and
   their doors are hidden until a person decides their shape (Midway's
   arena or a stance for the screens; Ironbottom Sound's US goal).
-- **Star shells** are not drawn; at night only `visibilityM` acts.
+- **The night's lights** light and do nothing else: a searchlight does
+  not show its holder to the other side's guns, nor a star shell its
+  target; at night only `visibilityM` acts on the gunnery.
 - **Level bombers dive** like dive bombers; there is no level bombing run.
 - **A person flying it**: the arcade numbers (§3) and the AI's ranging
   (§4.2) were set by the headless runs and by looking under SwiftShader at
