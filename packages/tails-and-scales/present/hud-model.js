@@ -35,6 +35,9 @@
 //                                 enabled once the table has caught up and
 //                                 the seat has an entry to take back
 //                                 (undoable, below)
+//     aim                         (F13) touch aim: { on (👆 Aim), select (▭
+//                                 Select), aiming (a finger's aim under way:
+//                                 'on', 'off' once called off, or null) }
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -51,7 +54,8 @@
 //            phase of a seat played here: { actors, covered }, the ids of the
 //            units whose orders act in it now and of those an order covers
 //            in it; null for none), ordered (how many of the seat's units
-//            hold an order) }
+//            hold an order), aim ((F13) input/aim.js's state(): the toggles
+//            and the drag; null for none) }
 //   hud      the HUD's own state, kept from the last model: { phaseShown,
 //            buttonsUp, hint, sides (each seat's look: ui/theme.js) }
 //
@@ -98,7 +102,7 @@ const [FIRST] = PHASES.map((p) => p.key)
 export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })
 
 export function hudModel({ G, mirror: M, session, input, hud }) {
-  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false } = input
+  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false, aim = null } = input
   const { phaseShown, sides } = hud
   const rounds = G.setup.rounds
   const ask = (fn) => session.preview(fn)
@@ -144,7 +148,10 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // hint line (a picked-up unit's kept as it was while the table plays its
   // action: the match has moved on already)
   let hint = hud.hint
-  if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
+  // ((F13) a finger aiming: what its lift will do, and how to call it off)
+  if (aim?.aiming === 'off') hint = 'Off the board: the aim is called off. Lift your finger.'
+  else if (aim?.aiming) hint = `Aiming — lift your finger ${aimVerb(pk, deploying, group, P)}; a second finger calls it off.`
+  else if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
   else if (deploying && group >= 2) hint = `Deployment — click inside your shaded zone to pin the ${group} units' formation there; Enter or its flag places them.`
   else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name}${sides[M.active].mirror ? ', the AI,' : ' (AI)'} are taking their turn…`
@@ -180,6 +187,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     undo,
     advance,
     shortest: { show: !!pk },
+    aim: { on: !!aim?.on, select: !!aim?.select, aiming: aim?.aiming ?? null },
     // the deploying seat's zone is lit; in battle both dim
     zones: [0, 1].map((s) => (M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === deploy ? 0.2 : 0.07)),
     hint,
@@ -217,6 +225,18 @@ export function undoable(session) {
   if (seat < 0 || k < 1) return -1
   const e = f.pushed[f.placed[k]]
   return UNDOABLE.includes(e.t) && e.s === seat && e.d === session.dev && f.dice[k] === f.dice[k - 1] ? k : -1
+}
+
+// (F13) What a finger's aim does where it lifts: the click's verb there.
+function aimVerb(pk, deploying, group, P) {
+  if (pk) return 'on the orange area to end the charge there'
+  if (deploying) return group >= 2 ? 'to pin the formation there' : 'to place the unit there'
+  const many = group >= 2
+  return {
+    move: many ? 'to pin the formation there, or on an enemy to approach it' : 'to move there (beyond its reach, as far as it goes that way)',
+    shoot: many ? 'on an enemy: every one of them that can fires at it' : 'on an enemy to shoot it',
+    charge: many ? 'on an enemy: every one of them that can charges it' : 'on an enemy to charge it',
+  }[P?.phase] ?? 'to act there'
 }
 
 // Each unit's ring: the one picked up, the deploying seat's, a charge's

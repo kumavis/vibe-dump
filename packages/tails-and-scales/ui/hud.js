@@ -1,7 +1,8 @@
 // The HUD (DESIGN §1.3, §2.11): the score, the round, the phase and the
 // seat whose turn the table shows, and the hint line, put on the page from
 // the HUD model (present/hud-model.js); and the HUD's tools (the speed, the
-// camera's next view and follow, the sound, the log's fold).
+// camera's next view and follow, the sound, the log's fold). ((F13) And the
+// touch toggles lit as they are on: 👆 Aim and ▭ Select, which take turns.)
 import { clock } from '../view/clock.js'
 import { unlock, toggleMute, isMuted } from '../view/sfx.js'
 
@@ -19,6 +20,10 @@ export class Hud {
     $('#sideB').classList.toggle('active', m.active === 1)
     $('#hint').textContent = m.hint
     $('#hint').style.display = m.hint ? '' : 'none'
+    if (m.aim) {
+      $('#aimMode')?.classList.toggle('on', m.aim.on)
+      $('#selectMode')?.classList.toggle('on', m.aim.select)
+    }
   }
 
   // The tools: the animation speed (1×, 2×, 4×), the camera's next view and
