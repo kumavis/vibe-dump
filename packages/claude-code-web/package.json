@@ -1,0 +1,33 @@
+{
+  "name": "@vibe-dump/claude-code-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/build-runtime.mjs",
+    "test": "node --test test/unit/",
+    "test:e2e": "node test/e2e.mjs"
+  },
+  "dependencies": {
+    "@jspm/core": "^2.1.0",
+    "@noble/hashes": "^1.8.0",
+    "fflate": "^0.8.2",
+    "fzstd": "^0.1.1",
+    "memfs": "^4.17.0",
+    "semver": "^7.7.0",
+    "slice-ansi": "^7.1.0",
+    "string-width": "^7.2.0",
+    "strip-ansi": "^7.1.0",
+    "wrap-ansi": "^9.0.0",
+    "yaml": "^2.7.0"
+  },
+  "gallery": {
+    "title": "Claude Code Web",
+    "description": "The official Claude Code harness, pulled out of its own binary in your browser and run on Node and Bun shims. No server, your own token, custom tools from the page.",
+    "tags": ["tool"],
+    "status": "wip",
+    "models": ["Opus 5.5", "Fable 5.1"],
+    "thinking": "unknown"
+  }
+}
