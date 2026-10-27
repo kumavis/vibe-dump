@@ -9,10 +9,11 @@
 // or ?terrain='s, then the last chosen), one button each. A later step adds
 // the army (F11b).
 //
-// (F8b) The battle size: a line of the missions (Skirmish, Field, Grand),
-// each with its board and points, the one chosen named under them with its
-// rounds; its default the flow's mission (?mission=, else classic; then the
-// last chosen). Grand is offered on a phone too (open question 16), with a
+// (F8b) The battle size: a line of the missions (Skirmish, Field, Grand,
+// (F19a) and the Powder keg, a Skirmish of its own), each with its board
+// and points, the one chosen named under them with its rounds (and what a
+// mission of its own is about); its default the flow's mission
+// (?mission=, else classic; then the last chosen). Grand is offered on a phone too (open question 16), with a
 // note that it is best on a larger screen. The sizes come from the page
 // (app/boot.js reads the missions), so this panel imports no rules data.
 // The size's sets are the terrain line's options.
@@ -34,8 +35,19 @@ export const TERRAINS = Object.freeze({
   fortified: { name: 'Fortified', what: 'ramparts, bastions, towers and a keep to climb' },
   // (F8b's set, the larger tables')
   open: { name: 'Open', what: 'ruins, woods, hedges and walls, spread over the larger table' },
+  // (F19a's set, the keg mission's only one)
+  keg: { name: 'Powder keg', what: 'ruins, woods, hedges and walls round a powder keg' },
 })
 export const terrainName = (set) => TERRAINS[set]?.name ?? set
+
+// (F19a) What a mission that is more than a battle's size is called on the
+// size line and in the lobby, and what it is about (a mission without a
+// line here goes by its list's size: Skirmish, Field, Grand)
+export const MISSION_NAMES = Object.freeze({
+  keg: { name: 'Powder keg', what: 'Four objectives round a powder keg at the centre: hold them while it stands, and whoever sets it off (a template, acid or the Brute) catches everyone near it.' },
+})
+// a mission's name on the size line: its own, else its list's size
+export const sizeName = (mission, m) => MISSION_NAMES[mission]?.name ?? m.list?.size ?? mission
 
 // a phone's screen: narrow, or a coarse pointer on a small one
 export const phoneScreen = () => innerWidth < 700 || (!!globalThis.matchMedia?.('(pointer: coarse)').matches && Math.min(innerWidth, innerHeight) < 600)
@@ -167,7 +179,8 @@ export class SetupScreen {
     this.sizeRow.replaceChildren(lbl, ...buttons)
     const at = sizes.find((s) => s.mission === size) ?? sizes[0]
     const big = phone && at.W * at.H > 60 * 40
-    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${big ? ' Best on a larger screen.' : ''}`
+    const what = MISSION_NAMES[at.mission]?.what
+    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
   }
 
   hide() {

@@ -196,6 +196,32 @@ const PIECES = {
     m.add(b, hoop)
     return standing(c, m)
   },
+  // (F19a) A powder keg: a barrel an inch across and 1.2" tall, its staves
+  // bellied (a lathe's profile), two iron hoops, a red danger band round its
+  // waist, a lid and a stub of fuse with a glowing tip. One look; the
+  // terrain's chunk is a box of the same size (core/terrain/recipes.js).
+  keg(c) {
+    const m = new THREE.Group()
+    const prof = [[0.4, 0], [0.46, 0.22], [0.5, 0.6], [0.46, 0.98], [0.4, 1.2]].map(([r, y]) => new THREE.Vector2(r, y))
+    const body = mesh(new THREE.LatheGeometry(prof, 14), mat(c.look.color))
+    const lid = mesh(new THREE.CircleGeometry(0.4, 14).rotateX(-Math.PI / 2), mat('#5f3e24'))
+    lid.position.y = 1.19
+    const iron = mat('#2f2f2f', { metalness: 0.5 })
+    const hoops = [0.14, 1.06].map((y) => {
+      const h = mesh(new THREE.TorusGeometry(0.44, 0.035, 4, 16).rotateX(Math.PI / 2), iron)
+      h.position.y = y
+      return h
+    })
+    const band = mesh(new THREE.CylinderGeometry(0.507, 0.507, 0.22, 16, 1, true), mat('#c0392b', { side: THREE.DoubleSide }))
+    band.position.y = 0.6
+    const fuse = mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.3, 5), mat('#3a2a1a'))
+    fuse.position.set(0.12, 1.33, 0.05)
+    fuse.rotation.z = -0.35
+    const tip = mesh(new THREE.SphereGeometry(0.05, 6, 4), mat('#ffb347', { emissive: '#ff7a1a', emissiveIntensity: 0.8 }), { shadow: false })
+    tip.position.set(0.17, 1.47, 0.05)
+    m.add(body, lid, ...hoops, band, fuse, tip)
+    return standing(c, m)
+  },
   sack(c) {
     const m = new THREE.Group()
     const sack = mesh(new THREE.SphereGeometry(0.34, 9, 7), mat('#c2a77a'))
@@ -974,6 +1000,14 @@ export class TerrainView {
       case 'log':
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
+        break
+      // (F19a) a powder keg bursts as a crate does, its staves flying and a
+      // puff of black powder; its explosion is its blast's, which follows
+      // (keg.fuse, then blast.land with fx 'keg': view/effects/shots.js)
+      case 'keg':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, [...WOOD, '#2f2f2f'], 16, { from, power: 6, size: 0.12 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: '#2a2622', life: 1.2 })
         break
     }
     // the break's sound: stone crumbles, the rest thwacks

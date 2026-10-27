@@ -43,6 +43,8 @@ import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt, groundY, fightOf } from '../queries.js'
 import { damage } from './damage.js'
+import { HAZARDS } from '../../data/hazards.js'
+import { kegsIn } from '../terrain/terrain.js'
 
 export function canShoot(G, u) {
   const w = u.t.ranged
@@ -264,7 +266,45 @@ export function eruption(G, u, target, w) {
 // a model is under it by its distance in 3D from there (its own floor's
 // height off the template's), and the scenery is chewed from half an inch
 // over that floor; without height, the flat test and 0.5 as ever.
+//
+// (F19a, §4.1 rule 28) Then any powder keg the blast broke goes off
+// (kegsGoOff): on a board with no keg (every set but `keg`) nothing more.
 export function blastLands(G, u, land, w) {
+  const kegs = landing(G, u, land, w)
+  if (kegs.length) kegsGoOff(G, u, kegs)
+}
+
+// (F19a, DESIGN §4.1 rule 28) The powder kegs `kegs` go off, one after
+// another in that order (a template's blast's in chunk order, a walk's as it
+// broke them), each a blast at its place with the keg's profile
+// (data/hazards.js): its line in the battle log ("The powder keg goes
+// up!"), `keg.fuse { id, x, z }` as it is set off, then straight on, its
+// blast landing as a template's does (landing: `blast.land` with fx 'keg',
+// whoever is under it, friend and foe, in G.units order, the "⚠" rows and
+// the "Friendly fire!" lines, the scenery round it, the nav after it). `u`
+// set it off, and is the attacker of every keg in the chain: a model the
+// blasts slay is u's (unit.slain's `by`), and "friendly" is u's side; the
+// wounds go first to the models nearest the keg. A keg a keg's blast
+// breaks joins the end of the line, in chunk order, so the first keg's
+// victims (and the scenery its blast chewed) all come before the second
+// keg's; a keg breaks once (a broken chunk is past every blast), so none
+// goes off twice. Nothing is drawn but the blasts' own dice (rule 4's, per
+// victim).
+export function kegsGoOff(G, u, kegs) {
+  const line = [...kegs], w = HAZARDS.keg
+  for (let i = 0; i < line.length; i++) {
+    const k = line[i], at = { x: k.shape.x, z: k.shape.z }
+    log(G, u.side, '<b>The powder keg goes up!</b>')
+    emit(G, 'keg.fuse', { id: k.id, x: at.x, z: at.z })
+    for (const next of landing(G, u, at, w, at)) line.push(next)
+  }
+}
+
+// A blast lands at `land`: blastLands' victims and scenery, the nav after
+// them; the kegs it broke, for its caller to set off. (F19a) `from` is
+// where the victims' wounds go nearest to (damage's): the thrower, or the
+// keg that went off.
+function landing(G, u, land, w, from = u.pos) {
   emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })
   const victims = []
   const ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
@@ -287,7 +327,7 @@ export function blastLands(G, u, land, w) {
     const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
     if (wounds && sn <= 6) emit(G, 'dice', { label: `Save ${sn}+${cover ? ' (cover)' : ''}`, dice: sv, need: sn, save: true })
-    const killed = damage(G, v, unsaved, w.D, u, under)
+    const killed = damage(G, v, unsaved, w.D, u, under, from)
     log(G, u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) emit(G, 'pause', { s: 0.25 })
@@ -297,6 +337,7 @@ export function blastLands(G, u, land, w) {
   if (broke.length) log(G, u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   // (the nav follows the scenery, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  return kegsIn(broke)
 }
 
 // The living models of `v` under `w`'s template landed at `land`: within

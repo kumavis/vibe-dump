@@ -126,6 +126,8 @@ export class View {
       'blast.scatter': (e) => shots.scattered(e),
       'blast.fire': (e) => shots.fired(e),
       'blast.land': (e) => shots.landed(e),
+      // ((F19a) a powder keg set off: its fuse, a beat before its blast)
+      'keg.fuse': (e) => shots.fused(e),
       'spell.cast': (e) => (units.hid(e.u) ? undefined : shots.cast()),
       'spell.fizzle': (e) => (units.hid(e.u) ? undefined : shots.fizzled(e)),
       'spell.thorns': (e) => shots.thorns(e, { quiet: units.hid(e.u) }),

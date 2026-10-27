@@ -12,9 +12,10 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf } from '../queries.js'
+import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 import { friendsUnder } from '../actions/shoot.js'
+import { HAZARDS } from '../../data/hazards.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -46,6 +47,101 @@ export function ownUnder(G, u, e) {
   return cost
 }
 
+// ── (F19a) The powder keg ───────────────────────────────────────────────────
+// What the AI makes of a keg (rule 10: they bump with F19a), in three terms,
+// each skipped where no keg stands (every board but the `keg` set's, so
+// every other battle scores as it did, to the bit): a unit fears standing
+// in a keg's blast while any enemy could set it off (score's), the guns
+// value a template that would set one off (shotValue's) and a wrecker the
+// walk that smashes one (score's), each keg's going off valued by what it
+// takes of the enemy less what it takes of its own side (by expected, as
+// ownUnder counts a template's friends). None draws: bestSpot's draws are
+// where they were.
+
+// The kegs standing, in chunk order ([] on a board with none).
+export const kegsOf = (G) => G.terrain.chunks.filter((c) => c.alive && c.kind === 'keg')
+
+// Whether any enemy of `side` could set a keg off this battle: one standing
+// with a blast weapon (a template, acid's among them, or a blast spell's) or
+// a wrecker's walk.
+export const kegDanger = (G, side) => G.units.some((e) => e.side !== side && alive(e) && !!(e.t.ranged?.blast || e.t.wrecker))
+
+// How many hits keg `k` going off would put on `v` were it standing at `at`
+// (where it stands, by default): its living models within the keg's blast
+// and 0.6 of a base of the keg, blastLands' flat test (no keg stands on a
+// board with height), a big one's D3+1 as 3 (ownUnder's).
+export function kegHits(v, k, at = v.pos) {
+  const R = HAZARDS.keg.blast + v.t.base * 0.6
+  let n = 0
+  for (const m of v.models) if (m.alive && hypot(at.x + m.ox - k.shape.x, at.z + m.oz - k.shape.z) <= R) n++
+  return n && v.t.big ? 3 : n
+}
+
+// What `u` would lose to keg `k` going off with it standing at `at`: the
+// points a template of the keg's profile due there takes (expected over
+// the models it would catch, kegHits'), the fear term's (score's).
+export function kegFear(u, k, at) {
+  const n = kegHits(u, k, at)
+  return n ? expected(n, 1, HAZARDS.keg, u, false).value : 0
+}
+
+// What keg `k` going off is worth to `side`: the points it would take of
+// the enemy less those of `side`'s own (each unit under it by expected, as
+// ownUnder counts a template's), `mover` standing at `at` instead of where
+// it is (a wrecker scoring where its walk through the keg ends).
+export function kegValue(G, side, k, mover = null, at = null) {
+  let v = 0
+  for (const x of G.units) {
+    if (!alive(x)) continue
+    const n = kegHits(x, k, x === mover ? at : x.pos)
+    if (!n) continue
+    const e = expected(n, 1, HAZARDS.keg, x, inCover(G, x)).value
+    v += x.side === side ? -e : e
+  }
+  return v
+}
+
+// What setting kegs off is worth to `u`'s artillery shooting at `e`: the
+// kegs (of `kegs`, kegsOf's) a template of its weapon landing square on e
+// would set off (terrain.js blastDamage, blast's own arithmetic: its damage
+// there at least the keg's hit points left), each by kegValue. 0 for any
+// other unit (only the guns weigh the keg in a shot: rule 10's modest
+// term), and where no keg would go off.
+export function kegGain(G, u, e, kegs = kegsOf(G)) {
+  const w = u.t.ranged
+  if (u.t.ai !== 'artillery' || !w?.blast || !kegs.length) return 0
+  const y = G.nav.hasHeight ? floorAt(G, e.pos.x, e.pos.z) + 0.5 : 0.5
+  let gain = 0
+  for (const k of kegs) {
+    const amount = G.terrain.blastDamage(k, e.pos.x, y, e.pos.z, w.blast, w.scenery || 1, !!w.corrodes)
+    if (amount !== null && amount >= k.hp) gain += kegValue(G, u.side, k)
+  }
+  return gain
+}
+
+// What a wrecker's walk ending at `at` is worth by the kegs it smashes
+// there: a walk's last sample is its end, so a keg within the smash's reach
+// of it (smashAround's test: u.r and 0.8 of the keg's half-width) is
+// smashed for sure, and goes off with u standing at `at`. (A keg on the
+// way is left out: the nav's wreck mode pays double through soft ground,
+// so its path goes round a lone keg rather than through it.) 0 for a unit
+// that smashes nothing.
+export function kegWalk(G, u, at, kegs) {
+  if (!u.t.wrecker || !kegs.length) return 0
+  let gain = 0
+  for (const k of kegs) {
+    const s = k.shape
+    if (hypot(s.x - at.x, s.z - at.z) < u.r + Math.max(s.hx, s.hz) * 0.8) gain += kegValue(G, u.side, k, u, at)
+  }
+  return gain
+}
+
+// How much a unit fears a keg's blast at a place, a weight on the points it
+// would lose there (the danger term's scale, between its fragile and
+// robust weights); and how much a wrecker values a walk that sets one off
+// (the brawlers' charge weight).
+export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
+
 // Expected points of `e` removed by `u` shooting from `from`. (S1) `pre`,
 // when given, is what bestSpot worked out about `e` once for its whole
 // scan (its `cover`, (F18) its `fight` and its template's `own` cost: the
@@ -65,6 +161,10 @@ export function ownUnder(G, u, e) {
 // erupting where the target stands). So a shot whose friendly fire
 // outweighs its haul is worth less than nothing, and the AI never prefers
 // to shell its own Brute. The gaze strikes its target alone.
+//
+// (F19a; rule 10: it bumps with F19a) The guns' template is also worth the
+// powder kegs it would set off landing on `e` (kegGain), once a shot, on
+// its hit: nothing where no keg stands.
 export function shotValue(G, u, e, from, moved, pre = null) {
   const w = u.t.ranged
   if (!w) return 0
@@ -82,7 +182,9 @@ export function shotValue(G, u, e, from, moved, pre = null) {
   if (w.blast) {
     const pHit = w.spell ? p2D6(w.spell) : pD6(hitNeed(u.t.BS, mod))
     const under = e.t.big ? 3 : Math.max(1, Math.min(e.alive, Math.round(e.alive * Math.min(1, (w.blast * w.blast) / (e.r * e.r)) * 0.8)))
-    return attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e)))
+    const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e)))
+    const keg = pre ? pre.keg : kegGain(G, u, e)
+    return keg ? value + pHit * keg : value
   }
   const n = attackCount(u, w, false), need = hitNeed(u.t.BS, mod)
   const fight = pre ? pre.fight : fightOf(G, u, e)
@@ -131,12 +233,17 @@ export function bestSpot(G, u, plan, claimed) {
   // shot at it would cost its own side (until F18 whether it was engaged,
   // which barred the shot): a volley's fight (fightOf), a template's friends
   // under it (ownUnder), each asked only of the weapon whose value reads it
+  //
+  // (F19a) and the kegs standing, whether an enemy could set one off, and
+  // what a gun's template on each enemy would set off (kegGain)
   const w = u.t.ranged, shoots = !!w && role !== 'melee'
+  const kegs = kegsOf(G)
   const pre = new Map(enemies.map((e) => [e, {
     cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u),
     fight: shoots && !w.blast && !w.mesmerize ? fightOf(G, u, e) : null, own: shoots && w.blast ? ownUnder(G, u, e) : 0,
+    keg: shoots && w.blast ? kegGain(G, u, e, kegs) : 0,
   }]))
-  const ctx = { enemies, friends, owners, claimed, role, pre }
+  const ctx = { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
   // stay put is always an option
   let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
@@ -209,8 +316,14 @@ function nearestBy(G, from, enemies, climb) {
 // the works counted) The charge term and the brawlers' danger measure their
 // ways so too, each walker's by levelDist: a deck's defenders are as far
 // from a brawler at the wall's foot as its stairs make them, both ways.
+//
+// (F19a; rule 10: it bumps with F19a) A powder keg: standing in its blast is
+// feared as a template of its profile due there (KEG_FEAR of the points it
+// would take) while any enemy could set it off; and a wrecker's walk that
+// smashes one is worth what the keg then takes of the enemy less its own
+// (KEG_SMASH of it). Both skipped where no keg stands.
 export function score(G, u, x, z, ctx, moving) {
-  const { enemies, friends, owners, claimed, role, pre } = ctx
+  const { enemies, friends, owners, claimed, role, pre, kegs } = ctx
   const t = u.t
   const from = { x, z }
   // (the review) the way up is a walker's: a flier's move is a circle that
@@ -311,6 +424,11 @@ export function score(G, u, x, z, ctx, moving) {
   for (const f of friends) {
     const g = hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
     if (g < 1.5) s -= (1.5 - g) * 0.6
+  }
+  // (F19a) a powder keg's blast, and a wrecker's walk through a keg
+  if (kegs.length) {
+    if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from) * KEG_FEAR
+    if (moved) s += kegWalk(G, u, from, kegs) * KEG_SMASH
   }
   ctx.last = { onObjective, obj, canShoot }
   return s

@@ -26,7 +26,7 @@ export const PACE = Object.freeze({
       : e.t === 'pause' ? e.s ?? 0
         : e.t === 'dice' ? PACE.dice(e.dice?.length ?? 1)
           : e.t === 'phase.start' || e.t === 'round.scored' ? 0.9
-            : /^(volley|blast\.|spell\.)/.test(e.t) ? 0.5 : 0,
+            : /^(volley|blast\.|spell\.|keg\.)/.test(e.t) ? 0.5 : 0,
   // (V1) a batch's walks start this far apart
   stagger: 0.15,
   // (F8b) an attack batch's attacks start at least this far apart, and a
@@ -152,12 +152,14 @@ export function batchAt(events, k, sideOf) {
 // first.)
 const ANCHOR = new Set(['volley', 'blast.fire', 'spell.cast', 'spell.fizzle', 'melee'])
 const OPENING = new Set(['focus', 'unit.face'])
-const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
+// ((F19a) a powder keg the attack set off goes off inside it: its fuse, its
+// blast's landing and victims, its scenery)
+const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
 const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 // what an attack in a batch waits on before the next may start: a volley
 // PACE.lead, a scatter, a throw and the slower spells their half second
 // (PACE.cost's), the rest nothing (their handlers draw at once)
-const HOLD = new Set(['blast.scatter', 'blast.fire', 'spell.thorns', 'spell.gaze'])
+const HOLD = new Set(['blast.scatter', 'blast.fire', 'keg.fuse', 'spell.thorns', 'spell.gaze'])
 export const holdOf = (e) => (e.t === 'volley' ? PACE.lead : HOLD.has(e.t) ? PACE.cost(e) : 0)
 
 export function attacksAt(events, k, sideOf) {

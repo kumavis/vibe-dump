@@ -30,7 +30,7 @@ import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
-import { SetupScreen } from '../ui/screens/setup.js'
+import { SetupScreen, sizeName } from '../ui/screens/setup.js'
 // (F8b) drawing at scale: the chips, the roster, the minimap
 import { Chips } from '../ui/chips.js'
 import { Roster } from '../ui/roster.js'
@@ -77,8 +77,9 @@ import { Session } from '../match/session.js'
 const { W, H } = MISSIONS.classic.board
 const $ = (s) => document.querySelector(s)
 // (F8b) the battle sizes the setup panel and the lobby offer: each mission,
-// its list's size name, its board, points and rounds
-export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
+// its list's size name ((F19a) or its own: the Powder keg's), its board,
+// points and rounds
+export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.

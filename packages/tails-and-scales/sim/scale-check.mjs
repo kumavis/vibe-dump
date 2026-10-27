@@ -400,6 +400,14 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
       const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 41))
       report(!b.bad.length && b.wide > 0, `P-scan, the box with height: ${b.plans} climbers' plans from ladders' feet and tops on 40 Grand-sized fortified boards, every reached cell inside scanBox (${b.wide} reaching past the box a flat board would draw)`, b.bad.length ? b.bad : b.wide ? [] : ['no plan reached past the flat box: the probe met no ladder that carries farther than it costs'])
     }
+    // (F19a) the keg board: the keg/ AI pairs, on code with the keg's AI
+    // terms (the reference asks them afresh at every cell; bestSpot once a
+    // scan), on a stream of its own (the rows after it draw as they did)
+    const kegB = C.M.kegsOf ? items.filter((it) => it.kind === 'ai' && it.set === 'keg').slice(0, quick ? 1 : 2).map((it) => [`keg ${it.id}`, jobSetup(it.job)]) : []
+    if (kegB.length) {
+      const s5 = sample(C, kegB, quick ? 9 : 4, [scanProbe], stream(20261027))
+      report(!s5.bad.length && s5.states >= (quick ? 20 : 100), `P-scan, keg: ${s5.states} states on ${kegB.length} keg/ boards, the reference scoring with the powder keg's terms`, s5.bad)
+    } else if (C.M.kegsOf) say('  (P-scan, keg: no keg/ AI pair in the corpus yet)')
   }
   if (want('los')) {
     const l1 = pLos(C, Array.from({ length: quick ? 60 : 500 }, (_, i) => i + 1), 40, rand)

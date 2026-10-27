@@ -33,6 +33,7 @@
 import { mulberry32, pick, rr, deepFreeze } from '../util.js'
 import { hypot, sin, cos, atan, atan2 } from '../dmath.js'
 import { corners } from './geom.js'
+import { HAZARDS } from '../../data/hazards.js'
 
 // Wall styles: palette, block width / height / thickness, hit points, and
 // whether a block is a box or a log. The palettes are drawn from the layout
@@ -57,6 +58,8 @@ const STONE = Object.freeze(['#7d7a74', '#8c8880', '#6e6b66', '#96918a'])
 const CRATE = Object.freeze(['#9a7048', '#8a6038', '#a77d50'])
 const BARREL = Object.freeze(['#8a5a34', '#7a4c2a'])
 const CAPS = Object.freeze(['#c0392b', '#d35a1f', '#8e44ad', '#b03050'])
+// (F19a) a powder keg's staves
+const KEG_WOOD = Object.freeze(['#8a5a34', '#7a4c2a', '#94643a'])
 // a forest floor is a CircleGeometry(r, 22): a centre vertex and 23 rim
 // vertices (the seam is doubled), each rim vertex pulled in or out by a draw
 const FLOOR_SEGMENTS = 22
@@ -229,6 +232,23 @@ export function mushroom(T, F, rng, lx, lz) {
     nav: { x: p.x, z: p.z, hx: sr + 0.12, hz: sr + 0.12, yaw: 0 },
     navKind: 'soft', los: 'obscure', cover: true,
     look: { piece: 'mushroom', h, r, sr, cap, dots, tilt, leaves: [cap, '#fff6e0', '#efe6d0'] },
+  })
+}
+
+// (F19a, DESIGN §2.9) A powder keg: a barrel of black powder about an inch
+// across and 1.2" tall, standing on the ground at (x, z), turned `yaw`, its
+// staves `color`, with the keg's hit points (data/hazards.js). Walkers go
+// round it (`soft`: a wrecker walks through, and smashes it); too small to
+// see past or hide behind (no line of sight, no cover). At zero hit points
+// it goes off: the rules' (core/actions/shoot.js kegsGoOff), from the
+// terrain's list of what broke; the terrain itself only reports it broken,
+// as a crate.
+export function powderKeg(T, x, z, yaw, color) {
+  return T.add({
+    kind: 'keg', hp: HAZARDS.keg.hp,
+    shape: { x, y: 0.6, z, hx: 0.5, hy: 0.6, hz: 0.5, yaw },
+    navKind: 'soft',
+    look: { piece: 'keg', color, yaw, chip: '#7a4c2a' },
   })
 }
 
@@ -659,7 +679,19 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
     buildFort(T, 'keep', { x: 0, z: 0, yaw: (rng() - 0.5) * 0.4 }, (rng() * 1e9) | 0)
     placed.push({ x: 0, z: 0, r: FOOTPRINT.keep, fort: 'keep' })
   },
+  // (F19a) the powder keg at the table's centre, the `keg` mission's
+  // objectives clustered round it: its yaw, then its staves' colour. Exactly
+  // at (0, 0), so it is its own point mirror; its footprint keeps the
+  // features KEG_R off.
+  keg(T, rng, placed) {
+    const yaw = rng() * Math.PI * 2
+    powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))
+    placed.push({ x: 0, z: 0, r: KEG_R, keg: true })
+  },
 }))
+// (F19a) the room a centre keg keeps round it from the features (each keeps
+// its own radius and the set's gap beyond this)
+export const KEG_R = 1
 
 // ── Scattering a set ────────────────────────────────────────────────────────
 // Lay terrain set S (sets.js) out over T's table from the board seed: one

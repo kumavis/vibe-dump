@@ -92,7 +92,8 @@
 //                rounds and each seat's army let go, the guest's page shows
 //                the size and can't change it; once both are ready again the
 //                battle starts on the size's board (60×40), its start
-//                naming the mission; a rematch keeps the size
+//                naming the mission; a rematch keeps the size; (F19a) the
+//                Powder keg is offered beside the three sizes, by its name
 //   (F14)
 //   follow       once the host has pressed End (the bookmark of its last
 //                End kept through its own fight and morale phases), the
@@ -990,7 +991,10 @@ async function runCases(dist, cases) {
         d.lobby.rounds = 5
       }))
       const offered = await host.$$eval('#lobbySize option', (os) => os.map((o) => o.value))
-      must(offered.join() === 'classic,field,grand', `the host's page offers every size: ${offered.join(', ')}`)
+      // ((F19a) and the Powder keg, a mission of its own beside the sizes)
+      must(offered.join() === 'classic,field,grand,keg', `the host's page offers every size, the Powder keg among them: ${offered.join(', ')}`)
+      const kegText = await host.$eval('#lobbySize option[value="keg"]', (o) => o.textContent)
+      must(/^Powder keg · 40×28, 500 pts$/.test(kegText), `the Powder keg offered by its own name, its board and points: ${JSON.stringify(kegText)}`)
       await host.selectOption('#lobbySize', 'field')
       await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
       const L = JSON.parse(await lobbyNow(guest))
