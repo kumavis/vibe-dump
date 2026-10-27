@@ -1320,11 +1320,13 @@ body.mirror .ulabel.s1.sel .ct {
   color: var(--dim);
   font-style: italic;
 }
-#selectMode {
+#selectMode,
+#aimMode {
   display: none;
 }
 @media (pointer: coarse) {
-  body.playing #selectMode {
+  body.playing #selectMode,
+  body.playing #aimMode {
     display: inline-block;
   }
 }
@@ -1391,7 +1393,8 @@ body.mirror .ulabel.s1.sel .ct {
   font-size: 12px;
   margin-bottom: 4px;
 }
-#selectMode.on {
+#selectMode.on,
+#aimMode.on {
   border-color: var(--gold);
   color: var(--gold);
 }
