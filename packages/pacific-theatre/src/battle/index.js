@@ -45,6 +45,20 @@
 // release); 'after' carries the sortie. The keys have one owner each: L and
 // Enter while watching are src/link.js's, Tab while watching (the next unit)
 // is bindWatchKeys's, Tab while a unit is held is the controls'.
+//
+// Round three (ROUND-3.md §4): the wargame. enterWargame(scenarioId, { side,
+// seed, from }) loads the box and wargames/<id>.json, builds the arena
+// (src/battle/arena/) in place of the record's sim (this.sim is the arena
+// while it runs, so the scene, the HUD, the unit list and the controls read
+// it unchanged), cuts to the side's first unit at its first station and runs
+// at 1× (pause allowed, no scrubbing). hop(kind | index) is Tab and 1–4;
+// restart({ side, seed }) builds a fresh arena (the other side's, when asked);
+// endNow() forces the end; leave() as ever. The arena's events go out as
+// 'battle' events with wargame: true ('phase', 'hit' markers via the arena's
+// markers, 'sinking', 'lost', 'respawn', 'hop', 'turn-away', 'wave',
+// 'highlight', and 'wargame-end' with the result); the scene's slow motion
+// scales the arena's dt in tick() and only the arena's. research/engine-3.md
+// §2 has every method as built.
 
 import { createSim } from './sim/index.js'
 import { createArena } from './arena/index.js'
@@ -873,6 +887,8 @@ export class Battle {
     const ev = this.app.events
     while (this._evIndex < arena.events.length) {
       const e = arena.events[this._evIndex++]
+      // (the hit markers stay in arena.events, where the HUD layer reads them: not sent to the page a second time)
+      if (e.marker) continue
       if (e.kind === 'hop' && (e.how === 'respawn' || e.how === 'hop')) this.rebindPlayer()
       if (e.kind === 'end') this.endWargame(e.result)
       ev?.dispatchEvent(new CustomEvent('battle', { detail: { ...e, kind: e.kind === 'end' ? 'wargame-end' : e.kind, wargame: true } }))
