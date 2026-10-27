@@ -11,7 +11,10 @@
 import * as THREE from 'three'
 import { DataUtils } from 'three'
 
-export const KIND = { GROUND: 0, STRUCTURE: 1, FOLIAGE: 2, EFFECT: 3 }
+// GROUND/WATER lie flat and crater; STRUCTURE/FOLIAGE fill the collision grid;
+// FLORA is soft (walk through, no grid) but still blows apart; LOOSE starts
+// life as loose litter the blower can lift; SKY never takes part in anything.
+export const KIND = { GROUND: 0, STRUCTURE: 1, FOLIAGE: 2, EFFECT: 3, FLORA: 4, LOOSE: 5, WATER: 6, SKY: 7 }
 
 const TEX_W = 2048 // texels per row → 1024 splats per row
 const CUTOFF = 2.6 // sigmas: beyond this a Gaussian is ~3% and gets cut
@@ -106,7 +109,9 @@ out vec4 fragColor;
 void main() {
   float r2 = dot(vPos, vPos);
   if (r2 > ${CUTOFF * CUTOFF}) discard;
-  float a = exp(-0.5 * r2) * vColor.a;
+  // A Gaussian with an opaque core: boosted and clamped so a dab reads as a
+  // stroke of paint with a soft rim rather than an airbrushed blur.
+  float a = min(1.0, 1.55 * exp(-0.5 * r2)) * vColor.a;
   if (a < 0.003) discard;
   fragColor = vec4(vColor.rgb * a, a);
 }
@@ -159,8 +164,8 @@ export class SplatStore {
       uFocal: { value: new THREE.Vector2(600, 600) },
       uViewport: { value: new THREE.Vector2(1, 1) },
       uFlash: { value: [new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4()] },
-      uFogColor: { value: new THREE.Color(0.80, 0.84, 0.90) },
-      uFogDensity: { value: 0.0055 },
+      uFogColor: { value: new THREE.Color(0.86, 0.83, 0.88) },
+      uFogDensity: { value: 0.0045 },
     }
     this.material = new THREE.ShaderMaterial({
       glslVersion: THREE.GLSL3,

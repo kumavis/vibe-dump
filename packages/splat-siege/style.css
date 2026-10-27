@@ -2,7 +2,7 @@
   color-scheme: dark;
   --ink: #f2efe6;
   --dim: rgba(242, 239, 230, 0.62);
-  --panel: rgba(12, 14, 20, 0.62);
+  --panel: rgba(28, 24, 40, 0.58);
   --accent: #ffb347;
 }
 * { box-sizing: border-box; }
@@ -29,6 +29,14 @@ body {
   padding: 6px 10px; border-radius: 8px; background: var(--panel); font-variant-numeric: tabular-nums;
 }
 #fps:empty { display: none; }
+#weapon {
+  position: absolute; left: 16px; bottom: 22px; display: flex; gap: 8px; font-size: 12px;
+}
+#weapon span {
+  padding: 6px 10px; border-radius: 8px; background: var(--panel); color: var(--dim);
+  border: 1px solid transparent; transition: color 0.15s, border-color 0.15s;
+}
+#weapon span.on { color: var(--accent); border-color: rgba(255, 179, 71, 0.5); }
 #crosshair {
   position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px;
   opacity: 0.85;

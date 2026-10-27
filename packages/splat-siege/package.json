@@ -12,10 +12,11 @@
   },
   "gallery": {
     "title": "Splat Siege",
-    "description": "A first-person rocket launcher in a town built from 100,000 Gaussian splats. Every wall, roof, tree and paving stone is a cloud of oriented Gaussians that blows apart, tumbles through the air and settles as rubble. Three.js.",
+    "description": "A rocket launcher and a leaf blower in Monet's garden at Giverny, painted in 80,000 Gaussian brush strokes: the rose arches, the iris beds, the Japanese bridge under its wisteria, the lily pond. Every stroke blows apart, and whatever lies loose drifts on the wind. Three.js.",
     "tags": [
       "game",
-      "simulation"
+      "simulation",
+      "art"
     ],
     "status": "wip",
     "models": [

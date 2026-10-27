@@ -5,6 +5,7 @@ export class Sfx {
     this.ctx = null
     this.master = null
     this.noiseBuf = null
+    this.blower = null
   }
 
   unlock() {
@@ -28,6 +29,41 @@ export class Sfx {
     src.buffer = this.noiseBuf
     src.loop = true
     return src
+  }
+
+  // The leaf blower: a looping, band-passed roar with a slow wobble.
+  blowerStart() {
+    if (!this.ctx || this.blower) return
+    const t = this.ctx.currentTime
+    const src = this.noise()
+    const bp = this.ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.Q.value = 1.2
+    bp.frequency.value = 420
+    const lfo = this.ctx.createOscillator()
+    lfo.frequency.value = 7
+    const lfoGain = this.ctx.createGain()
+    lfoGain.gain.value = 60
+    lfo.connect(lfoGain).connect(bp.frequency)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.5, t + 0.25)
+    src.connect(bp).connect(g).connect(this.master)
+    src.start(t)
+    lfo.start(t)
+    this.blower = { src, lfo, g }
+  }
+
+  blowerStop() {
+    if (!this.ctx || !this.blower) return
+    const { src, lfo, g } = this.blower
+    const t = this.ctx.currentTime
+    g.gain.cancelScheduledValues(t)
+    g.gain.setValueAtTime(Math.max(0.0001, g.gain.value), t)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35)
+    src.stop(t + 0.4)
+    lfo.stop(t + 0.4)
+    this.blower = null
   }
 
   launch() {

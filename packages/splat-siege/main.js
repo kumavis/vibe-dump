@@ -1,15 +1,15 @@
-// Splat Siege — a first-person rocket launcher in a town made of Gaussian
-// splats. The splats are the only representation of the world: a coarse voxel
-// grid, filled from the splat centres, is what rockets and the player collide
-// with, and an explosion simply turns the splats inside its radius into
-// tumbling debris and clears their cells.
+// Splat Siege — a rocket launcher and a leaf blower in Monet's garden, which
+// is made of nothing but Gaussian splats. The splats are the only world there
+// is: a coarse voxel grid filled from the solid ones is what rockets and the
+// player collide with, an explosion turns everything in its radius into
+// tumbling debris, and the blower pushes whatever is loose around the garden.
 import * as THREE from 'three'
 import { SplatStore, KIND } from './splats.js'
-import { buildTown, mulberry32, SUN, WORLD_HALF } from './town.js'
+import { buildGarden, mulberry32, SUN, WORLD_HALF, pondDist, POND } from './garden.js'
 import { Sfx } from './audio.js'
 
-const CAPACITY = 120000
-const POOL = 9000 // effect splats: fire, smoke, sparks, dust, trails
+const CAPACITY = 130000
+const POOL = 9000 // effect splats: fire, smoke, sparks, spray, trails, air
 const CELL = 0.5
 const GRID_HALF = 48
 const GRID_H = 32
@@ -17,15 +17,27 @@ const ROCKET_SPEED = 44
 const ROCKET_RADIUS = 5.2
 const ROCKET_POWER = 13
 const FIRE_INTERVAL = 0.55
+const BLOWER_RANGE = 15
+const BLOWER_TAN = Math.tan(0.42)
+const BLOWER_FORCE = 42
 const GRAVITY = 18
 const DEBRIS_GRAVITY = 13
 const EYE = 1.6
-const FOG = new THREE.Color(0.80, 0.84, 0.90)
-const SPAWN = new THREE.Vector3(7.5, 0, 5)
-const SPAWN_YAW = 0.03
-const INTRO_TARGET = new THREE.Vector3(6.5, 7, -22)
+const POND_DEPTH = 0.75
+const FOG = new THREE.Color(0.86, 0.83, 0.88)
+const SPAWN = new THREE.Vector3(14, 0, 34)
+const SPAWN_YAW = 0.75
+const INTRO_TARGET = new THREE.Vector3(12, 0.1, 22)
+const WEAPON = { ROCKET: 0, BLOWER: 1 }
 
 const $ = (id) => document.getElementById(id)
+
+// The pond floor dips so the player wades; debris still rests on the surface.
+function floorY(x, z) {
+  const e = pondDist(x, z)
+  if (e >= 1) return 0
+  return -POND_DEPTH * Math.min(1, (1 - e) / 0.12)
+}
 
 // ---------------------------------------------------------------- voxel grid
 
@@ -69,8 +81,8 @@ class Grid {
 
 // ---------------------------------------------------------------- effects
 
-// A pool of short-lived splats for fire, smoke, sparks and dust. They live in
-// the same store as the town so they sort and blend with everything else.
+// A pool of short-lived splats for fire, smoke, sparks, spray and air. They
+// live in the same store as the garden so they sort and blend with it.
 class Effects {
   constructor(store, size, rng) {
     this.store = store
@@ -203,6 +215,27 @@ class Effects {
     }
   }
 
+  // A rocket into the pond: a white column of spray, a ring of it, and mist.
+  splash(x, z) {
+    const r = this.rng
+    this.spawn(x, 0.2, z, 0, 0, 0, 0.3, 0.6, 1.8, [0.95, 0.98, 1], [0.7, 0.8, 0.9], 0.55, 0, 0, 0.6)
+    for (let k = 0; k < 50; k++) {
+      const a = r() * Math.PI * 2, rr = r() * 1.6, sp = 9 + r() * 12
+      this.spawn(x + Math.cos(a) * rr, 0.1, z + Math.sin(a) * rr, Math.cos(a) * rr * 2, sp, Math.sin(a) * rr * 2, 1.0 + r() * 0.8,
+        0.15 + r() * 0.15, 0.3 + r() * 0.3, [0.9, 0.95, 1], [0.6, 0.72, 0.85], 0.7, 0.8, -14, 1.0)
+    }
+    for (let k = 0; k < 40; k++) {
+      const a = r() * Math.PI * 2, sp = 8 + r() * 10
+      this.spawn(x, 0.3, z, Math.cos(a) * sp, 1.5 + r() * 3, Math.sin(a) * sp, 0.8 + r() * 0.6, 0.35, 1.2 + r() * 0.6,
+        [0.85, 0.92, 0.98], [0.75, 0.82, 0.9], 0.6, 3.5, -3, 1.2)
+    }
+    for (let k = 0; k < 24; k++) {
+      const a = r() * Math.PI * 2, rr = r() * 3
+      this.spawn(x + Math.cos(a) * rr, 0.4, z + Math.sin(a) * rr, (r() - 0.5), 1.2 + r(), (r() - 0.5), 2.2 + r() * 1.4,
+        0.6, 1.6 + r() * 0.8, [0.86, 0.9, 0.95], [0.86, 0.88, 0.93], 0.22, 1.5, 0.3, 1.5)
+    }
+  }
+
   puff(x, y, z, vx, vy, vz) {
     const r = this.rng
     this.spawn(x + (r() - 0.5) * 0.15, y + (r() - 0.5) * 0.15, z + (r() - 0.5) * 0.15, vx * 0.08 + (r() - 0.5), vy * 0.08 + (r() - 0.5) + 0.4, vz * 0.08 + (r() - 0.5),
@@ -223,6 +256,14 @@ class Effects {
     }
   }
 
+  // The blower's air stream: faint, fast, short-lived.
+  air(x, y, z, dx, dy, dz) {
+    const r = this.rng
+    const sp = 12 + r() * 8
+    this.spawn(x + (r() - 0.5) * 0.1, y + (r() - 0.5) * 0.1, z + (r() - 0.5) * 0.1, dx * sp + (r() - 0.5) * 3, dy * sp + (r() - 0.5) * 3, dz * sp + (r() - 0.5) * 3,
+      0.4 + r() * 0.3, 0.08, 0.45 + r() * 0.3, [0.96, 0.96, 1], [0.9, 0.92, 0.98], 0.07, 1.2, 0.3, 1.0)
+  }
+
   dust(x, y, z) {
     const r = this.rng
     this.spawn(x, y + 0.1, z, (r() - 0.5) * 1.5, 0.6 + r() * 0.6, (r() - 0.5) * 1.5, 0.6 + r() * 0.4, 0.2, 0.9,
@@ -232,8 +273,8 @@ class Effects {
 
 // ---------------------------------------------------------------- world
 
-// Owns the town's splats: which are standing, which are flying, which have
-// settled as rubble. Explosions and the debris simulation both live here.
+// Owns the garden's splats: which are standing, which are flying, which lie
+// loose. Explosions, the blower and the debris simulation all live here.
 class World {
   constructor(store, grid, sceneCount, rng, effects) {
     this.store = store
@@ -242,28 +283,34 @@ class World {
     this.rng = rng
     this.effects = effects
     const n = store.capacity
-    this.state = new Uint8Array(n) // 0 standing, 1 flying, 2 rubble
+    this.state = new Uint8Array(n) // 0 standing, 1 flying, 2 loose (rubble, litter, lily pads)
     this.vel = new Float32Array(n * 3)
     this.ang = new Float32Array(n * 3)
     this.flying = new Int32Array(n)
     this.flyingCount = 0
     this.destroyed = 0
     this.totalStructure = 0
-    for (let i = 0; i < sceneCount; i++) if (store.kind[i] !== KIND.GROUND) this.totalStructure++
+    for (let i = 0; i < sceneCount; i++) {
+      const k = store.kind[i]
+      if (k === KIND.STRUCTURE || k === KIND.FOLIAGE || k === KIND.FLORA) this.totalStructure++
+    }
     this.snap = {
       pos: store.pos.slice(0, sceneCount * 3),
       scale: store.scale.slice(0, sceneCount * 3),
       quat: store.quat.slice(0, sceneCount * 4),
       color: store.color.slice(0, sceneCount * 4),
     }
-    this.populateGrid()
+    this.initStates()
   }
 
-  populateGrid() {
-    const { grid, store } = this
+  initStates() {
+    const { grid, store, state } = this
     grid.cells.fill(0)
+    state.fill(0)
     for (let i = 0; i < this.sceneCount; i++) {
-      if (store.kind[i] === KIND.GROUND) continue
+      const k = store.kind[i]
+      if (k === KIND.LOOSE) state[i] = 2
+      if (k !== KIND.STRUCTURE && k !== KIND.FOLIAGE) continue
       const p = i * 3
       grid.add(store.pos[p], store.pos[p + 1], store.pos[p + 2])
     }
@@ -276,22 +323,48 @@ class World {
     store.quat.set(snap.quat)
     store.color.set(snap.color)
     store.alive.fill(1, 0, this.sceneCount)
-    this.state.fill(0)
     this.vel.fill(0)
     this.flyingCount = 0
     this.destroyed = 0
-    this.populateGrid()
+    this.initStates()
     this.effects.clear()
     store.packAll()
   }
 
+  // Set splat i flying with the given velocity added; handles grid and stats.
+  launch(i, vx, vy, vz) {
+    const { store, grid, state, vel, ang, rng } = this
+    const p = i * 3, q = i * 4, k = store.kind[i]
+    if (state[i] === 0) {
+      if (k === KIND.STRUCTURE || k === KIND.FOLIAGE) grid.remove(store.pos[p], store.pos[p + 1], store.pos[p + 2])
+      if (k === KIND.STRUCTURE || k === KIND.FOLIAGE || k === KIND.FLORA) this.destroyed++
+      if (k === KIND.GROUND) {
+        store.color[q] *= 0.7; store.color[q + 1] *= 0.6; store.color[q + 2] *= 0.5
+      } else if (k === KIND.WATER) {
+        store.color[q] = Math.min(255, store.color[q] * 0.6 + 110); store.color[q + 1] = Math.min(255, store.color[q + 1] * 0.6 + 110); store.color[q + 2] = Math.min(255, store.color[q + 2] * 0.5 + 128)
+      } else if (k === KIND.STRUCTURE) {
+        store.color[q] *= 0.9; store.color[q + 1] *= 0.88; store.color[q + 2] *= 0.86
+      }
+      // a chunk rather than a film: thicken the flake a little
+      store.scale[p] *= 1.2; store.scale[p + 1] *= 1.2; store.scale[p + 2] = Math.max(store.scale[p + 2] * 3, 0.05)
+    }
+    if (state[i] !== 1) {
+      this.flying[this.flyingCount++] = i
+      state[i] = 1
+      ang[p] = (rng() - 0.5) * 24; ang[p + 1] = (rng() - 0.5) * 24; ang[p + 2] = (rng() - 0.5) * 24
+    }
+    vel[p] += vx; vel[p + 1] += vy; vel[p + 2] += vz
+  }
+
   explode(cx, cy, cz, radius, power) {
-    const { store, grid, rng, state, vel, ang } = this
+    const { store, rng, state } = this
     const pos = store.pos, color = store.color, alive = store.alive, kind = store.kind
     const r2 = radius * radius
     const outer = radius * 1.7, outer2 = outer * outer
     for (let i = 0; i < this.sceneCount; i++) {
       if (alive[i] === 0) continue
+      const k = kind[i]
+      if (k === KIND.SKY) continue
       const p = i * 3
       const dx = pos[p] - cx
       if (dx > outer || dx < -outer) continue
@@ -302,7 +375,6 @@ class World {
       if (d2 > outer2) continue
       const d = Math.sqrt(d2)
       const q = i * 4
-      const k = kind[i]
       if (d2 < r2) {
         const t = 1 - d / radius
         if (k === KIND.GROUND && state[i] === 0 && d >= radius * 0.6) {
@@ -316,30 +388,12 @@ class World {
           store.pack(i)
           continue
         }
+        if (k === KIND.WATER && state[i] === 0 && d >= radius * 0.75) continue
         const inv = 1 / Math.max(d, 0.5)
-        if (state[i] === 0) {
-          if (k === KIND.GROUND) {
-            color[q] *= 0.7; color[q + 1] *= 0.6; color[q + 2] *= 0.5
-          } else {
-            grid.remove(pos[p], pos[p + 1], pos[p + 2])
-            this.destroyed++
-            color[q] *= 0.9; color[q + 1] *= 0.88; color[q + 2] *= 0.86
-          }
-        }
-        if (state[i] !== 1) {
-          this.flying[this.flyingCount++] = i
-          if (state[i] === 0) {
-            store.scale[p] *= 1.25; store.scale[p + 1] *= 1.25; store.scale[p + 2] = Math.max(store.scale[p + 2] * 3, 0.06)
-          }
-          state[i] = 1
-        }
         const f = power * (0.35 + 0.65 * t) * (0.7 + 0.6 * rng())
-        const up = k === KIND.GROUND ? 1.1 : 0.4
-        vel[p] += dx * inv * f + (rng() - 0.5) * 5
-        vel[p + 1] += (dy * inv + up) * f + rng() * 3
-        vel[p + 2] += dz * inv * f + (rng() - 0.5) * 5
-        ang[p] = (rng() - 0.5) * 24; ang[p + 1] = (rng() - 0.5) * 24; ang[p + 2] = (rng() - 0.5) * 24
-      } else {
+        const up = k === KIND.GROUND ? 1.1 : k === KIND.WATER ? 1.6 : 0.4
+        this.launch(i, dx * inv * f + (rng() - 0.5) * 5, (dy * inv + up) * f + rng() * 3, dz * inv * f + (rng() - 0.5) * 5)
+      } else if (k === KIND.GROUND || k === KIND.STRUCTURE || k === KIND.FOLIAGE) {
         // scorch ring
         const u = (d - radius) / (outer - radius)
         const dark = 1 - 0.45 * (1 - u) * (1 - u)
@@ -351,6 +405,28 @@ class World {
     }
   }
 
+  // The leaf blower: a cone of force from the muzzle that lifts whatever is
+  // loose (litter, lily pads, rubble) and shoves whatever is already airborne.
+  blow(mx, my, mz, dx, dy, dz, dt) {
+    const { store, state, rng } = this
+    const pos = store.pos, alive = store.alive
+    let count = 0
+    for (let i = 0; i < this.sceneCount; i++) {
+      if (state[i] === 0 || alive[i] === 0) continue
+      const p = i * 3
+      const rx = pos[p] - mx, ry = pos[p + 1] - my, rz = pos[p + 2] - mz
+      const t = rx * dx + ry * dy + rz * dz
+      if (t < 0.3 || t > BLOWER_RANGE) continue
+      const cone = 0.7 + t * BLOWER_TAN
+      const perp2 = rx * rx + ry * ry + rz * rz - t * t
+      if (perp2 > cone * cone) continue
+      const f = BLOWER_FORCE * (1 - t / BLOWER_RANGE) * (1 - 0.6 * Math.sqrt(perp2) / cone) * dt
+      this.launch(i, (dx + (rng() - 0.5) * 0.7) * f, (dy + 0.75 + (rng() - 0.5) * 0.6) * f, (dz + (rng() - 0.5) * 0.7) * f)
+      count++
+    }
+    return count
+  }
+
   update(dt) {
     const { store, grid, rng, state, vel, ang, flying } = this
     const pos = store.pos, quat = store.quat, alive = store.alive
@@ -358,8 +434,10 @@ class World {
     let w = 0
     for (let k = 0; k < this.flyingCount; k++) {
       const i = flying[k], p = i * 3, q = i * 4
-      vel[p + 1] -= DEBRIS_GRAVITY * dt
-      vel[p] *= drag; vel[p + 1] *= drag; vel[p + 2] *= drag
+      const light = store.kind[i] === KIND.LOOSE || store.kind[i] === KIND.FLORA
+      vel[p + 1] -= (light ? DEBRIS_GRAVITY * 0.55 : DEBRIS_GRAVITY) * dt
+      const dr = light ? Math.max(0, 1 - 1.4 * dt) : drag
+      vel[p] *= dr; vel[p + 1] *= dr; vel[p + 2] *= dr
       const x = pos[p], y = pos[p + 1], z = pos[p + 2]
       let nx = x + vel[p] * dt, ny = y + vel[p + 1] * dt, nz = z + vel[p + 2] * dt
       if (nx < -GRID_HALF - 6 || nx > GRID_HALF + 6 || nz < -GRID_HALF - 6 || nz > GRID_HALF + 6 || ny < -8) {
@@ -370,9 +448,9 @@ class World {
       let rest = false
       if (ny < 0.03) {
         const speed = Math.hypot(vel[p], vel[p + 1], vel[p + 2])
-        if (speed > 5 && rng() < 0.12) this.effects.dust(nx, 0, nz)
+        if (speed > 5 && rng() < 0.12 && !light) this.effects.dust(nx, 0, nz)
         ny = 0.03
-        vel[p + 1] = -vel[p + 1] * 0.3
+        vel[p + 1] = -vel[p + 1] * (light ? 0.1 : 0.3)
         vel[p] *= 0.55; vel[p + 2] *= 0.55
         ang[p] *= 0.5; ang[p + 1] *= 0.5; ang[p + 2] *= 0.5
         if (speed < 1.2) rest = true
@@ -394,10 +472,10 @@ class World {
       // integrate the tumble: q += 0.5 * (ω ⊗ q) dt
       const wx = ang[p] * 0.5 * dt, wy = ang[p + 1] * 0.5 * dt, wz = ang[p + 2] * 0.5 * dt
       const qx = quat[q], qy = quat[q + 1], qz = quat[q + 2], qw = quat[q + 3]
-      let rx = qx + (wx * qw + wy * qz - wz * qy)
-      let ry = qy + (wy * qw + wz * qx - wx * qz)
-      let rz = qz + (wz * qw + wx * qy - wy * qx)
-      let rw = qw - (wx * qx + wy * qy + wz * qz)
+      const rx = qx + (wx * qw + wy * qz - wz * qy)
+      const ry = qy + (wy * qw + wz * qx - wx * qz)
+      const rz = qz + (wz * qw + wx * qy - wy * qx)
+      const rw = qw - (wx * qx + wy * qy + wz * qz)
       const il = 1 / Math.hypot(rx, ry, rz, rw)
       quat[q] = rx * il; quat[q + 1] = ry * il; quat[q + 2] = rz * il; quat[q + 3] = rw * il
       store.pack(i)
@@ -421,11 +499,11 @@ function makeSky() {
       uniform vec3 uSun; uniform vec3 uFog; varying vec3 vDir;
       void main() {
         vec3 d = normalize(vDir);
-        vec3 top = vec3(0.22, 0.40, 0.76);
-        vec3 c = mix(uFog, top, smoothstep(0.0, 0.55, d.y));
-        c = mix(vec3(0.52, 0.56, 0.6), c, smoothstep(-0.12, 0.0, d.y));
+        vec3 top = vec3(0.55, 0.66, 0.86);
+        vec3 c = mix(uFog, top, smoothstep(0.0, 0.6, d.y));
+        c = mix(vec3(0.6, 0.62, 0.66), c, smoothstep(-0.12, 0.0, d.y));
         float s = max(0.0, dot(d, uSun));
-        c += vec3(1.0, 0.86, 0.62) * pow(s, 180.0) * 1.2 + vec3(1.0, 0.9, 0.7) * pow(s, 6.0) * 0.14;
+        c += vec3(1.0, 0.9, 0.7) * pow(s, 120.0) * 0.8 + vec3(1.0, 0.85, 0.75) * pow(s, 5.0) * 0.16;
         gl_FragColor = vec4(c, 1.0);
       }`,
   })
@@ -457,7 +535,7 @@ function makeRocketMesh() {
   return g
 }
 
-function makeWeapon() {
+function makeLauncher() {
   const g = new THREE.Group()
   const olive = new THREE.MeshStandardMaterial({ color: 0x4a5340, roughness: 0.75, metalness: 0.1 })
   const dark = new THREE.MeshStandardMaterial({ color: 0x1f2224, roughness: 0.55, metalness: 0.35 })
@@ -482,6 +560,30 @@ function makeWeapon() {
   return g
 }
 
+function makeBlower() {
+  const g = new THREE.Group()
+  const orange = new THREE.MeshStandardMaterial({ color: 0xe2641e, roughness: 0.55 })
+  const dark = new THREE.MeshStandardMaterial({ color: 0x2a2c2e, roughness: 0.6, metalness: 0.2 })
+  const grey = new THREE.MeshStandardMaterial({ color: 0x6b6e70, roughness: 0.5, metalness: 0.3 })
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.42, 20).rotateX(Math.PI / 2), orange)
+  body.position.z = 0.3
+  const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.16, 24).rotateZ(Math.PI / 2), dark)
+  motor.position.set(0.0, 0.0, 0.48)
+  const vent = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.18, 24).rotateZ(Math.PI / 2), grey)
+  vent.position.set(0.0, 0.0, 0.48)
+  const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.075, 0.95, 20).rotateX(Math.PI / 2), grey)
+  tube.position.z = -0.36
+  const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.055, 0.14, 20).rotateX(Math.PI / 2), dark)
+  nozzle.position.z = -0.88
+  const handle = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.2, 0.08), dark)
+  handle.position.set(0, -0.17, 0.2)
+  handle.rotation.x = 0.25
+  const top = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.3), dark)
+  top.position.set(0, 0.14, 0.25)
+  g.add(body, motor, vent, tube, nozzle, handle, top)
+  return g
+}
+
 // ---------------------------------------------------------------- boot
 
 function fail(msg) {
@@ -500,46 +602,54 @@ function boot() {
   renderer.setClearColor(FOG, 1)
 
   const scene = new THREE.Scene()
-  scene.fog = new THREE.FogExp2(FOG, 0.0055)
+  scene.fog = new THREE.FogExp2(FOG, 0.0045)
   const weaponScene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(75, 1, 0.08, 900)
 
   for (const s of [scene, weaponScene]) {
-    const hemi = new THREE.HemisphereLight(0xd8e6ff, 0x5a4b3a, 0.9)
+    const hemi = new THREE.HemisphereLight(0xe4e6ff, 0x6a5b4a, 0.9)
     const sun = new THREE.DirectionalLight(0xfff1dc, 1.7)
     sun.position.copy(SUN).multiplyScalar(50)
     s.add(hemi, sun)
   }
 
   scene.add(makeSky())
-  const soil = new THREE.Mesh(new THREE.PlaneGeometry(2 * WORLD_HALF + 1, 2 * WORLD_HALF + 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x2e241b }))
+  const soil = new THREE.Mesh(new THREE.PlaneGeometry(2 * WORLD_HALF + 1, 2 * WORLD_HALF + 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x3a3028 }))
   soil.position.y = -0.5
   scene.add(soil)
-  const far = new THREE.Mesh(new THREE.PlaneGeometry(1200, 1200).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x5c6b4e }))
+  const pondBed = new THREE.Mesh(new THREE.CircleGeometry(1, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x2f4a4c }))
+  pondBed.scale.set(POND.rx, 1, POND.rz)
+  pondBed.position.set(POND.cx, -0.45, POND.cz)
+  scene.add(pondBed)
+  const far = new THREE.Mesh(new THREE.PlaneGeometry(1200, 1200).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x6f7d5e }))
   far.position.y = -0.55
   scene.add(far)
 
-  // --- the town
+  // --- the garden
   const store = new SplatStore(CAPACITY)
-  const town = buildTown(store, 1337)
+  const garden = buildGarden(store, 1337)
   const rng = mulberry32(99)
   const effects = new Effects(store, POOL, rng)
   const grid = new Grid()
-  const world = new World(store, grid, town.count, rng, effects)
+  const world = new World(store, grid, garden.count, rng, effects)
   store.packAll()
   store.flush()
   scene.add(store.mesh)
 
-  // --- weapon
+  // --- weapons
   const weaponRig = new THREE.Group()
   const weaponSway = new THREE.Group()
-  const weapon = makeWeapon()
+  const launcher = makeLauncher()
+  const blower = makeBlower()
   weaponSway.position.set(0.3, -0.3, -0.5)
-  weapon.scale.setScalar(0.6)
-  weapon.rotation.set(0.02, -0.06, 0)
-  weaponSway.add(weapon)
+  for (const w of [launcher, blower]) {
+    w.scale.setScalar(0.6)
+    w.rotation.set(0.02, -0.06, 0)
+    weaponSway.add(w)
+  }
   weaponRig.add(weaponSway)
   weaponScene.add(weaponRig)
+  let weapon = WEAPON.ROCKET
 
   const sfx = new Sfx()
 
@@ -548,7 +658,7 @@ function boot() {
     pos: SPAWN.clone(),
     vel: new THREE.Vector3(),
     yaw: SPAWN_YAW,
-    pitch: -0.02,
+    pitch: -0.05,
     onGround: true,
   }
   const keys = new Set()
@@ -560,6 +670,7 @@ function boot() {
   let shake = 0
   let bobPhase = 0
   let simTime = 0
+  let blowing = false
 
   const rockets = []
   const flashes = []
@@ -614,14 +725,30 @@ function boot() {
     if (e.repeat) return
     keys.add(e.code)
     if (e.code === 'KeyR') rebuild()
+    if (e.code === 'Digit1') setWeapon(WEAPON.ROCKET)
+    if (e.code === 'Digit2') setWeapon(WEAPON.BLOWER)
+    if (e.code === 'KeyQ') setWeapon(weapon === WEAPON.ROCKET ? WEAPON.BLOWER : WEAPON.ROCKET)
     if (e.code === 'Space') e.preventDefault()
   })
   window.addEventListener('keyup', (e) => keys.delete(e.code))
+  window.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) > 0) setWeapon(weapon === WEAPON.ROCKET ? WEAPON.BLOWER : WEAPON.ROCKET)
+  }, { passive: true })
   window.addEventListener('blur', () => {
     keys.clear()
     firing = false
   })
   canvas.addEventListener('contextmenu', (e) => e.preventDefault())
+
+  const weaponEl = $('weapon')
+  function setWeapon(w) {
+    weapon = w
+    launcher.visible = w === WEAPON.ROCKET
+    blower.visible = w === WEAPON.BLOWER
+    for (const el of weaponEl.children) el.classList.toggle('on', Number(el.dataset.w) === w)
+    recoil = Math.max(recoil, 0.6)
+  }
+  setWeapon(WEAPON.ROCKET)
 
   function rebuild() {
     world.reset()
@@ -631,7 +758,7 @@ function boot() {
     player.pos.copy(SPAWN)
     player.vel.set(0, 0, 0)
     player.yaw = SPAWN_YAW
-    player.pitch = -0.02
+    player.pitch = -0.05
     rocketsFired = 0
     updateHud()
   }
@@ -671,8 +798,10 @@ function boot() {
 
   function explode(x, y, z) {
     world.explode(x, y, z, ROCKET_RADIUS, ROCKET_POWER)
-    effects.explosion(x, y, z)
-    flashes.push({ x, y, z, t: simTime })
+    const wet = y < 0.6 && pondDist(x, z) < 1
+    if (wet) effects.splash(x, z)
+    else effects.explosion(x, y, z)
+    flashes.push({ x, y, z, t: simTime, s: wet ? 0.5 : 1 })
     if (flashes.length > 4) flashes.shift()
     const d = _tmp.set(x, y, z).distanceTo(camera.position)
     shake += 1.1 / (1 + d * 0.1)
@@ -727,6 +856,29 @@ function boot() {
     }
   }
 
+  // --- the blower
+  let airAcc = 0
+  let blown = 0
+  function stepBlower(dt) {
+    const on = firing && weapon === WEAPON.BLOWER && (locked || !hasLock)
+    if (on !== blowing) {
+      blowing = on
+      if (on) sfx.blowerStart()
+      else sfx.blowerStop()
+    }
+    if (!on) return
+    camera.getWorldDirection(_fwd)
+    muzzleWorld(_muzzle)
+    _muzzle.addScaledVector(_fwd, 0.4)
+    blown += world.blow(_muzzle.x, _muzzle.y, _muzzle.z, _fwd.x, _fwd.y, _fwd.z, dt)
+    airAcc += dt * 50
+    while (airAcc >= 1) {
+      airAcc -= 1
+      effects.air(_muzzle.x, _muzzle.y, _muzzle.z, _fwd.x, _fwd.y, _fwd.z)
+    }
+    recoil = Math.max(recoil, 0.12 + Math.sin(simTime * 70) * 0.04)
+  }
+
   // --- player physics against the grid
   const HW = 0.3, PH = 1.7
   const collides = (x, y, z) => grid.boxSolid(x - HW, y + 0.05, z - HW, x + HW, y + PH, z + HW)
@@ -740,8 +892,21 @@ function boot() {
       const nx = axis === 'x' ? p.x + dd : p.x
       const nz = axis === 'z' ? p.z + dd : p.z
       if (collides(nx, p.y, nz)) {
-        player.vel[axis] = 0
-        return
+        // a low step (the bridge, the house steps): climb it
+        let stepped = false
+        if (player.onGround) {
+          for (let up = 0.1; up <= 0.55; up += 0.1) {
+            if (!collides(nx, p.y + up, nz)) {
+              p.y += up
+              stepped = true
+              break
+            }
+          }
+        }
+        if (!stepped) {
+          player.vel[axis] = 0
+          return
+        }
       }
       p.x = nx
       p.z = nz
@@ -752,10 +917,11 @@ function boot() {
     const p = player.pos
     const steps = Math.max(1, Math.ceil(Math.abs(d) / 0.1))
     const dd = d / steps
+    const floor = floorY(p.x, p.z)
     for (let s = 0; s < steps; s++) {
       const ny = p.y + dd
-      if (dd < 0 && ny <= 0) {
-        p.y = 0
+      if (dd <= 0 && ny <= floor) {
+        p.y = floor
         player.vel.y = 0
         player.onGround = true
         return
@@ -784,12 +950,13 @@ function boot() {
       wz /= wl
     }
     const sprint = keys.has('ShiftLeft') || keys.has('ShiftRight')
-    const speed = sprint ? 9.5 : 6
+    const wading = player.pos.y < -0.15
+    const speed = (sprint ? 9.5 : 6) * (wading ? 0.55 : 1)
     const k = 1 - Math.exp(-(player.onGround ? 11 : 2.5) * dt)
     player.vel.x += (wx * speed - player.vel.x) * k
     player.vel.z += (wz * speed - player.vel.z) * k
     if (keys.has('Space') && player.onGround) {
-      player.vel.y = 6.4
+      player.vel.y = wading ? 4.5 : 6.4
       player.onGround = false
     }
     player.vel.y -= GRAVITY * dt
@@ -826,7 +993,7 @@ function boot() {
   window.addEventListener('resize', resize)
   resize()
 
-  // --- intro: one scripted rocket into the tower so the page opens on a bang.
+  // --- intro: one scripted rocket into the pond so the page opens on a splash.
   // The #intro marker leaves once the blast is in full bloom (or after a
   // minute of wall-clock time on a machine too slow to get there).
   setTimeout(() => $('intro')?.remove(), 60000)
@@ -855,7 +1022,7 @@ function boot() {
     last = now
     simTime += dt
 
-    if (firing && fireCooldown <= 0 && (locked || !hasLock)) {
+    if (firing && weapon === WEAPON.ROCKET && fireCooldown <= 0 && (locked || !hasLock)) {
       camera.getWorldDirection(_fwd)
       fireRocket(_fwd)
       fireCooldown = FIRE_INTERVAL
@@ -865,6 +1032,7 @@ function boot() {
     stepPlayer(dt)
     stepIntro()
     updateRockets(dt)
+    stepBlower(dt)
     world.update(dt)
     effects.update(dt)
 
@@ -881,7 +1049,7 @@ function boot() {
     weaponRig.position.copy(camera.position)
     weaponRig.quaternion.copy(camera.quaternion)
     weaponSway.position.set(0.3 + Math.sin(bobPhase * 0.5) * 0.02, -0.3 + bob * 0.5 + recoil * 0.05, -0.5 + recoil * 0.14)
-    weapon.rotation.set(0.02 - recoil * 0.25, -0.06, 0)
+    for (const w of [launcher, blower]) w.rotation.set(0.02 - recoil * 0.25, -0.06, 0)
 
     for (let i = 0; i < 4; i++) {
       const f = flashes[i]
@@ -890,7 +1058,7 @@ function boot() {
         continue
       }
       const age = simTime - f.t
-      const s = age < 0.7 ? Math.pow(1 - age / 0.7, 1.6) * 1.5 : 0
+      const s = age < 0.7 ? Math.pow(1 - age / 0.7, 1.6) * 1.5 * f.s : 0
       flashU[i].set(f.x, f.y, f.z, s)
     }
 
@@ -915,7 +1083,7 @@ function boot() {
   }
   requestAnimationFrame(frame)
 
-  window.__siege = { store, world, effects, player, rockets, explode, fireRocket, grid, get simTime() { return simTime }, get intro() { return intro } }
+  window.__siege = { store, world, effects, player, rockets, explode, fireRocket, grid, setWeapon, get simTime() { return simTime }, get intro() { return intro }, get weapon() { return weapon }, set firing(v) { firing = v }, set hasLock(v) { hasLock = v }, get blown() { return blown } }
 }
 
 try {
