@@ -51,11 +51,12 @@ The decisions that shape everything else:
    arena's own (`arena/physics.js`); ships step the record's hull on an
    arcade copy of the model (radius ÷ 3, mass ÷ 2, rudder time ÷ 3, the
    Nomoto lag ÷ 10) with an arcade steering law (§3).
-4. **The AI's gunnery walks in.** The contract solves the lead exactly and
-   keeps dispersion at ×0.3; that alone sank a carrier in the first salvo
-   of every seed. The AI keeps the exact lead and adds a ranging error that
-   starts wide and closes with each fall it sees (§4.2), so a duel at 5 km
-   is a few salvos of straddles before the hits.
+4. **The AI's gunnery walks in, at a pace.** The contract solves the lead
+   exactly and keeps dispersion at ×0.3; that alone sank a carrier in the
+   first salvo of every seed. The AI keeps the exact lead and adds a
+   ranging error that starts wide and closes with each fall it sees, and
+   fires a salvo no oftener than every 30–40 s (§4.2): measured on
+   content-3's files, the games otherwise ended in three minutes of ten.
 5. **One fixed step** (1/60 s, at most eight a call, the rest carried), the
    admirals every 2 s (contract), the units' AI four times a second
    staggered by slot, the AA ten times a second.
@@ -131,9 +132,9 @@ kit's.
 | method | what it does |
 | --- | --- |
 | `enterWargame(id, { side, seed, from })` | loads the box and wargames/<id>.json (`loadScenario`; a test may hand one in through `globalThis.__wargameScenarios`), builds the arena, flies down from the table (`from: 'table'`) or cuts (`'url'`), takes the side's first unit at its first station; `state.wargame` is `{ id, side, seed, games }`; speeds `[1]`, no scrubbing |
-| `hop(kind \| index)` | Tab, 1–4, a pick; returns the new held unit's row; 'battle' event `hop` |
+| `hop(kind \| index)` | Tab, 1–4, a pick; returns the new held unit's row; a hop to another kind (a ship to an aircraft) shows that kind's keys and hints and asks the pointer lock for a pilot; 'battle' event `hop` |
 | `take(role)`, `release()`, `setStation(name)`, `cycleStation()` | as round two, on the arena; a release gives the unit back to its AI and leaves the box watching (no after-card) |
-| `restart({ side, seed })` | a fresh arena on the same box and scene, the same side or the other, the next seed; 'battle' event `wargame` with `phase: 'restart'` |
+| `restart({ side, seed })` | a fresh arena on the same box and scene, the same side or the other, the next seed; the HUD's lines, hints and spoken line of the last game cleared; 'battle' event `wargame` with `phase: 'restart'` |
 | `endNow(reason)` | the end now (the end card's *Back to the table*, the smoke test) |
 | `leave()` | as ever |
 
@@ -203,7 +204,9 @@ aircraft's motion (the impact point is the HUD's ring); hit boxes are
 own height, so a shell passing over the deck is a miss); the AA is the
 record's hazard × 3, shared among the aircraft in reach, with tracer and
 flak; the player's AA is round two's director. A hit on a ship going down
-registers nothing (`hitShip` returns null).
+registers nothing (`hitShip` returns null). A torpedo hit's column (90
+across) stands at the side it struck, not at the hull's middle where it
+stood hidden inside her.
 
 Damage (contract): hit points escort carrier 10, destroyer and destroyer
 escort 6, cruiser 14, battleship 30, fleet carrier 18 (light carrier 14,
@@ -218,16 +221,36 @@ once, 12 s, the slow motion).
 ### 4.2 The AI's gunnery (estimate)
 
 The lead is exact (contract). On it, per battery and target, a ranging
-error: it starts at 30 % of the range or 60 mils across, closes by a
-quarter with each fall the battery sees (to 6 % and 12 mils), and opens
-again on a new target or on the firer's own turn of more than 20°; each
-turret takes 0.87 of the battery's error plus its own share. A battery
-waits for its fall before the next salvo (light guns every 15 s,
-mediums 12 s); guns under 150 mm fire at ships only inside 3 km;
-secondaries take the escorts inside 4.5 km. A ship whose last 20 s brought
-falls within 250 m of her weaves ±30° every 10–18 s: she chases the
-salvos. A side that has turned away fires only at what comes within
-2.5 km.
+error: it starts at 40 % of the range or 80 mils across, closes by a fifth
+with each fall the battery sees (to 22 % and 35 mils), and opens again on
+a new target or on the firer's own turn of more than 20°; each turret
+takes 0.87 of the battery's error plus its own share. A battery waits for
+its fall before the next salvo, and fires no oftener than every 30 s (guns
+under 150 mm), 40 s (medium and heavy; a heavy battery's reload when
+slower, Yamato's 35 s being faster); guns under 150 mm fire at ships only
+inside 2.5 km; secondaries take the escorts inside 4.5 km. The target is
+the nearest in arc, the damaged first (contract), with a ship of a type
+the side's main goal (or its further terms) would have it sink or hit
+taken before a nearer one (its score × 0.55): Yamato lays her guns on a
+carrier before an escort, Washington on Kirishima before a destroyer; a
+side that must keep its ships afloat keeps the nearest threat. A ship
+whose last 20 s brought falls within 250 m of her weaves ±30° every 10–18
+s: she chases the salvos. A side that has turned away fires only at what
+comes within 2.5 km. A cruiser or destroyer outside a destroyer attack
+fires torpedoes at a carrier or capital ship on its beam inside the band
+no oftener than every 120 s.
+
+Why these numbers (measured with the headless runs, `tools/smoke-arena.mjs`
+and the scratch tools of §8): at the first numbers (30 %/60 mils to
+6 %/12 mils, salvos every 12–15 s) a game on content-3's files ended in
+about three minutes (Midway's carriers burning by 160 s, Kurita's four
+carriers sunk by 185 s). The ranging floor alone moved little: about half
+the hits are the shells that miss the ship aimed at and find another in a
+formation 450–700 m apart, or come in flat under 3.5 km through the hull's
+danger space. The volume did: the salvo intervals above and the wider
+range the admirals keep (§5) bring the games to 6–9 minutes. The AI's
+shells still hit 8–20 % of the time under 3.5 km; a person laying the
+diamond fires at the battery's own reload.
 
 ### 4.3 Strafing (content-3's `strafe`)
 
@@ -247,7 +270,9 @@ approach ──(within the range it keeps + 900 m)──▶ engage
 approach | engage ──(strength under turnAwayAt)──▶ turn-away (for good)
 ```
 
-The range it keeps is 4,600 − 3,000 × aggression metres (estimate), a side
+The range it keeps is 5,600 − 3,000 × aggression metres (estimate; 0.6
+keeps 3.8 km, 0.2 keeps 5 km: the first numbers, 4,600 − 3,000 ×
+aggression, made every scenario a brawl at 2.8 km), a side
 whose goal is to keep its ships afloat keeping at least 5,200 m (it runs,
 and the arena's edge turns it); it closes 20° off the threat axis, opens
 150° off it, or holds the beam, toward the arena's centre, a course kept
@@ -263,14 +288,14 @@ steams 160° off the threat. Its standing orders on each tick:
 - **zigzag** (contract): while the other side's strike aircraft are within
   3.5 km of the main body, legs of 12–22 s at ±40°; a ship dived on turns
   hard; a ship that sees a torpedo track within 2 km combs it;
-- **smoke** (contract): the weaker side from the start (with a minute of
-  smoke already laid behind its escorts and carriers), and either side
+- **smoke** (contract): the weaker side for its first 90 s (with half a
+  minute of smoke already laid behind its two layers), and either side
   when its main body has been hit in the last 30 s while it is no
-  stronger; up to three escorts lay it across the threat, the carriers
-  make their own; a screen drifts with the wind for 240 s, hides a ship
-  beyond 1 km across a radius of 300 m, and not within 200 m of either
-  end; a side that must keep its ships afloat makes smoke as it turns
-  away;
+  stronger, for 60 s and not again for 60 s after; two escorts at once lay
+  it across the threat (never the ship the player holds), and the
+  carriers, while their main body is being hit, trail their own from the
+  funnels; §6 has what a screen hides; a side that must keep its ships
+  afloat makes smoke as it turns away;
 - **the air** (contract): a combat air patrol kept up (the `cap` fighters
   when the scenario names them, as many as it had up at the start; else
   half the fighters, at most four), a wave every `launchEveryS` while it
@@ -290,21 +315,44 @@ when it gives one, §7; else the core in rows behind the guide, the
 cruisers on an arc at 0.7 of the screen radius across ±70° of the threat,
 the destroyers on the screen ring across ±115°), gunnery (nearest in arc,
 damaged first), evasion, the strike profiles compressed (approach at
-1,500 m; the dive from 1,200 m, the release at 380 m or on the bomb's
-impact point; the torpedo run from 800 m at 40 m, a torpedo dropped higher
-than 150 m or over land breaks), the combat air patrol's intercept within
+1,500 m; the dive from 1,200 m, the nose walking the bomb's impact point
+onto the target's from 1,400 m down, the release at 380 m or when the
+impact point lies inside the target's hit box; the torpedo run from 800 m
+at 40 m, rounded to the target's beam on the arena's side, back to the
+beam when the run has gone wide (the intercept led an Avenger 1.3 km past
+the edge after a carrier running away), a torpedo dropped higher than
+150 m or over land breaks), the combat air patrol's intercept within
 3 km, the dogfight (pursuit with lead, a burst in a 7° cone inside 380 m,
 a break after it, a hard break with an enemy fighter on the tail), the
 escorts, the rear gunners, the landing (from astern, low, onto the deck,
-rearmed in 40 s), and every aircraft not on its run turned back at 350 m
-beyond the edge.
+rearmed in 40 s), and every aircraft not on its run (a run within
+1,600 m of its target) turned back at 150 m beyond the edge.
 
 ## 6. Smoke, squalls, night
 
-The box's squalls are brought into the arena: as many as the box's
+**Smoke** (estimate; ROUND-3 §1 names it, nothing sizes it). A layer lays
+a segment every 5 s; a screen drifts with the wind for 150 s and hides for
+the first 100 of them: a ship beyond 1 km whose line of sight passes
+within 250 m of a thick segment's middle (plus half its length), more than
+200 m from either end, is hidden from the gunnery. It is drawn a line at a
+time, every 150 m of trail or 20 s (the effect, the record's, lays two
+dozen 150–420 m puffs on each line it is handed: one per segment stood a
+white wall along every layer's track). A carrier's own smoke is the ship's
+funnel trail and hides nothing. The smoke laid before the start is the two
+layers' alone (never the played side's first ship: the chase camera rode
+inside Johnston's trail) and is drawn.
+
+Why: at first the weaker side smoked for the whole game with three
+escorts and every carrier, the screens hid for 240 s across 300 m, and the
+pre-start smoke lay behind every escort and carrier; at Samar every one
+of Taffy 3's ships was hidden from Yamato for the whole game (156 screens
+at the start, 438 by three minutes), the heavy guns had nothing to fire at
+and the Japanese destroyers closed inside a kilometre and did the work.
+
+**Squalls**: the box's are brought into the arena, as many as the box's
 weather has, each a drifting disc 700–1,000 m across for 150–220 s, its
 middle passing near the arena's middle third; a ship inside one is hidden
-from a ship beyond a kilometre and sees none out. A night box (the
+from a ship beyond a kilometre and sees out to 2 km. A night box (the
 scenario's `night`, or the hour) draws white splashes, and a scenario's
 `visibilityM` hides every ship beyond it from the gunnery. Star shells
 (content-3's `starShells`) are not drawn.
@@ -361,9 +409,10 @@ more, or reads an unsaid detail one way, it is listed here.
    is a miss, so the plunging fire of a 5 km duel falls about her rather
    than on an invisible roof.
 4. **More than §1 asks of the sea**: smoke (a screen that drifts and
-   hides), the box's squalls brought into the arena, a minute of smoke
-   already laid by the weaker side at the start, ships chasing the salvos
-   under fire, ships combing torpedo tracks, a ship dived on turning hard.
+   hides, §6), the box's squalls brought into the arena, half a minute of
+   smoke already laid by the weaker side's two layers at the start, ships
+   chasing the salvos under fire, ships combing torpedo tracks, a ship
+   dived on turning hard.
 5. **A side whose goal is to keep its ships afloat keeps away** (5,200 m:
    it runs, as Taffy 3 did), makes smoke as it turns away, and sends its
    waves at the ships nearest its main body.
@@ -420,10 +469,77 @@ more, or reads an unsaid detail one way, it is listed here.
     of the hops, the stations, *Play again*, *Play the other side* and
     *End now*.
 22. **The HUD's endurance is the kit's**: the arena flies no fuel.
+23. **The AI fires at a pace** (§4.2): a salvo no oftener than every 30 s
+    (guns under 150 mm) or 40 s (the rest), whatever the gun's reload, and
+    torpedoes outside a destroyer attack no oftener than every 120 s. The
+    contract says nothing of the AI's rate of fire; at the guns' own rates
+    a ten-minute game was over in three. The player's guns keep their
+    reload.
+24. **The goal's type before the nearest** (§4.2): the contract's
+    "nearest in arc, damaged first" is kept as the score, multiplied by
+    0.55 for a ship of the type the side's goal names. Without it the
+    battleships spent their salvos on the destroyers closing them, and
+    Yamato at Samar fired on the escorts while the carriers ran.
+25. **The range the admirals keep** is 5,600 − 3,000 × aggression (§5);
+    the destroyers' attack at 4 km of the main bodies (contract) needs
+    aggression 0.3 and over, so an admiral given less holds its destroyers
+    back until it is losing after the fifth minute (contract).
+26. **The AI's dive bombers walk the impact point on** and let go when it
+    lies in the hit box (§5); its torpedo planes round to the beam again
+    when a run goes wide. Behaviour the contract's "strike profiles
+    compressed" leaves open.
+27. **Slow motion is a second of the page's time** (the scene's clock),
+    the arena's dt × 0.25 eased in and out: under SwiftShader at a frame or
+    two a second it spans a frame or two; on a real GPU about sixty.
 
 ## 10. Looked at, and measured
 
-{{LOOKED}}
+Under SwiftShader (`battle.html?wargame=<id>&side=<jp|us>`, the page at
+a frame every 80 ms for the fixture and Samar), with the battle paused for
+each picture and the camera set by hand; `node tools/smoke-arena.mjs
+--looks` takes the same pictures into `tools/shots/arena-look-*.png`.
+
+- **Yamato's main battery on a carrier at 4.9 km** (Samar, Japan, 0:05):
+  the salvo's flashes and their glow on the water from astern and abeam;
+  the fall nine seconds later about Gambier Bay, white columns spread
+  wide over a kilometre (the first salvo's 40 % ranging error), the
+  carriers' Wildcats and Avengers a swarm overhead. Splashes read plainly
+  from 1.3 km, thinly from 2.6 km and against the sun.
+- **A Wildcat in a dogfight with a Zero** (the fixture, 4:04): the FM-2 in
+  a hard bank, the A6M5 ahead at 350 m; from behind the Zero, the Wildcat
+  on its tail, the flak of the fleets' AA about them.
+- **A torpedo hit with the slow motion** (the fixture, the United States,
+  Test Destroyer B's spread at 2.4 km, 2:32): the scene's factor at 0.25
+  in the frame of the hit, the column rising at Test Carrier A's bow, her
+  fire's smoke; the HUD's line *Test Carrier A: torpedo hit amidships,
+  fire*. The column first stood at the hull's middle, hidden inside her:
+  moved to the struck side (§4.1).
+- **A carrier burning and going down** (the fixture, Test Carrier A,
+  1:21–1:41): burning with dark smoke at 1 s, listed and down by the bow
+  with her flight deck awash at 13 s, gone under her smoke at 18 s. At
+  Samar a CVE at 2 hit points was looked at paused: no smoke, because the
+  effect's fire columns are emitted per frame from `state.fire` and a
+  paused page emits none (not a fault of the arena's).
+- **The arena from the orbit camera with both fleets** (Samar, 0:40, 8.5
+  km out): Kurita's columns, Taffy 3's carriers in their circle, the two
+  smoke layers' screens, the air full of Taffy 3's aircraft. At first every
+  carrier sat in a white blob of the screen effect (the carriers' own
+  smoke): changed to their funnel trail (§6).
+- **The entries**: Samar as the United States (Johnston at the helm,
+  0:00): the first picture was fog (the chase camera inside Johnston's own
+  pre-start smoke): fixed (§6); Midway as the United States (an SBD at
+  1,500 m over the task forces); Ironbottom Sound as Japan (Kirishima's
+  main battery, the night, Gwin at 2,389 m with the lead diamond).
+- **The browser part of the gate** on the fixture (tools/shots/arena-*.png):
+  the entry as the United States in an Avenger, a hit and its marker, the
+  slow motion at × 0.38–0.44 on a tick, two snapshots of 320 × 200 JPEG,
+  the forced end, Play the other side into Test Battleship A and a hop to a
+  Kate (the keys and hints now the aircraft's, the last game's end line
+  gone); no console error; 74–80 ms a frame under SwiftShader, 66 draw
+  calls, 43,500 triangles, 38 MB of heap.
+
+Not looked at: a person flying the arena at 60 frames a second; Midway's
+and Ironbottom Sound's fights past the entry (their balance runs only).
 
 ## 11. What the integrator must wire
 
