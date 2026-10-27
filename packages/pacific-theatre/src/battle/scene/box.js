@@ -13,8 +13,8 @@
 // arena's dt only: Battle.tick's simScale, never the record's sim); the
 // sinking animation lists, trims and settles a ship over the twenty seconds
 // the arena gives her (UnitRenderer's pose hook, from the arena's damage
-// state); snapshot() is a 320 × 200 JPEG of the canvas, at most six a game,
-// taken by itself on the arena's highlights. Each is driven by the arena's
+// state); snapshot() is a 320 × 200 JPEG of the canvas (sixteen at most a game,
+// the reel keeps six), taken by itself on the arena's highlights. Each is driven by the arena's
 // own requests (sim.shake, sim.slowmo, sim.highlights).
 
 import * as THREE from 'three'
@@ -37,6 +37,9 @@ const _e = new THREE.Euler()
 
 const tick = () => new Promise((r) => setTimeout(r, 0))
 
+
+// the stills a game takes at most (the reel shows six of them)
+const SNAPS_MAX = 16
 export class BoxScene {
   constructor(app) {
     this.app = app
@@ -88,10 +91,11 @@ export class BoxScene {
 
   /**
    * A 320 × 200 JPEG data URL of the canvas, taken just after the next frame is
-   * drawn (a promise); null once six have been taken this game.
+   * drawn (a promise); null once SNAPS_MAX have been taken this game (the reel
+   * keeps the best six of them: link.js).
    */
   snapshot() {
-    if (this.snapshots >= 6) return Promise.resolve(null)
+    if (this.snapshots >= SNAPS_MAX) return Promise.resolve(null)
     this.snapshots++
     return new Promise((resolve) => this._snapQueue.push(resolve))
   }
@@ -129,12 +133,21 @@ export class BoxScene {
       this._slowSeq = sim.slowmo.seq
       if (sim.slowmo.seconds > 0) this.slowmo(sim.slowmo.seconds)
     }
+    // (each highlight says whether a still is coming: snapping 'asked' until it is in, 'taken' or 'none', so the reel waits only for those)
+    // (six stills go on the reel; up to SNAPS_MAX are taken, so a sinking or the player's own hit late in the game still
+    // has one after the first minutes' sinkings: the player's own four seconds apart, anyone else's eight once six are in)
     while (this._hiIndex < sim.highlights.length) {
       const h = sim.highlights[this._hiIndex++]
-      if (!h.snap || this.snapshots >= 6 || this.time - this._lastSnapT < 4) continue
+      const gap = h.player || this.snapshots < 6 ? 4 : 8
+      if (!h.snap || this.snapshots >= SNAPS_MAX || this.time - this._lastSnapT < gap) {
+        h.snapping = 'none'
+        continue
+      }
       this._lastSnapT = this.time
+      h.snapping = 'asked'
       this.snapshot().then((url) => {
         h.snapshot = url
+        h.snapping = url ? 'taken' : 'none'
       })
     }
   }

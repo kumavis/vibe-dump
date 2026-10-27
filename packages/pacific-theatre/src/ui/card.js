@@ -59,7 +59,7 @@ import { briefingHTML } from './briefing.js'
 import { afterHTML } from './after.js'
 import { creditsHTML } from './credits.js'
 import { STATION } from './roles.js'
-import { startSheetHTML, endCardHTML, WARGAME_ICON } from './wargame.js'
+import { startSheetHTML, endCardHTML, WARGAME_ICON, WARGAME_LABEL } from './wargame.js'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
@@ -315,7 +315,7 @@ export class EventCard {
   footer() {
     const tour = this.ui.tour
     const wg = this.mode === 'event' && this.ev?.box ? this.ui.wargameFor?.(this.ev) : null
-    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>${wg ? `<button class="nav wg-door" data-wargame="${esc(wg)}">${WARGAME_ICON}<span>Play it as a wargame</span></button>` : ''}` : ''
+    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>${wg ? `<button class="nav wg-door" data-wargame="${esc(wg)}" title="${esc(WARGAME_LABEL)}">${WARGAME_ICON}<span>Play it as a wargame</span></button><p class="wg-door-label">${esc(WARGAME_LABEL)}</p>` : ''}` : ''
     if (!tour?.active) return enter ? `<footer>${enter}</footer>` : ''
     const ch = tour.current
     let count

@@ -660,6 +660,8 @@ async function bake(dir, id) {
     exaggeration: f.exaggeration,
     sea: seaName,
     battle: `boxes/${id}/battle.json`,
+    // (its wargame, where content has written one: the app's door shows only where this names a file)
+    ...(existsSync(join(OUT, 'wargames', `${id}.json`)) ? { wargame: `wargames/${id}.json` } : {}),
     clock: f.clock.id,
     stats: {
       landFraction: round(nLand / N, 4),

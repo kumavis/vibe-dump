@@ -560,6 +560,8 @@ export function core(ctx) {
     }
     if (b.height?.file && b.size) checkPackImage(ctx, at, b.height.file, b.size)
     if (b.battle && !ctx.exists(b.battle)) ctx.warn(at, `battle ${b.battle} is not here yet`)
+    if (b.wargame && !ctx.exists(b.wargame)) ctx.bad(at, `wargame ${b.wargame} is not here: the box's door would open a sheet with nothing behind it`)
+    if (b.wargame && b.wargame !== `wargames/${b.id}.json`) ctx.bad(at, `wargame ${b.wargame}: a box's wargame is wargames/${b.id}.json (ROUND-3 §6)`)
     ctx.count('boxes')
   }
 

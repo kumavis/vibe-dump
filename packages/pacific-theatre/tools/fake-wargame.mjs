@@ -178,4 +178,12 @@ const scenario = {
 }
 fs.mkdirSync(path.join(dir, 'wargames'), { recursive: true })
 fs.writeFileSync(path.join(dir, 'wargames/test-box.json'), JSON.stringify(scenario, null, 1))
+// (the box's manifest entry names it, as public/data's do: the app loads a box's wargame from there and shows its door)
+const manFile = path.join(dir, 'boxes/manifest.json')
+const manifest = J(manFile)
+const entry = manifest.boxes.find((b) => b.id === 'test-box')
+if (entry.wargame !== 'wargames/test-box.json') {
+  entry.wargame = 'wargames/test-box.json'
+  fs.writeFileSync(manFile, JSON.stringify(manifest, null, 1))
+}
 console.log(`fake-wargame: test-data/wargames/test-box.json written (the arena at ${scenario.arena.centre.join(', ')}); ${KITS.join(', ')} copied into the fixture's kits`)

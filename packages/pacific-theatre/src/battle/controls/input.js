@@ -27,10 +27,11 @@
 // build's bindings until the first Tab.
 //
 // Round three (ROUND-3.md §4): in a wargame (battle.arena) Tab hops to the
-// next friendly unit of the same kind (Shift+Tab the one before) and 1–4 to
-// the nearest friendly carrier, battleship or cruiser, destroyer, aircraft
-// (battle.hop); the stations, which Tab switched in the record's box, go round
-// on the backquote key (`) or the station bar.
+// next friendly unit of the same kind and 1–4 to the nearest friendly
+// carrier, battleship or cruiser, destroyer, aircraft (battle.hop); the
+// stations, which Tab switched in the record's box, go round on Shift+Tab
+// (the project manager's decision 39), the backquote key (`) or the station
+// bar.
 
 import * as THREE from 'three'
 import { AIRCRAFT_KEYS, SHIP_KEYS, GUN_KEYS, BOMBARDIER_KEYS, HELM_STEPS, TELEGRAPH_LEVELS, GUN_HELP, BOMBARDIER_HELP, matches } from './bindings.js'
@@ -162,14 +163,14 @@ export class Input {
     if (!this.live) return
     const p = this.player
     const code = e.code
-    // the wargame's hops (Tab, 1–4) and its station key (`)
+    // the wargame's hops (Tab, 1–4) and its station keys (Shift+Tab, `)
     if (this.battle.arena && (code === 'Tab' || HOP_KEYS[code] || code === 'Backquote')) {
       e.preventDefault()
       e.stopPropagation()
       if (!down || e.repeat) return
       this.acted = true
-      if (code === 'Backquote') this.battle.cycleStation?.(e.shiftKey ? -1 : 1)
-      else this.battle.hop?.(code === 'Tab' ? (e.shiftKey ? 'prev' : 'next') : HOP_KEYS[code])
+      if (code === 'Backquote' || (code === 'Tab' && e.shiftKey)) this.battle.cycleStation?.(1)
+      else this.battle.hop?.(code === 'Tab' ? 'next' : HOP_KEYS[code])
       return
     }
     // Tab switches the station (any map; a bookmark's too: its first Tab gives it stations)

@@ -120,6 +120,9 @@ export default function check(ctx) {
       continue
     }
     checkScenario(ctx, rel, f.replace(/\.json$/, ''), W, { ledger, kits, packs })
+    // (the app opens a box's wargame from its manifest entry: a scenario no entry names has no door)
+    const entry = (ctx.list('boxes/manifest.json', 'boxes') || []).find((b) => b.id === W.box)
+    if (entry && entry.wargame !== rel) ctx.warn(rel, `boxes/manifest.json ${W.box} does not name it (wargame: "${rel}"): the battle offers no door to it`)
     ctx.count('wargames')
   }
 }

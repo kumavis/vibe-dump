@@ -26,6 +26,7 @@
 // in the air on the other side, the patrol and the escorts strafe.
 
 import { A } from './params.js'
+import { FX } from '../sim/effects.js'
 
 export const isCarrier = (t) => t === 'cv' || t === 'cvl' || t === 'cve'
 export const isCapital = (t) => t === 'bb' || t === 'ca' || t === 'cl'
@@ -278,7 +279,68 @@ export function admiralTick(ar, side) {
   destroyers(ar, side, enemy, ob, eb)
   zigzag(ar, side, enemy, ob)
   smoke(ar, side, enemy)
+  nightLights(ar, side, enemy)
   airOps(ar, side, enemy)
+}
+
+// --- the night's lights: searchlights and star shells (the project manager's decision 36) ----------------------
+
+/**
+ * At night a side's cruisers hold the other side's capital ship nearest them in a
+ * searchlight for A.night.beamS (one at a time, A.night.beamGapS apart, inside
+ * A.night.beamM), and, where the scenario says star shells, its cruisers and
+ * destroyers fire one over the enemy ship nearest its main body every
+ * A.night.starEveryS: the record's effects (FX.searchlight, FX.starshell),
+ * drawn by the scene as the record's are. They light; they hide or show nothing
+ * the arena's visibility does not.
+ */
+function nightLights(ar, side, enemy) {
+  if (!ar.night) return
+  const N = A.night
+  const s = ar.state
+  const X = ar._X
+  if (side.adm.state === 'turn-away') return
+  const live = (i) => s.alive[i] === 1
+  const dist = (i, j) => Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+  const ships = side.ships.filter((i) => live(i) && i !== ar.player?.unitIndex)
+  const foes = enemy.ships.filter(live)
+  if (!foes.length) return
+  if (ar.t >= (side._beamAt ?? N.firstBeamS)) {
+    let best = null
+    for (const i of ships) {
+      const ty = X[i].model.type
+      if (ty !== 'ca' && ty !== 'cl') continue
+      for (const j of foes) {
+        const tj = X[j].model.type
+        const d = dist(i, j) * (tj === 'bb' || tj === 'cv' || tj === 'ca' ? 0.6 : 1)
+        if (dist(i, j) < N.beamM && (!best || d < best.d)) best = { i, j, d }
+      }
+    }
+    if (best) {
+      ar.fx(FX.searchlight, s.pos[3 * best.i], 25, s.pos[3 * best.i + 2], { unit: best.i, dx: s.pos[3 * best.j] - s.pos[3 * best.i], dz: s.pos[3 * best.j + 2] - s.pos[3 * best.i + 2], size: N.beamS })
+      ar.beat(best.i, 'searchlight', `${ar.slots[best.i].name} holds ${ar.slots[best.j].name} in her searchlights.`)
+      side._beamAt = ar.t + N.beamS + N.beamGapS
+    } else side._beamAt = ar.t + 10
+  }
+  if (ar.scenario.arena?.starShells && ar.t >= (side._starAt ?? N.firstStarS)) {
+    const ob = bodyOf(ar, side)
+    const from = ships.filter((i) => ['ca', 'cl', 'dd', 'bb'].includes(X[i].model.type))
+    if (ob && from.length) {
+      let j = -1
+      let bd = Infinity
+      for (const f of foes) {
+        const d = Math.hypot(s.pos[3 * f] - ob.x, s.pos[3 * f + 2] - ob.z)
+        if (d < bd) [bd, j] = [d, f]
+      }
+      if (j >= 0 && bd < N.starM) {
+        const i = from[Math.floor(ar.rngs.ai.next() * from.length)]
+        // (bursting a little short of her and on the near side, so she stands against the light)
+        const k = Math.max(0, 1 - 350 / Math.max(1, dist(i, j)))
+        ar.fx(FX.starshell, s.pos[3 * i] + (s.pos[3 * j] - s.pos[3 * i]) * k, 500, s.pos[3 * i + 2] + (s.pos[3 * j + 2] - s.pos[3 * i + 2]) * k, { unit: i, size: N.starS })
+      }
+    }
+    side._starAt = ar.t + N.starEveryS * (0.8 + 0.4 * ar.rngs.ai.next())
+  }
 }
 
 // --- the destroyers' attack ------------------------------------------------------------------------------------

@@ -143,9 +143,12 @@ export async function loadData(base, warn = console.warn) {
     getJSON(abs('boxes/manifest.json'), { boxes: [] }, warn),
   ])
   const keyframes = list(frontsManifest, 'keyframes')
-  const [frontFiles, frontLines] = await Promise.all([
+  // the wargames (ROUND-3 §6): a box's scenario where its manifest entry names one, so a door shows only where a file is
+  const boxList = list(boxesManifest, 'boxes')
+  const [frontFiles, frontLines, wargameFiles] = await Promise.all([
     Promise.all(keyframes.map((k) => getJSON(abs(k.file), null, warn))),
     frontsManifest?.lines ? getJSON(abs(frontsManifest.lines), null, warn) : null,
+    Promise.all(boxList.map((b) => (b.wargame ? getJSON(abs(b.wargame), null, warn) : null))),
   ])
 
   // --- normalise every longitude, once -------------------------------------
@@ -170,7 +173,7 @@ export async function loadData(base, warn = console.warn) {
 
   // --- the table pack and the boxes ------------------------------------------
   const table = describePack(t, proj, abs, { normalExag: TABLE.normalExag, aoExag: TABLE.aoExag, land: false })
-  const boxes = list(boxesManifest, 'boxes').map((b) => {
+  const boxes = boxList.map((b) => {
     const pj = { ...b.projection, kind: 'tangent', unit: b.projection?.unit ?? BOX.unit }
     pj.lon0 = wrapLon(pj.lon0, lon0)
     const desc = { ...b, bounds: wrapBounds(b.bounds, lon0), projection: pj }
@@ -207,6 +210,8 @@ export async function loadData(base, warn = console.warn) {
     coast,
     boxes,
     boxById: new Map(boxes.map((b) => [b.id, b])),
+    // id → scenario, for the wargames whose file loaded (Battle.loadScenario reads and fills the same map)
+    wargames: new Map(wargameFiles.filter((w) => w?.id && w.sides).map((w) => [w.id, w])),
     kits: null,
   }
   data.loadBox = (id, opts) => loadBox(data, id, opts)

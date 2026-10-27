@@ -100,10 +100,10 @@ export const HINTS = {
   gunner: ['Aim: the mouse turns the rear gun (with the pointer locked; else its offset from the centre)', 'It bears aft and above, not through the tail or the wings', 'Fire: the left button or Space · the pip leads the aimed aircraft', 'Tab: the next station · Backspace twice gives the controls back'],
   aa: ['Aim: the mouse lays the AA director on an aircraft', 'The guns that bear fire where it points; the pip leads the aimed aircraft', 'Fire: the left button or Space · Tab: the next station', 'Backspace twice gives the controls back'],
   bombardier: ['Steer: A and D bring the track onto the target', 'The sight shows where the stick would fall now', 'Release: B or Space when the impact meets the target', 'Tab: the next station · Backspace twice gives the controls back'],
-  // round three, in a wargame: the hops (Tab, 1–4) and the station key (`)
-  'wargame-ship': ['Helm: A and D · telegraph: W and S', 'The mouse lays the guns on the sea: a click a salvo on the diamond · T the torpedoes along the fan', 'Tab: the next ship like this one · 1 carrier · 2 battleship or cruiser · 3 destroyer · 4 aircraft', '` : the next station · Backspace twice gives the controls back'],
-  'wargame-aircraft': ['Stick: the mouse (the nose follows it) or W/S and A/D; let go and the wings level', 'Fire: Space or the left button · B a bomb on the ring · T a torpedo down the line', 'Tab: the next aircraft · 1 carrier · 2 battleship or cruiser · 3 destroyer · 4 aircraft', 'Throttle: R and F · Backspace twice gives the controls back'],
-  'wargame-touch': ['Stick: the left pad, or the helm and telegraph sliders', 'Fire and release: the buttons on the right', 'Hop: the button beside the unit list', 'Release, at the top, gives the controls back'],
+  // round three, in a wargame: the hops (Tab, 1–4) and the station keys (Shift+Tab, `)
+  'wargame-ship': ['Helm: A and D · telegraph: W and S', 'The mouse lays the guns on the sea: a click a salvo on the diamond · T the torpedoes along the fan', 'Tab: the next ship like this one · Shift+Tab: the next station', '1 carrier · 2 battleship or cruiser · 3 destroyer · 4 aircraft'],
+  'wargame-aircraft': ['Stick: the mouse (the nose follows it) or W/S and A/D; let go and the wings level', 'Fire: Space or the left button · B a bomb on the ring · T a torpedo down the line', 'Tab: the next aircraft · Shift+Tab: the next station · throttle: R and F', '1 carrier · 2 battleship or cruiser · 3 destroyer · 4 aircraft'],
+  'wargame-touch': ['Stick: the left pad, or the helm and telegraph sliders', 'Fire and release: the buttons on the right', 'The arrows beside Units: the next ship or aircraft of the same kind', 'Units: any ship or aircraft of your side'],
 }
 
 export const HELM_STEPS = [-1, -0.5, 0, 0.5, 1]

@@ -783,6 +783,8 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
           continue
         }
         if (ar.airborneOf(sd.key) >= sd.maxAirborne) continue
+        // (an escort carrier strafed launches nothing while it lasts: the project manager's decision 34)
+        if (x.model.type === 'cve' && t < (x.strafedUntil ?? 0)) continue
         const j = x.launchQ.shift()
         if (s.alive[j] === 0 && X[j].hp > 0 && X[j].onDeck) ar._launch(j, X[j].next)
         x.nextLaunchT = t + A.strike.launchEveryS

@@ -35,7 +35,7 @@
 //
 // The start sheet (card mode `wargame`):
 //   { id, title, label, gloss, focus: 'jp' | 'us' | null, missing: bool,
-//     sides: [{ code, name, ja, goal, ships: [{ label: '6 escort carriers', names: [{ name, ja }] }],
+//     sides: [{ code, name, ja, leader, goal, ships: [{ label: '6 escort carriers', names: [{ name, ja }] }],
 //               aircraft: { count, list: ['10 Avengers', '10 Wildcats'] } }] }
 //   the side buttons, *Japan* and *United States*, raise ui.onWargameStart(side).
 // The end card (card mode `wargame-end`):
@@ -55,6 +55,12 @@ import { icon } from './icons.js'
 export const HOP_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h12l-3.5-3.5M20 16H8l3.5 3.5"/></svg>'
 /** The wargame's icon (the door on the bar and the cards): two bows meeting. */
 export const WARGAME_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 15.5h7l1.5-2.5M21.5 15.5h-7L13 13"/><path d="M5 12.5V10h3v2.5M16 12.5V10h3v2.5"/><path d="M2 19c2 0 2-.8 4-.8s2 .8 4 .8 2-.8 4-.8 2 .8 4 .8 2-.8 4-.8"/></svg>'
+
+/** The what-if label (ROUND-3.md §1, word for word; tools/check/wargames.mjs holds each scenario's to it): the door, the start sheet, the end card. */
+export const WARGAME_LABEL = 'A wargame played with the real forces. The record is on the other side of the table.'
+
+/** Text with its CJK runs marked lang="ja" (a leader's kanji after the romanised name), escaped. */
+export const withJa = (text) => esc(text || '').replace(/[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff]+/g, (m) => `<span lang="ja">${m}</span>`)
 
 /** The ship types in words, singular and plural, in the order a force lists them. */
 export const TYPE_WORDS = {
@@ -263,6 +269,7 @@ export function startSheetHTML(s) {
     const air = sd.aircraft?.count ? `<li><b>${esc(`${sd.aircraft.count} aircraft`)}</b> ${esc(sd.aircraft.list.join(', '))}</li>` : ''
     return `<div class="wg-ss-side" data-side="${esc(sd.code)}">
         <h3>${esc(sd.name)}${sd.ja ? ` <span lang="ja">${esc(sd.ja)}</span>` : ''}</h3>
+        ${sd.leader ? `<p class="wg-ss-leader">${withJa(sd.leader)}</p>` : ''}
         <ul class="wg-forces">${ships}${air}</ul>
         ${sd.goal ? `<p class="wg-ss-goal"><span class="uc-k">Goal</span> ${esc(sd.goal)}</p>` : ''}
         <button class="nav finish wg-start${s.focus === sd.code ? ' focus' : ''}" data-wg-side="${esc(sd.code)}">${WARGAME_ICON}<span>${esc(sd.code === 'jp' ? 'Japan' : 'United States')}</span></button>
@@ -294,8 +301,8 @@ export function endCardHTML(e) {
     <p class="wg-result">${esc(e.result || '')}</p>
     <div class="card-sec"><h2>The tallies</h2><ul class="wg-tallies">${sides}</ul>${e.yours ? `<p class="wg-yours"><span class="uc-k">Yours</span> ${esc(e.yours)}</p>` : ''}</div>
     ${reel ? `<div class="card-sec"><h2>The reel</h2><div class="wg-reel">${reel}</div></div>` : ''}
-    ${e.footnote ? `<div class="card-sec wg-foot"><h2>The record</h2><p>${esc(e.footnote)}</p></div>` : ''}
     ${e.label ? `<p class="wg-label small">${esc(e.label)}</p>` : ''}
+    ${e.footnote ? `<div class="card-sec wg-foot"><h2>The record</h2><p>${withJa(e.footnote)}</p></div>` : ''}
     <footer class="card-foot">
       <button class="nav finish wg-again" data-wg-restart="${esc(e.side)}">${WARGAME_ICON}<span>Play again</span></button>
       ${e.other ? `<button class="nav wg-other" data-wg-restart="${esc(e.other.code)}"><span>Play the other side</span></button>` : ''}

@@ -94,13 +94,17 @@ export const A = {
   waveBase: 3, // the first wave: at least three, or a sixth of the strike aircraft a side has
   waveShare: 1 / 6,
   turnedFireM: 2500, // a side that has turned away fires only at what comes within 2.5 km
-  squall: { radiusM: [700, 1000], lastS: [150, 220], hideM: 1000 }, // the box's squalls, brought into the arena (research/engine-3.md §6)
+  squall: { radiusM: [700, 1000], lastS: [150, 220], hideM: 1000 },
+  // the night's lights (estimate; the project manager's decision 36: the arena draws the searchlights its phases name, and
+  // the star shells of a scenario's `starShells`): a cruiser's beam on the nearest capital ship, one a side at a time
+  night: { firstBeamS: 30, beamM: 5000, beamS: 40, beamGapS: 50, firstStarS: 8, starM: 5500, starS: 45, starEveryS: 30 }, // the box's squalls, brought into the arena (research/engine-3.md §6)
   capShare: 0.5, // of the fighters, the share kept on combat air patrol
   firstStrikeS: 12,
   maxAirborne: 30, // a side's aircraft in the air at once, when the scenario does not say (content-3's maxAirborne: 30)
   // a strafing run (content-3's `strafe` profile; the contract's damage table has no entry for guns on a ship, so a
-  // strafed ship takes no damage: her AA is beaten down for a few seconds, research/engine-3.md §5)
-  strafe: { approachAltM: 600, openM: 1500, fireM: 900, breakM: 300, suppressS: 8, aaK: 0.4, everyS: 0.5 },
+  // strafed ship takes no damage: her AA at half for ten seconds and an escort carrier launching nothing for as long,
+  // the project manager's decision 34; research/engine-3.md §4.3)
+  strafe: { approachAltM: 600, openM: 1500, fireM: 900, breakM: 300, suppressS: 10, aaK: 0.5, everyS: 0.5 },
 
   // --- the player ---------------------------------------------------------------------------------------------------
   respawnS: 2, // contract

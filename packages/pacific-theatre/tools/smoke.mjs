@@ -635,15 +635,16 @@ await check('round two: the prologue front moves between 1931 and 1941 (Mukden a
   return `${pro.length} prologue keyframes; 1931-09-18 on ${a.pair.a} (red ${a.look.red}), 1941-12-06 on ${b.pair.a} (red ${b.look.red})`
 })
 
-// Round three on the built app: the door, the start sheet, the URL (ROUND-3 §5, §7). Today's Battle has no
-// enterWargame: a stand-in records the call, so link.js's side is held; the engine's arrives with the merge.
+// Round three on the built app: the door, the start sheet, the URL (ROUND-3 §5, §7), through the engine's
+// Battle.enterWargame (a stand-in records the call only in a build without one). The scenario is the data's
+// (the box's manifest entry names it; the fixtures' when tools/fake-wargame.mjs has written it).
 const WG = useTest ? 'test-box' : 'samar'
-const WG_FILE = existsSync(join(root, `public/data/wargames/${WG}.json`))
+const WG_FILE = await ui(`!!app.data.wargames?.has('${WG}')`)
 const WG_EV = await ui(`app.data.events.find((e) => e.box === '${WG}')?.id ?? null`)
 await check('round three: a box event’s card offers Play it as a wargame beside Enter the battle; it opens the start sheet with both sides’ forces and goals, the label, Japan and United States', async () => {
   if (!WG_EV) throw new Error(`no event with the box ${WG}`)
-  // (the fixtures' box has no wargame of its own, and the real files are content-3's: the dev page's scenario is handed over where the data has none)
-  if (useTest || !WG_FILE) await run(`app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[WG])})`)
+  // (the dev page's fixture scenario is handed over only where the data has none)
+  if (!WG_FILE) await run(`app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[WG])})`)
   await run(`app.ui.card.close(); app.ui.tour.open(app.data.events.find((e) => e.id === '${WG_EV}')); app.settle()`)
   await frames(2)
   const door = await ui(`document.querySelector('.card .wg-door')?.dataset.wargame ?? null`)
@@ -653,7 +654,7 @@ await check('round three: a box event’s card offers Play it as a wargame besid
   const s = await ui(`({ sides: [...document.querySelectorAll('.wg-ss-side')].map((e) => ({ side: e.dataset.side, name: e.querySelector('h3')?.textContent, groups: [...e.querySelectorAll('.wg-forces li b')].map((b) => b.textContent), goal: e.querySelector('.wg-ss-goal')?.textContent, button: e.querySelector('.wg-start')?.textContent.trim() })), label: document.querySelector('.card .wg-label')?.textContent })`)
   if (s.sides.length !== 2 || s.sides.map((x) => x.button).join() !== 'Japan,United States' || s.sides.some((x) => !x.groups.length || !x.goal) || !s.label) throw new Error(JSON.stringify(s))
   await look('smoke-wargame-start-app.png')
-  return `${WG_EV}: ${s.sides.map((x) => `${x.name} (${x.groups.join(', ')})`).join(' / ')}${useTest || !WG_FILE ? '; the dev page’s fixture scenario' : ''}`
+  return `${WG_EV}: ${s.sides.map((x) => `${x.name} (${x.groups.join(', ')})`).join(' / ')}${!WG_FILE ? '; the dev page’s fixture scenario' : ''}`
 })
 
 await check('round three: a side’s button calls Battle.enterWargame(id, { side }); the hash carries #wargame and #side; the engine’s leave lets them go', async () => {
@@ -837,7 +838,7 @@ if (!MOCK_ONLY && process.env.PHONE !== '0') {
     {
       name: 'a wargame',
       guard: `typeof app.battle.enterWargame === 'function'`,
-      setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); try { localStorage.removeItem('pt.hints') } catch {} ${useTest || !existsSync(join(root, `public/data/wargames/${useTest ? 'test-box' : 'samar'}.json`)) ? `app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[useTest ? 'test-box' : 'samar'])});` : ''} const s = await app.link.startWargame('${useTest ? 'test-box' : 'samar'}', 'us'); if (!s) throw new Error('Battle.enterWargame did not start it (see the warnings)'); await new Promise((r) => setTimeout(r, 500)); app.ui.card.close(); app.battle.pause(); return 'wargame ' + app.link.wg?.id + ', ' + (app.battle.state?.held?.id ?? '')`,
+      setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); try { localStorage.removeItem('pt.hints') } catch {} if (!app.data.wargames?.has('${useTest ? 'test-box' : 'samar'}')) app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[useTest ? 'test-box' : 'samar'])}); const s = await app.link.startWargame('${useTest ? 'test-box' : 'samar'}', 'us'); if (!s) throw new Error('Battle.enterWargame did not start it (see the warnings)'); await new Promise((r) => setTimeout(r, 500)); app.ui.card.close(); app.battle.pause(); return 'wargame ' + app.link.wg?.id + ', ' + (app.battle.state?.held?.id ?? '')`,
       want: ['bar', 'bar:hop', 'bar:units', 'wg:board', 'hud:plot', 'touch:pause'],
       not: ['hud:clock', 'touch:release', 'bar:release', 'bar:strip'],
     },

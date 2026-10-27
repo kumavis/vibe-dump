@@ -298,7 +298,9 @@ export class App {
     const p = new URLSearchParams()
     const sim = this.battle?.sim
     const inBox = !!(sim && this.active === this.battle.scene)
-    if (inBox) {
+    // (a wargame's hash is #wargame and #side alone, kept by link.js: its arena has no record clock to write as #t)
+    const wargame = !!this.battle?.arena
+    if (inBox && !wargame) {
       // in a box: its clock's time, to the second when it is not on the minute
       this.url.t = urlTime(sim.clock, sim.t)
     }
@@ -307,7 +309,7 @@ export class App {
     const s = this.active.rig.goal
     p.set('cam', [s.target.x, s.target.z, s.distance, s.yaw, s.pitch].map((v) => (+v.toFixed(4)).toString()).join(','))
     // (#t, #unit and #station only while a box is the scene: a table hash carries none)
-    for (const k of BOX_KEYS) if (this.url[k] && (!BOX_ONLY_KEYS.includes(k) || inBox)) p.set(k, this.url[k])
+    for (const k of BOX_KEYS) if (this.url[k] && (!BOX_ONLY_KEYS.includes(k) || (inBox && !wargame))) p.set(k, this.url[k])
     for (const [k, v] of Object.entries(this.url.kept)) p.set(k, v)
     return `#${p.toString().replace(/%2C/g, ',').replace(/%3A/g, ':')}`
   }

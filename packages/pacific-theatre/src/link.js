@@ -62,7 +62,7 @@ import { BoxBar } from './ui/boxbar.js'
 import { UnitList } from './ui/unitlist.js'
 import { sideName } from './ui/names.js'
 import { STATION, stationLabel, kitShort, kitLine, shipType, rolePhrase, aircraftRole, eventLine, attackLine, countWords, damageWords, asSentence, midName, ASSIST, SIDE_ORDER as SIDES, FATE_VERB } from './ui/roles.js'
-import { WargameHud, HOP_ICON, TYPE_ORDER, numWord, typeCount, clockText } from './ui/wargame.js'
+import { WargameHud, HOP_ICON, TYPE_ORDER, WARGAME_LABEL, numWord, typeCount, clockText } from './ui/wargame.js'
 
 const SIDE_ORDER = { ...SIDES }
 const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
@@ -70,7 +70,7 @@ const SHIP_SCALES = [1, 2, 4, 8]
 const narrow = () => innerWidth <= 760
 // the wargames (tools/check/ids.json `wargames`): a scenario's id is its box's (ROUND-3 §6); a loader's list wins (app.data.wargames)
 const WARGAMES = ['samar', 'midway', 'ironbottom-sound']
-const WG_LABEL = 'A wargame played with the real forces. The record is on the other side of the table.'
+const WG_LABEL = WARGAME_LABEL
 const WG_KEY = { jp: 'japan', us: 'usa' }
 const otherSide = (s) => (s === 'jp' ? 'us' : 'jp')
 // the arena's events that put a marker on their target (ROUND-3 §1: machine words at the target)
@@ -1251,12 +1251,13 @@ export function link(app, ui) {
         count += a.count || 0
       }
       const B = files.battle?.sides || {}
-      const ja = (B[WG_KEY[code]] || Object.values(B).find((x) => x?.side === code))?.ja ?? null
-      return { code, name: sd.name || sideName(code), ja, goal: sd.goal?.text || '', ships, aircraft: { count, list: [...kinds].map(([k, n]) => `${n} ${plural(k, n)}`) } }
+      // (the scenario's own Japanese name for the side first, then the battle file's; the commander on a line of his own, content-3's leader)
+      const ja = sd.ja ?? (B[WG_KEY[code]] || Object.values(B).find((x) => x?.side === code))?.ja ?? null
+      return { code, name: sd.name || sideName(code), ja, leader: sd.leader || null, goal: sd.goal?.text || '', ships, aircraft: { count, list: [...kinds].map(([k, n]) => `${n} ${plural(k, n)}`) } }
     })
     const mins = Math.round((sc.durationS || 600) / 60)
     const touch = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches
-    const keys = touch ? 'The arrows on the bar take you to the next ship or aircraft of the same kind; a tap on one of your side’s takes you into it.' : 'Tab and 1–4 move you between ships and aircraft; a click on one of your side’s takes you into it.'
+    const keys = touch ? 'The arrows on the bar take you to the next ship or aircraft of the same kind; a tap on one of your side’s takes you into it.' : 'Tab and 1–4 move you between ships and aircraft, Shift+Tab between a unit’s stations; a click on one of your side’s takes you into it.'
     return { id: sc.id, title: sc.title || `${sc.box ?? sc.id} as a wargame`, gloss: `${mins === 10 ? 'Ten' : numWord(mins).replace(/^./, (c) => c.toUpperCase())} minutes, either side`, label: sc.label || WG_LABEL, focus, sides, keys }
   }
 
@@ -1329,7 +1330,7 @@ export function link(app, ui) {
   /** A wargame begun (or begun again): its state, the URL, the hints once. */
   function beginWargame(id, side, sc) {
     const was = L.wg
-    L.wg = { id, side, scenario: sc ?? was?.scenario ?? L.scenarios.get(id) ?? null, session: ++L.session, arena: null, seen: 0, seenH: 0, marks: [], extra: [], xid: 0, reel: [], ended: false, endAt: 0, heldIndex: null }
+    L.wg = { id, side, scenario: sc ?? was?.scenario ?? L.scenarios.get(id) ?? null, session: ++L.session, arena: null, seen: 0, seenH: 0, marks: [], extra: [], xid: 0, reel: [], pending: [], ended: false, endAt: 0, heldIndex: null }
     setWargameUrl(id, side)
     L.held = null
     L.offered = null
@@ -1424,6 +1425,8 @@ export function link(app, ui) {
     return p && (p.title || p.text) && !p[code] && !p[WG_KEY[code]] ? p : bySide(p, code)
   }
   const goalCount = (g) => {
+    // (a goal of several terms, Ironbottom Sound's "Kirishima and two cruisers": each term's count, as the arena writes them)
+    if (g.terms?.length > 1 && g.line) return g.line
     const done = g.done ?? g.progress ?? 0
     if (g.kind === 'survive') return `${done} of ${g.of ?? g.total ?? g.count} afloat`
     return `${done} of ${g.count ?? g.target ?? g.of ?? 0}`
@@ -1510,29 +1513,36 @@ export function link(app, ui) {
     return `${from?.name ?? 'Your ship'} is sinking.${to ? ` ${to.name} is yours.` : ''}`
   }
 
-  /** The highlights since the last frame, for the reel: their stills (the arena's, or the scene's snapshot now), at most six, the sinkings and the player's own kept first. */
+  /**
+   * The highlights since the last frame, for the reel: each waits for the still the scene takes of it a frame later
+   * (its `snapping` says whether one is coming: 'asked', 'taken' or 'none'), then the six best are kept, the sinkings
+   * and the player's own first. link.js takes no still itself: the scene's are taken just after a frame is drawn.
+   */
   function reelFrame(a) {
     const wg = L.wg
     const hs = a.highlights || []
     const prio = (x) => (x.kind === 'sunk' || x.kind === 'sinking' ? (x.mine ? 5 : 4) : x.kind === 'magazine' ? 4 : x.kind === 'lost' ? 3 : x.mine ? 2 : 1)
-    for (let i = wg.seenH; i < hs.length; i++) {
-      const hl = hs[i]
-      const item = { id: hl.id ?? i, t: hl.t ?? a.t ?? 0, kind: hl.kind, mine: !!hl.mine, text: hl.text ?? hl.caption ?? '', src: hl.image ?? hl.snapshot ?? hl.src ?? null }
+    for (let i = wg.seenH; i < hs.length; i++) wg.pending.push({ hl: hs[i], i })
+    wg.seenH = hs.length
+    const ready = []
+    wg.pending = wg.pending.filter(({ hl, i }) => {
+      const src = hl.image ?? hl.snapshot ?? hl.src ?? null
+      if (typeof src === 'string' && src) {
+        ready.push({ hl, i, src })
+        return false
+      }
+      if (hl.snapping === 'none') return false
+      // (one whose still never came, twenty seconds of the game on, is let go)
+      return !(typeof hl.t === 'number' && (a.t ?? 0) - hl.t > 20)
+    })
+    for (const { hl, i, src } of ready) {
+      const item = { id: hl.id ?? i, t: hl.t ?? a.t ?? 0, kind: hl.kind, mine: !!hl.mine, text: hl.text ?? hl.caption ?? '', src }
       item.prio = prio(item)
       const worst = wg.reel.length >= 6 ? wg.reel.reduce((w, r, k) => (r.prio < wg.reel[w].prio ? k : w), 0) : -1
       if (worst >= 0 && wg.reel[worst].prio >= item.prio) continue
-      if (!item.src) {
-        try {
-          item.src = battle.scene?.snapshot?.() ?? null
-        } catch (err) {
-          app.warn(`scene.snapshot(): ${err.message}`)
-        }
-      }
-      if (!item.src) continue
       if (worst >= 0) wg.reel.splice(worst, 1)
       wg.reel.push(item)
     }
-    wg.seenH = hs.length
   }
 
   /** The result: the end card, a moment after it (the last marker and the sinking seen first). */
@@ -1612,7 +1622,7 @@ export function link(app, ui) {
     hud.hint(
       touch
         ? [`<b class="wg-hop-ic">${HOP_ICON}</b> the next ship or aircraft of the same kind`, '<b>Units</b> any ship or aircraft of your side', 'A tap on one of your side’s ships or aircraft: it is yours']
-        : ['<b>Tab</b> the next ship or aircraft of the same kind', '<b>1</b> carrier <b>2</b> battleship or cruiser <b>3</b> destroyer <b>4</b> aircraft', 'A click on one of your side’s ships or aircraft: it is yours'],
+        : ['<b>Tab</b> the next ship or aircraft of the same kind · <b>Shift+Tab</b> the next station', '<b>1</b> carrier <b>2</b> battleship or cruiser <b>3</b> destroyer <b>4</b> aircraft', 'A click on one of your side’s ships or aircraft: it is yours'],
       9,
     )
     try {
@@ -1648,7 +1658,7 @@ export function link(app, ui) {
       L.wg.arena = a
     } else if ((a.events?.length ?? 0) < wg.seen || (a.highlights?.length ?? 0) < wg.seenH) {
       // (the same arena begun again in place, or the dev page's scrub back: what was read is read again)
-      Object.assign(wg, { seen: 0, seenH: 0, marks: [], reel: [], ended: false, endAt: 0 })
+      Object.assign(wg, { seen: 0, seenH: 0, marks: [], reel: [], pending: [], ended: false, endAt: 0 })
     }
     if (!a.result && wg.ended) Object.assign(wg, { ended: false, endAt: 0 })
     ui.root.classList.add('holding', 'wargame')

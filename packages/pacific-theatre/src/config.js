@@ -134,4 +134,4 @@ export function dataBase() {
 
 // The query string carries tool switches, the hash the view (ENGINEERING §9).
 export const QUERY = ['data', 'q', 'fixedq', 'debug']
-export const HASH = ['date', 'cam', 'battle', 't', 'moment', 'unit', 'station']
+export const HASH = ['date', 'cam', 'battle', 't', 'moment', 'unit', 'station', 'wargame', 'side']
