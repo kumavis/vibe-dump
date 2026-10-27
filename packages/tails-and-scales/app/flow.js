@@ -48,6 +48,22 @@
 // move or charge's end of the seat whose decision it is, back to its last
 // commit point (app/undo.js): the battle's Session made again over its log
 // as it stood before that entry, and swapped in for it.
+//
+// (F16) The courtesy fog of war (present/fog.js): a battle against the AI
+// started with the battle-setup panel's Fog on, or an online battle whose
+// lobby agreed to it, played by one seat on this page, shows that seat only
+// what its units see of the other army (and the scenery as last seen).
+// After each entry the Session hands over, the sink asks what the seat's
+// units see in the match the table will show once it has played that
+// entry (the core's sight, through the Session's preview), steps the fog
+// on, marks the entry's events for the view (a line, a row, a template's
+// landing, a chunk's break the seat can't see) and puts a `fog` event
+// either side of them: as the entry opens, what may show while it plays,
+// and as it closes, what the seat now sees (the units veiled, the ghosts,
+// the chunks seen again). A snap draws it afresh: the battle log made
+// again (relog) walks the fog from the battle's start with it, so the
+// ghosts and the scenery as last seen come back. The fold, the corpus and
+// the setup never hear of it; without it nothing here changes.
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
@@ -57,16 +73,24 @@ import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
 import { MAX_ENTRIES, Folder } from '../match/fold.js'
 import { project } from '../present/mirror.js'
+import { fogStart, fogAsks, fogLands, fogSight, fogStep, fogView, fogOpen, fogReveal, fogEvents, fogChunks } from '../present/fog.js'
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
 import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, undoable, PHASE_NAME } from '../present/hud-model.js'
 import { EventPlayer } from '../view/player.js'
+import { defOf } from '../view/terrain.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
 import { rewind } from './undo.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
+
+// (F16) the events the courtesy fog may mark hidden (`veil: 'hide'`,
+// present/fog.js's fogEvents): their handlers never hear of those
+const VEILED = ['log', 'tray.open', 'dice', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'blast.aim', 'blast.scatter', 'blast.fire', 'blast.land', 'spell.thorns', 'spell.fade']
+// (F16) the modes the battle-setup panel offers the fog in: against the AI
+export const FOG_MODES = Object.freeze(['bushtail', 'serpent'])
 
 // (F4) Keep playing is offered until the battle's log is 80% full (the
 // Folder's cap, match/fold.js): past it the battle can only end, which
@@ -195,6 +219,20 @@ export class Flow {
     // draw nothing.
     this.facts = {}
     this.acted = []
+    // (F16) The courtesy fog (present/fog.js): `fog` the seat it is kept for
+    // while this battle is played under it ({ seat }: start(), follow();
+    // null without: hotseat, a watched battle, a watcher, a replay file);
+    // `fogPick` the battle-setup panel's toggle (app/boot.js: ?fog, else
+    // the page's last choice); `fogLast` the fog as the Session has handed
+    // the table its entries (each entry's sight asked as the sink takes
+    // it), `fogShown` as the table shows it (the last `fog` event played:
+    // what the minimap and the roster read), and `fogCache` the sight
+    // pass's answers by pair, kept while nothing they depend on moves.
+    this.fog = null
+    this.fogPick = false
+    this.fogLast = null
+    this.fogShown = null
+    this.fogCache = new Map()
     // Every battle's trace lines, as the match writes them (createMatch's
     // onTrace, which the Session passes): an action's facts for the card,
     // and under ?debug the trace listener's.
@@ -228,6 +266,8 @@ export class Flow {
         const facts = this.acted.splice(0), k = ses.accepted.length - 1
         events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e.t === 'log' ? { ...e, k } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
+        // ((F16) under the courtesy fog: marked, and its two fog events round it)
+        if (this.fog) events = this.fogEntry(events, ses)
         this.player.push(events)
       },
       // (N2) a change folded whole: the table's catch-up decided on the
@@ -257,7 +297,7 @@ export class Flow {
         this.acted.length = 0
         this.traceListener?.rejoin?.(G)
         this.player.snap(G, project(G))
-        this.relog(ses.folder.pushed)
+        this.relog(ses.folder.pushed, ses)
         if (undone > 0) this.ui.toast?.show(`History changed: ${undone} move${undone === 1 ? '' : 's'} undone`)
       },
       // (N2) the match's status changed (frozen, read-only): the online
@@ -309,9 +349,111 @@ export class Flow {
       // where its members stand and go, as the follow policy says, the
       // stage and the seat to act as the table shows them
       frame: (e, M) => view.rig.frame(e.points, { stage: M.stage, active: M.active, localSeats: this.session?.localSeats ?? [] }),
+      // (F16) the courtesy fog, as an entry opens and closes
+      fog: (e) => this.fogPlayed(e),
+    }
+    // ((F16) what the fog marked hidden never reaches its handler)
+    for (const k of VEILED) {
+      const h = handlers[k]
+      if (h) handlers[k] = (e, M, how) => (e.veil === 'hide' ? undefined : h(e, M, how))
     }
     this.player = new EventPlayer({ handlers, view, onIdle: (how) => this.idled(how), sideOf: (u) => this.unitById(u)?.side })
     return this.player
+  }
+
+  // ── The courtesy fog (F16) ──────────────────────────────────────────────
+  // Whether an entry of Session `ses` is played under the fog: the battle's
+  // own till the fog has lifted at its end; another (a peek at the battle,
+  // a replay of it) only while the battle is not over (a replay of a battle
+  // over sees all).
+  fogs(ses) {
+    return !!this.fog && !!ses?.G && (ses === this.battle || this.battle?.status !== 'over')
+  }
+
+  // The fog's pass over an entry: the match `G` as the entry leaves it (the
+  // table shows that once it has played the entry's events), `ask(fn)` its
+  // preview (the dice locked), the entry's `events`, the fog `before` it and
+  // the sight cache. The sight asked (fogSight), the fog stepped on
+  // (fogStep), the events marked (fogEvents) and the chunks seen again,
+  // each with its def (and a fallen log's tree's) for the view. The entry
+  // that ends the battle is marked, and played, by what the seat sees as
+  // it ends (`seen`), and its close lifts the fog (`after`); with `lift`
+  // (an entry no longer under the fog) nothing is asked or marked.
+  // { seen, after, events, reveal }
+  fogPass(G, ask, events, before, cache, lift = false) {
+    const M = project(G), side = new Map(G.units.map((u) => [u.id, u.side])), sideOf = (id) => side.get(id)
+    const over = M.stage === 'over'
+    const lands = fogLands(events)
+    const sees = lift ? null : ask((g, q) => fogSight(g, q, { seat: before.seat, ...fogAsks(before, M), lands }, cache))
+    const seen = lift ? null : fogStep(before, over ? { ...M, stage: 'battle' } : M, sideOf, sees)
+    const after = lift || over ? fogStep(before, { ...M, stage: 'over' }, sideOf, null) : seen
+    const marked = lift ? events : fogEvents(events, { seat: before.seat, before, after: seen, sees, M, sideOf, units: G.units.map((u) => ({ id: u.id, side: u.side, short: u.t.short, name: u.t.name })) })
+    const chunk = new Map(G.terrain.chunks.map((c) => [c.id, c]))
+    const reveal = fogReveal(before, after).map((id) => {
+      const c = chunk.get(id)
+      return { def: defOf(c), alive: c.alive, tree: c.look.piece === 'fallen' && chunk.has(c.look.tree) ? defOf(chunk.get(c.look.tree)) : null }
+    })
+    return { seen: seen ?? after, after, events: marked, reveal }
+  }
+
+  // An entry of `ses` handed over under the fog (the sink's): its pass, and
+  // its events between the two fog events, what may show as it opens
+  // (fogOpen) and what the seat sees as it closes (fogView, and the chunks
+  // seen again). An entry no longer under it (the battle over: a replay of
+  // it sees all) lifts a fog still kept.
+  fogEntry(events, ses) {
+    const before = this.fogLast
+    if (!before || before.over) return events
+    const lift = !this.fogs(ses)
+    const r = this.fogPass(ses.G, (fn) => ses.preview(fn), events, before, this.fogCache, lift)
+    this.fogLast = r.after
+    return [{ t: 'fog', at: 'open', ...fogOpen(before, r.seen) }, ...r.events, { t: 'fog', at: 'close', F: r.after, ...fogView(r.after), reveal: r.reveal }]
+  }
+
+  // A fog event played: the units veiled and the ghosts as it says, the
+  // chunks seen again brought up to date (as an entry closes), and what the
+  // pointer and the card held of a unit now veiled let go.
+  fogPlayed(e) {
+    const F = e.F ?? this.fogShown?.F ?? null
+    this.showFog({ hide: e.hide, ghosts: e.ghosts, F })
+    if (e.reveal?.length) this.view.terrain.reveal(e.reveal)
+  }
+
+  // What the table shows of the fog now (`v`: { hide, ghosts, F }, or null
+  // for none): the figures veiled, the ghosts standing, the camera told
+  // whom it may not follow; the card on a unit now veiled closed, the
+  // pointer's hold on one let go.
+  showFog(v) {
+    const { units, ghosts } = this.view
+    const over = !v || !!v.F?.over
+    this.fogShown = over ? null : v
+    units.veil(over ? null : v.hide)
+    ghosts.show(over ? null : v.ghosts)
+    this.player.veil = units.veiled ? (id) => units.hid(id) : null
+    const card = this.ui.card, human = this.human
+    if (card?.unit && units.hid(card.unit.id)) card.show(null)
+    if (human?.hoverPick?.unit && units.hid(human.hoverPick.unit.id)) {
+      human.hoverPick = null
+      human.hover = null
+      this.ui.tooltip?.hide()
+    }
+  }
+
+  // The fog after a snap (relog's: walked from the battle's start, `F`, or
+  // null without the fog; `G` the match as the table was snapped to it):
+  // the units veiled, the ghosts, and the scenery drawn as last seen.
+  refog(F, G) {
+    this.fogLast = F
+    if (!F) return this.showFog(null)
+    this.showFog({ ...fogView(F), F })
+    if (G && F.table && !F.over) this.view.terrain.sync(fogChunks(G.terrain.chunks, F))
+  }
+
+  // A new table: no fog shown, none kept, nothing cached.
+  fogReset() {
+    this.fogLast = null
+    this.fogCache.clear()
+    if (this.player) this.showFog(null)
   }
 
   // the match the table shows: the battle's, or on the title the backdrop
@@ -546,6 +688,8 @@ export class Flow {
     view.overlay.clear()
     ui.log.clear()
     ui.tray.hide()
+    // ((F16) no fog over a new table: a battle's own is set as it starts)
+    this.fogReset()
     // its board, then the tufts strewn anew, then (the snap) its figures:
     // the order the table has always been drawn in, so the cosmetic
     // Math.random draws fall as they did (three.js draws some for every
@@ -574,8 +718,10 @@ export class Flow {
   // (watch) to its end, and the table plays it from there.
   // (F7a) Fought on `terrain`, the battle-setup panel's choice of the
   // mission's sets (else the table's), which is the table's from then on;
-  // (F8b) of the mission `size`, the panel's battle size.
-  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size)) {
+  // (F8b) of the mission `size`, the panel's battle size; (F16) under the
+  // courtesy fog when `fog` (the panel's toggle) and the mode is against
+  // the AI (FOG_MODES: never hotseat, one screen, nor a watched battle).
+  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
@@ -655,6 +801,10 @@ export class Flow {
     // (as the title showed it: the battle's own stage events, its
     // deployment's first, take it on from there, P-present holding each)
     this.player.snap(this.backdrop, onTitle(this.backdrop))
+    // ((F16) the fog for the seat played here, from the start entry on)
+    this.fog = fog && FOG_MODES.includes(mode) ? { seat: who.indexOf('human') } : null
+    this.fogReset()
+    this.fogLast = this.fog && fogStart(this.fog.seat)
     const store = new LocalStore()
     this.session = new Session({ store, localSeats: who.flatMap((c, s) => (c === 'human' ? [s] : [])), dev: DEVICE, sink: this.sink, onTrace: this.onTrace })
     this.battle = this.session
@@ -687,8 +837,9 @@ export class Flow {
   // drawn afresh for its setup and snapped to the match as it stands, the
   // battle log made again from its entries, and its events played from here
   // on (the flow's sink). `online`: { status(status, session),
-  // settled(session) ((N3) a change folded: what the page keeps), leave() }
-  // (app/online.js's).
+  // settled(session) ((N3) a change folded: what the page keeps), leave(),
+  // (F16) fog: the lobby agreed to the courtesy fog } (app/online.js's): the
+  // fog kept for the one seat this page plays, if it does.
   follow(session, online) {
     const { view, ui, human } = this
     const G = session.G
@@ -708,11 +859,12 @@ export class Flow {
     this.acted.length = 0
     this.online = online
     session.sink = this.sink
+    this.fog = online?.fog && session.localSeats.length === 1 ? { seat: session.localSeats[0] } : null
     // (F10c) the battle's book: a rejoin finds its orders again
     this.human.standing?.reset()
     this.human.standing?.book.open(bookKey(session))
     this.player.snap(G, project(G))
-    this.relog(session.folder.pushed)
+    this.relog(session.folder.pushed, session)
     ui.title.hide()
     view.rig.setViews(viewsFor({ localSeats: session.localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
     this.refreshUI()
@@ -767,7 +919,7 @@ export class Flow {
     this.ui.tray.hide()
     this.traceListener?.rejoin?.(session.G)
     this.player.snap(session.G, project(session.G))
-    this.relog(session.folder.pushed)
+    this.relog(session.folder.pushed, session)
     this.refreshUI()
   }
 
@@ -788,6 +940,9 @@ export class Flow {
     this.traceListener?.begin()
     this.acted.length = 0
     this.player.snap(this.backdrop, onTitle(this.backdrop))
+    // ((F16) a peek at a battle under the fog, from its start: the fog
+    // from its start too)
+    this.fogLast = this.fogs(this.battle) && this.battle.status !== 'over' ? fogStart(this.fog.seat) : null
     this.session = session
     session.sink = this.sink
     this.refreshUI()
@@ -840,15 +995,29 @@ export class Flow {
   // followed, a refold), what the log shows is that match's history.
   // ((F15) Each line with its entry's place among the accepted, as the sink
   // stamps it: the fold's own, from the list's start.)
-  relog(entries) {
+  // ((F16) Under the courtesy fog (`ses`, the Session whose entries these
+  // are, played under it) the fog is walked from the battle's start with
+  // the fold, an entry at a time as the sink walks it, its lines the seat
+  // can't see left out; and the table just snapped shows the fog it ends
+  // at: the units veiled, the ghosts, the scenery as last seen.)
+  relog(entries, ses = this.session) {
     const f = new Folder({ out: [] }), lines = []
+    let F = this.fogs(ses) ? fogStart(this.fog.seat) : null
+    const cache = F && new Map()
     for (const e of entries) {
       f.push(e)
       const k = f.accepted.length - 1
-      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push({ ...x, k })
+      let out = f.G?.out?.splice(0) ?? []
+      if (F && f.G && out.length && !F.over) {
+        const g = f.G, r = this.fogPass(g, (fn) => preview(g, fn), out, F, cache)
+        F = r.after
+        out = r.events
+      }
+      for (const x of out) if (x.t === 'log' && x.veil !== 'hide') lines.push({ ...x, k })
     }
     this.ui.log.clear()
     for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at, x.k)
+    if (this.fog) this.refog(F, f.G)
   }
 
   // The elastic catch-up (above), once a change is folded: the table's
@@ -859,7 +1028,7 @@ export class Flow {
     if (behind > 30) {
       this.acted.length = 0
       this.player.snap(ses.G, project(ses.G))
-      this.relog(ses.folder.pushed)
+      this.relog(ses.folder.pushed, ses)
     } else clock.boost = behind > 16 ? 4 : behind > 8 ? 2 : 1
   }
 
@@ -868,6 +1037,7 @@ export class Flow {
   back() {
     this.replay?.close()
     if (this.online) this.leaveOnline()
+    this.fog = null
     this.ui.result.hide()
     this.ui.title.show()
     this.view.rig.toTitle()
