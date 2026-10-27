@@ -567,15 +567,29 @@ function boot() {
 
   // --- input
   const overlay = $('overlay')
-  const hasLock = 'requestPointerLock' in canvas
+  // Pointer lock is the real control scheme. Where it is refused (a sandboxed
+  // iframe, say) fall back to looking with plain mouse motion and clicking to
+  // fire, so the game is still playable rather than silently inert.
+  let hasLock = 'requestPointerLock' in canvas
+  function lockFallback() {
+    if (!hasLock) return
+    hasLock = false
+    overlay.classList.add('hidden')
+  }
   canvas.addEventListener('mousedown', (e) => {
     if (e.button !== 0) return
     sfx.unlock()
     if (locked || !hasLock) {
       firing = true
     } else {
-      const p = canvas.requestPointerLock()
-      if (p && p.catch) p.catch(() => {})
+      let p
+      try {
+        p = canvas.requestPointerLock()
+      } catch {
+        lockFallback()
+        return
+      }
+      if (p && p.catch) p.catch(lockFallback)
     }
   })
   window.addEventListener('mouseup', (e) => {
@@ -589,7 +603,7 @@ function boot() {
       keys.clear()
     }
   })
-  document.addEventListener('pointerlockerror', () => {})
+  document.addEventListener('pointerlockerror', lockFallback)
   window.addEventListener('mousemove', (e) => {
     if (!locked && hasLock) return
     player.yaw -= e.movementX * 0.0022
