@@ -22,9 +22,19 @@
 // the station bar), a hit, a slow motion, the snapshots, a forced end and
 // its event, no console error, frame time and heap (tools/shots/arena-*.png).
 //
+// Part 4, only with --looks (alone, it skips the rest): the pictures the
+// engine-3 workflow was asked to look at, the battle paused for each and the
+// camera set by hand (tools/shots/arena-look-*.png): Yamato's main battery on
+// a carrier at about 5 km and its fall (Samar, when content-3's file is in
+// the tree), a Wildcat in a dogfight with a Zero, the player's torpedo hit in
+// its slow motion, a carrier burning and going down, and the arena from the
+// orbit camera with both fleets. Pictures to look at, not checks: a look that
+// finds no such moment says so and the run goes on.
+//
 //   node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs
 //   node tools/smoke-arena.mjs [--headless-only] [--browser-only] [--seeds 20] [--scenario <file> ...]
 //                              [--only <id> ...] [--skip-balance] [--skip-player] [--set <id>.<side>.<path>=<value> ...]
+//   node tools/smoke-arena.mjs --looks           the pictures of part 4 alone
 //   PORT=5431 node tools/smoke-arena.mjs ...     the dev server's port (another worktree's may hold 5297)
 //
 // The scenarios: the fixture (test-data/wargames/test-box.json), every
@@ -130,8 +140,9 @@ const finiteState = (ar) => {
   return null
 }
 
-const doHeadless = !args.has('--browser-only')
-const doBrowser = !args.has('--headless-only')
+const doLooks = args.has('--looks')
+const doHeadless = !args.has('--browser-only') && !doLooks
+const doBrowser = !args.has('--headless-only') && !doLooks
 const balance = []
 
 if (doHeadless) {
@@ -474,6 +485,196 @@ if (doBrowser) {
       const st = await page.evaluate(() => ({ s: window.__app.stats?.(), frame: window.__app.frameAvg, heap: performance.memory ? performance.memory.usedJSHeapSize / 1048576 : null }))
       assert(!errors.length, errors.slice(0, 3).join(' | '))
       return `frame ${st.frame?.toFixed(0)} ms (SwiftShader), ${st.s?.calls} draw calls, ${st.s?.triangles} triangles, heap ${st.heap?.toFixed(1)} MB`
+    })
+  } finally {
+    await browser.close()
+    if (vite) vite.kill()
+  }
+}
+
+
+// =========================================================================================================
+// Part 4: the looks (--looks)
+// =========================================================================================================
+if (doLooks) {
+  console.log('the looks (tools/shots/arena-look-*.png), under SwiftShader:')
+  let vite = null
+  const up = async () => {
+    try {
+      return (await fetch(`http://127.0.0.1:${PORT}/battle.html`)).ok
+    } catch {
+      return false
+    }
+  }
+  if (!(await up())) {
+    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: false })
+    for (let k = 0; k < 60 && !(await up()); k++) await new Promise((r) => setTimeout(r, 500))
+  }
+  const { chromium } = await import('playwright')
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  const errors = []
+  page.on('pageerror', (e) => errors.push(String(e)))
+  // the page's helpers: the arena (a), its state (s), stepping, and a camera of the look's own
+  const H = `
+    const app = window.__app; const battle = app.battle; const a = battle.sim; const s = a.state; const DEG = Math.PI / 180
+    const idx = (id) => a.slots.findIndex((u) => u.id === id)
+    const dist = (i, j) => Math.hypot(s.pos[3*i]-s.pos[3*j], s.pos[3*i+2]-s.pos[3*j+2])
+    const dist3 = (i, j) => Math.hypot(s.pos[3*i]-s.pos[3*j], s.pos[3*i+1]-s.pos[3*j+1], s.pos[3*i+2]-s.pos[3*j+2])
+    const brg = (i, j) => ((Math.atan2(s.pos[3*j]-s.pos[3*i], -(s.pos[3*j+2]-s.pos[3*i+2])) / DEG) + 360) % 360
+    const stepT = (sec) => { const t1 = a.t + sec; while (a.t < t1 && !a.result) a.step() }
+    const C = battle.scene.cameras
+    const cam = (mode, o) => { if (C._upd) { C.update = C._upd; C._upd = null } ; battle.scene.setCamera(mode, o) }
+    const fixCam = (i, j, back, up, fov = 50) => {
+      if (!C._upd) C._upd = C.update
+      C.update = () => {
+        const c = C.camera
+        const dx = s.pos[3*i]-s.pos[3*j], dy = s.pos[3*i+1]-s.pos[3*j+1], dz = s.pos[3*i+2]-s.pos[3*j+2], L = Math.hypot(dx, dy, dz) || 1
+        c.position.set(s.pos[3*i] + dx / L * back, s.pos[3*i+1] + dy / L * back + up, s.pos[3*i+2] + dz / L * back)
+        c.up.set(0, 1, 0)
+        c.lookAt((s.pos[3*i]+s.pos[3*j]) / 2, (s.pos[3*i+1]+s.pos[3*j+1]) / 2, (s.pos[3*i+2]+s.pos[3*j+2]) / 2)
+        c.fov = fov; c.updateProjectionMatrix()
+      }
+    }
+  `
+  const run = (body, arg) => page.evaluate(new Function('arg', `return (async () => { ${H} ${body} })()`), arg)
+  const frames = async (n = 4) => {
+    for (let k = 0; k < n; k++) await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r())))
+  }
+  const shot = async (name) => {
+    await frames()
+    await page.screenshot({ path: path.join(shots, `arena-look-${name}.png`) })
+  }
+  const open = async (id, side) => {
+    await page.goto(`http://127.0.0.1:${PORT}/battle.html?wargame=${id}&side=${side}&data=${id === 'test-box' ? './test-data/' : './data/'}`)
+    await page.waitForFunction(() => window.__app?.ready === true, null, { timeout: 300000 })
+    await page.addStyleTag({ content: '#dev-panel { display: none !important }' })
+    await page.waitForTimeout(1500)
+    await run(`battle.running = false; return true`)
+  }
+  const hasSamar = fs.existsSync(path.join(root, 'public/data/wargames/samar.json'))
+  // (the player's spread from Test Destroyer B at an enemy capital ship, the same on each run: the arena is seeded and steps at 1/60 s)
+  const SPREAD = `
+    battle.hop('destroyer'); battle.running = false
+    const i = a.player.unitIndex, x = a._X[i]
+    for (let k = 0; k < 60 * 400; k++) {
+      let best = -1, bd = 1e9
+      for (const j of a.sides.jp.ships) if (s.alive[j] === 1 && ['bb', 'cv', 'ca'].includes(a._X[j].model.type)) { const d = dist(i, j); if (d < bd) { bd = d; best = j } }
+      const p = a.player
+      if (best < 0 || !p || p.unitIndex !== i) return null
+      p.input.telegraph = 1
+      const v = (x.torp.weapon?.settings?.[0]?.speedKn ?? x.torp.weapon?.speedKn ?? 40) * 0.514444 * 1.5
+      const px = s.pos[3*best]-s.pos[3*i], pz = s.pos[3*best+2]-s.pos[3*i+2], tvx = s.vel[3*best], tvz = s.vel[3*best+2]
+      const A2 = tvx*tvx+tvz*tvz-v*v, B2 = 2*(px*tvx+pz*tvz), C2 = px*px+pz*pz, disc = B2*B2-4*A2*C2
+      let ib = brg(i, best)
+      if (disc >= 0) { const r1 = (-B2-Math.sqrt(disc))/(2*A2), r2 = (-B2+Math.sqrt(disc))/(2*A2); const tt = Math.min(r1,r2) > 0 ? Math.min(r1,r2) : Math.max(r1,r2); if (tt > 0) ib = ((Math.atan2(px+tvx*tt, -(pz+tvz*tt)) / DEG) + 360) % 360 }
+      const off = ((brg(i, best) - s.heading[i] + 540) % 360) - 180
+      p.input.helm = Math.max(-1, Math.min(1, (off - Math.sign(off || 1) * 50) / 30))
+      p.input.aimAz = ib
+      if (bd < 2400 && a.t >= x.torp.readyAt && Math.abs(((ib - s.heading[i] + 540) % 360) - 180) > 30) { p.input.torpedoCount++; return { t: a.t, target: a.slots[best].id } }
+      a.step()
+    }
+    return null
+  `
+  try {
+    if (hasSamar) {
+      await check('Yamato’s main battery on a carrier at about 5 km, and its fall (Samar, Japan)', async () => {
+        await open('samar', 'jp')
+        const r = await run(`
+          const y = idx('yamato')
+          battle.release?.(); battle.running = false
+          for (let k = 0; k < 20000; k++) {
+            const x = a._X[y]
+            const before = x.guns[0].mounts.map((m) => m.readyAt)
+            a.step()
+            const t = x.target
+            if (t >= 0 && a._X[t].model.type === 'cve' && x.guns[0].mounts.some((m, q) => m.readyAt > before[q] + 1) && dist(y, t) > 4300 && dist(y, t) < 5800) {
+              const b = brg(y, t)
+              cam('orbit', { unitIndex: y, distance: 650, bearing: (b + 90) % 360, pitch: 0.1 })
+              return { t: a.t, target: a.slots[t].id, d: dist(y, t), b, ti: t }
+            }
+          }
+          return null
+        `)
+        assert(r, 'no salvo of Yamato’s on a carrier between 4.3 and 5.8 km')
+        await shot('yamato-fires')
+        await run(`stepT(9.6); cam('orbit', { unitIndex: arg.ti, distance: 1300, bearing: (arg.b + 300) % 360, pitch: 0.09 }); return true`, r)
+        await shot('yamato-fall')
+        await run(`stepT(1.2); return true`)
+        await shot('yamato-fall-2')
+        return `${r.target} at ${(r.d / 1000).toFixed(1)} km, ${r.t.toFixed(0)} s`
+      })
+    }
+    await check('a Wildcat in a dogfight with a Zero (the fixture)', async () => {
+      await open('test-box', 'us')
+      const r = await run(`
+        battle.release?.(); battle.running = false
+        for (let k = 0; k < 60 * 400; k++) {
+          a.step()
+          if (k % 6) continue
+          for (const i of a._air) {
+            if (s.alive[i] !== 1 || a._X[i].model.id !== 'fm-2') continue
+            const e = a._X[i].engage
+            if (e >= 0 && s.alive[e] === 1 && a._X[e].model.id === 'a6m5' && dist3(i, e) < 350 && dist3(i, e) > 120) {
+              fixCam(i, e, 40, 6, 50)
+              return { i, e, t: a.t, d: dist3(i, e) }
+            }
+          }
+        }
+        return null
+      `)
+      assert(r, 'no FM-2 engaging an A6M5 within 350 m')
+      await shot('dogfight')
+      await run(`stepT(0.6); fixCam(arg.e, arg.i, 60, 10, 50); return true`, r)
+      await shot('dogfight-2')
+      return `at ${r.t.toFixed(0)} s, ${r.d.toFixed(0)} m apart`
+    })
+    await check('the player’s torpedo hit in its slow motion (the fixture, Test Destroyer B’s spread)', async () => {
+      await open('test-box', 'us')
+      // (a fresh arena at 0:00, paused in the same call, its seed the game count's: the same game twice over)
+      const fresh = (g) => run(`if (arg != null) battle.wargame.games = arg - 1; battle.restart({ side: 'us' }); battle.running = false; return battle.wargame.games`, g)
+      const g = await fresh(null)
+      const fired = await run(SPREAD)
+      assert(fired, 'no spread fired')
+      // run 1: the step its hit comes; run 2: the same game to a second before it, then the scene runs it
+      const r1 = await run(`const h0 = a.slowmo.seq; for (let k = 0; k < 60 * 300; k++) { a.step(); if (a.slowmo.seq !== h0) break } ; return a.slowmo.seq !== h0 ? { t: a.t, on: a.markers.filter((m) => m.player).at(-1)?.unit ?? -1 } : null`)
+      assert(r1 && r1.on >= 0, 'none of the spread hit')
+      await fresh(g)
+      await run(SPREAD)
+      await run(`while (a.t < arg.t - 1.2) a.step(); battle.wargameTick(); cam('orbit', { unitIndex: arg.on, distance: 600, bearing: (s.heading[arg.on] + 75) % 360, pitch: 0.1 }); window.__seq0 = a.slowmo.seq; battle.running = true; return true`, r1)
+      await page.waitForFunction(() => window.__app.battle.sim.slowmo.seq !== window.__seq0, null, { timeout: 120000, polling: 30 })
+      await page.waitForTimeout(100)
+      await page.screenshot({ path: path.join(shots, 'arena-look-torpedo-hit.png') })
+      const f = await run(`return { f: battle.scene.slowFactor(), line: a.markers.filter((m) => m.player && m.weapon === 'torpedo').at(-1)?.text }`)
+      await page.waitForTimeout(1500)
+      await page.screenshot({ path: path.join(shots, 'arena-look-torpedo-after.png') })
+      assert(f.f < 1, `the slow motion had ended by the shot (×${f.f})`)
+      return `“${f.line}”, the scene at ×${f.f.toFixed(2)} in the shot`
+    })
+    await check('a carrier burning and going down (the fixture)', async () => {
+      await open('test-box', 'jp')
+      const r = await run(`
+        battle.release?.(); battle.running = false
+        for (let k = 0; k < 60 * 600 && !a.result; k++) { a.step(); for (const i of a._ships) if (s.alive[i] === 2 && ['cv', 'cve', 'cvl'].includes(a._X[i].model.type)) return { c: i, id: a.slots[i].id, t0: a.t } }
+        return null
+      `)
+      assert(r, 'no carrier went down')
+      for (const at of [1, 13, 18]) {
+        await run(`battle.running = false; while (a.t < arg.t0 + ${at} - 1.5) a.step(); battle.wargameTick(); cam('orbit', { unitIndex: arg.c, distance: 560, bearing: (s.heading[arg.c] + 65) % 360, pitch: 0.12 }); battle.running = true; return true`, r)
+        await page.waitForFunction((t) => window.__app.battle.sim.t >= t, r.t0 + at, { timeout: 120000, polling: 50 })
+        await page.screenshot({ path: path.join(shots, `arena-look-sinking-${at}s.png`) })
+      }
+      return `${r.id} from ${r.t0.toFixed(0)} s`
+    })
+    await check(`the arena from the orbit camera with both fleets (${hasSamar ? 'Samar' : 'the fixture'})`, async () => {
+      await open(hasSamar ? 'samar' : 'test-box', 'us')
+      await run(`battle.release?.(); battle.running = false; stepT(40); cam('free', { target: { x: a.centre.x, z: a.centre.z }, distance: 8500, bearing: 210, pitch: 0.55, duration: 0.01 }); return true`)
+      await page.waitForTimeout(2500)
+      await shot('orbit')
+      return 'at 0:40'
+    })
+    await check('no page error in the looks', async () => {
+      assert(!errors.length, errors.slice(0, 3).join(' | '))
     })
   } finally {
     await browser.close()
