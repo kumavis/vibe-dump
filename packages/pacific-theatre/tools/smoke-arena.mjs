@@ -24,7 +24,7 @@
 //
 //   node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs
 //   node tools/smoke-arena.mjs [--headless-only] [--browser-only] [--seeds 20] [--scenario <file> ...]
-//                              [--only <id> ...] [--skip-balance] [--skip-player]
+//                              [--only <id> ...] [--skip-balance] [--skip-player] [--set <id>.<side>.<path>=<value> ...]
 //   PORT=5431 node tools/smoke-arena.mjs ...     the dev server's port (another worktree's may hold 5297)
 //
 // The scenarios: the fixture (test-data/wargames/test-box.json), every
@@ -45,6 +45,13 @@ const PORT = Number(process.env.PORT || 5297)
 const SEEDS = argv.includes('--seeds') ? Number(argv[argv.indexOf('--seeds') + 1]) : 20
 const extra = argv.flatMap((a, i) => (a === '--scenario' ? [argv[i + 1]] : []))
 const only = argv.flatMap((a, i) => (a === '--only' ? [argv[i + 1]] : [])) // scenario ids to run (all when none)
+// --set <id>.<side key>.<path>=<value>: a scenario's field overridden for this run only (the admirals' numbers being
+// tuned, e.g. --set samar.japan.admiral.turnAwayAt=0.9), so a balance can be tried before the file is changed
+const sets = argv.flatMap((a, i) => (a === '--set' ? [argv[i + 1]] : [])).map((x) => {
+  const [k, v] = x.split('=')
+  const [id, ...p] = k.split('.')
+  return { id, path: p, value: v === 'null' ? null : v === 'true' ? true : v === 'false' ? false : Number.isFinite(+v) && v !== '' ? +v : v }
+})
 const shots = path.join(root, 'tools/shots')
 fs.mkdirSync(shots, { recursive: true })
 const J = (p) => JSON.parse(fs.readFileSync(p, 'utf8'))
@@ -91,6 +98,13 @@ if (only.length) for (let k = scenarios.length - 1; k >= 0; k--) if (!only.inclu
 const boxCache = new Map()
 function loadScenario({ file, data }) {
   const scenario = J(file)
+  for (const st of sets) {
+    if (st.id !== scenario.id) continue
+    let o = scenario.sides
+    for (const k of st.path.slice(0, -1)) o = o?.[k]
+    if (!o) throw new Error(`--set ${st.id}.${st.path.join('.')}: no such field`)
+    o[st.path.at(-1)] = st.value
+  }
   const key = `${data}:${scenario.box}`
   if (!boxCache.has(key)) {
     const kits = { ships: list(J(path.join(data, 'kits/ships.json')), 'ships'), aircraft: list(J(path.join(data, 'kits/aircraft.json')), 'aircraft'), weapons: list(J(path.join(data, 'kits/weapons.json')), 'weapons') }
@@ -124,7 +138,7 @@ if (doHeadless) {
   // =========================================================================================================
   // Part 1: the balance
   // =========================================================================================================
-  console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player:`)
+  console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player${sets.length ? `, with ${sets.map((x) => `${x.id}.${x.path.join('.')}=${x.value}`).join(', ')}` : ''}:`)
   for (const sc of args.has('--skip-balance') ? [] : scenarios) {
     const { scenario, kits, box } = loadScenario(sc)
     if (layout) {
