@@ -1,0 +1,30 @@
+{
+  "name": "@vibe-dump/splat-siege",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Splat Siege",
+    "description": "A first-person rocket launcher in a town built from 100,000 Gaussian splats. Every wall, roof, tree and paving stone is a cloud of oriented Gaussians that blows apart, tumbles through the air and settles as rubble. Three.js.",
+    "tags": [
+      "game",
+      "simulation"
+    ],
+    "status": "wip",
+    "models": [
+      "Fable 5.1"
+    ],
+    "thinking": "unknown",
+    "thumbnail": {
+      "waitFor": "!#intro",
+      "settle": 100
+    }
+  }
+}
