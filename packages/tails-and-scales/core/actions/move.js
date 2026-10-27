@@ -21,6 +21,7 @@ import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { setUnitPos } from '../units.js'
 import { pathLength } from '../nav.js'
+import { kegsIn } from '../terrain/terrain.js'
 import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
 
 export function moveMode(u) {
@@ -171,6 +172,11 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
 // makes it: the only path a move takes, so parity holds each corpus move
 // made on the remade plan to the old move, made on the plan the seat or the
 // AI picked from (a one-off probe at R5c found the plans deep-equal too).
+//
+// (F19a) Returns the powder kegs a wrecker's walk smashed, in the order it
+// smashed them, for the move's handler to set off (core/commands.js: a
+// keg's going off is shoot.js's kegsGoOff, which this module can't import
+// without a cycle, damage.js importing this one); [] for every other walk.
 export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)) {
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   u.flags.moved = true
@@ -178,9 +184,10 @@ export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.fl
   // (F7a: with height a climb counts what it costs, not the ground it spans)
   const L = G.nav.hasHeight ? walkCost(pts) : pathLength(pts)
   log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
-  resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
+  const kegs = resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  return kegs
 }
 
 // `u` advances: a D6 more inches for its move this phase (its move is a
@@ -231,9 +238,15 @@ export function walkCost(pts) {
 // the unit stands. Then `objectives` and `status`: the flags and labels as
 // the walk left them (the old walk turned a flag the frame it crossed; this
 // turns it as the walk ends).
+//
+// (F19a) Returns the powder kegs the walk smashed, in the order it smashed
+// them (sample by sample, each sample's in chunk order): they go off once
+// the walk has ended, the walker standing where it stopped, by its
+// caller's hand (doMove's handler, finishCharge; DESIGN §4.1 rule 28). []
+// when it smashed none, as every walk but a wrecker's past a keg does.
 export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false } = {}) {
   const L = pathLength(pts)
-  if (L < 0.05) return
+  if (L < 0.05) return []
   const seg = []
   let acc = 0
   for (let i = 1; i < pts.length; i++) {
@@ -241,7 +254,7 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
     seg.push({ a: pts[i - 1], b: pts[i], s: acc, l })
     acc += l
   }
-  const smashes = []
+  const smashes = [], broke = []
   if (u.t.wrecker) {
     const samples = []
     for (const q of seg) for (let t = 0; t < q.l; t += 0.25) samples.push({ s: q.s + t, x: q.a.x + ((q.b.x - q.a.x) * t) / q.l, z: q.a.z + ((q.b.z - q.a.z) * t) / q.l, dir: atan2(q.b.x - q.a.x, q.b.z - q.a.z) })
@@ -252,7 +265,7 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
     // a wrecker is big, so never a climber, and no sample lies on a climb)
     for (const p of samples) {
       const ev = G.out ? [] : null
-      if (smashAround(G, u, p, ev) && ev) smashes.push({ s: p.s, ev })
+      if (smashAround(G, u, p, ev, broke) && ev) smashes.push({ s: p.s, ev })
     }
   }
   // the walk's last frame: k = 1, so the distance along is L itself
@@ -269,18 +282,21 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
     emit(G, 'objectives', { owners: ownersOf(G) })
     emit(G, 'status', statusOf(G))
   }
+  return kegsIn(broke)
 }
 
 // The Brute ploughs through anything breakable in its way, at one sample of
 // its walk ({ x, z, dir }: where, and which way it is heading). It walks the
 // live chunk list (§4.1 rule 6), so a log a tree it felled leaves in its
 // path is smashed in the same sweep. The terrain's events go into `out`
-// (nowhere when it is null). Returns how many chunks it hit.
+// (nowhere when it is null). Returns how many chunks it hit. (F19a) What
+// broke is pushed onto `broke`, when given (resolveWalk's: the kegs among
+// it go off once the walk has ended).
 //
 // (F7a) With height it skips a chunk whose base (the floor it stands on, 0
 // when absent) isn't within HIGH of the sample's floor: a Brute on the
 // ground doesn't smash the parapets on a deck beside it.
-export function smashAround(G, u, { x, z, dir }, out) {
+export function smashAround(G, u, { x, z, dir }, out, broke = []) {
   let n = 0
   const y = G.nav.hasHeight ? floorAt(G, x, z) : 0
   for (const c of G.terrain.chunks) {
@@ -288,7 +304,7 @@ export function smashAround(G, u, { x, z, dir }, out) {
     if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
-      G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out)
+      G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out, broke)
       n++
     }
   }

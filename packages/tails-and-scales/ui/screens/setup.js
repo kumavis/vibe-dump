@@ -9,13 +9,21 @@
 // or ?terrain='s, then the last chosen), one button each. A later step adds
 // the army (F11b).
 //
-// (F8b) The battle size: a line of the missions (Skirmish, Field, Grand),
-// each with its board and points, the one chosen named under them with its
-// rounds; its default the flow's mission (?mission=, else classic; then the
-// last chosen). Grand is offered on a phone too (open question 16), with a
+// (F8b) The battle size: a line of the missions (Skirmish, Field, Grand,
+// (F19a) and the Powder keg, a Skirmish of its own), each with its board
+// and points, the one chosen named under them with its rounds (and what a
+// mission of its own is about); its default the flow's mission
+// (?mission=, else classic; then the last chosen). Grand is offered on a phone too (open question 16), with a
 // note that it is best on a larger screen. The sizes come from the page
 // (app/boot.js reads the missions), so this panel imports no rules data.
 // The size's sets are the terrain line's options.
+//
+// (F16) The fog line, against the AI only (never hotseat: one screen; nor a
+// watched battle): a toggle for the courtesy fog of war (your units show
+// you only what they see of the other army; app/flow.js, present/fog.js),
+// and a note that the AI sees everything (core/ai reads the match whole).
+// Its default the page's (?fog, else the last choice, which the page keeps
+// in localStorage: app/boot.js).
 import { RacePicker } from './races.js'
 
 const $ = (s) => document.querySelector(s)
@@ -27,8 +35,19 @@ export const TERRAINS = Object.freeze({
   fortified: { name: 'Fortified', what: 'ramparts, bastions, towers and a keep to climb' },
   // (F8b's set, the larger tables')
   open: { name: 'Open', what: 'ruins, woods, hedges and walls, spread over the larger table' },
+  // (F19a's set, the keg mission's only one)
+  keg: { name: 'Powder keg', what: 'ruins, woods, hedges and walls round a powder keg' },
 })
 export const terrainName = (set) => TERRAINS[set]?.name ?? set
+
+// (F19a) What a mission that is more than a battle's size is called on the
+// size line and in the lobby, and what it is about (a mission without a
+// line here goes by its list's size: Skirmish, Field, Grand)
+export const MISSION_NAMES = Object.freeze({
+  keg: { name: 'Powder keg', what: 'Four objectives round a powder keg at the centre: hold them while it stands, and whoever sets it off (a template, acid or the Brute) catches everyone near it.' },
+})
+// a mission's name on the size line: its own, else its list's size
+export const sizeName = (mission, m) => MISSION_NAMES[mission]?.name ?? m.list?.size ?? mission
 
 // a phone's screen: narrow, or a coarse pointer on a small one
 export const phoneScreen = () => innerWidth < 700 || (!!globalThis.matchMedia?.('(pointer: coarse)').matches && Math.min(innerWidth, innerHeight) < 600)
@@ -43,13 +62,16 @@ export class SetupScreen {
     this.on = null
     // (F8b) the size line, made as the panel first shows it
     this.sizeRow = null
+    // (F16) the fog line, likewise
+    this.fogRow = null
   }
 
   get up() {
     return !this.root.classList.contains('hidden')
   }
 
-  // { pick(seat, race), terrain(set), size(mission), start(), back() }
+  // { pick(seat, race), terrain(set), size(mission), (F16) fog(on), start(),
+  // back() }
   wire(on) {
     this.on = on
     $('#setupStart').onclick = () => on.start()
@@ -58,8 +80,9 @@ export class SetupScreen {
 
   // { title, seats: [{ who, race, color }], mirror, (F8b) sizes: [{
   // mission, name, W, H, points, rounds }], size (the chosen one's mission),
-  // (F7a) terrain: { sets, pick } (the mission's sets and the one picked) }
-  show({ title, seats, mirror, sizes = [], size = null, terrain = null }) {
+  // (F7a) terrain: { sets, pick } (the mission's sets and the one picked),
+  // (F16) fog: { offered, on } (the mode takes it, and the toggle's state) }
+  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null }) {
     // (the pickers made once, as the panel first opens: nothing is drawn
     // before)
     this.pickers ??= [0, 1].map((s) => new RacePicker({ root: $(`#setup .setupSeat[data-seat="${s}"] .picker`), diorama: this.diorama(), pick: (race) => this.on.pick(s, race) }))
@@ -71,7 +94,36 @@ export class SetupScreen {
     this.sizes(sizes, size)
     $('#setupMirror').classList.toggle('hidden', !mirror)
     this.terrainLine(terrain)
+    this.fogLine(fog)
     this.root.classList.remove('hidden')
+  }
+
+  // (F16) The fog line: shown for a mode that takes it (against the AI), a
+  // toggle and what it means.
+  fogLine(fog) {
+    if (!this.fogRow) {
+      const row = (this.fogRow = document.createElement('div'))
+      row.id = 'setupFog'
+      row.className = 'fogLine'
+      const lbl = document.createElement('span')
+      lbl.className = 'lbl'
+      lbl.textContent = 'Fog of war'
+      const btn = document.createElement('button')
+      btn.id = 'setupFogToggle'
+      btn.setAttribute('role', 'switch')
+      btn.onclick = () => this.on.fog?.(btn.getAttribute('aria-checked') !== 'true')
+      const note = document.createElement('span')
+      note.className = 'what small'
+      note.textContent = 'You see only what your units see of the other army, and the scenery as you last saw it. The AI sees everything.'
+      row.append(lbl, btn, note)
+      $('#setupMirror').before(row)
+      this.fogBtn = btn
+    }
+    this.fogRow.classList.toggle('hidden', !fog?.offered)
+    const btn = this.fogBtn, on = !!fog?.on
+    btn.textContent = on ? 'On' : 'Off'
+    btn.classList.toggle('on', on)
+    btn.setAttribute('aria-checked', String(on))
   }
 
   // (F7a) the terrain line: a button per set the mission is fought on, the
@@ -127,7 +179,8 @@ export class SetupScreen {
     this.sizeRow.replaceChildren(lbl, ...buttons)
     const at = sizes.find((s) => s.mission === size) ?? sizes[0]
     const big = phone && at.W * at.H > 60 * 40
-    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${big ? ' Best on a larger screen.' : ''}`
+    const what = MISSION_NAMES[at.mission]?.what
+    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
   }
 
   hide() {

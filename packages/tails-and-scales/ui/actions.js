@@ -1,5 +1,6 @@
 // The action buttons (DESIGN §1.3, §2.11): End (Begin battle in the
-// deployment), Auto, Advance and Shortest move; (F10c) ▶ Go and Orders N. Each press is an intent the
+// deployment), Auto, Advance and Shortest move; (F10c) ▶ Go and Orders N;
+// (F12) ↶ Undo (app/boot.js wires it: the flow's). Each press is an intent the
 // local human turns into a command (input/human.js), and each button shows,
 // reads and goes disabled as the HUD model says (present/hud-model.js: a
 // slice's show or label null leaves it as it was). (Each button's handler
@@ -22,6 +23,13 @@ export class Actions {
     }
     ords.style.display = m.ordersN ? '' : 'none'
     ords.textContent = `Orders ${m.ordersN}`
+    // (F12) ↶ Undo: up beside End in a game played here alone, enabled
+    // while there is something of the seat's to take back
+    if (m.undo) {
+      const undo = $('#undo')
+      undo.style.display = m.undo.show ? '' : 'none'
+      undo.disabled = m.undo.busy
+    }
     $('#closestSpot').style.display = m.shortest.show ? '' : 'none'
     if (m.end.label !== null) end.textContent = m.end.label
     end.disabled = m.end.busy

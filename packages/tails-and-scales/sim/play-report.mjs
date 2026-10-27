@@ -25,6 +25,15 @@
 // fights on one), read off the match as it is folded (sim/height-probe.mjs:
 // never the trace, which has no floors).
 //
+// F7b's row (at F17, which lobs from height; DESIGN §4.2.9's thresholds),
+// over the same battles as F7a's: a shooter fires from a deck in ≥ 50% of
+// battles (a volley, a template or a spell, its shooter's floor above the
+// nav's STEP as the events put it; sim/height-probe.mjs's deckShots).
+// Beside it, whether the AI climbs to shoot (shots from a deck the shooter
+// walked onto in the battle) and how often the lob decides (shots past the
+// weapon's printed range, which only a lob from height reaches; shots up at
+// a raised target).
+//
 // F10b's row (at F8b, on the Grand boards): 4 Grand battles with one army
 // on `pilot` every phase; that army reaches melee by round 3 in ≥ 3 of 4.
 // The pilot army's seat is the human's, and every phase it is handed a
@@ -46,8 +55,18 @@
 // pressing End (no pilot) must miss the threshold, or the row can't tell
 // a pilot that charges from one that doesn't.
 //
+// F19a's row, over the `keg/` AI pairs (the keg mission: a Skirmish round a
+// powder keg, its objectives clustered round it): the keg goes off in
+// ≥ 50% of battles (a `keg.fuse` among the battle's events). Beside it, per
+// battle, the round it went off in, who set it off and how (the template
+// that broke it: its thrower's weapon, an eruption's thorns, a walk that
+// smashed it, a keg before it in a chain), and the models its blast slew,
+// the setter-off's enemies' and its own side's. With no keg/ AI pair in
+// the corpus (before F19a's corpus commit) it sweeps 12 keg battles, seeded
+// as corpus-add's candidates are, the races swapping seats.
+//
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f10b; comma-separated for more)
+//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f10b, f19a; comma-separated for more)
 //   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's row: a seeded sweep of fortified AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
@@ -67,7 +86,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f10b']
+const ROWS = ['f7a', 'f7b', 'f10b', 'f19a']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -88,9 +107,16 @@ const { MISSIONS } = await import(at('data/mission.js'))
 const pct = (x, y) => (y ? `${Math.round((100 * x) / y)}%` : '-')
 
 // ── F7a: height played ──────────────────────────────────────────────────────
-// { checks, failed }, or null when the code has no fortified set
-async function f7a() {
+// The fortified battles F7a's and F7b's rows judge, each folded once with
+// the height probe: { what, rows, failed }, or null when the code has no
+// fortified set
+let folded = null
+async function fortFolds() {
   if (!Object.hasOwn(SETS, 'fortified')) return null
+  folded ??= foldFort()
+  return folded
+}
+async function foldFort() {
   // (sim/height-probe.mjs is F7a's, beside this file)
   const { heightProbe } = await import(pathToFileURL(fileURLToPath(new URL('./height-probe.mjs', import.meta.url))).href)
   const match = await loadMatch(dir)
@@ -104,8 +130,6 @@ async function f7a() {
   })
   const battles = SWEEP !== null || !pairs.length ? sweep(SWEEP ?? 24) : pairs
   const what = SWEEP !== null || !pairs.length ? `a sweep of ${battles.length} fortified AI battles (no fort/ AI pair is in the corpus${SWEEP !== null ? ', or --sweep' : ''})` : `the ${battles.length} fort/ AI pairs`
-  console.log(`\nF7a's row: ${what}`)
-
   const rows = [], failed = []
   for (const b of battles) {
     const probe = heightProbe(core.q)
@@ -116,9 +140,18 @@ async function f7a() {
       continue
     }
     rows.push({ id: b.id, ...p, rounds: res.over?.round })
-    console.log(`  ${b.id.padEnd(28)} on a deck by a move at the end of rounds ${p.movedRounds.join(',') || '-'}${p.movedBy3 ? ' (by 3)' : ''} (any unit: ${p.deckRounds.join(',') || '-'}); deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
   }
-  for (const f of failed) console.log(`  FAILED ${f}`)
+  return { what, rows, failed }
+}
+
+// { checks, failed }, or null when the code has no fortified set
+async function f7a() {
+  const f = await fortFolds()
+  if (!f) return null
+  const { what, rows, failed } = f
+  console.log(`\nF7a's row: ${what}`)
+  for (const p of rows) console.log(`  ${p.id.padEnd(28)} on a deck by a move at the end of rounds ${p.movedRounds.join(',') || '-'}${p.movedBy3 ? ' (by 3)' : ''} (any unit: ${p.deckRounds.join(',') || '-'}); deployed on decks ${p.deployed}; ladders ${p.climbs} (${p.up} up); onto a deck ${p.ontoDeck}; deck fights ${p.deckFights}${p.keep ? `; the keep, held at ${p.keepHeld} round end${p.keepHeld === 1 ? '' : 's'}` : ''}`)
+  for (const x of failed) console.log(`  FAILED ${x}`)
 
   const n = rows.length
   const deck = rows.filter((r) => r.movedBy3).length, anyDeck = rows.filter((r) => r.deckBy3).length
@@ -128,6 +161,24 @@ async function f7a() {
   const checks = [
     { name: 'a unit on a deck by a move of its own by the end of round 3', ok: n > 0 && deck * 2 >= n, got: `${deck} of ${n} battles (${pct(deck, n)}; counting the units deployed on decks, ${anyDeck})`, want: '≥ 50%' },
     { name: 'the keep\'s objective held from its top', ok: keeps.length > 0 && held * 6 >= keeps.length, got: keeps.length ? `${held} of the ${keeps.length} battles the keep stands in (${pct(held, keeps.length)})` : 'no battle has the keep, so this cannot be judged', want: '≥ 1 battle of 6' },
+  ]
+  return { checks, failed }
+}
+
+// ── F7b: shooting from the decks (judged from F17, which lobs from them) ────
+// { checks, failed }, or null when the code has no fortified set
+async function f7b() {
+  const f = await fortFolds()
+  if (!f) return null
+  const { what, rows, failed } = f
+  console.log(`\nF7b's row: ${what}`)
+  for (const p of rows) console.log(`  ${p.id.padEnd(28)} shots ${p.shots}: from a deck ${p.deckShots} (${p.climbedShots} by a shooter that climbed to it), past the printed range ${p.lobs}, up at a raised target ${p.upShots}`)
+  for (const x of failed) console.log(`  FAILED ${x}`)
+  const n = rows.length, fired = rows.filter((r) => r.deckShots > 0).length
+  const sum = (k) => rows.reduce((s, r) => s + r[k], 0)
+  console.log(`\n  ${n} battles: ${sum('shots')} shots, ${sum('deckShots')} from a deck in ${fired} battles, ${sum('climbedShots')} by a shooter that climbed to its deck in ${rows.filter((r) => r.climbedShots).length}, ${sum('lobs')} past the printed range in ${rows.filter((r) => r.lobs).length}, ${sum('upShots')} up at a raised target`)
+  const checks = [
+    { name: 'a shooter fires from a deck', ok: n > 0 && fired * 2 >= n, got: `${fired} of ${n} battles (${pct(fired, n)})`, want: '≥ 50%' },
   ]
   return { checks, failed }
 }
@@ -234,12 +285,96 @@ async function f10b() {
   return { checks, failed }
 }
 
+// ── F19a: the powder keg goes off ───────────────────────────────────────────
+// What a battle did with its keg, read off the events as they are folded
+// (foldJob's probe: an AI battle's arrive at once, after its last line):
+// each keg.fuse, the round it came in (the last phase.start's), who set it
+// off (the walk whose smashes broke it, else the blast that did: a
+// template's thrower, an eruption's caster, or the keg before it in the
+// chain, whose setter it shares) and the models its blast slew (its
+// unit.slain events up to the next fuse, throw, eruption or action's end),
+// by side against the setter's.
+function kegProbe() {
+  const kegs = []
+  return {
+    trace() {},
+    events(G, events) {
+      let round = 1, actor = null, how = null
+      const setterOf = new Map()
+      const side = (id) => G.units.find((u) => u.id === id)?.side
+      const short = (id) => G.units.find((u) => u.id === id)?.t.short ?? `unit ${id}`
+      for (let i = 0; i < events.length; i++) {
+        const e = events[i]
+        if (e.t === 'phase.start') round = e.round
+        if (e.t === 'blast.fire') (actor = e.u), (how = G.units.find((u) => u.id === e.u)?.t.ranged?.name ?? 'a template')
+        if (e.t === 'spell.thorns') (actor = e.u), (how = 'its Thornburst')
+        if (e.t === 'unit.move') {
+          for (const sm of e.smashes ?? []) for (const x of sm.ev) if (x.t === 'terrain.destroy' && x.kind === 'keg') setterOf.set(x.id, { u: e.u, how: 'its walk' })
+        }
+        if (e.t === 'terrain.destroy' && e.kind === 'keg' && !setterOf.has(e.id)) setterOf.set(e.id, { u: actor, how })
+        if (e.t === 'keg.fuse') {
+          const who = setterOf.get(e.id) ?? { u: actor, how: 'unknown' }
+          const k = { round, u: who.u, by: who.u === null || who.u === undefined ? '?' : short(who.u), how: kegs.length && who.how === 'its Powder keg' ? 'a chain' : who.how, foes: 0, own: 0 }
+          // (a keg a keg's blast broke: the setter of that keg, in a chain)
+          actor = who.u
+          how = 'a chain'
+          for (let j = i + 1; j < events.length; j++) {
+            const x = events[j]
+            if (x.t === 'keg.fuse' || x.t === 'blast.fire' || x.t === 'spell.thorns' || x.t === 'act') break
+            if (x.t === 'unit.slain') (side(x.u) === side(who.u) ? k.own++ : k.foes++)
+          }
+          kegs.push(k)
+        }
+      }
+    },
+    result: () => kegs,
+  }
+}
+async function foldKeg() {
+  const match = await loadMatch(dir)
+  const pairs = loadCorpus().items.filter((it) => it.set === 'keg' && it.kind === 'ai')
+  const sweep = (n) => Array.from({ length: n }, (_, i) => {
+    const r = mulberry32(Number(a.seed ?? 7000) + i + 1)
+    const races = i % 2 ? ['serpent', 'squirrel'] : ['squirrel', 'serpent']
+    const setup = { board: 1 + Math.floor(r() * 99999), dice: 1 + Math.floor(r() * 999999), mission: 'keg', seats: races.map((race) => ({ race, ctrl: 'ai' })) }
+    return { id: `sweep-${setup.board}-${setup.dice}`, job: { setup, entries: [] } }
+  })
+  const battles = SWEEP !== null || !pairs.length ? sweep(SWEEP ?? 12) : pairs
+  const what = SWEEP !== null || !pairs.length ? `a sweep of ${battles.length} keg battles (no keg/ AI pair is in the corpus${SWEEP !== null ? ', or --sweep' : ''})` : `the ${battles.length} keg/ AI pairs`
+  const rows = [], failed = []
+  for (const b of battles) {
+    const probe = kegProbe()
+    const res = foldJob(core, b.job, { match, probe })
+    if (res.error) {
+      failed.push(`${b.id}: ${res.error.split('\n')[0]}`)
+      continue
+    }
+    rows.push({ id: b.id, kegs: probe.result(), rounds: res.over?.round })
+  }
+  return { what, rows, failed }
+}
+// { checks, failed }, or null when the code has no keg mission
+async function f19a() {
+  if (!Object.hasOwn(MISSIONS, 'keg')) return null
+  const { what, rows, failed } = await foldKeg()
+  console.log(`\nF19a's row: ${what}`)
+  for (const r of rows) console.log(`  ${r.id.padEnd(28)} ${r.kegs.length ? r.kegs.map((k) => `the keg off in round ${k.round}, set off by the ${k.by} (${k.how}): ${k.foes} of the enemy slain, ${k.own} of its own`).join('; ') : 'the keg never went off'}`)
+  for (const x of failed) console.log(`  FAILED ${x}`)
+  const n = rows.length, off = rows.filter((r) => r.kegs.length).length
+  const all = rows.flatMap((r) => r.kegs)
+  console.log(`\n  ${n} battles: the keg off in ${off}, ${all.filter((k) => /walk/.test(k.how)).length} by a walk; ${all.reduce((s, k) => s + k.foes, 0)} enemy models and ${all.reduce((s, k) => s + k.own, 0)} of the setters' own slain by it`)
+  const checks = [
+    { name: 'the powder keg goes off', ok: n > 0 && off * 2 >= n, got: `${off} of ${n} battles (${pct(off, n)})`, want: '≥ 50%' },
+  ]
+  return { checks, failed }
+}
+
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : await f10b()
+  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f19a' ? await f19a() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7a' ? "F7a's row: not judged: this code has no fortified set" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
     continue
   }
   judged++

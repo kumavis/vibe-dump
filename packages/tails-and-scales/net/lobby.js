@@ -2,7 +2,7 @@
 // start, a last-writer-wins map every peer edits, which the fold never
 // reads (the start copies what it needs):
 //
-//   lobby: { host, board, mission, terrain, rounds, overtime,
+//   lobby: { host, board, mission, terrain, rounds, overtime, fog,
 //            seats: { s0: { ctrl, dev, name, race, ready, nonce }, s1: … },
 //            next }
 //
@@ -13,7 +13,12 @@
 // seats); seats: a claimed seat's record, its own device's to change (a
 // change of race or name un-readies it), keyed s0 and s1 so two devices
 // claiming one seat at once leave one claim standing everywhere (the
-// loser sees another device in it: "seat taken"); next: the rematch's
+// loser sees another device in it: "seat taken"); (F16) fog: the courtesy
+// fog of war, the host's to turn on or off beside the battle (a change
+// un-readies both seats, so both Readys are the agreement), which no start
+// carries (the fold never hears of it: each page reads it from the lobby
+// as its battle begins, app/online.js, and hides in its own view what its
+// seat can't see); next: the rematch's
 // document id, once someone asks for one. Plain fields of a map, so F8a's
 // `mission` joined (and F11b's `army` will) without a schema change.
 //
@@ -30,8 +35,8 @@ export const SEAT_KEYS = Object.freeze(['s0', 's1'])
 // A new match document: the lobby as its host makes it, the host in seat 0
 // (`me`: its seat record, nonce '' as the host's always is), and an empty
 // log (the host's Session writes its `open` next).
-export function lobbyDoc({ host, board, mission = 'classic', terrain = 'classic', rounds, overtime = 'vote', me }) {
-  return { ...matchDoc(), lobby: { host, board, mission, terrain, rounds, overtime, seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
+export function lobbyDoc({ host, board, mission = 'classic', terrain = 'classic', rounds, overtime = 'vote', fog = false, me }) {
+  return { ...matchDoc(), lobby: { host, board, mission, terrain, rounds, overtime, fog: fog === true, seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
 }
 
 // the lobby of a document as it stands, read safely (a peer may have
@@ -48,6 +53,9 @@ export function lobbyOf(doc) {
     terrain: L?.terrain ?? null,
     rounds: Number.isInteger(L?.rounds) ? L.rounds : null,
     overtime: L?.overtime ?? 'vote',
+    // ((F16) off unless the host turned it on: a lobby written before F16
+    // has none)
+    fog: L?.fog === true,
     seats: SEAT_KEYS.map((k) => rec(L?.seats?.[k])),
     next: typeof L?.next === 'string' ? L.next : null,
   }
@@ -114,8 +122,8 @@ export function editSeat(handle, i, dev, fields) {
   return true
 }
 
-// The host changes the battle (the board, the mission, (F7a) the terrain):
-// both seats un-readied. A new mission lets the old one's terrain and rounds
+// The host changes the battle (the board, the mission, (F7a) the terrain,
+// (F16) the fog): both seats un-readied. A new mission lets the old one's terrain and rounds
 // go: the start's setup takes the new mission's first set and its rounds,
 // unless the same change names a terrain (one of the new mission's sets:
 // the lobby screen offers no other, and the start's check refuses any).
@@ -132,6 +140,7 @@ export function editBattle(handle, fields) {
       for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army
     }
     if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain
+    if (fields.fog !== undefined) d.lobby.fog = fields.fog === true
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })
 }

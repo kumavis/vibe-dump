@@ -22,6 +22,8 @@
 // decides which applies, sends, and draws (the overlay, view/overlay.js;
 // the tooltip and the card, ui/). (F10a) A group, two or more units picked
 // up together (input/group.js), takes a click, a hover and a key first.
+// (F13) A finger aims as the mouse hovers (input/aim.js: a long press, or
+// 👆 Aim), and its lift is the click.
 import { CHARGE_RANGE } from '../core/rules.js'
 import { phaseKey } from '../core/queries.js'
 import { sfx, unlock } from '../view/sfx.js'
@@ -30,6 +32,7 @@ import { spotAt, placeAt } from './tools/deploy.js'
 import * as move from './tools/move.js'
 import * as shoot from './tools/shoot.js'
 import * as charge from './tools/charge.js'
+import { Aim } from './aim.js'
 
 export class Human {
   // `flow` (app/flow.js): the battle's Session and match, the player, and
@@ -48,6 +51,12 @@ export class Human {
     this.mouse = null
     this.pickShown = null
     this.downAt = null
+    // (F13) a move previewed and sent as far as it goes that way, beyond
+    // the unit's reach: the pointer's own (Alt held on the mouse, a finger
+    // aiming)
+    this.far = false
+    // (F13) touch aim: the long press's drag and 👆 Aim (input/aim.js)
+    this.aim = new Aim(this)
     // (F10a) the group input (input/group.js), set by app/boot.js
     this.group = null
     // (F10c) the standing orders (input/standing.js), set by app/boot.js
@@ -96,9 +105,10 @@ export class Human {
   // what the HUD model reads of the input (present/hud-model.js)
   state() {
     // ((F10c) and the standing orders: those acting now, those an order
-    // covers in this phase, how many the seat has)
+    // covers in this phase, how many the seat has; (F13) and touch aim's
+    // toggles and drag)
     const st = this.standing
-    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.living(this.localSeat()).size : 0, counting: !!st?.counting }
+    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.living(this.localSeat()).size : 0, counting: !!st?.counting, aim: this.aim.state() }
   }
 
   // ── Commands ──────────────────────────────────────────────────────────────
@@ -264,7 +274,8 @@ export class Human {
 
   // ── The pointer and the keys ──────────────────────────────────────────────
   // on the table's canvas: a click (a press and release that barely moved)
-  // picks, the pointer hovers
+  // picks, the pointer hovers; (F13) a finger aiming (input/aim.js) hovers
+  // while it is down, and its lift is the click
   listen(dom) {
     // (F10a) the pointers down now: a second one makes the press a gesture
     // (two fingers on the camera), never a click when one is lifted
@@ -276,12 +287,16 @@ export class Human {
       gesture ||= pressed.size > 1
       this.downAt = { x: e.clientX, y: e.clientY, b: e.button }
       // (F10a) Shift (or Select mode) drags a box instead of the camera
-      this.group?.down(e, pressed.size > 1)
+      const took = this.group?.down(e, pressed.size > 1)
+      // (F13) a second finger calls an aim off; with 👆 Aim on, a finger
+      // aims from the start
+      this.aim.down(e, pressed.size > 1, !!took)
     })
     dom.addEventListener('pointercancel', (e) => {
       pressed.delete(e.pointerId)
       if (!pressed.size) gesture = false
       this.group?.abort(e)
+      this.aim.cancel(e)
     })
     dom.addEventListener('pointerup', (e) => {
       pressed.delete(e.pointerId)
@@ -291,6 +306,12 @@ export class Human {
       // line this pointer drew ends, whichever button lifts
       const held = this.group?.letGo(e)
       const drew = this.group?.up(e)
+      // (F13) an aim's finger lifted: what a click there does, however far
+      // it slid (but a long press on one of the seat's own units took it)
+      if (this.aim.drag?.id === e.pointerId) {
+        this.downAt = null
+        return void this.aim.lift(e, !held)
+      }
       if (!this.downAt) return
       const moved = Math.hypot(e.clientX - this.downAt.x, e.clientY - this.downAt.y)
       // (F10a) a right click (no drag: a drag pans) drops a pinned formation
@@ -313,9 +334,15 @@ export class Human {
     dom.addEventListener('pointermove', (e) => {
       this.mouse = { x: e.clientX, y: e.clientY }
       if (this.group?.move(e)) return
+      // (F13) a finger aiming: its preview, under it
+      if (this.aim.move(e)) return
+      // ((F13) Alt held: a move beyond the unit's reach as far as it goes)
+      this.far = e.altKey
       this.hoverPick = this.picker.pick(e)
       this.pointed()
     })
+    // (F13) 👆 Aim, beside ▭ Select (touch)
+    document.querySelector('#aimMode')?.addEventListener('click', () => this.aim.toggle())
     // Escape puts down the unit picked up (but a charge's end must be
     // picked); the camera rig keeps the panning keys (view/camera.js);
     // (F10a) a group's keys first (input/group.js)
@@ -330,8 +357,10 @@ export class Human {
   // A click on the table: a unit, or the ground under the pointer (or both).
   // On a seat's own turn it selects, moves, shoots or charges; while a charge
   // waits for its end it picks the spot; in the deployment it places; any
-  // other time it shows the unit's card.
-  click({ unit, ground }, e = null) {
+  // other time it shows the unit's card. ((F13) `far`, Alt held or a
+  // finger's aim lifted: a move beyond the unit's reach goes as far as it
+  // goes that way, input/tools/move.js's aimCell.)
+  click({ unit, ground }, e = null, far = !!e?.altKey) {
     this.tooltip.hide()
     // (F10a) a group's click first: Shift-click picks, and two or more
     // picked act together
@@ -362,7 +391,7 @@ export class Human {
       return
     }
     if (ph === 'move' && sel && ground) {
-      const i = move.cellAt((fn) => this.ask(fn), this.reach, ground)
+      const i = move.cellAt((fn) => this.ask(fn), this.reach, ground, far)
       if (i >= 0) this.moveTo(sel, i)
       return
     }
@@ -429,7 +458,7 @@ export class Human {
         this.reach = move.planOf((fn) => this.ask(fn), u)
         overlay.reach(this.reach, G.nav)
       }
-      if (ph === 'shoot' && u.t.ranged) this.showRange(u, u.t.ranged.range)
+      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u)))
       if (ph === 'charge') this.showRange(u, CHARGE_RANGE)
     }
     this.card.show(u)
@@ -445,6 +474,8 @@ export class Human {
   // its selected unit would do there (the path and inches of a move, a
   // shot's odds, a charge's), or where a charge would end. Asked with the
   // dice locked; while the player is behind, the units are as shown.
+  // ((F13) `far` (Alt held, a finger aiming): a move as far as it goes
+  // that way, over an enemy too, as the click then takes it.)
   pointed() {
     const overlay = this.view.overlay, G = this.G
     this.tooltip.hide()
@@ -490,7 +521,7 @@ export class Human {
     } else if (this.myTurn() && sel) {
       text = this.ask((G, q) => {
         const ph = q.phaseKey(G)
-        if (ph === 'move' && this.reach && h.ground && !h.unit) return move.preview(G, q, this.reach, sel, h.ground, path)
+        if (ph === 'move' && this.reach && h.ground && (!h.unit || (this.far && h.unit.side !== sel.side))) return move.preview(G, q, this.reach, sel, h.ground, path, this.far)
         if (ph === 'shoot' && h.unit && h.unit.side !== sel.side) return shoot.preview(G, q, sel, h.unit)
         if (ph === 'charge' && h.unit && h.unit.side !== sel.side) return charge.preview(G, q, sel, h.unit)
         return ''
