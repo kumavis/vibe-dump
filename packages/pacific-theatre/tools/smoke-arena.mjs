@@ -24,6 +24,7 @@
 //
 //   node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs
 //   node tools/smoke-arena.mjs [--headless-only] [--browser-only] [--seeds 20] [--scenario <file> ...]
+//                              [--only <id> ...] [--skip-balance] [--skip-player]
 //   PORT=5431 node tools/smoke-arena.mjs ...     the dev server's port (another worktree's may hold 5297)
 //
 // The scenarios: the fixture (test-data/wargames/test-box.json), every
@@ -43,6 +44,7 @@ const args = new Set(argv)
 const PORT = Number(process.env.PORT || 5297)
 const SEEDS = argv.includes('--seeds') ? Number(argv[argv.indexOf('--seeds') + 1]) : 20
 const extra = argv.flatMap((a, i) => (a === '--scenario' ? [argv[i + 1]] : []))
+const only = argv.flatMap((a, i) => (a === '--only' ? [argv[i + 1]] : [])) // scenario ids to run (all when none)
 const shots = path.join(root, 'tools/shots')
 fs.mkdirSync(shots, { recursive: true })
 const J = (p) => JSON.parse(fs.readFileSync(p, 'utf8'))
@@ -84,6 +86,7 @@ else console.log('no test-data/: run node tools/fake-data.mjs && node tools/fake
 const pub = path.join(root, 'public/data/wargames')
 if (fs.existsSync(pub)) for (const f of fs.readdirSync(pub).filter((f) => f.endsWith('.json')).sort()) scenarios.push({ file: path.join(pub, f), data: path.join(root, 'public/data') })
 for (const f of extra) scenarios.push({ file: path.resolve(f), data: path.join(root, 'public/data') })
+if (only.length) for (let k = scenarios.length - 1; k >= 0; k--) if (!only.includes(J(scenarios[k].file).id) && !only.includes(path.basename(scenarios[k].file, '.json'))) scenarios.splice(k, 1)
 
 const boxCache = new Map()
 function loadScenario({ file, data }) {
@@ -122,7 +125,7 @@ if (doHeadless) {
   // Part 1: the balance
   // =========================================================================================================
   console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player:`)
-  for (const sc of scenarios) {
+  for (const sc of args.has('--skip-balance') ? [] : scenarios) {
     const { scenario, kits, box } = loadScenario(sc)
     if (layout) {
       await check(`${scenario.id}: the start as tools/check/wargames.mjs layout() lays it`, () => {
@@ -201,7 +204,7 @@ if (doHeadless) {
   // Part 2: a scripted player
   // =========================================================================================================
   console.log('a scripted player (ROUND-3 §7):')
-  for (const sc of scenarios) {
+  for (const sc of args.has('--skip-player') ? [] : scenarios) {
     const { scenario, kits, box } = loadScenario(sc)
     for (const side of ['jp', 'us']) {
       await check(`${scenario.id} as ${side}: possess, fire, hop, fly, be lost, respawn, release, a forced end`, () => {
@@ -233,11 +236,22 @@ if (doHeadless) {
               const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
               if (d < bd) [bd, best] = [d, j]
             }
-            if (best >= 0) {
+            // a fighter goes for the nearest of the other side's aircraft within 3 km, anything else for the nearest ship
+            let foe = -1
+            let fd = Infinity
+            if (ar._X[i].model.type === 'fighter') for (const j of ar._air) if (s.alive[j] === 1 && ar.slots[j].side !== side) {
+              const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 1] - s.pos[3 * i + 1], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+              if (d < fd) [fd, foe] = [d, j]
+            }
+            if (foe >= 0 && fd < 3000) {
+              p.input.mode = 'aim'
+              p.input.aimDir = [s.pos[3 * foe] + s.vel[3 * foe] - s.pos[3 * i], s.pos[3 * foe + 1] - s.pos[3 * i + 1], s.pos[3 * foe + 2] + s.vel[3 * foe + 2] - s.pos[3 * i + 2]]
+              p.input.fireHeld = fd < 700
+            } else if (best >= 0) {
               p.input.mode = 'aim'
               p.input.aimDir = [s.pos[3 * best] - s.pos[3 * i], Math.max(-200, 40 - s.pos[3 * i + 1]), s.pos[3 * best + 2] - s.pos[3 * i + 2]]
-              p.input.fireHeld = bd < 900
-              if (bd < 800 && k % 60 === 0) {
+              p.input.fireHeld = true // the trigger held from the start: a first aircraft lost on its way in has still fired
+              if (bd < 1400 && k % 60 === 0) {
                 p.input.bombCount++
                 p.input.torpedoCount++
               }
