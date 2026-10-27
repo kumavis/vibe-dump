@@ -207,8 +207,19 @@ async function check(page, say) {
   await snap('box')
 
   // Shift-click one member out and back in: the one furthest from any other
-  // figure on screen, so the click can only mean it
-  const lone = inBox.map((id) => all.find((u) => u.id === id)).map((u) => ({ u, d: Math.min(...all.filter((o) => o.on && o.id !== u.id).map((o) => Math.hypot(o.x - u.x, o.y - u.y))) })).sort((p, q) => q.d - p.d)[0].u
+  // figure on screen, so the click can only mean it, among those a panel of
+  // the HUD (the lead's open card, the group bar, the actions) doesn't cover
+  const uncovered = (q) => ev(({ x, y }) => ['#hud', '#hint', '#log', '#card', '#tray', '#actions', '#tools', '#groupbar', '#netbadge'].every((s) => {
+    const el = document.querySelector(s)
+    if (!el || getComputedStyle(el).display === 'none' || el.classList.contains('hidden')) return true
+    const r = el.getBoundingClientRect()
+    return x < r.left - 10 || x > r.right + 10 || y < r.top - 10 || y > r.bottom + 10
+  }), q)
+  const members = inBox.map((id) => all.find((u) => u.id === id))
+  const open = []
+  for (const u of members) if (await uncovered(u)) open.push(u)
+  if (!open.length) fail(`every member of the group (${JSON.stringify(inBox)}) lies under a panel of the HUD`)
+  const lone = open.map((u) => ({ u, d: Math.min(...all.filter((o) => o.on && o.id !== u.id).map((o) => Math.hypot(o.x - u.x, o.y - u.y))) })).sort((p, q) => q.d - p.d)[0].u
   await shiftClick(lone)
   got = await ids()
   if (got.includes(lone.id) || got.length !== inBox.length - 1) fail(`Shift-click on ${lone.id} left the group ${JSON.stringify(got)}`)

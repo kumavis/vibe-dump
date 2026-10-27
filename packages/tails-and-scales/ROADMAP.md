@@ -1260,17 +1260,19 @@ answered; 35 (Escape) by the user: no change.
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll
   D3+1 hits on it, which is against it); the shot tooltip gives "wound 6+ ·
   save 4+" but not why: "S3 vs T6" beside the wound need (ui/tooltip.js's
-  oddsText), and the card the same under its weapons. (Escape at a charge's
-  end stays as it is: question 35.)
+  oddsText); the card stays as it was. (Escape at a charge's end stays as
+  it is: question 35.)
   (View only: no bump, the corpus unchanged. The shot tooltip says why
   beside each need: "wound 6+ (S3 vs T6)", a poison that lowers the need
   named ("S2 vs T3, poison 4+"), and "save 4+ (Sv4+ AP0)", with ", cover"
-  where it helps (`woundWhy`, `saveWhy` in ui/tooltip.js). The card, under
-  each weapon with a strength, what it wounds on against every toughness
-  the races field, runs of one need together ("wounds T3 4+ · T4–5 5+ ·
-  T6 6+"; the Brute's fists "T3 2+ · T4–6 3+"): the same reason for every
-  target at once, since the card knows no target; the races screen's
-  showcase shows it too. hud-check holds no tooltip text (its rows are the
+  where it helps (`woundWhy`, `saveWhy` in ui/tooltip.js). A line under
+  each of the card's weapons with its need against every toughness
+  ("wounds T3 4+ · T4–5 5+ · T6 6+") was built and taken out again at the
+  wave's integration: it stood the card two lines taller, and on a
+  1280×800 screen the lead's open card then covered a figure the group
+  input's Shift-click lands on (input-check's; the check now picks a member
+  no panel covers). The card knows no target, so the reason stays the
+  tooltip's. hud-check holds no tooltip text (its rows are the
   HUD's buttons, the charge's spots and the end screen), so nothing there
   needed porting; play-check's shot and unit hovers still tell the two
   apart. DESIGN's F17 notes, the fix's paragraph.)
