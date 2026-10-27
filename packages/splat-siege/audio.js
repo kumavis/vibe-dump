@@ -6,6 +6,7 @@ export class Sfx {
     this.master = null
     this.noiseBuf = null
     this.blower = null
+    this.wind = null
   }
 
   unlock() {
@@ -22,6 +23,35 @@ export class Sfx {
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1
     }
     if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {})
+    if (!this.wind) this.ambience()
+  }
+
+  // A breeze: soft low-passed noise that swells and fades on its own.
+  ambience() {
+    const t = this.ctx.currentTime
+    const src = this.noise()
+    const lp = this.ctx.createBiquadFilter()
+    lp.type = 'lowpass'
+    lp.frequency.value = 380
+    lp.Q.value = 0.4
+    const lfo = this.ctx.createOscillator()
+    lfo.frequency.value = 0.09
+    const lfoGain = this.ctx.createGain()
+    lfoGain.gain.value = 220
+    lfo.connect(lfoGain).connect(lp.frequency)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.07, t + 3)
+    const swell = this.ctx.createOscillator()
+    swell.frequency.value = 0.06
+    const swellGain = this.ctx.createGain()
+    swellGain.gain.value = 0.03
+    swell.connect(swellGain).connect(g.gain)
+    src.connect(lp).connect(g).connect(this.master)
+    src.start(t)
+    lfo.start(t)
+    swell.start(t)
+    this.wind = { src, lfo, swell }
   }
 
   noise() {

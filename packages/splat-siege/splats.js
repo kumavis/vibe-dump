@@ -28,9 +28,22 @@ uniform vec2 uViewport;
 uniform vec4 uFlash[4];
 uniform vec3 uFogColor;
 uniform float uFogDensity;
+uniform float uTime;
+uniform vec3 uWindDir;
 in float splatIndex;
 out vec4 vColor;
 out vec2 vPos;
+
+// A gentle breeze: slow gusts rolling across the garden plus a fine flutter.
+// Smooth in space, so the strokes of one plant move together.
+vec3 breeze(vec3 p, float t, out vec3 flutter) {
+  float ph = t * 0.6 + p.x * 0.07 - p.z * 0.05;
+  float gust = 0.5 + 0.5 * sin(ph) * (0.7 + 0.3 * sin(ph * 0.37 + 1.3));
+  float f1 = sin(t * 2.1 + p.x * 1.1 + p.y * 1.7 + p.z * 0.9);
+  float f2 = sin(t * 3.3 + p.z * 1.5 - p.y * 1.1 + 0.7);
+  flutter = vec3(f1 * 0.035, f2 * 0.02, f2 * 0.03);
+  return uWindDir * (gust * 0.16) + flutter;
+}
 
 mat3 quatToMat(vec4 q) {
   float x = q.x, y = q.y, z = q.z, w = q.w;
@@ -54,6 +67,16 @@ void main() {
   vec2 h3 = unpackHalf2x16(b.w);
   vec3 scl = vec3(h0.x, h0.y, h1.x);
   vec4 q = vec4(h1.y, h2.x, h2.y, h3.x);
+  // sway weight: > 9 drifts like a cloud, > 0 takes the whole breeze,
+  // < 0 only the flutter (water glitters but does not blow away)
+  float sway = h3.y;
+  if (sway > 9.0) {
+    center += uWindDir * (sin(uTime * 0.025) * 50.0);
+  } else if (sway != 0.0) {
+    vec3 flutter;
+    vec3 w = breeze(center, uTime, flutter);
+    center += sway > 0.0 ? w * sway : flutter * -sway;
+  }
 
   vec4 cam = viewMatrix * vec4(center, 1.0);
   vec4 clipPos = projectionMatrix * cam;
@@ -128,6 +151,7 @@ export class SplatStore {
     this.scale = new Float32Array(capacity * 3)
     this.quat = new Float32Array(capacity * 4)
     this.color = new Uint8Array(capacity * 4)
+    this.sway = new Float32Array(capacity)
     this.alive = new Uint8Array(capacity)
     this.kind = new Uint8Array(capacity)
 
@@ -166,6 +190,8 @@ export class SplatStore {
       uFlash: { value: [new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4()] },
       uFogColor: { value: new THREE.Color(0.86, 0.83, 0.88) },
       uFogDensity: { value: 0.0045 },
+      uTime: { value: 0 },
+      uWindDir: { value: new THREE.Vector3(0.95, 0, 0.3).normalize() },
     }
     this.material = new THREE.ShaderMaterial({
       glslVersion: THREE.GLSL3,
@@ -187,9 +213,10 @@ export class SplatStore {
     this.mesh.renderOrder = 10
   }
 
-  add(x, y, z, sx, sy, sz, qx, qy, qz, qw, r, g, b, a, kind) {
+  add(x, y, z, sx, sy, sz, qx, qy, qz, qw, r, g, b, a, kind, sway = 0) {
     if (this.count >= this.capacity) throw new Error('SplatStore: capacity exceeded')
     const i = this.count++
+    this.sway[i] = sway
     const p = i * 3, q = i * 4
     this.pos[p] = x; this.pos[p + 1] = y; this.pos[p + 2] = z
     this.scale[p] = sx; this.scale[p + 1] = sy; this.scale[p + 2] = sz
@@ -210,7 +237,7 @@ export class SplatStore {
     u[o + 4] = toHalf(s[p]) | (toHalf(s[p + 1]) << 16)
     u[o + 5] = toHalf(s[p + 2]) | (toHalf(r[q]) << 16)
     u[o + 6] = toHalf(r[q + 1]) | (toHalf(r[q + 2]) << 16)
-    u[o + 7] = toHalf(r[q + 3])
+    u[o + 7] = toHalf(r[q + 3]) | (toHalf(this.sway[i]) << 16)
     this.dirty = true
   }
 

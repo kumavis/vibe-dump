@@ -20,6 +20,7 @@ const FIRE_INTERVAL = 0.55
 const BLOWER_RANGE = 15
 const BLOWER_TAN = Math.tan(0.42)
 const BLOWER_FORCE = 42
+const WIND = new THREE.Vector3(0.95, 0, 0.3).normalize()
 const GRAVITY = 18
 const DEBRIS_GRAVITY = 13
 const EYE = 1.6
@@ -299,6 +300,7 @@ class World {
       scale: store.scale.slice(0, sceneCount * 3),
       quat: store.quat.slice(0, sceneCount * 4),
       color: store.color.slice(0, sceneCount * 4),
+      sway: store.sway.slice(0, sceneCount),
     }
     this.initStates()
   }
@@ -322,6 +324,7 @@ class World {
     store.scale.set(snap.scale)
     store.quat.set(snap.quat)
     store.color.set(snap.color)
+    store.sway.set(snap.sway)
     store.alive.fill(1, 0, this.sceneCount)
     this.vel.fill(0)
     this.flyingCount = 0
@@ -347,6 +350,7 @@ class World {
       }
       // a chunk rather than a film: thicken the flake a little
       store.scale[p] *= 1.2; store.scale[p + 1] *= 1.2; store.scale[p + 2] = Math.max(store.scale[p + 2] * 3, 0.05)
+      store.sway[i] = 0 // loose things move for real, not in the shader
     }
     if (state[i] !== 1) {
       this.flying[this.flyingCount++] = i
@@ -427,15 +431,39 @@ class World {
     return count
   }
 
-  update(dt) {
+  // The same gusts the shader sways the plants with, felt by loose litter:
+  // now and then a petal lifts and tumbles a little way downwind.
+  breeze(dt, time) {
+    const { store, state, rng } = this
+    const gust = 0.5 + 0.5 * Math.sin(time * 0.6)
+    const pos = store.pos, kind = store.kind, alive = store.alive
+    const tries = 14
+    for (let k = 0; k < tries; k++) {
+      const i = (rng() * this.sceneCount) | 0
+      if (kind[i] !== KIND.LOOSE || state[i] !== 2 || alive[i] === 0) continue
+      const p = i * 3
+      if (pos[p + 1] > 0.12 || pondDist(pos[p], pos[p + 2]) < 1) continue
+      if (rng() > gust * gust * 0.5) continue
+      const f = 0.8 + rng() * 1.4
+      this.launch(i, WIND.x * f + (rng() - 0.5) * 0.6, 0.6 + rng() * 0.9, WIND.z * f + (rng() - 0.5) * 0.6)
+    }
+    return gust
+  }
+
+  update(dt, gust = 0) {
     const { store, grid, rng, state, vel, ang, flying } = this
     const pos = store.pos, quat = store.quat, alive = store.alive
     const drag = Math.max(0, 1 - 0.3 * dt)
+    const windX = WIND.x * 1.4 * gust * dt, windZ = WIND.z * 1.4 * gust * dt
     let w = 0
     for (let k = 0; k < this.flyingCount; k++) {
       const i = flying[k], p = i * 3, q = i * 4
       const light = store.kind[i] === KIND.LOOSE || store.kind[i] === KIND.FLORA
       vel[p + 1] -= (light ? DEBRIS_GRAVITY * 0.55 : DEBRIS_GRAVITY) * dt
+      if (light) {
+        vel[p] += windX
+        vel[p + 2] += windZ
+      }
       const dr = light ? Math.max(0, 1 - 1.4 * dt) : drag
       vel[p] *= dr; vel[p + 1] *= dr; vel[p + 2] *= dr
       const x = pos[p], y = pos[p + 1], z = pos[p + 2]
@@ -1033,8 +1061,10 @@ function boot() {
     stepIntro()
     updateRockets(dt)
     stepBlower(dt)
-    world.update(dt)
+    const gust = world.breeze(dt, simTime)
+    world.update(dt, gust)
     effects.update(dt)
+    store.uniforms.uTime.value = simTime
 
     // camera
     shake *= Math.exp(-5 * dt)

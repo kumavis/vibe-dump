@@ -127,7 +127,7 @@ class Painter {
   // One brush stroke: lies in the plane with normal n, long axis along dir
   // (projected into that plane; random if omitted). `shadeN` is the normal to
   // light it by, or null for an unlit (self-coloured) dab.
-  dab(x, y, z, n, dir, long, short, thin, rgb, alpha, kind, shadeN = n) {
+  dab(x, y, z, n, dir, long, short, thin, rgb, alpha, kind, shadeN = n, sway = 0) {
     const nn = this.n.set(n[0], n[1], n[2]).normalize()
     const q = this.q.setFromUnitVectors(this.zAxis, nn)
     let angle = this.rand(0, Math.PI * 2)
@@ -147,7 +147,7 @@ class Painter {
       const t = this.tint(shadeN[0], shadeN[1], shadeN[2])
       r *= t[0]; g *= t[1]; b *= t[2]
     }
-    return this.store.add(x, y, z, long, short, thin, q.x, q.y, q.z, q.w, to255(r), to255(g), to255(b), alpha, kind)
+    return this.store.add(x, y, z, long, short, thin, q.x, q.y, q.z, q.w, to255(r), to255(g), to255(b), alpha, kind, sway)
   }
 
   // A rectangle of strokes: origin o, unit edges u (length ul) and v (length
@@ -225,7 +225,7 @@ class Painter {
       const nx = dx / rx + this.rand(-0.3, 0.3), ny = dy / ry + this.rand(-0.3, 0.3), nz = dz / rz + this.rand(-0.3, 0.3)
       const pal2 = opt.mix && this.rng() < opt.mix[1] ? opt.mix[0] : pal
       this.dab(cx + dx * rx * t, cy + dy * ry * t, cz + dz * rz * t, [nx, ny, nz], opt.dir ?? null,
-        long * this.rand(0.7, 1.35), short * this.rand(0.7, 1.3), 0.04, this.pick(pal2), opt.alpha ?? 255, kind)
+        long * this.rand(0.7, 1.35), short * this.rand(0.7, 1.3), 0.04, this.pick(pal2), opt.alpha ?? 255, kind, [nx, ny, nz], opt.sway ?? 0)
     }
   }
 
@@ -245,7 +245,7 @@ class Painter {
           const c = this.pick(vertical ? PAL.reflect : PAL.water)
           // deeper water is bluer, the edge greener
           const k = 0.85 + 0.15 * e
-          this.dab(x, 0, z, UP, vertical ? ZP : X, vertical ? 0.5 : 0.52, 0.13, 0.03, [c[0] * k, c[1], c[2] * (2 - k)], 255, KIND.WATER, UP)
+          this.dab(x, 0, z, UP, vertical ? ZP : X, vertical ? 0.5 : 0.52, 0.13, 0.03, [c[0] * k, c[1], c[2] * (2 - k)], 255, KIND.WATER, UP, -0.5)
         } else if (onPath(x, z)) {
           this.dab(x, 0, z, UP, [1, 0, this.rand(-0.4, 0.4)], 0.42, 0.2, 0.03, this.pick(PAL.path), 255, KIND.GROUND, UP)
         } else {
@@ -295,7 +295,7 @@ class Painter {
     const h = this.rand(3.8, 5.2), lean = [this.rand(-0.12, 0.12), this.rand(-0.12, 0.12)]
     this.cylinder(x, 0, z, 0.34, h, PAL.bark, { spacing: 0.26, lean, taper: 0.4 })
     const tx = x + lean[0] * h, tz = z + lean[1] * h
-    this.blob(tx, h + 0.4, tz, 2.6, 1.1, 2.6, PAL.willow, 220, { long: 0.4, short: 0.14 })
+    this.blob(tx, h + 0.4, tz, 2.6, 1.1, 2.6, PAL.willow, 220, { long: 0.4, short: 0.14, sway: 0.25 })
     this.shadeSpots.push([x, z, 4.5])
     for (let k = 0; k < 85; k++) {
       const a = this.rand(0, Math.PI * 2), rr = this.rand(1.0, 2.7)
@@ -307,7 +307,7 @@ class Painter {
         const y = top - s * 0.33
         px += Math.cos(a) * drift; pz += Math.sin(a) * drift
         this.dab(px + this.rand(-0.06, 0.06), y, pz + this.rand(-0.06, 0.06), [Math.cos(a), 0.2, Math.sin(a)], UP,
-          0.3 * this.rand(0.8, 1.3), 0.07, 0.03, this.pick(PAL.willow), 255, KIND.FLORA)
+          0.3 * this.rand(0.8, 1.3), 0.07, 0.03, this.pick(PAL.willow), 255, KIND.FLORA, [Math.cos(a), 0.2, Math.sin(a)], 0.3 + 0.7 * (s / steps))
       }
     }
   }
@@ -315,7 +315,7 @@ class Painter {
   fruitTree(x, z) {
     const h = this.rand(1.9, 2.6)
     this.cylinder(x, 0, z, 0.17, h, PAL.bark, { spacing: 0.24, taper: 0.3 })
-    this.blob(x, h + 1.3, z, 2.0, 1.5, 2.0, PAL.canopy, 230, { mix: [PAL.blossom, 0.35], long: 0.3, short: 0.2 })
+    this.blob(x, h + 1.3, z, 2.0, 1.5, 2.0, PAL.canopy, 230, { mix: [PAL.blossom, 0.35], long: 0.3, short: 0.2, sway: 0.25 })
     this.shadeSpots.push([x, z, 3.2])
   }
 
@@ -323,7 +323,7 @@ class Painter {
     const h = this.rand(4, 5.5)
     this.cylinder(x, 0, z, 0.22, h, PAL.bark, { spacing: 0.28, taper: 0.3 })
     const ch = this.rand(5, 7.5)
-    this.blob(x, h + ch * 0.55, z, 1.7, ch * 0.6, 1.7, PAL.poplar, 300, { dir: UP, long: 0.45, short: 0.18 })
+    this.blob(x, h + ch * 0.55, z, 1.7, ch * 0.6, 1.7, PAL.poplar, 300, { dir: UP, long: 0.45, short: 0.18, sway: 0.2 })
     this.shadeSpots.push([x, z, 3])
   }
 
@@ -333,11 +333,11 @@ class Painter {
       const bx = x + Math.cos(a) * rr, bz = z + Math.sin(a) * rr, h = this.rand(2.6, 4.8)
       const lx = this.rand(-0.05, 0.05), lz = this.rand(-0.05, 0.05)
       for (let y = 0.2; y < h; y += 0.38) {
-        this.dab(bx + lx * y, y, bz + lz * y, [Math.cos(a), 0, Math.sin(a)], UP, 0.3, 0.05, 0.03, this.pick(PAL.bamboo), 255, KIND.FLORA)
+        this.dab(bx + lx * y, y, bz + lz * y, [Math.cos(a), 0, Math.sin(a)], UP, 0.3, 0.05, 0.03, this.pick(PAL.bamboo), 255, KIND.FLORA, [Math.cos(a), 0, Math.sin(a)], 0.1 + y * 0.12)
         if (y > h * 0.5 && this.rng() < 0.7) {
           const la = this.rand(0, Math.PI * 2)
           this.dab(bx + lx * y + Math.cos(la) * 0.3, y + 0.1, bz + lz * y + Math.sin(la) * 0.3, [Math.cos(la), 0.6, Math.sin(la)],
-            [Math.cos(la), 0.3, Math.sin(la)], 0.26, 0.06, 0.03, this.pick(PAL.bamboo), 255, KIND.FLORA)
+            [Math.cos(la), 0.3, Math.sin(la)], 0.26, 0.06, 0.03, this.pick(PAL.bamboo), 255, KIND.FLORA, [Math.cos(la), 0.6, Math.sin(la)], 0.2 + y * 0.12)
         }
       }
     }
@@ -347,7 +347,7 @@ class Painter {
     const len = Math.hypot(x1 - x0, z1 - z0), n = Math.round(len / 0.8)
     for (let k = 0; k <= n; k++) {
       const t = k / n
-      this.blob(lerp(x0, x1, t), h / 2, lerp(z0, z1, t), 0.7, h / 2, 0.7, PAL.hedge, 9, { long: 0.45, short: 0.22 })
+      this.blob(lerp(x0, x1, t), h / 2, lerp(z0, z1, t), 0.7, h / 2, 0.7, PAL.hedge, 9, { long: 0.45, short: 0.22, sway: 0.08 })
     }
   }
 
@@ -355,10 +355,12 @@ class Painter {
 
   stroke(x, y, z, len, pal) {
     const a = this.rand(0, Math.PI * 2)
-    this.dab(x, y, z, [Math.cos(a), 0.3, Math.sin(a)], UP, len, 0.045, 0.02, this.pick(pal), 255, KIND.FLORA)
+    const n = [Math.cos(a), 0.3, Math.sin(a)]
+    this.dab(x, y, z, n, UP, len, 0.045, 0.02, this.pick(pal), 255, KIND.FLORA, n, 0.15 + y * 0.45)
   }
   flower(x, y, z, r, pal) {
-    this.dab(x, y, z, [this.rand(-0.5, 0.5), 1, this.rand(-0.5, 0.5)], null, r, r * this.rand(0.6, 0.9), 0.03, this.pick(pal), 255, KIND.FLORA)
+    const n = [this.rand(-0.5, 0.5), 1, this.rand(-0.5, 0.5)]
+    this.dab(x, y, z, n, null, r, r * this.rand(0.6, 0.9), 0.03, this.pick(pal), 255, KIND.FLORA, n, 0.15 + y * 0.45)
   }
   iris(x, z) {
     for (let k = 0; k < 4; k++) this.stroke(x + this.rand(-0.15, 0.15), this.rand(0.2, 0.4), z + this.rand(-0.15, 0.15), 0.3, PAL.irisLeaf)
@@ -482,8 +484,9 @@ class Painter {
     const len = this.rand(0.5, 1.2), n = Math.round(len / 0.2)
     for (let k = 0; k < n; k++) {
       const r = k === n - 1 ? 0.14 : 0.11
-      this.dab(x + this.rand(-0.05, 0.05), y - 0.1 - k * 0.2, z + this.rand(-0.05, 0.05), [this.rand(-1, 1), 0.3, this.rand(-1, 1)], UP,
-        0.2, r * 0.7, 0.03, this.pick(PAL.wisteria), 255, KIND.FLORA)
+      const nn = [this.rand(-1, 1), 0.3, this.rand(-1, 1)]
+      this.dab(x + this.rand(-0.05, 0.05), y - 0.1 - k * 0.2, z + this.rand(-0.05, 0.05), nn, UP,
+        0.2, r * 0.7, 0.03, this.pick(PAL.wisteria), 255, KIND.FLORA, nn, 0.25 + 0.35 * (k / n))
     }
   }
 
@@ -491,7 +494,7 @@ class Painter {
     for (let k = 0; k < 26; k++) {
       const a = this.rand(0, Math.PI * 2), r = this.rand(40, 110), y = this.rand(45, 75)
       const s = this.rand(5, 11)
-      this.dab(Math.cos(a) * r, y, Math.sin(a) * r, UP, [Math.cos(a + 1.57), 0, Math.sin(a + 1.57)], s * 1.6, s * 0.6, 0.5, this.pick(PAL.cloud), 150, KIND.SKY, null)
+      this.dab(Math.cos(a) * r, y, Math.sin(a) * r, UP, [Math.cos(a + 1.57), 0, Math.sin(a + 1.57)], s * 1.6, s * 0.6, 0.5, this.pick(PAL.cloud), 150, KIND.SKY, null, 10)
     }
   }
 
