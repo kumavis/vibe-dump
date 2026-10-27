@@ -1040,7 +1040,7 @@ F17-F19 are rules changes (a `CORE_VERSION` bump, the corpus re-recorded and
 the PIN moved, in the commit that says so). Open questions 28-35 hold their
 defaults; 28, 30, 31 and 32 were answered in the reviewers' voice note of
 26 October (lob, melee, fog, undo), and F12, F16, F17 and F18 say what they
-answered.
+answered; 35 (Escape) by the user: no change.
 
 - [ ] **F12** Local undo: simple mistakes, within the phase. A button (and
   Ctrl-Z) takes back the last entry of a seat played here since its last
@@ -1170,18 +1170,13 @@ answered.
   is a wrecker's smash applied to units. Each a `CORE_VERSION` bump and a
   re-record; each with its terrain-check rows, P-prop cases and an army-sim
   gate (a hazard board must not move the Bushtails' 52.4% out of its band).
-- [ ] **Fixes (the same playtest).** *Escape at a charge's end:* once a
-  charge makes contact the 2D6 is rolled and the match waits on where it
-  ends, and Escape is a no-op with no word (input/human.js's `picking()`, on
-  purpose: the roll can't be taken back); it should take Shortest move, or a
-  toast should say "pick where the charge ends". (With a unit merely picked
-  up, Escape does put it down, by the code; if it fails on the page, a
-  repro first.) *The tooltip's reason:* the Scaleguard (T4, Sv4+) and the
-  Brute (T6, W9, Sv4+) are their numbers alone, no armour rule ("Shield wall"
-  is card copy; the Brute's `big` only makes a template roll D3+1 hits on it,
-  which is against it); the shot tooltip gives "wound 6+ · save 4+" but not
-  why: "S3 vs T6" beside the wound need (ui/tooltip.js's oddsText), and the
-  card the same under its weapons.
+- [ ] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
+  Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
+  ("Shield wall" is card copy; the Brute's `big` only makes a template roll
+  D3+1 hits on it, which is against it); the shot tooltip gives "wound 6+ ·
+  save 4+" but not why: "S3 vs T6" beside the wound need (ui/tooltip.js's
+  oddsText), and the card the same under its weapons. (Escape at a charge's
+  end stays as it is: question 35.)
 
 ### Open questions (building the defaults unless told otherwise)
 
@@ -1269,15 +1264,11 @@ answered.
 34. **The keg** goes off at zero hit points, from a template, acid or a
     wrecker; there is no tap command, and no keg on the classic set (a
     mission of its own).
-35. *(open: the reviewers asked for a rephrasing)* **Escape at a charge's
-    end.** After a charge whose roll reaches, the match waits for a click on
-    where the charger stops, and Escape there does nothing, silently (the
-    dice are rolled: the charge can't be called off). Either Escape takes
-    the default spot, the one the **Shortest move** button gives, or it
-    says "pick where the charge ends". The default if unanswered: the
-    message. (And the bug half: with a unit merely picked up, before any
-    enemy is clicked, Escape does put it down by the code; if it failed so
-    on the page, that is a bug to reproduce in a browser first.)
+35. *(answered)* **Escape at a charge's end: no change.** After a charge
+    whose roll reaches, the match waits for a click on where the charger
+    stops, and Escape there does nothing (the dice are rolled: the charge
+    can't be called off). With a unit merely picked up, Escape puts it down,
+    as it does.
 
 ## Done
 
