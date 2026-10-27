@@ -649,6 +649,22 @@ for (const [ctx, want, what] of [
     rig.bookmark(0)
     check(rig.cue(farWalk, OPP) === true && !close(rest(rig).pos, marked.pos), "(F14) the bookmark: End pressed, the opponent's walk followed away from it")
     check(rig.resume(0) === true && close(rest(rig).pos, marked.pos) && close(rig.pose().target, marked.target), "(F14) the bookmark: the seat's next phase still glides back to where it pressed End")
+    // a turn's last End (its charges): its own fight and morale phases
+    // begin, nothing having taken the camera away (a phase with nothing in
+    // it begins all the same), and keep the bookmark, its orders' framing
+    // over; the opponent's turn is followed; the seat's next phase comes back
+    rig.frameOn(-28, 6, 6)
+    const last = rest(rig)
+    rig.bookmark(0)
+    check(rig.resume(0) === false && rig.resume(0) === false && rig.marks.has(0) && close(rest(rig).pos, last.pos), "(F14) the bookmark: the seat's own fight and morale phases, nothing having moved the camera, keep it (no glide)")
+    check(rig.frame(farWalk.points, MINE) === false && rig.cue({ ...farWalk, own: true }, MINE) === false, "(F14) the bookmark: its orders' framing ends at the seat's next phase (its own fights off screen are not framed)")
+    check(rig.cue(farWalk, OPP) === true && !close(rest(rig).pos, last.pos), "(F14) the bookmark: the opponent's turn followed away")
+    check(rig.resume(0) === true && close(rest(rig).pos, last.pos) && !rig.marks.has(0), "(F14) the bookmark: the seat's next turn glides back to where it pressed its last End, the opponent's turn followed")
+    // a camera moved by hand after End, nothing followed: left where it is
+    rig.bookmark(0)
+    rig.nextView()
+    const mine = rest(rig)
+    check(rig.resume(0) === false && close(rest(rig).pos, mine.pos), "(F14) the bookmark: a phase begun with nothing followed since End leaves the camera where the player put it")
     // and that seat's own orders after its End: framed off screen, never
     // glided to on screen
     rig.frameOn(-30, 0, 6)

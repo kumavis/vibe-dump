@@ -77,10 +77,17 @@ export class CameraRig {
     // (F8b) the bookmarks: seat → { seat, pos, target }, where the camera
     // was as that seat pressed End, until its next phase begins ((F8b's
     // review) one per seat: with one slot, hotseat's other seat's End wrote
-    // over the first's before its next phase could glide back); and how
-    // often a batch ((F14) or an action played alone) was framed
+    // over the first's before its next phase could glide back); ((F14) each
+    // with `followed`, the count below as End was pressed, and `others`,
+    // whether another seat's phase has begun here since: until something
+    // has taken the camera away, a phase of the seat keeps its bookmark,
+    // resume); and how often a batch ((F14) or an action played alone) was
+    // framed
     this.marks = new Map()
     this.framed = 0
+    // ((F14) the seats whose End's orders are playing, framed as they play:
+    // from End to the seat's next phase, while its bookmark stands)
+    this.ending = new Set()
     // ((F14) how often the follow policy moved the camera: a batch or an
     // action framed, a focus glided to; ?debug's camera())
     this.followed = 0
@@ -188,6 +195,7 @@ export class CameraRig {
   toTitle() {
     this.views = []
     this.marks.clear()
+    this.ending.clear()
     this.titleSpin = true
     this.controls.maxDistance = MAX_DISTANCE
     this.titleAngle -= clock.time * PRESETS.title.orbit.speed
@@ -239,7 +247,7 @@ export class CameraRig {
   // looking the way it looks. True if it does (the batch's focus events are
   // then left out).
   frame(points, { stage, active, localSeats }) {
-    if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.marks.has(active) ? active : -1 })) return false
+    if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.ended(active) })) return false
     return this.frameAll(points)
   }
 
@@ -267,7 +275,7 @@ export class CameraRig {
   // nor in a turn the camera doesn't follow: a seat's own orders after its
   // End are framed, never glided to). True if the camera moves.
   cue({ points, x, z, own }, { stage, active, localSeats }) {
-    const ctx = { follow: this.follow, stage, active, localSeats, ended: this.marks.has(active) ? active : -1 }
+    const ctx = { follow: this.follow, stage, active, localSeats, ended: this.ended(active) }
     if (!(own ? frames(ctx) : cues(ctx))) return false
     if (points.length && this.frameAll(points)) return true
     return this.focus(x, z, { stage, active, localSeats })
@@ -314,15 +322,33 @@ export class CameraRig {
   // framed as they play
   bookmark(seat) {
     if (!this.views.length) return
-    this.marks.set(seat, { seat, ...this.pose() })
+    this.marks.set(seat, { seat, ...this.pose(), followed: this.followed, others: false })
+    this.ending.add(seat)
+  }
+
+  // (F14) The seat whose orders after its End the camera frames, if it is
+  // `active`'s (frames' `ended`): from its End (its bookmark: app/boot.js
+  // lets that go if the End was refused) to its next phase; else -1.
+  ended(active) {
+    return this.ending.has(active) && this.marks.has(active) ? active : -1
   }
 
   // A phase of `seat` begins: back to the pose it pressed End at, if it
   // did (its own bookmark, spent; another seat's kept). True if the camera
-  // glides there.
+  // glides there. ((F14) Only once something has taken the camera away
+  // since: the follow policy (the seat's orders at End framed, an
+  // opponent's turn followed) or, in hotseat, another seat's phase (its
+  // player's own camera); till then the bookmark is kept, no glide. Every
+  // phase begins with one, a fight or a morale phase with nothing in it
+  // too, so the End of a seat's last phase that decides (its charges) was
+  // spent at its own fight phase, before the opponent's turn: kept now, it
+  // brings the camera back for the seat's next turn, the opponent's
+  // followed. The orders' framing ends here all the same.)
   resume(seat) {
+    this.ending.delete(seat)
+    for (const o of this.marks.values()) if (o.seat !== seat) o.others = true
     const m = this.marks.get(seat)
-    if (!m) return false
+    if (!m || (m.followed === this.followed && !m.others)) return false
     this.marks.delete(seat)
     this.toPose(m, 0.9)
     return true
