@@ -861,8 +861,8 @@ body.mock-page { background: #07111a; }
 .nav.wg-door { background: transparent; border-color: rgba(var(--sand-rgb), 0.55); color: var(--sand); font-weight: 600; font-size: 12.5px; padding: 0 12px; }
 .nav.wg-door:hover { background: rgba(var(--sand-rgb), 0.16); }
 /* the record's door and the wargame's side by side, the record first, the what-if label under them (the project manager's decision 32) */
-.card footer .nav.wg-door { order: -1; flex: 1 1 0; min-width: 0; justify-content: center; height: 38px; }
-.card footer .nav.enter:has(+ .nav.wg-door) { flex: 1 1 0; min-width: 0; }
+.card footer .nav.wg-door { order: -1; flex: 1 1 0; min-width: 0; justify-content: center; height: 38px; white-space: nowrap; padding: 0 8px; }
+.card footer .nav.enter:has(+ .nav.wg-door) { flex: 1 1 0; min-width: 0; white-space: nowrap; padding: 0 8px; }
 .card footer .wg-door-label { order: -1; flex: 1 0 100%; margin: -2px 0 2px; font: italic 12px/1.35 var(--serif); color: rgba(var(--ink-rgb), 0.72); text-align: center; }
 .wg-ss-leader { margin: -4px 0 6px; font-size: 12.5px; color: rgba(var(--ink-rgb), 0.78); }
 .wg-door-card p { font-style: italic; font-family: var(--serif); }
