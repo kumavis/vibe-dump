@@ -51,8 +51,20 @@
 // view/camera.js's frame) and, if the camera framed them, the batch's
 // focus events are left out. With ⇉ off none of this: one event at a time,
 // as before V1.
+//
+// (F14) An action played on its own (a lone walk, a shot or a charge, a
+// fight: anything no batch takes) is cued as it opens: the handlers' `cue`
+// is told once where its actors stand and go and where the camera would
+// glide (present/camera-presets.js's cueAt, from its opening to its end),
+// and its focus events are then left out (folded, never followed), so the
+// camera makes one move for the action, as for a batch: the view's say
+// (view/camera.js's cue: the follow policy, whether they are on screen).
+// The same with ⇉ off, and for every seat: a human opponent's move online,
+// a watched battle's, a replay's. Without a `cue` handler an action plays
+// as before F14, its focus events followed.
 import { applyEvent, project } from '../present/mirror.js'
 import { PACE, batchAt, attacksAt, briefAt, playTime } from '../present/pace.js'
+import { cueAt, pointsOf } from '../present/camera-presets.js'
 import { wait } from './clock.js'
 
 // (F8b) the events that make a batch of attacks, and so wait a tick on an
@@ -91,6 +103,10 @@ export class EventPlayer {
     this.sideOf = sideOf
     // (the batch holding the flags' owners, if any)
     this.hold = null
+    // ((F14) the events left to play of the action last cued, whose focus
+    // events are left out; and how many actions were cued)
+    this.cueLeft = 0
+    this.cues = 0
   }
 
   get idle() {
@@ -130,6 +146,7 @@ export class EventPlayer {
     this.q.length = 0
     this.running = false
     this.hold = null
+    this.cueLeft = 0
     this.mirror = shown
     this.view?.rebuild(G, shown)
     this.observer?.reset?.(shown)
@@ -144,6 +161,7 @@ export class EventPlayer {
         // (V1) a batch of walks from here: played together
         const b = this.batched ? batchAt(this.q, 0, (u) => this.sideOf(u)) : null
         if (b) {
+          this.cueLeft = 0
           this.batch(this.q.splice(0, b.to), b, table).then(
             () => table === this.table && this.run(),
             (err) => table === this.table && this.fail(err),
@@ -153,6 +171,7 @@ export class EventPlayer {
         // (F8b) a batch of attacks from here
         const a = this.batched ? attacksAt(this.q, 0, (u) => this.sideOf(u)) : null
         if (a) {
+          this.cueLeft = 0
           this.attacks(this.q.splice(0, a.to), a, table).then(
             () => table === this.table && this.run(),
             (err) => table === this.table && this.fail(err),
@@ -162,9 +181,14 @@ export class EventPlayer {
         // ((F8b) a phase with nothing in it: its banner brief)
         const brief = this.batched && briefAt(this.q, 0)
         if (brief) this.briefs++
+        // ((F14) an action opening here: the camera cued once for it)
+        if (!this.cueLeft) this.cue()
+        const cued = this.cueLeft > 0
+        if (cued) this.cueLeft--
         const e = this.q.shift()
         this.mirror = applyEvent(this.mirror, e)
         this.observer?.event?.(e, this.mirror)
+        if (cued && e.t === 'focus') continue
         const r = (this.handlers[e.t] ?? this.handlers.fallback)(e, this.mirror, brief ? { brief: true } : undefined)
         if (r && typeof r.then === 'function') {
           r.then(() => table === this.table && this.run(), (err) => table === this.table && this.fail(err))
@@ -288,17 +312,32 @@ export class EventPlayer {
   // any of it is folded) and where they go: a walk's end, an attack's
   // target or a template's landing. True if it framed them (its handler's
   // say: the follow policy, and whether they are all on screen already).
+  // ((F14) present/camera-presets.js's pointsOf, which cueAt gathers an
+  // action's actors with: a template's aim and landing count too.)
   frame(events) {
     const f = this.handlers.frame
     if (!f) return false
-    const units = this.mirror?.units ?? {}, points = []
-    const at = (id) => units[id]?.pos
-    for (const e of events) {
-      if (e.u !== undefined && at(e.u)) points.push(at(e.u))
-      if (e.tg !== undefined && at(e.tg)) points.push(at(e.tg))
-      if (e.to && Number.isFinite(e.to.x)) points.push(e.to)
-    }
-    return points.length > 0 && f({ t: 'frame', points: points.map((p) => ({ x: p.x, z: p.z })) }, this.mirror) === true
+    const points = pointsOf(events, (id) => this.mirror?.units?.[id]?.pos)
+    return points.length > 0 && f({ t: 'frame', points }, this.mirror) === true
+  }
+
+  // (F14) The action opening at the head of the queue, if one does
+  // (present/camera-presets.js's cueAt: from its opening to its end, its
+  // actors where the table shows them, before any of it is folded): the
+  // handlers' `cue` told once, `{ points, x, z, own }`, and the next
+  // `cueLeft` events (the action's) played with their focus events left
+  // out, whatever the cue did (the follow policy, and whether its actors
+  // are on screen, are its handler's say: one move of the camera for the
+  // action). Without a `cue` handler, nothing: the focus events followed.
+  cue() {
+    this.cueLeft = 0
+    const h = this.handlers.cue
+    if (!h) return
+    const c = cueAt(this.q, 0, (id) => this.mirror?.units?.[id]?.pos)
+    if (!c) return
+    this.cueLeft = c.to
+    this.cues++
+    h({ t: 'cue', points: c.points, x: c.x, z: c.z, own: c.own }, this.mirror)
   }
 
   // An event this table has no visuals for yet: its text over the unit (or
@@ -315,6 +354,7 @@ export class EventPlayer {
   fail(err) {
     this.running = false
     this.q.length = 0
+    this.cueLeft = 0
     if (this.hold) {
       this.hold = null
       this.view?.holdOwners?.(null)

@@ -90,6 +90,12 @@ export class View {
       // as shown: a focus event plays while the match has run ahead, a whole
       // AI turn or more; never during the turn of the one seat played here)
       focus: (e, M) => rig.focus(e.x, e.z, { stage: M.stage, active: M.active, localSeats: localSeats() }),
+      // ((F14) an action played on its own, as it opens (view/player.js's
+      // cue: where its actors stand and go, where to glide, whether it
+      // carries a focus of its own, which is then left out): one move of
+      // the camera for it, framed or glided to, as the follow policy says;
+      // never an action of a seat played here, unless its orders after End)
+      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),
       // the figures
       'unit.place': (e) => units.disc(e.u),
       'unit.formation': (e) => {

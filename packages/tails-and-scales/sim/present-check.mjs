@@ -137,6 +137,17 @@
 // (--only) just notes the kinds it held none of: one battle may well have
 // no fizzle, no gaze or no eruption.
 //
+// (F14) And, before the battles, in this process: the page's own player and
+// camera rig (view/player.js, view/camera.js, with the view's camera
+// handlers) play a corpus battle's first human move, a lone walk, as the
+// other seat's page plays an online opponent's: exactly one camera glide
+// (toward the walk's end on the opening view, framed as a batch of its ends
+// is with the camera zoomed off), one for a watching page, none on the page
+// whose seat made it, in hotseat or with 🎥 off; and the AI's first turn
+// played one at a time is cued an action at a time, no focus followed on
+// its own (followCheck, below). Code older than F14 fails it. The
+// self-test's mutations reach only the battles' children, not this case.
+//
 //   node sim/present-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
 //   node sim/present-check.mjs --self-test     each edit in present-hooks.mjs's
 //                                              MUTATIONS must fail it
@@ -634,6 +645,150 @@ function child(dir, job, env = process.env) {
   })
 }
 
+// ── (F14) The camera follows a human opponent's lone move ──────────────────
+// The page's own player (view/player.js) and camera (view/camera.js), made
+// here in Node over a stand-in canvas (as sim/camera-check.mjs makes the
+// rig), with the view's camera handlers (view/index.js's focus and cue) and
+// the flow's frame (app/flow.js's: the rig's frame). A corpus battle's first
+// human move on classic (a lone walk: no batch takes it) is played as the
+// page of the other seat plays an online opponent's, from the table as it
+// stood before it: the camera glides exactly once as it plays (toward its
+// end, the battle's opening view taking it in; framed, as a batch of its two
+// ends is, with the camera zoomed off elsewhere), and once for a watching
+// page; not at all on the page whose seat made it, in hotseat, or with 🎥
+// off; and the move is cued once on every page. Then the AI's turn the same
+// battle opens with, played one at a time (⇉ off): each action is cued
+// once and no focus event is followed on its own (one move of the camera an
+// action at most). Returns { ok, lines }.
+async function followCheck(dir) {
+  const imp = (f) => import(pathToFileURL(join(dir, f)).href)
+  const { loadCorpus } = await import('./lib.mjs')
+  const lines = []
+  let bad = 0
+  const check = (ok, what, why = '') => {
+    if (!ok) bad++
+    lines.push(`  (F14) ${ok ? 'ok  ' : 'FAIL'} ${what}${!ok && why ? `: ${why}` : ''}`)
+  }
+  const presets = await imp('present/camera-presets.js')
+  if (!presets.cueAt) return { ok: false, lines: ['  (F14) FAIL code older than F14: present/camera-presets.js cues no action, so a human opponent\'s lone move moves no camera'] }
+  // (a page's globals, enough for the rig and its controls; put back after)
+  const keep = Object.fromEntries(['addEventListener', 'removeEventListener', 'document', 'innerWidth', 'innerHeight'].map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]))
+  const listen = { addEventListener() {}, removeEventListener() {} }
+  Object.assign(globalThis, { addEventListener() {}, removeEventListener() {}, document: listen, innerWidth: 1280, innerHeight: 800 })
+  try {
+    const canvas = { ...listen, style: {}, ownerDocument: listen, getRootNode: () => listen, clientHeight: 800, getBoundingClientRect: () => ({ left: 0, top: 0, width: 1280, height: 800 }) }
+    const core = await imp('core/index.js')
+    const { edgeOf } = await imp('core/match.js')
+    const { project } = await imp('present/mirror.js')
+    const { CameraRig } = await imp('view/camera.js')
+    const { View } = await imp('view/index.js')
+    const { EventPlayer } = await imp('view/player.js')
+    const { stepTweens, wait } = await imp('view/clock.js')
+    const { viewsFor, framePose, circleOf } = presets
+    // the battle: a human seat 0 against the AI on classic, with a move
+    const job = loadCorpus().items.map((it) => it.job).find((j) => j.setup?.seats?.[0]?.ctrl === 'human' && j.setup.seats[1]?.ctrl === 'ai' && !j.setup.mission && j.entries?.some((e) => e.t === 'move'))
+    if (!job) return { ok: false, lines: ['  (F14) FAIL the corpus has no classic battle of a human seat 0 against the AI with a move'] }
+    // folded an entry at a time: the table before the AI's first turn (the
+    // entry that hands it over) and before the first move, and their events
+    const G = core.createMatch(job.setup, { out: [] })
+    G.out.length = 0
+    let turn = null, move = null
+    for (const { s, ...body } of job.entries) {
+      const M = project(G)
+      core.apply(G, s, body)
+      const events = G.out.splice(0)
+      if (!turn && events.some((e) => e.t === 'focus')) turn = { M, events }
+      if (body.t === 'move' && events.some((e) => e.t === 'unit.move')) {
+        move = { M, events, walk: events.find((e) => e.t === 'unit.move') }
+        break
+      }
+    }
+    if (!move) return { ok: false, lines: ['  (F14) FAIL the battle has no walk in a move entry'] }
+    const mover = G.units.find((u) => u.id === move.walk.u).side
+    const ends = [move.M.units[move.walk.u].pos, move.walk.to].map((p) => ({ x: p.x, z: p.z }))
+    const settle = (rig) => {
+      for (let i = 0; i < 30; i++) stepTweens(0.1)
+      for (let i = 0; i < 5; i++) rig.update(0)
+    }
+    // a page playing `localSeats` (the rig at the battle's opening view, then
+    // `ready(rig)`), handed `events` from the table `M`: how many times the
+    // follow policy moved its camera, its pose before and after, how many
+    // actions were cued and focus events followed on their own
+    const play = async ({ localSeats, M, events, ready = () => {}, batched = true }) => {
+      const rig = new CameraRig({ domElement: canvas })
+      rig.setBoard(G.board)
+      rig.setViews(viewsFor({ localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
+      settle(rig)
+      ready(rig)
+      settle(rig)
+      const vh = View.prototype.handlers.call({ rig, units: {}, shots: {}, terrain: {} }, { localSeats: () => localSeats })
+      let focused = 0
+      const handlers = {
+        focus: (e, m) => (focused++, vh.focus(e, m)),
+        cue: vh.cue,
+        frame: (e, m) => rig.frame(e.points, { stage: m.stage, active: m.active, localSeats }),
+        'unit.move': (e) => wait((e.L ?? 0) / (e.speed || 6) + 0.15),
+        fallback: () => {},
+      }
+      const player = new EventPlayer({ handlers, mirror: structuredClone(M), sideOf: (u) => G.units.find((x) => x.id === u)?.side })
+      player.batched = batched
+      const f0 = rig.followed, before = rig.pose(), wasOff = rig.offScreen(ends)
+      player.push(events)
+      for (let i = 0; i < 5000 && !(player.idle && i > 2); i++) {
+        await new Promise((r) => setTimeout(r, 0))
+        stepTweens(0.1)
+        rig.update(0)
+      }
+      settle(rig)
+      return { glides: rig.followed - f0, before, after: rig.pose(), wasOff, cues: player.cues, focused, idle: player.idle, rig }
+    }
+    const close = (a, b) => a.every((x, i) => Math.abs(x - b[i]) <= 1e-6)
+    const other = 1 - mover
+    // the other seat's page, at the battle's opening view: the walk on
+    // screen, its end more than 6" from where the camera looks
+    {
+      const r = await play({ localSeats: [other], ...move })
+      const t = r.before.target, to = move.walk.to
+      const far = Math.hypot(to.x - t[0], to.z - t[2]) >= 6 && !r.wasOff
+      check(far, `the case: seat ${mover}'s move ends ${Math.hypot(to.x - t[0], to.z - t[2]).toFixed(1)}" from where seat ${other}'s opening view looks, on screen`)
+      check(r.idle && r.cues === 1 && r.glides === 1, `seat ${other}'s page (an online opponent's): seat ${mover}'s lone move glides its camera once`, `${r.glides} glides, ${r.cues} cues, idle ${r.idle}`)
+      const want = [t[0] + (to.x - t[0]) * 0.6, 0, t[2] + (to.z - t[2]) * 0.6]
+      check(close(r.after.target, want), '…toward the walk\'s end, as a focus glides (60% of the way)', `${r.after.target.map((x) => x.toFixed(2))} | ${want.map((x) => x.toFixed(2))}`)
+    }
+    // the same, the camera zoomed off to the other side of the board: framed
+    {
+      const r = await play({ localSeats: [other], ...move, ready: (rig) => rig.frameOn(-ends[1].x * 1.2, -ends[1].z - 6, 4) })
+      const want = framePose(circleOf(ends), r.before, 1280 / 800, { min: r.rig.controls.minDistance * 2, max: r.rig.controls.maxDistance })
+      check(r.wasOff, 'the case: zoomed off to the other side of the board, the walk is off screen')
+      check(r.cues === 1 && r.glides === 1 && close(r.after.pos, want.pos) && close(r.after.target, want.target), `seat ${other}'s page zoomed off elsewhere: the move is framed once, as a batch of its two ends is (framePose round them)`, `${r.glides} glides, at ${r.after.target.map((x) => x.toFixed(2))} | ${want.target.map((x) => x.toFixed(2))}`)
+    }
+    for (const [localSeats, want, what] of [
+      [[], 1, 'a watching page (no seat played here: a watched battle, a replay)'],
+      [[mover], 0, `seat ${mover}'s own page (its own move)`],
+      [[0, 1], 0, 'hotseat (its player\'s own move)'],
+    ]) {
+      const r = await play({ localSeats, ...move })
+      check(r.idle && r.cues === 1 && r.glides === want && (want || close(r.after.pos, r.before.pos)), `${what}: ${want ? 'one glide' : 'the camera stays'}`, `${r.glides} glides, ${r.cues} cues`)
+    }
+    {
+      const r = await play({ localSeats: [other], ...move, ready: (rig) => (rig.follow = false) })
+      check(r.cues === 1 && r.glides === 0 && close(r.after.pos, r.before.pos), '🎥 off: the camera stays', `${r.glides} glides`)
+    }
+    // the AI's turn played one at a time on the human seat's page
+    if (turn) {
+      const focuses = turn.events.filter((e) => e.t === 'focus').length
+      const r = await play({ localSeats: [0], ...turn, batched: false })
+      check(r.idle && r.cues > 0 && r.focused === 0 && r.glides <= r.cues, `the AI's first turn one at a time (${focuses} focus events): ${r.cues} actions cued, ${r.glides} camera moves, no focus followed on its own`, `${r.focused} focus events followed, idle ${r.idle}`)
+    }
+  } finally {
+    for (const [k, d] of Object.entries(keep)) {
+      if (d) Object.defineProperty(globalThis, k, d)
+      else delete globalThis[k]
+    }
+  }
+  return { ok: !bad, lines }
+}
+
 // ── Every battle ────────────────────────────────────────────────────────────
 // Returns the exit code; `env` (the self-test's mutation) goes to every child.
 async function parent({ env = process.env, quiet = false } = {}) {
@@ -655,6 +810,9 @@ async function parent({ env = process.env, quiet = false } = {}) {
   const t0 = Date.now()
   const total = { acts: 0, checks: 0, cards: 0, told: 0, events: 0, kinds: {}, ordered: {} }
   let failed = 0
+  // ((F14) the camera and a human opponent's lone move, in this process)
+  const follow = await followCheck(dir)
+  for (const l of follow.lines) say(l)
   await pool(items, CPUS, async (it) => {
     const r = await child(dir, it.job, env)
     let why = r.error ?? r.mismatch
@@ -688,8 +846,9 @@ async function parent({ env = process.env, quiet = false } = {}) {
       say(`  FAIL: the event order held no ${none.join(', ') || 'line'} at all (have their texts changed?)`)
     }
   }
-  say(failed ? `\npresent-check FAILED: ${failed} of ${items.length}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order (${Math.round((Date.now() - t0) / 1000)} s)`)
-  return failed ? 1 : 0
+  if (!follow.ok) say('  FAIL: (F14) the camera does not follow a human opponent\'s lone move as it should (above)')
+  say(failed || !follow.ok ? `\npresent-check FAILED: ${failed} of ${items.length}${follow.ok ? '' : ', and the camera\'s (F14) case'}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order; (F14) a human opponent's lone move glides the camera once, and none on its own seat's page (${Math.round((Date.now() - t0) / 1000)} s)`)
+  return failed || !follow.ok ? 1 : 0
 }
 
 // ── The self-test: each mutation must fail the check ────────────────────────

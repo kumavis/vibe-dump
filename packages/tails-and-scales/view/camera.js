@@ -17,9 +17,18 @@
 // stand and go); a cluster of chips is zoomed onto (frameOn); and the
 // bookmark: End pressed in a seat's phase keeps the camera's pose, and that
 // seat's next phase glides back to it (bookmark, resume).
+//
+// (F14) Following an action played on its own (cue): view/player.js tells
+// the rig of each action that plays alone, as it opens (where its actors
+// stand and go, and where to glide), and the rig makes one move for it, as
+// for a batch: if any actor is off screen it frames them all, else it
+// glides toward the action as a focus does. So a human opponent's move,
+// shot or charge (online, watched, replayed) swings the camera as the AI's
+// always did, never an action of a seat played here (cues), and the
+// bookmark still takes the camera back for that seat's next phase.
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { PRESETS, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf, panSpeed, circleOf, framePose, frames } from '../present/camera-presets.js'
+import { PRESETS, fovFor, orbitPose, follows, fitPose, BOARD_RECT, boardRect, reachOf, panSpeed, circleOf, framePose, frames, cues } from '../present/camera-presets.js'
 import { clock, tween, easeInOut, lerp } from './clock.js'
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2])
@@ -69,9 +78,12 @@ export class CameraRig {
     // was as that seat pressed End, until its next phase begins ((F8b's
     // review) one per seat: with one slot, hotseat's other seat's End wrote
     // over the first's before its next phase could glide back); and how
-    // often a batch was framed
+    // often a batch ((F14) or an action played alone) was framed
     this.marks = new Map()
     this.framed = 0
+    // ((F14) how often the follow policy moved the camera: a batch or an
+    // action framed, a focus glided to; ?debug's camera())
+    this.followed = 0
     // the keys held for panning; V the next view, Home the overview
     this.keys = new Set()
     addEventListener('keydown', (e) => {
@@ -185,20 +197,23 @@ export class CameraRig {
   // Follow the action to (x, z) (a `focus` event), as the follow policy
   // says: the stage and the seat to act as the table shows them (a focus
   // plays while the match has run ahead), and the seats played here.
+  // ((F14) True if the camera glides: not when it looks within 6" of it.)
   focus(x, z, { stage, active, localSeats }) {
-    if (!follows({ follow: this.follow, stage, active, localSeats })) return
+    if (!follows({ follow: this.follow, stage, active, localSeats })) return false
     const camera = this.camera, controls = this.controls
     const t0 = controls.target.clone()
     const d = Math.hypot(x - t0.x, z - t0.z)
-    if (d < 6) return
+    if (d < 6) return false
     const off = camera.position.clone().sub(t0)
     const tgt = new THREE.Vector3(lerp(t0.x, x, 0.6), 0, lerp(t0.z, z, 0.6))
+    this.followed++
     const id = (this.focusTween = {})
     tween(0.9, (k) => {
       if (this.focusTween !== id) return
       controls.target.lerpVectors(t0, tgt, k)
       camera.position.copy(controls.target).add(off)
     }, easeInOut)
+    return true
   }
 
   // (F10a) Glide to (x, z), as the player asks (Tab to the next unit to
@@ -225,10 +240,37 @@ export class CameraRig {
   // then left out).
   frame(points, { stage, active, localSeats }) {
     if (!points.length || !frames({ follow: this.follow, stage, active, localSeats, ended: this.marks.has(active) ? active : -1 })) return false
+    return this.frameAll(points)
+  }
+
+  // ((F8b) frame's, and (F14) cue's) If any of `points` is off screen, the
+  // camera glides to frame the circle round them all (framePose, as near as
+  // takes it in whole, from twice the dolly's least distance to its
+  // limit), looking the way it looks. True if it does.
+  frameAll(points) {
     if (!this.offScreen(points)) return false
     this.framed++
+    this.followed++
     this.toPose(framePose(circleOf(points), this.pose(), innerWidth / innerHeight, { min: this.controls.minDistance * 2, max: this.controls.maxDistance }), 0.9)
     return true
+  }
+
+  // (F14) An action played on its own opens (view/player.js's cue, from
+  // present/camera-presets.js's cueAt): `points`, where its actors stand
+  // and go; (x, z), where the camera glides if they are all on screen; and
+  // `own`, whether it carries a focus of its own (the AI's, a fight's: the
+  // follow policy as frames has it), else it is a seat's command (cues:
+  // never one of a seat played here, unless its orders after its End). One
+  // move of the camera for the whole action, as a batch gets: its actors
+  // framed if any is off screen (frameAll, as frame frames a batch's
+  // members), else a glide toward (x, z) as focus makes (none within 6",
+  // nor in a turn the camera doesn't follow: a seat's own orders after its
+  // End are framed, never glided to). True if the camera moves.
+  cue({ points, x, z, own }, { stage, active, localSeats }) {
+    const ctx = { follow: this.follow, stage, active, localSeats, ended: this.marks.has(active) ? active : -1 }
+    if (!(own ? frames(ctx) : cues(ctx))) return false
+    if (points.length && this.frameAll(points)) return true
+    return this.focus(x, z, { stage, active, localSeats })
   }
 
   // Zoom onto a circle on the table (x, z, r): a cluster of chips tapped
