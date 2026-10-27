@@ -370,12 +370,21 @@ function zigzag(ar, side, enemy, ob) {
 function smoke(ar, side, enemy) {
   const adm = side.adm
   const s = ar.state
-  // the weaker side makes smoke from the first (Taffy 3's escorts and carriers did); either side when its main body is hit and it is no stronger
+  // the weaker side makes smoke for the first minute and a half (Taffy 3's escorts did); either side, when its main
+  // body is hit and it is no stronger, for a minute, and not again for a minute after (smoke comes and goes: a screen
+  // that never lifts would leave the heavy guns nothing to fire at, research/engine-3.md §6)
   const weaker = side.strength.hp < enemy.strength.hp * 0.85
+  if (weaker && ar.t < A.smokeFirstS) adm.smokeUntil = Math.max(adm.smokeUntil, A.smokeFirstS)
   const pressed = side.lastCoreHitT > ar.t - 30 && side.strength.hp <= enemy.strength.hp * 1.1
-  if (pressed) adm.smokeUntil = Math.max(adm.smokeUntil, ar.t + 60)
+  if (pressed) {
+    adm.pressedUntil = ar.t + 30 // (the carriers make their own smoke only while their main body is being hit)
+    if (ar.t >= (adm.smokeAgainT ?? 0)) {
+      adm.smokeUntil = Math.max(adm.smokeUntil, ar.t + A.smokeWindowS)
+      adm.smokeAgainT = adm.smokeUntil + A.smokeWindowS
+    }
+  }
   // (a side that must keep its ships afloat goes on making smoke when it turns away: it runs under it)
-  const on = (adm.state !== 'turn-away' || side.def.goal?.kind === 'survive') && (weaker || pressed || ar.t < adm.smokeUntil)
+  const on = (adm.state !== 'turn-away' || side.def.goal?.kind === 'survive') && ar.t < adm.smokeUntil
   if (on !== adm.smoke) note(ar, side, on ? 'smoke' : 'smoke off')
   adm.smoke = on
   if (!on) {
@@ -384,7 +393,7 @@ function smoke(ar, side, enemy) {
   }
   const laying = side.ships.filter((i) => ar._X[i].order?.kind === 'smoke' && s.alive[i] === 1).length
   const free = side.ships.filter((i) => s.alive[i] === 1 && isEscort(ar._X[i].model.type) && !ar._X[i].order && ar.player?.unitIndex !== i)
-  free.slice(0, Math.max(0, 3 - laying)).forEach((i, k) => (ar._X[i].order = { kind: 'smoke', side: (laying + k) % 2 ? 1 : -1, since: ar.t }))
+  free.slice(0, Math.max(0, A.smokeLayers - laying)).forEach((i, k) => (ar._X[i].order = { kind: 'smoke', side: (laying + k) % 2 ? 1 : -1, since: ar.t }))
 }
 
 // --- the air: the combat air patrol, the waves --------------------------------------------------------------------

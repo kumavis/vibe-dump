@@ -31,7 +31,7 @@ export function shipThink(ar, i) {
   if (!(held && pl.station === 'helm')) shipCourse(ar, i, x, side)
   if (!(held && pl.station === 'main')) gunnery(ar, i, x, side, held ? pl.station : null)
   if (!(held && (pl.station === 'torpedoes' || pl.station === 'helm'))) torpedoes(ar, i, x, side)
-  if ((x.order?.kind === 'smoke' || (side.adm.smoke && isCarrier(x.model.type))) && ar.t >= (x.smokeT ?? 0)) layingSmoke(ar, i, x)
+  if ((x.order?.kind === 'smoke' || (side.adm.smoke && isCarrier(x.model.type) && ar.t < (side.adm.pressedUntil ?? 0))) && ar.t >= (x.smokeT ?? 0)) layingSmoke(ar, i, x)
   else if (!side.adm.smoke && x.order?.kind !== 'smoke') x.smokeLast = null
   // (a burning ship's fire is cosmetic; a listing one is slower)
   x.cap = x.hp / x.hpMax < A.listAt ? A.listedSpeedCap : 1
@@ -257,7 +257,7 @@ function secondaryTarget(ar, i, enemy) {
 /** A cruiser's or a destroyer's torpedoes, outside an attack: an enemy capital ship or carrier on the beam inside the band. */
 function torpedoes(ar, i, x, side) {
   const tp = x.torp
-  if (!tp || tp.left <= 0 || ar.t < tp.readyAt || x.order?.kind === 'attack') return
+  if (!tp || tp.left <= 0 || ar.t < tp.readyAt || x.order?.kind === 'attack' || ar.t < (x.freeTorpT ?? 0)) return
   if (side.adm.state === 'turn-away' && !isEscort(x.model.type)) return
   const s = ar.state
   const enemy = ar.sides[side.enemy]
@@ -274,6 +274,7 @@ function torpedoes(ar, i, x, side) {
     if (Math.abs(rel - 90) > 40) continue
     fireShipTorpedoes(ar, i, ic.bearing, Math.max(2, Math.ceil(tp.perSalvo / 2)), A.torpedoSpreadDeg)
     ar._onTorpedoesFired(i, j)
+    x.freeTorpT = ar.t + A.freeTorpedoS
     return
   }
 }
@@ -282,7 +283,8 @@ function layingSmoke(ar, i, x) {
   const s = ar.state
   const px = s.pos[3 * i]
   const pz = s.pos[3 * i + 2]
-  if (x.smokeLast) ar.addSmoke(x.smokeLast[0], x.smokeLast[1], px, pz, i)
+  // (a carrier's own funnel smoke is drawn and hides nothing: the screens that hide are the escorts')
+  if (x.smokeLast) ar.addSmoke(x.smokeLast[0], x.smokeLast[1], px, pz, i, !isCarrier(x.model.type))
   x.smokeLast = [px, pz]
   x.smokeT = ar.t + 5
 }
@@ -655,11 +657,19 @@ function strikeControl(ar, i, x, m, dt) {
     out.y = A.strike.approachAltM
     return out
   }
-  // diving: the nose on where the bomb must fall (the target's lead over the bomb's fall)
+  // diving: the nose on where the bomb must fall (the target's lead over the bomb's fall), corrected by where a bomb
+  // let go now would fall (the impact point walked onto the target's, as a dive bomber's sight did it)
   const fall = Math.sqrt((2 * Math.max(50, b.y)) / 9.81) * 0.8
   const eta = Math.hypot(tx - b.x, tz - b.z) / Math.max(40, b.V * Math.cos(b.gamma)) * 0.5
   out.x = tx + tvx * (fall + eta)
   out.z = tz + tvz * (fall + eta)
+  if (b.y < 1400 && b.gamma < -0.5) {
+    const bp = bombPoint(ar, i)
+    const px = tx + tvx * bp.tof
+    const pz = tz + tvz * bp.tof
+    out.x = px + (px - bp.x) * A.strike.diveCorrect
+    out.z = pz + (pz - bp.z) * A.strike.diveCorrect
+  }
   out.y = 0
   out.throttle = 0.3
   out.maxDive = 80 * DEG
@@ -670,9 +680,15 @@ function strikeControl(ar, i, x, m, dt) {
   }
   let release = b.y < A.strike.releaseAltM + 30
   if (!release && b.y < 900) {
+    // the impact point inside the target's hit box (its length and beam × 1.5, in its own frame), less a margin
     const bp = bombPoint(ar, i)
-    const hx = (tx + tvx * bp.tof - bp.x) ** 2 + (tz + tvz * bp.tof - bp.z) ** 2
-    if (hx < (ar._X[ti].model.B * 0.75) ** 2) release = true
+    const ex = bp.x - (tx + tvx * bp.tof)
+    const ez = bp.z - (tz + tvz * bp.tof)
+    const h = s.heading[ti] * DEG
+    const along = ex * Math.sin(h) - ez * Math.cos(h)
+    const across = ex * Math.cos(h) + ez * Math.sin(h)
+    const tm = ar._X[ti].model
+    if (Math.abs(along) < tm.L * A.hitBoxK * 0.35 && Math.abs(across) < tm.B * A.hitBoxK * 0.4) release = true
   }
   if (release) {
     while (x.ammo.bombs > 0) dropBomb(ar, i)

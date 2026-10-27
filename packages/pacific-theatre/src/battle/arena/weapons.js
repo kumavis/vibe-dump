@@ -185,9 +185,10 @@ export function aiSalvo(ar, i, bg, mounts, ti) {
     r.fired += q.fired
     r.tof = Math.max(r.tof, q.tof)
   }
-  // the AI's salvo fire: a light battery no oftener than every 6 s, a medium one every 10 s (by director, not by the gun's own rate)
+  // the AI's salvo fire, by director and not by the gun's own rate: a light battery no oftener than every 20 s, a medium
+  // one every 24 s, a heavy one every 30 s (or its reload, when slower): the arena's pace, research/engine-3.md §4.2
   const cal = bg.battery.weapon.calibreMm
-  const minS = cal < 150 ? A.aiGun.minIntervalS.light : cal < 250 ? A.aiGun.minIntervalS.medium : 0
+  const minS = cal < 150 ? A.aiGun.minIntervalS.light : cal < 250 ? A.aiGun.minIntervalS.medium : A.aiGun.minIntervalS.heavy
   if (minS) for (const mt of mounts) mt.readyAt = Math.max(mt.readyAt, ar.t + minS)
   if (r.fired && sol.seenAt < 0) sol.seenAt = ar.t + r.tof
   return r.fired

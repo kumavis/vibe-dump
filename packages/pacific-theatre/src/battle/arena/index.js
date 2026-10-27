@@ -442,8 +442,8 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   ar._onTorpedoBroke = (i, player) => {
     if (player) ar.beat(i, 'player', 'Too high: the torpedo broke on the water.')
   }
-  ar.addSmoke = (x0, z0, x1, z1, by) => {
-    ar.smoke.push({ x0, z0, x1, z1, born: ar.t, until: ar.t + A.smokeS, by })
+  ar.addSmoke = (x0, z0, x1, z1, by, hides = true) => {
+    ar.smoke.push({ x0, z0, x1, z1, born: ar.t, until: ar.t + A.smokeS, by, hides })
     ar.fx(FX.smoke, x0, 0, z0, { unit: by, dx: x1 - x0, dz: z1 - z0, size: A.smokeS, data: 1 })
   }
   /**
@@ -460,13 +460,13 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     const L = Math.hypot(dx, dz)
     if (L > ar.visM) return true
     if (L < A.squall.hideM) return false
-    if (ar.record.squalls.length && (ar.inSquall(s.pos[3 * j], s.pos[3 * j + 2]) || ar.inSquall(ax, az))) return true
+    if (ar.record.squalls.length && (ar.inSquall(s.pos[3 * j], s.pos[3 * j + 2]) || (L > A.squallSeeOutM && ar.inSquall(ax, az)))) return true
     if (!ar.smoke.length) return false
     dx /= L
     dz /= L
     for (const sm of ar.smoke) {
-      if (sm.until <= ar.t) continue
       const age = ar.t - sm.born
+      if (age > A.smokeThickS || sm.hides === false) continue // (thinned, or a carrier's funnel smoke: drawn, and hides nothing)
       const mx = (sm.x0 + sm.x1) / 2 + ar.wind.x * age - ax
       const mz = (sm.z0 + sm.z1) / 2 + ar.wind.z * age - az
       const u = mx * dx + mz * dz
@@ -569,18 +569,19 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       s.version[i] = 1
     }
   }
-  // the weaker side has been making smoke for the last minute (its escorts' and carriers' trails behind them, already drifting)
+  // the weaker side has been making smoke for the last half minute (its escorts' trails behind them, already drifting)
   for (const key of ['jp', 'us']) {
     const sd = ar.sides[key]
     const en = ar.sides[sd.enemy]
     const hp = (side) => side.ships.reduce((n, i) => n + X[i].hpMax, 0)
     if (!(hp(sd) < hp(en) * 0.85)) continue
-    for (const i of sd.ships) {
-      const t = X[i].model.type
-      if (!(t === 'dd' || t === 'de' || isCarrier(t))) continue
+    // (the escorts nearest the other side, as many as lay smoke at once)
+    const toward = (i) => Math.hypot(X[i].body.x - cx, X[i].body.z - cz)
+    const layers = sd.ships.filter((i) => X[i].model.type === 'dd' || X[i].model.type === 'de').sort((p, q) => toward(p) - toward(q)).slice(0, A.smokeLayers)
+    for (const i of layers) {
       const b = X[i].body
       const h = b.heading * DEG
-      for (let k = 12; k > 0; k--) {
+      for (let k = 6; k > 0; k--) {
         const d0 = k * 5 * b.V
         const d1 = (k - 1) * 5 * b.V
         const born = -k * 5

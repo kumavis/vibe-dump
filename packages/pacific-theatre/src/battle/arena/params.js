@@ -50,7 +50,7 @@ export const A = {
   torpedoArmM: 150, // estimate: armed after 150 m (the wide window)
   aaK: 3, // contract: AA as the hazard model × 3
   // the AI's ranging (estimate; research/engine-3.md §5: the lead is solved exactly, the range is walked in)
-  aiGun: { startPct: 30, startMils: 60, improve: 0.25, floorPct: 6, floorMils: 12, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 15, medium: 12 }, lightM: 3000 },
+  aiGun: { startPct: 40, startMils: 80, improve: 0.2, floorPct: 22, floorMils: 35, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 30, medium: 40, heavy: 40 }, lightM: 2500 },
   chaseS: [10, 18], // a ship under fire (a fall within 250 m in the last 20 s) weaves ±chaseDeg: it chases the salvos
   chaseDeg: 30,
   // the AI's air-to-air bursts (estimate)
@@ -69,7 +69,7 @@ export const A = {
   listedSpeedCap: 0.65,
 
   // --- the AI (contract numbers where ROUND-3 §3 gives them) ---------------------------------------------------
-  strike: { approachM: 1500, pushOverM: 1200, torpedoRunM: 800, torpedoAltM: 40, approachAltM: 1500, releaseAltM: 380, rearmS: 40, launchEveryS: 3 },
+  strike: { approachM: 1500, pushOverM: 1200, torpedoRunM: 800, torpedoAltM: 40, approachAltM: 1500, releaseAltM: 380, rearmS: 40, launchEveryS: 3, diveCorrect: 0.8 },
   cap: { altM: 1500, radiusM: 1200, interceptM: 3000 },
   escortEngageM: 1500,
   ddAttackM: 4000, // contract: the destroyers go in when the enemy's main body is within 4 km
@@ -80,9 +80,15 @@ export const A = {
   evadeTorpedoM: 2000, // a ship that sees a torpedo track within this combs it
   zigzagS: [12, 22],
   zigzagDeg: 40,
-  smokeS: 240,
-  smokeR: 300,
-  rangeFor: (aggression) => 4600 - 3000 * aggression, // the range the admiral keeps to the enemy's main body
+  smokeS: 150, // a screen's life (drawn, drifting); it hides only while thick
+  smokeThickS: 100,
+  smokeR: 250,
+  smokeFirstS: 90, // the weaker side's smoke from the start
+  smokeWindowS: 60, // a side pressed makes smoke this long, and not again for as long after
+  smokeLayers: 2, // escorts laying smoke at once, a side (the carriers make their own only while their main body is being hit)
+  squallSeeOutM: 2000, // a ship inside a squall sees out this far (and is seen from no further than squall.hideM)
+  rangeFor: (aggression) => 5600 - 3000 * aggression, // the range the admiral keeps to the enemy's main body (0.6: 3.8 km)
+  freeTorpedoS: 120, // a cruiser or destroyer outside an attack fires at a carrier or capital ship on its beam no oftener than this
   surviveRangeM: 5200, // a side that must keep its ships afloat keeps away (beyond the arena's width: it runs, and the edge turns it)
   waveBase: 3, // the first wave: at least three, or a sixth of the strike aircraft a side has
   waveShare: 1 / 6,
