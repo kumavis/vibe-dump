@@ -973,7 +973,8 @@ follows N3.
   `blast.land` with no `y` (the view takes a template's height from its own
   tops); the play-report's F7b row (a shooter fires from a deck in ≥ 50% of
   `fort/`), with `fort/` re-recorded. Drop lines and the "▲2"" label landed
-  in F7a.
+  in F7a. (The row itself landed with F17, `sim/play-report.mjs --row f7b`:
+  6 of 6 on F17's `fort/`; F7b judges it again on its own re-record.)
 - [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
   draws the platform as an open slab on braced posts while its deck's
   line-of-sight body is solid from the ground, as the piece table says: a
@@ -1110,7 +1111,7 @@ answered; 35 (Escape) by the user: no change.
   ignores, so a fogged match folds as any other), and as a solo option
   against the AI, the panel saying the AI sees everything (core/ai reads
   `G.units`). No fog in hotseat (one screen) or for a watcher.
-- [ ] **F17** Lobbing from height (rules). A blast or indirect weapon's range
+- [x] **F17** Lobbing from height (rules). A blast or indirect weapon's range
   grows with the shooter's floor over the target's as a thrown thing's
   does: with R its printed range and h the drop (negative firing up), the
   reach is √(R² + 2hR), the farthest a projectile launched at the speed that
@@ -1131,6 +1132,27 @@ answered; 35 (Escape) by the user: no change.
   ladders only, which no big unit climbs), the Venom Engine's 30" is 31.9",
   the Grenadiers' 12" is 13.9", and 14.7" from the watchtower; firing up at
   a rampart the trebuchet reaches 33.9".
+  (1917303; `CORE_VERSION` 8, `RULES_ID` unchanged: the formula is code,
+  not data. `lobbed(w)` and `rangeOf(G, u, tg, from)` in
+  core/actions/shoot.js, doors of the queries; `shotInfo`'s range test and
+  the AI's `shotValue` by it, the classic expression its own path; no AI
+  scan is bounded by a weapon's range, so none widened. The ring the reach
+  to the ground under the shooter, the tooltip the gap against the reach
+  ("30.2" / 37.9" (36", lobbed down)"), the help's Lobbing line. Measured,
+  bit for bit on every deck (terrain-check's lob rows): the trebuchet 37.9"
+  from 2", 38.4" from the keep's 2.5", 33.9" up at 2"; the Venom Engine
+  31.9"; the Grenadiers 13.9", 14.7" from 3": about a drop's worth, so the
+  trebuchet's base range stays (question 30). P-height's `lobPairs` and
+  three self-test edits; P-scan's reference by `rangeOf`; data-check and
+  P-prop pin 8. `fort/` re-recorded in b0dbba0 (watch-fort-3, -8 and -9;
+  the other three pairs and both human logs unchanged; no `scale/` pair is
+  on `fortified`), the PIN on 1917303: parity and `--pin` 70 of 70.
+  play-report's F7b row built: a shooter fires from a deck in 6 of 6
+  (shots from decks 28 → 36; F7a's row 4 → 5 of 6). The AI doesn't climb
+  to lob: on a 24-battle sweep, shots from a climbed deck 25 → 25, past
+  the printed range 0 → 1. Left as they were: the planner's approach and
+  the standing orders' "target in range" (present/, client code) read the
+  printed range. DESIGN's F17 notes.)
 - [ ] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
   target for every weapon but a spell ("locked in combat"), so nobody shoots
   or shells a melee. Any ranged weapon may, at no modifier: the cost is the
