@@ -206,7 +206,8 @@ function gunnery(ar, i, x, side, heldStation) {
       if (ar.hidden(i, j)) continue
       const xj = ar._X[j]
       const inArc = main ? main.mounts.some((mt) => bears(ar, i, mt, s.pos[3 * j], s.pos[3 * j + 2])) : true
-      const sc = R * (1 - 0.45 * (1 - xj.hp / xj.hpMax)) * (inArc ? 1 : 1.6)
+      // (the goal's type before the rest: a side out to sink carriers lays its guns on a carrier before an escort nearer)
+      const sc = R * (1 - 0.45 * (1 - xj.hp / xj.hpMax)) * (inArc ? 1 : 1.6) * (goalTypesOf(side).has(xj.model.type) ? A.aiGun.goalK : 1)
       if (sc < bestS) {
         bestS = sc
         best = j
@@ -228,7 +229,7 @@ function gunnery(ar, i, x, side, heldStation) {
     }
     const R0 = Math.hypot(s.pos[3 * ti] - s.pos[3 * i], s.pos[3 * ti + 2] - s.pos[3 * i + 2])
     if (R0 > bg.battery.table.maxRange * 0.97) continue
-    // (a light gun's fire at a ship beyond 3.5 km is not worth the rounds)
+    // (a light gun's fire at a ship beyond 2.5 km is not worth the rounds)
     if (bg.battery.weapon.calibreMm < 150 && R0 > A.aiGun.lightM) continue
     const readyM = bg.mounts.filter((mt) => mt.readyAt <= ar.t && bears(ar, i, mt, s.pos[3 * ti], s.pos[3 * ti + 2]))
     if (!readyM.length) continue
@@ -237,6 +238,18 @@ function gunnery(ar, i, x, side, heldStation) {
     if (bg.battery.role === 'main' && readyM.length < bearing) continue
     aiSalvo(ar, i, bg, readyM, ti)
   }
+}
+
+/** The ship types a side's main goal (and its further terms) would have it sink or hit; none for a side that must survive. */
+function goalTypesOf(side) {
+  if (side._goalTypes) return side._goalTypes
+  const set = new Set()
+  const goal = side.def.goal || {}
+  for (const g of [goal, ...(Array.isArray(goal.also) ? goal.also : [])]) {
+    if (g.kind !== 'sink' && g.kind !== 'hit') continue
+    for (const t of Array.isArray(g.types) && g.types.length ? g.types : [g.type]) if (t && t !== 'ship' && t !== 'aircraft') set.add(t)
+  }
+  return (side._goalTypes = set)
 }
 
 function secondaryTarget(ar, i, enemy) {

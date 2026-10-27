@@ -50,7 +50,7 @@ export const A = {
   torpedoArmM: 150, // estimate: armed after 150 m (the wide window)
   aaK: 3, // contract: AA as the hazard model × 3
   // the AI's ranging (estimate; research/engine-3.md §5: the lead is solved exactly, the range is walked in)
-  aiGun: { startPct: 40, startMils: 80, improve: 0.2, floorPct: 22, floorMils: 35, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 30, medium: 40, heavy: 40 }, lightM: 2500 },
+  aiGun: { startPct: 40, startMils: 80, improve: 0.2, floorPct: 22, floorMils: 35, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 30, medium: 40, heavy: 40 }, lightM: 2500, goalK: 0.55 },
   chaseS: [10, 18], // a ship under fire (a fall within 250 m in the last 20 s) weaves ±chaseDeg: it chases the salvos
   chaseDeg: 30,
   // the AI's air-to-air bursts (estimate)
