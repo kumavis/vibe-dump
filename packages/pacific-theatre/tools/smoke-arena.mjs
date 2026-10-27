@@ -1,0 +1,690 @@
+#!/usr/bin/env node
+// The wargame's gate (ROUND-3.md §3 "Determinism", §7; engine-3).
+//
+// Part 1, headless in node (the arena imports no three.js), the balance: each
+// scenario run for both admirals with no player, 20 seeds a side: the sim
+// finite, both sides taking losses, no unit beyond the arena's edge by more
+// than 1 km, the side's main goal met within the clock in 40–75 % of its
+// seeds (the balance band), the step under 2 ms (its mean and 99th
+// percentile, on this machine); and, where the scenario gives them, the
+// start laid out as tools/check/wargames.mjs layout() lays it (when that
+// check is in the tree) and never more aircraft a side in the air than its
+// maxAirborne.
+//
+// Part 2, headless, a scripted player in each scenario as each side:
+// possess the first unit, fire at its station, hop to each kind (1–4, Tab),
+// fly an aircraft and fire, be lost, be given the next unit two seconds
+// later with its line, the tally and the highlights, release, a forced end.
+//
+// Part 3, in Chromium under SwiftShader against the Vite dev server
+// (battle.html?wargame=test-box, started here if not up): enter the fixture
+// as each side through Battle.enterWargame, the HUD's own lines (the clock,
+// the station bar), a hit, a slow motion, the snapshots, a forced end and
+// its event, no console error, frame time and heap (tools/shots/arena-*.png).
+//
+// Part 4, only with --looks (alone, it skips the rest): the pictures the
+// engine-3 workflow was asked to look at, the battle paused for each and the
+// camera set by hand (tools/shots/arena-look-*.png): Yamato's main battery on
+// a carrier at about 5 km and its fall (Samar, when content-3's file is in
+// the tree), a Wildcat in a dogfight with a Zero, the player's torpedo hit in
+// its slow motion, a carrier burning and going down, and the arena from the
+// orbit camera with both fleets. Pictures to look at, not checks: a look that
+// finds no such moment says so and the run goes on.
+//
+//   node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs
+//   node tools/smoke-arena.mjs [--headless-only] [--browser-only] [--seeds 20] [--scenario <file> ...]
+//                              [--only <id> ...] [--skip-balance] [--skip-player] [--set <id>.<side>.<path>=<value> ...]
+//   node tools/smoke-arena.mjs --looks           the pictures of part 4 alone
+//   PORT=5431 node tools/smoke-arena.mjs ...     the dev server's port (another worktree's may hold 5297)
+//
+// The scenarios: the fixture (test-data/wargames/test-box.json), every
+// public/data/wargames/*.json there is (content-3's), and any --scenario
+// file (its box read from public/data/).
+
+import fs from 'node:fs'
+import path from 'node:path'
+import { spawn } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import { readPNG } from './lib/png.mjs'
+import { decodeHeights } from './lib/raster.mjs'
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
+const argv = process.argv.slice(2)
+const args = new Set(argv)
+const PORT = Number(process.env.PORT || 5297)
+const SEEDS = argv.includes('--seeds') ? Number(argv[argv.indexOf('--seeds') + 1]) : 20
+const extra = argv.flatMap((a, i) => (a === '--scenario' ? [argv[i + 1]] : []))
+const only = argv.flatMap((a, i) => (a === '--only' ? [argv[i + 1]] : [])) // scenario ids to run (all when none)
+// --set <id>.<side key>.<path>=<value>: a scenario's field overridden for this run only (the admirals' numbers being
+// tuned, e.g. --set samar.japan.admiral.turnAwayAt=0.9), so a balance can be tried before the file is changed
+const sets = argv.flatMap((a, i) => (a === '--set' ? [argv[i + 1]] : [])).map((x) => {
+  const [k, v] = x.split('=')
+  const [id, ...p] = k.split('.')
+  return { id, path: p, value: v === 'null' ? null : v === 'true' ? true : v === 'false' ? false : Number.isFinite(+v) && v !== '' ? +v : v }
+})
+const shots = path.join(root, 'tools/shots')
+fs.mkdirSync(shots, { recursive: true })
+const J = (p) => JSON.parse(fs.readFileSync(p, 'utf8'))
+const list = (v, k) => (Array.isArray(v) ? v : v?.[k] || [])
+
+const { createArena } = await import('../src/battle/arena/index.js')
+const { hitAircraft, hitShip } = await import('../src/battle/arena/damage.js')
+const { TangentProjection } = await import('../src/geo.js')
+const { wrapDeep } = await import('../src/data/load.js')
+
+let failed = 0
+const check = async (name, fn) => {
+  const t0 = Date.now()
+  try {
+    const note = await fn()
+    console.log('  ✓', name + (note ? ` — ${note}` : ''), `(${((Date.now() - t0) / 1000).toFixed(1)} s)`)
+  } catch (err) {
+    failed++
+    console.log('  ✗', name, '—', err.message.split('\n')[0])
+  }
+}
+const assert = (c, m) => {
+  if (!c) throw new Error(m)
+}
+const pct = (x) => `${Math.round(x * 100)} %`
+
+// --- the scenarios and their boxes -------------------------------------------------------------------------
+// (the fixture written afresh each time: fake-data.mjs and fake-battle.mjs rewrite the kits and the box it reads)
+const fixtureFile = path.join(root, 'test-data/wargames/test-box.json')
+if (fs.existsSync(path.join(root, 'test-data/boxes/test-box/battle.json'))) {
+  await new Promise((r) => spawn(process.execPath, [path.join(root, 'tools/fake-wargame.mjs')], { stdio: 'inherit' }).on('exit', r))
+}
+// content-3's layout() (tools/check/wargames.mjs), when it is in the tree: the start must agree with it
+const layoutFile = path.join(root, 'tools/check/wargames.mjs')
+const layout = fs.existsSync(layoutFile) ? (await import('./check/wargames.mjs')).layout ?? null : null
+const scenarios = []
+if (fs.existsSync(fixtureFile)) scenarios.push({ file: fixtureFile, data: path.join(root, 'test-data') })
+else console.log('no test-data/: run node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs first')
+const pub = path.join(root, 'public/data/wargames')
+if (fs.existsSync(pub)) for (const f of fs.readdirSync(pub).filter((f) => f.endsWith('.json')).sort()) scenarios.push({ file: path.join(pub, f), data: path.join(root, 'public/data') })
+for (const f of extra) scenarios.push({ file: path.resolve(f), data: path.join(root, 'public/data') })
+if (only.length) for (let k = scenarios.length - 1; k >= 0; k--) if (!only.includes(J(scenarios[k].file).id) && !only.includes(path.basename(scenarios[k].file, '.json'))) scenarios.splice(k, 1)
+
+const boxCache = new Map()
+function loadScenario({ file, data }) {
+  const scenario = J(file)
+  for (const st of sets) {
+    if (st.id !== scenario.id) continue
+    let o = scenario.sides
+    for (const k of st.path.slice(0, -1)) o = o?.[k]
+    if (!o) throw new Error(`--set ${st.id}.${st.path.join('.')}: no such field`)
+    o[st.path.at(-1)] = st.value
+  }
+  const key = `${data}:${scenario.box}`
+  if (!boxCache.has(key)) {
+    const kits = { ships: list(J(path.join(data, 'kits/ships.json')), 'ships'), aircraft: list(J(path.join(data, 'kits/aircraft.json')), 'aircraft'), weapons: list(J(path.join(data, 'kits/weapons.json')), 'weapons') }
+    const man = list(J(path.join(data, 'boxes/manifest.json')), 'boxes').find((b) => b.id === scenario.box)
+    if (!man) throw new Error(`${path.basename(file)}: no box ${scenario.box} in ${path.relative(root, data)}`)
+    const proj = new TangentProjection(man.projection)
+    const battle = J(path.join(data, man.battle))
+    wrapDeep(battle, proj.lon0)
+    const img = readPNG(path.join(data, man.height.file))
+    const ground = { metres: decodeHeights(img, man.height.scale, man.height.offset), W: img.width, H: img.height, rect: proj.rect(man.bounds), exaggeration: man.exaggeration ?? 1 }
+    boxCache.set(key, { kits, box: { battle, ground, proj, exaggeration: man.exaggeration ?? 1 } })
+  }
+  return { scenario, ...boxCache.get(key) }
+}
+
+const finiteState = (ar) => {
+  const s = ar.state
+  for (let i = 0; i < ar.capacity; i++) {
+    if (!s.alive[i]) continue
+    for (let k = 0; k < 3; k++) if (!Number.isFinite(s.pos[3 * i + k]) || !Number.isFinite(s.vel[3 * i + k])) return `${ar.slots[i].id} pos/vel`
+    for (let k = 0; k < 4; k++) if (!Number.isFinite(s.quat[4 * i + k])) return `${ar.slots[i].id} quat`
+  }
+  return null
+}
+
+const doLooks = args.has('--looks')
+const doHeadless = !args.has('--browser-only') && !doLooks
+const doBrowser = !args.has('--headless-only') && !doLooks
+const balance = []
+
+if (doHeadless) {
+  // =========================================================================================================
+  // Part 1: the balance
+  // =========================================================================================================
+  console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player${sets.length ? `, with ${sets.map((x) => `${x.id}.${x.path.join('.')}=${x.value}`).join(', ')}` : ''}:`)
+  for (const sc of args.has('--skip-balance') ? [] : scenarios) {
+    const { scenario, kits, box } = loadScenario(sc)
+    if (layout) {
+      await check(`${scenario.id}: the start as tools/check/wargames.mjs layout() lays it`, () => {
+        const ar = createArena(scenario, kits, box, { side: 'us', seed: 'layout', warn: () => {} })
+        const lay = layout(scenario)
+        if (!lay.length) return 'no formation given'
+        let worst = 0
+        let at = ''
+        for (const e of lay) {
+          const i = ar.slots.findIndex((u) => u.id === e.id && u.kind === 'ship')
+          assert(i >= 0, `${e.id} is not in the arena`)
+          const d = Math.hypot(ar.state.pos[3 * i] - ar.centre.x - e.p[0], ar.state.pos[3 * i + 2] - ar.centre.z + e.p[1])
+          if (d > worst) [worst, at] = [d, e.id]
+        }
+        assert(worst < 1, `${at} starts ${worst.toFixed(1)} m from its place`)
+        return `${lay.length} ships, the worst ${worst.toFixed(2)} m from its place`
+      })
+    }
+    for (const side of ['jp', 'us']) {
+      await check(`${scenario.id} as ${side}: finite, losses on both sides, inside the arena, the goal met in 40–75 % of the seeds, the step under 2 ms`, () => {
+        let met = 0
+        let both = 0
+        let far = 0
+        const upMax = { jp: 0, us: 0 }
+        const times = []
+        const reasons = {}
+        let sumMs = 0
+        let steps = 0
+        for (let k = 0; k < SEEDS; k++) {
+          const ar = createArena(scenario, kits, box, { side, seed: String(k), warn: () => {} })
+          let n = 0
+          while (!ar.result) {
+            const t0 = performance.now()
+            ar.step()
+            const d = performance.now() - t0
+            if (n > 120) {
+              times.push(d)
+              sumMs += d
+              steps++
+            }
+            if (n % 30 === 0) {
+              const bad = finiteState(ar)
+              if (bad) throw new Error(`seed ${k}: not finite at ${ar.t.toFixed(1)} s (${bad})`)
+              const s = ar.state
+              for (let i = 0; i < ar.capacity; i++) if (s.alive[i] === 1) far = Math.max(far, Math.hypot(s.pos[3 * i] - ar.centre.x, s.pos[3 * i + 2] - ar.centre.z) - ar.R)
+              for (const key of ['jp', 'us']) {
+                const up = ar.airborneOf(key)
+                upMax[key] = Math.max(upMax[key], up)
+                if (up > ar.sides[key].maxAirborne) throw new Error(`seed ${k}: ${up} of ${key}'s aircraft in the air at ${ar.t.toFixed(1)} s, more than its ${ar.sides[key].maxAirborne}`)
+              }
+            }
+            n++
+          }
+          const r = ar.result
+          reasons[r.reason] = (reasons[r.reason] || 0) + 1
+          if (r.goals[side].status === 'met') met++
+          const t = ar.tally
+          if (t.jp.shipsLost + t.jp.aircraftLost > 0 && t.us.shipsLost + t.us.aircraftLost > 0) both++
+        }
+        times.sort((a, b) => a - b)
+        const p99 = times[Math.floor(times.length * 0.99)]
+        const mean = sumMs / Math.max(1, steps)
+        const rate = met / SEEDS
+        balance.push({ id: scenario.id, side, rate, mean, p99, far, reasons })
+        const note = `goal met in ${met}/${SEEDS} (${pct(rate)}); losses on both sides in ${both}/${SEEDS}; furthest ${Math.max(0, far).toFixed(0)} m beyond the edge; at most ${upMax.jp} / ${upMax.us} aircraft up; step ${mean.toFixed(3)} ms mean, ${p99.toFixed(3)} ms p99; ends ${JSON.stringify(reasons)}`
+        assert(both >= Math.ceil(SEEDS * 0.9), `losses on both sides in only ${both} of ${SEEDS}: ${note}`)
+        assert(far <= 1000, `a unit ${far.toFixed(0)} m beyond the edge: ${note}`)
+        assert(mean < 2 && p99 < 2, `the step: ${note}`)
+        assert(rate >= 0.4 && rate <= 0.75, `outside the band: ${note}`)
+        return note
+      })
+    }
+  }
+
+  // =========================================================================================================
+  // Part 2: a scripted player
+  // =========================================================================================================
+  console.log('a scripted player (ROUND-3 §7):')
+  for (const sc of args.has('--skip-player') ? [] : scenarios) {
+    const { scenario, kits, box } = loadScenario(sc)
+    for (const side of ['jp', 'us']) {
+      await check(`${scenario.id} as ${side}: possess, fire, hop, fly, be lost, respawn, release, a forced end`, () => {
+        const ar = createArena(scenario, kits, box, { side, seed: 'player', warn: () => {} })
+        const first = ar.first
+        assert(first, 'no first unit')
+        const pl = ar.takeControl(first)
+        const so0 = ar._sortie
+        assert(ar.slots[pl.unitIndex].side === side, 'the first unit is not the side’s')
+        const def = Object.values(scenario.sides).find((d) => (d.side ?? null) === side) ?? scenario.sides[side === 'jp' ? 'japan' : 'usa']
+        if (def?.firstStation) assert(pl.station === def.firstStation, `the first station is ${pl.station}, not the scenario's ${def.firstStation}`)
+        const firstKind = pl.kind
+        const gunsAt = (i) => (ar._X[i].ammo?.guns || []).reduce((n, g) => n + (g.fixed ? g.left : 0), 0)
+        const guns0 = pl.kind === 'aircraft' ? gunsAt(pl.unitIndex) : 0
+        const rows = ar.units()
+        assert(rows.every((r) => r.enemy === (r.side !== side)), 'a row marked enemy wrongly')
+        assert(rows.filter((r) => !r.enemy && r.alive === 1).every((r) => r.takeable === true), 'a friendly unit alive is not takeable')
+        assert(rows.filter((r) => r.enemy).every((r) => typeof r.takeable === 'string'), 'an enemy row is takeable')
+        // twenty seconds at the first unit's station: steer, lay the guns on the lead, fire (an aircraft: at the nearest ship, guns, its torpedo or bombs)
+        for (let k = 0; k < (firstKind === 'aircraft' ? 60 : 20) * 60; k++) {
+          if (firstKind === 'aircraft' && k % 60 === 0 && (so0.releases.torpedoes + so0.releases.bombs > 0 || ar.player?.unitIndex !== pl.unitIndex)) break
+          const p = ar.player
+          if (p.kind === 'aircraft' && p.unitIndex === pl.unitIndex) {
+            const s = ar.state
+            const i = p.unitIndex
+            let best = -1
+            let bd = Infinity
+            for (const j of ar._ships) if (s.alive[j] === 1 && ar.slots[j].side !== side) {
+              const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+              if (d < bd) [bd, best] = [d, j]
+            }
+            // a fighter goes for the nearest of the other side's aircraft within 3 km, anything else for the nearest ship
+            let foe = -1
+            let fd = Infinity
+            if (ar._X[i].model.type === 'fighter') for (const j of ar._air) if (s.alive[j] === 1 && ar.slots[j].side !== side) {
+              const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 1] - s.pos[3 * i + 1], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+              if (d < fd) [fd, foe] = [d, j]
+            }
+            if (foe >= 0 && fd < 3000) {
+              p.input.mode = 'aim'
+              p.input.aimDir = [s.pos[3 * foe] + s.vel[3 * foe] - s.pos[3 * i], s.pos[3 * foe + 1] - s.pos[3 * i + 1], s.pos[3 * foe + 2] + s.vel[3 * foe + 2] - s.pos[3 * i + 2]]
+              p.input.fireHeld = fd < 700
+            } else if (best >= 0) {
+              p.input.mode = 'aim'
+              p.input.aimDir = [s.pos[3 * best] - s.pos[3 * i], Math.max(-200, 40 - s.pos[3 * i + 1]), s.pos[3 * best + 2] - s.pos[3 * i + 2]]
+              p.input.fireHeld = true // the trigger held from the start: a first aircraft lost on its way in has still fired
+              if (bd < 1400 && k % 60 === 0) {
+                p.input.bombCount++
+                p.input.torpedoCount++
+              }
+            }
+          } else if (p.kind === 'ship') {
+            p.input.helm = Math.sin(ar.t / 4) * 0.5
+            const t = p.state.target
+            if (t?.lead) {
+              const i = p.unitIndex
+              const s = ar.state
+              p.input.aimAz = (Math.atan2(t.lead[0] - s.pos[3 * i], -(t.lead[2] - s.pos[3 * i + 2])) / (Math.PI / 180) + 360) % 360
+              p.input.aimRange = Math.hypot(t.lead[0] - s.pos[3 * i], t.lead[2] - s.pos[3 * i + 2])
+              if (k % 120 === 0) p.input.salvoCount++
+              if (k === 300) p.input.torpedoCount++
+            }
+          }
+          ar.step()
+        }
+        const fired = so0?.releases
+        const spent = firstKind === 'aircraft' ? guns0 - gunsAt(pl.unitIndex) : 0
+        assert(fired && fired.salvos + fired.torpedoes + fired.bombs + spent > 0, `nothing fired from ${ar.slots[pl.unitIndex].id}`)
+        // the hops: each kind there is
+        const hopped = []
+        for (const kind of ['carrier', 'capital', 'destroyer', 'aircraft', 'next']) {
+          const want = ar.hopTarget(kind)
+          const p = ar.hop(kind)
+          if (want >= 0) {
+            assert(p && p.unitIndex === want, `hop ${kind} did not land on ${ar.slots[want].id}`)
+            hopped.push(`${kind}→${ar.slots[p.unitIndex].id}`)
+          }
+          ar.step()
+        }
+        // an aircraft (when the side has one): fly at the nearest enemy, fire, drop
+        const air = ar.hop('aircraft')
+        let flown = 'no aircraft'
+        if (air) {
+          const i = air.unitIndex
+          for (let k = 0; k < 15 * 60; k++) {
+            const s = ar.state
+            const t = ar.player.state.target
+            let best = t?.index ?? -1
+            if (best < 0) {
+              let bd = Infinity
+              for (const j of ar._ships) if (s.alive[j] === 1 && ar.slots[j].side !== side) {
+                const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+                if (d < bd) {
+                  bd = d
+                  best = j
+                }
+              }
+            }
+            if (best >= 0 && ar.player?.unitIndex === i) {
+              ar.player.input.mode = 'aim'
+              ar.player.input.aimDir = [s.pos[3 * best] - s.pos[3 * i], Math.max(-300, s.pos[3 * best + 1] - s.pos[3 * i + 1] + 60), s.pos[3 * best + 2] - s.pos[3 * i + 2]]
+              ar.player.input.fireHeld = true
+              if (k === 400) {
+                ar.player.input.bombCount++
+                ar.player.input.torpedoCount++
+              }
+            }
+            ar.step()
+            if (ar.player?.unitIndex !== i) break
+          }
+          flown = `${ar.slots[i].id}: ${ar.state.alive[i] === 1 ? `${ar.state.pos[3 * i + 1].toFixed(0)} m up` : 'lost'}`
+          // be lost: the next one of the flight two seconds later, with its line
+          if (ar.player?.unitIndex === i && ar.state.alive[i] === 1) {
+            hitAircraft(ar, i, 9, -1, 'aa')
+            const tLost = ar.t
+            while (ar.player?.unitIndex === i && ar.t - tLost < 3) ar.step()
+            assert(ar.respawn && ar.respawn.from === i, 'no respawn after the aircraft was lost')
+            assert(Math.abs(ar.respawn.t - tLost - 2) < 0.1, `the respawn came ${(ar.respawn.t - tLost).toFixed(2)} s after the loss`)
+            assert(/did not return\. The next one is yours\./.test(ar.respawn.line), `the line: “${ar.respawn.line}”`)
+          }
+        }
+        // a ship lost: the nearest friendly ship
+        const shipPl = ar.hop('capital') || ar.hop('destroyer') || ar.hop('carrier')
+        let shipLine = 'no ship to lose'
+        if (shipPl) {
+          const i = shipPl.unitIndex
+          hitShip(ar, i, 999, { by: -1, weapon: 'torpedo' })
+          const tLost = ar.t
+          while (ar.player?.unitIndex === i && ar.t - tLost < 3) ar.step()
+          if (ar.player) {
+            assert(ar.respawn?.from === i, 'no respawn after the ship was lost')
+            assert(/is going down\. .+ is yours\./.test(ar.respawn.line), `the line: “${ar.respawn.line}”`)
+            shipLine = ar.respawn.line
+          }
+        }
+        const t = ar.tally
+        assert(t.player.lost >= 1, 'the tally has no loss')
+        assert(ar.highlights.some((h) => h.kind === 'lost'), 'no loss among the highlights')
+        assert(ar.highlights.some((h) => h.kind === 'sinking'), 'no sinking among the highlights')
+        const so = ar.releaseControl()
+        assert(so && so.held === false, 'release gave no sortie')
+        const r = ar.forceEnd()
+        assert(r && r.reason === 'forced' && r.goals.jp && r.goals.us && r.line, 'no result from the forced end')
+        assert(!/\b(kill|score|win|enemy)\b/i.test(r.line + shipLine), `a never-word: ${r.line}`)
+        return `${hopped.join(', ')}; ${flown}; “${shipLine}”; the end: “${r.line}”`
+      })
+    }
+  }
+}
+
+// =========================================================================================================
+// Part 3: the browser (the fixture under SwiftShader)
+// =========================================================================================================
+if (doBrowser) {
+  console.log('the browser (ROUND-3 §7), the fixture under SwiftShader:')
+  let vite = null
+  const up = async () => {
+    try {
+      const r = await fetch(`http://127.0.0.1:${PORT}/battle.html`)
+      return r.ok
+    } catch {
+      return false
+    }
+  }
+  if (!(await up())) {
+    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: false })
+    for (let k = 0; k < 60 && !(await up()); k++) await new Promise((r) => setTimeout(r, 500))
+  }
+  const { chromium } = await import('playwright')
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  const errors = []
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text())
+  })
+  page.on('pageerror', (e) => errors.push(String(e)))
+  const run = (body) => page.evaluate(new Function(`return (async () => { const app = window.__app; const battle = app.battle; const sim = battle.sim; ${body} })()`))
+  const steps = (n) => run(`const a = battle.sim; for (let k = 0; k < ${n} && !a.result; k++) a.step(); return a.t`)
+  try {
+    await check('enter the fixture as the United States: Battle.enterWargame, the first unit held, the HUD’s own lines', async () => {
+      const t0 = Date.now()
+      await page.goto(`http://127.0.0.1:${PORT}/battle.html?wargame=test-box&side=us&data=./test-data/`)
+      await page.waitForFunction(() => window.__app?.ready === true, null, { timeout: 240000 })
+      await page.evaluate(() => {
+        window.__events = []
+        window.__app.events.addEventListener('battle', (e) => window.__events.push(e.detail.kind))
+      })
+      await page.waitForTimeout(1500)
+      const st = await run(`return { w: battle.state.wargame, held: battle.state.held, mode: app.mode, cam: battle.scene.cameraMode, clock: document.querySelector('.pt-hud .clock')?.textContent, stations: [...document.querySelectorAll('.pt-hud .stations button')].map((b) => b.textContent), speeds: battle.speeds }`)
+      assert(st.w?.id === 'test-box' && st.w.side === 'us', `wargame state ${JSON.stringify(st.w)}`)
+      assert(st.held && st.mode === 'moment', `not held: ${JSON.stringify(st)}`)
+      assert(/^0:0\d/.test(st.clock || ''), `the HUD's clock: “${st.clock}”`)
+      assert(st.stations.length >= 2, `the station bar: ${st.stations.join(', ')}`)
+      await page.screenshot({ path: path.join(shots, 'arena-enter-us.png') })
+      return `in ${((Date.now() - t0) / 1000).toFixed(1)} s; ${st.held.id} at ${st.stations[0]}; camera ${st.cam}; clock “${st.clock.slice(0, 40)}”`
+    })
+    await check('a hit and its marker, a slow motion (the arena’s dt only), the snapshots (320 × 200 JPEG)', async () => {
+      // the arena run on in the page (SwiftShader draws a frame a second; the sim is not the frame)
+      let t = 0
+      for (let k = 0; k < 20; k++) {
+        t = await steps(600)
+        const n = await run(`return battle.sim.markers.filter((m) => m.kind !== 'down').length`)
+        if (n > 0) break
+      }
+      const markers = await run(`return sim.markers.filter((m) => m.kind !== 'down').slice(0, 3).map((m) => m.text)`)
+      assert(markers.length, `no hit by ${t.toFixed(0)} s`)
+      // a slow motion: the arena's request reaches the scene, whose factor scales the arena's dt in Battle.tick (and only the arena's)
+      await run(`window.__dts = []; const adv = sim.advance; sim.advance = (dt) => { window.__dts.push([battle.scene.slowFactor(), dt]); return adv(dt) }; sim.requestSlowmo(4, 'test'); return true`)
+      const ok = await page.waitForFunction(() => window.__dts.some(([f]) => f < 0.5), null, { timeout: 30000 }).then(() => true, () => false)
+      const dts = await page.evaluate(() => window.__dts)
+      const slow = dts.filter(([f]) => f < 0.5)
+      assert(ok && slow.length, `no slowed tick: ${JSON.stringify(dts.slice(0, 6))}`)
+      const f = Math.min(...dts.map(([k]) => k))
+      // (SwiftShader's frames are near a second apart, each tick's dt capped at 0.1 s: a slowed tick advances the arena at most 0.025 s)
+      assert(slow.every(([k, dt]) => dt <= 0.1 * k + 1e-6), `a slowed tick's dt: ${JSON.stringify(slow.slice(0, 4))}`)
+      // a snapshot on a highlight worth one
+      await run(`battle.scene._lastSnapT = -1e9; sim.highlight({ kind: 'hit', unit: sim.player.unitIndex, caption: 'test: a highlight', snap: true }); return true`)
+      await page.waitForFunction(() => window.__app.battle.sim.highlights.some((h) => h.caption === 'test: a highlight' && h.snapshot), null, { timeout: 30000 })
+      const snap = await page.evaluate(async () => {
+        const h = window.__app.battle.sim.highlights.find((x) => x.caption === 'test: a highlight')
+        const img = new Image()
+        img.src = h.snapshot
+        await img.decode()
+        return { w: img.width, h: img.height, jpeg: h.snapshot.startsWith('data:image/jpeg'), n: window.__app.battle.scene.snapshots }
+      })
+      assert(snap.jpeg && snap.w === 320 && snap.h === 200, `the snapshot ${JSON.stringify(snap)}`)
+      await page.screenshot({ path: path.join(shots, 'arena-fight-us.png') })
+      return `${markers.join(' · ')}; slow ×${f.toFixed(2)} (${slow.length} slowed ticks, the arena's dt ≤ ${Math.max(...slow.map(([, dt]) => dt)).toFixed(3)} s); snapshot ${snap.w}×${snap.h} JPEG, ${snap.n} taken`
+    })
+    await check('a forced end: the result, the wargame-end event, the controls let go', async () => {
+      const r = await run(`const r = battle.endNow(); return { line: r?.line, reason: r?.reason, mode: app.mode, held: battle.state.held, snaps: sim.highlights.filter((h) => h.snapshot).length }`)
+      await page.waitForTimeout(800)
+      const ev = await page.evaluate(() => window.__events)
+      assert(r.reason === 'forced' && r.line, `result ${JSON.stringify(r)}`)
+      assert(ev.includes('wargame-end'), `events ${ev.join(', ')}`)
+      assert(r.mode === 'watch', `mode ${r.mode}`)
+      await page.screenshot({ path: path.join(shots, 'arena-end-us.png') })
+      return `“${r.line}”; ${r.snaps} snapshot(s) on the highlights`
+    })
+    await check('play the other side: Battle.restart({ side: jp }), the first Japanese unit held, a hop', async () => {
+      const st = await run(`battle.restart({ side: 'jp' }); const a = battle.sim; return { w: battle.state.wargame, held: battle.state.held, side: a.slots[a.player.unitIndex].side, fresh: a !== sim && a.t === 0 }`)
+      assert(st.fresh, 'the restart did not build a fresh arena')
+      assert(st.w.side === 'jp' && st.side === 'jp' && st.held, `restart ${JSON.stringify(st)}`)
+      await page.waitForTimeout(1500)
+      const h = await run(`const r = battle.hop('aircraft') || battle.hop('destroyer'); return { row: r && r.id, cam: battle.scene.cameraMode, held: battle.state.held?.id }`)
+      assert(h.row && h.held === h.row, `hop ${JSON.stringify(h)}`)
+      await steps(1200)
+      await page.waitForTimeout(1200)
+      await page.screenshot({ path: path.join(shots, 'arena-jp.png') })
+      return `${st.held.id} first; hopped to ${h.row} (${h.cam})`
+    })
+    await check('no console error; frame time and heap', async () => {
+      const st = await page.evaluate(() => ({ s: window.__app.stats?.(), frame: window.__app.frameAvg, heap: performance.memory ? performance.memory.usedJSHeapSize / 1048576 : null }))
+      assert(!errors.length, errors.slice(0, 3).join(' | '))
+      return `frame ${st.frame?.toFixed(0)} ms (SwiftShader), ${st.s?.calls} draw calls, ${st.s?.triangles} triangles, heap ${st.heap?.toFixed(1)} MB`
+    })
+  } finally {
+    await browser.close()
+    if (vite) vite.kill()
+  }
+}
+
+
+// =========================================================================================================
+// Part 4: the looks (--looks)
+// =========================================================================================================
+if (doLooks) {
+  console.log('the looks (tools/shots/arena-look-*.png), under SwiftShader:')
+  let vite = null
+  const up = async () => {
+    try {
+      return (await fetch(`http://127.0.0.1:${PORT}/battle.html`)).ok
+    } catch {
+      return false
+    }
+  }
+  if (!(await up())) {
+    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: false })
+    for (let k = 0; k < 60 && !(await up()); k++) await new Promise((r) => setTimeout(r, 500))
+  }
+  const { chromium } = await import('playwright')
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  const errors = []
+  page.on('pageerror', (e) => errors.push(String(e)))
+  // the page's helpers: the arena (a), its state (s), stepping, and a camera of the look's own
+  const H = `
+    const app = window.__app; const battle = app.battle; const a = battle.sim; const s = a.state; const DEG = Math.PI / 180
+    const idx = (id) => a.slots.findIndex((u) => u.id === id)
+    const dist = (i, j) => Math.hypot(s.pos[3*i]-s.pos[3*j], s.pos[3*i+2]-s.pos[3*j+2])
+    const dist3 = (i, j) => Math.hypot(s.pos[3*i]-s.pos[3*j], s.pos[3*i+1]-s.pos[3*j+1], s.pos[3*i+2]-s.pos[3*j+2])
+    const brg = (i, j) => ((Math.atan2(s.pos[3*j]-s.pos[3*i], -(s.pos[3*j+2]-s.pos[3*i+2])) / DEG) + 360) % 360
+    const stepT = (sec) => { const t1 = a.t + sec; while (a.t < t1 && !a.result) a.step() }
+    const C = battle.scene.cameras
+    const cam = (mode, o) => { if (C._upd) { C.update = C._upd; C._upd = null } ; battle.scene.setCamera(mode, o) }
+    const fixCam = (i, j, back, up, fov = 50) => {
+      if (!C._upd) C._upd = C.update
+      C.update = () => {
+        const c = C.camera
+        const dx = s.pos[3*i]-s.pos[3*j], dy = s.pos[3*i+1]-s.pos[3*j+1], dz = s.pos[3*i+2]-s.pos[3*j+2], L = Math.hypot(dx, dy, dz) || 1
+        c.position.set(s.pos[3*i] + dx / L * back, s.pos[3*i+1] + dy / L * back + up, s.pos[3*i+2] + dz / L * back)
+        c.up.set(0, 1, 0)
+        c.lookAt((s.pos[3*i]+s.pos[3*j]) / 2, (s.pos[3*i+1]+s.pos[3*j+1]) / 2, (s.pos[3*i+2]+s.pos[3*j+2]) / 2)
+        c.fov = fov; c.updateProjectionMatrix()
+      }
+    }
+  `
+  const run = (body, arg) => page.evaluate(new Function('arg', `return (async () => { ${H} ${body} })()`), arg)
+  const frames = async (n = 4) => {
+    for (let k = 0; k < n; k++) await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r())))
+  }
+  const shot = async (name) => {
+    await frames()
+    await page.screenshot({ path: path.join(shots, `arena-look-${name}.png`) })
+  }
+  const open = async (id, side) => {
+    await page.goto(`http://127.0.0.1:${PORT}/battle.html?wargame=${id}&side=${side}&data=${id === 'test-box' ? './test-data/' : './data/'}`)
+    await page.waitForFunction(() => window.__app?.ready === true, null, { timeout: 300000 })
+    await page.addStyleTag({ content: '#dev-panel { display: none !important }' })
+    await page.waitForTimeout(1500)
+    await run(`battle.running = false; return true`)
+  }
+  const hasSamar = fs.existsSync(path.join(root, 'public/data/wargames/samar.json'))
+  // (the player's spread from Test Destroyer B at an enemy capital ship, the same on each run: the arena is seeded and steps at 1/60 s)
+  const SPREAD = `
+    battle.hop('destroyer'); battle.running = false
+    const i = a.player.unitIndex, x = a._X[i]
+    for (let k = 0; k < 60 * 400; k++) {
+      let best = -1, bd = 1e9
+      for (const j of a.sides.jp.ships) if (s.alive[j] === 1 && ['bb', 'cv', 'ca'].includes(a._X[j].model.type)) { const d = dist(i, j); if (d < bd) { bd = d; best = j } }
+      const p = a.player
+      if (best < 0 || !p || p.unitIndex !== i) return null
+      p.input.telegraph = 1
+      const v = (x.torp.weapon?.settings?.[0]?.speedKn ?? x.torp.weapon?.speedKn ?? 40) * 0.514444 * 1.5
+      const px = s.pos[3*best]-s.pos[3*i], pz = s.pos[3*best+2]-s.pos[3*i+2], tvx = s.vel[3*best], tvz = s.vel[3*best+2]
+      const A2 = tvx*tvx+tvz*tvz-v*v, B2 = 2*(px*tvx+pz*tvz), C2 = px*px+pz*pz, disc = B2*B2-4*A2*C2
+      let ib = brg(i, best)
+      if (disc >= 0) { const r1 = (-B2-Math.sqrt(disc))/(2*A2), r2 = (-B2+Math.sqrt(disc))/(2*A2); const tt = Math.min(r1,r2) > 0 ? Math.min(r1,r2) : Math.max(r1,r2); if (tt > 0) ib = ((Math.atan2(px+tvx*tt, -(pz+tvz*tt)) / DEG) + 360) % 360 }
+      const off = ((brg(i, best) - s.heading[i] + 540) % 360) - 180
+      p.input.helm = Math.max(-1, Math.min(1, (off - Math.sign(off || 1) * 50) / 30))
+      p.input.aimAz = ib
+      if (bd < 2400 && a.t >= x.torp.readyAt && Math.abs(((ib - s.heading[i] + 540) % 360) - 180) > 30) { p.input.torpedoCount++; return { t: a.t, target: a.slots[best].id } }
+      a.step()
+    }
+    return null
+  `
+  try {
+    if (hasSamar) {
+      await check('Yamato’s main battery on a carrier at about 5 km, and its fall (Samar, Japan)', async () => {
+        await open('samar', 'jp')
+        const r = await run(`
+          const y = idx('yamato')
+          battle.release?.(); battle.running = false
+          for (let k = 0; k < 20000; k++) {
+            const x = a._X[y]
+            const before = x.guns[0].mounts.map((m) => m.readyAt)
+            a.step()
+            const t = x.target
+            if (t >= 0 && a._X[t].model.type === 'cve' && x.guns[0].mounts.some((m, q) => m.readyAt > before[q] + 1) && dist(y, t) > 4300 && dist(y, t) < 5800) {
+              const b = brg(y, t)
+              cam('orbit', { unitIndex: y, distance: 650, bearing: (b + 90) % 360, pitch: 0.1 })
+              return { t: a.t, target: a.slots[t].id, d: dist(y, t), b, ti: t }
+            }
+          }
+          return null
+        `)
+        assert(r, 'no salvo of Yamato’s on a carrier between 4.3 and 5.8 km')
+        await shot('yamato-fires')
+        await run(`stepT(9.6); cam('orbit', { unitIndex: arg.ti, distance: 1300, bearing: (arg.b + 300) % 360, pitch: 0.09 }); return true`, r)
+        await shot('yamato-fall')
+        await run(`stepT(1.2); return true`)
+        await shot('yamato-fall-2')
+        return `${r.target} at ${(r.d / 1000).toFixed(1)} km, ${r.t.toFixed(0)} s`
+      })
+    }
+    await check('a Wildcat in a dogfight with a Zero (the fixture)', async () => {
+      await open('test-box', 'us')
+      const r = await run(`
+        battle.release?.(); battle.running = false
+        for (let k = 0; k < 60 * 400; k++) {
+          a.step()
+          if (k % 6) continue
+          for (const i of a._air) {
+            if (s.alive[i] !== 1 || a._X[i].model.id !== 'fm-2') continue
+            const e = a._X[i].engage
+            if (e >= 0 && s.alive[e] === 1 && a._X[e].model.id === 'a6m5' && dist3(i, e) < 350 && dist3(i, e) > 120) {
+              fixCam(i, e, 40, 6, 50)
+              return { i, e, t: a.t, d: dist3(i, e) }
+            }
+          }
+        }
+        return null
+      `)
+      assert(r, 'no FM-2 engaging an A6M5 within 350 m')
+      await shot('dogfight')
+      await run(`stepT(0.6); fixCam(arg.e, arg.i, 60, 10, 50); return true`, r)
+      await shot('dogfight-2')
+      return `at ${r.t.toFixed(0)} s, ${r.d.toFixed(0)} m apart`
+    })
+    await check('the player’s torpedo hit in its slow motion (the fixture, Test Destroyer B’s spread)', async () => {
+      await open('test-box', 'us')
+      // (a fresh arena at 0:00, paused in the same call, its seed the game count's: the same game twice over)
+      const fresh = (g) => run(`if (arg != null) battle.wargame.games = arg - 1; battle.restart({ side: 'us' }); battle.running = false; return battle.wargame.games`, g)
+      const g = await fresh(null)
+      const fired = await run(SPREAD)
+      assert(fired, 'no spread fired')
+      // run 1: the step its hit comes; run 2: the same game to a second before it, then the scene runs it
+      const r1 = await run(`const h0 = a.slowmo.seq; for (let k = 0; k < 60 * 300; k++) { a.step(); if (a.slowmo.seq !== h0) break } ; return a.slowmo.seq !== h0 ? { t: a.t, on: a.markers.filter((m) => m.player).at(-1)?.unit ?? -1 } : null`)
+      assert(r1 && r1.on >= 0, 'none of the spread hit')
+      await fresh(g)
+      await run(SPREAD)
+      await run(`while (a.t < arg.t - 1.2) a.step(); battle.wargameTick(); cam('orbit', { unitIndex: arg.on, distance: 600, bearing: (s.heading[arg.on] + 75) % 360, pitch: 0.1 }); window.__seq0 = a.slowmo.seq; battle.running = true; return true`, r1)
+      await page.waitForFunction(() => window.__app.battle.sim.slowmo.seq !== window.__seq0, null, { timeout: 120000, polling: 30 })
+      await page.waitForTimeout(100)
+      await page.screenshot({ path: path.join(shots, 'arena-look-torpedo-hit.png') })
+      const f = await run(`return { f: battle.scene.slowFactor(), line: a.markers.filter((m) => m.player && m.weapon === 'torpedo').at(-1)?.text }`)
+      await page.waitForTimeout(1500)
+      await page.screenshot({ path: path.join(shots, 'arena-look-torpedo-after.png') })
+      assert(f.f < 1, `the slow motion had ended by the shot (×${f.f})`)
+      return `“${f.line}”, the scene at ×${f.f.toFixed(2)} in the shot`
+    })
+    await check('a carrier burning and going down (the fixture)', async () => {
+      await open('test-box', 'jp')
+      const r = await run(`
+        battle.release?.(); battle.running = false
+        for (let k = 0; k < 60 * 600 && !a.result; k++) { a.step(); for (const i of a._ships) if (s.alive[i] === 2 && ['cv', 'cve', 'cvl'].includes(a._X[i].model.type)) return { c: i, id: a.slots[i].id, t0: a.t } }
+        return null
+      `)
+      assert(r, 'no carrier went down')
+      for (const at of [1, 13, 18]) {
+        await run(`battle.running = false; while (a.t < arg.t0 + ${at} - 1.5) a.step(); battle.wargameTick(); cam('orbit', { unitIndex: arg.c, distance: 560, bearing: (s.heading[arg.c] + 65) % 360, pitch: 0.12 }); battle.running = true; return true`, r)
+        await page.waitForFunction((t) => window.__app.battle.sim.t >= t, r.t0 + at, { timeout: 120000, polling: 50 })
+        await page.screenshot({ path: path.join(shots, `arena-look-sinking-${at}s.png`) })
+      }
+      return `${r.id} from ${r.t0.toFixed(0)} s`
+    })
+    await check(`the arena from the orbit camera with both fleets (${hasSamar ? 'Samar' : 'the fixture'})`, async () => {
+      await open(hasSamar ? 'samar' : 'test-box', 'us')
+      await run(`battle.release?.(); battle.running = false; stepT(40); cam('free', { target: { x: a.centre.x, z: a.centre.z }, distance: 8500, bearing: 210, pitch: 0.55, duration: 0.01 }); return true`)
+      await page.waitForTimeout(2500)
+      await shot('orbit')
+      return 'at 0:40'
+    })
+    await check('no page error in the looks', async () => {
+      assert(!errors.length, errors.slice(0, 3).join(' | '))
+    })
+  } finally {
+    await browser.close()
+    if (vite) vite.kill()
+  }
+}
+
+if (balance.length) {
+  console.log('\nbalance:')
+  for (const b of balance) console.log(`  ${b.id} as ${b.side}: ${pct(b.rate)} met; step ${b.mean.toFixed(3)} / ${b.p99.toFixed(3)} ms; ${JSON.stringify(b.reasons)}`)
+}
+console.log(failed ? `\n${failed} check(s) failed` : '\nall checks passed')
+process.exit(failed ? 1 : 0)

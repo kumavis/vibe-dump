@@ -15,6 +15,13 @@
 // pips, the level sight (the predicted impact and the drift line), and the
 // release cue's window.
 //
+// Round three (ROUND-3.md §1 "Arcade handling"), in a wargame only (the
+// arena's player.state.arena): the main battery's lead (a diamond where to lay
+// the guns on the target's course at the time of flight), the torpedoes'
+// spread (the fan of tracks from the ship along the aim, six kilometres) and an
+// aircraft's torpedo track, the bomb's impact ring at all times, and the plot
+// at the arena's scale (8 km). The record's HUD is unchanged.
+//
 // On a phone (700 px wide or less, or a coarse pointer: the page's phone
 // layout, style.css) the instruments are a strip of the four numbers that
 // matter for the kind (an aircraft's speed, height, heading and g; a ship's
@@ -264,7 +271,8 @@ export class Hud {
     if (pl.stations.length > 1) {
       const t = document.createElement('span')
       t.className = 'tab'
-      t.textContent = 'Tab'
+      // (in a wargame Tab hops between units and the stations go round on the backquote key)
+      t.textContent = this.box.sim?.arena ? '`' : 'Tab'
       bar.appendChild(t)
     }
   }
@@ -371,6 +379,7 @@ export class Hud {
     }
     this.inst.style.display = ''
     const st = pl.state
+    if (st.arena) this.drawArena(pl, st)
     const units = this.units ?? st.units
     const imp = units === 'imperial'
     const spd = (ms) => (imp ? `${(ms / KN).toFixed(0)} kn` : `${(ms * 3.6).toFixed(0)} km/h`)
@@ -593,6 +602,104 @@ export class Hud {
     } else this.bracket.style.display = 'none'
   }
 
+  /**
+   * The arena's reticles (round three): the main battery's lead, the torpedoes'
+   * spread or an aircraft's torpedo track, the bomb's impact ring.
+   */
+  drawArena(pl, st) {
+    if (st.station === 'bombardier') return
+    const c = this.sightc
+    const W = innerWidth
+    const H = innerHeight
+    if (c.width !== W || c.height !== H) {
+      c.width = W
+      c.height = H
+    }
+    const g = c.getContext('2d')
+    g.clearRect(0, 0, W, H)
+    let drew = false
+    const line = (pts) => {
+      let open = false
+      g.beginPath()
+      for (const p of pts) {
+        const q = this.project(p[0], p[1], p[2])
+        if (!q) {
+          open = false
+          continue
+        }
+        if (open) g.lineTo(q[0], q[1])
+        else g.moveTo(q[0], q[1])
+        open = true
+      }
+      g.stroke()
+    }
+    // the main battery's lead: where to lay the guns to meet the target on its course
+    const t = st.target
+    if (pl.kind === 'ship' && t?.lead && (st.station === 'helm' || st.station === 'main')) {
+      const p = this.project(t.lead[0], 2, t.lead[2])
+      if (p) {
+        g.strokeStyle = 'rgba(246,227,160,.95)'
+        g.lineWidth = 1.5
+        g.beginPath()
+        g.moveTo(p[0], p[1] - 8)
+        g.lineTo(p[0] + 8, p[1])
+        g.lineTo(p[0], p[1] + 8)
+        g.lineTo(p[0] - 8, p[1])
+        g.closePath()
+        g.stroke()
+        g.font = '11px Inter, system-ui, sans-serif'
+        g.fillStyle = 'rgba(246,227,160,.95)'
+        g.fillText('lead', p[0] + 11, p[1] + 4)
+        drew = true
+      }
+    }
+    // the torpedoes' spread: the fan of tracks along the aim, dashed while the tubes reload
+    const sp = st.spread
+    if (sp && sp.n > 0) {
+      g.strokeStyle = sp.ready ? 'rgba(190,230,255,.75)' : 'rgba(190,230,255,.3)'
+      g.lineWidth = 1
+      g.setLineDash(sp.ready ? [] : [6, 6])
+      for (let k = 0; k < sp.n; k++) {
+        const b = ((sp.bearing + (k - (sp.n - 1) / 2) * sp.deg) * Math.PI) / 180
+        const pts = []
+        for (let d = 60; d <= sp.length; d += 250) pts.push([sp.from[0] + Math.sin(b) * d, 0.5, sp.from[1] - Math.cos(b) * d])
+        line(pts)
+      }
+      g.setLineDash([])
+      drew = true
+    }
+    // an aircraft's torpedo track ahead, and the bomb's impact ring
+    if (pl.kind === 'aircraft') {
+      const tr = st.track
+      if (tr) {
+        const b = (tr.bearing * Math.PI) / 180
+        g.strokeStyle = st.cue?.on ? 'rgba(246,227,160,.95)' : 'rgba(190,230,255,.6)'
+        g.lineWidth = 1
+        const pts = []
+        for (let d = 100; d <= 1800; d += 100) pts.push([tr.x + Math.sin(b) * d, 0.5, tr.z - Math.cos(b) * d])
+        line(pts)
+        drew = true
+      }
+      const cc = st.ccip
+      if (cc) {
+        const p = this.project(cc.x, 0, cc.z)
+        if (p) {
+          g.strokeStyle = cc.onTarget ? 'rgba(246,227,160,.95)' : 'rgba(255,255,255,.7)'
+          g.lineWidth = 1.5
+          g.beginPath()
+          g.arc(p[0], p[1], 10, 0, Math.PI * 2)
+          g.moveTo(p[0] - 18, p[1])
+          g.lineTo(p[0] - 6, p[1])
+          g.moveTo(p[0] + 6, p[1])
+          g.lineTo(p[0] + 18, p[1])
+          g.stroke()
+          drew = true
+        }
+      }
+    }
+    c.style.display = drew ? '' : 'none'
+  }
+
   /** The level sight: the predicted impact, the drift line through it along the track, the target's bracket. */
   drawLevelSight(sight, sim) {
     const c = this.sightc
@@ -677,7 +784,7 @@ export class Hud {
     }
     c.style.display = ''
     const st = pl.state
-    const span = pl.kind === 'aircraft' ? 20000 : 30000
+    const span = st.plotSpan ?? (pl.kind === 'aircraft' ? 20000 : 30000)
     g.strokeStyle = 'rgba(200,230,200,.22)'
     for (const k of [1 / 3, 2 / 3]) {
       g.beginPath()
@@ -686,7 +793,7 @@ export class Hud {
     }
     const radar = (sim._X[pl.unitIndex].model.sensors || []).length > 0
     // (the number and its unit kept together, so the phone's caption inside the small plot breaks between the words)
-    this.plotLabel.textContent = `${radar ? 'radar plot' : 'lookouts'} · ${pl.kind === 'aircraft' ? '20\u00a0km' : '30\u00a0km'}`
+    this.plotLabel.textContent = `${radar ? 'radar plot' : 'lookouts'} · ${Math.round(span / 1000)}\u00a0km`
     for (const ct of st.contacts || []) {
       if (ct.range > span) continue
       const a = ct.bearing * DEG

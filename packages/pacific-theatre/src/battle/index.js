@@ -45,8 +45,23 @@
 // release); 'after' carries the sortie. The keys have one owner each: L and
 // Enter while watching are src/link.js's, Tab while watching (the next unit)
 // is bindWatchKeys's, Tab while a unit is held is the controls'.
+//
+// Round three (ROUND-3.md §4): the wargame. enterWargame(scenarioId, { side,
+// seed, from }) loads the box and wargames/<id>.json, builds the arena
+// (src/battle/arena/) in place of the record's sim (this.sim is the arena
+// while it runs, so the scene, the HUD, the unit list and the controls read
+// it unchanged), cuts to the side's first unit at its first station and runs
+// at 1× (pause allowed, no scrubbing). hop(kind | index) is Tab and 1–4;
+// restart({ side, seed }) builds a fresh arena (the other side's, when asked);
+// endNow() forces the end; leave() as ever. The arena's events go out as
+// 'battle' events with wargame: true ('phase', 'hit' markers via the arena's
+// markers, 'sinking', 'lost', 'respawn', 'hop', 'turn-away', 'wave',
+// 'highlight', and 'wargame-end' with the result); the scene's slow motion
+// scales the arena's dt in tick() and only the arena's. research/engine-3.md
+// §2 has every method as built.
 
 import { createSim } from './sim/index.js'
+import { createArena } from './arena/index.js'
 import { BoxScene } from './scene/box.js'
 import { Input } from './controls/input.js'
 import { AIRCRAFT_HELP, SHIP_HELP, TOUCH_HELP, HINTS } from './controls/bindings.js'
@@ -71,6 +86,9 @@ const FLY_HOME = [4, 8, 16, 32] // after a bookmark's checkpoint an aircraft may
 const ASSISTS = ['assisted', 'pilot']
 // the camera each station looks through
 const STATION_CAMERA = { helm: 'bridge', main: 'director', aa: 'gun', torpedoes: 'director', pilot: 'chase', gunner: 'gun', bombardier: 'bombsight' }
+// round three: in a wargame the helm and the torpedoes look from the ship's high chase (the arena's captain fires from the helm)
+const WARGAME_CAMERA = { ...STATION_CAMERA, helm: 'chase', torpedoes: 'chase' }
+const cameraFor = (battle, station) => (battle.arena ? WARGAME_CAMERA : STATION_CAMERA)[station]
 
 export class Battle {
   constructor(app) {
@@ -91,6 +109,10 @@ export class Battle {
     this._keys = new AbortController()
     this._assist = 'assisted'
     this.selected = null
+    // round three (ROUND-3 §4): the wargame's arena and its scenario, or null
+    this.arena = null
+    this.wargame = null
+    this._evIndex = 0
   }
 
   get state() {
@@ -106,6 +128,7 @@ export class Battle {
       held: pl ? { index: pl.unitIndex, id: this.sim.slots[pl.unitIndex].id, kind: pl.kind, engaged: pl.engaged, role: pl.role } : null,
       assist: this._assist,
       sortie: this.sim?.sortie ?? null,
+      wargame: this.wargame ? { id: this.wargame.id, side: this.wargame.side, games: this.wargame.games, result: this.arena?.result ?? null, t: this.arena?.t ?? 0 } : null,
     }
   }
 
@@ -148,6 +171,7 @@ export class Battle {
 
   /** The battle file's first door (ROUND-2 §7: { role, t, title, text }), or null. */
   get firstDoor() {
+    if (this.arena) return null
     const fd = this.loaded?.battle?.firstDoor
     if (!fd) return null
     const sim = this.sim
@@ -162,6 +186,8 @@ export class Battle {
 
   /** The speeds the bar offers now: watching 1× to 60×; a held aircraft ×0.5, ×1, ×2 (Assisted) or ×1 (Pilot); a ship 1× to 8× (a bookmark's own list). */
   get speeds() {
+    // (a wargame runs at 1×, paused or not: the compression does the pacing, ROUND-3 §1)
+    if (this.arena) return [1]
     const sim = this.sim
     const pl = sim?.player
     if (!this.input || !pl) return WATCH_SCALES
@@ -176,6 +202,7 @@ export class Battle {
 
   /** The scale a held unit runs at by default (the threat drop-back returns to it). */
   baseScale() {
+    if (this.arena) return 1
     const sim = this.sim
     const pl = sim?.player
     if (!pl) return 1
@@ -206,6 +233,7 @@ export class Battle {
    * sortie, score, outcome, reason } when the sortie ends.
    */
   take(role = {}, { scripted = false } = {}) {
+    if (this.arena) return this.takeInWargame(role, { scripted })
     let sim = this.sim
     if (!sim) throw new Error('take() comes after enter()')
     const { t = null, ...r } = role
@@ -235,7 +263,7 @@ export class Battle {
     const app = this.app
     const sc = this.scene
     this.select(pl.unitIndex, { follow: false })
-    sc?.setCamera(cameraMode || STATION_CAMERA[pl.station] || (pl.kind === 'aircraft' ? 'chase' : 'bridge'), { unitIndex: pl.unitIndex, zoom })
+    sc?.setCamera(cameraMode || cameraFor(this, pl.station) || (pl.kind === 'aircraft' ? 'chase' : 'bridge'), { unitIndex: pl.unitIndex, zoom })
     // (the mode first: Input builds the touch controls only for a live take)
     app.setMode('moment')
     this.input?.dispose()
@@ -243,10 +271,11 @@ export class Battle {
     if (!scripted && pl.kind === 'aircraft' && pl.station === 'pilot') this.input.requestLock()
     this.running = true
     const touch = matchMedia?.('(pointer: coarse)')?.matches
+    this._boundKind = pl.kind
     if (sc) {
       sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
       sc.hud.setStations(pl)
-      if (!scripted) sc.hud.firstHints(...hintsFor(pl.station, pl.kind, touch))
+      if (!scripted) sc.hud.firstHints(...(this.arena ? (touch ? ['wargame-touch', HINTS['wargame-touch']] : [`wargame-${pl.kind}`, HINTS[`wargame-${pl.kind}`]]) : hintsFor(pl.station, pl.kind, touch)))
     }
     if (touch && this.aid === 'standard') this.setAid('guided')
   }
@@ -258,7 +287,7 @@ export class Battle {
     if (!pl) throw new Error('setStation: nobody holds a unit')
     sim.setStation(name)
     const sc = this.scene
-    sc?.setCamera(STATION_CAMERA[name] || 'chase', { unitIndex: pl.unitIndex })
+    sc?.setCamera(cameraFor(this, name) || 'chase', { unitIndex: pl.unitIndex })
     this.input?.onStation?.(name)
     sc?.hud.setStations(pl)
     sc?.hud.say(STATION_WORDS[name] ?? name, 1.5)
@@ -443,11 +472,17 @@ export class Battle {
   }
 
   /** Called by the box scene once a frame: the sim advances by realDt × timeScale while running. */
-  tick(realDt) {
+  tick(realDt, simScale = 1) {
     const sim = this.sim
     if (!sim) return
     this.input?.update(realDt)
     if (!this.running) return
+    if (this.arena) {
+      // the arena's own clock: 1×, its dt scaled by the scene's slow motion only (ROUND-3 §4)
+      sim.advance(Math.min(0.1, realDt) * this.timeScale * simScale)
+      this.wargameTick()
+      return
+    }
     const ms = sim.momentState
     if (this.input && sim.player && (!ms || !ms.done)) {
       // a threat drops a compressed scale back to the held unit's own (R7 §4.1; ×0.5 for an aircraft in Assisted)
@@ -641,6 +676,7 @@ export class Battle {
 
   /** Back to watching at the current t; the sim keeps the diverged state until leave(). */
   release() {
+    if (this.arena) return this.releaseInWargame()
     if (this._moment || this._take) return this.finish('released')
     this.releaseControls()
     return null
@@ -676,6 +712,8 @@ export class Battle {
 
   /** A restart point: the moment's start or its checkpoint, from the record. */
   restart(which = 'start') {
+    // round three: Battle.restart({ side }) plays the wargame again, the same side or the other
+    if (this.arena) return this.restartWargame(typeof which === 'object' && which ? which : {})
     const m = this.sim?.record.moments.get(this.momentId)
     if (!m) return null
     if (this.input) this.releaseControls()
@@ -740,11 +778,260 @@ export class Battle {
     return row
   }
 
+  // --- round three: the wargame (ROUND-3.md §4) ---------------------------------------------------------------
+
+  /** A scenario (public/data/wargames/<id>.json, read through app.data.abs), cached for the page. */
+  async loadScenario(id) {
+    const app = this.app
+    app.data.wargames ||= new Map()
+    if (app.data.wargames.has(id)) return app.data.wargames.get(id)
+    // (a test may hand the page a scenario of its own: tools/smoke-arena.mjs, the dev page's look at a scenario not yet in the data)
+    const given = globalThis.__wargameScenarios?.[id]
+    if (given) {
+      app.data.wargames.set(id, given)
+      return given
+    }
+    const r = await fetch(app.data.abs(`wargames/${id}.json`))
+    if (!r.ok) throw new Error(`wargames/${id}.json: HTTP ${r.status}`)
+    const sc = await r.json()
+    app.data.wargames.set(id, sc)
+    return sc
+  }
+
+  /**
+   * Enter a battle as a wargame (ROUND-3 §4): load the box and the scenario,
+   * build the arena for the side, cut to the side's first unit and run.
+   * side: 'jp' | 'us' (or 'japan' | 'usa'); from: 'table' (the fly-down) or
+   * 'url' (a cut); seed: the game's (the restarts count on from it).
+   */
+  async enterWargame(scenarioId, { side = 'us', from = 'table', seed = null } = {}) {
+    const app = this.app
+    const scenario = await this.loadScenario(scenarioId)
+    const boxId = scenario.box
+    const box = app.data.boxById.get(boxId)
+    if (!box) throw new Error(`wargame ${scenarioId}: no box “${boxId}” in boxes/manifest.json`)
+    if (this.scene) await this.leave()
+    side = side === 'japan' ? 'jp' : side === 'usa' ? 'us' : side
+    log('wargame', scenarioId, side, { from })
+    this.ready = false
+    this.momentId = null
+    const table = app.table && typeof app.table.flyTo === 'function' ? app.table : null
+    const loading = (async () => {
+      const loaded = await (app.takePrefetch?.(boxId) ?? app.data.loadBox(boxId, { decoder: app.decoder, warn: app.warn }))
+      if (!app.data.kits.weapons) {
+        try {
+          const r = await fetch(app.data.abs('kits/weapons.json'))
+          app.data.kits.weapons = r.ok ? await r.json() : []
+        } catch {
+          app.data.kits.weapons = []
+        }
+      }
+      this.loaded = loaded
+      const { battle, kits, pack } = loaded
+      const games = 1
+      const arena = createArena(scenario, kits, { battle, pack, box }, { side, seed: `${seed ?? ''}:${games}`, warn: app.warn })
+      const scene = new BoxScene(app)
+      scene.battle = this
+      // (the HUD's clock line names the wargame, not the box's zone)
+      await scene.load(box, { ...battle, clock: { ...battle.clock, name: scenario.title ?? battle.clock?.name } }, kits, { pack })
+      await scene.setSim(arena)
+      this.sim = arena
+      this.arena = arena
+      this.wargame = { id: scenarioId, side, scenario, seed, games }
+      this._evIndex = 0
+      this.scene = scene
+      this.ready = true
+      return loaded
+    })()
+    if (table && from === 'table') {
+      app.setMode('flying')
+      table.outline?.(boxId, true)
+      const view = table.outlineView?.(boxId)
+      if (view) await table.flyTo(view, { duration: 2.5, ready: () => this.ready })
+    } else app.setMode('flying')
+    await loading
+    const scene = this.scene
+    const arena = this.arena
+    await app.cut(() => {
+      app.setActive(scene)
+      if (table && from === 'table') scene.rig.jump(poseToBox(table.rig.pose(), box.placement))
+      else scene.rig.jump({ target: { x: arena.centre.x, z: arena.centre.z }, distance: 7000, yaw: Math.PI - (200 * Math.PI) / 180, pitch: 0.5 })
+      app.resize?.()
+    })
+    app.setMode('watch')
+    this.running = true
+    this.timeScale = 1
+    this._state = { boxId, t: 0, momentId: null, mode: 'watch' }
+    this.bindWatchKeys()
+    this.setAid('guided')
+    this.startWargame()
+    app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'wargame', phase: 'start', id: scenarioId, side } }))
+    log('in', scenarioId, side, `${arena.capacity} slots`, scene.stats())
+    return this.state
+  }
+
+  /** The side's first unit taken at once: a cut, no briefing (ROUND-3 §1). */
+  startWargame() {
+    const arena = this.arena
+    const first = arena?.first
+    if (!first) return null
+    const pl = arena.takeControl(first)
+    this.bindPlayer(pl)
+    this._evIndex = arena.events.length
+    this.scene?.hud.say(arena.sides[arena.side].def.goal?.text ?? '', 5)
+    return pl
+  }
+
+  /** Once a tick in a wargame: the arena's events to the page, the camera kept on the player's unit, the end. */
+  wargameTick() {
+    const arena = this.arena
+    const ev = this.app.events
+    while (this._evIndex < arena.events.length) {
+      const e = arena.events[this._evIndex++]
+      // (the hit markers stay in arena.events, where the HUD layer reads them: not sent to the page a second time)
+      if (e.marker) continue
+      if (e.kind === 'hop' && (e.how === 'respawn' || e.how === 'hop')) this.rebindPlayer()
+      if (e.kind === 'end') this.endWargame(e.result)
+      ev?.dispatchEvent(new CustomEvent('battle', { detail: { ...e, kind: e.kind === 'end' ? 'wargame-end' : e.kind, wargame: true } }))
+    }
+  }
+
+  /** The held unit changed under the controls (a hop, a respawn): the camera, the selection, the station bar. */
+  rebindPlayer() {
+    const pl = this.arena?.player
+    if (!pl) return
+    if (!this.input) return this.bindPlayer(pl)
+    const kindWas = this._boundKind
+    this._boundKind = pl.kind
+    this.select(pl.unitIndex, { follow: false })
+    this.scene?.setCamera(cameraFor(this, pl.station) || (pl.kind === 'aircraft' ? 'chase' : 'bridge'), { unitIndex: pl.unitIndex, zoom: 1 })
+    this.input.onStation?.(pl.station)
+    const sc = this.scene
+    sc?.hud.setStations(pl)
+    // a hop from a ship to an aircraft (or back): that kind's keys, its hints (once), and the pointer locked for a pilot
+    if (sc && kindWas !== pl.kind) {
+      const touch = matchMedia?.('(pointer: coarse)')?.matches
+      sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
+      sc.hud.clearHints()
+      if (!pl.scripted) sc.hud.firstHints(...(touch ? ['wargame-touch', HINTS['wargame-touch']] : [`wargame-${pl.kind}`, HINTS[`wargame-${pl.kind}`]]))
+      if (pl.kind === 'aircraft' && pl.station === 'pilot' && !pl.scripted) this.input.requestLock()
+    }
+  }
+
+  /**
+   * A hop (ROUND-3 §1): 'carrier' | 'capital' | 'destroyer' | 'aircraft'
+   * (1–4: the nearest friendly one) | 'next' | 'prev' (Tab: the next of the
+   * same kind) | a slot. Returns the unit's row, or null when nothing matches.
+   */
+  hop(kind) {
+    const arena = this.arena
+    if (!arena || arena.result) return null
+    const pl = arena.hop(kind)
+    if (!pl) {
+      this.scene?.hud.say('None to go to', 1.2)
+      return null
+    }
+    if (!this.input) this.bindPlayer(pl)
+    else this.rebindPlayer()
+    this._evIndex = arena.events.length
+    const row = arena.units().find((r) => r.index === pl.unitIndex) ?? null
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'hop', how: 'hop', index: pl.unitIndex, unit: row, hop: kind, wargame: true } }))
+    return row
+  }
+
+  /** take() in a wargame: possession at a station; resolves at the release, the next take or the end with { sortie, reason, result }. */
+  takeInWargame(role, { scripted = false } = {}) {
+    const arena = this.arena
+    const pl = arena.takeControl(role)
+    pl.scripted = scripted
+    if (!this.input) this.bindPlayer(pl, { scripted })
+    else this.rebindPlayer()
+    this._evIndex = arena.events.length
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'take', role: pl.role, index: pl.unitIndex, station: pl.station, wargame: true } }))
+    this._wtake?.resolve({ sortie: arena._lastSortie, reason: 'hop', result: null })
+    return new Promise((resolve) => {
+      this._wtake = { resolve }
+    })
+  }
+
+  /** release() in a wargame: the unit goes back to its AI and the box to watching (no after-card: the end card is the wargame's). */
+  releaseInWargame() {
+    const arena = this.arena
+    const sortie = arena.releaseControl()
+    if (this.input) this.releaseControls()
+    this._wtake?.resolve({ sortie, reason: 'released', result: arena.result })
+    this._wtake = null
+    this.app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'wargame-release', sortie, wargame: true } }))
+    return sortie
+  }
+
+  /** The end (the clock, the goals, or forced): the controls let go, the camera round the last unit; the UI opens its end card on 'wargame-end'. */
+  endWargame(result) {
+    const arena = this.arena
+    const i = arena.player?.unitIndex ?? -1
+    if (this.input) {
+      this.input.dispose()
+      this.input = null
+    }
+    this.app.setMode('watch')
+    this.scene?.hud.setStations(null)
+    this.scene?.hud.clearHints()
+    if (this.scene && i >= 0 && this.sim.state.alive[i]) this.scene.setCamera('orbit', { unitIndex: i, distance: 2500 })
+    this._wtake?.resolve({ sortie: arena.sortie, reason: 'end', result })
+    this._wtake = null
+    log('wargame end', this.wargame?.id, result.reason, result.line)
+  }
+
+  /** Force the end now (the smoke test; Back to the table): the result. */
+  endNow(reason = 'forced') {
+    const r = this.arena?.forceEnd(reason) ?? null
+    if (r) this.wargameTick()
+    return r
+  }
+
+  /** Play again (ROUND-3 §4): a fresh arena on the same box and scene, the same side or { side }, the next seed. */
+  restartWargame({ side = null } = {}) {
+    const app = this.app
+    const w = this.wargame
+    if (!w) return null
+    side = side === 'japan' ? 'jp' : side === 'usa' ? 'us' : side ?? w.side
+    if (this.input) {
+      this.input.dispose()
+      this.input = null
+    }
+    this._wtake?.resolve({ sortie: this.arena?.sortie ?? null, reason: 'restart', result: this.arena?.result ?? null })
+    this._wtake = null
+    const { battle, kits, pack, box } = this.loaded
+    w.games++
+    w.side = side
+    const arena = createArena(w.scenario, kits, { battle, pack, box }, { side, seed: `${w.seed ?? ''}:${w.games}`, warn: app.warn })
+    this.sim = arena
+    this.arena = arena
+    this._evIndex = 0
+    this.selected = null
+    this.scene.setSim(arena)
+    this.scene.hud.beatIndex = 0
+    // (the last game's lines and hints go with it: its end line is not the new game's)
+    this.scene.hud.lines = []
+    this.scene.hud.clearHints?.()
+    this.scene.hud.say('', 0)
+    this.running = true
+    this.timeScale = 1
+    app.setMode('watch')
+    this.startWargame()
+    app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'wargame', phase: 'restart', id: w.id, side } }))
+    return this.state
+  }
+
   /** Back to the table at the battle's date; the box is forgotten. */
   async leave() {
     const app = this.app
     const id = this._state?.boxId ?? this.loaded?.box.id
     log('leave', id)
+    if (this.arena) {
+      this._wtake?.resolve({ sortie: this.arena.releaseControl(), reason: 'left', result: this.arena.result })
+      this._wtake = null
+    }
     if (this._moment || this._take) this.finish('left')
     if (this.input) this.releaseControls()
     const s = this.scene
@@ -781,6 +1068,8 @@ export class Battle {
     this.ready = false
     this.running = false
     this.momentId = null
+    this.arena = null
+    this.wargame = null
     app.setMode('table')
     app.events?.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave', boxId: id } }))
   }
