@@ -1030,6 +1030,128 @@ follows N3.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 
+**Playtest feedback (October 2026).** The notes read against the code in one
+pass: lobbing from height, fog of war, a touch "hover", hazards, undo, the
+Scaleguard's and the Brute's toughness, Escape in the charge phase, the camera
+in online play, the battle log, shooting into a fight. Not yet ordered against
+the queue above: each lands where the user slots it. F12-F16 change no rule
+(no bump, the corpus byte-identical; each ships on its own Chromium check);
+F17-F19 are rules changes (a `CORE_VERSION` bump, the corpus re-recorded and
+the PIN moved, in the commit that says so). Open questions 28-34 hold their
+defaults.
+
+- [ ] **F12** Local undo: anything that drew no dice. A button (and Ctrl-Z)
+  takes back the last entry of a seat played here while the dice counter
+  (`G.rng.n`, every trace line's `rng:`) didn't move across it: a placement,
+  a move, a charge's end, an End whose phase end drew nothing; never an
+  advance, a shot, a charge, Auto, pilot, the last `deployed` (the roll-off)
+  or an End that ran a fight, morale or the AI. Not by truncating the store
+  (the Folder calls an accepted entry vanishing from the list `tamper` and
+  freezes): the battle's Session made again over the first k entries, as the
+  replay's `sessionTo` makes one (app/replay.js), and swapped in; the order
+  book is keyed by the start entry, so it survives. Hotseat: each seat its
+  own entries. Online: none (DESIGN §5: the log is append-only; an `undo`
+  command in the rules would be a step of its own). DESIGN §5's "local undo
+  of move/place by truncating the store" is this, the truncation replaced.
+  A replay-check case: undo then the same move folds to the same trace.
+- [ ] **F13** Touch aim: a hover for a finger. Today a phone gets no preview
+  at all (pointermove fires only while a finger orbits the camera, and a lift
+  after a drag is never a click). A long press on the ground, or on an enemy,
+  while a unit is picked up (a long press on your own unit already adds it to
+  the group) ticks the vibrator, holds the camera (as ▭ Select takes the
+  one-finger gesture: input/group.js's `touches()`), drives the mouse's own
+  preview under the finger (the path and inches, a shot's odds, a charge's
+  spots) and the lift commits. A 👆 Aim toggle beside ▭ Select (`pointer:
+  coarse` only) does the same for whoever never finds the long press. With
+  it, "as far as it goes that way": a client query over the move plan for the
+  last valid cell along the ray from the unit through the finger
+  (input/tools/move.js); the command sent is still `move {u, c}`.
+  input-check's touch cases through CDP, as F10a's.
+- [ ] **F14** The camera follows a human opponent. The follow policy (🎥,
+  `follows()`: every turn but the one seat played here) is in place, but only
+  fights and the AI's own moves, shots and charges emit `focus`; a human's
+  move, volley, template or charge emits none, and a lone walk is no batch
+  (`batchAt` frames two or more), so online the camera sits still while the
+  opponent acts. In the view, never the core: a focus derived from
+  `unit.move`, `volley`, `blast.fire` and `charge.result` when the policy
+  says follow (view/player.js, beside `frame`), or `frame` taking a single
+  walk; today's glides. camera-check holds the policy; a lobby-rig case
+  watches a guest's move swing the host's camera.
+- [ ] **F15** The battle log scrubs. A click on a line shows the battle as it
+  stood before that move, and ▶ plays on from there. Each line carries only
+  `at` (the trace's length); the sink receives each entry's events on their
+  own (app/flow.js), so they take the entry's place in the accepted list
+  (`k`) and the line its `data-k`; the click is `replay.open(battle, { live
+  })` and `scrub(k - 1)`, which already works on any battle (the bar's own
+  slider does it: the table as it stood, the log made again to there, Live
+  back). While scrubbed the seat played here can't act (the replay's Session
+  has no local seat), as it should. A replay-check case: a line's k folds to
+  the trace line it was logged at.
+- [ ] **F16** Courtesy fog of war, a lobby setting. DESIGN §5's "no hidden
+  information" stands as a rule: the match is a pure function of a public
+  log that every peer folds whole, so nothing can be hidden from devtools;
+  this hides it in the view, on the trust the dice and the sealed lists
+  already rest on (open questions 1 and 20). An enemy none of your living
+  units sees (`sight`, with its broadphase; each pair once per event batch)
+  has no figure, label, minimap chip, roster row or log line, and the tray
+  names no target of its rolls; what was seen once is not remembered. Online,
+  both seats agreeing in the lobby (a `SETUP_KEYS` entry the core ignores, so
+  a fogged match folds as any other), and as a solo option against the AI,
+  the panel saying the AI sees everything (core/ai reads `G.units`). No fog
+  in hotseat (one screen) or for a watcher.
+- [ ] **F17** Lobbing from height (rules). A blast or indirect weapon's range
+  grows with the shooter's floor over the target's: `shotInfo` (the range
+  test is flat today, `gap` in two dimensions against `w.range`; `sightInfo`'s
+  `high` is computed and read by nothing), the AI's own range test
+  (core/ai/score.js's `g > w.range`), the overlay's ring and the tooltip's
+  inches, through one `rangeOf(G, u, tg)`. Open question 12 and DESIGN §5
+  keep height off the to-hit and the save. `CORE_VERSION` 8; the classic
+  corpus has no height and stays byte-identical, `fort/` (and the `scale/`
+  pairs on `fortified`) re-recorded; a terrain-check row, and the
+  play-report's F7b row (a shooter fires from a deck) judges whether the AI
+  climbs for it.
+- [ ] **F18** Lobbing into a fight (rules). `shotInfo` refuses an engaged
+  target for every weapon but a spell ("locked in combat"), so the trebuchet,
+  the Venom Engine and the grenadiers can't shell a melee. A blast or indirect
+  weapon may: its templates land as ever, and `blastLands` already hits
+  whoever is under one (the ⚠ row), so the friendly fire is the price. The
+  AI's scoring takes a friendly-fire cost (its own units under the template,
+  by `expected`), or it shells its own Brute. `CORE_VERSION` bump; every
+  corpus battle with artillery re-records; P-prop's shoot cases take the new
+  legal pairs.
+- [ ] **F19** Hazards (rules), in order of fit. **F19a** The powder keg: a
+  chunk kind whose destruction is a blast at its place (the terrain's own
+  hurt → destroy → consequences, as a wall's collapse or a tree's topple:
+  core/terrain/terrain.js), set off by a template, by acid, or by a wrecker
+  walking through it (smashAround), the blast the keg's own weapon profile
+  (`blastLands`, friend and foe; a keg under a keg goes off in turn, in
+  chunk order); and the `keg` mission: its objectives clustered round the
+  keg at the centre, first come first served until somebody taps it. No
+  "attack the scenery" command: the Brute's walk is the tap. **F19b** Oil
+  and fire: a slick is a ground raster like `cover` (a cracked barrel spreads
+  it), fire a state that spreads along it and wounds whoever stands in it at
+  the end of each phase (dice: a new §4.1 rule for their order), lit by a
+  flaming template (the pinecone), never by acid; the AI scores a burning
+  cell as forbidden ground. **F19c** Slippery ground and pushers: a
+  displacement primitive (nothing moves a unit but its own walk and the
+  pile-in, `closeRanks`), with `nav.standable` and the engagement re-read
+  after a shove; slip carries a walk D3" on in its last direction, a pusher
+  is a wrecker's smash applied to units. Each a `CORE_VERSION` bump and a
+  re-record; each with its terrain-check rows, P-prop cases and an army-sim
+  gate (a hazard board must not move the Bushtails' 52.4% out of its band).
+- [ ] **Fixes (the same playtest).** *Escape at a charge's end:* once a
+  charge makes contact the 2D6 is rolled and the match waits on where it
+  ends, and Escape is a no-op with no word (input/human.js's `picking()`, on
+  purpose: the roll can't be taken back); it should take Shortest move, or a
+  toast should say "pick where the charge ends". (With a unit merely picked
+  up, Escape does put it down, by the code; if it fails on the page, a
+  repro first.) *The tooltip's reason:* the Scaleguard (T4, Sv4+) and the
+  Brute (T6, W9, Sv4+) are their numbers alone, no armour rule ("Shield wall"
+  is card copy; the Brute's `big` only makes a template roll D3+1 hits on it,
+  which is against it); the shot tooltip gives "wound 6+ · save 4+" but not
+  why: "S3 vs T6" beside the wound need (ui/tooltip.js's oddsText), and the
+  card the same under its weapons.
+
 ### Open questions (building the defaults unless told otherwise)
 
 1. Online opponents are **friends sharing a link**. Dice are seeded jointly,
@@ -1084,6 +1206,27 @@ follows N3.
     firing decks** (F5a after F9c, then their vehicles, F5b): the big
     boards and vehicles first, the user's call. (First answer: F5a right
     after F11a.)
+
+### The playtest's (F12-F19): questions 28-34
+
+28. **Undo** takes back only an entry of a seat played here across which
+    the dice counter didn't move; in hotseat each seat its own; none
+    online.
+29. **Touch aim** is both the long press and a 👆 Aim toggle, and the lift
+    commits (no second tap to confirm).
+30. **Lobbing from height** adds **3" of range per inch** of the shooter's
+    floor over the target's, blast and indirect weapons only; firing up
+    loses nothing. (A 2" rampart gives the trebuchet 42".)
+31. **Lobbing into a fight** is for blast and indirect weapons (spells as
+    today), at **no modifier**: the friendly fire is the price.
+32. **Fog** hides an enemy none of your living units sees, with **no memory**
+    of what was seen; the minimap, roster and log hide with the figure;
+    online by agreement, against the AI with a note, never in hotseat.
+33. **The log's click** shows the battle **before** that move, so ▶ plays the
+    move first.
+34. **The keg** goes off at zero hit points, from a template, acid or a
+    wrecker; there is no tap command, and no keg on the classic set (a
+    mission of its own).
 
 ## Done
 
