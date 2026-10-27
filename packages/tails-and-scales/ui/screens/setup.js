@@ -16,6 +16,13 @@
 // note that it is best on a larger screen. The sizes come from the page
 // (app/boot.js reads the missions), so this panel imports no rules data.
 // The size's sets are the terrain line's options.
+//
+// (F16) The fog line, against the AI only (never hotseat: one screen; nor a
+// watched battle): a toggle for the courtesy fog of war (your units show
+// you only what they see of the other army; app/flow.js, present/fog.js),
+// and a note that the AI sees everything (core/ai reads the match whole).
+// Its default the page's (?fog, else the last choice, which the page keeps
+// in localStorage: app/boot.js).
 import { RacePicker } from './races.js'
 
 const $ = (s) => document.querySelector(s)
@@ -43,13 +50,16 @@ export class SetupScreen {
     this.on = null
     // (F8b) the size line, made as the panel first shows it
     this.sizeRow = null
+    // (F16) the fog line, likewise
+    this.fogRow = null
   }
 
   get up() {
     return !this.root.classList.contains('hidden')
   }
 
-  // { pick(seat, race), terrain(set), size(mission), start(), back() }
+  // { pick(seat, race), terrain(set), size(mission), (F16) fog(on), start(),
+  // back() }
   wire(on) {
     this.on = on
     $('#setupStart').onclick = () => on.start()
@@ -58,8 +68,9 @@ export class SetupScreen {
 
   // { title, seats: [{ who, race, color }], mirror, (F8b) sizes: [{
   // mission, name, W, H, points, rounds }], size (the chosen one's mission),
-  // (F7a) terrain: { sets, pick } (the mission's sets and the one picked) }
-  show({ title, seats, mirror, sizes = [], size = null, terrain = null }) {
+  // (F7a) terrain: { sets, pick } (the mission's sets and the one picked),
+  // (F16) fog: { offered, on } (the mode takes it, and the toggle's state) }
+  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null }) {
     // (the pickers made once, as the panel first opens: nothing is drawn
     // before)
     this.pickers ??= [0, 1].map((s) => new RacePicker({ root: $(`#setup .setupSeat[data-seat="${s}"] .picker`), diorama: this.diorama(), pick: (race) => this.on.pick(s, race) }))
@@ -71,7 +82,36 @@ export class SetupScreen {
     this.sizes(sizes, size)
     $('#setupMirror').classList.toggle('hidden', !mirror)
     this.terrainLine(terrain)
+    this.fogLine(fog)
     this.root.classList.remove('hidden')
+  }
+
+  // (F16) The fog line: shown for a mode that takes it (against the AI), a
+  // toggle and what it means.
+  fogLine(fog) {
+    if (!this.fogRow) {
+      const row = (this.fogRow = document.createElement('div'))
+      row.id = 'setupFog'
+      row.className = 'fogLine'
+      const lbl = document.createElement('span')
+      lbl.className = 'lbl'
+      lbl.textContent = 'Fog of war'
+      const btn = document.createElement('button')
+      btn.id = 'setupFogToggle'
+      btn.setAttribute('role', 'switch')
+      btn.onclick = () => this.on.fog?.(btn.getAttribute('aria-checked') !== 'true')
+      const note = document.createElement('span')
+      note.className = 'what small'
+      note.textContent = 'You see only what your units see of the other army, and the scenery as you last saw it. The AI sees everything.'
+      row.append(lbl, btn, note)
+      $('#setupMirror').before(row)
+      this.fogBtn = btn
+    }
+    this.fogRow.classList.toggle('hidden', !fog?.offered)
+    const btn = this.fogBtn, on = !!fog?.on
+    btn.textContent = on ? 'On' : 'Off'
+    btn.classList.toggle('on', on)
+    btn.setAttribute('aria-checked', String(on))
   }
 
   // (F7a) the terrain line: a button per set the mission is fought on, the

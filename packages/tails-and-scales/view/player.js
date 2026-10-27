@@ -62,6 +62,14 @@
 // The same with ⇉ off, and for every seat: a human opponent's move online,
 // a watched battle's, a replay's. Without a `cue` handler an action plays
 // as before F14, its focus events followed.
+//
+// (F16) Under the courtesy fog the camera follows nothing the seat played
+// here can't see: with `veil(unitId)` set (app/flow.js's: the units the
+// fog veils now), an action whose actor is veiled is cued nowhere (its
+// focus events still left out), a batch's veiled members are no part of
+// its framing (a batch of them alone framed nowhere, its focus left out
+// too), and a batch of veiled walkers' advance dice show no row. Without
+// it (the fog off) all is as before.
 import { applyEvent, project } from '../present/mirror.js'
 import { PACE, batchAt, attacksAt, briefAt, playTime } from '../present/pace.js'
 import { cueAt, pointsOf } from '../present/camera-presets.js'
@@ -107,6 +115,8 @@ export class EventPlayer {
     // events are left out; and how many actions were cued)
     this.cueLeft = 0
     this.cues = 0
+    // ((F16) the units the courtesy fog veils now, or null: app/flow.js's)
+    this.veil = null
   }
 
   get idle() {
@@ -229,7 +239,9 @@ export class EventPlayer {
   }
 
   async playBatch(events, b, table, h, walks, hold, chain) {
-    if (b.dice.length) {
+    // ((F16) walkers the fog veils, every one: their advance shows no row)
+    const veiled = !!this.veil && b.walks.every((j) => this.veil(events[j].u))
+    if (b.dice.length && !veiled) {
       h['tray.open']?.({ t: 'tray.open', title: `Advance · ${b.dice.length} unit${b.dice.length > 1 ? 's' : ''}` }, this.mirror)
       await h.dice?.({ t: 'dice', label: 'D6 each', dice: b.dice, need: 0 }, this.mirror)
       if (table !== this.table) return
@@ -314,9 +326,16 @@ export class EventPlayer {
   // say: the follow policy, and whether they are all on screen already).
   // ((F14) present/camera-presets.js's pointsOf, which cueAt gathers an
   // action's actors with: a template's aim and landing count too.)
+  // ((F16) the members the fog veils left out: a batch of them alone is
+  // framed nowhere, and counts as framed, so its focus is left out too)
   frame(events) {
     const f = this.handlers.frame
     if (!f) return false
+    if (this.veil) {
+      const shown = events.filter((e) => e.u === undefined || !this.veil(e.u))
+      if (events.some((e) => e.u !== undefined) && !shown.some((e) => e.u !== undefined)) return true
+      events = shown
+    }
     const points = pointsOf(events, (id) => this.mirror?.units?.[id]?.pos)
     return points.length > 0 && f({ t: 'frame', points }, this.mirror) === true
   }
@@ -336,6 +355,11 @@ export class EventPlayer {
     const c = cueAt(this.q, 0, (id) => this.mirror?.units?.[id]?.pos)
     if (!c) return
     this.cueLeft = c.to
+    // ((F16) an action whose actor the fog veils: cued nowhere)
+    if (this.veil) {
+      const actor = this.q.slice(0, c.to).find((e) => e.u !== undefined)
+      if (actor && this.veil(actor.u)) return
+    }
     this.cues++
     h({ t: 'cue', points: c.points, x: c.x, z: c.z, own: c.own }, this.mirror)
   }

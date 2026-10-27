@@ -56,6 +56,15 @@
 // tiled chunk's drawn shape and colour to its own mesh's (terrain-check's
 // view half and sim/snap-check.mjs).
 //
+// (F16) Under the courtesy fog (present/fog.js) the table draws the scenery
+// as the seat played here last saw it: the events of a chunk it can't see
+// play nothing (app/flow.js leaves them out; a collapse's drops it can't
+// see named in `unseen`), so a wall a template brought down out of sight
+// stands on, until reveal() brings each chunk seen again up to date (a
+// broken one taken off, no debris; a dropped one set at its height; one
+// never seen before built, as sync builds it); a snap draws the chunks as
+// last seen through sync (present/fog.js's fogChunks).
+//
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
 // for mesh, and plays destruction on both, folding the terrain's reports
@@ -451,7 +460,8 @@ export class TerrainView {
       case 'terrain.add': return this.add(e.def)
       case 'terrain.hurt': return this.hurt(this.items.get(e.id).c, e.from, e.at)
       case 'terrain.destroy': return this.destroy(this.items.get(e.id).c, e.from, e.at)
-      case 'terrain.collapse': return this.collapse(e.drops, e.by, M)
+      // ((F16) but the drops the fog keeps unseen)
+      case 'terrain.collapse': return this.collapse(e.unseen ? e.drops.filter((d) => !e.unseen.includes(d.id)) : e.drops, e.by, M)
       case 'terrain.rubble': return this.rubble(this.items.get(e.id).c, e.from)
     }
     throw new Error(`TerrainView: no handler for ${e.t}`)
@@ -555,6 +565,50 @@ export class TerrainView {
       this.tile(item)
       // a rubble pile: a heap of pieces for each block of its column broken
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
+    }
+    this.flush()
+  }
+
+  // (F16) Chunks the fog kept as last seen, seen again as they now stand:
+  // [{ def (defOf, as the chunk stands), alive, tree (a fallen log's tree's
+  // def) }]. A broken one is taken off the table (no debris: its break was
+  // never seen); a standing one is set at its height (a drop never seen);
+  // one the table doesn't draw yet (rubble, a fallen log, never seen) is
+  // built as sync builds it. What already shows a chunk as it stands is
+  // left as it is.
+  reveal(list) {
+    for (const { def, alive } of list) {
+      const item = this.items.get(def.id)
+      if (alive || !item || !this.shows(item)) continue
+      this.free(item)
+      this.items.set(def.id, { c: item.c, obj: null })
+    }
+    for (const { def, alive, tree } of list) {
+      if (!alive) continue
+      const item = this.items.get(def.id)
+      if (item?.obj && this.shows(item)) {
+        if (SET_Y.has(def.look.piece) && item.obj.position.y !== def.shape.y) {
+          item.fall = null
+          item.anims = 0
+          this.untile(item)
+          item.obj.position.y = def.shape.y
+          item.c = def
+          this.tile(item)
+        }
+        continue
+      }
+      if (item) this.free(item)
+      if (def.look.piece === 'fallen') {
+        // (its tree, if the table still draws it standing, goes first)
+        const t = tree && this.items.get(tree.id)
+        if (t && this.shows(t)) this.free(t)
+        if (tree) this.fallen(def, tree)
+        continue
+      }
+      const made = { c: def, ...PIECES[def.look.piece](def) }
+      this.items.set(def.id, made)
+      this.group.add(made.obj)
+      this.tile(made)
     }
     this.flush()
   }

@@ -35,7 +35,7 @@ import { SetupScreen } from '../ui/screens/setup.js'
 import { Chips } from '../ui/chips.js'
 import { Roster } from '../ui/roster.js'
 import { Minimap } from '../view/minimap.js'
-import { Flow, MODES } from './flow.js'
+import { Flow, MODES, FOG_MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
 import { Session } from '../match/session.js'
 
@@ -63,7 +63,9 @@ import { Session } from '../match/session.js'
 // battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
 // armies its seats field; (F7a) ?terrain=<set> the terrain set a battle
 // started here is fought on (the battle-setup panel's default; the title's
-// table stays the mission's first set's). The fragment `#m=<id>` (N2) opens
+// table stays the mission's first set's); (F16) ?fog the courtesy fog on
+// for a battle against the AI started here (?fog=0 off: the battle-setup
+// panel's default, else the page's last choice). The fragment `#m=<id>` (N2) opens
 // an online match (`&dev=<id>` plays it as that device, `&sync=` through that
 // server): app/online.js, loaded only then or for Play online.
 // ---------------------------------------------------------------------------
@@ -155,6 +157,19 @@ function terrainPick(params, title, mission) {
   return null
 }
 
+// (F16) The battle-setup panel's fog toggle as the page opens: ?fog (on;
+// ?fog=0 off), else the last choice this browser kept (localStorage, in
+// try/catch: a page that keeps nothing starts with it off).
+const FOG_KEY = 'tails-and-scales:fog'
+function fogPick(params) {
+  if (params.has('fog')) return params.get('fog') !== '0'
+  try {
+    return localStorage.getItem(FOG_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
 function racePick(params, title) {
   if (!params.has('races')) return CLASSIC
   const pick = params.get('races').split(',').map((r) => r.trim().toLowerCase())
@@ -216,6 +231,7 @@ export function boot(location) {
   }
   const mission = missionPick(params, title)
   flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission), terrain: terrainPick(params, title, mission) })
+  flow.fogPick = fogPick(params)
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
@@ -298,6 +314,8 @@ export function boot(location) {
     setup: () => flow.atTable()?.setup ?? null,
     seats: () => flow.session?.localSeats ?? [],
     phase: () => human.myTurn(),
+    // ((F16) the courtesy fog as the table shows it)
+    fog: () => flow.fogShown,
     pick: (id) => {
       const u = flow.unitById(id), at = player.mirror?.units[id]
       if (!(u?.alive > 0) || !at) return
@@ -311,6 +329,7 @@ export function boot(location) {
     board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
     selected: () => human.standing?.picked().map((u) => u.id) ?? [],
     lines: () => human.standing?.lines() ?? [],
+    fog: () => flow.fogShown,
     pan: glideTo,
     ground: (g, how) => {
       const st = human.standing, grp = human.group
@@ -379,15 +398,16 @@ export function boot(location) {
   const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
   const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
   let picking = null
-  // ((F7a) and the terrain line: the mission's sets, the table's picked)
+  // ((F7a) and the terrain line: the mission's sets, the table's picked;
+  // (F16) the fog line against the AI)
   const showSetup = () => {
     const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain } })
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog } })
   }
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf() }
+    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick }
     title.away()
     showSetup()
   }
@@ -407,10 +427,19 @@ export function boot(location) {
       if (!MISSIONS[mission].sets.includes(picking.terrain)) picking.terrain = flow.terrainOf(mission)
       showSetup()
     },
+    // (F16) the fog toggled: the flow's next default too, kept by this
+    // browser
+    fog: (on) => {
+      picking.fog = flow.fogPick = on
+      try {
+        localStorage.setItem(FOG_KEY, on ? '1' : '0')
+      } catch {}
+      showSetup()
+    },
     start: () => {
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races, picking.mission, picking.terrain)
+        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog)
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)
@@ -1081,6 +1110,50 @@ export function boot(location) {
             heights.push(((top.y - bot.y) / 2) * innerHeight)
           })
           return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, followed: rig.followed, marks: [...rig.marks.keys()], heights }
+        },
+        // ((F16, not promised) the courtesy fog: the seat it is kept for, or
+        // null; the fog the sink has walked to (`last`: the units its seat
+        // sees, the ghosts, the chunks it holds as last seen where they
+        // differ from the match's) and the one the table shows (`shown`:
+        // the units veiled, the ghosts); and what the view draws of it:
+        // each unit's figures, ring, label and hit cylinder drawn or not,
+        // the ghosts standing, the minimap's dots and the roster's worth
+        // (sim/present-check.mjs's and sim/lobby-rig.mjs's fog cases)
+        fog: () => {
+          if (!flow.fog) return null
+          const L = flow.fogLast, S = flow.fogShown, M = player.mirror
+          const stale = (F) => (F?.table ? Object.keys(M.chunks).map(Number).filter((id) => { const r = F.table.get(id), c = M.chunks[id]; return !r || r.alive !== c.alive || r.y !== c.y }) : [])
+          const units = [...view.units.views.values()].map((v) => ({
+            id: v.id, side: v.u.side, alive: M.units[v.id]?.alive ?? 0,
+            figures: v.models.filter((f) => f.mesh && f.mesh.visible).length, ring: v.ring.visible, hit: !!v.hit.parent,
+            label: v.label.style.display !== 'none', picked: view.units.pickables().includes(v.hit),
+          }))
+          // (each chunk the table draws standing, by id: view/terrain.js's
+          // state)
+          const drawn = Object.keys(M.chunks).map(Number).filter((id) => view.terrain.state(id).shown)
+          return {
+            seat: flow.fog.seat, over: !!L?.over, drawn, table: S?.F?.table ? [...S.F.table].map(([id, r]) => [id, r.alive, r.y]) : null,
+            last: L && { seen: [...L.seen], ghosts: [...L.last.keys()].filter((id) => !L.seen.has(id)), known: Object.fromEntries(L.known), stale: stale(L) },
+            shown: S && { hide: [...S.hide], ghosts: [...S.ghosts.keys()], stale: stale(S.F) },
+            units, ghosts: view.ghosts.state(), dots: ui.minimap.dots(M), roster: ui.roster.model(),
+            // (the Strategic tier's chips, each standing unit given a place on
+            // screen for the asking, as a drawn page has; put back after)
+            chips: (() => {
+              const sc = view.units.screen, kept = new Map(sc)
+              for (const v of view.units.views.values()) if ((M.units[v.id]?.alive ?? 0) > 0) sc.set(v.id, { x: 0, y: 0, on: true })
+              const ids = view.units.chipsOf(M, null).map((c) => c.id)
+              sc.clear()
+              for (const [k, x] of kept) sc.set(k, x)
+              return ids
+            })(),
+          }
+        },
+        // ((F16, not promised) the next battle started here kept under the
+        // fog for `seat` whatever its mode (null: the panel's own choice
+        // again): sim/present-check.mjs's hotseat battles, whose scenery a
+        // seat loses sight of)
+        fogFor(seat) {
+          flow.fogPick = seat === null ? fogPick(params) : seat
         },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)

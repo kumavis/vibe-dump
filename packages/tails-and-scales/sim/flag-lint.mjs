@@ -187,6 +187,11 @@ export const ALLOW = [
   ['core/army.js', 'return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost', 1, "priceOf: the mission's price for the unit, by its key, else the unit's cost"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
+  // (F16) the courtesy fog reads a battle-log line or a tray that names no
+  // unit in its events (an advance's roll alone, a morale test held) by the
+  // name it starts with, to know whether it names an enemy unseen: the
+  // log's own text, read back in the view, never a rule
+  ['present/fog.js', 'const byName = (name) => units.filter((u) => u.short === name || u.name === name)', 1, "(F16) the fog finds whom a log line or tray with no unit in its events names, by the name it starts with: presentation"],
 ]
 
 function files(dir) {

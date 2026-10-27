@@ -1784,3 +1784,49 @@ body:not(.playing) #roster {
     flex: 1 1 30%;
   }
 }
+/* (F16) the courtesy fog: a ghost's label (where an unseen enemy was last
+   seen), greyed and dashed; the battle-setup panel's fog line, as the
+   terrain line; the lobby's switch; the roster's other army as last seen */
+.ulabel.ghost {
+  opacity: 0.7;
+  filter: grayscale(1);
+  border-style: dashed;
+  pointer-events: none;
+}
+.ulabel.ghost .ls {
+  color: var(--dim);
+  font-style: italic;
+}
+#setup .fogLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 23, 16, 0.94);
+  border: 1px solid rgba(255, 210, 140, 0.25);
+  border-radius: 12px;
+  padding: 8px 16px;
+}
+#setup .fogLine .lbl {
+  color: var(--gold);
+  font-weight: bold;
+}
+#setup .fogLine button.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#setup .fogLine .what {
+  color: var(--dim);
+}
+#lobby .fogPick {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+#lobby .fogPick .small {
+  color: var(--dim);
+}
+#roster .rpts.fog {
+  opacity: 0.6;
+  font-style: italic;
+}

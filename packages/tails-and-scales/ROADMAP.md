@@ -117,7 +117,10 @@ the commit, and add whatever the work turned up.
   `--jobs 2`; a step that moves balance runs it), `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
   set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
-  P-peers' `--only scale`). A step
+  P-peers' `--only scale`), and from F16 `node sim/fog-check.mjs` (the
+  courtesy fog's pure part: the units, the scenery, the marks, and its
+  sight held to the core's over every pair, entry by entry; present-check
+  holds the page under it, lobby-rig's `fog` online). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1155,7 +1158,7 @@ answered; 35 (Escape) by the user: no change.
   Auto and Undo down, a command refused. replay-check's `logs` (every
   line of the 70 battles named by the move that logged it, clicks, relog,
   the peek), undo-check's log steps. DESIGN's F15 notes.)
-- [ ] **F16** Courtesy fog of war, a lobby setting. DESIGN §5's "no hidden
+- [x] **F16** Courtesy fog of war, a lobby setting. DESIGN §5's "no hidden
   information" stands as a rule: the match is a pure function of a public
   log that every peer folds whole, so nothing can be hidden from devtools;
   this hides it in the view, on the trust the dice and the sealed lists
@@ -1174,6 +1177,34 @@ answered; 35 (Escape) by the user: no change.
   ignores, so a fogged match folds as any other), and as a solo option
   against the AI, the panel saying the AI sees everything (core/ai reads
   `G.units`). No fog in hotseat (one screen) or for a watcher.
+  (View only: no bump, the corpus byte-identical, no `SETUP_KEYS` entry
+  after all: the start of a fogged match is byte for byte an unfogged
+  one's. Online the lobby's `fog` (net/lobby.js), the host's switch beside
+  the battle, a change un-readying both seats, read by each page as its
+  battle begins and kept by a rematch; against the AI the battle-setup
+  panel's Fog line with its note (?fog, else the page's last choice in
+  localStorage), `Flow.start(…, fog)`. `present/fog.js` is the pure part:
+  `fogSight`, run inside the Session's preview, asks the core's `sight`
+  over every pair (cached per pair by places and slots, let go when the
+  scenery changes), and stand-ins for a ghost's place, a stale chunk's top
+  centre and a template's landing; `fogStep` keeps each enemy as last seen
+  (its ghost gone once a stand-in where it stood is seen, or it falls in
+  sight) and the scenery as last seen; `fogEvents` marks an entry's lines,
+  trays, rows, landings and scenery events (a shot at you from an unseen
+  unit shows its shooter as "Unseen"; a fight you are in shows in full).
+  The flow's sink puts two `fog` events round each entry (what may show as
+  it opens: an enemy leaving sight a ghost at once; what the seat sees as
+  it closes), relog walks the fog from the start after a snap, a peek (F15)
+  and Undo (F12) stay fogged while the battle lives, and its end lifts it.
+  `view/units.js`'s veil (no figure, ring, label, pick, place on screen,
+  chip), `view/fog.js`'s grey ghosts, `view/terrain.js`'s `reveal`, the
+  minimap's dots and the roster's worth as last seen; the camera follows
+  nothing veiled. Measured on a Grand board (40 units, 277 chunks, the
+  `scale/` pilot log's 222 entries, the machine loaded): an entry's whole
+  pass p50 0.6-0.8 ms, p90 about 5 ms; the whole board's sight 0.4-0.9 ms
+  cold, 0.1-0.3 cached (every pair asked: 3-9 ms); no coarsening.
+  `sim/fog-check.mjs`, present-check's F16 case, lobby-rig's `fog`. DESIGN's
+  F16 notes.)
 - [x] **F17** Lobbing from height (rules). A blast or indirect weapon's range
   grows with the shooter's floor over the target's as a thrown thing's
   does: with R its printed range and h the drop (negative firing up), the

@@ -189,11 +189,13 @@ export class Shots {
   // A thornburst: motes from the caster's gem, thorns bursting up through
   // the turf over the template, and their own explosion; they stand until
   // the spell is done (spell.fade), then sink away.
-  async thorns(e) {
+  // ((F16) `quiet`: the caster veiled by the courtesy fog, its gem's motes
+  // left out, the thorns where they burst seen)
+  async thorns(e, { quiet = false } = {}) {
     const units = this.units, fx = this.effects
     const cv = units.get(e.u), gen = units.gen
     const gem = cv.models[0].mesh.userData.anim.gem
-    if (gem) {
+    if (gem && !quiet) {
       const p = new THREE.Vector3()
       gem.getWorldPosition(p)
       for (let i = 0; i < 20; i++) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 3, size: 0.06, color: '#9aff7a', life: 0.8, g: -1 })
