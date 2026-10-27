@@ -15,6 +15,7 @@ import { DEG } from './physics.js'
 import { aiSalvo, bears, fireShipTorpedoes, torpedoSpeed, torpedoIntercept, dropBomb, dropTorpedo, bombPoint, aiBurst, rearGun, strafeBurst } from './weapons.js'
 import { isCarrier, isEscort, isCapital, stationPoint, edgeBend, bearingOf, canLaunch, targetsFor } from './admiral.js'
 import { steer } from './physics.js'
+import { FX } from '../sim/effects.js'
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 const wrap180 = (d) => ((((d + 180) % 360) + 360) % 360) - 180
@@ -296,8 +297,13 @@ function layingSmoke(ar, i, x) {
   const s = ar.state
   const px = s.pos[3 * i]
   const pz = s.pos[3 * i + 2]
-  // (a carrier's own funnel smoke is drawn and hides nothing: the screens that hide are the escorts')
-  if (x.smokeLast) ar.addSmoke(x.smokeLast[0], x.smokeLast[1], px, pz, i, !isCarrier(x.model.type))
+  // (a carrier's own is funnel smoke trailing from her, which hides nothing: the screens that hide are the escorts')
+  if (isCarrier(x.model.type)) {
+    ar.fx(FX.smoke, px, (x.model.deck ?? 15) + 10, pz, { unit: i, data: 0 })
+    x.smokeT = ar.t + 15
+    return
+  }
+  if (x.smokeLast) ar.addSmoke(x.smokeLast[0], x.smokeLast[1], px, pz, i)
   x.smokeLast = [px, pz]
   x.smokeT = ar.t + 5
 }
