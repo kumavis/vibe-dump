@@ -73,8 +73,11 @@ export const MUTATIONS = {
   'spare-placeholder': ['/view/terrain.js', 'if (spare?.obj && !spare.touched', 'if (spare && !spare.touched'],
   // (R7) a sync sets a dropped block at its height but leaves its item the
   // def it was built from: an add of the block where it first stood takes
-  // it back at the height it dropped to (boards 1, 7 and 23)
-  'spare-height': ['/view/terrain.js', '          kept.obj.position.y = c.shape.y\n          kept.c = defOf(c)\n', '          kept.obj.position.y = c.shape.y\n'],
+  // it back at the height it dropped to (boards 1, 7 and 23). ((F8b's
+  // review) The kept path sets the block's whole place now, x and z with y,
+  // so a shudder a snap stops leaves no tile off by its shake: the anchor
+  // follows it)
+  'spare-height': ['/view/terrain.js', '          kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)\n          kept.c = defOf(c)\n', '          kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)\n'],
   // (R7a's fixer, round 3) core's adds carry a field the view's copy of
   // defOf lacks (as F7's deck and stair pieces might): no mesh reads it, so
   // only the defs compared catch it

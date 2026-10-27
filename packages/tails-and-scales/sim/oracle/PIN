@@ -18,5 +18,5 @@
 # A deliberate re-record (parity.mjs --record) or a log added to the corpus
 # moves the PIN, and only the PIN, to the commit whose code produced the new
 # hashes, in the same push; `node sim/parity.mjs --pin` must pass afterwards.
-90bd7c843d8e65c56da81938e4d33baadfda3617
+ad911bf3ca4c3b7dd1c0e21a53b7b2803a71b87e
 hooks cacf5f5ade9c38720875b428a7dd82f6a386efdc

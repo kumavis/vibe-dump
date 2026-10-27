@@ -55,9 +55,13 @@
 //     and keys the table by the copy, an add by the def the event carries,
 //     so a field one has and the other lacks would part the two tables).
 //  6. (F7a, DESIGN §4.2.4) the `fortified` set, on the same seeds, on the
-//     Skirmish board (the classic mission's 40×28, its objectives and zones)
-//     and the Grand fixture's (sim/fixtures/grand.mjs: 80×56, zones 14", nine
-//     objectives), each board built by the working tree's Terrain alone
+//     Skirmish board (the classic mission's 40×28, its objectives and zones),
+//     (the merged build's gate) the field mission's (60×40, zones 12", seven
+//     objectives) and the grand mission's (data/mission.js: 80×56, zones
+//     14", nine objectives; until the merged build's gate, the Grand
+//     fixture's copy of the same table, sim/fixtures/grand.mjs, retired
+//     since), each board built as a match builds it, by the working tree's
+//     Terrain alone
 //     (there is no R0 code to hold it to): every board built twice, with
 //     Math.random made to throw, gives the same adds (every def, its look and
 //     its height fields) and the same footprints, so every look is made of
@@ -77,7 +81,8 @@
 //     more it also judges the rates against DESIGN's measurements (§4.2.4,
 //     the prototype's seeds 1-200): the works on ≥ 95% of boards, the keep on
 //     45-55%, and the fort pairs besides the works per board (Skirmish 0-1,
-//     on average under 0.5; Grand at least 2 and at most the 7 the rule can
+//     on average under 0.5; Field at most the 3 the rule can want there, on
+//     average 0.5-1.0; Grand at least 2 and at most the 7 the rule can
 //     want there, on average 3.5-4.5). Fewer boards than that make a rate
 //     noise: it prints them and judges only the exact rows. And the view of
 //     every such board (TerrainView: its decks, stairs, ladders and posts
@@ -668,7 +673,9 @@ console.log(`  ${stats.defs} adds played, each one's def the view's defOf of its
 console.log(`  the mirror the events folded into matched ${stats.mirrorChunks} chunks (standing, height); ${globalThis.__dustMoved ?? 0} of ${globalThis.__dustAll ?? 0} collapse dust puffs rise where their own drop left the block, not lower where a later drop in the same op took it (R5's rule; R0 read the place when the fall ended)`)
 
 // ── 6. The fortified set (F7a) ──────────────────────────────────────────────
-const { GRAND } = await import('./fixtures/grand.mjs')
+// (the grand mission's table: its board, zones and objectives, as
+// core/match.js scatters a Grand battle's terrain around them)
+const GRAND = MISSIONS.grand
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
 const { FOOTPRINT, GATE_OUT, LADDER_OUT } = await imp(PKG, 'core/terrain/recipes.js')
 // the height fields an add's def carries where its chunk has them (DESIGN
@@ -685,7 +692,12 @@ const FACING = new Set(SETS.fortified.facing)
 const FORT_BOARDS = [
   { label: 'Skirmish', W, H, deploy: MISSIONS.classic.deploy, objectives: OBJ_POS, pairs: [0, 1], avg: [0, 0.5] },
   // (s = 4 there: forts [1, 1] want 4 + a draw below 4, so 7 at most)
-  { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.board.deploy, objectives: GRAND.objectives.map(([x, z]) => ({ x, z })), pairs: [2, 7], avg: [3.5, 4.5] },
+  // ((the merged build's gate) the field mission's table too, as §4.2.9's
+  // P-climb runs on every mission: s = 60·40/1120 ≈ 2.14, so the rule asks
+  // for 2 + a draw below 2 pairs, 3 at most; on seeds 1-500 0 / 0.73 / 2,
+  // so judged on average 0.5-1.0, as the Grand row is about its own)
+  { label: 'Field', W: MISSIONS.field.board.W, H: MISSIONS.field.board.H, deploy: MISSIONS.field.deploy, objectives: MISSIONS.field.objectives, pairs: [0, 3], avg: [0.5, 1.0] },
+  { label: 'Grand', W: GRAND.board.W, H: GRAND.board.H, deploy: GRAND.deploy, objectives: GRAND.objectives, pairs: [2, 7], avg: [3.5, 4.5] },
 ]
 // a yaw's distance from another, the turn between them folded into [0, π]
 const turn = (a, b) => {
@@ -1090,7 +1102,12 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 //  - so does an r SQUAD_R (1.18", the largest squad's) disc, and it controls
 //    every objective: it reaches a standable cell within OBJECTIVE_RANGE + r
 //    of it (core/queries.js counts a model within OBJECTIVE_RANGE plus its
-//    base; a disc of r holds its models).
+//    base; a disc of r holds its models), (the merged build's gate) at its
+//    level on a board with height: a cell whose floor is within HIGH of the
+//    floor under the objective, as controlOf counts a model there (the
+//    keep's objective held from its top), the start a ground cell. (The
+//    reach stays a walker's, stairs but no ladders: stricter than the
+//    squad's own, a climber's.)
 // Every row must pass on every board: a failure names the mission, the set,
 // the seed, the seat, the disc and the zone or objective it couldn't reach.
 // The classic mission's boards are measured too and only reported (their
@@ -1101,6 +1118,7 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 // (F9b, F5b add a row per footprint: the hull on its lattice.)
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
+const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
 const CONTROL = process.env.CONNECT_MUTATE ?? null
 const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
@@ -1122,12 +1140,16 @@ function connectBoard(name, m, set, seed) {
   if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
   const edge = BW / 2 - m.deploy
   const why = []
+  // (the merged build's gate) with height: the ground, and an objective's
+  // level, the floor under it (core/queries.js floorAt)
+  const ground = (i) => !nav.hasHeight || !nav.level[i]
+  const atLevel = (i, o) => !nav.hasHeight || Math.abs(nav.floor[i] - nav.floor[nav.index(o.x, o.z)]) <= HIGH
   for (const seat of [0, 1]) {
     const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk')) continue
+        if (!(sgn * nav.x(i) > edge) || !ground(i) || !nav.standable(i, r, 'walk')) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (d < bd) [bd, start] = [d, i]
       }
@@ -1143,8 +1165,8 @@ function connectBoard(name, m, set, seed) {
       if (r !== SQUAD_R) continue
       for (const o of m.objectives) {
         let held = false
-        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r
-        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})`)
+        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && atLevel(i, o)
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${nav.hasHeight ? ` at its level (within ${HIGH}" of its floor, ${nav.floor[nav.index(o.x, o.z)]}")` : ''}`)
       }
     }
   }

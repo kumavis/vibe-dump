@@ -57,7 +57,11 @@
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
 //    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8b) It passes
 //    `open` too, refuses a copy of it with an unknown scale, and classic
-//    has no `scale` (its draws are frozen). (F8a) And the
+//    has no `scale` (its draws are frozen). (The merged build's gate)
+//    fortified's `largeCentre`, its centre rule on a table larger than
+//    classic's, is checked as `centre` is (a piece that doesn't exist,
+//    falling thresholds, no list), classic has none, and RULES_ID moves
+//    with it. (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
 //    loads) passes each and refuses one with an odd or fractional board, a
 //    zone reaching within 6" of the centre line, an objective under 1"
@@ -447,6 +451,8 @@ const moves = [
   ['a spacing rule (classic gap 2.1 → 2.0)', () => classic((c) => (c.gap = 2.0))],
   ['the forest kept out of deployment no more', () => classic((c) => (c.notInDeploy = []))],
   ['a new terrain set', () => rulesId({ sets: { ...SETS, fortified: structuredClone(SETS.classic) } })],
+  // (the merged build's gate) fortified's centre rule on a larger table
+  ["fortified's larger-table centre (the rock box → the tower ring)", () => rulesId({ sets: { ...SETS, fortified: { ...structuredClone(SETS.fortified), largeCentre: [['keep', 0.5], ['tower', 0.8]] } } })],
   // (F8b) the open set: its spacing and its area scale
   ['a spacing rule (open gap 3.2 → 3.1)', () => rulesId({ sets: { ...SETS, open: { ...structuredClone(SETS.open), gap: 3.1 } } })],
   ["the open set's area scale dropped", () => rulesId({ sets: { ...SETS, open: (({ scale, ...o }) => o)(structuredClone(SETS.open)) } })],
@@ -572,8 +578,8 @@ for (const [what, want, edit] of brokenSets) {
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
 }
 // (F7a) the fortified set's own fields, broken one at a time on a copy
-const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale']
-check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
+const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale', 'largeCentre']
+check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale, largeCentre): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
 const brokenForts = [
   ['a fortKind under its footprint (rampart 6, its footprint 7.1)', /fortKinds\[0\] \(rampart\): radius 6 must be a number, at least its footprint 7\.1/, (c) => (c.fortKinds[0][1] = 6)],
   ['a fortKind radius that is not a number', /fortKinds\[1\] \(bastion\): radius 6\.3 must be/, (c) => (c.fortKinds[1][1] = '6.3')],
@@ -595,6 +601,11 @@ const brokenForts = [
   ['facing with no fort phase', /facing names fortKinds, and the set has none/, (c) => ['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'].forEach((k) => delete c[k])],
   ['an unknown scale', /scale "length" is not one scatter knows/, (c) => (c.scale = 'length')],
   ['a misspelt fort field', /unknown field "fortGapp"/, (c) => (c.fortGapp = 3.2)],
+  // (the merged build's gate) the larger table's centre rule, as `centre`
+  ['a larger-table centre piece that does not exist', /largeCentre\[1\]: no centre piece "moat"/, (c) => (c.largeCentre[1][0] = 'moat')],
+  ['larger-table centre thresholds that fall', /largeCentre\[1\] \(keep\): thresholds must rise/, (c) => c.largeCentre.reverse()],
+  ['a larger-table centre that is no list', /largeCentre must be a list of \[piece, threshold\]/, (c) => (c.largeCentre = 'rockbox')],
+  ['a larger-table centre threshold of 0', /largeCentre\[0\] \(keep\): threshold 0 must be in \(0, 1\]/, (c) => (c.largeCentre[0][1] = 0)],
 ]
 for (const [what, want, edit] of brokenForts) {
   const c = structuredClone(SETS.fortified)
