@@ -22,6 +22,15 @@
 //             entries a page accepted (match/fold.js's knownOf) folds an
 //             honest log as before, and freezes as tamper, with no match,
 //             a log that lost one of them
+//   logs      (F15) every battle-log line the page's sink hands on
+//             (app/flow.js's, over the battle's Session) carries its
+//             entry's place k among the moves: move k logged it (the
+//             battle after move k - 1 is short of its `at`, after move k
+//             reaches it, a traced line there the trace's own), a click
+//             on it (the replay's before) shows the match after move
+//             k - 1, the log made again after a snap (relog) stamps every
+//             line alike, and a peek over a battle going on comes back to
+//             it at Live and at ✕
 //   undo      (F12) a human battle played alone: after every entry,
 //             undoable() is exactly the rule (the last accepted a
 //             placement, move or charge's end of the seat now deciding, no
@@ -49,23 +58,39 @@ const { values: a } = parseArgs({ options: { only: { type: 'string' }, 'self-tes
 
 async function modules(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [core, E, F, { LocalStore }, { Session }, R, { clock }, undo, hud] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/store.js', 'match/session.js', 'app/replay.js', 'view/clock.js', 'app/undo.js', 'present/hud-model.js'].map(at))
-  return { core, E, F, LocalStore, Session, R, clock, undo, hud }
+  const [core, E, F, { LocalStore }, { Session }, R, { clock }, flow, undo, hud] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/store.js', 'match/session.js', 'app/replay.js', 'view/clock.js', 'app/flow.js', 'app/undo.js', 'present/hud-model.js'].map(at))
+  return { core, E, F, LocalStore, Session, R, clock, flow, undo, hud }
+}
+
+// (F15) the page's flow, with nothing drawn: its sink (app/flow.js) hands
+// each entry's events to a player that keeps the battle log's lines, and
+// its relog writes into a log that keeps them too
+function pageFlow(M, setup) {
+  const flow = new M.flow.Flow({ view: {}, ui: {}, params: new URLSearchParams(), seed: setup.board, races: M.core.fullSetup(setup).seats.map((x) => x.race) })
+  flow.lines = []
+  flow.written = []
+  flow.sameUnits = () => {}
+  flow.player = { push: (ev) => flow.lines.push(...ev.filter((e) => e.t === 'log')) }
+  flow.ui.log = { clear: () => (flow.written.length = 0), write: (side, html, cls, at, k) => flow.written.push({ html, at, k }) }
+  return flow
 }
 
 // A battle's log, written as the page writes one: a Session over a
 // LocalStore, its human seats played from device 'sim'. `online`: the log
 // opens with a commitment first, and a stale entry is slipped in after the
 // third move. Returns the Session, every event it handed on, and the
-// match's hash after each accepted entry (by its place among them).
-function write(M, it, { online, upTo = Infinity }) {
+// match's hash and (F15) its trace's length after each accepted entry (by
+// its place among them); (F15) with `page`, the page's flow (pageFlow)
+// hears each entry's events too.
+function write(M, it, { online, upTo = Infinity, page = null }) {
   const setup = seatDevices(jobSetup(it.job), 'sim')
   const human = setup.seats.flatMap((x, s) => (x.ctrl === 'human' ? [s] : []))
-  const events = [], hashes = []
+  const events = [], hashes = [], lens = []
   const store = new M.LocalStore()
-  const ses = new M.Session({ store, localSeats: human, dev: 'sim', sink: { events: (ev) => events.push(...ev) } })
+  const ses = new M.Session({ store, localSeats: human, dev: 'sim', sink: { events: (ev, at) => (events.push(...ev), page?.sink.events(ev, at)) } })
   const mark = () => {
     hashes[ses.accepted.length - 1] = ses.G ? M.core.stateHash(ses.G) : null
+    lens[ses.accepted.length - 1] = ses.G ? ses.G.journal.trace.length : 0
   }
   if (online) {
     ses.open('c0mm1t')
@@ -82,7 +107,24 @@ function write(M, it, { online, upTo = Infinity }) {
     k++
     if (online && k === 3) store.append(M.E.encode(M.E.envelope({ t: 'end' }, { id: 'sim.stale.0', s: human[0], d: 'sim', p: 'nope' })))
   }
-  return { ses, events, hashes, setup, rest: entries.slice(k) }
+  return { ses, events, hashes, lens, setup, rest: entries.slice(k) }
+}
+
+// (F15) The battle log's lines as the page's flow wrote them, each held to
+// the move it names (`lens`, the battle's trace length after each move;
+// `first`, the start's place): → why not, or null
+function linesWrong(M, page, battle, lens, first) {
+  const trace = battle.G.journal.trace, n = battle.accepted.length
+  for (const [i, x] of page.lines.entries()) {
+    const k = x.k
+    if (!Number.isInteger(k) || k < first || k >= n) return `line ${i} ("${x.html.slice(0, 40)}") names move ${k}, not one of the battle's ${first}-${n - 1}`
+    const before = k > first ? lens[k - 1] : 0, after = lens[k]
+    // (a traced line is the trace's line at `at`; a held-back one, shown
+    // but never traced, at the trace's length when it was flushed)
+    const ok = x.traced ? before < x.at && x.at <= after && trace[x.at - 1].startsWith('log ') : before <= x.at && x.at <= after
+    if (!ok) return `line ${i} ("${x.html.slice(0, 40)}", at ${x.at}) wasn't logged by move ${k} (the trace ${before} lines before it, ${after} after)`
+  }
+  return null
 }
 
 // (F12) Undo over a human battle's log played alone (as write's, never
@@ -246,11 +288,30 @@ async function checks(dir, only) {
   }
   for (const it of picked) {
     const online = it.kind === 'human'
-    const { ses: battle, events, hashes, setup } = write(M, it, { online })
+    const page = pageFlow(M, seatDevices(jobSetup(it.job), 'sim'))
+    const { ses: battle, events, hashes, lens, setup } = write(M, it, { online, page })
     const { flow, bar } = standIn()
     const replay = new M.R.Replay({ flow, bar })
     replay.open(battle)
     const moves = replay.moves(), first = replay.first(moves)
+    // (F15) logs: every line names the move that logged it; relog stamps
+    // the same; a click on a line shows the match before its move
+    const lw = linesWrong(M, page, battle, lens, first)
+    if (lw) fail(it, `the battle log: ${lw}`)
+    page.relog(battle.folder.pushed)
+    const shown = page.lines.slice(-80).map((x) => ({ html: x.html, at: x.at, k: x.k }))
+    if (JSON.stringify(page.written) !== JSON.stringify(shown)) fail(it, `the battle log made again (relog) isn't the log as written, move for move (${page.written.length} lines, ${shown.length} written; first apart at ${page.written.findIndex((x, i) => JSON.stringify(x) !== JSON.stringify(shown[i]))})`)
+    const clicks = page.lines.length <= 6 ? page.lines : [0, 1, 2, 3, 4, 5].map((i) => page.lines[Math.round((i * (page.lines.length - 1)) / 5)])
+    for (const x of clicks) {
+      replay.before(battle, x.k)
+      const G = flow.shown?.G
+      const ok = replay.k === x.k - 1 && (x.k > first ? !!G && M.core.stateHash(G) === hashes[x.k - 1] && G.journal.trace.length === lens[x.k - 1] : !G && flow.startedWith === moves[first].setup)
+      if (!ok) {
+        fail(it, `a click on the line "${x.html.slice(0, 40)}" (move ${x.k}) shows move ${replay.k}${G ? '' : ' (before the battle)'}, not the match before its move`)
+        break
+      }
+    }
+    replay.live()
     // scrub: every k (a sample of 40 on long battles), and before the start
     const ks = moves.length <= 40 ? moves.map((_, k) => k) : Array.from({ length: 40 }, (_, i) => Math.round((i * (moves.length - 1)) / 39))
     let wrong = null
@@ -321,6 +382,19 @@ async function checks(dir, only) {
       await run(replay)
       const moves = replay.moves()
       if (!landed || flow.shown !== battle || replay.k !== moves.length - 1 || flow.shows.at(-1) !== 'show' || !bar.m?.atLive) fail(it, `a replay of a battle going on, ${landed} moves landing meanwhile, ends ${flow.shown === battle ? 'on the battle itself' : 'elsewhere'} at move ${replay.k} of ${moves.length - 1}, not at Live`)
+      // (F15) a peek: a click on a line of a battle going on that has no
+      // bar puts the bar up over the match before its move; Live, and ✕
+      // the second time, take it away, the battle itself shown, never the
+      // war room
+      for (const how of ['live', 'close']) {
+        const peek = standIn()
+        const pr = new M.R.Replay(peek)
+        pr.before(battle, 5)
+        const up = !!peek.bar.m && peek.flow.shown !== battle && pr.k === 4 && peek.bar.m.closable && peek.bar.m.live
+        if (how === 'live') pr.live()
+        else pr.close({ back: true })
+        if (!up || peek.bar.m || peek.flow.shown !== battle || peek.flow.wentBack || pr.battle) fail(it, `a peek at move 4 of a battle going on ${up ? '' : "never shows it on the bar (closable, at Live's side), and "}${how === 'live' ? 'at Live' : 'at ✕'} ${peek.bar.m ? 'keeps the bar up' : peek.flow.wentBack ? 'goes to the war room' : peek.flow.shown !== battle ? "doesn't show the battle" : 'comes back'}`)
+      }
     }
   }
   // refold: an entry of seat 1 inserted before seat 0's first, both in the
@@ -375,6 +449,14 @@ const MUTANTS = {
   // a replay goes on writing moves by their place after the battle folded
   // again under it
   'no-refold-check': ['app/replay.js', 'if (at.length !== this.k + 1 || at[this.k] !== moves[this.k]?.id) {', 'if (false) {'],
+  // (F15) a log line names the move after its own
+  'log-k-next': ['app/flow.js', 'const facts = this.acted.splice(0), k = ses.accepted.length - 1', 'const facts = this.acted.splice(0), k = ses.accepted.length'],
+  // (F15) the log made again after a snap names no move
+  'relog-unstamped': ['app/flow.js', "if (x.t === 'log') lines.push({ ...x, k })", "if (x.t === 'log') lines.push(x)"],
+  // (F15) a click shows the match after the line's move, not before it
+  'click-after': ['app/replay.js', '    this.scrub(k - 1)\n', '    this.scrub(k)\n'],
+  // (F15) a peek put away at Live stays on the bar
+  'peek-stays': ['app/replay.js', '    if (this.peek) return this.close({ back: true })\n', ''],
   // (F12) undo takes back past a die rolled
   'undo-past-dice': ['present/hud-model.js', '&& f.dice[k] === f.dice[k - 1] ? k : -1', '? k : -1'],
   // (F12) in hotseat a seat takes back the other's entry
@@ -411,6 +493,6 @@ if (a['self-test']) {
 } else {
   const t0 = performance.now()
   const { failed, n, undone } = await checks(a.dir ?? PKG, only)
-  console.log(failed ? `\nreplay-check: ${failed} check(s) failed` : `\nreplay-check passed: ${n} battles scrubbed move by move, replayed from the start event for event, saved and opened again, held to what a page kept; a replay of a battle going on catches up with it; (F12) undo's rule held after every entry of the human battles (${undone.entries} entries it would take back), ${undone.taken} taken back and made again to the same trace (${((performance.now() - t0) / 1000).toFixed(0)} s)`)
+  console.log(failed ? `\nreplay-check: ${failed} check(s) failed` : `\nreplay-check passed: ${n} battles scrubbed move by move, replayed from the start event for event, saved and opened again, held to what a page kept; a replay of a battle going on catches up with it; (F15) every battle-log line names the move that logged it, and a click on one shows the battle before it; (F12) undo's rule held after every entry of the human battles (${undone.entries} entries it would take back), ${undone.taken} taken back and made again to the same trace (${((performance.now() - t0) / 1000).toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }

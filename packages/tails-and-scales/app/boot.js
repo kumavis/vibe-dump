@@ -358,6 +358,9 @@ export function boot(location) {
   // a replay file opened from the title, watched from its start
   const replay = new Replay({ flow, bar: new ReplayBar() })
   flow.replay = replay
+  // (F15) a line of the battle log clicked: the battle as it stood before
+  // the move it was logged in, on the replay's bar
+  ui.log.wire((k) => flow.battle && replay.before(flow.battle, k))
   const watchFile = (text) => {
     const { store, why } = openReplay(text)
     const ses = store && new Session({ store, dev: 'replay' })

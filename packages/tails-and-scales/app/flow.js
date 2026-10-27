@@ -39,7 +39,10 @@
 // (app/replay.js) of the battle's first moves, a scrub to one of them, or
 // a replay from its very start; the battle's own Session (`battle`) goes
 // on folding meanwhile, its status still heard (online), and the table
-// comes back to it as it then stands.
+// comes back to it as it then stands. (F15) A click on a line of the battle
+// log puts the battle as it stood before that line's entry on the table
+// (each line knows its entry's place among the battle's moves), on the
+// replay's bar, ▶ playing on from there.
 //
 // (F12) In a game played here alone, Undo takes back the last placement,
 // move or charge's end of the seat whose decision it is, back to its last
@@ -218,9 +221,12 @@ export class Flow {
           this.sameUnits(this.G)
         }
         // each action's end carries the match's facts as they stood then,
-        // and the stop (the entry's `pending`) the match's as it stands
-        const facts = this.acted.splice(0)
-        events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e))
+        // and the stop (the entry's `pending`) the match's as it stands;
+        // (F15) and each battle-log line the entry it was logged in, its
+        // place k among the accepted (the entry just accepted: the last),
+        // which a click on the line scrubs to the eve of
+        const facts = this.acted.splice(0), k = ses.accepted.length - 1
+        events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e.t === 'log' ? { ...e, k } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         this.player.push(events)
       },
@@ -275,8 +281,8 @@ export class Flow {
     this.human = human
     const handlers = {
       ...view.handlers({ localSeats: () => this.session?.localSeats ?? [] }),
-      // the battle log, the dice tray
-      log: (e) => ui.log.write(e.side, e.html, e.cls, e.at),
+      // the battle log ((F15) each line its entry's place, k), the dice tray
+      log: (e) => ui.log.write(e.side, e.html, e.cls, e.at, e.k),
       'tray.open': (e) => ui.tray.clear(e.title),
       dice: (e) => ui.tray.row(e.label, e.dice, e.need, e),
       // an action's end: what the units have done, as the match had it then
@@ -832,14 +838,17 @@ export class Flow {
   // the `log` events written (the last 80, as many as the log keeps). After
   // a snap onto a match this page didn't play up to (an online match
   // followed, a refold), what the log shows is that match's history.
+  // ((F15) Each line with its entry's place among the accepted, as the sink
+  // stamps it: the fold's own, from the list's start.)
   relog(entries) {
     const f = new Folder({ out: [] }), lines = []
     for (const e of entries) {
       f.push(e)
-      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push(x)
+      const k = f.accepted.length - 1
+      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push({ ...x, k })
     }
     this.ui.log.clear()
-    for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at)
+    for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at, x.k)
   }
 
   // The elastic catch-up (above), once a change is folded: the table's
