@@ -97,8 +97,9 @@ if (!centre) throw new Error('no open water in the test box for the arena')
 // The two sides are built nearly alike (each its carrier's sinking for a goal) so the balance band is a test of the arena
 // and its admirals, not of the forces: the American side flies an Avenger and a Dauntless fewer and one Avenger up at
 // the start against two Kates (the TBM-1C's torpedo sank the Japanese carrier in four games of five otherwise), and
-// its admiral turns away at 0.7 of its strength (at 0.5 it met its goal in 16 games of 20); the admirals' numbers are
-// what tools/smoke-arena.mjs's band was tuned with (research/engine-3.md §8).
+// its admiral turns away at 0.75 of its strength (at 0.5 it met its goal in 16 games of 20), and the Japanese side's
+// first wave is four (the integrator's, after the arena's gun intervals and strafing changed: 55 % and 50 % over 20 seeds);
+// the admirals' numbers are what tools/smoke-arena.mjs's band was tuned with (research/engine-3.md §8).
 const ADMIRAL = { aggression: 0.6, turnAwayAt: 0.5, launchEveryS: 70, waveGrowth: 0.3, waveSize: 3 }
 const scenario = {
   id: 'test-box',
@@ -142,7 +143,7 @@ const scenario = {
         { t: 340, title: 'Test: break up their strike', goal: { kind: 'shoot-down', type: 'aircraft', count: 3, withinS: 110 }, text: 'Test: shoot down three of their aircraft.' },
         { t: 460, title: 'Test: finish it', goal: { kind: 'hit', type: 'bb', types: ['bb', 'cv'], count: 2, withinS: 130 }, text: 'Test: two more hits on a battleship or the carrier.' },
       ],
-      admiral: { ...ADMIRAL, aggression: 0.65 },
+      admiral: { ...ADMIRAL, aggression: 0.65, waveSize: 4 },
     },
     usa: {
       side: 'us',
@@ -170,7 +171,7 @@ const scenario = {
         { t: 340, title: 'Test: break up their strike', goal: { kind: 'shoot-down', type: 'aircraft', count: 3, withinS: 110 }, text: 'Test: shoot down three of their aircraft.' },
         { t: 460, title: 'Test: the last strike', goal: { kind: 'hit', type: 'cv', count: 2, withinS: 130 }, text: 'Test: two more hits on the carrier.' },
       ],
-      admiral: { ...ADMIRAL, turnAwayAt: 0.7 },
+      admiral: { ...ADMIRAL, turnAwayAt: 0.75 },
     },
   },
   footnote: 'Test: the fixture has no record; its battle is made up.',
