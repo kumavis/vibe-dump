@@ -105,7 +105,10 @@ the commit, and add whatever the work turned up.
   as logs with no entries) beside the rest (with `army/`, 60 battles), and
   `node sim/play-report.mjs` (the step's AI corpus against §4.2.9's
   thresholds: F7a's over the `fort/` AI pairs, its counts read off the
-  match by `sim/height-probe.mjs`) passes, and from
+  match by `sim/height-probe.mjs`; from F7b its F7b row too, a shooter
+  firing from a deck in ≥ 50% of the same battles) passes, and from F7b
+  P-height's parapet scenes, terrain-check's parapet rows (section 6 and
+  P-climb) and data-check's per-recipe parapets, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
   every Field and Grand board of seeds 1-500; its `--self-test` plants a
@@ -132,13 +135,18 @@ the commit, and add whatever the work turned up.
   fortified battles), `node sim/title-shot.mjs` (the title at 1200 ms against the
   previous commit; exit 3 is a timeout, not a verdict: run it again),
   `node sim/terrain-shots.mjs` (the five boards against R0, run at every
-  step that touched the view since R3, listed here from R7a) and, from
+  step that touched the view since R3, listed here from R7a; from F7b five
+  fortified boards too, a hotseat battle's table at its deployment, against
+  `FORT_REF`, F7b's code commit) and, from
   R7b, `node sim/hud-check.mjs` (and `--self-test`: a snap mid-battle, in
   the deployment, the roll-off, a seat's phase, at a charge's end and past
   the end, leaves the HUD right: Begin battle, End and Auto up for a local
   seat's phase, Shortest move and the charge's spots, the end screen worded
   as the match's own game.over; and the HUD model's `end.ready` is the
-  match's wherever a local seat idles in its phase), and from R8b
+  match's wherever a local seat idles in its phase; from F7b the tooltips
+  that read heights on a fortified battle, `--tips` alone: the climbing
+  cost, a rim's ledge, a shot past a parapet in cover with its amber ray,
+  an unseen target's red one), and from R8b
   `node sim/play-check.mjs` (the shipped page played rendered, without
   `?debug` or `?fast`, through the DOM alone: a watched battle and back,
   vs. the AI from each seat and hotseat, each seat played here placing
@@ -149,7 +157,10 @@ the commit, and add whatever the work turned up.
   back; from F10a a group placed and moved online), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
-  Select mode, long presses, the touch fallback), and from F8a
+  Select mode, long presses, the touch fallback; from F7b its fortified
+  section, `--fort` alone: Alt's see-through, a deck faded in front of
+  the unit picked up and its ring drawn through, the LOS ray on hover,
+  leaking nothing), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
@@ -964,22 +975,58 @@ follows N3.
   row judged by a move and the AI tuned to it; P-scan fortified, P-level
   on Grand-sized boards, P-height's scenes, rematch-memory's
   `--terrain`; `fort/`'s AI pairs re-recorded.)
-- [ ] **F7b** Parapets with cover at deck level; reading heights: drop
+- [x] **F7b** Parapets with cover at deck level; reading heights: drop
   lines, the climbing cost, line of sight with its reasons, see-through
-  walls. F7a left it: the parapet piece (a comment block in recipes.js, each
-  recipe noting where its own go) and its level-aware cover raster (the
-  rasters already apply by `base`); `sightInfo` (`{ok, block, obscure,
-  cover, high}`) for the ray and its reasons; `nav.linkCostOf` for the
-  move tooltip's climbing cost; cliff rims; see-through occluders and Alt;
-  `blast.land` with no `y` (the view takes a template's height from its own
-  tops); the play-report's F7b row (a shooter fires from a deck in ≥ 50% of
-  `fort/`), with `fort/` re-recorded. Drop lines and the "▲2"" label landed
-  in F7a.
+  walls.
+  (a556cfc; `CORE_VERSION` 8, F9a's 9 beside it; classic, `army/` and
+  `scale/` byte-identical, 62 of 62 in Node, `--page` and Chromium;
+  `RULES_ID` unmoved. The `parapet` piece as the piece table: 0.7" on the
+  deck's rim, `navKind` null, obscure, its 1.5" band rastered at its base,
+  hp 3, no rubble; the rampart 4, the bastion 6, the watchtower 8, the keep
+  10 (its own mirror still), drawing nothing, so every board's layout is
+  F7a's; cover by F7a's level rule unchanged in code. One rule beyond the
+  spec, recorded for approval: a shooter on its own deck at its level
+  fires over that deck's parapets (`nav.onLevel`, `Terrain.los`'s `over`).
+  The view: parapets in stone or earth and timber, debris on a break,
+  tiled; see-through walls (the camera-to-unit segment against each
+  chunk's box, a 6-of-16 dither, Alt for every tall chunk), the seats'
+  rings through walls (GreaterDepth, 40%), the LOS ray eye to each chest
+  in sightInfo's colour with its reasons, the move tooltip's climbing cost
+  and the cliff rims with "a ledge: no way down here". data-check's
+  parapets, terrain-check's parapet rows and six edits, P-height's scenes
+  and four mutants, `sim/fort-scene.mjs`, hud-check's tooltips, input-check
+  `--fort`, terrain-shots' fortified boards against `FORT_REF`, play-report's
+  F7b row: 6 of 6 over `fort/` (seeded sweeps 19 and 21 of 24, against
+  13 of 24 at F7a's code: no AI tuning needed). `fort/` re-recorded in
+  2cd1d14 by corpus-add as F7a picked it, every log back under its name,
+  the PIN on a556cfc. Two stale self-test anchors from F8b mended
+  (terrain-check's `spare-height`, snap-check's `shudder-holds`). DESIGN's
+  F7b notes.)
+- [ ] **Later (F7b's):** terrain-check's connectivity rows fail on 320 of
+  2,000 Field and Grand **fortified** boards, as on the base commit
+  2f10015 (the same 320): the fortified set's centre draws the tower ring
+  (`['tower', 0.8]`), which walls the centre objective off from every
+  squad, as F8b found for `open` and answered with the rock box. A design
+  call for the fortified set at Field and Grand (the rock box, or the keep
+  alone, at those sizes: a set change, so a bump and the fortified
+  `scale/` pairs again). Also: rematch-memory `--terrain fortified`'s heap
+  slope (about 21-25 KB a rematch against 16 KB, mostly V8's
+  WeakArrayList, 20.8 KB on the base commit too, every renderer count
+  flat), and input/group.js's ghost plan finishing just before Escape
+  leaving its summary tooltip up (seen once under load).
 - [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
   draws the platform as an open slab on braced posts while its deck's
   line-of-sight body is solid from the ground, as the piece table says: a
   thin timber body, or the view closing the gap, goes with the posts made
-  breakable.)
+  breakable.) What F7b left it: the posts still `hp: Infinity` (F7c's
+  `hp: 3`); the cascade in `Terrain.destroy(post)` (each deck listing the
+  post in `supports` down once `fallsAt` of them are, with its ladders by
+  `on`, a timber rubble pile at ground level, `terrain.dropped`); `settle(G)`
+  after the refreshNav of `blastLands`, `doMove` and `finishCharge` (the
+  only new draws: D3 mortal wounds); `unit.fall` and its view. A platform
+  has no parapets, so none falls with it; a parapet already breaks at
+  hp 3 with no rubble, and the view's debris for it is F7b's. `fort/` is
+  re-recorded again at F7c (a platform shot out).
 - [x] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
   battles: their presets and list limits, prices retuned on the real
   boards, the `open` set, a minimap (March from it), semantic zoom, terrain

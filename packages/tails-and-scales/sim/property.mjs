@@ -1233,8 +1233,8 @@ const V1_PINS = {
 }
 // (6, F7a's height, as data-check's PINNED: classic boards build none; 7,
 // F8b's missions, open set and fight guard, which a classic battle meets as
-// before)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7]
+// before; 8, F7b's parapets, which stand on fortified boards alone)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8]
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a
