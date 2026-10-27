@@ -1037,20 +1037,24 @@ in online play, the battle log, shooting into a fight. Not yet ordered against
 the queue above: each lands where the user slots it. F12-F16 change no rule
 (no bump, the corpus byte-identical; each ships on its own Chromium check);
 F17-F19 are rules changes (a `CORE_VERSION` bump, the corpus re-recorded and
-the PIN moved, in the commit that says so). Open questions 28-34 hold their
-defaults.
+the PIN moved, in the commit that says so). Open questions 28-35 hold their
+defaults; 28, 30, 31 and 32 were answered in the reviewers' voice note of
+26 October (lob, melee, fog, undo), and F12, F16, F17 and F18 say what they
+answered.
 
-- [ ] **F12** Local undo: anything that drew no dice. A button (and Ctrl-Z)
-  takes back the last entry of a seat played here while the dice counter
-  (`G.rng.n`, every trace line's `rng:`) didn't move across it: a placement,
-  a move, a charge's end, an End whose phase end drew nothing; never an
-  advance, a shot, a charge, Auto, pilot, the last `deployed` (the roll-off)
-  or an End that ran a fight, morale or the AI. Not by truncating the store
-  (the Folder calls an accepted entry vanishing from the list `tamper` and
-  freezes): the battle's Session made again over the first k entries, as the
-  replay's `sessionTo` makes one (app/replay.js), and swapped in; the order
-  book is keyed by the start entry, so it survives. Hotseat: each seat its
-  own entries. Online: none (DESIGN §5: the log is append-only; an `undo`
+- [ ] **F12** Local undo: simple mistakes, within the phase. A button (and
+  Ctrl-Z) takes back the last entry of a seat played here since its last
+  commit point: a placement, a move (the one that set it off: a unit sent
+  back when it was meant to advance), a charge's end. Ending the phase
+  commits (`end`, `deployed`), and so does any dice roll: an entry across
+  which the dice counter (`G.rng.n`, every trace line's `rng:`) moved is a
+  commit point, so an advance, a shot, a charge, Auto and pilot, and
+  everything before them, stay. Not by truncating the store (the Folder
+  calls an accepted entry vanishing from the list `tamper` and freezes): the
+  battle's Session made again over the first k entries, as the replay's
+  `sessionTo` makes one (app/replay.js), and swapped in; the order book is
+  keyed by the start entry, so it survives. Hotseat: each seat its own
+  entries. Online: none (DESIGN §5: the log is append-only; an `undo`
   command in the rules would be a step of its own). DESIGN §5's "local undo
   of move/place by truncating the store" is this, the truncation replaced.
   A replay-check case: undo then the same move folds to the same trace.
@@ -1093,32 +1097,59 @@ defaults.
   this hides it in the view, on the trust the dice and the sealed lists
   already rest on (open questions 1 and 20). An enemy none of your living
   units sees (`sight`, with its broadphase; each pair once per event batch)
-  has no figure, label, minimap chip, roster row or log line, and the tray
-  names no target of its rolls; what was seen once is not remembered. Online,
-  both seats agreeing in the lobby (a `SETUP_KEYS` entry the core ignores, so
-  a fogged match folds as any other), and as a solo option against the AI,
-  the panel saying the AI sees everything (core/ai reads `G.units`). No fog
-  in hotseat (one screen) or for a watcher.
+  has no live figure, label, minimap chip, roster row or log line, and the
+  tray names no target of its rolls; where it was last seen a greyed figure
+  stands as it then stood (its models, its wounds), until it is seen again
+  or falls in sight. No permanent reveal (the Warcraft 1 pattern, rejected):
+  the scenery too is drawn as last seen, a wall still standing where a
+  template has since brought it down, until a unit of yours sees the gap.
+  (A last-seen layer per seat, on the view's side: the mirror's record of
+  each enemy unit and each chunk as of the last batch a ray reached it, the
+  figures and tiles drawn from it where the live one is out of sight.)
+  Online, both seats agreeing in the lobby (a `SETUP_KEYS` entry the core
+  ignores, so a fogged match folds as any other), and as a solo option
+  against the AI, the panel saying the AI sees everything (core/ai reads
+  `G.units`). No fog in hotseat (one screen) or for a watcher.
 - [ ] **F17** Lobbing from height (rules). A blast or indirect weapon's range
-  grows with the shooter's floor over the target's: `shotInfo` (the range
-  test is flat today, `gap` in two dimensions against `w.range`; `sightInfo`'s
-  `high` is computed and read by nothing), the AI's own range test
-  (core/ai/score.js's `g > w.range`), the overlay's ring and the tooltip's
-  inches, through one `rangeOf(G, u, tg)`. Open question 12 and DESIGN §5
-  keep height off the to-hit and the save. `CORE_VERSION` 8; the classic
-  corpus has no height and stays byte-identical, `fort/` (and the `scale/`
-  pairs on `fortified`) re-recorded; a terrain-check row, and the
-  play-report's F7b row (a shooter fires from a deck) judges whether the AI
-  climbs for it.
-- [ ] **F18** Lobbing into a fight (rules). `shotInfo` refuses an engaged
-  target for every weapon but a spell ("locked in combat"), so the trebuchet,
-  the Venom Engine and the grenadiers can't shell a melee. A blast or indirect
-  weapon may: its templates land as ever, and `blastLands` already hits
-  whoever is under one (the ⚠ row), so the friendly fire is the price. The
-  AI's scoring takes a friendly-fire cost (its own units under the template,
-  by `expected`), or it shells its own Brute. `CORE_VERSION` bump; every
-  corpus battle with artillery re-records; P-prop's shoot cases take the new
-  legal pairs.
+  grows with the shooter's floor over the target's as a thrown thing's
+  does: with R its printed range and h the drop (negative firing up), the
+  reach is √(R² + 2hR), the farthest a projectile launched at the speed that
+  reaches R on the flat lands from h higher, at its best angle (scale-free,
+  so the table's inches serve). Direct fire gets none (a slingshot's and a
+  spit's arcs are flat), nor a spell (the thorns erupt under the target). In
+  the code: `shotInfo` (the range test is flat today, `gap` in two
+  dimensions against `w.range`; `sightInfo`'s `high` is computed and read by
+  nothing), the AI's own range test (core/ai/score.js's `g > w.range`), the
+  overlay's ring and the tooltip's inches, through one `rangeOf(G, u, tg)`
+  in core/rules.js. Open question 12 and DESIGN §5 keep height off the
+  to-hit and the save. `CORE_VERSION` 8; the classic corpus has no height
+  and stays byte-identical, `fort/` (and the `scale/` pairs on `fortified`)
+  re-recorded; a terrain-check row, and the play-report's F7b row (a shooter
+  fires from a deck) judges whether the AI climbs for it. What it gives
+  (open question 30): the trebuchet's 36" is 37.9" from a 2" rampart or
+  bastion and 38.4" from the keep's 2.5" (their stairs; the 3" watchtower is
+  ladders only, which no big unit climbs), the Venom Engine's 30" is 31.9",
+  the Grenadiers' 12" is 13.9", and 14.7" from the watchtower; firing up at
+  a rampart the trebuchet reaches 33.9".
+- [ ] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
+  target for every weapon but a spell ("locked in combat"), so nobody shoots
+  or shells a melee. Any ranged weapon may, at no modifier: the cost is the
+  risk to your own units in the fight, never a flat penalty. A blast or
+  indirect weapon pays it as things stand: its templates land as ever, and
+  `blastLands` already hits whoever is under one (the ⚠ row), so the scatter
+  is the risk. Direct fire needs a cone: a shot that misses the target flies
+  on into the melee and may strike a model of yours engaged with it. The
+  default (open question 31): each miss strikes a friendly unit engaged with
+  the target when a D6 rolls under the friends' share of the fight's models
+  (the misses' D6s after the hit roll, then the wounds, the target's before
+  the friends': §4.1 rule 4's order), wounded and saved as any hit; the
+  fuller cone (each miss's line through the melee by `dmath`'s angles, the
+  first base it crosses hit) is the alternative if the share reads wrong on
+  the table. The AI's scoring takes the same risk as a cost (its own units
+  in the fight, by `expected`), or it shoots through its own Brute.
+  `CORE_VERSION` bump; every corpus battle with a shooter and a melee in its
+  range re-records; P-prop's shoot cases take the new legal pairs and the
+  friendly rolls.
 - [ ] **F19** Hazards (rules), in order of fit. **F19a** The powder keg: a
   chunk kind whose destruction is a blast at its place (the terrain's own
   hurt → destroy → consequences, as a wall's collapse or a tree's topple:
@@ -1209,24 +1240,44 @@ defaults.
 
 ### The playtest's (F12-F19): questions 28-34
 
-28. **Undo** takes back only an entry of a seat played here across which
-    the dice counter didn't move; in hotseat each seat its own; none
-    online.
+28. *(answered)* **Undo** takes back only an entry of a seat played here
+    since its last commit point: **ending the phase commits, and so does
+    any dice roll** (an entry across which the dice counter moved); in
+    hotseat each seat its own; none online. (The case that asked for it: a
+    unit sent back by a slip when it was meant to advance.)
 29. **Touch aim** is both the long press and a 👆 Aim toggle, and the lift
     commits (no second tap to confirm).
-30. **Lobbing from height** adds **3" of range per inch** of the shooter's
-    floor over the target's, blast and indirect weapons only; firing up
-    loses nothing. (A 2" rampart gives the trebuchet 42".)
-31. **Lobbing into a fight** is for blast and indirect weapons (spells as
-    today), at **no modifier**: the friendly fire is the price.
-32. **Fog** hides an enemy none of your living units sees, with **no memory**
-    of what was seen; the minimap, roster and log hide with the figure;
+30. *(answered)* **Lobbing from height does what physics does**: the reach
+    √(R² + 2hR) for blast and indirect weapons, none for direct fire,
+    firing up losing as much; not the linear +3" an inch first proposed.
+    If the trebuchet comes out too strong, **its base range comes down**,
+    the physics stays. (By F17's numbers it comes out about a drop's worth
+    farther, 2" from a rampart: if height is to matter more, the lever
+    runs the other way, a scale on h before the formula, and that is a
+    question for the table.)
+31. *(answered)* **Shooting into a fight is for any ranged weapon**, at no
+    modifier: the risk of hitting your own engaged units is the cost.
+    Lobbed weapons by their scatter; direct fire by a cone, the default the
+    exposure-weighted miss under F18.
+32. *(answered)* **Fog** hides an enemy none of your living units sees and
+    shows **what was last seen, greyed**: the enemy where it last stood,
+    and the scenery as it then was, whether or not a blast has since
+    brought it down; no permanent reveal (Warcraft 1's pattern rejected);
     online by agreement, against the AI with a note, never in hotseat.
 33. **The log's click** shows the battle **before** that move, so ▶ plays the
     move first.
 34. **The keg** goes off at zero hit points, from a template, acid or a
     wrecker; there is no tap command, and no keg on the classic set (a
     mission of its own).
+35. *(open: the reviewers asked for a rephrasing)* **Escape at a charge's
+    end.** After a charge whose roll reaches, the match waits for a click on
+    where the charger stops, and Escape there does nothing, silently (the
+    dice are rolled: the charge can't be called off). Either Escape takes
+    the default spot, the one the **Shortest move** button gives, or it
+    says "pick where the charge ends". The default if unanswered: the
+    message. (And the bug half: with a unit merely picked up, before any
+    enemy is clicked, Escape does put it down by the code; if it failed so
+    on the page, that is a bug to reproduce in a browser first.)
 
 ## Done
 
