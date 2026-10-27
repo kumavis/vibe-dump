@@ -170,13 +170,21 @@ export function aiSalvo(ar, i, bg, mounts, ti) {
   const sol = solutionOn(ar, x, ti, key)
   const g = ar.rngs.gun
   const R = Math.hypot(lp.x - s.pos[3 * i], lp.z - s.pos[3 * i + 2])
-  const eR = g.gauss() * (sol.pct / 100) * R
-  const eD = g.gauss() * (sol.mils / 1000) * R
   const ux = (lp.x - s.pos[3 * i]) / Math.max(1, R)
   const uz = (lp.z - s.pos[3 * i + 2]) / Math.max(1, R)
-  const px = lp.x + ux * eR - uz * eD
-  const pz = lp.z + uz * eR + ux * eD
-  const r = fireMounts(ar, i, bg, mounts, px, pz, { target: ti })
+  // the error is the director's (one for the salvo) and each turret's own (the record's turret share: a salvo spreads, it does not clump)
+  const k = A.aiGun.turretShare
+  const c = Math.sqrt(1 - k * k)
+  const eR0 = g.gauss() * (sol.pct / 100) * R * c
+  const eD0 = g.gauss() * (sol.mils / 1000) * R * c
+  const r = { fired: 0, tof: 0 }
+  for (const mt of mounts) {
+    const eR = eR0 + g.gauss() * (sol.pct / 100) * R * k
+    const eD = eD0 + g.gauss() * (sol.mils / 1000) * R * k
+    const q = fireMounts(ar, i, bg, [mt], lp.x + ux * eR - uz * eD, lp.z + uz * eR + ux * eD, { target: ti })
+    r.fired += q.fired
+    r.tof = Math.max(r.tof, q.tof)
+  }
   // the AI's salvo fire: a light battery no oftener than every 6 s, a medium one every 10 s (by director, not by the gun's own rate)
   const cal = bg.battery.weapon.calibreMm
   const minS = cal < 150 ? A.aiGun.minIntervalS.light : cal < 250 ? A.aiGun.minIntervalS.medium : 0

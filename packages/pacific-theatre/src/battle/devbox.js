@@ -8,6 +8,11 @@
 //       ship's id, an aircraft's slot id (kaga-level#3) or a group's id (any
 //       of its aircraft but the leader, or a spare beside it)
 //
+//   battle.html?wargame=test-box&side=us[&data=./test-data/][&seed=1]
+//       round three (ROUND-3 §4): the box entered as a wargame through
+//       Battle.enterWargame, the side's first unit taken; the panel offers the
+//       hops, the stations, play again, the other side and a forced end
+//
 // A small panel offers the box's moments ("Take the controls"), its stops,
 // the watch speeds and leaving. window.__app and window.__battle are the
 // tools' handles (tools/smoke-battle.mjs drives the page through them).
@@ -77,6 +82,16 @@ export async function bootBox(params, status) {
   window.__app = app
   window.__battle = app.battle
   startWithoutTable(app)
+  const wargame = params.get('wargame')
+  if (wargame) {
+    status(`entering the wargame ${wargame}`)
+    const t0 = performance.now()
+    await app.battle.enterWargame(wargame, { side: params.get('side') || 'us', from: 'url', seed: params.get('seed') })
+    app.ready = true
+    status(`${wargame} as ${app.battle.wargame.side}: in ${((performance.now() - t0) / 1000).toFixed(1)} s`)
+    wargamePanel(app)
+    return
+  }
   const boxId = params.get('box') || data.boxes[0]?.id
   if (!boxId) throw new Error('no box in boxes/manifest.json')
   if (params.get('aid')) app.battle.setAid(params.get('aid'))
@@ -173,4 +188,66 @@ function panel(app, params) {
   el.appendChild(row)
   for (const k of [0, 1, 4, 15, 60]) add(row, k ? `×${k}` : 'pause', () => (k ? battle.play(k) : battle.pause()))
   add(el, 'Leave the box', () => battle.leave())
+}
+
+/** The wargame's dev panel: the hops, the stations, play again, the other side, a forced end. */
+function wargamePanel(app) {
+  if (!document.getElementById('dev-panel-style')) {
+    const st = document.createElement('style')
+    st.id = 'dev-panel-style'
+    st.textContent = PANEL_STYLE
+    document.head.appendChild(st)
+  }
+  const el = document.createElement('div')
+  el.id = 'dev-panel'
+  document.body.appendChild(el)
+  const battle = app.battle
+  const add = (parent, label, fn) => {
+    const b = document.createElement('button')
+    b.textContent = label
+    b.addEventListener('click', (e) => {
+      e.stopPropagation()
+      fn()
+    })
+    parent.appendChild(b)
+    return b
+  }
+  const head = (t) => {
+    const h = document.createElement('h4')
+    h.textContent = t
+    el.appendChild(h)
+  }
+  head('Hop')
+  const row = document.createElement('div')
+  row.className = 'row'
+  el.appendChild(row)
+  for (const [k, label] of [['carrier', '1 carrier'], ['capital', '2 capital'], ['destroyer', '3 destroyer'], ['aircraft', '4 aircraft'], ['next', 'Tab next']]) add(row, label, () => battle.hop(k))
+  head('Station')
+  add(el, 'Next station', () => battle.cycleStation())
+  add(el, 'Release', () => battle.release())
+  head('Game')
+  add(el, 'Play again', () => battle.restart())
+  add(el, 'Play the other side', () => battle.restart({ side: battle.wargame.side === 'jp' ? 'us' : 'jp' }))
+  add(el, 'End now', () => battle.endNow())
+  const info = document.createElement('div')
+  info.style.cssText = 'font: 11px/1.35 Inter, system-ui, sans-serif; color: #e9e4d6; background: rgba(14,18,22,.7); padding: 6px 8px; border-radius: 4px; white-space: pre-line'
+  el.appendChild(info)
+  setInterval(() => {
+    const a = battle.arena
+    if (!a) return
+    const o = a.objective
+    const ph = a.phase
+    const st = a.strength
+    const t = a.tally
+    info.textContent = [
+      `${a.clock.label(a.t)} of ${a.clock.label(a.durationS)}`,
+      `goal: ${o?.text ?? ''} (${o?.line ?? ''}, ${o?.status ?? ''})`,
+      ph ? `phase: ${ph.title} — ${ph.line}, ${Math.ceil(ph.remainingS)} s (${ph.status})` : '',
+      `strength jp ${(st.jp.fraction * 100).toFixed(0)} % · us ${(st.us.fraction * 100).toFixed(0)} %`,
+      `tally jp sunk ${t.jp.sunk} down ${t.jp.downed} · us sunk ${t.us.sunk} down ${t.us.downed}`,
+      `yours: hits ${t.player.hits} sunk ${t.player.sunk} down ${t.player.downed} lost ${t.player.lost}`,
+      a.respawn ? a.respawn.line : '',
+      a.result ? `end: ${a.result.line}` : '',
+    ].filter(Boolean).join('\n')
+  }, 500)
 }

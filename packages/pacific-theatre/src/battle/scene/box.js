@@ -6,6 +6,16 @@
 // cameras and the HUD. It is App's active scene while a box is entered:
 // scene, camera, rig, skyPlace, skyInstant(), update(), fog(), settle(),
 // setRange(), stats().
+//
+// Round three (ROUND-3.md §4), for the wargame's arena (sim.arena): shake
+// (amount) jolts the camera on a hit taken or a near miss and dies away;
+// slowmo(seconds) runs the arena at a quarter of its pace for that long (the
+// arena's dt only: Battle.tick's simScale, never the record's sim); the
+// sinking animation lists, trims and settles a ship over the twenty seconds
+// the arena gives her (UnitRenderer's pose hook, from the arena's damage
+// state); snapshot() is a 320 × 200 JPEG of the canvas, at most six a game,
+// taken by itself on the arena's highlights. Each is driven by the arena's
+// own requests (sim.shake, sim.slowmo, sim.highlights).
 
 import * as THREE from 'three'
 import { BOX } from '../../config.js'
@@ -20,6 +30,10 @@ import { Cameras } from './cameras.js'
 import { Hud } from './hud.js'
 import { Picker } from './pick.js'
 import { insigniaAtlas } from '../kits/index.js'
+
+const DEG = Math.PI / 180
+const _q = new THREE.Quaternion()
+const _e = new THREE.Euler()
 
 const tick = () => new Promise((r) => setTimeout(r, 0))
 
@@ -39,6 +53,105 @@ export class BoxScene {
     this.time = 0
     this.lowQuality = !!app.software || matchMedia?.('(pointer: coarse)')?.matches
     this.selected = null // ROUND-2 §4: the selected unit's slot (a bracket on it), or null
+    // round three: the camera's shake, the slow motion, the snapshots
+    this.shakeAmp = 0
+    this.slowUntil = -1
+    this.slowFrom = -1
+    this.snapshots = 0
+    this._shakeSeq = 0
+    this._slowSeq = 0
+    this._hiIndex = 0
+    this._lastSnapT = -1e9
+    this._snapQueue = []
+    this._shaken = null
+  }
+
+  /** Jolt the camera (0..1): the strongest request wins, and it dies away in about a third of a second. */
+  shake(amount = 0.3) {
+    this.shakeAmp = Math.max(this.shakeAmp, Math.min(1, amount))
+  }
+
+  /** Slow the arena to a quarter of its pace for `seconds` of the screen's time (eased in and out). */
+  slowmo(seconds = 1) {
+    this.slowFrom = this.time
+    this.slowUntil = this.time + seconds
+  }
+
+  /** The factor on the arena's dt now: 1, or down to 0.25 inside a slow motion. */
+  slowFactor() {
+    if (this.time >= this.slowUntil) return 1
+    const span = this.slowUntil - this.slowFrom
+    const u = (this.time - this.slowFrom) / Math.max(1e-3, span)
+    const edge = Math.min(1, u / 0.15, (1 - u) / 0.2)
+    return 1 - 0.75 * Math.max(0, Math.min(1, edge))
+  }
+
+  /**
+   * A 320 × 200 JPEG data URL of the canvas, taken just after the next frame is
+   * drawn (a promise); null once six have been taken this game.
+   */
+  snapshot() {
+    if (this.snapshots >= 6) return Promise.resolve(null)
+    this.snapshots++
+    return new Promise((resolve) => this._snapQueue.push(resolve))
+  }
+
+  /** Draw the canvas into a 320 × 200 JPEG (called in the frame's task, after the render). */
+  _grab() {
+    const src = this.app.renderer?.domElement
+    if (!src) return null
+    try {
+      const c = this._snapCanvas || (this._snapCanvas = document.createElement('canvas'))
+      c.width = 320
+      c.height = 200
+      const g = c.getContext('2d')
+      // the canvas's middle at 16:10, scaled down
+      const W = src.width
+      const H = src.height
+      const k = Math.min(W / 320, H / 200)
+      const sw = 320 * k
+      const sh = 200 * k
+      g.drawImage(src, (W - sw) / 2, (H - sh) / 2, sw, sh, 0, 0, 320, 200)
+      return c.toDataURL('image/jpeg', 0.82)
+    } catch {
+      return null
+    }
+  }
+
+  /** The arena's requests: the shake, the slow motion, a snapshot on each highlight worth one (six at most, four seconds apart). */
+  arenaRequests() {
+    const sim = this.sim
+    if (sim.shake.seq !== this._shakeSeq) {
+      this._shakeSeq = sim.shake.seq
+      this.shake(sim.shake.amount)
+    }
+    if (sim.slowmo.seq !== this._slowSeq) {
+      this._slowSeq = sim.slowmo.seq
+      if (sim.slowmo.seconds > 0) this.slowmo(sim.slowmo.seconds)
+    }
+    while (this._hiIndex < sim.highlights.length) {
+      const h = sim.highlights[this._hiIndex++]
+      if (!h.snap || this.snapshots >= 6 || this.time - this._lastSnapT < 4) continue
+      this._lastSnapT = this.time
+      this.snapshot().then((url) => {
+        h.snapshot = url
+      })
+    }
+  }
+
+  /** The sinking animation (the arena's ships going down): list, trim and settle over her twenty seconds. */
+  sinkingPose(i, P, Q) {
+    const sim = this.sim
+    const x = sim._X[i]
+    if (!x || x.sinkT == null) return
+    const u = Math.max(0, Math.min(1, (sim.t - x.sinkT) / (x.sinkDur || 20)))
+    const m = x.model
+    const listTo = (x.list < 0 ? -1 : 1) * (x.magazine ? 18 : 32)
+    const list = (x.list || 0) + (listTo - (x.list || 0)) * Math.min(1, u * 1.4)
+    const trim = (x.trim || 1) * 9 * u
+    P.y = -(m.top + m.T + 4) * u * u
+    _q.setFromEuler(_e.set(trim * DEG, -sim.state.heading[i] * DEG, -list * DEG, 'YXZ'))
+    Q.copy(_q)
   }
 
   /** Select a unit (its slot) or none: the HUD's bracket marks it. Battle.select calls this; selecting never changes the sim. */
@@ -95,6 +208,13 @@ export class BoxScene {
       this.weather.dispose()
     }
     this.units = new UnitRenderer(app.light.uniforms, sim, { colourDate: date, weapons, atlas: this.atlas })
+    // (the arena's ships go down by the scene's sinking animation; the record's sim places its own)
+    if (sim.arena) this.units.pose = (i, P, Q) => this.sinkingPose(i, P, Q)
+    this.snapshots = 0
+    this._hiIndex = 0
+    this._shakeSeq = sim.shake?.seq ?? 0
+    this._slowSeq = sim.slowmo?.seq ?? 0
+    this.slowUntil = -1
     this.effects = new EffectsRenderer(app.light.uniforms, sim, { lowQuality: this.lowQuality })
     this.weather = new Weather(app.light.uniforms, this.battleData?.weather || {}, this.ground.bounds, sim.record.squalls, { lowQuality: this.lowQuality })
     this.scene.add(this.units.group, this.effects.group, this.weather.group)
@@ -138,9 +258,36 @@ export class BoxScene {
     const app = this.app
     this.time += realDt
     const battle = this.battle ?? app.battle
-    if (battle?.tick) battle.tick(realDt)
+    // (the shake's offset of the last frame taken off before the cameras place the camera again)
+    if (this._shaken) {
+      this.camera.quaternion.copy(this._shaken)
+      this._shaken = null
+    }
+    const arena = this.sim?.arena ? this.sim : null
+    if (battle?.tick) battle.tick(realDt, arena ? this.slowFactor() : 1)
     const sim = this.sim
     this.cameras?.update(realDt)
+    if (arena && this.ready) {
+      this.arenaRequests()
+      if (this.shakeAmp > 0.003) {
+        this._shaken = this.camera.quaternion.clone()
+        const a = this.shakeAmp * 0.022
+        const tt = this.time * 37
+        this.camera.rotateX(Math.sin(tt) * a)
+        this.camera.rotateY(Math.sin(tt * 1.37 + 1.1) * a)
+        this.camera.rotateZ(Math.sin(tt * 0.71 + 2.3) * a * 0.6)
+        this.camera.updateMatrixWorld()
+        this.shakeAmp *= Math.exp(-realDt / 0.35)
+      } else this.shakeAmp = 0
+      // the snapshots asked for this frame: taken after the frame is drawn (App renders after update, in this task)
+      if (this._snapQueue.length) {
+        const q = this._snapQueue.splice(0)
+        queueMicrotask(() => {
+          const url = this._grab()
+          for (const r of q) r(url)
+        })
+      }
+    }
     this.ground.update(this.camera)
     this.ocean.update(this.camera)
     if (!sim || !this.ready) return

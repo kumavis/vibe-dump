@@ -554,7 +554,9 @@ function strikeControl(ar, i, x, m, dt) {
   // (aircraft of a wave fan out a little so they do not fly as one)
   const fan = ((x.k % 5) - 2) * 120
   if (m.phase === 'egress') {
-    const away = bearingOf(b.x - tx, b.z - tz) * DEG
+    // away from the target, bent back toward the middle near the arena's edge
+    const nearEdge = Math.hypot(b.x - ar.centre.x, b.z - ar.centre.z) > ar.R - 600
+    const away = (nearEdge ? bearingOf(ar.centre.x - b.x, ar.centre.z - b.z) : bearingOf(b.x - tx, b.z - tz)) * DEG
     out.x = b.x + Math.sin(away) * 1500
     out.z = b.z - Math.cos(away) * 1500
     out.y = 350

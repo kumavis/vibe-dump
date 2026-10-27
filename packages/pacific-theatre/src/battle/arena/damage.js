@@ -76,6 +76,7 @@ export function startSinking(ar, i, by, magazine = false) {
   x.sinkT = ar.t
   x.sinkDur = magazine ? A.sinkS * 0.6 : A.sinkS
   x.sinkBy = by
+  x.magazine = magazine
   x.fire = 1
   if (!x.list) x.list = (ar.rngs.dmg.next() < 0.5 ? -1 : 1) * A.listDeg[0]
   x.trim = ar.rngs.dmg.next() < 0.5 ? -1 : 1

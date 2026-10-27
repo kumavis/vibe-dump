@@ -327,7 +327,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     if (mine) {
       ar.tallyData.player.hits++
       const so = ar._sortie
-      if (so) {
+      if (so && info.by === so.unit.index) {
         const h = so.hits.find((q) => q.unit === victim.id && q.kind === info.weapon)
         if (h) h.count++
         else so.hits.push({ unit: victim.id, name: victim.name, kind: info.weapon, count: 1, where: res.where })
@@ -450,7 +450,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       const mx = (sm.x0 + sm.x1) / 2 + ar.wind.x * age - ax
       const mz = (sm.z0 + sm.z1) / 2 + ar.wind.z * age - az
       const u = mx * dx + mz * dz
-      if (u < 300 || u > L - 300) continue
+      if (u < 200 || u > L - 200) continue
       const r = A.smokeR + Math.hypot(sm.x1 - sm.x0, sm.z1 - sm.z0) / 2
       if (Math.abs(mx * dz - mz * dx) < r) return true
     }
@@ -544,6 +544,25 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       writeShip(i)
       s.alive[i] = 1
       s.version[i] = 1
+    }
+  }
+  // the weaker side has been making smoke for the last minute (its escorts' and carriers' trails behind them, already drifting)
+  for (const key of ['jp', 'us']) {
+    const sd = ar.sides[key]
+    const en = ar.sides[sd.enemy]
+    const hp = (side) => side.ships.reduce((n, i) => n + X[i].hpMax, 0)
+    if (!(hp(sd) < hp(en) * 0.85)) continue
+    for (const i of sd.ships) {
+      const t = X[i].model.type
+      if (!(t === 'dd' || t === 'de' || isCarrier(t))) continue
+      const b = X[i].body
+      const h = b.heading * DEG
+      for (let k = 12; k > 0; k--) {
+        const d0 = k * 5 * b.V
+        const d1 = (k - 1) * 5 * b.V
+        const born = -k * 5
+        ar.smoke.push({ x0: b.x - Math.sin(h) * d0, z0: b.z + Math.cos(h) * d0, x1: b.x - Math.sin(h) * d1, z1: b.z + Math.cos(h) * d1, born, until: born + A.smokeS, by: i })
+      }
     }
   }
   // the combat air patrol already up: instant action

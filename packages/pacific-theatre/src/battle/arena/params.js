@@ -50,7 +50,7 @@ export const A = {
   torpedoArmM: 150, // estimate: armed after 150 m (the wide window)
   aaK: 3, // contract: AA as the hazard model × 3
   // the AI's ranging (estimate; research/engine-3.md §5: the lead is solved exactly, the range is walked in)
-  aiGun: { startPct: 24, startMils: 50, improve: 0.35, floorPct: 5, floorMils: 10, resetTurnDeg: 20, resetShare: 1, secondaryM: 4500, minIntervalS: { light: 12, medium: 12 }, lightM: 3500 },
+  aiGun: { startPct: 30, startMils: 60, improve: 0.25, floorPct: 6, floorMils: 12, resetTurnDeg: 20, resetShare: 1, turretShare: 0.87, secondaryM: 4500, minIntervalS: { light: 15, medium: 12 }, lightM: 3000 },
   chaseS: [10, 18], // a ship under fire (a fall within 250 m in the last 20 s) weaves ±chaseDeg: it chases the salvos
   chaseDeg: 30,
   // the AI's air-to-air bursts (estimate)
@@ -80,9 +80,10 @@ export const A = {
   evadeTorpedoM: 2000, // a ship that sees a torpedo track within this combs it
   zigzagS: [12, 22],
   zigzagDeg: 40,
-  smokeS: 150,
-  smokeR: 220,
+  smokeS: 240,
+  smokeR: 300,
   rangeFor: (aggression) => 4600 - 3000 * aggression, // the range the admiral keeps to the enemy's main body
+  surviveRangeM: 5200, // a side that must keep its ships afloat keeps away (beyond the arena's width: it runs, and the edge turns it)
   waveBase: 3, // the first wave: at least three, or a sixth of the strike aircraft a side has
   waveShare: 1 / 6,
   turnedFireM: 2500, // a side that has turned away fires only at what comes within 2.5 km

@@ -16,6 +16,9 @@
 
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 export const countWord = (n) => WORDS[n] ?? String(n)
+/** A count in an "n of the m" phrase: none for nought. */
+const upper = (w) => w.charAt(0).toUpperCase() + w.slice(1)
+const ofWord = (n) => (n === 0 ? 'none' : countWord(n))
 const NOUN = { cve: ['carrier', 'carriers'], cv: ['carrier', 'carriers'], cvl: ['carrier', 'carriers'], bb: ['battleship', 'battleships'], ca: ['heavy cruiser', 'heavy cruisers'], cl: ['light cruiser', 'light cruisers'], dd: ['destroyer', 'destroyers'], de: ['destroyer escort', 'destroyer escorts'], ship: ['ship', 'ships'], aircraft: ['aircraft', 'aircraft'] }
 export const typeWord = (type, n) => (NOUN[type] || NOUN.ship)[n === 1 ? 0 : 1]
 export const clockText = (t) => `${Math.floor(Math.max(0, t) / 60)}:${String(Math.floor(Math.max(0, t) % 60)).padStart(2, '0')}`
@@ -206,17 +209,22 @@ function sentence(ar, side, g) {
   const n = side.name
   const w = (k) => typeWord(g.type, k)
   const when = clockText(ar.t)
+  // (one of one: the carrier, not "one of the one carrier")
+  if (g.need === 1 && (g.total ?? 1) === 1 && (g.kind === 'sink' || g.kind === 'survive')) {
+    if (g.kind === 'sink') return g.status === 'met' ? `${n} sank the ${w(1)} by ${when}.` : `${n} did not sink the ${w(1)}.`
+    return g.status === 'met' ? `${n} kept the ${w(1)} afloat to the end.` : `${n} lost the ${w(1)} at ${when}.`
+  }
   switch (g.kind) {
     case 'sink':
-      return g.status === 'met' ? `${n} sank ${countWord(g.count)} ${w(g.count)} by ${when}.` : `${n} sank ${countWord(g.count)} of the ${countWord(g.need)} ${w(g.need)} it set out to sink.`
+      return g.status === 'met' ? `${n} sank ${countWord(g.count)} ${w(g.count)} by ${when}.` : `${n} sank ${ofWord(g.count)} of the ${countWord(g.need)} ${w(g.need)} it set out to sink.`
     case 'survive':
-      return g.status === 'met' ? `${n} kept ${countWord(g.count)} of the ${countWord(g.total)} ${w(g.total)} afloat to the end.` : `${n} had ${countWord(g.count)} of the ${countWord(g.total)} ${w(g.total)} afloat at ${when}; ${countWord(g.need)} had to be.`
+      return g.status === 'met' ? `${n} kept ${countWord(g.count)} of the ${countWord(g.total)} ${w(g.total)} afloat to the end.` : `${n} had ${ofWord(g.count)} of the ${countWord(g.total)} ${w(g.total)} afloat at ${when}; ${countWord(g.need)} had to be.`
     case 'hit':
-      return g.status === 'met' ? `${n} put ${countWord(g.count)} hits into the ${w(2)} by ${when}.` : `${n} put ${countWord(g.count)} of ${countWord(g.need)} hits into the ${w(2)}.`
+      return g.status === 'met' ? `${n} put ${countWord(g.count)} hits into the ${w(2)} by ${when}.` : `${n} put ${ofWord(g.count)} of the ${countWord(g.need)} hits it needed into the ${w(2)}.`
     case 'shoot-down':
-      return g.status === 'met' ? `${n} shot down ${countWord(g.count)} aircraft by ${when}.` : `${n} shot down ${countWord(g.count)} of ${countWord(g.need)} aircraft.`
+      return g.status === 'met' ? `${n} shot down ${countWord(g.count)} aircraft by ${when}.` : `${n} shot down ${ofWord(g.count)} of the ${countWord(g.need)} aircraft it needed.`
     case 'reach':
-      return g.status === 'met' ? `${countWord(g.count)} of ${n}’s ${w(g.count)} came within range by ${when}.` : `${countWord(g.count)} of ${countWord(g.need)} of ${n}’s ${w(g.need)} came within range.`
+      return g.status === 'met' ? `${upper(countWord(g.count))} of ${n}’s ${w(g.count)} came within range by ${when}.` : `${upper(ofWord(g.count))} of the ${countWord(g.need)} ${w(g.need)} ${n} needed came within range.`
     default:
       return ''
   }

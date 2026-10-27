@@ -51,6 +51,8 @@ export class UnitRenderer {
     this.light = light
     this.pending = sim.kits.map((_, k) => k)
     this.origin = new THREE.Vector3()
+    // round three: a hook that poses a ship going down (alive 2) for the arena's sinking animation (BoxScene.sinkingPose); null for the record's
+    this.pose = null
   }
 
   /** Build a few kits (the box loads a few per frame); returns true when all are built. */
@@ -119,6 +121,7 @@ export class UnitRenderer {
       const n = counts[k]++
       P.set(s.pos[3 * i] - this.origin.x, s.pos[3 * i + 1], s.pos[3 * i + 2] - this.origin.z)
       Q.set(s.quat[4 * i], s.quat[4 * i + 1], s.quat[4 * i + 2], s.quat[4 * i + 3])
+      if (this.pose && a === 2 && kit.kind === 'ship') this.pose(i, P, Q)
       M.compose(P, Q, S1)
       const fire = s.fire[i]
       if (kit.kind === 'ship') {

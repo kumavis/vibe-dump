@@ -198,7 +198,8 @@ export function admiralTick(ar, side) {
     note(ar, side, 'turn-away')
     ar._onTurnAway(side)
   }
-  const want = A.rangeFor(adm.aggression)
+  // a side whose goal is to keep its ships afloat keeps its distance (Taffy 3 ran under its smoke); the rest hold the range their aggression asks
+  const want = side.def.goal?.kind === 'survive' ? Math.max(A.rangeFor(adm.aggression), A.surviveRangeM) : A.rangeFor(adm.aggression)
   // which way round: the side of the threat axis that points more toward the arena's centre
   const toCentre = bearingOf(ar.centre.x - gx, ar.centre.z - gz)
   const pick = (a, b) => (Math.abs(wrap180(a - toCentre)) <= Math.abs(wrap180(b - toCentre)) ? a : b)
@@ -312,7 +313,8 @@ function smoke(ar, side, enemy) {
   const weaker = side.strength.hp < enemy.strength.hp * 0.85
   const pressed = side.lastCoreHitT > ar.t - 30 && side.strength.hp <= enemy.strength.hp * 1.1
   if (pressed) adm.smokeUntil = Math.max(adm.smokeUntil, ar.t + 60)
-  const on = adm.state !== 'turn-away' && (weaker || pressed || ar.t < adm.smokeUntil)
+  // (a side that must keep its ships afloat goes on making smoke when it turns away: it runs under it)
+  const on = (adm.state !== 'turn-away' || side.def.goal?.kind === 'survive') && (weaker || pressed || ar.t < adm.smokeUntil)
   if (on !== adm.smoke) note(ar, side, on ? 'smoke' : 'smoke off')
   adm.smoke = on
   if (!on) {

@@ -25,12 +25,20 @@
 // written into the levels, so a unit taken and left alone stays on the
 // record (the sim's soft take). A bookmark (pl.allStations) keeps the first
 // build's bindings until the first Tab.
+//
+// Round three (ROUND-3.md §4): in a wargame (battle.arena) Tab hops to the
+// next friendly unit of the same kind (Shift+Tab the one before) and 1–4 to
+// the nearest friendly carrier, battleship or cruiser, destroyer, aircraft
+// (battle.hop); the stations, which Tab switched in the record's box, go round
+// on the backquote key (`) or the station bar.
 
 import * as THREE from 'three'
 import { AIRCRAFT_KEYS, SHIP_KEYS, GUN_KEYS, BOMBARDIER_KEYS, HELM_STEPS, TELEGRAPH_LEVELS, GUN_HELP, BOMBARDIER_HELP, matches } from './bindings.js'
 import { TouchControls } from './touch.js'
 
 const DEG = Math.PI / 180
+// round three: the wargame's hops on the number keys (ROUND-3 §1)
+export const HOP_KEYS = { Digit1: 'carrier', Digit2: 'capital', Digit3: 'destroyer', Digit4: 'aircraft', Numpad1: 'carrier', Numpad2: 'capital', Numpad3: 'destroyer', Numpad4: 'aircraft' }
 const GUN_RATE = 70 // deg/s at the screen's edge, the pointer's offset as a rate (no pointer lock)
 const GUN_SENS = 0.12 // deg per pixel of locked movement
 
@@ -154,6 +162,16 @@ export class Input {
     if (!this.live) return
     const p = this.player
     const code = e.code
+    // the wargame's hops (Tab, 1–4) and its station key (`)
+    if (this.battle.arena && (code === 'Tab' || HOP_KEYS[code] || code === 'Backquote')) {
+      e.preventDefault()
+      e.stopPropagation()
+      if (!down || e.repeat) return
+      this.acted = true
+      if (code === 'Backquote') this.battle.cycleStation?.(e.shiftKey ? -1 : 1)
+      else this.battle.hop?.(code === 'Tab' ? (e.shiftKey ? 'prev' : 'next') : HOP_KEYS[code])
+      return
+    }
     // Tab switches the station (any map; a bookmark's too: its first Tab gives it stations)
     if (code === 'Tab') {
       e.preventDefault()
