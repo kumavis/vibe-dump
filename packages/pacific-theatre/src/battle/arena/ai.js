@@ -32,7 +32,9 @@ export function shipThink(ar, i) {
   if (!(held && pl.station === 'helm')) shipCourse(ar, i, x, side)
   if (!(held && pl.station === 'main')) gunnery(ar, i, x, side, held ? pl.station : null)
   if (!(held && (pl.station === 'torpedoes' || pl.station === 'helm'))) torpedoes(ar, i, x, side)
-  if ((x.order?.kind === 'smoke' || (side.adm.smoke && isCarrier(x.model.type) && ar.t < (side.adm.pressedUntil ?? 0))) && ar.t >= (x.smokeT ?? 0)) layingSmoke(ar, i, x)
+  // (the held ship lays none: the player's camera rides behind her)
+  if (held) x.smokeLast = null
+  else if ((x.order?.kind === 'smoke' || (side.adm.smoke && isCarrier(x.model.type) && ar.t < (side.adm.pressedUntil ?? 0))) && ar.t >= (x.smokeT ?? 0)) layingSmoke(ar, i, x)
   else if (!side.adm.smoke && x.order?.kind !== 'smoke') x.smokeLast = null
   // (a burning ship's fire is cosmetic; a listing one is slower)
   x.cap = x.hp / x.hpMax < A.listAt ? A.listedSpeedCap : 1

@@ -587,7 +587,9 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     if (!(hp(sd) < hp(en) * 0.85)) continue
     // (the escorts nearest the other side, as many as lay smoke at once)
     const toward = (i) => Math.hypot(X[i].body.x - cx, X[i].body.z - cz)
-    const layers = sd.ships.filter((i) => X[i].model.type === 'dd' || X[i].model.type === 'de').sort((p, q) => toward(p) - toward(q)).slice(0, A.smokeLayers)
+    // (never the played side's first ship: the cut would land the chase camera inside her own trail)
+    const firstId = key === ar.side ? sd.def.first : null
+    const layers = sd.ships.filter((i) => (X[i].model.type === 'dd' || X[i].model.type === 'de') && units[i].id !== firstId).sort((p, q) => toward(p) - toward(q)).slice(0, A.smokeLayers)
     for (const i of layers) {
       const b = X[i].body
       const h = b.heading * DEG
