@@ -397,7 +397,11 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
         const s4 = sample(GF, grandFort, quick ? 30 : 7, [scanProbe], rand)
         report(!s4.bad.length && s4.states >= (quick ? 20 : 200), `P-scan, Grand fortified: ${s4.states} states, the same`, s4.bad)
       }
-      const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 1))
+      // (the tower ring's fix: on a Grand-sized fortified board the rock box
+      // stands where the ring stood, and the boards after it scatter anew,
+      // so seeds 1-40 hold no ladder that carries farther than it costs
+      // (31 and 34 did); 41-80 hold two, 42 and 61, the control's)
+      const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 41))
       report(!b.bad.length && b.wide > 0, `P-scan, the box with height: ${b.plans} climbers' plans from ladders' feet and tops on 40 of the grand mission's fortified boards, every reached cell inside scanBox (${b.wide} reaching past the box a flat board would draw)`, b.bad.length ? b.bad : b.wide ? [] : ['no plan reached past the flat box: the probe met no ladder that carries farther than it costs'])
     }
     // (F19a) the keg board: the keg/ AI pairs, on code with the keg's AI
