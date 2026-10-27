@@ -154,3 +154,19 @@ content-2.md) could not reach or settle. Tested from the container on
 | a person with a mouse and with a touch screen | round two's stations, the Assisted gains, the gun stations' mouse and drag rates and the fire button were driven only by scripts | the assist and the gun stations tuned by hand, and the phone layout of the held bar beside the touch controls |
 | a real GPU | still SwiftShader only (0.4 to 0.9 s a frame at a station) | the frame time at the stations |
 
+## From round three
+
+What the round's three workflows (research/content-3.md, engine-3.md,
+ui-3.md) and the integration could not reach or settle. Tested from the
+container on 26–27 October 2026.
+
+| what | why | what it would unlock |
+| --- | --- | --- |
+| St. Lo's VC-65 and Gambier Bay's VC-10 on 25 October 1944, Kitkun Bay's full complement, the types of St. Lo's four-plane dawn patrol | Morison XII's appendix is in print; the squadrons' aircraft action reports are at NARA | Samar's two stand-in squadrons (fourteen Wildcats and twelve Avengers each) and the four Avengers standing in for the dawn patrol replaced by the record |
+| the Wikipedia articles on the Taffy 3 carriers | a request was refused by the site's rate limit and not repeated | a finding aid for the squadrons above (not a source in itself) |
+| the Japanese name of Kondō's Emergency Bombardment Force | not in anything read; left blank rather than guessed | Ironbottom Sound's side line in Japanese |
+| a historian, and a reader of Japanese | the phase texts, the three footnotes and the side names have been read by no one but their authors | the wargames' words checked as DESIGN.md §7.5 asks of every card |
+| a real GPU | the container has SwiftShader only (a frame of Samar's wargame in 0.6–1.3 s) | the markers, the slow motion, the shake and the snapshots' timing at sixty frames; the arena's frame budget with forty ships and up to sixty aircraft |
+| a person with a mouse, and with a touch screen | the arena has been flown and fought only by scripts and by Playwright's clicks | the arcade handling, the main battery's view turning at the screen's edge, the AI's ranging against a person's, and whether a straddle reads as one |
+| a person to decide Midway's and Ironbottom Sound's shape | nine admiral settings for Ironbottom Sound and three for Midway, with the arena's gun intervals, left them outside the band: in a 6 km arena Midway's screens shoot the carriers out of action, and Lee's six cannot sink Kirishima under fourteen ships' fire (research/engine-3.md §8) | their doors opened (a larger arena or a stance for Midway's screens; Ironbottom Sound's US goal or forces) |
+

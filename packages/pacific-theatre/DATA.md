@@ -430,6 +430,7 @@ prologue date the app calls `allied` land "not held by Japan".
     "exaggeration": 1.0,                           // one constant for the renderer and the sim alike; never varies with the camera
     "sea": "gmrt",                                 // gmrt | etopo15: which supplied the sea floor
     "battle": "boxes/midway/battle.json",
+    "wargame": "wargames/midway.json",             // optional (round three): the box's wargame, named by hand where it is balanced and shipped
     "sources": [ { "id": "glo-30", "title": "Copernicus DEM GLO-30", "url": "https://copernicus-dem-30m.s3.amazonaws.com/", "fetched": "...", "licence": "attribution",
                    "notice": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
                    "liability": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30" },
@@ -914,6 +915,46 @@ pure-JS `shapefile` package; both are devDependencies.
   the check rather than the generator.
 - `labels.json` is sorted by rank then by text.
 
+## 13. Wargames: `wargames/<id>.json` (round three)
+
+A what-if with the real forces, fought in an arena 6 km across for ten
+minutes (ROUND-3.md §1–2, §6). The id is the box's; the app loads a box's
+scenario only where its manifest entry names it (`"wargame":
+"wargames/<id>.json"`, §7), so a door shows only where a scenario is and
+a scenario not yet balanced has none (the project manager's decision 30:
+Samar's is named; Midway's and Ironbottom Sound's are kept and not named,
+and the check warns of each). `bake-box.mjs` keeps an entry's `wargame` as
+it was named. ROUND-3 §6's example holds; content-3's fields beyond it are
+part of the schema (the project manager's decision 33), all optional:
+
+| field | meaning |
+| --- | --- |
+| `ja` | the battle's Japanese name and reading, from the box |
+| `arena.separationM` | guide to guide at the start (5,000; Ironbottom Sound 2,500) |
+| `arena.skyAt` | the battle-clock time whose sun or moon, cloud and sea the arena borrows |
+| `arena.night`, `starShells`, `visibilityM` | night; star shells drawn over the enemy (the arena's every 30 s or so); ships beyond the visibility hidden from the gunnery |
+| side `side`, `name`, `ja`, `leader` | the side's code and the start sheet's line; `leader` is the commander, a Japanese name in the first-mention form with kanji |
+| side `bearingDeg`, `headingDeg` | the guide's bearing from the centre (the two reciprocal); the course the side starts on |
+| side `formation` | the exact start: `circle` (a `ring` round the guide at `acrossM`/2, the `screen` on the `screenM` ring) or `columns` (each column's first ship at `atM` = [starboard, ahead] of the guide, the rest astern at `intervalM`); `tools/check/wargames.mjs` layout() writes the rule out and the arena agrees with it to the centimetre |
+| side `first`, `firstStation` | the unit the cut lands in (a ship's id, or an aircraft kit: an airborne one) and its station |
+| side `maxAirborne`, aircraft `airborne` | at most this many a side in the air; this many of an entry up at the start |
+| goal `weapon`, `by`, `types`, `rangeM` | only hits of that weapon, by aircraft or a ship type; `types` widens `type` (a cruiser is `ca` or `cl`); a `reach` within `rangeM` |
+| goal `outOfAction` | a carrier burning (under half her hit points) counts as one sunk |
+| goal `also` | more terms of a main goal, every one of which must hold |
+| admiral `waveSize` | the first launched wave; each after grows by `waveGrowth` |
+| admiral `press` | (the integrator's) how far the aggression rises by the end of the clock, from 2:00 on, 0 to 1 |
+
+`survive` counts the side's own ships of the type afloat; `sink`, `hit`
+and `shoot-down` count the other side's. `tools/check/wargames.mjs` holds
+the rest (research/content-3.md §6): every ship a unit of the box on its
+side, the arena at sea inside the box, the start laid out with no two
+ships within 150 m and none more than 1 km outside the arena, the goals
+satisfiable, 5–7 ordered phases inside the ten minutes, the admiral's
+ranges, the footnote one sentence, the sources in the ledger, and the
+voice on every user-facing string (the never-list, no count of people, a
+Japanese name family first and at a card's first mention in capitals with
+its kanji).
+
 
 ## Round two
 
@@ -921,4 +962,4 @@ The second round (any unit takeable at any time with stations, assisted flight b
 
 ## Round three
 
-The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md), which wins where it differs from this file until its "as built" is folded in.
+The third round (the Wargame) is specified in [ROUND-3.md](./ROUND-3.md); its "as built" is §13 below (the scenario files) and the box manifest's `wargame` (§7), and research/content-3.md holds what each scenario rests on.

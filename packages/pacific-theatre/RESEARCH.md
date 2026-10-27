@@ -38,6 +38,9 @@ decisions recorded in the design documents and below.
 | [ui-2](./research/ui-2.md) | round two's interface: the unit list, the unit card, the box's bar, Start here, the after-card over a span, the URL's unit and station, the setting, every call into Battle, the mock and its dev page | 23 KB | one row an air group; `#unit` offers and never takes; the bar at the top while a unit is held (ENGINEERING.md §11 "As built (round two)"; DESIGN.md §5.7) |
 | [content-2](./research/content-2.md) | the prologue front and the first doors: what each of the six keyframes stands on, the hand regions, the sources, the four doors | 17 KB | six schematic keyframes from Mukden to southern Indochina; the prologue's keyframe 1931-09-18; one gentle take-over a box (DATA.md §§6, 9; DESIGN.md §3.1) |
 | the integration | the five merged: the ledger, the wiring, the cross-references, the replay test, the font, the thumbnail | this file, §2 and §3 | `tools/replay.mjs` (every box replays its record untouched), `tools/check/cross.mjs`, `src/link.js`; the tuning and the fixes listed in §2 |
+| [content-3](./research/content-3.md) | round three's scenarios: Samar, Midway and Ironbottom Sound as wargames, what each rests on, the formations from the record's first contact, the aircraft on deck, the check | 27 KB | three scenario files with every unit from the boxes, Taffy 3's aircraft carrier by carrier from the captains' reports (two squadrons stand-ins), the side names with a leader line, the goals' extra fields (DATA.md §13; DESIGN.md §5.11) |
+| [engine-3](./research/engine-3.md) | round three's arena as built: the surface, the arcade models, weapons and damage, the AI's ranging, the admiral, smoke, squalls and night, the objectives, the departures, the balance | 43 KB | a sim of its own in the record's state layout; the AI's gunnery walked in and paced; the balance by the integrator (§8: Samar 50 % and 45 %, the other two not shipped) (ENGINEERING.md §§5, 7–9 "As built (round three)") |
+| [ui-3](./research/ui-3.md) | round three's interface: the doors, the start sheet, the HUD layer, the markers, the respawn line, the end card with its reel, every call into the arena and Battle, the mock | 25 KB | a tally is what a side did; `#wargame` offers and never starts; Japan's bar on the left; the bar's wargame mode (ENGINEERING.md §11 "As built (round three)") |
 
 ## 2. The decisions, and where each came from
 
@@ -212,3 +215,11 @@ stays, until a person measures an integrated GPU. The replay test runs the
 four boxes untouched at the sim's 1/60 s step in 155 s (Midway), 141 s (Pearl
 Harbor), 33 s (Ironbottom Sound) and 71 s (Samar) of node time; the data is
 17.8 MiB (`public/data/`), the build 20 MB.
+
+Round three (27 October 2026), the same Chromium: Samar's wargame draws in
+0.6–1.3 s a frame with 56–59 units and up to 1,050 particles; the
+fixture's in 76 ms (66 draw calls, 43,500 triangles, 38 MB of heap). The
+arena's step in node is 0.18 ms mean and 0.63 ms at the 99th percentile
+for Samar (the contract asks under 2 ms). A hit marker lives 1.5 s of page
+time, so at a frame a second it is seen for a frame or two; the slow
+motion likewise. Neither has been seen at sixty frames.

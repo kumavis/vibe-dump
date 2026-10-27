@@ -589,6 +589,25 @@ and a smoke test can assert what happened.
 
 ---
 
+### 5.11 The Wargame: a second door (round three)
+
+Each battle has two doors on its card, side by side and the record first:
+*Enter the battle* (the record, as everything above) and *Play it as a
+wargame* (ROUND-3.md). The wargame is a game, and says so: a what-if with
+the real forces, both sides, fought in an arena 6 km across for ten
+minutes against an admiral who fights back, with phases, a goal line,
+tallies, hit markers, a second of slow motion and the camera's shake, and
+a hop into any ship or aircraft of the side played. Its label stands on
+the door, the start sheet and the end card in ROUND-3 §1's words (*A
+wargame played with the real forces. The record is on the other side of
+the table.*), and the record's own sentence closes every end card. The
+pacing is not held back; the words are: machines, not people (*shot
+down*, *sunk*, *hit*, *did not return*), a *tally* of what a side did,
+never a score, never a count of people, and a sinking on either side reads
+the same (§7.3–7.4). The first wargame shipped is Samar's; Midway's and
+Ironbottom Sound's are written and wait for a shape that balances
+(research/engine-3.md §8).
+
 ## 6. Data model
 
 DATA.md is the contract; this is the shape. Everything hand-written carries
@@ -932,12 +951,13 @@ not from the English word, so the app's Japanese line is 太平洋戦争 and the
 dates, never a katakana title. Nothing a user sees plays on the word.
 
 Gallery card (R8's draft, in the Hawaiian card's register; since round two
-any unit can be taken, not one, and the card says so):
+any unit can be taken, not one, and since round three a battle can be
+played as a wargame, and the card says so in a clause each):
 
 ```json
 "gallery": {
   "title": "Pacific Theatre",
-  "description": "The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, or take any ship or aircraft, on either side.",
+  "description": "The Pacific War as a sand table, from Pearl Harbor to Tokyo Bay. Follow the front and the fleets day by day; drop into a battle to watch it as the record tells it, take any ship or aircraft on either side, or play it as a fast wargame with the real forces.",
   "tags": ["game", "simulation", "tutorial"],
   "status": "wip"
 }
@@ -981,4 +1001,4 @@ The second round (any unit takeable at any time with stations, assisted flight b
 
 ## Round three
 
-The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md), which wins where it differs from this file until its "as built" is folded in.
+The third round (the Wargame) is specified in [ROUND-3.md](./ROUND-3.md); its "as built" is §5.11 and §12 above.

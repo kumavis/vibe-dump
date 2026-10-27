@@ -621,6 +621,37 @@ field and number):
   her AA, as the record loses most of each: smoke part 5 lets one aircraft
   bookmark in four (at least one) end by the battle's fire, and reports it.
 
+**As built (round three): the arena** (`src/battle/arena/`;
+research/engine-3.md §§2–7 has it whole, §9 its 27 departures). A sim of
+its own beside the record's, filling the record's state layout (`pos`,
+`quat`, `alive` 0/1/2, `kits`, `capacityByKit`, `effects`, `projectiles`,
+`_X[i].model`), so the scene, the HUD, the unit list and the touch
+controls draw and drive it unchanged; while a wargame runs `battle.sim` is
+the arena and `battle.arena` names it. `createArena(scenario, kits, box,
+{ side, seed })` reads ROUND-3 §6 with content-3's fields (DATA.md §13):
+the start as `tools/check/wargames.mjs` layout() lays it, to the
+centimetre; `airborne` and `maxAirborne`; the goals' `weapon`, `by`,
+`types`, `rangeM`, `outOfAction` and `also`; the night and its
+`visibilityM`. One fixed step of 1/60 s (eight a call at most), the
+admirals every 2 s, the units' AI four times a second; Samar's step is
+0.18 ms mean and 0.63 ms at the 99th percentile in node. The departures
+that change the contract's words: the AI's ranging walks in from 40 % of
+the range to 22 %, and it fires a salvo no oftener than every 30 s (light
+guns), 45 s (medium) and 50 s (heavy); a shell's hit box is 1.5× the
+hull's length and beam at the hull's own height; ships turn quicker than
+three times the rate (the rudder ÷ 3, the yaw lag ÷ 10); smoke screens and
+the box's squalls hide from the gunnery; a side that must keep its ships
+afloat keeps 5,200 m; strafing halves a ship's AA for 10 s and stops an
+escort carrier's launches as long (the project manager's decision 34); a
+magazine is 3 % of the hits of 330 mm and over; the clock reads 0:00 to
+10:00. The integrator added an admiral's optional `press` (its aggression
+rising from 2:00 to the end, so a game turns late), an admiral one ship
+short of a goal of several pressing home instead of turning away, the
+AI's guns favouring only a goal's terms still open, and at night a
+cruiser's searchlight on the nearest capital ship and the scenario's star
+shells (the record's `FX.searchlight` and `FX.starshell`; the project
+manager's decision 36). The balance is research/engine-3.md §8.
+
 ## 6. Kits (`src/battle/kits/`)
 
 ```js
@@ -724,6 +755,23 @@ ninety-odd ships instance hulls per kit; under 500 on a desktop and under
 measure first. The sim's determinism is per browser engine: the smoke test
 asserts outcomes in bands ("Kaga doomed by 10:30"), not exact positions.
 
+**As built (round three)**: the scene gains `shake(amount)` (a camera
+jitter of the strongest request, dying in about a third of a second),
+`slowmo(seconds)` (the arena's dt at a quarter, eased in and out:
+Battle.tick's `simScale`, never the record's), the sinking animation
+(UnitRenderer's `pose` hook from the arena's damage state: the list to
+32°, the trim to 9°, settling under the sea over the ship's 20 s; 18° and
+12 s for a magazine) and `snapshot()` (a promise of a 320 × 200 JPEG, read
+just after the next frame is drawn, since the renderer keeps no drawing
+buffer). The scene snaps the arena's highlights itself, sixteen at most a
+game (the player's own four seconds apart, anyone else's eight once six
+are in), and marks each highlight's `snapping` ('asked', 'taken' or
+'none') so the reel waits only for a still that is coming (§11). Smoke
+thins near the camera and about the ship the player holds (the effects'
+`uClear`), so a chase camera behind an escort laying a screen sees her,
+in the record's boxes too. At night the arena's searchlights and star
+shells are drawn by the record's effects.
+
 ## 8. Controls (`src/battle/controls/`)
 
 `Input` collects keyboard, mouse and touch into `player.input` each frame
@@ -815,6 +863,23 @@ ellipsized, just above the controls (`--pt-controls`) or the watching bar
 cue stacked in the middle between the plot's column and the subtitle; the
 clock stands down while the bar at the top shows it
 (`--pt-clock-display`). `tools/smoke.mjs` holds the boxes apart (§12).
+
+**As built (round three): the hops** (`controls/input.js`,
+`bindings.js`). In a wargame Tab hops to the next friendly unit of the
+same kind and 1–4 (the number row or the keypad) to the nearest carrier,
+battleship or cruiser, destroyer or aircraft; Shift+Tab and the backquote
+key change the station (Tab's round-two job; the project manager's
+decision 39); a unit of the played side picked in the unit list or tapped
+in the box is a hop (`link.js`). On a touch screen the bar's hop button
+(the next of the same kind) stands beside Units. The hints say so
+(`wargame-ship`, `wargame-aircraft`, `wargame-touch`). At the main battery
+with the pointer free the director's view holds still while the pointer
+lays the guns on the sea inside it, and turns only with the pointer at the
+screen's left or right edge (`input.viewAz`, `viewRange`; `cameras.js`
+reads them before the aim); in pointer lock the view is the aim, as
+before. The view had followed a free pointer's aim and turned under it
+every frame (round two's record had the same loop). The guns are first
+laid on the nearest ship of the other side when the AI has no target yet.
 
 ## 9. The battle lifecycle (`src/battle/index.js`) and the hand-over (`src/app.js`)
 
@@ -915,6 +980,23 @@ a bookmark keeps `&moment=`); read back after the box is entered, it selects
 the unit and focuses that station's button, and takes nothing (`config.js`
 `HASH`).
 
+**As built (round three): `Battle.enterWargame(id, { side, from, seed })`**
+loads the scenario (`app.data.wargames`, filled at boot from the box
+manifest's `wargame`, DATA.md §13; `globalThis.__wargameScenarios` for a
+test), leaves a box that is open, loads the box, builds the arena, flies
+down from the table (`from: 'table'`) or cuts, and takes the side's first
+unit at its first station; `state.wargame` is `{ id, side, seed, games }`;
+speeds `[1]`, no scrubbing. `restart({ side })` (an object: the record's
+`restart('start' | 'checkpoint')` keeps its string) builds a fresh arena
+on the same scene; `hop(kind | index)`; `endNow()`; `leave()` as ever. The
+arena's events go to the page as 'battle' events with `wargame: true` (the
+hit markers stay in `arena.events` for the HUD layer) and the end as
+'wargame-end'. `App.hashNow` writes no `#t` while `battle.arena` is set
+(the project manager's decision 38); the URL is
+`#wargame=<id>&side=<jp|us>` (link.js keeps both; `HASH` lists them),
+which read at boot offers the start sheet with that side focused and never
+starts a game, as `#moment` never starts a sortie.
+
 ## 10. The table scene (`src/table/`)
 
 ```js
@@ -1009,6 +1091,33 @@ on its side), and over the HUD and the controls while open. `boxbar.js`
 tells the box where the bar stands through three variables on the
 document: `--pt-head` (the line under a bar at the top), `--pt-head-end`
 (its right edge) and `--pt-foot` (the room a bar at the foot takes).
+
+**As built (round three): the Wargame's interface** (`src/ui/wargame.js`,
+`card.js`, `briefing.js`, `boxbar.js`, `src/link.js`; research/ui-3.md).
+The door: *Play it as a wargame* beside *Enter the battle* on the battle's
+card, the record first and the what-if label under the two (the project
+manager's decisions 31–32), on the briefing, and *Wargame* on the watching
+bar, wherever the box has a scenario (`app.data.wargames`). The start
+sheet: each side's name with its own Japanese name, its leader on a line
+of its own (content-3's, at first mention in capitals with the kanji), its
+forces by type and its goal, and the label. The HUD layer is one block
+under the bar: both strength bars (Japan's on the left whichever side is
+played; a tally is what a side did, "sank 2 · shot down 9"), the timer,
+the goal with its count (each term's for a goal of several), the phase
+with its count and timer ("done" or "missed"), the held unit; hit markers
+in machine words at the target for 1.5 s of page time; the respawn line;
+the hop hints once. The bar's `wargame` mode hides the record's parts. The
+end card opens 1.6 s after the result: the line, both tallies, the
+player's own, a reel of the six best stills (the sinkings and the
+player's own kept first), the label, and the record's footnote last; *Play
+again*, *Play the other side*, *Back to the table*. On a phone the box's
+own first hints and keys stand where the wargame's hints do (beside the
+block on its side, above the controls upright, short of the plot's
+buttons), and the phone check holds a wargame clear at all six sizes.
+Midway's and Ironbottom Sound's doors are hidden (their manifest entries
+name no scenario) until they can be balanced (the project manager's
+decision 30). No mock is on a production path: `mock-arena.js` and
+`mock-battle.js` serve `ui.html` alone.
 
 ## 12. Tools
 
@@ -1219,4 +1328,4 @@ The second round (any unit takeable at any time with stations, assisted flight b
 
 ## Round three
 
-The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md), which wins where it differs from this file until its "as built" is folded in.
+The third round (the Wargame: a what-if with the real forces in a compressed arena, an AI admiral, arcade handling, phases and goals, hit markers and an end card) is specified in [ROUND-3.md](./ROUND-3.md); its "as built" is folded into §5, §7, §8, §9 and §11 above (each "As built (round three)"), and research/engine-3.md, ui-3.md and content-3.md hold the detail.

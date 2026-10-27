@@ -390,7 +390,68 @@ content-3's fields beyond §6 (research/content-3.md §2), all read:
 
 ## 8. The balance
 
-{{BALANCE}}
+Written by the integrator (integrate-3, 27 October 2026); engine-3's own
+measurements were lost with its last report. Measured with
+`tools/smoke-arena.mjs`'s headless runs (20 seeds a side, the seeds 0–19
+the gate uses, no player) and a scratch script beside it that also notes
+when a game was decided and both sides' strength at 3:00. "Met" is the
+side's main goal met within the clock in a run seeded for that side.
+
+| scenario | side | on the merged tree | after | the game decided |
+| --- | --- | --- | --- | --- |
+| Samar | Japan | 100 % (20 of 20), decided at 4:19 median | **50 %** | after 6:00 in 20 of 20 |
+| Samar | United States | 0 % (0 of 20), decided at 3:38 median | **45 %** | after 6:00 in 16 of 20 |
+| Midway | Japan | 85 %, decided at 2:28 median | 100 % (not shipped) | before 4:00 in every seed |
+| Midway | United States | 100 %, decided at 2:20 median | 100 % (not shipped) | before 4:00 in every seed |
+| Ironbottom Sound | Japan | 100 %, decided at 4:14 median | 100 % (not shipped) | before 6:00 in most |
+| Ironbottom Sound | United States | 0 % | 0–10 % (not shipped) | — |
+| the fixture (test box) | Japan / United States | in the band (engine-3) | 55 % / 50 % | — |
+
+Neither side's strength bar is under 0.48 at 3:00 in any Samar seed after
+the tuning (it was at 0.08–0.34 before, when the carriers were going down
+from 1:30).
+
+**What moved Samar** (the scenario's admirals, `public/data/wargames/samar.json`):
+
+- Kurita's admiral: aggression 0.7 → 0.2 (he keeps 5 km at first),
+  `press` 0.6 (a new optional field: the aggression rises from 2:00 to
+  the end, to 0.8 by 10:00, so the pressure grows and a game turns late),
+  turn-away 0.5 → 0.81 (Taffy 3's air strikes can turn him: at 0.83 Japan
+  met 35 %, at 0.86 20 %; at 0.80 the United States met 40 %).
+- Taffy 3's admiral: a wave every 75 → 60 s (the contract's lower bound),
+  the first wave 8 → 14, growing 30 → 45 % a wave. The size moved little
+  (thirty in the air at most); the interval more.
+
+**What moved every scenario** (the arena's own, `arena/params.js` and the
+admiral):
+
+- The AI's medium and heavy guns fire a salvo no oftener than every 45 and
+  50 s (40 and 40 before): Samar's first carriers went down in the first
+  two minutes to three-turret salvos from 3.6 km; the ranging floor and
+  rate (tried at 30 % and 0.15) moved nothing measurable, the volume did.
+- An admiral one ship short of a goal of several presses home instead of
+  turning away (`admiral.js`): without it a quarter of Samar's games ended
+  with Japan three carriers sunk and turned away, neither goal met.
+- The AI's guns favour only a goal's terms still open (`ai.js`
+  goalTypesOf): Ironbottom Sound's two cruisers sunk no longer draw
+  Washington's guns from Kirishima.
+- Strafing (the project manager's decision 34): AA at half for 10 s (0.4
+  for 8 s) and an escort carrier launching nothing for as long.
+
+**Why Midway and Ironbottom Sound are not shipped** (the project manager's
+decision 30: their doors are hidden, their files kept). Nine admiral
+settings for Ironbottom Sound and three for Midway (aggression 0 to 0.9,
+turn-away 0.2 to 0.85, a launch every 70 to 90 s, waves of 6 to 10,
+`press`, the light guns every 45 or 60 s) left both far outside the band. At Midway the two task forces start 5 km apart in a
+6 km arena and the screens' heavy cruisers put the carriers out of action
+with gunfire at 3 km inside three minutes, both sides' goals met in the
+same game; a carrier duel needs either a larger arena or a stance that
+keeps the surface ships off (a scenario field the contract does not
+have). At Ironbottom Sound the United States must sink Kirishima (30 hit
+points) and two cruisers while fourteen ships' 5-inch guns (56 hits in a
+probed game) and torpedoes are on Lee's six; Kirishima is never sunk in
+the clock. Both want a person to decide the scenario's shape, not its
+numbers (research/engine-3.md §12).
 
 ## 9. Where the build departs from the contract, and why
 
@@ -579,10 +640,10 @@ and Ironbottom Sound's fights past the entry (their balance runs only).
 
 ## 12. What is not finished, and needs a person
 
-- **The balance of the real scenarios** (§8): the arena runs all three
-  of content-3's files end to end, but none sits in the band on its
-  file's own admirals; the numbers that move them are in §8, and the
-  integrator sets them.
+- **The balance of the real scenarios** (§8): Samar sits in the band
+  (50 % and 45 %) and ships; Midway and Ironbottom Sound do not, and
+  their doors are hidden until a person decides their shape (Midway's
+  arena or a stance for the screens; Ironbottom Sound's US goal).
 - **Star shells** are not drawn; at night only `visibilityM` acts.
 - **Level bombers dive** like dive bombers; there is no level bombing run.
 - **A person flying it**: the arcade numbers (§3) and the AI's ranging
