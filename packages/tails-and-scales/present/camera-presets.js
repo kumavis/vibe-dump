@@ -318,7 +318,7 @@ export function cueAt(events, k, posOf) {
 // after its End (`ended`, the bookmark's seat). An action with a focus of
 // its own (the AI's, a fight's) is followed as frames says, as ever.
 export const cues = (ctx) => frames(ctx) && (!ctx.localSeats.includes(ctx.active) || ctx.ended === ctx.active)
-const dot =(a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
 const norm = (a) => {
   const l = Math.hypot(a[0], a[1], a[2])
