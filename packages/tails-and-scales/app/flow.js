@@ -39,7 +39,15 @@
 // (app/replay.js) of the battle's first moves, a scrub to one of them, or
 // a replay from its very start; the battle's own Session (`battle`) goes
 // on folding meanwhile, its status still heard (online), and the table
-// comes back to it as it then stands.
+// comes back to it as it then stands. (F15) A click on a line of the battle
+// log puts the battle as it stood before that line's entry on the table
+// (each line knows its entry's place among the battle's moves), on the
+// replay's bar, ▶ playing on from there.
+//
+// (F12) In a game played here alone, Undo takes back the last placement,
+// move or charge's end of the seat whose decision it is, back to its last
+// commit point (app/undo.js): the battle's Session made again over its log
+// as it stood before that entry, and swapped in for it.
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
@@ -51,10 +59,11 @@ import { MAX_ENTRIES, Folder } from '../match/fold.js'
 import { project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
-import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, PHASE_NAME } from '../present/hud-model.js'
+import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, undoable, PHASE_NAME } from '../present/hud-model.js'
 import { EventPlayer } from '../view/player.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
+import { rewind } from './undo.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
@@ -212,9 +221,12 @@ export class Flow {
           this.sameUnits(this.G)
         }
         // each action's end carries the match's facts as they stood then,
-        // and the stop (the entry's `pending`) the match's as it stands
-        const facts = this.acted.splice(0)
-        events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e))
+        // and the stop (the entry's `pending`) the match's as it stands;
+        // (F15) and each battle-log line the entry it was logged in, its
+        // place k among the accepted (the entry just accepted: the last),
+        // which a click on the line scrubs to the eve of
+        const facts = this.acted.splice(0), k = ses.accepted.length - 1
+        events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e.t === 'log' ? { ...e, k } : e))
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         this.player.push(events)
       },
@@ -269,8 +281,8 @@ export class Flow {
     this.human = human
     const handlers = {
       ...view.handlers({ localSeats: () => this.session?.localSeats ?? [] }),
-      // the battle log, the dice tray
-      log: (e) => ui.log.write(e.side, e.html, e.cls, e.at),
+      // the battle log ((F15) each line its entry's place, k), the dice tray
+      log: (e) => ui.log.write(e.side, e.html, e.cls, e.at, e.k),
       'tray.open': (e) => ui.tray.clear(e.title),
       dice: (e) => ui.tray.row(e.label, e.dice, e.need, e),
       // an action's end: what the units have done, as the match had it then
@@ -781,6 +793,36 @@ export class Flow {
     this.refreshUI()
   }
 
+  // ── Undo (F12) ──────────────────────────────────────────────────────────
+  // ↶ Undo or Ctrl-Z: the last placement, move or charge's end of the seat
+  // played here whose decision it is, taken back to its last commit point
+  // (present/hud-model.js's undoable: one entry a press). Only in a game
+  // played here alone, on the battle's own Session (never while a replay
+  // or a scrub is up), once the table has caught up and no group or order
+  // is still sending. The battle's Session is made again over its log as it
+  // stood before that entry (app/undo.js) and becomes the battle, shown on
+  // its table as a scrub's is (a snap: the table, the log, the HUD and the
+  // card made again from it), the old Session closed; the unit taken back
+  // is put down first. Returns why nothing was taken back, else null.
+  undo() {
+    const battle = this.battle, human = this.human
+    if (!battle || this.online) return 'no battle played on this device alone'
+    if (this.session !== battle || this.replay?.battle) return 'a replay is on the table'
+    if (!this.player.idle || human.group?.busy || human.standing?.busy) return 'the table is still playing'
+    const k = undoable(battle)
+    if (k < 0) return 'nothing to take back since the last End or dice roll'
+    human.select(null)
+    // (its trace lines heard once it is made: the card's facts and ?debug's
+    // trace of what it folds as it is made are the snap's to make again)
+    let made = false
+    const ses = rewind(battle, k, { onTrace: (line, g) => made && this.onTrace(line, g) })
+    made = true
+    // (the battle's no more: show() closes it as it hands over)
+    this.battle = ses
+    this.show(ses)
+    return null
+  }
+
   // The online match left: app/online.js lets go of its document.
   leaveOnline() {
     this.peerBadges = null
@@ -796,14 +838,17 @@ export class Flow {
   // the `log` events written (the last 80, as many as the log keeps). After
   // a snap onto a match this page didn't play up to (an online match
   // followed, a refold), what the log shows is that match's history.
+  // ((F15) Each line with its entry's place among the accepted, as the sink
+  // stamps it: the fold's own, from the list's start.)
   relog(entries) {
     const f = new Folder({ out: [] }), lines = []
     for (const e of entries) {
       f.push(e)
-      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push(x)
+      const k = f.accepted.length - 1
+      for (const x of f.G?.out?.splice(0) ?? []) if (x.t === 'log') lines.push({ ...x, k })
     }
     this.ui.log.clear()
-    for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at)
+    for (const x of lines.slice(-80)) this.ui.log.write(x.side, x.html, x.cls, x.at, x.k)
   }
 
   // The elastic catch-up (above), once a change is folded: the table's

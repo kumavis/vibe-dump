@@ -69,7 +69,9 @@ the commit, and add whatever the work turned up.
   (a game played alone loads no Automerge), and from N3
   `node sim/replay-check.mjs` (and `--self-test`: every corpus battle
   scrubbed move by move, replayed from its start event for event, saved
-  and opened again, held to what a page kept), and from S0-S3
+  and opened again, held to what a page kept; from F12 and F15 also
+  undo's rule after every entry and a move taken back and made again, and
+  every battle-log line named by the move that logged it), and from S0-S3
   `node sim/scale-check.mjs` (and `--self-test`: P-scan, P-los and
   P-memo, the core's scans held to the scans as they were, on classic and
   Grand: the Grand fixture until F8b, the `grand` mission since) and
@@ -154,7 +156,11 @@ the commit, and add whatever the work turned up.
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
   whole-board frame, a report failing above 1.25× budget: build first, run
   it on a quiet machine; rematch-memory alternates Grand and classic
-  battles now, 50-80 minutes, `--classic` the old run). A step that changes what one of them reads ports it in the same
+  battles now, 50-80 minutes, `--classic` the old run), and from F12 and
+  F15 `node sim/undo-check.mjs` (and `--self-test`: a hotseat battle's
+  placement and move taken back by Undo and Ctrl-Z, the phase still open,
+  and a battle-log line's scrub, no seat to act there, Live, ✕ and ▶
+  coming back; lobby-rig's `play` holds Undo hidden online). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -1042,7 +1048,7 @@ defaults; 28, 30, 31 and 32 were answered in the reviewers' voice note of
 26 October (lob, melee, fog, undo), and F12, F16, F17 and F18 say what they
 answered; 35 (Escape) by the user: no change.
 
-- [ ] **F12** Local undo: simple mistakes, within the phase. A button (and
+- [x] **F12** Local undo: simple mistakes, within the phase. A button (and
   Ctrl-Z) takes back the last entry of a seat played here since its last
   commit point: a placement, a move (the one that set it off: a unit sent
   back when it was meant to advance), a charge's end. Ending the phase
@@ -1058,6 +1064,20 @@ answered; 35 (Escape) by the user: no change.
   command in the rules would be a step of its own). DESIGN §5's "local undo
   of move/place by truncating the store" is this, the truncation replaced.
   A replay-check case: undo then the same move folds to the same trace.
+  (↶ Undo, first in the actions bar, and Ctrl-Z or ⌘-Z: one entry a press,
+  a `place`, `move` or `chargeEnd` of the seat whose decision it is, back
+  to the last End, Begin battle or entry across which `G.rng.n` moved,
+  which the Folder now records beside each accepted id with the entry's
+  place, derived and never hashed (`present/hud-model.js`'s `undoable`).
+  The battle's Session made again over its log's texts up to that entry
+  (`app/undo.js`'s `rewind`), the battle's device and seats, shown and
+  swapped in as `flow.battle`, the old one closed, the unit put down. Only
+  on a LocalStore whose human seats are all played here, with the battle
+  on the table and the table at rest; hidden online, refused while
+  scrubbed. replay-check's `undo` (the rule after every entry of the 28
+  human battles, four a battle taken back and made again to the same
+  trace, match and texts), `sim/undo-check.mjs` in Chromium, lobby-rig's
+  `play` (no Undo online). DESIGN's F12 notes.)
 - [ ] **F13** Touch aim: a hover for a finger. Today a phone gets no preview
   at all (pointermove fires only while a finger orbits the camera, and a lift
   after a drag is never a click). A long press on the ground, or on an enemy,
@@ -1098,7 +1118,7 @@ answered; 35 (Escape) by the user: no change.
   seat's own fight phase, so its next turn never came back from the
   opponent's. camera-check, present-check's in-process case, lobby-rig's
   `follow`. DESIGN's F14 notes.)
-- [ ] **F15** The battle log scrubs. A click on a line shows the battle as it
+- [x] **F15** The battle log scrubs. A click on a line shows the battle as it
   stood before that move, and ▶ plays on from there. Each line carries only
   `at` (the trace's length); the sink receives each entry's events on their
   own (app/flow.js), so they take the entry's place in the accepted list
@@ -1108,6 +1128,18 @@ answered; 35 (Escape) by the user: no change.
   back). While scrubbed the seat played here can't act (the replay's Session
   has no local seat), as it should. A replay-check case: a line's k folds to
   the trace line it was logged at.
+  (The flow's sink stamps each entry's `log` events with `k`, its place
+  among the accepted, and `relog` stamps the same; `ui/log.js` writes
+  `data-k` and a click calls `replay.before(battle, k)`, which scrubs to
+  `k - 1`: a bar already up as its slider does, else the bar comes up,
+  and over a battle not over it is a peek that Live, ✕ or the replay
+  reaching the battle's last move puts away, the battle back as it stands.
+  The deployment's lines show "Before the battle", the roll-off's the
+  deployment before the last Begin battle; an AI's turn is the End that
+  handed it over. Scrubbed, the table's Session is the replay's: End,
+  Auto and Undo down, a command refused. replay-check's `logs` (every
+  line of the 70 battles named by the move that logged it, clicks, relog,
+  the peek), undo-check's log steps. DESIGN's F15 notes.)
 - [ ] **F16** Courtesy fog of war, a lobby setting. DESIGN §5's "no hidden
   information" stands as a rule: the match is a pure function of a public
   log that every peer folds whole, so nothing can be hidden from devtools;

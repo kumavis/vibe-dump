@@ -266,6 +266,17 @@ export function boot(location) {
     human.group.setSelectMode(!human.group.selectMode)
     $('#selectMode').classList.toggle('on', human.group.selectMode)
   }
+  // (F12) ↶ Undo, and Ctrl-Z (⌘-Z on a Mac): the last placement, move or
+  // charge's end of the seat played here, back to its last commit point
+  // (app/flow.js's undo; the button up and enabled as the HUD model says).
+  // Not in a field, nor under a dialog.
+  $('#undo').onclick = () => flow.undo()
+  addEventListener('keydown', (e) => {
+    if (e.key?.toLowerCase() !== 'z' || !(e.ctrlKey || e.metaKey) || e.shiftKey || e.altKey) return
+    if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target?.tagName ?? '') || document.querySelector('.modal:not(.hidden)')) return
+    e.preventDefault()
+    if (!e.repeat) flow.undo()
+  })
   human.listen(view.renderer.domElement)
   // (F8b) Drawing at scale (DESIGN §4.2.7): the chips at the Strategic tier
   // (a tap is a click on the unit, as the board's; a cluster's asks the
@@ -347,6 +358,9 @@ export function boot(location) {
   // a replay file opened from the title, watched from its start
   const replay = new Replay({ flow, bar: new ReplayBar() })
   flow.replay = replay
+  // (F15) a line of the battle log clicked: the battle as it stood before
+  // the move it was logged in, on the replay's bar
+  ui.log.wire((k) => flow.battle && replay.before(flow.battle, k))
   const watchFile = (text) => {
     const { store, why } = openReplay(text)
     const ses = store && new Session({ store, dev: 'replay' })

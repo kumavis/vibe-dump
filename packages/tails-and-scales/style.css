@@ -491,6 +491,15 @@ ul.abil {
 #logList .entry.big {
   background: rgba(255, 211, 110, 0.07);
 }
+/* (F15) a line shows the battle as it stood before it */
+#logList .entry[data-k] {
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+}
+#logList .entry[data-k]:hover {
+  background: rgba(255, 211, 110, 0.14);
+  color: #fff6e2;
+}
 
 #actions {
   position: fixed;

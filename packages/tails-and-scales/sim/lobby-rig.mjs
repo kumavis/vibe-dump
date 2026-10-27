@@ -9,8 +9,9 @@
 //                race alone, its button picking nothing): the battle starts on
 //                both seats once both are ready, each page playing its own
 //                seat (the watcher none, its badge counted on the others');
-//                each seat deploys, plays a turn (the AI's Auto), and one
-//                concedes; every page ends over on the same match, each
+//                each seat deploys ((F12) its deployment shows Begin battle
+//                and no ↶ Undo: never online), plays a turn (the AI's
+//                Auto), and one concedes; every page ends over on the same match, each
 //                seated page's closing hash said and agreed (no dialog);
 //                then Rematch: the host's page opens a new lobby with both
 //                seats, and the guest's offers Join the rematch, which joins
@@ -291,6 +292,11 @@ async function runCases(dist, cases) {
       const seats = await Promise.all([host, guest, watcher].map((p) => p.evaluate(() => window.__ts.session.localSeats.join())))
       must(seats.join('|') === '0|1|', `each page plays its own seat (host 0, guest 1, watcher none): ${seats.join('|')}`)
       must((await guest.evaluate(() => window.__ts.G.setup.seats[1].name)) === 'Ben', "the start carries the guest's name as it readied it")
+      // (F12) no Undo online (the log is append-only): each seated page's
+      // deployment shows Begin battle, and no ↶ Undo beside it
+      for (const p of [host, guest]) await until(p, () => window.__ts.player.idle && window.__ts.session.decisionFor() >= 0 && getComputedStyle(document.querySelector('#endPhase')).display !== 'none', null, 30000, 'Begin battle up on a seated page')
+      const undos = await Promise.all([host, guest].map((p) => p.evaluate(() => getComputedStyle(document.querySelector('#undo')).display)))
+      must(undos.every((d) => d === 'none'), `online, no seated page shows Undo in its deployment (${undos.join(' | ')})`)
       // each seat deploys (Begin battle), then plays its turns with Auto, the
       // pages answering their own decisions, until round 2 begins
       const step = async (page) => page.evaluate(async () => {
@@ -950,6 +956,8 @@ async function runCases(dist, cases) {
 
 // Broken copies the self-test builds; each must fail the case named.
 const MUTANTS = {
+  // (F12) Undo up online too
+  'undo-online': ['play', 'present/hud-model.js', '  const undoUp = end.show && playedHere(session)\n', '  const undoUp = end.show\n'],
   // (F7a) the host's terrain never reaches the lobby
   'terrain-unwired': ['terrain', 'net/lobby.js', '    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain\n', ''],
   // (F4's leftover) a snap past the end keeps a vote panel up
