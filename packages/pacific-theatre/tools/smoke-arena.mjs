@@ -423,7 +423,7 @@ if (doBrowser) {
         const n = await run(`return battle.sim.markers.filter((m) => m.kind !== 'down').length`)
         if (n > 0) break
       }
-      const markers = await run(`return sim.markers.slice(0, 3).map((m) => m.text)`)
+      const markers = await run(`return sim.markers.filter((m) => m.kind !== 'down').slice(0, 3).map((m) => m.text)`)
       assert(markers.length, `no hit by ${t.toFixed(0)} s`)
       // a slow motion: the arena's request reaches the scene, whose factor scales the arena's dt in Battle.tick (and only the arena's)
       await run(`window.__dts = []; const adv = sim.advance; sim.advance = (dt) => { window.__dts.push([battle.scene.slowFactor(), dt]); return adv(dt) }; sim.requestSlowmo(4, 'test'); return true`)
