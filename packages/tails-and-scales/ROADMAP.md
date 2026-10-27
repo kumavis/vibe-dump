@@ -1128,7 +1128,10 @@ answered; 35 (Escape) by the user: no change.
   kept until something takes the camera away (the follow policy, or in
   hotseat the other seat's phase): a turn's last End was spent at that
   seat's own fight phase, so its next turn never came back from the
-  opponent's. camera-check, present-check's in-process case, lobby-rig's
+  opponent's; a battle's `setViews` lets the last battle's bookmarks go
+  (the wave's integration: one kept to a battle's end glided the next
+  battle's first phase off its board, input-check's aim case after the
+  main run). camera-check, present-check's in-process case, lobby-rig's
   `follow`. DESIGN's F14 notes.)
 - [x] **F15** The battle log scrubs. A click on a line shows the battle as it
   stood before that move, and ▶ plays on from there. Each line carries only

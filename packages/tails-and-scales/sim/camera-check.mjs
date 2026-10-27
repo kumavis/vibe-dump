@@ -443,6 +443,15 @@ for (const [ctx, want, what] of [
   rig.nextView()
   settle()
   check(rig.resume(1) === true && close(settle().pos, at1.pos), "(F8b's review) hotseat: and seat 1's to its own")
+  // ((F14's integration) a bookmark kept to a battle's end (nothing took the
+  // camera away since its End) is let go as the next battle's views are set:
+  // its first phase stays on the new battle's opening view)
+  rig.bookmark(0)
+  rig.nextView()
+  settle()
+  rig.setViews(viewsFor({ localSeats: [0, 1], edges: [-1, 1] }))
+  const opened = settle()
+  check(rig.resume(0) === false && close(settle().pos, opened.pos) && !rig.marks.size && !rig.ending.size, "(F14's integration) setViews lets a battle's bookmarks go: the next battle's first phase stays on its opening view")
   check(rig.marks.size === 0, "(F8b's review) both bookmarks spent")
   rig.bookmark(0)
   rig.bookmark(1)

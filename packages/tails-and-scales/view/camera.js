@@ -145,6 +145,11 @@ export class CameraRig {
   setViews(views) {
     this.views = views
     this.viewAt = 0
+    // ((F14's integration) a battle's bookmarks are its own: one kept to the
+    // end of the last battle (nothing took the camera away after its End)
+    // would glide the next battle's first phase to a pose off its board)
+    this.marks.clear()
+    this.ending.clear()
     this.goTo(views[0])
   }
 
