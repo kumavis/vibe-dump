@@ -443,6 +443,28 @@ async function layoutLane(browser, url) {
           return document.body.classList.contains('playing') && getComputedStyle(e).display !== 'none' && !e.disabled && e.textContent.startsWith('Begin battle')
         }, null, { timeout: 300000 })
         await sleep(4000)
+        // ((the WIP merge's follow-up) the boxes `sel` picks out at rest: none
+        // moving 2 px across a minimap tick (10 Hz) and two of the page's
+        // frames, three times running. A frame on a Grand board under
+        // SwiftShader takes a second or more, so a fixed wait, or two
+        // readings 800 ms apart inside one frame, can read a page that hasn't
+        // drawn what it is doing yet)
+        const settle = async (sel, what) => {
+          for (let n = 0, t0 = Date.now(); n < 3;) {
+            if (Date.now() - t0 > 180000) throw new Error(`${what} never came to rest`)
+            n = (await page.evaluate((sel) => new Promise((done) => {
+              const at = () => [...document.querySelectorAll(sel)].map((e) => e.getBoundingClientRect())
+              const was = at()
+              setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => done(at().every((r, i) => Math.max(Math.abs(r.left - was[i].left), Math.abs(r.top - was[i].top), Math.abs(r.bottom - was[i].bottom)) < 2)))), 150)
+            }), sel)) ? n + 1 : 0
+          }
+        }
+        // the deployment's camera at rest: its swing onto the battle's view
+        // is 1.4 s of game time, a frame stepping at most 0.05 s of it
+        // (view/stage.js), so on a Grand board the swing runs 20-30 s; 4 s
+        // in, the camera still near the title's orbit, every one of the
+        // seat's labels stood off the screen and no unit was clicked
+        await settle('#labels .ulabel', 'the camera')
         const box = (s) => page.evaluate((s) => {
           const el = document.querySelector(s)
           if (!el || getComputedStyle(el).display === 'none' || el.classList.contains('hidden')) return null
@@ -466,6 +488,10 @@ async function layoutLane(browser, url) {
             if (await box('#card.show')) break
           }
           await sleep(1200)
+          // (the card done sliding in and the minimap's tick past it: a
+          // reading 1.9 s after the click caught the card still 20 px low and
+          // the map not yet raised)
+          await settle('#card, #minimap, #roster', 'the card, the minimap and the roster')
           const c = await box('#card.show'), mm = await box('#minimap'), ro = await box('#roster')
           if (!c) problems.push(`${at}: no unit's card showed after clicks on six units`)
           else if (!mm || !ro) problems.push(`${at}: the minimap or the roster isn't up on a Grand board`)
