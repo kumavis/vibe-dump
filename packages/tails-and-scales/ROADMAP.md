@@ -1071,7 +1071,7 @@ answered; 35 (Escape) by the user: no change.
   last valid cell along the ray from the unit through the finger
   (input/tools/move.js); the command sent is still `move {u, c}`.
   input-check's touch cases through CDP, as F10a's.
-- [ ] **F14** The camera follows a human opponent. The follow policy (🎥,
+- [x] **F14** The camera follows a human opponent. The follow policy (🎥,
   `follows()`: every turn but the one seat played here) is in place, but only
   fights and the AI's own moves, shots and charges emit `focus`; a human's
   move, volley, template or charge emits none, and a lone walk is no batch
@@ -1081,6 +1081,23 @@ answered; 35 (Escape) by the user: no change.
   says follow (view/player.js, beside `frame`), or `frame` taking a single
   walk; today's glides. camera-check holds the policy; a lobby-rig case
   watches a guest's move swing the host's camera.
+  (View only, the corpus byte-identical. Every action no batch takes is
+  cued once as it opens (`cueAt` in present/camera-presets.js: from its
+  opening to its `act`, or its `pending` for a charge's spot; its actors by
+  `pointsOf`, which `frame` now gathers with too), and the CameraRig's `cue`
+  makes one move for it: framed as a batch is (the same `framePose`) when an
+  actor is off screen, else a glide toward its end (a walk's end, a shot's
+  or a charge's middle, or its own focus) as a focus glides, none within
+  6"; its focus events are left out. A seat's command (no focus of its own)
+  is followed by `cues`: never the seat played here's, hotseat's two seats
+  too, but its orders after End; the AI's and the fights' by `frames`, as
+  ever. Online, watched, replayed and with ⇉ off alike. No placement is
+  followed: an online deployment is simultaneous. The bookmark is now
+  kept until something takes the camera away (the follow policy, or in
+  hotseat the other seat's phase): a turn's last End was spent at that
+  seat's own fight phase, so its next turn never came back from the
+  opponent's. camera-check, present-check's in-process case, lobby-rig's
+  `follow`. DESIGN's F14 notes.)
 - [ ] **F15** The battle log scrubs. A click on a line shows the battle as it
   stood before that move, and ▶ plays on from there. Each line carries only
   `at` (the trace's length); the sink receives each entry's events on their
