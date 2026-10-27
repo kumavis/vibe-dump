@@ -1152,7 +1152,10 @@ answered; 35 (Escape) by the user: no change.
   to lob: on a 24-battle sweep, shots from a climbed deck 25 → 25, past
   the printed range 0 → 1. Left as they were: the planner's approach and
   the standing orders' "target in range" (present/, client code) read the
-  printed range. DESIGN's F17 notes.)
+  printed range. Inherited from the WIP merge, failing as on 2983543:
+  terrain-check's connectivity rows on fortified Field and Grand boards
+  (the keep's objective is held from its top) and play-check's layout lane
+  (no card after clicks on a Grand board). DESIGN's F17 notes.)
 - [ ] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
   target for every weapon but a spell ("locked in combat"), so nobody shoots
   or shells a melee. Any ranged weapon may, at no modifier: the cost is the
