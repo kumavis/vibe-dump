@@ -404,7 +404,7 @@ side's main goal met within the clock in a run seeded for that side.
 | Midway | Japan | 85 %, decided at 2:28 median | 100 % (not shipped) | before 4:00 in every seed |
 | Midway | United States | 100 %, decided at 2:20 median | 100 % (not shipped) | before 4:00 in every seed |
 | Ironbottom Sound | Japan | 100 %, decided at 4:14 median | 100 % (not shipped) | before 6:00 in most |
-| Ironbottom Sound | United States | 0 % | 0–10 % (not shipped) | — |
+| Ironbottom Sound | United States | 0 % | 0 % (not shipped) | — |
 | the fixture (test box) | Japan / United States | in the band (engine-3) | 55 % / 50 % | — |
 
 Neither side's strength bar is under 0.48 at 3:00 in any Samar seed after

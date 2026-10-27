@@ -217,11 +217,12 @@ if (doHeadless) {
         const rate = met / SEEDS
         balance.push({ id: scenario.id, side, rate, mean, p99, far, reasons, shipped })
         const note = `goal met in ${met}/${SEEDS} (${pct(rate)}); losses on both sides in ${both}/${SEEDS}; furthest ${Math.max(0, far).toFixed(0)} m beyond the edge; at most ${upMax.jp} / ${upMax.us} aircraft up; step ${mean.toFixed(3)} ms mean, ${p99.toFixed(3)} ms p99; ends ${JSON.stringify(reasons)}`
-        assert(both >= Math.ceil(SEEDS * 0.9), `losses on both sides in only ${both} of ${SEEDS}: ${note}`)
+        // (losses on both sides is the balance's too: a scenario with no door is reported, not held to it)
+        if (shipped) assert(both >= Math.ceil(SEEDS * 0.9), `losses on both sides in only ${both} of ${SEEDS}: ${note}`)
         assert(far <= 1000, `a unit ${far.toFixed(0)} m beyond the edge: ${note}`)
         assert(mean < 2 && p99 < 2, `the step: ${note}`)
         if (shipped) assert(rate >= 0.4 && rate <= 0.75, `outside the band: ${note}`)
-        return shipped || (rate >= 0.4 && rate <= 0.75) ? note : `${note} — OUTSIDE the band, not shipped`
+        return shipped || (rate >= 0.4 && rate <= 0.75 && both >= Math.ceil(SEEDS * 0.9)) ? note : `${note} — OUTSIDE the band, not shipped`
       })
     }
   }
