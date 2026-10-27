@@ -252,9 +252,10 @@ export const frames = ({ follow, stage, active, localSeats, ended = -1 }) => !!f
 // each unit an event names (`u`, `tg`: a walker, a shooter and its target,
 // a charger, the units struck), each place one goes to (`to`: a walk's end,
 // a template scattered or thrown), and the places a template is aimed at
-// or lands on, or thorns erupt at. (view/player.js's frame gathers a
-// batch's members with it, and cueAt an action's.)
-const PLACED = new Set(['blast.aim', 'blast.land', 'spell.thorns'])
+// or lands on, or thorns erupt at, (F19a) or a powder keg goes off at.
+// (view/player.js's frame gathers a batch's members with it, and cueAt an
+// action's.)
+const PLACED = new Set(['blast.aim', 'blast.land', 'keg.fuse', 'spell.thorns'])
 export function pointsOf(events, posOf) {
   const points = []
   const add = (p) => p && Number.isFinite(p.x) && Number.isFinite(p.z) && points.push({ x: p.x, z: p.z })

@@ -104,6 +104,12 @@ export const MUTATIONS = {
   // (F8b) the merge places a part by its own matrix, not its world one: a
   // tree's canopy, a hedge's tufts, drawn about the origin
   'tile-matrix': ['/view/terrain.js', '  geo.applyMatrix4(tmpM.copy(o.matrixWorld))', '  geo.applyMatrix4(tmpM.copy(o.matrix))', '1-3'],
+  // (F19a, the powder keg's rows) the keg a tenth of an inch off the centre
+  // (no longer its own mirror), a keg's hit points one more than the
+  // keg's, and a blast whose rim does the full damage
+  'keg-off-centre': ['/core/terrain/recipes.js', '    powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))', '    powderKeg(T, 0.1, 0, yaw, pick(KEG_WOOD, rng))', '1-3'],
+  'keg-tougher': ['/core/terrain/recipes.js', "    kind: 'keg', hp: HAZARDS.keg.hp,", "    kind: 'keg', hp: HAZARDS.keg.hp + 1,", '1-3'],
+  'blast-rim-full': ['/core/terrain/terrain.js', '    let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)', '    let amount = dmg', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws

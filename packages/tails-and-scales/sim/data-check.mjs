@@ -57,7 +57,10 @@
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
 //    feet) plus 0.25", to the nearest tenth, and holds its gates. (F8b) It passes
 //    `open` too, refuses a copy of it with an unknown scale, and classic
-//    has no `scale` (its draws are frozen). (F8a) And the
+//    has no `scale` (its draws are frozen). (The tower ring's fix, with
+//    F19a) It refuses a fortified copy whose `largeCentre`, the larger
+//    tables' centre rule, is broken as a centre rule can be, classic has
+//    none, and RULES_ID moves on it. (F8a) And the
 //    missions: checkMission (data/mission.js, run on every mission as it
 //    loads) passes each and refuses one with an odd or fractional board, a
 //    zone reaching within 6" of the centre line, an objective under 1"
@@ -164,7 +167,23 @@
 //    race's preset for it within its list rules; and every set it offers
 //    scattering at most 450 chunks on its worst board over seeds 1-200, on
 //    the mission's own board, objectives and zones (the count printed:
-//    §4.2.3 expects 250-300 at Grand).
+//    §4.2.3 expects 250-300 at Grand). (F19a) The keg mission is a
+//    Skirmish (40×28, 5 rounds, 500 points, its four objectives).
+// 13. (F19a, DESIGN §4.2.3) The powder keg: checkHazard (data/hazards.js)
+//    passes the keg and refuses eight broken copies (no or fractional hit
+//    points, a strength of 0, a negative AP, damage that is no number, no
+//    blast, scenery damage of NaN, a misspelt field); RULES_ID moves on its
+//    hit points and every number of its profile, on the keg set's spacing
+//    and the keg mission's objectives, and when the keg is dropped, and
+//    stays on its name and look; only the keg set stands a keg (classic,
+//    open and fortified none), on every board (its centre's threshold 1),
+//    and is classic's table but its centre; a keg board stands one keg,
+//    the first chunk, at (0, 0) exactly, with the keg's hit points, soft,
+//    no sight or cover in it (seeds 1-100); the keg mission is classic's
+//    Skirmish, fought on the keg set alone (and no other mission on it),
+//    its four objectives 2.5" from the keg exactly, off the axes, inside
+//    its blast; and what a keg does to every unit standing on it (printed),
+//    about half of a squad on average (40-60%).
 //
 //   node sim/data-check.mjs
 //
@@ -450,6 +469,9 @@ const moves = [
   // (F8b) the open set: its spacing and its area scale
   ['a spacing rule (open gap 3.2 → 3.1)', () => rulesId({ sets: { ...SETS, open: { ...structuredClone(SETS.open), gap: 3.1 } } })],
   ["the open set's area scale dropped", () => rulesId({ sets: { ...SETS, open: (({ scale, ...o }) => o)(structuredClone(SETS.open)) } })],
+  // (the tower ring's fix) the fortified set's centre rule on the larger tables
+  ["fortified's largeCentre (the rock box under 0.8 → 0.75)", () => rulesId({ sets: { ...SETS, fortified: (({ largeCentre, ...o }) => ({ ...o, largeCentre: [largeCentre[0], ['rockbox', 0.75]] }))(structuredClone(SETS.fortified)) } })],
+  ["fortified's largeCentre dropped", () => rulesId({ sets: { ...SETS, fortified: (({ largeCentre, ...o }) => o)(structuredClone(SETS.fortified)) } })],
   // the missions (R6a): where the objectives stand, the rounds, the zones
   ['an objective moved (classic centre 0,0 → 0,1)', () => mission((m) => (m.objectives[0].z = 1))],
   ['an objective added', () => mission((m) => m.objectives.push({ x: 0, z: 10 }))],
@@ -572,8 +594,8 @@ for (const [what, want, edit] of brokenSets) {
   check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
 }
 // (F7a) the fortified set's own fields, broken one at a time on a copy
-const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale']
-check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
+const FORT_ONLY = ['works', 'forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds', 'facing', 'scale', 'largeCentre']
+check(FORT_ONLY.every((k) => !(k in SETS.classic)), 'classic has none of the fortified set\'s fields (works, the fort phase\'s, facing, scale, largeCentre): its draws are frozen', FORT_ONLY.filter((k) => k in SETS.classic).join(', '))
 const brokenForts = [
   ['a fortKind under its footprint (rampart 6, its footprint 7.1)', /fortKinds\[0\] \(rampart\): radius 6 must be a number, at least its footprint 7\.1/, (c) => (c.fortKinds[0][1] = 6)],
   ['a fortKind radius that is not a number', /fortKinds\[1\] \(bastion\): radius 6\.3 must be/, (c) => (c.fortKinds[1][1] = '6.3')],
@@ -595,6 +617,12 @@ const brokenForts = [
   ['facing with no fort phase', /facing names fortKinds, and the set has none/, (c) => ['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'].forEach((k) => delete c[k])],
   ['an unknown scale', /scale "length" is not one scatter knows/, (c) => (c.scale = 'length')],
   ['a misspelt fort field', /unknown field "fortGapp"/, (c) => (c.fortGapp = 3.2)],
+  // (the tower ring's fix) the larger tables' centre rule, checked as `centre` is
+  ['a largeCentre that is no list', /largeCentre must be a list of \[piece, threshold\]/, (c) => (c.largeCentre = 'rockbox')],
+  ['a largeCentre piece that does not exist', /largeCentre\[1\]: no centre piece "moat"/, (c) => (c.largeCentre[1][0] = 'moat')],
+  ['a largeCentre threshold above 1', /largeCentre\[1\] \(rockbox\): threshold 1\.5/, (c) => (c.largeCentre[1][1] = 1.5)],
+  ['largeCentre thresholds that fall', /largeCentre\[1\] \(keep\): thresholds must rise/, (c) => c.largeCentre.reverse()],
+  ['a largeCentre entry without its threshold', /largeCentre\[0\] must be \[piece, threshold\]/, (c) => c.largeCentre[0].pop()],
 ]
 for (const [what, want, edit] of brokenForts) {
   const c = structuredClone(SETS.fortified)
@@ -906,14 +934,18 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // shooting into a fight, which shadowState prints nothing new for (the
   // format unchanged: hotseat-late-8 and serpent-random-2 hash as under 1
   // at every pin) but which is meant to alter play, and 64-89's AI plays
-  // another battle under it, so its end is that battle's, V9)
+  // another battle under it, so its end is that battle's, V9; 10, F19a:
+  // the powder keg, which no classic board has and shadowState prints
+  // nothing new for (a keg is a chunk like any, its id, alive, hp and
+  // height), and (the tower ring's fix) fortified's largeCentre, which no
+  // pinned match is fought on: every pin as under 9)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -1216,6 +1248,8 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
     classic: { W: 40, H: 28, deploy: 8, rounds: 5, points: 500, size: 'Skirmish', objectives: 5 },
     field: { W: 60, H: 40, deploy: 12, rounds: 6, points: 1000, size: 'Field', objectives: 7 },
     grand: { W: 80, H: 56, deploy: 14, rounds: 7, points: 1500, size: 'Grand', objectives: 9 },
+    // (F19a) the powder keg: a Skirmish, four objectives round the keg
+    keg: { W: 40, H: 28, deploy: 8, rounds: 5, points: 500, size: 'Skirmish', objectives: 4 },
   }
   check(isDeepStrictEqual(Object.keys(MISSIONS), Object.keys(SIZES)), `the missions are ${Object.keys(SIZES).join(', ')} (${Object.keys(MISSIONS).join(', ')})`)
   for (const [name, m] of Object.entries(MISSIONS)) {
@@ -1241,6 +1275,91 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
       check(worst <= ENV.chunks, `the ${name} mission on ${set}: at most ${worst} chunks over seeds 1-200 (seed ${at}; mean ${(sum / 200).toFixed(0)}), within ${ENV.chunks}`)
     }
   }
+}
+
+// ── 13. The powder keg (F19a) ───────────────────────────────────────────────
+console.log('\n13. the powder keg: its profile, its set and its mission (F19a)')
+{
+  const { HAZARDS, checkHazard } = await imp(PKG, 'data/hazards.js')
+  const { expected } = await imp(PKG, 'core/rules.js')
+  const { CENTRES, KEG_R } = await imp(PKG, 'core/terrain/recipes.js')
+  const K = HAZARDS.keg
+  const hazardError = (h) => {
+    try {
+      checkHazard('test', h)
+      return null
+    } catch (e) {
+      return e.message
+    }
+  }
+  check(hazardError(K) === null, `checkHazard passes the keg (hp ${K.hp}, S${K.S} AP${K.AP} D${K.D}, blast ${K.blast}", scenery ${K.scenery})`, hazardError(K))
+  for (const [what, want, edit] of [
+    ['no hit points', /hp 0 must be a whole number above 0/, (h) => (h.hp = 0)],
+    ['fractional hit points', /hp 1\.5 must be/, (h) => (h.hp = 1.5)],
+    ['a strength of 0', /S 0 must be a whole number above 0/, (h) => (h.S = 0)],
+    ['a negative AP', /AP -1 must be a whole number, 0 or more/, (h) => (h.AP = -1)],
+    ['damage that is no number', /D 2 must be/, (h) => (h.D = '2')],
+    ['no blast', /blast 0 must be a number above 0/, (h) => (h.blast = 0)],
+    ['scenery damage of NaN', /scenery NaN must be/, (h) => (h.scenery = NaN)],
+    ['a misspelt field', /takes no field "blst"/, (h) => (h.blst = 3)],
+  ]) {
+    const h = structuredClone(K)
+    edit(h)
+    const err = hazardError(h)
+    check(err && want.test(err), `checkHazard refuses a keg with ${what}`, err ?? 'accepted')
+  }
+  // RULES_ID: the keg's hit points and profile are rules, its name and look
+  // aren't; its set's spacing and its mission's objectives are rules
+  const kegWith = (edit) => {
+    const h = structuredClone(K)
+    edit(h)
+    return rulesId({ hazards: { ...HAZARDS, keg: h } })
+  }
+  for (const [what, edit] of [['hp (2 → 3)', (h) => (h.hp = 3)], ['S (5 → 6)', (h) => (h.S = 6)], ['AP (1 → 2)', (h) => (h.AP = 2)], ['D (2 → 1)', (h) => (h.D = 1)], ['blast (3" → 3.5")', (h) => (h.blast = 3.5)], ['scenery damage (4 → 3)', (h) => (h.scenery = 3)]]) check(kegWith(edit) !== RULES_ID, `RULES_ID moves on the keg's ${what}`)
+  for (const [what, edit] of [['name', (h) => (h.name = 'Barrel of powder')], ['look', (h) => (h.fx = 'boom')]]) check(kegWith(edit) === RULES_ID, `RULES_ID stays on the keg's ${what} (presentation)`)
+  check(rulesId({ sets: { ...SETS, keg: { ...structuredClone(SETS.keg), objectiveGap: 2.3 } } }) !== RULES_ID, "RULES_ID moves on the keg set's spacing (objectiveGap 2.2 → 2.3)")
+  check(rulesId({ missions: { ...MISSIONS, keg: { ...structuredClone(MISSIONS.keg), objectives: [{ x: -2, z: 1 }, { x: 2, z: -1 }, { x: -2, z: -1 }, { x: 2, z: 1 }] } } }) !== RULES_ID, "RULES_ID moves on the keg mission's objectives")
+  check(rulesId({ hazards: {} }) !== RULES_ID, 'RULES_ID moves when the keg is dropped')
+  // the sets: only `keg` stands one, and it is classic's table but its centre
+  const names = (rule) => (rule ?? []).map(([piece]) => piece)
+  const kegSets = Object.keys(SETS).filter((n) => [...names(SETS[n].centre), ...names(SETS[n].largeCentre)].includes('keg'))
+  check(isDeepStrictEqual(kegSets, ['keg']), `only the keg set stands a keg (classic, open and fortified none: ${kegSets.join(', ')})`)
+  check(isDeepStrictEqual(SETS.keg.centre, [['keg', 1]]), "the keg set's centre is the keg, on every board (threshold 1, above every draw)", JSON.stringify(SETS.keg.centre))
+  const { centre, ...kegRest } = SETS.keg, { centre: classicCentre, ...classicRest } = SETS.classic
+  check(isDeepStrictEqual(kegRest, classicRest), "the keg set is classic's table but its centre (its features, counts and spacing classic's)")
+  check(typeof CENTRES.keg === 'function' && KEG_R === 1, `the keg is a centre piece, keeping the features ${KEG_R}" off`)
+  // a board of the keg set stands one keg, at (0, 0) exactly, with the
+  // keg's hit points, as a soft chunk with no sight or cover
+  const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+  const bad = []
+  for (let seed = 1; seed <= 100; seed++) {
+    const T = new Terrain(40, 28)
+    T.generate(seed, MISSIONS.keg.objectives, MISSIONS.keg.deploy, 'keg', null)
+    const kegs = T.chunks.filter((c) => c.kind === 'keg')
+    const k = kegs[0]
+    if (kegs.length !== 1 || !Object.is(k.shape.x, 0) || !Object.is(k.shape.z, 0) || k.hp !== K.hp || k.navKind !== 'soft' || k.los || k.cover || k.id !== 1) bad.push(`seed ${seed}: ${JSON.stringify(kegs.map((c) => ({ id: c.id, x: c.shape.x, z: c.shape.z, hp: c.hp, nav: c.navKind, los: c.los, cover: c.cover })))}`)
+  }
+  check(!bad.length, "the keg set stands one keg at (0, 0) exactly, the first chunk, with the keg's hit points, walked round (soft), no sight or cover in it (seeds 1-100)", bad.slice(0, 2).join('; '))
+  // the mission: a Skirmish, its objectives 2.5" from the keg, none at it
+  const M = MISSIONS.keg, C = MISSIONS.classic
+  check(isDeepStrictEqual([M.board, M.deploy, M.rounds, M.army, M.list], [C.board, C.deploy, C.rounds, C.army, C.list]), "the keg mission is classic's Skirmish: its board, zones, rounds, preset and list rules")
+  check(isDeepStrictEqual(M.sets, ['keg']), 'the keg mission is fought on the keg set alone', JSON.stringify(M.sets))
+  check(!Object.values(MISSIONS).some((m) => m !== M && m.sets.includes('keg')), 'no other mission is fought on the keg set')
+  check(M.objectives.length === 4 && M.objectives.every((o) => Math.hypot(o.x, o.z) === 2.5 && o.x !== 0 && o.z !== 0), 'its four objectives each 2.5" from the keg exactly, off the axes, none at the keg', JSON.stringify(M.objectives))
+  check(M.objectives.every((o) => Math.hypot(o.x, o.z) < K.blast), `each objective inside the keg's ${K.blast}" blast`)
+  // what one keg does to a squad standing on it: every model under it, by
+  // rules.js's expected (a big unit's D3+1 hits as 3); about half a squad
+  const rows = []
+  let sum = 0, n = 0
+  for (const r of Object.values(RACES)) {
+    for (const t of Object.values(r.units)) {
+      const e = expected(t.big ? 3 : t.models, 1, K, { t, alive: t.models }, false)
+      rows.push(t.models > 1 ? `${t.short} ${e.kills.toFixed(1)} of ${t.models}` : `${t.short} ${(e.wounds * Math.min(K.D, t.W)).toFixed(1)} of ${t.W} wounds`)
+      if (t.models > 1) (sum += e.kills / t.models, n++)
+    }
+  }
+  console.log(`  (a keg on a unit, every model under it: ${rows.join(', ')})`)
+  check(sum / n >= 0.4 && sum / n <= 0.6, `a keg kills about half a squad standing on it: ${(100 * sum / n).toFixed(0)}% of its models on average over the ${n} squads, within 40-60%`)
 }
 
 console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, and (F8b) every mission, preset and set is inside the size envelope')

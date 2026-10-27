@@ -273,7 +273,8 @@ export const fogStale = (F, M, id) => !!F?.table && !F.over && !sameChunk(F.tabl
 //   - a template's victims (each wound row from its landing on, its save
 //     row and its line) and its "…scenery wrecked" line are shown when its
 //     landing is in sight, or (a row, a line) the victim is the seat's own;
-//     its landing (blast.land, spell.thorns, spell.fade) the same; its aim,
+//     its landing (blast.land, spell.thorns, spell.fade; (F19a) a keg.fuse
+//     as the landing straight after it) the same; its aim,
 //     scatter and throw as its shooter's figure (an enemy live through the
 //     entry, or the seat's own);
 //   - the scenery's events (and a walk's smashes) for a chunk stale as the
@@ -381,6 +382,12 @@ export function fogEvents(events, { seat, before, after, sees, M, sideOf, units 
       }
       if (e.t === 'spell.fade') {
         if (!lands[land]) mark(k, 'hide')
+        continue
+      }
+      // ((F19a) a powder keg's fuse, as the landing of its blast, straight
+      // after it)
+      if (e.t === 'keg.fuse') {
+        if (!lands[land + 1]) mark(k, 'hide')
         continue
       }
       if (e.t === 'blast.aim' || e.t === 'blast.fire' || e.t === 'blast.scatter') {

@@ -12,7 +12,9 @@
 // deployment depth, the sets, the army's name and, from F11a, the list
 // rules, `list`, less its `size`: the battle size's name, which the
 // refusals and the builder print as they print a race's name and a unit's
-// short one, is presentation like them). A stat or price retune changes
+// short one, is presentation like them), and (F19a) the hazards
+// (data/hazards.js: the powder keg's hit points and its blast's profile,
+// less its name and look). A stat or price retune changes
 // it, so a match started under other rules can be told apart instead of
 // silently playing differently (a peer whose prices or rosters differ
 // opens it as 'skew', never as a desync); a renamed unit, race or size
@@ -28,6 +30,7 @@
 import { BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_RANGE, ROUNDS, AURA, PHASES } from './rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS } from '../data/mission.js'
+import { HAZARDS } from '../data/hazards.js'
 import { SETS } from './terrain/sets.js'
 import { cyrb53, canonicalJSON } from './util.js'
 
@@ -49,11 +52,13 @@ export const CONSTANTS = Object.freeze({ BOARD, ENGAGE, CHARGE_RANGE, OBJECTIVE_
 // and through (every number in them places scenery, an objective or a
 // zone), so they go in whole, but for (F11a) the one name a mission holds:
 // its list's `size`, presentation, left out by that key alone (a list is a
-// mission's record, never a map keyed by a name).
+// mission's record, never a map keyed by a name). (F19a) The hazards are a
+// map keyed by name, as the races are: each record loses its presentation
+// (`name`, `fx`), never its key.
 const listRules = ({ size, ...rules }) => rules
 const missionRules = (m) => (m.list ? { ...m, list: listRules(m.list) } : m)
-export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS, missions = MISSIONS } = {}) {
-  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions: mapVals(missions, missionRules) }
+export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key), sets = SETS, missions = MISSIONS, hazards = HAZARDS } = {}) {
+  return { races: mapVals(races, ({ units, ...r }) => ({ ...strip(r), units: mapVals(units, strip) })), constants, phases, sets, missions: mapVals(missions, missionRules), hazards: mapVals(hazards, strip) }
 }
 
 export const rulesId = (opts) => cyrb53(canonicalJSON(rulesData(opts))).toString(36)
@@ -75,5 +80,11 @@ export const RULES_ID = rulesId()
 // weapon at a target locked in combat, a volley's misses straying into the
 // shooter's own units there by their share of the fight's models, and the
 // AI's shot value net of its friendly fire: code, no rules data, so
-// RULES_ID stays)
-export const CORE_VERSION = 9
+// RULES_ID stays; 10: F19a's powder keg, a chunk whose breaking is a blast
+// at its place (a template's, acid's or a wrecker's walk setting it off, a
+// keg under a keg's blast going off in turn: §4.1 rule 28), the `keg` set
+// and mission, and the AI's keg terms; and with it the tower ring's fix,
+// `fortified`'s `largeCentre` (the rock box where the ring stood on Field
+// and Grand boards): RULES_ID moves with the hazards, the set and the
+// mission)
+export const CORE_VERSION = 10

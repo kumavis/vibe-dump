@@ -18,6 +18,7 @@
 //   node sim/corpus-add.mjs --set scale --mission grand --terrain open --mode watch --tag grand --auto-armies 90 --count 2
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
+//   node sim/corpus-add.mjs --set keg --mission keg --mode watch --tag keg --need keg --count 2
 //
 // --regen <id>[,<id>…] (F18) plays again each named human-bot log of the
 // corpus, by the bot that made it (its own setup and its `bot`, the policy
@@ -38,7 +39,8 @@
 // the setup's (F4: 'vote'); --races <seat 0>,<seat 1> the seats' races
 // (default squirrel,serpent, the title screen's: serpent,squirrel puts the
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
-// default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's).
+// default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's; keg,
+// F19a's: the keg mission's, --mission keg).
 //
 // The board (F8b): --mission <name> the setup's mission (the code's
 // data/mission.js; classic, the default, is named by none, so a classic
@@ -100,6 +102,8 @@
 //   deckfight  a blow struck in a fight with a unit on a deck
 //   works      both seats' own ramparts stand
 //   keep       the keep stands round the centre objective; nokeep: it doesn't
+//   (F19a, read off the trace: the keg's line is a traced battle-log line)
+//   keg        a powder keg went off ("The powder keg goes up!")
 // --from <k> the first candidate seed (default 1): candidate k plays board
 // and dice drawn from mulberry32(9000 + k), and the bot's policy seed k.
 // Logs are named <mode>-<policy>-<tag>-<k> (watch: watch-<tag>-<k>); an
@@ -134,6 +138,8 @@ const NEEDS = {
   works: (r) => r.height.works === 2,
   keep: (r) => r.height.keep,
   nokeep: (r) => r.height.height && !r.height.keep,
+  // (F19a: the keg's own line, traced as every battle-log line is)
+  keg: (r) => r.trace.some((l) => /^log \d The powder keg goes up! rng:/.test(l)),
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const { values: a } = parseArgs({

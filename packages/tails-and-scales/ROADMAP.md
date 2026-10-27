@@ -1041,14 +1041,21 @@ follows N3.
   ruined tower ring at the centre (32% of them), not the keep: on all 502
   keep boards a squad walks up a stair and holds the objective from the
   top. F8b dropped the ring from `open` for walling the objective off;
-  the fix, consensus, is proposed in `sim/notes/keep-connectivity.diff`
+  the fix, consensus, was proposed in `sim/notes/keep-connectivity.diff`
   (a `largeCentre` for `fortified`, the rock box in the ring's place on
   the larger tables, the Skirmish's boards untouched: connectivity 2,000
   of 2,000 and parity 70 of 70 with it applied) for the step that holds
   the core and the corpus. The rows were also made to judge as the rules
   do, the hull on the ground and the objective held at its level, and to
   name the centre piece. Left: that patch, and lobby-rig's `group` and
-  `catch-up` under load. DESIGN's "Inherited failures as built".)
+  `catch-up` under load. DESIGN's "Inherited failures as built".
+  The patch landed with F19a, in a commit of its own before F19a's
+  (8469817): `fortified`'s `largeCentre`, the rock box where the ring
+  stood on Field and Grand from the same one draw, checked by checkSet and
+  data-check; terrain-check exits 0, connectivity 2,000 of 2,000, parity
+  70 of 70 byte-identical, `RULES_ID` moved; F19a's `CORE_VERSION` 10
+  covers it.
+  Left: lobby-rig's `group` and `catch-up` under load.)
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
@@ -1327,26 +1334,65 @@ answered; 35 (Escape) by the user: no change.
   can be shot now); the Grand's reported. macro-check's count ported
   (c0da8e6: a unit an earlier order's blast or shot freed may act, as one
   regenerated log showed). DESIGN's F18 notes.)
-- [ ] **F19** Hazards (rules), in order of fit. **F19a** The powder keg: a
-  chunk kind whose destruction is a blast at its place (the terrain's own
-  hurt → destroy → consequences, as a wall's collapse or a tree's topple:
-  core/terrain/terrain.js), set off by a template, by acid, or by a wrecker
-  walking through it (smashAround), the blast the keg's own weapon profile
-  (`blastLands`, friend and foe; a keg under a keg goes off in turn, in
-  chunk order); and the `keg` mission: its objectives clustered round the
-  keg at the centre, first come first served until somebody taps it. No
-  "attack the scenery" command: the Brute's walk is the tap. **F19b** Oil
-  and fire: a slick is a ground raster like `cover` (a cracked barrel spreads
-  it), fire a state that spreads along it and wounds whoever stands in it at
-  the end of each phase (dice: a new §4.1 rule for their order), lit by a
-  flaming template (the pinecone), never by acid; the AI scores a burning
-  cell as forbidden ground. **F19c** Slippery ground and pushers: a
-  displacement primitive (nothing moves a unit but its own walk and the
-  pile-in, `closeRanks`), with `nav.standable` and the engagement re-read
-  after a shove; slip carries a walk D3" on in its last direction, a pusher
-  is a wrecker's smash applied to units. Each a `CORE_VERSION` bump and a
-  re-record; each with its terrain-check rows, P-prop cases and an army-sim
-  gate (a hazard board must not move the Bushtails' 52.4% out of its band).
+- [ ] **F19** Hazards (rules), in order of fit. Each a `CORE_VERSION` bump
+  and a re-record; each with its terrain-check rows, P-prop cases and an
+  army-sim gate (a hazard board must not move the Bushtails' 52.4% out of
+  its band).
+  - [x] **F19a** The powder keg: a chunk kind whose destruction is a blast
+    at its place (the terrain's own hurt → destroy → consequences, as a
+    wall's collapse or a tree's topple: core/terrain/terrain.js), set off by
+    a template, by acid, or by a wrecker walking through it (smashAround),
+    the blast the keg's own weapon profile (`blastLands`, friend and foe; a
+    keg under a keg goes off in turn, in chunk order); and the `keg`
+    mission: its objectives clustered round the keg at the centre, first
+    come first served until somebody taps it. No "attack the scenery"
+    command: the Brute's walk is the tap.
+    (3b52833, after the tower ring's fix in 8469817; `CORE_VERSION` 10,
+    `RULES_ID` moved. The keg's profile is data, `data/hazards.js`: hp 2,
+    S5 AP1 D2, a 3" blast, scenery 4. The sketch's S6 AP2 D2 killed 69% of
+    a squad on it on average; this kills 52% (four Nutkin of six, a third
+    of the Oak Guard, 1.3 of the Brute's 9 wounds), and two hit points
+    leave the acorns only cracking it while the pinecone, the acid globe,
+    another keg, the Thornburst's core and the Brute's walk set it off.
+    The terrain breaks it as a crate; the rules set it off (`kegsGoOff`):
+    its line, `keg.fuse`, then its blast landed as a template's by the same
+    code, the wounds to the models nearest the keg, the fallen the
+    setter-off's ("Friendly fire!" for its own). A template's kegs go off
+    after its own victims and scenery, a walk's once the walk has ended,
+    the walker where it stopped (move.js hands them to the move's handler
+    and `finishCharge`: no import cycle); a chain breadth first, chunk
+    order within a blast, each keg once; nothing drawn but the blasts' own
+    dice (DESIGN §4.1 rule 28). The `keg` set, classic's table round the
+    keg; the `keg` mission, classic's Skirmish, its four objectives 2.5"
+    from the keg, offered as "Powder keg" on the panel and in the lobby,
+    `?mission=keg`. The AI's modest terms: a unit fears a keg's blast
+    while an enemy could set it off, the guns value a template that would,
+    a wrecker a walk ending on one. The barrel, its fuse and bang, the
+    minimap's dot, the help's paragraph. data-check's hazards section,
+    terrain-check's keg rows, P-keg (five self-test edits), P-scan's keg
+    board; data-check's PINNED and P-prop's PINNED_UNDER take 10. The
+    corpus in 74df14f, the PIN on 3b52833: `keg/`'s watch-keg-1, -4 and
+    hotseat-aggressive-keg-2, the keg set off in each by a template (the
+    acid globe twice, a pinecone once); no existing battle re-recorded;
+    parity and `--pin` 73 of 73. play-report's F19a row 2 of 2 (picked
+    for it: the keg went off in 36 of corpus-add's 48 candidates); no
+    wrecker walked through it. army-sim's keg gates fail and are reported:
+    the Bushtails 38.4% ± 1.2 against the 4-point band, five units out of
+    theirs; without the keg the same mission scores them 39.1% on 400
+    battles (36.6% with it, classic 51.9%), so the clustered objectives
+    move it, not the keg: a retune of the mission, data only, is the
+    user's to slot. No tooltip warns that a shot would set the keg off.
+    DESIGN's F19a notes.)
+  - [ ] **F19b** Oil and fire: a slick is a ground raster like `cover` (a
+    cracked barrel spreads it), fire a state that spreads along it and
+    wounds whoever stands in it at the end of each phase (dice: a new §4.1
+    rule for their order), lit by a flaming template (the pinecone), never
+    by acid; the AI scores a burning cell as forbidden ground.
+  - [ ] **F19c** Slippery ground and pushers: a displacement primitive
+    (nothing moves a unit but its own walk and the pile-in, `closeRanks`),
+    with `nav.standable` and the engagement re-read after a shove; slip
+    carries a walk D3" on in its last direction, a pusher is a wrecker's
+    smash applied to units.
 - [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
   Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll

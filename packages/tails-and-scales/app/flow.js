@@ -88,7 +88,8 @@ export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hots
 
 // (F16) the events the courtesy fog may mark hidden (`veil: 'hide'`,
 // present/fog.js's fogEvents): their handlers never hear of those
-const VEILED = ['log', 'tray.open', 'dice', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'blast.aim', 'blast.scatter', 'blast.fire', 'blast.land', 'spell.thorns', 'spell.fade']
+// ((F19a) and a powder keg's fuse, as its blast's landing)
+const VEILED = ['log', 'tray.open', 'dice', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'blast.aim', 'blast.scatter', 'blast.fire', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade']
 // (F16) the modes the battle-setup panel offers the fog in: against the AI
 export const FOG_MODES = Object.freeze(['bushtail', 'serpent'])
 

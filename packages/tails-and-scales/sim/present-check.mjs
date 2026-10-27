@@ -624,7 +624,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
-  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0 }
+  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0 }
   const reset = () => {
     p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = null
     melees = 0
@@ -672,6 +672,10 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     }
     if (p1?.t === 'blast.fire' && !(e.t === 'blast.land' && at(e, p1.to))) why ||= `a template thrown and not landing straight after, where it was thrown (${e.t})`
     if (p1?.t === 'spell.thorns' && !(e.t === 'blast.land' && at(e, p1) && e.r === p1.r)) why ||= `thorns erupting with no template landing straight after, under them (${e.t})`
+    // ((F19a) a powder keg set off: straight after its line, and its blast
+    // landing straight after it, where it stood, in the keg's look)
+    if (p1?.t === 'keg.fuse' && !(e.t === 'blast.land' && at(e, p1) && e.fx === 'keg')) why ||= `a powder keg set off at (${p1.x}, ${p1.z}) with no blast of its own landing straight after, there (${e.t}${e.t === 'blast.land' ? ` at (${e.x}, ${e.z}) in the look ${e.fx}` : ''})`
+    if (e.t === 'keg.fuse' && !(p1?.t === 'log' && p1.traced && text(p1.html) === 'The powder keg goes up!')) why ||= `a powder keg set off at (${e.x}, ${e.z}) not straight after its line (${p1?.t}${p1?.t === 'log' ? ` "${text(p1.html)}"` : ''})`
     // a landing: straight on to its first victim's wound row, or the beat
     // when it caught nobody
     if (p1?.t === 'blast.land' && !(e.t === 'dice' && /: \d+ hits? · wound \d\+$/.test(e.label)) && !(e.t === 'pause' && e.s === 0.25)) {
@@ -695,7 +699,9 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       shot = p1?.t === 'unit.face' ? p1.u : null
     }
     if ((e.t === 'volley' || e.t === 'blast.fire') && e.u !== shot) why ||= `${e.t} by ${nameOf(e.u)}, not by the shooter (${nameOf(shot)})`
-    if (e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') {
+    // ((F19a) but a powder keg's blast, in the keg's own look, whoever set
+    // it off)
+    if ((e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') && !(e.t === 'blast.land' && p1?.t === 'keg.fuse')) {
       const look = unitOf(shot)?.t.ranged?.fx
       if (e.fx !== look) why ||= `${e.t} in the look ${e.fx}, not the shooter's weapon's (${look})`
     }
@@ -726,7 +732,8 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
         seen.templates++
         if (tmpl?.land) seen.scatters++
         tmpl = null
-      } else if (p1?.t !== 'spell.thorns') why ||= `a template landing that was neither thrown nor erupted (after ${p1?.t})`
+      } else if (p1?.t === 'keg.fuse') seen.kegs++
+      else if (p1?.t !== 'spell.thorns') why ||= `a template landing that was neither thrown, erupted nor a powder keg's (after ${p1?.t})`
     }
     if (e.t === 'spell.thorns') thorns = e
     if (e.t === 'spell.fade') {

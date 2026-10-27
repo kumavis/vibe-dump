@@ -57,6 +57,7 @@ import { GLYPH } from '../present/standing.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { LobbyScreen } from '../ui/screens/lobby.js'
+import { sizeName } from '../ui/screens/setup.js'
 import { sidesFor, seatsOf } from '../ui/theme.js'
 import { NetDialog } from '../ui/screens/netdialog.js'
 import { NetBadge } from '../ui/netbadge.js'
@@ -111,11 +112,11 @@ const FROZEN = {
 }
 
 // (F8b) the battle sizes the lobby offers: each mission, its list's size
-// name, its board and points
+// name ((F19a) or its own: the Powder keg's), its board and points
 // (F7a with F8b) the terrain a lobby keeps through a size change: its own,
 // where the new size is fought on it (fortified, on every size)
 const keptTerrain = (L, name) => (L.terrain && MISSIONS[name].sets.includes(L.terrain) ? { terrain: L.terrain } : {})
-const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
+const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
 
 export class Online {
   // `flow` (app/flow.js), `params` (the page's URL parameters: ?sync=
