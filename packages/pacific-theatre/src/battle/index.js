@@ -271,6 +271,7 @@ export class Battle {
     if (!scripted && pl.kind === 'aircraft' && pl.station === 'pilot') this.input.requestLock()
     this.running = true
     const touch = matchMedia?.('(pointer: coarse)')?.matches
+    this._boundKind = pl.kind
     if (sc) {
       sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
       sc.hud.setStations(pl)
@@ -900,10 +901,21 @@ export class Battle {
     const pl = this.arena?.player
     if (!pl) return
     if (!this.input) return this.bindPlayer(pl)
+    const kindWas = this._boundKind
+    this._boundKind = pl.kind
     this.select(pl.unitIndex, { follow: false })
     this.scene?.setCamera(cameraFor(this, pl.station) || (pl.kind === 'aircraft' ? 'chase' : 'bridge'), { unitIndex: pl.unitIndex, zoom: 1 })
     this.input.onStation?.(pl.station)
-    this.scene?.hud.setStations(pl)
+    const sc = this.scene
+    sc?.hud.setStations(pl)
+    // a hop from a ship to an aircraft (or back): that kind's keys, its hints (once), and the pointer locked for a pilot
+    if (sc && kindWas !== pl.kind) {
+      const touch = matchMedia?.('(pointer: coarse)')?.matches
+      sc.hud.showKeys(touch ? TOUCH_HELP : pl.kind === 'aircraft' ? AIRCRAFT_HELP : SHIP_HELP, 3)
+      sc.hud.clearHints()
+      if (!pl.scripted) sc.hud.firstHints(...(touch ? ['wargame-touch', HINTS['wargame-touch']] : [`wargame-${pl.kind}`, HINTS[`wargame-${pl.kind}`]]))
+      if (pl.kind === 'aircraft' && pl.station === 'pilot' && !pl.scripted) this.input.requestLock()
+    }
   }
 
   /**
@@ -999,6 +1011,10 @@ export class Battle {
     this.selected = null
     this.scene.setSim(arena)
     this.scene.hud.beatIndex = 0
+    // (the last game's lines and hints go with it: its end line is not the new game's)
+    this.scene.hud.lines = []
+    this.scene.hud.clearHints?.()
+    this.scene.hud.say('', 0)
     this.running = true
     this.timeScale = 1
     app.setMode('watch')
