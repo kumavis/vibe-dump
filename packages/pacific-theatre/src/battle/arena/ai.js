@@ -531,7 +531,7 @@ export function airControl(ar, i, dt) {
   }
   // the arena's edge turns any aircraft back that is not on its run
   const rc = Math.hypot(b.x - ar.centre.x, b.z - ar.centre.z)
-  const onRun = m.kind === 'strike' && (m.phase === 'dive' || m.phase === 'run')
+  const onRun = m.kind === 'strike' && (m.phase === 'dive' || m.phase === 'run') && (m.runR ?? 0) < 1600 // (a run gone wide is not a run)
   if (rc > ar.R + A.airEdgeM && !onRun) {
     gx = ar.centre.x
     gz = ar.centre.z
@@ -550,6 +550,7 @@ function strikeControl(ar, i, x, m, dt) {
   const tvx = s.vel[3 * ti]
   const tvz = s.vel[3 * ti + 2]
   const R = Math.hypot(tx - b.x, tz - b.z)
+  m.runR = R
   const torpedo = x.ammo?.torpedoes > 0
   const out = { x: tx, y: A.strike.approachAltM, z: tz, throttle: 0.95, maxDive: null }
   // (aircraft of a wave fan out a little so they do not fly as one)
@@ -568,16 +569,26 @@ function strikeControl(ar, i, x, m, dt) {
   if (torpedo) {
     if (m.phase === 'approach' && R < 3200) m.phase = 'descend'
     if (m.phase === 'descend' && R < A.strike.torpedoRunM + 350) m.phase = 'run'
+    // a run that has gone wide (the intercept led it past a target running away) rounds to the beam again
+    if (m.phase === 'run' && R > A.strike.torpedoRunM + 700) m.phase = 'descend'
     if (m.phase === 'approach') {
       out.x = tx + tvx * 40 + Math.cos(x.k) * fan
       out.z = tz + tvz * 40 + Math.sin(x.k) * fan
       out.y = 300
     } else if (m.phase === 'descend') {
       // round to the target's beam, low
-      const side = (x.k % 2 ? 1 : -1) * 70
-      const brg = (s.heading[ti] + side + 360) % 360
-      out.x = tx + tvx * 30 + Math.sin(brg * DEG) * (A.strike.torpedoRunM + 200)
-      out.z = tz + tvz * 30 - Math.cos(brg * DEG) * (A.strike.torpedoRunM + 200)
+      // (the beam on the arena's side when the other lies beyond its edge)
+      const beam = (sd) => {
+        const brg = (s.heading[ti] + sd * 70 + 360) % 360
+        return [tx + tvx * 30 + Math.sin(brg * DEG) * (A.strike.torpedoRunM + 200), tz + tvz * 30 - Math.cos(brg * DEG) * (A.strike.torpedoRunM + 200)]
+      }
+      let p = beam(x.k % 2 ? 1 : -1)
+      if (Math.hypot(p[0] - ar.centre.x, p[1] - ar.centre.z) > ar.R) {
+        const q = beam(x.k % 2 ? -1 : 1)
+        if (Math.hypot(q[0] - ar.centre.x, q[1] - ar.centre.z) < Math.hypot(p[0] - ar.centre.x, p[1] - ar.centre.z)) p = q
+      }
+      out.x = p[0]
+      out.z = p[1]
       out.y = R < 2200 ? A.strike.torpedoAltM : 150
     } else {
       const ic = torpedoIntercept(ar, b.x, b.z, ti, torpedoSpeed(x.model.torpedo))
