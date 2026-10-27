@@ -116,7 +116,17 @@ the commit, and add whatever the work turned up.
   `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
   set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
-  P-peers' `--only scale`). A step
+  P-peers' `--only scale`), and from F9a P-riders in P-prop (§4.2.5's
+  invariants at every decision and trace line, riders hidden from every
+  spatial rule, each bail-out as it is emitted, the autoload, its scenes;
+  P-pilot's rider mask; P-army's hull deployment at the caps), P-present's
+  `aboard` and War-Cart battles (present-check `--only riders`), data-check's
+  section 13, merge-sim's `vehicles`, macro-check's riders, play-report's
+  F9a row (riders disembark in ≥ 50% of the `vehicle/` AI pairs), and the
+  `vehicle/` set in every check that reads the corpus (parity's 80
+  battles); and in Chromium input-check's carts page, snap-check's cart row
+  (and the bail-out log among its defaults), play-check's `cart` lane and
+  rematch-memory's `--carts`. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1025,6 +1035,10 @@ follows N3.
   seeds; lists that vary the heroes). Until then army-sim reports Grand
   and judges Skirmish and Field. Playtest first. (DESIGN's F8b notes, the
   review.)
+  (F9a: the War-Cart, one model and one unit, filled the Bushtails'
+  spare slots at Grand, 60.6% and 67.0% on seed 1111 at its Field price;
+  the Grand list prices it 150, which binds their points again: 47.2% on
+  open, 57.2% fortified. Fortified Grand is the larger gap now.)
 - [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
   what it built and checked; these gates of its row in DESIGN §4 (the
   migration table) are not done, and stay open here until they are
@@ -1033,12 +1047,48 @@ follows N3.
   pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
   minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
   merge).
-- [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
+- [x] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
+  (C1; `CORE_VERSION` 9, F7b's 8 beside it; the 70 recorded battles
+  byte-identical, `stateHash` as before for a match with no rider. The
+  `Vehicle` role and slot (0 / 2 / 2), the `transport` record, the
+  `vehicle` flag (`climb` derived without it); `u.aboard`, `flags.rode`,
+  `moveUnitTo`; riders off every spatial rule; `embark` and `disembark`
+  (`k` a list), `landing`, the autoload, the wreck and the bail-out (the
+  step's only new draws); the AI's transports, its riders stepping off to
+  shoot (no firing slot before F9c: kept aboard, the cart fitted about 0);
+  the War-Cart at 40, fitted at Field and judged on 4444 (58 ± 12; the
+  score 48.3% open, 52.9% fortified, every unit in its band), and at
+  Grand 150 by its list's `prices` (at 40 the carts filled the slots the
+  Bushtails' points left over: 60.6% and 67.0%; at 150 47.2% and 57.2%,
+  every unit inside its band; Grand still reported, not judged). The cart's
+  figure, deck slots at 0.8 (`present/deck.js`), pips, the label's rider
+  chips, the strategic chip's dots, the card, the embark and disembark
+  tools, R, the box and the group Move ("riders ride along"), a rider's
+  "with the hull", the wreck. P-riders, P-pilot's rider mask, P-army's
+  hull deployment at the caps, P-present's `aboard`, data-check's section
+  13, flag-lint's one-reader rows, boundaries, merge-sim's `vehicles`,
+  macro-check's riders, input-check's carts page, snap-check's cart row,
+  play-check's cart lane, rematch-memory's `--carts`, play-report's F9a
+  row; the `vehicle/` corpus, 6 AI pairs and 4 human-bot logs, in C2, the
+  corpus 80 battles. DESIGN's F9a notes.)
 - [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
+  F9a left it: `core/actions/transport.js` measures a round hull from its
+  centre (`embarkSpot`'s `v.r + u.r + 1"`, `landing`'s reach from `v.pos`
+  and its `v.r + u.r + 3"`): `clearOf` and the head and tail cells go
+  there; `present/deck.js` already takes `deckAt` and several deck discs;
+  the AI's transport branch (`aiTransport`) is shape-free but for the
+  hull's move; `fireSlots` (0 until F9c); `smashAround` unbinned; `hull/`
+  joins `LOG_SETS` as `vehicle` did.
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
+  F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
+  AI steps every rider with a gun off once an enemy is in its reach; F9c
+  makes it the record's `fire`, lets `canShoot` take a rider (the hull's
+  slots), and re-fits the War-Cart (its 40 and Grand's 150 are prices for
+  riders who must step off to shoot); the card's "firing decks come
+  later" and the label's chips are where the deck's fire shows.
 - [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop), each priced for the army builder against the other races, with
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
