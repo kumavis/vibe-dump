@@ -1,21 +1,24 @@
 #!/usr/bin/env node
 // The wargame's fixture (ROUND-3.md §8, engine-3): a scenario on the test box
-// in §6's schema, written to test-data/wargames/test-box.json, so the arena
-// (src/battle/arena/) is built and tested before content-3's real scenarios
-// land. Two small forces: a carrier, a battleship, two destroyers and twelve
-// aircraft a side. Plainly test data, nothing here is history. Idempotent:
-// run it after fake-data.mjs and fake-battle.mjs, as often as you like.
+// in §6's schema, with the fields content-3's scenarios add (research/
+// content-3.md §2: separationM, headingDeg, formation, firstStation, airborne,
+// maxAirborne, the profiles, waveSize, goal weapon/by/types, a reach `by`),
+// written to test-data/wargames/test-box.json, so the arena (src/battle/
+// arena/) is built and tested before content-3's real scenarios land, and
+// tools/check/wargames.mjs holds it as it holds theirs. Two small forces made
+// of the test box's own units: a carrier, two battleships and a destroyer a
+// side, and fourteen aircraft (Japan) or twelve. Plainly test data, nothing here is
+// history. Idempotent: run it after fake-data.mjs and fake-battle.mjs, as
+// often as you like (tools/smoke-arena.mjs runs it each time).
 //
 //   node tools/fake-wargame.mjs [--dir test-data]
 //
-// Beside the scenario it adds, to the fixture (test data, gitignored):
-//   - a second destroyer a side to the test box's battle.json (test-dd-a2,
-//     test-dd-b2: the box had one a side), on a short track of their own
-//     beside their force, with no events, so the record's box replays as
-//     before;
-//   - the real FM-2, TBM-1C, A6M5 and D3A1 kits copied into the fixture's
-//     kits (the fixture's own aircraft kits have no Japanese strike aircraft
-//     and no Wildcat), so the fixture's air fight is flown by real aircraft.
+// Beside the scenario it copies the real FM-2, TBM-1C, SBD-3, A6M5, D3A1 and
+// B5N2 kits into the fixture's kits (test data, gitignored: the fixture's own
+// aircraft kits have no Japanese strike aircraft and no Wildcat), so the
+// fixture's air fight is flown by real aircraft. The box's battle file is
+// left as fake-battle.mjs wrote it (an earlier version of this script added
+// two destroyers to it; they are taken out again).
 // The arena's centre is the open water of the test box nearest its middle
 // with no land within 5 km.
 
@@ -35,36 +38,26 @@ if (!fs.existsSync(file)) {
   process.exit(1)
 }
 const J = (p) => JSON.parse(fs.readFileSync(p, 'utf8'))
-const battle = J(file)
 const src = [{ id: 'test-source-a', where: 'p. 1' }]
 
-// --- a second destroyer a side ---------------------------------------------------------------------------
-const twin = (id, of, dLon) => {
-  const base = battle.units.find((u) => u.id === of)
-  if (!base) throw new Error(`the fixture has no ${of}`)
-  battle.units = battle.units.filter((u) => u.id !== id)
-  const f0 = base.track?.[0] || battle.units.find((u) => u.side === base.side && u.track?.length)?.track[0]
-  battle.units.push({
-    id,
-    kit: base.kit,
-    side: base.side,
-    name: `${base.name} (second)`,
-    ...(base.ja ? { ja: `${base.ja}二` } : {}),
-    track: [{ t: f0?.t ?? '04:00', lonlat: [+(f0.lonlat[0] + dLon).toFixed(4), f0.lonlat[1]], courseDeg: f0.courseDeg ?? 90, speedKn: f0.speedKn ?? 20, precision: 'schematic', source: 'test-source-a' }],
-    events: [],
-  })
+// --- the battle file as fake-battle.mjs wrote it (the earlier version's two extra destroyers out) ------------------------
+const battle = J(file)
+const extra = ['test-dd-a2', 'test-dd-b2']
+if (battle.units.some((u) => extra.includes(u.id))) {
+  battle.units = battle.units.filter((u) => !extra.includes(u.id))
+  fs.writeFileSync(file, JSON.stringify(battle, null, 1))
 }
-twin('test-dd-a2', 'test-dd-a', 0.02)
-twin('test-dd-b2', 'test-dd-b', -0.02)
-fs.writeFileSync(file, JSON.stringify(battle, null, 1))
+const ships = { jp: ['test-cv-a', 'test-bb-a', 'test-night-bb-jp', 'test-dd-a'], us: ['test-cv-b', 'test-bb-b', 'test-night-bb-us', 'test-dd-b'] }
+for (const id of [...ships.jp, ...ships.us]) if (!battle.units.some((u) => u.id === id)) throw new Error(`the fixture's battle file has no ${id}: run node tools/fake-battle.mjs`)
 
 // --- the real aircraft kits the fixture's air fight flies --------------------------------------------------------
 const kitsFile = path.join(dir, 'kits/aircraft.json')
 const fixtureKits = J(kitsFile)
 const realKits = J(path.join(pkg, 'public/data/kits/aircraft.json'))
 const list = Array.isArray(fixtureKits) ? fixtureKits : fixtureKits.aircraft
-for (const id of ['fm-2', 'tbm-1c', 'a6m5', 'd3a1']) {
-  const k = realKits.find((x) => x.id === id)
+const KITS = ['fm-2', 'tbm-1c', 'sbd-3', 'a6m5', 'd3a1', 'b5n2']
+for (const id of KITS) {
+  const k = (Array.isArray(realKits) ? realKits : realKits.aircraft).find((x) => x.id === id)
   if (!k) throw new Error(`public/data/kits/aircraft.json has no ${id}`)
   const at = list.findIndex((x) => x.id === id)
   if (at >= 0) list[at] = k
@@ -100,54 +93,83 @@ for (let r = 0; r <= 60000 && !centre; r += 2500) {
 }
 if (!centre) throw new Error('no open water in the test box for the arena')
 
-// --- the scenario (§6's schema) ---------------------------------------------------------------------------------------------
+// --- the scenario (§6's schema with content-3's fields) ---------------------------------------------------------------------
+// The two sides are built nearly alike (each its carrier's sinking for a goal) so the balance band is a test of the arena
+// and its admirals, not of the forces: the American side flies an Avenger and a Dauntless fewer and one Avenger up at
+// the start against two Kates (the TBM-1C's torpedo sank the Japanese carrier in four games of five otherwise); the
+// admirals' numbers are what tools/smoke-arena.mjs's band was tuned with (research/engine-3.md §8).
+const ADMIRAL = { aggression: 0.6, turnAwayAt: 0.5, launchEveryS: 70, waveGrowth: 0.3, waveSize: 3 }
 const scenario = {
   id: 'test-box',
   box: 'test-box',
   title: 'Test: the fixture as a wargame',
-  label: 'Test: a wargame played with the fixture’s forces. The record is on the other side of the table.',
-  arena: { centre: [+centre[0].toFixed(4), +centre[1].toFixed(4)], radiusM: 3000 },
+  label: 'A wargame played with the real forces. The record is on the other side of the table.',
+  arena: { centre: [+centre[0].toFixed(4), +centre[1].toFixed(4)], radiusM: 3000, separationM: 5000, note: 'Test: open water nearest the test box’s middle.' },
   durationS: 600,
   sides: {
     japan: {
+      side: 'jp',
       name: 'Test Force A',
       first: 'test-bb-a',
+      firstStation: 'main',
       bearingDeg: 345,
+      headingDeg: 150,
       guide: 'test-cv-a',
       screenM: 1100,
-      ships: ['test-cv-a', 'test-bb-a', 'test-dd-a', 'test-dd-a2'],
+      ships: ships.jp,
+      formation: {
+        kind: 'columns',
+        intervalM: 450,
+        columns: [
+          { ships: ['test-bb-a', 'test-cv-a'], atM: [0, 450] },
+          { ships: ['test-night-bb-jp'], atM: [700, -200] },
+          { ships: ['test-dd-a'], atM: [-700, 400] },
+        ],
+      },
       aircraft: [
-        { carrier: 'test-cv-a', kit: 'a6m5', count: 6, profile: 'cap' },
-        { carrier: 'test-cv-a', kit: 'd3a1', count: 6, profile: 'dive' },
+        { carrier: 'test-cv-a', kit: 'a6m5', count: 4, profile: 'cap', airborne: 2 },
+        { carrier: 'test-cv-a', kit: 'a6m5', count: 2, profile: 'escort', airborne: 0 },
+        { carrier: 'test-cv-a', kit: 'd3a1', count: 4, profile: 'dive', airborne: 0 },
+        { carrier: 'test-cv-a', kit: 'b5n2', count: 4, profile: 'torpedo', airborne: 2 },
       ],
-      goal: { kind: 'sink', type: 'cv', count: 1, text: 'Test: sink the American carrier before 10:00.' },
+      maxAirborne: 12,
+      goal: { kind: 'sink', type: 'cv', count: 1, text: 'Test: sink the other carrier before 10:00.' },
       phases: [
-        { t: 0, title: 'Test: open fire', goal: { kind: 'hit', type: 'ship', count: 3, withinS: 90 }, text: 'Test: the battleship has the range: three hits on any ship.' },
-        { t: 120, title: 'Test: the strike', goal: { kind: 'hit', type: 'cv', count: 1, withinS: 120 }, text: 'Test: the dive bombers go in: a hit on the carrier.' },
-        { t: 300, title: 'Test: the destroyers go in', goal: { kind: 'hit', type: 'bb', count: 1, withinS: 120 }, text: 'Test: put a torpedo into the battleship.' },
-        { t: 450, title: 'Test: finish it', goal: { kind: 'sink', type: 'ship', count: 1, withinS: 150 }, text: 'Test: sink a ship before the clock runs out.' },
+        { t: 0, title: 'Test: open fire', goal: { kind: 'hit', type: 'ship', count: 2, withinS: 90, weapon: 'shell' }, text: 'Test: the battleships have the range: two shells into any ship.' },
+        { t: 100, title: 'Test: the first strike', goal: { kind: 'hit', type: 'cv', count: 1, withinS: 100, by: 'aircraft' }, text: 'Test: the dive bombers go in: a hit on the carrier.' },
+        { t: 210, title: 'Test: the destroyer goes in', goal: { kind: 'reach', type: 'bb', count: 1, withinS: 120, rangeM: 2500, by: 'dd' }, text: 'Test: bring the destroyer within 2,500 m of a battleship.' },
+        { t: 340, title: 'Test: break up their strike', goal: { kind: 'shoot-down', type: 'aircraft', count: 3, withinS: 110 }, text: 'Test: shoot down three of their aircraft.' },
+        { t: 460, title: 'Test: finish it', goal: { kind: 'hit', type: 'bb', types: ['bb', 'cv'], count: 2, withinS: 130 }, text: 'Test: two more hits on a battleship or the carrier.' },
       ],
-      admiral: { aggression: 0.65, turnAwayAt: 0.45, launchEveryS: 80, waveGrowth: 0.3 },
+      admiral: { ...ADMIRAL, aggression: 0.65 },
     },
     usa: {
+      side: 'us',
       name: 'Test Force B',
-      first: 'test-dd-b',
+      first: 'tbm-1c',
+      firstStation: 'pilot',
       bearingDeg: 165,
+      headingDeg: 330,
       guide: 'test-cv-b',
-      screenM: 1200,
-      ships: ['test-cv-b', 'test-bb-b', 'test-dd-b', 'test-dd-b2'],
+      screenM: 1100,
+      ships: ships.us,
+      formation: { kind: 'circle', acrossM: 900, ring: ['test-bb-b', 'test-night-bb-us'], screen: ['test-dd-b'] },
       aircraft: [
-        { carrier: 'test-cv-b', kit: 'fm-2', count: 6, profile: 'cap' },
-        { carrier: 'test-cv-b', kit: 'tbm-1c', count: 6, profile: 'torpedo' },
+        { carrier: 'test-cv-b', kit: 'fm-2', count: 4, profile: 'cap', airborne: 2 },
+        { carrier: 'test-cv-b', kit: 'fm-2', count: 2, profile: 'strafe', airborne: 0 },
+        { carrier: 'test-cv-b', kit: 'tbm-1c', count: 3, profile: 'torpedo', airborne: 1 },
+        { carrier: 'test-cv-b', kit: 'sbd-3', count: 3, profile: 'dive', airborne: 0 },
       ],
-      goal: { kind: 'survive', type: 'cv', count: 1, text: 'Test: keep the carrier afloat until 10:00.' },
+      maxAirborne: 12,
+      goal: { kind: 'sink', type: 'cv', count: 1, text: 'Test: sink the other carrier before 10:00.' },
       phases: [
-        { t: 0, title: 'Test: break up the strike', goal: { kind: 'shoot-down', type: 'aircraft', count: 2, withinS: 120 }, text: 'Test: shoot down two of the dive bombers.' },
-        { t: 150, title: 'Test: the torpedo planes go in', goal: { kind: 'hit', type: 'ship', count: 2, withinS: 120 }, text: 'Test: two hits on their ships.' },
-        { t: 330, title: 'Test: the destroyers go in', goal: { kind: 'reach', type: 'dd', count: 1, rangeM: 2500, withinS: 120 }, text: 'Test: a destroyer within 2,500 m of their ships.' },
-        { t: 480, title: 'Test: hold on', goal: { kind: 'survive', type: 'cv', count: 1, withinS: 120 }, text: 'Test: the carrier afloat to the end.' },
+        { t: 0, title: 'Test: the torpedo planes go in', goal: { kind: 'hit', type: 'ship', count: 1, withinS: 100, weapon: 'torpedo', by: 'aircraft' }, text: 'Test: put a torpedo into any ship.' },
+        { t: 110, title: 'Test: hold on', goal: { kind: 'survive', type: 'cv', count: 1, withinS: 90 }, text: 'Test: keep the carrier afloat.' },
+        { t: 210, title: 'Test: the battleships’ duel', goal: { kind: 'hit', type: 'bb', count: 2, withinS: 120, weapon: 'shell', by: 'bb' }, text: 'Test: two battleship shells into a battleship.' },
+        { t: 340, title: 'Test: break up their strike', goal: { kind: 'shoot-down', type: 'aircraft', count: 3, withinS: 110 }, text: 'Test: shoot down three of their aircraft.' },
+        { t: 460, title: 'Test: the last strike', goal: { kind: 'hit', type: 'cv', count: 2, withinS: 130 }, text: 'Test: two more hits on the carrier.' },
       ],
-      admiral: { aggression: 0.5, turnAwayAt: 0.4, launchEveryS: 75, waveGrowth: 0.3 },
+      admiral: { ...ADMIRAL },
     },
   },
   footnote: 'Test: the fixture has no record; its battle is made up.',
@@ -155,4 +177,4 @@ const scenario = {
 }
 fs.mkdirSync(path.join(dir, 'wargames'), { recursive: true })
 fs.writeFileSync(path.join(dir, 'wargames/test-box.json'), JSON.stringify(scenario, null, 1))
-console.log(`fake-wargame: test-data/wargames/test-box.json written (the arena at ${scenario.arena.centre.join(', ')}); test-dd-a2 and test-dd-b2 added to the test box; fm-2, tbm-1c, a6m5, d3a1 copied into the fixture's kits`)
+console.log(`fake-wargame: test-data/wargames/test-box.json written (the arena at ${scenario.arena.centre.join(', ')}); ${KITS.join(', ')} copied into the fixture's kits`)
