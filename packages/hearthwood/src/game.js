@@ -186,7 +186,8 @@ export function setupStart(ctx) {
     // Head start for the opening shot: full output buffers mean the very first scheduler pass
     // sends couriers lodge -> sawmill (pull) AND lodge/sawmill -> Hearth (push of surplus),
     // so the first second already shows goods flowing both ways.
-    if (id >= 0 && s.type === B_LUMBER_LODGE) addItems(ctx, id, I_WOOD, 20, false)
+    // (half full, not full: a full buffer shows an 'output full' badge on the very first frame)
+    if (id >= 0 && s.type === B_LUMBER_LODGE) addItems(ctx, id, I_WOOD, 10, false)
     if (id >= 0 && s.type === B_SAWMILL) addItems(ctx, id, I_PLANK, 15, false)
   }
   for (const e of START.stock) addItems(ctx, hearth, e.item, e.qty, false)

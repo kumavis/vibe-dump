@@ -14,16 +14,16 @@
 
 import {
   MAX_UNITS, UNIT_CELL_SHIFT, TRAIN_QUEUE, BUILDING_COUNT,
-  U_COURIER, U_TREANT, UNIT_COUNT, F_PLAYER, F_BLIGHT,
+  U_COURIER, U_TREANT, UNIT_COUNT, F_PLAYER, F_BLIGHT, B_HEARTH, FX_ARROW,
   M_IDLE, M_WAIT_PATH, M_MOVING, M_ARRIVED, M_FAILED,
   O_NONE, O_MOVE, O_ATTACK_MOVE, O_ATTACK, O_HOLD, O_RAID,
   TK_NONE, TK_UNIT, TK_BUILDING,
   BF_TOWER, BF_HALL, BS_OK, BS_IDLE, BS_PAUSED,
   RETARGET_INTERVAL, CHASE_REPATH_TICKS,
-  EV_UNIT_TRAINED, EV_CANNOT_AFFORD,
+  EV_UNIT_TRAINED, EV_CANNOT_AFFORD, EV_BUILDING_ATTACKED, EV_COURIERS_LOST, TICK_RATE,
 } from './constants.js'
 import {
-  BUILDINGS, UNITS, B_FLAGS, U_ATTACK, U_RANGE, U_COOLDOWN, U_SIGHT, U_VS_BUILDING, U_FX,
+  BUILDINGS, UNITS, B_FLAGS, U_ATTACK, U_RANGE, U_COOLDOWN, U_SIGHT, U_VS_BUILDING, U_FX, U_SPEED,
 } from './content.js'
 import { CellGrid } from './world.js'
 import { spawnUnit, despawnUnit, orderMove, stopUnit } from './units.js'
@@ -108,8 +108,19 @@ export function createCombat(ctx) {
     blightGrid: new CellGrid(w, h, UNIT_CELL_SHIFT, cap),
     /** sort buffer for commandGroup */
     _group: new Int32Array(256),
+    // alerts: EV_BUILDING_ATTACKED at most once per ALERT_CHUNK_TICKS per chunk and once per
+    // ALERT_GAP_TICKS overall; courier deaths are summed into one EV_COURIERS_LOST per LOST_TICKS
+    alertAt: new Int32Array(ctx.world ? ctx.world.chunkCount : 64),
+    alertNext: 0,
+    lostCount: 0,
+    lostTile: -1,
+    lostNext: 0,
   }
 }
+
+const ALERT_CHUNK_TICKS = 15 * TICK_RATE
+const ALERT_GAP_TICKS = 3 * TICK_RATE
+const LOST_TICKS = 10 * TICK_RATE
 
 // ------------------------------------------------------------------ small helpers
 
@@ -304,8 +315,10 @@ export function damageUnit(ctx, id, amount) {
   const hp = u.hp[id] - amount
   u.hp[id] = hp
   if (hp > 0) return false
-  despawnUnit(ctx, id, true)
+  const courier = u.type[id] === U_COURIER
   const C = ctx.combat
+  if (C && courier) { C.lostCount++; C.lostTile = unitTileOf(ctx, id) }
+  despawnUnit(ctx, id, true)
   if (C) { C.stats.kills++; C.totals.kills++ }
   return true
 }
@@ -319,7 +332,19 @@ export function damageBuilding(ctx, b, amount) {
   if (!(b >= 0 && b < B.capacity && B.alive[b] === 1)) return false
   const hp = B.hp[b] - amount
   B.hp[b] = hp
-  if (hp > 0) return false
+  if (hp > 0) {
+    const C = ctx.combat
+    const tick = ctx.tick
+    if (C && tick >= C.alertNext) {
+      const ch = B.chunk[b]
+      if (ch >= 0 && ch < C.alertAt.length && tick >= C.alertAt[ch]) {
+        C.alertAt[ch] = tick + ALERT_CHUNK_TICKS
+        C.alertNext = tick + ALERT_GAP_TICKS
+        ctx.events.emit(EV_BUILDING_ATTACKED, B.type[b], B.door[b], tick)
+      }
+    }
+    return false
+  }
   destroyBuilding(ctx, b, 0, true)
   const C = ctx.combat
   if (C) { C.stats.buildingKills++; C.totals.buildingKills++ }
@@ -401,43 +426,65 @@ function tickHalls(ctx) {
 
 // ------------------------------------------------------------------ searches
 
-// nearestUnitIn scan state (module scratch; never held across calls)
-let _best = -1, _bestD2 = 0, _seen = 0, _stop = false
+// nearestUnitIn query + scan state (module scratch; never held across calls). Typed slots
+// rather than module `let`s or double arguments: a double written to a script-context slot
+// or passed to a non-inlined call is boxed into a fresh HeapNumber every time.
+//   _SF: [0] bestD2, [1] reach2 (always-acceptable distance^2), [2] qx, [3] qy, [4] maxR
+//   _SI: [0] best, [1] seen, [2] stop, [3] fromTile (-1 = no reachability filter)
+const _SF = new Float64Array(5)
+const _SI = new Int32Array(4)
 
-/** Scan grid.items[a, b) for the nearest unit of `faction`; sets _stop once a crowd shortcut applies. */
-function scanSpan(items, a, b, alive, fac, X, Y, x, y, faction, self) {
+/** Set the next nearestUnitIn query. fromTile >= 0 skips candidates farther than sqrt(reach2)
+ * that stand in another walk region (across water or a cliff): they can be seen, not reached. */
+function unitQuery(x, y, maxR, fromTile, reach) {
+  _SF[2] = x; _SF[3] = y; _SF[4] = maxR; _SF[1] = reach * reach
+  _SI[3] = fromTile
+}
+
+/** Scan grid.items[a, b) for the nearest unit of `faction`; sets _SI[2] once a crowd shortcut applies. */
+function scanSpan(ctx, items, a, b, alive, fac, X, Y, faction, self) {
+  const SF = _SF, SI = _SI
+  const x = SF[2], y = SF[3], from = SI[3]
   for (let q = a; q < b; q++) {
     const j = items[q]
     if (j === self || alive[j] === 0 || fac[j] !== faction) continue
     const dx = X[j] - x, dy = Y[j] - y
     const d2 = dx * dx + dy * dy
-    if (d2 < _bestD2 || (d2 === _bestD2 && (_best < 0 || j < _best))) { _best = j; _bestD2 = d2 }
+    const bd2 = SF[0], best = SI[0]
+    if ((d2 < bd2 || (d2 === bd2 && (best < 0 || j < best))) &&
+      (from < 0 || d2 <= SF[1] || ctx.path.sameRegion(unitTileOf(ctx, j), from))) {
+      SI[0] = j; SF[0] = d2
+    }
     // crowds (a courier pile): any prey within a tile will do; past CROWD_CAP candidates
     // the best so far will; past CROWD_GIVEUP with nothing in range, give up for this scan
-    if (++_seen >= CROWD_SCAN && (_bestD2 <= NEAR_ENOUGH2 || (_best >= 0 ? _seen >= CROWD_CAP : _seen >= CROWD_GIVEUP))) {
-      _stop = true
+    const seen = SI[1] + 1
+    SI[1] = seen
+    if (seen >= CROWD_SCAN && (SF[0] <= NEAR_ENOUGH2 || (SI[0] >= 0 ? seen >= CROWD_CAP : seen >= CROWD_GIVEUP))) {
+      SI[2] = 1
       return
     }
   }
 }
 
 /**
- * Nearest alive unit of `faction` in `grid` within maxR of (x,y), excluding `self`.
- * Ring search reading the grid's cell spans in place (a cell can hold thousands of
- * couriers), skipping cells whose rect is farther than the best so far, with early exit.
- * Ties -> lower id. In a crowd it settles early (see scanSpan), so the result is "a near
- * one" rather than the exact nearest once more than CROWD_SCAN candidates were examined.
+ * Nearest alive unit of `faction` in `grid` within maxR of (x,y) (all set by unitQuery),
+ * excluding `self`. Ring search reading the grid's cell spans in place (a cell can hold
+ * thousands of couriers), skipping cells whose rect is farther than the best so far, with
+ * early exit. Ties -> lower id. In a crowd it settles early (see scanSpan), so the result is
+ * "a near one" rather than the exact nearest once more than CROWD_SCAN candidates were examined.
  */
-function nearestUnitIn(ctx, grid, x, y, maxR, faction, self) {
+function nearestUnitIn(ctx, grid, faction, self) {
   const u = ctx.units
   const alive = u.alive, fac = u.faction, X = u.x, Y = u.y
+  const SF = _SF, SI = _SI
+  const x = SF[2], y = SF[3], maxR = SF[4]
   const cs = grid.cellSize, cw = grid.cw, ch = grid.ch
   const start = grid.cellStart, items = grid.items
   const cx = grid.cellX(x), cy = grid.cellY(y)
   const maxRing = ((maxR / cs) | 0) + 1
-  _best = -1; _bestD2 = maxR * maxR; _seen = 0; _stop = false
+  SI[0] = -1; SF[0] = maxR * maxR; SI[1] = 0; SI[2] = 0
   for (let r = 0; r <= maxRing; r++) {
-    if (_best >= 0) { const lim = (r - 1) * cs; if (lim > 0 && lim * lim > _bestD2) break }
+    if (SI[0] >= 0) { const lim = (r - 1) * cs; if (lim > 0 && lim * lim > SF[0]) break }
     for (let yy = cy - r; yy <= cy + r; yy++) {
       if (yy < 0 || yy >= ch) continue
       const edge = yy === cy - r || yy === cy + r
@@ -448,14 +495,14 @@ function nearestUnitIn(ctx, grid, x, y, maxR, faction, self) {
         if (xx < 0 || xx >= cw) continue
         const rx0 = xx * cs, rx1 = rx0 + cs
         const ddx = x < rx0 ? rx0 - x : x > rx1 ? x - rx1 : 0
-        if (ddx * ddx + ddy * ddy > _bestD2) continue // whole cell out of range / farther than best
+        if (ddx * ddx + ddy * ddy > SF[0]) continue // whole cell out of range / farther than best
         const c = yy * cw + xx
-        scanSpan(items, start[c], start[c + 1], alive, fac, X, Y, x, y, faction, self)
-        if (_stop) return _best
+        scanSpan(ctx, items, start[c], start[c + 1], alive, fac, X, Y, faction, self)
+        if (SI[2] !== 0) return SI[0]
       }
     }
   }
-  return _best
+  return SI[0]
 }
 
 /**
@@ -502,46 +549,57 @@ function rectD2(B, b, x, y) {
 
 // ------------------------------------------------------------------ per tick
 
-function tickTowers(ctx, haveBlight) {
+/**
+ * The Hearth's own ward: a weak bolt so a slow first-timer is not wiped by wave 1 before the
+ * hints reach Ward Towers. Kills a crawler in ~4 s, far short of a real defence.
+ */
+export const HEARTH_WARD = Object.freeze({ range: 5, attack: 8, cooldown: 20, fx: FX_ARROW })
+
+/** One stationary shooter (tower or Hearth ward) for one tick: retarget, fire on cooldown. */
+function shooterStep(ctx, b, range, attack, cd, fxk, haveBlight) {
   const B = ctx.buildings
   const u = ctx.units
   const C = ctx.combat
-  const grid = C.blightGrid
   const tick = ctx.tick
-  const fx = ctx.fx
+  if (B.cooldown[b] > 0) B.cooldown[b]--
+  if (!haveBlight) { B.target[b] = -1; return }
+  const cx = B.tx[b] + B.w[b] * 0.5, cy = B.ty[b] + B.h[b] * 0.5
+  let t = B.target[b]
+  if (t >= 0) {
+    if (!u.isAlive(t, B.targetGen[b])) t = -1
+    else {
+      const dx = u.x[t] - cx, dy = u.y[t] - cy
+      if (dx * dx + dy * dy > range * range) t = -1
+    }
+  }
+  if (t < 0 || (tick + b) % RETARGET_INTERVAL === 0) {
+    unitQuery(cx, cy, range, -1, 0)
+    const n = nearestUnitIn(ctx, C.blightGrid, F_BLIGHT, -1)
+    if (n >= 0) t = n
+  }
+  if (t < 0) { B.target[b] = -1; return }
+  B.target[b] = t
+  B.targetGen[b] = u.gen[t]
+  if (B.cooldown[b] === 0) {
+    ctx.fx.emit(fxk, cx, cy - 0.4, u.x[t], u.y[t], tick)
+    B.cooldown[b] = cd
+    C.stats.shots++; C.totals.shots++
+    if (damageUnit(ctx, t, attack)) B.target[b] = -1
+  }
+}
+
+function tickTowers(ctx, haveBlight) {
+  const B = ctx.buildings
   for (let h = 0; h < TOWER_TYPES.length; h++) {
     const bt = TOWER_TYPES[h]
     const list = B.typeList[bt]
     const cnt = B.typeCount[bt]
-    const range = TW_RANGE[bt], r2 = range * range
-    for (let k = 0; k < cnt; k++) {
-      const b = list[k]
-      if (B.cooldown[b] > 0) B.cooldown[b]--
-      if (!haveBlight) { B.target[b] = -1; continue }
-      const cx = B.tx[b] + B.w[b] * 0.5, cy = B.ty[b] + B.h[b] * 0.5
-      let t = B.target[b]
-      if (t >= 0) {
-        if (!u.isAlive(t, B.targetGen[b])) t = -1
-        else {
-          const dx = u.x[t] - cx, dy = u.y[t] - cy
-          if (dx * dx + dy * dy > r2) t = -1
-        }
-      }
-      if (t < 0 || (tick + b) % RETARGET_INTERVAL === 0) {
-        const n = nearestUnitIn(ctx, grid, cx, cy, range, F_BLIGHT, -1)
-        if (n >= 0) t = n
-      }
-      if (t < 0) { B.target[b] = -1; continue }
-      B.target[b] = t
-      B.targetGen[b] = u.gen[t]
-      if (B.cooldown[b] === 0) {
-        fx.emit(TW_FX[bt], cx, cy - 0.4, u.x[t], u.y[t], tick)
-        B.cooldown[b] = TW_COOLDOWN[bt]
-        C.stats.shots++; C.totals.shots++
-        if (damageUnit(ctx, t, TW_ATTACK[bt])) B.target[b] = -1
-      }
-    }
+    const range = TW_RANGE[bt], attack = TW_ATTACK[bt], cd = TW_COOLDOWN[bt], fxk = TW_FX[bt]
+    for (let k = 0; k < cnt; k++) shooterStep(ctx, list[k], range, attack, cd, fxk, haveBlight)
   }
+  const hl = B.typeList[B_HEARTH], hc = B.typeCount[B_HEARTH]
+  const W = HEARTH_WARD
+  for (let k = 0; k < hc; k++) shooterStep(ctx, hl[k], W.range, W.attack, W.cooldown, W.fx, haveBlight)
 }
 
 /** Pick a fresh target for unit i. Writes target fields; returns true if one was found. */
@@ -551,24 +609,37 @@ function acquire(ctx, i, ord, scanBuildings) {
   const radius = ord === O_HOLD ? U_RANGE[t] : U_SIGHT[t]
   if (u.faction[i] === F_PLAYER) {
     if (u.factionCount[F_BLIGHT] === 0) return false
-    const e = nearestUnitIn(ctx, ctx.combat.blightGrid, x, y, radius, F_BLIGHT, i)
+    // ranged soldiers may shoot across water at what is already in range; anything farther
+    // must be reachable, or the chase fails and the unit wedges on the bank
+    unitQuery(x, y, radius, unitTileOf(ctx, i), U_RANGE[t])
+    const e = nearestUnitIn(ctx, ctx.combat.blightGrid, F_BLIGHT, i)
     if (e < 0) return false
     u.target[i] = e; u.targetGen[i] = u.gen[e]; u.targetKind[i] = TK_UNIT
     return true
   }
-  // Blight: player units (couriers included) first, else buildings; Husks the other way round.
+  // Blight: soldiers first, then buildings, couriers only when nothing else is in sight (a wave
+  // that cut through the courier swarm left the economy dead while the towers won the fight).
+  // Husks go for buildings before soldiers. Soldiers come from sepGrid (non-couriers only), so
+  // a courier pile costs nothing here.
   const bFirst = U_VS_BUILDING[t] >= 2
+  const from = unitTileOf(ctx, i)
   if (bFirst && scanBuildings && ord !== O_HOLD) {
-    const b = nearestBuildingIn(ctx, x, y, radius, unitTileOf(ctx, i))
+    const b = nearestBuildingIn(ctx, x, y, radius, from)
     if (b >= 0) { setBuildingTarget(ctx, i, b); return true }
   }
-  if (!bFirst || scanBuildings) {
-    const e = u.factionCount[F_PLAYER] > 0 ? nearestUnitIn(ctx, ctx.unitGrid, x, y, radius, F_PLAYER, i) : -1
+  if (u.factionCount[F_PLAYER] > 0 && (!bFirst || scanBuildings)) {
+    unitQuery(x, y, radius, from, U_RANGE[t])
+    const e = nearestUnitIn(ctx, ctx.sepGrid || ctx.unitGrid, F_PLAYER, i)
     if (e >= 0) { u.target[i] = e; u.targetGen[i] = u.gen[e]; u.targetKind[i] = TK_UNIT; return true }
   }
   if (!bFirst && scanBuildings) {
-    const b = nearestBuildingIn(ctx, x, y, radius, unitTileOf(ctx, i))
+    const b = nearestBuildingIn(ctx, x, y, radius, from)
     if (b >= 0) { setBuildingTarget(ctx, i, b); return true }
+  }
+  if ((scanBuildings || ord === O_HOLD) && u.typeCount[U_COURIER] > 0) {
+    unitQuery(x, y, radius, from, U_RANGE[t])
+    const e = nearestUnitIn(ctx, ctx.unitGrid, F_PLAYER, i)
+    if (e >= 0) { u.target[i] = e; u.targetGen[i] = u.gen[e]; u.targetKind[i] = TK_UNIT; return true }
   }
   return false
 }
@@ -719,6 +790,11 @@ export function tickCombat(ctx) {
         clearTarget(u, i) // unreachable
         if (ord === O_ATTACK) { order[i] = O_NONE; orderTile[i] = -1 }
         if (ord === O_ATTACK || ord === O_NONE) stopUnit(ctx, i)
+      } else if (ms === M_ARRIVED && goal[i] === chaseTile && unitTileOf(ctx, i) === chaseTile) {
+        // standing on the chase tile but just out of reach (a crowd pushed it off the tile
+        // centre, or the prey sits in a far corner): orderMove would "arrive" again on the
+        // spot, so close the last fraction of a tile directly
+        closeIn(ctx, i, tg, kind)
       } else if (tick >= repathAt[i] || ms === M_IDLE || ms === M_ARRIVED || ms === M_FAILED) {
         if (goal[i] !== chaseTile || (ms !== M_MOVING && ms !== M_WAIT_PATH)) {
           orderMove(ctx, i, chaseTile & mask, chaseTile >> shift)
@@ -753,6 +829,37 @@ export function tickCombat(ctx) {
     }
     // O_NONE without a target keeps whatever raw orderMove a script gave it (sticky arrival)
   }
+
+  // ---- 4. courier losses, summed so a wave through the swarm is one toast, not twenty
+  if (C.lostCount > 0 && tick >= C.lostNext) {
+    ctx.events.emit(EV_COURIERS_LOST, C.lostCount, C.lostTile, tick)
+    C.lostCount = 0
+    C.lostNext = tick + LOST_TICKS
+  }
+}
+
+/** Step unit i (one tick of its speed) toward the nearest point of its target, staying on walkable tiles. */
+function closeIn(ctx, i, tg, kind) {
+  const u = ctx.units
+  const world = ctx.world
+  const x = u.x[i], y = u.y[i]
+  let px, py
+  if (kind === TK_UNIT) { px = u.x[tg]; py = u.y[tg] } else {
+    const B = ctx.buildings
+    const bx = B.tx[tg], by = B.ty[tg], ex = bx + B.w[tg], ey = by + B.h[tg]
+    px = x < bx ? bx : x > ex ? ex : x
+    py = y < by ? by : y > ey ? ey : y
+  }
+  const dx = px - x, dy = py - y
+  const d = Math.sqrt(dx * dx + dy * dy)
+  if (d < 1e-6) return
+  const sp = U_SPEED[u.type[i]]
+  const f = (sp < d ? sp : d) / d
+  const nx = x + dx * f, ny = y + dy * f
+  if (nx < 0 || ny < 0 || nx >= world.w || ny >= world.h) return
+  if (world.pass[((ny | 0) << world.shift) | (nx | 0)] !== 1) return
+  u.x[i] = nx; u.y[i] = ny
+  u.vx[i] = nx - u.px[i]; u.vy[i] = ny - u.py[i]
 }
 
 /** Stop a unit that was chasing (moving or waiting for a path); leaves arrivals alone. */

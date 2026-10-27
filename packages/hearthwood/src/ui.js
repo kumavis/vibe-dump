@@ -137,13 +137,15 @@ export function createUI(doc, game, input, overlay) {
   let capLast = ''
 
   function updateStock(ctx, heavy) {
+    const tenHz = heavy || frame % 6 === 0
     for (let i = 1; i < ITEM_COUNT; i++) {
       const v = ctx.stock[i]
       if (heavy) {
         const vis = stockVisible(ctx, i) ? 1 : 0
         if (vis !== stockVis[i]) { stockVis[i] = vis; stockEls[i].root.hidden = !vis }
       }
-      if (v !== stockLast[i]) { stockLast[i] = v; stockEls[i].num.textContent = fmtCount(v) }
+      // ~10 Hz: at scale stock changes every tick, and each text change costs a top-bar layout
+      if (tenHz && v !== stockLast[i]) { stockLast[i] = v; stockEls[i].num.textContent = fmtCount(v) }
     }
     if (heavy) {
       const B = ctx.buildings
@@ -518,7 +520,7 @@ export function createUI(doc, game, input, overlay) {
     for (let t = 1; t < UNIT_COUNT; t++) if (typeCounts[t]) summary += `<span class="slot">${unitDot(t)}<b>${typeCounts[t]}</b></span>`
     const head = `<h3>${n} selected</h3><div class="actions"><button data-act="hold" tabindex="-1">Hold <kbd>H</kbd></button><button data-act="stop" tabindex="-1">Stop <kbd>X</kbd></button></div>`
     const body = `<div class="slots">${summary}</div><div class="kv"><span>Health</span><span>${Math.round(hp / hpMax * 100)}%</span></div>${bar(hp / hpMax, 'hp')}` +
-      '<div class="dim">Right-click: move · A + click: attack-move · Ctrl+1–9: group</div>'
+      '<div class="dim">Right-click: move · A + click: attack-move · Ctrl+Shift+1–9: set group · Shift+1–9: recall</div>'
     return [head, body]
   }
 

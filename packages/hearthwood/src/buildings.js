@@ -72,7 +72,7 @@ export function recipeInputItem(type, k) { return IN_ITEMS[type * 4 + k] }
 export function offeringQty(tier, item) { return tier >= 0 && tier < TIERS.length ? OFFER_QTY[(tier << ITEM_SHIFT) | item] : 0 }
 
 /** Hearth rescue couriers: spawned free while fewer than RESCUE_MIN couriers are alive. */
-const RESCUE_MIN = 2
+const RESCUE_MIN = 4 // enough to restart a stalled economy after a wave cuts through the swarm
 const RESCUE_TICKS = 200
 const DEN_COST = BUILDINGS[B_SPRITE_DEN].courierSpawn.cost
 /** Dens hold off while more than this many couriers stand idle (and > 1/IDLE_SHARE of all). */

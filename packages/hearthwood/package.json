@@ -12,7 +12,7 @@
     "title": "Hearthwood",
     "description": "A woodland-fantasy automation RTS: grow a grove-town of lodges, sawmills and forges, let thousands of sprite couriers haul every log and ingot, and hold the line against the Blight — built to scale to thousands of buildings.",
     "tags": ["game", "simulation"],
-    "status": "wip",
+    "status": "done",
     "models": ["Opus 5.5"],
     "thinking": "high",
     "thumbnail": { "settle": 3000 }

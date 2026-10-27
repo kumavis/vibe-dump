@@ -61,11 +61,12 @@ function pullIn(ctx, tile) {
  * @property {boolean} warned     EV_WAVE_WARNING already emitted for the next wave
  * @property {boolean} enabled    false disables the director (tests, sandbox)
  * @property {number} lastSide    edge (0..3) of the last wave's first group, -1 none
+ * @property {number} lastTile    packed spawn anchor of the last wave's first group, -1 none
  */
 
 /** Must not throw (createContext calls it). @returns {WaveState} */
 export function createWaves(ctx) {
-  return { number: 0, nextTick: WAVES.firstTick, nextPoints: WAVES.basePoints, warned: false, enabled: true, lastSide: -1 }
+  return { number: 0, nextTick: WAVES.firstTick, nextPoints: WAVES.basePoints, warned: false, enabled: true, lastSide: -1, lastTile: -1 }
 }
 
 /**
@@ -107,7 +108,7 @@ export function spawnWave(ctx, points) {
   const maxUnits = WAVES.maxUnits
   const mask = world.mask, shift = world.shift
   let spawned = 0
-  let firstSide = -1
+  let firstSide = -1, firstTile = -1
   const share = Math.floor(points / groups)
   let extra = points - share * groups
 
@@ -131,7 +132,7 @@ export function spawnWave(ctx, points) {
       }
     }
     if (anchor < 0) continue
-    if (firstSide < 0) firstSide = side
+    if (firstSide < 0) { firstSide = side; firstTile = anchor }
     const ax = anchor & mask, ay = anchor >> shift
 
     // ---- buy units
@@ -165,6 +166,7 @@ export function spawnWave(ctx, points) {
 
   W.number = n
   W.lastSide = firstSide
+  W.lastTile = firstTile
   W.warned = false
   W.nextTick = ctx.tick + waveInterval(n)
   W.nextPoints = wavePoints(ctx, n + 1)

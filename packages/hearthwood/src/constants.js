@@ -241,6 +241,8 @@ export const EV_LOSE = 6 // hearth destroyed
 export const EV_UNIT_TRAINED = 7 // a = unit type, b = unit id
 export const EV_COURIER_SPAWNED = 8 // a = unit id
 export const EV_CANNOT_AFFORD = 9 // a = building or unit type (UI feedback), b = 0 building / 1 unit
+export const EV_BUILDING_ATTACKED = 10 // a = building type, b = packed door tile (throttled per chunk)
+export const EV_COURIERS_LOST = 11 // a = couriers killed since the last report, b = packed tile of the last death
 export const EV_CAPACITY = 1024 // power of two
 
 // ---------------------------------------------------------------- tile packing helpers

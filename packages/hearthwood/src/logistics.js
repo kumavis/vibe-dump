@@ -118,6 +118,9 @@ export function createLogistics(ctx) {
     sPrev: new Int32Array(maxB).fill(-1),
     sKey: new Int32Array(maxB).fill(-1),
     storageCount: 0,
+    // per storage chunk: largest freeSpaceIn of its storages, rebuilt once per tick before the
+    // push pass (an upper bound during the pass: reservations only shrink free space)
+    sChunkFree: new Int32Array(chunkCount),
     // idle couriers this tick (ascending id)
     idleList: new Int32Array(maxU),
     idleListLen: 0,
@@ -299,7 +302,7 @@ function reroute(ctx, u, exclude) {
   const item = units.cargoItem[u]
   let s = -1
   if (qty > 0 && item > 0) {
-    s = nearestStorage(ctx, unitTileOf(ctx, u), qty, exclude)
+    s = nearestStorage(ctx, unitTileOf(ctx, u), qty, exclude, null)
   }
   if (s < 0) {
     // cargo lost (job counts are recomputed by the courier pass that called us)
@@ -324,10 +327,12 @@ function reroute(ctx, u, exclude) {
 /**
  * Nearest storage (by Manhattan door distance from `fromTile`) in the same region with
  * freeSpaceIn >= need, excluding building `exclude`. Unlimited radius (whole map), rings
- * of chunks over the storage buckets. Ties -> lower id.
+ * of chunks over the storage buckets. Ties -> lower id. With `chunkFree` (L.sChunkFree, valid
+ * only inside the push pass) chunks whose best storage has less than `need` free are skipped
+ * whole, so a late game of nearly full storage does not walk every storage per visit.
  * @returns {number} building id or -1
  */
-function nearestStorage(ctx, fromTile, need, exclude) {
+function nearestStorage(ctx, fromTile, need, exclude, chunkFree) {
   const L = ctx.log
   if (L.storageCount === 0) return -1
   const world = ctx.world
@@ -347,7 +352,7 @@ function nearestStorage(ctx, fromTile, need, exclude) {
       if (yy < 0 || yy >= chh) continue
       const step = (yy === y0 || yy === y1) ? 1 : (x1 - x0)
       for (let xx = x0; xx <= x1; xx += step) {
-        if (xx >= 0 && xx < cw) {
+        if (xx >= 0 && xx < cw && (chunkFree === null || chunkFree[yy * cw + xx] >= need)) {
           for (let s = sHead[yy * cw + xx]; s >= 0; s = sNext[s]) {
             if (s === exclude) continue
             L.stats.providerScans++
@@ -526,7 +531,9 @@ export function tickLogistics(ctx) {
 
   courierPass(ctx)
   if (L.idleCount <= 0) return
-  if (pullPass(ctx)) pushPass(ctx)
+  // once per tick: per-chunk storage room (push pass) and whether storage can be refilled at all
+  const sFree = L.storageCount > 0 ? storageSummary(ctx) : 0
+  if (pullPass(ctx, sFree >= COURIER_CAP)) pushPass(ctx, sFree)
 }
 
 function courierPass(ctx) {
@@ -638,8 +645,12 @@ function courierPass(ctx) {
   L.busyCount = busy
 }
 
-/** @returns {boolean} false when couriers ran out (stop both passes). */
-function pullPass(ctx) {
+/**
+ * @param {boolean} canRefill storage has room for a courier load, so the push pass can bring
+ *   stored raw stock back up to CRAFT_RESERVE (otherwise the reserve gate would starve crafters)
+ * @returns {boolean} false when couriers ran out (stop both passes).
+ */
+function pullPass(ctx, canRefill) {
   const L = ctx.log
   const pool = ctx.buildings
   const inv = pool.inv, resIn = pool.resIn
@@ -669,7 +680,9 @@ function pullPass(ctx) {
         if (inv[ik] + resIn[ik] >= B_IN_QTY[(type << ITEM_SHIFT) | item]) continue // not starving
       }
       const reserve = shrine || L.storageCount === 0 ? 0 : CRAFT_RESERVE[item]
-      if (reserve > 0 && ctx.stock[item] < reserve) continue // construction first
+      // construction first: leave producers' output to the push pass, but only while storage
+      // can actually take it; full storage would otherwise lock the wood chain for good
+      if (reserve > 0 && canRefill && ctx.stock[item] < reserve) continue
       const want = free < COURIER_CAP ? free : COURIER_CAP
       const src = findProvider(ctx, item, b, door, want, reserve)
       if (src < 0) continue
@@ -678,7 +691,10 @@ function pullPass(ctx) {
       if (reserve > 0 && (B_FLAGS[pool.type[src]] & BF_STORAGE) && q > ctx.stock[item] - reserve) q = ctx.stock[item] - reserve
       if (q <= 0) continue
       const u = findIdleCourier(ctx, pool.door[src])
-      if (u < 0) return false
+      if (u < 0) {
+        if (L.idleCount <= 0) return false
+        continue // idle couriers exist, just none in src's region (built across a river)
+      }
       assign(ctx, u, src, b, item, q)
       if (L.idleCount <= 0) return false
     }
@@ -686,27 +702,33 @@ function pullPass(ctx) {
   return true
 }
 
-/** Largest freeSpaceIn over all storage (walks the storage buckets once). */
-function maxStorageFree(ctx) {
+/**
+ * Rebuild L.sChunkFree (largest freeSpaceIn per storage chunk) and return the largest over
+ * all storage. O(chunks + storages), once per tick.
+ */
+function storageSummary(ctx) {
   const L = ctx.log
-  const head = L.sHead, next = L.sNext
+  const head = L.sHead, next = L.sNext, cf = L.sChunkFree
   let best = 0
   for (let c = 0; c < head.length; c++) {
+    let m = 0
     for (let s = head[c]; s >= 0; s = next[s]) {
       const f = freeSpaceIn(ctx, s, 0)
-      if (f > best) { best = f; if (best >= COURIER_CAP) return best }
+      if (f > m) m = f
     }
+    cf[c] = m
+    if (m > best) best = m
   }
   return best
 }
 
-function pushPass(ctx) {
+function pushPass(ctx, sFree) {
   const L = ctx.log
   const pool = ctx.buildings
   const count = L.provCount
   if (count === 0 || L.storageCount === 0) return
   // every storage full: skip the pass instead of scanning all storage per visit
-  if (maxStorageFree(ctx) <= 0) return
+  if (sFree <= 0) return
   // plenty of idle couriers: move any full courier load (the top bar should tick up from the
   // first Quarry load); scarce couriers: leave outputs to consumers until half full
   const loose = L.idleCount * IDLE_SHARE > L.idleCount + L.jobCount
@@ -723,11 +745,15 @@ function pushPass(ctx) {
     const outCap = B_SLOT_CAP[(type << ITEM_SHIFT) | out]
     if (a <= 0 || a < (loose ? (COURIER_CAP < (outCap >> 1) ? COURIER_CAP : outCap >> 1) : outCap >> 1)) continue
     const need = a < COURIER_CAP ? a : COURIER_CAP
+    if (need > sFree) continue // no storage anywhere has room for this load
     const door = pool.door[p]
-    const s = nearestStorage(ctx, door, need, p)
+    const s = nearestStorage(ctx, door, need, p, L.sChunkFree)
     if (s < 0) continue
     const u = findIdleCourier(ctx, door)
-    if (u < 0) return
+    if (u < 0) {
+      if (L.idleCount <= 0) return
+      continue // none in this producer's region
+    }
     let q = need
     const fs = freeSpaceIn(ctx, s, out)
     if (fs < q) q = fs

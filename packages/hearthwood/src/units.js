@@ -264,8 +264,8 @@ export function tickUnits(ctx) {
         if (j === i || alive[j] === 0) continue
         const tj = type[j]
         if (tj === U_COURIER) continue
-        let md = ri + U_RADIUS[tj]
-        if (md < sepR) md = sepR
+        // Math.max keeps md unboxed (a phi with the module constant boxed it per neighbour)
+        const md = Math.max(ri + U_RADIUS[tj], sepR)
         let dx = x - X[j], dy = y - Y[j]
         let d2 = dx * dx + dy * dy
         if (d2 >= md * md) continue

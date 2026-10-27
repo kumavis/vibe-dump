@@ -156,7 +156,7 @@ test('HUD renders stock, couriers, wave, build menu and speed', () => {
   input.buildMenuOpen = false; frames(1)
   assert.equal($('bottombar').hidden, true)
   // stock updates on change
-  ctx.stock[I_WOOD] = 4321; frames(1)
+  ctx.stock[I_WOOD] = 4321; frames(6) // stock text refreshes at ~10 Hz
   assert.equal(woodSpan.lastChild.textContent, '4.3k')
 })
 

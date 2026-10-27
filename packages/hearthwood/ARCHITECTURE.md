@@ -107,7 +107,7 @@ and reach state through `ctx`.
 | `unitGrid` | CellGrid | tickUnits (rebuild) | all alive units; read by combat, render, input |
 | `log` | LogisticsState | logistics.js | public: `jobCount, idleCount, busyCount, stats` |
 | `combat` | CombatState | combat.js | private |
-| `waves` | WaveState | waves.js | public: `number, nextTick, nextPoints, warned, enabled, lastSide` |
+| `waves` | WaveState | waves.js | public: `number, nextTick, nextPoints, warned, enabled, lastSide, lastTile` |
 | `stock` | Int32Array[16] | buildings.js inventory helpers only | unreserved items in storage |
 | `storeCap` | int | buildings.js | total storage capacity |
 | `courierCap` | int | buildings.js | `courierCapExtra` + sum of `courierCap` of alive buildings (Hearth 12, Den +10) |
@@ -490,9 +490,12 @@ Per non-courier unit:
    - player in `O_NONE` / `O_ATTACK_MOVE`: nearest Blight unit within `U_SIGHT`.
    - player in `O_HOLD`: nearest Blight unit within `U_RANGE`.
    - player in `O_MOVE`: never.
-   - Blight `O_RAID`: nearest player unit (couriers included) within sight, else nearest
-     building within sight (point-to-rect distance). Types with `vsBuilding >= 2` (Husk)
-     check buildings first.
+   - Blight `O_RAID`: nearest player soldier within sight, else nearest building within
+     sight (point-to-rect distance), else nearest courier. Types with `vsBuilding >= 2`
+     (Husk) check buildings first.
+   - every unit search skips candidates farther than the searcher's `U_RANGE` that stand in
+     another walk region (seen across water, never reachable).
+   - the Hearth has a weak built-in ward (`HEARTH_WARD` in combat.js) that shoots like a tower.
 4. With a target: distance d (unit: centre-to-centre; building: point-to-footprint-rect).
    `d <= U_RANGE` → `stopUnit` (if moving) and, when `cooldown == 0`, hit: damage =
    `U_ATTACK * (building ? U_VS_BUILDING : 1)` applied **instantly**; emit `U_FX[type]`
@@ -519,7 +522,7 @@ BS_IDLE (empty) / BS_PAUSED / BS_OK. `cancelTraining` pops the last entry with f
 
 ## 13. Waves (waves.js) — owner: units
 
-`ctx.waves = {number, nextTick, nextPoints, warned, enabled, lastSide}`. `tickWaves`:
+`ctx.waves = {number, nextTick, nextPoints, warned, enabled, lastSide, lastTile}`. `tickWaves`:
 update `nextPoints = wavePoints(ctx, number+1)`; at `nextTick - warnTicks` emit
 EV_WAVE_WARNING(a=n, b=ticks left) once; at `nextTick` `spawnWave`. Points formula and
 spawning rules are in the stub (WAVES table in content.js). Spawned Blight get

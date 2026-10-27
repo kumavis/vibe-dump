@@ -450,7 +450,9 @@ test('a sprite den spawns couriers for planks up to the courier cap', () => {
   for (let n = w0; n < ctx.events.written; n++) if (ctx.events.type[n & ctx.events.mask] === EV_COURIER_SPAWNED) seen = true
   assert.ok(seen)
   run(ctx, 600)
-  assert.equal(ctx.units.typeCount[U_COURIER], 3, 'stops when planks run out')
+  // 3 bought with planks; the Hearth's rescue may coax out a 4th (RESCUE_MIN) once the Den is broke
+  const nc = ctx.units.typeCount[U_COURIER]
+  assert.ok(nc === 3 || nc === 4, `stops when planks run out (${nc})`)
   assert.equal(ctx.stock[I_PLANK], 0)
   assert.equal(destroyBuilding(ctx, d), undefined)
   assert.equal(ctx.courierCap, 12)

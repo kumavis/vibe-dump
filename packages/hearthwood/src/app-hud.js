@@ -5,9 +5,9 @@ import {
   TICK_RATE, ITEM_COUNT, I_WOOD, I_STONE, I_ORE, I_PLANK, I_INGOT, I_GLOWCAP, I_TOOL, I_CHARM,
   I_MOONSTONE, I_RELIC, B_QUARRY, B_STOREHOUSE, B_SPRITE_DEN, B_WARD_TOWER, B_WARDEN_HALL, B_FORGE,
   B_SHRINE, EV_WAVE_WARNING, EV_WAVE_SPAWNED, EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE,
-  EV_UNIT_TRAINED, EV_CANNOT_AFFORD, ITEM_SHIFT,
+  EV_UNIT_TRAINED, EV_CANNOT_AFFORD, ITEM_SHIFT, EV_BUILDING_ATTACKED, EV_COURIERS_LOST,
 } from './constants.js'
-import { BUILDINGS, UNITS, TIERS, WIN_TIER, ITEMS } from './content.js'
+import { BUILDINGS, UNITS, TIERS, WIN_TIER, ITEMS, WAVES } from './content.js'
 
 /** Ticks -> "m:ss" (negative clamps to 0:00). */
 export function fmtClock(ticks) {
@@ -76,7 +76,7 @@ const k = (hk) => '<kbd>' + hk + '</kbd>'
 export const HINTS = Object.freeze([
   { id: 'quarry', html: `Sprite couriers haul goods on their own. Build a <b>Quarry</b> ${k('2')} on the grey rocks south-west of the Hearth.`,
     done: (c) => c.buildings.typeCount[B_QUARRY] > 0 },
-  { id: 'store', html: `<b>Storehouses</b> ${k('6')} buffer surplus — construction is paid from everything in storage.`,
+  { id: 'store', html: `<b>Storehouses</b> ${k('6')} buffer surplus — construction is paid from everything in storage. Heartwood low? Add a <b>Lumber Lodge</b> ${k('1')}.`,
     done: (c) => c.buildings.typeCount[B_STOREHOUSE] > 0 },
   { id: 'den', html: `A <b>Sprite Den</b> ${k('7')} turns planks into more couriers.`,
     done: (c) => c.buildings.typeCount[B_SPRITE_DEN] > 0 },
@@ -92,8 +92,16 @@ export const HINTS = Object.freeze([
     done: (c) => c.won || c.tier >= WIN_TIER },
 ])
 
+const TOWER_HINT = HINTS.findIndex((h) => h.id === 'tower')
+/** Defence jumps the queue from the first wave warning on: wave 1 must not beat the tutorial. */
+const DEFENCE_URGENT_TICK = WAVES.firstTick - WAVES.warnTicks
+
+/** No Ward Tower and no Warden Hall yet. */
+function undefended(ctx) { return !HINTS[TOWER_HINT].done(ctx) }
+
 /** Index of the hint to show, or -1 when the tutorial is finished. */
 export function hintIndex(ctx) {
+  if (ctx.tick >= DEFENCE_URGENT_TICK && undefended(ctx)) return TOWER_HINT
   for (let i = 0; i < HINTS.length; i++) if (!HINTS[i].done(ctx)) return i
   return -1
 }
@@ -106,11 +114,18 @@ const SIDES = ['north', 'east', 'south', 'west']
  */
 export function eventMessage(ctx, type, a, b) {
   switch (type) {
-    case EV_WAVE_WARNING: return { msg: `The Blight stirs — wave ${a} in ${Math.round(b / TICK_RATE)} s`, kind: 'bad' }
-    case EV_WAVE_SPAWNED: {
-      const side = ctx.waves && ctx.waves.lastSide >= 0 ? ' from the ' + SIDES[ctx.waves.lastSide & 3] : ''
-      return { msg: `Wave ${a}: ${b} Blight emerge${side}!`, kind: 'bad' }
+    case EV_WAVE_WARNING: {
+      const tip = undefended(ctx) ? ' — build a Ward Tower [8]' : ''
+      return { msg: `The Blight stirs — wave ${a} in ${Math.round(b / TICK_RATE)} s${tip}`, kind: 'bad' }
     }
+    case EV_WAVE_SPAWNED: {
+      const W = ctx.waves
+      const side = W && W.lastSide >= 0 ? ' from the ' + SIDES[W.lastSide & 3] : ''
+      const tile = W && W.lastTile >= 0 ? W.lastTile : undefined
+      return { msg: `Wave ${a}: ${b} Blight emerge${side}!`, kind: 'bad', tile }
+    }
+    case EV_BUILDING_ATTACKED: return { msg: `${BUILDINGS[a] ? BUILDINGS[a].name : 'A building'} under attack!`, kind: 'bad', tile: b }
+    case EV_COURIERS_LOST: return { msg: a === 1 ? 'A courier was slain' : `${a} couriers slain`, kind: 'bad', tile: b }
     case EV_BUILDING_LOST: return { msg: `${BUILDINGS[a] ? BUILDINGS[a].name : 'A building'} was destroyed`, kind: 'bad', tile: b }
     case EV_TIER_UP: return { msg: `The grove grows: ${TIERS[a] ? TIERS[a].name : 'tier ' + a}`, kind: 'good' }
     case EV_WIN: return { msg: 'Five relics glow — the forest awakens!', kind: 'good' }
