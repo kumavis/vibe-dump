@@ -17,6 +17,7 @@
 
 import { dataBase } from '../config.js'
 import { loadData } from '../data/load.js'
+import { FIXTURE_SCENARIOS } from './mock-arena.js'
 import { EventCard } from './card.js'
 import { h } from './dom.js'
 import { link } from '../link.js'
@@ -34,6 +35,9 @@ async function start() {
   status.textContent = 'reading the record'
   const data = await loadData(dataBase(), warn)
   const q = new URLSearchParams(location.search)
+  // (the dev page plays the mock's fixture scenarios unless ?scenarios=data asks for the real files: the loader's list,
+  // since round three's integration, would otherwise hand link.js the real Samar ahead of the mock's loadWargame)
+  if (q.get('scenarios') !== 'data') data.wargames = new Map(Object.keys(FIXTURE_SCENARIOS).map((id) => [id, id]))
   const app = {
     data,
     warn,
