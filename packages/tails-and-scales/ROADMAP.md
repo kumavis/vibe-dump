@@ -148,7 +148,8 @@ the commit, and add whatever the work turned up.
   back; from F10a a group placed and moved online), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
-  Select mode, long presses, the touch fallback), and from F8a
+  Select mode, long presses, the touch fallback; from F13 the touch aim,
+  `--only aim` alone), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
@@ -1058,7 +1059,7 @@ answered; 35 (Escape) by the user: no change.
   command in the rules would be a step of its own). DESIGN §5's "local undo
   of move/place by truncating the store" is this, the truncation replaced.
   A replay-check case: undo then the same move folds to the same trace.
-- [ ] **F13** Touch aim: a hover for a finger. Today a phone gets no preview
+- [x] **F13** Touch aim: a hover for a finger. Today a phone gets no preview
   at all (pointermove fires only while a finger orbits the camera, and a lift
   after a drag is never a click). A long press on the ground, or on an enemy,
   while a unit is picked up (a long press on your own unit already adds it to
@@ -1071,6 +1072,16 @@ answered; 35 (Escape) by the user: no change.
   last valid cell along the ray from the unit through the finger
   (input/tools/move.js); the command sent is still `move {u, c}`.
   input-check's touch cases through CDP, as F10a's.
+  (`input/aim.js`: the long press's aim and 👆 Aim, the drag holding the
+  camera by OrbitControls' rotate alone, so a second finger is its pan and
+  zoom at once and calls the aim off; the mouse's own hover under the
+  finger, the tooltip lifted above it, the hint saying what the lift does;
+  the lift is the click, a finger off the board calls it off. ▭ Select and
+  👆 Aim take turns: switching one on switches the other off. "As far as it
+  goes" is `aimCell`/`farthest` in input/tools/move.js, for a finger's aim
+  and the mouse with Alt held, beyond the unit's reach only; the mouse
+  without Alt is as it was. input-check's aim cases (`--only aim`), parity
+  byte-identical. DESIGN's F13 notes.)
 - [ ] **F14** The camera follows a human opponent. The follow policy (🎥,
   `follows()`: every turn but the one seat played here) is in place, but only
   fights and the AI's own moves, shots and charges emit `focus`; a human's
