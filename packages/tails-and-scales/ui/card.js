@@ -17,11 +17,34 @@
 import { factOf, cardStatus } from '../present/hud-model.js'
 import { GLYPH, NAME } from '../present/standing.js'
 import { unitPrice } from '../core/army.js'
+import { woundNeed } from '../core/rules.js'
+import { RACES } from '../data/schema.js'
 
 const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 
+// (The October playtest's fix) Every toughness a unit of any race has, in
+// order: the card's weapons say what they wound each on
+const TOUGHNESS = [...new Set(Object.values(RACES).flatMap((r) => Object.values(r.units).map((t) => t.T)))].sort((a, b) => a - b)
+
+// What a weapon of strength S (and poison) wounds on against each
+// toughness in TOUGHNESS, runs of one need together (the table's need
+// never falls as T rises, so a run is every T between its ends):
+// "T3 4+ · T4–5 5+ · T6 6+"
+export function woundsLine(w) {
+  const runs = []
+  for (const T of TOUGHNESS) {
+    const n = woundNeed(w.S, T, w.poison), last = runs.at(-1)
+    if (last && last.n === n) last.hi = T
+    else runs.push({ lo: T, hi: T, n })
+  }
+  return runs.map((r) => `T${r.lo}${r.hi > r.lo ? `–${r.hi}` : ''} ${r.n}+`).join(' · ')
+}
+
 // A unit type's stats, weapons and abilities, as the card shows them (and
-// (F6) the battle-setup panel, for a figure of its race showcase)
+// (F6) the battle-setup panel, for a figure of its race showcase). (The
+// playtest's fix) Under each weapon with a strength, what it wounds on
+// against the toughnesses the races field: the reason a shot's tooltip
+// gives for its need ("S3 vs T6"), for every target at once.
 export function statsHtml(t) {
   const fmt = (k) => (k === 'M' ? `${t.M}"` : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
   const wpn = (w, icon) => {
@@ -37,7 +60,7 @@ export function statsHtml(t) {
     if (w.indirect) bits.push('indirect')
     if (w.heavy) bits.push('heavy')
     if (w.assault) bits.push('assault')
-    return `<div class="wpn"><span>${icon} ${w.name}</span><em>${bits.join(' · ')}</em></div>`
+    return `<div class="wpn"><span>${icon} ${w.name}</span><em>${bits.join(' · ')}</em>${w.S === undefined ? '' : `<em>wounds ${woundsLine(w)}</em>`}</div>`
   }
   return `
     <table class="stats"><tr>${statKeys.map((k) => `<th>${k}</th>`).join('')}</tr><tr>${statKeys.map((k) => `<td>${fmt(k)}</td>`).join('')}</tr></table>

@@ -1192,13 +1192,25 @@ answered; 35 (Escape) by the user: no change.
   is a wrecker's smash applied to units. Each a `CORE_VERSION` bump and a
   re-record; each with its terrain-check rows, P-prop cases and an army-sim
   gate (a hazard board must not move the Bushtails' 52.4% out of its band).
-- [ ] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
+- [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
   Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll
   D3+1 hits on it, which is against it); the shot tooltip gives "wound 6+ ·
   save 4+" but not why: "S3 vs T6" beside the wound need (ui/tooltip.js's
   oddsText), and the card the same under its weapons. (Escape at a charge's
   end stays as it is: question 35.)
+  (View only: no bump, the corpus unchanged. The shot tooltip says why
+  beside each need: "wound 6+ (S3 vs T6)", a poison that lowers the need
+  named ("S2 vs T3, poison 4+"), and "save 4+ (Sv4+ AP0)", with ", cover"
+  where it helps (`woundWhy`, `saveWhy` in ui/tooltip.js). The card, under
+  each weapon with a strength, what it wounds on against every toughness
+  the races field, runs of one need together ("wounds T3 4+ · T4–5 5+ ·
+  T6 6+"; the Brute's fists "T3 2+ · T4–6 3+"): the same reason for every
+  target at once, since the card knows no target; the races screen's
+  showcase shows it too. hud-check holds no tooltip text (its rows are the
+  HUD's buttons, the charge's spots and the end screen), so nothing there
+  needed porting; play-check's shot and unit hovers still tell the two
+  apart. DESIGN's F17 notes, the fix's paragraph.)
 
 ### Open questions (building the defaults unless told otherwise)
 
