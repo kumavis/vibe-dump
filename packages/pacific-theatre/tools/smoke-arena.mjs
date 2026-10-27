@@ -396,7 +396,7 @@ if (doBrowser) {
     }
   }
   if (!(await up())) {
-    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: false })
+    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: true })
     for (let k = 0; k < 60 && !(await up()); k++) await new Promise((r) => setTimeout(r, 500))
   }
   const { chromium } = await import('playwright')
@@ -489,7 +489,8 @@ if (doBrowser) {
     })
   } finally {
     await browser.close()
-    if (vite) vite.kill()
+    // (the whole group: npx's own child, the Vite server, outlived a kill of npx alone)
+    if (vite) try { process.kill(-vite.pid) } catch { vite.kill() }
   }
 }
 
@@ -508,7 +509,7 @@ if (doLooks) {
     }
   }
   if (!(await up())) {
-    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: false })
+    vite = spawn('npx', ['vite', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { cwd: root, stdio: 'ignore', detached: true })
     for (let k = 0; k < 60 && !(await up()); k++) await new Promise((r) => setTimeout(r, 500))
   }
   const { chromium } = await import('playwright')
@@ -679,7 +680,8 @@ if (doLooks) {
     })
   } finally {
     await browser.close()
-    if (vite) vite.kill()
+    // (the whole group: npx's own child, the Vite server, outlived a kill of npx alone)
+    if (vite) try { process.kill(-vite.pid) } catch { vite.kill() }
   }
 }
 

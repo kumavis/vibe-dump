@@ -1048,6 +1048,9 @@ body:has(> #ui > .card.show:is([data-mode='wargame'], [data-mode='wargame-end'])
   /* the respawn line and the hints in the middle, between the box's plot and the controls */
   .wg-say { top: auto; bottom: calc(var(--pt-controls, 150px) + 96px); font-size: 15px; }
   .wg-hints { bottom: calc(var(--pt-controls, 150px) + 44px); font-size: 12px; line-height: 1.5; padding: 7px 12px; }
+  /* (the box's own first hints and keys stand there too, short of the plot's camera and time buttons: under the block the
+     middle band is too short for four lines on a short phone, and the wargame's hints give way while the box's show) */
+  body.pt-wargame .pt-hud .mid > .hints, body.pt-wargame .pt-hud .mid > .keys { position: fixed; left: max(8px, env(safe-area-inset-left, 0px)); right: calc(var(--pt-plot, 96px) + 16px); width: auto; max-width: none; transform: none; top: auto; bottom: calc(var(--pt-controls, 150px) + 44px); }
   /* the end card over everything, the game being over; the start sheet over the bar at the foot (watching) or the table */
   #ui.wargame .card[data-mode='wargame-end'] { top: calc(var(--pt-bar-head, 60px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); max-height: none; }
   .card[data-mode='wargame'] { max-height: calc(100vh - 200px); }
@@ -1063,6 +1066,12 @@ body:has(> #ui > .card.show:is([data-mode='wargame'], [data-mode='wargame-end'])
   .wg-hints {
     left: calc(max(8px, env(safe-area-inset-left, 0px)) + min(440px, 100vw - var(--pt-plot, 96px) - 80px) + 14px); right: calc(var(--pt-plot, 96px) + 24px);
     top: calc(var(--pt-bar-head, 58px) + 2px); bottom: auto; transform: none; width: auto; max-width: none;
+  }
+  /* (the box's own first hints stand there too: on its side the middle band under the block is too short for four lines,
+     and the wargame's hints give way while the box's show) */
+  body.pt-wargame .pt-hud .mid > .hints, body.pt-wargame .pt-hud .mid > .keys {
+    position: fixed; left: calc(max(8px, env(safe-area-inset-left, 0px)) + min(440px, 100vw - var(--pt-plot, 96px) - 80px) + 14px); right: calc(var(--pt-plot, 96px) + 24px);
+    top: calc(var(--pt-bar-head, 58px) + 2px); bottom: auto; width: auto; max-width: none; transform: none;
   }
   #ui.wargame .card[data-mode='wargame-end'] { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); width: auto; top: var(--pt-bar-head, 58px); }
   .wg-reel { grid-template-columns: repeat(3, minmax(0, 1fr)); }

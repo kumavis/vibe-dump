@@ -878,7 +878,7 @@ export class Battle {
     const pl = arena.takeControl(first)
     this.bindPlayer(pl)
     this._evIndex = arena.events.length
-    this.scene?.hud.say(arena.sides[arena.side].def.goal?.text ?? '', 5)
+    // (the goal stands on the HUD layer's block: no spoken line of it over the box, where a phone has no room for one)
     return pl
   }
 

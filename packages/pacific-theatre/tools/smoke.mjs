@@ -661,7 +661,10 @@ await check('round three: a side’s button calls Battle.enterWargame(id, { side
   const real = await ui(`typeof app.battle.enterWargame === 'function'`)
   if (!real) await run(`window.__wgCalls = []; app.battle.enterWargame = async (id, o) => { window.__wgCalls.push([id, o]); return { stand: true } }`)
   else await run(`window.__wgCalls = []; const f = app.battle.enterWargame.bind(app.battle); app.battle.__enterWargame = app.battle.enterWargame; app.battle.enterWargame = (id, o) => { window.__wgCalls.push([id, o]); return f(id, o) }`)
-  await page.click('.card [data-wg-side=us]')
+  // (a DOM click on the button: Playwright's own waits for the page between frames, and SwiftShader building the box's
+  // scene right after the click outlasted its timeout though the click had landed)
+  await page.waitForSelector('.card [data-wg-side=us]', { state: 'visible', timeout: 30000 })
+  await run(`document.querySelector('.card [data-wg-side=us]').click()`)
   await page.waitForFunction(() => window.__app.link.wg, null, { timeout: real ? 600000 : 30000 })
   const calls = await ui('window.__wgCalls')
   const hash = await ui('app.hashNow()')
@@ -669,7 +672,8 @@ await check('round three: a side’s button calls Battle.enterWargame(id, { side
   if (!hash.includes(`wargame=${WG}`) || !hash.includes('side=us') || /[#&]battle=/.test(hash)) throw new Error(`hash ${hash}`)
   if (real) {
     await run(`app.battle.enterWargame = app.battle.__enterWargame; delete app.battle.__enterWargame`)
-    await page.click('.boxbar .bb-leave')
+    // (the first unit may be an aircraft, which asks for the pointer: let it go, and press the bar's button through the DOM)
+    await run(`document.exitPointerLock?.(); document.querySelector('.boxbar .bb-leave').click()`)
     await page.waitForFunction(() => window.__app.mode === 'table' && !window.__app.battle.scene && !window.__app.link?.busy, null, { timeout: 300000 })
   } else await run(`app.events.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave' } })); delete app.battle.enterWargame`)
   const after = await ui('app.hashNow()')
