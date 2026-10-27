@@ -31,6 +31,20 @@
 //   shooting    the bar says Fire; a group fires at an enemy only some of
 //               it can reach, and the rest stay picked once the table has
 //               caught up
+//   (F13) aim   a fresh classic battle, by real touches through CDP: a long
+//               press on the ground with a unit picked up shows its path,
+//               inches and ghost under the finger, the camera still, and
+//               the lift moves it to the ghost's cell; a second finger calls
+//               the aim off, nothing sent; a group's long press draws its
+//               formation and the lift pins it; ▭ Select and 👆 Aim take
+//               turns; with 👆 Aim a plain one-finger drag previews and the
+//               lift moves the unit to the ghost; dragged beyond a unit's
+//               reach, the ghost and the lift stop as far as it goes along
+//               the ray from the unit through the finger (no valid end
+//               farther along it); with the mouse a plain click there still
+//               sends nothing, and with Alt held it goes as far as it goes;
+//               in the shooting phase a long press on an enemy shows the
+//               odds and the lift fires
 //   (F8b) Grand a hotseat battle on the grand mission, the seat whose
 //               movement phase opens picking up its whole army (21 units):
 //               the pointer resting on the ground ahead plans its ghosts a
@@ -47,9 +61,10 @@
 //               and a cluster's zooms in
 // and no page error throughout.
 //
-//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>]
+//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim]
 //
-// 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step.
+// 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step;
+// (F13) --only aim plays the touch aim's cases alone.
 // Exit 0 when every step holds. Set CHROMIUM_PATH to the pre-installed
 // Chromium if Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
@@ -62,7 +77,7 @@ import { buildApp } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { IDLE_MS } from './chromium.mjs'
 
-const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' } } })
+const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' } } })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const same = (xs, ys) => JSON.stringify([...xs].sort((p, q) => p - q)) === JSON.stringify([...ys].sort((p, q) => p - q))
 
@@ -158,6 +173,9 @@ async function check(page, say) {
   const fail = (m) => {
     throw new Error(m)
   }
+  // ((F13) `--only aim`: the touch aim's cases alone, on a battle of their own)
+  const helpers = { ev, units, toScreen, groundNear, clear, rest, settled, count, seatNow, fail, snap }
+  if (a.only === 'aim') return aimCase(page, say, helpers)
 
   // ── The deployment ───────────────────────────────────────────────────────
   await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
@@ -796,6 +814,9 @@ async function check(page, say) {
   if (!drawn || after0) fail(`O drew ${drawn} order lines, then ${after0} once off again`)
   say(`O drew ${drawn} order line${drawn === 1 ? '' : 's'}, none once off again`)
 
+  // (F13) touch aim, on a fresh classic battle
+  await aimCase(page, say, helpers)
+
   // (F8b) Ghosts a few a frame on a Grand board
   {
     await ev(() => window.__ts.view.mission('grand'))
@@ -975,6 +996,387 @@ async function check(page, say) {
   }
 }
 
+// (F13) Touch aim, by real touches through CDP, on a fresh hotseat battle of
+// the classic board (every unit still to act). In the movement phase of the
+// seat that moves first: a long press on the ground with a unit picked up
+// shows its move's path, inches and ghost under the finger with the camera
+// still, and the lift moves it to the ghost's cell; a second finger calls a
+// long press's aim off, nothing sent; a group's long press draws its
+// formation and the lift pins it, nothing sent; ▭ Select and 👆 Aim take
+// turns; with 👆 Aim on a plain one-finger drag previews (no hold) with the
+// camera still and the lift moves the unit to the ghost's cell; dragged far
+// beyond a unit's reach, the ghost and the lift go as far as the move goes
+// along the ray from the unit through the finger (no valid end farther
+// along it); then in the shooting phase a long press on an enemy in range
+// shows the shot's odds and the lift fires.
+async function aimCase(page, say, h) {
+  const { ev, units, groundNear, clear, rest, settled, count, seatNow, fail, snap } = h
+  await ev(() => window.__ts.start('hotseat'))
+  await page.waitForFunction(() => window.__ts.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  for (let k = 0; k < 2; k++) {
+    if ((await ev(() => window.__ts.session.G.pending?.k)) !== 'deploy') break
+    await ev(() => window.__ts.endPhase())
+  }
+  await page.waitForFunction(() => {
+    const G = window.__ts.session.G
+    return G.pending?.k === 'phase' && G.pending.phase === 'move' && window.__ts.session.decisionFor() >= 0 && window.__ts.player.idle
+  }, null, { timeout: IDLE_MS })
+  await rest()
+  const t = await seatNow()
+  const cdp = await page.context().newCDPSession(page)
+  const touch = (type, pts) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(([x, y], id) => ({ x, y, id })) })
+  // (Chromium hands the page a move at its next frame, a second or so
+  // under SwiftShader: two frames waited, the last move has been played)
+  const frames = () => ev(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
+  // the camera's place; still (`unmoved`) within 0.02" (a finger's drag that
+  // orbits it moves it inches), and at rest: the drift of an earlier
+  // gesture's damping, a frame or more a second under SwiftShader, run out
+  const camAt = () => ev(() => window.__ts.camera.position.toArray())
+  const unmoved = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) < 0.02
+  const calm = async () => {
+    let was = await camAt()
+    for (let k = 0; k < 120; k++) {
+      await frames()
+      const now = await camAt()
+      if (Math.hypot(now[0] - was[0], now[1] - was[1], now[2] - was[2]) < 0.001) return now
+      was = now
+    }
+    return was
+  }
+  const aiming = () => ev(() => window.__ts.hud?.aim?.aiming ?? null)
+  // what the table draws: the move's path line (shown or not), the ghost
+  // ring's cell (null: none), the tooltip's text, the HUD's aim; the
+  // overlay's own objects, the first of their kind in the scene
+  const drawn = () => ev(() => {
+    const sc = window.__ts.scenery.scene, nav = window.__ts.session.G.nav
+    const ghost = sc.children.find((o) => o.isMesh && o.geometry?.parameters?.innerRadius === 0.9)
+    const path = sc.children.find((o) => o.isLine && o.renderOrder === 4 && o.material?.opacity === 0.9)
+    const tip = document.querySelector('#tooltip')
+    return { path: !!path?.visible, ghost: ghost?.visible ? nav.index(ghost.position.x, ghost.position.z) : null, tip: tip.style.display === 'block' ? tip.innerText.replace(/\s+/g, ' ') : '', aim: window.__ts.hud?.aim ?? null }
+  })
+  const sent = (n) => ev((n) => window.__ts.session.store.entries().slice(n).map(({ t, u, c, tg }) => ({ t, u, c, tg })), n)
+  const unitAt = (id) => ev((id) => {
+    const u = window.__ts.session.G.units.find((x) => x.id === id)
+    return { x: u.pos.x, z: u.pos.z, cell: window.__ts.session.G.nav.index(u.pos.x, u.pos.z) }
+  }, id)
+  // a long press: the finger down at q, held until the aim starts
+  const press = async (q) => {
+    await touch('touchStart', [[q.x, q.y]])
+    await page.waitForFunction(() => window.__ts.hud?.aim?.aiming === 'on', null, { timeout: 8000 }).catch(() => {})
+    return (await aiming()) === 'on'
+  }
+  const slide = async (from, to, steps = 6) => {
+    for (let k = 1; k <= steps; k++) await touch('touchMove', [[from.x + ((to.x - from.x) * k) / steps, from.y + ((to.y - from.y) * k) / steps]])
+    await frames()
+    await sleep(200)
+  }
+  let all = await units()
+  const ours = await ev((t) => window.__ts.session.preview((G, q) => G.units.filter((u) => u.side === t && u.alive > 0 && q.canAct(G, u) && !q.isEngaged(G, u)).map((u) => u.id)), t)
+  const toward = (u) => (u.pos.x < 0 ? 1 : -1)
+  // (the seat's longest gun stays put, for the shooting phase)
+  const gun = [...all.filter((u) => ours.includes(u.id))].sort((p, q) => q.range - p.range)[0].id
+  const free = () => all.filter((u) => ours.includes(u.id) && u.id !== gun && u.on && !u.moved)
+
+  // a long press on the ground: the path, the inches and the ghost under
+  // the finger, the camera still; the lift moves the unit to the ghost
+  let done = null
+  for (const u of free()) {
+    await ev((id) => window.__ts.group.select([id]), u.id)
+    await sleep(200)
+    const d = toward(u)
+    const q0 = await groundNear(u.pos.x, u.pos.z, [[d * 2, 0], [d * 2, 1], [d * 2, -1], [d * 1.5, 1.5]])
+    const q1 = q0 && (await groundNear(u.pos.x, u.pos.z, [[d * 3.5, 0], [d * 3.5, 1], [d * 3.5, -1], [d * 3, 2]]))
+    if (!q1) continue
+    const cam0 = await calm(), n0 = await count()
+    if (!(await press(q0))) {
+      await touch('touchEnd', [])
+      fail(`a long press on the ground by unit ${u.id} (picked up) started no aim`)
+    }
+    await slide(q0, q1)
+    const seen = await drawn()
+    const cam1 = await camAt()
+    if (!seen.path || seen.ghost === null) {
+      await touch('touchEnd', [])
+      await settled()
+      if ((await count()) !== n0) fail(`a long press with no move shown sent ${(await count()) - n0}`)
+      continue
+    }
+    await snap('aim-long-press')
+    await touch('touchEnd', [])
+    await settled()
+    const out = await sent(n0)
+    const at = await unitAt(u.id)
+    if (!unmoved(cam1, cam0)) fail(`the camera moved under a finger aiming (${cam0.map((v) => v.toFixed(3))} → ${cam1.map((v) => v.toFixed(3))})`)
+    if (!/" of /.test(seen.tip)) fail(`a long press's aim showed the tooltip "${seen.tip}", not the move's inches`)
+    if (out.length !== 1 || out[0].t !== 'move' || out[0].u !== u.id || out[0].c !== seen.ghost || at.cell !== seen.ghost) fail(`the lift sent ${JSON.stringify(out)} (unit ${u.id} now on cell ${at.cell}); its ghost stood on cell ${seen.ghost}`)
+    done = { id: u.id, tip: seen.tip }
+    break
+  }
+  if (!done) fail('no unit showed a move under a long press')
+  say(`aim: a long press on the ground by unit ${done.id} showed its path, its ghost and "${done.tip}" under the finger, the camera still; the lift moved it to the ghost's cell`)
+
+  // a second finger calls the aim off, nothing sent
+  await rest()
+  all = await units()
+  const [b, c2] = free()
+  if (!b || !c2) fail('fewer than two units left to aim with')
+  await ev((id) => window.__ts.group.select([id]), b.id)
+  await sleep(200)
+  let qb = await groundNear(b.pos.x, b.pos.z, [[toward(b) * 2, 0], [toward(b) * 2, 1], [toward(b) * 2, -1], [toward(b) * 1.5, 1.5]])
+  if (!qb) fail(`no clear ground by unit ${b.id}`)
+  let n0 = await count()
+  if (!(await press(qb))) fail('a long press for the two-finger case started no aim')
+  await touch('touchStart', [[qb.x, qb.y], [qb.x + 120, qb.y]])
+  await frames()
+  await sleep(200)
+  const two = await drawn()
+  for (let k = 1; k <= 5; k++) await touch('touchMove', [[qb.x, qb.y - 8 * k], [qb.x + 120, qb.y - 8 * k]])
+  await touch('touchEnd', [])
+  await sleep(800)
+  if (two.aim?.aiming || two.path || two.ghost !== null) fail(`a second finger left the aim ${two.aim?.aiming}, the path ${two.path ? 'shown' : 'hidden'}, the ghost on ${two.ghost}`)
+  if ((await count()) !== n0 || (await unitAt(b.id)).x !== b.pos.x) fail(`a second finger's abort sent ${(await count()) - n0} or moved unit ${b.id}`)
+  say(`aim: a second finger called the long press's aim off, the preview gone and nothing sent`)
+
+  // a group's long press: its formation drawn under the finger, the lift
+  // pins it (nothing sent); Esc drops the pin
+  await rest()
+  all = await units()
+  const pair = free().slice(0, 2)
+  await ev((xs) => window.__ts.group.select(xs), pair.map((u) => u.id))
+  await sleep(300)
+  const gx = (pair[0].pos.x + pair[1].pos.x) / 2, gz = (pair[0].pos.z + pair[1].pos.z) / 2
+  const qg = await groundNear(gx, gz, [[toward(pair[0]) * 3, 0], [toward(pair[0]) * 3, 2], [toward(pair[0]) * 3, -2], [toward(pair[0]) * 2, 0]])
+  if (!qg) fail('no clear ground ahead of the pair')
+  n0 = await count()
+  if (!(await press(qg))) fail("a group's long press on the ground started no aim")
+  await sleep(500)
+  const rings = await ev(() => window.__ts.group.ghosts().rings)
+  await touch('touchEnd', [])
+  await sleep(500)
+  if (!rings) fail("a group's aim drew no formation under the finger")
+  if (!(await ev(() => window.__ts.group.pinned())) || (await count()) !== n0) fail(`a group's aim lifted: pinned ${await ev(() => window.__ts.group.pinned())}, ${(await count()) - n0} sent`)
+  await page.keyboard.press('Escape')
+  await sleep(250)
+  say(`aim: a group of 2's long press drew ${rings} ghost rings under the finger; the lift pinned the formation, nothing sent`)
+
+  // ▭ Select and 👆 Aim take turns
+  const lit = () => ev(() => ({ aim: document.querySelector('#aimMode').classList.contains('on'), select: document.querySelector('#selectMode').classList.contains('on'), model: window.__ts.hud.aim }))
+  await ev(() => document.querySelector('#selectMode').click())
+  await ev(() => document.querySelector('#aimMode').click())
+  const l1 = await lit()
+  await ev(() => document.querySelector('#selectMode').click())
+  const l2 = await lit()
+  await ev(() => document.querySelector('#aimMode').click())
+  const l3 = await lit()
+  if (!l1.aim || l1.select || !l1.model.on || l1.model.select) fail(`👆 Aim pressed with ▭ Select on: ${JSON.stringify(l1)}`)
+  if (l2.aim || !l2.select || l2.model.on || !l2.model.select) fail(`▭ Select pressed with 👆 Aim on: ${JSON.stringify(l2)}`)
+  if (!l3.aim || l3.select) fail(`👆 Aim pressed again: ${JSON.stringify(l3)}`)
+  say('▭ Select and 👆 Aim take turns: switching one on switched the other off')
+
+  // 👆 Aim: a plain one-finger drag previews at once, the camera still, and
+  // the lift moves the unit to the ghost
+  await rest()
+  all = await units()
+  const bb = all.find((u) => u.id === b.id)
+  await ev((id) => window.__ts.group.select([id]), bb.id)
+  await sleep(300)
+  const p0 = await groundNear(bb.pos.x, bb.pos.z, [[toward(bb) * 1.5, 0], [toward(bb) * 1.5, 1], [toward(bb) * 1.5, -1], [0, 1.5], [0, -1.5]])
+  const p1 = p0 && (await groundNear(bb.pos.x, bb.pos.z, [[toward(bb) * 3.5, 0], [toward(bb) * 3.5, 1.5], [toward(bb) * 3.5, -1.5], [toward(bb) * 3, 0]]))
+  if (!p1) fail(`no clear ground for 👆 Aim's drag by unit ${bb.id}`)
+  const cam0 = await calm()
+  n0 = await count()
+  await touch('touchStart', [[p0.x, p0.y]])
+  const first = await aiming()
+  await slide(p0, p1)
+  const seen = await drawn()
+  const cam1 = await camAt()
+  await snap('aim-mode')
+  await touch('touchEnd', [])
+  await settled()
+  let out = await sent(n0)
+  if (first !== 'on') fail(`👆 Aim: a finger's press started no aim (${first})`)
+  if (!seen.path || seen.ghost === null || !/" of /.test(seen.tip)) fail(`👆 Aim: a one-finger drag drew ${JSON.stringify(seen)}, no move`)
+  if (!unmoved(cam1, cam0)) fail(`👆 Aim: the camera moved under the drag (${cam0.map((v) => v.toFixed(3))} → ${cam1.map((v) => v.toFixed(3))})`)
+  if (out.length !== 1 || out[0].t !== 'move' || out[0].u !== bb.id || out[0].c !== seen.ghost) fail(`👆 Aim: the lift sent ${JSON.stringify(out)}; the ghost stood on cell ${seen.ghost}`)
+  say(`👆 Aim: a plain one-finger drag showed unit ${bb.id}'s move ("${seen.tip}"), the camera still; the lift moved it to the ghost's cell`)
+
+  // as far as it goes: dragged well beyond a unit's reach, the ghost and the
+  // lift stop on the plan's valid end farthest along the ray from the unit
+  // through the finger
+  // (a start by unit u and a point well beyond its reach toward the enemy,
+  // both clear on screen, or null)
+  const beyond = async (u) => {
+    const M = await ev((id) => window.__ts.session.G.units.find((x) => x.id === id).t.M, u.id)
+    const d = toward(u)
+    const s0 = await groundNear(u.pos.x, u.pos.z, [[d * 1.5, 0], [d * 1.5, 1], [d * 1.5, -1]])
+    for (const dz of [0, 2, -2, 4, -4]) {
+      const q = await h.toScreen(u.pos.x + d * (M + 7), u.pos.z + dz)
+      if (s0 && (await clear(q, 20))) return { s0, s1: q }
+    }
+    return null
+  }
+  // (cell i judged against the pointer's own ground, as the picker found
+  // it: whether i is a valid end on the ray from unit `id` through it, how
+  // many valid ends on the ray lie farther along it (by more than a
+  // rounding: the page measures with core/dmath.js's hypot), and whether
+  // the pointer lay beyond the unit's reach; null with no ghost)
+  const judgeFar = (id, i) => i === null ? null : ev(({ id, i }) => {
+    const p = window.__ts.S.hoverPick?.ground
+    if (!p) return null
+    const g = { x: p.x, z: p.z }
+    return window.__ts.session.preview((G, q) => {
+      const u = G.units.find((v) => v.id === id), plan = q.movePlan(G, u, 0), nav = G.nav
+      const L = Math.hypot(g.x - u.pos.x, g.z - u.pos.z), ux = (g.x - u.pos.x) / L, uz = (g.z - u.pos.z) / L
+      const along = (j) => (nav.x(j) - u.pos.x) * ux + (nav.z(j) - u.pos.z) * uz
+      const off = (j) => Math.abs((nav.x(j) - u.pos.x) * uz - (nav.z(j) - u.pos.z) * ux)
+      let farther = 0
+      for (let j = 0; j < nav.N; j++) if (Number.isFinite(plan.res.dist[j]) && off(j) <= nav.cell - 1e-9 && along(j) <= L - 1e-9 && along(j) > along(i) + 1e-9 && q.validEnd(G, plan, j)) farther++
+      const c = nav.index(g.x, g.z)
+      return { valid: q.validEnd(G, plan, i), on: off(i) <= nav.cell + 1e-9, farther, beyond: c < 0 || !Number.isFinite(plan.res.dist[c]), dist: plan.res.dist[i], max: plan.max }
+    })
+  }, { id, i })
+  // (what a preview beyond the reach and the move it sent must be)
+  const asFar = (how, u, seen, judge, out) => {
+    if (!judge.beyond) fail(`${how}: the pointer lay within unit ${u.id}'s reach: ${JSON.stringify(judge)}`)
+    if (!/as far as it goes/.test(seen.tip)) fail(`${how}: beyond its reach the tooltip read "${seen.tip}"`)
+    if (!judge.valid || !judge.on || judge.farther) fail(`${how}: the ghost's cell ${seen.ghost} is ${JSON.stringify(judge)} (no valid end on the ray should lie farther along it)`)
+    if (out.length !== 1 || out[0].t !== 'move' || out[0].u !== u.id || out[0].c !== seen.ghost) fail(`${how}: sent ${JSON.stringify(out)}; the ghost stood on cell ${seen.ghost}`)
+  }
+  await rest()
+  all = await units()
+  let farDone = null
+  for (const u of all.filter((x) => ours.includes(x.id) && x.id !== gun && x.on && !x.moved && x.id !== bb.id)) {
+    await ev((id) => window.__ts.group.select([id]), u.id)
+    await sleep(300)
+    const way = await beyond(u)
+    if (!way) continue
+    n0 = await count()
+    await touch('touchStart', [[way.s0.x, way.s0.y]])
+    await slide(way.s0, way.s1, 10)
+    const seen = await drawn()
+    const judge = await judgeFar(u.id, seen.ghost)
+    await snap('aim-far')
+    await touch('touchEnd', [])
+    await settled()
+    out = await sent(n0)
+    if (!judge) {
+      if (out.length) fail(`dragged beyond unit ${u.id}'s reach with no ghost, the lift sent ${JSON.stringify(out)}`)
+      continue
+    }
+    asFar('as far as it goes', u, seen, judge, out)
+    farDone = { id: u.id, tip: seen.tip, dist: judge.dist, max: judge.max }
+    break
+  }
+  if (!farDone) fail('no unit to drag beyond its reach on clear ground')
+  say(`as far as it goes: dragged beyond unit ${farDone.id}'s reach, the ghost stood on the valid end farthest along the ray ("${farDone.tip}"), and the lift moved it there (${farDone.dist.toFixed(1)}" of ${farDone.max}")`)
+  await ev(() => document.querySelector('#aimMode').click())
+  if ((await ev(() => window.__ts.hud.aim.on))) fail('👆 Aim stayed on once pressed off')
+
+  // the mouse: a plain click beyond a unit's reach sends nothing, as ever;
+  // with Alt held, the pointer shows the move as far as it goes that way
+  // and the click sends it
+  await rest()
+  all = await units()
+  let altDone = null
+  for (const u of all.filter((x) => ours.includes(x.id) && x.id !== gun && x.on && !x.moved && x.id !== bb.id && x.id !== farDone.id)) {
+    await ev((id) => window.__ts.group.select([id]), u.id)
+    await sleep(300)
+    const way = await beyond(u)
+    if (!way) continue
+    n0 = await count()
+    await page.mouse.move(way.s1.x - 4, way.s1.y)
+    await page.mouse.move(way.s1.x, way.s1.y)
+    await frames()
+    const plain = await drawn()
+    await page.mouse.click(way.s1.x, way.s1.y)
+    await sleep(600)
+    if ((await count()) !== n0 || plain.ghost !== null) fail(`a plain click beyond unit ${u.id}'s reach sent ${(await count()) - n0} (its hover drew a ghost on ${plain.ghost}): today's click does nothing there`)
+    await page.keyboard.down('Alt')
+    await page.mouse.move(way.s1.x - 4, way.s1.y)
+    await page.mouse.move(way.s1.x, way.s1.y)
+    await frames()
+    const seen = await drawn()
+    const judge = await judgeFar(u.id, seen.ghost)
+    await page.mouse.click(way.s1.x, way.s1.y)
+    await page.keyboard.up('Alt')
+    await settled()
+    out = await sent(n0)
+    if (!judge) {
+      if (out.length) fail(`an Alt-click beyond unit ${u.id}'s reach with no ghost sent ${JSON.stringify(out)}`)
+      continue
+    }
+    asFar('Alt-click', u, seen, judge, out)
+    altDone = { id: u.id, tip: seen.tip }
+    break
+  }
+  if (!altDone) say('(no unit left to Alt-click beyond its reach on clear ground: the mouse\'s Alt untried)')
+  else say(`the mouse: a plain click beyond unit ${altDone.id}'s reach sent nothing; with Alt held the pointer showed "${altDone.tip}" and the click moved it to that ghost`)
+
+  // the shooting phase: a long press on an enemy in range shows the odds,
+  // and the lift fires
+  await ev(() => window.__ts.group.select([]))
+  await ev(() => window.__ts.endPhase())
+  await page.waitForFunction((t) => window.__ts.session.G.pending?.phase === 'shoot' && window.__ts.session.G.pending.seats.includes(t) && window.__ts.player.idle, t, { timeout: IDLE_MS })
+  await rest()
+  all = await units()
+  const pairs = await ev((t) => window.__ts.session.preview((G, q) => {
+    const out = []
+    for (const u of G.units) if (u.side === t && u.alive > 0 && q.canAct(G, u)) for (const tg of G.units) if (tg.side !== t && tg.alive > 0 && q.shotInfo(G, u, tg).ok) out.push({ u: u.id, tg: tg.id })
+    return out
+  }), t)
+  let shot = null
+  const why = []
+  for (const { u, tg } of pairs) {
+    const e = all.find((x) => x.id === tg)
+    // (on screen, off the HUD's panels (a gap of -1: whatever figures stand
+    // by), and the finger there finds it)
+    if (!e?.on || !(await clear({ x: e.x, y: e.y }, -1))) {
+      const under = e?.on ? await ev(({ x, y }) => [`at ${Math.round(x)},${Math.round(y)}`, ...['#hud', '#hint', '#log', '#card', '#tray', '#actions', '#tools', '#groupbar', '#netbadge'].filter((s) => {
+        const el = document.querySelector(s)
+        if (!el || getComputedStyle(el).display === 'none' || el.classList.contains('hidden')) return false
+        const r = el.getBoundingClientRect()
+        return !(x < r.left - 10 || x > r.right + 10 || y < r.top - 10 || y > r.bottom + 10)
+      })].join(' '), e) : 'off screen'
+      why.push(`${tg}: ${under}`)
+      continue
+    }
+    const found = await ev(({ x, y }) => window.__ts.group.pick(x, y, 'touch').unit, e)
+    if (found !== tg) {
+      why.push(`${tg}: a finger there finds ${found}`)
+      continue
+    }
+    await ev((id) => window.__ts.group.select([id]), u)
+    await sleep(300)
+    // (⏩ 4× for the shot: 1× → 2× → 4×, and a third press back to 1×)
+    await ev(() => {
+      document.querySelector('#speed').click()
+      document.querySelector('#speed').click()
+    })
+    n0 = await count()
+    if (!(await press(e))) {
+      await touch('touchEnd', [])
+      fail(`a long press on enemy unit ${tg} with unit ${u} picked up started no aim`)
+    }
+    await sleep(300)
+    const seen = await drawn()
+    await snap('aim-shoot')
+    await touch('touchEnd', [])
+    // (a blast's flight, its dice and the scenery it breaks play for
+    // minutes under SwiftShader, at ⏩ 4× too: the entry, then the table
+    // caught up)
+    await page.waitForFunction((n) => window.__ts.session.store.entries().length > n, n0, { timeout: 20000 }).catch(() => {})
+    out = await sent(n0)
+    await page.waitForFunction(() => window.__ts.player.idle, null, { timeout: 4 * IDLE_MS })
+    await ev(() => document.querySelector('#speed').click())
+    if (!seen.tip || /^✖/.test(seen.tip)) fail(`a long press on enemy unit ${tg} showed "${seen.tip}", not the shot's odds`)
+    if (!out.length || out[0].t !== 'shoot' || out[0].u !== u || out[0].tg !== tg) fail(`the lift on enemy unit ${tg} sent ${JSON.stringify(out)}, not unit ${u}'s shot`)
+    shot = { u, tg, tip: seen.tip }
+    break
+  }
+  if (!shot) fail(`no enemy in range and clear to press in the shooting phase (${pairs.length} shots possible: ${why.join('; ')})`)
+  say(`aim: a long press on enemy unit ${shot.tg} showed unit ${shot.u}'s odds ("${shot.tip.slice(0, 60)}…"); the lift fired`)
+}
+
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false
@@ -1007,5 +1409,5 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-console.log(ok ? '\ninput-check passed: box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, by mouse, keys and fingers' : '\ninput-check FAILED')
+console.log(ok ? '\ninput-check passed: box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers' : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)
