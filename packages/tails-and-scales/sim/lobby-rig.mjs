@@ -100,6 +100,21 @@
 //                ?debug block's view.camera().followed) and leaves the
 //                guest's own still; the host's next phase brings its camera
 //                back to where it pressed End
+//   (F16)
+//   fog          the host's lobby offers the courtesy fog of war, off; the
+//                guest readies, then the host turns it on (on battlefield 8,
+//                where each seat's deployment leaves two enemy units out of
+//                its sight): the guest's lobby shows it on (not the guest's
+//                to turn) and its seat un-readied; both ready, and the start
+//                carries no fog (the fold never hears of it). Each seated
+//                page keeps the fog for its own seat, and whenever its table
+//                has caught up hides exactly the enemy units none of its
+//                seat's living units sees (the core's sight, asked through
+//                the page's own Session with the dice locked), drawing no
+//                figure, label or pick for any of them, through the
+//                deployment and the turns both pages play with Auto; a
+//                watcher's page keeps no fog. Some enemy was hidden on each
+//                page (or the case held nothing)
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -129,7 +144,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -393,6 +408,75 @@ async function runCases(dist, cases) {
       const fought = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ terrain: window.__ts.G.setup.terrain, decks: window.__ts.G.terrain.chunks.filter((c) => c.kind === 'deck').length }))))
       must(fought.every((f) => f.terrain === 'fortified' && f.decks >= 2), `both pages' battle is fought on fortified, its works standing: ${JSON.stringify(fought)}`)
       return 'the host chose fortified, and both pages fight on it'
+    },
+
+    // (F16) the courtesy fog, agreed in the lobby, kept by each page for its
+    // own seat
+    async fog() {
+      const { host, guest, link } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      const offer = await host.evaluate(() => ({ on: document.querySelector('#lobbyFog')?.checked, disabled: document.querySelector('#lobbyFog')?.disabled }))
+      must(offer.on === false && offer.disabled === false, `the host's lobby offers the fog, off, its to turn: ${JSON.stringify(offer)}`)
+      // battlefield 8 (each seat's deployment leaves two enemies unseen)
+      await host.fill('#lobbyBoard', '8')
+      await host.dispatchEvent('#lobbyBoard', 'change')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.board === 8, null, 30000, "battlefield 8 on the guest's lobby")
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 30000, "the guest's Ready reaching the host")
+      await host.click('#lobbyFog')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.fog === true && document.querySelector('#lobbyFog').checked, null, 30000, "the host's fog on the guest's lobby")
+      const shown = await guest.evaluate(() => ({ disabled: document.querySelector('#lobbyFog').disabled, ready: window.__ts.net.handle.doc().lobby.seats.s1.ready }))
+      must(shown.disabled && shown.ready === false, `the fog is the host's to turn, and turning it un-readied the guest: ${JSON.stringify(shown)}`)
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const kept = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ seat: window.__ts.view.fog()?.seat ?? null, local: window.__ts.session.localSeats.join(), setup: Object.keys(window.__ts.G.setup).filter((k) => /fog/i.test(k)), board: window.__ts.G.setup.board }))))
+      must(kept[0].seat === 0 && kept[1].seat === 1 && kept.every((k) => !k.setup.length && k.board === 8), `each page keeps the fog for its own seat, and the start carries none: ${JSON.stringify(kept)}`)
+      const watcher = await open(hashOf(link))
+      await live(watcher)
+      must((await watcher.evaluate(() => window.__ts.view.fog())) === null, 'a watcher\'s page keeps no fog')
+      // whenever a page's table has caught up: it hides exactly the enemies
+      // its seat's units can't see, and draws none of them
+      const look = (page) => page.evaluate(() => {
+        const ts = window.__ts, ses = ts.session
+        if (!ses?.G || !ts.player.idle || ses.status !== 'live') return null
+        const f = ts.view.fog(), seat = f?.seat
+        if (!f) return { none: true }
+        const want = ses.preview((G, q) => {
+          const mine = G.units.filter((u) => u.side === seat && q.alive(u))
+          return G.units.filter((e) => e.side !== seat && q.alive(e) && !mine.some((u) => q.sight(G, u, e).visible)).map((e) => e.id)
+        })
+        const alive = new Set(f.units.filter((u) => u.alive > 0).map((u) => u.id))
+        const hide = (f.shown?.hide ?? []).filter((id) => alive.has(id))
+        const drawn = f.units.filter((u) => want.includes(u.id) && (u.figures || u.label || u.picked)).map((u) => u.id)
+        return { want: want.sort((a, b) => a - b).join(), hide: hide.sort((a, b) => a - b).join(), drawn: drawn.join(), n: want.length }
+      })
+      const step = async (page) => page.evaluate(async () => {
+        const ts = window.__ts, ses = ts.session
+        if (!ses || ses.status !== 'live' || !ts.player.idle || ses.decisionFor() < 0) return
+        const P = ses.G.pending
+        if (P.k === 'deploy') await ts.endPhase()
+        else if (P.k === 'phase') await ts.autoPhase()
+      })
+      const hidden = [0, 0]
+      let looks = 0
+      const t0 = Date.now()
+      while (Date.now() - t0 < 120000) {
+        for (const [i, p] of [host, guest].entries()) {
+          const r = await look(p)
+          if (!r) continue
+          must(!r.none, `${i ? "the guest's" : "the host's"} page keeps the fog`)
+          looks++
+          hidden[i] += r.n
+          must(r.hide === r.want && !r.drawn, `${i ? "the guest's" : "the host's"} page hides exactly the enemies its seat can't see (hidden ${r.hide || 'none'}, the core's sight leaves unseen ${r.want || 'none'}; drawn of those: ${r.drawn || 'none'})`)
+        }
+        await Promise.all([host, guest].map(step))
+        if ((await host.evaluate(() => window.__ts.G.turn.round)) >= 2) break
+        await sleep(150)
+      }
+      must(hidden[0] > 0 && hidden[1] > 0, `each page hid some enemy at some point (host ${hidden[0]}, guest ${hidden[1]} enemy-looks): else the case held nothing`)
+      return `the host turned the fog on, the guest saw it and readied; each page hid what its seat couldn't see at ${looks} looks (enemy-looks hidden: host ${hidden[0]}, guest ${hidden[1]}), the watcher none`
     },
 
     async altered() {
@@ -1010,6 +1094,10 @@ const MUTANTS = {
   // handler gone), or the bookmark spent at the host's own fight phase
   'no-cue': ['follow', 'view/index.js', '      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),\n', ''],
   'mark-spent': ['follow', 'view/camera.js', '    if (!m || (m.followed === this.followed && !m.others)) return false\n', '    if (!m) return false\n'],
+  // (F16) the lobby's fog never read as the battle begins, or never
+  // written by the host's switch
+  'fog-unread': ['fog', 'app/online.js', 'leave: () => this.close(), fog: N.lobbyOf(this.handle.doc()).fog })', 'leave: () => this.close(), fog: false })'],
+  'fog-unwired': ['fog', 'net/lobby.js', '    if (fields.fog !== undefined) d.lobby.fog = fields.fog === true\n', ''],
   'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
 }
 
