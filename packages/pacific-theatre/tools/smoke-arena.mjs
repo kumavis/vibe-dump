@@ -6,7 +6,10 @@
 // finite, both sides taking losses, no unit beyond the arena's edge by more
 // than 1 km, the side's main goal met within the clock in 40–75 % of its
 // seeds (the balance band), the step under 2 ms (its mean and 99th
-// percentile, on this machine).
+// percentile, on this machine); and, where the scenario gives them, the
+// start laid out as tools/check/wargames.mjs layout() lays it (when that
+// check is in the tree) and never more aircraft a side in the air than its
+// maxAirborne.
 //
 // Part 2, headless, a scripted player in each scenario as each side:
 // possess the first unit, fire at its station, hop to each kind (1–4, Tab),
@@ -67,11 +70,14 @@ const assert = (c, m) => {
 const pct = (x) => `${Math.round(x * 100)} %`
 
 // --- the scenarios and their boxes -------------------------------------------------------------------------
+// (the fixture written afresh each time: fake-data.mjs and fake-battle.mjs rewrite the kits and the box it reads)
 const fixtureFile = path.join(root, 'test-data/wargames/test-box.json')
-if (!fs.existsSync(fixtureFile) && fs.existsSync(path.join(root, 'test-data/boxes/test-box/battle.json'))) {
-  console.log('(no fixture scenario: running tools/fake-wargame.mjs)')
+if (fs.existsSync(path.join(root, 'test-data/boxes/test-box/battle.json'))) {
   await new Promise((r) => spawn(process.execPath, [path.join(root, 'tools/fake-wargame.mjs')], { stdio: 'inherit' }).on('exit', r))
 }
+// content-3's layout() (tools/check/wargames.mjs), when it is in the tree: the start must agree with it
+const layoutFile = path.join(root, 'tools/check/wargames.mjs')
+const layout = fs.existsSync(layoutFile) ? (await import('./check/wargames.mjs')).layout ?? null : null
 const scenarios = []
 if (fs.existsSync(fixtureFile)) scenarios.push({ file: fixtureFile, data: path.join(root, 'test-data') })
 else console.log('no test-data/: run node tools/fake-data.mjs && node tools/fake-battle.mjs && node tools/fake-wargame.mjs first')
@@ -118,11 +124,29 @@ if (doHeadless) {
   console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player:`)
   for (const sc of scenarios) {
     const { scenario, kits, box } = loadScenario(sc)
+    if (layout) {
+      await check(`${scenario.id}: the start as tools/check/wargames.mjs layout() lays it`, () => {
+        const ar = createArena(scenario, kits, box, { side: 'us', seed: 'layout', warn: () => {} })
+        const lay = layout(scenario)
+        if (!lay.length) return 'no formation given'
+        let worst = 0
+        let at = ''
+        for (const e of lay) {
+          const i = ar.slots.findIndex((u) => u.id === e.id && u.kind === 'ship')
+          assert(i >= 0, `${e.id} is not in the arena`)
+          const d = Math.hypot(ar.state.pos[3 * i] - ar.centre.x - e.p[0], ar.state.pos[3 * i + 2] - ar.centre.z + e.p[1])
+          if (d > worst) [worst, at] = [d, e.id]
+        }
+        assert(worst < 1, `${at} starts ${worst.toFixed(1)} m from its place`)
+        return `${lay.length} ships, the worst ${worst.toFixed(2)} m from its place`
+      })
+    }
     for (const side of ['jp', 'us']) {
       await check(`${scenario.id} as ${side}: finite, losses on both sides, inside the arena, the goal met in 40–75 % of the seeds, the step under 2 ms`, () => {
         let met = 0
         let both = 0
         let far = 0
+        const upMax = { jp: 0, us: 0 }
         const times = []
         const reasons = {}
         let sumMs = 0
@@ -144,6 +168,11 @@ if (doHeadless) {
               if (bad) throw new Error(`seed ${k}: not finite at ${ar.t.toFixed(1)} s (${bad})`)
               const s = ar.state
               for (let i = 0; i < ar.capacity; i++) if (s.alive[i] === 1) far = Math.max(far, Math.hypot(s.pos[3 * i] - ar.centre.x, s.pos[3 * i + 2] - ar.centre.z) - ar.R)
+              for (const key of ['jp', 'us']) {
+                const up = ar.airborneOf(key)
+                upMax[key] = Math.max(upMax[key], up)
+                if (up > ar.sides[key].maxAirborne) throw new Error(`seed ${k}: ${up} of ${key}'s aircraft in the air at ${ar.t.toFixed(1)} s, more than its ${ar.sides[key].maxAirborne}`)
+              }
             }
             n++
           }
@@ -158,7 +187,7 @@ if (doHeadless) {
         const mean = sumMs / Math.max(1, steps)
         const rate = met / SEEDS
         balance.push({ id: scenario.id, side, rate, mean, p99, far, reasons })
-        const note = `goal met in ${met}/${SEEDS} (${pct(rate)}); losses on both sides in ${both}/${SEEDS}; furthest ${Math.max(0, far).toFixed(0)} m beyond the edge; step ${mean.toFixed(3)} ms mean, ${p99.toFixed(3)} ms p99; ends ${JSON.stringify(reasons)}`
+        const note = `goal met in ${met}/${SEEDS} (${pct(rate)}); losses on both sides in ${both}/${SEEDS}; furthest ${Math.max(0, far).toFixed(0)} m beyond the edge; at most ${upMax.jp} / ${upMax.us} aircraft up; step ${mean.toFixed(3)} ms mean, ${p99.toFixed(3)} ms p99; ends ${JSON.stringify(reasons)}`
         assert(both >= Math.ceil(SEEDS * 0.9), `losses on both sides in only ${both} of ${SEEDS}: ${note}`)
         assert(far <= 1000, `a unit ${far.toFixed(0)} m beyond the edge: ${note}`)
         assert(mean < 2 && p99 < 2, `the step: ${note}`)
@@ -180,15 +209,40 @@ if (doHeadless) {
         const first = ar.first
         assert(first, 'no first unit')
         const pl = ar.takeControl(first)
+        const so0 = ar._sortie
         assert(ar.slots[pl.unitIndex].side === side, 'the first unit is not the side’s')
+        const def = Object.values(scenario.sides).find((d) => (d.side ?? null) === side) ?? scenario.sides[side === 'jp' ? 'japan' : 'usa']
+        if (def?.firstStation) assert(pl.station === def.firstStation, `the first station is ${pl.station}, not the scenario's ${def.firstStation}`)
+        const firstKind = pl.kind
+        const gunsAt = (i) => (ar._X[i].ammo?.guns || []).reduce((n, g) => n + (g.fixed ? g.left : 0), 0)
+        const guns0 = pl.kind === 'aircraft' ? gunsAt(pl.unitIndex) : 0
         const rows = ar.units()
         assert(rows.every((r) => r.enemy === (r.side !== side)), 'a row marked enemy wrongly')
         assert(rows.filter((r) => !r.enemy && r.alive === 1).every((r) => r.takeable === true), 'a friendly unit alive is not takeable')
         assert(rows.filter((r) => r.enemy).every((r) => typeof r.takeable === 'string'), 'an enemy row is takeable')
-        // twenty seconds at the first unit's station: steer, lay the guns on the lead, fire
-        for (let k = 0; k < 20 * 60; k++) {
+        // twenty seconds at the first unit's station: steer, lay the guns on the lead, fire (an aircraft: at the nearest ship, guns, its torpedo or bombs)
+        for (let k = 0; k < (firstKind === 'aircraft' ? 60 : 20) * 60; k++) {
+          if (firstKind === 'aircraft' && k % 60 === 0 && (so0.releases.torpedoes + so0.releases.bombs > 0 || ar.player?.unitIndex !== pl.unitIndex)) break
           const p = ar.player
-          if (p.kind === 'ship') {
+          if (p.kind === 'aircraft' && p.unitIndex === pl.unitIndex) {
+            const s = ar.state
+            const i = p.unitIndex
+            let best = -1
+            let bd = Infinity
+            for (const j of ar._ships) if (s.alive[j] === 1 && ar.slots[j].side !== side) {
+              const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+              if (d < bd) [bd, best] = [d, j]
+            }
+            if (best >= 0) {
+              p.input.mode = 'aim'
+              p.input.aimDir = [s.pos[3 * best] - s.pos[3 * i], Math.max(-200, 40 - s.pos[3 * i + 1]), s.pos[3 * best + 2] - s.pos[3 * i + 2]]
+              p.input.fireHeld = bd < 900
+              if (bd < 800 && k % 60 === 0) {
+                p.input.bombCount++
+                p.input.torpedoCount++
+              }
+            }
+          } else if (p.kind === 'ship') {
             p.input.helm = Math.sin(ar.t / 4) * 0.5
             const t = p.state.target
             if (t?.lead) {
@@ -202,8 +256,9 @@ if (doHeadless) {
           }
           ar.step()
         }
-        const fired = ar.sortie?.releases
-        assert(fired && fired.salvos + fired.torpedoes > 0, `nothing fired from ${ar.slots[ar.player.unitIndex].id}`)
+        const fired = so0?.releases
+        const spent = firstKind === 'aircraft' ? guns0 - gunsAt(pl.unitIndex) : 0
+        assert(fired && fired.salvos + fired.torpedoes + fired.bombs + spent > 0, `nothing fired from ${ar.slots[pl.unitIndex].id}`)
         // the hops: each kind there is
         const hopped = []
         for (const kind of ['carrier', 'capital', 'destroyer', 'aircraft', 'next']) {
@@ -273,7 +328,7 @@ if (doHeadless) {
         }
         const t = ar.tally
         assert(t.player.lost >= 1, 'the tally has no loss')
-        assert(ar.highlights.some((h) => h.kind === 'loss'), 'no loss among the highlights')
+        assert(ar.highlights.some((h) => h.kind === 'lost'), 'no loss among the highlights')
         assert(ar.highlights.some((h) => h.kind === 'sinking'), 'no sinking among the highlights')
         const so = ar.releaseControl()
         assert(so && so.held === false, 'release gave no sortie')
