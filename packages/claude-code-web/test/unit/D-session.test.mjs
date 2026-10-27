@@ -174,3 +174,18 @@ test('session: bad custom tools JSON stops start() with the problems listed', as
   await assert.rejects(s.start(), /tools\[0\]\.handler/)
   assert.equal(s.harness, null)
 })
+
+test('session: diagnostics add --debug-to-stderr and boot.trace, and only when asked', async () => {
+  for (const diagnostics of [{}, { trace: true, cliDebug: true }]) {
+    const { s, settings } = makeSession({ diagnostics })
+    await s.ready
+    settings.set({ authMode: 'oauth', token: 'sk-ant-oat01-x' })
+    await s.start()
+    const boot = s.harness.bridge.worker.received.find((m) => m.type === 'boot')
+    const on = Boolean(diagnostics.trace)
+    assert.equal(boot.trace, on)
+    assert.equal(boot.argv.includes('--debug-to-stderr'), on)
+    assert.equal(boot.argv[0], '-p', 'the base command line is unchanged')
+    await s.stop()
+  }
+})

@@ -31,9 +31,13 @@ export class Session extends EventTarget {
    * @param {boolean} [o.serviceWorker]    register sw.js (default true unless fake)
    * @param {CacheStorage} [o.caches]      passed to the extractor (tests)
    * @param {typeof fetch} [o.fetch]
+   * @param {{trace?: boolean, cliDebug?: boolean}} [o.diagnostics]  trace: boot.js logs every
+   *   spawn, fetch and Worker the CLI starts; cliDebug: the CLI's own --debug-to-stderr.
+   *   Both land in the page log (the page's ?trace and ?debug).
    */
-  constructor ({ base, fake = false, createWorker, settings, snapshotStore, loadExtractor, serviceWorker, caches, fetch, version = CC_VERSION } = {}) {
+  constructor ({ base, fake = false, createWorker, settings, snapshotStore, loadExtractor, serviceWorker, caches, fetch, version = CC_VERSION, diagnostics = {} } = {}) {
     super()
+    this.diagnostics = { trace: Boolean(diagnostics.trace), cliDebug: Boolean(diagnostics.cliDebug) }
     this.base = base ?? baseUrl()
     this.appUrl = appUrlFor(this.base)
     this.workerUrl = workerUrlFor(this.base)
@@ -175,7 +179,9 @@ export class Session extends EventTarget {
       env: argvEnv,
       model: s.model,
       mcpServers,
+      extraArgs: this.diagnostics.cliDebug ? ['--debug-to-stderr'] : [],
       boot: {
+        trace: this.diagnostics.trace,
         base: this.base,
         appUrl: this.appUrl,
         version: this.version,

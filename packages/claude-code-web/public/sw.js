@@ -10,7 +10,7 @@
 // available to Workers, and the cached tree stays exactly as extracted.
 //
 // Everything outside BASE/vfs/app/ is left to the network (no respondWith).
-import { SPECIFIER_MAP } from './runtime/node/BUILTINS.js'
+import { rewriteSpecifiers } from './runtime/boot/specifiers.js'
 
 const SCOPE = new URL(self.registration.scope)
 const APP_PATH = new URL('vfs/app/', SCOPE).pathname
@@ -66,24 +66,11 @@ async function serve (url, method) {
     current = { app: name, rewritten: rewrittenName(name) }
     const type = res.headers.get('content-type') || 'application/octet-stream'
     if (!type.startsWith('text/javascript')) return res
-    const out = new Response(rewriteSpecifiers(await res.text()), {
+    const out = new Response(rewriteSpecifiers(await res.text(), SHIM_PATH), {
       headers: { 'content-type': 'text/javascript; charset=utf-8' }
     })
     await (await caches.open(current.rewritten)).put(key, out.clone())
     return method === 'HEAD' ? new Response(null, { headers: out.headers }) : out
   }
   return new Response(`not in the extracted tree: ${url.pathname}`, { status: 404, headers: { 'content-type': 'text/plain' } })
-}
-
-// `from "x"`, `import "x"` and `import("x")` with a string literal that names
-// a shimmed built-in. A prose string such as 'imported from "claude-code"'
-// can also match the shape, but only names in SPECIFIER_MAP are touched, and
-// replacing one string literal with another never changes the syntax.
-const SPECIFIER_RE = /\b(from|import)(\s*\(?\s*)"([^"\n]{1,40})"/g
-
-function rewriteSpecifiers (src) {
-  return src.replace(SPECIFIER_RE, (whole, kw, gap, spec) => {
-    const file = Object.prototype.hasOwnProperty.call(SPECIFIER_MAP, spec) ? SPECIFIER_MAP[spec] : null
-    return file ? `${kw}${gap}"${SHIM_PATH}${file}"` : whole
-  })
 }

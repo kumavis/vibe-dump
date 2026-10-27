@@ -73,6 +73,7 @@ export class Harness extends EventTarget {
    * @param {string[]} [o.argv]          CLI arguments; default buildArgv({model, mcpServerNames})
    * @param {string} [o.model]           used only when argv is not given
    * @param {object} [o.mcpServers]      { [name]: { tools: [{name, description, inputSchema, handler}] } | McpSdkServer }
+   * @param {string[]} [o.extraArgs]     appended to the default argv (ignored with `argv`)
    * @param {object} [o.boot]            extra fields for the Worker boot message (manifest, fsSnapshot, seedFiles, base, appUrl, ...)
    * @param {Transferable[]} [o.transfer] transferables in `boot`
    * @param {string} [o.cwd]
@@ -80,7 +81,7 @@ export class Harness extends EventTarget {
    * @param {'allow'|'deny'} [o.permissionPolicy]  default answer when nobody handles 'permission' (default 'allow': no shell, VFS only)
    * @param {object} [o.initialize]      extra fields for the initialize control request
    */
-  constructor ({ workerUrl, createWorker, env = {}, argv, model = '', mcpServers = {}, boot = {}, transfer = [], cwd = WORKSPACE, canUseTool, permissionPolicy = 'allow', initialize = {} } = {}) {
+  constructor ({ workerUrl, createWorker, env = {}, argv, extraArgs = [], model = '', mcpServers = {}, boot = {}, transfer = [], cwd = WORKSPACE, canUseTool, permissionPolicy = 'allow', initialize = {} } = {}) {
     super()
     if (!workerUrl && !createWorker) throw new TypeError('Harness: workerUrl or createWorker is required')
     this.workerUrl = workerUrl ? String(workerUrl) : null
@@ -98,7 +99,7 @@ export class Harness extends EventTarget {
       const server = def instanceof McpSdkServer ? def : new McpSdkServer({ name, tools: def?.tools ?? [] })
       this.#attachServer(name, server)
     }
-    this.argv = argv ? [...argv] : buildArgv({ model, mcpServerNames: [...this.servers.keys()] })
+    this.argv = argv ? [...argv] : buildArgv({ model, mcpServerNames: [...this.servers.keys()], extra: extraArgs })
 
     this.state = 'idle' // idle | booting | ready | exited
     this.bridge = null

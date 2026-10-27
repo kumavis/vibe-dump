@@ -322,3 +322,43 @@ Headless Chromium, static `dist/` served with no custom headers, mock API:
   untrusted input data. Never run the `claude` ELF itself.
 - Nothing from Anthropic's packages is ever written under `packages/`; tests
   read them from the scratchpad or download them into a temp dir.
+
+## As built (integration round 1)
+
+Where the implementation departs from the contract above, and why. STATUS.md
+has the test results.
+
+- **`__bunRequire` returns a module namespace as is**, with no CJS
+  unwrapping of a lone `default`: Bun's `import.meta.require` returns the
+  namespace and the bundle reads `.default` itself. A `.md`/`.txt` target
+  returns the file's text (prompt templates). A top-level require inside an
+  import cycle (one site in 2.1.311) gets a forwarding proxy
+  (`src/runtime/boot/require.js`).
+- **Pre-import order is computed at extraction**
+  (`src/runtime/boot/module-graph.js`, stored as `manifest.boot`). boot.js
+  imports one blob "loader" module whose static imports register each
+  target in order, so the browser fetches the graph in parallel. With
+  `manifest.boot` present, the `chunk-*.js` files are not mounted in the VFS:
+  they are only ever imported, never read as files.
+- **Service worker:** the specifier rewriting lives in
+  `src/runtime/boot/specifiers.js`. Rewritten JS is kept in a companion cache
+  `cc-sw<N>-<version>`, which `src/extract/cache.js` drops whenever it
+  rewrites or clears `cc-app-<version>`.
+- **`Harness.start()` resolves on the `initialize` control response.** The
+  2.1.311 CLI emits `system/init` at the start of each turn, not at process
+  start. Acceptance step 2 is measured from Start to the first turn's
+  `system/init`.
+- **Page MCP servers** are declared both in `--mcp-config` (type `sdk`) and
+  in `initialize.sdkMcpServers`, as the current Agent SDK does.
+- **Manifest:** `moduleCount` is 2,848 for linux-x64. `files` is 2,846
+  because the two `.node` addons are not cached.
+- **Platforms:** `import.meta.dir` is rewritten to a string literal (browsers
+  have no `import.meta.dirname`), and the readdir helper is inlined. Counts
+  are pinned per flavor (linux, darwin). All six linux/darwin platform
+  packages pass the acceptance test; Windows builds are refused.
+- **Workspace listing:** the page decodes the Worker's `fs-sync` snapshot
+  bytes (`src/host/snapshot.js`). It cannot call the fs shim across realms.
+- **Tests:** Chromium is at `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`.
+  The e2e adds checks beyond the acceptance test (file tools, a denied
+  permission, an interrupt). It also takes `--base`, `--binary`, `--modules`
+  and `--log`.

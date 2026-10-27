@@ -37,6 +37,16 @@ const processAdapter = {
 export const volume = Volume.fromJSON({}, '/', { process: processAdapter });
 const mfs = createFsFromVolume(volume);
 
+// memfs defines the four stream classes as getters that read a private symbol
+// off `this`. graceful-fs (bundled for proper-lockfile, which guards every
+// config save) clones fs by copying property descriptors, so on the clone the
+// getter runs with a `this` that lacks the symbol and throws, and every
+// "save config with lock" fails. Node's getters work with any `this`: pin the
+// classes as plain data properties.
+for (const k of ['ReadStream', 'WriteStream', 'FileReadStream', 'FileWriteStream']) {
+  Object.defineProperty(mfs, k, { value: mfs[k], writable: true, enumerable: true, configurable: true });
+}
+
 // A Linux-ish skeleton so common paths exist from the start.
 for (const dir of ['/tmp', '/home/user', '/dev', '/etc', '/usr/bin']) mfs.mkdirSync(dir, { recursive: true });
 mfs.writeFileSync('/dev/null', '');

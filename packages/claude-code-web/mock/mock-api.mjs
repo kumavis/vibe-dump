@@ -18,6 +18,12 @@
 //                                 tool_use id (else 400), and the reply echoes it
 //       "write a file"         -> tool_use Write {file_path: <workspace>/hello.txt},
 //                                 then text echoing the tool_result
+//       "stream slowly"        -> a long text, one SSE event every 200 ms (~5 s in
+//                                 all), for interrupting; a request the client
+//                                 abandons is marked `aborted: true` in /__requests
+//       "run the file tools"   -> one tool_use per request, each answering the last:
+//                                 Glob, Grep, Read, Edit (on hello.txt), then text
+//                                 quoting every tool_result ("<Tool>: <result>" lines)
 //       anything else          -> 401 authentication_error
 //   - POST /v1/messages/count_tokens -> {input_tokens}
 //   - GET /__requests -> the logged requests (JSON array); POST /__reset clears them
@@ -35,6 +41,16 @@ const PICK_HEADERS = ['anthropic-beta', 'anthropic-version', 'user-agent', 'x-ap
 
 const WRITE_PATH = process.env.MOCK_WRITE_PATH || '/home/user/workspace/hello.txt'
 const WRITE_CONTENT = 'hello from the mock API\n'
+const WORKSPACE = WRITE_PATH.slice(0, WRITE_PATH.lastIndexOf('/'))
+
+// "run the file tools": the built-in file tools on the Worker's virtual
+// filesystem, one per round trip (the Write scenario creates the file first).
+export const FILE_TOOL_STEPS = [
+  { name: 'Glob', input: { pattern: '**/*.txt', path: WORKSPACE } },
+  { name: 'Grep', input: { pattern: 'hello from', path: WORKSPACE, output_mode: 'content' } },
+  { name: 'Read', input: { file_path: WRITE_PATH } },
+  { name: 'Edit', input: { file_path: WRITE_PATH, old_string: 'hello from', new_string: 'goodbye from' } }
+]
 
 /** Text of a user message, minus <system-reminder> blocks Claude Code injects. */
 function userText (m) {
@@ -49,6 +65,24 @@ function toolResultText (block) {
   if (typeof c === 'string') return c
   if (Array.isArray(c)) return c.filter((b) => b && b.type === 'text').map((b) => b.text).join('\n')
   return ''
+}
+
+const SCENARIOS = [['use the weather tool', 'weather'], ['write a file', 'write'], ['run the file tools', 'files'], ['stream slowly', 'slow'], ['say hi', 'hi']]
+
+/**
+ * The scenario whose phrase comes last in the prompt: after an interrupted
+ * turn the CLI folds the old prompt, "[Request interrupted by user]" and the
+ * new prompt into one user message.
+ */
+export function scenarioOf (prompt) {
+  const text = String(prompt).toLowerCase()
+  let best = 'unknown'
+  let at = -1
+  for (const [phrase, name] of SCENARIOS) {
+    const i = text.lastIndexOf(phrase)
+    if (i > at) { at = i; best = name }
+  }
+  return best
 }
 
 /** Which scenario, which phase, and what the conversation holds since the prompt. */
@@ -67,7 +101,7 @@ export function analyze (body) {
   // (a tool_result inside the prompt message itself counts as well: some
   // clients fold the follow-up into the same user turn)
   if (promptIdx >= 0 && Array.isArray(msgs[promptIdx].content)) toolResults.push(...msgs[promptIdx].content.filter((b) => b.type === 'tool_result'))
-  const scenario = /use the weather tool/i.test(prompt) ? 'weather' : /write a file/i.test(prompt) ? 'write' : /say hi/i.test(prompt) ? 'hi' : 'unknown'
+  const scenario = scenarioOf(prompt)
   const toolNames = Array.isArray(body?.tools) ? body.tools.map((t) => t?.name).filter(Boolean) : []
   return { scenario, prompt, phase: toolResults.length ? 'follow-up' : 'first', toolUses, toolResults, toolNames }
 }
@@ -78,6 +112,11 @@ export function reply (a) {
     return { status: 401, error: { type: 'authentication_error', message: 'Invalid bearer token (mock: no scenario for this prompt; try "say hi", "use the weather tool" or "write a file")' } }
   }
   if (a.scenario === 'hi') return { content: [{ type: 'text', text: 'hi from the mock API' }], stop: 'end_turn' }
+  if (a.scenario === 'files') return fileToolsReply(a)
+  if (a.scenario === 'slow') {
+    const text = Array.from({ length: 25 }, (_, i) => `word${i + 1}`).join(' ')
+    return { content: [{ type: 'text', text }], stop: 'end_turn', delayMs: 200 }
+  }
   if (a.phase === 'first') {
     if (a.scenario === 'weather') {
       const name = a.toolNames.find((n) => /^mcp__.+__get_weather$/.test(n)) ?? 'mcp__page__get_weather'
@@ -94,6 +133,24 @@ export function reply (a) {
   const text = toolResultText(result)
   if (a.scenario === 'weather') return { content: [{ type: 'text', text: `The weather tool said: ${text}` }], stop: 'end_turn', echoed: text }
   return { content: [{ type: 'text', text: `Wrote the file. The tool said: ${text}` }], stop: 'end_turn', echoed: text }
+}
+
+function fileToolsReply (a) {
+  // every tool_use so far must have its tool_result
+  for (const use of a.toolUses) {
+    if (!a.toolResults.some((r) => r.tool_use_id === use.id)) {
+      return { status: 400, error: { type: 'invalid_request_error', message: `mock: expected a tool_result for ${use.id}` } }
+    }
+  }
+  const step = FILE_TOOL_STEPS[a.toolUses.length]
+  if (step) {
+    return { content: [{ type: 'tool_use', id: `toolu_mock_${step.name.toLowerCase()}_${Date.now().toString(36)}`, name: step.name, input: step.input }], stop: 'tool_use', toolPresent: a.toolNames.includes(step.name) }
+  }
+  const lines = a.toolUses.map((use) => {
+    const r = a.toolResults.find((x) => x.tool_use_id === use.id)
+    return `${use.name}${r.is_error ? ' (error)' : ''}: ${toolResultText(r).replace(/\s+/g, ' ').trim()}`
+  })
+  return { content: [{ type: 'text', text: `File tools done.\n${lines.join('\n')}` }], stop: 'end_turn', echoed: lines.join('\n') }
 }
 
 function sseEvents (r, { model, id }) {
@@ -213,10 +270,12 @@ export function startMockApi ({ port = 0, host = '127.0.0.1', logFile = process.
         res.writeHead(200, { 'content-type': 'text/event-stream; charset=utf-8', 'cache-control': 'no-cache', 'request-id': `req_mock_${rec.i}`, ...corsHeaders(req) })
         const events = sseEvents(r, { model: body?.model, id })
         let k = 0
+        res.on('close', () => { if (k < events.length) rec.aborted = true })
         const pump = () => {
+          if (res.destroyed) return
           if (k >= events.length) return res.end()
           res.write(events[k++])
-          setTimeout(pump, eventDelayMs)
+          setTimeout(pump, r.delayMs ?? eventDelayMs)
         }
         return pump()
       }

@@ -2,15 +2,26 @@
 // The acceptance test (ARCHITECTURE.md "Acceptance test"), end to end in
 // headless Chromium against the built page and the mock API. Builds nothing.
 //
-//   node test/e2e.mjs [--dist <dir>] [--binary <path>] [--fake] [--skip-extract]
-//                     [--headed] [--json <file>] [--chromium <path>]
+//   node test/e2e.mjs [--dist <dir>] [--binary <path>] [--modules <n>] [--base <path>]
+//                     [--fake] [--skip-extract] [--headed] [--json <file>] [--log <file>]
+//                     [--chromium <path>]
 //
 //   --dist     the built page (default: ../dist next to this file)
-//   --binary   the linux-x64 `claude` executable to drop (default: $CC_BINARY,
-//              else the research scratchpad copy); read by the browser only
+//   --binary   the `claude` executable (or platform .tgz) to drop (default:
+//              $CC_BINARY, else the research scratchpad's linux-x64 copy);
+//              read by the browser only
 //   --fake     run the page with ?fake (fake-worker.js instead of the real
 //              harness): checks the page, host and UI wiring, NOT acceptance
 //   --skip-extract  with --fake: skip step 1
+//   --modules  the module count step 1 expects (default 2848, linux-x64)
+//   --base     serve the page under this path instead of / (e.g.
+//              /vibe-dump/claude-code-web/, as on GitHub Pages)
+//   --log      write the page's session log (Worker log, CLI stderr, notes) of
+//              every page the test opened to this file, for diagnosis
+//
+// Steps 1-6 (and 2b, the warm boot) are the acceptance test. Steps 7-9 go
+// beyond it on the warm session: the built-in file tools on the virtual
+// filesystem, a permission the page denies, and an interrupt mid-stream.
 //
 // Every step prints PASS/FAIL/SKIP with its reason; the exit code is 0 only
 // when every step passed (in --fake mode: when nothing failed). Any request
@@ -18,7 +29,7 @@
 // step 6 (page, Worker and service-worker requests all go through
 // context.route).
 
-import { existsSync, mkdtempSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -34,7 +45,6 @@ const CHROMIUM_CANDIDATES = [
   '/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell'
 ]
 const FAKE_TOKEN = 'sk-ant-oat01-e2e-FAKE-not-a-real-token'
-const EXPECTED_MODULES = 2848
 
 // --- options -----------------------------------------------------------------
 const args = process.argv.slice(2)
@@ -47,6 +57,10 @@ const SKIP_EXTRACT = flag('--skip-extract')
 const HEADED = flag('--headed')
 const JSON_OUT = opt('--json', null)
 const CHROMIUM = opt('--chromium', process.env.CHROMIUM_PATH || null)
+const LOG_OUT = opt('--log', null)
+// 2,848 for linux-x64; another platform's build has its own module set (darwin-arm64: 2,866)
+const EXPECTED_MODULES = Number(opt('--modules', 2848))
+const BASE_PATH = `/${opt('--base', '/').replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/')
 
 // --- reporting ---------------------------------------------------------------
 const results = []
@@ -61,8 +75,10 @@ const info = (msg) => console.log(`     ${msg}`)
 
 // --- harness of the test itself ----------------------------------------------
 let staticSrv, mock, browser
+let page = null // the page currently open
 const foreign = []
 const consoleLines = []
+const pageLogs = [] // session logs of closed pages (for --log)
 
 async function launch () {
   const tries = []
@@ -99,6 +115,15 @@ async function openPage (context, url) {
 
 const sessionLog = (page, n = 25) => page.evaluate((k) => window.__cc.session.log.slice(-k).map((l) => `${l.level}: ${l.msg}`).join('\n'), n).catch(() => '(page gone)')
 
+/** Keep the whole session log of a page before it is closed (for --log). */
+async function keepLog (p, label) {
+  const lines = await p.evaluate(() => window.__cc.session.log.map((l) => `${new Date(l.t).toISOString()} ${l.level}: ${l.msg}`)).catch(() => ['(page gone)'])
+  pageLogs.push(`===== ${label} =====`, ...lines)
+}
+
+/** The Worker's one-line boot summary (module count and per-phase timings). */
+const bootLine = (p) => p.evaluate(() => window.__cc.session.log.filter((l) => /^boot: /.test(l.msg)).map((l) => l.msg).pop() ?? '(no boot line)').catch(() => '(page gone)')
+
 /** Type a prompt into the composer and wait for that turn's result. */
 async function turnViaUi (page, text, timeoutMs) {
   const from = await page.evaluate(() => window.__cc.harness.messages.length)
@@ -131,7 +156,15 @@ async function main () {
     return
   }
 
-  staticSrv = await startStaticServer(DIST, 0)
+  // Under --base, serve a temp root in which BASE_PATH is a symlink to DIST.
+  let root = DIST
+  if (BASE_PATH !== '/') {
+    root = mkdtempSync(join(tmpdir(), 'cc-e2e-root-'))
+    const link = join(root, ...BASE_PATH.split('/').filter(Boolean))
+    mkdirSync(dirname(link), { recursive: true })
+    symlinkSync(DIST, link, 'dir')
+  }
+  staticSrv = await startStaticServer(root, 0)
   const logFile = process.env.MOCK_LOG || join(mkdtempSync(join(tmpdir(), 'cc-e2e-')), 'mock-requests.jsonl')
   mock = await startMockApi({ port: 0, logFile })
   info(`static ${staticSrv.url}  mock ${mock.url}  (mock log ${logFile})`)
@@ -151,8 +184,9 @@ async function main () {
     if (/^https?:$/.test(u.protocol) && !allowed.has(u.host) && !foreign.some((f) => f.url === u.href)) foreign.push({ url: u.href, type: r.resourceType(), via: 'request event' })
   })
 
-  const pageUrl = `${staticSrv.url}/index.html${FAKE ? '?fake' : ''}`
-  let page = await openPage(context, pageUrl)
+  const pageUrl = `${staticSrv.url}${BASE_PATH}index.html${FAKE ? '?fake' : ''}`
+  if (BASE_PATH !== '/') info(`page   ${pageUrl}`)
+  page = await openPage(context, pageUrl)
 
   // Settings through the UI (persisted in localStorage across the reloads).
   await page.click('#auth-oauth')
@@ -188,6 +222,7 @@ async function main () {
       if (!rw || !rw.ok) problems.push('rewrite report missing or not ok')
       for (const r of rw?.rewrites ?? []) if (!r.ok) problems.push(`rewrite ${r.id}: ${r.matches} matches, expected ${JSON.stringify(r.expected)}`)
       // reload: the cache must be reused without re-extracting
+      await keepLog(page, 'page 1: extraction')
       await page.close()
       page = await openPage(context, pageUrl)
       const after = await page.evaluate(() => ({ cache: window.__cc.state.cache, extractions: window.__cc.state.extractions, createdAt: window.__cc.state.manifest?.createdAt }))
@@ -212,6 +247,7 @@ async function main () {
     } else {
       running = true
       info(`initialize answered after ${secs(boot.ms)}`)
+      if (!FAKE) info(`worker ${await bootLine(page)}`)
     }
   }
 
@@ -308,6 +344,7 @@ async function main () {
       const domHas = async (p) => (await p.textContent('#workspace-list')).includes('hello.txt')
       if (!(await domHas(page))) p5.push('hello.txt not shown in #workspace-list')
       await page.evaluate(() => window.__cc.stop())
+      await keepLog(page, 'page 2: cold boot and the three turns')
       await page.close()
       page = await openPage(context, pageUrl)
       const afterReload = await listed(page)
@@ -321,12 +358,26 @@ async function main () {
         record('2b', 'warm boot: system/init within 10 s', 'FAIL', `the harness did not start (${boot.outcome}; state ${boot.harness})`)
       } else {
         await turnViaUi(page, 'say hi', 60_000)
+        if (!FAKE) info(`worker ${await bootLine(page)}`)
         const t = await page.evaluate(() => window.__cc.timings)
         record('2b', 'warm boot: system/init within 10 s', t.firstInitMs <= 10_000 ? 'PASS' : 'FAIL', `init after ${secs(t.firstInitMs)} (initialize ${secs(t.readyMs)})`, { warmInitMs: t.firstInitMs })
+        if (!FAKE) await fileTools(page)
+        if (!FAKE) await deniedWrite(page)
+        if (!FAKE) await interruptTurn(page)
       }
     } catch (err) {
       record(5, '"write a file"', 'FAIL', `${err.message}\n--- page log ---\n${await sessionLog(page)}`)
     }
+  }
+
+  if (!results.some((r) => r.id === 7)) {
+    record(7, 'extra: Glob, Grep, Read, Edit on the virtual filesystem', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'the fake worker has no file tools' : 'did not run (needs steps 5 and 2b)')
+  }
+  if (!results.some((r) => r.id === 9)) {
+    record(9, 'extra: interrupt mid-stream, then the next turn works', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'covered by the unit tests in fake mode' : 'did not run (needs steps 5 and 2b)')
+  }
+  if (!results.some((r) => r.id === 8)) {
+    record(8, 'extra: a denied permission prompt blocks the Write', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'covered by the unit tests in fake mode' : 'did not run (needs steps 5 and 2b)')
   }
 
   // ---- 6. no foreign requests ----------------------------------------------
@@ -335,10 +386,111 @@ async function main () {
     foreign.length ? `${foreign.length} blocked: ${hosts.join(', ')}\n${foreign.slice(0, 10).map((f) => `${f.type} ${f.url}`).join('\n')}` : `${allowed.size} hosts used`)
 }
 
+// ---- 7 (beyond the acceptance test): the built-in file tools on the VFS ----
+// The mock's "run the file tools" scenario sends Glob, Grep, Read and Edit on
+// the hello.txt step 5 wrote (restored from OPFS after the reload), one per
+// round trip, then quotes every tool_result. Glob and Grep run through the
+// child_process shim's ripgrep subset.
+async function fileTools (p) {
+  const name = 'extra: Glob, Grep, Read, Edit on the virtual filesystem'
+  try {
+    const { result } = await turnViaUi(p, 'run the file tools', 90_000)
+    const text = String(result.result ?? '')
+    const line = (tool) => text.split('\n').find((l) => l.startsWith(`${tool}`)) ?? ''
+    const p7 = []
+    if (result.is_error !== false) p7.push(`result is_error: ${text}`)
+    if (!/^Glob: .*hello\.txt/.test(line('Glob'))) p7.push(`Glob: ${line('Glob') || '(missing)'}`)
+    if (!/^Grep: .*hello\.txt:1:hello from the mock API/.test(line('Grep'))) p7.push(`Grep: ${line('Grep') || '(missing)'}`)
+    if (!/^Read: .*hello from the mock API/.test(line('Read'))) p7.push(`Read: ${line('Read') || '(missing)'}`)
+    if (!/^Edit: (?!.*error)/i.test(line('Edit'))) p7.push(`Edit: ${line('Edit') || '(missing)'}`)
+    let content = null
+    for (let i = 0; i < 40; i++) {
+      content = await p.evaluate(() => window.__cc.workspaceText('hello.txt'))
+      if (content?.startsWith('goodbye')) break
+      await new Promise((resolve) => setTimeout(resolve, 250))
+    }
+    if (content !== 'goodbye from the mock API\n') p7.push(`hello.txt after the Edit: ${JSON.stringify(content)}`)
+    record(7, name, p7.length ? 'FAIL' : 'PASS', p7.join('\n') || `4 tool round trips; hello.txt now ${JSON.stringify(content)}`)
+  } catch (err) {
+    record(7, name, 'FAIL', err.message)
+  }
+}
+
+// ---- 8 (beyond the acceptance test): deny over the control channel --------
+// The page answers the CLI's can_use_tool for the Write with a deny; the CLI
+// must not write, and must hand the denial to the model as the tool_result.
+async function deniedWrite (p) {
+  const name = 'extra: a denied permission prompt blocks the Write'
+  const reason = 'denied by the e2e test'
+  try {
+    const before = await p.evaluate(() => window.__cc.workspaceText('hello.txt'))
+    await p.evaluate((msg) => {
+      window.__cc.harness.addEventListener('permission', (e) => { e.preventDefault(); e.detail.deny(msg) }, { once: true })
+    }, reason)
+    const { result, messages } = await turnViaUi(p, 'write a file', 90_000)
+    const asked = messages.filter((m) => m.type === 'control_request' && m.request?.subtype === 'can_use_tool').map((m) => m.request.tool_name)
+    await p.evaluate(() => window.__cc.session.harness?.flushFs())
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const after = await p.evaluate(() => window.__cc.workspaceText('hello.txt'))
+    const p8 = []
+    if (asked.join() !== 'Write') p8.push(`can_use_tool asked for ${JSON.stringify(asked)}`)
+    if (!String(result.result ?? '').includes(reason)) p8.push(`the result does not carry the denial: ${result.result}`)
+    if (after !== before) p8.push(`hello.txt changed: ${JSON.stringify(before)} -> ${JSON.stringify(after)}`)
+    record(8, name, p8.length ? 'FAIL' : 'PASS', p8.join('\n') || `result "${result.result}"; hello.txt unchanged`)
+  } catch (err) {
+    record(8, name, 'FAIL', err.message)
+  }
+}
+
+// ---- 9 (beyond the acceptance test): interrupt ------------------------------
+// The mock streams "stream slowly" over ~3 s. Once it is streaming, the page
+// sends the interrupt control request: the turn must end promptly, the
+// streaming request must be abandoned (fetch abort through the http shim),
+// and the same process must answer the next prompt.
+async function interruptTurn (p) {
+  const name = 'extra: interrupt mid-stream, then the next turn works'
+  try {
+    await resetMock()
+    const from = await p.evaluate(() => window.__cc.harness.messages.length)
+    await p.fill('#prompt', 'stream slowly')
+    await p.click('#send')
+    const t0 = Date.now()
+    let streaming = null
+    while (!streaming && Date.now() - t0 < 30_000) {
+      streaming = messagePosts(await mockRequests()).find((r) => r.scenario === 'slow')
+      if (!streaming) await new Promise((resolve) => setTimeout(resolve, 100))
+    }
+    if (!streaming) throw new Error('the mock never saw the "stream slowly" request')
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    const tInt = Date.now()
+    await p.evaluate(() => window.__cc.interrupt())
+    const result = await p.evaluate(({ from }) => window.__cc.waitFor((m) => m.type === 'result', { fromIndex: from, timeoutMs: 20_000 }), { from })
+    const afterMs = Date.now() - tInt
+    // the mock sees the abort when the socket closes, a moment after the result
+    let slow = null
+    for (let i = 0; i < 30 && !slow?.aborted; i++) {
+      slow = messagePosts(await mockRequests()).find((r) => r.scenario === 'slow')
+      if (!slow?.aborted) await new Promise((resolve) => setTimeout(resolve, 100))
+    }
+    const p9 = []
+    if (afterMs > 2500) p9.push(`the result came ${secs(afterMs)} after the interrupt`)
+    if (!slow?.aborted) p9.push('the streaming request was not abandoned')
+    const next = await turnViaUi(p, 'say hi', 60_000)
+    if (next.result.is_error !== false || next.result.result !== 'hi from the mock API') p9.push(`the next turn: ${next.result.result}`)
+    record(9, name, p9.length ? 'FAIL' : 'PASS', p9.join('\n') || `result ${result.subtype}${result.is_error ? ' (is_error)' : ''} ${secs(afterMs)} after the interrupt; stream abandoned; next turn "${next.result.result}"`)
+  } catch (err) {
+    record(9, name, 'FAIL', err.message)
+  }
+}
+
 const guard = setTimeout(() => { console.log('FAIL     the whole run exceeded 20 min'); finish(1) }, 20 * 60_000)
 
 async function finish (forced) {
   clearTimeout(guard)
+  if (LOG_OUT) {
+    if (page) await keepLog(page, 'last page')
+    writeFileSync(LOG_OUT, pageLogs.join('\n') + '\n')
+  }
   await browser?.close().catch(() => {})
   await staticSrv?.close().catch(() => {})
   await mock?.close().catch(() => {})

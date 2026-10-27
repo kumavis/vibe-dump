@@ -68,11 +68,12 @@ function lazyNamespace (resolve) {
   })
 }
 
-// An arrow function as the target: callable and constructible through the
-// traps, and without the non-configurable `prototype` own property a plain
-// function has (which ownKeys would then have to report).
+// A bound function as the target: a Proxy is callable/constructible only when
+// its target is (an arrow function would make `new` throw before the trap
+// runs), and unlike a plain function it has no non-configurable `prototype`
+// own property, which ownKeys would then have to report.
 function lazyExport (value) {
-  return new Proxy(() => {}, {
+  return new Proxy(function () {}.bind(null), {
     get (_, prop) {
       const v = value()
       if (v === undefined || v === null) return undefined
@@ -92,6 +93,6 @@ function lazyExport (value) {
       return { value: v[prop], enumerable: true, configurable: true, writable: true }
     },
     apply: (_, self, args) => Reflect.apply(value(), self, args),
-    construct: (_, args, newTarget) => Reflect.construct(value(), args)
+    construct: (_, args) => Reflect.construct(value(), args)
   })
 }

@@ -112,16 +112,35 @@ answer; this project does not work around it.
 
 ## Development
 
+The real harness needs the built runtime (`dist/runtime/`: the shims, the Bun
+polyfill and the Worker bootstrap), so try it on the build, against the mock
+API:
+
 ```sh
-npm run dev                         # vite dev server; add ?fake to the URL to use
-                                    # the scripted fake worker instead of Claude Code
-node mock/mock-api.mjs 18080        # local stand-in for /v1/messages; set the page's
-                                    # base URL to http://127.0.0.1:18080 and try
-                                    # "say hi", "use the weather tool", "write a file"
+npm run build                       # vite build + scripts/build-runtime.mjs -> dist/
+PORT=4173 node ../../scripts/serve.mjs dist   # the page at http://127.0.0.1:4173/
+node mock/mock-api.mjs 18080        # local stand-in for /v1/messages
+```
+
+In the page, pick either credential mode and paste any placeholder (the mock
+only checks that one is there), set the base URL to `http://127.0.0.1:18080`,
+drop the binary, press Start, and try `say hi`, `use the weather tool`,
+`write a file`, `run the file tools` (Glob, Grep, Read, Edit on the
+workspace) or `stream slowly` (then Interrupt). `?trace` in the page URL logs
+every spawn and fetch the CLI makes; `?debug` adds the CLI's own debug output.
+Both show in the page log.
+
+```sh
+npm run dev                         # vite dev server for UI work: add ?fake to the URL
+                                    # (a scripted fake worker; the real one needs the build)
 npm test                            # unit tests (node --test)
 npm run build && npm run test:e2e   # the acceptance test in headless Chromium
-node test/e2e.mjs --fake            # the same flow against the fake worker
+node test/e2e.mjs --base /vibe-dump/claude-code-web/   # the same under the Pages sub-path
+node test/e2e.mjs --fake            # the page flow against the fake worker
 ```
+
+The acceptance test drops the binary from `$CC_BINARY` (default: the research
+scratchpad copy); `--log <file>` saves the page log of every page it opened.
 
 The design contract is [ARCHITECTURE.md](./ARCHITECTURE.md); the page ⇄
 Worker messages are specified in

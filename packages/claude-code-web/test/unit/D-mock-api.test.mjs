@@ -144,3 +144,11 @@ test('mock: analyze() finds the latest real prompt behind tool results and remin
   assert.equal(a.phase, 'follow-up')
   assert.equal(a.toolUses[0].id, 't1')
 })
+
+test('mock: after an interrupt the newest prompt phrase picks the scenario', async () => {
+  const { scenarioOf, analyze } = await import('../../mock/mock-api.mjs')
+  assert.equal(scenarioOf('stream slowly\n\n[Request interrupted by user]\n\nsay hi'), 'hi')
+  assert.equal(scenarioOf('say hi, then use the weather tool'), 'weather')
+  assert.equal(scenarioOf('something else'), 'unknown')
+  assert.equal(analyze({ messages: [{ role: 'user', content: [{ type: 'text', text: 'stream slowly' }, { type: 'text', text: '[Request interrupted by user]' }, { type: 'text', text: 'run the file tools' }] }] }).scenario, 'files')
+})
