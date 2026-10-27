@@ -1050,7 +1050,9 @@ export function boot(location) {
         // opening view's shots): its pose and distance, how many batches it
         // framed, its bookmark, and each figure's height on screen in CSS px
         // (its box's top and bottom at its middle, projected), for the
-        // figures in front of the camera and on screen
+        // figures in front of the camera and on screen; ((F14)
+        // sim/lobby-rig.mjs's follow) and how often the follow policy moved
+        // it (a batch or an action framed, a focus glided to)
         camera: () => {
           const pose = rig.pose(), box = new THREE.Box3(), v = new THREE.Vector3()
           const heights = []
@@ -1064,7 +1066,7 @@ export function boot(location) {
             if (top.z >= 1 || bot.z >= 1 || Math.abs(bot.x) > 1 || Math.abs(bot.y) > 1) return
             heights.push(((top.y - bot.y) / 2) * innerHeight)
           })
-          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, marks: [...rig.marks.keys()], heights }
+          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, followed: rig.followed, marks: [...rig.marks.keys()], heights }
         },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)
