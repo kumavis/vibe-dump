@@ -117,7 +117,9 @@ the commit, and add whatever the work turned up.
   `--jobs 2`; a step that moves balance runs it), `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
   set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
-  P-peers' `--only scale`). A step
+  P-peers' `--only scale`), and from F18 P-prop's P-fight (shooting into a
+  fight on scenes of its own: legal for every ranged weapon, a volley's
+  dice held draw for draw, the AI's value net of its friendly fire). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1216,7 +1218,7 @@ answered; 35 (Escape) by the user: no change.
   terrain-check's connectivity rows on fortified Field and Grand boards
   (the keep's objective is held from its top) and play-check's layout lane
   (no card after clicks on a Grand board). DESIGN's F17 notes.)
-- [ ] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
+- [x] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
   target for every weapon but a spell ("locked in combat"), so nobody shoots
   or shells a melee. Any ranged weapon may, at no modifier: the cost is the
   risk to your own units in the fight, never a flat penalty. A blast or
@@ -1235,6 +1237,39 @@ answered; 35 (Escape) by the user: no change.
   `CORE_VERSION` bump; every corpus battle with a shooter and a melee in its
   range re-records; P-prop's shoot cases take the new legal pairs and the
   friendly rolls.
+  (15f42ef; `CORE_VERSION` 9, `RULES_ID` unchanged: code, not data.
+  shotInfo's "locked in combat" is gone, for every ranged weapon; a plain
+  volley into a fight draws one die per miss after the hit roll, a stray
+  when under F / (F + T) (the shooter's units' living models in the fight
+  against the target's), the strays wounded and saved on the friend with
+  the most models (ties: G.units order), in ⚠ rows after the target's and
+  a "Friendly fire!" line; F = 0 draws nothing; templates land as ever
+  (DESIGN §4.1 rule 27). The exposure rule built, the cone kept as the
+  alternative: it reads right (the more of yours in the fight, the riskier
+  the shot), though a model is a model, the Brute one against ten Nutkin
+  (a base-weighted share is the lever if that reads harsh). The AI nets a
+  volley's expected strays and a template's friends under it, every
+  template's, not only one at a fight (`strayCost`, `ownUnder`, by
+  `expected`), so it never shells its own Brute. The tooltip's risk line
+  ("⚠ into a fight: 3 of yours in it, a miss strays 1 in 3 (≈0.4 of yours
+  slain)", "⚠ friends under the template: …"), the help's Shooting bullet
+  and Blast paragraph. P-fight in P-prop, nine self-test edits; P-scan's
+  reference by the code's own costs; data-check's PINNED and P-prop's
+  PINNED_UNDER take 9 (64-89 ends at its new battle's hash);
+  `corpus-add --regen`, a human-bot log played again by its own bot. The
+  corpus in 6b12ba4, the PIN on 15f42ef: 38 of 70 battles played
+  differently (33 shooting into a fight, five by a template's net value
+  alone): 28 AI battles re-recorded, eight human-bot logs played again by
+  their bots, two replaced as corpus-add makes one (bushtail-pilot-mix-2 by
+  -6, hotseat-late-vote-9 by -11); parity and `--pin` 70 of 70. army-sim's
+  Skirmish gates: classic 53.5% ± 1.2 (52.4 before), fortified 51.7% ±
+  1.2 (49.1), every unit in band; the Field's score gates hold (46.1% and
+  47.3%; 48.5 and 49.2 before), its per-unit gate failing on the Glider
+  Wing (30 against its 60) on the default seed and on other units on a
+  second, where F17's code fails it too (the unit to watch: a melee unit
+  can be shot now); the Grand's reported. macro-check's count ported
+  (c0da8e6: a unit an earlier order's blast or shot freed may act, as one
+  regenerated log showed). DESIGN's F18 notes.)
 - [ ] **F19** Hazards (rules), in order of fit. **F19a** The powder keg: a
   chunk kind whose destruction is a blast at its place (the terrain's own
   hurt → destroy → consequences, as a wall's collapse or a tree's topple:
