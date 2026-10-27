@@ -50,10 +50,15 @@ subscription.
    2026-10-07 Max and Team plans include monthly API credits that cover it,
    and browser-direct API-key access is officially supported.
 
-**Recommendation:** build the shim-port runtime (§9), with API-key auth as
-the default and setup-token auth as an opt-in experimental mode, targeting
-the extracted current JS if §8 holds and v2.1.112 otherwise. Run a one-day
-WebContainers baseline in parallel for comparison.
+**Recommendation:** build the shim-port runtime as the primary track (§6,
+§9), with API-key auth as the default and setup-token auth as an opt-in
+experimental mode, shipping v2.1.112 first and the extracted current JS as a
+follow-up (§8). Run a one-day WebContainers baseline in parallel, and a
+BrowserPod track only if the user signs up for a key and accepts its terms.
+The agents split between the shim port (independence, performance, iOS,
+everything ours) and BrowserPod (real bash/git/rg, no CORS wall, a first
+turn in a day, but proprietary, metered and vendor-routed); the acceptance
+test in §9 is designed to settle it empirically.
 
 ## 1. Constraints
 
@@ -201,20 +206,54 @@ What follows from this for our design:
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | **Shim port**: official JS on the page's V8 behind an import map (`@jspm/core` + own shims), ZenFS/memfs → OPFS, `just-bash`, isomorphic-git, xterm.js tty shim | 2.1.112 proven (`--help`, `-p` reach the API); current via extraction + Bun polyfill (§8) | **Native V8**; ~3x cold start measured | Browser `fetch`, so CORS (§3): inference works | `just-bash` already runs the Bash tool's wrapper idiom; lacks `trap`, `declare -f` bodies, `git`, `node`; `rg` built in | Optional (only for sync `spawnSync` via `Atomics.wait`) | Yes, trivially | All MIT/Apache/LGPL; Claude Code fetched at runtime | **Build this** |
 | 2 | **WebContainers** (StackBlitz) | 2.1.112 very likely (Node 22.22 inside); current via extracted JS + polyfill plausible | Near-native (~1–1.5x) | Browser `fetch`, so CORS; CORS proxy only in paid editor | `jsh`, not bash (alias a `just-bash` Node script as `SHELL`); no git; no native `rg` | Required (`coi-serviceworker` works, demo exists) | Yes | Proprietary runtime loaded from StackBlitz; free for OSS; breaks under third-party-cookie blocking | **One-day baseline** |
-| 3 | **BrowserPod / BrowserCode** (Leaning Technologies) | Current-era extracted JS (their pinned May-2026 image); the only precedent with real bash/git/rg | "Native-like" JS (vendor); no numbers | **All egress via their Cloudflare proxy** (allowlist incl. AI APIs); token transits their infra | Real bash, git, rg, npm compiled to Wasm | Required, plus Wasm JSPI (Chrome 137+, Firefox 153+, Safari 27+, no iOS) | Probably via `coi-serviceworker`, untested | Proprietary, metered (free non-commercial tier, attribution, key visible client-side) | Reference yardstick; poor foundation |
-| 4 | **almostnode / agent-wasm** | 2.1.112 (fork pinned there; code says it can't go past) | Native V8 | Configurable CORS proxy or Tailscale-in-Wasm exit node | `just-bash`; 48k lines of shims incl. an 8k-line `child_process` | See agent F | Yes | MIT | Mine for shims; see agent F |
+| 3 | **BrowserPod / BrowserCode** (Leaning Technologies): real Node 22.15 + OpenSSL compiled to Wasm, JS on the browser's V8, Linux-like kernel per Worker, ext2 image streamed and persisted in OPFS | 2.1.112 (plain Node code) and current-era extracted JS (their pinned May-2026 image runs it; we can inject our own files with `createFile` or mount our own ext2 `userImage`) | JS on V8; ~13.5 MB runtime download; no published numbers | **No CORS at all**: Node inside the pod makes raw TCP connections tunnelled over WebSockets to Leaning's relay, TLS terminating inside the pod, so the relay sees ciphertext. Server-side host allowlist (AI APIs, npm, GitHub). So normal `/login` works. No supported way to make `api.anthropic.com` go direct. | **Real** GNU bash, git, rg, fd, curl, npm, ptys, signals | Required, plus Wasm JSPI and `Atomics.waitAsync` (Chrome/Edge 137+, Firefox 153+, Safari 27+); **no iOS** | Runtime served from their CDN with `ACAO: *`; `coi-serviceworker` should suffice (untested) | Proprietary; Personal tier is non-commercial only, visible attribution required, API key client-visible by design, 10 tokens per boot from a 10,000-token grant, key owner liable for visitors' traffic | Highest fidelity, fastest first turn (~1 day), but vendor-bound |
+| 4 | **almostnode / agent-wasm** (MIT): pure-JS Node shims on the main thread, `just-bash`, no Wasm kernel | 2.1.112 only (fork pinned there; `--version` and TUI start are tested, no public evidence of a real API turn); current JS would need `worker_threads`, sync `child_process` and async-context emulation written from scratch | Main-thread JS; Ink render and tools share the UI thread | Direct CORS to `api.anthropic.com` possible via `noProxy`; everything else defaults to a third-party CORS proxy (`langtail.workers.dev`) that must be disabled | `just-bash`; JS `rg`; isomorphic-git; no PTY; child output buffered | **Not required** (same-origin service worker only) | Yes | MIT | Upstream inactive since 2026-02; fork single-author. Mine the fork for its transcript-tailing, bracketed-paste injection and passkey credential vault; do not build on it |
 | 5 | CheerpX / WebVM | 32-bit Node only; cannot run the 64-bit Bun binary | 2–10x slower, V8 JIT-in-JIT worse | **Tailscale only**; needs an exit-node server | Real Linux userland | Required | Yes | Free community licence from their CDN | Ruled out (network) |
 | 6 | v86 | 32-bit Node only | **10–100x slower**; Node hello-world 1.6–40 s | Port-80 fetch bridge (CORS) or relay | Real Linux userland | No | Yes | BSD-2 | Ruled out (speed) |
 | 7 | container2wasm / QEMU-wasm | The only one that could run the x86-64 Bun ELF | **Likely 50–500x slower** | In-page TLS-terminating fetch proxy | Real | Required | Yes | Apache/GPL | Curiosity only |
 | 8 | Nodebox, WASI Node/Bun, Edge.js | Nodebox abandoned 2023 with no TTY; no Node/Bun for wasm32-wasi exists; Edge.js runs QuickJS in Wasm | — | — | — | — | — | — | Not viable |
 
-Why the shim port wins: it is the only avenue with native JS speed, no vendor
-runtime, no mandatory cross-origin isolation, no server, and a licensing
-story where every line we ship is ours. Its cost is the long tail of
-`child_process`, `tty` and `fs` behaviour, which agents B and D have already
-mapped (startup subprocess list, raw-mode stdin must not flush, child output
-must be buffered so it does not interleave with Ink frames,
-`COLORTERM=truecolor`, `CLAUDE_CODE_NO_FLICKER=1`).
+**The real choice is between rows 1, 2 and 3**, and the agents split on it.
+
+- The runtime agent (B) ranks the **shim port** first: it is the only avenue
+  with native JS speed, no vendor runtime, no mandatory cross-origin
+  isolation, no server, iOS reach, and a licensing story where every line we
+  ship is ours. Its cost is the long tail of `child_process`, `tty` and `fs`
+  behaviour, which agents B, D and E have mapped (startup subprocess list,
+  raw-mode stdin must not flush, child output must be buffered so it does not
+  interleave with Ink frames, `COLORTERM=truecolor`,
+  `CLAUDE_CODE_NO_FLICKER=1`, seed onboarding), and a shell that is an
+  interpreter rather than bash: no `node`/`npm` inside the sandbox unless we
+  spawn nested Workers for them.
+- The deep-dive agent (F) ranks **BrowserPod** first: it is the only option
+  that gives Claude Code a real OS, it already runs Claude Code in public at
+  browsercode.io, the whole CORS problem disappears (so subscription `/login`
+  works as shipped), and a first real turn is about a day away by booting
+  BrowserCode's public image. The costs are a proprietary, metered runtime
+  with a client-visible key, attribution, non-commercial-only terms, no iOS,
+  and egress through a third party's relay (encrypted, but still their
+  infrastructure, and their terms say they log traffic metadata).
+- **WebContainers** sits between them: a real Node-compatible runtime with a
+  PTY and in-container `npm install`, free for open source, about a day to a
+  first turn, but `jsh` instead of bash, no git, a StackBlitz-hosted
+  proprietary runtime, and the same CORS boundary as the shim port.
+
+The project-manager call: **shim port as the primary track, WebContainers as
+the baseline, BrowserPod as an optional third track only if the user is
+willing to sign up for a key and accept its terms.** The reasoning is that
+this gallery is a collection of static, dependency-free apps, and a card
+whose runtime, network path and per-visitor cost belong to a vendor is a poor
+fit, while the shim port's weaknesses (shell fidelity, maintenance of the
+shim layer) are engineering we control. If fidelity of the Bash tool turns
+out to matter more than independence, BrowserPod is the better answer and
+the acceptance test below will show it.
+
+Rough effort to a first real API turn, from the agents' estimates: shim port
+2–5 days for 2.1.112 (B's probe already reaches the API with ~250 lines of
+shims), WebContainers about 1 day, BrowserPod 0.5–1 day with BrowserCode's
+image. Tracking the current extracted JS adds roughly 3–7 days on BrowserPod
+or WebContainers and more on the shim port, because of the 529 synchronous
+`import.meta.require` sites and the 2,594-chunk module graph.
 
 ## 7. Prior art worth knowing (agent D)
 
@@ -337,8 +376,17 @@ and are judged by one test run in headless Chromium against a static build:
   container, `npm i @anthropic-ai/claude-code@2.1.112`, `spawn` with the
   `terminal` option into xterm.js, `SHELL` pointed at a `just-bash` Node
   script, `USE_BUILTIN_RIPGREP=0` with a JS `rg` on `PATH`.
-- A verification agent runs the acceptance test on both and reports which
-  reached step 3 and 4, with timings. Converge on one.
+- **Track 3 (optional), BrowserPod.** Only with a user-supplied BrowserPod
+  key: load the 3.4.0 runtime behind `coi-serviceworker`, boot BrowserCode's
+  public `claude_20260506` image, wire its terminal to xterm.js, and run the
+  same test. Also measure whether our extracted current JS runs on its
+  Node 22 (the browser engine parses `await using`, so the open question is
+  the Node 22 vs 24 API surface).
+- A verification agent runs the acceptance test on every track and reports
+  which reached steps 3 and 4, with timings. Converge on one. In this
+  sandbox there is no real credential, so step 3 runs against a local mock
+  SSE server (the one from spike E); the real-key run is done by the user
+  from the deployed page, or from an environment secret if one is provided.
 
 ### Phase 3: harden the winner
 
@@ -365,5 +413,24 @@ against `@anthropic-ai/claude-code@latest` so breakage is noticed.
    for the extracted current JS?
 3. **Audience.** Personal tool for the author, or a public gallery card? The
    second is the weaker policy position (§5).
-4. **Proceed with Phase 2 as two parallel subagent tracks** under a workflow,
-   or pick Track 1 only?
+4. **Which Phase 2 tracks to run.** Tracks 1 and 2 in parallel under a
+   workflow (recommended), Track 1 only, or all three? Track 3 needs the
+   user to create a BrowserPod account and accept non-commercial terms,
+   attribution and no iOS.
+5. **API credential for testing.** A real turn in this sandbox needs an
+   `ANTHROPIC_API_KEY` secret in the environment; without it the spikes
+   validate against a mock server and the first real turn happens from the
+   deployed page.
+
+## Reports
+
+- [`A-claude-code-anatomy.md`](./claude-code-in-browser/A-claude-code-anatomy.md): distribution, binary internals, OAuth mechanics, terms, Agent SDK
+- [`B-browser-runtimes.md`](./claude-code-in-browser/B-browser-runtimes.md): every runtime avenue, with the in-session `cli.js`-in-Chromium experiment
+- [`C-cors-and-auth.md`](./claude-code-in-browser/C-cors-and-auth.md): raw preflight and browser probe tables; [`C-personal-cors-worker.js`](./claude-code-in-browser/C-personal-cors-worker.js) is the tested per-user Worker
+- [`D-prior-art.md`](./claude-code-in-browser/D-prior-art.md): who ran what where, and ten lessons
+- [`E-spike-node-boot.md`](./claude-code-in-browser/E-spike-node-boot.md): extracting and booting 2.1.311 on Node 24, request logs
+- [`F-browserpod-almostnode.md`](./claude-code-in-browser/F-browserpod-almostnode.md): the two runtimes that have hosted Claude Code, compared
+
+Paths written as `<scratchpad>/…` in the reports refer to the research
+session's temporary workspace; the tools and logs they name were not
+committed.
