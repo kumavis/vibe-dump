@@ -99,9 +99,19 @@ const DEFENCE_URGENT_TICK = WAVES.firstTick - WAVES.warnTicks
 /** No Ward Tower and no Warden Hall yet. */
 function undefended(ctx) { return !HINTS[TOWER_HINT].done(ctx) }
 
+/**
+ * The first wave is within its warning window (or has already come) and the director is
+ * running. A paused director never rushes the player into defence.
+ */
+function defenceUrgent(ctx) {
+  const W = ctx.waves
+  if (!W) return ctx.tick >= DEFENCE_URGENT_TICK
+  return W.enabled && (W.number > 0 || ctx.tick >= W.nextTick - WAVES.warnTicks)
+}
+
 /** Index of the hint to show, or -1 when the tutorial is finished. */
 export function hintIndex(ctx) {
-  if (ctx.tick >= DEFENCE_URGENT_TICK && undefended(ctx)) return TOWER_HINT
+  if (defenceUrgent(ctx) && undefended(ctx)) return TOWER_HINT
   for (let i = 0; i < HINTS.length; i++) if (!HINTS[i].done(ctx)) return i
   return -1
 }

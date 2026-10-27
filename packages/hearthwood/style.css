@@ -250,6 +250,8 @@ kbd {
 #wave b { color: var(--text); font-variant-numeric: tabular-nums; }
 #wave.warn, #wave.warn b { color: var(--danger); }
 #wave .blight { margin-left: 6px; display: inline-flex; gap: 3px; align-items: center; }
+#wave .wave-toggle { min-width: 26px; padding: 2px 5px; margin-left: 6px; font-size: 11px; line-height: 1.2; vertical-align: middle; }
+#wave .wave-toggle.active { color: var(--text); border-color: var(--edge-hi); box-shadow: none; }
 #speed button { min-width: 30px; padding: 3px 6px; }
 body.paused #speed button:first-child { animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 50% { box-shadow: 0 0 14px rgba(255, 181, 74, 0.7); } }

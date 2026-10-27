@@ -522,9 +522,12 @@ BS_IDLE (empty) / BS_PAUSED / BS_OK. `cancelTraining` pops the last entry with f
 
 ## 13. Waves (waves.js) — owner: units
 
-`ctx.waves = {number, nextTick, nextPoints, warned, enabled, lastSide, lastTile}`. `tickWaves`:
+`ctx.waves = {number, nextTick, nextPoints, warned, enabled, pausedTicks, lastSide, lastTile}`. `tickWaves`:
 update `nextPoints = wavePoints(ctx, number+1)`; at `nextTick - warnTicks` emit
-EV_WAVE_WARNING(a=n, b=ticks left) once; at `nextTick` `spawnWave`. Points formula and
+EV_WAVE_WARNING(a=n, b=ticks left) once; at `nextTick` `spawnWave`. While `enabled` is false
+(the HUD's pause button beside the countdown, `?peaceful`, tests) the director is frozen rather
+than skipped: `nextTick` slides forward a tick per tick and `pausedTicks` grows, so the countdown
+and the elapsed-minutes term of `wavePoints` both resume where they stopped. Points formula and
 spawning rules are in the stub (WAVES table in content.js). Spawned Blight get
 `commandRaid(nearestBuilding from spawn point)`. Interval:
 `max(minInterval, interval - intervalStep*(number-1))`. First wave at 4:00, spawned at most 56 tiles from the Hearth. All choices via

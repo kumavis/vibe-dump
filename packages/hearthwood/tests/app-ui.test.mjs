@@ -137,7 +137,9 @@ test('HUD renders stock, couriers, wave, build menu and speed', () => {
   const woodSpan = stock.children[I_WOOD - 1]
   assert.equal(woodSpan.lastChild.textContent, String(ctx.stock[I_WOOD]))
   assert.match($('couriers').innerHTML, new RegExp(`<b>${ctx.units.typeCount[U_COURIER]}</b>`))
-  assert.match($('wave').innerHTML, /wave 1 in <b>4:00<\/b>/)
+  // countdown text sits in the first child; the pause/resume button is the last
+  assert.match($('wave').firstElementChild.innerHTML, /wave 1 in <b>4:00<\/b>/)
+  assert.equal($('wave').lastChild.textContent, '❚❚')
   assert.match($('tier').innerHTML, /Clearing/)
   const menu = $('buildmenu')
   assert.equal(menu.children.length, BUILD_MENU.length)

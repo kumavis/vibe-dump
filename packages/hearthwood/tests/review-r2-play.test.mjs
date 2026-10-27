@@ -65,6 +65,7 @@ test('review r2 play: building-attacked and couriers-lost events carry a tile an
 
 test('review r2 play: the defence hint jumps the queue at the first wave warning', () => {
   const ctx = makeCtx({ w: 64, h: 64 })
+  ctx.waves.enabled = true
   assert.equal(HINTS[hintIndex(ctx)].id, 'quarry')
   ctx.tick = WAVES.firstTick - WAVES.warnTicks
   assert.equal(HINTS[hintIndex(ctx)].id, 'tower')

@@ -59,23 +59,26 @@ function pullIn(ctx, tile) {
  * @property {number} nextTick    ctx.tick at which the next wave spawns
  * @property {number} nextPoints  director points the next wave will get (preview, updated each tick)
  * @property {boolean} warned     EV_WAVE_WARNING already emitted for the next wave
- * @property {boolean} enabled    false disables the director (tests, sandbox)
+ * @property {boolean} enabled    false pauses the director (HUD toggle, ?peaceful, tests)
+ * @property {number} pausedTicks ticks spent with enabled=false; the countdown and the
+ *                                elapsed-time strength scaling both exclude them
  * @property {number} lastSide    edge (0..3) of the last wave's first group, -1 none
  * @property {number} lastTile    packed spawn anchor of the last wave's first group, -1 none
  */
 
 /** Must not throw (createContext calls it). @returns {WaveState} */
 export function createWaves(ctx) {
-  return { number: 0, nextTick: WAVES.firstTick, nextPoints: WAVES.basePoints, warned: false, enabled: true, lastSide: -1, lastTile: -1 }
+  return { number: 0, nextTick: WAVES.firstTick, nextPoints: WAVES.basePoints, warned: false, enabled: true, pausedTicks: 0, lastSide: -1, lastTile: -1 }
 }
 
 /**
  * Points for wave n (1-based) at the current tick and building count:
  *   floor(basePoints + pointsPerWave*(n-1) + pointsPerMinute*minutes + pointsPerBuilding*ctx.buildings.count)
- * Pure.
+ * where minutes excludes time the director spent paused. Pure.
  */
 export function wavePoints(ctx, n) {
-  const minutes = ctx.tick / TICKS_PER_MIN
+  const paused = ctx.waves ? ctx.waves.pausedTicks || 0 : 0
+  const minutes = (ctx.tick - paused) / TICKS_PER_MIN
   return Math.floor(WAVES.basePoints + WAVES.pointsPerWave * (n - 1) + WAVES.pointsPerMinute * minutes +
     WAVES.pointsPerBuilding * ctx.buildings.count)
 }
@@ -177,11 +180,19 @@ export function spawnWave(ctx, points) {
 /**
  * Per tick, last system: if enabled, update nextPoints, emit EV_WAVE_WARNING once at
  * nextTick - warnTicks, spawnWave at nextTick. O(1) except on spawn ticks.
+ * While paused (enabled=false) the countdown is frozen: nextTick slides forward one tick
+ * per tick and pausedTicks counts the gap, so resuming picks up exactly where it stopped
+ * instead of dumping a wave scaled on the paused minutes.
  * @param {Ctx} ctx
  */
 export function tickWaves(ctx) {
   const W = ctx.waves
-  if (!W.enabled || ctx.won || ctx.lost) return
+  if (ctx.won || ctx.lost) return
+  if (!W.enabled) {
+    W.nextTick++
+    W.pausedTicks++
+    return
+  }
   W.nextPoints = wavePoints(ctx, W.number + 1)
   const tick = ctx.tick
   if (!W.warned && tick >= W.nextTick - WAVES.warnTicks) {

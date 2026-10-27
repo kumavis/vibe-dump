@@ -201,19 +201,46 @@ export function createUI(doc, game, input, overlay) {
     setHTML(elTier, html)
   }
 
+  // The countdown text is re-rendered as it ticks; the pause/resume button is built once so
+  // its listener survives. It flips ctx.waves.enabled on the live ctx (game.ctx, not a captured
+  // one, so it keeps working after a reset).
+  elWave.textContent = ''
+  const waveText = doc.createElement('span')
+  const waveBtn = doc.createElement('button')
+  waveBtn.className = 'wave-toggle'
+  waveBtn.tabIndex = -1
+  waveBtn.addEventListener('click', () => {
+    const W = game.ctx && game.ctx.waves
+    if (W) W.enabled = !W.enabled
+    waveBtn.blur()
+  })
+  elWave.appendChild(waveText)
+  elWave.appendChild(waveBtn)
+  let waveBtnKey = -2
+
   function updateWave(ctx) {
     const W = ctx.waves
     const blight = ctx.units.factionCount[F_BLIGHT]
     let html
     let warn = false
-    if (!W || !W.enabled) html = '<span class="dim">peaceful</span>'
-    else {
+    if (!W) html = '<span class="dim">peaceful</span>'
+    else if (!W.enabled) {
+      html = `<span class="dim" title="Blight waves are paused — wave ${W.number + 1} resumes with ${fmtClock(W.nextTick - ctx.tick)} on the clock">waves paused</span>`
+    } else {
       const left = W.nextTick - ctx.tick
       warn = left < 30 * TICK_RATE
       html = `<span title="Next Blight wave (est. ${W.nextPoints | 0} strength)">wave ${W.number + 1} in <b>${fmtClock(left)}</b></span>`
     }
     if (blight > 0) { html += ` <span class="blight" title="Blight on the map">${unitDot(4)}${blight}</span>`; warn = true }
-    setHTML(elWave, html)
+    setHTML(waveText, html)
+    const k = !W ? -1 : W.enabled ? 1 : 0
+    if (k !== waveBtnKey) {
+      waveBtnKey = k
+      waveBtn.hidden = k < 0
+      waveBtn.textContent = k === 1 ? '❚❚' : '▶'
+      waveBtn.title = k === 1 ? 'Pause the Blight waves — play without raids' : 'Resume the Blight waves'
+      waveBtn.classList.toggle('active', k === 0)
+    }
     if (elWave.classList.contains('warn') !== warn) elWave.classList.toggle('warn', warn)
   }
 
