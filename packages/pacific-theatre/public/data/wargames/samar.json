@@ -1,0 +1,129 @@
+{
+  "id": "samar",
+  "box": "samar",
+  "title": "Samar as a wargame",
+  "ja": { "kanji": "サマール沖海戦", "romaji": "Samāru-oki kaisen" },
+  "label": "A wargame played with the real forces. The record is on the other side of the table.",
+  "arena": {
+    "centre": [126.045, 11.818],
+    "radiusM": 3000,
+    "separationM": 5000,
+    "skyAt": "06:58",
+    "note": "The midpoint of the two forces at first contact (06:53, the box's tracks), about 45 km off Samar's east coast over some 5,000 m of water; the forces stand 5 km apart, each 2.5 km from the centre on its bearingDeg, the bearings of CTU 77.4.3's sighting report (298°; the Battle Experience track chart has 287°)."
+  },
+  "durationS": 600,
+  "sides": {
+    "japan": {
+      "side": "jp",
+      "name": "The Centre Force",
+      "ja": "第一遊撃部隊",
+      "leader": "Vice Admiral KURITA Takeo 栗田健男",
+      "first": "yamato",
+      "firstStation": "main",
+      "bearingDeg": 298,
+      "headingDeg": 110,
+      "guide": "yamato",
+      "screenM": 1200,
+      "ships": [
+        "yamato", "nagato", "kongo", "haruna",
+        "haguro", "chokai",
+        "kumano", "suzuya", "chikuma", "tone",
+        "yahagi", "nowaki", "urakaze", "yukikaze", "isokaze",
+        "noshiro", "shimakaze", "hayashimo", "akishimo", "kishinami", "okinami", "hamanami", "fujinami"
+      ],
+      "formation": {
+        "kind": "columns",
+        "intervalM": 300,
+        "columns": [
+          { "ships": ["yamato", "nagato", "kongo", "haruna"], "atM": [0, 0] },
+          { "ships": ["haguro", "chokai"], "atM": [1200, 0] },
+          { "ships": ["kumano", "suzuya", "chikuma", "tone"], "atM": [-1200, 300] },
+          { "ships": ["noshiro", "shimakaze", "hayashimo", "akishimo", "kishinami", "okinami", "hamanami", "fujinami"], "atM": [1800, 1500] },
+          { "ships": ["yahagi", "nowaki", "urakaze", "yukikaze", "isokaze"], "atM": [-1800, 1200] }
+        ],
+        "note": "Kurita's own sketch of his disposition at contact (USSBS Nav 9, Plate 9-3): BatDiv 1 leading the centre column with BatDiv 3 astern, CruDiv 5 with Chōkai to starboard, CruDiv 7 to port, DesRon 2 on the starboard bow and DesRon 10 on the port bow; the columns about 4 km apart in the record, 1,200 m in the arena with 300 m between ships, the destroyer squadrons drawn forward so the columns' tails stay near the arena, all on 110° as Kurita turned them up-wind of the carriers. atM is the first ship of each column from the guide, metres to starboard and ahead."
+      },
+      "aircraft": [],
+      "maxAirborne": 30,
+      "goal": { "kind": "sink", "type": "cve", "count": 4, "text": "Sink four of the six carriers before 10:00." },
+      "phases": [
+        { "t": 0, "title": "Open fire", "goal": { "kind": "hit", "type": "cve", "count": 2, "withinS": 90, "weapon": "shell" }, "text": "Yamato has the range: put two shells into a carrier." },
+        { "t": 100, "title": "The destroyers' torpedo attack", "goal": { "kind": "hit", "type": "cve", "count": 1, "withinS": 100, "weapon": "torpedo" }, "text": "Yahagi leads the destroyers in under the smoke: put a torpedo into a carrier." },
+        { "t": 210, "title": "Close with the carriers", "goal": { "kind": "reach", "type": "cve", "count": 2, "withinS": 120, "rangeM": 3000, "by": "ca" }, "text": "The heavy cruisers race up the carriers' port quarter: bring two of them within 3,000 m of a carrier." },
+        { "t": 340, "title": "The Avengers come in", "goal": { "kind": "shoot-down", "type": "aircraft", "count": 4, "withinS": 100 }, "text": "Avengers and Wildcats dive out of the cloud on the cruisers: shoot down four of them." },
+        { "t": 450, "title": "Finish them", "goal": { "kind": "sink", "type": "cve", "count": 1, "withinS": 140 }, "text": "A carrier is falling astern, burning: sink her." }
+      ],
+      "admiral": { "aggression": 0.7, "turnAwayAt": 0.5, "launchEveryS": null, "waveGrowth": 0, "waveSize": 0 }
+    },
+    "usa": {
+      "side": "us",
+      "name": "Taffy 3",
+      "leader": "Rear Admiral Clifton A. F. Sprague",
+      "first": "johnston",
+      "firstStation": "helm",
+      "bearingDeg": 118,
+      "headingDeg": 90,
+      "guide": "fanshaw-bay",
+      "screenM": 1500,
+      "ships": [
+        "fanshaw-bay", "st-lo", "white-plains", "kalinin-bay", "kitkun-bay", "gambier-bay",
+        "johnston", "hoel", "heermann",
+        "samuel-b-roberts", "raymond", "dennis", "john-c-butler"
+      ],
+      "formation": {
+        "kind": "circle",
+        "acrossM": 1500,
+        "ring": ["st-lo", "white-plains", "kalinin-bay", "kitkun-bay", "gambier-bay"],
+        "screen": ["johnston", "hoel", "heermann", "samuel-b-roberts", "raymond", "dennis", "john-c-butler"],
+        "note": "Formation 5R: the carriers on a circle round the guide (2,500 yards across in Morison, 1,500 m in the arena), the screen on an outer circle (6,000 yards from the centre in the record, screenM in the arena), the screen listed from the station nearest the Japanese (Johnston's, Morison) clockwise; the order of the carriers on the circle is not in what was read. All on 090°, east into the wind to launch, as Sprague turned them at 06:55."
+      },
+      "aircraft": [
+        { "carrier": "fanshaw-bay", "kit": "fm-2", "count": 8, "profile": "cap", "airborne": 8, "note": "VC-68: the 8-plane local combat air patrol aloft before contact (CO Fanshaw Bay, Battle Experience)" },
+        { "carrier": "fanshaw-bay", "kit": "fm-2", "count": 8, "profile": "strafe", "airborne": 7, "note": "the 7-plane special strike group aloft before contact and the one fighter left aboard" },
+        { "carrier": "fanshaw-bay", "kit": "tbm-1c", "count": 4, "profile": "torpedo", "airborne": 0, "note": "the box's Avengers on Tone (taffy3-tbm-tone), the flagship standing for the six" },
+        { "carrier": "fanshaw-bay", "kit": "tbm-1c", "count": 8, "profile": "dive", "airborne": 1, "note": "the torpedo plane aloft with an air observer, and the eleven launched after contact less the four above" },
+        { "carrier": "kalinin-bay", "kit": "fm-2", "count": 13, "profile": "strafe", "airborne": 0, "note": "VC-3: ten fighters by 07:25 and three more at about 07:50, with service ammunition (CO Kalinin Bay)" },
+        { "carrier": "kalinin-bay", "kit": "tbm-1c", "count": 9, "profile": "dive", "airborne": 0, "note": "three with 500-lb GP bombs and rockets, six with ten 100-lb GP bombs and rockets" },
+        { "carrier": "kalinin-bay", "kit": "tbm-1c", "count": 1, "profile": "strafe", "airborne": 0, "note": "one with its service ammunition only" },
+        { "carrier": "kalinin-bay", "kit": "tbm-1c", "count": 2, "profile": "torpedo", "airborne": 0, "note": "two on the hangar deck loaded with torpedoes, kept aboard by the damaged catapult in the record; launched in the arena" },
+        { "carrier": "white-plains", "kit": "fm-2", "count": 16, "profile": "strafe", "airborne": 0, "note": "VC-4: sixteen Wildcats and twelve Avengers from April 1944 (DANFS White Plains)" },
+        { "carrier": "white-plains", "kit": "tbm-1c", "count": 12, "profile": "dive", "airborne": 0, "note": "arming with bombs from 07:01 (Morison, the box's note on Haguro's attackers)" },
+        { "carrier": "kitkun-bay", "kit": "fm-2", "count": 11, "profile": "escort", "airborne": 0, "note": "VC-5: the eleven Wildcats launched at 07:00 with the Avengers (the box's vc-5-fm2; ComCarAirGrp 26)" },
+        { "carrier": "kitkun-bay", "kit": "tbm-1c", "count": 6, "profile": "dive", "airborne": 0, "note": "the six Avengers launched at 07:00 (the box's vc-5-tbm)" },
+        { "carrier": "kitkun-bay", "kit": "tbm-1c", "count": 4, "profile": "torpedo", "airborne": 0, "note": "the four launched with the torpedoes left aboard after the surface action (CTU 77.4.3, Battle Experience); in the arena with the rest" },
+        { "carrier": "st-lo", "kit": "fm-2", "count": 14, "profile": "strafe", "airborne": 0, "note": "VC-65: the squadron's numbers are not in what was read; fourteen and twelve stand in, from the six squadrons' twelve to fourteen Wildcats and as many Avengers (wp-samar after Hornfischer)" },
+        { "carrier": "st-lo", "kit": "tbm-1c", "count": 6, "profile": "dive", "airborne": 4, "note": "the four-plane anti-submarine patrol aloft at contact (wp-samar), and the box's Avengers on Suzuya (taffy3-tbm-suzuya)" },
+        { "carrier": "st-lo", "kit": "tbm-1c", "count": 6, "profile": "torpedo", "airborne": 0, "note": "torpedo loads stand in for the Avengers armed the night before with torpedoes for Surigao Strait (Morison n. 19, the box's hangarHazard note)" },
+        { "carrier": "gambier-bay", "kit": "fm-2", "count": 14, "profile": "strafe", "airborne": 0, "note": "VC-10: as St. Lo's, the numbers stand in" },
+        { "carrier": "gambier-bay", "kit": "tbm-1c", "count": 6, "profile": "torpedo", "airborne": 0, "note": "as St. Lo's" },
+        { "carrier": "gambier-bay", "kit": "tbm-1c", "count": 6, "profile": "dive", "airborne": 0, "note": "as St. Lo's" }
+      ],
+      "maxAirborne": 30,
+      "goal": { "kind": "survive", "type": "cve", "count": 4, "text": "Keep four of the six carriers afloat until 10:00." },
+      "phases": [
+        { "t": 0, "title": "Run east making smoke", "goal": { "kind": "survive", "type": "cve", "count": 6, "withinS": 90 }, "text": "The carriers turn east into the wind to launch, and the screen lays smoke astern of them: keep all six afloat." },
+        { "t": 100, "title": "The destroyers go in", "goal": { "kind": "hit", "type": "ca", "types": ["ca", "cl"], "count": 1, "withinS": 90, "weapon": "torpedo" }, "text": "Johnston, Hoel and Heermann turn toward the cruisers: put a torpedo into a cruiser." },
+        { "t": 200, "title": "The Avengers and Wildcats up", "goal": { "kind": "hit", "type": "ship", "count": 4, "withinS": 120, "by": "aircraft" }, "text": "Every aircraft that can fly is in the air: put four bombs or torpedoes into Kurita's ships." },
+        { "t": 330, "title": "Hold them off", "goal": { "kind": "survive", "type": "cve", "count": 5, "withinS": 120 }, "text": "Kurita's heavy cruisers are on the carriers' port quarter and closing: keep five carriers afloat." },
+        { "t": 460, "title": "Kurita turns away", "goal": { "kind": "sink", "type": "ca", "count": 1, "withinS": 130 }, "text": "Kurita's force is scattered and under air attack: sink a cruiser before he can gather it again." }
+      ],
+      "admiral": { "aggression": 0.5, "turnAwayAt": 0.4, "launchEveryS": 75, "waveGrowth": 0.3, "waveSize": 8 }
+    }
+  },
+  "footnote": "In the surface action off Samar on 25 October 1944 Taffy 3 lost Gambier Bay, Hoel, Johnston and Samuel B. Roberts; Chōkai, Chikuma and Suzuya were crippled and lost later that day; and at 09:11 Vice Admiral KURITA Takeo 栗田健男 turned his force north.",
+  "sources": [
+    { "id": "sib22-leyte-1945", "where": "ch. 78: CTU 77.4.3's report (the sighting at 06:53, bearing 298°); CO Fanshaw Bay's and CO Kalinin Bay's reports (their aircraft); ComCarAirGrp 26's comments; the TU 77.4.3 track chart, p. 27" },
+    { "id": "morison-xii", "where": "chs. XII–XIII: formation 5R, the screen's sectors, the losses, the turn-away at 09:11" },
+    { "id": "ussbs-nav9", "where": "Plate 9-3: Kurita's disposition at contact; the turn to 110°" },
+    { "id": "danfs-white-plains", "where": "VC-4's complement" },
+    { "id": "danfs-gambier-bay" },
+    { "id": "danfs-st-lo" },
+    { "id": "johnston-ar-1944" },
+    { "id": "hoel-ar-1944" },
+    { "id": "trom-yamato" },
+    { "id": "trom-chokai" },
+    { "id": "trom-suzuya" },
+    { "id": "trom-chikuma" },
+    { "id": "wp-samar", "where": "the squadrons' twelve to fourteen Wildcats and as many Avengers; St. Lo's dawn patrol (a finding aid)" }
+  ]
+}

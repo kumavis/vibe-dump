@@ -33,20 +33,52 @@
 // unit, as the engine sees it), app.link.afterSortie(sortie), or the value
 // Battle.release() returns. research/ui-2.md lists every call into Battle
 // with the signature this file expects.
+//
+// Round three (ROUND-3.md §1, §4–5), the Wargame: a box event's card, the
+// briefing and the bar (watching) offer it where the box has one; the start
+// sheet shows the two sides' forces and goals from the scenario
+// (public/data/wargames/<id>.json) and the box's battle file; a side's button
+// enters it (Battle.enterWargame(id, { side })); while it runs the HUD layer
+// (ui/wargame.js) is fed each frame from the arena (strength, tally,
+// objective, phase, the events for the hit markers and the respawn line, the
+// highlights for the reel), the bar holds the stations and the hop button,
+// the unit list and a tap in the box possess a unit of the played side at
+// once (Battle.hop(index)); the arena's result opens the end card, whose
+// buttons restart (Battle.restart({ side })) or leave. The hooks:
+//
+//   ui.wargameFor(ev)           the scenario id a box event's card offers (or null)
+//   ui.onWargame(id)            *Play it as a wargame* / *Wargame* → the start sheet
+//   ui.onWargameStart(side)     *Japan* / *United States* on the start sheet → Battle.enterWargame
+//   ui.onWargameRestart(side)   *Play again* / *Play the other side* → Battle.restart({ side })
+//   ui.onHop(kind)              the bar's hop button ('next'), and a unit picked in a wargame (its index) → Battle.hop
+//
+// The URL: #wargame=<id>&side=<jp|us>, written on start (App keeps them as
+// unknown keys and writes them back), cleared on leave; read at boot, it
+// opens the start sheet with that side's button focused, never pressed (a
+// wargame starts on a click, as a sortie does). research/ui-3.md lists every
+// call into the arena and Battle with the shape this file expects.
 
 import { BoxBar } from './ui/boxbar.js'
 import { UnitList } from './ui/unitlist.js'
 import { sideName } from './ui/names.js'
 import { STATION, stationLabel, kitShort, kitLine, shipType, rolePhrase, aircraftRole, eventLine, attackLine, countWords, damageWords, asSentence, midName, ASSIST, SIDE_ORDER as SIDES, FATE_VERB } from './ui/roles.js'
+import { WargameHud, HOP_ICON, TYPE_ORDER, numWord, typeCount, clockText } from './ui/wargame.js'
 
 const SIDE_ORDER = { ...SIDES }
 const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
 const SHIP_SCALES = [1, 2, 4, 8]
 const narrow = () => innerWidth <= 760
+// the wargames (tools/check/ids.json `wargames`): a scenario's id is its box's (ROUND-3 §6); a loader's list wins (app.data.wargames)
+const WARGAMES = ['samar', 'midway', 'ironbottom-sound']
+const WG_LABEL = 'A wargame played with the real forces. The record is on the other side of the table.'
+const WG_KEY = { jp: 'japan', us: 'usa' }
+const otherSide = (s) => (s === 'jp' ? 'us' : 'jp')
+// the arena's events that put a marker on their target (ROUND-3 §1: machine words at the target)
+const MARKED = new Set(['hit', 'torpedo-hit', 'bomb-hit', 'gun-hit', 'fire', 'downed', 'shot-down', 'sinking', 'sunk', 'magazine'])
 
 export function link(app, ui) {
   const battle = app.battle
-  const L = { stop: -1, offered: null, busy: false, held: null, session: 0, shown: 0, cache: null, selected: null, cardIndex: null, heldIndex: -1, heldStation: null, seenSelected: undefined, slow: 0 }
+  const L = { stop: -1, offered: null, busy: false, held: null, session: 0, shown: 0, cache: null, selected: null, cardIndex: null, heldIndex: -1, heldStation: null, seenSelected: undefined, slow: 0, wg: null, sheet: null, scenarios: new Map(), boxFiles: null }
   app.link = L
 
   // --- the box's bar -----------------------------------------------------------------
@@ -76,8 +108,15 @@ export function link(app, ui) {
       battle.scrub(t)
       L.stop = stopIndexAt(battle.sim?.t ?? 0)
     },
+    wargame: () => ui.onWargame(wargameFor(battle.loaded?.box?.id)),
+    hop: () => ui.onHop('next'),
   })
   L.bar = bar
+
+  // --- the Wargame's HUD layer (ui/wargame.js): under the bar, part of its head ------------------------
+  const hud = new WargameHud(ui.root, { layout: () => bar.publish() })
+  bar.observe(hud.board)
+  L.hud = hud
 
   // --- the unit list -------------------------------------------------------------------
   const list = new UnitList(ui.root, {
@@ -88,6 +127,8 @@ export function link(app, ui) {
   ui.unitList = list
 
   app.updaters.push(() => {
+    // (a wargame has its own frame: the arena, the HUD layer, the bar's wargame mode)
+    if (wargameFrame()) return
     const sim = battle.sim
     if (!sim || app.active !== battle.scene || app.mode === 'flying') {
       if (list.isOpen) list.close()
@@ -114,6 +155,7 @@ export function link(app, ui) {
       scales: speeds(heldU),
       t: Math.round(sim.t),
       duration: sim.clock.duration,
+      door: !!wargameFor(battle.loaded?.box?.id),
       assist: assist(),
       held: heldU ? { name: heldU.name, station: heldStation(), stations: (heldU.stations || []).map((s) => ({ name: s, label: stationLabel(s), short: STATION[s]?.short ?? null, where: STATION[s]?.where ?? '' })) } : null,
     })
@@ -167,11 +209,32 @@ export function link(app, ui) {
     if (fd?.role) return takeUnit({ ...fd.role, t: fd.t, ...(fd.start ? { start: fd.start } : {}) })
   }
   ui.onUnits = () => toggleList()
+  // round three (ROUND-3 §5)
+  ui.wargameFor = (ev) => wargameFor(ev?.box)
+  ui.onWargame = (id) => openStartSheet(id)
+  ui.onWargameStart = (side) => startWargame(L.sheet, side)
+  ui.onWargameRestart = (side) => restartWargame(side)
+  ui.onHop = (kind) => hop(kind)
+  // (the start sheet closed without a start: the URL lets the wargame go)
+  const cardClosed = ui.onCardClosed?.bind(ui)
+  ui.onCardClosed = (was, mode) => {
+    if (mode === 'wargame' && !L.wg) clearWargameUrl()
+    cardClosed?.(was, mode)
+  }
 
   // Esc in a moment without pointer lock gives the controls back (with the lock, the browser's Esc
   // leaves the lock and the battle pauses and offers release: battle/controls/input.js)
   addEventListener('keydown', (e) => {
     if (e.key !== 'Escape' || app.mode !== 'moment' || document.pointerLockElement) return
+    // (in a wargame Esc closes its card, or the list, and gives nothing back: a wargame is always held)
+    if (L.wg) {
+      if (e.defaultPrevented) return
+      if (list.isOpen) list.close()
+      else if (ui.card.isOpen) ui.card.close()
+      else return
+      e.preventDefault()
+      return
+    }
     e.preventDefault()
     release()
   })
@@ -210,6 +273,10 @@ export function link(app, ui) {
     // the unit given back, by Backspace or by its fate: the sortie's card
     if ((d.kind === 'released' || d.kind === 'sortie') && d.sortie) after({ sortie: d.sortie, outcome: d.outcome ?? null, reason: d.sortie.how ?? d.reason ?? 'released', momentId: d.momentId ?? L.held?.momentId ?? null }, L.held?.session ?? 0)
     if (d.kind === 'select' || d.kind === 'take' || d.kind === 'station') L.cache = null
+    // a wargame the engine left by itself (the browser's Back, Esc with its own confirm): the layer and the URL let it go
+    if (d.kind === 'leave' && L.wg) endWargameState()
+    // a hit the engine raises as an event rather than in arena.events: a marker all the same
+    if (L.wg && MARKED.has(d.kind) && d.target != null && d.text) L.wg.extra.push({ kind: d.kind, target: d.target, text: d.text, mine: !!d.mine, id: `x${++L.wg.xid}` })
   })
   /** For the engine: the after-card of the sortie just closed (the event above does the same). */
   L.afterSortie = (sortie, extra = {}) => after({ sortie, reason: sortie?.how ?? 'released', ...extra }, L.held?.session ?? 0)
@@ -262,6 +329,7 @@ export function link(app, ui) {
       list.close()
       const evId = battle.loaded?.battle.event ?? null
       await battle.leave()
+      if (L.wg) endWargameState()
       app.url.battle = null
       app.url.t = null
       app.url.moment = null
@@ -348,7 +416,7 @@ export function link(app, ui) {
   const isAlive = (u) => u.alive === true || u.alive === 1 || u.alive === 2
   /** sim.units() (ROUND-2 §3), read at most four times a second; [] where the sim has none yet. */
   function units() {
-    const sim = battle.sim
+    const sim = (L.wg ? arenaOf() : null) ?? battle.sim
     if (!sim || typeof sim.units !== 'function') return []
     const now = performance.now()
     const c = L.cache
@@ -372,11 +440,13 @@ export function link(app, ui) {
   }
 
   function heldUnit() {
-    const p = battle.sim?.player
+    // (in a wargame the arena's player)
+    const sim = (L.wg ? arenaOf() : null) ?? battle.sim
+    const p = sim?.player
     if (!p || p.unitIndex == null) return null
-    return unitAt(p.unitIndex) || (p.kind ? { index: p.unitIndex, kind: p.kind, name: battle.sim.units?.[p.unitIndex]?.name ?? '', stations: [] } : null)
+    return unitAt(p.unitIndex) || (p.kind ? { index: p.unitIndex, kind: p.kind, name: Array.isArray(sim.units) ? sim.units[p.unitIndex]?.name ?? '' : '', stations: [] } : null)
   }
-  const heldStation = () => battle.state?.station ?? battle.sim?.player?.station ?? null
+  const heldStation = () => (L.wg ? arenaOf()?.player?.station : null) ?? battle.state?.station ?? battle.sim?.player?.station ?? null
 
   function kitFor(u) {
     const k = battle.loaded?.kits
@@ -507,6 +577,7 @@ export function link(app, ui) {
   L.openUnitCard = openUnitCard
 
   function select(index, { open = true, focus = null, spareOf = null } = {}) {
+    if (L.wg) return selectInWargame(index)
     if (!battle.sim) return
     L.selected = index
     L.seenSelected = index
@@ -519,7 +590,7 @@ export function link(app, ui) {
 
   /** The list's rows: by side, ships then air groups in the record's order (parked aircraft gathered, one row a field's kind). */
   function listData() {
-    const sim = battle.sim
+    const sim = (L.wg ? arenaOf() : null) ?? battle.sim
     const B = battle.loaded.battle
     const { units: rawUnits, groups } = recordMaps()
     const sides = new Map()
@@ -540,7 +611,7 @@ export function link(app, ui) {
       let r = s.byKey.get(key)
       if (!r) {
         const g = groups.get(u.group)
-        r = { key, index: null, kind: 'aircraft', name: air ? g.name || u.name : u.name, ja: air ? g.ja ?? null : null, sub: kitShort(kit, u.kit), now: '', takeable: null, alive: false, count: 0, members: [], parked: !air, first: null, pick: null }
+        r = { key, index: null, kind: 'aircraft', name: air ? g.name || u.name : u.groupName || u.name, ja: air ? g.ja ?? null : null, sub: kitShort(kit, u.kit), now: '', takeable: null, alive: false, count: 0, members: [], parked: !air && !L.wg, first: null, pick: null }
         s.byKey.set(key, r)
         s.groups.push(r)
       }
@@ -571,11 +642,14 @@ export function link(app, ui) {
       }
       delete s.byKey
     }
-    return { title: B.title?.split(',')[0] ?? '', clock: sim.clock.label(sim.t), sides: out, selected: { index: selectedIndex() } }
+    // (in a wargame its title and its clock, the game's)
+    const title = L.wg ? L.wg.scenario?.title ?? B.title?.split(',')[0] ?? '' : B.title?.split(',')[0] ?? ''
+    const clock = L.wg || !sim.clock?.label ? clockText(sim.t ?? 0) : sim.clock.label(sim.t)
+    return { title, clock, sides: out, selected: { index: L.wg ? arenaOf()?.player?.unitIndex ?? null : selectedIndex() } }
   }
 
   function toggleList() {
-    if (!battle.sim) return
+    if (!battle.sim && !arenaOf()) return
     if (list.isOpen) return list.close()
     list.set(listData())
     // (on a phone the list takes the screen the card would)
@@ -662,7 +736,7 @@ export function link(app, ui) {
       }
     }
     L.cache = null
-    if (!L.held?.momentId) app.url.station = name
+    if (!L.held?.momentId && !L.wg) app.url.station = name
     if (ui.card.mode === 'unit' && L.cardIndex === u.index) openUnitCard(u.index)
   }
 
@@ -773,6 +847,11 @@ export function link(app, ui) {
       // round two: Start here, and the setting (only where the Battle has them)
       door: doorRow(),
       assist: 'assist' in battle || app.assist ? assist() : null,
+      // round three: the wargame's door, where the box has one
+      wargame: (() => {
+        const id = wargameFor(box.id)
+        return id ? { id, label: L.scenarios.get(id)?.label ?? WG_LABEL } : null
+      })(),
     })
     if (keepScroll) ui.card.el.scrollTop = scroll
   }
@@ -1069,6 +1148,550 @@ export function link(app, ui) {
     return { text: lines.join(' '), sources: sources.slice(0, 6) }
   }
 
+  // --- the Wargame (ROUND-3.md §1, §4–5) ----------------------------------------------------------
+  /** The arena while a wargame runs: Battle.arena, or the sim itself where Battle put the arena there (it has the record sim's surface). */
+  function arenaOf() {
+    if (battle.arena) return battle.arena
+    if (battle.wargame?.arena) return battle.wargame.arena
+    const s = battle.sim
+    return s && typeof s === 'object' && 'objective' in s && 'tally' in s ? s : null
+  }
+  L.arena = arenaOf
+
+  /** A loader's list of wargames (app.data.wargames: ids, or scenarios with id and box), where it has one. */
+  function dataWargames() {
+    const w = app.data?.wargames
+    if (!w) return null
+    return w instanceof Map ? [...w.values()] : Array.isArray(w) ? w : Object.values(w)
+  }
+
+  function wargameKnown(id) {
+    if (L.scenarios.has(id)) return true
+    const list = dataWargames()
+    if (list) return list.some((w) => (typeof w === 'string' ? w : w?.id) === id)
+    return WARGAMES.includes(id) || id === battle.loaded?.box?.id
+  }
+
+  /** The wargame a box offers: the scenario whose box it is (a loaded one, the loader's list, or the frozen ids where the box exists). */
+  function wargameFor(boxId) {
+    if (!boxId) return null
+    for (const [id, sc] of L.scenarios) if ((sc.box ?? id) === boxId) return id
+    const list = dataWargames()
+    if (list) {
+      for (const w of list) {
+        const id = typeof w === 'string' ? w : w?.id
+        if (id && (typeof w === 'string' ? w : w.box ?? w.id) === boxId) return id
+      }
+      return null
+    }
+    return WARGAMES.includes(boxId) && app.data?.boxById?.has(boxId) ? boxId : null
+  }
+  L.wargameFor = wargameFor
+  /** For the tools and a loader: a scenario object handed over (it then needs no fetch). */
+  L.addWargame = (sc) => {
+    if (sc?.id) L.scenarios.set(sc.id, sc)
+  }
+
+  /** The scenario (ROUND-3 §6): already read; the loader's; Battle.loadWargame(id) where the Battle has one; else wargames/<id>.json. */
+  async function loadScenario(id) {
+    if (L.scenarios.has(id)) return L.scenarios.get(id)
+    let sc = (dataWargames() || []).find((w) => w && typeof w === 'object' && w.id === id && w.sides) || null
+    if (!sc && typeof battle.loadWargame === 'function') sc = await battle.loadWargame(id)
+    if (!sc) {
+      const r = await fetch(app.data.abs(`wargames/${id}.json`))
+      if (!r.ok) throw new Error(`wargames/${id}.json: HTTP ${r.status}`)
+      sc = await r.json()
+    }
+    if (sc) L.scenarios.set(id, sc)
+    return sc
+  }
+
+  /** The box's battle file and the kits, for the start sheet's forces (the box's own when it is open; read once otherwise). */
+  async function boxFile(boxId) {
+    if (battle.loaded?.box?.id === boxId && battle.loaded.battle) return { battle: battle.loaded.battle, kits: battle.loaded.kits || app.data.kits || { ships: [], aircraft: [] } }
+    if (L.boxFiles?.id === boxId) return L.boxFiles
+    const box = app.data.boxById.get(boxId)
+    const get = async (p) => {
+      const r = await fetch(app.data.abs(p))
+      return r.ok ? r.json() : null
+    }
+    const [b, ships, aircraft] = await Promise.all([box?.battle ? get(box.battle) : null, app.data.kits?.ships ?? get('kits/ships.json'), app.data.kits?.aircraft ?? get('kits/aircraft.json')])
+    L.boxFiles = { id: boxId, battle: b || { units: [], sides: {} }, kits: { ships: ships || [], aircraft: aircraft || [] } }
+    return L.boxFiles
+  }
+
+  /** A side of the scenario by its code (sides.japan / sides.usa, or sides.jp / sides.us). */
+  const scenarioSide = (sc, code) => sc?.sides?.[WG_KEY[code]] ?? sc?.sides?.[code] ?? null
+  function wgSideName(code) {
+    return scenarioSide(L.wg?.scenario, code)?.name || sideName(code)
+  }
+  const plural = (word, n) => (n === 1 || /aircraft$/.test(word) ? word : `${word}s`)
+
+  /** The start sheet's data: each side's ships by type (their names, the kanji beside a Japanese one), its aircraft counted by kind, its goal. */
+  function sheetData(sc, files, focus) {
+    const raw = new Map((files.battle?.units || []).map((u) => [u.id, u]))
+    const shipKits = new Map((files.kits?.ships || []).map((k) => [k.id, k]))
+    const airKits = new Map((files.kits?.aircraft || []).map((k) => [k.id, k]))
+    const sides = ['jp', 'us'].map((code) => {
+      const sd = scenarioSide(sc, code) || {}
+      const byType = new Map()
+      for (const id of sd.ships || []) {
+        const u = raw.get(id)
+        const type = shipKits.get(u?.kit)?.type || 'ship'
+        if (!byType.has(type)) byType.set(type, [])
+        byType.get(type).push({ name: u?.name || id, ja: u?.ja || null })
+      }
+      const order = [...TYPE_ORDER, ...[...byType.keys()].filter((t) => !TYPE_ORDER.includes(t))]
+      const ships = order.filter((t) => byType.has(t)).map((t) => ({ label: typeCount(byType.get(t).length, t, { words: false }), names: byType.get(t) }))
+      const kinds = new Map()
+      let count = 0
+      for (const a of sd.aircraft || []) {
+        const short = kitShort(airKits.get(a.kit), a.kit)
+        kinds.set(short, (kinds.get(short) || 0) + (a.count || 0))
+        count += a.count || 0
+      }
+      const B = files.battle?.sides || {}
+      const ja = (B[WG_KEY[code]] || Object.values(B).find((x) => x?.side === code))?.ja ?? null
+      return { code, name: sd.name || sideName(code), ja, goal: sd.goal?.text || '', ships, aircraft: { count, list: [...kinds].map(([k, n]) => `${n} ${plural(k, n)}`) } }
+    })
+    const mins = Math.round((sc.durationS || 600) / 60)
+    const touch = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches
+    const keys = touch ? 'The arrows on the bar take you to the next ship or aircraft of the same kind; a tap on one of your side’s takes you into it.' : 'Tab and 1–4 move you between ships and aircraft; a click on one of your side’s takes you into it.'
+    return { id: sc.id, title: sc.title || `${sc.box ?? sc.id} as a wargame`, gloss: `${mins === 10 ? 'Ten' : numWord(mins).replace(/^./, (c) => c.toUpperCase())} minutes, either side`, label: sc.label || WG_LABEL, focus, sides, keys }
+  }
+
+  /** *Play it as a wargame* (the card, the briefing) or *Wargame* (the bar): the start sheet. */
+  async function openStartSheet(id, { focus = null } = {}) {
+    if (!id) return
+    L.sheet = id
+    let sc = null
+    try {
+      sc = await loadScenario(id)
+    } catch (err) {
+      app.warn(`wargame ${id}: ${err.message}`)
+    }
+    if (!sc) return ui.card.openWargame({ id, title: 'A wargame', label: WG_LABEL, missing: true })
+    let files = { battle: { units: [], sides: {} }, kits: { ships: [], aircraft: [] } }
+    try {
+      files = await boxFile(sc.box ?? id)
+    } catch (err) {
+      app.warn(`wargame ${id}: the box's battle file: ${err.message}`)
+    }
+    if (L.sheet !== id) return
+    // (on a phone the sheet takes the screen the list would)
+    if (narrow() && list.isOpen) list.close()
+    ui.card.openWargame(sheetData(sc, files, focus))
+  }
+  L.openStartSheet = openStartSheet
+
+  function setWargameUrl(id, side) {
+    app.url.battle = null
+    app.url.t = null
+    app.url.moment = null
+    app.url.unit = null
+    app.url.station = null
+    app.url.kept = { ...(app.url.kept || {}), wargame: id, side }
+  }
+  function clearWargameUrl() {
+    if (!app.url?.kept) return
+    const { wargame, side, ...rest } = app.url.kept
+    if (wargame === undefined && side === undefined) return
+    app.url.kept = rest
+  }
+
+  /** *Japan* / *United States*: Battle.enterWargame(id, { side }) (it loads the box and the scenario, and cuts to the side's first unit). */
+  async function startWargame(id, side) {
+    if (!id || !['jp', 'us'].includes(side) || L.busy) return null
+    if (typeof battle.enterWargame !== 'function') {
+      app.warn('Battle.enterWargame() is not in this build (ROUND-3 §4): link.js calls it, the integrator wires it')
+      return null
+    }
+    L.busy = true
+    try {
+      ui.card.close()
+      list.close()
+      ui.help?.classList.add('hidden')
+      const sc = await loadScenario(id).catch(() => null)
+      const state = await battle.enterWargame(id, { side })
+      if (!state) return null
+      beginWargame(id, side, sc ?? battle.wargame?.scenario ?? null)
+      app.pushUrl?.()
+      return state
+    } catch (err) {
+      app.warn(`enterWargame ${id}: ${err.message}`)
+      return null
+    } finally {
+      L.busy = false
+    }
+  }
+  L.startWargame = startWargame
+
+  /** A wargame begun (or begun again): its state, the URL, the hints once. */
+  function beginWargame(id, side, sc) {
+    const was = L.wg
+    L.wg = { id, side, scenario: sc ?? was?.scenario ?? L.scenarios.get(id) ?? null, session: ++L.session, arena: null, seen: 0, seenH: 0, marks: [], extra: [], xid: 0, reel: [], ended: false, endAt: 0, heldIndex: null }
+    setWargameUrl(id, side)
+    L.held = null
+    L.offered = null
+    L.stop = -1
+    L.cache = null
+    L.selected = null
+    L.seenSelected = undefined
+    hintsOnce()
+  }
+
+  /** *Play again* (the same side) or *Play the other side*: Battle.restart({ side }). */
+  function restartWargame(side) {
+    const wg = L.wg
+    if (!wg || !['jp', 'us'].includes(side)) return
+    ui.card.close()
+    let r = null
+    try {
+      r = typeof battle.restart === 'function' ? battle.restart({ side }) : null
+    } catch (err) {
+      return app.warn(`restart ${side}: ${err.message}`)
+    }
+    const go = () => {
+      beginWargame(wg.id, side, wg.scenario)
+      app.replaceUrl?.()
+    }
+    if (r && typeof r.then === 'function') r.then(go, (err) => app.warn(`restart ${side}: ${err.message}`))
+    else go()
+  }
+
+  /** The wargame left: the layer, the end card, the URL's keys. */
+  function endWargameState() {
+    L.wg = null
+    L.sheet = null
+    clearWargameUrl()
+    hud.set(null)
+    ui.root.classList.remove('wargame')
+    if (ui.card.mode === 'wargame-end') ui.card.close()
+  }
+
+  /** Tab's hop on the bar (the next friendly unit of the same kind), 1–4's kinds, or a unit's index: Battle.hop (or the arena's). */
+  function hop(kind = 'next') {
+    if (!L.wg) return null
+    const a = arenaOf()
+    try {
+      const r = typeof battle.hop === 'function' ? battle.hop(kind) : a?.hop?.(kind) ?? null
+      L.cache = null
+      return r
+    } catch (err) {
+      app.warn(`hop ${kind}: ${err.message}`)
+      return null
+    }
+  }
+  L.hop = hop
+
+  /** In a wargame a unit picked (the list, a tap in the box) is possessed at once when it is the played side's; the other side's is only looked at. */
+  function selectInWargame(index) {
+    const u = unitAt(index)
+    if (!u) return
+    const me = arenaOf()?.player?.unitIndex
+    if (u.index === me) return
+    if (u.takeable === true && !u.enemy && u.side === L.wg.side) {
+      hop(u.index)
+      if (narrow() && list.isOpen) list.close()
+    } else if (typeof battle.select === 'function') battle.select(index)
+    L.selected = index
+    L.seenSelected = battle.state?.selected ?? index
+    if (list.isOpen) list.set(listData())
+  }
+
+  // (the arena's fields, by the side's code or its key, as a number, an object or a function)
+  const bySide = (o, code) => (typeof o === 'function' ? o(code) : o?.[code] ?? o?.[WG_KEY[code]] ?? null)
+  function shareOf(v) {
+    if (typeof v === 'number') return v > 1.0001 ? v / 100 : v
+    if (!v || typeof v !== 'object') return 0
+    const x = v.share ?? v.fraction ?? v.ratio ?? v.value ?? (v.max ? v.now / v.max : v.hpMax ? v.hp / v.hpMax : null)
+    return typeof x === 'number' ? (x > 1.0001 ? x / 100 : x) : 0
+  }
+  function tallyOf(t, code) {
+    const x = bySide(t, code) || {}
+    return { sunk: x.sunk ?? x.sank ?? x.shipsSunk ?? x.ships ?? 0, downed: x.downed ?? x.shotDown ?? x.aircraft ?? 0 }
+  }
+  /** The played side's main goal: a single goal object, or one per side. */
+  function goalOf(a, code) {
+    const o = a.objective
+    const g = o && (o.kind || o.text) && !o[code] && !o[WG_KEY[code]] ? o : bySide(o, code)
+    const sd = scenarioSide(L.wg?.scenario, code)?.goal
+    if (!g && !sd) return null
+    return { ...(sd || {}), ...(g || {}) }
+  }
+  function phaseOf(a, code) {
+    const p = a.phase
+    return p && (p.title || p.text) && !p[code] && !p[WG_KEY[code]] ? p : bySide(p, code)
+  }
+  const goalCount = (g) => {
+    const done = g.done ?? g.progress ?? 0
+    if (g.kind === 'survive') return `${done} of ${g.of ?? g.total ?? g.count} afloat`
+    return `${done} of ${g.count ?? g.target ?? g.of ?? 0}`
+  }
+
+  /** The HUD layer's data, from the arena now. */
+  function hudState(a, side, heldU) {
+    const g = goalOf(a, side)
+    const p = phaseOf(a, side)
+    const leftS = p ? p.leftS ?? p.left ?? (p.endsAt != null ? p.endsAt - (a.t ?? 0) : p.t != null && p.goal?.withinS != null ? p.t + p.goal.withinS - (a.t ?? 0) : null) : null
+    let you = null
+    if (heldU) {
+      const kit = kitFor(heldU)
+      const st = heldStation()
+      if (heldU.kind === 'aircraft') {
+        const members = units().filter((x) => x.group === heldU.group && x.kind === 'aircraft')
+        const k = memberOf(heldU)
+        you = { name: heldU.groupName || heldU.name, sub: [`${kitShort(kit, heldU.kit)}${k != null && members.length > 1 ? ` ${k + 1} of ${members.length}` : ''}`, st ? stationLabel(st) : null].filter(Boolean).join(' · ') }
+      } else you = { name: heldU.name, sub: [heldU.hull || shipType(kit), st ? stationLabel(st) : null].filter(Boolean).join(' · ') }
+    }
+    return {
+      sides: ['jp', 'us'].map((code) => ({ code, name: wgSideName(code), strength: shareOf(bySide(a.strength, code)), tally: tallyOf(a.tally, code), mine: code === side })),
+      timer: clockText(a.t ?? 0),
+      goal: g ? { text: g.text || '', count: goalCount(g), status: g.status || 'open' } : null,
+      phase: p ? { key: `${p.index ?? ''}:${p.t ?? ''}:${p.title ?? ''}`, title: p.title || '', text: p.text || '', count: p.goal?.kind === 'survive' ? `${p.done ?? 0} afloat` : `${p.done ?? 0} of ${p.count ?? p.goal?.count ?? 0}`, left: leftS != null ? clockText(leftS) : '', status: p.status || 'open' } : null,
+      you,
+      touch: typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches,
+    }
+  }
+
+  /** Where the scene puts unit i on the screen (the HUD's projection of its state.pos, a little above it), or null. */
+  function project(a, i) {
+    const P = a.state?.pos
+    let x
+    let y
+    let z
+    if (P && P.length >= 3 * i + 3) [x, y, z] = [P[3 * i], P[3 * i + 1], P[3 * i + 2]]
+    else {
+      const p = a.positionOf?.(i)
+      if (!p) return null
+      ;[x, y, z] = Array.isArray(p) ? p : [p.x, p.y, p.z]
+    }
+    const sc = battle.scene
+    const f = typeof sc?.project === 'function' ? sc.project.bind(sc) : typeof sc?.hud?.project === 'function' ? sc.hud.project.bind(sc.hud) : null
+    if (!f || !Number.isFinite(x)) return null
+    return f(x, Math.max(0, y || 0) + 25, z)
+  }
+
+  /** The new events since the last frame: hit markers on their targets, the respawn line; then the markers placed. */
+  function markersFrame(a) {
+    const wg = L.wg
+    const evs = a.events || []
+    const now = performance.now() / 1000
+    const me = a.player?.unitIndex
+    const fresh = []
+    for (let i = wg.seen; i < evs.length; i++) fresh.push(evs[i])
+    wg.seen = evs.length
+    fresh.push(...wg.extra.splice(0))
+    for (const e of fresh) {
+      // (what happened more than a marker's life ago in the game's time is not marked: a slow frame or a jump in the clock)
+      if (typeof e.t === 'number' && typeof a.t === 'number' && a.t - e.t > 1.5) continue
+      // (a near miss only where it is the player's: on the held unit, or the player's own shot)
+      const marked = MARKED.has(e.kind) || (e.kind === 'near-miss' && (e.mine || e.target === me))
+      if (marked && e.target != null && e.text) wg.marks.push({ id: `${wg.session}:${e.id ?? wg.marks.length}`, key: e.target, text: e.text, mine: !!e.mine, kind: e.kind, at: now })
+      if (e.kind === 'respawn' && e.mine !== false) hud.say(e.text || respawnLine(a, e), 3.2)
+    }
+    wg.marks = wg.marks.filter((m) => now - m.at < 1.5).slice(-8)
+    hud.marks(wg.marks.map((m) => {
+      const p = project(a, m.key)
+      return { ...m, x: p?.[0], y: p?.[1], age: now - m.at }
+    }))
+  }
+
+  /** "Your Avenger did not return. The next one is yours." where the arena gives no words. */
+  function respawnLine(a, e) {
+    const rows = units()
+    const from = rows.find((u) => u.index === e.from)
+    const to = rows.find((u) => u.index === e.to)
+    if (from?.kind === 'aircraft') {
+      const short = kitShort(kitFor(from), from.kit)
+      const other = to?.kind === 'aircraft' ? asSentence(aircraftRole(kitShort(kitFor(to), to.kit), to.groupName || to.name || '')).replace(/\.$/, '') : to?.name
+      return `Your ${short} did not return. ${to && to.group === from.group ? 'The next one is yours.' : to ? `${other} is yours.` : ''}`.trim()
+    }
+    return `${from?.name ?? 'Your ship'} is sinking.${to ? ` ${to.name} is yours.` : ''}`
+  }
+
+  /** The highlights since the last frame, for the reel: their stills (the arena's, or the scene's snapshot now), at most six, the sinkings and the player's own kept first. */
+  function reelFrame(a) {
+    const wg = L.wg
+    const hs = a.highlights || []
+    const prio = (x) => (x.kind === 'sunk' || x.kind === 'sinking' ? (x.mine ? 5 : 4) : x.kind === 'magazine' ? 4 : x.kind === 'lost' ? 3 : x.mine ? 2 : 1)
+    for (let i = wg.seenH; i < hs.length; i++) {
+      const hl = hs[i]
+      const item = { id: hl.id ?? i, t: hl.t ?? a.t ?? 0, kind: hl.kind, mine: !!hl.mine, text: hl.text ?? hl.caption ?? '', src: hl.image ?? hl.snapshot ?? hl.src ?? null }
+      item.prio = prio(item)
+      const worst = wg.reel.length >= 6 ? wg.reel.reduce((w, r, k) => (r.prio < wg.reel[w].prio ? k : w), 0) : -1
+      if (worst >= 0 && wg.reel[worst].prio >= item.prio) continue
+      if (!item.src) {
+        try {
+          item.src = battle.scene?.snapshot?.() ?? null
+        } catch (err) {
+          app.warn(`scene.snapshot(): ${err.message}`)
+        }
+      }
+      if (!item.src) continue
+      if (worst >= 0) wg.reel.splice(worst, 1)
+      wg.reel.push(item)
+    }
+    wg.seenH = hs.length
+  }
+
+  /** The result: the end card, a moment after it (the last marker and the sinking seen first). */
+  function endFrame(a) {
+    const wg = L.wg
+    const r = a.result
+    if (!r || wg.ended) return
+    const now = performance.now()
+    if (!wg.endAt) wg.endAt = now + 1600
+    if (now < wg.endAt) return
+    wg.ended = true
+    if (document.pointerLockElement) document.exitPointerLock?.()
+    list.close()
+    hud.say('')
+    hud.hint(null)
+    ui.card.openWargameEnd(endData(a, r))
+  }
+
+  function endData(a, r) {
+    const wg = L.wg
+    const side = wg.side
+    const other = otherSide(side)
+    const met = r.met ? bySide(r.met, side) : r.winner ? r.winner === side : r.side ? r.side === side : null
+    const t = clockText(r.t ?? a.t ?? 0)
+    const tl = (code) => {
+      const x = tallyOf(a.tally, code)
+      return `sank ${typeCount(x.sunk, 'ship', { words: false })}, shot down ${typeCount(x.downed, 'aircraft', { words: false })}`
+    }
+    const p = a.tally?.player || a.tally?.mine || null
+    const yours = p ? [`${p.hits ?? 0} ${p.hits === 1 ? 'hit' : 'hits'}`, `${p.sunk ?? 0} sunk`, `${p.downed ?? 0} shot down`, `${p.lost ?? 0} lost`].join(' · ') : null
+    return {
+      title: wg.scenario?.title || 'The wargame',
+      kicker: `${met === true ? 'Goal met' : met === false ? 'Goal missed' : 'The end'} · ${t}`,
+      result: r.text || resultLine(a, r),
+      sides: ['jp', 'us'].map((code) => ({ code, name: wgSideName(code), line: tl(code), mine: code === side })),
+      yours,
+      reel: [...wg.reel].sort((x, y) => x.t - y.t).map((x) => ({ src: x.src, caption: `${clockText(x.t)} · ${asSentence(x.text).replace(/\.$/, '')}` })),
+      footnote: wg.scenario?.footnote || '',
+      label: wg.scenario?.label || WG_LABEL,
+      side,
+      other: { code: other, name: wgSideName(other) },
+    }
+  }
+
+  /** The result in one line, from the played side's goal ("Taffy 3 kept five of the six escort carriers afloat until 10:00."). */
+  function resultLine(a, r) {
+    const side = L.wg.side
+    const g = goalOf(a, side) || {}
+    const end = clockText(a.durationS ?? L.wg.scenario?.durationS ?? 600)
+    const t = clockText(r.t ?? a.t ?? 0)
+    const me = wgSideName(side)
+    const them = wgSideName(otherSide(side))
+    const n = g.done ?? g.progress ?? 0
+    const type = g.type || 'ship'
+    const met = r.met ? bySide(r.met, side) : null
+    if (g.kind === 'survive') {
+      const of = g.of ?? g.total ?? g.count ?? 0
+      if (met === false || g.status === 'failed') return `${them} sank ${numWord(Math.max(0, of - n))} of the ${typeCount(of, type)} by ${t}.`
+      return `${me} kept ${numWord(n)} of the ${typeCount(of, type)} afloat until ${end}.`
+    }
+    const verb = { sink: 'sank', hit: 'hit', 'shoot-down': 'shot down', reach: 'reached' }[g.kind] ?? 'made'
+    const count = g.count ?? g.target ?? 0
+    if (met === true || g.status === 'met') return `${me} ${verb} ${typeCount(n, type)} by ${t}.`
+    return `${me} ${verb} ${typeCount(n, type)}; the goal was ${numWord(count)} by ${end}.`
+  }
+
+  /** The hop hints, once in this browser (localStorage pt.hints, as the first take's): Tab and 1–4, or on a touch screen the hop button. */
+  function hintsOnce() {
+    let seen = {}
+    try {
+      seen = JSON.parse(localStorage.getItem('pt.hints') || '{}') || {}
+    } catch {
+      seen = {}
+    }
+    if (seen.wargame) return
+    const touch = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches
+    hud.hint(
+      touch
+        ? [`<b class="wg-hop-ic">${HOP_ICON}</b> the next ship or aircraft of the same kind`, '<b>Units</b> any ship or aircraft of your side', 'A tap on one of your side’s ships or aircraft: it is yours']
+        : ['<b>Tab</b> the next ship or aircraft of the same kind', '<b>1</b> carrier <b>2</b> battleship or cruiser <b>3</b> destroyer <b>4</b> aircraft', 'A click on one of your side’s ships or aircraft: it is yours'],
+      9,
+    )
+    try {
+      localStorage.setItem('pt.hints', JSON.stringify({ ...seen, wargame: true }))
+    } catch {
+      // (no storage: the hints show this once in this page's life)
+    }
+  }
+
+  /** A wargame's frame: false when none runs (the record's frame follows); else the bar, the HUD layer, the markers, the reel, the end. */
+  function wargameFrame() {
+    const a = arenaOf()
+    const st = battle.state
+    // (a wargame the engine started itself, from its own key or URL: adopted)
+    if (!L.wg && a && st?.wargame?.id) beginWargame(st.wargame.id, st.wargame.side, battle.wargame?.scenario ?? null)
+    if (!L.wg) {
+      if (hud.shown) hud.set(null)
+      ui.root.classList.remove('wargame')
+      return false
+    }
+    if (!a || app.active !== battle.scene || app.mode === 'flying') {
+      hud.set(null)
+      bar.set(null)
+      if (list.isOpen) list.close()
+      ui.root.classList.remove('holding', 'wargame')
+      return true
+    }
+    const wg = L.wg
+    // a restart (the arena anew, or its events begun again): the markers and the reel with it
+    const side = st?.wargame?.side ?? a.side ?? wg.side
+    if (a !== wg.arena || side !== wg.side) {
+      if (wg.arena) beginWargame(wg.id, side, wg.scenario)
+      L.wg.arena = a
+    } else if ((a.events?.length ?? 0) < wg.seen || (a.highlights?.length ?? 0) < wg.seenH) {
+      // (the same arena begun again in place, or the dev page's scrub back: what was read is read again)
+      Object.assign(wg, { seen: 0, seenH: 0, marks: [], reel: [], ended: false, endAt: 0 })
+    }
+    if (!a.result && wg.ended) Object.assign(wg, { ended: false, endAt: 0 })
+    ui.root.classList.add('holding', 'wargame')
+    const heldU = heldUnit()
+    if ((heldU?.index ?? null) !== L.wg.heldIndex) {
+      L.wg.heldIndex = heldU?.index ?? null
+      L.cache = null
+    }
+    const timer = clockText(a.t ?? 0)
+    bar.set({
+      mode: 'wargame',
+      clock: timer,
+      clockS: timer,
+      where: heldU?.name ?? '',
+      stop: [-1, 0],
+      running: battle.running,
+      scale: 1,
+      scales: [],
+      t: Math.round(a.t ?? 0),
+      duration: a.durationS ?? 600,
+      assist: null,
+      held: heldU ? { name: heldU.name, station: heldStation(), stations: (heldU.stations || []).map((s) => ({ name: s, label: stationLabel(s), short: STATION[s]?.short ?? null, where: STATION[s]?.where ?? '' })) } : null,
+    })
+    hud.set(hudState(a, L.wg.side, heldU))
+    markersFrame(a)
+    reelFrame(a)
+    endFrame(a)
+    // the list and the selection a few times a second (a tap in the box possesses, as a pick in the list does)
+    const now = performance.now()
+    if (now - L.slow >= 250) {
+      L.slow = now
+      const sel = battle.state?.selected
+      if (sel !== undefined && sel !== L.seenSelected) {
+        const fromBox = L.seenSelected !== undefined
+        L.seenSelected = sel
+        if (fromBox && sel != null && sel !== a.player?.unitIndex) selectInWargame(sel)
+      }
+      if (list.isOpen) list.set(listData())
+    }
+    return true
+  }
+  L.wargameFrame = wargameFrame
+
   // --- the URL (ENGINEERING §9, ROUND-2 §5) ---------------------------------------------------
   /** A unit named by the URL (#unit, #station): selected, its card open with the station's button focused, never pressed. */
   function offerUnit(id, station) {
@@ -1091,6 +1714,16 @@ export function link(app, ui) {
   /** #battle, #t, #moment, #unit and #station, read at boot (after the table) and on hashchange. */
   app.urlBattle = async (h) => {
     if (L.busy || app.mode === 'flying') return
+    // #wargame=<id>&side=<jp|us>: the start sheet, that side's button focused (a wargame starts on a click)
+    const wgId = h.get('wargame')
+    if (wgId) {
+      if (L.wg?.id === wgId) return
+      const side = ['jp', 'us'].includes(h.get('side')) ? h.get('side') : null
+      if (!wargameKnown(wgId)) return app.warn(`#wargame=${wgId}: no such wargame`)
+      // (the box the URL names first, where it names one: the sheet then stands over the box)
+      if (h.get('battle') && h.get('battle') !== battle.state?.boxId && app.data.boxById.has(h.get('battle'))) await enter(h.get('battle'), { from: 'url', t: h.get('t') })
+      return openStartSheet(wgId, { focus: side })
+    }
     const id = h.get('battle')
     const t = h.get('t')
     const momentId = h.get('moment')
