@@ -274,6 +274,8 @@ function sentence(ar, side, g, also = false) {
     if (g.kind === 'sink') return g.status === 'met' ? `${n} sank the ${w(1)} by ${when}.` : `${n} did not sink the ${w(1)}.`
     return g.status === 'met' ? `${n} kept the ${w(1)} afloat to the end.` : `${n} lost the ${w(1)} at ${when}.`
   }
+  // (one of several to sink: "a battleship", not "none of the one battleship")
+  if (g.need === 1 && g.kind === 'sink') return g.status === 'met' ? `${n} sank a ${w(1)} by ${when}.` : `${n} did not sink a ${w(1)}.`
   switch (g.kind) {
     case 'sink':
       return g.status === 'met' ? `${n} sank ${countWord(g.count)} ${w(g.count)} by ${when}.` : `${n} sank ${ofWord(g.count)} of the ${countWord(g.need)} ${w(g.need)} it set out to sink.`
