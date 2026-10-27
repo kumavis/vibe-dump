@@ -12,7 +12,7 @@
 // place with this weapon's profile, landed as a template lands
 // (blastLands: whoever is under it, friend and foe, and the scenery round
 // it, by `scenery` as a template chews it). Tuned so a keg kills about
-// half a squad standing on it (sim/terrain-check.mjs prints what it does
+// half a squad standing on it (sim/data-check.mjs prints what it does
 // to each unit, by rules.js's expected: four Nutkin of six, two or three
 // of most squads, a third of an Oak Guard's) and chews the walls round it;
 // and two hit points, so the acorns' template (1 to scenery) only cracks
