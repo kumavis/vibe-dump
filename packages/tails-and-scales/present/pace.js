@@ -42,8 +42,12 @@ export const PACE = Object.freeze({
 // instant events: a focus, a pause of 0.2 s or less, objectives, status,
 // act, log, a tray opened, an advance's dice, the match waiting on a seat
 // (`pending`: a batch runs across a human's entries, a group order's
-// members) and, under ?debug, a checkpoint (app/boot.js puts one after each
-// action and stop, for P-present and snap-check). Its walks start
+// members), under ?debug, a checkpoint (app/boot.js puts one after each
+// action and stop, for P-present and snap-check) and (F16) under the
+// courtesy fog the `fog` events round each entry (app/flow.js's: what the
+// table shows of the other army as the entry opens and closes, which no
+// batch may wait on or break at, as a group order's members run across
+// entries). Its walks start
 // PACE.stagger apart, after one tray row of all its advance dice, and it is
 // over when its last walk to finish is; the mirror still folds every event
 // in order, so P-present's checkpoints are unchanged (the player plays one
@@ -65,7 +69,7 @@ export const PACE = Object.freeze({
 //       (PACE.cost's estimate; a batch counted once, until its last walk
 //       ends)
 // `sideOf(unitId)`: the seat a unit belongs to.
-const INSTANT = new Set(['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check', 'pending'])
+const INSTANT = new Set(['focus', 'objectives', 'status', 'act', 'log', 'tray.open', 'check', 'pending', 'fog'])
 const isAdvanceDice = (e) => e.t === 'dice' && /^Advance/.test(e.label ?? '')
 const quiet = (e) => INSTANT.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.2) || isAdvanceDice(e)
 
@@ -148,7 +152,7 @@ export function batchAt(events, k, sideOf) {
 // first.)
 const ANCHOR = new Set(['volley', 'blast.fire', 'spell.cast', 'spell.fizzle', 'melee'])
 const OPENING = new Set(['focus', 'unit.face'])
-const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending'])
+const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
 const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 // what an attack in a batch waits on before the next may start: a volley
 // PACE.lead, a scatter, a throw and the slower spells their half second
