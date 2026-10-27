@@ -30,6 +30,11 @@
 //                                 now, the phase left open
 //     ordersN                     (F10c) how many of the seat's units hold an
 //                                 order (the actions' Orders N; 0 hides it)
+//     undo                        (F12) ↶ Undo: { show, busy }, up beside End
+//                                 in a game played on this device alone,
+//                                 enabled once the table has caught up and
+//                                 the seat has an entry to take back
+//                                 (undoable, below)
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -125,6 +130,11 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // (F3) End lit when there is nothing else to do: the phase's units all
   // spent, or the deployment, where Begin battle is the only way on
   end.lit = deploying || end.ready
+  // (F12) Undo up with End in a game played here alone (never online, nor
+  // for a replay's Session, which holds no seat's decision), enabled while
+  // the table rests and there is an entry of the seat to take back
+  const undoUp = end.show && playedHere(session)
+  const undo = { show: undoUp, busy: !idle || !undoUp || undoable(session) < 0 }
   const advance = {
     // ((F10a) none for a group: its +D6 is the bar's)
     show: !mine ? false : idle ? P.phase === 'move' && !!sel && group < 2 && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
@@ -167,6 +177,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     auto: { show: up, busy: !idle },
     go: { show: up && idle && badge > 0, n: badge, busy: !idle },
     ordersN: mine || deploying ? ordered : 0,
+    undo,
     advance,
     shortest: { show: !!pk },
     // the deploying seat's zone is lit; in battle both dim
@@ -175,6 +186,37 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     rings: ringLooks({ session, input, covered: mine && idle ? covered : NOBODY }),
     buttonsUp,
   }
+}
+
+// ── Undo (F12) ──────────────────────────────────────────────────────────────
+// The kinds undo takes back: a placement, a move, a charge's end. None rolls
+// a die; every other kind ends a phase or the deployment, rolls, runs the AI
+// or answers a vote, and so commits.
+export const UNDOABLE = Object.freeze(['place', 'move', 'chargeEnd'])
+
+// A game played on this device alone (vs. the AI, hotseat): a log no other
+// device writes to (a LocalStore: online play's is Automerge's), every human
+// seat played here.
+export function playedHere(session) {
+  const G = session?.G
+  return !!G && session.store.kind === 'local' && G.setup.seats.every((x, s) => x.ctrl !== 'human' || (session.localSeats.includes(s) && x.dev === session.dev))
+}
+
+// The entry undo would take back: its place k among the accepted, or -1. It
+// is the last accepted, of a live match played here alone: a placement, a
+// move or a charge's end of the seat played here whose decision is now
+// pending (so in hotseat each seat takes back its own), with no die rolled
+// across it (the dice counter the Folder keeps after each entry,
+// match/fold.js). An End or Begin battle, and any entry that rolled (an
+// advance, a shot, a charge, Auto, a pilot, the last Begin battle with its
+// roll-off, an End that ran a fight, morale or the AI), is a commit point:
+// one press takes back one entry, down to the last of them, never past it.
+export function undoable(session) {
+  if (!playedHere(session) || session.status !== 'live') return -1
+  const f = session.folder, k = f.accepted.length - 1, seat = session.decisionFor()
+  if (seat < 0 || k < 1) return -1
+  const e = f.pushed[f.placed[k]]
+  return UNDOABLE.includes(e.t) && e.s === seat && e.d === session.dev && f.dice[k] === f.dice[k - 1] ? k : -1
 }
 
 // Each unit's ring: the one picked up, the deploying seat's, a charge's

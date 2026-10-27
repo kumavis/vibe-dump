@@ -40,6 +40,11 @@
 // a replay from its very start; the battle's own Session (`battle`) goes
 // on folding meanwhile, its status still heard (online), and the table
 // comes back to it as it then stands.
+//
+// (F12) In a game played here alone, Undo takes back the last placement,
+// move or charge's end of the seat whose decision it is, back to its last
+// commit point (app/undo.js): the battle's Session made again over its log
+// as it stood before that entry, and swapped in for it.
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
@@ -51,10 +56,11 @@ import { MAX_ENTRIES, Folder } from '../match/fold.js'
 import { project } from '../present/mirror.js'
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
-import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, PHASE_NAME } from '../present/hud-model.js'
+import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, undoable, PHASE_NAME } from '../present/hud-model.js'
 import { EventPlayer } from '../view/player.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
+import { rewind } from './undo.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
@@ -779,6 +785,36 @@ export class Flow {
     this.session = session
     session.sink = this.sink
     this.refreshUI()
+  }
+
+  // ── Undo (F12) ──────────────────────────────────────────────────────────
+  // ↶ Undo or Ctrl-Z: the last placement, move or charge's end of the seat
+  // played here whose decision it is, taken back to its last commit point
+  // (present/hud-model.js's undoable: one entry a press). Only in a game
+  // played here alone, on the battle's own Session (never while a replay
+  // or a scrub is up), once the table has caught up and no group or order
+  // is still sending. The battle's Session is made again over its log as it
+  // stood before that entry (app/undo.js) and becomes the battle, shown on
+  // its table as a scrub's is (a snap: the table, the log, the HUD and the
+  // card made again from it), the old Session closed; the unit taken back
+  // is put down first. Returns why nothing was taken back, else null.
+  undo() {
+    const battle = this.battle, human = this.human
+    if (!battle || this.online) return 'no battle played on this device alone'
+    if (this.session !== battle || this.replay?.battle) return 'a replay is on the table'
+    if (!this.player.idle || human.group?.busy || human.standing?.busy) return 'the table is still playing'
+    const k = undoable(battle)
+    if (k < 0) return 'nothing to take back since the last End or dice roll'
+    human.select(null)
+    // (its trace lines heard once it is made: the card's facts and ?debug's
+    // trace of what it folds as it is made are the snap's to make again)
+    let made = false
+    const ses = rewind(battle, k, { onTrace: (line, g) => made && this.onTrace(line, g) })
+    made = true
+    // (the battle's no more: show() closes it as it hands over)
+    this.battle = ses
+    this.show(ses)
+    return null
   }
 
   // The online match left: app/online.js lets go of its document.
