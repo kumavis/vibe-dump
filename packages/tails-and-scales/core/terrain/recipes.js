@@ -716,6 +716,8 @@ export function scatter(T, S, seed, objectives, deployDepth) {
   const placed = []
 
   // The middle of the table: something wrapped around the centre objective.
+  // (The merged build's gate) A set with `largeCentre` reads it instead on a
+  // table larger than classic's, the same draw picking from it.
   const centre = rng()
   const rule = S.largeCentre && areaScale(T) > 1 ? S.largeCentre : S.centre
   const middle = rule.find(([, below]) => centre < below)

@@ -466,6 +466,8 @@ const moves = [
   ['a spacing rule (classic gap 2.1 → 2.0)', () => classic((c) => (c.gap = 2.0))],
   ['the forest kept out of deployment no more', () => classic((c) => (c.notInDeploy = []))],
   ['a new terrain set', () => rulesId({ sets: { ...SETS, fortified: structuredClone(SETS.classic) } })],
+  // (the merged build's gate) fortified's centre rule on a larger table
+  ["fortified's larger-table centre (the rock box → the tower ring)", () => rulesId({ sets: { ...SETS, fortified: { ...structuredClone(SETS.fortified), largeCentre: [['keep', 0.5], ['tower', 0.8]] } } })],
   // (F8b) the open set: its spacing and its area scale
   ['a spacing rule (open gap 3.2 → 3.1)', () => rulesId({ sets: { ...SETS, open: { ...structuredClone(SETS.open), gap: 3.1 } } })],
   ["the open set's area scale dropped", () => rulesId({ sets: { ...SETS, open: (({ scale, ...o }) => o)(structuredClone(SETS.open)) } })],
@@ -623,6 +625,7 @@ const brokenForts = [
   ['a largeCentre threshold above 1', /largeCentre\[1\] \(rockbox\): threshold 1\.5/, (c) => (c.largeCentre[1][1] = 1.5)],
   ['largeCentre thresholds that fall', /largeCentre\[1\] \(keep\): thresholds must rise/, (c) => c.largeCentre.reverse()],
   ['a largeCentre entry without its threshold', /largeCentre\[0\] must be \[piece, threshold\]/, (c) => c.largeCentre[0].pop()],
+  ['a larger-table centre threshold of 0', /largeCentre\[0\] \(keep\): threshold 0 must be in \(0, 1\]/, (c) => (c.largeCentre[0][1] = 0)],
 ]
 for (const [what, want, edit] of brokenForts) {
   const c = structuredClone(SETS.fortified)

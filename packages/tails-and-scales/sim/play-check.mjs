@@ -208,9 +208,20 @@ async function lane(browser, url, name) {
         tries++
         const was = await every()
         await page.mouse.click(q.x, q.y)
-        await sleep(1500)
-        const m = moves(was, await every())
-        const moved = m.filter((x) => x.d > 12), still = m.filter((x) => x.d < 3)
+        // ((the merged build's gate) its landing read as the frames come,
+        // up to 6 s, not once 1.5 s on: under load a frame took longer)
+        let m = [], moved = [], still = []
+        for (let k = 0; k < 12; k++) {
+          await sleep(500)
+          m = moves(was, await every())
+          moved = m.filter((x) => x.d > 12)
+          still = m.filter((x) => x.d < 3)
+          if (moved.length) break
+        }
+        await sleep(500)
+        m = moves(was, await every())
+        moved = m.filter((x) => x.d > 12)
+        still = m.filter((x) => x.d < 3)
         if (moved.length === 1 && moved[0].seat === seat && still.length === m.length - 1) {
           stats.placed[seat]++
           log(`seat ${seat} placed a unit by a click: its label moved ${Math.round(moved[0].d)} px, the other ${still.length} labels still`)
@@ -477,11 +488,27 @@ async function layoutLane(browser, url) {
           // a unit of the seat placing picked up by a click on its label's
           // unit, so its card shows and the minimap rises over it
           const ls = await page.evaluate(() => [...document.querySelectorAll('#labels .ulabel.s0')].map((l) => l.getBoundingClientRect()).filter((r) => r.width && r.left > 260 && r.right < innerWidth - 40 && r.top > 120 && r.bottom < innerHeight - 120).map((r) => ({ x: r.left + r.width / 2, y: r.bottom })))
+          // (the unit under its label found as the other lanes find it, by
+          // the tooltip its hover shows a little below the label, then
+          // clicked there, the card waited on as the frames come)
+          const tip = () => page.evaluate(() => { const t = document.querySelector('#tooltip'); return t.style.display === 'block' ? t.textContent : '' })
           for (const l of ls.slice(0, 6)) {
-            await page.mouse.click(l.x, l.y + 20)
-            await sleep(700)
+            let p = null
+            for (const dy of [22, 34, 14, 48, 8]) {
+              await page.mouse.move(l.x, l.y + dy)
+              await sleep(500)
+              if (/models|wounds/.test(await tip())) { p = { x: l.x, y: l.y + dy }; break }
+            }
+            if (!p) continue
+            await page.mouse.click(p.x, p.y)
+            for (let k = 0; k < 10 && !(await box('#card.show')); k++) await sleep(500)
             if (await box('#card.show')) break
           }
+          // (and the minimap's rise over it, on its own ≤ 10 Hz tick and a
+          // 0.2 s slide, both starved by SwiftShader's slow frames: its box
+          // read once its tick has seen the card (view/minimap.js's lift,
+          // the card's height and 20 px) and it holds still over two
+          // readings 1 s apart; 30 s at most, then judged as it stands)
           await sleep(1200)
           // (the card done sliding in and the minimap's tick past it: a
           // reading 1.9 s after the click caught the card still 20 px low and

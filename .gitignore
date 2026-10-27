@@ -18,3 +18,5 @@ packages/cold-boot/out/
 /.probe/
 _probe*.mjs
 __probe*.mjs
+# the Grand fixture tails-and-scales builds for its fortified scale and climb checks, fresh on every run
+packages/tails-and-scales/sim/.fixtures/
