@@ -225,7 +225,16 @@ export function link(app, ui) {
   // Esc in a moment without pointer lock gives the controls back (with the lock, the browser's Esc
   // leaves the lock and the battle pauses and offers release: battle/controls/input.js)
   addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape' || app.mode !== 'moment' || document.pointerLockElement || L.wg) return
+    if (e.key !== 'Escape' || app.mode !== 'moment' || document.pointerLockElement) return
+    // (in a wargame Esc closes its card, or the list, and gives nothing back: a wargame is always held)
+    if (L.wg) {
+      if (e.defaultPrevented) return
+      if (list.isOpen) list.close()
+      else if (ui.card.isOpen) ui.card.close()
+      else return
+      e.preventDefault()
+      return
+    }
     e.preventDefault()
     release()
   })
