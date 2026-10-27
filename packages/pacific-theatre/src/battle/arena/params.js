@@ -16,7 +16,7 @@ export const A = {
   placeM: 2500, // each side's guide starts this far from the centre on its bearing: the enemy 5 km away (contract)
   coreSpacingM: { carrier: 520, capital: 650 }, // the core's ships in rows behind the guide
   edgeM: 450, // a ship this near the edge turns in; the guide's course bends at twice it
-  airEdgeM: 350, // an aircraft beyond the edge by this turns back (the smoke test fails one beyond 1 km)
+  airEdgeM: 150, // an aircraft beyond the edge by this turns back, and a fighter lets go of a fight beyond it by twice this (the smoke test fails one beyond 1 km)
 
   // --- aircraft (contract: point-to-fly, no stall, half to full of the top speed, auto-level, a floor) -----
   air: {
@@ -90,6 +90,10 @@ export const A = {
   squall: { radiusM: [700, 1000], lastS: [150, 220], hideM: 1000 }, // the box's squalls, brought into the arena (research/engine-3.md §6)
   capShare: 0.5, // of the fighters, the share kept on combat air patrol
   firstStrikeS: 12,
+  maxAirborne: 30, // a side's aircraft in the air at once, when the scenario does not say (content-3's maxAirborne: 30)
+  // a strafing run (content-3's `strafe` profile; the contract's damage table has no entry for guns on a ship, so a
+  // strafed ship takes no damage: her AA is beaten down for a few seconds, research/engine-3.md §5)
+  strafe: { approachAltM: 600, openM: 1500, fireM: 900, breakM: 300, suppressS: 8, aaK: 0.4, everyS: 0.5 },
 
   // --- the player ---------------------------------------------------------------------------------------------------
   respawnS: 2, // contract

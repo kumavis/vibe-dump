@@ -329,6 +329,37 @@ export function firePlayerGuns(ar, i, dt) {
   return n
 }
 
+/**
+ * A ship strafed by aircraft `by` (content-3's `strafe`; the contract's damage
+ * table has no entry for guns on a ship): no damage, her AA beaten down to
+ * A.strafe.aaK for A.strafe.suppressS, a marker when a run first finds her.
+ */
+export function strafed(ar, i, by) {
+  const x = ar._X[i]
+  if (ar.state.alive[i] !== 1) return
+  const fresh = ar.t >= (x.strafedUntil ?? 0)
+  x.strafedUntil = ar.t + A.strafe.suppressS
+  if (fresh) ar.marker(i, `${ar.slots[i].name}: strafed`, { kind: 'hit', player: !!ar.player && by === ar.player.unitIndex && !ar.player.lost, weapon: 'guns' })
+}
+
+/** An AI aircraft's strafing burst at ship j: tracer to her deck, the flashes on it, the rounds spent. */
+export function strafeBurst(ar, i, j) {
+  const s = ar.state
+  const o = 3 * i
+  const q = 3 * j
+  const m = ar._X[j].model
+  const deck = (m.deck ?? 10) + 2
+  const along = (ar.rngs.fx.next() - 0.5) * m.L * 0.5
+  const h = s.heading[j] * DEG
+  const tx = s.pos[q] + Math.sin(h) * along
+  const tz = s.pos[q + 2] - Math.cos(h) * along
+  ar.fx(FX.tracer, s.pos[o], s.pos[o + 1], s.pos[o + 2], { unit: i, dx: tx - s.pos[o], dy: deck - s.pos[o + 1], dz: tz - s.pos[o + 2], size: 1, data: 1 })
+  ar.fx(FX.hit, tx, deck, tz, { unit: j, size: 0.2 })
+  const am = ar._X[i].ammo
+  if (am) for (const g of am.guns) if (g.fixed) g.left = Math.max(0, g.left - Math.round(((g.weapon.rofRpm ?? 800) / 60) * 0.5 * g.count))
+  strafed(ar, j, i)
+}
+
 /** An AI fighter's burst at aircraft j: tracer along the line, and a hit drawn from the geometry. Returns 'down' | 'hit' | null. */
 export function aiBurst(ar, i, j, angleRad, range) {
   const s = ar.state
@@ -478,11 +509,12 @@ function bulletHits(ar, p) {
       return
     }
   }
-  // rounds into a ship register nothing beyond a flash
+  // rounds into a ship register nothing beyond a flash (an aircraft's on the other side's ship: strafed)
   if (y1 < 40) {
     for (const i of shipsNear(ar, x1, z1, 30)) {
       if (shipBoxHit(ar, i, prev[0], prev[1], prev[2], x1, y1, z1, 0) >= 0) {
         ar.fx(FX.hit, x1, Math.max(2, y1), z1, { unit: i, size: 0.1 })
+        if (owner >= 0 && ar.slots[owner].kind === 'aircraft' && ar.slots[i].side !== side) strafed(ar, i, owner)
         pr.kill(p)
         return
       }
@@ -580,7 +612,7 @@ export function aaStep(ar, dt) {
     if (!inReach.length) continue
     const era = eraFactor(side, ar.year)
     const share = inReach.length
-    const dmgK = x.hp / x.hpMax < A.fireAt ? 0.6 : 1
+    const dmgK = (x.hp / x.hpMax < A.fireAt ? 0.6 : 1) * (ar.t < (x.strafedUntil ?? 0) ? A.strafe.aaK : 1)
     for (const j of inReach) {
       const r = Math.hypot(s.pos[3 * j] - cx, s.pos[3 * j + 1], s.pos[3 * j + 2] - cz)
       const lam = (shipLambda(m, r) * era * A.aaK * dmgK) / share

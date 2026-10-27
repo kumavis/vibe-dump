@@ -12,7 +12,7 @@
 
 import { A } from './params.js'
 import { DEG } from './physics.js'
-import { aiSalvo, bears, fireShipTorpedoes, torpedoSpeed, torpedoIntercept, dropBomb, dropTorpedo, bombPoint, aiBurst, rearGun } from './weapons.js'
+import { aiSalvo, bears, fireShipTorpedoes, torpedoSpeed, torpedoIntercept, dropBomb, dropTorpedo, bombPoint, aiBurst, rearGun, strafeBurst } from './weapons.js'
 import { isCarrier, isEscort, isCapital, stationPoint, edgeBend, bearingOf, canLaunch, targetsFor } from './admiral.js'
 import { steer } from './physics.js'
 
@@ -324,7 +324,7 @@ export function airThink(ar, i) {
   const fighter = x.model.type === 'fighter'
   // a fighter's fight: keep the one it has, or take one the mission allows
   if (fighter) {
-    if (x.engage >= 0 && (s.alive[x.engage] !== 1 || Math.hypot(s.pos[3 * x.engage] - b.x, s.pos[3 * x.engage + 2] - b.z) > 4000)) x.engage = -1
+    if (x.engage >= 0 && (s.alive[x.engage] !== 1 || Math.hypot(s.pos[3 * x.engage] - b.x, s.pos[3 * x.engage + 2] - b.z) > 4000 || Math.hypot(s.pos[3 * x.engage] - ar.centre.x, s.pos[3 * x.engage + 2] - ar.centre.z) > ar.R + 2 * A.airEdgeM)) x.engage = -1
     if (x.engage < 0 && hasGuns(x)) {
       if (m.kind === 'cap') {
         const g = side.guide >= 0 ? side.guide : i
@@ -400,7 +400,8 @@ function strikeThink(ar, i, x, m) {
     if (t.length) m.strike.target = t[0]
     else x.mission = { kind: 'return' }
   }
-  if (!x.ammo || (x.ammo.bombs <= 0 && x.ammo.torpedoes <= 0)) {
+  // (a strafer goes in with its guns until its run is made: content-3's `strafe`)
+  if ((!x.ammo || (x.ammo.bombs <= 0 && x.ammo.torpedoes <= 0)) && !(hasGuns(x) && !m.strafed)) {
     if (m.phase !== 'egress') {
       m.phase = 'egress'
       m.until = ar.t + 6
@@ -591,6 +592,40 @@ function strikeControl(ar, i, x, m, dt) {
         m.phase = 'egress'
         m.until = ar.t + 7
       }
+    }
+    return out
+  }
+  if (!(x.ammo?.bombs > 0)) {
+    // a strafing run: in low, the nose on the target's deck, the guns from fireM in, a pull-out at breakM
+    const S = A.strafe
+    if (m.phase === 'approach' && R < S.openM) m.phase = 'run'
+    if (m.phase === 'approach') {
+      out.x = tx + tvx * 20 + Math.cos(x.k * 1.3) * fan
+      out.z = tz + tvz * 20 + Math.sin(x.k * 1.3) * fan
+      out.y = S.approachAltM
+      return out
+    }
+    const tof = R / 850
+    out.x = tx + tvx * tof
+    out.z = tz + tvz * tof
+    out.y = (ar._X[ti].model.deck ?? 10) + 4
+    out.throttle = 1
+    out.maxDive = 35 * DEG
+    if (R < S.fireM && ar.t >= (x.strafeT ?? 0)) {
+      const f = fwdOf(b)
+      const dx = out.x - b.x
+      const dy = out.y - b.y
+      const dz = out.z - b.z
+      const L = Math.hypot(dx, dy, dz) || 1
+      if ((dx * f[0] + dy * f[1] + dz * f[2]) / L > Math.cos(12 * DEG)) {
+        strafeBurst(ar, i, ti)
+        x.strafeT = ar.t + S.everyS
+      }
+    }
+    if (R < S.breakM || b.y < 45) {
+      m.phase = 'egress'
+      m.until = ar.t + 6
+      m.strafed = true
     }
     return out
   }

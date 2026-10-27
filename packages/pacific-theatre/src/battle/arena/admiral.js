@@ -16,9 +16,16 @@
 // in rows behind it, the cruisers and destroyers on rings toward the
 // threat), holds the range its aggression asks (closing, opening or
 // broadside), and keeps the fleet inside the arena.
+//
+// content-3's scenarios say more, and it is read (research/content-3.md §2):
+// the formation (`circle` or `columns`: every ship's place, kept on the threat
+// axis as the start has it), the first wave's size (`waveSize`), the profiles
+// (`cap` fighters on patrol, `escort` fighters with the waves, `strafe`
+// aircraft in the waves with their guns; `dive`, `torpedo`, `level` strikers)
+// and the most a side has in the air at once (`maxAirborne`). With nothing
+// in the air on the other side, the patrol and the escorts strafe.
 
 import { A } from './params.js'
-import { ammoFor } from '../sim/ai.js'
 
 export const isCarrier = (t) => t === 'cv' || t === 'cvl' || t === 'cve'
 export const isCapital = (t) => t === 'bb' || t === 'ca' || t === 'cl'
@@ -35,6 +42,7 @@ export function createAdmiral(ar, side) {
     turnAwayAt: p.turnAwayAt ?? 0.4,
     launchEveryS: p.launchEveryS ?? null,
     waveGrowth: p.waveGrowth ?? 0,
+    waveSize: p.waveSize || null,
     state: 'approach',
     course: 0,
     speed: 0,
@@ -130,6 +138,52 @@ export function formation(ar, side) {
   })
   ring(cruisers, screen * 0.7, 70)
   ring(escorts, screen, 115)
+  if (side.def.formation) scenarioFormation(ar, side)
+}
+
+/**
+ * The scenario's own formation (content-3): each ship's place by the rule of
+ * tools/check/wargames.mjs layout() (a circle's ring evenly round the guide at
+ * half acrossM from the bow and its screen evenly at screenM from the bearing
+ * of the other side; a column's first ship at atM [starboard, ahead] of the
+ * guide and the rest astern at intervalM), turned into the frame stationPoint
+ * reads, the threat axis as it is at the start, so the start is exactly the
+ * layout and the formation then keeps its face to the threat. Relative to the
+ * guide now: when the scenario's guide is lost the shape stays about the next.
+ */
+function scenarioFormation(ar, side) {
+  const S = side.def
+  const F = S.formation
+  const v = (deg, m) => [Math.sin(deg * DEG) * m, Math.cos(deg * DEG) * m]
+  const h = S.headingDeg ?? ((S.bearingDeg ?? 0) + 180) % 360
+  const at = new Map()
+  if (F.kind === 'circle') {
+    at.set(S.guide, [0, 0])
+    const ring = F.ring || []
+    ring.forEach((id, i) => at.set(id, v(h + (360 * i) / ring.length, (F.acrossM || 0) / 2)))
+    const screen = F.screen || []
+    screen.forEach((id, i) => at.set(id, v(((S.bearingDeg ?? 0) + 180) % 360 + (360 * i) / screen.length, S.screenM ?? 1200)))
+  } else if (F.kind === 'columns') {
+    for (const c of F.columns || []) {
+      ;(c.ships || []).forEach((id, i) => {
+        const a = v(h + 90, c.atM?.[0] ?? 0)
+        const b = v(h, (c.atM?.[1] ?? 0) - i * (F.intervalM || 0))
+        at.set(id, [a[0] + b[0], a[1] + b[1]])
+      })
+    }
+  } else return
+  const th = ((S.bearingDeg ?? 0) + 180) * DEG
+  const X = ar._X
+  for (const i of side.ships) {
+    const p = at.get(ar.slots[i].id)
+    if (!p) continue
+    // (east, north) → (x, z) = (east, −north) → [toward the threat, to its right]
+    const ox = p[0]
+    const oz = -p[1]
+    X[i].offset0 = [ox * Math.sin(th) - oz * Math.cos(th), ox * Math.cos(th) + oz * Math.sin(th)]
+  }
+  const base = X[side.guide].offset0 || [0, 0]
+  for (const i of side.ships) if (X[i].offset0) X[i].offset = [X[i].offset0[0] - base[0], X[i].offset0[1] - base[1]]
 }
 
 /** A station's world point: the guide's position plus an offset on the threat axis. */
@@ -268,18 +322,24 @@ export function targetsFor(ar, side, enemy) {
   const s = ar.state
   const goal = side.def.goal || {}
   const want = goal.kind === 'sink' || goal.kind === 'hit' ? goal.type : null
+  const wantTypes = want ? (Array.isArray(goal.types) && goal.types.length ? goal.types : [want]) : null
   const g = side.guide
   const rank = { cve: 1, cv: 1, cvl: 1, bb: 2, ca: 3, cl: 3, dd: 5, de: 5 }
+  // a side that must keep its ships afloat goes for the threats: the ships nearest its main body, the cruisers and
+  // destroyers before the battleships (Taffy 3's aircraft went for the cruisers closing on the carriers)
+  const survive = goal.kind === 'survive'
+  const ob = survive ? bodyOf(ar, side) : null
   const list = []
   for (const i of enemy.ships) {
     if (s.alive[i] !== 1) continue
     const x = ar._X[i]
     const t = x.model.type
     let score = (rank[t] ?? 6) * 1000
-    if (want && (t === want || want === 'ship')) score -= 2500
+    if (wantTypes && (wantTypes.includes(t) || wantTypes.includes('ship'))) score -= 2500
     if (!want) score = (t === 'bb' ? 1 : t === 'ca' || t === 'cl' ? 2 : isCarrier(t) ? 2.5 : 4) * 1000
+    if (survive && ob) score = Math.hypot(s.pos[3 * i] - ob.x, s.pos[3 * i + 2] - ob.z) + (t === 'bb' ? 1500 : 0)
     score -= (1 - x.hp / x.hpMax) * 800
-    if (g >= 0) score += Math.hypot(s.pos[3 * i] - s.pos[3 * g], s.pos[3 * i + 2] - s.pos[3 * g + 2]) * 0.15
+    if (g >= 0 && !survive) score += Math.hypot(s.pos[3 * i] - s.pos[3 * g], s.pos[3 * i + 2] - s.pos[3 * g + 2]) * 0.15
     list.push([score, i])
   }
   list.sort((a, b) => a[0] - b[0])
@@ -344,46 +404,81 @@ function queue(ar, j, mission) {
   ar._X[x.home].launchQ.push(j)
 }
 
+const STRIKE_PROFILES = new Set(['dive', 'torpedo', 'level', 'strafe'])
+const payloadOf = (x) => (x.ammoFull?.bombs ?? 0) > 0 || (x.ammoFull?.torpedoes ?? 0) > 0
+
 function airOps(ar, side, enemy) {
   const adm = side.adm
   if (!side.aircraft.length) return
   const s = ar.state
-  const fighters = side.aircraft.filter((j) => ar._X[j].model.type === 'fighter')
-  const capNeed = Math.min(4, Math.ceil(fighters.length * A.capShare))
-  const capUp = fighters.filter((j) => (s.alive[j] === 1 && ar._X[j].mission?.kind === 'cap') || (ar._X[j].queued && ar._X[j].next?.kind === 'cap')).length
+  const X = ar._X
+  const fighters = side.aircraft.filter((j) => X[j].model.type === 'fighter')
+  // nothing of the other side's in the air or on a deck that can fly: no patrol to keep, no escort to give
+  const noAir = !enemy.aircraft.some((j) => s.alive[j] === 1 || (X[j].onDeck && X[j].hp > 0 && s.alive[X[j].home] === 1))
+  const max = side.maxAirborne ?? A.maxAirborne
+  let up = ar.airborneOf(side.key, true)
+  // the combat air patrol: the `cap` fighters when the scenario names them, else any; as many as it had up at the start
+  const capPool = fighters.some((j) => X[j].profile === 'cap') ? fighters.filter((j) => X[j].profile === 'cap') : fighters
+  const capNeed = noAir ? 0 : side.capNeed ?? Math.min(4, Math.ceil(fighters.length * A.capShare))
+  const capUp = capPool.filter((j) => (s.alive[j] === 1 && X[j].mission?.kind === 'cap') || (X[j].queued && X[j].next?.kind === 'cap')).length
   let need = capNeed - capUp
-  for (const j of fighters) {
-    if (need <= 0) break
+  for (const j of capPool) {
+    if (need <= 0 || up >= max) break
     if (!ready(ar, j)) continue
     queue(ar, j, { kind: 'cap', a: ar.rngs.ai.next() * Math.PI * 2 })
     need--
+    up++
   }
   if (!adm.launchEveryS || adm.state === 'turn-away' || ar.t < adm.nextLaunch) return
   adm.nextLaunch = ar.t + adm.launchEveryS
-  const strikers = side.aircraft.filter((j) => ar._X[j].model.type !== 'fighter' && ready(ar, j) && (ar._X[j].ammoFull.bombs > 0 || ar._X[j].ammoFull.torpedoes > 0))
-  if (!strikers.length) return
-  const all = side.aircraft.filter((j) => ar._X[j].model.type !== 'fighter').length
-  const n = Math.max(1, Math.round(Math.max(A.waveBase, all * A.waveShare) * (1 + adm.waveGrowth * adm.wave)))
   const targets = targetsFor(ar, side, enemy)
   if (!targets.length) return
+  // the strikers: the strike profiles (the scenario's), or, when it names none, whatever carries a bomb or a torpedo
+  const named = side.aircraft.some((j) => STRIKE_PROFILES.has(X[j].profile) && X[j].model.type !== 'fighter') || side.aircraft.some((j) => X[j].profile === 'strafe')
+  const isStriker = (j) => (named ? STRIKE_PROFILES.has(X[j].profile) && (payloadOf(X[j]) || X[j].profile === 'strafe') : X[j].model.type !== 'fighter' && payloadOf(X[j]))
+  // (with nothing to fight in the air, the patrol and the escorts strafe; those already up are taken into the wave in the air)
+  // (the escorts: the `escort` fighters when the scenario names any, else the fighters on deck not needed on patrol)
+  const escortNamed = fighters.some((j) => X[j].profile === 'escort')
+  const spareFighter = (j) => X[j].model.type === 'fighter' && !isStriker(j) && (noAir || !escortNamed || X[j].profile === 'escort')
+  const strikers = side.aircraft.filter((j) => ready(ar, j) && isStriker(j))
+  strikers.sort((a, b) => (payloadOf(X[b]) ? 1 : 0) - (payloadOf(X[a]) ? 1 : 0))
+  const all = side.aircraft.filter(isStriker).length
+  const base = adm.waveSize ?? Math.max(A.waveBase, all * A.waveShare)
+  const n = Math.max(1, Math.min(Math.round(base * (1 + adm.waveGrowth * adm.wave)), max - up))
   const strike = { id: `${side.key}-wave-${adm.wave + 1}`, target: targets[adm.wave % Math.min(2, targets.length)], members: [], escorts: [], t: ar.t }
   for (const j of strikers.slice(0, n)) {
     strike.members.push(j)
     queue(ar, j, { kind: 'strike', strike, phase: 'approach' })
+    up++
   }
-  // with nothing in the air on the other side to escort against, the spare fighters go in with their bombs (the FM-2s at Samar)
-  const noAir = !enemy.aircraft.some((j) => s.alive[j] === 1 || ar._X[j].onDeck)
-  const spare = fighters.filter((j) => ready(ar, j)).slice(0, noAir ? Math.ceil(strike.members.length * 0.8) : Math.ceil(strike.members.length / 2))
+  if (noAir) {
+    for (const j of fighters) {
+      if (s.alive[j] !== 1 || X[j].mission?.kind !== 'cap' || !X[j].ammo?.guns.some((g) => g.fixed && g.left > 0)) continue
+      strike.members.push(j)
+      X[j].mission = { kind: 'strike', strike, phase: 'approach' }
+      X[j].engage = -1
+    }
+  }
+  const room = Math.max(0, max - up)
+  const spare = fighters.filter((j) => ready(ar, j) && spareFighter(j)).slice(0, Math.min(room, noAir ? Math.ceil(strike.members.length * 0.8) + 1 : Math.ceil(strike.members.length / 2)))
   for (const j of spare) {
-    const x = ar._X[j]
-    if (noAir && (x.model.payload?.length ?? 0) > 0) {
-      x.ammo = ammoFor(x.model, 'dive')
+    if (noAir) {
       strike.members.push(j)
       queue(ar, j, { kind: 'strike', strike, phase: 'approach' })
     } else {
       strike.escorts.push(j)
       queue(ar, j, { kind: 'escort', strike })
     }
+  }
+  if (!strike.members.length) {
+    for (const j of strike.escorts) {
+      X[j].queued = false
+      X[j].next = null
+      const q = X[X[j].home].launchQ
+      const k = q.indexOf(j)
+      if (k >= 0) q.splice(k, 1)
+    }
+    return
   }
   adm.wave++
   note(ar, side, `${strike.id}: ${strike.members.length} + ${strike.escorts.length} at ${ar.slots[strike.target].id}`)

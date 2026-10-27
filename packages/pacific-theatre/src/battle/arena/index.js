@@ -92,7 +92,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   const boxClock = battle.clock ? new BattleClock(battle.clock) : null
   let t0 = 0
   try {
-    const at = scenario.startT ?? battle.firstDoor?.t ?? battle.stops?.[0]?.t
+    const at = scenario.arena?.skyAt ?? scenario.startT ?? battle.firstDoor?.t ?? battle.stops?.[0]?.t
     if (boxClock && at != null) t0 = boxClock.clamp(boxClock.parse(at))
   } catch {
     t0 = 0
@@ -174,6 +174,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     shake: { amount: 0, seq: 0, t: -1 },
     slowmo: { seconds: 0, seq: 0, t: -1, why: null },
     night: false,
+    visM: scenario.arena?.visibilityM ?? Infinity,
     record: { squalls: [], stops: [], moments: new Map(), ships: [], groups: [], shipById: new Map(), groupById: new Map() },
     rngs: { ai: rng.fork('ai'), gun: rng.fork('gun'), dmg: rng.fork('damage'), aa: rng.fork('aa'), fx: rng.fork('fx') },
     sides: {},
@@ -240,8 +241,10 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       if (id === sd.def.guide) sd.guide = i
     }
   }
+  const groups = new Set()
   for (const key of ['jp', 'us']) {
     const sd = ar.sides[key]
+    sd.maxAirborne = sd.def.maxAirborne ?? A.maxAirborne
     for (const entry of sd.def.aircraft || []) {
       const c = units.findIndex((u) => u.id === entry.carrier && u.side === key)
       if (c < 0) {
@@ -251,13 +254,16 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       const m = modelOf(entry.kit, 'aircraft').model
       const spec = airSpec(m)
       const profile = entry.profile ?? (m.type === 'fighter' ? 'cap' : m.torpedo ? 'torpedo' : 'dive')
-      const group = `${entry.carrier}-${entry.kit}-${profile}`
+      let group = `${entry.carrier}-${entry.kit}-${profile}`
+      for (let n = 2; groups.has(group); n++) group = `${entry.carrier}-${entry.kit}-${profile}-${n}`
+      groups.add(group)
       const cname = units[c].name
+      if (entry.airborne != null) sd.airborneGiven = true
       for (let k = 0; k < (entry.count ?? 1); k++) {
         const i = units.length
         units.push({ index: i, id: `${group}#${k + 1}`, name: `${cname}’s ${plural(short(entry.kit))}`, ja: null, label: `${articled(short(entry.kit))} of ${cname}`, kind: 'aircraft', side: key, kit: entry.kit, kitName: short(entry.kit), kitIndex: kitIndexOf(entry.kit, 'aircraft'), group, groupName: `${cname}’s ${plural(short(entry.kit))}`, groupIndex: k, k, authority: 'ai', parked: false, carrierName: cname })
         const ammo = ammoFor(m, profile)
-        X.push({ model: m, spec, hp: spec.hp, hpMax: spec.hp, body: null, profile, home: c, carrier: c, onDeck: true, queued: false, next: null, rearmAt: 0, ammo, ammoFull: JSON.parse(JSON.stringify({ bombs: ammo.bombs, torpedoes: ammo.torpedoes })), mission: null, engage: -1, k, thinkAt: (i % 15) * A.step, skill: key === 'jp' && year <= 1942 ? 1.15 : key === 'jp' ? 0.85 : 1 })
+        X.push({ model: m, spec, hp: spec.hp, hpMax: spec.hp, body: null, profile, home: c, carrier: c, onDeck: true, queued: false, next: null, rearmAt: 0, ammo, ammoFull: JSON.parse(JSON.stringify({ bombs: ammo.bombs, torpedoes: ammo.torpedoes })), mission: null, engage: -1, k, thinkAt: (i % 15) * A.step, skill: key === 'jp' && year <= 1942 ? 1.15 : key === 'jp' ? 0.85 : 1, startAirborne: k < (entry.airborne ?? 0) })
         sd.aircraft.push(i)
         ar._air.push(i)
       }
@@ -306,19 +312,32 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   ar.requestSlowmo = (seconds, why) => {
     ar.slowmo = { seconds, seq: ar.slowmo.seq + 1, t: ar.t, why }
   }
-  ar.marker = (unit, text, o = {}) => ar.markers.push({ t: ar.t, unit, text, side: units[unit]?.side ?? null, player: false, onPlayer: ar.player?.unitIndex === unit, kind: 'hit', ...o })
+  ar.marker = (unit, text, o = {}) => {
+    const m = { t: ar.t, unit, text, side: units[unit]?.side ?? null, player: false, onPlayer: ar.player?.unitIndex === unit, kind: 'hit', ...o }
+    ar.markers.push(m)
+    // (and in the events, as the HUD layer reads them: 'hit' | 'sinking' | 'downed' at the target, `marker` so Battle does not send them to the page twice)
+    ar._event({ kind: m.kind === 'down' ? 'downed' : m.kind === 'sinking' ? 'sinking' : 'hit', marker: true, target: unit, text, mine: !!m.player, onPlayer: m.onPlayer, weapon: m.weapon ?? null })
+  }
   ar.highlight = (h) => {
-    const e = { t: ar.t, snapshot: null, ...h }
+    const e = { t: ar.t, snapshot: null, ...h, mine: !!h.player, text: h.caption ?? '' }
     ar.highlights.push(e)
     ar._event({ kind: 'highlight', highlight: e })
     return e
   }
   const heldBy = (by) => !!ar.player && by >= 0 && by === ar.player.unitIndex && !ar.player.lost
+  /** The hand a goal's `by` reads: 'aircraft', or the ship's type. */
+  const byTypeOf = (by) => (by >= 0 ? (units[by].kind === 'aircraft' ? 'aircraft' : X[by].model.type) : null)
+  /** A side's aircraft in the air (and, with `queued`, those on deck waiting their turn to launch). */
+  ar.airborneOf = (key, queued = false) => {
+    let n = 0
+    for (const j of ar.sides[key].aircraft) if (s.alive[j] === 1 || (queued && X[j].queued)) n++
+    return n
+  }
   ar._onShipHit = (i, res, info) => {
     const victim = units[i]
     const bySide = info.by >= 0 ? units[info.by].side : victim.side === 'jp' ? 'us' : 'jp'
     const type = X[i].model.type
-    countHit(ar, bySide, type)
+    countHit(ar, bySide, type, { weapon: info.weapon, byType: byTypeOf(info.by) })
     ar.tallyData[bySide].hits++
     const mine = info.byPlayer || heldBy(info.by)
     const onMe = ar.player?.unitIndex === i
@@ -345,7 +364,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   ar._onSinking = (i, by, magazine) => {
     const victim = units[i]
     const bySide = by >= 0 ? units[by].side : victim.side === 'jp' ? 'us' : 'jp'
-    countSunk(ar, bySide, X[i].model.type)
+    countSunk(ar, bySide, X[i].model.type, { weapon: magazine ? 'shell' : X[i].lastHitWeapon ?? null, byType: byTypeOf(by) })
     ar.tallyData[bySide].sunk++
     ar.tallyData[victim.side].shipsLost++
     if (heldBy(by)) ar.tallyData.player.sunk++
@@ -362,7 +381,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     if (ar.player?.unitIndex === j && !down) ar.requestShake(0.35)
     if (!down) return
     const bySide = by >= 0 ? units[by].side : victim.side === 'jp' ? 'us' : 'jp'
-    countDown(ar, bySide)
+    countDown(ar, bySide, { weapon: how, byType: byTypeOf(by) })
     ar.tallyData[bySide].downed++
     ar.tallyData[victim.side].aircraftLost++
     if (heldBy(by)) {
@@ -392,14 +411,14 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   ar._onPlayerLost = (i) => {
     const u = units[i]
     ar.tallyData.player.lost++
-    ar.highlight({ kind: 'loss', unit: i, name: u.kind === 'aircraft' ? u.label : u.name, side: u.side, by: X[i].lastHitBy ?? -1, player: true, weapon: null, caption: u.kind === 'aircraft' ? `Your ${u.kitName} did not return` : `${u.name} is going down`, snap: true })
+    ar.highlight({ kind: 'lost', unit: i, name: u.kind === 'aircraft' ? u.label : u.name, side: u.side, by: X[i].lastHitBy ?? -1, player: true, weapon: null, caption: u.kind === 'aircraft' ? `Your ${u.kitName} did not return` : `${u.name} is going down`, snap: true })
     ar.requestShake(u.kind === 'ship' ? 0.8 : 0.5)
     ar._event({ kind: 'lost', index: i })
   }
   ar._onRespawn = (from, to, line) => {
     ar.respawn = { t: ar.t, line, from, to }
     if (line) ar.beat(to, 'respawn', line)
-    ar._event({ kind: 'respawn', from, to, line })
+    ar._event({ kind: 'respawn', from, to, line, text: line, mine: true })
   }
   ar._onPhase = (sd, ps) => {
     ar._event({ kind: 'phase', side: sd.key, index: ps.index, title: ps.title })
@@ -439,6 +458,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     let dx = s.pos[3 * j] - ax
     let dz = s.pos[3 * j + 2] - az
     const L = Math.hypot(dx, dz)
+    if (L > ar.visM) return true
     if (L < A.squall.hideM) return false
     if (ar.record.squalls.length && (ar.inSquall(s.pos[3 * j], s.pos[3 * j + 2]) || ar.inSquall(ax, az))) return true
     if (!ar.smoke.length) return false
@@ -494,8 +514,8 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   function defaultMission(j) {
     const x = X[j]
     const sd = ar.sides[units[j].side]
-    if (x.model.type === 'fighter') return { kind: 'cap', a: 0 }
-    if ((x.ammo?.bombs ?? 0) > 0 || (x.ammo?.torpedoes ?? 0) > 0) {
+    if (x.model.type === 'fighter' && x.profile !== 'strafe') return { kind: 'cap', a: 0 }
+    if ((x.ammo?.bombs ?? 0) > 0 || (x.ammo?.torpedoes ?? 0) > 0 || x.profile === 'strafe') {
       const t = targetsFor(ar, sd, ar.sides[sd.enemy])
       if (t.length) {
         const strike = { id: `${sd.key}-solo-${j}`, target: t[0], members: [j], escorts: [], t: ar.t }
@@ -513,9 +533,11 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     sd.adm = createAdmiral(ar, sd)
     ensureGuide(ar, sd, { initial: true })
     if (sd.guide < 0) continue
+    // (content-3's separationM: guide to guide; half of it from the centre, as tools/check/wargames.mjs layout() has it)
     const b = (sd.def.bearingDeg ?? (key === 'jp' ? 345 : 165)) * DEG
-    const gx = cx + Math.sin(b) * Math.min(A.placeM, R * 0.85)
-    const gz = cz - Math.cos(b) * Math.min(A.placeM, R * 0.85)
+    const half = scenario.arena?.separationM != null ? scenario.arena.separationM / 2 : Math.min(A.placeM, R * 0.85)
+    const gx = cx + Math.sin(b) * half
+    const gz = cz - Math.cos(b) * half
     sd.adm.threat = bearingOf(cx - gx, cz - gz)
     s.pos[3 * sd.guide] = gx
     s.pos[3 * sd.guide + 2] = gz
@@ -531,8 +553,9 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     for (const i of sd.ships) if (isCore(X[i].model.type)) v = Math.min(v, X[i].model.vmax)
     if (!Number.isFinite(v)) v = Math.min(...sd.ships.map((i) => X[i].model.vmax))
     adm.speed = v * 0.9
-    // the opening course: the aggressive close; the rest open the range across the threat
-    adm.course = adm.aggression >= 0.5 ? adm.threat : (adm.threat + (sd.def.bearingDeg % 2 ? 120 : -120) + 360) % 360
+    // the opening course: the scenario's (content-3's headingDeg); else the aggressive close, the rest open the range across the threat
+    adm.course = sd.def.headingDeg != null ? (sd.def.headingDeg % 360 + 360) % 360 : adm.aggression >= 0.5 ? adm.threat : (adm.threat + (sd.def.bearingDeg % 2 ? 120 : -120) + 360) % 360
+    adm._courseT = 0
     const pt = { x: 0, z: 0 }
     for (const i of sd.ships) {
       if (i !== sd.guide) stationPoint(ar, sd, i, pt)
@@ -565,21 +588,64 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       }
     }
   }
-  // the combat air patrol already up: instant action
+  // the aircraft already up: instant action. The scenario's `airborne` counts when it gives them (content-3): the
+  // combat air patrol on its orbit, the rest in an opening strike already on its way in, its escorts with it; else
+  // the combat air patrol alone.
   for (const key of ['jp', 'us']) {
     const sd = ar.sides[key]
-    const fighters = sd.aircraft.filter((j) => X[j].model.type === 'fighter')
-    const n = Math.min(4, Math.ceil(fighters.length * A.capShare))
-    fighters.slice(0, n).forEach((j, k) => {
+    const en = ar.sides[sd.enemy]
+    const up = (j, mission, x0, y0, z0, heading, throttle) => {
       const x = X[j]
-      const g = sd.guide >= 0 ? sd.guide : x.home
-      const a = (k / Math.max(1, n)) * Math.PI * 2
-      x.body = createAir(x.spec, { x: s.pos[3 * g] + Math.sin(a) * A.cap.radiusM, y: A.cap.altM, z: s.pos[3 * g + 2] - Math.cos(a) * A.cap.radiusM, heading: (a / DEG + 90) % 360, throttle: 0.7 })
+      x.body = createAir(x.spec, { x: x0, y: y0, z: z0, heading, throttle })
       x.onDeck = false
-      x.mission = { kind: 'cap', a }
+      x.mission = mission
       writeAir(j)
       s.alive[j] = 1
       s.version[j] = 1
+    }
+    const g = sd.guide
+    const gx0 = g >= 0 ? s.pos[3 * g] : cx
+    const gz0 = g >= 0 ? s.pos[3 * g + 2] : cz
+    const orbit = (list) =>
+      list.forEach((j, k) => {
+        const a = (k / Math.max(1, list.length)) * Math.PI * 2
+        up(j, { kind: 'cap', a }, gx0 + Math.sin(a) * A.cap.radiusM, A.cap.altM, gz0 - Math.cos(a) * A.cap.radiusM, (a / DEG + 90) % 360, 0.7)
+      })
+    if (!sd.airborneGiven) {
+      const fighters = sd.aircraft.filter((j) => X[j].model.type === 'fighter')
+      orbit(fighters.slice(0, Math.min(4, Math.ceil(fighters.length * A.capShare))))
+      continue
+    }
+    const starting = sd.aircraft.filter((j) => X[j].startAirborne).slice(0, sd.maxAirborne)
+    const noAir = !en.aircraft.length
+    const cap = starting.filter((j) => X[j].profile === 'cap' && !noAir)
+    orbit(cap)
+    sd.capNeed = cap.length
+    const rest = starting.filter((j) => !cap.includes(j))
+    if (!rest.length) continue
+    const targets = targetsFor(ar, sd, en)
+    if (!targets.length) {
+      orbit(rest)
+      continue
+    }
+    const strike = { id: `${key}-wave-0`, target: targets[0], members: [], escorts: [], t: 0 }
+    const th = sd.adm.threat * DEG
+    rest.forEach((j, k) => {
+      const x = X[j]
+      const escort = x.model.type === 'fighter' && (x.profile === 'escort' || x.profile === 'cap') && !noAir
+      const payload = (x.ammo?.bombs ?? 0) > 0 || (x.ammo?.torpedoes ?? 0) > 0
+      const alt = escort ? A.strike.approachAltM + 250 : (x.ammo?.torpedoes ?? 0) > 0 ? 300 : payload ? A.strike.approachAltM : A.strafe.approachAltM
+      const lat = ((k % 7) - 3) * 160
+      const ahead = 700 + Math.floor(k / 7) * 220
+      const px = gx0 + Math.sin(th) * ahead + Math.cos(th) * lat
+      const pz = gz0 - Math.cos(th) * ahead + Math.sin(th) * lat
+      if (escort) {
+        strike.escorts.push(j)
+        up(j, { kind: 'escort', strike }, px, alt, pz, sd.adm.threat, 0.85)
+      } else {
+        strike.members.push(j)
+        up(j, { kind: 'strike', strike, phase: 'approach' }, px, alt, pz, sd.adm.threat, 0.9)
+      }
     })
   }
   // the box's squalls, brought into the arena: as many as the box's weather has, each a disc of rain drifting on its own
@@ -624,6 +690,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   } catch {
     ar.night = false
   }
+  if (typeof scenario.arena?.night === 'boolean') ar.night = scenario.arena.night
 
   // --- writing the state ------------------------------------------------------------------------------------------------
   function writeShip(i) {
@@ -699,6 +766,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
           x.launchQ.length = 0
           continue
         }
+        if (ar.airborneOf(sd.key) >= sd.maxAirborne) continue
         const j = x.launchQ.shift()
         if (s.alive[j] === 0 && X[j].hp > 0 && X[j].onDeck) ar._launch(j, X[j].next)
         x.nextLaunchT = t + A.strike.launchEveryS
@@ -804,9 +872,13 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     get() {
       const def = ar.sides[ar.side].def
       const id = def.first
-      let j = units.findIndex((u) => (u.id === id || u.group === id) && u.side === ar.side && takeableOf(ar, u.index) === true)
+      const ok = (u) => u.side === ar.side && takeableOf(ar, u.index) === true
+      let j = units.findIndex((u) => (u.id === id || u.group === id) && ok(u))
+      // (content-3: an aircraft kit as `first` is an airborne aircraft of that kit; one on deck if none is up)
+      if (j < 0) j = units.findIndex((u) => u.kind === 'aircraft' && u.kit === id && s.alive[u.index] === 1 && ok(u))
+      if (j < 0) j = units.findIndex((u) => u.kind === 'aircraft' && u.kit === id && ok(u))
       if (j < 0) j = ar.sides[ar.side].ships.find((i) => s.alive[i] === 1) ?? -1
-      return j >= 0 ? { unit: units[j].id, index: j, station: null } : null
+      return j >= 0 ? { unit: units[j].id, index: j, station: def.firstStation ?? null } : null
     },
   })
   Object.defineProperty(ar, 'sortie', { get: () => ar._sortie ? { ...ar._sortie, t1: ar.t, span: [ar._sortie.t0, ar.t] } : ar._lastSortie })
@@ -821,13 +893,14 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
     const sd = ar.sides[key]
     const g = sd.goalState
     if (!g) return null
-    return { side: key, name: sd.name, kind: g.kind, type: g.type, need: g.need, count: g.count, total: g.total ?? null, status: g.status, text: sd.def.goal?.text ?? null, line: g.line, endsAt: D }
+    return { side: key, name: sd.name, kind: g.kind, type: g.type, types: g.types, noun: g.noun, weapon: g.weapon, by: g.by, outOfAction: g.outOfAction, done: g.count, count: g.need, need: g.need, total: g.total ?? null, of: g.total ?? g.need, status: g.status, text: sd.def.goal?.text ?? null, line: g.line, endsAt: D, terms: (g.terms || []).map((t) => ({ kind: t.kind, type: t.type, types: t.types, noun: t.noun, done: t.count, count: t.need, need: t.need, total: t.total ?? null, status: t.status, line: t.line })) }
   }
   function phaseView(key) {
     const ps = ar.sides[key].phaseState
     if (!ps) return null
     const g = ps.state
-    return { side: key, index: ps.index, title: ps.title, text: ps.text, goal: ps.goal, t0: ps.t0, endsAt: ps.endsAt, remainingS: Math.max(0, ps.endsAt - ar.t), count: g?.count ?? 0, need: g?.need ?? ps.goal?.count ?? 0, status: g?.status ?? 'open', line: g?.line ?? '' }
+    const left = Math.max(0, ps.endsAt - ar.t)
+    return { side: key, index: ps.index, of: ar.sides[key].phases.length, title: ps.title, text: ps.text, goal: ps.goal, t: ps.t0, t0: ps.t0, endsAt: ps.endsAt, remainingS: left, leftS: left, done: g?.count ?? 0, count: g?.need ?? ps.goal?.count ?? 0, need: g?.need ?? ps.goal?.count ?? 0, status: g?.status ?? 'open', line: g?.line ?? '' }
   }
   /** The unit a ray hits (the record sim's pick: a ship's box, an aircraft's sphere), or −1. */
   ar.pick = function pick(o, d) {

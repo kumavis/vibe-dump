@@ -600,6 +600,18 @@ function shipTarget(ar, i, inp) {
     }
   }
   if (best < 0 && x.target >= 0 && s.alive[x.target] === 1) best = x.target
+  // (at the main battery the AI chooses no target: the nearest ship of the other side in sight, so the lead is drawn from the first second)
+  if (best < 0) {
+    let bd = Infinity
+    for (const j of ar._ships) {
+      if (s.alive[j] !== 1 || ar.slots[j].side === ar.slots[i].side || ar.hidden(i, j)) continue
+      const d = Math.hypot(s.pos[3 * j] - s.pos[3 * i], s.pos[3 * j + 2] - s.pos[3 * i + 2])
+      if (d < bd) {
+        bd = d
+        best = j
+      }
+    }
+  }
   if (best < 0) return null
   const lp = leadPoint(ar, i, best, main)
   const R = Math.hypot(s.pos[3 * best] - s.pos[3 * i], s.pos[3 * best + 2] - s.pos[3 * i + 2])
