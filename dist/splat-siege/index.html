@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Splat Siege</title>
+    <script type="module" crossorigin src="./assets/index-D_O6WraJ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C0aoDOPB.css">
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div id="hud">
+      <div id="stats">
+        <div class="row">
+          <span class="label">paths tidy</span>
+          <span id="tidy" class="big">0%</span>
+          <span class="dim"><span id="mess">0</span> petals on the gravel</span>
+        </div>
+        <div class="row">
+          <span class="label">garden destroyed</span>
+          <span id="pct" class="big">0.0%</span>
+          <span class="dim"><span id="splats">0</span> strokes · <span id="rockets">0</span> rockets</span>
+        </div>
+      </div>
+      <div id="fps"></div>
+      <div id="crosshair"></div>
+      <div id="weapon">
+        <span data-w="0"><kbd>1</kbd> rocket launcher</span>
+        <span data-w="1"><kbd>2</kbd> leaf blower</span>
+      </div>
+      <div id="overlay">
+        <h1>Splat Siege</h1>
+        <p>Monet's garden at Giverny, in a hundred thousand Gaussian brush strokes. Every one of them comes loose.</p>
+        <p class="hint">Keep the gravel clear with the blower, if you like. The breeze never stops dropping petals.</p>
+        <p class="keys">
+          <kbd>click</kbd> to play · <kbd>W A S D</kbd> move · <kbd>space</kbd> jump · <kbd>shift</kbd> sprint ·
+          <kbd>mouse</kbd> fire · <kbd>1</kbd> rockets · <kbd>2</kbd> leaf blower · <kbd>R</kbd> replant · <kbd>esc</kbd> release
+        </p>
+      </div>
+      <div id="error"></div>
+    </div>
+    <div id="intro"></div>
+  </body>
+</html>

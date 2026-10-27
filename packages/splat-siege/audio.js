@@ -1,0 +1,146 @@
+// audio.js — three synthesized sounds, no samples. The context is created on
+// the first user gesture; anything that fires before then is silent.
+export class Sfx {
+  constructor() {
+    this.ctx = null
+    this.master = null
+    this.noiseBuf = null
+    this.blower = null
+    this.wind = null
+  }
+
+  unlock() {
+    if (!this.ctx) {
+      const C = window.AudioContext || window.webkitAudioContext
+      if (!C) return
+      this.ctx = new C()
+      this.master = this.ctx.createGain()
+      this.master.gain.value = 0.55
+      this.master.connect(this.ctx.destination)
+      const len = this.ctx.sampleRate * 2
+      this.noiseBuf = this.ctx.createBuffer(1, len, this.ctx.sampleRate)
+      const d = this.noiseBuf.getChannelData(0)
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {})
+    if (!this.wind) this.ambience()
+  }
+
+  // A breeze: soft low-passed noise that swells and fades on its own.
+  ambience() {
+    const t = this.ctx.currentTime
+    const src = this.noise()
+    const lp = this.ctx.createBiquadFilter()
+    lp.type = 'lowpass'
+    lp.frequency.value = 380
+    lp.Q.value = 0.4
+    const lfo = this.ctx.createOscillator()
+    lfo.frequency.value = 0.09
+    const lfoGain = this.ctx.createGain()
+    lfoGain.gain.value = 220
+    lfo.connect(lfoGain).connect(lp.frequency)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.07, t + 3)
+    const swell = this.ctx.createOscillator()
+    swell.frequency.value = 0.06
+    const swellGain = this.ctx.createGain()
+    swellGain.gain.value = 0.03
+    swell.connect(swellGain).connect(g.gain)
+    src.connect(lp).connect(g).connect(this.master)
+    src.start(t)
+    lfo.start(t)
+    swell.start(t)
+    this.wind = { src, lfo, swell }
+  }
+
+  noise() {
+    const src = this.ctx.createBufferSource()
+    src.buffer = this.noiseBuf
+    src.loop = true
+    return src
+  }
+
+  // The leaf blower: a looping, band-passed roar with a slow wobble.
+  blowerStart() {
+    if (!this.ctx || this.blower) return
+    const t = this.ctx.currentTime
+    const src = this.noise()
+    const bp = this.ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.Q.value = 1.2
+    bp.frequency.value = 420
+    const lfo = this.ctx.createOscillator()
+    lfo.frequency.value = 7
+    const lfoGain = this.ctx.createGain()
+    lfoGain.gain.value = 60
+    lfo.connect(lfoGain).connect(bp.frequency)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.5, t + 0.25)
+    src.connect(bp).connect(g).connect(this.master)
+    src.start(t)
+    lfo.start(t)
+    this.blower = { src, lfo, g }
+  }
+
+  blowerStop() {
+    if (!this.ctx || !this.blower) return
+    const { src, lfo, g } = this.blower
+    const t = this.ctx.currentTime
+    g.gain.cancelScheduledValues(t)
+    g.gain.setValueAtTime(Math.max(0.0001, g.gain.value), t)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35)
+    src.stop(t + 0.4)
+    lfo.stop(t + 0.4)
+    this.blower = null
+  }
+
+  launch() {
+    if (!this.ctx) return
+    const t = this.ctx.currentTime
+    const src = this.noise()
+    const bp = this.ctx.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.Q.value = 0.9
+    bp.frequency.setValueAtTime(1400, t)
+    bp.frequency.exponentialRampToValueAtTime(180, t + 0.6)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.7, t + 0.02)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.65)
+    src.connect(bp).connect(g).connect(this.master)
+    src.start(t)
+    src.stop(t + 0.7)
+  }
+
+  explode(dist) {
+    if (!this.ctx) return
+    const t = this.ctx.currentTime
+    const vol = 1 / (1 + dist * 0.06)
+    const src = this.noise()
+    const lp = this.ctx.createBiquadFilter()
+    lp.type = 'lowpass'
+    lp.frequency.setValueAtTime(2200, t)
+    lp.frequency.exponentialRampToValueAtTime(60, t + 1.6)
+    const g = this.ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(1.2 * vol, t + 0.015)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 1.8)
+    src.connect(lp).connect(g).connect(this.master)
+    src.start(t)
+    src.stop(t + 1.9)
+
+    const osc = this.ctx.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(90, t)
+    osc.frequency.exponentialRampToValueAtTime(28, t + 0.7)
+    const og = this.ctx.createGain()
+    og.gain.setValueAtTime(0.0001, t)
+    og.gain.exponentialRampToValueAtTime(0.9 * vol, t + 0.01)
+    og.gain.exponentialRampToValueAtTime(0.0001, t + 0.8)
+    osc.connect(og).connect(this.master)
+    osc.start(t)
+    osc.stop(t + 0.85)
+  }
+}
