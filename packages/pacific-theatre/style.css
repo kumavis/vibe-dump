@@ -849,3 +849,225 @@ body:has(> #ui > .boxbar:not([hidden])) .pt-touch { --pt-touch-release: none; }
 body.mock-page { background: #07111a; }
 #plan { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #mock-status { position: fixed; left: 16px; top: 14px; font-size: 12px; color: var(--muted); pointer-events: none; z-index: 20; }
+
+/* --- round three: the Wargame (ROUND-3.md §1, §5; src/ui/wargame.js, boxbar.js, card.js, briefing.js) ------------
+   The doors (the event card's *Play it as a wargame*, the briefing's, the bar's *Wargame*); the bar while a wargame
+   runs (data-mode='wargame': the table, the held unit's stations, play, Units and the hop button; none of the
+   record's parts); the HUD layer (one block under the bar: the strength bars and tallies, the timer, the goal, the
+   phase, the held unit; the hit markers over the scene; the respawn line; the hop hints), which is part of the bar's
+   head (boxbar.js publishes --pt-head under it, so the box's HUD and touch controls stand beneath); the start sheet
+   and the end card in the card's frame, wider and in the middle. The phone layout of round two holds: the block
+   spans the top under the bar's row upright, and hugs the left under it on its side. */
+.nav.wg-door { background: transparent; border-color: rgba(var(--sand-rgb), 0.55); color: var(--sand); font-weight: 600; font-size: 12.5px; padding: 0 12px; }
+.nav.wg-door:hover { background: rgba(var(--sand-rgb), 0.16); }
+.card footer .nav.wg-door { order: -1; flex: 1 0 100%; justify-content: center; height: 38px; }
+.wg-door-card p { font-style: italic; font-family: var(--serif); }
+.boxbar .bb-hop { display: none; }
+.boxbar .bb-wargame[hidden] { display: none; }
+
+/* the bar while a wargame runs */
+.boxbar[data-mode='wargame'] .bb-release, .boxbar[data-mode='wargame'] .bb-prev, .boxbar[data-mode='wargame'] .bb-next,
+.boxbar[data-mode='wargame'] .bb-stop, .boxbar[data-mode='wargame'] .bb-more, .boxbar[data-mode='wargame'] .bb-strip,
+.boxbar[data-mode='wargame'] .bb-speed, .boxbar[data-mode='wargame'] .bb-speeds, .boxbar[data-mode='wargame'] .bb-brief,
+.boxbar[data-mode='wargame'] .bb-assist, .boxbar[data-mode='wargame'] .bb-wargame, .boxbar[data-mode='wargame'] .bb-credits,
+.boxbar[data-mode='wargame'] .bb-sep, .boxbar[data-mode='wargame'] .bb-sheet-head { display: none !important; }
+.boxbar[data-mode='wargame'] .bb-hop { display: inline-flex; }
+.boxbar[data-mode='wargame'] .bb-watch { flex-wrap: nowrap; }
+.boxbar[data-mode='wargame'] .bb-stations .bb-st { height: 26px; font-size: 12px; }
+@media (min-width: 701px) and (pointer: fine), (min-width: 701px) and (pointer: none) {
+  .boxbar[data-mode='wargame'] { top: 12px; bottom: auto; max-width: min(760px, calc(100vw - 420px)); }
+  /* the box's first hints, the list and the card step down under the block */
+  body.pt-wargame .pt-hud { --pt-hints-top: calc(var(--pt-head, 170px) + 8px); --pt-stations-display: none; }
+  #ui.wargame .unitlist, #ui.wargame .card { top: calc(var(--pt-head, 170px) + 8px); }
+  #ui.wargame .unitlist { max-height: calc(100vh - var(--pt-head, 170px) - 140px); }
+}
+
+/* the HUD layer */
+#ui .wg-hud { position: absolute; inset: 0; pointer-events: none; }
+#ui .wg-hud[hidden] { display: none; }
+.wg-board {
+  position: absolute; top: var(--pt-bar-head, 60px); left: 50%; transform: translateX(-50%);
+  width: min(620px, calc(100vw - 420px)); padding: 7px 14px 6px; border-radius: 14px;
+  background: rgba(7, 15, 24, 0.62); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line); font-size: 12px; line-height: 1.35; text-align: center; color: var(--ink);
+}
+.wg-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.wg-side { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.wg-jp { align-items: flex-end; text-align: right; }
+.wg-us { align-items: flex-start; text-align: left; }
+.wg-name { max-width: 100%; font-family: var(--serif); font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: rgba(var(--ink-rgb), 0.9); }
+.wg-side.mine .wg-name { color: var(--sand); }
+.wg-side.mine .wg-name::before { content: ''; display: inline-block; width: 6px; height: 6px; margin: 0 6px 2px 0; border-radius: 50%; background: var(--sand); vertical-align: middle; }
+.wg-bar { width: 100%; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; display: flex; }
+.wg-jp .wg-bar { justify-content: flex-end; }
+.wg-bar i { display: block; height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.wg-jp .wg-bar i { background: #d66052; }
+.wg-us .wg-bar i { background: #a0c4e6; }
+.wg-tally { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wg-timer b { display: block; min-width: 58px; font-size: 22px; font-weight: 600; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+.wg-goal { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--line); display: flex; justify-content: center; align-items: baseline; gap: 8px; min-width: 0; }
+.wg-goal[hidden], .wg-phase[hidden], .wg-you[hidden] { display: none; }
+.wg-goal-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: rgba(var(--ink-rgb), 0.9); }
+.wg-goal-n { flex: none; color: var(--sand); font-variant-numeric: tabular-nums; }
+.wg-goal[data-status='met'] .wg-goal-n::after { content: ' · met'; }
+.wg-goal[data-status='failed'] .wg-goal-n { color: #f0b860; }
+.wg-goal[data-status='failed'] .wg-goal-n::after { content: ' · missed'; }
+.wg-phase { margin-top: 3px; display: flex; justify-content: center; align-items: baseline; gap: 7px; min-width: 0; padding: 1px 6px; border-radius: 6px; }
+.wg-ph-title { flex: none; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sand); }
+.wg-ph-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+.wg-ph-n { flex: none; font-variant-numeric: tabular-nums; }
+.wg-ph-left { flex: none; font-variant-numeric: tabular-nums; color: var(--muted); }
+.wg-ph-left:not(:empty)::before { content: '⏱ '; opacity: 0.7; }
+.wg-phase[data-status='met'] .wg-ph-n { color: var(--sand); }
+.wg-phase[data-status='failed'] .wg-ph-n { color: #f0b860; }
+.wg-phase.new { animation: wg-flash 1.6s ease-out; }
+@keyframes wg-flash { 0% { background: rgba(var(--sand-rgb), 0.35); } 100% { background: transparent; } }
+.wg-you { margin-top: 3px; display: flex; justify-content: center; align-items: baseline; gap: 7px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.wg-you-name { font-family: var(--serif); font-weight: 600; font-size: 12.5px; color: rgba(var(--ink-rgb), 0.92); overflow: hidden; text-overflow: ellipsis; }
+.wg-you-sub { flex: none; }
+/* the hit markers: machine words at the target, the player's own in sand */
+.wg-marks { position: absolute; inset: 0; overflow: hidden; }
+.wg-mark {
+  position: absolute; left: 0; top: 0; white-space: nowrap; padding: 2px 8px; border-radius: 3px; font-size: 12px;
+  background: rgba(8, 10, 12, 0.62); border-left: 2px solid rgba(var(--ink-rgb), 0.7); color: var(--ink);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); will-change: transform, opacity;
+}
+.wg-mark b { font-weight: 600; }
+.wg-mark.mine { border-left-color: var(--sand); color: #f6e3a0; background: rgba(40, 32, 14, 0.7); }
+.wg-mark.k-sinking, .wg-mark.k-sunk { border-left-color: #f0b860; }
+.wg-mark.k-near-miss { opacity: 0.8; font-size: 11px; }
+/* the respawn line, and the hop hints once */
+.wg-say {
+  position: absolute; left: 50%; top: 38%; transform: translateX(-50%); width: max-content; max-width: min(560px, calc(100vw - 32px)); padding: 8px 16px; border-radius: 8px;
+  background: rgba(8, 10, 12, 0.66); font-family: var(--serif); font-size: 17px; text-align: center; opacity: 0; transition: opacity 0.4s; pointer-events: none;
+}
+.wg-say.show { opacity: 1; }
+.wg-say:empty { display: none; }
+.wg-hints {
+  position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); width: max-content; max-width: min(520px, calc(100vw - 32px));
+  padding: 8px 14px; border-radius: 8px; background: rgba(8, 10, 12, 0.66); font-size: 12.5px; line-height: 1.6; opacity: 0; transition: opacity 0.4s;
+}
+.wg-hints.show { opacity: 1; }
+.wg-hints:empty, .wg-hints:not(.show) { display: none; }
+.wg-hints b { display: inline-block; min-width: 18px; padding: 0 5px; margin-right: 4px; border-radius: 4px; background: rgba(var(--ink-rgb), 0.14); font-weight: 600; text-align: center; }
+.wg-hints .wg-hop-ic svg { vertical-align: -3px; }
+/* (the box's own first hints first: these wait while those show) */
+body:has(.pt-hud .hints:not(:empty)) .wg-hints { display: none; }
+/* (one word in the middle at a time: the respawn line, when it comes, stands for the hints) */
+.wg-say.show ~ .wg-hints { display: none; }
+
+/* the start sheet and the end card: the card's frame, wider, in the middle */
+.card[data-mode='wargame'], .card[data-mode='wargame-end'] { width: min(720px, calc(100vw - 36px)); right: max(18px, calc((100vw - 720px) / 2)); }
+.wg-icon { color: var(--sand); }
+.wg-label { margin: 0 0 6px; font-family: var(--serif); font-style: italic; font-size: 14px; line-height: 1.5; color: rgba(var(--sand-rgb), 0.92); }
+.wg-label.small { margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+.wg-missing { font-size: 13px; color: var(--muted); }
+.wg-ss { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wg-ss-side { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); border-top: 3px solid var(--side, var(--chart)); }
+.wg-ss-side[data-side='jp'] { --side: #d66052; }
+.wg-ss-side[data-side='us'] { --side: #a0c4e6; }
+.wg-ss-side h3 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 16px; }
+.wg-ss-side h3 span { font-family: var(--jp); font-weight: 400; font-size: 12px; color: var(--muted); }
+.card-sec ul.wg-forces { list-style: none; padding: 0; margin: 0; }
+.card-sec ul.wg-forces li { margin: 0 0 4px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+.card-sec ul.wg-forces li b { display: block; font-weight: 600; font-size: 11px; letter-spacing: 0.04em; color: rgba(var(--ink-rgb), 0.86); }
+.card-sec ul.wg-forces li i { font-style: normal; margin: 0 0 0 5px; color: var(--faint); }
+.card-sec ul.wg-forces .wg-n { white-space: nowrap; }
+.card-sec ul.wg-forces li span[lang='ja'] { font-size: 11px; }
+.wg-ss-goal { margin: 2px 0 4px; font-size: 13px; line-height: 1.45; color: rgba(var(--ink-rgb), 0.9); }
+.nav.wg-start { margin-top: auto; height: 40px; width: 100%; font-size: 14px; }
+.nav.wg-start.focus { box-shadow: 0 0 0 3px rgba(var(--sand-rgb), 0.35); }
+.wg-ss-keys { font-size: 12px; color: var(--faint); }
+.wg-result { margin: 2px 0 8px; font-family: var(--serif); font-weight: 600; font-size: 19px; line-height: 1.35; }
+.card-sec ul.wg-tallies { list-style: none; padding: 0; }
+.card-sec ul.wg-tallies li { margin: 0 0 3px; font-size: 13px; color: rgba(var(--ink-rgb), 0.86); border-left: 3px solid var(--side, var(--chart)); padding-left: 8px; }
+.card-sec ul.wg-tallies li[data-side='jp'] { --side: #d66052; }
+.card-sec ul.wg-tallies li[data-side='us'] { --side: #a0c4e6; }
+.card-sec ul.wg-tallies li b { font-family: var(--serif); font-weight: 600; }
+.card-sec ul.wg-tallies li.mine b { color: var(--sand); }
+.wg-yours { margin: 6px 0 0; font-size: 13px; color: rgba(var(--ink-rgb), 0.86); font-variant-numeric: tabular-nums; }
+.wg-reel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.wg-still { margin: 0; }
+.wg-shot { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #0a1c2a; cursor: zoom-in; aspect-ratio: 8 / 5; }
+.wg-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.wg-shot:hover, .wg-shot:focus-visible { border-color: rgba(var(--sand-rgb), 0.7); outline: none; }
+.wg-still figcaption { margin-top: 4px; font-size: 11.5px; line-height: 1.35; color: var(--muted); }
+.wg-foot p { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(var(--ink-rgb), 0.86); }
+.wg-zoom { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(3, 8, 14, 0.86); cursor: zoom-out; pointer-events: auto; }
+.wg-zoom[hidden] { display: none; }
+.wg-zoom figure { margin: 0; width: min(960px, 100%); }
+/* (the Wargame's two cards over the box's own HUD and touch controls, as a phone's open card already stands) */
+body:has(> #ui > .card.show:is([data-mode='wargame'], [data-mode='wargame-end'])) #ui { z-index: 35; }
+.wg-zoom img { display: block; width: 100%; height: auto; max-height: calc(100vh - 90px); object-fit: contain; border-radius: 10px; border: 1px solid var(--line); }
+.wg-zoom figcaption { margin-top: 8px; text-align: center; font-size: 14px; color: var(--ink); }
+@media (max-width: 640px) {
+  .wg-ss { grid-template-columns: 1fr; }
+  .wg-reel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* a phone, either way up: the bar's wargame row at the top (the table, the stations as pills, Units and the hop
+   button); the block under it across the top (upright) or hugging the left (on its side); the start sheet and the
+   end card over the rest */
+@media (max-width: 700px), (pointer: coarse) {
+  .boxbar[data-mode='wargame'] {
+    top: calc(8px + env(safe-area-inset-top, 0px)); bottom: auto; transform: none;
+    left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px));
+    width: auto; max-width: none; padding: 4px; border-radius: 22px;
+  }
+  .boxbar[data-mode='wargame'] .bb-watch { justify-content: flex-start; gap: 6px; }
+  .boxbar[data-mode='wargame'] .nav { height: 36px; }
+  .boxbar[data-mode='wargame'] .nav.bb-leave { flex: none; width: 40px; padding: 0; }
+  .boxbar[data-mode='wargame'] .bb-stations { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .boxbar[data-mode='wargame'] .bb-stations::-webkit-scrollbar { display: none; }
+  .boxbar[data-mode='wargame'] .bb-stations .bb-st { height: 32px; padding: 0 11px; font-size: 13px; }
+  .boxbar[data-mode='wargame'] .bb-st .bb-l { display: none; }
+  .boxbar[data-mode='wargame'] .bb-st .bb-s { display: inline; }
+  .boxbar[data-mode='wargame'] .nav.bb-units { flex: none; margin-left: auto; }
+  .boxbar[data-mode='wargame'] .nav.bb-units span { display: none; }
+  .boxbar[data-mode='wargame'] .nav.bb-hop { flex: none; padding: 0 12px; background: rgba(var(--sand-rgb), 0.16); border-color: rgba(var(--sand-rgb), 0.6); color: var(--sand); }
+  .boxbar[data-mode='wargame'] .nav.bb-hop span { display: none; }
+  /* (the box's clock stands down: the block's timer is the game's, and the bar's row has the corner) */
+  body:has(> #ui > .boxbar[data-mode='wargame']:not([hidden])) .pt-hud { --pt-clock-display: none; }
+  /* the block: under the bar's row, the whole width */
+  .wg-board { left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px)); width: auto; transform: none; padding: 5px 10px 5px; border-radius: 12px; }
+  .wg-top { gap: 8px; }
+  .wg-name { font-size: 12px; }
+  .wg-tally { font-size: 10px; }
+  .wg-timer b { min-width: 46px; font-size: 18px; }
+  .wg-goal { margin-top: 4px; padding-top: 4px; font-size: 11.5px; }
+  .wg-phase { font-size: 11.5px; gap: 6px; align-items: center; }
+  /* (the phase's instruction says what to do: its title stands down for it, and it takes two lines where it needs them) */
+  .wg-ph-title { display: none; }
+  .wg-ph-text { color: rgba(var(--ink-rgb), 0.86); white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
+  .wg-you { font-size: 10.5px; }
+  .wg-you-name { font-size: 11.5px; }
+  /* the respawn line and the hints in the middle, between the box's plot and the controls */
+  .wg-say { top: auto; bottom: calc(var(--pt-controls, 150px) + 96px); font-size: 15px; }
+  .wg-hints { bottom: calc(var(--pt-controls, 150px) + 44px); font-size: 12px; line-height: 1.5; padding: 7px 12px; }
+  /* the end card over everything, the game being over; the start sheet over the bar at the foot (watching) or the table */
+  #ui.wargame .card[data-mode='wargame-end'] { top: calc(var(--pt-bar-head, 60px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); max-height: none; }
+  .card[data-mode='wargame'] { max-height: calc(100vh - 200px); }
+  body:has(> #ui:not(.holding) > .boxbar:not([hidden])) .card[data-mode='wargame'] { max-height: calc(100vh - var(--pt-foot, 136px) - 60px); }
+}
+@media (max-width: 700px) and (orientation: landscape), (pointer: coarse) and (orientation: landscape) {
+  .boxbar[data-mode='wargame'] { right: auto; width: max-content; max-width: calc(100vw - 260px); }
+  /* the block hugs the left under the bar, short of the box's plot and its camera and time */
+  .wg-board { right: auto; width: min(440px, calc(100vw - var(--pt-plot, 96px) - 80px)); }
+  .wg-you { display: none; }
+  .wg-say { bottom: auto; top: calc(var(--pt-head, 160px) + 8px); }
+  /* (the hints beside the block, between it and the box's camera and time: the subtitle keeps the foot) */
+  .wg-hints {
+    left: calc(max(8px, env(safe-area-inset-left, 0px)) + min(440px, 100vw - var(--pt-plot, 96px) - 80px) + 14px); right: calc(var(--pt-plot, 96px) + 24px);
+    top: calc(var(--pt-bar-head, 58px) + 2px); bottom: auto; transform: none; width: auto; max-width: none;
+  }
+  #ui.wargame .card[data-mode='wargame-end'] { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); width: auto; top: var(--pt-bar-head, 58px); }
+  .wg-reel { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* the dev page's arena (ui.html, src/ui/mock-arena.js): the arena from above in place of the plan while a wargame runs */
+#arena { position: fixed; inset: 0; width: 100%; height: 100%; display: none; }
+body.wargame #arena { display: block; }
+body.wargame #plan { display: none; }
+#mock-dev { position: fixed; left: 12px; bottom: 10px; z-index: 20; display: none; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+#mock-dev.on:not([hidden]) { display: flex; }
+#mock-dev input { width: 220px; vertical-align: middle; }

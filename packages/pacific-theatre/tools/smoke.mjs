@@ -56,6 +56,31 @@
 // the screen; the pairs that do are printed. A beat's subtitle (a long one)
 // and the first hints are held on screen while the sizes are measured.
 //
+// Round three (ROUND-3.md §5, §7), the Wargame. On the built app: a box
+// event's card offers *Play it as a wargame* where its box has one (the
+// fixtures' box and, until content-3's files land, Samar are handed the dev
+// page's fixture scenario), the start sheet opens with both sides' forces and
+// goals, the label, Japan and United States; a side's button calls
+// Battle.enterWargame (a stand-in records it while the Battle has none) and
+// the hash carries #wargame and #side, which the engine's leave lets go;
+// #wargame=…&side=jp offers the sheet with Japan's button focused. The phone
+// check measures the Wargame's HUD layer with the rest (its block, the
+// respawn line, the hints; a hit marker only for leaving the screen), and
+// holds a wargame at its six sizes once Battle.enterWargame exists (skipped,
+// and said, until then). On ui.html against the mock arena
+// (src/ui/mock-arena.js): the bar's *Wargame* and the briefing's door; the
+// start sheet; United States entering (the bar's wargame mode with the
+// stations and the hop button, the HUD layer's bars, timer, goal with its
+// count, phase, held unit and the hints once); a hit marker at its target's
+// projection, stacking, gone after 1.5 s; the hop button, 1–4 and a pick in
+// the list possessing; the respawn line; the end card with its result,
+// tallies, reel (a still enlarged on a tap) and the record's sentence; Play
+// the other side, Play again and Back to the table with the URL's keys
+// following; the voice rules over every string; and the wargame on a mobile
+// page at the six sizes with the box's HUD and touch controls (their real
+// classes, as stand-ins), no two overlapping (WARGAME=0 skips the dev page's
+// wargame checks).
+//
 //   npm run build -w @vibe-dump/pacific-theatre
 //   node tools/fake-data.mjs
 //   node tools/smoke.mjs                 (test-data/ unless DATA=real)
@@ -77,6 +102,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, normalize, extname } from 'node:path'
 import { readPNG } from './lib/png.mjs'
+// (the dev page's fixture scenarios: handed to link.js where the data has no wargame file of its own)
+import { FIXTURE_SCENARIOS } from '../src/ui/mock-arena.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const port = Number(process.env.PORT || 5298)
@@ -608,6 +635,59 @@ await check('round two: the prologue front moves between 1931 and 1941 (Mukden a
   return `${pro.length} prologue keyframes; 1931-09-18 on ${a.pair.a} (red ${a.look.red}), 1941-12-06 on ${b.pair.a} (red ${b.look.red})`
 })
 
+// Round three on the built app: the door, the start sheet, the URL (ROUND-3 §5, §7). Today's Battle has no
+// enterWargame: a stand-in records the call, so link.js's side is held; the engine's arrives with the merge.
+const WG = useTest ? 'test-box' : 'samar'
+const WG_FILE = existsSync(join(root, `public/data/wargames/${WG}.json`))
+const WG_EV = await ui(`app.data.events.find((e) => e.box === '${WG}')?.id ?? null`)
+await check('round three: a box event’s card offers Play it as a wargame beside Enter the battle; it opens the start sheet with both sides’ forces and goals, the label, Japan and United States', async () => {
+  if (!WG_EV) throw new Error(`no event with the box ${WG}`)
+  // (the fixtures' box has no wargame of its own, and the real files are content-3's: the dev page's scenario is handed over where the data has none)
+  if (useTest || !WG_FILE) await run(`app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[WG])})`)
+  await run(`app.ui.card.close(); app.ui.tour.open(app.data.events.find((e) => e.id === '${WG_EV}')); app.settle()`)
+  await frames(2)
+  const door = await ui(`document.querySelector('.card .wg-door')?.dataset.wargame ?? null`)
+  if (door !== WG) throw new Error(`the card's door names ${door}`)
+  await page.click('.card .wg-door')
+  await page.waitForFunction(() => window.__app.ui.card.mode === 'wargame', null, { timeout: 60000 })
+  const s = await ui(`({ sides: [...document.querySelectorAll('.wg-ss-side')].map((e) => ({ side: e.dataset.side, name: e.querySelector('h3')?.textContent, groups: [...e.querySelectorAll('.wg-forces li b')].map((b) => b.textContent), goal: e.querySelector('.wg-ss-goal')?.textContent, button: e.querySelector('.wg-start')?.textContent.trim() })), label: document.querySelector('.card .wg-label')?.textContent })`)
+  if (s.sides.length !== 2 || s.sides.map((x) => x.button).join() !== 'Japan,United States' || s.sides.some((x) => !x.groups.length || !x.goal) || !s.label) throw new Error(JSON.stringify(s))
+  await look('smoke-wargame-start-app.png')
+  return `${WG_EV}: ${s.sides.map((x) => `${x.name} (${x.groups.join(', ')})`).join(' / ')}${useTest || !WG_FILE ? '; the dev page’s fixture scenario' : ''}`
+})
+
+await check('round three: a side’s button calls Battle.enterWargame(id, { side }); the hash carries #wargame and #side; the engine’s leave lets them go', async () => {
+  const real = await ui(`typeof app.battle.enterWargame === 'function'`)
+  if (!real) await run(`window.__wgCalls = []; app.battle.enterWargame = async (id, o) => { window.__wgCalls.push([id, o]); return { stand: true } }`)
+  else await run(`window.__wgCalls = []; const f = app.battle.enterWargame.bind(app.battle); app.battle.__enterWargame = app.battle.enterWargame; app.battle.enterWargame = (id, o) => { window.__wgCalls.push([id, o]); return f(id, o) }`)
+  await page.click('.card [data-wg-side=us]')
+  await page.waitForFunction(() => window.__app.link.wg, null, { timeout: real ? 600000 : 30000 })
+  const calls = await ui('window.__wgCalls')
+  const hash = await ui('app.hashNow()')
+  if (calls.length !== 1 || calls[0][0] !== WG || calls[0][1]?.side !== 'us') throw new Error(`calls ${JSON.stringify(calls)}`)
+  if (!hash.includes(`wargame=${WG}`) || !hash.includes('side=us') || /[#&]battle=/.test(hash)) throw new Error(`hash ${hash}`)
+  if (real) {
+    await run(`app.battle.enterWargame = app.battle.__enterWargame; delete app.battle.__enterWargame`)
+    await page.click('.boxbar .bb-leave')
+    await page.waitForFunction(() => window.__app.mode === 'table' && !window.__app.battle.scene && !window.__app.link?.busy, null, { timeout: 300000 })
+  } else await run(`app.events.dispatchEvent(new CustomEvent('battle', { detail: { kind: 'leave' } })); delete app.battle.enterWargame`)
+  const after = await ui('app.hashNow()')
+  if (/wargame=|side=/.test(after) || (await ui('!!app.link.wg'))) throw new Error(`after leaving: ${after}`)
+  return `enterWargame(${JSON.stringify(calls[0][0])}, ${JSON.stringify(calls[0][1])})${real ? '' : ' (a stand-in: the Battle has none yet)'}; ${hash.match(/wargame=[^&]+&side=\w+/)?.[0]}, then gone`
+})
+
+await check('round three: #wargame=…&side=jp offers the start sheet with Japan’s button focused, and closing it lets the keys go', async () => {
+  await run(`location.hash = '#wargame=${WG}&side=jp'`)
+  await page.waitForFunction(() => window.__app.ui.card.mode === 'wargame', null, { timeout: 60000 })
+  await frames(1)
+  const r = await ui(`({ focus: document.activeElement?.dataset?.wgSide ?? null, kept: app.url.kept, battle: app.battle.state?.boxId ?? null })`)
+  if (r.focus !== 'jp' || r.kept.wargame !== WG || r.kept.side !== 'jp' || (await ui('!!app.link.wg'))) throw new Error(JSON.stringify(r))
+  await run('app.ui.card.close()')
+  const h = await ui('app.hashNow()')
+  if (/wargame=|side=/.test(h)) throw new Error(`after the sheet closed: ${h}`)
+  return `the sheet over the ${r.battle ? 'box' : 'table'}, Japan focused, nothing started; the keys gone once it closed`
+})
+
 // What the page costs: the JS heap after a collection, and the frame time on
 // the table held still at the whole theatre (far) and over an island group
 // (near). Under the software renderer the frame times are the CPU's, shared
@@ -660,6 +740,71 @@ if (stats) console.log('stats', JSON.stringify(stats))
 // (the built app's page lets go of its WebGL before the dev page's checks, so their frames are not starved)
 await page.close()
 
+/** Every visible control and readout by its box (clipped by scrolling parents), and the pairs that overlap by more than 2 px or leave the screen (run in the page). */
+const MEASURE = () => {
+  const W = innerWidth
+  const H = innerHeight
+  const shown = (el) => {
+    for (let e = el; e && e !== document.documentElement; e = e.parentElement) {
+      const cs = getComputedStyle(e)
+      if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) < 0.05) return false
+    }
+    return true
+  }
+  const box = (el) => {
+    const r = el.getBoundingClientRect()
+    let [x0, y0, x1, y1] = [r.left, r.top, r.right, r.bottom]
+    for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
+      const cs = getComputedStyle(e)
+      if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue
+      const q = e.getBoundingClientRect()
+      x0 = Math.max(x0, q.left)
+      y0 = Math.max(y0, q.top)
+      x1 = Math.min(x1, q.right)
+      y1 = Math.min(y1, q.bottom)
+    }
+    return [x0, y0, x1, y1]
+  }
+  const items = []
+  const add = (name, el) => {
+    if (!el || !shown(el)) return
+    const b = box(el)
+    if (b[2] - b[0] < 1 || b[3] - b[1] < 1) return
+    items.push({ name, el, b })
+  }
+  const tag = (e, pre) => pre + (e.dataset.station || e.dataset.scale || e.dataset.assist || [...e.classList].find((c) => /^(bb|t)-/.test(c))?.replace(/^(bb|t)-/, '') || e.className)
+  const bar = document.querySelector('#ui > .boxbar')
+  add('bar', bar)
+  bar?.querySelectorAll('button:not(.bb-tick):not(.bb-mark), .bb-stop, .bb-strip, .bb-stations, .bb-speeds, .bb-assist, .bb-check-t').forEach((e) => add(tag(e, 'bar:'), e))
+  document.querySelectorAll('#ui .tools .tool').forEach((e) => add(`tool:${e.dataset.tool}`, e))
+  add('card', document.querySelector('#ui .card.show'))
+  add('list', document.querySelector('#ui .unitlist:not([hidden])'))
+  for (const k of ['clock', 'strip', 'inst', 'plot', 'plot-label', 'subs', 'msg', 'cue', 'cuewin', 'hints', 'keys', 'stations']) add(`hud:${k}`, document.querySelector(`.pt-hud .${k}`))
+  document.querySelectorAll('.pt-touch > *').forEach((e) => add(tag(e, 'touch:'), e))
+  // round three: the Wargame's HUD layer (its block under the bar, the respawn line, the hints), and its hit markers, which
+  // stand over the scene where their ships are and so are held only to the screen
+  add('wg:board', document.querySelector('#ui .wg-hud:not([hidden]) .wg-board'))
+  add('wg:say', document.querySelector('#ui .wg-hud:not([hidden]) .wg-say.show'))
+  add('wg:hints', document.querySelector('#ui .wg-hud:not([hidden]) .wg-hints.show'))
+  document.querySelectorAll('#ui .wg-hud:not([hidden]) .wg-mark').forEach((e, k) => add(`wg:mark${k}`, e))
+  // (the plot's caption stands inside it by design)
+  const together = new Set(['hud:plot|hud:plot-label'])
+  const overlaps = []
+  for (let i = 0; i < items.length; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      const a = items[i]
+      const b = items[j]
+      if (a.el.contains(b.el) || b.el.contains(a.el) || together.has(`${a.name}|${b.name}`) || together.has(`${b.name}|${a.name}`)) continue
+      if (a.name.startsWith('wg:mark') || b.name.startsWith('wg:mark')) continue
+      const w = Math.min(a.b[2], b.b[2]) - Math.max(a.b[0], b.b[0])
+      const h = Math.min(a.b[3], b.b[3]) - Math.max(a.b[1], b.b[1])
+      if (w > 2 && h > 2) overlaps.push(`${a.name} × ${b.name} (${Math.round(w)}×${Math.round(h)} px)`)
+    }
+  }
+  const out = items.filter((t) => t.b[0] < -1 || t.b[1] < -1 || t.b[2] > W + 1 || t.b[3] > H + 1).map((t) => `${t.name} at ${t.b.map(Math.round).join(',')}`)
+  return { names: items.map((t) => t.name), overlaps, out }
+}
+
 // ---------------------------------------------------------------------------------------------
 // The box on a phone: no two controls or readouts overlap and none leaves the screen, upright and on its side,
 // watching and holding an aircraft and a ship (style.css's phone layout; scene/hud.js; controls/touch.js).
@@ -674,66 +819,9 @@ if (!MOCK_ONLY && process.env.PHONE !== '0') {
     const f0 = await pp.evaluate(() => window.__app.frames)
     await pp.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 180000 })
   }
-  /** Every visible control and readout by its box (clipped by scrolling parents), and the pairs that overlap by more than 2 px or leave the screen. */
-  const measure = () =>
-    pp.evaluate(() => {
-      const W = innerWidth
-      const H = innerHeight
-      const shown = (el) => {
-        for (let e = el; e && e !== document.documentElement; e = e.parentElement) {
-          const cs = getComputedStyle(e)
-          if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) < 0.05) return false
-        }
-        return true
-      }
-      const box = (el) => {
-        const r = el.getBoundingClientRect()
-        let [x0, y0, x1, y1] = [r.left, r.top, r.right, r.bottom]
-        for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) {
-          const cs = getComputedStyle(e)
-          if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue
-          const q = e.getBoundingClientRect()
-          x0 = Math.max(x0, q.left)
-          y0 = Math.max(y0, q.top)
-          x1 = Math.min(x1, q.right)
-          y1 = Math.min(y1, q.bottom)
-        }
-        return [x0, y0, x1, y1]
-      }
-      const items = []
-      const add = (name, el) => {
-        if (!el || !shown(el)) return
-        const b = box(el)
-        if (b[2] - b[0] < 1 || b[3] - b[1] < 1) return
-        items.push({ name, el, b })
-      }
-      const tag = (e, pre) => pre + (e.dataset.station || e.dataset.scale || e.dataset.assist || [...e.classList].find((c) => /^(bb|t)-/.test(c))?.replace(/^(bb|t)-/, '') || e.className)
-      const bar = document.querySelector('#ui > .boxbar')
-      add('bar', bar)
-      bar?.querySelectorAll('button:not(.bb-tick):not(.bb-mark), .bb-stop, .bb-strip, .bb-stations, .bb-speeds, .bb-assist, .bb-check-t').forEach((e) => add(tag(e, 'bar:'), e))
-      document.querySelectorAll('#ui .tools .tool').forEach((e) => add(`tool:${e.dataset.tool}`, e))
-      add('card', document.querySelector('#ui .card.show'))
-      add('list', document.querySelector('#ui .unitlist:not([hidden])'))
-      for (const k of ['clock', 'strip', 'inst', 'plot', 'plot-label', 'subs', 'msg', 'cue', 'cuewin', 'hints', 'keys', 'stations']) add(`hud:${k}`, document.querySelector(`.pt-hud .${k}`))
-      document.querySelectorAll('.pt-touch > *').forEach((e) => add(tag(e, 'touch:'), e))
-      // (the plot's caption stands inside it by design)
-      const together = new Set(['hud:plot|hud:plot-label'])
-      const overlaps = []
-      for (let i = 0; i < items.length; i++) {
-        for (let j = i + 1; j < items.length; j++) {
-          const a = items[i]
-          const b = items[j]
-          if (a.el.contains(b.el) || b.el.contains(a.el) || together.has(`${a.name}|${b.name}`) || together.has(`${b.name}|${a.name}`)) continue
-          const w = Math.min(a.b[2], b.b[2]) - Math.max(a.b[0], b.b[0])
-          const h = Math.min(a.b[3], b.b[3]) - Math.max(a.b[1], b.b[1])
-          if (w > 2 && h > 2) overlaps.push(`${a.name} × ${b.name} (${Math.round(w)}×${Math.round(h)} px)`)
-        }
-      }
-      const out = items.filter((t) => t.b[0] < -1 || t.b[1] < -1 || t.b[2] > W + 1 || t.b[3] > H + 1).map((t) => `${t.name} at ${t.b.map(Math.round).join(',')}`)
-      return { names: items.map((t) => t.name), overlaps, out }
-    })
+  const measure = (p = pp) => p.evaluate(MEASURE)
   // a long subtitle and the first hints held on screen while the sizes are measured
-  const HOLD = `const hud = app.battle.scene.hud; hud.lines = [{ text: ${JSON.stringify(LONG)}, until: performance.now() / 1000 + 3600 }]; hud.textT = 0; if (hud.hints.textContent) hud.hintsUntil = performance.now() / 1000 + 3600`
+  const HOLD = `const hud = app.battle.scene.hud; hud.lines = [{ text: ${JSON.stringify(LONG)}, until: performance.now() / 1000 + 3600 }]; hud.textT = 0; if (hud.hints.textContent) hud.hintsUntil = performance.now() / 1000 + 3600; const wg = app.link?.hud; if (wg?.hintUntil) wg.hintUntil = performance.now() / 1000 + 3600`
   const TAKE_AIR = `const fd = app.battle.firstDoor; if (fd?.role?.kind === 'aircraft') app.ui.onFirstDoor(); else { const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const a = app.battle.sim.units().find((u) => u.kind === 'aircraft' && u.takeable === true && u.stations.includes('pilot')); if (!a) throw new Error('no takeable aircraft'); app.takeUnit({ unit: a.id, station: 'pilot' }) }`
   const SHIP = `const rows = app.battle.sim.units(); const ok = (u) => u.kind === 'ship' && u.takeable === true && u.stations.includes('aa') && u.stations.includes('helm'); const u = rows.find((u) => ok(u) && u.id === 'nevada') || rows.find(ok)`
   const STATES = [
@@ -745,6 +833,14 @@ if (!MOCK_ONLY && process.env.PHONE !== '0') {
     { name: 'an aircraft at the bombsight or the rear gun', setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); const m = [...app.battle.sim.record.moments.values()].find((m) => m.role?.kind === 'aircraft'); if (m) app.battle.scrub(app.battle.sim.clock.parse(m.t), { answer: 'yes' }); const rows = app.battle.sim.units().filter((u) => u.kind === 'aircraft' && u.takeable === true); const a = rows.find((u) => u.stations.includes('bombardier')) || rows.find((u) => u.stations.includes('gunner')); if (!a) throw new Error('no takeable aircraft with a crew station'); const st = a.stations.includes('bombardier') ? 'bombardier' : 'gunner'; app.takeUnit({ unit: a.id, station: st }); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.pause(); return a.id + ' at ' + app.battle.state.station`, want: ['bar:release', 'bar:more', 'hud:strip', 'hud:plot', 'touch:pause', 'touch:cam'], not: ['hud:clock', 'touch:release'] },
     { name: 'a ship at the AA director', setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.scrub(app.battle.sim.record.stops[0].t, { answer: 'yes' }); try { localStorage.removeItem('pt.hints') } catch {} ${SHIP}; if (!u) throw new Error('no takeable ship with the AA station'); app.takeUnit({ unit: u.id, station: 'aa' }); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); app.battle.pause(); return app.battle.state.held?.id + ' at ' + app.battle.state.station`, want: ['bar:release', 'bar:aa', 'bar:more', 'hud:strip', 'hud:plot', 'hud:subs', 'hud:hints', 'touch:fire', 'touch:pause', 'touch:time', 'touch:cam'], not: ['hud:clock', 'touch:release'] },
     { name: 'the same ship at her helm', setup: `app.ui.onStation('helm'); await new Promise((r) => setTimeout(r, 300)); app.battle.pause(); return app.battle.state.station`, want: ['bar:helm', 'hud:strip', 'touch:helm', 'touch:tel', 'touch:salvo', 'touch:torp', 'touch:aa', 'touch:pause'], not: ['hud:clock', 'touch:release'] },
+    // round three: a wargame, the HUD layer's block under the bar's row (once Battle.enterWargame exists: the engine's, with the merge)
+    {
+      name: 'a wargame',
+      guard: `typeof app.battle.enterWargame === 'function'`,
+      setup: `app.ui.onRelease(); await new Promise((r) => setTimeout(r, 300)); app.ui.card.close(); try { localStorage.removeItem('pt.hints') } catch {} ${useTest || !existsSync(join(root, `public/data/wargames/${useTest ? 'test-box' : 'samar'}.json`)) ? `app.link.addWargame(${JSON.stringify(FIXTURE_SCENARIOS[useTest ? 'test-box' : 'samar'])});` : ''} const s = await app.link.startWargame('${useTest ? 'test-box' : 'samar'}', 'us'); if (!s) throw new Error('Battle.enterWargame did not start it (see the warnings)'); await new Promise((r) => setTimeout(r, 500)); app.ui.card.close(); app.battle.pause(); return 'wargame ' + app.link.wg?.id + ', ' + (app.battle.state?.held?.id ?? '')`,
+      want: ['bar', 'bar:hop', 'bar:units', 'wg:board', 'hud:plot', 'touch:pause'],
+      not: ['hud:clock', 'touch:release', 'bar:release', 'bar:strip'],
+    },
   ]
   await pp.goto(`http://127.0.0.1:${port}/dist/index.html${useTest ? '?data=../test-data/' : ''}`)
   await pp.waitForSelector('#boot', { state: 'detached', timeout: 180000 })
@@ -752,6 +848,10 @@ if (!MOCK_ONLY && process.env.PHONE !== '0') {
   await prun(`await app.battle.enter('${PBOX}', { from: 'url' }); app.ui.card.close()`)
   await pp.waitForFunction(() => window.__app.mode === 'watch' && window.__app.active === window.__app.battle.scene, null, { timeout: 600000 })
   for (const st of STATES) {
+    if (st.guard && !(await prun(`return ${st.guard}`))) {
+      console.log(`  – the box on a phone, ${st.name}: skipped (${st.guard} is false in this build; the engine's arrives with the merge, and the integrator must see it pass)`)
+      continue
+    }
     await check(`the box on a phone, ${st.name}: no two controls or readouts overlap by more than 2 px, none leaves the screen (${SIZES.map((z) => z.join('×')).join(', ')})`, async () => {
       await pp.setViewportSize({ width: SIZES[0][0], height: SIZES[0][1] })
       const who = await prun(st.setup)
@@ -1055,6 +1155,261 @@ if (MOCK !== '0' && !PHONE_ONLY) {
     if (r.list[0] < 0 || r.list[2] > 390 || r.list[3] > r.bar[1] || r.bar[2] > 390 || r.scroll > 390 || after.list || after.card !== 'unit') throw new Error(JSON.stringify({ ...r, after }))
     return `list ${r.list.join(',')}, bar ${r.bar.join(',')}; a row → the card`
   })
+
+  // -------------------------------------------------------------------------------------------
+  // Round three on ui.html: the Wargame against the mock arena (ROUND-3 §1, §5, §7; src/ui/mock-arena.js), on Samar
+  if (process.env.WARGAME !== '0') {
+    const SAMAR = FIXTURE_SCENARIOS.samar
+    const wtexts = []
+    const wcollect = async (what, p = mp) => wtexts.push({ what, text: await p.evaluate(() => [...document.querySelectorAll('.card.show, .boxbar:not([hidden]), #ui .wg-hud:not([hidden])')].map((el) => el.innerText).join('\n')) })
+    const last = async (kind) => (await calls(kind)).slice(-1)[0] ?? null
+    /** Run the mock game until a condition holds in the page (the mock's clock runs on the page's frames). */
+    const until = (fn, ms = 90000) => mp.waitForFunction(fn, null, { timeout: ms })
+    await open('?box=samar&t=07:00&paused')
+
+    await check('ui.html: the bar offers Wargame on a box that has one; the start sheet shows each side’s ships by type, its aircraft, its goal, the label, Japan and United States', async () => {
+      await mrun(`app.ui.card.close(); app.ui.unitList?.close(); try { localStorage.removeItem('pt.hints') } catch {}`)
+      await tick()
+      if (!(await mui(`!document.querySelector('.boxbar .bb-wargame').hidden`))) throw new Error('no Wargame on the bar')
+      await mp.click('.boxbar .bb-wargame')
+      await until(() => window.__app.ui.card.mode === 'wargame', 30000)
+      const s = await mui(`({ sides: [...document.querySelectorAll('.wg-ss-side')].map((e) => ({ side: e.dataset.side, name: e.querySelector('h3')?.textContent, groups: [...e.querySelectorAll('.wg-forces li b')].map((b) => b.textContent), names: e.querySelectorAll('.wg-n').length, air: [...e.querySelectorAll('.wg-forces li')].map((l) => l.textContent).find((t) => /aircraft/.test(t)) ?? null, goal: e.querySelector('.wg-ss-goal')?.textContent.replace(/^Goal\\s*/, ''), button: e.querySelector('.wg-start')?.textContent.trim() })), label: document.querySelector('.card .wg-label')?.textContent, title: document.querySelector('.card h1')?.textContent })`)
+      const [jp, us] = s.sides
+      const want = (cond, what) => {
+        if (!cond) throw new Error(`${what}: ${JSON.stringify(s)}`)
+      }
+      want(jp?.side === 'jp' && us?.side === 'us', 'the sides in order')
+      want(jp.groups.includes('4 battleships') && jp.groups.includes('11 destroyers') && jp.names === SAMAR.sides.japan.ships.length, 'Japan’s ships by type')
+      want(us.groups.includes('6 escort carriers') && us.groups.includes('20 aircraft') && /Avengers/.test(us.air) && /Wildcats/.test(us.air), 'the United States’ ships and aircraft')
+      want(jp.goal === SAMAR.sides.japan.goal.text && us.goal === SAMAR.sides.usa.goal.text, 'the goals')
+      want(s.label === SAMAR.label && jp.button === 'Japan' && us.button === 'United States', 'the label and the buttons')
+      await wcollect('the start sheet')
+      await mshot('smoke-wargame-start.png')
+      return `“${s.title}”: ${jp.name} (${jp.groups.join(', ')}) / ${us.name} (${us.groups.join(', ')})`
+    })
+
+    await check('ui.html: the briefing offers Play it as a wargame with its label, and it opens the same sheet', async () => {
+      await mrun(`app.ui.card.close(); app.link.openBriefing()`)
+      await tick()
+      const b = await mui(`({ door: document.querySelector('.card .wg-brief .wg-door')?.dataset.wargame ?? null, label: document.querySelector('.card .wg-brief p')?.textContent ?? null })`)
+      if (b.door !== 'samar' || !b.label) throw new Error(JSON.stringify(b))
+      await mp.click('.card .wg-brief .wg-door')
+      await until(() => window.__app.ui.card.mode === 'wargame', 30000)
+      return `the briefing’s door → the sheet (“${b.label.slice(0, 40)}…”)`
+    })
+
+    await check('ui.html: United States enters the wargame: enterWargame(samar, us), the bar’s wargame mode (stations, Units, the hop button; none of the record’s parts), the HUD layer (both bars, the timer, the goal with its count, the phase, the held unit), the hints once, the URL’s keys', async () => {
+      await mp.click('.card [data-wg-side=us]')
+      await until(() => window.__app.link.wg && window.__app.battle.arena, 30000)
+      await tick(700)
+      const c = await last('enterWargame')
+      if (JSON.stringify(c) !== JSON.stringify(['enterWargame', 'samar', 'us'])) throw new Error(`enterWargame: ${JSON.stringify(c)}`)
+      const r = await mui(`(() => { const d = (s) => { const e = document.querySelector(s); return e ? getComputedStyle(e).display : null }; return { mode: document.querySelector('.boxbar').dataset.mode, stations: [...document.querySelectorAll('.boxbar .bb-st')].map((b) => b.dataset.station), on: document.querySelector('.boxbar .bb-st.on')?.dataset.station, hop: d('.boxbar .bb-hop'), units: d('.boxbar .bb-units'), release: d('.boxbar .bb-release'), strip: d('.boxbar .bb-strip'), assist: d('.boxbar .bb-assist'), names: [...document.querySelectorAll('.wg-name')].map((e) => e.textContent), bars: [...document.querySelectorAll('.wg-bar i')].map((e) => e.style.width), mine: document.querySelector('.wg-side.mine')?.dataset.side, timer: document.querySelector('.wg-timer b').textContent, goal: document.querySelector('.wg-goal').innerText.replace(/\\s+/g, ' '), phase: document.querySelector('.wg-phase').innerText.replace(/\\s+/g, ' '), you: document.querySelector('.wg-you').innerText.replace(/\\s+/g, ' '), hints: document.querySelector('.wg-hints.show')?.innerText ?? null, kept: app.url.kept, head: parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pt-head')), board: document.querySelector('.wg-board').getBoundingClientRect().bottom, seen: JSON.parse(localStorage.getItem('pt.hints') || '{}').wargame === true } })()`)
+      const fails = []
+      if (r.mode !== 'wargame') fails.push(`the bar’s mode ${r.mode}`)
+      if (!r.stations.includes('helm') || !r.stations.includes('torpedoes') || r.on !== 'helm') fails.push(`the stations ${r.stations} (${r.on})`)
+      if (r.hop === 'none' || r.units === 'none' || r.release !== 'none' || r.strip !== 'none' || r.assist !== 'none') fails.push(`the bar’s parts ${JSON.stringify({ hop: r.hop, units: r.units, release: r.release, strip: r.strip, assist: r.assist })}`)
+      if (r.names.join() !== `${SAMAR.sides.japan.name},${SAMAR.sides.usa.name}` || r.mine !== 'us' || r.bars.some((w) => !/%$/.test(w))) fails.push(`the bars ${JSON.stringify(r.names)} ${r.bars} ${r.mine}`)
+      if (!/^\d+:\d\d$/.test(r.timer)) fails.push(`the timer ${r.timer}`)
+      if (!r.goal.includes(SAMAR.sides.usa.goal.text) || !/6 of 6 afloat/.test(r.goal)) fails.push(`the goal “${r.goal}”`)
+      if (!/0 of 1/.test(r.phase) || !/\d:\d\d/.test(r.phase)) fails.push(`the phase “${r.phase}”`)
+      if (!/^Johnston DD-557 · Helm$/.test(r.you)) fails.push(`the held unit “${r.you}”`)
+      if (!/Tab/.test(r.hints || '') || !r.seen) fails.push(`the hints ${r.hints} (kept: ${r.seen})`)
+      if (r.kept.wargame !== 'samar' || r.kept.side !== 'us') fails.push(`the URL’s keys ${JSON.stringify(r.kept)}`)
+      if (!(r.head >= r.board)) fails.push(`--pt-head ${r.head} above the block’s foot ${r.board}`)
+      await wcollect('the HUD layer')
+      await mshot('smoke-wargame-hud.png')
+      if (fails.length) throw new Error(fails.join('; '))
+      return `${r.names.join(' / ')} ${r.timer}; “${r.goal}”; “${r.phase}”; ${r.you}; --pt-head ${r.head} under the block (${Math.round(r.board)})`
+    })
+
+    await check('ui.html: a hit marker stands at its target’s projection in machine words, markers on one target stack, and each is gone after 1.5 s', async () => {
+      await mrun(`app.battle.arena.seek(148); app.battle.play(1)`)
+      await until(() => document.querySelectorAll('.wg-mark').length >= 1)
+      await mrun(`app.battle.pause()`)
+      const r = await mui(`(() => { const a = app.battle.arena; const m = app.link.wg.marks.slice(-1)[0]; const els = [...document.querySelectorAll('.wg-mark')]; const el = els[els.length - 1]; const p = app.battle.scene.hud.project(a.state.pos[3 * m.key], a.state.pos[3 * m.key + 1] + 25, a.state.pos[3 * m.key + 2]); const b = el.getBoundingClientRect(); return { text: el.textContent, mtext: m.text, px: p[0], py: p[1], cx: b.left + b.width / 2, w: b.width, W: innerWidth, bottom: b.bottom, n: els.length, all: els.map((e) => e.textContent) } })()`)
+      const words = /^[^:]+: (hit|torpedo hit|bomb hit|near miss|shot down|sinking|sunk)\b/
+      if (r.text !== r.mtext || !words.test(r.text) || Math.abs(r.cx - Math.max(r.w / 2 + 8, Math.min(r.W - r.w / 2 - 8, r.px))) > 2 || r.bottom > r.py - 10 || r.bottom < r.py - 16 - 19 * 8) throw new Error(JSON.stringify(r))
+      await mshot('smoke-wargame-markers.png')
+      // two hits on one ship at once: stacked, the later one higher; both gone after 1.5 s
+      const st = await mrun(`const a = app.battle.arena; const me = a.player.unitIndex; const hp = app.battle.scene.hud; const inView = (u) => { if (u.alive !== 1 || u.kind !== 'ship') return false; const p = hp.project(a.state.pos[3 * u.index], 25, a.state.pos[3 * u.index + 2]); return p[0] > 150 && p[0] < innerWidth - 150 && p[1] > 230 && p[1] < innerHeight - 60 }; const t = a.u.find((u) => u.side === 'jp' && inView(u)) || a.u.find(inView); if (!t) throw new Error('no ship on the screen to mark'); a.events.push({ id: 900001, t: a.t, kind: 'hit', target: t.index, text: t.name + ': hit forward', mine: true }, { id: 900002, t: a.t, kind: 'hit', target: t.index, text: t.name + ': hit aft, fire', mine: true }); await new Promise((r) => setTimeout(r, 400)); const els = [...document.querySelectorAll('.wg-mark')].filter((e) => e.textContent.startsWith(t.name + ': hit forward') || e.textContent.startsWith(t.name + ': hit aft')); return { name: t.name, ys: els.map((e) => Math.round(e.getBoundingClientRect().bottom)), mine: els.every((e) => e.classList.contains('mine')) }`)
+      if (st.ys.length !== 2 || st.ys[1] > st.ys[0] - 18 || !st.mine) throw new Error(`stacking: ${JSON.stringify(st)}`)
+      await mp.waitForTimeout(1700)
+      const gone = await mui(`[...document.querySelectorAll('.wg-mark')].filter((e) => /: hit (forward|aft, fire)$/.test(e.textContent) && e.textContent.startsWith(${JSON.stringify(st.name)})).length`)
+      if (gone) throw new Error(`${gone} markers still up after 1.7 s`)
+      return `“${r.text}” at ${Math.round(r.cx)},${Math.round(r.bottom)} over its ship at ${Math.round(r.px)},${Math.round(r.py)} (${r.n} up: ${r.all.join(' | ')}); two on ${st.name} stacked ${st.ys.join(' over ')}; gone after 1.5 s`
+    })
+
+    await check('ui.html: the hop button (next of the same kind) and 1–4’s kinds move the player (Battle.hop); a pick in the list possesses a unit of the played side at once; the other side’s is only looked at', async () => {
+      const before = await mui('app.battle.arena.player.unitIndex')
+      await mp.click('.boxbar .bb-hop', { timeout: 15000 }).catch(async (err) => {
+        await mshot('smoke-wargame-hop-fail.png')
+        const at = await mui(`(() => { const b = document.querySelector('.boxbar .bb-hop'); const r = b.getBoundingClientRect(); const e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return { r: [r.left, r.top, r.width, r.height].map(Math.round), display: getComputedStyle(b).display, at: e ? e.tagName + '.' + e.className + ' in ' + e.parentElement?.className : null, card: app.ui.card.mode, list: !document.querySelector('.unitlist').hidden } })()`)
+        throw new Error(`${err.message.split('\n')[0]}; ${JSON.stringify(at)}`)
+      })
+      await tick()
+      const h1 = await last('hop')
+      const after = await mui(`(() => { const a = app.battle.arena; const u = a.u[a.player.unitIndex]; return { i: u.index, type: u.type, you: document.querySelector('.wg-you-name').textContent } })()`)
+      if (JSON.stringify(h1) !== '["hop","next"]' || after.i === before || !['dd', 'de'].includes(after.type)) throw new Error(`the hop button: ${JSON.stringify({ h1, before, after })}`)
+      await mrun(`app.ui.onHop('carrier')`)
+      await tick()
+      const cv = await mui(`app.battle.arena.u[app.battle.arena.player.unitIndex].type`)
+      if (cv !== 'cve') throw new Error(`1 (carrier) gave a ${cv}`)
+      await mrun(`if (!app.ui.unitList.isOpen) app.ui.onUnits()`)
+      await tick()
+      const rows = await mui(`[...document.querySelectorAll('.ul-side')].flatMap((s) => [...s.querySelectorAll('.ul-row')].map((r) => ({ side: s.dataset.side, key: r.dataset.key, name: r.querySelector('.ul-name b').textContent, grey: r.classList.contains('grey'), sel: r.classList.contains('sel'), why: r.querySelector('.ul-why')?.textContent ?? null })))`)
+      // (a ship of the played side afloat and not held; one of the other side)
+      const mine = rows.find((r) => r.side === 'us' && r.key.startsWith('u:') && !r.grey && !r.sel)
+      const theirs = rows.find((r) => r.side === 'jp' && r.key.startsWith('u:') && r.why === 'the other side')
+      if (!mine || !theirs?.grey) throw new Error(`the list: ${JSON.stringify({ mine, theirs })}`)
+      await mp.click(`.ul-row[data-key="${mine.key}"]`)
+      await tick()
+      const held = await mui(`app.battle.arena.u[app.battle.arena.player.unitIndex].name`)
+      // (on a wide screen the list stays open after a pick: a phone's closes)
+      await mrun(`if (!app.ui.unitList.isOpen) app.ui.onUnits()`)
+      await tick()
+      await mp.click(`.ul-row[data-key="${theirs.key}"]`)
+      await tick()
+      const still = await mui(`({ held: app.battle.arena.u[app.battle.arena.player.unitIndex].name, sel: app.battle.calls.filter((c) => c[0] === 'select').slice(-1)[0] })`)
+      await mrun(`app.ui.unitList?.close()`)
+      if (held !== mine.name || still.held !== mine.name || still.sel?.[1] == null) throw new Error(JSON.stringify({ mine: mine.name, held, still }))
+      return `next → ${after.you}; carrier → a ${cv}; ${mine.name} from the list is held; ${theirs.name} only selected`
+    })
+
+    await check('ui.html: the held aircraft lost: the respawn line names it, and the next one of the flight is the player’s', async () => {
+      await mrun(`app.ui.onHop('aircraft'); app.battle.arena.seek(209.5); app.battle.play(1)`)
+      await until(() => document.querySelector('.wg-say.show'))
+      const r = await mui(`({ say: document.querySelector('.wg-say').textContent, you: document.querySelector('.wg-you').innerText.replace(/\\s+/g, ' '), kind: app.battle.arena.player.kind })`)
+      await mrun(`app.battle.pause()`)
+      await mshot('smoke-wargame-respawn.png')
+      if (!/^Your [A-Z][\w ]+ did not return\. (The next one is yours\.|.+ is yours\.)$/.test(r.say) || r.kind !== 'aircraft') throw new Error(JSON.stringify(r))
+      await wcollect('the respawn')
+      return `“${r.say}”; now ${r.you}`
+    })
+
+    await check('ui.html: the result opens the end card: the result line, both tallies and yours, the reel (stills with captions, one enlarged on a tap, Esc closing it), the record’s sentence, the label', async () => {
+      await mrun(`app.battle.arena.seek(598); app.battle.play(1)`)
+      await until(() => window.__app.ui.card.mode === 'wargame-end', 30000)
+      await tick(500)
+      const e = await mui(`({ result: document.querySelector('.wg-result')?.textContent, kicker: document.querySelector('.card .gloss')?.textContent, tallies: [...document.querySelectorAll('.wg-tallies li')].map((l) => l.textContent), yours: document.querySelector('.wg-yours')?.textContent, stills: [...document.querySelectorAll('.wg-still')].map((f) => ({ src: f.querySelector('img').src.slice(0, 22), cap: f.querySelector('figcaption').textContent })), foot: document.querySelector('.wg-foot p')?.textContent, label: document.querySelector('.card .wg-label')?.textContent, buttons: [...document.querySelectorAll('.card footer .nav')].map((b) => b.textContent.trim()), say: document.querySelector('.wg-say.show')?.textContent ?? null })`)
+      const fails = []
+      if (!/^Centre Force sank|^Taffy 3 kept/.test(e.result || '')) fails.push(`the result “${e.result}”`)
+      if (!/^Goal (met|missed) · \d+:\d\d$/.test(e.kicker || '')) fails.push(`the kicker “${e.kicker}”`)
+      if (e.tallies.length !== 2 || !e.tallies.every((t) => /sank \d+ ships?, shot down \d+ aircraft$/.test(t))) fails.push(`the tallies ${JSON.stringify(e.tallies)}`)
+      if (!/hits? · \d+ sunk · \d+ shot down · \d+ lost/.test(e.yours || '')) fails.push(`yours “${e.yours}”`)
+      if (!e.stills.length || e.stills.length > 6 || e.stills.some((s) => s.src !== 'data:image/jpeg;base64' || !/^\d+:\d\d · \S/.test(s.cap))) fails.push(`the reel ${JSON.stringify(e.stills)}`)
+      if (e.foot !== SAMAR.footnote || e.label !== SAMAR.label) fails.push('the record’s sentence or the label')
+      if (e.buttons.join('|') !== 'Play again|Play the other side|Back to the table') fails.push(`the buttons ${e.buttons}`)
+      if (e.say) fails.push(`the respawn line still up: ${e.say}`)
+      await wcollect('the end card')
+      await mshot('smoke-wargame-end.png')
+      await mp.click('.wg-shot')
+      await tick(300)
+      const z = await mui(`({ open: !document.querySelector('.wg-zoom').hidden, img: document.querySelector('.wg-zoom img')?.naturalWidth ?? 0, cap: document.querySelector('.wg-zoom figcaption')?.textContent })`)
+      await mshot('smoke-wargame-zoom.png')
+      await mp.keyboard.press('Escape')
+      await tick(200)
+      const z2 = await mui(`({ open: !document.querySelector('.wg-zoom').hidden, card: app.ui.card.mode })`)
+      if (!z.open || z.img !== 320 || z.cap !== e.stills[0]?.cap || z2.open || z2.card !== 'wargame-end') fails.push(`the enlarged still ${JSON.stringify({ z, z2 })}`)
+      if (fails.length) throw new Error(fails.join('; '))
+      return `“${e.result}” (${e.kicker}); ${e.tallies.join(' / ')}; yours: ${e.yours}; ${e.stills.length} stills (${e.stills.map((s) => s.cap).join(' | ')})`
+    })
+
+    await check('ui.html: Play the other side restarts as Japan (restart({ side: jp })) and the URL’s side follows; Play again keeps it; Back to the table leaves and lets the keys go', async () => {
+      await mp.click('.card .wg-other')
+      await until(() => document.querySelector('.wg-side.mine')?.dataset.side === 'jp', 15000).catch(() => {})
+      await tick(200)
+      const r1 = await mui(`({ call: app.battle.calls.filter((c) => c[0] === 'restart').slice(-1)[0], side: app.link.wg?.side, kept: app.url.kept.side, mine: document.querySelector('.wg-side.mine')?.dataset.side, card: app.ui.card.mode, timer: document.querySelector('.wg-timer b').textContent, you: document.querySelector('.wg-you-name').textContent })`)
+      if (JSON.stringify(r1.call) !== '["restart","jp"]' || r1.side !== 'jp' || r1.kept !== 'jp' || r1.mine !== 'jp' || r1.card) throw new Error(`the other side: ${JSON.stringify(r1)}`)
+      await mrun(`app.battle.arena.seek(598); app.battle.play(1)`)
+      await until(() => window.__app.ui.card.mode === 'wargame-end', 30000)
+      await mp.click('.card .wg-again')
+      await tick(400)
+      const r2 = await mui(`({ call: app.battle.calls.filter((c) => c[0] === 'restart').slice(-1)[0], side: app.link.wg?.side, reel: app.link.wg?.reel.length, ended: app.link.wg?.ended })`)
+      if (JSON.stringify(r2.call) !== '["restart","jp"]' || r2.side !== 'jp' || r2.ended) throw new Error(`play again: ${JSON.stringify(r2)}`)
+      await mp.click('.boxbar .bb-leave')
+      await until(() => !window.__app.link.wg && !window.__app.link.busy, 30000)
+      const r3 = await mui(`({ kept: app.url.kept, hud: !document.querySelector('#ui .wg-hud').hidden, body: document.body.classList.contains('pt-wargame') })`)
+      if ('wargame' in r3.kept || 'side' in r3.kept || r3.hud || r3.body) throw new Error(`after leaving: ${JSON.stringify(r3)}`)
+      return `Japan from ${r1.timer} (${r1.you}); again as Japan; left, the keys gone`
+    })
+
+    await check('ui.html: every string of the wargame keeps the voice rules (no slur, glory or game word, nothing announced, no count of people, no “what if”)', async () => {
+      const bad = []
+      for (const { what, text } of wtexts) {
+        for (const re of [...SLURS, ...GLORY, ANNOUNCES, GAME, /\bwhat[- ]if\b/i, /\bsaved\b/i]) {
+          const m = text.match(re)
+          if (m) bad.push(`${what}: “${m[0]}”`)
+        }
+        if (PEOPLE_NUMBER.test(text)) bad.push(`${what}: a count of people (“${text.match(PEOPLE_NUMBER)[0]}”)`)
+      }
+      if (bad.length) throw new Error(bad.join('; '))
+      return `${wtexts.length} views, ${wtexts.reduce((s, t) => s + t.text.length, 0)} characters`
+    })
+
+    // the wargame on a phone: the bar's row, the HUD layer, the box's HUD and touch controls (the real classes, as stand-ins)
+    await check(`ui.html: the wargame on a phone, a ship and then an aircraft held, with the hints, a marker and the respawn line up: no two controls or readouts overlap by more than 2 px, none leaves the screen (360×780, 390×844, 412×915, 412×720, 844×390, 915×412)`, async () => {
+      const SIZES = [[360, 780], [390, 844], [412, 915], [412, 720], [844, 390], [915, 412]]
+      const wp = await browser.newPage({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 })
+      listen(wp, 'ui.html (wargame phone): ')
+      await open('?box=samar&t=07:00&paused#wargame=samar&side=us', wp)
+      await wp.waitForFunction(() => window.__app.ui.card.mode === 'wargame', null, { timeout: 60000 })
+      const focus = await wp.evaluate(() => document.activeElement?.dataset?.wgSide ?? null)
+      await wp.evaluate(() => localStorage.removeItem('pt.hints'))
+      await mshot('smoke-wargame-start-phone.png', wp)
+      await wp.click('.card [data-wg-side=us]')
+      await wp.waitForFunction(() => window.__app.link.wg && window.__app.battle.arena && document.querySelector('.pt-touch'), null, { timeout: 60000 })
+      const wrun = (body) => wp.evaluate(new Function(`const app = window.__app; return (async () => { ${body} })()`))
+      const wframes = async (n) => {
+        const f0 = await wp.evaluate(() => window.__app.frames)
+        await wp.waitForFunction((f) => window.__app.frames >= f, f0 + n, { timeout: 120000 })
+      }
+      // the hints and the respawn line held up; a marker made fresh on a ship of the other side each time
+      const HOLD = `const h = app.link.hud; if (h.hintsEl.textContent) h.hintUntil = performance.now() / 1000 + 3600; if (h.sayEl.textContent) h.sayUntil = performance.now() / 1000 + 3600; const a = app.battle.arena; const t = a.u.filter((u) => u.side === 'jp' && u.alive === 1 && u.kind === 'ship').sort((p, q) => Math.hypot(a.state.pos[3 * p.index] - a.state.pos[3 * a.player.unitIndex], a.state.pos[3 * p.index + 2] - a.state.pos[3 * a.player.unitIndex + 2]) - Math.hypot(a.state.pos[3 * q.index] - a.state.pos[3 * a.player.unitIndex], a.state.pos[3 * q.index + 2] - a.state.pos[3 * a.player.unitIndex + 2]))[0]; if (t) a.events.push({ id: 800000 + a.events.length, t: a.t, kind: 'hit', target: t.index, text: t.name + ': hit forward, fire', mine: true })`
+      const STATES = [
+        { name: 'a ship held', setup: `app.battle.arena.seek(60); app.battle.pause()`, want: ['bar', 'bar:leave', 'bar:units', 'bar:hop', 'bar:helm', 'wg:board', 'wg:hints', 'hud:strip', 'hud:plot', 'touch:helm', 'touch:salvo', 'touch:pause', 'touch:cam'], not: ['hud:clock', 'hud:inst', 'bar:release', 'bar:strip', 'bar:more', 'touch:release'] },
+        { name: 'an aircraft held, after a loss', setup: `app.ui.onHop('aircraft'); app.battle.arena.seek(209.5); app.battle.play(1); const t0 = performance.now(); while (!document.querySelector('.wg-say.show') && performance.now() - t0 < 60000) await new Promise((r) => setTimeout(r, 100)); app.battle.pause()`, want: ['bar', 'bar:pilot', 'bar:hop', 'wg:board', 'wg:say', 'hud:strip', 'hud:plot', 'touch:stick', 'touch:fire', 'touch:pause'], not: ['hud:clock', 'bar:release', 'touch:release'] },
+      ]
+      const bad = []
+      const seen = new Set()
+      for (const st of STATES) {
+        await wp.setViewportSize({ width: SIZES[0][0], height: SIZES[0][1] })
+        await wrun(st.setup)
+        for (const [w, h] of SIZES) {
+          await wp.setViewportSize({ width: w, height: h })
+          await wframes(2)
+          await wrun(HOLD)
+          await wframes(3)
+          const r = await wp.evaluate(MEASURE)
+          r.names.forEach((n) => seen.add(n))
+          const lacks = st.want.filter((n) => !r.names.includes(n))
+          const stray = st.not.filter((n) => r.names.includes(n))
+          const fails = [...r.overlaps, ...r.out.map((x) => `off screen: ${x}`), ...lacks.map((n) => `missing: ${n}`), ...stray.map((n) => `should not show: ${n}`)]
+          const tag = `${st.name.replace(/\W+/g, '-')}-${w}x${h}`
+          if (fails.length) bad.push(`${st.name}, ${w}×${h}: ${fails.join('; ')}`)
+          if (fails.length || (w === 412 && h === 915) || (w === 915 && h === 412)) await mshot(`smoke-wargame-phone-${tag}.png`, wp)
+          console.log(`      ${st.name}, ${w}×${h}: ${r.names.length} boxes${fails.length ? `, ${fails.length} failing: ${fails.join('; ')}` : ', clear'}`)
+        }
+      }
+      // the end card on the phone: under the bar's row, on the screen, over the rest
+      await wp.setViewportSize({ width: 412, height: 915 })
+      await wrun(`app.battle.arena.seek(598); app.battle.play(1)`)
+      await wp.waitForFunction(() => window.__app.ui.card.mode === 'wargame-end', null, { timeout: 60000 })
+      await wp.waitForTimeout(1500)
+      const endBox = await wp.evaluate(() => {
+        const c = document.querySelector('.card.show').getBoundingClientRect()
+        const b = document.querySelector('.boxbar').getBoundingClientRect()
+        return { card: [c.left, c.top, c.right, c.bottom].map(Math.round), bar: [b.left, b.top, b.right, b.bottom].map(Math.round), W: innerWidth, H: innerHeight }
+      })
+      await mshot('smoke-wargame-end-phone.png', wp)
+      await wcollect('the phone', wp)
+      await wp.close()
+      if (endBox.card[1] < endBox.bar[3] || endBox.card[0] < 0 || endBox.card[2] > endBox.W || endBox.card[3] > endBox.H) bad.push(`the end card ${JSON.stringify(endBox)}`)
+      if (focus !== 'us') bad.push(`#side=us did not focus its button (${focus})`)
+      if (bad.length) throw new Error(bad.join(' | '))
+      return `#wargame offered (United States focused); clear at all ${SIZES.length} sizes for both: ${[...seen].join(', ')}; the end card under the bar`
+    })
+  }
 
   await mp.close()
   await vite.close()

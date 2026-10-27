@@ -13,6 +13,7 @@
 //     credit: 'Terrain produced using Copernicus WorldDEM-30 …',               // the box's `credit`, verbatim
 //     door: { title: 'Gwin’s helm', text: '…', role: 'Gwin (DD-433), the helm', t: '23:24' },   // ROUND-2 §1.2: Start here
 //     assist: 'assisted' | 'pilot',                                             // the setting, kept in the browser
+//     wargame: { id: 'samar', label: 'A wargame played with the real forces. …' }, // ROUND-3 §5: the door, where the box has one
 //   })
 //
 // Each moment carries *Take the controls*, which raises ui.onTake(momentId);
@@ -25,10 +26,15 @@
 // ui.onFirstDoor(); under it the setting, Assisted or Pilot, with its one
 // line, each a button raising ui.onAssist(value). Nothing prompts a take:
 // watching stays the default and Watch closes the card.
+//
+// Round three (ROUND-3.md §5): where the box has a wargame, *Play it as a
+// wargame* (with its label: a wargame played with the real forces) stands
+// after the setting, raising ui.onWargame(id), which opens the start sheet.
 
 import { esc } from './dom.js'
 import { icon } from './icons.js'
 import { ASSIST, ASSIST_LABEL, ASSIST_LINE } from './roles.js'
+import { WARGAME_ICON } from './wargame.js'
 
 /** The setting's two buttons and its line (the briefing's and the bar's look alike). */
 export function assistHTML(value, { line = true } = {}) {
@@ -72,6 +78,12 @@ export function briefingHTML(b, { sourceLine }) {
       </div></div>`
     : ''
   const setting = b.assist ? `<div class="card-sec setting"><h2>Flying</h2>${assistHTML(b.assist)}</div>` : ''
+  const wg = b.wargame?.id
+    ? `<div class="card-sec wg-brief"><h2>A wargame</h2><div class="door-card wg-door-card">
+        ${b.wargame.label ? `<p>${esc(b.wargame.label)}</p>` : ''}
+        <button class="nav take wg-door" data-wargame="${esc(b.wargame.id)}">${WARGAME_ICON}<span>Play it as a wargame</span></button>
+      </div></div>`
+    : ''
   return `
     <header>
       <div class="card-icon">${icon('box', 26)}</div>
@@ -81,7 +93,7 @@ export function briefingHTML(b, { sourceLine }) {
     ${b.clock ? `<div class="card-clock">${esc(b.clock)}${b.clockNote ? `<span>${esc(b.clockNote)}</span>` : ''}</div>` : ''}
     ${b.situation ? `<div class="card-body"><p>${esc(b.situation)}</p></div>` : ''}
     ${forces ? `<div class="card-sec"><h2>The forces</h2><div class="bf">${forces}</div></div>` : ''}
-    ${door}${setting}
+    ${door}${setting}${wg}
     ${moments ? `<div class="card-sec"><h2>${d || b.assist ? 'The record’s turning points' : 'Moments'}</h2><ul class="bms">${moments}</ul></div>` : ''}
     <div class="card-sec"><h2>Sources</h2><ul class="sources">${(b.sources || []).map((s) => sourceLine(s)).join('') || '<li class="none">none listed</li>'}</ul></div>
     <footer class="card-foot">
