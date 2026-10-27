@@ -1073,6 +1073,13 @@ follows N3.
   play-check's cart lane, rematch-memory's `--carts`, play-report's F9a
   row; the `vehicle/` corpus, 6 AI pairs and 4 human-bot logs, in C2, the
   corpus 80 battles. DESIGN's F9a notes.)
+  Open from its run (DESIGN's F9a notes, Run): rematch-memory `--carts`
+  reads 19-20 KB a rematch against 16, all of it V8's own dependency
+  lists (`dependent_code`, `retained_maps`), which this Chromium types
+  `native` and the check's classifier counts as the page's: whether the
+  check leaves them out is its rule to settle, not a War-Cart's leak.
+  play-check's layout lane (a Grand unit's card by a click) fails on the
+  base commit too.
 - [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
   F9a left it: `core/actions/transport.js` measures a round hull from its
