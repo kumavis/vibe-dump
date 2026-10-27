@@ -80,6 +80,7 @@ uniform vec3 uSkyColor;
 uniform vec3 uSunDir;
 uniform float uTime;
 uniform float uAdditive;
+uniform vec4 uClear; // xz: the held ship, z: a radius, w: on (smoke thins about her, so her chase camera sees her)
 in vec2 vUv;
 in vec4 vData;
 in vec4 vColor;
@@ -96,8 +97,10 @@ void main() {
   vec3 col = vColor.rgb;
   vec3 lit = uSunColor * max(uSunDir.y, 0.0) * 0.8 + uSkyColor * 1.2 + vec3(0.02);
   if (kind < 0.5) {
-    // smoke: a soft lumpy puff, darkening the dye it was given, fading with age
-    a = smoothstep(1.0, 0.35, r + (n - 0.5) * 0.5) * (1.0 - age) * vColor.a;
+    // smoke: a soft lumpy puff, darkening the dye it was given, fading with age, and thinning about the camera, so an eye
+    // in a screen (a chase camera behind a ship laying one) looks through it instead of into a white wall
+    a = smoothstep(1.0, 0.35, r + (n - 0.5) * 0.5) * (1.0 - age) * vColor.a * smoothstep(20.0, 160.0, distance(cameraPosition, vWorld));
+    a *= mix(1.0, smoothstep(uClear.z * 0.35, uClear.z, distance(vWorld.xz, uClear.xy)), uClear.w);
     col = col * lit;
   } else if (kind < 1.5) {
     // fire: a flickering orange core
@@ -164,7 +167,7 @@ class Particles {
       name: additive ? 'effects-additive' : 'effects-alpha',
       vertexShader: vert,
       fragmentShader: frag,
-      uniforms: { uSunColor: light.uSunColor, uSkyColor: light.uSkyColor, uSunDir: light.uSunDir, uTime: light.uTime, uAdditive: { value: additive ? 1 : 0 }, uMinPx: { value: 1.5 }, uPxPerRad: { value: 900 } },
+      uniforms: { uSunColor: light.uSunColor, uSkyColor: light.uSkyColor, uSunDir: light.uSunDir, uTime: light.uTime, uAdditive: { value: additive ? 1 : 0 }, uMinPx: { value: 1.5 }, uPxPerRad: { value: 900 }, uClear: { value: new THREE.Vector4(0, 0, 1, 0) } },
       transparent: true,
       depthWrite: false,
       blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,
@@ -415,6 +418,18 @@ export class EffectsRenderer {
 
   /** Once a frame: the continuous emitters, the particles, the streaks and the night's point lights. */
   update(camera, heightPx, t, dt, light) {
+    // (the ship the player holds: the smoke about her thins, so her own screen or one she steams through does not white out
+    // the chase camera and the bridge; the arena's escorts lay smoke, and a hop lands in one)
+    {
+      const pl = this.sim?.player
+      const i = pl && !pl.lost && pl.kind === 'ship' && pl.unitIndex >= 0 ? pl.unitIndex : -1
+      const s = this.sim?.state
+      for (const m of [this.alpha.material, this.add.material]) {
+        const u = m.uniforms.uClear.value
+        if (i >= 0 && s) u.set(s.pos[3 * i], s.pos[3 * i + 2], 700, 1)
+        else u.w = 0
+      }
+    }
     this.t = t
     this.night = light.night ?? 0
     const sim = this.sim

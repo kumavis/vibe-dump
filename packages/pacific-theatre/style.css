@@ -881,7 +881,8 @@ body.mock-page { background: #07111a; }
 @media (min-width: 701px) and (pointer: fine), (min-width: 701px) and (pointer: none) {
   .boxbar[data-mode='wargame'] { top: 12px; bottom: auto; max-width: min(760px, calc(100vw - 420px)); }
   /* the box's first hints, the list and the card step down under the block */
-  body.pt-wargame .pt-hud { --pt-hints-top: calc(var(--pt-head, 170px) + 8px); --pt-stations-display: none; }
+  /* (body:has(> #ui.wargame): #ui is holding too, and the held bar's own rule, body:has(> #ui.holding), would win over a plainer one) */
+  body:has(> #ui.wargame) .pt-hud { --pt-hints-top: calc(var(--pt-head, 170px) + 8px); --pt-stations-display: none; }
   #ui.wargame .unitlist, #ui.wargame .card { top: calc(var(--pt-head, 170px) + 8px); }
   #ui.wargame .unitlist { max-height: calc(100vh - var(--pt-head, 170px) - 140px); }
 }

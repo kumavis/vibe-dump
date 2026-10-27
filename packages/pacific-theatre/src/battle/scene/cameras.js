@@ -192,8 +192,11 @@ export class Cameras {
       let el = this.look.pitch
       if (this.mode === 'director') {
         const inp = sim.player?.unitIndex === i ? sim.player.input : null
-        if (inp && inp.aimAz != null) az = inp.aimAz + this.look.yaw / DEG
-        const R = inp?.aimRange ?? 8000
+        // (the view the controls hold while the pointer is free, viewAz and viewRange, or the aim itself in pointer lock: a view
+        // that followed a free pointer's aim turned under it every frame and walked the fall in to the ship's own wake)
+        const vAz = inp?.viewAz ?? inp?.aimAz
+        if (inp && vAz != null) az = vAz + this.look.yaw / DEG
+        const R = inp?.viewRange ?? inp?.aimRange ?? 8000
         el = -Math.atan2(eyeY, R) + this.look.pitch
         fov = 60 / Math.max(1, this.zoom)
       } else fov = 60

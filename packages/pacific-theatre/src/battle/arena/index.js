@@ -417,7 +417,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
   }
   ar._onRespawn = (from, to, line) => {
     ar.respawn = { t: ar.t, line, from, to }
-    if (line) ar.beat(to, 'respawn', line)
+    // (no beat: the HUD layer says the line in the middle, and the subtitle would say it twice)
     ar._event({ kind: 'respawn', from, to, line, text: line, mine: true })
   }
   ar._onPhase = (sd, ps) => {

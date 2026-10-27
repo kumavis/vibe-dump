@@ -12,7 +12,7 @@
 //   - the timer between them (the game's clock, 0:00 to 10:00);
 //   - the goal line, the played side's main goal with its count ("2 of 4");
 //   - the current phase, its title, its count and its timer; a phase met or
-//     run out says so for a moment ("done" / "time");
+//     missed says so ("done" / "missed");
 //   - the held unit's name and station;
 // and over the scene:
 //   - the hit markers, in machine words at the target ("Kumano: hit forward,
@@ -183,7 +183,7 @@ export class WargameHud {
     if (p) {
       put(this.$('.wg-ph-title'), p.title || '')
       put(this.$('.wg-ph-text'), p.text || '')
-      put(this.$('.wg-ph-n'), p.status === 'met' ? 'done' : p.status === 'failed' ? 'time' : p.count || '')
+      put(this.$('.wg-ph-n'), p.status === 'met' ? 'done' : p.status === 'failed' ? 'missed' : p.count || '')
       put(this.$('.wg-ph-left'), p.status === 'open' ? p.left || '' : '')
       ph.dataset.status = p.status || 'open'
       // (a new phase stands out for a moment)

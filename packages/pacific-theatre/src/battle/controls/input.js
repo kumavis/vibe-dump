@@ -42,6 +42,8 @@ const DEG = Math.PI / 180
 export const HOP_KEYS = { Digit1: 'carrier', Digit2: 'capital', Digit3: 'destroyer', Digit4: 'aircraft', Numpad1: 'carrier', Numpad2: 'capital', Numpad3: 'destroyer', Numpad4: 'aircraft' }
 const GUN_RATE = 70 // deg/s at the screen's edge, the pointer's offset as a rate (no pointer lock)
 const GUN_SENS = 0.12 // deg per pixel of locked movement
+const EDGE = 0.86 // the pointer this far out from the middle (of half the width) turns a ship's director view…
+const EDGE_RATE = 45 // …at up to this many degrees a second at the screen's edge
 
 export class Input {
   /** battle: for the player, the scene's camera and HUD, release and time. */
@@ -431,6 +433,20 @@ export class Input {
         } else if (this.pointer.inside) inp.aimDir = this.pointerRay()
       }
     } else {
+      // the director's view: in pointer lock the aim itself (the centre of the screen, the mouse turning the look); with the
+      // pointer free a view held still while the pointer lays the guns inside it, turned by the pointer at the screen's
+      // left or right edge (else the view would follow the aim and the aim the pointer, turning every frame)
+      if (this.lock || this.touch?.active) {
+        inp.viewAz = null
+        inp.viewRange = null
+      } else {
+        if (inp.viewAz == null) {
+          inp.viewAz = inp.aimAz ?? this.battle.sim.state.heading[p.unitIndex]
+          inp.viewRange = Math.max(2000, Math.min(12000, inp.aimRange ?? 6000))
+        }
+        const ox = this.pointer.inside ? (this.pointer.x - innerWidth / 2) / (innerWidth / 2) : 0
+        if (Math.abs(ox) > EDGE) inp.viewAz = (inp.viewAz + Math.sign(ox) * ((Math.abs(ox) - EDGE) / (1 - EDGE)) * EDGE_RATE * dt + 360) % 360
+      }
       // the pointer on the sea lays the main battery (and the torpedoes' bearing): bearing and range from the ship (the ladder adds to the range)
       const cam = this.battle.scene?.camera
       if (cam && (this.pointer.inside || this.lock)) {

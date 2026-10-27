@@ -87,8 +87,17 @@ function defaultInput(ar, j) {
   const base = { pitch: 0, roll: 0, yaw: 0, throttle: 0.85, helm: 0, telegraph: 0, aimAz: s.heading[j], aimEl: 10, aimRange: null, aa: false, aaDir: null, aaTarget: -1, fireHeld: false, fireCount: 0, bombCount: 0, torpedoCount: 0, salvoCount: 0, starshellCount: 0, look: [0, 0], view: null, aimDir: null, mode: 'aim', brakes: null, spread: 'narrow', battery: 0 }
   if (ar.slots[j].kind === 'ship') {
     base.telegraph = telegraphFor(x.spec, Math.max(s.speed[j], x.want?.speed ?? 0))
-    // the guns laid on the AI's target to begin with
-    const t = x.target >= 0 && s.alive[x.target] === 1 ? x.target : -1
+    // the guns laid on the AI's target to begin with, or (at the start, before the AI has chosen one) on the nearest ship of
+    // the other side, so the first view at the main battery faces the enemy and not the empty beam
+    let t = x.target >= 0 && s.alive[x.target] === 1 ? x.target : -1
+    if (t < 0) {
+      let bd = Infinity
+      for (const k of ar._ships) {
+        if (s.alive[k] !== 1 || ar.slots[k].side === ar.slots[j].side) continue
+        const d = Math.hypot(s.pos[3 * k] - s.pos[3 * j], s.pos[3 * k + 2] - s.pos[3 * j + 2])
+        if (d < bd) [bd, t] = [d, k]
+      }
+    }
     if (t >= 0) {
       base.aimAz = (Math.atan2(s.pos[3 * t] - s.pos[3 * j], -(s.pos[3 * t + 2] - s.pos[3 * j + 2])) / DEG + 360) % 360
       base.aimRange = Math.hypot(s.pos[3 * t] - s.pos[3 * j], s.pos[3 * t + 2] - s.pos[3 * j + 2])
