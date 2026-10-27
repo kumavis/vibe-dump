@@ -255,7 +255,7 @@ export function createArena(scenario, kits, box = {}, opts = {}) {
       const cname = units[c].name
       for (let k = 0; k < (entry.count ?? 1); k++) {
         const i = units.length
-        units.push({ index: i, id: `${group}#${k + 1}`, name: `${cname}’s ${plural(short(entry.kit))}`, ja: null, label: `${articled(short(entry.kit))} of ${cname}`, kind: 'aircraft', side: key, kit: entry.kit, kitName: short(entry.kit), kitIndex: kitIndexOf(entry.kit, 'aircraft'), group, groupName: `${cname}’s ${plural(short(entry.kit))}`, groupIndex: sd.aircraft.length ? 0 : 0, k, authority: 'ai', parked: false, carrierName: cname })
+        units.push({ index: i, id: `${group}#${k + 1}`, name: `${cname}’s ${plural(short(entry.kit))}`, ja: null, label: `${articled(short(entry.kit))} of ${cname}`, kind: 'aircraft', side: key, kit: entry.kit, kitName: short(entry.kit), kitIndex: kitIndexOf(entry.kit, 'aircraft'), group, groupName: `${cname}’s ${plural(short(entry.kit))}`, groupIndex: k, k, authority: 'ai', parked: false, carrierName: cname })
         const ammo = ammoFor(m, profile)
         X.push({ model: m, spec, hp: spec.hp, hpMax: spec.hp, body: null, profile, home: c, carrier: c, onDeck: true, queued: false, next: null, rearmAt: 0, ammo, ammoFull: JSON.parse(JSON.stringify({ bombs: ammo.bombs, torpedoes: ammo.torpedoes })), mission: null, engage: -1, k, thinkAt: (i % 15) * A.step, skill: key === 'jp' && year <= 1942 ? 1.15 : key === 'jp' ? 0.85 : 1 })
         sd.aircraft.push(i)

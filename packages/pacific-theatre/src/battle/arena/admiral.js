@@ -18,6 +18,7 @@
 // broadside), and keeps the fleet inside the arena.
 
 import { A } from './params.js'
+import { ammoFor } from '../sim/ai.js'
 
 export const isCarrier = (t) => t === 'cv' || t === 'cvl' || t === 'cve'
 export const isCapital = (t) => t === 'bb' || t === 'ca' || t === 'cl'
@@ -370,10 +371,19 @@ function airOps(ar, side, enemy) {
     strike.members.push(j)
     queue(ar, j, { kind: 'strike', strike, phase: 'approach' })
   }
-  const spare = fighters.filter((j) => ready(ar, j)).slice(0, Math.ceil(strike.members.length / 2))
+  // with nothing in the air on the other side to escort against, the spare fighters go in with their bombs (the FM-2s at Samar)
+  const noAir = !enemy.aircraft.some((j) => s.alive[j] === 1 || ar._X[j].onDeck)
+  const spare = fighters.filter((j) => ready(ar, j)).slice(0, noAir ? Math.ceil(strike.members.length * 0.8) : Math.ceil(strike.members.length / 2))
   for (const j of spare) {
-    strike.escorts.push(j)
-    queue(ar, j, { kind: 'escort', strike })
+    const x = ar._X[j]
+    if (noAir && (x.model.payload?.length ?? 0) > 0) {
+      x.ammo = ammoFor(x.model, 'dive')
+      strike.members.push(j)
+      queue(ar, j, { kind: 'strike', strike, phase: 'approach' })
+    } else {
+      strike.escorts.push(j)
+      queue(ar, j, { kind: 'escort', strike })
+    }
   }
   adm.wave++
   note(ar, side, `${strike.id}: ${strike.members.length} + ${strike.escorts.length} at ${ar.slots[strike.target].id}`)

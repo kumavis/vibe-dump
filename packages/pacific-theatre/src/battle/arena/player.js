@@ -447,7 +447,7 @@ export function playerState(ar) {
     st.ammo = (x.ammo?.guns || []).map((g) => ({ calibreMm: g.weapon?.calibreMm ?? 12.7, left: g.left, position: g.fixed ? 'nose' : 'rear' }))
     st.bombs = x.ammo?.bombs ?? 0
     st.torpedoes = x.ammo?.torpedoes ?? 0
-    st.endurance = Math.max(0, ar.durationS - ar.t)
+    st.endurance = x.model.enduranceS ?? 3600 // (the arena flies no fuel: the kit's endurance, so the HUD warns of nothing)
     st.damage = 1 - x.hp / x.hpMax
     const c = x.home
     st.home = c >= 0 && s.alive[c] === 1 ? { bearing: (Math.atan2(s.pos[3 * c] - b.x, -(s.pos[3 * c + 2] - b.z)) / DEG + 360) % 360, range: Math.hypot(s.pos[3 * c] - b.x, s.pos[3 * c + 2] - b.z) } : null
