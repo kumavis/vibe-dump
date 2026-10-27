@@ -93,7 +93,10 @@ export function fullLos(M, terrain, a, b, ignoreR = 1.3) {
 // guns' +0.25 an inch of floor, so P-scan can judge a fortified board;
 // (F17) and the range a weapon reaches from the cell scored, the code's own
 // rangeOf (a rule, which P-scan takes as the scans do: on code older than
-// F17, the printed range)
+// F17, the printed range); (F18) and a target locked in combat valued net
+// of the shot's friendly fire, the code's own fightOf, strayCost and
+// ownUnder asked afresh at every cell (bestSpot asks them once per enemy:
+// P-scan judges that hoisting), where code older than F18 bars the shot
 const count2D6 = (need) => {
   let ok = 0
   for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (a + b >= need) ok++
@@ -105,7 +108,7 @@ function refShotValue(M, R, G, u, e, from, moved) {
   if (!w) return 0
   const g = M.hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > (M.rangeOf ? M.rangeOf(G, u, e, from) : w.range)) return 0
-  if (M.isEngaged(G, e) && !w.spell) return 0
+  if (!M.fightOf && M.isEngaged(G, e) && !w.spell) return 0
   const s = M.sight(G, u, e, from)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
@@ -118,9 +121,11 @@ function refShotValue(M, R, G, u, e, from, moved) {
   if (w.blast) {
     const pHit = w.spell ? count2D6(w.spell) : R.pD6(R.hitNeed(u.t.BS, mod))
     const under = e.t.big ? 3 : Math.max(1, Math.min(e.alive, Math.round(e.alive * Math.min(1, (w.blast * w.blast) / (e.r * e.r)) * 0.8)))
-    return R.attackCount(u, w, false) * pHit * R.expected(under, 1, w, e, s.cover).value
+    return R.attackCount(u, w, false) * pHit * (R.expected(under, 1, w, e, s.cover).value - (M.ownUnder ? M.ownUnder(G, u, e) : 0))
   }
-  return R.expected(R.attackCount(u, w, false), R.hitNeed(u.t.BS, mod), w, e, s.cover).value
+  const n = R.attackCount(u, w, false), need = R.hitNeed(u.t.BS, mod)
+  const fight = M.fightOf ? M.fightOf(G, u, e) : null
+  return R.expected(n, need, w, e, s.cover).value - (fight ? M.strayCost(n, need, w, fight) : 0)
 }
 
 export function refScore(M, R, G, u, x, z, ctx, moving) {

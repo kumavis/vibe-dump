@@ -71,5 +71,9 @@ export const RULES_ID = rulesId()
 // area scale) and the fight guard, max(30, 2·units + 2); 8: F17's lobbing
 // from height, a blast or indirect weapon reaching √(R² + 2hR) from h above
 // its target, in shotInfo and the AI's shot value alike: code, no rules
-// data, so RULES_ID stays)
-export const CORE_VERSION = 8
+// data, so RULES_ID stays; 9: F18's shooting into a fight, any ranged
+// weapon at a target locked in combat, a volley's misses straying into the
+// shooter's own units there by their share of the fight's models, and the
+// AI's shot value net of its friendly fire: code, no rules data, so
+// RULES_ID stays)
+export const CORE_VERSION = 9

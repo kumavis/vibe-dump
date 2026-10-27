@@ -17,6 +17,21 @@
 //   node sim/corpus-add.mjs --set fort --mode watch --terrain fortified --tag fort --need works,keep --count 3
 //   node sim/corpus-add.mjs --set scale --mission grand --terrain open --mode watch --tag grand --auto-armies 90 --count 2
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
+//   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
+//
+// --regen <id>[,<id>…] (F18) plays again each named human-bot log of the
+// corpus, by the bot that made it (its own setup and its `bot`, the policy
+// and seed it was played with) on the PIN code, admits it as any candidate
+// (and as --need asks), and writes it over itself, in its own set and under
+// its own name, its why said again. It is how a rules change that is meant
+// to alter play keeps a human-bot log: one whose commands the new rules
+// refuse, or whose AI seat now plays otherwise so that its later commands
+// answer another battle, is played again by its bot (every corpus log's bot
+// plays its recorded entries again on the code it was recorded on), never
+// edited by hand. Each log must be admitted, or nothing is written and it
+// exits 1. An AI pair (pairs.json's, or a watch log) has no commands: parity
+// --record re-records it. It takes no --mode, --policy, --tag or board
+// option: the log's own setup is the setup.
 //
 // --mode bushtail, serpent, hotseat or watch; --policy (not with watch)
 // random, late, aggressive or pilot (sim/oracle/human-bot.mjs); --overtime
@@ -94,7 +109,7 @@ import { existsSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
-import { runOracle, pool, CPUS, features, hashLines, saveHuman, buildApp, BASE, LOG_SETS } from './lib.mjs'
+import { runOracle, pool, CPUS, features, hashLines, saveHuman, buildApp, BASE, LOG_SETS, loadCorpus } from './lib.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32, MODES } from './oracle/human-bot.mjs'
 import { foldJob, loadMatch } from './run.mjs'
@@ -127,15 +142,26 @@ const { values: a } = parseArgs({
     count: { type: 'string' }, tries: { type: 'string' }, dry: { type: 'boolean' }, set: { type: 'string' },
     races: { type: 'string' }, armies: { type: 'string' }, 'auto-armies': { type: 'string' }, from: { type: 'string' },
     mission: { type: 'string' }, terrain: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' },
+    regen: { type: 'string' },
   },
 })
+// (F18) the logs --regen plays again, from the corpus as it stands
+const REGEN = a.regen === undefined ? null : a.regen.split(',').map((x) => x.trim()).filter(Boolean)
+const corpusLogs = REGEN ? loadCorpus().items : []
+const regenOf = REGEN ? REGEN.map((id) => corpusLogs.find((it) => it.id === id && it.set !== undefined)) : []
 const need = (a.need ?? '').split(',').filter(Boolean)
-const COUNT = Number(a.count ?? 1), TRIES = Number(a.tries ?? 24), FROM = Number(a.from ?? 1)
+const COUNT = REGEN ? REGEN.length : Number(a.count ?? 1), TRIES = REGEN ? REGEN.length : Number(a.tries ?? 24), FROM = Number(a.from ?? 1)
 const watch = a.mode === 'watch'
 const races = (a.races ?? 'squirrel,serpent').split(',')
 const armies = a.armies === undefined ? null : a.armies.split(',')
 const PCT = a['auto-armies'] === undefined ? null : Number(a['auto-armies'])
-const bad = [
+const bad = REGEN ? [
+  !REGEN.length && '--regen takes the ids of corpus logs, comma-separated',
+  ...REGEN.map((id, i) => !regenOf[i] ? `--regen: no log ${id} in the corpus (an AI pair of pairs.json is re-recorded by parity --record)` : !regenOf[i].bot ? `--regen: ${id} has no bot (an AI pair: parity --record re-records it)` : null),
+  ['mode', 'policy', 'tag', 'overtime', 'races', 'armies', 'auto-armies', 'from', 'mission', 'terrain', 'set', 'count', 'tries'].filter((k) => a[k] !== undefined).length && `--regen plays each log's own setup and bot, so it takes no ${['mode', 'policy', 'tag', 'overtime', 'races', 'armies', 'auto-armies', 'from', 'mission', 'terrain', 'set', 'count', 'tries'].filter((k) => a[k] !== undefined).map((k) => `--${k}`).join(', ')}`,
+  need.some((n) => !NEEDS[n]) && `--need takes ${Object.keys(NEEDS).join(', ')}`,
+  (a.ref !== undefined || a.dir !== undefined) && !a.dry && '--ref and --dir take another code than the PIN only with --dry (a corpus is recorded on the PIN)',
+].filter(Boolean) : [
   !Object.keys(MODES).includes(a.mode) && `--mode takes ${Object.keys(MODES).join(', ')}`,
   watch && a.policy !== undefined && '--mode watch records an AI pair: no bot plays it, so it takes no --policy',
   watch && a.overtime !== undefined && '--mode watch has no human seat to vote, so it takes no --overtime',
@@ -200,7 +226,7 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n)) || a.terrain === 'fortified' ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n)) || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)
@@ -234,9 +260,11 @@ const run = (jobs) => pool(jobs, CPUS, (j) => {
   return runOracle(j, dir).catch((e) => ({ trace: [], shadow: [], written: [], entries: [], error: e.message })).then((r) => ({ ...r, secs: (Date.now() - t0) / 1000 }))
 })
 
-const what = [watch ? 'watched (AI v AI)' : `${a.mode}, ${a.policy} bot`, `${races.join(' v ')}`, (MISSION !== 'classic' || a.terrain) && `the ${MISSION} mission on ${a.terrain ?? sets[0]}`, a.overtime && `overtime ${a.overtime}`, armies && `armies ${armies.join(', ')}`, PCT !== null && `lists by autoList at ${PCT}%`].filter(Boolean).join(', ')
-console.log(`corpus-add: ${TRIES} games (seeds ${FROM}-${FROM + TRIES - 1}), ${what}, on ${codeName}; wanted ${COUNT} showing ${need.join(', ') || 'anything'}, into ${a.set ?? 'human'}/`)
-const cands = Array.from({ length: TRIES }, (_, i) => {
+const what = REGEN ? `${REGEN.length} corpus log${REGEN.length > 1 ? 's' : ''} played again by ${REGEN.length > 1 ? 'their' : 'its'} own bot` : [watch ? 'watched (AI v AI)' : `${a.mode}, ${a.policy} bot`, `${races.join(' v ')}`, (MISSION !== 'classic' || a.terrain) && `the ${MISSION} mission on ${a.terrain ?? sets[0]}`, a.overtime && `overtime ${a.overtime}`, armies && `armies ${armies.join(', ')}`, PCT !== null && `lists by autoList at ${PCT}%`].filter(Boolean).join(', ')
+console.log(REGEN ? `corpus-add: ${what} (${REGEN.join(', ')}), on ${codeName}; each showing ${need.join(', ') || 'anything'}, over itself` : `corpus-add: ${TRIES} games (seeds ${FROM}-${FROM + TRIES - 1}), ${what}, on ${codeName}; wanted ${COUNT} showing ${need.join(', ') || 'anything'}, into ${a.set ?? 'human'}/`)
+// (F18) --regen's candidates: the named logs, their own setup and bot, each
+// written back over itself (so no existing name is skipped)
+const cands = REGEN ? regenOf.map((it) => ({ k: it.bot.seed, label: it.id, set: it.set, job: { setup: it.setup, bot: it.bot } })) : Array.from({ length: TRIES }, (_, i) => {
   const k = FROM + i, r = mulberry32(9000 + k)
   const base = onMission(setupFor(a.mode, 1 + Math.floor(r() * 99999), 1 + Math.floor(r() * 999999), a.overtime))
   const named = listsOf(base, k)
@@ -286,8 +314,9 @@ for (const c of chosen) {
   const high = h?.height && [h.works === 2 && 'works', h.keep && `keep held at ${h.keepHeld} round end${h.keepHeld === 1 ? '' : 's'}`, h.deployed && `deployed on decks ${h.deployed}`, h.deckRounds.length && `on a deck at the end of rounds ${h.deckRounds.join(' ')}`, h.movedRounds?.length && `by a move at the end of rounds ${h.movedRounds.join(' ')}`, h.climbs && `ladders ${h.climbs} (${h.up} up)`, h.ontoDeck && `onto a deck ${h.ontoDeck}`, h.deckFights && `deck fights ${h.deckFights}`].filter(Boolean).join(', ')
   const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
-  if (!a.dry) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, a.set ?? 'human')
+  // ((F18) --regen writes all its logs or none: each over itself, in its set)
+  if (!a.dry && !(REGEN && chosen.length < COUNT)) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, c.set ?? a.set ?? 'human')
 }
 const short = chosen.length < COUNT
-console.log(short ? `\ncorpus-add: only ${chosen.length} of ${COUNT} logs fit and passed admission${chosen.length && !a.dry ? ' (those written)' : ''}` : `\ncorpus-add: ${a.dry ? 'would write' : 'wrote'} ${chosen.map((c) => c.label).join(', ')}`)
+console.log(short ? `\ncorpus-add: only ${chosen.length} of ${COUNT} logs fit and passed admission${REGEN && !a.dry ? ' (none written: --regen writes all or none)' : chosen.length && !a.dry ? ' (those written)' : ''}` : `\ncorpus-add: ${a.dry ? 'would write' : 'wrote'} ${chosen.map((c) => c.label).join(', ')}`)
 process.exit(short ? 1 : 0)
