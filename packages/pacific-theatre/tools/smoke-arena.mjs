@@ -125,7 +125,7 @@ function loadScenario({ file, data }) {
     wrapDeep(battle, proj.lon0)
     const img = readPNG(path.join(data, man.height.file))
     const ground = { metres: decodeHeights(img, man.height.scale, man.height.offset), W: img.width, H: img.height, rect: proj.rect(man.bounds), exaggeration: man.exaggeration ?? 1 }
-    boxCache.set(key, { kits, box: { battle, ground, proj, exaggeration: man.exaggeration ?? 1 } })
+    boxCache.set(key, { kits, box: { battle, ground, proj, exaggeration: man.exaggeration ?? 1 }, shipped: man.wargame === `wargames/${scenario.id}.json` })
   }
   return { scenario, ...boxCache.get(key) }
 }
@@ -151,7 +151,8 @@ if (doHeadless) {
   // =========================================================================================================
   console.log(`balance (ROUND-3 §3), ${SEEDS} seeds a side, no player${sets.length ? `, with ${sets.map((x) => `${x.id}.${x.path.join('.')}=${x.value}`).join(', ')}` : ''}:`)
   for (const sc of args.has('--skip-balance') ? [] : scenarios) {
-    const { scenario, kits, box } = loadScenario(sc)
+    const { scenario, kits, box, shipped } = loadScenario(sc)
+    if (!shipped) console.log(`  (${scenario.id}: its box's manifest entry does not name it, so the app offers no door to it: its balance is measured and reported, not held to the band)`)
     if (layout) {
       await check(`${scenario.id}: the start as tools/check/wargames.mjs layout() lays it`, () => {
         const ar = createArena(scenario, kits, box, { side: 'us', seed: 'layout', warn: () => {} })
@@ -214,13 +215,13 @@ if (doHeadless) {
         const p99 = times[Math.floor(times.length * 0.99)]
         const mean = sumMs / Math.max(1, steps)
         const rate = met / SEEDS
-        balance.push({ id: scenario.id, side, rate, mean, p99, far, reasons })
+        balance.push({ id: scenario.id, side, rate, mean, p99, far, reasons, shipped })
         const note = `goal met in ${met}/${SEEDS} (${pct(rate)}); losses on both sides in ${both}/${SEEDS}; furthest ${Math.max(0, far).toFixed(0)} m beyond the edge; at most ${upMax.jp} / ${upMax.us} aircraft up; step ${mean.toFixed(3)} ms mean, ${p99.toFixed(3)} ms p99; ends ${JSON.stringify(reasons)}`
         assert(both >= Math.ceil(SEEDS * 0.9), `losses on both sides in only ${both} of ${SEEDS}: ${note}`)
         assert(far <= 1000, `a unit ${far.toFixed(0)} m beyond the edge: ${note}`)
         assert(mean < 2 && p99 < 2, `the step: ${note}`)
-        assert(rate >= 0.4 && rate <= 0.75, `outside the band: ${note}`)
-        return note
+        if (shipped) assert(rate >= 0.4 && rate <= 0.75, `outside the band: ${note}`)
+        return shipped || (rate >= 0.4 && rate <= 0.75) ? note : `${note} — OUTSIDE the band, not shipped`
       })
     }
   }
@@ -684,7 +685,7 @@ if (doLooks) {
 
 if (balance.length) {
   console.log('\nbalance:')
-  for (const b of balance) console.log(`  ${b.id} as ${b.side}: ${pct(b.rate)} met; step ${b.mean.toFixed(3)} / ${b.p99.toFixed(3)} ms; ${JSON.stringify(b.reasons)}`)
+  for (const b of balance) console.log(`  ${b.id} as ${b.side}: ${pct(b.rate)} met; step ${b.mean.toFixed(3)} / ${b.p99.toFixed(3)} ms; ${JSON.stringify(b.reasons)}${b.shipped ? '' : ' (no door: not shipped)'}`)
 }
 console.log(failed ? `\n${failed} check(s) failed` : '\nall checks passed')
 process.exit(failed ? 1 : 0)

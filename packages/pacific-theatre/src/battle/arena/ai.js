@@ -245,13 +245,18 @@ function gunnery(ar, i, x, side, heldStation) {
 
 /** The ship types a side's main goal (and its further terms) would have it sink or hit; none for a side that must survive. */
 function goalTypesOf(side) {
-  if (side._goalTypes) return side._goalTypes
+  // (the types of the goal's terms still open: a term met, Ironbottom Sound's two cruisers sunk, stops drawing the guns from the rest)
+  const terms = side.goalState?.terms || []
+  const key = terms.map((t) => t.status).join()
+  if (side._goalTypes && side._goalTypesKey === key) return side._goalTypes
   const set = new Set()
   const goal = side.def.goal || {}
-  for (const g of [goal, ...(Array.isArray(goal.also) ? goal.also : [])]) {
-    if (g.kind !== 'sink' && g.kind !== 'hit') continue
+  ;[goal, ...(Array.isArray(goal.also) ? goal.also : [])].forEach((g, k) => {
+    if (g.kind !== 'sink' && g.kind !== 'hit') return
+    if (terms[k] && terms[k].status !== 'open') return
     for (const t of Array.isArray(g.types) && g.types.length ? g.types : [g.type]) if (t && t !== 'ship' && t !== 'aircraft') set.add(t)
-  }
+  })
+  side._goalTypesKey = key
   return (side._goalTypes = set)
 }
 

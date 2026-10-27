@@ -49,7 +49,6 @@
       "exaggeration": 1,
       "sea": "gmrt",
       "battle": "boxes/midway/battle.json",
-      "wargame": "wargames/midway.json",
       "clock": "usn-zp12",
       "stats": {
         "landFraction": 0,
@@ -462,7 +461,6 @@
       "exaggeration": 1,
       "sea": "gmrt",
       "battle": "boxes/ironbottom-sound/battle.json",
-      "wargame": "wargames/ironbottom-sound.json",
       "clock": "usn-zm11",
       "stats": {
         "landFraction": 0.2436,

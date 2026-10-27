@@ -660,8 +660,6 @@ async function bake(dir, id) {
     exaggeration: f.exaggeration,
     sea: seaName,
     battle: `boxes/${id}/battle.json`,
-    // (its wargame, where content has written one: the app's door shows only where this names a file)
-    ...(existsSync(join(OUT, 'wargames', `${id}.json`)) ? { wargame: `wargames/${id}.json` } : {}),
     clock: f.clock.id,
     stats: {
       landFraction: round(nLand / N, 4),
@@ -679,6 +677,10 @@ async function bake(dir, id) {
   const mPath = join(OUT, 'boxes', 'manifest.json')
   const man = existsSync(mPath) ? JSON.parse(readFileSync(mPath, 'utf8')) : { boxes: [] }
   const order = Object.keys(IDS.boxes)
+  // (a box's wargame is named by hand where it is balanced and shipped, ROUND-3 §6 and the project manager's decision 30:
+  // a re-bake keeps the name the entry had, so a door neither appears nor goes with it)
+  const was = man.boxes.find((b) => b.id === id)
+  if (was?.wargame) entry.wargame = was.wargame
   man.boxes = [...man.boxes.filter((b) => b.id !== id), entry].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
   writeFileSync(mPath, JSON.stringify(man, null, 2) + '\n')
   lap(`boxes/manifest.json: ${id} written (placement ${entry.placement.centre.map((v) => v.toFixed(1)).join(', ')} km, convergence ${entry.placement.convergenceDeg}°)`)
