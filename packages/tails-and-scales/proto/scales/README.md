@@ -13,6 +13,8 @@ unchanged. (Prototypes A, B and C themselves aren't kept in the repo; this direc
 
 ![The six units beside today's meshes, close up and at game scale](./units.jpg)
 
+![Three splat Bushtails facing three glossy Ssithra on one table, at the game's camera](./pair.jpg)
+
 ## See it
 
 ```sh
@@ -57,6 +59,7 @@ shots `pair.png` and `pair-small.png`.
 | `bake-gloss.js` | view/models/bake.js extended for the glossy figures (see "Baking"); `bake-check.mjs` proves it bakes the kit figures exactly as bake.js does |
 | `viewer.html`, `viewer.js` | one figure, glossy or today's, on its base under the table's lights |
 | `pair.html`, `pair.js` | three splat Bushtails facing three glossy Ssithra on one table, at the game's camera |
+| `units.jpg`, `pair.jpg` | the sheet and the close pairing shot as of this commit |
 | `sheet.mjs` | the comparison sheet, the measures, the close-ups and the pairing shots |
 | `units.jpg` | the sheet as of this prototype |
 
