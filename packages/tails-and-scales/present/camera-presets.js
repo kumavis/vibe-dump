@@ -233,6 +233,91 @@ export function framePose(c, from, aspect, { min = 12, max = Infinity } = {}) {
 // is that seat's own orders, played after it pressed End (`ended`: the seat
 // whose End the camera keeps a bookmark for, view/camera.js's).
 export const frames = ({ follow, stage, active, localSeats, ended = -1 }) => !!follow && stage === 'battle' && (follows({ follow, stage, active, localSeats }) || (ended >= 0 && ended === active))
+
+// ── (F14) The camera follows an action played on its own ─────────────────
+// A batch is framed as it opens (frames, above), but only the AI's own
+// actions and the fights carry a `focus` (core/ai/policy.js,
+// core/actions/fight.js), and a lone walk is no batch: a human seat's move,
+// shot or charge played alone, an online opponent's every one, moved the
+// camera not at all. So the view reads where the camera should go off the
+// action's own events, as frame reads a batch's: each action played on its
+// own is cued once, as it opens (cueAt), and the CameraRig makes one move
+// for it (view/camera.js's cue): it frames the actors if any is off
+// screen, as a batch's members are framed, else glides toward the action
+// as a focus does. Pure, as the rest of this module: which events make an
+// action, which places they name, and whose actions are followed.
+
+// Where a run of events' actors stand and go, the table as it shows them
+// before any of it is played (`posOf(id)`: a unit's place, the mirror's):
+// each unit an event names (`u`, `tg`: a walker, a shooter and its target,
+// a charger, the units struck), each place one goes to (`to`: a walk's end,
+// a template scattered or thrown), and the places a template is aimed at
+// or lands on, or thorns erupt at. (view/player.js's frame gathers a
+// batch's members with it, and cueAt an action's.)
+const PLACED = new Set(['blast.aim', 'blast.land', 'spell.thorns'])
+export function pointsOf(events, posOf) {
+  const points = []
+  const add = (p) => p && Number.isFinite(p.x) && Number.isFinite(p.z) && points.push({ x: p.x, z: p.z })
+  for (const e of events) {
+    if (e.u !== undefined) add(posOf(e.u))
+    if (e.tg !== undefined) add(posOf(e.tg))
+    if (e.to) add(e.to)
+    if (PLACED.has(e.t)) add(e)
+  }
+  return points
+}
+
+// What opens an action (the AI's focus on it, the turn to face, its tray),
+// what an action does that the camera follows (a walk, a volley, a template
+// aimed or thrown, a spell, a charge's verdict, a blow struck), and what
+// ends one where it stands (a phase begun, a round scored, a stage, the end)
+const OPENS = new Set(['focus', 'unit.face', 'tray.open'])
+const DEEDS = new Set(['unit.move', 'volley', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'spell.gaze', 'charge.result', 'melee'])
+const ENDS = new Set(['phase.start', 'round.scored', 'stage', 'game.over'])
+
+// The action that opens at event k, if one does: from its opening or its
+// first deed through its end (its `act`, or the match stopping for a
+// decision, `pending`: a charge that reached waits for its spot, and its
+// walk is the next entry's action), or up to the next action's opening, or
+// to what ends one. Null when nothing opens at k, or what does holds no
+// deed (an advance's roll, a morale test, a deployment's placement: nothing
+// the camera follows). Else { to: the index after its last event, points:
+// its actors (pointsOf, the table as it stands at k), x, z: where the
+// camera glides when they are all on screen, own: whether it carries a
+// focus of its own }: its first focus (the AI's, a fight's: the glide the
+// follow policy has always made), else its first walk's end (a human
+// seat's move, or a charge's walk to its spot), else the middle of its
+// actors (a shot, a charge: the shooter and the target or the landing, as
+// the AI's own focus on a shot or a charge is their middle).
+export function cueAt(events, k, posOf) {
+  if (!events[k] || !(OPENS.has(events[k].t) || DEEDS.has(events[k].t))) return null
+  let to = k, deed = false, own = null, walk = null
+  for (let j = k; j < events.length; j++) {
+    const e = events[j]
+    if (ENDS.has(e.t) || (deed && OPENS.has(e.t))) break
+    to = j + 1
+    if (DEEDS.has(e.t)) deed = true
+    if (e.t === 'focus') own ??= e
+    if (e.t === 'unit.move') walk ??= e
+    if (e.t === 'act' || e.t === 'pending') break
+  }
+  if (!deed) return null
+  const points = pointsOf(events.slice(k, to), posOf)
+  if (!points.length) return null
+  const at = own ?? (walk && Number.isFinite(walk.to?.x) ? walk.to : null)
+  const c = circleOf(points, 0)
+  return { to, points, x: at ? at.x : c.cx, z: at ? at.z : c.cz, own: !!own }
+}
+
+// Whether the camera follows an action that carries no focus of its own: a
+// seat's command (a human seat's move, shot or charge, or its standing
+// orders), cueAt's `own` false. As a batch is framed (frames), but never an
+// action of a seat played here, which its player is making (hotseat's two
+// seats too, where the follow policy follows every turn: the camera would
+// chase each player's own clicks), unless it is that seat's orders played
+// after its End (`ended`, the bookmark's seat). An action with a focus of
+// its own (the AI's, a fight's) is followed as frames says, as ever.
+export const cues = (ctx) => frames(ctx) && (!ctx.localSeats.includes(ctx.active) || ctx.ended === ctx.active)
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
 const norm = (a) => {

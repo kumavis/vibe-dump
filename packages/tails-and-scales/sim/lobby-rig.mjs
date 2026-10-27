@@ -92,6 +92,13 @@
 //                the size and can't change it; once both are ready again the
 //                battle starts on the size's board (60×40), its start
 //                naming the mission; a rematch keeps the size
+//   (F14)
+//   follow       once the host has pressed End (the bookmark of its last
+//                End kept through its own fight and morale phases), the
+//                guest's lone move swings the host's camera once (the
+//                ?debug block's view.camera().followed) and leaves the
+//                guest's own still; the host's next phase brings its camera
+//                back to where it pressed End
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -121,7 +128,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -797,6 +804,84 @@ async function runCases(dist, cases) {
       return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match; ${ordered.length} units on autopilot carried out at End (${ran.kinds.join(', ')}), seen by the other page, folded alike`
     },
 
+    async follow() {
+      const { host, guest } = await lobbyPair()
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      // a page's camera (the ?debug block's view.camera()): its pose, how
+      // often the follow policy moved it, its bookmarks
+      const cam = (p) => p.evaluate(() => {
+        const c = window.__ts.view.camera()
+        return { pose: c.pose, followed: c.followed, marks: c.marks }
+      })
+      const state = (p) => p.evaluate(() => {
+        const ts = window.__ts, ses = ts.session
+        return { idle: ts.player.idle, seat: ses.decisionFor(), k: ses.G.pending?.k, phase: ses.G.pending?.phase }
+      })
+      // whoever holds a decision ends it (Begin battle, then each phase),
+      // until the host has pressed End in a phase of its own and the guest's
+      // movement phase waits on the guest
+      let hostEnded = false
+      const t0 = Date.now()
+      for (;;) {
+        if (Date.now() - t0 > 120000) throw new Fail(`the guest's movement phase never came after an End of the host's (host ended: ${hostEnded})`)
+        const g = await state(guest)
+        if (hostEnded && g.idle && g.seat === 1 && g.k === 'phase' && g.phase === 'move') break
+        for (const [p, isHost] of [[host, true], [guest, false]]) {
+          const s = await state(p)
+          if (!s.idle || s.seat < 0 || !(s.k === 'deploy' || s.k === 'phase')) continue
+          await p.evaluate(() => window.__ts.endPhase())
+          if (isHost && s.k === 'phase') hostEnded = true
+        }
+        await sleep(150)
+      }
+      const before = await cam(host), mineBefore = await cam(guest)
+      must(before.marks.includes(0), `the host's page keeps the bookmark of its last End through its own fight and morale phases: ${JSON.stringify(before.marks)}`)
+      // the guest moves one unit alone, as far from where the host's camera
+      // looks as its move reaches
+      const moved = await guest.evaluate(async (t) => {
+        const ts = window.__ts, ses = ts.session
+        const u = ts.units.find((x) => x.side === 1 && ts.q.alive(x) && ts.q.canAct(x))
+        const plan = ts.q.movePlan(u, 0)
+        let c = -1, best = -1
+        for (let i = 0; i < ts.nav.N; i++) {
+          if (!isFinite(plan.res.dist[i]) || plan.res.dist[i] < 2 || !ts.validEnd(plan, i)) continue
+          const d = Math.hypot(ts.nav.x(i) - t[0], ts.nav.z(i) - t[2])
+          if (d > best) (best = d), (c = i)
+        }
+        if (c < 0) return null
+        const n0 = ses.count, r0 = ses.rejected.length
+        await ts.doMove(u, c)
+        return { u: u.id, to: [ts.nav.x(c), ts.nav.z(c)], far: best, sent: ses.count - n0, refused: ses.rejected.length - r0, accepted: ses.accepted.length }
+      }, before.pose.target)
+      must(moved && moved.sent === 1 && !moved.refused, `the guest's lone move sent: ${JSON.stringify(moved)}`)
+      await until(host, (n) => window.__ts.session.accepted.length >= n && window.__ts.player.idle, moved.accepted, 30000, "the guest's move folded and played on the host's page")
+      await until(host, (f) => window.__ts.view.camera().followed > f, before.followed, 20000, "the host's camera following the guest's move")
+      await sleep(300)
+      const after = await cam(host), mine = await cam(guest)
+      const off = Math.hypot(after.pose.target[0] - before.pose.target[0], after.pose.target[2] - before.pose.target[2])
+      must(after.followed === before.followed + 1 && off > 1, `the guest's move swings the host's camera once (${after.followed - before.followed} moves, its look ${off.toFixed(1)}" away)`)
+      must(mine.followed === mineBefore.followed, `the guest's own camera stays for its own move (${mine.followed - mineBefore.followed} moves)`)
+      // the guest ends its turn: the host's next phase brings the camera
+      // back to where it pressed its last End
+      const t1 = Date.now()
+      for (;;) {
+        if (Date.now() - t1 > 120000) throw new Fail("the host's next phase never came")
+        const h = await state(host)
+        if (h.idle && h.seat === 0 && h.k === 'phase') break
+        const g = await state(guest)
+        if (g.idle && g.seat === 1 && (g.k === 'phase' || g.k === 'chargeEnd')) await guest.evaluate(() => window.__ts.endPhase())
+        await sleep(150)
+      }
+      await sleep(300)
+      const back = await cam(host)
+      const close = (a, b) => a.every((x, i) => Math.abs(x - b[i]) < 1e-3)
+      must(close(back.pose.pos, before.pose.pos) && close(back.pose.target, before.pose.target) && !back.marks.includes(0), `the host's next phase brings its camera back to its bookmark (at ${back.pose.target.map((x) => x.toFixed(2))}, kept ${JSON.stringify(back.marks)})`)
+      return `the guest's lone move (to ${moved.to.map((x) => x.toFixed(1))}) swung the host's camera once (its look ${off.toFixed(1)}" over), the guest's own stayed; the host's next phase came back to where it pressed End`
+    },
+
     async size() {
       const { host, guest, link } = await lobbyPair()
       await setName(guest, 'Ben')
@@ -913,6 +998,10 @@ const MUTANTS = {
   'no-ords': ['group', 'app/online.js', '    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))\n', ''],
   // (F8b) a size change keeps the seats' armies, or never reaches the lobby
   'size-keeps-army': ['size', 'net/lobby.js', "      for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army\n", ''],
+  // (F14) a human opponent's lone move cued nowhere (the view's cue
+  // handler gone), or the bookmark spent at the host's own fight phase
+  'no-cue': ['follow', 'view/index.js', '      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),\n', ''],
+  'mark-spent': ['follow', 'view/camera.js', '    if (!m || (m.followed === this.followed && !m.others)) return false\n', '    if (!m) return false\n'],
   'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
 }
 
