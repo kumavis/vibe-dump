@@ -68,5 +68,8 @@ export const RULES_ID = rulesId()
 // a list of counts, which newState builds the armies from; 6: F7a's
 // height: the nav's floor, links and ledges, and the rules' height
 // branches; 7: F8b's missions field and grand, the open set (the scatter's
-// area scale) and the fight guard, max(30, 2·units + 2))
-export const CORE_VERSION = 7
+// area scale) and the fight guard, max(30, 2·units + 2); 8: F17's lobbing
+// from height, a blast or indirect weapon reaching √(R² + 2hR) from h above
+// its target, in shotInfo and the AI's shot value alike: code, no rules
+// data, so RULES_ID stays)
+export const CORE_VERSION = 8

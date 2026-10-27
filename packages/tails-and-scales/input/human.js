@@ -429,7 +429,7 @@ export class Human {
         this.reach = move.planOf((fn) => this.ask(fn), u)
         overlay.reach(this.reach, G.nav)
       }
-      if (ph === 'shoot' && u.t.ranged) this.showRange(u, u.t.ranged.range)
+      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u)))
       if (ph === 'charge') this.showRange(u, CHARGE_RANGE)
     }
     this.card.show(u)

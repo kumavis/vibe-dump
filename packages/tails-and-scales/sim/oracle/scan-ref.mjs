@@ -90,7 +90,10 @@ export function fullLos(M, terrain, a, b, ignoreR = 1.3) {
 // score has them (DESIGN §4.2.4's AI and the play-report's tuning): a
 // walker's way by levelDist in the objective, charge and approach terms, an
 // enemy walker's in the danger term (a flier's the straight line), and the
-// guns' +0.25 an inch of floor, so P-scan can judge a fortified board
+// guns' +0.25 an inch of floor, so P-scan can judge a fortified board;
+// (F17) and the range a weapon reaches from the cell scored, the code's own
+// rangeOf (a rule, which P-scan takes as the scans do: on code older than
+// F17, the printed range)
 const count2D6 = (need) => {
   let ok = 0
   for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (a + b >= need) ok++
@@ -101,7 +104,7 @@ function refShotValue(M, R, G, u, e, from, moved) {
   const w = u.t.ranged
   if (!w) return 0
   const g = M.hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
-  if (g > w.range) return 0
+  if (g > (M.rangeOf ? M.rangeOf(G, u, e, from) : w.range)) return 0
   if (M.isEngaged(G, e) && !w.spell) return 0
   const s = M.sight(G, u, e, from)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
