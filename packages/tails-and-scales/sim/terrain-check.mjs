@@ -134,7 +134,10 @@ if (args['self-test']) {
   let missed = 0
   for (const name of Object.keys(MUTATIONS)) {
     const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', MUTATIONS[name][3] ?? '1-25', '--max', '1'], { env: { ...process.env, TERRAIN_MUTATE: name }, encoding: 'utf8' })
-    const caught = r.status === 1 && /MISMATCH/.test(r.stdout)
+    // ((the WIP merge's follow-up) a row of its own: no edit is the
+    // connectivity rows', and while they fail on the tower ring's boards
+    // every run prints their MISMATCH whatever it breaks)
+    const caught = r.status === 1 && /^MISMATCH(?!: connectivity)/m.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  seed')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
     console.log(`  ${caught ? 'caught' : 'MISSED'} ${name.padEnd(17)} ${first.trim().slice(0, 150)}`)
@@ -142,9 +145,12 @@ if (args['self-test']) {
   // (F8b) the connectivity rows' controls: a wall of cells across the
   // centre line, and a ring round one objective, each planted in the grid
   // of every Field and Grand board, must fail a connectivity row (and the
-  // classic part, untouched, still pass)
-  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no ground within/]]) {
-    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '1-3', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
+  // classic part, untouched, still pass). ((the WIP merge's follow-up) On
+  // seeds 7-9, boards with no tower ring at the centre, which pass without
+  // the control: seeds 1-3 all stand one on `fortified`, which fails a row
+  // by itself)
+  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no cell within/]]) {
+    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '7-9', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
     const caught = r.status === 1 && /MISMATCH: connectivity/.test(r.stdout) && want.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  connectivity')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
@@ -1158,8 +1164,20 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 //    every objective: it reaches a standable cell within OBJECTIVE_RANGE + r
 //    of it (core/queries.js counts a model within OBJECTIVE_RANGE plus its
 //    base; a disc of r holds its models).
+// (The WIP merge's follow-up) With height (a fortified board) the rows read
+// the board as the rules do: the hull keeps to the ground, starting there
+// and never stepping onto a cell whose floor is above STEP (a ground
+// vehicle takes no stair: F9a's rule, which the nav's walk doesn't apply
+// yet, so a hull walked the works' and the keep's stairs), and the squad,
+// which walks stairs as every non-vehicle does (no ladder: the
+// non-climbers' reach, the narrower), holds an objective only from a cell
+// within HIGH of the objective's floor (controlOf's rule, §4.2.9's "at its
+// level": the keep's objective is held from its top, up either stair).
 // Every row must pass on every board: a failure names the mission, the set,
-// the seed, the seat, the disc and the zone or objective it couldn't reach.
+// the seed, the seat, the disc and the zone or objective it couldn't reach,
+// and what stands round the centre objective (the keep, the ruined tower
+// ring); the MISMATCH counts the failed boards by it, the piece a centre
+// row fails on read off the board rather than guessed.
 // The classic mission's boards are measured too and only reported (their
 // lanes are the Skirmish's, frozen with its draws). It prints each board
 // size's chunk counts (§4.2.3 expects 250-300 at Grand). Its controls
@@ -1168,9 +1186,17 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 // (F9b, F5b add a row per footprint: the hull on its lattice.)
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
+const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
 const CONTROL = process.env.CONNECT_MUTATE ?? null
-const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
+const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
+// what scatter stood round the centre objective, from the footprints it
+// placed (recipes.js CENTRES: the keep's is marked `fort`, the tower ring's
+// `hollow`; the rock box's four piles stand off the centre)
+const centreOf = (placed) => {
+  const c = placed.find((p) => p.x === 0 && p.z === 0)
+  return c?.fort === 'keep' ? 'the keep' : c?.hollow ? 'the ruined tower ring' : 'no keep or tower ring'
+}
 const connShown = []
 const tn0 = Date.now()
 // one board's rows: null when every row holds, else what failed
@@ -1189,12 +1215,16 @@ function connectBoard(name, m, set, seed) {
   if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
   const edge = BW / 2 - m.deploy
   const why = []
+  const centre = centreOf(T.features)
+  // (with height) the cells off the ground, which the hull never enters
+  const raised = nav.hasHeight ? Uint8Array.from(nav.floor, (f) => (f > STEP ? 1 : 0)) : null
   for (const seat of [0, 1]) {
     const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
+      const forbid = r === HULL_R ? raised : null
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk')) continue
+        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk', forbid)) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (d < bd) [bd, start] = [d, i]
       }
@@ -1202,20 +1232,23 @@ function connectBoard(name, m, set, seed) {
         why.push(`seat ${seat}'s zone has no cell an r ${r} disc stands on`)
         continue
       }
-      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk' })
+      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk', forbid })
       conn.reaches++
       let crossed = false
       for (let i = 0; i < nav.N && !crossed; i++) crossed = -sgn * nav.x(i) > edge && isFinite(res.dist[i])
       if (!crossed) why.push(`an r ${r} disc from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) reaches no cell of seat ${1 - seat}'s`)
       if (r !== SQUAD_R) continue
       for (const o of m.objectives) {
+        // (with height) the objective's floor: a cell counts within HIGH of it
+        const oy = raised ? nav.floor[nav.index(o.x, o.z)] : 0
         let held = false
-        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r
-        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})`)
+        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && (!raised || Math.abs(nav.floor[i] - oy) <= HIGH)
+        const round = o.x === 0 && o.z === 0 ? `, ${centre} round it` : ''
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no cell within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${oy ? ` and within ${HIGH}" of its floor (${oy}")` : ''}${round}`)
       }
     }
   }
-  return { why, chunks: T.chunks.length }
+  return { why, chunks: T.chunks.length, centre }
 }
 for (const [name, m] of Object.entries(MISSIONS)) {
   for (const set of m.sets) {
@@ -1241,6 +1274,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
       conn.boards++
       if (r.why.length) {
         conn.failed++
+        conn.byCentre[r.centre] = (conn.byCentre[r.centre] ?? 0) + 1
         if (connShown.length < MAX) connShown.push(`connectivity ${key}, seed ${seed}: ${r.why.join('; ')}`)
       }
     }
@@ -1248,20 +1282,23 @@ for (const [name, m] of Object.entries(MISSIONS)) {
     conn.chunks[key] = `${counts[0]}-${counts[counts.length - 1]} (median ${counts[counts.length >> 1]}, mean ${(counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(0)})`
   }
 }
-console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}")${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
+console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
 for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
 const C = conn.classic
 console.log(`  (reported, not judged) classic: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
 if (conn.failed) {
-  console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s):`)
+  console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s) (by what stands round the centre objective: ${Object.entries(conn.byCentre).map(([k, v]) => `${k} ${v}`).join(', ')}):`)
   for (const s of connShown) console.log(`  ${s}`)
-  process.exit(1)
+  // ((the WIP merge's follow-up) exit 1 at the end: the tiles' rows below
+  // still run, so a failed board here hides none of theirs)
+  process.exitCode = 1
+} else {
+  if (!conn.boards) {
+    console.log('terrain-check: VACUOUS: no Field or Grand board checked for connectivity (no mission offers them?)')
+    process.exit(2)
+  }
+  console.log(`every Field and Grand board connected: ${conn.boards} of ${conn.boards}`)
 }
-if (!conn.boards) {
-  console.log('terrain-check: VACUOUS: no Field or Grand board checked for connectivity (no mission offers them?)')
-  process.exit(2)
-}
-console.log(`every Field and Grand board connected: ${conn.boards} of ${conn.boards}`)
 
 // ── Tiles (F8b, DESIGN §4.2.7's "Drawing at scale" 1) ──────────────────────
 // The view's half of the larger boards. On a board larger than classic's

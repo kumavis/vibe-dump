@@ -973,12 +973,15 @@ async function runCases(dist, cases) {
     },
 
     async size() {
-      const { host, guest, link } = await lobbyPair()
+      // (the host starts it by hand: Ready on both, then the size changed.
+      // Its autoStart is off from the lobby's making, not once both have
+      // pressed Ready: a guest's Ready that reaches the host's page before
+      // the host's own press makes that press the start, the lobby gone
+      // before the size can be picked)
+      const { host, guest, link } = await lobbyPair({ autoStart: false })
       await setName(guest, 'Ben')
       await press(guest, 'Ready')
       await press(host, 'Ready')
-      // (the host starts it by hand: Ready on both, then the size changed)
-      await host.evaluate(() => (window.__ts.net.autoStart = false))
       await until(host, () => { const L = window.__ts.net.handle.doc().lobby; return L.seats.s0?.ready && L.seats.s1?.ready }, null, 30000, 'both seats ready on the host')
       // (an army on each seat, as F11b's lists will ride: the size lets it go)
       await host.evaluate(() => window.__ts.net.handle.change((d) => {

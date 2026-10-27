@@ -1024,6 +1024,29 @@ follows N3.
   pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
   minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
   merge).
+  (The WIP merge's three inherited failures, each reproduced on 26ecab9:
+  two were the checks' and pass now, one is the boards' and still fails,
+  rightly. lobby-rig's `size` raced the host's autoStart (a guest's Ready
+  landing first made the host's press the start, the lobby gone): the
+  case now opens its lobby with autoStart off. play-check's layout lane
+  read the labels 4 s into a camera swing that runs about 25 s on a
+  Grand board under SwiftShader, every seat-0 label off the screen: it
+  waits for the camera, then the card and the minimap, to rest, by the
+  page's own frames (as every lane's rest() now does: under load the
+  serpent lane read its labels mid-swing too).
+  terrain-check's connectivity rows fail on 320 of 2,000 fortified Field
+  and Grand boards, and every one is a board where `fortified` stands the
+  ruined tower ring at the centre (32% of them), not the keep: on all 502
+  keep boards a squad walks up a stair and holds the objective from the
+  top. F8b dropped the ring from `open` for walling the objective off;
+  the fix, consensus, is proposed in `sim/notes/keep-connectivity.diff`
+  (a `largeCentre` for `fortified`, the rock box in the ring's place on
+  the larger tables, the Skirmish's boards untouched: connectivity 2,000
+  of 2,000 and parity 70 of 70 with it applied) for the step that holds
+  the core and the corpus. The rows were also made to judge as the rules
+  do, the hull on the ground and the objective held at its level, and to
+  name the centre piece. Left: that patch, and lobby-rig's `group` and
+  `catch-up` under load. DESIGN's "Inherited failures as built".)
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
