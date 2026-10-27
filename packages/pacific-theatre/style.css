@@ -995,7 +995,9 @@ body:has(.pt-hud .hints:not(:empty)) .wg-hints { display: none; }
 .wg-foot p { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(var(--ink-rgb), 0.86); }
 .wg-zoom { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(3, 8, 14, 0.86); cursor: zoom-out; pointer-events: auto; }
 .wg-zoom[hidden] { display: none; }
-.wg-zoom figure { margin: 0; max-width: min(960px, 100%); }
+.wg-zoom figure { margin: 0; width: min(960px, 100%); }
+/* (the Wargame's two cards over the box's own HUD and touch controls, as a phone's open card already stands) */
+body:has(> #ui > .card.show:is([data-mode='wargame'], [data-mode='wargame-end'])) #ui { z-index: 35; }
 .wg-zoom img { display: block; width: 100%; height: auto; max-height: calc(100vh - 90px); object-fit: contain; border-radius: 10px; border: 1px solid var(--line); }
 .wg-zoom figcaption { margin-top: 8px; text-align: center; font-size: 14px; color: var(--ink); }
 @media (max-width: 640px) {

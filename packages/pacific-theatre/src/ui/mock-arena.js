@@ -796,10 +796,16 @@ class ArenaView {
     }
     const P = arena.state.pos
     const me = arena.player?.unitIndex
-    // the camera eases toward a point between the held unit and the middle
+    // the camera eases toward a point between the held unit and the other side's guide, set down a little so the
+    // HUD block at the top hides neither fleet
     if (me != null) {
-      this.cx += (P[3 * me] * 0.6 - this.cx) * 0.15
-      this.cz += (P[3 * me + 2] * 0.6 - this.cz) * 0.15
+      const g = arena[`g_${arena.side === 'jp' ? 'us' : 'jp'}`]
+      const gi = g?.guide ?? -1
+      const ox = gi >= 0 ? P[3 * gi] : 0
+      const oz = gi >= 0 ? P[3 * gi + 2] : 0
+      const up = (innerHeight * 0.12) / this.scale
+      this.cx += ((P[3 * me] + ox) / 2 - this.cx) * 0.15
+      this.cz += ((P[3 * me + 2] + oz) / 2 - up - this.cz) * 0.15
     }
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     this.pts = this.paint(this.ctx, innerWidth, innerHeight, this.cx, this.cz, this.scale, arena)

@@ -117,7 +117,7 @@ const WG_IN = (side = 'us') => `if (!app.link.wg) { try { localStorage.removeIte
 const WG_RUN = (t, cond) => `app.ui.card.close(); app.battle.arena.seek(${t}); app.battle.play(1); const t0 = performance.now(); while (!(${cond}) && performance.now() - t0 < 30000) await new Promise((r) => setTimeout(r, 100)); app.battle.pause();`
 const WG = {
   start: `${UI_RESET} if (app.link.wg) await app.leaveBox(); if (!app.battle.sim) await app.urlBattle(new URLSearchParams('battle=samar&t=07:00')); app.battle.pause(); try { localStorage.removeItem('pt.hints') } catch {} await app.link.openStartSheet('samar'); await new Promise((r) => setTimeout(r, 300))`,
-  hud: `${WG_IN()} ${WG_RUN(148, "document.querySelectorAll('.wg-mark').length >= 2")}`,
+  hud: `${WG_IN()} ${WG_RUN(148, "document.querySelectorAll('.wg-mark').length >= 2")} ${'{'} const a = app.battle.arena; const me = a.player.unitIndex; const d = (u) => Math.hypot(a.state.pos[3 * u.index] - a.state.pos[3 * me], a.state.pos[3 * u.index + 2] - a.state.pos[3 * me + 2]); const t = a.u.filter((u) => u.side !== a.side && u.alive === 1 && u.kind === 'ship').sort((p, q) => d(p) - d(q))[0]; if (t) a.events.push({ id: 700000 + a.events.length, t: a.t, kind: 'hit', target: t.index, text: t.name + ': torpedo hit amidships, fire', mine: true }, { id: 700001 + a.events.length, t: a.t, kind: 'hit', target: t.index, text: t.name + ': hit aft', mine: true }) }`,
   respawn: `${WG_IN()} app.ui.onHop('aircraft'); ${WG_RUN(209.5, "document.querySelector('.wg-say.show')")}`,
   end: `${WG_IN()} ${WG_RUN(598, "app.ui.card.mode === 'wargame-end'")} await new Promise((r) => setTimeout(r, 400))`,
   zoom: "document.querySelector('.wg-shot')?.click(); await new Promise((r) => setTimeout(r, 300))",
