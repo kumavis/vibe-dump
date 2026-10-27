@@ -313,7 +313,7 @@ if (doBrowser) {
   })
   page.on('pageerror', (e) => errors.push(String(e)))
   const run = (body) => page.evaluate(new Function(`return (async () => { const app = window.__app; const battle = app.battle; const sim = battle.sim; ${body} })()`))
-  const steps = (n) => run(`for (let k = 0; k < ${n} && !sim.result; k++) sim.step(); return sim.t`)
+  const steps = (n) => run(`const a = battle.sim; for (let k = 0; k < ${n} && !a.result; k++) a.step(); return a.t`)
   try {
     await check('enter the fixture as the United States: Battle.enterWargame, the first unit held, the HUD’s own lines', async () => {
       const t0 = Date.now()
@@ -337,19 +337,20 @@ if (doBrowser) {
       let t = 0
       for (let k = 0; k < 20; k++) {
         t = await steps(600)
-        const n = await run(`return sim.markers.filter((m) => m.kind !== 'down').length`)
+        const n = await run(`return battle.sim.markers.filter((m) => m.kind !== 'down').length`)
         if (n > 0) break
       }
       const markers = await run(`return sim.markers.slice(0, 3).map((m) => m.text)`)
       assert(markers.length, `no hit by ${t.toFixed(0)} s`)
-      // a slow motion: the arena's request reaches the scene, whose factor slows the arena and only the arena
-      await run(`sim.requestSlowmo(1.2, 'test'); return true`)
-      await page.waitForTimeout(400)
-      const f = await run(`return battle.scene.slowFactor()`)
-      assert(f < 1, `the slow motion's factor ${f}`)
-      const before = await run(`return sim.t`)
-      await page.waitForTimeout(1500)
-      const after = await run(`return { t: sim.t, f: battle.scene.slowFactor() }`)
+      // a slow motion: the arena's request reaches the scene, whose factor scales the arena's dt in Battle.tick (and only the arena's)
+      await run(`window.__dts = []; const adv = sim.advance; sim.advance = (dt) => { window.__dts.push([battle.scene.slowFactor(), dt]); return adv(dt) }; sim.requestSlowmo(4, 'test'); return true`)
+      const ok = await page.waitForFunction(() => window.__dts.some(([f]) => f < 0.5), null, { timeout: 30000 }).then(() => true, () => false)
+      const dts = await page.evaluate(() => window.__dts)
+      const slow = dts.filter(([f]) => f < 0.5)
+      assert(ok && slow.length, `no slowed tick: ${JSON.stringify(dts.slice(0, 6))}`)
+      const f = Math.min(...dts.map(([k]) => k))
+      // (SwiftShader's frames are near a second apart, each tick's dt capped at 0.1 s: a slowed tick advances the arena at most 0.025 s)
+      assert(slow.every(([k, dt]) => dt <= 0.1 * k + 1e-6), `a slowed tick's dt: ${JSON.stringify(slow.slice(0, 4))}`)
       // a snapshot on a highlight worth one
       await run(`battle.scene._lastSnapT = -1e9; sim.highlight({ kind: 'hit', unit: sim.player.unitIndex, caption: 'test: a highlight', snap: true }); return true`)
       await page.waitForFunction(() => window.__app.battle.sim.highlights.some((h) => h.caption === 'test: a highlight' && h.snapshot), null, { timeout: 30000 })
@@ -362,7 +363,7 @@ if (doBrowser) {
       })
       assert(snap.jpeg && snap.w === 320 && snap.h === 200, `the snapshot ${JSON.stringify(snap)}`)
       await page.screenshot({ path: path.join(shots, 'arena-fight-us.png') })
-      return `${markers.join(' · ')}; slow ×${f.toFixed(2)} (the arena ${(after.t - before).toFixed(2)} s in 1.5 s of the screen); snapshot ${snap.w}×${snap.h} JPEG, ${snap.n} taken`
+      return `${markers.join(' · ')}; slow ×${f.toFixed(2)} (${slow.length} slowed ticks, the arena's dt ≤ ${Math.max(...slow.map(([, dt]) => dt)).toFixed(3)} s); snapshot ${snap.w}×${snap.h} JPEG, ${snap.n} taken`
     })
     await check('a forced end: the result, the wargame-end event, the controls let go', async () => {
       const r = await run(`const r = battle.endNow(); return { line: r?.line, reason: r?.reason, mode: app.mode, held: battle.state.held, snaps: sim.highlights.filter((h) => h.snapshot).length }`)
@@ -375,7 +376,8 @@ if (doBrowser) {
       return `“${r.line}”; ${r.snaps} snapshot(s) on the highlights`
     })
     await check('play the other side: Battle.restart({ side: jp }), the first Japanese unit held, a hop', async () => {
-      const st = await run(`battle.restart({ side: 'jp' }); return { w: battle.state.wargame, held: battle.state.held, side: sim.slots[sim.player.unitIndex].side }`)
+      const st = await run(`battle.restart({ side: 'jp' }); const a = battle.sim; return { w: battle.state.wargame, held: battle.state.held, side: a.slots[a.player.unitIndex].side, fresh: a !== sim && a.t === 0 }`)
+      assert(st.fresh, 'the restart did not build a fresh arena')
       assert(st.w.side === 'jp' && st.side === 'jp' && st.held, `restart ${JSON.stringify(st)}`)
       await page.waitForTimeout(1500)
       const h = await run(`const r = battle.hop('aircraft') || battle.hop('destroyer'); return { row: r && r.id, cam: battle.scene.cameraMode, held: battle.state.held?.id }`)
