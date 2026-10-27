@@ -997,23 +997,31 @@ follows N3.
   and four mutants, `sim/fort-scene.mjs`, hud-check's tooltips, input-check
   `--fort`, terrain-shots' fortified boards against `FORT_REF`, play-report's
   F7b row: 6 of 6 over `fort/` (seeded sweeps 19 and 21 of 24, against
-  13 of 24 at F7a's code: no AI tuning needed). `fort/` re-recorded in
-  2cd1d14 by corpus-add as F7a picked it, every log back under its name,
-  the PIN on a556cfc. Two stale self-test anchors from F8b mended
-  (terrain-check's `spare-height`, snap-check's `shudder-holds`). DESIGN's
-  F7b notes.)
-- [ ] **Later (F7b's):** terrain-check's connectivity rows fail on 320 of
-  2,000 Field and Grand **fortified** boards, as on the base commit
-  2f10015 (the same 320): the fortified set's centre draws the tower ring
-  (`['tower', 0.8]`), which walls the centre objective off from every
-  squad, as F8b found for `open` and answered with the rock box. A design
-  call for the fortified set at Field and Grand (the rock box, or the keep
-  alone, at those sizes: a set change, so a bump and the fortified
-  `scale/` pairs again). Also: rematch-memory `--terrain fortified`'s heap
-  slope (about 21-25 KB a rematch against 16 KB, mostly V8's
-  WeakArrayList, 20.8 KB on the base commit too, every renderer count
-  flat), and input/group.js's ghost plan finishing just before Escape
-  leaving its summary tooltip up (seen once under load).
+  13 and 14 of 24 at F7a's code: no AI tuning needed); army-sim's Skirmish
+  gates pass on both sets (fortified 53.7%, from F7a's 46.6%). `fort/`
+  re-recorded in 2cd1d14 by corpus-add as F7a picked it, every log back
+  under its name, the PIN on a556cfc. Two stale self-test anchors from
+  F8b mended (terrain-check's `spare-height`, snap-check's
+  `shudder-holds`). DESIGN's F7b notes.)
+- [ ] **Later (F7b's):** found here on the base commit 2f10015 and not
+  F7b's: terrain-check's connectivity rows fail on 320 of 2,000 Field and
+  Grand **fortified** boards (160 a size, the centre objective out of a
+  squad's reach), the very 320 2f10015 fails: the fortified set's centre
+  draws the tower ring (`['tower', 0.8]`) there, as F8b found for `open`.
+  Already answered on the gated branch by ad911bf (`largeCentre`, the rock
+  box where the tower ring was on a table larger than classic's;
+  connectivity 2,000 of 2,000 there, the fortified Field and Grand
+  `scale/` pairs recorded on it), which the merge brings: no change in this
+  worktree. At the merge the connectivity rows run again on the parapets,
+  and the fortified `scale/` pairs, which stand parapets now, are
+  re-recorded on F7b's code with the PIN moved. Likewise play-check's
+  layout lane (a Grand card never shown after six clicks, here and on
+  2f10015 alike: its fixed waits), answered there by 1519f63. Still open:
+  rematch-memory `--terrain fortified`'s heap slope (21.8 KB a rematch
+  against 16 KB, 21.4 KB on 2f10015, mostly V8's WeakArrayList, every
+  renderer count flat), and input/group.js's ghost plan finishing just
+  before Escape leaving its summary tooltip up (seen once under load in
+  the run lost to the restart; input-check passed here).
 - [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
   draws the platform as an open slab on braced posts while its deck's
   line-of-sight body is solid from the ground, as the piece table says: a
