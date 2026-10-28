@@ -15,7 +15,7 @@ import { serviceWorkerUrlFor } from './constants.js'
  */
 export async function ensureServiceWorker (base, { timeoutMs = 10_000, nav = globalThis.navigator, fetch = globalThis.fetch } = {}) {
   const sw = nav?.serviceWorker
-  if (!sw) return { state: 'unsupported', error: 'service workers are unavailable here (they need https or localhost)' }
+  if (!sw) return { state: 'unsupported', error: 'service workers are unavailable here (this host does not allow them, or the page is not https/localhost)' }
   const url = serviceWorkerUrlFor(base)
   try {
     if (fetch) {

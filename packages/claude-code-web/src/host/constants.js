@@ -43,8 +43,11 @@ export { POLICY_ENV } from '../runtime/boot/policy.js'
 
 /** BASE: the app's own directory URL (`/vibe-dump/claude-code-web/` on Pages, `/` under vite dev). */
 export function baseUrl (loc = globalThis.location) {
-  if (!loc) throw new Error('baseUrl: no location (pass one outside a browser)')
-  return new URL('.', loc.href).href
+  // In a page, document.baseURI honours a <base href> a host may inject
+  // (an artifact viewer does); it equals location.href when there is none.
+  const href = loc === globalThis.location && globalThis.document?.baseURI ? globalThis.document.baseURI : loc?.href
+  if (!href) throw new Error('baseUrl: no location (pass one outside a browser)')
+  return new URL('.', href).href
 }
 
 /** Where the service worker serves the extracted tree. */
