@@ -1156,9 +1156,9 @@ export function boot(location) {
             grid: [view.overlay.tex.image.width, view.overlay.tex.image.height], unitsW: view.units.W,
             tufts: view.table.tufts.count, flowers: view.table.flowers.count,
             dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
-            // ((V3d) the burns the table holds for the mat (painted a microtask
-            // later, all at once), and the fires' vents lit)
-            burns: view.terrain.marks.size, fires: view.effects.plumes.count().vents,
+            // ((V3d) the burns painted into the mat (a microtask after the
+            // table is drawn, all at once), and the fires' vents lit)
+            burns: view.table.marks?.length ?? 0, fires: view.effects.plumes.count().vents,
           }
         },
         // (F8b, not promised) the drawing at scale (sim/render-bench.mjs,

@@ -8,10 +8,12 @@
 // dramatic and legible?), and prints what burns and how much smoke flies
 // (?debug's view.drawing().fires).
 //
-//   node sim/powder-shots.mjs [--seed 7] [--out <dir>] [--battle 0]
+//   node sim/powder-shots.mjs [--seed 7] [--out <dir>] [--battle 0] [--mission powder]
 //
 // --battle N plays N seconds of the battle (game time, fast) before the
-// shots, so kegs have gone up and wrecks are broken. Build first (it
+// shots, so kegs have gone up and wrecks are broken; --mission shoots
+// another mission's board the same way (grand: the open Grand table, to
+// compare). Build first (it
 // shoots dist/). Exit 0 when the shots are written, 1 on a page error.
 import { parseArgs } from 'node:util'
 import { existsSync, mkdirSync } from 'node:fs'
@@ -35,14 +37,11 @@ try {
   page.on('pageerror', (e) => (errors.push(e.message), console.log('pageerror:', e.stack ?? e.message)))
   page.on('console', (m) => m.type() === 'error' && console.log('console:', m.text()))
   await page.goto(`${server.url}/?debug&seed=${SEED}&mission=${MISSION}`, { timeout: IDLE_MS })
-  console.log("loading")
   await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
   await page.evaluate(() => document.querySelector('[data-mode="watch"]').click())
   await page.waitForFunction(() => !document.querySelector('#setup').classList.contains('hidden'), null, { timeout: IDLE_MS })
   await page.evaluate(() => document.querySelector('#setupStart').click())
-  console.log("started")
   await page.waitForFunction(() => ['deploy', 'battle'].includes(window.__ts.S.stage), null, { timeout: IDLE_MS })
-  console.log("deployed")
   await page.evaluate(() => (window.__ts.S.follow = false))
   if (BATTLE > 0) {
     await page.evaluate(() => (window.__ts.clock.speed = 8))
@@ -69,7 +68,6 @@ try {
       requestAnimationFrame(f)
     }))
   }
-  console.log("settling")
   await settle(6)
   const fires = await page.evaluate(() => window.__ts.view.drawing?.().fires ?? null)
   await shot('game')

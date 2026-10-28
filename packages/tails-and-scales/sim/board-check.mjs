@@ -89,9 +89,9 @@ const EDITS = {
   // every snap makes the table over, whatever the board: the classic one
   // drawn again (and its Math.random draws) at every battle
   'always-rebuild': ['view/index.js', '    if (key === this.boardKey) return false\n', ''],
-  // ((V3d) a new table keeps the old one's burns: the Powder Field's
-  // scorch painted on the next classic battle's mat
-  'burns-kept': ['view/terrain.js', '    this.marks.clear()\n    this.scorched()\n    this.scene.remove(this.group)\n', '    this.scene.remove(this.group)\n'],
+  // ((V3d) the mat painted only when something burns, never cleaned: the
+  // Powder Field's scorch kept, and painted again on the next classic mat
+  'burns-kept': ['view/index.js', '      scorch: (marks) => {\n        this.table.scorch(marks)\n', '      scorch: (marks) => {\n        if (marks.length) this.table.scorch(marks)\n'],
 }
 
 // One run over a build: '' when P-board holds, else why not.
@@ -116,7 +116,9 @@ async function run(browser, url) {
       const info = ts.renderer.info
       return { ...ts.view.board(), counts: ts.view.counts(), geometries: info.memory.geometries, textures: info.memory.textures, programs: info.programs?.length ?? 0 }
     }, mission)
-    const battle = (mission) => look(mission)
+    // ((V3d) and the burns the mat is painted with: painted a microtask
+    // after the table is, so read once that has run)
+    const battle = async (mission) => ({ ...(await look(mission)), burns: await page.evaluate(() => new Promise((r) => setTimeout(() => r(window.__ts.view.board().burns), 0))) })
     const bad = []
     const title = await look()
     const classic = { W: 40, H: 28, deploy: 8, mat: [40, 28], objectives: 5, grid: [80, 56], unitsW: 40, tufts: 700, flowers: 140, dolly: 75, far: 400, fog: [70, 140], shadow: [-27, 27, 22, -22, 90] }
