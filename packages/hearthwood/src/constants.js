@@ -155,7 +155,7 @@ export const P_OOB = 1 // footprint outside the map (an off-map door is P_DOOR, 
 export const P_BLOCKED = 2 // footprint on water/cliff/building/door tile
 export const P_DOOR = 3 // door tile off the map, not walkable or occupied
 export const P_NO_RESOURCE = 4 // extractor with zero matching resource tiles in reach
-export const P_COST = 5 // cannot afford
+export const P_COST = 5 // legacy: cannot afford. canPlace no longer returns it (placement makes a construction site)
 export const P_TIER = 6 // tier too low
 export const P_UNIQUE = 7 // unique building already exists
 export const P_NOT_BUILDABLE = 8 // e.g. the Hearth
@@ -180,6 +180,14 @@ export const LOG_RADIUS_CHUNKS = 3 // provider ring search radius in chunks (Che
 export const IDLE_RADIUS_CELLS = 24 // idle-courier ring search radius in unit-grid cells
 export const PICK_TICKS = 4
 export const DROP_TICKS = 4
+export const LOG_SITE_PER_TICK = 16 // construction-site visits per tick (site pass, before the pull pass)
+export const SITE_JOBS_PER_VISIT = 4 // courier jobs a site may start per cost item per visit
+
+// ---------------------------------------------------------------- construction sites
+// A player-placed building starts as a site (buildings.site[b] = 1): it occupies its footprint
+// but does nothing until couriers deliver its whole cost into its own inventory.
+export const SITE_HP_FRAC = 0.5 // a site's max HP = B_HP[type] * SITE_HP_FRAC
+export const SITE_RAISE_TICKS = 30 // ticks of "raising" after the last delivery, then the building is built
 
 // ---------------------------------------------------------------- pathfinding
 export const PATH_BUDGET = 6000 // node expansions per tick, across all queued searches
@@ -243,6 +251,7 @@ export const EV_COURIER_SPAWNED = 8 // a = unit id
 export const EV_CANNOT_AFFORD = 9 // a = building or unit type (UI feedback), b = 0 building / 1 unit
 export const EV_BUILDING_ATTACKED = 10 // a = building type, b = packed door tile (throttled per chunk)
 export const EV_COURIERS_LOST = 11 // a = couriers killed since the last report, b = packed tile of the last death
+export const EV_BUILDING_BUILT = 12 // a = building type, b = packed door tile (a construction site completed)
 export const EV_CAPACITY = 1024 // power of two
 
 // ---------------------------------------------------------------- tile packing helpers

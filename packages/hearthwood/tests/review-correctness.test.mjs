@@ -29,7 +29,7 @@ test('review: Blight can attack a building that plugs a pass even when its door 
   addItems(ctx, hearth, I_STONE, 100, false)
   // ordinary player placement into the pass: footprint (30..31, 7..8), door (31, 9) inside
   assert.equal(canPlace(ctx, B_STOREHOUSE, 30, 7), P_OK)
-  const plug = placeBuilding(ctx, B_STOREHOUSE, 30, 7)
+  const plug = placeBuilding(ctx, B_STOREHOUSE, 30, 7, { free: true }) // built at once (sites start at half HP)
   assert.ok(plug >= 0)
   // a few crawlers north of the plug, raiding
   const ids = []

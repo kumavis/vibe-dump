@@ -3,20 +3,27 @@
 //
 // INVENTORY RULE: buildings.inv / resIn / resOut / invTotal / resInTotal and ctx.stock
 // are written ONLY by the inventory helpers in this file (addItems, takeItems,
-// reserveOut, releaseOut, reserveIn, releaseIn, payCost, refundCost). Every other
-// module calls these helpers. They keep ctx.stock in sync:
-//   ctx.stock[item] = sum over alive BF_STORAGE buildings of (inv - resOut)
+// reserveOut, releaseOut, reserveIn, releaseIn, payCost, refundCost, discardItems). Every
+// other module calls these helpers. They keep ctx.stock in sync:
+//   ctx.stock[item] = sum over alive, BUILT (site == 0) BF_STORAGE buildings of (inv - resOut)
+//
+// CONSTRUCTION SITES: a player placement (not {free}) allocates the building with
+// pool.site[b] = 1. It occupies its footprint and door at once but has no behaviour (not a
+// producer/storage/requester/tower/den/hall/shrine, no courierCap/storeCap). Logistics treats
+// it as the highest-priority requester of its cost; when every cost item has been delivered
+// into its own inventory it raises for SITE_RAISE_TICKS, consumes the items and becomes the
+// real building (completeSite).
 
 import {
   BUILDING_COUNT, ITEM_SHIFT, ITEM_STRIDE, ITEM_COUNT, CHUNK_SHIFT, CHUNK,
   BF_STORAGE, BF_PRODUCER, BF_EXTRACTOR, BF_DEN, BF_SHRINE, BF_CORE,
   BS_OK, BS_STARVED, BS_OUTPUT_FULL, BS_DEPLETED, BS_PAUSED, BS_NO_STOCK, BS_IDLE,
-  P_OK, P_BLOCKED, P_DOOR, P_NO_RESOURCE, P_COST, P_TIER, P_UNIQUE, P_NOT_BUILDABLE, P_OOB, P_ENCLOSE,
-  U_COURIER, FX_BUILD, FX_DESTROY, B_SPRITE_DEN,
-  EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE, EV_COURIER_SPAWNED,
+  P_OK, P_BLOCKED, P_DOOR, P_NO_RESOURCE, P_TIER, P_UNIQUE, P_NOT_BUILDABLE, P_OOB, P_ENCLOSE,
+  U_COURIER, FX_BUILD, FX_DESTROY, B_SPRITE_DEN, SITE_HP_FRAC, SITE_RAISE_TICKS,
+  EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE, EV_COURIER_SPAWNED, EV_BUILDING_BUILT,
 } from './constants.js'
 import {
-  BUILDINGS, TIERS, WIN_TIER, B_FLAGS, B_STORAGE, B_TIER, B_OUT_ITEM, B_SLOT_CAP, B_IN_QTY, B_W, B_H,
+  BUILDINGS, TIERS, WIN_TIER, B_FLAGS, B_STORAGE, B_TIER, B_OUT_ITEM, B_SLOT_CAP, B_IN_QTY, B_W, B_H, B_HP,
 } from './content.js'
 import { registerBuilding, unregisterBuilding } from './logistics.js'
 import { spawnUnit } from './units.js'
@@ -43,8 +50,20 @@ const T_COURIER_CAP = new Int32Array(BUILDING_COUNT)
 const DEN_TICKS = new Int32Array(BUILDING_COUNT)
 /** storage types in pay/refund order (ascending type: Hearth first, then Storehouse) */
 const STORAGE_TYPES = []
+/** construction cost per (type, item): SITE_QTY[(type << ITEM_SHIFT) | item] */
+const SITE_QTY = new Int32Array(BUILDING_COUNT * ITEM_STRIDE)
+/** cost items per type: SITE_ITEMS[type*4 + k], k < SITE_N[type]; SITE_TOTAL = sum of qty */
+const SITE_ITEMS = new Uint8Array(BUILDING_COUNT * 4)
+const SITE_N = new Uint8Array(BUILDING_COUNT)
+const SITE_TOTAL = new Int32Array(BUILDING_COUNT)
 for (let t = 1; t < BUILDING_COUNT; t++) {
   const d = BUILDINGS[t]
+  for (const e of d.cost) {
+    const k = (t << ITEM_SHIFT) | e.item
+    if (SITE_QTY[k] === 0) SITE_ITEMS[t * 4 + SITE_N[t]++] = e.item
+    SITE_QTY[k] += e.qty
+    SITE_TOTAL[t] += e.qty
+  }
   if (d.recipe) {
     P_TICKS[t] = d.recipe.ticks
     P_OUT_QTY[t] = d.recipe.outputs.length ? d.recipe.outputs[0].qty : 0
@@ -68,6 +87,33 @@ for (let t = 0; t < TIERS.length; t++) {
 export function recipeInputCount(type) { return IN_N[type] }
 /** k-th recipe input item of a building type. */
 export function recipeInputItem(type, k) { return IN_ITEMS[type * 4 + k] }
+/** Number of distinct cost items of a building type (construction-site requests). */
+export function siteCostCount(type) { return SITE_N[type] }
+/** k-th cost item of a building type. */
+export function siteCostItem(type, k) { return SITE_ITEMS[type * 4 + k] }
+/** Construction cost qty of `item` for a building type (0 if not in the cost). */
+export function siteCostQty(type, item) { return SITE_QTY[(type << ITEM_SHIFT) | item] }
+/**
+ * Construction progress of site b in [0, 1]: delivered share of the cost while materials
+ * arrive (0..0.9), then the raise timer (0.9..1). 1 for built buildings. Pure.
+ */
+export function siteProgress(ctx, b) {
+  const pool = ctx.buildings
+  if (!pool.site[b]) return 1
+  const type = pool.type[b]
+  const total = SITE_TOTAL[type]
+  let have = 0
+  for (let k = 0; k < SITE_N[type]; k++) {
+    const item = SITE_ITEMS[type * 4 + k]
+    const q = SITE_QTY[(type << ITEM_SHIFT) | item]
+    const n = pool.inv[(b << ITEM_SHIFT) | item]
+    have += n < q ? n : q
+  }
+  const deliv = total > 0 ? have / total : 1
+  if (deliv < 1) return deliv * 0.9
+  return 0.9 + 0.1 * (pool.progress[b] / SITE_RAISE_TICKS)
+}
+
 /** Offering qty needed for `item` to advance from `tier` (0 if none). */
 export function offeringQty(tier, item) { return tier >= 0 && tier < TIERS.length ? OFFER_QTY[(tier << ITEM_SHIFT) | item] : 0 }
 
@@ -88,13 +134,14 @@ let dyingBuilding = -1
  * Validate a placement. Checks in this order and returns the first failure:
  * P_NOT_BUILDABLE (only when opts.free is false), P_TIER, P_UNIQUE, P_OOB, P_BLOCKED
  * (world.areaFree), P_DOOR (door tile in bounds, walkable, not inside the footprint),
- * P_NO_RESOURCE (extractor: world.countResource(...) === 0), P_COST (unless opts.free).
+ * P_NO_RESOURCE (extractor: world.countResource(...) === 0), P_ENCLOSE (unless opts.free).
+ * Cost is NOT checked: a player placement becomes a construction site that couriers supply.
  * Pure: no side effects. O(footprint + reach area).
  * @param {Ctx} ctx
  * @param {number} type B_*
  * @param {number} tx footprint top-left
  * @param {number} ty
- * @param {{free?:boolean}} [opts] free: skip cost and buildable checks (start hamlet, stress, tests)
+ * @param {{free?:boolean}} [opts] free: skip tier/buildable/enclosure checks and build instantly (start hamlet, stress, tests)
  * @returns {number} P_*
  */
 export function canPlace(ctx, type, tx, ty, opts) {
@@ -115,7 +162,6 @@ export function canPlace(ctx, type, tx, ty, opts) {
     if (world.countResource(tx, ty, w, h, EX_REACH[type], EX_RES[type]) === 0) return P_NO_RESOURCE
   }
   if (!free && wouldEnclose(world, tx, ty, w, h, door)) return P_ENCLOSE
-  if (!free && !canAfford(ctx, d.cost)) return P_COST
   return P_OK
 }
 
@@ -194,9 +240,13 @@ function wouldEnclose(world, tx, ty, w, h, newDoor) {
 }
 
 /**
- * Place a building: canPlace -> payCost (unless free) -> pool.alloc -> set tx/ty/door
- * -> world.occupy -> pool.linkChunk -> ctx.courierCap += courierCap ->
- * if BF_STORAGE: ctx.storeCap += storage -> logistics.registerBuilding -> fx FX_BUILD.
+ * Place a building: canPlace -> pool.alloc -> set tx/ty/door -> world.occupy ->
+ * pool.linkChunk -> logistics.registerBuilding -> fx FX_BUILD.
+ *  - opts.free (start hamlet, stress, tests): built at once — ctx.courierCap += courierCap,
+ *    BF_STORAGE: ctx.storeCap += storage.
+ *  - otherwise: a CONSTRUCTION SITE (pool.site[b] = 1, hp = B_HP * SITE_HP_FRAC, status
+ *    BS_STARVED). Nothing is paid; logistics delivers the cost into the site and
+ *    tickBuildings completes it (completeSite).
  * @param {Ctx} ctx
  * @returns {number} building id, or -1 if canPlace failed (nothing changed)
  */
@@ -206,7 +256,6 @@ export function placeBuilding(ctx, type, tx, ty, opts) {
   const pool = ctx.buildings
   if (pool.count >= pool.capacity) return -1
   const free = !!(opts && opts.free)
-  if (!free && !payCost(ctx, BUILDINGS[type].cost)) return -1
   const b = pool.alloc(type)
   if (b < 0) return -1
   const world = ctx.world
@@ -216,8 +265,14 @@ export function placeBuilding(ctx, type, tx, ty, opts) {
   pool.door[b] = door
   world.occupy(tx, ty, B_W[type], B_H[type], b, door)
   pool.linkChunk(b, world.chunkOfXY(tx, ty))
-  ctx.courierCap += T_COURIER_CAP[type]
-  if (B_FLAGS[type] & BF_STORAGE) ctx.storeCap += B_STORAGE[type]
+  if (free) {
+    ctx.courierCap += T_COURIER_CAP[type]
+    if (B_FLAGS[type] & BF_STORAGE) ctx.storeCap += B_STORAGE[type]
+  } else {
+    pool.site[b] = 1
+    pool.hp[b] = B_HP[type] * SITE_HP_FRAC
+    pool.status[b] = BS_STARVED
+  }
   registerBuilding(ctx, b)
   const cx = tx + B_W[type] * 0.5, cy = ty + B_H[type] * 0.5
   ctx.fx.emit(FX_BUILD, cx, cy, cx, cy, ctx.tick)
@@ -225,12 +280,53 @@ export function placeBuilding(ctx, type, tx, ty, opts) {
 }
 
 /**
+ * Turn a site whose cost has fully arrived into the real building: consume the delivered
+ * cost, clear site, top HP up by the missing (1 - SITE_HP_FRAC) share (damage taken stays),
+ * apply courierCap / storeCap, re-index it in logistics as what it now is, FX_BUILD +
+ * EV_BUILDING_BUILT(type, door).
+ */
+function completeSite(ctx, b) {
+  const pool = ctx.buildings
+  const type = pool.type[b]
+  const o = b << ITEM_SHIFT
+  for (let k = 0; k < SITE_N[type]; k++) {
+    const item = SITE_ITEMS[type * 4 + k]
+    takeItems(ctx, b, item, SITE_QTY[(type << ITEM_SHIFT) | item], false)
+  }
+  unregisterBuilding(ctx, b) // leaves the site list
+  pool.site[b] = 0
+  pool.progress[b] = 0
+  pool.status[b] = BS_OK
+  // anything left over (only if more than the cost arrived) now belongs to the building
+  if (B_FLAGS[type] & BF_STORAGE) {
+    for (let i = 1; i < ITEM_COUNT; i++) ctx.stock[i] += pool.inv[o + i] - pool.resOut[o + i]
+  }
+  const max = B_HP[type]
+  let hp = pool.hp[b] + max * (1 - SITE_HP_FRAC)
+  if (hp > max) hp = max
+  pool.hp[b] = hp
+  ctx.courierCap += T_COURIER_CAP[type]
+  if (B_FLAGS[type] & BF_STORAGE) ctx.storeCap += B_STORAGE[type]
+  registerBuilding(ctx, b)
+  const cx = pool.tx[b] + B_W[type] * 0.5, cy = pool.ty[b] + B_H[type] * 0.5
+  ctx.fx.emit(FX_BUILD, cx, cy, cx, cy, ctx.tick)
+  ctx.events.emit(EV_BUILDING_BUILT, type, pool.door[b], ctx.tick)
+}
+
+/**
  * Remove a building from the world. Order: logistics.unregisterBuilding ->
- * refund `refundFrac` of its cost (floor per item) via refundCost -> if storage: subtract
- * its (inv - resOut) from ctx.stock and its capacity from ctx.storeCap (contents are LOST) ->
- * ctx.courierCap -= courierCap -> world.vacate -> pool.free.
+ * refund -> if storage: subtract its (inv - resOut) from ctx.stock and its capacity from
+ * ctx.storeCap -> ctx.courierCap -= courierCap -> world.vacate -> pool.free.
+ * Refund: a built building gets `refundFrac` of its cost (floor per item, refundCost) and, on
+ * player demolition (not `killed`), ALL of its own unreserved inventory (outputs, inputs, a
+ * Storehouse's contents) moved to other storage; a construction SITE gets `refundFrac` of what
+ * was DELIVERED into it so far (no caps to undo). With refundFrac 0 or `killed`, contents are
+ * lost.
+ * Refunds never vanish: storage without room is overfilled (see refundCost). ctx.lastRefund
+ * holds what came back (HUD toast).
  * If `killed`: fx FX_DESTROY + event EV_BUILDING_LOST; if BF_CORE: ctx.lost = true + EV_LOSE.
- * Couriers/units referencing it notice lazily through the generation check.
+ * Couriers/units referencing it notice lazily through the generation check (a courier
+ * carrying cargo for it reroutes to storage).
  * (A refund never lands in the building being destroyed.)
  * @param {Ctx} ctx
  * @param {number} b building id (must be alive)
@@ -242,19 +338,42 @@ export function destroyBuilding(ctx, b, refundFrac = 0, killed = false) {
   if (b < 0 || b >= pool.capacity || !pool.alive[b]) return
   const type = pool.type[b]
   const flags = B_FLAGS[type]
+  const site = pool.site[b] !== 0
   unregisterBuilding(ctx, b)
+  ctx.lastRefund.fill(0)
   if (refundFrac > 0) {
     dyingBuilding = b
-    refundCost(ctx, BUILDINGS[type].cost, refundFrac)
+    if (site) {
+      const o = b << ITEM_SHIFT
+      for (let i = 1; i < ITEM_COUNT; i++) {
+        const q = Math.floor(pool.inv[o + i] * refundFrac)
+        if (q > 0) ctx.lastRefund[i] += refundItem(ctx, i, q)
+      }
+    } else {
+      refundCost(ctx, BUILDINGS[type].cost, refundFrac)
+      // a demolished building's own stock (outputs, crafter inputs, a Storehouse's contents)
+      // goes back to storage in full rather than vanishing; items reserved for an in-flight
+      // pickup are dropped with the building (that courier's job aborts)
+      if (!killed) {
+        const o = b << ITEM_SHIFT
+        for (let i = 1; i < ITEM_COUNT; i++) {
+          const q = pool.inv[o + i] - pool.resOut[o + i]
+          if (q > 0) ctx.lastRefund[i] += refundItem(ctx, i, q)
+        }
+      }
+    }
     dyingBuilding = -1
   }
-  if (flags & BF_STORAGE) {
-    const o = b << ITEM_SHIFT
-    const stock = ctx.stock
-    for (let i = 1; i < ITEM_COUNT; i++) stock[i] -= pool.inv[o + i] - pool.resOut[o + i]
-    ctx.storeCap -= B_STORAGE[type]
+  if (!site) {
+    if (flags & BF_STORAGE) {
+      const o = b << ITEM_SHIFT
+      const stock = ctx.stock
+      for (let i = 1; i < ITEM_COUNT; i++) stock[i] -= pool.inv[o + i] - pool.resOut[o + i]
+      ctx.storeCap -= B_STORAGE[type]
+    }
+    ctx.courierCap -= T_COURIER_CAP[type]
   }
-  ctx.courierCap -= T_COURIER_CAP[type]
+  pool.site[b] = 0
   const tx = pool.tx[b], ty = pool.ty[b]
   const door = pool.door[b]
   ctx.world.vacate(tx, ty, B_W[type], B_H[type], door)
@@ -272,15 +391,34 @@ export function destroyBuilding(ctx, b, refundFrac = 0, killed = false) {
 }
 
 /**
- * Player demolition: 50% refund. Refuses the Hearth.
+ * Player demolition: 50% refund of the cost. Refuses the Hearth. On a construction site this
+ * is "cancel": 100% of what was delivered comes back. ctx.lastRefund holds the refund.
  * @returns {boolean} true if demolished
  */
 export function demolishBuilding(ctx, b) {
   const pool = ctx.buildings
   if (b < 0 || b >= pool.capacity || !pool.alive[b]) return false
   if (B_FLAGS[pool.type[b]] & BF_CORE) return false
-  destroyBuilding(ctx, b, 0.5, false)
+  destroyBuilding(ctx, b, pool.site[b] ? 1 : 0.5, false)
   return true
+}
+
+/**
+ * Destroy up to `qty` (default: all) of the UNRESERVED part (inv - resOut) of `item` in b.
+ * Items promised to an in-flight courier job are never touched. Keeps inv, invTotal and
+ * ctx.stock consistent (it is takeItems without a destination). Works on storage, producer
+ * inputs/outputs, sites and the shrine. Status flags (output full, starved) are recomputed by
+ * the next tickBuildings.
+ * @returns {number} quantity destroyed
+ */
+export function discardItems(ctx, b, item, qty) {
+  const pool = ctx.buildings
+  if (b < 0 || b >= pool.capacity || !pool.alive[b]) return 0
+  if (!(item >= 1 && item < ITEM_COUNT)) return 0
+  const k = (b << ITEM_SHIFT) | item
+  const avail = pool.inv[k] - pool.resOut[k]
+  const q = qty == null || qty > avail ? avail : qty | 0
+  return takeItems(ctx, b, item, q, false)
 }
 
 // ------------------------------------------------------------------ inventory helpers
@@ -288,26 +426,32 @@ export function demolishBuilding(ctx, b) {
 /**
  * Put items into b. If fromReserved, consumes `qty` of resIn first (courier drop-off of a
  * reserved job) and always succeeds; otherwise clamps to freeSpaceIn-style capacity
- * (storage: storage - invTotal - resInTotal; others: slot cap - inv - resIn for that item,
- * output slots included). Updates invTotal, resInTotal and ctx.stock when storage.
+ * (site: cost qty - inv - resIn; storage: storage - invTotal - resInTotal; others: slot
+ * cap - inv - resIn for that item, output slots included), unless `overflow` is set: then
+ * everything is added even past capacity (refunds overfill storage rather than vanish;
+ * logistics stops delivering to it until it drains below capacity).
+ * Updates invTotal, resInTotal and ctx.stock when (built) storage.
  * @returns {number} quantity actually added
  */
-export function addItems(ctx, b, item, qty, fromReserved) {
+export function addItems(ctx, b, item, qty, fromReserved, overflow) {
   if (qty <= 0) return 0
   const pool = ctx.buildings
   const k = (b << ITEM_SHIFT) | item
   const type = pool.type[b]
-  const storage = B_FLAGS[type] & BF_STORAGE
+  const site = pool.site[b]
+  const storage = (B_FLAGS[type] & BF_STORAGE) && !site
   let q = qty
   if (fromReserved) {
     let r = pool.resIn[k]
     if (r > q) r = q
     pool.resIn[k] -= r
     pool.resInTotal[b] -= r
-  } else {
-    const space = storage
-      ? B_STORAGE[type] - pool.invTotal[b] - pool.resInTotal[b]
-      : B_SLOT_CAP[(type << ITEM_SHIFT) | item] - pool.inv[k] - pool.resIn[k]
+  } else if (!overflow) {
+    const space = site
+      ? SITE_QTY[(type << ITEM_SHIFT) | item] - pool.inv[k] - pool.resIn[k]
+      : storage
+        ? B_STORAGE[type] - pool.invTotal[b] - pool.resInTotal[b]
+        : B_SLOT_CAP[(type << ITEM_SHIFT) | item] - pool.inv[k] - pool.resIn[k]
     if (space < q) q = space
     if (q <= 0) return 0
   }
@@ -326,7 +470,7 @@ export function takeItems(ctx, b, item, qty, fromReserved) {
   if (qty <= 0) return 0
   const pool = ctx.buildings
   const k = (b << ITEM_SHIFT) | item
-  const storage = B_FLAGS[pool.type[b]] & BF_STORAGE
+  const storage = (B_FLAGS[pool.type[b]] & BF_STORAGE) && !pool.site[b]
   let q = qty
   if (fromReserved) {
     if (q > pool.resOut[k]) q = pool.resOut[k]
@@ -351,7 +495,7 @@ export function takeItems(ctx, b, item, qty, fromReserved) {
 export function reserveOut(ctx, b, item, qty) {
   const pool = ctx.buildings
   pool.resOut[(b << ITEM_SHIFT) | item] += qty
-  if (B_FLAGS[pool.type[b]] & BF_STORAGE) ctx.stock[item] -= qty
+  if ((B_FLAGS[pool.type[b]] & BF_STORAGE) && !pool.site[b]) ctx.stock[item] -= qty
 }
 /** resOut -= qty. Storage: ctx.stock[item] += qty. */
 export function releaseOut(ctx, b, item, qty) {
@@ -360,7 +504,7 @@ export function releaseOut(ctx, b, item, qty) {
   if (qty > pool.resOut[k]) qty = pool.resOut[k]
   if (qty <= 0) return
   pool.resOut[k] -= qty
-  if (B_FLAGS[pool.type[b]] & BF_STORAGE) ctx.stock[item] += qty
+  if ((B_FLAGS[pool.type[b]] & BF_STORAGE) && !pool.site[b]) ctx.stock[item] += qty
 }
 /** resIn += qty, resInTotal += qty (caller ensured freeSpaceIn >= qty). */
 export function reserveIn(ctx, b, item, qty) {
@@ -387,7 +531,8 @@ export function availableOut(ctx, b, item) {
 
 /**
  * How many more of `item` b will ACCEPT as a logistics destination, net of reservations. Pure.
- *  - BF_STORAGE: storage - invTotal - resInTotal (any item)
+ *  - construction site: cost qty of item - inv - resIn (0 for items not in the cost)
+ *  - BF_STORAGE: storage - invTotal - resInTotal (any item; negative while overfilled)
  *  - BF_SHRINE: (TIERS[ctx.tier].offering qty for item) - inv - resIn, 0 if not in the offering or won
  *  - recipe input item: B_SLOT_CAP - inv - resIn
  *  - anything else (outputs, non-inputs): 0
@@ -396,6 +541,10 @@ export function freeSpaceIn(ctx, b, item) {
   const pool = ctx.buildings
   const type = pool.type[b]
   const f = B_FLAGS[type]
+  if (pool.site[b]) {
+    const kk = (b << ITEM_SHIFT) | item
+    return SITE_QTY[(type << ITEM_SHIFT) | item] - pool.inv[kk] - pool.resIn[kk]
+  }
   if (f & BF_STORAGE) return B_STORAGE[type] - pool.invTotal[b] - pool.resInTotal[b]
   const k = (b << ITEM_SHIFT) | item
   if (f & BF_SHRINE) {
@@ -421,8 +570,9 @@ export function canAfford(ctx, cost) {
 }
 
 /**
- * Deduct cost from storage buildings (Hearth typeList first, then Storehouses in typeList
- * order), unreserved items only. All-or-nothing.
+ * Deduct cost from (built) storage buildings (Hearth typeList first, then Storehouses in
+ * typeList order), unreserved items only. All-or-nothing. Used by dens and training;
+ * buildings are no longer paid this way (construction sites).
  * @returns {boolean} false (and nothing changed) if !canAfford
  */
 export function payCost(ctx, cost) {
@@ -436,35 +586,58 @@ export function payCost(ctx, cost) {
       const t = STORAGE_TYPES[s]
       const list = pool.typeList[t]
       const n = pool.typeCount[t]
-      for (let j = 0; j < n && left > 0; j++) left -= takeItems(ctx, list[j], item, left, false)
+      for (let j = 0; j < n && left > 0; j++) {
+        if (pool.site[list[j]]) continue
+        left -= takeItems(ctx, list[j], item, left, false)
+      }
     }
   }
   return true
 }
 
 /**
- * Add floor(qty * frac) of each cost entry into storage with free space (Hearth first).
- * Overflow is lost. @returns {number} total items refunded
+ * Put `qty` of `item` back into storage, never losing any: first into built storage with free
+ * room (Hearth first, then Storehouses, typeList order), then whatever is left OVERFILLS the
+ * first built storage in that order (the Hearth) past its capacity. Skips the building being
+ * destroyed. Lost only when no built storage exists at all.
+ * @returns {number} quantity stored
+ */
+function refundItem(ctx, item, qty) {
+  const pool = ctx.buildings
+  let left = qty
+  let total = 0
+  let first = -1
+  for (let s = 0; s < STORAGE_TYPES.length && left > 0; s++) {
+    const t = STORAGE_TYPES[s]
+    const list = pool.typeList[t]
+    const n = pool.typeCount[t]
+    for (let j = 0; j < n && left > 0; j++) {
+      const b = list[j]
+      if (b === dyingBuilding || pool.site[b]) continue
+      if (first < 0) first = b
+      const q = addItems(ctx, b, item, left, false)
+      left -= q
+      total += q
+    }
+  }
+  if (left > 0 && first >= 0) total += addItems(ctx, first, item, left, false, true)
+  return total
+}
+
+/**
+ * Add floor(qty * frac) of each cost entry into storage (refundItem: free room first, then
+ * overfill the Hearth — refunds never vanish). Records what came back in ctx.lastRefund
+ * (reset first). @returns {number} total items refunded
  */
 export function refundCost(ctx, cost, frac) {
+  ctx.lastRefund.fill(0)
   if (!cost || !(frac > 0)) return 0
-  const pool = ctx.buildings
   let total = 0
   for (let i = 0; i < cost.length; i++) {
     const item = cost[i].item
-    let left = Math.floor(cost[i].qty * frac)
-    for (let s = 0; s < STORAGE_TYPES.length && left > 0; s++) {
-      const t = STORAGE_TYPES[s]
-      const list = pool.typeList[t]
-      const n = pool.typeCount[t]
-      for (let j = 0; j < n && left > 0; j++) {
-        const b = list[j]
-        if (b === dyingBuilding) continue
-        const q = addItems(ctx, b, item, left, false)
-        left -= q
-        total += q
-      }
-    }
+    const q = refundItem(ctx, item, Math.floor(cost[i].qty * frac))
+    ctx.lastRefund[item] += q
+    total += q
   }
   return total
 }
@@ -576,10 +749,10 @@ export function nearestBuilding(ctx, x, y, maxChunks, flagMask, fromTile = -1) {
   return best
 }
 
-/** Toggle player pause on a building. */
+/** Toggle player pause on a building (no-op on construction sites). */
 export function setPaused(ctx, b, on) {
   const pool = ctx.buildings
-  if (b < 0 || b >= pool.capacity || !pool.alive[b]) return
+  if (b < 0 || b >= pool.capacity || !pool.alive[b] || pool.site[b]) return
   pool.paused[b] = on ? 1 : 0
   if (on) pool.status[b] = BS_PAUSED
   else if (pool.status[b] === BS_PAUSED) pool.status[b] = BS_OK
@@ -589,7 +762,8 @@ const recomputeScratch = new Int32Array(ITEM_STRIDE)
 
 /**
  * Recompute ctx.stock / storeCap / courierCap from scratch (debug + tests):
- * courierCap = ctx.courierCapExtra + sum of BUILDINGS[type].courierCap over alive buildings.
+ * courierCap = ctx.courierCapExtra + sum of BUILDINGS[type].courierCap over alive BUILT
+ * buildings (construction sites contribute nothing).
  * @returns {boolean} true if the incremental values already matched
  */
 export function recomputeStock(ctx) {
@@ -599,7 +773,7 @@ export function recomputeStock(ctx) {
   let storeCap = 0
   let courierCap = ctx.courierCapExtra | 0
   for (let b = 0; b < pool.hi; b++) {
-    if (!pool.alive[b]) continue
+    if (!pool.alive[b] || pool.site[b]) continue
     const t = pool.type[b]
     courierCap += T_COURIER_CAP[t]
     if (B_FLAGS[t] & BF_STORAGE) {
@@ -618,8 +792,17 @@ export function recomputeStock(ctx) {
 
 // ------------------------------------------------------------------ per tick
 
+/** True if at least one BUILT Sprite Den exists (a den site makes no couriers). */
+function builtDen(pool) {
+  const list = pool.typeList[B_SPRITE_DEN]
+  for (let j = 0, n = pool.typeCount[B_SPRITE_DEN]; j < n; j++) if (!pool.site[list[j]]) return true
+  return false
+}
+
 /**
  * Production + dens + shrine for every alive building, in id order. Budget: O(buildings).
+ *  - construction sites: wait for the whole cost (BS_STARVED), then raise for
+ *    SITE_RAISE_TICKS (BS_OK, progress counts up) and completeSite
  *  - producers (BF_PRODUCER): recipe cycle per ARCHITECTURE.md §9.4, sets status
  *  - dens (BF_DEN): spawn couriers while typeCount[U_COURIER] < ctx.courierCap
  *  - shrine (BF_SHRINE): consume a full offering -> ctx.tier++, EV_TIER_UP / EV_WIN
@@ -632,9 +815,22 @@ export function tickBuildings(ctx) {
   const inv = pool.inv
   const hi = pool.hi
   const tick = ctx.tick
+  const site = pool.site
   for (let b = 0; b < hi; b++) {
     if (pool.alive[b] === 0) continue
     const type = pool.type[b]
+    if (site[b]) {
+      let ready = true
+      const n = SITE_N[type]
+      for (let k = 0; k < n; k++) {
+        const item = SITE_ITEMS[type * 4 + k]
+        if (inv[(b << ITEM_SHIFT) | item] < SITE_QTY[(type << ITEM_SHIFT) | item]) { ready = false; break }
+      }
+      if (!ready) { pool.status[b] = BS_STARVED; pool.progress[b] = 0; continue }
+      pool.status[b] = BS_OK
+      if (++pool.progress[b] >= SITE_RAISE_TICKS) completeSite(ctx, b)
+      continue
+    }
     const f = B_FLAGS[type]
     if (f & BF_PRODUCER) {
       if (pool.paused[b]) { pool.status[b] = BS_PAUSED; continue }
@@ -716,7 +912,7 @@ export function tickBuildings(ctx) {
       // Hearth therefore coaxes out a free courier every RESCUE_TICKS while fewer than
       // RESCUE_MIN are alive.
       const n = ctx.units.typeCount[U_COURIER]
-      if (n < RESCUE_MIN && n < ctx.courierCap && (pool.typeCount[B_SPRITE_DEN] === 0 || !canAfford(ctx, DEN_COST))) {
+      if (n < RESCUE_MIN && n < ctx.courierCap && (!builtDen(pool) || !canAfford(ctx, DEN_COST))) {
         ctx.rescueTimer = (ctx.rescueTimer | 0) + 1
         if (ctx.rescueTimer >= RESCUE_TICKS) {
           ctx.rescueTimer = 0

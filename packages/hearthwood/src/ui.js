@@ -7,16 +7,18 @@ import {
   ITEM_COUNT, ITEM_SHIFT, TRAIN_QUEUE, U_COURIER, F_PLAYER, F_BLIGHT, UNIT_COUNT, TICK_RATE,
   BF_STORAGE, BF_PRODUCER, BF_EXTRACTOR, BF_DEN, BF_HALL, BF_TOWER, BF_SHRINE, BF_CORE,
   STATUS_NAMES, ORDER_NAMES, MSTATE_NAMES, JOB_NAMES, B_HEARTH, B_STOREHOUSE, J_NONE, BS_STARVED, BS_IDLE,
+  SITE_HP_FRAC,
 } from './constants.js'
 import {
   BUILDINGS, UNITS, TIERS, WIN_TIER, ITEMS, ITEM_COLOR, BUILD_MENU, B_FLAGS, B_HP, B_STORAGE,
   B_SLOT_CAP, B_OUT_ITEM, U_HP, RESOURCES,
 } from './content.js'
-import { canAfford, setPaused, demolishBuilding } from './buildings.js'
+import { setPaused, demolishBuilding, discardItems, siteProgress } from './buildings.js'
 import { enqueueTraining, cancelTraining } from './combat.js'
 import { itemIconURL, buildingIconURL } from './sprites.js'
 import {
-  fmtClock, fmtCount, esc, stockVisible, offeringProgress, shrineId, HINTS, hintIndex, eventMessage, costText,
+  fmtClock, fmtCount, esc, stockVisible, offeringProgress, shrineId, shrineSiteId, HINTS, hintIndex, eventMessage, costText,
+  demolishMessage,
 } from './app-hud.js'
 
 /** @typedef {import('./game.js').Game} Game */
@@ -152,10 +154,19 @@ export function createUI(doc, game, input, overlay) {
       let used = 0
       for (const t of [B_HEARTH, B_STOREHOUSE]) {
         const list = B.typeList[t], n = B.typeCount[t]
-        for (let j = 0; j < n; j++) used += B.invTotal[list[j]]
+        for (let j = 0; j < n; j++) if (!B.site[list[j]]) used += B.invTotal[list[j]]
       }
       const s = fmtCount(used) + ' / ' + fmtCount(ctx.storeCap)
-      if (s !== capLast) { capLast = s; capEl.textContent = s; capEl.classList.toggle('full', used >= ctx.storeCap * 0.95) }
+      if (s !== capLast) {
+        capLast = s
+        capEl.textContent = s
+        const over = used > ctx.storeCap
+        capEl.classList.toggle('over', over)
+        capEl.classList.toggle('full', !over && used >= ctx.storeCap * 0.95)
+        capEl.title = over
+          ? 'Storage is overfilled (refunds never vanish): couriers deliver nothing more until it drains — select the Hearth to discard a stack'
+          : 'Goods in storage / storage capacity (Hearth + Storehouses)'
+      }
     }
   }
 
@@ -191,6 +202,7 @@ export function createUI(doc, game, input, overlay) {
     const t = TIERS[ctx.tier]
     let html = `<span class="tier-name" title="Shrine tier">✦ ${esc(t ? t.name : '')}</span>`
     if (ctx.won || ctx.tier >= WIN_TIER) html += ' <span class="dim">awakened</span>'
+    else if (shrineSiteId(ctx) >= 0) html += ` <span class="dim">· Shrine under construction ${Math.floor(siteProgress(ctx, shrineSiteId(ctx)) * 100)}%</span>`
     else if (shrineId(ctx) < 0) html += ' <span class="dim">· raise a Shrine <kbd>0</kbd></span>'
     else {
       const parts = offeringProgress(ctx)
@@ -277,14 +289,23 @@ export function createUI(doc, game, input, overlay) {
     const url = safeIcon('b', type)
     const pic = url ? `<img class="bico" src="${url}" alt="">`
       : `<span class="swatch" style="--c:${d.color}">${esc(d.glyph)}</span>`
-    let cost = ''
-    for (const e of d.cost) cost += `<span>${itemIcon(e.item)}${e.qty}</span>`
-    b.innerHTML = `<span class="key">${esc((d.hotkey || '').toUpperCase())}</span>${pic}<span class="cost">${cost}</span>`
+    b.innerHTML = `<span class="key">${esc((d.hotkey || '').toUpperCase())}</span>${pic}`
+    // cost spans as elements: tinted (hint only) while storage does not hold that much of the item
+    const costBox = doc.createElement('span')
+    costBox.className = 'cost'
+    const costEls = []
+    for (const e of d.cost) {
+      const c = doc.createElement('span')
+      c.innerHTML = `${itemIcon(e.item)}${e.qty}`
+      costBox.appendChild(c)
+      costEls.push(c)
+    }
+    b.appendChild(costBox)
     b.addEventListener('click', () => { input.beginPlace(type); b.blur() })
     b.addEventListener('pointerenter', () => showTip(b, type))
     b.addEventListener('pointerleave', hideTip)
     elMenu.appendChild(b)
-    menuBtns.push({ b, type, locked: -1, poor: -1, active: -1 })
+    menuBtns.push({ b, type, locked: -1, active: -1, costEls, short: new Int8Array(costEls.length).fill(-1) })
   }
   const tip = doc.createElement('div')
   tip.className = 'tooltip'
@@ -301,6 +322,7 @@ export function createUI(doc, game, input, overlay) {
     }
     let extra = ''
     if (d.tier > ctx.tier) extra += `<div class="short">Needs tier ${d.tier} (${esc(TIERS[d.tier].name)})</div>`
+    else if (d.cost.length) extra += '<div class="dim">Placed as a construction site: couriers bring the materials from storage or straight from producers.</div>'
     if (d.extractor) extra += `<div class="dim">Place within ${d.extractor.reach} tiles of ${esc(RESOURCES[d.extractor.res].name)}</div>`
     if (d.recipe && d.recipe.inputs.length) {
       let r = ''
@@ -342,9 +364,13 @@ export function createUI(doc, game, input, overlay) {
       if (!heavy) continue
       const d = BUILDINGS[m.type]
       const locked = d.tier > ctx.tier ? 1 : 0
-      const poor = !locked && !canAfford(ctx, d.cost) ? 1 : 0
       if (locked !== m.locked) { m.locked = locked; m.b.classList.toggle('locked', !!locked) }
-      if (poor !== m.poor) { m.poor = poor; m.b.classList.toggle('poor', !!poor) }
+      // never greyed out for cost (a site waits for its materials); just hint what storage lacks
+      for (let k = 0; k < m.costEls.length; k++) {
+        const e = d.cost[k]
+        const sh = e && ctx.stock[e.item] < e.qty ? 1 : 0
+        if (sh !== m.short[k]) { m.short[k] = sh; m.costEls[k].classList.toggle('short', !!sh) }
+      }
     }
     if (heavy && tipType && tipAnchor) setHTML(tip, tipHTML(tipType)) // diffed: no re-parse when unchanged
   }
@@ -382,10 +408,12 @@ export function createUI(doc, game, input, overlay) {
     const ctx = game.ctx
     const b = overlay.selBuilding
     const act = btn.getAttribute('data-act')
+    if (act === 'discard') return // handled on pointerdown (the panel re-renders under the cursor)
     if (act === 'pause' && b >= 0) setPaused(ctx, b, !ctx.buildings.paused[b])
     else if (act === 'demolish' && b >= 0) {
       const type = ctx.buildings.type[b]
-      if (demolishBuilding(ctx, b)) { toast(BUILDINGS[type].name + ' demolished (50% refund)'); overlay.selBuilding = -1 }
+      const wasSite = ctx.buildings.site[b] !== 0
+      if (demolishBuilding(ctx, b)) { toast(demolishMessage(ctx, type, wasSite)); overlay.selBuilding = -1 }
       else toast('The Hearth cannot be demolished', 'bad')
     } else if (act === 'train' && b >= 0) {
       const ut = Number(btn.getAttribute('data-unit'))
@@ -406,8 +434,60 @@ export function createUI(doc, game, input, overlay) {
     selDirty = true
   })
 
+  // Discard: destroy the unreserved part of one stack. On pointerdown, not click: the body is
+  // re-rendered at 5 Hz and a click whose press and release straddle a re-render is dropped.
+  elSel.addEventListener('pointerdown', (e) => {
+    const t = /** @type {HTMLElement} */ (e.target)
+    const btn = t && t.closest ? t.closest('[data-act="discard"]') : null
+    if (!btn) return
+    e.preventDefault()
+    e.stopPropagation()
+    const ctx = game.ctx
+    const b = overlay.selBuilding
+    if (!(b >= 0 && ctx.buildings.alive[b] && ctx.buildings.gen[b] === overlay.selBuildingGen)) return
+    const item = Number(btn.getAttribute('data-item'))
+    const n = discardItems(ctx, b, item)
+    if (n > 0) toast(`Discarded ${n} ${ITEMS[item].name}`, 'info')
+    selDirty = true
+  })
+
+  /** Discard control for a slot holding `n` unreserved items (none when n <= 0). */
+  function discardBtn(item, n) {
+    if (!(n > 0)) return ''
+    return `<button class="discard" data-act="discard" data-item="${item}" tabindex="-1" title="Discard ${n} ${esc(ITEMS[item].name)} (destroys the unreserved stack)">×</button>`
+  }
+
+  function sitePanel(ctx, b) {
+    const B = ctx.buildings
+    const type = B.type[b]
+    const d = BUILDINGS[type]
+    const o = b << ITEM_SHIFT
+    const head = `<h3><span class="site-tag">Construction site</span> — ${esc(d.name)}</h3><div class="actions">` +
+      '<button data-act="demolish" class="danger" tabindex="-1" title="Cancel (Delete): every delivered material comes back">Cancel <kbd>Del</kbd></button></div>'
+    const hp = B.hp[b], hpMax = B_HP[type] * SITE_HP_FRAC
+    let body = `<div class="kv"><span>HP</span><span>${Math.ceil(hp)}/${hpMax}</span></div>${bar(hp / hpMax, 'hp')}`
+    let need = 0, have = 0, incoming = 0, inStock = false
+    let slots = ''
+    for (const e of d.cost) {
+      const n = B.inv[o + e.item], inc = B.resIn[o + e.item]
+      need += e.qty; have += n < e.qty ? n : e.qty; incoming += inc
+      if (n + inc < e.qty && ctx.stock[e.item] > 0) inStock = true
+      slots += slot(e.item, n, e.qty, inc, 0, 0, n - B.resOut[o + e.item])
+    }
+    const raising = have >= need
+    // nothing on the way although storage holds what is missing: the couriers are all busy
+    const st = raising ? 'raising…' : incoming > 0 ? 'materials on the way' : inStock ? 'waiting for couriers' : 'awaiting materials'
+    body += `<div class="kv"><span>Status</span><span class="st${raising ? 0 : 1}">${st}</span></div>`
+    body += `<div class="slots">${slots || '<span class="dim">no materials needed</span>'}</div>`
+    const p = siteProgress(ctx, b)
+    body += `<div class="kv"><span>Built</span><span>${Math.floor(p * 100)}%</span></div>${bar(p, 'site')}`
+    body += '<div class="dim site-note">Couriers bring materials from storage or straight from producers.</div>'
+    return [head, body]
+  }
+
   function buildingPanel(ctx, b) {
     const B = ctx.buildings
+    if (B.site[b]) return sitePanel(ctx, b)
     const type = B.type[b]
     const d = BUILDINGS[type]
     const f = B_FLAGS[type]
@@ -425,7 +505,7 @@ export function createUI(doc, game, input, overlay) {
       }
       if (B.trainLen[b] > 0) acts += '<button data-act="untrain" tabindex="-1" title="Cancel last (full refund)">✕ last</button>'
     }
-    if (!(f & BF_CORE)) acts += '<button data-act="demolish" class="danger" tabindex="-1" title="Demolish (Delete): 50% refund">Demolish <kbd>Del</kbd></button>'
+    if (!(f & BF_CORE)) acts += '<button data-act="demolish" class="danger" tabindex="-1" title="Demolish (Delete): 50% of the cost comes back (overfills storage if it is full)">Demolish <kbd>Del</kbd></button>'
     const head = `<h3>${esc(d.name)}</h3><div class="actions">${acts}</div>`
 
     // ---- body (dynamic)
@@ -434,21 +514,22 @@ export function createUI(doc, game, input, overlay) {
     body += `<div class="kv"><span>Status</span><span class="st st${B.status[b]}">${statusText(B, b, f)}</span></div>`
     if (f & BF_STORAGE) {
       const cap = B_STORAGE[type]
-      body += `<div class="kv"><span>Stored</span><span>${B.invTotal[b]}/${cap}</span></div>${bar(B.invTotal[b] / cap)}`
+      const over = B.invTotal[b] > cap
+      body += `<div class="kv"><span>Stored</span><span class="${over ? 'over' : ''}">${B.invTotal[b]}/${cap}${over ? ' overfilled' : ''}</span></div>${bar(B.invTotal[b] / cap)}`
       let slots = ''
       for (let i = 1; i < ITEM_COUNT; i++) {
         const n = B.inv[o + i]
-        if (n > 0 || B.resIn[o + i] > 0) slots += slot(i, n, 0, B.resIn[o + i], B.resOut[o + i])
+        if (n > 0 || B.resIn[o + i] > 0) slots += slot(i, n, 0, B.resIn[o + i], B.resOut[o + i], 0, n - B.resOut[o + i])
       }
       body += `<div class="slots">${slots || '<span class="dim">empty</span>'}</div>`
     }
     if (f & BF_PRODUCER) {
       const rec = d.recipe
       let slots = ''
-      for (const s of rec.inputs) slots += slot(s.item, B.inv[o + s.item], B_SLOT_CAP[(type << ITEM_SHIFT) | s.item], B.resIn[o + s.item], 0, s.qty)
+      for (const s of rec.inputs) slots += slot(s.item, B.inv[o + s.item], B_SLOT_CAP[(type << ITEM_SHIFT) | s.item], B.resIn[o + s.item], 0, s.qty, B.inv[o + s.item] - B.resOut[o + s.item])
       const out = B_OUT_ITEM[type]
       if (rec.inputs.length) slots += '<span class="arrow">→</span>'
-      slots += slot(out, B.inv[o + out], B_SLOT_CAP[(type << ITEM_SHIFT) | out], 0, B.resOut[o + out])
+      slots += slot(out, B.inv[o + out], B_SLOT_CAP[(type << ITEM_SHIFT) | out], 0, B.resOut[o + out], 0, B.inv[o + out] - B.resOut[o + out])
       body += `<div class="slots">${slots}</div>`
       body += `<div class="kv"><span>Work</span><span>${(rec.ticks / TICK_RATE).toFixed(1)} s</span></div>${bar(B.progress[b] / rec.ticks)}`
       if (f & BF_EXTRACTOR) {
@@ -484,7 +565,7 @@ export function createUI(doc, game, input, overlay) {
       else {
         body += `<div class="kv"><span>Offering for ${esc(TIERS[ctx.tier + 1] ? TIERS[ctx.tier + 1].name : '')}</span><span></span></div>`
         let slots = ''
-        for (const p of parts) slots += slot(p.item, p.have, p.need, B.resIn[o + p.item], 0)
+        for (const p of parts) slots += slot(p.item, p.have, p.need, B.resIn[o + p.item], 0, 0, B.inv[o + p.item] - B.resOut[o + p.item])
         body += `<div class="slots">${slots}</div>`
       }
     }
@@ -492,12 +573,13 @@ export function createUI(doc, game, input, overlay) {
     return [head, body]
   }
 
-  function slot(item, n, cap, incoming, outgoing, perCycle) {
+  /** One inventory slot; `discard` > 0 adds a control that destroys that many (unreserved). */
+  function slot(item, n, cap, incoming, outgoing, perCycle, discard) {
     let sub = ''
     if (incoming > 0) sub += `<i class="in" title="incoming">+${incoming}</i>`
     if (outgoing > 0) sub += `<i class="out" title="reserved for pickup">−${outgoing}</i>`
     const title = esc(ITEMS[item].name) + (perCycle ? ` (${perCycle} per cycle)` : '')
-    return `<span class="slot" title="${title}">${itemIcon(item)}<b>${n}${cap ? `<small>/${cap}</small>` : ''}</b>${sub}</span>`
+    return `<span class="slot" title="${title}">${itemIcon(item)}<b>${n}${cap ? `<small>/${cap}</small>` : ''}</b>${sub}${discardBtn(item, discard)}</span>`
   }
 
   const typeCounts = new Int32Array(UNIT_COUNT)

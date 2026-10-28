@@ -38,6 +38,7 @@ import { FxRing, EventRing } from './fx.js'
  * @property {number} storeCap        total storage capacity of alive storage buildings
  * @property {number} courierCap      max couriers = courierCapExtra + sum of BUILDINGS[t].courierCap over alive buildings
  * @property {number} courierCapExtra cap bonus not tied to a building (stress tests, cheats); recomputeStock keeps it
+ * @property {Int32Array} lastRefund  [ITEM_STRIDE] items the last refund (demolish / site cancel / refundCost) put back (HUD toast)
  * @property {number} tier            Shrine tier, 0..WIN_TIER
  * @property {boolean} won
  * @property {boolean} lost
@@ -90,6 +91,7 @@ export function createContext(opts = {}) {
     storeCap: 0,
     courierCap: 0,
     courierCapExtra: 0,
+    lastRefund: new Int32Array(ITEM_STRIDE),
     tier: 0,
     won: false,
     lost: false,

@@ -11,6 +11,7 @@ import { BUILDINGS, HOTKEYS, B_W, B_H, B_FLAGS } from './content.js'
 import { canPlace, placeBuilding, demolishBuilding, buildingAtTile, setPaused } from './buildings.js'
 import { unitsInRect, unitAt } from './units.js'
 import { commandGroup, commandAttack, commandHold, commandStop } from './combat.js'
+import { demolishMessage } from './app-hud.js'
 
 /** @typedef {import('./game.js').Game} Game */
 /** @typedef {import('./camera.js').Camera} Camera */
@@ -342,8 +343,9 @@ export function createInput(canvas, game, camera, overlay, hooks = {}) {
     if (b < 0 || !ctx.buildings.alive[b]) return
     const type = ctx.buildings.type[b]
     if (B_FLAGS[type] & BF_CORE) { toast('The Hearth cannot be demolished', 'bad'); return }
+    const wasSite = ctx.buildings.site[b] !== 0
     if (demolishBuilding(ctx, b)) {
-      toast(BUILDINGS[type].name + ' demolished (50% refund)', 'info')
+      toast(demolishMessage(ctx, type, wasSite), 'info')
       overlay.selBuilding = -1
       selected()
     }
@@ -352,7 +354,7 @@ export function createInput(canvas, game, camera, overlay, hooks = {}) {
     const ctx = game.ctx
     const b = overlay.selBuilding
     if (b < 0 || !ctx.buildings.alive[b]) return
-    if (!(B_FLAGS[ctx.buildings.type[b]] & (BF_PRODUCER | BF_DEN | BF_HALL))) return
+    if (!(B_FLAGS[ctx.buildings.type[b]] & (BF_PRODUCER | BF_DEN | BF_HALL)) || ctx.buildings.site[b]) return
     setPaused(ctx, b, !ctx.buildings.paused[b])
     selected()
   }

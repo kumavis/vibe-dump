@@ -19,7 +19,7 @@ import { createOverlay } from '../src/overlay.js'
 import {
   bakeSprites, setCanvasFactory, itemIconURL, buildingIconURL, UNIT_FRAMES, ICON_PX, RES_VARIANTS, TERRAIN_VARIANTS,
 } from '../src/sprites.js'
-import { Renderer, createRenderer, visibleChunks, nightFactor, DAY_TICKS } from '../src/render.js'
+import { Renderer, createRenderer, visibleChunks, nightFactor, DAY_TICKS, siteFraction } from '../src/render.js'
 import { Minimap, createMinimap } from '../src/minimap.js'
 import { TerrainCache, TIER_PPT } from '../src/render-chunks.js'
 
@@ -95,7 +95,7 @@ function fakeCtx({ w = 128, h = 128, maxB = 256, maxU = 1024 } = {}) {
     alive: new Uint8Array(maxB), gen: new Uint16Array(maxB), type: new Uint8Array(maxB),
     tx: new Int16Array(maxB), ty: new Int16Array(maxB), w: new Uint8Array(maxB), h: new Uint8Array(maxB),
     door: new Int32Array(maxB).fill(-1), chunk: new Int32Array(maxB).fill(-1), hp: new Float32Array(maxB),
-    status: new Uint8Array(maxB), paused: new Uint8Array(maxB), progress: new Int32Array(maxB),
+    status: new Uint8Array(maxB), paused: new Uint8Array(maxB), progress: new Int32Array(maxB), site: new Uint8Array(maxB),
     inv: new Int32Array(maxB * ITEM_STRIDE), invTotal: new Int32Array(maxB), rally: new Int32Array(maxB).fill(-1),
     chunkHead: new Int32Array(world.chunkCount).fill(-1), chunkNext: new Int32Array(maxB).fill(-1),
     isAlive(id, g) { return id >= 0 && this.alive[id] === 1 && this.gen[id] === g },
@@ -514,4 +514,26 @@ test('a felled tree is repainted in place: no chunk re-keys, only clipped patche
   // a terrain change still re-keys (full re-bake path)
   w.setTerrain(w.idx(5, 5), T_WATER)
   assert.notEqual(tc.keyOf(0), keys[0])
+})
+
+test('construction sites draw ghosted with a dashed outline and progress at every tier', () => {
+  const f = makeFactory()
+  const r = createRenderer(f.mk(1, 1), { makeCanvas: f.mk, ppt: 32, bakeMs: 1e9 })
+  r.resize(800, 600, 1)
+  const { ctx } = scene()
+  const B = ctx.buildings
+  const s = addBuilding(ctx, B_SAWMILL, 66, 62) // a Sawmill site: 15 wood + 5 stone
+  B.site[s] = 1
+  B.hp[s] = B_HP[B_SAWMILL] * 0.25 // damaged site: HP bar against the site's half max
+  B.inv[(s << ITEM_SHIFT) | I_WOOD] = 9
+  assert.ok(Math.abs(siteFraction(B, s) - 0.9 * 9 / 20) < 1e-9)
+  B.inv[(s << ITEM_SHIFT) | 2] = 5; B.inv[(s << ITEM_SHIFT) | I_WOOD] = 15
+  B.progress[s] = 15
+  assert.ok(siteFraction(B, s) > 0.9 && siteFraction(B, s) < 1)
+  f.calls = {}
+  for (const zoom of [1, 0.45, 0.125]) {
+    r.draw(fakeCamera(64, 64, zoom), ctx, 0.5, null)
+    assert.deepEqual(f.errors, [], 'zoom ' + zoom)
+  }
+  assert.ok((f.calls.setLineDash || 0) >= 4, 'dashed outline set and reset at near + mid zoom')
 })

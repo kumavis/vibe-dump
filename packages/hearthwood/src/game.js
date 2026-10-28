@@ -9,7 +9,7 @@ import {
   MAP_W, MAP_H, ITEM_COUNT,
 } from './constants.js'
 import { START, B_W, B_H, B_FLAGS, B_DOOR_DX, B_DOOR_DY } from './content.js'
-import { placeBuilding, addItems, canPlace } from './buildings.js'
+import { placeBuilding, addItems, canPlace, discardItems } from './buildings.js'
 import { spawnUnit } from './units.js'
 
 /** @typedef {import('./context.js').Ctx} Ctx */
@@ -329,6 +329,10 @@ export function installDebugApi(game, extras = {}) {
       }
     },
     place(type, tx, ty, free = true) { return placeBuilding(game.ctx, type, tx, ty, { free }) },
+    /** put up to qty of item into building b (clamped to its room) @returns {number} added */
+    give(b, item, qty) { return addItems(game.ctx, b, item, qty, false) },
+    /** destroy up to qty (default all) of the unreserved stack of item in b @returns {number} */
+    discard(b, item, qty) { return discardItems(game.ctx, b, item, qty) },
     spawn(type, x, y, faction) { return spawnUnit(game.ctx, type, x, y, faction) },
     setSpeed(s) { game.setSpeed(s) },
     pause() { game.paused = true },

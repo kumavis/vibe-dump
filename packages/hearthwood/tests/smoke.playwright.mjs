@@ -144,7 +144,8 @@ try {
       out.push({ tx, ty, sx: s.x, sy: s.y, d: (tx - cx) ** 2 + (ty - cy) ** 2 })
     }
     out.sort((a, b) => a.d - b.d)
-    return { quarries: __hw.buildings.typeCount[4], wood: __hw.ctx.stock[1], buildings: __hw.buildings.count, cands: out.slice(0, 12) }
+    const hh = __hw.buildings.typeList[1][0]
+    return { quarries: __hw.buildings.typeCount[4], wood: __hw.ctx.stock[1], hearthWood: __hw.buildings.inv[(hh << 4) | 1], buildings: __hw.buildings.count, cands: out.slice(0, 12) }
   })
   check('found a quarry candidate on screen', before.cands.length > 0, before.cands.length)
   let placed = false
@@ -157,10 +158,19 @@ try {
     if (ok) { await page.mouse.click(c.sx, c.sy); placed = true; break }
   }
   await page.waitForTimeout(100)
-  const after = await page.evaluate(() => ({ quarries: __hw.buildings.typeCount[4], wood: __hw.ctx.stock[1], ghost: __hw.overlay.ghostType }))
+  const after = await page.evaluate(() => {
+    const B = __hw.buildings, list = B.typeList[4]
+    const q = list[B.typeCount[4] - 1]
+    const hh = B.typeList[1][0]
+    return { quarries: B.typeCount[4], wood: __hw.ctx.stock[1], hearthWood: B.inv[(hh << 4) | 1], ghost: __hw.overlay.ghostType, q, site: q >= 0 ? B.site[q] : -1 }
+  })
   check('quarry placed via hotkey 2 + click', placed && after.quarries === before.quarries + 1, { before: before.quarries, after: after.quarries })
-  check('stock decreased by quarry cost', after.wood < before.wood, { before: before.wood, after: after.wood })
+  // (the site's couriers reserve wood at once, so ctx.stock may dip; the Hearth's inventory only
+  // drops as couriers actually pick up, at most a load or two in these few ticks)
+  check('placed as a construction site, nothing paid up front', after.site === 1 && after.hearthWood >= before.hearthWood - 10, { before: before.hearthWood, after: after.hearthWood, site: after.site })
   check('placement mode ended', after.ghost === 0)
+  const raised = await page.evaluate((q) => { for (let i = 0; i < 40 && __hw.buildings.site[q]; i++) __hw.tick(50); return { site: __hw.buildings.site[q], alive: __hw.buildings.alive[q], tick: __hw.ctx.tick } }, after.q)
+  check('couriers supply the quarry site and it is raised', raised.alive === 1 && raised.site === 0, raised)
 
   // ---------------------------------------------------------------- UI: soldiers, drag-select, right-click move
   const army = await page.evaluate(() => {
@@ -237,7 +247,7 @@ try {
     let bad = 0
     for (let i = 1; i < 11; i++) {
       let s = 0
-      for (let b = 0; b < B.hi; b++) if (B.alive[b] && (B.type[b] === 1 || B.type[b] === 2)) s += B.inv[(b << 4) | i] - B.resOut[(b << 4) | i]
+      for (let b = 0; b < B.hi; b++) if (B.alive[b] && !B.site[b] && (B.type[b] === 1 || B.type[b] === 2)) s += B.inv[(b << 4) | i] - B.resOut[(b << 4) | i]
       if (s !== ctx.stock[i]) bad++
     }
     return bad

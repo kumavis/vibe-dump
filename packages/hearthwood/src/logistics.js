@@ -2,6 +2,9 @@
 // OWNER: sim implementer. Contract: ARCHITECTURE.md §10.
 //
 // Indexes (all typed arrays, built incrementally by register/unregisterBuilding):
+//   siteList/sitePos   dense list of construction sites (round-robin site cursor). A site is
+//                      in NO other index until it completes (buildings.completeSite
+//                      unregisters it and registers it again as what it now is)
 //   reqList/reqPos     dense list of BF_REQUESTER buildings (round-robin pull cursor)
 //   provList/provPos   dense list of BF_PRODUCER buildings (round-robin push cursor)
 //   provider buckets   per (item, chunk of the DOOR tile) doubly-linked lists of producers
@@ -10,8 +13,11 @@
 //   idleGrid/idleList  idle couriers, rebuilt every tick by the courier state machine
 //
 // Per tick (tickLogistics): courier FSM over every courier (ascending id), then the
-// pull pass (≤ LOG_REQ_PER_TICK requester visits), then the push pass
-// (≤ LOG_PUSH_PER_TICK producer visits). Every job reserves stock at the provider
+// site pass (≤ LOG_SITE_PER_TICK construction-site visits — highest priority: sites take
+// from producers' outputs and from storage down to zero, but hold at most half the fleet),
+// then the pull pass (≤ LOG_REQ_PER_TICK requester visits), then the push pass
+// (≤ LOG_PUSH_PER_TICK producer visits), then a second site pass for couriers nobody else
+// wanted (leaving 1/IDLE_SHARE of the fleet idle). Every job reserves stock at the provider
 // (resOut) and space at the requester (resIn) at assignment, and takes
 // min(availableOut, freeSpaceIn), so nothing can be oversubscribed.
 
@@ -21,13 +27,13 @@ import {
   U_COURIER, M_IDLE, M_ARRIVED, M_FAILED,
   J_NONE, J_TO_PICKUP, J_PICKING, J_TO_DROPOFF, J_DROPPING,
   COURIER_CAP, LOG_REQ_PER_TICK, LOG_PUSH_PER_TICK, LOG_RADIUS_CHUNKS, IDLE_RADIUS_CELLS,
-  PICK_TICKS, DROP_TICKS,
+  PICK_TICKS, DROP_TICKS, LOG_SITE_PER_TICK, SITE_JOBS_PER_VISIT,
 } from './constants.js'
 import { B_FLAGS, B_OUT_ITEM, B_SLOT_CAP, B_IN_QTY, TIERS, WIN_TIER, ITEMS, BUILDINGS } from './content.js'
 import { CellGrid } from './world.js'
 import {
   addItems, takeItems, reserveOut, releaseOut, reserveIn, releaseIn, availableOut, freeSpaceIn,
-  recipeInputCount, recipeInputItem,
+  recipeInputCount, recipeInputItem, siteCostCount, siteCostItem,
 } from './buildings.js'
 import { orderMove, stopUnit } from './units.js'
 
@@ -64,6 +70,14 @@ for (let t = 1; t < BUILDINGS.length; t++) {
 const IDLE_SHARE = 4
 
 /**
+ * Construction may hold at most 1/SITE_SHARE of all couriers on site jobs in the first (top
+ * priority) site pass, so crafters, shrine offerings and the push pass are never frozen by a
+ * batch of sites. Couriers that pull and push leave idle go to sites in a second, uncapped
+ * pass — except 1/IDLE_SHARE of the fleet, kept idle for next tick's pull pass.
+ */
+const SITE_SHARE = 2
+
+/**
  * Logistics state, ctx.log. Public READ-ONLY fields for HUD/__hw: jobCount, idleCount,
  * busyCount, stats. Everything else is private to logistics.js (prefix-free names are
  * fine, but no other module may read them).
@@ -72,7 +86,8 @@ const IDLE_SHARE = 4
  * @property {number} idleCount    couriers with job === J_NONE (as of this tick's rebuild)
  * @property {number} busyCount    = jobCount
  * @property {CellGrid} idleGrid   idle couriers, rebuilt each tick in tickLogistics
- * @property {{assigned:number, pullVisits:number, pushVisits:number, aborted:number, providerScans:number}} stats  per-tick counters (reset each tick)
+ * @property {number} siteCount    construction sites waiting for materials (read-only)
+ * @property {{assigned:number, pullVisits:number, pushVisits:number, siteVisits:number, aborted:number, providerScans:number}} stats  per-tick counters (reset each tick)
  */
 
 /**
@@ -89,14 +104,23 @@ export function createLogistics(ctx) {
   return {
     jobCount: 0,
     idleCount: 0,
+    /** couriers whose job delivers into a construction site (rebuilt by the courier pass) */
+    siteJobs: 0,
+    /** the last site pass stopped on its courier budget with demand left (private) */
+    siteCapped: false,
     busyCount: 0,
     idleGrid: new CellGrid(w.w, w.h, UNIT_CELL_SHIFT, maxU),
     /** per-tick counters (reset at the start of tickLogistics) + cumulative totals */
     stats: {
-      assigned: 0, pullVisits: 0, pushVisits: 0, aborted: 0, providerScans: 0, rerouted: 0, lost: 0, delivered: 0,
+      assigned: 0, pullVisits: 0, pushVisits: 0, siteVisits: 0, aborted: 0, providerScans: 0, rerouted: 0, lost: 0, delivered: 0,
       totalAssigned: 0, totalDelivered: 0, totalAborted: 0, totalLost: 0,
     },
     _maxBuildings: maxB,
+    // construction sites round-robin (site pass)
+    siteList: new Int32Array(maxB),
+    sitePos: new Int32Array(maxB).fill(-1),
+    siteCount: 0,
+    siteCursor: 0,
     // requester round-robin
     reqList: new Int32Array(maxB),
     reqPos: new Int32Array(maxB).fill(-1),
@@ -135,12 +159,19 @@ export function createLogistics(ctx) {
 /**
  * Index a freshly placed building: requester round-robin list (BF_REQUESTER), push list
  * (BF_PRODUCER), per-item provider chunk buckets (recipe output item, keyed by the DOOR
- * tile's chunk), storage chunk buckets (BF_STORAGE). Called by buildings.placeBuilding.
- * O(1).
+ * tile's chunk), storage chunk buckets (BF_STORAGE). A construction site (pool.site[b])
+ * goes into the site list ONLY. Called by buildings.placeBuilding / completeSite. O(1).
  */
 export function registerBuilding(ctx, b) {
   const L = ctx.log
   const pool = ctx.buildings
+  if (pool.site[b]) {
+    if (L.sitePos[b] < 0) {
+      L.sitePos[b] = L.siteCount
+      L.siteList[L.siteCount++] = b
+    }
+    return
+  }
   const type = pool.type[b]
   const f = B_FLAGS[type]
   const door = pool.door[b]
@@ -181,7 +212,15 @@ export function registerBuilding(ctx, b) {
  */
 export function unregisterBuilding(ctx, b) {
   const L = ctx.log
-  let pos = L.reqPos[b]
+  let pos = L.sitePos[b]
+  if (pos >= 0) {
+    const last = L.siteList[--L.siteCount]
+    L.siteList[pos] = last
+    L.sitePos[last] = pos
+    L.sitePos[b] = -1
+    if (L.siteCursor >= L.siteCount) L.siteCursor = 0
+  }
+  pos = L.reqPos[b]
   if (pos >= 0) {
     const last = L.reqList[--L.reqCount]
     L.reqList[pos] = last
@@ -292,8 +331,11 @@ function unitTileOf(ctx, u) {
 }
 
 /**
- * Courier carrying cargo lost its destination: find the nearest storage (same region as the
- * courier) with room for the whole load, reserve it and walk there; else drop the cargo.
+ * Courier carrying cargo lost its destination (demolished / cancelled site / destroyed, or
+ * unreachable): find the nearest storage (same region as the courier) with room for the whole
+ * load, reserve it and walk there. When every reachable storage is full it still goes to the
+ * nearest one and overfills it (a drop-off always lands), so cargo is lost only when no
+ * storage is reachable at all.
  */
 function reroute(ctx, u, exclude) {
   const units = ctx.units
@@ -302,7 +344,9 @@ function reroute(ctx, u, exclude) {
   const item = units.cargoItem[u]
   let s = -1
   if (qty > 0 && item > 0) {
-    s = nearestStorage(ctx, unitTileOf(ctx, u), qty, exclude, null)
+    const from = unitTileOf(ctx, u)
+    s = nearestStorage(ctx, from, qty, exclude, null)
+    if (s < 0) s = nearestStorage(ctx, from, -0x7fffffff, exclude, null)
   }
   if (s < 0) {
     // cargo lost (job counts are recomputed by the courier pass that called us)
@@ -376,9 +420,13 @@ function nearestStorage(ctx, fromTile, need, exclude, chunkFree) {
  * Best provider of `item` for requester b (door `toDoor`): producers in the item's chunk
  * buckets within LOG_RADIUS_CHUNKS rings first; else storage anywhere on the map.
  * Score = Manhattan door distance + PARTIAL_PENALTY when it cannot fill `want`.
+ * Site mode (`site` true, construction sites): producers and storage compete on that one
+ * score (a lodge holding 2 logs never beats a Hearth with a full load nearby), and when no
+ * storage holds the item the producer search widens to the whole map (every 16th tick), so
+ * full storage plus a distant lodge can never softlock construction.
  * @returns {number} building id or -1
  */
-function findProvider(ctx, item, b, toDoor, want, reserve) {
+function findProvider(ctx, item, b, toDoor, want, reserve, site = false) {
   const L = ctx.log
   const world = ctx.world
   const pool = ctx.buildings
@@ -390,7 +438,10 @@ function findProvider(ctx, item, b, toDoor, want, reserve) {
   const inv = pool.inv, resOut = pool.resOut
   const pHead = L.pHead, pNext = L.pNext
   let best = -1, bestScore = 0x7fffffff
-  for (let r = 0; r <= LOG_RADIUS_CHUNKS; r++) {
+  const storeOk = ctx.stock[item] > reserve && L.storageCount > 0
+  // the whole-map producer sweep is O(chunks): run it every 16th tick only
+  const pMax = site && !storeOk && (ctx.tick & 15) === 0 ? (cw > chh ? cw : chh) : LOG_RADIUS_CHUNKS
+  for (let r = 0; r <= pMax; r++) {
     if (best >= 0 && (r - 1) * CHUNK > bestScore) break
     const y0 = cy - r, y1 = cy + r, x0 = cx - r, x1 = cx + r
     for (let yy = y0; yy <= y1; yy++) {
@@ -416,10 +467,10 @@ function findProvider(ctx, item, b, toDoor, want, reserve) {
       }
     }
   }
-  if (best >= 0) return best
-  // last resort: storage anywhere (skip the scan when no storage holds any unreserved item,
-  // or when what is left is the construction reserve)
-  if (ctx.stock[item] <= reserve || L.storageCount === 0) return -1
+  if (best >= 0 && !site) return best
+  // last resort (sites: equal rival): storage anywhere (skip the scan when no storage holds
+  // any unreserved item, or when what is left is the construction reserve)
+  if (!storeOk) return best
   const rMax = cw > chh ? cw : chh
   const sHead = L.sHead, sNext = L.sNext
   for (let r = 0; r <= rMax; r++) {
@@ -526,14 +577,76 @@ function findIdleCourier(ctx, tile) {
 export function tickLogistics(ctx) {
   const L = ctx.log
   const st = L.stats
-  st.assigned = 0; st.pullVisits = 0; st.pushVisits = 0; st.aborted = 0; st.providerScans = 0
+  st.assigned = 0; st.pullVisits = 0; st.pushVisits = 0; st.siteVisits = 0; st.aborted = 0; st.providerScans = 0
   st.rerouted = 0; st.lost = 0; st.delivered = 0
 
   courierPass(ctx)
+  L.siteCapped = false
   if (L.idleCount <= 0) return
+  // construction first: sites are served before any crafter or storage push, but may hold at
+  // most 1/SITE_SHARE of the fleet so the production chain keeps moving
+  const fleet = L.idleCount + L.jobCount
+  let siteCap = (fleet + SITE_SHARE - 1) / SITE_SHARE | 0
+  if (siteCap < 1) siteCap = 1
+  if (!sitePass(ctx, siteCap - L.siteJobs)) return
   // once per tick: per-chunk storage room (push pass) and whether storage can be refilled at all
   const sFree = L.storageCount > 0 ? storageSummary(ctx) : 0
   if (pullPass(ctx, sFree >= COURIER_CAP)) pushPass(ctx, sFree)
+  // couriers nobody else wanted this tick: let capped sites have them (keep a few idle)
+  if (L.siteCapped) {
+    const spare = L.idleCount - ((fleet / IDLE_SHARE) | 0)
+    if (spare > 0) sitePass(ctx, spare)
+  }
+}
+
+/**
+ * Site pass: visit up to LOG_SITE_PER_TICK construction sites (round robin). For each cost
+ * item still missing (freeSpaceIn = cost - delivered - incoming), start up to
+ * SITE_JOBS_PER_VISIT courier jobs from the best provider (producers' outputs and storage
+ * scored together, findProvider site mode) — with NO construction reserve, so storage can be
+ * drawn to zero. At most `budget` jobs start; stopping on it sets L.siteCapped.
+ * @returns {boolean} false when couriers ran out (stop every later pass).
+ */
+function sitePass(ctx, budget) {
+  const L = ctx.log
+  const count = L.siteCount
+  if (count === 0) return true
+  if (budget <= 0) { L.siteCapped = true; return true }
+  const pool = ctx.buildings
+  const visits = count < LOG_SITE_PER_TICK ? count : LOG_SITE_PER_TICK
+  for (let v = 0; v < visits; v++) {
+    if (L.siteCursor >= L.siteCount) L.siteCursor = 0
+    const b = L.siteList[L.siteCursor]
+    L.siteCursor = L.siteCursor + 1 >= L.siteCount ? 0 : L.siteCursor + 1
+    L.stats.siteVisits++
+    const type = pool.type[b]
+    const door = pool.door[b]
+    const n = siteCostCount(type)
+    for (let k = 0; k < n; k++) {
+      const item = siteCostItem(type, k)
+      for (let j = 0; j < SITE_JOBS_PER_VISIT; j++) {
+        const free = freeSpaceIn(ctx, b, item)
+        if (free <= 0) break
+        if (budget <= 0) { L.siteCapped = true; return true }
+        const want = free < COURIER_CAP ? free : COURIER_CAP
+        const src = findProvider(ctx, item, b, door, want, 0, true)
+        if (src < 0) break
+        const avail = availableOut(ctx, src, item)
+        const q = want < avail ? want : avail
+        if (q <= 0) break
+        const u = findIdleCourier(ctx, pool.door[src])
+        if (u < 0) {
+          if (L.idleCount <= 0) return false
+          break // idle couriers exist, just none in src's region
+        }
+        assign(ctx, u, src, b, item, q)
+        L.siteJobs++
+        budget--
+        if (L.idleCount <= 0) return false
+      }
+    }
+  }
+  return true
 }
 
 function courierPass(ctx) {
@@ -544,7 +657,8 @@ function courierPass(ctx) {
   const idleList = L.idleList
   const alive = units.alive, utype = units.type, job = units.job, mstate = units.mstate
   grid.clear()
-  let idle = 0, busy = 0
+  let idle = 0, busy = 0, siteJobs = 0
+  const site = pool.site
   const hi = units.hi
   for (let u = 0; u < hi; u++) {
     if (alive[u] !== 1 || utype[u] !== U_COURIER) continue
@@ -635,7 +749,10 @@ function courierPass(ctx) {
     if (j === J_NONE) {
       idleList[idle++] = u
       grid.add(u, units.x[u], units.y[u])
-    } else busy++
+    } else {
+      busy++
+      if (site[units.jobDst[u]] === 1) siteJobs++
+    }
   }
   grid.build()
   L.idleListLen = idle
@@ -643,6 +760,7 @@ function courierPass(ctx) {
   L.idleCount = idle
   L.jobCount = busy
   L.busyCount = busy
+  L.siteJobs = siteJobs
 }
 
 /**

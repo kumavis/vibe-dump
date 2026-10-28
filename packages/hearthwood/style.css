@@ -129,7 +129,7 @@ button:disabled, .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   position: absolute; top: 2px; left: 4px; font-size: 10px; color: var(--amber-dim);
 }
 .build-btn.locked { filter: grayscale(1); opacity: 0.45; }
-.build-btn.poor .cost { color: var(--danger); }
+.build-btn .cost span.short { color: var(--amber-dim); } /* hint only: storage holds less than this; still placeable (red stays for real blockers) */
 
 .tooltip {
   position: absolute;
@@ -243,6 +243,7 @@ kbd {
 .stock-item b { font-weight: 600; min-width: 2ch; }
 .stock-cap { color: var(--text-dim); font-variant-numeric: tabular-nums; padding-left: 6px; border-left: 1px solid var(--edge); }
 .stock-cap.full { color: var(--danger); }
+.stock-cap.over, .kv .over { color: var(--amber); font-weight: 600; }
 #couriers b { color: #bff2ff; }
 .tier-name { color: var(--teal); font-weight: 600; }
 .offer { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
@@ -348,3 +349,18 @@ body.paused #speed button:first-child { animation: pulse 1.2s ease-in-out infini
   #hints { left: 4px; right: 4px; max-width: none; }
   #minimap { right: 4px; bottom: 4px; }
 }
+
+/* construction sites + discard controls */
+#selpanel h3 .site-tag { color: var(--text-dim); font-weight: 400; }
+.bar.site > i { background: var(--teal); }
+.site-note { font-size: 11px; margin-top: 4px; line-height: 1.3; }
+.slot button.discard {
+  position: absolute; right: -6px; bottom: -6px;
+  width: 17px; height: 17px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; line-height: 1; border-radius: 50%;
+  color: #e7b8b0; background: #2a1c1a; border-color: #6a4038;
+  opacity: 0.8;
+}
+.slot:hover button.discard { opacity: 1; }
+.slot button.discard:hover { color: #ffc7c0; border-color: var(--danger); opacity: 1; }

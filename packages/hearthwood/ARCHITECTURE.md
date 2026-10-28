@@ -11,8 +11,8 @@ to a requester's door carrying at most 5 of ONE item. No belts.
 Core loop: Hearth + stock + 8 couriers → place extractors on resources (Lumber Lodge,
 Quarry, Bog Mine, Glowcap Grove, Moonstone Delve) and crafters (Sawmill, Ember Forge,
 Tinker Workshop, Glowloom, Starbloom Enchantery) → couriers haul everything → surplus
-lands in storage (Hearth, Storehouses) → construction is paid instantly from total
-storage stock → offerings at the Moonwell Shrine raise the tier (unlocks) → 5 relics =
+lands in storage (Hearth, Storehouses) → a placed building is a **construction site** that
+couriers supply from storage or straight from producers (highest logistics priority) → offerings at the Moonwell Shrine raise the tier (unlocks) → 5 relics =
 win. Blight raids from the map edges scale with time and factory size; Wardens
 (archers), Treants (tanks) and Ward Towers defend. Losing the Hearth loses the game.
 
@@ -112,10 +112,11 @@ and reach state through `ctx`.
 | `storeCap` | int | buildings.js | total storage capacity |
 | `courierCap` | int | buildings.js | `courierCapExtra` + sum of `courierCap` of alive buildings (Hearth 12, Den +10) |
 | `courierCapExtra` | int | game.js (`stress`) | cap bonus not tied to a building; buildings.js adds it, never resets it |
+| `lastRefund` | Int32Array[16] | buildings.js (`destroyBuilding`, `refundCost`) | items the last refund put back; the HUD's demolish/cancel toast reads it |
 | `tier` | int | buildings.js (shrine) | 0..WIN_TIER (3) |
 | `won`, `lost` | bool | buildings.js | game.js pauses / UI shows banner |
 | `fx` | FxRing | combat, units, buildings | cosmetic; renderer reads |
-| `events` | EventRing | buildings, combat, waves | HUD reads with its own cursor |
+| `events` | EventRing | buildings, combat, waves | HUD reads with its own cursor; `EV_*` ids in constants.js — buildings emits EV_BUILDING_BUILT (a site completed: a = type, b = door), EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE, EV_COURIER_SPAWNED |
 | `stats` | `{tickMs,lastTickMs,ticks}` | stepSim | EMA of stepSim wall time |
 
 `createContext({w, h, seed, generate=true, mapgen, path, maxUnits, maxBuildings, waves=true})`.
@@ -284,6 +285,7 @@ lowest free id first (deterministic), `free` pushes back (LIFO reuse) and bumps 
 | `paused` | Uint8 | player pause | buildings.setPaused |
 | `progress` | Int32 | ticks into current recipe / den spawn / training | buildings.js, combat.js (halls) |
 | `workTile` | Int32 | extractor's current resource tile | buildings.js |
+| `site` | Uint8 | 1 = construction site (placed, cost not yet delivered/raised), 0 = built. See §9.1a | buildings.js |
 | `inv, resIn, resOut` | Int32[cap*16] | items present / promised in / promised out | **buildings.js helpers only** |
 | `invTotal, resInTotal` | Int32 | sums for storage capacity | buildings.js helpers |
 | `trainQ` | Uint8[cap*TRAIN_QUEUE] | queued unit types (`b*TRAIN_QUEUE + k`) | combat.js |
@@ -298,31 +300,60 @@ lowest free id first (deterministic), `free` pushes back (LIFO reuse) and bumps 
 ### 9.1 Placement
 `canPlace(ctx,type,tx,ty,{free}) → P_*` checks, in order: `P_NOT_BUILDABLE` (Hearth, unless
 free), `P_TIER` (`B_TIER[type] > ctx.tier`, unless free), `P_UNIQUE` (typeCount > 0 for
-unique types), `P_OOB` (footprint only), `P_BLOCKED` (`!world.areaFree`), `P_DOOR` (door tile OOB, not
-walkable, or occupied), `P_NO_RESOURCE` (extractor and `countResource == 0`), `P_COST`
-(unless free), with `P_ENCLOSE` just before `P_COST` (player placement only: the footprint would
-split its surroundings so that a door ends up in a closed pocket; local flood fill, see
-`wouldEnclose`). Pure.
+unique types — a site counts), `P_OOB` (footprint only), `P_BLOCKED` (`!world.areaFree`), `P_DOOR` (door tile OOB, not
+walkable, or occupied), `P_NO_RESOURCE` (extractor and `countResource == 0`), `P_ENCLOSE`
+(player placement only: the footprint would split its surroundings so that a door ends up in a
+closed pocket; local flood fill, see `wouldEnclose`). Pure. **Cost is never checked**:
+`P_COST` still exists in constants.js but canPlace no longer returns it (the ghost never
+shows a cost reason).
 
-`placeBuilding(ctx,type,tx,ty,{free}) → id | -1`: canPlace → payCost → `alloc` → tx/ty/door
-→ `world.occupy` → `linkChunk(id, world.chunkOfXY(tx,ty))` → caps (`courierCap`,
-`storeCap`) → `logistics.registerBuilding` → `fx.emit(FX_BUILD, cx, cy, cx, cy, tick)`.
+`placeBuilding(ctx,type,tx,ty,{free}) → id | -1`: canPlace → `alloc` → tx/ty/door
+→ `world.occupy` → `linkChunk(id, world.chunkOfXY(tx,ty))` → then
+- `{free:true}` (start hamlet, `stress`, tests, `__hw.place` default): **built at once** — caps
+  (`courierCap`, `storeCap`);
+- otherwise: a **construction site** — `site[b] = 1`, `hp = B_HP * SITE_HP_FRAC` (half),
+  `status = BS_STARVED`, no caps, nothing paid;
 
-`destroyBuilding(ctx,b,refundFrac=0,killed=false)` and `demolishBuilding(ctx,b)` (50%,
-refuses Hearth): see stub docs. Contents of destroyed storage are lost (subtract from stock).
+→ `logistics.registerBuilding` (a site goes into the site list only) → `fx.emit(FX_BUILD, …)`.
+
+### 9.1a Building states: site → raising → built
+| state | `site` | behaviour |
+| --- | --- | --- |
+| collecting | 1 | footprint + door occupied (pathing/layout as for a building), drawn ghosted. NOT a producer / storage / requester / tower / den / hall / shrine; no `courierCap` / `storeCap`; not a logistics provider. Logistics delivers its cost (`content.cost`) into its own inventory slots (§10.3 site pass). `status = BS_STARVED`, `progress = 0`. Blight can attack it (half HP). |
+| raising | 1 | every cost item delivered (`inv >= qty`): `status = BS_OK`, `progress++` each tick |
+| built | 0 | at `progress >= SITE_RAISE_TICKS` (30): `completeSite` consumes the delivered cost, `site = 0`, `progress = 0`, HP topped up by the missing half (damage taken stays), caps applied, logistics `unregister` + `register` as the real type, `FX_BUILD` + `EV_BUILDING_BUILT(a = type, b = door)` (HUD toast "<name> raised") |
+
+`siteCostCount/siteCostItem/siteCostQty(type…)` expose the cost table; `siteProgress(ctx,b)`
+→ [0,1] (delivered share × 0.9, then the raise). Sites cannot be paused; halls refuse
+training and towers do not shoot while `site`; the Hearth rescue (§9.4) ignores Den sites.
+
+`destroyBuilding(ctx,b,refundFrac=0,killed=false)`: logistics.unregisterBuilding → refund →
+(built storage: subtract its `inv - resOut` from stock, capacity from storeCap) → (built:
+`courierCap -=`) → `world.vacate` → `pool.free`. Refund basis: a built building refunds
+`floor(cost * refundFrac)` (refundCost) and, when demolished by the player (refundFrac > 0, not
+`killed`), ALL of its own unreserved inventory too (outputs, crafter inputs, a Storehouse's
+contents; items reserved for an in-flight pickup are dropped); a **site** refunds
+`floor(delivered inv * refundFrac)`. Either way via the never-lose path below, recorded in
+`ctx.lastRefund`. Without a refund (refundFrac 0, or `killed`) the contents are lost. `killed` → FX_DESTROY + EV_BUILDING_LOST (+ EV_LOSE for the core); a site
+killed by Blight loses its deliveries. `demolishBuilding(ctx,b)` refuses the Hearth; built →
+50% of the cost; **site → "cancel", 100% of what was delivered**. Couriers with jobs on a
+dead building repair lazily (§10.2): pickups release `resOut`, carried cargo reroutes.
 
 ### 9.2 Inventory helpers — the ONLY writers of inv/resIn/resOut/stock
-Invariant: `ctx.stock[i] = Σ over alive storage b of (inv[b,i] - resOut[b,i])`.
+Invariant: `ctx.stock[i] = Σ over alive BUILT storage b (site == 0) of (inv[b,i] - resOut[b,i])`.
+A Storehouse site is not storage: its deliveries never count as stock.
 
 | helper | effect |
 | --- | --- |
-| `addItems(ctx,b,item,qty,fromReserved)` | fromReserved: `resIn -= qty` (+resInTotal), always adds all. Else clamps to capacity (storage: `storage - invTotal - resInTotal`; others: `B_SLOT_CAP - inv - resIn`). `inv += q`, `invTotal += q`, storage: `stock += q`. Returns q |
+| `addItems(ctx,b,item,qty,fromReserved,overflow)` | fromReserved: `resIn -= qty` (+resInTotal), always adds all. `overflow`: adds all, past capacity (refunds). Else clamps to capacity (site: `cost qty - inv - resIn`; storage: `storage - invTotal - resInTotal`; others: `B_SLOT_CAP - inv - resIn`). `inv += q`, `invTotal += q`, storage: `stock += q`. Returns q |
 | `takeItems(ctx,b,item,qty,fromReserved)` | fromReserved: `inv -= qty; resOut -= qty` (stock unchanged). Else `q = min(qty, inv-resOut)`, `inv -= q`, storage: `stock -= q`. Returns q |
 | `reserveOut / releaseOut` | `resOut ±= qty`; storage: `stock ∓= qty` |
 | `reserveIn / releaseIn` | `resIn ±= qty`, `resInTotal ±= qty` |
 | `availableOut(b,item)` | `inv - resOut` |
-| `freeSpaceIn(b,item)` | storage: `storage - invTotal - resInTotal`; shrine: current offering qty − inv − resIn (0 if not offered / won); recipe input: `B_SLOT_CAP - inv - resIn`; else 0 |
-| `canAfford(cost)`, `payCost(cost)`, `refundCost(cost, frac)` | stock-level; pay from Hearth first then Storehouses (typeList order), unreserved only, all-or-nothing |
+| `freeSpaceIn(b,item)` | site: cost qty of item − inv − resIn (0 if not in the cost); storage: `storage - invTotal - resInTotal` (negative while overfilled → logistics delivers nothing until it drains); shrine: current offering qty − inv − resIn (0 if not offered / won); recipe input: `B_SLOT_CAP - inv - resIn`; else 0 |
+| `discardItems(ctx,b,item,qty?)` | destroys up to qty (default all) of the UNRESERVED part (`inv - resOut`) — `takeItems(…, false)`, so stock stays exact; reserved items are never touched. Works on storage, producer inputs/outputs, sites, the shrine. Returns the count |
+| `canAfford(cost)`, `payCost(cost)` | stock-level; pay from (built) Hearth first then Storehouses (typeList order), unreserved only, all-or-nothing. Used by dens and training only |
+| `refundCost(cost, frac)` | `floor(qty*frac)` per entry via the never-lose path: built storage with room first (Hearth, then Storehouses), the remainder **overfills** the first built storage (the Hearth) with `addItems(…, overflow)`. Lost only if no storage exists. Resets + fills `ctx.lastRefund`. Used by demolition, site cancel (per delivered item), training cancel, den spawn failure |
 
 `recomputeStock(ctx)` rebuilds stock/storeCap/courierCap from scratch — tests assert it
 equals the incremental values after long runs.
@@ -349,13 +380,14 @@ else:
     if inv[out] + outQty > outCap: status = BS_OUTPUT_FULL; continue   // hold at `ticks`
     addItems(b, out, outQty, false); progress = 0
 ```
+Sites first: a `site[b]` building runs only the §9.1a state machine and `continue`s.
 Den (`BF_DEN`): if paused → BS_PAUSED. If `units.typeCount[U_COURIER] >= ctx.courierCap` →
 BS_IDLE, progress = 0. If more than 3 couriers stand idle and they are over a quarter of all
 couriers → BS_IDLE (no planks spent on couriers nobody needs). Else progress++; at
 `courierSpawn.ticks`: `payCost` → `spawnUnit(U_COURIER, door centre)` + EV_COURIER_SPAWNED,
 progress = 0; on failure BS_NO_STOCK and hold.
-Hearth (`BF_CORE`) rescue: while fewer than 2 couriers are alive and no Den can pay for one
-(no Den, or stock short of the spawn cost), the Hearth spawns a free courier every 200 ticks,
+Hearth (`BF_CORE`) rescue: while fewer than 4 couriers are alive and no Den can pay for one
+(no BUILT Den — a Den site makes nothing — or stock short of the spawn cost), the Hearth spawns a free courier every 200 ticks,
 so a raid that wipes the swarm while planks sit in producer buffers is never a soft-lock.
 Shrine (`BF_SHRINE`): offering = `TIERS[ctx.tier].offering`; when every `inv >= qty`, take
 them, `ctx.tier++`, EV_TIER_UP(a=tier); reaching `WIN_TIER` sets `ctx.won` + EV_WIN.
@@ -364,6 +396,9 @@ Halls and towers: combat.js.
 ## 10. Logistics (logistics.js) — owner: sim
 
 ### 10.1 Indexes (private to logistics; built by register/unregisterBuilding)
+- `siteList` (dense, swap-remove, `sitePos[b]`) of construction sites + `siteCursor`. A site is
+  in NO other index; `completeSite` unregisters it and registers it again as its real type.
+  `L.siteCount` is public read-only.
 - `reqList` (Int32Array dense, swap-remove, `reqPos[b]`) of `BF_REQUESTER` buildings + `reqCursor`.
 - `provList` (dense) of `BF_PRODUCER` buildings + `provCursor` (push pass).
 - Per-item provider buckets: for each (item, chunk of the DOOR tile) a list of producer
@@ -384,7 +419,7 @@ Halls and towers: combat.js.
 | J_TO_PICKUP | mstate M_ARRIVED | jobTimer = PICK_TICKS → J_PICKING |
 | J_PICKING | src/dst dead | as above → J_NONE |
 | J_PICKING | --jobTimer == 0 | `q = takeItems(src,item,jobQty,true)`; cargo = (item,q); orderMove(dst door) → J_TO_DROPOFF |
-| J_TO_DROPOFF | dst dead, or M_FAILED | if dst alive releaseIn(dst); **reroute**: nearest storage with `freeSpaceIn ≥ cargoQty` (storage buckets, same region) → reserveIn, jobDst=it, orderMove; none → cargo lost, J_NONE |
+| J_TO_DROPOFF | dst dead (demolished, cancelled/destroyed site), or M_FAILED | if dst alive releaseIn(dst); **reroute**: nearest storage with `freeSpaceIn ≥ cargoQty` (storage buckets, same region); if every reachable storage is full, the nearest reachable one anyway (the drop-off overfills it: cargo never vanishes) → reserveIn, jobDst=it, orderMove; no reachable storage at all → cargo lost, J_NONE |
 | J_TO_DROPOFF | M_ARRIVED | jobTimer = DROP_TICKS → J_DROPPING |
 | J_DROPPING | dst dead | reroute as above |
 | J_DROPPING | --jobTimer == 0 | `addItems(dst,item,cargoQty,true)`; cargo = 0 → J_NONE (stays where it is) |
@@ -394,6 +429,30 @@ Halls and towers: combat.js.
 Invariant: every live reservation is owned by exactly one courier job.
 
 ### 10.3 Scheduler (after the state machine). Early-out if `idleCount == 0`.
+Priority order: **site pass (capped) → pull pass → push pass → site pass (leftovers)**; a
+pass that runs out of idle couriers stops every later pass this tick.
+
+Site share: the courier pass counts `L.siteJobs` (jobs whose dst is a site). The first site
+pass may start at most `ceil(fleet / SITE_SHARE (2)) - siteJobs` jobs, so construction never
+holds more than half the couriers and crafters / offerings / pushes keep moving while a batch
+of sites is open. If it stopped on that budget with demand left (`L.siteCapped`), a second
+site pass after the push pass takes the couriers nobody else wanted this tick, leaving
+`fleet / IDLE_SHARE` idle for next tick's pull pass.
+
+**Site pass** (highest priority) — `visits = min(LOG_SITE_PER_TICK (16), siteCount)`, round robin:
+```
+for each cost item of site b:
+  repeat up to SITE_JOBS_PER_VISIT (4) times:
+    free = freeSpaceIn(b, item)  (= cost - delivered - incoming); if free <= 0: break
+    want = min(free, COURIER_CAP)
+    src = findProvider(item, b, want, reserve = 0, site = true)
+                       // producers' OUTPUTS and storage on ONE score (site mode, below); storage is
+                       // drawn down to ZERO (no CRAFT_RESERVE, no canRefill gate)
+    u = findIdleCourier(src.door); assign(u, src, b, item, min(want, availableOut(src)))
+```
+Because sites reserve producer output before the push pass runs, and storage (even when full)
+is still a provider, full storage + full producers can no longer soft-lock construction.
+
 **Pull pass** — `visits = min(LOG_REQ_PER_TICK, reqCount)`:
 ```
 b = reqList[reqCursor]; reqCursor = (reqCursor + 1) % reqCount
@@ -414,7 +473,11 @@ for each input item of b (shrine: items of the current offering):
 item's provider buckets; candidate needs `availableOut ≥ 1` and `path.sameRegion(src.door,
 b.door)`; score = Manhattan door distance + (avail < want ? 64 : 0); lowest score wins (ties
 → lower id); stop expanding once `(r-1)*CHUNK > bestScore`. If none: same over storage
-buckets with unlimited radius (whole map).
+buckets with unlimited radius (whole map). **Site mode** (construction sites): storage is
+always scanned and competes with the best producer on the same score, so a lodge holding 2
+logs (partial penalty) never beats a Hearth with a full load nearby; and when no storage
+holds the item (`stock[item] == 0`, the softlock case) the producer rings widen to the whole
+map every 16th tick, so a site is supplied from any reachable producer however far.
 
 **Push pass** — `visits = min(LOG_PUSH_PER_TICK, provCount)`:
 ```
@@ -515,10 +578,11 @@ Towers (`BF_TOWER`, `BUILDINGS[t].tower`): from footprint centre, nearest Blight
 Damage: `damageUnit(ctx,id,amt)` → hp ≤ 0 → `despawnUnit(ctx,id,true)`.
 `damageBuilding(ctx,b,amt)` → hp ≤ 0 → `destroyBuilding(ctx,b,0,true)`.
 
-Training: `enqueueTraining(ctx,b,unitType)` validates and pays immediately;
+Training: `enqueueTraining(ctx,b,unitType)` validates (refuses a hall still under construction) and pays immediately;
 halls run `progress++` on the head of `trainQ`; at `UNITS[t].trainTicks` spawn at the door
 centre, shift the queue, `commandMove` to `rally` if set, EV_UNIT_TRAINED; status
-BS_IDLE (empty) / BS_PAUSED / BS_OK. `cancelTraining` pops the last entry with full refund.
+BS_IDLE (empty) / BS_PAUSED / BS_OK. `cancelTraining` pops the last entry with full refund
+(refundCost: overfills the Hearth when storage is full). Hall and tower loops skip `site` buildings.
 
 ## 13. Waves (waves.js) — owner: units
 
@@ -557,13 +621,13 @@ game.ctx, alpha, overlay)` → `minimap.update(ctx)` + `minimap.draw(camera)` �
 | caller | may import |
 | --- | --- |
 | buildings.js | logistics: `registerBuilding, unregisterBuilding`; units: `spawnUnit` |
-| logistics.js | buildings: inventory helpers, `availableOut, freeSpaceIn, recipeInputCount, recipeInputItem`; units: `orderMove, stopUnit`; world `CellGrid` |
+| logistics.js | buildings: inventory helpers, `availableOut, freeSpaceIn, recipeInputCount, recipeInputItem, siteCostCount, siteCostItem`; units: `orderMove, stopUnit`; world `CellGrid` |
 | units.js | logistics: `abortJob`; path: `PATH_PENDING, PATH_NONE` |
 | combat.js | units: `spawnUnit, despawnUnit, orderMove, stopUnit`; buildings: `destroyBuilding, payCost, refundCost, nearestBuilding`; world `CellGrid` (private Blight grid) |
 | waves.js | units: `spawnUnit`; combat: `commandRaid`; buildings: `nearestBuilding` |
-| game.js | context, buildings (`placeBuilding, addItems, canPlace`), units (`spawnUnit`), mapgen via context |
-| input.js | buildings (`canPlace, placeBuilding, demolishBuilding, buildingAtTile, setPaused`), units (`unitsInRect, unitAt`), combat (commands), camera, overlay |
-| ui.js | content, constants, buildings (`canAfford, setPaused, demolishBuilding`), combat (`enqueueTraining, cancelTraining`), sprites (`itemIconURL, buildingIconURL`), app-hud (pure helpers) |
+| game.js | context, buildings (`placeBuilding, addItems, canPlace, discardItems`), units (`spawnUnit`), mapgen via context |
+| input.js | buildings (`canPlace, placeBuilding, demolishBuilding, buildingAtTile, setPaused`), units (`unitsInRect, unitAt`), combat (commands), camera, overlay, app-hud (`demolishMessage`) |
+| ui.js | content, constants, buildings (`setPaused, demolishBuilding, discardItems, siteProgress`), combat (`enqueueTraining, cancelTraining`), sprites (`itemIconURL, buildingIconURL`), app-hud (pure helpers) |
 | render.js / minimap.js / sprites.js | constants, content, rng, each other. **No sim functions** (read ctx fields only) |
 
 Everything may import `constants.js`, `content.js`, `rng.js`, `fx.js`. ESM import cycles
@@ -578,7 +642,11 @@ Everything may import `constants.js`, `content.js`, `rng.js`, `fx.js`. ESM impor
   `worldToScreen(wx,wy,out)`.
 - world: `terrain, res, resAmt, w, h, chunksW, chunksH, chunkVersion`.
 - buildings: `alive, type, tx, ty, w, h, hp, status, paused, progress, door, chunkHead/chunkNext, inv`
-  (fill gauge), `typeList[B_WARD_TOWER]`.
+  (fill gauge), `site`, `typeList[B_WARD_TOWER]`. A **site** is drawn as its sprite at reduced
+  alpha over a dark footing with a marching dashed amber outline and a teal progress bar
+  (`siteFraction(B,b)` in render.js mirrors `buildings.siteProgress` from content costs), HP
+  bar against `B_HP * SITE_HP_FRAC`; no shadow, smoke, glow, status icon or gauges. FAR tier:
+  its glyph at 35% alpha. Minimap: a darkened type colour.
 - units: `alive, type, faction, x, y, px, py, vx, hp, mstate, job, cargoItem, cargoQty`; culling via
   `ctx.unitGrid.queryRect` on the visible rect expanded by one cell.
 - `ctx.fx` (draw entries with `ctx.tick - tick[i] < FX_LIFE[kind]`), `ctx.tick` (animation clock).
@@ -624,10 +692,22 @@ corners (world units), `attackMoveArmed`, `cursorX/Y`, `pingX/Y/Tick/Kind`, `sho
 `ctx.log` + `units.typeCount[U_COURIER]` + `ctx.courierCap`), `#tier` (tier name + offering
 progress from the Shrine's inv), `#wave` (countdown from `ctx.waves.nextTick - ctx.tick`, `.warn`
 under 30 s), `#speed` (pause/1×/2×/4×), `#buildmenu` (BUILD_MENU order, hotkey, cost,
-locked by tier, tooltip with desc), `#selpanel` (building: name, HP, status, input/output slots
-with counts and reservations, recipe progress, pause/demolish, hall queue buttons; unit: name,
-HP, order/mstate, courier cargo + job), `#hints` (tutorial strip: build a quarry, storehouses
-buffer, dens make couriers, towers stop raids — advance on events/counts), `#toasts` (events
+locked by tier — **never greyed for cost**: a cost item storage cannot cover is only tinted
+`.short` (amber, not the danger red) as a hint — tooltip with desc + "placed as a construction site"), `#selpanel`
+(building: name, HP, status, input/output slots with counts and reservations, recipe progress,
+pause/demolish, hall queue buttons; **every inventory slot** — storage stacks, producer inputs
+and output, shrine offerings, site deliveries — carries a small × "discard" control whose title
+names how many it destroys (the unreserved part), handled on `pointerdown` (the body re-renders
+at 5 Hz) → `discardItems` + toast "Discarded N <item>", no modal; **site**: title
+"Construction site — <name>", one slot per cost item delivered/needed with "+incoming",
+status awaiting materials / waiting for couriers (storage holds what is missing, nothing on
+the way) / materials on the way / raising…, a progress bar, Cancel <kbd>Del</kbd> (full refund of
+deliveries); unit: name, HP, order/mstate, courier cargo + job); the `.stock-cap` figure sums
+built storage `invTotal` and reads e.g. "507 / 500" tinted amber (`.over`) while refunds
+overfill storage, `#hints` (tutorial strip: build a quarry, storehouses
+buffer, dens make couriers, towers stop raids — advance on counts of BUILT buildings,
+`builtCount` in app-hud, so placing a site does not tick a step; the tier bar reads "Shrine
+under construction N%" while the Shrine is a site), `#toasts` (events
 ring). Update DOM only when the rendered string changes; heavy panels ≤ 5 Hz.
 
 ### 17.2 Controls (input.js)
@@ -649,11 +729,11 @@ Use `KeyboardEvent.code` (layout-independent). Key map (resolves the WASD/A/numb
 | `KeyH` / `KeyX` | hold / stop selected soldiers |
 | `KeyP` | pause/unpause the selected building |
 | Esc | cancel placement → attack-move arm → selection |
-| Delete / Backspace | `demolishBuilding(selected)` |
+| Delete / Backspace | `demolishBuilding(selected)` — on a site this cancels it (100% of deliveries back); toast lists the refund from `ctx.lastRefund` ("Sawmill demolished: +7 Heartwood +2 Mossstone") |
 | Space | toggle game pause; `Equal`/`Minus` speed up/down |
 | minimap click/drag | recentre camera via `minimap.toWorld` |
 
-The ghost re-runs `canPlace` whenever its tile changes (and every 10 frames for cost changes);
+The ghost re-runs `canPlace` whenever its tile changes (and every 10 frames, e.g. tier or uniqueness changes);
 `overlay.ghostReason` drives its colour. Extractor ghosts also show the reach rect.
 
 ### 17.3 game.js and `window.__hw`
@@ -668,7 +748,9 @@ window.__hw = {
   tick(n = 1) -> ctx.tick                // synchronous stepSim calls, works while paused
   stress({buildings, couriers}) -> {buildings, couriers}
   stats() -> {tick, tickMs, frameMs, fps, units, buildings, couriers, idle, jobs, blight, pathQueue, pathHits, pathMisses}
-  place(type, tx, ty, free = true) -> id
+  place(type, tx, ty, free = true) -> id   // free=false makes a construction site
+  give(b, item, qty) -> added              // addItems, clamped to the building's room
+  discard(b, item, qty?) -> destroyed      // discardItems
   spawn(type, x, y, faction?) -> id
   setSpeed(s), reset(seed), renderer, camera, overlay
 }
@@ -689,6 +771,10 @@ within ~1 s at zoom 1 centred on the Hearth (package.json thumbnail settle 3000 
   `placeBuilding(ctx, type, tx, ty, {free:true})` and seed stock with `addItems`.
 - Your suite will import other areas' modules through context.js; until integration they may
   still be stubs. Write the tests against the contract anyway; the integrator runs them all.
+- `tests/sites.test.mjs`: construction sites (placement without cost, producer → site with storage
+  full, completion, cancel refund + reservation release + cargo reroute, destruction), discard,
+  overflow refunds. `tests/scenario-sites.playwright.mjs` (by hand, like the smoke): the
+  player's full-storage soft-lock end to end in the browser, prints JSON with `ok`.
 - End-to-end browser smoke (integrator): `npx vite build && node tests/smoke.playwright.mjs`
   (not picked up by `node --test`; serves dist/, drives Chromium through boot, economy, placement,
   selection, orders, stress, reset and a 512 map; prints JSON, exit 1 on any failure or console error).

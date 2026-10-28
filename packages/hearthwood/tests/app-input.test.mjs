@@ -49,7 +49,7 @@ function setup() {
   return { game, ctx, hearth, camera, overlay, canvas, keys, input, toasts, S, click, key, setTime: (v) => { t = v } }
 }
 
-test('placement: hotkey ghost, valid click places and pays, invalid click toasts', async () => {
+test('placement: hotkey ghost, valid click places a construction site (nothing paid), invalid click toasts', async () => {
   const env = setup()
   const { ctx, overlay, key, click, toasts, input } = env
   env.canvas.fire('pointermove', env.S(20.2, 20.2))
@@ -61,8 +61,10 @@ test('placement: hotkey ghost, valid click places and pays, invalid click toasts
   const wood = ctx.stock[I_WOOD], stone = ctx.stock[I_STONE]
   click(20.2, 20.2)
   assert.equal(ctx.buildings.typeCount[B_STOREHOUSE], 1)
-  assert.equal(ctx.stock[I_WOOD], wood - 20)
-  assert.equal(ctx.stock[I_STONE], stone - 10)
+  const st = ctx.buildings.typeList[B_STOREHOUSE][0]
+  assert.equal(ctx.buildings.site[st], 1, 'placed as a construction site')
+  assert.equal(ctx.stock[I_WOOD], wood, 'placement pays nothing up front')
+  assert.equal(ctx.stock[I_STONE], stone)
   assert.equal(overlay.ghostType, 0, 'placement ends without Shift')
   // Shift keeps placing; invalid spot (on the hearth) toasts the reason
   const saws = ctx.buildings.typeCount[B_SAWMILL] // the hamlet already has one
@@ -192,7 +194,7 @@ test('building selection: click selects, P pauses, Delete demolishes with refund
   const env = setup()
   const { ctx, overlay, key, click, toasts, hearth } = env
   const { placeBuilding } = await import('../src/buildings.js')
-  const saw = placeBuilding(ctx, B_SAWMILL, 20, 40, { free: false })
+  const saw = placeBuilding(ctx, B_SAWMILL, 20, 40, { free: true })
   assert.ok(saw >= 0)
   click(20.5, 40.5)
   assert.equal(overlay.selBuilding, saw)
@@ -205,6 +207,7 @@ test('building selection: click selects, P pauses, Delete demolishes with refund
   assert.equal(ctx.buildings.alive[saw], 0)
   assert.equal(overlay.selBuilding, -1)
   assert.equal(ctx.stock[I_WOOD], plank + 7) // floor(15 * 0.5)
+  assert.match(toasts.at(-1)[0], /Sawmill demolished.*\+7 Heartwood/)
   click(32.5, 32.5)
   assert.equal(overlay.selBuilding, hearth)
   key('Backspace')

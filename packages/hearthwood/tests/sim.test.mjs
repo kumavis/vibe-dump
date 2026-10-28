@@ -119,7 +119,7 @@ test('pools: alloc lowest id, free bumps gen, type lists and chunk lists stay co
 
 // ------------------------------------------------------------------ placement
 
-test('canPlace reports reasons in contract order; place/demolish pay and refund', () => {
+test('canPlace reports reasons in contract order (no cost check); place makes a site; demolish refunds 50%', () => {
   const ctx = mk()
   assert.equal(canPlace(ctx, B_HEARTH, 30, 30), P_NOT_BUILDABLE)
   const h = placeBuilding(ctx, B_HEARTH, 30, 30, { free: true })
@@ -136,14 +136,22 @@ test('canPlace reports reasons in contract order; place/demolish pay and refund'
   assert.equal(canPlace(ctx, B_SAWMILL, 10, 10, { free: true }), P_DOOR)
   assert.equal(canPlace(ctx, B_SAWMILL, 10, 62, { free: true }), P_DOOR) // door off the map
   assert.equal(canPlace(ctx, B_LUMBER_LODGE, 20, 20, { free: true }), P_NO_RESOURCE)
-  assert.equal(canPlace(ctx, B_SAWMILL, 20, 20), P_COST)
+  assert.equal(canPlace(ctx, B_SAWMILL, 20, 20), P_OK, 'nothing in stock: still placeable (construction site)')
+  assert.notEqual(canPlace(ctx, B_SAWMILL, 20, 20), P_COST)
   assert.equal(canPlace(ctx, B_SAWMILL, 20, 20, { free: true }), P_OK)
 
   addItems(ctx, h, I_WOOD, 100, false)
   addItems(ctx, h, I_STONE, 50, false)
   assert.equal(ctx.stock[I_WOOD], 100)
-  const s = placeBuilding(ctx, B_SAWMILL, 20, 20) // costs 15 wood + 5 stone
+  const site = placeBuilding(ctx, B_SAWMILL, 40, 20) // player placement: a site, nothing paid
+  assert.ok(site >= 0)
+  assert.equal(ctx.buildings.site[site], 1)
+  assert.equal(ctx.stock[I_WOOD], 100)
+  assert.equal(demolishBuilding(ctx, site), true, 'cancel the empty site')
+  assert.equal(ctx.stock[I_WOOD], 100, 'nothing delivered, nothing refunded')
+  const s = placeBuilding(ctx, B_SAWMILL, 20, 20, { free: true }) // costs 15 wood + 5 stone
   assert.ok(s >= 0)
+  payCost(ctx, BUILDINGS[B_SAWMILL].cost) // as if its site had drawn the cost from the Hearth
   assert.equal(ctx.stock[I_WOOD], 85)
   assert.equal(ctx.stock[I_STONE], 45)
   assert.equal(buildingAtTile(ctx, 21, 21), s)

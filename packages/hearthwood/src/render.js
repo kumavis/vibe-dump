@@ -16,7 +16,7 @@ import {
   BS_OK, BS_STARVED, BS_OUTPUT_FULL, BS_DEPLETED, BS_PAUSED, BS_NO_STOCK,
   B_HEARTH, B_FORGE, P_OK,
   FX_ARROW, FX_BOLT, FX_HIT, FX_DEATH, FX_BUILD, FX_DESTROY, FX_SPAWN, FX_LIFE,
-  TICK_RATE,
+  TICK_RATE, ITEM_STRIDE, SITE_HP_FRAC, SITE_RAISE_TICKS,
 } from './constants.js'
 import {
   BUILDINGS, B_W, B_H, B_HP, B_FLAGS, B_OUT_ITEM, B_STORAGE, B_DOOR_DX, B_DOOR_DY,
@@ -41,6 +41,26 @@ const NIGHT_ALPHA = 0.34
 const BAKE_MS = 6
 /** Courier lanterns drawn per frame at most (roughly; see _drawAtmosphere). */
 const LANTERN_MAX = 300
+/**
+ * Construction progress of site b in [0, 1] (render-side mirror of buildings.siteProgress:
+ * delivered share of the cost up to 0.9, then the raise timer). Reads ctx fields only.
+ */
+export function siteFraction(B, b) {
+  const t = B.type[b]
+  const total = SITE_TOTAL[t]
+  let have = 0
+  const o = b * ITEM_STRIDE
+  for (let k = 0; k < SITE_N[t]; k++) {
+    const item = SITE_COST[t * 8 + 2 * k], q = SITE_COST[t * 8 + 2 * k + 1]
+    const n = B.inv[o + item]
+    have += n < q ? n : q
+  }
+  const d = total > 0 ? have / total : 1
+  if (d < 1) return d * 0.9
+  const r = B.progress[b] / SITE_RAISE_TICKS
+  return 0.9 + 0.1 * (r > 1 ? 1 : r)
+}
+
 /** Placeholder for a far-zoom chunk not baked yet (bake budget spent this frame). */
 const FLAT_GROUND = '#2f5134'
 const MAX_FX_LIFE = 32
@@ -52,8 +72,21 @@ const GLYPH_COLOR = new Array(BUILDING_COUNT).fill('#888')
 /** Extractor reach / resource per type (ghost). */
 const EXT_REACH = new Int8Array(BUILDING_COUNT).fill(-1)
 const EXT_RES = new Uint8Array(BUILDING_COUNT)
+/** Construction cost per type (sites): flat (item, qty) pairs SITE_COST[t*8 + 2k], k < SITE_N[t]. */
+const SITE_COST = new Int32Array(BUILDING_COUNT * 8)
+const SITE_N = new Uint8Array(BUILDING_COUNT)
+const SITE_TOTAL = new Int32Array(BUILDING_COUNT)
+/** Alpha of a construction site's sprite (and far-zoom glyph). */
+const SITE_ALPHA = 0.45
+const SITE_GLYPH_ALPHA = 0.35
 for (let t = 1; t < BUILDING_COUNT; t++) {
   const d = BUILDINGS[t]
+  for (let k = 0; k < d.cost.length && k < 4; k++) {
+    SITE_COST[t * 8 + 2 * k] = d.cost[k].item
+    SITE_COST[t * 8 + 2 * k + 1] = d.cost[k].qty
+    SITE_TOTAL[t] += d.cost[k].qty
+    SITE_N[t]++
+  }
   RECIPE_TICKS[t] = d.recipe ? d.recipe.ticks : 0
   GLYPH_COLOR[t] = d.color
   if (d.extractor) { EXT_REACH[t] = d.extractor.reach; EXT_RES[t] = d.extractor.res }
@@ -118,6 +151,8 @@ export class Renderer {
     this._bSorted = new Int32Array(0)
     /** far-zoom glyph pass: building types present this frame */
     this._typeSeen = new Uint8Array(BUILDING_COUNT)
+    this._dash = [4, 3] // construction-site outline (rescaled per frame; setLineDash copies it)
+    this._noDash = []
     this._glowList = new Int32Array(0)
     this._glowCount = 0
     this._bCount = 0
@@ -315,18 +350,24 @@ export class Renderer {
       // the list is row-sorted, so per-building fillStyle switches would re-parse constantly
       const m = S < 2 ? 2 : 0
       const seen = this._typeSeen
+      const site = B.site
       seen.fill(0)
-      for (let k = 0; k < n; k++) seen[type[list[k]]] = 1
-      for (let t = 1; t < BUILDING_COUNT; t++) {
-        if (!seen[t]) continue
-        g.fillStyle = GLYPH_COLOR[t]
-        g.beginPath()
-        for (let k = 0; k < n; k++) {
-          const b = list[k]
-          if (type[b] === t) g.rect(tx[b] * S + ox, ty[b] * S + oy, bw[b] * S + m, bh[b] * S + m)
+      for (let k = 0; k < n; k++) seen[type[list[k]]] |= site[list[k]] ? 2 : 1
+      // built glyphs at full strength, construction sites dimmed (second pass)
+      for (let pass = 1; pass <= 2; pass++) {
+        g.globalAlpha = pass === 1 ? 1 : SITE_GLYPH_ALPHA
+        for (let t = 1; t < BUILDING_COUNT; t++) {
+          if (!(seen[t] & pass)) continue
+          g.fillStyle = GLYPH_COLOR[t]
+          g.beginPath()
+          for (let k = 0; k < n; k++) {
+            const b = list[k]
+            if (type[b] === t && (site[b] ? 2 : 1) === pass) g.rect(tx[b] * S + ox, ty[b] * S + oy, bw[b] * S + m, bh[b] * S + m)
+          }
+          g.fill()
         }
-        g.fill()
       }
+      g.globalAlpha = 1
       this.stats.buildingsDrawn = n
       return
     }
@@ -334,9 +375,11 @@ export class Renderer {
     const sprites = near ? spr.buildings : spr.buildingsMid
     const over = spr.buildingOver
     // shadows
+    const site = B.site
     g.globalAlpha = 0.6
     for (let k = 0; k < n; k++) {
       const b = list[k]
+      if (site[b]) continue
       const x = tx[b], y = ty[b], w = bw[b], h = bh[b]
       g.drawImage(spr.shadow, (x + 0.05) * S + ox, (y + h - 0.55) * S + oy, (w + 0.45) * S, 0.85 * S)
     }
@@ -348,6 +391,7 @@ export class Renderer {
       const b = list[k], t = type[b]
       const x = tx[b], y = ty[b], w = bw[b], h = bh[b], o = over[t]
       const sx = x * S + ox, sy = (y - o) * S + oy
+      if (site[b]) { this._drawSite(g, B, b, t, x, y, w, h, o, sprites[t], near); continue }
       g.drawImage(sprites[t], sx, sy, w * S, (h + o) * S)
       const working = status[b] === BS_OK && progress[b] > 0 && !paused[b]
       // chimney smoke
@@ -402,6 +446,39 @@ export class Renderer {
       }
     }
     this.stats.buildingsDrawn = n
+  }
+
+  /**
+   * A construction site: the building's sprite ghosted at SITE_ALPHA over a dark footing, a
+   * dashed amber outline of the footprint, a teal progress bar (delivered share, then the
+   * raise) and an HP bar against the site's reduced max when damaged.
+   */
+  _drawSite(g, B, b, t, x, y, w, h, o, sprite, near) {
+    const S = this._S, ox = this._ox, oy = this._oy, dpr = this.dpr
+    const fx = x * S + ox, fy = y * S + oy, fw = w * S, fh = h * S
+    g.fillStyle = 'rgba(20,14,8,0.35)'
+    g.fillRect(fx, fy, fw, fh)
+    g.globalAlpha = SITE_ALPHA
+    g.drawImage(sprite, fx, (y - o) * S + oy, fw, (h + o) * S)
+    g.globalAlpha = 1
+    const dash = this._dash
+    dash[0] = Math.max(3 * dpr, 0.16 * S); dash[1] = Math.max(2 * dpr, 0.1 * S)
+    g.setLineDash(dash)
+    g.lineDashOffset = -(this._time * 0.01 * dpr) % (dash[0] + dash[1]) // slow march: "in progress"
+    g.strokeStyle = 'rgba(255,181,74,0.85)'
+    g.lineWidth = Math.max(1.5 * dpr, 0.05 * S)
+    const inset = g.lineWidth * 0.5
+    g.strokeRect(fx + inset, fy + inset, fw - inset * 2, fh - inset * 2)
+    g.setLineDash(this._noDash)
+    g.lineDashOffset = 0
+    // progress bar across the lower footprint
+    const gw = fw * 0.76, gx = fx + fw * 0.12, gh = Math.max(3 * dpr, (near ? 0.12 : 0.16) * S)
+    this._bar(g, gx, fy + fh - gh - Math.max(2 * dpr, 0.14 * S), gw, gh, siteFraction(B, b), '#46e3cf')
+    const mh = B_HP[t] * SITE_HP_FRAC
+    if (B.hp[b] < mh) {
+      const f = B.hp[b] / mh
+      this._bar(g, (x + w * 0.1) * S + ox, (y - Math.min(o, 1) - 0.12) * S + oy, w * 0.8 * S, Math.max(3, 0.1 * S), f, f > 0.6 ? '#8fdc7a' : f > 0.3 ? '#ffb54a' : '#e2574c')
+    }
   }
 
   _bar(g, x, y, w, h, f, col) {

@@ -362,6 +362,7 @@ export function damageBuilding(ctx, b, amount) {
 export function enqueueTraining(ctx, b, unitType) {
   const B = ctx.buildings
   if (!(b >= 0 && b < B.capacity && B.alive[b] === 1)) return false
+  if (B.site[b]) return false // a hall under construction trains nothing
   if (!(unitType > 0 && unitType < UNIT_COUNT)) return false
   if ((HALL_TRAINS[B.type[b]] & (1 << unitType)) === 0) return false
   if (ctx.tier < U_TIER[unitType]) return false
@@ -400,6 +401,7 @@ function tickHalls(ctx) {
     const cnt = B.typeCount[bt]
     for (let k = 0; k < cnt; k++) {
       const b = list[k]
+      if (B.site[b]) continue // construction site: buildings.js owns its status/progress
       const len = B.trainLen[b]
       if (len === 0) { B.status[b] = BS_IDLE; B.progress[b] = 0; continue }
       if (B.paused[b]) { B.status[b] = BS_PAUSED; continue }
@@ -595,7 +597,7 @@ function tickTowers(ctx, haveBlight) {
     const list = B.typeList[bt]
     const cnt = B.typeCount[bt]
     const range = TW_RANGE[bt], attack = TW_ATTACK[bt], cd = TW_COOLDOWN[bt], fxk = TW_FX[bt]
-    for (let k = 0; k < cnt; k++) shooterStep(ctx, list[k], range, attack, cd, fxk, haveBlight)
+    for (let k = 0; k < cnt; k++) if (!B.site[list[k]]) shooterStep(ctx, list[k], range, attack, cd, fxk, haveBlight)
   }
   const hl = B.typeList[B_HEARTH], hc = B.typeCount[B_HEARTH]
   const W = HEARTH_WARD

@@ -5,7 +5,7 @@ import {
   TICK_RATE, ITEM_COUNT, I_WOOD, I_STONE, I_ORE, I_PLANK, I_INGOT, I_GLOWCAP, I_TOOL, I_CHARM,
   I_MOONSTONE, I_RELIC, B_QUARRY, B_STOREHOUSE, B_SPRITE_DEN, B_WARD_TOWER, B_WARDEN_HALL, B_FORGE,
   B_SHRINE, EV_WAVE_WARNING, EV_WAVE_SPAWNED, EV_BUILDING_LOST, EV_TIER_UP, EV_WIN, EV_LOSE,
-  EV_UNIT_TRAINED, EV_CANNOT_AFFORD, ITEM_SHIFT, EV_BUILDING_ATTACKED, EV_COURIERS_LOST,
+  EV_UNIT_TRAINED, EV_CANNOT_AFFORD, ITEM_SHIFT, EV_BUILDING_ATTACKED, EV_COURIERS_LOST, EV_BUILDING_BUILT,
 } from './constants.js'
 import { BUILDINGS, UNITS, TIERS, WIN_TIER, ITEMS, WAVES } from './content.js'
 
@@ -45,10 +45,34 @@ export function stockVisible(ctx, item) {
   return STOCK_BY_TIER[t].indexOf(item) >= 0
 }
 
-/** Alive Shrine id or -1. */
+/**
+ * BUILT (not construction-site) buildings of `type`: typeCount includes sites, and a tower
+ * site cannot shoot, so the tutorial must not count it as done.
+ */
+export function builtCount(c, type) {
+  const B = c.buildings
+  const n = B.typeCount[type]
+  if (!n || !B.site || !B.typeList) return n | 0
+  const list = B.typeList[type]
+  let m = 0
+  for (let j = 0; j < n; j++) if (!B.site[list[j]]) m++
+  return m
+}
+
+/** Shrine construction site id or -1. */
+export function shrineSiteId(ctx) {
+  const B = ctx.buildings
+  if (!B.typeCount[B_SHRINE] || !B.site) return -1
+  const s = B.typeList[B_SHRINE][0]
+  return B.site[s] ? s : -1
+}
+
+/** Alive, BUILT Shrine id or -1 (a Shrine construction site holds building materials, not offerings). */
 export function shrineId(ctx) {
   const B = ctx.buildings
-  return B.typeCount[B_SHRINE] > 0 ? B.typeList[B_SHRINE][0] : -1
+  if (B.typeCount[B_SHRINE] === 0) return -1
+  const s = B.typeList[B_SHRINE][0]
+  return B.site && B.site[s] ? -1 : s
 }
 
 /**
@@ -75,15 +99,15 @@ const k = (hk) => '<kbd>' + hk + '</kbd>'
  */
 export const HINTS = Object.freeze([
   { id: 'quarry', html: `Sprite couriers haul goods on their own. Build a <b>Quarry</b> ${k('2')} on the grey rocks south-west of the Hearth.`,
-    done: (c) => c.buildings.typeCount[B_QUARRY] > 0 },
-  { id: 'store', html: `<b>Storehouses</b> ${k('6')} buffer surplus — construction is paid from everything in storage. Heartwood low? Add a <b>Lumber Lodge</b> ${k('1')}.`,
-    done: (c) => c.buildings.typeCount[B_STOREHOUSE] > 0 },
+    done: (c) => builtCount(c, B_QUARRY) > 0 },
+  { id: 'store', html: `New buildings start as <b>construction sites</b>: couriers bring the materials from storage or straight from producers. <b>Storehouses</b> ${k('6')} buffer surplus; a full store? Select it and discard a stack.`,
+    done: (c) => builtCount(c, B_STOREHOUSE) > 0 },
   { id: 'den', html: `A <b>Sprite Den</b> ${k('7')} turns planks into more couriers.`,
-    done: (c) => c.buildings.typeCount[B_SPRITE_DEN] > 0 },
+    done: (c) => builtCount(c, B_SPRITE_DEN) > 0 },
   { id: 'tower', html: `The Blight raids from the map edges. <b>Ward Towers</b> ${k('8')} and a <b>Warden Hall</b> ${k('9')} stop raids.`,
-    done: (c) => c.buildings.typeCount[B_WARD_TOWER] > 0 || c.buildings.typeCount[B_WARDEN_HALL] > 0 },
+    done: (c) => builtCount(c, B_WARD_TOWER) > 0 || builtCount(c, B_WARDEN_HALL) > 0 },
   { id: 'forge', html: `Dig bog iron with a <b>Bog Mine</b> ${k('3')}, smelt ingots in an <b>Ember Forge</b> ${k('5')}.`,
-    done: (c) => c.buildings.typeCount[B_FORGE] > 0 },
+    done: (c) => builtCount(c, B_FORGE) > 0 },
   { id: 'shrine', html: `Raise the <b>Moonwell Shrine</b> ${k('0')} and offer 20 planks + 10 ingots to reach the Grove.`,
     done: (c) => c.tier >= 1 },
   { id: 'grove', html: `Grove tier: <b>Glowcap Groves</b>, <b>Workshops</b> and <b>Glowlooms</b> unlock. Offer 10 tools + 10 charms.`,
@@ -136,6 +160,7 @@ export function eventMessage(ctx, type, a, b) {
     }
     case EV_BUILDING_ATTACKED: return { msg: `${BUILDINGS[a] ? BUILDINGS[a].name : 'A building'} under attack!`, kind: 'bad', tile: b }
     case EV_COURIERS_LOST: return { msg: a === 1 ? 'A courier was slain' : `${a} couriers slain`, kind: 'bad', tile: b }
+    case EV_BUILDING_BUILT: return { msg: `${BUILDINGS[a] ? BUILDINGS[a].name : 'A building'} raised`, kind: 'good', tile: b }
     case EV_BUILDING_LOST: return { msg: `${BUILDINGS[a] ? BUILDINGS[a].name : 'A building'} was destroyed`, kind: 'bad', tile: b }
     case EV_TIER_UP: return { msg: `The grove grows: ${TIERS[a] ? TIERS[a].name : 'tier ' + a}`, kind: 'good' }
     case EV_WIN: return { msg: 'Five relics glow — the forest awakens!', kind: 'good' }
@@ -147,6 +172,24 @@ export function eventMessage(ctx, type, a, b) {
     }
     default: return null
   }
+}
+
+/** "+7 Heartwood +2 Mossstone" from a per-item count array (ctx.lastRefund), '' when empty. */
+export function refundText(arr) {
+  let s = ''
+  for (let i = 1; i < ITEM_COUNT; i++) if (arr[i] > 0) s += (s ? ' ' : '') + '+' + arr[i] + ' ' + ITEMS[i].name
+  return s
+}
+
+/**
+ * Toast text after demolishBuilding: a site cancel ("Quarry site cancelled: +5 Heartwood")
+ * or a demolition ("Sawmill demolished: +7 Heartwood +2 Mossstone"), from ctx.lastRefund.
+ */
+export function demolishMessage(ctx, type, wasSite) {
+  const name = BUILDINGS[type] ? BUILDINGS[type].name : 'Building'
+  const r = refundText(ctx.lastRefund)
+  if (wasSite) return `${name} site cancelled${r ? ': ' + r : ' (nothing delivered yet)'}`
+  return `${name} demolished${r ? ': ' + r : ''}`
 }
 
 /** "20 wood, 10 stone" style cost text (names from ITEMS). */

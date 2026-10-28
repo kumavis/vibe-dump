@@ -152,6 +152,7 @@ export class BuildingPool {
     this.paused = new Uint8Array(n) // 1 = player paused
     this.progress = new Int32Array(n) // ticks into current cycle (recipe, den spawn, hall training)
     this.workTile = new Int32Array(n).fill(-1) // extractor: packed tile being harvested
+    this.site = new Uint8Array(n) // 1 = construction site (placed, cost not yet delivered); buildings.js only
     // inventory: index (b << ITEM_SHIFT) | item  — ONLY buildings.js inventory helpers write these
     this.inv = new Int32Array(n * ITEM_STRIDE) // items physically present
     this.resIn = new Int32Array(n * ITEM_STRIDE) // promised incoming (courier en route to drop)
@@ -201,6 +202,7 @@ export class BuildingPool {
     this.paused[i] = 0
     this.progress[i] = 0
     this.workTile[i] = -1
+    this.site[i] = 0
     const o = i * ITEM_STRIDE
     this.inv.fill(0, o, o + ITEM_STRIDE)
     this.resIn.fill(0, o, o + ITEM_STRIDE)

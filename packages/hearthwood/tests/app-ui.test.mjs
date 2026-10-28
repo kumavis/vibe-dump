@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createUI } from '../src/ui.js'
-import { fmtClock, fmtCount, esc, hintIndex, HINTS, eventMessage, offeringProgress, stockVisible, costText } from '../src/app-hud.js'
+import { fmtClock, fmtCount, esc, hintIndex, HINTS, eventMessage, offeringProgress, stockVisible, costText, shrineId } from '../src/app-hud.js'
 import { createGame, setupStart } from '../src/game.js'
 import { createOverlay } from '../src/overlay.js'
 import {
@@ -221,4 +221,60 @@ test('events become toasts; ctx replacement resets the cursor; win shows a banne
   game.ctx.won = true
   frames(12)
   assert.ok(doc.getElementById('banner'), 'banner shown')
+})
+
+test('construction-site panel, discard controls, overfilled storage and the new toasts', async () => {
+  const env = setup()
+  const { ctx, overlay, $, frames } = env
+  const { placeBuilding, addItems, demolishBuilding } = await import('../src/buildings.js')
+  const { eventMessage: em, demolishMessage, refundText } = await import('../src/app-hud.js')
+  const { EV_BUILDING_BUILT, B_SAWMILL: SAW, I_STONE } = await import('../src/constants.js')
+  frames(1)
+  // a site: title, cost slots delivered/needed with incoming, progress, Cancel
+  const site = placeBuilding(ctx, SAW, 4, 50)
+  assert.ok(site >= 0 && ctx.buildings.site[site] === 1)
+  addItems(ctx, site, I_WOOD, 6, false)
+  overlay.selBuilding = site; overlay.selBuildingGen = ctx.buildings.gen[site]
+  env.ui.markSelection(); frames(1)
+  const head = $('selpanel').children[0].innerHTML, body = $('selpanel').children[1].innerHTML
+  assert.match(head, /Construction site<\/span> — Sawmill/)
+  assert.match(head, /data-act="demolish"[^>]*>Cancel/)
+  assert.doesNotMatch(head, /data-act="pause"/, 'a site cannot be paused')
+  assert.match(body, /<b>6<small>\/15<\/small><\/b>/, 'wood delivered/needed')
+  assert.match(body, /<b>0<small>\/5<\/small><\/b>/, 'stone delivered/needed')
+  assert.match(body, /data-act="discard" data-item="1"[^>]*title="Discard 6 Heartwood/)
+  assert.match(body, /bar site/)
+  // discard on pointerdown (fake target whose closest() is the button)
+  const btn = { getAttribute: (k) => (k === 'data-item' ? String(I_WOOD) : null) }
+  $('selpanel').fire('pointerdown', { target: { closest: () => btn }, stopPropagation() {} })
+  assert.equal(ctx.buildings.inv[(site << ITEM_SHIFT) | I_WOOD], 0)
+  assert.match($('toasts').children.at(-1).textContent, /Discarded 6 Heartwood/)
+  // cancel text from ctx.lastRefund
+  addItems(ctx, site, I_WOOD, 4, false)
+  demolishBuilding(ctx, site)
+  assert.equal(demolishMessage(ctx, SAW, true), 'Sawmill site cancelled: +4 Heartwood')
+  assert.equal(refundText([0, 10, 5]), '+10 Heartwood +5 Mossstone')
+  // EV_BUILDING_BUILT toasts "<name> raised"
+  const m = em(ctx, EV_BUILDING_BUILT, SAW, 99)
+  assert.equal(m.msg, 'Sawmill raised'); assert.equal(m.kind, 'good'); assert.equal(m.tile, 99)
+  // storage overfilled: the HUD figure shows it, tinted
+  const hearth = ctx.buildings.typeList[B_HEARTH][0]
+  addItems(ctx, hearth, I_STONE, 1000, false, true)
+  frames(12)
+  const cap = $('stock').lastChild
+  assert.equal(cap.classList.contains('over'), true)
+  assert.match(cap.textContent, /^1\.\dk \/ 500$/)
+  // build menu never greys a building out for cost, only tints the cost item
+  const menu = $('buildmenu')
+  const btnSaw = menu.children[BUILD_MENU.indexOf(SAW)]
+  assert.equal(btnSaw.classList.contains('poor'), false)
+  ctx.stock.fill(0); frames(12)
+  const costBox = btnSaw.children.at(-1)
+  assert.equal(costBox.children[0].classList.contains('short'), true, 'wood short: tinted hint')
+  // a Shrine still under construction holds planks as building material, not as an offering
+  const sh = placeBuilding(ctx, B_SHRINE, 40, 4)
+  assert.ok(sh >= 0 && ctx.buildings.site[sh] === 1)
+  addItems(ctx, sh, I_PLANK, 20, false)
+  assert.equal(shrineId(ctx), -1)
+  assert.equal(offeringProgress(ctx)[0].have, 0)
 })

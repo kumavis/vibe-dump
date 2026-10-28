@@ -27,6 +27,9 @@ for (let r = 1; r < RES_COUNT; r++) { RES[r * 2] = abgr(shade(RES_COLOR[r], 0.05
 const BCOL = new Uint32Array(BUILDING_COUNT)
 for (let t = 1; t < BUILDING_COUNT; t++) BCOL[t] = abgr(shade(BUILDINGS[t].color, 0.15))
 BCOL[B_HEARTH] = abgr('#ffd27a')
+/** construction sites: the type colour pulled most of the way toward the ground (dim) */
+const BCOL_SITE = new Uint32Array(BUILDING_COUNT)
+for (let t = 1; t < BUILDING_COUNT; t++) BCOL_SITE[t] = abgr(shade(BUILDINGS[t].color, -0.35))
 const C_COURIER = abgr('#9fe8ff')
 const C_SOLDIER = abgr('#d8ffb0')
 const C_BLIGHT = abgr('#ff4fe0')
@@ -170,7 +173,7 @@ export class Minimap {
       let x1 = Math.ceil(ox + (B.tx[b] + B.w[b]) * k), y1 = Math.ceil(oy + (B.ty[b] + B.h[b]) * k)
       if (x1 - x0 < 2) x1 = x0 + 2
       if (y1 - y0 < 2) y1 = y0 + 2
-      this._rect(x0, y0, x1, y1, BCOL[B.type[b]])
+      this._rect(x0, y0, x1, y1, B.site && B.site[b] ? BCOL_SITE[B.type[b]] : BCOL[B.type[b]])
     }
   }
 
