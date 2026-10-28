@@ -89,7 +89,7 @@ export function getSystemErrorMessage(errno) {
 }
 
 export function toUSVString(s) {
-  return String(s).toWellFormed ? String(s).toWellFormed() : String(s).replace(/[\uD800-\uDFFF]/g, '�');
+  return String(s).toWellFormed ? String(s).toWellFormed() : String(s).replace(/[\uD800-\uDFFF]/g, '\uFFFD');
 }
 
 const STYLE_CODES = {
