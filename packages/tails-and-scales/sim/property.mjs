@@ -1334,9 +1334,13 @@ const V1_PINS = {
 // before; 8, F17's lobbing from height, which needs height; 9, F18's
 // shooting into a fight, the format unchanged, but 64-89 another battle
 // under it: its end data-check's V9; 10, F19a's powder keg, which no
-// classic board has: the pins as under 9)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-const PINS_UNDER = (v) => (v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
+// classic board has: the pins as under 9; 11, V3c's spells, the format
+// unchanged for a unit no spell marks, 64-89 another battle again and
+// serpent-random-2 played again by its bot: data-check's V11)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+const PINS_UNDER = (v) => (v >= 11
+  ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
+  : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
 // trace is frozen): a battle-log line, or a state line (act, a phase, a

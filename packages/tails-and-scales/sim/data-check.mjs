@@ -961,14 +961,21 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // the powder keg, which no classic board has and shadowState prints
   // nothing new for (a keg is a chunk like any, its id, alive, hp and
   // height), and (the tower ring's fix) fortified's largeCentre, which no
-  // pinned match is fought on: every pin as under 9)
+  // pinned match is fought on: every pin as under 9; 11, V3c: the casters'
+  // three spells, whose marks shadowState prints only on a unit that holds
+  // one (the format unchanged for a match no spell marks: hotseat-late-8,
+  // all hotseat with the bot of old, hashes as under 1), but which are
+  // meant to alter play: 64-89's AI plays another battle again, and
+  // serpent-random-2, its old entries refused, was played again by its bot
+  // (corpus-add --regen), the same through its tenth entry: V11)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9 }
+  const V11 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V11 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
