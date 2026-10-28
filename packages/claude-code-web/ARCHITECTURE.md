@@ -397,3 +397,103 @@ has the test results.
   The e2e adds checks beyond the acceptance test (file tools, a denied
   permission, an interrupt). It also takes `--base`, `--binary`, `--modules`
   and `--log`.
+
+## Appendix A — ChatGPT subscription option (added 2026-10-28)
+
+Research: `docs/research/claude-code-in-browser/J-codex-protocol.md` (the
+Codex CLI's protocol and the Anthropic⇄Responses translation design, §7 is
+the spec) and `K-codex-cors-terms.md` (CORS and terms). Decision: build on
+OpenAI's documented **"Sign in with ChatGPT"** (SIWC) route for open-source
+apps: dynamic client registration, scope `chatgpt.tokens.use.direct`,
+inference on `https://api.openai.com/v1/responses` with the user's bearer
+token. The Codex CLI's private backend (`chatgpt.com/backend-api/codex/*`)
+is origin-allowlisted and must not be used; nothing may present as the Codex
+CLI (no `originator`, `chatgpt-account-id` or Codex User-Agent).
+
+### Settings (page)
+
+- `authMode`: `'api-key' | 'oauth' | 'chatgpt'`.
+- Public: `chatgpt: { clientId, extAgentHostId, model, effort, baseUrl, issuer }`.
+  `clientId` is the `oaiapp_…` id the first login issues (empty before);
+  `extAgentHostId` is a per-device `urn:uuid:…` minted once; `baseUrl`
+  defaults to `https://api.openai.com/v1`, `issuer` to `https://auth.openai.com`
+  (both overridable for tests; `checkBaseUrl` rules apply: https or loopback).
+- Secret (in `SECRET_FIELDS`, same `remember` semantics as the other
+  credentials): `chatgptTokens: { accessToken, refreshToken, idToken, expiresAt, earliestRefreshAt }`.
+
+### Sign-in flow (page, `src/host/siwc.js`)
+
+`createSiwc({ settings, fetch, now, random })` exposes:
+- `beginLogin() -> { url }`: PKCE S256, `state`, `nonce`; stores verifier/state in sessionStorage; authorize URL `issuer + '/api/accounts/authorize'` with `response_type=code`, `client_id` = saved `oaiapp_…` or `dynamic_agent_client`, `agent_name_hint=claude-code-web` (first registration only), `ext_agent_host_id`, `redirect_uri=http://127.0.0.1:1455/auth/callback`, `scope=openid profile email offline_access resource.invoke chatgpt.tokens.use.direct`, `resource=https://api.openai.com/v1`, `code_challenge`, `code_challenge_method=S256`, `state`, `nonce`. The page opens it in a new tab; the browser then fails to load the loopback redirect and the user pastes that final URL back.
+- `completeLogin(pastedUrl)`: parses `code`, `state` (must match), `client_id` (saved), exchanges at `issuer + '/api/accounts/oauth/token'` (form-encoded `grant_type=authorization_code&client_id&code&code_verifier&redirect_uri&resource`), saves tokens.
+- `getAccessToken({ force })`: single-flight; refreshes (form `grant_type=refresh_token&client_id&refresh_token&resource`) when within 5 minutes of `expiresAt`, respecting `earliestRefreshAt`; refresh tokens rotate, so persist the new one before resolving.
+- `listModels()`: `GET baseUrl + '/models'` with the bearer; `{models:[…]}` filtered to `visibility === 'list'`; returns `[{ slug, displayName, contextWindow }]`.
+- `logout()`.
+Pure helpers (`buildAuthorizeUrl`, `parseCallbackUrl`, `pkce`) are exported and unit-tested with a fake fetch; nothing in this module touches the network except through the injected `fetch`.
+
+### Worker side
+
+- Boot config gains `provider`: `{ kind: 'anthropic' }` (default) or
+  `{ kind: 'openai-responses', baseUrl, model, effort, contextWindow }`.
+- In chatgpt mode the harness env is `ANTHROPIC_BASE_URL=https://openai-adapter.invalid`
+  (synthetic origin) and `ANTHROPIC_API_KEY=openai-adapter` (placeholder so
+  Claude Code starts); argv keeps `--model claude-sonnet-5-5` so the harness
+  behaviour stays the tested one, and the adapter substitutes the OpenAI model.
+  Set `CLAUDE_CODE_MAX_CONTEXT_TOKENS` / `CLAUDE_CODE_AUTO_COMPACT_WINDOW` from
+  `contextWindow` if report J's reading of those variables holds (verify in the bundle).
+- **Token handoff** (page owns the tokens; the Worker never sees the refresh token):
+  Worker → page `{ type: 'provider-token-request', id, reason: 'start'|'expired'|'unauthorized' }`;
+  page → Worker `{ type: 'provider-token', id, accessToken, expiresAt }` or
+  `{ type: 'provider-token', id, error }`. The Worker caches the token until
+  `expiresAt - 60 s`; on an upstream 401 it asks once with `reason: 'unauthorized'`,
+  retries once, then fails the request. Document in `worker-protocol.md`.
+- `src/runtime/boot/openai-adapter.js`: `installOpenAIAdapter(scope, { provider, nativeFetch, getToken, syntheticOrigin, log, warn })`
+  wraps `scope.fetch` *inside* the egress guard and answers every request to
+  the synthetic origin locally: `POST /v1/messages` with `stream: true` →
+  translated upstream stream (Anthropic SSE out); without `stream` → run the
+  upstream stream, aggregate, return one Anthropic `Message`; `max_tokens <= 1`
+  probes → canned reply, no upstream call; `POST /v1/messages/count_tokens` →
+  `{ input_tokens: ceil(bytes/4) }`; anything else → 404. Pure, unit-tested
+  exports: `toResponsesRequest(anthropicBody, { model, effort }) -> { body, idMap }`,
+  `createResponsesToAnthropicStream({ model, idMap }) -> TransformStream` (Responses
+  SSE text in, Anthropic SSE text out, per J §7.6), `mapUpstreamError(status, body) -> { status, body, headers }`
+  (J §7.7: context overflow → `prompt is too long: N tokens > M`, terminal 429 → `x-should-retry: false`).
+  Request mapping per J §7.3–7.5: system blocks and in-`messages` `role:"system"`
+  items → one leading `developer` message (strip the `x-anthropic-billing-header` line);
+  tool_use/tool_result → `function_call`/`function_call_output` with `call_id` maps;
+  tools → function tools (schema cleanup; drop `DeferredToolPlaceholder`/`defer_loading`);
+  `thinking`/`output_config.effort` → `reasoning: { effort, summary: 'auto' }` plus
+  `include: ['reasoning.encrypted_content']`, encrypted reasoning carried back in a
+  thinking block `signature` envelope and replayed; always `store: false`, `stream: true`;
+  never `max_output_tokens`, `temperature`, `metadata`, `role: "system"` items.
+- Egress policy in chatgpt mode: allowed origins `{ self, provider.baseUrl origin }`;
+  credential headers allowed only to the provider origin; the synthetic origin
+  never reaches the network.
+
+### Mock and tests
+
+- `mock/mock-api.mjs` adds, on the same server: `POST /v1/responses` (Responses
+  SSE scenarios mirroring the Anthropic ones: `say hi`, `use the weather tool`
+  (a `function_call` for `mcp__page__get_weather`, then on the follow-up assert
+  the `function_call_output` and echo it), `write a file`, `run the file tools`,
+  `stream slowly`, `overflow` (a `context_length_exceeded` error)); it asserts
+  and records per request: bearer present, `store === false`, `stream === true`,
+  no `role: "system"` items, no `originator`/`chatgpt-account-id`/`max_output_tokens`/`temperature`/`metadata`;
+  `GET /v1/models` → `{ models: [{ slug: 'gpt-5.5', display_name: 'GPT-5.5', visibility: 'list', context_window: 272000 }, …] }`;
+  a fake issuer: `GET /api/accounts/authorize` → 302 to
+  `http://127.0.0.1:1455/auth/callback?code=…&state=<echoed>&client_id=oaiapp_test`,
+  `POST /api/accounts/oauth/token` (form) → tokens with a rotating `refresh_token`,
+  `expires_in: 3600`, rejecting a reused refresh token with `refresh_token_reused`.
+- `test/e2e.mjs --provider chatgpt`: settings point `baseUrl`/`issuer` at the
+  mock; the test performs the paste flow (fetch the authorize URL with
+  `redirect: 'manual'`, paste the `Location` into the page's callback field),
+  then runs steps 2–6 and the file-tools extra in chatgpt mode, asserting the
+  mock's recorded request shapes and that the only hosts used are the static
+  server and the mock. The Anthropic-mode e2e stays green.
+
+### Policy posture additions
+
+`agent_name_hint` is `claude-code-web`; tokens are stored exactly like the
+other credentials; the README states the Plus/Pro requirement, OpenAI's
+per-app weekly caps and open-source-app terms, and that the Codex CLI's own
+login is not supported here and why.
