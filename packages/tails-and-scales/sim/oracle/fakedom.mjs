@@ -46,6 +46,8 @@ Object.assign(globalThis, {
   addEventListener() {}, removeEventListener() {},
   requestAnimationFrame: (cb) => { rafCb = cb; return 1 },
   localStorage: { getItem: () => null, setItem() {} },
+  // (V2's boot asks it for the pointer, the quality it starts at)
+  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),
 })
 Object.defineProperty(globalThis, 'navigator', { value: { userAgent: 'node' }, configurable: true })
 export const takeFrame = () => { const cb = rafCb; rafCb = null; return cb }
