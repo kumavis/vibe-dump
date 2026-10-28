@@ -110,7 +110,7 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test [--mutations <names>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-41'
+const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-3'
 let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
