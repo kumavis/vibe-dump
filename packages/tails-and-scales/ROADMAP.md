@@ -156,7 +156,33 @@ the commit, and add whatever the work turned up.
   (and the bail-out log among its defaults), play-check's `cart` lane and
   rematch-memory's `--carts` (and, from its merge onto main, fog-check's
   War-Cart battle, bake-check's War-Cart in both figure styles and
-  P-fight's hull guns). A step
+  P-fight's hull guns), and from V3a `node sim/input-check.mjs --only tips`'s
+  Node part, which every input-check runs first (every field the core sets
+  on a unit, every fact and every mirror field a condition with an icon
+  and a tip of one or two sentences for every unit type, or HIDDEN with
+  why; every term `canShoot` and `canCharge` refuse by a condition that
+  blocks it, or a flag that lifts one), present-check's card oracle (the
+  status line in the conditions' words), snap-check's `deeds-stale`,
+  `turn-stale` and `over-stale` edits, and in Chromium the tips lane
+  (each icon, word and chip at the three tiers, by mouse and by touch,
+  inside the screen); from V3b play-check's layout lane (five screens,
+  classic and Grand: the badge in its corner in each state, no box of the
+  chrome meeting another, ↶ Undo on the screen in the movement phase,
+  the minimap clear of the card and the actions); from V3d data-check's
+  section 15 (the Powder Field: its set and refusals, its sites on its
+  objectives, its mission Grand's battle), terrain-check's section 9 and
+  its connectivity on 2,000 Powder Field boards (`--powder-seeds
+  1-2000`), P-keg on Powder Field boards, P-scan's powder row, the
+  `powder/` set in every check that reads the corpus (parity's 89 battles
+  since the V3 merge), and in Chromium board-check's Powder Field leg (and
+  its `burns-kept` edit), snap-check's powder row (`--only powder-row`:
+  fires at every Grand checkpoint, none on the classic table after it),
+  `node sim/render-bench.mjs --mission powder` and
+  `node sim/powder-shots.mjs`; and from the V3 merge (DESIGN §4.2.11's
+  (V3) note) every lane of the four together: input-check's group, carts,
+  tips and spell steps, play-check's layout and cart lanes, present-check's
+  riders, card oracle and spell order, snap-check's edits and its cart and
+  powder rows. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1286,7 +1312,13 @@ follows N3.
   marks on the unit, the AI's choice, the spell bar (keys 1-3), the looks,
   the help; `CORE_VERSION` 11, the corpus re-recorded and the PIN moved.
   No price moves (army-sim's Skirmish gates hold). DESIGN's "V3c as
-  built".
+  built". Landed with V3d onto F9a, V3a and V3b (3880346, be55f24): the
+  merged rules `CORE_VERSION` 12; the marks rows of V3a's conditions (🌿,
+  🪵, ❄️ on the label and the card, their tips the tooltip's, the spell
+  bar's too), the bar standing on V3b's wrapped actions, a rider casting
+  nothing and taking no spell on a friend, a snared unit boarding nothing
+  and a snared hull staying put; `vehicle/` and `powder/` re-recorded, by
+  the spells alone (de95926). DESIGN §4.2.11's (V3) note.
 - [x] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
@@ -1717,7 +1749,10 @@ answered; 35 (Escape) by the user: no change.
   layout lane, which passed on its own. Left: the AI sums its fear of every
   keg in reach, so it keeps off the magazines and they go up mostly by
   template; army-sim not run on the mission; a phone's frame time. DESIGN
-  §4.2.11.)
+  §4.2.11.) Landed with V3c onto F9a, V3a and V3b (be55f24): the Powder
+  Field takes War-Carts as Grand does (its list Grand's, Vehicle [0, 2]),
+  data-check's section 15, the merged rules `CORE_VERSION` 12; `powder/`
+  re-recorded under V3c's spells (de95926). DESIGN §4.2.11's (V3) note.
 - [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
   Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll
