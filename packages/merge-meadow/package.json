@@ -1,0 +1,43 @@
+{
+  "name": "@vibe-dump/merge-meadow",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test \"test/unit/*.test.mjs\"",
+    "test:e2e": "node test/e2e.mjs",
+    "test:xr": "node test/xr.mjs",
+    "lint:boundaries": "node scripts/boundaries.mjs",
+    "agent:mcp": "node agent/mcp.mjs",
+    "agent": "node agent/cli.mjs"
+  },
+  "dependencies": {
+    "@automerge/automerge": "3.5.0",
+    "@automerge/automerge-repo": "2.5.6",
+    "@automerge/automerge-repo-network-broadcastchannel": "2.5.6",
+    "@automerge/automerge-repo-network-websocket": "2.5.6",
+    "@automerge/automerge-repo-storage-indexeddb": "2.5.6",
+    "@endo/captp": "^4.5.1",
+    "@endo/eventual-send": "^1.5.0",
+    "@endo/far": "^1.1.14",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "ses": "^2.3.0",
+    "three": "0.186.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@automerge/automerge-repo-network-messagechannel": "2.5.6",
+    "@automerge/automerge-repo-sync-server": "^0.3.0",
+    "iwer": "^2.7.0"
+  },
+  "gallery": {
+    "title": "Merge Meadow",
+    "description": "A shared three.js world edited live by people and agents: entities are JSON components in an Automerge doc, synced through a link, driven over CapTP, on desktop or in WebXR. Add a T-rex, add a sheep, watch what happens.",
+    "tags": ["simulation", "tool"],
+    "status": "wip",
+    "models": ["Opus 5.5", "Fable 5.1"],
+    "thinking": "high"
+  }
+}
