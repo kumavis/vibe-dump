@@ -6,7 +6,11 @@
 //   1. globals: process (argv/env/cwd, stdio bridged over postMessage, exit),
 //      Buffer, global, setImmediate, Node-style timers  (./node/globals.js);
 //      the env gets the policy flags merged in last (./boot/policy.js), and
-//      fetch/WebSocket are wrapped by the egress guard (./boot/egress.js)
+//      fetch/WebSocket are wrapped by the egress guard (./boot/egress.js);
+//      with the boot message's `provider` of kind 'openai-responses' (the
+//      ChatGPT subscription option, ARCHITECTURE.md Appendix A) the env points
+//      the CLI at a synthetic origin and the OpenAI adapter
+//      (./boot/openai-adapter.js) answers it, on top of the egress guard
 //   2. the virtual filesystem: the extracted tree read back from the Cache
 //      API and mounted at BASE/vfs/app/, then HOME restored from the page's
 //      snapshot, then the seed files written where absent  (./node/fs.js)
@@ -29,6 +33,7 @@ let stdin = null // process.stdin, once it exists
 const stdinQueue = [] // lines (with '\n') or null (EOF) that arrived before it did
 let flushFs = null
 let proc = null
+let tokenBroker = null // ChatGPT mode: the token handoff (./boot/openai/token.js)
 
 self.addEventListener('message', (ev) => {
   const m = ev.data
@@ -48,6 +53,7 @@ self.addEventListener('message', (ev) => {
       else if (m.id != null) post({ type: 'fs-sync', snapshot: null, paths: [], flush: m.id })
       break
     case 'signal': if (proc && proc.listenerCount(m.signal) > 0) proc.emit(m.signal, m.signal); break
+    case 'provider-token': tokenBroker?.onMessage(m); break
   }
 })
 
@@ -98,10 +104,13 @@ async function main (boot) {
   // The policy flags last, whatever the page sent (shared with the page's
   // invocation.js through boot/policy.js), then the egress guard on fetch and
   // WebSocket before any Claude Code module can capture them.
-  const { workerEnv } = await import('./boot/policy.js')
+  const { workerEnv, providerConfig, applyProviderEnv, PROVIDER_OPENAI_RESPONSES } = await import('./boot/policy.js')
+  const provider = providerConfig(boot.provider)
   const env = workerEnv(boot.env)
+  applyProviderEnv(env, provider)
   const { installEgressGuard } = await import('./boot/egress.js')
-  installEgressGuard(globalThis, { baseUrl: env.ANTHROPIC_BASE_URL, selfOrigin: base.origin, warn: (m) => log('warn', m) })
+  installEgressGuard(globalThis, { baseUrl: env.ANTHROPIC_BASE_URL, selfOrigin: base.origin, provider, warn: (m) => log('warn', m) })
+  if (provider.kind === PROVIDER_OPENAI_RESPONSES) await installProvider(provider, !!boot.trace)
   proc = installNodeGlobals(globalThis, {
     processOptions: {
       argv: ['/usr/local/bin/node', `${appPath}cli`, ...(boot.argv || [])],
@@ -211,6 +220,23 @@ async function main (boot) {
   status('cli')
   tree.clear()
   await import(manifest.entryUrl || new URL('cli', appUrl).href)
+}
+
+// ChatGPT mode: the OpenAI adapter on top of the egress guard (its upstream
+// requests go through the guard too), fed access tokens by the page over
+// provider-token-request / provider-token (worker-protocol.md).
+async function installProvider (provider, trace) {
+  const { installOpenAIAdapter, createTokenBroker } = await import('./boot/openai-adapter.js')
+  tokenBroker = createTokenBroker({ post })
+  const { origin, endpoint } = installOpenAIAdapter(globalThis, {
+    provider,
+    getToken: ({ failedToken, ambiguous } = {}) => (failedToken ? tokenBroker.renew(failedToken, { ambiguous }) : tokenBroker.get()),
+    log: trace ? (m) => log('debug', `[trace] ${m}`) : () => {},
+    warn: (m) => log('warn', m)
+  })
+  // Ask for the first token now, while the CLI boots (reason 'start').
+  tokenBroker.get().catch((err) => log('warn', `ChatGPT token: ${err?.message ?? err}`))
+  log('info', `ChatGPT mode: model ${provider.model}, effort ${provider.effort}, context window ${provider.contextWindow ?? 'unknown'}; Claude Code's API calls to ${origin} are answered in the Worker from ${endpoint}`)
 }
 
 // Diagnostics (boot message `trace: true`, the page's `?trace`): log every
