@@ -59,17 +59,46 @@
 //               a roster row's click picks its unit up; and on a 412×915
 //               phone's overview (Strategic) a chip's tap picks its unit up
 //               and a cluster's zooms in
+//   (V3a) tips  the conditions (present/conditions.js, the one table), first
+//               in Node, read off the code itself (conditionsCheck): every
+//               field the core sets on a unit, every field of the card's
+//               facts and of the mirror's unit record is a condition with an
+//               icon and a tip of one or two sentences for every unit type
+//               (or HIDDEN, with why, or what the unit is), and every term
+//               canShoot and canCharge refuse by is a condition that blocks
+//               that action (or a flag that lifts one); then in Chromium, at
+//               1280×800 by the mouse and on a 390×844 phone by real
+//               touches, each on a hotseat battle of the grand mission in
+//               its first movement phase, conditions forced on the table as
+//               shown (?debug's view.tips): at the Close tier each of the
+//               label's icons (mesmerized, in combat, fell back, a charge
+//               failed, high ground; advanced; a war machine's never
+//               charging in its Charge phase) shows its tip on a hover or a
+//               tap, worded as the table words it, inside the screen; a tap's
+//               tip stays pinned until the next tap, which takes it away; the
+//               card's marked words (mesmerized, in combat, the high ground,
+//               a war machine's never charging) the same; at the Tactical
+//               tier the label keeps its icons (its name gone) and an icon's
+//               tip shows; at the Strategic tier a unit's chip carries its
+//               icons and shows its line and its conditions' tips (a mouse's
+//               hover, a finger's tap with its pick), a cluster's its count;
+//               and a tip shown beside a point 1 px inside each edge and
+//               corner of the screen stays MARGIN px inside every edge,
+//               flipped to the pointer's other side at the right and the
+//               bottom
 // and no page error throughout.
 //
-//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim]
+//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips]
 //
 // 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step;
-// (F13) --only aim plays the touch aim's cases alone.
+// (F13) --only aim plays the touch aim's cases alone; (V3a) --only tips the
+// conditions' alone (the Node part runs first in every run).
 // Exit 0 when every step holds. Set CHROMIUM_PATH to the pre-installed
 // Chromium if Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
-import { mkdtempSync, rmSync, mkdirSync } from 'node:fs'
+import { mkdtempSync, rmSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { tmpdir } from 'node:os'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
@@ -1388,31 +1417,444 @@ async function aimCase(page, say, h) {
   say(`aim: a long press on enemy unit ${shot.tg} showed unit ${shot.u}'s odds ("${shot.tip.slice(0, 60)}…"); the lift fired`)
 }
 
+// ── (V3a) The conditions, in Node ─────────────────────────────────────────────
+// Every condition the rules can put on a unit has an icon and a tip in the
+// one table (present/conditions.js), read off the code itself, so a rule
+// that adds one fails here until it is explained. Throws on the first gap;
+// returns the lines to say.
+// the unit's own record that no condition is: who and where it is and its
+// models (the label's name and count, its place)
+const WHO = ['id', 'key', 't', 'side', 'race', 'pos', 'r', 'models', 'alive', 'flags']
+// the code's names for a condition where the table names it otherwise
+const ALIAS = { y: 'high', isEngaged: 'engaged', inCover: 'cover' }
+// a literal's top-level keys ("{ a: { x: 1 }, b, c: f(1, 2) }" → a, b, c)
+function topKeys(src) {
+  const keys = []
+  let depth = 0, part = ''
+  for (const ch of src) {
+    if ('{[('.includes(ch)) depth++
+    else if ('}])'.includes(ch)) depth--
+    if (ch === ',' && depth === 0) (keys.push(part), (part = ''))
+    else part += ch
+  }
+  keys.push(part)
+  return keys.map((p) => /^\s*(\w+)/.exec(p.replace(/\/\/[^\n]*/g, ''))?.[1]).filter(Boolean)
+}
+async function conditionsCheck() {
+  const read = (f) => readFileSync(join(PKG, f), 'utf8')
+  const files = (d) => readdirSync(join(PKG, d), { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(join(d, e.name)) : e.name.endsWith('.js') ? [join(d, e.name)] : []))
+  const { CONDITIONS, HIDDEN, tipOf } = await import(pathToFileURL(join(PKG, 'present', 'conditions.js')).href)
+  const { RACES } = await import(pathToFileURL(join(PKG, 'data', 'schema.js')).href)
+  const fail = (m) => {
+    throw new Error(`conditions: ${m}`)
+  }
+  const isCond = (f) => !!CONDITIONS[ALIAS[f] ?? f]
+  const known = (f) => isCond(f) || Object.hasOwn(HIDDEN, f) || WHO.includes(f)
+  const lines = []
+  // what the core sets on a unit: its flags, and its own fields (a unit's
+  // own name for it: u, target, tg, unit), and what makeUnit gives it
+  const set = new Map()
+  const note = (f, where) => set.has(f) || set.set(f, where)
+  for (const f of files('core')) {
+    const src = read(f)
+    for (const m of src.matchAll(/\.flags\.(\w+)\s*(?:[-+]?=(?!=)|\+\+|--)/g)) note(m[1], f)
+    for (const m of src.matchAll(/\b(?:u|target|tg|unit)\.(\w+)\s*(?:[-+]?=(?!=)|\+\+|--)/g)) note(m[1], f)
+  }
+  const made = /export function makeUnit[\s\S]*?const u = \{([\s\S]*?)\n {2}\}/.exec(read('core/units.js'))
+  if (!made) fail("core/units.js's makeUnit makes no unit literal this check can read")
+  for (const k of topKeys(made[1])) note(k, 'core/units.js makeUnit')
+  // what the card's facts and the mirror's unit record carry
+  const fact = /export const factOf = \(G, u\) => \(\{([\s\S]*?)\}\)\n/.exec(read('present/hud-model.js'))
+  const rec = /units\[u\.id\] = \{([\s\S]*?)\n {4}\}/.exec(read('present/mirror.js'))
+  if (!fact || !rec) fail(`${!fact ? "present/hud-model.js's factOf" : "present/mirror.js's project"} has no literal this check can read`)
+  const facts = topKeys(fact[1]), shown = topKeys(rec[1])
+  for (const [f, where] of [...set, ...facts.map((f) => [f, 'present/hud-model.js factOf']), ...shown.map((f) => [f, 'present/mirror.js project'])]) {
+    if (!known(f)) fail(`${where} puts \`${f}\` on a unit, and present/conditions.js neither explains it (CONDITIONS) nor says why no player is shown it (HIDDEN)`)
+  }
+  lines.push(`the core sets ${set.size} fields on a unit (${[...set.keys()].join(', ')}), the card's facts carry ${facts.length} and the mirror's record ${shown.length}: each a condition, HIDDEN with why, or what the unit is`)
+  // what canShoot and canCharge refuse by
+  for (const [file, fn, act] of [['core/actions/shoot.js', 'canShoot', 'shoot'], ['core/actions/charge.js', 'canCharge', 'charge']]) {
+    const body = new RegExp(String.raw`export function ${fn}\(G, u\) \{\n([\s\S]*?)\n\}`).exec(read(file))?.[1]
+    if (!body) fail(`${file} has no ${fn}(G, u) this check can read`)
+    const terms = new Set([
+      ...[...body.matchAll(/\bu\.flags\.(\w+)/g)].map((m) => m[1]),
+      ...[...body.matchAll(/\bu\.(?!t\b|flags\b)(\w+)/g)].map((m) => m[1]),
+      ...[...body.matchAll(/\bu\.t\.(\w+)/g)].map((m) => m[1]),
+      ...[...body.matchAll(/\bw\.(\w+)/g)].map((m) => m[1]),
+      ...[...body.matchAll(/\b(isEngaged|inCover)\(/g)].map((m) => m[1]),
+    ])
+    const lifts = new Set(Object.values(CONDITIONS).flatMap((c) => c.lifts ?? []))
+    // (the unit's being: its ranged weapon, `w`, which a unit without one
+    // has none of to shoot)
+    terms.delete('ranged')
+    for (const x of terms) {
+      const c = CONDITIONS[ALIAS[x] ?? x]
+      if (c ? !c.blocks(null).includes(act) : !lifts.has(x)) fail(`${fn} refuses by \`${x}\`, which ${c ? `present/conditions.js's ${ALIAS[x] ?? x} doesn't say it blocks (${act})` : 'no condition explains (nor lifts)'}`)
+    }
+    lines.push(`${fn} refuses by ${[...terms].join(', ')}: each a condition that blocks it, with its icon, or a flag that lifts one`)
+  }
+  // every condition: its icon, its title, its kind, and a tip of one or two
+  // sentences for a unit of every type (and of none), in reach and in context
+  const types = [null, ...Object.values(RACES).flatMap((r) => Object.values(r.units))]
+  for (const [k, c] of Object.entries(CONDITIONS)) {
+    if (typeof c.icon !== 'string' || !c.icon.trim()) fail(`condition ${k} has no icon`)
+    if (!c.title || !['state', 'deed', 'trait'].includes(c.kind)) fail(`condition ${k} has no title or no kind`)
+    for (const t of types) for (const ctx of [{}, { own: true, y: 2.2, advRoll: 4, lost: 2 }]) {
+      const text = tipOf(k, t, ctx).replace(/<[^>]*>/g, '')
+      const sentences = (text.match(/[.!?](?=\s|$)/g) ?? []).length
+      if (!text.includes(c.title) || sentences < 1 || sentences > 2 || text.length > 300) fail(`condition ${k}'s tip for ${t ? t.name : 'no type'} reads "${text}": its title, then one or two sentences`)
+    }
+  }
+  lines.push(`${Object.keys(CONDITIONS).length} conditions (${Object.entries(CONDITIONS).map(([k, c]) => `${c.icon} ${k}`).join(', ')}), each with an icon and a tip of one or two sentences for all ${types.length - 1} unit types`)
+  return lines
+}
+
+// ── (V3a) The conditions' tips, in Chromium ────────────────────────────────────
+// A hotseat battle of the grand mission on a page of its own, `vp` its
+// viewport ({ width, height, touch: a phone's real touches, else the mouse }),
+// in the first movement phase played here; conditions forced on the table
+// as shown through ?debug's view.tips, the tooltip read as the page shows it.
+async function tipsCase(browser, url, vp, say, shots) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: !!vp.touch, isMobile: !!vp.touch })
+  const page = await ctx.newPage()
+  page.setDefaultTimeout(IDLE_MS)
+  const errors = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+  const where = `${vp.width}×${vp.height}${vp.touch ? ' (touch)' : ''}`
+  const fail = (m) => {
+    throw new Error(`${where}: ${m}`)
+  }
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  let shot = 0
+  const snap = async (name) => shots && page.screenshot({ path: join(shots, `tips-${vp.width}-${String(++shot).padStart(2, '0')}-${name}.png`) })
+  const frames = (n = 2) => ev((n) => new Promise((r) => {
+    const go = (k) => (k ? requestAnimationFrame(() => go(k - 1)) : r())
+    go(n)
+  }), n)
+  try {
+    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1`)
+    await page.waitForSelector('#title:not(.hidden)')
+    await ev(() => window.__ts.view.mission('grand'))
+    await ev(() => window.__ts.start('hotseat'))
+    await page.waitForFunction(() => window.__ts.session?.G?.board?.W === 80 && window.__ts.player.idle, null, { timeout: IDLE_MS })
+    for (let k = 0; k < 6; k++) {
+      if ((await ev(() => window.__ts.session.G.pending))?.phase === 'move') break
+      if ((await ev(() => window.__ts.session.decisionFor())) >= 0) await ev(() => window.__ts.endPhase())
+      await page.waitForFunction(() => window.__ts.player.idle, null, { timeout: IDLE_MS })
+    }
+    const s = await ev(() => window.__ts.session.decisionFor())
+    if ((await ev(() => window.__ts.session.G.pending?.phase)) !== 'move' || s < 0) fail('the battle never reached a movement phase played here')
+    // a unit of the seat for which an advance costs something, and its war
+    // machine (never charges)
+    const army = await ev((s) => window.__ts.G.units.filter((u) => u.side === s && u.alive > 0).map((u) => ({ id: u.id, x: u.pos.x, z: u.pos.z, name: u.t.name, noCharge: !!u.t.noCharge, both: !!u.t.ranged && !u.t.ranged.assault && !u.t.chargeAfterAdvance && !u.t.noCharge })), s)
+    const U = army.find((u) => u.both), Wm = army.find((u) => u.noCharge)
+    if (!U || !Wm) fail(`the seat has ${U ? '' : 'no unit an advance stops shooting and charging'}${!U && !Wm ? ' and ' : ''}${Wm ? '' : 'no war machine'}`)
+    const M = 8, W = vp.width, H = vp.height
+    // the camera's distance for `ppi` pixels per inch where it looks
+    // (present/zoom.js's pxPerInch, turned round)
+    const dFor = (ppi) => ev((p) => innerHeight / (2 * p * Math.tan((window.__ts.camera.fov * Math.PI) / 360)), ppi)
+    const inside = (b) => b.left >= M - 0.5 && b.top >= M - 0.5 && b.right <= W - M + 0.5 && b.bottom <= H - M + 0.5
+    const box = (b) => `${Math.round(b.left)},${Math.round(b.top)}–${Math.round(b.right)},${Math.round(b.bottom)}`
+    const tip = () => ev(() => window.__ts.view.tips.tooltip())
+    // a tip's text (its HTML's, as the page reads it)
+    const textOf = (html) => ev((h) => {
+      const d = document.createElement('div')
+      d.innerHTML = h
+      return d.textContent
+    }, html)
+    // the camera `d` inches from (x, z), the table come to rest (the label's
+    // place the same twice running) at tier `tier`
+    const look = async (u, d, tier) => {
+      await ev(({ x, z, d }) => window.__ts.view.tips.look(x, z, d), { x: u.x, z: u.z, d })
+      let was = ''
+      for (let k = 0; k < 60; k++) {
+        await frames(2)
+        const now = await ev((id) => {
+          const l = document.querySelector(`.ulabel[data-unit="${id}"]`)
+          return `${window.__ts.view.drawing().tier} ${l?.style.transform}`
+        }, u.id)
+        if (now === was && now.startsWith(tier)) return
+        was = now
+      }
+      fail(`the camera ${d}" from ${u.name} never came to rest at the ${tier} tier (${was})`)
+    }
+    // the shown icons of unit id's label: [{ k, x, y, w }] (their middles),
+    // each on the screen
+    const icons = async (id) => {
+      const out = await ev((id) => [...document.querySelectorAll(`.ulabel[data-unit="${id}"] .st[data-cond]`)].map((el) => {
+        const r = el.getBoundingClientRect()
+        return { k: el.dataset.cond, x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width }
+      }), id)
+      const off = out.find((i) => i.w > 0 && !(i.x > 4 && i.x < W - 4 && i.y > 4 && i.y < H - 4))
+      if (off) fail(`unit ${id}'s ${off.k} icon stands off the screen, at (${Math.round(off.x)}, ${Math.round(off.y)})`)
+      return out
+    }
+    // the pointer to (x, y): the mouse's move, or a finger's tap
+    const point = async ({ x, y }) => {
+      if (vp.touch) await page.touchscreen.tap(x, y)
+      else await page.mouse.move(x, y)
+      await frames(2)
+    }
+    // the tooltip shown at `at` must tell `want` (HTML), inside the screen,
+    // pinned on a touch screen
+    const holds = async (what, want) => {
+      const t = await tip()
+      if (!t.shown) fail(`${what}: no tip shown`)
+      const got = await textOf(t.html), w = await textOf(want)
+      if (!got.includes(w)) fail(`${what}: the tip reads "${got}", not "${w}"`)
+      if (!inside(t.box)) fail(`${what}: the tip stands at ${box(t.box)}, outside the screen less ${M} px`)
+      if (vp.touch && !t.pinned) fail(`${what}: a tap's tip is not pinned`)
+      return t
+    }
+    // the pointer away: a mouse off the marked thing, or a finger's tap on
+    // the table elsewhere (the next tap): the tip gone
+    // (a finger's tap: on the table where no unit stands, the canvas on top
+    // there and all round it, 24 px each way (Chromium moves a finger's tap
+    // onto a clickable thing near it: a chip), so it picks nothing up and,
+    // with nothing picked up, moves nothing: the battle stays as it was;
+    // the mouse anywhere off it)
+    const away = async (what, at) => {
+      const q = vp.touch
+        ? await ev(({ W, H }) => {
+          const bare = (x, y) => [-24, 0, 24].every((dx) => [-24, 0, 24].every((dy) => document.elementFromPoint(x + dx, y + dy)?.tagName === 'CANVAS'))
+          for (let y = H * 0.3; y < H * 0.75; y += 23) for (let x = 30; x < W - 30; x += 29) {
+            const p = window.__ts.group.pick(x, y, 'touch')
+            if (bare(x, y) && p.ground && p.unit === null && !window.__ts.view.tips.at(x, y, 24)) return { x, y }
+          }
+          return null
+        }, { W, H })
+        : { x: Math.min(W - 20, Math.max(20, at.x + (at.x < W / 2 ? 90 : -90))), y: Math.min(H - 20, Math.max(20, at.y - 70)) }
+      if (!q) fail(`${what}: no quiet spot on the table to tap away from it`)
+      if (vp.touch && (await ev(() => window.__ts.group.picked().length))) await ev(() => window.__ts.select(null))
+      await point(q)
+      if (vp.touch) {
+        const t = await tip()
+        if (t.shown) fail(`${what}: the next tap (at ${Math.round(q.x)}, ${Math.round(q.y)}) left a tip up${t.pinned ? ', pinned' : ''}: "${(await textOf(t.html)).slice(0, 80)}"`)
+      }
+    }
+
+    // ── Close: each of the label's icons ──
+    await look(U, await dFor(30), 'close')
+    await ev((id) => window.__ts.view.tips.force(id, { mu: { mesmerized: true, engaged: true, y: 1.2 }, f: { moved: true, fellBack: true, chargeTried: true } }), U.id)
+    await frames(3)
+    let got = await icons(U.id)
+    const want = ['mesmerized', 'engaged', 'fellBack', 'chargeTried', 'high']
+    if (got.map((i) => i.k).join() !== want.join()) fail(`${U.name}'s label shows ${got.map((i) => i.k).join(', ') || 'no icon'}, not ${want.join(', ')}`)
+    await snap('close-label')
+    for (const i of got) {
+      await point(i)
+      await holds(`${U.name}'s ${i.k} icon at the Close tier`, await ev(({ id, k }) => window.__ts.view.tips.want(id, k), { id: U.id, k: i.k }))
+      if (i.k === 'mesmerized') await snap('close-tip')
+      await away(`${U.name}'s ${i.k} icon`, i)
+    }
+    // the roster's row (open on a larger board, but on a phone): its icons,
+    // each its tip on a hover
+    if (!vp.touch) {
+      await page.waitForFunction((id) => document.querySelectorAll(`#roster li[data-unit="${id}"] [data-cond]`).length > 0, U.id, { timeout: 10000 }).catch(() => {})
+      const rs = await ev((id) => [...document.querySelectorAll(`#roster li[data-unit="${id}"] [data-cond]`)].map((el) => {
+        el.scrollIntoView({ block: 'nearest' })
+        const r = el.getBoundingClientRect()
+        return { k: el.dataset.cond, x: r.left + r.width / 2, y: r.top + r.height / 2 }
+      }), U.id)
+      if (rs.map((r) => r.k).join() !== 'mesmerized,engaged,fellBack,chargeTried') fail(`${U.name}'s roster row shows ${rs.map((r) => r.k).join(', ') || 'no icon'}, not its label's (but its height)`)
+      for (const r of rs) {
+        await point(r)
+        await holds(`${U.name}'s roster row's ${r.k}`, await ev(({ id, k }) => window.__ts.view.tips.want(id, k), { id: U.id, k: r.k }))
+      }
+      await away(`${U.name}'s roster row`, rs[0])
+    }
+    // the unit's own hover (the mouse): its line and every condition told
+    if (!vp.touch) {
+      const at = await ev((id) => window.__ts.group.screen(id), U.id)
+      await page.mouse.move(at.x, at.y)
+      await frames(2)
+      const t = await tip(), line = await textOf(await ev((id) => window.__ts.view.tips.unitTip(id), U.id))
+      if (!t.shown || !(await textOf(t.html)).startsWith(line.split('\n')[0].slice(0, 20)) || !(await textOf(t.html)).includes('Mesmerized')) fail(`a hover over ${U.name}'s figure shows "${await textOf(t.html)}", not its line and its conditions told`)
+      if (!inside(t.box)) fail(`a hover over ${U.name}'s figure: the tip at ${box(t.box)}, outside the screen`)
+      await snap('unit-hover')
+    }
+    await ev(() => window.__ts.view.tips.unforce())
+    // advanced
+    await ev((id) => window.__ts.view.tips.force(id, { f: { moved: true, advanced: true, advRoll: 4 } }), U.id)
+    await frames(2)
+    got = await icons(U.id)
+    if (got.map((i) => i.k).join() !== 'advanced') fail(`${U.name}, advanced, shows ${got.map((i) => i.k).join(', ') || 'no icon'} on its label, not the advance's`)
+    await point(got[0])
+    await holds(`${U.name}'s advanced icon`, await ev(({ id }) => window.__ts.view.tips.want(id, 'advanced'), { id: U.id }))
+    await away(`${U.name}'s advanced icon`, got[0])
+    await ev(() => window.__ts.view.tips.unforce())
+    // a war machine, never charging, in its Charge phase
+    await look(Wm, await dFor(30), 'close')
+    await ev((id) => window.__ts.view.tips.force(id, { phase: 'charge' }), Wm.id)
+    await frames(2)
+    got = await icons(Wm.id)
+    if (got.map((i) => i.k).join() !== 'noCharge') fail(`${Wm.name} in its Charge phase shows ${got.map((i) => i.k).join(', ') || 'no icon'}, not its never charging`)
+    await point(got[0])
+    await holds(`${Wm.name}'s never-charges icon`, await ev(({ id }) => window.__ts.view.tips.want(id, 'noCharge'), { id: Wm.id }))
+    await away(`${Wm.name}'s never-charges icon`, got[0])
+    await ev(() => window.__ts.view.tips.unforce())
+    say(`${where}: Close, ${U.name}'s label's icons (${want.join(', ')}, then advanced) and ${Wm.name}'s never charging each ${vp.touch ? 'tapped: its tip pinned, inside the screen, and gone at the next tap' : 'hovered: its tip, inside the screen'}${vp.touch ? '' : `; a hover over the figure its line and every condition told`}`)
+
+    // ── The card's marked words ──
+    await look(U, await dFor(30), 'close')
+    await ev((id) => window.__ts.view.tips.force(id, { mu: { mesmerized: true, engaged: true, y: 1.2 } }), U.id)
+    for (const [u, ks] of [[U, ['mesmerized', 'engaged', 'high']], [Wm, ['noCharge']]]) {
+      // (the card opened, its slide in over: its words read where they come
+      // to rest; again for each word, a finger's tap away closing it)
+      const card = async () => {
+        await ev((id) => window.__ts.present.card(window.__ts.G.units.find((x) => x.id === id)), u.id)
+        await page.waitForFunction(() => {
+          const c = getComputedStyle(document.querySelector('#card'))
+          return c.opacity === '1' && c.transform === 'none'
+        }, null, { timeout: 10000 }).catch(() => {})
+        await frames(2)
+        return ev(() => [...document.querySelectorAll('#card [data-cond]')].map((el) => {
+          const r = el.getBoundingClientRect()
+          return { k: el.dataset.cond, x: r.left + Math.min(r.width / 2, 30), y: r.top + r.height / 2 }
+        }))
+      }
+      const words = await card()
+      if (words.map((w) => w.k).join() !== ks.join()) fail(`${u.name}'s card marks ${words.map((w) => w.k).join(', ') || 'nothing'}, not ${ks.join(', ')}`)
+      for (const n of ks.keys()) {
+        const w = (await card())[n]
+        await point(w)
+        await holds(`${u.name}'s card's ${w.k}`, await ev(({ id, k }) => window.__ts.view.tips.want(id, k), { id: u.id, k: w.k }))
+        if (w.k === 'engaged') await snap('card-tip')
+        await away(`${u.name}'s card's ${w.k}`, w)
+        if (!vp.touch && (await tip()).shown) fail(`${u.name}'s card's ${w.k}: the tip stayed up with the mouse gone`)
+      }
+    }
+    await ev(() => window.__ts.select(null))
+    await ev(() => window.__ts.view.tips.unforce())
+    say(`${where}: the card's marked words (mesmerized, in combat, the high ground; a war machine's never charging) each ${vp.touch ? 'tapped' : 'hovered'}: its tip, inside the screen, gone ${vp.touch ? 'at the next tap' : 'as the mouse leaves'}`)
+
+    // ── Tactical: the label's icons kept, its name gone ──
+    await look(U, await dFor(9), 'tactical')
+    await ev((id) => window.__ts.view.tips.force(id, { mu: { mesmerized: true, engaged: true } }), U.id)
+    await frames(2)
+    got = (await icons(U.id)).filter((i) => i.w > 0)
+    const nm = await ev((id) => getComputedStyle(document.querySelector(`.ulabel[data-unit="${id}"] .nm`)).display, U.id)
+    if (got.map((i) => i.k).join() !== 'mesmerized,engaged' || nm !== 'none') fail(`a Tactical label shows ${got.map((i) => i.k).join(', ') || 'no icon'} (its name ${nm === 'none' ? 'hidden' : 'shown'}), not its icons without its name`)
+    await snap('tactical')
+    await point(got[0])
+    await holds(`${U.name}'s mesmerized icon at the Tactical tier`, await ev(({ id }) => window.__ts.view.tips.want(id, 'mesmerized'), { id: U.id }))
+    await away(`${U.name}'s Tactical icon`, got[0])
+    await ev(() => window.__ts.view.tips.unforce())
+    say(`${where}: Tactical, the label's icons kept (its name gone) and a tip on its icon`)
+
+    // ── Strategic: a unit's chip ──
+    // (the dolly stops at a tenth past the overview's fit, which on a
+    // landscape screen is Tactical: a Grand board's chips are a phone's)
+    await ev(({ x, z, d }) => window.__ts.view.tips.look(x, z, d), { x: U.x, z: U.z, d: await dFor(3.5) })
+    await page.waitForFunction(() => window.__ts.view.drawing().tier === 'strategic' && window.__ts.view.chips().length > 0, null, { timeout: vp.touch ? 60000 : 15000 }).catch(() => {})
+    await frames(4)
+    if (!vp.touch && (await ev(() => window.__ts.view.drawing().tier)) !== 'strategic') {
+      say(`${where}: no Strategic tier (the camera's farthest reads ${(await ev(() => window.__ts.view.drawing().ppi)).toFixed(1)} px per inch): the chips are the phone's`)
+      await ev(() => window.__ts.view.tips.look(0, 0, 40))
+    } else {
+      const chips = await ev(() => window.__ts.view.chips())
+      const one = chips.find((c) => c.ids.length === 1 && army.some((u) => u.id === c.ids[0])) ?? chips.find((c) => c.ids.length === 1)
+      if (!one) fail(`the Strategic tier shows ${chips.length} chips, none of one unit alone`)
+      await ev((id) => window.__ts.view.tips.force(id, { mu: { mesmerized: true } }), one.ids[0])
+      await frames(3)
+      const badge = await ev((id) => document.querySelector(`#chips .chip[data-unit="${id}"] s`)?.textContent ?? null, one.ids[0])
+      if (badge !== '🌀') fail(`unit ${one.ids[0]}'s chip carries ${JSON.stringify(badge)}, not its mesmerized icon`)
+      const at = (await ev(() => window.__ts.view.chips())).find((c) => c.ids.length === 1 && c.ids[0] === one.ids[0]) ?? one
+      await point(at)
+      await holds(`unit ${one.ids[0]}'s chip`, await ev((id) => window.__ts.view.tips.unitTip(id), one.ids[0]))
+      await snap('strategic-chip')
+      await away(`unit ${one.ids[0]}'s chip`, at)
+      await ev(() => window.__ts.select(null))
+      const many = (await ev(() => window.__ts.view.chips())).find((c) => c.ids.length > 1)
+      if (!vp.touch && many) {
+        await page.mouse.move(many.x, many.y)
+        await frames(2)
+        await holds(`a cluster of ${many.ids.length}`, `${many.ids.length} units: tap to zoom in`)
+        await page.mouse.move(W / 2, H / 2)
+      }
+      await ev(() => window.__ts.view.tips.unforce())
+      say(`${where}: Strategic, a unit's chip carries its icon (🌀) and ${vp.touch ? 'its tap' : 'its hover'} shows its line and its conditions told${!vp.touch && many ? `; a cluster's, its count (${many.ids.length})` : ''}`)
+    }
+
+    // ── The edges ──
+    await ev((id) => window.__ts.view.tips.force(id, { mu: { mesmerized: true, engaged: true, y: 1.2 }, f: { moved: true, fellBack: true, chargeTried: true } }), U.id)
+    const long = await ev((id) => window.__ts.view.tips.unitTip(id), U.id)
+    const pts = [[1, 1], [W / 2, 1], [W - 1, 1], [W - 1, H / 2], [W - 1, H - 1], [W / 2, H - 1], [1, H - 1], [1, H / 2]]
+    for (const [x, y] of pts) {
+      await ev(({ h, x, y }) => window.__ts.view.tips.show(h, x, y), { h: long, x, y })
+      const b = (await tip()).box
+      if (!inside(b)) fail(`a tip beside (${x}, ${y}) stands at ${box(b)}, outside the screen less ${M} px`)
+      // (flipped: to the pointer's left at the right edge, above it at the
+      // bottom; right of it and below it at the left and the top)
+      if ((x > W / 2 && b.right > x) || (x < W / 2 && b.left < x) || (y > H / 2 && b.bottom > y) || (y < 10 && b.top < y)) fail(`a tip beside (${x}, ${y}) stands at ${box(b)}: not on the pointer's inner side`)
+      if (x === W - 1 && y === H - 1) await snap('edge-corner')
+    }
+    await ev(() => window.__ts.view.tips.hide())
+    await ev(() => window.__ts.view.tips.unforce())
+    say(`${where}: a tip of ${(await textOf(long)).length} characters beside each edge and corner stays ${M} px inside the screen, flipped to the pointer's inner side`)
+    if (errors.length) fail(`page errors: ${errors.slice(0, 3).join(' | ')}`)
+  } finally {
+    await ctx.close()
+  }
+}
+
+if (a.only && !['aim', 'tips'].includes(a.only)) {
+  console.error(`input-check: --only takes aim or tips, not ${a.only}`)
+  process.exit(2)
+}
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false
 try {
+  // ((V3a) the conditions' table, in Node, before any page)
+  console.log('input-check (V3a): the conditions, read off the code\n')
+  let conds = false
+  try {
+    for (const l of await conditionsCheck()) console.log(`  ok   ${l}`)
+    conds = true
+  } catch (e) {
+    console.log(`  FAIL ${e.message}`)
+  }
   const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
   const { url, close } = await startStaticServer(dist)
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   try {
-    const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
-    page.setDefaultTimeout(IDLE_MS)
-    const errors = []
-    page.on('pageerror', (e) => errors.push(e.message))
-    page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
-    console.log('input-check (F10a): the group input in Chromium, by mouse and keys\n')
-    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1`)
-    await page.waitForSelector('#title:not(.hidden)')
-    await page.click('[data-mode="hotseat"]')
-    await page.click('#setupStart')
-    try {
-      await check(page, (l) => console.log(`  ok   ${l}`))
-      ok = !errors.length
-    } catch (e) {
-      console.log(`  FAIL ${e.message}`)
+    let lanes = true
+    if (a.only !== 'tips') {
+      const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
+      page.setDefaultTimeout(IDLE_MS)
+      const errors = []
+      page.on('pageerror', (e) => errors.push(e.message))
+      page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+      console.log('\ninput-check (F10a): the group input in Chromium, by mouse and keys\n')
+      await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1`)
+      await page.waitForSelector('#title:not(.hidden)')
+      await page.click('[data-mode="hotseat"]')
+      await page.click('#setupStart')
+      lanes = false
+      try {
+        await check(page, (l) => console.log(`  ok   ${l}`))
+        lanes = !errors.length
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+      }
+      if (errors.length) console.log(`  FAIL page errors:\n         ${errors.slice(0, 5).join('\n         ')}`)
     }
-    if (errors.length) console.log(`  FAIL page errors:\n         ${errors.slice(0, 5).join('\n         ')}`)
+    // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
+    // touches on a 390×844 phone
+    if (a.only !== 'aim') {
+      console.log('\ninput-check (V3a): the conditions\' tips in Chromium, by the mouse and by touch\n')
+      for (const vp of [{ width: 1280, height: 800 }, { width: 390, height: 844, touch: true }]) {
+        try {
+          await tipsCase(browser, url, vp, (l) => console.log(`  ok   ${l}`), a.shots)
+        } catch (e) {
+          console.log(`  FAIL ${e.message}`)
+          lanes = false
+        }
+      }
+    }
+    ok = conds && lanes
   } finally {
     await browser.close()
     close()
@@ -1420,5 +1862,5 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-console.log(ok ? '\ninput-check passed: box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers' : '\ninput-check FAILED')
+console.log(ok ? `\ninput-check passed: ${a.only === 'tips' ? '' : 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers; '}${a.only === 'aim' ? '' : '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen'}` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)
