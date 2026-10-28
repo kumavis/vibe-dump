@@ -1533,6 +1533,14 @@ body.mirror .ulabel.s1.sel .ct {
 #spellbar.hidden {
   display: none;
 }
+/* beside the unit card, as the actions are (it scrolls past that): the
+   card stands at the bottom left from 901 px, where its three spells ran
+   over the card's right edge up to about 960 px */
+@media (min-width: 901px) {
+  #spellbar {
+    max-width: calc(100vw - 350px);
+  }
+}
 #spellbar .spell {
   display: grid;
   grid-template-columns: auto 1fr;

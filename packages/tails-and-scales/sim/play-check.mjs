@@ -24,7 +24,8 @@
 //   layout    (F8b's review) the battle's chrome in place: a hotseat battle
 //             on classic and on Grand, at 1280×800, 1366×768 and a 412×915
 //             phone ((V3b) and 1024×768 and an 844×390 landscape phone, the
-//             phones touch screens), once the deployment's camera has
+//             phones touch screens; (V3c, at the V3 merge) and 920×760),
+//             once the deployment's camera has
 //             rested: the tools row
 //             holds only its eight buttons of before F8b and (V2) the perf
 //             overlay's 📈 (no ☰ or 🗺 in it: they widened it over the
@@ -43,7 +44,10 @@
 //             the first seat's movement phase with a unit picked up by Tab
 //             (Advance up), every action button shown is on the screen, ↶
 //             Undo among them, its title the rule, the row clear of the card
-//             and the group bar, and the minimap clear of both
+//             and the group bar, and the minimap clear of both; ((V3c, at
+//             the V3 merge) then that seat's shooting phase with its caster
+//             picked up by Tab: the spell bar on the screen, clear of the
+//             card, the actions, the group bar and the minimap)
 //   cart      (F9a) vs. the AI from seat 0 in a Field battle whose
 //             Bushtails field two War-Carts (?mission=field&armies=): the
 //             deployment adjusted by clicks, Begin battle, and in the first
@@ -76,8 +80,8 @@
 // minutes at SwiftShader's frame rate. --parallel runs
 // that many lanes at once (default 1: SwiftShader draws at about 2 fps on
 // this machine). (V3b) --shots writes the layout lane's screenshots there
-// (each screen and board: each of the net badge's states, and the actions
-// in the movement phase). Exit 0 when every lane plays, 1 otherwise, 2 on bad
+// (each screen and board: each of the net badge's states, the actions in
+// the movement phase and the spell bar in the shooting phase). Exit 0 when every lane plays, 1 otherwise, 2 on bad
 // arguments. Set CHROMIUM_PATH to the pre-installed Chromium if
 // Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
@@ -525,7 +529,10 @@ async function lane(browser, url, name) {
 // ((F8b's review) the layout lane: the chrome's boxes on three screens;
 // (V3b) five, the phones touch screens: [width, height, touch])
 const TOOLS = ['speed', 'view', 'follow', 'batch', 'autoFirst', 'autoEnd', 'mute', 'perf', 'helpBtn']
-const SCREENS = [[1280, 800], [1366, 768], [1024, 768], [844, 390, true], [412, 915, true]]
+// ((V3c, at the V3 merge) and 920×760: just past 900 px the card stands at
+// the bottom left beside the actions, where the spell bar's three spells
+// ran over its right edge)
+const SCREENS = [[1280, 800], [1366, 768], [1024, 768], [920, 760], [844, 390, true], [412, 915, true]]
 // ((V3b) the net badge in each of its states, shown by ui/netbadge.js's own
 // NetBadge (its source put in the page as a script: the module imports
 // nothing), and the chrome's boxes while it shows: the badge, the perf
@@ -685,7 +692,33 @@ async function layoutLane(browser, url) {
         if (meets(map, row)) problems.push(`${at}: the minimap (${rounded(map)}) meets the actions (${rounded(row)})`)
         await shot('undo')
         const moves = `; in the movement phase ${acts.length} actions in ${row ? rounded(row) : 'none'}, Undo ${undo ? rounded(undo) : 'none'}`
-        lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${badge}${card}${moves}`)
+        // ((V3c, at the V3 merge) the spell bar: the movement phase ended,
+        // then in the same seat's shooting phase its caster picked up by Tab
+        // (each Tab the next unit still to act, until the bar shows: a caster
+        // always has a spell to cast, on itself at least): the bar inside the
+        // screen and clear of the card, the actions, the group bar and the
+        // minimap, as the actions are)
+        await page.evaluate(() => document.activeElement?.blur?.())
+        await page.click('#endPhase')
+        for (const t0 = Date.now(); !(await endUp()).startsWith('End Shooting');) {
+          if (Date.now() - t0 > 120000) throw new Error(`no shooting phase 120 s after End Movement (End reads "${await endUp()}")`)
+          await sleep(500)
+        }
+        await page.evaluate(() => document.activeElement?.blur?.())
+        for (let k = 0; k < 16 && !(await box('#spellbar')); k++) {
+          await page.keyboard.press('Tab')
+          await sleep(600)
+        }
+        await settle(page, '#card, #actions, #spellbar, #groupbar', 'the card, the actions and the spell bar')
+        const sb = await box('#spellbar'), card2 = await box('#card.show'), row2 = await box('#actions'), bar2 = await box('#groupbar'), map2 = await box('#minimap')
+        if (!sb) problems.push(`${at}: in the shooting phase sixteen Tabs picked up no caster (no spell bar)`)
+        else {
+          if (sb.l < 0 || sb.t < 0 || sb.r > w || sb.b > h) problems.push(`${at}: the spell bar (${rounded(sb)}) runs off the ${w}×${h} screen`)
+          for (const [n, b] of [['the unit card', card2], ['the actions', row2], ['the group bar', bar2], ['the minimap', map2]]) if (meets(sb, b)) problems.push(`${at}: the spell bar (${rounded(sb)}) meets ${n} (${rounded(b)})`)
+        }
+        await shot('spells')
+        const spells = `; in the shooting phase the spell bar ${sb ? rounded(sb) : 'none'}, the card ${card2 ? rounded(card2) : 'none'}`
+        lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${badge}${card}${moves}${spells}`)
       } catch (e) {
         problems.push(`${at}: ${e.message.split('\n')[0]}`)
       }
