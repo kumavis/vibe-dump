@@ -23,7 +23,13 @@
 //   - over five round trips (grand, then classic), what the table holds is
 //     flat: on every classic battle the same renderer.info geometries and
 //     textures, the same scene and labels, as on the first, and so on
-//     every grand one (and as many shader programs: none linked anew).
+//     every grand one (and as many shader programs: none linked anew);
+//   - (V3d) a battle of the Powder Field (the grand board, its own seven
+//     objectives) burns: its turf scorched into the mat and its fires lit;
+//     a classic battle after it has neither, and over three round trips
+//     (classic, then Powder Field) the table holds flat again: the fires'
+//     two clouds (two geometries, one program, two objects in the scene)
+//     made at the first burn and kept, and nothing else.
 //
 //   node sim/board-check.mjs                 P-board on the working tree
 //   node sim/board-check.mjs --self-test     each of EDITS, made in the copy,
@@ -47,13 +53,17 @@ const { values: a } = parseArgs({ options: { 'self-test': { type: 'boolean' } } 
 // the grand mission's board, which the checks below hold the table to (the
 // shipped mission's, data/mission.js: refused at once if it is not this)
 const GRAND = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]] }
+// ((V3d) the Powder Field's: the grand board, its own seven objectives)
+const POWDER = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-12, 12], [12, -12], [-12, -12], [12, 12], [0, -20], [0, 20]] }
 {
   const { MISSIONS } = await import(new URL('../data/mission.js', import.meta.url).href)
-  const m = MISSIONS.grand
-  const got = m && { W: m.board.W, H: m.board.H, deploy: m.deploy, objectives: m.objectives.map((o) => [o.x, o.z]) }
-  if (JSON.stringify(got) !== JSON.stringify(GRAND)) {
-    console.error(`board-check: the grand mission is ${JSON.stringify(got)}, not the board this check holds the table to (${JSON.stringify(GRAND)}): port the check`)
-    process.exit(1)
+  for (const [name, want] of [['grand', GRAND], ['powder', POWDER]]) {
+    const m = MISSIONS[name]
+    const got = m && { W: m.board.W, H: m.board.H, deploy: m.deploy, objectives: m.objectives.map((o) => [o.x, o.z]) }
+    if (JSON.stringify(got) !== JSON.stringify(want)) {
+      console.error(`board-check: the ${name} mission is ${JSON.stringify(got)}, not the board this check holds the table to (${JSON.stringify(want)}): port the check`)
+      process.exit(1)
+    }
   }
 }
 
@@ -79,6 +89,9 @@ const EDITS = {
   // every snap makes the table over, whatever the board: the classic one
   // drawn again (and its Math.random draws) at every battle
   'always-rebuild': ['view/index.js', '    if (key === this.boardKey) return false\n', ''],
+  // ((V3d) a new table keeps the old one's burns: the Powder Field's
+  // scorch painted on the next classic battle's mat
+  'burns-kept': ['view/terrain.js', '    this.marks.clear()\n    this.scorched()\n    this.scene.remove(this.group)\n', '    this.scene.remove(this.group)\n'],
 }
 
 // One run over a build: '' when P-board holds, else why not.
@@ -140,9 +153,31 @@ async function run(browser, url) {
         for (const k of ['scene', 'labels']) if (t.counts[k] !== list[0].counts[k]) bad.push(`${m} battle ${i + 1} of 5: the scene holds ${t.counts[k]} ${k === 'scene' ? 'objects' : 'labels'}, the first ${list[0].counts[k]}`)
       }
     }
+    // ((V3d) the Powder Field: burning on the grand board, and gone again
+    for (const [m, list] of Object.entries(tables)) for (const [i, t] of list.entries()) if (t.burns || t.fires) bad.push(`${m} battle ${i + 1} of 5 burns: ${t.burns} scorch marks, ${t.fires} vents lit`)
+    const p1 = await battle('powder')
+    holds(p1, { ...grand, objectives: POWDER.objectives.length }, 'a Powder Field battle')
+    if (JSON.stringify(p1.objectives) !== JSON.stringify(POWDER.objectives)) bad.push(`a Powder Field battle's objectives stand at ${JSON.stringify(p1.objectives)}`)
+    if (!(p1.burns > 0) || !(p1.fires > 0)) bad.push(`a Powder Field battle doesn't burn: ${p1.burns} scorch marks, ${p1.fires} vents lit`)
+    const trips = { powder: [], classic: [] }
+    for (let i = 0; i < 3; i++) {
+      trips.classic.push(await battle('classic'))
+      trips.powder.push(await battle('powder'))
+    }
+    const clouds = { geometries: 2, textures: 0, programs: 1, scene: 2, labels: 0 }
+    for (const [i, t] of trips.classic.entries()) {
+      if (t.burns || t.fires) bad.push(`classic battle ${i + 1} of 3 after a Powder Field one burns: ${t.burns} scorch marks, ${t.fires} vents lit`)
+      for (const k of flat) if (t[k] !== tables.classic[0][k] + clouds[k]) bad.push(`classic battle ${i + 1} of 3 after a Powder Field one: renderer.info ${k} ${t[k]}, not the first classic battle's ${tables.classic[0][k]} and the fires' ${clouds[k]}`)
+      for (const k of ['scene', 'labels']) if (t.counts[k] !== tables.classic[0].counts[k] + clouds[k]) bad.push(`classic battle ${i + 1} of 3 after a Powder Field one: the scene holds ${t.counts[k]} ${k === 'scene' ? 'objects' : 'labels'}, not the first classic battle's ${tables.classic[0].counts[k]} and the fires' ${clouds[k]}`)
+    }
+    for (const [i, t] of trips.powder.entries()) {
+      if (t.burns !== p1.burns || t.fires !== p1.fires) bad.push(`Powder Field battle ${i + 2} burns otherwise: ${t.burns} scorch marks and ${t.fires} vents, the first's ${p1.burns} and ${p1.fires}`)
+      for (const k of flat) if (t[k] !== trips.powder[0][k]) bad.push(`Powder Field battle ${i + 2}: renderer.info ${k} ${t[k]}, the second's ${trips.powder[0][k]}`)
+      for (const k of ['scene', 'labels']) if (t.counts[k] !== trips.powder[0].counts[k]) bad.push(`Powder Field battle ${i + 2}: the scene holds ${t.counts[k]} ${k === 'scene' ? 'objects' : 'labels'}, the second's ${trips.powder[0].counts[k]}`)
+    }
     if (errors.length) bad.push(`the page threw: ${errors[0]}`)
     const said = bad.length ? bad.slice(0, 6).join('; ') : ''
-    return { said, title, g1, c1, last: tables }
+    return { said, title, g1, c1, p1, last: tables, trips }
   } finally {
     await page.close()
   }
@@ -179,7 +214,8 @@ try {
   } else {
     const r = await once('tree')
     const t = r.last.grand[0], c = r.last.classic[0]
-    console.log(`board-check (P-board): the title the classic table (${r.title.W}×${r.title.H}, ${r.title.objectives.length} objectives, grid ${r.title.grid.join('×')}); a grand battle made it over (${r.g1.W}×${r.g1.H}, zones ${r.g1.deploy}", ${r.g1.objectives.length} objectives, grid ${r.g1.grid.join('×')}, ${r.g1.tufts} tufts, dolly ${r.g1.dolly.toFixed(1)}, far ${r.g1.far}, fog ${r.g1.fog.join('–')}), a classic one back; five round trips: grand ${t.geometries} geometries, ${t.textures} textures; classic ${c.geometries}, ${c.textures}; ${r.last.classic.at(-1).programs} programs`)
+    const p = r.trips.powder.at(-1)
+    console.log(`board-check (P-board): the title the classic table (${r.title.W}×${r.title.H}, ${r.title.objectives.length} objectives, grid ${r.title.grid.join('×')}); a grand battle made it over (${r.g1.W}×${r.g1.H}, zones ${r.g1.deploy}", ${r.g1.objectives.length} objectives, grid ${r.g1.grid.join('×')}, ${r.g1.tufts} tufts, dolly ${r.g1.dolly.toFixed(1)}, far ${r.g1.far}, fog ${r.g1.fog.join('–')}), a classic one back; five round trips: grand ${t.geometries} geometries, ${t.textures} textures; classic ${c.geometries}, ${c.textures}; ${r.last.classic.at(-1).programs} programs; a Powder Field battle burning (${r.p1.burns} scorch marks, ${r.p1.fires} vents lit), the classic ones after it not, three round trips flat (Powder Field ${p.geometries} geometries, ${p.textures} textures)`)
     if (r.said) {
       failed++
       console.log(`  FAIL ${r.said}`)

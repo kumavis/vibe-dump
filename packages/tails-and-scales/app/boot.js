@@ -1146,7 +1146,8 @@ export function boot(location) {
         // (sim/board-check.mjs): the mat, the zones' depth, the objectives,
         // the overlay's grid, the figures' run-off edge, the tufts and
         // flowers, the camera's dolly and far plane, the fog and the
-        // shadow camera, and how often it was made over (setBoard)
+        // shadow camera, how often it was made over (setBoard), and (V3d)
+        // what burns on it
         board: () => {
           const sc = view.stage.sun.shadow.camera, mat = view.table.board.geometry.parameters
           return {
@@ -1155,6 +1156,9 @@ export function boot(location) {
             grid: [view.overlay.tex.image.width, view.overlay.tex.image.height], unitsW: view.units.W,
             tufts: view.table.tufts.count, flowers: view.table.flowers.count,
             dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
+            // ((V3d) the burns the table holds for the mat (painted a microtask
+            // later, all at once), and the fires' vents lit)
+            burns: view.terrain.marks.size, fires: view.effects.plumes.count().vents,
           }
         },
         // (F8b, not promised) the drawing at scale (sim/render-bench.mjs,

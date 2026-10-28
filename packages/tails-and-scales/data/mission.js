@@ -171,6 +171,41 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       { x: 2, z: 1.5 },
     ],
   },
+  // (V3d, DESIGN §4.2.11) The Powder Field: a Grand battle (80×56, zones
+  // 14" deep, 7 rounds, 1,500 points and its list rules and prices, the ×3
+  // presets) fought over the wreckage of the day's fighting, on the
+  // `powder` set alone, for seven objectives where the fighting was: the
+  // centre on the burned farmstead's floor, then the pairs its sites stand
+  // on, in this order (core/terrain/recipes.js sites): a wrecked trebuchet
+  // on each diagonal toward a seat's left, a powder magazine on each toward
+  // its right, and an overturned venom engine on the centre line toward
+  // each long edge. Every objective is held at its level (HIGH: from the
+  // deck it stands on, the engine's 1.2" also from the ground beside it).
+  powder: {
+    board: { W: 80, H: 56 },
+    deploy: 14,
+    rounds: 7,
+    army: 'grand',
+    list: {
+      size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
+      roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3] },
+      prices: {
+        squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
+      },
+    },
+    // (the Powder Field's own set alone)
+    sets: ['powder'],
+    objectives: [
+      { x: 0, z: 0 },
+      { x: -12, z: 12 },
+      { x: 12, z: -12 },
+      { x: -12, z: -12 },
+      { x: 12, z: 12 },
+      { x: 0, z: -20 },
+      { x: 0, z: 20 },
+    ],
+  },
 }))
 
 // A mission the rules can play, or an Error naming what is wrong with it:

@@ -103,6 +103,29 @@
 //     order (the section's own comment, below, says each row). The keg
 //     mission, a Skirmish, is reported beside classic in the connectivity
 //     rows, never judged.
+//  9. (V3d, DESIGN §4.2.11) the Powder Field: the powder mission's boards
+//     (80×56, its seven objectives, zones 14"), on --powder-seeds (the
+//     run's seeds when not given), held to section 6's rows as a fortified
+//     board is (built twice alike with Math.random throwing, every add's
+//     def the view's defOf, every deck, stair, ladder and post exactly
+//     point-mirrored, the farmstead's deck its own mirror, every other chunk
+//     within 1e-9, every piece inside the footprint of the wreck it belongs
+//     to, the view's sync, walkable tops and meshes taken back) and to
+//     section 7's P-climb (every wreck's deck reached by a climber from
+//     seat 0's zone, the stair wrecks' (the farmstead, farms, trebuchets,
+//     engines) by big walkers and the ladder-only ones' (barns, wagons) by
+//     none, every ladder climbed over its link and every stair walked up
+//     from its gate, every top holding a climber and the fliers, the floor
+//     and links exactly point-symmetric, the lob rows on every deck); and to
+//     its own: every site on its objective (a wreck's deck centred on it,
+//     the objective's floor its top's; a magazine's kegs round it, none
+//     nearer than 2.3"), no keg in a deployment zone, every keg a keg in
+//     its rules (the keg's hit points, soft, no sight or cover), and its
+//     chains: which kegs each keg's own blast breaks (Terrain.blastDamage
+//     at its place, its profile: what kegsGoOff sets off), each magazine's
+//     kegs one chain, the chains' sizes printed. Its connectivity rows run
+//     with the rest's, below, on the same --powder-seeds (2,000 boards:
+//     `--powder-seeds 1-2000`).
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -114,7 +137,7 @@
 // draw counter), and counts the puffs that moved; every other number of
 // every fx call is still R0's own.
 //
-//   node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10]
+//   node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10] [--powder-seeds 1-2000]
 //   node sim/terrain-check.mjs --self-test     each edit in terrain-hooks.mjs's
 //                                              MUTATIONS must fail it
 //
@@ -140,7 +163,7 @@ import { spawnSync } from 'node:child_process'
 // argument like any other: exit 2 with the usage line (usage is below)
 let args
 try {
-  ({ values: args } = parseArgs({ options: { seeds: { type: 'string' }, ops: { type: 'string' }, max: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: args } = parseArgs({ options: { seeds: { type: 'string' }, 'powder-seeds': { type: 'string' }, ops: { type: 'string' }, max: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
 } catch (e) {
   usage(e.message)
 }
@@ -290,6 +313,10 @@ const whole = (name, v, dflt) => {
 const range = /^(\d+)(?:-(\d+))?$/.exec(args.seeds ?? '1-500') ?? usage(`--seeds ${args.seeds}: give N or A-B`)
 const lo = Number(range[1]), hi = Number(range[2] ?? range[1])
 if (lo > hi) usage(`--seeds ${args.seeds}: ${lo} is above ${hi}`)
+// ((V3d) the Powder Field's seeds: the run's, or --powder-seeds A-B)
+const prange = /^(\d+)(?:-(\d+))?$/.exec(args['powder-seeds'] ?? `${lo}-${hi}`) ?? usage(`--powder-seeds ${args['powder-seeds']}: give N or A-B`)
+const plo = Number(prange[1]), phi = Number(prange[2] ?? prange[1])
+if (plo > phi) usage(`--powder-seeds ${args['powder-seeds']}: ${plo} is above ${phi}`)
 const OPS = whole('ops', args.ops, 8)
 const MAX = whole('max', args.max, 10)
 
@@ -725,7 +752,7 @@ const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 
 const fortRows = []
 // a board, built twice; the differences thrown as `differ` does
 function fortBoard(B, seed) {
-  const where = `fortified ${B.label} seed ${seed}`
+  const where = `${B.set ?? 'fortified'} ${B.label} seed ${seed}`
   const build = () => {
     const T = new Terrain(B.W, B.H), out = []
     const random = Math.random, STUB = Symbol('Math.random')
@@ -734,7 +761,8 @@ function fortBoard(B, seed) {
       throw Object.assign(new Error('Math.random'), { [STUB]: true })
     }
     try {
-      T.generate(seed, B.objectives, B.deploy, 'fortified', out)
+      // ((V3d) a board's set: fortified's, or the Powder Field's)
+      T.generate(seed, B.objectives, B.deploy, B.set ?? 'fortified', out)
     } catch (e) {
       if (!e?.[STUB]) throw e
       differ(`${where}: the build's draws (a look is made of the layout stream's recorded draws)`, 'none from Math.random', `Math.random called: ${e.stack.split('\n')[2]?.trim()}`)
@@ -849,9 +877,11 @@ function fortBoard(B, seed) {
     const x = f.works === 0 ? c.link.foot.x : -c.link.foot.x
     if (Math.abs(x - (-B.W / 2 + B.deploy + LADDER_OUT)) > 1e-9) differ(`${where} works ${f.works}'s ladder: its foot ${LADDER_OUT}" out from the zone`, -B.W / 2 + B.deploy + LADDER_OUT, x)
   }
-  for (const [f, n] of held) if (!n) differ(`${where} the ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its pieces`, 'some', 'none')
+  // ((V3d) but a magazine, a site with no deck: its kegs are features')
+  for (const [f, n] of held) if (!n && f.fort !== 'magazine') differ(`${where} the ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its pieces`, 'some', 'none')
   for (const f of forts) if (f.r !== FOOTPRINT[f.fort]) differ(`${where} the ${f.fort}'s footprint`, FOOTPRINT[f.fort], f.r)
   return {
+    T,
     works: forts.some((f) => f.works === 0) && forts.some((f) => f.works === 1),
     keep: forts.some((f) => f.fort === 'keep'),
     pairs: forts.filter((f) => f.works === undefined && f.fort !== 'keep').length / 2,
@@ -1021,7 +1051,7 @@ const fail = (where, what) => {
 function climbBoard(B, seed) {
   const where = `P-climb ${B.label} seed ${seed}`
   const T = new Terrain(B.W, B.H)
-  T.generate(seed, B.objectives, B.deploy, 'fortified', null)
+  T.generate(seed, B.objectives, B.deploy, B.set ?? 'fortified', null)
   const nav = new NavGrid(B.W, B.H, 0.5)
   nav.rebuild(T.chunks)
   if (!nav.hasHeight) return fail(where, 'a fortified board built no height layer')
@@ -1075,11 +1105,13 @@ function climbBoard(B, seed) {
     const L = levelOf(d), recipe = d.look.recipe
     climb.decks++
     if (!climber.has(L)) fail(where, `deck ${d.id} (${recipe}) isn't reached from seat 0's zone by a climber (r ${CLIMB_R}, ladders and stairs)`)
+    // ((V3d) the board's own staired recipes: the Powder Field's wrecks')
+    const staired = B.staired ?? STAIRED
     for (const [r, got] of walkers) {
-      if (STAIRED.has(recipe) && !got.has(L)) fail(where, `deck ${d.id} (${recipe}, a stair's) isn't reached from seat 0's zone by a big walker (r ${r}, stairs only)`)
-      if (!STAIRED.has(recipe) && got.has(L)) fail(where, `deck ${d.id} (${recipe}, a ladder's only) is reached by a big walker (r ${r}, which takes no ladder)`)
+      if (staired.has(recipe) && !got.has(L)) fail(where, `deck ${d.id} (${recipe}, a stair's) isn't reached from seat 0's zone by a big walker (r ${r}, stairs only)`)
+      if (!staired.has(recipe) && got.has(L)) fail(where, `deck ${d.id} (${recipe}, a ladder's only) is reached by a big walker (r ${r}, which takes no ladder)`)
     }
-    if (STAIRED.has(recipe)) climb.staired++
+    if (staired.has(recipe)) climb.staired++
     else climb.ladderOnly++
   }
   // every ladder climbable over its link alone; every stair walked up from
@@ -1362,6 +1394,121 @@ if (kegs.failed || !kegs.boards || kegs.hp.length !== TEMPLATES.length) {
   process.exitCode = 1
 }
 
+// ── 9. The Powder Field (V3d, DESIGN §4.2.11) ──────────────────────────────
+// The header's section 9: the powder mission's boards on --powder-seeds,
+// through section 6's fortBoard (its view half, fortView, inside it) and
+// section 7's climbBoard, with the board's own set and staired recipes,
+// then its sites, its kegs and their chains.
+const PM = MISSIONS.powder
+const POWDER = { label: 'Powder Field', set: 'powder', W: PM.board.W, H: PM.board.H, deploy: PM.deploy, objectives: PM.objectives, staired: new Set(['farmstead', 'farm', 'trebuchet', 'engine']) }
+const { objectivePairs } = await imp(PKG, 'core/terrain/recipes.js')
+const pw = { boards: 0, failed: 0, chunks: [], kegs: [], chains: {}, longest: 0, sites: 0, magazines: 0, forts: {}, decks: 0, vents: 0 }
+const pwShown = []
+const pwFail = (where, what) => {
+  pw.failed++
+  if (pwShown.length < MAX) pwShown.push(`${where}: ${what}`)
+}
+const tp0 = Date.now()
+const climbBefore = { ...climb }
+sides = ['want', 'got']
+for (let seed = plo; seed <= phi; seed++) {
+  const where = `the Powder Field, seed ${seed}`
+  let T
+  try {
+    T = fortBoard(POWDER, seed).T
+  } catch (e) {
+    Math.random = realRandom
+    if (!(e instanceof Stop)) throw e
+    pw.failed++
+    for (const s of shown.splice(0)) if (pwShown.length < MAX) pwShown.push(s)
+    continue
+  }
+  pw.boards++
+  pw.chunks.push(T.chunks.length)
+  try {
+    climbBoard(POWDER, seed)
+  } catch (e) {
+    fail(`P-climb ${POWDER.label} seed ${seed}`, `threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`)
+  }
+  for (const f of T.features) if (f.fort && f.site === undefined && f.fort !== 'farmstead') pw.forts[f.fort] = (pw.forts[f.fort] ?? 0) + 0.5
+  // the sites, each on its objective
+  const nav = new NavGrid(PM.board.W, PM.board.H, 0.5)
+  nav.rebuild(T.chunks)
+  const floor = (o) => nav.floor[nav.index(o.x, o.z)]
+  const centre = T.chunks.find((c) => c.kind === 'deck' && c.look.recipe === 'farmstead')
+  if (!centre || !Object.is(centre.shape.x, 0) || !Object.is(centre.shape.z, 0) || floor({ x: 0, z: 0 }) !== centre.surface.y) pwFail(where, "the farmstead's floor doesn't hold the centre objective")
+  objectivePairs(PM.objectives).forEach((o, k) => {
+    const name = SETS.powder.sites[k]
+    for (const at of [o, { x: -o.x, z: -o.z }]) {
+      pw.sites++
+      if (!T.features.some((f) => f.site === k && f.x === at.x && f.z === at.z && f.fort === name)) pwFail(where, `no ${name} placed on its objective (${at.x}, ${at.z})`)
+      if (name === 'magazine') {
+        pw.magazines++
+        const near = T.chunks.filter((c) => c.kind === 'keg' && hypot(c.shape.x - at.x, c.shape.z - at.z) < 4)
+        if (near.length < 5 || near.some((c) => hypot(c.shape.x - at.x, c.shape.z - at.z) < 2.3)) pwFail(where, `the magazine on (${at.x}, ${at.z}): ${near.length} kegs round it, the nearest ${Math.min(...near.map((c) => hypot(c.shape.x - at.x, c.shape.z - at.z))).toFixed(2)}" off`)
+      } else {
+        const d = T.chunks.find((c) => c.kind === 'deck' && c.look.recipe === name && Math.abs(c.shape.x - at.x) < 1e-9 && Math.abs(c.shape.z - at.z) < 1e-9)
+        if (!d || floor(at) !== nav.floor[nav.index(d.shape.x, d.shape.z)] || !(floor(at) > STEP)) pwFail(where, `the ${name} on (${at.x}, ${at.z}): ${d ? `the objective's floor ${floor(at)}, its deck's ${d.surface.y}` : 'no deck centred on it'}`)
+        pw.decks++
+      }
+    }
+  })
+  // the kegs: none in a zone, each a keg in its rules, and their chains
+  const kegs = T.chunks.filter((c) => c.kind === 'keg')
+  pw.kegs.push(kegs.length)
+  for (const k of kegs) {
+    if (Math.abs(k.shape.x) > PM.board.W / 2 - PM.deploy) pwFail(where, `keg ${k.id} at (${k.shape.x.toFixed(2)}, ${k.shape.z.toFixed(2)}) stands in a deployment zone`)
+    if (k.hp !== KEG.hp || k.navKind !== 'soft' || k.los || k.cover) pwFail(where, `keg ${k.id} isn't a keg in its rules (hp ${k.hp}, ${k.navKind}, los ${k.los}, cover ${k.cover})`)
+  }
+  const root = kegs.map((_, i) => i)
+  const find = (i) => (root[i] === i ? i : (root[i] = find(root[i])))
+  kegs.forEach((a, i) => kegs.forEach((b, j) => {
+    if (i === j) return
+    const amount = T.blastDamage(b, a.shape.x, 0.5, a.shape.z, KEG.blast, KEG.scenery, false)
+    if (amount !== null && amount >= b.hp) root[find(i)] = find(j)
+  }))
+  const sizes = new Map()
+  kegs.forEach((_, i) => sizes.set(find(i), (sizes.get(find(i)) ?? 0) + 1))
+  for (const n of sizes.values()) {
+    pw.chains[n] = (pw.chains[n] ?? 0) + 1
+    pw.longest = Math.max(pw.longest, n)
+  }
+  // each magazine's kegs go up together
+  for (const o of objectivePairs(PM.objectives).filter((_, k) => SETS.powder.sites[k] === 'magazine').flatMap((o) => [o, { x: -o.x, z: -o.z }])) {
+    const own = kegs.map((k, i) => (hypot(k.shape.x - o.x, k.shape.z - o.z) < 4 ? find(i) : null)).filter((r) => r !== null)
+    if (new Set(own).size > 1) pwFail(where, `the magazine on (${o.x}, ${o.z}): its kegs are ${new Set(own).size} chains, not one`)
+  }
+  // the view lit its fires (fortBoard's fortView played the adds: here the
+  // vents a table registers, counted on one more)
+  const rec = recorder(), view = new TerrainView(new THREE.Scene(), rec.proxy), mirror = blankMirror()
+  const out = []
+  new Terrain(PM.board.W, PM.board.H).generate(seed, PM.objectives, PM.deploy, 'powder', out)
+  for (const e of out) view.apply(e, applyEvent(mirror, e))
+  const burning = T.chunks.filter((c) => c.look.burn || c.look.spill).length, lit = new Set(rec.log.filter(([k]) => k === 'vent').map(([, a]) => a[0])).size
+  if (lit !== burning) pwFail(where, `${lit} chunks' fires lit by the view, ${burning} burning or sputtering`)
+  pw.vents += lit
+  view.dispose()
+  if (rec.log.filter(([k]) => k === 'unvent').length !== lit) pwFail(where, "the view's dispose put out another count of fires than it lit")
+}
+Math.random = realRandom
+{
+  const stat = (a) => (a.length ? `${Math.min(...a)} / ${(a.reduce((s, x) => s + x, 0) / a.length).toFixed(1)} / ${Math.max(...a)}` : 'none')
+  const n = pw.boards
+  console.log(`\nthe Powder Field (V3d): ${n} boards, seeds ${plo}-${phi} (${((Date.now() - tp0) / 1000).toFixed(1)} s): built twice alike, point-symmetric, every piece inside its wreck's footprint, the view's defs, sync and tops (section 6's rows); every wreck's deck climbed (section 7's: ${climb.decks - climbBefore.decks} decks, ${climb.ladders - climbBefore.ladders} ladders, ${climb.stairs - climbBefore.stairs} stairs); ${pw.sites} sites on their objectives (${pw.decks} on a deck's top, ${pw.magazines} magazines' kegs round theirs); chunks ${stat(pw.chunks)}; kegs ${stat(pw.kegs)}, none in a zone, each a keg in its rules; chains (kegs that go up together: size × count) ${Object.entries(pw.chains).sort((a, b) => a[0] - b[0]).map(([k, v]) => `${k}×${v}`).join(', ')}, the longest ${pw.longest}, each magazine one; fort pairs per board ${Object.entries(pw.forts).map(([k, v]) => `${k} ${(v / Math.max(1, n)).toFixed(2)}`).join(', ') || 'none'}; ${pw.vents} chunks' fires lit by the view and put out again`)
+  if (climb.failed > climbBefore.failed) {
+    pw.failed += climb.failed - climbBefore.failed
+    for (const s of climbShown.slice(-MAX)) if (pwShown.length < MAX) pwShown.push(s)
+  }
+  if (pw.failed) {
+    console.log(`MISMATCH: the Powder Field failed ${pw.failed} time(s):`)
+    for (const s of pwShown) console.log(`  ${s}`)
+    process.exitCode = 1
+  } else if (!n || !pw.sites || !pw.vents) {
+    console.log(`terrain-check: VACUOUS: ${n} Powder Field boards, ${pw.sites} sites, ${pw.vents} fires checked`)
+    process.exit(2)
+  }
+}
+
 // ── Connectivity (F8b, DESIGN §4.2.3 and §4.2.9) ────────────────────────────
 // Lanes are checked, not assumed: a footprint circle over-states some pieces
 // and under-states none, so the scatter's `gap` alone neither proves nor
@@ -1469,7 +1616,9 @@ for (const [name, m] of Object.entries(MISSIONS)) {
   for (const set of m.sets) {
     const key = `${name} on ${set}`
     const counts = []
-    for (let seed = lo; seed <= hi; seed++) {
+    // ((V3d) the Powder Field on its own seeds, --powder-seeds)
+    const [slo, shi] = name === 'powder' ? [plo, phi] : [lo, hi]
+    for (let seed = slo; seed <= shi; seed++) {
       let r
       try {
         r = connectBoard(name, m, set, seed)
@@ -1499,7 +1648,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
     conn.chunks[key] = `${counts[0]}-${counts[counts.length - 1]} (median ${counts[counts.length >> 1]}, mean ${(counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(0)})`
   }
 }
-console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
+console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (the Powder Field's ${plo}-${phi}) (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
 for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
 for (const [name, C] of Object.entries(conn.small)) console.log(`  (reported, not judged) ${name}: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
 if (conn.failed) {

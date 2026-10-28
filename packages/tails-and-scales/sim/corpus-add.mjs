@@ -19,6 +19,7 @@
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
 //   node sim/corpus-add.mjs --set keg --mission keg --mode watch --tag keg --need keg --count 2
+//   node sim/corpus-add.mjs --set powder --mission powder --mode watch --tag powder --need keg,climb --count 2
 //
 // --regen <id>[,<id>…] (F18) plays again each named human-bot log of the
 // corpus, by the bot that made it (its own setup and its `bot`, the policy
@@ -40,7 +41,8 @@
 // (default squirrel,serpent, the title screen's: serpent,squirrel puts the
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
 // default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's; keg,
-// F19a's: the keg mission's, --mission keg).
+// F19a's: the keg mission's, --mission keg; powder, V3d's: the Powder
+// Field's, --mission powder).
 //
 // The board (F8b): --mission <name> the setup's mission (the code's
 // data/mission.js; classic, the default, is named by none, so a classic

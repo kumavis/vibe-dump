@@ -959,8 +959,8 @@ const BAD_MISSION_SETUPS = {
   'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
   'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
   // ((F8b) the three missions, named in their order)
-  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand, keg\)$/],
-  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand, keg\)$/],
+  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand, keg, powder\)$/],
+  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand, keg, powder\)$/],
   'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
   'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
   // ((F7a) the classic mission is fought on fortified too, so a set it isn't
@@ -978,6 +978,10 @@ const BAD_MISSION_SETUPS = {
   'the classic mission on the keg set': [{ terrain: 'keg' }, /^the classic mission is fought on classic or fortified, not "keg"$/],
   'the grand mission on the keg set': [{ mission: 'grand', terrain: 'keg' }, /^the grand mission is fought on open or fortified, not "keg"$/],
   'a Field preset in the keg mission': [{ mission: 'keg', seats: [{ ...SETUP.seats[0], army: 'field' }, SETUP.seats[1]] }, /^seat 0's army: \d+ points, over the Skirmish limit of 500$/],
+  // ((V3d) the Powder Field is fought on its own set alone, and no other
+  // mission on it)
+  'the powder mission on the open set': [{ mission: 'powder', terrain: 'open' }, /^the powder mission is fought on powder, not "open"$/],
+  'the grand mission on the powder set': [{ mission: 'grand', terrain: 'powder' }, /^the grand mission is fought on open or fortified, not "powder"$/],
   'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
   // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
   // for the setup's prototype (its fields would slip past the whitelist)
@@ -1265,7 +1269,7 @@ const V1_PINS = {
 // shooting into a fight, the format unchanged, but 64-89 another battle
 // under it: its end data-check's V9; 10, F19a's powder keg, which no
 // classic board has: the pins as under 9)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const PINS_UNDER = (v) => (v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
 
 // Every trace line in the format core/journal.js writes (DESIGN §4.1: the
@@ -2519,14 +2523,22 @@ function kegTask(core, mods) {
   const counts = { clean: 0, kegBoards: 0, templates: 0, rows: 0, once: 0, chains: 0, walks: 0, values: 0, fears: 0 }
   const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
   const K = mods.hazards.HAZARDS.keg
-  // no keg but on the keg set
+  // no keg but on the keg set ((V3d) and the Powder Field's, whose kegs
+  // and caches are kegs in every rule: the keg's hit points, soft, no
+  // sight or cover)
   for (const [name, m] of Object.entries(mods.MISSIONS)) {
     for (const set of m.sets) {
       for (let seed = 1; seed <= KEG_SETS_SEEDS; seed++) {
         const T = new mods.terrain.Terrain(m.board.W, m.board.H)
         T.generate(seed, m.objectives, m.deploy, set)
         const kegs = T.chunks.filter((c) => c.kind === 'keg')
-        if (set !== 'keg' && kegs.length) throw new Error(`P-keg: the ${name} mission's ${set} board ${seed} stands ${kegs.length} powder keg(s): no set but the keg's has one`)
+        if (set === 'powder') {
+          if (!kegs.length || kegs.some((k) => k.hp !== K.hp || k.navKind !== 'soft' || k.los || k.cover)) throw new Error(`P-keg: the Powder Field's board ${seed} stands ${kegs.length} kegs, ${kegs.length ? 'not all with the keg\'s hit points, soft, without sight or cover' : 'none'}`)
+          counts.powderBoards = (counts.powderBoards ?? 0) + 1
+          counts.powderKegs = (counts.powderKegs ?? 0) + kegs.length
+          continue
+        }
+        if (set !== 'keg' && kegs.length) throw new Error(`P-keg: the ${name} mission's ${set} board ${seed} stands ${kegs.length} powder keg(s): no set but the keg's and the Powder Field's has one`)
         if (set === 'keg' && !(kegs.length === 1 && kegs[0] === T.chunks[0] && Object.is(kegs[0].shape.x, 0) && Object.is(kegs[0].shape.z, 0) && kegs[0].hp === K.hp)) throw new Error(`P-keg: the keg board ${seed} stands ${kegs.length} kegs, not one at (0, 0), the first chunk, with ${K.hp} hit points`)
         if (set === 'keg') counts.kegBoards++
         else counts.clean++
@@ -2888,7 +2900,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   // (F19a) P-keg's scenes, for code with the powder keg
   if (/export function kegsGoOff/.test(readFileSync(join(pkg, 'core', 'actions', 'shoot.js'), 'utf8'))) {
     const r = await child({ kind: 'keg' }, pkg)
-    say(`  P-keg: ${r.ok ? `ok   no keg on ${r.counts.clean} boards of classic, open and fortified, one at (0, 0) on ${r.counts.kegBoards} keg boards; ${r.counts.templates} templates setting the keg off once (${r.counts.once} again on the same spot setting nothing off), the setting-off blast's victims and scenery before the keg's line, fuse and blast, ${r.counts.rows} victims' rows held die for die in G.units order, the fallen the setter-off's; ${r.counts.chains} chains of four kegs going off in the line's order, each once; ${r.counts.walks} wreckers' walks setting it off once the walk ended; ${r.counts.values} AI keg values and ${r.counts.fears} cells in the blast feared` : `FAIL ${r.error}`}`)
+    say(`  P-keg: ${r.ok ? `ok   no keg on ${r.counts.clean} boards of classic, open and fortified, one at (0, 0) on ${r.counts.kegBoards} keg boards, ${r.counts.powderKegs ?? 0} kegs every one a keg in its rules on ${r.counts.powderBoards ?? 0} Powder Field boards; ${r.counts.templates} templates setting the keg off once (${r.counts.once} again on the same spot setting nothing off), the setting-off blast's victims and scenery before the keg's line, fuse and blast, ${r.counts.rows} victims' rows held die for die in G.units order, the fallen the setter-off's; ${r.counts.chains} chains of four kegs going off in the line's order, each once; ${r.counts.walks} wreckers' walks setting it off once the walk ended; ${r.counts.values} AI keg values and ${r.counts.fears} cells in the blast feared` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
   // what the random games reached, over the whole run

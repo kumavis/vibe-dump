@@ -48,7 +48,12 @@
 // machine: a timing row that fails is run again, alone, before it is
 // believed (the calls, triangles and writes don't depend on the machine).
 //
-//   node sim/render-bench.mjs [--seed 7] [--frames 15] [--json]
+//   node sim/render-bench.mjs [--seed 7] [--frames 15] [--json] [--mission powder]
+//
+// (V3d) --mission names the larger board's mission (grand by default): the
+// Powder Field's, `--mission powder`, is a Grand board with its wrecks,
+// fires and smoke (view/effects/plumes.js: two draw calls more, and the
+// smoke's and flames' points), judged by the same budgets.
 //
 // Build first (npx vite build: it measures dist/). Exit 0 when every row is
 // within its budget × 1.25, 1 otherwise. Set CHROMIUM_PATH to the
@@ -60,7 +65,8 @@ import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { DIST, IDLE_MS } from './chromium.mjs'
 
-const { values: a } = parseArgs({ options: { seed: { type: 'string' }, frames: { type: 'string' }, json: { type: 'boolean' } } })
+const { values: a } = parseArgs({ options: { seed: { type: 'string' }, frames: { type: 'string' }, json: { type: 'boolean' }, mission: { type: 'string' } } })
+const BIG = a.mission ?? 'grand'
 const SEED = Number(a.seed ?? 7), FRAMES = Number(a.frames ?? 15)
 const BUDGET = { main: 600, shadow: 600, tris: 400000, splats: 150000, js: 1.3, writes: 20, minimapMs: 1 }
 // the minimap's redraws driven per mission (its row's sample)
@@ -154,7 +160,7 @@ const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PAT
 let rows
 try {
   const classic = await measure(browser, server.url, 'classic')
-  const grand = await measure(browser, server.url, 'grand')
+  const grand = await measure(browser, server.url, BIG)
   rows = { classic, grand }
 } finally {
   await browser.close()
@@ -173,7 +179,7 @@ const judge = (who, key, v, budget, fmt) => {
 const n = (v) => String(Math.round(v))
 const k = (v) => `${(v / 1000).toFixed(0)} K`
 const ms = (v) => `${v.toFixed(2)} ms`
-console.log(`render-bench: a watched battle's whole-board frame at 1280×800 (board seed ${SEED}), §4.2.1's drawing rows; a row fails above ${OVER}× its budget`)
+console.log(`render-bench: a watched battle's whole-board frame at 1280×800 (board seed ${SEED}${BIG !== 'grand' ? `, the larger board the ${BIG} mission's` : ''}), §4.2.1's drawing rows; a row fails above ${OVER}× its budget`)
 console.log(`  ${'row'.padEnd(15)} ${'classic'.padEnd(19)} ${'Grand'.padEnd(19)} budget`)
 const row = (name, key, budget, fmt) => console.log(`  ${name.padEnd(15)} ${judge('classic', key, C[key], budget, fmt).padEnd(19)} ${judge('Grand', key, G[key], budget, fmt).padEnd(19)} ${fmt(budget)}`)
 row('main calls', 'main', BUDGET.main, n)

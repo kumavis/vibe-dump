@@ -86,5 +86,10 @@ export const RULES_ID = rulesId()
 // and mission, and the AI's keg terms; and with it the tower ring's fix,
 // `fortified`'s `largeCentre` (the rock box where the ring stood on Field
 // and Grand boards): RULES_ID moves with the hazards, the set and the
+// mission; 11: V3d's Powder Field, the `powder` set (its scatter's `sites`
+// on the objectives, its wrecks to climb, its features: shell holes, kegs
+// and caches, burned trees, carts, sandbags, fires) and the `powder`
+// mission, and the AI's keg terms measured in 3D with height (kegHits): no
+// existing board or battle changes, and RULES_ID moves with the set and the
 // mission)
-export const CORE_VERSION = 10
+export const CORE_VERSION = 11

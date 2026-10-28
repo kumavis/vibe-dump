@@ -222,7 +222,7 @@ export function refScore(M, R, G, u, x, z, ctx, moving) {
   // (F19a) a powder keg's blast, and a wrecker's walk through a keg
   const kegs = M.kegsOf ? M.kegsOf(G) : []
   if (kegs.length) {
-    if (M.kegDanger(G, u.side)) for (const k of kegs) s -= M.kegFear(u, k, from) * M.KEG_FEAR
+    if (M.kegDanger(G, u.side)) for (const k of kegs) s -= M.kegFear(u, k, from, G) * M.KEG_FEAR
     if (moved) s += M.kegWalk(G, u, from, kegs) * M.KEG_SMASH
   }
   ctx.last = { onObjective, obj, canShoot }

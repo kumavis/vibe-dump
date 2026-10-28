@@ -11,7 +11,7 @@
 // the lattice's order (rule 6). Everything else here only reads the match.
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
 import { draw } from '../rng.js'
-import { hypot } from '../dmath.js'
+import { hypot, hypot3 } from '../dmath.js'
 import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 import { friendsUnder } from '../actions/shoot.js'
@@ -68,20 +68,32 @@ export const kegDanger = (G, side) => G.units.some((e) => e.side !== side && ali
 
 // How many hits keg `k` going off would put on `v` were it standing at `at`
 // (where it stands, by default): its living models within the keg's blast
-// and 0.6 of a base of the keg, blastLands' flat test (no keg stands on a
-// board with height), a big one's D3+1 as 3 (ownUnder's).
-export function kegHits(v, k, at = v.pos) {
+// and 0.6 of a base of the keg, blastLands' own test (core/actions/shoot.js
+// modelsUnder), a big one's D3+1 as 3 (ownUnder's). Flat, as on the keg
+// mission's board; (V3d; rule 10: it bumps with V3d) with height (the
+// Powder Field's kegs stand among wrecks with decks), in 3D, each model's
+// floor off the floor the keg's blast lands on, as blastLands measures it:
+// a squad on a wreck's top over a keg is no longer feared as one beside it.
+export function kegHits(v, k, at = v.pos, G = null) {
   const R = HAZARDS.keg.blast + v.t.base * 0.6
   let n = 0
-  for (const m of v.models) if (m.alive && hypot(at.x + m.ox - k.shape.x, at.z + m.oz - k.shape.z) <= R) n++
+  if (G?.nav.hasHeight) {
+    const ky = floorAt(G, k.shape.x, k.shape.z)
+    for (const m of v.models) {
+      if (!m.alive) continue
+      const x = at.x + m.ox, z = at.z + m.oz
+      if (hypot3(x - k.shape.x, floorAt(G, x, z) - ky, z - k.shape.z) <= R) n++
+    }
+  } else for (const m of v.models) if (m.alive && hypot(at.x + m.ox - k.shape.x, at.z + m.oz - k.shape.z) <= R) n++
   return n && v.t.big ? 3 : n
 }
 
 // What `u` would lose to keg `k` going off with it standing at `at`: the
 // points a template of the keg's profile due there takes (expected over
-// the models it would catch, kegHits'), the fear term's (score's).
-export function kegFear(u, k, at) {
-  const n = kegHits(u, k, at)
+// the models it would catch, kegHits'), the fear term's (score's). ((V3d)
+// `G`, for the test with height.)
+export function kegFear(u, k, at, G = null) {
+  const n = kegHits(u, k, at, G)
   return n ? expected(n, 1, HAZARDS.keg, u, false).value : 0
 }
 
@@ -93,7 +105,7 @@ export function kegValue(G, side, k, mover = null, at = null) {
   let v = 0
   for (const x of G.units) {
     if (!alive(x)) continue
-    const n = kegHits(x, k, x === mover ? at : x.pos)
+    const n = kegHits(x, k, x === mover ? at : x.pos, G)
     if (!n) continue
     const e = expected(n, 1, HAZARDS.keg, x, inCover(G, x)).value
     v += x.side === side ? -e : e
@@ -427,7 +439,7 @@ export function score(G, u, x, z, ctx, moving) {
   }
   // (F19a) a powder keg's blast, and a wrecker's walk through a keg
   if (kegs.length) {
-    if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from) * KEG_FEAR
+    if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from, G) * KEG_FEAR
     if (moved) s += kegWalk(G, u, from, kegs) * KEG_SMASH
   }
   ctx.last = { onObjective, obj, canShoot }

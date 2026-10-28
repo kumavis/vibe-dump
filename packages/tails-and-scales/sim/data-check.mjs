@@ -184,6 +184,23 @@
 //    its four objectives 2.5" from the keg exactly, off the axes, inside
 //    its blast; and what a keg does to every unit standing on it (printed),
 //    about half of a squad on average (40-60%).
+// 14. (V3d, DESIGN §4.2.11) The Powder Field: its set passes checkSet and
+//    a copy is refused with broken `sites` (none, a site that is no
+//    recipe, a site that is a wreck to scatter but no site, sites that are
+//    no list), with a fortKind under its footprint and with a zoneFootprint
+//    other than 1 (the zone test by each feature's footprint); its fortKinds' radii
+//    are their recipes' footprints (each footprint held to its reach with
+//    the rest, section 7); classic, open, fortified and keg have no
+//    `sites` and no `zoneFootprint` (their draws are frozen); RULES_ID moves on the powder set's
+//    sites, its spacing and its fort phase, and on the mission's
+//    objectives; the mission is the grand one's battle (board, zones,
+//    rounds, preset and list rules, prices and all) fought on the powder
+//    set alone, and no other mission on it; it has an objective at the
+//    centre and a mirrored pair for each site, in the sites' order; and on
+//    seeds 1-100 every site stands on its objective (a wreck's deck centred
+//    on it, its floor the deck's height; a magazine's kegs round it, none
+//    nearer than 2.3"), its point mirror on the other of the pair, and the
+//    farmstead's floor holds the centre.
 //
 //   node sim/data-check.mjs
 //
@@ -948,7 +965,7 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -1253,6 +1270,8 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
     grand: { W: 80, H: 56, deploy: 14, rounds: 7, points: 1500, size: 'Grand', objectives: 9 },
     // (F19a) the powder keg: a Skirmish, four objectives round the keg
     keg: { W: 40, H: 28, deploy: 8, rounds: 5, points: 500, size: 'Skirmish', objectives: 4 },
+    // (V3d) the Powder Field: a Grand battle, seven objectives
+    powder: { W: 80, H: 56, deploy: 14, rounds: 7, points: 1500, size: 'Grand', objectives: 7 },
   }
   check(isDeepStrictEqual(Object.keys(MISSIONS), Object.keys(SIZES)), `the missions are ${Object.keys(SIZES).join(', ')} (${Object.keys(MISSIONS).join(', ')})`)
   for (const [name, m] of Object.entries(MISSIONS)) {
@@ -1363,6 +1382,70 @@ console.log('\n13. the powder keg: its profile, its set and its mission (F19a)')
   }
   console.log(`  (a keg on a unit, every model under it: ${rows.join(', ')})`)
   check(sum / n >= 0.4 && sum / n <= 0.6, `a keg kills about half a squad standing on it: ${(100 * sum / n).toFixed(0)}% of its models on average over the ${n} squads, within 40-60%`)
+}
+
+// ── 14. The Powder Field (V3d) ──────────────────────────────────────────────
+console.log('\n14. the Powder Field: its set, its sites and its mission (V3d)')
+{
+  const { SITE_KINDS, WRECK_KINDS, objectivePairs } = await imp(PKG, 'core/terrain/recipes.js')
+  const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+  const { NavGrid } = await imp(PKG, 'core/nav.js')
+  const P = SETS.powder, M = MISSIONS.powder, Gm = MISSIONS.grand
+  check(setError(P) === null, 'checkSet passes the powder set', setError(P))
+  for (const [what, want, edit] of [
+    ['no sites', /sites must list at least one site/, (c) => (c.sites = [])],
+    ['sites that are no list', /sites must list at least one site/, (c) => (c.sites = 'trebuchet')],
+    ['a site that is no recipe', /sites\[1\]: no site "moat"/, (c) => (c.sites[1] = 'moat')],
+    ['a site that is a wreck to scatter, not a site (the barn)', /sites\[0\]: no site "barn"/, (c) => (c.sites[0] = 'barn')],
+    ['a fortKind under its footprint (barn 4, its footprint 5)', /fortKinds\[0\] \(barn\): radius 4 must be a number, at least its footprint 5/, (c) => (c.fortKinds[0][1] = 4)],
+    ['a misspelt field', /unknown field "site"/, (c) => (c.site = ['engine'])],
+  ]) {
+    const c = structuredClone(P)
+    edit(c)
+    const err = setError(c)
+    check(err && want.test(err), `refuses powder with ${what}`, err ?? 'accepted')
+  }
+  check(P.fortKinds.every(([k]) => WRECK_KINDS.includes(k)) && P.sites.every((k) => SITE_KINDS.includes(k)), `the powder set scatters wrecks (${P.fortKinds.map(([k]) => k).join(', ')}) and stands sites (${P.sites.join(', ')})`)
+  for (const [name, r] of P.fortKinds) check(r === FOOTPRINT[name], `powder's ${name} radius is its footprint (${FOOTPRINT[name]})`, `${r}`)
+  check(['classic', 'open', 'fortified', 'keg'].every((n) => !('sites' in SETS[n]) && !('zoneFootprint' in SETS[n])), 'classic, open, fortified and keg have no sites and no zone test by footprint: their draws are frozen')
+  check(setError({ ...structuredClone(P), zoneFootprint: 2 })?.includes('zoneFootprint 2 must be 1'), 'refuses powder with a zoneFootprint of 2', setError({ ...structuredClone(P), zoneFootprint: 2 }) ?? 'accepted')
+  for (const [what, id] of [
+    ['the sites (the engine → the magazine)', () => rulesId({ sets: { ...SETS, powder: { ...structuredClone(P), sites: ['trebuchet', 'magazine', 'magazine'] } } })],
+    ['the spacing (gap 2.3 → 2.4)', () => rulesId({ sets: { ...SETS, powder: { ...structuredClone(P), gap: 2.4 } } })],
+    ['the fort phase (forts [1, 1] → [2, 1])', () => rulesId({ sets: { ...SETS, powder: { ...structuredClone(P), forts: [2, 1] } } })],
+    ["the mission's objectives (the engines 20 → 21)", () => rulesId({ missions: { ...MISSIONS, powder: { ...structuredClone(M), objectives: M.objectives.map((o) => (Math.abs(o.z) === 20 ? { ...o, z: Math.sign(o.z) * 21 } : o)) } } })],
+  ]) check(id() !== RULES_ID, `RULES_ID moves on the powder set's ${what}`)
+  check(isDeepStrictEqual([M.board, M.deploy, M.rounds, M.army, M.list], [Gm.board, Gm.deploy, Gm.rounds, Gm.army, Gm.list]), "the powder mission is the grand one's battle: its board, zones, rounds, preset and list rules, its prices")
+  check(isDeepStrictEqual(M.sets, ['powder']), 'the powder mission is fought on the powder set alone', JSON.stringify(M.sets))
+  check(!Object.values(MISSIONS).some((m) => m !== M && m.sets.includes('powder')), 'no other mission is fought on the powder set')
+  const pairs = objectivePairs(M.objectives)
+  check(M.objectives.some((o) => o.x === 0 && o.z === 0) && pairs.length === P.sites.length && M.objectives.length === 1 + 2 * pairs.length, `an objective at the centre and a mirrored pair for each of the ${P.sites.length} sites (${pairs.map((o, k) => `${P.sites[k]} at (${o.x}, ${o.z})`).join(', ')})`)
+  // every site on its objective, its mirror on the other of the pair
+  const bad = []
+  for (let seed = 1; seed <= 100; seed++) {
+    const T = new Terrain(M.board.W, M.board.H)
+    T.generate(seed, M.objectives, M.deploy, 'powder', null)
+    const nav = new NavGrid(M.board.W, M.board.H, 0.5)
+    nav.rebuild(T.chunks)
+    const floor = (o) => nav.floor[nav.index(o.x, o.z)]
+    const centre = T.chunks.find((c) => c.kind === 'deck' && c.look.recipe === 'farmstead')
+    if (!centre || centre.shape.x !== 0 || centre.shape.z !== 0 || floor({ x: 0, z: 0 }) !== centre.surface.y) bad.push(`seed ${seed}: the farmstead's floor doesn't hold the centre`)
+    pairs.forEach((o, k) => {
+      const name = P.sites[k]
+      for (const at of [o, { x: -o.x, z: -o.z }]) {
+        const placed = T.features.find((f) => f.site === k && f.x === at.x && f.z === at.z && f.fort === name)
+        if (!placed) bad.push(`seed ${seed}: no ${name} placed on (${at.x}, ${at.z})`)
+        if (name === 'magazine') {
+          const near = T.chunks.filter((c) => c.kind === 'keg' && Math.hypot(c.shape.x - at.x, c.shape.z - at.z) < 4)
+          if (near.length < 5 || near.some((c) => Math.hypot(c.shape.x - at.x, c.shape.z - at.z) < 2.3)) bad.push(`seed ${seed}: the magazine at (${at.x}, ${at.z}) has ${near.length} kegs round it, nearest ${Math.min(...near.map((c) => Math.hypot(c.shape.x - at.x, c.shape.z - at.z))).toFixed(2)}"`)
+        } else {
+          const d = T.chunks.find((c) => c.kind === 'deck' && c.look.recipe === name && Math.abs(c.shape.x - at.x) < 1e-9 && Math.abs(c.shape.z - at.z) < 1e-9)
+          if (!d || floor(at) !== nav.floor[nav.index(d.shape.x, d.shape.z)] || !(floor(at) > 1)) bad.push(`seed ${seed}: the ${name} at (${at.x}, ${at.z}): ${d ? `the objective's floor ${floor(at)}, its deck's ${d.surface.y}` : 'no deck centred on it'}`)
+        }
+      }
+    })
+  }
+  check(!bad.length, `on seeds 1-100 every site stands on its objective (a wreck's deck centred on it, the objective on its floor; a magazine's kegs round it, none nearer than 2.3"), its mirror on the other of its pair, and the farmstead's floor holds the centre`, bad.slice(0, 3).join('; '))
 }
 
 console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, and (F8b) every mission, preset and set is inside the size envelope')
