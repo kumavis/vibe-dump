@@ -23,13 +23,27 @@
 //             with more than 10 units gives its one-time tip (the toast)
 //   layout    (F8b's review) the battle's chrome in place: a hotseat battle
 //             on classic and on Grand, at 1280×800, 1366×768 and a 412×915
-//             phone, once the deployment's camera has rested: the tools row
+//             phone ((V3b) and 1024×768 and an 844×390 landscape phone, the
+//             phones touch screens), once the deployment's camera has
+//             rested: the tools row
 //             holds only its eight buttons of before F8b and (V2) the perf
 //             overlay's 📈 (no ☰ or 🗺 in it: they widened it over the
 //             other seat's score), and it
-//             clears that score (#vp1); on Grand in landscape, with a unit
+//             clears that score (#vp1); on Grand in landscape (1280×800 and
+//             1366×768), with a unit
 //             picked up and its card showing, the roster stops above the
-//             minimap raised over the card
+//             minimap raised over the card. (V3b) With the perf overlay on
+//             (its 📈) and the net badge shown in each of its states
+//             (ui/netbadge.js's own NetBadge, its source put in the page:
+//             online · 2 watching, reconnecting, offline, out of step with
+//             two names), the badge stands in the top-left corner and no box
+//             of the chrome (the badge, the perf overlay, the HUD, the hint,
+//             the tools, the log, the roster, the minimap, the actions)
+//             meets another; and once both seats have begun the battle, in
+//             the first seat's movement phase with a unit picked up by Tab
+//             (Advance up), every action button shown is on the screen, ↶
+//             Undo among them, its title the rule, the row clear of the card
+//             and the group bar, and the minimap clear of both
 //   cart      (F9a) vs. the AI from seat 0 in a Field battle whose
 //             Bushtails field two War-Carts (?mission=field&armies=): the
 //             deployment adjusted by clicks, Begin battle, and in the first
@@ -53,7 +67,7 @@
 // was, and at least FRAMES frames drawn (the labels move only when a frame
 // is drawn).
 //
-//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand,layout,cart] [--rounds R] [--full] [--dist <dir>] [--parallel N]
+//   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand,layout,cart] [--rounds R] [--full] [--dist <dir>] [--parallel N] [--shots <dir>]
 //
 // ?lowfi by default (--full: without); board 4242; the dice per lane
 // (bushtail 99, serpent 7, hotseat 1, watch 99, grand 5, cart 99);
@@ -61,11 +75,13 @@
 // grand lane plays round 1 only (--rounds caps it), a Grand AI turn taking
 // minutes at SwiftShader's frame rate. --parallel runs
 // that many lanes at once (default 1: SwiftShader draws at about 2 fps on
-// this machine). Exit 0 when every lane plays, 1 otherwise, 2 on bad
+// this machine). (V3b) --shots writes the layout lane's screenshots there
+// (each screen and board: each of the net badge's states, and the actions
+// in the movement phase). Exit 0 when every lane plays, 1 otherwise, 2 on bad
 // arguments. Set CHROMIUM_PATH to the pre-installed Chromium if
 // Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, mkdirSync, readFileSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { chromium } from 'playwright'
@@ -79,9 +95,9 @@ const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5, layout
 const CART_QUERY = 'mission=field&armies=1222112,field'
 let a
 try {
-  ({ values: a } = parseArgs({ options: { lanes: { type: 'string' }, rounds: { type: 'string' }, full: { type: 'boolean' }, dist: { type: 'string' }, parallel: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { lanes: { type: 'string' }, rounds: { type: 'string' }, full: { type: 'boolean' }, dist: { type: 'string' }, parallel: { type: 'string' }, shots: { type: 'string' } } }))
 } catch (e) {
-  console.error(`play-check: ${e.message}\nusage: node sim/play-check.mjs [--lanes ${LANES.join(',')}] [--rounds R] [--full] [--dist <dir>] [--parallel N]`)
+  console.error(`play-check: ${e.message}\nusage: node sim/play-check.mjs [--lanes ${LANES.join(',')}] [--rounds R] [--full] [--dist <dir>] [--parallel N] [--shots <dir>]`)
   process.exit(2)
 }
 const lanes = a.lanes ? a.lanes.split(',') : LANES
@@ -506,13 +522,24 @@ async function lane(browser, url, name) {
   return { name, ok: !problems.length, problems, lines, stats }
 }
 
-// ((F8b's review) the layout lane: the chrome's boxes on three screens)
+// ((F8b's review) the layout lane: the chrome's boxes on three screens;
+// (V3b) five, the phones touch screens: [width, height, touch])
 const TOOLS = ['speed', 'view', 'follow', 'batch', 'autoFirst', 'autoEnd', 'mute', 'perf', 'helpBtn']
+const SCREENS = [[1280, 800], [1366, 768], [1024, 768], [844, 390, true], [412, 915, true]]
+// ((V3b) the net badge in each of its states, shown by ui/netbadge.js's own
+// NetBadge (its source put in the page as a script: the module imports
+// nothing), and the chrome's boxes while it shows: the badge, the perf
+// overlay, the HUD, the hint, the tools, the log, the roster, the minimap
+// and the actions, those on the page)
+const BADGE = [['online', { link: 'online', watching: 2 }], ['reconnecting', { link: 'reconnecting' }], ['offline', { link: 'offline' }], ['apart', { link: 'online', watching: 1, apart: ['Ann', 'Bartholomew'] }]]
+const BADGE_SRC = readFileSync(join(PKG, 'ui', 'netbadge.js'), 'utf8').replace(/^export class/m, 'class')
+const CHROME = ['#netbadge', '#perfOverlay', '#hud', '#hint', '#tools', '#log', '#roster', '#minimap', '#actions']
 async function layoutLane(browser, url) {
   const lines = [], problems = [], errors = []
-  for (const [w, h] of [[1280, 800], [1366, 768], [412, 915]]) {
+  if (a.shots) mkdirSync(a.shots, { recursive: true })
+  for (const [w, h, touch = false] of SCREENS) {
     for (const mission of ['classic', 'grand']) {
-      const page = await (await browser.newContext({ viewport: { width: w, height: h } })).newPage()
+      const page = await (await browser.newContext({ viewport: { width: w, height: h }, ...(touch ? { hasTouch: true, isMobile: true } : {}) })).newPage()
       page.setDefaultTimeout(300000)
       page.on('pageerror', (e) => errors.push(e.message))
       const at = `${mission} at ${w}×${h}`
@@ -548,8 +575,38 @@ async function layoutLane(browser, url) {
         if (shown.join() !== TOOLS.join()) problems.push(`${at}: the tools row shows ${shown.join(', ')}, not its eight of before F8b and (V2) 📈 (${TOOLS.join(', ')})`)
         if (!tools || !score) problems.push(`${at}: no tools row or no score for the other seat on the page`)
         else if (meets(tools, score)) problems.push(`${at}: the tools row (${Math.round(tools.l)}-${Math.round(tools.r)} px) covers the other seat's score (${Math.round(score.l)}-${Math.round(score.r)} px)`)
+        const shot = (what) => (a.shots ? page.screenshot({ path: join(a.shots, `layout-${mission}-${w}x${h}-${what}.png`) }) : null)
+        const rounded = (b) => `${Math.round(b.l)},${Math.round(b.t)}-${Math.round(b.r)},${Math.round(b.b)}`
+        // ((V3b) the perf overlay on by its 📈, as a player switches it, its
+        // six lines written (twice a second, as the frames come); then the
+        // net badge in each state: in the top-left corner, and no box of the
+        // chrome meeting another)
+        await page.click('#perf')
+        await page.waitForFunction(() => document.querySelector('#perfOverlay').textContent.split('\n').length === 6, null, { timeout: 120000 })
+        await page.addScriptTag({ content: `${BADGE_SRC}\nwindow.__v3bBadge = new NetBadge(document.querySelector('#netbadge'))` })
+        let badge = ''
+        for (const [k, state] of BADGE) {
+          await page.evaluate((s) => window.__v3bBadge.show(s), state)
+          await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
+          const bs = []
+          for (const s of CHROME) {
+            const b = await box(s)
+            if (b) bs.push([s, b])
+          }
+          const nb = bs.find(([s]) => s === '#netbadge')?.[1]
+          if (!nb) problems.push(`${at}: the net badge ("${k}") isn't on the page`)
+          else if (nb.l > 12 || nb.t > 12) problems.push(`${at}: the net badge ("${k}") stands at ${rounded(nb)}, not in the top-left corner`)
+          if (!bs.some(([s]) => s === '#perfOverlay')) problems.push(`${at}: the perf overlay isn't up after its 📈`)
+          for (let i = 0; i < bs.length; i++) {
+            for (let j = i + 1; j < bs.length; j++) if (meets(bs[i][1], bs[j][1])) problems.push(`${at}, the badge "${k}": ${bs[i][0]} (${rounded(bs[i][1])}) meets ${bs[j][0]} (${rounded(bs[j][1])})`)
+          }
+          if (k === 'apart') badge = `; the badge ${nb ? rounded(nb) : 'none'} beside ${bs.length - 1} boxes`
+          await shot(`badge-${k}`)
+        }
+        await page.evaluate(() => window.__v3bBadge.hide())
+        await page.click('#perf')
         let card = ''
-        if (mission === 'grand' && w > h) {
+        if (mission === 'grand' && w >= 1280) {
           // a unit of the seat placing picked up by a click on its label's
           // unit, so its card shows and the minimap rises over it
           const ls = await page.evaluate(() => [...document.querySelectorAll('#labels .ulabel.s0')].map((l) => l.getBoundingClientRect()).filter((r) => r.width && r.left > 260 && r.right < innerWidth - 40 && r.top > 120 && r.bottom < innerHeight - 120).map((r) => ({ x: r.left + r.width / 2, y: r.bottom })))
@@ -588,7 +645,47 @@ async function layoutLane(browser, url) {
             card = `; the card up (${Math.round(c.t)}-${Math.round(c.b)} px), the minimap ${Math.round(mm.t)}-${Math.round(mm.b)}, the roster ${Math.round(ro.t)}-${Math.round(ro.b)}`
           }
         }
-        lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${card}`)
+        // ((V3b) ↶ Undo on the screen: Begin battle for each seat, then in
+        // the first seat's movement phase a unit picked up by Tab (its card
+        // up, Advance up: the actions' fullest common row; on a touch screen
+        // ▭ Select and 👆 Aim too): every action button shown inside the
+        // screen, Undo among them, its title the rule, the row clear of the
+        // card and the group bar, the minimap of both)
+        const endUp = () => page.evaluate(() => {
+          const e = document.querySelector('#endPhase')
+          return getComputedStyle(e).display !== 'none' && !e.disabled ? e.textContent : ''
+        })
+        for (const t0 = Date.now(); !(await endUp()).startsWith('End Movement');) {
+          if (Date.now() - t0 > 300000) throw new Error(`no movement phase 300 s after the deployment (End reads "${await endUp()}")`)
+          if ((await endUp()).startsWith('Begin battle')) {
+            await page.click('#endPhase')
+            await page.waitForFunction(() => document.querySelector('#endPhase').disabled, null, { timeout: 10000 }).catch(() => {})
+          }
+          await sleep(1000)
+        }
+        await page.evaluate(() => document.activeElement?.blur?.())
+        await page.keyboard.press('Tab')
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('#advance')).display !== 'none' && document.querySelector('#card.show'), null, { timeout: 60000 }).catch(() => {})
+        await settle(page, '#card, #actions, #groupbar', 'the card and the actions')
+        const acts = await page.evaluate(() => [...document.querySelectorAll('#actions button')].filter((b) => getComputedStyle(b).display !== 'none' && !b.classList.contains('hidden')).map((b) => {
+          const r = b.getBoundingClientRect()
+          return { id: b.id, l: r.left, t: r.top, r: r.right, b: r.bottom, title: b.title }
+        }))
+        const undo = acts.find((x) => x.id === 'undo')
+        const off = acts.filter((x) => x.l < 0 || x.t < 0 || x.r > w || x.b > h)
+        if (!undo) problems.push(`${at}: in the movement phase ↶ Undo isn't up (the actions: ${acts.map((x) => x.id).join(', ')})`)
+        else if (!/End or dice roll/.test(undo.title)) problems.push(`${at}: ↶ Undo's title doesn't say the rule ("${undo.title}")`)
+        if (off.length) problems.push(`${at}: in the movement phase ${off.map((x) => `${x.id} (${rounded(x)})`).join(', ')} off the ${w}×${h} screen`)
+        if (!acts.some((x) => x.id === 'advance')) problems.push(`${at}: Tab picked up no unit that can advance (the actions: ${acts.map((x) => x.id).join(', ')})`)
+        const row = await box('#actions'), cardUp = await box('#card.show'), bar = await box('#groupbar'), map = await box('#minimap')
+        if (meets(row, cardUp)) problems.push(`${at}: the actions (${rounded(row)}) meet the unit card (${rounded(cardUp)})`)
+        if (meets(row, bar)) problems.push(`${at}: the actions (${rounded(row)}) meet the group bar (${rounded(bar)})`)
+        // (and the minimap, raised over the card or put away for it)
+        if (meets(map, cardUp)) problems.push(`${at}: the minimap (${rounded(map)}) meets the unit card (${rounded(cardUp)})`)
+        if (meets(map, row)) problems.push(`${at}: the minimap (${rounded(map)}) meets the actions (${rounded(row)})`)
+        await shot('undo')
+        const moves = `; in the movement phase ${acts.length} actions in ${row ? rounded(row) : 'none'}, Undo ${undo ? rounded(undo) : 'none'}`
+        lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${badge}${card}${moves}`)
       } catch (e) {
         problems.push(`${at}: ${e.message.split('\n')[0]}`)
       }

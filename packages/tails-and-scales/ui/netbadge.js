@@ -5,7 +5,10 @@
 // offline: what this page writes waits in its document); and, when a
 // peer's presence says it stands on this page's head with another hash,
 // "out of step with Ann" (net/presence.js: the only cross-check a match
-// with no human seat has).
+// with no human seat has). ((V3b) In the top-left corner on every screen,
+// one line that stops short of the HUD (style.css's #netbadge: the top
+// row's table), its text cut with … past that and whole in its title; on a
+// phone the HUD and all under it step down a line while it shows.)
 export class NetBadge {
   constructor(el) {
     this.el = el
@@ -22,6 +25,7 @@ export class NetBadge {
       el.textContent = `● online · ${watching} watching`
       el.classList.add('ok')
     } else el.textContent = link === 'offline' ? '○ offline · your moves will sync' : '◌ reconnecting…'
+    el.title = el.textContent
   }
 
   hide() {

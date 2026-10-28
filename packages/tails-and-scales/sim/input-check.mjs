@@ -121,8 +121,8 @@ import { PKG } from './oracle/pin.mjs'
 import { IDLE_MS } from './chromium.mjs'
 
 const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' } } })
-if (a.only !== undefined && (a.only !== 'aim' || a.carts)) {
-  console.error('input-check: --only takes aim, and not with --carts')
+if (a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) {
+  console.error('input-check: --only takes aim or tips, and not with --carts')
   process.exit(2)
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -2133,10 +2133,6 @@ async function tipsCase(browser, url, vp, say, shots) {
   }
 }
 
-if (a.only && !['aim', 'tips'].includes(a.only)) {
-  console.error(`input-check: --only takes aim or tips, not ${a.only}`)
-  process.exit(2)
-}
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false

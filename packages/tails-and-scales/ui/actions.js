@@ -5,12 +5,28 @@
 // reads and goes disabled as the HUD model says (present/hud-model.js: a
 // slice's show or label null leaves it as it was). (Each button's handler
 // returns why it sent nothing, null once it sent: the ?debug block's hooks
-// press them.)
+// press them.) ((V3b) The row wraps upward in rows rather than off the
+// screen (style.css's #actions: a phone's movement phase holds more buttons
+// than a row, and ↶ Undo, the first, went off its left edge), and its height
+// is published as --actions-h on the page's root, for what stands on it (the
+// group bar; the card and the dice tray on a phone and a narrow screen): a
+// ResizeObserver's, so nothing is measured per frame.)
 import { sfx, unlock } from '../view/sfx.js'
 
 const $ = (s) => document.querySelector(s)
 
 export class Actions {
+  constructor() {
+    const el = $('#actions')
+    if (!el || typeof ResizeObserver !== 'function') return
+    let h = -1
+    new ResizeObserver(() => {
+      if (el.offsetHeight === h) return
+      h = el.offsetHeight
+      document.documentElement.style.setProperty('--actions-h', `${h}px`)
+    }).observe(el)
+  }
+
   render(m) {
     const end = $('#endPhase'), auto = $('#autoPhase'), adv = $('#advance'), go = $('#goOrders'), ords = $('#ordersN')
     end.style.display = m.end.show ? '' : 'none'

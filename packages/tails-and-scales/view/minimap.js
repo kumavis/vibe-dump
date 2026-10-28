@@ -155,17 +155,27 @@ export class Minimap {
     // (the map or its folded 🗺 in battle on a larger board; on classic's
     // only while brought up)
     const larger = !!b0 && b0.W * b0.H > 40 * 28
-    const shown = up || (larger && !!M && M.stage !== 'title')
+    const portrait = innerWidth < innerHeight
+    // ((V3b) raised over the card from where the card's top stands, its
+    // layout box (no slide): 10 px over it, which on a wide screen, the card
+    // 10 px off the bottom, is its height and 20 px as before, and on a
+    // narrow one, the card standing over the actions (style.css), is higher;
+    // and while the card shows on a screen with no room for the map above
+    // it (under 64 px, the roster's top, left: a landscape phone, the card
+    // filling the left), the map is put away until the card goes)
+    const card = document.querySelector('#card')
+    const cardUp = !portrait && !!card?.classList.contains('show')
+    const lift = cardUp ? innerHeight - card.offsetTop + 10 : 10
+    if (this.el.offsetHeight) this.height = this.el.offsetHeight
+    const room = !cardUp || innerHeight - lift - (this.height ?? 0) >= 64
+    const shown = (up || (larger && !!M && M.stage !== 'title')) && room
     this.el.classList.toggle('hidden', !shown)
     this.el.classList.toggle('folded', !up)
     this.button.classList.toggle('on', up)
-    const portrait = innerWidth < innerHeight
     // ((F8b's review) where the map's top stands, landscape: the roster
     // above it, also down the left, stops short of it (style.css's
     // --minimap-top), so the map raised over the card never covers its
     // last rows; its place as it comes to rest, whatever its slide)
-    const card = document.querySelector('#card')
-    const lift = !portrait && card?.classList.contains('show') ? card.offsetHeight + 20 : 10
     const top = shown && !portrait ? `${Math.round(innerHeight - lift - this.el.offsetHeight)}px` : ''
     if (this.top !== top) {
       this.top = top
