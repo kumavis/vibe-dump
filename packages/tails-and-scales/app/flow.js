@@ -493,9 +493,12 @@ export class Flow {
   // ── The flow's events ───────────────────────────────────────────────────
   // A stage begins: the zones dim for the battle, and nothing stays
   // selected.
+  // ((V3a) Every label drawn again: what a unit did shows on it only in its
+  // seat's turn of the battle, so not once it is over.)
   staged(e) {
     this.hud.phaseShown = false
     if (e.stage !== 'deploy') this.human.select(null)
+    this.view.units.labelAll()
     this.refreshUI()
   }
 

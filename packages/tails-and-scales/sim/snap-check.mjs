@@ -116,8 +116,13 @@ const MUTATIONS = {
   'stale-label': ['view/index.js', '      status: () => units.labelAll(),', '      status: () => {},'],
   // (V3a) the labels not redrawn as an action's end brings the card's
   // record (an advance's 💨, a fall back's ↩ shown an action late: the
-  // fresh snap reads the record as it stands)
-  'deeds-stale': ['app/flow.js', '        if (e.facts) this.facts = e.facts\n        if (e.facts) view.units.labelAll()\n      },\n      // what the match waits on', '        if (e.facts) this.facts = e.facts\n      },\n      // what the match waits on'],
+  // fresh snap reads the record as it stands). On a watched battle: a
+  // human's every action is followed by the decision it waits on, which
+  // draws them again, but the AI's turn plays on, its checks between acts
+  'deeds-stale': ['app/flow.js', '        if (e.facts) this.facts = e.facts\n        if (e.facts) view.units.labelAll()\n      },\n      // what the match waits on', '        if (e.facts) this.facts = e.facts\n      },\n      // what the match waits on', '4242-99'],
+  // (V3a) the labels not redrawn as the battle ends: the last seat's deeds
+  // left on them once no seat's turn is under way
+  'over-stale': ['app/flow.js', "    if (e.stage !== 'deploy') this.human.select(null)\n    this.view.units.labelAll()\n", "    if (e.stage !== 'deploy') this.human.select(null)\n", '4242-99'],
   // (V3a) the labels not redrawn as a seat's turn begins: the seat whose
   // turn ended keeps its deeds' icons into the other's
   'turn-stale': ['app/flow.js', '    this.facts = turnBegun(this.facts, e)\n    this.view.units.labelAll()\n', '    this.facts = turnBegun(this.facts, e)\n'],

@@ -1234,7 +1234,8 @@ follows N3.
   Checked by `node sim/input-check.mjs --only tips` (the table read off the
   rules' code in Node; the tips at 1280×800 by the mouse and on a 390×844
   phone by touch), `sim/present-check.mjs`'s card oracle and snap-check's
-  `deeds-stale` and `turn-stale` edits (`--mutations` runs edits alone).
+  `deeds-stale`, `turn-stale` and `over-stale` edits (`--mutations` runs
+  edits alone).
   Left: any condition a new spell puts on a unit wants a row in the table
   (the check fails until it has one).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
