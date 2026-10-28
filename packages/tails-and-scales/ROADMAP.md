@@ -133,7 +133,12 @@ the commit, and add whatever the work turned up.
   sight held to the core's over every pair, entry by entry; present-check
   holds the page under it, lobby-rig's `fog` online), and from F18 P-prop's P-fight (shooting into a
   fight on scenes of its own: legal for every ranged weapon, a volley's
-  dice held draw for draw, the AI's value net of its friendly fire), and from V2 `node sim/bake-check.mjs`
+  dice held draw for draw, the AI's value net of its friendly fire), and
+  from V3c P-prop's P-spell (each caster's three spells on scenes of their
+  own: legal and refused where they must be, the cast die for die, each
+  mark made, holding and worn off when it must, the ward's save, the
+  resolve's morale and charge, the AI's pick; and at every probe decision
+  no spell legal but a caster's own, once a phase), and from V2 `node sim/bake-check.mjs`
   (view/models/bake.js bakes every classic figure exactly as R7a's did,
   node for node, and keeps the glossy ones whole; the splat Bushtails keep
   their splats, shadow proxies and anim, every 'new' figure casts through
@@ -175,7 +180,8 @@ the commit, and add whatever the work turned up.
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback; from F13 the touch aim,
-  `--only aim` alone), and from F8a
+  `--only aim` alone; from V3c the spell bar, its keys and a spell cast on
+  the caster itself), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
@@ -1217,6 +1223,14 @@ follows N3.
   self-test and input-check's Shift-click fail on HEAD's build alike, not
   this step's. Left: a phone's numbers for both styles (the overlay is
   there for them).
+- [x] **V3c** Three spells a caster, the player's pick (the user's ask of
+  the V3 batch): the Elder's Thornburst, Barkskin and Root Snare, the
+  Hierophant's Mesmerize, Cold Blood and Venom Mist, one a shooting phase,
+  each a 2D6 cast (DESIGN §4.1 rule 29); the `shoot` command's `sp`, the
+  marks on the unit, the AI's choice, the spell bar (keys 1-3), the looks,
+  the help; `CORE_VERSION` 11, the corpus re-recorded and the PIN moved.
+  No price moves (army-sim's Skirmish gates hold). DESIGN's "V3c as
+  built".
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
