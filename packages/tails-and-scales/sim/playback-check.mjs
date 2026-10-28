@@ -82,8 +82,9 @@ const BRISK = 0.3
 // and hold nothing back, as a template's landing)
 const HELD = { volley: 0.35, 'blast.scatter': 0.5, 'blast.fire': 0.5, 'keg.fuse': 0.5, 'spell.thorns': 0.5, 'spell.gaze': 0.5 }
 const ANCHORS = ['volley', 'blast.fire', 'spell.cast', 'spell.fizzle', 'melee']
-// what may sit in an attack (this check's own list)
-const inAttack = (e) => [...ANCHORS, 'focus', 'unit.face', 'tray.open', 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'spell.snare', 'spell.ward', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
+// what may sit in an attack (this check's own list; (F9a) a bail-out
+// among it, a forced `unit.disembark`: the attack wrecked the hull)
+const inAttack = (e) => [...ANCHORS, 'focus', 'unit.face', 'tray.open', 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'spell.snare', 'spell.ward', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? '')) || (e.t === 'unit.disembark' && e.forced)
 
 // when a walk's last smash plays (view/units.js's walk: a tween of
 // L / speed + 0.15 s, easeInOut, over L + 0.15·speed inches), found here by
