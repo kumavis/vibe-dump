@@ -175,7 +175,8 @@
 // 14. (F9a) P-riders, on code with core/actions/transport.js (the block
 //    above its tasks below says what each holds): a rider's state after
 //    every entry and at every trace line of the AI battles with War-Carts
-//    (8, Field and Grand, open and fortified), riders hidden from every
+//    (10: Field and Grand, open and fortified, and the Powder Field, which
+//    takes War-Carts since the V3 merge), riders hidden from every
 //    spatial rule (each query with and without them), the bail-outs as
 //    they are emitted, the autoload, and every embark and disembark legal()
 //    takes held to DESIGN §4.2.5's table, over those battles, 6 random
@@ -191,7 +192,7 @@
 //    embark legal() takes also of a unit no snare holds (rideWrong);
 //    P-pilot's F9a row (a mask naming a rider without its hull in the
 //    movement phase refused); and P-army's deployment at the caps with two
-//    War-Carts a side (60 boards).
+//    War-Carts a side (80 boards: Field 40, Grand 20, the Powder Field 20).
 //
 // 14. (V3c) P-spell, on code whose casters have several spells (bestCast):
 //    on scenes of its own (spellTask below says what each holds): every
@@ -4353,8 +4354,9 @@ function child(task, pkg) {
 // legal lists played AI against AI (in children of 10) and with a human
 // seat; (F9a) P-riders': AI battles with War-Carts by mission (in children
 // of 2), random games with War-Carts and a human seat, the scenes, and
-// P-army's deployments at the caps with hulls by mission
-const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20 } }
+// P-army's deployments at the caps with hulls by mission ((V3d, at the V3
+// merge) the Powder Field among them: it takes War-Carts as Grand does)
+const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 } }
 
 async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
