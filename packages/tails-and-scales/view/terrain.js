@@ -102,6 +102,15 @@ const PIECES = {
   log: (c) => block(c, LOG),
   cap(c) {
     const { look, shape: s } = c
+    // ((V3d) a chimney's crown: a corbelled course and two pots, sooted)
+    if (look.chimney) {
+      const g = new THREE.Group()
+      g.add(merged([boxAt(look.r * 1.5, look.h * 0.35, look.r * 1.5, 0, -look.h * 0.32, 0), boxAt(look.r * 1.25, look.h * 0.3, look.r * 1.25, 0, 0, 0)], look.color))
+      g.add(merged([-1, 1].map((k) => new THREE.CylinderGeometry(look.r * 0.22, look.r * 0.26, look.h * 0.45, 7).translate(k * look.r * 0.32, look.h * 0.35, 0)), '#3a3430'))
+      g.position.set(s.x, s.y, s.z)
+      g.rotation.y = look.yaw
+      return { obj: g }
+    }
     const m = mesh(new THREE.ConeGeometry(look.r, look.h, 4).rotateY(Math.PI / 4), mat(look.color))
     m.position.set(s.x, s.y, s.z)
     m.rotation.y = look.yaw
@@ -220,6 +229,15 @@ const PIECES = {
     const tip = mesh(new THREE.SphereGeometry(0.05, 6, 4), mat('#ffb347', { emissive: '#ff7a1a', emissiveIntensity: 0.8 }), { shadow: false })
     tip.position.set(0.17, 1.47, 0.05)
     m.add(body, lid, ...hoops, band, fuse, tip)
+    // ((V3d) the Powder Field's kegs (look.spill): their bands striped black
+    // and yellow, a bomb's warning, and its fuse lit (glowing: its sparks
+    // are the plumes', ventsOf))
+    if (c.look.spill) {
+      const stripes = []
+      for (let i = 0; i < 8; i++) stripes.push(new THREE.BoxGeometry(0.16, 0.24, 0.05).rotateZ(0.5).translate(0, 0, 0.51).rotateY((i / 8) * Math.PI * 2).translate(0, 0.6, 0))
+      m.add(merged(stripes, '#1d1b19'), merged([new THREE.CylinderGeometry(0.512, 0.512, 0.05, 16, 1, true).translate(0, 0.74, 0), new THREE.CylinderGeometry(0.512, 0.512, 0.05, 16, 1, true).translate(0, 0.46, 0)], '#e8b923'))
+      m.add(mesh(new THREE.IcosahedronGeometry(0.07, 0).translate(0.17, 1.48, 0.05), glowMat('#ffd27a'), { shadow: false }))
+    }
     return standing(c, m)
   },
   sack(c) {
@@ -278,6 +296,232 @@ const PIECES = {
     return { obj: g, pieces: 0 }
   },
 }
+// ── The Powder Field (V3d, DESIGN §4.2.11) ──────────────────────────────────
+// The wreckage of a day's fighting in the same chunky painted plastic as the
+// rest of the table: charred timber near black, scorched timber brown,
+// sooty stone, and what still burns glowing. Each piece is built from its
+// look alone (core/terrain/recipes.js's recorded draws) and nothing here
+// draws from Math.random: what jitter a piece has comes from a hash of its
+// place (`hash`), so a snap builds what the events built. What glows (coals,
+// a lit fuse, spilled venom) is unlit (glowMat): a tile keeps it unlit too
+// (tileClass's `basic`). The fires' smoke and flames are not meshes: the
+// table registers each burning piece's vents with the effects (ventOn,
+// view/effects/plumes.js), and paints the turf burned round the pieces that
+// scorch it (scorched, view/table.js's scorch).
+
+// one unlit material per colour (embers, fuses, venom): glowing in any light
+const glowMats = new Map()
+function glowMat(color) {
+  if (!glowMats.has(color)) glowMats.set(color, new THREE.MeshBasicMaterial({ color, toneMapped: false }))
+  return glowMats.get(color)
+}
+// a small stream of numbers in [0, 1) from a piece's place: its jitter
+// (cosmetic, but the same on every build of the board)
+function hash(c, salt = 0) {
+  let h = (Math.imul(Math.round(c.shape.x * 1000), 73856093) ^ Math.imul(Math.round(c.shape.z * 1000), 19349663) ^ Math.imul(salt + 1, 83492791)) >>> 0
+  return () => {
+    h = (h + 0x6d2b79f5) >>> 0
+    let t = h
+    t = Math.imul(t ^ (t >>> 15), t | 1)
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+const COALS = ['#ff7a1a', '#ffb347', '#ff3d0a', '#ffd27a']
+// a heap of glowing coals at (x, y, z), `spread` across, in group g's frame
+function coals(g, x, y, z, spread, rnd, n = 5) {
+  const parts = new Map()
+  for (let i = 0; i < n; i++) {
+    const a = rnd() * 6.28, d = rnd() * spread, s = 0.05 + rnd() * 0.07
+    const col = COALS[i % COALS.length]
+    if (!parts.has(col)) parts.set(col, [])
+    parts.get(col).push(new THREE.IcosahedronGeometry(s, 0).translate(x + Math.cos(a) * d, y + s * 0.5, z + Math.sin(a) * d))
+  }
+  for (const [col, geos] of parts) g.add(mesh(mergeGeometries(geos), glowMat(col), { shadow: false }))
+}
+// a wheel of radius r, t thick, its axle along z, at (x, y, z) in a frame:
+// a rim, a hub and four spokes, merged
+function wheelParts(r, t, x, y, z, rz = 0) {
+  const rim = new THREE.TorusGeometry(r, t * 0.45, 4, 12)
+  const hub = new THREE.CylinderGeometry(r * 0.2, r * 0.2, t * 1.4, 6).rotateX(Math.PI / 2)
+  const spokes = [0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4].map((a) => new THREE.BoxGeometry(r * 2, t * 0.5, t * 0.6).rotateZ(a))
+  return [rim, hub, ...spokes].map((g) => g.rotateZ(rz).translate(x, y, z))
+}
+
+const WRECK_PIECES = {
+  // A shell hole: a ring of churned earth round a scorched dish, its crest
+  // wobbling with the rim's draws, a few clods thrown up on it.
+  crater(c) {
+    const { look, shape: s } = c
+    const { r, rim } = look
+    const g = new THREE.Group()
+    g.position.set(s.x, 0, s.z)
+    g.rotation.y = look.yaw
+    const n = rim.length * 2
+    const pos = [], idx = []
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2, j = i >> 1
+      const w = i % 2 ? (rim[j] + rim[(j + 1) % rim.length]) / 2 : rim[j]
+      const ca = Math.cos(a), sa = Math.sin(a)
+      pos.push(ca * r * 0.52, 0.03, sa * r * 0.52, ca * r * 0.82 * w, 0.17 + 0.1 * (w - 0.82), sa * r * 0.82 * w, ca * r * 1.14 * w, 0.006, sa * r * 1.14 * w)
+    }
+    for (let i = 0; i < n; i++) {
+      const a = i * 3, b = ((i + 1) % n) * 3
+      idx.push(a, b, a + 1, a + 1, b, b + 1, a + 1, b + 1, a + 2, a + 2, b + 1, b + 2)
+    }
+    const ring = new THREE.BufferGeometry()
+    ring.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+    ring.setIndex(idx)
+    ring.computeVertexNormals()
+    g.add(mesh(ring, mat('#5d4a35'), { shadow: false }))
+    g.add(mesh(new THREE.CircleGeometry(r * 0.56, 14).rotateX(-Math.PI / 2).translate(0, 0.025, 0), mat('#2a221c'), { shadow: false }))
+    const rnd = hash(c), clods = []
+    for (let i = 0; i < 5; i++) {
+      const a = rnd() * 6.28, d = r * (0.75 + rnd() * 0.5), sz = 0.12 + rnd() * 0.12
+      clods.push(boxAt(sz, sz * 0.7, sz * 0.9, Math.cos(a) * d, 0.12 + sz * 0.3, Math.sin(a) * d, rnd() * 3))
+    }
+    g.add(merged(clods, '#4a3a2a'))
+    if (look.burn) coals(g, 0, 0.03, 0, r * 0.2, rnd, 3)
+    return { obj: g }
+  },
+  // A burned stump: a charred trunk with a splintered top and three roots.
+  stump(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const parts = [new THREE.CylinderGeometry(look.r * 0.82, look.r * 1.08, look.h, 7).translate(0, look.h / 2, 0), new THREE.ConeGeometry(look.r * 0.8, 0.22, 7).translate(0, look.h + 0.09, 0)]
+    for (const a of [0.4, 2.5, 4.6]) parts.push(beam([Math.cos(a) * look.r * 0.6, 0.1, Math.sin(a) * look.r * 0.6], [Math.cos(a) * look.r * 1.9, 0.02, Math.sin(a) * look.r * 1.9], 0.1, 0.07))
+    g.add(merged(parts, look.color))
+    if (look.burn) coals(g, 0, look.h + 0.02, 0, look.r * 0.5, hash(c), 4)
+    return standing(c, g)
+  },
+  // A dead tree: a charred trunk, leaning, its top snapped, and its broken
+  // limbs (its `canopy`: they go up in ash when it is felled, and it keels
+  // over as a tree does: TerrainView.fell).
+  snag(c) {
+    const { look, shape: s } = c
+    const { h, r } = look.trunk
+    const g = new THREE.Group()
+    g.position.set(s.x, 0, s.z)
+    const trunk = merged([new THREE.CylinderGeometry(r * 0.5, r, h, 7).translate(0, h / 2, 0), new THREE.ConeGeometry(r * 0.5, 0.35, 5).translate(0.04, h + 0.15, 0)], look.bark)
+    trunk.rotation.z = look.lean
+    g.add(trunk)
+    const canopy = new THREE.Group()
+    canopy.rotation.z = look.lean
+    const limbs = look.limbs.map((l) => {
+      const out = l.len * Math.sin(l.tilt)
+      return beam([0, l.y, 0], [Math.cos(l.a) * out, l.y + l.len * Math.cos(l.tilt), Math.sin(l.a) * out], l.r * 2, l.r * 2)
+    })
+    canopy.add(merged(limbs, shade(look.bark, 1.1)))
+    g.add(canopy)
+    g.rotation.y = look.yaw
+    return { obj: g, canopy }
+  },
+  // A burned trunk lying where it fell: its bark charred, its ends
+  // splintered, a few broken branches.
+  deadlog(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const { len, r } = look
+    const parts = [new THREE.CylinderGeometry(r, r * 1.06, len, 8).rotateZ(Math.PI / 2).translate(0, r, 0)]
+    for (const sx of [-1, 1]) parts.push(new THREE.ConeGeometry(r * 0.9, 0.3, 6).rotateZ((-sx * Math.PI) / 2).translate(sx * (len / 2 + 0.12), r, 0))
+    for (const [at, a, l] of look.stubs) parts.push(beam([at, r + Math.sin(a) * r * 0.7, Math.cos(a) * r * 0.7], [at + l * 0.3, r + Math.sin(a) * (r + l), Math.cos(a) * (r + l)], 0.08, 0.08))
+    g.add(merged(parts, look.bark))
+    if (look.burn) coals(g, len * 0.15, r * 1.7, 0, r * 0.6, hash(c), 5)
+    return standing(c, g)
+  },
+  // A broken cart: its bed and sides, a wheel still on and one lost (or on
+  // its side, a wheel in the air), its shafts snapped.
+  cart(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const body = new THREE.Group()
+    const wood = look.color, dark = shade(look.color, 0.7)
+    const bed = [boxAt(2, 0.1, 1.05, 0, 0.42, 0)]
+    for (const sz of [-1, 1]) bed.push(boxAt(2, 0.34, 0.07, 0, 0.62, sz * 0.5))
+    bed.push(boxAt(0.07, 0.34, 1.05, -0.97, 0.62, 0))
+    const shafts = [-0.32, 0.32].map((z) => boxAt(0.95, 0.07, 0.07, 1.45, 0.36, z, 0.08))
+    body.add(merged([...bed, ...shafts], wood))
+    const wheels = []
+    if (look.wheels[0]) wheels.push(...wheelParts(0.4, 0.09, 0.1, 0.4, -0.6))
+    if (look.wheels[1]) wheels.push(...wheelParts(0.4, 0.09, 0.1, 0.4, 0.6))
+    if (wheels.length) body.add(merged(wheels, dark))
+    if (look.tipped) {
+      body.rotation.x = -1.25
+      body.position.set(0, 0.55, 0.32)
+    } else if (!look.wheels[0] || !look.wheels[1]) body.rotation.x = look.wheels[0] ? -0.22 : 0.22
+    g.add(body)
+    // a wheel fallen off, flat on the ground
+    if (!look.wheels[0]) g.add(merged(wheelParts(0.4, 0.09, 0, 0, 0).map((p) => p.rotateX(Math.PI / 2).translate(-0.4, 0.05, -1.05)), dark))
+    if (look.burn) coals(g, 0.2, look.tipped ? 0.95 : 0.6, 0, 0.4, hash(c), 6)
+    return standing(c, g)
+  },
+  // A length of sandbag breastwork: two courses of fat sacks, one atop.
+  sandbags(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const bag = (x, y, z, k) => new THREE.IcosahedronGeometry(1, 1).scale(0.29, 0.13, 0.17).rotateY(k * 0.15).translate(x, y, z)
+    const by = new Map()
+    const put = (col, geo) => (by.has(col) ? by.get(col) : by.set(col, []).get(col)).push(geo)
+    let k = 0
+    for (const z of [-0.16, 0.16]) for (const x of [-0.27, 0.27]) put(look.colors[k++ % 3], bag(x, 0.12, z, k))
+    for (const x of [-0.27, 0.27]) put(look.colors[k++ % 3], bag(x + look.slump, 0.34, 0, k))
+    put(look.colors[k++ % 3], bag(look.slump * 2, 0.53, 0.02, k))
+    for (const [col, geos] of by) g.add(mesh(mergeGeometries(geos), mat(col)))
+    return standing(c, g)
+  },
+  // Wreckage burning where it fell: charred beams leaning in over a bed of
+  // coals (the flames are the vent's).
+  pyre(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const beams = look.beams.map(([a, len, lean]) => beam([Math.cos(a) * 0.68, 0.04, Math.sin(a) * 0.68], [Math.cos(a) * (0.68 - len * lean), 0.1 + len * 0.62, Math.sin(a) * (0.68 - len * lean)], 0.13, 0.11))
+    g.add(merged(beams, look.color))
+    g.add(mesh(new THREE.CylinderGeometry(0.62, 0.72, 0.12, 9).translate(0, 0.06, 0), mat('#241c17')))
+    coals(g, 0, 0.1, 0, 0.45, hash(c), 9)
+    return standing(c, g)
+  },
+  // A cache of bombs: an open crate with hazard stripes on its sides, round
+  // black bombs heaped in it and spilled beside it, their fuses, two lit.
+  bombs(c) {
+    const { look } = c
+    const g = new THREE.Group()
+    const W = 0.86, D = 0.62, Hc = 0.42
+    const crate = [boxAt(W, 0.06, D, 0, 0.03, 0), boxAt(W, Hc, 0.06, 0, Hc / 2, -D / 2), boxAt(W, Hc, 0.06, 0, Hc / 2, D / 2), boxAt(0.06, Hc, D, -W / 2, Hc / 2, 0), boxAt(0.06, Hc, D, W / 2, Hc / 2, 0)]
+    g.add(merged(crate, look.crate))
+    // a band of yellow and black round the crate
+    const yellow = [], black = []
+    for (let i = 0; i < 6; i++) (i % 2 ? black : yellow).push(boxAt(W / 6, 0.12, D + 0.075, -W / 2 + (i + 0.5) * (W / 6), Hc * 0.62, 0))
+    g.add(merged(yellow, '#e8b923'), merged(black, '#1d1b19'))
+    const rnd = hash(c, 7), balls = [], fuses = [], lit = []
+    const spots = [[-0.2, 0.36, -0.13], [0.2, 0.36, -0.13], [-0.2, 0.36, 0.13], [0.2, 0.36, 0.13], [0, 0.6, 0], [0.62, 0.17, 0.2], [-0.6, 0.17, -0.25], [0.45, 0.17, -0.5], [-0.3, 0.17, 0.52]]
+    for (let i = 0; i < Math.min(look.n, spots.length); i++) {
+      const [x, y, z] = spots[i], r = 0.17 + rnd() * 0.03
+      balls.push(new THREE.IcosahedronGeometry(r, 1).translate(x, y, z))
+      fuses.push(new THREE.CylinderGeometry(0.025, 0.025, 0.16, 4).rotateZ(rnd() - 0.5).translate(x, y + r + 0.05, z))
+      if (i === 4 || i === 6) lit.push(new THREE.IcosahedronGeometry(0.05, 0).translate(x, y + r + 0.14, z))
+    }
+    g.add(mesh(mergeGeometries(balls), mat('#22201e', { metalness: 0.5 })), merged(fuses, '#c2a77a'))
+    if (lit.length) g.add(mesh(mergeGeometries(lit), glowMat('#ffb347'), { shadow: false }))
+    return standing(c, g)
+  },
+  // A trebuchet's counterweight torn loose: a great iron-bound box of
+  // stones, tipped where it fell, a stub of the arm still in its yoke.
+  counterweight(c) {
+    const { w, d, h, color, iron } = c.look
+    const g = framed(c)
+    const box = new THREE.Group()
+    box.add(mesh(boxAt(w, h * 0.92, d, 0, h * 0.46, 0), mat(color)))
+    const bands = [-0.33, 0.33].map((f) => boxAt(w + 0.06, h * 0.94, 0.14, 0, h * 0.47, f * d))
+    bands.push(boxAt(w + 0.06, 0.14, d + 0.06, 0, h * 0.8, 0))
+    box.add(merged(bands, iron, { metalness: 0.5 }))
+    box.add(merged([beam([0, h * 0.9, 0], [w * 0.15, h + 0.75, d * 0.1], 0.28, 0.24), boxAt(0.5, 0.3, 0.9, 0, h * 0.95, 0)], shade(color, 0.8)))
+    box.rotation.z = 0.12
+    g.add(box)
+    return { obj: g }
+  },
+}
+Object.assign(PIECES, WRECK_PIECES)
+
 // ── Fortifications (F7a, DESIGN §4.2.4) ─────────────────────────────────────
 // Decks, stairs, ladders and posts, each built from its look (the recipe's
 // recorded draws: its colour, its size in its own frame, w along its own x,
@@ -344,8 +588,10 @@ function topQuad(g, w, d, h, ramp) {
 const FORT_PIECES = {
   // A deck: its body (earth or stone, or a timber platform's open frame on
   // its posts), a rim round its top, and its walk (planks along the deck's
-  // length on earth and timber, flagstones on stone).
+  // length on earth and timber, flagstones on stone). ((V3d) A wreck's is
+  // its own: WRECK_DECKS, by its material.)
   deck(c) {
+    if (WRECK_DECKS[c.look.material]) return WRECK_DECKS[c.look.material](c)
     const { w, d, h, material, color } = c.look
     const g = framed(c)
     const T = 0.1, RIM = 0.16
@@ -398,6 +644,8 @@ const FORT_PIECES = {
   stair(c) {
     const { w: len, d: width, h, color } = c.look
     const g = framed(c)
+    // ((V3d) a wreck's: timber steps, and on a trebuchet's its fallen arm)
+    if (WRECK_DECKS[c.look.material] && c.look.material !== 'farm') return wreckStair(c, g)
     const n = Math.max(2, Math.round(len / 0.5)), run = len / n
     const steps = [], arrows = []
     for (let i = 0; i < n; i++) {
@@ -407,7 +655,8 @@ const FORT_PIECES = {
     }
     // its cheeks: a low wall up each side, following the ramp
     const cheeks = [-1, 1].map((s) => beam([-len / 2, 0.06, s * (width / 2 + 0.06)], [len / 2, h + 0.06, s * (width / 2 + 0.06)], 0.22, 0.14))
-    g.add(merged(steps, color), merged(cheeks, shade(color, 0.75)), merged(arrows, '#f4ead0', { flatShading: false }))
+    // ((V3d) a burned farmstead's arrows sooty, the stair still plain)
+    g.add(merged(steps, color), merged(cheeks, shade(color, 0.75)), merged(arrows, c.look.material === 'farm' ? '#c8b89c' : '#f4ead0', { flatShading: false }))
     topQuad(g, len, width, h, true)
     return { obj: g }
   },
@@ -432,6 +681,200 @@ const FORT_PIECES = {
     return { obj: g }
   },
 }
+// (V3d) The wrecks' decks, each drawn round its walkable top (w × d at h,
+// in the chunk's own frame): the top itself always a flat walk at h (planks
+// or a burned floor), so a figure standing on it stands on what it sees.
+// Their fires' coals glow at their vents (look.vents, the plumes' too).
+const ventCoals = (g, c, rnd) => {
+  if (!c.look.burn) return
+  for (const [x, y, z] of c.look.vents ?? []) coals(g, x, y, z, 0.35, rnd, c.look.burn > 1 ? 7 : 4)
+}
+// planks across a top w × d at h, every `gap`th one burned through
+function planks(w, d, h, gap = 0) {
+  const out = [], n = Math.max(2, Math.round(d / 0.55)), pd = d / n, T = 0.1
+  for (let j = 0; j < n; j++) if (!gap || j % gap !== gap - 1) out.push(boxAt(w - 0.04, T, pd - 0.06, 0, h - T / 2, -d / 2 + (j + 0.5) * pd))
+  return out
+}
+const WRECK_DECKS = {
+  // A farmhouse burned out: its stone shell to the first floor, the
+  // window holes black and sooted above, its floor charred planks (some
+  // burned through) over the dark below, the joists' ends jutting at its
+  // burning corners.
+  farm(c) {
+    const { w, d, h, color, timber } = c.look
+    const g = framed(c), T = 0.1, rnd = hash(c)
+    g.add(mesh(boxAt(w, h - T, d, 0, (h - T) / 2, 0), mat(color)))
+    g.add(merged([boxAt(w + 0.1, 0.3, d + 0.1, 0, 0.15, 0), boxAt(w + 0.08, 0.16, d + 0.08, 0, h - 0.22, 0)], shade(color, 0.72)))
+    // windows, each a black hole with soot licking up from it
+    const holes = [], soot = []
+    const win = (x, z, rot) => {
+      holes.push(boxAt(0.62, 0.66, 0.06, 0, 0, 0).rotateY(rot).translate(x, h * 0.52, z))
+      soot.push(boxAt(0.52, 0.5, 0.05, 0, 0, 0).rotateY(rot).translate(x, h * 0.52 + 0.55, z))
+    }
+    for (const sx of [-1, 1]) for (const f of [-0.28, 0.28]) win(f * w, sx * (d / 2 + 0.01), 0)
+    for (const sx of [-1, 1]) if (d > 5) win(sx * (w / 2 + 0.01), d * 0.25 * sx, Math.PI / 2)
+    g.add(merged(holes, '#120e0b'), merged(soot, '#2b2622'))
+    g.add(merged(planks(w - 0.2, d - 0.2, h, 4), timber), mesh(boxAt(w - 0.22, T * 0.6, d - 0.22, 0, h - T * 0.7, 0), mat('#120e0b')))
+    const rim = [boxAt(w + 0.08, 0.16, 0.18, 0, h + 0.02, -d / 2), boxAt(w + 0.08, 0.16, 0.18, 0, h + 0.02, d / 2), boxAt(0.18, 0.16, d, -w / 2, h + 0.02, 0), boxAt(0.18, 0.16, d, w / 2, h + 0.02, 0)]
+    // what is left of the upper walls: ragged stubs along the rim, highest
+    // at the corners (low enough to see over: no rule reads them)
+    for (const sz of [-1, 1]) for (let i = 0; i < 7; i++) {
+      const f = (i - 3) / 3, top = 0.12 + 0.45 * Math.abs(f) ** 2 * (0.6 + rnd() * 0.6)
+      rim.push(boxAt(w / 7 - 0.04, top, 0.2, f * (w / 2 - w / 14), h + top / 2, sz * d / 2))
+    }
+    for (const sx of [-1, 1]) for (let i = 0; i < 5; i++) {
+      const f = (i - 2) / 2, top = 0.12 + 0.45 * Math.abs(f) ** 2 * (0.6 + rnd() * 0.6)
+      rim.push(boxAt(0.2, top, d / 5 - 0.04, sx * w / 2, h + top / 2, f * (d / 2 - d / 10)))
+    }
+    g.add(merged(rim, shade(color, 0.85)))
+    const joists = []
+    for (const [x, , z] of c.look.vents ?? []) for (let k = 0; k < 2; k++) {
+      const a = rnd() * 6.28
+      joists.push(beam([x, h - 0.1, z], [x + Math.cos(a) * 0.35, h + 0.45 + rnd() * 0.35, z + Math.sin(a) * 0.35], 0.16, 0.14))
+    }
+    if (joists.length) g.add(merged(joists, timber))
+    ventCoals(g, c, rnd)
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+  // A barn's hayloft left standing on its posts: a charred slab and joists,
+  // braces between the posts, two of its rafters still up over the back
+  // and burning at their feet.
+  barn(c) {
+    const { w, d, h, color } = c.look
+    const g = framed(c), T = 0.1, P = 0.2, rnd = hash(c)
+    const slab = boxAt(w, 0.24, d, 0, h - T - 0.12, 0)
+    const joists = [-1, 1].map((sz) => boxAt(w - 0.3, 0.22, 0.26, 0, h - T - 0.35, sz * (d / 2 - 0.5)))
+    const braces = []
+    const lo = 0.35, hi = h - T - 0.3
+    for (const sz of [-1, 1]) {
+      const z = sz * (d / 2 - P)
+      for (const [x0, x1] of [[-w / 2 + P, 0], [0, w / 2 - P]]) braces.push(beam([x0, lo, z], [x1, hi, z], 0.12, 0.08), beam([x0, hi, z], [x1, lo, z], 0.12, 0.08))
+    }
+    g.add(merged([slab, ...joists], shade(color, 0.9)), merged(braces, shade(color, 0.75)))
+    g.add(merged(planks(w, d, h, 5), shade(color, 1.25)), mesh(boxAt(w - 0.02, T * 0.6, d - 0.02, 0, h - T * 0.7, 0), mat('#120e0b')))
+    // the rafters: an A over the back edge at each end, one leg snapped
+    const rafters = []
+    for (const sx of [-1, 1]) {
+      const x = sx * (w / 2 - 0.35), z = d / 2 - 0.2
+      rafters.push(beam([x, h, z], [x - sx * 0.9, h + 1.4, z], 0.16, 0.14), beam([x - sx * 1.8, h, z], [x - sx * 1.25, h + 0.85 + rnd() * 0.2, z], 0.16, 0.14))
+    }
+    g.add(merged(rafters, color))
+    const rim = [boxAt(w + 0.08, 0.14, 0.14, 0, h + 0.01, -d / 2), boxAt(0.14, 0.14, d, -w / 2, h + 0.01, 0), boxAt(0.14, 0.14, d, w / 2, h + 0.01, 0)]
+    g.add(merged(rim, shade(color, 0.8)))
+    ventCoals(g, c, rnd)
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+  // A great trebuchet's frame wrecked: two great side beams and their
+  // cross beams under a planked top, its wheels along its sides (one
+  // broken), and in its middle the A-frames that held the arm, snapped.
+  trebuchet(c) {
+    const { w, d, h, color, iron } = c.look
+    const g = framed(c), rnd = hash(c)
+    const beams = [], top = planks(w, d - 0.5, h, 0)
+    for (const sz of [-1, 1]) beams.push(boxAt(w + 0.3, 0.5, 0.42, 0, h - 0.25, sz * (d / 2 - 0.21)), boxAt(w - 0.4, 0.35, 0.3, 0, 0.5, sz * (d / 2 - 0.3)))
+    for (const x of [-w / 2 + 0.3, -w / 6, w / 6, w / 2 - 0.3]) beams.push(boxAt(0.32, 0.4, d - 0.4, x, h - 0.45, 0))
+    for (const x of [-w / 2 + 0.3, w / 2 - 0.3]) for (const sz of [-1, 1]) beams.push(boxAt(0.3, h - 0.5, 0.3, x, (h - 0.5) / 2, sz * (d / 2 - 0.3)))
+    g.add(merged(beams, shade(color, 0.8)), merged(top, color))
+    // the A-frames, snapped: each leg a beam up from the side beam, broken off
+    const legs = []
+    for (const sz of [-1, 1]) {
+      const z = sz * (d / 2 - 0.21)
+      legs.push(beam([-1.4, h, z], [-0.3, h + 2 + rnd() * 0.4, z], 0.28, 0.24), beam([1.4, h, z], [0.55, h + 1.2 + rnd() * 0.5, z], 0.28, 0.24))
+      // (the axle's bearing, snapped off with the leg)
+      legs.push(boxAt(0.5, 0.36, 0.36, -0.3, h + 2.05, z))
+    }
+    g.add(merged(legs, shade(color, 0.92)))
+    const wheels = []
+    for (const sz of [-1, 1]) for (const x of [-w / 2 + 1, w / 2 - 1]) {
+      if (sz < 0 && x > 0) continue
+      wheels.push(...wheelParts(0.95, 0.18, x, 0.95, sz * (d / 2 + 0.14)))
+    }
+    // the broken one, lying against the frame
+    wheels.push(...wheelParts(0.95, 0.18, 0, 0, 0, 0).map((p) => p.rotateX(1.2).translate(w / 2 - 1.1, 0.5, -d / 2 - 0.6)))
+    g.add(merged(wheels, shade(color, 0.65)))
+    const bands = [-w / 2 + 0.3, -w / 6, w / 6, w / 2 - 0.3].flatMap((x) => [-1, 1].map((sz) => boxAt(0.36, 0.54, 0.46, x, h - 0.25, sz * (d / 2 - 0.21))))
+    g.add(merged(bands, iron, { metalness: 0.5 }))
+    ventCoals(g, c, rnd)
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+  // A war-wagon wrecked: its bed planked, its side boards half burned away,
+  // its axles and wheels (two lost), its pole snapped off at the front.
+  wagon(c) {
+    const { w, d, h, color, iron } = c.look
+    const g = framed(c), rnd = hash(c)
+    const body = [boxAt(w - 0.3, h - 0.55, d - 0.5, 0, 0.55 + (h - 0.55) / 2 - 0.05, 0)]
+    for (const x of [-w / 2 + 0.9, w / 2 - 0.9]) body.push(boxAt(0.3, 0.3, d + 0.2, x, 0.5, 0))
+    g.add(merged(body, shade(color, 0.7)), merged(planks(w, d, h, 6), color))
+    const sides = []
+    for (const sz of [-1, 1]) for (let i = 0; i < 6; i++) {
+      if (rnd() < 0.4) continue
+      sides.push(boxAt(w / 6 - 0.05, 0.22 + rnd() * 0.25, 0.1, -w / 2 + (i + 0.5) * (w / 6), h + 0.12, sz * (d / 2 - 0.05)))
+    }
+    if (sides.length) g.add(merged(sides, shade(color, 0.85)))
+    const wheels = [...wheelParts(0.6, 0.14, -w / 2 + 0.9, 0.6, -d / 2 - 0.12), ...wheelParts(0.6, 0.14, w / 2 - 0.9, 0.6, d / 2 + 0.12)]
+    wheels.push(...wheelParts(0.6, 0.14, 0, 0, 0).map((p) => p.rotateX(Math.PI / 2 - 0.15).translate(w / 2 - 0.6, 0.1, -d / 2 - 0.9)))
+    g.add(merged(wheels, shade(color, 0.6)), merged([beam([w / 2 - 0.2, 0.5, 0], [w / 2 + 1.1, 0.12, 0.3], 0.14, 0.14)], color))
+    g.add(merged([-w / 2 + 0.9, w / 2 - 0.9].map((x) => boxAt(0.12, 0.12, d + 0.5, x, 0.6, 0)), iron, { metalness: 0.5 }))
+    ventCoals(g, c, rnd)
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+  // A venom engine overturned: its carriage on its side (the top its
+  // flank), its wheels standing out from its back like a beetle's legs,
+  // its globe's cage cracked at one end and the venom spilled on the
+  // ground, glowing.
+  engine(c) {
+    const { w, d, h, color, iron, end, ooze } = c.look
+    const g = framed(c), rnd = hash(c)
+    g.add(mesh(boxAt(w, h - 0.08, d, 0, (h - 0.08) / 2, 0), mat(shade(color, 0.75))))
+    g.add(merged(planks(w, d, h, 0), color))
+    const ribs = [-w / 3, 0, w / 3].map((x) => boxAt(0.14, h + 0.04, d + 0.08, x, h / 2, 0))
+    g.add(merged(ribs, iron, { metalness: 0.5 }))
+    const wheels = []
+    for (const x of [-w / 2 + 1, w / 2 - 1]) wheels.push(...wheelParts(0.55, 0.12, x, h * 0.6, d / 2 + 0.1))
+    g.add(merged(wheels, shade(color, 0.6)))
+    // the globe's cage, cracked, and the glow inside it
+    const x0 = -end * (w / 2 + 0.2)
+    g.add(merged([0, 1.2, 2.4].map((a) => new THREE.TorusGeometry(0.5, 0.05, 4, 10).rotateY(a).translate(x0, 0.5, -d / 4)), iron, { metalness: 0.5 }))
+    g.add(mesh(new THREE.IcosahedronGeometry(0.34, 1).translate(x0, 0.4, -d / 4), glowMat('#7dff5a'), { shadow: false }))
+    // the basilisk's skull, fallen off its prow
+    g.add(merged([new THREE.IcosahedronGeometry(0.32, 1).scale(1, 0.75, 1.3).translate(-x0 * 1.05, 0.25, d / 5)], '#d8cfb0'))
+    // the venom, spilled behind it
+    g.add(mesh(mergeGeometries(ooze.map(([x, z, r]) => new THREE.CircleGeometry(r * 0.8, 9).rotateX(-Math.PI / 2).translate(x, 0.02, z))), glowMat('#38a51d'), { shadow: false }))
+    ventCoals(g, c, rnd)
+    topQuad(g, w, d, h, false)
+    return { obj: g }
+  },
+}
+// A wreck's stair: timber steps planked over the wreckage (no arrows: the
+// heap of planks shows the way up), and on a trebuchet's (look.arm) its
+// snapped arm lying along it, its sling's cup at the foot.
+function wreckStair(c, g) {
+  const { w: len, d: width, h, color } = c.look
+  const n = Math.max(2, Math.round(len / 0.5)), run = len / n
+  const steps = []
+  for (let i = 0; i < n; i++) {
+    const y = ((i + 0.5) * h) / n, x = -len / 2 + (i + 0.5) * run
+    steps.push(boxAt(run + 0.01, y, width, x, y / 2, 0))
+  }
+  const treads = []
+  for (let i = 0; i < n; i++) {
+    const y = ((i + 0.5) * h) / n, x = -len / 2 + (i + 0.5) * run
+    for (const z of [-width / 3, 0, width / 3]) treads.push(boxAt(run - 0.04, 0.05, width / 3 - 0.08, x, y + 0.02, z))
+  }
+  g.add(merged(steps, shade(color, 0.7)), merged(treads, color))
+  if (c.look.arm) {
+    const arm = [beam([-len / 2 - 0.6, 0.18, 0.4], [len / 2 + 1.4, h + 0.25, 0.25], 0.42, 0.42)]
+    arm.push(new THREE.CylinderGeometry(0.45, 0.32, 0.4, 8).translate(-len / 2 - 0.8, 0.2, 0.45))
+    g.add(merged(arm, shade(color, 0.85)))
+  }
+  topQuad(g, len, width, h, true)
+  return { obj: g }
+}
+
 // an up-arrow on a step's top at x, y (pointing up the stair's own +x)
 function chevron(x, y) {
   const s = new THREE.Shape([[-0.2, -0.62], [0.16, 0], [-0.2, 0.62], [-0.42, 0.62], [-0.08, 0], [-0.42, -0.62]].map(([a, b]) => new THREE.Vector2(a, b)))
@@ -454,9 +897,18 @@ function standing(c, m) {
 }
 
 export class TerrainView {
-  constructor(scene, fx) {
+  // ((V3d) `scorch`, when given, hears the burned turf the table's chunks
+  // leave round them, [{ x, z, r }], as it changes (view/index.js hands it
+  // to the table's mat: view/table.js scorch); a table built off the page,
+  // a snap check's, passes none)
+  constructor(scene, fx, { scorch = null } = {}) {
     this.scene = scene
     this.effects = fx
+    this.onScorch = scorch
+    // (V3d) the burned turf, by chunk id: { x, z, r } (scorched), and its
+    // signature as last handed on
+    this.marks = new Map()
+    this.markSig = ''
     this.group = new THREE.Group()
     scene.add(this.group)
     // chunk id → { c (its def), obj, canopy?, pieces?, ownMat?, touched?,
@@ -499,6 +951,10 @@ export class TerrainView {
   clear() {
     this.freeSpares()
     this.dropTiles()
+    // ((V3d) nothing burns off the table; a spare taken back burns again)
+    for (const id of this.items.keys()) this.ventOff(id)
+    this.marks.clear()
+    this.scorched()
     this.scene.remove(this.group)
     this.group = new THREE.Group()
     this.scene.add(this.group)
@@ -517,6 +973,8 @@ export class TerrainView {
       this.items.set(c.id, item)
       this.group.add(spare.obj)
       this.tile(item)
+      this.ventOn(item)
+      this.burnMark(c)
       return
     }
     if (c.look.piece === 'fallen') return this.fell(c)
@@ -524,6 +982,57 @@ export class TerrainView {
     this.items.set(c.id, item)
     this.group.add(item.obj)
     this.tile(item)
+    this.ventOn(item)
+    this.burnMark(c)
+  }
+
+  // ── Fires and scorched turf (V3d) ─────────────────────────────────────────
+  // Where a burning chunk's fires are on the table, from its look (`burn`
+  // and `vents`, core/terrain/recipes.js): each vent's place in the frame
+  // the piece is drawn in (its shape's turn), on the table; with no vents,
+  // its top's middle. A chunk at a height other than its def's (a chimney's
+  // cap dropped by a collapse) passes `y`, its centre's.
+  // (A Powder Field's keg or cache, look.spill, sputters at its fuse: a
+  // vent of burn 3, its sparks alone.)
+  ventsOf(c, y = c.shape.y) {
+    const s = c.shape, co = Math.cos(s.yaw), sn = Math.sin(s.yaw)
+    const at = ([x, vy, z], burn) => ({ x: s.x + co * x + sn * z, y: vy, z: s.z - sn * x + co * z, burn })
+    if (!c.look.burn) return [at(c.look.piece === 'bombs' ? [0, 1, 0] : [0.17, 1.5, 0.05], 3)]
+    return (c.look.vents ?? [[0, y + s.hy, 0]]).map((v) => at(v, c.look.burn))
+  }
+  // a chunk's fires lit, as its item comes onto the table standing (an
+  // add, a spare taken back, a sync's or a reveal's build); put out as it
+  // goes (ventOff: freed, broken, cleared)
+  ventOn(item, y) {
+    if (!burns(item.c) || !this.shows(item)) return
+    this.effects.vent?.(item.c.id, this.ventsOf(item.c, y))
+  }
+  ventOff(id) {
+    const item = this.items.get(id)
+    if (item && burns(item.c)) this.effects.unvent?.(id)
+  }
+  // a chunk's burned turf (look.scorch: its radius), kept whatever becomes
+  // of the chunk (the turf stays burned), handed on once a run of adds is
+  // over (scorched, from a microtask)
+  // ((V3d) and a keg's spill: black powder, { powder: true })
+  burnMark(c) {
+    if (c.look.spill) this.marks.set(c.id, { x: c.shape.x, z: c.shape.z, r: 1.3, powder: true })
+    else if (c.look.scorch > 0) this.marks.set(c.id, { x: c.shape.x, z: c.shape.z, r: c.look.scorch })
+    else return
+    if (!this.markPending) {
+      this.markPending = true
+      queueMicrotask(() => {
+        this.markPending = false
+        this.scorched()
+      })
+    }
+  }
+  scorched() {
+    const list = [...this.marks.values()]
+    const sig = list.map((m) => `${m.x},${m.z},${m.r},${m.powder ? 1 : 0}`).join(';')
+    if (sig === this.markSig) return
+    this.markSig = sig
+    this.onScorch?.(list)
   }
 
   // everything off the table and freed (a new table drawn from scratch, in a
@@ -532,6 +1041,8 @@ export class TerrainView {
     this.freeSpares()
     this.dropTiles()
     for (const item of this.items.values()) this.free(item)
+    this.marks.clear()
+    this.scorched()
     this.items.clear()
     this.scene.remove(this.group)
     this.group = new THREE.Group()
@@ -547,6 +1058,9 @@ export class TerrainView {
   sync(chunks) {
     this.freeSpares()
     const byId = new Map(chunks.map((c) => [c.id, c]))
+    // ((V3d) the burned turf: every chunk's that scorches, standing or not)
+    this.marks.clear()
+    for (const c of chunks) this.burnMark(c)
     for (const [id, item] of [...this.items]) {
       const c = byId.get(id)
       if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item))) continue
@@ -573,6 +1087,8 @@ export class TerrainView {
         // ((F8b) a chunk promoted out of its tile by an event whose
         // playback the snap cut short: back in it)
         this.tile(kept)
+        // ((V3d) its fires where it stands now)
+        this.ventOn(kept, c.shape.y)
         continue
       }
       if (!c.alive) {
@@ -589,6 +1105,7 @@ export class TerrainView {
       this.items.set(c.id, item)
       this.group.add(item.obj)
       this.tile(item)
+      this.ventOn(item)
       // a rubble pile: a heap of pieces for each block of its column broken
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
     }
@@ -606,6 +1123,7 @@ export class TerrainView {
     for (const { def, alive } of list) {
       const item = this.items.get(def.id)
       if (alive || !item || !this.shows(item)) continue
+      this.ventOff(def.id)
       this.free(item)
       this.items.set(def.id, { c: item.c, obj: null })
     }
@@ -635,6 +1153,8 @@ export class TerrainView {
       this.items.set(def.id, made)
       this.group.add(made.obj)
       this.tile(made)
+      this.ventOn(made)
+      this.burnMark(def)
     }
     this.flush()
   }
@@ -914,6 +1434,8 @@ export class TerrainView {
   // fallen tree's item shares its mesh with its log's, which frees it.)
   free(item) {
     this.untile(item)
+    // ((V3d) its fires out, while it is still the item of its chunk)
+    if (item.c && this.items.get(item.c.id) === item) this.ventOff(item.c.id)
     // (a felled tree's canopy, gone up in leaves, is no longer in its mesh)
     if (item.canopy && item.canopy.parent !== item.obj) freeShapes(item.canopy)
     item.canopy = null
@@ -970,6 +1492,8 @@ export class TerrainView {
     const v = this.items.get(c.id)
     v.touched = true
     this.promote(v)
+    // ((V3d) what burned on it goes out with it)
+    this.ventOff(c.id)
     const s = at
     const fx = this.effects
     switch (c.kind) {
@@ -1009,6 +1533,19 @@ export class TerrainView {
         fx.debris(s.x, s.y, s.z, [...WOOD, '#2f2f2f'], 16, { from, power: 6, size: 0.12 })
         fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: '#2a2622', life: 1.2 })
         break
+      // (V3d) the Powder Field's: a stump or a cart splinters into charcoal
+      // and a puff of ash, a sandbag bursts in a spray of sand
+      case 'stump':
+      case 'cart':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, [c.look.chip, '#2e2621', '#5a3f2a'], c.kind === 'cart' ? 16 : 8, { from, power: 6, size: 0.12 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: '#4a4440', life: 1.4 })
+        break
+      case 'sandbag':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, ['#a8946a', '#c9b48a', '#8f7b55'], 14, { from, power: 4, size: 0.09 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.3, color: '#b8a77e', life: 1.1 })
+        break
     }
     // the break's sound: stone crumbles, the rest thwacks
     if (c.kind === 'block') sfx.crumble()
@@ -1034,6 +1571,8 @@ export class TerrainView {
       const fall = (item.fall = {})
       tween(0.18 + dy * 0.15, (k) => item.fall === fall && (m.position.y = y0 + (y1 - y0) * k), bounce).then(() => {
         this.effects.debris(b.shape.x, rest - by / 2, b.shape.z, ['#8a8478'], 3, { power: 2, size: 0.07 })
+        // ((V3d) a chimney's smoke from where its cap came to rest)
+        if (item.fall === fall && this.items.get(id) === item) this.ventOn(item, rest)
         // (at rest: back in a tile, unless it fell again since)
         this.settle(id, item)
       })
@@ -1083,7 +1622,8 @@ export class TerrainView {
   // canopy gone, keeled over all the way (the fall's last frame).
   fallen(c, treeChunk) {
     const t = defOf(treeChunk)
-    const { obj: g, canopy } = PIECES.tree(t)
+    // ((V3d) a burned snag's as a tree's: its own piece)
+    const { obj: g, canopy } = PIECES[t.look.piece](t)
     g.remove(canopy)
     topple(g, g.quaternion.clone(), c.look, t.look.trunk)(1)
     this.items.set(t.id, { c: t, obj: g, canopy, shared: true })
@@ -1099,10 +1639,14 @@ export class TerrainView {
 // linked again).
 const TILE = 8
 const tileMats = new Map()
-const tileClass = (m) => [m.flatShading ? 1 : 0, m.metalness, m.roughness].join(',')
+// ((V3d) and the unlit one, `basic`: what glows, coals and venom, stays
+// unlit in its tile)
+const tileClass = (m) => (m.isMeshBasicMaterial ? 'basic' : [m.flatShading ? 1 : 0, m.metalness, m.roughness].join(','))
 function tileMat(key, m) {
   if (!tileMats.has(key)) {
-    const mat = new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: m.roughness, metalness: m.metalness, flatShading: m.flatShading })
+    const mat = m.isMeshBasicMaterial
+      ? new THREE.MeshBasicMaterial({ color: '#ffffff', vertexColors: true, toneMapped: false })
+      : new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: m.roughness, metalness: m.metalness, flatShading: m.flatShading })
     mat.userData.tileKey = key
     tileMats.set(key, mat)
   }
@@ -1155,6 +1699,10 @@ function freeShapes(obj) {
     if (o.geometry && o.geometry !== BOX && o.geometry !== LOG) o.geometry.dispose()
   })
 }
+
+// (V3d) whether a chunk has fires on it (look.burn) or a fuse sputtering (a
+// Powder Field's keg or cache, look.spill): its vents, ventsOf
+const burns = (c) => !!(c.look.burn || c.look.spill)
 
 // the pieces whose mesh stands at the chunk's height (a wall's blocks and
 // caps, which drop when a block under them breaks)

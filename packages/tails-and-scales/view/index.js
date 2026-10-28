@@ -61,7 +61,14 @@ export class View {
     // G.out, among the events of the entry the Session folds, and the player
     // plays each report (the terrain.* handlers) when it reaches it in those
     // events, in order (a wrecker's smashes as its walk passes them).
-    this.terrain = new TerrainView(scene, this.effects)
+    // ((V3d) the turf the battlefield burned, painted into the mat)
+    this.terrain = new TerrainView(scene, this.effects, {
+      scorch: (marks) => {
+        this.table.scorch(marks)
+        // ((V3d) and under a burning field's evening light)
+        this.stage.mood(marks.some((m) => !m.powder))
+      },
+    })
   }
 
   // The figures (view/units.js: each unit's view by unit id, following the

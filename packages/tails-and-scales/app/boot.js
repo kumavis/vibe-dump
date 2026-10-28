@@ -1172,8 +1172,19 @@ export function boot(location) {
             tiles: view.terrain.tileCheck(), shadow: { fits: view.stage.fits ?? 0, box: [sc.left, sc.right, sc.bottom, sc.top, sc.near, sc.far] },
             minimap: { up: ui.minimap.up(), ms: ui.minimap.ms, paintMs: ui.minimap.paintMs, redraws: ui.minimap.redraws }, roster: ui.roster.model(),
             chips: document.querySelectorAll('#chips .chip:not([style*="display: none"])').length,
+            // ((V3d) the fires burning on the table, and their smoke and flames)
+            fires: view.effects.plumes.count(),
           }
         },
+        // ((V3d, not promised) the fires' smoke and flames run on `s` seconds
+        // at once, the battle held where it is (sim/powder-shots.mjs: the
+        // columns built up before a shot)
+        smoke: (s) => {
+          for (let t = 0; t < s; t += 0.1) view.effects.plumes.update(0.1)
+        },
+        // ((V3d, not promised) the camera put on a pose at once ({ pos,
+        // target }, [x, y, z] each), or on the whole board ('overview')
+        look: (p) => rig.toPose(p === 'overview' ? rig.fit(rig.views[rig.views.length - 1]) : p, 0.01),
         // ((F8b's review, not promised) the chips shown, each its units'
         // ids and its place on the page (sim/input-check.mjs taps them), and
         // the minimap redrawn `n` times running, each a whole redraw (its
