@@ -20,7 +20,9 @@
 // charge.result; the shot's, shoot.js: a turn to face, a volley, a
 // template's aim, scatter, throw and landing, the beat after one that
 // caught nobody, a spell cast or fizzling, thorns erupting and fading, a
-// gaze, the "Mesmerized!", and the shot's look and who throws), and the
+// gaze, the "Mesmerized!", (V3c) a snare's roots and a spell settling on
+// a friend, each with the labels straight after it, and the shot's look
+// and who throws), and the
 // roll-off's rows, are caught by the check's event order instead
 // (present-check.mjs's eventOrder), each where the next event or line
 // breaks it: no-stomp through walk-speed, no-melee through land-fx, and
@@ -136,6 +138,20 @@ export const MUTATIONS = {
   'no-gaze-status': ['/core/actions/shoot.js', "  if (G.out) emit(G, 'status', statusOf(G))\n  emit(G, 'spell.mesmerized',", "  emit(G, 'spell.mesmerized',"],
   // no "Mesmerized!" over the target
   'no-mesmerized': ['/core/actions/shoot.js', "  emit(G, 'spell.mesmerized',", "  if (false) emit(G, 'spell.mesmerized',"],
+  // ((V3c) a snare cast with no roots round its target, the cast then
+  // followed by the labels: the event order sees it)
+  'no-snare': ['/core/actions/shoot.js', "  emit(G, 'spell.snare',", "  if (false) emit(G, 'spell.snare',"],
+  // the snared target's label never says so (its action's end re-reports
+  // the labels: the event order sees the snare with no labels after it)
+  'no-snare-status': ['/core/actions/shoot.js', "  target.snared = true\n  // its label says so\n  if (G.out) emit(G, 'status', statusOf(G))", "  target.snared = true\n  // its label says so"],
+  // a spell on a friend with nothing settling on it
+  'no-ward': ['/core/actions/shoot.js', "  emit(G, 'spell.ward',", "  if (false) emit(G, 'spell.ward',"],
+  // the friend's label never says it is warded or resolute
+  'no-ward-status': ['/core/actions/shoot.js', "  else target.resolute = true\n  if (G.out) emit(G, 'status', statusOf(G))", "  else target.resolute = true"],
+  // a ward or a resolve wearing off as its side's turn begins never
+  // reported: the label keeps it into the turn (the mirror, at the phase's
+  // check)
+  'no-wear-status': ['/core/engine.js', "  if (worn && G.out) emit(G, 'status', statusOf(G))", "  if (false) emit(G, 'status', statusOf(G))"],
   // no beat after a template that caught nobody
   'no-blast-pause': ['/core/actions/shoot.js', "  if (!victims.length) emit(G, 'pause', { s: 0.25 })", "  if (false) emit(G, 'pause', { s: 0.25 })"],
   // a template thrown by its target: the throw comes from the wrong figure

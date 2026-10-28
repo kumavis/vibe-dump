@@ -18,7 +18,7 @@
 //
 // Units go by id. It walks the units in G.units order, and the alternation
 // keeps its guard of 30 (§4.1 rule 6).
-import { roll, passes, woundNeed, saveNeed, hitNeed, attackCount } from '../rules.js'
+import { roll, passes, woundNeed, saveNeed, hitNeed, attackCount, svOf } from '../rules.js'
 import { emit, log } from '../journal.js'
 import { alive, engagedWith, isEngaged, statusOf } from '../queries.js'
 import { damage } from './damage.js'
@@ -46,11 +46,12 @@ export function fight(G, u) {
   const wd = roll(G, h)
   const wounds = passes(wd, wn)
   if (h) emit(G, 'dice', { label: `Wound ${wn}+`, dice: wd, need: wn })
-  const sn = saveNeed(target.t.Sv, w.AP, false)
+  // ((V3c) the target's own save: one better while warded, rules.js svOf)
+  const sn = saveNeed(svOf(target), w.AP, false)
   // (the dice roll even when there is no save to make: §4.1 rule 5)
   const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
-  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+`, dice: sn > 6 ? [] : sv, need: sn, save: true })
+  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${target.warded ? ' (ward)' : ''}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
   const killed = damage(G, target, unsaved, w.D, u)
   log(G, u.side, `<b>${u.t.short}</b> fight ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   emit(G, 'pause', { s: 0.3 })

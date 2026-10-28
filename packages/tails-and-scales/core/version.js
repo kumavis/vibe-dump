@@ -91,5 +91,10 @@ export const RULES_ID = rulesId()
 // and the AI's transports (built on 7 as 9, beside F7b's 8, and renumbered
 // at its merge onto 10: F7b, unlanded, takes the next number free); RULES_ID
 // moves with the War-Cart, the Vehicle role and slot and the transport
-// record)
-export const CORE_VERSION = 11
+// record; 12: the V3 rules landed together, each built as 11 on 10: V3c's
+// spells, three a caster (the race data's `spells`, so RULES_ID moves), the
+// `shoot` command's `sp`, Barkskin's ward, Root Snare's snare and Cold
+// Blood's resolve on a unit (stateHash's UNIT_EXTRAS beside F9a's aboard)
+// and their ends, Venom Mist's template that spares the scenery, and the
+// AI's choice of spell and target)
+export const CORE_VERSION = 12

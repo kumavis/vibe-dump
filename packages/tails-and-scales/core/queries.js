@@ -28,11 +28,15 @@
 import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
 import { hypot } from './dmath.js'
 import { STEP } from './nav.js'
-import { canShoot, shootTargets } from './actions/shoot.js'
+import { canShoot, hasTarget } from './actions/shoot.js'
 import { canCharge, chargeTargets } from './actions/charge.js'
 
 export { moveMode, climbs, forbidMask, movePlan, validEnd, nearestValid } from './actions/move.js'
-export { canShoot, shotInfo, shootTargets, rangeOf, lobbed } from './actions/shoot.js'
+export { canShoot, shotInfo, shootTargets, rangeOf, lobbed, weaponOf, allySpell, hasTarget } from './actions/shoot.js'
+// ((V3c) the AI's pick of a caster's spell, which the shooting tool and the
+// group's fire take as theirs until the player picks another: pure
+// appraisal, no draw)
+export { bestSpell, spellFor } from './ai/policy.js'
 export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
 export { freeSpot } from './deploy.js'
 export { groundOnly } from './actions/move.js'
@@ -418,11 +422,15 @@ function stairUnder(nav, gg, p, L) {
 
 // What the table shows at the end of an action (DESIGN §2.3's `objectives`
 // and `status` events): who holds each objective, and which units are in
-// combat or mesmerized (by id).
+// combat or mesmerized (by id), and (V3c) which the spells mark: snared,
+// warded and resolute.
 export const ownersOf = (G) => G.objectives.map((o) => controlOf(G, o))
 export const statusOf = (G) => ({
   engaged: G.units.filter((u) => alive(u) && isEngaged(G, u)).map((u) => u.id),
   mesmerized: G.units.filter((u) => u.mesmerized).map((u) => u.id),
+  snared: G.units.filter((u) => u.snared).map((u) => u.id),
+  warded: G.units.filter((u) => u.warded).map((u) => u.id),
+  resolute: G.units.filter((u) => u.resolute).map((u) => u.id),
 })
 
 // ── Who can act ─────────────────────────────────────────────────────────────
@@ -434,12 +442,14 @@ export const phaseKey = (G) => PHASES[Math.min(G.turn.ph, PHASES.length - 1)].ke
 // Something left to do for `u` in the current phase of its own turn. (F9a)
 // A rider can still act in the movement phase while it hasn't moved (it may
 // disembark: `!moved`, as for any unit), and never in the shooting or the
-// charge phase while aboard (canShoot and canCharge refuse it).
+// charge phase while aboard (canShoot and canCharge refuse it). ((V3c) a
+// snared unit has no move to make; a caster has a spell to cast while it
+// may cast at all: hasTarget)
 export function canAct(G, u) {
   if (!alive(u) || u.side !== G.turn.active) return false
   switch (phaseKey(G)) {
-    case 'move': return !u.flags.moved
-    case 'shoot': return canShoot(G, u) && shootTargets(G, u).length > 0
+    case 'move': return !u.flags.moved && !u.snared
+    case 'shoot': return canShoot(G, u) && hasTarget(G, u)
     case 'charge': return canCharge(G, u) && chargeTargets(G, u).length > 0
   }
   return false

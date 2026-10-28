@@ -28,9 +28,14 @@
 //               moves; the chips grey with the units that have acted; Space
 //               takes the camera to the group; Esc with a group and no pin
 //               lets go
-//   shooting    the bar says Fire; a group fires at an enemy only some of
-//               it can reach, and the rest stay picked once the table has
-//               caught up
+//   shooting    the bar says Fire; (V3c) the seat's caster picked up shows
+//               its spell bar, its three spells each with its cast, chance
+//               and range, the AI's pick lit; keys 3 and 2 and a click on
+//               the bar's first pick each; its spell on a friend picked, a
+//               click on the caster itself casts it there (one command, its
+//               line naming the spell) and the bar goes; a group fires at
+//               an enemy only some of it can reach, and the rest stay
+//               picked once the table has caught up
 //   (F13) aim   a fresh classic battle, by real touches through CDP: a long
 //               press on the ground with a unit picked up shows its path,
 //               inches and ghost under the finger, the camera still, and
@@ -689,6 +694,66 @@ async function check(page, say) {
   b = await bar()
   if (!b.show || b.verbs[0]?.k !== 'shoot') fail(`the bar in the shooting phase: ${JSON.stringify(b)}`)
   say(`shooting: the bar says ${b.verbs[0].label}`)
+
+  // ((V3c) the spells: the seat's caster picked up alone, its spell bar
+  // shows its three, the AI's pick lit, each with its cast, chance and
+  // range; 3 and 2 pick by key, a click on the bar's first by the mouse;
+  // its spell on a friend picked, a click on the caster itself casts it
+  // there, that spell named in the line it writes, and the bar goes)
+  await ev(() => window.__ts.group.select([]))
+  await rest()
+  const caster = await ev((t) => window.__ts.session.preview((G, q) => {
+    const c = G.units.find((u) => u.side === t && u.alive > 0 && u.t.spells && q.canAct(G, u))
+    return c ? { id: c.id, names: c.t.spells.map((w) => w.name), casts: c.t.spells.map((w) => w.spell), ranges: c.t.spells.map((w) => w.range), ally: c.t.spells.findIndex((w) => w.ward || w.resolve), best: q.bestSpell(G, c) } : null
+  }), t)
+  if (!caster) say('(no caster of the seat able to act: the spells untried)')
+  else {
+    const spellBar = () => ev(() => {
+      const el = document.querySelector('#spellbar')
+      return { shown: !!el && !el.classList.contains('hidden') && getComputedStyle(el).display !== 'none', spells: [...(el?.querySelectorAll('.spell') ?? [])].map((s) => ({ on: s.classList.contains('on'), key: s.querySelector('kbd')?.textContent, name: s.querySelector('b')?.textContent, small: s.querySelector('small')?.textContent, line: s.querySelector('em')?.textContent })) }
+    })
+    const lit = (sb) => sb.spells.findIndex((s) => s.on)
+    await ev((id) => window.__ts.select(window.__ts.session.G.units.find((u) => u.id === id)), caster.id)
+    await sleep(400)
+    let sb = await spellBar()
+    if (!sb.shown || sb.spells.length !== caster.names.length) fail(`the caster (unit ${caster.id}) picked up: the spell bar ${sb.shown ? `shows ${sb.spells.length} spells` : 'is hidden'}, not its ${caster.names.length}`)
+    sb.spells.forEach((s, k) => {
+      if (s.key !== String(k + 1) || s.name !== caster.names[k] || !s.small?.startsWith(`${caster.casts[k]}+ · `) || !s.small.endsWith(` · ${caster.ranges[k]}"`) || !s.line) fail(`spell ${k + 1} on the bar reads ${JSON.stringify(s)}, not key ${k + 1}, ${caster.names[k]}, cast ${caster.casts[k]}+ and ${caster.ranges[k]}" with a line of what it does`)
+    })
+    if (lit(sb) !== caster.best) fail(`the bar lights spell ${lit(sb) + 1}, the AI's pick is ${caster.best + 1}`)
+    say(`the caster's spell bar: ${sb.spells.map((s) => `${s.key} ${s.name} (${s.small})`).join(', ')}; the AI's pick, ${caster.names[caster.best]}, lit`)
+    for (const k of [3, 2]) {
+      await page.keyboard.press(String(k))
+      await sleep(250)
+      sb = await spellBar()
+      if (lit(sb) !== k - 1) fail(`key ${k} lit spell ${lit(sb) + 1}`)
+    }
+    await page.click('#spellbar .spell[data-sp="0"]')
+    await sleep(250)
+    if (lit(await spellBar()) !== 0) fail('a click on the bar\'s first spell did not light it')
+    say('keys 3 and 2 and a click on the bar\'s first each picked that spell')
+    if (caster.ally < 0) say('(the caster has no spell to cast on a friend: the cast untried)')
+    else {
+      await page.keyboard.press(String(caster.ally + 1))
+      await sleep(250)
+      const hint = await ev(() => document.querySelector('#hint').textContent)
+      if (!hint.includes(caster.names[caster.ally])) fail(`with ${caster.names[caster.ally]} picked the hint reads "${hint}"`)
+      await rest()
+      const me = (await units()).find((u) => u.id === caster.id)
+      if (!me?.on || (await ev(({ x, y }) => window.__ts.group.pick(x, y).unit, me)) !== caster.id) say(`(the caster isn't clear to click: the cast untried)`)
+      else {
+        n0 = await count()
+        await page.mouse.click(me.x, me.y)
+        n1 = await settled()
+        const lines = await ev(() => window.__ts.session.G.journal.trace.filter((l) => l.startsWith('log')).slice(-2).join(' | '))
+        if (n1 !== n0 + 1) fail(`a click on the caster with ${caster.names[caster.ally]} picked sent ${n1 - n0} commands, not 1`)
+        if (!lines.includes(caster.names[caster.ally])) fail(`the cast wrote "${lines}", which doesn't name ${caster.names[caster.ally]}`)
+        if ((await spellBar()).shown) fail('the spell bar still shows once the caster has cast')
+        say(`${caster.names[caster.ally]} cast on the caster itself by a click on it: "${lines.replace(/<[^>]+>/g, '')}"; the bar gone`)
+      }
+    }
+    await snap('spells')
+  }
 
   // a group fires at an enemy some of it can reach: once the table has
   // caught up, the members still able to act are still picked

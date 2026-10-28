@@ -1,7 +1,8 @@
 // The opponent (DESIGN §2.2's "AI inside the fold", §2.5): for each phase,
 // a generator that looks at the match and yields the commands it decides on,
 // one at a time, as a seat's would be (`{ t: 'advance' | 'move' | 'shoot' |
-// 'charge', u, c | tg }`, units by id, places by nav cell). core/engine.js's
+// 'charge', u, c | tg }`, units by id, places by nav cell; (V3c) a
+// caster's shot names its spell, `sp`). core/engine.js's
 // runAI, the only driver, applies each command before asking for the next,
 // in the fold, which every peer runs (an AI seat's phase, and a human's
 // `auto`), so the generator reads the match as each of its commands left
@@ -40,12 +41,12 @@ import { p2D6, CHARGE_RANGE, OBJECTIVE_RANGE } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import {
-  alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, canCharge, chargeTargets, chargePlan,
+  alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, shotInfo, canCharge, chargeTargets, chargePlan,
   ownersOf, riders, landing,
 } from '../queries.js'
 import { hold } from '../actions/move.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, bestSpot, fallbackSpot, bestLanding } from './score.js'
+import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports
@@ -86,7 +87,8 @@ function* aiMove(G, side, mask) {
       yield* aiTransport(G, u, mask, claimed)
       continue
     }
-    if (u.flags.moved) continue
+    // ((V3c) a snared unit has no move to make: core/commands.js)
+    if (u.flags.moved || u.snared) continue
     yield* aiMoveOne(G, u, u.t.ai, claimed)
   }
 }
@@ -144,7 +146,8 @@ function* aiMoveOne(G, u, role, claimed) {
 // each brawler rider (not yet moved, and in `only`) with an enemy within
 // CHARGE_RANGE − 2 of the hull's edge steps off onto the landing cell
 // nearest the nearest such enemy, to charge it this turn. The hull moves as
-// its riders make it (hullRole). After it moves, each rider in G.units
+// its riders make it (hullRole), unless (V3c) Root Snare holds it. After it
+// moves, each rider in G.units
 // order that isn't a brawler steps off onto the landing cell nearest the
 // nearest objective its seat doesn't hold within OBJECTIVE_RANGE + 2 of
 // the hull's edge (the objectives as they stand when it does); then the
@@ -170,7 +173,9 @@ function* aiTransport(G, v, mask, claimed) {
       emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
       yield { t: 'disembark', u: p.id, c }
     }
-    yield* aiMoveOne(G, v, hullRole(G, v), claimed)
+    // ((V3c) a snared hull stays where it stands; its riders may still
+    // step off, as here and below)
+    if (!v.snared) yield* aiMoveOne(G, v, hullRole(G, v), claimed)
   }
   for (const p of riders(G, v)) {
     if (!mask(p) || p.flags.moved || p.t.brawler) continue
@@ -204,41 +209,99 @@ function* aiTransport(G, v, mask, claimed) {
 }
 
 // ── Shooting ────────────────────────────────────────────────────────────────
+// (V3c) A caster picks its spell and its target together (bestCast), every
+// other unit its target (bestShot), as it always has.
 function* aiShoot(G, side, mask) {
   const mine = G.units.filter((u) => u.side === side && canShoot(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(b.t.ai) - ORDER.indexOf(a.t.ai))
   for (const u of mine) {
     if (!canShoot(G, u)) continue
-    // (F18) an enemy locked in combat is among the targets, valued net of
-    // the shot's friendly fire (shotValue: a volley's strays into the
-    // fight, a template's friends under it), so one that costs more of ours
-    // than it takes of theirs is never picked
-    const targets = shootTargets(G, u)
-    let best = null, bv = 0.4
-    for (const e of targets) {
-      let v = shotValue(G, u, e, u.pos, u.flags.moved)
-      const w = u.t.ranged
-      if (w.blast) {
-        // count the cost of a scatter landing on our own lads
-        // (F9a: a rider is out of a template's reach, its hull in it)
-        for (const f of G.units) {
-          if (f.side !== u.side || !alive(f) || f.aboard) continue
-          const g = hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
-          if (g < w.blast + 2.5) v -= worth(f) * 0.25 * (1 - Math.max(0, g) / (w.blast + 2.5))
-        }
-      }
-      if (w.mesmerize && e.mesmerized) v *= 0.2
-      if (v > bv) {
-        bv = v
-        best = e
-      }
-    }
-    if (best) {
+    const pick = u.t.spells ? bestCast(G, u) : bestShot(G, u)
+    if (pick) {
+      const best = pick.e
       emit(G, 'focus', { x: (u.pos.x + best.pos.x) / 2, z: (u.pos.z + best.pos.z) / 2 })
-      yield { t: 'shoot', u: u.id, tg: best.id }
+      yield u.t.spells ? { t: 'shoot', u: u.id, tg: best.id, sp: pick.sp } : { t: 'shoot', u: u.id, tg: best.id }
       emit(G, 'pause', { s: 0.1 })
     }
   }
+}
+
+// What a shot (or (V3c) a cast) at `e` with weapon `w` is worth to `u` as
+// the policy weighs it: its value (`v`), less, for a template, the cost of a
+// scatter landing on our own lads (a blast spell's too, which never
+// scatters: the AI fears its template near them all the same), and a fifth
+// of it for a gaze at a target already mesmerized.
+function weighed(G, u, w, e, v) {
+  if (w.blast) {
+    // count the cost of a scatter landing on our own lads
+    // (F9a: a rider is out of a template's reach, its hull in it)
+    for (const f of G.units) {
+      if (f.side !== u.side || !alive(f) || f.aboard) continue
+      const g = hypot(f.pos.x - e.pos.x, f.pos.z - e.pos.z) - f.r
+      if (g < w.blast + 2.5) v -= worth(f) * 0.25 * (1 - Math.max(0, g) / (w.blast + 2.5))
+    }
+  }
+  if (w.mesmerize && e.mesmerized) v *= 0.2
+  return v
+}
+
+// The target `u`'s ranged weapon is best fired at: { e, v }, the first found
+// of the best worth more than 0.4, or null. (F18) An enemy locked in combat
+// is among the targets, valued net of the shot's friendly fire (shotValue:
+// a volley's strays into the fight, a template's friends under it), so one
+// that costs more of ours than it takes of theirs is never picked.
+function bestShot(G, u) {
+  let best = null, bv = 0.4
+  for (const e of shootTargets(G, u)) {
+    const v = weighed(G, u, u.t.ranged, e, shotValue(G, u, e, u.pos, u.flags.moved))
+    if (v > bv) {
+      bv = v
+      best = { e, v }
+    }
+  }
+  return best
+}
+
+// (V3c, rule 10: it bumps with V3c) The spell and target a caster's cast is
+// best worth: every spell (in its order) at every target it takes
+// (shootTargets: friends for a ward or a resolve), each by spellValue as
+// weighed above; { sp, e, v }, the first found of the best worth more than
+// 0.4, or null. Pure: it draws nothing.
+export function bestCast(G, u) {
+  let best = null, bv = 0.4
+  u.t.spells.forEach((w, sp) => {
+    for (const e of shootTargets(G, u, sp)) {
+      const v = weighed(G, u, w, e, spellValue(G, u, sp, e))
+      if (v > bv) {
+        bv = v
+        best = { sp, e, v }
+      }
+    }
+  })
+  return best
+}
+
+// (V3c) The spell a caster's player finds picked when it picks the caster up
+// (the shooting tool's default, input/human.js): the AI's own pick, or its
+// first spell when the AI would cast none. 0 for a unit with no spells.
+export const bestSpell = (G, u) => (u.t.spells ? bestCast(G, u)?.sp ?? 0 : 0)
+
+// (V3c) The spell a caster fires at enemy `tg` in a group's fire
+// (present/orders.js): of its spells that take tg (shotInfo), the one worth
+// most to the AI there (the first found of the best, worth or not); -1 for
+// none, and undefined for a unit with no spells, whose shot names none.
+export function spellFor(G, u, tg) {
+  if (!u.t.spells) return undefined
+  let best = -1, bv = -Infinity
+  u.t.spells.forEach((w, sp) => {
+    if (!shotInfo(G, u, tg, sp).ok) return
+    const v = weighed(G, u, w, tg, spellValue(G, u, sp, tg))
+    if (v > bv) {
+      bv = v
+      best = sp
+    }
+  })
+  return best
 }
 
 // ── Charges ─────────────────────────────────────────────────────────────────
@@ -255,7 +318,8 @@ function* aiCharge(G, side, mask) {
     for (const e of chargeTargets(G, u)) {
       const plan = chargePlan(G, u, e)
       if (!plan) continue
-      const p = p2D6(plan.need)
+      // ((V3c, rule 10) a resolute unit rolls a miss again: 2p − p²)
+      const p0 = p2D6(plan.need), p = u.resolute ? p0 + p0 * (1 - p0) : p0
       const gain = meleeValue(u, e) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
       const loss = meleeValue(e, u)
       const min = role === 'melee' ? 0.25 : role === 'line' ? 0.33 : role === 'raider' ? 0.4 : role === 'hero' ? 0.5 : 0.6

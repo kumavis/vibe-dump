@@ -96,7 +96,7 @@ try {
   console.error(`hud-check: ${e.message}\nusage: node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test`)
   process.exit(2)
 }
-const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-11'
+const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-1'
 let items
 try {
   items = select(loadCorpus().items, a.only ?? DEFAULT)
@@ -133,7 +133,7 @@ const MUTATIONS = {
   // snap again at a charge's end)
   'pick-unshaded': ['app/flow.js', '    human.pickShown = null\n', ''],
 }
-const SELF_TEST_ON = '64-89,hotseat-aggressive-103,hotseat-late-vote-11'
+const SELF_TEST_ON = '64-89,hotseat-aggressive-103,hotseat-late-vote-1'
 
 // In the page, before the app: catch window.__ts, drive a human log's seats
 // (the corpus driver), and snap at each point due, reading the page once

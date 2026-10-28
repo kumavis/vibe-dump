@@ -375,7 +375,9 @@ function kegProbe() {
         const e = events[i]
         if (e.t === 'phase.start') round = e.round
         if (e.t === 'blast.fire') (actor = e.u), (how = G.units.find((u) => u.id === e.u)?.t.ranged?.name ?? 'a template')
-        if (e.t === 'spell.thorns') (actor = e.u), (how = 'its Thornburst')
+        // ((V3c) the eruption by its look's spell: Thornburst; Venom Mist
+        // spares the scenery and sets no keg off)
+        if (e.t === 'spell.thorns') (actor = e.u), (how = `its ${G.units.find((u) => u.id === e.u)?.t.spells?.find((w) => w.fx === e.fx)?.name ?? 'Thornburst'}`)
         if (e.t === 'unit.move') {
           for (const sm of e.smashes ?? []) for (const x of sm.ev) if (x.t === 'terrain.destroy' && x.kind === 'keg') setterOf.set(x.id, { u: e.u, how: 'its walk' })
         }

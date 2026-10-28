@@ -18,8 +18,10 @@
 // table's), so their icons are found by their boxes (iconAt) and asked for
 // by the table's own handlers (input/human.js: hoverIcon, tapIcon); the
 // card and the chips take the pointer, and are watched here (watch). No
-// native title says any of it.
-import { woundNeed, saveNeed, attackCount, expected, p2D6, pD6 } from '../core/rules.js'
+// native title says any of it. ((V3c) A caster's spells are told through
+// the same tooltip: a shot's odds for the spell picked, each its own (its
+// cast, what it does, its range, a warded target's save): oddsText, below.)
+import { woundNeed, saveNeed, attackCount, expected, p2D6, pD6, svOf } from '../core/rules.js'
 
 // how far a tip keeps from each edge of the screen, and stands from the
 // pointer
@@ -170,16 +172,22 @@ export class Tooltip {
 // and a poison that makes it easier), the save the target's own and the
 // weapon's AP ("save 4+ (Sv4+ AP0)", and cover's +1). A unit's numbers are
 // its own: no armour rule hides behind them. (F18) A shot that risks the
-// shooter's own side says so on a line of its own (riskText).
-export function oddsText(u, target, info) {
-  const w = u.t.ranged
-  if (w.mesmerize) return `Mesmerize: cast ${w.spell}+ on 2D6 (${Math.round(p2D6(w.spell) * 100)}%) · D3 mortal wounds`
+// shooter's own side says so on a line of its own (riskText). (V3c) `sp`:
+// a caster's spell (none: its first); a spell that marks its target says
+// what the mark does, one cast on a friend its range, and a warded target's
+// save is its own, one better (svOf).
+export function oddsText(u, target, info, sp) {
+  const w = sp === undefined ? u.t.ranged : u.t.spells[sp]
+  const cast = `cast ${w.spell}+ on 2D6 (${Math.round(p2D6(w.spell) * 100)}%)`
+  if (w.mesmerize) return `Mesmerize: ${cast} · D3 mortal wounds`
+  if (w.snare) return `${w.name}: ${cast} · it can't move or charge next turn<br>${info.range.toFixed(1)}" / ${w.range}"`
+  if (w.ward || w.resolve) return `${w.name} on ${target === u ? 'itself' : target.t.short}: ${cast} · ${w.ward ? '+1 to its saves' : 'no morale tests, a failed charge rolled again'} until your next turn<br>${info.range.toFixed(1)}" / ${w.range}"`
   const lines = []
-  if (w.spell) lines.push(`Cast ${w.spell}+ (${Math.round(p2D6(w.spell) * 100)}%)`)
+  if (w.spell) lines.push(`${w.name}: ${cast}`)
   const n = attackCount(u, w, false)
   const wn = woundNeed(w.S, target.t.T, w.poison)
-  const sn = saveNeed(target.t.Sv, w.AP, info.cover)
-  lines.push(`${n} ${w.blast ? `template${n > 1 ? 's' : ''} (${w.blast}")` : 'shots'} · hit ${w.spell ? 'auto' : info.need + '+'} · wound ${wn}+ (${woundWhy(w, target.t)}) · save ${sn > 6 ? '—' : sn + '+'} (${saveWhy(w, target.t, info.cover)})`)
+  const sn = saveNeed(svOf(target), w.AP, info.cover)
+  lines.push(`${n} ${w.blast ? `template${n > 1 ? 's' : ''} (${w.blast}")` : 'shots'} · hit ${w.spell ? 'auto' : info.need + '+'} · wound ${wn}+ (${woundWhy(w, target.t)}) · save ${sn > 6 ? '—' : sn + '+'} (${saveWhy(w, target.t, info.cover, target.warded)})`)
   const flags = []
   const reach = info.reach ?? w.range
   const lob = reach > w.range ? ` (${w.range}", lobbed down)` : reach < w.range ? ` (${w.range}", lobbed up)` : ''
@@ -193,7 +201,7 @@ export function oddsText(u, target, info) {
     flags.push(`≈${e.kills.toFixed(1)} slain`)
   }
   lines.push(flags.join(' · '))
-  const risk = riskText(u, info, n)
+  const risk = riskText(u, info, n, w)
   if (risk) lines.push(risk)
   return lines.join('<br>')
 }
@@ -206,8 +214,8 @@ export function oddsText(u, target, info) {
 // rules.js's expected: what doShoot rolls); for a template, who of yours
 // one landing square on the target would catch (info.under: friendsUnder),
 // a scatter's risk being the blast's own line in the help.
-export function riskText(u, info, n = attackCount(u, u.t.ranged, false)) {
-  const w = u.t.ranged
+// ((V3c) `w`: the weapon, a caster's spell; its ranged weapon by default)
+export function riskText(u, info, n = attackCount(u, u.t.ranged, false), w = u.t.ranged) {
   if (w.blast) {
     if (!info.under?.length) return ''
     return `⚠ friends under the template: ${info.under.map(({ v, under }) => `${v.t.short}${v.models.length > 1 ? ` ×${under}` : ''}`).join(', ')}`
@@ -230,5 +238,6 @@ export function woundWhy(w, t) {
 }
 
 // Why a save needs what it needs: the target's save and the weapon's AP
-// (AP0, AP-1: the card's way of writing it), and cover where it helps
-export const saveWhy = (w, t, cover) => `Sv${t.Sv}+ AP${w.AP ? `-${w.AP}` : '0'}${cover ? ', cover' : ''}`
+// (AP0, AP-1: the card's way of writing it), and cover where it helps, and
+// (V3c) a ward (Barkskin)
+export const saveWhy = (w, t, cover, warded = false) => `Sv${t.Sv}+ AP${w.AP ? `-${w.AP}` : '0'}${cover ? ', cover' : ''}${warded ? ', ward' : ''}`

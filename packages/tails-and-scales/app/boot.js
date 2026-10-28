@@ -12,6 +12,7 @@ import { UnitViews } from '../view/units.js'
 import { clock } from '../view/clock.js'
 import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
+import { shootAt } from '../input/tools/shoot.js'
 import { Selection } from '../input/selection.js'
 import { GroupInput } from '../input/group.js'
 import { OrderBook } from '../input/book.js'
@@ -310,7 +311,9 @@ export function boot(location) {
   // battle-setup panel's showcase, the type's plain words); a unit's chip
   // its line and its conditions told (none on a tap that has none to tell:
   // the tap picks it up, as ever), a cluster's what a tap does there; a
-  // roster row's order badge which order it is, its ✓ what it means.
+  // roster row's order badge which order it is, its ✓ what it means; (V3c)
+  // a spell bar's button its spell (its cast and chance, its range, what it
+  // does).
   const tipFor = (el, { tap = false } = {}) => {
     const units = view.units, id = Number(el.closest('[data-unit]')?.dataset.unit), v = units?.get(id)
     if (el.dataset.cond) return tipOf(el.dataset.cond, v?.u.t ?? null, v ? units.ctx(id) : {})
@@ -321,6 +324,8 @@ export function boot(location) {
       return k ? `<b>${ORDER_GLYPH[k]} ${ORDER_NAME[k]}</b> — its standing order (the card's Orders line changes it).` : ''
     }
     if (el.dataset.tip === 'done') return '<b>✓ Done</b> — it has nothing more to do this phase.'
+    // ((V3c) a spell bar's button: its spell, worded by ui/actions.js)
+    if (el.dataset.tip === 'spell') return el.dataset.say ?? ''
     return ''
   }
   ui.tooltip.watch(document)
@@ -1091,8 +1096,10 @@ export function boot(location) {
         must(human.advance(u), 'doAdvance')
         return settle()
       },
-      doShoot: (u, tg) => {
-        must(human.shoot(u, tg), 'doShoot')
+      // ((V3c) the shot exactly as given: a caster's names its spell `sp`
+      // or none, whatever the spell bar has picked)
+      doShoot: (u, tg, sp) => {
+        must(human.send(human.localSeat(), shootAt(u, tg, sp)), 'doShoot')
         return settle()
       },
       doCharge: (u, tg) => {
@@ -1166,8 +1173,8 @@ export function boot(location) {
         canAct: (u) => asked((g) => canAct(g, u)),
         movePlan: (u, extra) => asked((g) => movePlan(g, u, extra)),
         freeSpot: (u, x, z, side, others) => asked((g) => freeSpot(g, u, x, z, side, others)),
-        shootTargets: (u) => asked((g) => shootTargets(g, u)),
-        shotInfo: (u, tg) => asked((g) => shotInfo(g, u, tg)),
+        shootTargets: (u, sp) => asked((g) => shootTargets(g, u, sp)),
+        shotInfo: (u, tg, sp) => asked((g) => shotInfo(g, u, tg, sp)),
         chargeTargets: (u) => asked((g) => chargeTargets(g, u)),
         chargePlan: (u, tg) => asked((g) => chargePlan(g, u, tg)),
         // (F9a) a rider's landing cells (its hull's), and why u may not

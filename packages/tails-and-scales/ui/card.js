@@ -39,12 +39,17 @@ const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 // playtest's fix) The reason a shot needs what it needs ("S3 vs T6") is the
 // tooltip's, at the moment it matters (ui/tooltip.js's oddsText); the card
 // stays compact: a line per weapon with every toughness's need made the
-// lead's card cover a figure on a 1280×800 screen.
+// lead's card cover a figure on a 1280×800 screen. (V3c) A caster's spells,
+// each a line, numbered by the key that picks it (1-3), its effect in a
+// few words where it isn't a weapon's.
 export function statsHtml(t) {
   const fmt = (k) => (k === 'M' ? `${t.M}"` : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
   const wpn = (w, icon) => {
     if (!w) return ''
     if (w.mesmerize) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · D3 mortal + mesmerize</em></div>`
+    if (w.snare) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · no move or charge next turn</em></div>`
+    if (w.ward) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend saves at +1</em></div>`
+    if (w.resolve) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend: no morale, charge again</em></div>`
     const bits = []
     if (w.range) bits.push(`${w.range}"`)
     if (w.spell) bits.push(`spell ${w.spell}+`)
@@ -52,6 +57,7 @@ export function statsHtml(t) {
     else if (w.shots) bits.push(`A${w.shots}`)
     bits.push(`S${w.S}`, `AP-${w.AP}`, `D${w.D}`)
     if (w.poison) bits.push(`poison ${w.poison}+`)
+    if (w.scenery === 0) bits.push('spares scenery')
     if (w.indirect) bits.push('indirect')
     if (w.heavy) bits.push('heavy')
     if (w.assault) bits.push('assault')
@@ -59,7 +65,7 @@ export function statsHtml(t) {
   }
   return `
     <table class="stats"><tr>${statKeys.map((k) => `<th>${k}</th>`).join('')}</tr><tr>${statKeys.map((k) => `<td>${fmt(k)}</td>`).join('')}</tr></table>
-    ${wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
+    ${t.spells ? t.spells.map((w, i) => wpn(w, `✦${i + 1}`)).join('') : wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
     <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}${t.noCharge ? `<li class="cond" data-cond="noCharge">${CONDITIONS.noCharge.icon} ${CONDITIONS.noCharge.title}</li>` : ''}</ul>`
 }
 

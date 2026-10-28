@@ -78,6 +78,8 @@ export const fireSlots = () => 0
 // vehicle of u's seat with a transport, on the table, not in combat, with
 // room for u's models. In a phase (`inPhase`) u must also reach the hull's
 // side this move (embarkSpot); in the deployment it boards where it stands.
+// ((V3c, at the V3 merge) A unit Root Snare binds boards nothing: boarding
+// is its move, and the snare forbids one, core/commands.js mayMove.)
 export function mayBoard(G, u, v, inPhase) {
   if (!alive(u)) return `unit ${u.id} is destroyed`
   if (u.aboard) return `${u.t.short} is aboard a vehicle already`
@@ -88,6 +90,7 @@ export function mayBoard(G, u, v, inPhase) {
   if (v.aboard) return `the ${v.t.short} is aboard a vehicle itself`
   if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short} (${u.t.base}" over its ${tr.maxBase}")`
   if (u.flags.moved) return `${u.t.short} has moved`
+  if (u.snared) return `${u.t.short} is snared`
   if (isEngaged(G, u)) return `${u.t.short} is in combat`
   if (isEngaged(G, v)) return `the ${v.t.short} is in combat`
   const left = room(G, v)

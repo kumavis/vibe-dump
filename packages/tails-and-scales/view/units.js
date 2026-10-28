@@ -664,9 +664,9 @@ export class UnitViews {
   }
   // The label: the unit as shown (models standing or wounds left), and
   // (V3a) its conditions' icons (present/conditions.js's labelConds:
-  // mesmerized, in combat, in its own seat's turn what keeps it from
-  // shooting or charging, its height), each marked for its tip; written only
-  // when it changed.
+  // mesmerized, (V3c) the spells' marks, in combat, in its own seat's turn
+  // what keeps it from shooting or charging, its height), each marked for
+  // its tip; written only when it changed.
   label(id) {
     const v = this.views.get(id), u = v.u, mu = this.shown(id)
     const w = mu.models.filter((m) => m.alive)

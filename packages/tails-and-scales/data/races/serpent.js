@@ -56,9 +56,15 @@ export default {
     hierophant: {
       name: 'Hierophant Ssithra', short: 'Hierophant', role: 'Hero', ai: 'hero', models: 1, base: 0.45, pts: 85, cost: 60, hero: true,
       stats: 'M5 WS3 BS3 S4 T5 W5 A3 Ld9 Sv4 OC1',
-      ranged: { name: 'Mesmerize', spell: 7, range: 18, mesmerize: true, fx: 'gaze' },
+      // (V3c) three spells, one cast a shooting phase, the player's pick:
+      // the first is her ranged weapon as it always was (data/schema.js)
+      spells: [
+        { name: 'Mesmerize', spell: 7, range: 18, mesmerize: true, fx: 'gaze' },
+        { name: 'Cold Blood', spell: 5, range: 12, resolve: true, fx: 'coil' },
+        { name: 'Venom Mist', spell: 6, range: 18, shots: 1, blast: 3, S: 2, AP: 0, D: 1, poison: 2, scenery: 0, fx: 'mist' },
+      ],
       melee: { name: 'Fang staff', S: 5, AP: 2, D: 2, poison: 3 },
-      abilities: ['Spell — cast on 2D6 ≥ 7: the target suffers D3 mortal wounds and is Mesmerized — it can’t shoot or charge next turn and hits at −1 in melee.', `Coiled will — friends within ${AURA}" use her Ld 9.`],
+      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; a Mesmerized target can’t shoot or charge next turn and hits at −1 in melee.', `Coiled will — friends within ${AURA}" use her Ld 9.`],
     },
   },
 }

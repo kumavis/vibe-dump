@@ -191,11 +191,15 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         p = ts.doMove(u, e.c, S.reach)
         break
       }
+      // ((V3c) a caster's names its spell, `sp`, which may be cast on a
+      // friend: the target a standing unit of either side then, shotInfo
+      // judging it; a log with none plays as it always has)
       case 'shoot': {
-        const u = own(e.u), tg = enemy(e.tg)
-        if (!q.canAct(u) || !q.shotInfo(u, tg).ok) throw bad('cannot shoot that')
+        const u = own(e.u), tg = e.sp === undefined ? enemy(e.tg) : find(e.tg)
+        if (!tg) throw bad(`unit ${e.tg} is not a live unit`)
+        if (!q.canAct(u) || !q.shotInfo(u, tg, e.sp).ok) throw bad('cannot shoot that')
         ts.select(u)
-        p = ts.doShoot(u, tg)
+        p = e.sp === undefined ? ts.doShoot(u, tg) : ts.doShoot(u, tg, e.sp)
         break
       }
       case 'charge': {
@@ -471,6 +475,20 @@ export function makePolicy(name, seed) {
           }
         }
         return acted++, { s, t: 'move', u: u.id, c }
+      }
+      if (d.phase === 'shoot' && u.t.spells) {
+        // ((V3c) a caster casts one of its spells that has something to
+        // cast on, named by `sp`: at random, the aggressive bot its first
+        // when it can, at the weakest; a spell on a friend at a friend)
+        const sps = u.t.spells.map((w, sp) => sp).filter((sp) => q.shootTargets(u, sp).length)
+        if (!sps.length) {
+          pass()
+          continue
+        }
+        const sp = aggressive && sps.includes(0) ? 0 : pick(sps)
+        const tgs = q.shootTargets(u, sp)
+        const tg = aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs)
+        return acted++, { s, t: 'shoot', u: u.id, tg: tg.id, sp }
       }
       if (d.phase === 'shoot') {
         const tgs = q.shootTargets(u)

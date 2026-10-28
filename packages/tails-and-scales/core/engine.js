@@ -11,13 +11,16 @@
 // lines up line for line:
 //
 //   rolloff    the stage, the flags, the roll-off (do…while: §4.1 rule 4)
-//   turnStart  the active seat, its units' flags reset, the first phase
+//   turnStart  the active seat, its units' flags reset (and (V3c) the
+//              spells it cast on its own units last turn worn off), the
+//              first phase
 //   phase      the phase begins: the fight or the morale plays itself, a
 //              phase with nothing to do is a beat, a human seat is asked
 //              (G.pending), an AI seat plays it now (runAI)
 //   phaseEnd   its state line, the wipe check (a wipe ends the game before
 //              the mesmerism wears off), the next phase or the turn's end
-//   turnEnd    the mesmerism of the seat whose turn it was wears off
+//   turnEnd    the mesmerism (and (V3c) a snare) of the seat whose turn it
+//              was wears off
 //   score      the round is scored; the next round, or the game is over
 //
 // Between two commands G holds no control state but these fields (§0.2
@@ -81,7 +84,7 @@ export function advance(G) {
         T.step = ++T.ph < PHASES.length ? 'phase' : 'turnEnd'
         break
       case 'turnEnd':
-        endMesmerism(G, T.active)
+        endSpells(G, T.active)
         T.step = ++T.t < 2 ? 'turnStart' : 'score'
         break
       case 'score':
@@ -122,17 +125,34 @@ export function rollOff(G) {
 }
 
 // A seat's turn begins: every unit's losses this turn are forgotten, and the
-// seat's own units may act again.
+// seat's own units may act again. (V3c, DESIGN §4.1 rule 29) And the spells
+// its casters laid on its own units last turn, each "until its next turn",
+// wear off: a ward (Barkskin) and a resolve (Cold Blood); the labels say so
+// when one did (a `status`, only then: a turn that ends none emits nothing
+// new).
 export function resetTurn(G, side) {
+  let worn = false
   for (const u of G.units) {
     u.lost = 0
-    if (u.side === side) u.flags = {}
+    if (u.side === side) {
+      u.flags = {}
+      if (u.warded || u.resolute) {
+        u.warded = u.resolute = false
+        worn = true
+      }
+    }
   }
+  if (worn && G.out) emit(G, 'status', statusOf(G))
 }
 
-// Mesmerism wears off at the end of the victim's own turn.
-export function endMesmerism(G, side) {
-  for (const u of G.units) if (u.side === side && u.mesmerized) u.mesmerized = false
+// Mesmerism wears off at the end of the victim's own turn, and (V3c) so
+// does a snare (Root Snare's).
+export function endSpells(G, side) {
+  for (const u of G.units) {
+    if (u.side !== side) continue
+    if (u.mesmerized) u.mesmerized = false
+    if (u.snared) u.snared = false
+  }
   // every label
   if (G.out) emit(G, 'status', statusOf(G))
 }

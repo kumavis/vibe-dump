@@ -3,7 +3,8 @@
 // now, each with its icon, its word on the card and its tip, one or two
 // plain sentences saying what it is, what it stops and when it ends. One
 // table, keyed by the rules' own names (core/units.js's flags, `mesmerized`,
-// the queries' engaged and in cover, the type's noCharge), read by the
+// (V3c) the spells' `snared`, `warded` and `resolute`, the queries' engaged
+// and in cover, the type's noCharge), read by the
 // label (view/units.js), the card (ui/card.js, through
 // present/hud-model.js's cardStatus), the chips (ui/chips.js) and the
 // tooltip (ui/tooltip.js, wired by app/boot.js). Pure, like the rest of
@@ -132,6 +133,24 @@ export const CONDITIONS = Object.freeze({
     blocks: () => ['charge'],
     tip: () => `It charged home this turn, and strikes first in the Fight phase.`,
   },
+  // (V3c) the spells' marks (DESIGN §4.1 rule 29): Root Snare's snare, which
+  // keeps a unit from moving (core/commands.js) and charging (canCharge),
+  // and the two cast on a friend, Barkskin's ward and Cold Blood's resolve
+  snared: {
+    icon: '🌿', title: 'Snared', kind: 'state',
+    blocks: () => ['charge'],
+    tip: (t, c) => `Root Snare binds it: it can't move, advance, fall back or charge, though it still shoots and fights. It wears off at the end of ${c?.own ? 'this turn' : 'its own next turn'}.`,
+  },
+  warded: {
+    icon: '🪵', title: 'Barkskin', kind: 'state',
+    blocks: () => [],
+    tip: () => `A spell hardens its skin to bark: every save it makes is 1 better (a 4+ save is a 3+). It wears off as its side's next turn begins.`,
+  },
+  resolute: {
+    icon: '❄️', title: 'Cold Blood', kind: 'state',
+    blocks: () => [],
+    tip: (t) => `A spell steadies it: it takes no morale test${t && !t.noCharge ? ', and a failed charge roll is rolled again' : ''}. It wears off as its side's next turn begins.`,
+  },
   // (F9a) a rider: aboard its hull, and stepped off one that moved
   aboard: {
     icon: '▣', title: 'Aboard', kind: 'state',
@@ -174,7 +193,8 @@ const ownTurn = (M, side) => M?.stage === 'battle' && M.active === side
 export const ctxOf = (side, mu, f, M) => ({ own: ownTurn(M, side), y: mu?.y ?? 0, advRoll: f?.advRoll, lost: f?.lost ?? 0 })
 
 // The conditions a unit of type `t` and seat `side` shows on its label,
-// in order: mesmerized, in combat, and in its own seat's turn what it did
+// in order: mesmerized, (V3c) the spells' marks (snared, Barkskin, Cold
+// Blood), in combat, and in its own seat's turn what it did
 // that keeps it from shooting or charging (fell back, advanced where that
 // costs it something, a charge failed), the war machine's in its Charge
 // phase; then its height. A unit fallen shows none.
@@ -182,6 +202,10 @@ export function labelConds(t, side, mu, f, M) {
   if (!(mu?.alive > 0)) return []
   const out = []
   if (mu.mesmerized) out.push('mesmerized')
+  // ((V3c) the spells' marks, as long as they last)
+  if (mu.snared) out.push('snared')
+  if (mu.warded) out.push('warded')
+  if (mu.resolute) out.push('resolute')
   if (mu.engaged) out.push('engaged')
   if (ownTurn(M, side) && f) {
     if (f.fellBack) out.push('fellBack')
@@ -206,7 +230,8 @@ export function unitTip(t, mu, ks = [], ctx = {}, extra = '') {
 // The card's status line after what of the unit stands: [{ k, word }], each
 // its condition's (k null: a word no tip explains). What it did this turn
 // (fell back, advanced, moved; shot; charged or a charge failed), then what
-// it is under (mesmerized, in combat, in cover, its losses). Its height is
+// it is under (mesmerized, (V3c) snared, Barkskin, Cold Blood, (F9a)
+// aboard, in combat, in cover, its losses). Its height is
 // the card's own span (ui/card.js), and a war machine's never charging a
 // line of its abilities (statsHtml).
 export function cardConds(t, mu, f) {
@@ -217,6 +242,10 @@ export function cardConds(t, mu, f) {
   if (f?.charged) put('charged', 'charged')
   else if (f?.chargeTried) put('chargeTried', 'charge failed')
   if (mu.mesmerized) put('mesmerized', 'mesmerized')
+  // ((V3c) the spells' marks, by the spell's name where it is no state's)
+  if (mu.snared) put('snared', 'snared')
+  if (mu.warded) put('warded', 'barkskin')
+  if (mu.resolute) put('resolute', 'cold blood')
   if (mu.alive > 0 && mu.aboard) put('aboard', 'aboard')
   if (mu.alive > 0 && mu.engaged) put('engaged', 'in combat')
   if (mu.alive > 0 && f?.cover) put('cover', 'in cover')

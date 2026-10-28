@@ -1510,6 +1510,73 @@ body.mirror .ulabel.s1.sel .ct {
 #groupbar.hidden {
   display: none;
 }
+/* (V3c) the spell bar: a caster's spells above the action buttons, the one
+   picked lit gold, one cast on a friend green-edged, one with nothing to
+   cast on now dimmed. ((V3b), at the V3 merge: over the actions, as many
+   rows as they take (--actions-row-h, ui/actions.js's): 58 px over one;
+   and while it shows, the card, the dice tray and the group bar stand over
+   it too, --actions-h counting it) */
+#spellbar {
+  position: fixed;
+  right: 10px;
+  bottom: calc(var(--actions-row-h, 40px) + 18px);
+  z-index: 12;
+  display: flex;
+  gap: 6px;
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  padding: 6px;
+  background: rgba(30, 23, 16, 0.92);
+  border: 1px solid rgba(255, 210, 140, 0.3);
+  border-radius: 12px;
+}
+#spellbar.hidden {
+  display: none;
+}
+#spellbar .spell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 6px;
+  align-items: baseline;
+  text-align: left;
+  width: 190px;
+  padding: 6px 9px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+#spellbar .spell kbd {
+  grid-row: span 2;
+  font: bold 12px/1 system-ui, sans-serif;
+  color: var(--dim);
+  border: 1px solid rgba(255, 210, 140, 0.35);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+#spellbar .spell small {
+  color: var(--dim);
+}
+#spellbar .spell em {
+  grid-column: 1 / -1;
+  font-style: normal;
+  color: var(--dim);
+  font-size: 11px;
+}
+#spellbar .spell.ally {
+  border-color: rgba(125, 255, 154, 0.55);
+}
+#spellbar .spell.on {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold) inset;
+}
+#spellbar .spell.on b {
+  color: var(--gold);
+}
+#spellbar .spell.dim {
+  opacity: 0.5;
+}
+.rules ul.spells li {
+  margin-bottom: 6px;
+}
 #groupbar .gcount {
   color: var(--gold);
   font-weight: bold;

@@ -5,7 +5,9 @@
 // events (`tray.open`, `dice`), the old wait after a flight a `pause`, each
 // fleeing model a `unit.flee`, and the battle log's lines `log` events
 // (core/journal.js), all in the old order (§4.1 rule 3). It walks the units
-// in G.units order (§4.1 rule 6), one D6 each.
+// in G.units order (§4.1 rule 6), one D6 each. (V3c, DESIGN §4.1 rule 29)
+// A resolute squad (Cold Blood: core/actions/shoot.js bless) takes no test
+// at all: its line says so, and nothing is rolled or shown in the tray.
 //
 //   unit.flee { u, m }   model m runs off the table over its seat's edge
 import { roll } from '../rules.js'
@@ -17,6 +19,10 @@ export function moralePhase(G) {
   let any = false
   for (const u of G.units) {
     if (!alive(u) || !u.lost || u.t.models === 1) continue
+    if (u.resolute) {
+      log(G, u.side, `<b>${u.t.short}</b> stand resolute: no morale test.`)
+      continue
+    }
     if (!any) emit(G, 'tray.open', { title: 'Morale' })
     any = true
     const ld = leadership(G, u)

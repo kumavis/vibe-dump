@@ -273,7 +273,7 @@ export function pointsOf(events, posOf) {
 // aimed or thrown, a spell, a charge's verdict, a blow struck), and what
 // ends one where it stands (a phase begun, a round scored, a stage, the end)
 const OPENS = new Set(['focus', 'unit.face', 'tray.open'])
-const DEEDS = new Set(['unit.move', 'volley', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'spell.gaze', 'charge.result', 'melee'])
+const DEEDS = new Set(['unit.move', 'volley', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'spell.gaze', 'spell.snare', 'spell.ward', 'charge.result', 'melee'])
 const ENDS = new Set(['phase.start', 'round.scored', 'stage', 'game.over'])
 
 // The action that opens at event k, if one does: from its opening or its

@@ -311,9 +311,14 @@ check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit k
 for (const key of legacyKeys) {
   const L = legacy.TYPES[key], t = TYPES[key]
   if (!t) continue
-  // ((F11a) `cost`, the army builder's price, is new: the R0 code had none)
-  const { cost, ...legacyShaped } = t
-  const why = [diffPath(legacyShaped, expected(key, L))]
+  // ((F11a) `cost`, the army builder's price, is new: the R0 code had none;
+  // (V3c) so is a caster's `spells` list, whose first spell is its ranged
+  // weapon, the very record (the legacy one, field for field, below), and
+  // its ability text, which tells of all three)
+  const { cost, spells, ...legacyShaped } = t
+  const why = [diffPath(spells ? { ...legacyShaped, abilities: L.abilities } : legacyShaped, expected(key, L))]
+  if (spells && (spells[0] !== t.ranged || spells.length < 2 || !spells.every((w) => w.spell > 0))) why.push(`its spells (${spells.map((w) => w.name).join(', ')}) are not its ranged weapon first and more, each with a cast value`)
+  if (!!spells !== !!L.ranged?.spell) why.push(spells ? 'it has spells, but the legacy unit cast none' : 'the legacy unit cast a spell, but it has no spells')
   // the derivations stand on their own, without the explicit flags: hero is
   // role Hero, no unit sits in two deploy rows, and the schema's brawler rule
   // gives what ai.js's key test gave
@@ -406,6 +411,13 @@ breakIt('an unknown role', (d) => (d.units.brute.role = 'Beast'), /role must be 
 breakIt('an unknown AI role', (d) => (d.units.brute.ai = 'berserk'), /ai must be one of/)
 breakIt('a weapon without strength', (d) => delete d.units.engine.ranged.S, /ranged: a ranged weapon needs S/)
 breakIt('a melee weapon with a range', (d) => (d.units.brute.melee.range = 2), /melee: a melee weapon has no range/)
+// ((V3c) a caster's spells)
+breakIt('a caster giving a ranged weapon beside its spells', (d) => (d.units.hierophant.ranged = d.units.hierophant.spells[0]), /a caster gives its spells, not a ranged weapon/)
+breakIt('no spells in the list', (d) => (d.units.hierophant.spells = []), /spells is a list of one to nine spells/)
+breakIt('a spell with no cast value', (d) => delete d.units.hierophant.spells[2].spell, /spell 2 \(Venom Mist\) needs a cast value/)
+breakIt('a spell with two effects', (d) => (d.units.hierophant.spells[1].ward = true), /a spell has one effect, not ward and resolve/)
+breakIt('an effect with no cast value', (d) => (d.units.engine.ranged.snare = true), /snare is a spell: give it a cast value/)
+breakIt('a melee weapon with an effect', (d) => (d.units.brute.melee.ward = true), /a melee weapon has no ward/)
 breakIt('an army listing a unit the race lacks', (d) => d.army.push('nutkin'), /army lists "nutkin"/)
 breakIt('an army listing an Object.prototype name', (d) => d.army.push('constructor'), /army lists "constructor"/)
 breakIt('an army listing __proto__', (d) => d.army.push('__proto__'), /army lists "__proto__"/)
@@ -474,6 +486,11 @@ const moves = [
   ['the AI role (Oak Guard as line)', () => variant('squirrel', (d) => (d.units.oakguard.ai = 'line'))],
   ['points (Nutkin 7 → 8)', () => variant('squirrel', (d) => (d.units.nutkin.pts = 8))],
   ['a base (Brute 0.95 → 1)', () => variant('serpent', (d) => (d.units.brute.base = 1))],
+  // ((V3c) a caster's spells: a cast value, a range, their order, one more)
+  ['a cast value (Barkskin 5+ → 6+)', () => variant('squirrel', (d) => (d.units.elder.spells[1].spell = 6))],
+  ['a spell range (Venom Mist 18" → 16")', () => variant('serpent', (d) => (d.units.hierophant.spells[2].range = 16))],
+  ['the spell order (Cold Blood first)', () => variant('serpent', (d) => d.units.hierophant.spells.unshift(...d.units.hierophant.spells.splice(1, 1)))],
+  ['a fourth spell (Root Snare twice)', () => variant('squirrel', (d) => d.units.elder.spells.push({ ...d.units.elder.spells[2] }))],
   // ((F11a) the army stays in roster order, so the roster turns with it)
   ['the army order', () => variant('squirrel', (d) => d.army.reverse() && d.roster.reverse())],
   ['a constant (AURA 6 → 7)', () => rulesId({ constants: { ...CONSTANTS, AURA: 7 } })],
@@ -553,6 +570,9 @@ const stays = [
   ['the look', () => variant('serpent', (d) => (d.look = { ...d.look, team: '#000000', voice: 'squeak' }))],
   ['a weapon name', () => variant('squirrel', (d) => (d.units.trebuchet.ranged = { ...d.units.trebuchet.ranged, name: 'Pinecone of doom' }))],
   ['a weapon fx', () => variant('serpent', (d) => (d.units.engine.ranged.fx = 'bomb'))],
+  // ((V3c) a spell's name and look)
+  ['a spell name', () => variant('squirrel', (d) => (d.units.elder.spells[1].name = 'Oak Hide'))],
+  ['a spell fx', () => variant('serpent', (d) => (d.units.hierophant.spells[1].fx = 'gaze'))],
   // the control for the set edits above: a copy of the sets hashes the same
   ['an unchanged copy of the terrain sets', () => classic(() => {})],
   // and for the mission edits
@@ -966,14 +986,22 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // pinned match is fought on: every pin as under 9; 11, F9a:
   // `aboard`, printed only for a rider (UNIT_EXTRAS), and a wreck's chunk,
   // only where a hull is destroyed: neither in a match without vehicles,
-  // so every pin as under 10)
+  // so every pin as under 10; 12, the V3 rules landed together, V3c's
+  // built as 11 on 10: the casters' three spells, whose marks shadowState
+  // prints only on a unit that holds one (the format unchanged for a match
+  // no spell marks: hotseat-late-8, all hotseat with the bot of old, hashes
+  // as under 1), but which are meant to alter play: 64-89's AI plays
+  // another battle again, and serpent-random-2, its old entries refused,
+  // was played again by its bot (corpus-add --regen), the same through its
+  // tenth entry: V12, V3c's V11)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
     'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: '29rym70iz9j' },
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9 }
+  const V12 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -995,8 +1023,11 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
     check(!apart.length, `stateHash of ${Object.values(pins).reduce((n, w) => n + Object.keys(w).length, 0)} corpus matches is the one pinned under CORE_VERSION ${core.CORE_VERSION}`, `${apart.join('; ')}: shadowState's output changed, which bumps CORE_VERSION (§2.6), then pin the new hashes under it`)
   }
   // the extras
-  // ((F9a) the first: `aboard`, 0 for a unit on the table)
-  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, { aboard: 0 }), `UNIT_EXTRAS is frozen and names F9a's aboard alone, at 0 (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
+  // ((F9a) the first: `aboard`, 0 for a unit on the table; (V3c) the
+  // spells' marks, each false until a spell sets it, and so on every unit
+  // core/units.js makes)
+  const extrasWant = { aboard: 0, resolute: false, snared: false, warded: false }
+  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, extrasWant), `UNIT_EXTRAS is frozen and names F9a's aboard, at 0, and V3c's spell marks, each false (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
   const extras = Object.freeze({ zeta: false, aboard: 0 })
   check(unitExtras({}, extras) === '' && unitExtras({ aboard: 0, zeta: false }, extras) === '' && unitExtras({ aboard: 3 }, extras) === 'aboard=3' && unitExtras({ zeta: true, aboard: -0 }, extras) === 'aboard=-0,zeta=true', 'a unit\'s extras print only where they aren\'t their default, in sorted key=value (-0 apart from 0)')
   {

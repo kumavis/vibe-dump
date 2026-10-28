@@ -160,6 +160,11 @@ const CROSS = {
     // (core/actions/transport.js, core/actions/move.js), for the view's
     // embark and disembark tools, the card and the mirror
     'groundOnly', 'hullOf', 'riders', 'room', 'mayBoard', 'embarkSpot', 'landing', 'isTransport',
+    // (V3c) a caster's spells: the weapon a shot names, whether a spell is
+    // cast on a friend, whether there is anything to cast on; and the AI's
+    // pick of a spell (the shooting tool's default, a group's fire), which
+    // values and draws nothing
+    'weaponOf', 'allySpell', 'hasTarget', 'bestSpell', 'spellFor',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than
@@ -611,7 +616,7 @@ if (a['self-test']) {
     ['transport.js keeping landings in a module-level cache', append('core/actions/transport.js', 'const landings = new Map()'), true, /module-level Map or WeakMap/],
     ['present/deck.js importing data/ (its unit type is handed in)', append('present/deck.js', "import { RACES } from '../data/schema.js'"), true, /present\/ may import only/],
     ['present/deck.js touching the DOM', append('present/deck.js', 'export const el = () => document.body'), true, /contains document/],
-    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 2/],
+    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 4/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
   ]

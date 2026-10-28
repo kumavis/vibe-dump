@@ -34,7 +34,8 @@
 //   placeFor(G, q, u, slot, others)  a placement: the free cell nearest its
 //                                    slot in its zone, -1 for none
 //   previewGroup(G, q, seat, verb, members, target, slots?, { line, advance }?)
-//                                    { members: [{ u, cell, slot, how, why }],
+//                                    { members: [{ u, cell, slot, how, why,
+//                                    sp ((V3c) a caster's fire: its spell) }],
 //                                    slots, summary }: verb 'place' and 'move'
 //                                    (a point), 'approach', 'fire' and
 //                                    'charge' (an enemy unit); `slots`, the
@@ -283,15 +284,19 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
   }
   if (verb === 'fire') {
     for (const u of fireOrder(members)) {
-      const can = q.canShoot(G, u) && q.shootTargets(G, u).includes(target)
-      out.push({ u, cell: -1, how: can ? 'fire' : 'none', why: can ? '' : whyNot(G, q, u, target, 'shoot') })
+      // ((V3c) a caster casts at it the spell the AI would (spellFor: of
+      // those that take an enemy, the one it values most there), carried
+      // as the member's `sp`)
+      const sp = q.spellFor(G, u, target)
+      const can = q.canShoot(G, u) && (sp === undefined ? q.shootTargets(G, u).includes(target) : sp >= 0)
+      out.push({ u, cell: -1, how: can ? 'fire' : 'none', why: can ? '' : whyNot(G, q, u, target, 'shoot'), ...(can && sp !== undefined ? { sp } : {}) })
     }
     const firing = out.filter((m) => m.how === 'fire')
     // the models it may slay, on average (volleys: a blast's or a spell's
     // templates and casts left out)
     let slain = 0
-    for (const { u } of firing) {
-      const w = u.t.ranged, info = q.shotInfo(G, u, target)
+    for (const { u, sp } of firing) {
+      const w = q.weaponOf(u, sp), info = q.shotInfo(G, u, target, sp)
       if (!w.blast && !w.spell && info.ok) slain += expected(attackCount(u, w, false), info.need, w, target, info.cover).kills
     }
     const cant = out.length - firing.length, why = out.find((m) => m.how === 'none')?.why
