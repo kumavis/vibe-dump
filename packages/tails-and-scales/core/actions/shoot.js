@@ -138,17 +138,23 @@ export function rangeOf(G, u, tg = null, from = u.pos, sp = undefined) {
 // not: { ok, range (the gap; 0 for the caster), reach (the spell's range),
 // ally: true }. Anything else is shot at an enemy, never a friend. Neither
 // asks whether the target stands (the command's own rule,
-// core/commands.js mine and foe).
+// core/commands.js mine and foe). (F9a, at the V3 merge) Neither takes a
+// rider either, a friend's or a foe's: it is inside its vehicle, and its
+// hull is the target, as the command has it (core/commands.js foe and
+// friend, shootTargets' pool); refused here so that the table's odds and
+// the click it sends say so rather than offer what legal() refuses.
 export function shotInfo(G, u, target, sp) {
   const w = weaponOf(u, sp)
   if (!w) return { ok: false, why: `no spell ${sp}` }
   if (allySpell(w)) {
     if (target.side !== u.side) return { ok: false, why: `${w.name} is cast on a friend` }
+    if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
     const range = target === u ? 0 : gap(u, target)
     if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
     return { ok: true, range, reach: w.range, ally: true }
   }
   if (target.side === u.side) return { ok: false, why: 'one of your own' }
+  if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
   const range = gap(u, target), reach = rangeOf(G, u, target, u.pos, sp)
   if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
   const s = sight(G, u, target)
