@@ -43,7 +43,7 @@
 //             the first seat's movement phase with a unit picked up by Tab
 //             (Advance up), every action button shown is on the screen, ↶
 //             Undo among them, its title the rule, the row clear of the card
-//             and the group bar
+//             and the group bar, and the minimap clear of both
 // (F4) A lane with a seat played here that reaches the round limit (--rounds
 // 5) is asked to play on: the panel must say which round is over, and Keep
 // playing must take it down and the HUD into round 6, overtime.
@@ -602,7 +602,7 @@ async function layoutLane(browser, url) {
         // up, Advance up: the actions' fullest common row; on a touch screen
         // ▭ Select and 👆 Aim too): every action button shown inside the
         // screen, Undo among them, its title the rule, the row clear of the
-        // card and the group bar)
+        // card and the group bar, the minimap of both)
         const endUp = () => page.evaluate(() => {
           const e = document.querySelector('#endPhase')
           return getComputedStyle(e).display !== 'none' && !e.disabled ? e.textContent : ''
@@ -629,9 +629,12 @@ async function layoutLane(browser, url) {
         else if (!/End or dice roll/.test(undo.title)) problems.push(`${at}: ↶ Undo's title doesn't say the rule ("${undo.title}")`)
         if (off.length) problems.push(`${at}: in the movement phase ${off.map((x) => `${x.id} (${rounded(x)})`).join(', ')} off the ${w}×${h} screen`)
         if (!acts.some((x) => x.id === 'advance')) problems.push(`${at}: Tab picked up no unit that can advance (the actions: ${acts.map((x) => x.id).join(', ')})`)
-        const row = await box('#actions'), cardUp = await box('#card.show'), bar = await box('#groupbar')
+        const row = await box('#actions'), cardUp = await box('#card.show'), bar = await box('#groupbar'), map = await box('#minimap')
         if (meets(row, cardUp)) problems.push(`${at}: the actions (${rounded(row)}) meet the unit card (${rounded(cardUp)})`)
         if (meets(row, bar)) problems.push(`${at}: the actions (${rounded(row)}) meet the group bar (${rounded(bar)})`)
+        // (and the minimap, raised over the card or put away for it)
+        if (meets(map, cardUp)) problems.push(`${at}: the minimap (${rounded(map)}) meets the unit card (${rounded(cardUp)})`)
+        if (meets(map, row)) problems.push(`${at}: the minimap (${rounded(map)}) meets the actions (${rounded(row)})`)
         await shot('undo')
         const moves = `; in the movement phase ${acts.length} actions in ${row ? rounded(row) : 'none'}, Undo ${undo ? rounded(undo) : 'none'}`
         lines.push(`${at}: the tools ${shown.length} buttons, ${tools ? `${Math.round(tools.l)}-${Math.round(tools.r)} px` : 'none'}, the score ${score ? `${Math.round(score.l)}-${Math.round(score.r)} px` : 'none'}${badge}${card}${moves}`)
