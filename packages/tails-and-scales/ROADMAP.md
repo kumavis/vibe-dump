@@ -1554,6 +1554,46 @@ answered; 35 (Escape) by the user: no change.
     with `nav.standable` and the engagement re-read after a shove; slip
     carries a walk D3" on in its last direction, a pusher is a wrecker's
     smash applied to units.
+- [x] **V3d** The Powder Field (the playtest's "a grand battlefield of bombs
+  and remnants of an active battlefield … things you can climb on top of":
+  the keg mission was too small a bang). A Grand mission of its own,
+  `powder`, on a set of its own, `powder`: the wreckage of the day's
+  fighting, still burning. At the centre a burned farmstead to climb; on the
+  other objective pairs (`sites`, a new scatter phase) a wrecked trebuchet,
+  a powder magazine of five or six kegs round its objective, an overturned
+  venom engine; a pair of burned barns or war-wagons in no-man's land; and
+  between them shell holes, dumps of kegs, caches of bombs, a supply train
+  strewn along its road, burned trees standing and fallen, broken carts,
+  sandbags and pyres. Every deck reached by stairs or ladders (F7a's height
+  layer); every keg F19a's, its chain unchanged (10-36 a board, magazines
+  going up five or six at once). The view: the wreckage from looks alone,
+  two clouds of smoke and flame for every fire on the table, the turf
+  scorched round the wrecks, a dusk light. (`CORE_VERSION` 11, `RULES_ID`
+  moved; the AI's `kegHits` in 3D with height. The view in 819cb2d, the set
+  and mission in 70f2fd8, the page oracle, present-check and rematch-check
+  ported to V2's page in 879409d and 41d3d4d (they threw at boot since V2),
+  the corpus in f2da9f8 with the PIN on 70f2fd8: `powder/`'s watch-powder-4
+  and -5, no existing battle re-recorded, parity and `--pin` 79 of 79.
+  terrain-check's section 9 and connectivity on 2,000 Powder Field boards
+  (all connected, every deck climbed, every site on its objective, no keg in
+  a zone), data-check's section 14, P-keg, P-scan's powder row,
+  board-check's and snap-check's Powder Field rows, `render-bench --mission
+  powder`, `sim/powder-shots.mjs`. The gates, each 0 unless said:
+  data-check, boundaries and flag-lint (each with `--self-test`), P-prop,
+  parity and `--pin`, terrain-check (and `--self-test`), scale-check,
+  mirror-check, camera-check, `perturb --fn hypot`, merge-sim, present-check
+  and rematch-check (79 of 79, once ported), snap-check (its powder row
+  fires at each of 350 checkpoints), hud-check, board-check (and
+  `--self-test`, 4192953 reading the burns as painted), play-check's six
+  lanes, render-bench (the Powder Field's whole-board frame 458 main and 331
+  shadow calls, 278 K triangles, its render JS 1.05× classic's). input-check
+  failed once at a load of 25-40 (a group's send not settled in 60 s) and
+  passed at 4; render-bench timed out on the classic board under that load
+  and passed at 4; play-check's full run hit the two-hour limit in its
+  layout lane, which passed on its own. Left: the AI sums its fear of every
+  keg in reach, so it keeps off the magazines and they go up mostly by
+  template; army-sim not run on the mission; a phone's frame time. DESIGN
+  §4.2.11.)
 - [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
   Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll
