@@ -1,0 +1,22 @@
+{
+  "name": "@vibe-dump/jhana-book",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "shot": "node tools/shot.mjs"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Jhāna Book",
+    "description": "A pop-up book of the eight jhānas. Each spread unfolds a cut-paper Three.js scene as the page opens and folds it flat as it closes — sit with a page, breathe with it, turn when ready.",
+    "tags": ["art"],
+    "status": "wip",
+    "models": ["Opus 5.5", "Fable 5.1"],
+    "thinking": "high"
+  }
+}
