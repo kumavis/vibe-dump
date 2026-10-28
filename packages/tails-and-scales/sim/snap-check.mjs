@@ -64,6 +64,13 @@
 // default row.) It runs by default and with --only cart; the self-test's
 // deck edits run on it.
 //
+// (V3d) And the Powder Field's row (`powder-row`): the same, a watched
+// battle of the powder mission in place of the grand one's, its table's
+// fires held too: at every Grand checkpoint some chunk burns (the
+// farmstead never stops: view.drawing().fires, the vents the table lit),
+// and on the classic table after it none does (a new table puts every
+// fire out). It runs by default and with --only powder-row.
+//
 //   node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]
 //   node sim/snap-check.mjs --self-test    each edit of MUTATIONS (the view
 //                                          broken one way at a time, in a
@@ -110,7 +117,9 @@ const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
 const GRAND_ROW = !a.only || only.includes('grand')
 // ((F9a) the cart row: by default, or named in --only)
 const CART_ROW = !a.only || only.includes('cart')
-const ROWS = new Set(['grand', 'cart'])
+// ((V3d) and the Powder Field's)
+const POWDER_ROW = !a.only || only.includes('powder-row')
+const ROWS = new Set(['grand', 'cart', 'powder-row'])
 try {
   items = only.filter((x) => !ROWS.has(x)).length ? select(loadCorpus().items, only.filter((x) => !ROWS.has(x)).join(',')) : []
 } catch (e) {
@@ -312,7 +321,8 @@ async function run(browser, url, item) {
 // (F8b) The Grand row: a watched grand battle from the classic title, then
 // a classic one, in one page (above). Returns { checks, error, ... } as run
 // does, judged by judgeGrand.
-async function grandRow(browser, url) {
+// ((V3d) `mission`: the larger board's, grand's or the Powder Field's)
+async function grandRow(browser, url, mission = 'grand') {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
@@ -332,7 +342,7 @@ async function grandRow(browser, url) {
             if (--n > 0) return void requestAnimationFrame(f)
             try {
               const d = window.__ts.view.snapDiff(e.proj), t = window.__ts.view.drawing().tiles
-              sim.checks.push({ mark: `check at trace line ${window.__ts.trace.length}`, board: window.__ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks })
+              sim.checks.push({ mark: `check at trace line ${window.__ts.trace.length}`, board: window.__ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks, vents: window.__ts.view.drawing().fires?.vents ?? 0 })
             } catch (err) {
               sim.error ??= String(err.stack ?? err)
             }
@@ -361,7 +371,7 @@ async function grandRow(browser, url) {
         const f = () => {
           if (--n > 0) return void requestAnimationFrame(f)
           const d = ts.view.snapDiff(), t = ts.view.drawing().tiles
-          resolve({ mark: 'snapped in place', board: ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks })
+          resolve({ mark: 'snapped in place', board: ts.board.W, n: d.n + t.bad.length, diffs: [...t.bad, ...d.diffs], tiles: t.tiles, tiled: t.tiled, chunks: d.chunks, vents: ts.view.drawing().fires?.vents ?? 0 })
         }
         requestAnimationFrame(f)
       }), SETTLE)
@@ -369,12 +379,13 @@ async function grandRow(browser, url) {
       boards.push([`the ${mission} battle`, await board()])
       await page.click('#again', { timeout: 30000 })
     }
-    await battle('grand')
+    await battle(mission)
     await battle('classic')
     boards.push(['the title again', await board()])
     const r = await page.evaluate(() => ({ checks: window.__grand.checks, error: window.__grand.error }))
     if (!r.error && errors.length) r.error = errors.join('\n')
     r.boards = boards
+    r.mission = mission
     r.secs = Math.round((Date.now() - t0) / 1000)
     return r
   } finally {
@@ -477,6 +488,11 @@ function judgeGrand(r) {
   if (!grandChecks.length || !grandChecks.every((c) => c.tiled > 0)) why.push(`${grandChecks.length} checks on the Grand table, ${grandChecks.filter((c) => !c.tiled).length} of them with no chunk in a tile`)
   const bad = r.checks.filter((c) => c.n)
   if (bad.length) why.push(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} on the ${bad[0].board === 80 ? 'Grand' : 'classic'} table (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  // ((V3d) the fires: some on the Powder Field's table at every check, none
+  // on a classic one)
+  const lit = r.checks.filter((c) => c.board !== 80 && c.vents)
+  if (lit.length) why.push(`board: ${lit.length} checks on the classic table with fires burning (${lit[0].vents} vents at ${lit[0].mark})`)
+  if (r.mission === 'powder' && grandChecks.some((c) => !c.vents)) why.push(`board: ${grandChecks.filter((c) => !c.vents).length} checks on the Powder Field with no fire burning`)
   return why.length ? `${why[0].includes('checks differ') ? '' : 'board: '}${why.join('; ')}` : ''
 }
 
@@ -519,7 +535,7 @@ if (a['self-test']) {
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
       let r
       try {
-        r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url)
+        r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
@@ -583,6 +599,19 @@ try {
     if (why) failed++
     checks += r.checks.length
     console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, and snapped in place (${r.secs} s)`}`)
+  }
+  if (POWDER_ROW) {
+    let r
+    try {
+      r = await grandRow(browser, url, 'powder')
+    } catch (e) {
+      r = { error: e.message, checks: [], boards: [] }
+    }
+    const why = judgeGrand(r)
+    if (why) failed++
+    checks += r.checks.length
+    const g = r.checks.filter((c) => c.board === 80)
+    console.log(`  powder ${'classic → Powder → classic'.padEnd(23)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the table made over for each board (${r.boards.map(([w, b]) => `${w} ${b.W}×${b.H}`).join(', ')}), the same at ${g.length} Powder Field checkpoints and ${r.checks.length - g.length} classic ones, the tiles drawn as their chunks at each (${g.at(-1)?.tiled} chunks in ${g.at(-1)?.tiles} tiles at the end), fires burning at each (${Math.min(...g.map((c) => c.vents))}-${Math.max(...g.map((c) => c.vents))} vents) and none on the classic table (${r.secs} s)`}`)
   }
 } finally {
   await browser.close()

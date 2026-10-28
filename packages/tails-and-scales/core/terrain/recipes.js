@@ -42,6 +42,10 @@ export const STYLES = deepFreeze({
   stone: { colors: ['#8f8b82', '#9c978d', '#7f7b73', '#a7a296', '#878378'], bw: 1, by: 0.72, bt: 0.62, hp: 3, look: 'box' },
   sand: { colors: ['#c9a66b', '#d6b67e', '#b9935b', '#ddc28e', '#c29a60'], bw: 1, by: 0.72, bt: 0.66, hp: 2, look: 'box' },
   log: { colors: ['#7a5232', '#6b4528', '#86603c', '#5f3e24'], bw: 1, by: 0.56, bt: 0.56, hp: 2, look: 'log' },
+  // (V3d) the Powder Field's: stone blackened by the fires (its chimneys
+  // and cottage shells), and timber burned to charcoal (its barns' walls)
+  soot: { colors: ['#5d5853', '#68625b', '#545049', '#706a62', '#4c4844'], bw: 1, by: 0.72, bt: 0.62, hp: 3, look: 'box' },
+  charred: { colors: ['#2e2621', '#382c24', '#2a221d', '#3f3128'], bw: 1, by: 0.56, bt: 0.56, hp: 2, look: 'log' },
 })
 export const LEAVES = deepFreeze({
   oak: ['#4f8a34', '#5f9a3c', '#447a2c', '#6aa646'],
@@ -60,6 +64,15 @@ const BARREL = Object.freeze(['#8a5a34', '#7a4c2a'])
 const CAPS = Object.freeze(['#c0392b', '#d35a1f', '#8e44ad', '#b03050'])
 // (F19a) a powder keg's staves
 const KEG_WOOD = Object.freeze(['#8a5a34', '#7a4c2a', '#94643a'])
+// (V3d) the Powder Field's palettes: timber burned to charcoal, timber only
+// scorched, sooty stone, the ash a dead tree sheds, a war-engine's iron and
+// the sandbags' sacking
+const CHAR = Object.freeze(['#2e2621', '#382c24', '#2a221d', '#3f3128'])
+const SCORCHED = Object.freeze(['#5a3f2a', '#4e3626', '#634632', '#47321f'])
+const SOOT = Object.freeze(['#5b5650', '#66605a', '#524d48', '#6e6862'])
+const ASH = Object.freeze(['#4a4440', '#5e5752', '#3a3532', '#6b625a'])
+const IRON = Object.freeze(['#3d3a37', '#4a4642', '#34312e'])
+const SACKING = Object.freeze(['#a8946a', '#9a8660', '#b3a077', '#8f7b55'])
 // a forest floor is a CircleGeometry(r, 22): a centre vertex and 23 rim
 // vertices (the seam is doubled), each rim vertex pulled in or out by a draw
 const FLOOR_SEGMENTS = 22
@@ -82,7 +95,8 @@ export function build(T, name, frame, seed) {
 // A wall column: a stack of `h` blocks (with optional holes, at the levels
 // in `holes`) and maybe a cap. Its blocks share one record, so when one breaks the ones
 // above can drop into the gap (Terrain.collapse) and rubble piles at its foot.
-export function column(T, F, rng, lx, lz, ly, h, styleKey, { holes = [], cap = false, bw, bt } = {}) {
+// (V3d) `capLook`, more for a cap's look (a chimney's smoke: the view's).
+export function column(T, F, rng, lx, lz, ly, h, styleKey, { holes = [], cap = false, bw, bt, capLook } = {}) {
   const st = STYLES[styleKey]
   const w = bw ?? st.bw, t = bt ?? st.bt
   const p = F.p(lx, lz)
@@ -108,7 +122,7 @@ export function column(T, F, rng, lx, lz, ly, h, styleKey, { holes = [], cap = f
       kind: 'block', hp: st.hp,
       shape: { x: p.x, y, z: p.z, hx: w / 2, hy: w * 0.55, hz: w / 2, yaw },
       navKind: 'soft', los: 'block', cover: true, col, level: h,
-      look: { piece: 'cap', color, chip: color, r: w * 0.72, h: w * 1.1, yaw },
+      look: { piece: 'cap', color, chip: color, r: w * 0.72, h: w * 1.1, yaw, ...capLook },
     })
     col.blocks.push(b)
   }
@@ -242,13 +256,184 @@ export function mushroom(T, F, rng, lx, lz) {
 // see past or hide behind (no line of sight, no cover). At zero hit points
 // it goes off: the rules' (core/actions/shoot.js kegsGoOff), from the
 // terrain's list of what broke; the terrain itself only reports it broken,
-// as a crate.
-export function powderKeg(T, x, z, yaw, color) {
+// as a crate. ((V3d) `extra`, more for its look: the Powder Field's kegs'
+// `spill`, the black powder spilled round them, the view's.)
+export function powderKeg(T, x, z, yaw, color, extra) {
   return T.add({
     kind: 'keg', hp: HAZARDS.keg.hp,
     shape: { x, y: 0.6, z, hx: 0.5, hy: 0.6, hz: 0.5, yaw },
     navKind: 'soft',
-    look: { piece: 'keg', color, yaw, chip: '#7a4c2a' },
+    look: { piece: 'keg', color, yaw, chip: '#7a4c2a', ...extra },
+  })
+}
+// (V3d) the look the Powder Field's kegs and caches add (the view draws
+// their powder spilled on the turf, their fuses sputtering, their bands
+// striped)
+const SPILL = Object.freeze({ spill: 1 })
+
+// ── The Powder Field's modules (V3d, DESIGN §4.2.11) ────────────────────────
+// What a battlefield looks like the evening after: shell holes, burned
+// trees, broken carts, sandbags, wreckage still burning, and powder lying
+// about where the gunners left it. Each is one chunk, rules like any other
+// (a kind, hit points, a box, how it blocks a walk, a sight line and a
+// blast); its look carries, besides its shape and colours, what the view
+// makes of the fires (none of it rules): `burn` 1 a wreck smoulders (smoke,
+// a glow of embers), 2 it burns (flames as well), `vents` where on it the
+// smoke and flames rise ([x, y, z] in its own frame, y over the table; one
+// at its top's centre when it names none), and `scorch`, the radius of the
+// burned turf round it on the mat. Every number is a recorded draw (THE
+// TRAP, above): nothing here is drawn by the view.
+
+// a crater's rim, as a forest floor's: this many wobbles round it
+const CRATER_RIM = 14
+
+// A shell hole r across (its dish's box 0.8 r a side, a lip 0.24" tall):
+// difficult ground (every inch across it costs two), cover to whoever
+// crouches in it, too low to see past or hide behind (no line of sight
+// test), and nothing a blast can hurt. A third still smoke.
+export function crater(T, F, rng, lx, lz, r) {
+  const p = F.p(lx, lz)
+  const rim = []
+  for (let i = 0; i < CRATER_RIM; i++) rim.push(0.82 + rng() * 0.32)
+  const yaw = rng() * Math.PI * 2
+  const burn = rng() < 0.3 ? 1 : 0
+  return T.add({
+    kind: 'crater', hp: Infinity,
+    shape: { x: p.x, y: 0.12, z: p.z, hx: r * 0.8, hy: 0.12, hz: r * 0.8, yaw: 0 },
+    navKind: 'diff', los: null, cover: true,
+    look: { piece: 'crater', r, rim, yaw, burn, scorch: r * 1.45 },
+  })
+}
+
+// A burned stump, 0.35-0.8" tall: stepped over (difficult), cover beside it,
+// too short to hide behind; two hits break it. A quarter still glow.
+export function stump(T, F, rng, lx, lz) {
+  const p = F.p(lx, lz)
+  const h = rr(rng, 0.35, 0.8), r = rr(rng, 0.2, 0.32)
+  const color = pick(CHAR, rng), yaw = rng() * 6
+  const burn = rng() < 0.25 ? 1 : 0
+  return T.add({
+    kind: 'stump', hp: 2,
+    shape: { x: p.x, y: h / 2, z: p.z, hx: r + 0.05, hy: h / 2, hz: r + 0.05, yaw: 0 },
+    coverShape: { x: p.x, z: p.z, hx: 0.55, hz: 0.55, yaw: 0 },
+    navKind: 'diff', los: null, cover: true,
+    look: { piece: 'stump', h, r, color, yaw, burn, chip: '#2e2621' },
+  })
+}
+
+// A tree burned bare and black, still standing: a tree in the rules (its
+// trunk walked round, a sight line through it obscured, cover; broken, it
+// keels over into a log: core/terrain/terrain.js topple), its look a snag's
+// (a leaning trunk and a few broken limbs, which shed ash, not leaves).
+export function snag(T, F, rng, lx, lz) {
+  const p = F.p(lx, lz)
+  const trunkH = rr(rng, 2.2, 3.4), trunkR = rr(rng, 0.16, 0.24)
+  const bark = pick(CHAR, rng)
+  const limbs = []
+  const n = 2 + Math.floor(rng() * 3)
+  for (let i = 0; i < n; i++) limbs.push({ y: trunkH * rr(rng, 0.45, 0.9), a: rng() * 6.28, len: rr(rng, 0.5, 1.1), tilt: rr(rng, 0.4, 1), r: trunkR * rr(rng, 0.35, 0.55) })
+  const lean = rr(rng, -0.12, 0.12), yaw = rng() * 6
+  const top = trunkH + 0.3
+  return T.add({
+    kind: 'tree', hp: 2,
+    shape: { x: p.x, y: top / 2, z: p.z, hx: 0.45, hy: top / 2, hz: 0.45, yaw: 0 },
+    nav: { x: p.x, z: p.z, hx: trunkR + 0.12, hz: trunkR + 0.12, yaw: 0 },
+    coverShape: { x: p.x, z: p.z, hx: 0.6, hz: 0.6, yaw: 0 },
+    navKind: 'soft', los: 'obscure', cover: true, trunkH, trunkR,
+    look: { piece: 'snag', trunk: { h: trunkH, r: trunkR }, bark, limbs, lean, yaw, leaves: ASH },
+  })
+}
+
+// A burned trunk lying where it fell: a log in the rules (as a felled
+// tree's: difficult, obscuring, cover, two hits), turned ly.
+export function deadlog(T, F, rng, lx, lz, ly) {
+  const p = F.p(lx, lz), yaw = F.yaw(ly)
+  const len = rr(rng, 2.2, 3.4), r = rr(rng, 0.2, 0.3)
+  const bark = pick(CHAR, rng)
+  const stubs = []
+  const n = 1 + Math.floor(rng() * 3)
+  for (let i = 0; i < n; i++) stubs.push([rr(rng, -0.4, 0.4) * len, rng() * 6, rr(rng, 0.3, 0.7)])
+  const burn = rng() < 0.3 ? 1 : 0
+  return T.add({
+    kind: 'log', hp: 2,
+    shape: { x: p.x, y: r, z: p.z, hx: len / 2, hy: r, hz: r + 0.05, yaw },
+    navKind: 'diff', los: 'obscure', cover: true,
+    look: { piece: 'deadlog', len, r, bark, stubs, yaw, burn, chip: '#2e2621' },
+  })
+}
+
+// A broken cart, 2.1 × 1.2", on its side or sagging on a lost wheel:
+// walked round (a wrecker smashes it), a sight line through it obscured,
+// cover round it, three hits. A third burn, as many again smoulder.
+export function cart(T, F, rng, lx, lz, ly) {
+  const p = F.p(lx, lz), yaw = F.yaw(ly)
+  const color = pick(SCORCHED, rng)
+  const tipped = rng() < 0.5
+  const wheels = [rng() < 0.6, rng() < 0.6]
+  const burn = rng() < 0.35 ? 2 : rng() < 0.5 ? 1 : 0
+  const h = tipped ? 1 : 0.85
+  return T.add({
+    kind: 'cart', hp: 3,
+    shape: { x: p.x, y: h / 2, z: p.z, hx: 1.05, hy: h / 2, hz: 0.6, yaw },
+    navKind: 'soft', los: 'obscure', cover: true,
+    look: { piece: 'cart', color, tipped, wheels, yaw, burn, scorch: burn ? 1.8 : 0, chip: color },
+  })
+}
+
+// A sandbag breastwork's length, 1.1 × 0.64" and 0.6" tall: stepped over
+// (difficult), obscuring, cover, two hits.
+export function sandbag(T, F, rng, lx, lz, ly) {
+  const p = F.p(lx, lz), yaw = F.yaw(ly)
+  const colors = [pick(SACKING, rng), pick(SACKING, rng), pick(SACKING, rng)]
+  const slump = rr(rng, -0.08, 0.08)
+  return T.add({
+    kind: 'sandbag', hp: 2,
+    shape: { x: p.x, y: 0.3, z: p.z, hx: 0.55, hy: 0.3, hz: 0.32, yaw },
+    navKind: 'diff', los: 'obscure', cover: true,
+    look: { piece: 'sandbags', colors, slump, yaw, chip: '#a8946a' },
+  })
+}
+
+// Wreckage burning where it fell, 1.5" across: nobody walks into it (hard),
+// its smoke obscures a sight line, and nothing puts it out (no hit points).
+export function pyre(T, F, rng, lx, lz) {
+  const p = F.p(lx, lz)
+  const beams = []
+  const n = 4 + Math.floor(rng() * 3)
+  for (let i = 0; i < n; i++) beams.push([rng() * 6.28, rr(rng, 0.7, 1.3), rr(rng, 0.25, 0.7)])
+  const color = pick(CHAR, rng), yaw = rng() * 6
+  return T.add({
+    kind: 'pyre', hp: Infinity,
+    shape: { x: p.x, y: 0.45, z: p.z, hx: 0.75, hy: 0.45, hz: 0.75, yaw: 0 },
+    navKind: 'hard', los: 'obscure', cover: false,
+    look: { piece: 'pyre', beams, color, yaw, burn: 2, vents: [[0, 0.7, 0]], scorch: 2.2 },
+  })
+}
+
+// A cache of bombs: a powder keg in the rules (its hit points, its box, its
+// blast when it goes off: core/actions/shoot.js kegsGoOff), drawn as a crate
+// of round bombs with their fuses. Placed at (x, z) like powderKeg.
+export function bombCache(T, x, z, yaw, rng) {
+  const n = 5 + Math.floor(rng() * 4)
+  const crate = pick(CRATE, rng)
+  return T.add({
+    kind: 'keg', hp: HAZARDS.keg.hp,
+    shape: { x, y: 0.6, z, hx: 0.5, hy: 0.6, hz: 0.5, yaw },
+    navKind: 'soft',
+    look: { piece: 'bombs', n, crate, yaw, chip: '#2f2f2f', ...SPILL },
+  })
+}
+
+// A wreck's great part on the ground (a trebuchet's counterweight): w × d
+// and h tall, turned ly; nothing walks through it or sees past it, it gives
+// cover round it, and nothing breaks it.
+function hulk(T, F, { lx, lz, ly = 0, w, d, h, look }) {
+  const p = F.p(lx, lz)
+  return T.add({
+    kind: 'hulk', hp: Infinity,
+    shape: { x: p.x, y: h / 2, z: p.z, hx: w / 2, hy: h / 2, hz: d / 2, yaw: F.yaw(ly) },
+    navKind: 'hard', los: 'block', cover: true,
+    look: { ...look, w, d, h, chip: look.color },
   })
 }
 
@@ -375,7 +560,137 @@ function obelisk(T, F, rng) {
   if (rng() < 0.7) boulder(T, F, rng, 1.0, 0.4, 0.4)
 }
 
-export const FEATURES = deepFreeze(Object.assign(Object.create(null), { ruin, wall, tower, forest, hedgerow, rocks, barricade, mushrooms, obelisk }))
+// ── The Powder Field's features (V3d) ───────────────────────────────────────
+// Scattered in mirrored pairs as classic's are (scatter, below); each keeps
+// inside the footprint radius its set gives it (sets.js `powder`).
+
+// a shell hole, a third of them still smoking
+function shellhole(T, F, rng) {
+  crater(T, F, rng, 0, 0, rr(rng, 1.15, 1.6))
+}
+
+// ground the guns walked over: two or three craters, run together
+function shelled(T, F, rng) {
+  const n = 2 + Math.floor(rng() * 2)
+  for (let i = 0; i < n; i++) {
+    const a = rng() * Math.PI * 2, d = i ? rr(rng, 1.2, 1.8) : 0
+    crater(T, F, rng, cos(a) * d, sin(a) * d, rr(rng, 0.9, 1.3))
+  }
+}
+
+// a dump of three or four powder kegs, each within 1.6" of the first and
+// 1.25" or more apart: one going off sets off the rest (a keg's blast
+// breaks a keg anywhere under it: data/hazards.js)
+function kegDump(T, F, rng) {
+  const n = 3 + Math.floor(rng() * 2)
+  const pts = [{ x: 0, z: 0 }]
+  for (let tries = 0; tries < 40 && pts.length < n; tries++) {
+    const b = pts[Math.floor(rng() * pts.length)], a = rng() * Math.PI * 2, d = rr(rng, 1.25, 1.55)
+    const x = b.x + cos(a) * d, z = b.z + sin(a) * d
+    if (hypot(x, z) > 1.6 || pts.some((q) => hypot(q.x - x, q.z - z) < 1.25)) continue
+    pts.push({ x, z })
+  }
+  for (const q of pts) {
+    const p = F.p(q.x, q.z)
+    const yaw = F.yaw(rng() * 6)
+    powderKeg(T, p.x, p.z, yaw, pick(KEG_WOOD, rng), SPILL)
+  }
+}
+
+// a lone cache of bombs, half of them behind a sandbag
+function cache(T, F, rng) {
+  const p = F.p(0, 0)
+  bombCache(T, p.x, p.z, F.yaw(rng() * 6), rng)
+  if (rng() < 0.5) sandbag(T, F, rng, 0, -1.05, rr(rng, -0.3, 0.3))
+}
+
+// a burned tree down, and the stumps of its neighbours either side of it
+function deadfall(T, F, rng) {
+  deadlog(T, F, rng, 0, 0, 0)
+  const n = 1 + Math.floor(rng() * 3)
+  const pts = []
+  for (let tries = 0; tries < 30 && pts.length < n; tries++) {
+    const x = rr(rng, -1.5, 1.5), z = (rng() < 0.5 ? -1 : 1) * rr(rng, 0.95, 1.6)
+    if (pts.some((q) => hypot(q.x - x, q.z - z) < 0.9)) continue
+    pts.push({ x, z })
+    stump(T, F, rng, x, z)
+  }
+}
+
+// two or three burned trees, bare and black
+function snags(T, F, rng) {
+  const n = 2 + Math.floor(rng() * 2)
+  const pts = []
+  for (let tries = 0; tries < 40 && pts.length < n; tries++) {
+    const a = rng() * Math.PI * 2, d = Math.sqrt(rng()) * 1.6
+    const x = cos(a) * d, z = sin(a) * d
+    if (pts.some((q) => hypot(q.x - x, q.z - z) < 1.4)) continue
+    pts.push({ x, z })
+    snag(T, F, rng, x, z)
+  }
+}
+
+// a broken cart, its load spilled either side of it
+function wreckedCart(T, F, rng) {
+  cart(T, F, rng, 0, 0, 0)
+  const n = Math.floor(rng() * 3)
+  for (let i = 0; i < n; i++) crate(T, F, rng, rr(rng, -1.2, 1.2), (rng() < 0.5 ? -1 : 1) * rr(rng, 1.15, 1.5))
+}
+
+// wreckage burning where it fell
+function bonfire(T, F, rng) {
+  pyre(T, F, rng, 0, 0)
+}
+
+// a sandbag breastwork, bent, most with a gap left to sally through
+function breastwork(T, F, rng) {
+  const n = 4 + Math.floor(rng() * 3)
+  const bend = rr(rng, -0.1, 0.1)
+  const gap = 1 + Math.floor(rng() * (n - 2))
+  for (let i = 0; i < n; i++) {
+    if (i === gap && rng() < 0.6) continue
+    const x = (i - (n - 1) / 2) * 1.08
+    sandbag(T, F, rng, x, bend * x * x, -atan(2 * bend * x))
+  }
+}
+
+// a cottage burned to its walls: a ruin's L in sooty stone, a course or two
+// high, open to the sky
+function shell(T, F, rng) {
+  const A = 4 + Math.floor(rng() * 2), B = 3 + Math.floor(rng() * 2)
+  const ox = -A / 2 + 0.5, oz = -B / 2 + 0.5
+  const door = 1 + Math.floor(rng() * (A - 2))
+  for (let i = 0; i < A; i++) {
+    if (i === door) continue
+    column(T, F, rng, ox + i, oz, 0, 1 + Math.floor(rng() * 2), 'soot')
+  }
+  for (let j = 1; j <= B; j++) {
+    if (rng() < 0.2) continue
+    column(T, F, rng, ox, oz + 0.8 + (j - 1), Math.PI / 2, 1 + Math.floor(rng() * 2), 'soot')
+  }
+}
+
+// a supply column caught on the road: three or four kegs (some caches of
+// bombs) strewn along it, each 2.6-3.1" on from the last (within a keg's
+// blast of it: one going off runs down the line), and its cart beside them
+function train(T, F, rng) {
+  const n = 3 + Math.floor(rng() * 2)
+  let x = -((n - 1) * 2.85) / 2
+  for (let i = 0; i < n; i++) {
+    const p = F.p(x, rr(rng, -0.5, 0.5))
+    const yaw = F.yaw(rng() * 6)
+    if (rng() < 0.3) bombCache(T, p.x, p.z, yaw, rng)
+    else powderKeg(T, p.x, p.z, yaw, pick(KEG_WOOD, rng), SPILL)
+    x += rr(rng, 2.6, 3.1)
+  }
+  cart(T, F, rng, rr(rng, -1, 1), (rng() < 0.5 ? -1 : 1) * 1.75, rr(rng, -0.25, 0.25))
+}
+
+export const FEATURES = deepFreeze(Object.assign(Object.create(null), {
+  ruin, wall, tower, forest, hedgerow, rocks, barricade, mushrooms, obelisk,
+  // (V3d) the Powder Field's
+  shellhole, shelled, kegs: kegDump, cache, deadfall, snags, cart: wreckedCart, pyre: bonfire, sandbags: breastwork, shell, train,
+}))
 
 // ── Fortifications (F7a, DESIGN §4.2.4) ─────────────────────────────────────
 // Raised ground a squad can stand on: decks (a walkable top over a solid
@@ -436,15 +751,16 @@ const TIMBER = Object.freeze(['#8a6038', '#7a5232', '#9a7048'])
 
 // A deck: a walkable top h high over a solid body (line of sight runs into
 // it: the "dead ground" at the foot of a wall), w × d, its own frame the
-// fortification's turned by ly.
-function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports }) {
+// fortification's turned by ly. ((V3d) `extra`, more for its look: a
+// wreck's burning, its smoke's vents, its scorch on the turf: the view's.)
+function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports, extra }) {
   const p = F.p(lx, lz)
   const def = {
     kind: 'deck', hp: Infinity,
     shape: { x: p.x, y: h / 2, z: p.z, hx: w / 2, hy: h / 2, hz: d / 2, yaw: F.yaw(ly) },
     navKind: null, los: 'block', cover: false,
     surface: { y: h },
-    look: { piece: 'deck', recipe, material, w, d, h, color, chip: color },
+    look: { piece: 'deck', recipe, material, w, d, h, color, chip: color, ...extra },
   }
   if (supports) def.supports = supports
   return T.add(def)
@@ -453,14 +769,14 @@ function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports
 // A stair: a ramp len long and w wide, rising from the ground at its own −x
 // end to h at its own +x end (`look.rise` says so: '+x'); ly turns its own
 // frame so its own +x points up the stair.
-function stair(T, F, { lx, lz, ly, len, w, h, material, color, recipe }) {
+function stair(T, F, { lx, lz, ly, len, w, h, material, color, recipe, extra }) {
   const p = F.p(lx, lz)
   return T.add({
     kind: 'stair', hp: Infinity,
     shape: { x: p.x, y: h / 2, z: p.z, hx: len / 2, hy: h / 2, hz: w / 2, yaw: F.yaw(ly) },
     navKind: null, los: null, cover: false,
     surface: { y: h, ramp: { axis: 'x', y0: 0, y1: h } },
-    look: { piece: 'stair', recipe, material, w: len, d: w, h, rise: '+x', color, chip: color },
+    look: { piece: 'stair', recipe, material, w: len, d: w, h, rise: '+x', color, chip: color, ...extra },
   })
 }
 
@@ -586,10 +902,200 @@ function keep(T, F, rng) {
   return [{ ...F.p(-(3 + len + GATE_OUT), 0), by: 'stair' }, { ...F.p(3 + len + GATE_OUT, 0), by: 'stair' }]
 }
 
-export const FORTS = deepFreeze(Object.assign(Object.create(null), { rampart, bastion, watchtower, platform, keep }))
+// ── The Powder Field's wrecks (V3d, DESIGN §4.2.11) ─────────────────────────
+// What the day's fighting left to climb: a farmhouse and a barn burned out,
+// their upper floors gone; a great trebuchet, a war-wagon and a venom engine
+// wrecked where they stood. Each is a fortification in everything but its
+// look: a deck (the walkable top: the farmhouse's floor over its stone
+// shell, the barn's hayloft on its posts, the trebuchet's frame, the
+// wagon's bed, the engine's flank), and the stairs and ladders that climb
+// it, each sized for whole squads as F7a's are (a deck's narrow side 4.5",
+// a stair 4.5" wide rising 0.5"/", a ladder's foot LADDER_OUT out), with
+// its own stream, its draws in a fixed order and recorded in `look`, built
+// exactly point-mirrored (fortFrame) and dry-built for its gates (gatesOf).
+// Unlike F7a's, each is centred on its deck (the origin is the deck's
+// middle, so a site's objective stands on it: sites, below), its front
+// (the ladder's face) at local −z; their footprints measured from there.
+// Around the decks stand pieces of the classic kind, rules as ever: a
+// chimney (a column of sooty blocks that breaks and falls as a wall does),
+// a barn's walls burned to stubs, a counterweight lying on the ground (a
+// hulk), kegs fallen off a wagon. The magazine is a site with no deck:
+// powder kegs heaped round its objective. Their looks carry the fires
+// (`burn`, `vents`, `scorch`: the modules' note, above).
+
+// A ladder stands along its deck's front face at most this far from the
+// middle on a 6"-long deck: its top, on the deck's centreline above it, keeps
+// 2.25" (the deck's half-depth) from the deck's ends, so a climber's disc
+// (CLIMB_R) stands there clear of the ledge at any yaw (a trebuchet's 7"
+// deck takes 1.25", an engine's 5" 0.25")
+const LADDER_SPAN = 0.75
+
+// A farmhouse burned out: its stone shell 6 × 4.5" and 2" high, its floor
+// the deck, a stone stair up one end (drawn: `end`), a ladder on its front,
+// and its chimney standing against the back at the other end, four courses
+// of sooty stone and a cap that smokes. Most still burn. 14 × 9" all told:
+// the stair's gate at x = ±7.5, the ladder's foot at z = −4.5.
+function farm(T, F, rng) {
+  const stone = pick(SOOT, rng), timber = pick(CHAR, rng)
+  const end = rng() < 0.5 ? 1 : -1
+  const off = rr(rng, -LADDER_SPAN, LADDER_SPAN)
+  const cx = -end * rr(rng, 1.2, 2.2), cs = (rng() * 1e9) | 0
+  const burn = rng() < 0.6 ? 2 : 1
+  const wood = pick(CHAR, rng)
+  const h = 2
+  const d = deck(T, F, { lx: 0, lz: 0, w: 6, d: 4.5, h, material: 'farm', color: stone, recipe: 'farm', extra: { timber, burn, vents: [[end * 2.6, h, -1.7], [-end * 0.4, h, 1.75]], scorch: 5.5 } })
+  // (rising toward the deck: up its own +x, the recipe's −x when it stands
+  // at the +x end)
+  stair(T, F, { lx: end * 5, lz: 0, ly: end > 0 ? Math.PI : 0, len: 4, w: 4.5, h, material: 'farm', color: stone, recipe: 'farm' })
+  ladder(T, F, { lx: off, lz: -2.25, ly: 0, h, color: wood, recipe: 'farm', foot: [off, -2.25 - LADDER_OUT], top: [off, 0], on: d.id })
+  column(T, F, mulberry32(cs), cx, 2.25 + CHIMNEY_OUT, 0, 4, 'soot', { cap: true, capLook: CHIMNEY })
+  return [{ ...F.p(end * (7 + GATE_OUT), 0), by: 'stair' }, { ...F.p(off, -2.25 - LADDER_OUT), by: 'ladder' }]
+}
+// a chimney stands this far out from its wall (its blocks' half-thickness
+// and a little: it stands on the ground, clear of the deck); its cap is a
+// chimney's crown, and smokes
+const CHIMNEY_OUT = 0.37
+const CHIMNEY = Object.freeze({ chimney: 1, burn: 1 })
+
+// A barn burned out but for its hayloft: a timber deck 6 × 4.5", 2.5" high,
+// on six posts, reached by one ladder on its front, the barn's back wall
+// and one end burned down to stubs of charred log (columns of one or two,
+// some gone). Half still burn. 6.6 × 9".
+function barn(T, F, rng) {
+  const timber = pick(CHAR, rng)
+  const off = rr(rng, -LADDER_SPAN, LADDER_SPAN)
+  const side = rng() < 0.5 ? 1 : -1
+  const burn = rng() < 0.5 ? 2 : 1
+  const wood = pick(SCORCHED, rng)
+  const h = 2.5, kx = 3 - POST / 2, kz = 2.25 - POST / 2
+  const supports = [[-kx, -kz], [0, -kz], [kx, -kz], [kx, kz], [0, kz], [-kx, kz]].map(([x, z]) => post(T, F, x, z, h, timber, 'barn').id)
+  const d = deck(T, F, { lx: 0, lz: 0, w: 6, d: 4.5, h, material: 'barn', color: timber, recipe: 'barn', supports, extra: { burn, vents: [[-2.5, h, 1.8], [2.3, h, 1.6]], scorch: 5 } })
+  ladder(T, F, { lx: off, lz: -2.25, ly: 0, h, color: wood, recipe: 'barn', foot: [off, -2.25 - LADDER_OUT], top: [off, 0], on: d.id })
+  // the walls burned down to stubs: the back, and one end
+  for (let i = 0; i < 6; i++) {
+    if (rng() < 0.3) continue
+    column(T, F, rng, -2.5 + i, 2.25 + STUB_OUT, 0, 1 + Math.floor(rng() * 2), 'charred')
+  }
+  for (let j = 0; j < 4; j++) {
+    if (rng() < 0.3) continue
+    column(T, F, rng, side * (3 + STUB_OUT), -1.5 + j, Math.PI / 2, 1 + Math.floor(rng() * 2), 'charred')
+  }
+  return [{ ...F.p(off, -2.25 - LADDER_OUT), by: 'ladder' }]
+}
+// a burned wall's stubs stand this far out from the loft's edge
+const STUB_OUT = 0.32
+
+// A great trebuchet wrecked: its frame the deck, 7 × 4.5" and 1.5" high,
+// its snapped arm fallen to one end and planked over (a stair 3" long, the
+// arm drawn on it: `end`), a ladder on its front toward the other end, and
+// at that end its counterweight torn loose, lying on the ground (a hulk 2.2
+// × 2.6", 1.4" tall, tilted). Some still smoulder. 13 × 9".
+function trebuchet(T, F, rng) {
+  const timber = pick(SCORCHED, rng), iron = pick(IRON, rng)
+  const end = rng() < 0.5 ? 1 : -1
+  const off = -end * rr(rng, 0, 1.25)
+  const cz = rr(rng, -0.7, 0.7), tilt = rr(rng, -0.25, 0.25)
+  const burn = rng() < 0.45 ? 1 : 0
+  const h = 1.5, len = h / STAIR_SLOPE
+  const d = deck(T, F, { lx: 0, lz: 0, w: 7, d: 4.5, h, material: 'trebuchet', color: timber, recipe: 'trebuchet', extra: { iron, end, burn, vents: [[-end * 2.6, h + 0.6, 0.4]], scorch: burn ? 4 : 0 } })
+  stair(T, F, { lx: end * (3.5 + len / 2), lz: 0, ly: end > 0 ? Math.PI : 0, len, w: 4.5, h, material: 'trebuchet', color: timber, recipe: 'trebuchet', extra: { arm: true } })
+  ladder(T, F, { lx: off, lz: -2.25, ly: 0, h, color: timber, recipe: 'trebuchet', foot: [off, -2.25 - LADDER_OUT], top: [off, 0], on: d.id })
+  hulk(T, F, { lx: -end * (3.5 + 0.45 + 1.1), lz: cz, ly: tilt, w: 2.2, d: 2.6, h: 1.4, look: { piece: 'counterweight', recipe: 'trebuchet', color: timber, iron } })
+  return [{ ...F.p(end * (3.5 + len + GATE_OUT), 0), by: 'stair' }, { ...F.p(off, -2.25 - LADDER_OUT), by: 'ladder' }]
+}
+
+// A war-wagon wrecked, its bed the deck, 6 × 4.5" and LOW_DECK high (within
+// HIGH of the ground: a fight on it is a fight with the ground beside it),
+// a ladder on its front, and up to two of its powder kegs fallen off the
+// back (each within a keg's blast of the other). Some burn. 6 × 9".
+// (1.2" would quantise to 77/64", 0.003" over HIGH: core/nav.js quant)
+const LOW_DECK = 1.1875
+function wagon(T, F, rng) {
+  const timber = pick(SCORCHED, rng), iron = pick(IRON, rng)
+  const off = rr(rng, -LADDER_SPAN, LADDER_SPAN)
+  const burn = rng() < 0.4 ? 2 : rng() < 0.5 ? 1 : 0
+  const h = LOW_DECK
+  const d = deck(T, F, { lx: 0, lz: 0, w: 6, d: 4.5, h, material: 'wagon', color: timber, recipe: 'wagon', extra: { iron, burn, vents: [[2.1, h + 0.3, 1.3]], scorch: burn ? 4.5 : 0 } })
+  ladder(T, F, { lx: off, lz: -2.25, ly: 0, h, color: timber, recipe: 'wagon', foot: [off, -2.25 - LADDER_OUT], top: [off, 0], on: d.id })
+  const n = Math.floor(rng() * 3)
+  for (let i = 0; i < n; i++) {
+    const p = F.p(-1.4 + i * 2.2 + rr(rng, -0.4, 0.4), 2.25 + rr(rng, 0.95, 1.4))
+    const yaw = F.yaw(rng() * 6)
+    powderKeg(T, p.x, p.z, yaw, pick(KEG_WOOD, rng), SPILL)
+  }
+  return [{ ...F.p(off, -2.25 - LADDER_OUT), by: 'ladder' }]
+}
+
+// A venom engine overturned, its flank the deck, 5 × 4.5" and LOW_DECK high,
+// its broken carriage planked over at one end into a stair (`end`; a
+// ground squad holds the objective on it from beside it too, but needs
+// the stair to fight for its top: the connectivity rows' squad walks no
+// ladder), a ladder on its front, its venom spilled on the ground behind
+// it (`ooze`: puddles, the view's glow), smouldering. 10.75 × 9".
+function engine(T, F, rng) {
+  const timber = pick(SCORCHED, rng), iron = pick(IRON, rng)
+  const end = rng() < 0.5 ? 1 : -1
+  const off = -end * rr(rng, 0, 0.25)
+  const ooze = []
+  for (let i = 0; i < 3; i++) ooze.push([rr(rng, -2.6, 2.6), rr(rng, 2.6, 3.4), rr(rng, 0.4, 0.8)])
+  const h = LOW_DECK, len = h / STAIR_SLOPE
+  const d = deck(T, F, { lx: 0, lz: 0, w: 5, d: 4.5, h, material: 'engine', color: timber, recipe: 'engine', extra: { iron, end, ooze, burn: 1, vents: [[-end * 1.6, h + 0.5, 1.2]], scorch: 4 } })
+  stair(T, F, { lx: end * (2.5 + len / 2), lz: 0, ly: end > 0 ? Math.PI : 0, len, w: 4.5, h, material: 'engine', color: timber, recipe: 'engine' })
+  ladder(T, F, { lx: off, lz: -2.25, ly: 0, h, color: timber, recipe: 'engine', foot: [off, -2.25 - LADDER_OUT], top: [off, 0], on: d.id })
+  return [{ ...F.p(end * (2.5 + len + GATE_OUT), 0), by: 'stair' }, { ...F.p(off, -2.25 - LADDER_OUT), by: 'ladder' }]
+}
+
+// A powder magazine where the gunners left it: five or six kegs heaped in a
+// ragged double row round the back of the origin (2.35-3.3" from it, about
+// 1.3" apart: one going off sets off the rest), and the cart that brought
+// them overturned behind; the front of the origin left open. A site: its
+// objective stands at the origin, among the kegs.
+function magazine(T, F, rng) {
+  const n = 5 + Math.floor(rng() * 2)
+  const a0 = rr(rng, -0.25, 0.25)
+  for (let i = 0; i < n; i++) {
+    const a = Math.PI / 2 + a0 + (i - (n - 1) / 2) * 0.5 + rr(rng, -0.05, 0.05)
+    const r = rr(rng, 2.35, 2.7) + (i % 2) * 0.55
+    const p = F.p(cos(a) * r, sin(a) * r)
+    const yaw = F.yaw(rng() * 6)
+    if (i === n >> 1) bombCache(T, p.x, p.z, yaw, rng)
+    else powderKeg(T, p.x, p.z, yaw, pick(KEG_WOOD, rng), SPILL)
+  }
+  cart(T, F, rng, rr(rng, -0.8, 0.8), 4.75, rr(rng, -0.3, 0.3))
+  return []
+}
+
+// The burned farmstead round the centre objective (its floor holds it): a
+// stone shell 6 × 6", 2" high, two stone stairs 4.5" wide and 4" long on
+// opposite sides along its own x (turned at most 0.2 off the table's long
+// axis: CENTRES.farmstead, so they face the two zones, as the keep's do),
+// and a chimney on each of the other two sides, each the other's point
+// mirror (one stream, `cs`, for both). Burning. 14 × 7.4". Its own point
+// mirror, exactly, as the keep is.
+function farmstead(T, F, rng) {
+  const stone = pick(SOOT, rng), timber = pick(CHAR, rng)
+  const cx = rr(rng, -1.6, 1.6), cs = (rng() * 1e9) | 0
+  const h = 2, len = h / STAIR_SLOPE, at = 3 + len / 2
+  deck(T, F, { lx: 0, lz: 0, w: 6, d: 6, h, material: 'farm', color: stone, recipe: 'farmstead', extra: { timber, burn: 2, vents: [[2.55, h, 2.55], [-2.55, h, -2.55]], scorch: 7.5 } })
+  stair(T, F, { lx: -at, lz: 0, ly: 0, len, w: 4.5, h, material: 'farm', color: stone, recipe: 'farmstead' })
+  stair(T, F, { lx: at, lz: 0, ly: Math.PI, len, w: 4.5, h, material: 'farm', color: stone, recipe: 'farmstead' })
+  column(T, F, mulberry32(cs), cx, 3 + CHIMNEY_OUT, 0, 4, 'soot', { cap: true, capLook: CHIMNEY })
+  column(T, F, mulberry32(cs), -cx, -(3 + CHIMNEY_OUT), Math.PI, 4, 'soot', { cap: true, capLook: CHIMNEY })
+  return [{ ...F.p(-(3 + len + GATE_OUT), 0), by: 'stair' }, { ...F.p(3 + len + GATE_OUT, 0), by: 'stair' }]
+}
+
+export const FORTS = deepFreeze(Object.assign(Object.create(null), {
+  rampart, bastion, watchtower, platform, keep,
+  // (V3d) the Powder Field's
+  farm, barn, trebuchet, wagon, engine, magazine, farmstead,
+}))
 // the fortifications a set may scatter in mirrored pairs (fortKinds); the
 // keep stands only at the centre
 export const FORT_KINDS = Object.freeze(['rampart', 'bastion', 'watchtower', 'platform'])
+// (V3d) the wrecks a set may scatter so too (the farmstead stands only at
+// the centre), and those a set's `sites` may stand on its objectives
+export const WRECK_KINDS = Object.freeze(['farm', 'barn', 'trebuchet', 'wagon'])
+export const SITE_KINDS = Object.freeze(['trebuchet', 'magazine', 'engine'])
 
 // The frame a fortification is built in: `mirror` builds the point mirror of
 // the copy built in `frame`, exactly (see above).
@@ -630,7 +1136,12 @@ export function gatesOf(name, frame, seed) {
 // these. sim/data-check.mjs holds each to its recipe's reach (reachOf) on
 // seeds 1-500: measuring that here, as the module loads, cost 120-200 ms
 // on every page and process, so the check is data-check's row instead.
-export const FOOTPRINT = deepFreeze(Object.assign(Object.create(null), { rampart: 7.1, bastion: 6.3, watchtower: 4.8, platform: 4.3, keep: 8.6 }))
+// (V3d) The wrecks' are measured from their decks' middles, where they are
+// centred (above), the same way.
+export const FOOTPRINT = deepFreeze(Object.assign(Object.create(null), {
+  rampart: 7.1, bastion: 6.3, watchtower: 4.8, platform: 4.3, keep: 8.6,
+  farm: 7.6, barn: 5, trebuchet: 7.1, wagon: 5.1, engine: 5.6, magazine: 6.1, farmstead: 7.6,
+}))
 
 // How far fortification `name` reaches, built at the origin from each of
 // `seeds` (a list): `r` over its chunks' corners and its links' feet (what
@@ -688,6 +1199,13 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
     powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))
     placed.push({ x: 0, z: 0, r: KEG_R, keg: true })
   },
+  // (V3d) the burned farmstead, the objective on its floor, turned at most
+  // 0.2 off the table's long axis so its stairs face the two zones (the
+  // keep's rule): its yaw, then its seed
+  farmstead(T, rng, placed) {
+    buildFort(T, 'farmstead', { x: 0, z: 0, yaw: (rng() - 0.5) * 0.4 }, (rng() * 1e9) | 0)
+    placed.push({ x: 0, z: 0, r: FOOTPRINT.farmstead, fort: 'farmstead' })
+  },
 }))
 // (F19a) the room a centre keg keeps round it from the features (each keeps
 // its own radius and the set's gap beyond this)
@@ -723,6 +1241,7 @@ export function scatter(T, S, seed, objectives, deployDepth) {
   const middle = rule.find(([, below]) => centre < below)
   if (middle) CENTRES[middle[0]](T, rng, placed)
 
+  if (S.sites) sites(T, S, rng, placed, objectives)
   if (S.works) works(T, S, rng, placed, deployDepth)
   if (S.forts) forts(T, S, rng, placed, objectives, deployDepth)
 
@@ -746,7 +1265,10 @@ export function scatter(T, S, seed, objectives, deployDepth) {
     const z = rr(rng, -H / 2 + r + S.margin, H / 2 - r - S.margin)
     // a feature and its mirror image mustn't overlap
     if (hypot(x, z) < r + S.selfGap) continue
-    const inDeploy = Math.abs(x) > W / 2 - deployDepth - S.deployMargin
+    // ((V3d) a set with `zoneFootprint` reads the feature's whole footprint:
+    // a dump of kegs whose middle is outside a zone's margin stands no keg
+    // inside it; every other set reads the middle, as it always has)
+    const inDeploy = Math.abs(x) + (S.zoneFootprint ? r : 0) > W / 2 - deployDepth - S.deployMargin
     if (inDeploy && (r > S.bigNotInDeploy || S.notInDeploy.includes(name))) continue
     if (objectives.some((o) => hypot(o.x - x, o.z - z) < r + S.objectiveGap)) continue
     const gap = S.gap
@@ -803,6 +1325,47 @@ function works(T, S, rng, placed, deployDepth) {
   }
 }
 
+// (V3d) The sites: a recipe of S.sites (SITE_KINDS) standing on each pair
+// of objectives off the centre, in the mission's order (objectivePairs: the
+// first of each pair; a mission with fewer pairs than sites leaves the rest
+// unbuilt), its frame's origin the objective (a wreck's deck centred on it,
+// a magazine's kegs round it) and its copy the point mirror on the other
+// objective of the pair. Up to SITE_TRIES tries each, a try drawing the yaw
+// and then the seed; a try stands when both copies' aprons fit (the last
+// stands whatever: an objective's site is never left out), and pushes both
+// footprints (marked `site`) and every apron.
+const SITE_TRIES = 8
+function sites(T, S, rng, placed, objectives) {
+  const pairs = objectivePairs(objectives)
+  S.sites.forEach((name, k) => {
+    const o = pairs[k]
+    if (!o) return
+    const r = FOOTPRINT[name]
+    for (let tries = 0; tries < SITE_TRIES; tries++) {
+      const frame = { x: o.x, z: o.z, yaw: rng() * Math.PI * 2 }
+      const seed = (rng() * 1e9) | 0
+      const gates = bothGates(gatesOf(name, frame, seed))
+      if (tries < SITE_TRIES - 1 && !gates.every((g) => apronFits(T, g, placed))) continue
+      buildFort(T, name, frame, seed)
+      buildFort(T, name, frame, seed, true)
+      placed.push({ x: o.x, z: o.z, r, fort: name, site: k }, { x: -o.x, z: -o.z, r, fort: name, site: k }, ...aprons(gates))
+      return
+    }
+  })
+}
+// The objectives off the centre, one of each mirrored pair (the first in
+// the list: a mission's objectives come with their point mirrors,
+// data/mission.js checkMission), in the list's order.
+export function objectivePairs(objectives) {
+  const out = []
+  for (const o of objectives) {
+    if (o.x === 0 && o.z === 0) continue
+    if (out.some((p) => (p.x === o.x && p.z === o.z) || (p.x === -o.x && p.z === -o.z))) continue
+    out.push(o)
+  }
+  return out
+}
+
 // The fort phase: `want` mirrored pairs of fortKinds in at most `attempts`
 // tries, each try a weighted draw of the kind, then x and z, then the tests
 // (inside the table by r + margin, which the draw's range makes so; |x| + r
@@ -851,7 +1414,8 @@ const SET_FIELDS = Object.freeze(['centre', 'kinds', 'pairs', 'attempts', 'mirro
 // (all of them or none, `facing` with them), the area scale and the larger
 // tables' centre rule
 const FORT_FIELDS = Object.freeze(['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'])
-const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale', 'largeCentre'])
+// ((V3d) and the sites on the objectives)
+const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale', 'largeCentre', 'sites', 'zoneFootprint'])
 const MIRRORS = Object.freeze(['point']) // the only symmetry scatter knows
 const SCALES = Object.freeze(['area']) // and the only scaling
 export function checkSet(name, S) {
@@ -900,7 +1464,7 @@ export function checkSet(name, S) {
     if (!Array.isArray(S.fortKinds) || !S.fortKinds.length) bad('fortKinds must list at least one fortification')
     S.fortKinds.forEach((k, i) => {
       if (!Array.isArray(k) || k.length !== 3) bad(`fortKinds[${i}] must be [fortification, radius, weight]`)
-      if (!FORT_KINDS.includes(k[0])) bad(`fortKinds[${i}]: no fortification "${k[0]}" to scatter (there are ${FORT_KINDS.join(', ')})`)
+      if (!SCATTERED.includes(k[0])) bad(`fortKinds[${i}]: no fortification "${k[0]}" to scatter (there are ${SCATTERED.join(', ')})`)
       // (its footprint, or more: a smaller one would let it stand in another's)
       if (!num(k[1]) || !(k[1] >= FOOTPRINT[k[0]])) bad(`fortKinds[${i}] (${k[0]}): radius ${k[1]} must be a number, at least its footprint ${FOOTPRINT[k[0]]}`)
       if (!num(k[2]) || k[2] <= 0) bad(`fortKinds[${i}] (${k[0]}): weight ${k[2]} must be a number above 0`)
@@ -912,5 +1476,16 @@ export function checkSet(name, S) {
     for (const f of S.facing) if (!S.fortKinds.some((k) => k[0] === f)) bad(`facing: no fortification "${f}" in fortKinds`)
   }
   if ('scale' in S && !SCALES.includes(S.scale)) bad(`scale "${S.scale}" is not one scatter knows (${SCALES.join(', ')})`)
+  // (V3d) the zone test by footprint: 1, or no field
+  if ('zoneFootprint' in S && S.zoneFootprint !== 1) bad(`zoneFootprint ${S.zoneFootprint} must be 1 (the zone test by footprint), or no field`)
+  // (V3d) the sites: a list of SITE_KINDS, each standing on a pair of objectives
+  if ('sites' in S) {
+    if (!Array.isArray(S.sites) || !S.sites.length) bad('sites must list at least one site')
+    S.sites.forEach((k, i) => {
+      if (!SITE_KINDS.includes(k)) bad(`sites[${i}]: no site "${k}" (there are ${SITE_KINDS.join(', ')})`)
+    })
+  }
   return S
 }
+// (V3d) what a fort phase may scatter: F7a's fortifications and the wrecks
+const SCATTERED = Object.freeze([...FORT_KINDS, ...WRECK_KINDS])

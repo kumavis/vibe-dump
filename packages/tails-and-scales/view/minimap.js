@@ -487,9 +487,11 @@ export class Minimap {
 
 // how each kind of chunk shows from above ((F19a) a powder keg a red dot,
 // the colour of its danger band)
-const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e' }
+// ((V3d) the Powder Field's: craters the burned turf's brown, the wrecks'
+// decks and hulks charred, a fire's orange)
+const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37' }
 // the kinds drawn as discs whatever their extent
-const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true }
+const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true, crater: true, stump: true, pyre: true }
 
 // A convex polygon ([[x, z]]) clipped to the rectangle x0..x1 by z0..z1.
 function clip(poly, x0, x1, z0, z1) {

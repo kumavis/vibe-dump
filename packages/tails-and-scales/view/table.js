@@ -143,6 +143,94 @@ function paintWood() {
   return t
 }
 
+// (V3d) The Powder Field's burned turf, painted over the mat's paint on
+// canvas `c` (a board W × H): the whole mat dried browner and trampled with
+// mud, then at each mark { x, z, r } a burn, soot at its heart going brown
+// to its ragged edge, flecked with ash. Its jitter is a hash, never
+// Math.random: the cosmetic stream's draws stay where they were (and a
+// board's burns look the same each time they are painted).
+// ((A mark { powder: true } is a keg's black powder spilled round it: a
+// sooty grey splash, no wash of its own.)
+function paintScorch(g, c, W, H, marks) {
+  const sx = c.width / W, sz = c.height / H
+  const stream = (seed) => {
+    let h = seed >>> 0
+    return () => {
+      h = (h + 0x6d2b79f5) >>> 0
+      let t = Math.imul(h ^ (h >>> 15), h | 1)
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    }
+  }
+  if (marks.some((m) => !m.powder)) {
+    g.globalAlpha = 0.34
+    g.fillStyle = '#6e5a38'
+    g.fillRect(0, 0, c.width, c.height)
+    const rnd = stream(0x5eed)
+    // trampled mud and churned turf
+    for (let i = 0; i < 420; i++) {
+      g.globalAlpha = 0.12 + rnd() * 0.2
+      g.fillStyle = ['#4e3d28', '#5f4a30', '#3f3222', '#6b5a3c'][i % 4]
+      g.beginPath()
+      g.ellipse(rnd() * c.width, rnd() * c.height, 6 + rnd() * 40, 5 + rnd() * 24, rnd() * 3, 0, Math.PI * 2)
+      g.fill()
+    }
+    // the small pocks of a day's shot and shell
+    for (let i = 0; i < 260; i++) {
+      const x = rnd() * c.width, y = rnd() * c.height, r = 2 + rnd() * 5
+      g.globalAlpha = 0.45
+      g.fillStyle = '#2b2118'
+      g.beginPath()
+      g.arc(x, y, r, 0, Math.PI * 2)
+      g.fill()
+      g.globalAlpha = 0.3
+      g.strokeStyle = '#7a6748'
+      g.lineWidth = 1.5
+      g.stroke()
+    }
+  }
+  for (const m of marks.filter((m) => m.powder)) {
+    const x = (m.x + W / 2) * sx, y = (m.z + H / 2) * sz, r = m.r * sx
+    const q = stream(Math.round(m.x * 977) ^ Math.imul(Math.round(m.z * 991), 7919))
+    for (let i = 0; i < 7; i++) {
+      const a = q() * Math.PI * 2, d = r * q() * 0.6
+      g.globalAlpha = 0.4
+      g.fillStyle = '#26221f'
+      g.beginPath()
+      g.ellipse(x + Math.cos(a) * d, y + Math.sin(a) * d, r * (0.25 + q() * 0.3), r * (0.15 + q() * 0.2), q() * 3, 0, Math.PI * 2)
+      g.fill()
+    }
+  }
+  for (const m of marks.filter((m) => !m.powder)) {
+    const x = (m.x + W / 2) * sx, y = (m.z + H / 2) * sz, r = m.r * sx
+    const grad = g.createRadialGradient(x, y, r * 0.08, x, y, r)
+    grad.addColorStop(0, 'rgba(20,15,11,0.9)')
+    grad.addColorStop(0.5, 'rgba(38,28,18,0.7)')
+    grad.addColorStop(1, 'rgba(70,52,30,0)')
+    g.globalAlpha = 1
+    g.fillStyle = grad
+    g.beginPath()
+    g.arc(x, y, r, 0, Math.PI * 2)
+    g.fill()
+    const q = stream(Math.round(m.x * 977) ^ Math.imul(Math.round(m.z * 991), 7919))
+    for (let i = 0; i < 9; i++) {
+      const a = q() * Math.PI * 2, d = r * (0.55 + q() * 0.4), b = r * (0.12 + q() * 0.2)
+      g.globalAlpha = 0.3
+      g.fillStyle = '#251b12'
+      g.beginPath()
+      g.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, b, 0, Math.PI * 2)
+      g.fill()
+    }
+    for (let i = 0; i < 26; i++) {
+      const a = q() * Math.PI * 2, d = r * Math.sqrt(q()) * 0.9
+      g.globalAlpha = 0.25 + q() * 0.25
+      g.fillStyle = i % 3 ? '#8f8a82' : '#b5aea3'
+      g.fillRect(x + Math.cos(a) * d, y + Math.sin(a) * d, 2 + q() * 3, 2 + q() * 3)
+    }
+  }
+  g.globalAlpha = 1
+}
+
 // a zone's edge, dashed, along the board's length
 function zoneLine(sx, W, H, deploy) {
   const pts = []
@@ -285,6 +373,32 @@ export class Table {
     this.tufts = regrow(this.tufts, Math.min(2800, Math.round(700 * k)))
     this.flowers = regrow(this.flowers, Math.min(560, Math.round(140 * k)))
     this.scatterTufts()
+    // ((V3d) the new paint is clean: its burns, if any, painted on it again)
+    this.clean = null
+    if (this.marks?.length) this.scorch(this.marks)
+  }
+
+  // (V3d) The turf burned round the Powder Field's wrecks, painted into the
+  // mat: `marks` [{ x, z, r }] (view/terrain.js's scorched). The paint is
+  // kept clean (a copy of the mat's canvas, made at the first burn), and
+  // each list is painted over a fresh copy of it (paintScorch); [] puts the
+  // clean paint back. A table that never burns (every set but the Powder
+  // Field's) never copies or repaints anything.
+  scorch(marks) {
+    this.marks = marks
+    const map = this.board.material.map, c = map.image
+    if (!this.clean) {
+      if (!marks.length) return
+      this.clean = document.createElement('canvas')
+      this.clean.width = c.width
+      this.clean.height = c.height
+      this.clean.getContext('2d').drawImage(c, 0, 0)
+    }
+    const g = c.getContext('2d')
+    g.globalAlpha = 1
+    g.drawImage(this.clean, 0, 0)
+    if (marks.length) paintScorch(g, c, this.W, this.H, marks)
+    map.needsUpdate = true
   }
 
   // each seat's zone in its colour (colors[seat])

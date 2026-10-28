@@ -130,7 +130,8 @@ export class Stage {
   // The sky's and the sun's light (after the camera is made, as always).
   light() {
     const scene = this.scene
-    scene.add(new THREE.HemisphereLight('#d6e6ff', '#3b2a1a', 0.85))
+    const sky = (this.sky = new THREE.HemisphereLight('#d6e6ff', '#3b2a1a', 0.85))
+    scene.add(sky)
     const sun = (this.sun = new THREE.DirectionalLight('#fff0d6', 2.3))
     sun.position.set(-16, 34, 20)
     // ((V2) as the quality has it: high's 2048 map, as ever)
@@ -149,6 +150,20 @@ export class Stage {
     const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
     fill.position.set(18, 12, -16)
     scene.add(fill)
+  }
+
+  // (V3d) The light over a field still burning (the Powder Field's: the
+  // view turns it on while the table's turf is scorched, view/index.js),
+  // or the day's as ever: an evening's low warm sun under a sky gone brown
+  // with smoke. Only colours and strengths change (no light is added or
+  // taken away, so no material links its program again).
+  mood(burning) {
+    if (!!burning === !!this.burning) return
+    this.burning = !!burning
+    this.sky.color.set(burning ? '#d9c0a6' : '#d6e6ff')
+    this.sky.intensity = burning ? 0.8 : 0.85
+    this.sun.color.set(burning ? '#ffc58f' : '#fff0d6')
+    this.sun.intensity = burning ? 2.15 : 2.3
   }
 
   // (F8a) The fog and the sun's shadows for a board W×H: the fog from 70k to

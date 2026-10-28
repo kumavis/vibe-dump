@@ -412,6 +412,14 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
       const s5 = sample(C, kegB, quick ? 9 : 4, [scanProbe], stream(20261027))
       report(!s5.bad.length && s5.states >= (quick ? 20 : 100), `P-scan, keg: ${s5.states} states on ${kegB.length} keg/ boards, the reference scoring with the powder keg's terms`, s5.bad)
     } else if (C.M.kegsOf) say('  (P-scan, keg: no keg/ AI pair in the corpus yet)')
+    // (V3d) the Powder Field: the powder/ AI pairs (a Grand board with
+    // height and a field of kegs: the keg terms measured in 3D), on a stream
+    // of their own (the rows after it draw as they did)
+    const powB = C.M.kegsOf ? items.filter((it) => it.kind === 'ai' && it.set === 'powder').slice(0, quick ? 1 : 2).map((it) => [`powder ${it.id}`, jobSetup(it.job)]) : []
+    if (powB.length) {
+      const s6 = sample(C, powB, quick ? 7 : 3, [scanProbe], stream(20261028))
+      report(!s6.bad.length && s6.states >= (quick ? 15 : 60), `P-scan, the Powder Field: ${s6.states} states on ${powB.length} powder/ boards, the reference scoring with the keg terms in 3D and the wrecks' height terms`, s6.bad)
+    } else if (C.M.kegsOf) say('  (P-scan, the Powder Field: no powder/ AI pair in the corpus yet)')
   }
   if (want('los')) {
     const l1 = pLos(C, Array.from({ length: quick ? 60 : 500 }, (_, i) => i + 1), 40, rand)

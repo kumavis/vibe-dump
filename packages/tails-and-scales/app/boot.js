@@ -1257,7 +1257,8 @@ export function boot(location) {
         // (sim/board-check.mjs): the mat, the zones' depth, the objectives,
         // the overlay's grid, the figures' run-off edge, the tufts and
         // flowers, the camera's dolly and far plane, the fog and the
-        // shadow camera, and how often it was made over (setBoard)
+        // shadow camera, how often it was made over (setBoard), and (V3d)
+        // what burns on it
         board: () => {
           const sc = view.stage.sun.shadow.camera, mat = view.table.board.geometry.parameters
           return {
@@ -1266,6 +1267,9 @@ export function boot(location) {
             grid: [view.overlay.tex.image.width, view.overlay.tex.image.height], unitsW: view.units.W,
             tufts: view.table.tufts.count, flowers: view.table.flowers.count,
             dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
+            // ((V3d) the burns painted into the mat (a microtask after the
+            // table is drawn, all at once), and the fires' vents lit)
+            burns: view.table.marks?.length ?? 0, fires: view.effects.plumes.count().vents,
           }
         },
         // (F8b, not promised) the drawing at scale (sim/render-bench.mjs,
@@ -1283,8 +1287,19 @@ export function boot(location) {
             tiles: view.terrain.tileCheck(), shadow: { fits: view.stage.fits ?? 0, box: [sc.left, sc.right, sc.bottom, sc.top, sc.near, sc.far] },
             minimap: { up: ui.minimap.up(), ms: ui.minimap.ms, paintMs: ui.minimap.paintMs, redraws: ui.minimap.redraws }, roster: ui.roster.model(),
             chips: document.querySelectorAll('#chips .chip:not([style*="display: none"])').length,
+            // ((V3d) the fires burning on the table, and their smoke and flames)
+            fires: view.effects.plumes.count(),
           }
         },
+        // ((V3d, not promised) the fires' smoke and flames run on `s` seconds
+        // at once, the battle held where it is (sim/powder-shots.mjs: the
+        // columns built up before a shot)
+        smoke: (s) => {
+          for (let t = 0; t < s; t += 0.1) view.effects.plumes.update(0.1)
+        },
+        // ((V3d, not promised) the camera put on a pose at once ({ pos,
+        // target }, [x, y, z] each), or on the whole board ('overview')
+        look: (p) => rig.toPose(p === 'overview' ? rig.fit(rig.views[rig.views.length - 1]) : p, 0.01),
         // ((F8b's review, not promised) the chips shown, each its units'
         // ids and its place on the page (sim/input-check.mjs taps them), and
         // the minimap redrawn `n` times running, each a whole redraw (its
