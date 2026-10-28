@@ -1217,6 +1217,26 @@ follows N3.
   self-test and input-check's Shift-click fail on HEAD's build alike, not
   this step's. Left: a phone's numbers for both styles (the overlay is
   there for them).
+- [x] **V3a** Condition tooltips and attack-block icons (the user: "when
+  hovering over a unit with a condition, explain the condition inside a
+  tool tip that doesn't go off the side of the screen … if there's some
+  reason you can't attack, make sure there's a status icon for that").
+  Landed (view, ui and present only: no bump, the corpus byte-identical):
+  one table of the conditions, `present/conditions.js`, an icon and a tip
+  each (mesmerized, in combat, fell back, advanced, a charge failed, never
+  charges, in cover, high ground, losses, moved, shot, charged), every
+  reason `canShoot` and `canCharge` refuse by among them; the label shows
+  what holds a unit back now (a deed's in its own turn, a war machine's in
+  its Charge phase), the card, the roster and the chips too, at every zoom
+  tier; one tooltip, kept 8 px inside the screen and flipped at its edges,
+  on a hover, or pinned by a tap until the next; a hover over a figure
+  tells its conditions; no native titles. DESIGN §2.11's (V3a) note.
+  Checked by `node sim/input-check.mjs --only tips` (the table read off the
+  rules' code in Node; the tips at 1280×800 by the mouse and on a 390×844
+  phone by touch), `sim/present-check.mjs`'s card oracle and snap-check's
+  `deeds-stale` and `turn-stale` edits (`--mutations` runs edits alone).
+  Left: any condition a new spell puts on a unit wants a row in the table
+  (the check fails until it has one).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
