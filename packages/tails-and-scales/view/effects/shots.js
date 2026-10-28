@@ -3,13 +3,16 @@
 // style (its `fx`, a presentation key the rules never read); a blast
 // weapon's template, its marker held where it is aimed until the throw, its
 // scatter, the war machine's or the grenadier's throw, and where it lands;
-// a spell's cast, fizzle, thorns and mesmerizing gaze. It plays them with
-// fx (view/effects/fx.js) over the figures (view/units.js), as the
+// a spell's cast, fizzle, thorns and mesmerizing gaze; (V3c) Venom Mist's
+// cloud, Root Snare's roots and the glow of a spell cast on a friend
+// (Barkskin's bark, Cold Blood's frost). It plays them with fx
+// (view/effects/fx.js) over the figures (view/units.js), as the
 // EventPlayer hands them over (view/player.js).
 //
-// The marker and the thorns are view state the mirror doesn't hold: a new
-// table takes them away, and so does a snap (clear(): DESIGN §2.4), which
-// drops the blast.fire or spell.fade that would have.
+// The marker, the thorns and (V3c) the roots are view state the mirror
+// doesn't hold: a new table takes them away, and so does a snap (clear():
+// DESIGN §2.4), which drops the blast.fire or spell.fade that would have.
+// (The roots sink away on their own, a beat after they bind.)
 //
 // R7 moved it out of main.js (volleyFx, projGeo, projectileStyle,
 // artilleryFire and the shooting's handlers) unchanged, but that a glowing
@@ -60,6 +63,8 @@ export class Shots {
     this.blastMarker = null
     // an eruption's thorns, by caster, until its spell.fade
     this.spikesOf = new Map()
+    // ((V3c) Root Snare's roots standing, until they sink of their own)
+    this.roots = new Set()
   }
 
   // A projectile in a weapon's style: its mesh, arc, speed, spin, trail.
@@ -171,11 +176,13 @@ export class Shots {
     const fx = this.effects, y = this.floorAt(e.x, e.z)
     // ((F19a) a powder keg's blast: its own, bigger bang)
     if (e.fx === 'keg') return this.kegLanded(e, y)
-    if (e.fx !== 'thorns') {
+    // ((V3c) nor a venom mist, which billows rather than bangs: mist())
+    const erupted = e.fx === 'thorns' || e.fx === 'mist'
+    if (!erupted) {
       fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire', y)
       sfx.boom(e.r / 2)
     }
-    fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2, y })
+    fx.ring(e.x, e.z, e.r, e.fx === 'acid' || e.fx === 'mist' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2, y })
   }
 
   // (F19a) A powder keg set off (keg.fuse): its fuse fizzes, sparks spitting
@@ -216,6 +223,8 @@ export class Shots {
   // ((F16) `quiet`: the caster veiled by the courtesy fog, its gem's motes
   // left out, the thorns where they burst seen)
   async thorns(e, { quiet = false } = {}) {
+    // ((V3c) the eruption's other look: Venom Mist's cloud)
+    if (e.fx === 'mist') return this.mist(e, { quiet })
     const units = this.units, fx = this.effects
     const cv = units.get(e.u), gen = units.gen
     const gem = cv.models[0].mesh.userData.anim.gem
@@ -272,11 +281,126 @@ export class Shots {
     this.effects.text(this.units.top(e.tg), 'Mesmerized!', '#e0a0ff', { size: 20 })
   }
 
+  // (V3c) Venom Mist (spell.thorns, fx 'mist'): a thread of green motes
+  // from the caster's head, then a cloud of venom billowing up over the
+  // template, rolling low and thinning over a few seconds, its stain on the
+  // turf; no bang, no thorns (landed() and faded() have nothing of it to
+  // play). `quiet`: the caster veiled by the courtesy fog, the thread left
+  // out.
+  async mist(e, { quiet = false } = {}) {
+    const units = this.units, fx = this.effects
+    const cv = units.get(e.u), gen = units.gen
+    const y = this.floorAt(e.x, e.z)
+    if (!quiet) {
+      const from = units.top(e.u)
+      for (let i = 0; i <= 12; i++) {
+        const k = i / 12
+        fx.mote({ x: lerp(from.x, e.x, k), y: lerp(from.y, y + 0.6, k) + Math.sin(k * Math.PI) * 0.6, z: lerp(from.z, e.z, k), size: 0.07, color: '#9aff5a', life: 0.5 + k * 0.3, g: 0 })
+      }
+    }
+    sfx.fizzle()
+    await wait(0.25)
+    // (nothing of a table since replaced: no stain on the new one)
+    if (units.gone(e.u, cv, gen)) return
+    const greens = ['#4f9a2e', '#6fc23f', '#3a6e22', '#8fdc5a']
+    for (let i = 0; i < 26 + e.r * 6; i++) {
+      const a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * e.r * 0.9
+      fx.smoke({
+        x: e.x + Math.cos(a) * d, y: y + 0.15 + Math.random() * 0.3, z: e.z + Math.sin(a) * d,
+        vx: Math.cos(a) * (0.3 + Math.random() * 0.6), vy: 0.15 + Math.random() * 0.35, vz: Math.sin(a) * (0.3 + Math.random() * 0.6),
+        size: 0.35 + Math.random() * 0.35, color: greens[i % greens.length], life: 2.2 + Math.random() * 1.6, g: -0.4, drag: 1.2,
+      })
+    }
+    for (let i = 0; i < 18; i++) {
+      const a = Math.random() * Math.PI * 2, d = Math.random() * e.r
+      fx.mote({ x: e.x + Math.cos(a) * d, y: y + 0.2, z: e.z + Math.sin(a) * d, vy: 0.5 + Math.random(), size: 0.05, color: '#c8ff8a', life: 1 + Math.random(), g: -0.5 })
+    }
+    fx.decal(e.x, e.z, e.r * 0.8, fx.acidTex, 0.4, y)
+  }
+
+  // (V3c) Root Snare (spell.snare): roots burst up round every figure of
+  // the target, curling in over its feet, leaves flying, and "Snared!" over
+  // it; they stand a beat, then sink away of their own (`roots`, which a
+  // snap clears). Nothing of the caster's: the roots rise where the target
+  // stands, whoever cast them.
+  async snared(e) {
+    const units = this.units, fx = this.effects
+    const tv = units.get(e.tg), gen = units.gen
+    this.thorn ??= new THREE.ConeGeometry(0.12, 1, 5)
+    const roots = []
+    for (const f of units.standing(e.tg)) {
+      const y = f.y ?? 0
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + Math.random() * 0.5, d = 0.12 + Math.random() * 0.12
+        const s = new THREE.Mesh(this.thorn, M(i % 2 ? '#5a3f22' : '#6b7a2e'))
+        s.position.set(f.x + Math.cos(a) * d, y - 0.5, f.z + Math.sin(a) * d)
+        // (leaning in over the feet)
+        s.rotation.set(Math.sin(a) * -0.7, 0, Math.cos(a) * 0.7)
+        s.scale.set(0.55, 0.45 + Math.random() * 0.35, 0.55)
+        s.userData.y0 = s.position.y
+        this.scene.add(s)
+        roots.push(s)
+        this.roots.add(s)
+      }
+      fx.leaves(f.x, y + 0.2, f.z, ['#6b8a2e', '#8aa83a', '#5a3f22'], 4, 0.6)
+    }
+    sfx.crumble()
+    await tween(0.35, (k) => roots.forEach((s) => (s.position.y = s.userData.y0 + easeOut(k) * (0.3 + s.scale.y * 0.35))))
+    if (units.gone(e.tg, tv, gen)) return
+    this.effects.text(units.top(e.tg), 'Snared!', '#c8e07a', { size: 20 })
+    // (they hold, then sink back into the turf)
+    wait(1.4).then(() => tween(0.8, (k) => roots.forEach((s) => (s.position.y -= 0.02 * k)))).then(() => {
+      for (const s of roots) {
+        if (!this.roots.has(s)) continue
+        this.roots.delete(s)
+        this.scene.remove(s)
+      }
+    })
+  }
+
+  // (V3c) A spell settling on a friend (spell.ward: Barkskin's bark, fx
+  // 'bark'; Cold Blood's frost, fx 'coil'): a thread of motes from the
+  // caster to it in the spell's colours, rings closing round it, the spell's
+  // name over it (its caster's spell of that look), and bark chips or frost
+  // rising. `quiet`: the caster veiled by the courtesy fog, the thread left
+  // out.
+  async ward(e, { quiet = false } = {}) {
+    const units = this.units, fx = this.effects
+    const tv = units.get(e.tg), gen = units.gen
+    const gone = () => units.gone(e.tg, tv, gen)
+    const bark = e.fx === 'bark'
+    const col = bark ? ['#c8954a', '#8bd16a', '#e8c890'] : ['#9fe6ff', '#e8fbff', '#5fb8e8']
+    const from = units.top(e.u), to = units.top(e.tg)
+    if (!quiet && e.u !== e.tg) {
+      const beam = []
+      for (let i = 0; i <= 14; i++) {
+        const k = i / 14
+        beam.push(wait(k * 0.25).then(() => gone() || fx.mote({ x: lerp(from.x, to.x, k), y: lerp(from.y, to.y, k) + Math.sin(k * Math.PI) * 0.7, z: lerp(from.z, to.z, k), size: 0.08, color: col[i % 2], life: 0.6, g: 0 })))
+      }
+      await Promise.all(beam)
+    }
+    if (gone()) return
+    sfx.magic()
+    const at = units.shown(e.tg), y = at.y ?? 0
+    for (let i = 0; i < 3; i++) fx.ring(at.pos.x, at.pos.z, at.r * (1.25 - i * 0.25), col[i], { life: 1.1 + i * 0.25, fill: 0.06, y })
+    for (const f of units.standing(e.tg)) {
+      if (bark) fx.leaves(f.x, (f.y ?? 0) + 0.3, f.z, ['#7a5a32', '#a07a46', '#6b8a2e'], 3, 0.5)
+      else for (let i = 0; i < 4; i++) fx.mote({ x: f.x + (Math.random() - 0.5) * 0.4, y: (f.y ?? 0) + 0.2, z: f.z + (Math.random() - 0.5) * 0.4, vy: 1 + Math.random(), size: 0.05, color: col[i % 3], life: 0.9, g: -0.6 })
+    }
+    const name = units.unit(e.u).t.spells?.find((w) => w.fx === e.fx)?.name ?? 'Warded'
+    fx.text(to, `${name}!`, col[0], { size: 19 })
+  }
+
   // What the shooting holds outside the mirror now: a template's marker, an
   // eruption's thorns standing (for sim/'s snap check: nothing, once the
   // player has drained its queue).
   held() {
     return { marker: !!this.blastMarker, thorns: [...this.spikesOf.values()].reduce((n, spikes) => n + spikes.length, 0) }
+  }
+
+  // (V3c) the roots standing now (a snare's, which sink of their own)
+  rooted() {
+    return this.roots.size
   }
 
   // Whatever the shooting holds outside the mirror goes: a template's
@@ -286,5 +410,7 @@ export class Shots {
     this.blastMarker = null
     for (const spikes of this.spikesOf.values()) for (const s of spikes) this.scene.remove(s)
     this.spikesOf.clear()
+    for (const s of this.roots) this.scene.remove(s)
+    this.roots.clear()
   }
 }

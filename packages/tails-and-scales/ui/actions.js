@@ -1,6 +1,9 @@
 // The action buttons (DESIGN §1.3, §2.11): End (Begin battle in the
 // deployment), Auto, Advance and Shortest move; (F10c) ▶ Go and Orders N;
-// (F12) ↶ Undo (app/boot.js wires it: the flow's). Each press is an intent the
+// (F12) ↶ Undo (app/boot.js wires it: the flow's); (V3c) the spell bar above
+// them, a button a spell of the caster picked up (its key, its name, its
+// cast and chance, its range and its one line; the one picked lit, one with
+// nothing to cast on dimmed). Each press is an intent the
 // local human turns into a command (input/human.js), and each button shows,
 // reads and goes disabled as the HUD model says (present/hud-model.js: a
 // slice's show or label null leaves it as it was). (Each button's handler
@@ -41,10 +44,38 @@ export class Actions {
     adv.disabled = m.advance.busy
     if (m.advance.show !== null) adv.style.display = m.advance.show ? '' : 'none'
     if (m.advance.label !== null) adv.textContent = m.advance.label
+    this.spellBar(m.spells)
+  }
+
+  // (V3c) the spell bar (present/hud-model.js spellBar), drawn again only
+  // when what it shows changes
+  spellBar(s) {
+    const bar = $('#spellbar')
+    if (!bar) return
+    bar.classList.toggle('hidden', !s)
+    const key = s ? JSON.stringify(s) : ''
+    if (key === this.spellsShown) return
+    this.spellsShown = key
+    bar.innerHTML = ''
+    if (!s) return
+    for (const x of s.list) {
+      const b = document.createElement('button')
+      b.className = `spell${x.on ? ' on' : ''}${x.can ? '' : ' dim'}${x.ally ? ' ally' : ''}`
+      b.dataset.sp = String(x.sp)
+      b.title = `${x.name} (${x.key}): cast ${x.cast}+ on 2D6, ${x.pct}% · ${x.range}" · ${x.what}${x.can ? '' : ' · nothing to cast it on now'}`
+      b.innerHTML = `<kbd>${x.key}</kbd><b>${x.name}</b><small>${x.cast}+ · ${x.pct}% · ${x.range}"</small><em>${x.what}</em>`
+      b.onclick = () => {
+        sfx.click()
+        return this.human?.pickSpell(x.sp)
+      }
+      bar.appendChild(b)
+    }
   }
 
   // `human`: the local human (input/human.js)
   wire(human) {
+    // ((V3c) the spell bar's buttons pick its spells)
+    this.human = human
     // End: the deployment done, or the phase over
     $('#endPhase').onclick = () => {
       unlock()

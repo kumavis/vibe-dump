@@ -79,7 +79,8 @@
 export const fogStart = (seat) => ({ seat, over: false, foes: [], seen: new Set(), fell: new Set(), last: new Map(), known: new Map(), table: null })
 
 // a mirror unit, as a record (models copied: the mirror folds in place)
-const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged })
+// ((V3c) its spell marks too, as last seen)
+const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged, snared: !!mu.snared, warded: !!mu.warded, resolute: !!mu.resolute })
 const chunkRec = (c) => ({ alive: c.alive, y: c.y })
 const sameChunk = (a, b) => !!a && !!b && a.alive === b.alive && a.y === b.y
 
@@ -286,7 +287,7 @@ export const fogStale = (F, M, id) => !!F?.table && !F.over && !sameChunk(F.tabl
 const OWN = new Set(['phase.start', 'round.scored', 'stage', 'game.over'])
 const OPENS = new Set(['focus', 'unit.face', 'tray.open'])
 const DEEDS = new Set(['unit.move', 'unit.place', 'volley', 'melee', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'charge.result', 'unit.flee'])
-const ACTS = new Set(['unit.face', 'volley', 'melee', 'charge.result', 'spell.cast', 'spell.fizzle', 'spell.gaze', 'spell.thorns', 'blast.fire', 'unit.move', 'unit.place'])
+const ACTS = new Set(['unit.face', 'volley', 'melee', 'charge.result', 'spell.cast', 'spell.fizzle', 'spell.gaze', 'spell.thorns', 'spell.snare', 'spell.ward', 'blast.fire', 'unit.move', 'unit.place'])
 const TERRAIN = new Set(['terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble'])
 const VICTIM = /^(⚠ )?.+: \d+ hits? · wound/
 // the name a line or a tray title starts with

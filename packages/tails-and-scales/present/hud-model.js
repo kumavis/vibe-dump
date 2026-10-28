@@ -38,6 +38,13 @@
 //     aim                         (F13) touch aim: { on (👆 Aim), select (▭
 //                                 Select), aiming (a finger's aim under way:
 //                                 'on', 'off' once called off, or null) }
+//     spells                      (V3c) the spell bar: a caster picked up
+//                                 alone in its seat's shooting phase, the
+//                                 table caught up: { u, list: [{ sp, key,
+//                                 name, cast (2D6 ≥ it), pct, range, ally,
+//                                 what (its one line), on (picked), can
+//                                 (anything to cast it on now) }] }; null
+//                                 hides it
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -55,7 +62,8 @@
 //            units whose orders act in it now and of those an order covers
 //            in it; null for none), ordered (how many of the seat's units
 //            hold an order), aim ((F13) input/aim.js's state(): the toggles
-//            and the drag; null for none) }
+//            and the drag; null for none), spell ((V3c) the spell picked for
+//            the caster picked up, by index; undefined for none) }
 //   hud      the HUD's own state, kept from the last model: { phaseShown,
 //            buttonsUp, hint, sides (each seat's look: ui/theme.js) }
 //
@@ -89,7 +97,7 @@
 // turn's start clearing its seat's (as the match's own turn start does).
 // What a fight or a morale phase changes without an action's end (a pile-in,
 // a model slain or fled) reaches it at the next action's end or stop.
-import { PHASES } from '../core/rules.js'
+import { PHASES, p2D6 } from '../core/rules.js'
 import { inCover } from '../core/queries.js'
 
 const NOBODY = new Set()
@@ -102,7 +110,7 @@ const [FIRST] = PHASES.map((p) => p.key)
 export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })
 
 export function hudModel({ G, mirror: M, session, input, hud }) {
-  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false, aim = null } = input
+  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false, aim = null, spell } = input
   const { phaseShown, sides } = hud
   const rounds = G.setup.rounds
   const ask = (fn) => session.preview(fn)
@@ -168,9 +176,14 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
       charge: `${group} units: click an enemy — every one of them that can charges it.`,
     }[P.phase] || ''
   } else if (mine && (idle || !sel)) {
+    // ((V3c) a caster: the spell picked, and how to pick another)
+    const w = sel?.t.spells && spell !== undefined ? sel.t.spells[spell] : null
+    const casting = !w ? null : w.ward || w.resolve
+      ? `${w.name} — click a friend within ${w.range}" (or ${sel.t.short} itself) to cast it on. 1–${sel.t.spells.length} picks another spell.`
+      : `${w.name} — click an enemy to cast it. Hover for the odds; 1–${sel.t.spells.length} picks another spell.`
     hint = {
       move: sel ? (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
-      shoot: sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.',
+      shoot: casting ?? (sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.'),
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
     }[P.phase] || ''
   } else if (!mine) hint = ''
@@ -188,11 +201,35 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     advance,
     shortest: { show: !!pk },
     aim: { on: !!aim?.on, select: !!aim?.select, aiming: aim?.aiming ?? null },
+    // ((V3c) the spell bar, once the table has caught up with the caster's
+    // phase)
+    spells: mine && idle && P.phase === 'shoot' && sel?.t.spells && group < 2 ? spellBar(sel, spell, ask) : null,
     // the deploying seat's zone is lit; in battle both dim
     zones: [0, 1].map((s) => (M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === deploy ? 0.2 : 0.07)),
     hint,
     rings: ringLooks({ session, input, covered: mine && idle ? covered : NOBODY }),
     buttonsUp,
+  }
+}
+
+// ── (V3c) The spell bar ─────────────────────────────────────────────────────
+// What a caster picked up may cast: each of its spells with its key (1-9),
+// its name, its cast value and chance on 2D6, its range, whether it is cast
+// on a friend, its one line, whether it is the one picked, and whether it
+// has anything to cast on now (asked of the match, with the dice locked).
+const SPELL_LINE = (w) => w.mesmerize ? 'D3 mortal wounds; it can\'t shoot or charge next turn'
+  : w.snare ? 'it can\'t move or charge next turn'
+    : w.ward ? 'a friend saves at +1 until your next turn'
+      : w.resolve ? 'a friend takes no morale test and rolls a failed charge again until your next turn'
+        : `a ${w.blast}" template under the enemy, S${w.S} AP${w.AP ? `-${w.AP}` : '0'}${w.poison ? `, poison ${w.poison}+` : ''}${w.scenery === 0 ? ', spares the scenery' : ''}`
+export function spellBar(u, picked, ask) {
+  const can = ask((G, q) => u.t.spells.map((w, sp) => q.shootTargets(G, u, sp).length > 0))
+  return {
+    u: u.id,
+    list: u.t.spells.map((w, sp) => ({
+      sp, key: String(sp + 1), name: w.name, cast: w.spell, pct: Math.round(p2D6(w.spell) * 100), range: w.range,
+      ally: !!(w.ward || w.resolve), what: SPELL_LINE(w), on: sp === picked, can: can[sp],
+    })),
   }
 }
 
@@ -247,15 +284,19 @@ function aimVerb(pk, deploying, group, P) {
 // too).
 // ((F10c) a unit whose standing order covers the phase: cyan, not white,
 // while it can still act)
+// ((V3c) a caster's spell picked (input.spell): what it may be cast on, an
+// enemy red, a friend green, before whether it can act)
 export function ringLooks({ session, input, covered = NOBODY }) {
-  const { mode, deploy: dep, pick: pk, sel, hover } = input
+  const { mode, deploy: dep, pick: pk, sel, hover, spell: sp } = input
   // (unit id → [colour, opacity]) for what the match says, on a seat's turn
   const lit = mode !== 'phase' ? new Map() : session.preview((G, q) => {
     const ph = q.phaseKey(G), out = new Map()
+    const ally = !!sel && ph === 'shoot' && sp !== undefined && q.allySpell(q.weaponOf(sel, sp))
     for (const u of G.units) {
       if (!q.alive(u) || u === sel) continue
-      if (q.canAct(G, u)) out.set(u.id, covered.has(u.id) ? ['#5fd3ff', 0.85] : ['#ffffff', 0.75])
-      else if (sel && ph === 'shoot' && u.side !== sel.side && q.shotInfo(G, sel, u).ok) out.set(u.id, ['#ff5a4a', 0.95])
+      if (ally && u.side === sel.side && q.canShoot(G, sel) && q.shotInfo(G, sel, u, sp).ok) out.set(u.id, ['#7dff9a', 0.95])
+      else if (q.canAct(G, u)) out.set(u.id, covered.has(u.id) ? ['#5fd3ff', 0.85] : ['#ffffff', 0.75])
+      else if (sel && ph === 'shoot' && u.side !== sel.side && q.shotInfo(G, sel, u, sp).ok) out.set(u.id, ['#ff5a4a', 0.95])
       else if (sel && ph === 'charge' && u.side !== sel.side && q.chargeTargets(G, sel).includes(u)) out.set(u.id, ['#ffa040', 0.95])
     }
     return out
@@ -294,16 +335,28 @@ export function turnBegun(facts, e) {
   return out
 }
 
+// (V3c) What each spell's mark on a unit does, as the label's glyph says it
+// on hover (view/units.js) and the help tells it.
+export const MARKS = Object.freeze({
+  snared: "Snared (Root Snare): it can't move, advance, fall back or charge until the end of its next turn",
+  warded: "Barkskin: +1 to its saves until its side's next turn",
+  resolute: "Cold Blood: no morale tests, and a failed charge rolled again, until its side's next turn",
+})
+
 // The card's status line for a unit: `mu` the unit as shown (the mirror's:
 // what stands, what wounds are left, mesmerized, in combat) and `f` its
 // facts (factOf: the match's own while the table has caught up with it,
 // else the record of the last action the table has played).
+// ((V3c) and the spells' marks, each by its glyph and name)
 export function cardStatus(t, mu, f) {
   const status = []
   if (f.moved) status.push(f.fellBack ? 'fell back' : f.advanced ? `advanced +${f.advRoll}"` : 'moved')
   if (f.shot) status.push('shot')
   if (f.charged) status.push('charged')
   if (mu.mesmerized) status.push('🌀 mesmerized')
+  if (mu.snared) status.push('🌿 snared')
+  if (mu.warded) status.push('🪵 barkskin')
+  if (mu.resolute) status.push('❄️ cold blood')
   if (mu.alive > 0 && mu.engaged) status.push('⚔ in combat')
   if (mu.alive > 0 && f.cover) status.push('🛡 in cover')
   const models = t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`

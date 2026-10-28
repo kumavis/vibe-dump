@@ -5,13 +5,16 @@
 // it: it reads this, folded from the same events it plays, one at a time.
 //
 //   M = { units: { id → { pos: { x, z }, y, r, models: [{ w, alive, ox, oz }],
-//                         alive, mesmerized, engaged } },
+//                         alive, mesmerized, engaged, snared, warded,
+//                         resolute } },
 //         chunks: { id → { alive, y } },
 //         owners: [seat or -1, per objective], vp: [a, b],
 //         round, active, phase, stage, board: { W, H } }  (F8a: board the
 //         match's, fixed for its whole battle)
 //   (F7a) a unit's `y`: the floor it stands on (core/queries.js groundY), 0
 //   on a board without height, whose events carry none
+//   (V3c) a unit's spell marks, snared (Root Snare), warded (Barkskin) and
+//   resolute (Cold Blood): the `status` event's lists, as mesmerized is
 //
 // project(G) is the mirror of a match that is not running ahead of its view
 // (a new table, or a snap); applyEvent(M, e) folds one event into it. Once
@@ -40,6 +43,7 @@ export function project(G) {
       pos: { x: u.pos.x, z: u.pos.z }, y: groundY(G, u), r: u.r,
       models: u.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })),
       alive: u.alive, mesmerized: u.mesmerized, engaged: alive(u) && isEngaged(G, u),
+      snared: u.snared, warded: u.warded, resolute: u.resolute,
     }
   }
   const chunks = {}
@@ -91,9 +95,13 @@ export function applyEvent(M, e) {
       break
     case 'status': {
       const engaged = new Set(e.engaged), mesmerized = new Set(e.mesmerized)
+      const snared = new Set(e.snared), warded = new Set(e.warded), resolute = new Set(e.resolute)
       for (const [id, v] of Object.entries(M.units)) {
         v.engaged = engaged.has(Number(id))
         v.mesmerized = mesmerized.has(Number(id))
+        v.snared = snared.has(Number(id))
+        v.warded = warded.has(Number(id))
+        v.resolute = resolute.has(Number(id))
       }
       break
     }

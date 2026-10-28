@@ -86,7 +86,13 @@ export function stepOf(G, q, u, o, phase) {
   // whose target another's shot just felled still plays this phase)
   const tg = G.units.find((x) => x.id === o.tg)
   if (!tg || !q.alive(tg)) return { how: 'pilot' }
-  if (phase === 'shoot') return q.canShoot(G, u) && q.shotInfo(G, u, tg).ok ? { how: 'macro', cmds: [{ t: 'shoot', u: u.id, tg: tg.id }] } : { how: 'pilot' }
+  // ((V3c) a caster's attack casts the spell the AI would at its target,
+  // spellFor's; none that takes it: the AI plays it)
+  if (phase === 'shoot') {
+    const sp = q.spellFor(G, u, tg)
+    if (sp !== undefined) return q.canShoot(G, u) && sp >= 0 ? { how: 'macro', cmds: [{ t: 'shoot', u: u.id, tg: tg.id, sp }] } : { how: 'pilot' }
+    return q.canShoot(G, u) && q.shotInfo(G, u, tg).ok ? { how: 'macro', cmds: [{ t: 'shoot', u: u.id, tg: tg.id }] } : { how: 'pilot' }
+  }
   if (phase === 'charge') {
     if (!q.canCharge(G, u) || !q.chargeTargets(G, u).includes(tg)) return { how: 'none', why: 'out of reach' }
     const plan = q.chargePlan(G, u, tg)

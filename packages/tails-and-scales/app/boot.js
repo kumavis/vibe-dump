@@ -12,6 +12,7 @@ import { UnitViews } from '../view/units.js'
 import { clock } from '../view/clock.js'
 import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
+import { shootAt } from '../input/tools/shoot.js'
 import { Selection } from '../input/selection.js'
 import { GroupInput } from '../input/group.js'
 import { OrderBook } from '../input/book.js'
@@ -1050,8 +1051,10 @@ export function boot(location) {
         must(human.advance(u), 'doAdvance')
         return settle()
       },
-      doShoot: (u, tg) => {
-        must(human.shoot(u, tg), 'doShoot')
+      // ((V3c) the shot exactly as given: a caster's names its spell `sp`
+      // or none, whatever the spell bar has picked)
+      doShoot: (u, tg, sp) => {
+        must(human.send(human.localSeat(), shootAt(u, tg, sp)), 'doShoot')
         return settle()
       },
       doCharge: (u, tg) => {
@@ -1113,8 +1116,8 @@ export function boot(location) {
         canAct: (u) => asked((g) => canAct(g, u)),
         movePlan: (u, extra) => asked((g) => movePlan(g, u, extra)),
         freeSpot: (u, x, z, side, others) => asked((g) => freeSpot(g, u, x, z, side, others)),
-        shootTargets: (u) => asked((g) => shootTargets(g, u)),
-        shotInfo: (u, tg) => asked((g) => shotInfo(g, u, tg)),
+        shootTargets: (u, sp) => asked((g) => shootTargets(g, u, sp)),
+        shotInfo: (u, tg, sp) => asked((g) => shotInfo(g, u, tg, sp)),
         chargeTargets: (u) => asked((g) => chargeTargets(g, u)),
         chargePlan: (u, tg) => asked((g) => chargePlan(g, u, tg)),
         rngState: () => (serving ? serving.rng : rngState(atTable().rng)),

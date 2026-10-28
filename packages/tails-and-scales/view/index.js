@@ -135,6 +135,11 @@ export class View {
       'spell.fade': (e) => shots.faded(e),
       'spell.gaze': (e) => (units.hid(e.u) ? undefined : shots.gaze(e)),
       'spell.mesmerized': (e) => (units.hid(e.tg) ? undefined : shots.mesmerized(e)),
+      // ((V3c) a snare's roots round its target, a spell settling on a
+      // friend: each where its target is seen, a veiled caster's thread
+      // left out)
+      'spell.snare': (e) => (units.hid(e.tg) ? undefined : shots.snared(e)),
+      'spell.ward': (e) => (units.hid(e.tg) ? undefined : shots.ward(e, { quiet: units.hid(e.u) })),
       // what the labels and flags show: read off the mirror, which these
       // have just updated (the flags repaint each frame, view/objectives.js)
       status: () => units.labelAll(),

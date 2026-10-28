@@ -60,6 +60,7 @@ import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
 import { LADDER_OUT } from '../core/terrain/recipes.js'
 import { PACE } from '../present/pace.js'
+import { MARKS } from '../present/hud-model.js'
 import { buildModel, disposeFigure, lodOf } from './models/cache.js'
 import { pxPerInch, tierOf, glyphOf } from '../present/zoom.js'
 import { tween, wait, easeOut, easeInOut, wrapAngle, lerp } from './clock.js'
@@ -402,7 +403,7 @@ export class UnitViews {
     if (!v.at && v.labelY !== undefined && v.labelY !== heightOf(mu)) this.label(id)
   }
   // The label: the unit as shown (models standing or wounds left, mesmerized,
-  // in combat).
+  // in combat; (V3c) the spells' marks, each with what it does in its title).
   label(id) {
     const v = this.views.get(id), u = v.u, mu = this.shown(id)
     const w = mu.models.filter((m) => m.alive)
@@ -410,6 +411,9 @@ export class UnitViews {
     if (u.t.models > 1) html += `<span class="ct">${mu.alive}/${u.t.models}</span>`
     else html += `<span class="ct">${w[0] ? w[0].w : 0}/${u.t.W}♥</span>`
     if (mu.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
+    if (mu.snared) html += `<span class="st" title="${MARKS.snared}">🌿</span>`
+    if (mu.warded) html += `<span class="st" title="${MARKS.warded}">🪵</span>`
+    if (mu.resolute) html += `<span class="st" title="${MARKS.resolute}">❄️</span>`
     if (mu.alive > 0 && mu.engaged) html += `<span class="st" title="In combat">⚔</span>`
     // (F7a) a raised unit's height ("▲2"": on a deck 2" up)
     v.labelY = heightOf(mu)

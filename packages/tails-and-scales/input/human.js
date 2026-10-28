@@ -15,7 +15,10 @@
 // deployment ('deploy') doesn't wait on the player (a placement plays at
 // once). Its own state is the selection: the unit picked up (`sel`), its
 // move's plan (`reach`), what the pointer is over (`hover`, `hoverPick`,
-// `mouse`), and which charge's spots are shaded (`pickShown`).
+// `mouse`), which charge's spots are shaded (`pickShown`), and (V3c) the
+// spell picked for a caster picked up in its shooting phase (`spell`: {
+// u, sp }, the AI's own pick as it is picked up, core/ai/policy.js
+// bestSpell; another by the spell bar or the keys 1-9).
 //
 // The tools (input/tools/): deploy.js, move.js, shoot.js, charge.js and
 // charge-end.js turn a pick into a body and say what it would do; this file
@@ -50,6 +53,8 @@ export class Human {
     this.hoverPick = null
     this.mouse = null
     this.pickShown = null
+    // ((V3c) the spell picked for the caster picked up: { u, sp } or null)
+    this.spell = null
     this.downAt = null
     // (F13) a move previewed and sent as far as it goes that way, beyond
     // the unit's reach: the pointer's own (Alt held on the mouse, a finger
@@ -108,7 +113,29 @@ export class Human {
     // covers in this phase, how many the seat has; (F13) and touch aim's
     // toggles and drag)
     const st = this.standing
-    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.living(this.localSeat()).size : 0, counting: !!st?.counting, aim: this.aim.state() }
+    return { idle: this.flow.player.idle, decision: this.localDecision(), mode: this.mode(), deploy: this.deploySeat(), sel: this.sel, pick: this.picking(), hover: this.hover, group: this.group?.members().length ?? 0, orders: st?.plan() ?? null, ordered: st ? st.living(this.localSeat()).size : 0, counting: !!st?.counting, aim: this.aim.state(), spell: this.spellOf(this.sel) }
+  }
+
+  // ── (V3c) A caster's spells ───────────────────────────────────────────────
+  // The spell picked for unit `u`: its index in u's spells while u is the
+  // caster picked up, else undefined (a unit with no spells, or another
+  // unit: its shot names none).
+  spellOf(u) {
+    return u && u.t.spells && this.spell?.u === u.id ? this.spell.sp : undefined
+  }
+  // Pick spell `sp` for the caster picked up, in its seat's shooting phase
+  // (the spell bar's buttons, the keys 1-9): its range ring and the rings of
+  // what it may be cast on follow. Returns why it picked nothing, null once
+  // it did.
+  pickSpell(sp) {
+    const u = this.sel
+    if (!u?.t.spells || !this.myTurn() || phaseKey(this.G) !== 'shoot') return 'no caster picked up in its shooting phase'
+    if (!(Number.isInteger(sp) && sp >= 0 && sp < u.t.spells.length)) return `${u.t.short} has no spell ${sp}`
+    this.spell = { u: u.id, sp, at: `${this.G.turn.round}:${this.G.turn.active}:shoot` }
+    this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, u.pos, sp)))
+    this.pointed()
+    this.flow.refreshUI()
+    return null
   }
 
   // ── Commands ──────────────────────────────────────────────────────────────
@@ -131,7 +158,7 @@ export class Human {
     return this.send(this.localSeat(), move.advance(u))
   }
   shoot(u, tg) {
-    return this.send(this.localSeat(), shoot.shootAt(u, tg))
+    return this.send(this.localSeat(), shoot.shootAt(u, tg, this.spellOf(u)))
   }
   charge(u, tg) {
     return this.send(this.localSeat(), charge.chargeAt(u, tg))
@@ -348,6 +375,13 @@ export class Human {
     // (F10a) a group's keys first (input/group.js)
     addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT') return
+      // ((V3c) a caster picked up in its shooting phase: 1-9 pick its
+      // spell, before the group's keys call a saved group by them)
+      if (!e.ctrlKey && !e.metaKey && !e.altKey && /^[1-9]$/.test(e.key) && this.sel?.t.spells && Number(e.key) <= this.sel.t.spells.length && this.myTurn() && phaseKey(this.G) === 'shoot') {
+        e.preventDefault()
+        this.pickSpell(Number(e.key) - 1)
+        return
+      }
       if (!this.picking() && this.standing?.key(e)) return
       if (!this.picking() && this.group?.key(e)) return
       if (e.key === 'Escape' && !this.picking()) this.select(null)
@@ -383,6 +417,10 @@ export class Human {
       return
     }
     const sel = this.sel, ph = phaseKey(this.G)
+    // ((V3c) a spell cast on a friend: a click on a friend it takes, the
+    // caster itself included, casts it there)
+    const sp = this.spellOf(sel)
+    if (ph === 'shoot' && sel && unit && unit.side === sel.side && sp !== undefined && this.ask((G, q) => q.allySpell(q.weaponOf(sel, sp)) && q.shotInfo(G, sel, unit, sp).ok)) return void this.shoot(sel, unit)
     if (unit && unit.side === this.localSeat()) {
       if (this.ask((G, q) => q.canAct(G, unit))) {
         sfx.click()
@@ -458,16 +496,23 @@ export class Human {
         this.reach = move.planOf((fn) => this.ask(fn), u)
         overlay.reach(this.reach, G.nav)
       }
-      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u)))
+      // ((V3c) a caster: the AI's pick of its spells to begin with (kept
+      // while the same phase lasts, should it be picked up again), its
+      // range the ring's)
+      const at = `${G.turn.round}:${G.turn.active}:${ph}`
+      if (ph === 'shoot' && u.t.spells && (this.spell?.u !== u.id || this.spell.at !== at)) this.spell = { u: u.id, sp: this.ask((G, q) => q.bestSpell(G, u)), at }
+      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, u.pos, this.spellOf(u))))
       if (ph === 'charge') this.showRange(u, CHARGE_RANGE)
     }
     this.card.show(u)
     this.flow.refreshUI()
   }
 
-  // The range ring of a shot or a charge, around the unit picked up.
+  // The range ring of a shot or a charge, around the unit picked up ((V3c)
+  // a spell cast on a friend's in green).
   showRange(u, range) {
-    this.view.overlay.range(u.pos, u.r, range, phaseKey(this.G) === 'charge' ? '#ffb070' : '#ffffff')
+    const sp = this.spellOf(u), ally = sp !== undefined && !!(u.t.spells[sp].ward || u.t.spells[sp].resolve)
+    this.view.overlay.range(u.pos, u.r, range, phaseKey(this.G) === 'charge' ? '#ffb070' : ally ? '#7dff9a' : '#ffffff')
   }
 
   // What the pointer is over: a unit's line, or on a seat's own turn what
@@ -522,7 +567,10 @@ export class Human {
       text = this.ask((G, q) => {
         const ph = q.phaseKey(G)
         if (ph === 'move' && this.reach && h.ground && (!h.unit || (this.far && h.unit.side !== sel.side))) return move.preview(G, q, this.reach, sel, h.ground, path, this.far)
-        if (ph === 'shoot' && h.unit && h.unit.side !== sel.side) return shoot.preview(G, q, sel, h.unit)
+        // ((V3c) the spell picked: at an enemy, or one cast on a friend at
+        // a friend or the caster itself)
+        const sp = this.spellOf(sel), ally = sp !== undefined && q.allySpell(q.weaponOf(sel, sp))
+        if (ph === 'shoot' && h.unit && (h.unit.side !== sel.side) !== ally) return shoot.preview(G, q, sel, h.unit, sp)
         if (ph === 'charge' && h.unit && h.unit.side !== sel.side) return charge.preview(G, q, sel, h.unit)
         return ''
       })

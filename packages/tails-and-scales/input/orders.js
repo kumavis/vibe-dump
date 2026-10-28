@@ -93,7 +93,8 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
         left.push(u)
         continue
       }
-      if (verb === 'fire') await send({ t: 'shoot', u: id, tg: tg.id }, u)
+      // ((V3c) a caster's: the spell the plan picked, present/orders.js)
+      if (verb === 'fire') await send(plan.sp === undefined ? { t: 'shoot', u: id, tg: tg.id } : { t: 'shoot', u: id, tg: tg.id, sp: plan.sp }, u)
       else if (await send({ t: 'charge', u: id, tg: tg.id }, u)) {
         // a charge that made contact waits on its end: the shortest move
         if (session.G.pending?.k === 'chargeEnd' && session.decisionFor() === seat) await send({ t: 'chargeEnd', c: -1 }, u)
