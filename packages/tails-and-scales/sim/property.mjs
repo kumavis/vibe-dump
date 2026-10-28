@@ -183,9 +183,15 @@
 //    battery) and P-army's list battles; the scenes (a bail-out by an
 //    enemy's 1" and one with nowhere to stand, a template over a hull, the
 //    AI's friendly fire round one, the deployment's re-arranging, a phase's
-//    embark and disembark, `rode`); P-pilot's F9a row (a mask naming a
-//    rider without its hull in the movement phase refused); and P-army's
-//    deployment at the caps with two War-Carts a side (60 boards).
+//    embark and disembark, `rode`; and the V3 merge's rules where a hull
+//    meets V3c's spells: a snared unit's boarding refused, a snared hull's
+//    move and advance refused while its riders may step off and the AI's
+//    phase leaving it where it stands, a rider no target of any spell, a
+//    friend's ward included, for the shoot command or shotInfo); every
+//    embark legal() takes also of a unit no snare holds (rideWrong);
+//    P-pilot's F9a row (a mask naming a rider without its hull in the
+//    movement phase refused); and P-army's deployment at the caps with two
+//    War-Carts a side (60 boards).
 //
 // 14. (V3c) P-spell, on code whose casters have several spells (bestCast):
 //    on scenes of its own (spellTask below says what each holds): every
@@ -201,7 +207,9 @@
 //    and its pick the tool's default. And at every decision of the probes
 //    (spellRules): no spell legal but a caster's own, once a phase, on a
 //    target of the side the spell takes within its range, no snared unit
-//    moving or charging, no mesmerized one charging; and every spell of
+//    moving or charging, no mesmerized one charging, and (F9a, at the V3
+//    merge) no shot or spell by a rider or at one (the battery casts every
+//    spell at every rider of either side); and every spell of
 //    both casters cast by a random game's human seat over the run.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
@@ -323,12 +331,13 @@ function battery(core, G, seat, rand) {
       // ((V3c) a caster's spells: each at every unit it takes and at a few
       // of either side at random (a ward or a resolve at a friend, the
       // caster too, the rest at an enemy, and each the other way round),
-      // the AI's own pick (the tool's default) and its pick at an enemy (a
-      // group's fire); spells the caster hasn't, and a spell named for a
-      // unit with none)
+      // and (F9a, at the V3 merge) at every rider of either side, which
+      // none takes; the AI's own pick (the tool's default) and its pick at
+      // an enemy (a group's fire); spells the caster hasn't, and a spell
+      // named for a unit with none)
       if (q.weaponOf && u.t.spells) {
         u.t.spells.forEach((w, sp) => {
-          for (const x of [...q.shootTargets(G, u, sp), ...some(G.units, 4)]) {
+          for (const x of [...q.shootTargets(G, u, sp), ...some(G.units, 4), ...G.units.filter((r) => r.aboard)]) {
             out.push({ t: 'shoot', u: u.id, tg: x.id, sp })
             if (q.alive(u) && q.alive(x)) q.shotInfo(G, u, x, sp)
           }
@@ -508,7 +517,10 @@ function probe(core, G, seat, rand, where) {
 // seat's own (the caster too) within the spell's range, every other spell
 // and shot on a standing enemy within its range (a spell never lobs); no
 // snared unit moves or advances (its fall back included), and no snared or
-// mesmerized one charges. Returns how many spells it held.
+// mesmerized one charges. (F9a, at the V3 merge) And no shot or spell
+// whose shooter or target is aboard a vehicle: a rider neither shoots nor
+// casts, and is no one's target, a friend's spell's included (DESIGN
+// §4.2.5). Returns how many spells it held.
 function spellRules(core, G, seat, ok, where) {
   if (!core.q.weaponOf) return 0
   const unit = (id) => G.units.find((u) => u.id === id)
@@ -519,6 +531,7 @@ function spellRules(core, G, seat, ok, where) {
     if (b.t === 'charge' && (u.snared || u.mesmerized)) throw new Error(`${where}: legal() lets the ${u.snared ? 'snared' : 'mesmerized'} ${u.t.short} charge: ${JSON.stringify(b)}`)
     if (b.t !== 'shoot') continue
     const tg = unit(b.tg)
+    if (u.aboard || tg?.aboard) throw new Error(`${where}: legal() lets ${u.t.short}${u.aboard ? `, aboard unit ${u.aboard},` : ''} ${b.sp === undefined ? 'shoot' : `cast spell ${b.sp}`} at ${tg ? tg.t.short : `unit ${b.tg}`}${tg?.aboard ? `, aboard unit ${tg.aboard}` : ''}: a rider neither shoots nor casts, and is no target: ${JSON.stringify(b)}`)
     if (b.sp !== undefined && !u.t.spells) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which casts none`)
     const w = b.sp === undefined ? u.t.ranged : u.t.spells[b.sp]
     if (!w) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which has ${u.t.spells.length}`)
@@ -3631,6 +3644,9 @@ function rideWrong(core, G, seat, b) {
     if (u.t.vehicle) return 'boards a vehicle onto a vehicle'
     if (u.aboard) return `boards unit ${u.id}, which rides unit ${u.aboard} already`
     if (u.flags.moved) return `boards unit ${u.id}, which has moved`
+    // ((V3c, at the V3 merge) boarding is the unit's move, which Root
+    // Snare forbids)
+    if (u.snared) return `boards unit ${u.id}, which is snared`
     if (q.isEngaged(G, u)) return `boards unit ${u.id}, which is in combat`
     if (!v || v.side !== seat || !q.alive(v) || !tr) return `boards onto no standing transport of seat ${seat}'s`
     if (v.aboard) return `boards onto unit ${v.id}, which rides unit ${v.aboard}`
@@ -4043,6 +4059,88 @@ function ridesScenes(core, mods, mirror, RACES, MISSIONS) {
     const tgs = [...chosen].map((x) => JSON.parse(x)?.tg)
     if (!tgs.includes(E.id) || !tgs.includes(F.id)) throw new Error(`${where}: the sweep never turned the Trebuchet's choice between unit ${E.id} (beside the cart) and unit ${F.id} (alone): it chose ${[...chosen].join(' and ')}, so it can't tell`)
     c.sweep = 651
+    c.scenes++
+  }
+
+  // 7. (V3c's Root Snare round a hull, at the V3 merge) the movement
+  // phase: a unit that may board the hull refused once it is snared
+  // (boarding is its move: mayBoard), and taken again once it isn't; the
+  // hull snared, its own move and advance refused while a rider may still
+  // step off, and the AI playing the phase (strict: each of its commands
+  // judged by legal()) leaving the snared hull where it stands
+  {
+    const where = 'scene: a snare round a hull'
+    const { G, look, snap } = sceneMatch(core, mods, mirror)
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    look(`${where}, the battle begun`)
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`${where}: the battle begins at ${JSON.stringify(G.pending)}, not a movement phase`)
+    const s = G.pending.seats[0], mine = G.units.filter((u) => u.side === s)
+    const v = hullsOf(G, s)[0], [p, p2] = q.riders(G, v)
+    // (a rider off first, for room aboard: the deployment's hull is full)
+    core.apply(G, s, { t: 'disembark', u: p.id, c: q.landing(G, p, v)[0] })
+    look(`${where}, a rider stepped off`)
+    const board = mine.find((u) => core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null)
+    if (!board) throw new Error(`${where}: no unit of seat ${s}'s may board unit ${v.id} with ${q.room(G, v)} models' room (the scene reaches no snared boarding)`)
+    board.snared = true
+    refused(G, s, { t: 'embark', u: board.id, v: v.id }, /is snared/, where)
+    board.snared = false
+    legalOk(G, s, { t: 'embark', u: board.id, v: v.id }, `${where} (the snare lifted)`)
+    v.snared = true
+    snap()
+    const land = q.landing(G, p2, v)
+    if (!land.length) throw new Error(`${where}: rider unit ${p2.id} has no landing cell beside its hull`)
+    legalOk(G, s, { t: 'disembark', u: p2.id, c: land[0] }, `${where} (a rider of the snared hull)`)
+    refused(G, s, { t: 'advance', u: v.id }, /is snared/, where)
+    const to = q.nearestValid(G, q.movePlan(G, v, 0), v.pos.x - G.seats[s].edge * 4, v.pos.z)
+    if (to >= 0) refused(G, s, { t: 'move', u: v.id, c: to }, /is snared/, where)
+    const at = { x: v.pos.x, z: v.pos.z }
+    G.strict = true
+    try {
+      core.apply(G, s, { t: 'auto' })
+    } catch (e) {
+      throw new Error(`${where}: the AI's movement phase with the hull snared: ${e.message}`)
+    } finally {
+      G.strict = false
+    }
+    if (v.pos.x !== at.x || v.pos.z !== at.z || v.flags.moved || v.flags.advanced) throw new Error(`${where}: the AI moved the snared hull from (${at.x}, ${at.z}) to (${v.pos.x}, ${v.pos.z}) (moved ${v.flags.moved}, advanced ${v.flags.advanced}): Root Snare holds it`)
+    look(`${where}, the AI's phase played`)
+    c.scenes++
+  }
+
+  // 8. (F9a's riders and V3c's spells, at the V3 merge) the shooting phase:
+  // the Elder beside his own laden War-Cart may ward the hull, but neither
+  // the shoot command nor shotInfo (the table's odds and its click) takes a
+  // rider aboard it, his own or the enemy's, for any of his spells; and the
+  // probes' battery there (every spell at every rider) held to spellRules
+  {
+    const where = 'scene: a spell at a rider'
+    const { G } = sceneMatch(core, mods, mirror)
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    const s = G.pending.seats[0]
+    core.apply(G, s, { t: 'end' })
+    if (G.pending?.phase !== 'shoot' || G.pending.seats[0] !== s) throw new Error(`${where}: seat ${s}'s End led to ${JSON.stringify(G.pending)}, not its shooting phase`)
+    const elder = G.units.find((u) => u.side === s && u.t.spells && !u.aboard), v = hullsOf(G, s)[0], p = q.riders(G, v)[0]
+    const foe = G.units.find((u) => u.side !== s && u.aboard)
+    if (!elder || !p || !foe) throw new Error(`${where}: no Elder of seat ${s}'s, no rider aboard its War-Cart, or no enemy rider`)
+    const spot = q.freeSpot(G, elder, v.pos.x, v.pos.z + 4, s, G.units.filter((o) => o !== elder && !o.aboard))
+    mods.units.setUnitPos(elder, spot.x, spot.z)
+    const ward = elder.t.spells.findIndex((w) => w.ward)
+    if (ward < 0 || q.gap(elder, p) > elder.t.spells[ward].range) throw new Error(`${where}: the Elder has no ward, or stands ${q.gap(elder, p).toFixed(2)}" from the rider`)
+    legalOk(G, s, { t: 'shoot', u: elder.id, tg: v.id, sp: ward }, `${where} (the ward on the hull)`)
+    // (each spell at the side it is cast on: a ward at his own rider, the
+    // rest at the enemy's, so the rider is the only reason to refuse)
+    for (const [tg, whose] of [[p, 'his own'], [foe, "the enemy's"]]) {
+      elder.t.spells.forEach((w, sp) => {
+        if (q.allySpell(w) !== (tg.side === s)) return
+        const info = q.shotInfo(G, elder, tg, sp)
+        if (info.ok || !/inside a vehicle/.test(info.why)) throw new Error(`${where}: shotInfo ${info.ok ? 'takes' : `refuses with "${info.why}"`} the Elder's ${w.name} at ${whose} rider (unit ${tg.id}, aboard unit ${tg.aboard}): a rider is inside its vehicle`)
+      })
+    }
+    refused(G, s, { t: 'shoot', u: elder.id, tg: p.id, sp: ward }, /inside a vehicle/, where)
+    refused(G, s, { t: 'shoot', u: elder.id, tg: foe.id, sp: elder.t.spells.findIndex((w) => w.snare) }, /inside a vehicle/, where)
+    probe(core, G, s, mulberry32(29), `${where}, the probes`)
     c.scenes++
   }
   return c
@@ -4658,6 +4756,18 @@ const MUTATIONS = {
   'rode-forgotten': ['core/actions/transport.js', '  if (v.flags.moved) u.flags.rode = true\n', ''],
   // boarding in a phase isn't the unit's move: it may step off again
   'embark-unmoved': ['core/actions/transport.js', '  moveUnitTo(G, u, v.pos.x, v.pos.z)\n  u.flags.moved = true\n', '  moveUnitTo(G, u, v.pos.x, v.pos.z)\n'],
+  // (the V3 merge's rules, P-riders' scenes 7 and 8 and spellRules) a
+  // spell on a friend takes a rider: the shoot command's `friend` and
+  // shotInfo's ally branch both let it through (either alone is the other's
+  // backstop: legal() asks friend, then mayShoot asks shotInfo)
+  'friend-takes-rider': [
+    ['core/commands.js', '  return mine(G, seat, id) ?? (u.aboard ? `${u.t.short} is inside a vehicle` : null)\n', '  return mine(G, seat, id)\n'],
+    ['core/actions/shoot.js', '    if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }\n    const range = target === u', '    const range = target === u'],
+  ],
+  // a snared unit boards a hull
+  'snared-boards': ['core/actions/transport.js', '  if (u.snared) return `${u.t.short} is snared`\n', ''],
+  // the AI moves a snared hull
+  'snared-hull-moves': ['core/ai/policy.js', '    if (!v.snared) yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n', '    yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n'],
 }
 
 if (a['self-test']) {
@@ -4681,16 +4791,20 @@ if (a['self-test']) {
   }
   console.log('  unbroken       passes (three corpus battles, ten games)')
   let missed = 0
-  for (const [name, [file, from, to]] of Object.entries(MUTATIONS).filter(([x]) => names.includes(x))) {
+  for (const [name, spec] of Object.entries(MUTATIONS).filter(([x]) => names.includes(x))) {
     const pkg = copyCode(dir, join(work, name))
-    const f = join(pkg, file)
-    const src = readFileSync(f, 'utf8')
-    if (src.split(from).length !== 2) {
-      console.log(`  ${name.padEnd(14)} STALE: "${from.trim().slice(0, 50)}" isn't in ${file} exactly once`)
+    // (a mutant is one edit [file, from, to], or a list of them, each made)
+    const edits = Array.isArray(spec[0]) ? spec : [spec]
+    const stale = edits.find(([file, from]) => readFileSync(join(pkg, file), 'utf8').split(from).length !== 2)
+    if (stale) {
+      console.log(`  ${name.padEnd(14)} STALE: "${stale[1].trim().slice(0, 50)}" isn't in ${stale[0]} exactly once`)
       missed++
       continue
     }
-    writeFileSync(f, src.replace(from, to))
+    for (const [file, from, to] of edits) {
+      const f = join(pkg, file)
+      writeFileSync(f, readFileSync(f, 'utf8').replace(from, to))
+    }
     const bad = await run(pkg, load)
     console.log(`  ${name.padEnd(14)} ${bad.length ? `caught: ${bad[0].error.slice(0, 150)}` : 'MISSED'}`)
     if (!bad.length) missed++
