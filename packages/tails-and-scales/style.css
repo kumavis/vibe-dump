@@ -876,7 +876,10 @@ table.wt th {
   #log:not(.open) #logList {
     max-height: 30vh;
   }
-  /* ((V3b) over the actions, as many rows as they take: 64 px over one) */
+  /* ((V3b) over the actions, as many rows as they take: 64 px over one; the
+     card no taller than the screen above them, scrolling past that: on a
+     landscape phone, two rows of actions under it, it ran off the top; and
+     over the roster's head, which it reaches there) */
   #tray {
     width: calc(100vw - 20px);
     min-width: 0;
@@ -885,6 +888,9 @@ table.wt th {
   #card {
     width: 260px;
     bottom: calc(var(--actions-h, 36px) + 28px);
+    max-height: calc(100vh - var(--actions-h, 36px) - 36px);
+    overflow-y: auto;
+    z-index: 6;
   }
   .modes {
     grid-template-columns: 1fr;
@@ -958,10 +964,12 @@ table.wt th {
   .tray-row .lbl {
     flex-basis: 110px;
   }
-  /* ((V3b) over the actions, as many rows as they take) */
+  /* ((V3b) over the actions, as many rows as they take, no taller than the
+     screen above them) */
   #card {
     left: 8px;
     bottom: calc(var(--actions-h, 48px) + 16px);
+    max-height: calc(100vh - var(--actions-h, 48px) - 24px);
     width: calc(100vw - 16px);
     padding: 8px 10px;
   }
