@@ -419,10 +419,13 @@ async function page(dir) {
         const mu = M.units[u.id], t = u.t, f = facts?.[u.id]
         const want = [
           mu.alive > 0 ? (t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`) : 'destroyed',
-          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${f.advRoll}"` : `${v3a ? '👣 ' : ''}moved`] : []),
+          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${f.advRoll}"` : v3a && f.rode ? '⤓ stepped off' : `${v3a ? '👣 ' : ''}moved`] : []),
           ...(f?.shot ? [`${v3a ? '➹ ' : ''}shot`] : []),
           ...(f?.charged ? [`${v3a ? '⚡ ' : ''}charged`] : v3a && f?.chargeTried ? ['✖ charge failed'] : []),
           ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
+          // ((F9a) a rider aboard its hull, and one that stepped off a hull
+          // that moved, above: each a condition on the card)
+          ...(v3a && mu.alive > 0 && mu.aboard ? ['▣ aboard'] : []),
           ...(mu.alive > 0 && mu.engaged ? ['⚔ in combat'] : []),
           ...(mu.alive > 0 && f?.cover ? ['🛡 in cover'] : []),
           ...(v3a && mu.alive > 0 && f?.lost > 0 && t.models > 1 ? [`💔 lost ${f.lost}`] : []),
