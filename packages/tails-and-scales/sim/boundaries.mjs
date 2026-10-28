@@ -153,6 +153,11 @@ const CROSS = {
   'core/queries.js': [
     'moveMode', 'climbs', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
     'rangeOf', 'lobbed', 'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
+    // (V3c) a caster's spells: the weapon a shot names, whether a spell is
+    // cast on a friend, whether there is anything to cast on; and the AI's
+    // pick of a spell (the shooting tool's default, a group's fire), which
+    // values and draws nothing
+    'weaponOf', 'allySpell', 'hasTarget', 'bestSpell', 'spellFor',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than
@@ -582,7 +587,7 @@ if (a['self-test']) {
     // (F11a) flag-lint's one-reader fields, over core/ and data/ here too
     ["core/ reading a unit's cost", append('core/ai/score.js', 'export const price = (u) => u.t.cost'), true, /army builder's data .* read outside core\/army\.js \(flag-lint's ban\)/],
     ['core/ reading pts outside the AI', append('core/actions/shoot.js', 'export const value = (u) => u.t.pts'), true, /the AI's appraisal \(pts\) read outside core\/ai\/score\.js/],
-    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 2/],
+    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 4/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
   ]

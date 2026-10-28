@@ -173,6 +173,23 @@
 //    in the blast feared). (P-mission's setups task holds the keg mission's
 //    refusals, and P-army plays its random lists as every mission's.)
 //
+// 14. (V3c) P-spell, on code whose casters have several spells (bestCast):
+//    on scenes of its own (spellTask below says what each holds): every
+//    spell of both casters castable at a target it takes, once a phase, its
+//    cast die for die, refused at the other side, past its range and at the
+//    dead; its mark made (a ward, a resolve, a snare, the gaze) or its
+//    template landed (Venom Mist hurting no scenery); each mark worn off when
+//    it must (a ward and a resolve as the caster's side's next turn begins,
+//    a snare and the gaze as the victim's own turn ends) and holding until
+//    then, the snared unit's move, advance and charge refused; a ward's save
+//    one better, a resolute squad untested and its failed charge rolled
+//    again; the AI's pick a spell on a friend when no enemy is in reach,
+//    and its pick the tool's default. And at every decision of the probes
+//    (spellRules): no spell legal but a caster's own, once a phase, on a
+//    target of the side the spell takes within its range, no snared unit
+//    moving or charging, no mesmerized one charging; and every spell of
+//    both casters cast by a random game's human seat over the run.
+//
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
 //                                         MUTATIONS below must fail it
@@ -288,6 +305,22 @@ function battery(core, G, seat, rand) {
           if (plan) q.chargeSpots(plan, 2 + Math.floor(rand() * 11))
         }
       }
+      // ((V3c) a caster's spells: each at every unit it takes and at a few
+      // of either side at random (a ward or a resolve at a friend, the
+      // caster too, the rest at an enemy, and each the other way round),
+      // the AI's own pick (the tool's default) and its pick at an enemy (a
+      // group's fire); spells the caster hasn't, and a spell named for a
+      // unit with none)
+      if (q.weaponOf && u.t.spells) {
+        u.t.spells.forEach((w, sp) => {
+          for (const x of [...q.shootTargets(G, u, sp), ...some(G.units, 4)]) {
+            out.push({ t: 'shoot', u: u.id, tg: x.id, sp })
+            if (q.alive(u) && q.alive(x)) q.shotInfo(G, u, x, sp)
+          }
+        })
+        if (q.alive(u)) q.bestSpell(G, u), q.spellFor(G, u, theirs[0]), q.hasTarget(G, u)
+        out.push({ t: 'shoot', u: u.id, tg: theirs[0].id, sp: u.t.spells.length }, { t: 'shoot', u: u.id, tg: theirs[0].id, sp: -1 }, { t: 'shoot', u: u.id, tg: u.id, sp: 1.5 })
+      } else if (q.weaponOf) out.push({ t: 'shoot', u: u.id, tg: theirs[0].id, sp: 0 })
     }
     // a charge's end: the shortest move, spots the roll reaches, random cells
     if (P?.k === 'chargeEnd') {
@@ -346,7 +379,7 @@ function actorsOutside(core, G, seat, m) {
 
 // bodies with a field their kind doesn't take, each of them refused
 const JUNK = [{ t: 'end', c: 0 }, { t: 'chargeEnd', c: -1, u: 0 }, { t: 'shoot', u: 0, tg: 1, c: 0 }]
-const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [] }
+const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg', 'sp'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [] }
 
 // Judge the battery for `seat` (and some for the other seat and seats that
 // don't exist); every verdict must leave the match exactly as it was.
@@ -409,7 +442,39 @@ function probe(core, G, seat, rand, where) {
   // a wipe-out decides the battle (it ends at the phase's end): nobody
   // concedes it after
   if (G.turn.wiped >= 0 && ok.some((b) => b.t === 'concede')) throw new Error(`${where}: legal() lets seat ${seat} concede a battle seat ${G.turn.wiped}'s wipe-out decided`)
+  spellRules(core, G, seat, ok, where)
   return ok
+}
+
+// (V3c, P-spell) What legal() took at a decision, held to the spells' rules
+// as written here, not by the core's own shotInfo: a shot names a spell
+// only of a caster, one it has; a caster that has shot or cast this phase
+// casts nothing more; a ward or a resolve goes on a standing unit of the
+// seat's own (the caster too) within the spell's range, every other spell
+// and shot on a standing enemy within its range (a spell never lobs); no
+// snared unit moves or advances (its fall back included), and no snared or
+// mesmerized one charges. Returns how many spells it held.
+function spellRules(core, G, seat, ok, where) {
+  if (!core.q.weaponOf) return 0
+  const unit = (id) => G.units.find((u) => u.id === id)
+  let n = 0
+  for (const b of ok) {
+    const u = unit(b.u)
+    if ((b.t === 'move' || b.t === 'advance') && u.snared) throw new Error(`${where}: legal() lets the snared ${u.t.short} ${b.t}: ${JSON.stringify(b)}`)
+    if (b.t === 'charge' && (u.snared || u.mesmerized)) throw new Error(`${where}: legal() lets the ${u.snared ? 'snared' : 'mesmerized'} ${u.t.short} charge: ${JSON.stringify(b)}`)
+    if (b.t !== 'shoot') continue
+    const tg = unit(b.tg)
+    if (b.sp !== undefined && !u.t.spells) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which casts none`)
+    const w = b.sp === undefined ? u.t.ranged : u.t.spells[b.sp]
+    if (!w) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which has ${u.t.spells.length}`)
+    if (u.flags.shot) throw new Error(`${where}: legal() lets ${u.t.short} ${w.spell ? `cast ${w.name}` : 'shoot'} again this phase`)
+    const ally = !!(w.ward || w.resolve)
+    if (!tg || !core.q.alive(tg) || (tg.side === seat) !== ally) throw new Error(`${where}: legal() takes ${u.t.short}'s ${w.name} at ${tg ? `${tg.t.short}, ${tg.side === seat ? 'a friend' : 'an enemy'}${core.q.alive(tg) ? '' : ', destroyed'}` : `no unit ${b.tg}`}`)
+    const gap = tg === u ? 0 : Math.hypot(tg.pos.x - u.pos.x, tg.pos.z - u.pos.z) - u.r - tg.r
+    if (w.spell && gap > w.range + 1e-9) throw new Error(`${where}: legal() takes ${u.t.short}'s ${w.name} at ${tg.t.short}, ${gap.toFixed(2)}" off, past its ${w.range}"`)
+    if (w.spell) n++
+  }
+  return n
 }
 
 // Between two commands (DESIGN §0.2 #12, §4.1 rule 9).
@@ -850,6 +915,11 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     }
     log.push([by, body])
     counts.commands[body.t] = (counts.commands[body.t] ?? 0) + 1
+    // ((V3c) the spells a human seat's command cast, by caster and name)
+    if (body.t === 'shoot' && body.sp !== undefined) {
+      const caster = G.units.find((x) => x.id === body.u), k = `${caster.t.key} ${caster.t.spells[body.sp].name}`
+      counts.spells = { ...counts.spells, [k]: (counts.spells?.[k] ?? 0) + 1 }
+    }
   }
   invariants(core, G, `${where0} at its end`, last)
   if (fortified) counts.heights = (counts.heights ?? 0) + heightRules(core, G, `${where0} at its end`, rand)
@@ -2719,8 +2789,353 @@ function kegTask(core, mods) {
   return counts
 }
 
+// ── P-spell (V3c, DESIGN §4.1 rule 29) ──────────────────────────────────────
+// The casters' spells, on scenes of their own: for each race's caster (the
+// Elder, the Hierophant) in either seat, on SPELL_BOARDS boards, a hotseat
+// match at its first shooting phase with everyone gone but the caster, a
+// friend of its side within 12" (a squad) and an enemy squad in its range
+// and sight (where the board's scenery allows: a scene is tried again only
+// for the terrain's reasons), and for each spell of the caster:
+//  - castable, once a phase: legal() takes it at a target it takes (the
+//    friend for a ward or a resolve, the enemy for the rest; and the caster
+//    itself for a ward or a resolve), shootTargets offers that target, and
+//    refuses it at the other side's unit, at a destroyed one, and past its
+//    range; the cast is the stream's next 2D6 (its "Cast N+ (2D6)" row, its
+//    verdict the sum against N), a fizzle marks nothing and plays the
+//    fizzle; and once cast (made or not) legal() refuses every spell and
+//    every shot of the caster for the rest of the phase;
+//  - its mark: made, a ward marks the friend warded, a resolve resolute, a
+//    snare the enemy snared, the gaze mesmerized (each in the labels'
+//    status straight after), an eruption lands its template under the
+//    enemy, and Venom Mist (scenery 0) hurts no chunk and sets no keg off;
+//  - its end: the phases played on by End, the ward and the resolve hold
+//    through the rest of the caster's turn and the other seat's whole turn
+//    and are gone at the caster's next turn's first decision; the snare
+//    and the mesmerism hold through the victim's own turn, in which
+//    legal() refuses the snared unit's move, advance and charge (canAct
+//    false in its movement phase) and the mesmerized one's charge, and are
+//    gone when it ends;
+// and, on scenes of two matches alike but for a mark set by hand:
+//  - a ward: a volley at the warded unit plays the same dice as at the
+//    same unit unwarded, its save row one better (`Save N+ (ward)` against
+//    `Save N+1+` or `No save`, never better than 2+);
+//  - a resolve: in the morale phase the resolute squad's line says it
+//    stands resolute and no die is rolled for it (the other match's rolls
+//    its test); a resolute charger's failed charge roll is rolled again,
+//    at once, the stream's next 2D6 (a second "Charge" row), and stands;
+//  - the AI: with no enemy in reach of any spell and a friend in danger,
+//    the caster's best cast (bestCast; bestSpell, the tool's default, its
+//    spell) is a ward or a resolve, on a friend, and the AI's own pilot of
+//    the caster casts it; spellFor never names a spell cast on a friend at
+//    an enemy; and bestSpell is bestCast's spell in every scene.
+// Every spell of both casters must be cast (made) and fizzled, each mark
+// must wear off, the ward's save and the resolve's morale and charge must
+// be met, and the AI must pick a spell on a friend, or the run says what
+// it never met and fails.
+const SPELL_BOARDS = 8
+function spellTask(core, mods) {
+  const q = core.q
+  const counts = { legal: 0, refused: 0, made: 0, fizzled: 0, ends: 0, wards: 0, morale: 0, rerolls: 0, ai: 0, defaults: 0 }
+  const met = new Map()
+  const meet = (k) => met.set(k, (met.get(k) ?? 0) + 1)
+  const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
+  const at = (u, x, z) => {
+    u.pos.x = x
+    u.pos.z = z
+  }
+  const fresh = (board, races) => {
+    const G = core.createMatch({ board, dice: board * 7 + 3, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`P-spell, board ${board}: no movement phase after the deployment`)
+    return { G, s: G.pending.seats[0] }
+  }
+  const keep = (G, units) => {
+    for (const u of G.units) if (!units.includes(u)) u.alive = 0
+  }
+  const mask = (G, s, u) => G.units.filter((x) => x.side === s).reduce((m, x, j) => (x === u ? m + 2 ** j : m), 0)
+  // End the seat's phases until the match waits on `until` (a predicate on
+  // G.pending), holding `each` at every decision on the way
+  const endUntil = (G, until, where, each = () => {}) => {
+    for (let k = 0; k < 40 && G.turn.stage !== 'over'; k++) {
+      if (until(G.pending)) return
+      each()
+      const why = core.legal(G, G.pending.seats[0], { t: 'end' })
+      if (why) throw new Error(`${where}: End refused at ${JSON.stringify(G.pending)}: ${why}`)
+      core.apply(G, G.pending.seats[0], { t: 'end' })
+    }
+    if (!until(G.pending)) throw new Error(`${where}: never reached the decision looked for (${JSON.stringify(G.pending)})`)
+  }
+  // the scene: the caster, a friend squad and an enemy squad, placed at
+  // random until the enemy is in the caster's range and sight (the first
+  // spell's: every enemy spell's range is 18") and the friend within 12";
+  // the same draws give the same places in another match of the board
+  const scene = (board, races, rand) => {
+    const { G, s } = fresh(board, races)
+    const c = G.units.find((u) => u.side === s && u.t.spells)
+    const f = G.units.find((u) => u.side === s && u !== c && u.models.length > 1 && !u.t.fly)
+    const e = G.units.find((u) => u.side !== s && u.models.length > 1 && !u.t.fly)
+    // (and an enemy squad in the far corner, which keeps the other seat's
+    // turn one with decisions in it, a snared unit beside it)
+    const e2 = G.units.find((u) => u.side !== s && u !== e && u.models.length > 1 && !u.t.fly && u.t.ranged)
+    if (!c || !f || !e || !e2) return null
+    keep(G, [c, f, e, e2])
+    const { W, H } = G.board
+    for (let tries = 0; tries < 80; tries++) {
+      const x = (rand() - 0.5) * (W - 14), z = (rand() - 0.5) * (H - 10), a = rand() * Math.PI * 2, b = rand() * Math.PI * 2
+      at(c, x, z)
+      const df = c.r + f.r + 1 + rand() * 6, de = c.r + e.r + 4 + rand() * 10
+      at(f, x + Math.cos(a) * df, z + Math.sin(a) * df)
+      at(e, x + Math.cos(b) * de, z + Math.sin(b) * de)
+      if ([f, e].some((u) => Math.abs(u.pos.x) > W / 2 - 1 || Math.abs(u.pos.z) > H / 2 - 1)) continue
+      if (q.gap(f, e) < 2 || q.isEngaged(G, c)) continue
+      at(e2, x > 0 ? -W / 2 + 2 : W / 2 - 2, z > 0 ? -H / 2 + 2 : H / 2 - 2)
+      if ([c, f, e].some((u) => q.gap(u, e2) < 3)) continue
+      const info = q.shotInfo(G, c, e, 0)
+      if (info.ok) return { G, s, c, f, e }
+      if (!/^(no line of sight|out of range)/.test(info.why)) throw new Error(`P-spell, board ${board}: shotInfo refuses ${c.t.short} at ${e.t.short} ${q.gap(c, e).toFixed(2)}" off: ${info.why}`)
+    }
+    return null
+  }
+  const toShoot = (G, s, where) => {
+    core.apply(G, s, { t: 'end' })
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'shoot' || G.pending.seats[0] !== s) throw new Error(`${where}: the shooting phase didn't open on the scene (pending ${JSON.stringify(G.pending)})`)
+    G.out.length = 0
+  }
+  // End the seat's phases until its `phase` opens; false when its turn
+  // passes it by (nothing of its could act there), its events cleared
+  const reach = (G, s, phase) => {
+    for (let k = 0; k < 6; k++) {
+      const P = G.pending
+      if (P?.k === 'phase' && P.seats[0] === s && P.phase === phase) {
+        G.out.length = 0
+        return true
+      }
+      if (!P || P.seats[0] !== s) return false
+      core.apply(G, s, { t: 'end' })
+    }
+    return false
+  }
+  const ally = (w) => !!(w.ward || w.resolve)
+  const markOf = (w) => (w.ward ? 'warded' : w.resolve ? 'resolute' : w.snare ? 'snared' : w.mesmerize ? 'mesmerized' : null)
+  for (let board = 1; board <= SPELL_BOARDS; board++) {
+    for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
+      const seed = board * 7919 + (races[0] === 'squirrel' ? 0 : 1)
+      const first = scene(board, races, mulberry32(seed))
+      if (!first) continue
+      const spells = first.c.t.spells
+      for (let sp = 0; sp < spells.length; sp++) {
+        const S = scene(board, races, mulberry32(seed))
+        const { G, s, c, f, e } = S, w = spells[sp]
+        const where = `P-spell, board ${board} (${races.join(' v ')}), ${c.t.short}'s ${w.name}`
+        toShoot(G, s, where)
+        // the AI's default is its own pick, in every scene
+        const best = mods.policy.bestCast(G, c)
+        if (q.bestSpell(G, c) !== (best?.sp ?? 0)) throw new Error(`${where}: bestSpell says ${q.bestSpell(G, c)}, bestCast ${JSON.stringify(best && { sp: best.sp, tg: best.e.id })}`)
+        counts.defaults++
+        const tg = ally(w) ? f : e, wrong = ally(w) ? e : f
+        // castable at its target (and a ward or a resolve at the caster
+        // itself), refused at the other side's, past its range, at the dead
+        const body = { t: 'shoot', u: c.id, tg: tg.id, sp }
+        const why = core.legal(G, s, body)
+        if (why) throw new Error(`${where}: legal() refuses it at ${tg.t.short}: ${why}`)
+        if (!q.shootTargets(G, c, sp).includes(tg)) throw new Error(`${where}: shootTargets doesn't offer ${tg.t.short}`)
+        if (ally(w) && core.legal(G, s, { ...body, tg: c.id })) throw new Error(`${where}: legal() refuses it at the caster itself: ${core.legal(G, s, { ...body, tg: c.id })}`)
+        if (!core.legal(G, s, { ...body, tg: wrong.id })) throw new Error(`${where}: legal() takes it at ${wrong.t.short}, ${ally(w) ? 'an enemy' : 'a friend'}`)
+        const was = { x: tg.pos.x, z: tg.pos.z }
+        const dir = Math.hypot(tg.pos.x - c.pos.x, tg.pos.z - c.pos.z) || 1
+        const out = c.r + tg.r + w.range + 0.5
+        at(tg, c.pos.x + ((tg.pos.x - c.pos.x) / dir) * out, c.pos.z + ((tg.pos.z - c.pos.z) / dir) * out)
+        if (!core.legal(G, s, body)) throw new Error(`${where}: legal() takes it at ${tg.t.short} ${q.gap(c, tg).toFixed(2)}" off, past its ${w.range}"`)
+        at(tg, was.x, was.z)
+        const alive = tg.alive
+        tg.alive = 0
+        if (!core.legal(G, s, body)) throw new Error(`${where}: legal() takes it at the destroyed ${tg.t.short}`)
+        tg.alive = alive
+        counts.legal += 2
+        counts.refused += 3
+        // the cast: the stream's next 2D6
+        const r = { ...G.rng }, dice = [d6(r), d6(r)], made = dice[0] + dice[1] >= w.spell
+        const hp = G.terrain.chunks.map((x) => x.hp)
+        core.apply(G, s, body)
+        const ev = G.out.splice(0), row = ev.find((x) => x.t === 'dice')
+        if (!row || row.label !== `Cast ${w.spell}+ (2D6)` || JSON.stringify(row.dice) !== JSON.stringify(dice) || row.pass !== made) throw new Error(`${where}: the cast row is ${JSON.stringify(row)}, not the stream's ${JSON.stringify(dice)} against ${w.spell}+`)
+        const mark = markOf(w), marked = mark ? tg[mark] : false
+        if (!made) {
+          if (!ev.some((x) => x.t === 'spell.fizzle' && x.u === c.id) || marked || ev.some((x) => x.t === 'blast.land')) throw new Error(`${where}: a fizzle (${dice.join('+')}) that ${marked ? `marks ${tg.t.short} ${mark}` : 'plays no fizzle or lands a template'}`)
+          counts.fizzled++
+          meet(`${c.t.key} ${w.name} fizzled`)
+        } else {
+          counts.made++
+          meet(`${c.t.key} ${w.name} made`)
+          if (mark) {
+            if (!marked) throw new Error(`${where}: made, and ${tg.t.short} isn't ${mark}`)
+            const st = ev.filter((x) => x.t === 'status').at(-1)
+            if (!st?.[mark]?.includes(tg.id)) throw new Error(`${where}: made, and no status says ${tg.t.short} is ${mark}`)
+          } else {
+            const land = ev.find((x) => x.t === 'blast.land')
+            if (!land || land.x !== e.pos.x || land.z !== e.pos.z || land.r !== w.blast) throw new Error(`${where}: made, and no template lands under ${e.t.short}`)
+            if (w.scenery === 0 && (ev.some((x) => /^terrain\./.test(x.t) || x.t === 'keg.fuse') || G.terrain.chunks.some((x, i) => x.hp !== hp[i]))) throw new Error(`${where}: a template of scenery 0 hurt the scenery`)
+          }
+        }
+        // once a phase: no spell, no shot, at anyone
+        for (let k = 0; k < spells.length; k++) for (const x of [c, f, e]) if (!core.legal(G, s, { t: 'shoot', u: c.id, tg: x.id, sp: k })) throw new Error(`${where}: cast, and legal() takes spell ${k} at ${x.t.short} again this phase`)
+        if (!core.legal(G, s, { t: 'shoot', u: c.id, tg: e.id })) throw new Error(`${where}: cast, and legal() takes a shot again this phase`)
+        if (!made || !mark || !q.alive(tg)) continue
+        // the mark's end, decision by decision (End played at each): the
+        // turns met from the cast's on, the first the caster's (n 1), the
+        // next the other seat's (n 2: a ward's and a resolve's friend's
+        // enemy's, a snare's and a gaze's victim's own); the mark holds at
+        // every decision of those two (a turn with nothing to do for the
+        // seat has none: the engine plays it through) and is gone at the
+        // first decision after them
+        const turns = []
+        let gone = false
+        for (let k = 0; k < 60 && G.turn.stage !== 'over'; k++) {
+          const key = `${G.turn.round}:${G.turn.active}`
+          if (!turns.includes(key)) turns.push(key)
+          const P = G.pending
+          if (turns.length >= 3) {
+            if (tg[mark]) throw new Error(`${where}: ${tg.t.short} still ${mark} at turn ${key}, past the one after the cast's (${JSON.stringify(P)})`)
+            gone = true
+            break
+          }
+          if (!tg[mark]) throw new Error(`${where}: ${tg.t.short} no longer ${mark} at turn ${key} (${turns.length === 1 ? "the cast's" : 'the next'}; ${JSON.stringify(P)})`)
+          if (turns.length === 2 && !ally(w) && P?.seats[0] === tg.side) {
+            if (P.phase === 'move' && w.snare) {
+              if (q.canAct(G, tg)) throw new Error(`${where}: canAct says the snared ${tg.t.short} has a move to make`)
+              for (const b of [{ t: 'advance', u: tg.id }, { t: 'move', u: tg.id, c: G.nav.index(tg.pos.x, tg.pos.z) }]) if (!core.legal(G, tg.side, b)) throw new Error(`${where}: legal() takes the snared ${tg.t.short}'s ${b.t}`)
+              meet('snare held in the move')
+            }
+            if (P.phase === 'charge' && !core.legal(G, tg.side, { t: 'charge', u: tg.id, tg: c.id })) throw new Error(`${where}: legal() takes the ${mark} ${tg.t.short}'s charge`)
+          }
+          core.apply(G, P.seats[0], { t: 'end' })
+        }
+        if (!gone) continue
+        counts.ends++
+        meet(`${mark} worn off`)
+      }
+      // a ward: the same volley at a unit warded and not, its save one better
+      {
+        const pair = [0, 1].map(() => {
+          const { G, s } = fresh(board, races)
+          const v = G.units.find((u) => u.side === s && u.t.ranged && !u.t.ranged.blast && !u.t.spells && u.models.length > 1)
+          const e = G.units.find((u) => u.side !== s && u.models.length > 1 && !u.t.fly)
+          keep(G, [v, e])
+          at(v, -4, 0)
+          at(e, -4 + v.r + e.r + Math.min(6, v.t.ranged.range - 1), 0)
+          return { G, s, v, e }
+        })
+        const where = `P-spell, board ${board} (${races.join(' v ')}), the ward's save`
+        pair[1].e.warded = true
+        const rows = pair.map(({ G, s, v, e }) => {
+          if (!reach(G, s, 'shoot') || !q.shotInfo(G, v, e).ok) return null
+          core.apply(G, s, { t: 'shoot', u: v.id, tg: e.id })
+          return G.out.filter((x) => x.t === 'dice')
+        })
+        if (rows[0] && rows[1]) {
+          if (rows[0].length !== rows[1].length || rows[0].some((x, i) => !x.save && JSON.stringify(x.dice) !== JSON.stringify(rows[1][i].dice))) throw new Error(`${where}: the volleys at the unit warded and not rolled apart: ${JSON.stringify(rows)}`)
+          const [a, b] = rows.map((rs) => rs.find((x) => x.save))
+          if (a || b) {
+            if (!a || !b || b.need !== Math.max(2, a.need - 1) || !/\(.*ward.*\)$/.test(b.label) || /ward/.test(a.label)) throw new Error(`${where}: the save rows are ${JSON.stringify(a)} unwarded and ${JSON.stringify(b)} warded`)
+            counts.wards++
+            meet('ward saved better')
+          }
+        }
+      }
+      // a resolve: the morale test none, and a failed charge rolled again
+      {
+        const where = `P-spell, board ${board} (${races.join(' v ')}), the resolve`
+        const pair = [0, 1].map(() => {
+          const { G, s } = fresh(board, races)
+          const f = G.units.find((u) => u.side === s && u.models.length > 1 && !u.t.fly && !u.t.noCharge && u.t.M < 9)
+          const e = G.units.find((u) => u.side !== s && u.models.length > 1 && !u.t.fly)
+          keep(G, [f, e])
+          at(f, -8, 0)
+          at(e, -8 + f.r + e.r + 10.6, 0)
+          return { G, s, f, e }
+        })
+        pair[1].f.resolute = true
+        const charged = pair.map(({ G, s, f, e }) => {
+          if (!reach(G, s, 'charge') || !q.chargeTargets(G, f).includes(e) || !q.chargePlan(G, f, e)) return null
+          const r = { ...G.rng }
+          G.out.length = 0
+          core.apply(G, s, { t: 'charge', u: f.id, tg: e.id })
+          return { r, rows: G.out.filter((x) => x.t === 'dice'), G, s, f }
+        })
+        if (charged[0] && charged[1]) {
+          const [a, b] = charged
+          const first = [d6(b.r), d6(b.r)]
+          if (JSON.stringify(a.rows[0]?.dice) !== JSON.stringify(first) || JSON.stringify(b.rows[0]?.dice) !== JSON.stringify(first)) throw new Error(`${where}: the charge rolls ${JSON.stringify(a.rows[0])} and ${JSON.stringify(b.rows[0])}, not the stream's ${JSON.stringify(first)}`)
+          if (a.rows.length !== 1) throw new Error(`${where}: an unresolved charge rolled ${a.rows.length} rows`)
+          if (!b.rows[0].pass) {
+            const again = [d6(b.r), d6(b.r)]
+            if (b.rows.length !== 2 || !/^Charge \d+" rolled again \(2D6\)$/.test(b.rows[1].label) || JSON.stringify(b.rows[1].dice) !== JSON.stringify(again)) throw new Error(`${where}: a resolute charge failed (${first.join('+')}) and rolled ${JSON.stringify(b.rows.slice(1))}, not the stream's ${JSON.stringify(again)} again`)
+            counts.rerolls++
+            meet('charge rolled again')
+          } else if (b.rows.length !== 1) throw new Error(`${where}: a resolute charge that made it rolled again`)
+        }
+        // the morale: a squad that lost a model this turn, resolute or not
+        const mor = [0, 1].map((k) => {
+          const { G, s } = fresh(board, races)
+          const f = G.units.find((u) => u.side === s && u.models.length > 1)
+          keep(G, [f, G.units.find((u) => u.side !== s)])
+          at(f, -10, 0)
+          f.resolute = k === 1
+          f.lost = 1
+          endUntil(G, (P) => P?.seats[0] === 1 - s, where)
+          const ev = G.out
+          return { rows: ev.filter((x) => x.t === 'dice' && x.label.startsWith(`${f.t.short}: D6 + `)), lines: ev.filter((x) => x.t === 'log' && x.html.startsWith(`<b>${f.t.short}</b> stand resolute`)) }
+        })
+        if (mor[0].rows.length !== 1 || mor[0].lines.length || mor[1].rows.length || mor[1].lines.length !== 1) throw new Error(`${where}: morale rows ${mor.map((m) => m.rows.length).join(' and ')}, resolute lines ${mor.map((m) => m.lines.length).join(' and ')} (unresolved, resolute)`)
+        counts.morale++
+        meet('resolute morale')
+      }
+      // the AI: no enemy in any spell's reach, a friend in a brawler's
+      {
+        const { G, s } = fresh(board, races)
+        const c = G.units.find((u) => u.side === s && u.t.spells)
+        const f = G.units.find((u) => u.side === s && u !== c && u.models.length > 1 && !u.t.fly)
+        const e = G.units.find((u) => u.side !== s && u.t.brawler && !u.t.noCharge)
+        const where = `P-spell, board ${board} (${races.join(' v ')}), the AI's pick`
+        if (c && f && e) {
+          keep(G, [c, f, e])
+          at(c, -18, 0)
+          at(f, -18 + c.r + f.r + 6, 0)
+          at(e, -18 + c.r + e.r + 19, 0)
+          toShoot(G, s, where)
+          const best = mods.policy.bestCast(G, c)
+          if (!best || !ally(c.t.spells[best.sp]) || best.e.side !== s) throw new Error(`${where}: bestCast picks ${JSON.stringify(best && { sp: best.sp, tg: best.e.id, v: best.v })}, not a ward or a resolve on a friend`)
+          if (q.bestSpell(G, c) !== best.sp) throw new Error(`${where}: bestSpell ${q.bestSpell(G, c)}, bestCast ${best.sp}`)
+          const sf = q.spellFor(G, c, e)
+          if (sf !== -1) throw new Error(`${where}: spellFor names spell ${sf} at ${e.t.short}, out of every spell's reach`)
+          core.apply(G, s, { t: 'pilot', m: mask(G, s, c) })
+          const tray = G.out.find((x) => x.t === 'tray.open')
+          if (!tray?.title.endsWith(` · ${c.t.spells[best.sp].name}`)) throw new Error(`${where}: the AI's pilot of ${c.t.short} cast ${tray?.title}, not ${c.t.spells[best.sp].name}`)
+          counts.ai++
+          meet('the AI on a friend')
+        }
+        // spellFor at an enemy never names a spell cast on a friend
+        const S = scene(board, races, mulberry32(seed))
+        if (S) {
+          toShoot(S.G, S.s, where)
+          const sf = q.spellFor(S.G, S.c, S.e)
+          if (sf >= 0 && ally(S.c.t.spells[sf])) throw new Error(`${where}: spellFor names ${S.c.t.spells[sf].name} at the enemy ${S.e.t.short}`)
+        }
+      }
+    }
+  }
+  const want = [...Object.values(RACES_S).flatMap((r) => Object.values(r.units).filter((t) => t.spells).flatMap((t) => t.spells.map((w) => `${t.key} ${w.name}`)))]
+  const never = [...want.map((k) => `${k} made`), ...want.map((k) => `${k} fizzled`), 'warded worn off', 'resolute worn off', 'snared worn off', 'mesmerized worn off', 'snare held in the move', 'ward saved better', 'charge rolled again', 'resolute morale', 'the AI on a friend'].filter((k) => !met.has(k))
+  if (never.length) throw new Error(`P-spell never met: ${never.join(', ')} (on ${SPELL_BOARDS} boards)`)
+  return counts
+}
+
 // (the races, for P-fight's coverage: the child's)
 let RACES_F = null
+
+// ((V3c) the races, for P-spell's coverage: the child's)
+let RACES_S = null
 
 // (the child's match/ modules that fold a log, R8's: refold's)
 let FOLDING = null
@@ -2771,6 +3186,11 @@ if (a.child) {
       const [score, policy] = await Promise.all([mod('ai', 'score.js'), mod('ai', 'policy.js')])
       RACES_F = RACES
       out = { ok: true, counts: fightTask(core, { rng, score, policy }) }
+    } else if (task.kind === 'spell') {
+      // (V3c: P-spell's scenes)
+      const policy = await import(pathToFileURL(join(dir, 'core', 'ai', 'policy.js')).href)
+      RACES_S = RACES
+      out = { ok: true, counts: spellTask(core, { rng, policy }) }
     } else if (task.kind === 'keg') {
       // (F19a: P-keg's scenes)
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
@@ -2891,6 +3311,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-keg: ${r.ok ? `ok   no keg on ${r.counts.clean} boards of classic, open and fortified, one at (0, 0) on ${r.counts.kegBoards} keg boards; ${r.counts.templates} templates setting the keg off once (${r.counts.once} again on the same spot setting nothing off), the setting-off blast's victims and scenery before the keg's line, fuse and blast, ${r.counts.rows} victims' rows held die for die in G.units order, the fallen the setter-off's; ${r.counts.chains} chains of four kegs going off in the line's order, each once; ${r.counts.walks} wreckers' walks setting it off once the walk ended; ${r.counts.values} AI keg values and ${r.counts.fears} cells in the blast feared` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (V3c) P-spell's scenes, for code whose casters have several spells
+  if (/export function bestCast/.test(readFileSync(join(pkg, 'core', 'ai', 'policy.js'), 'utf8'))) {
+    const r = await child({ kind: 'spell' }, pkg)
+    say(`  P-spell: ${r.ok ? `ok   ${r.counts.legal} casts taken at their targets and ${r.counts.refused} refused (the other side, past the range, the dead), ${r.counts.made} made and ${r.counts.fizzled} fizzled, each die for die and none twice a phase; ${r.counts.ends} marks worn off when they must; ${r.counts.wards} wards saving one better; ${r.counts.rerolls} resolute charges rolled again and ${r.counts.morale} resolute squads untested; the AI's pick on a friend ${r.counts.ai} times, its default its pick in ${r.counts.defaults} scenes` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
@@ -2919,6 +3345,16 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     const never = Object.entries(reached).filter(([, n]) => !n).map(([k]) => k)
     if (never.length) bad.push({ error: `the random games never reached: ${never.join(', ')} (more --games?)` })
   }
+  // (V3c) every spell of every caster named by a human seat's command in
+  // the random games (P-spell's rules held at each decision: spellRules)
+  const cast = {}
+  for (const r of res) for (const [k, n] of Object.entries(r.counts?.spells ?? {})) cast[k] = (cast[k] ?? 0) + n
+  if (coverage && games >= 8 && /export function bestCast/.test(readFileSync(join(pkg, 'core', 'ai', 'policy.js'), 'utf8'))) {
+    const { RACES } = await import(pathToFileURL(join(pkg, 'data', 'schema.js')).href)
+    const want = Object.values(RACES).flatMap((r) => Object.values(r.units).filter((t) => t.spells).flatMap((t) => t.spells.map((w) => `${t.key} ${w.name}`)))
+    const never = want.filter((k) => !cast[k])
+    if (never.length) bad.push({ error: `the random games' human seats never cast: ${never.join(', ')} (more --games?)` })
+  }
   // (F11a) P-army: what it held, over the run
   let armySaid = ''
   if (lists) {
@@ -2929,7 +3365,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
     if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -2978,7 +3414,7 @@ const MUTATIONS = {
   // while the rules take the lob
   'lob-flat': ['core/actions/shoot.js', '  if (!G.nav.hasHeight || !lobbed(w)) return w.range\n', '  return w.range\n'],
   'lob-direct': ['core/actions/shoot.js', 'export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)', 'export const lobbed = (w) => !!w'],
-  'lob-ai-flat': ['core/ai/score.js', '  if (g > rangeOf(G, u, e, from)) return 0\n', '  if (g > w.range) return 0\n'],
+  'lob-ai-flat': ['core/ai/score.js', '  if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0\n', '  if (g > w.range) return 0\n'],
   // (F18) P-fight: a target in a fight refused again, a stray die drawn
   // with no friend in the fight, a stray per hit rather than per miss, the
   // share the target's, the strays' draws after the target's wound roll,
@@ -3002,7 +3438,23 @@ const MUTATIONS = {
   'friend-rows-first': ['core/actions/shoot.js', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  if (stray) (strayHits(G, u, fight.onto, stray, w), stray = 0)\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n'],
   'stray-tie-last': ['core/queries.js', '    if (f.alive > onto.alive) onto = f\n', '    if (f.alive >= onto.alive) onto = f\n'],
   'ai-ignores-strays': ['core/ai/score.js', ' - (fight ? strayCost(n, need, w, fight) : 0)', ''],
-  'ai-ignores-own-template': ['core/ai/score.js', ' - (pre ? pre.own : ownUnder(G, u, e)))', ')'],
+  'ai-ignores-own-template': ['core/ai/score.js', ' - (pre ? pre.own : ownUnder(G, u, e, w)))', ')'],
+  // (V3c) P-spell: a ward that never wears off, a snare that outlasts its
+  // victim's turn, a cast that leaves the caster free to cast again, a
+  // ward cast anywhere on the table, a snared unit that walks, a ward that
+  // saves no better, a resolute squad tested all the same, a failed charge
+  // never rolled again, an AI that casts no spell on a friend, a default
+  // that isn't the AI's pick
+  'ward-forever': ['core/engine.js', '      if (u.warded || u.resolute) {\n        u.warded = u.resolute = false\n        worn = true\n      }\n', ''],
+  'snare-forever': ['core/engine.js', '    if (u.snared) u.snared = false\n', ''],
+  'cast-twice': ['core/actions/shoot.js', "  const info = shotInfo(G, u, target, sp)\n  u.flags.shot = true\n", "  const info = shotInfo(G, u, target, sp)\n  if (!w.spell) u.flags.shot = true\n"],
+  'ward-anywhere': ['core/actions/shoot.js', "    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}\" / ${w.range}\")` }\n    return { ok: true, range, reach: w.range, ally: true }\n", '    return { ok: true, range, reach: w.range, ally: true }\n'],
+  'snare-walks': ['core/commands.js', "  if (u.flags.moved) return `${u.t.short} has moved`\n  if (u.snared) return `${u.t.short} is snared`\n  if (!inGrid(G, c)", "  if (u.flags.moved) return `${u.t.short} has moved`\n  if (!inGrid(G, c)"],
+  'ward-no-better': ['core/rules.js', 'export const svOf = (u) => (u.warded ? u.t.Sv - 1 : u.t.Sv)', 'export const svOf = (u) => u.t.Sv'],
+  'resolute-tested': ['core/actions/morale.js', '    if (u.resolute) {\n', '    if (u.resolute && false) {\n'],
+  'resolute-no-reroll': ['core/actions/charge.js', '  const again = !ok && u.resolute\n', '  const again = false\n'],
+  'ai-no-wards': ['core/ai/score.js', '  if (w.ward) return e.warded ? 0 : p * worth(e) * exposure(G, e) * wardGain(e)\n  if (w.resolve) return e.resolute ? 0 : p * resolveGain(G, e)\n', '  if (w.ward || w.resolve) return 0\n'],
+  'default-first': ['core/ai/policy.js', 'export const bestSpell = (G, u) => (u.t.spells ? bestCast(G, u)?.sp ?? 0 : 0)', 'export const bestSpell = (G, u) => 0'],
   // (F8a, P-mission) a setup's stray field copied through, as before F8a
   'whitelist-off': ['core/index.js', "  for (const [k] of fields) if (!SETUP_KEYS.includes(k)) throw new Error(`a setup takes no field \"${k}\"`)\n", ''],
   // (F8a's review) the whitelist read off the copy, as first built: a

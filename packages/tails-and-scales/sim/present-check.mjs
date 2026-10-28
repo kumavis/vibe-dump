@@ -127,7 +127,13 @@
 //     straight after `spell.mesmerized`, itself straight after the gaze's
 //     `status`, the labels with its target mesmerized (the damage's own
 //     `status`, just before, has the target as it was); and no action ends
-//     with a volley, a template, thorns or an eruption still owed.
+//     with a volley, a template, thorns or an eruption still owed. (V3c) A
+//     cast straight on to `spell.snare` or `spell.ward` too, each straight
+//     on to a `status` with its target snared (warded or resolute), and
+//     that straight on to its line; a template's look the spell's own (the
+//     tray names the weapon: Venom Mist's cloud is not Mesmerize's gaze);
+//     and a charge's roll rolled again (Cold Blood) straight after the
+//     first, which missed.
 // Over the whole corpus the run fails if it held none of any of these
 // kinds (a line whose text changed would match nothing, and the order it
 // should hold would go unchecked; nor may the walks of flying units or the
@@ -384,6 +390,10 @@ async function page(dir) {
           ...(f?.shot ? ['shot'] : []),
           ...(f?.charged ? ['charged'] : []),
           ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
+          // ((V3c) the spells' marks)
+          ...(mu.snared ? ['🌿 snared'] : []),
+          ...(mu.warded ? ['🪵 barkskin'] : []),
+          ...(mu.resolute ? ['❄️ cold blood'] : []),
           ...(mu.alive > 0 && mu.engaged ? ['⚔ in combat'] : []),
           ...(mu.alive > 0 && f?.cover ? ['🛡 in cover'] : []),
         ].join(' · ')
@@ -620,13 +630,13 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
 // the ground its segment spans, which is the walk's L (the view's).
 function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const nameOf = (id) => unitOf(id)?.t.short
-  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll
+  let p1, p2, p3, p4, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, shotW, roll
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
-  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0 }
+  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0, snares: 0, wards: 0 }
   const reset = () => {
-    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = null
+    p1 = p2 = p3 = p4 = melee = moving = vol = tmpl = thorns = casting = shot = shotW = roll = null
     melees = 0
     pause = false
   }
@@ -685,7 +695,22 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     if (p1?.t === 'dice' && /^Cast \d+\+ \(2D6\)$/.test(p1.label) && e.t !== (p1.pass ? 'spell.cast' : 'spell.fizzle')) {
       why ||= `a cast roll that ${p1.pass ? 'made' : 'missed'} it not followed straight by spell.${p1.pass ? 'cast' : 'fizzle'} (${e.t})`
     }
-    if (p1?.t === 'spell.cast' && !(e.t === 'spell.gaze' || (e.t === 'log' && e.traced && / casts <b>/.test(e.html)))) why ||= `a spell cast and followed by neither its gaze nor its eruption's line (${e.t})`
+    if (p1?.t === 'spell.cast' && !(e.t === 'spell.gaze' || e.t === 'spell.snare' || e.t === 'spell.ward' || (e.t === 'log' && e.traced && / casts <b>/.test(e.html)))) why ||= `a spell cast and followed by neither its gaze, its snare, its ward nor its eruption's line (${e.t})`
+    // ((V3c) a snare or a ward: straight on to the labels with its mark,
+    // and they straight on to its line)
+    if (p1?.t === 'spell.snare' && !(e.t === 'status' && e.snared?.includes(p1.tg))) why ||= `${pair(p1)}: snared with no status straight after that has ${nameOf(p1.tg)} snared (${e.t})`
+    if (p1?.t === 'spell.ward' && !(e.t === 'status' && (e.warded?.includes(p1.tg) || e.resolute?.includes(p1.tg)))) why ||= `${pair(p1)}: a ward with no status straight after that has ${nameOf(p1.tg)} warded or resolute (${e.t})`
+    if (p2?.t === 'spell.snare' && p1?.t === 'status') {
+      const ok = e.t === 'log' && e.traced && text(e.html).startsWith(`${nameOf(p2.u)} binds ${nameOf(p2.tg)} with `)
+      if (!ok) why ||= `${pair(p2)}: the snare's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+      else seen.snares++
+    }
+    if (p2?.t === 'spell.ward' && p1?.t === 'status') {
+      const who = p2.tg === p2.u ? 'itself' : nameOf(p2.tg)
+      const ok = e.t === 'log' && e.traced && (text(e.html).startsWith(`${nameOf(p2.u)} wraps ${who} in `) || text(e.html).startsWith(`${nameOf(p2.u)} steels ${who} with `))
+      if (!ok) why ||= `${pair(p2)}: the ward's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+      else seen.wards++
+    }
     if (p1?.t === 'spell.gaze' && !(e.t === 'dice' && e.label === 'Mortal wounds D3')) why ||= `a gaze not followed straight by its D3 (${e.t})`
     // an eruption's line, then (past the held-back lines it shows) the thorns
     if (casting && !held) {
@@ -695,14 +720,17 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     // ── the shot's: what must have come before ──
     if (e.t === 'tray.open' && / → .* · /.test(e.title)) {
       if (!(p1?.t === 'unit.face' && e.title.startsWith(`${nameOf(p1.u)} → ${nameOf(p1.tg)} · `))) why ||= `a shot's tray ("${e.title}") not straight after the shooter's turn to face its target (${p1?.t})`
-      // (the shooter, by id: who throws, and whose weapon's look it is)
+      // (the shooter, by id: who throws, and whose weapon's look it is;
+      // (V3c) the weapon by the name the tray gives it, a caster's spell)
       shot = p1?.t === 'unit.face' ? p1.u : null
+      const wn = e.title.slice(e.title.lastIndexOf(' · ') + 3), st = unitOf(shot)?.t
+      shotW = (st?.spells ?? [st?.ranged]).find((w) => w?.name === wn) ?? null
     }
     if ((e.t === 'volley' || e.t === 'blast.fire') && e.u !== shot) why ||= `${e.t} by ${nameOf(e.u)}, not by the shooter (${nameOf(shot)})`
     // ((F19a) but a powder keg's blast, in the keg's own look, whoever set
     // it off)
     if ((e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') && !(e.t === 'blast.land' && p1?.t === 'keg.fuse')) {
-      const look = unitOf(shot)?.t.ranged?.fx
+      const look = shotW?.fx
       if (e.fx !== look) why ||= `${e.t} in the look ${e.fx}, not the shooter's weapon's (${look})`
     }
     if (e.t === 'volley') {
@@ -749,7 +777,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       why ||= `an action ended with ${vol ? `a volley's line (${pair(vol)})` : tmpl ? 'a template' : thorns ? "an eruption's thorns to fade" : "an eruption's thorns"} still to come`
       vol = tmpl = thorns = casting = null
     }
-    if (e.t === 'act') shot = null
+    if (e.t === 'act') shot = shotW = null
     if (p1?.t === 'melee' && !(e.t === 'dice' && /^Hit /.test(e.label) && e.dice.length === p1.n && passes(e.dice, e.need) === p1.hits)) {
       why = `a melee (${pair(p1)}, ${p1.n} attacks, ${p1.hits} hits) not followed straight by its hit row (${e.t}${e.label ? ` "${e.label}"` : ''})`
     }
@@ -765,8 +793,11 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
         why ||= `a melee (${pair(e)}) not straight after its fighter's turn to face, the camera and the tray (${[p3, p2, p1].map((x) => x?.t).join(', ')})`
       }
     }
-    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && p2?.t === 'dice' && /^Charge /.test(p2.label) && p3?.t === 'tray.open' && p3.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
-      why ||= `a charge's result (${pair(e)}) not straight after its tray, its roll and the charger's turn to face (${[p3, p2, p1].map((x) => x?.t).join(', ')})`
+    // ((V3c) or its roll, a miss, then that rolled again: Cold Blood's)
+    const again = p2?.t === 'dice' && / rolled again \(2D6\)$/.test(p2.label)
+    const [rl, tray] = again ? [p3, p4] : [p2, p3]
+    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && rl?.t === 'dice' && /^Charge \d+" \(2D6\)$/.test(rl.label) && (!again || rl.pass === false) && tray?.t === 'tray.open' && tray.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
+      why ||= `a charge's result (${pair(e)}) not straight after its tray, its roll${again ? ' (missed), that rolled again' : ''} and the charger's turn to face (${[p4, p3, p2, p1].map((x) => x?.t).join(', ')})`
     }
     // a walk: a move's straight after its line (past the held-back lines it
     // shows), as long as the line says, stomping off when a wrecker goes
@@ -837,6 +868,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       if (mz && !(p1?.t === 'spell.mesmerized' && nameOf(p1.u) === mz[1] && nameOf(p1.tg) === mz[2])) why ||= `the mesmerize line "${text(e.html)}" not straight after its spell.mesmerized (${p1?.t})`
       if (mz) seen.gazes++
     }
+    p4 = p3
     p3 = p2
     p2 = p1
     p1 = e
