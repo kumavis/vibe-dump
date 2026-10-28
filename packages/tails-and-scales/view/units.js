@@ -44,6 +44,17 @@
 // shout, a stomp, a smash's shake) says nothing. Without the fog nothing
 // is veiled, and every figure is drawn as ever.
 //
+// (V3a) The conditions (present/conditions.js): a label's icons are its
+// unit's labelConds, each a span marked with its condition (data-cond:
+// the tooltip's, ui/tooltip.js, which finds it by its box, the labels
+// letting the pointer through to the table), read from the mirror and,
+// for what the unit did in its own seat's turn (fell back, advanced, a
+// charge failed), from the facts the card reads (`facts()`, the flow's
+// record: app/flow.js draws every label again as it changes, and the
+// ?debug snap check's fresh snap reads the same record, so a label left
+// stale by it differs). Each label carries its unit's id (data-unit) for
+// the tooltip's context, and the chips each unit's icons.
+//
 // It plays the figures' events (unit.wound, unit.slain, unit.flee,
 // unit.destroyed, unit.face, unit.move, melee, charge.result) as the
 // EventPlayer hands them over (view/player.js), and is made afresh, or
@@ -85,6 +96,7 @@ import { PACE } from '../present/pace.js'
 import { buildModel, disposeFigure, lodOf } from './models/cache.js'
 import { deckSlots, RIDER_SCALE } from '../present/deck.js'
 import { pxPerInch, tierOf, glyphOf } from '../present/zoom.js'
+import { CONDITIONS, labelConds, ctxOf, unitTip } from '../present/conditions.js'
 import { tween, wait, easeOut, easeInOut, wrapAngle, lerp } from './clock.js'
 import { sfx } from './sfx.js'
 
@@ -170,11 +182,14 @@ export class UnitViews {
   // mirror match's east army: broader); `labels` the element the floating
   // labels go in; `W` the board's width (a fleeing figure runs off it);
   // (F7a's review) `floorAt(x, z)` the height of the table's walkable top
-  // there (view/terrain.js), which a walk's figures stand on as they go
-  constructor({ scene, labels, fx, mirror, colorOf, rimOf = () => 1, W, floorAt = () => 0 }) {
+  // there (view/terrain.js), which a walk's figures stand on as they go;
+  // (V3a) `facts()` the card's record of what each unit did this turn, by
+  // id (present/hud-model.js's facts: null for none)
+  constructor({ scene, labels, fx, mirror, colorOf, rimOf = () => 1, W, floorAt = () => 0, facts = () => null }) {
     this.scene = scene
     this.W = W
     this.floorAt = floorAt
+    this.facts = facts
     this.labels = labels
     this.effects = fx
     this.mirror = mirror
@@ -287,6 +302,8 @@ export class UnitViews {
     v.label.className = `ulabel s${u.side}`
     // ((F8b) its role's glyph, which a Tactical label shows for its name)
     v.label.dataset.glyph = glyphOf(u.t)
+    // ((V3a) its unit, whose conditions its icons' tips tell)
+    v.label.dataset.unit = u.id
     v.ring.material.visible = this.tier !== 'strategic'
     // ((F9a) a transport's capacity pips, on its ring)
     if (u.t.transport) {
@@ -645,23 +662,25 @@ export class UnitViews {
     }
     if (!v.at && v.labelY !== undefined && v.labelY !== heightOf(mu)) this.label(id)
   }
-  // The label: the unit as shown (models standing or wounds left, mesmerized,
-  // in combat).
+  // The label: the unit as shown (models standing or wounds left), and
+  // (V3a) its conditions' icons (present/conditions.js's labelConds:
+  // mesmerized, in combat, in its own seat's turn what keeps it from
+  // shooting or charging, its height), each marked for its tip; written only
+  // when it changed.
   label(id) {
     const v = this.views.get(id), u = v.u, mu = this.shown(id)
     const w = mu.models.filter((m) => m.alive)
     let html = `<span class="nm">${u.t.short}</span>`
     if (u.t.models > 1) html += `<span class="ct">${mu.alive}/${u.t.models}</span>`
     else html += `<span class="ct">${w[0] ? w[0].w : 0}/${u.t.W}♥</span>`
-    if (mu.mesmerized) html += `<span class="st" title="Mesmerized">🌀</span>`
-    if (mu.alive > 0 && mu.engaged) html += `<span class="st" title="In combat">⚔</span>`
-    // (F7a) a raised unit's height ("▲2"": on a deck 2" up)
+    // (F7a) a raised unit's height ("▲2"": on a deck 2" up; at the Tactical
+    // tier the ▲ alone)
     v.labelY = heightOf(mu)
-    if (v.labelY) html += `<span class="st hi" title="On high ground, ${v.labelY}&quot; up">▲${v.labelY}"</span>`
+    for (const k of this.conds(id)) html += k === 'high' ? `<span class="st hi" data-cond="high">${CONDITIONS.high.icon}<i>${v.labelY}"</i></span>` : `<span class="st" data-cond="${k}">${CONDITIONS[k].icon}</span>`
     // ((F9a) a transport: the models aboard of its capacity, and each squad
     // riding it as a chip that picks it up; its ring's pips lit to match)
     if (u.t.transport) html += this.cargo(v, u.t.transport)
-    v.label.innerHTML = html
+    if (v.html !== html) v.label.innerHTML = v.html = html
     // ((F9a) a rider's label hides while it rides: its hull's says it;
     // (F16) and one the fog veils hides)
     v.label.style.display = mu.alive > 0 && !mu.aboard && !this.hid(id) ? '' : 'none'
@@ -674,6 +693,25 @@ export class UnitViews {
     let html = `<span class="cg" title="Riders aboard: ${n} of ${tr.capacity} models">▣ ${n}/${tr.capacity}</span>`
     if (rs.length) html += `<span class="rd">⟨${rs.map((r) => `<i data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</i>`).join(' · ')}⟩</span>`
     return html
+  }
+  // (V3a) the conditions unit `id` shows on its label now, the context
+  // their tips read, and its own tip (its line, its conditions told: a
+  // hover over its figure, input/human.js, and its chip's) (present/conditions.js)
+  conds(id) {
+    const v = this.views.get(id)
+    return labelConds(v.u.t, v.u.side, this.shown(id), this.facts()?.[id], this.mirror())
+  }
+  ctx(id) {
+    return ctxOf(this.views.get(id).u.side, this.shown(id), this.facts()?.[id], this.mirror())
+  }
+  // (V3a) a unit's tip: its line and its conditions told; ((F9a) a
+  // transport's riders aboard, a rider's hull, on its line)
+  tip(id) {
+    const v = this.views.get(id), mu = this.shown(id), tr = v.u.t.transport
+    let extra = ''
+    if (tr) extra += ` · ${this.ridersOf(id).reduce((k, r) => k + r.alive, 0)}/${tr.capacity} aboard`
+    if (mu.aboard) extra += ` · aboard the ${this.unit(mu.aboard).t.short}`
+    return unitTip(v.u.t, mu, this.conds(id), this.ctx(id), extra)
   }
   labelAll() {
     for (const id of this.views.keys()) this.label(id)
@@ -920,7 +958,8 @@ export class UnitViews {
   // in G.units order (the views', a sync's), with its place on the table
   // and on screen, its seat's colour, its role's glyph, its models standing
   // (a single model's wounds left), its order badge and its state (picked
-  // up, in combat, the ring's colour as the input painted it).
+  // up, in combat, the ring's colour as the input painted it); (V3a) and
+  // its label's condition icons (`conds`, its height's left to the label).
   chipsOf(M, sel) {
     const out = []
     for (const v of this.views.values()) {
@@ -931,6 +970,7 @@ export class UnitViews {
         id: v.id, x: at.x, y: at.y, wx: p.x, wz: p.z, side: v.u.side, color: v.color, glyph: v.label.dataset.glyph,
         n: v.u.t.models > 1 ? mu.alive : mu.models.find((m) => m.alive)?.w ?? 0, ord: v.label.dataset.ord ?? '',
         sel: v.id === sel, engaged: !!mu.engaged, look: v.look ?? null,
+        conds: this.conds(v.id).filter((k) => k !== 'high').map((k) => CONDITIONS[k].icon).join(''),
         // ((F9a) a transport's rider squads: a dot each on its chip)
         riders: v.u.t.transport ? this.ridersOf(v.id).length : 0,
       })

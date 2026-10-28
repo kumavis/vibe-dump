@@ -69,9 +69,10 @@ export class View {
   // (view/effects/shots.js) and what a seat's tools draw on the table
   // (view/overlay.js: one texel per nav cell, `grid` every match's grid
   // size).
-  figures({ mirror, colorOf, rimOf, W, H, grid }) {
-    // ((F7a's review) a walk's figures on the tops they cross: floorAt)
-    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z) })
+  figures({ mirror, colorOf, rimOf, W, H, grid, facts }) {
+    // ((F7a's review) a walk's figures on the tops they cross: floorAt;
+    // (V3a) the labels' conditions from the card's record too: facts)
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z), facts })
     // ((F7a) a template marked, landing and scorching on the top it falls on)
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) the overlay shades the battlefield's deck tops too)

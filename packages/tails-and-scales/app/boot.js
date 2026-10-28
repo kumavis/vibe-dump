@@ -21,6 +21,8 @@ import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
 import { Card } from '../ui/card.js'
 import { Tooltip } from '../ui/tooltip.js'
+import { tipOf } from '../present/conditions.js'
+import { GLYPH as ORDER_GLYPH, NAME as ORDER_NAME } from '../present/standing.js'
 import { Banner } from '../ui/banner.js'
 import { Toast } from '../ui/toast.js'
 import { Hud } from '../ui/hud.js'
@@ -283,7 +285,9 @@ export function boot(location) {
       },
       onRider: (id) => human.pickRider(id),
     }),
-    tooltip: new Tooltip($('#tooltip')),
+    // ((V3a) the labels' icons found by their boxes; a marked element's tip
+    // worded for the unit it belongs to: tipFor, below)
+    tooltip: new Tooltip($('#tooltip'), { labels: $('#labels'), explain: (el, how) => tipFor(el, how) }),
     banner: new Banner($('#banner')),
     toast: new Toast($('#toast')),
     hud: new Hud(),
@@ -298,7 +302,28 @@ export function boot(location) {
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
-  view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL) })
+  // ((V3a) the labels' conditions read the card's record too: flow.facts)
+  view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL), facts: () => flow.facts })
+  // (V3a) A marked element's tip (ui/tooltip.js): a condition's, worded for
+  // the unit whose label, card or chip it is on (data-unit: its type, its
+  // height, its advance's roll, its seat's turn; with no unit, as on the
+  // battle-setup panel's showcase, the type's plain words); a unit's chip
+  // its line and its conditions told (none on a tap that has none to tell:
+  // the tap picks it up, as ever), a cluster's what a tap does there; a
+  // roster row's order badge which order it is, its ✓ what it means.
+  const tipFor = (el, { tap = false } = {}) => {
+    const units = view.units, id = Number(el.closest('[data-unit]')?.dataset.unit), v = units?.get(id)
+    if (el.dataset.cond) return tipOf(el.dataset.cond, v?.u.t ?? null, v ? units.ctx(id) : {})
+    if (el.dataset.tip === 'cluster') return `${el.dataset.n} units: tap to zoom in`
+    if (el.dataset.tip === 'unit' && v) return tap && !units.conds(id).length ? '' : units.tip(id)
+    if (el.dataset.tip === 'order') {
+      const k = Object.keys(ORDER_GLYPH).find((o) => ORDER_GLYPH[o] === el.textContent)
+      return k ? `<b>${ORDER_GLYPH[k]} ${ORDER_NAME[k]}</b> — its standing order (the card's Orders line changes it).` : ''
+    }
+    if (el.dataset.tip === 'done') return '<b>✓ Done</b> — it has nothing more to do this phase.'
+    return ''
+  }
+  ui.tooltip.watch(document)
 
   // ── The local human (input/), the player, the buttons ─────────────────────
   const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id), tops: () => view.terrain.tops() })
@@ -868,7 +893,9 @@ export function boot(location) {
       // (draws nothing: a rebuild throws no debris)
       const quiet = new Proxy({}, { get: () => () => {} })
       const at = { M: null }
-      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W: atTable().board.W })
+      // ((V3a) the labels' conditions from the card's record, as the
+      // table's: a label the flow left stale differs)
+      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W: atTable().board.W, facts: () => flow.facts })
       // (no shot is ever fired off the table: it holds nothing to clear, and
       // fx's marks are the page's, left alone)
       const sh = { clear() {}, held: () => ({ marker: false, thorns: 0 }) }
@@ -1004,10 +1031,13 @@ export function boot(location) {
         listen(observer) {
           player.observer = observer
         },
-        // the unit card's status line as it shows `u` now (it opens the card)
+        // the unit card's status line as it shows `u` now (it opens the card):
+        // its text up to the high ground's span ((V3a) its words' marks
+        // left out)
         card(u) {
           ui.card.show(u)
-          return /class="card-sub">([^<]*)</.exec($('#card').innerHTML)?.[1] ?? null
+          const sub = /class="card-sub">(.*?)<\/div>/s.exec($('#card').innerHTML)?.[1]
+          return sub == null ? null : sub.split('<span class="card-high"')[0].replace(/<[^>]*>/g, '')
         },
       },
       get units() {
@@ -1156,6 +1186,49 @@ export function boot(location) {
       },
       view: {
         snapDiff,
+        // ((V3a, not promised) the conditions' tips (sim/input-check.mjs's
+        // tips lane): unit `id` shown under conditions forced on the table
+        // as shown (`mu`: fields of its mirror record, `f`: of its facts in
+        // the card's record, `phase`: the mirror's phase), its label drawn
+        // again; unforce() puts back all that was forced, and draws every
+        // label again; the tip a condition of unit `id` gives (`want`); the
+        // tooltip as it stands (shown or not, pinned, its text and box);
+        // `show(html, x, y)` the tooltip beside a page point, as any tip is
+        // placed, and `hide()` it, pinned or not; `look(x, z, d)` the camera
+        // `d` inches from (x, z), above and behind it, at once)
+        tips: (() => {
+          const kept = []
+          return {
+            force(id, { mu = {}, f = {}, phase } = {}) {
+              const M = player.mirror, rec = M.units[id]
+              kept.push({ id, mu: Object.fromEntries(Object.keys(mu).map((k) => [k, rec[k]])), f: flow.facts[id], phase: M.phase })
+              Object.assign(rec, mu)
+              flow.facts = { ...flow.facts, [id]: { ...flow.facts[id], ...f } }
+              if (phase) M.phase = phase
+              view.units.label(id)
+            },
+            unforce() {
+              for (const k of kept.reverse()) {
+                Object.assign(player.mirror.units[k.id], k.mu)
+                flow.facts = { ...flow.facts, [k.id]: k.f }
+                player.mirror.phase = k.phase
+              }
+              kept.length = 0
+              view.units.labelAll()
+            },
+            want: (id, k) => tipOf(k, view.units.get(id).u.t, view.units.ctx(id)),
+            unitTip: (id) => view.units.tip(id),
+            tooltip: () => {
+              const el = $('#tooltip'), r = el.getBoundingClientRect()
+              return { shown: el.style.display === 'block', pinned: ui.tooltip.pinned, html: el.innerHTML, box: { left: r.left, top: r.top, right: r.right, bottom: r.bottom } }
+            },
+            show: (html, x, y) => ui.tooltip.show(html, { x, y }),
+            hide: () => ui.tooltip.unpin(),
+            // the label icon the tooltip finds at a page point (its condition)
+            at: (x, y, slop) => ui.tooltip.iconAt(x, y, slop)?.dataset.cond ?? null,
+            look: (x, z, d) => rig.toPose({ pos: [x, d * 0.8, z + d * 0.6], target: [x, 0, z] }, 0.05),
+          }
+        })(),
         // fn(e) at every checkpoint (a `check` event), the player waiting on
         // what it returns (null: no pause)
         pauseAtChecks(fn) {

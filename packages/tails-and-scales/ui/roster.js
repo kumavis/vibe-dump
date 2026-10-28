@@ -22,8 +22,14 @@
 // of it: each unit it sees now as it stands, each other at its models as
 // last seen (whole, never seen), greyed and said so. ((F8b's review) Its header is its one toggle: a ☰ in the
 // tools as well widened the row over the other seat's score.)
+// (V3a) A row's state is its unit's label's condition icons (in combat,
+// mesmerized, fell back, …: present/conditions.js; its height left to the
+// label), each marked (data-cond) and the row with its unit (data-unit), so
+// the tooltip (ui/tooltip.js) tells each on a hover or a tap; the order's
+// badge and the ✓ say what they are in the same way, no native title.
 import { glyphOf } from '../present/zoom.js'
 import { unitPrice } from '../core/army.js'
+import { CONDITIONS } from '../present/conditions.js'
 
 const HZ = 4
 
@@ -89,6 +95,7 @@ export class Roster {
         id: v.id, side: s, glyph: glyphOf(t), name: t.short,
         n: t.models > 1 ? `${mu.alive}/${t.models}` : `${mu.models.find((m) => m.alive)?.w ?? 0}/${t.W}♥`,
         acted: inPhase && !can, ord: v.label.dataset.ord ?? '', engaged: !!mu.engaged, sel: v.look === '#ffe680',
+        conds: this.units.conds(v.id).filter((k) => k !== 'high'),
       })
     }
     return fog ? { worth: worth.map(Math.round), full, rows, fogged } : { worth: worth.map(Math.round), full, rows }
@@ -107,6 +114,6 @@ export class Roster {
     this.el.classList.toggle('open', open)
     this.el.querySelector('.rfold').textContent = open ? '▾' : '▸'
     this.head.innerHTML = [0, 1].map((s) => `<span class="rpts${m.fogged?.[s] ? ' fog' : ''}" style="color:${this.colorOf(s)}" title="${m.fogged?.[s] ? 'As last seen' : 'On the table'}: ${m.worth[s]} of ${m.full[s]} points">${m.worth[s].toLocaleString('en-GB')}</span>`).join('<span class="rvs">·</span>') + '<span class="rlbl">pts</span>'
-    this.list.innerHTML = !open ? '' : m.rows.map((r) => `<li data-id="${r.id}" class="${[r.acted ? 'acted' : '', r.sel ? 'sel' : '', r.engaged ? 'engaged' : ''].join(' ').trim()}" style="--side:${this.colorOf(r.side)}"><span class="rg">${r.glyph}</span><span class="rn">${r.name}</span><span class="rc">${r.n}</span><span class="rs">${r.engaged ? '<span title="In combat">⚔</span>' : ''}${r.ord ? `<span class="ro" title="Standing order">${r.ord}</span>` : ''}${r.acted ? '<span title="Done this phase">✓</span>' : ''}</span></li>`).join('')
+    this.list.innerHTML = !open ? '' : m.rows.map((r) => `<li data-id="${r.id}" data-unit="${r.id}" class="${[r.acted ? 'acted' : '', r.sel ? 'sel' : '', r.engaged ? 'engaged' : ''].join(' ').trim()}" style="--side:${this.colorOf(r.side)}"><span class="rg">${r.glyph}</span><span class="rn">${r.name}</span><span class="rc">${r.n}</span><span class="rs">${r.conds.map((k) => `<span data-cond="${k}">${CONDITIONS[k].icon}</span>`).join('')}${r.ord ? `<span class="ro" data-tip="order">${r.ord}</span>` : ''}${r.acted ? '<span data-tip="done">✓</span>' : ''}</span></li>`).join('')
   }
 }

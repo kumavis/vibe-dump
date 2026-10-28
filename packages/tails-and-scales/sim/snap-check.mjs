@@ -69,6 +69,7 @@
 //                                          broken one way at a time, in a
 //                                          copy) must fail it, on a battle
 //                                          the unedited code passes
+//                     [--mutations <names>]  (V3a) those edits alone
 //
 // By default a selection: four watched battles (one of them 64886-198528,
 // the only corpus battle where a block dropped by a collapse still stands
@@ -97,9 +98,9 @@ import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './orac
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
 } catch (e) {
-  console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]`)
+  console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test [--mutations <names>]`)
   process.exit(2)
 }
 const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-41'
@@ -132,6 +133,18 @@ const MUTATIONS = {
   // the labels not redrawn as the match's status changes (a wound, a
   // mesmerism, a melee joined)
   'stale-label': ['view/index.js', '      status: () => units.labelAll(),', '      status: () => {},'],
+  // (V3a) the labels not redrawn as an action's end brings the card's
+  // record (an advance's 💨, a fall back's ↩ shown an action late: the
+  // fresh snap reads the record as it stands). On a watched battle: a
+  // human's every action is followed by the decision it waits on, which
+  // draws them again, but the AI's turn plays on, its checks between acts
+  'deeds-stale': ['app/flow.js', '        if (e.facts) this.facts = e.facts\n        if (e.facts) view.units.labelAll()\n      },\n      // what the match waits on', '        if (e.facts) this.facts = e.facts\n      },\n      // what the match waits on', '4242-99'],
+  // (V3a) the labels not redrawn as the battle ends: the last seat's deeds
+  // left on them once no seat's turn is under way
+  'over-stale': ['app/flow.js', "    if (e.stage !== 'deploy') this.human.select(null)\n    this.view.units.labelAll()\n", "    if (e.stage !== 'deploy') this.human.select(null)\n", '4242-99'],
+  // (V3a) the labels not redrawn as a seat's turn begins: the seat whose
+  // turn ended keeps its deeds' icons into the other's
+  'turn-stale': ['app/flow.js', '    this.facts = turnBegun(this.facts, e)\n    this.view.units.labelAll()\n', '    this.facts = turnBegun(this.facts, e)\n'],
   // a slain model's figure left standing
   'dead-standing': ['view/units.js', '      .then(() => {\n        this.unfigure(f)\n        f.dying = false\n      })\n  }\n\n  // A model flees', '      .then(() => {\n        f.dying = false\n      })\n  }\n\n  // A model flees'],
   // a placed unit's ring and hit cylinder left where the unit stood
@@ -481,11 +494,18 @@ const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PAT
 if (a['self-test']) {
   const corpus = loadCorpus().items
   const on = (name) => MUTATIONS[name][3] ?? SELF_TEST_ON
+  // ((V3a) --mutations: those edits alone)
+  const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(MUTATIONS)
+  const unknown = names.filter((x) => !MUTATIONS[x])
+  if (unknown.length) {
+    console.error(`snap-check: no edit ${unknown.join(', ')} (${Object.keys(MUTATIONS).join(', ')})`)
+    process.exit(2)
+  }
   // the unedited code first, on every battle an edit runs on
-  const battles = [...new Set([SELF_TEST_ON, ...Object.keys(MUTATIONS).map(on)])]
-  const runs = [...battles.map((id) => ['unedited', id]), ...Object.keys(MUTATIONS).map((name) => [name, on(name)])]
+  const battles = [...new Set([SELF_TEST_ON, ...names.map(on)])]
+  const runs = [...battles.map((id) => ['unedited', id]), ...names.map((name) => [name, on(name)])]
   let missed = 0
-  console.log(`snap-check self-test: ${Object.keys(MUTATIONS).length} edits of the view, each on ${SELF_TEST_ON} unless it names another, after the unedited code on ${battles.join(' and ')}`)
+  console.log(`snap-check self-test: ${names.length} edits of the view, each on ${SELF_TEST_ON} unless it names another, after the unedited code on ${battles.join(' and ')}`)
   try {
     for (const [k, [name, id]] of runs.entries()) {
       const it = ROWS.has(id) ? null : corpus.find((x) => x.id === id)

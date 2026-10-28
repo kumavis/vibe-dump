@@ -336,6 +336,14 @@ ul.abil {
   font-size: 11px;
   color: #d8ccb4;
 }
+/* (V3a) a word a condition explains (the card's status line, a war
+   machine's never charging): its tip on a hover or a tap (ui/tooltip.js) */
+#card .cond,
+ul.abil .cond {
+  cursor: help;
+  text-decoration: underline dotted rgba(244, 236, 216, 0.45);
+  text-underline-offset: 2px;
+}
 
 /* ── Dice tray ───────────────────────────────────────────────────────── */
 #tray {
@@ -570,7 +578,10 @@ ul.abil {
   border-radius: 8px;
   padding: 5px 9px;
   font-size: 12px;
-  max-width: 340px;
+  /* (V3a) never wider than the screen less its two margins (ui/tooltip.js's
+     MARGIN, 8 px): placeTip then keeps it inside every edge */
+  max-width: min(340px, calc(100vw - 16px));
+  box-sizing: border-box;
   line-height: 1.4;
 }
 
@@ -1491,6 +1502,10 @@ body.mirror .ulabel.s1.sel .ct {
   color: #ffe9a8;
   font-weight: bold;
 }
+/* ((V3a) its inches, which a Tactical label leaves out) */
+.ulabel .st.hi i {
+  font-style: normal;
+}
 .card-high {
   color: #ffe9a8;
 }
@@ -1535,9 +1550,10 @@ body.mirror .ulabel.s1.sel .ct {
 
 /* F8b: drawing at scale */
 /* semantic zoom (view/units.js): Tactical labels are short (the role's
-   glyph for the name, the count, the order badge); Strategic shows chips */
+   glyph for the name, the count, the order badge, (V3a) the conditions'
+   icons, the high ground's ▲ without its inches); Strategic shows chips */
 #labels[data-tier='tactical'] .ulabel .nm,
-#labels[data-tier='tactical'] .ulabel .st {
+#labels[data-tier='tactical'] .ulabel .st.hi i {
   display: none;
 }
 #labels[data-tier='tactical'] .ulabel::before {
@@ -1592,6 +1608,21 @@ body:not(.playing) #chips {
   color: #5fd3ff;
 }
 #chips .chip i:empty {
+  display: none;
+}
+/* (V3a) its unit's condition icons, a badge on its upper right corner */
+#chips .chip s {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  padding: 0 2px;
+  border-radius: 7px;
+  background: rgba(20, 16, 12, 0.85);
+  font: 9px/13px system-ui, sans-serif;
+  text-decoration: none;
+  text-shadow: none;
+}
+#chips .chip s:empty {
   display: none;
 }
 @media (pointer: coarse) {
@@ -1761,6 +1792,11 @@ body:not(.playing) #roster {
   color: #5fd3ff;
   margin-left: 2px;
 }
+/* (V3a) its unit's condition icons, each with its tip (ui/tooltip.js) */
+#roster .rs [data-cond] {
+  margin-left: 2px;
+  cursor: help;
+}
 @media (max-width: 700px) {
   #roster {
     top: 100px;
@@ -1914,13 +1950,13 @@ body:not(.playing) #roster {
   display: block;
   opacity: 0.75;
 }
-#chips .chip s {
+#chips .chip u {
   text-decoration: none;
   color: #fff1c4;
   letter-spacing: -2px;
   margin-left: 1px;
 }
-#chips .chip s:empty {
+#chips .chip u:empty {
   display: none;
 }
 /* (F16) the courtesy fog: a ghost's label (where an unseen enemy was last

@@ -91,6 +91,7 @@
 // a model slain or fled) reaches it at the next action's end or stop.
 import { PHASES } from '../core/rules.js'
 import { inCover } from '../core/queries.js'
+import { cardConds } from './conditions.js'
 
 const NOBODY = new Set()
 // a phase's name by its key ('move' → 'Movement')
@@ -276,10 +277,14 @@ export function ringLooks({ session, input, covered = NOBODY }) {
 
 // ── The unit card's facts ───────────────────────────────────────────────────
 // What unit `u` of match G has done this turn and whether it stands in
-// cover, as G has it now.
+// cover, as G has it now. ((V3a) and whether a charge of its failed, and
+// the models it lost this turn, which it tests its nerve on at the turn's
+// end: present/conditions.js's chargeTried and lost; the label reads them
+// too, view/units.js)
 export const factOf = (G, u) => ({
   side: u.side, moved: !!u.flags.moved, fellBack: !!u.flags.fellBack, advanced: !!u.flags.advanced, advRoll: u.flags.advRoll,
   shot: !!u.flags.shot, charged: !!u.flags.charged, cover: inCover(G, u),
+  chargeTried: !!u.flags.chargeTried, lost: u.lost, rode: !!u.flags.rode,
 })
 // Every unit's, by id: the record the card reads while the table is behind
 // (taken as each action's `act` line is written, the match as it stood then;
@@ -291,25 +296,24 @@ export function factsOf(G) {
 }
 // A seat's turn begins (its first phase.start played): its units have done
 // nothing yet this turn, as the match's own turn start says (a copy).
+// ((V3a) and no unit of either seat has lost a model this turn: the turn
+// start forgets every unit's losses, core/engine.js's resetTurn)
 export function turnBegun(facts, e) {
   if (e.phase !== FIRST) return facts
   const out = {}
-  for (const [id, f] of Object.entries(facts)) out[id] = f.side === e.side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false } : f
+  for (const [id, f] of Object.entries(facts)) out[id] = f.side === e.side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false, chargeTried: false, lost: 0 } : { ...f, lost: 0 }
   return out
 }
 
 // The card's status line for a unit: `mu` the unit as shown (the mirror's:
 // what stands, what wounds are left, mesmerized, in combat) and `f` its
 // facts (factOf: the match's own while the table has caught up with it,
-// else the record of the last action the table has played).
+// else the record of the last action the table has played). (V3a) Its
+// words are present/conditions.js's cardConds, each in a span marked with
+// its condition (data-cond), whose tip the tooltip shows on a hover or a
+// tap (ui/tooltip.js); the ?debug card hook reads the line's text.
 export function cardStatus(t, mu, f) {
-  const status = []
-  if (f.moved) status.push(f.fellBack ? 'fell back' : f.advanced ? `advanced +${f.advRoll}"` : 'moved')
-  if (f.shot) status.push('shot')
-  if (f.charged) status.push('charged')
-  if (mu.mesmerized) status.push('🌀 mesmerized')
-  if (mu.alive > 0 && mu.engaged) status.push('⚔ in combat')
-  if (mu.alive > 0 && f.cover) status.push('🛡 in cover')
+  const status = cardConds(t, mu, f).map(({ k, word }) => `<span class="cond" data-cond="${k}">${word}</span>`)
   const models = t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`
   return `${mu.alive > 0 ? models : 'destroyed'}${status.length ? ' · ' + status.join(' · ') : ''}`
 }
