@@ -45,6 +45,14 @@ export const REVOKE_PATH = '/api/accounts/oauth/revoke'
 export const REFRESH_WINDOW_MS = 5 * 60_000
 export const PENDING_KEY = 'cc-web:siwc-pending'
 export const REFRESH_LOCK = 'cc-web:siwc-refresh'
+/**
+ * How long a token-endpoint POST (code exchange or refresh) may take. A
+ * refresh runs under the cross-tab lock REFRESH_LOCK, so an issuer that never
+ * answers must not hold it, and every tab's refreshes, forever.
+ */
+export const TOKEN_TIMEOUT_MS = 30_000
+/** Clock skew tolerated when checking an ID token's `exp`. */
+export const ID_TOKEN_LEEWAY_S = 120
 
 /**
  * Shown until the live list (`listModels`) arrives, and used when it cannot
@@ -57,7 +65,7 @@ export const FALLBACK_MODELS = Object.freeze([
 
 export class SiwcError extends Error {
   /**
-   * @param {'config'|'no-pending'|'bad-callback'|'state-mismatch'|'nonce'|'scope'|'signed-out'|'reauth'|'not-yet'|'network'|'http'} code
+   * @param {'config'|'no-pending'|'bad-callback'|'state-mismatch'|'nonce'|'id-token'|'scope'|'signed-out'|'reauth'|'not-yet'|'network'|'http'} code
    */
   constructor (code, message, extra = {}) {
     super(message)
@@ -182,6 +190,31 @@ export function decodeJwt (token) {
 }
 
 /**
+ * Why an ID token cannot be accepted, as {code, why}, or null when it can.
+ * Its signature cannot be checked (the JWKS is not CORS-readable, K §4.8), so
+ * these are the claim checks of OIDC Core §3.1.3.7 that need no key: `iss` is
+ * the issuer signed in with, `aud` is (or, as a list, includes) the issued
+ * client id, `exp` has not passed (give or take `leewayS`), and, when `nonce`
+ * is given (a sign-in; a refresh has none to compare), the token carries
+ * exactly that nonce.
+ */
+export function idTokenProblem (claims, { issuer, clientId, nonce, now = Date.now(), leewayS = ID_TOKEN_LEEWAY_S } = {}) {
+  const bad = (why) => ({ code: 'id-token', why })
+  if (!claims) return bad('it is not a readable JWT')
+  if (!issuer || typeof claims.iss !== 'string' || trimSlash(claims.iss) !== trimSlash(issuer)) return bad(`its issuer ${JSON.stringify(claims.iss ?? null)} is not ${trimSlash(issuer)}`)
+  const aud = Array.isArray(claims.aud) ? claims.aud : [claims.aud]
+  if (!clientId || !aud.includes(clientId)) return bad(`its audience ${JSON.stringify(claims.aud ?? null)} is not this app's client id ${clientId}`)
+  const exp = Number(claims.exp)
+  if (claims.exp == null || !Number.isFinite(exp) || exp <= 0) return bad('it has no expiry (exp)')
+  if ((exp + leewayS) * 1000 < now) return bad(`it expired at ${new Date(exp * 1000).toISOString()}`)
+  if (nonce !== undefined) {
+    if (claims.nonce == null || claims.nonce === '') return { code: 'nonce', why: 'it carries no nonce' }
+    if (claims.nonce !== nonce) return { code: 'nonce', why: 'nonce mismatch' }
+  }
+  return null
+}
+
+/**
  * A time from a token response (`earliest_refresh_at`) as epoch ms: unix
  * seconds or ms, an ISO string, or a small number taken as seconds from now.
  */
@@ -260,8 +293,9 @@ export function normaliseModels (json) {
  * @param {(bytes: Uint8Array) => Promise<Uint8Array>} [o.sha256]  default crypto.subtle
  * @param {Storage} [o.sessionStorage]  where a sign-in in progress keeps its verifier/state (this tab)
  * @param {LockManager|null} [o.locks]  serialises refreshes across tabs (default navigator.locks)
+ * @param {number} [o.tokenTimeoutMs]  limit on each token-endpoint POST (default TOKEN_TIMEOUT_MS; 0: none)
  */
-export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, sessionStorage, locks } = {}) {
+export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, sessionStorage, locks, tokenTimeoutMs = TOKEN_TIMEOUT_MS } = {}) {
   if (!settings?.get) throw new TypeError('createSiwc: settings are required')
   const fetchImpl = fetch ?? globalThis.fetch?.bind(globalThis)
   const rnd = random ?? webRandom
@@ -282,6 +316,9 @@ export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, s
 
   async function post (url, params, what) {
     if (!fetchImpl) throw new SiwcError('network', 'fetch is not available')
+    // the limit covers the answer's body as well as its headers
+    const signal = tokenTimeoutMs > 0 && typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(tokenTimeoutMs) : undefined
+    const timedOut = () => new SiwcError('network', `${what}: ${new URL(url).origin} did not answer within ${tokenTimeoutMs >= 1000 ? `${Math.round(tokenTimeoutMs / 1000)} s` : `${tokenTimeoutMs} ms`}.`, { timeout: true })
     let res
     try {
       res = await fetchImpl(url, {
@@ -290,12 +327,15 @@ export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, s
         headers: { 'content-type': 'application/x-www-form-urlencoded', accept: 'application/json' },
         body: new URLSearchParams(params).toString(),
         credentials: 'omit',
-        cache: 'no-store'
+        cache: 'no-store',
+        signal
       })
     } catch (err) {
+      if (signal?.aborted) throw timedOut()
       throw new SiwcError('network', `${what}: could not reach ${new URL(url).origin} (${err?.message ?? err}).`)
     }
-    const text = await res.text().catch(() => '')
+    let text = ''
+    try { text = await res.text() } catch { if (signal?.aborted) throw timedOut() }
     let json = null
     try { json = text ? JSON.parse(text) : null } catch {}
     if (!res.ok) {
@@ -370,11 +410,13 @@ export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, s
     }
     const next = tokensFromResponse(json, { now: now() })
     if (!next.accessToken) throw new SiwcError('http', 'Signing in: the answer had no access_token.')
-    const claims = decodeJwt(next.idToken)
-    if (claims?.nonce && claims.nonce !== p.nonce) {
+    // The ID token only supplies the email and plan shown; with none there is
+    // nothing to check. One that is there must be this sign-in's.
+    const bad = next.idToken ? idTokenProblem(decodeJwt(next.idToken), { issuer: p.issuer, clientId, nonce: p.nonce ?? '', now: now() }) : null
+    if (bad) {
       pending.clear()
       changed()
-      throw new SiwcError('nonce', 'The ID token does not belong to this sign-in (nonce mismatch). Sign in again.')
+      throw new SiwcError(bad.code, `The ID token does not belong to this sign-in (${bad.why}). Sign in again.`)
     }
     settings.set({ chatgptTokens: next })
     pending.clear()
@@ -419,6 +461,10 @@ export function createSiwc ({ settings, fetch, now = Date.now, random, sha256, s
     }
     const next = tokensFromResponse(json, { now: now(), previous: t })
     if (!next.accessToken) throw new SiwcError('http', 'Refreshing the ChatGPT sign-in: the answer had no access_token.')
+    // A new ID token that fails the claim checks is not kept (it only feeds
+    // the email and plan shown). The refresh itself stands: its refresh token
+    // has already rotated, so refusing it here would sign the user out.
+    if (json.id_token && idTokenProblem(decodeJwt(next.idToken), { issuer: c.issuer, clientId: c.clientId, now: now() })) next.idToken = t.idToken || ''
     // refresh tokens rotate: the new one is saved before anyone gets the access token
     settings.set({ chatgptTokens: next })
     changed()

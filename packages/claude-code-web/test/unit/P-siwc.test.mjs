@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto'
 import {
   buildAuthorizeUrl, parseCallbackUrl, pkce, base64url, decodeJwt, parseTime, tokensFromResponse, parseOAuthError,
   isPermanentAuthError, normaliseModels, createSiwc, SiwcError, DYNAMIC_CLIENT_ID, REDIRECT_URI, SCOPE, RESOURCE,
-  REFRESH_WINDOW_MS, PENDING_KEY, FALLBACK_MODELS, uuidFrom
+  REFRESH_WINDOW_MS, PENDING_KEY, FALLBACK_MODELS, uuidFrom, idTokenProblem, TOKEN_TIMEOUT_MS, ID_TOKEN_LEEWAY_S
 } from '../../src/host/siwc.js'
 import { createSettings, SETTINGS_KEY, SECRETS_KEY } from '../../src/host/settings.js'
 import { startMockApi } from '../../mock/mock-api.mjs'
@@ -21,7 +21,12 @@ function memoryStorage () {
 const jwt = (payload) => `${base64url(new TextEncoder().encode('{"alg":"none"}'))}.${base64url(new TextEncoder().encode(JSON.stringify(payload)))}.sig`
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
 
-/** A fake issuer + models endpoint as a fetch function; records every call. */
+/**
+ * A fake issuer + models endpoint as a fetch function; records every call.
+ * Its ID tokens carry iss (https://auth.example, the test issuer), aud (the
+ * client id of the grant), exp and `f.nonce`; `f.idClaims` overrides claims
+ * for the next answers (a key set to undefined drops that claim).
+ */
 function fakeOpenAI ({ clock, rotate = true, expiresIn = 3600, earliest, models } = {}) {
   const calls = []
   let n = 0
@@ -29,7 +34,7 @@ function fakeOpenAI ({ clock, rotate = true, expiresIn = 3600, earliest, models 
   const f = async (url, init = {}) => {
     const u = new URL(url)
     const form = init.body ? Object.fromEntries(new URLSearchParams(init.body)) : null
-    calls.push({ url: u.pathname, method: init.method ?? 'GET', form, headers: init.headers })
+    calls.push({ url: u.pathname, method: init.method ?? 'GET', form, headers: init.headers, signal: init.signal })
     if (f.fail) { const r = f.fail; f.fail = null; if (r === 'network') throw new TypeError('Failed to fetch'); return json(r.status, r.body) }
     if (u.pathname === '/api/accounts/oauth/token') {
       if (form.grant_type === 'refresh_token') {
@@ -40,7 +45,9 @@ function fakeOpenAI ({ clock, rotate = true, expiresIn = 3600, earliest, models 
       n++
       const at = `at_${n}`
       issued.access.add(at)
-      const body = { access_token: at, id_token: jwt({ email: 'u@example.com', nonce: f.nonce, 'https://api.openai.com/auth': { chatgpt_plan_type: 'pro' } }), token_type: 'Bearer', expires_in: expiresIn, scope: f.scope ?? SCOPE }
+      const iat = Math.floor((clock?.t ?? 1_800_000_000_000) / 1000)
+      const claims = { iss: 'https://auth.example', aud: form.client_id, sub: 'user-1', iat, exp: iat + expiresIn, email: 'u@example.com', nonce: f.nonce, 'https://api.openai.com/auth': { chatgpt_plan_type: 'pro' }, ...f.idClaims }
+      const body = { access_token: at, id_token: jwt(claims), token_type: 'Bearer', expires_in: expiresIn, scope: f.scope ?? SCOPE }
       if (rotate || form.grant_type === 'authorization_code') { body.refresh_token = `rt_${n}`; issued.refresh.add(body.refresh_token) }
       if (earliest !== undefined) body.earliest_refresh_at = earliest
       return json(200, body)
@@ -59,7 +66,7 @@ function fakeOpenAI ({ clock, rotate = true, expiresIn = 3600, earliest, models 
   return f
 }
 
-function setup ({ clock = { t: 1_800_000_000_000 }, fetch, tokens, remember = false, chatgpt } = {}) {
+function setup ({ clock = { t: 1_800_000_000_000 }, fetch, tokens, remember = false, chatgpt, locks = null, tokenTimeoutMs } = {}) {
   const storage = memoryStorage()
   const sessionStorage = memoryStorage()
   const settings = createSettings({ storage, sessionStorage })
@@ -67,7 +74,7 @@ function setup ({ clock = { t: 1_800_000_000_000 }, fetch, tokens, remember = fa
   if (tokens) settings.set({ chatgpt: { clientId: 'oaiapp_x' }, chatgptTokens: tokens })
   let seq = 0
   const random = (k) => Uint8Array.from({ length: k }, () => (seq++ * 37 + 11) & 255)
-  const siwc = createSiwc({ settings, fetch, now: () => clock.t, random, sessionStorage, locks: null })
+  const siwc = createSiwc({ settings, fetch, now: () => clock.t, random, sessionStorage, locks, tokenTimeoutMs })
   return { settings, siwc, storage, sessionStorage, clock }
 }
 
@@ -229,6 +236,109 @@ test('siwc: a wrong nonce or a grant without chatgpt.tokens.use.direct is refuse
   fetch.fail = { status: 401, body: { error: { code: 'token_expired', message: 'Could not validate your token.' } } }
   await assert.rejects(siwc.completeLogin(`?code=c&state=${c.state}&client_id=oaiapp_1`), (e) => e.code === 'reauth' && /token_expired/.test(e.message))
   assert.equal(siwc.status().pending, false)
+})
+
+test('siwc: idTokenProblem checks iss, aud, exp and (on a sign-in) the nonce', () => {
+  const now = 1_800_000_000_000
+  const ok = { iss: 'https://auth.example', aud: 'oaiapp_1', exp: now / 1000 + 3600, nonce: 'n1' }
+  const check = (claims, o = {}) => idTokenProblem(claims, { issuer: 'https://auth.example/', clientId: 'oaiapp_1', nonce: 'n1', now, ...o })
+  assert.equal(check(ok), null)
+  assert.equal(check({ ...ok, aud: ['other', 'oaiapp_1'] }), null, 'an audience list that includes the client')
+  assert.equal(check({ ...ok, nonce: undefined }, { nonce: undefined }), null, 'a refresh has no nonce to compare')
+  assert.equal(check({ ...ok, exp: now / 1000 - ID_TOKEN_LEEWAY_S + 1 }), null, 'clock skew is tolerated')
+  const code = (claims, o) => check(claims, o)?.code
+  const why = (claims, o) => check(claims, o)?.why ?? ''
+  assert.equal(code({ ...ok, nonce: undefined }), 'nonce', 'no nonce when one was expected')
+  assert.match(why({ ...ok, nonce: undefined }), /no nonce/)
+  assert.equal(code({ ...ok, nonce: 'n2' }), 'nonce')
+  assert.equal(code({ ...ok, aud: 'oaiapp_other' }), 'id-token')
+  assert.match(why({ ...ok, aud: 'oaiapp_other' }), /audience "oaiapp_other" is not this app's client id oaiapp_1/)
+  assert.equal(code({ ...ok, aud: ['oaiapp_other'] }), 'id-token')
+  assert.equal(code({ ...ok, aud: undefined }), 'id-token')
+  assert.match(why({ ...ok, iss: 'https://evil.example' }), /issuer "https:\/\/evil.example" is not https:\/\/auth.example/)
+  assert.equal(code({ ...ok, iss: undefined }), 'id-token')
+  assert.match(why({ ...ok, exp: now / 1000 - ID_TOKEN_LEEWAY_S - 1 }), /expired at /)
+  assert.match(why({ ...ok, exp: undefined }), /no expiry/)
+  assert.equal(code(null), 'id-token')
+})
+
+test('siwc: a sign-in whose ID token has no nonce, a wrong aud or iss, or has expired is refused', async () => {
+  const clock = { t: 1_800_000_000_000 }
+  const fetch = fakeOpenAI({ clock })
+  const { siwc, settings, sessionStorage } = setup({ clock, fetch })
+  const cases = [
+    [{ nonce: undefined }, 'nonce', /no nonce/],
+    [{ aud: 'oaiapp_someone_else' }, 'id-token', /audience "oaiapp_someone_else" is not this app's client id oaiapp_1/],
+    [{ aud: 'dynamic_agent_client' }, 'id-token', /audience/],
+    [{ iss: 'https://auth.elsewhere.example' }, 'id-token', /issuer/],
+    [{ exp: clock.t / 1000 - 3600 }, 'id-token', /expired at /],
+    [{ exp: undefined }, 'id-token', /no expiry/]
+  ]
+  for (const [idClaims, errCode, re] of cases) {
+    const { state } = await siwc.beginLogin()
+    fetch.nonce = JSON.parse(sessionStorage.m.get(PENDING_KEY)).nonce
+    fetch.idClaims = idClaims
+    await assert.rejects(siwc.completeLogin(`?code=c&state=${state}&client_id=oaiapp_1`), (e) => e instanceof SiwcError && e.code === errCode && re.test(e.message) && /Sign in again/.test(e.message), JSON.stringify(idClaims))
+    assert.equal(settings.get().chatgptTokens, null, `no tokens kept: ${JSON.stringify(idClaims)}`)
+    assert.equal(siwc.status().pending, false, 'the pending sign-in is dropped')
+  }
+  // the same flow with the claims right signs in; an answer without an ID token is accepted (nothing to verify)
+  const { state } = await siwc.beginLogin()
+  fetch.nonce = JSON.parse(sessionStorage.m.get(PENDING_KEY)).nonce
+  fetch.idClaims = undefined
+  assert.equal((await siwc.completeLogin(`?code=c&state=${state}&client_id=oaiapp_1`)).email, 'u@example.com')
+})
+
+test('siwc: a refreshed ID token that fails the checks is dropped, the rotated tokens are kept', async () => {
+  const clock = { t: 1_800_000_000_000 }
+  const fetch = fakeOpenAI({ clock })
+  const { siwc, settings } = setup({ clock, fetch, tokens: { accessToken: 'at_0', refreshToken: 'rt_0', idToken: 'id_before', expiresAt: clock.t - 1 } })
+  fetch.idClaims = { aud: 'oaiapp_someone_else' }
+  assert.equal((await siwc.getAccessToken()).accessToken, 'at_1')
+  assert.deepEqual([settings.get().chatgptTokens.refreshToken, settings.get().chatgptTokens.idToken], ['rt_1', 'id_before'])
+  fetch.idClaims = undefined // a good one (no nonce on a refresh) is taken
+  clock.t += 3_600_000
+  await siwc.getAccessToken()
+  assert.equal(decodeJwt(settings.get().chatgptTokens.idToken).aud, 'oaiapp_x')
+})
+
+test('siwc: token-endpoint POSTs time out (AbortSignal.timeout), so a hanging issuer cannot hold the refresh lock', async (t) => {
+  assert.equal(TOKEN_TIMEOUT_MS, 30_000)
+  const clock = { t: 1_800_000_000_000 }
+  const good = fakeOpenAI({ clock })
+  const signals = []
+  let hang = true
+  const fetch = (url, init = {}) => {
+    signals.push(init.signal)
+    if (!hang) return good(url, init)
+    // an issuer that accepts the connection and never answers
+    return new Promise((resolve, reject) => init.signal?.addEventListener('abort', () => reject(init.signal.reason), { once: true }))
+  }
+  const lock = { held: 0, names: [], request (name, fn) { this.names.push(name); this.held++; return Promise.resolve().then(fn).finally(() => { this.held-- }) } }
+  const { siwc, settings, sessionStorage } = setup({ clock, fetch, locks: lock, tokenTimeoutMs: 60, tokens: { accessToken: 'at_0', refreshToken: 'rt_0', expiresAt: clock.t - 1 } })
+  // Node does not keep the process alive for AbortSignal.timeout's timer (a page does not care)
+  const keepAlive = setInterval(() => {}, 1000)
+  t.after(() => clearInterval(keepAlive))
+  const started = Date.now()
+  await assert.rejects(siwc.getAccessToken(), (e) => e instanceof SiwcError && e.code === 'network' && e.timeout === true && /auth\.example did not answer within 60 ms/.test(e.message))
+  assert.ok(Date.now() - started < 5000, 'gave up at the timeout')
+  assert.ok(signals[0] instanceof AbortSignal && signals[0].aborted, 'the refresh POST carried the timeout signal')
+  assert.deepEqual([lock.names, lock.held], [['cc-web:siwc-refresh'], 0], 'the cross-tab lock was released')
+  assert.equal(settings.get().chatgptTokens.refreshToken, 'rt_0', 'a timeout keeps the tokens (transient)')
+  // the next refresh goes through
+  hang = false
+  assert.equal((await siwc.getAccessToken()).accessToken, 'at_1')
+  // the code exchange has the limit too; a timed-out exchange keeps the pending sign-in (like a network failure)
+  hang = true
+  const { state } = await siwc.beginLogin()
+  await assert.rejects(siwc.completeLogin(`?code=c&state=${state}&client_id=oaiapp_1`), (e) => e.code === 'network' && e.timeout === true && /^Signing in: /.test(e.message))
+  assert.ok(signals.at(-1).aborted)
+  assert.equal(siwc.status().pending, true)
+  assert.ok(sessionStorage.m.has(PENDING_KEY))
+  // a body that stalls after the headers is cut off by the same signal
+  const stall = (url, init = {}) => Promise.resolve({ ok: true, status: 200, text: () => new Promise((resolve, reject) => init.signal.addEventListener('abort', () => reject(init.signal.reason), { once: true })) })
+  const s2 = setup({ clock, fetch: stall, tokenTimeoutMs: 60, tokens: { accessToken: 'at_0', refreshToken: 'rt_0', expiresAt: clock.t - 1 } })
+  await assert.rejects(s2.siwc.getAccessToken(), (e) => e.code === 'network' && e.timeout === true)
 })
 
 // --- tokens ---------------------------------------------------------------------

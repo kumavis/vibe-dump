@@ -3,6 +3,9 @@
 import { test, before, after } from 'node:test'
 import assert from 'node:assert/strict'
 import { createHash, randomBytes } from 'node:crypto'
+import { readdirSync, readFileSync } from 'node:fs'
+import { extname, join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { startMockApi, analyzeResponses, checkResponsesRequest, MOCK_CLIENT_ID } from '../../mock/mock-api.mjs'
 
 let mock
@@ -74,11 +77,12 @@ test('mock (openai): the fake issuer checks the Sign in with ChatGPT parameters 
 
   // a second sign-in with the issued client id, no agent_name_hint
   await signIn({ clientId: MOCK_CLIENT_ID })
-  // what the issuer refuses
-  const bad = await fetch(`${mock.url}/api/accounts/authorize?response_type=code&client_id=app_EMoamEEZ73f0CkXaXp7hrann&redirect_uri=http://localhost:1455/auth/callback&originator=codex_cli_rs`, { redirect: 'manual' })
+  // what the issuer refuses: a client id it never issued and any `originator`
+  // (made-up values: no real client id appears in this package)
+  const bad = await fetch(`${mock.url}/api/accounts/authorize?response_type=code&client_id=app_not_registered&redirect_uri=http://localhost:1455/auth/callback&originator=not_a_codex_client`, { redirect: 'manual' })
   assert.equal(bad.status, 400)
   const why = (await bad.json()).error_description
-  for (const p of ['unknown client_id', 'redirect_uri must be', 'chatgpt.tokens.use.direct', 'PKCE', 'ext_agent_host_id', 'originator']) assert.ok(why.includes(p), `${p}: ${why}`)
+  for (const p of ['unknown client_id app_not_registered', 'redirect_uri must be', 'chatgpt.tokens.use.direct', 'PKCE', 'ext_agent_host_id', 'originator presents the sign-in as the Codex CLI']) assert.ok(why.includes(p), `${p}: ${why}`)
   const wrongVerifier = await (async () => {
     const q = new URLSearchParams({ response_type: 'code', client_id: MOCK_CLIENT_ID, redirect_uri: 'http://127.0.0.1:1455/auth/callback', scope: 'chatgpt.tokens.use.direct', resource: 'https://api.openai.com/v1', code_challenge: 'A'.repeat(43), code_challenge_method: 'S256', state: 's', nonce: 'n', ext_agent_host_id: HOST_ID })
     const loc = new URL((await fetch(`${mock.url}/api/accounts/authorize?${q}`, { redirect: 'manual' })).headers.get('location'))
@@ -88,6 +92,27 @@ test('mock (openai): the fake issuer checks the Sign in with ChatGPT parameters 
   assert.match((await wrongVerifier.json()).error.message, /PKCE/)
   const json = await fetch(`${mock.url}/api/accounts/oauth/token`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ grant_type: 'refresh_token' }) })
   assert.equal(json.status, 400, 'form-encoded only')
+})
+
+// The policy: no Codex client id anywhere in this package, not even in a
+// negative test. Matched by its shape (`app_` and 24 letters or digits, as the
+// Codex CLI's public id is), so this test does not spell one out either.
+test('policy: no Codex-style client id (app_ + 24 alphanumerics) in any file of the package', () => {
+  const root = fileURLToPath(new URL('../../', import.meta.url))
+  const hits = []
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name.startsWith('.')) continue
+      const path = join(dir, e.name)
+      if (e.isDirectory()) walk(path)
+      else if (['.js', '.mjs', '.cjs', '.json', '.html', '.md', '.css', '.txt'].includes(extname(e.name))) {
+        const m = readFileSync(path, 'utf8').match(/\bapp_[A-Za-z0-9]{24}\b/)
+        if (m) hits.push(`${relative(root, path)}: ${m[0].slice(0, 8)}...`)
+      }
+    }
+  }
+  walk(root)
+  assert.deepEqual(hits, [])
 })
 
 test('mock (openai): /v1/models lists for a bearer the issuer gave out; preflights pass for any origin', async () => {
@@ -189,7 +214,7 @@ test('mock (openai): requests the preview would reject are refused and recorded'
     [{ ...baseBody([userMsg('say hi')]), stream: false }, {}, /stream must be true/],
     [baseBody([{ type: 'message', role: 'system', content: 'x' }, userMsg('say hi')]), {}, /role:"system"/],
     [{ ...baseBody([userMsg('say hi')]), max_output_tokens: 100, temperature: 1, metadata: {} }, {}, /max_output_tokens.*temperature.*metadata/],
-    [baseBody([userMsg('say hi')]), { originator: 'codex_cli_rs' }, /originator header/],
+    [baseBody([userMsg('say hi')]), { originator: 'not_a_codex_client' }, /originator header/],
     [baseBody([userMsg('say hi')]), { 'chatgpt-account-id': 'x' }, /chatgpt-account-id header/]
   ]
   for (const [body, headers, re] of cases) {

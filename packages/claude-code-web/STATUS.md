@@ -1,6 +1,6 @@
 # claude-code-web — status
 
-_Last update: ChatGPT-option integration (2026-10-28, 04:56 UTC). Older rounds below, newest first._
+_Last update: ChatGPT option, fixes after verification report L (2026-10-28, 05:28 UTC). Older rounds below, newest first._
 
 ## ChatGPT option (Sign in with ChatGPT) — integrated
 
@@ -69,7 +69,8 @@ node test/e2e.mjs --fake --provider chatgpt
 #   ChatGPT subscription -> Advanced: endpoints: API base http://127.0.0.1:18080/v1, issuer http://127.0.0.1:18080
 ```
 
-Unit tests: `npm test` 339/339 (track P 38, track W 47, integration `I-chatgpt` 6).
+Unit tests: `npm test` 351/351 (track P 38, track W 47, integration `I-chatgpt` 6, review-L fixes 12).
+`--no-interrupt` makes step 9 skip its interrupt on purpose, to check the e2e's own recovery (exits 1).
 
 ### What does not work, or is not verified
 
@@ -81,8 +82,9 @@ Unit tests: `npm test` 339/339 (track P 38, track W 47, integration `I-chatgpt` 
   `clear_thinking … keep:'all'`); Anthropic server tools; prompt-cache controls (OpenAI caches by
   prefix and `prompt_cache_key` = Claude Code's session id). Token counts are estimates until the
   final usage arrives; the cost line is in Claude prices (the page says so after Start).
-- **ID token** signature not verified (JWKS not CORS-readable); nonce checked; email and plan shown
-  unverified. **Revoke** on log out is best effort (its CORS is unknown).
+- **ID token** signature not verified (JWKS not CORS-readable); its claims are checked (`iss`, `aud`,
+  `exp`, and the nonce on sign-in); email and plan shown come from it. **Revoke** on log out is best
+  effort (its CORS is unknown).
 - The model list is cached in memory; after a reload Start fetches it once for the context window and
   effort levels (if that fails, Claude Code keeps its own compaction window and efforts pass through).
 
@@ -113,6 +115,29 @@ From report J §9 (still open) and K §6:
 
 J §9.2 (Route A's `originator`) does not apply: Route A (the Codex CLI backend) is not used. J §9.5
 was answered with the real binary (above).
+
+### Fixes after verification report L (05:14–05:28 UTC)
+
+Report: `docs/research/claude-code-in-browser/L-verify-chatgpt-option.md`. Findings 5, 3, 4 and 2 are fixed;
+finding 1 (the missed interrupt itself, 1 in 54) is not diagnosed yet.
+- **No Codex client id anywhere (L5).** `P-mock-responses` refuses a made-up `client_id=app_not_registered`
+  and `originator=not_a_codex_client`. A new test fails on any `app_` + 24-character id in the package.
+- **Split parallel results (L3).** `openai/request.js` no longer adds an `"aborted"` output at the end of each
+  user message. It adds one only when an assistant message, or the end of input, follows with a call
+  still unanswered. User text and reminders sent before the last result wait until every call has its
+  output. Test: `W-request` (split results, checked with the mock's `inputStructureProblems`).
+- **ID token and token-endpoint timeout (L4).** `siwc.js` `idTokenProblem` refuses a sign-in whose ID
+  token has no nonce, the wrong `aud` (not the issued client id), the wrong `iss` (not the issuer) or an
+  expired or missing `exp` (120 s leeway). A refreshed ID token that fails these checks is dropped; the
+  rotated tokens are kept. Code-exchange and refresh POSTs carry `AbortSignal.timeout(30 s)`, so a
+  hanging issuer cannot hold `cc-web:siwc-refresh`. A timeout is a transient `network` error that keeps
+  the tokens. Tests: 4 in `P-siwc`.
+- **e2e after a failed step 9 (L2).** The e2e waits for the late `result`, or stops and restarts Claude
+  Code. Steps 11 and 13 then report a failure as SKIP "skipped due to step 9", or do not run when the
+  session could not be recovered. The logic is in `test/e2e-resync.mjs`; tests: `I-e2e-resync` (6). With
+  `--no-interrupt` (L's run c3 on purpose), step 9 fails, the e2e waits 2.3 s for the result, and
+  steps 11, 13, 12 and 6 pass.
+- Results: `npm test` 351/351; build ok; `test:e2e` 11/11; `test:e2e -- --provider chatgpt` 15/15.
 
 ### Integration log
 

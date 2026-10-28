@@ -27,6 +27,10 @@
 //              AbortSignal and when it aborts; see --log)
 //   --interrupt-loops N  run step 9 N times in a row (default 1): the
 //              interrupt race only shows in a fraction of runs
+//   --no-interrupt  step 9 sends no interrupt, as if one were missed: checks
+//              the test's own recovery (step 9 fails; the session is
+//              resynchronised and the steps after it must not fail in
+//              cascade). A diagnostic: the run exits 1
 //   --provider chatgpt  run in ChatGPT-subscription mode (ARCHITECTURE.md
 //              Appendix A): the page's ChatGPT base URL and issuer point at the
 //              mock, step 0 signs in with the paste flow (the authorize URL is
@@ -48,6 +52,14 @@
 // Every step prints PASS/FAIL/SKIP with its reason; the exit code is 0 only
 // when every step passed (in --fake mode: when nothing failed).
 //
+// When step 9 fails (an interrupt that was not applied lets the slow turn run
+// on for ~20 s), the test waits for that turn's result, or else stops and
+// restarts Claude Code, before the next step: otherwise every later turn
+// would read the previous turn's result. The steps after it (11 and 13) are
+// then reported as SKIP "skipped due to step 9" instead of FAIL (with their
+// own problems in the reason), or not run when the session could not be
+// brought back; the run still fails on step 9.
+//
 // Egress is blocked at the network level, not with context.route (with a
 // route installed, Playwright answers every CORS preflight itself, so the
 // mock's strict-CORS check would never run): Chromium gets a proxy on a
@@ -65,6 +77,7 @@ import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { startMockApi } from '../mock/mock-api.mjs'
 import { ALLOWED_TOOLS } from '../src/host/constants.js'
+import { createStep9Guard, resyncAfterFailedRun } from './e2e-resync.mjs'
 import { LINUX_X64_BINARY } from './research.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -94,6 +107,7 @@ const SHOT_OUT = opt('--screenshot', null)
 const ACCESS_TTL = Math.max(61, Number(opt('--access-ttl', 3600)) || 3600)
 const TRACE = flag('--trace')
 const INTERRUPT_LOOPS = Math.max(1, Number(opt('--interrupt-loops', 1)) || 1)
+const NO_INTERRUPT = flag('--no-interrupt')
 // 2,848 for linux-x64; another platform's build has its own module set (darwin-arm64: 2,866)
 const EXPECTED_MODULES = Number(opt('--modules', 2848))
 const BASE_PATH = `/${opt('--base', '/').replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/')
@@ -111,6 +125,8 @@ function record (id, name, status, reason = '', details = undefined) {
   console.log(`${status.padEnd(4)} ${pad} ${name}${reason ? `\n           ${reason.split('\n').join('\n           ')}` : ''}`)
 }
 const info = (msg) => console.log(`     ${msg}`)
+// Steps after step 9 report a failure as its knock-on once it failed (e2e-resync.mjs).
+const after9 = createStep9Guard(record)
 
 // --- harness of the test itself ----------------------------------------------
 let staticSrv, mock, browser, mockLogFile
@@ -700,15 +716,35 @@ async function interruptTurn (p) {
   }
   const failed = runs.filter((r) => r.problems.length)
   const rate = INTERRUPT_LOOPS > 1 ? ` (${runs.length - failed.length}/${runs.length} runs passed)` : ''
-  record(9, name, failed.length ? 'FAIL' : 'PASS', failed.length ? `${failed[0].problems.join('\n')}${rate}` : `${runs[0].summary}${rate}`, { runs: runs.map((r) => ({ ok: !r.problems.length, ...r.details })) })
+  const last = runs[runs.length - 1]
+  if (failed.length) after9.fail(last.resync ?? (last.problems.length ? undefined : { ok: true, how: 'its last run passed' }))
+  const resyncNote = failed.length ? `\nsession afterwards: ${after9.failed.how}` : ''
+  record(9, name, failed.length ? 'FAIL' : 'PASS', failed.length ? `${failed[0].problems.join('\n')}${rate}${resyncNote}` : `${runs[0].summary}${rate}`, { runs: runs.map((r) => ({ ok: !r.problems.length, resync: r.resync, ...r.details })) })
 }
 
+/** After a failed step-9 run: wait for the results of the `sent` turns since message `from`, else restart. */
+const resync9 = (p, from, sent) => resyncAfterFailedRun({
+  sent,
+  results: () => p.evaluate((from) => {
+    const h = window.__cc.harness
+    return !h || h.state === 'exited' ? -1 : h.messages.slice(from).filter((m) => m.type === 'result').length
+  }, from),
+  restart: async () => {
+    await p.evaluate(() => window.__cc.stop())
+    const boot = await startViaUi(p, 60_000)
+    return { ready: boot.harness === 'ready', detail: `${boot.outcome}; state ${boot.harness}`, ms: boot.ms }
+  }
+})
+
 async function interruptOnce (p) {
-  try {
+  let from = null
+  let sent = 0 // turns of this run sent so far (each must have its result before the next step)
+  const run = await (async () => {
     await resetMock()
-    const from = await p.evaluate(() => window.__cc.harness.messages.length)
+    from = await p.evaluate(() => window.__cc.harness.messages.length)
     await p.fill('#prompt', 'stream slowly')
     await p.click('#send')
+    sent = 1
     const t0 = Date.now()
     let streaming = null
     while (!streaming && Date.now() - t0 < 30_000) {
@@ -718,7 +754,7 @@ async function interruptOnce (p) {
     if (!streaming) throw new Error('the mock never saw the "stream slowly" request')
     await new Promise((resolve) => setTimeout(resolve, 500))
     const tInt = Date.now()
-    await p.evaluate(() => window.__cc.interrupt())
+    if (!NO_INTERRUPT) await p.evaluate(() => window.__cc.interrupt())
     const result = await p.evaluate(({ from }) => window.__cc.waitFor((m) => m.type === 'result', { fromIndex: from, timeoutMs: 20_000 }), { from })
     const afterMs = Date.now() - tInt
     // the mock sees the abort when the socket closes, a moment after the result
@@ -731,6 +767,7 @@ async function interruptOnce (p) {
     if (afterMs > 2500) problems.push(`the result came ${secs(afterMs)} after the interrupt`)
     if (result.subtype === 'success') problems.push('the interrupted turn ended in success (the interrupt was not applied)')
     if (!slow?.aborted) problems.push(`the streaming request was not abandoned (${slow?.completed ? 'it ran to completion' : `still streaming: ${slow?.sent ?? '?'} of ${slow?.events ?? '?'} events sent ${secs(Date.now() - tInt)} after the interrupt`})`)
+    sent = 2
     const next = await turnViaUi(p, 'say hi', 60_000)
     if (next.result.is_error !== false || next.result.result !== 'hi from the mock API') problems.push(`the next turn: ${next.result.result}`)
     const nextPost = apiPosts(await mockRequests()).filter((r) => r.scenario !== 'slow').pop()
@@ -739,9 +776,11 @@ async function interruptOnce (p) {
       summary: `result ${result.subtype}${result.is_error ? ' (is_error)' : ''} ${secs(afterMs)} after the interrupt; stream abandoned after ${slow?.sent ?? '?'} of ${slow?.events ?? '?'} events; next turn "${next.result.result}"`,
       details: { afterMs, subtype: result.subtype, aborted: Boolean(slow?.aborted), completed: Boolean(slow?.completed), sent: slow?.sent, nextMessages: nextPost?.body?.nMessages, nextPrompt: nextPost?.body?.prompt }
     }
-  } catch (err) {
-    return { problems: [err.message], summary: err.message, details: {} }
-  }
+  })().catch((err) => ({ problems: [err.message], summary: err.message, details: {} }))
+  if (NO_INTERRUPT) run.problems.unshift('--no-interrupt: no interrupt was sent')
+  // a failed run may have left a turn running: wait for it (or restart) before the next step
+  if (run.problems.length && from !== null && sent > 0) run.resync = await resync9(p, from, sent)
+  return run
 }
 
 // ---- 11 (ChatGPT mode): a refused access token -------------------------------
@@ -751,6 +790,7 @@ async function interruptOnce (p) {
 // one is saved), and the request is retried once with the new token.
 async function refusedToken (p) {
   const name = 'ChatGPT: a refused access token is refreshed and the request retried'
+  if (after9.blocked(11, name)) return
   try {
     await resetMock()
     const before = await storedChatgptTokens(p)
@@ -770,9 +810,9 @@ async function refusedToken (p) {
     if (after?.accessToken === before?.accessToken) p11.push('the page still holds the refused access token')
     const log = await p.evaluate(() => window.__cc.session.log.filter((l) => /ChatGPT: the Worker asked/.test(l.msg)).map((l) => l.msg))
     if (!log.some((m) => /\(unauthorized\)/.test(m))) p11.push(`the Worker never asked with reason "unauthorized": ${JSON.stringify(log)}`)
-    record(11, name, p11.length ? 'FAIL' : 'PASS', p11.join('\n') || `401, then one refresh (rotated, saved), then the retry with the new token: "${result.result}"`)
+    after9.record(11, name, p11.length ? 'FAIL' : 'PASS', p11.join('\n') || `401, then one refresh (rotated, saved), then the retry with the new token: "${result.result}"`)
   } catch (err) {
-    record(11, name, 'FAIL', err.message)
+    after9.record(11, name, 'FAIL', err.message)
   }
 }
 
@@ -790,6 +830,7 @@ async function refusedToken (p) {
 // then answer; the next turn works.
 async function upstreamLimits (p) {
   const name = 'ChatGPT: a usage limit reaches the user unretried; a rate limit is retried; a mid-stream failure is resumed; an overflow makes Claude Code compact'
+  if (after9.blocked(13, name)) return
   const p13 = []
   const notes = []
   try {
@@ -834,7 +875,7 @@ async function upstreamLimits (p) {
   } catch (err) {
     p13.push(err.message)
   }
-  record(13, name, p13.length ? 'FAIL' : 'PASS', [...p13, ...notes].join('\n'))
+  after9.record(13, name, p13.length ? 'FAIL' : 'PASS', [...p13, ...notes].join('\n'))
 }
 
 // ---- 12 (ChatGPT mode): every Responses request of the run had the right shape

@@ -520,8 +520,11 @@ STATUS.md ("ChatGPT option") has the test results.
   storage first, so two tabs cannot burn one rotating refresh token.
   `logout()` also asks `issuer + /api/accounts/oauth/revoke`, best effort.
   The ID token's signature is not verified (the JWKS is not CORS-readable,
-  report K §4.8); its `nonce` is checked, and the email/plan shown come from
-  it unverified.
+  report K §4.8). Its claims are checked (`idTokenProblem`): `iss` must be the
+  issuer, `aud` the issued client id, and `exp` must not have passed; on
+  sign-in its `nonce` must be present and match. The email/plan shown come
+  from it. Token-endpoint POSTs time out after 30 s (`TOKEN_TIMEOUT_MS`),
+  because a refresh holds the cross-tab lock.
 - **Effort.** The boot `provider.effort` is `''` for "follow Claude Code";
   `providerConfig()` in `boot/policy.js` maps that to `'auto'`, and the
   translator then uses the request's `output_config.effort`. When the model

@@ -308,8 +308,15 @@ export function toResponsesRequest (anthropic, { model, smallModel, effort, effo
   let assistantSeen = 0
   const seenCalls = new Set() // call_ids of emitted function_calls
   let pending = [] // call_ids of the latest assistant turn not yet answered
-  let deferred = [] // developer messages that arrived between a call and its output
+  let deferred = [] // developer and user messages that arrived between a call and its output
 
+  // Every call of a turn must be answered before anything else follows it.
+  // A call still unanswered when the next assistant message (or the end of
+  // the input) comes was interrupted: it gets an "aborted" output there, and
+  // the messages held back meanwhile follow. Not at the end of a user
+  // message: one turn's parallel results may be split across consecutive
+  // user messages, and an "aborted" output before the real one would be a
+  // second output for that call, which /v1/responses rejects.
   const flushPending = () => {
     for (const id of pending) items.push({ type: 'function_call_output', call_id: id, output: 'aborted' })
     pending = []
@@ -381,9 +388,10 @@ export function toResponsesRequest (anthropic, { model, smallModel, effort, effo
         orphanTexts.push({ type: 'input_text', text: `[result of an earlier tool call]\n${text}` })
       }
     }
-    flushPending()
+    // all of the turn's calls answered: release what was held back
+    if (!pending.length) flushPending()
     const parts = [...orphanTexts, ...contentParts(rest)]
-    if (parts.length) items.push({ type: 'message', role: 'user', content: parts })
+    if (parts.length) (pending.length ? deferred : items).push({ type: 'message', role: 'user', content: parts })
   }
   flushPending()
 

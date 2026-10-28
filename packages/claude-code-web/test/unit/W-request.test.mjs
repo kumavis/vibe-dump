@@ -9,6 +9,7 @@ import {
   encodeReasoningSignature, decodeReasoningSignature, reasoningEffort, sessionIdOf, SIGNATURE_PREFIX
 } from '../../src/runtime/boot/openai/request.js'
 import { claudeCodeRequest, SESSION_ID, LONG_MCP, UPSTREAM_MODEL } from './W-fixtures.mjs'
+import { inputStructureProblems } from '../../mock/mock-api.mjs'
 import { RESEARCH_DIR } from '../research.mjs'
 
 const opts = { model: UPSTREAM_MODEL }
@@ -123,6 +124,53 @@ test('request: interrupted calls get an "aborted" output, orphan results become 
   ])
   assert.equal(body.tools, undefined, 'no tools, no tool_choice')
   assert.equal(body.tool_choice, undefined)
+})
+
+test('request: one turn\'s parallel results split across consecutive user messages get no "aborted" duplicate', () => {
+  const seqOf = (body) => body.input.map((i) => (i.type === 'function_call_output' ? `out:${i.call_id}:${i.output}` : i.type === 'function_call' ? `call:${i.call_id}` : `${i.role}:${i.content.map((c) => c.text).join('|')}`))
+  const calls = (...ids) => ({ role: 'assistant', content: ids.map((id) => ({ type: 'tool_use', id, name: 'Read', input: { file_path: `/${id}` } })) })
+  const results = (...ids) => ids.map((id) => ({ type: 'tool_result', tool_use_id: id, content: `r:${id}` }))
+
+  // the finding's case: A answered in one user message, B in the next
+  const split = toResponsesRequest({ model: 'claude-sonnet-5-5', messages: [
+    { role: 'user', content: 'go' },
+    calls('call_AAA', 'call_BBB'),
+    { role: 'user', content: results('call_AAA') },
+    { role: 'user', content: [...results('call_BBB'), { type: 'text', text: 'continue' }] }
+  ] }, opts).body
+  assertSiwcSafe(split)
+  assert.deepEqual(seqOf(split), ['user:go', 'call:call_AAA', 'call:call_BBB', 'out:call_AAA:r:call_AAA', 'out:call_BBB:r:call_BBB', 'user:continue'])
+  assert.deepEqual(inputStructureProblems(split.input), [], 'one output per call')
+
+  // text and a system reminder between the halves wait until every call is answered
+  const held = toResponsesRequest({ model: 'claude-sonnet-5-5', messages: [
+    { role: 'user', content: 'go' },
+    calls('call_AAA', 'call_BBB'),
+    { role: 'user', content: [...results('call_AAA'), { type: 'text', text: 'note' }] },
+    { role: 'system', content: 'reminder' },
+    { role: 'user', content: results('call_BBB') },
+    { role: 'assistant', content: [{ type: 'text', text: 'done' }] }
+  ] }, opts).body
+  assert.deepEqual(seqOf(held), ['user:go', 'call:call_AAA', 'call:call_BBB', 'out:call_AAA:r:call_AAA', 'out:call_BBB:r:call_BBB', 'user:note', 'developer:reminder', 'assistant:done'])
+  assert.deepEqual(inputStructureProblems(held.input), [])
+
+  // a call never answered before the next assistant message (or the end) still gets "aborted", once
+  const missing = toResponsesRequest({ model: 'claude-sonnet-5-5', messages: [
+    { role: 'user', content: 'go' },
+    calls('call_AAA', 'call_BBB', 'call_CCC'),
+    { role: 'user', content: results('call_AAA') },
+    { role: 'user', content: [...results('call_CCC'), { type: 'text', text: '[Request interrupted by user]' }] },
+    calls('call_DDD'),
+    { role: 'user', content: results('call_DDD') },
+    calls('call_EEE')
+  ] }, opts).body
+  assert.deepEqual(seqOf(missing), [
+    'user:go', 'call:call_AAA', 'call:call_BBB', 'call:call_CCC',
+    'out:call_AAA:r:call_AAA', 'out:call_CCC:r:call_CCC', 'out:call_BBB:aborted', 'user:[Request interrupted by user]',
+    'call:call_DDD', 'out:call_DDD:r:call_DDD',
+    'call:call_EEE', 'out:call_EEE:aborted'
+  ])
+  assert.deepEqual(inputStructureProblems(missing.input), [])
 })
 
 test('request: images, documents and rich tool results degrade per J §7.8', () => {
