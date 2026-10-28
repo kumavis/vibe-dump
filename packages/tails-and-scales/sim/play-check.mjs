@@ -24,8 +24,9 @@
 //   layout    (F8b's review) the battle's chrome in place: a hotseat battle
 //             on classic and on Grand, at 1280×800, 1366×768 and a 412×915
 //             phone, once the deployment's camera has rested: the tools row
-//             holds only its eight buttons of before F8b (no ☰ or 🗺 in
-//             it: they widened it over the other seat's score), and it
+//             holds only its eight buttons of before F8b and (V2) the perf
+//             overlay's 📈 (no ☰ or 🗺 in it: they widened it over the
+//             other seat's score), and it
 //             clears that score (#vp1); on Grand in landscape, with a unit
 //             picked up and its card showing, the roster stops above the
 //             minimap raised over the card
@@ -37,7 +38,13 @@
 // click on a unit, then on the ground in its zone, seen as one of the
 // seat's labels moving while every other label stays put; must reach its
 // rounds or the end; and must play moves and Ends. The title must be up
-// 1200 ms after the page loads.
+// 1200 ms after the page loads. (V2) What the page draws decides how long
+// a frame takes under SwiftShader (from about 2 a second to one every few
+// seconds, the 'new' figures' splats at a close camera), so a wait for the
+// table to show something (the camera at rest, a placed unit's label
+// moved) is a wait for frames as well as time: at least the time it always
+// was, and at least FRAMES frames drawn (the labels move only when a frame
+// is drawn).
 //
 //   node sim/play-check.mjs [--lanes watch,bushtail,serpent,hotseat,grand] [--rounds R] [--full] [--dist <dir>] [--parallel N]
 //
@@ -92,6 +99,8 @@ async function settle(page, sel, what) {
     }), sel)) ? n + 1 : 0
   }
 }
+// ((V2) the frames a wait for the table spans, at the least)
+const FRAMES = 3
 
 // One lane on its own page; returns { ok, lines, stats, errors }.
 async function lane(browser, url, name) {
@@ -137,6 +146,13 @@ async function lane(browser, url, name) {
     await page.mouse.click(p.x, p.y)
     await sleep(300)
   }
+  // ((V2) `ms` and at least `n` frames drawn: requestAnimationFrame's
+  // callbacks n times over, the page's own frame drawn between each)
+  const drawn = (ms, n = FRAMES) => Promise.all([sleep(ms), page.evaluate((n) => new Promise((r) => {
+    let k = 0
+    const f = () => (++k >= n ? r() : requestAnimationFrame(f))
+    requestAnimationFrame(f)
+  }), n)])
   // every label shown, wherever it is: its place among the labels (a
   // unit's label is made once, so it names the unit), its seat and the
   // bottom centre of its box
@@ -209,16 +225,17 @@ async function lane(browser, url, name) {
         const was = await every()
         await page.mouse.click(q.x, q.y)
         // ((the merged build's gate) its landing read as the frames come,
-        // up to 6 s, not once 1.5 s on: under load a frame took longer)
+        // up to 6 s, not once 1.5 s on: under load a frame took longer;
+        // (V2) each reading after a frame drawn, the labels moving only then)
         let m = [], moved = [], still = []
         for (let k = 0; k < 12; k++) {
-          await sleep(500)
+          await drawn(500, 1)
           m = moves(was, await every())
           moved = m.filter((x) => x.d > 12)
           still = m.filter((x) => x.d < 3)
           if (moved.length) break
         }
-        await sleep(500)
+        await drawn(500, 1)
         m = moves(was, await every())
         moved = m.filter((x) => x.d > 12)
         still = m.filter((x) => x.d < 3)
@@ -442,7 +459,7 @@ async function lane(browser, url, name) {
 }
 
 // ((F8b's review) the layout lane: the chrome's boxes on three screens)
-const TOOLS = ['speed', 'view', 'follow', 'batch', 'autoFirst', 'autoEnd', 'mute', 'helpBtn']
+const TOOLS = ['speed', 'view', 'follow', 'batch', 'autoFirst', 'autoEnd', 'mute', 'perf', 'helpBtn']
 async function layoutLane(browser, url) {
   const lines = [], problems = [], errors = []
   for (const [w, h] of [[1280, 800], [1366, 768], [412, 915]]) {
@@ -480,7 +497,7 @@ async function layoutLane(browser, url) {
         const meets = (p, q) => !!p && !!q && p.l < q.r && q.l < p.r && p.t < q.b && q.t < p.b
         const shown = await page.evaluate(() => [...document.querySelectorAll('#tools button')].filter((b) => getComputedStyle(b).display !== 'none').map((b) => b.id))
         const tools = await box('#tools'), score = await box('#vp1')
-        if (shown.join() !== TOOLS.join()) problems.push(`${at}: the tools row shows ${shown.join(', ')}, not its eight of before F8b (${TOOLS.join(', ')})`)
+        if (shown.join() !== TOOLS.join()) problems.push(`${at}: the tools row shows ${shown.join(', ')}, not its eight of before F8b and (V2) 📈 (${TOOLS.join(', ')})`)
         if (!tools || !score) problems.push(`${at}: no tools row or no score for the other seat on the page`)
         else if (meets(tools, score)) problems.push(`${at}: the tools row (${Math.round(tools.l)}-${Math.round(tools.r)} px) covers the other seat's score (${Math.round(score.l)}-${Math.round(score.r)} px)`)
         let card = ''

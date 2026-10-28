@@ -323,7 +323,10 @@ export class Overlay {
       this.flag = new THREE.Group()
       this.flag.add(pole, cloth)
       this.flag.userData.cloth = cloth
-      this.flag.renderOrder = 5
+      // ((V2) its meshes' order, not the group's: three sorts a group's
+      // renderOrder before any mesh's, which drew the flag over the furs,
+      // view/models/splat/splats.js's FUR_ORDER)
+      pole.renderOrder = cloth.renderOrder = 5
       this.scene.add(this.flag)
     }
     const geo = this.ghost.geometry

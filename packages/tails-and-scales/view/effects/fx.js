@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { tween, easeOut, clock } from '../clock.js'
+import { FUR_ORDER } from '../models/splat/splats.js'
 
 // ---------------------------------------------------------------------------
 // Effects: pooled instanced particles (debris cubes, unlit glow motes, smoke
@@ -8,6 +9,12 @@ import { tween, easeOut, clock } from '../clock.js'
 // until R7, which moved it here: view/effects/shots.js plays the shooting's
 // events with it, view/units.js and view/terrain.js the figures' and the
 // battlefield's.)
+// (V2) The see-through things in the air, a blast's flash and the smoke
+// puffs, are drawn in the splat furs' renderOrder (view/models/splat/
+// splats.js's FUR_ORDER: after the table's marks on the ground, back to
+// front with the furs), so a puff before a Bushtail veils its fur; a pool
+// sorts as one object, at the middle of what it shows (its boundingSphere,
+// moved each update: never used to cull, frustumCulled is off).
 // ---------------------------------------------------------------------------
 
 const MAX_CUBES = 900
@@ -82,6 +89,12 @@ class Pool {
     }
     this.items = keep
     this.mesh.instanceMatrix.needsUpdate = true
+    // ((V2) its place among the see-through things: the middle of the live ones)
+    if (keep.length) {
+      const c = (this.mesh.boundingSphere ??= new THREE.Sphere(new THREE.Vector3(), 1)).center.set(0, 0, 0)
+      for (const p of keep) c.x += p.x, c.y += p.y, c.z += p.z
+      c.divideScalar(keep.length)
+    }
   }
 }
 
@@ -135,6 +148,7 @@ export class FX {
       new THREE.MeshLambertMaterial({ transparent: true, opacity: 0.55, depthWrite: false }),
       MAX_PUFF,
     )
+    puff.renderOrder = FUR_ORDER
     scene.add(cubes, glow, puff)
     this.cubes = new Pool(cubes, MAX_CUBES)
     this.glow = new Pool(glow, MAX_GLOW)
@@ -246,7 +260,9 @@ export class FX {
     g.add(ring, disc)
     g.position.set(x, y + 0.05, z)
     g.scale.setScalar(r)
-    g.renderOrder = 3
+    // ((V2) its meshes' order, not the group's: three sorts a group's
+    // renderOrder before any mesh's, which drew a template over the furs)
+    ring.renderOrder = disc.renderOrder = 3
     this.scene.add(g)
     const remove = () => {
       this.scene.remove(g)
@@ -276,6 +292,7 @@ export class FX {
     }[style]
     const flash = new THREE.Mesh(this.flashGeo, new THREE.MeshBasicMaterial({ color: pal.flash, transparent: true, opacity: 0.9, toneMapped: false, depthWrite: false }))
     flash.position.set(x, y + 0.3, z)
+    flash.renderOrder = FUR_ORDER
     this.scene.add(flash)
     tween(0.45, (k) => {
       flash.scale.setScalar(0.2 + r * 0.85 * easeOut(k))

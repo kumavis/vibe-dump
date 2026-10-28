@@ -388,10 +388,10 @@ export function cutGeometry(M, colour, plain) {
   const c = new THREE.Color()
   for (let t = 0; t < L.length; t++) {
     for (let j = 0; j < 3; j++) {
-      const v = T[3 * t + j], key = v * S + LI[t]
-      let i = map[key]
+      const v = T[3 * t + j], slot = v * S + LI[t]
+      let i = map[slot]
       if (i < 0) {
-        i = map[key] = src.length
+        i = map[slot] = src.length
         pos.push(P[3 * v], P[3 * v + 1], P[3 * v + 2])
         nor.push(N[3 * v], N[3 * v + 1], N[3 * v + 2])
         colour(Q, v * k, L[t], c)
@@ -480,10 +480,10 @@ export function body(knots, opts = {}) {
   const L = curve.getLength()
   const n = knots.length - 1
   // a knot scalar at curve parameter t (0..1), smoothly
-  const at = (key, t) => {
+  const at = (field, t) => {
     const x = clamp(t * n, 0, n)
     const i = Math.min(Math.floor(x), n - 1), f = x - i
-    const a = knots[i][key], b = knots[i + 1][key]
+    const a = knots[i][field], b = knots[i + 1][field]
     const s = f * f * (3 - 2 * f)
     if (Array.isArray(a)) return [a[0] + (b[0] - a[0]) * s, a[1] + (b[1] - a[1]) * s, a[2] + (b[2] - a[2]) * s]
     return a + (b - a) * s

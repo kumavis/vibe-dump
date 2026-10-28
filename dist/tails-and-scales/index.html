@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-CCIFRidZ.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DswHYqmA.css">
+    <script type="module" crossorigin src="./assets/index-DFGhcagn.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DMJSUK-X.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -30,6 +30,7 @@
       <button id="autoFirst" class="off" title="Autopilot first: off (click: units on autopilot act as your phase opens)">⟳¹</button>
       <button id="autoEnd" class="off" title="Auto-End: off (click: End presses itself once every unit left is under orders)">⏭</button>
       <button id="mute" title="Sound">🔊</button>
+      <button id="perf" class="off" title="Perf overlay: off (click: the frame rate, frame time, draw calls and triangles over the table)">📈</button>
       <button id="helpBtn" title="Rules">?</button>
     </div>
 
@@ -72,6 +73,7 @@
           <button id="continue" class="wide hidden">↩️ Continue your online battle<small></small></button>
         </div>
         <p class="small replayrow"><button id="openReplay" class="link">📼 Watch a replay file</button><input id="replayFile" type="file" accept=".json,application/json" hidden /></p>
+        <p class="small optrow"><button id="figures" class="link">🎨 Figures: new</button><span class="sep">·</span><button id="qualityTitle" class="link">⚙️ Quality: auto</button><span class="sep">·</span><button id="perfTitle" class="link">📈 Perf overlay: off</button></p>
         <div class="seedrow">
           <label>Battlefield <input id="seed" type="number" min="0" max="4294967295" step="1" /></label>
           <button id="reroll">🎲 New battlefield</button>
@@ -206,6 +208,7 @@
 
     <div id="netbadge" class="hidden"></div>
     <div id="toast"></div>
+    <div id="perfOverlay" class="hidden" aria-hidden="true"></div>
 
   </body>
 </html>

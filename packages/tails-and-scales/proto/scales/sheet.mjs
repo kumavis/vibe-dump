@@ -1,5 +1,6 @@
-// Shoots the Coil of Ssithra's six figures, smooth and glossy (serpents.js), beside the game's mesh figures
-// today, close up and at game scale (about 60 and 28 px tall), through viewer.html under a Vite dev server,
+// Shoots the Coil of Ssithra's six figures, smooth and glossy (view/models/gloss/serpents.js, the game's own
+// since V2), beside the classic mesh figures (the "game today" columns: the game's figures before V2), close
+// up and at game scale (about 60 and 28 px tall), through viewer.html under a Vite dev server,
 // and lays the shots out in one labelled sheet (<out>/units.png, and .jpg). Then shoots each glossy figure
 // close up from the game's camera (44° up) and once from behind (<out>/close-<unit>.png, back-<unit>.png),
 // and the two armies on one table (pair.html: <out>/pair.png close, pair-small.png at game scale).

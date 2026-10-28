@@ -40,6 +40,7 @@ import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
+import { IDLE_MS } from './chromium.mjs'
 
 const { values: a } = parseArgs({ options: { 'self-test': { type: 'boolean' } } })
 
@@ -86,7 +87,7 @@ async function run(browser, url) {
   const errors = []
   page.on('pageerror', (e) => errors.push(e.message))
   try {
-    await page.goto(`${url}/?debug&fast&lowfi&seed=4242&dice=99&mission=grand`)
+    await page.goto(`${url}/?debug&fast&lowfi&seed=4242&dice=99&mission=grand`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts?.view?.board, null, { timeout: 60000 })
     // what the table holds, read as it stands: drawn once first, so three.js
     // counts it (`mission`: a hotseat battle of that mission started first,

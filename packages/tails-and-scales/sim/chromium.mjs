@@ -90,7 +90,7 @@ async function runOne(browser, url, job) {
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(job)}, ${JSON.stringify(mode)})` })
     const t0 = Date.now()
     const href = `${url}/?debug&fast&${query}`
-    const res = await page.goto(href)
+    const res = await page.goto(href, { timeout: IDLE_MS })
     if (!res?.ok()) throw new Error(`${href}: HTTP ${res?.status()}`)
     // main.js publishes __ts as it loads, so by now it is there (with every
     // member the harness reads) or never will be
