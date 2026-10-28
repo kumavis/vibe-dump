@@ -26,6 +26,13 @@ export default defineConfig({
     target: 'es2022',
     sourcemap: false,
     reportCompressedSize: false,
+    // memfs and its @jsonjoy.com helpers are CommonJS with require cycles.
+    // With the default ('auto') wrapping, which modules get a lazy wrapper
+    // depends on the order Rollup finished loading them, and that order
+    // varied run to run with filesystem timing, so vendor.js was not
+    // byte-identical across builds. Wrapping every CommonJS module keeps the
+    // output deterministic, which the committed dist/ relies on.
+    commonjsOptions: { strictRequires: true },
     lib: {
       entry: fileURLToPath(new URL('./src/runtime/vendor-entry.js', import.meta.url)),
       formats: ['es'],
