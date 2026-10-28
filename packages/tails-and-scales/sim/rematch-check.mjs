@@ -77,7 +77,8 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  globalThis.location = { search: `?fast&debug&lowfi&${query}` }
+  // ((V2) the page reads its fragment too: an empty one here)
+  globalThis.location = { search: `?fast&debug&lowfi&${query}`, hash: '' }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
