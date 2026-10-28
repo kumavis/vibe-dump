@@ -19,14 +19,14 @@ import { sha3_256, sha3_512 } from '@noble/hashes/sha3'
 import { hmac } from '@noble/hashes/hmac'
 import { EventEmitter } from 'node:events'
 import { PassThrough } from 'node:stream'
+import { RESEARCH_DIR } from '../research.mjs'
 
 export const vendor = {
   stringWidth, wrapAnsi, sliceAnsi, stripAnsi, YAML, semver, fzstd, fflate,
   sha224, sha256, sha384, sha512, sha512_256, md5, sha1, ripemd160, sha3_256, sha3_512, hmac,
 }
 
-export const SCRATCH_RESEARCH = process.env.CC_RESEARCH_DIR ||
-  '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+export const SCRATCH_RESEARCH = RESEARCH_DIR // CC_RESEARCH_DIR, see ../research.mjs
 
 /** A process stand-in with its own env/argv/cwd and stream std*. */
 export function fakeProcess({ env = { HOME: '/home/user', PATH: '/usr/bin' }, argv = ['/node', '/app/cli', '-p'], cwd = '/home/user/workspace' } = {}) {

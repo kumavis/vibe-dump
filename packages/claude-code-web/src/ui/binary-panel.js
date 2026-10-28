@@ -39,9 +39,13 @@ export function binaryPanel (session) {
   const render = () => {
     const st = session.state
     const busy = st.cache === 'extracting'
-    input.disabled = busy || st.extractor !== 'ok'
-    download.disabled = busy || st.extractor !== 'ok'
+    // the running process imports from the cache: no re-extraction or clearing under it
+    const running = st.harness === 'booting' || st.harness === 'ready'
+    input.disabled = busy || running || st.extractor !== 'ok'
+    download.disabled = busy || running || st.extractor !== 'ok'
+    clearBtn.disabled = running
     drop.classList.toggle('disabled', input.disabled)
+    drop.title = running ? 'Stop Claude Code first' : ''
     state.dataset.state = st.cache
     state.textContent =
       st.extractor === 'loading' ? 'Checking the cache…'

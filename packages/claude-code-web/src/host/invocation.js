@@ -2,7 +2,7 @@
 // fresh HOME (ARCHITECTURE.md "Harness invocation"). Pure functions, so the
 // exact command line is unit-tested.
 
-import { HOME, WORKSPACE, CONFIG_DIR, CC_VERSION, DEFAULT_API_BASE, DISALLOWED_TOOLS, POLICY_ENV } from './constants.js'
+import { HOME, WORKSPACE, CONFIG_DIR, CC_VERSION, DEFAULT_API_BASE, ALLOWED_TOOLS, POLICY_ENV } from './constants.js'
 
 /**
  * The CLI arguments (what `process.argv.slice(2)` is inside the Worker).
@@ -14,10 +14,10 @@ import { HOME, WORKSPACE, CONFIG_DIR, CC_VERSION, DEFAULT_API_BASE, DISALLOWED_T
  * @param {string} [o.model]             omitted when empty (the CLI picks its default)
  * @param {string[]} [o.mcpServerNames]  in-process (type "sdk") servers to declare
  * @param {string} [o.permissionMode]
- * @param {string[]} [o.disallowedTools]
- * @param {string[]} [o.extra]           appended last (integration may add e.g. --tools)
+ * @param {string[]} [o.tools]           the built-in tools (`--tools`, an allowlist; [] for none)
+ * @param {string[]} [o.extra]           appended last
  */
-export function buildArgv ({ model = '', mcpServerNames = [], permissionMode = 'default', disallowedTools = DISALLOWED_TOOLS, extra = [] } = {}) {
+export function buildArgv ({ model = '', mcpServerNames = [], permissionMode = 'default', tools = ALLOWED_TOOLS, extra = [] } = {}) {
   const argv = [
     '-p',
     '--input-format', 'stream-json',
@@ -26,7 +26,9 @@ export function buildArgv ({ model = '', mcpServerNames = [], permissionMode = '
     '--permission-prompt-tool', 'stdio',
     '--permission-mode', permissionMode
   ]
-  if (disallowedTools.length) argv.push('--disallowedTools', disallowedTools.join(','))
+  // Only these built-ins exist for the model (the CLI's `--tools <tools...>`:
+  // a comma-separated list, '' for none). MCP tools are not built-ins.
+  argv.push('--tools', tools.join(','))
   if (mcpServerNames.length) {
     const mcpServers = Object.fromEntries(mcpServerNames.map((name) => [name, { type: 'sdk', name }]))
     argv.push('--mcp-config', JSON.stringify({ mcpServers }))
@@ -83,6 +85,28 @@ export function checkCredentials ({ authMode, token, apiKey }) {
   } else if (!apiKey || !apiKey.trim()) {
     throw new Error('Paste an Anthropic API key first (Settings).')
   }
+}
+
+/** Loopback hosts, where plain http never leaves the machine (the mock API). */
+export function isLoopbackHost (hostname) {
+  const h = String(hostname).toLowerCase().replace(/^\[|\]$/g, '')
+  return h === 'localhost' || h.endsWith('.localhost') || h === '::1' || /^127(\.\d{1,3}){3}$/.test(h)
+}
+
+/**
+ * The API base URL check: https anywhere, or http on loopback only, since
+ * the credential travels in a request header. Returns null when fine, else
+ * a user-facing reason (the settings panel shows it, Session.start refuses).
+ */
+export function checkBaseUrl (url) {
+  const raw = String(url ?? '').trim()
+  if (!raw) return null // the default, https://api.anthropic.com
+  let u
+  try { u = new URL(raw) } catch { return `The API base URL "${raw}" is not a valid URL.` }
+  if (u.protocol === 'https:') return null
+  if (u.protocol === 'http:' && isLoopbackHost(u.hostname)) return null
+  if (u.protocol === 'http:') return `The API base URL must use https (plain http is allowed only for localhost / 127.0.0.1): ${u.host} would receive your key or token unencrypted.`
+  return `The API base URL must be an https:// URL (got ${u.protocol}).`
 }
 
 const SANDBOX_NOTES = `# This environment

@@ -20,6 +20,11 @@ const SHIM_PATH = new URL('runtime/node/', SCOPE).pathname
 // the harness Worker it creates next is controlled without a reload.
 self.addEventListener('install', (event) => { event.waitUntil(self.skipWaiting()) })
 self.addEventListener('activate', (event) => { event.waitUntil(self.clients.claim()) })
+// A hard reload (Shift+Reload) loads the page uncontrolled while this worker
+// is already active, so no activate follows: the page asks to be claimed.
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'claim') event.waitUntil(self.clients.claim())
+})
 
 self.addEventListener('fetch', (event) => {
   const req = event.request

@@ -120,6 +120,23 @@ test('onChange() debounces changes under the watched roots only', async () => {
   assert.equal(batches.length, 1)
 })
 
+test('onChange(): maxWaitMs caps the debounce under a steady stream of writes', (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now: 0 })
+  for (const [maxWaitMs, expected] of [[2000, [20, 20, 10]], [0, [50]]]) {
+    const batches = []
+    const stop = fsmod.onChange((e) => batches.push(e.paths.length), { roots: ['/home/user/mw'], debounceMs: 400, maxWaitMs })
+    fs.mkdirSync('/home/user/mw', { recursive: true })
+    t.mock.timers.tick(1000) // the mkdir's own batch
+    batches.length = 0
+    // a write every 100 ms for 5 s: each one restarts the 400 ms debounce
+    for (let i = 0; i < 50; i++) { fs.writeFileSync(`/home/user/mw/f${i}`, 'x'); t.mock.timers.tick(100) }
+    t.mock.timers.tick(400)
+    assert.deepEqual(batches, expected, `maxWaitMs ${maxWaitMs}`)
+    stop()
+    fs.rmSync('/home/user/mw', { recursive: true, force: true })
+  }
+})
+
 test('streams, watch and the promise API', async () => {
   fs.mkdirSync('/home/user/s', { recursive: true })
   const ws = fs.createWriteStream('/home/user/s/out.txt')

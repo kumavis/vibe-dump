@@ -3,6 +3,112 @@
 _Integration round 1. Refreshed after each step; last update after the
 per-platform runs._
 
+## Fix round F2 (credentials, interrupt race, Worker guard, tool allowlist, notices, test paths)
+
+Started 01:33 UTC, finished ~02:00 UTC. Scope: H-review-round-1.md items owned by F2. All six done.
+
+- done:
+  1. credentials (settings.js, persist.js createJsonStore `area`, settings-panel.js, main.js, README):
+     the key/token goes to sessionStorage `cc-web:secrets` unless "Remember on this device"
+     (`remember`) is ticked; unticking removes it from localStorage; an old localStorage copy
+     is migrated out on load; `settings.getPublic()` (no secrets). `window.__cc` only under
+     `?test` (e2e opens `index.html?test`), `__cc.settings` is the redacted view. e2e step 10
+     (new) checks localStorage/sessionStorage, a new tab, no `__cc` on a plain visit.
+     Tests: D-host-parts 'settings: ...' (3).
+  5. "Unofficial; not affiliated with or endorsed by Anthropic" in header, footer, README top;
+     `checkBaseUrl` (invocation.js): https, or http on loopback only; warned in the panel,
+     refused by Session.start. Tests: D-host-parts 'invocation: the base URL ...',
+     D-session 'session: Start refuses a base URL ...'.
+  2. interrupt race, diagnosed: the /v1/messages stream does NOT use the http shim. The
+     CLI's fetch wrapper (dw -> uZ -> gl -> wlr in 2.1.311) calls globalThis.fetch with
+     the SDK's AbortSignal; Bun.FetchSession is used only when Bun.isStandaloneExecutable
+     is true (ours is false). `?trace` now logs per fetch `(direct|http-shim, signal)` and
+     when the signal aborts relative to the response. e2e `--trace --interrupt-loops 25`:
+     25/25 passed, every API fetch `direct, signal`, slow-stream aborts ~590 ms after
+     dispatch (response at ~10 ms), stream abandoned after 3-4 of 106 events
+     (scratchpad f2/loop1.*). Shim hardening anyway (B-http-abort.test.mjs, 5 tests: destroy
+     between fetch resolving and the reader, signal mid-stream, signal while pending, abort
+     before/right after end(), pre-aborted signal): only defect found was the abort
+     listener never removed from a long-lived signal; now removed on destroy/end. e2e step 9
+     now also fails if the interrupted turn ends in `success` (interrupt not applied).
+  3. Worker defence in depth: `src/runtime/boot/policy.js` holds POLICY_ENV (host/constants.js
+     re-exports it) and `workerEnv()`, which boot.js uses so the flags are merged last;
+     `src/runtime/boot/egress.js` wraps fetch and WebSocket before the Node globals: hosts
+     outside {ANTHROPIC_BASE_URL origin, https://api.anthropic.com, page origin} and any
+     authorization / x-api-key header to an origin other than the base URL's are refused
+     (TypeError, code EGRESS_REFUSED) and logged as warn (header names only). Tests:
+     I-egress.test.mjs (4). Docs still to update: worker-protocol.md, ARCHITECTURE as-built.
+  4. tool allowlist: constants.js `ALLOWED_TOOLS` (Read, Write, Edit, Glob, Grep, NotebookEdit,
+     Task, TodoWrite, AskUserQuestion, ExitPlanMode, Skill) + `isToolAllowed()`; buildArgv
+     passes `--tools <comma list>` (the bundle's commander option `--tools <tools...>`;
+     spike-E/out-help.txt is an error dump, not the help) and no `--disallowedTools`;
+     Harness answers can_use_tool with deny for anything outside the allowlist and the
+     page's own mcp__<server>__ tools, before canUseTool/'permission' (new 'denied' event).
+     Real e2e init: 11 tools (Task, AskUserQuestion, Edit, ExitPlanMode, Glob, Grep,
+     NotebookEdit, Read, Skill, Write, mcp__page__get_weather; 2.1.311 offers no TodoWrite
+     here), was 24. e2e step 2 fails on any tool outside the allowlist. Tests: D-host-parts
+     'invocation: the built-in tools are an allowlist (pinned) ...', D-harness 'harness:
+     can_use_tool for a tool outside the page allowlist is denied unasked'.
+     Full e2e after 1-5: 11/11 (run-a), no egress-guard refusal in the page log.
+  6. `test/research.mjs`: `RESEARCH_DIR` = `$CC_RESEARCH_DIR` or the scratchpad default, and
+     `LINUX_X64_BINARY`; used by A-*.test.mjs, B-support, C-support and e2e.mjs (no other
+     copy of the path in test/). acquire.js `loadZstd()` (lazy `import('fzstd')`) is passed as
+     `zstdDecompressSync` by extractFile and downloadAndExtract. Tests: D-host-parts 'acquire:
+     extractions pass fzstd ...' and 'acquire: a real extraction through extractFile checks
+     every .zst asset (report.zst.checked > 0)' (skips without the research binary).
+  docs: worker-protocol.md (argv `--tools`, env merge, rule 5 egress guard), ARCHITECTURE
+  as-built (F2 bullets), README (unofficial notice, credential storage, allowlist,
+  CC_RESEARCH_DIR, `?test`, e2e `--trace` / `--interrupt-loops`).
+  `npm test`: 248/248 (28 s; 17 new). `npm run build`: ok (boot/ now 7 files; fzstd is a
+  lazy 8 KB chunk).
+- results (final tree): `npm test` 248/248 (30 s); `npm run build` ok; `npm run test:e2e`
+  10 full runs in a row, all 11/11 (steps 1-9, 2b and the new 10; 25.4-26.9 s; cold init
+  7.1-7.7 s, warm 5.6-6.6 s; init 11 tools every run; no egress-guard refusal in any page
+  log); step 9 passed 10/10 (abandoned after 3-4 of 106 events, result 0.0 s after the
+  interrupt), plus 25/25 in the traced loop run; `--base /vibe-dump/claude-code-web/` 11/11;
+  `--fake --skip-extract` 7 passed, 4 skipped. Outputs: scratchpad f2/ (loop.txt, run<N>.*,
+  loop1.* traced, final-base.*).
+- not done / open: the verifier's 1-in-16 step-9 failure did not reproduce (35 runs here);
+  the http shim is not on the API path, so its hardening cannot be what fixed it. If it
+  recurs, run `node test/e2e.mjs --trace --interrupt-loops 30 --log <f>`: step 9 now says
+  whether the turn ended in success (interrupt not applied) or the stream ran on, and the
+  trace shows when the SDK signal aborted. The egress guard covers fetch and WebSocket, not
+  XMLHttpRequest/EventSource (the CLI uses neither). Session's 'denied' note has no test of
+  its own (the Harness 'denied' event does).
+
+## Fix round F1 (persistence, multi-tab, e2e gaps, sw, small fixes)
+
+Scope from `docs/research/claude-code-in-browser/H-review-round-1.md`.
+
+- done (code + unit tests in `test/unit/D-persist.test.mjs`, `B-fs.test.mjs`):
+  1. persistence: persist.js load()/clear() await the save chain, save() returns
+     the real promise (failures reach Session.note()), storage.persist() after the
+     first write; Session.#start boots from the in-memory snapshot; Session.stop()
+     sends `fs-flush` with an id, waits for that fs-sync and its save, then ends
+     stdin; `whenSaved()` + 'saved' event; fs.js onChange `maxWaitMs` (boot.js: 2 s);
+     flush on pagehide / hidden (`Session.flushOnHide`, main.js).
+  2. Web Lock `cc-web:home` (ifAvailable, then queued; a second tab shows
+     "open in another tab" and refuses Start / clear workspace).
+  4. sw.js `claim` message + sw-client posts it on a hard reload; no classic fallback.
+  5. no extract/clearCache while booting/ready (binary panel disables them).
+  6. boot.js reports an uncaught error once (`boot/errors.js`, preventDefault);
+     Session reads messages/toolCalls from the harness (one log, not two).
+  3. e2e: `context.route` dropped; egress blocked at the network level (dead
+     loopback proxy + `--host-resolver-rules`, probe must fail); `request` and
+     `requestfailed` record foreign hosts; step 3 asserts exactly one strict-CORS
+     OPTIONS preflight (ok) before the POST; step 5 waits for `whenSaved()` and
+     uses `page.reload()` without `stop()`; the mock's slow stream is ~21 s and
+     step 9 says whether a missed abort ran to completion or is still streaming.
+- results: `npm test` 231/231 (30.8 s, 15 new tests); `npm run build` ok;
+  `npm run test:e2e` 6 of 6 full runs 10/10 (one, then five in a row: 23.4–25.3 s;
+  cold init 7.0–7.8 s, warm 5.9–6.4 s); every run's mock saw exactly one
+  `OPTIONS /v1/messages?beta=true` with `preflight.ok: true` before the POST;
+  step 9 passed 5/5 in the series (6/6 overall), so the interrupt race (F2's
+  shim fix) did not show here; the longer stream makes it obvious when it does.
+  `node test/e2e.mjs --fake --skip-extract`: 6 passed, 4 skipped (as before).
+- not done: the reviewer's "best fix" (the Worker writing OPFS itself through
+  `createSyncAccessHandle`); the pagehide flush stays best effort.
+
 ## Summary
 
 **The acceptance test passes.** In headless Chromium against the mock API,

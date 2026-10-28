@@ -18,9 +18,12 @@
 //                                 tool_use id (else 400), and the reply echoes it
 //       "write a file"         -> tool_use Write {file_path: <workspace>/hello.txt},
 //                                 then text echoing the tool_result
-//       "stream slowly"        -> a long text, one SSE event every 200 ms (~5 s in
+//       "stream slowly"        -> a long text, one SSE event every 200 ms (~20 s in
 //                                 all), for interrupting; a request the client
-//                                 abandons is marked `aborted: true` in /__requests
+//                                 abandons is marked `aborted: true` in /__requests,
+//                                 and `sent`/`events`/`completed` show how far it got
+//                                 (long on purpose: a stream an interrupt failed to
+//                                 cancel is still running when the test looks)
 //       "run the file tools"   -> one tool_use per request, each answering the last:
 //                                 Glob, Grep, Read, Edit (on hello.txt), then text
 //                                 quoting every tool_result ("<Tool>: <result>" lines)
@@ -114,7 +117,7 @@ export function reply (a) {
   if (a.scenario === 'hi') return { content: [{ type: 'text', text: 'hi from the mock API' }], stop: 'end_turn' }
   if (a.scenario === 'files') return fileToolsReply(a)
   if (a.scenario === 'slow') {
-    const text = Array.from({ length: 25 }, (_, i) => `word${i + 1}`).join(' ')
+    const text = Array.from({ length: 300 }, (_, i) => `word${i + 1}`).join(' ')
     return { content: [{ type: 'text', text }], stop: 'end_turn', delayMs: 200 }
   }
   if (a.phase === 'first') {
@@ -270,11 +273,14 @@ export function startMockApi ({ port = 0, host = '127.0.0.1', logFile = process.
         res.writeHead(200, { 'content-type': 'text/event-stream; charset=utf-8', 'cache-control': 'no-cache', 'request-id': `req_mock_${rec.i}`, ...corsHeaders(req) })
         const events = sseEvents(r, { model: body?.model, id })
         let k = 0
+        rec.events = events.length
+        rec.sent = 0
         res.on('close', () => { if (k < events.length) rec.aborted = true })
         const pump = () => {
           if (res.destroyed) return
-          if (k >= events.length) return res.end()
+          if (k >= events.length) { rec.completed = true; return res.end() }
           res.write(events[k++])
+          rec.sent = k
           setTimeout(pump, r.delayMs ?? eventDelayMs)
         }
         return pump()

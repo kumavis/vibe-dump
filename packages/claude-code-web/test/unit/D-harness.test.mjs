@@ -121,6 +121,32 @@ test('harness: the permission event can defer and deny; cancel aborts it', async
   assert.equal(w.stdin.filter((m) => m.type === 'control_response' && m.response.request_id === 'p3').length, 0)
 })
 
+test('harness: can_use_tool for a tool outside the page allowlist is denied unasked', async () => {
+  const asked = []
+  const { w, h, started, init } = await bootScripted({ canUseTool: async (name) => { asked.push(name); return { behavior: 'allow' } } })
+  assert.equal(h.argv[h.argv.indexOf('--tools') + 1], 'Read,Write,Edit,Glob,Grep,NotebookEdit,Task,TodoWrite,AskUserQuestion,ExitPlanMode,Skill')
+  w.out({ type: 'control_response', response: { subtype: 'success', request_id: init.request_id, response: {} } })
+  await started
+  const denied = []
+  h.addEventListener('denied', (e) => denied.push(e.detail.toolName))
+  h.addEventListener('permission', () => asked.push('event'))
+  for (const [id, tool] of [['d1', 'RemoteTrigger'], ['d2', 'Bash'], ['d3', 'mcp__elsewhere__x']]) {
+    w.out({ type: 'control_request', request_id: id, request: { subtype: 'can_use_tool', tool_name: tool, input: { a: 1 }, tool_use_id: `t_${id}` } })
+    const r = await w.next((m) => m.type === 'control_response' && m.response.request_id === id)
+    assert.equal(r.response.response.behavior, 'deny', tool)
+    assert.match(r.response.response.message, new RegExp(`^${tool} is not available in this page`))
+    assert.equal(r.response.response.toolUseID, `t_${id}`)
+  }
+  assert.deepEqual(denied, ['RemoteTrigger', 'Bash', 'mcp__elsewhere__x'])
+  assert.deepEqual(asked, [], 'neither canUseTool nor the permission event saw them')
+  // the page's own MCP tool and an allowed built-in still reach canUseTool
+  w.out({ type: 'control_request', request_id: 'd4', request: { subtype: 'can_use_tool', tool_name: 'mcp__page__get_weather', input: {}, tool_use_id: 't_d4' } })
+  assert.equal((await w.next((m) => m.type === 'control_response' && m.response.request_id === 'd4')).response.response.behavior, 'allow')
+  w.out({ type: 'control_request', request_id: 'd5', request: { subtype: 'can_use_tool', tool_name: 'NotebookEdit', input: {}, tool_use_id: 't_d5' } })
+  assert.equal((await w.next((m) => m.type === 'control_response' && m.response.request_id === 'd5')).response.response.behavior, 'allow')
+  assert.deepEqual(asked, ['mcp__page__get_weather', 'NotebookEdit'])
+})
+
 test('harness: canUseTool option wins over events', async () => {
   const { w, h, started, init } = await bootScripted({ canUseTool: async (name, input) => ({ behavior: 'allow', updatedInput: { ...input, patched: name } }) })
   w.out({ type: 'control_response', response: { subtype: 'success', request_id: init.request_id, response: {} } })

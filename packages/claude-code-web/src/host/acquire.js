@@ -38,9 +38,30 @@ export function npmUrl (mod, version = CC_VERSION) {
   return `https://registry.npmjs.org/@anthropic-ai/claude-code-linux-x64/-/claude-code-linux-x64-${version}.tgz`
 }
 
+/**
+ * fzstd's decompress as the extractor's `zstdDecompressSync`, so the .zst
+ * drift check (src/extract/rewrites.js) runs on every extraction: each
+ * compressed asset is checked for rewrite targets instead of being counted
+ * as unchecked. Loaded on first use (kept out of the page's main bundle);
+ * if it cannot load, the extraction goes on and the manifest's
+ * rewrites.zst.unchecked says what was not checked.
+ */
+let zstd = null
+export async function loadZstd (load = () => import('fzstd')) {
+  if (zstd) return zstd
+  try {
+    const { decompress } = await load()
+    zstd = (u8) => decompress(u8)
+  } catch {
+    return undefined
+  }
+  return zstd
+}
+
 /** A dropped file (the user's `claude`, `claude.exe` or the platform .tgz). */
-export function extractFile (mod, file, { version = CC_VERSION, appUrl, onProgress, caches } = {}) {
-  return mod.extractFromBinary(file, { source: 'drop', version, appUrl, onProgress, caches })
+export async function extractFile (mod, file, { version = CC_VERSION, appUrl, onProgress, caches, zstdDecompressSync } = {}) {
+  zstdDecompressSync ??= await loadZstd()
+  return mod.extractFromBinary(file, { source: 'drop', version, appUrl, onProgress, caches, zstdDecompressSync })
 }
 
 /**
@@ -48,7 +69,8 @@ export function extractFile (mod, file, { version = CC_VERSION, appUrl, onProgre
  * Access-Control-Allow-Origin: *) and extract it while it streams in.
  * Progress: {phase: 'download', loaded, total} then the extractor's phases.
  */
-export async function downloadAndExtract (mod, { version = CC_VERSION, appUrl, onProgress, caches, fetch = globalThis.fetch, signal } = {}) {
+export async function downloadAndExtract (mod, { version = CC_VERSION, appUrl, onProgress, caches, fetch = globalThis.fetch, signal, zstdDecompressSync } = {}) {
+  zstdDecompressSync ??= await loadZstd()
   const url = npmUrl(mod, version)
   onProgress?.({ phase: 'download', loaded: 0, total: 0, url })
   const res = await fetch(url, { signal })
@@ -68,6 +90,7 @@ export async function downloadAndExtract (mod, { version = CC_VERSION, appUrl, o
     version,
     appUrl,
     caches,
+    zstdDecompressSync,
     // The extractor's own 'read' phase would repeat the download numbers.
     onProgress: (p) => { if (p.phase !== 'read') onProgress?.(p) }
   })

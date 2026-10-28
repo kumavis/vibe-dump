@@ -22,9 +22,9 @@ import {
   readTarballEntries, findBunPayload, parseBunfs, detectVersion, applyRewrites, extractFromBinary,
   createMemoryCaches, treeSha256, KNOWN_BUILDS, RewriteDriftError
 } from '../../src/extract/index.js'
+import { RESEARCH_DIR } from '../research.mjs'
 
-const RESEARCH = process.env.CC_RESEARCH_DIR ||
-  '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+const RESEARCH = RESEARCH_DIR
 const TGZ_DIR = process.env.CC_PLATFORM_TGZ_DIR || path.join(RESEARCH, '..', 'trackA')
 const LINUX_BIN = path.join(RESEARCH, 'pkg-linux-x64/package/claude')
 const APP = 'https://kumavis.github.io/vibe-dump/claude-code-web/vfs/app/'

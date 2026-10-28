@@ -7,6 +7,9 @@ import { binaryPanel } from './binary-panel.js'
 import { settingsPanel } from './settings-panel.js'
 import { workspacePanel } from './workspace-panel.js'
 
+/** Shown in the header, the footer and at the top of the README. */
+export const UNOFFICIAL = 'Unofficial; not affiliated with or endorsed by Anthropic'
+
 export function mountApp (root, session) {
   const status = h('span', { id: 'status', class: 'pill' })
   const transcriptEl = h('div', { id: 'transcript', class: 'transcript', 'aria-live': 'polite' })
@@ -60,20 +63,24 @@ export function mountApp (root, session) {
     interrupt.disabled = st.harness !== 'ready' || !st.busy
     const label = st.harness === 'ready' ? (st.busy ? 'working' : 'ready')
       : st.harness === 'booting' ? 'starting'
-        : st.cache === 'extracting' ? 'extracting'
-          : st.harness === 'exited' ? 'stopped'
-            : st.cache === 'present' || session.fake ? 'not started' : 'needs Claude Code'
+        : st.lock === 'other-tab' ? 'open in another tab'
+          : st.cache === 'extracting' ? 'extracting'
+            : st.harness === 'exited' ? 'stopped'
+              : st.cache === 'present' || session.fake ? 'not started' : 'needs Claude Code'
     status.textContent = session.fake ? `${label} (fake worker)` : label
     status.dataset.state = st.harness === 'ready' ? 'ok' : st.harness === 'booting' || st.cache === 'extracting' ? 'busy' : 'idle'
     boot.textContent = st.harness === 'booting' && st.boot ? bootText(st.boot) : ''
     root.dataset.harness = st.harness
     root.dataset.cache = st.cache
+    root.dataset.lock = st.lock
+    start.title = st.lock === 'other-tab' ? 'Claude Code is open in another tab of this site' : ''
   }
   session.addEventListener('change', render)
 
   root.append(
     h('header', { class: 'top' },
       h('h1', null, 'Claude Code ', h('span', { class: 'muted' }, 'in your browser')),
+      h('span', { id: 'unofficial', class: 'unofficial muted' }, UNOFFICIAL),
       status),
     h('div', { class: 'layout' },
       h('aside', { class: 'side' }, binaryPanel(session), settingsPanel(session), workspacePanel(session)),
@@ -83,7 +90,7 @@ export function mountApp (root, session) {
         composer,
         logPanel)),
     h('footer', { class: 'foot muted' },
-      'Runs the official Claude Code JavaScript from your own copy, in a Worker in this tab. No server; your key or token stays in this browser and goes only to the API base URL. ',
+      `${UNOFFICIAL}. Runs the official Claude Code JavaScript from your own copy, in a Worker in this tab. No server; your key or token stays in this browser (this tab only, unless you tick "Remember on this device") and goes only to the API base URL. `,
       h('a', { href: 'https://github.com/kumavis/vibe-dump/tree/main/packages/claude-code-web#readme', target: '_blank', rel: 'noopener' }, 'How it works and its limits')))
   render()
   return { transcript }

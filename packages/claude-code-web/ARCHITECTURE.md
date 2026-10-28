@@ -358,7 +358,42 @@ has the test results.
   packages pass the acceptance test; Windows builds are refused.
 - **Workspace listing:** the page decodes the Worker's `fs-sync` snapshot
   bytes (`src/host/snapshot.js`). It cannot call the fs shim across realms.
+- **Persistence (fix round F1):** the page saves every `fs-sync` to OPFS on
+  one ordered chain (`persist.js`), boots from its in-memory snapshot, and
+  `Session.stop()` flushes (`fs-flush` with an `id`, answered by an `fs-sync`
+  carrying `flush: id`) and waits for the save before `stdin-end`. The fs
+  shim's change debounce has a 2 s `maxWaitMs`. One tab at a time: the
+  session holds the Web Lock `cc-web:home`; a second tab refuses Start.
+- **Acceptance step 6 is enforced at the network level:** the e2e launches
+  Chromium with a proxy on a closed loopback port (only `127.0.0.1`
+  bypassed) and host-resolver rules that resolve nothing else, records
+  foreign hosts from `request`/`requestfailed`, and probes that the block
+  holds. It no longer uses `context.route`, which made Playwright answer the
+  CORS preflights itself; step 3 now checks the mock's strict-CORS preflight.
+  Step 5 reloads without `stop()`, after the session reports the OPFS save.
+- **Credentials (fix round F2):** the origin is shared with the other gallery
+  apps (kumavis.github.io), so the API key / token is kept in
+  `sessionStorage` (`cc-web:secrets`, this tab only) unless the user ticks
+  "Remember on this device", which writes it to `localStorage`. This narrows
+  the "Tokens stay in localStorage/OPFS" line of the policy posture.
+  `window.__cc` exists only under `?test` (the e2e opens `index.html?test`).
+  The base URL must be https, or http on loopback only.
+- **Tool allowlist (F2):** `--tools` with `ALLOWED_TOOLS` (`src/host/constants.js`)
+  replaces `--disallowedTools`; the harness also denies `can_use_tool` for
+  anything outside that list and the page's `mcp__<server>__` tools. With
+  2.1.311 the init message lists Task, AskUserQuestion, Edit, ExitPlanMode,
+  Glob, Grep, NotebookEdit, Read, Skill, Write and the page's MCP tools.
+- **Worker defence in depth (F2):** boot.js merges `POLICY_ENV` in last
+  (`src/runtime/boot/policy.js`, which `src/host/constants.js` re-exports) and
+  wraps `fetch`/`WebSocket` with an egress guard (`src/runtime/boot/egress.js`,
+  worker-protocol.md rule 5).
+- **The API stream does not use the http shim (F2):** in 2.1.311 the CLI's
+  fetch wrapper calls `globalThis.fetch` with the SDK's `AbortSignal`
+  (`Bun.FetchSession` is used only when `Bun.isStandaloneExecutable` is true).
+  An interrupt aborts that signal and the browser cancels the body.
+  `?trace` logs each fetch's path (`direct` or `http-shim`) and its abort.
 - **Tests:** Chromium is at `/opt/pw-browsers/chromium-1243/chrome-linux64/chrome`.
+  Research inputs come from `$CC_RESEARCH_DIR` (`test/research.mjs`).
   The e2e adds checks beyond the acceptance test (file tools, a denied
   permission, an interrupt). It also takes `--base`, `--binary`, `--modules`
   and `--log`.

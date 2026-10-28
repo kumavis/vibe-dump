@@ -46,9 +46,10 @@ pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
 .error { color: var(--err); }
 .warn { color: var(--warn); font-size: 13px; margin: 0; }
 
-.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
 .top h1 { font-size: 18px; margin: 0; font-weight: 650; }
 .top h1 .muted { font-weight: 400; }
+.top .unofficial { font-size: 12px; margin-left: auto; }
 .pill { font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
 .pill[data-state='ok'] { color: var(--ok); border-color: currentColor; }
 .pill[data-state='busy'] { color: var(--warn); border-color: currentColor; }
@@ -90,6 +91,8 @@ button.link { border: 0; background: none; padding: 0; color: var(--accent); tex
 .field input, textarea { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); }
 .radios { display: flex; gap: 14px; font-size: 13px; }
 .radio, .check { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.remember { display: flex; flex-direction: column; gap: 4px; }
+.remember small { color: var(--muted); font-size: 12px; }
 details > summary { cursor: pointer; font-size: 13px; }
 details.tools textarea { min-height: 220px; resize: vertical; margin-top: 6px; }
 #manifest-details { background: var(--code-bg); padding: 8px; border-radius: 6px; margin: 6px 0; overflow-x: auto; }

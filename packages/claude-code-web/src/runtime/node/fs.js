@@ -4,7 +4,7 @@
 //   mount(tree, { at, stripPrefix, mode })   bulk-load files (the extracted app tree)
 //   snapshot(roots) / restore(snap)          whole-subtree capture for OPFS persistence
 //   serializeSnapshot(snap) / deserializeSnapshot(bytes)   one-blob encoding of a snapshot
-//   onChange(cb, { roots, debounceMs })      debounced "something under roots changed"
+//   onChange(cb, { roots, debounceMs, maxWaitMs })  debounced "something under roots changed"
 //
 // Relative paths resolve against the live process.cwd().
 import { Volume, createFsFromVolume, memfsProcess } from '../vendor.js';
@@ -182,10 +182,14 @@ export function deserializeSnapshot(bytes) {
 
 // --- change notification -----------------------------------------------------
 // memfs' superblock emits an event for every create/modify/delete/move/attrib.
-export function onChange(cb, { roots = ['/home/user'], debounceMs = 300 } = {}) {
+// A trailing debounce (debounceMs after the last change), capped by maxWaitMs
+// after the first change of a batch: a steady stream of writes still fires at
+// least every maxWaitMs, so persistence is never put off indefinitely.
+export function onChange(cb, { roots = ['/home/user'], debounceMs = 300, maxWaitMs = 2000 } = {}) {
   const prefixes = roots.map((r) => path.resolve(r));
   const under = (p) => prefixes.some((r) => p === r || p.startsWith(r.endsWith('/') ? r : `${r}/`));
   let timer = null;
+  let first = 0; // Date.now() of the batch's first change
   let changed = new Set();
   const fire = () => { timer = null; const paths = changed; changed = new Set(); cb({ paths: [...paths] }); };
   const stop = volume._core.changes.listen((ev) => {
@@ -194,9 +198,12 @@ export function onChange(cb, { roots = ['/home/user'], debounceMs = 300 } = {}) 
     const p = Array.isArray(steps) ? `/${steps.filter(Boolean).join('/')}` : null;
     const old = Array.isArray(ev?.oldSteps) ? `/${ev.oldSteps.filter(Boolean).join('/')}` : null;
     if (p === null || !(under(p) || (old && under(old)))) return;
+    const t = Date.now();
+    if (!changed.size) first = t;
     changed.add(p);
     if (timer) clearTimeout(timer);
-    timer = setTimeout(fire, debounceMs);
+    const left = maxWaitMs > 0 ? Math.max(0, first + maxWaitMs - t) : Infinity;
+    timer = setTimeout(fire, Math.min(debounceMs, left));
   });
   return () => { stop(); if (timer) clearTimeout(timer); };
 }

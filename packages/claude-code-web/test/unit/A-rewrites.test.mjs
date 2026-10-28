@@ -13,9 +13,9 @@ import zlib from 'node:zlib'
 import { applyRewrites, rewritesId, RewriteDriftError } from '../../src/extract/apply-rewrites.js'
 import { REWRITES, PINNED_VERSION } from '../../src/extract/rewrites.js'
 import { parseBunfs, detectVersion } from '../../src/extract/bunfs.js'
+import { RESEARCH_DIR } from '../research.mjs'
 
-const RESEARCH = process.env.CC_RESEARCH_DIR ||
-  '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+const RESEARCH = RESEARCH_DIR
 const LINUX_BIN = path.join(RESEARCH, 'pkg-linux-x64/package/claude')
 const PORT_APP = path.join(RESEARCH, 'spike-E/install/app')
 const missing = (...ps) => { const m = ps.find((p) => !fs.existsSync(p)); return m ? `scratchpad artifact missing: ${m}` : false }

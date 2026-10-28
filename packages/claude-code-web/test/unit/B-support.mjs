@@ -11,9 +11,10 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { pathToFileURL, fileURLToPath } from 'node:url'
 import { buildRuntime, buildVendor, pkgDir } from '../../scripts/build-runtime.mjs'
+import { RESEARCH_DIR } from '../research.mjs'
 
 // Research artifacts (read-only inputs). Tests that need them skip when absent.
-export const SCRATCH_RESEARCH = '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+export const SCRATCH_RESEARCH = RESEARCH_DIR // CC_RESEARCH_DIR, see ../research.mjs
 export const EXTRACTED_TREE = join(SCRATCH_RESEARCH, 'spike-E', 'extract-unhare', 'root')
 // Pre-installed Chromium builds (the ARCHITECTURE.md path, then what this
 // sandbox actually has); the first that exists wins.

@@ -13,19 +13,33 @@ export const DEFAULT_SERVER = 'page'
 
 export const DEFAULT_API_BASE = 'https://api.anthropic.com'
 
-/** No shell, and nothing that would reach hosts other than the API. */
-export const DISALLOWED_TOOLS = ['Bash', 'BashOutput', 'KillShell', 'WebFetch', 'WebSearch']
+/**
+ * The built-in tools the CLI is given (`--tools`, an allowlist): the file
+ * tools on the virtual filesystem and the conversation-control tools. No
+ * shell, no web access, nothing that acts on the account or on remote agents
+ * (RemoteTrigger, SendMessage, Cron*, worktrees, ...), and nothing a future
+ * release adds until it is listed here. The page's own MCP tools
+ * (mcp__<server>__<tool>) come on top, via --mcp-config.
+ */
+export const ALLOWED_TOOLS = Object.freeze(['Read', 'Write', 'Edit', 'Glob', 'Grep', 'NotebookEdit', 'Task', 'TodoWrite', 'AskUserQuestion', 'ExitPlanMode', 'Skill'])
+
+/**
+ * Whether the page lets the model use a tool: a built-in on the allowlist, or
+ * a tool of one of the page's own MCP servers. Anything else is denied when
+ * the CLI asks (can_use_tool), whatever --tools let through.
+ */
+export function isToolAllowed (toolName, { allowedTools = ALLOWED_TOOLS, serverNames = [] } = {}) {
+  const name = String(toolName ?? '')
+  if (allowedTools.includes(name)) return true
+  return serverNames.some((s) => name.startsWith(`mcp__${s}__`) && name.length > `mcp__${s}__`.length)
+}
 
 /**
  * Policy flags (ARCHITECTURE.md "Policy posture"): always set, never
- * overridable from settings.
+ * overridable from settings. One definition, shared with the Worker, which
+ * merges them in again (src/runtime/boot/policy.js).
  */
-export const POLICY_ENV = Object.freeze({
-  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1',
-  DISABLE_TELEMETRY: '1',
-  DISABLE_ERROR_REPORTING: '1',
-  DISABLE_AUTOUPDATER: '1'
-})
+export { POLICY_ENV } from '../runtime/boot/policy.js'
 
 /** BASE: the app's own directory URL (`/vibe-dump/claude-code-web/` on Pages, `/` under vite dev). */
 export function baseUrl (loc = globalThis.location) {

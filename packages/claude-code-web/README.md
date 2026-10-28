@@ -1,5 +1,9 @@
 # Claude Code Web
 
+> **Unofficial; not affiliated with or endorsed by Anthropic.** A personal
+> experiment that runs your own copy of Claude Code; Anthropic does not
+> provide or support it.
+
 The official Claude Code harness, running in a browser tab. You give the page
 your own copy of Claude Code; it pulls the JavaScript out of the binary, runs
 it in a Web Worker on top of small Node and Bun compatibility layers, and
@@ -65,8 +69,18 @@ auto-updater are switched off with Claude Code's own environment flags.
      It prints a long-lived, inference-only token starting with
      `sk-ant-oat01-`. Paste it into the page. Read the next section first.
 
-   Keys and tokens are kept in this browser's `localStorage` and are sent
-   only to the API base URL.
+   **Where the key or token is kept.** By default only for the current tab
+   (`sessionStorage`): it survives a reload and is forgotten when the tab
+   closes. Tick **Remember on this device** to save it in `localStorage`
+   instead; untick it to remove it from there. Think before ticking it: on
+   GitHub Pages this page's origin (`kumavis.github.io`) is shared with every
+   other app in this gallery and every other Pages site of the account, and
+   any script on that origin can read that origin's storage (the saved
+   workspace in OPFS too). The only real fix is hosting the page on an origin
+   of its own. Either way the credential is sent only to the API base URL,
+   which must be `https://` (plain `http://` is accepted for `localhost` /
+   `127.0.0.1` only, for the mock); inside the Worker, requests that carry it
+   to any other origin are refused.
 3. **Start Claude Code**, then chat. Files it writes live in an in-browser
    workspace (`/home/user/workspace`), listed on the left and kept across
    reloads.
@@ -99,12 +113,19 @@ answer; this project does not work around it.
 - **No shell.** The Bash tool is disabled; nothing can be installed or run.
   `git` is absent too. Read, Write, Edit, Glob and Grep work on the in-browser
   filesystem.
+- **An allowlist of tools.** Claude Code gets only Read, Write, Edit, Glob,
+  Grep, NotebookEdit, Task, TodoWrite, AskUserQuestion, ExitPlanMode and Skill
+  (`--tools`), plus the page's own tools; the page also denies any other tool
+  the CLI asks permission for. Tools a new Claude Code release adds stay off.
 - **No WebFetch or WebSearch**, and no MCP servers other than the page's own
   tools.
 - **No interactive TUI.** No slash-command UI, `/login`, plan mode UI, hooks,
   plugins or marketplace, background sessions, image resizing, clipboard or
   voice.
 - **Conversations are not kept** across reloads (only the workspace is).
+- **One tab at a time.** The workspace is one saved file per site, so a
+  second tab of the page says it is open in another tab and will not start
+  Claude Code until the first tab is closed.
 - **Browsers:** Chromium-based browsers, version 134 or later (the code uses
   `await using`). Others are untested.
 - **One version:** 2.1.311 only. A new Claude Code release usually means new
@@ -127,8 +148,8 @@ only checks that one is there), set the base URL to `http://127.0.0.1:18080`,
 drop the binary, press Start, and try `say hi`, `use the weather tool`,
 `write a file`, `run the file tools` (Glob, Grep, Read, Edit on the
 workspace) or `stream slowly` (then Interrupt). `?trace` in the page URL logs
-every spawn and fetch the CLI makes; `?debug` adds the CLI's own debug output.
-Both show in the page log.
+every spawn and fetch the CLI makes (with its abort signal); `?debug` adds the
+CLI's own debug output. Both show in the page log.
 
 ```sh
 npm run dev                         # vite dev server for UI work: add ?fake to the URL
@@ -139,8 +160,19 @@ node test/e2e.mjs --base /vibe-dump/claude-code-web/   # the same under the Page
 node test/e2e.mjs --fake            # the page flow against the fake worker
 ```
 
-The acceptance test drops the binary from `$CC_BINARY` (default: the research
-scratchpad copy); `--log <file>` saves the page log of every page it opened.
+The tests never keep any of Anthropic's code in this repository: the ones
+that need the official binary, the reference extraction or the Agent SDK read
+them from one research directory, **`CC_RESEARCH_DIR`** (default: the
+scratchpad of the session that built this package; see
+[`test/research.mjs`](./test/research.mjs)), and skip when it is absent.
+That includes the drift alarms (pinned rewrite counts, bundle surface). The
+acceptance test drops `$CC_BINARY` (default:
+`$CC_RESEARCH_DIR/pkg-linux-x64/package/claude`).
+
+The e2e opens the page as `index.html?test`: only then does the page define
+`window.__cc`, its test hook. Other e2e options: `--log <file>` saves the page
+log of every page it opened, `--trace` adds `?trace`, and
+`--interrupt-loops N` repeats the interrupt check N times.
 
 The design contract is [ARCHITECTURE.md](./ARCHITECTURE.md); the page ⇄
 Worker messages are specified in

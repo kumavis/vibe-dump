@@ -7,7 +7,8 @@
 //   'exit'   {code, signal, error}   exactly once
 //   'log'    {level, msg, data}      boot diagnostics from boot.js
 //   'status' {phase, ...}           boot progress
-//   'fs-sync' {snapshot, paths}     a serialized snapshot of the persisted roots
+//   'fs-sync' {snapshot, paths, flush?}  a serialized snapshot of the persisted roots
+//                                    (flush: the id of the fs-flush it answers)
 //   'error'  {message, stack}       an uncaught error inside the Worker
 //
 // The worker may send stdout/stderr as whole lines ({line}) or as raw text
@@ -79,8 +80,8 @@ export class WorkerBridge extends EventTarget {
   /** EOF on stdin. */
   endInput () { this.#post({ type: 'stdin-end' }) }
 
-  /** Ask the worker for an immediate fs-sync. */
-  flushFs () { this.#post({ type: 'fs-flush' }) }
+  /** Ask the worker for an immediate fs-sync; an `id` comes back as that fs-sync's `flush`. */
+  flushFs (id) { this.#post(id == null ? { type: 'fs-flush' } : { type: 'fs-flush', id }) }
 
   /** Forward a signal to process (SIGINT/SIGTERM); boot.js emits it on `process`. */
   signal (name = 'SIGINT') { this.#post({ type: 'signal', signal: name }) }
@@ -116,7 +117,7 @@ export class WorkerBridge extends EventTarget {
       case 'exit': this.#exit({ code: msg.code ?? 0, signal: msg.signal ?? null, error: msg.error ?? null }); break
       case 'log': this.#emit('log', { level: msg.level ?? 'info', msg: msg.msg ?? '', data: msg.data }); break
       case 'status': this.#emit('status', { ...msg }); break
-      case 'fs-sync': this.#emit('fs-sync', { snapshot: msg.snapshot, paths: msg.paths ?? [] }); break
+      case 'fs-sync': this.#emit('fs-sync', { snapshot: msg.snapshot ?? null, paths: msg.paths ?? [], ...(msg.flush != null ? { flush: msg.flush } : {}) }); break
       case 'error': this.#emit('error', { message: msg.message ?? 'error in Worker', stack: msg.stack }); break
       default: this.#emit('log', { level: 'debug', msg: `unknown worker message type ${JSON.stringify(msg.type)}`, data: msg })
     }

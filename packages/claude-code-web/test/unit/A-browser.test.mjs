@@ -8,9 +8,9 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import http from 'node:http'
 import path from 'node:path'
+import { RESEARCH_DIR } from '../research.mjs'
 
-const RESEARCH = process.env.CC_RESEARCH_DIR ||
-  '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+const RESEARCH = RESEARCH_DIR
 const LINUX_BIN = path.join(RESEARCH, 'pkg-linux-x64/package/claude')
 const LINUX_TGZ = path.join(RESEARCH, 'pkg-linux-x64/anthropic-ai-claude-code-linux-x64-2.1.311.tgz')
 // ARCHITECTURE.md names chrome-linux/; the installed build lives in chrome-linux64/.

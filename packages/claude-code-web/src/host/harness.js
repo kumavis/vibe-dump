@@ -23,6 +23,7 @@
 //   'tool_call'   {server, tool, input, result, error, durationMs} after a page tool ran
 //   'permission'  {request, toolName, input, signal, resolve(decision), allow(updatedInput?), deny(message?)}
 //                 cancelable: call event.preventDefault() to answer later via resolve()
+//   'denied'      {toolName, input, reason}: a can_use_tool for a tool outside the page allowlist, denied unasked
 //   'permission_cancelled' {request_id}
 //   'ready'       the initialize response
 //   'stderr' {line}, 'stdout_text' {line} (non-JSON stdout), 'log', 'status', 'fs-sync', 'error'
@@ -31,7 +32,7 @@
 import { WorkerBridge } from './worker-bridge.js'
 import { McpSdkServer, isJsonRpcRequest } from './mcp-sdk-server.js'
 import { buildArgv } from './invocation.js'
-import { WORKSPACE, randomId } from './constants.js'
+import { ALLOWED_TOOLS, WORKSPACE, isToolAllowed, randomId } from './constants.js'
 
 const STDERR_KEEP = 400
 /** Marker: leave a control request unanswered (the SDK's behaviour for some subtypes). */
@@ -79,9 +80,11 @@ export class Harness extends EventTarget {
    * @param {string} [o.cwd]
    * @param {(toolName, input, ctx) => Promise<object>} [o.canUseTool]  answers permission prompts; else the 'permission' event, else `permissionPolicy`
    * @param {'allow'|'deny'} [o.permissionPolicy]  default answer when nobody handles 'permission' (default 'allow': no shell, VFS only)
+   * @param {string[]} [o.allowedTools]  built-in tools passed as --tools (default ALLOWED_TOOLS); can_use_tool for a
+   *   tool outside them and outside this page's MCP servers is denied before canUseTool or 'permission' see it
    * @param {object} [o.initialize]      extra fields for the initialize control request
    */
-  constructor ({ workerUrl, createWorker, env = {}, argv, extraArgs = [], model = '', mcpServers = {}, boot = {}, transfer = [], cwd = WORKSPACE, canUseTool, permissionPolicy = 'allow', initialize = {} } = {}) {
+  constructor ({ workerUrl, createWorker, env = {}, argv, extraArgs = [], model = '', mcpServers = {}, boot = {}, transfer = [], cwd = WORKSPACE, canUseTool, permissionPolicy = 'allow', allowedTools = ALLOWED_TOOLS, initialize = {} } = {}) {
     super()
     if (!workerUrl && !createWorker) throw new TypeError('Harness: workerUrl or createWorker is required')
     this.workerUrl = workerUrl ? String(workerUrl) : null
@@ -92,6 +95,7 @@ export class Harness extends EventTarget {
     this.transfer = transfer
     this.canUseTool = canUseTool ?? null
     this.permissionPolicy = permissionPolicy
+    this.allowedTools = [...allowedTools]
     this.initializeExtra = initialize
 
     this.servers = new Map()
@@ -99,7 +103,7 @@ export class Harness extends EventTarget {
       const server = def instanceof McpSdkServer ? def : new McpSdkServer({ name, tools: def?.tools ?? [] })
       this.#attachServer(name, server)
     }
-    this.argv = argv ? [...argv] : buildArgv({ model, mcpServerNames: [...this.servers.keys()], extra: extraArgs })
+    this.argv = argv ? [...argv] : buildArgv({ model, mcpServerNames: [...this.servers.keys()], tools: this.allowedTools, extra: extraArgs })
 
     this.state = 'idle' // idle | booting | ready | exited
     this.bridge = null
@@ -261,8 +265,32 @@ export class Harness extends EventTarget {
     })
   }
 
-  /** Ask the Worker for an fs-sync now (the workspace listing refreshes on the event). */
-  flushFs () { this.bridge?.flushFs() }
+  /**
+   * Ask the Worker for an fs-sync now. Resolves with that fs-sync's detail
+   * ({snapshot, paths, flush}) after the 'fs-sync' event has been dispatched
+   * (so listeners such as the Session's save have started), or with null when
+   * the process exits or nothing answers within `timeoutMs`. Never rejects.
+   */
+  flushFs ({ timeoutMs = 5000 } = {}) {
+    if (!this.bridge || this.state === 'exited') return Promise.resolve(null)
+    const id = ++this.#flushSeq
+    return new Promise((resolve) => {
+      const done = (value) => {
+        clearTimeout(timer)
+        this.removeEventListener('fs-sync', onSync)
+        this.removeEventListener('exit', onExit)
+        resolve(value)
+      }
+      const onSync = (e) => { if (e.detail?.flush === id) done(e.detail) }
+      const onExit = () => done(null)
+      const timer = setTimeout(() => done(null), timeoutMs)
+      this.addEventListener('fs-sync', onSync)
+      this.addEventListener('exit', onExit)
+      this.bridge.flushFs(id)
+    })
+  }
+
+  #flushSeq = 0
 
   // --- internals ---------------------------------------------------------
 
@@ -351,6 +379,11 @@ export class Harness extends EventTarget {
     const toolName = request.tool_name
     const input = request.input ?? {}
     const toolUseId = request.tool_use_id
+    // The page-side allowlist: whatever --tools let through, nothing else runs.
+    if (!isToolAllowed(toolName, { allowedTools: this.allowedTools, serverNames: [...this.servers.keys()] })) {
+      this.#emit('denied', { toolName, input, reason: 'not on the page allowlist' })
+      return normaliseDecision({ behavior: 'deny', message: `${toolName} is not available in this page (it allows only ${this.allowedTools.join(', ')} and its own mcp__ tools).` }, input, toolUseId)
+    }
     if (this.canUseTool) {
       return normaliseDecision(await this.canUseTool(toolName, input, { signal, request }), input, toolUseId)
     }

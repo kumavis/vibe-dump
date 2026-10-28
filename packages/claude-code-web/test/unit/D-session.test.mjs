@@ -83,6 +83,16 @@ test('session: real-worker preflight refuses without credentials or a cache', as
   await assert.rejects(s.start(), /Get Claude Code first/)
 })
 
+test('session: Start refuses a base URL that would send the credential in cleartext', async () => {
+  const { s, settings } = makeSession({ createWorker: null })
+  await s.ready
+  settings.set({ apiKey: 'sk-ant-api-test', baseUrl: 'http://api.example.com' })
+  await assert.rejects(s.start(), /must use https/)
+  assert.match(s.state.error, /unencrypted/)
+  settings.set({ baseUrl: 'http://127.0.0.1:18080' })
+  await assert.rejects(s.start(), /Get Claude Code first/, 'loopback http passes the check')
+})
+
 test('session: preflight reports a missing runtime/boot.js', async () => {
   const { s, settings } = makeSession({ createWorker: null, fetch: async (url) => new Response('', { status: String(url).endsWith('boot.js') ? 404 : 200 }) })
   await s.ready

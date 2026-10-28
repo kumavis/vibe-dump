@@ -4,7 +4,9 @@
 //
 // Boot sequence (ARCHITECTURE.md "Worker boot sequence"):
 //   1. globals: process (argv/env/cwd, stdio bridged over postMessage, exit),
-//      Buffer, global, setImmediate, Node-style timers  (./node/globals.js)
+//      Buffer, global, setImmediate, Node-style timers  (./node/globals.js);
+//      the env gets the policy flags merged in last (./boot/policy.js), and
+//      fetch/WebSocket are wrapped by the egress guard (./boot/egress.js)
 //   2. the virtual filesystem: the extracted tree read back from the Cache
 //      API and mounted at BASE/vfs/app/, then HOME restored from the page's
 //      snapshot, then the seed files written where absent  (./node/fs.js)
@@ -39,7 +41,12 @@ self.addEventListener('message', (ev) => {
       break
     case 'stdin': toStdin(`${m.line}\n`); break
     case 'stdin-end': toStdin(null); break
-    case 'fs-flush': flushFs?.([]); break
+    case 'fs-flush':
+      // `id` (optional) comes back on the fs-sync it causes; before the VFS
+      // is mounted there is nothing to snapshot, and the answer says so.
+      if (flushFs) flushFs([], m.id)
+      else if (m.id != null) post({ type: 'fs-sync', snapshot: null, paths: [], flush: m.id })
+      break
     case 'signal': if (proc && proc.listenerCount(m.signal) > 0) proc.emit(m.signal, m.signal); break
   }
 })
@@ -88,7 +95,13 @@ async function main (boot) {
   const index = await import('./node/index.js')
   const { installSharedMemoryFallback } = await import('./node/internal/shared-memory.js')
   if (installSharedMemoryFallback(globalThis)) log('info', 'not cross-origin isolated: SharedArrayBuffer is an unshared stand-in, Atomics.wait busy-waits')
-  const env = { ...boot.env }
+  // The policy flags last, whatever the page sent (shared with the page's
+  // invocation.js through boot/policy.js), then the egress guard on fetch and
+  // WebSocket before any Claude Code module can capture them.
+  const { workerEnv } = await import('./boot/policy.js')
+  const env = workerEnv(boot.env)
+  const { installEgressGuard } = await import('./boot/egress.js')
+  installEgressGuard(globalThis, { baseUrl: env.ANTHROPIC_BASE_URL, selfOrigin: base.origin, warn: (m) => log('warn', m) })
   proc = installNodeGlobals(globalThis, {
     processOptions: {
       argv: ['/usr/local/bin/node', `${appPath}cli`, ...(boot.argv || [])],
@@ -101,17 +114,9 @@ async function main (boot) {
   })
   stdin = proc.stdin
   for (const chunk of stdinQueue.splice(0)) stdin.push(chunk)
-  // Uncaught errors the CLI did not handle itself: report, keep running (a
-  // Node process would die; the page decides via the stream-json result).
-  self.addEventListener('error', (ev) => {
-    if (ev.error instanceof ProcessExit || ev.defaultPrevented) return
-    post({ type: 'error', message: String(ev.error?.message ?? ev.message), stack: ev.error?.stack })
-  })
-  self.addEventListener('unhandledrejection', (ev) => {
-    if (ev.reason instanceof ProcessExit || ev.defaultPrevented) return
-    ev.preventDefault()
-    post({ type: 'error', message: `unhandled rejection: ${ev.reason?.message ?? ev.reason}`, stack: ev.reason?.stack })
-  })
+  // Uncaught errors the CLI did not handle itself: report once, keep running.
+  const { reportUncaught } = await import('./boot/errors.js')
+  reportUncaught(self, { post, isExit: (e) => e instanceof ProcessExit })
   if (boot.trace) installTrace(index.namespaces.child_process)
   mark('globals', t)
 
@@ -152,11 +157,12 @@ async function main (boot) {
     fs.writeFileSync(p, text, { mode: 0o600 })
   }
   const persistRoots = boot.persistRoots || [home]
-  flushFs = (paths) => {
+  flushFs = (paths, flush) => {
     const bytes = fsMod.serializeSnapshot(fsMod.snapshot(persistRoots))
-    post({ type: 'fs-sync', snapshot: bytes, paths }, [bytes.buffer])
+    post({ type: 'fs-sync', snapshot: bytes, paths, ...(flush != null ? { flush } : {}) }, [bytes.buffer])
   }
-  fsMod.onChange(({ paths }) => { if (!exited) flushFs(paths) }, { roots: persistRoots, debounceMs: 400 })
+  // 400 ms after the last write, and at least every 2 s while writes keep coming
+  fsMod.onChange(({ paths }) => { if (!exited) flushFs(paths) }, { roots: persistRoots, debounceMs: 400, maxWaitMs: 2000 })
 
   // 3. Bun and __bunRequire ---------------------------------------------------------
   status('bun')
@@ -217,9 +223,21 @@ function installTrace (childProcess) {
   globalThis.fetch = async function fetch (input, init) {
     const id = ++n
     const url = typeof input === 'string' ? input : input?.url ?? String(input)
-    t(`fetch#${id} ${init?.method ?? input?.method ?? 'GET'} ${url}`)
+    // Which path a request took and whether an abort can reach it: the http
+    // shim's ClientRequest passes credentials 'omit'; the CLI's own API
+    // client calls fetch directly with the SDK's AbortSignal.
+    const signal = init?.signal ?? input?.signal
+    const via = init?.credentials === 'omit' ? 'http-shim' : 'direct'
+    const t0 = performance.now()
+    let resAt = 0
+    t(`fetch#${id} ${init?.method ?? input?.method ?? 'GET'} ${url} (${via}, ${signal ? (signal.aborted ? 'signal already aborted' : 'signal') : 'no signal'})`)
+    signal?.addEventListener?.('abort', () => {
+      const ms = Math.round(performance.now() - t0)
+      t(`fetch#${id} signal aborted ${ms} ms after dispatch (${resAt ? `response received ${Math.round(resAt - t0)} ms after dispatch` : 'response pending'}): ${signal.reason?.name ?? ''} ${signal.reason?.message ?? signal.reason ?? ''}`)
+    }, { once: true })
     try {
       const res = await realFetch.call(this, input, init)
+      resAt = performance.now()
       t(`fetch#${id} -> ${res.status}`)
       return res
     } catch (err) {

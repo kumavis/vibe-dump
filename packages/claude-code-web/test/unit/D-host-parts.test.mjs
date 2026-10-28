@@ -2,21 +2,26 @@
 // snapshots, the Worker bridge, settings and the acquisition adapter.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { buildArgv, buildEnv, checkCredentials, seedFiles } from '../../src/host/invocation.js'
+import { buildArgv, buildEnv, checkBaseUrl, checkCredentials, isLoopbackHost, seedFiles } from '../../src/host/invocation.js'
 import { parseToolsConfig, compileTools, mcpServersFromText, DEFAULT_TOOLS_JSON, ToolsConfigError } from '../../src/host/custom-tools.js'
 import { encodeSnapshot, decodeSnapshot, listEntries, readText, isSnapshotBytes } from '../../src/host/snapshot.js'
 import { WorkerBridge, LineSplitter } from '../../src/host/worker-bridge.js'
-import { createSettings, DEFAULT_SETTINGS } from '../../src/host/settings.js'
+import { createSettings, DEFAULT_SETTINGS, SETTINGS_KEY, SECRETS_KEY } from '../../src/host/settings.js'
 import { createMemorySnapshotStore } from '../../src/host/persist.js'
-import { describeManifest, downloadAndExtract, npmUrl } from '../../src/host/acquire.js'
-import { baseUrl, appUrlFor, workerUrlFor, randomId } from '../../src/host/constants.js'
+import { describeManifest, downloadAndExtract, extractFile, loadZstd, npmUrl } from '../../src/host/acquire.js'
+import { existsSync, readFileSync } from 'node:fs'
+import zlib from 'node:zlib'
+import { LINUX_X64_BINARY } from '../research.mjs'
+
+const missingResearch = (p) => (existsSync(p) ? false : `research artifact missing: ${p} (set CC_RESEARCH_DIR)`)
+import { baseUrl, appUrlFor, workerUrlFor, randomId, ALLOWED_TOOLS, isToolAllowed } from '../../src/host/constants.js'
 
 test('invocation: argv matches the contract', () => {
   const argv = buildArgv({ model: 'claude-sonnet-5-5', mcpServerNames: ['page'] })
   assert.deepEqual(argv, [
     '-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose',
     '--permission-prompt-tool', 'stdio', '--permission-mode', 'default',
-    '--disallowedTools', 'Bash,BashOutput,KillShell,WebFetch,WebSearch',
+    '--tools', 'Read,Write,Edit,Glob,Grep,NotebookEdit,Task,TodoWrite,AskUserQuestion,ExitPlanMode,Skill',
     '--mcp-config', '{"mcpServers":{"page":{"type":"sdk","name":"page"}}}',
     '--strict-mcp-config', '--no-session-persistence', '--model', 'claude-sonnet-5-5'
   ])
@@ -24,6 +29,22 @@ test('invocation: argv matches the contract', () => {
   assert.ok(!bare.includes('--mcp-config'))
   assert.ok(!bare.includes('--model'))
   assert.ok(bare.includes('--strict-mcp-config'))
+})
+
+test('invocation: the built-in tools are an allowlist (pinned), MCP tools only from the page', () => {
+  // Pinned on purpose: a change here is a policy change (fix round F2, H-review-round-1.md).
+  assert.deepEqual([...ALLOWED_TOOLS], ['Read', 'Write', 'Edit', 'Glob', 'Grep', 'NotebookEdit', 'Task', 'TodoWrite', 'AskUserQuestion', 'ExitPlanMode', 'Skill'])
+  assert.ok(Object.isFrozen(ALLOWED_TOOLS))
+  const argv = buildArgv({ mcpServerNames: ['page'] })
+  assert.equal(argv[argv.indexOf('--tools') + 1], ALLOWED_TOOLS.join(','))
+  assert.ok(!argv.includes('--disallowedTools'), 'no denylist: tools added upstream stay off')
+  assert.equal(buildArgv({ tools: [] })[buildArgv({ tools: [] }).indexOf('--tools') + 1], '', '"" switches every built-in off')
+  const opts = { serverNames: ['page'] }
+  for (const name of ALLOWED_TOOLS) assert.equal(isToolAllowed(name, opts), true, name)
+  assert.equal(isToolAllowed('mcp__page__get_weather', opts), true)
+  for (const name of ['Bash', 'BashOutput', 'KillShell', 'WebFetch', 'WebSearch', 'RemoteTrigger', 'SendMessage', 'Workflow', 'CronCreate', 'CronDelete', 'CronList', 'ScheduleWakeup', 'ListAgents', 'EnterWorktree', 'ExitWorktree', 'mcp__other__x', 'mcp__page__', 'read', '', undefined]) {
+    assert.equal(isToolAllowed(name, opts), false, String(name))
+  }
 })
 
 test('invocation: env sets one credential and the policy flags cannot be overridden', () => {
@@ -197,23 +218,89 @@ function memoryStorage () {
   return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k), m }
 }
 
+test('invocation: the base URL must be https, or http on loopback only', () => {
+  for (const ok of ['', 'https://api.anthropic.com', 'https://proxy.example.com/v1', 'http://127.0.0.1:18080', 'http://localhost:8080', 'http://[::1]:9', 'http://mock.localhost']) {
+    assert.equal(checkBaseUrl(ok), null, ok)
+  }
+  assert.match(checkBaseUrl('http://api.example.com'), /must use https.*unencrypted/)
+  assert.match(checkBaseUrl('http://192.168.1.5:8080'), /must use https/)
+  assert.match(checkBaseUrl('http://127.0.0.1.example.com'), /must use https/, 'a name that only starts like loopback')
+  assert.match(checkBaseUrl('ftp://x'), /https:\/\//)
+  assert.match(checkBaseUrl('not a url'), /not a valid URL/)
+  assert.equal(isLoopbackHost('127.255.0.1'), true)
+  assert.equal(isLoopbackHost('128.0.0.1'), false)
+})
+
 test('settings: defaults, persistence, sanitising', () => {
   const storage = memoryStorage()
-  const s = createSettings({ storage })
+  const sessionStorage = memoryStorage()
+  const s = createSettings({ storage, sessionStorage })
   assert.deepEqual(s.get(), { ...DEFAULT_SETTINGS })
   assert.equal(s.get().authMode, 'api-key', 'API key is the default auth mode')
+  assert.equal(s.get().remember, false, 'the credential is not remembered by default')
   s.set({ authMode: 'oauth', token: 'tok', askPermission: 1, bogus: 'x', model: 5 })
-  const again = createSettings({ storage }).get()
+  const again = createSettings({ storage, sessionStorage }).get()
   assert.equal(again.authMode, 'oauth')
-  assert.equal(again.token, 'tok')
+  assert.equal(again.token, 'tok', 'a reload of the same tab keeps the token (sessionStorage)')
   assert.equal(again.askPermission, true)
   assert.equal(again.bogus, undefined)
   assert.equal(again.model, '')
   storage.setItem('cc-web:settings', '{not json')
-  assert.deepEqual(createSettings({ storage }).get(), { ...DEFAULT_SETTINGS })
+  sessionStorage.setItem('cc-web:secrets', '{not json')
+  assert.deepEqual(createSettings({ storage, sessionStorage }).get(), { ...DEFAULT_SETTINGS })
   const throwing = { getItem () { throw new Error('denied') }, setItem () { throw new Error('denied') }, removeItem () {} }
-  const t = createSettings({ storage: throwing })
+  const t = createSettings({ storage: throwing, sessionStorage: throwing })
   assert.equal(t.set({ model: 'm' }).model, 'm', 'works in memory when storage throws')
+})
+
+test('settings: the credential stays out of localStorage unless "remember" is on', () => {
+  const storage = memoryStorage()
+  const sessionStorage = memoryStorage()
+  const s = createSettings({ storage, sessionStorage })
+  s.set({ apiKey: 'sk-ant-api-SECRET', token: 'sk-ant-oat01-SECRET', baseUrl: 'http://127.0.0.1:1' })
+  const local = () => storage.m.get(SETTINGS_KEY) ?? ''
+  assert.ok(!local().includes('SECRET'), `localStorage holds no credential: ${local()}`)
+  assert.ok(local().includes('127.0.0.1:1'), 'the other settings are remembered')
+  assert.ok(sessionStorage.m.get(SECRETS_KEY).includes('sk-ant-api-SECRET'), 'this tab keeps it in sessionStorage')
+  // a new tab (fresh sessionStorage) does not see it
+  const newTab = createSettings({ storage, sessionStorage: memoryStorage() }).get()
+  assert.equal(newTab.apiKey, '')
+  assert.equal(newTab.token, '')
+  assert.equal(newTab.baseUrl, 'http://127.0.0.1:1')
+
+  // ticked: written to localStorage, and a new tab has it
+  s.set({ remember: true })
+  assert.ok(local().includes('sk-ant-api-SECRET') && local().includes('sk-ant-oat01-SECRET'))
+  assert.equal(sessionStorage.m.has(SECRETS_KEY), false, 'no second copy in sessionStorage')
+  const remembered = createSettings({ storage, sessionStorage: memoryStorage() }).get()
+  assert.equal(remembered.apiKey, 'sk-ant-api-SECRET')
+  assert.equal(remembered.remember, true)
+
+  // unticked: removed from localStorage at once, still usable in this tab
+  s.set({ remember: false })
+  assert.ok(!local().includes('SECRET'), 'unticking removes the credential from localStorage')
+  assert.equal(createSettings({ storage, sessionStorage }).get().token, 'sk-ant-oat01-SECRET')
+
+  // getPublic(): nothing secret
+  const pub = s.getPublic()
+  assert.equal('apiKey' in pub || 'token' in pub, false)
+  assert.equal(pub.hasCredential, true)
+  assert.ok(!JSON.stringify(pub).includes('SECRET'))
+
+  s.reset()
+  assert.equal(storage.m.has(SETTINGS_KEY), false)
+  assert.equal(sessionStorage.m.has(SECRETS_KEY), false)
+})
+
+test('settings: a credential an older build left in localStorage moves to sessionStorage', () => {
+  const storage = memoryStorage()
+  const sessionStorage = memoryStorage()
+  storage.setItem(SETTINGS_KEY, JSON.stringify({ authMode: 'oauth', token: 'sk-ant-oat01-OLD', model: 'm' }))
+  const s = createSettings({ storage, sessionStorage })
+  assert.equal(s.get().token, 'sk-ant-oat01-OLD', 'still usable in this tab')
+  assert.ok(!storage.m.get(SETTINGS_KEY).includes('OLD'), 'gone from localStorage')
+  assert.equal(JSON.parse(storage.m.get(SETTINGS_KEY)).model, 'm')
+  assert.ok(sessionStorage.m.get(SECRETS_KEY).includes('sk-ant-oat01-OLD'))
 })
 
 test('persist: memory snapshot store copies bytes', async () => {
@@ -251,6 +338,36 @@ test('acquire: download streams progress into extractFromBinary', async () => {
   assert.ok(seen.some((p) => p.phase === 'rewrite'))
   await assert.rejects(downloadAndExtract(mod, { fetch: async () => new Response('x', { status: 404 }) }), /HTTP 404/)
   assert.match(npmUrl({}), /claude-code-linux-x64-2\.1\.311\.tgz$/)
+})
+
+test('acquire: extractions pass fzstd as zstdDecompressSync, so the .zst drift check runs', async () => {
+  const seen = []
+  const mod = {
+    npmTarballUrl: () => 'https://registry.example/x.tgz',
+    async extractFromBinary (input, opts) {
+      if (input instanceof ReadableStream) for await (const c of input) void c
+      seen.push(opts.zstdDecompressSync)
+      return { source: { kind: opts.source } }
+    }
+  }
+  await extractFile(mod, new Blob(['x']))
+  await downloadAndExtract(mod, { fetch: async () => new Response('x') })
+  assert.equal(seen.length, 2)
+  for (const z of seen) {
+    assert.equal(typeof z, 'function')
+    const plain = Buffer.from('see /$bunfs/root/x '.repeat(50))
+    assert.deepEqual(Buffer.from(z(new Uint8Array(zlib.zstdCompressSync(plain)))), plain, 'it really decompresses zstd')
+  }
+  assert.equal(await loadZstd(), seen[0], 'loaded once')
+})
+
+test('acquire: a real extraction through extractFile checks every .zst asset (report.zst.checked > 0)', { skip: missingResearch(LINUX_X64_BINARY) }, async () => {
+  const extractor = await import('../../src/extract/index.js')
+  const bytes = new Uint8Array(readFileSync(LINUX_X64_BINARY))
+  const m = await extractFile(extractor, bytes, { appUrl: 'http://127.0.0.1:9/vfs/app/', caches: extractor.createMemoryCaches() })
+  assert.ok(m.rewrites.zst.checked > 0, JSON.stringify(m.rewrites.zst))
+  assert.equal(m.rewrites.zst.unchecked, 0, 'nothing left unchecked')
+  assert.deepEqual(m.rewrites.zst.needRewrite, [])
 })
 
 test('acquire: describeManifest', () => {

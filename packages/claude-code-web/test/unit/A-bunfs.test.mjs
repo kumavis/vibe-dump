@@ -11,9 +11,9 @@ import crypto from 'node:crypto'
 import { findBunPayload, parseBunfs, detectVersion, normalizeModuleName, BUN_MAGIC, BunPayloadError } from '../../src/extract/bunfs.js'
 import { treeSha256 } from '../../src/extract/hash.js'
 import { KNOWN_BUILDS } from '../../src/extract/builds.js'
+import { RESEARCH_DIR } from '../research.mjs'
 
-const RESEARCH = process.env.CC_RESEARCH_DIR ||
-  '/tmp/claude-0/-home-user-vibe-dump/5b506f29-8275-5bfc-ac58-3487cb33f8da/scratchpad/research'
+const RESEARCH = RESEARCH_DIR
 const LINUX_BIN = path.join(RESEARCH, 'pkg-linux-x64/package/claude')
 const UNHARE = path.join(RESEARCH, 'spike-E/extract-unhare')
 const missing = (...ps) => ps.find((p) => !fs.existsSync(p)) ? `scratchpad artifact missing: ${ps.find((p) => !fs.existsSync(p))}` : false

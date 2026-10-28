@@ -218,10 +218,19 @@ export class ClientRequest extends Writable {
     this.connection = this.socket;
     if (callback) this.once('response', callback);
     if (opts.timeout) this.setTimeout(opts.timeout);
+    this._unlinkSignal = null;
     if (opts.signal) {
-      const onAbort = () => this.destroy(Object.assign(new Error('The operation was aborted'), { name: 'AbortError', code: 'ABORT_ERR' }));
-      if (opts.signal.aborted) queueMicrotask(onAbort);
-      else opts.signal.addEventListener('abort', onAbort, { once: true });
+      // An abort destroys the request whenever it lands: _destroy aborts the
+      // fetch (pending, or its body mid-stream) and _send cancels a body that
+      // arrives after the request was destroyed. The listener goes away with
+      // the request, so a long-lived signal does not collect one per request.
+      const signal = opts.signal;
+      const onAbort = () => this.destroy(Object.assign(new Error('The operation was aborted'), { name: 'AbortError', code: 'ABORT_ERR', cause: signal.reason }));
+      if (signal.aborted) queueMicrotask(onAbort);
+      else {
+        signal.addEventListener('abort', onAbort, { once: true });
+        this._unlinkSignal = () => { this._unlinkSignal = null; signal.removeEventListener('abort', onAbort); };
+      }
     }
     queueMicrotask(() => { if (!this.destroyed) this.emit('socket', this.socket); });
   }
@@ -279,6 +288,7 @@ export class ClientRequest extends Writable {
 
   _destroy(err, cb) {
     clearTimeout(this._timer);
+    this._unlinkSignal?.();
     this._controller.abort(err || undefined);
     this.res?.destroy();
     cb(err);
@@ -333,7 +343,7 @@ export class ClientRequest extends Writable {
       msg.push(null);
     }
     // (the Readable emits its own 'close' after 'end')
-    msg.once('end', () => { clearTimeout(this._timer); queueMicrotask(() => this.emit('close')); });
+    msg.once('end', () => { clearTimeout(this._timer); this._unlinkSignal?.(); queueMicrotask(() => this.emit('close')); });
     this.emit('response', msg);
     // Node discards an unconsumed response body; don't leave the fetch dangling.
     if (this.listenerCount('response') === 0) msg.resume();

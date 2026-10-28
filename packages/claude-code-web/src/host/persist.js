@@ -1,7 +1,9 @@
 // Where the page keeps things across reloads:
 //
-//   settings   localStorage "cc-web:settings" (token / API key included: they
-//              stay on this device and are only ever put into the Worker's env)
+//   settings   localStorage "cc-web:settings"; the API key / token only when
+//              "Remember on this device" is ticked, otherwise sessionStorage
+//              "cc-web:secrets" (this tab only). See settings.js: the origin
+//              is shared with other apps.
 //   VFS        OPFS file "cc-web/home.ccwfs": the latest fs-sync snapshot of
 //              /home/user (workspace + ~/.claude), handed back to the Worker
 //              in its boot message
@@ -23,7 +25,17 @@ export function createMemorySnapshotStore () {
   }
 }
 
-/** OPFS-backed snapshot store, or the memory one where OPFS is unavailable. */
+/**
+ * OPFS-backed snapshot store, or the memory one where OPFS is unavailable.
+ *
+ * Writes are serialised on one chain, and load()/clear() wait for it, so a
+ * load right after a save (Stop, then Start) never reads the older file.
+ * save() returns that write's own promise: it rejects when the write fails
+ * (quota, no createWritable), while the chain itself stays usable.
+ * After the first successful write the store asks for persistent storage
+ * (navigator.storage.persist()), so the browser does not evict the workspace
+ * as best-effort data; `store.persisted` records the answer.
+ */
 export async function createSnapshotStore ({ storage = globalThis.navigator?.storage } = {}) {
   let root
   try {
@@ -33,11 +45,13 @@ export async function createSnapshotStore ({ storage = globalThis.navigator?.sto
   } catch {
     return createMemorySnapshotStore()
   }
-  // Serialise writes: a slow write must never land after a newer one.
   let chain = Promise.resolve()
-  return {
+  let askedPersist = false
+  const store = {
     kind: 'opfs',
+    persisted: null, // null until asked; then true/false (the browser's answer)
     async load () {
+      await chain
       try {
         const fh = await root.getFileHandle(OPFS_FILE)
         const file = await fh.getFile()
@@ -45,24 +59,39 @@ export async function createSnapshotStore ({ storage = globalThis.navigator?.sto
       } catch { return null }
     },
     save (bytes) {
-      chain = chain.then(async () => {
+      const p = chain.then(async () => {
         const fh = await root.getFileHandle(OPFS_FILE, { create: true })
         const w = await fh.createWritable()
-        await w.write(bytes)
-        await w.close()
-      }).catch(() => {})
-      return chain
+        try {
+          await w.write(bytes)
+          await w.close()
+        } catch (err) {
+          try { await w.abort?.() } catch {}
+          throw err
+        }
+        if (!askedPersist) {
+          askedPersist = true
+          Promise.resolve(storage.persist?.()).then((granted) => { store.persisted = granted ?? null }, () => { store.persisted = false })
+        }
+      })
+      chain = p.catch(() => {})
+      return p
     },
     async clear () {
       await chain
       try { await root.removeEntry(OPFS_FILE) } catch {}
     }
   }
+  return store
 }
 
-/** Small JSON-in-localStorage helper (settings). */
-export function createJsonStore (key, { storage } = {}) {
-  const ls = () => storage ?? globalThis.localStorage
+/**
+ * Small JSON-in-Web-Storage helper (settings). `area` names the global used
+ * when no `storage` is passed: 'localStorage' or 'sessionStorage'. Reading
+ * either global can throw (blocked site data); every accessor tolerates it.
+ */
+export function createJsonStore (key, { storage, area = 'localStorage' } = {}) {
+  const ls = () => storage ?? globalThis[area]
   return {
     load () {
       try { const s = ls()?.getItem(key); return s ? JSON.parse(s) : null } catch { return null }

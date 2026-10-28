@@ -96,7 +96,7 @@ export class FakeWorker extends EventTarget {
       case 'stdin-end':
         this.turns = this.turns.then(() => this.#exit(0))
         return
-      case 'fs-flush': return this.#fsSync([])
+      case 'fs-flush': return this.#fsSync([], msg.id)
       case 'signal': this.turnAbort?.abort(); return
     }
   }
@@ -322,7 +322,7 @@ export class FakeWorker extends EventTarget {
     })
   }
 
-  #fsSync (paths) {
+  #fsSync (paths, flush) {
     const entries = []
     const dirs = new Set()
     for (const p of this.files.keys()) {
@@ -332,7 +332,7 @@ export class FakeWorker extends EventTarget {
     for (const d of [...dirs].sort()) entries.push({ path: d, type: 'dir', mode: 0o755, mtimeMs: Date.now() })
     for (const [path, data] of [...this.files].sort()) if (path.startsWith(`${HOME}/`)) entries.push({ path, type: 'file', mode: 0o644, mtimeMs: Date.now(), data })
     const bytes = encodeSnapshot({ version: 1, roots: [HOME], entries })
-    this.#post({ type: 'fs-sync', snapshot: bytes, paths })
+    this.#post({ type: 'fs-sync', snapshot: bytes, paths, ...(flush != null ? { flush } : {}) })
   }
 
   #exit (code) {
