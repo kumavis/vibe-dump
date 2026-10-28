@@ -2370,12 +2370,17 @@ function heightTask(core, mods) {
 //    AI's floor (0.4) the AI's shooting phase fires nothing.
 // Every ranged unit type of both races must meet the fight and the clear
 // shot, the tie both armies, and a stray must be rolled, or the run says
-// what it never met and fails.
+// what it never met and fails. ((F9a, at its merge) No classic preset
+// fields the War-Cart, so on code with transports each board plays its
+// hulls' fight and clear shot again on a Field battle whose Bushtails
+// field the P-riders scenes' list, the Coil its Field preset.)
 const FIGHT_BOARDS = 6
 function fightTask(core, mods) {
   const q = core.q
   const counts = { legal: 0, volleys: 0, clear: 0, templates: 0, misses: 0, strays: 0, ties: 0, values: 0, brute: 0, bruteDeclined: 0 }
   const met = { fight: new Set(), clear: new Set(), tie: new Set() }
+  // ((F9a) the code has transports: their guns are met on Field boards)
+  const HULLS = Object.values(RACES_F.squirrel.units).some((t) => t.transport)
   const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
   const at = (u, x, z) => {
     u.pos.x = x
@@ -2384,8 +2389,12 @@ function fightTask(core, mods) {
   // a hotseat match at the movement phase of the seat with the first turn,
   // every unit but `keep(G, seat)`'s taken off; returns null when the seat
   // can't field the scene
-  const fresh = (board, races) => {
-    const G = core.createMatch({ board, dice: board, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+  // ((F9a, at its merge) `carts`: a Field battle, each Bushtail seat
+  // fielding the P-riders scenes' list (two War-Carts), the Coil its Field
+  // preset: no classic preset fields the War-Cart, a ranged unit like any)
+  const fresh = (board, races, carts = false) => {
+    const seats = races.map((race) => ({ race, ctrl: 'human', ...(carts ? { army: race === 'squirrel' ? SCENE_LIST : 'field' } : {}) }))
+    const G = core.createMatch({ board, dice: board, ...(carts ? { mission: 'field', terrain: 'open' } : {}), seats }, { out: [] })
     core.apply(G, 0, { t: 'deployed' })
     core.apply(G, 1, { t: 'deployed' })
     if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`P-fight, board ${board}: no movement phase after the deployment`)
@@ -2488,36 +2497,41 @@ function fightTask(core, mods) {
   for (let board = 1; board <= FIGHT_BOARDS; board++) {
     for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
       const rand = mulberry32(board * 104729 + (races[0] === 'squirrel' ? 0 : 1))
-      const probe = fresh(board, races)
-      const shooters = probe.G.units.filter((u) => u.side === probe.s && u.t.ranged).map((u) => u.id)
-      for (const uid of shooters) {
-        for (const kind of ['fight', 'clear']) {
-          const { G, s } = fresh(board, races)
-          const u = G.units.find((x) => x.id === uid), w = u.t.ranged
-          const where = `P-fight, board ${board} (${races.join(' v ')}), ${u.t.short} (${w.name}), ${kind}`
-          const e = G.units.find((x) => x.side !== s && x.models.length > 1 && !x.t.fly)
-          const f = G.units.find((x) => x.side === s && x !== u && x.models.length > 1)
-          only_(G, [u, e, f])
-          if (!place(G, rand, u, e, [f], kind === 'fight' ? 0.4 : 4)) continue
-          const fight = q.fightOf(G, u, e)
-          if (kind === 'fight' && !(fight && fight.F === f.alive && fight.T === e.alive && fight.onto === f && fight.friends.length === 1)) throw new Error(`${where}: fightOf says ${JSON.stringify(fight && { F: fight.F, T: fight.T, onto: fight.onto.id })}, not ${f.alive} of ours against ${e.alive} with ${f.id}`)
-          if (kind === 'clear' && fight) throw new Error(`${where}: fightOf finds a fight with the friend 4" off`)
-          // the AI's value nets the friendly fire (before the shot: it
-          // changes the table)
-          if (kind === 'fight' && !w.mesmerize) {
-            const v = mods.score.shotValue(G, u, e, u.pos, false)
-            const fa = f.alive
-            f.alive = 0
-            const bare = mods.score.shotValue(G, u, e, u.pos, false)
-            f.alive = fa
-            const own = w.blast ? mods.score.ownUnder(G, u, e) : 1
-            if (own > 0 && !(v < bare)) throw new Error(`${where}: the AI values the shot at ${v} with ${f.t.short} ${w.blast ? 'under the template' : 'in the fight'}, ${bare} without: no friendly fire weighed`)
-            counts.values++
+      // ((F9a) and, on code with transports, a Field battle with War-Carts
+      // for the hulls' own guns: the cart pass shoots with them alone, and
+      // nobody aboard is a shooter, a target or a friend in the fight)
+      for (const carts of HULLS ? [false, true] : [false]) {
+        const probe = fresh(board, races, carts)
+        const shooters = probe.G.units.filter((u) => u.side === probe.s && u.t.ranged && !u.aboard && (!carts || u.t.transport)).map((u) => u.id)
+        for (const uid of shooters) {
+          for (const kind of ['fight', 'clear']) {
+            const { G, s } = fresh(board, races, carts)
+            const u = G.units.find((x) => x.id === uid), w = u.t.ranged
+            const where = `P-fight, board ${board} (${races.join(' v ')}${carts ? ', Field with War-Carts' : ''}), ${u.t.short} (${w.name}), ${kind}`
+            const e = G.units.find((x) => x.side !== s && x.models.length > 1 && !x.t.fly && !x.aboard)
+            const f = G.units.find((x) => x.side === s && x !== u && x.models.length > 1 && !x.aboard)
+            only_(G, [u, e, f])
+            if (!place(G, rand, u, e, [f], kind === 'fight' ? 0.4 : 4)) continue
+            const fight = q.fightOf(G, u, e)
+            if (kind === 'fight' && !(fight && fight.F === f.alive && fight.T === e.alive && fight.onto === f && fight.friends.length === 1)) throw new Error(`${where}: fightOf says ${JSON.stringify(fight && { F: fight.F, T: fight.T, onto: fight.onto.id })}, not ${f.alive} of ours against ${e.alive} with ${f.id}`)
+            if (kind === 'clear' && fight) throw new Error(`${where}: fightOf finds a fight with the friend 4" off`)
+            // the AI's value nets the friendly fire (before the shot: it
+            // changes the table)
+            if (kind === 'fight' && !w.mesmerize) {
+              const v = mods.score.shotValue(G, u, e, u.pos, false)
+              const fa = f.alive
+              f.alive = 0
+              const bare = mods.score.shotValue(G, u, e, u.pos, false)
+              f.alive = fa
+              const own = w.blast ? mods.score.ownUnder(G, u, e) : 1
+              if (own > 0 && !(v < bare)) throw new Error(`${where}: the AI values the shot at ${v} with ${f.t.short} ${w.blast ? 'under the template' : 'in the fight'}, ${bare} without: no friendly fire weighed`)
+              counts.values++
+            }
+            toShoot(G, s, where)
+            shoot(G, s, u, e, where)
+            met[kind].add(u.t.key)
+            if (kind === 'clear') counts.clear++
           }
-          toShoot(G, s, where)
-          shoot(G, s, u, e, where)
-          met[kind].add(u.t.key)
-          if (kind === 'clear') counts.clear++
         }
       }
       // the tie: the seat's two units of one type round the enemy, a direct
@@ -2956,14 +2970,24 @@ function cellsWithin(nav, x, z, R) {
 
 // What the AI's score makes of `cells` for `u` (its own role; a hull's as
 // a line unit), its context built as core/ai/score.js's scoring builds it:
-// the numbers, as text
+// the numbers, as text. ((F9a at its merge) the context as F18 and F19a
+// left it: no `engaged` any more, a shooter's fight, own and keg terms,
+// and the kegs standing, where the code has them)
 function scoreText(core, mods, G, u, cells) {
-  const q = core.q
+  const q = core.q, S = mods.score
   const enemies = q.enemiesOf(G, u), friends = q.friendsOf(G, u)
   const owners = G.objectives.map((o) => q.controlOf(G, o))
-  const pre = new Map(enemies.map((e) => [e, { engaged: q.isEngaged(G, e), cover: q.inCover(G, e), hit: mods.score.meleeValue(u, e), back: mods.score.meleeValue(e, u) }]))
-  const ctx = { enemies, friends, owners, claimed: new Set(), role: u.t.ai === 'transport' ? 'line' : u.t.ai, pre }
-  return cells.map((i) => String(mods.score.score(G, u, G.nav.x(i), G.nav.z(i), ctx, true))).join(',')
+  const role = u.t.ai === 'transport' ? 'line' : u.t.ai
+  const w = u.t.ranged, shoots = !!w && role !== 'melee', f18 = typeof q.fightOf === 'function', kegs = S.kegsOf ? S.kegsOf(G) : []
+  const pre = new Map(enemies.map((e) => [e, f18
+    ? {
+        cover: q.inCover(G, e), hit: S.meleeValue(u, e), back: S.meleeValue(e, u),
+        fight: shoots && !w.blast && !w.mesmerize ? q.fightOf(G, u, e) : null, own: shoots && w.blast ? S.ownUnder(G, u, e) : 0,
+        keg: shoots && w.blast && S.kegGain ? S.kegGain(G, u, e, kegs) : 0,
+      }
+    : { engaged: q.isEngaged(G, e), cover: q.inCover(G, e), hit: S.meleeValue(u, e), back: S.meleeValue(e, u) }]))
+  const ctx = { enemies, friends, owners, claimed: new Set(), role, pre, kegs, kegDanger: kegs.length > 0 && !!S.kegDanger?.(G, u.side) }
+  return cells.map((i) => String(S.score(G, u, G.nav.x(i), G.nav.z(i), ctx, true))).join(',')
 }
 
 // hidden, as above: returns how many queries it held (0 with nobody aboard,
