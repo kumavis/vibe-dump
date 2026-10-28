@@ -329,14 +329,17 @@ export class Flow {
       'tray.open': (e) => ui.tray.clear(e.title),
       dice: (e) => ui.tray.row(e.label, e.dice, e.need, e),
       // an action's end: what the units have done, as the match had it then
-      // (the card reads it while the table is behind)
+      // (the card reads it while the table is behind; (V3a) and the labels,
+      // drawn again from it: a fall back, an advance, a charge failed)
       act: (e) => {
         if (e.facts) this.facts = e.facts
+        if (e.facts) view.units.labelAll()
       },
       // what the match waits on (the table asks once it has played
       // everything): the units as the match stands there, for the card
       pending: (e) => {
         if (e.facts) this.facts = e.facts
+        if (e.facts) view.units.labelAll()
       },
       // the flow: a stage of the battle, a phase begun, a round scored, the
       // end
@@ -503,8 +506,11 @@ export class Flow {
   // (the card's record). (F8b) A phase of a seat played here takes the
   // camera back to where that seat pressed End (the bookmark), and a turn
   // begun with more than 10 units gives the selection's one-time tip.
+  // ((V3a) Every label drawn again: what a unit did shows on it in its own
+  // seat's turn, a war machine's never charging in its Charge phase.)
   phaseBegun(e, how) {
     this.facts = turnBegun(this.facts, e)
+    this.view.units.labelAll()
     this.hud.phaseShown = true
     this.human.select(null)
     this.ui.tray.hide()
@@ -569,8 +575,9 @@ export class Flow {
   // object; its move's plan and what the pointer is over found afresh, the
   // plan as the input catches up and the pointer as it next moves), no
   // charge's spots shaded (the input shades a charge's again as it catches
-  // up, if one waits on its end), the card's record the match as it stands,
-  // and a battle snapped past its end shows its end screen.
+  // up, if one waits on its end), the card's record the match as it stands
+  // ((V3a) and the labels drawn again from it), and a battle snapped past
+  // its end shows its end screen.
   snapped(G) {
     const M = this.player.mirror, overlay = this.view.overlay, human = this.human
     Object.assign(this.hud, afterSnap(M))
@@ -581,6 +588,7 @@ export class Flow {
     overlay.clear()
     overlay.ghost.visible = false
     this.facts = preview(G, factsOf)
+    this.view.units.labelAll()
     // ((F4) the round limit's vote shares the panel: a snap past the end
     // replaces it with the end)
     if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))

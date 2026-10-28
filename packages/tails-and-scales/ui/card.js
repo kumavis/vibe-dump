@@ -14,7 +14,15 @@
 // the last action's end, or the last stop for a decision, the table has
 // played (present/hud-model.js's facts), so the card never tells of moves
 // and dice the table hasn't played (§2.4).
+//
+// (V3a) Each word of the status line that a condition explains (fell back,
+// advanced, a charge failed, mesmerized, in combat, in cover, its losses,
+// the high ground; present/conditions.js) is marked with it (data-cond),
+// and the card with its unit (data-unit), so the tooltip (ui/tooltip.js)
+// tells the condition on a hover or a tap; a war machine's abilities end
+// with its never charging, marked so too.
 import { factOf, cardStatus } from '../present/hud-model.js'
+import { CONDITIONS } from '../present/conditions.js'
 import { GLYPH, NAME } from '../present/standing.js'
 import { unitPrice } from '../core/army.js'
 
@@ -46,7 +54,7 @@ export function statsHtml(t) {
   return `
     <table class="stats"><tr>${statKeys.map((k) => `<th>${k}</th>`).join('')}</tr><tr>${statKeys.map((k) => `<td>${fmt(k)}</td>`).join('')}</tr></table>
     ${wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
-    <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}</ul>`
+    <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}${t.noCharge ? `<li class="cond" data-cond="noCharge">${CONDITIONS.noCharge.icon} ${CONDITIONS.noCharge.title}</li>` : ''}</ul>`
 }
 
 export class Card {
@@ -98,6 +106,7 @@ export class Card {
     // ((F8b) the price in this battle: the setup never changes, so the
     // match asked is the same whether the table has caught up or not)
     const price = this.ask((G) => unitPrice(G.setup, u))
+    card.dataset.unit = u.id
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${price} pts</span></div>
@@ -111,7 +120,7 @@ export class Card {
   // ?debug card hook reads the line's text up to it).
   height(mu) {
     const y = mu?.y ?? 0
-    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · ▲ high ground, ${+y.toFixed(1)}" up</span>` : ''
+    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · <span class="cond" data-cond="high">▲ high ground, ${+y.toFixed(1)}" up</span></span>` : ''
   }
 
   // (F10c) the unit's standing order, and while the player may change it,

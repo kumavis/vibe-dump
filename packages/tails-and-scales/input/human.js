@@ -306,6 +306,13 @@ export class Human {
       // line this pointer drew ends, whichever button lifts
       const held = this.group?.letGo(e)
       const drew = this.group?.up(e)
+      // (V3a) a finger's short, still tap on a label's icon: its tip, pinned
+      // (ui/tooltip.js), and nothing else (an aim it began called off)
+      if (e.pointerType === 'touch' && this.downAt && !two && !held && !drew && Math.hypot(e.clientX - this.downAt.x, e.clientY - this.downAt.y) <= 6 && this.tooltip.tapIcon(e.clientX, e.clientY)) {
+        if (this.aim.drag?.id === e.pointerId) this.aim.cancel(e)
+        this.downAt = null
+        return
+      }
       // (F13) an aim's finger lifted: what a click there does, however far
       // it slid (but a long press on one of the seat's own units took it)
       if (this.aim.drag?.id === e.pointerId) {
@@ -336,6 +343,9 @@ export class Human {
       if (this.group?.move(e)) return
       // (F13) a finger aiming: its preview, under it
       if (this.aim.move(e)) return
+      // (V3a) the mouse over a label's icon (the labels let it through):
+      // the icon's tip, the table's own hover left as it was
+      if (e.pointerType !== 'touch' && this.tooltip.hoverIcon(e.clientX, e.clientY)) return
       // ((F13) Alt held: a move beyond the unit's reach as far as it goes)
       this.far = e.altKey
       this.hoverPick = this.picker.pick(e)
@@ -527,11 +537,9 @@ export class Human {
         return ''
       })
     }
-    if (!text && h.unit) {
-      // the unit as shown, like its label
-      const mu = this.view.units.shown(h.unit.id)
-      text = `${h.unit.t.name} · ${h.unit.t.models > 1 ? `${mu.alive}/${h.unit.t.models} models` : `${mu.models[0].w}/${h.unit.t.W} wounds`}`
-    }
+    // the unit as shown, like its label: (V3a) its line, and each condition
+    // its label shows told (present/conditions.js's unitTip)
+    if (!text && h.unit) text = this.view.units.tip(h.unit.id)
     if (text && this.mouse) this.tooltip.show(text, this.mouse)
   }
 }

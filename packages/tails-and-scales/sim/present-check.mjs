@@ -243,9 +243,10 @@ function differ(x, y, path = 'M') {
 async function factsFold(dir, job, setup) {
   const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
   const { PHASES } = await import(pathToFileURL(join(dir, 'core', 'rules.js')).href)
+  // ((V3a) and a charge failed, and the models lost this turn)
   const factsOf = (G) => Object.fromEntries(G.units.map((u) => [u.id, {
     side: u.side, moved: !!u.flags.moved, fellBack: !!u.flags.fellBack, advanced: !!u.flags.advanced, advRoll: u.flags.advRoll,
-    shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u),
+    shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u), chargeTried: !!u.flags.chargeTried, lost: u.lost,
   }]))
   // ((F8b) on the battle's own mission, each seat its own army: a Field or
   // Grand table is its own, as app/flow.js's showTable makes it)
@@ -260,9 +261,11 @@ async function factsFold(dir, job, setup) {
   }
   return { start: factsOf(table), acts, stops, first: PHASES[0].key }
 }
-// a seat's turn begins: its units' deeds cleared, their cover kept (a copy)
+// a seat's turn begins: its units' deeds cleared, their cover kept, and
+// ((V3a) as the match's turn start, core/engine.js's resetTurn) every
+// unit's losses forgotten (a copy)
 function turnBegun(facts, side) {
-  return facts && Object.fromEntries(Object.entries(facts).map(([id, f]) => [id, f.side === side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false } : f]))
+  return facts && Object.fromEntries(Object.entries(facts).map(([id, f]) => [id, f.side === side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false, chargeTried: false, lost: 0 } : { ...f, lost: 0 }]))
 }
 
 // ── One battle, in a child ──────────────────────────────────────────────────
@@ -300,6 +303,9 @@ async function page(dir) {
   // of the battle through the core alone; null for code before R7b, whose
   // card shows none of it while the table is behind
   const shownFacts = existsSync(join(dir, 'present', 'hud-model.js')) ? await factsFold(dir, job, setup) : null
+  // ((V3a) the card's words as code from V3a on words them: with their
+  // conditions' icons, a charge failed and a squad's losses told)
+  const v3a = existsSync(join(dir, 'present', 'conditions.js'))
   try {
     await import(pathToFileURL(join(dir, 'main.js')).href)
     if (!ts?.present?.listen) throw new Error('main.js offers no ?debug present.listen: code older than R5?')
@@ -374,18 +380,20 @@ async function page(dir) {
       // the unit card, every unit's, as the player plays (behind the
       // match): what the mirror holds, and what each unit did this turn
       // and its cover as the last action played left them (R7b; before
-      // R7b, none: they read the match, §2.4)
+      // R7b, none: they read the match, §2.4); (V3a) a fall back's and an
+      // advance's icons, a charge failed, and a squad's losses this turn
       if (!ts.present.card) return
       for (const u of ts.G.units) {
         const mu = M.units[u.id], t = u.t, f = facts?.[u.id]
         const want = [
           mu.alive > 0 ? (t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`) : 'destroyed',
-          ...(f?.moved ? [f.fellBack ? 'fell back' : f.advanced ? `advanced +${f.advRoll}"` : 'moved'] : []),
-          ...(f?.shot ? ['shot'] : []),
-          ...(f?.charged ? ['charged'] : []),
+          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${f.advRoll}"` : `${v3a ? '👣 ' : ''}moved`] : []),
+          ...(f?.shot ? [`${v3a ? '➹ ' : ''}shot`] : []),
+          ...(f?.charged ? [`${v3a ? '⚡ ' : ''}charged`] : v3a && f?.chargeTried ? ['✖ charge failed'] : []),
           ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
           ...(mu.alive > 0 && mu.engaged ? ['⚔ in combat'] : []),
           ...(mu.alive > 0 && f?.cover ? ['🛡 in cover'] : []),
+          ...(v3a && mu.alive > 0 && f?.lost > 0 && t.models > 1 ? [`💔 lost ${f.lost}`] : []),
         ].join(' · ')
         const got = ts.present.card(u)
         out.cards++

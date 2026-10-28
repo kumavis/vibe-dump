@@ -178,6 +178,10 @@ export const MUTATIONS = {
   // (R7b) a turn's start leaves its seat's deeds of the turn before on the
   // card's record (app/flow.js)
   'card-turn-kept': ['/app/flow.js', '    this.facts = turnBegun(this.facts, e)', '    // (dropped)'],
+  // (V3a) a turn's start leaves the other seat's losses of the turn before
+  // on the record: its squads still "💔 lost N", tested already
+  // (present/hud-model.js)
+  'card-losses-kept': ['/present/hud-model.js', ', lost: 0 } : { ...f, lost: 0 }', ', lost: 0 } : f'],
 }
 
 export async function load(url, ctx, next) {
