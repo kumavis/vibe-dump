@@ -15,7 +15,9 @@
 // adds `fortified`, with three fields of its own, each reaching a branch of
 // scatter's that no other set does: `works`, the fort phase's and `scale`;
 // F8b adds `open`, which shares F7a's `scale`, the area scaling, and reaches
-// no branch of its own). RULES_ID (core/version.js) hashes this table.
+// no branch of its own; F19a adds `keg`, classic's table round a powder keg,
+// a centre piece no other set names). RULES_ID (core/version.js) hashes
+// this table.
 //
 // Every set is checked as this module loads (recipes.js checkSet): each
 // feature and centre piece it names exists, the numbers are numbers, the
@@ -66,6 +68,13 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
     // round the centre objective: the keep under 0.5, the ruined tower ring
     // under 0.8, else open ground
     centre: [['keep', 0.5], ['tower', 0.8]],
+    // on a table larger than classic's (Field, Grand) the box of rock piles
+    // stands where the tower ring would, as on `open`: the ring's doors are
+    // about 1.25" wide, so no squad walks in and none controls the objective
+    // inside it (terrain-check's connectivity rows failed on every Field and
+    // Grand board it stood on). The same one draw picks it, so the keep
+    // stands on the same boards; the Skirmish's boards are untouched.
+    largeCentre: [['keep', 0.5], ['rockbox', 0.8]],
     // a rampart per seat on its zone's front edge (recipes.js works)
     works: 1,
     // the fort phase, before the features: forts[0] + a draw below forts[1]
@@ -144,6 +153,35 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
     gap: 3.2,
     // the pair counts and attempts scale with the table's area (40 × 28: 1)
     scale: 'area',
+  },
+  // (F19a, DESIGN §4.2.3) The `keg` mission's battlefield: classic's pieces,
+  // its feature table, counts and spacing rules, round a powder keg standing
+  // at the table's centre on every board (recipes.js CENTRES.keg: the
+  // threshold 1 is above every draw), where the mission clusters its
+  // objectives. The keg is its own point mirror, so the board stays one.
+  // The only set with a keg: classic, open and fortified have none.
+  keg: {
+    centre: [['keg', 1]],
+    kinds: [
+      ['ruin', 3.2, 4],
+      ['wall', 3.6, 2],
+      ['forest', 3.2, 3],
+      ['hedgerow', 3.4, 2],
+      ['rocks', 2.0, 2],
+      ['barricade', 2.0, 2],
+      ['mushrooms', 2.0, 1.5],
+      ['obelisk', 1.6, 1],
+    ],
+    pairs: [6, 3],
+    attempts: 1200,
+    mirror: 'point',
+    margin: 0.5,
+    selfGap: 1.4,
+    deployMargin: 1,
+    bigNotInDeploy: 2.1,
+    notInDeploy: ['forest'],
+    objectiveGap: 2.2,
+    gap: 2.1,
   },
 }))
 for (const name of Object.keys(SETS)) checkSet(name, SETS[name])

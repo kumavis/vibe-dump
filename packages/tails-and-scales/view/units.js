@@ -31,8 +31,18 @@
 // - Figure LOD (`lod`, set for a board larger than classic's by
 //   view/index.js's setBoard): a unit more than LOD_FAR from the camera is
 //   drawn by its figures' far stand-ins (view/models/cache.js's lodOf: one
-//   mesh each), without their idle animation; a figure dying, fleeing or
-//   flinching keeps its own.
+//   mesh each, (V2) a splat-fur figure's its fur beside it), without their
+//   idle animation; a figure dying, fleeing or flinching keeps its own.
+//
+// (F16) The courtesy fog (present/fog.js, app/flow.js): `veil(ids)` names
+// the units the seat played here can't see now. A unit veiled has no
+// figure drawn, no ring, no label, no hit cylinder (the picker finds
+// nothing), no place on screen (a box and the picker's fallback skip it)
+// and no chip; its events still play, unseen (a walk, a fall: the view
+// stays the mirror's), but what they would say over the table (a wound's
+// number, a death's cry and debris, "flees!", "destroyed", a charge's
+// shout, a stomp, a smash's shake) says nothing. Without the fog nothing
+// is veiled, and every figure is drawn as ever.
 //
 // It plays the figures' events (unit.wound, unit.slain, unit.flee,
 // unit.destroyed, unit.face, unit.move, melee, charge.result) as the
@@ -185,6 +195,8 @@ export class UnitViews {
     this.lod = false
     this.chips = null
     this.writes = 0
+    // (F16) the units veiled by the fog, by id (null: none, the fog off)
+    this.veiled = null
   }
 
   // the view of unit `id`, and the unit it shows (its static look)
@@ -208,6 +220,34 @@ export class UnitViews {
     const mu = this.shown(id), p = mu.pos
     return { x: p.x, y: yOf(mu) + (this.unit(id).t.big ? 2.6 : 1.6), z: p.z }
   }
+  // (F16) whether the fog veils unit `id` now
+  hid(id) {
+    return !!this.veiled?.has(id)
+  }
+  // (F16) The units the fog veils now (a Set of ids, or null for none):
+  // each view drawn or hidden by it at once.
+  veil(ids) {
+    const was = this.veiled
+    this.veiled = ids && ids.size ? ids : null
+    // (none veiled before or now: nothing to draw again)
+    if (!was && !this.veiled) return
+    for (const v of this.views.values()) this.cloak(v)
+  }
+  // a view drawn as the fog has it: its figures, ring, hit cylinder, drop
+  // line and label shown or hidden, its place on screen forgotten (a
+  // figure falling or fleeing goes on as it was: one seen to fall falls in
+  // sight to the end, one veiled as it fell stays unseen)
+  cloak(v) {
+    const hid = this.hid(v.id)
+    // ((F9a) a rider's figures on an enclosed hull's deck stay hidden, and a
+    // rider has no ring or cylinder while it rides)
+    for (const f of v.models) if (f.mesh && !f.dying) f.mesh.visible = !hid && !(f.deck && this.views.get(f.deck)?.u.t.transport?.enclosed)
+    this.stands(v, this.shown(v.id).alive > 0 && !this.shown(v.id).aboard)
+    this.disc(v.id)
+    this.label(v.id)
+    if (hid) this.screen.delete(v.id)
+  }
+
   // whether a playback begun on view `v` is left over from a table (or a
   // snap) since: it then touches nothing
   gone(id, v, gen) {
@@ -266,16 +306,20 @@ export class UnitViews {
     // the figures stand in their slots from the start ((F9a) a rider's on
     // its hull's deck, once the hull's view is made: layDeck, sync's)
     this.place(v)
+    // ((F16) veiled by the fog: drawn hidden)
+    if (this.veiled) this.cloak(v)
     return v
   }
 
   // The ring and the hit cylinder of a unit standing, or (a unit destroyed,
   // as its unit.destroyed left them) neither.
+  // ((F16) and neither for a unit the fog veils)
   stands(v, standing) {
-    v.ring.visible = standing
-    v.hit.visible = standing
-    if (standing && !v.hit.parent) this.scene.add(v.hit)
-    if (!standing) this.scene.remove(v.hit)
+    const on = standing && !this.hid(v.id)
+    v.ring.visible = on
+    v.hit.visible = on
+    if (on && !v.hit.parent) this.scene.add(v.hit)
+    if (!on) this.scene.remove(v.hit)
   }
 
   // Each figure standing exactly in its model's slot as shown, turned the
@@ -383,6 +427,7 @@ export class UnitViews {
       this.disc(u.id)
       this.stands(v, mu.alive > 0 && !mu.aboard)
       this.place(v)
+      if (this.veiled) this.cloak(v)
     }
     // ((F9a) then each hull's riders onto its deck, every hull's view made)
     this.layDecks(false)
@@ -440,7 +485,7 @@ export class UnitViews {
         f.slot = s
         f.mesh.userData.rider = r.id
         if (f.lo) this.lo(f, false)
-        f.mesh.visible = !hidden
+        f.mesh.visible = !hidden && !this.hid(r.id)
         // (standing on the deck itself: its base hidden)
         if (f.mesh.userData.base) f.mesh.userData.base.visible = false
         if (!(f.hop > 0)) f.mesh.position.set(s.x, 0, s.z)
@@ -480,7 +525,8 @@ export class UnitViews {
     }
     f.deck = null
     f.slot = null
-    f.mesh.visible = true
+    // ((F16) one the fog veils stays veiled off the deck)
+    f.mesh.visible = !(f.mesh.userData.rider !== undefined && this.hid(f.mesh.userData.rider))
     if (f.mesh.userData.base) f.mesh.userData.base.visible = true
     delete f.mesh.userData.rider
     if (!keep) {
@@ -530,7 +576,8 @@ export class UnitViews {
     const v = this.views.get(e.u)
     this.stands(v, false)
     this.layDeck(e.v)
-    sfx.click()
+    // ((F16) unheard where the fog veils it)
+    if (!this.hid(e.u)) sfx.click()
     this.labelAll()
   }
   // A unit steps off its hull, or (`forced`) bails out of its wreck
@@ -545,7 +592,8 @@ export class UnitViews {
     this.stands(v, this.shown(e.u).alive > 0)
     this.layDeck(e.v)
     this.labelAll()
-    if (e.forced) {
+    // ((F16) a bail-out the fog veils says nothing)
+    if (e.forced && !this.hid(e.u)) {
       this.effects.text(this.top(e.u), 'bail out!', '#ffb36a', { size: 16 })
       sfx.thwack()
     }
@@ -583,7 +631,7 @@ export class UnitViews {
     v.ring.position.z = v.hit.position.z = p.z
     v.ring.position.y = 0.04 + y
     v.hit.position.y = y + v.hit.scale.y / 2
-    const raised = y > RAISED && mu.alive > 0
+    const raised = y > RAISED && mu.alive > 0 && !this.hid(id)
     if (raised && !v.dropLine) {
       const { geo, mat } = dropShapes()
       v.dropLine = new THREE.Line(geo, mat)
@@ -614,8 +662,9 @@ export class UnitViews {
     // riding it as a chip that picks it up; its ring's pips lit to match)
     if (u.t.transport) html += this.cargo(v, u.t.transport)
     v.label.innerHTML = html
-    // ((F9a) a rider's label hides while it rides: its hull's says it)
-    v.label.style.display = mu.alive > 0 && !mu.aboard ? '' : 'none'
+    // ((F9a) a rider's label hides while it rides: its hull's says it;
+    // (F16) and one the fog veils hides)
+    v.label.style.display = mu.alive > 0 && !mu.aboard && !this.hid(id) ? '' : 'none'
   }
   // (F9a) a transport's cargo for its label, its pips lit to match
   cargo(v, tr) {
@@ -655,9 +704,10 @@ export class UnitViews {
 
   // the hit cylinders of the units the table shows standing (while the
   // player is behind, the match may have slain some of them already)
-  // ((F9a) a rider's none: its deck figures are picked instead, deckFigures)
+  // ((F9a) a rider's none: its deck figures are picked instead, deckFigures;
+  // (F16) and the fog doesn't veil)
   pickables() {
-    return [...this.views.values()].filter((v) => this.shown(v.id).alive > 0 && !this.shown(v.id).aboard).map((v) => v.hit)
+    return [...this.views.values()].filter((v) => this.shown(v.id).alive > 0 && !this.shown(v.id).aboard && !this.hid(v.id)).map((v) => v.hit)
   }
 
   // ── Each frame ────────────────────────────────────────────────────────────
@@ -689,10 +739,12 @@ export class UnitViews {
         // hop on), turned the hull's way; the hull's LOD hides the deck)
         if (m.deck && model.alive) {
           this.ride(m, dt, M)
+          // ((V2) its breath about its height as built, cache.js's sy, as a
+          // figure's on the table)
           if (m.mesh.userData.anim?.kind === 'squirrel' && !m.lo) {
             const fig = m.mesh.userData.fig
             fig.position.y = fig.userData.y0
-            fig.scale.y = 1 + Math.sin((time + m.mesh.userData.phase) * 2.4) * 0.018
+            fig.scale.y = fig.userData.sy * (1 + Math.sin((time + m.mesh.userData.phase) * 2.4) * 0.018)
             fig.rotation.x = 0
           }
           continue
@@ -751,14 +803,17 @@ export class UnitViews {
         if (!a || !model.alive || m.lo) continue
         const t = time + m.mesh.userData.phase
         const fig = m.mesh.userData.fig
+        // ((V2) the breath scales the figure's height about its own scale,
+        // cache.js's sy: before V2 it set the scale itself, which drew a
+        // brute, a hierophant and an elder at 1 high, squashed)
         if (a.kind === 'squirrel') {
           const hop = m.moving ? Math.abs(Math.sin(t * 13)) * 0.16 : 0
           fig.position.y = fig.userData.y0 + hop
-          fig.scale.y = 1 + (m.moving ? 0 : Math.sin(t * 2.4) * 0.018)
+          fig.scale.y = fig.userData.sy * (1 + (m.moving ? 0 : Math.sin(t * 2.4) * 0.018))
           fig.rotation.x = m.moving ? 0.12 : 0
         } else if (a.kind === 'naga') {
           fig.rotation.z = Math.sin(t * (m.moving ? 9 : 1.4)) * (m.moving ? 0.12 : 0.035)
-          fig.scale.y = 1 + Math.sin(t * 1.4) * 0.015
+          fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 1.4) * 0.015)
         } else if (a.kind === 'machine') {
           if (m.moving) for (const w of a.wheels) w.rotation.x += dt * 6
         }
@@ -771,9 +826,11 @@ export class UnitViews {
       // the floating label; (F10a) and the unit's centre on screen, which a
       // box selects by and the picker falls back on (input/): a unit fallen,
       // or nothing drawn, has none
-      // ((F9a) a rider has none: its hull stands for it)
-      if (!(mu.alive > 0) || fast || mu.aboard) this.screen.delete(u.id)
-      if (mu.alive > 0 && !fast && !mu.aboard) {
+      // ((F9a) a rider has none: its hull stands for it; (F16) a unit the
+      // fog veils has neither)
+      const hid = this.hid(u.id) || !!mu.aboard
+      if (!(mu.alive > 0) || fast || hid) this.screen.delete(u.id)
+      if (mu.alive > 0 && !fast && !hid) {
         tmpV.set(p.x, py + 0.4, p.z).project(camera)
         const sx = (tmpV.x * 0.5 + 0.5) * innerWidth, sy = (-tmpV.y * 0.5 + 0.5) * innerHeight
         const onScreen = tmpV.z < 1 && Math.abs(tmpV.x) <= 1 && Math.abs(tmpV.y) <= 1
@@ -868,7 +925,7 @@ export class UnitViews {
     const out = []
     for (const v of this.views.values()) {
       const mu = M.units[v.id], at = this.screen.get(v.id)
-      if (!(mu.alive > 0) || !at?.on) continue
+      if (!(mu.alive > 0) || !at?.on || this.hid(v.id)) continue
       const p = v.at ?? mu.pos
       out.push({
         id: v.id, x: at.x, y: at.y, wx: p.x, wz: p.z, side: v.u.side, color: v.color, glyph: v.label.dataset.glyph,
@@ -893,6 +950,7 @@ export class UnitViews {
   // A wound that leaves the model standing: the number, and a flinch.
   wounded(e) {
     const v = this.views.get(e.u), u = v.u, f = v.models[e.m]
+    if (this.hid(e.u)) return
     this.effects.text({ x: f.x, y: (f.y ?? 0) + (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
     f.flash = 0.4
   }
@@ -902,21 +960,24 @@ export class UnitViews {
   // then sinks out of sight and leaves the table.
   slain(e, M) {
     const v = this.views.get(e.u), u = v.u, f = v.models[e.m], fy = f.y ?? 0
-    this.effects.text({ x: f.x, y: fy + (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
+    // ((F16) one the fog veils falls unseen and unheard)
+    const hid = this.hid(e.u)
+    if (!hid) this.effects.text({ x: f.x, y: fy + (u.t.big ? 2.3 : 1.3), z: f.z }, `-${e.dmg}`, '#ff5a4a', { size: u.t.big ? 24 : 18 })
     // ((F9a) a vehicle bursts: its riders thrown off the deck first, where
-    // they stood, and its wreck (the terrain's, next) takes its place)
-    if (u.t.vehicle) return this.burst(v, f)
+    // they stood, and its wreck (the terrain's, next) takes its place; (F16)
+    // unseen, it goes without the fire and the noise)
+    if (u.t.vehicle) return this.burst(v, f, hid)
     // ((F9a) a figure still on a deck, a rider lost with its hull: off it)
     if (f.deck) this.offDeck(f, true)
     f.dying = true
     // the race's own voice and gore
     const look = RACES[u.race].look
-    sfx.voice(look.voice)
+    if (!hid) sfx.voice(look.voice)
     const fig = f.mesh.userData.fig
     const by = e.by === null ? null : M.units[e.by]
     const dir = by ? Math.atan2(f.x - by.pos.x, f.z - by.pos.z) - f.yaw : 0
     const side = Math.sin(dir) >= 0 ? 1 : -1
-    this.effects.debris(f.x, fy + 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
+    if (!hid) this.effects.debris(f.x, fy + 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
     tween(0.6, (k) => {
       fig.rotation.z = side * k * 1.45
       fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
@@ -937,7 +998,7 @@ export class UnitViews {
     const ex = edge * (this.W / 2 + 3)
     const x0 = f.x, z0 = f.z, y0 = f.y ?? 0
     f.fleeing = true
-    this.effects.text({ x: f.x, y: y0 + 1.4, z: f.z }, 'flees!', '#e0e0e0', { size: 14 })
+    if (!this.hid(e.u)) this.effects.text({ x: f.x, y: y0 + 1.4, z: f.z }, 'flees!', '#e0e0e0', { size: 14 })
     f.yaw = edge * Math.PI / 2
     tween(2.2, (k) => {
       f.x = lerp(x0, ex, k)
@@ -954,16 +1015,20 @@ export class UnitViews {
   // (F9a) A vehicle destroyed: its riders off the deck (each figure where it
   // stood: its bail-out's hop, or its fall, plays from there), a burst of
   // fire, smoke and splinters, and the figure gone at once: the burning
-  // wreck the terrain adds next stands where it stood.
-  burst(v, f) {
+  // wreck the terrain adds next stands where it stood. ((F16) One the fog
+  // veils (`hid`) goes unseen and unheard: its riders, veiled with it, fall
+  // or bail out unseen too.)
+  burst(v, f, hid = false) {
     const fy = f.y ?? 0
     if (v.deck) this.dismount(v.id, true)
-    const fx = this.effects
-    fx.explode?.(f.x, f.z, Math.max(1.2, v.u.t.base), 'fire', fy)
-    fx.debris(f.x, fy + 0.8, f.z, ['#86552c', '#5a3820', '#c49a62', '#3a2a1e'], 18, { power: 6, size: 0.16 })
-    fx.smoke({ x: f.x, y: fy + 1, z: f.z, size: 0.9, color: '#3a3430', life: 2.4 })
-    fx.shake = Math.max(fx.shake ?? 0, 0.12)
-    sfx.boom?.(0.8)
+    if (!hid) {
+      const fx = this.effects
+      fx.explode?.(f.x, f.z, Math.max(1.2, v.u.t.base), 'fire', fy)
+      fx.debris(f.x, fy + 0.8, f.z, ['#86552c', '#5a3820', '#c49a62', '#3a2a1e'], 18, { power: 6, size: 0.16 })
+      fx.smoke({ x: f.x, y: fy + 1, z: f.z, size: 0.9, color: '#3a3430', life: 2.4 })
+      fx.shake = Math.max(fx.shake ?? 0, 0.12)
+      sfx.boom?.(0.8)
+    }
     this.unfigure(f)
     v.deck = null
   }
@@ -977,6 +1042,7 @@ export class UnitViews {
     v.hit.visible = false
     this.scene.remove(v.hit)
     if (v.dropLine?.parent) this.scene.remove(v.dropLine)
+    if (this.hid(e.u)) return
     this.effects.text({ x: p.x, y: yOf(M.units[e.u]) + 2.2, z: p.z }, `${u.t.short} destroyed`, this.colorOf(e.by !== null ? this.unit(e.by).side : 1 - u.side), { size: 20, life: 2 })
   }
 
@@ -990,6 +1056,7 @@ export class UnitViews {
   // A charge roll's verdict, over the charger's head.
   shout(e) {
     const u = this.unit(e.u)
+    if (this.hid(e.u)) return
     if (e.ok) this.effects.text(this.top(e.u), 'CHARGE!', this.colorOf(u.side), { size: 22 })
     else this.effects.text(this.top(e.u), 'Charge failed', '#d0d0d0')
   }
@@ -1005,11 +1072,14 @@ export class UnitViews {
       f.lunge = 1
       f.lungeDir = Math.atan2(at.x - f.x, at.z - f.z)
     }
+    // ((F16) a fight with a unit the fog veils, both unseen: nothing heard)
+    if (this.hid(e.u) && this.hid(e.tg)) return
     sfx.thwack()
     if (!e.hits) return
     wait(PACE.dice(e.n)).then(() => {
-      // (nothing of a table since replaced)
-      if (this.gone(e.tg, tv, gen)) return
+      // (nothing of a table since replaced; (F16) no sparks over a unit
+      // the fog veils)
+      if (this.gone(e.tg, tv, gen) || this.hid(e.tg)) return
       for (let i = 0; i < Math.min(e.hits, 8); i++) {
         const v = this.standing(e.tg)[i % Math.max(1, this.shown(e.tg).alive)]
         if (v) for (let k = 0; k < 4; k++) this.effects.mote({ x: v.x, y: 0.6, z: v.z, vx: (Math.random() - 0.5) * 5, vy: Math.random() * 4, vz: (Math.random() - 0.5) * 5, size: 0.05, color: '#fff2b0', life: 0.3, g: 12 })
@@ -1042,7 +1112,9 @@ export class UnitViews {
   async walk(e, M, smash) {
     const v = this.views.get(e.u), gen = this.gen
     const { path: pts, L, speed, fly, smashes } = e
-    if (e.stomp) sfx.boom(0.4)
+    // ((F16) a walker the fog veils stomps and smashes unheard)
+    const hid = this.hid(e.u)
+    if (e.stomp && !hid) sfx.boom(0.4)
     v.moving = true
     if (fly) for (const f of v.models) f.flying = true
     const seg = []
@@ -1062,7 +1134,7 @@ export class UnitViews {
     let next = 0
     const play = ({ ev }) => {
       smash(ev)
-      this.effects.shake = Math.max(this.effects.shake, 0.08)
+      if (!hid) this.effects.shake = Math.max(this.effects.shake, 0.08)
     }
     // (nothing of a table since replaced: its unit ids count from 1 again)
     const gone = () => this.gone(e.u, v, gen)

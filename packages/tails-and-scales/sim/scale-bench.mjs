@@ -41,9 +41,10 @@
 // again on a quiet one before it is believed.
 //
 // (F7a) The fortified rows: the same on the fortified set, the classic
-// mission's board (Skirmish) and the Grand fixture's (its --fortified: the
-// setups name the set, which scales itself by the table's area), the Grand
-// ones against the same budget; and the height layer's own cost at Grand,
+// mission's board (Skirmish) and the grand mission's (the setups name the
+// set, which scales itself by the table's area; until the WIP merge with
+// F8b, the Grand fixture's --fortified), the Grand ones against the same
+// budget, with the same ×3 presets and cap lists; and the height layer's own cost at Grand,
 // over every fortified Grand board: nav.rebuild with the height layer
 // (floor, links, ledges and cliff, levels and gates, the rasters by level),
 // against 3 ms on average (§4.2.4's cost: S4 comes in past it), beside the
@@ -230,7 +231,7 @@ if (grand) {
 }
 // (F7a) the fortified rows, for code whose missions are fought on the set
 // ((the WIP merge with F8b) on the real grand mission, fortified, with the
-// flat rows' lists: the fixture sim/fixtures/grand.mjs no longer needed here)
+// flat rows' lists; the Grand fixture, sim/fixtures/grand.mjs, is retired)
 const FORT = MISSIONS.classic.sets.includes('fortified') && !!grand?.sets.includes('fortified')
 if (FORT) {
   out.classicFort = await row(CODE, classicSetups, (seed, dice) => ({ ...jobSetup({ seed, dice }), terrain: 'fortified' }))

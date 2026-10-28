@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { tween, easeOut, clock } from '../clock.js'
+import { FUR_ORDER } from '../models/splat/splats.js'
 
 // ---------------------------------------------------------------------------
 // Effects: pooled instanced particles (debris cubes, unlit glow motes, smoke
@@ -8,6 +9,12 @@ import { tween, easeOut, clock } from '../clock.js'
 // until R7, which moved it here: view/effects/shots.js plays the shooting's
 // events with it, view/units.js and view/terrain.js the figures' and the
 // battlefield's.)
+// (V2) The see-through things in the air, a blast's flash and the smoke
+// puffs, are drawn in the splat furs' renderOrder (view/models/splat/
+// splats.js's FUR_ORDER: after the table's marks on the ground, back to
+// front with the furs), so a puff before a Bushtail veils its fur; a pool
+// sorts as one object, at the middle of what it shows (its boundingSphere,
+// moved each update: never used to cull, frustumCulled is off).
 // ---------------------------------------------------------------------------
 
 const MAX_CUBES = 900
@@ -82,6 +89,12 @@ class Pool {
     }
     this.items = keep
     this.mesh.instanceMatrix.needsUpdate = true
+    // ((V2) its place among the see-through things: the middle of the live ones)
+    if (keep.length) {
+      const c = (this.mesh.boundingSphere ??= new THREE.Sphere(new THREE.Vector3(), 1)).center.set(0, 0, 0)
+      for (const p of keep) c.x += p.x, c.y += p.y, c.z += p.z
+      c.divideScalar(keep.length)
+    }
   }
 }
 
@@ -135,6 +148,7 @@ export class FX {
       new THREE.MeshLambertMaterial({ transparent: true, opacity: 0.55, depthWrite: false }),
       MAX_PUFF,
     )
+    puff.renderOrder = FUR_ORDER
     scene.add(cubes, glow, puff)
     this.cubes = new Pool(cubes, MAX_CUBES)
     this.glow = new Pool(glow, MAX_GLOW)
@@ -246,7 +260,9 @@ export class FX {
     g.add(ring, disc)
     g.position.set(x, y + 0.05, z)
     g.scale.setScalar(r)
-    g.renderOrder = 3
+    // ((V2) its meshes' order, not the group's: three sorts a group's
+    // renderOrder before any mesh's, which drew a template over the furs)
+    ring.renderOrder = disc.renderOrder = 3
     this.scene.add(g)
     const remove = () => {
       this.scene.remove(g)
@@ -271,9 +287,12 @@ export class FX {
       acid: { flash: 0x9dff6a, glow: ['#b8ff6a', '#5be04a', '#d8ff9a', '#2fbf4a'], light: 0x8aff5a, smoke: '#3f5a2a' },
       thorns: { flash: 0xc8ff9a, glow: ['#9be36a', '#e4ffb0', '#5ab04a'], light: 0xbaff8a, smoke: '#3a4a2a' },
       dust: { flash: 0xfff0d0, glow: ['#ffe9b0', '#ffd080'], light: 0xffe0a0, smoke: '#8a7a64' },
+      // (F19a) a powder keg: whiter, then a fireball, black powder smoke
+      keg: { flash: 0xfff0b8, glow: ['#fff2b0', '#ffd36e', '#ff8a2a', '#ff5a1f', '#ffffff'], light: 0xffc070, smoke: '#2e2924' },
     }[style]
     const flash = new THREE.Mesh(this.flashGeo, new THREE.MeshBasicMaterial({ color: pal.flash, transparent: true, opacity: 0.9, toneMapped: false, depthWrite: false }))
     flash.position.set(x, y + 0.3, z)
+    flash.renderOrder = FUR_ORDER
     this.scene.add(flash)
     tween(0.45, (k) => {
       flash.scale.setScalar(0.2 + r * 0.85 * easeOut(k))
@@ -302,6 +321,45 @@ export class FX {
     this.debris(x, y + 0.1, z, ['#5b4630', '#6f8a3a', '#4a3a28'], Math.round(6 + r * 4), { power: 5 + r, size: 0.1 })
     this.decal(x, z, r * 0.7, style === 'acid' ? this.acidTex : this.scorchTex, style === 'acid' ? 0.6 : 0.45, y)
     this.shake = Math.max(this.shake, 0.05 + r * 0.06)
+  }
+
+  // (F19a) A powder keg going off at (x, z), its blast r: an explosion in
+  // the keg's palette, and more of it: a shock ring racing out over the
+  // turf, a column of sparks, a mushroom of black powder smoke, the
+  // barrel's staves and hoops flung far, a broad deep scorch, and a harder
+  // shake than any template's.
+  kegBlast(x, z, r, y = 0) {
+    this.explode(x, z, r, 'keg', y)
+    const ring = new THREE.Mesh(this.ringGeo, new THREE.MeshBasicMaterial({ color: 0xfff0c0, transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }))
+    ring.position.set(x, y + 0.08, z)
+    ring.renderOrder = 3
+    this.scene.add(ring)
+    tween(0.5, (k) => {
+      ring.scale.setScalar(0.3 + r * 1.3 * easeOut(k))
+      ring.material.opacity = 0.85 * (1 - k)
+    }).then(() => {
+      this.scene.remove(ring)
+      ring.material.dispose()
+    })
+    this.flashLight(x, y + 2.5, z, 0xffd090, 18 + r * 8, 1.1)
+    for (let i = 0; i < 40; i++) {
+      const a = Math.random() * Math.PI * 2, s = Math.random() * 2.5
+      this.mote({
+        x, y: y + 0.5, z, vx: Math.cos(a) * s, vy: 7 + Math.random() * 9, vz: Math.sin(a) * s, g: 9, drag: 1.4,
+        size: 0.06 + Math.random() * 0.1, color: ['#ffffff', '#fff2b0', '#ffd36e', '#ff8a2a'][i % 4], life: 0.7 + Math.random() * 0.8,
+      })
+    }
+    for (let i = 0; i < 10; i++) {
+      const a = Math.random() * Math.PI * 2, d = Math.random() * 0.6
+      this.smoke({
+        x: x + Math.cos(a) * d, y: y + 1 + Math.random() * 1.5, z: z + Math.sin(a) * d,
+        vx: Math.cos(a) * 0.6, vy: 2.5 + Math.random() * 2, vz: Math.sin(a) * 0.6,
+        size: 0.5 + Math.random() * 0.5, color: '#221e1a', life: 2.6 + Math.random() * 1.6,
+      })
+    }
+    this.debris(x, y + 0.6, z, ['#8a5a34', '#7a4c2a', '#5f3e24', '#2f2f2f'], 22, { power: 9 + r, size: 0.14 })
+    this.decal(x, z, r * 0.95, this.scorchTex, 0.7, y)
+    this.shake = Math.max(this.shake, 0.2 + r * 0.08)
   }
 
   // Lob (or fling) a mesh from a to b. Resolves on impact.

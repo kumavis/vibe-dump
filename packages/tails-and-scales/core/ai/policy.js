@@ -209,6 +209,10 @@ function* aiShoot(G, side, mask) {
   mine.sort((a, b) => ORDER.indexOf(b.t.ai) - ORDER.indexOf(a.t.ai))
   for (const u of mine) {
     if (!canShoot(G, u)) continue
+    // (F18) an enemy locked in combat is among the targets, valued net of
+    // the shot's friendly fire (shotValue: a volley's strays into the
+    // fight, a template's friends under it), so one that costs more of ours
+    // than it takes of theirs is never picked
     const targets = shootTargets(G, u)
     let best = null, bv = 0.4
     for (const e of targets) {

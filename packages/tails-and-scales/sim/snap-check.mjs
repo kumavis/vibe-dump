@@ -73,7 +73,8 @@
 // By default a selection: four watched battles (one of them 64886-198528,
 // the only corpus battle where a block dropped by a collapse still stands
 // when its action ends: in every other the same blast or sweep breaks it
-// too) and four human logs (one per vs-AI seat, one hotseat, and (F4) a
+// too), (F19a) a watched keg battle (watch-keg-1: the powder keg drawn,
+// and gone from the table once an acid globe sets it off) and four human logs (one per vs-AI seat, one hotseat, and (F4) a
 // vs-AI log that votes at the round limit and plays an overtime round), and
 // (F9a) the vehicle/ corpus's bail-out log (a War-Cart wrecked with its
 // riders aboard: their hop off and the bail-out's dice), the quick run for a
@@ -101,7 +102,7 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-41'
+const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-41'
 let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
@@ -252,7 +253,7 @@ async function run(browser, url, item) {
     page.on('pageerror', (e) => errors.push(e.message))
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE})` })
-    await page.goto(`${url}/?debug&fast&${query}`)
+    await page.goto(`${url}/?debug&fast&${query}`, { timeout: IDLE_MS })
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
@@ -329,7 +330,7 @@ async function grandRow(browser, url) {
       }
       hook()
     }})(${SETTLE})`)
-    await page.goto(`${url}/?debug&fast&seed=4242&dice=99`)
+    await page.goto(`${url}/?debug&fast&seed=4242&dice=99`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts)
     const t0 = Date.now()
     const board = () => page.evaluate(() => ({ ...window.__ts.view.board(), tiles: window.__ts.view.drawing().tiles }))

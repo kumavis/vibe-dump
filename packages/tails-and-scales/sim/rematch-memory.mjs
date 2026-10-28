@@ -218,7 +218,16 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
     // The heap as a snapshot sums it: { own, kinds }, `own` the bytes of the
     // page's own objects, `kinds` theirs by (type, constructor); what V8 and
     // the browser keep beside them left out (compiled code, V8's hidden lists
-    // and object shapes, the performance timeline's entries).
+    // and object shapes, the performance timeline's entries). ((The merged
+    // build's gate) Two of those the snapshot types as `native`, so they are
+    // told by what holds them: V8's dependent-code lists, a WeakArrayList
+    // each map, property cell or allocation site keeps of the optimised code
+    // its change would throw away (an edge named `dependent_code`: they grow
+    // as more of the code is optimised, about 20 KB a rematch on fortified
+    // tables, where the page's own objects stay flat), and the layout-shift
+    // and paint entries of the timeline, a LayoutShiftAttribution's rects
+    // with them; `engine` sums them, reported beside `own`.)
+    const TIMELINE = /^(Performance|TaskAttributionTiming|LayoutShift|LargestContentfulPaint|InteractionContentfulPaint)/
     const snapshot = async () => {
       const chunks = []
       const on = (m) => chunks.push(m.chunk)
@@ -227,19 +236,35 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
       cdp.off('HeapProfiler.addHeapSnapshotChunk', on)
       const snap = JSON.parse(chunks.join(''))
       const f = snap.snapshot.meta.node_fields, types = snap.snapshot.meta.node_types[0]
-      const nf = f.length, iT = f.indexOf('type'), iN = f.indexOf('name'), iS = f.indexOf('self_size')
+      const nf = f.length, iT = f.indexOf('type'), iN = f.indexOf('name'), iS = f.indexOf('self_size'), iE = f.indexOf('edge_count')
+      // (the nodes left out by what holds them: a dependent-code list, a
+      // layout shift's rect)
+      const ef = snap.snapshot.meta.edge_fields, et = snap.snapshot.meta.edge_types[0]
+      const ne = ef.length, eT = ef.indexOf('type'), eN = ef.indexOf('name_or_index'), eTo = ef.indexOf('to_node')
+      const held = new Set()
+      for (let i = 0, e = 0; i < snap.nodes.length; i += nf) {
+        const by = snap.strings[snap.nodes[i + iN]]
+        for (let k = 0; k < snap.nodes[i + iE]; k++, e += ne) {
+          const to = snap.edges[e + eTo], named = !['element', 'hidden'].includes(et[snap.edges[e + eT]])
+          const what = snap.strings[snap.nodes[to + iN]]
+          if ((named && snap.strings[snap.edges[e + eN]] === 'dependent_code' && what === 'system / WeakArrayList') || (by === 'LayoutShiftAttribution' && what === 'DOMRectReadOnly')) held.add(to)
+        }
+      }
       const kinds = new Map()
-      let own = 0
+      let own = 0, engine = 0
       for (let i = 0; i < snap.nodes.length; i += nf) {
         const type = types[snap.nodes[i + iT]], name = snap.strings[snap.nodes[i + iN]]
         if (type === 'code' || type === 'hidden' || type === 'object shape') continue
-        if (type === 'native' && /^(Performance|TaskAttributionTiming)/.test(name)) continue
+        if (held.has(i) || (type === 'native' && TIMELINE.test(name))) {
+          engine += snap.nodes[i + iS]
+          continue
+        }
         const key = `${type} ${/string|number/.test(type) ? '' : name.slice(0, 50)}`.trim()
         const size = snap.nodes[i + iS]
         own += size
         kinds.set(key, (kinds.get(key) ?? 0) + size)
       }
-      return { own, kinds }
+      return { own, kinds, engine }
     }
     // what the page holds now: settled, drawn once more from above the
     // whole table, the heap collected
@@ -265,7 +290,7 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
         const counts = ts.view?.counts?.() ?? { scene: ts.scenery.scene.children.length, terrain: null, figures: null, labels: null }
         return { ...ts.renderer.info.memory, programs: ts.renderer.info.programs?.length ?? 0, ...counts, linked: window.__linked.length }
       })
-      return { ...m, heap, own: held?.own ?? null, kinds: held?.kinds ?? null }
+      return { ...m, heap, own: held?.own ?? null, kinds: held?.kinds ?? null, engine: held?.engine ?? null }
     }
     const rows = []
     const row = (what, m) => {
@@ -333,7 +358,7 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
       const n = titles.length, xs = titles.map((_, i) => i), ys = titles.map((r) => r.own)
       const mx = xs.reduce((p, q) => p + q, 0) / n, my = ys.reduce((p, q) => p + q, 0) / n
       slope = xs.reduce((p, x, i) => p + (x - mx) * (ys[i] - my), 0) / xs.reduce((p, x) => p + (x - mx) ** 2, 0)
-      console.log(`  the page's own heap on each title after a battle: ${ys.map((y) => `${(y / 1048576).toFixed(3)}`).join(', ')} MB (${(slope / 1024).toFixed(1)} KB a rematch); the heap in use ${(heapGrowth / 1048576).toFixed(2)} MB more after battle ${battles} than after battle 1 (V8's code warming up: not judged)`)
+      console.log(`  the page's own heap on each title after a battle: ${ys.map((y) => `${(y / 1048576).toFixed(3)}`).join(', ')} MB (${(slope / 1024).toFixed(1)} KB a rematch); the heap in use ${(heapGrowth / 1048576).toFixed(2)} MB more after battle ${battles} than after battle 1 (V8's code warming up: not judged); left out, V8's dependent-code lists and the timeline's layout-shift and paint entries: ${titles.map((r) => `${((r.engine ?? 0) / 1024).toFixed(0)}`).join(', ')} KB`)
       if (slope > OWN_SLOPE) {
         const first = titles[0].kinds, last = titles.at(-1).kinds
         const top = [...new Set([...first.keys(), ...last.keys()])].map((k) => [k, (last.get(k) ?? 0) - (first.get(k) ?? 0)]).sort((p, q) => q[1] - p[1]).slice(0, 5)

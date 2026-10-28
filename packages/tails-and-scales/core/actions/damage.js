@@ -33,8 +33,10 @@ import { alive, dist, gap, engagedWith, isEngaged, mx, mz, ownersOf, statusOf, g
 
 // Allocate `n` wounds of `D` damage to `u`, finishing off wounded models
 // first and preferring the models actually under a template. Returns the
-// models slain.
-export function damage(G, u, n, D, attacker, prefer = null) {
+// models slain. (F19a) `from`, where "nearest" is measured from: the
+// attacker, but a powder keg's blast's from the keg (its setter-off, far
+// off, is the attacker the fallen are credited to).
+export function damage(G, u, n, D, attacker, prefer = null, from = attacker.pos) {
   let killed = 0
   for (let i = 0; i < n; i++) {
     const live = u.models.filter((m) => m.alive)
@@ -47,7 +49,7 @@ export function damage(G, u, n, D, attacker, prefer = null) {
     else {
       // whoever is nearest the attacker takes it (a tie keeps the first:
       // DESIGN §4.1 rule 6)
-      const near = (q) => hypot(mx(u, q) - attacker.pos.x, mz(u, q) - attacker.pos.z)
+      const near = (q) => hypot(mx(u, q) - from.x, mz(u, q) - from.z)
       m = pool.reduce((a, b) => (near(a) < near(b) ? a : b))
     }
     m.w -= D

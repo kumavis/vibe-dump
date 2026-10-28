@@ -174,11 +174,35 @@ export class Shots {
   // ((F7a) on the top it lands on: a deck's, or the ground)
   landed(e) {
     const fx = this.effects, y = this.floorAt(e.x, e.z)
+    // ((F19a) a powder keg's blast: its own, bigger bang)
+    if (e.fx === 'keg') return this.kegLanded(e, y)
     if (e.fx !== 'thorns') {
       fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire', y)
       sfx.boom(e.r / 2)
     }
     fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2, y })
+  }
+
+  // (F19a) A powder keg set off (keg.fuse): its fuse fizzes, sparks spitting
+  // off the barrel's top where it stood, and the table waits a beat on it
+  // before the bang (its blast.land, next: kegLanded).
+  fused(e) {
+    const fx = this.effects, y = this.floorAt(e.x, e.z) + 1.3
+    sfx.fizzle()
+    for (let i = 0; i < 18; i++) {
+      const a = Math.random() * Math.PI * 2, s = 0.5 + Math.random() * 1.5
+      fx.mote({ x: e.x, y, z: e.z, vx: Math.cos(a) * s, vy: 1 + Math.random() * 2.5, vz: Math.sin(a) * s, size: 0.05 + Math.random() * 0.05, color: i % 2 ? '#ffd36e' : '#ff7a1a', life: 0.3 + Math.random() * 0.4, g: 4 })
+    }
+    fx.smoke({ x: e.x, y, z: e.z, size: 0.2, color: '#5a5048', life: 0.8 })
+    return wait(0.4)
+  }
+
+  // (F19a) A powder keg's blast landing (blast.land, fx 'keg'): fx's
+  // kegBlast, a deep boom and a hot ring the size of its blast.
+  kegLanded(e, y) {
+    this.effects.kegBlast(e.x, e.z, e.r, y)
+    sfx.boom(e.r)
+    this.effects.ring(e.x, e.z, e.r, '#ffb347', { life: 1.8, fill: 0.28, y })
   }
 
   // A spell cast (its sound), or fizzled (a sound and the word over the
@@ -194,11 +218,13 @@ export class Shots {
   // A thornburst: motes from the caster's gem, thorns bursting up through
   // the turf over the template, and their own explosion; they stand until
   // the spell is done (spell.fade), then sink away.
-  async thorns(e) {
+  // ((F16) `quiet`: the caster veiled by the courtesy fog, its gem's motes
+  // left out, the thorns where they burst seen)
+  async thorns(e, { quiet = false } = {}) {
     const units = this.units, fx = this.effects
     const cv = units.get(e.u), gen = units.gen
     const gem = cv.models[0].mesh.userData.anim.gem
-    if (gem) {
+    if (gem && !quiet) {
       const p = new THREE.Vector3()
       gem.getWorldPosition(p)
       for (let i = 0; i < 20; i++) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 3, size: 0.06, color: '#9aff7a', life: 0.8, g: -1 })

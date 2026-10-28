@@ -56,6 +56,15 @@
 // tiled chunk's drawn shape and colour to its own mesh's (terrain-check's
 // view half and sim/snap-check.mjs).
 //
+// (F16) Under the courtesy fog (present/fog.js) the table draws the scenery
+// as the seat played here last saw it: the events of a chunk it can't see
+// play nothing (app/flow.js leaves them out; a collapse's drops it can't
+// see named in `unseen`), so a wall a template brought down out of sight
+// stands on, until reveal() brings each chunk seen again up to date (a
+// broken one taken off, no debris; a dropped one set at its height; one
+// never seen before built, as sync builds it); a snap draws the chunks as
+// last seen through sync (present/fog.js's fogChunks).
+//
 // sim/terrain-check.mjs builds these meshes in Node and holds them to the
 // ones the battlefield was built with before the split (the R0 code), mesh
 // for mesh, and plays destruction on both, folding the terrain's reports
@@ -194,6 +203,32 @@ const PIECES = {
     const hoop = mesh(new THREE.TorusGeometry(0.29, 0.025, 4, 14).rotateX(Math.PI / 2), mat('#3a3a3a', { metalness: 0.4 }))
     hoop.position.y = 0.55
     m.add(b, hoop)
+    return standing(c, m)
+  },
+  // (F19a) A powder keg: a barrel an inch across and 1.2" tall, its staves
+  // bellied (a lathe's profile), two iron hoops, a red danger band round its
+  // waist, a lid and a stub of fuse with a glowing tip. One look; the
+  // terrain's chunk is a box of the same size (core/terrain/recipes.js).
+  keg(c) {
+    const m = new THREE.Group()
+    const prof = [[0.4, 0], [0.46, 0.22], [0.5, 0.6], [0.46, 0.98], [0.4, 1.2]].map(([r, y]) => new THREE.Vector2(r, y))
+    const body = mesh(new THREE.LatheGeometry(prof, 14), mat(c.look.color))
+    const lid = mesh(new THREE.CircleGeometry(0.4, 14).rotateX(-Math.PI / 2), mat('#5f3e24'))
+    lid.position.y = 1.19
+    const iron = mat('#2f2f2f', { metalness: 0.5 })
+    const hoops = [0.14, 1.06].map((y) => {
+      const h = mesh(new THREE.TorusGeometry(0.44, 0.035, 4, 16).rotateX(Math.PI / 2), iron)
+      h.position.y = y
+      return h
+    })
+    const band = mesh(new THREE.CylinderGeometry(0.507, 0.507, 0.22, 16, 1, true), mat('#c0392b', { side: THREE.DoubleSide }))
+    band.position.y = 0.6
+    const fuse = mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.3, 5), mat('#3a2a1a'))
+    fuse.position.set(0.12, 1.33, 0.05)
+    fuse.rotation.z = -0.35
+    const tip = mesh(new THREE.SphereGeometry(0.05, 6, 4), mat('#ffb347', { emissive: '#ff7a1a', emissiveIntensity: 0.8 }), { shadow: false })
+    tip.position.set(0.17, 1.47, 0.05)
+    m.add(body, lid, ...hoops, band, fuse, tip)
     return standing(c, m)
   },
   sack(c) {
@@ -533,7 +568,8 @@ export class TerrainView {
       case 'terrain.add': return this.add(e.def)
       case 'terrain.hurt': return this.hurt(this.items.get(e.id).c, e.from, e.at)
       case 'terrain.destroy': return this.destroy(this.items.get(e.id).c, e.from, e.at)
-      case 'terrain.collapse': return this.collapse(e.drops, e.by, M)
+      // ((F16) but the drops the fog keeps unseen)
+      case 'terrain.collapse': return this.collapse(e.unseen ? e.drops.filter((d) => !e.unseen.includes(d.id)) : e.drops, e.by, M)
       case 'terrain.rubble': return this.rubble(this.items.get(e.id).c, e.from)
     }
     throw new Error(`TerrainView: no handler for ${e.t}`)
@@ -637,6 +673,50 @@ export class TerrainView {
       this.tile(item)
       // a rubble pile: a heap of pieces for each block of its column broken
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
+    }
+    this.flush()
+  }
+
+  // (F16) Chunks the fog kept as last seen, seen again as they now stand:
+  // [{ def (defOf, as the chunk stands), alive, tree (a fallen log's tree's
+  // def) }]. A broken one is taken off the table (no debris: its break was
+  // never seen); a standing one is set at its height (a drop never seen);
+  // one the table doesn't draw yet (rubble, a fallen log, never seen) is
+  // built as sync builds it. What already shows a chunk as it stands is
+  // left as it is.
+  reveal(list) {
+    for (const { def, alive } of list) {
+      const item = this.items.get(def.id)
+      if (alive || !item || !this.shows(item)) continue
+      this.free(item)
+      this.items.set(def.id, { c: item.c, obj: null })
+    }
+    for (const { def, alive, tree } of list) {
+      if (!alive) continue
+      const item = this.items.get(def.id)
+      if (item?.obj && this.shows(item)) {
+        if (SET_Y.has(def.look.piece) && item.obj.position.y !== def.shape.y) {
+          item.fall = null
+          item.anims = 0
+          this.untile(item)
+          item.obj.position.y = def.shape.y
+          item.c = def
+          this.tile(item)
+        }
+        continue
+      }
+      if (item) this.free(item)
+      if (def.look.piece === 'fallen') {
+        // (its tree, if the table still draws it standing, goes first)
+        const t = tree && this.items.get(tree.id)
+        if (t && this.shows(t)) this.free(t)
+        if (tree) this.fallen(def, tree)
+        continue
+      }
+      const made = { c: def, ...PIECES[def.look.piece](def) }
+      this.items.set(def.id, made)
+      this.group.add(made.obj)
+      this.tile(made)
     }
     this.flush()
   }
@@ -1029,6 +1109,14 @@ export class TerrainView {
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, ['#2b211b', '#4a3020', '#ff7a2a'], 16, { from, power: 6, size: 0.12 })
         fx.smoke({ x: s.x, y: s.y + 0.4, z: s.z, size: 0.7, color: '#2e2a28', life: 2 })
+        break
+      // (F19a) a powder keg bursts as a crate does, its staves flying and a
+      // puff of black powder; its explosion is its blast's, which follows
+      // (keg.fuse, then blast.land with fx 'keg': view/effects/shots.js)
+      case 'keg':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, [...WOOD, '#2f2f2f'], 16, { from, power: 6, size: 0.12 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: '#2a2622', life: 1.2 })
         break
     }
     // the break's sound: stone crumbles, the rest thwacks

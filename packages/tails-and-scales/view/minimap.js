@@ -18,7 +18,12 @@
 //     redraws, so no event handler is needed).
 // It reads only what the table shows: the mirror (the player's), the unit
 // views (each unit's seat and colour), the terrain view's chunk defs, the
-// objectives' places and the camera.
+// objectives' places and the camera. (F16) Under the courtesy fog
+// (`fog()`, app/flow.js's fogShown: null without it) an enemy unit the
+// seat played here can't see has no dot and no ping; where one was last
+// seen a grey ring stands (its ghost, as on the table); and the terrain's
+// footprints are the scenery as last seen (a wall broken out of sight still
+// drawn, no ping for it).
 //
 // Input: a click or a drag pans the camera there (`pan(x, z)`, the camera
 // rig's, wired by the app). A right-click or a long press (500 ms) asks the
@@ -60,8 +65,9 @@ export class Minimap {
   // `selected()` the ids picked up, `lines()` the order lines
   // (input/standing.js's), `pan(x, z)` and `ground({ x, z }, how)` (above),
   // `fast` (?fast: nothing drawn)
-  constructor({ units, terrain, mirror, camera, board, colorOf, selected = () => [], lines = () => [], pan = () => {}, ground = () => false, fast = false }) {
-    Object.assign(this, { units, terrain, mirror, camera, board, colorOf, selected, lines, pan, ground, fast })
+  // ((F16) `fog()`: the courtesy fog as the table shows it, or null)
+  constructor({ units, terrain, mirror, camera, board, colorOf, selected = () => [], lines = () => [], pan = () => {}, ground = () => false, fog = () => null, fast = false }) {
+    Object.assign(this, { units, terrain, mirror, camera, board, colorOf, selected, lines, pan, ground, fog, fast })
     const wrap = (this.el = document.createElement('div'))
     wrap.id = 'minimap'
     wrap.className = 'hidden'
@@ -194,39 +200,56 @@ export class Minimap {
   // what the map shows, as a string: a redraw only when it changes
   signature(M, b) {
     const parts = [b.W, b.H, this.canvas.width, M.owners?.join(), [...this.selected()].join()]
-    for (const v of this.units.views.values()) {
-      const mu = M.units[v.id]
-      if (mu?.alive > 0) parts.push(`${v.id}:${Math.round(mu.pos.x * 4)}:${Math.round(mu.pos.z * 4)}`)
-    }
+    for (const d of this.dots(M)) parts.push(`${d.id}${d.ghost ? 'g' : ''}:${Math.round(d.x * 4)}:${Math.round(d.z * 4)}`)
     parts.push(this.terrainKey(M))
     for (const l of this.lines()) parts.push(`${l.k}${Math.round(l.from.x)}${Math.round(l.from.z)}${Math.round(l.to.x)}${Math.round(l.to.z)}`)
     const e = this.camera.matrixWorld.elements
     parts.push([e[12], e[13], e[14], e[8], e[9], e[10]].map((x) => x.toFixed(2)).join())
     return parts.join('|')
   }
-  // the terrain's state: which chunks stand, and at what height
+  // the terrain's state: which chunks stand, and at what height ((F16) as
+  // the seat played here last saw them, under the fog)
   terrainKey(M) {
     let n = 0, h = 0
-    for (const id in M.chunks) {
-      const c = M.chunks[id]
-      if (c.alive) (n++, (h += c.y * (1 + (Number(id) % 7))))
-    }
+    for (const [id, c] of this.chunkStates(M)) if (c.alive) (n++, (h += c.y * (1 + (Number(id) % 7))))
     return `${n}:${h.toFixed(2)}`
+  }
+  // (F16) each chunk's state as the minimap draws it: the mirror's, or
+  // under the fog the seat's record of it (a chunk never seen: not drawn)
+  chunkStates(M) {
+    const table = this.fog()?.F?.table
+    if (!table) return Object.entries(M.chunks)
+    return Object.keys(M.chunks).map((id) => [id, table.get(Number(id)) ?? { alive: false, y: 0 }])
+  }
+
+  // (F16) The units' dots: each standing unit the fog doesn't veil, where
+  // the table shows it, in its seat's colour; and each ghost, grey, where
+  // it was last seen. [{ id, x, z, r, color, ghost }] (?debug reads it)
+  // ((F9a) a rider is its hull's dot: it has none of its own)
+  dots(M) {
+    const fog = this.fog(), out = []
+    for (const v of this.units.views.values()) {
+      const mu = M.units[v.id]
+      if (!(mu?.alive > 0) || mu.aboard || fog?.hide?.has(v.id)) continue
+      out.push({ id: v.id, x: mu.pos.x, z: mu.pos.z, r: mu.r, color: v.color, ghost: false })
+    }
+    for (const [id, rec] of fog?.ghosts ?? []) out.push({ id, x: rec.pos.x, z: rec.pos.z, r: rec.r, color: '#9a9a94', ghost: true })
+    return out
   }
 
   // Pings: a unit that lost models, or a chunk broken, since the last look,
   // where the camera doesn't see it.
   watch(M) {
-    const now = performance.now()
+    const now = performance.now(), fog = this.fog()
     for (const v of this.units.views.values()) {
       const mu = M.units[v.id]
       if (!mu) continue
       const was = this.lost.get(v.id)
-      if (was !== undefined && mu.alive < was && !this.seen(mu.pos)) this.pings.push({ x: mu.pos.x, z: mu.pos.z, at: now, color: mu.alive > 0 ? '#ffd27a' : '#ff5a4a' })
+      // ((F16) none for a unit the fog veils)
+      if (was !== undefined && mu.alive < was && !this.seen(mu.pos) && !fog?.hide?.has(v.id)) this.pings.push({ x: mu.pos.x, z: mu.pos.z, at: now, color: mu.alive > 0 ? '#ffd27a' : '#ff5a4a' })
       this.lost.set(v.id, mu.alive)
     }
-    for (const id in M.chunks) {
-      const c = M.chunks[id]
+    for (const [id, c] of this.chunkStates(M)) {
       if (c.alive) {
         this.dead.delete(id)
         continue
@@ -282,18 +305,21 @@ export class Minimap {
       g.stroke()
     }
     g.setLineDash([])
-    // the units, the ones picked up outlined
+    // the units, the ones picked up outlined ((F16) a ghost a grey ring)
     const sel = new Set(this.selected())
-    for (const v of this.units.views.values()) {
-      const mu = M.units[v.id]
-      // ((F9a) a rider is its hull's dot)
-      if (!(mu?.alive > 0) || mu.aboard) continue
-      const [x, y] = this.toPx(mu.pos.x, mu.pos.z)
+    for (const d of this.dots(M)) {
+      const [x, y] = this.toPx(d.x, d.z)
       g.beginPath()
-      g.arc(x, y, Math.max(1.5, mu.r * k), 0, Math.PI * 2)
-      g.fillStyle = v.color
+      g.arc(x, y, Math.max(1.5, d.r * k), 0, Math.PI * 2)
+      if (d.ghost) {
+        g.lineWidth = Math.max(1, k * 0.3)
+        g.strokeStyle = d.color
+        g.stroke()
+        continue
+      }
+      g.fillStyle = d.color
       g.fill()
-      if (sel.has(v.id)) {
+      if (sel.has(d.id)) {
         g.lineWidth = Math.max(1.2, k * 0.35)
         g.strokeStyle = '#ffe680'
         g.stroke()
@@ -348,8 +374,9 @@ export class Minimap {
       g.fillRect(zx, y0, b.deploy * k, b.H * k)
     }
     g.globalAlpha = 1
-    // the floors first, then the rest
-    const items = [...this.terrain.items.values()].filter((it) => it.c && M.chunks[it.c.id]?.alive)
+    // the floors first, then the rest ((F16) as last seen, under the fog)
+    const state = new Map(this.chunkStates(M).map(([id, c]) => [Number(id), c]))
+    const items = [...this.terrain.items.values()].filter((it) => it.c && state.get(it.c.id)?.alive)
     items.sort((a, bb) => (a.c.kind === 'floor' ? 0 : 1) - (bb.c.kind === 'floor' ? 0 : 1))
     for (const { c: ch } of items) {
       const s = ch.shape, [x, y] = this.toPx(s.x, s.z)
@@ -448,10 +475,11 @@ export class Minimap {
   }
 }
 
-// how each kind of chunk shows from above
-const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a' }
+// how each kind of chunk shows from above ((F19a) a powder keg a red dot,
+// the colour of its danger band)
+const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e' }
 // the kinds drawn as discs whatever their extent
-const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true }
+const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true }
 
 // A convex polygon ([[x, z]]) clipped to the rectangle x0..x1 by z0..z1.
 function clip(poly, x0, x1, z0, z1) {

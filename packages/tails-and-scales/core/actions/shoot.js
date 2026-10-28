@@ -1,7 +1,10 @@
 // Shooting (DESIGN §1.1): who may shoot, at whom and at what odds, and the
 // shot itself: a plain volley, a blast weapon's templates (each aimed,
 // rolled, scattered on a miss, landed), or a spell (an eruption of thorns
-// under the target, or a mesmerizing gaze).
+// under the target, or a mesmerizing gaze). (F18) A target locked in combat
+// may be shot by any of them: a template hits whoever it lands on, as it
+// always has, and a volley's misses may stray into the shooter's own units
+// in the fight.
 //
 // Synchronous, like damage.js: what the old code waited on is an event in
 // the match's out at the same place (DESIGN §2.3, §4.1 rule 3): the tray's
@@ -38,8 +41,10 @@ import { draw } from '../rng.js'
 import { hypot, hypot3, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
-import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt } from '../queries.js'
+import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, floorAt, groundY, fightOf } from '../queries.js'
 import { damage } from './damage.js'
+import { HAZARDS } from '../../data/hazards.js'
+import { kegsIn } from '../terrain/terrain.js'
 
 // (F9a) A rider can't shoot while aboard: the firing deck, from which up to
 // `fire` rider units shoot from the deck's height, is F9c's (DESIGN §4.2.5),
@@ -52,17 +57,80 @@ export function canShoot(G, u) {
   return true
 }
 
+// (F17, DESIGN §4.2.4) Lobbing from height. A lobbed weapon (a blast or an
+// indirect one, but never a spell: the thorns erupt under the target and the
+// gaze is no lob) carries farther from higher ground, as a thrown thing
+// does: with R its printed range and h the drop (the shooter's floor less
+// the target's, negative firing up), it reaches √(R² + 2hR), the farthest a
+// projectile launched at the speed that carries it R on the flat lands from
+// h higher, at its best angle (scale-free, so the table's inches serve).
+// Direct fire (a sling's, a spit's, a javelin's: flat arcs) reaches its
+// printed range from anywhere.
+export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)
+
+// How far `u`'s ranged weapon reaches `tg` from `from` (where it stands, by
+// default; the AI scores the cells it might move to), or with no `tg` the
+// ground under it (the overlay's ring: h its own floor). Without height the
+// printed range itself, the classic expression (§4.1 rule 18: a path of its
+// own, never the formula with h = 0); with it, a lobbed weapon's reach as
+// above (level, the printed range exactly), anything else the printed range.
+// A drop so far below that nothing reaches (R² + 2hR ≤ 0: firing up more
+// than half the range) reaches 0. Pure, under the lock like every query:
+// shotInfo's range test reads it, and the AI's (core/ai/score.js), and
+// through the queries the tooltip's inches and the overlay's ring.
+export function rangeOf(G, u, tg = null, from = u.pos) {
+  const w = u.t.ranged
+  if (!G.nav.hasHeight || !lobbed(w)) return w.range
+  const R = w.range, h = floorAt(G, from.x, from.z) - (tg ? groundY(G, tg) : 0)
+  if (h === 0) return R
+  const q = R * R + 2 * h * R
+  return q > 0 ? Math.sqrt(q) : 0
+}
+
+// May `u` shoot `target`, and at what odds: { ok, range, reach, visible,
+// cover, seen, total, mod, need, fight, under }, or { ok: false, why }.
+// (F17) `range` is the gap between the two bases, `reach` how far the
+// weapon carries to this target (rangeOf: the printed range but for a lob
+// from or at height).
+//
+// (F18, DESIGN §4.1 rule 27) A target locked in combat may be shot, by any
+// ranged weapon and at no modifier: the cost is the risk to the shooter's
+// own units in the fight. `fight` says what that is (fightOf: u's units
+// engaged with the target, their models and the target's; null when none
+// of u's is in it), and `under`, for a blast weapon, who of u's side a
+// template landing square on the target would catch (friendsUnder): what
+// the tooltip warns of. The shooter itself still may not shoot while it is
+// engaged (canShoot).
 export function shotInfo(G, u, target) {
   const w = u.t.ranged
-  const range = gap(u, target)
-  if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
-  if (isEngaged(G, target) && !w.spell) return { ok: false, why: 'locked in combat' }
+  const range = gap(u, target), reach = rangeOf(G, u, target)
+  if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
   const s = sight(G, u, target)
   if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
   let mod = 0
   if (w.heavy && u.flags.moved) mod++
   if (w.indirect && !s.visible) mod++
-  return { ok: true, range, ...s, mod, need: hitNeed(u.t.BS, mod) }
+  return { ok: true, range, reach, ...s, mod, need: hitNeed(u.t.BS, mod), fight: fightOf(G, u, target), under: w.blast ? friendsUnder(G, u, target) : null }
+}
+
+// (F18) Who of `u`'s own side (u itself among them: a template spares
+// nobody) a template of its weapon landing square on `tg` would catch: the
+// aim's centre, before the aim's offset or any scatter. [{ v, under }] in
+// G.units order, `under` the count of v's models under it, by blastLands'
+// own test (modelsUnder); [] for a weapon with no template. The tooltip's
+// warning and the AI's cost (core/ai/score.js) read it; nothing rolls on it.
+// (F9a) A rider is never under a template (blastLands' rule): its hull is.
+export function friendsUnder(G, u, tg) {
+  const w = u.t.ranged
+  if (!w?.blast) return []
+  const land = { x: tg.pos.x, z: tg.pos.z }, ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
+  const out = []
+  for (const v of G.units) {
+    if (v.side !== u.side || !alive(v) || v.aboard) continue
+    const under = modelsUnder(G, v, land, ly, w)
+    if (under.length) out.push({ v, under: under.length })
+  }
+  return out
 }
 
 export function shootTargets(G, u) {
@@ -101,6 +169,17 @@ export function doShoot(G, u, target) {
   const hits = roll(G, n)
   const h = passes(hits, info.need)
   emit(G, 'dice', { label: `Hit ${info.need}+`, dice: hits, need: info.need })
+  // (F18, §4.1 rule 27) into a fight, each miss strays into the shooter's
+  // own units there with the odds of their share of the fight's models:
+  // one draw per miss, in the order of the misses, after the whole hit roll
+  // and before any wound roll. With none of u's units in the fight nothing
+  // strays and nothing is drawn (§4.1 rule 11: the classic path).
+  const fight = info.fight
+  let stray = 0
+  if (fight) {
+    const share = fight.F / (fight.F + fight.T)
+    for (const d of hits) if (d < info.need && draw(G.rng) < share) stray++
+  }
   const wn = woundNeed(w.S, target.t.T, w.poison)
   const wd = roll(G, h)
   const wounds = passes(wd, wn)
@@ -112,6 +191,27 @@ export function doShoot(G, u, target) {
   if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${info.cover ? ' (cover)' : ''}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
   const killed = damage(G, target, unsaved, w.D, u)
   log(G, u.side, `<b>${u.t.short}</b> shoot ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
+  // (the target's rows and line first, then the friends')
+  if (stray) strayHits(G, u, fight.onto, stray, w)
+}
+
+// (F18, §4.1 rule 27) `n` of `u`'s shots strayed into its own unit `f`,
+// fighting their target: each a hit on f, rolled to wound against its T and
+// saved on its Sv (cover as inCover), in rows of their own after the
+// target's, the dice rolling even with no save to make (§4.1 rule 5); then
+// damage as ever, and the friendly-fire line.
+function strayHits(G, u, f, n, w) {
+  const wn = woundNeed(w.S, f.t.T, w.poison)
+  const wd = roll(G, n)
+  const wounds = passes(wd, wn)
+  emit(G, 'dice', { label: `⚠ ${f.t.short}: ${n} stray hit${n > 1 ? 's' : ''} · wound ${wn}+`, dice: wd, need: wn })
+  const cover = inCover(G, f)
+  const sn = saveNeed(f.t.Sv, w.AP, cover)
+  const sv = roll(G, wounds)
+  const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
+  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${cover ? ' (cover)' : ''}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
+  const killed = damage(G, f, unsaved, w.D, u)
+  log(G, u.side, `<b>Friendly fire!</b> ${n} stray shot${n > 1 ? 's' : ''} hit ${f.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
 }
 
 // A blast weapon: one template per model, up to its count. Each is aimed at
@@ -174,16 +274,53 @@ export function eruption(G, u, target, w) {
 // (F9a) Riders are off the table: a template over a hull hits the hull (a
 // big target: D3+1 hits), never the riders on its deck. A hull it destroys
 // bails its riders out mid-volley (core/actions/transport.js), after the
-// victims were all found, so no rider is among this template's.
+// victims were all found, so no rider is among this template's (a later
+// keg's blast in the same chain finds them where they bailed out to).
+//
+// (F19a, §4.1 rule 28) Then any powder keg the blast broke goes off
+// (kegsGoOff): on a board with no keg (every set but `keg`) nothing more.
 export function blastLands(G, u, land, w) {
+  const kegs = landing(G, u, land, w)
+  if (kegs.length) kegsGoOff(G, u, kegs)
+}
+
+// (F19a, DESIGN §4.1 rule 28) The powder kegs `kegs` go off, one after
+// another in that order (a template's blast's in chunk order, a walk's as it
+// broke them), each a blast at its place with the keg's profile
+// (data/hazards.js): its line in the battle log ("The powder keg goes
+// up!"), `keg.fuse { id, x, z }` as it is set off, then straight on, its
+// blast landing as a template's does (landing: `blast.land` with fx 'keg',
+// whoever is under it, friend and foe, in G.units order, the "⚠" rows and
+// the "Friendly fire!" lines, the scenery round it, the nav after it). `u`
+// set it off, and is the attacker of every keg in the chain: a model the
+// blasts slay is u's (unit.slain's `by`), and "friendly" is u's side; the
+// wounds go first to the models nearest the keg. A keg a keg's blast
+// breaks joins the end of the line, in chunk order, so the first keg's
+// victims (and the scenery its blast chewed) all come before the second
+// keg's; a keg breaks once (a broken chunk is past every blast), so none
+// goes off twice. Nothing is drawn but the blasts' own dice (rule 4's, per
+// victim).
+export function kegsGoOff(G, u, kegs) {
+  const line = [...kegs], w = HAZARDS.keg
+  for (let i = 0; i < line.length; i++) {
+    const k = line[i], at = { x: k.shape.x, z: k.shape.z }
+    log(G, u.side, '<b>The powder keg goes up!</b>')
+    emit(G, 'keg.fuse', { id: k.id, x: at.x, z: at.z })
+    for (const next of landing(G, u, at, w, at)) line.push(next)
+  }
+}
+
+// A blast lands at `land`: blastLands' victims and scenery, the nav after
+// them; the kegs it broke, for its caller to set off. (F19a) `from` is
+// where the victims' wounds go nearest to (damage's): the thrower, or the
+// keg that went off.
+function landing(G, u, land, w, from = u.pos) {
   emit(G, 'blast.land', { x: land.x, z: land.z, r: w.blast, fx: w.fx })
   const victims = []
   const ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
   for (const v of G.units) {
     if (!alive(v) || v.aboard) continue
-    const under = G.nav.hasHeight
-      ? v.models.filter((m) => m.alive && hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
-      : v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
+    const under = modelsUnder(G, v, land, ly, w)
     if (under.length) victims.push({ v, under })
   }
   for (const { v, under } of victims) {
@@ -200,7 +337,7 @@ export function blastLands(G, u, land, w) {
     const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
     if (wounds && sn <= 6) emit(G, 'dice', { label: `Save ${sn}+${cover ? ' (cover)' : ''}`, dice: sv, need: sn, save: true })
-    const killed = damage(G, v, unsaved, w.D, u, under)
+    const killed = damage(G, v, unsaved, w.D, u, under, from)
     log(G, u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) emit(G, 'pause', { s: 0.25 })
@@ -210,6 +347,17 @@ export function blastLands(G, u, land, w) {
   if (broke.length) log(G, u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   // (the nav follows the scenery, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  return kegsIn(broke)
+}
+
+// The living models of `v` under `w`'s template landed at `land`: within
+// its radius and 0.6 of the model's base of the landing, (F7a) in 3D from
+// the floor there (`ly`) with height, flat without. (F18) blastLands'
+// victims, and friendsUnder's.
+function modelsUnder(G, v, land, ly, w) {
+  return G.nav.hasHeight
+    ? v.models.filter((m) => m.alive && hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
+    : v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
 }
 
 // A spell that mesmerizes: `u`'s gaze reaches the target, which takes D3

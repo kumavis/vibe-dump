@@ -30,14 +30,19 @@ import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
-import { SetupScreen } from '../ui/screens/setup.js'
+import { SetupScreen, sizeName } from '../ui/screens/setup.js'
 // (F8b) drawing at scale: the chips, the roster, the minimap
 import { Chips } from '../ui/chips.js'
 import { Roster } from '../ui/roster.js'
 import { Minimap } from '../view/minimap.js'
-import { Flow, MODES } from './flow.js'
+import { Flow, MODES, FOG_MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
 import { Session } from '../match/session.js'
+// (V2) the figure style, and the perf overlay
+import { STYLES, setFigureStyle } from '../view/models/cache.js'
+import { splatStats } from '../view/models/splat/splats.js'
+import { QUALITY } from '../view/stage.js'
+import { PerfOverlay } from '../ui/perf.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized tabletop wargame.
@@ -57,15 +62,26 @@ import { Session } from '../match/session.js'
 // The URL: ?seed=N the title's board (else a random one), ?dice=N every
 // battle's dice (else fresh ones per battle), ?races=<seat 0>,<seat 1> the
 // races at the table, ?watch a watched battle at once, ?lowfi no shadows
-// and a pixel ratio of 1, ?fast nothing drawn and game time effectively
+// and a pixel ratio of 0.5, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
 // battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
 // armies its seats field; (F7a) ?terrain=<set> the terrain set a battle
 // started here is fought on (the battle-setup panel's default; the title's
-// table stays the mission's first set's). The fragment `#m=<id>` (N2) opens
-// an online match (`&dev=<id>` plays it as that device, `&sync=` through that
-// server): app/online.js, loaded only then or for Play online.
+// table stays the mission's first set's); (F16) ?fog the courtesy fog on
+// for a battle against the AI started here (?fog=0 off: the battle-setup
+// panel's default, else the page's last choice); (V2) ?models=new|classic the figure
+// style drawn and ?quality=auto|high|medium|low the stage's quality (for
+// development: the page's own switches are the title's Figures and Quality,
+// kept in this browser), ?perf the perf overlay on (ui/perf.js; in the page:
+// the title's Perf overlay, the battle's 📈). The fragment `#m=<id>` (N2)
+// opens an online match (`&dev=<id>` plays it as that device, `&sync=`
+// through that server): app/online.js, loaded only then or for Play online.
+// (V2) The fragment may also carry `models=` and `quality=` (as
+// `#models=classic`), read where the address has no such parameter: a page
+// published where its query string never reaches it (an artifact) still
+// receives its fragment, and the Figures switch writes it there when this
+// browser keeps no settings.
 // ---------------------------------------------------------------------------
 
 // (F8a) The table is made for the classic mission's board, the title's
@@ -75,8 +91,9 @@ import { Session } from '../match/session.js'
 const { W, H } = MISSIONS.classic.board
 const $ = (s) => document.querySelector(s)
 // (F8b) the battle sizes the setup panel and the lobby offer: each mission,
-// its list's size name, its board, points and rounds
-export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
+// its list's size name ((F19a) or its own: the Powder keg's), its board,
+// points and rounds
+export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
@@ -155,6 +172,49 @@ function terrainPick(params, title, mission) {
   return null
 }
 
+// (F16) The battle-setup panel's fog toggle as the page opens: ?fog (on;
+// ?fog=0 off), else the last choice this browser kept (localStorage, in
+// try/catch: a page that keeps nothing starts with it off).
+const FOG_KEY = 'tails-and-scales:fog'
+function fogPick(params) {
+  if (params.has('fog')) return params.get('fog') !== '0'
+  try {
+    return localStorage.getItem(FOG_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+// (V2) A setting the page takes (`name`, one of `values`): ?name='s (for
+// development), else the fragment's (#name=), else the one this browser
+// kept (localStorage `key`), else `dflt`. A ?name= (or #name=) naming none
+// of them gets the kept or default one and a line on the title card saying
+// why (`why`, put there once the card is made).
+function settingPick(params, hash, name, values, key, dflt) {
+  let kept = null
+  try {
+    kept = localStorage.getItem(key)
+  } catch {}
+  const value = kept !== null && values.includes(kept) ? kept : dflt
+  const from = params.has(name) ? params : hash.has(name) ? hash : null
+  if (!from) return { value }
+  const pick = from.get(name).trim().toLowerCase()
+  if (values.includes(pick)) return { value: pick }
+  return { value, why: `${from === params ? '?' : '#'}${name}= takes one of ${values.join(', ')}, not "${from.get(name)}", so it is ${value}.` }
+}
+// (V2) The figure style the page draws (view/models/cache.js's STYLES):
+// settingPick's, kept as MODELS_KEY by the title's Figures, 'new' by
+// default.
+export const MODELS_KEY = 'tails-and-scales:models'
+// (V2) The stage's quality (view/stage.js's QUALITY): settingPick's, kept
+// as QUALITY_KEY by the title's Quality, 'auto' by default: 'medium' where
+// the pointer is coarse (a phone, a tablet: its pixel ratio capped at 1.5,
+// a 1024 shadow map, 60k splats a frame), 'high' elsewhere (the page as it
+// always drew). The Quality switch steps through QUALITIES and changes the
+// stage at once.
+export const QUALITY_KEY = 'tails-and-scales:quality'
+const QUALITIES = ['auto', ...Object.keys(QUALITY)]
+const autoQuality = () => (matchMedia('(pointer: coarse)').matches ? 'medium' : 'high')
+
 function racePick(params, title) {
   if (!params.has('races')) return CLASSIC
   const pick = params.get('races').split(',').map((r) => r.trim().toLowerCase())
@@ -170,6 +230,14 @@ export function boot(location) {
   // ?fast: a test mode that skips drawing and lets game time run
   // effectively instantly (view/stage.js)
   const FAST = params.has('fast')
+  // (V2) the figure style, before any figure is built, and the quality,
+  // before the stage is made (each from the address, its fragment, or what
+  // this browser kept)
+  const hash = new URLSearchParams(location.hash.slice(1))
+  const models = settingPick(params, hash, 'models', Object.keys(STYLES), MODELS_KEY, 'new')
+  setFigureStyle(models.value)
+  const quality = settingPick(params, hash, 'quality', QUALITIES, QUALITY_KEY, 'auto')
+  const drawnAt = (choice) => (choice === 'auto' ? autoQuality() : choice)
   // (the flow, made below: what the view's colours read once it is drawn)
   let flow = null
   const colorOf = (s) => flow.sides[s].color
@@ -180,7 +248,7 @@ export function boot(location) {
   // board seed (a Math.random draw, where it always came); then (below) the
   // figures, the shooting's effects and the overlay: the same three.js
   // objects, materials and Math.random draws as before R7, in the same order.
-  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
+  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, quality: drawnAt(quality.value), W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
   // (Every seed the page takes is made a whole number from 0 to 2^32 - 1, as
   // a setup's must be, with `>>> 0`: what the board's and the dice's
   // generators always did with a seed, so ?seed=-5 is still the board -5
@@ -189,6 +257,8 @@ export function boot(location) {
 
   // ── The UI (ui/) and the flow (app/flow.js) ──────────────────────────────
   const title = new TitleScreen()
+  if (models.why) title.note(`The figures: ${models.why}`)
+  if (quality.why) title.note(`The quality: ${quality.why}`)
   const races = racePick(params, title)
   const ui = {
     tray: new Tray($('#tray')),
@@ -224,6 +294,7 @@ export function boot(location) {
   }
   const mission = missionPick(params, title)
   flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission), terrain: terrainPick(params, title, mission) })
+  flow.fogPick = fogPick(params)
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
@@ -274,6 +345,17 @@ export function boot(location) {
     human.group.setSelectMode(!human.group.selectMode)
     $('#selectMode').classList.toggle('on', human.group.selectMode)
   }
+  // (F12) ↶ Undo, and Ctrl-Z (⌘-Z on a Mac): the last placement, move or
+  // charge's end of the seat played here, back to its last commit point
+  // (app/flow.js's undo; the button up and enabled as the HUD model says).
+  // Not in a field, nor under a dialog.
+  $('#undo').onclick = () => flow.undo()
+  addEventListener('keydown', (e) => {
+    if (e.key?.toLowerCase() !== 'z' || !(e.ctrlKey || e.metaKey) || e.shiftKey || e.altKey) return
+    if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target?.tagName ?? '') || document.querySelector('.modal:not(.hidden)')) return
+    e.preventDefault()
+    if (!e.repeat) flow.undo()
+  })
   human.listen(view.renderer.domElement)
   // (F8b) Drawing at scale (DESIGN §4.2.7): the chips at the Strategic tier
   // (a tap is a click on the unit, as the board's; a cluster's asks the
@@ -295,6 +377,8 @@ export function boot(location) {
     setup: () => flow.atTable()?.setup ?? null,
     seats: () => flow.session?.localSeats ?? [],
     phase: () => human.myTurn(),
+    // ((F16) the courtesy fog as the table shows it)
+    fog: () => flow.fogShown,
     pick: (id) => {
       const u = flow.unitById(id), at = player.mirror?.units[id]
       if (!(u?.alive > 0) || !at) return
@@ -308,6 +392,7 @@ export function boot(location) {
     board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
     selected: () => human.standing?.picked().map((u) => u.id) ?? [],
     lines: () => human.standing?.lines() ?? [],
+    fog: () => flow.fogShown,
     pan: glideTo,
     ground: (g, how) => {
       const st = human.standing, grp = human.group
@@ -325,7 +410,32 @@ export function boot(location) {
     },
   })
   ui.actions.wire(human)
-  ui.hud.wire({ rig: view.rig, player, standing: human.standing })
+  // (V2) the quality as chosen ('auto' or one of QUALITY's), stepped by the
+  // title's Quality and a tap on the perf overlay: kept in this browser
+  // (where it keeps anything) and drawn at once
+  const qualities = {
+    choice: quality.value,
+    listeners: [],
+    label() {
+      return this.choice === 'auto' ? `${drawnAt('auto')} (auto)` : this.choice
+    },
+    listen(fn) {
+      this.listeners.push(fn)
+      fn(this.label())
+    },
+    next() {
+      this.choice = QUALITIES[(QUALITIES.indexOf(this.choice) + 1) % QUALITIES.length]
+      try {
+        localStorage.setItem(QUALITY_KEY, this.choice)
+      } catch {}
+      view.stage.setQuality(drawnAt(this.choice))
+      for (const fn of this.listeners) fn(this.label())
+    },
+  }
+  // (V2) the perf overlay (ui/perf.js): on by ?perf or as this browser kept
+  // it, switched by the HUD's 📈 and the title's link
+  const perf = new PerfOverlay({ stage: view.stage, el: $('#perfOverlay'), style: models.value, quality: qualities, params, fast: FAST })
+  ui.hud.wire({ rig: view.rig, player, standing: human.standing, perf })
   wireHelp()
   // (N2) online play: app/online.js, the net layer and Automerge loaded the
   // first time they are wanted (Play online, a #m= link), never for a game
@@ -355,6 +465,9 @@ export function boot(location) {
   // a replay file opened from the title, watched from its start
   const replay = new Replay({ flow, bar: new ReplayBar() })
   flow.replay = replay
+  // (F15) a line of the battle log clicked: the battle as it stood before
+  // the move it was logged in, on the replay's bar
+  ui.log.wire((k) => flow.battle && replay.before(flow.battle, k))
   const watchFile = (text) => {
     const { store, why } = openReplay(text)
     const ses = store && new Session({ store, dev: 'replay' })
@@ -373,15 +486,16 @@ export function boot(location) {
   const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
   const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
   let picking = null
-  // ((F7a) and the terrain line: the mission's sets, the table's picked)
+  // ((F7a) and the terrain line: the mission's sets, the table's picked;
+  // (F16) the fog line against the AI)
   const showSetup = () => {
     const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain } })
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog } })
   }
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf() }
+    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick }
     title.away()
     showSetup()
   }
@@ -401,10 +515,19 @@ export function boot(location) {
       if (!MISSIONS[mission].sets.includes(picking.terrain)) picking.terrain = flow.terrainOf(mission)
       showSetup()
     },
+    // (F16) the fog toggled: the flow's next default too, kept by this
+    // browser
+    fog: (on) => {
+      picking.fog = flow.fogPick = on
+      try {
+        localStorage.setItem(FOG_KEY, on ? '1' : '0')
+      } catch {}
+      showSetup()
+    },
     start: () => {
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races, picking.mission, picking.terrain)
+        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog)
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)
@@ -415,7 +538,28 @@ export function boot(location) {
       title.show()
     },
   })
-  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => openSetup(mode), online: () => goOnline('host'), replay: watchFile })
+  // (V2) the title's Figures: the style kept in this browser, and the page
+  // loaded again to build its figures (a ?models= or #models= in the address
+  // would override it, so the address loses them); where this browser keeps
+  // nothing, the fragment carries it instead (#models=, which reaches a
+  // page that never receives its query string)
+  const chooseModels = (style) => {
+    let kept = true
+    try {
+      localStorage.setItem(MODELS_KEY, style)
+    } catch {
+      kept = false
+    }
+    const url = new URL(location.href), frag = new URLSearchParams(url.hash.slice(1))
+    url.searchParams.delete('models')
+    if (kept) frag.delete('models')
+    else frag.set('models', style)
+    url.hash = frag.toString()
+    if (url.search !== location.search) return location.replace(url.href)
+    if (url.hash !== location.hash) location.hash = url.hash
+    location.reload()
+  }
+  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => openSetup(mode), online: () => goOnline('host'), replay: watchFile, figures: { style: models.value, styles: Object.keys(STYLES), choose: chooseModels }, quality: qualities, perf })
   ui.result.wire(() => flow.back(), (more) => human.vote(more), () => {
     if (!flow.battle) return
     replay.open(flow.battle)
@@ -1021,6 +1165,9 @@ export function boot(location) {
         // objects, the battlefield's, the figures and the floating labels;
         // and fx's scorch and acid marks (sim/snap-check.mjs: a snap takes
         // them away)
+        // ((V2, not promised) the splat-fur Bushtails' last preparation
+        // and registry, view/models/splat/splats.js)
+        splats: splatStats,
         counts: () => {
           let figures = 0
           scene.traverse((o) => o.userData.fig && figures++)
@@ -1081,7 +1228,9 @@ export function boot(location) {
         // opening view's shots): its pose and distance, how many batches it
         // framed, its bookmark, and each figure's height on screen in CSS px
         // (its box's top and bottom at its middle, projected), for the
-        // figures in front of the camera and on screen
+        // figures in front of the camera and on screen; ((F14)
+        // sim/lobby-rig.mjs's follow) and how often the follow policy moved
+        // it (a batch or an action framed, a focus glided to)
         camera: () => {
           const pose = rig.pose(), box = new THREE.Box3(), v = new THREE.Vector3()
           const heights = []
@@ -1095,7 +1244,51 @@ export function boot(location) {
             if (top.z >= 1 || bot.z >= 1 || Math.abs(bot.x) > 1 || Math.abs(bot.y) > 1) return
             heights.push(((top.y - bot.y) / 2) * innerHeight)
           })
-          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, marks: [...rig.marks.keys()], heights }
+          return { pose, d: Math.hypot(...pose.pos.map((x, i) => x - pose.target[i])), framed: rig.framed, followed: rig.followed, marks: [...rig.marks.keys()], heights }
+        },
+        // ((F16, not promised) the courtesy fog: the seat it is kept for, or
+        // null; the fog the sink has walked to (`last`: the units its seat
+        // sees, the ghosts, the chunks it holds as last seen where they
+        // differ from the match's) and the one the table shows (`shown`:
+        // the units veiled, the ghosts); and what the view draws of it:
+        // each unit's figures, ring, label and hit cylinder drawn or not,
+        // the ghosts standing, the minimap's dots and the roster's worth
+        // (sim/present-check.mjs's and sim/lobby-rig.mjs's fog cases)
+        fog: () => {
+          if (!flow.fog) return null
+          const L = flow.fogLast, S = flow.fogShown, M = player.mirror
+          const stale = (F) => (F?.table ? Object.keys(M.chunks).map(Number).filter((id) => { const r = F.table.get(id), c = M.chunks[id]; return !r || r.alive !== c.alive || r.y !== c.y }) : [])
+          const units = [...view.units.views.values()].map((v) => ({
+            id: v.id, side: v.u.side, alive: M.units[v.id]?.alive ?? 0,
+            figures: v.models.filter((f) => f.mesh && f.mesh.visible).length, ring: v.ring.visible, hit: !!v.hit.parent,
+            label: v.label.style.display !== 'none', picked: view.units.pickables().includes(v.hit),
+          }))
+          // (each chunk the table draws standing, by id: view/terrain.js's
+          // state)
+          const drawn = Object.keys(M.chunks).map(Number).filter((id) => view.terrain.state(id).shown)
+          return {
+            seat: flow.fog.seat, over: !!L?.over, drawn, table: S?.F?.table ? [...S.F.table].map(([id, r]) => [id, r.alive, r.y]) : null,
+            last: L && { seen: [...L.seen], ghosts: [...L.last.keys()].filter((id) => !L.seen.has(id)), known: Object.fromEntries(L.known), stale: stale(L) },
+            shown: S && { hide: [...S.hide], ghosts: [...S.ghosts.keys()], stale: stale(S.F) },
+            units, ghosts: view.ghosts.state(), dots: ui.minimap.dots(M), roster: ui.roster.model(),
+            // (the Strategic tier's chips, each standing unit given a place on
+            // screen for the asking, as a drawn page has; put back after)
+            chips: (() => {
+              const sc = view.units.screen, kept = new Map(sc)
+              for (const v of view.units.views.values()) if ((M.units[v.id]?.alive ?? 0) > 0) sc.set(v.id, { x: 0, y: 0, on: true })
+              const ids = view.units.chipsOf(M, null).map((c) => c.id)
+              sc.clear()
+              for (const [k, x] of kept) sc.set(k, x)
+              return ids
+            })(),
+          }
+        },
+        // ((F16, not promised) the next battle started here kept under the
+        // fog for `seat` whatever its mode (null: the panel's own choice
+        // again): sim/present-check.mjs's hotseat battles, whose scenery a
+        // seat loses sight of)
+        fogFor(seat) {
+          flow.fogPick = seat === null ? fogPick(params) : seat
         },
         // (F8a) the mission a battle started here is fought for from now on
         // (as ?mission= names one at load)

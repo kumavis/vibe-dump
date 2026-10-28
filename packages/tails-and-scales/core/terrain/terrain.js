@@ -7,6 +7,9 @@
 // an optional separate footprint (`nav`) for movement, and hit points.
 // Blasts chip them; at zero they break: wall blocks shatter and the blocks
 // above drop into the gap, trees topple into logs, hedges and crates burst.
+// (F19a) A powder keg bursts as a crate does here; that it goes off, a blast
+// that hits units, is the rules' (core/actions/shoot.js kegsGoOff), read
+// off the list of what broke (blast's, and the wrecker's smashAround's).
 //
 // This is consensus code: no meshes, no clock, and no randomness but the
 // board's layout stream. Destruction is instant here (a block's fall lowers
@@ -80,6 +83,11 @@ const addDef = (c) => {
 // moves sideways (a collapse only lowers it), so it is binned once, as it
 // joins.
 const BIN = 4, PAD = 0.01
+
+// (F19a) The powder kegs in `broke` (a blast's list of what broke, or a
+// wrecker's walk's, in the order they broke), which the rules set off
+// (core/actions/shoot.js kegsGoOff).
+export const kegsIn = (broke) => broke.filter((c) => c.kind === 'keg')
 
 export class Terrain {
   constructor(W, H) {
@@ -250,17 +258,32 @@ export class Terrain {
   // the blast is measured from: half an inch over the floor it lands on
   // (core/actions/shoot.js blastLands: 0.5 on a board without height, as it
   // always was).
+  //
+  // (F19a) A powder keg it breaks is in the list like any chunk: the rules
+  // set it off (core/actions/shoot.js kegsGoOff), the terrain only reports
+  // it broken.
   blast(x, z, r, dmg, { acid = false, y = 0.5 } = {}, out = null) {
     const broken = []
     for (const c of [...this.chunks]) {
       if (!c.alive || !c.destructible) continue
-      const d = distToBox(x, y, z, c.shape)
-      if (d > r) continue
-      let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)
-      if (acid && c.kind === 'block') amount += 1
+      const amount = this.blastDamage(c, x, y, z, r, dmg, acid)
+      if (amount === null) continue
       this.hurt(c, amount, { x, z }, out, broken)
     }
     return broken
+  }
+
+  // (F19a) What a blast centred on (x, z), measured from height y, of radius
+  // r and scenery damage dmg (acid or not) does to chunk c: the damage, or
+  // null when c is out of its reach. blast's own arithmetic, which the AI
+  // asks too (core/ai/score.js: would a template landing there set a keg
+  // off?); it changes nothing.
+  blastDamage(c, x, y, z, r, dmg, acid) {
+    const d = distToBox(x, y, z, c.shape)
+    if (d > r) return null
+    let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)
+    if (acid && c.kind === 'block') amount += 1
+    return amount
   }
 
   hurt(c, amount, from, out = null, broken = []) {
@@ -276,6 +299,7 @@ export class Terrain {
     return broken
   }
 
+  // (F19a) A keg breaks as a crate does: the blast it is is the rules'.
   destroy(c, from, out = null) {
     c.alive = false
     this.dirty = true

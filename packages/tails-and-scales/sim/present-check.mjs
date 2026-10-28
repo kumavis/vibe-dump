@@ -153,6 +153,49 @@
 // an embark and a step off, or it held nothing. They run with every run,
 // and with --only only when it names `riders` (--only riders: them alone).
 //
+//
+// (F14) And, before the battles, in this process: the page's own player and
+// camera rig (view/player.js, view/camera.js, with the view's camera
+// handlers) play a corpus battle's first human move, a lone walk, as the
+// other seat's page plays an online opponent's: exactly one camera glide
+// (toward the walk's end on the opening view, framed as a batch of its ends
+// is with the camera zoomed off), one for a watching page, none on the page
+// whose seat made it, in hotseat or with 🎥 off; and the AI's first turn
+// played one at a time is cued an action at a time, no focus followed on
+// its own (followCheck, below). Code older than F14 fails it. The
+// self-test's mutations reach only the battles' children, not this case.
+//
+// (F16) And the courtesy fog: every battle against the AI (the human
+// set's) played again on the page with ?fog, the seat played here under
+// it. The battle itself must be the corpus's, and the mirror the match at
+// every checkpoint, as above (the fog changes nothing the match holds);
+// and as each entry closes (its second `fog` event played) what the page
+// shows of the other army is held to a fold of its own through the core
+// alone, which asks the core's sight over every pair of units as the
+// entry leaves the match: every living enemy none of the seat's units
+// sees has no figure drawn, no ring, no label, no hit cylinder (no pick),
+// no minimap dot and no chip (the Strategic tier's: each unit given a
+// place on screen for the asking, as a drawn page has), and every one
+// seen has its label and its pick; the ghosts are the fold's (each enemy
+// seen once and not now, kept until a stand-in where it stood is seen,
+// or it fell in sight) and stand where it fold says, their figures its
+// models then standing, each a grey minimap ring; the roster's other army
+// is its worth as last seen; and the scenery: every chunk drawn standing
+// exactly when the seat's record of it says so, and none kept as last
+// seen (its record not the match's) while the fold's core sees it (a
+// stand-in at its top centre, as the fog asks). Every battle-log line the page writes from
+// the other seat that starts with an enemy's name names one seen as its
+// entry opened or closed (else it is hidden, or unnamed: "Unseen"), and
+// so does every dice tray's title; a line the fog hid was never written,
+// and every other was. The battle over, the fog is lifted. Over the whole
+// set the run fails if no enemy was ever hidden, no ghost ever stood or no
+// line was ever hidden (the check would hold nothing). The scenery goes
+// out of sight in no battle against the AI, so four hotseat battles in
+// which it does are played as well, one seat under the fog (the ?debug
+// block's view.fogFor: never offered in hotseat); over them some chunk
+// must be kept as last seen. Code older than F16 fails it; the self-test's
+// mutations leave it out.
+//
 //   node sim/present-check.mjs [--only ai,hotseat,4242-99,riders] [--ref <ref> | --dir <packageDir>]
 //   node sim/present-check.mjs --self-test     each edit in present-hooks.mjs's
 //                                              MUTATIONS must fail it
@@ -264,6 +307,9 @@ async function page(dir) {
   const job = JSON.parse(readFileSync(0, 'utf8'))
   const setup = jobSetup(job)
   const { mode, query } = pageStart(setup)
+  // ((F16) the courtesy fog's run: the battle under ?fog, the seat played
+  // here the human one)
+  const FOG = !!process.env.PRESENT_FOG
   let ts = null, rec = null
   Object.defineProperty(globalThis, '__ts', {
     configurable: true,
@@ -273,11 +319,11 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  globalThis.location = { search: `?fast&debug&lowfi&${query}` }
+  globalThis.location = { search: `?fast&debug&lowfi&${query}${FOG ? '&fog' : ''}` }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
-  const out = { trace: [], shadow: [], written: [], acts: 0, checks: 0, cards: 0, told: 0, events: 0, kinds: {}, ordered: null, mismatch: null, error: null }
+  const out = { trace: [], shadow: [], written: [], acts: 0, checks: 0, cards: 0, told: 0, events: 0, kinds: {}, ordered: null, mismatch: null, error: null, fog: null }
   // (R7b) what each unit has done this turn and its cover as the match
   // stood at each `act` line and at each stop, and at the battle's start
   // (its table, the backdrop: both seats human, dice 0): from a quiet fold
@@ -301,6 +347,10 @@ async function page(dir) {
     const { LADDER_MUL = 2 } = await import(pathToFileURL(join(dir, 'core', 'nav.js')).href).catch(() => ({}))
     const { hypot = Math.hypot } = await import(pathToFileURL(join(dir, 'core', 'dmath.js')).href).catch(() => ({}))
     const order = eventOrder((id) => ts.G.units.find((u) => u.id === id), LADDER_MUL, hypot)
+    // ((F16) the fog's own checks, as each entry closes: fogWatch, below)
+    const fogSeat = process.env.PRESENT_FOG_SEAT ? Number(process.env.PRESENT_FOG_SEAT) : mode === 'serpent' ? 1 : 0
+    const fogW = FOG ? await fogWatch(dir, job, setup, fogSeat, mode !== 'hotseat', () => ts, miss) : null
+    if (fogW) out.fog = fogW.stats
     ts.present.listen({
       // a new table: the mirror it is shown from (a copy: the player's own
       // is folded in place)
@@ -315,6 +365,7 @@ async function page(dir) {
       // line, a stop (`pending`) to the match's as it stopped there, a
       // seat's first phase clearing its units' deeds
       event: (e, shown) => {
+        fogW?.event(e)
         if (shownFacts && e.t === 'phase.start' && e.phase === shownFacts.first) facts = turnBegun(facts, e.side)
         try {
           look(e, shown)
@@ -331,7 +382,9 @@ async function page(dir) {
     // the folded mirror, the player's (`shown`) and the cards, at event e
     function look(e, shown) {
       M = applyEvent(M, e)
-      const o = order.event(e)
+      // ((F16) under the fog the trays and lines it unnamed read otherwise:
+      // the order is the unfogged run's to hold)
+      const o = FOG ? '' : order.event(e)
       if (o) miss(`after act ${out.acts} (trace line ${ts.trace.length}): event order: ${o}`)
       out.events++
       out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
@@ -372,6 +425,8 @@ async function page(dir) {
       }
     }
     const driver = mode === 'watch' ? null : humanDriver(ts, { entries: job.entries })
+    // ((F16) a hotseat battle with one seat under the fog: the ?debug door)
+    if (FOG && process.env.PRESENT_FOG_SEAT) ts.view.fogFor(fogSeat)
     ts.start(mode)
     let frames = 0
     while (ts.S.stage !== 'over') {
@@ -384,6 +439,8 @@ async function page(dir) {
       await new Promise((r) => setImmediate(r))
     }
     if (fatal) throw fatal
+    // ((F16) the last entry's close looked at, and the fog lifted)
+    fogW?.end()
     if (driver?.unused) throw new Error(`the battle ended with ${driver.unused} log entries unplayed`)
     // the battle played was the log's, field for field
     const other = playedAs(ts.G?.setup, setup)
@@ -398,7 +455,7 @@ async function page(dir) {
     if (d) out.mismatch ??= `at the game's end: ${d}`
     const lines = ts.trace.filter((l) => l.startsWith('act ')).length
     if (lines !== out.acts) out.mismatch ??= `${lines} act lines in the trace, ${out.acts} act events`
-    const o = order.end()
+    const o = FOG ? '' : order.end()
     if (o) out.mismatch ??= `at the game's end: event order: ${o}`
     out.ordered = order.seen
   } catch (e) {
@@ -409,6 +466,176 @@ async function page(dir) {
   out.written = rec?.written ?? []
   // (no process.exit: it would cut a piped stdout short)
   process.stdout.write(JSON.stringify(out))
+}
+
+// ── (F16) The courtesy fog, held to the core's sight ──────────────────────
+// A fold of the battle of its own through the core alone (quiet), an entry
+// at a time as the page's Session folds it: as each entry leaves the
+// match, the enemy units the seat's living units see (the core's sight,
+// every pair), and the ghosts: each enemy seen once and not now, where it
+// last stood (as it then stood), gone once it falls in sight (seen as the
+// entry opened) or a stand-in where it stood is seen (the unit's type, its
+// models in their slots then: the core's sight to it). Then the page,
+// played under ?fog, is looked at after each entry's closing `fog` event
+// has played (at the next event the player plays, or the end), and its
+// battle log and dice tray after each line and tray: event(e) for each
+// event, end() at the battle's end. The fold also asks, of each chunk
+// changed since the board stood (broken, dropped, added), whether a stand-in
+// at its top centre is seen (a fallen log and its tree together), which the
+// page's scenery as last seen is held to. `solo`: against the AI (the
+// roster lists no unit of the other seat). `ts()` the ?debug block,
+// `miss(why)`.
+async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
+  const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
+  const stats = { closes: 0, entries: 0, hidden: 0, ghosts: 0, stale: 0, linesHidden: 0, linesUnseen: 0, linesNamed: 0, trays: 0, looked: 0 }
+  const G = core.createMatch(setup, { out: null })
+  const sees = (f, b) => core.q.sight(G, f, b, f.pos, false).visible
+  const names = new Map()
+  for (const u of G.units) for (const n of [u.t.short, u.t.name]) names.set(n, [...(names.get(n) ?? []), u])
+  const ref = []
+  let seen = new Set(), last = new Map(), board = null
+  const point = (x, z, y) => ({ id: -1, side: -1, t: { chest: y - core.q.floorAt(G, x, z), eye: 0, models: 1 }, pos: { x, z }, r: 0, models: [{ alive: true, w: 1, ox: 0, oz: 0 }] })
+  const fold = () => {
+    const mine = G.units.filter((u) => u.side === seat && u.alive > 0), foes = G.units.filter((u) => u.side !== seat)
+    // the chunks changed since the board stood (after the start), and
+    // which of them the seat's units see the top of
+    board ??= new Map(G.terrain.chunks.map((c) => [c.id, { alive: c.alive, y: c.shape.y }]))
+    const byId = new Map(G.terrain.chunks.map((c) => [c.id, c]))
+    const changed = G.terrain.chunks.filter((c) => !board.has(c.id) || board.get(c.id).alive !== c.alive || board.get(c.id).y !== c.shape.y)
+    const chunks = new Set(changed.filter((c) => mine.some((f) => sees(f, point(c.shape.x, c.shape.z, c.shape.y + c.shape.hy + 0.1)))).map((c) => c.id))
+    for (const c of changed) {
+      const t = c.look?.piece === 'fallen' ? c.look.tree : undefined
+      if (t !== undefined && byId.has(t) && (chunks.has(c.id) || chunks.has(t))) chunks.add(c.id).add(t)
+    }
+    const now = new Set(foes.filter((e) => e.alive > 0 && mine.some((f) => core.q.sight(G, f, e).visible)).map((e) => e.id))
+    for (const e of foes) {
+      if (now.has(e.id)) last.set(e.id, { x: e.pos.x, z: e.pos.z, r: e.r, models: e.models.map((m) => ({ ...m })) })
+      else if (!(e.alive > 0) && seen.has(e.id)) last.delete(e.id)
+      else if (last.has(e.id)) {
+        const r = last.get(e.id)
+        if (r.models.some((m) => m.alive) && mine.some((f) => sees(f, { id: e.id, side: e.side, t: e.t, pos: { x: r.x, z: r.z }, r: r.r, models: r.models }))) last.delete(e.id)
+      }
+    }
+    ref.push({ seen: now, V: new Set([...seen, ...now]), alive: new Set(foes.filter((e) => e.alive > 0).map((e) => e.id)), ghosts: new Map([...last].filter(([id]) => !now.has(id))), chunks, over: G.turn.stage === 'over' })
+    seen = now
+  }
+  fold()
+  for (const { s, ...body } of job.entries ?? []) {
+    core.apply(G, s, body)
+    fold()
+  }
+  const foe = (id) => G.units.find((u) => u.id === id)?.side !== seat
+  // the name a line or a tray title starts with, and whether it names an
+  // enemy seen as entry k opened or closed (true for a name no enemy has)
+  const lineName = (html) => /^<b>(.*?)<\/b>/.exec(html ?? '')?.[1] ?? null
+  const trayName = (title) => String(title ?? '').split(/ → | fight | charge | — |: /)[0].trim()
+  const namedSeen = (name, k) => {
+    const of = (names.get(name) ?? []).filter((u) => u.side !== seat)
+    return !of.length || of.some((u) => ref[k]?.V.has(u.id))
+  }
+  let k = -1, due = null, line = null, tray = null
+  const look = (at) => {
+    const t = ts(), f = t.view.fog(), r = ref[at], rc = r
+    stats.looked++
+    if (!f) return miss(`(F16) entry ${at}: the page keeps no fog`)
+    if (!r) return miss(`(F16) entry ${at}: the page closed more entries than the battle has (${ref.length})`)
+    if (r.over) {
+      if (f.shown || !f.over) miss(`(F16) entry ${at}: the battle is over and the fog not lifted (${JSON.stringify(f.shown)})`)
+      return
+    }
+    const hide = new Set((f.shown?.hide ?? []).filter((id) => r.alive.has(id)))
+    const want = [...r.alive].filter((id) => !r.seen.has(id))
+    stats.hidden += want.length
+    if ([...hide].sort().join() !== want.sort().join()) return miss(`(F16) entry ${at}: the page hides enemies ${[...hide].sort().join()}, the core's sight leaves unseen ${want.join()}`)
+    for (const u of f.units) {
+      if (!foe(u.id) || !r.alive.has(u.id)) continue
+      const hid = !r.seen.has(u.id)
+      if (hid && (u.figures || u.ring || u.label || u.hit || u.picked)) return miss(`(F16) entry ${at}: unit ${u.id}, unseen, is drawn (${JSON.stringify(u)})`)
+      if (!hid && (!u.label || !u.picked || !u.figures)) return miss(`(F16) entry ${at}: unit ${u.id}, seen, is not drawn (${JSON.stringify(u)})`)
+    }
+    const dots = new Map(f.dots.map((d) => [`${d.id}${d.ghost ? 'g' : ''}`, d]))
+    for (const id of want) if (dots.has(`${id}`)) return miss(`(F16) entry ${at}: unit ${id}, unseen, has a minimap dot`)
+    for (const id of f.chips) if (want.includes(id)) return miss(`(F16) entry ${at}: unit ${id}, unseen, has a chip`)
+    // the ghosts
+    const ghosts = new Map(f.ghosts.map((g) => [g.id, g]))
+    stats.ghosts += r.ghosts.size
+    if ([...ghosts.keys()].sort().join() !== [...r.ghosts.keys()].sort().join()) return miss(`(F16) entry ${at}: the page's ghosts are ${[...ghosts.keys()].sort().join()}, the fold's ${[...r.ghosts.keys()].sort().join()}`)
+    for (const [id, g] of r.ghosts) {
+      const p = ghosts.get(id), standing = g.models.filter((m) => m.alive).length
+      if (p.x !== g.x || p.z !== g.z || p.figures !== standing) return miss(`(F16) entry ${at}: unit ${id}'s ghost stands at (${p.x}, ${p.z}) with ${p.figures} figures, not where it was last seen, (${g.x}, ${g.z}) with ${standing}`)
+      if (!dots.has(`${id}g`)) return miss(`(F16) entry ${at}: unit ${id}'s ghost has no minimap ring`)
+    }
+    // the roster: the other army as last seen (against the AI, none of its
+    // units listed)
+    const other = 1 - seat
+    if (!f.roster.fogged?.[other] || (solo && f.roster.rows.some((row) => foe(row.id)))) return miss(`(F16) entry ${at}: the roster doesn't show the other army as last seen (${JSON.stringify(f.roster)})`)
+    // the scenery: drawn as the seat's record has it, and none kept as last
+    // seen while the core sees it
+    if (!f.table) return miss(`(F16) entry ${at}: the page keeps no record of the scenery`)
+    const rec = new Map(f.table.map(([id, alive, y]) => [id, { alive, y }])), drawn = new Set(f.drawn), M = t.player.mirror
+    for (const key of Object.keys(M.chunks)) {
+      const id = Number(key), r = rec.get(id), c = M.chunks[key]
+      if (drawn.has(id) !== !!r?.alive) return miss(`(F16) entry ${at}: chunk ${id} is ${drawn.has(id) ? '' : 'not '}drawn standing, its record ${r ? `${r.alive ? 'standing' : 'broken'}` : 'never seen'}`)
+      if (r && r.alive === c.alive && r.y === c.y) continue
+      stats.stale++
+      if (rc.chunks.has(id)) return miss(`(F16) entry ${at}: chunk ${id} is kept as last seen (${r ? JSON.stringify(r) : 'never seen'}; the match's ${JSON.stringify(c)}) though the seat's units see its top`)
+    }
+  }
+  // a line just played: written as the fog marked it, and a name it starts
+  // with seen
+  const lookLine = ({ e, top, at }) => {
+    const list = globalThis.document.querySelector('#logList'), now = list.children[0]
+    if (e.veil === 'hide') {
+      stats.linesHidden++
+      if (now !== top) miss(`(F16) entry ${at}: a line the fog hid was written ("${e.html}")`)
+      return
+    }
+    if (now === top || now?.innerHTML !== e.html) return miss(`(F16) entry ${at}: a line the fog showed wasn't written as marked ("${e.html}" | "${now?.innerHTML}")`)
+    if (e.side === seat || e.side < 0) return
+    const name = lineName(e.html)
+    if (name === 'Unseen') return void stats.linesUnseen++
+    if (name && (names.get(name) ?? []).some((u) => u.side !== seat)) {
+      stats.linesNamed++
+      if (!namedSeen(name, at)) miss(`(F16) entry ${at}: the line "${e.html}" names ${name}, none of whom the seat saw as its entry opened or closed`)
+    }
+  }
+  // (a tray a batch plays opens its own, never the event's: written only
+  // when the tray's title changed)
+  const lookTray = ({ e, top, at }) => {
+    const now = globalThis.document.querySelector('#tray').children[0]
+    if (now === top) return
+    if (e.veil === 'hide') return miss(`(F16) entry ${at}: a tray the fog hid was opened ("${e.title}")`)
+    stats.trays++
+    if (now?.textContent !== e.title) return miss(`(F16) entry ${at}: the tray reads "${now?.textContent}", not "${e.title}" as the fog marked it`)
+    const name = trayName(e.title)
+    if (name !== 'Unseen' && !namedSeen(name, at)) miss(`(F16) entry ${at}: the tray "${e.title}" names ${name}, none of whom the seat saw as its entry opened or closed`)
+  }
+  const settle = () => {
+    if (due !== null) look(due)
+    if (line) lookLine(line)
+    if (tray) lookTray(tray)
+    due = line = tray = null
+  }
+  return {
+    stats,
+    event(e) {
+      settle()
+      if (e.t === 'fog' && e.at === 'open') k++
+      if (e.t === 'fog' && e.at === 'close') {
+        stats.closes++
+        due = k
+      }
+      if (e.t === 'log') line = { e, top: globalThis.document.querySelector('#logList').children[0], at: k }
+      if (e.t === 'tray.open') tray = { e, top: globalThis.document.querySelector('#tray').children[0], at: k }
+    },
+    end() {
+      settle()
+      stats.entries = ref.length
+      if (stats.closes !== ref.length) miss(`(F16) the page closed ${stats.closes} entries under the fog, the battle has ${ref.length}`)
+      const f = ts().view.fog()
+      if (f?.shown || !f?.over) miss(`(F16) the battle is over, and the fog not lifted`)
+    },
+  }
 }
 
 // The actions' own events in their order (the header's list), from each
@@ -427,7 +654,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
-  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0 }
+  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0 }
   const reset = () => {
     p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = boarding = null
     melees = 0
@@ -485,6 +712,10 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     }
     if (p1?.t === 'blast.fire' && !(e.t === 'blast.land' && at(e, p1.to))) why ||= `a template thrown and not landing straight after, where it was thrown (${e.t})`
     if (p1?.t === 'spell.thorns' && !(e.t === 'blast.land' && at(e, p1) && e.r === p1.r)) why ||= `thorns erupting with no template landing straight after, under them (${e.t})`
+    // ((F19a) a powder keg set off: straight after its line, and its blast
+    // landing straight after it, where it stood, in the keg's look)
+    if (p1?.t === 'keg.fuse' && !(e.t === 'blast.land' && at(e, p1) && e.fx === 'keg')) why ||= `a powder keg set off at (${p1.x}, ${p1.z}) with no blast of its own landing straight after, there (${e.t}${e.t === 'blast.land' ? ` at (${e.x}, ${e.z}) in the look ${e.fx}` : ''})`
+    if (e.t === 'keg.fuse' && !(p1?.t === 'log' && p1.traced && text(p1.html) === 'The powder keg goes up!')) why ||= `a powder keg set off at (${e.x}, ${e.z}) not straight after its line (${p1?.t}${p1?.t === 'log' ? ` "${text(p1.html)}"` : ''})`
     // a landing: straight on to its first victim's wound row, or the beat
     // when it caught nobody
     if (p1?.t === 'blast.land' && !(e.t === 'dice' && /: \d+ hits? · wound \d\+$/.test(e.label)) && !(e.t === 'pause' && e.s === 0.25)) {
@@ -508,7 +739,9 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       shot = p1?.t === 'unit.face' ? p1.u : null
     }
     if ((e.t === 'volley' || e.t === 'blast.fire') && e.u !== shot) why ||= `${e.t} by ${nameOf(e.u)}, not by the shooter (${nameOf(shot)})`
-    if (e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') {
+    // ((F19a) but a powder keg's blast, in the keg's own look, whoever set
+    // it off)
+    if ((e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') && !(e.t === 'blast.land' && p1?.t === 'keg.fuse')) {
       const look = unitOf(shot)?.t.ranged?.fx
       if (e.fx !== look) why ||= `${e.t} in the look ${e.fx}, not the shooter's weapon's (${look})`
     }
@@ -539,7 +772,8 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
         seen.templates++
         if (tmpl?.land) seen.scatters++
         tmpl = null
-      } else if (p1?.t !== 'spell.thorns') why ||= `a template landing that was neither thrown nor erupted (after ${p1?.t})`
+      } else if (p1?.t === 'keg.fuse') seen.kegs++
+      else if (p1?.t !== 'spell.thorns') why ||= `a template landing that was neither thrown, erupted nor a powder keg's (after ${p1?.t})`
     }
     if (e.t === 'spell.thorns') thorns = e
     if (e.t === 'spell.fade') {
@@ -792,6 +1026,191 @@ function child(dir, job, env = process.env, mode = '--child') {
   })
 }
 
+// ── (F14) The camera follows a human opponent's lone move ──────────────────
+// The page's own player (view/player.js) and camera (view/camera.js), made
+// here in Node over a stand-in canvas (as sim/camera-check.mjs makes the
+// rig), with the view's camera handlers (view/index.js's focus and cue) and
+// the flow's frame (app/flow.js's: the rig's frame). A corpus battle's first
+// human move on classic (a lone walk: no batch takes it) is played as the
+// page of the other seat plays an online opponent's, from the table as it
+// stood before it: the camera glides exactly once as it plays (toward its
+// end, the battle's opening view taking it in; framed, as a batch of its two
+// ends is, with the camera zoomed off elsewhere), and once for a watching
+// page; not at all on the page whose seat made it, in hotseat, or with 🎥
+// off; and the move is cued once on every page. Then the AI's turn the same
+// battle opens with, played one at a time (⇉ off): each action is cued
+// once and no focus event is followed on its own (one move of the camera an
+// action at most). Returns { ok, lines }.
+async function followCheck(dir) {
+  const imp = (f) => import(pathToFileURL(join(dir, f)).href)
+  const { loadCorpus } = await import('./lib.mjs')
+  const lines = []
+  let bad = 0
+  const check = (ok, what, why = '') => {
+    if (!ok) bad++
+    lines.push(`  (F14) ${ok ? 'ok  ' : 'FAIL'} ${what}${!ok && why ? `: ${why}` : ''}`)
+  }
+  const presets = await imp('present/camera-presets.js')
+  if (!presets.cueAt) return { ok: false, lines: ['  (F14) FAIL code older than F14: present/camera-presets.js cues no action, so a human opponent\'s lone move moves no camera'] }
+  // (a page's globals, enough for the rig and its controls; put back after)
+  const keep = Object.fromEntries(['addEventListener', 'removeEventListener', 'document', 'innerWidth', 'innerHeight'].map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]))
+  const listen = { addEventListener() {}, removeEventListener() {} }
+  Object.assign(globalThis, { addEventListener() {}, removeEventListener() {}, document: listen, innerWidth: 1280, innerHeight: 800 })
+  try {
+    const canvas = { ...listen, style: {}, ownerDocument: listen, getRootNode: () => listen, clientHeight: 800, getBoundingClientRect: () => ({ left: 0, top: 0, width: 1280, height: 800 }) }
+    const core = await imp('core/index.js')
+    const { edgeOf } = await imp('core/match.js')
+    const { project } = await imp('present/mirror.js')
+    const { CameraRig } = await imp('view/camera.js')
+    const { View } = await imp('view/index.js')
+    const { EventPlayer } = await imp('view/player.js')
+    const { stepTweens, wait } = await imp('view/clock.js')
+    const { viewsFor, framePose, circleOf } = presets
+    // the battle: a human seat 0 against the AI on classic, with a move
+    const job = loadCorpus().items.map((it) => it.job).find((j) => j.setup?.seats?.[0]?.ctrl === 'human' && j.setup.seats[1]?.ctrl === 'ai' && !j.setup.mission && j.entries?.some((e) => e.t === 'move'))
+    if (!job) return { ok: false, lines: ['  (F14) FAIL the corpus has no classic battle of a human seat 0 against the AI with a move'] }
+    // folded an entry at a time: the table before the AI's first turn (the
+    // entry that hands it over) and before the first move, and their events
+    const G = core.createMatch(job.setup, { out: [] })
+    G.out.length = 0
+    let turn = null, move = null
+    for (const { s, ...body } of job.entries) {
+      const M = project(G)
+      core.apply(G, s, body)
+      const events = G.out.splice(0)
+      if (!turn && events.some((e) => e.t === 'focus')) turn = { M, events }
+      if (body.t === 'move' && events.some((e) => e.t === 'unit.move')) {
+        move = { M, events, walk: events.find((e) => e.t === 'unit.move') }
+        break
+      }
+    }
+    if (!move) return { ok: false, lines: ['  (F14) FAIL the battle has no walk in a move entry'] }
+    const mover = G.units.find((u) => u.id === move.walk.u).side
+    const ends = [move.M.units[move.walk.u].pos, move.walk.to].map((p) => ({ x: p.x, z: p.z }))
+    const settle = (rig) => {
+      for (let i = 0; i < 30; i++) stepTweens(0.1)
+      for (let i = 0; i < 5; i++) rig.update(0)
+    }
+    // a page playing `localSeats` (the rig at the battle's opening view, then
+    // `ready(rig)`), handed `events` from the table `M`: how many times the
+    // follow policy moved its camera, its pose before and after, how many
+    // actions were cued and focus events followed on their own
+    const play = async ({ localSeats, M, events, ready = () => {}, batched = true }) => {
+      const rig = new CameraRig({ domElement: canvas })
+      rig.setBoard(G.board)
+      rig.setViews(viewsFor({ localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
+      settle(rig)
+      ready(rig)
+      settle(rig)
+      const vh = View.prototype.handlers.call({ rig, units: {}, shots: {}, terrain: {} }, { localSeats: () => localSeats })
+      let focused = 0
+      const handlers = {
+        focus: (e, m) => (focused++, vh.focus(e, m)),
+        cue: vh.cue,
+        frame: (e, m) => rig.frame(e.points, { stage: m.stage, active: m.active, localSeats }),
+        'unit.move': (e) => wait((e.L ?? 0) / (e.speed || 6) + 0.15),
+        fallback: () => {},
+      }
+      const player = new EventPlayer({ handlers, mirror: structuredClone(M), sideOf: (u) => G.units.find((x) => x.id === u)?.side })
+      player.batched = batched
+      const f0 = rig.followed, before = rig.pose(), wasOff = rig.offScreen(ends)
+      player.push(events)
+      for (let i = 0; i < 5000 && !(player.idle && i > 2); i++) {
+        await new Promise((r) => setTimeout(r, 0))
+        stepTweens(0.1)
+        rig.update(0)
+      }
+      settle(rig)
+      return { glides: rig.followed - f0, before, after: rig.pose(), wasOff, cues: player.cues, focused, idle: player.idle, rig }
+    }
+    const close = (a, b) => a.every((x, i) => Math.abs(x - b[i]) <= 1e-6)
+    const other = 1 - mover
+    // the other seat's page, at the battle's opening view: the walk on
+    // screen, its end more than 6" from where the camera looks
+    {
+      const r = await play({ localSeats: [other], ...move })
+      const t = r.before.target, to = move.walk.to
+      const far = Math.hypot(to.x - t[0], to.z - t[2]) >= 6 && !r.wasOff
+      check(far, `the case: seat ${mover}'s move ends ${Math.hypot(to.x - t[0], to.z - t[2]).toFixed(1)}" from where seat ${other}'s opening view looks, on screen`)
+      check(r.idle && r.cues === 1 && r.glides === 1, `seat ${other}'s page (an online opponent's): seat ${mover}'s lone move glides its camera once`, `${r.glides} glides, ${r.cues} cues, idle ${r.idle}`)
+      const want = [t[0] + (to.x - t[0]) * 0.6, 0, t[2] + (to.z - t[2]) * 0.6]
+      check(close(r.after.target, want), '…toward the walk\'s end, as a focus glides (60% of the way)', `${r.after.target.map((x) => x.toFixed(2))} | ${want.map((x) => x.toFixed(2))}`)
+    }
+    // the same, the camera zoomed off to the other side of the board: framed
+    {
+      const r = await play({ localSeats: [other], ...move, ready: (rig) => rig.frameOn(-ends[1].x * 1.2, -ends[1].z - 6, 4) })
+      const want = framePose(circleOf(ends), r.before, 1280 / 800, { min: r.rig.controls.minDistance * 2, max: r.rig.controls.maxDistance })
+      check(r.wasOff, 'the case: zoomed off to the other side of the board, the walk is off screen')
+      check(r.cues === 1 && r.glides === 1 && close(r.after.pos, want.pos) && close(r.after.target, want.target), `seat ${other}'s page zoomed off elsewhere: the move is framed once, as a batch of its two ends is (framePose round them)`, `${r.glides} glides, at ${r.after.target.map((x) => x.toFixed(2))} | ${want.target.map((x) => x.toFixed(2))}`)
+    }
+    for (const [localSeats, want, what] of [
+      [[], 1, 'a watching page (no seat played here: a watched battle, a replay)'],
+      [[mover], 0, `seat ${mover}'s own page (its own move)`],
+      [[0, 1], 0, 'hotseat (its player\'s own move)'],
+    ]) {
+      const r = await play({ localSeats, ...move })
+      check(r.idle && r.cues === 1 && r.glides === want && (want || close(r.after.pos, r.before.pos)), `${what}: ${want ? 'one glide' : 'the camera stays'}`, `${r.glides} glides, ${r.cues} cues`)
+    }
+    {
+      const r = await play({ localSeats: [other], ...move, ready: (rig) => (rig.follow = false) })
+      check(r.cues === 1 && r.glides === 0 && close(r.after.pos, r.before.pos), '🎥 off: the camera stays', `${r.glides} glides`)
+    }
+    // the AI's turn played one at a time on the human seat's page
+    if (turn) {
+      const focuses = turn.events.filter((e) => e.t === 'focus').length
+      const r = await play({ localSeats: [0], ...turn, batched: false })
+      check(r.idle && r.cues > 0 && r.focused === 0 && r.glides <= r.cues, `the AI's first turn one at a time (${focuses} focus events): ${r.cues} actions cued, ${r.glides} camera moves, no focus followed on its own`, `${r.focused} focus events followed, idle ${r.idle}`)
+    }
+  } finally {
+    for (const [k, d] of Object.entries(keep)) {
+      if (d) Object.defineProperty(globalThis, k, d)
+      else delete globalThis[k]
+    }
+  }
+  return { ok: !bad, lines }
+}
+
+// ── (F16) The courtesy fog: every battle against the AI, under ?fog ───────
+// Each played in a child with PRESENT_FOG set (fogWatch, above): the
+// battle the corpus's, the mirror the match, the fog the core's sight.
+// Returns { ok, lines }.
+// (the hotseat battles in which one seat loses sight of scenery it saw
+// change, and that seat)
+// (a function: the checks run from the module's top, above this line)
+function fogHotseat(id) {
+  return { 'hotseat-aggressive-125': 1, 'hotseat-aggressive-lists-3': 1, 'hotseat-aggressive-140': 0, 'hotseat-aggressive-field-1': 0 }[id]
+}
+async function fogCase(dir, items, env) {
+  const { verdict, pool, CPUS } = await import('./lib.mjs')
+  if (!existsSync(join(dir, 'present', 'fog.js'))) return { ok: false, lines: ['  (F16) FAIL code older than F16: no present/fog.js, so no battle is played under the courtesy fog'] }
+  const lines = [], total = { closes: 0, hidden: 0, ghosts: 0, stale: 0, linesHidden: 0, linesUnseen: 0, linesNamed: 0, trays: 0, looked: 0 }
+  let bad = 0
+  await pool(items, CPUS, async (it) => {
+    const seat = fogHotseat(it.id)
+    const r = await child(dir, it.job, { ...env, PRESENT_FOG: '1', ...(seat !== undefined ? { PRESENT_FOG_SEAT: String(seat) } : {}) })
+    let why = r.error ?? r.mismatch
+    if (!why) {
+      // (the battle itself the corpus's: its trace and shadows; the battle
+      // log the page writes is the fog's, lines hidden or unnamed, each held
+      // to the fog's marks by fogWatch)
+      const v = verdict(it, r)
+      if (v.line >= 0 || v.shadow >= 0) why = `under the fog the battle itself differs from the corpus (trace line ${v.line}, shadow ${v.shadow})`
+      else if (!r.fog?.closes) why = 'no entry closed under the fog (?fog not taken?)'
+    }
+    if (why) bad++
+    for (const k of Object.keys(total)) total[k] += r.fog?.[k] ?? 0
+    lines.push(`  (F16) ${why ? 'FAIL' : 'ok  '} ${it.id.padEnd(24)} ${why ? why.split('\n')[0].slice(0, 300) : `${seat !== undefined ? `(seat ${seat} under the fog) ` : ''}${r.fog.closes} entries under the fog, ${r.fog.hidden} enemy-entries hidden, ${r.fog.ghosts} ghost-entries, ${r.fog.stale} chunk-entries as last seen, ${r.fog.linesHidden} lines hidden, ${r.fog.linesUnseen} unnamed`}`)
+  })
+  // (a check that held nothing proves nothing)
+  const none = ['hidden', 'ghosts', 'linesHidden', ...(items.some((it) => fogHotseat(it.id) !== undefined) ? ['stale'] : [])].filter((k) => !total[k])
+  if (items.length && none.length) {
+    bad++
+    lines.push(`  (F16) FAIL over ${items.length} battles the fog held no ${none.join(', ')}: the check held nothing there`)
+  }
+  lines.push(`  (F16) ${items.length} battles under the fog: ${total.closes} entries closed and looked at, ${total.hidden} enemy-entries hidden, ${total.ghosts} ghost-entries, ${total.stale} chunk-entries as last seen, ${total.linesHidden} lines hidden, ${total.linesUnseen} unnamed, ${total.linesNamed} naming a seen enemy, ${total.trays} trays`)
+  return { ok: !bad, lines }
+}
+
 // ── Every battle ────────────────────────────────────────────────────────────
 // Returns the exit code; `env` (the self-test's mutation) goes to every child.
 async function parent({ env = process.env, quiet = false } = {}) {
@@ -818,6 +1237,9 @@ async function parent({ env = process.env, quiet = false } = {}) {
   const t0 = Date.now()
   const total = { acts: 0, checks: 0, cards: 0, told: 0, events: 0, kinds: {}, ordered: {} }
   let failed = 0
+  // ((F14) the camera and a human opponent's lone move, in this process)
+  const follow = await followCheck(dir)
+  for (const l of follow.lines) say(l)
   await pool(items, CPUS, async (it) => {
     const r = await child(dir, it.job, env)
     let why = r.error ?? r.mismatch
@@ -867,9 +1289,17 @@ async function parent({ env = process.env, quiet = false } = {}) {
       say(`  FAIL: the event order held no ${none.join(', ') || 'line'} at all (have their texts changed?)`)
     }
   }
+  if (!follow.ok) say('  FAIL: (F14) the camera does not follow a human opponent\'s lone move as it should (above)')
+  // ((F16) the courtesy fog: the battles against the AI among those
+  // selected, under ?fog; not under the self-test's mutations)
+  const solo = items.filter((it) => it.mode === 'bushtail' || it.mode === 'serpent' || fogHotseat(it.id) !== undefined)
+  const fogged = env.PRESENT_MUTATE ? { ok: true, lines: [] } : await fogCase(dir, solo, env)
+  for (const l of fogged.lines) say(l)
+  if (!solo.length && !env.PRESENT_MUTATE) say('  (F16) no battle against the AI selected: the fog went unchecked here')
+  const ok = !failed && follow.ok && fogged.ok
   const n = items.length + (rides ? RIDES.length : 0)
-  say(failed ? `\npresent-check FAILED: ${failed} of ${n}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order${rides ? `; and (F9a) at every act and stop of ${RIDES.length} battles with War-Carts, riders aboard among it` : ''} (${Math.round((Date.now() - t0) / 1000)} s)`)
-  return failed ? 1 : 0
+  say(!ok ? `\npresent-check FAILED: ${failed} of ${n}${follow.ok ? '' : ', and the camera\'s (F14) case'}${fogged.ok ? '' : ', and the courtesy fog\'s (F16) case'}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order${rides ? `; and (F9a) at every act and stop of ${RIDES.length} battles with War-Carts, riders aboard among it` : ''}; (F14) a human opponent's lone move glides the camera once, and none on its own seat's page; (F16) under the courtesy fog the page shows the other army as the core's sight has it (${Math.round((Date.now() - t0) / 1000)} s)`)
+  return ok ? 0 : 1
 }
 
 // ── The self-test: each mutation must fail the check ────────────────────────

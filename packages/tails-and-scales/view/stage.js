@@ -10,21 +10,95 @@
 //
 // R7 moved it out of main.js unchanged: the same renderer settings, fog and
 // lights, and the frame's steps in the same order.
+//
+// (V2) The perf overlay's probe (ui/perf.js), `probe`, null unless the
+// overlay is on (then nothing of it runs): `drawn(renderer)` right after the
+// table's render, renderer.info then counting that render alone with the
+// sun's shadow pass (three resets the counts after drawing the shadow map,
+// so while the probe is on they are reset by hand before the render
+// instead; the race picker's windows, drawn after, reset them as ever), and
+// `frame(t0, t1)` once the frame is done (its start and end on
+// performance.now()). The splats the table drew (view/stats.js) are zeroed
+// before each frame's render, so they count that render's.
+//
+// (V2) The splat-fur Bushtails (view/models/splat/splats.js): every render
+// of the table's scene prepares its splats first (prepareSplats, as the
+// scene's onBeforeRender: three calls it at the start of each render, once
+// the world matrices and the camera, the shake's offset in it, are current,
+// before it lists what to draw), for the camera drawing it, the viewport
+// it draws into and the sun's direction: each figure's level of detail and
+// draw order. Under ?fast nothing is drawn, so nothing is prepared. And
+// the squirrels' shadows: their shadow proxies (the classic bodies, on
+// SHADOW_LAYER alone) are seen by the sun's shadow camera only. That camera
+// has the layer enabled, but three r160's shadow pass tests a caster's
+// layers against the camera the scene is drawn by, not the shadow camera's
+// (later three tests the shadow camera's), so the renderer's shadow pass is
+// wrapped to draw with that layer enabled on the drawing camera too, and
+// set back after: the scene's own render lists what it draws before the
+// shadow pass, so a proxy is never drawn but into the shadow map. (A lost
+// WebGL context, restored, makes three a new shadow map: it is wrapped
+// again then.) The 'new' style's other figures cast through one such
+// shadow-only mesh each too (view/models/cache.js), on the same layer.
+//
+// (V2) The quality (QUALITY, `quality` here, the page's: app/boot.js and
+// the title's Quality switch): the cap on the renderer's pixel ratio (the
+// device's, never above it), the sun's shadow map (its size; 0: none) and
+// the splats a frame (view/models/splat/splats.js's budget). 'high' is the
+// page as it always drew (a ratio up to 2, a 2048 map); setQuality changes
+// it as the page runs (the ratio and the canvas at once; the shadows by the
+// sun's castShadow, which changes the lights' state, so three makes every
+// lit material's program again for it; the map remade at its new size).
+// ?lowfi overrides the ratio (0.5) and the shadows (no shadow map at all),
+// as it always did, and the splats: low's, whatever the quality (the
+// harnesses' mode: a figure's level is chosen from the drawing buffer's
+// height, a quarter of the splats at 0.5, and the frame holds 30,000).
 import * as THREE from 'three'
 import { clock, stepTweens } from './clock.js'
+import { drawStats } from './stats.js'
+import { prepareSplats, setSplatBudget, SHADOW_LAYER } from './models/splat/splats.js'
+
+// (V2) the qualities: the pixel ratio's cap, the shadow map's size (0: no
+// shadows), the splats a frame
+export const QUALITY = Object.freeze({
+  high: Object.freeze({ dpr: 2, shadow: 2048, splats: 150000 }),
+  medium: Object.freeze({ dpr: 1.5, shadow: 1024, splats: 60000 }),
+  low: Object.freeze({ dpr: 1, shadow: 0, splats: 30000 }),
+})
 
 export class Stage {
-  // `lowfi`: half the pixels and no shadows (?lowfi); `fast`: ?fast
-  constructor({ lowfi = false, fast = false } = {}) {
+  // `lowfi`: half the pixels and no shadows (?lowfi); `fast`: ?fast;
+  // (V2) `quality`: one of QUALITY's
+  constructor({ lowfi = false, fast = false, quality = 'high' } = {}) {
     this.fast = fast
+    this.lowfi = lowfi
+    this.quality = quality
+    const q = QUALITY[quality]
     const renderer = (this.renderer = new THREE.WebGLRenderer({ antialias: true }))
-    renderer.setPixelRatio(lowfi ? 0.5 : Math.min(devicePixelRatio, 2))
+    renderer.setPixelRatio(lowfi ? 0.5 : Math.min(devicePixelRatio, q.dpr))
     renderer.setSize(innerWidth, innerHeight)
     renderer.shadowMap.enabled = !lowfi
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.05
     document.body.prepend(renderer.domElement)
+    setSplatBudget(lowfi ? QUALITY.low.splats : q.splats)
+    // ((V2) the shadow pass sees the shadow proxies' layer: see above; and
+    // again on a restored context's new shadow map, after three's own
+    // listener has made it)
+    const wrap = () => {
+      const map = renderer.shadowMap, pass = map.render
+      map.render = (lights, scene, camera) => {
+        const mask = camera.layers.mask
+        camera.layers.enable(SHADOW_LAYER)
+        try {
+          pass.call(map, lights, scene, camera)
+        } finally {
+          camera.layers.mask = mask
+        }
+      }
+    }
+    wrap()
+    renderer.domElement.addEventListener('webglcontextrestored', wrap)
 
     const scene = (this.scene = new THREE.Scene())
     scene.background = new THREE.Color('#1c1712')
@@ -32,6 +106,25 @@ export class Stage {
     addEventListener('resize', () => renderer.setSize(innerWidth, innerHeight))
     // the floating labels and texts, over the canvas
     this.overlay = document.querySelector('#labels')
+    // ((V2) the perf overlay's, while it is on)
+    this.probe = null
+  }
+
+  // (V2) Draw at quality `name` (one of QUALITY's) from now on.
+  setQuality(name) {
+    const q = QUALITY[name], r = this.renderer, sun = this.sun
+    this.quality = name
+    if (this.lowfi) return
+    setSplatBudget(q.splats)
+    r.setPixelRatio(Math.min(devicePixelRatio, q.dpr))
+    r.setSize(innerWidth, innerHeight)
+    if (!sun) return
+    sun.castShadow = q.shadow > 0
+    if (q.shadow && q.shadow !== sun.shadow.mapSize.x) {
+      sun.shadow.map?.dispose()
+      sun.shadow.map = null
+      sun.shadow.mapSize.set(q.shadow, q.shadow)
+    }
   }
 
   // The sky's and the sun's light (after the camera is made, as always).
@@ -40,12 +133,19 @@ export class Stage {
     scene.add(new THREE.HemisphereLight('#d6e6ff', '#3b2a1a', 0.85))
     const sun = (this.sun = new THREE.DirectionalLight('#fff0d6', 2.3))
     sun.position.set(-16, 34, 20)
-    sun.castShadow = true
-    sun.shadow.mapSize.set(2048, 2048)
+    // ((V2) as the quality has it: high's 2048 map, as ever)
+    const q = QUALITY[this.quality]
+    sun.castShadow = this.lowfi || q.shadow > 0
+    sun.shadow.mapSize.set(q.shadow || 2048, q.shadow || 2048)
     Object.assign(sun.shadow.camera, { left: -27, right: 27, top: 22, bottom: -22, near: 5, far: 90 })
     sun.shadow.bias = -0.0004
     sun.shadow.normalBias = 0.02
+    // ((V2) the squirrels' shadow proxies: see above)
+    sun.shadow.camera.layers.enable(SHADOW_LAYER)
     scene.add(sun)
+    // ((V2) the splats prepared at the start of each render, lit by the sun)
+    const toSun = sun.position.clone().normalize()
+    scene.onBeforeRender = (renderer, scene, camera) => prepareSplats(camera, renderer, toSun, scene, 'table')
     const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
     fill.position.set(18, 12, -16)
     scene.add(fill)
@@ -130,9 +230,10 @@ export class Stage {
   // draws into its windows of the page (wall: seconds since the page ran),
   // never under ?fast.
   run({ parts, rig, shake, after = null }) {
-    const timer = new THREE.Clock(), t0 = performance.now()
+    const timer = new THREE.Clock(), start = performance.now()
     const frame = () => {
       requestAnimationFrame(frame)
+      const probe = this.probe, t0 = probe ? performance.now() : 0
       if (this.fast) clock.speed = 1e4
       const wall = timer.getDelta()
       const raw = Math.min(wall, 0.05)
@@ -147,8 +248,18 @@ export class Stage {
       // (F8b) the shadows fitted to the view once the camera has rested
       // SETTLE frames (a larger board's only: fit())
       if (this.board && !this.fast) this.settleShadow(rig.camera)
+      drawStats.splats = 0
+      if (probe) {
+        this.renderer.info.autoReset = false
+        this.renderer.info.reset()
+      }
       rig.render(this.renderer, this.scene, shake(), !this.fast)
-      if (after && !this.fast) after((performance.now() - t0) / 1000)
+      if (probe) {
+        probe.drawn(this.renderer)
+        this.renderer.info.autoReset = true
+      }
+      if (after && !this.fast) after((performance.now() - start) / 1000)
+      if (probe) probe.frame(t0, performance.now())
     }
     frame()
   }

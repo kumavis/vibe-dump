@@ -69,7 +69,9 @@ the commit, and add whatever the work turned up.
   (a game played alone loads no Automerge), and from N3
   `node sim/replay-check.mjs` (and `--self-test`: every corpus battle
   scrubbed move by move, replayed from its start event for event, saved
-  and opened again, held to what a page kept), and from S0-S3
+  and opened again, held to what a page kept; from F12 and F15 also
+  undo's rule after every entry and a move taken back and made again, and
+  every battle-log line named by the move that logged it), and from S0-S3
   `node sim/scale-check.mjs` (and `--self-test`: P-scan, P-los and
   P-memo, the core's scans held to the scans as they were, on classic and
   Grand: the Grand fixture until F8b, the `grand` mission since) and
@@ -91,15 +93,19 @@ the commit, and add whatever the work turned up.
   `node sim/army-sim.mjs --check` (and `--self-test`: the Skirmish gates,
   the score within 4 points of even on every set the mission offers, from
   F7a `fortified` with `classic` (`--terrain <set>` plays one), and each
-  unit's price within its fitted band; 5,400 battles, so run it on a quiet
-  machine, about 4 minutes, its self-test, on one set, about 3), P-army
+  unit's price within its fitted band; at the Skirmish 5,400 battles, two
+  score gates of 1,500 and a fit of 2,400, about 12 minutes with `--jobs 2`
+  on a machine shared at load 15-40, so run it on a quiet one; its
+  self-test, on one set, about 11 minutes at load 70), P-army
   in P-prop (fuzzed armies, autoList, battles between random lists) and
   P-mission's refusals, data-check's prices, rosters, presets and list
   rules, the `army/` set in parity and merge-sim's `lists`, and from F7a P-prop holds P-height and P-level (two
   random games in five on fortified boards, and the `height` task: since
   F7a's review its scenes, and P-level on Grand-sized boards too),
   scale-check's P-scan the fortified boards (the `fort/` AI pairs, the
-  Grand fixture's `--fortified`, and the box with height), terrain-check
+  `grand` mission's fortified boards, the Grand fixture's `--fortified`
+  until the merged build's gate retired it, and the box with height),
+  terrain-check
   holds the fortified set and P-climb (its sections 6 and 7, and the
   self-test's fortified edits), parity folds the `fort/` log set (AI pairs
   as logs with no entries) beside the rest (with `army/`, 60 battles), and
@@ -108,22 +114,39 @@ the commit, and add whatever the work turned up.
   match by `sim/height-probe.mjs`) passes, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
-  every Field and Grand board of seeds 1-500; its `--self-test` plants a
+  every Field and Grand board of seeds 1-500, on every set the mission
+  offers, `open` and `fortified`, since the merged build's gate each
+  objective at its level; its `--self-test` plants a
   wall and a ring), army-sim's gates at all three sizes (Skirmish, Field
-  and Grand, the score and per-unit gates: about 15-20 minutes with
-  `--jobs 2`; a step that moves balance runs it; Grand's rows are played
+  and Grand, the score and per-unit gates, on every set each mission
+  offers: 9,950 battles, Skirmish 5,400, Field 2,700 (two score gates of
+  900, a fit of 900) and Grand 1,850 (two of 625, a fit of 600), 77 minutes
+  with `--jobs 2` at load 40-72 on 4 CPUs, so run it on a quiet machine;
+  a step that moves balance runs it; Grand's rows are played
   and reported, not judged, until the Grand rebalance below is settled),
   `node sim/play-report.mjs`
   (F10b's row over the `scale/` corpus's Grand pairs), and the `scale/`
-  set in every check that reads the corpus (parity's 70 battles with `army/` and `fort/`, P-auto,
-  P-peers' `--only scale`), and from F9a P-riders in P-prop (§4.2.5's
+  set in every check that reads the corpus (parity's 77 battles with `army/`, `fort/`, `keg/` and, since the
+  merged build's gate, scale/'s four fortified pairs, P-auto,
+  P-peers' `--only scale`), from F16 `node sim/fog-check.mjs` (the
+  courtesy fog's pure part: the units, the scenery, the marks, and its
+  sight held to the core's over every pair, entry by entry; present-check
+  holds the page under it, lobby-rig's `fog` online), and from F18 P-prop's P-fight (shooting into a
+  fight on scenes of its own: legal for every ranged weapon, a volley's
+  dice held draw for draw, the AI's value net of its friendly fire), and from V2 `node sim/bake-check.mjs`
+  (view/models/bake.js bakes every classic figure exactly as R7a's did,
+  node for node, and keeps the glossy ones whole; the splat Bushtails keep
+  their splats, shadow proxies and anim, every 'new' figure casts through
+  its one shadow caster, and the splats' preparation keeps its levels, its
+  budget (a frame's, shared with the race picker's windows) and freed
+  orders), and from F9a P-riders in P-prop (§4.2.5's
   invariants at every decision and trace line, riders hidden from every
   spatial rule, each bail-out as it is emitted, the autoload, its scenes;
   P-pilot's rider mask; P-army's hull deployment at the caps), P-present's
   `aboard` and War-Cart battles (present-check `--only riders`), data-check's
-  section 13, merge-sim's `vehicles`, macro-check's riders, play-report's
+  section 14, merge-sim's `vehicles`, macro-check's riders, play-report's
   F9a row (riders disembark in ≥ 50% of the `vehicle/` AI pairs), and the
-  `vehicle/` set in every check that reads the corpus (parity's 80
+  `vehicle/` set in every check that reads the corpus (parity's 87
   battles); and in Chromium input-check's carts page, snap-check's cart row
   (and the bail-out log among its defaults), play-check's `cart` lane and
   rematch-memory's `--carts`. A step
@@ -152,20 +175,28 @@ the commit, and add whatever the work turned up.
   `node sim/play-check.mjs` (the shipped page played rendered, without
   `?debug` or `?fast`, through the DOM alone: a watched battle and back,
   vs. the AI from each seat and hotseat, each seat played here placing
-  units by clicks before Begin battle; `--full` without `?lowfi`), and from
+  units by clicks before Begin battle; `--full` without `?lowfi`; from V2
+  each wait for the table, the camera's rest and a placed unit's label,
+  spans drawn frames as well as time), and from
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
   rematch; from N3 the replay bar, replay files and the page that comes
   back; from F10a a group placed and moved online), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
-  Select mode, long presses, the touch fallback), and from F8a
+  Select mode, long presses, the touch fallback; from F13 the touch aim,
+  `--only aim` alone), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
   whole-board frame, a report failing above 1.25× budget: build first, run
-  it on a quiet machine; rematch-memory alternates Grand and classic
-  battles now, 50-80 minutes, `--classic` the old run). A step that changes what one of them reads ports it in the same
+  it on a quiet machine; from V2 the splats a row of their own, the
+  triangles the meshes'; rematch-memory alternates Grand and classic
+  battles now, 50-80 minutes, `--classic` the old run), and from F12 and
+  F15 `node sim/undo-check.mjs` (and `--self-test`: a hotseat battle's
+  placement and move taken back by Undo and Ctrl-Z, the phase still open,
+  and a battle-log line's scrub, no seat to act there, Live, ✕ and ▶
+  coming back; lobby-rig's `play` holds Undo hidden online). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -935,13 +966,16 @@ follows N3.
   six `army/` battles, recorded on F11a's code in a commit of their own,
   the corpus 52. The review's nine fixes, `RULES_ID` leaving out the size's
   name. DESIGN's F11a notes.)
-- [ ] **Later (F11a's, with F8b):** the Grand fixture's cap lists cost
+- [x] **Later (F11a's, with F8b):** the Grand fixture's cap lists cost
   1,575 and 1,670 against Grand's 1,500 (under `--caps` the fixture lifts
   its limit to 2,000): when the fixture retires, build the cap lists within
   the limit or give scale-bench's cap rows a test mission with it lifted.
   army-sim's fit plays no list over the limit (§4.2.8.2's 80-120% budgets
   clamped at 100%); a copy with the limit lifted would fit the top too, if
   F8b's retune wants it.
+  (F8b's scale-bench builds its cap lists within the grand mission's limit
+  by an exhaustive search, `capList`; F8b's retune never wanted the lifted
+  fit; the fixture itself was deleted at the merged build's gate.)
 - [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
@@ -984,7 +1018,8 @@ follows N3.
   `blast.land` with no `y` (the view takes a template's height from its own
   tops); the play-report's F7b row (a shooter fires from a deck in ≥ 50% of
   `fort/`), with `fort/` re-recorded. Drop lines and the "▲2"" label landed
-  in F7a.
+  in F7a. (The row itself landed with F17, `sim/play-report.mjs --row f7b`:
+  6 of 6 on F17's `fort/`; F7b judges it again on its own re-record.)
 - [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
   draws the platform as an open slab on braced posts while its deck's
   line-of-sight body is solid from the ground, as the piece table says: a
@@ -1018,6 +1053,30 @@ follows N3.
   re-recorded on `fortified`, with army-sim's Field and Grand gates and the
   connectivity rows run there too. Left: the gates below, in an item of
   their own. DESIGN's F8b notes.)
+- [x] **The merged build's gate.** F11a, F7a and F8b went to `main` as a
+  playtest build (2f10015) ahead of their standing checks, by the
+  project owner's choice; the checks then ran in full on it, every fix a
+  commit of its own. (Every corpus replayed as merged, 70 of 70 in Node,
+  `--page` and Chromium; the PIN on 2f10015, then on the one
+  play-affecting fix: on Field and Grand fortified boards the ruined tower
+  ring at the centre walled the objective off from every squad (the
+  connectivity rows, never run on fortified, failed 320 of 2,000 boards),
+  so fortified's `largeCentre` stands the rock box there, as `open` does
+  (ad911bf; `RULES_ID` moved, no bump, no corpus battle changed). The
+  connectivity rows judge each objective at its level, and P-terrain's
+  fortified rows and P-climb run on the Field table too; two self-test
+  anchors F8b's review had moved followed it (terrain-check's, snap-check's);
+  rematch-memory tells V8's dependent-code lists from the page's heap
+  (`--terrain fortified` read 22 KB a rematch, all of it V8's, the page's
+  own 3.9); play-check's waits follow SwiftShader's frames, its layout
+  lane run for the first time; the Grand fixture deleted, its last rows on
+  the `grand` mission; scale/'s fortified pairs, 2 Field and 2 Grand, the
+  corpus 74; army-sim's gates on every set (Skirmish and Field pass on
+  `fortified` too: 46.6% and 49.0%), and the model-cap experiment in the
+  item below. Left: scale-bench on a quiet machine (on this shared box
+  the Grand rows read 1.6-2.75× their budgets, its classic row 1.6-2.1×
+  F8b's: against it a Grand battle is 5.6-7.2 classic ones, F8b's 5.7-6.4).
+  DESIGN's "The merged build, as gated".)
 - [ ] **Grand rebalance.** At Grand the points don't bind the Bushtails'
   lists (the slot table and the 90-model cap do: points bind 14 of 1,000
   Random lists, a median 1,325 spent, against the Coil's 900 and 1,480),
@@ -1035,6 +1094,37 @@ follows N3.
   seeds; lists that vary the heroes). Until then army-sim reports Grand
   and judges Skirmish and Field. Playtest first. (DESIGN's F8b notes, the
   review.)
+  **The first option, measured** (the merged build's gate; scratch copies
+  of the code with grand's `list.models` raised, nothing shipped;
+  `army-sim --check --mission grand --terrain open --jobs 2`, seed 1111,
+  N 625 a score gate and 600 a fit; "binds" is army-sim's bindOf over
+  autoList's seeds 1-1,000, Bushtails / Coil):
+  | models | Bushtails' score | points bind | Bushtails spend (p10 / median) | units outside their band |
+  |---|---|---|---|---|
+  | 90 (shipped) | 45.4% ± 1.9 (fortified 43.6%) | 14 / 900 | 1,160 / 1,325 | none (bands of 42-228) |
+  | 95 | 55.2% ± 1.9 | 61 / 882 | 1,250 / 1,385 | none |
+  | 100 | 57.0% ± 1.9 | 211 / 858 | 1,300 / 1,455 | Brute 273 ± 43 (170), Sidewinders 142 ± 24 (80) |
+  | 110 | 58.4% ± 1.9 | 258 / 858 | 1,345 / 1,470 | as at 120 |
+  | 120 | 58.3% ± 1.9 | 258 / 858 | 1,345 / 1,470 | Elder −60 ± 56 (75), Oak Guard 74 ± 24 (130), Brute 294 ± 47 (170), Sidewinders 146 ± 25 (80) |
+
+  The score turns between 90 and 95 models (even near 92, by
+  interpolation, on one seed) and is flat
+  past 100: there the 24-unit cap binds the Bushtails instead (their
+  Random lists 21.7 units and 89.0 models at 90, 23.6 and 99.0 at 110 and
+  120, where 997 of 1,000 lists are the same; the Coil's 22.1 and 81.4,
+  then 22.3 and 82.6, held by their points in 858-900 of 1,000 at every
+  cap). So the model cap is a lever about as sharp as the prices: past
+  92 or so the Bushtails' bigger lists win, and raising it alone makes the
+  points bind them in at most a quarter of their lists. Cost: the cap lists grow
+  from 180 models on the table (46 units) to 190 at 95, 199 at 100 and
+  210 at 120 (48 units), so stateHash's string at a Grand deployment from
+  15,311 characters to 15,773, 16,193 and 16,690 (+9% at 120), a blast's
+  per-model test (every model on the table, core/actions/shoot.js
+  blastLands) +6% / +11% / +17%, and the Random lists' models a side
+  170 → 182 (+7%); scale-bench at the new cap lists (24 units, 190-210
+  models; at load about 20, so inside its noise): a Grand battle 552-728
+  ms on `open` and 535-763 on `fortified`, against 621 and 547 at 90 the
+  same hour (the classic row, the load's gauge, 80-103 ms across the runs).
   (F9a: the War-Cart, one model and one unit, filled the Bushtails'
   spare slots at Grand, 60.6% and 67.0% on seed 1111 at its Field price;
   the Grand list prices it 150, which binds their points again: 47.2% on
@@ -1047,6 +1137,100 @@ follows N3.
   pilot/'s two Grand logs; a Grand battle played on a phone by hand; the
   minimap's deck rims, stair arrows and ladder ticks (F7a's look, at F7a's
   merge).
+  (The WIP merge's three inherited failures, each reproduced on 26ecab9:
+  two were the checks' and pass now, one is the boards' and still fails,
+  rightly. lobby-rig's `size` raced the host's autoStart (a guest's Ready
+  landing first made the host's press the start, the lobby gone): the
+  case now opens its lobby with autoStart off. play-check's layout lane
+  read the labels 4 s into a camera swing that runs about 25 s on a
+  Grand board under SwiftShader, every seat-0 label off the screen: it
+  waits for the camera, then the card and the minimap, to rest, by the
+  page's own frames (as every lane's rest() now does: under load the
+  serpent lane read its labels mid-swing too).
+  terrain-check's connectivity rows fail on 320 of 2,000 fortified Field
+  and Grand boards, and every one is a board where `fortified` stands the
+  ruined tower ring at the centre (32% of them), not the keep: on all 502
+  keep boards a squad walks up a stair and holds the objective from the
+  top. F8b dropped the ring from `open` for walling the objective off;
+  the fix, consensus, was proposed in `sim/notes/keep-connectivity.diff`
+  (a `largeCentre` for `fortified`, the rock box in the ring's place on
+  the larger tables, the Skirmish's boards untouched: connectivity 2,000
+  of 2,000 and parity 70 of 70 with it applied) for the step that holds
+  the core and the corpus. The rows were also made to judge as the rules
+  do, the hull on the ground and the objective held at its level, and to
+  name the centre piece. Left: that patch, and lobby-rig's `group` and
+  `catch-up` under load. DESIGN's "Inherited failures as built".
+  The patch landed with F19a, in a commit of its own before F19a's
+  (8469817): `fortified`'s `largeCentre`, the rock box where the ring
+  stood on Field and Grand from the same one draw, checked by checkSet and
+  data-check; terrain-check exits 0, connectivity 2,000 of 2,000, parity
+  70 of 70 byte-identical, `RULES_ID` moved; F19a's `CORE_VERSION` 10
+  covers it.
+  Left: lobby-rig's `group` and `catch-up` under load.)
+- [ ] **V2** The new figures as the game's own, the classic ones a switch
+  away, and a perf overlay to measure them on a phone. Landed (its first
+  half): the glossy Ssithra (proto/scales/'s runtime moved to
+  `view/models/gloss/`, the kit `view/models/serpent.js`, every figure at
+  detail 0.5: one template per unit for the 28 px table and the 140 px close
+  look, its measures in serpent.js's header and DESIGN §1.1's (V2) note);
+  the classic builders in `view/models/classic/`, unchanged; two figure
+  styles in `view/models/cache.js` (`setFigureStyle`, once, before any
+  figure; templates keyed by style), picked by the title's Figures link
+  (kept in this browser, the page reloaded) or `?models=new|classic`;
+  `view/models/bake.js` with the prototype's three changes, held to R7a's
+  bake on every classic figure by `sim/bake-check.mjs` (proto/scales's
+  bake-check moved there); the far stand-ins unchanged and checked; the
+  idle breath now about a figure's own height scale (the brute, hierophant
+  and elder were drawn squashed to about 1 high, in either style); the perf
+  overlay (`ui/perf.js`: fps, frame time average and worst, CPU time, draw
+  calls, triangles, splats, pixels and pixel ratio, shadows, the style;
+  the title's Perf overlay link, the battle's 📈, `?perf`; off, nothing
+  runs). proto/scales's viewer, pair and sheet import the game's modules.
+  `sim/title-shot.mjs` fails, as it must for a step that changes the
+  figures and the title card: against HEAD (seed 1), with the figures
+  hidden, only the card differs (its new row moves it); the table is the
+  same pixel for pixel. play-check's layout lane: the nine tools clear the
+  score as the eight did (890-1270 px at 1280×800); its Grand card check
+  fails on HEAD's build too. `rematch-memory --classic` (the classic
+  mission, in the 'new' figures) passes with the glossy figures (no program
+  linked twice, the heap flat). And (its second
+  half) the splat-fur Bushtails: proto/splat/'s runtime moved to
+  `view/models/splat/` (`fur.js` generated there by
+  `proto/splat/make-bushtail.py`, now at density 0.05: 8,300 splats in
+  under half the time, alike at game sizes; `splats.js`), the kit
+  `view/models/squirrel.js`; one fur a unit at four levels of detail (800
+  to 6,000 splats) in one texture, a level per figure per render from its
+  CSS height (n ≈ 1.7 px², hysteresis) under a 150,000-splat budget, the
+  draw order cached per (level, view bin: 32 azimuths × 6 bands) and
+  shared, no sort per frame (`prepareSplats`, each scene's onBeforeRender:
+  the table's and the race picker's); shadows from the classic body as an
+  invisible proxy on a layer only the sun's shadow pass draws (three r160's
+  shadow pass tests the drawing camera's layers, so view/stage.js wraps
+  it); the far stand-in the proxy and the kit; the anim as classic's;
+  `view/stats.js`'s splats and build time in the perf overlay. DESIGN
+  §1.1's (V2) splat note has the design and the numbers. Round 2 (the
+  first verification's findings, DESIGN §1.1's round-2 note): every 'new'
+  figure casts through one shadow caster (render-bench's classic frame,
+  shadow calls 639 → 280); a quality in the page (the title's Quality, a
+  tap on the perf overlay; auto: medium on a touch screen, a pixel ratio of
+  1.5, a 1024 shadow map, 60,000 splats) and `?quality=`; the splat budget
+  a frame's, the race picker's windows sharing it and the table's figures
+  at their coarsest behind them; `?lowfi`'s splats from the drawing buffer
+  and at low's 30,000; an explosion's flash and smoke drawn back to front
+  with the furs; a squirrel's far stand-in keeps its fur; the perf overlay
+  clear of the HUD; the Figures switch carries `#models=` where the
+  browser keeps nothing. The gates as they stand: the Node checks pass;
+  render-bench passes (the splats a row of their own, DESIGN §4.2.1's
+  decision); play-check's placement lanes pass (bushtail, serpent and
+  hotseat placing units by clicks, rounds 1-3 played) with its waits
+  frame-aware, and so does grand into round 2; lobby-rig's catch-up case
+  passes three runs in three under load (its page loads wait IDLE_MS);
+  `title-shot` fails as it must (the figures and the title card's new
+  row); play-check's layout lane's Grand card check, terrain-check's
+  connectivity and self-test, self-test.mjs's spin mutant, snap-check's
+  self-test and input-check's Shift-click fail on HEAD's build alike, not
+  this step's. Left: a phone's numbers for both styles (the overlay is
+  there for them).
 - [x] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
@@ -1099,6 +1283,348 @@ follows N3.
   in v1).
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
+
+**Playtest feedback (October 2026).** The notes read against the code in one
+pass: lobbing from height, fog of war, a touch "hover", hazards, undo, the
+Scaleguard's and the Brute's toughness, Escape in the charge phase, the camera
+in online play, the battle log, shooting into a fight. Not yet ordered against
+the queue above: each lands where the user slots it. F12-F16 change no rule
+(no bump, the corpus byte-identical; each ships on its own Chromium check);
+F17-F19 are rules changes (a `CORE_VERSION` bump, the corpus re-recorded and
+the PIN moved, in the commit that says so). Open questions 28-35 hold their
+defaults; 28, 30, 31 and 32 were answered in the reviewers' voice note of
+26 October (lob, melee, fog, undo), and F12, F16, F17 and F18 say what they
+answered; 35 (Escape) by the user: no change.
+
+- [x] **F12** Local undo: simple mistakes, within the phase. A button (and
+  Ctrl-Z) takes back the last entry of a seat played here since its last
+  commit point: a placement, a move (the one that set it off: a unit sent
+  back when it was meant to advance), a charge's end. Ending the phase
+  commits (`end`, `deployed`), and so does any dice roll: an entry across
+  which the dice counter (`G.rng.n`, every trace line's `rng:`) moved is a
+  commit point, so an advance, a shot, a charge, Auto and pilot, and
+  everything before them, stay. Not by truncating the store (the Folder
+  calls an accepted entry vanishing from the list `tamper` and freezes): the
+  battle's Session made again over the first k entries, as the replay's
+  `sessionTo` makes one (app/replay.js), and swapped in; the order book is
+  keyed by the start entry, so it survives. Hotseat: each seat its own
+  entries. Online: none (DESIGN §5: the log is append-only; an `undo`
+  command in the rules would be a step of its own). DESIGN §5's "local undo
+  of move/place by truncating the store" is this, the truncation replaced.
+  A replay-check case: undo then the same move folds to the same trace.
+  (↶ Undo, first in the actions bar, and Ctrl-Z or ⌘-Z: one entry a press,
+  a `place`, `move` or `chargeEnd` of the seat whose decision it is, back
+  to the last End, Begin battle or entry across which `G.rng.n` moved,
+  which the Folder now records beside each accepted id with the entry's
+  place, derived and never hashed (`present/hud-model.js`'s `undoable`).
+  The battle's Session made again over its log's texts up to that entry
+  (`app/undo.js`'s `rewind`), the battle's device and seats, shown and
+  swapped in as `flow.battle`, the old one closed, the unit put down. Only
+  on a LocalStore whose human seats are all played here, with the battle
+  on the table and the table at rest; hidden online, refused while
+  scrubbed. replay-check's `undo` (the rule after every entry of the 28
+  human battles, four a battle taken back and made again to the same
+  trace, match and texts), `sim/undo-check.mjs` in Chromium, lobby-rig's
+  `play` (no Undo online). DESIGN's F12 notes.)
+- [x] **F13** Touch aim: a hover for a finger. Today a phone gets no preview
+  at all (pointermove fires only while a finger orbits the camera, and a lift
+  after a drag is never a click). A long press on the ground, or on an enemy,
+  while a unit is picked up (a long press on your own unit already adds it to
+  the group) ticks the vibrator, holds the camera (as ▭ Select takes the
+  one-finger gesture: input/group.js's `touches()`), drives the mouse's own
+  preview under the finger (the path and inches, a shot's odds, a charge's
+  spots) and the lift commits. A 👆 Aim toggle beside ▭ Select (`pointer:
+  coarse` only) does the same for whoever never finds the long press. With
+  it, "as far as it goes that way": a client query over the move plan for the
+  last valid cell along the ray from the unit through the finger
+  (input/tools/move.js); the command sent is still `move {u, c}`.
+  input-check's touch cases through CDP, as F10a's.
+  (`input/aim.js`: the long press's aim and 👆 Aim, the drag holding the
+  camera by OrbitControls' rotate alone, so a second finger is its pan and
+  zoom at once and calls the aim off; the mouse's own hover under the
+  finger, the tooltip lifted above it, the hint saying what the lift does;
+  the lift is the click, a finger off the board calls it off. ▭ Select and
+  👆 Aim take turns: switching one on switches the other off. "As far as it
+  goes" is `aimCell`/`farthest` in input/tools/move.js, for a finger's aim
+  and the mouse with Alt held, beyond the unit's reach only; the mouse
+  without Alt is as it was. input-check's aim cases (`--only aim`), parity
+  byte-identical. DESIGN's F13 notes.)
+- [x] **F14** The camera follows a human opponent. The follow policy (🎥,
+  `follows()`: every turn but the one seat played here) is in place, but only
+  fights and the AI's own moves, shots and charges emit `focus`; a human's
+  move, volley, template or charge emits none, and a lone walk is no batch
+  (`batchAt` frames two or more), so online the camera sits still while the
+  opponent acts. In the view, never the core: a focus derived from
+  `unit.move`, `volley`, `blast.fire` and `charge.result` when the policy
+  says follow (view/player.js, beside `frame`), or `frame` taking a single
+  walk; today's glides. camera-check holds the policy; a lobby-rig case
+  watches a guest's move swing the host's camera.
+  (View only, the corpus byte-identical. Every action no batch takes is
+  cued once as it opens (`cueAt` in present/camera-presets.js: from its
+  opening to its `act`, or its `pending` for a charge's spot; its actors by
+  `pointsOf`, which `frame` now gathers with too), and the CameraRig's `cue`
+  makes one move for it: framed as a batch is (the same `framePose`) when an
+  actor is off screen, else a glide toward its end (a walk's end, a shot's
+  or a charge's middle, or its own focus) as a focus glides, none within
+  6"; its focus events are left out. A seat's command (no focus of its own)
+  is followed by `cues`: never the seat played here's, hotseat's two seats
+  too, but its orders after End; the AI's and the fights' by `frames`, as
+  ever. Online, watched, replayed and with ⇉ off alike. No placement is
+  followed: an online deployment is simultaneous. The bookmark is now
+  kept until something takes the camera away (the follow policy, or in
+  hotseat the other seat's phase): a turn's last End was spent at that
+  seat's own fight phase, so its next turn never came back from the
+  opponent's; a battle's `setViews` lets the last battle's bookmarks go
+  (the wave's integration: one kept to a battle's end glided the next
+  battle's first phase off its board, input-check's aim case after the
+  main run). camera-check, present-check's in-process case, lobby-rig's
+  `follow`. DESIGN's F14 notes.)
+- [x] **F15** The battle log scrubs. A click on a line shows the battle as it
+  stood before that move, and ▶ plays on from there. Each line carries only
+  `at` (the trace's length); the sink receives each entry's events on their
+  own (app/flow.js), so they take the entry's place in the accepted list
+  (`k`) and the line its `data-k`; the click is `replay.open(battle, { live
+  })` and `scrub(k - 1)`, which already works on any battle (the bar's own
+  slider does it: the table as it stood, the log made again to there, Live
+  back). While scrubbed the seat played here can't act (the replay's Session
+  has no local seat), as it should. A replay-check case: a line's k folds to
+  the trace line it was logged at.
+  (The flow's sink stamps each entry's `log` events with `k`, its place
+  among the accepted, and `relog` stamps the same; `ui/log.js` writes
+  `data-k` and a click calls `replay.before(battle, k)`, which scrubs to
+  `k - 1`: a bar already up as its slider does, else the bar comes up,
+  and over a battle not over it is a peek that Live, ✕ or the replay
+  reaching the battle's last move puts away, the battle back as it stands.
+  The deployment's lines show "Before the battle", the roll-off's the
+  deployment before the last Begin battle; an AI's turn is the End that
+  handed it over. Scrubbed, the table's Session is the replay's: End,
+  Auto and Undo down, a command refused. replay-check's `logs` (every
+  line of the 70 battles named by the move that logged it, clicks, relog,
+  the peek), undo-check's log steps. DESIGN's F15 notes.)
+- [x] **F16** Courtesy fog of war, a lobby setting. DESIGN §5's "no hidden
+  information" stands as a rule: the match is a pure function of a public
+  log that every peer folds whole, so nothing can be hidden from devtools;
+  this hides it in the view, on the trust the dice and the sealed lists
+  already rest on (open questions 1 and 20). An enemy none of your living
+  units sees (`sight`, with its broadphase; each pair once per event batch)
+  has no live figure, label, minimap chip, roster row or log line, and the
+  tray names no target of its rolls; where it was last seen a greyed figure
+  stands as it then stood (its models, its wounds), until it is seen again
+  or falls in sight. No permanent reveal (the Warcraft 1 pattern, rejected):
+  the scenery too is drawn as last seen, a wall still standing where a
+  template has since brought it down, until a unit of yours sees the gap.
+  (A last-seen layer per seat, on the view's side: the mirror's record of
+  each enemy unit and each chunk as of the last batch a ray reached it, the
+  figures and tiles drawn from it where the live one is out of sight.)
+  Online, both seats agreeing in the lobby (a `SETUP_KEYS` entry the core
+  ignores, so a fogged match folds as any other), and as a solo option
+  against the AI, the panel saying the AI sees everything (core/ai reads
+  `G.units`). No fog in hotseat (one screen) or for a watcher.
+  (View only: no bump, the corpus byte-identical, no `SETUP_KEYS` entry
+  after all: the start of a fogged match is byte for byte an unfogged
+  one's. Online the lobby's `fog` (net/lobby.js), the host's switch beside
+  the battle, a change un-readying both seats, read by each page as its
+  battle begins and kept by a rematch; against the AI the battle-setup
+  panel's Fog line with its note (?fog, else the page's last choice in
+  localStorage), `Flow.start(…, fog)`. `present/fog.js` is the pure part:
+  `fogSight`, run inside the Session's preview, asks the core's `sight`
+  over every pair (cached per pair by places and slots, let go when the
+  scenery changes), and stand-ins for a ghost's place, a stale chunk's top
+  centre and a template's landing; `fogStep` keeps each enemy as last seen
+  (its ghost gone once a stand-in where it stood is seen, or it falls in
+  sight) and the scenery as last seen; `fogEvents` marks an entry's lines,
+  trays, rows, landings and scenery events (a shot at you from an unseen
+  unit shows its shooter as "Unseen"; a fight you are in shows in full).
+  The flow's sink puts two `fog` events round each entry (what may show as
+  it opens: an enemy leaving sight a ghost at once; what the seat sees as
+  it closes), relog walks the fog from the start after a snap, a peek (F15)
+  and Undo (F12) stay fogged while the battle lives, and its end lifts it.
+  `view/units.js`'s veil (no figure, ring, label, pick, place on screen,
+  chip), `view/fog.js`'s grey ghosts, `view/terrain.js`'s `reveal`, the
+  minimap's dots and the roster's worth as last seen; the camera follows
+  nothing veiled. Measured on a Grand board (40 units, 277 chunks, the
+  `scale/` pilot log's 222 entries, the machine loaded): an entry's whole
+  pass p50 0.6-0.8 ms, p90 about 5 ms; the whole board's sight 0.4-0.9 ms
+  cold, 0.1-0.3 cached (every pair asked: 3-9 ms); no coarsening.
+  `sim/fog-check.mjs`, present-check's F16 case, lobby-rig's `fog`. DESIGN's
+  F16 notes.)
+- [x] **F17** Lobbing from height (rules). A blast or indirect weapon's range
+  grows with the shooter's floor over the target's as a thrown thing's
+  does: with R its printed range and h the drop (negative firing up), the
+  reach is √(R² + 2hR), the farthest a projectile launched at the speed that
+  reaches R on the flat lands from h higher, at its best angle (scale-free,
+  so the table's inches serve). Direct fire gets none (a slingshot's and a
+  spit's arcs are flat), nor a spell (the thorns erupt under the target). In
+  the code: `shotInfo` (the range test is flat today, `gap` in two
+  dimensions against `w.range`; `sightInfo`'s `high` is computed and read by
+  nothing), the AI's own range test (core/ai/score.js's `g > w.range`), the
+  overlay's ring and the tooltip's inches, through one `rangeOf(G, u, tg)`
+  in core/rules.js. Open question 12 and DESIGN §5 keep height off the
+  to-hit and the save. `CORE_VERSION` 8; the classic corpus has no height
+  and stays byte-identical, `fort/` (and the `scale/` pairs on `fortified`)
+  re-recorded; a terrain-check row, and the play-report's F7b row (a shooter
+  fires from a deck) judges whether the AI climbs for it. What it gives
+  (open question 30): the trebuchet's 36" is 37.9" from a 2" rampart or
+  bastion and 38.4" from the keep's 2.5" (their stairs; the 3" watchtower is
+  ladders only, which no big unit climbs), the Venom Engine's 30" is 31.9",
+  the Grenadiers' 12" is 13.9", and 14.7" from the watchtower; firing up at
+  a rampart the trebuchet reaches 33.9".
+  (1917303; `CORE_VERSION` 8, `RULES_ID` unchanged: the formula is code,
+  not data. `lobbed(w)` and `rangeOf(G, u, tg, from)` in
+  core/actions/shoot.js, doors of the queries; `shotInfo`'s range test and
+  the AI's `shotValue` by it, the classic expression its own path; no AI
+  scan is bounded by a weapon's range, so none widened. The ring the reach
+  to the ground under the shooter, the tooltip the gap against the reach
+  ("30.2" / 37.9" (36", lobbed down)"), the help's Lobbing line. Measured,
+  bit for bit on every deck (terrain-check's lob rows): the trebuchet 37.9"
+  from 2", 38.4" from the keep's 2.5", 33.9" up at 2"; the Venom Engine
+  31.9"; the Grenadiers 13.9", 14.7" from 3": about a drop's worth, so the
+  trebuchet's base range stays (question 30). P-height's `lobPairs` and
+  three self-test edits; P-scan's reference by `rangeOf`; data-check and
+  P-prop pin 8. `fort/` re-recorded in b0dbba0 (watch-fort-3, -8 and -9;
+  the other three pairs and both human logs unchanged; no `scale/` pair is
+  on `fortified`), the PIN on 1917303: parity and `--pin` 70 of 70.
+  play-report's F7b row built: a shooter fires from a deck in 6 of 6
+  (shots from decks 28 → 36; F7a's row 4 → 5 of 6). The AI doesn't climb
+  to lob: on a 24-battle sweep, shots from a climbed deck 25 → 25, past
+  the printed range 0 → 1. Left as they were: the planner's approach and
+  the standing orders' "target in range" (present/, client code) read the
+  printed range. Inherited from the WIP merge, failing as on 2983543:
+  terrain-check's connectivity rows on fortified Field and Grand boards
+  (the keep's objective is held from its top) and play-check's layout lane
+  (no card after clicks on a Grand board). DESIGN's F17 notes.)
+- [x] **F18** Shooting into a fight (rules). `shotInfo` refuses an engaged
+  target for every weapon but a spell ("locked in combat"), so nobody shoots
+  or shells a melee. Any ranged weapon may, at no modifier: the cost is the
+  risk to your own units in the fight, never a flat penalty. A blast or
+  indirect weapon pays it as things stand: its templates land as ever, and
+  `blastLands` already hits whoever is under one (the ⚠ row), so the scatter
+  is the risk. Direct fire needs a cone: a shot that misses the target flies
+  on into the melee and may strike a model of yours engaged with it. The
+  default (open question 31): each miss strikes a friendly unit engaged with
+  the target when a D6 rolls under the friends' share of the fight's models
+  (the misses' D6s after the hit roll, then the wounds, the target's before
+  the friends': §4.1 rule 4's order), wounded and saved as any hit; the
+  fuller cone (each miss's line through the melee by `dmath`'s angles, the
+  first base it crosses hit) is the alternative if the share reads wrong on
+  the table. The AI's scoring takes the same risk as a cost (its own units
+  in the fight, by `expected`), or it shoots through its own Brute.
+  `CORE_VERSION` bump; every corpus battle with a shooter and a melee in its
+  range re-records; P-prop's shoot cases take the new legal pairs and the
+  friendly rolls.
+  (15f42ef; `CORE_VERSION` 9, `RULES_ID` unchanged: code, not data.
+  shotInfo's "locked in combat" is gone, for every ranged weapon; a plain
+  volley into a fight draws one die per miss after the hit roll, a stray
+  when under F / (F + T) (the shooter's units' living models in the fight
+  against the target's), the strays wounded and saved on the friend with
+  the most models (ties: G.units order), in ⚠ rows after the target's and
+  a "Friendly fire!" line; F = 0 draws nothing; templates land as ever
+  (DESIGN §4.1 rule 27). The exposure rule built, the cone kept as the
+  alternative: it reads right (the more of yours in the fight, the riskier
+  the shot), though a model is a model, the Brute one against ten Nutkin
+  (a base-weighted share is the lever if that reads harsh). The AI nets a
+  volley's expected strays and a template's friends under it, every
+  template's, not only one at a fight (`strayCost`, `ownUnder`, by
+  `expected`), so it never shells its own Brute. The tooltip's risk line
+  ("⚠ into a fight: 3 of yours in it, a miss strays 1 in 3 (≈0.4 of yours
+  slain)", "⚠ friends under the template: …"), the help's Shooting bullet
+  and Blast paragraph. P-fight in P-prop, nine self-test edits; P-scan's
+  reference by the code's own costs; data-check's PINNED and P-prop's
+  PINNED_UNDER take 9 (64-89 ends at its new battle's hash);
+  `corpus-add --regen`, a human-bot log played again by its own bot. The
+  corpus in 6b12ba4, the PIN on 15f42ef: 38 of 70 battles played
+  differently (33 shooting into a fight, five by a template's net value
+  alone): 28 AI battles re-recorded, eight human-bot logs played again by
+  their bots, two replaced as corpus-add makes one (bushtail-pilot-mix-2 by
+  -6, hotseat-late-vote-9 by -11); parity and `--pin` 70 of 70. army-sim's
+  Skirmish gates: classic 53.5% ± 1.2 (52.4 before), fortified 51.7% ±
+  1.2 (49.1), every unit in band; the Field's score gates hold (46.1% and
+  47.3%; 48.5 and 49.2 before), its per-unit gate failing on the Glider
+  Wing (30 against its 60) on the default seed and on other units on a
+  second, where F17's code fails it too (the unit to watch: a melee unit
+  can be shot now); the Grand's reported. macro-check's count ported
+  (c0da8e6: a unit an earlier order's blast or shot freed may act, as one
+  regenerated log showed). DESIGN's F18 notes.)
+- [ ] **F19** Hazards (rules), in order of fit. Each a `CORE_VERSION` bump
+  and a re-record; each with its terrain-check rows, P-prop cases and an
+  army-sim gate (a hazard board must not move the Bushtails' 52.4% out of
+  its band).
+  - [x] **F19a** The powder keg: a chunk kind whose destruction is a blast
+    at its place (the terrain's own hurt → destroy → consequences, as a
+    wall's collapse or a tree's topple: core/terrain/terrain.js), set off by
+    a template, by acid, or by a wrecker walking through it (smashAround),
+    the blast the keg's own weapon profile (`blastLands`, friend and foe; a
+    keg under a keg goes off in turn, in chunk order); and the `keg`
+    mission: its objectives clustered round the keg at the centre, first
+    come first served until somebody taps it. No "attack the scenery"
+    command: the Brute's walk is the tap.
+    (3b52833, after the tower ring's fix in 8469817; `CORE_VERSION` 10,
+    `RULES_ID` moved. The keg's profile is data, `data/hazards.js`: hp 2,
+    S5 AP1 D2, a 3" blast, scenery 4. The sketch's S6 AP2 D2 killed 69% of
+    a squad on it on average; this kills 52% (four Nutkin of six, a third
+    of the Oak Guard, 1.3 of the Brute's 9 wounds), and two hit points
+    leave the acorns only cracking it while the pinecone, the acid globe,
+    another keg, the Thornburst's core and the Brute's walk set it off.
+    The terrain breaks it as a crate; the rules set it off (`kegsGoOff`):
+    its line, `keg.fuse`, then its blast landed as a template's by the same
+    code, the wounds to the models nearest the keg, the fallen the
+    setter-off's ("Friendly fire!" for its own). A template's kegs go off
+    after its own victims and scenery, a walk's once the walk has ended,
+    the walker where it stopped (move.js hands them to the move's handler
+    and `finishCharge`: no import cycle); a chain breadth first, chunk
+    order within a blast, each keg once; nothing drawn but the blasts' own
+    dice (DESIGN §4.1 rule 28). The `keg` set, classic's table round the
+    keg; the `keg` mission, classic's Skirmish, its four objectives 2.5"
+    from the keg, offered as "Powder keg" on the panel and in the lobby,
+    `?mission=keg`. The AI's modest terms: a unit fears a keg's blast
+    while an enemy could set it off, the guns value a template that would,
+    a wrecker a walk ending on one. The barrel, its fuse and bang, the
+    minimap's dot, the help's paragraph. data-check's hazards section,
+    terrain-check's keg rows, P-keg (five self-test edits), P-scan's keg
+    board; data-check's PINNED and P-prop's PINNED_UNDER take 10. The
+    corpus in 74df14f, the PIN on 3b52833: `keg/`'s watch-keg-1, -4 and
+    hotseat-aggressive-keg-2, the keg set off in each by a template (the
+    acid globe twice, a pinecone once); no existing battle re-recorded;
+    parity and `--pin` 73 of 73. play-report's F19a row 2 of 2 (picked
+    for it: the keg went off in 36 of corpus-add's 48 candidates); no
+    wrecker walked through it. army-sim's keg gates fail and are reported:
+    the Bushtails 38.4% ± 1.2 against the 4-point band, five units out of
+    theirs; without the keg the same mission scores them 39.1% on 400
+    battles (36.6% with it, classic 51.9%), so the clustered objectives
+    move it, not the keg: a retune of the mission, data only, is the
+    user's to slot. No tooltip warns that a shot would set the keg off.
+    DESIGN's F19a notes.)
+  - [ ] **F19b** Oil and fire: a slick is a ground raster like `cover` (a
+    cracked barrel spreads it), fire a state that spreads along it and
+    wounds whoever stands in it at the end of each phase (dice: a new §4.1
+    rule for their order), lit by a flaming template (the pinecone), never
+    by acid; the AI scores a burning cell as forbidden ground.
+  - [ ] **F19c** Slippery ground and pushers: a displacement primitive
+    (nothing moves a unit but its own walk and the pile-in, `closeRanks`),
+    with `nav.standable` and the engagement re-read after a shove; slip
+    carries a walk D3" on in its last direction, a pusher is a wrecker's
+    smash applied to units.
+- [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
+  Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
+  ("Shield wall" is card copy; the Brute's `big` only makes a template roll
+  D3+1 hits on it, which is against it); the shot tooltip gives "wound 6+ ·
+  save 4+" but not why: "S3 vs T6" beside the wound need (ui/tooltip.js's
+  oddsText); the card stays as it was. (Escape at a charge's end stays as
+  it is: question 35.)
+  (View only: no bump, the corpus unchanged. The shot tooltip says why
+  beside each need: "wound 6+ (S3 vs T6)", a poison that lowers the need
+  named ("S2 vs T3, poison 4+"), and "save 4+ (Sv4+ AP0)", with ", cover"
+  where it helps (`woundWhy`, `saveWhy` in ui/tooltip.js). A line under
+  each of the card's weapons with its need against every toughness
+  ("wounds T3 4+ · T4–5 5+ · T6 6+") was built and taken out again at the
+  wave's integration: it stood the card two lines taller, and on a
+  1280×800 screen the lead's open card then covered a figure the group
+  input's Shift-click lands on (input-check's; the check now picks a member
+  no panel covers). The card knows no target, so the reason stays the
+  tooltip's. hud-check holds no tooltip text (its rows are the
+  HUD's buttons, the charge's spots and the end screen), so nothing there
+  needed porting; play-check's shot and unit hovers still tell the two
+  apart. DESIGN's F17 notes, the fix's paragraph.)
 
 ### Open questions (building the defaults unless told otherwise)
 
@@ -1154,6 +1680,43 @@ follows N3.
     firing decks** (F5a after F9c, then their vehicles, F5b): the big
     boards and vehicles first, the user's call. (First answer: F5a right
     after F11a.)
+
+### The playtest's (F12-F19): questions 28-34
+
+28. *(answered)* **Undo** takes back only an entry of a seat played here
+    since its last commit point: **ending the phase commits, and so does
+    any dice roll** (an entry across which the dice counter moved); in
+    hotseat each seat its own; none online. (The case that asked for it: a
+    unit sent back by a slip when it was meant to advance.)
+29. **Touch aim** is both the long press and a 👆 Aim toggle, and the lift
+    commits (no second tap to confirm).
+30. *(answered)* **Lobbing from height does what physics does**: the reach
+    √(R² + 2hR) for blast and indirect weapons, none for direct fire,
+    firing up losing as much; not the linear +3" an inch first proposed.
+    If the trebuchet comes out too strong, **its base range comes down**,
+    the physics stays. (By F17's numbers it comes out about a drop's worth
+    farther, 2" from a rampart: if height is to matter more, the lever
+    runs the other way, a scale on h before the formula, and that is a
+    question for the table.)
+31. *(answered)* **Shooting into a fight is for any ranged weapon**, at no
+    modifier: the risk of hitting your own engaged units is the cost.
+    Lobbed weapons by their scatter; direct fire by a cone, the default the
+    exposure-weighted miss under F18.
+32. *(answered)* **Fog** hides an enemy none of your living units sees and
+    shows **what was last seen, greyed**: the enemy where it last stood,
+    and the scenery as it then was, whether or not a blast has since
+    brought it down; no permanent reveal (Warcraft 1's pattern rejected);
+    online by agreement, against the AI with a note, never in hotseat.
+33. **The log's click** shows the battle **before** that move, so ▶ plays the
+    move first.
+34. **The keg** goes off at zero hit points, from a template, acid or a
+    wrecker; there is no tap command, and no keg on the classic set (a
+    mission of its own).
+35. *(answered)* **Escape at a charge's end: no change.** After a charge
+    whose roll reaches, the match waits for a click on where the charger
+    stops, and Escape there does nothing (the dice are rolled: the charge
+    can't be called off). With a unit merely picked up, Escape puts it down,
+    as it does.
 
 ## Done
 

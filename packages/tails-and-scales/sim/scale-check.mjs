@@ -11,11 +11,14 @@
 //           leaves the dice where it did; the fall back's scan
 //           (fallbackSpot) and freeSpot return the cell the whole board's
 //           scan found. (F7a's review) On fortified boards too, the `fort/`
-//           AI pairs' and the Grand fixture's (--fortified), its reference
-//           scoring with F7a's height terms; and the box itself on
-//           Grand-sized fortified boards: every cell a climber's reach from
+//           AI pairs' and the grand mission's on its fortified set (before
+//           the WIP merge with F8b, the Grand fixture's --fortified), its
+//           reference scoring with F7a's height terms; and the box itself
+//           on the grand mission's fortified boards: every cell a climber's reach from
 //           a ladder's foot or top makes finite lies inside scanBox, the
-//           ladders' savings (nav.linkSave) included.
+//           ladders' savings (nav.linkSave) included (seeds 41-80 since the
+//           tower ring's fix, which moved 1-40's two shortcut ladders off
+//           the boards).
 //   P-los   On terrain from board seeds 1-500 (Grand: 1-100) after random
 //           blasts, the broadphase line of sight (S0b's bins) returns what
 //           the scan over every chunk did, { blocked, obscure }, over
@@ -78,7 +81,7 @@ async function coreOf(dir, name = 'classic') {
   const M = { ...queries, ...move, ...deploy, ...score, draw: rng.draw, hypot: dmath.hypot, segmentHitsBox: geom.segmentHitsBox }
   const m = mission.MISSIONS[name]
   if (!m) throw new Error(`scale-check: ${dir} has no ${name} mission`)
-  return { core: index, M, Terrain: terrain.Terrain, NavGrid: nav.NavGrid, mission: m, set: m.sets[0], rules: await at('core/rules.js') }
+  return { core: index, M, Terrain: terrain.Terrain, NavGrid: nav.NavGrid, mission: m, missions: mission.MISSIONS, set: m.sets[0], rules: await at('core/rules.js') }
 }
 
 // a small seeded stream of the check's own (never the match's)
@@ -269,15 +272,18 @@ function throwingApply(C) {
 // A ladder carries a climber farther than it costs, so scanBox widens by
 // the ladders' savings (core/ai/score.js); this holds the box to the claim
 // it rests on, every finite cell of a plan inside it, where the savings
-// count: from every ladder's foot and top on Grand-sized fortified boards
-// (the Grand fixture's table, 80×56 with its 14" zones and nine
-// objectives, built straight from the code's own Terrain and NavGrid, so a
-// broken copy's box is judged too), for three discs and four reaches each.
+// count: from every ladder's foot and top on the grand mission's fortified
+// boards (its 80×56 table with its 14" zones and nine objectives, from the
+// code's own data/mission.js, the boards built straight from the code's own
+// Terrain and NavGrid as a match scatters them, so a broken copy's box is
+// judged too; until the merged build's gate a copy of the Grand fixture's
+// table, the same board), for three discs and four reaches each.
 // `wide` counts the plans with a cell outside the box a board without
 // height would have drawn: the savings were needed there.
-const GRAND_TABLE = { W: 80, H: 56, deploy: 14, objectives: [[0, 0], [-14, 14], [14, -14], [-14, -14], [14, 14], [-24, 0], [24, 0], [0, -20], [0, 20]].map(([x, z], i) => ({ i, x, z })) }
 function boxHeight(C, seeds) {
-  const { W, H, deploy, objectives } = GRAND_TABLE
+  const grand = C.missions.grand
+  if (!grand) throw new Error('scale-check: the box with height needs the grand mission (code from before F8b has none)')
+  const { W, H } = grand.board, deploy = grand.deploy, objectives = grand.objectives.map((p, i) => ({ i, x: p.x, z: p.z }))
   const out = { plans: 0, wide: 0, bad: [] }
   const inside = (b, nav, i) => {
     const ix = i % nav.nx, iz = (i / nav.nx) | 0
@@ -391,9 +397,21 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
         const s4 = sample(GF, grandFort, quick ? 30 : 7, [scanProbe], rand)
         report(!s4.bad.length && s4.states >= (quick ? 20 : 200), `P-scan, Grand fortified: ${s4.states} states, the same`, s4.bad)
       }
-      const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 1))
-      report(!b.bad.length && b.wide > 0, `P-scan, the box with height: ${b.plans} climbers' plans from ladders' feet and tops on 40 Grand-sized fortified boards, every reached cell inside scanBox (${b.wide} reaching past the box a flat board would draw)`, b.bad.length ? b.bad : b.wide ? [] : ['no plan reached past the flat box: the probe met no ladder that carries farther than it costs'])
+      // (the tower ring's fix: on a Grand-sized fortified board the rock box
+      // stands where the ring stood, and the boards after it scatter anew,
+      // so seeds 1-40 hold no ladder that carries farther than it costs
+      // (31 and 34 did); 41-80 hold two, 42 and 61, the control's)
+      const b = boxHeight(C, Array.from({ length: 40 }, (_, i) => i + 41))
+      report(!b.bad.length && b.wide > 0, `P-scan, the box with height: ${b.plans} climbers' plans from ladders' feet and tops on 40 of the grand mission's fortified boards, every reached cell inside scanBox (${b.wide} reaching past the box a flat board would draw)`, b.bad.length ? b.bad : b.wide ? [] : ['no plan reached past the flat box: the probe met no ladder that carries farther than it costs'])
     }
+    // (F19a) the keg board: the keg/ AI pairs, on code with the keg's AI
+    // terms (the reference asks them afresh at every cell; bestSpot once a
+    // scan), on a stream of its own (the rows after it draw as they did)
+    const kegB = C.M.kegsOf ? items.filter((it) => it.kind === 'ai' && it.set === 'keg').slice(0, quick ? 1 : 2).map((it) => [`keg ${it.id}`, jobSetup(it.job)]) : []
+    if (kegB.length) {
+      const s5 = sample(C, kegB, quick ? 9 : 4, [scanProbe], stream(20261027))
+      report(!s5.bad.length && s5.states >= (quick ? 20 : 100), `P-scan, keg: ${s5.states} states on ${kegB.length} keg/ boards, the reference scoring with the powder keg's terms`, s5.bad)
+    } else if (C.M.kegsOf) say('  (P-scan, keg: no keg/ AI pair in the corpus yet)')
   }
   if (want('los')) {
     const l1 = pLos(C, Array.from({ length: quick ? 60 : 500 }, (_, i) => i + 1), 40, rand)

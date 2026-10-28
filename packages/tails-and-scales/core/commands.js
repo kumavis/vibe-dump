@@ -63,7 +63,7 @@ import {
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
 import { mayBoard, doEmbark, mayLand, doDisembark } from './actions/transport.js'
-import { doShoot } from './actions/shoot.js'
+import { doShoot, kegsGoOff } from './actions/shoot.js'
 import { declareCharge, finishCharge } from './actions/charge.js'
 import { finishAction, gameOver, runAI } from './engine.js'
 
@@ -94,7 +94,10 @@ export const HANDLERS = Object.freeze({
   },
   move(G, seat, { u, c }) {
     // (doMove makes the plan afresh from the unit's flags, as legal's)
-    doMove(G, unitOf(G, u), c)
+    const unit = unitOf(G, u), kegs = doMove(G, unit, c)
+    // ((F19a, DESIGN §4.1 rule 28) a powder keg a wrecker's walk smashed
+    // goes off now, the walk ended: the walker set it off)
+    if (kegs.length) kegsGoOff(G, unit, kegs)
     finishAction(G)
   },
   shoot(G, seat, { u, tg }) {

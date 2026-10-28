@@ -30,6 +30,14 @@
 //                                 now, the phase left open
 //     ordersN                     (F10c) how many of the seat's units hold an
 //                                 order (the actions' Orders N; 0 hides it)
+//     undo                        (F12) ↶ Undo: { show, busy }, up beside End
+//                                 in a game played on this device alone,
+//                                 enabled once the table has caught up and
+//                                 the seat has an entry to take back
+//                                 (undoable, below)
+//     aim                         (F13) touch aim: { on (👆 Aim), select (▭
+//                                 Select), aiming (a finger's aim under way:
+//                                 'on', 'off' once called off, or null) }
 //     zones                       each seat's deployment zone's opacity
 //     hint                        the hint line ('' for none)
 //     rings                       each unit's ring: (view) → [colour, opacity]
@@ -46,7 +54,8 @@
 //            phase of a seat played here: { actors, covered }, the ids of the
 //            units whose orders act in it now and of those an order covers
 //            in it; null for none), ordered (how many of the seat's units
-//            hold an order) }
+//            hold an order), aim ((F13) input/aim.js's state(): the toggles
+//            and the drag; null for none) }
 //   hud      the HUD's own state, kept from the last model: { phaseShown,
 //            buttonsUp, hint, sides (each seat's look: ui/theme.js) }
 //
@@ -93,7 +102,7 @@ const [FIRST] = PHASES.map((p) => p.key)
 export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })
 
 export function hudModel({ G, mirror: M, session, input, hud }) {
-  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false } = input
+  const { idle, decision: P, deploy, sel, pick: pk, group = 0, orders: plan = null, ordered = 0, counting = false, aim = null } = input
   const { phaseShown, sides } = hud
   const rounds = G.setup.rounds
   const ask = (fn) => session.preview(fn)
@@ -127,6 +136,11 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // (F3) End lit when there is nothing else to do: the phase's units all
   // spent, or the deployment, where Begin battle is the only way on
   end.lit = deploying || end.ready
+  // (F12) Undo up with End in a game played here alone (never online, nor
+  // for a replay's Session, which holds no seat's decision), enabled while
+  // the table rests and there is an entry of the seat to take back
+  const undoUp = end.show && playedHere(session)
+  const undo = { show: undoUp, busy: !idle || !undoUp || undoable(session) < 0 }
   const advance = {
     // ((F10a) none for a group: its +D6 is the bar's)
     // ((F9a) never a rider's: it steps off, it doesn't advance)
@@ -137,7 +151,10 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // hint line (a picked-up unit's kept as it was while the table plays its
   // action: the match has moved on already)
   let hint = hud.hint
-  if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
+  // ((F13) a finger aiming: what its lift will do, and how to call it off)
+  if (aim?.aiming === 'off') hint = 'Off the board: the aim is called off. Lift your finger.'
+  else if (aim?.aiming) hint = `Aiming — lift your finger ${aimVerb(pk, deploying, group, P)}; a second finger calls it off.`
+  else if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
   else if (deploying && group >= 2) hint = `Deployment — click inside your shaded zone to pin the ${group} units' formation there; Enter or its flag places them.`
   else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name}${sides[M.active].mirror ? ', the AI,' : ' (AI)'} are taking their turn…`
@@ -171,14 +188,59 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     auto: { show: up, busy: !idle },
     go: { show: up && idle && badge > 0, n: badge, busy: !idle },
     ordersN: mine || deploying ? ordered : 0,
+    undo,
     advance,
     shortest: { show: !!pk },
+    aim: { on: !!aim?.on, select: !!aim?.select, aiming: aim?.aiming ?? null },
     // the deploying seat's zone is lit; in battle both dim
     zones: [0, 1].map((s) => (M.stage === 'battle' || M.stage === 'over' ? 0.05 : s === deploy ? 0.2 : 0.07)),
     hint,
     rings: ringLooks({ session, input, covered: mine && idle ? covered : NOBODY }),
     buttonsUp,
   }
+}
+
+// ── Undo (F12) ──────────────────────────────────────────────────────────────
+// The kinds undo takes back: a placement, a move, a charge's end. None rolls
+// a die; every other kind ends a phase or the deployment, rolls, runs the AI
+// or answers a vote, and so commits.
+export const UNDOABLE = Object.freeze(['place', 'move', 'chargeEnd'])
+
+// A game played on this device alone (vs. the AI, hotseat): a log no other
+// device writes to (a LocalStore: online play's is Automerge's), every human
+// seat played here.
+export function playedHere(session) {
+  const G = session?.G
+  return !!G && session.store.kind === 'local' && G.setup.seats.every((x, s) => x.ctrl !== 'human' || (session.localSeats.includes(s) && x.dev === session.dev))
+}
+
+// The entry undo would take back: its place k among the accepted, or -1. It
+// is the last accepted, of a live match played here alone: a placement, a
+// move or a charge's end of the seat played here whose decision is now
+// pending (so in hotseat each seat takes back its own), with no die rolled
+// across it (the dice counter the Folder keeps after each entry,
+// match/fold.js). An End or Begin battle, and any entry that rolled (an
+// advance, a shot, a charge, Auto, a pilot, the last Begin battle with its
+// roll-off, an End that ran a fight, morale or the AI), is a commit point:
+// one press takes back one entry, down to the last of them, never past it.
+export function undoable(session) {
+  if (!playedHere(session) || session.status !== 'live') return -1
+  const f = session.folder, k = f.accepted.length - 1, seat = session.decisionFor()
+  if (seat < 0 || k < 1) return -1
+  const e = f.pushed[f.placed[k]]
+  return UNDOABLE.includes(e.t) && e.s === seat && e.d === session.dev && f.dice[k] === f.dice[k - 1] ? k : -1
+}
+
+// (F13) What a finger's aim does where it lifts: the click's verb there.
+function aimVerb(pk, deploying, group, P) {
+  if (pk) return 'on the orange area to end the charge there'
+  if (deploying) return group >= 2 ? 'to pin the formation there' : 'to place the unit there'
+  const many = group >= 2
+  return {
+    move: many ? 'to pin the formation there, or on an enemy to approach it' : 'to move there (beyond its reach, as far as it goes that way)',
+    shoot: many ? 'on an enemy: every one of them that can fires at it' : 'on an enemy to shoot it',
+    charge: many ? 'on an enemy: every one of them that can charges it' : 'on an enemy to charge it',
+  }[P?.phase] ?? 'to act there'
 }
 
 // Each unit's ring: the one picked up, the deploying seat's, a charge's

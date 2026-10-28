@@ -77,10 +77,11 @@ const STAGGER = 0.15 // the spec's, not the module's
 // of event holds the next attack back by (the spec's, not the module's)
 const BATTLE = 200
 const BRISK = 0.3
-const HELD = { volley: 0.35, 'blast.scatter': 0.5, 'blast.fire': 0.5, 'spell.thorns': 0.5, 'spell.gaze': 0.5 }
+// ((F19a) a powder keg's fuse, set off inside an attack, as a throw)
+const HELD = { volley: 0.35, 'blast.scatter': 0.5, 'blast.fire': 0.5, 'keg.fuse': 0.5, 'spell.thorns': 0.5, 'spell.gaze': 0.5 }
 const ANCHORS = ['volley', 'blast.fire', 'spell.cast', 'spell.fizzle', 'melee']
 // what may sit in an attack (this check's own list)
-const inAttack = (e) => [...ANCHORS, 'focus', 'unit.face', 'tray.open', 'blast.aim', 'blast.scatter', 'blast.land', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
+const inAttack = (e) => [...ANCHORS, 'focus', 'unit.face', 'tray.open', 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending'].includes(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 
 // when a walk's last smash plays (view/units.js's walk: a tween of
 // L / speed + 0.15 s, easeInOut, over L + 0.15·speed inches), found here by
@@ -353,6 +354,7 @@ async function run(paceDir, { boards = 4, say = console.log } = {}) {
 // the browser: a watched battle batched, then one at a time
 async function browser() {
   const { chromium } = await import('playwright')
+  const { IDLE_MS } = await import('./chromium.mjs')
   const { startStaticServer } = await import('../../../scripts/static-server.mjs')
   const work = mkdtempSync(join(tmpdir(), 'playback-check-'))
   try {
@@ -363,7 +365,7 @@ async function browser() {
       const page = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
       const errors = []
       page.on('pageerror', (e) => errors.push(e.message))
-      await page.goto(`${url}/?debug&fast&seed=4242&dice=99`)
+      await page.goto(`${url}/?debug&fast&seed=4242&dice=99`, { timeout: IDLE_MS })
       await page.waitForSelector('#title:not(.hidden)', { timeout: 120000 })
       const watch = async () => {
         await page.click('[data-mode="watch"]')

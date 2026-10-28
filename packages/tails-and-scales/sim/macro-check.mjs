@@ -228,6 +228,9 @@ async function probeOrders(L, ses, rand, out) {
   const mineInOrder = G.units.filter((u) => u.side === seat).map((u) => u.id)
   const posted = new Set(P.phase === 'move' ? [...orders].filter(([, o]) => o.k === 'hold' || o.k === 'march').map(([id]) => id) : [])
   const actors = ses.preview((G2, q) => L.standing.actorsOf(G2, q, seat, orders, P.phase))
+  // (F18's corpus) and who of the seat could act at all as the count was
+  // taken (below)
+  const could = ses.preview((G2, q) => G2.units.filter((u) => u.side === seat && q.alive(u) && q.canAct(G2, u)).map((u) => u.id))
   const rejected = ses.folder.rejected.length, count = ses.count
   const t0 = performance.now()
   let r
@@ -256,7 +259,18 @@ async function probeOrders(L, ses, rand, out) {
     out.orders.held = (out.orders.held ?? 0) + posted.size
   }
   if (r.acted.some((id) => !orders.has(id))) return 'orders acted for a unit with none'
-  if (r.acted.some((id) => !actors.some((a) => a.u.id === id))) return `orders acted for units the count left out (${r.acted.filter((id) => !actors.some((a) => a.u.id === id)).join(', ')})`
+  // (F18's corpus) An order's action can change what another unit may do:
+  // a template that wrecks the scenery between a gun and its target, a shot
+  // that fells the foe a unit was locked with (since F18 a fight may be
+  // shot into). So a unit the count left out because it could do nothing
+  // then may act once the table has changed under it (the count is a
+  // preview of the table as it stood); one the count left out that could
+  // act, never. (hotseat-pilot-mix-1 as F18 played it again: a Trebuchet's
+  // Attack wrecks nine pieces of scenery and opens the sight a held Nutkin
+  // lacked.)
+  const late = r.acted.filter((id) => !actors.some((a) => a.u.id === id))
+  if (late.some((id) => could.includes(id))) return `orders acted for units the count left out, though they could act as it was taken (${late.filter((id) => could.includes(id)).join(', ')})`
+  out.orders.freed = (out.orders.freed ?? 0) + late.length
   return null
 }
 
@@ -543,7 +557,7 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 

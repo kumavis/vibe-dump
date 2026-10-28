@@ -10,6 +10,8 @@
 //              still to act; Tab / Shift-Tab the next or last of them;
 //              Ctrl-1…9 saves the group, 1…9 calls it back (twice: the
 //              camera goes to it); Space the camera to the group; Esc lets go
+//              ((F13) a long press on the ground or on an enemy, with a
+//              unit or a group picked up, aims instead: input/aim.js)
 //   Act        with two or more picked: in the deployment and the movement
 //              phase a click on the ground pins a formation there (its
 //              ghosts drawn: white rings arrive, amber fall short), an
@@ -112,20 +114,27 @@ export class GroupInput {
   }
 
   // ▭ Select (touch): one finger drags a box, two still pan and pinch (the
-  // camera's one-finger orbit set aside while it is on)
+  // camera's one-finger orbit set aside while it is on); ((F13) and 👆 Aim
+  // off as it comes on: the two take turns, input/aim.js)
   setSelectMode(on) {
     this.selectMode = on
+    const aim = this.human.aim
+    if (on && aim?.on) {
+      aim.on = false
+      this.human.flow.refreshUI()
+    }
     this.touches()
   }
 
   // (OrbitControls' touches as Select mode wants them now: one finger the
-  // box's while a seat played here may pick, else the camera's as ever, so
-  // a finger is never dead; model() calls it at every refresh)
+  // box's while a seat played here may pick, ((F13) or the aim's while 👆
+  // Aim is on and something is picked up to aim), else the camera's as
+  // ever, so a finger is never dead; model() calls it at every refresh)
   touches() {
     const c = this.controls
     if (!c.touches) return
     this.touches0 ??= { ...c.touches }
-    const one = this.selectMode && this.seat() >= 0 ? null : this.touches0.ONE
+    const one = (this.selectMode && this.seat() >= 0) || this.human.aim?.holds() ? null : this.touches0.ONE
     if (c.touches.ONE !== one || c.touches.TWO !== this.touches0.TWO) c.touches = { ...this.touches0, ONE: one }
   }
 
@@ -185,14 +194,27 @@ export class GroupInput {
   }
 
   // A finger held still on one of the seat's units: it joins the group, or
-  // leaves it (a tick of the vibrator), and the lift is no click.
+  // leaves it (a tick of the vibrator), and the lift is no click. ((F13)
+  // Held on the ground or on an enemy instead, with something picked up to
+  // aim: an aim drag, input/aim.js's, which a box this press began gives
+  // way to.)
   holdFrom(e) {
     clearTimeout(this.press?.timer)
     const at = { clientX: e.clientX, clientY: e.clientY, pointerType: 'touch' }
     this.press = { id: e.pointerId, x: e.clientX, y: e.clientY, done: false }
     this.press.timer = setTimeout(() => {
-      const seat = this.seat(), { unit } = this.human.picker.pick(at)
-      if (!this.press || seat < 0 || !unit || unit.side !== seat) return
+      const seat = this.seat(), pick = this.human.picker.pick(at), { unit } = pick
+      if (!this.press) return
+      if (seat < 0 || !unit || unit.side !== seat) {
+        const id = this.press.id
+        if (!this.human.aim?.hold(id, at.clientX, at.clientY, pick)) return
+        this.press = null
+        if (this.box?.id === id) {
+          this.box = null
+          this.boxEl.classList.add('hidden')
+        }
+        return
+      }
       this.press.done = true
       this.selection.toggle(seat, unit.id)
       this.selection.of(seat).note = ''
@@ -552,6 +574,16 @@ export class GroupInput {
 
   deploying() {
     return this.human.deploySeat() >= 0
+  }
+
+  // (F13) a hover's ghosts let go (a finger's aim over): a plan still coming
+  // stops, and the pinned formation, if any, is drawn again
+  unhover() {
+    if (!this.isGroup()) return
+    this.ghosts?.cancel()
+    const pin = this.rec.pin
+    if (pin) this.draw(pin.preview, pin.target, true)
+    else this.view.overlay.formation(null)
   }
 
   cancel() {

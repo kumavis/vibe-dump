@@ -33,6 +33,7 @@
 import { mulberry32, pick, rr, deepFreeze } from '../util.js'
 import { hypot, sin, cos, atan, atan2 } from '../dmath.js'
 import { corners } from './geom.js'
+import { HAZARDS } from '../../data/hazards.js'
 
 // Wall styles: palette, block width / height / thickness, hit points, and
 // whether a block is a box or a log. The palettes are drawn from the layout
@@ -57,6 +58,8 @@ const STONE = Object.freeze(['#7d7a74', '#8c8880', '#6e6b66', '#96918a'])
 const CRATE = Object.freeze(['#9a7048', '#8a6038', '#a77d50'])
 const BARREL = Object.freeze(['#8a5a34', '#7a4c2a'])
 const CAPS = Object.freeze(['#c0392b', '#d35a1f', '#8e44ad', '#b03050'])
+// (F19a) a powder keg's staves
+const KEG_WOOD = Object.freeze(['#8a5a34', '#7a4c2a', '#94643a'])
 // a forest floor is a CircleGeometry(r, 22): a centre vertex and 23 rim
 // vertices (the seam is doubled), each rim vertex pulled in or out by a draw
 const FLOOR_SEGMENTS = 22
@@ -229,6 +232,23 @@ export function mushroom(T, F, rng, lx, lz) {
     nav: { x: p.x, z: p.z, hx: sr + 0.12, hz: sr + 0.12, yaw: 0 },
     navKind: 'soft', los: 'obscure', cover: true,
     look: { piece: 'mushroom', h, r, sr, cap, dots, tilt, leaves: [cap, '#fff6e0', '#efe6d0'] },
+  })
+}
+
+// (F19a, DESIGN §2.9) A powder keg: a barrel of black powder about an inch
+// across and 1.2" tall, standing on the ground at (x, z), turned `yaw`, its
+// staves `color`, with the keg's hit points (data/hazards.js). Walkers go
+// round it (`soft`: a wrecker walks through, and smashes it); too small to
+// see past or hide behind (no line of sight, no cover). At zero hit points
+// it goes off: the rules' (core/actions/shoot.js kegsGoOff), from the
+// terrain's list of what broke; the terrain itself only reports it broken,
+// as a crate.
+export function powderKeg(T, x, z, yaw, color) {
+  return T.add({
+    kind: 'keg', hp: HAZARDS.keg.hp,
+    shape: { x, y: 0.6, z, hx: 0.5, hy: 0.6, hz: 0.5, yaw },
+    navKind: 'soft',
+    look: { piece: 'keg', color, yaw, chip: '#7a4c2a' },
   })
 }
 
@@ -659,7 +679,19 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
     buildFort(T, 'keep', { x: 0, z: 0, yaw: (rng() - 0.5) * 0.4 }, (rng() * 1e9) | 0)
     placed.push({ x: 0, z: 0, r: FOOTPRINT.keep, fort: 'keep' })
   },
+  // (F19a) the powder keg at the table's centre, the `keg` mission's
+  // objectives clustered round it: its yaw, then its staves' colour. Exactly
+  // at (0, 0), so it is its own point mirror; its footprint keeps the
+  // features KEG_R off.
+  keg(T, rng, placed) {
+    const yaw = rng() * Math.PI * 2
+    powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))
+    placed.push({ x: 0, z: 0, r: KEG_R, keg: true })
+  },
 }))
+// (F19a) the room a centre keg keeps round it from the features (each keeps
+// its own radius and the set's gap beyond this)
+export const KEG_R = 1
 
 // ── Scattering a set ────────────────────────────────────────────────────────
 // Lay terrain set S (sets.js) out over T's table from the board seed: one
@@ -674,16 +706,21 @@ export const CENTRES = deepFreeze(Object.assign(Object.create(null), {
 // pairs before the features (forts, below), so the big pieces get the space;
 // the features then keep clear of their footprints and their gates' aprons
 // alike. (F8b's `open`, and `fortified`) A set with `scale: 'area'` scales
-// its pair counts and attempts with the table's area. Each branch is reached
-// only for a set that has its field, so classic's draws are untouched.
+// its pair counts and attempts with the table's area. (`fortified`) A set
+// with a `largeCentre` reads it in place of `centre` on a table larger than
+// classic's, from the same one draw. Each branch is reached only for a set
+// that has its field, so classic's draws are untouched.
 export function scatter(T, S, seed, objectives, deployDepth) {
   const rng = mulberry32(seed)
   const { W, H } = T
   const placed = []
 
   // The middle of the table: something wrapped around the centre objective.
+  // (The merged build's gate) A set with `largeCentre` reads it instead on a
+  // table larger than classic's, the same draw picking from it.
   const centre = rng()
-  const middle = S.centre.find(([, below]) => centre < below)
+  const rule = S.largeCentre && areaScale(T) > 1 ? S.largeCentre : S.centre
+  const middle = rule.find(([, below]) => centre < below)
   if (middle) CENTRES[middle[0]](T, rng, placed)
 
   if (S.works) works(T, S, rng, placed, deployDepth)
@@ -811,9 +848,10 @@ function forts(T, S, rng, placed, objectives, deployDepth) {
 // draws land on it). Throws, naming the set and the field.
 const SET_FIELDS = Object.freeze(['centre', 'kinds', 'pairs', 'attempts', 'mirror', 'margin', 'selfGap', 'deployMargin', 'bigNotInDeploy', 'notInDeploy', 'objectiveGap', 'gap'])
 // (F7a, F8b) the fields a set may have besides: the works, the fort phase's
-// (all of them or none, `facing` with them) and the area scale
+// (all of them or none, `facing` with them), the area scale and the larger
+// tables' centre rule
 const FORT_FIELDS = Object.freeze(['forts', 'fortAttempts', 'fortGap', 'fortObjectiveGap', 'fortKinds'])
-const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale'])
+const OPTIONAL_FIELDS = Object.freeze(['works', ...FORT_FIELDS, 'facing', 'scale', 'largeCentre'])
 const MIRRORS = Object.freeze(['point']) // the only symmetry scatter knows
 const SCALES = Object.freeze(['area']) // and the only scaling
 export function checkSet(name, S) {
@@ -832,13 +870,18 @@ export function checkSet(name, S) {
     if (!num(k[1]) || k[1] <= 0) bad(`kinds[${i}] (${k[0]}): radius ${k[1]} must be a number above 0`)
     if (!num(k[2]) || k[2] <= 0) bad(`kinds[${i}] (${k[0]}): weight ${k[2]} must be a number above 0`)
   })
-  if (!Array.isArray(S.centre)) bad('centre must be a list of [piece, threshold]')
-  S.centre.forEach((c, i) => {
-    if (!Array.isArray(c) || c.length !== 2) bad(`centre[${i}] must be [piece, threshold]`)
-    if (!(c[0] in CENTRES)) bad(`centre[${i}]: no centre piece "${c[0]}" (there are ${Object.keys(CENTRES).join(', ')})`)
-    if (!num(c[1]) || c[1] <= 0 || c[1] > 1) bad(`centre[${i}] (${c[0]}): threshold ${c[1]} must be in (0, 1]`)
-    if (i && c[1] <= S.centre[i - 1][1]) bad(`centre[${i}] (${c[0]}): thresholds must rise (the first one above the draw wins)`)
-  })
+  // (a centre rule: `centre`, and a `largeCentre` alike)
+  const centreRule = (k) => {
+    if (!Array.isArray(S[k])) bad(`${k} must be a list of [piece, threshold]`)
+    S[k].forEach((c, i) => {
+      if (!Array.isArray(c) || c.length !== 2) bad(`${k}[${i}] must be [piece, threshold]`)
+      if (!(c[0] in CENTRES)) bad(`${k}[${i}]: no centre piece "${c[0]}" (there are ${Object.keys(CENTRES).join(', ')})`)
+      if (!num(c[1]) || c[1] <= 0 || c[1] > 1) bad(`${k}[${i}] (${c[0]}): threshold ${c[1]} must be in (0, 1]`)
+      if (i && c[1] <= S[k][i - 1][1]) bad(`${k}[${i}] (${c[0]}): thresholds must rise (the first one above the draw wins)`)
+    })
+  }
+  centreRule('centre')
+  if ('largeCentre' in S) centreRule('largeCentre')
   if (!Array.isArray(S.pairs) || S.pairs.length !== 2 || !S.pairs.every(int)) bad('pairs must be two whole numbers, 0 or more')
   if (!int(S.attempts)) bad(`attempts ${S.attempts} must be a whole number, 0 or more`)
   if (!MIRRORS.includes(S.mirror)) bad(`mirror "${S.mirror}" is not one scatter knows (${MIRRORS.join(', ')})`)

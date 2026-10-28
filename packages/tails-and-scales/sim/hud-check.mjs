@@ -96,7 +96,7 @@ try {
   console.error(`hud-check: ${e.message}\nusage: node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test`)
   process.exit(2)
 }
-const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-9'
+const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-11'
 let items
 try {
   items = select(loadCorpus().items, a.only ?? DEFAULT)
@@ -133,7 +133,7 @@ const MUTATIONS = {
   // snap again at a charge's end)
   'pick-unshaded': ['app/flow.js', '    human.pickShown = null\n', ''],
 }
-const SELF_TEST_ON = '64-89,hotseat-aggressive-103,hotseat-late-vote-9'
+const SELF_TEST_ON = '64-89,hotseat-aggressive-103,hotseat-late-vote-11'
 
 // In the page, before the app: catch window.__ts, drive a human log's seats
 // (the corpus driver), and snap at each point due, reading the page once
@@ -321,7 +321,7 @@ async function run(browser, url, item) {
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript({ content: `${[missingHooks, humanDriver].join('\n')}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE}, ${JSON.stringify(NAMES)})` })
-    await page.goto(`${url}/?debug&fast&${query}`)
+    await page.goto(`${url}/?debug&fast&${query}`, { timeout: IDLE_MS })
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })

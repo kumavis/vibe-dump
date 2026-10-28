@@ -27,7 +27,11 @@ import { unitPrice } from '../core/army.js'
 const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 
 // A unit type's stats, weapons and abilities, as the card shows them (and
-// (F6) the battle-setup panel, for a figure of its race showcase)
+// (F6) the battle-setup panel, for a figure of its race showcase). (The
+// playtest's fix) The reason a shot needs what it needs ("S3 vs T6") is the
+// tooltip's, at the moment it matters (ui/tooltip.js's oddsText); the card
+// stays compact: a line per weapon with every toughness's need made the
+// lead's card cover a figure on a 1280×800 screen.
 export function statsHtml(t) {
   const fmt = (k) => (k === 'M' ? `${t.M}"` : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
   const wpn = (w, icon) => {

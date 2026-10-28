@@ -68,7 +68,8 @@ export function jobSetup(job) {
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  const PRESET = { classic: 'classic' }, FIRST_SET = { classic: 'classic' }
+  // ((F19a) the keg mission takes the classic preset, and is fought on its own set)
+  const PRESET = { classic: 'classic', keg: 'classic' }, FIRST_SET = { classic: 'classic', keg: 'keg' }
   const m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
   const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
   const terrain = setup.terrain && setup.terrain !== (Object.hasOwn(FIRST_SET, m) ? FIRST_SET[m] : undefined) ? `&terrain=${setup.terrain}` : ''
@@ -87,7 +88,8 @@ export function pageStart(setup) {
 // written: 'classic' and '112111' field the same units, but they are not
 // the same setup.
 export function playedAs(played, setup) {
-  const PRESET = { classic: 'classic' }
+  // ((F19a) the keg mission's preset is the classic one)
+  const PRESET = { classic: 'classic', keg: 'classic' }
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
   const plain = (s) => {
     const mission = s.mission ?? 'classic', preset = Object.hasOwn(PRESET, mission) ? PRESET[mission] : mission
