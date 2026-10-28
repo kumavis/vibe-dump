@@ -149,7 +149,9 @@ the commit, and add whatever the work turned up.
   `vehicle/` set in every check that reads the corpus (parity's 87
   battles); and in Chromium input-check's carts page, snap-check's cart row
   (and the bail-out log among its defaults), play-check's `cart` lane and
-  rematch-memory's `--carts`. A step
+  rematch-memory's `--carts` (and, from its merge onto main, fog-check's
+  War-Cart battle, bake-check's War-Cart in both figure styles and
+  P-fight's hull guns). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1234,8 +1236,9 @@ follows N3.
 - [x] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
-  (C1; `CORE_VERSION` 9, F7b's 8 beside it; the 70 recorded battles
-  byte-identical, `stateHash` as before for a match with no rider. The
+  (C1, 7a94cfd; `CORE_VERSION` 9 as built, 11 at its merge onto main; the
+  70 recorded battles byte-identical, `stateHash` as before for a match
+  with no rider. The
   `Vehicle` role and slot (0 / 2 / 2), the `transport` record, the
   `vehicle` flag (`climb` derived without it); `u.aboard`, `flags.rode`,
   `moveUnitTo`; riders off every spatial rule; `embark` and `disembark`
@@ -1252,11 +1255,28 @@ follows N3.
   tools, R, the box and the group Move ("riders ride along"), a rider's
   "with the hull", the wreck. P-riders, P-pilot's rider mask, P-army's
   hull deployment at the caps, P-present's `aboard`, data-check's section
-  13, flag-lint's one-reader rows, boundaries, merge-sim's `vehicles`,
-  macro-check's riders, input-check's carts page, snap-check's cart row,
-  play-check's cart lane, rematch-memory's `--carts`, play-report's F9a
-  row; the `vehicle/` corpus, 6 AI pairs and 4 human-bot logs, in C2, the
-  corpus 80 battles. DESIGN's F9a notes.)
+  13 (14 since the merge), flag-lint's one-reader rows, boundaries,
+  merge-sim's `vehicles`, macro-check's riders, input-check's carts page,
+  snap-check's cart row, play-check's cart lane, rematch-memory's
+  `--carts`, play-report's F9a row; the `vehicle/` corpus, 6 AI pairs and
+  4 human-bot logs, in C2 (f282341), the corpus 80 battles. Merged onto
+  main (8207e30: the October playtest's items, the merged build's gate
+  and V2) keeping both sides: `CORE_VERSION` 11 and `RULES_ID` moved once
+  (the keg mission's Vehicle slot `[0, 0]`); a rider no friend under a
+  template (F18's `friendsUnder`, the AI's keg value) as it was never a
+  victim; F16's fog seeing a rider with its hull, no eye and no ghost of
+  its own; the War-Cart's machine in `view/models/warcart.js`, built by
+  both figure styles (classic crew, or splat-fur crew as the trebuchet's),
+  its riders their own units' figures in the page's style. Seven of
+  `vehicle/`'s ten re-recorded under F18 (proved F18's alone), the PIN on
+  the merged code (aa2ea7d), the corpus 87 battles. The standing checks
+  gain, with the merge: fog-check's War-Cart battle (a rider seen with its
+  hull), bake-check's War-Cart in both styles, P-fight's hull guns on a
+  Field battle, present-check's fog fold over the `vehicle/` logs against
+  the AI, and sim/oracle's fake DOM fit for V2's boot (a fragment,
+  `matchMedia`), without which present-check and corpus-add's page runs
+  failed on main too. DESIGN's F9a notes, its merge and V2's figure
+  styles among them.)
 - [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
   F9a left it: `core/actions/transport.js` measures a round hull from its
