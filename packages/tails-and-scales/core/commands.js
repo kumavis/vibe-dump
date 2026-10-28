@@ -31,7 +31,10 @@
 //                     the battle is decided (a side wiped out has lost)
 //   embark {u, v}     (F9a) deploy or move phase: unit u boards vehicle v (in
 //                     a phase, walking to v's side as its move; in the
-//                     deployment where it stands)
+//                     deployment where it stands); ((V3c, at the V3 merge)
+//                     never a unit Root Snare binds, boarding being its
+//                     move: mayBoard; a snared hull's riders may still step
+//                     off)
 //   disembark {u, c}  (F9a) move phase: rider u steps off its vehicle onto
 //                     cell c, as its move
 // (The AI's `hold` is its own, never a command: core/ai/policy.js.)

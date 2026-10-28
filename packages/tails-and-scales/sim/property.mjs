@@ -194,7 +194,7 @@
 //    movement phase refused); and P-army's deployment at the caps with two
 //    War-Carts a side (80 boards: Field 40, Grand 20, the Powder Field 20).
 //
-// 14. (V3c) P-spell, on code whose casters have several spells (bestCast):
+// 15. (V3c) P-spell, on code whose casters have several spells (bestCast):
 //    on scenes of its own (spellTask below says what each holds): every
 //    spell of both casters castable at a target it takes, once a phase, its
 //    cast die for die, refused at the other side, past its range and at the
