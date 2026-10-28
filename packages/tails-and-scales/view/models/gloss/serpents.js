@@ -1,5 +1,5 @@
 // The Coil of Ssithra, smooth and shiny (refined primitives + physical gloss): the six units of
-// view/models/serpent.js, part for part (the coil, torso, head, hood and arms of its naga(), and every
+// view/models/classic/serpent.js, part for part (the coil, torso, head, hood and arms of its naga(), and every
 // unit's gear), rebuilt as smooth high-resolution geometry under a lacquered, scaled skin.
 //
 //   buildSerpent(key, { detail })   { group, triangles, ms }: the figure standing (coiled) on y 0, facing
@@ -37,7 +37,7 @@
 //   T-junction cracks), the crew cloned with no userData.
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
-import { part, rod, hold, shade } from '../../view/models/kit.js'
+import { part, rod, hold, shade } from '../kit.js'
 import { skin, belly as bellyMat, gloss, polished, satinMetal, glow } from './gloss.js'
 import { blob, ellipsoid, lathe, horn, body as sweepBody, tint, triangles, smooth, cutPaint, withPlain, occluder, occlude, sweepSimple, vertexNormals } from './shapes.js'
 import { smin, smax, roundCone, ellipsoid as sdfEllipsoid, fieldGeometry } from './sdf.js'

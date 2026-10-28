@@ -202,17 +202,19 @@ body:not(.playing) #hint {
   font-weight: bold;
 }
 
+/* ((V2) a touch tighter than before, so its nine buttons (📈 the ninth) take
+   the eight's width and stay clear of the other seat's score) */
 #tools {
   position: fixed;
   top: 10px;
   right: 10px;
   display: flex;
-  gap: 6px;
+  gap: 5px;
   z-index: 6;
 }
 #tools button {
-  padding: 6px 10px;
-  min-width: 38px;
+  padding: 6px 8px;
+  min-width: 34px;
 }
 #tools button.off {
   opacity: 0.45;
@@ -839,8 +841,10 @@ table.wt th {
     right: 8px;
     gap: 4px;
   }
+  /* ((V2) 5px a side, not 7: nine buttons in the eight's width, the hint's
+     line no more covered than before) */
   #tools button {
-    padding: 4px 7px;
+    padding: 4px 5px;
     min-width: 0;
   }
   #hint {
@@ -1087,6 +1091,62 @@ body.replaying #toast {
 }
 .replayrow {
   margin-top: 6px;
+}
+/* (V2) the title's settings: the figure style and the perf overlay */
+.optrow {
+  margin-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+/* ── (V2) The perf overlay (ui/perf.js) ───────────────────────────────── */
+/* six short lines, out of the way of the HUD: on a wide screen at the
+   right, just under the battle log's tallest (the log is at most
+   min(40vh, 100vh - 140px) from its top at 56px), clear of the score, the
+   tools and the actions; on a phone in portrait at the left, under the
+   roster's head (the HUD, the tools and the hint are above it, the card
+   and the actions at the bottom). A panel opened over it (the roster, the
+   log, the dice tray, a wide screen's title card) covers it, as it covers
+   the table. Inside the safe area; a tap steps the quality. */
+#perfOverlay {
+  position: fixed;
+  right: max(10px, env(safe-area-inset-right));
+  top: calc(64px + min(40vh, 100vh - 140px));
+  z-index: 4;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: rgba(10, 8, 6, 0.62);
+  color: #d8ffd0;
+  font: 10.5px/1.35 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  white-space: pre;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#perfOverlay.hidden {
+  display: none;
+}
+@media (max-width: 700px) {
+  #perfOverlay {
+    right: auto;
+    left: max(8px, env(safe-area-inset-left));
+    top: 140px;
+    font-size: 9.5px;
+  }
+  /* out of a battle, at the very top, over the title's modal (its card
+     starts below it on a phone), so the title's cost can be read too; and
+     none over the battle-setup panel or the lobby, whose race windows show
+     the table, and the overlay with it, through the panel */
+  body:not(.playing) #perfOverlay {
+    top: max(4px, env(safe-area-inset-top));
+    z-index: 31;
+  }
+  body:has(#setup:not(.hidden)) #perfOverlay,
+  body:has(#lobby:not(.hidden)) #perfOverlay {
+    display: none;
+  }
 }
 button.link {
   background: none;

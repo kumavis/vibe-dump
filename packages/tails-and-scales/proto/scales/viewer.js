@@ -1,21 +1,23 @@
-// One Ssithra figure, smooth and glossy (serpents.js), or the game's mesh figure today, on its base, lit as
-// view/stage.js lights the table: drag to orbit. Under the package's `npm run dev`:
+// One Ssithra figure, smooth and glossy (view/models/gloss/serpents.js, the game's 'new' figures since V2),
+// or the classic mesh figure, on its base, lit as view/stage.js lights the table: drag to orbit. Under the
+// package's `npm run dev`:
 //   /proto/scales/viewer.html?unit=hierophant          the smooth, glossy figure
-//   /proto/scales/viewer.html?unit=hierophant&mesh=1   the game's mesh figure (view/models/cache.js)
+//   /proto/scales/viewer.html?unit=hierophant&mesh=1   the classic mesh figure (view/models/cache.js, its
+//                                                      'classic' style)
 // The query also takes w, h (the canvas, CSS px; the window if unset), dist, el, az (the camera's distance,
 // elevation and azimuth, degrees), ty (the height it looks at), detail (the figure's level of detail: 1 close
-// up, lower for game scale), base (0: none), bake=1 (merged by bake-gloss.js, as the game would bake it) and
+// up, lower for game scale), base (0: none), bake=1 (merged by view/models/bake.js, as the game bakes it) and
 // plain=1 (every material swapped for a matte MeshStandardMaterial: the shapes without the gloss), dpr (the
 // renderer's pixel ratio when w is given: the gloss's level of detail is the same at 1 and 2) and mask=coil
 // (only the coil, flat white on black: sheet.mjs measures the coil's noise inside it). window.done holds
 // what was drawn once the first frame is (sheet.mjs waits for it).
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { buildSerpent, KEYS } from './serpents.js'
-import { triangles } from './shapes.js'
-import { bakeGloss } from './bake-gloss.js'
+import { buildSerpent, KEYS } from '../../view/models/gloss/serpents.js'
+import { triangles } from '../../view/models/gloss/shapes.js'
+import { bake } from '../../view/models/bake.js'
 import { base } from '../../view/models/kit.js'
-import { buildModel } from '../../view/models/cache.js'
+import { buildModel, setFigureStyle } from '../../view/models/cache.js'
 import { RACES } from '../../data/schema.js'
 
 const q = new URLSearchParams(location.search)
@@ -43,6 +45,7 @@ scene.add(fill)
 const t = RACES.serpent.units[unit]
 let info
 if (num('mesh', 0)) {
+  setFigureStyle('classic')
   const t0 = performance.now()
   const root = buildModel('serpent', unit, t, '#46c27a')
   const ms = performance.now() - t0
@@ -55,8 +58,8 @@ if (num('mesh', 0)) {
   // lifted as view/models/cache.js lifts a figure onto its base
   fig.group.position.y = lift
   scene.add(fig.group)
-  // (bake=1: merged as the game would, by bake-gloss.js: it should look the same)
-  if (num('bake', 0)) bakeGloss(fig.group)
+  // (bake=1: merged as the game merges it, by view/models/bake.js: it should look the same)
+  if (num('bake', 0)) bake(fig.group)
   // (plain=1: every material swapped for kit.js's matte MeshStandardMaterial, same colours, smooth normals:
   // what the shapes alone do, without the gloss)
   if (num('plain', 0)) {

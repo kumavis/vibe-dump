@@ -138,7 +138,8 @@ export const ALLOW = [
   ['view/effects/shots.js', "if (e.fx === 'keg') return this.kegLanded(e, y)", 1, "(F19a) the blast.land handler plays a powder keg's blast as its own, bigger bang (the keg's look, data/hazards.js): presentation"],
   ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire'", 1, "the explosion's look: presentation"],
   ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
-  ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
+  ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names, (V2) in the figure style's kits): presentation"],
+  ['view/models/gloss/serpents.js', 'BUILD[key]', 1, "(V2) the unit's glossy figure, by its builder: presentation"],
   ['ui/card.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['input/human.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
   // (F1/F2) the camera's keys: V the next view, Home the overview

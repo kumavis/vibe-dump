@@ -1,6 +1,7 @@
-// Shoots the Bushtail Clans' six figures with splat fur beside the game's mesh figures today, close up and
-// at game scale (about 60 and 28 px tall: the level-of-detail rule's splat counts), through viewer.html
-// under a Vite dev server, and lays the shots out in one labelled sheet (<out>/units.png, and .jpg).
+// Shoots the Bushtail Clans' six figures with splat fur (the game's 'new' figures since V2) beside the
+// classic mesh figures, close up and at game scale (about 60 and 28 px tall: the game picks the splats
+// drawn, view/models/splat/splats.js's levels of detail), through viewer.html under a Vite dev server, and
+// lays the shots out in one labelled sheet (<out>/units.png, and .jpg).
 //   node proto/splat/sheet.mjs <out dir> [unit...]       (from packages/tails-and-scales)
 // Set CHROMIUM_PATH to the pre-installed Chromium if Playwright's own isn't installed.
 import { chromium } from 'playwright'
@@ -23,12 +24,12 @@ const UNITS = [
   { key: 'elder', label: 'Elder<br>Chitterwick', dist: 3.4, ty: 0.75 },
 ].filter((u) => !only.length || only.includes(u.key))
 const COLS = [
-  { label: 'splat fur + mesh kit<br>close-up', size: 300, zoom: 1, q: 'density=0.2' },
-  { label: 'game today<br>close-up', size: 300, zoom: 1, q: 'mesh=1' },
-  { label: 'splat fur + mesh kit<br>figure ~60 px', size: 86, zoom: 2.5, q: 'density=0.1&n=6000' },
-  { label: 'game today<br>~60 px', size: 86, zoom: 2.5, q: 'mesh=1' },
-  { label: 'splat fur + mesh kit<br>~28 px (classic table)', size: 40, zoom: 3, q: 'density=0.1&n=1300' },
-  { label: 'game today<br>~28 px', size: 40, zoom: 3, q: 'mesh=1' },
+  { label: 'splat fur + mesh kit<br>close-up', size: 300, zoom: 1, q: '' },
+  { label: 'classic<br>close-up', size: 300, zoom: 1, q: 'mesh=1' },
+  { label: 'splat fur + mesh kit<br>figure ~60 px', size: 86, zoom: 2.5, q: '' },
+  { label: 'classic<br>~60 px', size: 86, zoom: 2.5, q: 'mesh=1' },
+  { label: 'splat fur + mesh kit<br>~28 px (classic table)', size: 40, zoom: 3, q: '' },
+  { label: 'classic<br>~28 px', size: 40, zoom: 3, q: 'mesh=1' },
 ]
 
 const server = await createServer({ root: PKG, configFile: join(PKG, 'vite.config.js'), logLevel: 'warn', server: { host: '127.0.0.1', port: 0 }, optimizeDeps: { include: ['three'] } })

@@ -10,7 +10,14 @@
 //                  autoUpdate off)                           budget ≤ 600
 //   shadow calls   the shadow pass's draw calls (the casters drawn, the
 //                  shadow camera fitted to the view)          budget ≤ 600
-//   triangles      the main pass's, the whole board          budget ≤ 400 K
+//   triangles      the main pass's, the whole board, (V2) its meshes'
+//                  alone (renderer.info counts a splat, an instanced
+//                  quad, as two triangles: they are taken off) budget ≤ 400 K
+//   splats         (V2) the splats the main pass drew (the 'new' style's
+//                  Bushtails, view/models/splat/splats.js: a splat's cost
+//                  is its quad's four vertices and its fill, not a mesh
+//                  triangle's, so DESIGN §4.2.1 budgets them apart, at the
+//                  'high' quality's splats a frame)          budget ≤ 150 K
 //   render JS      renderer.render's own time, the median of FRAMES calls
 //                  (shadows redrawn each), Grand's over classic's
 //                                                              budget ≤ 1.3×
@@ -55,7 +62,7 @@ import { DIST, IDLE_MS } from './chromium.mjs'
 
 const { values: a } = parseArgs({ options: { seed: { type: 'string' }, frames: { type: 'string' }, json: { type: 'boolean' } } })
 const SEED = Number(a.seed ?? 7), FRAMES = Number(a.frames ?? 15)
-const BUDGET = { main: 600, shadow: 600, tris: 400000, js: 1.3, writes: 20, minimapMs: 1 }
+const BUDGET = { main: 600, shadow: 600, tris: 400000, splats: 150000, js: 1.3, writes: 20, minimapMs: 1 }
 // the minimap's redraws driven per mission (its row's sample)
 const MINIMAP = 40
 const OVER = 1.25
@@ -70,7 +77,7 @@ async function measure(browser, url, mission) {
   const errors = []
   page.on('pageerror', (e) => errors.push(e.message))
   try {
-    await page.goto(`${url}/?debug&seed=${SEED}${mission === 'classic' ? '' : `&mission=${mission}`}`)
+    await page.goto(`${url}/?debug&seed=${SEED}${mission === 'classic' ? '' : `&mission=${mission}`}`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
     // a watched battle, from the title's button and the panel's Start
     await page.evaluate(() => document.querySelector('[data-mode="watch"]').click())
@@ -104,7 +111,9 @@ async function measure(browser, url, mission) {
       sm.autoUpdate = false
       info.reset()
       r.render(scene, cam)
-      const main = info.render.calls, tris = info.render.triangles
+      // ((V2) the splats it drew, each counted as two triangles)
+      const splats = ts.view.splats?.().splats ?? 0
+      const main = info.render.calls, tris = info.render.triangles - 2 * splats
       sm.autoUpdate = true
       info.autoReset = true
       // renderer.render's own time, shadows redrawn each call
@@ -129,7 +138,7 @@ async function measure(browser, url, mission) {
       const sorted = [...times].sort((x, y) => x - y)
       const paintMs = ts.view.drawing().minimap.paintMs
       return {
-        main, shadow: all - main, tris, js: js[js.length >> 1], writes, minimapMs: sorted[Math.min(sorted.length - 1, Math.floor(0.9 * sorted.length))], minimapMed: sorted[sorted.length >> 1], minimapMax: sorted[sorted.length - 1], minimapN: times.length, paintMs,
+        main, shadow: all - main, tris, splats, js: js[js.length >> 1], writes, minimapMs: sorted[Math.min(sorted.length - 1, Math.floor(0.9 * sorted.length))], minimapMed: sorted[sorted.length >> 1], minimapMax: sorted[sorted.length - 1], minimapN: times.length, paintMs,
         tier: drawn.tier, ppi: drawn.ppi, lo: drawn.lo, figs: drawn.figs, tiles: drawn.tiles.tiles, tileMeshes: drawn.tiles.meshes, tiled: drawn.tiles.tiled,
         tileBad: drawn.tiles.bad, fits: drawn.shadow.fits, d: cam.position.distanceTo(ts.controls.target), units: ts.G.units.length,
       }
@@ -170,6 +179,7 @@ const row = (name, key, budget, fmt) => console.log(`  ${name.padEnd(15)} ${judg
 row('main calls', 'main', BUDGET.main, n)
 row('shadow calls', 'shadow', BUDGET.shadow, n)
 row('triangles', 'tris', BUDGET.tris, k)
+row('splats', 'splats', BUDGET.splats, k)
 {
   const ratio = G.js / C.js
   const bad = ratio / BUDGET.js > OVER

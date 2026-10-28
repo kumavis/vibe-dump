@@ -38,6 +38,11 @@ import { Minimap } from '../view/minimap.js'
 import { Flow, MODES, FOG_MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
 import { Session } from '../match/session.js'
+// (V2) the figure style, and the perf overlay
+import { STYLES, setFigureStyle } from '../view/models/cache.js'
+import { splatStats } from '../view/models/splat/splats.js'
+import { QUALITY } from '../view/stage.js'
+import { PerfOverlay } from '../ui/perf.js'
 
 // ---------------------------------------------------------------------------
 // Tails & Scales — a pocket-sized tabletop wargame.
@@ -57,7 +62,7 @@ import { Session } from '../match/session.js'
 // The URL: ?seed=N the title's board (else a random one), ?dice=N every
 // battle's dice (else fresh ones per battle), ?races=<seat 0>,<seat 1> the
 // races at the table, ?watch a watched battle at once, ?lowfi no shadows
-// and a pixel ratio of 1, ?fast nothing drawn and game time effectively
+// and a pixel ratio of 0.5, ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
 // battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
@@ -65,9 +70,18 @@ import { Session } from '../match/session.js'
 // started here is fought on (the battle-setup panel's default; the title's
 // table stays the mission's first set's); (F16) ?fog the courtesy fog on
 // for a battle against the AI started here (?fog=0 off: the battle-setup
-// panel's default, else the page's last choice). The fragment `#m=<id>` (N2) opens
-// an online match (`&dev=<id>` plays it as that device, `&sync=` through that
-// server): app/online.js, loaded only then or for Play online.
+// panel's default, else the page's last choice); (V2) ?models=new|classic the figure
+// style drawn and ?quality=auto|high|medium|low the stage's quality (for
+// development: the page's own switches are the title's Figures and Quality,
+// kept in this browser), ?perf the perf overlay on (ui/perf.js; in the page:
+// the title's Perf overlay, the battle's 📈). The fragment `#m=<id>` (N2)
+// opens an online match (`&dev=<id>` plays it as that device, `&sync=`
+// through that server): app/online.js, loaded only then or for Play online.
+// (V2) The fragment may also carry `models=` and `quality=` (as
+// `#models=classic`), read where the address has no such parameter: a page
+// published where its query string never reaches it (an artifact) still
+// receives its fragment, and the Figures switch writes it there when this
+// browser keeps no settings.
 // ---------------------------------------------------------------------------
 
 // (F8a) The table is made for the classic mission's board, the title's
@@ -170,6 +184,36 @@ function fogPick(params) {
     return false
   }
 }
+// (V2) A setting the page takes (`name`, one of `values`): ?name='s (for
+// development), else the fragment's (#name=), else the one this browser
+// kept (localStorage `key`), else `dflt`. A ?name= (or #name=) naming none
+// of them gets the kept or default one and a line on the title card saying
+// why (`why`, put there once the card is made).
+function settingPick(params, hash, name, values, key, dflt) {
+  let kept = null
+  try {
+    kept = localStorage.getItem(key)
+  } catch {}
+  const value = kept !== null && values.includes(kept) ? kept : dflt
+  const from = params.has(name) ? params : hash.has(name) ? hash : null
+  if (!from) return { value }
+  const pick = from.get(name).trim().toLowerCase()
+  if (values.includes(pick)) return { value: pick }
+  return { value, why: `${from === params ? '?' : '#'}${name}= takes one of ${values.join(', ')}, not "${from.get(name)}", so it is ${value}.` }
+}
+// (V2) The figure style the page draws (view/models/cache.js's STYLES):
+// settingPick's, kept as MODELS_KEY by the title's Figures, 'new' by
+// default.
+export const MODELS_KEY = 'tails-and-scales:models'
+// (V2) The stage's quality (view/stage.js's QUALITY): settingPick's, kept
+// as QUALITY_KEY by the title's Quality, 'auto' by default: 'medium' where
+// the pointer is coarse (a phone, a tablet: its pixel ratio capped at 1.5,
+// a 1024 shadow map, 60k splats a frame), 'high' elsewhere (the page as it
+// always drew). The Quality switch steps through QUALITIES and changes the
+// stage at once.
+export const QUALITY_KEY = 'tails-and-scales:quality'
+const QUALITIES = ['auto', ...Object.keys(QUALITY)]
+const autoQuality = () => (matchMedia('(pointer: coarse)').matches ? 'medium' : 'high')
 
 function racePick(params, title) {
   if (!params.has('races')) return CLASSIC
@@ -186,6 +230,14 @@ export function boot(location) {
   // ?fast: a test mode that skips drawing and lets game time run
   // effectively instantly (view/stage.js)
   const FAST = params.has('fast')
+  // (V2) the figure style, before any figure is built, and the quality,
+  // before the stage is made (each from the address, its fragment, or what
+  // this browser kept)
+  const hash = new URLSearchParams(location.hash.slice(1))
+  const models = settingPick(params, hash, 'models', Object.keys(STYLES), MODELS_KEY, 'new')
+  setFigureStyle(models.value)
+  const quality = settingPick(params, hash, 'quality', QUALITIES, QUALITY_KEY, 'auto')
+  const drawnAt = (choice) => (choice === 'auto' ? autoQuality() : choice)
   // (the flow, made below: what the view's colours read once it is drawn)
   let flow = null
   const colorOf = (s) => flow.sides[s].color
@@ -196,7 +248,7 @@ export function boot(location) {
   // board seed (a Math.random draw, where it always came); then (below) the
   // figures, the shooting's effects and the overlay: the same three.js
   // objects, materials and Math.random draws as before R7, in the same order.
-  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
+  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, quality: drawnAt(quality.value), W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
   // (Every seed the page takes is made a whole number from 0 to 2^32 - 1, as
   // a setup's must be, with `>>> 0`: what the board's and the dice's
   // generators always did with a seed, so ?seed=-5 is still the board -5
@@ -205,6 +257,8 @@ export function boot(location) {
 
   // ── The UI (ui/) and the flow (app/flow.js) ──────────────────────────────
   const title = new TitleScreen()
+  if (models.why) title.note(`The figures: ${models.why}`)
+  if (quality.why) title.note(`The quality: ${quality.why}`)
   const races = racePick(params, title)
   const ui = {
     tray: new Tray($('#tray')),
@@ -348,7 +402,32 @@ export function boot(location) {
     },
   })
   ui.actions.wire(human)
-  ui.hud.wire({ rig: view.rig, player, standing: human.standing })
+  // (V2) the quality as chosen ('auto' or one of QUALITY's), stepped by the
+  // title's Quality and a tap on the perf overlay: kept in this browser
+  // (where it keeps anything) and drawn at once
+  const qualities = {
+    choice: quality.value,
+    listeners: [],
+    label() {
+      return this.choice === 'auto' ? `${drawnAt('auto')} (auto)` : this.choice
+    },
+    listen(fn) {
+      this.listeners.push(fn)
+      fn(this.label())
+    },
+    next() {
+      this.choice = QUALITIES[(QUALITIES.indexOf(this.choice) + 1) % QUALITIES.length]
+      try {
+        localStorage.setItem(QUALITY_KEY, this.choice)
+      } catch {}
+      view.stage.setQuality(drawnAt(this.choice))
+      for (const fn of this.listeners) fn(this.label())
+    },
+  }
+  // (V2) the perf overlay (ui/perf.js): on by ?perf or as this browser kept
+  // it, switched by the HUD's 📈 and the title's link
+  const perf = new PerfOverlay({ stage: view.stage, el: $('#perfOverlay'), style: models.value, quality: qualities, params, fast: FAST })
+  ui.hud.wire({ rig: view.rig, player, standing: human.standing, perf })
   wireHelp()
   // (N2) online play: app/online.js, the net layer and Automerge loaded the
   // first time they are wanted (Play online, a #m= link), never for a game
@@ -451,7 +530,28 @@ export function boot(location) {
       title.show()
     },
   })
-  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => openSetup(mode), online: () => goOnline('host'), replay: watchFile })
+  // (V2) the title's Figures: the style kept in this browser, and the page
+  // loaded again to build its figures (a ?models= or #models= in the address
+  // would override it, so the address loses them); where this browser keeps
+  // nothing, the fragment carries it instead (#models=, which reaches a
+  // page that never receives its query string)
+  const chooseModels = (style) => {
+    let kept = true
+    try {
+      localStorage.setItem(MODELS_KEY, style)
+    } catch {
+      kept = false
+    }
+    const url = new URL(location.href), frag = new URLSearchParams(url.hash.slice(1))
+    url.searchParams.delete('models')
+    if (kept) frag.delete('models')
+    else frag.set('models', style)
+    url.hash = frag.toString()
+    if (url.search !== location.search) return location.replace(url.href)
+    if (url.hash !== location.hash) location.hash = url.hash
+    location.reload()
+  }
+  title.wire({ S: flow.S, showTable: (b) => flow.showTable(b), start: (mode) => openSetup(mode), online: () => goOnline('host'), replay: watchFile, figures: { style: models.value, styles: Object.keys(STYLES), choose: chooseModels }, quality: qualities, perf })
   ui.result.wire(() => flow.back(), (more) => human.vote(more), () => {
     if (!flow.battle) return
     replay.open(flow.battle)
@@ -1034,6 +1134,9 @@ export function boot(location) {
         // objects, the battlefield's, the figures and the floating labels;
         // and fx's scorch and acid marks (sim/snap-check.mjs: a snap takes
         // them away)
+        // ((V2, not promised) the splat-fur Bushtails' last preparation
+        // and registry, view/models/splat/splats.js)
+        splats: splatStats,
         counts: () => {
           let figures = 0
           scene.traverse((o) => o.userData.fig && figures++)

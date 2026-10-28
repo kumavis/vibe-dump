@@ -317,7 +317,7 @@ async function run(browser, url, item) {
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript({ content: `${[missingHooks, humanDriver].join('\n')}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE}, ${JSON.stringify(NAMES)})` })
-    await page.goto(`${url}/?debug&fast&${query}`)
+    await page.goto(`${url}/?debug&fast&${query}`, { timeout: IDLE_MS })
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })

@@ -2,8 +2,11 @@
 // assembled from these primitives in a chunky, faceted "painted plastic"
 // style and stands on a round base with a rim in its army's colour. Models
 // face +z; the origin is the centre of the base on the table. The races'
-// figures are view/models/squirrel.js and serpent.js, baked by bake.js and
-// made (once per unit, then cloned) by cache.js.
+// classic figures are view/models/classic/squirrel.js and serpent.js ((V2)
+// the 'new' style's glossy Ssithra, view/models/gloss/, take part, rod, hold
+// and shade from here, the splat-fur Bushtails' kit, view/models/
+// squirrel.js, its meshes, and every figure stands on its base()), baked by
+// bake.js and made (once per unit, then cloned) by cache.js.
 import * as THREE from 'three'
 
 // one material per colour and finish, shared by every figure (and the

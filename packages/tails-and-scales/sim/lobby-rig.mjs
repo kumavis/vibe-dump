@@ -135,6 +135,7 @@ import { ImmutableString } from '@automerge/automerge/slim'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { startSyncServer } from './sync-server.mjs'
 import { buildApp, copyCode } from './lib.mjs'
+import { IDLE_MS } from './chromium.mjs'
 import { makeMatch, autoplay } from './online-fixture.mjs'
 import { AutomergeStore } from '../net/automerge-store.js'
 import { lobbyOf, startSeat } from '../net/lobby.js'
@@ -167,12 +168,15 @@ async function runCases(dist, cases) {
   // `fast`: ?fast, nothing drawn and game time instant)
   const open = async (hash = '', init = null, { fast = true } = {}) => {
     const ctx = await browser.newContext({ viewport: { width: 1100, height: 760 } })
+    // ((V2) a page load may take as long as any harness's: sim/chromium.mjs's
+    // IDLE_MS, for every page of the context)
+    ctx.setDefaultNavigationTimeout(IDLE_MS)
     contexts.push(ctx)
     if (init) await ctx.addInitScript((kv) => Object.entries(kv).forEach(([k, v]) => localStorage.setItem(k, v)), init)
     const page = await ctx.newPage()
     page.on('pageerror', (e) => errors.push(`${e.message}`))
     await page.goto(`${fast ? base : base.replace('&fast', '')}${hash}`)
-    await page.waitForFunction(() => window.__ts, null, { timeout: 60000 })
+    await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
     return page
   }
   const until = (page, fn, arg, ms = 30000, what = 'a condition') => page.waitForFunction(fn, arg, { timeout: ms, polling: 100 }).catch((e) => {

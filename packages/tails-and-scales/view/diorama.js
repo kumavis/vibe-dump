@@ -12,6 +12,17 @@
 // and every cosmetic Math.random draw the title makes, stay the table's
 // (sim/title-shot.mjs).
 //
+// (V2) A window's splat-fur Bushtails (view/models/splat/splats.js) are
+// prepared at the start of each of its renders (its scene's
+// onBeforeRender), for its camera, its viewport (set just before) and its
+// own sun: each figure's level of detail from its height in the window, and
+// its draw order from the window camera's direction in it, as the table's
+// are (view/stage.js), within what the frame's splat budget has left after
+// the table's render (which, while a window shows, draws its own figures at
+// their coarsest: the panel is over it). The windows cast no shadows, so a
+// squirrel's shadow proxy (or a figure's shadow caster) is never drawn in
+// one.
+//
 //   diorama.show(el, race, color)   the race in element `el`'s window (its
 //                                   bases' rims in `color`); again with
 //                                   another race or colour rebuilds it
@@ -26,6 +37,7 @@
 import * as THREE from 'three'
 import { RACES } from '../data/schema.js'
 import { buildModel, disposeFigure } from './models/cache.js'
+import { prepareSplats } from './models/splat/splats.js'
 
 export class Diorama {
   constructor(renderer) {
@@ -49,6 +61,9 @@ export class Diorama {
     const fill = new THREE.DirectionalLight('#9fb8ff', 0.4)
     fill.position.set(6, 5, -6)
     scene.add(fill)
+    // ((V2) its splats, lit by its sun)
+    const toSun = sun.position.clone().normalize()
+    scene.onBeforeRender = (renderer, s, camera) => prepareSplats(camera, renderer, toSun, s, 'window')
     // each unit of the race once, in the order its army lists them, on a
     // felt plinth, the big ones at the back
     const keys = [...new Set([...r.army, ...Object.keys(r.units)])]
@@ -126,10 +141,11 @@ export class Diorama {
       // little to and fro
       for (const f of w.figures) {
         const a = f.userData.anim, fig = f.userData.fig, t = time + f.userData.phase
-        if (a?.kind === 'squirrel') fig.scale.y = 1 + Math.sin(t * 2.4) * 0.018
+        // ((V2) about the figure's own height scale, as on the table)
+        if (a?.kind === 'squirrel') fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 2.4) * 0.018)
         else if (a?.kind === 'naga') {
           fig.rotation.z = Math.sin(t * 1.4) * 0.035
-          fig.scale.y = 1 + Math.sin(t * 1.4) * 0.015
+          fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 1.4) * 0.015)
         }
         if (a?.gem) a.gem.rotation.y = t * 2
       }

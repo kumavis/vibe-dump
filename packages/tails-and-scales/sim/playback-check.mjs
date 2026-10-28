@@ -354,6 +354,7 @@ async function run(paceDir, { boards = 4, say = console.log } = {}) {
 // the browser: a watched battle batched, then one at a time
 async function browser() {
   const { chromium } = await import('playwright')
+  const { IDLE_MS } = await import('./chromium.mjs')
   const { startStaticServer } = await import('../../../scripts/static-server.mjs')
   const work = mkdtempSync(join(tmpdir(), 'playback-check-'))
   try {
@@ -364,7 +365,7 @@ async function browser() {
       const page = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
       const errors = []
       page.on('pageerror', (e) => errors.push(e.message))
-      await page.goto(`${url}/?debug&fast&seed=4242&dice=99`)
+      await page.goto(`${url}/?debug&fast&seed=4242&dice=99`, { timeout: IDLE_MS })
       await page.waitForSelector('#title:not(.hidden)', { timeout: 120000 })
       const watch = async () => {
         await page.click('[data-mode="watch"]')
