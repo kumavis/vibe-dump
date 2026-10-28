@@ -218,7 +218,7 @@ export class CellSegmenter {
     let link = 0
 
     const pushText = (chunk) => {
-      if (this._substitute) chunk = chunk.replace(this._substitute, '�')
+      if (this._substitute) chunk = chunk.replace(this._substitute, '\uFFFD')
       const gs = SIMPLE_TEXT.test(chunk) ? chunk : graphemesOf(chunk)
       for (const g of gs) {
         const id = this._graphemeId(g)
