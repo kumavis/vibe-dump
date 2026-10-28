@@ -170,10 +170,12 @@ async function check(page, say) {
     throw new Error('the camera never came to rest')
   }
   // the group's commands sent and folded and the table caught up: not busy,
-  // the player idle, the count still for 1 s
+  // the player idle, the count still for 1 s ((V3a) for up to 2 minutes:
+  // on a machine running other Chromium checks besides, SwiftShader played
+  // a +D6 group's two advances and two moves in 63 s)
   const settled = async () => {
     let was = -1
-    for (let k = 0; k < 60; k++) {
+    for (let k = 0; k < 120; k++) {
       const n = await count()
       if (n === was && (await ev(() => !window.__ts.group.busy() && window.__ts.player.idle))) return n
       was = n
@@ -934,7 +936,9 @@ async function check(page, say) {
       const tableAt = (fx, fy) => ({ x: (fx - 0.5) * mm.w / k, z: (fy - 0.5) * mm.h / k })
       const want = tableAt(0.75, 0.5)
       await page.mouse.click(mm.l + mm.w * 0.75, mm.t + mm.h * 0.5)
-      await page.waitForFunction(({ x, z }) => Math.hypot(window.__ts.controls.target.x - x, window.__ts.controls.target.z - z) < 1, want, { timeout: 20000 }).catch(() => {})
+      // ((V3a) a minute: on a machine running other Chromium checks
+      // besides, the glide was still 6" short after 20 s)
+      await page.waitForFunction(({ x, z }) => Math.hypot(window.__ts.controls.target.x - x, window.__ts.controls.target.z - z) < 1, want, { timeout: 60000 }).catch(() => {})
       const tg = await ev(() => window.__ts.controls.target.toArray())
       if (Math.hypot(tg[0] - want.x, tg[2] - want.z) >= 1) fail(`a click on the minimap at (${want.x.toFixed(1)}, ${want.z.toFixed(1)}) left the camera looking at (${tg[0].toFixed(1)}, ${tg[2].toFixed(1)}): it pans there`)
       const mine = await ev((t) => window.__ts.G.units.filter((u) => u.side === t && u.alive > 0).map((u) => u.id), gs)
@@ -1840,6 +1844,8 @@ try {
         console.log(`  FAIL ${e.message}`)
       }
       if (errors.length) console.log(`  FAIL page errors:\n         ${errors.slice(0, 5).join('\n         ')}`)
+      // ((V3a) its page closed: one left playing would hold up the next)
+      await page.context().close()
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
