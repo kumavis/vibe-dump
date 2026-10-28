@@ -135,6 +135,7 @@ export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
   ['view/effects/shots.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
+  ['view/effects/shots.js', "if (e.fx === 'keg') return this.kegLanded(e, y)", 1, "(F19a) the blast.land handler plays a powder keg's blast as its own, bigger bang (the keg's look, data/hazards.js): presentation"],
   ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire'", 1, "the explosion's look: presentation"],
   ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
   ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names): presentation"],
@@ -187,6 +188,11 @@ export const ALLOW = [
   ['core/army.js', 'return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost', 1, "priceOf: the mission's price for the unit, by its key, else the unit's cost"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
+  // (F16) the courtesy fog reads a battle-log line or a tray that names no
+  // unit in its events (an advance's roll alone, a morale test held) by the
+  // name it starts with, to know whether it names an enemy unseen: the
+  // log's own text, read back in the view, never a rule
+  ['present/fog.js', 'const byName = (name) => units.filter((u) => u.short === name || u.name === name)', 1, "(F16) the fog finds whom a log line or tray with no unit in its events names, by the name it starts with: presentation"],
 ]
 
 function files(dir) {

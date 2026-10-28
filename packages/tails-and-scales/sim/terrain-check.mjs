@@ -92,6 +92,17 @@
 //     rows), the walkable tops it lists (the overlay's tints, the picker's
 //     quads) are exactly the chunks with a surface, and the board's adds
 //     played again take back every mesh.
+//  (7, P-climb and the lob rows, and the connectivity and tiles rows, say
+//  what they hold where they stand below.)
+//  8. (F19a) the powder keg: the keg set's boards (one keg, at the centre
+//     exactly, the board built alike twice and point-symmetric, the view's
+//     defs and sync, the keg gone once broken, the keg mission's objectives
+//     inside its blast), its hit points against every template (broken
+//     exactly where blast's model reaches them, scuffed short of it) and a
+//     wrecker's smash, and two kegs under a third's blast broken in chunk
+//     order (the section's own comment, below, says each row). The keg
+//     mission, a Skirmish, is reported beside classic in the connectivity
+//     rows, never judged.
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -139,7 +150,10 @@ if (args['self-test']) {
   let missed = 0
   for (const name of Object.keys(MUTATIONS)) {
     const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', MUTATIONS[name][3] ?? '1-25', '--max', '1'], { env: { ...process.env, TERRAIN_MUTATE: name }, encoding: 'utf8' })
-    const caught = r.status === 1 && /MISMATCH/.test(r.stdout)
+    // ((the WIP merge's follow-up) a row of its own: no edit is the
+    // connectivity rows', and while they fail on the tower ring's boards
+    // every run prints their MISMATCH whatever it breaks)
+    const caught = r.status === 1 && /^MISMATCH(?!: connectivity)/m.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  seed')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
     console.log(`  ${caught ? 'caught' : 'MISSED'} ${name.padEnd(17)} ${first.trim().slice(0, 150)}`)
@@ -147,9 +161,12 @@ if (args['self-test']) {
   // (F8b) the connectivity rows' controls: a wall of cells across the
   // centre line, and a ring round one objective, each planted in the grid
   // of every Field and Grand board, must fail a connectivity row (and the
-  // classic part, untouched, still pass)
-  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no ground within/]]) {
-    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '1-3', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
+  // classic part, untouched, still pass). ((the WIP merge's follow-up) On
+  // seeds 7-9, boards with no tower ring at the centre, which pass without
+  // the control: seeds 1-3 all stand one on `fortified`, which fails a row
+  // by itself)
+  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no cell within/]]) {
+    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '7-9', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
     const caught = r.status === 1 && /MISMATCH: connectivity/.test(r.stdout) && want.test(r.stdout)
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  connectivity')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
@@ -961,8 +978,21 @@ console.log(`all ${boards} board${boards === 1 ? '' : 's'} identical: layout dra
 //    mirror link, at the same cost); the cliff field within 1e-4 (its two
 //    chamfer passes sum in the board's order).
 //  - The works stand on ≥ 95% of boards (judged over 100 boards or more).
+//  - (F17, DESIGN §4.2.4) Lobbing from height, over every deck: a lobbed
+//    weapon (blast or indirect, never a spell) on the deck's top reaches a
+//    target on the ground √(R² + 2hR) away, h the top's floor, and one on the
+//    ground reaches a target on the top √(R² − 2hR) (rangeOf, bit for bit
+//    that expression); its reach to the ground (no target: the overlay's
+//    ring) is the first; direct fire and spells reach their printed range
+//    both ways; and a board without height gives every weapon its printed
+//    range exactly. The roadmap's numbers to a tenth: the Trebuchet's 36"
+//    is 37.9" from a 2" deck (a rampart's, a bastion's) and 38.4" from the
+//    keep's 2.5", 33.9" firing up at a 2" one; the Venom Engine's 30" is
+//    31.9" from 2"; the Grenadiers' 12" is 13.9" from 2" and 14.7" from the
+//    watchtower's 3".
 // A failure names the board, the piece and the row.
 const { NavGrid, CLIMB_R, STEP, LADDER_MUL } = await imp(PKG, 'core/nav.js')
+const { rangeOf } = await imp(PKG, 'core/queries.js')
 const { RACES } = await imp(PKG, 'data/schema.js')
 const { formation } = await imp(PKG, 'core/units.js')
 const radius = (t) => formation(t.models, t.base).reduce((m, [x, z]) => Math.max(m, hypot(x, z)), 0) + t.base
@@ -971,6 +1001,17 @@ const BIG = [1.05, 0.95]
 const FLIERS = [...new Set(UNITS.filter((t) => t.fly).map(radius))]
 const STAIRED = new Set(['rampart', 'bastion', 'keep'])
 const climb = { boards: 0, failed: 0, decks: 0, staired: 0, ladderOnly: 0, ladders: 0, stairs: 0, cells: 0, works: {} }
+// (F17) the lob rows: the weapons (a lobbed one of each kind, direct fire, a
+// blast spell and a gaze), the decks they were held on, and the numbers the
+// roadmap gives, each met at least once
+const UNIT = (race, key) => ({ ...RACES[race].units[key], key })
+const LOBS = [UNIT('squirrel', 'trebuchet'), UNIT('serpent', 'engine'), UNIT('squirrel', 'grenadier')]
+const FLAT = [UNIT('squirrel', 'nutkin'), UNIT('serpent', 'spitter'), UNIT('squirrel', 'elder'), UNIT('serpent', 'hierophant')]
+const NUMBERS = [
+  ['trebuchet', 2, 'down', '37.9'], ['trebuchet', 2.5, 'down', '38.4'], ['trebuchet', 2, 'up', '33.9'],
+  ['engine', 2, 'down', '31.9'], ['grenadier', 2, 'down', '13.9'], ['grenadier', 3, 'down', '14.7'],
+]
+const lob = { decks: 0, pairs: 0, met: new Set() }
 const tc0 = Date.now()
 const climbShown = []
 const fail = (where, what) => {
@@ -1011,6 +1052,8 @@ function climbBoard(B, seed) {
       if (!ok) return fail(where, `deck ${d.id} (${d.look.recipe}, level ${L}) has no cell an r ${r} disc stands on`)
     }
   }
+  // (F17) lobbing from each deck's top at the ground, and up at it
+  lobDecks(where, nav, decks)
   // the reaches from seat 0's zone
   let start = -1, bd = Infinity
   const zx = -B.W / 2 + B.deploy / 2
@@ -1065,6 +1108,41 @@ function climbBoard(B, seed) {
     }
   }
 }
+// (F17) every deck's top against the ground: the cell at the deck's centre
+// (its floor the deck's height) and the first ground cell (floor 0), a
+// shooter of each weapon at one and a target at the other, both ways
+function lobDecks(where, nav, decks) {
+  const G = { nav }
+  const at = (t, i) => ({ t, pos: { x: nav.x(i), z: nav.z(i) }, r: 1 })
+  let ground = -1
+  for (let i = 0; i < nav.N && ground < 0; i++) if (nav.floor[i] === 0) ground = i
+  if (ground < 0) return fail(where, 'the board has no ground cell')
+  for (const d of decks) {
+    const top = nav.index(d.shape.x, d.shape.z), h = nav.floor[top]
+    lob.decks++
+    for (const t of [...LOBS, ...FLAT]) {
+      const w = t.ranged, R = w.range, lobbed = LOBS.includes(t)
+      const down = rangeOf(G, at(t, top), at(t, ground)), up = rangeOf(G, at(t, ground), at(t, top)), ring = rangeOf(G, at(t, top))
+      const wantDown = lobbed ? Math.sqrt(R * R + 2 * h * R) : R, wantUp = lobbed ? Math.sqrt(R * R - 2 * h * R) : R
+      lob.pairs++
+      if (!Object.is(down, wantDown)) fail(where, `${w.name} (${R}") on deck ${d.id} (${d.look.recipe}, ${h}" up) reaches ${down}" at the ground, not ${wantDown}"`)
+      if (!Object.is(up, wantUp)) fail(where, `${w.name} (${R}") on the ground reaches ${up}" at deck ${d.id} (${d.look.recipe}, ${h}" up), not ${wantUp}"`)
+      if (!Object.is(ring, down)) fail(where, `${w.name}'s ring on deck ${d.id} (${d.look.recipe}) is ${ring}", not its reach to the ground, ${down}"`)
+      for (const [key, hh, way, tenth] of NUMBERS) {
+        if (t.key !== key || h !== hh) continue
+        const got = (way === 'down' ? down : up).toFixed(1)
+        if (got !== tenth) fail(where, `${w.name} ${way === 'down' ? `from ${hh}" up at the ground` : `at ${hh}" up from the ground`} reaches ${got}", not the roadmap's ${tenth}"`)
+        else lob.met.add(`${key} ${hh} ${way}`)
+      }
+    }
+  }
+  // without height, the printed range itself
+  const flat = { nav: { hasHeight: false } }
+  for (const t of [...LOBS, ...FLAT]) {
+    const u = { t, pos: { x: 0, z: 0 }, r: 1 }, v = { t, pos: { x: 5, z: 5 }, r: 1 }
+    if (!Object.is(rangeOf(flat, u, v), t.ranged.range) || !Object.is(rangeOf(flat, u), t.ranged.range)) fail(where, `${t.ranged.name} reaches ${rangeOf(flat, u, v)}" on a board without height, not its printed ${t.ranged.range}"`)
+  }
+}
 for (const B of FORT_BOARDS) {
   for (let seed = lo; seed <= hi; seed++) {
     try {
@@ -1077,6 +1155,12 @@ for (const B of FORT_BOARDS) {
   if (n >= 100 && w < 0.95 * n) fail(`P-climb ${B.label}, seeds ${lo}-${hi}`, `the works stand on ${w} of ${n} boards, not ≥ 95%`)
 }
 console.log(`\nP-climb (F7a): ${climb.boards} fortified boards' height layers (${((Date.now() - tc0) / 1000).toFixed(1)} s): ${climb.decks} decks (${climb.staired} a stair rises to, ${climb.ladderOnly} only ladders reach), each reached by a climber (r ${CLIMB_R}) from seat 0's zone, the stair decks by big walkers (r ${BIG.join(', ')}) and no ladder-only deck; ${climb.ladders} ladders climbed over their links, ${climb.stairs} stairs walked up from their gates; every top hosts r ${CLIMB_R} and the fliers' r ${FLIERS.map((r) => r.toFixed(3)).join(', ')}; ${climb.cells} cells' floor and links point-symmetric exactly, the cliff within 1e-4; the works on ${FORT_BOARDS.map((B) => `${climb.works[B.label] ?? 0} ${B.label}`).join(' and ')} boards of ${hi - lo + 1}`)
+console.log(`Lobbing (F17): ${lob.pairs} weapon-deck rows on ${lob.decks} decks: the lobbed weapons (${LOBS.map((t) => `${t.short} ${t.ranged.range}"`).join(', ')}) reach √(R² ± 2hR) down from each top and up at it, the ring the reach down, direct fire and spells (${FLAT.map((t) => t.short).join(', ')}) their printed range, every weapon its printed range on a board without height; the roadmap's numbers met: ${NUMBERS.filter(([k, h, way]) => lob.met.has(`${k} ${h} ${way}`)).map(([k, h, way, tenth]) => `${k} ${way === 'down' ? 'from' : 'up at'} ${h}" ${tenth}"`).join(', ') || 'none'}`)
+// (a deck of each height stands on most runs of seeds: 2" the works, 2.5"
+// the keep on half the boards, 3" a watchtower on a few; a short run may
+// meet none of the rarer ones, which is reported, not failed)
+const lobMissed = NUMBERS.filter(([k, h, way]) => !lob.met.has(`${k} ${h} ${way}`))
+if (lobMissed.length) console.log(`  (not met on these boards: ${lobMissed.map(([k, h, way]) => `${k} ${way} ${h}"`).join(', ')})`)
 if (climb.failed) {
   console.log(`MISMATCH: P-climb failed ${climb.failed} time(s):`)
   for (const s of climbShown) console.log(`  ${s}`)
@@ -1085,6 +1169,197 @@ if (climb.failed) {
 if (!climb.decks || !climb.ladders || !climb.stairs) {
   console.log(`terrain-check: VACUOUS: P-climb met ${climb.decks} decks, ${climb.ladders} ladders and ${climb.stairs} stairs`)
   process.exit(2)
+}
+
+// ── 8. The powder keg (F19a, DESIGN §4.2.3 and §4.1 rule 28) ───────────────
+// The keg set's boards and the keg itself: the terrain's half (the rules'
+// half, the keg going off, its order and its dice, is P-keg's:
+// sim/property.mjs). On seeds lo-hi, the keg mission's board (40×28, its
+// four objectives, zones 8") built as newState builds it:
+//  - built twice, Math.random made to throw: the same adds (a look made of
+//    recorded draws); exactly one keg, the first chunk, at (0, 0) exactly
+//    (its own point mirror), with the keg's hit points (data/hazards.js),
+//    walked round (soft), no sight or cover in it; every other chunk with
+//    its point mirror within 1e-9 (classic's features, turned by π);
+//  - the view (a TerrainView playing the adds): each add's def the view's
+//    defOf of its chunk, the keg drawn as its piece, a table synced from the
+//    chunks the adds' table; and once the keg breaks (its hit points spent:
+//    terrain.destroy, played as a crate's burst) gone from both;
+//  - the objectives inside the keg's blast: each within its radius of the
+//    keg, and the nearest cell an r 1.18 squad holds it from (standable,
+//    within OBJECTIVE_RANGE + r) under the blast: holding one from its near
+//    side is standing in it (the farthest, its far side, printed);
+// and on a table with the keg alone, its hit points against every template
+// and a wrecker:
+//  - each blast weapon of both races and the keg's own, landing at 0.25"
+//    steps from the keg's box out past its radius (Terrain.blast, as
+//    blastLands calls it): its damage there blast's own model (its scenery
+//    within 0.6 of its radius, half rounded up out to the rim, a corroding
+//    one's +1 only on a wall's block), the keg broken (in blast's list)
+//    exactly where that damage reaches its hit points, scuffed (its
+//    terrain.hurt) where it falls short, untouched past the radius; printed:
+//    which templates set it off, from how far, and which only crack it;
+//  - a wrecker's smash (smashAround, at a walk's sample, an r 0.95 walker):
+//    the keg broken from a sample within its reach (u.r and 0.8 of its
+//    half-width) and in the list `broke` resolveWalk reads, untouched from
+//    one just out of it;
+//  - the chain: two kegs more under the first's blast (2.4" each side, in
+//    that chunk order), the first broken: its own blast at its place breaks
+//    both in chunk order (the line they go off in, which P-keg holds the
+//    rules to), and a second blast there breaks nothing (a keg breaks once).
+const { HAZARDS } = await imp(PKG, 'data/hazards.js')
+const { powderKeg } = await imp(PKG, 'core/terrain/recipes.js')
+const { OBJECTIVE_RANGE: OBJ_RANGE } = await imp(PKG, 'core/rules.js')
+const KEG = HAZARDS.keg, KM = MISSIONS.keg
+const kegs = { boards: 0, failed: 0, chunks: 0, mirrored: 0, defs: 0, near: [], far: [], hp: [], smashes: 0, chains: 0 }
+const tk0 = Date.now()
+sides = ['want', 'got']
+function kegBoard(seed) {
+  const where = `the keg set, seed ${seed}`
+  const build = () => {
+    const T = new Terrain(KM.board.W, KM.board.H), out = []
+    const random = Math.random, STUB = Symbol('Math.random')
+    Math.random = () => {
+      throw Object.assign(new Error('Math.random'), { [STUB]: true })
+    }
+    try {
+      T.generate(seed, KM.objectives, KM.deploy, 'keg', out)
+    } catch (e) {
+      if (!e?.[STUB]) throw e
+      differ(`${where}: the build's draws (a look is made of the layout stream's recorded draws)`, 'none from Math.random', `Math.random called: ${e.stack.split('\n')[2]?.trim()}`)
+    } finally {
+      Math.random = random
+    }
+    return { T, out }
+  }
+  const { T, out } = build(), again = build()
+  deep(`${where} the adds, built twice`, out.map((e) => e.def ?? e.t), again.out.map((e) => e.def ?? e.t))
+  const ks = T.chunks.filter((c) => c.kind === 'keg')
+  same(`${where} kegs`, 1, ks.length)
+  const k = ks[0]
+  same(`${where} the keg is the first chunk`, T.chunks[0], k)
+  same(`${where} the keg's x`, 0, k.shape.x)
+  same(`${where} the keg's z`, 0, k.shape.z)
+  same(`${where} the keg's hit points`, KEG.hp, k.hp)
+  same(`${where} the keg's footing`, 'soft', k.navKind)
+  same(`${where} the keg's sight`, null, k.los)
+  same(`${where} the keg's cover`, false, k.cover)
+  for (const c of T.chunks) {
+    if (c === k) continue
+    const m = T.chunks.find((o) => o !== c && o.kind === c.kind && Math.abs(o.shape.x + c.shape.x) < 1e-9 && Math.abs(o.shape.z + c.shape.z) < 1e-9 && Math.abs(o.shape.y - c.shape.y) < 1e-9)
+    if (!m) differ(`${where} chunk ${c.id} (${c.kind} at ${c.shape.x}, ${c.shape.z})'s point mirror`, 'a chunk of its kind at the negated place, within 1e-9', 'none')
+    kegs.mirrored++
+  }
+  kegs.chunks += T.chunks.length
+  // the view
+  const view = new TerrainView(new THREE.Scene(), recorder().proxy), mirror = blankMirror()
+  for (const e of out) {
+    if (e.t === 'terrain.add') {
+      deep(`${where} chunk ${e.def.id}'s def (the add's | the view's defOf)`, e.def, viewDefOf(T.chunks.find((c) => c.id === e.def.id)))
+      kegs.defs++
+    }
+    view.apply(e, applyEvent(mirror, e))
+  }
+  same(`${where} the keg drawn as its piece`, 'keg', view.items.get(k.id)?.c.look.piece)
+  syncCheck(`${where} synced`, { terrain: T, view }, null, false)
+  const broke = []
+  const hit = []
+  T.hurt(k, k.hp, { x: -5, z: 0 }, hit, broke)
+  same(`${where} the keg broken at its hit points`, 1, broke.length)
+  for (const e of hit) view.apply(e, applyEvent(mirror, e))
+  same(`${where} the keg gone from the table once broken`, false, view.state(k.id).shown)
+  syncCheck(`${where} synced, the keg broken`, { terrain: T, view }, null, false)
+  view.dispose()
+  // the objectives inside the blast, held from the near side in it
+  k.alive = true
+  T.dirty = true
+  const nav = new NavGrid(KM.board.W, KM.board.H, 0.5)
+  nav.rebuild(T.chunks)
+  for (const o of KM.objectives) {
+    const d = hypot(o.x, o.z)
+    if (!(d < KEG.blast)) differ(`${where} the objective at (${o.x}, ${o.z})`, `within the keg's ${KEG.blast}" blast`, `${d}" off`)
+    let near = Infinity, far = 0
+    for (let i = 0; i < nav.N; i++) {
+      if (!nav.standable(i, KEG_SQUAD, 'walk') || hypot(nav.x(i) - o.x, nav.z(i) - o.z) > OBJ_RANGE + KEG_SQUAD) continue
+      const dk = hypot(nav.x(i), nav.z(i))
+      near = Math.min(near, dk)
+      far = Math.max(far, dk)
+    }
+    if (!(near <= KEG.blast)) differ(`${where} the objective at (${o.x}, ${o.z}): the nearest cell an r ${KEG_SQUAD} squad holds it from`, `under the keg's ${KEG.blast}" blast`, `${near}" off`)
+    kegs.near.push(near)
+    kegs.far.push(far)
+  }
+  kegs.boards++
+}
+// (the squad's disc, connectivity's: the largest squad's)
+const KEG_SQUAD = 1.18
+for (let seed = lo; seed <= hi; seed++) {
+  try {
+    kegBoard(seed)
+  } catch (e) {
+    Math.random = realRandom
+    if (!(e instanceof Stop)) throw e
+    kegs.failed++
+  }
+}
+// the keg's hit points against every template, a wrecker, and the chain
+const lone = (x = 0) => {
+  const T = new Terrain(KM.board.W, KM.board.H)
+  const k = powderKeg(T, x, 0, 0, '#8a5a34')
+  return { T, k }
+}
+const TEMPLATES = []
+for (const r of Object.values(RACES)) for (const t of Object.values(r.units)) if (t.ranged?.blast) TEMPLATES.push({ name: t.ranged.name, blast: t.ranged.blast, scenery: t.ranged.scenery || 1, acid: !!t.ranged.corrodes })
+TEMPLATES.push({ name: KEG.name, blast: KEG.blast, scenery: KEG.scenery, acid: false })
+const setsOff = []
+try {
+  for (const w of TEMPLATES) {
+    let farthest = -1
+    for (let s = 0; s <= w.blast + 0.75; s += 0.25) {
+      const { T, k } = lone()
+      const x = 0.5 + s, out = []
+      const d = distToBox(x, 0.5, 0, k.shape)
+      const broke = T.blast(x, 0, w.blast, w.scenery, { acid: w.acid }, out)
+      const want = d > w.blast ? 0 : d < w.blast * 0.6 ? w.scenery : Math.ceil(w.scenery / 2)
+      const at = `${w.name} landing ${d.toFixed(2)}" off the keg's box`
+      same(`${at}: the keg broken`, want >= KEG.hp, broke.includes(k))
+      same(`${at}: the keg scuffed`, want > 0 && want < KEG.hp, out.some((e) => e.t === 'terrain.hurt' && e.id === k.id))
+      same(`${at}: its hit points left`, KEG.hp - want, k.hp)
+      if (want >= KEG.hp) farthest = Math.max(farthest, d)
+    }
+    setsOff.push(`${w.name} ${farthest >= 0 ? `sets it off from ${farthest.toFixed(2)}" of its box` : 'only cracks it'}`)
+    kegs.hp.push(w.name)
+  }
+  // a wrecker's smash
+  for (const [off, want] of [[0, true], [0.95 + 0.4 - 0.01, true], [0.95 + 0.4 + 0.01, false]]) {
+    const { T, k } = lone()
+    const broke = []
+    smashAround({ nav: { hasHeight: false }, terrain: T }, { r: 0.95 }, { x: off, z: 0, dir: Math.PI / 2 }, null, broke)
+    same(`a wrecker's smash ${off.toFixed(2)}" from the keg: the keg in the list broken`, want, broke.includes(k))
+    same(`a wrecker's smash ${off.toFixed(2)}" from the keg: the keg broken`, !want, k.alive)
+    kegs.smashes++
+  }
+  // the chain
+  {
+    const T = new Terrain(KM.board.W, KM.board.H)
+    const A = powderKeg(T, 0, 0, 0, '#8a5a34'), B = powderKeg(T, 2.4, 0, 0, '#8a5a34'), C = powderKeg(T, -2.4, 0, 0, '#8a5a34')
+    T.hurt(A, A.hp, { x: -5, z: 0 }, null, [])
+    const broke = T.blast(0, 0, KEG.blast, KEG.scenery, {}, null)
+    same("the chain: the first keg's blast breaks", [B.id, C.id].join(), broke.map((c) => c.id).join())
+    same('the chain: a second blast there breaks', '', T.blast(0, 0, KEG.blast, KEG.scenery, {}, null).map((c) => c.id).join())
+    kegs.chains++
+  }
+} catch (e) {
+  if (!(e instanceof Stop)) throw e
+  kegs.failed++
+}
+const pct = (a) => `${Math.min(...a).toFixed(2)}-${Math.max(...a).toFixed(2)}"`
+console.log(`\nthe powder keg (F19a): ${kegs.boards} keg boards, seeds ${lo}-${hi} (${((Date.now() - tk0) / 1000).toFixed(1)} s): built twice alike, Math.random never called, one keg at (0, 0) exactly, the first chunk, with ${KEG.hp} hit points, soft, no sight or cover; ${kegs.mirrored} other chunks with their point mirror within 1e-9; ${kegs.defs} adds' defs the view's defOf, the keg drawn as its piece, the synced table the adds' table, the keg gone from both once broken; each objective inside the keg's ${KEG.blast}" blast, the nearest cell a squad holds it from ${pct(kegs.near)} from the keg (in the blast), the farthest ${pct(kegs.far)}`)
+console.log(`  the keg's ${KEG.hp} hit points, by blast's own model, at 0.25" steps: ${setsOff.join('; ')}; a wrecker's smash breaks it from its reach (${kegs.smashes} rows); the chain: a keg's blast breaks the two beside it in chunk order, and a keg breaks once`)
+if (kegs.failed || !kegs.boards || kegs.hp.length !== TEMPLATES.length) {
+  console.log(`MISMATCH: the powder keg failed ${kegs.failed} time(s)${kegs.boards ? '' : ' (no keg board checked)'}:`)
+  for (const s of shown.splice(0)) console.log(`  ${s}`)
+  process.exitCode = 1
 }
 
 // ── Connectivity (F8b, DESIGN §4.2.3 and §4.2.9) ────────────────────────────
@@ -1102,14 +1377,21 @@ if (!climb.decks || !climb.ladders || !climb.stairs) {
 //  - so does an r SQUAD_R (1.18", the largest squad's) disc, and it controls
 //    every objective: it reaches a standable cell within OBJECTIVE_RANGE + r
 //    of it (core/queries.js counts a model within OBJECTIVE_RANGE plus its
-//    base; a disc of r holds its models), (the merged build's gate) at its
-//    level on a board with height: a cell whose floor is within HIGH of the
-//    floor under the objective, as controlOf counts a model there (the
-//    keep's objective held from its top), the start a ground cell. (The
-//    reach stays a walker's, stairs but no ladders: stricter than the
-//    squad's own, a climber's.)
+//    base; a disc of r holds its models).
+// (The WIP merge's follow-up) With height (a fortified board) the rows read
+// the board as the rules do: the hull keeps to the ground, starting there
+// and never stepping onto a cell whose floor is above STEP (a ground
+// vehicle takes no stair: F9a's rule, which the nav's walk doesn't apply
+// yet, so a hull walked the works' and the keep's stairs), and the squad,
+// which walks stairs as every non-vehicle does (no ladder: the
+// non-climbers' reach, the narrower), holds an objective only from a cell
+// within HIGH of the objective's floor (controlOf's rule, §4.2.9's "at its
+// level": the keep's objective is held from its top, up either stair).
 // Every row must pass on every board: a failure names the mission, the set,
-// the seed, the seat, the disc and the zone or objective it couldn't reach.
+// the seed, the seat, the disc and the zone or objective it couldn't reach,
+// and what stands round the centre objective (the keep, the ruined tower
+// ring); the MISMATCH counts the failed boards by it, the piece a centre
+// row fails on read off the board rather than guessed.
 // The classic mission's boards are measured too and only reported (their
 // lanes are the Skirmish's, frozen with its draws). It prints each board
 // size's chunk counts (§4.2.3 expects 250-300 at Grand). Its controls
@@ -1121,7 +1403,15 @@ const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
 const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
 const CONTROL = process.env.CONNECT_MUTATE ?? null
-const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, classic: { boards: 0, hull: 0, squad: 0, objectives: 0 } }
+// ((F19a) the Skirmish-sized missions, classic and keg, each reported apart)
+const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, small: {} }
+// what scatter stood round the centre objective, from the footprints it
+// placed (recipes.js CENTRES: the keep's is marked `fort`, the tower ring's
+// `hollow`; the rock box's four piles stand off the centre)
+const centreOf = (placed) => {
+  const c = placed.find((p) => p.x === 0 && p.z === 0)
+  return c?.fort === 'keep' ? 'the keep' : c?.hollow ? 'the ruined tower ring' : 'no keep or tower ring'
+}
 const connShown = []
 const tn0 = Date.now()
 // one board's rows: null when every row holds, else what failed
@@ -1140,16 +1430,16 @@ function connectBoard(name, m, set, seed) {
   if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
   const edge = BW / 2 - m.deploy
   const why = []
-  // (the merged build's gate) with height: the ground, and an objective's
-  // level, the floor under it (core/queries.js floorAt)
-  const ground = (i) => !nav.hasHeight || !nav.level[i]
-  const atLevel = (i, o) => !nav.hasHeight || Math.abs(nav.floor[i] - nav.floor[nav.index(o.x, o.z)]) <= HIGH
+  const centre = centreOf(T.features)
+  // (with height) the cells off the ground, which the hull never enters
+  const raised = nav.hasHeight ? Uint8Array.from(nav.floor, (f) => (f > STEP ? 1 : 0)) : null
   for (const seat of [0, 1]) {
     const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
+      const forbid = r === HULL_R ? raised : null
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !ground(i) || !nav.standable(i, r, 'walk')) continue
+        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk', forbid)) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (d < bd) [bd, start] = [d, i]
       }
@@ -1157,20 +1447,23 @@ function connectBoard(name, m, set, seed) {
         why.push(`seat ${seat}'s zone has no cell an r ${r} disc stands on`)
         continue
       }
-      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk' })
+      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk', forbid })
       conn.reaches++
       let crossed = false
       for (let i = 0; i < nav.N && !crossed; i++) crossed = -sgn * nav.x(i) > edge && isFinite(res.dist[i])
       if (!crossed) why.push(`an r ${r} disc from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) reaches no cell of seat ${1 - seat}'s`)
       if (r !== SQUAD_R) continue
       for (const o of m.objectives) {
+        // (with height) the objective's floor: a cell counts within HIGH of it
+        const oy = raised ? nav.floor[nav.index(o.x, o.z)] : 0
         let held = false
-        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && atLevel(i, o)
-        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no ground within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${nav.hasHeight ? ` at its level (within ${HIGH}" of its floor, ${nav.floor[nav.index(o.x, o.z)]}")` : ''}`)
+        for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && (!raised || Math.abs(nav.floor[i] - oy) <= HIGH)
+        const round = o.x === 0 && o.z === 0 ? `, ${centre} round it` : ''
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no cell within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${oy ? ` and within ${HIGH}" of its floor (${oy}")` : ''}${round}`)
       }
     }
   }
-  return { why, chunks: T.chunks.length }
+  return { why, chunks: T.chunks.length, centre }
 }
 for (const [name, m] of Object.entries(MISSIONS)) {
   for (const set of m.sets) {
@@ -1184,9 +1477,11 @@ for (const [name, m] of Object.entries(MISSIONS)) {
         r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], chunks: 0 }
       }
       counts.push(r.chunks)
-      if (name === 'classic') {
-        // (reported, never judged: the Skirmish's lanes are its frozen draws')
-        const c = conn.classic
+      // ((F19a) a mission on classic's table, the keg's too, is a Skirmish)
+      if (m.board.W * m.board.H <= W * H) {
+        // (reported, never judged: the Skirmish's lanes are its frozen draws'
+        // (classic's, and the keg set's, classic's table round its keg))
+        const c = (conn.small[name] ??= { boards: 0, hull: 0, squad: 0, objectives: 0 })
         c.boards++
         if (!r.why.some((w) => w.includes(`r ${HULL_R} disc`))) c.hull++
         if (!r.why.some((w) => w.includes(`r ${SQUAD_R} disc`))) c.squad++
@@ -1196,6 +1491,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
       conn.boards++
       if (r.why.length) {
         conn.failed++
+        conn.byCentre[r.centre] = (conn.byCentre[r.centre] ?? 0) + 1
         if (connShown.length < MAX) connShown.push(`connectivity ${key}, seed ${seed}: ${r.why.join('; ')}`)
       }
     }
@@ -1203,20 +1499,22 @@ for (const [name, m] of Object.entries(MISSIONS)) {
     conn.chunks[key] = `${counts[0]}-${counts[counts.length - 1]} (median ${counts[counts.length >> 1]}, mean ${(counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(0)})`
   }
 }
-console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}")${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
+console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
 for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
-const C = conn.classic
-console.log(`  (reported, not judged) classic: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
+for (const [name, C] of Object.entries(conn.small)) console.log(`  (reported, not judged) ${name}: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
 if (conn.failed) {
-  console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s):`)
+  console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s) (by what stands round the centre objective: ${Object.entries(conn.byCentre).map(([k, v]) => `${k} ${v}`).join(', ')}):`)
   for (const s of connShown) console.log(`  ${s}`)
-  process.exit(1)
+  // ((the WIP merge's follow-up) exit 1 at the end: the tiles' rows below
+  // still run, so a failed board here hides none of theirs)
+  process.exitCode = 1
+} else {
+  if (!conn.boards) {
+    console.log('terrain-check: VACUOUS: no Field or Grand board checked for connectivity (no mission offers them?)')
+    process.exit(2)
+  }
+  console.log(`every Field and Grand board connected: ${conn.boards} of ${conn.boards}`)
 }
-if (!conn.boards) {
-  console.log('terrain-check: VACUOUS: no Field or Grand board checked for connectivity (no mission offers them?)')
-  process.exit(2)
-}
-console.log(`every Field and Grand board connected: ${conn.boards} of ${conn.boards}`)
 
 // ── Tiles (F8b, DESIGN §4.2.7's "Drawing at scale" 1) ──────────────────────
 // The view's half of the larger boards. On a board larger than classic's

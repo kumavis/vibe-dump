@@ -94,6 +94,9 @@ export const MUTATIONS = {
   'works-off-edge': ['/core/terrain/recipes.js', 'const RAMPART_FACE = 1.125', 'const RAMPART_FACE = 1.375', '1-3'],
   // the facing pieces turned anywhere, not toward the other zone
   'facing-ignored': ['/core/terrain/recipes.js', 'const yaw = S.facing?.includes(name) ?', 'const yaw = false ?', '1-25'],
+  // (F17, P-climb's lob rows) a reach that ignores the height: every
+  // weapon its printed range from a deck
+  'lob-flat': ['/core/actions/shoot.js', '  if (!G.nav.hasHeight || !lobbed(w)) return w.range\n', '  return w.range\n', '1-3'],
   // (F8b, the tiles: terrain-check's last section) a chunk promoted out of
   // its tile leaves the tile as it was: the tile still draws it, and its
   // own mesh too
@@ -103,6 +106,12 @@ export const MUTATIONS = {
   // (F8b) the merge places a part by its own matrix, not its world one: a
   // tree's canopy, a hedge's tufts, drawn about the origin
   'tile-matrix': ['/view/terrain.js', '  geo.applyMatrix4(tmpM.copy(o.matrixWorld))', '  geo.applyMatrix4(tmpM.copy(o.matrix))', '1-3'],
+  // (F19a, the powder keg's rows) the keg a tenth of an inch off the centre
+  // (no longer its own mirror), a keg's hit points one more than the
+  // keg's, and a blast whose rim does the full damage
+  'keg-off-centre': ['/core/terrain/recipes.js', '    powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))', '    powderKeg(T, 0.1, 0, yaw, pick(KEG_WOOD, rng))', '1-3'],
+  'keg-tougher': ['/core/terrain/recipes.js', "    kind: 'keg', hp: HAZARDS.keg.hp,", "    kind: 'keg', hp: HAZARDS.keg.hp + 1,", '1-3'],
+  'blast-rim-full': ['/core/terrain/terrain.js', '    let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)', '    let amount = dmg', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws

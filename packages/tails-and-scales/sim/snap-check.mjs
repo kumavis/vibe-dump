@@ -59,7 +59,8 @@
 // By default a selection: four watched battles (one of them 64886-198528,
 // the only corpus battle where a block dropped by a collapse still stands
 // when its action ends: in every other the same blast or sweep breaks it
-// too) and four human logs (one per vs-AI seat, one hotseat, and (F4) a
+// too), (F19a) a watched keg battle (watch-keg-1: the powder keg drawn,
+// and gone from the table once an acid globe sets it off) and four human logs (one per vs-AI seat, one hotseat, and (F4) a
 // vs-AI log that votes at the round limit and plays an overtime round), the quick
 // run for a step that touches the view; --only picks others (`ai`, `human`
 // or ids, as parity's): `--only ai,human`, the whole corpus (about an hour),
@@ -85,7 +86,7 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1'
+const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1'
 let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())

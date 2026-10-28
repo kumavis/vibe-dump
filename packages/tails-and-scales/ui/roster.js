@@ -17,7 +17,10 @@
 // "acted"). It is folded to its header (the totals) unless opened (its
 // header's ▸, or R), open by default on a board larger than classic's (not
 // on a phone), and rewritten at most four times a second, only when what
-// it shows changed. ((F8b's review) Its header is its one toggle: a ☰ in the
+// it shows changed. (F16) Under the courtesy fog (`fog()`, app/flow.js's
+// fogShown) the other army's worth is what the seat played here has seen
+// of it: each unit it sees now as it stands, each other at its models as
+// last seen (whole, never seen), greyed and said so. ((F8b's review) Its header is its one toggle: a ☰ in the
 // tools as well widened the row over the other seat's score.)
 import { glyphOf } from '../present/zoom.js'
 import { unitPrice } from '../core/army.js'
@@ -25,8 +28,8 @@ import { unitPrice } from '../core/army.js'
 const HZ = 4
 
 export class Roster {
-  constructor({ units, mirror, board, colorOf, setup = () => null, seats = () => [], phase = () => false, pick = () => {}, fast = false }) {
-    Object.assign(this, { units, mirror, board, colorOf, setup, seats, phase, pick })
+  constructor({ units, mirror, board, colorOf, setup = () => null, seats = () => [], phase = () => false, pick = () => {}, fog = () => null, fast = false }) {
+    Object.assign(this, { units, mirror, board, colorOf, setup, seats, phase, pick, fog })
     const el = (this.el = document.createElement('aside'))
     el.id = 'roster'
     el.className = 'hidden'
@@ -68,14 +71,18 @@ export class Roster {
   // What the roster shows now: both armies' worth, and the rows.
   model() {
     const M = this.mirror(), mine = new Set(this.seats()), inPhase = this.phase(), setup = this.setup()
-    const worth = [0, 0], full = [0, 0], rows = []
+    const worth = [0, 0], full = [0, 0], rows = [], fog = this.fog(), fogged = [false, false]
     for (const v of this.units.views.values()) {
       const t = v.u.t, mu = M?.units[v.id]
       if (!mu) continue
       const s = v.u.side
       const price = unitPrice(setup, v.u)
       full[s] += price
-      worth[s] += (price * mu.alive) / t.models
+      // ((F16) a unit the fog veils: its models as last known, whole if
+      // never seen)
+      const veiled = !!fog?.hide?.has(v.id)
+      if (fog && s !== fog.F?.seat && fog.F) fogged[s] = true
+      worth[s] += (price * (veiled ? fog.F?.known?.get(v.id) ?? t.models : mu.alive)) / t.models
       if (!mine.has(s) || !(mu.alive > 0)) continue
       const can = v.look === '#ffffff' || v.look === '#5fd3ff' || v.look === '#ffe680'
       rows.push({
@@ -84,7 +91,7 @@ export class Roster {
         acted: inPhase && !can, ord: v.label.dataset.ord ?? '', engaged: !!mu.engaged, sel: v.look === '#ffe680',
       })
     }
-    return { worth: worth.map(Math.round), full, rows }
+    return fog ? { worth: worth.map(Math.round), full, rows, fogged } : { worth: worth.map(Math.round), full, rows }
   }
 
   tick() {
@@ -99,7 +106,7 @@ export class Roster {
     this.sig = sig
     this.el.classList.toggle('open', open)
     this.el.querySelector('.rfold').textContent = open ? '▾' : '▸'
-    this.head.innerHTML = [0, 1].map((s) => `<span class="rpts" style="color:${this.colorOf(s)}" title="On the table: ${m.worth[s]} of ${m.full[s]} points">${m.worth[s].toLocaleString('en-GB')}</span>`).join('<span class="rvs">·</span>') + '<span class="rlbl">pts</span>'
+    this.head.innerHTML = [0, 1].map((s) => `<span class="rpts${m.fogged?.[s] ? ' fog' : ''}" style="color:${this.colorOf(s)}" title="${m.fogged?.[s] ? 'As last seen' : 'On the table'}: ${m.worth[s]} of ${m.full[s]} points">${m.worth[s].toLocaleString('en-GB')}</span>`).join('<span class="rvs">·</span>') + '<span class="rlbl">pts</span>'
     this.list.innerHTML = !open ? '' : m.rows.map((r) => `<li data-id="${r.id}" class="${[r.acted ? 'acted' : '', r.sel ? 'sel' : '', r.engaged ? 'engaged' : ''].join(' ').trim()}" style="--side:${this.colorOf(r.side)}"><span class="rg">${r.glyph}</span><span class="rn">${r.name}</span><span class="rc">${r.n}</span><span class="rs">${r.engaged ? '<span title="In combat">⚔</span>' : ''}${r.ord ? `<span class="ro" title="Standing order">${r.ord}</span>` : ''}${r.acted ? '<span title="Done this phase">✓</span>' : ''}</span></li>`).join('')
   }
 }

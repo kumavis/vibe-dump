@@ -45,6 +45,12 @@
 //   folder.acceptedEntries()  (N3) the accepted entries, decoded, in fold
 //                         order: the first k fold to the match as it stood
 //                         after its k-th (a scrub, a replay: app/replay.js)
+//   folder.placed, folder.dice   (F12) beside each accepted id: where its
+//                         entry stands in what was pushed, and the dice
+//                         counter (G.rng.n) after it, so an entry across
+//                         which the counter moved is one that rolled (the
+//                         page's undo, app/undo.js: a commit point). Derived
+//                         from the fold, never hashed, never in the log
 //
 // Per entry the Folder does the checks below, stateHash where one seat is
 // waited on, legal() and apply(), and O(1) besides; per sync, one pass of
@@ -177,6 +183,10 @@ export class Folder {
     this.last = null
     this.simul = null
     this.finals = new Set()
+    // (F12) beside `accepted`, an entry's place in `pushed` and the dice
+    // counter after it (a number each: O(1) an entry)
+    this.placed = []
+    this.dice = []
     // a sync under way (sync), and an entry being folded or its events
     // handed on (push)
     this.syncing = false
@@ -356,6 +366,9 @@ export class Folder {
   accept(e, P = null, clock = null) {
     this.accepted.push(e.id)
     this.last = e.id
+    // ((F12) the entry is the last pushed; no match yet before a start)
+    this.placed.push(this.pushed.length - 1)
+    this.dice.push(this.G ? this.G.rng.n : 0)
     const G = this.G, now = G?.pending, open = this.simul
     const simultaneous = !!now && SIMULTANEOUS.includes(now.k)
     // the same decision still open: this seat's head moves on

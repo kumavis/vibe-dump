@@ -26,6 +26,7 @@ import { Overlay } from './overlay.js'
 import { FX } from './effects/fx.js'
 import { Shots } from './effects/shots.js'
 import { Diorama } from './diorama.js'
+import { Ghosts } from './fog.js'
 import { wait } from './clock.js'
 
 // (F8a) what of a board the table is made for: its size, its zones' depth
@@ -74,13 +75,19 @@ export class View {
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) the overlay shades the battlefield's deck tops too)
     this.overlay = new Overlay(this.scene, { W, H, grid, terrain: this.terrain })
+    // ((F16) the courtesy fog's ghosts: where an unseen enemy was last seen)
+    this.ghosts = new Ghosts({ scene: this.scene, labels: this.stage.overlay, units: this.units })
   }
 
   // The view's handlers for the player (view/player.js): each kind of event
   // with the old code's visuals, called with the event and the mirror just
   // after it is folded in (app/flow.js merges in the UI's and the flow's).
   // `localSeats()`: the seats played here (the camera never follows during
-  // their turn).
+  // their turn). (F16) What a unit the courtesy fog veils does shows
+  // nothing over the table (view/units.js's hid: its volley, its spell, its
+  // shout); a template's aim, throw and landing, and the scenery's events,
+  // carry the fog's own say (`veil`, app/flow.js's: those hidden never
+  // reach these handlers; a walk's smashes hidden are left out here).
   handlers({ localSeats }) {
     const { rig, units, shots, terrain } = this
     return {
@@ -90,6 +97,12 @@ export class View {
       // as shown: a focus event plays while the match has run ahead, a whole
       // AI turn or more; never during the turn of the one seat played here)
       focus: (e, M) => rig.focus(e.x, e.z, { stage: M.stage, active: M.active, localSeats: localSeats() }),
+      // ((F14) an action played on its own, as it opens (view/player.js's
+      // cue: where its actors stand and go, where to glide, whether it
+      // carries a focus of its own, which is then left out): one move of
+      // the camera for it, framed or glided to, as the follow policy says;
+      // never an action of a seat played here, unless its orders after End)
+      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),
       // the figures
       'unit.place': (e) => units.disc(e.u),
       'unit.formation': (e) => {
@@ -103,22 +116,24 @@ export class View {
       'unit.face': (e) => units.face(e),
       // (what a wrecker smashed breaks as the walker passes it)
       'unit.move': (e, M) => units.walk(e, M, (ev) => {
-        for (const x of ev) terrain.apply(x, M)
+        for (const x of ev) if (x.veil !== 'hide') terrain.apply(x, M)
       }),
       melee: (e) => units.lunge(e),
       'charge.result': (e) => units.shout(e),
       // the shooting
-      volley: (e) => shots.volley(e),
+      volley: (e) => (units.hid(e.u) ? undefined : shots.volley(e)),
       'blast.aim': (e) => shots.aimed(e),
       'blast.scatter': (e) => shots.scattered(e),
       'blast.fire': (e) => shots.fired(e),
       'blast.land': (e) => shots.landed(e),
-      'spell.cast': () => shots.cast(),
-      'spell.fizzle': (e) => shots.fizzled(e),
-      'spell.thorns': (e) => shots.thorns(e),
+      // ((F19a) a powder keg set off: its fuse, a beat before its blast)
+      'keg.fuse': (e) => shots.fused(e),
+      'spell.cast': (e) => (units.hid(e.u) ? undefined : shots.cast()),
+      'spell.fizzle': (e) => (units.hid(e.u) ? undefined : shots.fizzled(e)),
+      'spell.thorns': (e) => shots.thorns(e, { quiet: units.hid(e.u) }),
       'spell.fade': (e) => shots.faded(e),
-      'spell.gaze': (e) => shots.gaze(e),
-      'spell.mesmerized': (e) => shots.mesmerized(e),
+      'spell.gaze': (e) => (units.hid(e.u) ? undefined : shots.gaze(e)),
+      'spell.mesmerized': (e) => (units.hid(e.tg) ? undefined : shots.mesmerized(e)),
       // what the labels and flags show: read off the mirror, which these
       // have just updated (the flags repaint each frame, view/objectives.js)
       status: () => units.labelAll(),
@@ -213,6 +228,8 @@ export class View {
       parts: (dt, time) => {
         effects.update(dt)
         units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
+        // ((F16) the fog's ghosts' labels)
+        if (this.ghosts.standing.size) this.ghosts.animate(camera, this.fast, mirror().stage === 'title')
         objectives.animate(dt, time, this.owners ?? mirror().owners)
       },
       rig: this.rig,

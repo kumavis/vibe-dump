@@ -12,7 +12,9 @@
 // mission: Skirmish, Field, Grand, with their boards and points) is the
 // host's to choose, beside the battlefield; a change un-readies both seats
 // (net/lobby.js's editBattle), and a lobby written before F8b reads as
-// Skirmish.
+// Skirmish. (F16) The courtesy fog of war, a switch beside them, the host's
+// to turn (a change un-readies both seats: Ready is the agreement), shown
+// to the guest before its Ready as the size and terrain are.
 import { RacePicker } from './races.js'
 import { terrainName } from './setup.js'
 
@@ -62,7 +64,7 @@ export class LobbyScreen {
   }
 
   // `on`: { claim(i), leave(i), name(text), race(key), ready(bool),
-  // board(n), (F7a) terrain(set), (F8b) mission(key), reroll(), copy(), secondTab(), back(),
+  // board(n), (F7a) terrain(set), (F8b) mission(key), (F16) fog(bool), reroll(), copy(), secondTab(), back(),
   // fit(text, typing) }
   wire(on) {
     this.on = on
@@ -75,6 +77,17 @@ export class LobbyScreen {
       $('#lobby .seedrow').prepend(label)
     }
     $('#lobbySize').onchange = () => on.mission?.($('#lobbySize').value)
+    // (F16) the fog's switch, made once after the battle's row
+    if (!$('#lobbyFog')) {
+      const label = el('label', 'fogPick', 'Fog of war ')
+      const box = el('input')
+      box.id = 'lobbyFog'
+      box.type = 'checkbox'
+      const note = el('span', 'small', ' each side sees only what its units see')
+      label.append(box, note)
+      $('#lobby .seedrow').append(label)
+    }
+    $('#lobbyFog').onchange = () => on.fog?.($('#lobbyFog').checked)
     $('#copyLink').onclick = () => on.copy()
     $('#secondTab').onclick = () => on.secondTab()
     $('#lobbyReroll').onclick = () => on.reroll()
@@ -94,12 +107,13 @@ export class LobbyScreen {
     for (const p of this.pickers) p?.picker.close()
     this.nameBox = null
     $('#lobbyLink').value = ''
-    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbyTerrain', '#lobbySize']) $(id).disabled = true
+    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbyTerrain', '#lobbySize', '#lobbyFog']) $(id).disabled = true
   }
 
   // m: { status, link, board, (F7a) terrain and terrains (the set chosen and
   // the mission's sets), host (the battle is yours to change), (F8b)
-  // mission and sizes ([{ mission, name, W, H, points }]), seats: [{ name,
+  // mission and sizes ([{ mission, name, W, H, points }]), (F16) fog (the
+  // courtesy fog agreed: on or off), seats: [{ name,
   // race (a free seat's: the race it would bring), color (its bases' rims),
   // ready, mine, free, canSit }] }
   render(m) {
@@ -133,6 +147,10 @@ export class LobbyScreen {
     }
     if (document.activeElement !== size) size.value = m.mission
     size.disabled = !m.host
+    // (F16) the fog: the lobby's, the host's to turn
+    const fog = $('#lobbyFog')
+    fog.checked = !!m.fog
+    fog.disabled = !m.host
     m.seats.forEach((s, i) => this.seat(this.root.querySelector(`.seat[data-seat="${i}"]`), s, i))
   }
 

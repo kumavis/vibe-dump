@@ -57,6 +57,7 @@ import { GLYPH } from '../present/standing.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { LobbyScreen } from '../ui/screens/lobby.js'
+import { sizeName } from '../ui/screens/setup.js'
 import { sidesFor, seatsOf } from '../ui/theme.js'
 import { NetDialog } from '../ui/screens/netdialog.js'
 import { NetBadge } from '../ui/netbadge.js'
@@ -111,11 +112,11 @@ const FROZEN = {
 }
 
 // (F8b) the battle sizes the lobby offers: each mission, its list's size
-// name, its board and points
+// name ((F19a) or its own: the Powder keg's), its board and points
 // (F7a with F8b) the terrain a lobby keeps through a size change: its own,
 // where the new size is fought on it (fortified, on every size)
 const keptTerrain = (L, name) => (L.terrain && MISSIONS[name].sets.includes(L.terrain) ? { terrain: L.terrain } : {})
-const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: m.list?.size ?? mission, W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
+const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
 
 export class Online {
   // `flow` (app/flow.js), `params` (the page's URL parameters: ?sync=
@@ -144,6 +145,8 @@ export class Online {
       // kept where the new size is fought on it)
       mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),
       reroll: () => this.isHost() && N.editBattle(this.handle, { board: (Math.random() * 1e6) | 0 }),
+      // (F16) the courtesy fog, on or off
+      fog: (on) => this.isHost() && N.editBattle(this.handle, { fog: on === true }),
       copy: () => this.copy(),
       fit: (text, typing) => N.fitName(text, { typing }),
       secondTab: () => window.open(this.linkFor(this.id, N.randomId(8)), '_blank'),
@@ -315,7 +318,7 @@ export class Online {
     const sets = MISSIONS[L.mission]?.sets ?? [L.terrain ?? 'classic']
     const m = {
       status, link: this.linkFor(this.id), board: L.board, host: this.isHost(), terrain: L.terrain ?? sets[0], terrains: [...sets],
-      mission: L.mission, sizes: SIZES,
+      mission: L.mission, sizes: SIZES, fog: L.fog,
       seats: L.seats.map((r, i) => ({ ...(r ? { name: r.name, ready: r.ready, mine: r.dev === this.dev } : { free: true, canSit: true }), race: races[i], color: sides?.[i].color ?? '#9a8a70' })),
     }
     // (drawn again only when it changed: a picker left open stays open)
@@ -476,7 +479,9 @@ export class Online {
       })
       return
     }
-    this.flow.follow(this.play, { status: (st) => this.frozen(st), settled: () => this.keepSoon(), leave: () => this.close() })
+    // ((F16) the courtesy fog as the lobby agreed it, which each page reads
+    // as its battle begins: the start never carries it)
+    this.flow.follow(this.play, { status: (st) => this.frozen(st), settled: () => this.keepSoon(), leave: () => this.close(), fog: N.lobbyOf(this.handle.doc()).fog })
     // (N3) a page with no seat in it watches: the replay bar, at Live
     if (!localSeats.length) this.flow.replay?.open(this.play, { live: true })
     if (why) this.dialog.show({ title: 'Watching only', why: `${why}. This page won't play a seat in this battle, though you can watch it.`, watch: () => {}, back: () => this.flow.back() })
@@ -657,7 +662,8 @@ export class Online {
     const { repo } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
     const me = G.setup.seats.find((s) => s.dev === this.dev) ?? G.setup.seats[0]
-    const doc = N.lobbyDoc({ host: this.dev, board: G.setup.board, mission: G.setup.mission, terrain: G.setup.terrain, rounds: G.setup.rounds, overtime: G.setup.overtime, me: { ctrl: 'human', dev: this.dev, name: me.name, race: me.race } })
+    // ((F16) the rematch under the fog as this one was)
+    const doc = N.lobbyDoc({ host: this.dev, board: G.setup.board, mission: G.setup.mission, terrain: G.setup.terrain, rounds: G.setup.rounds, overtime: G.setup.overtime, fog: N.lobbyOf(this.handle.doc()).fog, me: { ctrl: 'human', dev: this.dev, name: me.name, race: me.race } })
     // (each guest draws its nonce as it readies, after this match's open:
     // none is copied, which the host would know)
     G.setup.seats.forEach((s, i) => {

@@ -146,10 +146,13 @@ const WHY = {
 }
 // the code that draws, and what of it a door may pass on: the queries
 const DRAWS = /^core\/(rng\.js|engine\.js|commands\.js|actions\/|ai\/)/
+// ((F17) rangeOf, a weapon's reach to a target with height, and lobbed,
+// whether a weapon lobs: pure, drawing nothing, for the tooltip and the
+// overlay's ring)
 const CROSS = {
   'core/queries.js': [
     'moveMode', 'climbs', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
-    'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
+    'rangeOf', 'lobbed', 'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than

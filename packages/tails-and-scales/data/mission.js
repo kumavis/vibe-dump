@@ -27,7 +27,10 @@
 // `grand` are the larger battles, 60×40 at 1,000 points and 80×56 at 1,500,
 // each fought on the `open` set (core/terrain/sets.js: the classic pieces,
 // their counts scaled with the table's area) or (F7a) `fortified`, and taking its race's ×2 and
-// ×3 presets (data/races/: '224222' and '336333', every race's).
+// ×3 presets (data/races/: '224222' and '336333', every race's). (F19a)
+// `keg` is a Skirmish fought round a powder keg: classic's board, zones,
+// rounds, points and list rules, on the `keg` set alone (classic's pieces
+// with the keg at the centre), its four objectives clustered round the keg.
 //
 // Every mission is checked as this module loads (checkMission, as the
 // terrain sets are): a slip in a new one fails at once, on every board.
@@ -140,6 +143,32 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       { x: 24, z: 0 },
       { x: 0, z: -20 },
       { x: 0, z: 20 },
+    ],
+  },
+  // (F19a) The powder keg: a Skirmish (classic's 40×28, zones 8" deep, 5
+  // rounds, 500 points and its list rules, the classic preset) fought for
+  // four objectives clustered round a powder keg at the table's centre
+  // (data/hazards.js: a 3" blast when it goes off), none at the centre
+  // itself: each 2.5" from the keg (a 3-4-5 triangle, so exactly), so a
+  // unit holding one from its near side stands in the blast. First come,
+  // first served, until somebody sets it off: a template or acid landing
+  // near it, or the Brute walking through it.
+  keg: {
+    board: { W: 40, H: 28 },
+    deploy: BOARD.deploy,
+    rounds: ROUNDS,
+    army: 'classic',
+    list: {
+      size: 'Skirmish', points: 500, units: 10, models: 36, perKind: 3,
+      roles: { Hero: [1, 1], Troops: [1, 6], Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1] },
+    },
+    // (the keg's own set alone: no other set has a keg)
+    sets: ['keg'],
+    objectives: [
+      { x: -2, z: 1.5 },
+      { x: 2, z: -1.5 },
+      { x: -2, z: -1.5 },
+      { x: 2, z: 1.5 },
     ],
   },
 }))

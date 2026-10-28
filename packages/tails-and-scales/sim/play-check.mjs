@@ -76,6 +76,22 @@ if (lanes.some((l) => !LANES.includes(l)) || !Number.isInteger(ROUNDS) || ROUNDS
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+// ((the WIP merge's follow-up) The boxes `sel` picks out on `page` at rest:
+// none moving 2 px across a minimap tick (10 Hz) and two of the page's
+// frames, three times running. Under SwiftShader a frame takes a second or
+// more (on a Grand board, or on a loaded machine), so a fixed wait, or two
+// readings 800 ms apart inside one frame, can read a page that hasn't drawn
+// what it is doing yet: a camera still swinging read as at rest.)
+async function settle(page, sel, what) {
+  for (let n = 0, t0 = Date.now(); n < 3;) {
+    if (Date.now() - t0 > 180000) throw new Error(`${what} never came to rest`)
+    n = (await page.evaluate((sel) => new Promise((done) => {
+      const at = () => [...document.querySelectorAll(sel)].map((e) => e.getBoundingClientRect())
+      const was = at()
+      setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => done(at().every((r, i) => Math.max(Math.abs(r.left - was[i].left), Math.abs(r.top - was[i].top), Math.abs(r.bottom - was[i].bottom)) < 2)))), 150)
+    }), sel)) ? n + 1 : 0
+  }
+}
 
 // One lane on its own page; returns { ok, lines, stats, errors }.
 async function lane(browser, url, name) {
@@ -134,21 +150,11 @@ async function lane(browser, url, name) {
     return { ...l, d: o ? Math.hypot(l.x - o.x, l.y - o.y) : 0 }
   })
   // the camera at rest (its swing onto the battle's view takes seconds
-  // under SwiftShader): no label moving more than 2 px ((the merged build's
-  // gate) over three readings 2 s apart: with the box loaded SwiftShader
-  // took longer than one 800 ms reading over a frame, so a camera still
-  // gliding read as at rest, and the clicks that followed missed)
-  const rest = async () => {
-    let was = await every(), still = 0
-    for (let k = 0; k < 90; k++) {
-      await sleep(2000)
-      const now = await every()
-      still = moves(was, now).every((m) => m.d < 2) ? still + 1 : 0
-      if (still >= 3) return
-      was = now
-    }
-    throw new Error('the camera never came to rest')
-  }
+  // under SwiftShader): no label moving 2 px (settle: (the WIP merge's
+  // follow-up) across the page's own frames, not 800 ms, which a loaded
+  // machine's frame outlasts; the serpent lane then hovered seat 1's
+  // labels mid-swing and found no unit under any)
+  const rest = () => settle(page, '#labels .ulabel', 'the camera')
   // a point on the table clear of the HUD's panels and buttons
   const onTable = (q) => page.evaluate(({ x, y }) => x > 40 && x < innerWidth - 40 && y > 110 && y < innerHeight - 50 && ['#hud', '#hint', '#log', '#card', '#tray', '#actions', '#tools', '#roster', '#minimap'].every((s) => {
     const el = document.querySelector(s)
@@ -457,23 +463,14 @@ async function layoutLane(browser, url) {
           const e = document.querySelector('#endPhase')
           return document.body.classList.contains('playing') && getComputedStyle(e).display !== 'none' && !e.disabled && e.textContent.startsWith('Begin battle')
         }, null, { timeout: 300000 })
-        // ((the merged build's gate) the camera's opening glide over first:
-        // under SwiftShader its 0.9 s take tens of seconds (at 4 s a Grand
-        // battle's camera still stood near the title's pose, 28" from its
-        // middle, the broadside's 95" not reached until about 30 s), so a
-        // fixed wait read the labels mid-glide; now the seat's labels must
-        // stand still over three readings 2 s apart)
-        {
-          const spots = () => page.evaluate(() => [...document.querySelectorAll('#labels .ulabel.s0')].map((l) => { const r = l.getBoundingClientRect(); return `${Math.round(r.left)},${Math.round(r.bottom)}` }).join(' '))
-          let was = await spots(), still = 0
-          for (let k = 0; k < 150 && still < 3; k++) {
-            await sleep(2000)
-            const now = await spots()
-            still = now === was ? still + 1 : 0
-            was = now
-          }
-          if (still < 3) problems.push(`${at}: the camera never came to rest after the battle's start`)
-        }
+        await sleep(4000)
+        // ((the WIP merge's follow-up) then the deployment's camera at rest:
+        // its swing onto the battle's view is 1.4 s of game time, a frame
+        // stepping at most 0.05 s of it (view/stage.js), so on a Grand board
+        // the swing runs 20-30 s; 4 s in, the camera still near the title's
+        // orbit, every one of the seat's labels stood off the screen and no
+        // unit was clicked)
+        await settle(page, '#labels .ulabel', 'the camera')
         const box = (s) => page.evaluate((s) => {
           const el = document.querySelector(s)
           if (!el || getComputedStyle(el).display === 'none' || el.classList.contains('hidden')) return null
@@ -513,16 +510,10 @@ async function layoutLane(browser, url) {
           // the card's height and 20 px) and it holds still over two
           // readings 1 s apart; 30 s at most, then judged as it stands)
           await sleep(1200)
-          for (let k = 0, was = ''; k < 30; k++) {
-            const now = await page.evaluate(() => {
-              const m = document.querySelector('#minimap'), c = document.querySelector('#card')
-              const r = m?.getBoundingClientRect()
-              return { lifted: !!m && !!c && Math.abs(parseFloat(getComputedStyle(m).bottom) - (c.offsetHeight + 20)) < 1, at: r ? `${Math.round(r.top)},${Math.round(r.bottom)}` : '' }
-            })
-            if (now.lifted && now.at === was) break
-            was = now.at
-            await sleep(1000)
-          }
+          // (the card done sliding in and the minimap's tick past it: a
+          // reading 1.9 s after the click caught the card still 20 px low and
+          // the map not yet raised)
+          await settle(page, '#card, #minimap, #roster', 'the card, the minimap and the roster')
           const c = await box('#card.show'), mm = await box('#minimap'), ro = await box('#roster')
           if (!c) problems.push(`${at}: no unit's card showed after clicks on six units`)
           else if (!mm || !ro) problems.push(`${at}: the minimap or the roster isn't up on a Grand board`)

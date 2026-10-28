@@ -40,6 +40,19 @@
 // once; and a cluster's zoom frames its circle. (F8b's review) The semantic
 // zoom on classic's board: Close on every view of every mode, on a laptop
 // and portrait phones, though some of those poses are under 12 px per inch.
+// (F14) An action played on its own: pointsOf names the places a run of
+// events does, cueAt finds an action from its opening to its end (a human
+// seat's move, shot, template and charge, the charge's walk the next
+// entry's, the AI's move with its focus, a fight up to the next; none for
+// an advance's roll, a morale test or a placement), its actors and where the
+// camera glides; cues follows a seat's command in an opponent's turn, a
+// watched battle and a replay, never the seat played here's (hotseat's two
+// seats too) but its orders after End, while an action with its own focus
+// is followed as frames says; and the rig's cue makes one move for an
+// action, framed as a batch of those members is (frame's very pose) when
+// any is off screen, else glided to as a focus is (none near the look),
+// nothing for the seat played here or with 🎥 off, and the bookmark still
+// takes the camera back after following.
 //
 //   node sim/camera-check.mjs
 //
@@ -430,6 +443,15 @@ for (const [ctx, want, what] of [
   rig.nextView()
   settle()
   check(rig.resume(1) === true && close(settle().pos, at1.pos), "(F8b's review) hotseat: and seat 1's to its own")
+  // ((F14's integration) a bookmark kept to a battle's end (nothing took the
+  // camera away since its End) is let go as the next battle's views are set:
+  // its first phase stays on the new battle's opening view)
+  rig.bookmark(0)
+  rig.nextView()
+  settle()
+  rig.setViews(viewsFor({ localSeats: [0, 1], edges: [-1, 1] }))
+  const opened = settle()
+  check(rig.resume(0) === false && close(settle().pos, opened.pos) && !rig.marks.size && !rig.ending.size, "(F14's integration) setViews lets a battle's bookmarks go: the next battle's first phase stays on its opening view")
   check(rig.marks.size === 0, "(F8b's review) both bookmarks spent")
   rig.bookmark(0)
   rig.bookmark(1)
@@ -520,10 +542,171 @@ for (const [ctx, want, what] of [
   check(g.tier === 'strategic' && g.labels.dataset.tier === 'strategic', `(F8b's review) the grand board's overview on a 412×915 phone reads Strategic (${g.ppi.toFixed(1)} px per inch, data-tier ${g.labels.dataset.tier}): the tiers still work where they are keyed on`)
 }
 
+// ── (F14) The camera follows an action played on its own ──────────────────
+// present/camera-presets.js's pointsOf (the places a run of events names),
+// cueAt (an action from its opening to its end, its actors, where the
+// camera glides, whether it carries a focus of its own) and cues (whose
+// actions a cue moves the camera for), on made-up streams in the shapes the
+// core emits; then the CameraRig's cue: one move per action, framed as a
+// batch is (the same pose frame gives the same points) or glided to as a
+// focus is, never for the seat played here, and the bookmark still takes
+// the camera back after following.
+{
+  const { pointsOf, cueAt, cues } = await imp('present/camera-presets.js')
+  const POS = { 1: { x: -12, z: 2 }, 2: { x: -10, z: -6 }, 8: { x: 14, z: 4 }, 9: { x: 13, z: -5 } }
+  const posOf = (id) => POS[id]
+  const pts = (ps) => JSON.stringify(ps.map((p) => [p.x, p.z]))
+  // pointsOf: the units named (where they stand), the places gone to, the
+  // template's aim and landing; nothing for a unit the table doesn't show
+  check(pts(pointsOf([{ t: 'unit.move', u: 1, to: { x: -6, z: 2, y: 0.5 } }], posOf)) === '[[-12,2],[-6,2]]', "(F14) pointsOf: a walk's start (where the table shows it) and end")
+  check(pts(pointsOf([{ t: 'unit.face', u: 2, tg: 9 }, { t: 'volley', u: 2, tg: 9 }, { t: 'unit.wound', u: 9 }], posOf)) === '[[-10,-6],[13,-5],[-10,-6],[13,-5],[13,-5]]', '(F14) pointsOf: a shot, the shooter and its target')
+  check(pts(pointsOf([{ t: 'blast.aim', x: 12, z: -4, r: 2 }, { t: 'blast.scatter', from: { x: 12, z: -4 }, to: { x: 15, z: -1 } }, { t: 'blast.fire', u: 2, to: { x: 15, z: -1 } }, { t: 'blast.land', x: 15, z: -1 }], posOf)) === '[[12,-4],[15,-1],[-10,-6],[15,-1],[15,-1]]', "(F14) pointsOf: a template's aim, scatter, thrower and landing")
+  check(pts(pointsOf([{ t: 'charge.result', u: 77, tg: 8 }, { t: 'unit.move', u: 1, to: { x: NaN, z: 0 } }], posOf)) === '[[14,4],[-12,2]]', "(F14) pointsOf: no place for a unit the table doesn't show, nor a place that isn't one")
+  // cueAt: the shapes the core emits (core/actions/, core/ai/policy.js)
+  const walk = (u, to) => ({ t: 'unit.move', u, path: [], L: 6, speed: 7, to })
+  const end = [{ t: 'objectives', owners: [] }, { t: 'status' }, { t: 'act', tag: 'act' }]
+  const cases = [
+    ["a human seat's move", [{ t: 'log' }, walk(1, { x: -6, z: 2 }), ...end, { t: 'pending', k: 'phase' }], 1, { to: 5, x: -6, z: 2, own: false, n: 2 }],
+    ['…not from its log line before it', [{ t: 'log' }, walk(1, { x: -6, z: 2 }), ...end], 0, null],
+    ["the AI's move (its focus on the walker)", [{ t: 'focus', x: -12, z: 2 }, { t: 'tray.open' }, { t: 'dice', label: 'Advance D6', dice: [3] }, { t: 'focus', x: -12, z: 2 }, walk(1, { x: -3, z: 2 }), ...end, { t: 'pause', s: 0.05 }, { t: 'focus', x: -10, z: -6 }, walk(2, { x: -4, z: -6 })], 0, { to: 8, x: -12, z: 2, own: true, n: 2 }],
+    ["a human seat's shot", [{ t: 'unit.face', u: 2, tg: 9 }, { t: 'tray.open' }, { t: 'volley', u: 2, tg: 9 }, { t: 'dice', label: 'Hit 4+', dice: [4] }, { t: 'unit.wound', u: 9 }, { t: 'pause', s: 0.06 }, ...end, { t: 'pending', k: 'phase' }], 0, { to: 9, x: 1.5, z: -5.5, own: false, n: 5 }],
+    ["a human seat's template, scattered", [{ t: 'unit.face', u: 2, tg: 9 }, { t: 'tray.open' }, { t: 'blast.aim', x: 13, z: -5, r: 2 }, { t: 'dice', label: 'Hit 5+', dice: [2] }, { t: 'dice', label: 'Scatter D6+1', dice: [3] }, { t: 'blast.scatter', from: { x: 13, z: -5 }, to: { x: 16, z: -5 } }, { t: 'blast.fire', u: 2, to: { x: 16, z: -5 } }, { t: 'blast.land', x: 16, z: -5, r: 2 }, { t: 'pause', s: 0.25 }, ...end], 0, { to: 12, x: 3, z: -5.5, own: false, n: 7 }],
+    ["a human seat's charge that reached (its walk waits on the spot)", [{ t: 'tray.open' }, { t: 'dice', label: 'Charge 7" (2D6)', dice: [3, 5] }, { t: 'unit.face', u: 1, tg: 8 }, { t: 'charge.result', u: 1, tg: 8, ok: true }, { t: 'log' }, { t: 'pending', k: 'chargeEnd' }], 0, { to: 6, x: 1, z: 3, own: false, n: 4 }],
+    ["…and its walk to the spot, the next entry's", [walk(1, { x: 12, z: 4 }), ...end, { t: 'pending', k: 'phase' }], 0, { to: 4, x: 12, z: 4, own: false, n: 2 }],
+    ['a fight, up to the next one', [{ t: 'unit.face', u: 1, tg: 8 }, { t: 'focus', x: 1, z: 3 }, { t: 'tray.open' }, { t: 'melee', u: 1, tg: 8, n: 3, hits: 2 }, { t: 'dice', label: 'Hit 3+', dice: [3, 4, 1] }, { t: 'unit.wound', u: 8 }, { t: 'pause', s: 0.3 }, { t: 'unit.face', u: 2, tg: 9 }, { t: 'focus', x: 1.5, z: -5.5 }], 0, { to: 7, x: 1, z: 3, own: true, n: 5 }],
+    ['…its phase ending it', [{ t: 'unit.face', u: 1, tg: 8 }, { t: 'focus', x: 1, z: 3 }, { t: 'tray.open' }, { t: 'melee', u: 1, tg: 8, n: 3, hits: 2 }, { t: 'status' }, { t: 'phase.start', side: 1, phase: 'morale' }], 0, { to: 5, x: 1, z: 3, own: true, n: 4 }],
+    ["an advance's roll (no deed)", [{ t: 'tray.open' }, { t: 'dice', label: 'Advance D6', dice: [4] }, { t: 'pending', k: 'phase' }], 0, null],
+    ['a morale test (no deed)', [{ t: 'tray.open' }, { t: 'dice', label: 'D6 + 2 lost vs Ld 7', dice: [5] }, { t: 'status' }, { t: 'phase.start', side: 0, phase: 'move' }], 0, null],
+    ["a deployment's placement", [{ t: 'unit.place', u: 1, x: -14, z: 2 }, { t: 'pending', k: 'deploy' }], 0, null],
+    ["a walk of a unit the table doesn't show, to nowhere", [walk(77, { x: NaN, z: 0 }), ...end], 0, null],
+  ]
+  for (const [what, events, k, want] of cases) {
+    const c = cueAt(events, k, posOf)
+    const ok = want ? !!c && c.to === want.to && Math.abs(c.x - want.x) < 1e-9 && Math.abs(c.z - want.z) < 1e-9 && c.own === want.own && c.points.length === want.n : c === null
+    check(ok, `(F14) cueAt: ${what}: ${want ? `events ${k}-${want.to - 1}, ${want.n} places, gliding to (${want.x}, ${want.z})${want.own ? ', its own focus' : ''}` : 'no cue'}`, JSON.stringify(c && { ...c, points: c.points.length }))
+  }
+  // whose actions move the camera: a seat's command (no focus of its own)
+  // by cues, never the seat played here's (hotseat's two seats too) but its
+  // orders after End; one with a focus of its own (the AI's, a fight's) by
+  // frames, as ever
+  const followed = (own, ctx) => (own ? frames(ctx) : cues(ctx))
+  for (const [ctx, cmd, ownFocus, what] of [
+    [{ follow: true, stage: 'battle', active: 1, localSeats: [0] }, true, true, "an online opponent's turn (the host's page)"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [1] }, true, true, "an online opponent's turn (the guest's page)"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [0] }, false, false, "the turn of the one seat played here (its own move, or its 🤖 Auto's)"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [0], ended: 0 }, true, true, "that seat's orders after its End"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [0], ended: 1 }, false, false, "that seat's turn, another seat's End kept"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [0, 1] }, false, true, "hotseat (each player's own clicks; its fights followed as ever)"],
+    [{ follow: true, stage: 'battle', active: 1, localSeats: [0, 1], ended: 1 }, true, true, "hotseat, a seat's orders after its End"],
+    [{ follow: true, stage: 'battle', active: 0, localSeats: [] }, true, true, 'a watched battle, or a replay (no seat played here)'],
+    [{ follow: false, stage: 'battle', active: 1, localSeats: [0] }, false, false, '🎥 off'],
+    [{ follow: true, stage: 'deploy', active: 1, localSeats: [0] }, false, false, "the deployment (the opponent's placements, made as yours are)"],
+  ]) {
+    check(followed(false, ctx) === cmd && followed(true, ctx) === ownFocus, `(F14) in ${what}: a seat's command ${cmd ? 'is' : 'is not'} followed, an action with its own focus ${ownFocus ? 'is' : 'is not'}`, `${followed(false, ctx)}, ${followed(true, ctx)}`)
+  }
+
+  // the rig's cue, on a Grand board (a laptop's 1280×800), the page playing
+  // seat 0 (west) and the opponent seat 1
+  globalThis.innerWidth = 1280
+  globalThis.innerHeight = 800
+  const aspect = 1280 / 800
+  const fresh = (localSeats = [0]) => {
+    const rig = new CameraRig({ domElement: canvas })
+    rig.setBoard({ W: 80, H: 56 })
+    rig.setViews(viewsFor({ localSeats, edges: [-1, 1] }))
+    for (let i = 0; i < 30; i++) stepTweens(0.1)
+    for (let i = 0; i < 5; i++) rig.update(0)
+    return rig
+  }
+  const rest = (rig) => {
+    for (let i = 0; i < 30; i++) stepTweens(0.1)
+    for (let i = 0; i < 5; i++) rig.update(0)
+    return rig.pose()
+  }
+  const OPP = { stage: 'battle', active: 1, localSeats: [0] }, MINE = { stage: 'battle', active: 0, localSeats: [0] }
+  // the opponent's walk across the far half, off screen from behind seat 0
+  const farWalk = { points: [{ x: 30, z: 18 }, { x: 24, z: 18 }], x: 24, z: 18, own: false }
+  {
+    const rig = fresh(), twin = fresh(), start = rig.pose()
+    check(rig.offScreen(farWalk.points), "(F14) the case: the opponent's far walk is off screen from behind seat 0")
+    const f0 = rig.followed
+    check(rig.cue(farWalk, OPP) === true && rig.followed === f0 + 1, "(F14) cue: an opponent's walk off screen moves the camera once")
+    const got = rest(rig)
+    twin.frame(farWalk.points, OPP)
+    const batch = rest(twin)
+    check(close(got.pos, batch.pos) && close(got.target, batch.target) && seen({ ...got, fov: fovFor(aspect) }, aspect, farWalk.points.map((p) => [p.x, p.z])), '(F14) cue: it is framed as a batch of those members is (frame: the same pose), both ends in view', `${got.pos.map((x) => x.toFixed(1))} → ${got.target.map((x) => x.toFixed(1))}`)
+    check(!close(got.target, start.target), '(F14) cue: the camera has moved off its opening view')
+    // the next walk of that unit, on screen now and near the look: still
+    const near = { points: [{ x: 24, z: 18 }, { x: got.target[0] + 2, z: got.target[2] + 1 }], x: got.target[0] + 2, z: got.target[2] + 1, own: false }
+    const f1 = rig.followed
+    check(rig.cue(near, OPP) === false && rig.followed === f1 && close(rest(rig).pos, got.pos), '(F14) cue: an action on screen, ending near where the camera looks, leaves it still')
+  }
+  {
+    // on screen but far from the look: a glide toward its end, as a focus
+    // makes (60% of the way, at the same distance)
+    const rig = fresh([]), start = rig.pose()
+    const tx = start.target[0], tz = start.target[2]
+    const across = { points: [{ x: tx - 14, z: tz + 4 }, { x: tx - 10, z: tz + 4 }], x: tx - 10, z: tz + 4, own: false }
+    check(!rig.offScreen(across.points), "(F14) the case: a watched battle's walk on screen, its end 10\" from the look")
+    const f0 = rig.followed
+    check(rig.cue(across, { stage: 'battle', active: 1, localSeats: [] }) === true && rig.followed === f0 + 1, "(F14) cue: an action on screen, far from the look, glides there once (a watched battle's)")
+    const got = rest(rig)
+    check(close(got.target, [tx - 6, 0, tz + 2.4]) && Math.abs(dist(got) - dist(start)) < 1e-9, '(F14) cue: as a focus glides (60% of the way to its end, at the same distance)', `${got.target.map((x) => x.toFixed(2))}`)
+  }
+  {
+    // the seat played here: its own walk, off screen or not, moves nothing;
+    // hotseat's two seats the same; a fight there (its own focus) as ever
+    const rig = fresh(), start = rig.pose(), f0 = rig.followed
+    check(rig.cue({ ...farWalk, points: farWalk.points }, MINE) === false && rig.followed === f0 && close(rest(rig).pos, start.pos), "(F14) cue: the seat played here's own walk, off screen, moves nothing")
+    const hot = fresh([0, 1]), h0 = hot.pose()
+    check(hot.cue(farWalk, { stage: 'battle', active: 0, localSeats: [0, 1] }) === false && close(rest(hot).pos, h0.pos), "(F14) cue: in hotseat a seat's own walk moves nothing")
+    check(hot.cue({ ...farWalk, own: true }, { stage: 'battle', active: 0, localSeats: [0, 1] }) === true, '(F14) cue: in hotseat a fight off screen (its own focus) is framed, as the follow policy always followed it')
+    rig.follow = false
+    check(rig.cue(farWalk, OPP) === false && close(rest(rig).pos, start.pos), '(F14) cue: not with 🎥 off')
+  }
+  {
+    // the bookmark after following: End pressed at a pose, the opponent's
+    // turn followed (framed), the seat's next phase glides back to it
+    const rig = fresh()
+    rig.frameOn(-30, 0, 6)
+    const marked = rest(rig)
+    rig.bookmark(0)
+    check(rig.cue(farWalk, OPP) === true && !close(rest(rig).pos, marked.pos), "(F14) the bookmark: End pressed, the opponent's walk followed away from it")
+    check(rig.resume(0) === true && close(rest(rig).pos, marked.pos) && close(rig.pose().target, marked.target), "(F14) the bookmark: the seat's next phase still glides back to where it pressed End")
+    // a turn's last End (its charges): its own fight and morale phases
+    // begin, nothing having taken the camera away (a phase with nothing in
+    // it begins all the same), and keep the bookmark, its orders' framing
+    // over; the opponent's turn is followed; the seat's next phase comes back
+    rig.frameOn(-28, 6, 6)
+    const last = rest(rig)
+    rig.bookmark(0)
+    check(rig.resume(0) === false && rig.resume(0) === false && rig.marks.has(0) && close(rest(rig).pos, last.pos), "(F14) the bookmark: the seat's own fight and morale phases, nothing having moved the camera, keep it (no glide)")
+    check(rig.frame(farWalk.points, MINE) === false && rig.cue({ ...farWalk, own: true }, MINE) === false, "(F14) the bookmark: its orders' framing ends at the seat's next phase (its own fights off screen are not framed)")
+    check(rig.cue(farWalk, OPP) === true && !close(rest(rig).pos, last.pos), "(F14) the bookmark: the opponent's turn followed away")
+    check(rig.resume(0) === true && close(rest(rig).pos, last.pos) && !rig.marks.has(0), "(F14) the bookmark: the seat's next turn glides back to where it pressed its last End, the opponent's turn followed")
+    // a camera moved by hand after End, nothing followed: left where it is
+    rig.bookmark(0)
+    rig.nextView()
+    const mine = rest(rig)
+    check(rig.resume(0) === false && close(rest(rig).pos, mine.pos), "(F14) the bookmark: a phase begun with nothing followed since End leaves the camera where the player put it")
+    // and that seat's own orders after its End: framed off screen, never
+    // glided to on screen
+    rig.frameOn(-30, 0, 6)
+    rest(rig)
+    rig.bookmark(0)
+    const own = { points: [{ x: 32, z: -20 }, { x: 28, z: -20 }], x: 28, z: -20, own: false }
+    check(rig.offScreen(own.points) && rig.cue(own, MINE) === true, "(F14) cue: the seat's own orders after its End, off screen, are framed (as a batch of them is)")
+    rig.toOverview()
+    const at = rest(rig)
+    const onScreen = { points: [{ x: at.target[0] + 12, z: at.target[2] }, { x: at.target[0] + 10, z: at.target[2] }], x: at.target[0] + 10, z: at.target[2], own: false }
+    check(!rig.offScreen(onScreen.points) && rig.cue(onScreen, MINE) === false, "(F14) cue: the seat's own orders after its End, on screen, are not glided to")
+  }
+}
+
 // pure: nothing but the board's size from core/
 const src = readFileSync(join(PKG, 'present', 'camera-presets.js'), 'utf8')
 const imports = [...src.matchAll(/^import .* from '([^']+)'/gm)].map((m) => m[1])
 check(imports.join() === '../core/rules.js', 'present/camera-presets.js imports only core/rules.js (pure: no three.js, no DOM)', imports.join(', '))
 
-console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the camera at load, the field of view, the title's orbit and the follow rule are the R0 code's, a battle opens behind the seat played here or broadside, and the presets keep their own promises; (F8b) a larger board opens on the seat's half, the keys pan with the distance, batches are framed as the policy says, and the bookmark takes the camera back`)
+console.log(bad ? `\ncamera-check FAILED: ${bad} of ${checks} checks` : `\ncamera-check passed: ${checks} checks, the camera at load, the field of view, the title's orbit and the follow rule are the R0 code's, a battle opens behind the seat played here or broadside, and the presets keep their own promises; (F8b) a larger board opens on the seat's half, the keys pan with the distance, batches are framed as the policy says, and the bookmark takes the camera back; (F14) an action played alone is cued once, framed or glided to, never the seat played here's`)
 process.exit(bad ? 1 : 0)

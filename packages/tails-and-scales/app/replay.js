@@ -17,7 +17,11 @@
 // end screen's Watch the replay) or frozen (the dialog's Keep watching);
 // and a replay file opened from the title (📼). Save writes the battle's
 // whole log (every entry's text: a fold of it is the battle) as a file
-// that the title opens again.
+// that the title opens again. (F15) And any battle on the table from a
+// click on a line of its battle log: the battle as it stood before the
+// entry that line was logged in, ▶ playing that entry first (open question
+// 33); over a battle still going on that this page plays, a peek, which
+// Live or ✕ puts away, the battle as it stands back on the table.
 //
 //   replay.open(battle, { live })   the bar over `battle` (its own Session;
 //                         live: still going on, the bar at Live)
@@ -27,6 +31,8 @@
 //   replay.play(), pause(), live(), close()
 //   replay.idled()        the table has played everything (app/flow.js):
 //                         the next move, while playing
+//   replay.before(battle, k)  (F15) a battle-log line clicked, its entry the
+//                         k-th of `battle`'s moves: the match before it
 //   replay.file()         the battle's log as a replay file's text
 //   openReplay(text)      a replay file's log (a LocalStore of its texts),
 //                         or why it can't be one
@@ -51,6 +57,9 @@ export class Replay {
     this.k = -1
     this.playing = false
     this.timer = 0
+    // (F15) the bar put up by a battle-log line over a battle still going
+    // on that wasn't on the bar: Live and ✕ put it away again
+    this.peek = false
     bar.wire({
       start: () => this.fromStart(),
       play: () => (this.playing ? this.pause() : this.play()),
@@ -85,6 +94,24 @@ export class Replay {
     // there, playing or not)
     this.isLive = live
     this.render()
+  }
+
+  // (F15) A line of the battle log clicked, logged in the battle's k-th
+  // move (app/flow.js stamps each line with its entry's place among the
+  // accepted, the moves' own numbering): the match before that move, paused
+  // (▶ plays the move, then on). A bar already over the battle (a watched
+  // online battle, a replay file, the end screen's replay) scrubs as its
+  // slider does; else the bar comes up over it (at Live while it is still
+  // going on), and a battle not over yet is a peek. The deployment's lines,
+  // logged by the start, scrub to before the battle (the table as it
+  // stood); the roll-off's, by the last Begin battle, to the deployment
+  // just before it.
+  before(battle, k) {
+    if (this.battle !== battle) {
+      this.open(battle, { live: battle.status !== 'over' })
+      this.peek = battle.status !== 'over'
+    }
+    this.scrub(k - 1)
   }
 
   // A Session over the battle's first k + 1 moves, no seat played here.
@@ -140,9 +167,10 @@ export class Replay {
     this.render()
   }
 
-  // the battle itself, as it stands
+  // the battle itself, as it stands ((F15) a peek put away with it)
   live() {
     if (!this.battle) return
+    if (this.peek) return this.close({ back: true })
     this.stopFeeding()
     this.playing = false
     this.shown = null
@@ -188,14 +216,15 @@ export class Replay {
   // The bar let go of: the battle's own Session shown again (`back`: the
   // bar's ✕; else the battle is being left, and its table with it). ✕ on a
   // battle that isn't over (a replay file saved mid-battle, a frozen
-  // match) has nothing to come back to but the war room.
+  // match) has nothing to come back to but the war room; (F15) but a peek
+  // comes back to the battle, which it looked back on.
   close({ back = false } = {}) {
     if (!this.battle) return
     this.stopFeeding()
-    const battle = this.battle, shown = this.shown
-    Object.assign(this, { battle: null, shown: null, playing: false, k: -1 })
+    const battle = this.battle, shown = this.shown, peek = this.peek
+    Object.assign(this, { battle: null, shown: null, playing: false, k: -1, peek: false })
     this.bar.hide()
-    if (back && battle.status !== 'over') return this.flow.back()
+    if (back && battle.status !== 'over' && !peek) return this.flow.back()
     if (back && shown) this.flow.show(battle)
     else shown?.close()
   }
@@ -206,7 +235,7 @@ export class Replay {
     if (!this.battle) return this.bar.hide()
     const moves = this.moves(), first = this.first(moves)
     if (!this.shown) this.k = moves.length - 1
-    this.bar.render({ min: first - 1, max: moves.length - 1, at: this.k, first, playing: this.playing, live: this.isLive, atLive: !this.shown, closable: !this.isLive })
+    this.bar.render({ min: first - 1, max: moves.length - 1, at: this.k, first, playing: this.playing, live: this.isLive, atLive: !this.shown, closable: !this.isLive || this.peek })
   }
 
   // ── Replay files ───────────────────────────────────────────────────────

@@ -9,8 +9,9 @@
 //                race alone, its button picking nothing): the battle starts on
 //                both seats once both are ready, each page playing its own
 //                seat (the watcher none, its badge counted on the others');
-//                each seat deploys, plays a turn (the AI's Auto), and one
-//                concedes; every page ends over on the same match, each
+//                each seat deploys ((F12) its deployment shows Begin battle
+//                and no ↶ Undo: never online), plays a turn (the AI's
+//                Auto), and one concedes; every page ends over on the same match, each
 //                seated page's closing hash said and agreed (no dialog);
 //                then Rematch: the host's page opens a new lobby with both
 //                seats, and the guest's offers Join the rematch, which joins
@@ -91,7 +92,30 @@
 //                rounds and each seat's army let go, the guest's page shows
 //                the size and can't change it; once both are ready again the
 //                battle starts on the size's board (60×40), its start
-//                naming the mission; a rematch keeps the size
+//                naming the mission; a rematch keeps the size; (F19a) the
+//                Powder keg is offered beside the three sizes, by its name
+//   (F14)
+//   follow       once the host has pressed End (the bookmark of its last
+//                End kept through its own fight and morale phases), the
+//                guest's lone move swings the host's camera once (the
+//                ?debug block's view.camera().followed) and leaves the
+//                guest's own still; the host's next phase brings its camera
+//                back to where it pressed End
+//   (F16)
+//   fog          the host's lobby offers the courtesy fog of war, off; the
+//                guest readies, then the host turns it on (on battlefield 8,
+//                where each seat's deployment leaves two enemy units out of
+//                its sight): the guest's lobby shows it on (not the guest's
+//                to turn) and its seat un-readied; both ready, and the start
+//                carries no fog (the fold never hears of it). Each seated
+//                page keeps the fog for its own seat, and whenever its table
+//                has caught up hides exactly the enemy units none of its
+//                seat's living units sees (the core's sight, asked through
+//                the page's own Session with the dice locked), drawing no
+//                figure, label or pick for any of them, through the
+//                deployment and the turns both pages play with Auto; a
+//                watcher's page keeps no fog. Some enemy was hidden on each
+//                page (or the case held nothing)
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -121,7 +145,7 @@ import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -284,6 +308,11 @@ async function runCases(dist, cases) {
       const seats = await Promise.all([host, guest, watcher].map((p) => p.evaluate(() => window.__ts.session.localSeats.join())))
       must(seats.join('|') === '0|1|', `each page plays its own seat (host 0, guest 1, watcher none): ${seats.join('|')}`)
       must((await guest.evaluate(() => window.__ts.G.setup.seats[1].name)) === 'Ben', "the start carries the guest's name as it readied it")
+      // (F12) no Undo online (the log is append-only): each seated page's
+      // deployment shows Begin battle, and no ↶ Undo beside it
+      for (const p of [host, guest]) await until(p, () => window.__ts.player.idle && window.__ts.session.decisionFor() >= 0 && getComputedStyle(document.querySelector('#endPhase')).display !== 'none', null, 30000, 'Begin battle up on a seated page')
+      const undos = await Promise.all([host, guest].map((p) => p.evaluate(() => getComputedStyle(document.querySelector('#undo')).display)))
+      must(undos.every((d) => d === 'none'), `online, no seated page shows Undo in its deployment (${undos.join(' | ')})`)
       // each seat deploys (Begin battle), then plays its turns with Auto, the
       // pages answering their own decisions, until round 2 begins
       const step = async (page) => page.evaluate(async () => {
@@ -380,6 +409,75 @@ async function runCases(dist, cases) {
       const fought = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ terrain: window.__ts.G.setup.terrain, decks: window.__ts.G.terrain.chunks.filter((c) => c.kind === 'deck').length }))))
       must(fought.every((f) => f.terrain === 'fortified' && f.decks >= 2), `both pages' battle is fought on fortified, its works standing: ${JSON.stringify(fought)}`)
       return 'the host chose fortified, and both pages fight on it'
+    },
+
+    // (F16) the courtesy fog, agreed in the lobby, kept by each page for its
+    // own seat
+    async fog() {
+      const { host, guest, link } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      const offer = await host.evaluate(() => ({ on: document.querySelector('#lobbyFog')?.checked, disabled: document.querySelector('#lobbyFog')?.disabled }))
+      must(offer.on === false && offer.disabled === false, `the host's lobby offers the fog, off, its to turn: ${JSON.stringify(offer)}`)
+      // battlefield 8 (each seat's deployment leaves two enemies unseen)
+      await host.fill('#lobbyBoard', '8')
+      await host.dispatchEvent('#lobbyBoard', 'change')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.board === 8, null, 30000, "battlefield 8 on the guest's lobby")
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 30000, "the guest's Ready reaching the host")
+      await host.click('#lobbyFog')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.fog === true && document.querySelector('#lobbyFog').checked, null, 30000, "the host's fog on the guest's lobby")
+      const shown = await guest.evaluate(() => ({ disabled: document.querySelector('#lobbyFog').disabled, ready: window.__ts.net.handle.doc().lobby.seats.s1.ready }))
+      must(shown.disabled && shown.ready === false, `the fog is the host's to turn, and turning it un-readied the guest: ${JSON.stringify(shown)}`)
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const kept = await Promise.all([host, guest].map((p) => p.evaluate(() => ({ seat: window.__ts.view.fog()?.seat ?? null, local: window.__ts.session.localSeats.join(), setup: Object.keys(window.__ts.G.setup).filter((k) => /fog/i.test(k)), board: window.__ts.G.setup.board }))))
+      must(kept[0].seat === 0 && kept[1].seat === 1 && kept.every((k) => !k.setup.length && k.board === 8), `each page keeps the fog for its own seat, and the start carries none: ${JSON.stringify(kept)}`)
+      const watcher = await open(hashOf(link))
+      await live(watcher)
+      must((await watcher.evaluate(() => window.__ts.view.fog())) === null, 'a watcher\'s page keeps no fog')
+      // whenever a page's table has caught up: it hides exactly the enemies
+      // its seat's units can't see, and draws none of them
+      const look = (page) => page.evaluate(() => {
+        const ts = window.__ts, ses = ts.session
+        if (!ses?.G || !ts.player.idle || ses.status !== 'live') return null
+        const f = ts.view.fog(), seat = f?.seat
+        if (!f) return { none: true }
+        const want = ses.preview((G, q) => {
+          const mine = G.units.filter((u) => u.side === seat && q.alive(u))
+          return G.units.filter((e) => e.side !== seat && q.alive(e) && !mine.some((u) => q.sight(G, u, e).visible)).map((e) => e.id)
+        })
+        const alive = new Set(f.units.filter((u) => u.alive > 0).map((u) => u.id))
+        const hide = (f.shown?.hide ?? []).filter((id) => alive.has(id))
+        const drawn = f.units.filter((u) => want.includes(u.id) && (u.figures || u.label || u.picked)).map((u) => u.id)
+        return { want: want.sort((a, b) => a - b).join(), hide: hide.sort((a, b) => a - b).join(), drawn: drawn.join(), n: want.length }
+      })
+      const step = async (page) => page.evaluate(async () => {
+        const ts = window.__ts, ses = ts.session
+        if (!ses || ses.status !== 'live' || !ts.player.idle || ses.decisionFor() < 0) return
+        const P = ses.G.pending
+        if (P.k === 'deploy') await ts.endPhase()
+        else if (P.k === 'phase') await ts.autoPhase()
+      })
+      const hidden = [0, 0]
+      let looks = 0
+      const t0 = Date.now()
+      while (Date.now() - t0 < 120000) {
+        for (const [i, p] of [host, guest].entries()) {
+          const r = await look(p)
+          if (!r) continue
+          must(!r.none, `${i ? "the guest's" : "the host's"} page keeps the fog`)
+          looks++
+          hidden[i] += r.n
+          must(r.hide === r.want && !r.drawn, `${i ? "the guest's" : "the host's"} page hides exactly the enemies its seat can't see (hidden ${r.hide || 'none'}, the core's sight leaves unseen ${r.want || 'none'}; drawn of those: ${r.drawn || 'none'})`)
+        }
+        await Promise.all([host, guest].map(step))
+        if ((await host.evaluate(() => window.__ts.G.turn.round)) >= 2) break
+        await sleep(150)
+      }
+      must(hidden[0] > 0 && hidden[1] > 0, `each page hid some enemy at some point (host ${hidden[0]}, guest ${hidden[1]} enemy-looks): else the case held nothing`)
+      return `the host turned the fog on, the guest saw it and readied; each page hid what its seat couldn't see at ${looks} looks (enemy-looks hidden: host ${hidden[0]}, guest ${hidden[1]}), the watcher none`
     },
 
     async altered() {
@@ -797,13 +895,94 @@ async function runCases(dist, cases) {
       return `a group of 3 placed (${placed.sent} sent) and moved (${moved.sent} sent) online, none refused; the other page saw the group and folds the same match; ${ordered.length} units on autopilot carried out at End (${ran.kinds.join(', ')}), seen by the other page, folded alike`
     },
 
-    async size() {
-      const { host, guest, link } = await lobbyPair()
+    async follow() {
+      const { host, guest } = await lobbyPair()
       await setName(guest, 'Ben')
       await press(guest, 'Ready')
       await press(host, 'Ready')
-      // (the host starts it by hand: Ready on both, then the size changed)
-      await host.evaluate(() => (window.__ts.net.autoStart = false))
+      await Promise.all([live(host), live(guest)])
+      // a page's camera (the ?debug block's view.camera()): its pose, how
+      // often the follow policy moved it, its bookmarks
+      const cam = (p) => p.evaluate(() => {
+        const c = window.__ts.view.camera()
+        return { pose: c.pose, followed: c.followed, marks: c.marks }
+      })
+      const state = (p) => p.evaluate(() => {
+        const ts = window.__ts, ses = ts.session
+        return { idle: ts.player.idle, seat: ses.decisionFor(), k: ses.G.pending?.k, phase: ses.G.pending?.phase }
+      })
+      // whoever holds a decision ends it (Begin battle, then each phase),
+      // until the host has pressed End in a phase of its own and the guest's
+      // movement phase waits on the guest
+      let hostEnded = false
+      const t0 = Date.now()
+      for (;;) {
+        if (Date.now() - t0 > 120000) throw new Fail(`the guest's movement phase never came after an End of the host's (host ended: ${hostEnded})`)
+        const g = await state(guest)
+        if (hostEnded && g.idle && g.seat === 1 && g.k === 'phase' && g.phase === 'move') break
+        for (const [p, isHost] of [[host, true], [guest, false]]) {
+          const s = await state(p)
+          if (!s.idle || s.seat < 0 || !(s.k === 'deploy' || s.k === 'phase')) continue
+          await p.evaluate(() => window.__ts.endPhase())
+          if (isHost && s.k === 'phase') hostEnded = true
+        }
+        await sleep(150)
+      }
+      const before = await cam(host), mineBefore = await cam(guest)
+      must(before.marks.includes(0), `the host's page keeps the bookmark of its last End through its own fight and morale phases: ${JSON.stringify(before.marks)}`)
+      // the guest moves one unit alone, as far from where the host's camera
+      // looks as its move reaches
+      const moved = await guest.evaluate(async (t) => {
+        const ts = window.__ts, ses = ts.session
+        const u = ts.units.find((x) => x.side === 1 && ts.q.alive(x) && ts.q.canAct(x))
+        const plan = ts.q.movePlan(u, 0)
+        let c = -1, best = -1
+        for (let i = 0; i < ts.nav.N; i++) {
+          if (!isFinite(plan.res.dist[i]) || plan.res.dist[i] < 2 || !ts.validEnd(plan, i)) continue
+          const d = Math.hypot(ts.nav.x(i) - t[0], ts.nav.z(i) - t[2])
+          if (d > best) (best = d), (c = i)
+        }
+        if (c < 0) return null
+        const n0 = ses.count, r0 = ses.rejected.length
+        await ts.doMove(u, c)
+        return { u: u.id, to: [ts.nav.x(c), ts.nav.z(c)], far: best, sent: ses.count - n0, refused: ses.rejected.length - r0, accepted: ses.accepted.length }
+      }, before.pose.target)
+      must(moved && moved.sent === 1 && !moved.refused, `the guest's lone move sent: ${JSON.stringify(moved)}`)
+      await until(host, (n) => window.__ts.session.accepted.length >= n && window.__ts.player.idle, moved.accepted, 30000, "the guest's move folded and played on the host's page")
+      await until(host, (f) => window.__ts.view.camera().followed > f, before.followed, 20000, "the host's camera following the guest's move")
+      await sleep(300)
+      const after = await cam(host), mine = await cam(guest)
+      const off = Math.hypot(after.pose.target[0] - before.pose.target[0], after.pose.target[2] - before.pose.target[2])
+      must(after.followed === before.followed + 1 && off > 1, `the guest's move swings the host's camera once (${after.followed - before.followed} moves, its look ${off.toFixed(1)}" away)`)
+      must(mine.followed === mineBefore.followed, `the guest's own camera stays for its own move (${mine.followed - mineBefore.followed} moves)`)
+      // the guest ends its turn: the host's next phase brings the camera
+      // back to where it pressed its last End
+      const t1 = Date.now()
+      for (;;) {
+        if (Date.now() - t1 > 120000) throw new Fail("the host's next phase never came")
+        const h = await state(host)
+        if (h.idle && h.seat === 0 && h.k === 'phase') break
+        const g = await state(guest)
+        if (g.idle && g.seat === 1 && (g.k === 'phase' || g.k === 'chargeEnd')) await guest.evaluate(() => window.__ts.endPhase())
+        await sleep(150)
+      }
+      await sleep(300)
+      const back = await cam(host)
+      const close = (a, b) => a.every((x, i) => Math.abs(x - b[i]) < 1e-3)
+      must(close(back.pose.pos, before.pose.pos) && close(back.pose.target, before.pose.target) && !back.marks.includes(0), `the host's next phase brings its camera back to its bookmark (at ${back.pose.target.map((x) => x.toFixed(2))}, kept ${JSON.stringify(back.marks)})`)
+      return `the guest's lone move (to ${moved.to.map((x) => x.toFixed(1))}) swung the host's camera once (its look ${off.toFixed(1)}" over), the guest's own stayed; the host's next phase came back to where it pressed End`
+    },
+
+    async size() {
+      // (the host starts it by hand: Ready on both, then the size changed.
+      // Its autoStart is off from the lobby's making, not once both have
+      // pressed Ready: a guest's Ready that reaches the host's page before
+      // the host's own press makes that press the start, the lobby gone
+      // before the size can be picked)
+      const { host, guest, link } = await lobbyPair({ autoStart: false })
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
       await until(host, () => { const L = window.__ts.net.handle.doc().lobby; return L.seats.s0?.ready && L.seats.s1?.ready }, null, 30000, 'both seats ready on the host')
       // (an army on each seat, as F11b's lists will ride: the size lets it go)
       await host.evaluate(() => window.__ts.net.handle.change((d) => {
@@ -812,7 +991,10 @@ async function runCases(dist, cases) {
         d.lobby.rounds = 5
       }))
       const offered = await host.$$eval('#lobbySize option', (os) => os.map((o) => o.value))
-      must(offered.join() === 'classic,field,grand', `the host's page offers every size: ${offered.join(', ')}`)
+      // ((F19a) and the Powder keg, a mission of its own beside the sizes)
+      must(offered.join() === 'classic,field,grand,keg', `the host's page offers every size, the Powder keg among them: ${offered.join(', ')}`)
+      const kegText = await host.$eval('#lobbySize option[value="keg"]', (o) => o.textContent)
+      must(/^Powder keg · 40×28, 500 pts$/.test(kegText), `the Powder keg offered by its own name, its board and points: ${JSON.stringify(kegText)}`)
       await host.selectOption('#lobbySize', 'field')
       await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
       const L = JSON.parse(await lobbyNow(guest))
@@ -865,6 +1047,8 @@ async function runCases(dist, cases) {
 
 // Broken copies the self-test builds; each must fail the case named.
 const MUTANTS = {
+  // (F12) Undo up online too
+  'undo-online': ['play', 'present/hud-model.js', '  const undoUp = end.show && playedHere(session)\n', '  const undoUp = end.show\n'],
   // (F7a) the host's terrain never reaches the lobby
   'terrain-unwired': ['terrain', 'net/lobby.js', '    if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain\n', ''],
   // (F4's leftover) a snap past the end keeps a vote panel up
@@ -913,6 +1097,14 @@ const MUTANTS = {
   'no-ords': ['group', 'app/online.js', '    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))\n', ''],
   // (F8b) a size change keeps the seats' armies, or never reaches the lobby
   'size-keeps-army': ['size', 'net/lobby.js', "      for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army\n", ''],
+  // (F14) a human opponent's lone move cued nowhere (the view's cue
+  // handler gone), or the bookmark spent at the host's own fight phase
+  'no-cue': ['follow', 'view/index.js', '      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),\n', ''],
+  'mark-spent': ['follow', 'view/camera.js', '    if (!m || (m.followed === this.followed && !m.others)) return false\n', '    if (!m) return false\n'],
+  // (F16) the lobby's fog never read as the battle begins, or never
+  // written by the host's switch
+  'fog-unread': ['fog', 'app/online.js', 'leave: () => this.close(), fog: N.lobbyOf(this.handle.doc()).fog })', 'leave: () => this.close(), fog: false })'],
+  'fog-unwired': ['fog', 'net/lobby.js', '    if (fields.fog !== undefined) d.lobby.fog = fields.fog === true\n', ''],
   'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
 }
 

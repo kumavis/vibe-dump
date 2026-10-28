@@ -49,15 +49,45 @@
 //              stands on the keep's top, above STEP: a controlOf that let
 //              the ground at the keep's foot hold it would hold it from
 //              below, and is not counted
+//   (F17; DESIGN §4.2.9's F7b row, "a shooter fires from a deck")
+//   shots      the shots taken (a volley, a blast's templates, a spell
+//              cast or fizzled: each `unit.face` a shot follows), and of them
+//   deckShots  those fired from a deck (the shooter's floor above STEP, as
+//              the events put it: a place's `y`, a walk's end, a
+//              formation's, from where G stood them first)
+//   climbedShots  those fired from a deck the shooter got onto by a move of
+//              its own in the battle (a walk from below onto it, seen in the
+//              events, which come in order): the AI climbing to shoot
+//   lobs       those at a target past the weapon's printed range (the gap
+//              between the bases as the events put them, against `range`):
+//              only a lob from height reaches one (F17)
+//   upShots    those at a target standing more than STEP above the shooter
 const STEP = 0.4, OBJECTIVE_RANGE = 3
 
 export function heightProbe(q) {
-  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0 }
+  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0, shots: 0, deckShots: 0, climbedShots: 0, lobs: 0, upShots: 0 }
   let first = true, battle = false, rounds = 0
   // each unit's floor as the events have it (unit id → y); each one's as
   // the last trace line found it, and the units that have since come up
   // onto a deck from below
   const ys = new Map(), was = new Map(), movedUp = new Set()
+  // (F17) each unit's place and disc as the events have it (unit id →
+  // { x, z, r }), the units that walked onto a deck from below (in the
+  // events' order), and the shot a unit.face may begin
+  const at = new Map(), climbed = new Set()
+  let face = null, types = null
+  const shot = (u, tg) => {
+    const a = at.get(u), b = at.get(tg), w = types.get(u)?.ranged
+    if (!a || !b || !w) return
+    const ay = ys.get(u) ?? 0, by = ys.get(tg) ?? 0
+    r.shots++
+    if (ay > STEP) {
+      r.deckShots++
+      if (climbed.has(u)) r.climbedShots++
+    }
+    if (by - ay > STEP) r.upShots++
+    if (Math.hypot(a.x - b.x, a.z - b.z) - a.r - b.r > w.range) r.lobs++
+  }
   const standing = (u) => q.alive(u)
   const raised = (G, u) => q.groundY(G, u) > STEP
   return {
@@ -68,7 +98,13 @@ export function heightProbe(q) {
         r.keep = r.height && G.terrain.chunks.some((c) => c.look?.recipe === 'keep')
         const edge = G.board.W / 2 - G.board.deploy + 2.25
         r.works = !r.height ? 0 : G.terrain.chunks.filter((c) => c.kind === 'deck' && c.look?.recipe === 'rampart' && Math.abs(Math.abs(c.shape.x) - edge) < 1e-6).length
-        if (r.height) for (const u of G.units) ys.set(u.id, q.groundY(G, u))
+        if (r.height) {
+          for (const u of G.units) {
+            ys.set(u.id, q.groundY(G, u))
+            at.set(u.id, { x: u.pos.x, z: u.pos.z, r: u.r })
+          }
+          types = new Map(G.units.map((u) => [u.id, u.t]))
+        }
       }
       if (!r.height || line.startsWith('log ')) return
       if (!battle && line.startsWith('phase ')) {
@@ -109,11 +145,24 @@ export function heightProbe(q) {
     events(G, events) {
       if (!r.height) return
       for (const e of events) {
-        if (e.t === 'unit.place') ys.set(e.u, e.y ?? 0)
-        else if (e.t === 'unit.formation') ys.set(e.u, e.pos.y ?? 0)
-        else if (e.t === 'melee' && ((ys.get(e.u) ?? 0) > STEP || (ys.get(e.tg) ?? 0) > STEP)) r.deckFights++
+        if (e.t === 'unit.place') {
+          ys.set(e.u, e.y ?? 0)
+          Object.assign(at.get(e.u) ?? {}, { x: e.x, z: e.z })
+        } else if (e.t === 'unit.formation') {
+          ys.set(e.u, e.pos.y ?? 0)
+          Object.assign(at.get(e.u) ?? {}, { x: e.pos.x, z: e.pos.z, r: e.r })
+        } else if (e.t === 'melee' && ((ys.get(e.u) ?? 0) > STEP || (ys.get(e.tg) ?? 0) > STEP)) r.deckFights++
+        // (F17) a shot: the unit.face that begins it, then its volley, its
+        // first template or its cast
+        else if (e.t === 'unit.face') face = { u: e.u, tg: e.tg }
+        else if (e.t === 'volley' || e.t === 'blast.aim' || e.t === 'spell.cast' || e.t === 'spell.fizzle') {
+          if (face) shot(face.u, face.tg)
+          face = null
+        }
         if (e.t !== 'unit.move' || !e.path?.length) continue
         ys.set(e.u, e.to?.y ?? 0)
+        if (e.to) Object.assign(at.get(e.u) ?? {}, { x: e.to.x, z: e.to.z })
+        if ((e.path[0].y ?? 0) <= STEP && (e.to?.y ?? 0) > STEP) climbed.add(e.u)
         const k = e.path.findIndex((p) => p.climb)
         if (k > 0) {
           r.climbs++

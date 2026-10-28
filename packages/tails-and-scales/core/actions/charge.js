@@ -27,6 +27,7 @@ import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
 import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
+import { kegsGoOff } from './shoot.js'
 
 export function canCharge(G, u) {
   if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
@@ -139,9 +140,14 @@ export function declareCharge(G, u, target, via) {
 // follows. `plan` is declareCharge's, or the same plan made again (a pick
 // comes back with only the cell). No pile-in: the old charge ended at its
 // walk (the only pile-in is damage.js closeRanks's, after losses).
+//
+// (F19a, DESIGN §4.1 rule 28) A powder keg a charging wrecker smashed on
+// its way goes off once the charge's walk has ended, the charger standing
+// where it stopped, its setter-off (shoot.js kegsGoOff).
 export function finishCharge(G, u, target, cell, plan = chargePlan(G, u, target)) {
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
-  resolveWalk(G, u, pts, { speed: 11, fly: plan.mode === 'fly' })
+  const kegs = resolveWalk(G, u, pts, { speed: 11, fly: plan.mode === 'fly' })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  if (kegs.length) kegsGoOff(G, u, kegs)
 }
