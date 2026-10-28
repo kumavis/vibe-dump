@@ -30,13 +30,16 @@
 // 6. The splat-fur Bushtails (view/models/squirrel.js), each unit built as
 //    the game builds it (cache.js's buildModel: the first a fresh build,
 //    baked, the second its template's clone): its splat meshes (a
-//    trebuchet's two) inside root.userData.fig, left whole by the bake,
-//    casting no shadow, every figure of a unit drawing one fur (seven furs
-//    for six units: the trebuchet's crew are two); a shadow proxy per
+//    trebuchet's two, (F9a) the War-Cart's two) inside root.userData.fig,
+//    left whole by the bake, casting no shadow, every figure of a unit
+//    drawing one fur (nine furs for seven units: the trebuchet's crew are
+//    two, and the War-Cart's); a shadow proxy per
 //    squirrel, on SHADOW_LAYER alone, in the fresh build and the clone;
 //    userData.anim as the view and the shots read it (kind; body, head,
 //    tail, armL, armR in the figure; the elder's gem a kept mesh; the
-//    trebuchet's wheels, throwArm, rest); and the far stand-in (lodOf): the
+//    trebuchet's wheels, throwArm, rest; (F9a) the War-Cart's wheels and
+//    its deck's height, the machine both styles share, view/models/
+//    warcart.js); and the far stand-in (lodOf): the
 //    base and the kit merged (no white: a caster's material), a splat mesh
 //    for each of the figure's, drawing its fur, and the body's shadow (its
 //    proxies merged, on SHADOW_LAYER alone, casting), as tall as the
@@ -354,7 +357,10 @@ for (const key of Object.keys(RACES.squirrel.units)) {
     root.traverse((o) => o.isMesh && o.layers.test({ mask: 1 << SHADOW_LAYER }) && !o.layers.test({ mask: 1 }) && onShadow++)
     if (onShadow !== proxies.length + 1) issues.push('a mesh on the shadow layer and the default one')
     issues.push(...casting(root))
-    if (t.big) {
+    if (t.transport) {
+      // ((F9a) the War-Cart: a machine whose wheels turn, its deck's height for its riders)
+      if (a.kind !== 'machine' || a.wheels?.length !== 4 || a.wheels.some((w) => !w.userData.keep || !inFig(w, fig)) || typeof a.deck !== 'number' || a.throwArm) issues.push(`the War-Cart's anim is ${Object.keys(a)}`)
+    } else if (t.big) {
       if (a.kind !== 'machine' || a.wheels?.length !== 4 || !a.throwArm?.isObject3D || typeof a.rest !== 'number') issues.push(`the machine's anim is ${Object.keys(a)}`)
     } else {
       if (a.kind !== 'squirrel') issues.push(`anim.kind ${a.kind}`)
@@ -403,8 +409,9 @@ for (const key of Object.keys(RACES.squirrel.units)) {
     cache.disposeFigure(root)
   }
 }
-if (surs.size !== 7) fail(`${surs.size} furs for the six units, not 7 (one a unit, the trebuchet's crew two)`)
-else console.log(`  ok   7 furs for the six units, each drawn by every figure of its unit`)
+// ((F9a) the War-Cart's two crew too)
+if (surs.size !== 9) fail(`${surs.size} furs for the seven units, not 9 (one a unit, the trebuchet's crew two, the War-Cart's two)`)
+else console.log(`  ok   9 furs for the seven units, each drawn by every figure of its unit`)
 
 // ── 7. The splats' preparation ─────────────────────────────────────────────
 {
@@ -520,9 +527,10 @@ else console.log(`  ok   7 furs for the six units, each drawn by every figure of
   const held = splat.splatStats().orders
   for (let k = 0; k < 200; k++) splat.prepareSplats(cam, stub, toSun, scene)
   const left = splat.splatStats()
-  // (the five templates' own kept, cache.js's: the trebuchet DRAWS, so it has none)
-  const freed = left.live === 0 && left.orders === 5
-  console.log(`  ${freed ? 'ok  ' : 'FAIL'} every figure freed: ${left.live} registered, draw orders ${held} → ${left.orders} after 200 preparations (the five templates' own kept)`)
+  // (the six templates' own kept, cache.js's, the War-Cart's two crew among
+  // them: the trebuchet DRAWS, so it has none)
+  const freed = left.live === 0 && left.orders === 7
+  console.log(`  ${freed ? 'ok  ' : 'FAIL'} every figure freed: ${left.live} registered, draw orders ${held} → ${left.orders} after 200 preparations (the six templates' own kept, the War-Cart's two crew among them)`)
   if (!freed) issues.push('orders kept')
   bad += issues.length
 }

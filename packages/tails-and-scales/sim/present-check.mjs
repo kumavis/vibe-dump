@@ -496,7 +496,8 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
   let seen = new Set(), last = new Map(), board = null
   const point = (x, z, y) => ({ id: -1, side: -1, t: { chest: y - core.q.floorAt(G, x, z), eye: 0, models: 1 }, pos: { x, z }, r: 0, models: [{ alive: true, w: 1, ox: 0, oz: 0 }] })
   const fold = () => {
-    const mine = G.units.filter((u) => u.side === seat && u.alive > 0), foes = G.units.filter((u) => u.side !== seat)
+    // ((F9a) a rider is no eye, and is seen exactly when its hull is)
+    const mine = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.aboard), foes = G.units.filter((u) => u.side !== seat)
     // the chunks changed since the board stood (after the start), and
     // which of them the seat's units see the top of
     board ??= new Map(G.terrain.chunks.map((c) => [c.id, { alive: c.alive, y: c.shape.y }]))
@@ -507,9 +508,11 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
       const t = c.look?.piece === 'fallen' ? c.look.tree : undefined
       if (t !== undefined && byId.has(t) && (chunks.has(c.id) || chunks.has(t))) chunks.add(c.id).add(t)
     }
-    const now = new Set(foes.filter((e) => e.alive > 0 && mine.some((f) => core.q.sight(G, f, e).visible)).map((e) => e.id))
+    const now = new Set(foes.filter((e) => e.alive > 0 && !e.aboard && mine.some((f) => core.q.sight(G, f, e).visible)).map((e) => e.id))
+    for (const e of foes) if (e.alive > 0 && e.aboard && now.has(e.aboard)) now.add(e.id)
     for (const e of foes) {
-      if (now.has(e.id)) last.set(e.id, { x: e.pos.x, z: e.pos.z, r: e.r, models: e.models.map((m) => ({ ...m })) })
+      // ((F9a) a rider seen on its hull's deck leaves no ghost of its own)
+      if (now.has(e.id)) e.aboard ? last.delete(e.id) : last.set(e.id, { x: e.pos.x, z: e.pos.z, r: e.r, models: e.models.map((m) => ({ ...m })) })
       else if (!(e.alive > 0) && seen.has(e.id)) last.delete(e.id)
       else if (last.has(e.id)) {
         const r = last.get(e.id)
@@ -551,6 +554,12 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
       if (!foe(u.id) || !r.alive.has(u.id)) continue
       const hid = !r.seen.has(u.id)
       if (hid && (u.figures || u.ring || u.label || u.hit || u.picked)) return miss(`(F16) entry ${at}: unit ${u.id}, unseen, is drawn (${JSON.stringify(u)})`)
+      // ((F9a) a rider seen is drawn on its hull's deck alone: no label, no
+      // ring, no pick of its own)
+      if (!hid && t.player.mirror.units[u.id]?.aboard) {
+        if (!u.figures || u.ring || u.label || u.picked) return miss(`(F16) entry ${at}: unit ${u.id}, seen aboard its hull, is not drawn as a rider (${JSON.stringify(u)})`)
+        continue
+      }
       if (!hid && (!u.label || !u.picked || !u.figures)) return miss(`(F16) entry ${at}: unit ${u.id}, seen, is not drawn (${JSON.stringify(u)})`)
     }
     const dots = new Map(f.dots.map((d) => [`${d.id}${d.ghost ? 'g' : ''}`, d]))

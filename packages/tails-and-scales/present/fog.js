@@ -14,7 +14,12 @@
 // What fog hides (open question 32, answered): an enemy unit none of the
 // seat's living units sees (the core's own `sight`, any friendly unit to
 // any of its models) has no live figure, label, chip, minimap dot, card,
-// tooltip or pick, and the log lines and dice rows that name it go; where
+// tooltip or pick, and the log lines and dice rows that name it go. (F9a)
+// A rider is off the table: it is no eye (its hull sees for it), it is
+// seen exactly when its hull is (its figures stand on the hull's deck),
+// and while it rides it leaves no ghost of its own (the hull's ghost is
+// where it was last seen; one seen on the table before it boarded keeps
+// that ghost, as any unit does, until its place is seen empty); where
 // it was last seen a greyed figure stands as it then stood (its models,
 // its wounds), until it is seen again, or seen to be gone (its last place
 // in sight and empty, or the unit fallen in sight). The scenery likewise
@@ -102,7 +107,8 @@ export const fogLands = (events) => events.filter((e) => e.t === 'blast.land' ||
 // or null. Returns { units: Set, places: Set, chunks: Set, lands: [bool] }.
 export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = [] }, cache = null) {
   const mine = [], foes = []
-  for (const u of G.units) if (q.alive(u)) (u.side === seat ? mine : foes).push(u)
+  // ((F9a) riders aside: off the table, seen with their hulls below)
+  for (const u of G.units) if (q.alive(u) && !u.aboard) (u.side === seat ? mine : foes).push(u)
   if (cache) {
     const tk = terrainKey(G)
     if (cache.get('terrain') !== tk) {
@@ -126,6 +132,8 @@ export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = 
   }
   const units = new Set()
   for (const e of foes) if (mine.some((f) => pair(f, e))) units.add(e.id)
+  // ((F9a) an enemy rider is seen exactly when its hull is)
+  for (const u of G.units) if (q.alive(u) && u.aboard && u.side !== seat && units.has(u.aboard)) units.add(u.id)
   // a stand-in seen by any friendly unit (its cover never asked: false)
   const probe = (b) => mine.some((f) => q.sight(G, f, b, f.pos, false).visible)
   const point = (x, z, y) => ({ id: -1, side: -1, t: { chest: y - q.floorAt(G, x, z), eye: 0, models: 1 }, pos: { x, z }, r: 0, models: [{ alive: true, w: 1, ox: 0, oz: 0 }] })
@@ -185,7 +193,10 @@ export function fogStep(F, M, sideOf, sees) {
     const mu = M.units[id]
     if (mu.alive > 0 && sees.units.has(id)) {
       seen.add(id)
-      last.set(id, recOf(mu))
+      // ((F9a) a rider seen on its hull's deck leaves no record of its own:
+      // its hull's ghost stands for it)
+      if (mu.aboard) last.delete(id)
+      else last.set(id, recOf(mu))
       known.set(id, mu.alive)
     } else if (!(mu.alive > 0) && F.seen.has(id)) {
       fell.add(id)
@@ -285,8 +296,9 @@ export const fogStale = (F, M, id) => !!F?.table && !F.over && !sameChunk(F.tabl
 // hide by the unit (fogOpen's live set): they are never marked here.
 const OWN = new Set(['phase.start', 'round.scored', 'stage', 'game.over'])
 const OPENS = new Set(['focus', 'unit.face', 'tray.open'])
-const DEEDS = new Set(['unit.move', 'unit.place', 'volley', 'melee', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'charge.result', 'unit.flee'])
-const ACTS = new Set(['unit.face', 'volley', 'melee', 'charge.result', 'spell.cast', 'spell.fizzle', 'spell.gaze', 'spell.thorns', 'blast.fire', 'unit.move', 'unit.place'])
+// ((F9a) a unit boarding or stepping off its hull acts as a walker does)
+const DEEDS = new Set(['unit.move', 'unit.place', 'volley', 'melee', 'blast.aim', 'blast.fire', 'spell.cast', 'spell.fizzle', 'spell.thorns', 'charge.result', 'unit.flee', 'unit.embark', 'unit.disembark'])
+const ACTS = new Set(['unit.face', 'volley', 'melee', 'charge.result', 'spell.cast', 'spell.fizzle', 'spell.gaze', 'spell.thorns', 'blast.fire', 'unit.move', 'unit.place', 'unit.embark', 'unit.disembark'])
 const TERRAIN = new Set(['terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble'])
 const VICTIM = /^(⚠ )?.+: \d+ hits? · wound/
 // the name a line or a tray title starts with
