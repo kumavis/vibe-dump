@@ -1,13 +1,19 @@
 // Units as the rules see them: a squad of models that moves as one disc.
 //
 //   { id, key, t, side, race, pos: { x, z }, r, alive, lost, mesmerized,
+//     snared, warded, resolute,
 //     flags: { moved, advanced, advRoll, fellBack, shot, charged, chargeTried,
 //              chargeTarget, fought },
 //     models: [{ w, alive, ox, oz }] }
 //
 // `t` is the unit's type (data/schema.js), `alive` the count of models still
 // standing, `r` the disc's radius, and each model's (ox, oz) its slot in the
-// formation around `pos`. Where a figure is drawn this frame, which way it
+// formation around `pos`. (V3c) What the casters' spells left on it, each
+// false until one does (core/actions/shoot.js; core/hash.js's UNIT_EXTRAS):
+// `snared` (Root Snare: no move or charge until the end of its next turn),
+// `warded` (Barkskin: its saves one better until its side's next turn) and
+// `resolute` (Cold Blood: no morale test, a failed charge re-rolled, until
+// then). Where a figure is drawn this frame, which way it
 // faces and how it lunges or falls is the view's (view/units.js), never read
 // here.
 import { hypot, sin, cos, atan2 } from './dmath.js'
@@ -34,6 +40,7 @@ export function makeUnit(G, key, side) {
   const u = {
     id: G.nextUnitId++, key, t, side, race: race.key,
     pos: { x: 0, z: 0 }, models: [], alive: t.models, r: 0, flags: {}, lost: 0, mesmerized: false,
+    snared: false, warded: false, resolute: false,
   }
   for (let i = 0; i < t.models; i++) u.models.push({ w: t.W, alive: true, ox: 0, oz: 0 })
   relayout(u)

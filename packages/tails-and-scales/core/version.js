@@ -86,5 +86,9 @@ export const RULES_ID = rulesId()
 // and mission, and the AI's keg terms; and with it the tower ring's fix,
 // `fortified`'s `largeCentre` (the rock box where the ring stood on Field
 // and Grand boards): RULES_ID moves with the hazards, the set and the
-// mission)
-export const CORE_VERSION = 10
+// mission; 11: V3c's spells, three a caster (the race data's `spells`, so
+// RULES_ID moves), the `shoot` command's `sp`, Barkskin's ward, Root
+// Snare's snare and Cold Blood's resolve on a unit (stateHash's
+// UNIT_EXTRAS) and their ends, Venom Mist's template that spares the
+// scenery, and the AI's choice of spell and target)
+export const CORE_VERSION = 11

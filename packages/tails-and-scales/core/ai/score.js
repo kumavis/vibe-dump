@@ -9,10 +9,10 @@
 // every peer, and bestSpot's tie-breaks draw from the match's own dice, one
 // draw per lattice cell that passes `isFinite(res.dist[i]) && validEnd`, in
 // the lattice's order (rule 6). Everything else here only reads the match.
-import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
+import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot } from '../dmath.js'
-import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf } from '../queries.js'
+import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 import { friendsUnder } from '../actions/shoot.js'
 import { HAZARDS } from '../../data/hazards.js'
@@ -39,11 +39,11 @@ export function strayCost(n, need, w, fight) {
 // `e` would take (friendsUnder: who it would catch there, u itself
 // included), each friend by expected over its models under it, a big one's
 // D3+1 hits as 3 (as the value of the target's own): one template's cost
-// on a hit. A scatter's cost is the policy's (aiShoot's own lads).
-export function ownUnder(G, u, e) {
-  const w = u.t.ranged
+// on a hit. A scatter's cost is the policy's (aiShoot's own lads). ((V3c)
+// `w`: the weapon, a caster's spell; its ranged weapon by default)
+export function ownUnder(G, u, e, w = u.t.ranged) {
   let cost = 0
-  for (const { v, under } of friendsUnder(G, u, e)) cost += expected(v.t.big ? 3 : under, 1, w, v, inCover(G, v)).value
+  for (const { v, under } of friendsUnder(G, u, e, w)) cost += expected(v.t.big ? 3 : under, 1, w, v, inCover(G, v)).value
   return cost
 }
 
@@ -165,11 +165,14 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // (F19a; rule 10: it bumps with F19a) The guns' template is also worth the
 // powder kegs it would set off landing on `e` (kegGain), once a shot, on
 // its hit: nothing where no keg stands.
-export function shotValue(G, u, e, from, moved, pre = null) {
-  const w = u.t.ranged
+//
+// (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
+// strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
+// by default; `pre` is only ever its ranged weapon's.
+export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
   if (!w) return 0
   const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
-  if (g > rangeOf(G, u, e, from)) return 0
+  if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0
   const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
@@ -182,13 +185,93 @@ export function shotValue(G, u, e, from, moved, pre = null) {
   if (w.blast) {
     const pHit = w.spell ? p2D6(w.spell) : pD6(hitNeed(u.t.BS, mod))
     const under = e.t.big ? 3 : Math.max(1, Math.min(e.alive, Math.round(e.alive * Math.min(1, (w.blast * w.blast) / (e.r * e.r)) * 0.8)))
-    const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e)))
+    const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e, w)))
     const keg = pre ? pre.keg : kegGain(G, u, e)
     return keg ? value + pHit * keg : value
   }
   const n = attackCount(u, w, false), need = hitNeed(u.t.BS, mod)
   const fight = pre ? pre.fight : fightOf(G, u, e)
   return expected(n, need, w, e, s.cover).value - (fight ? strayCost(n, need, w, fight) : 0)
+}
+
+// ── (V3c) The casters' spells ───────────────────────────────────────────────
+// What a caster's spell `sp` cast on `e` from where it stands is worth to
+// the AI (rule 10: it bumps with V3c), each by the cast's odds (p2D6): an
+// eruption (Thornburst, Venom Mist) and the gaze (Mesmerize) as shotValue
+// values them, struck where the caster stands; a snare (Root Snare) by the
+// charge it denies and the ground it keeps the target from (snareGain); a
+// ward (Barkskin) by the saves it adds to a friend in danger (wardGain ×
+// its points × exposure); a resolve (Cold Blood) by the charge roll it may
+// give again and the nerve it keeps (resolveGain). A mark already on its
+// target is worth nothing. Pure, no draw: the policy's choice of spell and
+// target (core/ai/policy.js bestCast), and the shooting tool's default.
+export function spellValue(G, u, sp, e, moved = !!u.flags.moved) {
+  const w = u.t.spells[sp]
+  const p = p2D6(w.spell)
+  if (w.ward) return e.warded ? 0 : p * worth(e) * exposure(G, e) * wardGain(e)
+  if (w.resolve) return e.resolute ? 0 : p * resolveGain(G, e)
+  if (w.snare) return e.snared ? 0 : p * snareGain(G, u, e)
+  return shotValue(G, u, e, u.pos, moved, null, w)
+}
+
+// How much of `f` is in danger before its side's next turn, as a share of
+// its points: locked in a fight 0.35, an enemy brawler free to charge it
+// within its move and an average charge 0.3, an enemy gun in range 0.2,
+// else 0.05.
+export function exposure(G, f) {
+  if (isEngaged(G, f)) return 0.35
+  let x = 0.05
+  for (const e of enemiesOf(G, f)) {
+    const g = gap(e, f)
+    if (e.t.brawler && !e.t.noCharge && !e.snared && g < e.t.M + 7) return 0.3
+    if (e.t.ranged && g <= e.t.ranged.range) x = 0.2
+  }
+  return x
+}
+
+// The share of the wounds `f` fails to save that a ward saves (its save one
+// better, against an AP 1 blow in the open): 1/3 for a 3+ save, 1/6 for
+// none.
+export function wardGain(f) {
+  const fail = (sv) => 1 - pD6(saveNeed(sv, 1, false))
+  const f0 = fail(f.t.Sv), f1 = fail(f.t.Sv - 1)
+  return f0 > 0 ? (f0 - f1) / f0 : 0
+}
+
+// What a resolve gives `f`: a charge it may still make this turn rolled
+// again on a miss (the best of its targets within 12", p(1 − p) more of
+// reaching it, by the straight gap, worth its fight as the charge term
+// values one), and the nerve of a squad that may lose models before its
+// side's next turn.
+export function resolveGain(G, f) {
+  let v = 0
+  if (canCharge(G, f)) {
+    for (const e of enemiesOf(G, f)) {
+      const g = gap(f, e)
+      if (g > CHARGE_RANGE) continue
+      const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
+      const gain = p * (1 - p) * (meleeValue(f, e) + (e.t.role === 'Artillery' ? 10 : 0))
+      if (gain > v) v = gain
+    }
+  }
+  if (f.t.models > 1 && f.alive > 1) v += worth(f) * exposure(G, f) * 0.3
+  return v
+}
+
+// What a snare on `e` denies `u`'s side: for a brawler free to charge, half
+// the worst its charge could do to one of u's units within its move and a
+// charge; and the ground it can't take, a share of its points (little for
+// a unit that never charges, which rarely moves).
+export function snareGain(G, u, e) {
+  let deny = 0
+  if (e.t.brawler && !e.t.noCharge && !isEngaged(G, e)) {
+    for (const f of G.units) {
+      if (f.side !== u.side || !alive(f) || gap(e, f) > e.t.M + CHARGE_RANGE) continue
+      const v = meleeValue(e, f)
+      if (v > deny) deny = v
+    }
+  }
+  return deny * 0.5 + worth(e) * (e.t.noCharge ? 0.02 : 0.08)
 }
 
 // The cells of the board within `reach` inches of (x, z), as rows and

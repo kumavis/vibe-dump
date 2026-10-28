@@ -6,6 +6,15 @@
 // always has, and a volley's misses may stray into the shooter's own units
 // in the fight.
 //
+// (V3c, DESIGN §4.1 rule 29) A caster has several spells (its type's
+// `spells`, data/schema.js) and casts one a shooting phase, the one its
+// command names (`sp`; none: its first, which is its ranged weapon): one
+// erupting under its target (Thornburst's thorns, Venom Mist's cloud, which
+// spares the scenery), one marking its target (Mesmerize, Root Snare's
+// snare), or one cast on a friend, the caster itself included, within its
+// range and with no need to see it (allySpell: Barkskin's ward, Cold
+// Blood's resolve). Every one is the 2D6 cast first, a fizzle on a miss.
+//
 // Synchronous, like damage.js: what the old code waited on is an event in
 // the match's out at the same place (DESIGN §2.3, §4.1 rule 3): the tray's
 // title and each row of dice (`tray.open`, `dice`), the beat after a
@@ -23,10 +32,18 @@
 //   blast.land       { x, z, r, fx }   it lands: an explosion, a ring
 //   spell.cast       { u }             u's cast roll made it
 //   spell.fizzle     { u }             it didn't
-//   spell.thorns     { u, x, z, r }    thorns burst up through the turf
+//   spell.thorns     { u, x, z, r, fx } an eruption: thorns burst up through
+//                                      the turf (fx 'thorns'), or (V3c) a
+//                                      venom mist billows up (fx 'mist');
+//                                      the event keeps the first one's name
 //   spell.fade       { u }             and sink back, once they are done
 //   spell.gaze       { u, tg }         u's gaze reaches tg
 //   spell.mesmerized { u, tg }         tg is mesmerized
+//   spell.snare      { u, tg }         (V3c) roots burst up round tg and
+//                                      bind it
+//   spell.ward       { u, tg, fx }     (V3c) u's spell settles on its
+//                                      friend tg: a ward (fx 'bark') or a
+//                                      resolve (fx 'coil')
 //
 // Units go by id. `fx` is the weapon's look, which the rules carry to the
 // view and never test. Nothing here ends the action (its state line in the
@@ -35,8 +52,10 @@
 // finishAction after it (DESIGN §2.2's (R6a) note).
 // The orders of §4.1 rule 4 (a template's draws; a blast's victims; the
 // gaze's D3) and rule 5 (the dice roll even when there is no save to make)
-// are kept exactly.
-import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount } from '../rules.js'
+// are kept exactly. (V3c) A snare and a spell on a friend draw nothing
+// but their cast; every save reads the target's own (rules.js svOf: one
+// better while warded).
+import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount, svOf } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, hypot3, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
@@ -46,6 +65,16 @@ import { damage } from './damage.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { kegsIn } from '../terrain/terrain.js'
 
+// (V3c) The weapon a shot or a cast uses: the unit's ranged weapon, or with
+// `sp` its spell of that index; null for a spell it doesn't have (the
+// `shoot` command refuses one first: core/commands.js).
+export const weaponOf = (u, sp) => (sp === undefined ? u.t.ranged : u.t.spells?.[sp] ?? null)
+// (V3c) A spell cast on a friend: a ward (Barkskin) or a resolve (Cold
+// Blood).
+export const allySpell = (w) => !!w && !!(w.ward || w.resolve)
+
+// May `u` shoot (or (V3c) cast) at all this phase: one shot or one spell a
+// phase, as ever (its `shot` flag).
 export function canShoot(G, u) {
   const w = u.t.ranged
   if (!w || !alive(u) || u.flags.shot) return false
@@ -65,9 +94,10 @@ export function canShoot(G, u) {
 // printed range from anywhere.
 export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)
 
-// How far `u`'s ranged weapon reaches `tg` from `from` (where it stands, by
-// default; the AI scores the cells it might move to), or with no `tg` the
-// ground under it (the overlay's ring: h its own floor). Without height the
+// How far `u`'s ranged weapon (or (V3c) its spell `sp`) reaches `tg` from
+// `from` (where it stands, by default; the AI scores the cells it might
+// move to), or with no `tg` the ground under it (the overlay's ring: h its
+// own floor). Without height the
 // printed range itself, the classic expression (§4.1 rule 18: a path of its
 // own, never the formula with h = 0); with it, a lobbed weapon's reach as
 // above (level, the printed range exactly), anything else the printed range.
@@ -75,8 +105,8 @@ export const lobbed = (w) => !!w && !w.spell && !!(w.blast || w.indirect)
 // than half the range) reaches 0. Pure, under the lock like every query:
 // shotInfo's range test reads it, and the AI's (core/ai/score.js), and
 // through the queries the tooltip's inches and the overlay's ring.
-export function rangeOf(G, u, tg = null, from = u.pos) {
-  const w = u.t.ranged
+export function rangeOf(G, u, tg = null, from = u.pos, sp = undefined) {
+  const w = weaponOf(u, sp)
   if (!G.nav.hasHeight || !lobbed(w)) return w.range
   const R = w.range, h = floorAt(G, from.x, from.z) - (tg ? groundY(G, tg) : 0)
   if (h === 0) return R
@@ -98,16 +128,32 @@ export function rangeOf(G, u, tg = null, from = u.pos) {
 // template landing square on the target would catch (friendsUnder): what
 // the tooltip warns of. The shooter itself still may not shoot while it is
 // engaged (canShoot).
-export function shotInfo(G, u, target) {
-  const w = u.t.ranged
-  const range = gap(u, target), reach = rangeOf(G, u, target)
+//
+// (V3c) `sp` names a caster's spell (none: its ranged weapon, its first).
+// A spell cast on a friend (allySpell) takes a unit of the caster's own
+// side, the caster itself among them, within the spell's range, seen or
+// not: { ok, range (the gap; 0 for the caster), reach (the spell's range),
+// ally: true }. Anything else is shot at an enemy, never a friend. Neither
+// asks whether the target stands (the command's own rule,
+// core/commands.js mine and foe).
+export function shotInfo(G, u, target, sp) {
+  const w = weaponOf(u, sp)
+  if (!w) return { ok: false, why: `no spell ${sp}` }
+  if (allySpell(w)) {
+    if (target.side !== u.side) return { ok: false, why: `${w.name} is cast on a friend` }
+    const range = target === u ? 0 : gap(u, target)
+    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
+    return { ok: true, range, reach: w.range, ally: true }
+  }
+  if (target.side === u.side) return { ok: false, why: 'one of your own' }
+  const range = gap(u, target), reach = rangeOf(G, u, target, u.pos, sp)
   if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
   const s = sight(G, u, target)
   if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
   let mod = 0
   if (w.heavy && u.flags.moved) mod++
   if (w.indirect && !s.visible) mod++
-  return { ok: true, range, reach, ...s, mod, need: hitNeed(u.t.BS, mod), fight: fightOf(G, u, target), under: w.blast ? friendsUnder(G, u, target) : null }
+  return { ok: true, range, reach, ...s, mod, need: hitNeed(u.t.BS, mod), fight: fightOf(G, u, target), under: w.blast ? friendsUnder(G, u, target, w) : null }
 }
 
 // (F18) Who of `u`'s own side (u itself among them: a template spares
@@ -116,8 +162,8 @@ export function shotInfo(G, u, target) {
 // G.units order, `under` the count of v's models under it, by blastLands'
 // own test (modelsUnder); [] for a weapon with no template. The tooltip's
 // warning and the AI's cost (core/ai/score.js) read it; nothing rolls on it.
-export function friendsUnder(G, u, tg) {
-  const w = u.t.ranged
+// ((V3c) `w`: the weapon, a caster's spell; its ranged weapon by default)
+export function friendsUnder(G, u, tg, w = u.t.ranged) {
   if (!w?.blast) return []
   const land = { x: tg.pos.x, z: tg.pos.z }, ly = G.nav.hasHeight ? floorAt(G, land.x, land.z) : 0
   const out = []
@@ -129,18 +175,36 @@ export function friendsUnder(G, u, tg) {
   return out
 }
 
-export function shootTargets(G, u) {
+// Whom `u` may shoot now, or (V3c) cast its spell `sp` on: the enemies
+// shotInfo takes, or for a spell cast on a friend the standing friends it
+// takes (the caster among them), in G.units order.
+export function shootTargets(G, u, sp) {
   if (!canShoot(G, u)) return []
-  return enemiesOf(G, u).filter((e) => shotInfo(G, u, e).ok)
+  const w = weaponOf(u, sp)
+  if (!w) return []
+  const pool = allySpell(w) ? G.units.filter((f) => f.side === u.side && alive(f)) : enemiesOf(G, u)
+  return pool.filter((e) => shotInfo(G, u, e, sp).ok)
+}
+
+// (V3c) Whether `u` has anything to shoot at or cast on now (canAct's
+// shooting phase): a target for its ranged weapon, or for a caster one for
+// any of its spells (a spell cast on a friend always has the caster
+// itself). For a unit with no spells, its weapon's targets, as ever.
+export function hasTarget(G, u) {
+  const n = u.t.spells?.length ?? 0
+  if (!n) return shootTargets(G, u).length > 0
+  for (let sp = 0; sp < n; sp++) if (shootTargets(G, u, sp).length) return true
+  return false
 }
 
 // ── The shot ────────────────────────────────────────────────────────────────
 // `u` shoots `target` (shotInfo says it may): a spell is cast first (2D6
 // against its number), a blast weapon throws its templates, and anything
-// else is a volley, rolled to hit, to wound and to save.
-export function doShoot(G, u, target) {
-  const w = u.t.ranged
-  const info = shotInfo(G, u, target)
+// else is a volley, rolled to hit, to wound and to save. (V3c) `sp`: the
+// caster's spell (none: its first).
+export function doShoot(G, u, target, sp) {
+  const w = weaponOf(u, sp)
+  const info = shotInfo(G, u, target, sp)
   u.flags.shot = true
   emit(G, 'unit.face', { u: u.id, tg: target.id })
   emit(G, 'tray.open', { title: `${u.t.short} → ${target.t.short} · ${w.name}` })
@@ -155,6 +219,8 @@ export function doShoot(G, u, target) {
     }
     emit(G, 'spell.cast', { u: u.id })
     if (w.mesmerize) return mesmerize(G, u, target)
+    if (w.snare) return snare(G, u, target, w)
+    if (allySpell(w)) return bless(G, u, target, w)
     log(G, u.side, `<b>${u.t.short}</b> casts <b>${w.name}</b> on ${target.t.short}!`)
     return eruption(G, u, target, w)
   }
@@ -180,11 +246,11 @@ export function doShoot(G, u, target) {
   const wd = roll(G, h)
   const wounds = passes(wd, wn)
   if (h) emit(G, 'dice', { label: `Wound ${wn}+`, dice: wd, need: wn })
-  const sn = saveNeed(target.t.Sv, w.AP, info.cover)
+  const sn = saveNeed(svOf(target), w.AP, info.cover)
   // (the dice roll even when there is no save to make: §4.1 rule 5)
   const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
-  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${info.cover ? ' (cover)' : ''}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
+  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${saveWhy(target, info.cover)}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
   const killed = damage(G, target, unsaved, w.D, u)
   log(G, u.side, `<b>${u.t.short}</b> shoot ${target.t.short}: ${h} hit, ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   // (the target's rows and line first, then the friends')
@@ -202,10 +268,10 @@ function strayHits(G, u, f, n, w) {
   const wounds = passes(wd, wn)
   emit(G, 'dice', { label: `⚠ ${f.t.short}: ${n} stray hit${n > 1 ? 's' : ''} · wound ${wn}+`, dice: wd, need: wn })
   const cover = inCover(G, f)
-  const sn = saveNeed(f.t.Sv, w.AP, cover)
+  const sn = saveNeed(svOf(f), w.AP, cover)
   const sv = roll(G, wounds)
   const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
-  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${cover ? ' (cover)' : ''}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
+  if (wounds) emit(G, 'dice', { label: sn > 6 ? 'No save' : `Save ${sn}+${saveWhy(f, cover)}`, dice: sn > 6 ? [] : sv, need: sn, save: true })
   const killed = damage(G, f, unsaved, w.D, u)
   log(G, u.side, `<b>Friendly fire!</b> ${n} stray shot${n > 1 ? 's' : ''} hit ${f.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
 }
@@ -249,10 +315,11 @@ export function blastVolley(G, u, target, w, info) {
 // A spell that erupts under its target (the cast was its roll: no hit roll
 // and no scatter): thorns burst up where the target stands, a template there
 // hurts whoever is under it, friend or foe, and the scenery, and then the
-// thorns sink back.
+// thorns sink back. ((V3c) Or Venom Mist's cloud, its look the event's fx,
+// which spares the scenery: its `scenery` 0, landing's.)
 export function eruption(G, u, target, w) {
   const land = { x: target.pos.x, z: target.pos.z }
-  emit(G, 'spell.thorns', { u: u.id, x: land.x, z: land.z, r: w.blast })
+  emit(G, 'spell.thorns', { u: u.id, x: land.x, z: land.z, r: w.blast, fx: w.fx })
   blastLands(G, u, land, w)
   emit(G, 'spell.fade', { u: u.id })
 }
@@ -322,18 +389,21 @@ function landing(G, u, land, w, from = u.pos) {
     const wounds = passes(wd, wn)
     emit(G, 'dice', { label: `${friendly ? '⚠ ' : ''}${v.t.short}: ${hits} hit${hits > 1 ? 's' : ''} · wound ${wn}+`, dice: wd, need: wn })
     const cover = inCover(G, v)
-    const sn = saveNeed(v.t.Sv, w.AP, cover)
+    const sn = saveNeed(svOf(v), w.AP, cover)
     // (the dice roll even when there is no save to make: §4.1 rule 5)
     const sv = roll(G, wounds)
     const unsaved = sn > 6 ? wounds : wounds - passes(sv, sn)
-    if (wounds && sn <= 6) emit(G, 'dice', { label: `Save ${sn}+${cover ? ' (cover)' : ''}`, dice: sv, need: sn, save: true })
+    if (wounds && sn <= 6) emit(G, 'dice', { label: `Save ${sn}+${saveWhy(v, cover)}`, dice: sv, need: sn, save: true })
     const killed = damage(G, v, unsaved, w.D, u, under, from)
     log(G, u.side, `${friendly ? '<b>Friendly fire!</b> ' : ''}${w.name} hits ${v.t.short}: ${wounds} wound, ${unsaved} unsaved${killed ? ` — <b>${killed} slain</b>` : ''}.`)
   }
   if (!victims.length) emit(G, 'pause', { s: 0.25 })
-  const broke = G.nav.hasHeight
-    ? G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes, y: ly + 0.5 }, G.out)
-    : G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
+  // ((V3c) a template of scenery 0, Venom Mist's, wrecks nothing, and so
+  // sets no keg off)
+  const broke = w.scenery === 0 ? []
+    : G.nav.hasHeight
+      ? G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes, y: ly + 0.5 }, G.out)
+      : G.terrain.blast(land.x, land.z, w.blast, w.scenery || 1, { acid: !!w.corrodes }, G.out)
   if (broke.length) log(G, u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   // (the nav follows the scenery, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
@@ -365,3 +435,38 @@ export function mesmerize(G, u, target) {
   emit(G, 'spell.mesmerized', { u: u.id, tg: target.id })
   log(G, u.side, `<b>${u.t.short}</b> mesmerizes ${target.t.short}: ${mw} mortal wound${mw > 1 ? 's' : ''}${killed ? `, <b>${killed} slain</b>` : ''}. It can't shoot or charge next turn.`)
 }
+
+// (V3c, DESIGN §4.1 rule 29) Root Snare: roots burst up round `target` and
+// bind it until the end of its own next turn (core/engine.js endSpells, as
+// mesmerism wears off): it may not move, advance or fall back
+// (core/commands.js) nor charge (charge.js canCharge); it still shoots and
+// fights. Nothing drawn but the cast.
+export function snare(G, u, target, w) {
+  emit(G, 'spell.snare', { u: u.id, tg: target.id })
+  target.snared = true
+  // its label says so
+  if (G.out) emit(G, 'status', statusOf(G))
+  log(G, u.side, `<b>${u.t.short}</b> binds ${target.t.short} with <b>${w.name}</b>: it can't move or charge next turn.`)
+}
+
+// (V3c, §4.1 rule 29) A spell cast on a friend (allySpell) settles on
+// `target` until its side's next turn begins (core/engine.js resetTurn
+// takes it off): a ward (Barkskin: its saves one better, rules.js svOf) or
+// a resolve (Cold Blood: no morale test, morale.js; a failed charge roll
+// rolled again, charge.js). Nothing drawn but the cast. The spell's look
+// rides on its event, which the two share.
+export function bless(G, u, target, w) {
+  emit(G, 'spell.ward', { u: u.id, tg: target.id, fx: w.fx })
+  if (w.ward) target.warded = true
+  else target.resolute = true
+  if (G.out) emit(G, 'status', statusOf(G))
+  const who = target === u ? 'itself' : target.t.short
+  log(G, u.side, w.ward
+    ? `<b>${u.t.short}</b> wraps ${who} in <b>${w.name}</b>: +1 to its saves until its next turn.`
+    : `<b>${u.t.short}</b> steels ${who} with <b>${w.name}</b>: no morale test, and a failed charge rolled again, until its next turn.`)
+}
+
+// (V3c) Why a save row needs what it needs, after its number: cover's +1
+// and a ward's (the dice row's label, which the view shows and no rule
+// reads)
+const saveWhy = (u, cover) => (cover || u.warded ? ` (${[cover && 'cover', u.warded && 'ward'].filter(Boolean).join(', ')})` : '')

@@ -23,10 +23,26 @@
 //   UnitDef = { name, short, role, ai, models, base, pts, cost,
 //               stats: 'M7 WS4 BS4 S3 T3 W1 A1 Ld6 Sv6 OC2',
 //               ranged: Weapon | null, melee: Weapon, abilities: [text…],
+//               (V3c) spells?: [Spell…] in ranged's place,
 //               fly?, big?, hero?, wrecker?, burrow?, chargeAfterAdvance?,
 //               noCharge?, brawler?, climb?, swarm?: { min }, swoop?: { chargeS } }
 //   Weapon  = { name, range?, shots?, S, AP, D, assault?, heavy?, indirect?,
-//               blast?, scenery?, poison?, corrodes?, spell?, mesmerize?, fx? }
+//               blast?, scenery?, poison?, corrodes?, spell?, mesmerize?,
+//               ward?, snare?, resolve?, fx? }
+//
+// (V3c, DESIGN §2.8) A caster's spells: `spells`, one to nine weapons each
+// with its cast value (`spell`, 2D6 ≥ it), given instead of `ranged`; the
+// unit's `ranged` is its first spell, the very record (so every rule that
+// reads a unit's ranged weapon reads that one, as before there were
+// several), and a `shoot` command's `sp` names the one it casts
+// (core/commands.js). A spell either strikes as a weapon does (a template
+// erupting under its target: blast, S, AP, D; scenery 0 wrecks nothing) or
+// carries exactly one effect, which strikes by its own rules and needs no
+// S, AP or D: mesmerize (D3 mortal wounds, the target mesmerized), snare
+// (the target can't move or charge until the end of its next turn), ward
+// (a friend saves at +1 until the caster's next turn) or resolve (a friend
+// takes no morale test and re-rolls a failed charge until then). A ward or
+// resolve spell is cast on a friend (core/actions/shoot.js allySpell).
 //
 // Derived, unless the unit sets them itself:
 //   hero     = role is Hero                 noCharge = role is Artillery
@@ -64,10 +80,12 @@ export const AI_ROLES = Object.freeze(['melee', 'raider', 'line', 'shooter', 'he
 // unit flags; each is a boolean on every normalised type
 export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler', 'climb'])
 
-const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'cost', 'stats', 'ranged', 'melee', 'abilities',
+const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'cost', 'stats', 'ranged', 'spells', 'melee', 'abilities',
   ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop'])
 const WEAPON_NUMS = ['range', 'shots', 'S', 'AP', 'D', 'blast', 'scenery', 'poison', 'spell']
-const WEAPON_BOOLS = ['assault', 'heavy', 'indirect', 'corrodes', 'mesmerize']
+const WEAPON_BOOLS = ['assault', 'heavy', 'indirect', 'corrodes', 'mesmerize', 'ward', 'snare', 'resolve']
+// (V3c) a spell's effects, each struck by its own rules (at most one a spell)
+const EFFECTS = ['mesmerize', 'ward', 'snare', 'resolve']
 const WEAPON_KEYS = new Set(['name', 'fx', ...WEAPON_NUMS, ...WEAPON_BOOLS])
 const MOVES = ['walk', 'fly', 'wreck', 'burrow']
 const ROWS = ['front', 'mid', 'back']
@@ -109,12 +127,15 @@ function weapon(w, where, melee) {
   const strike = ['S', 'AP', 'D']
   if (melee) {
     for (const k of strike) if (w[k] === undefined) throw bad(`a melee weapon needs ${k}`)
-    for (const k of ['range', 'shots', 'blast', 'spell', 'mesmerize', 'indirect', 'heavy', 'assault']) if (w[k] !== undefined) throw bad(`a melee weapon has no ${k}`)
+    for (const k of ['range', 'shots', 'blast', 'spell', 'indirect', 'heavy', 'assault', ...EFFECTS]) if (w[k] !== undefined) throw bad(`a melee weapon has no ${k}`)
   } else {
     if (w.range === undefined) throw bad('a ranged weapon needs a range')
-    // a mesmerize spell strikes with its own rules; anything else rolls to hit
-    if (!w.mesmerize) for (const k of ['shots', ...strike]) if (w[k] === undefined) throw bad(`a ranged weapon needs ${k}`)
-    if (w.mesmerize && !w.spell) throw bad('mesmerize is a spell: give it a cast value')
+    // a spell's effect (mesmerize, (V3c) ward, snare, resolve) strikes with
+    // its own rules; anything else rolls to hit
+    const effects = EFFECTS.filter((k) => w[k])
+    if (effects.length > 1) throw bad(`a spell has one effect, not ${effects.join(' and ')}`)
+    if (!effects.length) for (const k of ['shots', ...strike]) if (w[k] === undefined) throw bad(`a ranged weapon needs ${k}`)
+    if (effects.length && !w.spell) throw bad(`${effects[0]} is a spell: give it a cast value`)
   }
   return { ...w }
 }
@@ -144,7 +165,18 @@ function unitType(race, key, def) {
   } catch (e) {
     throw bad(e.message)
   }
-  const ranged = def.ranged === null ? null : weapon(def.ranged, `${where}, ranged`, false)
+  // ((V3c) a caster's spells, in ranged's place: its ranged weapon is the
+  // first of them, the same frozen record)
+  let ranged, spells = null
+  if (def.spells !== undefined) {
+    if (def.ranged !== undefined) throw bad('a caster gives its spells, not a ranged weapon: its ranged weapon is its first spell')
+    if (!Array.isArray(def.spells) || !def.spells.length || def.spells.length > 9) throw bad('spells is a list of one to nine spells')
+    spells = def.spells.map((w, i) => weapon(w, `${where}, spell ${i}`, false))
+    spells.forEach((w, i) => {
+      if (!w.spell) throw bad(`spell ${i} (${w.name}) needs a cast value`)
+    })
+    ranged = spells[0]
+  } else ranged = def.ranged === null ? null : weapon(def.ranged, `${where}, ranged`, false)
   const melee = weapon(def.melee, `${where}, melee`, true)
 
   const flag = (k, dflt) => (def[k] === undefined ? dflt : def[k])
@@ -167,6 +199,7 @@ function unitType(race, key, def) {
     eye: def.eye ?? (big ? 1.9 : fly ? 1.5 : 0.95),
     chest: def.chest ?? (big ? 1.0 : fly ? 1.0 : 0.55),
   }
+  if (spells) t.spells = spells
   if (def.swarm) t.swarm = { min: def.swarm.min }
   if (def.swoop) t.swoop = { chargeS: def.swoop.chargeS }
   return t

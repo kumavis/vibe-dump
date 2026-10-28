@@ -58,9 +58,15 @@ export default {
     elder: {
       name: 'Elder Chitterwick', short: 'Elder', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 60, hero: true,
       stats: 'M6 WS3 BS3 S4 T4 W5 A3 Ld9 Sv4 OC1',
-      ranged: { name: 'Thornburst', spell: 6, range: 18, shots: 1, blast: 2.4, S: 5, AP: 2, D: 1, scenery: 2, fx: 'thorns' },
+      // (V3c) three spells, one cast a shooting phase, the player's pick:
+      // the first is his ranged weapon as it always was (data/schema.js)
+      spells: [
+        { name: 'Thornburst', spell: 6, range: 18, shots: 1, blast: 2.4, S: 5, AP: 2, D: 1, scenery: 2, fx: 'thorns' },
+        { name: 'Barkskin', spell: 5, range: 12, ward: true, fx: 'bark' },
+        { name: 'Root Snare', spell: 7, range: 18, snare: true, fx: 'roots' },
+      ],
       melee: { name: 'Rootwood staff', S: 5, AP: 1, D: 2 },
-      abilities: [`Spell — cast on 2D6 ≥ 6: thorns erupt under the target, no scatter.`, `Grey whiskers — friends within ${AURA}" use his Ld 9.`],
+      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; Thornburst erupts under the target, no scatter.', `Grey whiskers — friends within ${AURA}" use his Ld 9.`],
     },
   },
 }

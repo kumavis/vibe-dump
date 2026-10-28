@@ -57,8 +57,10 @@ const val = (v) => (typeof v === 'number' ? num(v) : String(v))
 const flagsOf = (f) => Object.keys(f).filter((k) => f[k] !== undefined).sort().map((k) => `${k}=${String(f[k])}`).join(',')
 
 // The unit fields features add beyond the classic ones, each with its
-// default: none yet (F9's `aboard: 0` will be the first).
-export const UNIT_EXTRAS = Object.freeze({})
+// default: (V3c) the spells' marks, Root Snare's `snared`, Barkskin's
+// `warded` and Cold Blood's `resolute` (core/units.js), each false until a
+// spell sets it.
+export const UNIT_EXTRAS = Object.freeze({ resolute: false, snared: false, warded: false })
 
 // A unit's extras as shadowState prints them: `key=value` in sorted keys,
 // each only where the unit holds a value other than its default (a field

@@ -8,7 +8,10 @@
 //   advance {u}       move phase: a D6 more inches (no shooting unless assault,
 //                     no charge unless it may charge after advancing)
 //   move {u, c}       move phase: move, advance's move, or fall back, to cell c
-//   shoot {u, tg}     shoot phase
+//   shoot {u, tg, sp?} shoot phase; (V3c) a caster's `sp` names the spell it
+//                     casts (its index in the type's `spells`; none: its
+//                     first), and a spell cast on a friend takes one of
+//                     the seat's own units as `tg` (the caster too)
 //   charge {u, tg}    charge phase: declare and roll; on contact a seat's own
 //                     charge waits for chargeEnd (the AI's moves the shortest way)
 //   chargeEnd {c}     where the charge ends: a cell the roll reaches, -1 for
@@ -50,7 +53,7 @@ import {
   alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits, groundY,
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
-import { doShoot, kegsGoOff } from './actions/shoot.js'
+import { doShoot, kegsGoOff, weaponOf, allySpell } from './actions/shoot.js'
 import { declareCharge, finishCharge } from './actions/charge.js'
 import { finishAction, gameOver, runAI } from './engine.js'
 
@@ -84,8 +87,8 @@ export const HANDLERS = Object.freeze({
     if (kegs.length) kegsGoOff(G, unit, kegs)
     finishAction(G)
   },
-  shoot(G, seat, { u, tg }) {
-    doShoot(G, unitOf(G, u), unitOf(G, tg))
+  shoot(G, seat, { u, tg, sp }) {
+    doShoot(G, unitOf(G, u), unitOf(G, tg), sp)
     finishAction(G)
   },
   // The charge splits where a seat picks its spot (§2.2): nothing is drawn
@@ -162,7 +165,7 @@ export const RULES = deepFreeze({
   deployed: { k: 'deploy', fields: [] },
   advance: { k: 'phase', phase: 'move', fields: ['u'], ok: (G, seat, { u }) => mine(G, seat, u) ?? mayAdvance(G, unitOf(G, u)) },
   move: { k: 'phase', phase: 'move', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? mayMove(G, unitOf(G, u), c) },
-  shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg)) },
+  shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], opt: ['sp'], ok: (G, seat, { u, tg, sp }) => mine(G, seat, u) ?? hasSpell(unitOf(G, u), sp) ?? (allySpell(weaponOf(unitOf(G, u), sp)) ? mine(G, seat, tg) : foe(G, seat, tg)) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg), sp) },
   charge: { k: 'phase', phase: 'charge', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayCharge(G, unitOf(G, u), unitOf(G, tg)) },
   chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
   end: { k: 'phase', fields: [] },
@@ -237,22 +240,32 @@ function mayConcede(G, seat) {
   return G.turn.wiped >= 0 ? `the battle is decided: seat ${G.turn.wiped} is wiped out` : null
 }
 
+// ((V3c) a unit Root Snare binds may neither advance nor move, a fall back
+// included, until its snare wears off: core/actions/shoot.js snare)
 function mayAdvance(G, u) {
   if (u.flags.moved) return `${u.t.short} has moved`
   if (u.flags.advanced) return `${u.t.short} has advanced`
+  if (u.snared) return `${u.t.short} is snared`
   return isEngaged(G, u) ? `${u.t.short} is in combat` : null
 }
 // Its move this phase (an advance's move on its roll, a fall back when in
 // combat): ending on c, as the plan the move itself will make has it.
 function mayMove(G, u, c) {
   if (u.flags.moved) return `${u.t.short} has moved`
+  if (u.snared) return `${u.t.short} is snared`
   if (!inGrid(G, c) || !validEnd(G, movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), c)) return `${u.t.short} can't end its move on cell ${c}`
   return null
 }
-function mayShoot(G, u, tg) {
+// (V3c) the spell a shot names, when it names one: one of the unit's (a
+// whole number, legal's own rule, from 0 to one less than its spells)
+function hasSpell(u, sp) {
+  if (sp === undefined) return null
+  return u.t.spells && sp >= 0 && sp < u.t.spells.length ? null : `${u.t.short} has no spell ${sp}`
+}
+function mayShoot(G, u, tg, sp) {
   if (!canShoot(G, u)) return `${u.t.short} can't shoot now`
-  const info = shotInfo(G, u, tg)
-  return info.ok ? null : `${u.t.short} can't shoot ${tg.t.short}: ${info.why}`
+  const info = shotInfo(G, u, tg, sp)
+  return info.ok ? null : `${u.t.short} can't ${sp === undefined ? 'shoot' : `cast ${weaponOf(u, sp).name} on`} ${tg.t.short}: ${info.why}`
 }
 function mayCharge(G, u, tg) {
   if (!chargeTargets(G, u).includes(tg)) return `${u.t.short} can't charge ${tg.t.short}`
