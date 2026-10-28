@@ -1217,6 +1217,25 @@ follows N3.
   self-test and input-check's Shift-click fail on HEAD's build alike, not
   this step's. Left: a phone's numbers for both styles (the overlay is
   there for them).
+- [x] **V3b** The online badge in the top-left corner, and ↶ Undo where a
+  phone can reach it (the user: "online / watching counts ui overlaps the
+  other panel. put it proper top left"). View only: no bump, the corpus
+  unchanged. (The badge at 10,10 on every screen, one line stopping short
+  of the HUD, cut with … and whole in its title; the top row laid out by
+  width so the nine tools no longer cover the other seat's name or score
+  below about 1540 px (two rows, then three of smaller buttons, the HUD
+  compact from 1180 px, the log and the perf overlay under the tools); a
+  phone's top stacked (the badge's line, the HUD, the tools, the hint under
+  them, the roster's and log's heads, the perf overlay and the minimap's
+  🗺), the hint no longer under the tools nor the 🗺 on the log; the
+  actions wrapping upward with their height published to the card, the
+  dice tray and the group bar, so Undo, pushed off a phone's left edge in
+  the movement phase, leads the first row; the card over them no taller
+  than the screen above, the minimap raised from its top (or put away for
+  it); the roster never under its head. play-check's layout lane: five
+  screens, classic and Grand, the badge in each state beside the perf
+  overlay with no box of the chrome meeting another, and Undo on the
+  screen in the movement phase. DESIGN §2.11's (V3b) note.)
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
