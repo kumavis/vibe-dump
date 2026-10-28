@@ -159,9 +159,11 @@ const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land'
 const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 // what an attack in a batch waits on before the next may start: a volley
 // PACE.lead, a scatter, a throw and the slower spells their half second
-// (PACE.cost's), the rest nothing (their handlers draw at once); (V3c) the
-// roots of a snare and a spell settling on a friend among the slower spells
-const HOLD = new Set(['blast.scatter', 'blast.fire', 'keg.fuse', 'spell.thorns', 'spell.gaze', 'spell.snare', 'spell.ward'])
+// (PACE.cost's), the rest nothing (their handlers draw at once); (V3c) a
+// snare's roots and a spell settling on a friend among the rest: each
+// plays in about the attacks' own spacing (PACE.brisk), so it holds
+// nothing back (a Grand battle as watched stays within its budget)
+const HOLD = new Set(['blast.scatter', 'blast.fire', 'keg.fuse', 'spell.thorns', 'spell.gaze'])
 export const holdOf = (e) => (e.t === 'volley' ? PACE.lead : HOLD.has(e.t) ? PACE.cost(e) : 0)
 
 export function attacksAt(events, k, sideOf) {

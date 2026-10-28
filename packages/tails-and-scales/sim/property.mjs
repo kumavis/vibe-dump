@@ -193,6 +193,7 @@
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
 //                                         MUTATIONS below must fail it
+//                         [--mutations a,b]   (V3c) only these of them
 // The self-test first runs the same small workload (three corpus battles,
 // ten games) on an unbroken copy, which must pass; a mutation counts as
 // caught only on a property's own failure, never on what the games failed
@@ -220,11 +221,11 @@ try {
   ({ values: a } = parseArgs({
     options: {
       games: { type: 'string' }, seed: { type: 'string' }, only: { type: 'string' }, dir: { type: 'string' }, ref: { type: 'string' },
-      child: { type: 'boolean' }, 'self-test': { type: 'boolean' },
+      child: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' },
     },
   }))
 } catch (e) {
-  console.error(`property: ${e.message}\nusage: node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids> | none] [--dir <packageDir> | --ref <ref>] | --self-test`)
+  console.error(`property: ${e.message}\nusage: node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids> | none] [--dir <packageDir> | --ref <ref>] | --self-test [--mutations a,b]`)
   process.exit(2)
 }
 const whole = (v, d, name) => {
@@ -3589,7 +3590,14 @@ if (a['self-test']) {
   }
   console.log('  unbroken       passes (three corpus battles, ten games)')
   let missed = 0
-  for (const [name, [file, from, to]] of Object.entries(MUTATIONS)) {
+  // ((V3c) --mutations a,b: only these, as present-check's)
+  const picked = a.mutations ? a.mutations.split(',') : Object.keys(MUTATIONS)
+  const unknown = picked.filter((m) => !MUTATIONS[m])
+  if (unknown.length) {
+    console.log(`property self-test: no mutation named ${unknown.join(', ')}`)
+    process.exit(2)
+  }
+  for (const [name, [file, from, to]] of Object.entries(MUTATIONS).filter(([m]) => picked.includes(m))) {
     const pkg = copyCode(dir, join(work, name))
     const f = join(pkg, file)
     const src = readFileSync(f, 'utf8')
@@ -3604,7 +3612,7 @@ if (a['self-test']) {
     if (!bad.length) missed++
   }
   rmSync(work, { recursive: true, force: true })
-  console.log(missed ? `\nproperty self-test FAILED: ${missed} mutation(s) missed or stale` : `\nproperty self-test passed: all ${Object.keys(MUTATIONS).length} mutations caught`)
+  console.log(missed ? `\nproperty self-test FAILED: ${missed} mutation(s) missed or stale` : `\nproperty self-test passed: all ${picked.length} mutations caught`)
   process.exit(missed ? 1 : 0)
 }
 

@@ -133,7 +133,8 @@
 //     that straight on to its line; a template's look the spell's own (the
 //     tray names the weapon: Venom Mist's cloud is not Mesmerize's gaze);
 //     and a charge's roll rolled again (Cold Blood) straight after the
-//     first, which missed.
+//     first, which missed; and as a seat's turn begins (its first
+//     phase.start) none of its units still shown warded or resolute.
 // Over the whole corpus the run fails if it held none of any of these
 // kinds (a line whose text changed would match nothing, and the order it
 // should hold would go unchecked; nor may the walks of flying units or the
@@ -362,6 +363,13 @@ async function page(dir) {
       // the order is the unfogged run's to hold)
       const o = FOG ? '' : order.event(e)
       if (o) miss(`after act ${out.acts} (trace line ${ts.trace.length}): event order: ${o}`)
+      // ((V3c) a ward or a resolve wears off as its side's turn begins, the
+      // labels told so then: by the seat's first phase.start no unit of its
+      // side is shown warded or resolute)
+      if (shownFacts && e.t === 'phase.start' && e.phase === shownFacts.first) {
+        const kept = ts.G.units.filter((u) => u.side === e.side && (M.units[u.id]?.warded || M.units[u.id]?.resolute))
+        if (kept.length) miss(`after act ${out.acts} (trace line ${ts.trace.length}): the mirror begins seat ${e.side}'s turn with ${kept.map((u) => u.t.short).join(', ')} still warded or resolute`)
+      }
       out.events++
       out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
       // a walk's smashes: terrain events played inside it (counted with
