@@ -81,7 +81,9 @@ Object.defineProperty(globalThis, '__ts', {
     if (!missing.length) rec = instrument(v, say)
   },
 })
-globalThis.location = { search: `?fast&debug&lowfi&${query}` }
+// ((V2) and a fragment, empty: app/boot.js reads the figure style and the
+// quality from it too)
+globalThis.location = { search: `?fast&debug&lowfi&${query}`, hash: '' }
 console.log = console.info = console.debug = console.error
 await import(pathToFileURL(join(dir, 'main.js')).href)
 if (!ts) throw new Error(`${dir}/main.js published no window.__ts under ?debug`)

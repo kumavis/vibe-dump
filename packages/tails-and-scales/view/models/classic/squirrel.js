@@ -4,9 +4,14 @@
 // names this kit). userData.anim holds the bits the view wiggles: the
 // bobbing body, the tail, the weapon arm, a trebuchet's throwing arm.
 // ((V2) squirrel() is exported too: the body alone is each splat-fur
-// Bushtail's shadow, view/models/squirrel.js.)
+// Bushtail's shadow, view/models/squirrel.js.) (F9a) And the Acorn
+// War-Cart, the clan's transport (DESIGN §4.2.5): ../warcart.js's machine,
+// which both figure styles share, crewed here by two of these squirrels;
+// its anim's `deck` is the height its riders stand at (view/units.js
+// parents their figures there, at present/deck.js's slots).
 import * as THREE from 'three'
 import { M, glowMat, metal, G, part, rod, shade, wood, roundShield, hold, wheel } from '../kit.js'
+import { warCart } from '../warcart.js'
 
 // ── Squirrel-folk ───────────────────────────────────────────────────────────
 export function squirrel({ fur = '#c96a2d', belly = '#f1dcb5', hat = 'acorn', hatColor = '#6e4a2a', tailUp = 1 } = {}) {
@@ -242,6 +247,17 @@ export const BUILDERS = {
     a.gem = staff.children[1]
     a.gem.userData.keep = true
     return m
+  },
+  // (F9a) The Acorn War-Cart (../warcart.js, the machine both figure styles
+  // share), pushed by two of the crew in acorn caps, both arms forward on
+  // its push bar.
+  warcart() {
+    return warCart((s) => {
+      const crew = squirrel({ fur: s < 0 ? '#c96a2d' : '#b5612b', hatColor: '#5a3c22' })
+      const ca = crew.userData.anim
+      ca.armL.rotation.x = ca.armR.rotation.x = -1.35
+      return crew
+    })
   },
 }
 

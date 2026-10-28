@@ -155,17 +155,27 @@ export class Minimap {
     // (the map or its folded 🗺 in battle on a larger board; on classic's
     // only while brought up)
     const larger = !!b0 && b0.W * b0.H > 40 * 28
-    const shown = up || (larger && !!M && M.stage !== 'title')
+    const portrait = innerWidth < innerHeight
+    // ((V3b) raised over the card from where the card's top stands, its
+    // layout box (no slide): 10 px over it, which on a wide screen, the card
+    // 10 px off the bottom, is its height and 20 px as before, and on a
+    // narrow one, the card standing over the actions (style.css), is higher;
+    // and while the card shows on a screen with no room for the map above
+    // it (under 64 px, the roster's top, left: a landscape phone, the card
+    // filling the left), the map is put away until the card goes)
+    const card = document.querySelector('#card')
+    const cardUp = !portrait && !!card?.classList.contains('show')
+    const lift = cardUp ? innerHeight - card.offsetTop + 10 : 10
+    if (this.el.offsetHeight) this.height = this.el.offsetHeight
+    const room = !cardUp || innerHeight - lift - (this.height ?? 0) >= 64
+    const shown = (up || (larger && !!M && M.stage !== 'title')) && room
     this.el.classList.toggle('hidden', !shown)
     this.el.classList.toggle('folded', !up)
     this.button.classList.toggle('on', up)
-    const portrait = innerWidth < innerHeight
     // ((F8b's review) where the map's top stands, landscape: the roster
     // above it, also down the left, stops short of it (style.css's
     // --minimap-top), so the map raised over the card never covers its
     // last rows; its place as it comes to rest, whatever its slide)
-    const card = document.querySelector('#card')
-    const lift = !portrait && card?.classList.contains('show') ? card.offsetHeight + 20 : 10
     const top = shown && !portrait ? `${Math.round(innerHeight - lift - this.el.offsetHeight)}px` : ''
     if (this.top !== top) {
       this.top = top
@@ -225,11 +235,12 @@ export class Minimap {
   // (F16) The units' dots: each standing unit the fog doesn't veil, where
   // the table shows it, in its seat's colour; and each ghost, grey, where
   // it was last seen. [{ id, x, z, r, color, ghost }] (?debug reads it)
+  // ((F9a) a rider is its hull's dot: it has none of its own)
   dots(M) {
     const fog = this.fog(), out = []
     for (const v of this.units.views.values()) {
       const mu = M.units[v.id]
-      if (!(mu?.alive > 0) || fog?.hide?.has(v.id)) continue
+      if (!(mu?.alive > 0) || mu.aboard || fog?.hide?.has(v.id)) continue
       out.push({ id: v.id, x: mu.pos.x, z: mu.pos.z, r: mu.r, color: v.color, ghost: false })
     }
     for (const [id, rec] of fog?.ghosts ?? []) out.push({ id, x: rec.pos.x, z: rec.pos.z, r: rec.r, color: '#9a9a94', ghost: true })
@@ -476,9 +487,11 @@ export class Minimap {
 
 // how each kind of chunk shows from above ((F19a) a powder keg a red dot,
 // the colour of its danger band)
-const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e' }
+// ((V3d) the Powder Field's: craters the burned turf's brown, the wrecks'
+// decks and hulks charred, a fire's orange)
+const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37' }
 // the kinds drawn as discs whatever their extent
-const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true }
+const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true, crater: true, stump: true, pyre: true }
 
 // A convex polygon ([[x, z]]) clipped to the rectangle x0..x1 by z0..z1.
 function clip(poly, x0, x1, z0, z1) {

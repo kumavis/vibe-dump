@@ -18,6 +18,16 @@
 //     with those it said may, each charge that made contact ended (no
 //     decision left open);
 //   - finish within its budget (1 s here for a classic group).
+// (F9a, DESIGN §4.2.5's Groups) And with transports, on Field battles of
+// their own (both seats human, two War-Carts a side, at a movement phase):
+// a group Move holding a hull, its riders and a unit beside it, sent as the
+// group bar sends it (input/group.js GroupInput's preview and run), moves
+// the hull to the cell its preview drew, its riders riding along (each
+// where the hull now stands, still aboard, sent nothing, and given no cell
+// of its own by the preview), the preview saying "riders ride along"; and
+// a rider under any standing
+// order does nothing of its own in the movement phase, its step reading
+// "with the hull", nor is it among the actors End would act for.
 // A third of the point orders take a line formation (as an Alt-drag pins
 // one), and a third of the moves +D6 (each member advancing first: its
 // landing the roll's, so held only to acting once, and only in the group).
@@ -28,14 +38,16 @@
 // preview that ignores the members planned before it, one that lets a
 // member in combat fall back, an executor that loses the formation's slots
 // as it plans each member again, or its line, a Fire that stops after one
-// shot) and expects each to be caught. (The Session itself
+// shot; (F9a) a group Move that sends its riders, a preview that never
+// says they ride along) and expects each to be caught, after the code as
+// it stands passes the same run. (The Session itself
 // refuses an illegal command, so an executor that skips its own legality
 // check sends nothing illegal: no fault this can show.) Exit 0 when
 // everything holds.
 import { parseArgs } from 'node:util'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs'
+import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus } from './lib.mjs'
 import { jobSetup, seatDevices } from './run.mjs'
@@ -45,8 +57,8 @@ const { values: a } = parseArgs({ options: { probes: { type: 'string' }, seed: {
 
 async function load(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [session, store, orders, exec, standing, book, sti] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null)])
-  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput }
+  const [session, store, orders, exec, standing, book, sti, group] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null), at('input/group.js').catch(() => null)])
+  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput, GroupInput: group?.GroupInput }
 }
 
 function stream(seed) {
@@ -143,6 +155,12 @@ async function probe(L, ses, rand, out) {
         out.landed++
         const c = G2.nav.index(u.pos.x, u.pos.z)
         if (c !== m.cell) return `${verb}: ${u.t.short} ${u.id} was previewed to cell ${m.cell} and went to ${c}${process.env.MACRO_DEBUG ? ` (members ${JSON.stringify(pv.members.map((x) => [x.u.id, x.cell, x.how, G2.nav.index(G2.units.find((y) => y.id === x.u.id).pos.x, G2.units.find((y) => y.id === x.u.id).pos.z)]))}; sent ${JSON.stringify(ses.store.entries().slice(count).map((e) => [e.t, e.u, e.c]))}; blocked ${JSON.stringify(r.blocked.map((b) => [b.u.id, b.why]))})` : ''}`
+      } else if (m.why === 'with the hull') {
+        // ((F9a) a rider left out of the order rides along: still aboard,
+        // where its hull stands now)
+        const h = G2.units.find((x) => x.id === u.aboard)
+        if (!h || u.pos.x !== h.pos.x || u.pos.z !== h.pos.z) return `${verb}: ${u.t.short} ${u.id}, previewed riding along with its hull, ${h ? `stands at (${u.pos.x}, ${u.pos.z}), not its hull's (${h.pos.x}, ${h.pos.z})` : 'rides no hull now'}`
+        out.stayed++
       } else if (u.pos.x !== m.u.pos.x || u.pos.z !== m.u.pos.z) return `${verb}: ${u.t.short} ${u.id} was previewed staying and moved`
       else out.stayed++
     }
@@ -199,7 +217,9 @@ async function probeOrders(L, ses, rand, out) {
   }
   if (!orders.size) return null
   const then = rand.pick([null, 'end', 'auto'])
-  const look = (G2) => G2.units.filter((u) => u.side === seat && !orders.has(u.id)).map((u) => `${u.id}@${u.pos.x},${u.pos.z}:${u.flags.moved ? 1 : 0}${u.flags.shot ? 1 : 0}${u.flags.charged ? 1 : 0}`).join(' ')
+  // ((F9a) a rider by its hull, not its place: carried by an ordered hull it
+  // acted for nothing of its own; stepped off, it would read otherwise)
+  const look = (G2) => G2.units.filter((u) => u.side === seat && !orders.has(u.id)).map((u) => `${u.id}@${u.aboard ? `a${u.aboard}` : `${u.pos.x},${u.pos.z}`}:${u.flags.moved ? 1 : 0}${u.flags.shot ? 1 : 0}${u.flags.charged ? 1 : 0}`).join(' ')
   const before = look(G)
   // (Auto with orders: the AI plays the units no order holds, so the run
   // writes no plain auto, and in the movement phase no pilot of its names a
@@ -410,6 +430,77 @@ async function settledScenario(L, it, out) {
   return null
 }
 
+// (F9a) The riders' rows, on four Field boards (`ridesOut`: what they held,
+// or why one failed). Returns null when every row holds, else why.
+const RIDE_LIST = '1032012' // an Elder, three Nutkin, two Grenadiers, a Trebuchet, two War-Carts
+async function ridersScenario(L, board, out) {
+  const setup = { board, dice: 7, mission: 'field', terrain: 'open', seats: [0, 1].map(() => ({ race: 'squirrel', ctrl: 'human', army: RIDE_LIST })) }
+  const ses = new L.Session({ store: new L.LocalStore(), localSeats: [0, 1], dev: 'here' })
+  ses.start(seatDevices(setup, 'here'))
+  ses.submit(0, { t: 'deployed' })
+  ses.submit(1, { t: 'deployed' })
+  const seat = ses.decisionFor(), G = ses.G
+  if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') return `board ${board}: the battle begins at ${JSON.stringify(G.pending)}, not a movement phase`
+  const hull = G.units.find((u) => u.side === seat && u.t.transport && G.units.some((p) => p.aboard === u.id))
+  if (!hull) return `board ${board}: seat ${seat} has no hull carrying riders`
+  const riders = G.units.filter((p) => p.aboard === hull.id)
+  // the standing orders first, as the match stands: a rider's step "with
+  // the hull", under every kind of order, and no rider among End's actors
+  if (L.standing) {
+    const orders = new Map()
+    for (const p of riders) {
+      for (const o of [{ k: 'march', anchor: G.nav.index(0, 0), slot: G.nav.index(0, 0) }, { k: 'attack', tg: G.units.find((e) => e.side !== seat).id }, { k: 'hold' }, { k: 'auto' }]) {
+        const step = ses.preview((G2, q) => L.standing.stepOf(G2, q, G2.units.find((x) => x.id === p.id), o, 'move'))
+        if (step.how !== 'none' || !/with the hull/i.test(step.why ?? '')) return `board ${board}: a rider's (${p.t.short} ${p.id}) ${o.k} order in the movement phase steps ${JSON.stringify(step)}, not nothing "with the hull"`
+        out.orders++
+      }
+      orders.set(p.id, { k: 'auto' })
+    }
+    const actors = ses.preview((G2, q) => L.standing.actorsOf(G2, q, seat, orders, 'move'))
+    if (actors.length) return `board ${board}: End would act for ${actors.map((x) => x.u.id).join(', ')}, riders under Autopilot (they move only with their hull)`
+  }
+  // the group Move: the hull, its riders and the friend nearest it, toward
+  // the enemy 5", through the group bar's own preview and send
+  // (input/group.js GroupInput's, over this Session: its page parts, the
+  // selection, the pin and the bar, stood in for)
+  const friend = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.aboard && u !== hull).sort((a, b) => Math.hypot(a.pos.x - hull.pos.x, a.pos.z - hull.pos.z) - Math.hypot(b.pos.x - hull.pos.x, b.pos.z - hull.pos.z))[0]
+  const ids = [hull, ...riders, friend].map((u) => u.id)
+  const target = { x: hull.pos.x - G.seats[seat].edge * 5, z: hull.pos.z }
+  if (!L.GroupInput) return 'the code has transports but no input/group.js GroupInput'
+  const rec = { advance: false, note: '', pin: null }
+  const group = Object.create(L.GroupInput.prototype)
+  Object.assign(group, {
+    human: { get G() { return ses.G }, session: ses, ask: (fn) => ses.preview(fn), deploySeat: () => -1, myTurn: () => true, localSeat: () => seat, flow: { refreshUI() {} } },
+    selection: { of: () => rec, members: (G2) => ids.map((id) => G2.units.find((x) => x.id === id)).filter((u) => u && u.alive > 0), units: (G2, xs) => xs.map((id) => G2.units.find((x) => x.id === id)) },
+    busy: false,
+    cancel() {},
+  })
+  const pv = group.preview('move', target)
+  if (!/riders ride along/i.test(pv.summary ?? '')) return `board ${board}: a group Move holding a hull and its riders previews "${pv.summary}", which doesn't say the riders ride along`
+  for (const p of riders) {
+    const m = pv.members.find((x) => x.u.id === p.id)
+    if (m && m.cell >= 0) return `board ${board}: the preview sends rider ${p.t.short} ${p.id} to cell ${m.cell} of its own, not riding along with its hull`
+  }
+  const mh = pv.members.find((x) => x.u.id === hull.id)
+  if (!mh || mh.cell < 0) return `board ${board}: the preview leaves the hull where it stands (${JSON.stringify(mh && { cell: mh.cell, why: mh.why })})`
+  const count = ses.count, rejected = ses.folder.rejected.length
+  await group.run('move', target)
+  if (ses.folder.rejected.length !== rejected) return `board ${board}: the group Move's entries were rejected (${ses.folder.rejected.length - rejected})`
+  const sent = ses.store.entries().slice(count)
+  if (!sent.some((e) => e.t === 'move' && e.u === hull.id)) return `board ${board}: the group Move sent the hull nothing (${rec.note || JSON.stringify(sent.map((e) => [e.t, e.u]))})`
+  const stray = sent.find((e) => riders.some((p) => p.id === e.u))
+  if (stray) return `board ${board}: the group Move sent rider ${stray.u} a ${stray.t} (a rider moves only with its hull)`
+  const G2 = ses.G, h2 = G2.units.find((u) => u.id === hull.id)
+  if (G2.nav.index(h2.pos.x, h2.pos.z) !== mh.cell) return `board ${board}: the hull was previewed to cell ${mh.cell} and went to ${G2.nav.index(h2.pos.x, h2.pos.z)}`
+  for (const p of riders) {
+    const p2 = G2.units.find((u) => u.id === p.id)
+    if (p2.aboard !== hull.id || p2.pos.x !== h2.pos.x || p2.pos.z !== h2.pos.z) return `board ${board}: rider ${p.t.short} ${p.id} is aboard ${p2.aboard} at (${p2.pos.x}, ${p2.pos.z}) after the group Move, not riding along with its hull at (${h2.pos.x}, ${h2.pos.z})`
+  }
+  out.groups++
+  out.carried += riders.length
+  return null
+}
+
 async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.log } = {}) {
   const L = await load(dir)
   const rand = stream(seed)
@@ -453,12 +544,20 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
     }
     if (!out.settled.pilots || !out.settled.ends) out.bad.push(`the settings did nothing: ${out.settled.pilots} autopilot pilots, ${out.settled.ends} Auto-Ends`)
   }
+  // (F9a) the riders' rows, on code with transports
+  const rides = existsSync(join(dir, 'core', 'actions', 'transport.js')) ? { groups: 0, carried: 0, orders: 0 } : null
+  if (rides) {
+    for (const board of [4242, 31, 808, 52]) {
+      const why = await ridersScenario(L, board, rides).catch((e) => `board ${board}: threw: ${e.message}`)
+      if (why && out.bad.length < 8) out.bad.push(`riders: ${why}`)
+    }
+  }
   const kinds = Object.entries(out.kinds).map(([k, n]) => `${k} ${n}`).join(', ')
   const O = out.orders, M = out.march
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
@@ -479,16 +578,44 @@ const MUTANTS = [
   // (F10c's review) Auto with orders sends a plain auto: the AI plays every
   // unit, a Hold walked off its post, a March in combat fallen back
   ['auto-plays-ordered', 'input/orders.js', "  if (then === 'auto' && phaseNow() === phase) {", '  if (false) {'],
+  // (F9a) a group Move or Approach plans its riders too (each previewed a
+  // cell of its own, then refused: it moves only with its hull; the
+  // planner's rule, under GroupInput's movers)
+  ['planner-sends-riders', 'present/orders.js', "const stuck = u.aboard ? 'with the hull' : ", 'const stuck = ', 2],
+  // the preview never says the riders ride along
+  ['riders-unsaid', 'input/group.js', "? ' · riders ride along' : ''", "? '' : ''"],
 ]
 
 if (a['self-test']) {
   console.log('macro-check self-test: each planted fault caught\n')
   let bad = 0
+  // (F9a: view/ too, which input/group.js's sound reads; and the code as
+  // it stands first, which must pass, or every fault would count caught)
+  const copy = (dir) => {
+    for (const d of ['core', 'data', 'match', 'present', 'input', 'view']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module', private: true }))
+  }
+  {
+    const dir = mkdtempSync(join(tmpdir(), 'macro-unbroken-'))
+    try {
+      copy(dir)
+      const lines = []
+      const failed = await run(dir, { probes: 240, say: (l) => lines.push(l) })
+      if (failed) {
+        // (what failed: the run's own reasons, each line under its FAIL)
+        const why = lines.join('\n').split('\n').filter((l) => /^ {9}\S/.test(l)).map((l) => l.trim())
+        console.log(`  FAIL the unbroken copy fails the same run, so no fault can be judged: ${why.length ? why.join('; ') : lines.join(' ').slice(0, 400)}`)
+        process.exit(1)
+      }
+      console.log('  ok   unbroken       passes')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
   for (const [name, file, from, to, times = 1] of MUTANTS) {
     const dir = mkdtempSync(join(tmpdir(), `macro-${name}-`))
     try {
-      for (const d of ['core', 'data', 'match', 'present', 'input']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
-      writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module', private: true }))
+      copy(dir)
       const p = join(dir, file), text = readFileSync(p, 'utf8')
       if (text.split(from).length !== times + 1) {
         console.log(`  FAIL ${name}: its anchor is not in ${file} ${times === 1 ? 'exactly once' : `${times} times`} (stale mutant)`)

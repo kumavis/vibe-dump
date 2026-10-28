@@ -91,7 +91,9 @@
 //      core/actions/shoot.js carries a weapon's look to the view), each
 //      entry for those files matching exactly its count; (F11a) and its
 //      one-reader fields (OWNED: the army builder's data read by
-//      core/army.js alone, pts by the AI's appraisal), the same way.
+//      core/army.js alone, pts by the AI's appraisal; (F9a) a hull's
+//      transport by core/actions/transport.js, the vehicle and climb flags
+//      by the plans' mode setup, enclosed by the view alone), the same way.
 // The top level is told by indentation (the code puts module-level
 // declarations at column 0, and everything nested deeper).
 //
@@ -153,6 +155,16 @@ const CROSS = {
   'core/queries.js': [
     'moveMode', 'climbs', 'forbidMask', 'movePlan', 'validEnd', 'nearestValid', 'canShoot', 'shotInfo', 'shootTargets',
     'rangeOf', 'lobbed', 'canCharge', 'chargeTargets', 'chargePlan', 'chargeSpots', 'rngState',
+    // (F9a) the transports' queries: who rides what, the room left, whether
+    // and where a unit boards, where a rider steps off, and the ground rule
+    // (core/actions/transport.js, core/actions/move.js), for the view's
+    // embark and disembark tools, the card and the mirror
+    'groundOnly', 'hullOf', 'riders', 'room', 'mayBoard', 'embarkSpot', 'landing', 'isTransport',
+    // (V3c) a caster's spells: the weapon a shot names, whether a spell is
+    // cast on a friend, whether there is anything to cast on; and the AI's
+    // pick of a spell (the shooting tool's default, a group's fire), which
+    // values and draws nothing
+    'weaponOf', 'allySpell', 'hasTarget', 'bestSpell', 'spellFor',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than
@@ -582,7 +594,29 @@ if (a['self-test']) {
     // (F11a) flag-lint's one-reader fields, over core/ and data/ here too
     ["core/ reading a unit's cost", append('core/ai/score.js', 'export const price = (u) => u.t.cost'), true, /army builder's data .* read outside core\/army\.js \(flag-lint's ban\)/],
     ['core/ reading pts outside the AI', append('core/actions/shoot.js', 'export const value = (u) => u.t.pts'), true, /the AI's appraisal \(pts\) read outside core\/ai\/score\.js/],
-    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 2/],
+    // (F9a) the transports: their queries on queries.js's door, for the
+    // view's tools and present/; core/actions/transport.js itself, whose
+    // bail-out rolls, on no surface and passed on by no door; the one-reader
+    // rows of DESIGN §4.2.5's table (transport, vehicle, climb, enclosed)
+    // over core/ here too; the bail-out drawing only from the match's dice;
+    // and present/deck.js, the deck slots, pure and DOM-free
+    ['the view taking the transport queries through core/queries.js', append('input/human.js', "import { landing, mayBoard, embarkSpot, riders, room, hullOf, isTransport, groundOnly } from '../core/queries.js'"), false],
+    ['present/ taking riders and isTransport through core/queries.js', append('present/hud-model.js', "import { riders, isTransport } from '../core/queries.js'"), false],
+    ['the view importing core/actions/transport.js (its bail-out rolls)', append('view/units.js', "import { landing } from '../core/actions/transport.js'"), true, /imports core\/actions\/transport\.js, which draws: the view \(view\/\) may import from core\/ only/],
+    ['present/ importing the autoload', append('present/deck.js', "import { autoload } from '../core/actions/transport.js'"), true, /imports core\/actions\/transport\.js, which draws: present\/ may import from core\/ only/],
+    ['match/ importing the bail-out', append('match/session.js', "import { hullDestroyed } from '../core/actions/transport.js'"), true, /imports core\/actions\/transport\.js, which draws/],
+    ['queries.js re-exporting hullDestroyed (the bail-out rolls)', append('core/queries.js', "export { hullDestroyed } from './actions/transport.js'"), true, /re-exports hullDestroyed from core\/actions\/transport\.js, which draws/],
+    ['queries.js re-exporting doEmbark', append('core/queries.js', "export { doEmbark, doDisembark } from './actions/transport.js'"), true, /re-exports doEmbark from core\/actions\/transport\.js, which draws/],
+    ['index.js passing on all of transport.js', append('core/index.js', "export * from './actions/transport.js'"), true, /re-exports all of it from core\/actions\/transport\.js, which draws/],
+    ["core/ reading a hull's transport outside transport.js", append('core/deploy.js', 'export const cap = (u) => u.t.transport.capacity'), true, /transport record read outside core\/actions\/transport\.js \(flag-lint's ban\)/],
+    ['core/ reading the vehicle flag in deploy.js', append('core/deploy.js', 'export const hull = (u) => u.t.vehicle'), true, /the vehicle flag read outside the plans' mode setup/],
+    ['core/ reading the climb flag outside the mode setup', append('core/queries.js', 'export const up = (u) => u.t.climb'), true, /the climb flag read outside the plans' mode setup/],
+    ['core/ reading an enclosed deck', append('core/actions/transport.js', 'export const sealed = (v) => v.t.transport.enclosed'), true, /an enclosed deck read by the rules/],
+    ['the bail-out drawing Math.random', append('core/actions/transport.js', 'export const bail = () => Math.random() < 1 / 6'), true, /core\/actions\/transport\.js:\d+ core\/ contains Math\.random/],
+    ['transport.js keeping landings in a module-level cache', append('core/actions/transport.js', 'const landings = new Map()'), true, /module-level Map or WeakMap/],
+    ['present/deck.js importing data/ (its unit type is handed in)', append('present/deck.js', "import { RACES } from '../data/schema.js'"), true, /present\/ may import only/],
+    ['present/deck.js touching the DOM', append('present/deck.js', 'export const el = () => document.body'), true, /contains document/],
+    ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 4/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
   ]

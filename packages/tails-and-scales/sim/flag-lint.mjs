@@ -40,6 +40,24 @@
 //                                         below): the AI's own appraisal,
 //                                         which the builder's prices never
 //                                         replace without a re-record
+//   (F9a, DESIGN §4.2.5's one-reader table) transport   core/actions/
+//                                         transport.js alone, the autoload
+//                                         included (deployArmies calls it):
+//                                         a hull's capacity, maxBase, deck
+//                                         and wreck are the transports' own
+//                                         rules, so no other rule reads them
+//   vehicle                               the derived climb (data/schema.js,
+//                                         by its local), the plans' mode
+//                                         setup (core/actions/move.js
+//                                         groundOnly: a ground hull keeps
+//                                         to the ground) and transport.js's
+//                                         legality (a vehicle rides nothing)
+//   climb                                 the plans' mode setup alone
+//                                         (core/actions/move.js climbs)
+//   enclosed                              the view alone (present/deck.js:
+//                                         riders shown as pips and chips),
+//                                         so no file of core/ or data/ but
+//                                         the schema's check reads it
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
 // core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
@@ -126,6 +144,15 @@ const reads = (names) => new RegExp(String.raw`\.\s*(${names})\b|\[\s*['"\x60]($
 export const OWNED = [
   [reads('cost|roster|armies|list|army|prices'), ['core/army.js'], "the army builder's data (cost, roster, armies, a mission's list or its prices, an army) read outside core/army.js"],
   [reads('pts'), ['core/ai/score.js'], "the AI's appraisal (pts) read outside core/ai/score.js"],
+  // (F9a) the transports' record, the ground rule, the climbing flag and
+  // the view's enclosed deck, each with its own reader (DESIGN §4.2.5's
+  // table): core/actions/move.js's mode setup also reads a path vertex's
+  // `climb` (a ladder taken) and core/queries.js its gate graph's cache
+  // slot of that name (ALLOW below), neither of them the unit's flag
+  [reads('transport'), ['core/actions/transport.js'], "a hull's transport record read outside core/actions/transport.js"],
+  [reads('vehicle'), ['core/actions/move.js', 'core/actions/transport.js'], 'the vehicle flag read outside the plans\' mode setup (core/actions/move.js groundOnly) and core/actions/transport.js\'s legality'],
+  [reads('climb'), ['core/actions/move.js'], 'the climb flag read outside the plans\' mode setup (core/actions/move.js climbs)'],
+  [reads('enclosed'), [], "an enclosed deck read by the rules (the view's alone: present/deck.js)"],
 ]
 // the patterns that apply to file `f`
 const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
@@ -134,18 +161,22 @@ const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(
 export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
-  ['view/effects/shots.js', "if (e.fx !== 'thorns') {", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own'],
+  ['view/effects/shots.js', "const erupted = e.fx === 'thorns' || e.fx === 'mist'", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own, and (V3c) a venom mist billows rather than bangs'],
+  ['view/effects/shots.js', "if (e.fx === 'mist') return this.mist(e, { quiet })", 1, "(V3c) the spell.thorns handler plays the eruption's other look, Venom Mist's cloud: presentation"],
+  ['view/effects/shots.js', "const bark = e.fx === 'bark'", 1, "(V3c) the spell.ward handler's colours, bark or frost: presentation"],
+  ['view/effects/shots.js', ".find((w) => w.fx === e.fx)?.name ?? 'Warded'", 1, "(V3c) the spell.ward handler names the spell over its target by its look: presentation"],
   ['view/effects/shots.js', "if (e.fx === 'keg') return this.kegLanded(e, y)", 1, "(F19a) the blast.land handler plays a powder keg's blast as its own, bigger bang (the keg's look, data/hazards.js): presentation"],
   ['view/effects/shots.js', "fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire'", 1, "the explosion's look: presentation"],
-  ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
+  ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' || e.fx === 'mist' ? '#8aff5a' : '#ff9a4a'", 1, "the template ring's colour: presentation"],
   ['view/models/cache.js', 'KITS[kit][key]', 1, "the unit's figure, by its kit's builder for the unit (the kit the race's look names, (V2) in the figure style's kits): presentation"],
   ['view/models/gloss/serpents.js', 'BUILD[key]', 1, "(V2) the unit's glossy figure, by its builder: presentation"],
   ['ui/card.js', '(t.abilities || []).map(', 1, 'the unit card prints the ability text'],
   ['input/human.js', "if (e.key === 'Escape'", 1, 'a keyboard key'],
+  ['input/human.js', '/^[1-9]$/.test(e.key)', 1, "(V3c) a keyboard key: 1-9 pick a caster's spell"],
   // (F1/F2) the camera's keys: V the next view, Home the overview
   ['view/camera.js', "(e.key === 'v' || e.key === 'V')", 1, 'a keyboard key'],
   ['view/camera.js', "if (e.key === 'Home')", 1, 'a keyboard key'],
-  ['core/actions/shoot.js', 'fx: w.fx', 3, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events and never tested there: presentation"],
+  ['core/actions/shoot.js', 'fx: w.fx', 5, "the weapon's look, carried to the view in the volley, blast.fire and blast.land events, and (V3c) a spell's in spell.thorns (thorns or a venom mist) and spell.ward (bark or coil), and never tested there: presentation"],
   ['ui/theme.js', 'seats[0].race === seats[1].race', 1, 'spots a mirror match, so seat 1 is painted in look.alt: presentation'],
   ['ui/screens/races.js', 'b.dataset.race === race', 1, "(F6) the race picker marks the chosen race's button: presentation"],
   ['view/diorama.js', 'had.race === race', 1, '(F6) the race showcase drawn once for a race and colour, not rebuilt: presentation'],
@@ -187,6 +218,13 @@ export const ALLOW = [
   // costs in that battle, never a rule of it (no draw, nothing in the match)
   ['core/army.js', 'const own = rules?.prices && Object.hasOwn(rules.prices, race.key) ? rules.prices[race.key] : null', 1, "priceOf: the mission's prices for the race, by its key (the fallback's table)"],
   ['core/army.js', 'return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost', 1, "priceOf: the mission's price for the unit, by its key, else the unit's cost"],
+  // (F9a, OWNED) the schema checking and copying a transport, and refusing
+  // a vehicle that climbs; the nav memo's gate graph for climbers, a cache
+  // slot named for the climbers' graph (F7a), not the unit's flag
+  ['data/schema.js', 'def.transport', 2, 'refuses a transport on a unit that is no vehicle, and checks and copies the record (transportOf)'],
+  ['data/schema.js', 't.transport = transport', 1, 'the normalised type carries the checked transport record, only where the def gives one'],
+  ['data/schema.js', 'def.climb === true', 1, 'refuses a vehicle that sets climb: true (a hull never climbs)'],
+  ['core/queries.js', 'memo.climb', 1, "gateGraph: the climbers' gate graph's cache slot in the nav's memo (F7a), not a unit's climb flag"],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
   // (F16) the courtesy fog reads a battle-log line or a tray that names no
@@ -368,6 +406,20 @@ if (main && args['self-test']) {
     ['core/ai/score.js', 'const {\n    cost,\n    models,\n  } = u.t'],
     ['core/engine.js', 'const {\n  list: rules,\n} = missionOf(G.setup)'],
     ['core/engine.js', 'const {\n  fx,\n} = w'],
+    // (F9a, OWNED) the transport record, the ground rule, the climbing flag
+    // and the enclosed deck read outside their one reader, by every route
+    ['core/ai/policy.js', 'const cap = v.t.transport.capacity'],
+    ['core/deploy.js', "const wreck = u.t['transport']?.wreck"],
+    ['core/commands.js', 'const { transport } = v.t'],
+    ['core/actions/damage.js', 'if (v.t.transport) bail(G, v)'],
+    ['core/deploy.js', 'if (u.t.vehicle) return false'],
+    ['core/queries.js', 'const ground = !!u.t.vehicle'],
+    ['core/ai/score.js', 'const {\n  vehicle,\n} = u.t'],
+    ['core/queries.js', 'if (u.t.climb) up()'],
+    ['core/nav.js', 'const climber = t.climb && !t.big'],
+    ['core/actions/transport.js', 'if (tr.enclosed) return 0'],
+    ['data/mission.js', "const hidden = t.transport?.enclosed"],
+    ['core/actions/transport.js', "const sealed = tr['enclosed']"],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -382,7 +434,7 @@ if (main && args['self-test']) {
     ['main.js', 'keys.add(e.key.toLowerCase())'],
     ['data/schema.js', "if (typeof w.name !== 'string' || !w.name) throw bad('needs a name')"],
     ['data/schema.js', "if (typeof key !== 'string' || !/^[a-z][a-z0-9-]*$/.test(key)) throw new Error('bad key')"],
-    ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })"],
+    ['view/effects/shots.js', "fx.ring(e.x, e.z, e.r, e.fx === 'acid' || e.fx === 'mist' ? '#8aff5a' : '#ff9a4a', { life: 1.4, fill: 0.2 })"],
     ['core/actions/shoot.js', "emit(G, 'blast.fire', { u: u.id, to: { x: land.x, z: land.z }, fx: w.fx })"],
     ['main.js', 'const race = raceOf(G, side), t = race.units[key]'],
     ['core/version.js', 'export function rulesData({ races = RACES, constants = CONSTANTS, phases = PHASES.map((p) => p.key) } = {}) {'],
@@ -404,6 +456,16 @@ if (main && args['self-test']) {
     // fields
     ['core/engine.js', 'emit(G, \'deploy\', {\n  army: 1,\n  list: 2,\n})'],
     ['core/engine.js', 'const {\n  models,\n  role,\n} = u.t'],
+    // (F9a, OWNED) each one's own reader, the AI's role name, the view
+    ['core/actions/transport.js', 'const tr = v.t.transport'],
+    ['core/actions/transport.js', 'if (u.t.vehicle) return `${u.t.short} is a vehicle`'],
+    ['core/actions/move.js', 'return u.t.vehicle'],
+    ['core/actions/move.js', 'return u.t.climb'],
+    ['core/ai/policy.js', "const roleOf = (G, u) => (u.t.ai === 'transport' ? hullRole(G, u) : u.t.ai)"],
+    ['core/actions/transport.js', 'const { capacity, maxBase } = v.t.transport'],
+    ['present/deck.js', 'if (t.transport.enclosed) return []'],
+    ['view/units.js', 'const rides = u.t.transport && !u.t.transport.enclosed'],
+    ['core/actions/move.js', 'L += pts[i].climb ? pts[i].cost : 1'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -427,6 +489,6 @@ if (main && !args['self-test']) {
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, and (F11a) the army builder\'s data and pts each have their one reader in core/ and data/')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck')
   process.exit(bad ? 1 : 0)
 }

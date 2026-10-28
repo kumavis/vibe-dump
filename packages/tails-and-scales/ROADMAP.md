@@ -133,13 +133,56 @@ the commit, and add whatever the work turned up.
   sight held to the core's over every pair, entry by entry; present-check
   holds the page under it, lobby-rig's `fog` online), and from F18 P-prop's P-fight (shooting into a
   fight on scenes of its own: legal for every ranged weapon, a volley's
-  dice held draw for draw, the AI's value net of its friendly fire), and from V2 `node sim/bake-check.mjs`
+  dice held draw for draw, the AI's value net of its friendly fire), and
+  from V3c P-prop's P-spell (each caster's three spells on scenes of their
+  own: legal and refused where they must be, the cast die for die, each
+  mark made, holding and worn off when it must, the ward's save, the
+  resolve's morale and charge, the AI's pick; and at every probe decision
+  no spell legal but a caster's own, once a phase), and from V2 `node sim/bake-check.mjs`
   (view/models/bake.js bakes every classic figure exactly as R7a's did,
   node for node, and keeps the glossy ones whole; the splat Bushtails keep
   their splats, shadow proxies and anim, every 'new' figure casts through
   its one shadow caster, and the splats' preparation keeps its levels, its
   budget (a frame's, shared with the race picker's windows) and freed
-  orders). A step
+  orders), and from F9a P-riders in P-prop (§4.2.5's
+  invariants at every decision and trace line, riders hidden from every
+  spatial rule, each bail-out as it is emitted, the autoload, its scenes;
+  P-pilot's rider mask; P-army's hull deployment at the caps), P-present's
+  `aboard` and War-Cart battles (present-check `--only riders`), data-check's
+  section 14, merge-sim's `vehicles`, macro-check's riders, play-report's
+  F9a row (riders disembark in ≥ 50% of the `vehicle/` AI pairs), and the
+  `vehicle/` set in every check that reads the corpus (parity's 87
+  battles); and in Chromium input-check's carts page, snap-check's cart row
+  (and the bail-out log among its defaults), play-check's `cart` lane and
+  rematch-memory's `--carts` (and, from its merge onto main, fog-check's
+  War-Cart battle, bake-check's War-Cart in both figure styles and
+  P-fight's hull guns), and from V3a `node sim/input-check.mjs --only tips`'s
+  Node part, which every input-check runs first (every field the core sets
+  on a unit, every fact and every mirror field a condition with an icon
+  and a tip of one or two sentences for every unit type, or HIDDEN with
+  why; every term `canShoot` and `canCharge` refuse by a condition that
+  blocks it, or a flag that lifts one), present-check's card oracle (the
+  status line in the conditions' words), snap-check's `deeds-stale`,
+  `turn-stale` and `over-stale` edits, and in Chromium the tips lane
+  (each icon, word and chip at the three tiers, by mouse and by touch,
+  inside the screen); from V3b play-check's layout lane (five screens,
+  classic and Grand: the badge in its corner in each state, no box of the
+  chrome meeting another, ↶ Undo on the screen in the movement phase,
+  the minimap clear of the card and the actions); from V3d data-check's
+  section 15 (the Powder Field: its set and refusals, its sites on its
+  objectives, its mission Grand's battle), terrain-check's section 9 and
+  its connectivity on 2,000 Powder Field boards (`--powder-seeds
+  1-2000`), P-keg on Powder Field boards, P-scan's powder row, the
+  `powder/` set in every check that reads the corpus (parity's 89 battles
+  since the V3 merge), and in Chromium board-check's Powder Field leg (and
+  its `burns-kept` edit), snap-check's powder row (`--only powder-row`:
+  fires at every Grand checkpoint, none on the classic table after it),
+  `node sim/render-bench.mjs --mission powder` and
+  `node sim/powder-shots.mjs`; and from the V3 merge (DESIGN §4.2.11's
+  (V3) note) every lane of the four together: input-check's group, carts,
+  tips and spell steps, play-check's layout and cart lanes, present-check's
+  riders, card oracle and spell order, snap-check's edits and its cart and
+  powder rows. A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -175,7 +218,8 @@ the commit, and add whatever the work turned up.
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback; from F13 the touch aim,
-  `--only aim` alone), and from F8a
+  `--only aim` alone; from V3c the spell bar, its keys and a spell cast on
+  the caster itself), and from F8a
   `node sim/board-check.mjs` (and `--self-test`: P-board, the table made
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
@@ -1115,6 +1159,10 @@ follows N3.
   models; at load about 20, so inside its noise): a Grand battle 552-728
   ms on `open` and 535-763 on `fortified`, against 621 and 547 at 90 the
   same hour (the classic row, the load's gauge, 80-103 ms across the runs).
+  (F9a: the War-Cart, one model and one unit, filled the Bushtails'
+  spare slots at Grand, 60.6% and 67.0% on seed 1111 at its Field price;
+  the Grand list prices it 150, which binds their points again: 47.2% on
+  open, 57.2% fortified. Fortified Grand is the larger gap now.)
 - [ ] **Later (F8b's, its migration row's open gates):** F8b is ticked for
   what it built and checked; these gates of its row in DESIGN §4 (the
   migration table) are not done, and stay open here until they are
@@ -1217,12 +1265,120 @@ follows N3.
   self-test and input-check's Shift-click fail on HEAD's build alike, not
   this step's. Left: a phone's numbers for both styles (the overlay is
   there for them).
-- [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
+- [x] **V3a** Condition tooltips and attack-block icons (the user: "when
+  hovering over a unit with a condition, explain the condition inside a
+  tool tip that doesn't go off the side of the screen … if there's some
+  reason you can't attack, make sure there's a status icon for that").
+  Landed (view, ui and present only: no bump, the corpus byte-identical):
+  one table of the conditions, `present/conditions.js`, an icon and a tip
+  each (mesmerized, in combat, fell back, advanced, a charge failed, never
+  charges, in cover, high ground, losses, moved, shot, charged), every
+  reason `canShoot` and `canCharge` refuse by among them; the label shows
+  what holds a unit back now (a deed's in its own turn, a war machine's in
+  its Charge phase), the card, the roster and the chips too, at every zoom
+  tier; one tooltip, kept 8 px inside the screen and flipped at its edges,
+  on a hover, or pinned by a tap until the next; a hover over a figure
+  tells its conditions; no native titles. DESIGN §2.11's (V3a) note.
+  Checked by `node sim/input-check.mjs --only tips` (the table read off the
+  rules' code in Node; the tips at 1280×800 by the mouse and on a 390×844
+  phone by touch), `sim/present-check.mjs`'s card oracle and snap-check's
+  `deeds-stale`, `turn-stale` and `over-stale` edits (`--mutations` runs
+  edits alone).
+  Left: any condition a new spell puts on a unit wants a row in the table
+  (the check fails until it has one).
+- [x] **V3b** The online badge in the top-left corner, and ↶ Undo where a
+  phone can reach it (the user: "online / watching counts ui overlaps the
+  other panel. put it proper top left"). View only: no bump, the corpus
+  unchanged. (The badge at 10,10 on every screen, one line stopping short
+  of the HUD, cut with … and whole in its title; the top row laid out by
+  width so the nine tools no longer cover the other seat's name or score
+  below about 1540 px (two rows, then three of smaller buttons, the HUD
+  compact from 1180 px, the log and the perf overlay under the tools); a
+  phone's top stacked (the badge's line, the HUD, the tools, the hint under
+  them, the roster's and log's heads, the perf overlay and the minimap's
+  🗺), the hint no longer under the tools nor the 🗺 on the log; the
+  actions wrapping upward with their height published to the card, the
+  dice tray and the group bar, so Undo, pushed off a phone's left edge in
+  the movement phase, leads the first row; the card over them no taller
+  than the screen above, the minimap raised from its top (or put away for
+  it); the roster never under its head. play-check's layout lane: five
+  screens, classic and Grand, the badge in each state beside the perf
+  overlay with no box of the chrome meeting another, and Undo on the
+  screen in the movement phase. DESIGN §2.11's (V3b) note.)
+- [x] **V3c** Three spells a caster, the player's pick (the user's ask of
+  the V3 batch): the Elder's Thornburst, Barkskin and Root Snare, the
+  Hierophant's Mesmerize, Cold Blood and Venom Mist, one a shooting phase,
+  each a 2D6 cast (DESIGN §4.1 rule 29); the `shoot` command's `sp`, the
+  marks on the unit, the AI's choice, the spell bar (keys 1-3), the looks,
+  the help; `CORE_VERSION` 11, the corpus re-recorded and the PIN moved.
+  No price moves (army-sim's Skirmish gates hold). DESIGN's "V3c as
+  built". Landed with V3d onto F9a, V3a and V3b (3880346, be55f24): the
+  merged rules `CORE_VERSION` 12; the marks rows of V3a's conditions (🌿,
+  🪵, ❄️ on the label and the card, their tips the tooltip's, the spell
+  bar's too), the bar standing on V3b's wrapped actions, a rider casting
+  nothing and taking no spell on a friend, a snared unit boarding nothing
+  and a snared hull staying put; `vehicle/` and `powder/` re-recorded, by
+  the spells alone (de95926). DESIGN §4.2.11's (V3) note.
+- [x] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.
+  (C1, 7a94cfd; `CORE_VERSION` 9 as built, 11 at its merge onto main; the
+  70 recorded battles byte-identical, `stateHash` as before for a match
+  with no rider. The
+  `Vehicle` role and slot (0 / 2 / 2), the `transport` record, the
+  `vehicle` flag (`climb` derived without it); `u.aboard`, `flags.rode`,
+  `moveUnitTo`; riders off every spatial rule; `embark` and `disembark`
+  (`k` a list), `landing`, the autoload, the wreck and the bail-out (the
+  step's only new draws); the AI's transports, its riders stepping off to
+  shoot (no firing slot before F9c: kept aboard, the cart fitted about 0);
+  the War-Cart at 40, fitted at Field and judged on 4444 (58 ± 12; the
+  score 48.3% open, 52.9% fortified, every unit in its band), and at
+  Grand 150 by its list's `prices` (at 40 the carts filled the slots the
+  Bushtails' points left over: 60.6% and 67.0%; at 150 47.2% and 57.2%,
+  every unit inside its band; Grand still reported, not judged). The cart's
+  figure, deck slots at 0.8 (`present/deck.js`), pips, the label's rider
+  chips, the strategic chip's dots, the card, the embark and disembark
+  tools, R, the box and the group Move ("riders ride along"), a rider's
+  "with the hull", the wreck. P-riders, P-pilot's rider mask, P-army's
+  hull deployment at the caps, P-present's `aboard`, data-check's section
+  13 (14 since the merge), flag-lint's one-reader rows, boundaries,
+  merge-sim's `vehicles`, macro-check's riders, input-check's carts page,
+  snap-check's cart row, play-check's cart lane, rematch-memory's
+  `--carts`, play-report's F9a row; the `vehicle/` corpus, 6 AI pairs and
+  4 human-bot logs, in C2 (f282341), the corpus 80 battles. Merged onto
+  main (8207e30: the October playtest's items, the merged build's gate
+  and V2) keeping both sides: `CORE_VERSION` 11 and `RULES_ID` moved once
+  (the keg mission's Vehicle slot `[0, 0]`); a rider no friend under a
+  template (F18's `friendsUnder`, the AI's keg value) as it was never a
+  victim; F16's fog seeing a rider with its hull, no eye and no ghost of
+  its own; the War-Cart's machine in `view/models/warcart.js`, built by
+  both figure styles (classic crew, or splat-fur crew as the trebuchet's),
+  its riders their own units' figures in the page's style. Seven of
+  `vehicle/`'s ten re-recorded under F18 (proved F18's alone), the PIN on
+  the merged code (aa2ea7d), the corpus 87 battles. The standing checks
+  gain, with the merge: fog-check's War-Cart battle (a rider seen with its
+  hull), bake-check's War-Cart in both styles, P-fight's hull guns on a
+  Field battle, present-check's fog fold over the `vehicle/` logs against
+  the AI, and sim/oracle's fake DOM fit for V2's boot (a fragment,
+  `matchMedia`), without which present-check and corpus-add's page runs
+  failed on main too. DESIGN's F9a notes, its merge and V2's figure
+  styles among them.)
 - [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
+  F9a left it: `core/actions/transport.js` measures a round hull from its
+  centre (`embarkSpot`'s `v.r + u.r + 1"`, `landing`'s reach from `v.pos`
+  and its `v.r + u.r + 3"`): `clearOf` and the head and tail cells go
+  there; `present/deck.js` already takes `deckAt` and several deck discs;
+  the AI's transport branch (`aiTransport`) is shape-free but for the
+  hull's move; `fireSlots` (0 until F9c); `smashAround` unbinned; `hull/`
+  joins `LOG_SETS` as `vehicle` did.
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
+  F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
+  AI steps every rider with a gun off once an enemy is in its reach; F9c
+  makes it the record's `fire`, lets `canShoot` take a rider (the hull's
+  slots), and re-fits the War-Cart (its 40 and Grand's 150 are prices for
+  riders who must step off to shoot); the card's "firing decks come
+  later" and the label's chips are where the deck's fire shows.
 - [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop), each priced for the army builder against the other races, with
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
@@ -1554,6 +1710,49 @@ answered; 35 (Escape) by the user: no change.
     with `nav.standable` and the engagement re-read after a shove; slip
     carries a walk D3" on in its last direction, a pusher is a wrecker's
     smash applied to units.
+- [x] **V3d** The Powder Field (the playtest's "a grand battlefield of bombs
+  and remnants of an active battlefield … things you can climb on top of":
+  the keg mission was too small a bang). A Grand mission of its own,
+  `powder`, on a set of its own, `powder`: the wreckage of the day's
+  fighting, still burning. At the centre a burned farmstead to climb; on the
+  other objective pairs (`sites`, a new scatter phase) a wrecked trebuchet,
+  a powder magazine of five or six kegs round its objective, an overturned
+  venom engine; a pair of burned barns or war-wagons in no-man's land; and
+  between them shell holes, dumps of kegs, caches of bombs, a supply train
+  strewn along its road, burned trees standing and fallen, broken carts,
+  sandbags and pyres. Every deck reached by stairs or ladders (F7a's height
+  layer); every keg F19a's, its chain unchanged (10-36 a board, magazines
+  going up five or six at once). The view: the wreckage from looks alone,
+  two clouds of smoke and flame for every fire on the table, the turf
+  scorched round the wrecks, a dusk light. (`CORE_VERSION` 11, `RULES_ID`
+  moved; the AI's `kegHits` in 3D with height. The view in 819cb2d, the set
+  and mission in 70f2fd8, the page oracle, present-check and rematch-check
+  ported to V2's page in 879409d and 41d3d4d (they threw at boot since V2),
+  the corpus in f2da9f8 with the PIN on 70f2fd8: `powder/`'s watch-powder-4
+  and -5, no existing battle re-recorded, parity and `--pin` 79 of 79.
+  terrain-check's section 9 and connectivity on 2,000 Powder Field boards
+  (all connected, every deck climbed, every site on its objective, no keg in
+  a zone), data-check's section 14, P-keg, P-scan's powder row,
+  board-check's and snap-check's Powder Field rows, `render-bench --mission
+  powder`, `sim/powder-shots.mjs`. The gates, each 0 unless said:
+  data-check, boundaries and flag-lint (each with `--self-test`), P-prop,
+  parity and `--pin`, terrain-check (and `--self-test`), scale-check,
+  mirror-check, camera-check, `perturb --fn hypot`, merge-sim, present-check
+  and rematch-check (79 of 79, once ported), snap-check (its powder row
+  fires at each of 350 checkpoints), hud-check, board-check (and
+  `--self-test`, 4192953 reading the burns as painted), play-check's six
+  lanes, render-bench (the Powder Field's whole-board frame 458 main and 331
+  shadow calls, 278 K triangles, its render JS 1.05× classic's). input-check
+  failed once at a load of 25-40 (a group's send not settled in 60 s) and
+  passed at 4; render-bench timed out on the classic board under that load
+  and passed at 4; play-check's full run hit the two-hour limit in its
+  layout lane, which passed on its own. Left: the AI sums its fear of every
+  keg in reach, so it keeps off the magazines and they go up mostly by
+  template; army-sim not run on the mission; a phone's frame time. DESIGN
+  §4.2.11.) Landed with V3c onto F9a, V3a and V3b (be55f24): the Powder
+  Field takes War-Carts as Grand does (its list Grand's, Vehicle [0, 2]),
+  data-check's section 15, the merged rules `CORE_VERSION` 12; `powder/`
+  re-recorded under V3c's spells (de95926). DESIGN §4.2.11's (V3) note.
 - [x] **Fix (the same playtest): the tooltip's reason.** The Scaleguard (T4,
   Sv4+) and the Brute (T6, W9, Sv4+) are their numbers alone, no armour rule
   ("Shield wall" is card copy; the Brute's `big` only makes a template roll

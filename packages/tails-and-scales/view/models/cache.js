@@ -40,7 +40,12 @@
 //                                    geometry only it uses) and `drawn`
 //                                    (its miniature has parts its builder
 //                                    placed at random: sim/title-shot.mjs
-//                                    compares their shapes, not where)
+//                                    compares their shapes, not where);
+//                                    (F9a) `base`, its base, which a
+//                                    rider's figure hides on a hull's deck
+//                                    (both styles' kits build the Acorn
+//                                    War-Cart from ./warcart.js, so its
+//                                    template is keyed by style like any)
 //   disposeFigure(root)              frees what only that figure used (a
 //                                    template's geometry is shared: kept)
 //                                    ((V2) and takes its splats off the
@@ -169,6 +174,9 @@ export function buildModel(kit, key, t, sideColor, rim = 1) {
   fig.userData.sy = fig.scale.y
   root.add(fig)
   root.userData.fig = fig
+  // ((F9a) its base, which a rider's figure hides while it stands on a
+  // hull's deck: view/units.js)
+  root.userData.base = b
   root.userData.anim = fig.userData.anim
   root.userData.phase = Math.random() * 10
   root.userData.drawn = draws
@@ -280,10 +288,13 @@ function atRest(root, fn) {
 // positions only (null where it has none).
 function lowPoly(root) {
   const shadowOnly = (o) => o.layers.mask === 1 << SHADOW_LAYER
-  const geo = cluster(root, LOD_CELL, (o) => !o.userData.lod && !shadowOnly(o), true)
+  // ((F9a) a hull's riders on its deck left out, their meshes, furs and
+  // shadow proxies alike: they are their own units' figures, and hide with
+  // the deck at range)
+  const geo = cluster(root, LOD_CELL, (o) => !o.userData.lod && !shadowOnly(o) && !onDeck(o, root), true)
   const furs = [], inv = new THREE.Matrix4().copy(root.matrixWorld).invert()
-  root.traverse((o) => o.isSplats && !o.parent.userData.lod && furs.push([o.fur, new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld)]))
-  const body = furs.length ? cluster(root, LOD_CELL, (o) => !o.userData.lod && shadowOnly(o) && !o.userData.caster, false) : null
+  root.traverse((o) => o.isSplats && !o.parent.userData.lod && !onDeck(o, root) && furs.push([o.fur, new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld)]))
+  const body = furs.length ? cluster(root, LOD_CELL, (o) => !o.userData.lod && shadowOnly(o) && !o.userData.caster && !onDeck(o, root), false) : null
   return { geo, furs, body: body?.index.count ? body : null }
 }
 
@@ -382,6 +393,14 @@ function cluster(root, cell, take, colors) {
   geo.setIndex(tris)
   geo.computeBoundingSphere()
   return geo
+}
+
+// (F9a) whether a mesh stands on a hull's deck (view/units.js's deck group,
+// in the hull's root: its riders' figures), which the hull's stand-in
+// leaves out (they are their own units', and hide with the deck at range)
+function onDeck(o, root) {
+  for (let p = o; p && p !== root; p = p.parent) if (p.userData.deck) return true
+  return false
 }
 
 // A copy of a baked miniature sharing its geometry and materials (Mesh.clone

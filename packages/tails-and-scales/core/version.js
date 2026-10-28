@@ -86,5 +86,20 @@ export const RULES_ID = rulesId()
 // and mission, and the AI's keg terms; and with it the tower ring's fix,
 // `fortified`'s `largeCentre` (the rock box where the ring stood on Field
 // and Grand boards): RULES_ID moves with the hazards, the set and the
-// mission)
-export const CORE_VERSION = 10
+// mission; 11: F9a's transports: riders aboard a vehicle, embark and
+// disembark, the deployment's autoload, a hull's wreck and the bail-out,
+// and the AI's transports (built on 7 as 9, beside F7b's 8, and renumbered
+// at its merge onto 10: F7b, unlanded, takes the next number free); RULES_ID
+// moves with the War-Cart, the Vehicle role and slot and the transport
+// record; 12: the V3 rules landed together, V3c's and V3d's each built as
+// 11 on 10: V3c's spells, three a caster (the race data's `spells`, so
+// RULES_ID moves), the `shoot` command's `sp`, Barkskin's ward, Root
+// Snare's snare and Cold Blood's resolve on a unit (stateHash's
+// UNIT_EXTRAS beside F9a's aboard) and their ends, Venom Mist's template
+// that spares the scenery, and the AI's choice of spell and target; V3d's
+// Powder Field, the `powder` set (its scatter's `sites` on the objectives,
+// its wrecks to climb, its features: shell holes, kegs and caches, burned
+// trees, carts, sandbags, fires) and the `powder` mission, and the AI's keg
+// terms measured in 3D with height (kegHits): no other board changes, and
+// RULES_ID moves with the set and the mission)
+export const CORE_VERSION = 12

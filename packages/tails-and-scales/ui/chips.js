@@ -4,7 +4,9 @@
 // ▣), its models standing (a single model's wounds) and its order badge.
 // The rings are hidden then, so the chip's border carries their state: the
 // colour the input painted the ring (picked up, a target, can act), gold
-// when picked up, red when in combat, else a dark rim. A tap selects
+// when picked up, red when in combat, else a dark rim. (F9a) A transport's
+// chip carries a dot per rider squad aboard (its riders have no chip: they
+// stand on its deck, view/units.js). A tap selects
 // (`pick(id)`), which beats casting a ray at an 11 px figure. Chips within
 // 18 px of each other (28 px on a touch screen: (F8b's review) its chips
 // are 28 px discs, so at 18 two of them 18-28 px apart neither stacked nor
@@ -12,6 +14,14 @@
 // cluster, "×3", and a tap zooms the
 // camera onto it (`zoom(x, z, r)`: the table's point and the radius its
 // units take; the app wires it to the camera rig).
+//
+// (V3a) A chip carries its unit's condition icons (the label's: mesmerized,
+// in combat, fell back, …; present/conditions.js) in a corner badge, and
+// is marked for the tooltip (ui/tooltip.js): a unit's chip (data-tip
+// "unit", data-unit its id) shows the unit's line and its conditions' tips
+// on a hover, and on a touch screen with its tap's pick; a cluster's
+// (data-tip "cluster", data-n its count) says a tap zooms in. No native
+// title.
 //
 // view/units.js hands it what to show every frame it draws (draw(chips), or
 // draw(null) at any other tier: none shown), already projected; it writes
@@ -48,7 +58,7 @@ export class Chips {
   }
 
   // Show `units` ([{ id, x, y, wx, wz, side, color, glyph, n, ord, sel,
-  // engaged, look }], in G.units order), clustered; null shows none.
+  // engaged, look, conds, riders }], in G.units order), clustered; null shows none.
   // Returns how many style or text writes it made.
   draw(units) {
     let writes = 0
@@ -69,14 +79,19 @@ export class Chips {
         border: us.some((u) => u.sel) ? '#ffe680' : us.find((u) => u.look)?.look ?? (us.some((u) => u.engaged) ? '#ff6a4a' : 'rgba(20,16,12,0.85)'),
         text: many ? `×${us.length}` : `${lead.glyph}${lead.n}`,
         ord: many ? '' : lead.ord,
-        title: many ? `${us.length} units: tap to zoom in` : null,
+        // ((V3a) its unit's condition icons; a cluster's tip its count, a
+        // unit's its id)
+        conds: many ? '' : lead.conds ?? '',
+        tip: many ? `cluster:${us.length}` : `unit:${lead.id}`,
+        // ((F9a) a transport's rider squads, a dot each)
+        dots: many ? '' : '•'.repeat(lead.riders ?? 0),
       }
       let slot = this.pool[k]
       if (!slot) {
         const el = document.createElement('div')
         el.className = 'chip'
         el.dataset.k = k
-        el.innerHTML = '<b></b><i></i>'
+        el.innerHTML = '<b></b><i></i><s></s><u></u>'
         this.el.appendChild(el)
         slot = this.pool[k] = { el, last: {} }
       }
@@ -86,9 +101,18 @@ export class Chips {
       if (last.bg !== look.bg) (el.style.background = look.bg), writes++
       if (last.border !== look.border) (el.style.borderColor = look.border), writes++
       if (last.text !== look.text) (el.firstChild.textContent = look.text), writes++
-      if (last.ord !== look.ord) (el.lastChild.textContent = look.ord), writes++
+      if (last.ord !== look.ord) (el.children[1].textContent = look.ord), writes++
+      if (last.conds !== look.conds) (el.children[2].textContent = look.conds), writes++
+      if (last.dots !== look.dots) (el.children[3].textContent = look.dots), writes++
       if (last.many !== many) el.classList.toggle('many', many), writes++
-      if (last.title !== look.title) (look.title ? (el.title = look.title) : el.removeAttribute('title')), writes++
+      if (last.tip !== look.tip) {
+        const [kind, n] = look.tip.split(':')
+        el.dataset.tip = kind
+        delete el.dataset.unit
+        delete el.dataset.n
+        el.dataset[kind === 'unit' ? 'unit' : 'n'] = n
+        writes++
+      }
       if (last.hidden !== false) (el.style.display = ''), writes++
       slot.last = { ...look, many, hidden: false }
     })

@@ -219,6 +219,78 @@ body:not(.playing) #hint {
 #tools button.off {
   opacity: 0.45;
 }
+/* (V3b) The top row, laid out so that nothing in it meets anything else at
+   any width: the net badge in the top-left corner (#netbadge, below), the
+   score in the middle, the tools at the right, the battle log under the
+   tools (--log-top) and the perf overlay under the log. As measured here:
+     ≥ 1600 px   the tools one row (380 px), the HUD with the sides' names
+                 (764 px at most, half the screen below that, the names
+                 wrapping)
+     1181-1599   the tools two rows, 5 and 4 (230 px; the short row
+                 right-aligned: its first button starts one column in), the
+                 log's top 84 px
+     901-1180    and the HUD compact: no names, the phone's sizes (368 px)
+     701-900     the tools three rows of the phone's smaller buttons
+                 (116 px), the log's top 106 px; the perf overlay at the
+                 left, under the roster's head (a short landscape phone's
+                 actions are where it would stand under the log)
+     ≤ 700       the phone's own (the ≤ 700 px block below)
+   The badge stops short of the HUD at each (its max-width), its text cut
+   with … past that (its title the whole). */
+@media (min-width: 701px) and (max-width: 1599px) {
+  :root {
+    --log-top: 84px;
+  }
+  #tools {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+  }
+  #tools > :nth-child(6) {
+    grid-column-start: 2;
+  }
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  :root {
+    --log-top: 106px;
+  }
+  #tools {
+    grid-template-columns: repeat(3, auto);
+    gap: 4px;
+  }
+  #tools > :nth-child(6) {
+    grid-column-start: auto;
+  }
+  #tools button {
+    padding: 4px 5px;
+    min-width: 0;
+  }
+}
+@media (max-width: 1180px) {
+  #hud {
+    gap: 4px;
+  }
+  #hud .side {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+  #hud .side .nm {
+    display: none;
+  }
+  #hud .side .ic {
+    font-size: 16px;
+  }
+  #hud .side .vp {
+    font-size: 16px;
+    min-width: 26px;
+  }
+  #hud .mid {
+    padding: 3px 6px;
+  }
+  #phases .ph {
+    font-size: 9px;
+    padding: 1px 3px;
+  }
+}
 
 #hint {
   position: fixed;
@@ -336,6 +408,14 @@ ul.abil {
   font-size: 11px;
   color: #d8ccb4;
 }
+/* (V3a) a word a condition explains (the card's status line, a war
+   machine's never charging): its tip on a hover or a tap (ui/tooltip.js) */
+#card .cond,
+ul.abil .cond {
+  cursor: help;
+  text-decoration: underline dotted rgba(244, 236, 216, 0.45);
+  text-underline-offset: 2px;
+}
 
 /* ── Dice tray ───────────────────────────────────────────────────────── */
 #tray {
@@ -445,7 +525,8 @@ ul.abil {
 #log {
   position: fixed;
   right: 10px;
-  top: 56px;
+  /* ((V3b) under the tools, as many rows as they take at the width) */
+  top: var(--log-top, 56px);
   width: 270px;
   max-height: min(40vh, calc(100vh - 140px));
   display: flex;
@@ -503,14 +584,29 @@ ul.abil {
   color: #fff6e2;
 }
 
+/* ((V3b) wrapping upward in rows, right-aligned, End last at the bottom
+   right, rather than running off the screen's left edge: a phone's movement
+   phase holds more buttons than a row, and ↶ Undo, the first of them, went
+   off it, Ready N with it. ui/actions.js publishes the block's height
+   (--actions-h) to what stands on it: the group bar, and the unit card and
+   the dice tray where they stand above the actions (a phone, a narrow
+   screen). On a wide screen it stops short of the unit card at the left.) */
 #actions {
   position: fixed;
   right: 10px;
   bottom: 10px;
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px 8px;
+  max-width: calc(100vw - 20px);
   z-index: 6;
   align-items: center;
+}
+@media (min-width: 901px) {
+  #actions {
+    max-width: calc(100vw - 350px);
+  }
 }
 #actions button {
   padding: 9px 14px;
@@ -570,7 +666,10 @@ ul.abil {
   border-radius: 8px;
   padding: 5px 9px;
   font-size: 12px;
-  max-width: 340px;
+  /* (V3a) never wider than the screen less its two margins (ui/tooltip.js's
+     MARGIN, 8 px): placeTip then keeps it inside every edge */
+  max-width: min(340px, calc(100vw - 16px));
+  box-sizing: border-box;
   line-height: 1.4;
 }
 
@@ -788,17 +887,21 @@ table.wt th {
   #log:not(.open) #logList {
     max-height: 30vh;
   }
+  /* ((V3b) over the actions, as many rows as they take: 64 px over one; the
+     card no taller than the screen above them, scrolling past that: on a
+     landscape phone, two rows of actions under it, it ran off the top; and
+     over the roster's head, which it reaches there) */
   #tray {
     width: calc(100vw - 20px);
     min-width: 0;
-    bottom: 64px;
+    bottom: calc(var(--actions-h, 36px) + 28px);
   }
   #card {
     width: 260px;
-    bottom: 64px;
-  }
-  #hud .side .nm {
-    display: none;
+    bottom: calc(var(--actions-h, 36px) + 28px);
+    max-height: calc(100vh - var(--actions-h, 36px) - 36px);
+    overflow-y: auto;
+    z-index: 6;
   }
   .modes {
     grid-template-columns: 1fr;
@@ -811,59 +914,58 @@ table.wt th {
   }
 }
 
+/* (V3b) A phone's top, down the screen: the net badge's line in the corner
+   while it shows (--net-h, 0 without it: everything under it steps down),
+   the HUD (compact: the ≤ 1180 px block above), the tools at the right, the
+   hint under them (centred, two lines at most: before, it stood at their
+   left, 200 px wide, and the nine tools covered it), then the roster's head
+   at the left and the battle log's at the right, each at most half the
+   screen, and under those the perf overlay at the left and the minimap's 🗺
+   at the right (style.css's #roster, #perfOverlay and #minimap.portrait).
+   The dice tray comes down over the last two while it rolls. */
 @media (max-width: 700px) {
+  body {
+    --net-h: 0px;
+  }
+  body:has(#netbadge:not(.hidden)) {
+    --net-h: 26px;
+  }
   #hud {
-    top: 6px;
+    top: calc(6px + var(--net-h));
     left: 8px;
     transform: none;
-    gap: 4px;
-  }
-  #hud .side {
-    padding: 4px 6px;
-    gap: 4px;
-  }
-  #hud .side .ic {
-    font-size: 16px;
-  }
-  #hud .side .vp {
-    font-size: 16px;
-    min-width: 26px;
-  }
-  #hud .mid {
-    padding: 3px 6px;
-  }
-  #phases .ph {
-    font-size: 9px;
-    padding: 1px 3px;
   }
   #tools {
-    top: 60px;
+    top: calc(52px + var(--net-h));
     right: 8px;
     gap: 4px;
   }
-  /* ((V2) 5px a side, not 7: nine buttons in the eight's width, the hint's
-     line no more covered than before) */
+  /* ((V2) 5px a side, not 7: nine buttons in the eight's width) */
   #tools button {
     padding: 4px 5px;
     min-width: 0;
   }
   #hint {
-    top: 60px;
-    left: 8px;
-    transform: none;
+    top: calc(86px + var(--net-h));
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    width: max-content;
+    max-width: calc(100vw - 16px);
     white-space: normal;
-    max-width: calc(100vw - 190px);
+    text-align: center;
     border-radius: 10px;
     font-size: 12px;
   }
   #log {
-    top: 96px;
+    top: calc(136px + var(--net-h));
     right: 8px;
-    width: 190px;
+    width: min(190px, calc(50vw - 14px));
   }
   #tray {
     bottom: auto;
-    top: 140px;
+    top: calc(178px + var(--net-h));
     width: calc(100vw - 16px);
     transform: translateX(-50%) translateY(-10px);
   }
@@ -873,9 +975,12 @@ table.wt th {
   .tray-row .lbl {
     flex-basis: 110px;
   }
+  /* ((V3b) over the actions, as many rows as they take, no taller than the
+     screen above them) */
   #card {
     left: 8px;
-    bottom: 60px;
+    bottom: calc(var(--actions-h, 48px) + 16px);
+    max-height: calc(100vh - var(--actions-h, 48px) - 24px);
     width: calc(100vw - 16px);
     padding: 8px 10px;
   }
@@ -883,7 +988,7 @@ table.wt th {
     left: 8px;
     right: 8px;
     bottom: 8px;
-    justify-content: flex-end;
+    max-width: none;
   }
   #actions button {
     padding: 8px 10px;
@@ -996,17 +1101,45 @@ table.wt th {
 #netdialog .hidden {
   display: none;
 }
+/* ((V3b) the top-left corner itself, on every screen, small and quiet: at
+   60 px it stood on the roster's head on a wide screen and on the hint on a
+   phone. One line, stopping short of the HUD (half the screen less half the
+   HUD's widest at the width, and a gap: the top row's table above), its
+   text cut with … past that; on a phone the HUD and all under it step down
+   a line for it.) */
 #netbadge {
   position: fixed;
-  top: 60px;
-  left: 12px;
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
   z-index: 12;
-  font-size: 11.5px;
-  padding: 4px 9px;
+  max-width: min(300px, calc(50vw - 400px));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: var(--panel);
   border: 1px solid var(--edge);
   color: var(--dim);
+}
+@media (max-width: 1599px) {
+  #netbadge {
+    max-width: min(300px, calc(50vw - 349px));
+  }
+}
+@media (max-width: 1180px) {
+  #netbadge {
+    max-width: min(300px, calc(50vw - 202px));
+  }
+}
+@media (max-width: 700px) {
+  #netbadge {
+    top: max(6px, env(safe-area-inset-top));
+    left: max(8px, env(safe-area-inset-left));
+    max-width: calc(100vw - 16px);
+  }
 }
 #netbadge.hidden {
   display: none;
@@ -1109,11 +1242,15 @@ body.replaying #toast {
    roster's head (the HUD, the tools and the hint are above it, the card
    and the actions at the bottom). A panel opened over it (the roster, the
    log, the dice tray, a wide screen's title card) covers it, as it covers
-   the table. Inside the safe area; a tap steps the quality. */
+   the table. Inside the safe area; a tap steps the quality. ((V3b) The log's
+   top is the tools' bottom (--log-top: the top row's table, by the HUD); at
+   701-900 px in battle at the left under the roster's head, as a phone's,
+   since a short landscape phone's actions stand where it would under the
+   log; on a phone a line lower while the net badge shows.) */
 #perfOverlay {
   position: fixed;
   right: max(10px, env(safe-area-inset-right));
-  top: calc(64px + min(40vh, 100vh - 140px));
+  top: calc(var(--log-top, 56px) + 8px + min(40vh, 100vh - 140px));
   z-index: 4;
   padding: 3px 7px;
   border-radius: 6px;
@@ -1128,11 +1265,18 @@ body.replaying #toast {
 #perfOverlay.hidden {
   display: none;
 }
+@media (min-width: 701px) and (max-width: 900px) {
+  body.playing #perfOverlay {
+    right: auto;
+    left: max(10px, env(safe-area-inset-left));
+    top: 106px;
+  }
+}
 @media (max-width: 700px) {
   #perfOverlay {
     right: auto;
     left: max(8px, env(safe-area-inset-left));
-    top: 140px;
+    top: calc(178px + var(--net-h, 0px));
     font-size: 9.5px;
   }
   /* out of a battle, at the very top, over the title's modal (its card
@@ -1348,7 +1492,8 @@ body.mirror .ulabel.s1.sel .ct {
 #groupbar {
   position: fixed;
   right: 10px;
-  bottom: 58px;
+  /* ((V3b) over the actions, as many rows as they take: 58 px over one) */
+  bottom: calc(var(--actions-h, 36px) + 22px);
   z-index: 12;
   display: flex;
   align-items: center;
@@ -1364,6 +1509,81 @@ body.mirror .ulabel.s1.sel .ct {
 }
 #groupbar.hidden {
   display: none;
+}
+/* (V3c) the spell bar: a caster's spells above the action buttons, the one
+   picked lit gold, one cast on a friend green-edged, one with nothing to
+   cast on now dimmed. ((V3b), at the V3 merge: over the actions, as many
+   rows as they take (--actions-row-h, ui/actions.js's): 58 px over one;
+   and while it shows, the card, the dice tray and the group bar stand over
+   it too, --actions-h counting it) */
+#spellbar {
+  position: fixed;
+  right: 10px;
+  bottom: calc(var(--actions-row-h, 40px) + 18px);
+  z-index: 12;
+  display: flex;
+  gap: 6px;
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  padding: 6px;
+  background: rgba(30, 23, 16, 0.92);
+  border: 1px solid rgba(255, 210, 140, 0.3);
+  border-radius: 12px;
+}
+#spellbar.hidden {
+  display: none;
+}
+/* beside the unit card, as the actions are (it scrolls past that): the
+   card stands at the bottom left from 901 px, where its three spells ran
+   over the card's right edge up to about 960 px */
+@media (min-width: 901px) {
+  #spellbar {
+    max-width: calc(100vw - 350px);
+  }
+}
+#spellbar .spell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 6px;
+  align-items: baseline;
+  text-align: left;
+  width: 190px;
+  padding: 6px 9px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+#spellbar .spell kbd {
+  grid-row: span 2;
+  font: bold 12px/1 system-ui, sans-serif;
+  color: var(--dim);
+  border: 1px solid rgba(255, 210, 140, 0.35);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+#spellbar .spell small {
+  color: var(--dim);
+}
+#spellbar .spell em {
+  grid-column: 1 / -1;
+  font-style: normal;
+  color: var(--dim);
+  font-size: 11px;
+}
+#spellbar .spell.ally {
+  border-color: rgba(125, 255, 154, 0.55);
+}
+#spellbar .spell.on {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold) inset;
+}
+#spellbar .spell.on b {
+  color: var(--gold);
+}
+#spellbar .spell.dim {
+  opacity: 0.5;
+}
+.rules ul.spells li {
+  margin-bottom: 6px;
 }
 #groupbar .gcount {
   color: var(--gold);
@@ -1491,6 +1711,10 @@ body.mirror .ulabel.s1.sel .ct {
   color: #ffe9a8;
   font-weight: bold;
 }
+/* ((V3a) its inches, which a Tactical label leaves out) */
+.ulabel .st.hi i {
+  font-style: normal;
+}
 .card-high {
   color: #ffe9a8;
 }
@@ -1535,9 +1759,10 @@ body.mirror .ulabel.s1.sel .ct {
 
 /* F8b: drawing at scale */
 /* semantic zoom (view/units.js): Tactical labels are short (the role's
-   glyph for the name, the count, the order badge); Strategic shows chips */
+   glyph for the name, the count, the order badge, (V3a) the conditions'
+   icons, the high ground's ▲ without its inches); Strategic shows chips */
 #labels[data-tier='tactical'] .ulabel .nm,
-#labels[data-tier='tactical'] .ulabel .st {
+#labels[data-tier='tactical'] .ulabel .st.hi i {
   display: none;
 }
 #labels[data-tier='tactical'] .ulabel::before {
@@ -1592,6 +1817,21 @@ body:not(.playing) #chips {
   color: #5fd3ff;
 }
 #chips .chip i:empty {
+  display: none;
+}
+/* (V3a) its unit's condition icons, a badge on its upper right corner */
+#chips .chip s {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  padding: 0 2px;
+  border-radius: 7px;
+  background: rgba(20, 16, 12, 0.85);
+  font: 9px/13px system-ui, sans-serif;
+  text-decoration: none;
+  text-shadow: none;
+}
+#chips .chip s:empty {
   display: none;
 }
 @media (pointer: coarse) {
@@ -1680,6 +1920,9 @@ body:not(.playing) #minimap {
      unit card on the left too: view/minimap.js sets --minimap-top while it
      shows in landscape) */
   max-height: min(calc(100vh - 380px), calc(var(--minimap-top, 100vh) - 74px));
+  /* ((V3b) never less than its head: on a short landscape phone the sums
+     above came to 10 px, the head drawn out of its box) */
+  max-height: max(36px, min(calc(100vh - 380px), calc(var(--minimap-top, 100vh) - 74px)));
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -1761,12 +2004,22 @@ body:not(.playing) #roster {
   color: #5fd3ff;
   margin-left: 2px;
 }
+/* (V3a) its unit's condition icons, each with its tip (ui/tooltip.js) */
+#roster .rs [data-cond] {
+  margin-left: 2px;
+  cursor: help;
+}
 @media (max-width: 700px) {
+  /* ((V3b) the phone's top: under the hint, beside the battle log's head,
+     each at most half the screen; the minimap's 🗺 under the log's head) */
   #roster {
-    top: 100px;
+    top: calc(136px + var(--net-h, 0px));
     left: 8px;
-    width: 170px;
+    width: min(170px, calc(50vw - 14px));
     max-height: 40vh;
+  }
+  #minimap.portrait {
+    top: calc(178px + var(--net-h, 0px));
   }
 }
 
@@ -1843,6 +2096,85 @@ body:not(.playing) #roster {
     min-width: 0;
     flex: 1 1 30%;
   }
+}
+
+/* F9a */
+/* transports (view/units.js, ui/card.js, ui/chips.js): a hull's label says
+   who rides it, each squad a chip that picks it up; a hull the unit picked
+   up may board shows ⤒ on its count; its card lists its riders; its
+   Strategic chip a dot per rider squad */
+.ulabel .cg {
+  color: #fff1c4;
+  font-weight: bold;
+}
+.ulabel .rd {
+  color: #e8dcc0;
+}
+.ulabel .rd i {
+  font-style: normal;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 0 3px;
+  border-radius: 6px;
+  background: rgba(255, 241, 196, 0.12);
+}
+.ulabel .rd i:hover {
+  background: rgba(255, 230, 128, 0.35);
+  color: #fff;
+}
+.ulabel.board {
+  border-color: #7fe0ff;
+  box-shadow: 0 0 6px rgba(127, 224, 255, 0.7);
+}
+.ulabel.board .ct::before {
+  content: '⤒ ';
+  color: #7fe0ff;
+}
+#labels[data-tier='tactical'] .ulabel .rd {
+  display: none;
+}
+#card .card-ride {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #fff1c4;
+}
+#card .card-riders {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--edge);
+  font-size: 12px;
+}
+#card .card-riders .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+#card .card-riders button {
+  font: inherit;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 9px;
+  border: 1px solid var(--edge);
+  background: rgba(255, 241, 196, 0.1);
+  color: inherit;
+  cursor: pointer;
+}
+#card .card-riders button:hover {
+  background: rgba(255, 230, 128, 0.3);
+}
+#card .card-riders em {
+  display: block;
+  opacity: 0.75;
+}
+#chips .chip u {
+  text-decoration: none;
+  color: #fff1c4;
+  letter-spacing: -2px;
+  margin-left: 1px;
+}
+#chips .chip u:empty {
+  display: none;
 }
 /* (F16) the courtesy fog: a ghost's label (where an unseen enemy was last
    seen), greyed and dashed; the battle-setup panel's fog line, as the

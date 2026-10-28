@@ -12,6 +12,7 @@ import { UnitViews } from '../view/units.js'
 import { clock } from '../view/clock.js'
 import { Picker } from '../input/picking.js'
 import { Human } from '../input/human.js'
+import { shootAt } from '../input/tools/shoot.js'
 import { Selection } from '../input/selection.js'
 import { GroupInput } from '../input/group.js'
 import { OrderBook } from '../input/book.js'
@@ -21,6 +22,8 @@ import { Tray } from '../ui/tray.js'
 import { BattleLog } from '../ui/log.js'
 import { Card } from '../ui/card.js'
 import { Tooltip } from '../ui/tooltip.js'
+import { tipOf } from '../present/conditions.js'
+import { GLYPH as ORDER_GLYPH, NAME as ORDER_NAME } from '../present/standing.js'
 import { Banner } from '../ui/banner.js'
 import { Toast } from '../ui/toast.js'
 import { Hud } from '../ui/hud.js'
@@ -274,8 +277,18 @@ export function boot(location) {
         // (its row shows the order it now holds)
         ui.card.show(u)
       },
+      // (F9a) a transport's riders as shown, a rider's hull, and a rider's
+      // chip pressed: that squad picked up (input/human.js)
+      riders: (u) => view.units.ridersOf(u.id),
+      aboard: (u) => {
+        const h = view.units.shown(u.id)?.aboard
+        return h ? { id: h, short: view.units.unit(h).t.short } : null
+      },
+      onRider: (id) => human.pickRider(id),
     }),
-    tooltip: new Tooltip($('#tooltip')),
+    // ((V3a) the labels' icons found by their boxes; a marked element's tip
+    // worded for the unit it belongs to: tipFor, below)
+    tooltip: new Tooltip($('#tooltip'), { labels: $('#labels'), explain: (el, how) => tipFor(el, how) }),
     banner: new Banner($('#banner')),
     toast: new Toast($('#toast')),
     hud: new Hud(),
@@ -290,7 +303,32 @@ export function boot(location) {
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
-  view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL) })
+  // ((V3a) the labels' conditions read the card's record too: flow.facts)
+  view.figures({ mirror: () => flow.player.mirror, colorOf, rimOf: (s) => (s === 1 && flow.sides[1].mirror ? 2.4 : 1), W, H, grid: gridSize(W, H, NAV_CELL), facts: () => flow.facts })
+  // (V3a) A marked element's tip (ui/tooltip.js): a condition's, worded for
+  // the unit whose label, card or chip it is on (data-unit: its type, its
+  // height, its advance's roll, its seat's turn; with no unit, as on the
+  // battle-setup panel's showcase, the type's plain words); a unit's chip
+  // its line and its conditions told (none on a tap that has none to tell:
+  // the tap picks it up, as ever), a cluster's what a tap does there; a
+  // roster row's order badge which order it is, its ✓ what it means; (V3c)
+  // a spell bar's button its spell (its cast and chance, its range, what it
+  // does).
+  const tipFor = (el, { tap = false } = {}) => {
+    const units = view.units, id = Number(el.closest('[data-unit]')?.dataset.unit), v = units?.get(id)
+    if (el.dataset.cond) return tipOf(el.dataset.cond, v?.u.t ?? null, v ? units.ctx(id) : {})
+    if (el.dataset.tip === 'cluster') return `${el.dataset.n} units: tap to zoom in`
+    if (el.dataset.tip === 'unit' && v) return tap && !units.conds(id).length ? '' : units.tip(id)
+    if (el.dataset.tip === 'order') {
+      const k = Object.keys(ORDER_GLYPH).find((o) => ORDER_GLYPH[o] === el.textContent)
+      return k ? `<b>${ORDER_GLYPH[k]} ${ORDER_NAME[k]}</b> — its standing order (the card's Orders line changes it).` : ''
+    }
+    if (el.dataset.tip === 'done') return '<b>✓ Done</b> — it has nothing more to do this phase.'
+    // ((V3c) a spell bar's button: its spell, worded by ui/actions.js)
+    if (el.dataset.tip === 'spell') return el.dataset.say ?? ''
+    return ''
+  }
+  ui.tooltip.watch(document)
 
   // ── The local human (input/), the player, the buttons ─────────────────────
   const picker = new Picker({ camera: view.camera, units: view.units, board: view.table.board, unitOf: (id) => flow.unitById(id), tops: () => view.terrain.tops() })
@@ -583,7 +621,10 @@ export function boot(location) {
     // shootTargets and chargeTargets arrays of the units[] objects themselves;
     // shotInfo(u, tg).ok; chargePlan(u, tg) null when no spot is reachable,
     // else a plan with .need; freeSpot(...) null or {x, z}; movePlan(u, extra)
-    // the plan validEnd takes; rngState() as the trace prints it. Replaying a
+    // the plan validEnd takes; rngState() as the trace prints it; (F9a) the
+    // embark(u, v) and disembark(u, c) hooks, units[].aboard, t.transport,
+    // q.landing(u) the cells a rider may step off onto and q.mayBoard(u, v)
+    // null or why not (the ride policy's). Replaying a
     // log needs the hooks, alive, isEngaged, canAct, shotInfo().ok,
     // chargeTargets, chargePlan's null and rngState(); the rest feeds only the
     // corpus policies (run on the PIN), so parity won't notice a reshape of
@@ -857,7 +898,9 @@ export function boot(location) {
       // (draws nothing: a rebuild throws no debris)
       const quiet = new Proxy({}, { get: () => () => {} })
       const at = { M: null }
-      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W: atTable().board.W })
+      // ((V3a) the labels' conditions from the card's record, as the
+      // table's: a label the flow left stale differs)
+      const uv = new UnitViews({ scene: sc, labels: document.createElement('div'), fx: quiet, mirror: () => at.M, colorOf: (s) => flow.sides[s].color, W: atTable().board.W, facts: () => flow.facts })
       // (no shot is ever fired off the table: it holds nothing to clear, and
       // fx's marks are the page's, left alone)
       const sh = { clear() {}, held: () => ({ marker: false, thorns: 0 }) }
@@ -993,10 +1036,13 @@ export function boot(location) {
         listen(observer) {
           player.observer = observer
         },
-        // the unit card's status line as it shows `u` now (it opens the card)
+        // the unit card's status line as it shows `u` now (it opens the card):
+        // its text up to the high ground's span ((V3a) its words' marks
+        // left out)
         card(u) {
           ui.card.show(u)
-          return /class="card-sub">([^<]*)</.exec($('#card').innerHTML)?.[1] ?? null
+          const sub = /class="card-sub">(.*?)<\/div>/s.exec($('#card').innerHTML)?.[1]
+          return sub == null ? null : sub.split('<span class="card-high"')[0].replace(/<[^>]*>/g, '')
         },
       },
       get units() {
@@ -1050,8 +1096,10 @@ export function boot(location) {
         must(human.advance(u), 'doAdvance')
         return settle()
       },
-      doShoot: (u, tg) => {
-        must(human.shoot(u, tg), 'doShoot')
+      // ((V3c) the shot exactly as given: a caster's names its spell `sp`
+      // or none, whatever the spell bar has picked)
+      doShoot: (u, tg, sp) => {
+        must(human.send(human.localSeat(), shootAt(u, tg, sp)), 'doShoot')
         return settle()
       },
       doCharge: (u, tg) => {
@@ -1063,6 +1111,18 @@ export function boot(location) {
       },
       placeCharge: (c) => {
         must(human.placeCharge(c), 'placeCharge')
+        return settle()
+      },
+      // (F9a) a unit boarding hull v (its ⤒ badge's click; in the deployment
+      // where the unit stands) and a rider stepping off onto cell c (a
+      // shaded landing cell's click), sent as those clicks send them
+      // (sim/oracle/human-bot.mjs's embark and disembark entries)
+      embark: (u, v) => {
+        must(human.embark(u, v), 'embark')
+        return settle()
+      },
+      disembark: (u, c) => {
+        must(human.disembark(u, c), 'disembark')
         return settle()
       },
       deployClick: (unit, ground) => must(human.deployClick(unit, ground), 'deployClick'),
@@ -1113,10 +1173,18 @@ export function boot(location) {
         canAct: (u) => asked((g) => canAct(g, u)),
         movePlan: (u, extra) => asked((g) => movePlan(g, u, extra)),
         freeSpot: (u, x, z, side, others) => asked((g) => freeSpot(g, u, x, z, side, others)),
-        shootTargets: (u) => asked((g) => shootTargets(g, u)),
-        shotInfo: (u, tg) => asked((g) => shotInfo(g, u, tg)),
+        shootTargets: (u, sp) => asked((g) => shootTargets(g, u, sp)),
+        shotInfo: (u, tg, sp) => asked((g) => shotInfo(g, u, tg, sp)),
         chargeTargets: (u) => asked((g) => chargeTargets(g, u)),
         chargePlan: (u, tg) => asked((g) => chargePlan(g, u, tg)),
+        // (F9a) a rider's landing cells (its hull's), and why u may not
+        // board v now, null when it may (in a phase, or the deployment, as
+        // the decision is): the bot's ride policy
+        landing: (u) => asked((g, qq) => {
+          const v = g.units.find((x) => x.id === u.aboard)
+          return v ? qq.landing(g, u, v) : []
+        }),
+        mayBoard: (u, v) => asked((g, qq) => qq.mayBoard(g, u, v, g.pending?.k === 'phase')),
         rngState: () => (serving ? serving.rng : rngState(atTable().rng)),
       },
       screen(x, y, z) {
@@ -1125,6 +1193,49 @@ export function boot(location) {
       },
       view: {
         snapDiff,
+        // ((V3a, not promised) the conditions' tips (sim/input-check.mjs's
+        // tips lane): unit `id` shown under conditions forced on the table
+        // as shown (`mu`: fields of its mirror record, `f`: of its facts in
+        // the card's record, `phase`: the mirror's phase), its label drawn
+        // again; unforce() puts back all that was forced, and draws every
+        // label again; the tip a condition of unit `id` gives (`want`); the
+        // tooltip as it stands (shown or not, pinned, its text and box);
+        // `show(html, x, y)` the tooltip beside a page point, as any tip is
+        // placed, and `hide()` it, pinned or not; `look(x, z, d)` the camera
+        // `d` inches from (x, z), above and behind it, at once)
+        tips: (() => {
+          const kept = []
+          return {
+            force(id, { mu = {}, f = {}, phase } = {}) {
+              const M = player.mirror, rec = M.units[id]
+              kept.push({ id, mu: Object.fromEntries(Object.keys(mu).map((k) => [k, rec[k]])), f: flow.facts[id], phase: M.phase })
+              Object.assign(rec, mu)
+              flow.facts = { ...flow.facts, [id]: { ...flow.facts[id], ...f } }
+              if (phase) M.phase = phase
+              view.units.label(id)
+            },
+            unforce() {
+              for (const k of kept.reverse()) {
+                Object.assign(player.mirror.units[k.id], k.mu)
+                flow.facts = { ...flow.facts, [k.id]: k.f }
+                player.mirror.phase = k.phase
+              }
+              kept.length = 0
+              view.units.labelAll()
+            },
+            want: (id, k) => tipOf(k, view.units.get(id).u.t, view.units.ctx(id)),
+            unitTip: (id) => view.units.tip(id),
+            tooltip: () => {
+              const el = $('#tooltip'), r = el.getBoundingClientRect()
+              return { shown: el.style.display === 'block', pinned: ui.tooltip.pinned, html: el.innerHTML, box: { left: r.left, top: r.top, right: r.right, bottom: r.bottom } }
+            },
+            show: (html, x, y) => ui.tooltip.show(html, { x, y }),
+            hide: () => ui.tooltip.unpin(),
+            // the label icon the tooltip finds at a page point (its condition)
+            at: (x, y, slop) => ui.tooltip.iconAt(x, y, slop)?.dataset.cond ?? null,
+            look: (x, z, d) => rig.toPose({ pos: [x, d * 0.8, z + d * 0.6], target: [x, 0, z] }, 0.05),
+          }
+        })(),
         // fn(e) at every checkpoint (a `check` event), the player waiting on
         // what it returns (null: no pause)
         pauseAtChecks(fn) {
@@ -1146,7 +1257,8 @@ export function boot(location) {
         // (sim/board-check.mjs): the mat, the zones' depth, the objectives,
         // the overlay's grid, the figures' run-off edge, the tufts and
         // flowers, the camera's dolly and far plane, the fog and the
-        // shadow camera, and how often it was made over (setBoard)
+        // shadow camera, how often it was made over (setBoard), and (V3d)
+        // what burns on it
         board: () => {
           const sc = view.stage.sun.shadow.camera, mat = view.table.board.geometry.parameters
           return {
@@ -1155,6 +1267,9 @@ export function boot(location) {
             grid: [view.overlay.tex.image.width, view.overlay.tex.image.height], unitsW: view.units.W,
             tufts: view.table.tufts.count, flowers: view.table.flowers.count,
             dolly: rig.dolly, far: camera.far, fog: [scene.fog.near, scene.fog.far], shadow: [sc.left, sc.right, sc.top, sc.bottom, sc.far], builds: view.boardBuilds,
+            // ((V3d) the burns painted into the mat (a microtask after the
+            // table is drawn, all at once), and the fires' vents lit)
+            burns: view.table.marks?.length ?? 0, fires: view.effects.plumes.count().vents,
           }
         },
         // (F8b, not promised) the drawing at scale (sim/render-bench.mjs,
@@ -1172,8 +1287,19 @@ export function boot(location) {
             tiles: view.terrain.tileCheck(), shadow: { fits: view.stage.fits ?? 0, box: [sc.left, sc.right, sc.bottom, sc.top, sc.near, sc.far] },
             minimap: { up: ui.minimap.up(), ms: ui.minimap.ms, paintMs: ui.minimap.paintMs, redraws: ui.minimap.redraws }, roster: ui.roster.model(),
             chips: document.querySelectorAll('#chips .chip:not([style*="display: none"])').length,
+            // ((V3d) the fires burning on the table, and their smoke and flames)
+            fires: view.effects.plumes.count(),
           }
         },
+        // ((V3d, not promised) the fires' smoke and flames run on `s` seconds
+        // at once, the battle held where it is (sim/powder-shots.mjs: the
+        // columns built up before a shot)
+        smoke: (s) => {
+          for (let t = 0; t < s; t += 0.1) view.effects.plumes.update(0.1)
+        },
+        // ((V3d, not promised) the camera put on a pose at once ({ pos,
+        // target }, [x, y, z] each), or on the whole board ('overview')
+        look: (p) => rig.toPose(p === 'overview' ? rig.fit(rig.views[rig.views.length - 1]) : p, 0.01),
         // ((F8b's review, not promised) the chips shown, each its units'
         // ids and its place on the page (sim/input-check.mjs taps them), and
         // the minimap redrawn `n` times running, each a whole redraw (its

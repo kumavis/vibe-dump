@@ -31,6 +31,11 @@
 // - Its height over the base: cache.js stands every miniature 0.06 over the base's foot (0.09 a big
 //   one's), where the base's top is 0.1: a squirrel stands FOOT higher in its miniature, its feet in the
 //   flock. A trebuchet's crew stand where the classic crew stood.
+// - (F9a) The Acorn War-Cart, the clan's transport (DESIGN §4.2.5): the machine both styles share
+//   (./warcart.js, built with ./kit.js), crewed here by two splat squirrels leaning on its push bar, as
+//   the trebuchet is; kind 'machine', its anim's `deck` the height its riders stand at. Its riders are
+//   their own units' figures (these, in this style), which view/units.js stands on its deck: the cart
+//   draws none itself, and its far stand-in leaves them out (cache.js).
 //
 //   BUILDERS[unit]()   the unit's miniature (a fresh build: cache.js keeps it as the template and clones it)
 //   DRAWS              the trebuchet's builder (its heap of acorns, the classic machine's)
@@ -44,6 +49,7 @@ import { buildFur, furPose, progressive, ANCHOR, BONES, cloakLeaves, castToBody 
 import { SplatFur, Splats, SHADOW_LAYER } from './splat/splats.js'
 import { M, G, part, rod, metal, glowMat, shade, roundShield } from './kit.js'
 import { BUILDERS as CLASSIC, squirrel as classicBody } from './classic/squirrel.js'
+import { warCart } from './warcart.js'
 
 const V = (a) => new THREE.Vector3(...a)
 const UP = new THREE.Vector3(0, 1, 0)
@@ -427,6 +433,19 @@ export const BUILDERS = {
       parent.add(S.g)
     })
     return machine
+  },
+  // (F9a) the Acorn War-Cart (./warcart.js, the machine both styles share), pushed by two splat squirrels
+  // in acorn caps, both paws forward on its push bar (the classic crew's arms, -1.35 about x)
+  warcart() {
+    return warCart((s) => {
+      const S = squirrel(s < 0 ? 'war-cart crew left' : 'war-cart crew right', {
+        seed: s < 0 ? 4 : 5, fur: s < 0 ? '#c96a2d' : '#b5612b',
+        pose: { armL: { raise: 1.2, swing: -0.15 }, armR: { raise: 1.2, swing: -0.15 } },
+        shadow: { armL: [-1.35, 0, 0], armR: [-1.35, 0, 0] },
+      })
+      acornCap(S, '#5a3c22')
+      return S.g
+    })
   },
   // a mossy robe open down the front, a white beard, a wreath of oak and autumn leaves, a staff with a
   // glowing gem in the left paw; larger than the rest (a hero)

@@ -225,23 +225,28 @@ export const tag = (v, r) =>
 //                            round a powder keg, its own set), recorded on
 //                            F19a's code: AI pairs (logs with no entries)
 //                            and a human-bot log, each seat its preset
+// sim/baselines/powder/*.json (V3d) battles on the Powder Field (a Grand
+//                            battle on the wreckage, its own set), recorded
+//                            on V3d's code: AI pairs (logs with no entries),
+//                            each seat its preset
 // (until N0 the corpus also kept Chromium's shadow hashes, `webShadow`, where
 // they differed from Node's: since N0 every engine computes Node's). Each
 // item comes back as { id, kind, set, mode, job, ...stored fields } (`set`
-// a log's: human, pilot, army, fort, scale or keg), `mode` the title screen's for
+// a log's: human, pilot, army, fort, scale, keg, vehicle or powder), `mode` the title screen's for
 // its seats (a log whose seats no button seats is refused here) and `kind`
 // who sits in them: 'ai' for pairs.json's pairs and for a log whose seats
-// are both AI (F11a's army/, F7a's fort/, F8b's scale/ and F19a's keg/ all
-// keep AI pairs as logs, because their setups name what a seed pair can't:
-// lists and seat races, a terrain set, a board, a mission; so pairs.json
-// takes none of them), 'human' for a log with a human seat. So
+// are both AI (F11a's army/, F7a's fort/, F8b's scale/, F19a's keg/,
+// F9a's vehicle/ and V3d's powder/ all keep AI pairs as logs, because their
+// setups name what a seed pair can't: lists and seat races, a terrain set,
+// a board, a mission; so pairs.json takes none of them), 'human' for a log
+// with a human seat. So
 // `--only ai` takes every AI battle, a pair or a log, and `--only army`,
-// `--only fort`, `--only scale` or `--only keg` a set's whole; a consumer that needs a
+// `--only fort`, `--only scale`, `--only keg`, `--only vehicle` or `--only powder` a set's whole; a consumer that needs a
 // pair's seeds reads `it.set` (undefined for a pair) or `it.job.seed`.
 // Whether the page can make the rest of a setup is found where it is
 // played: every page runner holds the battle the page started to the log's
 // setup (oracle/human-bot.mjs's playedAs).
-export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort', 'scale', 'keg'])
+export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort', 'scale', 'keg', 'vehicle', 'powder'])
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))
@@ -259,7 +264,7 @@ export function loadCorpus() {
 
 // The battles an --only list names: kinds (ai, human), modes (watch,
 // bushtail, serpent, hotseat), a log set (LOG_SETS: human, pilot, army,
-// fort, scale, keg) or ids. A token that names nothing is a usage error, so a typo can
+// fort, scale, keg, vehicle) or ids. A token that names nothing is a usage error, so a typo can
 // never pass a gate by selecting no battles.
 export function select(all, only) {
   if (only === undefined) return all

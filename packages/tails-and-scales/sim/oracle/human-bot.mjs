@@ -13,6 +13,10 @@
 //   { s: 0, t: 'pilot', m: 5 }             (F10b) the AI plays the seat's
 //                                          units 0 and 2 (bit j: its j-th
 //                                          unit in G.units order)
+//   { s: 0, t: 'embark', u: 3, v: 12 }     (F9a) unit 3 boards hull 12 (in
+//                                          the deployment, or as its move)
+//   { s: 0, t: 'disembark', u: 3, c: 977 } (F9a) rider 3 steps off onto
+//                                          cell 977, as its move
 //
 // Each entry goes through the same hook calls a click or a button makes.
 // Before that the driver checks what the UI's own gates check: the entry's
@@ -64,8 +68,9 @@ export function jobSetup(job) {
 export function pageStart(setup) {
   const mode = Array.isArray(setup?.seats) ? modeOf(setup) : undefined
   if (!mode) throw new Error(`no title-screen mode seats ${JSON.stringify(setup?.seats?.map((s) => s.ctrl))}: a log is played from the title screen`)
-  // ((F19a) the keg mission takes the classic preset, and is fought on its own set)
-  const PRESET = { classic: 'classic', keg: 'classic' }, FIRST_SET = { classic: 'classic', keg: 'keg' }
+  // ((F19a) the keg mission takes the classic preset, and is fought on its
+  // own set; (V3d) the powder mission the grand one, on its own)
+  const PRESET = { classic: 'classic', keg: 'classic', powder: 'grand' }, FIRST_SET = { classic: 'classic', keg: 'keg', powder: 'powder' }
   const m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
   const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
   const terrain = setup.terrain && setup.terrain !== (Object.hasOwn(FIRST_SET, m) ? FIRST_SET[m] : undefined) ? `&terrain=${setup.terrain}` : ''
@@ -84,8 +89,9 @@ export function pageStart(setup) {
 // written: 'classic' and '112111' field the same units, but they are not
 // the same setup.
 export function playedAs(played, setup) {
-  // ((F19a) the keg mission's preset is the classic one)
-  const PRESET = { classic: 'classic', keg: 'classic' }
+  // ((F19a) the keg mission's preset is the classic one; (V3d) the powder
+  // mission's the grand one)
+  const PRESET = { classic: 'classic', keg: 'classic', powder: 'grand' }
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${canon(v[k])}`).join(',')}}` : JSON.stringify(v))
   const plain = (s) => {
     const mission = s.mission ?? 'classic', preset = Object.hasOwn(PRESET, mission) ? PRESET[mission] : mission
@@ -121,9 +127,11 @@ export function humanDriver(ts, { entries = null, choose = null }) {
   // length when each was applied, so its lines can be found
   const played = [], asked = [], at = []
   let next = 0, busy = null, failed = null
-  const KINDS = { deploy: ['place', 'deployed'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto', 'pilot'], roundLimit: ['vote'] }
+  // ((F9a) embark answers the deployment and the movement phase alike,
+  // disembark the movement phase)
+  const KINDS = { deploy: ['place', 'deployed', 'embark'], chargeEnd: ['chargeEnd'], phase: ['advance', 'move', 'shoot', 'charge', 'end', 'auto', 'pilot', 'embark', 'disembark'], roundLimit: ['vote'] }
   // the phase each in-phase command belongs to (end and auto fit any)
-  const PHASE = { advance: 'move', move: 'move', shoot: 'shoot', charge: 'charge' }
+  const PHASE = { advance: 'move', move: 'move', shoot: 'shoot', charge: 'charge', embark: 'move', disembark: 'move' }
 
   // what a human is being asked right now, if anything
   function decision() {
@@ -144,7 +152,7 @@ export function humanDriver(ts, { entries = null, choose = null }) {
   function apply(d, e) {
     const bad = (why) => new Error(`entry ${played.length} ${JSON.stringify(e)}: ${why}`)
     if (e.s !== d.s || !KINDS[d.k].includes(e.t)) throw bad(`does not answer a ${d.k} decision of seat ${d.s}`)
-    if (PHASE[e.t] && d.phase !== PHASE[e.t]) throw bad(`answers the ${d.phase} phase, but ${e.t} belongs to the ${PHASE[e.t]} phase`)
+    if (PHASE[e.t] && d.k === 'phase' && d.phase !== PHASE[e.t]) throw bad(`answers the ${d.phase} phase, but ${e.t} belongs to the ${PHASE[e.t]} phase`)
     const find = (id) => ts.units.find((u) => u.id === id && q.alive(u))
     const own = (id) => {
       const u = find(id)
@@ -185,11 +193,15 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         p = ts.doMove(u, e.c, S.reach)
         break
       }
+      // ((V3c) a caster's names its spell, `sp`, which may be cast on a
+      // friend: the target a standing unit of either side then, shotInfo
+      // judging it; a log with none plays as it always has)
       case 'shoot': {
-        const u = own(e.u), tg = enemy(e.tg)
-        if (!q.canAct(u) || !q.shotInfo(u, tg).ok) throw bad('cannot shoot that')
+        const u = own(e.u), tg = e.sp === undefined ? enemy(e.tg) : find(e.tg)
+        if (!tg) throw bad(`unit ${e.tg} is not a live unit`)
+        if (!q.canAct(u) || !q.shotInfo(u, tg, e.sp).ok) throw bad('cannot shoot that')
         ts.select(u)
-        p = ts.doShoot(u, tg)
+        p = e.sp === undefined ? ts.doShoot(u, tg) : ts.doShoot(u, tg, e.sp)
         break
       }
       case 'charge': {
@@ -218,6 +230,24 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         if (typeof e.more !== 'boolean') throw bad('a vote says more, true or false')
         p = ts.vote(e.more, e.s)
         break
+      // (F9a) a unit boards a hull of its seat's (the hull's ⤒ badge, or the
+      // deployment's re-arranging), and a rider steps off onto a landing
+      // cell (its chip, then the shaded cell): the page's ?debug hooks
+      // ts.embark(u, v) and ts.disembark(u, c), each settling once played
+      case 'embark': {
+        if (typeof ts.embark !== 'function') throw bad('the page has no embark hook (code older than F9a)')
+        const u = own(e.u), v = own(e.v)
+        if (u.aboard || (d.k === 'phase' && !q.canAct(u))) throw bad('cannot board: it rides already, or has moved')
+        p = ts.embark(u, v)
+        break
+      }
+      case 'disembark': {
+        if (typeof ts.disembark !== 'function') throw bad('the page has no disembark hook (code older than F9a)')
+        const u = own(e.u)
+        if (!u.aboard || !q.canAct(u)) throw bad('cannot step off: it rides nothing, or has moved')
+        p = ts.disembark(u, e.c)
+        break
+      }
       // (F10b) the group bar's Auto these: standing units of the seat's, one
       // at least able to act
       case 'pilot': {
@@ -287,11 +317,28 @@ export function mulberry32(seed) {
 // `pilot` (F10b): `random`, but now and then (at most once a phase) it puts
 // a random few of the units still to act on autopilot (the group bar's Auto
 // these), before, between or after its own commands.
+// `ride` (F9a): `random`, with transports: in its deployment it re-arranges
+// the autoload (a rider placed off its hull, then boarded again, or another
+// unit boarding in its place), and in each movement phase, before its own
+// moves, steps a rider off (more often than not, onto a random landing
+// cell) and boards a unit that may onto a hull with room (now and then).
+// It reads the hulls through the page's ?debug queries q.landing(u) (a
+// rider's landing cells, its hull's: core/queries.js landing) and
+// q.mayBoard(u, v) (null when u may board v now: core/queries.js mayBoard,
+// in a phase or the deployment as the decision is), and sends through its
+// hooks embark(u, v) and disembark(u, c) (the driver's): the ?debug
+// block's F9a members.
+// Every policy leaves a rider out of its moves, advances and pilots (it
+// moves only with its hull: the AI's), so a battle with transports plays
+// under any of them.
 export function makePolicy(name, seed) {
   const rand = mulberry32(seed)
   const pick = (a) => a[Math.floor(rand() * a.length)]
-  const aggressive = name === 'aggressive', late = name === 'late', pilot = name === 'pilot'
-  if (!aggressive && !late && !pilot && name !== 'random') throw new Error(`unknown policy ${name}`)
+  const aggressive = name === 'aggressive', late = name === 'late', pilot = name === 'pilot', ride = name === 'ride'
+  if (!aggressive && !late && !pilot && !ride && name !== 'random') throw new Error(`unknown policy ${name}`)
+  // (ride) the seats whose autoload it has re-arranged, and the rider each
+  // placed off its hull (by id: the policy never marks the match's units)
+  const arranged = new Set(), offed = new Map()
   const placing = new Map() // seat → placements left in its deployment
   let key = '', skipped = new Set(), acted = 0, last = null, piloted = false // `last`: this phase's latest entry
 
@@ -309,6 +356,26 @@ export function makePolicy(name, seed) {
     // 8, classic's, on a page from before missions
     const W = nav.W, H = nav.H, depth = ts.board?.deploy ?? 8
     const mine = ts.units.filter((u) => u.side === s)
+    // (ride) the autoload re-arranged first: the first rider of the seat's
+    // first hull placed off it, then that rider (or, half the time, another
+    // unit that may) boarding the hull
+    if (ride && !arranged.has(s)) {
+      const hull = mine.find((u) => u.t.transport && ts.q.alive(u))
+      if (!hull) arranged.add(s)
+      else {
+        if (typeof ts.q.mayBoard !== 'function') throw new Error("the ride policy needs the page's ?debug q.mayBoard (code older than F9a)")
+        const rider = mine.find((u) => u.aboard === hull.id)
+        const p = !offed.has(s) && rider && ts.q.freeSpot(rider, hull.pos.x, hull.pos.z + (rand() - 0.5) * 8, s, ts.units.filter((o) => o !== rider))
+        if (p) {
+          offed.set(s, rider.id)
+          return { s, t: 'place', u: rider.id, c: nav.index(p.x, p.z) }
+        }
+        arranged.add(s)
+        const was = mine.find((u) => u.id === offed.get(s))
+        const back = was && rand() < 0.5 && ts.q.mayBoard(was, hull) === null ? was : mine.find((u) => !u.aboard && !u.t.transport && ts.q.mayBoard(u, hull) === null)
+        if (back) return { s, t: 'embark', u: back.id, v: hull.id }
+      }
+    }
     if (!placing.has(s)) placing.set(s, aggressive ? mine.slice() : Array.from({ length: Math.floor(rand() * 4) }, () => pick(mine)))
     const todo = placing.get(s)
     while (todo.length) {
@@ -339,7 +406,27 @@ export function makePolicy(name, seed) {
     if (late && acted && rand() < (last?.t === 'advance' ? 0.6 : 0.15)) return { s, t: 'auto' }
     if (!aggressive && !acted && rand() < 0.08) return acted++, { s, t: 'auto' }
     if (!aggressive && rand() < 0.03) return end
-    const mine = ts.units.filter((u) => u.side === s && q.alive(u) && !skipped.has(u.id))
+    // ((F9a) a rider moves only with its hull: never one of these policies'
+    // own moves, advances or pilots)
+    const mine = ts.units.filter((u) => u.side === s && q.alive(u) && !skipped.has(u.id) && !u.aboard)
+    // (ride) a rider stepping off, a unit boarding, before its own moves
+    if (ride && d.phase === 'move') {
+      if (typeof q.landing !== 'function' || typeof q.mayBoard !== 'function') throw new Error("the ride policy needs the page's ?debug q.landing and q.mayBoard (code older than F9a)")
+      const riders = ts.units.filter((u) => u.side === s && q.alive(u) && u.aboard && q.canAct(u) && !skipped.has(u.id))
+      if (riders.length && rand() < 0.6) {
+        const p = pick(riders), cells = q.landing(p)
+        skipped.add(p.id)
+        if (cells.length) return acted++, { s, t: 'disembark', u: p.id, c: pick(cells) }
+      }
+      if (rand() < 0.25) {
+        const hulls = mine.filter((u) => u.t.transport)
+        const pairs = hulls.flatMap((v) => mine.filter((u) => !u.t.transport && q.canAct(u) && q.mayBoard(u, v) === null).map((u) => [u, v]))
+        if (pairs.length) {
+          const [u, v] = pick(pairs)
+          return acted++, { s, t: 'embark', u: u.id, v: v.id }
+        }
+      }
+    }
     if (pilot && !piloted && rand() < 0.3) {
       // a random few of the units still to act (each kept on a coin), as a
       // mask over all the seat's units, dead ones too
@@ -390,6 +477,20 @@ export function makePolicy(name, seed) {
           }
         }
         return acted++, { s, t: 'move', u: u.id, c }
+      }
+      if (d.phase === 'shoot' && u.t.spells) {
+        // ((V3c) a caster casts one of its spells that has something to
+        // cast on, named by `sp`: at random, the aggressive bot its first
+        // when it can, at the weakest; a spell on a friend at a friend)
+        const sps = u.t.spells.map((w, sp) => sp).filter((sp) => q.shootTargets(u, sp).length)
+        if (!sps.length) {
+          pass()
+          continue
+        }
+        const sp = aggressive && sps.includes(0) ? 0 : pick(sps)
+        const tgs = q.shootTargets(u, sp)
+        const tg = aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs)
+        return acted++, { s, t: 'shoot', u: u.id, tg: tg.id, sp }
       }
       if (d.phase === 'shoot') {
         const tgs = q.shootTargets(u)

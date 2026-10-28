@@ -6,6 +6,12 @@
 // Opened by a click on a figure (or as a unit is picked up), closed by
 // showing nothing.
 //
+// (F9a, DESIGN §4.2.5) A transport's card, after its stats, says who rides
+// it ("Riders: 2 squads · 11/12 models"), each squad a chip that picks it up
+// (to step it off, or in the deployment to place it), and that riders ride
+// under cover, firing decks to come (F9c); a rider's says what it rides.
+// Both read the mirror (`riders(u)`, `aboard(u)`), as the label does.
+//
 // It reads the unit as shown (the mirror's: what stands, what wounds are
 // left, mesmerized, in combat), like its label. What the unit has done this
 // turn and whether it stands in cover read the match itself once the table
@@ -14,7 +20,15 @@
 // the last action's end, or the last stop for a decision, the table has
 // played (present/hud-model.js's facts), so the card never tells of moves
 // and dice the table hasn't played (§2.4).
+//
+// (V3a) Each word of the status line that a condition explains (fell back,
+// advanced, a charge failed, mesmerized, in combat, in cover, its losses,
+// the high ground; present/conditions.js) is marked with it (data-cond),
+// and the card with its unit (data-unit), so the tooltip (ui/tooltip.js)
+// tells the condition on a hover or a tap; a war machine's abilities end
+// with its never charging, marked so too.
 import { factOf, cardStatus } from '../present/hud-model.js'
+import { CONDITIONS } from '../present/conditions.js'
 import { GLYPH, NAME } from '../present/standing.js'
 import { unitPrice } from '../core/army.js'
 
@@ -25,12 +39,17 @@ const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 // playtest's fix) The reason a shot needs what it needs ("S3 vs T6") is the
 // tooltip's, at the moment it matters (ui/tooltip.js's oddsText); the card
 // stays compact: a line per weapon with every toughness's need made the
-// lead's card cover a figure on a 1280×800 screen.
+// lead's card cover a figure on a 1280×800 screen. (V3c) A caster's spells,
+// each a line, numbered by the key that picks it (1-3), its effect in a
+// few words where it isn't a weapon's.
 export function statsHtml(t) {
   const fmt = (k) => (k === 'M' ? `${t.M}"` : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
   const wpn = (w, icon) => {
     if (!w) return ''
     if (w.mesmerize) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · D3 mortal + mesmerize</em></div>`
+    if (w.snare) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · no move or charge next turn</em></div>`
+    if (w.ward) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend saves at +1</em></div>`
+    if (w.resolve) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend: no morale, charge again</em></div>`
     const bits = []
     if (w.range) bits.push(`${w.range}"`)
     if (w.spell) bits.push(`spell ${w.spell}+`)
@@ -38,6 +57,7 @@ export function statsHtml(t) {
     else if (w.shots) bits.push(`A${w.shots}`)
     bits.push(`S${w.S}`, `AP-${w.AP}`, `D${w.D}`)
     if (w.poison) bits.push(`poison ${w.poison}+`)
+    if (w.scenery === 0) bits.push('spares scenery')
     if (w.indirect) bits.push('indirect')
     if (w.heavy) bits.push('heavy')
     if (w.assault) bits.push('assault')
@@ -45,8 +65,8 @@ export function statsHtml(t) {
   }
   return `
     <table class="stats"><tr>${statKeys.map((k) => `<th>${k}</th>`).join('')}</tr><tr>${statKeys.map((k) => `<td>${fmt(k)}</td>`).join('')}</tr></table>
-    ${wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
-    <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}</ul>`
+    ${t.spells ? t.spells.map((w, i) => wpn(w, `✦${i + 1}`)).join('') : wpn(t.ranged, t.ranged?.spell ? '✦' : '➹')}${wpn({ ...t.melee, range: 0 }, '⚔')}
+    <ul class="abil">${(t.abilities || []).map((a) => `<li>${a}</li>`).join('')}${t.noCharge ? `<li class="cond" data-cond="noCharge">${CONDITIONS.noCharge.icon} ${CONDITIONS.noCharge.title}</li>` : ''}</ul>`
 }
 
 export class Card {
@@ -56,8 +76,11 @@ export class Card {
   // (the core's preview, §4.1 rule 2); `facts()`: the record of the last
   // action or stop played, by unit id; (F10c) `orders(u)`: the unit's
   // standing order ({ k, can: whether the player may change it now }, or
-  // null: none to show), and `onOrder(u, k)`: one of its buttons pressed
-  constructor({ el, sides, shown, live, ask, facts, orders = () => null, onOrder = () => {} }) {
+  // null: none to show), and `onOrder(u, k)`: one of its buttons pressed;
+  // (F9a) `riders(u)`: the squads the mirror shows aboard transport u
+  // ([{ id, short, alive }]), `aboard(u)`: the hull rider u rides as shown
+  // ({ id, short }, or null), and `onRider(id)`: a rider's chip pressed
+  constructor({ el, sides, shown, live, ask, facts, orders = () => null, onOrder = () => {}, riders = () => [], aboard = () => null, onRider = () => {} }) {
     this.el = el
     this.sides = sides
     this.shown = shown
@@ -66,9 +89,15 @@ export class Card {
     this.facts = facts
     this.orders = orders
     this.onOrder = onOrder
+    this.riders = riders
+    this.aboard = aboard
+    this.onRider = onRider
     el.addEventListener('click', (e) => {
       const k = e.target?.dataset?.order
       if (k && this.unit) this.onOrder(this.unit, k)
+      // ((F9a) a rider's chip: that squad picked up)
+      const r = e.target?.closest?.('[data-rider]')?.dataset.rider
+      if (r) this.onRider(Number(r))
     })
     // the unit the open card shows (app/flow.js redraws it as the table
     // catches up)
@@ -98,11 +127,28 @@ export class Card {
     // ((F8b) the price in this battle: the setup never changes, so the
     // match asked is the same whether the table has caught up or not)
     const price = this.ask((G) => unitPrice(G.setup, u))
+    card.dataset.unit = u.id
     card.innerHTML = `${this.group && u.id === this.groupLead ? `
     <div class="card-group">${this.group}</div>` : ''}
     <div class="card-head s${u.side}"><b>${t.name}</b><span>${this.sides()[u.side].short} · ${t.role} · ${price} pts</span></div>
-    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.orderLine(u)}${statsHtml(t)}`
+    <div class="card-sub">${cardStatus(t, mu, f)}${this.height(mu)}</div>${this.ride(u, mu)}${this.orderLine(u)}${statsHtml(t)}${this.cargo(u)}`
     card.classList.add('show')
+  }
+
+  // (F9a) a rider's line: the hull it rides, as shown
+  ride(u, mu) {
+    const h = mu?.aboard ? this.aboard(u) : null
+    return h ? `<div class="card-ride">▣ Aboard the ${h.short} · steps off as its move</div>` : ''
+  }
+  // (F9a) a transport's riders, after its stats: how many squads and models
+  // of its capacity, a chip per squad (pressed, it picks the squad up), and
+  // what riding means until the firing decks come
+  cargo(u) {
+    const tr = u.t.transport
+    if (!tr) return ''
+    const rs = this.riders(u), n = rs.reduce((k, r) => k + r.alive, 0)
+    const chips = rs.map((r) => `<button data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</button>`).join('')
+    return `<div class="card-riders"><div><b>Riders:</b> ${rs.length} squad${rs.length === 1 ? '' : 's'} · ${n}/${tr.capacity} models</div>${chips ? `<div class="chips">${chips}</div>` : ''}<em>Riders ride under cover; firing decks come later.</em></div>`
   }
 
   // (F7a) a unit standing on a deck or high on a stair (the mirror's `y`, its
@@ -111,7 +157,7 @@ export class Card {
   // ?debug card hook reads the line's text up to it).
   height(mu) {
     const y = mu?.y ?? 0
-    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · ▲ high ground, ${+y.toFixed(1)}" up</span>` : ''
+    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · <span class="cond" data-cond="high">▲ high ground, ${+y.toFixed(1)}" up</span></span>` : ''
   }
 
   // (F10c) the unit's standing order, and while the player may change it,

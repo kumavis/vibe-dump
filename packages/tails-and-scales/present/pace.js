@@ -154,11 +154,19 @@ const ANCHOR = new Set(['volley', 'blast.fire', 'spell.cast', 'spell.fizzle', 'm
 const OPENING = new Set(['focus', 'unit.face'])
 // ((F19a) a powder keg the attack set off goes off inside it: its fuse, its
 // blast's landing and victims, its scenery)
-const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
-const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
+// ((V3c) a caster's snare and its spell on a friend sit in one too)
+// ((F9a) and a hull the attack wrecks bails its riders out inside it
+// (core/actions/transport.js hullDestroyed, mid-damage): each rider's hop
+// off, a forced `unit.disembark`, then its dice and its wounds; a rider
+// stepping off of its own accord is a move, never in an attack)
+const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'spell.snare', 'spell.ward', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
+const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'unit.disembark' && e.forced) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 // what an attack in a batch waits on before the next may start: a volley
 // PACE.lead, a scatter, a throw and the slower spells their half second
-// (PACE.cost's), the rest nothing (their handlers draw at once)
+// (PACE.cost's), the rest nothing (their handlers draw at once); (V3c) a
+// snare's roots and a spell settling on a friend among the rest: each
+// plays in about the attacks' own spacing (PACE.brisk), so it holds
+// nothing back (a Grand battle as watched stays within its budget)
 const HOLD = new Set(['blast.scatter', 'blast.fire', 'keg.fuse', 'spell.thorns', 'spell.gaze'])
 export const holdOf = (e) => (e.t === 'volley' ? PACE.lead : HOLD.has(e.t) ? PACE.cost(e) : 0)
 

@@ -46,6 +46,9 @@ Object.assign(globalThis, {
   addEventListener() {}, removeEventListener() {},
   requestAnimationFrame: (cb) => { rafCb = cb; return 1 },
   localStorage: { getItem: () => null, setItem() {} },
+  // ((V2) the quality's auto pick asks whether the pointer is coarse: a
+  // mouse here)
+  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),
 })
 Object.defineProperty(globalThis, 'navigator', { value: { userAgent: 'node' }, configurable: true })
 export const takeFrame = () => { const cb = rafCb; rafCb = null; return cb }

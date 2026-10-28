@@ -6,6 +6,12 @@
 // fortified board, cast at one by one with no broadphase), else the board's
 // plane: a click on a deck is a click on its top, not on the ground under it.
 // The point carries its height (y), and the tools read its x and z.
+//
+// (F9a, DESIGN §4.2.5) A rider has no cylinder and no place on screen
+// (view/units.js): it is picked by its figure on its hull's deck, cast at
+// first, mesh by mesh (a dozen small figures a hull at most), so a click on
+// a squad riding the cart picks that squad, and one on the cart's wheels,
+// cup or crew the cart.
 import * as THREE from 'three'
 
 export class Picker {
@@ -29,8 +35,12 @@ export class Picker {
     ray.setFromCamera(ptr, this.camera)
     // the units the table shows standing (while the player is behind, the
     // match may have slain some of them already)
-    const hits = ray.intersectObjects(this.units.pickables(), false)
-    let unit = hits.length ? this.unitOf(hits[0].object.userData.id) : null
+    // ((F9a) a rider's figure on a deck first)
+    const deck = this.units.deckFigures?.() ?? []
+    const rode = deck.length ? ray.intersectObjects(deck, true)[0] : null
+    const riderId = rode ? riderOf(rode.object) : null
+    const hits = riderId !== null ? [] : ray.intersectObjects(this.units.pickables(), false)
+    let unit = riderId !== null ? this.unitOf(riderId) : hits.length ? this.unitOf(hits[0].object.userData.id) : null
     // (F10a) a miss falls back on the unit whose centre on screen is
     // nearest the pointer, within 14 px (a finger: 24): a far figure is a
     // few pixels tall
@@ -53,4 +63,11 @@ export class Picker {
     const g = (tops.length ? ray.intersectObjects(tops, false)[0] : null) ?? ray.intersectObject(this.board, false)[0]
     return { unit, ground: g ? g.point : null }
   }
+}
+
+// (F9a) the rider whose deck figure a mesh is part of (its root carries the
+// rider's id), or null
+function riderOf(o) {
+  for (let p = o; p; p = p.parent) if (p.userData.rider !== undefined) return p.userData.rider
+  return null
 }

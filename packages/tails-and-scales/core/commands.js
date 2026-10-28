@@ -8,7 +8,10 @@
 //   advance {u}       move phase: a D6 more inches (no shooting unless assault,
 //                     no charge unless it may charge after advancing)
 //   move {u, c}       move phase: move, advance's move, or fall back, to cell c
-//   shoot {u, tg}     shoot phase
+//   shoot {u, tg, sp?} shoot phase; (V3c) a caster's `sp` names the spell it
+//                     casts (its index in the type's `spells`; none: its
+//                     first), and a spell cast on a friend takes one of
+//                     the seat's own units as `tg` (the caster too)
 //   charge {u, tg}    charge phase: declare and roll; on contact a seat's own
 //                     charge waits for chargeEnd (the AI's moves the shortest way)
 //   chargeEnd {c}     where the charge ends: a cell the roll reaches, -1 for
@@ -26,7 +29,22 @@
 //                     if every one says more
 //   concede {}        out of band: a human seat gives up, at any time until
 //                     the battle is decided (a side wiped out has lost)
+//   embark {u, v}     (F9a) deploy or move phase: unit u boards vehicle v (in
+//                     a phase, walking to v's side as its move; in the
+//                     deployment where it stands); ((V3c, at the V3 merge)
+//                     never a unit Root Snare binds, boarding being its
+//                     move: mayBoard; a snared hull's riders may still step
+//                     off)
+//   disembark {u, c}  (F9a) move phase: rider u steps off its vehicle onto
+//                     cell c, as its move
 // (The AI's `hold` is its own, never a command: core/ai/policy.js.)
+//
+// (F9a) A kind's decision `k` may be a list: `embark` answers both the
+// deployment and a phase (the movement phase: `phase` applies when the
+// decision is a phase's). A rider (u.aboard, DESIGN §4.2.5) can't move,
+// advance or charge ("aboard a vehicle: disembark first"), nor shoot (the
+// firing deck is F9c's), and is never a target ("inside a vehicle"); `place`
+// takes it off its hull, and placing a hull carries its riders.
 //
 // legal(G, seat, body) answers null, or why not: the body carries its kind's
 // fields and nothing else (`fields` whole numbers, every one; `opt` whole
@@ -44,13 +62,14 @@ import { lock, unlock } from './rng.js'
 import { deepFreeze } from './util.js'
 import { emit, log } from './journal.js'
 import { ctrl, seatName } from './match.js'
-import { setUnitPos } from './units.js'
+import { moveUnitTo } from './units.js'
 import { placeOk } from './deploy.js'
 import {
   alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits, groundY,
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
-import { doShoot, kegsGoOff } from './actions/shoot.js'
+import { mayBoard, doEmbark, mayLand, doDisembark } from './actions/transport.js'
+import { doShoot, kegsGoOff, weaponOf, allySpell } from './actions/shoot.js'
 import { declareCharge, finishCharge } from './actions/charge.js'
 import { finishAction, gameOver, runAI } from './engine.js'
 
@@ -62,10 +81,13 @@ const unitOf = (G, id) => G.units.find((u) => u.id === id)
 // the chargeEnd decision, which gives it back.
 export const HANDLERS = Object.freeze({
   // (F7a: with height the place carries the floor it stands on, `y`; a
-  // classic place doesn't grow)
+  // classic place doesn't grow) (F9a: a rider placed steps off its hull, and
+  // a hull placed takes its riders along: the mirror reads both off the
+  // event, so it doesn't grow either)
   place(G, seat, { u, c }) {
     const unit = unitOf(G, u)
-    setUnitPos(unit, G.nav.x(c), G.nav.z(c))
+    unit.aboard = 0
+    moveUnitTo(G, unit, G.nav.x(c), G.nav.z(c))
     emit(G, 'unit.place', { u, x: unit.pos.x, z: unit.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, unit) } : {}) })
   },
   deployed(G, seat) {
@@ -84,8 +106,8 @@ export const HANDLERS = Object.freeze({
     if (kegs.length) kegsGoOff(G, unit, kegs)
     finishAction(G)
   },
-  shoot(G, seat, { u, tg }) {
-    doShoot(G, unitOf(G, u), unitOf(G, tg))
+  shoot(G, seat, { u, tg, sp }) {
+    doShoot(G, unitOf(G, u), unitOf(G, tg), sp)
     finishAction(G)
   },
   // The charge splits where a seat picks its spot (§2.2): nothing is drawn
@@ -148,6 +170,18 @@ export const HANDLERS = Object.freeze({
   concede(G, seat) {
     gameOver(G, seat)
   },
+  // (F9a) boarding: in the deployment it rides at once; in the movement
+  // phase it walks to the hull's side first, as its move (core/actions/
+  // transport.js), and the action ends as a move's does
+  embark(G, seat, { u, v }) {
+    const inPhase = G.turn.stage !== 'deploy'
+    doEmbark(G, unitOf(G, u), unitOf(G, v), inPhase)
+    if (inPhase) finishAction(G)
+  },
+  disembark(G, seat, { u, c }) {
+    doDisembark(G, unitOf(G, u), c)
+    finishAction(G)
+  },
 })
 
 // ── Whether a command is legal now ──────────────────────────────────────────
@@ -162,14 +196,17 @@ export const RULES = deepFreeze({
   deployed: { k: 'deploy', fields: [] },
   advance: { k: 'phase', phase: 'move', fields: ['u'], ok: (G, seat, { u }) => mine(G, seat, u) ?? mayAdvance(G, unitOf(G, u)) },
   move: { k: 'phase', phase: 'move', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? mayMove(G, unitOf(G, u), c) },
-  shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg)) },
+  shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], opt: ['sp'], ok: (G, seat, { u, tg, sp }) => mine(G, seat, u) ?? hasSpell(unitOf(G, u), sp) ?? (allySpell(weaponOf(unitOf(G, u), sp)) ? friend(G, seat, tg) : foe(G, seat, tg)) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg), sp) },
   charge: { k: 'phase', phase: 'charge', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayCharge(G, unitOf(G, u), unitOf(G, tg)) },
   chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
   end: { k: 'phase', fields: [] },
   auto: { k: 'phase', fields: [] },
-  pilot: { k: 'phase', fields: ['m'], ok: (G, seat, { m }) => mayPilot(G, seat, m) },
+  pilot: { k: 'phase', fields: ['m'], ok: (G, seat, { m }, P) => mayPilot(G, seat, m, P) },
   vote: { k: 'roundLimit', fields: [], bools: ['more'] },
   concede: { k: null, fields: [], ok: (G, seat) => mayConcede(G, seat) },
+  // (F9a) a list of decisions: the deployment's, or the movement phase's
+  embark: { k: ['deploy', 'phase'], phase: 'move', fields: ['u', 'v'], ok: (G, seat, { u, v }, P) => mine(G, seat, u) ?? mayBoard(G, unitOf(G, u), unitOf(G, v), P.k === 'phase') },
+  disembark: { k: 'phase', phase: 'move', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? mayLand(G, unitOf(G, u), c) },
 })
 
 // the kinds of command there are (match/envelope.js decodes no other)
@@ -210,8 +247,10 @@ function why(G, seat, body, P) {
   if (G.turn.stage === 'over') return 'the battle is over'
   if (rule.k) {
     if (!P || !P.seats.includes(seat)) return `seat ${seat} has no decision to make now`
-    if (P.k !== rule.k) return `${body.t} doesn't answer the ${P.k} decision`
-    if (rule.phase && P.phase !== rule.phase) return `${body.t} belongs to the ${rule.phase} phase, not the ${P.phase}`
+    // (F9a: a kind may answer a list of decisions; `phase` holds only when
+    // the decision is a phase's, which a lone `phase` kind's always is)
+    if (Array.isArray(rule.k) ? !rule.k.includes(P.k) : P.k !== rule.k) return `${body.t} doesn't answer the ${P.k} decision`
+    if (rule.phase && P.k === 'phase' && P.phase !== rule.phase) return `${body.t} belongs to the ${rule.phase} phase, not the ${P.phase}`
     return rule.ok?.(G, seat, body, P) ?? null
   }
   return rule.ok(G, seat, body)
@@ -222,11 +261,22 @@ function mine(G, seat, id) {
   const u = unitOf(G, id)
   return u && alive(u) && u.side === seat ? null : `unit ${id} is no standing unit of seat ${seat}`
 }
-// a standing enemy of the seat
+// a standing enemy of the seat, on the table (F9a: a rider is inside its
+// vehicle, and no target)
 function foe(G, seat, id) {
   const u = unitOf(G, id)
-  return u && alive(u) && u.side !== seat ? null : `unit ${id} is no standing enemy of seat ${seat}`
+  if (!(u && alive(u) && u.side !== seat)) return `unit ${id} is no standing enemy of seat ${seat}`
+  return u.aboard ? `${u.t.short} is inside a vehicle` : null
 }
+// one of the seat's own units, standing on the table: (V3c) a spell cast on
+// a friend takes one, and (F9a, at the V3 merge) never a rider, which is
+// inside its vehicle as for every shot
+function friend(G, seat, id) {
+  const u = unitOf(G, id)
+  return mine(G, seat, id) ?? (u.aboard ? `${u.t.short} is inside a vehicle` : null)
+}
+// (F9a) a rider moves, advances and charges only once it has stepped off
+const aboard = (u) => (u.aboard ? `${u.t.short} is aboard a vehicle: disembark first` : null)
 const inGrid = (G, c) => c >= 0 && c < G.nav.N
 
 // a human seat, while the battle is undecided: a side wiped out mid-phase
@@ -237,36 +287,56 @@ function mayConcede(G, seat) {
   return G.turn.wiped >= 0 ? `the battle is decided: seat ${G.turn.wiped} is wiped out` : null
 }
 
+// ((V3c) a unit Root Snare binds may neither advance nor move, a fall back
+// included, until its snare wears off: core/actions/shoot.js snare)
 function mayAdvance(G, u) {
+  if (u.aboard) return aboard(u)
   if (u.flags.moved) return `${u.t.short} has moved`
   if (u.flags.advanced) return `${u.t.short} has advanced`
+  if (u.snared) return `${u.t.short} is snared`
   return isEngaged(G, u) ? `${u.t.short} is in combat` : null
 }
 // Its move this phase (an advance's move on its roll, a fall back when in
 // combat): ending on c, as the plan the move itself will make has it.
 function mayMove(G, u, c) {
+  if (u.aboard) return aboard(u)
   if (u.flags.moved) return `${u.t.short} has moved`
+  if (u.snared) return `${u.t.short} is snared`
   if (!inGrid(G, c) || !validEnd(G, movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), c)) return `${u.t.short} can't end its move on cell ${c}`
   return null
 }
-function mayShoot(G, u, tg) {
+// (V3c) the spell a shot names, when it names one: one of the unit's (a
+// whole number, legal's own rule, from 0 to one less than its spells)
+function hasSpell(u, sp) {
+  if (sp === undefined) return null
+  return u.t.spells && sp >= 0 && sp < u.t.spells.length ? null : `${u.t.short} has no spell ${sp}`
+}
+function mayShoot(G, u, tg, sp) {
+  // (F9a: riders don't shoot, nor cast, until the firing deck, F9c)
+  if (u.aboard) return `${u.t.short} is aboard a vehicle: riders can't shoot`
   if (!canShoot(G, u)) return `${u.t.short} can't shoot now`
-  const info = shotInfo(G, u, tg)
-  return info.ok ? null : `${u.t.short} can't shoot ${tg.t.short}: ${info.why}`
+  const info = shotInfo(G, u, tg, sp)
+  return info.ok ? null : `${u.t.short} can't ${sp === undefined ? 'shoot' : `cast ${weaponOf(u, sp).name} on`} ${tg.t.short}: ${info.why}`
 }
 function mayCharge(G, u, tg) {
+  if (u.aboard) return aboard(u)
   if (!chargeTargets(G, u).includes(tg)) return `${u.t.short} can't charge ${tg.t.short}`
   return chargePlan(G, u, tg) ? null : `${u.t.short} has no way to ${tg.t.short}`
 }
 // (F10b) a mask naming some of the seat's units, all standing, one at least
 // with something left to do in this phase (canAct; whether the AI then
-// chooses to do it is the AI's, so a pilot may play nothing)
-function mayPilot(G, seat, m) {
+// chooses to do it is the AI's, so a pilot may play nothing). (F9a) In the
+// movement phase a rider moves only with its hull (the AI steps it off as
+// it moves the hull: core/ai/policy.js), so a mask naming a rider names its
+// hull too.
+function mayPilot(G, seat, m, P) {
   if (!Number.isSafeInteger(m) || m < 1) return 'm is a set of the seat\'s units (a whole number ≥ 1)'
   const units = maskUnits(G, seat, m)
   if (units === null) return `m names a unit seat ${seat} doesn't have`
   const dead = units.find((u) => !alive(u))
   if (dead) return `unit ${dead.id} is destroyed`
+  const loose = P?.phase === 'move' ? units.find((u) => u.aboard && !units.some((h) => h.id === u.aboard)) : undefined
+  if (loose) return `unit ${loose.id} rides unit ${loose.aboard}: a rider moves only with its hull, so m names both`
   return units.some((u) => canAct(G, u)) ? null : `none of these units can act in the ${phaseKey(G)} phase`
 }
 // a spot the roll reaches around the target (chargeSpots), or -1

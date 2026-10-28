@@ -18,11 +18,17 @@
 // Units go by id and models by index into the unit's models. A destroyed
 // unit's line in the battle log waits in G.journal.pendingLog until the
 // attack that did it is reported (§4.1 rule 8).
+//
+// (F9a, DESIGN §4.2.5) A transport destroyed leaves its wreck and bails its
+// riders out (core/actions/transport.js hullDestroyed, called at the end of
+// unitDestroyed): reached only for a unit with riders' room, `transport`.
 import { ENGAGE } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
-import { relayout, setUnitPos } from '../units.js'
-import { moveMode } from './move.js'
+import { relayout, moveUnitTo } from '../units.js'
+import { STEP } from '../nav.js'
+import { moveMode, groundOnly } from './move.js'
+import { hullDestroyed } from './transport.js'
 import { alive, dist, gap, engagedWith, isEngaged, mx, mz, ownersOf, statusOf, groundY } from '../queries.js'
 
 // Allocate `n` wounds of `D` damage to `u`, finishing off wounded models
@@ -71,6 +77,10 @@ export function damage(G, u, n, D, attacker, prefer = null, from = attacker.pos)
 //
 //   (F7a, with height) unit.formation's pos is { x, y, z }, y the floor the
 //   unit stands on; classic's doesn't grow
+//
+// (F9a) A hull piling in carries its riders (moveUnitTo; the mirror carries
+// them on unit.formation), and a rider only re-forms: it engages nobody
+// (engagedWith is [] aboard), so it never piles in.
 export function closeRanks(G, u) {
   const foes = engagedWith(G, u)
   relayout(u)
@@ -80,9 +90,13 @@ export function closeRanks(G, u) {
     const step = gap(u, f) - (ENGAGE - 0.3)
     const x = u.pos.x + ((f.pos.x - u.pos.x) / d) * step, z = u.pos.z + ((f.pos.z - u.pos.z) / d) * step
     // (F7a) no pile-in where the new place isn't standable: off a wall's
-    // top, or onto a ledge's band
-    if (!G.nav.hasHeight) setUnitPos(u, x, z)
-    else if (G.nav.standable(G.nav.index(x, z), u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk')) setUnitPos(u, x, z)
+    // top, or onto a ledge's band; (F9a) nor, for a ground vehicle, onto a
+    // floor above STEP
+    if (!G.nav.hasHeight) moveUnitTo(G, u, x, z)
+    else {
+      const i = G.nav.index(x, z)
+      if (G.nav.standable(i, u.r, moveMode(u) === 'wreck' ? 'wreck' : 'walk') && !(groundOnly(u) && G.nav.floor[i] > STEP)) moveUnitTo(G, u, x, z)
+    }
   }
   emit(G, 'unit.formation', { u: u.id, offs: u.models.map((m) => [m.ox, m.oz]), r: u.r, pos: { x: u.pos.x, z: u.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, u) } : {}) } })
 }
@@ -96,9 +110,13 @@ export function killModel(G, u, m, attacker, dmg) {
   if (!alive(u)) unitDestroyed(G, u, attacker)
 }
 
-// `u`'s last model is gone (to `by`, or to its own nerve: null).
+// `u`'s last model is gone (to `by`, or to its own nerve: null). (F9a) A
+// transport then leaves its wreck and bails its riders out, in this order
+// (§4.1 rule 16): the one new branch of the step, its only draws the
+// bail-out's dice (core/actions/transport.js).
 export function unitDestroyed(G, u, by) {
   // reported after the attack that did it, not in the middle of it
   G.journal.pendingLog.push([u.side, `<b>${u.t.name}</b> ${u.t.models > 1 ? 'are' : 'is'} destroyed!`, 'big'])
   emit(G, 'unit.destroyed', { u: u.id, by: by ? by.id : null })
+  hullDestroyed(G, u, by)
 }

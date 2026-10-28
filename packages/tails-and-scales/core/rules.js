@@ -68,6 +68,13 @@ export function saveNeed(Sv, AP, cover) {
   return Math.max(2, Sv + AP - (cover ? 1 : 0))
 }
 
+// (V3c) The save a unit rolls against: its own, one better while it is
+// warded (Barkskin: core/actions/shoot.js's ward), which every save it makes
+// reads (a volley's, a template's, a stray's, a keg's, a fight's) and the
+// AI's appraisal with them (expected, below). saveNeed still never asks
+// better than 2+.
+export const svOf = (u) => (u.warded ? u.t.Sv - 1 : u.t.Sv)
+
 // Modified hit roll: a 1 always misses, a 6 always hits.
 export const hitNeed = (skill, mod) => clamp(skill + mod, 2, 6)
 
@@ -81,11 +88,12 @@ export function attackCount(unit, weapon, melee) {
 }
 
 // Average models killed by `n` attacks, for the AI and for the hover preview.
+// ((V3c) against the save the target rolls: svOf's)
 export function expected(n, need, weapon, target, cover) {
   const t = target.t
   const pHit = pD6(need)
   const pWound = pD6(woundNeed(weapon.S, t.T, weapon.poison))
-  const pFail = 1 - pD6(saveNeed(t.Sv, weapon.AP, cover))
+  const pFail = 1 - pD6(saveNeed(svOf(target), weapon.AP, cover))
   const wounds = n * pHit * pWound * pFail
   const perModel = Math.min(weapon.D, t.W) / t.W
   const kills = Math.min(target.alive, wounds * perModel)

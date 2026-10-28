@@ -183,5 +183,61 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
     objectiveGap: 2.2,
     gap: 2.1,
   },
+  // (V3d, DESIGN §4.2.11) The Powder Field: a battlefield after a day's
+  // fighting and still burning, the `powder` mission's alone. Round the
+  // centre objective the burned farmstead (its floor holds it); on the
+  // other objectives, pair by pair in the mission's order, a wrecked
+  // trebuchet (its frame holds it), a powder magazine (its kegs round it)
+  // and an overturned venom engine (its flank holds it): recipes.js sites.
+  // Then three or four mirrored pairs of wrecks to climb (burned farmhouses
+  // and barns, trebuchets, war-wagons), and the field between: shell holes
+  // and shelled ground, dumps of kegs and lone caches of bombs, a supply
+  // train's kegs strewn along a road, burned trees standing and fallen,
+  // broken carts, sandbag breastworks, cottages burned to their walls and
+  // wreckage still burning. Counts and spacing for the Grand table it is
+  // fought on (no area scale: the numbers are its own), tuned so a round
+  // hull still crosses zone to zone and a squad holds every objective at
+  // its level (sim/terrain-check.mjs's connectivity rows, 2,000 boards).
+  powder: {
+    centre: [['farmstead', 1]],
+    sites: ['trebuchet', 'magazine', 'engine'],
+    forts: [1, 1],
+    fortAttempts: 600,
+    fortGap: 0.8,
+    fortObjectiveGap: 0.5,
+    // [wreck, footprint radius, weight] (each radius its recipe's footprint;
+    // with the sites standing, only these smaller ones find room, in the
+    // corners of no-man's land)
+    fortKinds: [
+      ['barn', 5, 1],
+      ['wagon', 5.1, 1],
+    ],
+    kinds: [
+      ['shellhole', 2.0, 4],
+      ['shelled', 3.4, 1.5],
+      ['kegs', 2.4, 2],
+      ['cache', 1.8, 2],
+      ['deadfall', 2.8, 2.5],
+      ['snags', 2.6, 1.5],
+      ['cart', 2.8, 2],
+      ['pyre', 1.4, 1.2],
+      ['sandbags', 3.6, 2],
+      ['shell', 3.2, 1.5],
+      ['train', 5.8, 0.8],
+    ],
+    pairs: [18, 6],
+    attempts: 1500,
+    mirror: 'point',
+    margin: 0.5,
+    selfGap: 1.4,
+    deployMargin: 1,
+    bigNotInDeploy: 2.1,
+    // (no powder, no fire and no dead wood in a deployment zone, nor
+    // reaching into one: the zone test by each feature's footprint)
+    notInDeploy: ['kegs', 'cache', 'train', 'pyre', 'snags'],
+    zoneFootprint: 1,
+    objectiveGap: 2.4,
+    gap: 2.3,
+  },
 }))
 for (const name of Object.keys(SETS)) checkSet(name, SETS[name])

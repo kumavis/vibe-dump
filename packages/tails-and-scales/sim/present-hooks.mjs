@@ -20,12 +20,18 @@
 // charge.result; the shot's, shoot.js: a turn to face, a volley, a
 // template's aim, scatter, throw and landing, the beat after one that
 // caught nobody, a spell cast or fizzling, thorns erupting and fading, a
-// gaze, the "Mesmerized!", and the shot's look and who throws), and the
+// gaze, the "Mesmerized!", (V3c) a snare's roots and a spell settling on
+// a friend, each with the labels straight after it, and the shot's look
+// and who throws), and the
 // roll-off's rows, are caught by the check's event order instead
 // (present-check.mjs's eventOrder), each where the next event or line
 // breaks it: no-stomp through walk-speed, no-melee through land-fx, and
 // no-rolloff-row. The rest (no-formation through no-move-status, no-place
-// and on) are caught by the mirror. And three edits of the page, not of an
+// and on) are caught by the mirror; so (F9a) are no-embark, no-embark-phase,
+// no-carry and no-place-carry, by the mirror of the battles with War-Carts
+// present-check plays in Node, and no-embark-owners by the vehicle/
+// corpus's logs. And three
+// edits of the page, not of an
 // event, caught by the check's card test at a checkpoint: card-reads-match,
 // the unit card telling of what the match did ahead of the table; and
 // (R7b) card-facts-stale, card-stop-stale and card-turn-kept, the card's
@@ -132,6 +138,20 @@ export const MUTATIONS = {
   'no-gaze-status': ['/core/actions/shoot.js', "  if (G.out) emit(G, 'status', statusOf(G))\n  emit(G, 'spell.mesmerized',", "  emit(G, 'spell.mesmerized',"],
   // no "Mesmerized!" over the target
   'no-mesmerized': ['/core/actions/shoot.js', "  emit(G, 'spell.mesmerized',", "  if (false) emit(G, 'spell.mesmerized',"],
+  // ((V3c) a snare cast with no roots round its target, the cast then
+  // followed by the labels: the event order sees it)
+  'no-snare': ['/core/actions/shoot.js', "  emit(G, 'spell.snare',", "  if (false) emit(G, 'spell.snare',"],
+  // the snared target's label never says so (its action's end re-reports
+  // the labels: the event order sees the snare with no labels after it)
+  'no-snare-status': ['/core/actions/shoot.js', "  target.snared = true\n  // its label says so\n  if (G.out) emit(G, 'status', statusOf(G))", "  target.snared = true\n  // its label says so"],
+  // a spell on a friend with nothing settling on it
+  'no-ward': ['/core/actions/shoot.js', "  emit(G, 'spell.ward',", "  if (false) emit(G, 'spell.ward',"],
+  // the friend's label never says it is warded or resolute
+  'no-ward-status': ['/core/actions/shoot.js', "  else target.resolute = true\n  if (G.out) emit(G, 'status', statusOf(G))", "  else target.resolute = true"],
+  // a ward or a resolve wearing off as its side's turn begins never
+  // reported: the label keeps it into the turn (the mirror, at the phase's
+  // check)
+  'no-wear-status': ['/core/engine.js', "  if (worn && G.out) emit(G, 'status', statusOf(G))", "  if (false) emit(G, 'status', statusOf(G))"],
   // no beat after a template that caught nobody
   'no-blast-pause': ['/core/actions/shoot.js', "  if (!victims.length) emit(G, 'pause', { s: 0.25 })", "  if (false) emit(G, 'pause', { s: 0.25 })"],
   // a template thrown by its target: the throw comes from the wrong figure
@@ -166,6 +186,20 @@ export const MUTATIONS = {
   // behind: it tells of moves, shots, charges and cover not yet played
   // (ui/card.js since R7b, main.js before; caught by the card check at a
   // checkpoint, not by an event)
+  // (F9a) the riders, caught by the mirror of present-check's battles
+  // with War-Carts (in Node): a unit boarding in the deployment never
+  // reported (it stands where it stood in the mirror, riding nothing); one
+  // boarding in a phase never reported; a hull's walk that leaves its
+  // riders behind in the mirror; a hull's placement that does
+  'no-embark': ['/core/actions/transport.js', "    emit(G, 'unit.embark', { u: u.id, v: v.id })\n    return", '    return'],
+  // (an embark in a phase: its event, before the flags it leaves)
+  'no-embark-phase': ['/core/actions/transport.js', "  emit(G, 'unit.embark', { u: u.id, v: v.id })\n  // (F9a's integration)", "  // (F9a's integration)"],
+  // (F9a's integration) an embark in a phase leaving the flags its walk
+  // took at the hull's side (the vehicle/ corpus's rearranged log: the
+  // rider held an objective there)
+  'no-embark-owners': ['/core/actions/transport.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n  log(G, u.side, `<b>${u.t.short}</b> board", "  log(G, u.side, `<b>${u.t.short}</b> board"],
+  'no-carry': ['/present/mirror.js', '      u.y = e.to.y ?? 0\n      carry(M, e.u, u)', '      u.y = e.to.y ?? 0'],
+  'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
   'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],
   // (R7b) the card's record of what each unit did this turn kept from the
   // battle's start: an action's end never updates it (app/flow.js)
@@ -178,6 +212,10 @@ export const MUTATIONS = {
   // (R7b) a turn's start leaves its seat's deeds of the turn before on the
   // card's record (app/flow.js)
   'card-turn-kept': ['/app/flow.js', '    this.facts = turnBegun(this.facts, e)', '    // (dropped)'],
+  // (V3a) a turn's start leaves the other seat's losses of the turn before
+  // on the record: its squads still "💔 lost N", tested already
+  // (present/hud-model.js)
+  'card-losses-kept': ['/present/hud-model.js', ', lost: 0 } : { ...f, lost: 0 }', ', lost: 0 } : f'],
 }
 
 export async function load(url, ctx, next) {

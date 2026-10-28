@@ -24,6 +24,10 @@
 //   String(n) (R3's ChunkDef order must match, which P-terrain checks).
 // A snapshot is taken at every non-`log` trace line, not only at `act`.
 // To read the reference text: node sim/parity.mjs --pin --dump <dir>.
+// (V3c) The spells' marks follow the mesmerism's ` mes`, each only on a
+// unit that holds it (` snare`, ` ward`, ` resolute`): a unit no spell
+// marked prints exactly as at R0, so every snapshot taken before them
+// still reads byte for byte.
 //
 // Node and Chromium disagree in the last bit of Math.sin/cos for a few
 // inputs, so code that takes the engine's trig (the PIN, everything older
@@ -49,7 +53,7 @@
 export function shadowString({ stage, round, active, phase, first, vp, wiped, rng, units, chunks }) {
   const n = String
   const flags = (f) => Object.keys(f).sort().filter((k) => f[k] !== undefined && f[k] !== false).map((k) => (f[k] === true ? k : `${k}=${f[k]}`)).join(',')
-  const us = units.map((u) => `${u.id}@${n(u.pos.x)},${n(u.pos.z)} r${n(u.r)} a${u.alive} l${u.lost}${u.mesmerized ? ' mes' : ''} {${flags(u.flags)}} ` +
+  const us = units.map((u) => `${u.id}@${n(u.pos.x)},${n(u.pos.z)} r${n(u.r)} a${u.alive} l${u.lost}${u.mesmerized ? ' mes' : ''}${u.snared ? ' snare' : ''}${u.warded ? ' ward' : ''}${u.resolute ? ' resolute' : ''} {${flags(u.flags)}} ` +
     u.models.map((m) => `${m.alive ? '' : 'x'}${m.w}:${n(m.ox)},${n(m.oz)}`).join(' '))
   const cs = chunks.map((c) => `${c.alive ? '' : 'x'}${c.hp}:${n(c.x)},${n(c.y)},${n(c.z)},${n(c.yaw)}`)
   const turn = `${stage} r${round} t${active} ${phase} f${first} vp${vp.join('-')} w${wiped ?? '-'} rng:${rng}`

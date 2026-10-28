@@ -61,7 +61,14 @@ export class View {
     // G.out, among the events of the entry the Session folds, and the player
     // plays each report (the terrain.* handlers) when it reaches it in those
     // events, in order (a wrecker's smashes as its walk passes them).
-    this.terrain = new TerrainView(scene, this.effects)
+    // ((V3d) the turf the battlefield burned, painted into the mat)
+    this.terrain = new TerrainView(scene, this.effects, {
+      scorch: (marks) => {
+        this.table.scorch(marks)
+        // ((V3d) and under a burning field's evening light)
+        this.stage.mood(marks.some((m) => !m.powder))
+      },
+    })
   }
 
   // The figures (view/units.js: each unit's view by unit id, following the
@@ -69,9 +76,10 @@ export class View {
   // (view/effects/shots.js) and what a seat's tools draw on the table
   // (view/overlay.js: one texel per nav cell, `grid` every match's grid
   // size).
-  figures({ mirror, colorOf, rimOf, W, H, grid }) {
-    // ((F7a's review) a walk's figures on the tops they cross: floorAt)
-    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z) })
+  figures({ mirror, colorOf, rimOf, W, H, grid, facts }) {
+    // ((F7a's review) a walk's figures on the tops they cross: floorAt;
+    // (V3a) the labels' conditions from the card's record too: facts)
+    this.units = new UnitViews({ scene: this.scene, labels: this.stage.overlay, fx: this.effects, mirror, colorOf, rimOf, W, floorAt: (x, z) => this.terrain.floorAt(x, z), facts })
     // ((F7a) a template marked, landing and scorching on the top it falls on)
     this.shots = new Shots({ scene: this.scene, fx: this.effects, units: this.units, floorAt: (x, z) => this.terrain.floorAt(x, z) })
     // ((F7a) the overlay shades the battlefield's deck tops too)
@@ -104,8 +112,9 @@ export class View {
       // the camera for it, framed or glided to, as the follow policy says;
       // never an action of a seat played here, unless its orders after End)
       cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),
-      // the figures
-      'unit.place': (e) => units.disc(e.u),
+      // the figures ((F9a) a placed rider steps off its hull; a placed hull
+      // carries its riders, on its deck)
+      'unit.place': (e) => units.placed(e),
       'unit.formation': (e) => {
         units.disc(e.u)
         units.label(e.u)
@@ -115,6 +124,10 @@ export class View {
       'unit.flee': (e) => units.fled(e),
       'unit.destroyed': (e, M) => units.destroyed(e, M),
       'unit.face': (e) => units.face(e),
+      // ((F9a) riders board a hull and step off it, or bail out of its
+      // wreck: view/units.js's deck)
+      'unit.embark': (e) => units.embarked(e),
+      'unit.disembark': (e) => units.disembarked(e),
       // (what a wrecker smashed breaks as the walker passes it)
       'unit.move': (e, M) => units.walk(e, M, (ev) => {
         for (const x of ev) if (x.veil !== 'hide') terrain.apply(x, M)
@@ -135,6 +148,11 @@ export class View {
       'spell.fade': (e) => shots.faded(e),
       'spell.gaze': (e) => (units.hid(e.u) ? undefined : shots.gaze(e)),
       'spell.mesmerized': (e) => (units.hid(e.tg) ? undefined : shots.mesmerized(e)),
+      // ((V3c) a snare's roots round its target, a spell settling on a
+      // friend: each where its target is seen, a veiled caster's thread
+      // left out)
+      'spell.snare': (e) => (units.hid(e.tg) ? undefined : shots.snared(e)),
+      'spell.ward': (e) => (units.hid(e.tg) ? undefined : shots.ward(e, { quiet: units.hid(e.u) })),
       // what the labels and flags show: read off the mirror, which these
       // have just updated (the flags repaint each frame, view/objectives.js)
       status: () => units.labelAll(),
@@ -228,6 +246,8 @@ export class View {
     this.stage.run({
       parts: (dt, time) => {
         effects.update(dt)
+        // ((F9a) a wreck's smoke and embers)
+        if (!this.fast) this.terrain.animate(dt, time)
         units.animate(dt, time, { fast: this.fast, camera, sel: sel() })
         // ((F16) the fog's ghosts' labels)
         if (this.ghosts.standing.size) this.ghosts.animate(camera, this.fast, mirror().stage === 'title')

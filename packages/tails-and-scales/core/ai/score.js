@@ -9,10 +9,10 @@
 // every peer, and bestSpot's tie-breaks draw from the match's own dice, one
 // draw per lattice cell that passes `isFinite(res.dist[i]) && validEnd`, in
 // the lattice's order (rule 6). Everything else here only reads the match.
-import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount } from '../rules.js'
+import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed } from '../rules.js'
 import { draw } from '../rng.js'
-import { hypot } from '../dmath.js'
-import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf } from '../queries.js'
+import { hypot, hypot3 } from '../dmath.js'
+import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 import { friendsUnder } from '../actions/shoot.js'
 import { HAZARDS } from '../../data/hazards.js'
@@ -39,11 +39,11 @@ export function strayCost(n, need, w, fight) {
 // `e` would take (friendsUnder: who it would catch there, u itself
 // included), each friend by expected over its models under it, a big one's
 // D3+1 hits as 3 (as the value of the target's own): one template's cost
-// on a hit. A scatter's cost is the policy's (aiShoot's own lads).
-export function ownUnder(G, u, e) {
-  const w = u.t.ranged
+// on a hit. A scatter's cost is the policy's (aiShoot's own lads). ((V3c)
+// `w`: the weapon, a caster's spell; its ranged weapon by default)
+export function ownUnder(G, u, e, w = u.t.ranged) {
   let cost = 0
-  for (const { v, under } of friendsUnder(G, u, e)) cost += expected(v.t.big ? 3 : under, 1, w, v, inCover(G, v)).value
+  for (const { v, under } of friendsUnder(G, u, e, w)) cost += expected(v.t.big ? 3 : under, 1, w, v, inCover(G, v)).value
   return cost
 }
 
@@ -68,32 +68,45 @@ export const kegDanger = (G, side) => G.units.some((e) => e.side !== side && ali
 
 // How many hits keg `k` going off would put on `v` were it standing at `at`
 // (where it stands, by default): its living models within the keg's blast
-// and 0.6 of a base of the keg, blastLands' flat test (no keg stands on a
-// board with height), a big one's D3+1 as 3 (ownUnder's).
-export function kegHits(v, k, at = v.pos) {
+// and 0.6 of a base of the keg, blastLands' own test (core/actions/shoot.js
+// modelsUnder), a big one's D3+1 as 3 (ownUnder's). Flat, as on the keg
+// mission's board; (V3d; rule 10: it bumps with V3d) with height (the
+// Powder Field's kegs stand among wrecks with decks), in 3D, each model's
+// floor off the floor the keg's blast lands on, as blastLands measures it:
+// a squad on a wreck's top over a keg is no longer feared as one beside it.
+export function kegHits(v, k, at = v.pos, G = null) {
   const R = HAZARDS.keg.blast + v.t.base * 0.6
   let n = 0
-  for (const m of v.models) if (m.alive && hypot(at.x + m.ox - k.shape.x, at.z + m.oz - k.shape.z) <= R) n++
+  if (G?.nav.hasHeight) {
+    const ky = floorAt(G, k.shape.x, k.shape.z)
+    for (const m of v.models) {
+      if (!m.alive) continue
+      const x = at.x + m.ox, z = at.z + m.oz
+      if (hypot3(x - k.shape.x, floorAt(G, x, z) - ky, z - k.shape.z) <= R) n++
+    }
+  } else for (const m of v.models) if (m.alive && hypot(at.x + m.ox - k.shape.x, at.z + m.oz - k.shape.z) <= R) n++
   return n && v.t.big ? 3 : n
 }
 
 // What `u` would lose to keg `k` going off with it standing at `at`: the
 // points a template of the keg's profile due there takes (expected over
-// the models it would catch, kegHits'), the fear term's (score's).
-export function kegFear(u, k, at) {
-  const n = kegHits(u, k, at)
+// the models it would catch, kegHits'), the fear term's (score's). ((V3d)
+// `G`, for the test with height.)
+export function kegFear(u, k, at, G = null) {
+  const n = kegHits(u, k, at, G)
   return n ? expected(n, 1, HAZARDS.keg, u, false).value : 0
 }
 
 // What keg `k` going off is worth to `side`: the points it would take of
 // the enemy less those of `side`'s own (each unit under it by expected, as
 // ownUnder counts a template's), `mover` standing at `at` instead of where
-// it is (a wrecker scoring where its walk through the keg ends).
+// it is (a wrecker scoring where its walk through the keg ends). (F9a) A
+// rider is never under a blast (blastLands'): its hull is.
 export function kegValue(G, side, k, mover = null, at = null) {
   let v = 0
   for (const x of G.units) {
-    if (!alive(x)) continue
-    const n = kegHits(x, k, x === mover ? at : x.pos)
+    if (!alive(x) || x.aboard) continue
+    const n = kegHits(x, k, x === mover ? at : x.pos, G)
     if (!n) continue
     const e = expected(n, 1, HAZARDS.keg, x, inCover(G, x)).value
     v += x.side === side ? -e : e
@@ -165,11 +178,14 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // (F19a; rule 10: it bumps with F19a) The guns' template is also worth the
 // powder kegs it would set off landing on `e` (kegGain), once a shot, on
 // its hit: nothing where no keg stands.
-export function shotValue(G, u, e, from, moved, pre = null) {
-  const w = u.t.ranged
+//
+// (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
+// strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
+// by default; `pre` is only ever its ranged weapon's.
+export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
   if (!w) return 0
   const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
-  if (g > rangeOf(G, u, e, from)) return 0
+  if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0
   const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
@@ -182,13 +198,93 @@ export function shotValue(G, u, e, from, moved, pre = null) {
   if (w.blast) {
     const pHit = w.spell ? p2D6(w.spell) : pD6(hitNeed(u.t.BS, mod))
     const under = e.t.big ? 3 : Math.max(1, Math.min(e.alive, Math.round(e.alive * Math.min(1, (w.blast * w.blast) / (e.r * e.r)) * 0.8)))
-    const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e)))
+    const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e, w)))
     const keg = pre ? pre.keg : kegGain(G, u, e)
     return keg ? value + pHit * keg : value
   }
   const n = attackCount(u, w, false), need = hitNeed(u.t.BS, mod)
   const fight = pre ? pre.fight : fightOf(G, u, e)
   return expected(n, need, w, e, s.cover).value - (fight ? strayCost(n, need, w, fight) : 0)
+}
+
+// ── (V3c) The casters' spells ───────────────────────────────────────────────
+// What a caster's spell `sp` cast on `e` from where it stands is worth to
+// the AI (rule 10: it bumps with V3c), each by the cast's odds (p2D6): an
+// eruption (Thornburst, Venom Mist) and the gaze (Mesmerize) as shotValue
+// values them, struck where the caster stands; a snare (Root Snare) by the
+// charge it denies and the ground it keeps the target from (snareGain); a
+// ward (Barkskin) by the saves it adds to a friend in danger (wardGain ×
+// its points × exposure); a resolve (Cold Blood) by the charge roll it may
+// give again and the nerve it keeps (resolveGain). A mark already on its
+// target is worth nothing. Pure, no draw: the policy's choice of spell and
+// target (core/ai/policy.js bestCast), and the shooting tool's default.
+export function spellValue(G, u, sp, e, moved = !!u.flags.moved) {
+  const w = u.t.spells[sp]
+  const p = p2D6(w.spell)
+  if (w.ward) return e.warded ? 0 : p * worth(e) * exposure(G, e) * wardGain(e)
+  if (w.resolve) return e.resolute ? 0 : p * resolveGain(G, e)
+  if (w.snare) return e.snared ? 0 : p * snareGain(G, u, e)
+  return shotValue(G, u, e, u.pos, moved, null, w)
+}
+
+// How much of `f` is in danger before its side's next turn, as a share of
+// its points: locked in a fight 0.35, an enemy brawler free to charge it
+// within its move and an average charge 0.3, an enemy gun in range 0.2,
+// else 0.05.
+export function exposure(G, f) {
+  if (isEngaged(G, f)) return 0.35
+  let x = 0.05
+  for (const e of enemiesOf(G, f)) {
+    const g = gap(e, f)
+    if (e.t.brawler && !e.t.noCharge && !e.snared && g < e.t.M + 7) return 0.3
+    if (e.t.ranged && g <= e.t.ranged.range) x = 0.2
+  }
+  return x
+}
+
+// The share of the wounds `f` fails to save that a ward saves (its save one
+// better, against an AP 1 blow in the open): 1/3 for a 3+ save, 1/6 for
+// none.
+export function wardGain(f) {
+  const fail = (sv) => 1 - pD6(saveNeed(sv, 1, false))
+  const f0 = fail(f.t.Sv), f1 = fail(f.t.Sv - 1)
+  return f0 > 0 ? (f0 - f1) / f0 : 0
+}
+
+// What a resolve gives `f`: a charge it may still make this turn rolled
+// again on a miss (the best of its targets within 12", p(1 − p) more of
+// reaching it, by the straight gap, worth its fight as the charge term
+// values one), and the nerve of a squad that may lose models before its
+// side's next turn.
+export function resolveGain(G, f) {
+  let v = 0
+  if (canCharge(G, f)) {
+    for (const e of enemiesOf(G, f)) {
+      const g = gap(f, e)
+      if (g > CHARGE_RANGE) continue
+      const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
+      const gain = p * (1 - p) * (meleeValue(f, e) + (e.t.role === 'Artillery' ? 10 : 0))
+      if (gain > v) v = gain
+    }
+  }
+  if (f.t.models > 1 && f.alive > 1) v += worth(f) * exposure(G, f) * 0.3
+  return v
+}
+
+// What a snare on `e` denies `u`'s side: for a brawler free to charge, half
+// the worst its charge could do to one of u's units within its move and a
+// charge; and the ground it can't take, a share of its points (little for
+// a unit that never charges, which rarely moves).
+export function snareGain(G, u, e) {
+  let deny = 0
+  if (e.t.brawler && !e.t.noCharge && !isEngaged(G, e)) {
+    for (const f of G.units) {
+      if (f.side !== u.side || !alive(f) || gap(e, f) > e.t.M + CHARGE_RANGE) continue
+      const v = meleeValue(e, f)
+      if (v > deny) deny = v
+    }
+  }
+  return deny * 0.5 + worth(e) * (e.t.noCharge ? 0.02 : 0.08)
 }
 
 // The cells of the board within `reach` inches of (x, z), as rows and
@@ -221,29 +317,14 @@ export function scanBox(nav, x, z, reach) {
 // own rows and columns: row iz a multiple of the step, its columns from
 // its offset (1 on odd lattice rows) in steps, as the whole board's scan
 // visited them.
-export function bestSpot(G, u, plan, claimed) {
+//
+// (F9a) `role`: the role the unit plays as, its own but for a hull's
+// (core/ai/policy.js hullRole: a raider while brawlers ride it, else a line
+// unit). (Friends never count riders: friendsOf leaves them out, so a hull
+// isn't pushed off by its own.)
+export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const { nav } = G
-  const enemies = enemiesOf(G, u)
-  const friends = friendsOf(G, u)
-  const owners = G.objectives.map((o) => controlOf(G, o))
-  const role = u.t.ai
-  // (S1, DESIGN §4.2.2) what the scan asks of each enemy at every cell, none
-  // of which a cell changes, worked out once: whether it is in cover, and
-  // the fight's value either way; (F18) and, for a unit that shoots, what a
-  // shot at it would cost its own side (until F18 whether it was engaged,
-  // which barred the shot): a volley's fight (fightOf), a template's friends
-  // under it (ownUnder), each asked only of the weapon whose value reads it
-  //
-  // (F19a) and the kegs standing, whether an enemy could set one off, and
-  // what a gun's template on each enemy would set off (kegGain)
-  const w = u.t.ranged, shoots = !!w && role !== 'melee'
-  const kegs = kegsOf(G)
-  const pre = new Map(enemies.map((e) => [e, {
-    cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u),
-    fight: shoots && !w.blast && !w.mesmerize ? fightOf(G, u, e) : null, own: shoots && w.blast ? ownUnder(G, u, e) : 0,
-    keg: shoots && w.blast ? kegGain(G, u, e, kegs) : 0,
-  }]))
-  const ctx = { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
+  const ctx = scoring(G, u, claimed, role)
   // stay put is always an option
   let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
@@ -258,6 +339,50 @@ export function bestSpot(G, u, plan, claimed) {
       const x = nav.x(i), z = nav.z(i)
       const sc = score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
+    }
+  }
+  return best
+}
+
+// What score asks of the match for `u`, worked out once for a whole scan:
+// its enemies and friends (riders left out), who holds each objective, and
+// (S1, DESIGN §4.2.2) what the scan asks of each enemy at every cell, none
+// of which a cell changes, worked out once: whether it is in cover, and
+// the fight's value either way; (F18) and, for a unit that shoots, what a
+// shot at it would cost its own side (until F18 whether it was engaged,
+// which barred the shot): a volley's fight (fightOf), a template's friends
+// under it (ownUnder), each asked only of the weapon whose value reads it
+//
+// (F19a) and the kegs standing, whether an enemy could set one off, and
+// what a gun's template on each enemy would set off (kegGain). (F9a) `role`
+// is the role the unit plays as (bestSpot's: a hull's by its riders).
+function scoring(G, u, claimed, role) {
+  const enemies = enemiesOf(G, u)
+  const friends = friendsOf(G, u)
+  const owners = G.objectives.map((o) => controlOf(G, o))
+  const w = u.t.ranged, shoots = !!w && role !== 'melee'
+  const kegs = kegsOf(G)
+  const pre = new Map(enemies.map((e) => [e, {
+    cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u),
+    fight: shoots && !w.blast && !w.mesmerize ? fightOf(G, u, e) : null, own: shoots && w.blast ? ownUnder(G, u, e) : 0,
+    keg: shoots && w.blast ? kegGain(G, u, e, kegs) : 0,
+  }]))
+  return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
+}
+
+// (F9a) Where rider `u` steps off to, of `cells` (its landing cells, in
+// index order: core/actions/transport.js landing): the one it scores best
+// on as a mover of its own role, ties to the lowest index, with no draw (the
+// AI chooses only whether it steps off by the rules of core/ai/policy.js's
+// transports; this is where). -1 for none.
+export function bestLanding(G, u, cells, claimed) {
+  const ctx = scoring(G, u, claimed, u.t.ai)
+  let best = -1, bs = -Infinity
+  for (const i of cells) {
+    const sc = score(G, u, G.nav.x(i), G.nav.z(i), ctx, true)
+    if (sc > bs) {
+      bs = sc
+      best = i
     }
   }
   return best
@@ -427,7 +552,7 @@ export function score(G, u, x, z, ctx, moving) {
   }
   // (F19a) a powder keg's blast, and a wrecker's walk through a keg
   if (kegs.length) {
-    if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from) * KEG_FEAR
+    if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from, G) * KEG_FEAR
     if (moved) s += kegWalk(G, u, from, kegs) * KEG_SMASH
   }
   ctx.last = { onObjective, obj, canShoot }

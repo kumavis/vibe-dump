@@ -127,7 +127,14 @@
 //     straight after `spell.mesmerized`, itself straight after the gaze's
 //     `status`, the labels with its target mesmerized (the damage's own
 //     `status`, just before, has the target as it was); and no action ends
-//     with a volley, a template, thorns or an eruption still owed.
+//     with a volley, a template, thorns or an eruption still owed. (V3c) A
+//     cast straight on to `spell.snare` or `spell.ward` too, each straight
+//     on to a `status` with its target snared (warded or resolute), and
+//     that straight on to its line; a template's look the spell's own (the
+//     tray names the weapon: Venom Mist's cloud is not Mesmerize's gaze);
+//     and a charge's roll rolled again (Cold Blood) straight after the
+//     first, which missed; and as a seat's turn begins (its first
+//     phase.start) none of its units still shown warded or resolute.
 // Over the whole corpus the run fails if it held none of any of these
 // kinds (a line whose text changed would match nothing, and the order it
 // should hold would go unchecked; nor may the walks of flying units or the
@@ -136,6 +143,23 @@
 // on code older than R6b). A run on a selection
 // (--only) just notes the kinds it held none of: one battle may well have
 // no fizzle, no gaze or no eruption.
+//
+// (F9a, DESIGN §4.2.9's P-present row) And the riders: with no battle of
+// the corpus yet carrying a War-Cart (the vehicle/ corpus is recorded
+// after F9a's code), battles with transports are played in Node through
+// the core alone (RIDES below: AI battles at Field, Bushtail mirrors and
+// Bushtails against the Coil, and hotseat games played by a script that
+// re-arranges the autoload in the deployment, boards and steps off in
+// every movement phase and leaves the rest to Auto), the module hooks of
+// the self-test registered, so its edits reach them too. Their mirror,
+// folded from every event from the battle's start, must equal project(G)
+// at every act and every stop, `aboard` among it (a rider's hull, its
+// place with its hull's): so a unit.embark dropped, or a rider left behind
+// by its hull's walk, placement or pile-in in the mirror, fails there.
+// Such a battle must show riders aboard at some act and (the scripted ones)
+// an embark and a step off, or it held nothing. They run with every run,
+// and with --only only when it names `riders` (--only riders: them alone).
+//
 //
 // (F14) And, before the battles, in this process: the page's own player and
 // camera rig (view/player.js, view/camera.js, with the view's camera
@@ -179,7 +203,7 @@
 // must be kept as last seen. Code older than F16 fails it; the self-test's
 // mutations leave it out.
 //
-//   node sim/present-check.mjs [--only ai,hotseat,4242-99] [--ref <ref> | --dir <packageDir>]
+//   node sim/present-check.mjs [--only ai,hotseat,4242-99,riders] [--ref <ref> | --dir <packageDir>]
 //   node sim/present-check.mjs --self-test     each edit in present-hooks.mjs's
 //                                              MUTATIONS must fail it
 //                              [--mutations a,b]   only these of them
@@ -206,13 +230,26 @@ import { readFileSync, existsSync } from 'node:fs'
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, riders: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
 } catch (e) {
   console.error(`present-check: ${e.message}\nusage: node sim/present-check.mjs [--only <kinds, modes or ids>] [--ref <ref> | --dir <packageDir>] | --self-test [--mutations <names>] [--only <kinds, modes or ids>]`)
   process.exit(2)
 }
 
+// (F9a) The battles with transports: [id, setup, scripted]. The lists are the
+// races' own autoList's on fixed seeds, the first of each holding War-Carts
+// (two for the scripted games), found as the child loads the code.
+const RIDES = [
+  ['riders-field-mirror-1', { board: 31, dice: 7, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'] }, false],
+  ['riders-field-coil-2', { board: 52, dice: 11, mission: 'field', terrain: 'open', races: ['squirrel', 'serpent'] }, false],
+  ['riders-field-fort-3', { board: 77, dice: 5, mission: 'field', terrain: 'fortified', races: ['serpent', 'squirrel'] }, false],
+  ['riders-grand-coil-4', { board: 19, dice: 3, mission: 'grand', terrain: 'open', races: ['squirrel', 'serpent'] }, false],
+  ['riders-hotseat-5', { board: 4242, dice: 99, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'] }, true],
+  ['riders-hotseat-6', { board: 808, dice: 41, mission: 'field', terrain: 'fortified', races: ['squirrel', 'serpent'] }, true],
+]
+
 if (a.child) await page(a.child)
+else if (a.riders) await ridersChild(a.riders)
 else if (a['self-test']) await selfTest()
 else process.exit(await parent())
 
@@ -243,9 +280,10 @@ function differ(x, y, path = 'M') {
 async function factsFold(dir, job, setup) {
   const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
   const { PHASES } = await import(pathToFileURL(join(dir, 'core', 'rules.js')).href)
+  // ((V3a) and a charge failed, and the models lost this turn)
   const factsOf = (G) => Object.fromEntries(G.units.map((u) => [u.id, {
     side: u.side, moved: !!u.flags.moved, fellBack: !!u.flags.fellBack, advanced: !!u.flags.advanced, advRoll: u.flags.advRoll,
-    shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u),
+    shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u), chargeTried: !!u.flags.chargeTried, lost: u.lost, rode: !!u.flags.rode,
   }]))
   // ((F8b) on the battle's own mission, each seat its own army: a Field or
   // Grand table is its own, as app/flow.js's showTable makes it)
@@ -260,9 +298,11 @@ async function factsFold(dir, job, setup) {
   }
   return { start: factsOf(table), acts, stops, first: PHASES[0].key }
 }
-// a seat's turn begins: its units' deeds cleared, their cover kept (a copy)
+// a seat's turn begins: its units' deeds cleared, their cover kept, and
+// ((V3a) as the match's turn start, core/engine.js's resetTurn) every
+// unit's losses forgotten (a copy)
 function turnBegun(facts, side) {
-  return facts && Object.fromEntries(Object.entries(facts).map(([id, f]) => [id, f.side === side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false } : f]))
+  return facts && Object.fromEntries(Object.entries(facts).map(([id, f]) => [id, f.side === side ? { ...f, moved: false, fellBack: false, advanced: false, advRoll: undefined, shot: false, charged: false, chargeTried: false, lost: 0, rode: false } : { ...f, lost: 0 }]))
 }
 
 // ── One battle, in a child ──────────────────────────────────────────────────
@@ -289,7 +329,9 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  globalThis.location = { search: `?fast&debug&lowfi&${query}${FOG ? '&fog' : ''}` }
+  // ((V2) and a fragment, empty: app/boot.js reads the figure style and
+  // the quality from it too)
+  globalThis.location = { search: `?fast&debug&lowfi&${query}${FOG ? '&fog' : ''}`, hash: '' }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
@@ -300,6 +342,9 @@ async function page(dir) {
   // of the battle through the core alone; null for code before R7b, whose
   // card shows none of it while the table is behind
   const shownFacts = existsSync(join(dir, 'present', 'hud-model.js')) ? await factsFold(dir, job, setup) : null
+  // ((V3a) the card's words as code from V3a on words them: with their
+  // conditions' icons, a charge failed and a squad's losses told)
+  const v3a = existsSync(join(dir, 'present', 'conditions.js'))
   try {
     await import(pathToFileURL(join(dir, 'main.js')).href)
     if (!ts?.present?.listen) throw new Error('main.js offers no ?debug present.listen: code older than R5?')
@@ -356,6 +401,13 @@ async function page(dir) {
       // the order is the unfogged run's to hold)
       const o = FOG ? '' : order.event(e)
       if (o) miss(`after act ${out.acts} (trace line ${ts.trace.length}): event order: ${o}`)
+      // ((V3c) a ward or a resolve wears off as its side's turn begins, the
+      // labels told so then: by the seat's first phase.start no unit of its
+      // side is shown warded or resolute)
+      if (shownFacts && e.t === 'phase.start' && e.phase === shownFacts.first) {
+        const kept = ts.G.units.filter((u) => u.side === e.side && (M.units[u.id]?.warded || M.units[u.id]?.resolute))
+        if (kept.length) miss(`after act ${out.acts} (trace line ${ts.trace.length}): the mirror begins seat ${e.side}'s turn with ${kept.map((u) => u.t.short).join(', ')} still warded or resolute`)
+      }
       out.events++
       out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
       // a walk's smashes: terrain events played inside it (counted with
@@ -374,18 +426,27 @@ async function page(dir) {
       // the unit card, every unit's, as the player plays (behind the
       // match): what the mirror holds, and what each unit did this turn
       // and its cover as the last action played left them (R7b; before
-      // R7b, none: they read the match, §2.4)
+      // R7b, none: they read the match, §2.4); (V3a) a fall back's and an
+      // advance's icons, a charge failed, and a squad's losses this turn
       if (!ts.present.card) return
       for (const u of ts.G.units) {
         const mu = M.units[u.id], t = u.t, f = facts?.[u.id]
         const want = [
           mu.alive > 0 ? (t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`) : 'destroyed',
-          ...(f?.moved ? [f.fellBack ? 'fell back' : f.advanced ? `advanced +${f.advRoll}"` : 'moved'] : []),
-          ...(f?.shot ? ['shot'] : []),
-          ...(f?.charged ? ['charged'] : []),
+          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${f.advRoll}"` : v3a && f.rode ? '⤓ stepped off' : `${v3a ? '👣 ' : ''}moved`] : []),
+          ...(f?.shot ? [`${v3a ? '➹ ' : ''}shot`] : []),
+          ...(f?.charged ? [`${v3a ? '⚡ ' : ''}charged`] : v3a && f?.chargeTried ? ['✖ charge failed'] : []),
           ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
+          // ((V3c) the spells' marks)
+          ...(mu.snared ? ['🌿 snared'] : []),
+          ...(mu.warded ? ['🪵 barkskin'] : []),
+          ...(mu.resolute ? ['❄️ cold blood'] : []),
+          // ((F9a) a rider aboard its hull, and one that stepped off a hull
+          // that moved, above: each a condition on the card)
+          ...(v3a && mu.alive > 0 && mu.aboard ? ['▣ aboard'] : []),
           ...(mu.alive > 0 && mu.engaged ? ['⚔ in combat'] : []),
           ...(mu.alive > 0 && f?.cover ? ['🛡 in cover'] : []),
+          ...(v3a && mu.alive > 0 && f?.lost > 0 && t.models > 1 ? [`💔 lost ${f.lost}`] : []),
         ].join(' · ')
         const got = ts.present.card(u)
         out.cards++
@@ -466,7 +527,8 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
   let seen = new Set(), last = new Map(), board = null
   const point = (x, z, y) => ({ id: -1, side: -1, t: { chest: y - core.q.floorAt(G, x, z), eye: 0, models: 1 }, pos: { x, z }, r: 0, models: [{ alive: true, w: 1, ox: 0, oz: 0 }] })
   const fold = () => {
-    const mine = G.units.filter((u) => u.side === seat && u.alive > 0), foes = G.units.filter((u) => u.side !== seat)
+    // ((F9a) a rider is no eye, and is seen exactly when its hull is)
+    const mine = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.aboard), foes = G.units.filter((u) => u.side !== seat)
     // the chunks changed since the board stood (after the start), and
     // which of them the seat's units see the top of
     board ??= new Map(G.terrain.chunks.map((c) => [c.id, { alive: c.alive, y: c.shape.y }]))
@@ -477,9 +539,11 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
       const t = c.look?.piece === 'fallen' ? c.look.tree : undefined
       if (t !== undefined && byId.has(t) && (chunks.has(c.id) || chunks.has(t))) chunks.add(c.id).add(t)
     }
-    const now = new Set(foes.filter((e) => e.alive > 0 && mine.some((f) => core.q.sight(G, f, e).visible)).map((e) => e.id))
+    const now = new Set(foes.filter((e) => e.alive > 0 && !e.aboard && mine.some((f) => core.q.sight(G, f, e).visible)).map((e) => e.id))
+    for (const e of foes) if (e.alive > 0 && e.aboard && now.has(e.aboard)) now.add(e.id)
     for (const e of foes) {
-      if (now.has(e.id)) last.set(e.id, { x: e.pos.x, z: e.pos.z, r: e.r, models: e.models.map((m) => ({ ...m })) })
+      // ((F9a) a rider seen on its hull's deck leaves no ghost of its own)
+      if (now.has(e.id)) e.aboard ? last.delete(e.id) : last.set(e.id, { x: e.pos.x, z: e.pos.z, r: e.r, models: e.models.map((m) => ({ ...m })) })
       else if (!(e.alive > 0) && seen.has(e.id)) last.delete(e.id)
       else if (last.has(e.id)) {
         const r = last.get(e.id)
@@ -521,6 +585,12 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
       if (!foe(u.id) || !r.alive.has(u.id)) continue
       const hid = !r.seen.has(u.id)
       if (hid && (u.figures || u.ring || u.label || u.hit || u.picked)) return miss(`(F16) entry ${at}: unit ${u.id}, unseen, is drawn (${JSON.stringify(u)})`)
+      // ((F9a) a rider seen is drawn on its hull's deck alone: no label, no
+      // ring, no pick of its own)
+      if (!hid && t.player.mirror.units[u.id]?.aboard) {
+        if (!u.figures || u.ring || u.label || u.picked) return miss(`(F16) entry ${at}: unit ${u.id}, seen aboard its hull, is not drawn as a rider (${JSON.stringify(u)})`)
+        continue
+      }
       if (!hid && (!u.label || !u.picked || !u.figures)) return miss(`(F16) entry ${at}: unit ${u.id}, seen, is not drawn (${JSON.stringify(u)})`)
     }
     const dots = new Map(f.dots.map((d) => [`${d.id}${d.ghost ? 'g' : ''}`, d]))
@@ -620,13 +690,13 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
 // the ground its segment spans, which is the walk's L (the view's).
 function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const nameOf = (id) => unitOf(id)?.t.short
-  let p1, p2, p3, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, roll
+  let p1, p2, p3, p4, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, shotW, roll, boarding
   // how many lines (or templates, or walks) of each kind were held to their
   // events: `flights` the walks of units that fly, `beats` the templates
   // that caught nobody
-  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0 }
+  const seen = { rolloffs: 0, fights: 0, charges: 0, moves: 0, advances: 0, flights: 0, volleys: 0, templates: 0, scatters: 0, beats: 0, eruptions: 0, fizzles: 0, gazes: 0, kegs: 0, snares: 0, wards: 0 }
   const reset = () => {
-    p1 = p2 = p3 = melee = moving = vol = tmpl = thorns = casting = shot = roll = null
+    p1 = p2 = p3 = p4 = melee = moving = vol = tmpl = thorns = casting = shot = shotW = roll = boarding = null
     melees = 0
     pause = false
   }
@@ -640,6 +710,16 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   const event = (e) => {
     let why = ''
     const held = e.t === 'log' && !e.traced
+    // ((F9a) a walk no move line came before: a charge's, at its pace, or
+    // an embark's (core/actions/transport.js doEmbark: the walk, its flags
+    // and labels, then unit.embark, the line after it), at a move's; told
+    // apart by the first event past the walk's flags)
+    if (boarding && !(e.t === 'objectives' || e.t === 'status' || held)) {
+      const w = boarding.e, embark = e.t === 'unit.embark' && e.u === w.u, speed = embark ? 7 : 11
+      if (w.stomp) why ||= `${nameOf(w.u)}'s walk of ${w.L.toFixed(2)}" (${embark ? 'an embark\'s' : 'not a move'}) has stomp ${w.stomp}, not false`
+      if (w.speed !== speed) why ||= `${nameOf(w.u)}'s walk (${embark ? 'an embark\'s' : 'not a move'}) goes at ${w.speed}"/s, not ${speed}`
+      boarding = null
+    }
     // ── the roll-off: its tray after the battle's stage and flags, its rows
     // in pairs until one isn't a tie, then the line naming the winner ──
     if (e.t === 'tray.open' && e.title === 'Roll-off for the first turn') {
@@ -685,7 +765,22 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     if (p1?.t === 'dice' && /^Cast \d+\+ \(2D6\)$/.test(p1.label) && e.t !== (p1.pass ? 'spell.cast' : 'spell.fizzle')) {
       why ||= `a cast roll that ${p1.pass ? 'made' : 'missed'} it not followed straight by spell.${p1.pass ? 'cast' : 'fizzle'} (${e.t})`
     }
-    if (p1?.t === 'spell.cast' && !(e.t === 'spell.gaze' || (e.t === 'log' && e.traced && / casts <b>/.test(e.html)))) why ||= `a spell cast and followed by neither its gaze nor its eruption's line (${e.t})`
+    if (p1?.t === 'spell.cast' && !(e.t === 'spell.gaze' || e.t === 'spell.snare' || e.t === 'spell.ward' || (e.t === 'log' && e.traced && / casts <b>/.test(e.html)))) why ||= `a spell cast and followed by neither its gaze, its snare, its ward nor its eruption's line (${e.t})`
+    // ((V3c) a snare or a ward: straight on to the labels with its mark,
+    // and they straight on to its line)
+    if (p1?.t === 'spell.snare' && !(e.t === 'status' && e.snared?.includes(p1.tg))) why ||= `${pair(p1)}: snared with no status straight after that has ${nameOf(p1.tg)} snared (${e.t})`
+    if (p1?.t === 'spell.ward' && !(e.t === 'status' && (e.warded?.includes(p1.tg) || e.resolute?.includes(p1.tg)))) why ||= `${pair(p1)}: a ward with no status straight after that has ${nameOf(p1.tg)} warded or resolute (${e.t})`
+    if (p2?.t === 'spell.snare' && p1?.t === 'status') {
+      const ok = e.t === 'log' && e.traced && text(e.html).startsWith(`${nameOf(p2.u)} binds ${nameOf(p2.tg)} with `)
+      if (!ok) why ||= `${pair(p2)}: the snare's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+      else seen.snares++
+    }
+    if (p2?.t === 'spell.ward' && p1?.t === 'status') {
+      const who = p2.tg === p2.u ? 'itself' : nameOf(p2.tg)
+      const ok = e.t === 'log' && e.traced && (text(e.html).startsWith(`${nameOf(p2.u)} wraps ${who} in `) || text(e.html).startsWith(`${nameOf(p2.u)} steels ${who} with `))
+      if (!ok) why ||= `${pair(p2)}: the ward's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+      else seen.wards++
+    }
     if (p1?.t === 'spell.gaze' && !(e.t === 'dice' && e.label === 'Mortal wounds D3')) why ||= `a gaze not followed straight by its D3 (${e.t})`
     // an eruption's line, then (past the held-back lines it shows) the thorns
     if (casting && !held) {
@@ -695,14 +790,17 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     // ── the shot's: what must have come before ──
     if (e.t === 'tray.open' && / → .* · /.test(e.title)) {
       if (!(p1?.t === 'unit.face' && e.title.startsWith(`${nameOf(p1.u)} → ${nameOf(p1.tg)} · `))) why ||= `a shot's tray ("${e.title}") not straight after the shooter's turn to face its target (${p1?.t})`
-      // (the shooter, by id: who throws, and whose weapon's look it is)
+      // (the shooter, by id: who throws, and whose weapon's look it is;
+      // (V3c) the weapon by the name the tray gives it, a caster's spell)
       shot = p1?.t === 'unit.face' ? p1.u : null
+      const wn = e.title.slice(e.title.lastIndexOf(' · ') + 3), st = unitOf(shot)?.t
+      shotW = (st?.spells ?? [st?.ranged]).find((w) => w?.name === wn) ?? null
     }
     if ((e.t === 'volley' || e.t === 'blast.fire') && e.u !== shot) why ||= `${e.t} by ${nameOf(e.u)}, not by the shooter (${nameOf(shot)})`
     // ((F19a) but a powder keg's blast, in the keg's own look, whoever set
     // it off)
     if ((e.t === 'volley' || e.t === 'blast.fire' || e.t === 'blast.land') && !(e.t === 'blast.land' && p1?.t === 'keg.fuse')) {
-      const look = unitOf(shot)?.t.ranged?.fx
+      const look = shotW?.fx
       if (e.fx !== look) why ||= `${e.t} in the look ${e.fx}, not the shooter's weapon's (${look})`
     }
     if (e.t === 'volley') {
@@ -749,7 +847,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       why ||= `an action ended with ${vol ? `a volley's line (${pair(vol)})` : tmpl ? 'a template' : thorns ? "an eruption's thorns to fade" : "an eruption's thorns"} still to come`
       vol = tmpl = thorns = casting = null
     }
-    if (e.t === 'act') shot = null
+    if (e.t === 'act') shot = shotW = null
     if (p1?.t === 'melee' && !(e.t === 'dice' && /^Hit /.test(e.label) && e.dice.length === p1.n && passes(e.dice, e.need) === p1.hits)) {
       why = `a melee (${pair(p1)}, ${p1.n} attacks, ${p1.hits} hits) not followed straight by its hit row (${e.t}${e.label ? ` "${e.label}"` : ''})`
     }
@@ -765,8 +863,11 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
         why ||= `a melee (${pair(e)}) not straight after its fighter's turn to face, the camera and the tray (${[p3, p2, p1].map((x) => x?.t).join(', ')})`
       }
     }
-    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && p2?.t === 'dice' && /^Charge /.test(p2.label) && p3?.t === 'tray.open' && p3.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
-      why ||= `a charge's result (${pair(e)}) not straight after its tray, its roll and the charger's turn to face (${[p3, p2, p1].map((x) => x?.t).join(', ')})`
+    // ((V3c) or its roll, a miss, then that rolled again: Cold Blood's)
+    const again = p2?.t === 'dice' && / rolled again \(2D6\)$/.test(p2.label)
+    const [rl, tray] = again ? [p3, p4] : [p2, p3]
+    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && rl?.t === 'dice' && /^Charge \d+" \(2D6\)$/.test(rl.label) && (!again || rl.pass === false) && tray?.t === 'tray.open' && tray.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
+      why ||= `a charge's result (${pair(e)}) not straight after its tray, its roll${again ? ' (missed), that rolled again' : ''} and the charger's turn to face (${[p4, p3, p2, p1].map((x) => x?.t).join(', ')})`
     }
     // a walk: a move's straight after its line (past the held-back lines it
     // shows), as long as the line says, stomping off when a wrecker goes
@@ -777,13 +878,15 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       const cost = e.path.some((p) => p.climb) ? e.path.reduce((L, p, i) => (i ? L + (p.climb ? ladderMul * Math.abs(p.y - e.path[i - 1].y) : hypot(p.x - e.path[i - 1].x, p.z - e.path[i - 1].z)) : 0), 0) : e.L
       if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
       const stomp = !!mv && !!unitOf(e.u)?.t.wrecker && e.L > 0.1
-      if (e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (${mv ? 'a move' : 'not a move'}) has stomp ${e.stomp}, not ${stomp}`
+      if (mv && e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (a move) has stomp ${e.stomp}, not ${stomp}`
       // flying exactly when its unit flies; a move's pace, or a charge's
       const fly = unitOf(e.u)?.t.move === 'fly'
       if (e.fly !== fly) why ||= `${nameOf(e.u)}'s walk has fly ${e.fly}, not ${fly}`
       if (fly) seen.flights++
-      const speed = mv ? 7 : 11
-      if (e.speed !== speed) why ||= `${nameOf(e.u)}'s walk (${mv ? 'a move' : 'not a move'}) goes at ${e.speed}"/s, not ${speed}`
+      // (no move line before it: a charge's or (F9a) an embark's walk, judged
+      // at the next event that tells which: `boarding`, above)
+      if (mv && e.speed !== 7) why ||= `${nameOf(e.u)}'s walk (a move) goes at ${e.speed}"/s, not 7`
+      if (!mv) boarding = { e }
       moving = null
     } else if (moving && !(e.t === 'log' && !e.traced)) {
       // (a line of 0.0" walks nowhere: under 0.05" nothing moves)
@@ -837,6 +940,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       if (mz && !(p1?.t === 'spell.mesmerized' && nameOf(p1.u) === mz[1] && nameOf(p1.tg) === mz[2])) why ||= `the mesmerize line "${text(e.html)}" not straight after its spell.mesmerized (${p1?.t})`
       if (mz) seen.gazes++
     }
+    p4 = p3
     p3 = p2
     p2 = p1
     p1 = e
@@ -846,10 +950,127 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
   return { event, reset, end, seen }
 }
 
-function child(dir, job, env = process.env) {
+// ── (F9a) The riders, in Node ───────────────────────────────────────────────
+
+// One of RIDES, played in this child through the core of `dir` (the self-
+// test's edit applied as the code loads: present-hooks.mjs), its events
+// folded into a mirror from the battle's start (sim/run.mjs mirrorTap's:
+// the table as the start shows it), held to project(G) at every act (as the
+// act line was written) and every stop. Writes { acts, stops, events,
+// kinds, aboard, mismatch, error }.
+async function ridersChild(dir) {
+  const { register } = await import('node:module')
+  register('./present-hooks.mjs', import.meta.url)
+  const [id, spec, scripted] = JSON.parse(readFileSync(0, 'utf8'))
+  const at = (f) => import(pathToFileURL(join(dir, f)).href)
+  const [core, mirror, { RACES }, { MISSIONS }] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('data/schema.js'), at('data/mission.js')])
+  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, mismatch: null, error: null }
+  const miss = (why) => (out.mismatch ??= why)
+  try {
+    const A = core.army, rules = MISSIONS[spec.mission].list
+    const army = (race) => {
+      const k = RACES[race].roster.findIndex((key) => RACES[race].units[key].transport)
+      for (let seed = 1; seed < 400; seed++) {
+        const counts = A.autoList(RACES[race], rules, seed)
+        if (k < 0 || (counts[k] ?? 0) >= (scripted ? 2 : 1)) return A.listText(counts)
+      }
+      throw new Error(`no ${race} list with War-Carts at ${spec.mission} on seeds 1-399`)
+    }
+    const setup = { board: spec.board, dice: spec.dice, mission: spec.mission, terrain: spec.terrain, seats: spec.races.map((race) => ({ race, ctrl: scripted ? 'human' : 'ai', army: army(race) })) }
+    let M = null
+    const projs = []
+    const onTrace = (line, G) => {
+      M ??= { ...mirror.project(G), stage: 'title', owners: G.objectives.map(() => -1), chunks: {} }
+      if (line.startsWith('act ')) projs.push(mirror.project(G))
+    }
+    const G = core.createMatch(setup, { out: [], onTrace })
+    M ??= { ...mirror.project(G), stage: 'title', owners: G.objectives.map(() => -1), chunks: {} }
+    // the events since, folded; each act held to its line's projection,
+    // and the stop to the match
+    const look = (where) => {
+      for (const e of G.out.splice(0)) {
+        mirror.applyEvent(M, e)
+        out.events++
+        out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
+        if (e.t !== 'act') continue
+        const proj = projs.shift()
+        out.acts++
+        if (Object.values(proj.units).some((u) => u.aboard)) out.aboard++
+        const d = differ(M, proj)
+        if (d) return miss(`act ${out.acts} (${where}): the mirror folded from the events differs from the match: ${d}`)
+      }
+      if (projs.length) return miss(`${projs.length} act line(s) traced with no act event (${where})`)
+      out.stops++
+      const d = differ(M, mirror.project(G))
+      if (d) miss(`stop ${out.stops} (${where}): the mirror folded from the events differs from the match: ${d}`)
+    }
+    look('the start')
+    // (the scripted seats: the deployment re-arranged, a board and a step
+    // off a movement phase where they may, Auto for the rest)
+    const q = core.q
+    for (let k = 0; G.turn.stage !== 'over' && !out.mismatch; k++) {
+      if (k > 4000) throw new Error('the scripted battle never ends')
+      const P = G.pending, s = P.seats[0]
+      const send = (body) => {
+        const why = core.legal(G, s, body)
+        if (why) throw new Error(`the script's ${JSON.stringify(body)} for seat ${s} is refused: ${why}`)
+        core.apply(G, s, body)
+        look(`${JSON.stringify(body)} for seat ${s}`)
+      }
+      const mine = G.units.filter((u) => u.side === s && u.alive > 0)
+      if (P.k === 'deploy') {
+        const hulls = mine.filter((u) => u.t.transport)
+        if (hulls.length) {
+          // a rider placed off its hull, then boarded again; the hull
+          // placed elsewhere, its riders with it
+          const v = hulls[0], p = q.riders(G, v)[0]
+          if (p) {
+            const spot = q.freeSpot(G, p, v.pos.x, v.pos.z + 5, s, G.units.filter((o) => o !== p))
+            if (spot) send({ t: 'place', u: p.id, c: G.nav.index(spot.x, spot.z) })
+            if (!p.aboard) send({ t: 'embark', u: p.id, v: v.id })
+          }
+          const to = q.freeSpot(G, v, v.pos.x, v.pos.z - 6, s, G.units.filter((o) => o !== v))
+          if (to) send({ t: 'place', u: v.id, c: G.nav.index(to.x, to.z) })
+        }
+        send({ t: 'deployed' })
+        continue
+      }
+      if (P.k === 'phase' && P.phase === 'move') {
+        // a rider steps off (the first that may), a unit boards (the first
+        // that may), a hull moves 3" with its riders; then Auto
+        const p = mine.find((u) => u.aboard && !u.flags.moved)
+        const cells = p ? q.landing(G, p, G.units.find((v) => v.id === p.aboard)) : []
+        if (cells.length) send({ t: 'disembark', u: p.id, c: cells[0] })
+        let boarded = false
+        for (const v of mine.filter((x) => x.t.transport)) for (const u of mine) if (!boarded && !u.aboard && core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null) {
+          send({ t: 'embark', u: u.id, v: v.id })
+          boarded = true
+        }
+        const v = mine.find((x) => x.t.transport && !x.flags.moved && q.riders(G, x).length && !q.isEngaged(G, x))
+        if (v) {
+          const plan = q.movePlan(G, v, 0), c = q.nearestValid(G, plan, v.pos.x - G.seats[s].edge * 3, v.pos.z)
+          if (c >= 0) send({ t: 'move', u: v.id, c })
+        }
+        if (G.pending?.k === 'phase') send({ t: 'auto' })
+        continue
+      }
+      if (P.k === 'chargeEnd') send({ t: 'chargeEnd', c: -1 })
+      else if (P.k === 'roundLimit') send({ t: 'vote', more: false })
+      else send({ t: 'auto' })
+    }
+    look('the end')
+    if (!out.aboard) miss('no act of the battle had a rider aboard: it held no rider to the mirror')
+    if (scripted && !(out.kinds['unit.embark'] && out.kinds['unit.disembark'])) miss(`the scripted battle met ${out.kinds['unit.embark'] ?? 0} embarks and ${out.kinds['unit.disembark'] ?? 0} steps off: it held too little`)
+  } catch (e) {
+    out.error = String(e?.stack ?? e)
+  }
+  process.stdout.write(JSON.stringify(out))
+}
+
+function child(dir, job, env = process.env, mode = '--child') {
   const self = fileURLToPath(import.meta.url)
   return new Promise((done) => {
-    const p = spawn(process.execPath, [self, '--child', dir], { stdio: ['pipe', 'pipe', 'pipe'], env })
+    const p = spawn(process.execPath, [self, mode, dir], { stdio: ['pipe', 'pipe', 'pipe'], env })
     let out = '', err = ''
     // decoded as a stream: a character split across two chunks stays whole
     p.stdout.setEncoding('utf8')
@@ -1058,11 +1279,16 @@ async function parent({ env = process.env, quiet = false } = {}) {
   const { loadCorpus, select, verdict, pool, CPUS } = await import('./lib.mjs')
   const { dirFromArgs } = await import('./oracle/pin.mjs')
   const dir = a.dir ? resolve(a.dir) : dirFromArgs({ ref: a.ref ?? 'WORKTREE' })
-  // (whole: every battle of the corpus is selected)
+  // (whole: every battle of the corpus is selected; (F9a) `riders`, a
+  // token of this check's own, selects RIDES, which run unless --only
+  // names battles without it)
   let items, whole
+  const tokens = a.only === undefined ? null : a.only.split(',').map((x) => x.trim()).filter(Boolean)
+  const rides = (tokens === null || tokens.includes('riders')) && existsSync(join(dir, 'core', 'actions', 'transport.js'))
   try {
     const all = loadCorpus().items
-    items = select(all, a.only)
+    const rest = tokens?.filter((x) => x !== 'riders')
+    items = rest === undefined ? all : rest.length ? select(all, rest.join(',')) : []
     whole = items.length === all.length
   } catch (e) {
     console.error(`present-check: ${e.message}`)
@@ -1095,6 +1321,22 @@ async function parent({ env = process.env, quiet = false } = {}) {
     for (const [k, n] of Object.entries(r.kinds ?? {})) total.kinds[k] = (total.kinds[k] ?? 0) + n
     say(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.checks).padStart(3)} checks, ${String(r.events).padStart(5)} events: the mirror is the match`}`)
   })
+  // (F9a) the riders, in Node (their battles' lines read as the corpus's do)
+  if (rides) {
+    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0 }
+    await pool(RIDES, CPUS, async (job) => {
+      const r = await child(dir, job, env, '--riders')
+      const why = r.error ?? r.mismatch
+      if (why) failed++
+      held.acts += r.acts ?? 0
+      held.stops += r.stops ?? 0
+      held.aboard += r.aboard ?? 0
+      held.embarks += r.kinds?.['unit.embark'] ?? 0
+      held.steps += r.kinds?.['unit.disembark'] ?? 0
+      say(`  ${(job[2] ? 'human' : 'ai').padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.stops).padStart(3)} stops, ${String(r.events).padStart(5)} events: the mirror is the match, riders aboard at ${r.aboard} acts`}`)
+    })
+    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)`)
+  }
   const kinds = Object.entries(total.kinds).filter(([k]) => /^(unit|terrain|blast|spell)\.|^(smashed|melee|charge\.result|volley)$/.test(k)).sort().map(([k, n]) => `${k} ${n}`).join(', ')
   const ordered = Object.entries(total.ordered)
   say(`  folded ${total.events} events (${kinds}) and compared ${total.acts} acts and ${total.checks} checks (${total.cards} unit cards read at them, ${total.told} telling what a unit did this turn or of its cover); held to their events' order: ${ordered.map(([k, n]) => `${n} ${k}`).join(', ')}`)
@@ -1117,7 +1359,8 @@ async function parent({ env = process.env, quiet = false } = {}) {
   for (const l of fogged.lines) say(l)
   if (!solo.length && !env.PRESENT_MUTATE) say('  (F16) no battle against the AI selected: the fog went unchecked here')
   const ok = !failed && follow.ok && fogged.ok
-  say(!ok ? `\npresent-check FAILED: ${failed} of ${items.length}${follow.ok ? '' : ', and the camera\'s (F14) case'}${fogged.ok ? '' : ', and the courtesy fog\'s (F16) case'}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order; (F14) a human opponent's lone move glides the camera once, and none on its own seat's page; (F16) under the courtesy fog the page shows the other army as the core's sight has it (${Math.round((Date.now() - t0) / 1000)} s)`)
+  const n = items.length + (rides ? RIDES.length : 0)
+  say(!ok ? `\npresent-check FAILED: ${failed} of ${n}${follow.ok ? '' : ', and the camera\'s (F14) case'}${fogged.ok ? '' : ', and the courtesy fog\'s (F16) case'}` : `\npresent-check passed: at every act and check of all ${items.length} battles the mirror folded from the events is the match, and the actions' own events come in their order${rides ? `; and (F9a) at every act and stop of ${RIDES.length} battles with War-Carts, riders aboard among it` : ''}; (F14) a human opponent's lone move glides the camera once, and none on its own seat's page; (F16) under the courtesy fog the page shows the other army as the core's sight has it (${Math.round((Date.now() - t0) / 1000)} s)`)
   return ok ? 0 : 1
 }
 

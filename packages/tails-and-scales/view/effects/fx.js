@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { tween, easeOut, clock } from '../clock.js'
 import { FUR_ORDER } from '../models/splat/splats.js'
+import { Plumes } from './plumes.js'
 
 // ---------------------------------------------------------------------------
 // Effects: pooled instanced particles (debris cubes, unlit glow motes, smoke
@@ -15,6 +16,9 @@ import { FUR_ORDER } from '../models/splat/splats.js'
 // front with the furs), so a puff before a Bushtail veils its fur; a pool
 // sorts as one object, at the middle of what it shows (its boundingSphere,
 // moved each update: never used to cull, frustumCulled is off).
+// (V3d) And the fires that burn on the table (view/effects/plumes.js): the
+// TerrainView lights and puts out each burning chunk's vents through
+// vent() and unvent(), and the smoke and flames are updated with the rest.
 // ---------------------------------------------------------------------------
 
 const MAX_CUBES = 900
@@ -175,6 +179,16 @@ export class FX {
     this.ringGeo.rotateX(-Math.PI / 2)
     this.discGeo = new THREE.CircleGeometry(1, 48)
     this.discGeo.rotateX(-Math.PI / 2)
+    // ((V3d) nothing made until something burns: Plumes's note)
+    this.plumes = new Plumes(scene)
+  }
+
+  // (V3d) chunk `key`'s fires on the table ([{ x, y, z, burn }]), and out
+  vent(key, list) {
+    this.plumes.vent(key, list)
+  }
+  unvent(key) {
+    this.plumes.unvent(key)
   }
 
   cube(o) {
@@ -394,6 +408,7 @@ export class FX {
     this.cubes.update(dt)
     this.glow.update(dt)
     this.puff.update(dt)
+    this.plumes.update(dt)
     this.shake *= Math.exp(-dt * 6)
     const w = innerWidth, hgt = innerHeight
     this.texts = this.texts.filter((t) => {

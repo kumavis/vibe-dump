@@ -33,6 +33,8 @@
 //      stands is seen exactly when the unit is (the ghosts' places), the
 //      dice never moved; and the whole pass over each entry folds the
 //      marked events to the match (project(G)) at every entry's end.
+//      (F9a) One of them a Field battle with War-Carts: a rider is no eye
+//      and is seen exactly when its hull is.
 //
 //   node sim/fog-check.mjs
 //
@@ -231,13 +233,15 @@ section('3. the events marked: lines, trays, rows, templates and the scenery')
 // ── 4. The sight pass, on real matches ─────────────────────────────────────
 section('4. the sight pass on corpus battles: the core\'s own sight, entry by entry')
 {
-  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json']
+  // ((F9a) and a Field battle with War-Carts, a hull wrecked with riders
+  // aboard: a rider is no eye, and is seen exactly when its hull is)
+  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-3.json']
   for (const file of logs) {
     const log = JSON.parse(readFileSync(join(PKG, file), 'utf8'))
     const G = core.createMatch(log.setup, { out: [] })
     const cache = new Map()
     const Fs = [fogStart(0), fogStart(1)]
-    let entries = 0, pairs = 0, hiddenSeen = 0, wrong = null, standIn = null, cacheWrong = null, rngMoved = null, mirrorWrong = null, ghosts = 0
+    let entries = 0, pairs = 0, hiddenSeen = 0, wrong = null, standIn = null, cacheWrong = null, rngMoved = null, mirrorWrong = null, ghosts = 0, riders = 0
     const pass = (events) => {
       entries++
       const M = project(G)
@@ -248,9 +252,11 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
         const ask = { seat, ...fogAsks(F, M), lands: fogLands(events) }
         const got = core.preview(G, (g, q) => fogSight(g, q, ask, seat === 0 ? cache : null))
         if (core.q.rngState(G.rng) !== rng) rngMoved ??= `entry ${entries}`
-        // the brute force: every pair, the core's sight
-        const mine = G.units.filter((u) => u.side === seat && u.alive > 0), foes = G.units.filter((u) => u.side !== seat && u.alive > 0)
+        // the brute force: every pair, the core's sight ((F9a) over the
+        // units on the table; a rider seen with its hull)
+        const mine = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.aboard), foes = G.units.filter((u) => u.side !== seat && u.alive > 0 && !u.aboard)
         const want = new Set(foes.filter((e) => mine.some((f) => (pairs++, core.q.sight(G, f, e).visible))).map((e) => e.id))
+        for (const u of G.units) if (u.side !== seat && u.alive > 0 && u.aboard && want.has(u.aboard)) (want.add(u.id), riders++)
         if (ids(got.units) !== ids(want)) wrong ??= `entry ${entries}, seat ${seat}: ${ids(got.units)} | ${ids(want)}`
         if (seat === 0) {
           const cold = core.preview(G, (g, q) => fogSight(g, q, ask, null))
@@ -288,8 +294,11 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
       core.apply(G, s, body)
       pass(G.out.splice(0))
     }
-    check(!wrong, `${file}: over ${entries} entries and both seats, the units seen are the brute force over every pair (${pairs} sight calls; ${hiddenSeen} enemy-entries unseen)`, wrong)
+    check(!wrong, `${file}: over ${entries} entries and both seats, the units seen are the brute force over every pair (${pairs} sight calls; ${hiddenSeen} enemy-entries unseen${riders ? `; ${riders} riders seen with their hulls` : ''})`, wrong)
     check(!cacheWrong, `${file}: the cache answers as a pass without it`, cacheWrong)
+    // ((F9a) the War-Cart battle holds riders seen with their hulls, or the
+    // rider rule went unchecked)
+    if (file.includes('/vehicle/')) check(riders > 0, `${file}: riders were seen with their hulls (${riders} rider-entries)`, 'no rider was ever seen aboard a hull')
     check(!standIn, `${file}: a stand-in for each unseen enemy where it stands is never seen (a ghost's place reads as the unit does)`, standIn)
     check(!rngMoved, `${file}: the dice never moved`, rngMoved)
     check(!mirrorWrong, `${file}: every entry's marked events fold the last entry's mirror to the match (project(G)); ghosts at most ${ghosts}`, mirrorWrong)

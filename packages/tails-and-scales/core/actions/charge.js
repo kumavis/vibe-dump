@@ -29,9 +29,12 @@ import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
 import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
 import { kegsGoOff } from './shoot.js'
 
+// (F9a) A rider charges nobody while aboard, nor once it has stepped off a
+// hull that had moved this turn (`rode`: DESIGN §4.2.5's disembarking).
+// ((V3c) a unit Root Snare binds may not charge either: shoot.js snare)
 export function canCharge(G, u) {
-  if (!alive(u) || u.flags.charged || u.flags.chargeTried) return false
-  if (u.t.noCharge || u.mesmerized || u.flags.fellBack || isEngaged(G, u)) return false
+  if (!alive(u) || u.flags.charged || u.flags.chargeTried || u.aboard || u.flags.rode) return false
+  if (u.t.noCharge || u.mesmerized || u.snared || u.flags.fellBack || isEngaged(G, u)) return false
   if (u.flags.advanced && !u.t.chargeAfterAdvance) return false
   return true
 }
@@ -80,7 +83,8 @@ export function chargePlan(G, u, target) {
     if (nav.hasHeight) {
       if (others.some((e, k) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
     } else if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
-    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
+    // (a friend's spacing; F9a: a rider stands in nobody's way)
+    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && !o.aboard && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
     spots.push({ i, d })
     if (d < bd) {
       best = i
@@ -107,6 +111,9 @@ export function chargeSpots(plan, rolled) {
 // `via` 'ai' (an AI seat, or a human's Auto) goes straight on to the
 // shortest move (finishCharge); a seat's human picks the spot first, from
 // what this returns: { plan, rolled }. Null once the charge is over.
+// (V3c, DESIGN §4.1 rule 29) A resolute unit (Cold Blood: shoot.js bless)
+// rolls a failed charge again, at once: 2D6 more, in a row of their own
+// straight after the first, and the second roll stands.
 export function declareCharge(G, u, target, via) {
   const plan = chargePlan(G, u, target)
   u.flags.chargeTried = true
@@ -116,20 +123,28 @@ export function declareCharge(G, u, target, via) {
     log(G, u.side, `<b>${u.t.short}</b> can't find a way to ${target.t.short}.`)
     return null
   }
-  const r = roll(G, 2)
-  const total = r[0] + r[1]
-  const ok = total >= plan.need
+  let r = roll(G, 2)
+  let total = r[0] + r[1]
+  let ok = total >= plan.need
   emit(G, 'dice', { label: `Charge ${plan.need}" (2D6)`, dice: r, need: 0, sum: true, pass: ok })
+  const again = !ok && u.resolute
+  if (again) {
+    r = roll(G, 2)
+    total = r[0] + r[1]
+    ok = total >= plan.need
+    emit(G, 'dice', { label: `Charge ${plan.need}" rolled again (2D6)`, dice: r, need: 0, sum: true, pass: ok })
+  }
+  const rolled = again ? `roll ${total} (again)` : `roll ${total}`
   emit(G, 'unit.face', { u: u.id, tg: target.id })
   if (!ok) {
     emit(G, 'charge.result', { u: u.id, tg: target.id, ok })
-    log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total}, needed ${plan.need}. Failed.`)
+    log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — ${rolled}, needed ${plan.need}. Failed.`)
     return null
   }
   u.flags.charged = true
   u.flags.chargeTarget = target.id
   emit(G, 'charge.result', { u: u.id, tg: target.id, ok })
-  log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — roll ${total} vs ${plan.need}. <b>Contact!</b>`)
+  log(G, u.side, `<b>${u.t.short}</b> charge ${target.t.short} — ${rolled} vs ${plan.need}. <b>Contact!</b>`)
   if (via !== 'ai') return { plan, rolled: total }
   finishCharge(G, u, target, plan.cell, plan)
   return null
