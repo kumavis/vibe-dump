@@ -77,7 +77,7 @@ async function page(dir) {
       rec = instrument(v)
     },
   })
-  globalThis.location = { search: `?fast&debug&lowfi&${query}` }
+  globalThis.location = { search: `?fast&debug&lowfi&${query}`, hash: '' }
   console.log = console.info = console.debug = console.error
   let fatal = null
   process.on('unhandledRejection', (e) => (fatal ??= e))
