@@ -20,11 +20,12 @@ scripted imitation of the CLI. When in doubt, it is the executable reference.
 
 | message | when | meaning |
 |---|---|---|
-| `{type:'boot', protocol:1, argv, env, cwd, base, appUrl, version, manifest, fsSnapshot, seedFiles, persistRoots}` | exactly once, first | start the process (fields below) |
+| `{type:'boot', protocol:1, argv, env, cwd, base, appUrl, version, manifest, fsSnapshot, seedFiles, persistRoots, provider, trace?}` | exactly once, first | start the process (fields below) |
 | `{type:'stdin', line}` | any time after `boot` | one stream-json line for the CLI's stdin, **without** the trailing newline; the Worker appends `'\n'` |
 | `{type:'stdin-end'}` | `Harness.stop()` | EOF on stdin (`process.stdin` emits `'end'`) |
 | `{type:'fs-flush', id?}` | "refresh" in the workspace panel; `Session.stop()` before `stdin-end`; the page going hidden (`pagehide`, `visibilitychange`) | post an `fs-sync` now. With an `id`, that `fs-sync` carries `flush: id`, so the page can wait for exactly this snapshot (`Harness.flushFs()` resolves on it). Before the VFS is mounted there is nothing to snapshot: the answer is `{type:'fs-sync', snapshot: null, paths: [], flush: id}` |
 | `{type:'signal', signal}` | optional | emit `signal` (`'SIGINT'`/`'SIGTERM'`) on `process` |
+| `{type:'provider-token', id, accessToken, expiresAt}` or `{type:'provider-token', id, error}` | ChatGPT mode, answering a `provider-token-request` | an OpenAI access token and its expiry (ms since the epoch), or why there is none (a user-facing sentence). Never anything else: see "Provider tokens" below |
 
 `terminate()` on the Worker is the page's SIGKILL; it is used after
 `stdin-end` plus a grace period, and after an `exit` message.
@@ -40,7 +41,7 @@ boot.js posts before `exit` is saved as well before `stop()` resolves.
 |---|---|---|
 | `protocol` | `1` | bump on incompatible changes |
 | `argv` | `string[]` | the CLI arguments, i.e. what `process.argv.slice(2)` must return. boot.js prepends its own `[execPath, scriptPath]` (e.g. `['/usr/local/bin/node', appPath + 'cli']`). Built by `invocation.js` `buildArgv()`: `-p --input-format stream-json --output-format stream-json --verbose --permission-prompt-tool stdio --permission-mode default --tools Read,Write,Edit,Glob,Grep,NotebookEdit,Task,TodoWrite,AskUserQuestion,ExitPlanMode,Skill [--mcp-config {"mcpServers":{"page":{"type":"sdk","name":"page"}}}] --strict-mcp-config --no-session-persistence [--model M]` |
-| `env` | `{[k]: string}` | the complete `process.env` (`invocation.js` `buildEnv()`): HOME, CLAUDE_CONFIG_DIR, TERM=dumb, SHELL='', exactly one of CLAUDE_CODE_OAUTH_TOKEN / ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL, the four policy flags, USE_BUILTIN_RIPGREP=false, CLAUDE_CODE_ENTRYPOINT=sdk-cli. boot.js uses it as is except that it merges the four policy flags in again, last (`boot/policy.js` `workerEnv()`, the same `POLICY_ENV` the page uses); nothing else is added, and nothing that identifies differently |
+| `env` | `{[k]: string}` | the complete `process.env` (`invocation.js` `buildEnv()`): HOME, CLAUDE_CONFIG_DIR, TERM=dumb, SHELL='', exactly one of CLAUDE_CODE_OAUTH_TOKEN / ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL, the four policy flags, USE_BUILTIN_RIPGREP=false, CLAUDE_CODE_ENTRYPOINT=sdk-cli. boot.js uses it as is except that it merges the four policy flags in again, last (`boot/policy.js` `workerEnv()`, the same `POLICY_ENV` the page uses); nothing else is added, and nothing that identifies differently. **ChatGPT mode** (`provider.kind` `'openai-responses'`): ANTHROPIC_BASE_URL is the synthetic origin `https://openai-adapter.invalid`, ANTHROPIC_API_KEY the placeholder `openai-adapter` (so Claude Code starts; not a credential), and CLAUDE_CODE_AUTO_COMPACT_WINDOW the OpenAI model's context window when it is known and within 100k..1M (2.1.311 clamps it to the Claude model's window). No ChatGPT token is ever in `env`; argv keeps `--model claude-sonnet-5-5` |
 | `cwd` | `string` | `/home/user/workspace`; create it if missing, then `process.chdir` |
 | `base` | `string` | BASE, absolute URL of the app directory (a Worker's `location` is the script URL, not BASE) |
 | `appUrl` | `string` | `BASE + 'vfs/app/'`, where `sw.js` serves the extracted tree |
@@ -49,6 +50,8 @@ boot.js posts before `exit` is saved as well before `stop()` resolves.
 | `fsSnapshot` | `Uint8Array \| null` | the persisted VFS: `serializeSnapshot(snapshot(['/home/user']))` bytes from the last `fs-sync` (format in `src/runtime/node/fs.js`). Its buffer is **transferred**. Restore it with `restore(deserializeSnapshot(bytes))` before the CLI starts |
 | `seedFiles` | `{[path]: string}` | files to write **only where absent** after restoring the snapshot: `~/.claude/.claude.json` (onboarding done, workspace trusted: without it the CLI runs a CORS-blocked preflight and exits) and `~/.claude/CLAUDE.md` (describes the sandbox) |
 | `persistRoots` | `string[]` | `['/home/user']`: what `fs-sync` snapshots (never the app tree) |
+| `provider` | `object` | where the model requests go (`invocation.js` `providerConfig()`): `{kind: 'anthropic'}` (the default; also when absent), or `{kind: 'openai-responses', baseUrl, model, effort, efforts?, contextWindow}` for the ChatGPT subscription option (ARCHITECTURE.md Appendix A): `baseUrl` the Responses API base (`https://api.openai.com/v1`, or the mock's `<mock>/v1`), `model` the OpenAI model slug the adapter substitutes for the Claude model, `effort` a reasoning-effort override (`'low'`…`'xhigh'`, or `''`: follow Claude Code's `output_config.effort`), `efforts` (present when the model list gave them) the model's supported levels, which the Worker clamps the effort it sends to, `contextWindow` tokens or `null` |
+| `trace` | `boolean` | the page's `?trace`: boot.js logs every spawn, fetch and Worker the CLI starts |
 
 ## Worker → Page
 
@@ -61,6 +64,7 @@ boot.js posts before `exit` is saved as well before `stop()` resolves.
 | `{type:'log', level, msg, data?}` | boot diagnostics (`level`: debug/info/warn/error), shown in the page log |
 | `{type:'status', phase, done?, total?}` | boot progress, shown next to the Start button, e.g. `{phase:'import', done: 1200, total: 2594}` |
 | `{type:'error', message, stack?}` | an uncaught error the Worker survived (logged; not fatal by itself). boot.js calls `preventDefault()` on the error event after posting this, so the page's Worker object does not report the same error a second time |
+| `{type:'provider-token-request', id, reason}` | ChatGPT mode: the Worker needs an OpenAI access token. `reason`: `'start'` (the first one, asked for at boot), `'expired'` (the cached one is within 60 s of `expiresAt`), `'unauthorized'` (the API refused the cached one). The page answers with `provider-token` carrying the same `id` |
 
 A Worker that fails to load (404, syntax error, throwing top-level import)
 fires a plain `error` event on the Worker object; the bridge turns that into
@@ -83,6 +87,55 @@ fires a plain `error` event on the Worker object; the bridge turns that into
    page's origin}, or one carrying `authorization` / `x-api-key` to any origin
    but the base URL's, is refused (a `TypeError` with `code: 'EGRESS_REFUSED'`)
    and reported as a `log` message at level `warn` (header names, never values).
+   **ChatGPT mode:** the allowed origins are {the page's origin, the origin of
+   `provider.baseUrl`}; credential headers may go to the provider origin only;
+   the synthetic origin is answered inside the Worker by the OpenAI adapter
+   (`boot/openai-adapter.js`, installed inside the guard) and never reaches
+   the network.
+6. **Tokens come from the page.** In ChatGPT mode the Worker holds at most an
+   access token and its expiry, obtained with `provider-token-request`
+   (below). It never asks for, stores or logs anything else, and it never
+   presents as the Codex CLI (no `originator`, `chatgpt-account-id` or Codex
+   User-Agent on the upstream requests).
+
+## Provider tokens (ChatGPT mode)
+
+The ChatGPT subscription option (ARCHITECTURE.md Appendix A) signs in with
+OpenAI's "Sign in with ChatGPT" in the page (`src/host/siwc.js`). The page
+owns the tokens: the refresh token and the ID token never cross into the
+Worker. The Worker asks for an access token when it needs one:
+
+```
+Worker -> page   {type:'provider-token-request', id, reason: 'start'|'expired'|'unauthorized'}
+page -> Worker   {type:'provider-token', id, accessToken, expiresAt}     expiresAt: ms since the epoch
+                 {type:'provider-token', id, error}                      a sentence for the user
+```
+
+- **Page side** (`worker-bridge.js` `serveProviderTokens(worker, {getAccessToken})`,
+  attached by `Session` to the Worker before the boot message is posted, so
+  no request can arrive unheard): `'start'` and `'expired'` call
+  `siwc.getAccessToken()`, which returns the current token, refreshing it
+  first when it has less than 5 minutes left (unless OpenAI's
+  `earliest_refresh_at` has not passed while the token is still valid);
+  `'unauthorized'` calls `getAccessToken({force: true})`, which refreshes
+  now (single-flight: concurrent requests share one refresh). Refresh tokens
+  rotate; the new one is saved before the answer is sent. The reply is built
+  field by field: only `accessToken` and `expiresAt` (or `error`) leave the
+  page. Errors are user-facing: signed out, the refresh refused (sign in
+  again), no refresh allowed yet, the issuer unreachable.
+- **Worker side** (track W, `boot/openai/token.js`): one request in flight at
+  a time; the token is cached until `expiresAt - 60 s`. After an upstream
+  401 it asks once with `'unauthorized'`, retries the request once, then
+  fails it. OpenAI's edge layer answers a refused token without CORS
+  headers, so the browser reports a `TypeError` instead of the 401; the
+  Worker treats that as possibly unauthorized but does not ask again for a
+  token it got moments ago, so a network outage cannot become a refresh
+  storm. An `error` answer fails the request as an authentication error that
+  carries the page's sentence.
+- `src/host/fake-worker.js` imitates the Worker side: it asks with
+  `'start'` at boot, with `'expired'` before a turn when its token is within
+  60 s of expiry, and with `'unauthorized'` for a prompt containing
+  "token refused".
 
 ## What travels inside stdin/stdout
 

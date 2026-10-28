@@ -10,11 +10,60 @@
 //   'fs-sync' {snapshot, paths, flush?}  a serialized snapshot of the persisted roots
 //                                    (flush: the id of the fs-flush it answers)
 //   'error'  {message, stack}       an uncaught error inside the Worker
+//   'provider-token-request' {id, reason}  the Worker asks for a ChatGPT access
+//                                    token (answered by serveProviderTokens below,
+//                                    which listens on the Worker itself)
 //
 // The worker may send stdout/stderr as whole lines ({line}) or as raw text
 // ({chunk}); chunks are split here, so either side can be simple.
 
 export const PROTOCOL_VERSION = 1
+
+export const TOKEN_REASONS = Object.freeze(['start', 'expired', 'unauthorized'])
+
+/**
+ * The page's half of the token handoff (worker-protocol.md, "Provider
+ * tokens"): answers every `{type:'provider-token-request', id, reason}` from
+ * `worker` with `{type:'provider-token', id, accessToken, expiresAt}` or
+ * `{type:'provider-token', id, error}`. The page owns the tokens; the reply is
+ * built field by field, so nothing but the access token and its expiry ever
+ * reaches the Worker (never the refresh or ID token). `reason: 'unauthorized'`
+ * (the API refused the token) forces a refresh; 'start' and 'expired' take
+ * the current token, which getAccessToken refreshes when it is near expiry.
+ *
+ * Attach it before the boot message is posted (Session wraps the Worker
+ * factory), so no request can arrive unheard. Returns a detach function.
+ *
+ * @param {{postMessage: Function, addEventListener: Function, removeEventListener?: Function}} worker
+ * @param {object} o
+ * @param {(o: {force: boolean, reason: string}) => Promise<{accessToken: string, expiresAt: number}>} o.getAccessToken
+ * @param {(d: {id, reason}) => void} [o.onRequest]
+ * @param {(d: {id, reason, ok: boolean, error?: string, expiresAt?: number}) => void} [o.onAnswer]  never given the token
+ */
+export function serveProviderTokens (worker, { getAccessToken, onRequest, onAnswer } = {}) {
+  if (!worker || typeof worker.addEventListener !== 'function') throw new TypeError('serveProviderTokens: a Worker-like object is required')
+  if (typeof getAccessToken !== 'function') throw new TypeError('serveProviderTokens: getAccessToken is required')
+  const onMessage = async (ev) => {
+    const msg = ev?.data
+    if (!msg || typeof msg !== 'object' || msg.type !== 'provider-token-request') return
+    const id = msg.id
+    const reason = TOKEN_REASONS.includes(msg.reason) ? msg.reason : 'start'
+    try { onRequest?.({ id, reason }) } catch {}
+    let reply
+    try {
+      const t = await getAccessToken({ force: reason === 'unauthorized', reason })
+      const accessToken = typeof t === 'string' ? t : t?.accessToken
+      if (typeof accessToken !== 'string' || !accessToken) throw new Error('no access token')
+      reply = { type: 'provider-token', id, accessToken, expiresAt: Number(t?.expiresAt) || 0 }
+    } catch (err) {
+      reply = { type: 'provider-token', id, error: String(err?.message ?? err) }
+    }
+    try { onAnswer?.({ id, reason, ok: !reply.error, ...(reply.error ? { error: reply.error } : { expiresAt: reply.expiresAt }) }) } catch {}
+    try { worker.postMessage(reply) } catch {}
+  }
+  worker.addEventListener('message', onMessage)
+  return () => worker.removeEventListener?.('message', onMessage)
+}
 
 /** Splits a text stream into lines; keeps the unterminated tail for the next push. */
 export class LineSplitter {
@@ -119,6 +168,7 @@ export class WorkerBridge extends EventTarget {
       case 'status': this.#emit('status', { ...msg }); break
       case 'fs-sync': this.#emit('fs-sync', { snapshot: msg.snapshot ?? null, paths: msg.paths ?? [], ...(msg.flush != null ? { flush: msg.flush } : {}) }); break
       case 'error': this.#emit('error', { message: msg.message ?? 'error in Worker', stack: msg.stack }); break
+      case 'provider-token-request': this.#emit('provider-token-request', { id: msg.id, reason: msg.reason }); break
       default: this.#emit('log', { level: 'debug', msg: `unknown worker message type ${JSON.stringify(msg.type)}`, data: msg })
     }
   }

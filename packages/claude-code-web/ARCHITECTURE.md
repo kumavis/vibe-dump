@@ -497,3 +497,86 @@ Pure helpers (`buildAuthorizeUrl`, `parseCallbackUrl`, `pkce`) are exported and 
 other credentials; the README states the Plus/Pro requirement, OpenAI's
 per-app weekly caps and open-source-app terms, and that the Codex CLI's own
 login is not supported here and why.
+
+### As built (ChatGPT option, integration 2026-10-28)
+
+Where the implementation departs from or pins down the appendix above.
+STATUS.md ("ChatGPT option") has the test results.
+
+- **Token handoff.** `siwc.getAccessToken()` returns `{accessToken, expiresAt}`
+  (the reply needs the expiry). The page answers `provider-token-request`
+  with `serveProviderTokens(worker, {getAccessToken})` (`worker-bridge.js`),
+  which `Session` attaches to the raw Worker through the Worker factory it
+  hands the Harness, so the listener is on before the boot message is
+  posted. `'unauthorized'` forces a refresh; the reply is built field by
+  field (never the refresh or ID token). The Worker side
+  (`boot/openai/token.js`) caches until `expiresAt - 60 s`, keeps one
+  request in flight, and after a `TypeError` (OpenAI's edge sends a refused
+  token's 401 without CORS headers) renews only if its token is older than
+  30 s, so an outage cannot become a refresh storm.
+- **`createSiwc`** also takes `sha256` (tests), `sessionStorage` (the pending
+  PKCE login) and `locks`: refreshes run under the Web Lock
+  `cc-web:siwc-refresh` and, with "Remember on this device", re-read
+  storage first, so two tabs cannot burn one rotating refresh token.
+  `logout()` also asks `issuer + /api/accounts/oauth/revoke`, best effort.
+  The ID token's signature is not verified (the JWKS is not CORS-readable,
+  report K §4.8); its `nonce` is checked, and the email/plan shown come from
+  it unverified.
+- **Effort.** The boot `provider.effort` is `''` for "follow Claude Code";
+  `providerConfig()` in `boot/policy.js` maps that to `'auto'`, and the
+  translator then uses the request's `output_config.effort`. When the model
+  list gave the model's `supported_reasoning_levels`, the page passes them as
+  `provider.efforts` and the translator clamps the effort to them
+  (`clampEffort`: the highest supported level not above the requested one);
+  otherwise the effort is passed through.
+- **Context window.** Only `CLAUDE_CODE_AUTO_COMPACT_WINDOW` is set (the
+  model's `context_window` when within 100k..1M; 2.1.311 clamps it to the
+  Claude model's window). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is a no-op with
+  `--model claude-sonnet-5-5` in 2.1.311 and is not set. The page sets the
+  env; `applyProviderEnv()` re-applies the ChatGPT env in the Worker
+  (synthetic base URL, placeholder key, no Anthropic credential). The
+  constants (`OPENAI_ADAPTER_ORIGIN`, `OPENAI_ADAPTER_KEY`,
+  `AUTO_COMPACT_WINDOW_RANGE`) live in `boot/policy.js`; the page re-exports
+  them.
+- **System items stay in place.** Only the top-level `system` blocks become
+  the leading `developer` message (billing line stripped). In-`messages`
+  `role:"system"` items become `developer` messages where they are (J §7.3),
+  and one that sits between a call and its output moves to just after the
+  output. Folding them into the leading message (the appendix's wording)
+  would change the prefix every turn (`<total_tokens>` reminders) and defeat
+  OpenAI's prefix caching; `toResponsesRequest(..., {hoistSystem: true})`
+  gives the folded form.
+- **Order of the wrappers.** The adapter wraps `fetch` on top of the egress
+  guard, and its upstream requests go through the guard: in ChatGPT mode the
+  guard allows {the page, the provider origin} and credentials only to the
+  provider origin, so the policy covers the adapter's own calls as well.
+- **Failures before any output** become HTTP errors, not a 200 stream with an
+  error event: the adapter reads ahead to the first non-preamble event, so
+  `context_length_exceeded` is a 400 "prompt is too long: N tokens > M
+  maximum" (Claude Code compacts on it) and usage limits are a 429 with
+  `x-should-retry: false`. Probes (`max_tokens <= 1`) get a canned reply and
+  `count_tokens` a local estimate; 2.1.311 sent neither in the e2e runs.
+- **Mock.** `overflow` is an HTTP 400 before the stream; `overflow
+  mid-stream` sends `response.failed`. A prompt without a scenario gets a 400
+  `mock_no_scenario` (not a 401, which would burn refreshes). Bearers must be
+  ones the mock's issuer minted; `POST /__revoke-access` revokes them. Beyond
+  the SIWC field list, the mock refuses what the real `/v1/responses` would
+  (`inputStructureProblems`: call/output pairing, a reasoning item without
+  its following item, content types per role, tool names, non-function
+  tools). Further scenarios: "hit the usage limit" (429
+  `subscription_sharing_usage_limit_exceeded`), "hit the rate limit"
+  (`response.failed rate_limit_exceeded` before output, then answered),
+  "fail mid-stream" (text, then `response.failed`; 2.1.311's resume request
+  is answered), and compaction (a prompt asking for a "summary" gets a
+  marked summary, after which "overflow" is answered).
+- **e2e.** `--provider chatgpt` adds step 0 (sign-in by paste, model list),
+  11 (a refused token is refreshed once and the request retried), 12
+  (every `/v1/responses` request had the SIWC shape and valid input; every
+  refresh grant accepted; reasoning replayed) and 13 (usage limit not
+  retried, rate limit retried, mid-stream failure resumed, overflow
+  compacted, all by the real 2.1.311). A new tab signs in again (tokens are
+  per tab unless remembered). `--access-ttl S` shortens the mock's token
+  lifetime to exercise the `expired` path; the run prints each turn's wall
+  time.
+- **Transcript.** `system/thinking_tokens` (2.1.311 emits one per thinking
+  delta) is not shown; an empty thinking block reads "(no summary)".

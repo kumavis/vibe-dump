@@ -9,7 +9,7 @@ your own copy of Claude Code; it pulls the JavaScript out of the binary, runs
 it in a Web Worker on top of small Node and Bun compatibility layers, and
 talks to it the way the Claude Agent SDK does. There is no server: the only
 network traffic is between your browser and the Anthropic API (or whatever
-base URL you set).
+base URL you set), or OpenAI if you use your ChatGPT subscription instead.
 
 Status: work in progress. Pinned to Claude Code **2.1.311**.
 
@@ -68,6 +68,9 @@ auto-updater are switched off with Claude Code's own environment flags.
 
      It prints a long-lived, inference-only token starting with
      `sk-ant-oat01-`. Paste it into the page. Read the next section first.
+   - **ChatGPT subscription** (experimental): sign in with your ChatGPT Plus
+     or Pro plan; Claude Code then runs on an OpenAI model. See
+     [Using your ChatGPT subscription](#using-your-chatgpt-subscription).
 
    **Where the key or token is kept.** By default only for the current tab
    (`sessionStorage`): it survives a reload and is forgotten when the tab
@@ -108,6 +111,69 @@ before using a subscription token. In short (not legal advice):
 If Anthropic's servers reject subscription tokens from a browser, that is the
 answer; this project does not work around it.
 
+## Using your ChatGPT subscription
+
+Pick **ChatGPT subscription** in Settings. The harness stays the same
+official Claude Code; only its model requests change direction. Claude Code
+is pointed at a made-up address (`https://openai-adapter.invalid`) that never
+reaches the network: inside the Worker, an adapter translates each request
+into OpenAI's Responses API and sends it to `https://api.openai.com/v1` with
+your ChatGPT sign-in, then translates the streamed answer back.
+
+**Signing in** uses OpenAI's documented
+["Sign in with ChatGPT" for open-source apps](https://developers.openai.com/siwc/token-sharing-open-source/sign-in)
+(scope `chatgpt.tokens.use.direct`; the app registers itself the first time as
+`claude-code-web`):
+
+1. Press **Open sign-in**. A new tab opens on `auth.openai.com`; sign in and
+   approve.
+2. That tab then tries to load `http://127.0.0.1:1455/auth/callback?code=…`
+   and fails ("can't connect"). That is expected: OpenAI only redirects to a
+   loopback address, and a web page cannot listen there. Copy the whole
+   address from that tab's address bar.
+3. Paste it into the page and press **Complete sign-in**. The page exchanges
+   the code itself (with PKCE) and shows who is signed in.
+
+If the Codex CLI or another app happens to be signing in on the same computer
+at that moment, it may grab the callback instead; just try again.
+
+Then pick a **model** (the list is the one OpenAI offers your plan; GPT-5.5 is
+the one tested with this page) and, if you like, a **reasoning effort**
+("Auto" follows the effort Claude Code asks for).
+
+What to know first:
+
+- **Plans and limits.** It needs an eligible **ChatGPT Plus or Pro** plan, and
+  it counts against your plan's Codex usage limits (a 5-hour window on Plus,
+  and weekly limits). In
+  ChatGPT, *Settings → Security and login → Sign in with ChatGPT* lets you set
+  a **weekly cap** for this app or disconnect it.
+- **Terms.** OpenAI offers plan usage to open-source apps under its own terms
+  for them; this page is open source and runs only in your browser. It is
+  unofficial: not affiliated with or endorsed by OpenAI, nor by Anthropic.
+- **Your tokens** are kept exactly like the other credentials: in this tab
+  only unless you tick *Remember on this device*. They go only to OpenAI
+  (`auth.openai.com` to sign in and refresh, `api.openai.com` for the model).
+  The page keeps the refresh token; the Worker that runs Claude Code is only
+  ever handed the short-lived access token. The refresh token is a
+  long-lived credential: anyone who reads it can use your plan until you log
+  out (Log out also asks OpenAI to revoke it, best effort). Remember that this
+  origin is shared with the other gallery apps.
+- **Nothing presents as the Codex CLI**: no Codex client id, `originator`,
+  `chatgpt-account-id` or Codex User-Agent.
+- **The Codex CLI's own login is not supported.** Its backend
+  (`chatgpt.com/backend-api/codex`) only answers OpenAI's own web origins, so
+  a page cannot reach it without a relay server, and OpenAI's docs steer
+  third-party apps to the route above instead. Its `auth.json` tokens also
+  rotate on refresh, so sharing them with the CLI would sign one of the two
+  out.
+- **What does not carry over.** Claude Code still believes it talks to a
+  Claude model (its own prompt and tools run on the OpenAI model); its
+  result line reports `claude-sonnet-5-5` and a cost in Claude prices that
+  says nothing about your ChatGPT usage. Prompt-cache controls, Anthropic
+  server tools and exact token counts have no equivalent; thinking shows as
+  OpenAI's reasoning summaries.
+
 ## What does not work (v1)
 
 - **No shell.** The Bash tool is disabled; nothing can be installed or run.
@@ -147,7 +213,21 @@ In the page, pick either credential mode and paste any placeholder (the mock
 only checks that one is there), set the base URL to `http://127.0.0.1:18080`,
 drop the binary, press Start, and try `say hi`, `use the weather tool`,
 `write a file`, `run the file tools` (Glob, Grep, Read, Edit on the
-workspace) or `stream slowly` (then Interrupt). `?trace` in the page URL logs
+workspace) or `stream slowly` (then Interrupt).
+
+For the ChatGPT mode, the same mock is also a fake OpenAI: pick *ChatGPT
+subscription*, and under *Advanced: endpoints* set the API base URL to
+`http://127.0.0.1:18080/v1` and the issuer to `http://127.0.0.1:18080`. *Open
+sign-in* then opens the mock's authorize page, which redirects straight to
+the `127.0.0.1:1455` callback; paste that address back. The mock answers
+`/v1/responses` with the same scenarios (plus `overflow`, which Claude Code
+answers by compacting the conversation, `hit the usage limit` and `hit the
+rate limit`), checks
+every request the way OpenAI's preview does (no `role: "system"` items,
+`store: false`, `stream: true`, no `max_output_tokens`/`temperature`/`metadata`,
+no Codex headers) and the way `/v1/responses` validates its input (every tool
+call answered, reasoning items followed by their output, content types per
+role), and logs what it saw at `/__requests`. `?trace` in the page URL logs
 every spawn and fetch the CLI makes (with its abort signal); `?debug` adds the
 CLI's own debug output. Both show in the page log.
 
@@ -158,6 +238,9 @@ npm test                            # unit tests (node --test)
 npm run build && npm run test:e2e   # the acceptance test in headless Chromium
 node test/e2e.mjs --base /vibe-dump/claude-code-web/   # the same under the Pages sub-path
 node test/e2e.mjs --fake            # the page flow against the fake worker
+node test/e2e.mjs --provider chatgpt   # the same acceptance run in ChatGPT mode (sign-in by paste,
+                                    # the Worker's OpenAI adapter against the mock's /v1/responses,
+                                    # plus a refused token, usage/rate limits and overflow/compaction)
 ```
 
 The tests never keep any of Anthropic's code in this repository: the ones
@@ -182,6 +265,6 @@ Worker messages are specified in
 |---|---|
 | `src/extract/` | tar/gunzip, the Bun payload parser, the rewrites, the cache |
 | `src/runtime/` | Node built-in shims, the Bun polyfill, the Worker bootstrap |
-| `src/host/` | the stream-json driver (`harness.js`), the MCP server for page tools, the Worker bridge, the session |
+| `src/host/` | the stream-json driver (`harness.js`), the MCP server for page tools, the Worker bridge, the session, Sign in with ChatGPT (`siwc.js`) |
 | `src/ui/` | the page |
 | `mock/` | the mock API used by the tests |

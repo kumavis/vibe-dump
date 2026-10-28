@@ -90,7 +90,7 @@ export function mountApp (root, session) {
         composer,
         logPanel)),
     h('footer', { class: 'foot muted' },
-      `${UNOFFICIAL}. Runs the official Claude Code JavaScript from your own copy, in a Worker in this tab. No server; your key or token stays in this browser (this tab only, unless you tick "Remember on this device") and goes only to the API base URL. `,
+      `${UNOFFICIAL}. Runs the official Claude Code JavaScript from your own copy, in a Worker in this tab. No server; your key, token or ChatGPT sign-in stays in this browser (this tab only, unless you tick "Remember on this device") and goes only to the API base URL, or to OpenAI in ChatGPT mode. `,
       h('a', { href: 'https://github.com/kumavis/vibe-dump/tree/main/packages/claude-code-web#readme', target: '_blank', rel: 'noopener' }, 'How it works and its limits')))
   render()
   return { transcript }

@@ -14,6 +14,16 @@ export const DEFAULT_SERVER = 'page'
 export const DEFAULT_API_BASE = 'https://api.anthropic.com'
 
 /**
+ * The ChatGPT subscription option (ARCHITECTURE.md Appendix A). Claude Code
+ * talks to a synthetic origin that never reaches the network: the Worker's
+ * adapter answers it and calls the OpenAI Responses API itself. The key is a
+ * placeholder so Claude Code starts; it is not a credential.
+ */
+export { OPENAI_ADAPTER_ORIGIN, OPENAI_ADAPTER_KEY } from '../runtime/boot/policy.js' // one source with the Worker
+/** The Claude model name the harness keeps in ChatGPT mode (its tested behaviour); the adapter substitutes the OpenAI model. */
+export const CHATGPT_HARNESS_MODEL = 'claude-sonnet-5-5'
+
+/**
  * The built-in tools the CLI is given (`--tools`, an allowlist): the file
  * tools on the virtual filesystem and the conversation-control tools. No
  * shell, no web access, nothing that acts on the account or on remote agents

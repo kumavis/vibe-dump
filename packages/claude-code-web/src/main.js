@@ -17,6 +17,7 @@
 //   __cc.workspaceFiles()   relative paths in /home/user/workspace
 //   __cc.workspaceText(rel) UTF-8 text of one workspace file (last fs-sync), or null
 //   __cc.waitFor(pred, {timeoutMs, fromIndex}) on the stream-json messages
+//   __cc.chatgpt            Sign in with ChatGPT status (signedIn, clientId, email, plan, expiresAt; no token)
 
 import { Session } from './host/session.js'
 import { readText } from './host/snapshot.js'
@@ -41,6 +42,7 @@ function testHook (session) {
     get messages () { return session.messages },
     get toolCalls () { return session.toolCalls },
     get timings () { return session.timings },
+    get chatgpt () { return session.siwc.status() },
     ready: session.ready,
     whenSaved: () => session.whenSaved(),
     start: () => session.start(),

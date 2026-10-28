@@ -63,7 +63,7 @@ export class Transcript {
     for (const b of blocks) {
       if (b.type === 'text' && b.text) nodes.push(h('div', { class: 'text' }, b.text))
       else if (b.type === 'thinking' || b.type === 'redacted_thinking') {
-        nodes.push(h('details', { class: 'thinking' }, h('summary', null, 'Thinking'), h('div', { class: 'text' }, b.thinking || '(redacted)')))
+        nodes.push(h('details', { class: 'thinking' }, h('summary', null, 'Thinking'), h('div', { class: 'text' }, b.thinking || (b.type === 'redacted_thinking' ? '(redacted)' : '(no summary)'))))
       } else if (b.type === 'tool_use' || b.type === 'server_tool_use') {
         const slot = h('div', { class: 'tool-result pending' }, 'running…')
         this.toolCards.set(b.id, slot)

@@ -18,7 +18,10 @@
 // gone.
 
 import { Harness } from './harness.js'
-import { buildEnv, checkBaseUrl, checkCredentials, seedFiles } from './invocation.js'
+import { buildEnv, checkBaseUrl, checkChatgptUrls, checkCredentials, harnessModel, providerConfig, seedFiles } from './invocation.js'
+import { serveProviderTokens } from './worker-bridge.js'
+import { createSiwc } from './siwc.js'
+import { chatgptConfig } from './settings.js'
 import { mcpServersFromText } from './custom-tools.js'
 import { decodeSnapshot, encodeSnapshot, listEntries } from './snapshot.js'
 import { createSnapshotStore } from './persist.js'
@@ -46,8 +49,9 @@ export class Session extends EventTarget {
    *   spawn, fetch and Worker the CLI starts; cliDebug: the CLI's own --debug-to-stderr.
    *   Both land in the page log (the page's ?trace and ?debug).
    * @param {LockManager|null} [o.locks]   Web Locks (default navigator.locks; null: no single-tab guard)
+   * @param {object} [o.siwc]              createSiwc() result (Sign in with ChatGPT; default: over these settings and fetch)
    */
-  constructor ({ base, fake = false, createWorker, settings, snapshotStore, loadExtractor, serviceWorker, caches, fetch, version = CC_VERSION, diagnostics = {}, locks } = {}) {
+  constructor ({ base, fake = false, createWorker, settings, snapshotStore, loadExtractor, serviceWorker, caches, fetch, version = CC_VERSION, diagnostics = {}, locks, siwc } = {}) {
     super()
     this.diagnostics = { trace: Boolean(diagnostics.trace), cliDebug: Boolean(diagnostics.cliDebug) }
     this.base = base ?? baseUrl()
@@ -62,6 +66,7 @@ export class Session extends EventTarget {
     this.useServiceWorker = serviceWorker ?? !fake
     this.caches = caches
     this.fetch = fetch ?? globalThis.fetch?.bind(globalThis)
+    this.siwc = siwc ?? createSiwc({ settings: this.settings, fetch: this.fetch })
     this.extractor = null
     this.harness = null
     this.locks = locks === undefined ? globalThis.navigator?.locks ?? null : locks
@@ -251,15 +256,31 @@ export class Session extends EventTarget {
       await this.#loadWorkspace() // just taken over: the other tab may have saved since
     }
     const s = this.settings.get()
+    const chatgpt = s.authMode === 'chatgpt'
     let mcpServers
     let argvEnv
+    let provider
     try {
       if (!this.fake) checkCredentials(s)
-      const badBase = checkBaseUrl(s.baseUrl)
+      const badBase = chatgpt ? checkChatgptUrls(s.chatgpt) : checkBaseUrl(s.baseUrl)
       if (badBase) throw new Error(badBase)
       mcpServers = mcpServersFromText(s.toolsJson, { log: (...a) => this.note('info', a.join(' ')) })
-      argvEnv = buildEnv(s)
       if (!this.createWorker) await this.#preflight()
+      let contextWindow = null
+      let efforts = null
+      if (chatgpt) {
+        const model = chatgptConfig(s.chatgpt).model
+        if (!this.fake) {
+          // signed out, or a refresh that cannot work: say so before a boot
+          await this.siwc.getAccessToken()
+          // after a reload the model list is gone: fetch it once for the context window (best effort)
+          if (this.siwc.contextWindowFor(model) == null) await this.siwc.listModels().catch((err) => this.#log('warn', `ChatGPT: no model list (${err.message}); the context window of ${model} is unknown`))
+        }
+        contextWindow = this.siwc.contextWindowFor(model)
+        efforts = this.siwc.models?.find((m) => m.slug === model)?.efforts ?? null
+      }
+      argvEnv = buildEnv({ ...s, contextWindow })
+      provider = providerConfig(s, { contextWindow, efforts })
     } catch (err) {
       this.#set({ error: err.message })
       this.note('error', err.message)
@@ -272,9 +293,9 @@ export class Session extends EventTarget {
     const snapshotBytes = snap?.entries?.length ? encodeSnapshot(snap) : null
     const harness = this.harness = new Harness({
       workerUrl: this.workerUrl,
-      createWorker: this.createWorker ?? undefined,
+      createWorker: chatgpt ? this.#tokenServingWorker() : this.createWorker ?? undefined,
       env: argvEnv,
-      model: s.model,
+      model: harnessModel(s),
       mcpServers,
       extraArgs: this.diagnostics.cliDebug ? ['--debug-to-stderr'] : [],
       boot: {
@@ -285,7 +306,8 @@ export class Session extends EventTarget {
         manifest: this.state.manifest,
         fsSnapshot: snapshotBytes,
         seedFiles: seedFiles({ version: this.version }),
-        persistRoots: [HOME]
+        persistRoots: [HOME],
+        provider
       },
       transfer: snapshotBytes ? [snapshotBytes.buffer] : [],
       permissionPolicy: 'allow'
@@ -300,11 +322,34 @@ export class Session extends EventTarget {
       this.timings.readyMs = Date.now() - this.timings.startAt
       this.#set({ harness: 'ready' })
       this.note('info', `Claude Code is up (${(this.timings.readyMs / 1000).toFixed(1)} s). Send a message.`)
+      if (chatgpt) this.note('info', `ChatGPT mode: Claude Code reports ${harnessModel(s)}, but every request goes to ${provider.model} on your ChatGPT plan. Its cost line is in Claude prices and does not describe your ChatGPT usage.`)
       return res
     } catch (err) {
       this.#set({ harness: 'exited', error: err.message })
       this.note('error', `Claude Code did not start: ${err.message}`)
       throw err
+    }
+  }
+
+  /**
+   * The Worker factory for ChatGPT mode: the Worker asks the page for access
+   * tokens (provider-token-request); the answer comes from Sign in with
+   * ChatGPT, and the refresh token never leaves the page. The listener is on
+   * before the Harness posts the boot message.
+   */
+  #tokenServingWorker () {
+    const make = this.createWorker ?? (() => new Worker(this.workerUrl, { type: 'module', name: 'claude-code' }))
+    return async () => {
+      const worker = await make()
+      serveProviderTokens(worker, {
+        getAccessToken: (o) => this.siwc.getAccessToken(o),
+        onRequest: ({ reason }) => this.#log('info', `ChatGPT: the Worker asked for an access token (${reason})`),
+        onAnswer: ({ reason, ok, error }) => {
+          if (!ok) this.note('error', `ChatGPT sign-in: ${error}`)
+          else if (reason === 'unauthorized') this.#log('warn', 'ChatGPT: OpenAI refused the access token; the sign-in was refreshed')
+        }
+      })
+      return worker
     }
   }
 

@@ -89,7 +89,17 @@ button.link { border: 0; background: none; padding: 0; color: var(--accent); tex
 .field > span { font-weight: 600; }
 .field small { color: var(--muted); }
 .field input, textarea { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); }
-.radios { display: flex; gap: 14px; font-size: 13px; }
+.radios { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.chatgpt { border-left: 3px solid var(--accent); padding-left: 10px; }
+.chatgpt .steps { margin: 0; padding-left: 18px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
+.chatgpt .steps code { word-break: break-all; }
+.chatgpt input { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); }
+.chatgpt select { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: inherit; font: inherit; }
+.chatgpt a { color: var(--accent); }
+.chatgpt > p { margin: 0; }
+#chatgpt-account { font-size: 13px; color: var(--ok); }
+.chatgpt button.link { align-self: flex-start; }
+.notes { margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
 .radio, .check { display: flex; align-items: center; gap: 6px; font-size: 13px; }
 .remember { display: flex; flex-direction: column; gap: 4px; }
 .remember small { color: var(--muted); font-size: 12px; }

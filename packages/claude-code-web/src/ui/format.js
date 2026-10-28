@@ -89,6 +89,8 @@ export function systemLine (msg) {
     case 'api_retry': return `API retry ${msg.attempt ?? ''}${msg.max_retries ? `/${msg.max_retries}` : ''}${msg.error_status ? ` after HTTP ${msg.error_status}` : ''}`
     case 'compact_boundary': return 'Conversation compacted'
     case 'status': return msg.status ? `Status: ${msg.status}` : null
+    // progress estimates while a thinking block streams (one per delta): not transcript material
+    case 'thinking_tokens': return null
     default: return `system/${msg.subtype ?? '?'}`
   }
 }

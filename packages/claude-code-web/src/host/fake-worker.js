@@ -17,6 +17,14 @@
 //                            fake VFS -> fs-sync -> text
 //     anything else          result with is_error (as a 401 would)
 //
+// ChatGPT mode (a boot message with provider.kind 'openai-responses') adds the
+// token handoff of worker-protocol.md: at boot the fake asks the page for an
+// access token (provider-token-request, reason 'start'), and before each turn
+// again when its cached token is within 60 s of expiry ('expired'); a prompt
+// containing "token refused" asks with reason 'unauthorized', as the real
+// Worker does after an upstream 401. A token error ends the turn with
+// is_error. `tokenRequests` and `providerToken` record what happened.
+//
 // Usable in-process (new FakeWorker()) wherever a Worker is expected.
 
 import { encodeSnapshot, decodeSnapshot } from './snapshot.js'
@@ -43,6 +51,11 @@ export class FakeWorker extends EventTarget {
     this.sessionId = randomId()
     this.received = [] // every message from the page (for tests)
     this._onmessage = null
+    this.provider = { kind: 'anthropic' }
+    this.tokenRequests = [] // {id, reason} sent to the page
+    this.tokenWaiters = new Map() // id -> resolve
+    this.providerToken = null // {accessToken, expiresAt} the page gave
+    this.startToken = Promise.resolve()
   }
 
   // --- Worker interface ----------------------------------------------------
@@ -98,7 +111,33 @@ export class FakeWorker extends EventTarget {
         return
       case 'fs-flush': return this.#fsSync([], msg.id)
       case 'signal': this.turnAbort?.abort(); return
+      case 'provider-token': {
+        const resolve = this.tokenWaiters.get(msg.id)
+        this.tokenWaiters.delete(msg.id)
+        resolve?.(msg)
+      }
     }
+  }
+
+  // --- the ChatGPT token handoff ------------------------------------------------
+
+  #askToken (reason) {
+    const id = `ptr_${this.tokenRequests.length + 1}`
+    this.tokenRequests.push({ id, reason })
+    return new Promise((resolve) => {
+      this.tokenWaiters.set(id, resolve)
+      this.#post({ type: 'provider-token-request', id, reason })
+    })
+  }
+
+  /** The cached token, or a new one from the page (reason given: always ask). */
+  async #token (reason) {
+    const t = this.providerToken
+    if (!reason && t && t.expiresAt - 60_000 > Date.now()) return t
+    const r = await this.#askToken(reason ?? (t ? 'expired' : 'start'))
+    if (r.error) throw new Error(r.error)
+    this.providerToken = { accessToken: r.accessToken, expiresAt: r.expiresAt }
+    return this.providerToken
   }
 
   #boot (msg) {
@@ -119,6 +158,10 @@ export class FakeWorker extends EventTarget {
       } catch (err) { this.#post({ type: 'log', level: 'warn', msg: `fake worker: snapshot not restored: ${err.message}` }) }
     }
     for (const [path, text] of Object.entries(msg.seedFiles ?? {})) if (!this.files.has(path)) this.files.set(path, te.encode(text))
+    if (msg.provider?.kind) this.provider = msg.provider
+    if (this.provider.kind === 'openai-responses') {
+      this.startToken = this.#token('start').catch((err) => this.#post({ type: 'stderr', line: `fake worker: no ChatGPT token at start: ${err.message}` }))
+    }
     this.#post({ type: 'log', level: 'info', msg: `fake worker booted: ${this.argv.length} args, ${this.files.size} files` })
     setTimeout(() => {
       if (this.terminated) return
@@ -253,7 +296,16 @@ export class FakeWorker extends EventTarget {
     let resultText
     let isError = false
     let turns = 1
-    if (/say hi/i.test(text)) {
+    let tokenError = null
+    if (this.provider.kind === 'openai-responses') {
+      await this.startToken
+      try { await this.#token(/token refused/i.test(text) ? 'unauthorized' : undefined) } catch (err) { tokenError = err }
+    }
+    if (tokenError) {
+      isError = true
+      resultText = `API Error: 401 ChatGPT sign-in: ${tokenError.message}`
+      this.#assistant([{ type: 'text', text: resultText }], 'end_turn')
+    } else if (/say hi/i.test(text)) {
       this.#assistant([{ type: 'thinking', thinking: 'The user is greeting me.', signature: '' }])
       await this.#step()
       resultText = 'Hi! (from the fake worker)'

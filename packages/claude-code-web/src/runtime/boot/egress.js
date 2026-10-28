@@ -10,6 +10,13 @@
 // A refusal rejects like a network failure (TypeError) and is logged with
 // the method, URL and the names (never the values) of the credential
 // headers. data: and blob: URLs never leave the browser and pass.
+//
+// ChatGPT mode (provider kind 'openai-responses', ARCHITECTURE.md Appendix
+// A): the allowed origins are {the provider's API origin, this page}, and
+// credential headers may go only to the provider's origin. The CLI's own
+// ANTHROPIC_BASE_URL is then the synthetic adapter origin, which the OpenAI
+// adapter (installed on top of this guard) answers locally; should a request
+// for it ever get past the adapter, it is refused here like any other host.
 
 export const ANTHROPIC_API_ORIGIN = 'https://api.anthropic.com'
 const CREDENTIAL_HEADERS = ['authorization', 'x-api-key']
@@ -36,9 +43,9 @@ export function egressVerdict ({ url, headerNames = [] }, policy) {
   if (u.protocol === 'data:' || u.protocol === 'blob:') return null
   const origin = httpOrigin(u)
   if (!origin) return `protocol ${u.protocol} is not allowed`
-  if (!policy.allowed.has(origin)) return `${origin} is not the API base URL, ${ANTHROPIC_API_ORIGIN} or this page`
+  if (!policy.allowed.has(origin)) return policy.provider ? `${origin} is not the ChatGPT API (${policy.base}) or this page` : `${origin} is not the API base URL, ${ANTHROPIC_API_ORIGIN} or this page`
   const creds = headerNames.filter((h) => CREDENTIAL_HEADERS.includes(h))
-  if (creds.length && origin !== policy.base) return `it carries ${creds.join(' and ')} to ${origin}, which is not the API base URL (${policy.base})`
+  if (creds.length && origin !== policy.base) return `it carries ${creds.join(' and ')} to ${origin}, which is not the ${policy.provider ? 'ChatGPT API' : 'API base URL'} (${policy.base})`
   return null
 }
 
@@ -48,7 +55,21 @@ function httpOrigin (u) {
   return proto ? `${proto}//${u.host}` : null
 }
 
-export function egressPolicy ({ baseUrl, selfOrigin }) {
+/**
+ * @param {object} o
+ * @param {string} [o.baseUrl]     ANTHROPIC_BASE_URL
+ * @param {string} [o.selfOrigin]  the page's origin
+ * @param {object} [o.provider]    the boot message's provider; kind 'openai-responses' switches to ChatGPT mode
+ */
+export function egressPolicy ({ baseUrl, selfOrigin, provider }) {
+  if (provider?.kind === 'openai-responses') {
+    let base
+    try { base = new URL(provider.baseUrl).origin } catch { base = null }
+    // An unusable provider URL allows nothing but the page itself.
+    const allowed = new Set(base && base !== 'null' ? [base] : [])
+    if (selfOrigin) allowed.add(selfOrigin)
+    return { base: base || 'none', allowed, provider: 'openai-responses' }
+  }
   let base
   try { base = new URL(baseUrl || ANTHROPIC_API_ORIGIN).origin } catch { base = ANTHROPIC_API_ORIGIN }
   const allowed = new Set([base, ANTHROPIC_API_ORIGIN])
@@ -74,11 +95,12 @@ function headerNamesOf (input, init) {
  * @param {object} o
  * @param {string} o.baseUrl     ANTHROPIC_BASE_URL
  * @param {string} o.selfOrigin  the page's origin (the Worker's own requests)
+ * @param {object} [o.provider]   ChatGPT mode when its kind is 'openai-responses' (see egressPolicy)
  * @param {(msg: string) => void} [o.warn]
  * @returns {{policy: object, refused: object[]}}
  */
-export function installEgressGuard (scope, { baseUrl, selfOrigin, warn = () => {} }) {
-  const policy = egressPolicy({ baseUrl, selfOrigin })
+export function installEgressGuard (scope, { baseUrl, selfOrigin, provider, warn = () => {} }) {
+  const policy = egressPolicy({ baseUrl, selfOrigin, provider })
   const refused = []
   const refuse = (kind, method, url, why, headerNames) => {
     const creds = headerNames.filter((h) => CREDENTIAL_HEADERS.includes(h))

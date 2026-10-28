@@ -51,4 +51,5 @@ test('format: init, result and system lines', () => {
   assert.equal(systemLine({ subtype: 'api_retry', attempt: 2, max_retries: 10, error_status: 529 }), 'API retry 2/10 after HTTP 529')
   assert.equal(systemLine({ subtype: 'hook_started' }), 'system/hook_started')
   assert.equal(systemLine({ subtype: 'status' }), null)
+  assert.equal(systemLine({ subtype: 'thinking_tokens', estimated_tokens: 40, estimated_tokens_delta: 8 }), null)
 })

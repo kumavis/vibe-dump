@@ -1,7 +1,228 @@
 # claude-code-web — status
 
-_Integration round 1. Refreshed after each step; last update after the
-per-platform runs._
+_Last update: ChatGPT-option integration (2026-10-28, 04:56 UTC). Older rounds below, newest first._
+
+## ChatGPT option (Sign in with ChatGPT) — integrated
+
+_Integration 04:24–04:56 UTC on 2026-10-28, after tracks P (page) and W (Worker). Spec: ARCHITECTURE.md
+Appendix A and its "As built (ChatGPT option)" section. Run outputs: scratchpad `cgi/`._
+
+**Status: works end to end against the mock; never run against OpenAI.** With the real Claude Code
+2.1.311 binary in headless Chromium, `node test/e2e.mjs --provider chatgpt` passes 15/15: sign-in by
+pasting the callback URL, the acceptance steps 1–6 and the extras in ChatGPT mode, with every
+`/v1/responses` request checked against the Sign in with ChatGPT rules and against how
+`/v1/responses` validates its input. The Anthropic-mode e2e still passes 11/11, and its behaviour is
+unchanged (the only shared edits are in the transcript, which hides `system/thinking_tokens` progress
+lines and labels an empty thinking block "(no summary)", and the e2e printing turn times). No ChatGPT account was available, so nothing has been sent to
+`auth.openai.com` or `api.openai.com`.
+
+### What works (against the mock, real 2.1.311 binary)
+
+| step (`--provider chatgpt`) | result |
+|---|---|
+| 0. Sign in with ChatGPT by paste: authorize URL (`dynamic_agent_client`, `agent_name_hint=claude-code-web` on the first registration only, `ext_agent_host_id` urn:uuid, loopback redirect, PKCE S256, `resource`), code exchange, issued `oaiapp_…` client reused; model list (hidden models filtered) | PASS |
+| 10. ChatGPT tokens only in this tab's sessionStorage; a new tab is signed out; no `window.__cc` without `?test` | PASS |
+| 1. extraction; 2. cold boot; 2b. warm boot (system/init within 30 s / 10 s) | PASS |
+| 3. `say hi`: exactly one `POST /v1/responses` (model gpt-5.5, effort medium, `store:false`, `stream:true`, no system items, no forbidden fields, no Codex or Anthropic headers, the issued bearer), its CORS preflight ok, no `/v1/messages` | PASS |
+| 4. weather tool: `function_call` → page MCP handler → `function_call_output` with the same `call_id` → echoed | PASS |
+| 5. write a file, kept after a reload (OPFS) | PASS |
+| 7. Glob, Grep, Read, Edit over five chained requests; 8. a denied Write | PASS |
+| 9. interrupt mid-stream: the upstream SSE fetch is aborted (3–4 of 114 events sent), next turn works | PASS |
+| 11. a refused access token (401): the Worker asks once with `unauthorized`, the page refreshes (rotated refresh token saved first), the request is retried once with the new token | PASS |
+| 13. usage limit (429 `subscription_sharing_usage_limit_exceeded`): shown to the user ("ChatGPT usage limit reached on the plus plan; it resets at …"), **one** upstream request (Claude Code honours `x-should-retry: false`); a short rate limit arriving as `response.failed rate_limit_exceeded` ("try again in 1.2s") before any output: the adapter answers 429 with `retry-after: 2`, Claude Code retries once (one `api_retry`) and the retry is answered after 2.2 s; a failure **after** some text (`response.failed server_is_overloaded` → an Anthropic `overloaded_error` event mid-stream): 2.1.311 does not retry the request but keeps the partial text and sends a new "resume" user message, which is answered; context overflow (400 `context_length_exceeded`): the adapter's "prompt is too long: N tokens > M maximum" makes the real 2.1.311 **compact the conversation through the adapter** and answer (upstream `overflow:400, compact:200, compacted:200`) | PASS |
+| 12. every request of a run (26 in the final runs) has the SIWC shape and valid input structure; every refresh grant accepted; Claude Code replays our reasoning envelope in 7 of 7 follow-ups | PASS |
+| 6. only the static server and the mock were contacted | PASS |
+| `--access-ttl 65` (tokens live 65 s): the Worker asks again with `expired`, the page refreshes and rotates 10 times in one run, none refused | 15/15 |
+| `--base /vibe-dump/claude-code-web/` (Pages sub-path) | 15/15 |
+| `--fake --provider chatgpt` (page wiring, token handoff with the fake worker) | 9 pass, 6 skip |
+
+Also confirmed with the real binary (report J §9.5): Claude Code 2.1.311 keeps and replays the
+`thinking` blocks carrying our `cxr1.` signature envelope verbatim, and takes the usage in
+`message_delta` over the `message_start` estimate (the result line shows the mock's 100 in / 30 out,
+not the ~9,700-token estimate). It sent no `max_tokens: 1` probes and no `count_tokens` in any run.
+
+### Timings (mock, unloaded machine, eight ChatGPT-mode runs)
+
+| | ChatGPT mode | Anthropic mode (same tree) |
+|---|---|---|
+| cold boot, Start to first `system/init` | 6.6–7.9 s (initialize 6.4–7.7 s) | 7.2–8.1 s |
+| warm boot (after a reload) | 5.7–6.2 s | 6.3–6.4 s |
+| turn, warm `say hi` (Send to `result`) | 123–183 ms (first turn of a session, with its system/init: 401–538 ms) | 90–112 ms |
+| turn with one tool round trip (weather) | 273–346 ms | 236–269 ms |
+| five chained requests (file tools) | 627–720 ms | 530–536 ms |
+| whole e2e run (ChatGPT mode runs four more turns) | 26–31 s | 26–28 s |
+
+The adapter adds about 30–40 ms per request here (translation both ways, a reasoning item per mock
+reply, the read-ahead to the first output event); boot time is unchanged.
+
+### How to run
+
+```bash
+cd packages/claude-code-web
+npm test && npm run build
+CHROMIUM_PATH=/opt/pw-browsers/chromium-1243/chrome-linux64/chrome node test/e2e.mjs --provider chatgpt
+node test/e2e.mjs --provider chatgpt --trace --log /tmp/page.log   # one line per upstream request
+node test/e2e.mjs --provider chatgpt --access-ttl 65               # stress the token handoff
+node test/e2e.mjs --provider chatgpt --base /vibe-dump/claude-code-web/
+node test/e2e.mjs --fake --provider chatgpt
+# by hand: PORT=4173 node ../../scripts/serve.mjs dist ; node mock/mock-api.mjs 18080
+#   ChatGPT subscription -> Advanced: endpoints: API base http://127.0.0.1:18080/v1, issuer http://127.0.0.1:18080
+```
+
+Unit tests: `npm test` 339/339 (track P 38, track W 47, integration `I-chatgpt` 6).
+
+### What does not work, or is not verified
+
+- **No real OpenAI traffic yet.** Everything above is against the mock, which imitates the documented
+  behaviour (and K's CORS probes), not the real service.
+- **Model coverage:** only `gpt-5.5`'s classic tool shape is exercised. The responses-lite models
+  (gpt-5.6-\*, gpt-6\*) may need tools as an `additional_tools` developer item (J §9.3).
+- **Not emulated:** the `clear_tool_uses_*` context-management edit (2.1.311 sends only
+  `clear_thinking … keep:'all'`); Anthropic server tools; prompt-cache controls (OpenAI caches by
+  prefix and `prompt_cache_key` = Claude Code's session id). Token counts are estimates until the
+  final usage arrives; the cost line is in Claude prices (the page says so after Start).
+- **ID token** signature not verified (JWKS not CORS-readable); nonce checked; email and plan shown
+  unverified. **Revoke** on log out is best effort (its CORS is unknown).
+- The model list is cached in memory; after a reload Start fetches it once for the context window and
+  effort levels (if that fails, Claude Code keeps its own compaction window and efforts pass through).
+
+### Needs a real ChatGPT Plus/Pro login to confirm
+
+From report J §9 (still open) and K §6:
+1. **CORS on success** (J §9.1, K §6.1): does a successful `POST api.openai.com/v1/responses` SSE carry
+   `ACAO: *` to `https://kumavis.github.io` and stream incrementally? (Preflight and error paths are
+   verified by K.) Does the SIWC entitlement check look at `Origin`, `Referer` or the browser UA?
+2. **The paste flow** (K §6.2): does `auth.openai.com/api/accounts/authorize` complete when nothing
+   listens on `127.0.0.1:1455`, leaving the code readable in the failed tab's URL? Is the issued
+   `client_id` stable across re-logins with the same `ext_agent_host_id`? Is a Cloudflare challenge
+   shown to a normal browser there?
+3. **A real expired token** (K §6.3): edge 401 without CORS (a `TypeError`, handled as "maybe
+   unauthorized", renewed once) or a readable app-layer 401 (renewed once)? Both paths are
+   implemented and unit-tested; which one OpenAI uses is unknown.
+4. **Tools on responses-lite models** (J §9.3): do classic top-level `tools` work for gpt-5.6-\* and
+   gpt-6\*, or must they go in `additional_tools` with `reasoning.context: "all_turns"`? Is
+   `reasoning.summary: "auto"` accepted for every listed model?
+5. **The model list** (J §9.4): what `GET /v1/models` returns for a SIWC token (which models, the
+   shape of `supported_reasoning_levels` and `context_window`), and whether anything is gated on a
+   client version.
+6. **Token response details:** the format of `earliest_refresh_at` (`parseTime` accepts unix s/ms, ISO,
+   or small relative seconds), whether `scope` is returned (checked only if present), `expires_in`.
+7. **Terms** (J §9.6, K §3–4): whether a static GitHub Pages app whose code runs only in the user's
+   browser counts as an "open-source and locally hosted" app for plan usage; the README states the
+   position and the Plus/Pro requirement; `/siwc/request-client-id` exists if certainty is wanted.
+
+J §9.2 (Route A's `originator`) does not apply: Route A (the Codex CLI backend) is not used. J §9.5
+was answered with the real binary (above).
+
+### Integration log
+
+- 04:24–04:31: the combined tree was green as delivered (`npm test` 333/333, build, chatgpt 14/14,
+  anthropic 11/11); the P/W interface matched (boot `provider`, `provider-token-request` /
+  `provider-token`, env, constants), so there was no mismatch to fix. Hardening: the adapter constants
+  and `AUTO_COMPACT_WINDOW_RANGE` now have one source (`boot/policy.js`, re-exported by the page);
+  the mock refuses what `/v1/responses` would (`inputStructureProblems`); turn times printed;
+  `test/unit/I-chatgpt.test.mjs`.
+- 04:31–04:37: effort clamped to the model's supported levels (`provider.efforts` → `clampEffort`);
+  "(no summary)" for an empty thinking block; mock "hit the usage limit" and compaction scenarios;
+  e2e extra 13.
+- 04:37–04:44: the transcript no longer prints a line per `system/thinking_tokens` progress message
+  (2.1.311 emits one per thinking delta, so long reasoning flooded it); e2e `--access-ttl` and
+  `--screenshot`; step 12 checks every refresh grant and reports the token-request reasons;
+  ARCHITECTURE.md "As built (ChatGPT option)", worker-protocol.md (`provider.efforts`), README.
+- 04:47–04:52: mock "hit the rate limit" (fails before output once, then answers) and "fail mid-stream"
+  (text, then `response.failed`; the mock treats 2.1.311's resume request as that scenario's
+  retry); extra 13 checks both through the adapter; `I-chatgpt` runs the adapter against every mock failure
+  scenario in Node. Finding: after a mid-stream error 2.1.311
+  keeps the partial assistant text and asks the model to resume in a new user message (no
+  `api_retry`); the translated resume request passes the strict input checks.
+- final round (04:51–04:55, `cgi/k*`): `npm test` 339/339; build ok; `--provider chatgpt` 15/15 twice, under
+  `--base` and with `--access-ttl 65`; anthropic 11/11 at `/` and under `--base`; `--fake` both
+  providers green.
+- next (needs an account): the list above, starting with 1, 2 and 4.
+
+## ChatGPT option — track P report (page side)
+
+Started 03:59 UTC, finished 04:24 UTC. Spec: ARCHITECTURE.md Appendix A. Owns src/host/{siwc,settings,
+invocation,session,worker-bridge,fake-worker,constants}.js, worker-protocol.md, src/ui/*, src/main.js,
+mock/mock-api.mjs, test/e2e.mjs, README.md, test/unit/P-*.test.mjs.
+
+- done:
+  - settings.js: authMode 'chatgpt'; public `chatgpt` {clientId, extAgentHostId, model, effort, baseUrl,
+    issuer} patched field by field; secret `chatgptTokens` in SECRET_FIELDS (same remember semantics);
+    older saved settings load with the defaults; `reload()`; `chatgptConfig()`.
+  - siwc.js: buildAuthorizeUrl / parseCallbackUrl / pkce (WebCrypto, deps injectable) / decodeJwt /
+    tokensFromResponse / parseTime / normaliseModels; createSiwc: beginLogin, completeLogin (state,
+    client_id, nonce and granted-scope checks), getAccessToken (single-flight, 5-min window,
+    earliestRefreshAt, rotation persisted before resolving, cross-tab Web Lock + re-read with
+    "remember"), listModels (retry once after 401 or a CORS-less TypeError), logout (best-effort revoke).
+  - invocation.js: chatgpt env (ANTHROPIC_BASE_URL=https://openai-adapter.invalid,
+    ANTHROPIC_API_KEY=openai-adapter, CLAUDE_CODE_AUTO_COMPACT_WINDOW from the context window),
+    harnessModel() keeps --model claude-sonnet-5-5, providerConfig(), checkCredentials, checkChatgptUrls.
+  - worker-bridge.js serveProviderTokens(); session.js passes `provider` in boot, attaches the token
+    server to the Worker before boot, checks the token (and fetches the model list for the context
+    window when unknown) before booting, notes the cost-line caveat.
+  - fake-worker.js speaks provider-token-request/provider-token.
+  - UI: "ChatGPT subscription" radio, src/ui/chatgpt-panel.js (Open sign-in, paste field, Complete
+    sign-in, signed-in state + Log out, model dropdown from listModels, effort select, notes, advanced
+    endpoints). Screenshots light/dark/390 px in scratchpad p/ (no horizontal overflow).
+  - mock: /v1/responses (SSE scenarios + request-shape checks), /v1/models, fake issuer, /__revoke-access.
+  - e2e `--provider chatgpt` (step 0 sign-in, 10, 1-9, 11 refused token, 12 request shapes).
+  - worker-protocol.md (boot `provider`, provider-token messages, rules 5-6, "Provider tokens"), README.
+- results (04:23): `npm test` 333/333 (P-siwc 15, P-host 13, P-mock-responses 10 new); `npm run build` ok;
+  e2e against track W's adapter: `--provider chatgpt` 14/14 (twice, 27-31 s), `--provider chatgpt
+  --base /vibe-dump/claude-code-web/` 14/14, anthropic 11/11 (twice), `--fake --provider chatgpt` 9 pass
+  5 skip, `--fake --skip-extract` both providers green. Outputs: scratchpad p/run1*.txt, run2-*.txt.
+- not done / open: the real OpenAI endpoints were not exercised (no account): the authorize page
+  with nothing on 127.0.0.1:1455, the format of `earliest_refresh_at`, CORS on the revoke endpoint and
+  on a successful /v1/responses stream. The ID token's signature is not verified (JWKS not
+  CORS-readable); only its nonce. ARCHITECTURE.md as-built not updated (not this track's file).
+- finding (bundle 2.1.311): CLAUDE_CODE_AUTO_COMPACT_WINDOW accepts 100k..1M and is clamped to the
+  Claude model's window; CLAUDE_CODE_MAX_CONTEXT_TOKENS only applies with DISABLE_COMPACT or an
+  unrecognised model, so the page does not set it.
+
+## ChatGPT option — track W report (Worker side)
+
+Started 04:00 UTC, finished ~04:25 UTC. Spec: ARCHITECTURE.md Appendix A + J §7. Owns src/runtime/boot.js,
+src/runtime/boot/{openai-adapter,egress,policy}.js, src/runtime/boot/openai/*.js, test/unit/W-*.
+
+- done:
+  - `boot/openai/request.js` `toResponsesRequest(body, {model, smallModel, effort, sessionId, hoistSystem})
+    -> {body, idMap}`: system blocks -> one leading developer message (billing line stripped);
+    in-message role:"system" -> developer messages in place (deferred past pending call outputs;
+    `hoistSystem: true` folds them into the leading one instead); tool_use/tool_result <->
+    function_call/function_call_output (call_id = tool_use id, sanitized+hashed past 64 chars;
+    interrupted calls get an "aborted" output; orphan results become user text); tools -> non-strict
+    function tools (schema cleanup, DeferredToolPlaceholder and server tools dropped, names <= 64 with
+    a reverse map); thinking/redacted_thinking with our `cxr1.` envelope -> reasoning items
+    (other-model and dangling ones dropped, clear_thinking keep N honoured); images -> input_image,
+    PDFs -> input_file, text docs -> input_text, else a placeholder; reasoning {effort, summary:'auto'},
+    include reasoning.encrypted_content, store:false, stream:true, prompt_cache_key = session id.
+    The body is built from scratch: no max_output_tokens/temperature/metadata/... ever.
+  - `boot/openai/stream.js` `createResponsesToAnthropicStream({model, idMap, inputTokens, contextWindow, pingMs})`
+    (J §7.6: message_start with placeholders, text / tool_use (input_json_delta) / thinking
+    (signature_delta envelope) blocks, out-of-order events held back, completed -> message_delta
+    end_turn|tool_use|max_tokens|refusal with usage incl. cached tokens, failed/error/EOF -> error event,
+    pings on silence) + `aggregateAnthropicEvents` for non-stream calls.
+  - `boot/openai/errors.js` `mapUpstreamError(status, body, ctx) -> {status, body, headers}` (J §7.7).
+  - `boot/openai/token.js` `createTokenBroker({post})`: get()/renew(failedToken, {ambiguous})/onMessage().
+  - `boot/openai-adapter.js` `installOpenAIAdapter(scope, {provider, getToken, nativeFetch, syntheticOrigin, log, warn, pingMs})`;
+    a pre-stream upstream failure (response.failed before any output) becomes an HTTP error, so
+    "prompt is too long" is a 400 and usage limits are 429 + x-should-retry:false.
+  - `boot/policy.js` `providerConfig`, `applyProviderEnv` (+ OPENAI_ADAPTER_ORIGIN/KEY, equal to the
+    page's); `boot/egress.js` ChatGPT-mode policy; `boot.js` wiring (provider-token routed to the broker).
+- results: `npm test` 332/332 (W: request 10, stream 10, errors 5, token 5, adapter 11, boot 5,
+  browser 1 = 47 new; W-browser runs the adapter as plain ESM in a Chromium module Worker against a
+  CORS provider). `npm run build` ok (boot/ 13 files). With track P's page + mock:
+  `node test/e2e.mjs --provider chatgpt` 14/14 twice (real 2.1.311 binary; reasoning envelope
+  replayed by Claude Code in 7 of 7 follow-ups; interrupt, refused-token refresh, file tools pass);
+  `node test/e2e.mjs` (Anthropic mode) 11/11, no egress refusals.
+- bundle finding: CLAUDE_CODE_AUTO_COMPACT_WINDOW sets the auto-compact window to min(model window,
+  value), accepted 100k..1M (clamped outside, with a warning); claude-sonnet-5-5's window is 1M, so
+  272000 takes effect. CLAUDE_CODE_MAX_CONTEXT_TOKENS is only read for model ids Claude Code does not
+  recognize (or with DISABLE_COMPACT): a no-op with --model claude-sonnet-5-5, so it is not set.
+  Usage: Claude Code merges message_delta usage over message_start when the value is > 0.
+- not verified (needs a real ChatGPT login): `reasoning.summary:'auto'` and classic top-level tools on
+  the real /v1/responses for each model; readable SSE success responses cross-origin.
 
 ## Fix round F2 (credentials, interrupt race, Worker guard, tool allowlist, notices, test paths)
 

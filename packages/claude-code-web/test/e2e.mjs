@@ -17,12 +17,27 @@
 //   --modules  the module count step 1 expects (default 2848, linux-x64)
 //   --base     serve the page under this path instead of / (e.g.
 //              /vibe-dump/claude-code-web/, as on GitHub Pages)
+//   --screenshot <file>  a full-page PNG of the last page at the end
+//   --access-ttl S  ChatGPT mode: the mock issues access tokens valid for S seconds
+//              (default 3600; e.g. 65 makes the Worker ask again, reason 'expired',
+//              on most turns and the page refresh and rotate each time)
 //   --log      write the page's session log (Worker log, CLI stderr, notes) of
 //              every page the test opened to this file, for diagnosis
 //   --trace    open the page with ?trace (the Worker logs every fetch, its
 //              AbortSignal and when it aborts; see --log)
 //   --interrupt-loops N  run step 9 N times in a row (default 1): the
 //              interrupt race only shows in a fraction of runs
+//   --provider chatgpt  run in ChatGPT-subscription mode (ARCHITECTURE.md
+//              Appendix A): the page's ChatGPT base URL and issuer point at the
+//              mock, step 0 signs in with the paste flow (the authorize URL is
+//              fetched from Node with redirect: 'manual' and its Location pasted
+//              into the page), and steps 2-9 run with the Worker's OpenAI
+//              adapter against the mock's /v1/responses, whose request-shape
+//              checks are asserted. Extras 11 (a refused token is refreshed and
+//              the request retried), 12 (every Responses request had the
+//              Sign in with ChatGPT shape) and 13 (a usage limit and a context
+//              overflow reach the user, the session goes on) run in this mode
+//              only. Default: anthropic (the acceptance test as before)
 //
 // Steps 1-6 (and 2b, the warm boot) are the acceptance test. Steps 7-9 go
 // beyond it on the warm session: the built-in file tools on the virtual
@@ -73,11 +88,18 @@ const HEADED = flag('--headed')
 const JSON_OUT = opt('--json', null)
 const CHROMIUM = opt('--chromium', process.env.CHROMIUM_PATH || null)
 const LOG_OUT = opt('--log', null)
+const SHOT_OUT = opt('--screenshot', null)
+// ChatGPT mode: the mock's access-token lifetime (s). Below ~5 min the page refreshes on every
+// token request and the Worker's cache (expiry - 60 s) runs out between turns: the 'expired' path.
+const ACCESS_TTL = Math.max(61, Number(opt('--access-ttl', 3600)) || 3600)
 const TRACE = flag('--trace')
 const INTERRUPT_LOOPS = Math.max(1, Number(opt('--interrupt-loops', 1)) || 1)
 // 2,848 for linux-x64; another platform's build has its own module set (darwin-arm64: 2,866)
 const EXPECTED_MODULES = Number(opt('--modules', 2848))
 const BASE_PATH = `/${opt('--base', '/').replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/')
+const PROVIDER = opt('--provider', 'anthropic')
+if (!['anthropic', 'chatgpt'].includes(PROVIDER)) throw new Error(`--provider must be anthropic or chatgpt (got ${PROVIDER})`)
+const CHATGPT = PROVIDER === 'chatgpt'
 
 // --- reporting ---------------------------------------------------------------
 const results = []
@@ -91,7 +113,7 @@ function record (id, name, status, reason = '', details = undefined) {
 const info = (msg) => console.log(`     ${msg}`)
 
 // --- harness of the test itself ----------------------------------------------
-let staticSrv, mock, browser
+let staticSrv, mock, browser, mockLogFile
 let page = null // the page currently open
 const foreign = []
 const consoleLines = []
@@ -131,6 +153,11 @@ async function mockRequests () {
 const resetMock = () => fetch(`${mock.url}/__reset`, { method: 'POST' })
 const messagePosts = (reqs) => reqs.filter((r) => r.method === 'POST' && /^\/v1\/messages(\?|$)/.test(r.path))
 const messagePreflights = (reqs) => reqs.filter((r) => r.method === 'OPTIONS' && /^\/v1\/messages(\?|$)/.test(r.path))
+const responsesPosts = (reqs) => reqs.filter((r) => r.method === 'POST' && /^\/v1\/responses(\?|$)/.test(r.path))
+/** The model requests of the current provider: /v1/messages, or /v1/responses in ChatGPT mode. */
+const apiPosts = (reqs) => (CHATGPT ? responsesPosts(reqs) : messagePosts(reqs))
+/** Headers that must never reach OpenAI from this app (the placeholder key, Anthropic's, the Codex CLI's identity). */
+const LEAKY_HEADERS = /^(x-api-key|anthropic-|originator$|chatgpt-account-id$)/
 
 async function openPage (context, url) {
   const page = await context.newPage()
@@ -145,9 +172,68 @@ async function openPage (context, url) {
   return page
 }
 
-/** Paste the placeholder token (a new tab does not have it: it is not remembered). */
+/** Paste the placeholder token (a new tab does not have it: it is not remembered). In ChatGPT mode: sign in again. */
 async function fillToken (p) {
+  if (CHATGPT) return signInChatgpt(p)
   if ((await p.inputValue('#token')) !== FAKE_TOKEN) await p.fill('#token', FAKE_TOKEN)
+}
+
+// ---- ChatGPT mode: Sign in with ChatGPT through the paste flow ---------------
+// The page opens the authorize URL in a new tab; here window.open is stubbed
+// (a real tab would follow the redirect to 127.0.0.1:1455, which nothing
+// serves) and Node fetches the URL with redirect: 'manual', as the user's
+// browser would follow it, then pastes the Location into the callback field.
+async function signInChatgpt (p) {
+  if (await p.evaluate(() => window.__cc.chatgpt.signedIn)) return { already: true }
+  await p.evaluate(() => { window.open = (u) => { window.__ccOpened = u; return null } })
+  await p.click('#chatgpt-open')
+  await p.waitForFunction(() => window.__ccOpened || document.getElementById('chatgpt-error')?.textContent, null, { timeout: 10_000 })
+  const opened = await p.evaluate(() => ({ url: window.__ccOpened, error: document.getElementById('chatgpt-error').textContent, link: document.getElementById('chatgpt-authorize-link').href }))
+  if (!opened.url) throw new Error(`Open sign-in failed: ${opened.error}`)
+  if (opened.link !== opened.url) throw new Error('the fallback link does not carry the authorize URL')
+  const res = await fetch(opened.url, { redirect: 'manual' })
+  const location = res.headers.get('location')
+  if (res.status !== 302 || !location) throw new Error(`the mock issuer answered ${res.status}: ${await res.text()}`)
+  await p.fill('#chatgpt-callback', location)
+  await p.click('#chatgpt-complete')
+  await p.waitForFunction(() => window.__cc.chatgpt.signedIn || (!document.getElementById('chatgpt-complete').disabled && document.getElementById('chatgpt-error').textContent), null, { timeout: 10_000 })
+  const st = await p.evaluate(() => ({ chatgpt: window.__cc.chatgpt, error: document.getElementById('chatgpt-error').textContent }))
+  if (!st.chatgpt.signedIn) throw new Error(`Complete sign-in failed: ${st.error}`)
+  return { url: opened.url, location, status: st.chatgpt }
+}
+
+/** The page's ChatGPT tokens as stored (sessionStorage while "Remember" is off). */
+const storedChatgptTokens = (p) => p.evaluate(() => { try { return JSON.parse(sessionStorage.getItem('cc-web:secrets'))?.chatgptTokens ?? null } catch { return null } })
+
+// ---- 0 (ChatGPT mode): sign in, and the model list ---------------------------
+async function chatgptSignIn (p) {
+  const name = 'ChatGPT: Sign in with ChatGPT by pasting the callback URL; the model list'
+  const p0 = []
+  try {
+    const r = await signInChatgpt(p)
+    const q = new URL(r.url).searchParams
+    if (q.get('client_id') !== 'dynamic_agent_client') p0.push(`first sign-in client_id ${q.get('client_id')}`)
+    if (q.get('agent_name_hint') !== 'claude-code-web') p0.push(`agent_name_hint ${q.get('agent_name_hint')}`)
+    if (!/^urn:uuid:/.test(q.get('ext_agent_host_id') ?? '')) p0.push(`ext_agent_host_id ${q.get('ext_agent_host_id')}`)
+    if (q.get('redirect_uri') !== 'http://127.0.0.1:1455/auth/callback') p0.push(`redirect_uri ${q.get('redirect_uri')}`)
+    const reqs = await mockRequests()
+    const auth = reqs.filter((x) => x.authorize).pop()
+    if (auth?.authorize?.problems?.length) p0.push(`the mock issuer found: ${auth.authorize.problems.join('; ')}`)
+    const exchange = reqs.filter((x) => x.token?.grant_type === 'authorization_code').pop()
+    if (exchange?.status !== 200 || !exchange.token.pkce) p0.push(`code exchange: ${JSON.stringify(exchange?.token)} (HTTP ${exchange?.status})`)
+    if (r.status.clientId !== 'oaiapp_test') p0.push(`clientId ${r.status.clientId}`)
+    if (r.status.email !== 'e2e@example.com') p0.push(`email ${r.status.email}`)
+    // the dropdown fills from /v1/models: listed models only
+    await p.waitForFunction(() => /offered/.test(document.getElementById('chatgpt-models-note')?.textContent ?? '') || /Could not/.test(document.getElementById('chatgpt-models-note')?.textContent ?? ''), null, { timeout: 10_000 })
+    const options = await p.evaluate(() => [...document.querySelectorAll('#chatgpt-model option')].map((o) => o.value))
+    if (options.join() !== 'gpt-5.5,gpt-6.1-sol') p0.push(`model options ${JSON.stringify(options)} (note: ${await p.textContent('#chatgpt-models-note')})`)
+    if ((await p.inputValue('#chatgpt-model')) !== 'gpt-5.5') p0.push(`selected model ${await p.inputValue('#chatgpt-model')}`)
+    const efforts = await p.evaluate(() => [...document.querySelectorAll('#chatgpt-effort option')].map((o) => o.value))
+    if (efforts.join() !== ',low,medium,high,xhigh') p0.push(`effort options ${JSON.stringify(efforts)}`)
+    record(0, name, p0.length ? 'FAIL' : 'PASS', p0.join('\n') || `signed in as ${r.status.email} with client ${r.status.clientId}; models ${options.join(', ')}`)
+  } catch (err) {
+    record(0, name, 'FAIL', err.message)
+  }
 }
 
 // ---- 10 (beyond the acceptance test): where the credential is kept ---------
@@ -155,20 +241,26 @@ async function fillToken (p) {
 // reach localStorage, a new tab must not get it back, and a page loaded
 // without ?test must not define window.__cc.
 async function credentialStorage (context, plainUrl) {
-  const name = 'extra: the token stays out of localStorage; no window.__cc without ?test'
+  const name = CHATGPT ? 'extra: the ChatGPT tokens stay out of localStorage; no window.__cc without ?test' : 'extra: the token stays out of localStorage; no window.__cc without ?test'
   const p10 = []
   try {
-    const stored = await page.evaluate(() => ({ local: JSON.stringify({ ...localStorage }), session: JSON.stringify({ ...sessionStorage }), pub: JSON.stringify(window.__cc.settings) }))
-    if (stored.local.includes(FAKE_TOKEN)) p10.push('localStorage holds the token although "Remember on this device" is off')
-    if (!stored.session.includes(FAKE_TOKEN)) p10.push('sessionStorage does not hold the token for this tab')
-    if (stored.pub.includes(FAKE_TOKEN)) p10.push('__cc.settings exposes the token')
+    const tokens = CHATGPT ? await storedChatgptTokens(page) : null
+    const secrets = CHATGPT ? [tokens?.refreshToken, tokens?.accessToken].filter(Boolean) : [FAKE_TOKEN]
+    if (CHATGPT && secrets.length !== 2) p10.push(`sessionStorage holds no ChatGPT tokens for this tab: ${JSON.stringify(tokens)}`)
+    const stored = await page.evaluate(() => ({ local: JSON.stringify({ ...localStorage }), session: JSON.stringify({ ...sessionStorage }), pub: JSON.stringify(window.__cc.settings), status: JSON.stringify(window.__cc.chatgpt) }))
+    for (const secret of secrets) {
+      if (stored.local.includes(secret)) p10.push('localStorage holds a credential although "Remember on this device" is off')
+      if (!stored.session.includes(secret)) p10.push('sessionStorage does not hold the credential for this tab')
+      if (stored.pub.includes(secret) || stored.status.includes(secret)) p10.push('__cc.settings / __cc.chatgpt expose a credential')
+    }
     const plain = await context.newPage()
     try {
       await plain.goto(plainUrl)
       await plain.waitForSelector('#token', { state: 'attached', timeout: 30_000 })
-      const seen = await plain.evaluate(() => ({ hook: typeof window.__cc, token: document.getElementById('token').value, remember: document.getElementById('remember-credential').checked, notice: document.getElementById('unofficial')?.textContent ?? '' }))
+      const seen = await plain.evaluate(() => ({ hook: typeof window.__cc, token: document.getElementById('token').value, remember: document.getElementById('remember-credential').checked, notice: document.getElementById('unofficial')?.textContent ?? '', chatgptSignedIn: !document.getElementById('chatgpt-signed-in')?.hidden }))
       if (seen.hook !== 'undefined') p10.push(`window.__cc is defined without ?test (${seen.hook})`)
       if (seen.token) p10.push('a new tab got the token back')
+      if (seen.chatgptSignedIn) p10.push('a new tab is signed in with ChatGPT')
       if (seen.remember) p10.push('"Remember on this device" is ticked by default')
       if (!/not affiliated with or endorsed by Anthropic/.test(seen.notice)) p10.push(`no "unofficial" notice in the header: ${JSON.stringify(seen.notice)}`)
     } finally {
@@ -177,7 +269,7 @@ async function credentialStorage (context, plainUrl) {
   } catch (err) {
     p10.push(err.message)
   }
-  record(10, name, p10.length ? 'FAIL' : 'PASS', p10.join('\n') || 'token only in sessionStorage; a new tab starts without it; no __cc and an "unofficial" notice on a plain visit')
+  record(10, name, p10.length ? 'FAIL' : 'PASS', p10.join('\n') || `${CHATGPT ? 'ChatGPT tokens' : 'token'} only in sessionStorage; a new tab starts without ${CHATGPT ? 'them' : 'it'}; no __cc and an "unofficial" notice on a plain visit`)
 }
 
 async function pageReady (p) {
@@ -197,12 +289,18 @@ async function keepLog (p, label) {
 const bootLine = (p) => p.evaluate(() => window.__cc.session.log.filter((l) => /^boot: /.test(l.msg)).map((l) => l.msg).pop() ?? '(no boot line)').catch(() => '(page gone)')
 
 /** Type a prompt into the composer and wait for that turn's result. */
+// Every turn's wall time, Send click to `result` (printed at the end): the
+// first turn of a session also waits for that turn's system/init.
+const turnTimes = []
+
 async function turnViaUi (page, text, timeoutMs) {
   const from = await page.evaluate(() => window.__cc.harness.messages.length)
   await page.fill('#prompt', text)
+  const t = Date.now()
   await page.click('#send')
   const result = await page.evaluate(({ from, timeoutMs }) =>
     window.__cc.waitFor((m) => m.type === 'result', { fromIndex: from, timeoutMs }), { from, timeoutMs })
+  turnTimes.push({ text, ms: Date.now() - t, first: from === 0 || !(await page.evaluate((from) => window.__cc.harness.messages.slice(0, from).some((m) => m.type === 'result'), from)), subtype: result?.subtype })
   const messages = await page.evaluate((from) => window.__cc.harness.messages.slice(from), from)
   return { result, messages }
 }
@@ -220,7 +318,7 @@ async function startViaUi (page, timeoutMs) {
 }
 
 async function main () {
-  console.log(`claude-code-web e2e${FAKE ? ' (FAKE WORKER: page/host/UI wiring only, not the acceptance test)' : ''}`)
+  console.log(`claude-code-web e2e${CHATGPT ? ' [provider: chatgpt]' : ''}${FAKE ? ' (FAKE WORKER: page/host/UI wiring only, not the acceptance test)' : ''}`)
   console.log(`  dist   ${DIST}`)
   console.log(`  binary ${BINARY}${existsSync(BINARY) ? '' : ' (missing)'}`)
   if (!existsSync(join(DIST, 'index.html'))) {
@@ -237,8 +335,8 @@ async function main () {
     symlinkSync(DIST, link, 'dir')
   }
   staticSrv = await startStaticServer(root, 0)
-  const logFile = process.env.MOCK_LOG || join(mkdtempSync(join(tmpdir(), 'cc-e2e-')), 'mock-requests.jsonl')
-  mock = await startMockApi({ port: 0, logFile })
+  const logFile = mockLogFile = process.env.MOCK_LOG || join(mkdtempSync(join(tmpdir(), 'cc-e2e-')), 'mock-requests.jsonl')
+  mock = await startMockApi({ port: 0, logFile, accessTtlS: ACCESS_TTL })
   info(`static ${staticSrv.url}  mock ${mock.url}  (mock log ${logFile})`)
   const allowed = new Set([new URL(staticSrv.url).host, new URL(mock.url).host])
 
@@ -264,9 +362,17 @@ async function main () {
   // localStorage; the token, with "Remember on this device" off (the
   // default), only in this tab's sessionStorage: it survives page.reload()
   // but a new tab has to be given it again (fillToken).
-  await page.click('#auth-oauth')
-  await fillToken(page)
-  await page.fill('#base-url', mock.url)
+  if (CHATGPT) {
+    await page.click('#auth-chatgpt')
+    await page.click('#chatgpt-advanced > summary')
+    await page.fill('#chatgpt-base-url', `${mock.url}/v1`)
+    await page.fill('#chatgpt-issuer', mock.url)
+    await chatgptSignIn(page)
+  } else {
+    await page.click('#auth-oauth')
+    await fillToken(page)
+    await page.fill('#base-url', mock.url)
+  }
   await credentialStorage(context, plainUrl)
 
   // ---- 1. extraction -----------------------------------------------------
@@ -360,8 +466,36 @@ async function main () {
       const ir = messages.findIndex((m) => m.type === 'result')
       if (ia < 0 || ia > ir) p3.push('no assistant message before the result')
       if (result.is_error !== false || result.subtype !== 'success') p3.push(`result: is_error ${result.is_error}, subtype ${result.subtype}: ${result.result ?? ''}`)
-      if (FAKE) {
+      if (FAKE && CHATGPT) {
+        // the fake worker makes no requests, but the token handoff is real
+        const handoff = await page.evaluate(() => ({ requests: window.__cc.harness.bridge.worker.tokenRequests, token: window.__cc.harness.bridge.worker.providerToken, received: JSON.stringify(window.__cc.harness.bridge.worker.received) }))
+        const tokens = await storedChatgptTokens(page)
+        if (!handoff.requests.length || handoff.requests[0].reason !== 'start') p3.push(`token requests: ${JSON.stringify(handoff.requests)}`)
+        if (handoff.token?.accessToken !== tokens?.accessToken) p3.push('the Worker did not get the page\'s access token')
+        if (tokens?.refreshToken && handoff.received.includes(tokens.refreshToken)) p3.push('the refresh token reached the Worker')
+        record(3, '"say hi": assistant then result; the token handoff', p3.length ? 'FAIL' : 'PASS', p3.join('\n') || `"${result.result}"; the fake worker asked for a token (${handoff.requests.map((r) => r.reason).join(', ')}) and got the access token only (fake worker; mock checks skipped)`)
+      } else if (FAKE) {
         record(3, '"say hi": assistant then result', p3.length ? 'FAIL' : 'PASS', p3.join('\n') || `"${result.result}" (fake worker; mock checks skipped)`)
+      } else if (CHATGPT) {
+        const reqs = await mockRequests()
+        const posts = responsesPosts(reqs)
+        const anthropic = messagePosts(reqs)
+        if (posts.length !== 1) p3.push(`the mock saw ${posts.length} POST /v1/responses (expected exactly 1)`)
+        if (anthropic.length) p3.push(`the mock saw ${anthropic.length} POST /v1/messages in ChatGPT mode`)
+        const post = posts[0]
+        if (post) {
+          if (post.problems?.length) p3.push(`request shape: ${post.problems.join('; ')}`)
+          if (!post.checks?.bearerKnown) p3.push('the bearer was not the access token the sign-in issued')
+          const leaky = (post.headerNames ?? []).filter((h) => LEAKY_HEADERS.test(h))
+          if (leaky.length) p3.push(`headers that must not reach OpenAI: ${leaky.join(', ')}`)
+          if (post.body?.model !== 'gpt-5.5') p3.push(`model ${post.body?.model} (expected the chosen gpt-5.5)`)
+          if (!['low', 'medium', 'high', 'xhigh'].includes(post.body?.reasoning?.effort)) p3.push(`reasoning effort ${post.body?.reasoning?.effort} is not one gpt-5.5 supports`)
+        }
+        if (result.result !== 'hi from the mock API') p3.push(`result text ${JSON.stringify(result.result)}`)
+        const pre = reqs.filter((r) => r.method === 'OPTIONS' && /^\/v1\/responses/.test(r.path))
+        if (pre.length && pre.some((r) => r.preflight?.ok !== true)) p3.push('a /v1/responses preflight failed')
+        record(3, '"say hi": assistant then result, one POST /v1/responses with the Sign in with ChatGPT shape', p3.length ? 'FAIL' : 'PASS',
+          p3.join('\n') || `"${result.result}"; 1 POST /v1/responses (model ${post.body.model}, effort ${post.body.reasoning?.effort}, store false, stream true, no system items, no forbidden fields or headers, the issued bearer); ${pre.length} preflight(s); no /v1/messages`, { post })
       } else {
         const reqs = await mockRequests()
         const posts = messagePosts(reqs)
@@ -401,7 +535,8 @@ async function main () {
       if (result.is_error !== false) p4.push(`result is_error: ${result.result}`)
       if (!handlerText || !String(result.result ?? '').includes(handlerText)) p4.push(`result "${result.result}" does not echo the handler's "${handlerText}"`)
       if (!FAKE) {
-        const posts = messagePosts(await mockRequests())
+        const posts = apiPosts(await mockRequests())
+        if (CHATGPT) for (const p of posts) if (p.problems?.length) p4.push(`request ${p.i} shape: ${p.problems.join('; ')}`)
         const follow = posts.find((p) => p.phase === 'follow-up')
         if (!follow) p4.push('the mock saw no follow-up request carrying the tool_result')
         else if (!follow.toolResults.some((t) => t.text.includes(handlerText))) p4.push(`the tool_result the mock saw: ${JSON.stringify(follow.toolResults)}`)
@@ -456,6 +591,8 @@ async function main () {
         if (!FAKE) await fileTools(page)
         if (!FAKE) await deniedWrite(page)
         if (!FAKE) await interruptTurn(page)
+        if (!FAKE && CHATGPT) await refusedToken(page)
+        if (!FAKE && CHATGPT) await upstreamLimits(page)
       }
     } catch (err) {
       record(5, '"write a file"', 'FAIL', `${err.message}\n--- page log ---\n${await sessionLog(page)}`)
@@ -471,6 +608,13 @@ async function main () {
   if (!results.some((r) => r.id === 8)) {
     record(8, 'extra: a denied permission prompt blocks the Write', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'covered by the unit tests in fake mode' : 'did not run (needs steps 5 and 2b)')
   }
+  if (CHATGPT && !results.some((r) => r.id === 11)) {
+    record(11, 'ChatGPT: a refused access token is refreshed and the request retried', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'needs the real Worker' : 'did not run (needs steps 5 and 2b)')
+  }
+  if (CHATGPT && !results.some((r) => r.id === 13)) {
+    record(13, 'ChatGPT: a usage limit reaches the user unretried; a rate limit is retried; a mid-stream failure is resumed; an overflow makes Claude Code compact', FAKE ? 'SKIP' : 'FAIL', FAKE ? 'needs the real Worker' : 'did not run (needs steps 5 and 2b)')
+  }
+  if (CHATGPT) await requestShapes()
 
   // ---- 6. no foreign requests ----------------------------------------------
   // The block itself must hold: a request to a foreign host from the page fails.
@@ -568,7 +712,7 @@ async function interruptOnce (p) {
     const t0 = Date.now()
     let streaming = null
     while (!streaming && Date.now() - t0 < 30_000) {
-      streaming = messagePosts(await mockRequests()).find((r) => r.scenario === 'slow')
+      streaming = apiPosts(await mockRequests()).find((r) => r.scenario === 'slow')
       if (!streaming) await new Promise((resolve) => setTimeout(resolve, 100))
     }
     if (!streaming) throw new Error('the mock never saw the "stream slowly" request')
@@ -580,7 +724,7 @@ async function interruptOnce (p) {
     // the mock sees the abort when the socket closes, a moment after the result
     let slow = null
     for (let i = 0; i < 30 && !slow?.aborted; i++) {
-      slow = messagePosts(await mockRequests()).find((r) => r.scenario === 'slow')
+      slow = apiPosts(await mockRequests()).find((r) => r.scenario === 'slow')
       if (!slow?.aborted) await new Promise((resolve) => setTimeout(resolve, 100))
     }
     const problems = []
@@ -589,7 +733,7 @@ async function interruptOnce (p) {
     if (!slow?.aborted) problems.push(`the streaming request was not abandoned (${slow?.completed ? 'it ran to completion' : `still streaming: ${slow?.sent ?? '?'} of ${slow?.events ?? '?'} events sent ${secs(Date.now() - tInt)} after the interrupt`})`)
     const next = await turnViaUi(p, 'say hi', 60_000)
     if (next.result.is_error !== false || next.result.result !== 'hi from the mock API') problems.push(`the next turn: ${next.result.result}`)
-    const nextPost = messagePosts(await mockRequests()).filter((r) => r.scenario !== 'slow').pop()
+    const nextPost = apiPosts(await mockRequests()).filter((r) => r.scenario !== 'slow').pop()
     return {
       problems,
       summary: `result ${result.subtype}${result.is_error ? ' (is_error)' : ''} ${secs(afterMs)} after the interrupt; stream abandoned after ${slow?.sent ?? '?'} of ${slow?.events ?? '?'} events; next turn "${next.result.result}"`,
@@ -600,10 +744,139 @@ async function interruptOnce (p) {
   }
 }
 
+// ---- 11 (ChatGPT mode): a refused access token -------------------------------
+// The mock revokes every access token it issued (a readable 401, as OpenAI's
+// app layer sends). The Worker must ask the page again with reason
+// 'unauthorized', the page refreshes (the refresh token rotates and the new
+// one is saved), and the request is retried once with the new token.
+async function refusedToken (p) {
+  const name = 'ChatGPT: a refused access token is refreshed and the request retried'
+  try {
+    await resetMock()
+    const before = await storedChatgptTokens(p)
+    const revoked = await (await fetch(`${mock.url}/__revoke-access`, { method: 'POST' })).json()
+    const { result } = await turnViaUi(p, 'say hi', 60_000)
+    const after = await storedChatgptTokens(p)
+    const reqs = await mockRequests()
+    const posts = responsesPosts(reqs)
+    const refreshes = reqs.filter((r) => r.token?.grant_type === 'refresh_token')
+    const p11 = []
+    if (result.is_error !== false || result.result !== 'hi from the mock API') p11.push(`result: ${result.subtype} ${JSON.stringify(result.result)}`)
+    if (!posts.some((r) => r.status === 401)) p11.push(`no refused request (revoked ${revoked.revoked} token(s)); statuses ${posts.map((r) => r.status).join(',')}`)
+    if ((ACCESS_TTL >= 600 ? refreshes.length !== 1 : !refreshes.length) || refreshes.some((r) => r.status !== 200)) p11.push(`refresh grants: ${JSON.stringify(refreshes.map((r) => [r.status, r.token.problem]))}`)
+    const ok = posts.filter((r) => r.status === 200)
+    if (ok.length !== 1 || !ok[0].checks?.bearerKnown) p11.push(`retries: ${JSON.stringify(posts.map((r) => [r.status, r.checks?.bearerKnown]))}`)
+    if (!after?.refreshToken || after.refreshToken === before?.refreshToken) p11.push('the rotated refresh token was not saved in the page')
+    if (after?.accessToken === before?.accessToken) p11.push('the page still holds the refused access token')
+    const log = await p.evaluate(() => window.__cc.session.log.filter((l) => /ChatGPT: the Worker asked/.test(l.msg)).map((l) => l.msg))
+    if (!log.some((m) => /\(unauthorized\)/.test(m))) p11.push(`the Worker never asked with reason "unauthorized": ${JSON.stringify(log)}`)
+    record(11, name, p11.length ? 'FAIL' : 'PASS', p11.join('\n') || `401, then one refresh (rotated, saved), then the retry with the new token: "${result.result}"`)
+  } catch (err) {
+    record(11, name, 'FAIL', err.message)
+  }
+}
+
+// ---- 13 (ChatGPT mode): upstream limits ---------------------------------------
+// The plan's usage limit (HTTP 429, subscription_sharing_usage_limit_exceeded)
+// must reach the user as an error without Claude Code retrying it (the
+// adapter answers 429 with x-should-retry: false); a short rate limit that
+// arrives as response.failed before any output (429 with retry-after) is
+// retried by Claude Code and then answered; after a failure that follows
+// some output (an Anthropic error event mid-stream) Claude Code asks the model
+// to resume, and that request is answered; and a context overflow
+// (400 context_length_exceeded, which the adapter turns into Claude Code's
+// own "prompt is too long: N tokens > M maximum") must make Claude Code
+// compact the conversation (the mock answers its compaction request) and
+// then answer; the next turn works.
+async function upstreamLimits (p) {
+  const name = 'ChatGPT: a usage limit reaches the user unretried; a rate limit is retried; a mid-stream failure is resumed; an overflow makes Claude Code compact'
+  const p13 = []
+  const notes = []
+  try {
+    await resetMock()
+    const limit = await turnViaUi(p, 'hit the usage limit', 90_000)
+    const limitPosts = responsesPosts(await mockRequests()).filter((r) => r.scenario === 'usage-limit')
+    if (!limit.result.is_error && !/usage limit/i.test(String(limit.result.result))) p13.push(`usage limit: result ${limit.result.subtype} ${JSON.stringify(limit.result.result)}`)
+    if (!/usage limit/i.test(JSON.stringify(limit.messages))) p13.push('usage limit: the message never reached the transcript')
+    if (limitPosts.length !== 1) p13.push(`usage limit: ${limitPosts.length} upstream requests (x-should-retry: false must stop Claude Code's retries)`)
+    notes.push(`usage limit -> ${limit.result.subtype}${limit.result.is_error ? ' (is_error)' : ''} "${String(limit.result.result ?? '').slice(0, 120)}", ${limitPosts.length} upstream request(s)`)
+
+    await resetMock()
+    const tr = Date.now()
+    const rate = await turnViaUi(p, 'hit the rate limit', 90_000)
+    const ratePosts = responsesPosts(await mockRequests()).filter((r) => r.scenario === 'rate-limit')
+    const retries = rate.messages.filter((m) => m.type === 'system' && m.subtype === 'api_retry')
+    if (rate.result.is_error !== false || rate.result.result !== 'answered after a rate limit') p13.push(`rate limit: result ${rate.result.subtype} ${JSON.stringify(rate.result.result)} (expected Claude Code to retry and succeed)`)
+    if (ratePosts.length !== 2 || ratePosts[0].failed !== 'rate_limit_exceeded' || ratePosts[1].failed) p13.push(`rate limit: upstream ${JSON.stringify(ratePosts.map((r) => r.failed ?? 'ok'))} (expected one failure, then one answered retry)`)
+    notes.push(`short rate limit (response.failed rate_limit_exceeded "try again in 1.2s" -> 429 retry-after 2) -> ${retries.length} api_retry, then "${rate.result.result}" after ${secs(Date.now() - tr)}`)
+
+    await resetMock()
+    const tm = Date.now()
+    const mid = await turnViaUi(p, 'fail mid-stream', 120_000)
+    const midPosts = responsesPosts(await mockRequests()).filter((r) => r.scenario === 'mid-fail')
+    const midRetries = mid.messages.filter((m) => m.type === 'system' && m.subtype === 'api_retry')
+    if (mid.result.is_error !== false || mid.result.result !== 'answered after a mid-stream failure') p13.push(`mid-stream failure: result ${mid.result.subtype} ${JSON.stringify(mid.result.result)} (expected Claude Code to resume and succeed)`)
+    if (midPosts.length !== 2 || midPosts[0].failed !== 'server_is_overloaded' || midPosts[1].failed) p13.push(`mid-stream failure: upstream ${JSON.stringify(midPosts.map((r) => r.failed ?? 'ok'))} (expected one failure, then one answered resume request)`)
+    const partialKept = JSON.stringify(mid.messages).includes('Partial answer, then the connection fails')
+    notes.push(`failure after output (text deltas, then response.failed server_is_overloaded -> an Anthropic overloaded_error event mid-stream) -> ${midRetries.length} api_retry, partial text ${partialKept ? 'kept' : 'dropped'}, then "${mid.result.result}" after ${secs(Date.now() - tm)}`)
+
+    await resetMock()
+    const t = Date.now()
+    const over = await turnViaUi(p, 'overflow', 120_000)
+    const overPosts = responsesPosts(await mockRequests())
+    const seq = overPosts.map((r) => `${r.scenario}:${r.status}`)
+    if (over.result.is_error !== false || over.result.result !== 'answered after compaction') p13.push(`overflow: result ${over.result.subtype} ${JSON.stringify(over.result.result)} (expected Claude Code to compact and then answer)`)
+    if (seq[0] !== 'overflow:400' || !seq.includes('compact:200')) p13.push(`overflow: upstream ${seq.join(', ')} (expected overflow:400, then a compaction request)`)
+    notes.push(`overflow -> ${over.result.subtype}${over.result.is_error ? ' (is_error)' : ''} "${String(over.result.result ?? '').slice(0, 120)}" after ${secs(Date.now() - t)}; upstream ${overPosts.map((r) => `${r.scenario}:${r.status}`).join(', ')}`)
+
+    const next = await turnViaUi(p, 'say hi', 60_000)
+    if (next.result.is_error !== false || next.result.result !== 'hi from the mock API') p13.push(`the next turn: ${next.result.subtype} ${JSON.stringify(next.result.result)}`)
+  } catch (err) {
+    p13.push(err.message)
+  }
+  record(13, name, p13.length ? 'FAIL' : 'PASS', [...p13, ...notes].join('\n'))
+}
+
+// ---- 12 (ChatGPT mode): every Responses request of the run had the right shape
+// (the mock's log is cleared between steps, so this reads its JSONL log)
+async function requestShapes () {
+  const name = 'ChatGPT: every /v1/responses request had the Sign in with ChatGPT shape; nothing went to /v1/messages'
+  if (FAKE) { record(12, name, 'SKIP', 'the fake worker sends no requests'); return }
+  try {
+    const { readFileSync } = await import('node:fs')
+    const all = readFileSync(mockLogFile, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l))
+    const posts = responsesPosts(all)
+    const p12 = []
+    if (!posts.length) p12.push('no /v1/responses requests at all')
+    for (const r of posts) {
+      if (r.problems?.length) p12.push(`#${r.i} (${r.scenario}): ${r.problems.join('; ')}`)
+      const leaky = (r.headerNames ?? []).filter((h) => LEAKY_HEADERS.test(h))
+      if (leaky.length) p12.push(`#${r.i}: headers ${leaky.join(', ')}`)
+    }
+    const anth = messagePosts(all)
+    if (anth.length) p12.push(`${anth.length} POST /v1/messages`)
+    const authorizes = all.filter((r) => r.authorize)
+    const hints = authorizes.map((r) => `${r.authorize.clientId}${r.authorize.agentNameHint ? '+hint' : ''}`)
+    if (authorizes.slice(1).some((r) => r.authorize.clientId !== 'oaiapp_test' || r.authorize.agentNameHint)) p12.push(`later sign-ins must reuse the issued client without agent_name_hint: ${hints.join(', ')}`)
+    const replays = posts.filter((r) => r.phase === 'follow-up').map((r) => r.reasoningReplayed ?? [])
+    const replayed = replays.filter((x) => x.some((y) => y.known)).length
+    // the token handoff over the whole run: every refresh accepted (a reused refresh token would be refused)
+    const refreshes = all.filter((r) => r.token?.grant_type === 'refresh_token')
+    if (refreshes.some((r) => r.status !== 200)) p12.push(`refresh grants refused: ${JSON.stringify(refreshes.filter((r) => r.status !== 200).map((r) => [r.status, r.token.problem]))}`)
+    const reasons = page ? await page.evaluate(() => window.__cc.session.log.map((l) => /ChatGPT: the Worker asked for an access token \((\w+)\)/.exec(l.msg)?.[1]).filter(Boolean)).catch(() => []) : []
+    if (ACCESS_TTL < 600 && !reasons.includes('expired')) p12.push(`with --access-ttl ${ACCESS_TTL} the Worker never asked again with reason 'expired' (last page: ${reasons.join(', ')})`)
+    const count = (k) => reasons.filter((x) => x === k).length
+    record(12, name, p12.length ? 'FAIL' : 'PASS', p12.join('\n') || `${posts.length} requests checked (bearer, store false, stream true, no system items, no forbidden fields or Codex headers; input structure as /v1/responses validates it); sign-ins: ${hints.join(', ')}; ${refreshes.length} refresh grant(s), all accepted; token requests on the last page: start ${count('start')}, expired ${count('expired')}, unauthorized ${count('unauthorized')}; reasoning replayed in ${replayed} of ${replays.length} follow-ups (informational)`)
+  } catch (err) {
+    record(12, name, 'FAIL', err.message)
+  }
+}
+
 const guard = setTimeout(() => { console.log('FAIL     the whole run exceeded 20 min'); finish(1) }, 20 * 60_000)
 
 async function finish (forced) {
   clearTimeout(guard)
+  if (SHOT_OUT && page) await page.screenshot({ path: SHOT_OUT, fullPage: true }).catch((err) => console.log(`     screenshot failed: ${err.message}`))
   if (LOG_OUT) {
     if (page) await keepLog(page, 'last page')
     writeFileSync(LOG_OUT, pageLogs.join('\n') + '\n')
@@ -617,8 +890,9 @@ async function finish (forced) {
     console.log('\n--- last browser console lines ---')
     console.log(consoleLines.slice(-30).join('\n'))
   }
+  if (turnTimes.length) console.log(`\n     turn times (Send to result; * = first turn of a session, includes its system/init): ${turnTimes.map((x) => `${JSON.stringify(x.text)}${x.first ? '*' : ''} ${x.ms} ms`).join(', ')}`)
   console.log(`\n${results.length - failed.length - skipped.length} passed, ${failed.length} failed, ${skipped.length} skipped in ${secs(Date.now() - t0)}${FAKE ? ' (FAKE WORKER: not the acceptance test)' : ''}`)
-  if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify({ fake: FAKE, results, foreign, ms: Date.now() - t0 }, null, 2))
+  if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify({ fake: FAKE, provider: PROVIDER, results, foreign, turnTimes, ms: Date.now() - t0 }, null, 2))
   const ok = !forced && failed.length === 0 && (FAKE || skipped.length === 0)
   process.exit(ok ? 0 : 1)
 }
