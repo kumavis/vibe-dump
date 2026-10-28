@@ -31,8 +31,8 @@
 // - Figure LOD (`lod`, set for a board larger than classic's by
 //   view/index.js's setBoard): a unit more than LOD_FAR from the camera is
 //   drawn by its figures' far stand-ins (view/models/cache.js's lodOf: one
-//   mesh each), without their idle animation; a figure dying, fleeing or
-//   flinching keeps its own.
+//   mesh each, (V2) a splat-fur figure's its fur beside it), without their
+//   idle animation; a figure dying, fleeing or flinching keeps its own.
 //
 // (F16) The courtesy fog (present/fog.js, app/flow.js): `veil(ids)` names
 // the units the seat played here can't see now. A unit veiled has no
@@ -522,14 +522,17 @@ export class UnitViews {
         if (!a || !model.alive || m.lo) continue
         const t = time + m.mesh.userData.phase
         const fig = m.mesh.userData.fig
+        // ((V2) the breath scales the figure's height about its own scale,
+        // cache.js's sy: before V2 it set the scale itself, which drew a
+        // brute, a hierophant and an elder at 1 high, squashed)
         if (a.kind === 'squirrel') {
           const hop = m.moving ? Math.abs(Math.sin(t * 13)) * 0.16 : 0
           fig.position.y = fig.userData.y0 + hop
-          fig.scale.y = 1 + (m.moving ? 0 : Math.sin(t * 2.4) * 0.018)
+          fig.scale.y = fig.userData.sy * (1 + (m.moving ? 0 : Math.sin(t * 2.4) * 0.018))
           fig.rotation.x = m.moving ? 0.12 : 0
         } else if (a.kind === 'naga') {
           fig.rotation.z = Math.sin(t * (m.moving ? 9 : 1.4)) * (m.moving ? 0.12 : 0.035)
-          fig.scale.y = 1 + Math.sin(t * 1.4) * 0.015
+          fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 1.4) * 0.015)
         } else if (a.kind === 'machine') {
           if (m.moving) for (const w of a.wheels) w.rotation.x += dt * 6
         }

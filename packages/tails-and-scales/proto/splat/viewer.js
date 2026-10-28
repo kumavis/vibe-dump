@@ -1,24 +1,28 @@
-// One Bushtail figure with splat fur (bushtail-kit.js), or the game's mesh figure today, on its base, lit
-// as view/stage.js lights the table: drag to orbit. Under the package's `npm run dev`:
+// One Bushtail figure as the game builds it (view/models/cache.js's buildModel): with splat fur
+// (view/models/squirrel.js, the game's 'new' figures since V2), or the classic mesh figure, on its base,
+// lit as view/stage.js lights the table: drag to orbit. Under the package's `npm run dev`:
 //   /proto/splat/viewer.html?unit=elder           the figure with splat fur and a mesh kit
-//   /proto/splat/viewer.html?unit=elder&mesh=1    the game's mesh figure (view/models/cache.js)
+//   /proto/splat/viewer.html?unit=elder&mesh=1    the classic mesh figure (cache.js's 'classic' style)
 // The query also takes w, h (the canvas, CSS px; the window if unset), dist, el, az (the camera's distance,
-// elevation and azimuth, degrees), ty (the height it looks at), density (the fur's), n (splats drawn per
-// squirrel; 0: all), scale (splat size), seed and base (0: none). window.done holds what was drawn once
-// the first frame is (sheet.mjs waits for it).
+// elevation and azimuth, degrees), ty (the height it looks at), base (0: none) and shadow=1 (the sun casts,
+// as on the table: a squirrel's shadow is its proxy's, view/stage.js). The splats drawn are the game's own
+// choice for the figure's height on the canvas (view/models/splat/splats.js's levels of detail, prepared
+// before each render as the table prepares them). window.done holds what was drawn once the first frame
+// is (sheet.mjs waits for it): the splats drawn and the build's milliseconds.
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { buildFigure, UNITS } from './bushtail-kit.js'
-import { base } from '../../view/models/kit.js'
-import { buildModel } from '../../view/models/cache.js'
+import { buildModel, setFigureStyle } from '../../view/models/cache.js'
+import { prepareSplats, splatsPrepared, SHADOW_LAYER } from '../../view/models/splat/splats.js'
 import { RACES } from '../../data/schema.js'
 
 const q = new URLSearchParams(location.search)
 const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d)
 const unit = q.get('unit') ?? 'nutkin'
-if (!Object.hasOwn(UNITS, unit)) throw new Error(`no unit "${unit}": ${Object.keys(UNITS).join(', ')}`)
+const units = RACES.squirrel.units
+if (!Object.hasOwn(units, unit)) throw new Error(`no unit "${unit}": ${Object.keys(units).join(', ')}`)
 const W = num('w', innerWidth), H = num('h', innerHeight)
-const renderer = new THREE.WebGLRenderer({ antialias: true })
+// (preserveDrawingBuffer: a screenshot taken a moment after the draw still finds the frame)
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true })
 renderer.setPixelRatio(q.has('w') ? 1 : devicePixelRatio)
 renderer.setSize(W, H)
 renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -34,21 +38,39 @@ scene.add(sun)
 const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
 fill.position.set(20, 15, -20)
 scene.add(fill)
-
-const t0 = performance.now()
-let splats = [], count = 0
-if (num('mesh', 0)) {
-  scene.add(buildModel('squirrel', unit, RACES.squirrel.units[unit], '#ec8a34'))
-} else {
-  const fig = buildFigure(unit, { density: num('density', 0.1), n: num('n', 0), splatScale: num('scale', 1.5), seed: num('seed', 1) })
-  if (num('base', 1)) scene.add(base(UNITS[unit].base, '#ec8a34'))
-  fig.group.position.y = num('base', 1) ? 0.1 : 0
-  scene.add(fig.group)
-  splats = fig.splats
-  count = fig.count
-  for (const s of splats) s.light.copy(sunDir)
+// (shadow=1: the sun casts onto a ground under the base, as on the table; three r160 tests a caster's
+// layers against the drawing camera's, so the camera sees the proxies' layer during the shadow pass,
+// as view/stage.js arranges)
+if (num('shadow', 0)) {
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  sun.castShadow = true
+  sun.shadow.mapSize.set(1024, 1024)
+  Object.assign(sun.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3, near: 1, far: 60 })
+  sun.shadow.bias = -0.0004
+  sun.shadow.camera.layers.enable(SHADOW_LAYER)
+  const pass = renderer.shadowMap.render
+  renderer.shadowMap.render = (lights, s, camera) => {
+    const mask = camera.layers.mask
+    camera.layers.enable(SHADOW_LAYER)
+    pass.call(renderer.shadowMap, lights, s, camera)
+    camera.layers.mask = mask
+  }
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(4, 48).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: '#5f7a45', roughness: 0.95 }))
+  ground.receiveShadow = true
+  scene.add(ground)
 }
+// the splats prepared before each render, as the table's
+scene.onBeforeRender = (r, s, camera) => prepareSplats(camera, r, sunDir, s)
+
+const mesh = !!num('mesh', 0)
+if (mesh) setFigureStyle('classic')
+const t0 = performance.now()
+const root = buildModel('squirrel', unit, units[unit], '#ec8a34')
 const ms = Math.round(performance.now() - t0)
+// (base=0: the figure alone, its base hidden)
+if (!num('base', 1)) root.children[0].visible = false
+scene.add(root)
 
 // the camera: fov 35, looking at (0, ty, 0) from `dist` away at elevation `el`, azimuth `az`
 const el = (num('el', 44) * Math.PI) / 180, az = (num('az', 25) * Math.PI) / 180, dist = num('dist', 2.8), ty = num('ty', 0.6)
@@ -57,13 +79,7 @@ cam.position.set(Math.sin(az) * Math.cos(el) * dist, ty + Math.sin(el) * dist, M
 const controls = new OrbitControls(cam, renderer.domElement)
 controls.target.set(0, ty, 0)
 controls.update()
-// (splats are sorted for the camera before each draw: three uploads their order before onBeforeRender)
-function draw() {
-  scene.updateMatrixWorld()
-  cam.updateMatrixWorld()
-  for (const s of splats) s.sort(cam)
-  renderer.render(scene, cam)
-}
+const draw = () => renderer.render(scene, cam)
 controls.addEventListener('change', draw)
 addEventListener('resize', () => {
   if (q.has('w')) return
@@ -73,4 +89,4 @@ addEventListener('resize', () => {
   draw()
 })
 draw()
-window.done = { unit, mesh: !!num('mesh', 0), splats: count, ms }
+window.done = { unit, mesh, splats: splatsPrepared.splats, ms }

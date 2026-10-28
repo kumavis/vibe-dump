@@ -5,11 +5,19 @@ Bushtails in `../splat/`. This is prototype A ("refined primitives + physical gl
 on art, game-scale readability and engineering), finished with grafts from B (the sculpted basilisk
 skull, three-claw hands) and C (crisp paint cut along a field's zero line, the screen-footprint gloss
 level of detail, painted catchlights, the lavender shadow lift and the warm rim). Each figure keeps
-`view/models/serpent.js`'s parts (a coil, a torso, a head, an optional hood, two arms, and the unit's
-gear), its colours, its silhouette and its `userData.anim` (body, head, tongue, arms; the engine's wheels,
-throwing arm and globe; the hierophant's gem) with the same `keep` marks. It is a look prototype: nothing
-here is imported by the game, and `vite build` never sees it (only `index.html` is built), so `dist/` is
-unchanged. (Prototypes A, B and C themselves aren't kept in the repo; this directory is the result.)
+the classic figures' parts (`view/models/classic/serpent.js`: a coil, a torso, a head, an optional hood,
+two arms, and the unit's gear), their colours, silhouette and `userData.anim` (body, head, tongue, arms;
+the engine's wheels, throwing arm and globe; the hierophant's gem) with the same `keep` marks.
+(Prototypes A, B and C themselves aren't kept in the repo; this directory is the result.)
+
+**Since V2 these are the game's figures** (the 'new' figure style, the default; the classic ones are a
+switch away: the title's *Figures* link, or `?models=classic`). Their runtime moved into the game:
+`serpents.js`, `shapes.js`, `gloss.js` and `sdf.js` are `view/models/gloss/`, the game's kit is
+`view/models/serpent.js` (every figure built at detail 0.5: its header says why), `bake-gloss.js`'s three
+changes are `view/models/bake.js`'s, and `bake-check.mjs` is `sim/bake-check.mjs`. What stays here is the
+look work: the viewer, the pairing shot and the sheet, all importing the game's own modules (one source
+of truth), and this record of how the figures were made and measured (in it, "today's" figure is the
+classic one, the game's before V2). `vite build` still sees nothing here (only `index.html` is built).
 
 ![The six units beside today's meshes, close up and at game scale](./units.jpg)
 
@@ -21,9 +29,9 @@ unchanged. (Prototypes A, B and C themselves aren't kept in the repo; this direc
 npm run dev -w packages/tails-and-scales
 # then open /proto/scales/viewer.html?unit=hierophant
 #   unit:    scaleguard, spitter, sidewinder, brute, engine, hierophant
-#   mesh=1   the game's figure today (view/models/cache.js buildModel), for comparison
-#   detail   the figure's level of detail: 1 close up (default), 0.5 for ~60 px, 0.3 for ~28 px
-#   bake=1   merged by bake-gloss.js, as the game would bake it (it draws the same)
+#   mesh=1   the classic figure (view/models/cache.js buildModel, its 'classic' style), for comparison
+#   detail   the figure's level of detail: 1 close up (default), 0.5 for ~60 px (the game's), 0.3 for ~28 px
+#   bake=1   merged by view/models/bake.js, as the game bakes it (it draws the same)
 #   plain=1  every material swapped for kit.js's matte MeshStandardMaterial (the shapes without the gloss)
 #   dpr      the pixel ratio when w is given (the gloss's level of detail is the same at 1 and 2)
 #   mask=coil  the coil alone, white on black (what sheet.mjs measures the coil's noise inside)
@@ -41,7 +49,7 @@ Everything below is shot and measured by one script (about two minutes under Swi
 ```sh
 cd packages/tails-and-scales
 CHROMIUM_PATH=/opt/pw-browsers/chromium-<build>/chrome-linux/chrome node proto/scales/sheet.mjs <out dir> [unit... | pair]
-node proto/scales/bake-check.mjs      # bake-gloss.js against view/models/bake.js (Node, no browser)
+node sim/bake-check.mjs               # view/models/bake.js against R7a's on every classic figure (Node)
 ```
 
 `sheet.mjs` writes `units.png` (and `.jpg`: the copy above), `metrics.json`, a 600 px close-up of each
@@ -52,12 +60,12 @@ shots `pair.png` and `pair-small.png`.
 
 | file | what it is |
 | --- | --- |
-| `serpents.js` | `buildSerpent(key, { detail })` → `{ group, triangles, ms }` for the six units: the naga body, its markings, hands, eyes and hood, the occlusion pass, and each unit's gear. The figure stands (coiled) on y 0, faces +z, has no base. No `Math.random` |
-| `shapes.js` | smooth geometry: `body` (the swept body tube with its scuted belly and its markings cut crisply), `blob` (a sculpted icosphere, welded as it is built), `lathe` (welded as it is built), `horn`, `tint`, `vertexNormals`; `cutMesh`/`cutGeometry`/`cutPaint` (crisp paint along a field's zero line, optionally only in a region, its neighbours split at the cut's edge vertices so the surface stays closed); `occluder`/`occlude` (capsule occlusion) |
-| `sdf.js` | signed-distance modelling for the engine's skull (graft of C's sdf.js: smooth min/max, rounded cone, ellipsoid, surface nets with an x-mirror, field occlusion) |
-| `gloss.js` | the finishes: the HalfFloat environment, the scaled `skin`, the `belly` lacquer, `gloss`, `satinMetal`, `polished`, `glow`, all MeshPhysicalMaterial with one `onBeforeCompile` patch (scales, the env gate, the level of detail, the rim and the lift); `finishFields`/`classMaterial` for baking |
-| `bake-gloss.js` | view/models/bake.js extended for the glossy figures (see "Baking"); `bake-check.mjs` proves it bakes the kit figures exactly as bake.js does |
-| `viewer.html`, `viewer.js` | one figure, glossy or today's, on its base under the table's lights |
+| `view/models/gloss/serpents.js` | (moved there in V2) `buildSerpent(key, { detail })` → `{ group, triangles, ms }` for the six units: the naga body, its markings, hands, eyes and hood, the occlusion pass, and each unit's gear. The figure stands (coiled) on y 0, faces +z, has no base. No `Math.random` |
+| `view/models/gloss/shapes.js` | smooth geometry: `body` (the swept body tube with its scuted belly and its markings cut crisply), `blob` (a sculpted icosphere, welded as it is built), `lathe` (welded as it is built), `horn`, `tint`, `vertexNormals`; `cutMesh`/`cutGeometry`/`cutPaint` (crisp paint along a field's zero line, optionally only in a region, its neighbours split at the cut's edge vertices so the surface stays closed); `occluder`/`occlude` (capsule occlusion) |
+| `view/models/gloss/sdf.js` | signed-distance modelling for the engine's skull (graft of C's sdf.js: smooth min/max, rounded cone, ellipsoid, surface nets with an x-mirror, field occlusion) |
+| `view/models/gloss/gloss.js` | the finishes: the HalfFloat environment (`env()`, made with the first glossy material), the scaled `skin`, the `belly` lacquer, `gloss`, `satinMetal`, `polished`, `glow`, all MeshPhysicalMaterial with one `onBeforeCompile` patch (scales, the env gate, the level of detail, the rim and the lift); `finishFields`/`classMaterial` for baking |
+| `view/models/bake.js`, `sim/bake-check.mjs` | (V2) the bake, with the prototype's `bake-gloss.js` changes (see "Baking"), and the check that it bakes every classic figure exactly as R7a's bake.js did |
+| `viewer.html`, `viewer.js` | one figure, glossy or classic, on its base under the table's lights |
 | `pair.html`, `pair.js` | three splat Bushtails facing three glossy Ssithra on one table, at the game's camera |
 | `units.jpg`, `pair.jpg` | the sheet and the close pairing shot as of this commit |
 | `sheet.mjs` | the comparison sheet, the measures, the close-ups and the pairing shots |
@@ -271,11 +279,11 @@ per unit type per session, not per figure. At detail 0.3 every unit is within 1.
 floor comes from the low-detail head (an icosphere of detail 4), hood (4, unmarked), a coarse body tube,
 no claws, nostrils or catchlights, rounded octahedra of detail 0, a skull at a 0.042 cell.
 
-## Baking (`bake-gloss.js`)
+## Baking (`view/models/bake.js` since V2; the prototype's `bake-gloss.js`)
 
-bake.js merges a figure into one mesh per material class (position, normal and one colour per part) and
-draws each class with a MeshStandardMaterial. `bake-gloss.js` is bake.js with three changes, each a no-op
-for the kit's plain parts:
+bake.js merged a figure into one mesh per material class (position, normal and one colour per part) and
+drew each class with a MeshStandardMaterial. The prototype's `bake-gloss.js` was bake.js with three
+changes, each a no-op for the kit's plain parts, and since V2 bake.js is that code:
 
 1. **classKey keeps every old field** (metalness, roughness, emissive, its intensity, transparent,
    opacity, side, flatShading) and, for a glossy part only, appends gloss.js's physical fields (type,
@@ -285,31 +293,44 @@ for the kit's plain parts:
 3. **a glossy class is drawn with `gloss.js classMaterial`** (the same MeshPhysicalMaterial, env and
    patch, its colour moved into the vertices); a plain class with bake.js's own MeshStandardMaterial.
 
-`node proto/scales/bake-check.mjs` builds every squirrel figure (view/models/squirrel.js) and every serpent
-figure today twice, bakes one with each, and compares them node for node: every one is **the same**
+`node sim/bake-check.mjs` builds every classic squirrel and serpent figure (view/models/classic/) twice,
+bakes one with R7a's bake.js (read from git) and the other with today's, and compares them node for node:
+every one is **the same**
 (children, places, every attribute array value for value, material class and fields). It then bakes each
 glossy figure and checks every triangle, the skin's own colours and its plain colour survive, and that the
-engine's baked crew has a standalone scaleguard's scales per figure. `viewer.html?bake=1` draws the same
+engine's baked crew has a standalone scaleguard's scales per figure (and, since V2, that each glossy
+figure's far stand-in is drawn in its paint, and that the glossy modules draw no `Math.random` as they
+load). `viewer.html?bake=1` draws the same
 as the unbaked figure. The shader reads only object-space position and normal (and `plain`), which baking
 carries in the figure's space. A baked figure is 6–10 meshes (19–20 for the engine, with its kept wheels,
 arm and globe), against today's 3–4 (15).
 
-## Integrating it into the game
+## In the game (V2)
 
-- view/models/bake.js takes `bake-gloss.js`'s three changes; cache.js needs nothing new (its far
-  stand-in already reads vertex colours times the material colour, and its clone sets userData aside);
-  the kits route `serpent` to `serpents.js`, with `detail` chosen from the board size. The `anim`
-  structure is serpent.js's, so view/units.js's sway, head bob and tongue work unchanged.
-- view/stage.js sets no `scene.environment`, and doesn't need to: each glossy material carries `ENV`.
+- view/models/bake.js took `bake-gloss.js`'s three changes; cache.js's far stand-in reads vertex colours
+  times the material colour as it did, and its clone sets userData aside. cache.js picks its kits by the
+  page's figure style (`setFigureStyle`, once, before any figure: app/boot.js, from `?models=` or the title's
+  Figures switch kept in localStorage), and keys its templates by style too.
+- One level of detail for every figure, 0.5 (not one per board size: a unit is one template, cloned, and
+  a figure is seen at 28 px and at 140 px on the same table); `view/models/serpent.js`'s header has the
+  measures. The `anim` structure is the classic one, so view/units.js's sway, head bob and tongue work
+  unchanged.
+- view/stage.js sets no `scene.environment`, and doesn't need to: each glossy material carries `env()`,
+  made with the first glossy material (never as the module loads: three.js draws `Math.random` for a
+  texture's uuid, and the title's table is painted from `Math.random`).
 - The level of detail needs nothing from the game: it reads the viewport and pixel ratio from the renderer
   each draw (`material.onBeforeRender`).
+- The sun's shadow pass draws a glossy figure through one shadow caster (cache.js's `casterOf`: its
+  classes merged, positions only, double-sided, on a layer only that pass draws), not its 6-10 classes; its
+  kept wheels, arm, globe and gem cast as themselves (they move).
 
 ## The pairing (`pair.png`, `pair-small.png`)
 
-Three splat Bushtails (nutkin, grenadier, oakguard: `../splat/bushtail-kit.js`, each splat mesh sorted for
-the camera before every draw) face three glossy Ssithra (brute, scaleguard, spitter) about 3 units apart,
-each line turned a little toward the game's camera (fov 40, 44° up), close (~136 px figures, every splat,
-detail 1) and at game scale (~34 px, the splats the game would draw there, detail 0.3). The lavender lift
+Three splat Bushtails (nutkin, grenadier, oakguard: the game's own since V2, `view/models/squirrel.js`,
+prepared for the camera before every draw as the table prepares them) face three glossy Ssithra (brute,
+scaleguard, spitter) about 3 units apart, each line turned a little toward the game's camera (fov 40, 44°
+up), close (~136 px figures, the finest level of splats, detail 1) and at game scale (~34 px, the splats
+the game draws there, detail 0.3). (The shots were taken with the prototype's own splats, before V2.) The lavender lift
 and the warm rim are what tie the two finishes: fur and enamel share their shadow colour and their edge
 light (warm on the fur, warm and in its own hue on the enamel), and the enamel's crisp highlights are the
 only thing the fur doesn't have.
@@ -331,6 +352,7 @@ only thing the fur doesn't have.
 - Only the sidewinder has gripping hands. The scaleguard's spear and the hierophant's staff still pass
   through open, forward-curling claws, which reads as held at game scale; `naga({ grip: true })` and a
   grip along the hand's axis would close those fists too.
-- Not yet seen with the stage's shadow map, animation, or a full army on the table; measure a Grand battle
-  before turning it on (MeshPhysicalMaterial with clearcoat, plus up to 27 cell lookups where scales are
-  visible, skipped where they aren't).
+- Turned on in V2 and seen with the stage's shadow map, animation and a full army; what a phone makes of
+  it (MeshPhysicalMaterial with clearcoat, plus up to 27 cell lookups where scales are visible, skipped
+  where they aren't; a baked figure 6–10 draw calls against the classic 3–4) is what the game's perf
+  overlay (the title's Perf overlay link, or 📈 in a battle) is for.

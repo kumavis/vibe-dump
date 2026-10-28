@@ -1,8 +1,9 @@
 // The HUD (DESIGN §1.3, §2.11): the score, the round, the phase and the
 // seat whose turn the table shows, and the hint line, put on the page from
 // the HUD model (present/hud-model.js); and the HUD's tools (the speed, the
-// camera's next view and follow, the sound, the log's fold). ((F13) And the
-// touch toggles lit as they are on: 👆 Aim and ▭ Select, which take turns.)
+// camera's next view and follow, the sound, (V2) the perf overlay, the log's
+// fold). ((F13) And the touch toggles lit as they are on: 👆 Aim and ▭ Select,
+// which take turns.)
 import { clock } from '../view/clock.js'
 import { unlock, toggleMute, isMuted } from '../view/sfx.js'
 
@@ -33,8 +34,10 @@ export class Hud {
   // settings (`standing`, input/standing.js), kept in this browser:
   // Autopilot first (units on autopilot act as their seat's phase opens)
   // and Auto-End (End presses itself, after a 1.5 s countdown on it, once
-  // every unit left is under orders).
-  wire({ rig, player, standing = null }) {
+  // every unit left is under orders); (V2) and the perf overlay (`perf`,
+  // ui/perf.js, which keeps its own setting), switched by 📈 beside the
+  // sound, as on the title.
+  wire({ rig, player, standing = null, perf = null }) {
     const SPEEDS = [1, 2, 4]
     $('#speed').onclick = () => {
       clock.speed = SPEEDS[(SPEEDS.indexOf(clock.speed) + 1) % SPEEDS.length]
@@ -89,6 +92,14 @@ export class Hud {
     $('#mute').onclick = () => {
       unlock()
       $('#mute').textContent = toggleMute() ? '🔇' : '🔊'
+    }
+    if (perf) {
+      const el = $('#perf')
+      perf.listen((on) => {
+        el.classList.toggle('off', !on)
+        el.title = on ? 'Perf overlay: on (click: off)' : 'Perf overlay: off (click: the frame rate, frame time, draw calls and triangles over the table)'
+      })
+      el.onclick = () => perf.toggle()
     }
     $('#logToggle').onclick = () => $('#log').classList.toggle('collapsed')
   }

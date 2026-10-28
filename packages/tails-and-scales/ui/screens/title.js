@@ -4,7 +4,12 @@
 // races gets a line on its card saying why the classic matchup is up. (N3)
 // The last online battle this browser was in, still going when the page
 // last saw it (app/online.js notes it), gets a Continue button: its link,
-// without having kept it.
+// without having kept it. (V2) Three settings under the replay link: Figures
+// (the figure style drawn, view/models/cache.js: 'new' or 'classic'; a click
+// keeps the other and reloads the page, which builds every figure in it),
+// Quality (view/stage.js's: auto, high, medium or low, each click the next,
+// drawn at once, as a tap on the perf overlay does) and Perf overlay
+// (ui/perf.js: on or off at once, as the battle's 📈).
 import { sfx, unlock } from '../../view/sfx.js'
 
 const $ = (s) => document.querySelector(s)
@@ -61,9 +66,38 @@ export class TitleScreen {
   // draws a board's table; `start(mode)` a mode's battle ((F6) through the
   // battle-setup panel: app/boot.js); (N2)
   // `online()` a new online match (app/online.js); (N3) `replay(text)` a
-  // replay file's text watched (app/boot.js)
-  wire({ S, showTable, start, online, replay }) {
+  // replay file's text watched (app/boot.js); (V2) `figures` the figure
+  // style ({ style, styles, choose(style) }: app/boot.js keeps the choice and
+  // reloads), `quality` the quality ({ listen(fn(label)), next() }: app/
+  // boot.js keeps it and draws it) and `perf` the perf overlay (ui/perf.js)
+  wire({ S, showTable, start, online, replay, figures = null, quality = null, perf = null }) {
     this.continued()
+    if (figures) {
+      const b = $('#figures'), next = figures.styles[(figures.styles.indexOf(figures.style) + 1) % figures.styles.length]
+      b.textContent = `🎨 Figures: ${figures.style}`
+      b.title = `The figures drawn: ${figures.style} (click: ${next}; the page reloads)`
+      b.onclick = () => figures.choose(next)
+    }
+    if (quality) {
+      const b = $('#qualityTitle')
+      quality.listen((label) => (b.textContent = `⚙️ Quality: ${label}`))
+      b.title = 'How the table is drawn: auto (medium on a touch screen, else high), high, medium or low (click: the next)'
+      b.onclick = () => {
+        unlock()
+        sfx.click()
+        quality.next()
+      }
+    }
+    if (perf) {
+      const b = $('#perfTitle')
+      perf.listen((on) => (b.textContent = `📈 Perf overlay: ${on ? 'on' : 'off'}`))
+      b.title = 'The frame rate, frame time, draw calls and triangles over the table (click: on or off)'
+      b.onclick = () => {
+        unlock()
+        sfx.click()
+        perf.toggle()
+      }
+    }
     const file = $('#replayFile')
     $('#openReplay').onclick = () => {
       unlock()

@@ -225,7 +225,7 @@ async function run(browser, url, item) {
     page.on('pageerror', (e) => errors.push(e.message))
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
     await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE})` })
-    await page.goto(`${url}/?debug&fast&${query}`)
+    await page.goto(`${url}/?debug&fast&${query}`, { timeout: IDLE_MS })
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
@@ -302,7 +302,7 @@ async function grandRow(browser, url) {
       }
       hook()
     }})(${SETTLE})`)
-    await page.goto(`${url}/?debug&fast&seed=4242&dice=99`)
+    await page.goto(`${url}/?debug&fast&seed=4242&dice=99`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts)
     const t0 = Date.now()
     const board = () => page.evaluate(() => ({ ...window.__ts.view.board(), tiles: window.__ts.view.drawing().tiles }))

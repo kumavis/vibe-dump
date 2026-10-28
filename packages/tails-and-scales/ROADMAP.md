@@ -133,7 +133,13 @@ the commit, and add whatever the work turned up.
   sight held to the core's over every pair, entry by entry; present-check
   holds the page under it, lobby-rig's `fog` online), and from F18 P-prop's P-fight (shooting into a
   fight on scenes of its own: legal for every ranged weapon, a volley's
-  dice held draw for draw, the AI's value net of its friendly fire). A step
+  dice held draw for draw, the AI's value net of its friendly fire), and from V2 `node sim/bake-check.mjs`
+  (view/models/bake.js bakes every classic figure exactly as R7a's did,
+  node for node, and keeps the glossy ones whole; the splat Bushtails keep
+  their splats, shadow proxies and anim, every 'new' figure casts through
+  its one shadow caster, and the splats' preparation keeps its levels, its
+  budget (a frame's, shared with the race picker's windows) and freed
+  orders). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -159,7 +165,9 @@ the commit, and add whatever the work turned up.
   `node sim/play-check.mjs` (the shipped page played rendered, without
   `?debug` or `?fast`, through the DOM alone: a watched battle and back,
   vs. the AI from each seat and hotseat, each seat played here placing
-  units by clicks before Begin battle; `--full` without `?lowfi`), and from
+  units by clicks before Begin battle; `--full` without `?lowfi`; from V2
+  each wait for the table, the camera's rest and a placed unit's label,
+  spans drawn frames as well as time), and from
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
   rematch; from N3 the replay bar, replay files and the page that comes
@@ -172,7 +180,8 @@ the commit, and add whatever the work turned up.
   for each match's board across missions, flat over round trips), and from
   F8b `node sim/render-bench.mjs` (the drawing's rows on a Grand
   whole-board frame, a report failing above 1.25× budget: build first, run
-  it on a quiet machine; rematch-memory alternates Grand and classic
+  it on a quiet machine; from V2 the splats a row of their own, the
+  triangles the meshes'; rematch-memory alternates Grand and classic
   battles now, 50-80 minutes, `--classic` the old run), and from F12 and
   F15 `node sim/undo-check.mjs` (and `--self-test`: a hotseat battle's
   placement and move taken back by Undo and Ctrl-Z, the phase still open,
@@ -1144,6 +1153,70 @@ follows N3.
   70 of 70 byte-identical, `RULES_ID` moved; F19a's `CORE_VERSION` 10
   covers it.
   Left: lobby-rig's `group` and `catch-up` under load.)
+- [ ] **V2** The new figures as the game's own, the classic ones a switch
+  away, and a perf overlay to measure them on a phone. Landed (its first
+  half): the glossy Ssithra (proto/scales/'s runtime moved to
+  `view/models/gloss/`, the kit `view/models/serpent.js`, every figure at
+  detail 0.5: one template per unit for the 28 px table and the 140 px close
+  look, its measures in serpent.js's header and DESIGN §1.1's (V2) note);
+  the classic builders in `view/models/classic/`, unchanged; two figure
+  styles in `view/models/cache.js` (`setFigureStyle`, once, before any
+  figure; templates keyed by style), picked by the title's Figures link
+  (kept in this browser, the page reloaded) or `?models=new|classic`;
+  `view/models/bake.js` with the prototype's three changes, held to R7a's
+  bake on every classic figure by `sim/bake-check.mjs` (proto/scales's
+  bake-check moved there); the far stand-ins unchanged and checked; the
+  idle breath now about a figure's own height scale (the brute, hierophant
+  and elder were drawn squashed to about 1 high, in either style); the perf
+  overlay (`ui/perf.js`: fps, frame time average and worst, CPU time, draw
+  calls, triangles, splats, pixels and pixel ratio, shadows, the style;
+  the title's Perf overlay link, the battle's 📈, `?perf`; off, nothing
+  runs). proto/scales's viewer, pair and sheet import the game's modules.
+  `sim/title-shot.mjs` fails, as it must for a step that changes the
+  figures and the title card: against HEAD (seed 1), with the figures
+  hidden, only the card differs (its new row moves it); the table is the
+  same pixel for pixel. play-check's layout lane: the nine tools clear the
+  score as the eight did (890-1270 px at 1280×800); its Grand card check
+  fails on HEAD's build too. `rematch-memory --classic` (the classic
+  mission, in the 'new' figures) passes with the glossy figures (no program
+  linked twice, the heap flat). And (its second
+  half) the splat-fur Bushtails: proto/splat/'s runtime moved to
+  `view/models/splat/` (`fur.js` generated there by
+  `proto/splat/make-bushtail.py`, now at density 0.05: 8,300 splats in
+  under half the time, alike at game sizes; `splats.js`), the kit
+  `view/models/squirrel.js`; one fur a unit at four levels of detail (800
+  to 6,000 splats) in one texture, a level per figure per render from its
+  CSS height (n ≈ 1.7 px², hysteresis) under a 150,000-splat budget, the
+  draw order cached per (level, view bin: 32 azimuths × 6 bands) and
+  shared, no sort per frame (`prepareSplats`, each scene's onBeforeRender:
+  the table's and the race picker's); shadows from the classic body as an
+  invisible proxy on a layer only the sun's shadow pass draws (three r160's
+  shadow pass tests the drawing camera's layers, so view/stage.js wraps
+  it); the far stand-in the proxy and the kit; the anim as classic's;
+  `view/stats.js`'s splats and build time in the perf overlay. DESIGN
+  §1.1's (V2) splat note has the design and the numbers. Round 2 (the
+  first verification's findings, DESIGN §1.1's round-2 note): every 'new'
+  figure casts through one shadow caster (render-bench's classic frame,
+  shadow calls 639 → 280); a quality in the page (the title's Quality, a
+  tap on the perf overlay; auto: medium on a touch screen, a pixel ratio of
+  1.5, a 1024 shadow map, 60,000 splats) and `?quality=`; the splat budget
+  a frame's, the race picker's windows sharing it and the table's figures
+  at their coarsest behind them; `?lowfi`'s splats from the drawing buffer
+  and at low's 30,000; an explosion's flash and smoke drawn back to front
+  with the furs; a squirrel's far stand-in keeps its fur; the perf overlay
+  clear of the HUD; the Figures switch carries `#models=` where the
+  browser keeps nothing. The gates as they stand: the Node checks pass;
+  render-bench passes (the splats a row of their own, DESIGN §4.2.1's
+  decision); play-check's placement lanes pass (bushtail, serpent and
+  hotseat placing units by clicks, rounds 1-3 played) with its waits
+  frame-aware, and so does grand into round 2; lobby-rig's catch-up case
+  passes three runs in three under load (its page loads wait IDLE_MS);
+  `title-shot` fails as it must (the figures and the title card's new
+  row); play-check's layout lane's Grand card check, terrain-check's
+  connectivity and self-test, self-test.mjs's spin mutant, snap-check's
+  self-test and input-check's Shift-click fail on HEAD's build alike, not
+  this step's. Left: a phone's numbers for both styles (the overlay is
+  there for them).
 - [ ] **F9a** Vehicles: the Bushtail War-Cart, a round transport carrying two
   squads; embark, disembark, wrecks and bail-outs; riders loaded at
   deployment; up to two a side in Field and Grand.

@@ -1,12 +1,16 @@
 // The Ssithra's glossy finish: the materials every smooth serpent figure (serpents.js) is painted with.
 //
-//   ENV                 a small procedural studio sky (a 256x128 equirect HalfFloat texture, made on the CPU,
+//   env()               a small procedural studio sky (a 256x128 equirect HalfFloat texture, made on the CPU,
 //                       no renderer needed, linear-filterable on every WebGL2 device): a DIM dome, a bright
 //                       horizon band, two crisp light panels and the sun, the table's green below. three
 //                       turns it into a PMREM itself the first time a material samples it. The stage has no
 //                       scene.environment (and setting one would change every other material on the table),
 //                       so each glossy material carries this as its own envMap. It is for reflections: its
-//                       diffuse light is cut to 0.45 (uEnvDiffuse) so a figure's paint reads as today's.
+//                       diffuse light is cut to 0.45 (uEnvDiffuse) so a figure's paint reads as the classic
+//                       figures'. Made with the first glossy material, never as the module loads: three.js
+//                       draws Math.random for every texture's uuid, and the table is painted from Math.random
+//                       as the page loads (view/index.js), so a page drawing the classic figures (cache.js's
+//                       style) makes none and draws as it did before this module was in the bundle.
 //   skin(opts)          the scaled skin: MeshPhysicalMaterial (vertex colours, clearcoat) whose shader grows
 //                       scales out of object-space position and normal (a 3D cellular pattern: no UVs), domes
 //                       each scale in the normal and washes its edges darker. The coat follows the scales, the
@@ -87,7 +91,8 @@ function makeEnv() {
   t.needsUpdate = true
   return t
 }
-export const ENV = makeEnv()
+let ENV = null
+export const env = () => (ENV ??= makeEnv())
 
 // ── The level of detail's one global: the viewport's height in CSS pixels ─────
 // (set from the renderer before each draw of a glossy material: the drawing buffer's height divided by
@@ -299,7 +304,7 @@ export function skin(opts = {}) {
     const { iridescence = 0, clearcoatRoughness = 0.13, specularIntensity = 0.3, ...params } = opts
     const m = new THREE.MeshPhysicalMaterial({
       color: '#ffffff', vertexColors: true, roughness: 0.5, metalness: 0, specularIntensity,
-      clearcoat: 1, clearcoatRoughness, envMap: ENV, envMapIntensity: 1.0,
+      clearcoat: 1, clearcoatRoughness, envMap: env(), envMapIntensity: 1.0,
       iridescence, iridescenceIOR: 1.6, iridescenceThicknessRange: [180, 420],
     })
     // (the env at about a third on both layers, and gated: only its hot spots reflect, the sun and the
@@ -314,7 +319,7 @@ export function belly(opts = {}) {
   return once('belly' + JSON.stringify(opts), () => {
     const m = new THREE.MeshPhysicalMaterial({
       color: '#ffffff', vertexColors: true, roughness: 0.36, metalness: 0, specularIntensity: 0.6,
-      clearcoat: 1, clearcoatRoughness: 0.07, envMap: ENV, envMapIntensity: 1.0,
+      clearcoat: 1, clearcoatRoughness: 0.07, envMap: env(), envMapIntensity: 1.0,
     })
     return patch(m, { params: { uEnvSpec: 0.6, uEnvCoat: 0.65, ...opts } })
   })
@@ -322,24 +327,24 @@ export function belly(opts = {}) {
 export function gloss(color, opts = {}) {
   return once('gloss' + color + JSON.stringify(opts), () => {
     const { shader = {}, ...o } = opts
-    return patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.4, metalness: 0, clearcoat: 0.8, clearcoatRoughness: 0.12, envMap: ENV, envMapIntensity: 1.0, ...o }), { params: shader })
+    return patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.4, metalness: 0, clearcoat: 0.8, clearcoatRoughness: 0.12, envMap: env(), envMapIntensity: 1.0, ...o }), { params: shader })
   })
 }
 // metal that is mostly its own colour: a bronze face lit by the sun, not a mirror of the table
 export function satinMetal(color, opts = {}) {
   return once('satin' + color + JSON.stringify(opts), () =>
-    patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, metalness: 0.35, clearcoat: 0.5, clearcoatRoughness: 0.18, envMap: ENV, envMapIntensity: 1.0, ...opts }), { params: { uEnvDiffuse: 0.7, uRim: 0.12 } }))
+    patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, metalness: 0.35, clearcoat: 0.5, clearcoatRoughness: 0.18, envMap: env(), envMapIntensity: 1.0, ...opts }), { params: { uEnvDiffuse: 0.7, uRim: 0.12 } }))
 }
 export function polished(color, opts = {}) {
   return once('metal' + color + JSON.stringify(opts), () =>
-    patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.22, metalness: 1, envMap: ENV, envMapIntensity: 2.2, clearcoat: 0.4, clearcoatRoughness: 0.08, ...opts }), { params: { uEnvDiffuse: 1, uRim: 0.1, uLift: 0.15 } }))
+    patch(new THREE.MeshPhysicalMaterial({ color, roughness: 0.22, metalness: 1, envMap: env(), envMapIntensity: 2.2, clearcoat: 0.4, clearcoatRoughness: 0.08, ...opts }), { params: { uEnvDiffuse: 1, uRim: 0.1, uLift: 0.15 } }))
 }
 export function glow(color, opts = {}) {
   return once('glow' + color + JSON.stringify(opts), () =>
-    patch(new THREE.MeshPhysicalMaterial({ color, emissive: color, emissiveIntensity: 1.6, roughness: 0.15, clearcoat: 1, clearcoatRoughness: 0.05, envMap: ENV, envMapIntensity: 1.0, ...opts }), { params: { uRim: 0, uLift: 0 } }))
+    patch(new THREE.MeshPhysicalMaterial({ color, emissive: color, emissiveIntensity: 1.6, roughness: 0.15, clearcoat: 1, clearcoatRoughness: 0.05, envMap: env(), envMapIntensity: 1.0, ...opts }), { params: { uRim: 0, uLift: 0 } }))
 }
 
-// ── Baking (bake-gloss.js) ─────────────────────────────────────────────────
+// ── Baking (view/models/bake.js) ───────────────────────────────────────────
 // What a glossy part's class adds to bake.js's classKey (the physical parameters, and the shader's), and
 // the vertex-coloured material a glossy class is drawn with: the same finish, its colour moved into the
 // vertices.

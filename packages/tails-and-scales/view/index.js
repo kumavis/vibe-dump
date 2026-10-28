@@ -37,14 +37,15 @@ export class View {
   // The table: `W`, `H` the board's size, `deploy` the deployment's depth
   // and `edges` the seats' edges (the zones), `objectives` their places and
   // `range` their reach, `colorOf(seat)` a seat's colour (each flag in its
-  // holder's: the seats' look, ui/theme.js).
-  constructor({ lowfi = false, fast = false, W, H, deploy, edges, objectives, range, colorOf }) {
+  // holder's: the seats' look, ui/theme.js); (V2) `quality` the stage's
+  // (view/stage.js's QUALITY).
+  constructor({ lowfi = false, fast = false, quality = 'high', W, H, deploy, edges, objectives, range, colorOf }) {
     this.fast = fast
     // (F8a) the board shown (setBoard): classic's, the title's, as made
     this.boardKey = boardKey({ W, H, deploy }, objectives)
     // (how often a match's board made the table over: ?debug's)
     this.boardBuilds = 0
-    this.stage = new Stage({ lowfi, fast })
+    this.stage = new Stage({ lowfi, fast, quality })
     const { renderer, scene } = this.stage
     this.renderer = renderer
     this.scene = scene
