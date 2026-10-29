@@ -1,6 +1,6 @@
 # Merge Meadow — a shared, agent-editable three.js world
 
-**Package:** `packages/merge-meadow` · **Status:** design v1 (2026-10-28), research done, spikes next
+**Package:** `packages/merge-meadow` · **Status:** design v1.1 (2026-10-29): research done, four integration spikes done (§16 holds their amendments), implementation next
 **One-liner:** A three.js scene whose entire authored state is an Automerge
 document: open the link and you are in the same world as everyone else; edit
 it from a desktop editor, from inside WebXR, or hand an AI agent a CapTP
@@ -30,8 +30,8 @@ and its reason are stated inline.
 | Who simulates what? | **One writer per entity.** Players own themselves, a ridden mount follows its rider's peer, everything else belongs to the elected host (lowest live peer id) or an explicit owner pin. Damage goes through the victim's inbox; only the victim's owner applies it | behaviors, prior-art, ecs: otherwise N peers apply damage N times |
 | Behaviour vocabulary? | **`brain.drives`**: utility-scored drives with structured filters and a fixed set of steering verbs; presets with `extends`; component groups toggled by events | behaviors: T-rex/sheep/horse/rider emerged from ~10 general components; riderless horse fled with no code for it |
 | Runtime extensibility? | Systems and component schemas **stored in the doc as source/JSON**, compiled per peer in **SES Compartments**, hot-swapped on change, errors isolated | runtime-extensibility: peer B ran peer A's new system 89 ms later; `new Function` on the shared `kumavis.github.io` origin is unacceptable (localStorage of other apps) |
-| Where do sandboxed systems run? | **Main thread under `lockdown()` in v1**, behind a `SystemHost` interface so a Worker host can replace it | measured cost is 2–8× on three's matrix math, which at 300 entities is tens of microseconds; a Worker doubles the architecture (two mirrors, async editor). Revisit if scenes grow |
-| Agent interface? | **@endo/captp**, Far `World`/`Entity` objects over the same ops module the editor uses; **transport = sealed frames over the scene doc's ephemeral channel** (public server), plus BroadcastChannel for same-origin page tools; **a stdio MCP server and a one-shot CLI** ship in the package | captp: 41–67 ms round trip through the server, pipelining 45 vs 125 ms, MCP tool call ≈ 43 ms |
+| Where do sandboxed systems run? | **Main thread under `lockdown()` in v1**, behind a `SystemHost` interface so a Worker host can replace it | spike S1 measured the real cost: matrix math 0.048→0.095 ms/frame at 300 objects, 0.58→1.0 ms at 3000; `renderer.render` of 300 sprites 0.55→0.89 ms; `lockdown()` 10–14 ms. A Worker doubles the architecture (two mirrors, async editor). Revisit if scenes grow |
+| Agent interface? | **@endo/captp**, Far `World`/`Entity` objects over the same ops module the editor uses; **transport = sealed frames over the scene doc's ephemeral channel** (public server), plus BroadcastChannel for same-origin page tools; **a stdio MCP server and a one-shot CLI** ship in the package | spike S3 ran the whole chain: MCP tool call through a rendering browser host p50 87–117 ms, a batch of 50 ops 145 ms, BroadcastChannel 1–30 ms (bounded by the host's frame time) |
 | Security posture? | The doc URL **is** edit access (public server has no auth). The agent secret in the link fragment gates only what the live page exposes beyond the doc (`capture`, `logs`, `eval`). Page runs under SES; doc-stored code never sees three, DOM or handles | captp, runtime-extensibility, automerge |
 | Desktop + XR? | One `PlayerRig`, one `Pointer` abstraction, `renderer.xr.enabled` always, **three@0.186.1**, custom Enter-VR button hidden unless `immersive-vr` is supported; players are local entities fed by presence, not doc entities | webxr: `Raycaster.setFromXRController` needs ≥0.162; the stock VRButton's "not supported" pill lands in thumbnails |
 
@@ -104,9 +104,11 @@ BroadcastChannel + WebSocket (`wss://sync.automerge.org`, `&sync=` override).
 - **Enums, ids and URLs are `ImmutableString`.** A plain string is
   collaborative text: concurrent edits interleave ("T-Rexy"), and every edit
   arrives as `put ""` + `splice` patches. Code compares with `String(x)`.
-- **Health is `health: { max: number, damage: Counter, armor }`**; hp =
-  `max - damage`, clamped on read. Two concurrent hits on a plain number lose
-  one; a Counter sums.
+- **Health is a ledger: `health: { max, armor, hits: { [hitId]: amount } }`**;
+  hp = `max − Σ max(0, amount − armor)`, clamped on read. Hit ids are
+  `<peerId>:<seq>`. A plain number loses concurrent hits; a Counter sums them but
+  double-applies when two partitioned owners drain the same inbox entry (spike
+  S2 saw it happen); a keyed put is idempotent and costs 2.6 bytes per hit.
 - **Sets are maps of `true`** (`tags: { prey: true }`, `groups`), so
   concurrent adds both survive.
 - **`set` merges fields, `replace` swaps identity.** A wholesale component
@@ -126,7 +128,12 @@ BroadcastChannel + WebSocket (`wss://sync.automerge.org`, `&sync=` override).
 
 - **Share:** `…/merge-meadow/#doc=automerge:<id>&key=<secret>` — the doc URL is
   the edit capability; `key` is the agent secret (§6). A link without `key`
-  opens the same editable world but no agent can attach through that tab.
+  opens the same editable world but no agent can attach through that tab. A
+  view link is `#doc=…&view=<HKDF(key,'view')>`: the role lives in the
+  parameter name so the agent's local fallback can attenuate without a host.
+  The Share button enables only once the sync server holds the doc (a joiner
+  opened earlier gets "unavailable" for ~6 s); joiners retry `find` with
+  backoff and show "waiting for the world…".
 - **Fork:** `repo.clone(handle)` → a new URL; also how "compact history" works
   (history only grows; ~2.7 bytes per small change, ~1 MB/hour if you commit
   50 entities at 2 Hz, which we don't).
@@ -205,7 +212,7 @@ All plain JSON. None of these knows what a T-rex is.
 | `perception` | `{radius}` | perceive |
 | `brain` | `{drives: {name: Drive}, idle: 'wander'\|'idle', stickiness}` | decide |
 | `attack` | `{damage, reach, cooldown, match?: Filter}` | attack |
-| `health` | `{max, damage: Counter, armor, regen}` | health; `dead` when hp ≤ 0 |
+| `health` | `{max, armor, hits: {[hitId]: amount}}` | health; `dead` when hp ≤ 0 |
 | `on` | `{died: {add: ['dead']}, hurt: {...}}` | events → groups |
 | `controller` | `{kind: 'input'}` | control (players, agent puppets) |
 | `mount` | `{seats: [{offset, controls}], panicPriority}` | mount, control |
@@ -248,10 +255,22 @@ owner(e) = riderPeer(e)                  // a ridden mount follows its rider's p
         ?? host                          // lowest live peer id
 ```
 
-Presence heartbeats every 2 s; a peer is live for 6 s after its last message.
-The host election needs no doc write. Pins are written on grab/drag
-(so the editor's hand is authoritative while dragging) and cleared on release.
-Hysteresis of ~3 s on host change avoids flapping on churn. Partition means
+Presence heartbeats every 2 s; any ephemeral message (presence, pose, CapTP)
+refreshes liveness; a peer that was streaming poses and has been silent for
+2.5 s is gone (crash failover measured at 2.5 s; 1.5 s would false-trigger on
+the 1.9 s stalls the public server shows); a peer that never streamed expires
+after 6 s; `bye` is broadcast on `pagehide` after one final checkpoint
+(graceful takeover in ~60 ms). The host election needs no doc write and uses
+this exact rule (spike S2: the obvious rule self-elects a joiner for 100 ms and
+caused a double hit): a remote peer is a host candidate if I first heard it
+within my own first 3 s (an incumbent) or I have known it for ≥3 s; I am a
+candidate after 3 s + 250 ms when others are present, or after 1.5 s alone; a
+peer with no candidate simulates nothing; removal (bye/expiry) applies at
+once. Pins are written on grab (so the editor's hand is authoritative while
+dragging) under a conditional protocol: a grab is refused while `owner` is
+pinned to another live peer ("held by X"); release writes the final transform
+and clears the pin in one change only if the pin is still mine; a drag whose
+pin is no longer mine aborts and writes nothing. Partition means
 two peers may simulate the same entity until their presence merges; the doc
 stays consistent because only checkpoints and inbox drains reach it, and both
 are idempotent enough (last checkpoint wins; a Counter sums).
@@ -259,26 +278,45 @@ are idempotent enough (last checkpoint wins; a Counter sums).
 ### 4.2 Live stream
 
 The owner broadcasts a packed frame at 10 Hz for NPCs and 20 Hz for its own
-player: `{t, poses: Float32Array [id-index, x,y,z, yaw, animState, …]}` with an
-id table sent on change. Receivers interpolate 100–150 ms behind; an entity
-silent for 3 s snaps back to its doc transform. The same channel carries
-presence and CapTP frames, each tagged.
+player: `{t:'po', k, ts, f: Float32Array[idx, x,y,z, yaw, anim]×N, ids?}`
+(24 bytes per entity plus a ~190-byte envelope). The id table is sent on
+change, on every presence hello, and every 10th frame. Receivers interpolate
+120 ms (configured) + one-way latency behind, with extrapolation clamped
+(≥50 ms velocity baseline, ≤30 m/s, ≤200 ms) and corrections blended over
+~250 ms after a gap. An entity that falls silent holds its last pose; only
+after 5 s (longer than the 2.5 s failover) does it snap to its doc transform.
+On ownership loss the old owner holds the last simulated pose until the new
+owner's first frame; on gain it clears the entity's buffer and seeds from the
+displayed pose. Budget (measured): 7 entities 3.7 KB/s, 50 → 14.5 KB/s, 300 →
+77 KB/s per owner stream, and automerge-repo 2.5.6 re-gossips every received
+ephemeral message, so each receiver uploads what it downloads; skip resting
+entities before scaling past ~50 streamed. The same channel carries presence
+and CapTP frames, each tagged.
 
 ### 4.3 Cross-owner effects: the inbox
 
-An attacker's owner appends `{type:'damage', from, amount, t}` to
-`entities[victim].inbox` (one list push per hit, at most once per cooldown).
-The victim's owner drains its inbox each tick: increments `health.damage`,
-emits `hurt`/`died`, deletes the drained entries. Appends and deletes to the
-same list merge without loss. This is the pattern for every cross-owner
-interaction (push, heal, tame); none needs a new sync mechanism.
+Damage is a direct idempotent put: the attacker's owner writes
+`entities[victim].components.health.hits[hitId] = amount` (one put per hit,
+at most once per cooldown). The victim's owner only observes hp crossing
+zero and adds the `dead` group (idempotent too). Other cross-owner effects on
+live state (push, tame, `move` = teleport by a non-owner) go through
+`entities[id].inbox`, a map keyed by event id, that the owner drains (apply,
+then delete the key); those may double-apply during a partition, which is
+acceptable for live effects and not for damage. Concurrent puts to the same
+key merge to one value; a drained key deleted on one side and re-put on the
+other re-applies at most once more.
 
 ### 4.4 Checkpoints
 
 Every 3 s the owner writes, in **one** change, the rest pose of each owned
-entity that moved more than 0.1 m since its last checkpoint. Also on
-ownership release and before unload. Measured budget: a handful of entities
-at 0.3 Hz is a few KB per minute of history.
+entity that moved more than 0.1 m or turned more than 5° since its last
+checkpoint, rounded to mm / 0.1°. Also on ownership release and on `pagehide`.
+Measured: 7 entities with a hunting T-rex grew the doc by 46 B/s. Checkpoints
+serve resting entities and worlds opened with nobody online; a live joiner
+converges from the stream within ~200 ms (the doc pose can be 11 m off for a
+running T-rex). The owner ignores doc transform patches for entities it
+simulates; a `set transform` on a simulated entity owned by another live peer
+travels as an inbox `move` event.
 
 ## 5. One write path
 
@@ -387,7 +425,11 @@ export default {
 ```
 
 Lowered by one regex (`export default` → return), compiled in a fresh SES
-`Compartment` per source hash with endowments `{ world, Math, log }`. Swap:
+`Compartment` per source hash with endowments `{ world, log }` only: the
+compartment's own `Math.random()` and `Date.now()` throw in secure mode, which
+is what a seeded, owner-simulated world wants (`world.rand()`, `world.time`).
+SES rejects source that contains `eval(`, `import(` or HTML comment tokens at
+compile time; the editor shows those as compile errors. Swap:
 `dispose` → `init` with the previous hot data. A compile error keeps the last
 good version and reports; a throwing `update` is caught per system and the
 system is suspended locally after 30 consecutive errors. Status (`ok`,
@@ -404,13 +446,25 @@ patch)` (queued, flushed as one change per tick), `emit(event)`,
 
 ### 7.3 Lockdown and recovery
 
-- `src/boot/lockdown.js` is the **first module script** in `index.html`:
-  `import 'ses'; lockdown({ overrideTaming: 'severe', errorTaming: 'unsafe', consoleTaming: 'unsafe' })`.
-  Main runs after it. (Spike S1 confirms the Vite build keeps that order.)
-- Crash marker: before doc systems first run, `localStorage['mm:running']=docId`;
-  cleared after 2 s of healthy frames. If present at boot (a hang killed the
-  tab), boot with doc systems disabled and a banner. `#safe` does the same on
-  demand.
+- `index.html` has **one** module script, `src/boot/entry.js`:
+  `import './lockdown.js'; import('../../main.js').catch(showBootError)`, where
+  `lockdown.js` is `import 'ses'; import '@endo/eventual-send/shim.js';
+  lockdown({ overrideTaming: 'severe', errorTaming: 'unsafe', consoleTaming: 'unsafe' })`.
+  Spikes S1/S3: two module scripts work until a second Vite entry shares
+  `@endo/*`, then harden runs before lockdown; `manualChunks` of statically
+  imported three/@endo breaks the order; without the eventual-send shim a
+  static captp import dies with `HandledPromise is not defined`, silently
+  unless the dynamic import is caught. Main boots inside an async function (the
+  shared Vite config has no es2022 target, so no top-level await). Main refuses
+  to compile doc systems if `Object.isFrozen(Array.prototype)` is false.
+- Crash marker (session style, S1 measured the 2-second variant never recovers
+  from a late hang): when doc systems start running in this tab write
+  `localStorage['mm:running'] = {docId, systemsHash}`; clear it on `pagehide`,
+  re-arm on `pageshow`. At boot, enter safe mode only if the marker's docId is
+  this doc, and stay in safe mode while the doc's systems hash equals the
+  recorded one, so editing a system re-enables systems. The banner has "Run
+  systems anyway". A browser killed with the tab open costs one safe-mode
+  boot. `#safe` forces it.
 - `SystemHost` interface (`compileAll(doc)`, `tick(dt)`, `status()`) so a
   Worker host with a watchdog can replace the main-thread one later.
 
@@ -437,11 +491,23 @@ ref-counted by key (texture URL, emoji, geometry params).
 | `billboard` | `{image: 'emoji:🦖' \| url, size, color}` | emoji drawn to a canvas texture: zero assets |
 | `primitive` | `{shape: box\|sphere\|cone\|cylinder\|capsule, size, color, roughness, metalness}` | |
 | `tree` | `{nodes: [{shape, p, r, s, color, children}]}` | a JSON node tree: the "sculpt it" path |
-| `model` | `{url, scale}` + `animation.clips` | glTF via GLTFLoader + AnimationMixer |
-| `critter` | `{kind: quadruped\|biped, length, height, color, head, tail}` | procedural low-poly rig with idle/walk/run/attack/die clips built in code: the animated path with zero assets |
+| `model` | `{url, scale}` + `animation.clips` | glTF via GLTFLoader + AnimationMixer; `url` is `asset:<name>` (resolved through `doc.assets`) or https, never `blob:`/`data:`; loader imported lazily on the first model; one template per URL, a SkeletonUtils clone per entity |
+| `critter` | `{rig: quadruped\|biped, length, height, color, head, tail}` | procedural low-poly rig with idle/walk/run/attack/die clips built in code: the animated path with zero assets (`rig`, not `kind`: representation is flat). Template shared per quantised proportions; 300 animating critters cost ~3.5 ms CPU/frame |
 
-The simulation writes only `live.anim` (semantic state); model and critter
-handlers map it to clips with fallbacks, billboard and primitive ignore it.
+The simulation writes only `live.anim` (semantic state); the render pass
+reads it every frame together with `animation.clips` (which has no handler, so
+editing a mapping never rebuilds the look) and maps it to clips: explicit
+mapping → case-insensitive clip name → fallbacks (run>walk>idle, attack>idle,
+sit>idle); no die clip halts the current action. Billboard and primitive
+ignore it. Resources are keyed `tex:<image>`, `spritemat:<image>:<color>`,
+`geo:<shape>` (unit shapes, size is scale), `mat:std:<color>:<rough>:<metal>:…`,
+`gltf:<url>`, `critter:<rig>:<L>:<H>:<head>:<tail>`; kinds record acquired keys
+on `obj.userData.res` and `dispose` releases them generically. `tree` nodes:
+`p`/`r` (degrees) place a node group, `s` scales only that node's own shape; a
+structure change rebuilds, pose/scale/colour edits patch in place. Emoji: font
+stack Apple Color Emoji / Segoe UI Emoji / Noto Color Emoji / Twemoji Mozilla,
+glyph anchored at the bottom; a 1 ms boot probe detects a monochrome fallback
+and the seed presets then use eight bundled Twemoji SVGs (9 KB gz, CC-BY 4.0).
 Upgrading an entity is `replace(id, 'representation', {...})`: same root, same
 `live`, same components, same children.
 
@@ -543,6 +609,78 @@ covered one axis; these combine them):
 
 Each returns go / no-go with numbers and the paths to adopt. Design changes
 they force are recorded here before the build starts.
+
+## 16. Amendments from the spikes (normative)
+
+All four spikes (`S1` boot-and-lockdown, `S2` sync-split, `S3` agent-loop,
+`S4` representation-upgrade) returned GO-WITH-CHANGES. The changes are folded
+into the sections above; this list is the checklist an implementer can grep
+for, with the measurement that forced each one.
+
+1. **Boot** (§7.3): one module script `src/boot/entry.js` → static
+   `lockdown.js` (ses + eventual-send shim + severe lockdown) → dynamic
+   `import('../../main.js').catch(...)`. No `manualChunks`. No top-level await.
+   S1: a split build evaluated three before lockdown; S3: two scripts failed
+   with "prior harden" as soon as a second entry shared @endo.
+2. **Doc watching** (§3.1, §5): every doc consumer subscribes through one
+   `watch(handle, fn)` helper that keeps its own last heads, computes
+   `Automerge.diff(doc, lastHeads, now)` itself and wraps `fn` in try/catch.
+   Never trust `handle.on('change').patches`: S4 showed a throwing listener
+   stops automerge-repo 2.5.6 advancing its patch base, after which a
+   spawn+despawn nets to zero patches (300 leaked critters).
+3. **Damage ledger** (§2.2, §4.3): `health.hits[hitId] = amount` written by the
+   attacker's owner; no Counter, no inbox for damage. S2: a Counter
+   double-applied a hit during a 6 s partition.
+4. **Liveness, election, pins, stream** (§4.1, §4.2, §4.4): exactly as now
+   written there (2.5 s stream-silence TTL, the candidate rule, conditional
+   grab/release/abort, id table on hello + every 10th frame, hold on loss /
+   forget on gain, 5 s snap timeout, clamped extrapolation, owner ignores doc
+   transform patches for simulated entities, `move` via inbox).
+5. **Inbox is a map keyed by event id**, drained by the owner (apply, delete
+   key); used for live-state effects only.
+6. **Transport** (§6.2): drop frames with `seq < expected` (duplicates: two
+   host tabs in one browser relay the same ephemeral message twice via
+   BroadcastChannel and websocket); abort only on a gap; the guest sends a
+   sealed `fin` on close and to every host whose ACK lost; hosts drop idle
+   sessions and cancel a dead session's subscriptions. Latency: p50 87–117 ms
+   per MCP call through a rendering host, bounded by the host's frame time.
+7. **Local fallback** (§6.2, §6.3): host timeout 1.5 s (env-overridable);
+   local writes return only after the sync server acks
+   (`handle.getSyncInfo(serverStorageId).lastHeads` equals `handle.heads()`);
+   every tool result reports `mode` (`live`|`local`) and `fallbackReason`; in
+   local mode `systems()` lists doc systems with status `unknown` and
+   `capture`/`logs`/`eval`/`explain` reject with "needs a live host page".
+8. **View links** carry their role in the parameter name (`&view=`); the page
+   hosts agents only when it has `key`; `connect.mjs` attenuates to
+   `WorldView` locally too.
+9. **Filters resolve presets**: `list({tags})` and every `has`/`tags` filter
+   use `effectiveComponents` (S3 found 0 of 51 preset-spawned sheep before).
+10. **world-caps is one module**, `makeWorldCaps(handle, {checkSource, host,
+    mode})`; the page injects host powers (`capture`, `logs`, `eval`,
+    `explain`, `systems`); Node gets the same module without them; add
+    `heads()`; `eval` runs in a Compartment endowed with `{world, E, Math,
+    log}` and JSON-copies its result; returns arrive hardened on the guest.
+11. **Compartment endowments** are `{world, log}` only (§7.1).
+12. **Crash marker** is the session variant (§7.3).
+13. **Representation** (§8): `critter.rig`; `model.url` is `asset:`/https;
+    `animation` read per frame, not a handler; resource keys and `tree`
+    semantics as written; emoji font probe + bundled Twemoji seed glyphs;
+    `kind`, `rig`, `shape`, `image`, `url` are ImmutableString; schemas may
+    carry `x-immutable` and `x-json`; the kind switcher writes one `replace`
+    from the target's schema defaults plus same-typed carried fields.
+14. **Anchors**: kinds may expose named anchors (`seat`, `head`); `mount.seats[i]`
+    may name an anchor and falls back to its offset, so a seat follows the look.
+15. **Verification** (§12): e2e asserts boot order (an inline `__THREE__`
+    setter probe + `Object.isFrozen(Array.prototype)` at the top of main);
+    filters console checks on `type === 'error'` (SES warns on every load);
+    position error is judged against the owner's pose 160 ms earlier (≤0.1 m
+    mean / 0.3 m max); handoff ≤250 ms graceful, ≤3 s crash; a doc-history
+    exactly-once check; ≤3 headless pages per box (6 caused 6 s stalls and a
+    split brain); Playwright perf loops read back one pixel per frame.
+16. **Dependencies**: `@modelcontextprotocol/sdk` and `zod` are declared;
+    `agent/lib/connect.mjs` imports `ses/assert-shim.js` and
+    `@endo/eventual-send/shim.js` before anything from @endo. GLTFExporter is
+    test-only and must not ship.
 
 ## 14. Non-goals (v1)
 
