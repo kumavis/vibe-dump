@@ -38,6 +38,7 @@
     "tags": ["simulation", "tool"],
     "status": "wip",
     "models": ["Opus 5.5", "Fable 5.1"],
-    "thinking": "high"
+    "thinking": "high",
+    "thumbnail": { "click": "button.mode", "settle": 2500 }
   }
 }
