@@ -235,8 +235,8 @@ is "stunned", "sleeping" or "enraged".
 
 **Seed presets** (editable in every doc; `creature` is the base with `on.died`):
 
-- `trex` — tags predator; body speed 6; perception 25; drives hunt `{act:'pursue', match:{tags:['prey']}, weight:2}`, idle wander; attack 25/1.5 m/1.2 s; health 200; look `billboard 🦖`.
-- `sheep` — tags prey; body speed 5; perception 15; drives flee `{act:'flee', match:{tags:['predator']}, weight:3}`, idle wander; health 30; look `billboard 🐑`.
+- `trex` — tags predator; body speed 6; perception 25; drives hunt `{act:'pursue', match:{tags:['prey']}, weight:2, range:15}` (past 15 m it gives up), idle wander; attack 25/1.5 m/1.2 s; health 200; look `billboard 🦖`.
+- `sheep` — tags prey; body speed 6.5 (faster than the T-rex: it catches unaware or cornered sheep, not every sheep); perception 15; drives flee `{act:'flee', match:{tags:['predator']}, weight:3, range:12}`, idle wander; health 30; look `billboard 🐑`.
 - `horse` — tags prey; mount one controlling seat; body speed 9; drives flee predator weight 2; health 80; look `billboard 🐎`.
 - `tree`, `rock`, `lamp` — static looks and a light.
 
