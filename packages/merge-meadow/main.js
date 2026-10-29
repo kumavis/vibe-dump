@@ -169,8 +169,8 @@ async function boot () {
   const rig = new PlayerRig(stage.renderer, stage.camera)
   if (!rig.root.parent) stage.scene.add(rig.root)
   // the editor camera opens raised over the starter meadow (and the gallery card)
-  rig.teleport({ x: 0, y: 3.5, z: 23 })
-  rig.look(0, -0.24)
+  rig.teleport({ x: 0, y: 5, z: 26 })
+  rig.look(0, -0.3)
   const pointers = makePointers({ renderer: stage.renderer, camera: stage.camera, rig, dom: canvas })
   // no onMove / onSnapTurn: the controllers then move and turn the rig themselves;
   // their `move` is read below as a mounted rider's steering

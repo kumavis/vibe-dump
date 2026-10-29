@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>Merge Meadow</title>
+<meta name="description" content="A shared three.js world edited live by people and agents." />
+<script>
+  // Boot-order probe (design §16.15). A classic inline script runs during
+  // parse, before any module: three.core.js does `window.__THREE__ = REVISION`
+  // as it evaluates, so this setter records whether lockdown had already
+  // frozen the intrinsics at that moment. main.js pushes its own row.
+  ;(function () {
+    var v, log = (window.__order = [])
+    Object.defineProperty(window, '__THREE__', { configurable: true, get: function () { return v },
+      set: function (x) { log.push({ what: 'three-evaluated', arrayProtoFrozen: Object.isFrozen(Array.prototype), t: Math.round(performance.now()) }); v = x } })
+  })()
+</script>
+  <script type="module" crossorigin src="./assets/index-ChaZsPcm.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-lFcOMgsm.css">
+</head>
+<body>
+<canvas id="scene" aria-label="the meadow"></canvas>
+<div id="app"></div>
+<div id="banners" aria-live="polite"></div>
+<div id="boot">
+  <div class="card">
+    <div class="logo" aria-hidden="true">🌱🦖🐑</div>
+    <h1>Merge Meadow</h1>
+    <p class="msg">loading…</p>
+    <div class="bar"><i></i></div>
+  </div>
+</div>
+<div id="boot-error" hidden>
+  <div class="card">
+    <h2>The meadow failed to start</h2>
+    <pre></pre>
+    <p><button type="button" onclick="location.reload()">Reload</button> <a href="./">Start a new world</a></p>
+  </div>
+</div>
+<noscript><p class="noscript">Merge Meadow needs JavaScript.</p></noscript>
+</body>
+</html>

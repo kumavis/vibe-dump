@@ -39,6 +39,6 @@
     "status": "wip",
     "models": ["Opus 5.5", "Fable 5.1"],
     "thinking": "high",
-    "thumbnail": { "click": "button.mode", "settle": 2500 }
+    "thumbnail": { "click": ["button.toggle-left", "button.toggle-right"], "settle": 1000 }
   }
 }
