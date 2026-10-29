@@ -151,9 +151,22 @@ How the e2e harness is set up:
   `"thumbnail": { "click": "…" }` that collapses the panels, or add a `#thumb`
   switch. The renderer now sizes its buffer at boot, so the card is sharp.
   Before this round, every tab rendered a 300×150 buffer stretched by CSS.
-- Contract amendments 1–12 below should be folded into ARCHITECTURE §3.
+- The contract (ARCHITECTURE.md §3) was reconciled with the code on 2026-10-29.
 
 ## Contract amendments
+
+ARCHITECTURE.md §3 now reflects these; they stay here as the record of why it changed.
+
+Where an amendment below overstated the code, the contract follows the code:
+`live.held` is honoured by steer and integrate only (and set only on entities
+this peer owns); editor writes are applied at once through `applyOps` with
+`withMoves`, and only interaction commits are queued into the tick flush, whose
+world ops go through `applyValidOps`; `expandMoves` and `healOps` live in
+`src/editor/component-ops.js`; a host's served-session set is capped at 4096
+(oldest dropped); `changeDoc` writes `schema: 1` only when it is missing; the
+sim's `teleport` queues a checkpoint as `{id, p, yaw}`; and ownership loss
+clears `live.hp/died/intent/scores` in `main.js`'s `reown()`, not in
+`makeOwnership`.
 
 Positional parameters are unchanged everywhere. These are the departures from
 ARCHITECTURE §3 that callers rely on.
