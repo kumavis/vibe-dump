@@ -29,9 +29,19 @@ function material (res, d, assets) {
 }
 const disposeMat = (res) => (m) => { m.dispose(); res.release(m.userData.texKey) }
 
+// `size` is the height in metres; the width follows the image's aspect, so a wide
+// picture is not squashed into a square. An image still loading places itself
+// again when it lands (the texture keeps a list of waiters until then).
+function aspectOf (tex) {
+  const img = tex?.image
+  const w = img?.naturalWidth || img?.width, h = img?.naturalHeight || img?.height
+  return w && h ? w / h : 1
+}
 function place (s, d) {
   const k = size(d)
-  s.scale.set(k, k, 1)
+  const tex = s.material?.map
+  s.scale.set(k * aspectOf(tex), k, 1)
+  if (tex?.userData?.onLoad && aspectOf(tex) === 1 && !tex.image) tex.userData.onLoad.push(() => { if (s.userData.look === d) place(s, d) })
   // anchors live in sprite space (scaled by size): a seat on the back, a head on top
   s.userData.seat.position.set(0, 0.62, 0)
   s.userData.head.position.set(0, 0.95, 0)
@@ -46,11 +56,13 @@ export default {
     s.center.set(0.5, 0)
     s.userData.seat = anchorPoint(s, 'seat'); s.userData.head = anchorPoint(s, 'head')
     s.userData.pick = 'box'
+    s.userData.look = d
     place(s, d)
     return s
   },
   update (s, d, prev, { res, assets }) {
     s.material = res.swap(s, spriteMatKey(image(prev), colour(prev)), spriteMatKey(image(d), colour(d)), material(res, d, assets?.()), disposeMat(res))
+    s.userData.look = d
     place(s, d)
   },
   // Sprite geometry is three's module-level singleton: never dispose it

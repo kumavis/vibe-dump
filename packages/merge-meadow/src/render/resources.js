@@ -148,8 +148,10 @@ export function makeResources ({ document: doc = globalThis.document, colorEmoji
     if (s.startsWith('emoji:')) return emojiTexture(s.slice(6) || '❓')
     const url = resolveUrl(s, assets)
     if (!url || !doc?.createElement) return emojiTexture('❓')
-    const t = new THREE.TextureLoader().load(url)
+    // sprites size themselves to the image's aspect once it has landed (billboard.js)
+    const t = new THREE.TextureLoader().load(url, () => { const fs = t.userData.onLoad; t.userData.onLoad = null; for (const f of fs ?? []) f(t) })
     t.colorSpace = THREE.SRGBColorSpace; t.name = url
+    t.userData.onLoad = []
     return t
   }
 
