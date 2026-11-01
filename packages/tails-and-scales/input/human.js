@@ -434,7 +434,9 @@ export class Human {
     // ((F7b) Alt held fades every tall chunk: read off every key's down and
     // up (its altKey: held or not), and let go when the page loses the
     // keyboard; Alt's own default, the browser's menu bar, kept off the
-    // table)
+    // table. ((F7b's merge review) Alt is F13's far aim on the pointer too,
+    // and input/group.js's Alt-drag line: a line drawn with the walls seen
+    // through, as meant, the ground behind them shown where it lands)
     const altKey = (e) => e.code === 'AltLeft' || e.code === 'AltRight'
     addEventListener('keydown', (e) => {
       this.alt = e.altKey

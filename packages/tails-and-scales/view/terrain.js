@@ -1627,6 +1627,12 @@ export class TerrainView {
         })
       } else this.solid(item)
     }
+    // ((F7b's merge review) and the tiles a chunk went back to merged again
+    // now, not from mark()'s microtask: see() runs inside the frame, before
+    // it is drawn, and a chunk solid again has its own mesh hidden, so until
+    // the flush neither it nor its tile would draw it, a wall blinking out
+    // for a frame on every Field and Grand board)
+    if (this.dirty.size) this.flush()
   }
   // an item drawn solid again (and back in its tile)
   solid(item) {
@@ -1694,6 +1700,13 @@ export class TerrainView {
         v.ownMat = true
       }
       m.material.color.multiplyScalar(0.8)
+      // ((F7b's merge review) its faded copy, made from the colour it had,
+      // freed: the next fade copies the darker one)
+      const f = fades.get(m.material)
+      if (f) {
+        f.dispose()
+        fades.delete(m.material)
+      }
     }
     const p0 = m.position.clone()
     // ((F8b's review) a token, as a fall's: a snap that stops the shudder

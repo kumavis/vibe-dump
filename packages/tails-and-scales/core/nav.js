@@ -312,9 +312,11 @@ export class NavGrid {
   // (5) the hard, soft and difficult rasters, and (6) the cover, each
   // chunk's only on the cells whose floor is within STEP of the floor it
   // stands on (`base`, 0 when absent: a parapet on a deck covers the deck,
-  // not the ditch below; F7b's parapets, the first chunks with a base, are
-  // the first whose cover this parts, and their cover is the band behind
-  // them, their `coverShape`); then the clearance fields, as ever. (7, F9b:
+  // not the ditch below; F7b's parapets join F9a's wreck (on the floor its
+  // hull stood on) as chunks with a base, the first standing on a raised
+  // deck, so the first whose cover this keeps off the ground below, and
+  // their cover is the band behind them, their `coverShape`); then the
+  // clearance fields, as ever. (7, F9b:
   // the hull memo is cleared.)
   rebuildHeight(chunks) {
     const N = this.N

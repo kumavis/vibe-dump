@@ -69,9 +69,17 @@ const NAMES = {
   parapet: 'a parapet', tree: 'the trees', hedge: 'the hedge', rock: 'the rocks', mushroom: 'the mushrooms', rubble: 'the rubble', log: 'the fallen tree', post: 'a post', floor: 'the wood',
   keg: 'the powder kegs', wreck: 'the wreck', crater: 'the shell hole', stump: 'the burned stumps', cart: 'the broken cart', sandbag: 'the sandbags', pyre: 'the burning wreckage', hulk: 'the wreckage',
 }
+// ((F7b's merge review) and V3d's wrecked sites' decks by what they were, not
+// by their recipe: "Blocked by the trebuchet" read as the Pinecone
+// Trebuchet, a unit)
+const DECKS = {
+  platform: 'the timber platform',
+  farm: 'the burned farmhouse', barn: 'the burned barn', farmstead: 'the burned farmstead',
+  trebuchet: 'the wrecked trebuchet', wagon: 'the wrecked war-wagon', engine: 'the overturned venom engine',
+}
 export function nameOf(c) {
   if (!c) return 'something'
-  if (c.kind === 'deck') return c.look.recipe === 'platform' ? 'the timber platform' : `the ${c.look.recipe}`
+  if (c.kind === 'deck') return DECKS[c.look.recipe] ?? `the ${c.look.recipe}`
   if (c.kind === 'block') return c.look.piece === 'log' ? 'the log wall' : 'the wall'
   if (c.kind === 'crate') return c.look.piece === 'barrel' ? 'the barrels' : c.look.piece === 'sack' ? 'the sacks' : 'the crates'
   return NAMES[c.kind] ?? `the ${c.kind}`

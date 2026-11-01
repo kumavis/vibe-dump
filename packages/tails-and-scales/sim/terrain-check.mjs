@@ -1861,7 +1861,11 @@ if (conn.failed) {
 //    none hidden and untiled, none standing untouched and untiled);
 //  - every chunk's state (shown or not, where its object stands) is the
 //    untiled table's;
-// on the fresh table, mid-destruction (blasts played, their tweens not yet
+// on the fresh table; ((F7b's merge review) with every tiled chunk seen
+// through (F7b's see-through walls) and solid again, and in that same task
+// none of them drawn neither by its own mesh nor by its tile (see() runs
+// inside the frame it fades for, and the frame is drawn straight after);
+// mid-destruction (blasts played, their tweens not yet
 // stepped: each chunk they touched promoted out of its tile, the tiles
 // merged again without it) and after it (every animation ended: back in
 // their tiles); then on a tiled table synced from the chunks as they stand
@@ -1870,7 +1874,7 @@ if (conn.failed) {
 // tiles and their draw calls per board (§4.2.7 expects about 70 tiles and
 // 150 calls at Grand).
 const TILE_SEEDS = Number(process.env.TILE_SEEDS ?? 12)
-const tiles = { boards: 0, failed: 0, checks: 0, promoted: 0, rows: {} }
+const tiles = { boards: 0, failed: 0, checks: 0, promoted: 0, faded: 0, rows: {} }
 const tileShown = []
 const tt0 = Date.now()
 const tmine = { ...(await imp(PKG, 'view/clock.js')) }
@@ -1912,6 +1916,27 @@ async function tileBoard(name, m, set, seed) {
   play()
   await Promise.resolve()
   const fresh = check('fresh')
+  // ((F7b's merge review) see-through on the tiled table, as see() does it
+  // inside a frame: every tiled chunk faded (out of its tile, its own mesh
+  // drawn), then all solid again, and in that same task, before any
+  // microtask could merge a tile, every chunk drawn before is drawn by its
+  // own mesh or by its tile, none by neither: the frame see() runs in is
+  // drawn straight after it)
+  const drawn = (id) => {
+    const it = tiled.items.get(id)
+    return !!it?.obj && (it.obj.visible || !!it.tile?.parts.has(id))
+  }
+  const looked = [...tiled.items.values()].filter((it) => it.tile).map((it) => it.c.id)
+  const before = looked.filter(drawn)
+  tiled.seeThrough(new Set(looked))
+  const fadedNow = tiled.faded().length
+  tiles.faded += fadedNow
+  if (looked.length && !fadedNow) why.push(`see-through: none of the ${looked.length} tiled chunks faded`)
+  check('see-through, faded')
+  tiled.seeThrough(new Set())
+  const blink = before.filter((id) => !drawn(id))
+  if (blink.length) why.push(`see-through: ${blink.length} of ${fadedNow} chunks solid again drawn neither by their own mesh nor by their tile until a microtask (chunk ${blink[0]} first)`)
+  check('see-through, solid again')
   // blasts on the destructible chunks, checked as they play and once settled
   const plan = mulberry(seed ^ 0xb1a57)
   const targets = T.chunks.filter((c) => c.destructible)
@@ -1962,7 +1987,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
 }
 Math.random = realRandom
 const span = (a) => `${Math.min(...a)}-${Math.max(...a)} (mean ${(a.reduce((x, y) => x + y, 0) / a.length).toFixed(0)})`
-console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, mid-blast, settled, synced and untiled again`)
+console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast, ${tiles.faded} faded and solid again): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, seen through and solid again (drawn in the same task), mid-blast, settled, synced and untiled again`)
 for (const [key, r] of Object.entries(tiles.rows)) console.log(`  ${key}: ${span(r.chunks)} chunks in ${span(r.tiles)} tiles, ${span(r.meshes)} draw calls`)
 if (tiles.failed) {
   console.log(`MISMATCH: tiles failed on ${tiles.failed} of ${tiles.boards} board(s):`)

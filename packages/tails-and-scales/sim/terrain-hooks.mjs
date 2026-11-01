@@ -119,6 +119,9 @@ export const MUTATIONS = {
   // (F8b) the merge places a part by its own matrix, not its world one: a
   // tree's canopy, a hedge's tufts, drawn about the origin
   'tile-matrix': ['/view/terrain.js', '  geo.applyMatrix4(tmpM.copy(o.matrixWorld))', '  geo.applyMatrix4(tmpM.copy(o.matrix))', '1-3'],
+  // ((F7b's merge review) a chunk seen through and solid again waits for
+  // mark()'s microtask to rejoin its tile: hidden and undrawn for a frame
+  'tile-fade-blink': ['/view/terrain.js', '    if (this.dirty.size) this.flush()\n  }\n  // an item drawn solid again', '  }\n  // an item drawn solid again', '1-3'],
   // (F19a, the powder keg's rows) the keg a tenth of an inch off the centre
   // (no longer its own mirror), a keg's hit points one more than the
   // keg's, and a blast whose rim does the full damage
