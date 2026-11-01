@@ -104,14 +104,30 @@
 //               corner of the screen stays MARGIN px inside every edge,
 //               flipped to the pointer's other side at the right and the
 //               bottom
+//   (F7b) fortified  a hotseat battle on the fortified set (sim/fort-scene.mjs:
+//               seed 3, dice 1), DESIGN §4.2.4's see-through walls and the
+//               LOS ray: holding Alt fades every tall chunk (its meshes
+//               drawn see-through) and letting go makes them all solid
+//               again; a unit picked up with a deck between it and the
+//               camera fades that deck (and its ring, a seat's played here,
+//               gets its see-through copy), and put down, nothing stays
+//               faded; in a shooting phase, hovering each enemy in turn
+//               draws the LOS ray, a beam to each of its standing models,
+//               and the pointer off them none; hovered again, the
+//               renderer's geometries (but the splat figures' draw
+//               orders, which come and go with the camera's poses) and
+//               the scene's objects the same after every hover (the beams
+//               a pool, grown to the most models a target has had: the
+//               ray leaks nothing)
 // and no page error throughout.
 //
-//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts]
+//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts | --fort]
 //
 // 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step;
 // (F13) --only aim plays the touch aim's cases alone; (V3a) --only tips the
 // conditions' alone (the Node part runs first in every run); (F9a) --carts
-// runs the War-Carts' page alone (without any, every lane runs).
+// runs the War-Carts' page alone; (F7b) --fort the fortified rows alone
+// (without any, every lane runs).
 // Exit 0 when every step holds. Set CHROMIUM_PATH to the pre-installed
 // Chromium if Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
@@ -124,10 +140,11 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { IDLE_MS } from './chromium.mjs'
+import { fortScene } from './fort-scene.mjs'
 
-const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' } } })
-if (a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) {
-  console.error('input-check: --only takes aim or tips, and not with --carts')
+const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' } } })
+if ((a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) || (a.fort && (a.only !== undefined || a.carts))) {
+  console.error('input-check: --only takes aim or tips, and not with --carts; --fort goes alone')
   process.exit(2)
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -2198,6 +2215,107 @@ async function tipsCase(browser, url, vp, say, shots) {
   }
 }
 
+// (F7b) The see-through walls and the LOS ray on a fortified board (the
+// header's last row), in a page of its own.
+async function fortified(browser, url, say) {
+  const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
+  page.setDefaultTimeout(IDLE_MS)
+  const errors = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  const fail = (m) => {
+    throw new Error(m)
+  }
+  try {
+    const f = await fortScene(page, url)
+    const { seat: A } = await f.at()
+    // the seat's rampart, from low over the board's middle: Alt held
+    const deck = await f.ev((A) => window.__ts.session.preview((G) => {
+      const units = G.units.filter((u) => u.side === A && u.alive > 0)
+      const decks = G.terrain.chunks.filter((c) => c.alive && c.kind === 'deck')
+      // (the deck nearest one of the seat's units off it: a unit behind it)
+      let best = null
+      for (const u of units) {
+        for (const d of decks) {
+          const on = Math.abs(Math.cos(d.shape.yaw) * (u.pos.x - d.shape.x) - Math.sin(d.shape.yaw) * (u.pos.z - d.shape.z)) <= d.shape.hx + 0.5 && Math.abs(Math.sin(d.shape.yaw) * (u.pos.x - d.shape.x) + Math.cos(d.shape.yaw) * (u.pos.z - d.shape.z)) <= d.shape.hz + 0.5
+          const dist = Math.hypot(u.pos.x - d.shape.x, u.pos.z - d.shape.z)
+          if (!on && (!best || dist < best.dist)) best = { u: u.id, ux: u.pos.x, uz: u.pos.z, x: d.shape.x, z: d.shape.z, y: d.surface.y, dist }
+        }
+      }
+      return best
+    }), A)
+    if (!deck) fail(`seat ${A} has no unit off a deck to look at past one`)
+    await f.pose([deck.x * 0.4, 9, deck.z * 0.4 + 14], [deck.x, 1, deck.z])
+    const before = await f.faded()
+    await page.keyboard.down('Alt')
+    await sleep(500)
+    const held = await f.faded()
+    await page.keyboard.up('Alt')
+    await sleep(500)
+    const after = await f.faded()
+    if (before || !held || after) fail(`Alt: ${before} meshes see-through before, ${held} while held, ${after} once let go (none, some, none)`)
+    say(`fortified: Alt held drew ${held} meshes of the tall chunks see-through; let go, every one solid again`)
+    // a unit with a deck between it and the camera, picked up
+    const dx = deck.x - deck.ux, dz = deck.z - deck.uz, L = Math.hypot(dx, dz)
+    await f.pose([deck.x + (dx / L) * 8, deck.y + 1.6, deck.z + (dz / L) * 8], [deck.ux, 0.6, deck.uz])
+    await f.select(deck.u)
+    await sleep(500)
+    const picked = await f.faded(), xr = await f.xrays()
+    await f.select(null)
+    await f.away()
+    await sleep(500)
+    const down = await f.faded()
+    if (!picked || down) fail(`unit ${deck.u} picked up behind the deck at (${deck.x.toFixed(1)}, ${deck.z.toFixed(1)}): ${picked} meshes see-through, ${down} once put down (some, then none)`)
+    if (!xr) fail(`unit ${deck.u} picked up: no ring of a seat played here drawn through what hides it`)
+    say(`fortified: unit ${deck.u} picked up behind a deck: ${picked} meshes see-through, ${xr} rings drawn through; put down, none`)
+    // the LOS ray: each enemy hovered in turn by a shooter ((at the F7b
+    // merge) one with no spells: a caster picked up takes the AI's pick of
+    // its spells, and with one cast on a friend (V3c's Barkskin, Cold
+    // Blood) an enemy hovered shows nothing at all, no ray among it)
+    let shooter = null
+    for (const s of [A, 1 - A]) {
+      await f.until(s, 'shoot')
+      shooter = await f.ev((s) => window.__ts.session.preview((G, q) => G.units.find((u) => u.side === s && q.alive(u) && u.t.ranged && !u.t.spells && q.canShoot(G, u))?.id ?? null), s)
+      if (shooter !== null) break
+    }
+    if (shooter === null) fail('no unit can shoot in either seat\'s first shooting phase')
+    const foes = await f.ev((id) => window.__ts.session.preview((G, q) => {
+      const u = G.units.find((x) => x.id === id)
+      return G.units.filter((e) => e.side !== u.side && q.alive(e)).map((e) => ({ id: e.id, x: e.pos.x, z: e.pos.z, y: q.floorAt(G, e.pos.x, e.pos.z), n: e.alive }))
+    }), shooter)
+    await f.select(shooter)
+    // (twice over the same enemies: the first round may grow the beams'
+    // pool to the most models a target has, the second must grow nothing)
+    let first = null, hovered = 0, most = 0
+    const counts = []
+    for (const round of [1, 2]) {
+      for (const e of foes.slice(0, 6)) {
+        await f.pose([e.x + 3, e.y + 9, e.z + 10], [e.x, e.y, e.z])
+        const at = await f.hover(e.x, e.y + 0.6, e.z)
+        if (at.on !== 'CANVAS') continue
+        const b = await f.beams()
+        if (b.n !== e.n) fail(`hovering unit ${e.id} (${e.n} models standing) with unit ${shooter} picked up: ${b.n} LOS beams`)
+        // ((at the F7b merge) the geometries but V2's splat draw orders,
+        // which the camera's poses make and free on their own: memory())
+        const m = await f.memory(), geos = m.geometries - m.orders
+        if (round === 2) {
+          first ??= { ...m, geos }
+          counts.push(`${geos}/${m.scene}`)
+          if (geos !== first.geos || m.scene !== first.scene) fail(`the LOS ray grows the page on a second round of the same hovers: geometries (but the splats' draw orders)/scene objects ${counts.join(' → ')}`)
+          hovered++
+        } else most = Math.max(most, e.n)
+        await f.away()
+        const off = await f.beams()
+        if (off.n) fail(`the pointer off unit ${e.id}: ${off.n} LOS beams still drawn`)
+      }
+    }
+    if (hovered < 2) fail(`only ${hovered} enemies could be hovered`)
+    say(`fortified: unit ${shooter}'s LOS ray drawn on hovering each of ${hovered} enemies (a beam a model, up to ${most}), gone off them; hovered again, geometries (but the splats' draw orders) and scene objects ${counts[0]} after every hover (the ray leaks nothing)`)
+    if (errors.length) fail(`page errors: ${errors.slice(0, 3).join('; ')}`)
+  } finally {
+    await page.context().close()
+  }
+}
+
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false
@@ -2216,7 +2334,7 @@ try {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   try {
     let lanes = true
-    if (a.only !== 'tips') {
+    if (a.only !== 'tips' && !a.fort) {
       const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
       page.setDefaultTimeout(IDLE_MS)
       const errors = []
@@ -2251,7 +2369,7 @@ try {
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
-    if (a.only !== 'aim') {
+    if (a.only !== 'aim' && !a.fort) {
       console.log('\ninput-check (V3a): the conditions\' tips in Chromium, by the mouse and by touch\n')
       for (const vp of [{ width: 1280, height: 800 }, { width: 390, height: 844, touch: true }]) {
         try {
@@ -2262,6 +2380,17 @@ try {
         }
       }
     }
+    // ((F7b) the see-through walls and the LOS ray, on a fortified board:
+    // a page of its own; with --fort alone)
+    if (a.fort || (a.only === undefined && !a.carts)) {
+      console.log('\ninput-check (F7b): the see-through walls and the LOS ray on a fortified board\n')
+      try {
+        await fortified(browser, url, (l) => console.log(`  ok   ${l}`))
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+        lanes = false
+      }
+    }
     ok = conds && lanes
   } finally {
     await browser.close()
@@ -2270,6 +2399,6 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-const what = a.only === 'aim' ? '(F13) the touch aim' : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen'].filter(Boolean).join('; ')
+const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray'].filter(Boolean).join('; ')
 console.log(ok ? `\ninput-check passed: ${what}` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)

@@ -54,7 +54,11 @@
 //              cast or fizzled: each `unit.face` a shot follows), and of them
 //   deckShots  those fired from a deck (the shooter's floor above STEP, as
 //              the events put it: a place's `y`, a walk's end, a
-//              formation's, from where G stood them first)
+//              formation's, from where G stood them first), and
+//   deckVolleys  (F7b) the volleys among them (a ranged weapon's shot, not
+//              a template's nor a spell's). ((at the F7b merge) F7b counted
+//              its deck shots off each `volley` and `blast.fire`, a
+//              template's every throw; F17's count, one a shot, is kept)
 //   climbedShots  those fired from a deck the shooter got onto by a move of
 //              its own in the battle (a walk from below onto it, seen in the
 //              events, which come in order): the AI climbing to shoot
@@ -65,7 +69,7 @@
 const STEP = 0.4, OBJECTIVE_RANGE = 3
 
 export function heightProbe(q) {
-  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0, shots: 0, deckShots: 0, climbedShots: 0, lobs: 0, upShots: 0 }
+  const r = { height: false, deckRounds: [], deckBy3: false, movedRounds: [], movedBy3: false, deployed: 0, climbs: 0, up: 0, ontoDeck: 0, deckFights: 0, works: 0, keep: false, keepHeld: 0, shots: 0, deckShots: 0, deckVolleys: 0, climbedShots: 0, lobs: 0, upShots: 0 }
   let first = true, battle = false, rounds = 0
   // each unit's floor as the events have it (unit id → y); each one's as
   // the last trace line found it, and the units that have since come up
@@ -76,13 +80,14 @@ export function heightProbe(q) {
   // events' order), and the shot a unit.face may begin
   const at = new Map(), climbed = new Set()
   let face = null, types = null
-  const shot = (u, tg) => {
+  const shot = (u, tg, volley) => {
     const a = at.get(u), b = at.get(tg), w = types.get(u)?.ranged
     if (!a || !b || !w) return
     const ay = ys.get(u) ?? 0, by = ys.get(tg) ?? 0
     r.shots++
     if (ay > STEP) {
       r.deckShots++
+      if (volley) r.deckVolleys++
       if (climbed.has(u)) r.climbedShots++
     }
     if (by - ay > STEP) r.upShots++
@@ -156,7 +161,7 @@ export function heightProbe(q) {
         // first template or its cast
         else if (e.t === 'unit.face') face = { u: e.u, tg: e.tg }
         else if (e.t === 'volley' || e.t === 'blast.aim' || e.t === 'spell.cast' || e.t === 'spell.fizzle') {
-          if (face) shot(face.u, face.tg)
+          if (face) shot(face.u, face.tg, e.t === 'volley')
           face = null
         }
         if (e.t !== 'unit.move' || !e.path?.length) continue

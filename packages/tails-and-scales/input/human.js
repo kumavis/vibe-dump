@@ -85,6 +85,24 @@ export class Human {
     this.group = null
     // (F10c) the standing orders (input/standing.js), set by app/boot.js
     this.standing = null
+    // (F7b, DESIGN §4.2.4's see-through walls) Alt held (every tall chunk
+    // fades), and what the view keeps clear each frame: the unit picked up,
+    // the one under the pointer and a group's members (view/index.js's
+    // see()), in a battle only; and whose rings show through what hides
+    // them: the seats played here (view/units.js's xray)
+    this.alt = false
+    view.focus = () => this.looking()
+    if (view.units) view.units.own = (seat) => !!this.session?.localSeats.includes(seat)
+  }
+
+  // (F7b) the units the player is looking at, and whether Alt is held
+  looking() {
+    if (!this.G) return { ids: [], all: false }
+    const ids = new Set()
+    if (this.sel) ids.add(this.sel.id)
+    if (this.hover) ids.add(this.hover.id)
+    for (const u of this.group?.members() ?? []) ids.add(u.id)
+    return { ids: [...ids], all: this.alt }
   }
 
   get session() {
@@ -413,6 +431,22 @@ export class Human {
     })
     // (F13) 👆 Aim, beside ▭ Select (touch)
     document.querySelector('#aimMode')?.addEventListener('click', () => this.aim.toggle())
+    // ((F7b) Alt held fades every tall chunk: read off every key's down and
+    // up (its altKey: held or not), and let go when the page loses the
+    // keyboard; Alt's own default, the browser's menu bar, kept off the
+    // table. ((F7b's merge review) Alt is F13's far aim on the pointer too,
+    // and input/group.js's Alt-drag line: a line drawn with the walls seen
+    // through, as meant, the ground behind them shown where it lands)
+    const altKey = (e) => e.code === 'AltLeft' || e.code === 'AltRight'
+    addEventListener('keydown', (e) => {
+      this.alt = e.altKey
+      if (altKey(e)) e.preventDefault()
+    })
+    addEventListener('keyup', (e) => {
+      this.alt = e.altKey
+      if (altKey(e)) e.preventDefault()
+    })
+    addEventListener('blur', () => (this.alt = false))
     // Escape puts down the unit picked up (but a charge's end must be
     // picked); the camera rig keeps the panning keys (view/camera.js);
     // (F10a) a group's keys first (input/group.js)
@@ -706,6 +740,8 @@ export class Human {
     this.tooltip.hide()
     overlay.pathLine.visible = false
     overlay.ghost.visible = false
+    // ((F7b) the LOS rays: drawn again below while an enemy is aimed at)
+    overlay.los(null)
     const h = this.hoverPick
     const pk = this.picking()
     if (!h) {
@@ -760,11 +796,16 @@ export class Human {
     } else if (this.myTurn() && sel) {
       text = this.ask((G, q) => {
         const ph = q.phaseKey(G)
-        if (ph === 'move' && this.reach && h.ground && (!h.unit || (this.far && h.unit.side !== sel.side))) return move.preview(G, q, this.reach, sel, h.ground, path, this.far)
+        // ((F7b) the move's rims: the overlay's, the tooltip saying why a
+        // ledge cell takes no base)
+        if (ph === 'move' && this.reach && h.ground && (!h.unit || (this.far && h.unit.side !== sel.side))) return move.preview(G, q, this.reach, sel, h.ground, path, this.far, (i) => overlay.rimAt(i))
         // ((V3c) the spell picked: at an enemy, or one cast on a friend at
         // a friend or the caster itself)
-        const sp = this.spellOf(sel), ally = sp !== undefined && q.allySpell(q.weaponOf(sel, sp))
-        if (ph === 'shoot' && h.unit && (h.unit.side !== sel.side) !== ally) return shoot.preview(G, q, sel, h.unit, sp)
+        const sp = this.spellOf(sel), w = q.weaponOf(sel, sp), ally = sp !== undefined && q.allySpell(w)
+        // ((F7b) with its rays, eye to chest, in the verdict's colour: a
+        // shot's or a spell's at an enemy, which sight judges; (at the F7b
+        // merge) none for a spell cast on a friend, which asks no sight)
+        if (ph === 'shoot' && h.unit && (h.unit.side !== sel.side) !== ally) return shoot.preview(G, q, sel, h.unit, sp, w && !ally ? (rays, color) => overlay.los(rays, color) : null)
         if (ph === 'charge' && h.unit && h.unit.side !== sel.side) return charge.preview(G, q, sel, h.unit)
         return ''
       })
