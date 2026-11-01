@@ -402,7 +402,8 @@ included), the page tool, and safe mode. Point it at a browser with `CHROMIUM_PA
 Playwright's own browser or whatever is under `/opt/pw-browsers`. Screenshots
 and `results.json` go to `$TMPDIR/merge-meadow-e2e`, or to `MM_E2E_OUT`.
 
-Code layout and the rules each directory follows are in
+How to add a creature (a model plus a preset, as data, never as code) is the
+playbook in [AGENTS.md](./AGENTS.md). Code layout and the rules each directory follows are in
 [ARCHITECTURE.md](./ARCHITECTURE.md). The short version: `src/doc` is the
 document and the only write path (`applyOps`); `src/core`, `src/sim` and
 `src/scripts` are the world, the built-in behaviours and doc systems, and

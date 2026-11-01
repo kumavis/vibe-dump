@@ -253,3 +253,7 @@ above. Keep provenance in the commit message (link the source PR).
   conflicts in the lockfile) easy to review and resolve in isolation.
 - Develop on the assigned branch; deploy happens on push via
   `.github/workflows/deploy.yml`.
+- A package may carry its own `AGENTS.md` with the playbook for working
+  inside it; read it before changing that package. `merge-meadow` has one
+  ([packages/merge-meadow/AGENTS.md](./packages/merge-meadow/AGENTS.md)): there
+  a creature is a rig model plus a preset, data in the document, never code.
