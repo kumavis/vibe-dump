@@ -22,7 +22,8 @@
 // how many, their colour), faded() how many meshes are drawn see-through
 // (view/terrain.js's seeThrough: their material's userData.seeThrough),
 // xrays() the rings drawn through what hides them (view/units.js's xray),
-// and memory() renderer.info.memory with the scene's own objects.
+// and memory() renderer.info.memory with the scene's own objects (and the
+// splat figures' draw orders, `orders`).
 //
 // Library only (no CLI). Seed 3 with dice 1 by default: its works stand on
 // both sides, the Bushtails win the roll-off, and seat 0's trebuchet (36",
@@ -130,7 +131,11 @@ export async function fortScene(page, url, { seed = 3, dice = 1 } = {}) {
     window.__ts.scenery.scene.traverse((o) => o.isMesh && o.visible && !o.userData.losRay && o.material?.depthFunc === 6 && o.material.visible && n++)
     return n
   })
-  const memory = () => ev(() => ({ ...window.__ts.renderer.info.memory, scene: window.__ts.scenery.scene.children.length }))
+  // ((at the F7b merge) and the draw orders V2's splat-fur figures hold:
+  // one geometry per figure kind, level and view, made as the camera moves
+  // and freed EVICT preparations after its last use, view/models/splat/
+  // splats.js, so the geometries rise and fall with the camera's poses)
+  const memory = () => ev(() => ({ ...window.__ts.renderer.info.memory, scene: window.__ts.scenery.scene.children.length, orders: window.__ts.view?.splats?.().orders ?? 0 }))
   const select = (id) => ev((id) => window.__ts.select(id === null ? null : window.__ts.G.units.find((u) => u.id === id)), id)
 
   const climbs = (seat) => ev((seat) => window.__ts.session.preview((G, q) => {

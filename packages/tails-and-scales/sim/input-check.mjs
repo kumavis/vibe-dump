@@ -114,9 +114,11 @@
 //               faded; in a shooting phase, hovering each enemy in turn
 //               draws the LOS ray, a beam to each of its standing models,
 //               and the pointer off them none; hovered again, the
-//               renderer's geometries and the scene's objects the same
-//               after every hover (the beams a pool, grown to the most
-//               models a target has had: the ray leaks nothing)
+//               renderer's geometries (but the splat figures' draw
+//               orders, which come and go with the camera's poses) and
+//               the scene's objects the same after every hover (the beams
+//               a pool, grown to the most models a target has had: the
+//               ray leaks nothing)
 // and no page error throughout.
 //
 //   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts | --fort]
@@ -2265,11 +2267,14 @@ async function fortified(browser, url, say) {
     if (!picked || down) fail(`unit ${deck.u} picked up behind the deck at (${deck.x.toFixed(1)}, ${deck.z.toFixed(1)}): ${picked} meshes see-through, ${down} once put down (some, then none)`)
     if (!xr) fail(`unit ${deck.u} picked up: no ring of a seat played here drawn through what hides it`)
     say(`fortified: unit ${deck.u} picked up behind a deck: ${picked} meshes see-through, ${xr} rings drawn through; put down, none`)
-    // the LOS ray: each enemy hovered in turn by a shooter
+    // the LOS ray: each enemy hovered in turn by a shooter ((at the F7b
+    // merge) one with no spells: a caster picked up takes the AI's pick of
+    // its spells, and with one cast on a friend (V3c's Barkskin, Cold
+    // Blood) an enemy hovered shows nothing at all, no ray among it)
     let shooter = null
     for (const s of [A, 1 - A]) {
       await f.until(s, 'shoot')
-      shooter = await f.ev((s) => window.__ts.session.preview((G, q) => G.units.find((u) => u.side === s && q.alive(u) && u.t.ranged && q.canShoot(G, u))?.id ?? null), s)
+      shooter = await f.ev((s) => window.__ts.session.preview((G, q) => G.units.find((u) => u.side === s && q.alive(u) && u.t.ranged && !u.t.spells && q.canShoot(G, u))?.id ?? null), s)
       if (shooter !== null) break
     }
     if (shooter === null) fail('no unit can shoot in either seat\'s first shooting phase')
@@ -2289,11 +2294,13 @@ async function fortified(browser, url, say) {
         if (at.on !== 'CANVAS') continue
         const b = await f.beams()
         if (b.n !== e.n) fail(`hovering unit ${e.id} (${e.n} models standing) with unit ${shooter} picked up: ${b.n} LOS beams`)
-        const m = await f.memory()
+        // ((at the F7b merge) the geometries but V2's splat draw orders,
+        // which the camera's poses make and free on their own: memory())
+        const m = await f.memory(), geos = m.geometries - m.orders
         if (round === 2) {
-          first ??= m
-          counts.push(`${m.geometries}/${m.scene}`)
-          if (m.geometries !== first.geometries || m.scene !== first.scene) fail(`the LOS ray grows the page on a second round of the same hovers: geometries/scene objects ${counts.join(' → ')}`)
+          first ??= { ...m, geos }
+          counts.push(`${geos}/${m.scene}`)
+          if (geos !== first.geos || m.scene !== first.scene) fail(`the LOS ray grows the page on a second round of the same hovers: geometries (but the splats' draw orders)/scene objects ${counts.join(' → ')}`)
           hovered++
         } else most = Math.max(most, e.n)
         await f.away()
@@ -2302,7 +2309,7 @@ async function fortified(browser, url, say) {
       }
     }
     if (hovered < 2) fail(`only ${hovered} enemies could be hovered`)
-    say(`fortified: unit ${shooter}'s LOS ray drawn on hovering each of ${hovered} enemies (a beam a model, up to ${most}), gone off them; hovered again, geometries and scene objects ${counts[0]} after every hover (the ray leaks nothing)`)
+    say(`fortified: unit ${shooter}'s LOS ray drawn on hovering each of ${hovered} enemies (a beam a model, up to ${most}), gone off them; hovered again, geometries (but the splats' draw orders) and scene objects ${counts[0]} after every hover (the ray leaks nothing)`)
     if (errors.length) fail(`page errors: ${errors.slice(0, 3).join('; ')}`)
   } finally {
     await page.context().close()
