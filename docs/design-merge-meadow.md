@@ -1013,3 +1013,475 @@ the dead peer's entities. Hits are written the moment they land.
    server kept for open worlds. This is the one item here that is a different
    deployment, not a change to this code; §14 keeps server-side access control
    out of v1.
+
+## 20. Document growth (v1.4, 2026-11-01)
+
+Measured on the built app (research track G, report in the session scratchpad
+under `design-r3/G-growth.md`; every number has its script). Decisions here
+are normative once built; §20.5 lists what is still open.
+
+### 20.1 What was measured
+
+| world | growth | 1 h | 24 h | 30 d |
+| --- | --- | --- | --- | --- |
+| Animal meadow, sim running, one host tab | 28.5 B/s (1.7 KB/min) | 103 KB | 2.5 MB | 74 MB |
+| meadow + 300 wandering creatures | 994 B/s (60 KB/min) | 3.6 MB | 86 MB | |
+| meadow with every mover frozen; a blank world | 0 B/s | | | |
+
+- **Checkpoints are the document.** 98.2 % of the bytes in the meadow and
+  99.9 % with 300 movers; health hits 1.4 %, groups 0.3 %, inbox, pins and
+  edits near zero. Each continuously moving entity costs about 3.2 B/s saved,
+  whatever the scene. Wanderers never rest, so the 0.1 m / 5° filter never
+  applies to them; resting entities already write nothing.
+- **Every cost follows the history, which Automerge never frees.** A fresh
+  peer downloads the whole history (2.62 MB for a day of meadow, ready in
+  2.9 s on a local server; 4.16 MB for an hour of 300 movers, 4.0 s). A
+  returning peer more than about 20–100 changes behind also gets the whole
+  doc. Load is linear in ops (about 1 µs/op in Node, 1.15–1.3× in the
+  browser); memory is 250–280 B/op, so a month of the meadow (about 23M ops)
+  or 14 h of 300 movers likely cannot be loaded at all (4 GB wasm32).
+- **The current state is tiny**: 30 KB for the day-old meadow, 50 KB for the
+  hour of 300 movers, 83–86× smaller than their histories.
+- **automerge-repo's compaction bounds disk only** (IndexedDB and the sync
+  server stay at 1.4–1.6× the save size), not history, memory, load or join.
+  Each compaction is a full save on the main thread (180 ms at 2.6 MB,
+  288 ms at 4.2 MB).
+- **Pruning frees nothing.** Deleting 400 hit keys added 47 B; a 100 KB inline
+  asset is a permanent cost that deletion cannot recover.
+- **Corrections to earlier sections.** §1's "kilobytes per minute" holds for
+  the meadow only. §2.3 and `share.js` say Fork compacts history; it does
+  not: `repo.clone` is `Automerge.clone` and the saved bytes were identical.
+  §2.2's 2.6 B per hit holds only for batched hits; the running sim writes
+  one change per hit (19–21 B saved, about 124 B on the wire). §4.1's Counter
+  and §2.1's list-shaped inbox are stale: the ledger and the inbox are keyed
+  maps.
+
+### 20.2 Decisions
+
+1. **Checkpoint policy: on rest, at most every `movingS` while moving, and on
+   ownership loss or `pagehide`.** An owned entity writes a checkpoint when it
+   comes to rest (speed below ε for 1 s), at most once every `movingS`
+   seconds while it keeps moving, and always on release. `world.checkpoint =
+   { movingS: 30, minMove: 0.1 }`, a world setting the panel and the agent
+   expose; `movingS: 0` means only on rest and on leave. About 10× less
+   growth (meadow 0.25 MB/day, 7.5 MB/month, still loadable; 300 movers
+   8.6 MB/day). Only `src/net/checkpoint.js` changes; the per-axis op shape
+   and the merge rules of §2.2 stay. Live joiners are unaffected (they take
+   the stream). The cost: after a crash with nobody online, a cold-opened
+   world can show a creature up to 30 s of motion from where it was.
+2. **A size line and a budget**, in the World panel and in the agent's
+   `describe`: bytes, changes, growth per minute, from `Automerge.stats`
+   (9 µs per call). Advisory: amber at 5 MB, red at 25 MB. The editor and the
+   agent do not refuse spawns; they say what the world costs.
+3. **"Save as a fresh world."** The only real bound on history: a new document
+   built from the current state (`Automerge.from(Automerge.toJS(doc))`, which
+   keeps `ImmutableString`; a JSON round trip does not), with
+   `meta.successor = <new doc url>` written into the old document and a banner
+   there that follows it. It loses history, version links and heads, and the
+   old link, recents and agent key move to the new one; it is a person's
+   explicit, destructive action with a confirmation that says so. Fork stays
+   what it is and is relabelled honestly ("copies the world and its history").
+4. **The health ledger stays as it is.** It is bounded per life (hits stop at
+   0 hp) and is 1.4 % of the bytes. If its state size ever matters, fold it at
+   death or heal; the keys cost nothing in history either way.
+5. **Assets never go inline.** Before any `doc.assets` write path ships,
+   assets are separate content-addressed Automerge documents (one per asset,
+   `assets[name] = { kind, url: 'automerge:<id>' | 'https:…', bytes, sha256 }`
+   in the world doc), with a per-asset cap (1 MB) and a per-world cap checked
+   in `ops-validate`, and `setAsset` / `removeAsset` ops. A removed asset then
+   costs the world a few bytes and no joiner downloads it again.
+6. **Checkpoint rate counts as a world rule**: agents may read and set it
+   through world settings, as with `disabledSystems`.
+
+### 20.3 Verification
+
+Unit: the came-to-rest test and the interval on a fake clock; a release
+always writes. e2e: rerun the growth harness on the meadow and on 300 movers
+and assert the bytes per second against the policy; the cold-open pose error
+after a host crash without `pagehide`; the fresh-world rebase round-trips the
+whole schema (system sources as Text, `ImmutableString`, models, int vs
+float) and the successor banner opens the new world; the size line matches
+`Automerge.stats`.
+
+### 20.4 Spikes
+
+G1 the policy behind a flag, re-measured; G2 rebase fidelity and the
+successor, with a peer offline on the old doc at the cut; G3 the real memory
+ceiling in Chromium (synthetic 5M/10M/16M-op docs); G4 a 5–50 MB doc through
+`wss://sync.automerge.org` (message limits, join time over a real network);
+G5 the main-thread stall of compaction at 5 and 20 MB and whether other
+peers see it as a pose gap.
+
+### 20.5 Open
+
+- Whether to offer **ambient movers** as well: a component flag for creatures
+  with no durable pose, so a cold open puts them at their authored placement
+  (which today's checkpoints overwrite within 3 s) and they cost nothing.
+  Worth it if authors want "where I put the sheep" to survive.
+- What scale and lifetime are the targets. 300 continuous movers for a day is
+  8.6 MB under the new policy; a month of a lively world still wants a fresh
+  world now and then.
+
+## 21. The world model (v1.4, 2026-11-01)
+
+Research track W (`design-r3/W-world.md`). Trees, rocks and lamps are not
+obstacles today: they have no `body`, so creatures walk through them (20.6 %
+of creature samples sat inside a trunk with 300 trees). The only wall is the
+world bounds, square in the sim (per-axis clamp) but drawn as a circle. Static
+entities leak into the perception grid, the separation counter and the pose
+stream. The T-rex corner pin (12 of 12 sheep die in a corner, 4 of 12 in the
+open) is a flee-tuning problem that obstacles do not fix: round bounds, a
+context flee and an intercept-scored flee were tried and none solved it.
+
+### 21.1 Obstacles and movement: steering over static shapes
+
+- **Data:** an `obstacle` component, `{ shape: 'circle', radius: 0.6 }` or
+  `{ shape: 'capsule', a: [x, z], b: [x, z], radius }` for fences and walls,
+  scaled by `transform.s` (max of x and z). On the `tree` (trunk radius about
+  0.4), `rock` (about 0.7) and `lamp` presets. An entity may carry both `body`
+  and `obstacle`; the kernel skips the mover itself.
+- **Sim:** a built-in `avoid` system at order 450 (look-ahead steering over a
+  static spatial hash rebuilt on obstacle or transform change, 0.05–0.33 ms)
+  and a `collide` push-out after `integrate`. The bounds become four implicit
+  capsules so walls and trees share one slide rule. Measured 0.045–0.12 ms per
+  tick for about 47 movers with 30–300 obstacles, zero penetration; budget
+  0.25 ms under lockdown.
+- **The three static leaks are fixed in the same change:** `perceive` indexes
+  only entities with a `body`; the separation counter moves after the `body`
+  check (today four nearby trees disable separation from creatures); the
+  stream sends only entities with a `body` (statics follow the doc; 300
+  statics were adding 10.5 KB/s).
+- **Rejected for v1:** flow fields (3–10 ms per goal, 60–400 KB per field,
+  and pursue, flee and follow have moving per-entity goals; kept as a later
+  `goto` verb for fixed destinations) and a navmesh (three-pathfinding
+  imports three, which `src/sim` may not; Recast is about 190 KB gzipped of
+  wasm and glue untested under lockdown and in Node).
+- **The corner pin is a separate behaviour ticket** with the research
+  harness as its bench: prey speed margin, time-to-intercept flee scoring, a
+  juke. Target: corner deaths at or below 50 % with open-field deaths
+  unchanged.
+- **Bounds are square and drawn square.** The sim's per-axis containment
+  stays; the ring becomes a square so what people see is what the sim does.
+
+### 21.2 Terrain: a procedural base plus placed features
+
+- **Data:** `doc.world.terrain = { kind: 'noise', seed, layers: [{ scale, amp }…],
+  flat: 12 }` (about 100 bytes; `flat` is a level radius around the origin
+  for the spawn area; missing or `kind: 'flat'` is today's world). A feature
+  is a component on an ordinary entity: `terrain: { shape: 'hill' | 'pit' |
+  'plateau', radius, height, falloff }`, placed by its `transform`, with no
+  body and no render, not streamed. Features merge, undo and reach agents
+  through the existing ops.
+- **One sampler for everyone:** `src/core/terrain.js`, pure, exports
+  `makeGround(world) → (x, z) => y`, memoised on the settings plus a feature
+  revision (79 ns per sample measured for four octaves). The sim, the render,
+  XR, doc systems and Node import the same function; `scene.ground` and the
+  closure from `main.js` go away, and `groundHit` becomes a ray march plus
+  bisection in `src/core`.
+- **Render:** a 128- or 256-segment plane over the bounds, displaced from the
+  sampler with vertex normals, rebuilt on change; the outer disc stays flat as
+  the horizon. **XR and desktop:** the player rig sets `root.y` from the
+  sampler after locomotion and teleport, low-passed over about 0.15 s in XR
+  so slopes do not jitter the floor; the editor camera clamps to ground +
+  0.3.
+- **Statics on terrain: `transform.p[1]` of an entity without a body is
+  height above ground when the world has terrain.** Flat ground is y = 0, so
+  every existing world is unchanged; the reconciler adds `ground(x, z)` when
+  posing a top-level static, and the inspector labels the field "above
+  ground". This is the one change of meaning in the schema.
+- **Checkpoints and the stream do not change**: y is already carried.
+- **Rejected for v1:** a heightfield as one bytes value (a 9×9 brush stroke
+  copies 20–82 KB). If authors want a real brush later, 16×16 `Uint16` tiles
+  under `world.terrain.tiles["x,z"]` cost 170–190 B per stroke and are the
+  v2 shape; concurrent strokes in one tile are last-writer-wins.
+
+### 21.3 Shadows
+
+Measured under SwiftShader at 640×400: a sun shadow adds 15–25 ms on the
+meadow (+40–60 %) and 120–200 ms with 300 rigs; draw calls double (230 → 471,
+6081 → 12 323); map size barely matters (1024 and 2048 within noise). Rig mesh
+merging (the STATUS draw-call gap) is what makes shadows cheap.
+
+- One shadow-casting light, the stage's sun; entity lights never cast in v1.
+  PCF, a 1024 map, a camera-following orthographic frustum of ±20 m centred
+  8–10 m ahead of the camera, snapped to the texel grid (3.9 cm) so it does
+  not shimmer; bias −0.0005, normalBias 0.02.
+- Casters: entities with a `body` or an `obstacle`. Billboards cannot cast;
+  they get a shared blob disc. Receiver: the ground only.
+- **Two settings, because intent and cost differ.** Doc: `world.shadows:
+  true | false`, default `true` for new worlds, missing means `false` so old
+  worlds look the same. Local, per device: graphics `auto | high | low`;
+  `auto` is on for desktop, off while XR is presenting, and off when the
+  median frame time over 2 s exceeds 20 ms. Effective = doc and local.
+  Switching recompiles materials once (a one-time hitch).
+- The thumbnail is re-shot when this ships.
+
+### 21.4 Despawn cascade and the parent rule
+
+- `{ op: 'despawn', id, children: 'delete' | 'detach' }`, `'delete'` the
+  default from the editor and the agent. The subtree is expanded **at apply
+  time inside the one change** by an exported `subtree(doc, id)` that
+  `ops-validate` and `drainOps` also use, children first, so the inverse list
+  respawns parents first: one change, one undo entry. `'detach'` re-parents
+  children to the despawned entity's parent and rewrites their transforms to
+  keep their world pose, through a pure compose helper in `src/core/xform.js`
+  (Euler XYZ degrees ↔ matrix) that also gives `setParent` a `keepWorld`
+  option the editor's parent picker uses. The editor confirms above five
+  children. Orphans from a concurrent re-parent stay rendered at the root and
+  marked "parent deleted" in the tree with a one-click clean-up; there is no
+  automatic clean-up, because a peer cannot tell "deleted" from "not synced
+  yet".
+- **`live.p` and `live.yaw` are world space for every entity with a `body`.**
+  A doc parent of a body entity is organisational, not kinematic: the
+  reconciler converts to parent-local when posing, checkpoints convert back
+  on write, and simulated movement never inherits a parent's motion.
+  "Carried" is `rider.mount` (seated, world-correct today) or `live.held`,
+  never parenting; a moving cart that carries an NPC gets a seat without
+  `controls`. Statics keep parent-local semantics, which is already right.
+
+### 21.5 Interest management for the pose stream
+
+The ephemeral channel is broadcast and re-gossiped: every client re-uploads
+what it receives, and nothing can be addressed per receiver (W, measured and
+read in automerge-repo 2.5.6). On the wire a 10 Hz NPC frame is 1.4 KB for 50
+movers (14.9 KB/s), 3.8 KB for 150 (40 KB/s), 7.4 KB for 300 (78 KB/s); the
+envelope is 227–229 B, not §4.2's 190 B.
+
+1. **Now:** stream only entities with a `body` (§21.1).
+2. **Then, a `po2` frame:** distance tiers set by the owner from the nearest
+   player of any peer (near < 20 m at 10 Hz, mid 5 Hz, far 2 Hz, the id table
+   at 1 Hz; about −36 % of rows in the meadow with two players), with rows
+   tagged by tier so receivers use a per-entity interpolation delay of
+   `max(120 ms, 1.2 × period)`; and quantised rows (16-bit x and z at 2 mm
+   over ±64 m, 8-bit yaw and anim, y dropped where the receiver can sample
+   terrain): 24 → about 8 B per row. Together, 300 movers with eight peers is
+   about 40 KB/s per client each way.
+3. **Not v1: per-peer WebRTC data channels** with the ephemeral channel as
+   signalling. The threshold, an estimate: past about 150 streamed movers
+   with eight or more peers, past about 1 MB/s at the server, or worlds past
+   about 300 m where players spread out. It needs STUN and a paid TURN
+   service, N² connections and a fallback. A self-hosted sync server is the
+   cheaper first step if the shared public server is the limit.
+4. Region lanes are rejected: they save nothing on a broadcast transport.
+
+### 21.6 Where the code goes (boundaries rule)
+
+| piece | module |
+| --- | --- |
+| obstacle hash, `avoid`, `collide` | `src/sim/avoid.js` (new) |
+| terrain sampler, ray-vs-terrain; transform compose | `src/core/terrain.js`, `src/core/xform.js` (new, pure) |
+| `subtree`, cascade expansion, detach rewrite | `src/doc/ops.js`, `ops-validate.js` |
+| ground mesh, shadow set-up, blob discs, world-pose placement under a parent | `src/render/scene.js`, `reconciler.js` |
+| rig y from the sampler | `src/xr/rig.js`, `desktop.js` |
+| body-only rows, tiers, `po2` | `src/net/stream.js` |
+
+### 21.7 Verification and spikes
+
+Unit: the avoid kernel in Node (penetration 0 over 60 s with 50 movers and
+300 obstacles; cost); the sampler and feature maths; `subtree` against a
+concurrent re-parent in a forked doc and a one-step undo of a three-level
+tree; `xform` round trips. e2e: the chase on a meadow with obstacles (the
+"not a massacre" bar unchanged in the open); terrain end to end (XR rig y in
+`test/xr.mjs`, pose error with y moving, ground rebuild time per edit);
+shadows on and off at the thumbnail view; near and far pose-error bounds
+split once tiers exist; the 300-entity stream end to end (a STATUS gap).
+Spikes: the obstacle kernel in the real app under lockdown; the corner-pin
+bench; shadows on a real GPU and a Quest paired with a rig-merge prototype;
+stream v2 at 300 movers.
+
+### 21.8 Open
+
+- Shadows on by default for new worlds costs 40–60 % of frame time under
+  SwiftShader and doubles draw calls until rigs are merged. The decision
+  above says on; say if you would rather ship it off until merging lands.
+- Whether a terrain brush (tiles) is a v1 goal or features are enough.
+
+## 22. People in the world (v1.4, 2026-11-01)
+
+Research track P (`design-r3/P-people.md`). Today a player is a local entity
+`player:<peer>` with a transform, a controller and `tags.player`; remote
+players draw as a flat 🧑 billboard with no colour and no name, and your own
+player draws nothing. Five gaps, all measured: XR head and hands never leave
+`PlayerRig.pose()` (a wire gap, not a renderer gap); the local player always
+streams `idle` with zero velocity, so a person walking at 3 m/s slides in idle
+for everyone else; the colour in presence is sent but never read; players
+have no health, so no predator ever targets them; and once they have health
+the host emits hit events that nobody applies. On the wire a player frame is
+202 B and every peer re-gossips every other player's frames, so two standing
+players already cost 8.5 KB/s of upload per tab.
+
+### 22.1 Avatars
+
+- **Data:** `info.avatar = { model, color }` in presence. The receiver renders
+  a remote player as `{ kind: 'rig', model, color }`, resolved in this order:
+  a model of that name in `doc.models` with a `head` anchor; else that name in
+  the code library, rendered as an inline rig (so it works in worlds made
+  before the library, with no doc write); else the 🧑 billboard tinted with
+  the colour. Presence is untrusted: accept a model **name** from those two
+  sets and a colour matching `#rrggbb`, never inline nodes.
+- **A `traveller` library model**, extending `biped`: named `hand_l` /
+  `hand_r` under the elbows, near-white clothing so the look-wide colour
+  multiplier reads as the person's colour, a `sit` clip for riding (the biped
+  has none, so a rider stands on the saddle today), and an `xr` controller
+  state whose clip collapses the arms while the hands float, so XR arm
+  handling stays data.
+- **Locomotion:** `updateSelf` derives `live.v` from successive rig positions
+  (smoothed over about 100 ms) and the player gets `body.speed: 6`, so desktop
+  WASD at 4 m/s reads as a fast walk and the XR stick at 3 m/s as a walk; the
+  owner decides the state and streams `walk` / `run`. Head pitch on desktop
+  is one `int16` in the frame (+6 B). A name sprite over the `head` anchor in
+  the person's colour.
+- **Yourself:** nothing on desktop, as now (a body at the camera clips, and
+  the editor camera flies); the procedural controller meshes in XR. A blob
+  shadow while riding or in play mode is the cheap grounding cue, later.
+
+### 22.2 XR presence for others
+
+- **Frame:** the player lane's message grows one optional field; NPC frames
+  are unchanged. `b: Int16Array`, desktop `[pitch × 10000]`; XR `[flags, head
+  p×3 q×4, left p×3 q×4, right p×3 q×4]` (22 values; p in mm in rig space, q
+  × 32767; flags: 1 xr, 2 left present, 4 right present, 8 hand tracking).
+  +50 B per frame: **4.9 KB/s per XR peer** at 20 Hz against 8.1 KB/s for a
+  separate lane, because the envelope dominates.
+- **Receiver:** samples keep `b`; positions lerp, rotations slerp between
+  bracketing samples and hold during extrapolation; the decoded pose lands in
+  `live.xr = { head, l, r, flags }` and reaches the kind as `vars.pose`.
+- **Driving the rig, the smallest change:** in `kinds/rig.js` `animate()`,
+  after the clip offsets, an exported `applyPose(root, entityRoot, pose,
+  weight)` (about 25 lines) sets the local transform that puts a named bone at
+  its target in entity space, blended by `weight`. Spiked in Node on the
+  library wizard: exact placement, an exact return to the clip pose, 0.04–
+  0.06 ms per avatar. Bones: `head` rotation from the headset; `hand_l` /
+  `hand_r` full pose (floating hands; a two-bone arm IK is a 40-line
+  follow-up, not v1); the model root as **body under the head**, at `head.xz`
+  in rig space with a body yaw that follows the head through a ±35° dead zone
+  and about 0.3 s of lag, so glances do not spin the torso. Crouch lowers the
+  hips by eye height minus head height, or clips in v1.
+- **Dropping to 2D:** the next frame has no xr flag; the override weight fades
+  to 0 over 250 ms and the arms come back. A headset taken off stops the
+  frame loop; after the 2.5 s stream TTL the avatar is removed, as any silent
+  peer is.
+
+### 22.3 Hits on players
+
+- **Authority:** the victim's own peer, consistent with §0; the attacker's
+  owner mints the hit id, as for doc entities, so a hit is idempotent.
+- **Protocol (ephemeral, addressed, acked):**
+
+  ```
+  hit     { t: 'hit', to: '<victimPeer>', id: 'player:<victimPeer>', life: n, hits: [[hitId, amount, fromEntityId], …] }
+  hitack  { t: 'hitack', to: '<attackerPeer>', ids: [hitId, …] }
+  ```
+
+  The attacker's owner sends at once and re-sends at 200, 400, 800 and
+  1600 ms, batched per victim, until acked, until the victim leaves presence
+  or after the last try. The victim keeps an LRU of 512 seen ids across lives;
+  an unseen id whose `life` matches the current life goes into `live.hits`
+  (which `hpOf` already merges); a seen id or an old life is acked and not
+  applied, so a retried hit from before a respawn cannot hurt the new life.
+  `attack.js` already emits exactly this event and needs no change; the module
+  is `src/net/hits.js`, about 80 lines. hp, `dead` and `life` are echoed in
+  presence, so every peer's copy of the player takes `tags.dead` and predators
+  drop it. Two simulators of one predator during a partition deal double
+  damage, the same as for animals today. **No doc writes**, so §14 holds.
+- **Opt-in per world through a reserved `player` preset.** When a world
+  defines `presets.player`, `makePlayers` merges an allowlist of its
+  components into every local player: `health`, `tags`, `attack`, `body`.
+  Never `brain`, `perception` or `representation`: a player is never
+  AI-driven and the avatar stays the person's choice. A world that wants
+  everyone hunted writes `player: { components: { health: { max: 100 }, tags:
+  { prey: true } } }`. That is authored world rule, not player state. With no
+  `player` preset, players stay invulnerable, which is today's behaviour, and
+  the templates do not define one.
+- **Death and respawn, on the player's own peer:** the health system already
+  emits `died` for your own player; a reaction in `players.js` sets
+  `tags.dead`, drops `controller` so input stops, streams `die` so others see
+  the rig fall, dismounts (the mount falls back to the host) and echoes
+  presence. Desktop: the camera stays, with an overlay ("Knocked out by T-rex,
+  back in 5 s"). XR: a grey vignette and never a forced camera move. After
+  `world.players.respawnS` (default 5): teleport to `world.players.spawn` or
+  the origin edge, `life++`, clear `live.hits` (keep `seen`), restore
+  components, echo presence; in XR fade, teleport, fade back. A reload is a
+  full heal, by design, and the UI says so.
+- **Damage dealt by players:** the `player` preset may carry `attack`; the
+  input map gains `attack: <targetId>` (desktop click on the entity under the
+  reticle in play mode, XR trigger while the ray hovers one); `control.js`
+  sets a one-tick `strike` intent; `attack.js` applies reach and cooldown
+  unchanged and writes the doc `hit` for an animal. **v1 is animals only:**
+  a player target is ignored, so there is no player-versus-player until it is
+  asked for.
+- **Rejected:** a per-player doc record (breaks §14, unauthenticated, and
+  anyone could damage or heal anyone); players as doc entities (litter per
+  session, and the stream is still needed).
+
+### 22.4 The identity link (§19.4, item 1, decided)
+
+Presence v2:
+
+```
+{ v: 2, id: 'u_<10 base64url>', name, color, avatar: { model, color }, mode: 'desktop' | 'xr',
+  riding: { mount, seat } | null, hp?: [hp, max], dead?: true, life?: n }
+```
+
+- **`id` is a per-world pseudonym:** `u_` + 10 characters of
+  `SHA-256(secret ‖ docId)`, with `secret` 16 random bytes in
+  `localStorage['mm:me']`. Stable for a person across tabs and reloads within
+  one world, and not linkable across worlds, because the public sync server
+  is one shared room for every world. Name, colour and avatar live beside it
+  (`mm:name`, `mm:color`, `mm:avatar`).
+- **The stream, ownership and pins are unchanged**: entities stay
+  `player:<peerId>` and a pin is a peer id, because simulation is per tab.
+  Receivers map peer → person through presence, and the UI renders people:
+  one topbar chip per identity with a tab count, coloured with `info.color`
+  (which fixes the unused colour); "simulated by Ada" and "held by you
+  (another tab)" in the inspector; rename, colour and avatar on your own chip.
+- **Two tabs of one person:** a hidden tab already says `bye`, so only the
+  visible tab is present; two visible windows are two bodies with one name,
+  which is honest. **A duplicated tab** detects its twin over
+  `BroadcastChannel('mm:tabs')` with an in-memory nonce and mints a fresh peer
+  id before the repo opens (about 100 ms at boot).
+- **Trust:** the identity is a label anyone can claim, and the UI says so. A
+  later keypair is a non-extractable WebCrypto key in IndexedDB, and it proves
+  "this browser on this origin", not "this person": on the shared Pages
+  origin any app there can read the secret or ask the key to sign.
+- **Attribution in history (§19.4, item 4) uses this pseudonym.** That puts a
+  per-world pseudonymous id permanently in shared history: a small, deliberate
+  exception to §14, accepted here because the pseudonym cannot be linked
+  across worlds.
+
+### 22.5 The persistence boundary, restated
+
+**The doc may hold rules about players, never records of a player.** Name,
+colour, avatar and the identity secret are `localStorage`; the `player`
+preset, `world.players.spawn` and `respawnS` are doc rules, the same for
+everyone; hp, death and the life counter are live and presence, lost on
+reload by design. Across the line, and refused: hp that survives a reload,
+inventories, currency, score, a home, "my horse" kept by person, roles and
+bans. Each is a record per person that an unauthenticated identity cannot
+protect, and the last two are permissions in disguise (§19.4, item 8).
+
+### 22.6 Order of work, verification, spikes
+
+Order: (1) the locomotion fix (`live.v`, `body.speed`), since every avatar
+slides without it; (2) the `traveller` model and avatars from presence;
+(3) the XR block and `applyPose`; (4) hits, opt-in; (5) presence v2 and the
+identity UI. Unit: frame encode and decode with the `b` block; `applyPose` on
+the library models; the hit protocol in Node over fake channels that drop
+30 % and duplicate 10 % of messages (1000 hits applied exactly once, a
+respawn mid-retry never hurts the new life). e2e: a remote walker shows
+`walk`; an avatar from presence in a pre-library world; a T-rex hurts a
+player in a world with a `player` preset and never in one without; death,
+respawn and the presence echo on the second tab. `test/xr.mjs`: one page
+under IWER streams the block and the second shows floating hands within
+160 ms. Spikes: XR avatar end to end (half a day); body-under-head comfort in
+a real headset (by hand); re-gossip at 8–16 players, since each tab uploads
+every player's frames (about 63 KB/s per tab at 16 players before any NPC),
+which caps session size more than XR does.
+
+### 22.7 Open
+
+- Should the Animal meadow template define a `player` preset, so that the
+  T-rex threatens people out of the box? Decided above: no template does, so
+  worlds are safe by default; say if you want the meadow hunted.
+- A costume world that forces a look on every player would put
+  `representation` on the allowlist; decided no for v1.
