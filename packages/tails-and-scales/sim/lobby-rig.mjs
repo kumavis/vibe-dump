@@ -94,6 +94,7 @@
 //                battle starts on the size's board (60×40), its start
 //                naming the mission; a rematch keeps the size; (F19a) the
 //                Powder keg is offered beside the three sizes, by its name
+//                ((V3d) and the Powder Field after it, by its own)
 //   (F14)
 //   follow       once the host has pressed End (the bookmark of its last
 //                End kept through its own fight and morale phases), the
@@ -995,10 +996,13 @@ async function runCases(dist, cases) {
         d.lobby.rounds = 5
       }))
       const offered = await host.$$eval('#lobbySize option', (os) => os.map((o) => o.value))
-      // ((F19a) and the Powder keg, a mission of its own beside the sizes)
-      must(offered.join() === 'classic,field,grand,keg', `the host's page offers every size, the Powder keg among them: ${offered.join(', ')}`)
-      const kegText = await host.$eval('#lobbySize option[value="keg"]', (o) => o.textContent)
-      must(/^Powder keg · 40×28, 500 pts$/.test(kegText), `the Powder keg offered by its own name, its board and points: ${JSON.stringify(kegText)}`)
+      // ((F19a) and the Powder keg, a mission of its own beside the sizes;
+      // (V3d) and the Powder Field after it, offered in the lobby as on the
+      // panel (DESIGN §4.2.11): the picker lists data/mission.js's MISSIONS
+      // in their order, so a mission added there is a row here)
+      must(offered.join() === 'classic,field,grand,keg,powder', `the host's page offers every size, the Powder keg and the Powder Field among them: ${offered.join(', ')}`)
+      const named = await host.$$eval('#lobbySize option[value="keg"], #lobbySize option[value="powder"]', (os) => os.map((o) => o.textContent))
+      must(/^Powder keg · 40×28, 500 pts$/.test(named[0]) && /^Powder Field · 80×56, 1,500 pts$/.test(named[1]), `the Powder keg and the Powder Field offered by their own names, their boards and points: ${JSON.stringify(named)}`)
       await host.selectOption('#lobbySize', 'field')
       await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
       const L = JSON.parse(await lobbyNow(guest))
