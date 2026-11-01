@@ -907,3 +907,109 @@ presets get a readable card.
   `&safe`, so a reload after a hang stays safe.
 - A world created from a template takes the template's title (Animal meadow,
   Blank meadow), so entries in Your worlds can be told apart.
+
+## 19. Ownership, identity and who may edit (notes, 2026-11-01)
+
+Notes from reviewing the model as built, with the phoenix session as the
+test case. §19.1 and §19.2 describe what exists; §19.3 lists the gaps; §19.4 is
+proposed and **not built**. An item becomes normative when it ships and gets
+its row in STATUS.
+
+### 19.1 What ownership governs
+
+Ownership (§4.1) decides who **simulates** an entity: who streams its live
+pose and who writes the doc entries that follow from simulation (checkpoints,
+the `on` reactions that add groups, inbox drains, the hits an attacker lands).
+It never gates authored state. Any peer with the doc link, in a tab, through
+an agent or with the CLI in local mode, may set or replace components, define
+presets, models and systems, spawn and despawn; Automerge merges those edits
+field by field and every peer converges. Moving a simulated entity is open
+too: a transform write by a non-owner becomes an inbox `move` the owner drains
+(§4.4), and a grab pins the entity to the grabbing tab for the drag. The one
+refusal is a grab while another live peer holds the pin ("held by X").
+
+| | authored state (the doc) | live state (per frame) |
+| --- | --- | --- |
+| what | presets, models, systems, components, spawn/despawn, groups | position and yaw while moving, velocity, animation state, controller input |
+| who writes | anyone with the doc link | one peer per entity: the rider's peer, else the pin if that peer is live, else the host |
+| how it merges | Automerge, field-wise | not merged: the owner streams, the rest interpolate |
+
+### 19.2 Crashes and departures, as built and measured
+
+| event | behaviour | measured (e2e `hidden`, `handoff`, `safe`; unit `b-presence`) |
+| --- | --- | --- |
+| tab closes or navigates | `bye` after one last checkpoint; removal applies at once | next peer hosts and owns the T-rex in 11 ms |
+| tab hidden or backgrounded | says `bye`, simulates nothing, rejoins on resume | handoff in 27 ms, held while hidden |
+| tab crashes or hangs | heartbeats stop; a streaming peer is gone after 2.5 s of silence, a silent one after 6 s | 2.46 s on a fake clock; 1.5 s false-triggered on the public server's 1.9 s stalls |
+| crashed mid-drag | a pin counts only while its peer is live; the hold evaporates | |
+| crashed while riding | the player entity is local and vanishes with its presence; the mount falls back to the host | |
+| hung on a doc system | the crash marker puts that tab's next load of the world in safe mode | survives a browser restart |
+| new tab joins | cannot self-elect host for 3 s (+250 ms with others present) | stopped a joiner double-applying a hit (S2) |
+| partition | two peers may simulate one entity until presence merges; only checkpoints and idempotent writes reach the doc | |
+
+Bounded, not prevented: up to 3 s of motion since the last checkpoint is
+re-simulated by the new owner, and during the failover window nobody drives
+the dead peer's entities. Hits are written the moment they land.
+
+### 19.3 Gaps
+
+- **Ownership is per tab, not per person.** The peer id is minted per tab and
+  kept in that tab's `sessionStorage`: it survives a reload of that tab and
+  nothing else. Two tabs of one person are two peers; a duplicated tab copies
+  `sessionStorage` and the two share one peer id (STATUS). The display name
+  is a label with nothing behind it.
+- **Stale pins stay in the doc.** A pin left by a dead peer is ignored but
+  remains written, so the inspector still prints it.
+- **Nothing shows who drives what.** The inspector shows a pin when one
+  exists; there is no "driven by" on an entity and no list of who is present
+  and what each peer simulates. Most confusion about the model is
+  invisibility, not behaviour.
+- **Authored edits merge silently.** Concurrent edits to one field resolve
+  deterministically with no attribution and no sign that a value lost. Own
+  empty maps at spawn make first writes merge one level deep only (STATUS).
+- **Undo is blind to other people.** It applies the inverse patch, so it
+  clobbers a later edit of the same field by someone else.
+- **Doc systems may write only what their peer owns.** The script facade
+  gates `set` by ownership so that N peers do not all write the same op; it
+  also stops a system from editing presets or models.
+- **No permissions.** The doc link is the only capability; anyone holding it
+  can rewrite the systems every peer runs (§6.4). This cannot be added inside
+  Automerge.
+- **Takeover could flap** between two peers on a bad connection. Not
+  observed; the doc stays consistent, only the picture would jitter.
+
+### 19.4 Proposed
+
+1. **An identity above the tab.** A stable per-browser identity (id and name,
+   `localStorage`) that presence carries beside the per-tab peer id. Tabs are
+   leases under it: "mine" means all my tabs; a grab is held by a person, with
+   one tab holding the lease; a duplicated tab detects its twin over the
+   BroadcastChannel and mints a fresh peer id. The inspector and the toasts
+   name people, not peer ids. When trust is wanted, this identity is where a
+   keypair goes, and an authenticating sync server checks the signatures;
+   until then it is a label, and the UI says so.
+2. **Clear stale pins on takeover.** The host that takes over an entity
+   unpins it conditionally (`unpin` with `ifOwner` = the dead peer), the same
+   conditional write grabs already use.
+3. **Show it.** A presence list (who is here, what each drives, which one is
+   host) and a "driven by" badge on the selected entity, fed by the same
+   `ownerOf` the inspector already calls.
+4. **Attribution and conflicts.** Changes already carry a message; add the
+   author (identity) so the inspector can say who last edited a component and
+   when. Surface a conflicted field (Automerge keeps the losing values) in the
+   panel instead of hiding it; the existing merge toast covers only
+   representation.
+5. **Undo that respects others.** An undo entry records the value it expects
+   to find; applying it is conditional on that value, like the pin protocol,
+   and a mismatch skips that field with a toast rather than clobbering it.
+6. **Authored writes from doc systems, from any peer.** Relax the facade's
+   `set` to any entity for components that are not live-derived; an unchanged
+   `set` is already a no-op in `mergeInto`, so N peers converge without churn.
+   Expose `definePreset` and `defineModel` to systems under the same rule.
+   Keep `spawn` host-only.
+7. **A takeover hold-down**, only if flapping is ever observed.
+8. **Permissions live in the sync layer.** Per-player roles mean an
+   authenticating sync server that decides who may push, with the public
+   server kept for open worlds. This is the one item here that is a different
+   deployment, not a change to this code; §14 keeps server-side access control
+   out of v1.
