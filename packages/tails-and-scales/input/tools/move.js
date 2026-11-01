@@ -17,12 +17,18 @@ export const cellAt = (ask, plan, ground, far = false) => ask((G, q) => aimCell(
 // Inside the caller's preview: the path from unit `sel` to the cell a click
 // at `ground` moves to, drawn by `path(pts, cell, r)`, and its inches (''
 // for none); ((F13) `far`: aimCell's, saying so when it went as far as it
-// goes).
-export function preview(G, q, plan, sel, ground, path, far = false) {
+// goes). (F7b, DESIGN §4.2.4) With a climb on the way, what of them the
+// ladders cost: "7.0" of 7" (4.0" climbing)" (climbOf); and with the
+// pointer on a cliff rim the overlay shaded (`rimAt(cell)`,
+// view/overlay.js's), why the unit can't stand there.
+export function preview(G, q, plan, sel, ground, path, far = false, rimAt = null) {
   const { cell: i, ray } = aimCell(G, q, plan, ground, far)
   if (i < 0) return ''
   path(G.nav.path(plan.res, i, sel.r, plan.mode === 'fly' ? null : plan.forbid), i, sel.r)
-  return `${plan.res.dist[i].toFixed(1)}" of ${plan.max}"${ray ? ' · as far as it goes' : ''}`
+  const up = climbOf(G, plan, i)
+  let text = `${plan.res.dist[i].toFixed(1)}" of ${plan.max}"${up > 0 ? ` (${up.toFixed(1)}" climbing)` : ''}${ray ? ' · as far as it goes' : ''}`
+  if (rimAt?.(G.nav.index(ground.x, ground.z))) text += `<br><span class="ledge">✖ a ledge: no way down here</span>`
+  return text
 }
 
 // (F13) The cell a move aimed at `ground` goes to: { cell, ray }. The plan's
@@ -72,6 +78,22 @@ export function farthest(G, q, plan, x, z) {
   on.sort((a, b) => b.t - a.t || a.d - b.d || a.i - b.i)
   for (const c of on) if (q.validEnd(G, plan, c.i)) return c.i
   return -1
+}
+
+// (F7b) What of the way to cell i the plan spends on ladders: its prev chain
+// walked back from i to the start, each step that is a link (the nav's
+// linkCostOf: a ladder's foot to its top or back, LADDER_MUL × its height)
+// adding what it costs. 0 on a board with no height, and for a flier (its
+// move a circle, no links in it).
+export function climbOf(G, plan, i) {
+  const prev = plan.res?.prev
+  if (!G.nav.hasHeight || !prev || plan.mode === 'fly') return 0
+  let sum = 0
+  for (let c = i, n = 0; c >= 0 && prev[c] >= 0 && n < G.nav.N; c = prev[c], n++) {
+    const k = G.nav.linkCostOf(prev[c], c)
+    if (k >= 0) sum += k
+  }
+  return sum
 }
 
 // the commands

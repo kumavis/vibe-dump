@@ -97,6 +97,19 @@ export const MUTATIONS = {
   // (F17, P-climb's lob rows) a reach that ignores the height: every
   // weapon its printed range from a deck
   'lob-flat': ['/core/actions/shoot.js', '  if (!G.nav.hasHeight || !lobbed(w)) return w.range\n', '  return w.range\n', '1-3'],
+  // ── (F7b) the parapets (section 6's rows, P-climb's) ──
+  // parapets set a few tenths in from the deck's edge, off its rim
+  'parapet-off-rim': ['/core/terrain/recipes.js', "  const inset = face[0] === '-' ? PARAPET_T / 2 : -PARAPET_T / 2", "  const inset = face[0] === '-' ? PARAPET_T : -PARAPET_T", '1-3'],
+  // no gap left for a ladder's top: the parapets run up to its climb
+  'parapet-on-ladder': ['/core/terrain/recipes.js', 'export const PARAPET_LADDER_GAP = LADDER_W / 2 + 0.25', 'export const PARAPET_LADDER_GAP = 0.25', '1-3'],
+  // a rampart one parapet short
+  'parapet-count': ['/core/terrain/recipes.js', "parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lo, b: lx - PARAPET_LADDER_GAP, k: 2, recipe: 'rampart' })", "parapetRun(T, F, d, { face: '-z', at: dz - 2.25, a: lo, b: lx - PARAPET_LADDER_GAP, k: 1, recipe: 'rampart' })", '1-3'],
+  // a band half an inch deeper than the piece table's 1.5"
+  'parapet-band-deep': ['/core/terrain/recipes.js', 'const back = (PARAPET_BAND - COVER_PAD) / 2', 'const back = (PARAPET_BAND + 0.5 - COVER_PAD) / 2', '1-3'],
+  // a parapet's cover band rastered at every level: the ditch below in cover
+  'parapet-cover-flat': ['/core/nav.js', '      if (c.cover) this.rasterAt(c.coverShape || s, 0.6, this.cover, base)\n', '      if (c.cover) this.raster(c.coverShape || s, 0.6, this.cover)\n', '1-3'],
+  // a parapet that blocks movement (soft: a Brute's way through it)
+  'parapet-nav': ['/core/terrain/recipes.js', "    navKind: null, los: 'obscure', cover: true,\n    base, on: deck.id,", "    navKind: 'soft', los: 'obscure', cover: true,\n    base, on: deck.id,", '1-3'],
   // (F8b, the tiles: terrain-check's last section) a chunk promoted out of
   // its tile leaves the tile as it was: the tile still draws it, and its
   // own mesh too

@@ -101,5 +101,10 @@ export const RULES_ID = rulesId()
 // its wrecks to climb, its features: shell holes, kegs and caches, burned
 // trees, carts, sandbags, fires) and the `powder` mission, and the AI's keg
 // terms measured in 3D with height (kegHits): no other board changes, and
-// RULES_ID moves with the set and the mission)
-export const CORE_VERSION = 12
+// RULES_ID moves with the set and the mission; 13: F7b's parapets, built
+// as 8 on 7 and renumbered at its merge onto 12: a new piece on every
+// fortified board, standing on its deck's rim and drawing nothing, its
+// cover band rastered at its deck's level, and a shooter on its own deck
+// firing over that deck's parapets (nav.onLevel, Terrain.los's over): code,
+// no rules data, so RULES_ID stays, and no other board changes)
+export const CORE_VERSION = 13

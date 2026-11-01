@@ -32,7 +32,9 @@
 // Beside it, whether the AI climbs to shoot (shots from a deck the shooter
 // walked onto in the battle) and how often the lob decides (shots past the
 // weapon's printed range, which only a lob from height reaches; shots up at
-// a raised target).
+// a raised target), and (F7b) the volleys among the shots from a deck and
+// the battles with one: the parapets' cover band behind a deck's rim is
+// what draws the AI's shooters up there.
 //
 // F10b's row (at F8b, on the Grand boards): 4 Grand battles with one army
 // on `pilot` every phase; that army reaches melee by round 3 in ≥ 3 of 4.
@@ -81,11 +83,11 @@
 //
 //   node sim/play-report.mjs                    every row, on the working tree's core
 //   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f9a, f10b, f19a; comma-separated for more)
-//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's and F9a's rows: a seeded sweep of AI battles instead
+//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's and F9a's rows: a seeded sweep of AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
-// F7a's row: with no fort/ AI pair in the corpus (before F7a's corpus
-// commit) it sweeps 24. Each battle is folded in this process through the
+// F7a's and F7b's rows: with no fort/ AI pair in the corpus (before F7a's
+// corpus commit) they sweep 24. Each battle is folded in this process through the
 // code's own Folder (sim/run.mjs foldJob), as parity folds it. F10b's row
 // folds through the code's createMatch and apply, `strict` (every AI
 // command held to legal()). A battle that stops short is a failure, named.
@@ -240,11 +242,11 @@ async function f7b() {
   if (!f) return null
   const { what, rows, failed } = f
   console.log(`\nF7b's row: ${what}`)
-  for (const p of rows) console.log(`  ${p.id.padEnd(28)} shots ${p.shots}: from a deck ${p.deckShots} (${p.climbedShots} by a shooter that climbed to it), past the printed range ${p.lobs}, up at a raised target ${p.upShots}`)
+  for (const p of rows) console.log(`  ${p.id.padEnd(28)} shots ${p.shots}: from a deck ${p.deckShots} (${p.deckVolleys} volleys; ${p.climbedShots} by a shooter that climbed to it), past the printed range ${p.lobs}, up at a raised target ${p.upShots}`)
   for (const x of failed) console.log(`  FAILED ${x}`)
   const n = rows.length, fired = rows.filter((r) => r.deckShots > 0).length
   const sum = (k) => rows.reduce((s, r) => s + r[k], 0)
-  console.log(`\n  ${n} battles: ${sum('shots')} shots, ${sum('deckShots')} from a deck in ${fired} battles, ${sum('climbedShots')} by a shooter that climbed to its deck in ${rows.filter((r) => r.climbedShots).length}, ${sum('lobs')} past the printed range in ${rows.filter((r) => r.lobs).length}, ${sum('upShots')} up at a raised target`)
+  console.log(`\n  ${n} battles: ${sum('shots')} shots, ${sum('deckShots')} from a deck in ${fired} battles (${sum('deckVolleys')} volleys, in ${rows.filter((r) => r.deckVolleys).length}), ${sum('climbedShots')} by a shooter that climbed to its deck in ${rows.filter((r) => r.climbedShots).length}, ${sum('lobs')} past the printed range in ${rows.filter((r) => r.lobs).length}, ${sum('upShots')} up at a raised target`)
   const checks = [
     { name: 'a shooter fires from a deck', ok: n > 0 && fired * 2 >= n, got: `${fired} of ${n} battles (${pct(fired, n)})`, want: '≥ 50%' },
   ]
