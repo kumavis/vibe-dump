@@ -531,3 +531,19 @@ Editor: `src/editor/rig-panel.js` exports `makeRigPanel(ctx, { id, rep, inherite
 removed kinds (a `critter` look shows as a disabled option and the inspector offers "Convert to rig"). Fork = `defineModel(newName, resolved with extends flattened)`
 + `replace representation`; the JSON boxes edit the referenced model's OWN fields (patches over its base) or an inline look's fields;
 preview state writes `reconciler.preview(id, { anim })` and clears with `preview(id, null)` on deselect or a change of selection.
+
+## 7. Launcher and templates (added 2026-11-01, design §18)
+
+```js
+// src/doc/templates.js (track A)
+export const TEMPLATES                           // { blank: { title, description, icon }, meadow: { ... } }
+export function templateOps(name, { title })     // -> ops: initDoc + component defs + presets (+ icon) + MODEL_LIBRARY + the template's entities and world settings
+// src/net/recent.js (track B)
+export function recentWorlds(storage = localStorage)   // { list() -> entries newest first, upsert({ docUrl, key, view, sync, title }), touch(docUrl, { title }), forget(docUrl), clear() }  key 'mm:worlds', max 50, every write wrapped in try/catch
+// src/editor/launcher.js (track D)
+export function makeLauncher({ root, recent, templates, onOpen /* (link) */, onCreate /* (templateName) */, onOpenFile /* (File) */ })
+//   -> { show(), hide(), refresh(), destroy() }; stable ids: #launcher, #launch-new, #launch-template-<name>, #launch-recent, #launch-open-file, #launch-link
+// main.js: no `doc` in the hash and no `new=` -> makeLauncher; `#new=<template>` -> create at once; after any successful open/create -> recent.upsert; on meta.title change -> recent.touch
+// package.json gallery.thumbnail: { "click": ["#launch-new", "#launch-template-meadow", "button.toggle-left", "button.toggle-right"], "settle": 1000 }
+// palette: paletteEntries uses preset.icon before the billboard emoji
+```

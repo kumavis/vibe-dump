@@ -828,3 +828,52 @@ upgrade path becomes billboard → primitive → tree → **tree + animations (s
 root, same meshes)** → rig model → model(glTF) → billboard with zero leaks;
 300 rigs animating with CPU ms/frame reported; the dead group tints a rig;
 preview state drives clips with the sim idle.
+
+## 18. Launcher and templates (v1.3, 2026-11-01)
+
+**Today** a bare URL plants a new seeded world at once and rewrites the hash.
+That hides two things people want: their earlier worlds, and a choice of what
+a new world contains.
+
+### 18.1 The launcher
+
+A bare URL (no `doc` in the fragment) shows a full-screen launcher over an
+uninitialised scene; nothing is created until the person chooses. Sections:
+
+- **Your worlds** — worlds this browser has opened, newest first, from a local
+  list: title, last opened, Open, Copy link, Forget. Forget removes the entry
+  only; the document stays in IndexedDB and in the sync server.
+- **New world** — one card per template (§18.2); a click creates the document
+  from the template, writes the recent entry and rewrites the hash with a
+  fresh key, as today.
+- **Open a file** — the existing `.automerge` import.
+- **Paste a link** — a field that navigates to a pasted world link.
+
+`#new=<template>` creates that template at once (for links, docs and tests);
+`#safe` and `&sync=` keep working. The recent list lives in
+`localStorage['mm:worlds']` (max 50 entries of `{ docUrl, key, view, sync,
+title, at }`), written only by the app on open/create and on title change,
+rendered with `textContent` only. It holds the agent key of each world, which
+the browser history already holds; the Security notes say so and Forget
+removes it.
+
+### 18.2 Templates
+
+`src/doc/templates.js`: every template seeds the same library (component
+defs, presets with their `icon`, rig models) and differs in the entities it
+places and the world settings:
+
+- **Blank meadow** — ground and sky, one lamp, no creatures. The palette has
+  everything; the field is yours.
+- **Animal meadow** — the current starter scene (trees, rocks, lamp, T-rex,
+  three sheep, horse) plus the wizard by the lamp and a few zodiac animals,
+  so a new visitor sees the chase, a rider's mount and a person at once.
+
+The gallery thumbnail is shot through the launcher: the hint clicks **New
+world → Animal meadow**, then hides the panels.
+
+### 18.3 Palette icons
+
+A preset may carry `icon` (an emoji string) at its top level. The palette
+uses it first, then the billboard emoji as today, then a generic glyph, so rig
+presets get a readable card.
