@@ -39,7 +39,7 @@ export function makeInspector (ctx) {
   let preview = null // { id, anim }
   const setPreview = (anim) => {
     const arg = id ? previewArg(anim) : null
-    if (preview && (!arg || preview.id !== id)) { try { ctx.reconciler?.preview?.(preview.id, null) } catch (e) { console.error('[inspector] preview', e) } preview = null }
+    if (preview && (!arg || preview.id !== id)) { try { ctx.reconciler?.preview?.(preview.id, { anim: null }) } catch (e) { console.error('[inspector] preview', e) } preview = null }
     if (arg) { try { ctx.reconciler?.preview?.(id, arg); preview = { id, anim: arg.anim } } catch (e) { console.error('[inspector] preview', e) } }
   }
   const modelNames = () => Object.keys(doc()?.models ?? {}).sort()
@@ -129,9 +129,11 @@ export function makeInspector (ctx) {
     if (comp === 'representation') {
       const kind = String(data?.kind ?? '')
       const inheritedRep = () => presetComps(rowOf()?.preset).representation ?? {}
+      // the look without group overlays (the dead tint): what a whole-look copy starts from
+      const baseRep = (r) => ctx.read.baseComponents?.(doc(), r.id)?.representation ?? r.effective.representation
       const sw = renderKindSwitcher(ctx.kinds ?? {}, data, (target, { model } = {}) => {
         const r = rowOf(); if (!r) return
-        write([switchKindOps(r.id, r.effective.representation, target, ctx.kinds, { inherited: inheritedRep(), model })], `look ${kind} → ${target}${target === 'rig' && model ? ` (${model})` : ''}`)
+        write([switchKindOps(r.id, baseRep(r), target, ctx.kinds, { inherited: inheritedRep(), model })], `look ${kind} → ${target}${target === 'rig' && model ? ` (${model})` : ''}`)
       }, { models: modelNames() })
       const form = h('div')
       // kind belongs to the switcher; a rig's model and layers belong to the rig panel
@@ -148,11 +150,11 @@ export function makeInspector (ctx) {
           h('button', { class: 'small', type: 'button', title: `one replace: { kind: 'rig', model: '${target}' } with this colour`, onclick: (e) => {
             e.preventDefault()
             const r = rowOf(); if (!r) return
-            write([convertCritterOps(r.id, r.effective.representation, { inherited: inheritedRep() })], `critter → rig ${target}`)
+            write([convertCritterOps(r.id, baseRep(r), { inherited: inheritedRep() })], `critter → rig ${target}`)
           } }, `Convert to rig (${target})`)))
       } else if (kind === 'rig') {
         const panel = makeRigPanel({ doc, read: ctx.read, write, toast: ctx.toast }, {
-          id: row.id, rep: data, inherited: presetComps(row.preset).representation ?? {},
+          id: row.id, rep: baseRep(row) ?? data, inherited: presetComps(row.preset).representation ?? {},
           preview: { get: () => (preview?.id === row.id ? preview.anim : ''), set: setPreview },
         })
         body.append(panel.el)

@@ -129,7 +129,7 @@ A model has three layers:
                                // the controller merges (states by state name); up to 8 levels, no cycles
   stride: 1.2, runSpeed: 4,    // metres per gait cycle (drives `phase`) and the speed where `gait` reaches 1
   nodes: [                     // geometry: a tree of nodes; a named node is a bone, its children move with it
-    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.38, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
+    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.5, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
   ],                           // node fields: name, shape, p [m], r [deg], s, color, roughness, metalness,
                                // anchor ('seat' | 'head'), children
   animations: {                // clips of tracks, ADDITIVE to the rest pose, so clips layer
@@ -182,7 +182,7 @@ bones, then point an entity at it.
 
 ```bash
 node agent/cli.mjs "$L" define-model wizard '{"extends":"biped","nodes":[
-  {"name":"head","children":[{"name":"hat","shape":"cone","p":[0,0.38,0],"s":[0.34,0.5,0.34],"color":"#3b2a7a"}]},
+  {"name":"head","children":[{"name":"hat","shape":"cone","p":[0,0.5,0],"s":[0.34,0.5,0.34],"color":"#3b2a7a"}]},
   {"name":"chest","color":"#3b2a7a"},
   {"name":"arm_r","children":[{"name":"staff","shape":"cylinder","p":[0,-0.3,0.1],"s":[0.04,1.6,0.04],"color":"#6b4a2e"}]}],
   "animations":{"attack":{"tracks":{"staff.rz":[[0,0],[0.3,40],[0.7,0]]}}}}'

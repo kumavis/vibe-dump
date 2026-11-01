@@ -94,6 +94,7 @@ export const tools = {
   },
   define_model: {
     description: 'Add or replace a rig model in doc.models (design §17): a data-driven articulated look. model = {extends: "" | base model (nodes patch the base by name, clips merge by name, controller shallow-merges), stride (m per gait cycle, default 1), runSpeed (m/s, default 4), ' +
+      'With extends, a node entry whose name the base has changes that node (and its children are added under it: {name: "head", children: [hat]}); {name, remove: true} deletes a base node and its subtree; any other entry is a NEW node. A stub with only name/children that names no base node is refused as a misspelling (the error suggests the base name); a new node needs a shape or a position. Read the base\'s node names with `models` or `model` first. ' +
       'nodes: [{name, shape: box|sphere|cone|cylinder|capsule, p:[x,y,z], r:[deg x3], s:[x,y,z], color, roughness, metalness, anchor: seat|head, children: [...]}] (a named node is a bone; children move with it), ' +
       'animations: {clip: {loop: true, once: false, duration?, tracks: {"<node>.<rx|ry|rz|px|py|pz|sx|sy|sz>": "<expression>" | [[t, v], ...]}}} (additive to the rest pose: degrees, metres, scale factor), ' +
       'controller: {states: {idle|walk|run|attack|die|sit: clip | [clips layered]}, blend: seconds}}. ' +

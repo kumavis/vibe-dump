@@ -6,17 +6,24 @@ contract is [ARCHITECTURE.md](./ARCHITECTURE.md). This file records what is
 verified and by which test, what is known to be missing, and where the code
 departs from the contract.
 
-**State (rigs, integration round 1, 2026-11-01):** data-driven rigs (design §17,
+**State (rigs, review-fix round, 2026-11-01):** data-driven rigs (design §17,
 ARCHITECTURE §6) replace the `critter` kind; tracks A, B and C are wired
 together and `main.js` adds the model library to worlds opened from before rigs.
-Every check below passes:
+This round fixed the review's findings (amendment 17). Every check below passes:
 
-- unit tests: 260/260, ~9.5 s
+- unit tests: 274/274, ~10 s (new: `a-rig-review`, `c-rig-review`, two
+  `d-rig-editor` cases)
+- `test/e2e.mjs`: 106/106 in ~68 s on the final run (new: remove + redefine and
+  a plain redefinition of the in-use wizard rebuild it on B, a misspelt stub is
+  refused, 300 rigs flipping state every frame). The run before it was 105/106:
+  an `upgrade` regex still pinned the old key format (fixed). The baseline run
+  at the start of the round was 101/102 with the `keys` flake
+  ("the page tool's session ended with its fin"); it did not recur.
 - boundary lint: 0 errors and 0 warnings in 97 files, also with `--strict`
 - Vite build with the shared config: `base './'`, one module script, no
   `manualChunks`, no top-level await
-- `test/e2e.mjs`: 102/102 in ~60 s (a new `rigs` phase; `upgrade`, `mcp` and
-  `local` reworked for rigs). Of the 5 full runs this round: the first failed
+- previous round, `test/e2e.mjs`: 102/102 in ~60 s (a new `rigs` phase; `upgrade`, `mcp` and
+  `local` reworked for rigs). Of the 5 full runs that round: the first failed
   one check because the leftover-key filter matched the seed's own inline
   templates (test fixed); one hit the known pose-error flake (max 0.41 m at
   160 ms behind a 106 ms frame gap in B); one failed the handoff motion check
@@ -44,7 +51,15 @@ Not done here, left to the PM: the thumbnail, the gallery `dist/`, and
 | Representation replace billboard → primitive → tree → **tree + animations** → rig (`horse`) → model (glTF) → billboard keeps the same root `Object3D` and the same `live` object, with one visual and no leftover resources (primitive, tree, inline-rig and model templates, glTF) | e2e `upgrade`; unit `c-reconciler`, `c-rig-kind` |
 | Adding `animations` to a tree (a `set`, not a replace) keeps the same visual and the same mesh objects, and the tree starts moving (trunk swings ~22°) | e2e `upgrade`; unit `c-rig-kind` |
 | A new world carries the seven library models; every library model builds with every track on a built bone, feet at y≈0, `seat` and `head` anchors | e2e `rigs`; unit `a-rig-models`, `c-rig-kind`, `c-rig-lockdown` |
-| 300 rigs of two library models (horse + sheep) animating: they share one template per model (150 refs each); reconciler CPU **4.1–4.7 ms/frame** mean (p95 6–7.7 ms) in headless Chromium/SwiftShader under lockdown; a frame with render and a 1 px readback ~280–300 ms (~3.3 fps, ~5870 draw calls at 640×400); nothing is left after despawning them | e2e `rigs` (prints the numbers; `results.json` → `rigPerf`) |
+| 300 rigs of two library models (horse + sheep) animating: they share one template per model (150 refs each); reconciler CPU **4.1–4.7 ms/frame** mean (p95 6–7.7 ms; bound now 10 ms) in headless Chromium/SwiftShader under lockdown; a frame with render and a 1 px readback ~280–300 ms (~3.3 fps, ~5870 draw calls at 640×400); nothing is left after despawning them | e2e `rigs` (prints the numbers; `results.json` → `rigPerf`) |
+| The same 300 rigs with their state flipping walk/idle EVERY frame: 4.6–4.9 ms/frame (bound 2 × steady + 1 ms), at most 3 crossfade sets per rig; 1000 alternating switches keep ≤ 3 sets with weights summing to 1 | e2e `rigs`; unit `c-rig-review` |
+| A model whose content changes under the same revs re-keys (`model:<name>:<revs>:<hash>`): remove + redefine (two ops, or one batch, no frame between) and two peers defining one name from scratch both rebuild; new spawns never reuse the old template. On the live page: batch remove + define of the in-use wizard (1.1 → 1.1, other content) and a plain redefinition (→ 2.1, new `beard` bone, new hat colour) both rebuild it, one wizard template held | unit `c-rig-review`, `a-rig-review`; e2e `mcp` |
+| A world made before rigs: the library added on open and an agent's model, created concurrently, keep the union after the heal (Automerge shows one `models` map whole); a model removed after the heal stays removed; two peers healing at once converge | unit `a-rig-review` |
+| `__proto__` is never a name or id: `defineModel '__proto__'`, `extends: '__proto__'`, a rig look naming it, and `removeModel '__proto__'` are refused by validation (heads unchanged, `splitValidOps` drops it); prototype-member names (`constructor`) resolve to nothing; an own `__proto__` key from JSON stays visible to the validators | unit `a-rig-review` |
+| An old tree (repeated and odd names, extra fields, `cube`, `red`) stays editable: a node move and a replace with its own data pass; animating it needs the targeted name on exactly one node; inline nodes are not merged by name | unit `a-rig-review`, `a-rig-ops` |
+| With `extends`, a `{name, children}` stub naming no base node is refused with the nearest base name (`right_arm` → `arm_r`, `Head` → `head`), as is a `remove` naming no node | unit `a-rig-review`; e2e `mcp` |
+| A bone with no shape and `s` ≠ 1 keeps its subtree's world scale when a track moves it; summed offsets are clamped finite | unit `c-rig-review` |
+| A JSON-box edit of a model keeps its `description` (and every other field it does not touch); a Fork of a dead creature does not copy the dead tint into its own look | unit `d-rig-editor` |
 | The inspector's preview selector forces `walk` on a rig the sim leaves idle (bone swing 2.6° idle → ~48° walk); deselecting clears it | e2e `rigs`; unit `d-rig-editor`, `c-rig-kind` |
 | The `dead` group tints every node of a rig (a sheep preset with a rig look), patched in place (same visual) | e2e `rigs`; unit `c-rig-kind` (a halted pose survives the tint patch) |
 | Expressions: precedence, functions, arity, column-numbered errors, no global access, guarded output, also under `lockdown()` | unit `a-rig-expr`, `a-rig-lockdown` |
@@ -160,8 +175,6 @@ How the e2e harness is set up:
     frame, so a swinging limb or a dead rig lying down can extend past it.
   - A model redefinition rebuilds every instance. The state resumes (`since`),
     but an in-flight crossfade restarts and layer clocks reset.
-  - A model removed and re-created under the same name restarts at rev 1, so a
-    template still held from before the removal could be reused.
   - `ensureLibraryOps` runs on every open of a writable doc: it never
     overwrites an edited model, but it puts back a library model the user
     removed.
@@ -174,9 +187,15 @@ How the e2e harness is set up:
     with inline errors, the switcher's model dropdown and the Convert button are
     covered by unit tests of their op builders only.
   - When a previewed entity's look changes from rig to another kind, the
-    preview stays on until deselect. If the inspector clears while a drag of
-    the same entity is active, it clears the drag pose and the preview state
-    stays on until the next clear.
+    preview stays on until deselect.
+  - The `doc.models` heal moves a losing map's models only when the winner
+    lacks the name; a concurrent edit of a model inside the LOSING map that
+    arrives after a heal emptied it is lost (the heal runs on every change, so
+    the window is one sync round trip). It writes no undo entry.
+  - Old trees animate only once the targeted name is unique: there is no
+    converter that renames duplicates; the refusal names the problem.
+  - The model key's content hash is 53 bits (inline keys too): a collision is
+    possible in principle, not handled.
   - LIMITS.depth = 8 node levels; the serpent uses all 8.
   - The geometry and clips were checked in track C's harness (screenshots) and
     numerically; the biped gained a neck mesh this round (its head floated).
@@ -384,7 +403,8 @@ ARCHITECTURE §3 that callers rely on.
     - Doc (A): `resolveRepresentation` returns `{ key, model, chain, stride,
       runSpeed, nodes, animations, controller }` or null (never throws), with
       `key = 'model:<name>:<revs>'` joining the chain's revs own-first
-      (`model:horse:3.1`), so editing a base re-keys every model built on it. A
+      (`model:horse:3.1`), so editing a base re-keys every model built on it
+      (amendment 17 adds a content hash: `model:horse:3.1:<hash>`). A
       model's `rev` is an Automerge Counter that only moves forward (an undo
       restores content under a new rev; concurrent redefinitions sum).
       `validateModel(model, models, { name })` takes the name to catch cycles
@@ -401,9 +421,9 @@ ARCHITECTURE §3 that callers rely on.
       (tree.js re-exports rig.js's alias; importing each from the other was
       circular). `signature()` includes node names. An inline rig/tree key change
       with the same structure swaps the template in place; only model looks
-      return false. `reconciler.preview(id, null)` clears the drag pose when one
-      is active, else the preview state; `{ anim: null }` clears only the state;
-      added `previewState(id)`. `evaluate(layers, vars, out?)` and
+      return false. `reconciler.preview(id, null)` clears only the drag pose
+      (amendment 17; it used to clear the preview state when no pose was
+      active); `{ anim: null }` clears only the state; added `previewState(id)`. `evaluate(layers, vars, out?)` and
       `controller.set(state, now, { mapping, since })` avoid per-frame
       allocation and let a rebuilt look resume. With nothing matching, the
       controller plays the first LOOPING clip. A missing model renders a
@@ -421,3 +441,37 @@ ARCHITECTURE §3 that callers rely on.
       existing writable doc (not a version view, not a world it just seeded).
       The library biped gained `neck_m` (its head floated over the chest) and
       the T-rex patches it to fit.
+17. **Rig review fixes (2026-11-01), against ARCHITECTURE §6** (§6.1–§6.3 updated):
+    - Keys: `model:<name>:<revs>:<hash>` with a 53-bit content hash of the
+      chain's stored bodies (`models.js` `modelKeyOf`, `contentHash`,
+      `inlineKeyOf`; rig.js `modelKey` delegates and caches a link's hash per
+      stored object and rev). Inline keys use the same 53-bit hash (was 32-bit FNV).
+    - `doc.models` heal: `ops.js` `healModels(handle)` / `modelsToHeal(doc)`,
+      run by `main.js` on open (before `ensureLibraryOps`) and after every doc
+      change, and by the agent's local mode before its first write, which also
+      adds the library (a read-only local session writes nothing).
+    - Names: `isName` / `isId` refuse `__proto__`; `schema.js` exports `own(o, k)`
+      and every `doc.models` lookup uses it (chainOf, dependentsOf, validateOps,
+      world-caps `model`, read `modelData`, rig keys, inspector); `plain`/`toDoc`
+      keep an own `__proto__` key as data; `diffInto`, `inversePatch` and
+      `exactPatch` use `Object.hasOwn`, so a clip named `constructor` is
+      deleted by a redefinition.
+    - `validateInline` (inline looks, `tree`) is lenient on nodes (list of
+      objects, limits) and strict on clips/controller; a track must target a
+      name exactly one node carries. `fold` takes the first layer as written
+      (no merge by name), so an old tree with a repeated name renders both
+      nodes. The rig panel validates an inline edit with `validateInline` and a
+      model edit with `validateModel(candidate, models, { name })`.
+      Deviation from the finding's suggestion: node vectors are not checked
+      with isVec3, because the renderer coerces them (`vec3`) as the old tree did.
+    - `validateModel` with `extends` refuses a `{name, children}`-only stub or a
+      `remove` that names no base node, suggesting the nearest base name; the
+      `define_model` MCP description documents the patch rules and `remove`.
+    - Render: a shapeless node's rest scale is 1; `applyOffsets` clamps; the
+      controller keeps at most `MAX_OUT` = 2 outgoing sets (exported; `sets`
+      getter), reuses its `seen` map; the sim's animate system has hysteresis.
+    - Editor: `MODEL_FIELDS` includes `description`; Fork / kind switch /
+      Convert use `read.baseComponents(doc, id)` (no group overlays); the
+      inspector clears the preview state with `{ anim: null }`.
+    - Library: walk and run knees flex during swing (a quarter cycle earlier);
+      README / e2e wizard hat at `p: [0, 0.5, 0]` (above the eyes).

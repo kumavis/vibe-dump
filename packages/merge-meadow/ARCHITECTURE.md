@@ -477,12 +477,25 @@ export const CHANNELS                           // ['rx','ry','rz','px','py','pz
 export const LIMITS                             // { nodes: 200, tracks: 400, depth: 8, extendsDepth: 8 }
 export function resolveModel(models, name)      // follows `extends` (nodes patch by name, clips merge by name, controller shallow merge); -> plain resolved model or null; throws on a cycle / depth
 export function resolveRepresentation(doc, rep) // rig rep (model or inline) -> { key, model, chain, stride, runSpeed, nodes, animations, controller } | null (unknown model or broken chain: never throws)
-                                                // key = 'model:<name>:<revs>' with revs the chain's revs own-first joined by '.' (e.g. 'model:horse:3.1'), or 'inline:<hash>'
+                                                // key = 'model:<name>:<revs>:<hash>' with revs the chain's revs own-first joined by '.' and hash a 53-bit
+                                                // content hash of the chain's stored bodies (e.g. 'model:horse:3.1:1ba708667deb84'; modelKeyOf), or
+                                                // 'inline:<hash>' (inlineKeyOf). The hash is what re-keys a model whose content changed under the same
+                                                // revs: two peers defining a name from scratch (both rev 1), a removeModel + defineModel
 export function validateModel(model, models, { name }?) // -> problems[]: node names unique and valid, tracks target existing node.channel, expressions compile, keyframes sorted, limits, extends resolvable;
-                                                // `name` detects cycles through the model itself; resolver extras (name, chain, revs, key, model, error) are accepted and dropped
+                                                // `name` detects cycles through the model itself; resolver extras (name, chain, revs, key, model, error) are accepted and dropped;
+                                                // with `extends`, a {name, children}-only stub (or a remove) naming no base node is refused with the nearest base name
+export function validateInline(rep, models)     // an inline look (`tree`): nodes checked only for what the renderer needs (a list of objects, limits; shapes,
+                                                // colours and extra fields are coerced/ignored as the old tree kind did), clips and controller strictly, and a
+                                                // track must target a name exactly one node carries
 export function ensureLibraryOps(doc)           // -> ops that add any MODEL_LIBRARY entry missing from doc.models (never overwrites an edited one)
 export function nodeNames(nodes)                // flat list, depth-first
 ```
+
+`doc.models` heal (ops.js `healModels(handle)`, `modelsToHeal(doc)`): a world made before rigs has no `models` map, and two peers that
+create it concurrently conflict on the root key (Automerge shows one map whole). `healModels` moves every model of the losing map(s)
+that the winner lacks into the winner and empties the losers, in one change; `main.js` runs it on open (before `ensureLibraryOps`) and
+after every doc change, the agent's local mode before its first write (which also adds the library). Names (`isName`, `isId`) never
+accept `__proto__`; every `doc.models` lookup is an own-property lookup (`schema.js` `own`).
 
 Ops: `defineModel {name, model}` (validateModel before the change; `rev` is an
 Automerge Counter that only moves forward, so an undo restores content under a
@@ -516,6 +529,9 @@ export function makeRigController(resolved)     // -> { set(state, now, { mappin
 //   wireframe placeholder inside the rig visual until stale() sees it. Templates are ref-counted resources under the key: all instances of a model share one
 // kinds/index.js: KINDS = { billboard, primitive, tree: rigAlias, rig, model }; no critter
 // reconciler: keeps per-instance { t0, stateT0, dist, lastP, rand, idx } and passes vars to kind.animate; `preview.anim` on a rec overrides live.anim (editor preview state)
+// controller: at most MAX_OUT (2) outgoing crossfade sets, sets under 0.02 dropped and the rest renormalised (a flickering state stays bounded); `sets` = live set count
+// nodes.js: a node with no shape has rest scale 1 (its `s` scales nothing), so a track on a bone never rescales its subtree; applyOffsets clamps the summed offsets
+//   (|p| <= 1e4 m, |r| <= 1e6 deg, |s| <= 1e3, NaN -> 0). The sim's animate system has hysteresis (walk 0.25/0.15 m/s, run 0.65/0.55 x speed)
 ```
 
 ### 6.3 Track B — agent and editor
@@ -530,7 +546,9 @@ Editor: `src/editor/rig-panel.js` exports `makeRigPanel(ctx, { id, rep, inherite
 `renderKindSwitcher(kinds, current, onSwitch, { models })` adds a model dropdown and calls `onSwitch(kind, { model })`; it hides
 removed kinds (a `critter` look shows as a disabled option and the inspector offers "Convert to rig"). Fork = `defineModel(newName, resolved with extends flattened)`
 + `replace representation`; the JSON boxes edit the referenced model's OWN fields (patches over its base) or an inline look's fields;
-preview state writes `reconciler.preview(id, { anim })` and clears with `preview(id, null)` on deselect or a change of selection.
+preview state writes `reconciler.preview(id, { anim })` and clears with `preview(id, { anim: null })` on deselect or a change of selection
+(`preview(id, null)` clears only interaction's drag pose). Fork, the kind switch and Convert start from `read.baseComponents(doc, id)`
+(the look without active group overlays), so a dead creature's tint is not copied into its own representation.
 
 ## 7. Launcher and templates (added 2026-11-01, design §18)
 

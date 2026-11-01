@@ -122,3 +122,17 @@ test('a JSON-box edit of a model keeps every field it does not touch (descriptio
   // the editor's body carries every field the doc's model holds
   assert.equal(modelBody(before).description, before.description)
 })
+
+test('Fork of a dead creature starts from the look without group overlays: the dead tint is not baked in', () => {
+  const h = seeded()
+  applyOps(h, [{ op: 'replace', id: 'sheep-1', component: 'representation', data: { kind: 'rig', model: 'sheep' } }, { op: 'addGroup', id: 'sheep-1', group: 'dead' }])
+  const eff = read.entityData(h.doc(), 'sheep-1').effective.representation
+  assert.ok(eff.tint, `the dead group tints the effective look (${eff.tint})`)
+  const base = read.baseComponents(h.doc(), 'sheep-1').representation
+  assert.equal(base.tint, undefined)
+  const inherited = presetComponents(read, h.doc(), 'sheep').representation
+  applyOps(h, forkOps('sheep-1', base, 'sheep-2', read.modelData(h.doc(), 'sheep'), { inherited }))
+  applyOps(h, [{ op: 'removeGroup', id: 'sheep-1', group: 'dead' }])
+  const revived = read.entityData(h.doc(), 'sheep-1').effective.representation
+  assert.equal(revived.model, 'sheep-2'); assert.equal(revived.tint, undefined, 'revived, it is not grey')
+})

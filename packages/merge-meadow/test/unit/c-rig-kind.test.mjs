@@ -181,7 +181,9 @@ test('reconciler: vars from live (phase from distance, speed from live.v, hp), p
     s.rec.preview('h', { p: [5, 0, 5], yaw: 0 }); s.rec.frame(0.1)
     s.rec.preview('h', null)
     assert.equal(s.rec.previewState('h'), 'run')
-    s.rec.preview('h', null) // the inspector's clear
+    s.rec.preview('h', null) // a release with no pose shown (an aborted drag) leaves it too
+    assert.equal(s.rec.previewState('h'), 'run')
+    s.rec.preview('h', { anim: null }) // the inspector's clear
     assert.equal(s.rec.previewState('h'), null)
     s.rec.frame(0.1); assert.equal(seen[1], 'idle')
   } finally { KINDS.rig.animate = orig }

@@ -387,13 +387,14 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
     bounds: (id) => { const rec = recs.get(id); return rec ? bounds(rec).clone() : null },
     // hide an entity's root (your own player avatar) without touching its components; unpickable while hidden
     setVisible (id, v) { const rec = recs.get(id); if (rec) rec.root.visible = !!v },
-    // interaction's drag preview { p, yaw }: shown immediately, untweened, until
-    // cleared; the editor's preview state { anim } forces live.anim for the look.
-    // null clears the pose preview when one is active (a drag release), else the
-    // state; { anim: null } clears only the state.
+    // Two channels that never touch each other: interaction's drag preview { p, yaw }
+    // (shown immediately, untweened) cleared with null (a drag release or abort), and
+    // the editor's preview state { anim } (forces live.anim for the look) cleared
+    // with { anim: null }. A drag released before any pose was shown must not clear
+    // the state the inspector's selector still shows.
     preview (id, p) {
       const rec = recs.get(id); if (!rec) return
-      if (!p) { if (rec.preview) rec.preview = null; else rec.previewAnim = null; return }
+      if (!p) { rec.preview = null; return }
       if ('anim' in p) rec.previewAnim = p.anim ? String(p.anim) : null
       if (Array.isArray(p.p)) rec.preview = { p: [...p.p], yaw: p.yaw }
     },

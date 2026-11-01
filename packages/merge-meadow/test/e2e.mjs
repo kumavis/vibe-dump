@@ -182,7 +182,7 @@ async function contextWithPeer (browser, peerId) {
 const WIZARD = {
   extends: 'biped',
   nodes: [
-    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.38, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
+    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.5, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
     { name: 'chest', color: '#3b2a7a' },
     { name: 'arm_r', children: [{ name: 'staff', shape: 'cylinder', p: [0, -0.3, 0.1], s: [0.04, 1.6, 0.04], color: '#6b4a2e' }] },
   ],
@@ -595,7 +595,7 @@ async function upgradePhase () {
   }
   ok(treeAnim?.sameVisual && treeAnim.sameMeshes && treeAnim.meshes === 2 && treeAnim.swingDeg > 5, 'tree -> tree + animations: same visual and the same mesh objects, and the trunk now sways', treeAnim)
   const rigStep = steps.find((s) => s.kind === 'rig')
-  ok(rigStep && /^model:horse:\d+(\.\d+)*$/.test(rigStep.key ?? '') && !rigStep.missing, `the rig step renders the library horse (template ${rigStep?.key})`, rigStep)
+  ok(rigStep && /^model:horse:\d+(\.\d+)*:[0-9a-f]{14}$/.test(rigStep.key ?? '') && !rigStep.missing, `the rig step renders the library horse (template ${rigStep?.key})`, rigStep)
   // a look replaced while its model is still loading: the late load must not land or leak
   const slow = `${S.origin}${PREFIX}__e2e/tri.gltf?delay=900`
   await B.evaluate(([id, url]) => window.__mm.caps.world.get(id).replace('representation', { kind: 'model', url, scale: 1 }), [id, slow])
@@ -759,6 +759,25 @@ async function mcpPhase () {
     const rev = await B.evaluate(() => { const w = window.__mm.handle.doc().models?.wizard; return { rev: Number(w?.rev?.value ?? w?.rev ?? 0), idle: !!w?.animations?.idle } })
     ok(badM.isError && /column/.test(badM.json?.error ?? '') && rev.rev === 1 && !rev.idle, 'define_model with an expression syntax error is refused before the doc changes (the wizard stays at rev 1)', { error: String(badM.json?.error ?? '').slice(0, 120), ...rev })
     S.wizard = wid
+    // redefining a model that is IN USE rebuilds its instances on the live page (§17.4).
+    // First remove + redefine in one batch with other content: the revs start again at
+    // 1.1, so only the content part of the key tells B's look that it is stale
+    const keyOf = (id) => B.evaluate((id) => window.__mm.reconciler.visualFor(id)?.userData.key ?? null, id)
+    const k1 = await keyOf(wid)
+    const CROWNED = { ...WIZARD, nodes: [{ name: 'head', children: [{ name: 'crown', shape: 'cylinder', p: [0, 0.3, 0], s: [0.26, 0.1, 0.26], color: '#e8c020' }] }, ...WIZARD.nodes.slice(1)] }
+    const rr = await m.call('batch', { ops: [{ op: 'removeModel', name: 'wizard' }, { op: 'defineModel', name: 'wizard', model: CROWNED }] })
+    const crowned = await waitIn(B, ([id, k1]) => { const v = window.__mm.reconciler.visualFor(id); return v && !v.userData.missing && v.userData.key !== k1 && v.userData.bones?.has('crown') && !v.userData.bones.has('hat') ? v.userData.key : null }, [wid, k1]).then((h) => h.jsonValue(), () => null)
+    ok(!rr.isError && crowned && /^model:wizard:1\.1:/.test(k1) && /^model:wizard:1\.1:/.test(crowned), `remove_model + define_model with other content (same revs 1.1) rebuilds the wizard on B (${k1} -> ${crowned})`, rr.isError ? rr.json : { k1, crowned })
+    // then a plain redefinition: a new hat colour and a new node
+    const V2 = { ...WIZARD, nodes: [{ name: 'head', children: [{ ...WIZARD.nodes[0].children[0], color: '#7a2a3b' }, { name: 'beard', shape: 'cone', p: [0, 0.02, 0.16], r: [180, 0, 0], s: [0.16, 0.22, 0.08], color: '#e8e8e8' }] }, ...WIZARD.nodes.slice(1)] }
+    const v2 = await m.call('define_model', { name: 'wizard', model: V2 })
+    const rebuilt = await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v && /^model:wizard:2\.1:/.test(v.userData.key) && v.userData.bones?.has('beard') && v.userData.bones.has('hat') && !v.userData.bones.has('crown') ? v.userData.key : null }, wid).then((h) => h.jsonValue(), () => null)
+    const wkeys = await B.evaluate(() => window.__mm.resources.keys().filter((k) => /^model:wizard:/.test(k)))
+    const hatColor = await B.evaluate((id) => '#' + window.__mm.reconciler.visualFor(id)?.userData.bones.get('hat')?.userData.mesh?.material.color.getHexString(), wid)
+    ok(!v2.isError && rebuilt && wkeys.length === 1 && wkeys[0] === rebuilt && hatColor === '#7a2a3b', `define_model of an in-use model rebuilds it on B: key ${rebuilt}, the new beard bone, the new hat colour (${hatColor}), one wizard template in resources`, { rebuilt, wkeys, hatColor, err: v2.isError ? v2.json : undefined })
+    // a misspelt stub is refused with the base's name, not added at the feet
+    const typo = await m.call('define_model', { name: 'wizard', model: { ...WIZARD, nodes: [...WIZARD.nodes, { name: 'right_arm', children: [{ name: 'wand', shape: 'cylinder', s: [0.02, 0.3, 0.02] }] }] } })
+    ok(typo.isError && /did you mean "arm_r"/.test(typo.json?.error ?? ''), 'define_model refuses a stub that names no biped bone and suggests the right one', String(typo.json?.error ?? '').slice(0, 200))
     // B is the host and keeps writing checkpoints, so heads move anyway here: the strict
     // heads-unchanged check runs in the local phase, where nothing else writes
     const bad = await m.call('define_system', { name: 'broken', source: 'export default { update (world) { for (const e of world.query("tags") ' })
@@ -899,8 +918,23 @@ async function rigsPhase () {
     S.rigPerf = perf
     console.log(`#   300 rigs: reconciler ${perf.reconcilerMs.mean} ms/frame (p95 ${perf.reconcilerMs.p95}), render + 1 px readback ${perf.renderReadbackMs.mean} ms, ${perf.fps} fps, ${perf.drawCalls} draw calls`)
     ok(perf.frames >= 40 && perf.legSwingDeg > 10, `the 300 rigs animate (a horse's leg swings ${perf.legSwingDeg}° over ${perf.frames} frames)`, perf)
-    ok(perf.reconcilerMs.mean < 15, `reconciler CPU for 300 animating rigs: ${perf.reconcilerMs.mean} ms/frame mean (p95 ${perf.reconcilerMs.p95}; bound 15 ms)`)
-    await R.evaluate((ids) => { for (const id of ids) window.__mm.reconciler.preview(id, null); return window.__mm.caps.world.batch(ids.map((id) => ({ op: 'despawn', id }))).length }, ids)
+    ok(perf.reconcilerMs.mean < 10, `reconciler CPU for 300 animating rigs: ${perf.reconcilerMs.mean} ms/frame mean (p95 ${perf.reconcilerMs.p95}; bound 10 ms)`)
+    // the same rigs with their state flipping walk <-> idle every frame (a creature at a
+    // speed threshold): every frame starts a crossfade, which must stay bounded
+    const flick = await R.evaluate(async ([ids, frames]) => {
+      const rec = window.__mm.reconciler; const fr = rec.frame; const ms = []
+      rec.frame = function (...a) { const t = performance.now(); const r = fr.apply(this, a); ms.push(performance.now() - t); return r }
+      let i = 0
+      while (ms.length < frames) { const st = i++ % 2 ? 'idle' : 'walk'; for (const id of ids) rec.preview(id, { anim: st }); await new Promise((r) => requestAnimationFrame(r)) }
+      rec.frame = fr
+      const sets = Math.max(...ids.map((id) => rec.visualFor(id)?.userData.ctl?.sets ?? 0))
+      const s = [...ms].sort((a, b) => a - b)
+      return { mean: +(s.reduce((a, b) => a + b, 0) / s.length).toFixed(2), p95: +s[Math.floor(s.length * 0.95)].toFixed(2), sets }
+    }, [ids, 40])
+    const flickBound = +(perf.reconcilerMs.mean * 2 + 1).toFixed(2)
+    console.log(`#   300 rigs flickering walk/idle every frame: reconciler ${flick.mean} ms/frame (p95 ${flick.p95}), at most ${flick.sets} crossfade sets per rig`)
+    ok(flick.mean < flickBound && flick.sets <= 3, `reconciler CPU for 300 rigs switching state every frame: ${flick.mean} ms/frame mean (bound 2 x steady + 1 = ${flickBound} ms), crossfade sets per rig ${flick.sets} (<= 3)`, flick)
+    await R.evaluate((ids) => { for (const id of ids) window.__mm.reconciler.preview(id, { anim: null }); return window.__mm.caps.world.batch(ids.map((id) => ({ op: 'despawn', id }))).length }, ids)
     await waitIn(R, (ids) => ids.every((id) => !window.__mm.reconciler.objectFor(id)), ids, 30000).catch(() => {})
     const left = await R.evaluate((keys0) => window.__mm.resources.keys().filter((k) => !keys0.includes(k)), keys0)
     ok(left.length === 0, 'after despawning the 300 rigs no resource they held is left', left)

@@ -40,6 +40,16 @@ export function entityData (doc, id) {
   return row(doc, id, e, resolveEntity(doc, e))
 }
 
+// The effective components WITHOUT the active groups' overlays (preset chain ->
+// own): what the entity is when no group is on. An editor op that copies a whole
+// look (a Fork, a kind switch) starts from this, so the dead group's grey tint is
+// not baked into the entity's own representation and stays after a revive.
+export function baseComponents (doc, id) {
+  const e = doc?.entities?.[id]
+  if (!e) return null
+  return plain(resolveEntity(doc, { ...e, groups: {} })?.components ?? {})
+}
+
 const asList = (v) => (v == null ? [] : Array.isArray(v) ? v : [v])
 
 // Filters match EFFECTIVE components (spike S3 found 0 of 51 preset-spawned sheep
