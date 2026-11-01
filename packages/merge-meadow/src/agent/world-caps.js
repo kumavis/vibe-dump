@@ -15,6 +15,7 @@
 import { Far, E } from '@endo/far'
 import { watch as docWatch } from '../doc/watch.js'
 import { withMoves } from '../doc/ops.js'
+import { resolveModel, nodeNames } from '../doc/models.js'
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v)
 // JSON-shaped deep copy for things that are not doc values (host power results, op results)
@@ -34,6 +35,7 @@ export function eventsFromPatches (patches) {
     if (root === 'systems' && key != null) { seen.set(`s/${key}`, { type: 'system-changed', name: String(key) }); continue }
     if (root === 'presets' && key != null) { seen.set(`p/${key}`, { type: 'preset-changed', name: String(key) }); continue }
     if (root === 'components' && key != null) { seen.set(`c/${key}`, { type: 'component-def-changed', name: String(key) }); continue }
+    if (root === 'models' && key != null) { seen.set(`m/${key}`, { type: 'model-changed', name: String(key) }); continue }
     if (root === 'world' || root === 'meta') { seen.set(root, { type: `${root}-changed` }); continue }
     if (root !== 'entities' || key == null) continue
     const id = String(key)
@@ -156,6 +158,33 @@ export function makeWorldCaps (handle, { applyOps, read, checkSource, host = {},
       return viewCaps.get(id)
     }
 
+    // rig models (design §17.3): a summary per model, and one model resolved through
+    // its `extends` chain. Both read a plain copy of doc.models, never the proxy.
+    const allModels = () => read.plain(doc().models ?? {})
+    const models = () => {
+      const all = allModels()
+      return Object.keys(all).sort().map((name) => {
+        const own = isObj(all[name]) ? all[name] : {}
+        let r = null; let error = null
+        try { r = resolveModel(all, name) } catch (e) { error = String(e?.message ?? e) }
+        const m = r ?? own
+        return {
+          name,
+          extends: String(own.extends ?? ''),
+          nodes: nodeNames(Array.isArray(m.nodes) ? m.nodes : []),
+          clips: Object.keys(isObj(m.animations) ? m.animations : {}).sort(),
+          rev: Number(own.rev ?? 0),
+          ...(error ? { error } : {}),
+        }
+      })
+    }
+    const model = (name) => {
+      const all = allModels()
+      const n = String(name)
+      if (!isObj(all[n])) throw new Error(`no model ${n}`)
+      return json(read.plain(resolveModel(all, n)))
+    }
+
     const describe = () => ({ ...json(read.docSummary(doc())), mode, url: handle.url, heads: [...handle.heads()], powers: ['capture', 'logs', 'eval', 'explain', 'systems'].filter((k) => !!host[k]) })
     const list = (q = {}) => read.listEntities(doc(), isObj(q) ? copyIn(q) : {})
     const snapshot = () => read.plain(doc())
@@ -168,6 +197,8 @@ export function makeWorldCaps (handle, { applyOps, read, checkSource, host = {},
       snapshot,
       url: () => handle.url,
       heads: () => [...handle.heads()],
+      models,
+      model,
     })
 
     const world = Far('World', {
@@ -185,6 +216,12 @@ export function makeWorldCaps (handle, { applyOps, read, checkSource, host = {},
       setSystem: (name, patch) => write([{ op: 'setSystem', name, patch }])[0],
       removeSystem: (name) => write([{ op: 'removeSystem', name }])[0],
       setWorld: (patch) => write([{ op: 'setWorld', patch }])[0],
+      // validated by track A's validateOps (validateModel: names, track targets,
+      // expressions compile, extends, limits) before the change: a bad model leaves heads unchanged
+      defineModel: (name, m) => write([{ op: 'defineModel', name, model: m }])[0],
+      removeModel: (name) => write([{ op: 'removeModel', name }])[0],
+      models,
+      model,
       systems: hostSystems,
       explain: hostPower('explain'),
       subscribe: (l, f) => subscribe(scope, l, f),

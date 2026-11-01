@@ -6,6 +6,7 @@
 //   replace <id> <comp> '<json>' | remove <id> <comp> | despawn <id> | link <id> <comp> <otherId> ['<json extra>']
 //   batch '<ops json>' | define <id> '<entity json>' | define-preset <name> '<json>' | define-component <name> '<json>'
 //   define-system <name> '<source>' [--order n] | define-system <name> --file sys.js | explain <id>
+//   define-model <name> '<model json>' | define-model <name> --file model.json | models | model <name> | remove-model <name>
 //   capture [out.jpg] | eval '<js body>'
 // stdout: the JSON result; stderr: mode, fallbackReason and timings.
 // exit 0 ok, 1 error, 2 usage, 3 a local write the sync server did not acknowledge.
@@ -40,6 +41,10 @@ const argsFor = {
   'define-preset': () => ({ name: a[0], preset: J(a[1], 'preset') }),
   'define-component': () => ({ name: a[0], def: J(a[1], 'def') }),
   'define-system': () => ({ name: a[0], source: flags.file ? readFileSync(flags.file, 'utf8') : a[1], order: num(flags.order), ...(flags.disabled ? { enabled: false } : {}) }),
+  'define-model': () => ({ name: a[0], model: J(flags.file ? readFileSync(flags.file, 'utf8') : a[1], 'model') }),
+  models: () => ({}),
+  model: () => ({ name: a[0] }),
+  'remove-model': () => ({ name: a[0] }),
   explain: () => ({ id: a[0] }),
   eval: () => ({ code: a[0] }),
 }

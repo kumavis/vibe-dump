@@ -61,7 +61,7 @@ server.registerTool('connect', {
 })
 
 server.registerTool('events', {
-  description: 'Change events (entity-added/-removed/-changed, component-changed, system-changed, preset-changed, …) since the last call, oldest first. Filters: types, ids. since: a seq to read after instead of the cursor.',
+  description: 'Change events (entity-added/-removed/-changed, component-changed, system-changed, preset-changed, model-changed, …) since the last call, oldest first. Filters: types, ids. since: a seq to read after instead of the cursor.',
   inputSchema: { max: z.number().int().positive().optional(), since: z.number().int().optional(), types: z.array(z.string()).optional(), ids: z.array(z.string()).optional() },
 }, async ({ max = 50, since, types, ids }) => {
   try {

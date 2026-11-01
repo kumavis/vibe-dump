@@ -37,7 +37,7 @@ export const tools = {
     write: true,
   },
   replace: {
-    description: 'Replace a component wholesale (a new identity; wins over concurrent field edits). Use for meaning changes, e.g. swapping representation.kind from billboard to critter.',
+    description: 'Replace a component wholesale (a new identity; wins over concurrent field edits). Use for meaning changes, e.g. swapping representation.kind from billboard to a rig: {kind: "rig", model: "horse"} (see `models`).',
     input: { id: z.string(), component: z.string(), data: obj },
     run: (w, { id, component, data }) => E(E(w).get(id)).replace(component, data),
     write: true,
@@ -63,7 +63,7 @@ export const tools = {
     write: true,
   },
   batch: {
-    description: 'Apply many ops in ONE validated change and one round trip; a bad op fails the whole batch with no change. ops: [{op: "spawn"|"despawn"|"set"|"replace"|"remove"|"define"|"setParent"|"setName"|"addGroup"|"removeGroup"|"push"|"definePreset"|"removePreset"|"defineComponent"|"removeComponent"|"defineSystem"|"setSystem"|"removeSystem"|"setWorld", ...fields}]; "$<i>" in an id field refers to the id spawned by op i.',
+    description: 'Apply many ops in ONE validated change and one round trip; a bad op fails the whole batch with no change. ops: [{op: "spawn"|"despawn"|"set"|"replace"|"remove"|"define"|"setParent"|"setName"|"addGroup"|"removeGroup"|"push"|"definePreset"|"removePreset"|"defineComponent"|"removeComponent"|"defineSystem"|"setSystem"|"removeSystem"|"setWorld"|"defineModel"|"removeModel", ...fields}]; "$<i>" in an id field refers to the id spawned by op i.',
     input: { ops: z.array(obj) },
     run: (w, { ops }) => E(w).batch(ops),
     write: true,
@@ -90,6 +90,33 @@ export const tools = {
     description: 'Add or hot-swap a doc system that every peer runs. source is an ES module: `export default { init(world, hot) {}, update(world, dt) {}, dispose(hot) {} }`. world: query(...names) -> [{id, c, live, has, owned}], get(id), owns(id), nearby(id, r), spawn(def), despawn(id), set(id, comp, patch), emit(ev), events(type), rand(), time, dt, log. Mutate `live` of owned entities only. A syntax error is rejected before the doc changes.',
     input: { name: z.string(), source: z.string(), order: z.number().optional(), enabled: z.boolean().optional() },
     run: (w, { name, ...rest }) => E(w).defineSystem(name, rest),
+    write: true,
+  },
+  define_model: {
+    description: 'Add or replace a rig model in doc.models (design §17): a data-driven articulated look. model = {extends: "" | base model (nodes patch the base by name, clips merge by name, controller shallow-merges), stride (m per gait cycle, default 1), runSpeed (m/s, default 4), ' +
+      'nodes: [{name, shape: box|sphere|cone|cylinder|capsule, p:[x,y,z], r:[deg x3], s:[x,y,z], color, roughness, metalness, anchor: seat|head, children: [...]}] (a named node is a bone; children move with it), ' +
+      'animations: {clip: {loop: true, once: false, duration?, tracks: {"<node>.<rx|ry|rz|px|py|pz|sx|sy|sz>": "<expression>" | [[t, v], ...]}}} (additive to the rest pose: degrees, metres, scale factor), ' +
+      'controller: {states: {idle|walk|run|attack|die|sit: clip | [clips layered]}, blend: seconds}}. ' +
+      'Expressions: numbers, + - * / %, comparisons, && || !, a ? b : c, sin cos tan abs min max clamp lerp smoothstep floor ceil round sign sqrt pow saturate step, pi tau, and the vars t st phase speed gait turn hp rand idx. ' +
+      'Validated before the doc changes (unknown identifier, bad node/track target, extends cycle, > 200 nodes / 400 tracks): an error leaves the doc unchanged. Use it on an entity with replace representation {kind: "rig", model: name}.',
+    input: { name: z.string(), model: obj },
+    run: (w, { name, model }) => E(w).defineModel(name, model),
+    write: true,
+  },
+  models: {
+    description: 'The rig model library: [{name, extends, nodes: [node names, depth-first], clips: [clip names], rev}] (nodes and clips after `extends` resolution). Start from a library base (quadruped, biped, serpent, bird) or a species (horse, sheep, trex).',
+    input: {},
+    run: (w) => E(w).models(),
+  },
+  model: {
+    description: 'One rig model resolved through its `extends` chain: {nodes, animations, controller, stride, runSpeed, ...} as plain data, ready to copy, edit and pass to define_model under a new name.',
+    input: { name: z.string() },
+    run: (w, { name }) => E(w).model(name),
+  },
+  remove_model: {
+    description: 'Delete a rig model from doc.models. Refused while another model `extends` it; entities still naming it render a placeholder.',
+    input: { name: z.string() },
+    run: (w, { name }) => E(w).removeModel(name),
     write: true,
   },
   systems: {
