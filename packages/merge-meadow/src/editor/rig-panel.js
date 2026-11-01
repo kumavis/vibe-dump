@@ -7,7 +7,7 @@
 // beside the box; nothing invalid reaches the write path. The op shapes live in
 // rig-ops.js (tested in Node).
 import { h, hasFocusWithin } from './dom.js'
-import { resolveModel as defaultResolve, validateModel as defaultValidate } from '../doc/models.js'
+import { resolveModel as defaultResolve, validateModel as defaultValidate, validateInline as defaultValidateInline } from '../doc/models.js'
 import { RIG_INLINE } from './kind-switcher.js'
 import { PREVIEW_STATES, forkOps, rigFieldOps, setModelOps, uniqueModelName } from './rig-ops.js'
 
@@ -20,16 +20,18 @@ const FIELD_HINT = {
   controller: 'controller: {states: {idle, walk, run, attack, die, sit: clip | [clips]}, blend}',
 }
 
-// ctx: { doc(), read, write(ops, message, opts), toast?, resolveModel?, validateModel? }
+// ctx: { doc(), read, write(ops, message, opts), toast?, resolveModel?, validateModel?, validateInline? }
 // opts: { id, rep (effective representation), inherited (the preset's look), preview: { get() -> state, set(state) } }
 export function makeRigPanel (ctx, { id, rep, inherited, preview } = {}) {
   const resolveModel = ctx.resolveModel ?? defaultResolve
   const validateModel = ctx.validateModel ?? defaultValidate
+  // an inline look is checked the way the write path checks it (lenient nodes: an old tree stays editable)
+  const validateInline = ctx.validateInline ?? defaultValidateInline
   const models = () => ctx.read.plain(ctx.doc()?.models ?? {})
   const all = models()
   const names = Object.keys(all).sort()
   const name = rep?.model ? String(rep.model) : ''
-  const own = name && isObj(all[name]) ? all[name] : null
+  const own = name && Object.hasOwn(all, name) && isObj(all[name]) ? all[name] : null
   let resolved = null; let resolveError = null
   if (name && own) { try { resolved = resolveModel(all, name) } catch (e) { resolveError = problemText(e) } }
   if (!name) resolved = { nodes: rep?.nodes ?? [], animations: rep?.animations ?? {}, controller: rep?.controller ?? {} }
@@ -85,7 +87,7 @@ export function makeRigPanel (ctx, { id, rep, inherited, preview } = {}) {
       const target = name ? { model: name, own } : { inline: true, rep }
       const { candidate, ops } = rigFieldOps(id, target, field, v ?? (field === 'nodes' ? [] : {}))
       let problems = []
-      try { problems = validateModel(candidate, { ...models(), ...(name ? { [name]: candidate } : {}) }) ?? [] } catch (e) { problems = [problemText(e)] }
+      try { problems = (name ? validateModel(candidate, models(), { name }) : validateInline(candidate, models())) ?? [] } catch (e) { problems = [problemText(e)] }
       if (problems.length) { err.textContent = problems.map(String).join('\n'); err.hidden = false; return }
       const ok = write(ops, `${name ? `model ${name}` : 'rig'}.${field}`, { quiet: true, onError: (e) => { err.textContent = problemText(e); err.hidden = false } })
       if (ok) err.hidden = true

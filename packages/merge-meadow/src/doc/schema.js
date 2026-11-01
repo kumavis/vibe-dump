@@ -12,8 +12,12 @@ export const IMMUTABLE_KEYS = Object.freeze(['name', 'parent', 'preset', 'owner'
 
 const NAME_RE = /^[A-Za-z_][A-Za-z0-9_-]{0,63}$/
 export const ID_RE = /^[A-Za-z0-9_][A-Za-z0-9_:.-]{0,79}$/
-export const isName = (s) => typeof s === 'string' && NAME_RE.test(s)
-export const isId = (s) => typeof s === 'string' && ID_RE.test(s)
+// `__proto__` matches both patterns, but Automerge refuses it as a map key (and a
+// plain-object lookup would find Object.prototype): never a valid name or id
+export const isName = (s) => typeof s === 'string' && NAME_RE.test(s) && s !== '__proto__'
+export const isId = (s) => typeof s === 'string' && ID_RE.test(s) && s !== '__proto__'
+// own-property lookup: `models[name]` must never reach Object.prototype
+export const own = (o, k) => (o != null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k) ? o[k] : undefined)
 
 export const slug = (s) => String(s || 'e').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 24) || 'e'
 

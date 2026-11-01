@@ -126,7 +126,10 @@ test('validateOps: a rig look must name a model that resolves, or carry valid in
   ok([{ op: 'spawn', components: { representation: { kind: 'tree', nodes: [{ name: 'trunk', shape: 'cylinder' }], animations: { sway: { tracks: { 'trunk.rz': 'sin(t)*3' } } }, controller: { states: { idle: 'sway' } } } } }])
   no([{ op: 'spawn', components: { representation: { kind: 'tree', nodes: [{ name: 'trunk' }], animations: { sway: { tracks: { 'trunk.rz': 'sin(x)' } } } } } }], /representation\.animations\.sway\.tracks\["trunk\.rz"\]: unknown identifier 'x'/)
   no([{ op: 'spawn', components: { representation: { kind: 'rig', nodes: [{ name: 'a' }], animations: { c: { tracks: { 'b.rx': '1' } } } } } }], /no node named "b"/)
-  no([{ op: 'spawn', components: { representation: { kind: 'tree', nodes: [{ shape: 'teapot' }] } } }], /shape/)
+  // inline nodes are checked only for what the renderer needs (an old tree stays editable):
+  // an unknown shape draws a box, so it is not refused; a non-list or a non-object is
+  ok([{ op: 'spawn', components: { representation: { kind: 'tree', nodes: [{ shape: 'teapot' }] } } }])
+  no([{ op: 'spawn', components: { representation: { kind: 'tree', nodes: [{ shape: 'box' }, 7] } } }], /nodes\[1\]: must be a node object/)
   // the seed's own tree looks still validate
   ok(Object.entries(PRESETS).map(([name, preset]) => ({ op: 'definePreset', name, preset })))
   // a set patch is checked as the look it makes: the tree-1 look has unnamed nodes, so a track has nothing to target
@@ -149,9 +152,9 @@ test('upgrading a seed horse to a rig is one replace; resolveRepresentation read
   const rep = entityData(h.doc(), 'horse-1').effective.representation
   assert.equal(rep.kind, 'rig'); assert.equal(rep.model, 'horse')
   const r = resolveRepresentation(h.doc(), h.doc().entities['horse-1'].components.representation)
-  assert.equal(r.key, 'model:horse:1.1')
+  assert.match(r.key, /^model:horse:1\.1:[0-9a-f]{14}$/)
   applyOps(h, [{ op: 'defineModel', name: 'quadruped', model: { ...JSON.parse(JSON.stringify(MODEL_LIBRARY.quadruped)), stride: 1.1 } }])
-  assert.equal(resolveRepresentation(h.doc(), rep).key, 'model:horse:1.2')
+  assert.match(resolveRepresentation(h.doc(), rep).key, /^model:horse:1\.2:[0-9a-f]{14}$/)
 })
 
 test('read: modelData (resolved, raw) and docSummary.models are fresh plain data', () => {

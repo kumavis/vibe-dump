@@ -189,20 +189,20 @@ test('validateModel: track shapes (expression and keyframes), targets, names, li
 test('resolveRepresentation: model reps key on the chain revisions, inline reps on a content hash', () => {
   const doc = { models: library() }
   const h = resolveRepresentation(doc, { kind: 'rig', model: 'horse', color: '#ff0000' })
-  assert.equal(h.key, 'model:horse:1.1')
+  assert.match(h.key, /^model:horse:1\.1:[0-9a-f]{14}$/)
   assert.equal(h.model, 'horse')
   assert.deepEqual(h.chain, ['quadruped', 'horse'])
   assert.ok(find(h.nodes, 'mane') && h.animations.walk && h.controller.states.idle && h.stride === 1.8 && h.runSpeed === 7)
-  assert.equal(resolveRepresentation(doc, { kind: 'rig', model: 'biped' }).key, 'model:biped:1')
+  assert.match(resolveRepresentation(doc, { kind: 'rig', model: 'biped' }).key, /^model:biped:1:[0-9a-f]{14}$/)
   doc.models.quadruped.rev = 4
-  assert.equal(resolveRepresentation(doc, { kind: 'rig', model: 'horse' }).key, 'model:horse:1.4', 'editing a base re-keys what extends it')
+  assert.match(resolveRepresentation(doc, { kind: 'rig', model: 'horse' }).key, /^model:horse:1\.4:[0-9a-f]{14}$/, 'editing a base re-keys what extends it')
   assert.equal(resolveRepresentation(doc, { kind: 'rig', model: 'nope' }), null)
   assert.equal(resolveRepresentation({ models: { a: { extends: 'a' } } }, { kind: 'rig', model: 'a' }), null, 'a broken chain is null, never a throw')
   assert.equal(resolveRepresentation(doc, null), null)
   // inline: the tree kind's nodes
   const nodes = [{ shape: 'cylinder', p: [0, 1, 0], s: [0.35, 2, 0.35], color: '#7a5230' }]
   const a = resolveRepresentation(doc, { kind: 'tree', nodes })
-  assert.match(a.key, /^inline:[0-9a-f]{8}$/)
+  assert.match(a.key, /^inline:[0-9a-f]{14}$/)
   assert.equal(a.model, '')
   assert.deepEqual(a.animations, {})
   assert.deepEqual(a.controller, { states: {}, blend: 0.15 })

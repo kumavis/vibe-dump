@@ -23,7 +23,7 @@
 //   stride, runSpeed, description: the most derived value wins.
 // Depth ≤ LIMITS.extendsDepth hops; a cycle or a missing base throws.
 import { plain, isObj, Counter } from './convert.js'
-import { isName } from './schema.js'
+import { isName, own } from './schema.js'
 import { checkJSON } from './validate.js'
 import { checkExpr } from './expr.js'
 
@@ -121,10 +121,11 @@ const quadruped = {
         'leg_br.rx': 'sin(phase*tau)*(20 + 10*gait)',
         'leg_fr.rx': '-sin(phase*tau)*(20 + 10*gait)',
         'leg_bl.rx': '-sin(phase*tau)*(20 + 10*gait)',
-        'knee_fl.rx': 'saturate(cos(phase*tau))*30',
-        'knee_br.rx': '-saturate(cos(phase*tau))*25',
-        'knee_fr.rx': 'saturate(-cos(phase*tau))*30',
-        'knee_bl.rx': '-saturate(-cos(phase*tau))*25',
+        // knees flex while their leg swings forward (rx falling), never in stance
+        'knee_fl.rx': 'saturate(-cos(phase*tau))*30',
+        'knee_br.rx': '-saturate(-cos(phase*tau))*25',
+        'knee_fr.rx': 'saturate(cos(phase*tau))*30',
+        'knee_bl.rx': '-saturate(cos(phase*tau))*25',
         'body.py': 'abs(sin(phase*tau))*0.02',
         'head.rx': 'sin(phase*tau*2)*3',
         'tail.ry': 'sin(phase*tau)*10',
@@ -137,10 +138,10 @@ const quadruped = {
         'leg_fr.rx': 'sin(phase*tau - 0.5)*(30 + 15*gait)',
         'leg_bl.rx': 'sin(phase*tau + pi)*(30 + 15*gait)',
         'leg_br.rx': 'sin(phase*tau + pi - 0.5)*(30 + 15*gait)',
-        'knee_fl.rx': 'saturate(cos(phase*tau))*50',
-        'knee_fr.rx': 'saturate(cos(phase*tau - 0.5))*50',
-        'knee_bl.rx': '-saturate(-cos(phase*tau))*40',
-        'knee_br.rx': '-saturate(-cos(phase*tau - 0.5))*40',
+        'knee_fl.rx': 'saturate(-cos(phase*tau))*50',
+        'knee_fr.rx': 'saturate(-cos(phase*tau - 0.5))*50',
+        'knee_bl.rx': '-saturate(cos(phase*tau))*40',
+        'knee_br.rx': '-saturate(cos(phase*tau - 0.5))*40',
         'body.rx': 'sin(phase*tau)*4',
         'body.py': 'abs(sin(phase*tau))*0.06',
         'neck.rx': '8 + sin(phase*tau)*5',
@@ -231,8 +232,9 @@ const biped = {
       tracks: {
         'leg_l.rx': '-sin(phase*tau)*(22 + 8*gait)',
         'leg_r.rx': 'sin(phase*tau)*(22 + 8*gait)',
-        'knee_l.rx': 'saturate(sin(phase*tau))*35',
-        'knee_r.rx': 'saturate(-sin(phase*tau))*35',
+        // knees flex mid-swing (the leg's rx falling), so the foot clears the ground
+        'knee_l.rx': 'saturate(cos(phase*tau))*35',
+        'knee_r.rx': 'saturate(-cos(phase*tau))*35',
         'arm_l.rx': 'sin(phase*tau)*18',
         'arm_r.rx': '-sin(phase*tau)*18',
         'hips.py': 'abs(cos(phase*tau))*0.03',
@@ -243,8 +245,8 @@ const biped = {
       tracks: {
         'leg_l.rx': '-sin(phase*tau)*(38 + 15*gait)',
         'leg_r.rx': 'sin(phase*tau)*(38 + 15*gait)',
-        'knee_l.rx': 'saturate(sin(phase*tau))*70',
-        'knee_r.rx': 'saturate(-sin(phase*tau))*70',
+        'knee_l.rx': 'saturate(cos(phase*tau))*70',
+        'knee_r.rx': 'saturate(-cos(phase*tau))*70',
         'arm_l.rx': 'sin(phase*tau)*35',
         'arm_r.rx': '-sin(phase*tau)*35',
         'elbow_l.rx': '-70',
@@ -646,6 +648,47 @@ export function fnv1a (s) {
   for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0 }
   return h.toString(16).padStart(8, '0')
 }
+// a 53-bit content hash (cyrb53) as 14 hex digits: what template keys use, so two
+// different looks practically never share a key (and so a template)
+export function contentHash (s) {
+  let h1 = 0xdeadbeef; let h2 = 0x41c6ce57
+  for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677) }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909)
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909)
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0')
+}
+
+// The render key of a model look (design §17.3): 'model:<name>:<revs>:<hash>', revs
+// the chain's revs own-first joined by '.', hash over the chain's stored bodies.
+// The revs alone are not enough: two peers that each define a model from scratch
+// both start at rev 1, and a remove + redefine starts again at 1, so the same revs
+// can carry different content. A link's hash is cached on the stored object per
+// rev (an Automerge snapshot keeps the identity of an unchanged subtree), so a doc
+// change elsewhere costs a lookup, not a stringify.
+const linkHashes = new WeakMap()
+function linkHash (m) {
+  const rev = Number(plain(m?.rev) ?? 0) || 0
+  if (m && typeof m === 'object') { const hit = linkHashes.get(m); if (hit && hit.rev === rev) return hit.h }
+  const h = contentHash(stableStringify(modelBody(m)))
+  if (m && typeof m === 'object') linkHashes.set(m, { rev, h })
+  return h
+}
+// -> the key, or 'missing:<name>' (no such model) / 'broken:<name>' (a missing base,
+// a cycle or too deep a chain). `models`: doc.models (proxy, snapshot or plain).
+export function modelKeyOf (models, name) {
+  const revs = []; const hashes = []; const seen = new Set()
+  let cur = String(name ?? '')
+  while (cur) {
+    const m = own(models, cur)
+    if (!isObj(m) || seen.has(cur) || revs.length > LIMITS.extendsDepth) return revs.length ? `broken:${name}` : `missing:${name}`
+    seen.add(cur); revs.push(Number(plain(m.rev) ?? 0) || 0); hashes.push(linkHash(m))
+    cur = str(m.extends)
+  }
+  if (!revs.length) return `missing:${name}`
+  return `model:${name}:${revs.join('.')}:${hashes.length === 1 ? hashes[0] : contentHash(hashes.join('.'))}`
+}
+// the key of an inline look's body ({ nodes, animations, controller, stride?, runSpeed? })
+export const inlineKeyOf = (body) => `inline:${contentHash(stableStringify(body))}`
 
 // a definable body: the model fields only, no rev and no resolver extras
 export function modelBody (m) {
@@ -757,12 +800,15 @@ function normalize (r) {
 
 function fold (layers) {
   const r = { stride: DEFAULTS.stride, runSpeed: DEFAULTS.runSpeed, nodes: [], animations: {}, controller: { states: {}, blend: DEFAULTS.blend } }
-  for (const m of layers) {
+  layers.forEach((m, i) => {
     for (const k of ['stride', 'runSpeed', 'description']) if (m[k] != null) r[k] = clone(m[k])
-    patchNodes(r.nodes, m.nodes)
+    // the first layer is taken as written: patching by name is what `extends` does,
+    // and an inline look (an old tree) may repeat a name, which must not merge nodes
+    if (i === 0) r.nodes = (Array.isArray(m.nodes) ? m.nodes : []).filter((n) => isObj(n) && n.remove !== true).map(freshNode)
+    else patchNodes(r.nodes, m.nodes)
     mergeClips(r.animations, m.animations)
     r.controller = mergeController(r.controller, m.controller)
-  }
+  })
   return normalize(r)
 }
 
@@ -774,7 +820,7 @@ function chainOf (models, name) {
   let cur = String(name)
   while (cur) {
     if (seen.has(cur)) throw new TypeError(`model ${name}: extends cycle ${[...chain.map(([n]) => n), cur].join(' -> ')}`)
-    const m = models?.[cur]
+    const m = own(models, cur)
     if (!isObj(m)) {
       if (!chain.length) return null
       throw new TypeError(`model ${chain[chain.length - 1][0]} extends unknown model ${q(cur)}`)
@@ -807,10 +853,10 @@ export function resolveModel (models, name) {
 }
 
 // A rig representation -> the resolved look, or null (unknown model, a broken
-// extends chain). Model reps key on the revisions of the chain (own first, then
-// each base), so editing a base re-keys everything built on it:
-//   { kind: 'rig', model: 'horse' }        -> key 'model:horse:3.1'  ('model:quadruped:1' with no extends)
-//   { kind: 'rig'|'tree', nodes, ... }     -> key 'inline:<fnv1a of the stable JSON>'
+// extends chain). Model reps key on the revisions AND content of the chain (own
+// first, then each base: modelKeyOf), so editing a base re-keys everything built on it:
+//   { kind: 'rig', model: 'horse' }        -> key 'model:horse:3.1:<hash>'  ('model:quadruped:1:<hash>' with no extends)
+//   { kind: 'rig'|'tree', nodes, ... }     -> key 'inline:<contentHash of the stable JSON>'
 // -> { key, model, chain, stride, runSpeed, nodes, animations, controller } (fresh plain data)
 export function resolveRepresentation (doc, rep) {
   const r = plain(rep)
@@ -820,12 +866,12 @@ export function resolveRepresentation (doc, rep) {
     let m
     try { m = resolveModel(doc?.models ?? {}, name) } catch { return null }
     if (!m) return null
-    return { key: `model:${name}:${m.revs.join('.')}`, model: name, chain: m.chain, stride: m.stride, runSpeed: m.runSpeed, nodes: m.nodes, animations: m.animations, controller: m.controller }
+    return { key: modelKeyOf(doc?.models ?? {}, name), model: name, chain: m.chain, stride: m.stride, runSpeed: m.runSpeed, nodes: m.nodes, animations: m.animations, controller: m.controller }
   }
   const body = { nodes: Array.isArray(r.nodes) ? r.nodes : [], animations: isObj(r.animations) ? r.animations : {}, controller: isObj(r.controller) ? r.controller : {} }
   if (r.stride != null) body.stride = r.stride
   if (r.runSpeed != null) body.runSpeed = r.runSpeed
-  const key = `inline:${fnv1a(stableStringify(body))}`
+  const key = inlineKeyOf(body)
   const f = fold([body])
   return { key, model: '', chain: [], stride: f.stride, runSpeed: f.runSpeed, nodes: f.nodes, animations: f.animations, controller: f.controller }
 }
@@ -933,7 +979,7 @@ function checkResolved (r, problems, label = '') {
     }
   }
   if (tracks > LIMITS.tracks) problems.push(`${pre}${tracks} tracks (at most ${LIMITS.tracks})`)
-  for (const [s, list] of Object.entries(r.controller.states)) for (const c of list) if (!(c in r.animations)) problems.push(`${pre}controller.states.${s}: no clip named ${q(c)}`)
+  for (const [s, list] of Object.entries(r.controller.states)) for (const c of list) if (!Object.hasOwn(r.animations, c)) problems.push(`${pre}controller.states.${s}: no clip named ${q(c)}`)
 }
 
 const NEW = ' new' // a key no model name can take (names have no spaces)
@@ -959,15 +1005,109 @@ export function validateModel (model, models = {}, { name } = {}) {
   const all = { ...plain(models ?? {}), [name ?? NEW]: { ...modelBody(m), rev: 0 } }
   let r
   try { r = resolveModel(all, name ?? NEW) } catch (e) { problems.push(String(e?.message ?? e).replace(NEW, '(new model)')); return problems }
+  if (ext && m.nodes != null) checkPatchNames(m.nodes, ext, all, problems)
   checkResolved(r, problems)
   return problems
 }
 
-// structure-only checks of an inline rig look (representation { nodes, animations?, controller? })
+// `extends`: a patch entry names a base node to change, or adds a NEW node. An
+// entry that names no node of the base and carries only `name` and `children` is
+// a stub whose name is misspelt ('right_arm' for 'arm_r'): as a new node it would
+// be a shapeless root at the origin, with the hat or staff at the feet. So is a
+// `remove: true` that names no node. Both are refused, with the nearest base name.
+function checkPatchNames (patches, ext, all, problems) {
+  let base
+  try { base = resolveModel(all, ext) } catch { return } // reported by the resolve of the model itself
+  if (!base) return
+  const baseNames = nodeNames(base.nodes)
+  const known = new Set(baseNames)
+  const walk = (list, path, inPatch) => {
+    (Array.isArray(list) ? list : []).forEach((p, i) => {
+      if (!isObj(p)) return
+      const at = `${path}[${i}]`
+      const nm = typeof p.name === 'string' ? p.name : ''
+      if (inPatch && nm && known.has(nm)) { walk(p.children, `${at}.children`, true); return }
+      if (inPatch && p.remove === true) {
+        problems.push(`${at}: remove names ${q(nm)}, which is not a node of ${ext}${hint(nm, baseNames)}`)
+        return
+      }
+      if (inPatch && nm && Object.keys(p).every((k) => k === 'name' || k === 'children')) {
+        problems.push(`${at}: ${q(nm)} is not a node of ${ext}${hint(nm, baseNames)}; to add a new node give it a shape or a position (p)`)
+      }
+      for (const n of nodeNames([p])) known.add(n)
+      // a new node's children are new too: nothing under it patches the base
+    })
+  }
+  walk(patches, 'nodes', true)
+}
+
+// ' (did you mean "arm_r"?)' — compares names with sides spelt out or abbreviated
+// and their parts in any order, so right_arm finds arm_r and Head finds head
+const SIDE = { right: 'r', left: 'l', front: 'f', back: 'b', rear: 'b', upper: 'u', lower: 'lo' }
+const normName = (n) => String(n).toLowerCase().split(/[_\-\s]+|(?<=[a-z])(?=[0-9])/).filter(Boolean).map((t) => SIDE[t] ?? t).sort().join('_')
+function editDistance (a, b) {
+  const d = Array.from({ length: b.length + 1 }, (_, j) => j)
+  for (let i = 1; i <= a.length; i++) {
+    let prev = d[0]; d[0] = i
+    for (let j = 1; j <= b.length; j++) { const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = t }
+  }
+  return d[b.length]
+}
+function hint (name, names) {
+  if (!name || !names.length) return ''
+  const a = normName(name)
+  let best = null; let bd = Infinity
+  for (const n of names) { const dd = Math.min(editDistance(a, normName(n)), editDistance(name.toLowerCase(), n.toLowerCase())); if (dd < bd) { bd = dd; best = n } }
+  return best != null && bd <= Math.max(1, Math.floor(a.length / 3)) ? ` (did you mean ${q(best)}?)` : ''
+}
+
+// An inline rig look (representation { nodes, animations?, controller? }; what a
+// `tree` is). The nodes are checked only for what the renderer needs: a list of
+// node objects within the limits. The renderer coerces the rest (an unknown shape
+// draws a box, a CSS colour name a default, a short vector its defaults; extra
+// fields are ignored), and the `tree` kind accepted any node content before rigs,
+// so a strict check would leave existing trees unrenderable-in-the-editor: no
+// field edit, not even a replace with the same data, would pass. Clips and the
+// controller are checked strictly, and a track must target a name exactly ONE
+// node carries (a repeated or missing name is refused only once a track uses it).
 export function validateInline (rep, models = {}) {
-  const body = { nodes: rep?.nodes ?? [] }
-  for (const k of ['animations', 'controller', 'stride', 'runSpeed']) if (rep?.[k] != null) body[k] = rep[k]
-  return validateModel(body, models)
+  void models
+  const problems = []
+  const r = plain(rep) ?? {}
+  const nodes = r.nodes ?? []
+  const walk = (list, path, depth) => {
+    if (!Array.isArray(list)) { problems.push(`${path}: must be a list of nodes`); return }
+    list.forEach((n, i) => {
+      const at = `${path}[${i}]`
+      if (!isObj(n)) { problems.push(`${at}: must be a node object`); return }
+      if (depth > LIMITS.depth) problems.push(`${at}: nodes nested deeper than ${LIMITS.depth}`)
+      else if (n.children != null) walk(n.children, `${at}.children`, depth + 1)
+    })
+  }
+  walk(nodes, 'nodes', 1)
+  for (const f of ['stride', 'runSpeed']) if (r[f] != null && !(fin(r[f]) && r[f] > 0 && r[f] <= 1000)) problems.push(`${f}: must be a number in (0, 1000]`)
+  if (r.animations != null) checkClips(r.animations, problems)
+  if (r.controller != null) checkController(r.controller, problems)
+  if (problems.length) return problems
+  const { count, depth } = countNodes(nodes)
+  if (count > LIMITS.nodes) problems.push(`${count} nodes (at most ${LIMITS.nodes})`)
+  if (depth > LIMITS.depth) problems.push(`nodes nested ${depth} deep (at most ${LIMITS.depth})`)
+  const f = fold([{ nodes, animations: isObj(r.animations) ? r.animations : {}, controller: isObj(r.controller) ? r.controller : {} }])
+  const uses = new Map()
+  for (const n of nodeNames(f.nodes)) uses.set(n, (uses.get(n) ?? 0) + 1)
+  let tracks = 0
+  for (const [clip, c] of Object.entries(f.animations)) {
+    for (const k of Object.keys(c.tracks ?? {})) {
+      tracks++
+      const node = TRACK_RE.exec(k)?.[1]
+      const u = node ? uses.get(node) ?? 0 : 1
+      if (!u) problems.push(`animations.${clip}.tracks[${q(k)}]: no node named ${q(node)}`)
+      else if (u > 1) problems.push(`animations.${clip}.tracks[${q(k)}]: ${u} nodes are named ${q(node)}; rename all but one to animate it`)
+    }
+  }
+  if (tracks > LIMITS.tracks) problems.push(`${tracks} tracks (at most ${LIMITS.tracks})`)
+  for (const [st, list] of Object.entries(f.controller.states)) for (const c of list) if (!Object.hasOwn(f.animations, c)) problems.push(`controller.states.${st}: no clip named ${q(c)}`)
+  return problems
 }
 
 // the models whose extends chain passes through `name` (not `name` itself)
@@ -975,8 +1115,8 @@ export function dependentsOf (models, name) {
   const out = []
   for (const n of Object.keys(models ?? {})) {
     if (n === name) continue
-    let cur = str(models[n]?.extends); let hops = 0
-    while (cur && hops++ <= LIMITS.extendsDepth) { if (cur === name) { out.push(n); break } cur = str(models[cur]?.extends) }
+    let cur = str(own(models, n)?.extends); let hops = 0
+    while (cur && hops++ <= LIMITS.extendsDepth) { if (cur === name) { out.push(n); break } cur = str(own(models, cur)?.extends) }
   }
   return out.sort()
 }

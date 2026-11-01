@@ -7,16 +7,18 @@
 //   { kind: 'rig', nodes, animations?, controller? }                  inline (what `tree` is)
 //
 // The resolved model is a TEMPLATE resource keyed on the resolved key
-// ('model:<name>:<revs>' or 'inline:<hash>'), so 300 instances of one model
+// ('model:<name>:<revs>:<hash>' or 'inline:<hash>'), so 300 instances of one model
 // resolve and compile once and share geometry (unit shapes) and materials.
-// Editing a model bumps its rev, which re-keys every look built on it: the
-// reconciler asks stale() when the doc changes and rebuilds those.
+// Editing a model bumps its rev and changes its content hash, which re-keys every
+// look built on it: the reconciler asks stale() when the doc changes and rebuilds
+// those. The hash is what catches a model that changed under the same revs (two
+// peers defining one name from scratch, a remove + redefine).
 //
 // `tree` is an alias: the same implementation reading only the inline fields,
 // so adding `animations` to a tree component animates it in place (same root,
 // same meshes), never a kind swap.
 import * as THREE from 'three'
-import { resolveRepresentation, stableStringify, fnv1a } from '../../doc/models.js'
+import { resolveRepresentation, modelKeyOf, inlineKeyOf } from '../../doc/models.js'
 import { geoKey, shapeGeo, normColor } from '../resources.js'
 import { kindProp, defaultsOf, finite } from './common.js'
 import { signature, buildNodes, patchNodes } from './nodes.js'
@@ -52,25 +54,17 @@ export const treeSchema = {
 }
 
 // ---- keys (cheap: no resolve) ----------------------------------------------------
-// A model key walks the extends chain reading revs (own first), the format
-// resolveRepresentation uses; memoised per doc snapshot (an Automerge doc is a new
-// object after every change, so a snapshot's keys never go stale).
+// A model key walks the extends chain reading revs and per-link content hashes (own
+// first: models.js modelKeyOf, the key resolveRepresentation reports); memoised per
+// doc snapshot (an Automerge doc is a new object after every change, so a
+// snapshot's keys never go stale; the link hashes are cached across snapshots).
 let memoDoc = null
 const memo = new Map()
 export function modelKey (doc, name) {
   if (doc !== memoDoc) { memoDoc = doc; memo.clear() }
   const hit = memo.get(name)
   if (hit) return hit
-  const models = doc?.models
-  const revs = []; const seen = new Set()
-  let cur = name; let key = null
-  while (cur) {
-    const m = models?.[cur]
-    if (!isObj(m) || seen.has(cur) || revs.length > 9) { key = revs.length ? `broken:${name}` : `missing:${name}`; break }
-    seen.add(cur); revs.push(Number(m.rev ?? 0) || 0)
-    cur = str(m.extends)
-  }
-  key ??= `model:${name}:${revs.join('.')}`
+  const key = modelKeyOf(doc?.models, name)
   memo.set(name, key)
   return key
 }
@@ -87,7 +81,7 @@ function lookOf (d, alias) {
 }
 export function lookKey (doc, d, alias = false) {
   const L = lookOf(d, alias)
-  return L.model ? modelKey(doc, L.model) : `inline:${fnv1a(stableStringify(L.body))}`
+  return L.model ? modelKey(doc, L.model) : inlineKeyOf(L.body)
 }
 
 // template = what every instance of one resolved key shares
@@ -122,7 +116,7 @@ function make (alias) {
       const { res } = ctx
       const doc = ctx.doc?.()
       const L = lookOf(d, alias)
-      const key = L.model ? modelKey(doc, L.model) : `inline:${fnv1a(stableStringify(L.body))}`
+      const key = lookKey(doc, d, alias)
       const root = new THREE.Group()
       const ud = root.userData
       ud.pick = 'mesh'; ud.key = key; ud.model = L.model; ud.bones = new Map(); ud.anchors = {}
@@ -149,7 +143,7 @@ function make (alias) {
       const doc = ctx.doc?.()
       const L = lookOf(d, alias)
       if (str(L.model) !== str(ud.model)) return false
-      const key = L.model ? modelKey(doc, L.model) : `inline:${fnv1a(stableStringify(L.body))}`
+      const key = lookKey(doc, d, alias)
       if (key !== ud.key) {
         // a model edit re-keys: rebuild (the reconciler swaps the child)
         if (L.model) return false

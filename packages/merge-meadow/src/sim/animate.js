@@ -12,11 +12,16 @@ export function installAnimate (world, { order }) {
         const l = e.live
         const s = l.v ? len(l.v[0], l.v[2]) : 0
         const speed = Number(e.c.body?.speed ?? 1)
+        // hysteresis: a creature hovering at a threshold must not flicker between
+        // states every tick (each switch starts a crossfade in the renderer)
+        const was = l.anim
+        const runAt = speed * (was === 'run' ? 0.55 : 0.65)
+        const walkAt = was === 'walk' || was === 'run' ? 0.15 : 0.25
         l.anim = isDead(e) ? 'die'
           : (l.attackT != null && w.time - l.attackT < 0.35) ? 'attack'
               : ridingId(e) ? 'sit'
-                : s > speed * 0.6 ? 'run'
-                  : s > 0.2 ? 'walk' : 'idle'
+                : s > runAt ? 'run'
+                  : s > walkAt ? 'walk' : 'idle'
       }
     },
   })

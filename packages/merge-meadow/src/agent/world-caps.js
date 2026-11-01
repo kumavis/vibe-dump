@@ -181,7 +181,7 @@ export function makeWorldCaps (handle, { applyOps, read, checkSource, host = {},
     const model = (name) => {
       const all = allModels()
       const n = String(name)
-      if (!isObj(all[n])) throw new Error(`no model ${n}`)
+      if (!Object.hasOwn(all, n) || !isObj(all[n])) throw new Error(`no model ${n}`)
       return json(read.plain(resolveModel(all, n)))
     }
 

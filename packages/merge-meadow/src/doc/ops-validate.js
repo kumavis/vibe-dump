@@ -2,7 +2,7 @@
 // each one, and lists every problem (design §5.1: a bad agent call fails
 // without a change). Must not mutate the doc.
 import { plain, isObj } from './convert.js'
-import { isName, isId } from './schema.js'
+import { isName, isId, own } from './schema.js'
 import { validateComponent, validateSchema, validateSystemMeta, checkJSON } from './validate.js'
 import { componentDefsOf, isHollow, effectiveComponents, BUILTIN_KINDS, RIG_KINDS } from './presets.js'
 import { validateModel, validateInline, resolveModel, dependentsOf, modelBody } from './models.js'
@@ -106,7 +106,7 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
       if (!isObj(r) || !RIG_KINDS.includes(str(r.kind))) return
       const m = str(r.model)
       if (m) {
-        if (!isObj(models()[m])) { bad(`representation.model: no model ${JSON.stringify(m)}`); return }
+        if (!isName(m) || !isObj(own(models(), m))) { bad(`representation.model: no model ${JSON.stringify(m)}`); return }
         try { resolveModel(models(), m) } catch (e) { bad(`representation.model: ${e?.message ?? e}`) }
         return
       }
@@ -270,7 +270,7 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
         if (!isName(op.name)) { bad('bad model name'); break }
         if (!isObj(op.model)) { bad('model must be {extends?, stride?, runSpeed?, nodes, animations?, controller?}'); break }
         const ms = models()
-        const before = ms[op.name]
+        const before = own(ms, op.name)
         const problems0 = validateModel(op.model, ms, { name: op.name })
         for (const p of problems0) bad(`model ${op.name}: ${p}`)
         if (problems0.length) break
@@ -284,8 +284,8 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
       }
       case 'removeModel': {
         const ms = models()
-        if (!isName(op.name) || !isObj(ms[op.name])) { bad(`no model ${op.name}`); break }
-        const deps = Object.keys(ms).filter((n) => n !== op.name && str(ms[n]?.extends) === op.name).sort()
+        if (!isName(op.name) || !isObj(own(ms, op.name))) { bad(`no model ${op.name}`); break }
+        const deps = Object.keys(ms).filter((n) => n !== op.name && str(own(ms, n)?.extends) === op.name).sort()
         if (deps.length) { bad(`model ${op.name} is extended by ${deps.join(', ')}: remove or re-base those first`); break }
         delete ms[op.name]
         break

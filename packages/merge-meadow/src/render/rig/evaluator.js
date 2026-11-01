@@ -141,6 +141,11 @@ export function makeRigEvaluator (resolved) {
   }
 }
 
+const MAX_P = 1e4 // metres
+const MAX_R = 1e6 // degrees
+const MAX_S = 1e3 // scale factor
+const lim = (v, m) => (v > m ? m : v < -m ? -m : v === v ? v : 0) // NaN -> 0
+
 // Rest pose + offsets into the node groups of a rig root (built by kinds/nodes.js:
 // root.userData.bones = Map<name, Group>, each group's userData.rest = { p, r (rad), s }).
 // r/p add; s multiplies the node's mesh scale (a pivot with no mesh scales its group).
@@ -157,9 +162,12 @@ export function applyOffsets (rootGroup, offsets) {
     const last = g.userData.applied
     if (last && last[0] === o[0] && last[1] === o[1] && last[2] === o[2] && last[3] === o[3] && last[4] === o[4] && last[5] === o[5] && last[6] === o[6] && last[7] === o[7] && last[8] === o[8]) continue
     if (last) last.set(o); else g.userData.applied = Float64Array.from(o)
-    g.position.set(r.p[0] + o[3], r.p[1] + o[4], r.p[2] + o[5])
-    g.rotation.set(r.r[0] + o[0] * DEG, r.r[1] + o[1] * DEG, r.r[2] + o[2] * DEG)
+    // each track value is finite, but a sum of layers (or a big finite value) may
+    // not be: clamp, so a NaN/Infinity never reaches matrixWorld, the children and
+    // the anchors a rider's camera hangs on (doc data is shared)
+    g.position.set(r.p[0] + lim(o[3], MAX_P), r.p[1] + lim(o[4], MAX_P), r.p[2] + lim(o[5], MAX_P))
+    g.rotation.set(r.r[0] + lim(o[0], MAX_R) * DEG, r.r[1] + lim(o[1], MAX_R) * DEG, r.r[2] + lim(o[2], MAX_R) * DEG)
     const target = g.userData.mesh ?? g
-    target.scale.set(r.s[0] * o[6], r.s[1] * o[7], r.s[2] * o[8])
+    target.scale.set(lim(r.s[0] * o[6], MAX_S), lim(r.s[1] * o[7], MAX_S), lim(r.s[2] * o[8], MAX_S))
   }
 }

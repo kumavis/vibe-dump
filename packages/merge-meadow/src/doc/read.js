@@ -114,7 +114,7 @@ export function modelSummaries (doc) {
 // extends: '' (defineModel drops name/chain/rev/revs).
 export function modelData (doc, name, { raw = false } = {}) {
   const all = plain(doc?.models ?? {})
-  const own = all[String(name)]
+  const own = Object.hasOwn(all, String(name)) ? all[String(name)] : undefined
   if (!isObj(own)) return null
   const stored = { name: String(name), ...modelBody(own), extends: str(own.extends), rev: Number(own.rev ?? 0) || 0 }
   if (raw) return stored

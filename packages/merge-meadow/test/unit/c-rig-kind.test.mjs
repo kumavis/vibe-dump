@@ -6,7 +6,7 @@ import assert from 'node:assert/strict'
 import * as THREE from 'three'
 import { KINDS } from '../../src/render/kinds/index.js'
 import { makeResources, stdMatKey, tintColor } from '../../src/render/resources.js'
-import { MODEL_LIBRARY, resolveModel } from '../../src/doc/models.js'
+import { MODEL_LIBRARY, resolveModel, resolveRepresentation } from '../../src/doc/models.js'
 import { stage } from './c-helpers.mjs'
 
 const near = (a, b, eps = 1e-9, msg) => assert.ok(Math.abs(a - b) <= eps, `${msg ?? ''} ${a} != ${b}`)
@@ -24,7 +24,8 @@ test('every library model builds, every track drives a built bone, anchors come 
   for (const name of Object.keys(MODEL_LIBRARY)) {
     const o = KINDS.rig.create({ kind: 'rig', model: name }, ctx)
     assert.equal(o.userData.missing, undefined, name)
-    assert.equal(o.userData.key, `model:${name}:${resolveModel(MODEL_LIBRARY, name).revs.join('.')}`)
+    assert.ok(o.userData.key.startsWith(`model:${name}:${resolveModel(MODEL_LIBRARY, name).revs.join('.')}:`), o.userData.key)
+    assert.equal(o.userData.key, resolveRepresentation({ models: MODEL_LIBRARY }, { kind: 'rig', model: name }).key, 'the kind and track A agree on the key')
     const bones = o.userData.bones
     for (const n of o.userData.tpl.evaluator.nodes) assert.ok(bones.has(n), `${name}: track node ${n} built`)
     assert.deepEqual(o.userData.tpl.evaluator.errors, [], name)

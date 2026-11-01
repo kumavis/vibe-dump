@@ -21,19 +21,25 @@ test('resource keys follow the design §8 format', () => {
   assert.equal(gltfKey('https://x/a.glb'), 'gltf:https://x/a.glb')
 })
 
-test('rig keys: a model keys on its extends chain revs (own first), an inline look on its content', () => {
+test('rig keys: a model keys on its extends chain revs (own first) and content, an inline look on its content', () => {
   const doc = { models: { quadruped: { extends: '', rev: 3 }, horse: { extends: 'quadruped', rev: 5 } } }
-  assert.equal(modelKey(doc, 'horse'), 'model:horse:5.3')
-  assert.equal(modelKey(doc, 'quadruped'), 'model:quadruped:3')
+  assert.match(modelKey(doc, 'horse'), /^model:horse:5\.3:[0-9a-f]{14}$/)
+  assert.match(modelKey(doc, 'quadruped'), /^model:quadruped:3:[0-9a-f]{14}$/)
   assert.equal(modelKey(doc, 'nope'), 'missing:nope')
   assert.equal(modelKey({ models: { a: { extends: 'b', rev: 1 } } }, 'a'), 'broken:a', 'a missing base')
   assert.equal(modelKey({ models: { a: { extends: 'b' }, b: { extends: 'a' } } }, 'a'), 'broken:a', 'a cycle')
   // memoised per doc snapshot: a new snapshot (a new object) re-reads
   const next = { models: { ...doc.models, horse: { extends: 'quadruped', rev: 6 } } }
-  assert.equal(modelKey(next, 'horse'), 'model:horse:6.3')
+  assert.match(modelKey(next, 'horse'), /^model:horse:6\.3:[0-9a-f]{14}$/)
+  // the same revs with other content (two peers defining a name from scratch, a
+  // remove + redefine) is another key
+  const a1 = modelKey({ models: { w: { nodes: [{ name: 'hat', shape: 'cone', color: '#3b2a7a' }], rev: 1 } } }, 'w')
+  const a2 = modelKey({ models: { w: { nodes: [{ name: 'hat', shape: 'cone', color: '#ff0000' }], rev: 1 } } }, 'w')
+  assert.match(a1, /^model:w:1:/); assert.match(a2, /^model:w:1:/); assert.notEqual(a1, a2)
+  assert.equal(a1, modelKey({ models: { w: { rev: 1, nodes: [{ color: '#3b2a7a', shape: 'cone', name: 'hat' }] } } }, 'w'), 'key order does not matter')
   // inline: content-addressed, independent of key order and of colour/scale/tint
   const a = lookKey(null, { kind: 'tree', nodes: [{ shape: 'box', p: [0, 1, 0] }], color: '#ff0000' }, true)
-  assert.match(a, /^inline:[0-9a-f]{8}$/)
+  assert.match(a, /^inline:[0-9a-f]{14}$/)
   assert.equal(a, lookKey(null, { kind: 'rig', nodes: [{ p: [0, 1, 0], shape: 'box' }], scale: 2, tint: '#555555' }))
   assert.notEqual(a, lookKey(null, { kind: 'tree', nodes: [{ shape: 'box', p: [0, 2, 0] }] }, true))
   assert.equal(lookKey(null, { kind: 'tree', model: 'horse', nodes: [{ shape: 'box', p: [0, 1, 0] }] }, true), a, 'the tree alias ignores model')

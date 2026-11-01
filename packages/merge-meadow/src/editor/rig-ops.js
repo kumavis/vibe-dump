@@ -9,7 +9,9 @@ const clone = (v) => (v == null || typeof v !== 'object' ? v : JSON.parse(JSON.s
 // the editor's preview-state selector: the sim's semantic states, '' = off
 export const PREVIEW_STATES = ['idle', 'walk', 'run', 'attack', 'die', 'sit']
 // the model fields a definition carries (never `rev`: the op increments it)
-export const MODEL_FIELDS = ['extends', 'stride', 'runSpeed', 'nodes', 'animations', 'controller']
+// (every field the doc's model holds: one left out here would be deleted by every
+// JSON-box edit, since defineModel makes the stored model equal to the body)
+export const MODEL_FIELDS = ['extends', 'stride', 'runSpeed', 'description', 'nodes', 'animations', 'controller']
 
 // a definable copy of a model: known fields only, rev and resolver extras dropped
 export function modelBody (m, { flatten = false } = {}) {
@@ -52,7 +54,7 @@ export function forkOps (entityId, rep, name, resolved, { inherited } = {}) {
 export function exactPatch (prev, next) {
   if (!isObj(prev) || !isObj(next)) return clone(next)
   const out = {}
-  for (const k of Object.keys(prev)) if (!(k in next)) out[k] = null
+  for (const k of Object.keys(prev)) if (!Object.hasOwn(next, k)) out[k] = null
   for (const [k, v] of Object.entries(next)) {
     if (isObj(v) && isObj(prev[k])) out[k] = exactPatch(prev[k], v)
     else out[k] = clone(v)

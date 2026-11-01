@@ -47,7 +47,8 @@ export function makeInspector (ctx) {
   const cardSig = (row, comp) => {
     const data = row.effective[comp]
     if (comp !== 'representation' || String(data?.kind ?? '') !== 'rig') return json(data)
-    const m = data?.model ? doc()?.models?.[String(data.model)] : null
+    const ms = doc()?.models
+    const m = data?.model && ms && Object.hasOwn(ms, String(data.model)) ? ms[String(data.model)] : null
     return json([data, modelNames(), m ? ctx.read.plain(m) : null])
   }
 

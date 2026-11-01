@@ -27,8 +27,10 @@ function pose (g, n) {
   const rest = g.userData.rest ||= { p: [0, 0, 0], r: [0, 0, 0], s: [1, 1, 1] }
   rest.p[0] = p[0]; rest.p[1] = p[1]; rest.p[2] = p[2]
   rest.r[0] = r[0] * D; rest.r[1] = r[1] * D; rest.r[2] = r[2] * D
-  rest.s[0] = s[0]; rest.s[1] = s[1]; rest.s[2] = s[2]
-  if (!g.userData.mesh) g.scale.set(1, 1, 1)
+  // `s` scales only the node's own shape: a node with no shape (a bone pivot) has
+  // none, so its rest scale is 1 — an sx/sy/sz track then scales its group (and
+  // subtree) from 1, never jumping to an `s` that does nothing at rest
+  if (g.userData.mesh) { rest.s[0] = s[0]; rest.s[1] = s[1]; rest.s[2] = s[2] } else { rest.s[0] = 1; rest.s[1] = 1; rest.s[2] = 1; g.scale.set(1, 1, 1) }
   g.userData.applied = null // at rest now: the next applyOffsets writes
 }
 

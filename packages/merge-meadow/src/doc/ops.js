@@ -2,7 +2,7 @@
 // the Node agent fallback and the tests share it. validateOps (ops-validate.js)
 // checks a whole batch and lists every problem; applyOps refuses the batch
 // before handle.change if there is one.
-import { updateText } from '@automerge/automerge/slim'
+import { updateText, getConflicts, getObjectId } from '@automerge/automerge/slim'
 import { plain, toDoc, isObj, sameScalar, ImmutableString, Counter } from './convert.js'
 import { newId, slug, SCHEMA_VERSION } from './schema.js'
 import { validateOps, OP_NAMES, MAX_OPS, REF } from './ops-validate.js'
@@ -52,7 +52,7 @@ function arrayInto (target, v, path, changed) {
 // define = DEEP DIFF: make target equal to def with minimal writes; an unchanged
 // subtree is never assigned, so a concurrent field edit inside it survives.
 function diffInto (target, def, path, changed, keep = () => false) {
-  for (const k of Object.keys(target)) if (!(k in def) && !keep([...path, k])) { delete target[k]; changed.push([...path, k]) }
+  for (const k of Object.keys(target)) if (!Object.hasOwn(def, k) && !keep([...path, k])) { delete target[k]; changed.push([...path, k]) }
   for (const [k, v] of Object.entries(def)) {
     if (v === undefined) continue
     const cur = target[k]
@@ -69,7 +69,7 @@ function inversePatch (prev, patch) {
   const out = {}
   for (const [k, v] of Object.entries(patch)) {
     if (v === undefined) continue
-    if (!prev || !(k in prev)) { if (v !== null) out[k] = null; continue }
+    if (!isObj(prev) || !Object.hasOwn(prev, k)) { if (v !== null) out[k] = null; continue }
     if (isObj(v) && isObj(prev[k])) out[k] = inversePatch(prev[k], v)
     else out[k] = prev[k]
   }
@@ -390,6 +390,51 @@ export function applyValidOps (handle, ops, opts = {}) {
   const { ok, dropped } = splitValidOps(handle.doc(), ops, { componentDefs: opts.componentDefs, kinds: opts.kinds })
   const out = ok.length ? applyOps(handle, ok, opts) : { results: [], inverse: [] }
   return { ...out, dropped }
+}
+
+// ---------------------------------------------------------------- doc.models conflicts
+// A world made before rigs has no doc.models: the first defineModel creates it (the
+// library added on open, an agent's model). Two peers that create it concurrently
+// conflict on the root key, and Automerge shows ONE map whole: every model in the
+// other one vanishes from view (the whole library, or the agent's wizard). Both maps
+// are still in the doc, so this repairs it after the merge: every model of a losing
+// map that the winner lacks is moved into the winner, and the losing maps are
+// emptied, so a model removed later is not brought back by the next heal. A name
+// both maps hold keeps the winner's version (one concurrent definition wins, as for
+// any key). Deterministic: every peer sees the same winner, and two peers healing
+// at once write the same models.
+function losingModelMaps (doc) {
+  let c
+  try { c = getConflicts(doc, 'models') } catch { return [] }
+  if (!c) return []
+  let win = null
+  try { win = getObjectId(doc.models) } catch {}
+  return Object.entries(c).filter(([id, m]) => id !== win && isObj(m)).map(([, m]) => m)
+}
+// -> how many models sit in losing maps (0: nothing to heal)
+export function modelsToHeal (doc) {
+  let n = 0
+  for (const m of losingModelMaps(doc)) n += Object.keys(m).length
+  return n
+}
+// one change that moves them (no change at all when there is nothing to move) -> models moved
+export function healModels (handle, { message = 'merge concurrent model libraries' } = {}) {
+  if (!modelsToHeal(handle.doc())) return 0
+  let moved = 0
+  handle.change((d) => {
+    if (!isObj(d.models)) return
+    for (const m of losingModelMaps(d)) {
+      for (const name of Object.keys(m)) {
+        const lost = m[name]
+        if (!Object.hasOwn(d.models, name) && isObj(lost)) {
+          d.models[name] = { ...toDoc(modelBody(lost)), rev: new Counter(Math.max(1, Number(plain(lost.rev) ?? 0) || 0)) }
+          moved++
+        }
+        delete m[name]
+      }
+    }
+  }, { message })
+  return moved
 }
 
 // Moving an entity from the editor or an agent. A simulated entity (one with a

@@ -14,7 +14,7 @@ import { makePoseStream } from './src/net/stream.js'
 import { makeCheckpointer } from './src/net/checkpoint.js'
 import { seedOps } from './src/doc/seed.js'
 import { ensureLibraryOps } from './src/doc/models.js'
-import { applyOps as applyDocOps, applyValidOps, withMoves } from './src/doc/ops.js'
+import { applyOps as applyDocOps, applyValidOps, withMoves, healModels } from './src/doc/ops.js'
 import * as read from './src/doc/read.js'
 import { watch } from './src/doc/watch.js'
 import { World } from './src/core/world.js'
@@ -95,9 +95,12 @@ async function boot () {
     }
   }
   // a world made before rigs (or one whose library model was removed) gets the
-  // shared model library; an edited model is never overwritten (design §17.3)
+  // shared model library; an edited model is never overwritten (design §17.3).
+  // Two peers creating doc.models at once conflict on the key: heal that first, so
+  // the library only fills in what neither map had (ops.js healModels)
   if (!readOnly && !created) {
     try {
+      healModels(handle)
       const lib = ensureLibraryOps(handle.doc())
       if (lib.length) applyDocOps(handle, lib, { message: 'model library', peerId })
     } catch (e) { log.warn('[models] could not add the model library:', e?.message ?? e) }
@@ -295,9 +298,16 @@ async function boot () {
   })
 
   // ---- 8 one doc subscription feeds everything (rule §2.3)
+  let healQueued = false
   watch(handle, ({ doc, patches, initial, deleted }) => {
     if (deleted) { banner({ id: 'deleted', level: 'error', text: 'This world was deleted.' }); return }
     if (readOnly && !initial) return // a version view stays at its heads
+    // a merge that brought a concurrently created doc.models: move its models into
+    // the map Automerge shows (outside this callback: it writes)
+    if (!readOnly && !healQueued) {
+      healQueued = true
+      queueMicrotask(() => { healQueued = false; try { const n = healModels(handle); if (n) log.info(`[models] merged ${n} model(s) from a concurrently created library`) } catch (e) { log.warn('[models] heal:', e?.message ?? e) } })
+    }
     const d = readOnly ? docView : doc
     if (initial) world.load(d); else world.applyPatches(d, patches)
     syncSystems(d)

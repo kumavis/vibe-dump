@@ -11,7 +11,9 @@
 //
 // A state change crossfades over controller.blend seconds: the incoming set rises
 // 0 -> 1 while every outgoing set falls from the weight it had, so the weights of
-// the sets always sum to 1. A looping clip that is in both sets (breathe) keeps
+// the sets always sum to 1. A state that flickers (a creature at a speed
+// threshold) would pile up outgoing sets, each still fading: at most MAX_OUT
+// outgoing sets are kept, sets under MIN_W are dropped, and the rest renormalised. A looping clip that is in both sets (breathe) keeps
 // its clock and is reported once, with the summed weight. A `once` clip plays
 // from the state's entry and clamps at its duration (both time and st).
 import { FALLBACK } from '../animation.js'
@@ -19,6 +21,8 @@ import { FALLBACK } from '../animation.js'
 const fin = (v) => typeof v === 'number' && Number.isFinite(v)
 const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v)
 const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x)
+export const MAX_OUT = 2 // outgoing sets kept through a crossfade
+const MIN_W = 0.02 // an outgoing set lighter than this is dropped
 
 // -> { set(state, now, { mapping, since }) -> changed, layers(now) -> [{ clip, weight, time, st }], state, halted, as, blend }
 export function makeRigController (resolved, opts = {}) {
@@ -64,6 +68,7 @@ export function makeRigController (resolved, opts = {}) {
   let haltAt = 0
   let first = true
   const out = []
+  const seen = new Map() // reused by layers(): clip name -> index into out
 
   const kAt = (now) => (!fading ? 1 : blend > 0 ? clamp01((now - fadeT0) / blend) : 1)
   function weightOf (i, k) { return i === sets.length - 1 ? (fading ? k : 1) : sets[i].w0 * (1 - k) }
@@ -73,6 +78,7 @@ export function makeRigController (resolved, opts = {}) {
     get as () { return as },
     get halted () { return halted },
     get blend () { return blend },
+    get sets () { return sets.length }, // live layer sets (incoming + outgoing), for tests
     clips: names,
     // cheap when nothing changed (called every frame); -> true when it changed something
     set (next = 'idle', now = 0, { mapping = null, since = null } = {}) {
@@ -96,9 +102,11 @@ export function makeRigController (resolved, opts = {}) {
         incoming.w0 = 1; sets = [incoming]; fading = false
       } else {
         const k = kAt(now)
-        const outgoing = []
-        sets.forEach((set, i) => { const w = weightOf(i, k); if (w > 1e-6) outgoing.push({ ...set, w0: w }) })
-        // renormalise against drift so the outgoing weights sum to exactly 1
+        let outgoing = []
+        sets.forEach((set, i) => { const w = weightOf(i, k); if (w > MIN_W) { set.w0 = w; outgoing.push(set) } })
+        // keep the heaviest few (in their order), then renormalise so the outgoing
+        // weights sum to exactly 1
+        if (outgoing.length > MAX_OUT) { const keep = new Set([...outgoing].sort((a, b) => b.w0 - a.w0).slice(0, MAX_OUT)); outgoing = outgoing.filter((x) => keep.has(x)) }
         const sum = outgoing.reduce((a, x) => a + x.w0, 0)
         for (const o of outgoing) o.w0 = sum > 0 ? o.w0 / sum : 0
         sets = [...outgoing, incoming]; fadeT0 = now; fading = outgoing.length > 0
@@ -113,7 +121,7 @@ export function makeRigController (resolved, opts = {}) {
       let k = kAt(t)
       if (fading && k >= 1 && !halted) { sets = [sets[sets.length - 1]]; sets[0].w0 = 1; fading = false; k = 1 }
       let n = 0
-      const seen = new Map()
+      seen.clear()
       for (let i = 0; i < sets.length; i++) {
         const set = sets[i]
         const w = weightOf(i, k)

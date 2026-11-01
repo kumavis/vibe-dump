@@ -16,9 +16,13 @@ export function plain (v) {
   if (v instanceof Uint8Array) return new Uint8Array(v)
   if (v instanceof Date) return new Date(v.getTime())
   const o = {}
-  for (const k of Object.keys(v)) o[k] = plain(v[k])
+  for (const k of Object.keys(v)) put(o, k, plain(v[k]))
   return o
 }
+
+// o[k] = x, except that an own `__proto__` key (JSON.parse makes one) stays an own
+// data property the validators can see and refuse, instead of becoming a prototype
+const put = (o, k, x) => { if (k === '__proto__') Object.defineProperty(o, k, { value: x, enumerable: true, writable: true, configurable: true }); else o[k] = x }
 
 // Plain JSON -> doc value. Every string becomes an ImmutableString: component data
 // is enums, ids, colours and URLs, and a plain string is collaborative Text whose
@@ -30,7 +34,7 @@ export function toDoc (v) {
   if (v instanceof ImmutableString || v instanceof Counter) return v
   if (Array.isArray(v)) return v.map(toDoc)
   const o = {}
-  for (const [k, x] of Object.entries(v)) if (x !== undefined) o[k] = toDoc(x)
+  for (const [k, x] of Object.entries(v)) if (x !== undefined) put(o, k, toDoc(x))
   return o
 }
 

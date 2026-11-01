@@ -45,6 +45,6 @@ test('under lockdown: the library validates and resolves; model ops write and re
   applyOps(h, [{ op: 'defineModel', name: 'pony', model: { extends: 'horse', stride: 1.2, animations: { walk: { tracks: { 'tail.rz': 'sin(phase*tau)*9' } } } } }])
   assert.equal(modelData(h.doc(), 'pony').stride, 1.2)
   assert.ok(docSummary(h.doc()).models.some((m) => m.name === 'pony'))
-  assert.equal(resolveRepresentation(h.doc(), { kind: 'rig', model: 'pony' }).key, 'model:pony:1.1.1')
+  assert.match(resolveRepresentation(h.doc(), { kind: 'rig', model: 'pony' }).key, /^model:pony:1\.1\.1:[0-9a-f]{14}$/)
   assert.throws(() => applyOps(h, [{ op: 'defineModel', name: 'bad', model: { extends: 'horse', animations: { walk: { tracks: { 'tail.rz': 'eval(1)' } } } } }]), /unknown function 'eval'/)
 })

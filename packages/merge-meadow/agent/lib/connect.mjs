@@ -17,7 +17,8 @@ import { connectCapTP, aesKey, randomId } from '../../src/agent/transport.js'
 import { makeWorldCaps } from '../../src/agent/world-caps.js'
 import { parseLink, docIdOf } from '../../src/net/link.js'
 import { findDoc, whenSynced, trackServer, serverStorageId } from '../../src/net/repo.js'
-import { applyOps } from '../../src/doc/ops.js'
+import { applyOps, healModels } from '../../src/doc/ops.js'
+import { ensureLibraryOps } from '../../src/doc/models.js'
 import * as read from '../../src/doc/read.js'
 
 const withTimeout = (p, ms, msg) => {
@@ -102,7 +103,22 @@ export async function connect (link, {
 
   if (!world) {
     const checkSource = makeNodeCheckSource(await loadLower())
-    const localApply = (...args) => { const r = applyOps(...args); wrote = true; return r }
+    // before the first write, the migration a page runs on open (main.js): heal a
+    // concurrently created doc.models, then add the model library to a world made
+    // before rigs, so `define-model wizard {"extends":"biped"}` works with no tab open.
+    // Not on connect: a read-only use of local mode must not write.
+    let migrated = false
+    const localApply = (h, ops, opts) => {
+      if (!migrated) {
+        migrated = true
+        try {
+          if (healModels(h)) wrote = true
+          const lib = ensureLibraryOps(h.doc())
+          if (lib.length) { applyOps(h, lib, { message: 'model library', peerId }); wrote = true }
+        } catch {}
+      }
+      const r = applyOps(h, ops, opts); wrote = true; return r
+    }
     localCaps = makeWorldCaps(handle, { applyOps: localApply, read, checkSource, mode: 'local', peerId })
     world = role === 'viewer' ? localCaps.viewer : localCaps.world // attenuate locally too (§16.8)
     mode = 'local'

@@ -107,3 +107,18 @@ test('applied to the seeded doc: switch a sheep to a rig, convert a critter, for
   assert.ok(h.doc().models['biped-2'])
   assert.equal(read.entityData(h.doc(), 'sheep-1').effective.representation.model, 'biped-2')
 })
+
+test('a JSON-box edit of a model keeps every field it does not touch (description included)', () => {
+  const h = seeded()
+  const before = read.plain(h.doc().models.horse)
+  assert.ok(before.description, 'library models carry a description')
+  const own = read.modelData(h.doc(), 'horse', { raw: true })
+  const { ops } = rigFieldOps('h1', { model: 'horse', own }, 'controller', { ...(own.controller ?? {}), blend: 0.3 })
+  applyOps(h, ops)
+  const after = read.plain(h.doc().models.horse)
+  assert.equal(after.controller.blend, 0.3)
+  for (const k of Object.keys(before)) if (k !== 'controller' && k !== 'rev') assert.deepEqual(after[k], before[k], k)
+  assert.equal(after.rev, before.rev + 1)
+  // the editor's body carries every field the doc's model holds
+  assert.equal(modelBody(before).description, before.description)
+})
