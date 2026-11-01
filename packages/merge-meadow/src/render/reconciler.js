@@ -5,9 +5,18 @@
 // (preset + own + groups) component data; this module never reads the doc for
 // entity data. `animation` has no handler: frame() reads it with live.anim, so
 // editing a clip mapping never rebuilds a look.
+//
+// Rigs (design §17.4): each entity keeps animation variables beside its root —
+// { t0, stateT0, dist, lastP, rand, idx } — from which every frame derives
+// t, st, phase (distance ÷ the model's stride), speed, gait, turn and hp for
+// kind.animate(). preview(id, { anim }) forces the state (the editor's preview
+// selector). When the doc changes outside an entity (a model redefined), looks
+// whose kind reports stale() are rebuilt.
 import * as THREE from 'three'
 import { KINDS, PLACEHOLDER, onKindRegistered } from './kinds/index.js'
 import { lightHandler } from './light.js'
+import { hp as hpOf } from '../doc/read.js'
+import { fnv1a } from '../doc/models.js'
 
 const DEG = Math.PI / 180
 const SNAP = 4 // m between two ticks: a teleport, not motion; do not tween across it
@@ -27,10 +36,13 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
   const recs = new Map() // id -> rec
   const assets = () => world.doc?.assets
   const offs = []
+  const docOf = () => world.doc
   let lastTick = -1
   let sinceTick = 0
+  let clock = 0 // seconds of frames: the rig variables' time base
+  let lastDoc
 
-  const ctxFor = (rec) => ({ res, entity: rec.e, assets, changed: () => { rec.boxDirty = true } })
+  const ctxFor = (rec) => ({ res, entity: rec.e, assets, doc: docOf, changed: () => { rec.boxDirty = true } })
 
   function ensure (e) {
     let rec = recs.get(e.id)
@@ -38,7 +50,7 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
     const root = new THREE.Group()
     root.name = 'entity:' + e.id; root.userData.entity = e.id
     scene.add(root)
-    rec = { id: e.id, e, root, t: null, visuals: new Map(), anchors: new Map(), prevP: null, curP: null, prevYaw: 0, curYaw: 0, preview: null, box: new THREE.Box3(), boxDirty: true, clipsRef: undefined, clips: null }
+    rec = { id: e.id, e, root, t: null, visuals: new Map(), anchors: new Map(), prevP: null, curP: null, prevYaw: 0, curYaw: 0, preview: null, previewAnim: null, box: new THREE.Box3(), boxDirty: true, clipsRef: undefined, clips: null, av: animVars(e.id) }
     recs.set(e.id, rec)
     return rec
   }
@@ -153,12 +165,57 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
     root.scale.set(t.s[0], t.s[1], t.s[2])
   }
 
+  // ---- rig variables (design §17.2), per instance
+  function animVars (id) {
+    const h = parseInt(fnv1a(String(id)), 16) >>> 0
+    return {
+      t0: clock, stateT0: clock, state: null, dist: 0, lastP: null, lastYaw: null, speed: 0, turn: 0,
+      rand: h / 4294967296, idx: h % 1000, hRef: undefined, hp: 1,
+      vars: { t: 0, st: 0, phase: 0, speed: 0, gait: 0, turn: 0, hp: 1, rand: 0, idx: 0 },
+    }
+  }
+  const LOCO = { walk: 0.4, run: 1 } // a previewed gait with the sim idle: this share of runSpeed
+  function varsFor (rec, state, dt, obj) {
+    const a = rec.av
+    if (state !== a.state) { a.state = state; a.stateT0 = clock }
+    const stride = obj.userData.stride > 0 ? obj.userData.stride : 1
+    const runSpeed = obj.userData.runSpeed > 0 ? obj.userData.runSpeed : 4
+    // distance travelled by the rendered root (horizontal), not across a teleport
+    const p = rec.root.position
+    let moved = 0
+    if (a.lastP) { const d = Math.hypot(p.x - a.lastP[0], p.z - a.lastP[1]); if (d <= SNAP) moved = d } else a.lastP = [0, 0]
+    a.lastP[0] = p.x; a.lastP[1] = p.z
+    const yaw = rec.root.rotation.y
+    const dYaw = a.lastYaw == null ? 0 : wrap(yaw - a.lastYaw)
+    a.lastYaw = yaw
+    const k = dt > 0 ? Math.min(1, dt * 10) : 0 // ~0.1 s smoothing
+    const L = rec.e.live
+    let speed
+    if (Array.isArray(L?.v) && L.v.length === 3 && !rec.preview) speed = Math.hypot(fin(L.v[0]), fin(L.v[2]))
+    else { a.speed += ((dt > 0 ? moved / dt : 0) - a.speed) * k; speed = a.speed }
+    a.turn += ((dt > 0 ? dYaw / dt : 0) - a.turn) * k
+    if (rec.previewAnim && LOCO[state] && speed < 0.05) { speed = LOCO[state] * runSpeed; moved = speed * dt }
+    a.dist += moved
+    const health = rec.e.c.health
+    if (health !== a.hRef) {
+      a.hRef = health
+      const h = hpOf(health); const max = fin(health?.max)
+      a.hp = h == null || !(max > 0) ? 1 : Math.min(1, Math.max(0, h / max))
+    }
+    const v = a.vars
+    v.t = clock - a.t0; v.st = clock - a.stateT0; v.phase = a.dist / stride
+    v.speed = speed; v.gait = Math.min(1, Math.max(0, speed / runSpeed)); v.turn = a.turn
+    v.hp = a.hp; v.rand = a.rand; v.idx = a.idx
+    return v
+  }
+
   function animate (rec, dt) {
     const v = rec.visuals.get('representation')
     if (!v?.impl.animate) return
     const ref = rec.e.c.animation?.clips
     if (ref !== rec.clipsRef) { rec.clipsRef = ref; rec.clips = ref ? plain(ref) : null }
-    try { v.impl.animate(v.obj, String(rec.e.live?.anim ?? 'idle'), rec.clips, dt) } catch (err) {
+    const state = String(rec.previewAnim ?? rec.e.live?.anim ?? 'idle')
+    try { v.impl.animate(v.obj, state, rec.clips, dt, varsFor(rec, state, dt, v.obj)) } catch (err) {
       if (!rec.animErr) console.error(`[render] animate failed for ${rec.id}:`, err)
       rec.animErr = true
     }
@@ -251,7 +308,21 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
     g.scale.set(s.x ? 1 / s.x : 1, s.y ? 1 / s.y : 1, s.z ? 1 / s.z : 1)
   }
 
+  // the doc changed: a look built from doc data outside its entity (a rig's
+  // model) may be out of date. Cheap: kinds compare memoised keys.
+  function restale () {
+    for (const rec of [...recs.values()]) {
+      const v = rec.visuals.get('representation')
+      if (!v?.impl.stale) continue
+      let s = false
+      try { s = v.impl.stale(v.obj, v.data, ctxFor(rec)) } catch (err) { console.error(`[render] stale check failed for ${rec.id}:`, err) }
+      if (s) { unmount(rec, 'representation'); mount(rec, 'representation', v.data) }
+    }
+  }
+
   function frame (dt = 0, alpha = 1) {
+    clock += Number.isFinite(dt) && dt > 0 ? dt : 0
+    if (world.doc !== lastDoc) { lastDoc = world.doc; restale() }
     const fresh = world.tickCount !== lastTick
     if (fresh) { lastTick = world.tickCount; sinceTick = 0 } else sinceTick += dt
     // a world that is not ticking (paused, or a harness) is shown as-is, untweened
@@ -316,8 +387,17 @@ export function makeReconciler ({ world, scene, resources, plain = copy, tickHz 
     bounds: (id) => { const rec = recs.get(id); return rec ? bounds(rec).clone() : null },
     // hide an entity's root (your own player avatar) without touching its components; unpickable while hidden
     setVisible (id, v) { const rec = recs.get(id); if (rec) rec.root.visible = !!v },
-    // interaction's drag preview: shown immediately, untweened, until cleared
-    preview (id, p) { const rec = recs.get(id); if (!rec) return; rec.preview = p ? { p: [...p.p], yaw: p.yaw } : null },
+    // interaction's drag preview { p, yaw }: shown immediately, untweened, until
+    // cleared; the editor's preview state { anim } forces live.anim for the look.
+    // null clears the pose preview when one is active (a drag release), else the
+    // state; { anim: null } clears only the state.
+    preview (id, p) {
+      const rec = recs.get(id); if (!rec) return
+      if (!p) { if (rec.preview) rec.preview = null; else rec.previewAnim = null; return }
+      if ('anim' in p) rec.previewAnim = p.anim ? String(p.anim) : null
+      if (Array.isArray(p.p)) rec.preview = { p: [...p.p], yaw: p.yaw }
+    },
+    previewState: (id) => recs.get(id)?.previewAnim ?? null,
     stats () {
       let visuals = 0; let placeholders = 0
       for (const rec of recs.values()) for (const v of rec.visuals.values()) { visuals++; if (v.impl === PLACEHOLDER) placeholders++ }

@@ -6,7 +6,7 @@ import {
   texKey, spriteMatKey, geoKey, stdMatKey, gltfKey, normColor, tintColor, resolveUrl, codepoints, TWEMOJI,
   makeResources, hasColorEmoji, EMOJI_FONT, SHAPES,
 } from '../../src/render/resources.js'
-import { critterKey, rigParams } from '../../src/render/kinds/critter.js'
+import { modelKey, lookKey } from '../../src/render/kinds/rig.js'
 
 test('resource keys follow the design §8 format', () => {
   assert.equal(texKey('emoji:🦖'), 'tex:emoji:🦖')
@@ -21,12 +21,22 @@ test('resource keys follow the design §8 format', () => {
   assert.equal(gltfKey('https://x/a.glb'), 'gltf:https://x/a.glb')
 })
 
-test('critter keys quantise proportions so near-identical critters share a template', () => {
-  assert.equal(critterKey(rigParams({ rig: 'biped', length: 4, height: 2.6, head: 1.3, tail: 1.3 })), 'critter:biped:4:2.6:1.3:1.3')
-  assert.equal(critterKey(rigParams({ length: 1.21 })), critterKey(rigParams({ length: 1.19 })))
-  assert.notEqual(critterKey(rigParams({ length: 1.2 })), critterKey(rigParams({ length: 1.3 })))
-  assert.equal(rigParams({ rig: 'octopus' }).rig, 'quadruped')
-  assert.equal(rigParams({ length: 999 }).L, 12)
+test('rig keys: a model keys on its extends chain revs (own first), an inline look on its content', () => {
+  const doc = { models: { quadruped: { extends: '', rev: 3 }, horse: { extends: 'quadruped', rev: 5 } } }
+  assert.equal(modelKey(doc, 'horse'), 'model:horse:5.3')
+  assert.equal(modelKey(doc, 'quadruped'), 'model:quadruped:3')
+  assert.equal(modelKey(doc, 'nope'), 'missing:nope')
+  assert.equal(modelKey({ models: { a: { extends: 'b', rev: 1 } } }, 'a'), 'broken:a', 'a missing base')
+  assert.equal(modelKey({ models: { a: { extends: 'b' }, b: { extends: 'a' } } }, 'a'), 'broken:a', 'a cycle')
+  // memoised per doc snapshot: a new snapshot (a new object) re-reads
+  const next = { models: { ...doc.models, horse: { extends: 'quadruped', rev: 6 } } }
+  assert.equal(modelKey(next, 'horse'), 'model:horse:6.3')
+  // inline: content-addressed, independent of key order and of colour/scale/tint
+  const a = lookKey(null, { kind: 'tree', nodes: [{ shape: 'box', p: [0, 1, 0] }], color: '#ff0000' }, true)
+  assert.match(a, /^inline:[0-9a-f]{8}$/)
+  assert.equal(a, lookKey(null, { kind: 'rig', nodes: [{ p: [0, 1, 0], shape: 'box' }], scale: 2, tint: '#555555' }))
+  assert.notEqual(a, lookKey(null, { kind: 'tree', nodes: [{ shape: 'box', p: [0, 2, 0] }] }, true))
+  assert.equal(lookKey(null, { kind: 'tree', model: 'horse', nodes: [{ shape: 'box', p: [0, 1, 0] }] }, true), a, 'the tree alias ignores model')
 })
 
 test('colours normalise and tint multiplies', () => {

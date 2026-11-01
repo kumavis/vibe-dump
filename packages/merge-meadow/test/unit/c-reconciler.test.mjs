@@ -10,7 +10,8 @@ const UPGRADE = [
   { kind: 'primitive', shape: 'box', size: [1.2, 1.6, 2], color: '#55aa33' },
   { kind: 'tree', nodes: [{ shape: 'box', p: [0, 1.6, 0], s: [1, 1.1, 2], color: '#6a8f3a', children: [{ shape: 'sphere', p: [0, 0.8, 1.2], s: [0.5, 0.5, 0.5] }] }] },
   { kind: 'model', url: 'asset:rex', scale: 1.4 },
-  { kind: 'critter', rig: 'biped', length: 4, height: 2.6, color: '#6a8f3a', head: 1.3, tail: 1.3 },
+  { kind: 'rig', model: 'trex', color: '#ffffff', scale: 1 },
+  { kind: 'rig', nodes: [{ name: 'hips', shape: 'box', p: [0, 1, 0], children: [{ name: 'neck', shape: 'sphere', p: [0, 0.6, 0] }] }], animations: { bob: { tracks: { 'hips.py': 'sin(t*3)*0.05' } } } },
   { kind: 'billboard', image: 'emoji:🦖', size: 2.2 },
 ]
 

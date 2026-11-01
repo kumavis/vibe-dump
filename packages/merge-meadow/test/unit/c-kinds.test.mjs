@@ -7,7 +7,7 @@ import { makeResources } from '../../src/render/resources.js'
 import { validateSchema, validateComponent } from '../../src/doc/validate.js'
 import { COMPONENT_DEFS } from '../../src/doc/presets.js'
 
-const NAMES = ['billboard', 'primitive', 'tree', 'model', 'critter']
+const NAMES = ['billboard', 'primitive', 'tree', 'rig', 'model']
 
 test('every kind exposes a schema in the supported subset and defaults that validate', () => {
   assert.deepEqual(Object.keys(KINDS).slice(0, 5), NAMES)
@@ -22,9 +22,12 @@ test('every kind exposes a schema in the supported subset and defaults that vali
     const d = kindDefaults(n); d.kind = 'x'
     assert.equal(KINDS[n].defaults.kind, n, 'kindDefaults returns a copy')
   }
-  for (const [n, f] of [['billboard', 'image'], ['primitive', 'shape'], ['model', 'url'], ['critter', 'rig']]) assert.equal(KINDS[n].schema.properties[f]['x-immutable'], true, `${n}.${f}`)
+  for (const [n, f] of [['billboard', 'image'], ['primitive', 'shape'], ['model', 'url'], ['rig', 'model']]) assert.equal(KINDS[n].schema.properties[f]['x-immutable'], true, `${n}.${f}`)
   assert.equal(KINDS.tree.schema.properties.nodes['x-json'], true)
   assert.equal(kindDefaults('nope'), null)
+  assert.equal(KINDS.critter, undefined, 'critter was removed (design §17)')
+  assert.deepEqual(kindDefaults('rig'), { kind: 'rig', model: 'quadruped', color: '#ffffff', scale: 1 })
+  for (const f of ['nodes', 'animations', 'controller']) assert.equal(KINDS.rig.schema.properties[f]['x-json'], true, 'inline rig ' + f)
 })
 
 test('tree signature: shapes, nesting and anchors are structure; poses and colours are not', () => {
@@ -37,12 +40,13 @@ test('tree signature: shapes, nesting and anchors are structure; poses and colou
   assert.notEqual(signature(a), signature([{ shape: 'box', anchor: 'seat', children: [{ shape: 'sphere' }] }]))
   assert.equal(signature([{ shape: 'blob' }]), signature([{ shape: 'box' }]), 'unknown shapes render as boxes')
   assert.equal(signature(null), '')
+  assert.notEqual(signature([{ name: 'hips', shape: 'box' }]), signature([{ name: 'neck', shape: 'box' }]), 'node names are bones: a rename rebuilds')
 })
 
 // switch-safe update(): in place returns undefined, structure changes return false
 function harness () {
   const res = makeResources({ document: null })
-  const ctx = { res, entity: { id: 'e', c: {}, live: {} }, assets: () => ({}), changed () {} }
+  const ctx = { res, entity: { id: 'e', c: {}, live: {} }, assets: () => ({}), doc: () => null, changed () {} }
   const run = (kind, d0, d1) => {
     const k = KINDS[kind]
     const o = k.create({ kind, ...d0 }, ctx)
@@ -87,20 +91,6 @@ test('tree: same structure patches, new structure rebuilds; node anchors are exp
   assert.equal(t.k.anchors(t.o).seat.position.y, 1.5)
   assert.ok(res.has('mat:std:#222222:0.8:0:0:0')); assert.equal(res.has('mat:std:#111111:0.8:0:0:0'), false)
   assert.equal(t.k.update(t.o, { kind: 'tree', nodes: [{ shape: 'cone' }] }, { kind: 'tree', nodes: n1 }, { res }), false)
-  t.done(); assert.equal(res.stats().keys, 0)
-})
-
-test('critter: colour patches in place, proportions rebuild; anchors ride the bones', () => {
-  const { res, run } = harness()
-  const t = run('critter', { rig: 'quadruped', color: '#aaaaaa' }, { rig: 'quadruped', color: '#bb5500' })
-  assert.equal(t.r, undefined)
-  assert.ok(t.o.userData.mesh.isSkinnedMesh)
-  const seat = t.k.anchors(t.o).seat
-  assert.equal(seat.parent.name, 'hips')
-  assert.equal(t.k.update(t.o, { kind: 'critter', rig: 'biped' }, { kind: 'critter', rig: 'quadruped' }, { res }), false)
-  assert.equal(t.k.update(t.o, { kind: 'critter', rig: 'quadruped', length: 3 }, { kind: 'critter', rig: 'quadruped' }, { res }), false)
-  t.k.animate(t.o, 'run', null, 0.1)
-  assert.equal(t.o.userData.anim.clipName, 'run')
   t.done(); assert.equal(res.stats().keys, 0)
 })
 

@@ -201,6 +201,7 @@ const biped = {
             box('chest', [0, 0.28, 0], [0.4, 0.5, 0.24], BIPED),
             { name: 'seat', p: [0, 0.5, -0.15], anchor: 'seat' },
             pivot('neck', [0, 0.56, 0], [
+              box('neck_m', [0, 0, 0], [0.11, 0.16, 0.11], BIPED), // bridges the chest top and the head
               pivot('head', [0, 0.06, 0], [
                 box('head_m', [0, 0.14, 0.02], [0.24, 0.26, 0.26], BIPED),
                 box('eye_l', [0.06, 0.16, 0.14], [0.04, 0.05, 0.03], '#111111'),
@@ -540,6 +541,7 @@ const trex = {
     { name: 'chest', p: [0, 0.5, 0], s: [0.75, 1.1, 0.7], color: REX },
     { name: 'seat', p: [0, 0.9, -0.4] },
     { name: 'neck', p: [0, 1.05, 0], r: [-50, 0, 0] },
+    { name: 'neck_m', p: [0, 0.05, 0], s: [0.5, 0.35, 0.5], color: REX },
     { name: 'head', p: [0, 0.15, 0], children: [
       pivot('jaw', [0, -0.05, 0], [
         box('jaw_m', [0, -0.08, 0.35], [0.5, 0.16, 0.85], REX_DARK),

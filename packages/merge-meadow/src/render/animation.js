@@ -1,5 +1,5 @@
 // Semantic animation state (live.anim, written by the sim's animate system) ->
-// a clip. Shared by the `model` and `critter` kinds. The sim never names a clip:
+// a clip. Used by the `model` kind (glTF clips); rigs share FALLBACK (rig/controller.js). The sim never names a clip:
 // it says "run", and this module finds the best thing the look can do about it
 // (design §8): the entity's explicit mapping, then a clip with that name, then a
 // clip whose name contains it ("CharacterArmature|Run"), then the fallback chain.

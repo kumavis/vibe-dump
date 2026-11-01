@@ -1,7 +1,11 @@
 // The open registry of representation kinds (design §8). Each kind is
 //   { schema, defaults, create(data, ctx), update(obj, data, prev, ctx) -> false | void,
-//     dispose(obj, ctx), anchors?(obj) -> { seat?, head? }, animate?(obj, state, mapping, dt) }
-// ctx = { res, entity, assets: () => doc.assets, changed(obj) }.
+//     dispose(obj, ctx), anchors?(obj) -> { seat?, head? }, animate?(obj, state, mapping, dt, vars),
+//     stale?(obj, data, ctx) -> bool }
+// ctx = { res, entity, assets: () => doc.assets, doc: () => doc, changed(obj) }.
+// stale() is asked when the doc changes outside the entity (a rig's model was
+// redefined): true rebuilds the look. vars (rigs): { t, st, phase, speed, gait,
+// turn, hp, rand, idx }, kept per instance by the reconciler.
 // update() returning false means "cannot patch this in place": the reconciler
 // disposes and recreates the child. Everything a kind acquires goes through
 // ctx.res and is released by the reconciler, so dispose() only frees what is
@@ -9,11 +13,12 @@
 import billboard from './billboard.js'
 import primitive from './primitive.js'
 import tree from './tree.js'
+import rig from './rig.js'
 import model from './model.js'
-import critter from './critter.js'
 import PLACEHOLDER from './placeholder.js'
 
-export const KINDS = { billboard, primitive, tree, model, critter }
+// `tree` is an alias of `rig` (inline nodes); `critter` was removed (design §17)
+export const KINDS = { billboard, primitive, tree, rig, model }
 export { PLACEHOLDER }
 
 const listeners = new Set()

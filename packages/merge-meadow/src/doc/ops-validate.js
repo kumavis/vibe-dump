@@ -16,6 +16,7 @@ export const MAX_SOURCE = 100_000
 export const REF = /^\$(\d+)$/
 export const PEER_RE = /^[A-Za-z0-9_:.-]{0,80}$/
 const str = (v) => (v == null ? '' : String(plain(v)))
+const RIG_FIELDS = ['kind', 'model', 'nodes', 'animations', 'controller', 'stride', 'runSpeed']
 const isVec3 = (v) => Array.isArray(v) && v.length === 3 && v.every((x) => typeof x === 'number' && Number.isFinite(x))
 
 // a set patch applied to plain data: objects merge, null deletes, the rest replaces
@@ -143,7 +144,9 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
         if (!isObj(op.patch)) { bad('patch must be an object (replace swaps identity, remove deletes)'); break }
         // a field edit of a rig look is checked as the look it makes (an animations
         // patch must target the nodes the entity already has)
-        if (op.component === 'representation' && keys[i] && ents[keys[i]]) {
+        // (only when it touches a rig field: a colour edit of a look whose model went
+        // missing concurrently is still fine)
+        if (op.component === 'representation' && keys[i] && ents[keys[i]] && RIG_FIELDS.some((f) => f in op.patch)) {
           rig(mergePlain(plain(effectiveComponents(doc, keys[i])?.representation ?? {}), plain(op.patch)))
           rigChecked = true
         }

@@ -13,6 +13,7 @@ import { makeOwnership } from './src/net/ownership.js'
 import { makePoseStream } from './src/net/stream.js'
 import { makeCheckpointer } from './src/net/checkpoint.js'
 import { seedOps } from './src/doc/seed.js'
+import { ensureLibraryOps } from './src/doc/models.js'
 import { applyOps as applyDocOps, applyValidOps, withMoves } from './src/doc/ops.js'
 import * as read from './src/doc/read.js'
 import { watch } from './src/doc/watch.js'
@@ -92,6 +93,14 @@ async function boot () {
       docView = handle.doc()
       banner({ id: 'heads', level: 'error', text: `This version link names heads this world does not have (${e?.message ?? e}); showing the current world, read-only.` })
     }
+  }
+  // a world made before rigs (or one whose library model was removed) gets the
+  // shared model library; an edited model is never overwritten (design §17.3)
+  if (!readOnly && !created) {
+    try {
+      const lib = ensureLibraryOps(handle.doc())
+      if (lib.length) applyDocOps(handle, lib, { message: 'model library', peerId })
+    } catch (e) { log.warn('[models] could not add the model library:', e?.message ?? e) }
   }
   const docNow = () => (readOnly ? docView : handle.doc())
   Object.assign(mm, { repo, handle, url: handle.url, peerId, link, readOnly })

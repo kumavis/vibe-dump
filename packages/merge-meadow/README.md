@@ -12,8 +12,8 @@ T-rex and a sheep, and the T-rex hunts while the sheep flees, because one
 carries `predator` and a `pursue` drive and the other carries `prey` and a
 `flee` drive. Health, damage, riding and death are presets over the same small
 vocabulary. You can upgrade an entity's look in place, from an emoji billboard
-to a mesh, a node tree or an animated procedural critter, and its behaviour
-does not change.
+to a mesh, a node tree or an animated rig (a skeleton of named parts whose
+clips are data in the document), and its behaviour does not change.
 
 Status: work in progress. The design, with every decision and the
 measurement behind it, is in
@@ -94,6 +94,108 @@ While riding, WASD steers the mount.
 | left stick / right stick | move / snap-turn 30° |
 | trigger on the left-wrist palette | spawn a sheep, a T-rex or a tree |
 
+## Looks
+
+An entity's `representation` component is its look. Replacing it swaps the
+look in place: the entity keeps its root object, its live state and its
+behaviour.
+
+| kind | fields | what it is |
+| --- | --- | --- |
+| `billboard` | `image` (`emoji:🐑` or a URL), `size`, `color` | a camera-facing sprite; every seed creature starts as one |
+| `primitive` | `shape` (box, sphere, cone, cylinder, capsule), `size` [x,y,z], `color`, `roughness`, `metalness` | one mesh |
+| `tree` | `nodes` (and optionally `animations`, `controller`) | a sculpt of nested shapes stored on the entity; an alias of an inline `rig` |
+| `rig` | `model` (a name in `doc.models`), `color` (multiplies every node colour), `scale`; or inline `nodes`/`animations`/`controller` | an articulated look: named nodes are bones, clips move them, a controller maps the sim's state to clips |
+| `model` | `url` (`asset:<name>` or https glTF), `scale` | an external glTF asset, loaded asynchronously |
+
+Any look also takes `tint`, which is how the `dead` group greys a creature out.
+Adding `animations` to a `tree` animates it without a kind swap: the same
+meshes start moving.
+
+### Rigs: models are data
+
+The document holds a library of rig models in `doc.models`. A new world gets
+seven: the bases `quadruped`, `biped`, `serpent` and `bird`, and the species
+`horse`, `sheep` and `trex` that `extend` them. Upgrading a horse is one
+replace: `{ "kind": "rig", "model": "horse" }`. Every instance of a model
+shares one compiled template, and editing the model updates every entity that
+uses it, on every peer.
+
+A model has three layers:
+
+```js
+{
+  extends: 'biped',            // '' or a base model: nodes patch the base BY NAME, clips merge by name,
+                               // the controller merges (states by state name); up to 8 levels, no cycles
+  stride: 1.2, runSpeed: 4,    // metres per gait cycle (drives `phase`) and the speed where `gait` reaches 1
+  nodes: [                     // geometry: a tree of nodes; a named node is a bone, its children move with it
+    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.38, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
+  ],                           // node fields: name, shape, p [m], r [deg], s, color, roughness, metalness,
+                               // anchor ('seat' | 'head'), children
+  animations: {                // clips of tracks, ADDITIVE to the rest pose, so clips layer
+    attack: { once: true, tracks: {
+      'staff.rz': [[0, 0], [0.3, 40], [0.7, 0]],     // keyframes [[seconds, value], ...], linear
+      'hat.ry': 'sin(st * tau * 2) * 10',             // or an expression, evaluated every frame
+    } },
+  },
+  controller: { states: { idle: ['idle', 'breathe'], walk: ['walk', 'breathe'], attack: 'attack' }, blend: 0.15 },
+}
+```
+
+- A track key is `<node>.<channel>`: `rx ry rz` (degrees), `px py pz`
+  (metres), or `sx sy sz` (a factor on the node's rest scale).
+- A clip loops unless it says `once: true`; a `once` clip plays from the
+  moment its state starts and holds its last frame.
+- The controller maps the sim's states (`idle`, `walk`, `run`, `attack`,
+  `die`, `sit`) to one clip or a list of clips played together, with a
+  crossfade of `blend` seconds. A state without a clip falls back (run → walk
+  → idle, attack and sit → idle); a missing `die` clip freezes the pose. An
+  entity's `animation.clips` can remap states per entity.
+- In an extending model, `{ name: 'chest', color: '#3b2a7a' }` patches the
+  base's `chest`; a node with a new name under a base node's stub is added
+  there; `remove: true` deletes a base node and its subtree; `null` removes a
+  field, a clip or a track.
+- Limits: 200 nodes, 400 tracks, 8 levels of node nesting.
+
+**Expressions** are a small language with its own parser (no `eval`): numbers,
+`+ - * / %` (`%` is floored, so `phase % 1` stays in 0..1), comparisons,
+`&& || !`, `a ? b : c`, the functions `sin cos tan abs min max clamp lerp
+smoothstep floor ceil round sign sqrt pow saturate step`, and the constants
+`pi` and `tau`. The variables, supplied per entity per frame:
+
+| variable | meaning |
+| --- | --- |
+| `t` | seconds since the look was created |
+| `st` | seconds since the current state started |
+| `phase` | distance walked ÷ `stride`, in gait cycles |
+| `speed` | horizontal speed, m/s |
+| `gait` | `speed / runSpeed`, clamped to 0..1 |
+| `turn` | yaw rate, rad/s |
+| `hp` | health fraction 0..1 (1 without health) |
+| `rand`, `idx` | a per-entity constant in 0..1 and a per-entity integer, for variety |
+
+An unknown name, a wrong number of arguments or a syntax error is reported
+with its column when the model is written, and nothing is written.
+
+**Making a person, say a wizard**: extend `biped` and add parts under its
+bones, then point an entity at it.
+
+```bash
+node agent/cli.mjs "$L" define-model wizard '{"extends":"biped","nodes":[
+  {"name":"head","children":[{"name":"hat","shape":"cone","p":[0,0.38,0],"s":[0.34,0.5,0.34],"color":"#3b2a7a"}]},
+  {"name":"chest","color":"#3b2a7a"},
+  {"name":"arm_r","children":[{"name":"staff","shape":"cylinder","p":[0,-0.3,0.1],"s":[0.04,1.6,0.04],"color":"#6b4a2e"}]}],
+  "animations":{"attack":{"tracks":{"staff.rz":[[0,0],[0.3,40],[0.7,0]]}}}}'
+node agent/cli.mjs "$L" spawn --name Merlin --at 0,0,10 --json '{"representation":{"kind":"rig","model":"wizard"}}'
+```
+
+The biped's walk, run, idle and die clips come with it. For behaviour, spawn
+from a preset instead (`spawn horse`, or a preset of your own that extends
+`creature`) and replace its representation. In the editor: select an entity,
+switch its look to `rig` with model `biped`, press **Fork** to copy the model
+as `wizard`, edit the `nodes` box, and set **preview** to `walk` to watch the
+clips with the sim idle.
+
 ## Agents
 
 An agent gets the same write path as the editor: every change is a validated
@@ -113,10 +215,15 @@ claude mcp add merge-meadow -- node "$PWD/agent/mcp.mjs"
 # or fix the world up front: claude mcp add merge-meadow -e MERGE_MEADOW_LINK='<link>' -- node "$PWD/agent/mcp.mjs"
 ```
 
-There are 21 tools: `connect`, `describe`, `list`, `get`, `spawn`, `set`,
+There are 25 tools: `connect`, `describe`, `list`, `get`, `spawn`, `set`,
 `replace`, `remove`, `despawn`, `link`, `batch`, `define`, `define_preset`,
 `define_component`, `define_system`, `systems`, `explain`, `events`,
-`capture`, `eval` and `heads`. Every result reports `mode`, which is `live`
+`capture`, `eval`, `heads`, and for rig models `define_model`, `models`,
+`model` and `remove_model`. `models` lists the library with each model's node
+names and clips (after `extends`), `model` returns one model resolved through
+its chain (ready to copy and redefine under a new name), and `define_model`
+validates the whole model, every expression included, before the document
+changes. Every result reports `mode`, which is `live`
 (through a tab) or `local` (straight to the document), and the
 `fallbackReason` when it is `local`. The editor's Agent tab shows this line
 with the path filled in.
@@ -129,7 +236,11 @@ node agent/cli.mjs "$L" describe
 node agent/cli.mjs "$L" spawn trex --at 3,0,-5 --name Rex
 node agent/cli.mjs "$L" list --tags prey
 node agent/cli.mjs "$L" set <id> body '{"speed": 8}'
-node agent/cli.mjs "$L" replace <id> representation '{"kind":"critter","rig":"quadruped","length":1.2,"height":0.9,"color":"#f4f0e8"}'
+node agent/cli.mjs "$L" replace <id> representation '{"kind":"rig","model":"horse"}'
+node agent/cli.mjs "$L" models                    # the rig model library
+node agent/cli.mjs "$L" model biped               # one model, resolved through extends
+node agent/cli.mjs "$L" define-model wizard --file wizard.json
+node agent/cli.mjs "$L" remove-model wizard       # refused while another model extends it
 node agent/cli.mjs "$L" define-system bob --file bob.js
 node agent/cli.mjs "$L" capture shot.jpg          # needs an open tab
 node agent/cli.mjs "$L" describe --local          # skip the tab, edit the doc directly
@@ -213,9 +324,9 @@ drawn by your own system font are not Twemoji and need no credit here.
 npm run dev -w @vibe-dump/merge-meadow           # vite dev server
 npm run build -w @vibe-dump/merge-meadow         # → packages/merge-meadow/dist/
 cd packages/merge-meadow
-node --test "test/unit/*.test.mjs"               # unit tests (no browser), ~6 s
+node --test "test/unit/*.test.mjs"               # unit tests (no browser), ~10 s
 node scripts/boundaries.mjs [--strict]           # the import-boundary lint (ARCHITECTURE §2)
-node test/e2e.mjs                                # the built app end to end, ~30 s (build first)
+node test/e2e.mjs                                # the built app end to end, ~60 s (build first)
 node test/xr.mjs                                 # WebXR smoke with an emulated Quest 3 (IWER), by hand
 ```
 
@@ -223,9 +334,11 @@ node test/xr.mjs                                 # WebXR smoke with an emulated 
 `@automerge/automerge-repo-sync-server` in process on a free port, serves
 `dist/` under a `/vibe-dump/merge-meadow/` sub-path, and drives headless
 Chromium with at most three pages at once. It covers boot order, two peers,
-the chase, damage applied exactly once, handoff, doc systems, look upgrades,
-keys and view links, the MCP server live and local, the page tool, and safe
-mode. Point it at a browser with `CHROMIUM_PATH=…`; by default it uses
+the chase, damage applied exactly once, handoff, doc systems, look upgrades
+(through a tree that gains animations and a library rig), 300 animating rigs
+with their CPU cost per frame, the editor's preview state, the dead tint on a
+rig, keys and view links, the MCP server live and local (`define_model`
+included), the page tool, and safe mode. Point it at a browser with `CHROMIUM_PATH=…`; by default it uses
 Playwright's own browser or whatever is under `/opt/pw-browsers`. Screenshots
 and `results.json` go to `$TMPDIR/merge-meadow-e2e`, or to `MM_E2E_OUT`.
 

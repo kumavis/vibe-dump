@@ -264,8 +264,9 @@ export const EMOJI_FONT
 export function resolveUrl(url, assets)         // 'asset:<name>' -> doc.assets[name].url; https, localhost and same-origin relative paths; else null (never blob:/data:)
 
 // src/render/kinds/index.js
-export const KINDS                              // open registry { billboard, primitive, tree, model, critter }: each { schema (with a hidden `kind` property), defaults, create(data, ctx),
-                                                // update(obj, data, prev, ctx) -> false|void, dispose(obj, ctx), anchors?(obj) -> { seat, head }, animate?(obj, state, mapping, dt) }; ctx = { res, entity, assets(), changed() }
+export const KINDS                              // open registry { billboard, primitive, tree, rig, model } (tree = an alias of an inline rig; critter removed, §6): each { schema (with a hidden `kind` property), defaults, create(data, ctx),
+                                                // update(obj, data, prev, ctx) -> false|void, dispose(obj, ctx), anchors?(obj) -> { seat, head }, animate?(obj, state, mapping, dt, vars?),
+                                                // stale?(obj, data, ctx) -> bool (asked once per doc change; true rebuilds the look) }; ctx = { res, entity, assets(), changed(), doc() }
 export function registerKind(name, handler)     // placeholders of that kind upgrade in place; also onKindRegistered(fn), kindDefaults(name), PLACEHOLDER (an unknown kind's wireframe cube)
 
 // src/render/animation.js
@@ -275,7 +276,11 @@ export function makeAnimator(root, clips)       // { set(state, { fade, mapping 
 export function makeReconciler({ world, scene, resources, plain, tickHz = 30 })   // scene: the THREE.Scene (stage.scene)
 //   registers component handlers on world: transform (order -100), representation and light (order 10); `animation` is read per frame; poses and anchors follow the sim's live pose
 //   -> { objectFor(id), visualFor(id, comp), idOf(object3d), ids(), frame(dt, alpha), pick(raycaster) -> { id, point, object, distance } | null, anchor(id, name) -> Vector3 | null,
-//        anchorArray(id, name) -> [x,y,z] | null, anchorObject(id, name) -> Group | null, bounds(id) -> Box3 | null, preview(id, { p, yaw } | null), setVisible(id, v), stats(), dispose() }
+//        anchorArray(id, name) -> [x,y,z] | null, anchorObject(id, name) -> Group | null, bounds(id) -> Box3 | null, preview(id, { p, yaw } | { anim } | null), previewState(id) -> state | null,
+//        setVisible(id, v), stats(), dispose() }
+//   preview: { p, yaw } is interaction's drag pose; { anim } is the editor's preview state (forces live.anim); { anim: null } clears only the state;
+//   null clears the drag pose when one is active, else the state. Per frame it computes the rig vars (§6.2) and passes them to kind.animate;
+//   once per doc change (object identity) it asks every look's kind.stale() and rebuilds the stale ones (how a defineModel reaches the screen)
 
 // src/xr/rig.js
 export const EYE_HEIGHT
@@ -343,7 +348,7 @@ export function bcHandle(docId, name?)          // BroadcastChannel wrapper with
 // src/agent/world-caps.js
 export function makeWorldCaps(handle, { applyOps, read, checkSource, host, mode, watch, peerId, kinds, componentDefs, log })   // host = { capture, logs, eval, explain, systems } injected by the page
 //   -> { world: Far World, viewer: Far WorldView, session(sessionId) -> { world, viewer }, endSession(sessionId), subscriptions(), close() }
-//   World verbs: describe list get spawn batch define definePreset removePreset defineComponent removeComponent defineSystem setSystem removeSystem setWorld systems explain subscribe
+//   World verbs: describe list get spawn batch define definePreset removePreset defineComponent removeComponent defineSystem setSystem removeSystem setWorld defineModel removeModel models model systems explain subscribe
 //   snapshot url heads viewer capture logs eval; Entity: get(comp) (effective data) set replace remove link parent groups addGroup removeGroup destroy
 //   writes go through withMoves, so an agent move of a simulated entity also pushes an inbox `move`
 export function makeEvalPower({ world, makeCompartment, log })   // the eval host power
@@ -354,7 +359,7 @@ export function startAgentHost({ handle, docId, key, caps, log })   // editor + 
 export async function connect(link, { hostTimeoutMs = 1500, local, openRepo })   // -> { world, mode: 'live'|'local', fallbackReason, handle, synced(), close() }
 //   synced() rejects when the server advertised no storage id (unless the repo factory says noServer); close() rejects when local writes were not acknowledged
 // agent/lib/tools.mjs   — the one verb table (zod raw shapes + E(world) calls) shared by mcp.mjs and cli.mjs
-// agent/mcp.mjs  — stdio MCP server, 21 tools; MERGE_MEADOW_LINK env or `connect` tool; every result carries { mode, fallbackReason }; local writes carry `durable`; `heads` adds a versionLink
+// agent/mcp.mjs  — stdio MCP server, 25 tools (incl. define_model, models, model, remove_model); MERGE_MEADOW_LINK env or `connect` tool; every result carries { mode, fallbackReason }; local writes carry `durable`; `heads` adds a versionLink
 // agent/cli.mjs  — node agent/cli.mjs "<link>" <verb> [...args] [--local]; exits 3 for a local write the server did not acknowledge
 // agent/build-page-tool.mjs — bundles src/agent/page-tool.js into public/agent.js (esbuild)
 // public/agent.js — guest over BroadcastChannel for a same-origin page tool: connect(link) -> { world, E, role, close() }
@@ -471,14 +476,24 @@ export const MODEL_LIBRARY                      // { quadruped, biped, serpent, 
 export const CHANNELS                           // ['rx','ry','rz','px','py','pz','sx','sy','sz']
 export const LIMITS                             // { nodes: 200, tracks: 400, depth: 8, extendsDepth: 8 }
 export function resolveModel(models, name)      // follows `extends` (nodes patch by name, clips merge by name, controller shallow merge); -> plain resolved model or null; throws on a cycle / depth
-export function resolveRepresentation(doc, rep) // rig rep (model or inline) -> resolved { nodes, animations, controller, stride, runSpeed, key } ; key = 'model:<name>:<rev>' or 'inline:<hash>'
-export function validateModel(model, models)    // -> problems[]: node names unique and valid, tracks target existing node.channel, expressions compile, keyframes sorted, limits, extends resolvable
+export function resolveRepresentation(doc, rep) // rig rep (model or inline) -> { key, model, chain, stride, runSpeed, nodes, animations, controller } | null (unknown model or broken chain: never throws)
+                                                // key = 'model:<name>:<revs>' with revs the chain's revs own-first joined by '.' (e.g. 'model:horse:3.1'), or 'inline:<hash>'
+export function validateModel(model, models, { name }?) // -> problems[]: node names unique and valid, tracks target existing node.channel, expressions compile, keyframes sorted, limits, extends resolvable;
+                                                // `name` detects cycles through the model itself; resolver extras (name, chain, revs, key, model, error) are accepted and dropped
 export function ensureLibraryOps(doc)           // -> ops that add any MODEL_LIBRARY entry missing from doc.models (never overwrites an edited one)
 export function nodeNames(nodes)                // flat list, depth-first
 ```
 
-Ops: `defineModel {name, model}` (validateModel before the change; `rev` increments),
-`removeModel {name}` (refused while a model `extends` it). `validateOps` with
+Ops: `defineModel {name, model}` (validateModel before the change; `rev` is an
+Automerge Counter that only moves forward, so an undo restores content under a
+new rev and concurrent redefinitions sum; also refused when it would break a
+model that extends it), `removeModel {name}` (refused while a model `extends` it).
+Extra exports used across tracks: `expr.js` `checkExpr`, `MAX_EXPR`; `models.js`
+`SHAPES`, `DEFAULTS`, `modelBody`, `validateInline`, `dependentsOf`,
+`LIBRARY_ORDER`, `libraryDocModels`, `modelSummaries` (in `read.js`, with
+`modelData(doc, name, { raw })`); `presets.js` `BUILTIN_KINDS` (always unioned
+into the doc's kind enum). `main.js` applies `ensureLibraryOps` when it opens an
+existing writable doc. `validateOps` with
 `kinds` validates a `rig` representation: `model` must exist or inline `nodes`
 must validate. Doc: `doc.models[name] = { extends, stride, runSpeed, nodes, animations, controller, rev }`
 with ImmutableString for `extends`, node `name`/`shape`/`anchor`, clip-name keys and
@@ -488,19 +503,31 @@ controller clip references; expression strings are ImmutableString too.
 
 ```js
 // src/render/rig/evaluator.js
-export function makeRigEvaluator(resolved)      // compiles every track once; -> { clips: names[], evaluate(layers /* [{clip, weight, time, st}] */, vars) -> Map<node, offsets>, dispose() }
+export function makeRigEvaluator(resolved)      // compiles every track once; -> { clips: names[], evaluate(layers /* [{clip, weight, time, st}] */, vars, out?: Map) -> Map<node, offsets>, dispose() }
 export function applyOffsets(rootGroup, offsets)// rest + offsets into node groups (r/p add, s multiply on the node's mesh)
 // src/render/rig/controller.js
-export function makeRigController(resolved)     // -> { set(state, now), layers(now) -> [{clip, weight, time, st}], state }  (fallback chain of animation.js, blend crossfade, once/halt)
-// src/render/kinds/rig.js — handler: schema { kind, model, color, scale } (+ inline nodes/animations/controller), create/update(false when the resolved key changes)/dispose, anchors from named nodes with `anchor`, animate(obj, state, mapping, dt, vars)
+export function makeRigController(resolved)     // -> { set(state, now, { mapping, since }?), layers(now) -> [{clip, weight, time, st}] (reused array), state, halted }
+                                                //    order: entity mapping, controller.states, a clip named like the state, animation.js's fallback chain, then the first LOOPING clip;
+                                                //    blend crossfade, once/halt; `since` lets a rebuilt look resume mid-state
+// src/render/kinds/nodes.js — signature / buildNodes / patchNodes shared by rig and tree (signature includes node names: a rename rebuilds)
+// src/render/kinds/rig.js — handler: schema { kind, model, color, scale } (+ inline nodes/animations/controller), create/update/dispose, anchors from named nodes with `anchor`,
+//   animate(obj, state, mapping, dt, vars), stale(obj, data, ctx) (true when the model's key moved or a missing model appeared). update returns false when a MODEL key changes;
+//   an inline key change with the same node structure swaps the template in place (same root and meshes: tree -> tree + animations). An unknown model renders a
+//   wireframe placeholder inside the rig visual until stale() sees it. Templates are ref-counted resources under the key: all instances of a model share one
 // kinds/index.js: KINDS = { billboard, primitive, tree: rigAlias, rig, model }; no critter
 // reconciler: keeps per-instance { t0, stateT0, dist, lastP, rand, idx } and passes vars to kind.animate; `preview.anim` on a rec overrides live.anim (editor preview state)
 ```
 
 ### 6.3 Track B — agent and editor
 
-World verbs `defineModel(name, model)`, `models()` → plain library summary `{ name, extends, nodes, clips, rev }[]`,
-`model(name)` → resolved plain model, `removeModel(name)`; MCP tools `define_model`, `models`, `model`, `remove_model`;
-CLI verbs `define-model`, `models`, `model`. Editor: `src/editor/rig-panel.js` (`makeRigPanel({ read, applyOps, kinds, ... })`),
-kind switcher: `rig` with a model dropdown; Fork = `defineModel(newName, resolved)` + `replace representation`;
-preview state writes `reconciler.preview(id, { anim })` and clears on deselect.
+World verbs `defineModel(name, model)`, `models()` → plain library summary `{ name, extends, nodes: node names depth-first after extends, clips: sorted names, rev, error? }[]`,
+`model(name)` → resolved plain model (throws `no model X`), `removeModel(name)`; the viewer also has `models()` and `model()`;
+`eventsFromPatches` emits `model-changed` once per model. MCP tools `define_model`, `models`, `model`, `remove_model`;
+CLI verbs `define-model` (inline JSON or `--file`), `models`, `model`, `remove-model`.
+Editor: `src/editor/rig-panel.js` exports `makeRigPanel(ctx, { id, rep, inherited, preview: { get, set } })` with
+`ctx = { doc, read, write, toast, resolveModel?, validateModel? }` (the editor's one write path, so undo works); the pure op builders
+(`forkOps`, `rigFieldOps`, `setModelOps`, `uniqueModelName`, `previewArg`, `PREVIEW_STATES`) are in `src/editor/rig-ops.js`.
+`renderKindSwitcher(kinds, current, onSwitch, { models })` adds a model dropdown and calls `onSwitch(kind, { model })`; it hides
+removed kinds (a `critter` look shows as a disabled option and the inspector offers "Convert to rig"). Fork = `defineModel(newName, resolved with extends flattened)`
++ `replace representation`; the JSON boxes edit the referenced model's OWN fields (patches over its base) or an inline look's fields;
+preview state writes `reconciler.preview(id, { anim })` and clears with `preview(id, null)` on deselect or a change of selection.

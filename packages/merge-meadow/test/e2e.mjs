@@ -19,12 +19,15 @@
 //   ride       B (not the host) rides a horse: both pages agree the rider's peer owns it
 //   hidden     A's tab goes to the background (no frames, timers still run): B hosts
 //              and keeps hosting; A comes back as a newcomer, then hosts again
-//   upgrade    representation replace keeps the root and leaks no resources (incl. a glTF)
+//   upgrade    billboard -> primitive -> tree -> tree + animations -> rig (horse) -> glTF -> billboard:
+//              the same root, the tree's meshes kept, no resources left
 //   keys       wrong key cannot attach; a view link attenuates (live and local)
 //   handoff    A closes gracefully -> B hosts within 250 ms and simulates the T-rex
-//   mcp        the MCP server (stdio) through B: spawn, set, define_system (syntax error
-//              leaves heads unchanged), capture returns an image
-//   local      no page open: MCP falls back to local mode; the doc history check
+//   mcp        the MCP server (stdio) through B: spawn, set, replace to a rig, models, define_model
+//              (a wizard; a syntax error is refused), define_system, capture returns an image
+//   local      no page open: MCP falls back to local mode; define_model; the doc history check
+//   rigs       a fresh world: 300 rigs of two library models animating (CPU ms/frame), the
+//              inspector's preview state with the sim idle, the dead group tinting a rig
 //   safe       an infinite-loop system hangs a tab; the next load of that doc is in safe mode
 import 'ses/assert-shim.js'
 import '@endo/eventual-send/shim.js'
@@ -52,7 +55,7 @@ const DIST = path.join(PKG, 'dist')
 const OUT = process.env.MM_E2E_OUT || path.join(os.tmpdir(), 'merge-meadow-e2e')
 const PREFIX = '/vibe-dump/merge-meadow/'
 const KEEP = process.argv.includes('--keep')
-const ONLY = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7) // e.g. --only=safe (debugging)
+const ONLY = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7) // --only=safe | --only=rigs (debugging)
 const SAFE_PEER = process.env.MM_E2E_SAFE_PEER ?? 'p_cccccccc03' // 'random' = a fresh id per tab
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const T_START = Date.now()
@@ -175,6 +178,17 @@ async function contextWithPeer (browser, peerId) {
   return ctx
 }
 
+// the person of the user's question: a biped with a hat, a robe colour and a staff
+const WIZARD = {
+  extends: 'biped',
+  nodes: [
+    { name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.38, 0], s: [0.34, 0.5, 0.34], color: '#3b2a7a' }] },
+    { name: 'chest', color: '#3b2a7a' },
+    { name: 'arm_r', children: [{ name: 'staff', shape: 'cylinder', p: [0, -0.3, 0.1], s: [0.04, 1.6, 0.04], color: '#6b4a2e' }] },
+  ],
+  animations: { attack: { tracks: { 'staff.rz': [[0, 0], [0.3, 40], [0.7, 0]] } } },
+}
+
 // ---------------------------------------------------------------- MCP client
 async function mcpClient (env = {}) {
   const transport = new StdioClientTransport({ command: process.execPath, args: [path.join(PKG, 'agent/mcp.mjs')], env: { ...process.env, ...env }, stderr: 'pipe' })
@@ -214,6 +228,7 @@ async function main () {
   console.log(`# sync server ${SYNC}, app ${BASE}, browser ${launched.exe}, out ${OUT}`)
 
   if (ONLY === 'safe') { await safePhase(); return }
+  if (ONLY === 'rigs') { await rigsPhase(); return }
 
   // ============================================================== boot
   phase('boot')
@@ -307,6 +322,7 @@ async function main () {
   await handoffPhase()
   await mcpPhase()
   await localPhase()
+  await rigsPhase()
   await safePhase()
 }
 
@@ -518,34 +534,68 @@ async function hiddenPhase () {
 }
 
 // ============================================================== representation upgrade
-// billboard -> primitive -> tree -> critter -> billboard on one entity: same root
-// Object3D, same live object, one visual, and none of the looks' resources left.
+// billboard -> primitive -> tree -> tree + animations -> rig (library model) -> model
+// (glTF) -> billboard on one entity: same root Object3D, same live object, one
+// visual, and none of the looks' resources left. Adding animations to a tree is a
+// field edit of the same component (design §17.1): same visual, same meshes.
 async function upgradePhase () {
   phase('upgrade')
   const { B } = S
   const id = await B.evaluate(() => window.__mm.caps.world.spawn({ name: 'probe', components: { transform: { p: [-6, 0, 14], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'billboard', image: 'emoji:🧪', size: 1.2 } } }).id())
   await waitIn(B, (id) => window.__mm.reconciler.visualFor(id)?.userData.kind === 'billboard', id)
   await B.evaluate((id) => { window.__probe = { root: window.__mm.reconciler.objectFor(id), live: window.__mm.world.get(id).live, keys0: window.__mm.resources.keys() }; window.__probe.live.marker = 42 }, id)
+  const TREE = { kind: 'tree', nodes: [{ name: 'trunk', shape: 'box', p: [0, 0.5, 0], s: [1, 1, 1], color: '#2468ac', children: [{ name: 'crown', shape: 'sphere', p: [0, 0.8, 0], s: [0.8, 0.8, 0.8], color: '#2468ad' }] }] }
+  const SWAY = { sway: { loop: true, tracks: { 'trunk.rz': 'sin(t*tau)*12', 'crown.sy': '1 + sin(t*tau*2)*0.1' } } }
   const looks = [
     { kind: 'primitive', shape: 'cone', size: [1, 1.6, 1], color: '#13579b', roughness: 0.5, metalness: 0.1 },
-    { kind: 'tree', nodes: [{ shape: 'box', p: [0, 0.5, 0], s: [1, 1, 1], color: '#2468ac' }, { shape: 'sphere', p: [0, 1.3, 0], s: [0.8, 0.8, 0.8], color: '#2468ad' }] },
-    { kind: 'critter', rig: 'quadruped', length: 1.35, height: 0.85, color: '#97531f' },
+    TREE,
+    { set: { animations: SWAY }, kind: 'tree' }, // a field edit, not a replace
+    { kind: 'rig', model: 'horse', color: '#97531f' },
     // the async kind: a one-triangle glTF served by this harness
     { kind: 'model', url: `${S.origin}${PREFIX}__e2e/tri.gltf`, scale: 1 },
     { kind: 'billboard', image: 'emoji:🧪', size: 1.2 },
   ]
+  await B.evaluate(() => {
+    window.__meshesOf = (id) => {
+      const v = window.__mm.reconciler.visualFor(id); const ms = []
+      v?.traverse((o) => { if (o.isMesh) ms.push(o) })
+      return { visual: v, meshes: ms }
+    }
+  })
   const steps = []
+  let treeAnim = null
   for (const look of looks) {
-    await B.evaluate(([id, look]) => window.__mm.caps.world.get(id).replace('representation', look), [id, look])
-    await waitIn(B, ([id, k]) => window.__mm.reconciler.visualFor(id)?.userData.kind === k, [id, look.kind])
-    if (look.kind === 'model') await waitIn(B, () => window.__mm.reconciler.stats().placeholders === 0, undefined, 15000).catch(() => {})
+    if (look.set) {
+      await B.evaluate((id) => { window.__probe.tree = window.__meshesOf(id) }, id)
+      await B.evaluate(([id, patch]) => window.__mm.caps.world.get(id).set('representation', patch), [id, look.set])
+      await waitIn(B, (id) => !!window.__mm.reconciler.visualFor(id)?.userData.tpl?.evaluator.clips.length, id)
+      // it animates: the trunk bone sweeps, and every mesh is still the one built for the tree
+      treeAnim = await B.evaluate(async (id) => {
+        const after = window.__meshesOf(id); const before = window.__probe.tree
+        const trunk = after.visual.userData.bones.get('trunk'); const rz = []
+        for (let i = 0; i < 12; i++) { rz.push(trunk.rotation.z); await new Promise((r) => setTimeout(r, 60)) }
+        return {
+          sameVisual: after.visual === before.visual, meshes: after.meshes.length,
+          sameMeshes: after.meshes.length === before.meshes.length && after.meshes.every((m, i) => m === before.meshes[i]),
+          swingDeg: +((Math.max(...rz) - Math.min(...rz)) * 180 / Math.PI).toFixed(1),
+        }
+      }, id)
+    } else {
+      await B.evaluate(([id, look]) => window.__mm.caps.world.get(id).replace('representation', look), [id, look])
+      await waitIn(B, ([id, k]) => window.__mm.reconciler.visualFor(id)?.userData.kind === k, [id, look.kind])
+      if (look.kind === 'model') await waitIn(B, () => window.__mm.reconciler.stats().placeholders === 0, undefined, 15000).catch(() => {})
+    }
     await sleep(120)
     steps.push(await B.evaluate((id) => {
       const mm = window.__mm; const root = mm.reconciler.objectFor(id); let roots = 0
       mm.stage.scene.traverse((o) => { if (o.userData?.entity === id && o === mm.reconciler.objectFor(id)) roots++ })
-      return { kind: mm.reconciler.visualFor(id)?.userData.kind, sameRoot: root === window.__probe.root, sameLive: mm.world.get(id).live === window.__probe.live && mm.world.get(id).live.marker === 42, visuals: root.children.filter((c) => !c.userData?.entity).length, roots, placeholders: mm.reconciler.stats().placeholders }
+      const v = mm.reconciler.visualFor(id)
+      return { kind: v?.userData.kind, key: v?.userData.key, sameRoot: root === window.__probe.root, sameLive: mm.world.get(id).live === window.__probe.live && mm.world.get(id).live.marker === 42, visuals: root.children.filter((c) => !c.userData?.entity).length, roots, placeholders: mm.reconciler.stats().placeholders, missing: !!v?.userData.missing }
     }, id))
   }
+  ok(treeAnim?.sameVisual && treeAnim.sameMeshes && treeAnim.meshes === 2 && treeAnim.swingDeg > 5, 'tree -> tree + animations: same visual and the same mesh objects, and the trunk now sways', treeAnim)
+  const rigStep = steps.find((s) => s.kind === 'rig')
+  ok(rigStep && /^model:horse:\d+(\.\d+)*$/.test(rigStep.key ?? '') && !rigStep.missing, `the rig step renders the library horse (template ${rigStep?.key})`, rigStep)
   // a look replaced while its model is still loading: the late load must not land or leak
   const slow = `${S.origin}${PREFIX}__e2e/tri.gltf?delay=900`
   await B.evaluate(([id, url]) => window.__mm.caps.world.get(id).replace('representation', { kind: 'model', url, scale: 1 }), [id, slow])
@@ -554,14 +604,14 @@ async function upgradePhase () {
   await sleep(1500) // past the delayed response
   const midLoad = await B.evaluate((id) => { const mm = window.__mm; const root = mm.reconciler.objectFor(id); return { kind: mm.reconciler.visualFor(id)?.userData.kind, visuals: root.children.filter((c) => !c.userData?.entity).length, sameRoot: root === window.__probe.root } }, id)
   ok(midLoad.kind === 'billboard' && midLoad.visuals === 1 && midLoad.sameRoot, 'a look replaced mid-load stays replaced: the late model never lands', midLoad)
-  const end = await B.evaluate(() => { const k = window.__mm.resources.keys(); return { left: k.filter((x) => /13579b|2468ac|2468ad|97531f|critter:|gltf:|placeholder/i.test(x)), added: k.filter((x) => !window.__probe.keys0.includes(x)) } })
+  const end = await B.evaluate(() => { const k = window.__mm.resources.keys(); return { left: k.filter((x) => /13579b|2468ac|2468ad|97531f|model:|inline:|gltf:|placeholder/i.test(x) && !window.__probe.keys0.includes(x)), added: k.filter((x) => !window.__probe.keys0.includes(x)) } })
   // the probe started as this same billboard, so nothing it holds now is new; other
   // entities may meanwhile have acquired billboard sprites (a sheep's dead tint)
   ok(end.added.every((k) => /^(tex|spritemat):/.test(k)), 'the final look holds only billboard keys: nothing of the model or the other looks was added', end.added)
   ok(steps.some((s) => s.kind === 'model'), 'the model kind (async glTF load) was one of the steps', steps.map((s) => s.kind))
   ok(steps.every((s) => s.sameRoot && s.sameLive && s.roots === 1), 'every swap kept the same root Object3D and the same live state', steps.map((s) => `${s.kind}:${s.sameRoot && s.sameLive}`).join(' '))
   ok(steps.every((s) => s.visuals === 1) && steps.every((s) => s.placeholders === 0), 'exactly one visual child per step, no placeholders', steps.map((s) => s.visuals))
-  ok(end.left.length === 0, 'no resource of the intermediate looks is still held', end)
+  ok(end.left.length === 0, 'no resource of the intermediate looks is still held (primitive, tree, inline rig, model template, glTF)', end)
   await B.evaluate((id) => window.__mm.caps.world.get(id).destroy(), id)
 }
 
@@ -656,7 +706,9 @@ async function handoffPhase () {
   const gaps = ho ? ho.ticks.filter(([t]) => t > tClose - 300 && t < tClose + 1500).map(([t, n], i, a) => (i ? [t - tClose, t - a[i - 1][0], n] : null)).filter((g) => g && g[1] > 60) : []
   ok(ho && ownMs <= 250, `B owns the T-rex ${ownMs} ms after A closed (≤250 ms)`, gaps.length ? { tickGapsMs: gaps } : undefined)
   await sleep(1500)
-  const p1 = await B.evaluate((id) => ({ p: window.__mm.world.get(id).live.p, intent: window.__mm.world.get(id).live.intent ?? null, owns: window.__mm.ownership.owns(id) }), trex)
+  // a wandering T-rex (its prey dead) can cover < 0.5 m in 1.5 s: give it up to 3 s more
+  const sample = () => B.evaluate((id) => ({ p: window.__mm.world.get(id).live.p, intent: window.__mm.world.get(id).live.intent ?? null, owns: window.__mm.ownership.owns(id) }), trex)
+  const p1 = await until(async () => { const s = await sample(); return Math.hypot(s.p[0] - p0[0], s.p[2] - p0[2]) > 0.5 ? s : null }, { timeout: 3000, every: 100 }) ?? await sample()
   // B never owned the T-rex before: live.intent is written only by its owner's decide
   // system, so an intent at all (and motion) means B really runs its sim now
   const moved = Math.hypot(p1.p[0] - p0[0], p1.p[2] - p0[2])
@@ -687,9 +739,26 @@ async function mcpPhase () {
     const mv = await m.call('set', { id, component: 'transform', patch: { p: [-8, 0, -8] } })
     const moved = await until(() => B.evaluate((id) => { const p = window.__mm.world.get(id)?.live.p; return p && Math.hypot(p[0] + 8, p[2] + 8) < 1.5 }, id), { timeout: 3000 })
     ok(!mv.isError && moved, 'MCP set transform moves a simulated entity on the live page (inbox move drained by its owner)')
-    const rp = await m.call('replace', { id, component: 'representation', data: { kind: 'critter', rig: 'quadruped', length: 1.1, height: 0.8, color: '#f4f0e8' } })
-    const crit = await waitIn(B, (id) => window.__mm.reconciler.visualFor(id)?.userData.kind === 'critter', id).then(() => true, () => false)
-    ok(!rp.isError && crit, 'MCP replace swaps the representation to a critter on the live page')
+    const rp = await m.call('replace', { id, component: 'representation', data: { kind: 'rig', model: 'sheep' } })
+    const rig = await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing }, id).then(() => true, () => false)
+    ok(!rp.isError && rig, 'MCP replace swaps the representation to a rig (library sheep) on the live page')
+    // the person question (design §17): a wizard is a biped with a hat and a staff
+    const lib = await m.call('models')
+    const libNames = lib.json?.result?.map?.((r) => r.name) ?? []
+    ok(!lib.isError && ['quadruped', 'biped', 'serpent', 'bird', 'horse', 'sheep', 'trex'].every((n) => libNames.includes(n)), `models lists the library (${libNames.join(', ')})`, lib.isError ? lib.json : undefined)
+    const dm = await m.call('define_model', { name: 'wizard', model: WIZARD })
+    const wz = await m.call('spawn', { name: 'Wizard', at: [4, 0, 12], components: { transform: { p: [4, 0, 12], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: 'wizard' } } })
+    const wid = wz.json?.result?.id
+    const bones = wid && await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing && v.userData.bones?.has('hat') && v.userData.bones.has('staff') && v.userData.bones.has('thigh_l') ? v.userData.key : null }, wid).then((h) => h.jsonValue(), () => null)
+    ok(!dm.isError && !wz.isError && bones, `define_model wizard (extends biped) + a rig look: B renders it with the biped's bones plus hat and staff (template ${bones})`, dm.isError ? dm.json : wz.isError ? wz.json : undefined)
+    const ls = await m.call('models')
+    const wrow = ls.json?.result?.find?.((r) => r.name === 'wizard')
+    ok(wrow && String(wrow.extends) === 'biped' && wrow.nodes.includes('hat') && wrow.nodes.includes('head') && wrow.clips.includes('walk'), 'models() reports the wizard: extends biped, node names after extends, the inherited clips', wrow)
+    const badM = await m.call('define_model', { name: 'wizard', model: { ...WIZARD, animations: { idle: { tracks: { 'hat.rz': 'sin(t*' } } } } })
+    await sleep(300)
+    const rev = await B.evaluate(() => { const w = window.__mm.handle.doc().models?.wizard; return { rev: Number(w?.rev?.value ?? w?.rev ?? 0), idle: !!w?.animations?.idle } })
+    ok(badM.isError && /column/.test(badM.json?.error ?? '') && rev.rev === 1 && !rev.idle, 'define_model with an expression syntax error is refused before the doc changes (the wizard stays at rev 1)', { error: String(badM.json?.error ?? '').slice(0, 120), ...rev })
+    S.wizard = wid
     // B is the host and keeps writing checkpoints, so heads move anyway here: the strict
     // heads-unchanged check runs in the local phase, where nothing else writes
     const bad = await m.call('define_system', { name: 'broken', source: 'export default { update (world) { for (const e of world.query("tags") ' })
@@ -733,6 +802,16 @@ async function localPhase () {
     const h1 = await m.call('heads')
     ok(bad.isError && !h0.isError && JSON.stringify(h0.json.result) === JSON.stringify(h1.json.result), 'local define_system with a syntax error leaves the doc heads unchanged', String(bad.json?.error ?? '').split('\n').pop().trim().slice(0, 80))
     ok(typeof h0.json.versionLink === 'string' && /heads=/.test(h0.json.versionLink), 'heads also returns a read-only version link')
+    // define_model in local mode: valid writes, a syntax error leaves the heads unchanged
+    const okM = await m.call('define_model', { name: 'apprentice', model: { extends: 'wizard', nodes: [{ name: 'hat', color: '#2a6a3a' }] } })
+    const hm0 = await m.call('heads')
+    const badM = await m.call('define_model', { name: 'apprentice', model: { extends: 'wizard', animations: { idle: { tracks: { 'hat.ry': 'sin(t * 2' } } } } })
+    const hm1 = await m.call('heads')
+    ok(!okM.isError && badM.isError && JSON.stringify(hm0.json.result) === JSON.stringify(hm1.json.result), 'local define_model: a valid model writes, one with a syntax error leaves the doc heads unchanged', String(badM.json?.error ?? '').slice(0, 100))
+    const one = await m.call('model', { name: 'apprentice' })
+    const names = []; const walk = (ns) => { for (const n of ns ?? []) { names.push(n.name); walk(n.children) } }; walk(one.json?.result?.nodes)
+    const ls2 = await m.call('models')
+    ok(!one.isError && names.includes('hat') && names.includes('staff') && names.includes('thigh_r') && ls2.json?.result?.some((r) => r.name === 'apprentice' && String(r.extends) === 'wizard'), `model() resolves a two-level extends chain (apprentice -> wizard -> biped: ${names.length} nodes) and models() lists it`)
     const ls = await m.call('list', { tags: ['predator'] })
     ok(!ls.isError && ls.json.result.some((r) => r.id === S.offlineRex), 'list filters on preset-resolved tags')
   } finally { await m.close() }
@@ -740,6 +819,9 @@ async function localPhase () {
   // async: the sync server runs in this process, so a blocking exec would deadlock it
   const { stdout: out } = await promisify(execFile)(process.execPath, [path.join(PKG, 'agent/cli.mjs'), S.linkA, 'get', S.offlineRex, 'health', '--local'], { encoding: 'utf8' })
   ok(JSON.parse(out)?.max > 0, 'the CLI reads the offline T-rex', out.trim().slice(0, 80))
+  const { stdout: mOut } = await promisify(execFile)(process.execPath, [path.join(PKG, 'agent/cli.mjs'), S.linkA, 'models', '--local'], { encoding: 'utf8' })
+  let cliModels = null; try { cliModels = JSON.parse(mOut) } catch {}
+  ok(Array.isArray(cliModels) && cliModels.some((r) => r.name === 'wizard') && cliModels.some((r) => r.name === 'horse'), 'the CLI lists the models (library + wizard)', mOut.trim().slice(0, 80))
 
   // ---- exactly-once, from the doc's own history (S2's verify-doc, for the ledger)
   const c = await connect(S.linkA, { local: true })
@@ -765,6 +847,108 @@ async function localPhase () {
     ok(final.reduce((s, [, n]) => s + n, 0) === puts.size, 'every put hit is still in its victim\'s ledger (no lost or duplicated keys)', Object.fromEntries(final))
     ok(!!doc.entities?.[S.offlineRex] && !!doc.entities?.[S.agentSheep], 'the doc on the server holds the local and the live agent spawns')
   } finally { await c.close() }
+}
+
+// ============================================================== rigs: 300 animating, dead tint, preview state
+// A fresh world in its own tab (nothing else open, so the timings above are not
+// disturbed): R is host and sim of its own world.
+async function rigsPhase () {
+  phase('rigs')
+  ok(openPages.size === 0, 'no other page is open')
+  const ctx = await browser.newContext({ viewport: SMALL })
+  const R = await openPage(ctx, `${S.BASE}#sync=${encodeURIComponent(S.SYNC)}`, 'R', { timeout: 45000 })
+  try {
+    const lib = await R.evaluate(() => Object.keys(window.__mm.handle.doc().models ?? {}).sort())
+    ok(['bird', 'biped', 'horse', 'quadruped', 'serpent', 'sheep', 'trex'].every((n) => lib.includes(n)), `a new world carries the model library (${lib.join(', ')})`)
+
+    // ---- 300 rigs of two library models, walking and running (preview state: no sim needed)
+    const N = 300
+    const keys0 = await R.evaluate(() => window.__mm.resources.keys())
+    const tSpawn = Date.now()
+    const ids = await R.evaluate((N) => {
+      const ops = []
+      for (let i = 0; i < N; i++) {
+        const x = -18 + (i % 20) * 1.9; const z = -12 + Math.floor(i / 20) * 1.9
+        ops.push({ op: 'spawn', name: `rig ${i}`, components: { transform: { p: [x, 0, z], r: [0, (i * 37) % 360, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: i % 2 ? 'sheep' : 'horse', scale: 0.6 } } })
+      }
+      return window.__mm.caps.world.batch(ops).map((r) => (typeof r === 'string' ? r : r?.id))
+    }, N)
+    const spawnMs = Date.now() - tSpawn
+    const built = await waitIn(R, (ids) => ids.every((id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing }), ids, 60000).then(() => true, () => false)
+    ok(ids.length === N && built, `${N} rigs (horse + sheep) spawned in one batch and built (${spawnMs} ms to write)`)
+    await R.evaluate((ids) => ids.forEach((id, i) => window.__mm.reconciler.preview(id, { anim: i % 4 === 3 ? 'run' : 'walk' })), ids)
+    const shared = await R.evaluate(() => window.__mm.resources.keys().filter((k) => /^model:/.test(k)).map((k) => [k, window.__mm.resources.refs(k)]))
+    ok(shared.length === 2 && shared.every(([, n]) => n === 150), 'all instances share one template per model', shared)
+    // time the loop: the reconciler (CPU: vars, controller, tracks, node writes) and a
+    // frame's render, closed by a 1 px readback so the GPU work is inside the frame
+    const perf = await R.evaluate(async ([id0, frames]) => {
+      const mm = window.__mm; const rec = mm.reconciler; const st = mm.stage
+      const gl = mm.renderer.getContext(); const px = new Uint8Array(4)
+      const fr = rec.frame; const rd = st.render; const recMs = []; const drawMs = []; const gaps = []
+      let last = 0
+      rec.frame = function (...a) { const t = performance.now(); if (last) gaps.push(t - last); last = t; const r = fr.apply(this, a); recMs.push(performance.now() - t); return r }
+      st.render = function (...a) { const t = performance.now(); const r = rd.apply(this, a); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); drawMs.push(performance.now() - t); return r }
+      // a leg of one horse, to show the clips really move the bones
+      const leg = [...mm.reconciler.visualFor(id0).userData.bones.entries()].find(([n]) => /^(leg|thigh|upper_leg|hip)/.test(n))?.[1]
+      const rx = []
+      while (recMs.length < frames) { await new Promise((r) => requestAnimationFrame(r)); if (leg) rx.push(leg.rotation.x) }
+      rec.frame = fr; st.render = rd
+      const stat = (xs) => { const s = [...xs].sort((a, b) => a - b); return { mean: +(s.reduce((a, b) => a + b, 0) / s.length).toFixed(2), p95: +s[Math.floor(s.length * 0.95)].toFixed(2), max: +s[s.length - 1].toFixed(2) } }
+      return { frames: recMs.length, reconcilerMs: stat(recMs), renderReadbackMs: stat(drawMs), frameGapMs: stat(gaps), fps: +(1000 / stat(gaps).mean).toFixed(1), legSwingDeg: rx.length ? +((Math.max(...rx) - Math.min(...rx)) * 180 / Math.PI).toFixed(1) : null, drawCalls: mm.renderer.info.render.calls }
+    }, [ids[0], 40])
+    S.rigPerf = perf
+    console.log(`#   300 rigs: reconciler ${perf.reconcilerMs.mean} ms/frame (p95 ${perf.reconcilerMs.p95}), render + 1 px readback ${perf.renderReadbackMs.mean} ms, ${perf.fps} fps, ${perf.drawCalls} draw calls`)
+    ok(perf.frames >= 40 && perf.legSwingDeg > 10, `the 300 rigs animate (a horse's leg swings ${perf.legSwingDeg}° over ${perf.frames} frames)`, perf)
+    ok(perf.reconcilerMs.mean < 15, `reconciler CPU for 300 animating rigs: ${perf.reconcilerMs.mean} ms/frame mean (p95 ${perf.reconcilerMs.p95}; bound 15 ms)`)
+    await R.evaluate((ids) => { for (const id of ids) window.__mm.reconciler.preview(id, null); return window.__mm.caps.world.batch(ids.map((id) => ({ op: 'despawn', id }))).length }, ids)
+    await waitIn(R, (ids) => ids.every((id) => !window.__mm.reconciler.objectFor(id)), ids, 30000).catch(() => {})
+    const left = await R.evaluate((keys0) => window.__mm.resources.keys().filter((k) => !keys0.includes(k)), keys0)
+    ok(left.length === 0, 'after despawning the 300 rigs no resource they held is left', left)
+
+    // ---- preview state drives a clip with the sim idle (the editor's selector)
+    const pid = await R.evaluate(() => window.__mm.caps.world.spawn({ name: 'preview horse', components: { transform: { p: [0, 0, 16], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: 'horse' } } }).id())
+    await waitIn(R, (id) => window.__mm.reconciler.visualFor(id)?.userData.kind === 'rig', pid)
+    const swing = (id, ms) => R.evaluate(async ([id, ms]) => {
+      const bones = [...window.__mm.reconciler.visualFor(id).userData.bones.values()]; const lo = bones.map(() => Infinity); const hi = bones.map(() => -Infinity)
+      const t0 = performance.now()
+      while (performance.now() - t0 < ms) { bones.forEach((b, i) => { lo[i] = Math.min(lo[i], b.rotation.x); hi[i] = Math.max(hi[i], b.rotation.x) }); await new Promise((r) => requestAnimationFrame(r)) }
+      return +(Math.max(...bones.map((b, i) => hi[i] - lo[i])) * 180 / Math.PI).toFixed(1)
+    }, [id, ms])
+    const idleSwing = await swing(pid, 800)
+    await R.evaluate((id) => { window.__mm.interaction.select(id); window.__mm.editor.showTab('inspector') }, pid)
+    const sel = await waitIn(R, () => !!document.querySelector('#app select.rig-preview'), undefined, 5000).then(() => true, () => false)
+    await R.evaluate(() => { const s = document.querySelector('#app select.rig-preview'); if (s) { s.value = 'walk'; s.dispatchEvent(new Event('change', { bubbles: true })) } })
+    const forced = await R.evaluate((id) => ({ state: window.__mm.reconciler.previewState(id), anim: window.__mm.world.get(id).live.anim ?? null, owns: window.__mm.world.owns(id), v: window.__mm.world.get(id).live.v ?? null }), pid)
+    await sleep(200)
+    const walkSwing = await swing(pid, 1000)
+    await R.evaluate(() => window.__mm.interaction.select(null))
+    await sleep(100)
+    const cleared = await R.evaluate((id) => window.__mm.reconciler.previewState(id), pid)
+    ok(sel && forced.state === 'walk' && (forced.anim == null || forced.anim === 'idle') && walkSwing > idleSwing + 10 && cleared === null,
+      `the inspector's preview selector plays walk on an entity the sim leaves idle (bone swing ${idleSwing}° idle -> ${walkSwing}° walk), and deselecting clears it`, { sel, forced, cleared })
+
+    // ---- the dead group tints a rig (a preset creature with a rig look)
+    const sid = await R.evaluate(() => {
+      const e = window.__mm.caps.world.spawn({ preset: 'sheep', name: 'rig sheep', at: [3, 0, 16] })
+      e.replace('representation', { kind: 'rig', model: 'sheep', image: null, size: null })
+      return e.id()
+    })
+    await waitIn(R, (id) => window.__mm.reconciler.visualFor(id)?.userData.kind === 'rig', sid)
+    const colours = (id) => R.evaluate((id) => {
+      const v = window.__mm.reconciler.visualFor(id); const c = []
+      v.traverse((o) => { if (o.isMesh && !o.userData.notNode) c.push(o.material.color.getHexString()) })
+      return { visual: v.uuid, c }
+    }, id)
+    const before = await colours(sid)
+    await R.evaluate((id) => window.__mm.caps.world.get(id).addGroup('dead'), sid)
+    const tinted = await until(async () => { const a = await colours(sid); return a.c.length && a.c.every((h) => [0, 2, 4].every((i) => parseInt(h.slice(i, i + 2), 16) <= 0x56)) ? a : null }, { timeout: 5000 })
+    const after = tinted ?? await colours(sid)
+    ok(tinted && after.c.length === before.c.length && before.c.some((h) => [0, 2, 4].some((i) => parseInt(h.slice(i, i + 2), 16) > 0x56)), `the dead group tints every node of a rig sheep (${before.c.slice(0, 3).join(',')} -> ${after.c.slice(0, 3).join(',')})`, { before: before.c.length, after: after.c.length, sameVisual: before.visual === after.visual })
+    await R.evaluate(([a, b]) => { window.__mm.caps.world.get(a).destroy(); window.__mm.caps.world.get(b).destroy() }, [pid, sid])
+  } finally {
+    await R.close().catch(() => {})
+    await ctx.close().catch(() => {})
+  }
 }
 
 // ============================================================== safe mode after an infinite loop
@@ -859,7 +1043,7 @@ try {
   ok(errs.length === 0, `no console messages of type 'error' on any page (${errs.length})`, errs.slice(0, 8))
   const total = ((Date.now() - T_START) / 1000).toFixed(1)
   console.log(`\n# ${results.length - failed}/${results.length} passed in ${total} s`)
-  fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify({ total, results, consoleErrors, poseError: S.poseError, rates: S.rates }, null, 1))
+  fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify({ total, results, consoleErrors, poseError: S.poseError, rates: S.rates, rigPerf: S.rigPerf }, null, 1))
   exitCode = failed ? 1 : 0
   if (!KEEP) { await browser?.close().catch(() => {}); await browserB?.close().catch(() => {}); distSrv?.close(); syncSrv?.close() }
   process.exit(exitCode)
