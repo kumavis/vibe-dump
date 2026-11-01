@@ -3,7 +3,7 @@
 // where the mouse ray meets the ground.
 import { h } from './dom.js'
 
-const KIND_ICON = { tree: '🌳', critter: '🐾', model: '📦' }
+const KIND_ICON = { tree: '🌳', rig: '🐾', model: '📦' }
 const SHAPE_ICON = { box: '📦', sphere: '🪨', cone: '🔺', cylinder: '🛢️', capsule: '💊' }
 // light: the preset carries a light (a lamp's look is a tree of nodes, but it is a lamp)
 export function presetIcon (representation, { light = false } = {}) {

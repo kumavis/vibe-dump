@@ -4,6 +4,7 @@
 import { initDoc, DEFAULT_WORLD } from './schema.js'
 import { COMPONENT_DEFS, PRESETS, withOwnMaps } from './presets.js'
 import { toDoc, ImmutableString } from './convert.js'
+import { libraryDocModels, ensureLibraryOps } from './models.js'
 
 const I = (s) => new ImmutableString(s)
 
@@ -47,6 +48,8 @@ export function seedDoc (d, { title = 'Merge Meadow' } = {}) {
   initDoc(d, { title })
   for (const [name, def] of Object.entries(COMPONENT_DEFS)) d.components[name] = toDoc(def)
   for (const [name, preset] of Object.entries(PRESETS)) d.presets[name] = toDoc(preset)
+  // the rig model library (design §17.3); the seed presets stay billboards
+  for (const [name, m] of Object.entries(libraryDocModels(toDoc))) d.models[name] = m
   for (const [id, preset, p, yaw, s] of STARTER) d.entities[id] = starterEntity(preset, p, yaw, s)
   return d
 }
@@ -60,6 +63,7 @@ export function seedOps ({ title = 'Merge Meadow' } = {}) {
     ...Object.entries(COMPONENT_DEFS).map(([name, def]) => ({ op: 'defineComponent', name, def })),
     // creature first: the others extend it, and validation reads the batch in order
     ...Object.keys(PRESETS).sort((a, b) => (a === 'creature' ? -1 : b === 'creature' ? 1 : 0)).map((name) => ({ op: 'definePreset', name, preset: PRESETS[name] })),
+    ...ensureLibraryOps({ models: {} }), // bases first
     ...STARTER.map(([id, preset, p, yaw, s]) => ({ op: 'spawn', id, preset, name: NAMES[preset] ?? preset, components: { transform: { p: [...p], r: [0, yaw, 0], s: [s, s, s] } } })),
   ]
 }

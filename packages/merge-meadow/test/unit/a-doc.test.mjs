@@ -16,7 +16,7 @@ test('schema helpers', () => {
   assert.ok(isName('hunt') && isName('_x-1') && !isName('1x') && !isName('a b') && !isName('') && !isName(3))
   let d = A.change(A.init(), (x) => initDoc(x, { title: 'T' }))
   assert.equal(plain(d.meta.title), 'T')
-  assert.deepEqual(Object.keys(d).sort(), ['assets', 'components', 'entities', 'meta', 'presets', 'schema', 'systems', 'world'])
+  assert.deepEqual(Object.keys(d).sort(), ['assets', 'components', 'entities', 'meta', 'models', 'presets', 'schema', 'systems', 'world'])
   d = A.change(d, (x) => migrate(x))
   assert.equal(d.schema, 1)
 })
@@ -36,7 +36,7 @@ test('seedDoc: vocabulary, presets and the starter meadow, all valid against the
   assert.doesNotThrow(() => validateOps(doc, Object.entries(PRESETS).map(([name, preset]) => ({ op: 'definePreset', name, preset }))))
   assert.doesNotThrow(() => validateOps(doc, Object.entries(COMPONENT_DEFS).map(([name, def]) => ({ op: 'defineComponent', name, def }))))
   // representation.kind is the enum of the five kinds; billboards are emoji
-  assert.deepEqual(plain(doc.components.representation.schema.properties.kind.enum), ['billboard', 'primitive', 'tree', 'model', 'critter'])
+  assert.deepEqual(plain(doc.components.representation.schema.properties.kind.enum), ['billboard', 'primitive', 'tree', 'rig', 'model'])
   assert.equal(entityData(doc, 'trex-1').effective.representation.image, 'emoji:🦖')
   assert.equal(entityData(doc, 'horse-1').effective.mount.seats[0].anchor, 'seat')
   // strings in the doc are ImmutableString, the seed's plain JS stays plain

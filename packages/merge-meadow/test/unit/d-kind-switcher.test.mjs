@@ -13,8 +13,8 @@ test('switchKindOps: one replace from the target defaults plus same-typed carrie
 })
 
 test('switchKindOps: values out of the target range fall back to its default; kind defaults merge', () => {
-  const d = switchedData({ kind: 'primitive', shape: 'box', size: [1, 1, 1], color: '#123456' }, 'critter', KINDS)
-  assert.equal(d.kind, 'critter'); assert.equal(d.color, '#123456'); assert.equal(d.rig, 'quadruped'); assert.equal(d.tail, 0.5)
+  const d = switchedData({ kind: 'primitive', shape: 'box', size: [1, 1, 1], color: '#123456' }, 'rig', KINDS)
+  assert.equal(d.kind, 'rig'); assert.equal(d.color, '#123456'); assert.equal(d.model, 'quadruped'); assert.equal(d.scale, 1)
   const big = switchedData({ kind: 'model', url: 'asset:x', scale: 15 }, 'billboard', KINDS)
   assert.equal(big.size, 1.2)
   assert.throws(() => switchedData({ kind: 'billboard' }, 'hologram', KINDS), /unknown representation kind/)
@@ -25,11 +25,11 @@ test('switchKindOps: applied to the doc it swaps the look and keeps every other 
   const h = seeded()
   const before = read.entityData(h.doc(), 'sheep-1')
   const inherited = presetComponents(read, h.doc(), 'sheep').representation
-  const op = switchKindOps('sheep-1', before.effective.representation, 'critter', KINDS, { inherited })
+  const op = switchKindOps('sheep-1', before.effective.representation, 'primitive', KINDS, { inherited })
   assert.equal(op.data.image, null, 'the preset image is nulled out of the new look')
   const { inverse } = applyOps(h, [op], { kinds: KINDS })
   const after = read.entityData(h.doc(), 'sheep-1')
-  assert.equal(after.effective.representation.kind, 'critter')
+  assert.equal(after.effective.representation.kind, 'primitive')
   assert.ok(!('image' in after.effective.representation))
   assert.deepEqual(after.effective.brain, before.effective.brain)
   assert.deepEqual(after.effective.transform, before.effective.transform)

@@ -6,7 +6,9 @@ export const SCHEMA_VERSION = 1
 // Fields stored as ImmutableString (rule §2.5). In practice ops.js stores EVERY
 // string of component data as ImmutableString; this list is the contract other
 // tracks can rely on when they compare (always via String(x)).
-export const IMMUTABLE_KEYS = Object.freeze(['name', 'parent', 'preset', 'owner', 'type', 'from', 'kind', 'rig', 'shape', 'image', 'url', 'act'])
+// Rig models (design §17.3) add `model` (a representation's model name), `extends` and
+// node `anchor`; their expression strings and clip references are ImmutableString too.
+export const IMMUTABLE_KEYS = Object.freeze(['name', 'parent', 'preset', 'owner', 'type', 'from', 'kind', 'rig', 'shape', 'image', 'url', 'act', 'model', 'extends', 'anchor'])
 
 const NAME_RE = /^[A-Za-z_][A-Za-z0-9_-]{0,63}$/
 export const ID_RE = /^[A-Za-z0-9_][A-Za-z0-9_:.-]{0,79}$/
@@ -40,7 +42,7 @@ export function initDoc (d, { title = 'Merge Meadow' } = {}) {
   d.schema = SCHEMA_VERSION
   d.meta = { title: I(title), created: Date.now() }
   d.world = { bounds: DEFAULT_WORLD.bounds, ground: { color: I(DEFAULT_WORLD.ground.color) }, sky: { color: I(DEFAULT_WORLD.sky.color) }, disabledSystems: {} }
-  for (const k of ['entities', 'presets', 'components', 'systems', 'assets']) if (!d[k]) d[k] = {}
+  for (const k of ['entities', 'presets', 'components', 'systems', 'assets', 'models']) if (!d[k]) d[k] = {}
   return d
 }
 

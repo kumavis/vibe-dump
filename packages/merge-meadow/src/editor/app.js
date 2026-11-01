@@ -83,7 +83,7 @@ export function makeEditor ({
     onSpawn: (name) => { if (placing) { placing.preset = name; palette.setArmed(true, name) } else spawnAhead(name) },
     onArm: (on) => { placing = on ? { preset: null } : null; palette.setArmed(on) },
   })
-  const ctx = { doc: () => docOf(), read, kinds, ownership, presence, peerId, write, explain, toast, copy }
+  const ctx = { doc: () => docOf(), read, kinds, ownership, presence, peerId, write, explain, toast, copy, reconciler }
   const inspector = makeInspector(ctx)
   const systems = makeSystemsPanel({ ...ctx, systemHost, safe })
   const agent = makeAgentPanel({ link, share, agentHost, copy, toast, enableAgents, viewLink: () => (agentHost?.viewKey && share?.viewLink ? share.viewLink(agentHost.viewKey) : null) })
@@ -193,7 +193,7 @@ export function makeEditor ({
         if (key === undefined || p.path.length <= 2 || TREE_FIELDS.has(sub)) dirty.tree = true
         if (key === selected) dirty.insp = true
         if (sub === 'components' && comp === 'representation' && p.path.length === 4) touched.add(String(key))
-      } else if (rootKey === 'presets') { dirty.tree = dirty.insp = dirty.palette = true } else if (rootKey === 'components') dirty.insp = true
+      } else if (rootKey === 'presets') { dirty.tree = dirty.insp = dirty.palette = true } else if (rootKey === 'components' || rootKey === 'models') dirty.insp = true
       else if (rootKey === 'systems') dirty.sys = true
       else if (rootKey === 'world' || rootKey === 'meta') { dirty.world = dirty.title = true; if (rootKey === 'world') dirty.sys = true }
       else if (rootKey === undefined) Object.keys(dirty).forEach((k) => { dirty[k] = true })

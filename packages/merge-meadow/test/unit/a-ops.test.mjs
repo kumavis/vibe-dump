@@ -111,7 +111,9 @@ test('inverse ops undo a batch exactly', () => {
   const r = applyOps(h, [
     { op: 'spawn', id: 'x', preset: 'sheep', at: [1, 2, 3] },
     { op: 'set', id: 'sheep-1', component: 'body', patch: { speed: 9, turn: 2 } },
-    { op: 'replace', id: 'trex-1', component: 'representation', data: { kind: 'critter', rig: 'biped', length: 4 } },
+    { op: 'replace', id: 'trex-1', component: 'representation', data: { kind: 'rig', model: 'trex', color: '#ffffff' } },
+    { op: 'defineModel', name: 'trex', model: { extends: 'biped', stride: 3 } },
+    { op: 'defineModel', name: 'blob', model: { nodes: [{ name: 'b', shape: 'sphere' }] } },
     { op: 'remove', id: 'tree-1', component: 'transform' },
     { op: 'transform', id: 'rock-1', p: [0, 0, 0], s: [2, 2, 2] },
     { op: 'setName', id: 'lamp-1', name: 'Lantern' },
@@ -124,8 +126,14 @@ test('inverse ops undo a batch exactly', () => {
     { op: 'despawn', id: 'horse-1' },
   ])
   assert.notEqual(JSON.stringify(plain(h.doc())), before)
+  assert.equal(plain(h.doc().models.trex.rev), 2)
   applyOps(h, r.inverse)
-  assert.equal(JSON.stringify(sortKeys(plain(h.doc()))), JSON.stringify(sortKeys(JSON.parse(before))))
+  // a model's rev only moves forward (it keys the render template), so undo
+  // restores the model's content under a new revision
+  assert.equal(plain(h.doc().models.trex.rev), 3)
+  assert.equal(h.doc().models.blob, undefined)
+  const noRev = (x) => { for (const m of Object.values(x.models ?? {})) delete m.rev; return x }
+  assert.equal(JSON.stringify(sortKeys(noRev(plain(h.doc())))), JSON.stringify(sortKeys(noRev(JSON.parse(before)))))
 })
 
 function sortKeys (v) {
@@ -216,7 +224,7 @@ test('changeDoc works on a bare Automerge doc (Node fallback path) and every op 
   let d = A.from({})
   d = A.change(d, (x) => { changeDoc(x, [{ op: 'spawn', id: 'a', components: { tags: { t: true } } }, { op: 'checkpoint', id: 'a', p: [1, 2, 3], yaw: 90 }]) })
   assert.deepEqual(plain(d.entities.a.components.transform), { p: [1, 2, 3], r: [0, 90, 0], s: [1, 1, 1] })
-  assert.equal(OP_NAMES.length, 26)
+  assert.equal(OP_NAMES.length, 28)
 })
 
 test('validateOps with a kinds registry accepts any registered representation kind (open registry)', async () => {
@@ -227,7 +235,7 @@ test('validateOps with a kinds registry accepts any registered representation ki
   const h = repo.create(); h.change((d) => seedDoc(d, { title: 't' }))
   const op = [{ op: 'spawn', components: { representation: { kind: 'blob', wobble: 2 } } }]
   assert.throws(() => validateOps(h.doc(), op), /representation/, 'without the registry the five built-ins are the enum')
-  const kinds = { billboard: {}, primitive: {}, tree: {}, model: {}, critter: {}, blob: { schema: { type: 'object', properties: { wobble: { type: 'number', minimum: 0, maximum: 5 } } } } }
+  const kinds = { billboard: {}, primitive: {}, tree: {}, rig: {}, model: {}, blob: { schema: { type: 'object', properties: { wobble: { type: 'number', minimum: 0, maximum: 5 } } } } }
   assert.doesNotThrow(() => validateOps(h.doc(), op, { kinds }), 'a registered kind validates')
   assert.throws(() => validateOps(h.doc(), [{ op: 'spawn', components: { representation: { kind: 'blob', wobble: 9 } } }], { kinds }), /wobble/, 'and its own schema still applies')
   assert.throws(() => validateOps(h.doc(), [{ op: 'spawn', components: { representation: { kind: 'nope' } } }], { kinds }), /representation/, 'an unregistered kind is still refused')

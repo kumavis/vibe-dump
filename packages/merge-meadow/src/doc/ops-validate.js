@@ -4,18 +4,31 @@
 import { plain, isObj } from './convert.js'
 import { isName, isId } from './schema.js'
 import { validateComponent, validateSchema, validateSystemMeta, checkJSON } from './validate.js'
-import { componentDefsOf, isHollow } from './presets.js'
+import { componentDefsOf, isHollow, effectiveComponents, BUILTIN_KINDS, RIG_KINDS } from './presets.js'
+import { validateModel, validateInline, resolveModel, dependentsOf, modelBody } from './models.js'
 
 export const OP_NAMES = Object.freeze(['spawn', 'despawn', 'set', 'replace', 'remove', 'define', 'setParent', 'setName',
   'addGroup', 'removeGroup', 'push', 'drain', 'hit', 'pin', 'unpin', 'checkpoint', 'transform',
   'definePreset', 'removePreset', 'defineComponent', 'removeComponent', 'defineSystem', 'setSystem', 'removeSystem',
-  'setWorld', 'setMeta'])
+  'setWorld', 'setMeta', 'defineModel', 'removeModel'])
 export const MAX_OPS = 2000
 export const MAX_SOURCE = 100_000
 export const REF = /^\$(\d+)$/
 export const PEER_RE = /^[A-Za-z0-9_:.-]{0,80}$/
 const str = (v) => (v == null ? '' : String(plain(v)))
 const isVec3 = (v) => Array.isArray(v) && v.length === 3 && v.every((x) => typeof x === 'number' && Number.isFinite(x))
+
+// a set patch applied to plain data: objects merge, null deletes, the rest replaces
+function mergePlain (base, patch) {
+  const out = isObj(base) ? { ...base } : {}
+  for (const [k, v] of Object.entries(patch ?? {})) {
+    if (v === undefined) continue
+    if (v === null) delete out[k]
+    else if (isObj(v) && isObj(out[k])) out[k] = mergePlain(out[k], v)
+    else out[k] = v
+  }
+  return out
+}
 
 export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
   const problems = []
@@ -27,6 +40,9 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
   const presets = new Set(Object.keys(doc?.presets ?? {}))
   const systems = new Set(Object.keys(doc?.systems ?? {}))
   const defs = { ...componentDefsOf(doc), ...plain(componentDefs ?? {}) }
+  // doc.models as of the op being checked (copied only when a batch needs it)
+  let modelsMap = null
+  const models = () => (modelsMap ??= plain(doc?.models ?? {}))
   const keys = [] // per-op entity key (explicit id, or '$i' for a generated one)
 
   ops.forEach((op, i) => {
@@ -53,11 +69,12 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
       for (const p of checkJSON(data, [name])) bad(p)
       // the representation def lists the five built-in kinds; with the renderer's
       // registry at hand, any registered kind is valid (design §8: an open registry)
+      // (and the built-in kinds always are, so a doc seeded before `rig` existed takes one)
       let def = defs[name]
-      if (name === 'representation' && kinds && def?.schema?.properties?.kind) {
+      if (name === 'representation' && def?.schema?.properties?.kind && Array.isArray(plain(def.schema.properties.kind.enum))) {
         def = plain(def)
         const k = def.schema.properties.kind
-        k.enum = [...new Set([...(Array.isArray(k.enum) ? k.enum : []), ...Object.keys(kinds)])]
+        k.enum = [...new Set([...k.enum, ...BUILTIN_KINDS, ...Object.keys(kinds ?? {})])]
       }
       for (const p of validateComponent(def, data, { partial, defs })) bad(`${name}.${p}`)
       // `on` reactions add/remove GROUPS: every entry must be a group name, or the
@@ -78,6 +95,22 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
         const k = kinds[String(plain(data.kind))]
         if (k?.schema) for (const p of validateComponent(k.schema, data, { partial: true, defs })) bad(`representation(${plain(data.kind)}).${p}`)
       }
+      if (name === 'representation' && isObj(data) && !rigChecked) rig(data)
+    }
+    // a rig look (design §17.3): `model` must name a model that resolves, or the
+    // inline nodes/animations/controller must validate as a model
+    let rigChecked = false
+    const rig = (rep) => {
+      const r = plain(rep)
+      if (!isObj(r) || !RIG_KINDS.includes(str(r.kind))) return
+      const m = str(r.model)
+      if (m) {
+        if (!isObj(models()[m])) { bad(`representation.model: no model ${JSON.stringify(m)}`); return }
+        try { resolveModel(models(), m) } catch (e) { bad(`representation.model: ${e?.message ?? e}`) }
+        return
+      }
+      if (r.nodes == null && r.animations == null && r.controller == null) return
+      for (const p of validateInline(r, models())) bad(`representation.${p}`)
     }
     const components = (comps, where, partial = true) => {
       if (comps == null) return
@@ -107,8 +140,15 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
       case 'despawn': { const k = need(op.id); if (k) exists.delete(k); keys[i] = k; break }
       case 'set': {
         keys[i] = need(op.id)
-        if (!isObj(op.patch)) bad('patch must be an object (replace swaps identity, remove deletes)')
-        else component(op.component, op.patch, true)
+        if (!isObj(op.patch)) { bad('patch must be an object (replace swaps identity, remove deletes)'); break }
+        // a field edit of a rig look is checked as the look it makes (an animations
+        // patch must target the nodes the entity already has)
+        if (op.component === 'representation' && keys[i] && ents[keys[i]]) {
+          rig(mergePlain(plain(effectiveComponents(doc, keys[i])?.representation ?? {}), plain(op.patch)))
+          rigChecked = true
+        }
+        component(op.component, op.patch, true)
+        rigChecked = false
         break
       }
       case 'replace': {
@@ -223,6 +263,30 @@ export function validateOps (doc, ops, { componentDefs, kinds } = {}) {
         break
       }
       case 'removeSystem': if (!systems.has(op.name)) bad(`no system ${op.name}`); else systems.delete(op.name); break
+      case 'defineModel': {
+        if (!isName(op.name)) { bad('bad model name'); break }
+        if (!isObj(op.model)) { bad('model must be {extends?, stride?, runSpeed?, nodes, animations?, controller?}'); break }
+        const ms = models()
+        const before = ms[op.name]
+        const problems0 = validateModel(op.model, ms, { name: op.name })
+        for (const p of problems0) bad(`model ${op.name}: ${p}`)
+        if (problems0.length) break
+        ms[op.name] = { ...modelBody(op.model), rev: Number(plain(before?.rev) ?? 0) + 1 }
+        // redefining a base must not break the models built on it
+        for (const dep of dependentsOf(ms, op.name)) {
+          const ps = validateModel(ms[dep], ms, { name: dep })
+          if (ps.length) bad(`model ${op.name}: breaks ${dep}, which extends it: ${ps.join('; ')}`)
+        }
+        break
+      }
+      case 'removeModel': {
+        const ms = models()
+        if (!isName(op.name) || !isObj(ms[op.name])) { bad(`no model ${op.name}`); break }
+        const deps = Object.keys(ms).filter((n) => n !== op.name && str(ms[n]?.extends) === op.name).sort()
+        if (deps.length) { bad(`model ${op.name} is extended by ${deps.join(', ')}: remove or re-base those first`); break }
+        delete ms[op.name]
+        break
+      }
       case 'setWorld': case 'setMeta': {
         if (!isObj(op.patch)) { bad('patch must be an object'); break }
         for (const p of checkJSON(op.patch, ['patch'])) bad(p)

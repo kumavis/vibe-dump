@@ -4,14 +4,16 @@
 // only when their own effective data changed, and never under the cursor.
 import { h, hasFocusWithin, peerColor } from './dom.js'
 import { renderForm } from './forms.js'
-import { renderKindSwitcher, switchKindOps } from './kind-switcher.js'
+import { renderKindSwitcher, switchKindOps, convertCritterOps, critterModel, RIG_INLINE } from './kind-switcher.js'
+import { makeRigPanel } from './rig-panel.js'
+import { previewArg } from './rig-ops.js'
 import { editOps, componentOrigin, removeComponentOps, resetComponentOps, addComponentOps, presetComponents, healOps, representationSchema, sortComponents } from './component-ops.js'
 import { moveOps } from '../doc/ops.js'
 
 const OPEN_BY_DEFAULT = new Set(['transform', 'representation', 'body', 'health', 'light', 'perception', 'attack'])
 const json = (v) => JSON.stringify(v ?? null)
 
-// ctx: { doc(), read, kinds, ownership, presence, peerId, write(ops, message, opts), explain(id), toast(msg, level), copy(text) }
+// ctx: { doc(), read, kinds, ownership, presence, peerId, write(ops, message, opts), explain(id), toast(msg, level), copy(text), reconciler? }
 export function makeInspector (ctx) {
   const el = h('div', { class: 'inspector' })
   const empty = h('div', { class: 'empty muted' }, 'Select an entity in the tree or the scene.', h('br'), 'Spawn one from the palette.')
@@ -31,6 +33,23 @@ export function makeInspector (ctx) {
     return [...Object.keys(p.groups ?? {}), ...bases.flatMap((b) => presetGroups(String(b), seen))]
   }
   const write = (ops, msg, opts) => ctx.write(ops, msg, opts)
+
+  // rig preview state (design §17.5): forces live.anim on the selected entity
+  // through the reconciler; cleared on deselect and on a change of selection
+  let preview = null // { id, anim }
+  const setPreview = (anim) => {
+    const arg = id ? previewArg(anim) : null
+    if (preview && (!arg || preview.id !== id)) { try { ctx.reconciler?.preview?.(preview.id, null) } catch (e) { console.error('[inspector] preview', e) } preview = null }
+    if (arg) { try { ctx.reconciler?.preview?.(id, arg); preview = { id, anim: arg.anim } } catch (e) { console.error('[inspector] preview', e) } }
+  }
+  const modelNames = () => Object.keys(doc()?.models ?? {}).sort()
+  // a rig card also depends on the model it references (and the library's names)
+  const cardSig = (row, comp) => {
+    const data = row.effective[comp]
+    if (comp !== 'representation' || String(data?.kind ?? '') !== 'rig') return json(data)
+    const m = data?.model ? doc()?.models?.[String(data.model)] : null
+    return json([data, modelNames(), m ? ctx.read.plain(m) : null])
+  }
 
   function header (row) {
     const presets = ctx.read.docSummary(doc()).presets
@@ -108,15 +127,35 @@ export function makeInspector (ctx) {
     }
     if (comp === 'representation') {
       const kind = String(data?.kind ?? '')
-      const sw = renderKindSwitcher(ctx.kinds ?? {}, data, (target) => {
+      const inheritedRep = () => presetComps(rowOf()?.preset).representation ?? {}
+      const sw = renderKindSwitcher(ctx.kinds ?? {}, data, (target, { model } = {}) => {
         const r = rowOf(); if (!r) return
-        write([switchKindOps(r.id, r.effective.representation, target, ctx.kinds, { inherited: presetComps(r.preset).representation ?? {} })], `look ${kind} → ${target}`)
-      })
+        write([switchKindOps(r.id, r.effective.representation, target, ctx.kinds, { inherited: inheritedRep(), model })], `look ${kind} → ${target}${target === 'rig' && model ? ` (${model})` : ''}`)
+      }, { models: modelNames() })
       const form = h('div')
-      const { kind: _k, ...fields } = data ?? {} // kind belongs to the switcher, not the form
-      renderForm(form, { schema: representationSchema(def?.schema, ctx.kinds, kind), value: fields, onPatch })
+      // kind belongs to the switcher; a rig's model and layers belong to the rig panel
+      const { kind: _k, ...fields } = data ?? {}
+      let schema = representationSchema(def?.schema, ctx.kinds, kind)
+      if (kind === 'rig') {
+        for (const k of ['model', ...RIG_INLINE]) { delete fields[k]; delete schema.properties[k] }
+      }
+      renderForm(form, { schema, value: fields, onPatch })
       body.append(h('label', { class: 'sf-row' }, h('span', { class: 'sf-label' }, 'kind'), sw), form)
-      if (kind && ctx.kinds && !ctx.kinds[kind]) body.append(h('div', { class: 'warn' }, `no renderer registered for kind "${kind}"`))
+      if (kind === 'critter') {
+        const target = critterModel(data)
+        body.append(h('div', { class: 'warn' }, 'The critter kind was removed: this look renders a placeholder. ',
+          h('button', { class: 'small', type: 'button', title: `one replace: { kind: 'rig', model: '${target}' } with this colour`, onclick: (e) => {
+            e.preventDefault()
+            const r = rowOf(); if (!r) return
+            write([convertCritterOps(r.id, r.effective.representation, { inherited: inheritedRep() })], `critter → rig ${target}`)
+          } }, `Convert to rig (${target})`)))
+      } else if (kind === 'rig') {
+        const panel = makeRigPanel({ doc, read: ctx.read, write, toast: ctx.toast }, {
+          id: row.id, rep: data, inherited: presetComps(row.preset).representation ?? {},
+          preview: { get: () => (preview?.id === row.id ? preview.anim : ''), set: setPreview },
+        })
+        body.append(panel.el)
+      } else if (kind && ctx.kinds && !ctx.kinds[kind]) body.append(h('div', { class: 'warn' }, `no renderer registered for kind "${kind}"`))
     } else {
       const form = h('div')
       renderForm(form, { schema: def?.schema, value: data, onPatch })
@@ -135,7 +174,7 @@ export function makeInspector (ctx) {
     const list = h('div', { class: 'cards' })
     for (const comp of sortComponents(Object.keys(row.effective), allDefs)) {
       const c = card(row, comp, pc, allDefs)
-      cards.set(comp, { el: c, json: json(row.effective[comp]) })
+      cards.set(comp, { el: c, json: cardSig(row, comp) })
       list.append(c)
     }
     const missing = Object.keys(allDefs).filter((n) => !(n in row.effective)).sort()
@@ -162,7 +201,7 @@ export function makeInspector (ctx) {
     const pc = presetComps(row.preset)
     const allDefs = defs()
     for (const n of names) {
-      const j = json(row.effective[n])
+      const j = cardSig(row, n)
       const c = cards.get(n)
       if (c.json === j) continue
       if (hasFocusWithin(c.el)) { dirty = true; continue } // that card catches up on blur
@@ -179,7 +218,7 @@ export function makeInspector (ctx) {
   return {
     el,
     get id () { return id },
-    select (next) { if (next === id) return; id = next ?? null; full() },
+    select (next) { if (next === id) return; id = next ?? null; setPreview(null); full() },
     update,
     refreshLive () { if (!id || !parts) return; const row = rowOf(); if (!row) { full(); return } parts.live.update(row) },
   }

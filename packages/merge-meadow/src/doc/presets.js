@@ -25,6 +25,11 @@ const DRIVE = {
 
 const def = (order, description, defaults, schema) => ({ description, order, defaults, schema })
 
+// the built-in representation kinds (design §8, §17: `critter` is gone, `rig` replaced it)
+export const BUILTIN_KINDS = Object.freeze(['billboard', 'primitive', 'tree', 'rig', 'model'])
+// the kinds whose data is a rig (validated against doc.models by ops-validate.js)
+export const RIG_KINDS = Object.freeze(['rig', 'tree'])
+
 export const COMPONENT_DEFS = deepFreeze({
   transform: def(-100, 'Rest pose: position (m), Euler rotation (degrees), scale. Live motion is not stored here.',
     { p: [0, 0, 0], r: [0, 0, 0], s: [1, 1, 1] },
@@ -55,9 +60,9 @@ export const COMPONENT_DEFS = deepFreeze({
     { type: 'object', properties: { seats: { type: 'array', maxItems: 16, items: { type: 'object', properties: { name: { type: 'string' }, anchor: { type: 'string', 'x-immutable': true }, offset: vec3('offset', [0, 1.5, 0]), controls: { type: 'boolean' } } } }, panicPriority: { type: 'number', minimum: -100, maximum: 1000, title: 'panic priority' } } }),
   rider: def(0, 'Riding a mount: the only stored side of the relation.', { mount: '', seat: 0 },
     { type: 'object', properties: { mount: { type: 'string', 'x-immutable': true, title: 'mount id' }, seat: { type: 'integer', minimum: 0, maximum: 15, title: 'seat' } } }),
-  representation: def(10, 'How the entity looks. `kind` picks a renderer; the other fields belong to that kind.',
+  representation: def(10, 'How the entity looks. `kind` picks a renderer; the other fields belong to that kind. A `rig` names a model in doc.models ({kind: \'rig\', model: \'horse\'}) or carries its nodes inline (`tree` is a rig with no animations).',
     { kind: 'billboard', image: 'emoji:❓', size: 1 },
-    { type: 'object', required: ['kind'], properties: { kind: { enum: ['billboard', 'primitive', 'tree', 'model', 'critter'], 'x-immutable': true, title: 'kind' }, tint: color('tint', '#ffffff') } }),
+    { type: 'object', required: ['kind'], properties: { kind: { enum: BUILTIN_KINDS, 'x-immutable': true, title: 'kind' }, tint: color('tint', '#ffffff') } }),
   animation: def(10, 'Maps semantic states (idle, walk, run, attack, die, sit) to clip names of a model.', { clips: {} },
     { type: 'object', properties: { clips: { type: 'object', additionalProperties: { type: 'string' } } } }),
   light: def(10, 'A light attached to the entity.', { kind: 'point', color: '#ffd59a', intensity: 6, distance: 12 },

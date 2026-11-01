@@ -3,6 +3,7 @@
 // so a shared object handed out once would be frozen for its owner too.
 import { plain, isObj } from './convert.js'
 import { resolveEntity, presetChain } from './presets.js'
+import { resolveModel, nodeNames, modelBody } from './models.js'
 
 export { plain }
 
@@ -80,7 +81,44 @@ export function docSummary (doc) {
     components: Object.keys(doc?.components ?? {}).sort(),
     systems,
     world: isObj(doc?.world) ? plain(doc.world) : {},
+    models: modelSummaries(doc),
   }
+}
+
+// [{ name, extends, rev, nodes: [named nodes, depth-first], clips: [names], error? }],
+// nodes and clips after `extends` resolution, sorted by name
+export function modelSummaries (doc) {
+  const all = plain(doc?.models ?? {})
+  return Object.keys(all).sort().map((name) => {
+    const own = isObj(all[name]) ? all[name] : {}
+    let r = null; let error = null
+    try { r = resolveModel(all, name) } catch (e) { error = String(e?.message ?? e) }
+    const m = r ?? own
+    return {
+      name,
+      extends: str(own.extends),
+      rev: Number(own.rev ?? 0) || 0,
+      nodes: nodeNames(m.nodes),
+      clips: Object.keys(isObj(m.animations) ? m.animations : {}).sort(),
+      ...(error ? { error } : {}),
+    }
+  })
+}
+
+// One rig model as fresh plain data, or null.
+//   default: RESOLVED through its extends chain — { name, extends, chain, rev, revs,
+//            stride, runSpeed, nodes, animations, controller, description? }; a
+//            broken chain gives the stored model plus `error`
+//   { raw: true }: the model as stored — { name, extends, rev, ...fields }
+// To copy a model under a new name without its base, define the resolved one with
+// extends: '' (defineModel drops name/chain/rev/revs).
+export function modelData (doc, name, { raw = false } = {}) {
+  const all = plain(doc?.models ?? {})
+  const own = all[String(name)]
+  if (!isObj(own)) return null
+  const stored = { name: String(name), ...modelBody(own), extends: str(own.extends), rev: Number(own.rev ?? 0) || 0 }
+  if (raw) return stored
+  try { return resolveModel(all, String(name)) } catch (e) { return { ...stored, error: String(e?.message ?? e) } }
 }
 
 export function componentData (doc, name) {

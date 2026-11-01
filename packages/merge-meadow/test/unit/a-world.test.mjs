@@ -35,8 +35,8 @@ test('reconcile from real patches: add (in component order), nested edit, delete
   assert.deepEqual(log, ['change rep dolly billboard->billboard'])
   assert.equal(w.get('dolly').c.representation.size, 4)
   log.length = 0
-  applyOps(h, [{ op: 'replace', id: 'dolly', component: 'representation', data: { kind: 'critter', rig: 'quadruped' } }])
-  assert.deepEqual(log, ['change rep dolly billboard->critter'])
+  applyOps(h, [{ op: 'replace', id: 'dolly', component: 'representation', data: { kind: 'rig', model: 'sheep' } }])
+  assert.deepEqual(log, ['change rep dolly billboard->rig'])
   log.length = 0
   applyOps(h, [{ op: 'set', id: 'dolly', component: 'body', patch: { speed: 1 } }])
   assert.deepEqual(log, [], 'unrelated component edits do not touch representation handlers')

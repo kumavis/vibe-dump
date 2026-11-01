@@ -7,6 +7,7 @@ import { plain, toDoc, isObj, sameScalar, ImmutableString, Counter } from './con
 import { newId, slug, SCHEMA_VERSION } from './schema.js'
 import { validateOps, OP_NAMES, MAX_OPS, REF } from './ops-validate.js'
 import { effectiveComponents, withOwnMaps } from './presets.js'
+import { modelBody } from './models.js'
 
 const I = (s) => new ImmutableString(String(s ?? ''))
 const str = (v) => (v == null ? '' : String(plain(v)))
@@ -289,6 +290,28 @@ export function changeDoc (d, ops, ctx = {}) {
       case 'removeSystem': {
         const s = d.systems[op.name]
         if (s) { inv = { op: 'defineSystem', name: op.name, source: String(s.source), order: plain(s.order), enabled: plain(s.enabled) !== false }; delete d.systems[op.name] }
+        break
+      }
+      // rig models (design §17.3). `rev` is a Counter, so two concurrent redefinitions
+      // sum (both peers see a revision neither had) and the render key moves on
+      case 'defineModel': {
+        if (!isObj(d.models)) d.models = {}
+        const cur = d.models[op.name]
+        const body = modelBody(op.model) // known fields only: no rev, no resolver extras
+        inv = cur === undefined ? { op: 'removeModel', name: op.name } : { op: 'defineModel', name: op.name, model: modelBody(cur) }
+        if (isObj(cur)) {
+          diffInto(d.models[op.name], body, [], [], (p) => p.length === 1 && p[0] === 'rev')
+          const m = d.models[op.name]
+          if (m.rev instanceof Counter) m.rev.increment(1)
+          else m.rev = new Counter(Number(plain(m.rev) ?? 0) + 1)
+        } else {
+          d.models[op.name] = { ...toDoc(body), rev: new Counter(1) }
+        }
+        break
+      }
+      case 'removeModel': {
+        const cur = d.models?.[op.name]
+        if (cur !== undefined) { inv = { op: 'defineModel', name: op.name, model: modelBody(cur) }; delete d.models[op.name] }
         break
       }
       case 'setWorld': case 'setMeta': {

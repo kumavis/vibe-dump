@@ -61,7 +61,7 @@ test('simHash is unchanged by representation replaces mid-run', () => {
   const hashes = { a: [], b: [] }
   play(a, 450, (t) => { if (t % 50 === 0) hashes.a.push(simHash(a.world)) })
   play(b, 450, (t) => {
-    if (t === 100) applyOps(b.handle, [{ op: 'replace', id: 'rex', component: 'representation', data: { kind: 'critter', rig: 'biped', length: 4, height: 3 } }])
+    if (t === 100) applyOps(b.handle, [{ op: 'replace', id: 'rex', component: 'representation', data: { kind: 'rig', model: 'trex', scale: 1.2 } }])
     if (t === 200) applyOps(b.handle, [{ op: 'replace', id: 'rex', component: 'representation', data: { kind: 'model', url: 'asset:trex' } }, { op: 'set', id: 'bucephalus', component: 'representation', patch: { size: 3 } }])
     if (t === 300) applyOps(b.handle, [{ op: 'set', id: 'rex', component: 'animation', patch: { clips: { run: 'Gallop' } } }])
     if (t % 50 === 0) hashes.b.push(simHash(b.world))
