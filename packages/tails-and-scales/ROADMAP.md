@@ -1081,18 +1081,32 @@ follows N3.
   F8b mended (terrain-check's `spare-height`, snap-check's
   `shudder-holds`). DESIGN's F7b notes. The row itself landed with F17,
   `sim/play-report.mjs --row f7b`, before F7b; F7b judged it again on its
-  own re-record. Merged onto main over V3 as `CORE_VERSION` 13, `fort/`
-  and the fortified `scale/` pairs re-recorded on the merge: DESIGN's
-  "F7b merged onto main".)
-- [ ] **Later (F7b's):** found on F7b's base commit 2f10015 and not
-  F7b's, and still open after its merge onto main (the connectivity rows
-  and play-check's layout lane, which failed there too, were answered on
-  main by ad911bf and 1519f63 and pass at the merge): rematch-memory
-  `--terrain fortified`'s heap slope (21.8 KB a rematch against 16 KB,
-  21.4 KB on 2f10015, mostly V8's WeakArrayList, every renderer count
-  flat), and input/group.js's ghost plan finishing just before Escape
-  leaving its summary tooltip up (seen once under load in the run lost to
-  the restart; input-check passed there).
+  own re-record. Merged onto main over V3 as `CORE_VERSION` 13 (17c41b0),
+  `fort/` and the fortified `scale/` pairs re-recorded on the merge with
+  the PIN on it (78bca8a, hotseat-aggressive-climb-8 replaced by -5),
+  input-check's fortified lane ported to the merged page (e252bfe):
+  DESIGN's "F7b merged onto main".)
+- [ ] **Later (F7b's):** at F7b's merge onto main (17c41b0) army-sim's
+  Skirmish per-unit gate fails: the Pinecone Trebuchet fits 32 ± 7
+  against its 50 (band 13), where ab8cee6 passes at 48 ± 7; both score
+  gates hold (classic 48.6%, `fortified` 50.6%). On `fortified` alone the
+  Trebuchet fits 55 on ab8cee6, 41 on F7b's own code and 34 merged, the
+  Venom Engine 60, 66 and 83: the parapets' cover on the decks takes from
+  the templates. A price is rules data (`RULES_ID` moves, and every
+  battle its lists make), so it is a retune of its own, run on a quiet
+  machine at all three sizes. (F7b's other two Later items are gone at
+  the merge: rematch-memory `--terrain fortified` gives 2.3 KB a rematch,
+  and the ghost plan's tooltip wasn't seen; the connectivity rows and
+  play-check's layout lane pass on main's fixes.)
+- [ ] **Later (main's, found at F7b's merge):** each main's own, the
+  last three run on ab8cee6 too: P-prop's self-test finds its
+  `aishoot-fears-riders` edit stale (its anchor still indented as
+  core/ai/policy.js was before the V3 merge; the edit and the file are
+  ab8cee6's, byte for byte); input-check's tips lane on the 390×844 phone, "Elder
+  Chitterwick's card's high: no tip shown"; lobby-rig's `size` ("the
+  host's page offers every size, the Powder keg among them"); and
+  playback-check's Grand battle as watched, 203.9 s against its 200 s
+  (V3c's note's 204 s).
 - [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
   draws the platform as an open slab on braced posts while its deck's
   line-of-sight body is solid from the ground, as the piece table says: a
