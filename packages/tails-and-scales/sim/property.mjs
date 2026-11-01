@@ -4929,7 +4929,10 @@ const MUTATIONS = {
   'riders-block-place': ['core/deploy.js', 'if (others.some((o) => !o.aboard && hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false', 'if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false'],
   'riders-block-charge': ['core/actions/charge.js', 'o.side === u.side && !o.aboard && hypot(', 'o.side === u.side && hypot('],
   // the AI's friendly fire counts the riders, whom no template reaches
-  'aishoot-fears-riders': ['core/ai/policy.js', '          if (f.side !== u.side || !alive(f) || f.aboard) continue', '          if (f.side !== u.side || !alive(f)) continue'],
+  // (the loop is weighed()'s since the V3 merge (3880346) moved V3c's
+  // template cost out of aiShoot's target loop, six spaces in where it
+  // stood ten: the anchor follows it)
+  'aishoot-fears-riders': ['core/ai/policy.js', '      if (f.side !== u.side || !alive(f) || f.aboard) continue', '      if (f.side !== u.side || !alive(f)) continue'],
   // the bail-out runs backwards through G.units
   'bail-reversed': ['core/actions/transport.js', '  for (const p of G.units.filter((o) => o.aboard === v.id && alive(o))) {', '  for (const p of G.units.filter((o) => o.aboard === v.id && alive(o)).reverse()) {'],
   // the bail-out ignores the enemies' 1"
