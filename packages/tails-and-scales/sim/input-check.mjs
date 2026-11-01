@@ -2118,6 +2118,11 @@ async function tipsCase(browser, url, vp, say, shots) {
     for (const [u, ks] of [[U, ['mesmerized', 'engaged', 'high']], [Wm, ['noCharge']]]) {
       // (the card opened, its slide in over: its words read where they come
       // to rest; again for each word, a finger's tap away closing it)
+      // (each word pointed at on its first line's box: a word the card's
+      // width wraps, as the phone's 390 px wraps "▲ high ground, 1.2" up"
+      // with its "up" alone on the next line, has a bounding box that spans
+      // both lines, whose middle row is the gap between them, on the
+      // status line's own div and on no word)
       const card = async () => {
         await ev((id) => window.__ts.present.card(window.__ts.G.units.find((x) => x.id === id)), u.id)
         await page.waitForFunction(() => {
@@ -2126,7 +2131,7 @@ async function tipsCase(browser, url, vp, say, shots) {
         }, null, { timeout: 10000 }).catch(() => {})
         await frames(2)
         return ev(() => [...document.querySelectorAll('#card [data-cond]')].map((el) => {
-          const r = el.getBoundingClientRect()
+          const r = el.getClientRects()[0] ?? el.getBoundingClientRect()
           return { k: el.dataset.cond, x: r.left + Math.min(r.width / 2, 30), y: r.top + r.height / 2 }
         }))
       }
