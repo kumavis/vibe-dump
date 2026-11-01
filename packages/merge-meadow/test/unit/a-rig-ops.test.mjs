@@ -6,18 +6,19 @@ import assert from 'node:assert/strict'
 import { seeded, empty, fork, heads, A } from './a-helpers.mjs'
 import { applyOps, validateOps, changeDoc, OP_NAMES } from '../../src/doc/ops.js'
 import { plain, modelData, docSummary, entityData } from '../../src/doc/read.js'
-import { MODEL_LIBRARY, LIBRARY_ORDER, ensureLibraryOps, resolveRepresentation } from '../../src/doc/models.js'
+import { MODEL_LIBRARY, LIBRARY_ORDER, ensureLibraryOps, resolveRepresentation, dependentsOf } from '../../src/doc/models.js'
 import { PRESETS } from '../../src/doc/presets.js'
 
 const pony = { extends: 'horse', stride: 1.2, nodes: [{ name: 'body', s: [0.4, 0.45, 1.0] }], animations: { walk: { tracks: { 'tail.rz': 'sin(phase*tau)*9' } } } }
 
-test('seed: doc.models holds the library at rev 1; the seed presets stay billboards', () => {
+test('seed: doc.models holds the library at rev 1; the T-rex, sheep and horse presets are rigs', () => {
   const doc = seeded().doc()
   assert.deepEqual(Object.keys(doc.models).sort(), Object.keys(MODEL_LIBRARY).sort())
   for (const n of LIBRARY_ORDER) assert.equal(plain(doc.models[n].rev), 1, n)
   assert.ok(doc.models.horse.rev instanceof A.Counter, 'rev is a Counter: concurrent redefinitions sum')
-  for (const p of ['trex', 'sheep', 'horse']) assert.equal(PRESETS[p].components.representation.kind, 'billboard', p)
-  assert.equal(entityData(doc, 'horse-1').effective.representation.kind, 'billboard')
+  for (const p of ['trex', 'sheep', 'horse']) assert.deepEqual(PRESETS[p].components.representation, { kind: 'rig', model: p }, p)
+  assert.equal(entityData(doc, 'horse-1').effective.representation.kind, 'rig')
+  assert.equal(PRESETS.lamp.components.representation.kind, 'tree', 'the rest of the seed keeps its looks')
   assert.deepEqual(ensureLibraryOps(doc), [], 'a seeded doc needs nothing')
   // the library reads back exactly
   const lib = JSON.parse(JSON.stringify(MODEL_LIBRARY))
@@ -94,20 +95,22 @@ test('defineModel with a bad expression (or a bad target, or a cycle) leaves the
 test('removeModel: refused while another model extends it; the inverse restores it', () => {
   const h = seeded()
   const before = heads(h)
-  assert.throws(() => applyOps(h, [{ op: 'removeModel', name: 'quadruped' }]), /extended by horse, sheep/)
+  assert.throws(() => applyOps(h, [{ op: 'removeModel', name: 'quadruped' }]), /extended by dog, goat, horse, ox, pig, rabbit, rat, sheep, tiger/)
   assert.throws(() => applyOps(h, [{ op: 'removeModel', name: 'nope' }]), /no model nope/)
   assert.deepEqual(heads(h), before)
   // in a batch, removing the dependents first makes it fine
-  const r = applyOps(h, [{ op: 'removeModel', name: 'horse' }, { op: 'removeModel', name: 'sheep' }, { op: 'removeModel', name: 'quadruped' }])
-  assert.deepEqual(Object.keys(h.doc().models).sort(), ['biped', 'bird', 'serpent', 'trex'])
-  assert.deepEqual(r.inverse.map((o) => [o.op, o.name]), [['defineModel', 'quadruped'], ['defineModel', 'sheep'], ['defineModel', 'horse']], 'bases come back first')
+  const deps = dependentsOf(plain(h.doc().models), 'quadruped')
+  const r = applyOps(h, [...deps.map((name) => ({ op: 'removeModel', name })), { op: 'removeModel', name: 'quadruped' }])
+  const left = Object.keys(MODEL_LIBRARY).filter((n) => n !== 'quadruped' && !deps.includes(n)).sort()
+  assert.deepEqual(Object.keys(h.doc().models).sort(), left)
+  assert.deepEqual(r.inverse.map((o) => [o.op, o.name]), [['defineModel', 'quadruped'], ...[...deps].reverse().map((n) => ['defineModel', n])], 'bases come back first')
   applyOps(h, r.inverse)
   assert.deepEqual(Object.keys(h.doc().models).sort(), Object.keys(MODEL_LIBRARY).sort())
   assert.deepEqual(modelData(h.doc(), 'horse', { raw: true }).nodes, JSON.parse(JSON.stringify(MODEL_LIBRARY.horse.nodes)))
   // ensureLibraryOps puts a removed library model back, never an edited one over
-  applyOps(h, [{ op: 'removeModel', name: 'bird' }, { op: 'defineModel', name: 'serpent', model: { ...JSON.parse(JSON.stringify(MODEL_LIBRARY.serpent)), stride: 2 } }])
+  applyOps(h, [{ op: 'removeModel', name: 'rooster' }, { op: 'removeModel', name: 'bird' }, { op: 'defineModel', name: 'serpent', model: { ...JSON.parse(JSON.stringify(MODEL_LIBRARY.serpent)), stride: 2 } }])
   const ops = ensureLibraryOps(h.doc())
-  assert.deepEqual(ops.map((o) => o.name), ['bird'])
+  assert.deepEqual(ops.map((o) => o.name), ['bird', 'rooster'])
   applyOps(h, ops)
   assert.equal(modelData(h.doc(), 'serpent').stride, 2)
 })

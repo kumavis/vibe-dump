@@ -559,9 +559,70 @@ export function templateOps(name, { title })     // -> ops: initDoc + component 
 // src/net/recent.js (track B)
 export function recentWorlds(storage = localStorage)   // { list() -> entries newest first, upsert({ docUrl, key, view, sync, title }), touch(docUrl, { title }), forget(docUrl), clear() }  key 'mm:worlds', max 50, every write wrapped in try/catch
 // src/editor/launcher.js (track D)
-export function makeLauncher({ root, recent, templates, onOpen /* (link) */, onCreate /* (templateName) */, onOpenFile /* (File) */ })
+export function makeLauncher({ root, recent, templates, onOpen /* (link) */, onCreate /* (templateName, { sync, safe }?) */, onOpenFile /* (File) */ })
 //   -> { show(), hide(), refresh(), destroy() }; stable ids: #launcher, #launch-new, #launch-template-<name>, #launch-recent, #launch-open-file, #launch-link
 // main.js: no `doc` in the hash and no `new=` -> makeLauncher; `#new=<template>` -> create at once; after any successful open/create -> recent.upsert; on meta.title change -> recent.touch
 // package.json gallery.thumbnail: { "click": ["#launch-new", "#launch-template-meadow", "button.toggle-left", "button.toggle-right"], "settle": 1000 }
 // palette: paletteEntries uses preset.icon before the billboard emoji
+```
+
+### 7.1 As built (round 1, 2026-11-01): where the code departs from the block above
+
+```js
+// src/doc/templates.js — also exported (shared by seed.js, palette.js, main.js and the tests):
+export const TEMPLATE_ORDER, DEFAULT_TEMPLATE /* 'meadow' */, STARTER /* moved here; seed.js re-exports it */, NAMES
+export function isTemplate(name); yawToward(from, to); displayName(preset)
+export function libraryPresets()                 // { ...ZOO_PRESETS, ...PRESETS }: the core presets win a name clash
+export function presetOrder(presets)             // names, bases first (validateOps reads a batch in order)
+export function templateEntities(name, presets?) // [{ id, preset, p, yaw, s, name }]; an entity whose preset is missing is left out
+export function templateWorld(name)
+// templateOps op order: setMeta, setWorld, defineComponent…, the MODEL_LIBRARY (ensureLibraryOps on an
+// empty doc, bases first: a rig look validates against doc.models), definePreset… (bases first), spawn…
+// The template's title ('Animal meadow' / 'Blank meadow') is the default title.
+// src/doc/seed.js: seedOps({ title='Merge Meadow', template='meadow' }) delegates to templateOps;
+// seedDoc(d, { title, template='meadow' }) writes the same world directly (fixtures get the Animal meadow).
+// src/doc/presets-zoo.js (new, track M): export const ZOO_PRESETS   // 12 presets: wizard + 11 zodiac animals
+// src/doc/models.js: MODEL_LIBRARY has 19 models; export const ZOO_MODELS (the zodiac order + wizard)
+// src/doc/presets.js: trex, sheep, horse look like { kind:'rig', model:<same name> }; every preset but
+//   `creature` has a top-level `icon`
+// src/doc/read.js: presetData(doc, name) -> { …, icon }   ('' when the preset has none)
+
+// src/net/recent.js
+export const RECENT_KEY /* 'mm:worlds' */, RECENT_MAX /* 50 */
+export function cleanEntry(e)                    // normalised entry or null
+export function recentWorlds(storage?, { now, max })   // { list, upsert, touch, forget, clear }
+//   entries { docUrl, key, view, sync, title, at }, newest first; cleaned on read (doc url normalised,
+//   junk and duplicates dropped, titles ≤ 200 chars). upsert dedupes by doc and keeps a stored field
+//   when the new value is empty (a view link never drops a stored key); touch updates an existing entry only.
+
+// src/editor/launcher.js
+export function makeLauncher({ root, recent, templates, onOpen, onCreate, onOpenFile, order?, base?, now?, clipboard?, navigate? })
+//   -> { el, show, hide, refresh, error(text), setBusy(on), busy, destroy }
+//   extra id: #launch-link-go (the paste form's button); rows are #launch-recent li[data-doc] with
+//   .launch-open, .launch-copy, .launch-forget. One choice at a time: buttons go busy after a click.
+export function newTemplateOf(hash), relativeTime(at, now), entryLink(e, base), entryMeta(e, now), titleOf(e),
+  parseWorldInput(text, { base, templates }) /* -> open | create (+ sync, safe) | navigate (http(s) on another base) | invalid + reason */,
+  templateCards(templates, order)
+
+// src/editor/palette.js
+export function filterEntries(entries, query), gridMove(index, key, cols, n); export const LIBRARY_ICONS
+//   icon order: the preset's own `icon`, then the look (light, billboard emoji, primitive shape), then
+//   LIBRARY_ICONS[name], then a kind glyph. makePalette() adds a search box and focusSearch().
+// src/editor/kind-switcher.js: switchKindOps(id, cur, target, kinds, { inherited, model, icon })
+//   a switch to `billboard` from a look with no image uses `emoji:<icon>` (the inspector passes the preset's icon)
+
+// main.js
+//   launcher choice -> create/open/import in place, history.pushState (Back returns to the launcher);
+//   `#new=<template>` -> replaceState; a hashchange to a doc or `new=` link also resolves the launcher.
+//   A failed launcher choice returns to the launcher with launcher.error(); a failed hash link is a boot error.
+//   The page's own link (pageLink, parsed once at boot) is kept apart from `link`, which is
+//   committed only when a choice succeeds: a failed Open never moves the next New world or
+//   Open-a-file to the failed link's sync server. A `#new=` link — at boot, by hashchange or
+//   pasted (parseWorldInput -> { kind:'create', template, sync, safe }) — creates on the sync
+//   server it names and keeps its `safe`; a template card uses the page's. Every address the
+//   launcher writes keeps `&safe`.
+//   __mm.phase: 'launcher' | 'boot' | 'ready'; __mm.launcher while shown; __mm.recent once running.
+//   ensureLibraryOps runs only when doc.models == null (after healModels); agent/lib/connect.mjs
+//   (local mode, before its first write) follows the same rule.
+// src/boot/overlay.js: + pauseBoot()
 ```

@@ -6,12 +6,68 @@ contract is [ARCHITECTURE.md](./ARCHITECTURE.md). This file records what is
 verified and by which test, what is known to be missing, and where the code
 departs from the contract.
 
-**State (rigs, review-fix round, 2026-11-01):** data-driven rigs (design §17,
-ARCHITECTURE §6) replace the `critter` kind; tracks A, B and C are wired
-together and `main.js` adds the model library to worlds opened from before rigs.
-This round fixed the review's findings (amendment 17). Every check below passes:
+**Launcher review fixes (2026-11-01, after round 1):** a `#new=` link creates on
+the sync server it names and keeps `&safe`, whether it arrives at boot, by a
+hash change while the launcher is up, or through Paste a link (it used to take
+the bare page's server); a failed launcher Open no longer moves the next New
+world or Open a file to the failed link's server (`main.js` keeps the page's
+own link apart and commits `link` only on success); every address the launcher
+writes keeps `&safe`; Enter in an empty palette search spawns nothing; Forget on
+an offline world no longer mentions a sync server; the README and design §6.4
+say the worlds list is readable by every page on this shared origin; the zoo
+speed comment says which prey the T-rex catches; the thumbnail is re-shot
+through the launcher (Animal meadow). Checks after the fixes:
 
-- unit tests: 274/274, ~10 s (new: `a-rig-review`, `c-rig-review`, two
+- unit tests: 298/298, ~18 s (`l-launcher`: a `#new=` paste carries `sync` and `safe`)
+- `test/e2e.mjs`: 126/126 in ~90 s (new in `boot`: the second tab is on
+  `#sync=none` and follows `#new=blank&sync=<local>&safe`, which must create on
+  the local server with safe forced; Back after `#new=` returns to the launcher
+  and Forward reopens the same world with no second one; Paste a link opens in
+  place on the link's server and Back returns to the launcher; Open a file
+  imports a Download as a new copy under a fresh key on the page's server). The
+  first run after the fixes was 125/126: the new paste check compared
+  `history.length`, which a push over a Forward entry does not grow (test fixed;
+  Back covers the push).
+- boundary lint: 0 errors, 0 warnings in 101 files; the package build is clean
+- Not covered by a browser test: a failed launcher Open followed by New world
+  (a failing `findDoc` takes up to 8 × 20 s); the fix is structural (`pageLink`).
+
+**State (launcher + content pass, integration round 1, 2026-11-01):** a bare
+URL shows the launcher (design §18, ARCHITECTURE §7): Your worlds, New world
+from a template (Animal meadow, Blank meadow), Open a file, Paste a link;
+`#new=<template>` creates at once. The library has 19 rig models (the wizard and
+eleven zodiac animals added, track M) with 12 matching presets; the T-rex,
+sheep and horse presets are rigs; the palette shows each preset's icon and has
+a search box. Tracks L and M are integrated (amendment 18). Every check below
+passes:
+
+- unit tests: 298/298, ~18 s (new: `l-launcher`, `l-palette`, `l-recent`,
+  `l-templates`, `m-zoo`, one `d-kind-switcher` case; 11 fixtures updated for
+  the template seed and 6 for the larger library, see amendment 18)
+- `test/e2e.mjs`: 120/120 in ~82 s on the last three runs (new: the launcher boot,
+  Your worlds + Forget, `#new=blank`, every zoo preset from the palette, the
+  palette search, the thumbnail path; `rigs` and `safe` open `#new=meadow`; the
+  scratch model in `mcp`/`local` is `mage`, since the library has a `wizard`).
+  Of the integration runs: the first was 118/120 (two test bugs: an array
+  compared to a count; the leak check counted a dead-tint material from a kill
+  in the meadow as the 300 rigs'), the second 119/120 (the ledger check: 8 hits
+  put, 7 in ledgers — see the known gap below; the check now explains a hit
+  whose victim was despawned), the third 120/120, the fourth 119/120 (the
+  `upgrade` leak check saw a meadow goat's dead-tint node materials, which only
+  billboard sprites could be before the seed creatures were rigs; it now
+  accepts tints ≤ #565656 from other entities), then three runs 120/120 in
+  82–83 s. Pose error on those runs: mean 0.011–0.021 m, max 0.06–0.14 m at the
+  best lag; 300 rigs: reconciler 3.9–4.9 ms/frame.
+- the gallery thumbnail path, as `scripts/thumbnails.mjs` runs it (built dist
+  at a sub-path, bare URL, 1280×800 at DPR 2, the four clicks with default
+  actionability, settle 1500): rendered Animal meadow, no panels; ~0.7 s to
+  network idle, clicks done at ~4.2–4.5 s (the meadow click ~0.9 s, each panel
+  toggle ~1.2–1.5 s at DPR 2), shot at ~6.5 s. The e2e `thumb` phase repeats it at
+  DPR 1 (~4.2 s).
+- boundary lint: 0 errors and 0 warnings in 101 files, also with `--strict`
+- Vite build with the shared config: `base './'`, one module script, no
+  `manualChunks`, no top-level await
+- previous round (rigs review fixes): unit tests: 274/274, ~10 s (new: `a-rig-review`, `c-rig-review`, two
   `d-rig-editor` cases)
 - `test/e2e.mjs`: 106/106 in ~68 s on the final run (new: remove + redefine and
   a plain redefinition of the in-use wizard rebuild it on B, a misspelt stub is
@@ -19,9 +75,7 @@ This round fixed the review's findings (amendment 17). Every check below passes:
   an `upgrade` regex still pinned the old key format (fixed). The baseline run
   at the start of the round was 101/102 with the `keys` flake
   ("the page tool's session ended with its fin"); it did not recur.
-- boundary lint: 0 errors and 0 warnings in 97 files, also with `--strict`
-- Vite build with the shared config: `base './'`, one module script, no
-  `manualChunks`, no top-level await
+- previous round: boundary lint 0/0 in 97 files
 - previous round, `test/e2e.mjs`: 102/102 in ~60 s (a new `rigs` phase; `upgrade`, `mcp` and
   `local` reworked for rigs). Of the 5 full runs that round: the first failed
   one check because the leftover-key filter matched the seed's own inline
@@ -29,31 +83,42 @@ This round fixed the review's findings (amendment 17). Every check below passes:
   160 ms behind a 106 ms frame gap in B); one failed the handoff motion check
   (a wandering T-rex covered 0.48 m of the required 0.5 m in 1.5 s; the check now
   waits up to 3 s more); the last two after both fixes were 102/102.
-- `test/xr.mjs` (run by hand): not re-run this round (16/16 in most runs
-  before; nothing in it is rig-specific, and its horse and sheep are billboard
-  presets)
+- `test/xr.mjs` (run by hand): 16/16 this round, on `#new=meadow&sync=none`
+  (a bare URL now stops at the launcher); its horse is now the rig horse and
+  the ride and dismount checks pass with it
 
-Not done here, left to the PM: the thumbnail, the gallery `dist/`, and
-`package.json`.
+Not done here, left to the PM: the gallery `dist/` (the thumbnail was re-shot in
+the review fixes) and `package.json` (its thumbnail hint already goes through the
+launcher).
 
 ## What is verified, and by which test
 
 | claim | test |
 | --- | --- |
 | Boot order: three evaluates after `lockdown()` froze the intrinsics; main runs under lockdown | e2e `boot` (inline `__THREE__` setter probe + `window.__order`) |
-| A doc-less link makes a seeded world and rewrites the hash to `doc` + `key`, keeping `&sync` | e2e `boot` |
-| The seed scene renders: 15 roots, no placeholders, a drawn canvas; the editor is shown; no console `error`s anywhere in the run | e2e `boot` (screenshot `boot.png`), final check |
+| A doc-less link shows the launcher (`__mm.phase === 'launcher'`), creates no document, writes no recent entry and leaves the hash alone; the stable ids are there | e2e `boot`; unit `l-launcher` |
+| New world → Animal meadow creates the world in place (no reload, ~0.6–0.9 s), rewrites the hash to `doc` + `key` keeping `&sync`, and writes the recent entry (doc, key, sync, title) | e2e `boot`; unit `l-recent`, `l-templates` |
+| The Animal meadow renders: one root per template entity (20: the 14 starter entities, the wizard, rabbit, goat, pig, dog, rooster), no placeholders, a drawn canvas; the T-rex, sheep, horse, wizard and zodiac animals are rigs; the editor is shown; no console `error`s anywhere in the run | e2e `boot` (screenshot `boot.png`), final check |
+| A second tab on the bare URL lists the world under Your worlds (Open, Copy link, Forget) and opens nothing; Forget removes the entry from the list and `localStorage` and leaves the world alone | e2e `boot`; unit `l-recent`, `l-launcher` |
+| `#new=blank` (reached by a hash change while the launcher is up) creates a world with one lamp and the full library (19 presets, 19 models) under its own doc + key | e2e `boot`; unit `l-templates` |
+| A `#new=` hash followed from a bare page on another sync server creates on the hash's server and keeps `&safe` (safe mode forced, `safe` in the address); a pasted `#new=` link carries its `sync` and `safe` | e2e `boot`; unit `l-launcher` |
+| Back after `#new=` returns to the launcher and Forward reopens the same world (no second world); Paste a link opens in place and Back returns to the launcher; Open a file imports a Download as a new copy under a fresh key on the page's sync server | e2e `boot` |
+| Templates: `templateOps` and `seedDoc` write the same world; every op validates in order (models before presets, bases first); entities stay within ±15 m; the wizard faces the lamp | unit `l-templates`, `a-doc` |
+| Every zoo preset (12) spawns from the palette as its library rig with no placeholder; each card shows the preset's own icon; the search filters (`ra` → dragon, rabbit, rat, "3 of 18"), says when nothing matches, and clears | e2e `rigs`; unit `l-palette`, `d-tree` |
+| The 12 new library models validate, resolve, have ≤ 40 nodes, round-trip through JSON, carry their species clips; built with the real rig kind their feet stay within −0.12…0.16 m of the ground over a walk | unit `m-zoo`, `c-rig-lockdown` (every library model under lockdown) |
+| The gallery thumbnail's clicks (`#launch-new`, `#launch-template-meadow`, both panel toggles) on a bare URL end on the rendered meadow with no panel on screen | e2e `thumb`; by hand at DPR 2 (see the state above) |
+| Switching a rig to `billboard` in the inspector shows the preset's icon (`emoji:🦖`), not the billboard default | unit `d-kind-switcher` |
 | A second browser context finds the world through the sync server; the peers see each other in presence; both elect the lowest peer id | e2e `join` |
 | Each page renders the other's spawn (5–180 ms) | e2e `spawns` |
 | A's T-rex chases a sheep spawned in B. B's **displayed** pose is within 0.01–0.07 m mean and 0.05–0.16 m max of A's simulated pose 140–160 ms earlier, at ~5 m/s, over ~285 frames | e2e `chase` (see contract amendment 13) |
-| A kill writes exactly `ceil(max/(damage−armor))` hits, all from the attacker's owner. In the doc history every hit id is put exactly once and is still in its victim's ledger | e2e `hits`, and `local` (decodes every change) |
+| A kill writes exactly `ceil(max/(damage−armor))` hits, all from the attacker's owner. In the doc history every hit id is put exactly once and is still in its victim's ledger, or its victim was despawned (found in the doc as of the change that put it) | e2e `hits`, and `local` (decodes every change) |
 | A doc system defined in A runs in B (~100–160 ms); a hot swap keeps hot data | e2e `system` |
 | Representation replace billboard → primitive → tree → **tree + animations** → rig (`horse`) → model (glTF) → billboard keeps the same root `Object3D` and the same `live` object, with one visual and no leftover resources (primitive, tree, inline-rig and model templates, glTF) | e2e `upgrade`; unit `c-reconciler`, `c-rig-kind` |
 | Adding `animations` to a tree (a `set`, not a replace) keeps the same visual and the same mesh objects, and the tree starts moving (trunk swings ~22°) | e2e `upgrade`; unit `c-rig-kind` |
-| A new world carries the seven library models; every library model builds with every track on a built bone, feet at y≈0, `seat` and `head` anchors | e2e `rigs`; unit `a-rig-models`, `c-rig-kind`, `c-rig-lockdown` |
-| 300 rigs of two library models (horse + sheep) animating: they share one template per model (150 refs each); reconciler CPU **4.1–4.7 ms/frame** mean (p95 6–7.7 ms; bound now 10 ms) in headless Chromium/SwiftShader under lockdown; a frame with render and a 1 px readback ~280–300 ms (~3.3 fps, ~5870 draw calls at 640×400); nothing is left after despawning them | e2e `rigs` (prints the numbers; `results.json` → `rigPerf`) |
+| A new world carries the 19 library models; every library model builds with every track on a built bone, feet at y≈0, `seat` and `head` anchors | e2e `rigs`; unit `a-rig-models`, `c-rig-kind`, `c-rig-lockdown`, `m-zoo` |
+| 300 rigs of two library models (horse + sheep) animating in the Animal meadow: they share the meadow's template per model (150 more refs each); reconciler CPU **4.1–4.7 ms/frame** mean (p95 6–7.7 ms; bound now 10 ms) in headless Chromium/SwiftShader under lockdown; a frame with render and a 1 px readback ~280–300 ms (~3.3 fps, ~5870 draw calls at 640×400); nothing is left after despawning them | e2e `rigs` (prints the numbers; `results.json` → `rigPerf`) |
 | The same 300 rigs with their state flipping walk/idle EVERY frame: 4.6–4.9 ms/frame (bound 2 × steady + 1 ms), at most 3 crossfade sets per rig; 1000 alternating switches keep ≤ 3 sets with weights summing to 1 | e2e `rigs`; unit `c-rig-review` |
-| A model whose content changes under the same revs re-keys (`model:<name>:<revs>:<hash>`): remove + redefine (two ops, or one batch, no frame between) and two peers defining one name from scratch both rebuild; new spawns never reuse the old template. On the live page: batch remove + define of the in-use wizard (1.1 → 1.1, other content) and a plain redefinition (→ 2.1, new `beard` bone, new hat colour) both rebuild it, one wizard template held | unit `c-rig-review`, `a-rig-review`; e2e `mcp` |
+| A model whose content changes under the same revs re-keys (`model:<name>:<revs>:<hash>`): remove + redefine (two ops, or one batch, no frame between) and two peers defining one name from scratch both rebuild; new spawns never reuse the old template. On the live page: batch remove + define of the in-use scratch `mage` (1.1 → 1.1, other content) and a plain redefinition (→ 2.1, new `beard` bone, new hat colour) both rebuild it, one wizard template held | unit `c-rig-review`, `a-rig-review`; e2e `mcp` |
 | A world made before rigs: the library added on open and an agent's model, created concurrently, keep the union after the heal (Automerge shows one `models` map whole); a model removed after the heal stays removed; two peers healing at once converge | unit `a-rig-review` |
 | `__proto__` is never a name or id: `defineModel '__proto__'`, `extends: '__proto__'`, a rig look naming it, and `removeModel '__proto__'` are refused by validation (heads unchanged, `splitValidOps` drops it); prototype-member names (`constructor`) resolve to nothing; an own `__proto__` key from JSON stays visible to the validators | unit `a-rig-review` |
 | An old tree (repeated and odd names, extra fields, `cube`, `red`) stays editable: a node move and a replace with its own data pass; animating it needs the targeted name on exactly one node; inline nodes are not merged by name | unit `a-rig-review`, `a-rig-ops` |
@@ -69,8 +134,8 @@ Not done here, left to the PM: the thumbnail, the gallery `dist/`, and
 | A wrong key gets no host session, and a raw SYN sealed with it is never answered. A view link attaches live as a viewer that can read but not write, eval or capture, and stays read-only in local mode | e2e `keys`; unit `b-transport` |
 | A same-origin page tool (`public/agent.js` over a BroadcastChannel) connects in ~5–10 ms and spawns; its `fin` ends the host session | e2e `keys` |
 | A closes gracefully → B is host and owns the T-rex after 7–60 ms (≤250 ms), then simulates it | e2e `handoff`; unit `b-presence` (fake clock: bye ≤100 ms, crash 2.46 s) |
-| The MCP server over stdio, through the live page: 25 tools; spawn, set, `set transform` moving a simulated sheep (inbox move), replace to a rig (`sheep`), `models` lists the library, `define_model wizard` (extends `biped`, adds a hat and a staff) renders on B with the biped's bones plus `hat` and `staff`, `models()` reports it, a `define_model` with an expression syntax error is refused (column in the message, rev unchanged), `define_system` with a syntax error refused while the connection survives, explain, a capture JPEG of the live view, events | e2e `mcp`; unit `b-rig-mcp`, `b-rig-caps` |
-| No page open: MCP falls back to local mode with a `fallbackReason`. Writes return after the server acknowledges them. `capture` needs a live page; `systems` reports `unknown`; `define_system` and `define_model` with a syntax error leave the heads unchanged; `model` resolves a two-level chain (apprentice → wizard → biped); `heads` returns a version link; the one-shot CLI works (`get`, `models`) | e2e `local`; unit `b-mcp`, `b-world-caps`, `b-rig-mcp` |
+| The MCP server over stdio, through the live page: 25 tools; spawn, set, `set transform` moving a simulated sheep (inbox move), replace to a rig (`sheep`), `models` lists the library, `define_model mage` (a scratch wizard: extends `biped`, adds a hat and a staff) renders on B with the biped's bones plus `hat` and `staff`, `models()` reports it, a `define_model` with an expression syntax error is refused (column in the message, rev unchanged), `define_system` with a syntax error refused while the connection survives, explain, a capture JPEG of the live view, events | e2e `mcp`; unit `b-rig-mcp`, `b-rig-caps` |
+| No page open: MCP falls back to local mode with a `fallbackReason`. Writes return after the server acknowledges them. `capture` needs a live page; `systems` reports `unknown`; `define_system` and `define_model` with a syntax error leave the heads unchanged; `model` resolves a two-level chain (apprentice → mage → biped); `heads` returns a version link; the one-shot CLI works (`get`, `models`) | e2e `local`; unit `b-mcp`, `b-world-caps`, `b-rig-mcp` |
 | An infinite-loop system hangs a tab. The next load of that world (same profile, browser restarted) starts in safe mode and still ticks. When the systems that hung arrive **after** boot (a boot from a stale local copy), the tab goes safe instead of running them. Fixing the system re-enables systems with no reload | e2e `safe` |
 | The World tab credits the bundled Twemoji glyphs (CC-BY 4.0) | e2e `boot` |
 | A non-host rider owns its mount on every peer (riding is published in presence); the host stops simulating it, and gets it back on dismount | e2e `ride`; unit `d-boot` |
@@ -81,7 +146,7 @@ Not done here, left to the PM: the thumbnail, the gallery `dist/`, and
 | Every pose write on a simulated entity (`set`/`replace`/`define` of transform, `transform`) reaches its owner as one inbox `move`; a yaw-only edit keeps the live position | unit `d-component-ops`, `a-sim` |
 | A recorded CapTP session cannot be replayed, and a frame re-addressed into a live session is dropped without breaking it | unit `b-transport` |
 | A drag that lost its pin aborts and writes nothing, even after the winner let go | unit `c-xr` |
-| The seed meadow is not a massacre (≥2 of 4 prey alive after 60 s; cornered prey slide along the wall) | unit `a-sim` |
+| The seed meadow is not a massacre (≥2 of 4 prey alive after 60 s; cornered prey slide along the wall) — measured on the Animal meadow, whose prey now also include the rabbit, goat, pig and rooster | unit `a-sim` |
 | A local CLI write the sync server never acknowledges exits 3 with an error | unit `b-mcp` |
 | A look replaced while its glTF is still loading stays replaced; the model kind leaks nothing | e2e `upgrade` |
 | The §12 headless scenario: the T-rex kills, and the riderless horse flees. `simHash` is unchanged across look swaps. The core, ops and a real Compartment run under `lockdown()` | unit `a-sim`, `a-lockdown` |
@@ -175,9 +240,11 @@ How the e2e harness is set up:
     frame, so a swinging limb or a dead rig lying down can extend past it.
   - A model redefinition rebuilds every instance. The state resumes (`since`),
     but an in-flight crossfade restarts and layer clocks reset.
-  - `ensureLibraryOps` runs on every open of a writable doc: it never
-    overwrites an edited model, but it puts back a library model the user
-    removed.
+  - Worlds created before the content pass keep their billboard T-rex,
+    sheep and horse presets and do not get the zoo models or presets: the
+    library is added only to a world with no `doc.models` (by design, §18.4).
+    A world where someone already defined a model named `wizard`, `rat`, `dog`
+    and so on keeps theirs, and a zoo preset then renders it.
   - A doc seeded before rigs keeps its old `representation` def (kind enum with
     `critter`) in `doc.components`; validation unions the built-in kinds, but
     the editor's form for that def shows the old enum until it is redefined.
@@ -199,12 +266,40 @@ How the e2e harness is set up:
   - LIMITS.depth = 8 node levels; the serpent uses all 8.
   - The geometry and clips were checked in track C's harness (screenshots) and
     numerically; the biped gained a neck mesh this round (its head floated).
+- **Launcher and templates (design §18):**
+  - Not in a browser test: **Copy link** on a real clipboard, **Open** from
+    Your worlds (Paste a link, Open a file and Back to the launcher are now in
+    e2e `boot`), the phone layout (harness only: no horizontal scroll at
+    390 px, a tap creates a world).
+  - A launcher choice that fails (an unknown doc) returns to the launcher only
+    after `findDoc` gives up, up to 8 tries of up to 20 s each, with the boot
+    status shown meanwhile. There is no cancel button.
+  - A recent world opened from the launcher with a sync server different from
+    the page's starts a second repo; the background repo for the page's sync
+    stays connected.
+  - A version (heads) link is stored in Your worlds without its heads (so a
+    stored edit key is kept); opening that entry later opens the live world.
+  - The meadow places 6 more rigs than the old starter billboards (~16–20 draw
+    calls each); render cost at the default view was not measured.
+  - The extra prey (rabbit, goat, pig, rooster) and the wizard are things the
+    T-rex hunts or that flee it, so the meadow is busier: hits on them show up
+    in the `local` ledger check, and the chase phase's sheep is placed on the
+    T-rex's current line of pursuit as before. In one integration run 8 hit ids
+    were put and 7 were in ledgers; the most likely cause is a hit on a creature
+    the e2e later despawned (the `ride` phase's horse), which the check could not
+    tell apart then and now explains. It did not recur in the runs after.
+  - The wizard has no attack, so its `cast` clip plays only from the
+    inspector's preview selector.
+  - Zoo models were checked by eye on one walk frame each (plus cast, wag,
+    pounce, breath, strike); run, die and the other idle flourishes only
+    numerically. The rabbit's legs bunch up mid-hop; the dragon reads small at
+    full-body framing and lies 0.22 m up when dead.
 - **The 300-entity stream** has not been checked end to end. Units cover
   steady error, clamping, holds and 5 s snaps. The resting-entity skip assumes
   receivers hold a pose through ~1 s gaps.
 - **`public/agent.js` is a committed generated file.** It is current as of this
   round (byte-identical rebuild), but nothing checks that it stays current.
-- **Main is one dynamic chunk** of ~970 KB (280 KB gzip), and Vite warns about
+- **Main is one dynamic chunk** of ~1,070 KB (313 KB gzip; ~970 KB before the zoo models and the launcher), and Vite warns about
   the size. That is expected: no `manualChunks`, by design §16.1.
 
 ## For the PM
@@ -213,11 +308,12 @@ How the e2e harness is set up:
   `"build:agent": "node agent/build-page-tool.mjs"`. `esbuild` is imported by
   that script and is present only as Vite's dependency at the repo root;
   declare it as a devDependency to make that explicit.
-- **Thumbnail:** at 1280×800 the editor panels are open (≥900 px), framing the
-  meadow from (0, 3.5, 23). To shoot the bare scene, use a hint such as
-  `"thumbnail": { "click": "…" }` that collapses the panels, or add a `#thumb`
-  switch. The renderer now sizes its buffer at boot, so the card is sharp.
-  Before this round, every tab rendered a 300×150 buffer stretched by CSS.
+- **Thumbnail:** `package.json`'s hint (`click`: `#launch-new`,
+  `#launch-template-meadow`, `button.toggle-left`, `button.toggle-right`,
+  settle 1500) works against the built dist (see the state above); the
+  committed `thumbnail.jpg` predates the zoo and should be re-shot
+  (`npm run thumbnails -- merge-meadow`). The card catches the meadow ~2 s after
+  creation, so the T-rex is usually mid-chase.
 - The contract (ARCHITECTURE.md §3) was reconciled with the code on 2026-10-29.
 
 ## Contract amendments
@@ -475,3 +571,9 @@ ARCHITECTURE §3 that callers rely on.
       inspector clears the preview state with `{ anim: null }`.
     - Library: walk and run knees flex during swing (a quarter cycle earlier);
       README / e2e wizard hat at `p: [0, 0.5, 0]` (above the eyes).
+18. **Launcher, templates and the zoo (2026-11-01, integration round 1), against ARCHITECTURE §7** (§7.1 records the code as built; design §18.4 the decisions that changed):
+    - Track L: `src/doc/templates.js`, `src/net/recent.js`, `src/editor/launcher.js`, the palette search and icons, `main.js`'s launcher flow. Departures: templates.js exports more (`TEMPLATE_ORDER`, `DEFAULT_TEMPLATE`, `STARTER`, `libraryPresets`, `presetOrder`, `templateEntities`, `templateWorld`, `yawToward`, `NAMES`); `seedDoc` takes `{ template = 'meadow' }`, so every fixture built with it is the 20-entity Animal meadow with rig T-rex, sheep and horse and the zoo presets; `makeLauncher` takes optional `order`, `base`, `now`, `clipboard`, `navigate`, returns `error()` and `setBusy()`, and the paste form has `#launch-link-go`; launcher choices `pushState`, `#new=` `replaceState`; a template's title is the world's title; the palette falls back to `LIBRARY_ICONS[name]` before a kind glyph.
+    - Track M: 12 models in `MODEL_LIBRARY` (19 in all) and `src/doc/presets-zoo.js` (`ZOO_PRESETS`, 12). No zoo `horse` (the core preset is it); the snake is tagged `snake`, not `predator`, and the rat flees both; the monkey is tagged `monkey` and `person`; the wizard's staff hangs from `arm_r` and `cast` counter-rotates it; new export `ZOO_MODELS`.
+    - Integration: `read.presetData` returns `icon` and `app.js` passes it to `palette.setPresets` (the doc's icon wins over the library's); `switchKindOps(…, { icon })` gives a switch to `billboard` the preset's emoji, and the inspector passes it; `agent/lib/connect.mjs` adds the library only when `doc.models == null`, like `main.js` (so neither puts back a removed model; the gap is closed).
+    - Tests changed for the new content (not for behaviour): `a-doc` #9–#11 (library presets, 20 entities, rig T-rex look, 8 prey, 11 creatures), `a-rig-ops` (seed presets are rigs; removing `quadruped` needs its 9 dependents removed first; `bird` needs `rooster` removed first), `a-rig-models` (19 names; quadruped's dependents), `a-rig-review` and `c-rig-review` (library size; the scratch model is `mage`), `a-world` (entity counts; `dolly` spawns with an own billboard look to keep the billboard → rig path), `c-reconciler` (the billboard seat anchor is checked on a horse with an own billboard look, plus the rig horse's `seat` bone, from the sim pose), `d-kind-switcher` (the sheep preset is a rig; plus the icon case), `d-share` (20 entities), `d-tree` (18 palette names, the doc's icons).
+    - e2e: `boot` drives the launcher; `rigs` and `safe` open `#new=meadow`; `mcp`/`local` use a scratch `mage`; the `rigs` template-sharing and leak checks measure against the meadow's own rigs (refs before/after, keys the 300 added) instead of an empty world; the `local` ledger check accepts a hit whose victim was despawned; the `upgrade` leak check accepts other entities' dead-tint node materials; new `thumb` phase reads the hint from `package.json`. `test/xr.mjs` opens `#new=meadow&sync=none`.

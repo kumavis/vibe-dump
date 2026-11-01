@@ -105,7 +105,9 @@ export async function connect (link, {
     const checkSource = makeNodeCheckSource(await loadLower())
     // before the first write, the migration a page runs on open (main.js): heal a
     // concurrently created doc.models, then add the model library to a world made
-    // before rigs, so `define-model wizard {"extends":"biped"}` works with no tab open.
+    // before rigs, so `define-model mage {"extends":"biped"}` works with no tab open.
+    // Only when the world has no doc.models at all (the same policy as main.js):
+    // a library model someone removed is never put back.
     // Not on connect: a read-only use of local mode must not write.
     let migrated = false
     const localApply = (h, ops, opts) => {
@@ -113,8 +115,10 @@ export async function connect (link, {
         migrated = true
         try {
           if (healModels(h)) wrote = true
-          const lib = ensureLibraryOps(h.doc())
-          if (lib.length) { applyOps(h, lib, { message: 'model library', peerId }); wrote = true }
+          if (h.doc().models == null) {
+            const lib = ensureLibraryOps(h.doc())
+            if (lib.length) { applyOps(h, lib, { message: 'model library', peerId }); wrote = true }
+          }
         } catch {}
       }
       const r = applyOps(h, ops, opts); wrote = true; return r

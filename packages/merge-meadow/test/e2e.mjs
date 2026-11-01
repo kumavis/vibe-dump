@@ -10,7 +10,12 @@
 // touches wss://sync.automerge.org.
 //
 // Phases, in order (each prints `ok - …` / `NOT OK - …`; exit 1 on any failure):
-//   boot       new world from a doc-less link: seeded, hash rewritten, boot order, scene, editor
+//   boot       a doc-less link shows the launcher and creates nothing; New world -> Animal
+//              meadow creates it in place (hash rewritten, seeded, rigs, boot order, scene,
+//              editor); a second tab (on #sync=none) lists it under Your worlds and Forget
+//              removes it; #new=blank&sync=…&safe makes a blank world with one lamp on the
+//              hash's server, safe flag kept; Back / Forward plant no second world; Paste a
+//              link opens in place (pushState, Back to the launcher); Open a file imports
 //   join       a second browser context joins through the sync server; presence; host = A
 //   spawns     each page sees the other's spawn
 //   chase      A's T-rex chases a sheep spawned in B; B's displayed pose vs A's 160 ms earlier
@@ -24,10 +29,13 @@
 //   keys       wrong key cannot attach; a view link attenuates (live and local)
 //   handoff    A closes gracefully -> B hosts within 250 ms and simulates the T-rex
 //   mcp        the MCP server (stdio) through B: spawn, set, replace to a rig, models, define_model
-//              (a wizard; a syntax error is refused), define_system, capture returns an image
+//              (a scratch 'mage'; a syntax error is refused), define_system, capture returns an image
 //   local      no page open: MCP falls back to local mode; define_model; the doc history check
-//   rigs       a fresh world: 300 rigs of two library models animating (CPU ms/frame), the
-//              inspector's preview state with the sim idle, the dead group tinting a rig
+//   rigs       a fresh world (#new=meadow): 300 rigs of two library models animating (CPU
+//              ms/frame), the inspector's preview state with the sim idle, the dead group
+//              tinting a rig, every zoo preset spawned from the palette, the palette search
+//   thumb      the gallery thumbnail's clicks on a bare URL (New world -> Animal meadow,
+//              both panel toggles) end on the rendered meadow with no panels
 //   safe       an infinite-loop system hangs a tab; the next load of that doc is in safe mode
 import 'ses/assert-shim.js'
 import '@endo/eventual-send/shim.js'
@@ -47,6 +55,9 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { connect } from '../agent/lib/connect.mjs'
 import { connectCapTP, aesKey } from '../src/agent/transport.js'
 import { parseLink, buildLink, newKey } from '../src/net/link.js'
+import { templateEntities } from '../src/doc/templates.js'
+import { MODEL_LIBRARY } from '../src/doc/models.js'
+import { ZOO_PRESETS } from '../src/doc/presets-zoo.js'
 
 const require = createRequire(import.meta.url)
 const { chromium } = require('playwright')
@@ -55,7 +66,7 @@ const DIST = path.join(PKG, 'dist')
 const OUT = process.env.MM_E2E_OUT || path.join(os.tmpdir(), 'merge-meadow-e2e')
 const PREFIX = '/vibe-dump/merge-meadow/'
 const KEEP = process.argv.includes('--keep')
-const ONLY = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7) // --only=safe | --only=rigs (debugging)
+const ONLY = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7) // --only=safe | --only=rigs | --only=thumb (debugging)
 const SAFE_PEER = process.env.MM_E2E_SAFE_PEER ?? 'p_cccccccc03' // 'random' = a fresh id per tab
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const T_START = Date.now()
@@ -88,7 +99,10 @@ function serveDist (root, port) {
   return new Promise((resolve) => {
     const s = http.createServer((q, r) => {
       let p = decodeURIComponent(q.url.split('?')[0].split('#')[0])
-      if (p === '/probe') { r.writeHead(200, { 'content-type': 'text/html' }); return r.end('<!doctype html><title>probe</title>') }
+      // Chromium fetches /favicon.ico for any page without an icon, sometimes; a 404 there
+      // would count as a console error, so the stub declares one and the server answers 204.
+      if (p === '/favicon.ico') { r.writeHead(204); return r.end() }
+      if (p === '/probe') { r.writeHead(200, { 'content-type': 'text/html' }); return r.end('<!doctype html><title>probe</title><link rel="icon" href="data:,">') }
       if (!p.startsWith(PREFIX)) { r.writeHead(404); return r.end('outside the sub-path') }
       if (p === PREFIX + '__e2e/tri.gltf') {
         const delay = Number(new URL(q.url, 'http://x').searchParams.get('delay') ?? 0)
@@ -154,17 +168,35 @@ const setDrawing = (pages, on) => Promise.all(pages.map((p) => p.evaluate((on) =
 // contending, which would starve the frame-sampled checks; the pages run at 640×400
 // (≥25 fps) except for the boot screenshot.
 const SMALL = { width: 640, height: 400 }
-async function openPage (ctx, url, tag, { timeout = 30000, viewport = SMALL } = {}) {
+async function newTab (ctx, tag, { viewport = SMALL, peer } = {}) {
   if (openPages.size >= 3) throw new Error(`refusing a 4th page (${tag}): ≤3 headless pages per box (§16.15)`)
   const page = await ctx.newPage({ viewport })
   openPages.add(page); page.on('close', () => openPages.delete(page))
   watchPage(page, tag)
+  // a second tab of a context with a fixed peer id needs its own: the sync server
+  // and the BroadcastChannel would take two tabs with one id for one peer
+  if (peer) await page.addInitScript((id) => { try { sessionStorage.setItem('mm:peer', id) } catch {} }, peer)
+  return page
+}
+// a world link (doc or #new=<template>): wait until the world runs
+async function openPage (ctx, url, tag, { timeout = 30000, viewport = SMALL, peer } = {}) {
+  const page = await newTab(ctx, tag, { viewport, peer })
   await page.goto(url)
   await page.waitForFunction(() => window.__mm?.ready || window.__mm?.error, null, { timeout })
   const err = await page.evaluate(() => window.__mm.error ?? null)
   if (err) throw new Error(`${tag} failed to boot: ${err}`)
   return page
 }
+// a doc-less link (design §18.1): wait for the launcher, nothing else
+async function openLauncher (ctx, url, tag, { timeout = 30000, viewport = SMALL, peer } = {}) {
+  const page = await newTab(ctx, tag, { viewport, peer })
+  await page.goto(url)
+  await page.waitForFunction(() => window.__mm?.phase === 'launcher' && !!document.querySelector('#launcher:not([hidden])') || window.__mm?.error, null, { timeout })
+  const err = await page.evaluate(() => window.__mm.error ?? null)
+  if (err) throw new Error(`${tag} failed to show the launcher: ${err}`)
+  return page
+}
+const recentOf = (page) => page.evaluate(() => { try { return JSON.parse(localStorage.getItem('mm:worlds') ?? 'null') } catch (e) { return String(e) } })
 const waitIn = (page, fn, arg, timeout = 10000) => page.waitForFunction(fn, arg, { timeout, polling: 50 })
 const until = async (fn, { timeout = 10000, every = 50 } = {}) => {
   const t0 = Date.now()
@@ -229,35 +261,68 @@ async function main () {
 
   if (ONLY === 'safe') { await safePhase(); return }
   if (ONLY === 'rigs') { await rigsPhase(); return }
+  if (ONLY === 'thumb') { await thumbPhase(); return }
 
   // ============================================================== boot
   phase('boot')
   const ctxA = await contextWithPeer(browser, PEER_A)
+  const SYNC_HASH = `#sync=${encodeURIComponent(SYNC)}`
+  // a link with no doc shows the launcher (design §18.1); only &sync= is given (never the public server)
+  const tL = Date.now()
+  const A = await openLauncher(ctxA, `${BASE}${SYNC_HASH}`, 'A', { viewport: { width: 1280, height: 800 } })
+  const launcherMs = Date.now() - tL
+  await sleep(300) // nothing may be created behind the launcher's back
+  const l0 = await A.evaluate(() => ({
+    phase: window.__mm.phase, handle: !!window.__mm.handle, ready: !!window.__mm.ready, hash: location.hash,
+    stored: localStorage.getItem('mm:worlds'), editor: !!document.querySelector('#app')?.children.length,
+    cards: [...document.querySelectorAll('[id^="launch-template-"]')].map((b) => b.id),
+    ids: ['launch-new', 'launch-recent', 'launch-open-file', 'launch-link'].filter((id) => document.getElementById(id)),
+  }))
+  ok(l0.phase === 'launcher' && !l0.handle && !l0.ready && !l0.editor && l0.stored == null, `a doc-less link shows the launcher (${launcherMs} ms) and creates no document`, l0)
+  ok(l0.hash === SYNC_HASH, 'the launcher leaves the hash alone (no doc, no key written)', l0.hash)
+  ok(['launch-template-meadow', 'launch-template-blank'].every((id) => l0.cards.includes(id)) && l0.ids.length === 4, 'the launcher has its stable ids: New world, a card per template, Your worlds, Open a file, Paste a link', l0)
+  await A.evaluate(() => { window.__launcherMark = 1 }) // gone if the create reloads the page
   const t0 = Date.now()
-  // a link with no doc is "make me a world"; only &sync= is given (never the public server)
-  const A = await openPage(ctxA, `${BASE}#sync=${encodeURIComponent(SYNC)}`, 'A', { viewport: { width: 1280, height: 800 } })
+  await A.click('#launch-new')
+  await A.click('#launch-template-meadow')
+  await A.waitForFunction(() => window.__mm?.ready || window.__mm?.error, null, { timeout: 30000 })
   const bootMs = Date.now() - t0
-  const a0 = await A.evaluate(() => {
+  const bootErr = await A.evaluate(() => window.__mm.error ?? null)
+  if (bootErr) throw new Error(`A failed to create a world: ${bootErr}`)
+  const MEADOW = templateEntities('meadow')
+  // a rig is built when its look is: give the reconciler a moment past the first frames
+  await waitIn(A, (ids) => ids.every((id) => { const v = window.__mm.reconciler.visualFor(id); return v && !v.userData.missing }), MEADOW.map((e) => e.id), 10000).catch(() => {})
+  const a0 = await A.evaluate((ids) => {
     const mm = window.__mm
     return {
       order: window.__order, hash: location.hash, path: location.pathname, peerId: mm.peerId, lockedDown: mm.lockedDown,
-      frozen: Object.isFrozen(Array.prototype), docEntities: Object.keys(mm.handle.doc().entities ?? {}).length,
+      frozen: Object.isFrozen(Array.prototype), docEntities: Object.keys(mm.handle.doc().entities ?? {}).sort(),
       presets: Object.keys(mm.handle.doc().presets ?? {}).sort(), title: String(mm.handle.doc().meta?.title ?? ''),
       worldEntities: mm.world.entities.size, rendered: mm.reconciler.stats(), systemsOn: mm.systemHost.enabled,
+      kinds: Object.fromEntries(ids.map((id) => { const v = mm.reconciler.visualFor(id); return [id, v ? `${v.userData.kind}${v.userData.missing ? '!missing' : ''}` : null] })),
+      roots: ids.filter((id) => mm.reconciler.objectFor(id)?.parent === mm.stage.scene).length,
       editor: !!document.querySelector('#app')?.children.length && getComputedStyle(document.querySelector('#app')).display !== 'none',
       topbar: !!document.querySelector('#app .topbar, #app [class*="topbar"]'),
       bootHidden: document.getElementById('boot').hidden || document.getElementById('boot').classList.contains('done'),
+      launcherGone: !document.querySelector('#launcher:not([hidden])'), phase: mm.phase, reloaded: !window.__launcherMark,
       canvas: [document.getElementById('scene').width, document.getElementById('scene').height],
+      recent: (() => { try { return JSON.parse(localStorage.getItem('mm:worlds') ?? '[]') } catch { return null } })(),
     }
-  })
+  }, MEADOW.map((e) => e.id))
   S.linkA = BASE + a0.hash
   const L = parseLink(a0.hash)
-  ok(true, `A booted a new world in ${bootMs} ms`)
+  ok(true, `New world -> Animal meadow created A's world in ${bootMs} ms (the launcher came up in ${launcherMs} ms)`)
   ok(a0.order?.[0]?.what === 'three-evaluated' && a0.order[0].arrayProtoFrozen === true, 'boot order: three evaluated after lockdown froze the intrinsics (inline __THREE__ probe)', a0.order)
   ok(a0.order?.some((o) => o.what === 'main-body' && o.arrayProtoFrozen) && a0.frozen && a0.lockedDown, 'main.js body ran under lockdown')
-  ok(L.docUrl && L.key && L.sync === SYNC, 'hash rewritten to doc + key, keeping &sync', a0.hash.slice(0, 90))
-  ok(a0.docEntities >= 14 && ['horse', 'lamp', 'rock', 'sheep', 'tree', 'trex'].every((p) => a0.presets.includes(p)), `the doc is seeded (${a0.docEntities} entities, presets ${a0.presets.join(',')})`)
-  ok(a0.rendered.entities >= 14 && a0.rendered.placeholders === 0, 'the seed scene is reconciled into three objects with no placeholders', a0.rendered)
+  ok(L.docUrl && L.key && L.sync === SYNC && a0.phase === 'ready' && a0.launcherGone && !a0.reloaded, 'the world is created in place: hash rewritten to doc + key, keeping &sync; the launcher is gone', a0.hash.slice(0, 90))
+  const meadowIds = MEADOW.map((e) => e.id).sort()
+  ok(JSON.stringify(a0.docEntities) === JSON.stringify(meadowIds) && a0.title === 'Animal meadow' && ['horse', 'lamp', 'rock', 'sheep', 'tree', 'trex', 'wizard', ...Object.keys(ZOO_PRESETS)].every((p) => a0.presets.includes(p)),
+    `the doc is the Animal meadow template (${a0.docEntities.length} entities: the starter, the wizard, ${MEADOW.filter((e) => /^(rabbit|goat|pig|dog|rooster|rat|ox|tiger|dragon|snake|monkey)-/.test(e.id)).length} zodiac animals; ${a0.presets.length} presets)`, { title: a0.title, entities: a0.docEntities.join(',') })
+  ok(a0.roots === MEADOW.length && a0.rendered.entities >= MEADOW.length && a0.rendered.placeholders === 0, `the seed scene renders: ${a0.roots} roots for the ${MEADOW.length} template entities (${a0.rendered.entities} with the players), no placeholders`, a0.rendered)
+  const rigIds = MEADOW.filter((e) => ['trex', 'sheep', 'horse', 'wizard', ...Object.keys(ZOO_PRESETS)].includes(e.preset)).map((e) => e.id)
+  ok(rigIds.length >= 11 && rigIds.every((id) => a0.kinds[id] === 'rig') && ['trex-1', 'sheep-1', 'horse-1', 'wizard-1'].every((id) => rigIds.includes(id)), `the T-rex, the sheep, the horse, the wizard and the zodiac animals are rigs (${rigIds.length})`, Object.fromEntries(rigIds.map((id) => [id, a0.kinds[id]])))
+  const entry = Array.isArray(a0.recent) ? a0.recent.find((e) => e.docUrl === L.docUrl) : null
+  ok(entry && entry.key === L.key && entry.title === 'Animal meadow' && entry.sync === SYNC && a0.recent.length === 1, 'the create wrote the recent entry (doc, key, sync, title)', a0.recent)
   ok(a0.editor && a0.topbar && a0.bootHidden, 'the editor is shown and the boot overlay is gone')
   ok(a0.systemsOn, 'doc systems are enabled (lockdown on, not safe mode)')
   await sleep(1200)
@@ -276,6 +341,74 @@ async function main () {
   ok(credit, 'the World tab credits the bundled Twemoji glyphs (CC-BY 4.0)')
   await A.setViewportSize(SMALL)
 
+  // ---- Your worlds: a second tab of the same browser profile, on a bare URL whose sync
+  // differs from the #new= hash it follows below (offline: never the public server)
+  const Q = await openLauncher(ctxA, `${BASE}#sync=none`, 'Q', { peer: 'p_dddddddd04' })
+  const listed = await waitIn(Q, () => document.querySelectorAll('#launch-recent li[data-doc]').length > 0, undefined, 5000).then(() => true, () => false)
+  const rows = await Q.evaluate(() => [...document.querySelectorAll('#launch-recent li[data-doc]')].map((li) => ({
+    doc: li.dataset.doc, text: li.textContent, open: !!li.querySelector('.launch-open'), copy: !!li.querySelector('.launch-copy'), forget: !!li.querySelector('.launch-forget'),
+  })))
+  ok(listed && rows.length === 1 && rows[0].doc === L.docUrl && /Animal meadow/.test(rows[0].text) && rows[0].open && rows[0].copy && rows[0].forget && !(await Q.evaluate(() => !!window.__mm.handle)),
+    'a second tab on the bare URL lists the world under Your worlds (Open, Copy link, Forget) and opens nothing', rows)
+  await Q.click(`#launch-recent li[data-doc="${L.docUrl}"] .launch-forget`)
+  const forgot = await Q.evaluate(() => ({ lis: document.querySelectorAll('#launch-recent li[data-doc]').length, store: (() => { try { return JSON.parse(localStorage.getItem('mm:worlds') ?? '[]') } catch { return null } })() }))
+  const stillThere = await A.evaluate((u) => window.__mm.handle.url === u && Object.keys(window.__mm.handle.doc().entities).length > 0, L.docUrl)
+  ok(forgot.lis === 0 && Array.isArray(forgot.store) && !forgot.store.some((e) => e.docUrl === L.docUrl) && stillThere, 'Forget removes the entry (list and localStorage); the world itself is untouched', forgot)
+  // ---- #new=blank: the launcher also follows a hash that names a template (no reload),
+  // on the sync server and with the safe flag the hash names, not the bare page's
+  await Q.evaluate((h) => { location.hash = h }, `new=blank&sync=${encodeURIComponent(SYNC)}&safe`)
+  await waitIn(Q, () => window.__mm?.ready || window.__mm?.error, undefined, 30000).catch(() => {})
+  const q0 = await Q.evaluate(() => ({
+    err: window.__mm.error ?? null, hash: location.hash, ents: Object.keys(window.__mm.handle?.doc().entities ?? {}),
+    lamp: window.__mm.reconciler?.visualFor('lamp-1')?.userData.kind ?? null, title: String(window.__mm.handle?.doc().meta?.title ?? ''),
+    presets: Object.keys(window.__mm.handle?.doc().presets ?? {}).length, models: Object.keys(window.__mm.handle?.doc().models ?? {}).length,
+    sync: window.__mm.link?.sync, forced: !!window.__mm.safe?.forced, hlen: history.length,
+    recent: (() => { try { return JSON.parse(localStorage.getItem('mm:worlds') ?? '[]') } catch { return null } })(),
+  }))
+  const QL = parseLink(q0.hash)
+  ok(!q0.err && JSON.stringify(q0.ents) === '["lamp-1"]' && q0.lamp && q0.title === 'Blank meadow' && QL.docUrl && QL.docUrl !== L.docUrl && QL.key && QL.sync === SYNC && q0.presets === a0.presets.length && q0.models === Object.keys(MODEL_LIBRARY).length,
+    `#new=blank creates a blank world: one lamp, the same library (${q0.presets} presets, ${q0.models} models), hash rewritten to its own doc + key`, q0)
+  const qEntry = Array.isArray(q0.recent) ? q0.recent.find((e) => e.docUrl === QL.docUrl) : null
+  ok(q0.sync === SYNC && qEntry?.sync === SYNC && QL.safe && q0.forced,
+    "a #new= hash followed from a bare page on another sync server (#sync=none) creates on the hash's server and keeps its &safe in the address", { sync: q0.sync, entry: qEntry?.sync, safe: QL.safe, forced: q0.forced, hash: q0.hash.slice(0, 120) })
+  // the history: Back after #new= returns to the bare page (the #new= entry was replaced),
+  // Forward reopens the same world; neither plants a second one
+  const evalSafe = (page, fn, arg) => page.evaluate(fn, arg).catch(() => null)
+  const atLauncher = (page) => until(() => evalSafe(page, () => window.__mm?.phase === 'launcher' && !!document.querySelector('#launcher:not([hidden])')), { timeout: 30000 })
+  const atReady = (page) => until(() => evalSafe(page, () => !!(window.__mm?.ready || window.__mm?.error)), { timeout: 30000 })
+  const worldsIn = (page) => evalSafe(page, () => { try { return JSON.parse(localStorage.getItem('mm:worlds') ?? '[]').map((e) => e.docUrl) } catch { return null } })
+  const before = await worldsIn(Q)
+  await Q.goBack()
+  const backOk = await atLauncher(Q)
+  const qb = await evalSafe(Q, () => ({ hash: location.hash, handle: !!window.__mm.handle }))
+  ok(backOk && qb?.hash === '#sync=none' && !qb.handle && JSON.stringify(await worldsIn(Q)) === JSON.stringify(before), 'Back after #new= returns to the launcher on the bare page and plants no second world', { qb, before })
+  await Q.goForward()
+  await atReady(Q)
+  const qf = await evalSafe(Q, () => ({ url: window.__mm.handle?.url, err: window.__mm.error ?? null }))
+  ok(qf?.url === QL.docUrl && !qf.err && JSON.stringify(await worldsIn(Q)) === JSON.stringify(before), 'Forward reopens the same #new= world (it was replaced by its doc link), no new world', qf)
+  const fileBytes = await Q.evaluate(async () => Array.from(await window.__mm.repo.export(window.__mm.handle.documentId)))
+  await Q.goBack()
+  await atLauncher(Q)
+  // Paste a link: the world opens in place and its address is pushed (Back returns here)
+  await Q.evaluate(() => { window.__pasteMark = 1 })
+  await Q.fill('#launch-link', BASE + q0.hash)
+  await Q.click('#launch-link-go')
+  await atReady(Q)
+  const qp = await evalSafe(Q, () => ({ url: window.__mm.handle?.url, err: window.__mm.error ?? null, mark: !!window.__pasteMark, hash: location.hash, sync: window.__mm.link?.sync }))
+  // (history.length cannot show the push: it replaces the Forward entry left above; Back below does)
+  ok(qp?.url === QL.docUrl && !qp.err && qp.mark && parseLink(qp.hash).docUrl === QL.docUrl && qp.sync === SYNC, "Paste a link opens the world in place (no reload) on the link's sync server and writes its address", qp)
+  await Q.goBack()
+  const pasteBack = await atLauncher(Q)
+  ok(pasteBack && (await evalSafe(Q, () => location.hash)) === '#sync=none', 'Back from a launcher-opened world returns to the launcher')
+  // Open a file: a Download of the blank world opens as a new copy on the page's sync (none)
+  await Q.setInputFiles('#launcher input[type=file]', { name: 'blank.automerge', mimeType: 'application/octet-stream', buffer: Buffer.from(fileBytes) })
+  await atReady(Q)
+  const qi = await evalSafe(Q, () => ({ url: window.__mm.handle?.url, err: window.__mm.error ?? null, hash: location.hash, ents: Object.keys(window.__mm.handle?.doc().entities ?? {}), sync: window.__mm.link?.sync }))
+  const QI = parseLink(qi?.hash ?? '')
+  ok(qi && !qi.err && qi.url && qi.url !== QL.docUrl && QI.docUrl === qi.url && QI.key && QI.key !== QL.key && JSON.stringify(qi.ents) === '["lamp-1"]' && qi.sync === 'none' && QI.sync === 'none',
+    "Open a file imports the .automerge as a new copy under a fresh key, on the bare page's sync server", qi)
+  await Q.close()
+
   // ============================================================== join
   phase('join')
   // the doc must have reached the server before a fresh context can find it
@@ -283,7 +416,7 @@ async function main () {
   const ctxB = await contextWithPeer(browserB, PEER_B)
   const B = await openPage(ctxB, S.linkA, 'B', { timeout: 45000 })
   const b0 = await B.evaluate(() => ({ docUrl: window.__mm.handle.url, n: Object.keys(window.__mm.handle.doc().entities).length, peerId: window.__mm.peerId }))
-  ok(b0.docUrl === L.docUrl && b0.n === a0.docEntities, `B (fresh context: no shared IndexedDB or BroadcastChannel) opened the same world through the sync server (${b0.n} entities)`)
+  ok(b0.docUrl === L.docUrl && b0.n === a0.docEntities.length, `B (fresh context: no shared IndexedDB or BroadcastChannel) opened the same world through the sync server (${b0.n} entities)`)
   const seen = await until(async () => {
     const [pa, pb] = await Promise.all([A.evaluate(() => [...window.__mm.presence.peers().keys()]), B.evaluate(() => [...window.__mm.presence.peers().keys()])])
     return pa.includes(PEER_B) && pb.includes(PEER_A) ? { pa, pb } : null
@@ -323,6 +456,7 @@ async function main () {
   await mcpPhase()
   await localPhase()
   await rigsPhase()
+  await thumbPhase()
   await safePhase()
 }
 
@@ -606,8 +740,10 @@ async function upgradePhase () {
   ok(midLoad.kind === 'billboard' && midLoad.visuals === 1 && midLoad.sameRoot, 'a look replaced mid-load stays replaced: the late model never lands', midLoad)
   const end = await B.evaluate(() => { const k = window.__mm.resources.keys(); return { left: k.filter((x) => /13579b|2468ac|2468ad|97531f|model:|inline:|gltf:|placeholder/i.test(x) && !window.__probe.keys0.includes(x)), added: k.filter((x) => !window.__probe.keys0.includes(x)) } })
   // the probe started as this same billboard, so nothing it holds now is new; other
-  // entities may meanwhile have acquired billboard sprites (a sheep's dead tint)
-  ok(end.added.every((k) => /^(tex|spritemat):/.test(k)), 'the final look holds only billboard keys: nothing of the model or the other looks was added', end.added)
+  // entities may meanwhile have acquired a dead tint: billboard sprites, or (the
+  // meadow's creatures are rigs) node materials greyed to ≤ #565656 per channel
+  const deadTint = (k) => { const m = /^mat:std:#([0-9a-f]{6}):/.exec(k); return !!m && [0, 2, 4].every((i) => parseInt(m[1].slice(i, i + 2), 16) <= 0x56) }
+  ok(end.added.every((k) => /^(tex|spritemat):/.test(k) || deadTint(k)), 'the final look holds only billboard keys: nothing of the model or the other looks was added (other entities\' dead tints aside)', end.added.filter((k) => !/^(tex|spritemat):/.test(k) && !deadTint(k)))
   ok(steps.some((s) => s.kind === 'model'), 'the model kind (async glTF load) was one of the steps', steps.map((s) => s.kind))
   ok(steps.every((s) => s.sameRoot && s.sameLive && s.roots === 1), 'every swap kept the same root Object3D and the same live state', steps.map((s) => `${s.kind}:${s.sameRoot && s.sameLive}`).join(' '))
   ok(steps.every((s) => s.visuals === 1) && steps.every((s) => s.placeholders === 0), 'exactly one visual child per step, no placeholders', steps.map((s) => s.visuals))
@@ -746,18 +882,18 @@ async function mcpPhase () {
     const lib = await m.call('models')
     const libNames = lib.json?.result?.map?.((r) => r.name) ?? []
     ok(!lib.isError && ['quadruped', 'biped', 'serpent', 'bird', 'horse', 'sheep', 'trex'].every((n) => libNames.includes(n)), `models lists the library (${libNames.join(', ')})`, lib.isError ? lib.json : undefined)
-    const dm = await m.call('define_model', { name: 'wizard', model: WIZARD })
-    const wz = await m.call('spawn', { name: 'Wizard', at: [4, 0, 12], components: { transform: { p: [4, 0, 12], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: 'wizard' } } })
+    const dm = await m.call('define_model', { name: 'mage', model: WIZARD })
+    const wz = await m.call('spawn', { name: 'Wizard', at: [4, 0, 12], components: { transform: { p: [4, 0, 12], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: 'mage' } } })
     const wid = wz.json?.result?.id
     const bones = wid && await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing && v.userData.bones?.has('hat') && v.userData.bones.has('staff') && v.userData.bones.has('thigh_l') ? v.userData.key : null }, wid).then((h) => h.jsonValue(), () => null)
-    ok(!dm.isError && !wz.isError && bones, `define_model wizard (extends biped) + a rig look: B renders it with the biped's bones plus hat and staff (template ${bones})`, dm.isError ? dm.json : wz.isError ? wz.json : undefined)
+    ok(!dm.isError && !wz.isError && bones, `define_model mage (a scratch wizard: extends biped) + a rig look: B renders it with the biped's bones plus hat and staff (template ${bones})`, dm.isError ? dm.json : wz.isError ? wz.json : undefined)
     const ls = await m.call('models')
-    const wrow = ls.json?.result?.find?.((r) => r.name === 'wizard')
-    ok(wrow && String(wrow.extends) === 'biped' && wrow.nodes.includes('hat') && wrow.nodes.includes('head') && wrow.clips.includes('walk'), 'models() reports the wizard: extends biped, node names after extends, the inherited clips', wrow)
-    const badM = await m.call('define_model', { name: 'wizard', model: { ...WIZARD, animations: { idle: { tracks: { 'hat.rz': 'sin(t*' } } } } })
+    const wrow = ls.json?.result?.find?.((r) => r.name === 'mage')
+    ok(wrow && String(wrow.extends) === 'biped' && wrow.nodes.includes('hat') && wrow.nodes.includes('head') && wrow.clips.includes('walk'), 'models() reports the mage: extends biped, node names after extends, the inherited clips', wrow)
+    const badM = await m.call('define_model', { name: 'mage', model: { ...WIZARD, animations: { idle: { tracks: { 'hat.rz': 'sin(t*' } } } } })
     await sleep(300)
-    const rev = await B.evaluate(() => { const w = window.__mm.handle.doc().models?.wizard; return { rev: Number(w?.rev?.value ?? w?.rev ?? 0), idle: !!w?.animations?.idle } })
-    ok(badM.isError && /column/.test(badM.json?.error ?? '') && rev.rev === 1 && !rev.idle, 'define_model with an expression syntax error is refused before the doc changes (the wizard stays at rev 1)', { error: String(badM.json?.error ?? '').slice(0, 120), ...rev })
+    const rev = await B.evaluate(() => { const w = window.__mm.handle.doc().models?.mage; return { rev: Number(w?.rev?.value ?? w?.rev ?? 0), idle: !!w?.animations?.idle } })
+    ok(badM.isError && /column/.test(badM.json?.error ?? '') && rev.rev === 1 && !rev.idle, 'define_model with an expression syntax error is refused before the doc changes (the mage stays at rev 1)', { error: String(badM.json?.error ?? '').slice(0, 120), ...rev })
     S.wizard = wid
     // redefining a model that is IN USE rebuilds its instances on the live page (§17.4).
     // First remove + redefine in one batch with other content: the revs start again at
@@ -765,18 +901,18 @@ async function mcpPhase () {
     const keyOf = (id) => B.evaluate((id) => window.__mm.reconciler.visualFor(id)?.userData.key ?? null, id)
     const k1 = await keyOf(wid)
     const CROWNED = { ...WIZARD, nodes: [{ name: 'head', children: [{ name: 'crown', shape: 'cylinder', p: [0, 0.3, 0], s: [0.26, 0.1, 0.26], color: '#e8c020' }] }, ...WIZARD.nodes.slice(1)] }
-    const rr = await m.call('batch', { ops: [{ op: 'removeModel', name: 'wizard' }, { op: 'defineModel', name: 'wizard', model: CROWNED }] })
+    const rr = await m.call('batch', { ops: [{ op: 'removeModel', name: 'mage' }, { op: 'defineModel', name: 'mage', model: CROWNED }] })
     const crowned = await waitIn(B, ([id, k1]) => { const v = window.__mm.reconciler.visualFor(id); return v && !v.userData.missing && v.userData.key !== k1 && v.userData.bones?.has('crown') && !v.userData.bones.has('hat') ? v.userData.key : null }, [wid, k1]).then((h) => h.jsonValue(), () => null)
-    ok(!rr.isError && crowned && /^model:wizard:1\.1:/.test(k1) && /^model:wizard:1\.1:/.test(crowned), `remove_model + define_model with other content (same revs 1.1) rebuilds the wizard on B (${k1} -> ${crowned})`, rr.isError ? rr.json : { k1, crowned })
+    ok(!rr.isError && crowned && /^model:mage:1\.1:/.test(k1) && /^model:mage:1\.1:/.test(crowned), `remove_model + define_model with other content (same revs 1.1) rebuilds the mage on B (${k1} -> ${crowned})`, rr.isError ? rr.json : { k1, crowned })
     // then a plain redefinition: a new hat colour and a new node
     const V2 = { ...WIZARD, nodes: [{ name: 'head', children: [{ ...WIZARD.nodes[0].children[0], color: '#7a2a3b' }, { name: 'beard', shape: 'cone', p: [0, 0.02, 0.16], r: [180, 0, 0], s: [0.16, 0.22, 0.08], color: '#e8e8e8' }] }, ...WIZARD.nodes.slice(1)] }
-    const v2 = await m.call('define_model', { name: 'wizard', model: V2 })
-    const rebuilt = await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v && /^model:wizard:2\.1:/.test(v.userData.key) && v.userData.bones?.has('beard') && v.userData.bones.has('hat') && !v.userData.bones.has('crown') ? v.userData.key : null }, wid).then((h) => h.jsonValue(), () => null)
-    const wkeys = await B.evaluate(() => window.__mm.resources.keys().filter((k) => /^model:wizard:/.test(k)))
+    const v2 = await m.call('define_model', { name: 'mage', model: V2 })
+    const rebuilt = await waitIn(B, (id) => { const v = window.__mm.reconciler.visualFor(id); return v && /^model:mage:2\.1:/.test(v.userData.key) && v.userData.bones?.has('beard') && v.userData.bones.has('hat') && !v.userData.bones.has('crown') ? v.userData.key : null }, wid).then((h) => h.jsonValue(), () => null)
+    const wkeys = await B.evaluate(() => window.__mm.resources.keys().filter((k) => /^model:mage:/.test(k)))
     const hatColor = await B.evaluate((id) => '#' + window.__mm.reconciler.visualFor(id)?.userData.bones.get('hat')?.userData.mesh?.material.color.getHexString(), wid)
-    ok(!v2.isError && rebuilt && wkeys.length === 1 && wkeys[0] === rebuilt && hatColor === '#7a2a3b', `define_model of an in-use model rebuilds it on B: key ${rebuilt}, the new beard bone, the new hat colour (${hatColor}), one wizard template in resources`, { rebuilt, wkeys, hatColor, err: v2.isError ? v2.json : undefined })
+    ok(!v2.isError && rebuilt && wkeys.length === 1 && wkeys[0] === rebuilt && hatColor === '#7a2a3b', `define_model of an in-use model rebuilds it on B: key ${rebuilt}, the new beard bone, the new hat colour (${hatColor}), one mage template in resources`, { rebuilt, wkeys, hatColor, err: v2.isError ? v2.json : undefined })
     // a misspelt stub is refused with the base's name, not added at the feet
-    const typo = await m.call('define_model', { name: 'wizard', model: { ...WIZARD, nodes: [...WIZARD.nodes, { name: 'right_arm', children: [{ name: 'wand', shape: 'cylinder', s: [0.02, 0.3, 0.02] }] }] } })
+    const typo = await m.call('define_model', { name: 'mage', model: { ...WIZARD, nodes: [...WIZARD.nodes, { name: 'right_arm', children: [{ name: 'wand', shape: 'cylinder', s: [0.02, 0.3, 0.02] }] }] } })
     ok(typo.isError && /did you mean "arm_r"/.test(typo.json?.error ?? ''), 'define_model refuses a stub that names no biped bone and suggests the right one', String(typo.json?.error ?? '').slice(0, 200))
     // B is the host and keeps writing checkpoints, so heads move anyway here: the strict
     // heads-unchanged check runs in the local phase, where nothing else writes
@@ -822,15 +958,15 @@ async function localPhase () {
     ok(bad.isError && !h0.isError && JSON.stringify(h0.json.result) === JSON.stringify(h1.json.result), 'local define_system with a syntax error leaves the doc heads unchanged', String(bad.json?.error ?? '').split('\n').pop().trim().slice(0, 80))
     ok(typeof h0.json.versionLink === 'string' && /heads=/.test(h0.json.versionLink), 'heads also returns a read-only version link')
     // define_model in local mode: valid writes, a syntax error leaves the heads unchanged
-    const okM = await m.call('define_model', { name: 'apprentice', model: { extends: 'wizard', nodes: [{ name: 'hat', color: '#2a6a3a' }] } })
+    const okM = await m.call('define_model', { name: 'apprentice', model: { extends: 'mage', nodes: [{ name: 'hat', color: '#2a6a3a' }] } })
     const hm0 = await m.call('heads')
-    const badM = await m.call('define_model', { name: 'apprentice', model: { extends: 'wizard', animations: { idle: { tracks: { 'hat.ry': 'sin(t * 2' } } } } })
+    const badM = await m.call('define_model', { name: 'apprentice', model: { extends: 'mage', animations: { idle: { tracks: { 'hat.ry': 'sin(t * 2' } } } } })
     const hm1 = await m.call('heads')
     ok(!okM.isError && badM.isError && JSON.stringify(hm0.json.result) === JSON.stringify(hm1.json.result), 'local define_model: a valid model writes, one with a syntax error leaves the doc heads unchanged', String(badM.json?.error ?? '').slice(0, 100))
     const one = await m.call('model', { name: 'apprentice' })
     const names = []; const walk = (ns) => { for (const n of ns ?? []) { names.push(n.name); walk(n.children) } }; walk(one.json?.result?.nodes)
     const ls2 = await m.call('models')
-    ok(!one.isError && names.includes('hat') && names.includes('staff') && names.includes('thigh_r') && ls2.json?.result?.some((r) => r.name === 'apprentice' && String(r.extends) === 'wizard'), `model() resolves a two-level extends chain (apprentice -> wizard -> biped: ${names.length} nodes) and models() lists it`)
+    ok(!one.isError && names.includes('hat') && names.includes('staff') && names.includes('thigh_r') && ls2.json?.result?.some((r) => r.name === 'apprentice' && String(r.extends) === 'mage'), `model() resolves a two-level extends chain (apprentice -> mage -> biped: ${names.length} nodes) and models() lists it`)
     const ls = await m.call('list', { tags: ['predator'] })
     ok(!ls.isError && ls.json.result.some((r) => r.id === S.offlineRex), 'list filters on preset-resolved tags')
   } finally { await m.close() }
@@ -840,7 +976,7 @@ async function localPhase () {
   ok(JSON.parse(out)?.max > 0, 'the CLI reads the offline T-rex', out.trim().slice(0, 80))
   const { stdout: mOut } = await promisify(execFile)(process.execPath, [path.join(PKG, 'agent/cli.mjs'), S.linkA, 'models', '--local'], { encoding: 'utf8' })
   let cliModels = null; try { cliModels = JSON.parse(mOut) } catch {}
-  ok(Array.isArray(cliModels) && cliModels.some((r) => r.name === 'wizard') && cliModels.some((r) => r.name === 'horse'), 'the CLI lists the models (library + wizard)', mOut.trim().slice(0, 80))
+  ok(Array.isArray(cliModels) && cliModels.some((r) => r.name === 'mage') && cliModels.some((r) => r.name === 'wizard') && cliModels.some((r) => r.name === 'horse'), 'the CLI lists the models (library, its wizard, and the scratch mage)', mOut.trim().slice(0, 80))
 
   // ---- exactly-once, from the doc's own history (S2's verify-doc, for the ledger)
   const c = await connect(S.linkA, { local: true })
@@ -854,7 +990,7 @@ async function localPhase () {
         if (op.action !== 'set' && op.action !== 'makeText' && op.action !== 'put') continue
         if (typeof op.key !== 'string' || !/^p_[A-Za-z0-9_-]+:[a-z0-9]+\.\d+$/.test(op.key)) continue
         if (!puts.has(op.key)) puts.set(op.key, [])
-        puts.get(op.key).push({ actor: ch.actor.slice(0, 8), seq: ch.seq, value: op.value })
+        puts.get(op.key).push({ actor: ch.actor.slice(0, 8), seq: ch.seq, value: op.value, hash: ch.hash })
       }
     }
     const twice = [...puts].filter(([, w]) => w.length > 1)
@@ -863,7 +999,15 @@ async function localPhase () {
     // with one simulator per entity, one attacker's hits are at least a cooldown apart
     // (a split brain would double them); the doc holds what each victim took
     const final = Object.entries(doc.entities ?? {}).map(([id, e]) => [id, Object.keys(e.components?.health?.hits ?? {}).length]).filter(([, n]) => n)
-    ok(final.reduce((s, [, n]) => s + n, 0) === puts.size, 'every put hit is still in its victim\'s ledger (no lost or duplicated keys)', Object.fromEntries(final))
+    // a hit whose victim was later despawned (the ride phase's horse, say: the meadow
+    // is full of prey now) left with it; find its victim in the doc as of that change
+    const inLedger = new Set(Object.values(doc.entities ?? {}).flatMap((e) => Object.keys(e.components?.health?.hits ?? {})))
+    const gone = [...puts].filter(([k]) => !inLedger.has(k)).map(([k, w]) => {
+      const then = Automerge.view(doc, [w[0].hash])
+      const victim = Object.entries(then.entities ?? {}).find(([, e]) => Object.hasOwn(e.components?.health?.hits ?? {}, k))?.[0] ?? null
+      return { hit: k, victim, despawned: !!victim && !doc.entities?.[victim] }
+    })
+    ok(final.reduce((s, [, n]) => s + n, 0) + gone.length === puts.size && gone.every((g) => g.despawned), `every put hit is still in its victim's ledger, or its victim was despawned (${gone.length}; no lost or duplicated keys)`, { ledgers: Object.fromEntries(final), gone })
     ok(!!doc.entities?.[S.offlineRex] && !!doc.entities?.[S.agentSheep], 'the doc on the server holds the local and the live agent spawns')
   } finally { await c.close() }
 }
@@ -875,14 +1019,16 @@ async function rigsPhase () {
   phase('rigs')
   ok(openPages.size === 0, 'no other page is open')
   const ctx = await browser.newContext({ viewport: SMALL })
-  const R = await openPage(ctx, `${S.BASE}#sync=${encodeURIComponent(S.SYNC)}`, 'R', { timeout: 45000 })
+  const R = await openPage(ctx, `${S.BASE}#new=meadow&sync=${encodeURIComponent(S.SYNC)}`, 'R', { timeout: 45000 })
   try {
     const lib = await R.evaluate(() => Object.keys(window.__mm.handle.doc().models ?? {}).sort())
-    ok(['bird', 'biped', 'horse', 'quadruped', 'serpent', 'sheep', 'trex'].every((n) => lib.includes(n)), `a new world carries the model library (${lib.join(', ')})`)
+    ok(JSON.stringify(lib) === JSON.stringify(Object.keys(MODEL_LIBRARY).sort()), `a new world carries the ${Object.keys(MODEL_LIBRARY).length} library models (${lib.join(', ')})`)
 
     // ---- 300 rigs of two library models, walking and running (preview state: no sim needed)
     const N = 300
     const keys0 = await R.evaluate(() => window.__mm.resources.keys())
+    // the meadow's own rigs (T-rex, sheep, horse, wizard, zodiac animals) already hold model templates
+    const refs0 = await R.evaluate(() => Object.fromEntries(window.__mm.resources.keys().filter((k) => /^model:/.test(k)).map((k) => [k, window.__mm.resources.refs(k)])))
     const tSpawn = Date.now()
     const ids = await R.evaluate((N) => {
       const ops = []
@@ -895,9 +1041,12 @@ async function rigsPhase () {
     const spawnMs = Date.now() - tSpawn
     const built = await waitIn(R, (ids) => ids.every((id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing }), ids, 60000).then(() => true, () => false)
     ok(ids.length === N && built, `${N} rigs (horse + sheep) spawned in one batch and built (${spawnMs} ms to write)`)
+    // what the 300 hold beyond the meadow's own looks (the meadow's creatures keep living,
+    // and a kill there adds a dead-tint material that is not theirs)
+    const held = await R.evaluate((keys0) => window.__mm.resources.keys().filter((k) => !keys0.includes(k)), keys0)
     await R.evaluate((ids) => ids.forEach((id, i) => window.__mm.reconciler.preview(id, { anim: i % 4 === 3 ? 'run' : 'walk' })), ids)
-    const shared = await R.evaluate(() => window.__mm.resources.keys().filter((k) => /^model:/.test(k)).map((k) => [k, window.__mm.resources.refs(k)]))
-    ok(shared.length === 2 && shared.every(([, n]) => n === 150), 'all instances share one template per model', shared)
+    const shared = await R.evaluate((refs0) => window.__mm.resources.keys().filter((k) => /^model:/.test(k)).map((k) => [k, window.__mm.resources.refs(k) - (refs0[k] ?? 0)]).filter(([, n]) => n !== 0), refs0)
+    ok(shared.length === 2 && shared.every(([k, n]) => n === 150 && /^model:(horse|sheep):/.test(k)), 'all instances share one template per model (150 more refs on the meadow\'s horse and sheep templates, nothing new)', shared)
     // time the loop: the reconciler (CPU: vars, controller, tracks, node writes) and a
     // frame's render, closed by a 1 px readback so the GPU work is inside the frame
     const perf = await R.evaluate(async ([id0, frames]) => {
@@ -936,8 +1085,11 @@ async function rigsPhase () {
     ok(flick.mean < flickBound && flick.sets <= 3, `reconciler CPU for 300 rigs switching state every frame: ${flick.mean} ms/frame mean (bound 2 x steady + 1 = ${flickBound} ms), crossfade sets per rig ${flick.sets} (<= 3)`, flick)
     await R.evaluate((ids) => { for (const id of ids) window.__mm.reconciler.preview(id, { anim: null }); return window.__mm.caps.world.batch(ids.map((id) => ({ op: 'despawn', id }))).length }, ids)
     await waitIn(R, (ids) => ids.every((id) => !window.__mm.reconciler.objectFor(id)), ids, 30000).catch(() => {})
-    const left = await R.evaluate((keys0) => window.__mm.resources.keys().filter((k) => !keys0.includes(k)), keys0)
-    ok(left.length === 0, 'after despawning the 300 rigs no resource they held is left', left)
+    const left = await R.evaluate(([held, refs0]) => ({
+      keys: window.__mm.resources.keys().filter((k) => held.includes(k)),
+      refs: Object.entries(refs0).filter(([k, n]) => window.__mm.resources.refs(k) > n).map(([k, n]) => [k, n, window.__mm.resources.refs(k)]),
+    }), [held, refs0])
+    ok(left.keys.length === 0 && left.refs.length === 0, `after despawning the 300 rigs no resource they held is left (${held.length} keys of their own; the shared templates are back to the meadow's refs)`, left)
 
     // ---- preview state drives a clip with the sim idle (the editor's selector)
     const pid = await R.evaluate(() => window.__mm.caps.world.spawn({ name: 'preview horse', components: { transform: { p: [0, 0, 16], r: [0, 0, 0], s: [1, 1, 1] }, representation: { kind: 'rig', model: 'horse' } } }).id())
@@ -979,8 +1131,89 @@ async function rigsPhase () {
     const after = tinted ?? await colours(sid)
     ok(tinted && after.c.length === before.c.length && before.c.some((h) => [0, 2, 4].some((i) => parseInt(h.slice(i, i + 2), 16) > 0x56)), `the dead group tints every node of a rig sheep (${before.c.slice(0, 3).join(',')} -> ${after.c.slice(0, 3).join(',')})`, { before: before.c.length, after: after.c.length, sameVisual: before.visual === after.visual })
     await R.evaluate(([a, b]) => { window.__mm.caps.world.get(a).destroy(); window.__mm.caps.world.get(b).destroy() }, [pid, sid])
+
+    // ---- every zoo preset (design §18.2) spawns from the palette as a rig, with no placeholder
+    await R.evaluate(() => { document.body.classList.add('left-open'); window.__mm.interaction.select(null) })
+    const zoo = Object.keys(ZOO_PRESETS).sort()
+    const tZoo = Date.now()
+    const spawned = {}
+    for (const name of zoo) {
+      const before = await R.evaluate(() => [...window.__mm.world.entities.keys()])
+      await R.click(`.palette button.preset[data-preset="${name}"]`)
+      const id = await waitIn(R, ([name, before]) => [...window.__mm.world.entities.values()].find((e) => String(e.preset) === name && !before.includes(e.id))?.id ?? null, [name, before], 5000).then((h) => h.jsonValue(), () => null)
+      spawned[name] = id
+    }
+    const ids2 = Object.values(spawned).filter(Boolean)
+    await waitIn(R, (ids) => ids.every((id) => { const v = window.__mm.reconciler.visualFor(id); return v?.userData.kind === 'rig' && !v.userData.missing }), ids2, 15000).catch(() => {})
+    const zooLooks = await R.evaluate((spawned) => Object.fromEntries(Object.entries(spawned).map(([name, id]) => {
+      const v = id && window.__mm.reconciler.visualFor(id)
+      return [name, v ? { kind: v.userData.kind, key: String(v.userData.key ?? ''), missing: !!v.userData.missing, bones: v.userData.bones?.size ?? 0, placeholder: v.userData.kind === 'placeholder' } : null]
+    })), spawned)
+    const placeholders = await R.evaluate(() => window.__mm.reconciler.stats().placeholders)
+    const icons = await R.evaluate((zoo) => Object.fromEntries(zoo.map((n) => [n, document.querySelector(`.palette button.preset[data-preset="${n}"] .icon`)?.textContent ?? null])), zoo)
+    ok(zoo.length === 12 && zoo.every((n) => zooLooks[n]?.kind === 'rig' && !zooLooks[n].missing && zooLooks[n].key.startsWith(`model:${n}:`) && zooLooks[n].bones > 3) && placeholders === 0,
+      `every zoo preset (${zoo.length}) spawns from the palette as its library rig, no placeholder (${Date.now() - tZoo} ms for all)`, zooLooks)
+    ok(zoo.every((n) => icons[n] && icons[n] === ZOO_PRESETS[n].icon), 'each palette card shows the preset\'s own icon', icons)
+    // the search box filters the grid
+    await R.fill('.palette-search', 'ra')
+    const found = await R.evaluate(() => ({ names: [...document.querySelectorAll('.palette button.preset')].map((b) => b.dataset.preset), count: document.querySelector('.palette-section .count')?.textContent ?? '' }))
+    await R.fill('.palette-search', 'zzz')
+    const none = await R.evaluate(() => ({ n: document.querySelectorAll('.palette button.preset').length, msg: !!document.querySelector('.palette-none') }))
+    await R.fill('.palette-search', '')
+    const all = await R.evaluate(() => document.querySelectorAll('.palette button.preset').length)
+    ok(found.names.length >= 3 && found.names.every((n) => n.includes('ra')) && ['dragon', 'rabbit', 'rat'].every((n) => found.names.includes(n)) && new RegExp(`^${found.names.length} of ${all}$`).test(found.count) && none.n === 0 && none.msg && all >= 18,
+      `the palette search filters: "ra" -> ${found.names.join(', ')} (${found.count}); no match says so; clearing shows all ${all}`, { found, none, all })
+    await R.evaluate((ids) => window.__mm.caps.world.batch(ids.map((id) => ({ op: 'despawn', id }))), ids2)
   } finally {
     await R.close().catch(() => {})
+    await ctx.close().catch(() => {})
+  }
+}
+
+// ============================================================== the gallery thumbnail's path
+// scripts/thumbnails.mjs loads the bare URL and presses package.json's
+// gallery.thumbnail.click selectors in order, each with Playwright's default
+// actionability waits (design §18.2). Here at 1280×800 (DPR 1, not the script's
+// DPR 2) against the local sync server: it must end on the rendered meadow with
+// both panels closed.
+async function thumbPhase () {
+  phase('thumb')
+  const hint = JSON.parse(fs.readFileSync(path.join(PKG, 'package.json'), 'utf8')).gallery?.thumbnail ?? {}
+  const clicks = [hint.click ?? []].flat()
+  const SHOT = { width: 1280, height: 800 }
+  const ctx = await browser.newContext({ viewport: SHOT })
+  try {
+    const P = await newTab(ctx, 'thumb', { viewport: SHOT })
+    const t0 = Date.now()
+    await P.goto(`${S.BASE}#sync=${encodeURIComponent(S.SYNC)}`)
+    await P.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {})
+    const steps = []
+    for (const sel of clicks) { const t = Date.now(); await P.click(sel, { timeout: 60000 }); steps.push(`${sel} ${Date.now() - t} ms`) }
+    const tClicked = Date.now() - t0
+    await P.waitForTimeout(hint.settle ?? 1200)
+    await P.screenshot({ path: path.join(OUT, 'thumb.png') })
+    const total = Date.now() - t0
+    const st = await P.evaluate(() => {
+      const mm = window.__mm; const W = innerWidth
+      const panel = (sel) => { const r = document.querySelector(sel)?.getBoundingClientRect(); return r ? Math.max(0, Math.min(r.right, W) - Math.max(r.left, 0)) : 0 }
+      const c = document.getElementById('scene'); const g = c.getContext('webgl2') || c.getContext('webgl')
+      mm.stage.render()
+      const buf = new Uint8Array(4); const seen = new Set()
+      for (let i = 1; i < 12; i++) for (let j = 1; j < 8; j++) { g.readPixels(Math.floor(c.width * i / 12), Math.floor(c.height * j / 8), 1, 1, g.RGBA, g.UNSIGNED_BYTE, buf); seen.add(buf.join(',')) }
+      return {
+        ready: !!mm.ready, title: String(mm.handle?.doc().meta?.title ?? ''), entities: Object.keys(mm.handle?.doc().entities ?? {}).length,
+        rendered: mm.reconciler?.stats(), launcher: !!document.querySelector('#launcher:not([hidden])'),
+        open: ['left-open', 'right-open'].filter((k) => document.body.classList.contains(k)),
+        visiblePx: { left: panel('.panel.left'), right: panel('.panel.right') }, colours: seen.size,
+      }
+    })
+    console.log(`#   thumbnail path: ${steps.join(', ')}; clicks done ${tClicked} ms after goto, shot at ${total} ms`)
+    ok(clicks.length === 4 && clicks[0] === '#launch-new' && clicks[1] === '#launch-template-meadow', `package.json's thumbnail hint goes through the launcher (${clicks.join(' -> ')}, settle ${hint.settle})`)
+    ok(st.ready && !st.launcher && st.title === 'Animal meadow' && st.entities === templateEntities('meadow').length && st.rendered?.placeholders === 0 && st.colours >= 4,
+      `the thumbnail clicks end on the rendered Animal meadow (${st.entities} entities, ${st.colours} colours) in ${total} ms`, st)
+    ok(st.open.length === 0 && st.visiblePx.left === 0 && st.visiblePx.right === 0, 'and both panels are closed (none of either is on screen)', { open: st.open, visiblePx: st.visiblePx })
+    await P.close()
+  } finally {
     await ctx.close().catch(() => {})
   }
 }
@@ -995,7 +1228,7 @@ async function safePhase () {
   // every evaluate here is bounded: a hung tab never answers
   const evalT = (page, fn, arg, ms = 4000) => Promise.race([page.evaluate(fn, arg), sleep(ms).then(() => { throw new Error('page did not answer') })])
   try {
-    const P = await openPage(ctx, `${S.BASE}#sync=${encodeURIComponent(S.SYNC)}`, 'safe-1')
+    const P = await openPage(ctx, `${S.BASE}#new=meadow&sync=${encodeURIComponent(S.SYNC)}`, 'safe-1')
     const link = await P.evaluate(() => location.href)
     await P.evaluate(() => window.__mm.caps.world.defineSystem('spin', { source: 'export default { update () {} }' }))
     await sleep(500)

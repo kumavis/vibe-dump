@@ -4,6 +4,9 @@ import { makeShare, mcpSetupLine, cliLine, fileNameFor, editLink, viewLink, vers
 import { parseLink } from '../../src/net/link.js'
 import { load, getHeads, view } from '@automerge/automerge'
 import { seeded, repo } from './d-helpers.mjs'
+import { templateEntities } from '../../src/doc/templates.js'
+
+const ENTITY_COUNT = templateEntities('meadow').length // the Animal meadow seed (design §18.2)
 
 const base = 'https://kumavis.github.io/vibe-dump/merge-meadow/'
 
@@ -40,17 +43,17 @@ test('share: copy, download, fork, open and version links against a real repo', 
   assert.equal(c.copied, true); assert.equal(copied[0], c.text); assert.equal(parseLink(c.text).docUrl, h.url)
   const d = s.download()
   assert.match(d.name, /^test-meadow-.*\.automerge$/)
-  assert.equal(Object.keys(load(saved[0].bytes).entities).length, 14, 'the download is the whole doc')
+  assert.equal(Object.keys(load(saved[0].bytes).entities).length, ENTITY_COUNT, 'the download is the whole doc')
   const f = await s.fork()
   assert.notEqual(f.url, h.url)
   const fl = parseLink(f.link)
   assert.equal(fl.docUrl, f.url); assert.ok(fl.key && fl.key !== 'K', 'a fork gets a fresh agent key')
   const o = await s.open({ arrayBuffer: async () => saved[0].bytes.buffer.slice(saved[0].bytes.byteOffset, saved[0].bytes.byteOffset + saved[0].bytes.byteLength) })
   const opened = await repo.find(o.url)
-  assert.equal(Object.keys(opened.doc().entities).length, 14)
+  assert.equal(Object.keys(opened.doc().entities).length, ENTITY_COUNT)
   assert.deepEqual(parseLink(s.versionLink()).heads, getHeads(h.doc()))
   assert.equal(parseLink(s.versionLink()).key, '', 'a version link never carries the editor key')
-  assert.equal(Object.keys(view(h.doc(), parseLink(s.versionLink()).heads).entities).length, 14, 'the version link heads open with view()')
+  assert.equal(Object.keys(view(h.doc(), parseLink(s.versionLink()).heads).entities).length, ENTITY_COUNT, 'the version link heads open with view()')
   assert.equal(s.viewLink(''), null)
   const failing = makeShare({ handle: h, link: {}, repo, base, clipboard: { writeText: async () => { throw new Error('denied') } } })
   assert.equal((await failing.copyLink()).copied, false)

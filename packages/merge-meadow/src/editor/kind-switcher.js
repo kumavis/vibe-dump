@@ -108,8 +108,13 @@ export function rigData (current, model, kinds, opts = {}) {
 
 // -> one replace op (the contract's shape); the editor wraps it in a list.
 // opts.model: the model a switch to 'rig' references (see pickModel).
+// opts.icon: the preset's palette icon (design §18.3); a switch to `billboard`
+// from a look with no image of its own shows it, so a rig T-rex steps down the
+// ladder to a 🦖 card, not the billboard kind's default sheep.
 export function switchKindOps (entityId, current, targetKind, kinds, opts = {}) {
   const data = targetKind === 'rig' ? rigData(current, opts.model ?? DEFAULT_RIG_MODEL, kinds, opts) : switchedData(current, targetKind, kinds, opts)
+  const icon = typeof opts.icon === 'string' ? opts.icon.trim() : ''
+  if (targetKind === 'billboard' && icon && !(isObj(current) && typeof current.image === 'string' && current.image)) data.image = `emoji:${icon}`
   return { op: 'replace', id: entityId, component: 'representation', data }
 }
 

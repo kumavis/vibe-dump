@@ -22,8 +22,9 @@ test('a pre-rig world: two peers that each create doc.models keep the union afte
     const [x, y] = trial % 2 ? [a, b] : [b, a]
     merged(x, y)
     const before = Object.keys(x.doc().models)
-    assert.ok(before.length === 1 || before.length === 7, `Automerge shows one map whole (${before})`)
-    assert.equal(modelsToHeal(x.doc()), 8 - before.length)
+    const libSize = Object.keys(MODEL_LIBRARY).length
+    assert.ok(before.length === 1 || before.length === libSize, `Automerge shows one map whole (${before})`)
+    assert.equal(modelsToHeal(x.doc()), libSize + 1 - before.length)
     healModels(x)
     assert.deepEqual(Object.keys(x.doc().models).sort(), [...Object.keys(MODEL_LIBRARY), 'blob'].sort(), 'the union survives')
     assert.equal(modelsToHeal(x.doc()), 0)
@@ -46,24 +47,24 @@ test('model keys follow content: concurrent first definitions and remove + redef
   const h = seeded()
   const a = fork(h); const b = fork(h)
   const wiz = (color) => ({ extends: 'biped', nodes: [{ name: 'head', children: [{ name: 'hat', shape: 'cone', p: [0, 0.5, 0], s: [0.34, 0.5, 0.34], color }] }] })
-  applyOps(a, [{ op: 'defineModel', name: 'wizard', model: wiz('#3b2a7a') }])
-  applyOps(b, [{ op: 'defineModel', name: 'wizard', model: wiz('#ff0000') }])
-  const rep = { kind: 'rig', model: 'wizard' }
+  applyOps(a, [{ op: 'defineModel', name: 'mage', model: wiz('#3b2a7a') }])
+  applyOps(b, [{ op: 'defineModel', name: 'mage', model: wiz('#ff0000') }])
+  const rep = { kind: 'rig', model: 'mage' }
   const ka = resolveRepresentation(a.doc(), rep).key; const kb = resolveRepresentation(b.doc(), rep).key
-  assert.match(ka, /^model:wizard:1\.1:/); assert.match(kb, /^model:wizard:1\.1:/)
+  assert.match(ka, /^model:mage:1\.1:/); assert.match(kb, /^model:mage:1\.1:/)
   assert.notEqual(ka, kb, 'same revs, different content: different keys')
   merged(a, b); merged(b, a)
   const k = resolveRepresentation(a.doc(), rep).key
   assert.equal(k, resolveRepresentation(b.doc(), rep).key, 'both peers agree after the merge')
-  const hat = modelData(a.doc(), 'wizard').nodes.flatMap(function f (n) { return [n, ...(n.children ?? []).flatMap(f)] }).find((n) => n.name === 'hat')
+  const hat = modelData(a.doc(), 'mage').nodes.flatMap(function f (n) { return [n, ...(n.children ?? []).flatMap(f)] }).find((n) => n.name === 'hat')
   assert.equal(k === ka, hat.color === '#3b2a7a', 'the key names the content that won')
   // remove + redefine: the rev starts again at 1, the key still moves
   const c = seeded()
-  applyOps(c, [{ op: 'defineModel', name: 'wizard', model: wiz('#3b2a7a') }])
+  applyOps(c, [{ op: 'defineModel', name: 'mage', model: wiz('#3b2a7a') }])
   const k1 = resolveRepresentation(c.doc(), rep).key
-  applyOps(c, [{ op: 'removeModel', name: 'wizard' }, { op: 'defineModel', name: 'wizard', model: wiz('#00ff00') }])
+  applyOps(c, [{ op: 'removeModel', name: 'mage' }, { op: 'defineModel', name: 'mage', model: wiz('#00ff00') }])
   const k2 = resolveRepresentation(c.doc(), rep).key
-  assert.match(k2, /^model:wizard:1\.1:/)
+  assert.match(k2, /^model:mage:1\.1:/)
   assert.notEqual(k1, k2)
 })
 

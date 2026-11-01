@@ -20,15 +20,15 @@ const CROWN = { name: 'crown', shape: 'cylinder', p: [0, 0.3, 0], s: [0.25, 0.1,
 
 test('remove + redefine with no frame between: existing instances go stale and new spawns get the new template', () => {
   const h = seeded()
-  applyOps(h, [{ op: 'defineModel', name: 'wizard', model: wizard(HAT) }])
+  applyOps(h, [{ op: 'defineModel', name: 'mage', model: wizard(HAT) }])
   const res = makeResources({ document: null })
   const ctx = ctxOf(res, () => h.doc())
-  const d = { kind: 'rig', model: 'wizard' }
+  const d = { kind: 'rig', model: 'mage' }
   const w1 = KINDS.rig.create(d, ctx)
   assert.ok(w1.userData.bones.has('hat'))
   // two ops (a backgrounded tab sees both before its next frame), then one in a batch
-  applyOps(h, [{ op: 'removeModel', name: 'wizard' }])
-  applyOps(h, [{ op: 'defineModel', name: 'wizard', model: wizard(CROWN) }])
+  applyOps(h, [{ op: 'removeModel', name: 'mage' }])
+  applyOps(h, [{ op: 'defineModel', name: 'mage', model: wizard(CROWN) }])
   assert.equal(KINDS.rig.stale(w1, d, ctx), true, 'same revs (1.1), new content: stale')
   assert.equal(KINDS.rig.update(w1, d, d, ctx), false, 'update asks for a rebuild')
   const w2 = KINDS.rig.create(d, ctx)
@@ -36,8 +36,8 @@ test('remove + redefine with no frame between: existing instances go stale and n
   res.releaseAll(w1)
   const w1b = KINDS.rig.create(d, ctx)
   assert.ok(w1b.userData.bones.has('crown'), 'the rebuilt look has the new content')
-  assert.equal(res.keys().filter((k) => k.startsWith('model:wizard:')).length, 1, 'one template for the model')
-  applyOps(h, [{ op: 'removeModel', name: 'wizard' }, { op: 'defineModel', name: 'wizard', model: wizard(HAT) }])
+  assert.equal(res.keys().filter((k) => k.startsWith('model:mage:')).length, 1, 'one template for the model')
+  applyOps(h, [{ op: 'removeModel', name: 'mage' }, { op: 'defineModel', name: 'mage', model: wizard(HAT) }])
   assert.equal(KINDS.rig.stale(w2, d, ctx), true, 'and again in one batch')
   res.releaseAll(w2); res.releaseAll(w1b)
   assert.equal(res.stats().keys, 0)
@@ -46,9 +46,9 @@ test('remove + redefine with no frame between: existing instances go stale and n
 test('two peers that each define the same name from scratch: the peer whose version lost rebuilds after the merge', () => {
   const base = seeded()
   const a = fork(base); const b = fork(base)
-  applyOps(a, [{ op: 'defineModel', name: 'wizard', model: wizard(HAT) }])
-  applyOps(b, [{ op: 'defineModel', name: 'wizard', model: wizard(CROWN) }])
-  const d = { kind: 'rig', model: 'wizard' }
+  applyOps(a, [{ op: 'defineModel', name: 'mage', model: wizard(HAT) }])
+  applyOps(b, [{ op: 'defineModel', name: 'mage', model: wizard(CROWN) }])
+  const d = { kind: 'rig', model: 'mage' }
   const ra = makeResources({ document: null }); const rb = makeResources({ document: null })
   const ca = ctxOf(ra, () => a.doc()); const cb = ctxOf(rb, () => b.doc())
   const oa = KINDS.rig.create(d, ca); const ob = KINDS.rig.create(d, cb)

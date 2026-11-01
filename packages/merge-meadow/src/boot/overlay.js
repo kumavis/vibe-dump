@@ -6,8 +6,16 @@ const $ = (id) => document.getElementById(id)
 export function bootStatus (text, { waiting = false } = {}) {
   const el = $('boot'); if (!el) return
   el.hidden = false
+  el.classList.remove('done') // back after the launcher handed over
   el.classList.toggle('waiting', !!waiting)
   const msg = el.querySelector('.msg'); if (msg) msg.textContent = text
+}
+
+// the launcher (design §18.1) takes the screen: the loading card goes away at
+// once, and bootStatus brings it back when a world is chosen
+export function pauseBoot () {
+  const el = $('boot'); if (!el) return
+  el.hidden = true
 }
 
 export function hideBoot () {

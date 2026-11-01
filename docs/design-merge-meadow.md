@@ -407,7 +407,10 @@ directly through automerge-repo in Node — every verb except `capture`, `logs`,
 - Anyone with the doc URL can edit, including the system code every peer runs.
 - Doc-stored code runs in a Compartment with no DOM, no three, no handles.
 - The agent key gates `capture`/`logs`/`eval`; a `view` key is derived one-way.
-- Nothing from a doc or an agent ever reaches `localStorage` of this origin.
+- Nothing from a doc or an agent ever reaches `localStorage` of this origin,
+  with one exception (§18.1): the launcher's worlds list stores each world's
+  title (text only, ≤ 200 characters, shown with `textContent`), and its agent
+  key, which every page of this shared origin can read.
 
 ## 7. Runtime extensibility
 
@@ -877,3 +880,30 @@ world → Animal meadow**, then hides the panels.
 A preset may carry `icon` (an emoji string) at its top level. The palette
 uses it first, then the billboard emoji as today, then a generic glyph, so rig
 presets get a readable card.
+
+### 18.4 Decisions that changed while building it (round 1, 2026-11-01)
+
+- **Seed presets are rigs.** §17.3 said the seed presets stay billboards; the
+  content pass makes the `trex`, `sheep` and `horse` presets look like their
+  library rigs, and adds twelve rig presets (the wizard and eleven zodiac
+  animals: rat, ox, tiger, rabbit, dragon, snake, goat, monkey, rooster, dog,
+  pig; the core `horse` is the zodiac horse). The library is nineteen models.
+  The billboard stays the first rung of the ladder: switching a rig to
+  `billboard` shows the preset's `icon`.
+- **The library is added only to a world with no `doc.models`.** §17.3 had
+  `ensureLibrary` fill in missing library models on every open, which put back
+  a model someone had removed. Now the page (and the agent's local mode) adds
+  the library only to a world made before rigs. Worlds made before this round
+  keep their seven models and their billboard presets; the zoo comes with new
+  worlds.
+- **Launcher navigation.** A launcher choice creates or opens the world in
+  place and pushes the new address, so Back returns to the launcher;
+  `#new=<template>` replaces it, so Back does not plant a second world. A
+  failed choice returns to the launcher with the reason; a failed link in the
+  address is still a boot error. A `#new=` link creates on the sync server it
+  names and keeps its `&safe`, however it arrives (boot, a hash change, Paste
+  a link); a template card and Open a file use the page's own sync server,
+  which a failed choice never changes. Addresses the launcher writes keep
+  `&safe`, so a reload after a hang stays safe.
+- A world created from a template takes the template's title (Animal meadow,
+  Blank meadow), so entries in Your worlds can be told apart.

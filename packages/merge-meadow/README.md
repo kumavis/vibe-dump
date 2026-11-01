@@ -11,8 +11,8 @@ comes from those components, not from code about particular animals. Add a
 T-rex and a sheep, and the T-rex hunts while the sheep flees, because one
 carries `predator` and a `pursue` drive and the other carries `prey` and a
 `flee` drive. Health, damage, riding and death are presets over the same small
-vocabulary. You can upgrade an entity's look in place, from an emoji billboard
-to a mesh, a node tree or an animated rig (a skeleton of named parts whose
+vocabulary. You can change an entity's look in place, between an emoji billboard,
+a mesh, a node tree and an animated rig (a skeleton of named parts whose
 clips are data in the document), and its behaviour does not change.
 
 Status: work in progress. The design, with every decision and the
@@ -24,7 +24,8 @@ today is in [STATUS.md](./STATUS.md).
 ## The link is the world
 
 ```
-…/vibe-dump/merge-meadow/                              a bare URL makes a new world
+…/vibe-dump/merge-meadow/                              a bare URL opens the launcher
+…/merge-meadow/#new=meadow   (or #new=blank)            make a new world from a template at once
 …/merge-meadow/#doc=automerge:<id>&key=<secret>         the world, with the agent key
 …/merge-meadow/#doc=automerge:<id>&view=<secret>        the world, agent key for reading only
 …/merge-meadow/#doc=automerge:<id>&heads=<h1,h2>        a read-only view of one version
@@ -32,8 +33,26 @@ today is in [STATUS.md](./STATUS.md).
                                          &safe          start with doc systems switched off
 ```
 
-- Opening a bare URL plants a new meadow: a seeded document, then the address
-  is rewritten to `#doc=…&key=…`. **Share** copies that link. It becomes active
+- Opening a bare URL shows the **launcher**, and nothing is created until you
+  choose:
+  - **Your worlds**: the worlds this browser has opened, newest first, with
+    when you last opened each, **Open**, **Copy link** and **Forget**. Forget
+    removes the entry from this browser's list only; the world itself stays
+    on the sync server and in this browser's storage, and its link still opens it.
+  - **New world**: one card per template. **Animal meadow** is trees, rocks, a
+    lamp, a T-rex, three sheep, a horse to ride, a wizard by the lamp and five
+    zodiac animals (rabbit, goat, pig, dog, rooster). **Blank meadow** is
+    ground, sky and one lamp. Both carry the same library: every preset is in
+    the palette and every rig model is in the document.
+  - **Open a file**: an `.automerge` file you downloaded earlier.
+  - **Paste a link**: a world link, or the `#doc=…` part of one.
+
+  Choosing creates or opens the world in place (no reload) and rewrites the
+  address to `#doc=…&key=…`; **Back** returns to the launcher. `#new=meadow` or
+  `#new=blank` skips the launcher and creates the world straight away (for
+  links, docs and tests); `&sync=` and `&safe` work with it. An unknown
+  template name shows the launcher.
+- **Share** copies the world's link. It becomes active
   once the sync server has acknowledged the document, so a friend who opens it
   straight away does not get "unavailable". If they do, the page retries and
   shows "waiting for the world…".
@@ -68,9 +87,12 @@ today is in [STATUS.md](./STATUS.md).
 | **/** | search the entity tree |
 | Ctrl/⌘-Z, Shift-Ctrl/⌘-Z or Ctrl-Y | undo and redo, per gesture |
 
-The left panel holds the entity tree and the spawn palette. A palette click
-spawns 6 m ahead of you; **📍 at cursor** then a click in the scene spawns where
-you point. The right panel has four tabs:
+The left panel holds the entity tree and the spawn palette. Each preset is a
+card with its icon (a preset's own `icon` field, else its billboard emoji, else
+a glyph for its kind). The search box above the grid filters by name: **Enter**
+spawns the first match, **↓** moves into the grid (arrow keys, Home and End
+move between cards), **Esc** clears it. A palette click spawns 6 m ahead of
+you; **📍 at cursor** then a click in the scene spawns where you point. The right panel has four tabs:
 
 - **Inspector**: one form per component, marked own, inherited or override.
   It also has groups, the owner pin and a health bar, plus a "doing: …" line
@@ -102,7 +124,7 @@ behaviour.
 
 | kind | fields | what it is |
 | --- | --- | --- |
-| `billboard` | `image` (`emoji:🐑` or a URL), `size`, `color` | a camera-facing sprite; every seed creature starts as one |
+| `billboard` | `image` (`emoji:🐑` or a URL), `size`, `color` | a camera-facing sprite; switching a rig to `billboard` in the inspector shows the preset's icon |
 | `primitive` | `shape` (box, sphere, cone, cylinder, capsule), `size` [x,y,z], `color`, `roughness`, `metalness` | one mesh |
 | `tree` | `nodes` (and optionally `animations`, `controller`) | a sculpt of nested shapes stored on the entity; an alias of an inline `rig` |
 | `rig` | `model` (a name in `doc.models`), `color` (multiplies every node colour), `scale`; or inline `nodes`/`animations`/`controller` | an articulated look: named nodes are bones, clips move them, a controller maps the sim's state to clips |
@@ -115,11 +137,34 @@ meshes start moving.
 ### Rigs: models are data
 
 The document holds a library of rig models in `doc.models`. A new world gets
-seven: the bases `quadruped`, `biped`, `serpent` and `bird`, and the species
-`horse`, `sheep` and `trex` that `extend` them. Upgrading a horse is one
-replace: `{ "kind": "rig", "model": "horse" }`. Every instance of a model
-shares one compiled template, and editing the model updates every entity that
-uses it, on every peer.
+nineteen: the bases `quadruped`, `biped`, `serpent` and `bird`; the species
+`horse`, `sheep` and `trex`; the `wizard`; and eleven zodiac animals (below).
+The T-rex, sheep and horse presets look like their rigs
+(`{ "kind": "rig", "model": "horse" }`), and any entity can be pointed at any
+model with one replace. Every instance of a model shares one compiled
+template, and editing the model updates every entity that uses it, on every
+peer.
+
+**The wizard and the zoo.** Each of these is a model that `extends` a base,
+plus a preset of the same name that extends `creature`, carries its palette
+`icon` and looks like its rig:
+
+| preset | model extends | behaviour |
+| --- | --- | --- |
+| 🧙 `wizard` | `biped`: hat with a star, beard, robe, staff with a crystal; idle bobs the staff; a `cast` clip for attack (the preset has no attack, so preview it in the inspector) | a person; flees predators |
+| 🐀 `rat` | `quadruped` | prey (and `rodent`); flees predators and snakes |
+| 🐂 `ox` · 🐇 `rabbit` (hops) · 🐐 `goat` · 🐖 `pig` | `quadruped` | prey; flee predators |
+| 🐅 `tiger` | `quadruped`, striped; `pounce` on attack | predator; hunts prey (damage 20) |
+| 🐉 `dragon` | `serpent` on four legs; `breath` (a flame) on attack | predator; hunts prey (damage 40) |
+| 🐍 `snake` | `serpent`, slimmer and banded | hunts rodents; flees predators |
+| 🐒 `monkey` | `biped`, long arms and a tail | wanders |
+| 🐓 `rooster` | `bird`, comb, wattle and a tail fan | prey; flees predators |
+| 🐕 `dog` | `quadruped`, collar; idle wags | wanders |
+
+There is no zodiac horse: the core `horse` preset is it. A world made before
+this library keeps the models it has: the library is added only to a world
+with no `doc.models` at all, so a model someone removed is never put back, and
+an older world's T-rex, sheep and horse presets stay as they were.
 
 A model has three layers:
 
@@ -177,23 +222,24 @@ smoothstep floor ceil round sign sqrt pow saturate step`, and the constants
 An unknown name, a wrong number of arguments or a syntax error is reported
 with its column when the model is written, and nothing is written.
 
-**Making a person, say a wizard**: extend `biped` and add parts under its
-bones, then point an entity at it.
+**Making your own person**: extend `biped` and add parts under its bones,
+then point an entity at it. (The library has a `wizard`; this one is a `mage`,
+so it does not replace it.)
 
 ```bash
-node agent/cli.mjs "$L" define-model wizard '{"extends":"biped","nodes":[
+node agent/cli.mjs "$L" define-model mage '{"extends":"biped","nodes":[
   {"name":"head","children":[{"name":"hat","shape":"cone","p":[0,0.5,0],"s":[0.34,0.5,0.34],"color":"#3b2a7a"}]},
   {"name":"chest","color":"#3b2a7a"},
   {"name":"arm_r","children":[{"name":"staff","shape":"cylinder","p":[0,-0.3,0.1],"s":[0.04,1.6,0.04],"color":"#6b4a2e"}]}],
   "animations":{"attack":{"tracks":{"staff.rz":[[0,0],[0.3,40],[0.7,0]]}}}}'
-node agent/cli.mjs "$L" spawn --name Merlin --at 0,0,10 --json '{"representation":{"kind":"rig","model":"wizard"}}'
+node agent/cli.mjs "$L" spawn --name Merlin --at 0,0,10 --json '{"representation":{"kind":"rig","model":"mage"}}'
 ```
 
 The biped's walk, run, idle and die clips come with it. For behaviour, spawn
 from a preset instead (`spawn horse`, or a preset of your own that extends
 `creature`) and replace its representation. In the editor: select an entity,
 switch its look to `rig` with model `biped`, press **Fork** to copy the model
-as `wizard`, edit the `nodes` box, and set **preview** to `walk` to watch the
+under a new name, edit the `nodes` box, and set **preview** to `walk` to watch the
 clips with the sim idle.
 
 ## Agents
@@ -239,8 +285,8 @@ node agent/cli.mjs "$L" set <id> body '{"speed": 8}'
 node agent/cli.mjs "$L" replace <id> representation '{"kind":"rig","model":"horse"}'
 node agent/cli.mjs "$L" models                    # the rig model library
 node agent/cli.mjs "$L" model biped               # one model, resolved through extends
-node agent/cli.mjs "$L" define-model wizard --file wizard.json
-node agent/cli.mjs "$L" remove-model wizard       # refused while another model extends it
+node agent/cli.mjs "$L" define-model mage --file mage.json
+node agent/cli.mjs "$L" remove-model mage         # refused while another model extends it
 node agent/cli.mjs "$L" define-system bob --file bob.js
 node agent/cli.mjs "$L" capture shot.jpg          # needs an open tab
 node agent/cli.mjs "$L" describe --local          # skip the tab, edit the doc directly
@@ -298,19 +344,30 @@ only of entities it owns.
   can read, but cannot write, `eval` or `capture`, and the agent enforces
   this in local mode as well. A tab hosts agents only when its link carries
   `key`. A wrong key gets no answer at all.
-- **Nothing from a document or an agent is written into this origin's
-  storage.** That origin is shared by every app on the site. The crash marker
-  holds only a doc id and a hash. Besides that, `localStorage` keeps your
-  display name and the package path you typed in the Agent tab, and
-  `sessionStorage` keeps a per-tab peer id.
+- **The launcher's list of your worlds holds each world's agent key.** It
+  lives in this browser's `localStorage['mm:worlds']` (at most 50 entries of
+  doc id, key or view key, sync server, title and time), the same secrets the
+  browser history holds for those links, with one difference: `localStorage`
+  is per origin, and this origin is shared by every app on this Pages site
+  (every vibe in the gallery, and any other Pages site of the same account).
+  Any of those pages can read the list; none of them can read your history.
+  **Forget** removes an entry and its key; clearing the site's data removes
+  them all. Anyone with access to this browser profile can read them too.
+- **Little from a document is written into this origin's storage**, and no
+  code. That origin is shared by every app on the site. The crash marker holds
+  only a doc id and a hash. The worlds list stores each world's title, capped
+  at 200 characters and only ever shown as text. Besides that, `localStorage`
+  keeps your display name and the package path you typed in the Agent tab,
+  and `sessionStorage` keeps a per-tab peer id.
 - Model URLs must be `asset:` names or https. `blob:`, `data:` and
   `javascript:` URLs are refused.
 
 ## Emoji and the Twemoji attribution
 
-Creatures start as emoji billboards drawn with your system's colour-emoji font,
-so they need no image files. If the platform has no colour-emoji font, which a
-1 ms probe at boot detects, the starter looks use eight bundled
+Billboards are emoji drawn with your system's colour-emoji font, so they need
+no image files; palette icons are emoji text in the page. If the platform has
+no colour-emoji font, which a 1 ms probe at boot detects, billboards of the
+starter emoji use eight bundled
 [Twemoji](https://github.com/jdecked/twemoji) 15.1 SVGs instead:
 🦖 🐑 🐎 🌳 🪨 💡 🐺 🧑. Twemoji graphics are © Twitter, Inc., jdecked and other
 contributors, licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
@@ -324,16 +381,19 @@ drawn by your own system font are not Twemoji and need no credit here.
 npm run dev -w @vibe-dump/merge-meadow           # vite dev server
 npm run build -w @vibe-dump/merge-meadow         # → packages/merge-meadow/dist/
 cd packages/merge-meadow
-node --test "test/unit/*.test.mjs"               # unit tests (no browser), ~10 s
+node --test "test/unit/*.test.mjs"               # unit tests (no browser), ~18 s
 node scripts/boundaries.mjs [--strict]           # the import-boundary lint (ARCHITECTURE §2)
-node test/e2e.mjs                                # the built app end to end, ~60 s (build first)
+node test/e2e.mjs                                # the built app end to end, ~80 s (build first)
 node test/xr.mjs                                 # WebXR smoke with an emulated Quest 3 (IWER), by hand
 ```
 
 `test/e2e.mjs` needs nothing from the network. It starts an
 `@automerge/automerge-repo-sync-server` in process on a free port, serves
 `dist/` under a `/vibe-dump/merge-meadow/` sub-path, and drives headless
-Chromium with at most three pages at once. It covers boot order, two peers,
+Chromium with at most three pages at once. It covers the launcher (a bare URL
+creates nothing; New world → Animal meadow; Your worlds and Forget;
+`#new=blank`), the gallery thumbnail's clicks, every zoo preset spawned from
+the palette and the palette search, boot order, two peers,
 the chase, damage applied exactly once, handoff, doc systems, look upgrades
 (through a tree that gains animations and a library rig), 300 animating rigs
 with their CPU cost per frame, the editor's preview state, the dead tint on a

@@ -24,15 +24,35 @@ test('switchKindOps: values out of the target range fall back to its default; ki
 test('switchKindOps: applied to the doc it swaps the look and keeps every other component', () => {
   const h = seeded()
   const before = read.entityData(h.doc(), 'sheep-1')
+  assert.equal(before.effective.representation.kind, 'rig', 'the sheep preset is a rig (design §18.2)')
   const inherited = presetComponents(read, h.doc(), 'sheep').representation
   const op = switchKindOps('sheep-1', before.effective.representation, 'primitive', KINDS, { inherited })
-  assert.equal(op.data.image, null, 'the preset image is nulled out of the new look')
+  assert.equal(op.data.model, null, 'the preset model is nulled out of the new look')
   const { inverse } = applyOps(h, [op], { kinds: KINDS })
   const after = read.entityData(h.doc(), 'sheep-1')
   assert.equal(after.effective.representation.kind, 'primitive')
-  assert.ok(!('image' in after.effective.representation))
+  assert.ok(!('model' in after.effective.representation))
   assert.deepEqual(after.effective.brain, before.effective.brain)
   assert.deepEqual(after.effective.transform, before.effective.transform)
   applyOps(h, inverse)
-  assert.equal(read.entityData(h.doc(), 'sheep-1').effective.representation.kind, 'billboard', 'the inverse restores the preset look')
+  assert.deepEqual(read.plain(read.entityData(h.doc(), 'sheep-1').effective.representation), { kind: 'rig', model: 'sheep' }, 'the inverse restores the preset look')
+  // and the other way: a billboard entity switched to a rig nulls its preset-free image
+  applyOps(h, [{ op: 'spawn', id: 'bb', components: { representation: { kind: 'billboard', image: 'emoji:🐑', size: 1.2 } } }])
+  const bb = read.entityData(h.doc(), 'bb').effective.representation
+  const op2 = switchKindOps('bb', bb, 'rig', KINDS)
+  assert.equal(op2.data.kind, 'rig'); assert.equal(op2.data.image, null)
+})
+
+test('switchKindOps: a rig switched to billboard shows the preset icon (opts.icon); an own image wins', () => {
+  const h = seeded()
+  const trex = read.entityData(h.doc(), 'trex-1').effective.representation
+  const inherited = presetComponents(read, h.doc(), 'trex').representation
+  const icon = read.presetData(h.doc(), 'trex').icon
+  assert.equal(icon, '🦖')
+  const op = switchKindOps('trex-1', trex, 'billboard', KINDS, { inherited, icon })
+  assert.equal(op.data.image, 'emoji:🦖'); assert.equal(op.data.model, null)
+  assert.doesNotThrow(() => applyOps(h, [op], { kinds: KINDS }))
+  assert.equal(read.entityData(h.doc(), 'trex-1').effective.representation.image, 'emoji:🦖')
+  assert.equal(switchKindOps('x', trex, 'billboard', KINDS).data.image, 'emoji:🐑', 'no icon: the kind default')
+  assert.equal(switchKindOps('x', { kind: 'billboard', image: 'emoji:🐊' }, 'billboard', KINDS, { icon }).data.image, 'emoji:🐊')
 })

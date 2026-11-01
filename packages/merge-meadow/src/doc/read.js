@@ -75,7 +75,7 @@ export function presetData (doc, name) {
   const p = doc?.presets?.[name]
   if (!p) return null
   const d = plain(p)
-  return { name, extends: d.extends ?? '', components: d.components ?? {}, groups: d.groups ?? {}, chain: presetChain(doc, name).filter((n) => doc.presets?.[n]) }
+  return { name, extends: d.extends ?? '', icon: typeof d.icon === 'string' ? d.icon : '', components: d.components ?? {}, groups: d.groups ?? {}, chain: presetChain(doc, name).filter((n) => doc.presets?.[n]) }
 }
 
 export function docSummary (doc) {

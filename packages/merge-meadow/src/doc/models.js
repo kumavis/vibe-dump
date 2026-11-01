@@ -617,7 +617,633 @@ const trex = {
   controller: { states: { attack: 'bite' } },
 }
 
-export const MODEL_LIBRARY = deepFreeze({ quadruped, biped, serpent, bird, horse, sheep, trex })
+// ---- the wizard and the twelve zodiac animals (design §18.2) -----------------
+// Every one extends a base, so it inherits the base's bones, gaits and fall, and
+// patches only its body plan, colours and species parts. Feet stand at y = 0:
+// the leg helper derives the hip height from the leg lengths.
+
+const r3 = (x) => Math.round(x * 1000) / 1000
+const neg = (x) => (x === 0 ? 0 : -x) // never -0: the library must round-trip through JSON
+const mirror = ([x, y, z]) => [neg(x), y, z]
+const mirrorR = ([x, y, z]) => [x, neg(y), neg(z)]
+// a left/right pair of new nodes: `_l` at +x as given, `_r` mirrored
+function pair (name, node) {
+  const one = (side, f) => {
+    const n = { ...node, p: f(node.p) }
+    if (name) n.name = `${name}_${side}`
+    if (node.r) n.r = side === 'l' ? node.r : mirrorR(node.r)
+    if (node.children) n.children = node.children.map((c) => mirrorTree(c, side))
+    return n
+  }
+  return [one('l', (p) => p), one('r', mirror)]
+}
+function mirrorTree (c, side) {
+  if (side === 'l') return c
+  const n = { ...c, p: c.p ? mirror(c.p) : c.p }
+  if (c.name) n.name = String(c.name).replace(/_l$/, '_r')
+  if (c.r) n.r = mirrorR(c.r)
+  if (c.children) n.children = c.children.map((x) => mirrorTree(x, side))
+  if (n.p === undefined) delete n.p
+  return n
+}
+
+// patch a quadruped's legs so the feet touch y = 0 under a body centred at bodyY.
+// f / b: { x, z, upper, lower, w }; extra: { hip(side), foot(side, leg) } new parts
+function qlegs (bodyY, f, b, color, lowerColor = color, extra = {}) {
+  return QLEGS.map((s) => {
+    const L = s[0] === 'f' ? f : b
+    const x = s.endsWith('l') ? L.x : -L.x
+    return {
+      name: `leg_${s}`,
+      p: [x, r3(L.upper + L.lower - bodyY), L.z],
+      children: [
+        { name: `thigh_${s}`, p: [0, r3(-L.upper / 2), 0], s: [L.w, L.upper, L.w], color },
+        ...(extra.hip ? extra.hip(s, L) : []),
+        { name: `knee_${s}`, p: [0, -L.upper, 0], children: [
+          { name: `shin_${s}`, p: [0, r3(-L.lower / 2), 0], s: [r3(L.w * 0.8), L.lower, r3(L.w * 0.8)], color: lowerColor },
+          ...(extra.foot ? extra.foot(s, L) : []),
+        ] },
+      ],
+    }
+  })
+}
+
+// the quadruped's named parts, patched in one call (fields as in a node patch)
+function quad (o) {
+  const eye = (x) => ({ p: [x, o.eyes.p[1], o.eyes.p[2]], ...(o.eyes.s ? { s: o.eyes.s } : {}), ...(o.eyes.color ? { color: o.eyes.color } : {}) })
+  return [
+    { name: 'body', ...o.body, ...(o.bodyKids ? { children: o.bodyKids } : {}) },
+    { name: 'saddle', p: o.saddle },
+    { name: 'neck', p: o.neck, ...(o.neckKids ? { children: o.neckKids } : {}) },
+    { name: 'neck_m', ...o.neckM },
+    { name: 'head', p: o.head, ...(o.headKids ? { children: o.headKids } : {}) },
+    { name: 'head_m', ...o.headM },
+    { name: 'eye_l', ...eye(o.eyes.p[0]) },
+    { name: 'eye_r', ...eye(-o.eyes.p[0]) },
+    { name: 'tail', ...o.tail, ...(o.tailKids ? { children: o.tailKids } : {}) },
+    { name: 'tail_m', ...o.tailM },
+    ...o.legs,
+  ]
+}
+// a quadruped lying on its side rests on half its body width
+const quadDie = (halfWidth) => ({ die: { tracks: { 'root.py': `smoothstep(0, 0.7, st)*${halfWidth}` } } })
+
+// -- rat: small and low, a pointed snout, round pink ears, a long bare tail
+const RAT = '#8c8478'
+const PINK = '#d9a3a0'
+const rat = {
+  extends: 'quadruped',
+  description: 'A small grey quadruped with a pointed snout, round pink ears and a long thin tail. It sniffs when idle.',
+  stride: 0.3,
+  runSpeed: 3,
+  nodes: quad({
+    body: { shape: 'sphere', p: [0, 0.17, 0], s: [0.2, 0.17, 0.38], color: RAT },
+    saddle: [0, 0.09, 0],
+    neck: [0, 0.03, 0.16],
+    neckM: { p: [0, 0.01, 0.02], r: [0, 0, 0], s: [0.09, 0.09, 0.08], color: RAT },
+    head: [0, 0.03, 0.05],
+    headM: { shape: 'sphere', p: [0, 0, 0.05], s: [0.12, 0.11, 0.16], color: RAT },
+    headKids: [
+      { name: 'snout', shape: 'cone', p: [0, -0.01, 0.15], r: [90, 0, 0], s: [0.07, 0.08, 0.07], color: RAT, children: [
+        { shape: 'sphere', p: [0, 0.045, 0], s: [0.025, 0.025, 0.025], color: PINK }, // the snout's +y is forward
+        box('', [0, 0.01, 0], [0.17, 0.004, 0.004], '#e8e4dc'), // whiskers
+      ] },
+      ...pair('ear', { shape: 'sphere', p: [0.05, 0.07, 0], s: [0.07, 0.07, 0.02], color: PINK }),
+    ],
+    eyes: { p: [0.045, 0.03, 0.11], s: [0.025, 0.025, 0.025] },
+    tail: { p: [0, -0.01, -0.18], r: [-12, 0, 0] },
+    tailM: { p: [0, 0, -0.22], s: [0.02, 0.02, 0.44], color: PINK },
+    legs: qlegs(0.17, { x: 0.06, z: 0.1, upper: 0.05, lower: 0.06, w: 0.045 }, { x: 0.065, z: -0.11, upper: 0.06, lower: 0.05, w: 0.05 }, RAT, PINK),
+  }),
+  animations: {
+    idle: { tracks: { 'head.rx': 'sin(t*15)*2 + sin(t*0.6)*5', 'snout.rx': 'sin(t*15)*3', 'tail.ry': 'sin(t*1.8)*18', 'ear_l.rz': 'sin(t*0.7)*6', 'ear_r.rz': '-sin(t*0.7 + 1)*6' } },
+    walk: { tracks: { 'tail.ry': 'sin(phase*tau)*14' } },
+    ...quadDie(0.1),
+  },
+}
+
+// -- ox: heavy and dark, a shoulder hump, short thick legs, horns, a tufted tail
+const OX = '#5c3f2c'
+const OX_DARK = '#3a2a1e'
+const HORN = '#e8dcc0'
+const ox = {
+  extends: 'quadruped',
+  description: 'A heavy dark quadruped with a shoulder hump, short thick legs, outward horns and a tufted tail. It chews the cud.',
+  stride: 1.3,
+  runSpeed: 4.5,
+  nodes: quad({
+    body: { p: [0, 0.95, 0], s: [0.7, 0.6, 1.3], color: OX },
+    bodyKids: [box('hump', [0, 0.34, 0.32], [0.52, 0.18, 0.42], '#4e3524')],
+    saddle: [0, 0.32, -0.2],
+    neck: [0, 0.08, 0.62],
+    neckM: { p: [0, 0.02, 0.08], r: [10, 0, 0], s: [0.42, 0.42, 0.34], color: OX },
+    head: [0, 0, 0.3],
+    headM: { p: [0, -0.02, 0.12], s: [0.4, 0.4, 0.46], color: OX },
+    headKids: [
+      box('muzzle', [0, -0.12, 0.37], [0.32, 0.2, 0.12], '#c9b49a'),
+      ...pair('horn', { shape: 'cylinder', p: [0.33, 0.2, 0.02], r: [0, 0, -70], s: [0.09, 0.34, 0.09], color: HORN }),
+      ...pair('horn_tip', { shape: 'cone', p: [0.5, 0.35, 0.02], r: [0, 0, -10], s: [0.075, 0.2, 0.075], color: HORN }),
+      ...pair('ear', { shape: 'box', p: [0.25, 0.08, -0.06], s: [0.14, 0.06, 0.08], color: OX }),
+    ],
+    eyes: { p: [0.19, 0.06, 0.25], s: [0.05, 0.05, 0.04] },
+    tail: { p: [0, 0.2, -0.65], r: [-70, 0, 0] },
+    tailM: { p: [0, 0, -0.24], s: [0.05, 0.05, 0.48], color: OX_DARK },
+    tailKids: [{ shape: 'sphere', p: [0, 0, -0.5], s: [0.1, 0.1, 0.16], color: '#2a1e14' }],
+    legs: qlegs(0.95, { x: 0.24, z: 0.45, upper: 0.33, lower: 0.34, w: 0.18 }, { x: 0.24, z: -0.45, upper: 0.33, lower: 0.34, w: 0.18 }, OX, OX_DARK),
+  }),
+  animations: {
+    idle: { tracks: { 'tail.ry': 'sin(t*1.6)*25', 'muzzle.px': 'sin(t*5)*0.012', 'head.ry': 'sin(t*0.25 + rand*6)*8' } },
+    walk: { tracks: { 'head.rx': 'sin(phase*tau*2)*4', 'tail.ry': 'sin(phase*tau)*12' } },
+    ...quadDie(0.35),
+  },
+}
+
+// -- tiger: orange with dark stripes on the body and back legs, a long tail; it pounces
+const TIGER = '#e0832a'
+const STRIPE = '#2a1a12'
+const WHITE_FUR = '#f2e6d2'
+const tiger = {
+  extends: 'quadruped',
+  description: 'An orange quadruped with dark stripes on its body and back legs, a white muzzle and a long tail. It pounces to attack.',
+  stride: 1.4,
+  runSpeed: 6,
+  nodes: quad({
+    body: { p: [0, 0.72, 0], s: [0.46, 0.42, 1.25], color: TIGER },
+    bodyKids: [0.38, 0.13, -0.12, -0.37].map((z) => box('', [0, 0.06, z], [0.48, 0.32, 0.07], STRIPE)),
+    saddle: [0, 0.22, -0.1],
+    neck: [0, 0.1, 0.6],
+    neckM: { p: [0, 0.07, 0.04], r: [20, 0, 0], s: [0.28, 0.3, 0.26], color: TIGER },
+    head: [0, 0.22, 0.12],
+    headM: { p: [0, 0, 0.08], s: [0.36, 0.32, 0.34], color: TIGER },
+    headKids: [
+      box('', [0, -0.07, 0.27], [0.2, 0.14, 0.12], WHITE_FUR), // muzzle
+      box('', [0, 0.17, 0.12], [0.08, 0.025, 0.2], STRIPE), // brow stripe
+      pivot('jaw', [0, -0.12, 0.12], [box('', [0, 0, 0.1], [0.18, 0.05, 0.18], WHITE_FUR)]),
+      ...pair('ear', { shape: 'cone', p: [0.12, 0.18, 0], s: [0.1, 0.1, 0.06], color: TIGER }),
+    ],
+    eyes: { p: [0.1, 0.07, 0.25], s: [0.05, 0.04, 0.03], color: '#2a2a10' },
+    tail: { p: [0, 0.12, -0.62], r: [-35, 0, 0] },
+    tailM: { p: [0, 0, -0.4], s: [0.07, 0.07, 0.8], color: TIGER },
+    tailKids: [box('', [0, 0, -0.82], [0.08, 0.08, 0.1], STRIPE)],
+    legs: qlegs(0.72, { x: 0.16, z: 0.47, upper: 0.26, lower: 0.27, w: 0.15 }, { x: 0.16, z: -0.47, upper: 0.27, lower: 0.26, w: 0.16 }, TIGER, TIGER, {
+      hip: (s) => (s[0] === 'b' ? [box('', [0, -0.14, 0], [0.17, 0.035, 0.17], STRIPE)] : []),
+    }),
+  }),
+  animations: {
+    idle: { tracks: { 'tail.ry': 'sin(t*1.1)*22', 'tail.rx': 'sin(t*0.7)*8', 'jaw.rx': 'saturate(sin(t*0.4 + rand*6) - 0.9)*250' } },
+    walk: { tracks: { 'tail.ry': 'sin(phase*tau)*12', 'head.rx': '6 + sin(phase*tau*2)*2' } },
+    run: { tracks: { 'tail.rx': '12 + sin(phase*tau)*6' } },
+    // crouch, spring with the forelegs reaching, the jaw open, land
+    pounce: {
+      once: true,
+      duration: 0.9,
+      tracks: {
+        'body.rx': [[0, 0], [0.2, 6], [0.4, -16], [0.65, 4], [0.9, 0]],
+        'body.py': [[0, 0], [0.2, -0.08], [0.45, 0.22], [0.7, 0], [0.9, 0]],
+        'body.pz': 'sin(saturate(st/0.9)*pi)*0.35',
+        'leg_fl.rx': [[0, 0], [0.2, 10], [0.45, -65], [0.7, -10], [0.9, 0]],
+        'leg_fr.rx': [[0, 0], [0.2, 10], [0.45, -60], [0.7, -10], [0.9, 0]],
+        'leg_bl.rx': [[0, 0], [0.2, -15], [0.45, 35], [0.9, 0]],
+        'leg_br.rx': [[0, 0], [0.2, -15], [0.45, 35], [0.9, 0]],
+        'jaw.rx': [[0, 0], [0.3, 0], [0.5, 35], [0.75, 0]],
+        'tail.rx': 'sin(saturate(st/0.9)*pi)*25',
+      },
+    },
+    ...quadDie(0.23),
+  },
+  controller: { states: { attack: 'pounce' } },
+}
+
+// -- rabbit: a round body, long upright ears, big back feet, a puff tail; it hops
+const RABBIT = '#cdbba4'
+const rabbit = {
+  extends: 'quadruped',
+  description: 'A small round quadruped with long upright ears, big back feet and a white puff tail. It hops.',
+  stride: 0.5,
+  runSpeed: 6,
+  nodes: quad({
+    body: { shape: 'sphere', p: [0, 0.24, 0], s: [0.28, 0.27, 0.4], color: RABBIT },
+    saddle: [0, 0.13, 0],
+    neck: [0, 0.1, 0.15],
+    neckM: { p: [0, 0.01, 0.01], r: [0, 0, 0], s: [0.1, 0.1, 0.1], color: RABBIT },
+    head: [0, 0.08, 0.05],
+    headM: { shape: 'sphere', p: [0, 0, 0.03], s: [0.18, 0.17, 0.2], color: RABBIT },
+    headKids: [
+      { shape: 'sphere', p: [0, -0.01, 0.13], s: [0.03, 0.025, 0.02], color: '#e89aa0' }, // nose
+      ...pair('ear', { p: [0.04, 0.07, -0.02], r: [-8, 0, -8], children: [
+        box('', [0, 0.11, 0], [0.05, 0.22, 0.025], RABBIT),
+        box('', [0, 0.11, 0.013], [0.03, 0.17, 0.005], '#e8b0b0'),
+      ] }),
+    ],
+    eyes: { p: [0.07, 0.03, 0.08], s: [0.03, 0.035, 0.03] },
+    tail: { p: [0, 0.04, -0.2], r: [0, 0, 0] },
+    tailM: { shape: 'sphere', p: [0, 0, -0.02], s: [0.1, 0.1, 0.1], color: '#f6f2ea' },
+    legs: qlegs(0.24, { x: 0.07, z: 0.12, upper: 0.08, lower: 0.09, w: 0.06 }, { x: 0.09, z: -0.1, upper: 0.1, lower: 0.08, w: 0.09 }, RABBIT, RABBIT, {
+      foot: (s, L) => (s[0] === 'b' ? [box('', [0, r3(-L.lower + 0.015), 0.05], [0.07, 0.03, 0.14], RABBIT)] : []),
+    }),
+  }),
+  animations: {
+    idle: { tracks: { 'head.rx': 'sin(t*18)*1.5', 'ear_l.rz': 'sin(t*0.8)*6', 'ear_r.rz': '-sin(t*0.8 + 1)*6', 'ear_l.rx': 'saturate(sin(t*0.5 + rand*6) - 0.9)*-150' } },
+    // a hop: the front pair and the back pair move together, the body lifts each stride
+    walk: {
+      tracks: {
+        'leg_fl.rx': 'sin(phase*tau)*25', 'leg_fr.rx': 'sin(phase*tau)*25',
+        'leg_bl.rx': '-sin(phase*tau)*30', 'leg_br.rx': '-sin(phase*tau)*30',
+        'knee_fl.rx': null, 'knee_fr.rx': null, 'knee_bl.rx': null, 'knee_br.rx': null,
+        'body.py': 'saturate(sin(phase*tau))*0.12',
+        'body.rx': '-cos(phase*tau)*8',
+        'ear_l.rx': 'cos(phase*tau)*10', 'ear_r.rx': 'cos(phase*tau)*10',
+      },
+    },
+    run: { tracks: { 'body.py': 'saturate(sin(phase*tau))*0.18', 'ear_l.rx': '-25', 'ear_r.rx': '-25' } },
+    ...quadDie(0.14),
+  },
+}
+
+// -- goat: cream, curved horns sweeping back, a beard, a stub tail
+const GOAT = '#d9d0bf'
+const GOAT_DARK = '#5a4a3a'
+const GOAT_HORN = '#6a5a48'
+const goat = {
+  extends: 'quadruped',
+  description: 'A cream quadruped with curved horns sweeping back, a chin beard and a stub tail. It chews and flicks its tail.',
+  stride: 0.8,
+  runSpeed: 5,
+  nodes: quad({
+    body: { p: [0, 0.58, 0], s: [0.34, 0.34, 0.7], color: GOAT },
+    saddle: [0, 0.17, -0.05],
+    neck: [0, 0.1, 0.33],
+    neckM: { p: [0, 0.12, 0.03], r: [20, 0, 0], s: [0.13, 0.3, 0.14], color: GOAT },
+    head: [0, 0.28, 0.08],
+    headM: { p: [0, -0.02, 0.1], r: [20, 0, 0], s: [0.16, 0.17, 0.3], color: GOAT },
+    headKids: [
+      box('beard', [0, -0.15, 0.17], [0.05, 0.14, 0.05], '#efe9dc'),
+      ...pair('horn', { shape: 'box', p: [0.05, 0.12, -0.02], r: [-35, 0, -12], s: [0.045, 0.14, 0.045], color: GOAT_HORN }),
+      ...pair('horn_tip', { shape: 'cone', p: [0.075, 0.189, -0.106], r: [-75, 0, -12], s: [0.04, 0.11, 0.04], color: GOAT_HORN }),
+      ...pair('ear', { shape: 'box', p: [0.1, 0.06, -0.02], r: [0, 0, -25], s: [0.12, 0.04, 0.06], color: GOAT }),
+    ],
+    eyes: { p: [0.08, 0.04, 0.12], s: [0.03, 0.035, 0.03] },
+    tail: { p: [0, 0.12, -0.36], r: [50, 0, 0] },
+    tailM: { p: [0, 0, -0.05], s: [0.05, 0.05, 0.1], color: GOAT },
+    legs: qlegs(0.58, { x: 0.11, z: 0.27, upper: 0.22, lower: 0.24, w: 0.08 }, { x: 0.11, z: -0.27, upper: 0.22, lower: 0.24, w: 0.08 }, GOAT, GOAT_DARK),
+  }),
+  animations: {
+    idle: { tracks: { 'beard.rx': 'sin(t*7)*6', 'head.rx': 'sin(t*7)*1.5 + sin(t*0.6)*5', 'tail.ry': 'saturate(sin(t*1.3 + rand*6) - 0.6)*sin(t*20)*60', 'ear_l.rx': 'sin(t*0.9)*8' } },
+    ...quadDie(0.17),
+  },
+}
+
+// -- dog: tan with white socks, floppy ears, a red collar; it wags its tail
+const DOG = '#c4914e'
+const DOG_EAR = '#7a4c26'
+const dog = {
+  extends: 'quadruped',
+  description: 'A tan dog with white socks, floppy ears, a red collar and a tail that wags while it stands.',
+  stride: 0.9,
+  runSpeed: 6,
+  nodes: quad({
+    body: { p: [0, 0.48, 0], s: [0.28, 0.28, 0.66], color: DOG },
+    saddle: [0, 0.15, -0.05],
+    neck: [0, 0.08, 0.3],
+    neckKids: [box('collar', [0, 0.06, 0], [0.16, 0.045, 0.16], '#c02828')],
+    neckM: { p: [0, 0.09, 0.02], r: [20, 0, 0], s: [0.14, 0.22, 0.14], color: DOG },
+    head: [0, 0.22, 0.06],
+    headM: { p: [0, 0, 0.04], s: [0.22, 0.2, 0.22], color: DOG },
+    headKids: [
+      box('snout', [0, -0.04, 0.19], [0.12, 0.1, 0.14], '#e8d4b0'),
+      box('', [0, -0.005, 0.265], [0.05, 0.04, 0.03], '#1a1a1a'), // nose
+      ...pair('ear', { p: [0.1, 0.08, 0], r: [0, 0, 15], children: [box('', [0, -0.08, 0], [0.04, 0.16, 0.1], DOG_EAR)] }),
+    ],
+    eyes: { p: [0.07, 0.05, 0.14], s: [0.035, 0.04, 0.03] },
+    tail: { p: [0, 0.1, -0.34], r: [45, 0, 0] },
+    tailM: { p: [0, 0, -0.12], s: [0.05, 0.05, 0.24], color: DOG },
+    legs: qlegs(0.48, { x: 0.1, z: 0.24, upper: 0.18, lower: 0.18, w: 0.085 }, { x: 0.1, z: -0.24, upper: 0.19, lower: 0.17, w: 0.09 }, DOG, '#efe4cc'),
+  }),
+  animations: {
+    idle: { tracks: { 'head.rx': 'sin(t*9)*1.5 + sin(t*0.5)*4', 'ear_l.rz': 'sin(t*1.1)*5', 'ear_r.rz': '-sin(t*1.1 + 0.7)*5' } },
+    // the wag: a layer of its own, played over idle (see the controller)
+    wag: { tracks: { 'tail.ry': 'sin(t*15)*35', 'body.ry': 'sin(t*15)*1.5' } },
+    walk: { tracks: { 'ear_l.rx': 'sin(phase*tau*2)*10', 'ear_r.rx': 'sin(phase*tau*2)*10', 'tail.ry': 'sin(t*8)*15' } },
+    ...quadDie(0.14),
+  },
+  controller: { states: { idle: ['idle', 'breathe', 'wag'] } },
+}
+
+// -- pig: pink and round, a snout disc, floppy ears, a curly tail of small spheres
+const PIG = '#f0a5ad'
+const PIG_DARK = '#d8848e'
+const pig = {
+  extends: 'quadruped',
+  description: 'A round pink quadruped on short legs, with a snout disc, floppy ears and a curly tail. It roots about when idle.',
+  stride: 0.6,
+  runSpeed: 4,
+  nodes: quad({
+    body: { shape: 'sphere', p: [0, 0.42, 0], s: [0.5, 0.44, 0.82], color: PIG },
+    saddle: [0, 0.22, -0.05],
+    neck: [0, 0.04, 0.36],
+    neckM: { p: [0, 0, 0.02], r: [0, 0, 0], s: [0.26, 0.26, 0.14], color: PIG },
+    head: [0, 0.06, 0.1],
+    headM: { p: [0, 0, 0.06], s: [0.3, 0.28, 0.26], color: PIG },
+    headKids: [
+      { name: 'snout', shape: 'cylinder', p: [0, -0.03, 0.22], r: [90, 0, 0], s: [0.14, 0.08, 0.12], color: '#e8899a' },
+      box('', [0, -0.03, 0.262], [0.07, 0.025, 0.01], '#7a3a44'), // nostrils
+      ...pair('ear', { shape: 'box', p: [0.1, 0.15, 0.04], r: [35, 0, -25], s: [0.1, 0.02, 0.12], color: PIG_DARK }),
+    ],
+    eyes: { p: [0.09, 0.05, 0.17], s: [0.035, 0.035, 0.03] },
+    tail: { p: [0, 0.08, -0.42], r: [0, 0, 0] },
+    tailM: { shape: 'sphere', p: [0, 0, -0.02], s: [0.045, 0.045, 0.045], color: PIG },
+    tailKids: [[0, 0.04, -0.05], [0.02, 0.08, -0.03], [0.015, 0.07, 0]].map((p) => ({ shape: 'sphere', p, s: [0.04, 0.04, 0.04], color: PIG })),
+    legs: qlegs(0.42, { x: 0.13, z: 0.22, upper: 0.12, lower: 0.12, w: 0.1 }, { x: 0.13, z: -0.22, upper: 0.12, lower: 0.12, w: 0.1 }, PIG, PIG_DARK),
+  }),
+  animations: {
+    idle: {
+      duration: 5,
+      tracks: {
+        'snout.sx': '1 + sin(t*9)*0.08',
+        'tail.rz': 'sin(t*7)*25',
+        'neck.rx': [[0, 0], [2, 0], [2.5, 25], [3.5, 20], [4, 0], [5, 0]],
+        'ear_l.rx': 'sin(t*1.3)*6', 'ear_r.rx': 'sin(t*1.3 + 1)*6',
+      },
+    },
+    walk: { tracks: { 'ear_l.rx': 'sin(phase*tau*2)*10', 'ear_r.rx': 'sin(phase*tau*2)*10', 'tail.rz': 'sin(t*6)*20' } },
+    ...quadDie(0.25),
+  },
+}
+
+// -- snake: a slimmer green serpent with yellow bands and eyes, flicking its tongue
+const SNAKE = '#2f7a2a'
+const SNAKE_BAND = '#a8c43a'
+const snake = {
+  extends: 'serpent',
+  description: 'A slim green serpent with yellow-green bands and yellow eyes. It flicks its tongue and strikes.',
+  stride: 0.7,
+  runSpeed: 3.5,
+  nodes: [
+    { name: 'head', p: [0, 0.08, 0.9], s: [0.2, 0.12, 0.28], color: SNAKE },
+    { name: 'eye_l', p: [0.075, 0.045, 0.07], color: '#e8d020' },
+    { name: 'eye_r', p: [-0.075, 0.045, 0.07], color: '#e8d020' },
+    { name: 'tongue', p: [0, -0.03, 0.18] },
+    ...SEGMENTS.map((k) => { const w = r3(0.2 - k * 0.008); return { name: `s${k}`, s: [w, r3(w * 0.7), 0.44], color: k % 2 ? SNAKE : SNAKE_BAND } }),
+    { name: 'tail', s: [0.13, 0.42, 0.1], color: SNAKE },
+  ],
+  animations: {
+    // two quick flicks every 2 s, and the head weaving
+    idle: { duration: 2, tracks: { 'tongue.sz': [[0, 0.2], [0.6, 0.2], [0.7, 1.6], [0.8, 0.2], [0.9, 1.6], [1, 0.2], [2, 0.2]], 'head.ry': 'sin(t*0.9)*6' } },
+  },
+}
+
+// -- dragon: a long red serpent body on four short legs, gold horns, whiskers and
+//    back fins; it breathes fire. Its head is the root of the chain, so nothing
+//    may pitch the head (the rear legs would leave the ground): the base's head
+//    pitch tracks are removed.
+const DRAGON = '#c8261c'
+const DRAGON_2 = '#e0442a'
+const GOLD = '#e8b828'
+function dragonLeg (side, x) {
+  return pivot(`leg_${side}`, [x, -0.05, 0], [
+    box('', [0, -0.15, 0], [0.08, 0.3, 0.08], DRAGON),
+    box('', [0, -0.34, 0.05], [0.12, 0.06, 0.16], GOLD),
+  ])
+}
+const backFin = () => ({ shape: 'cone', p: [0, 0.15, 0], r: [-30, 0, 0], s: [0.06, 0.16, 0.14], color: GOLD })
+const dragon = {
+  extends: 'serpent',
+  description: 'A long red serpent body on four short legs, with gold horns, whiskers and back fins. It breathes fire.',
+  stride: 1,
+  runSpeed: 4,
+  nodes: [
+    { name: 'head', p: [0, 0.42, 1.25], s: [0.44, 0.32, 0.5], color: DRAGON, children: [
+      box('', [0, -0.03, 0.34], [0.32, 0.2, 0.24], DRAGON_2), // snout
+      box('', [0, 0.14, -0.24], [0.4, 0.14, 0.2], GOLD), // mane
+      pivot('jaw', [0, -0.15, 0.1], [box('', [0, -0.01, 0.2], [0.3, 0.07, 0.38], '#a01c14')]),
+      ...pair('horn', { shape: 'cone', p: [0.11, 0.24, -0.12], r: [-55, 0, -12], s: [0.07, 0.34, 0.07], color: GOLD }),
+      ...pair('whisker', { shape: 'box', p: [0.38, -0.06, 0.24], r: [12, 130, 0], s: [0.025, 0.025, 0.56], color: GOLD }),
+      // fire: a cone in front of the mouth, near zero at rest; the breath clip scales it up
+      { name: 'flame', shape: 'cone', p: [0, -0.08, 0.78], r: [-90, 0, 0], s: [0.005, 0.01, 0.005], color: '#ff8a1e' },
+    ] },
+    { name: 'eye_l', p: [0.15, 0.1, 0.16], s: [0.07, 0.06, 0.06], color: '#f2c230' },
+    { name: 'eye_r', p: [-0.15, 0.1, 0.16], s: [0.07, 0.06, 0.06], color: '#f2c230' },
+    { name: 'tongue', remove: true },
+    ...SEGMENTS.map((k) => {
+      const w = r3(0.34 - k * 0.025)
+      const kids = k === 1 ? [dragonLeg('fl', 0.17), dragonLeg('fr', -0.17)] : k === 5 ? [dragonLeg('bl', 0.15), dragonLeg('br', -0.15)] : k % 2 === 0 ? [backFin()] : []
+      return { name: `s${k}`, p: [0, 0, k === 1 ? -0.32 : -0.42], s: [w, r3(w * 0.85), 0.6], color: k % 2 ? DRAGON : DRAGON_2, ...(kids.length ? { children: kids } : {}) }
+    }),
+    { name: 'tail', p: [0, 0, -0.42], s: [0.18, 0.5, 0.14], color: GOLD },
+  ],
+  animations: {
+    idle: {
+      tracks: {
+        'head.rx': null,
+        'tongue.sz': null,
+        'whisker_l.ry': 'sin(t*1.5)*12',
+        'whisker_r.ry': '-sin(t*1.5 + 0.5)*12',
+        'jaw.rx': 'saturate(sin(t*0.5 + rand*6) - 0.85)*100',
+      },
+    },
+    walk: {
+      tracks: {
+        ...each(SEGMENTS, (k) => [[`s${k}.ry`, `sin(phase*tau - ${k}*0.9)*(6 + 4*gait)`]]),
+        'head.ry': '-sin(phase*tau + 0.9)*4',
+        'leg_fl.rx': 'sin(phase*tau)*28', 'leg_br.rx': 'sin(phase*tau)*28',
+        'leg_fr.rx': '-sin(phase*tau)*28', 'leg_bl.rx': '-sin(phase*tau)*28',
+        'whisker_l.ry': 'sin(phase*tau*2)*8', 'whisker_r.ry': '-sin(phase*tau*2)*8',
+      },
+    },
+    run: {
+      tracks: {
+        ...each(SEGMENTS, (k) => [[`s${k}.ry`, `sin(phase*tau - ${k}*1.1)*(9 + 5*gait)`]]),
+        'head.ry': '-sin(phase*tau + 1.1)*5',
+        'leg_fl.rx': 'sin(phase*tau)*40', 'leg_fr.rx': 'sin(phase*tau)*40',
+        'leg_bl.rx': '-sin(phase*tau)*40', 'leg_br.rx': '-sin(phase*tau)*40',
+      },
+    },
+    attack: null,
+    // the jaw opens and a flame grows out of it, flickers, and goes out
+    breath: {
+      once: true,
+      duration: 1.3,
+      tracks: {
+        'jaw.rx': [[0, 0], [0.2, 35], [1.05, 35], [1.3, 0]],
+        'flame.sx': '1 + 59*saturate((st - 0.2)/0.2)*saturate((1.1 - st)/0.15)*(0.85 + 0.15*sin(st*40))',
+        'flame.sy': '1 + 59*saturate((st - 0.2)/0.2)*saturate((1.1 - st)/0.15)*(0.9 + 0.1*sin(st*31))',
+        'flame.sz': '1 + 59*saturate((st - 0.2)/0.2)*saturate((1.1 - st)/0.15)*(0.85 + 0.15*sin(st*37))',
+        'head.pz': 'sin(saturate(st/1.3)*pi)*0.12',
+      },
+    },
+    die: { tracks: { 'head.py': '-smoothstep(0, 1, st)*0.2' } },
+  },
+  controller: { states: { attack: 'breath' } },
+}
+
+// -- monkey: a small long-armed biped, brown with a pale face, a curling tail
+const MONKEY = '#7a5230'
+const MONKEY_FACE = '#e2b98c'
+const monkey = {
+  extends: 'biped',
+  description: 'A small brown biped with long arms, a pale face, round ears and a curling tail. It scratches its head.',
+  stride: 0.6,
+  runSpeed: 4,
+  nodes: [
+    { name: 'hips', p: [0, 0.44, 0], s: [0.2, 0.12, 0.14], color: MONKEY, children: [
+      pivot('tail', [0, 0, -0.07], [
+        box('', [0, 0, -0.15], [0.03, 0.03, 0.3], MONKEY),
+        pivot('tail2', [0, 0, -0.3], [box('', [0, 0, -0.1], [0.028, 0.028, 0.2], MONKEY)], { r: [70, 0, 0] }),
+      ], { r: [40, 0, 0] }),
+    ] },
+    { name: 'torso', p: [0, 0.06, 0], r: [8, 0, 0] },
+    { name: 'chest', p: [0, 0.15, 0], s: [0.24, 0.28, 0.17], color: MONKEY },
+    { name: 'seat', p: [0, 0.28, -0.08] },
+    { name: 'neck', p: [0, 0.3, 0] },
+    { name: 'neck_m', s: [0.07, 0.06, 0.07], color: MONKEY },
+    { name: 'head', p: [0, 0.02, 0], children: [
+      { shape: 'sphere', p: [0, 0.09, 0.055], s: [0.15, 0.14, 0.09], color: MONKEY_FACE }, // face
+      { shape: 'sphere', p: [0, 0.045, 0.085], s: [0.1, 0.07, 0.07], color: MONKEY_FACE }, // muzzle
+      ...pair('ear', { shape: 'sphere', p: [0.105, 0.11, 0], s: [0.07, 0.08, 0.03], color: MONKEY_FACE }),
+    ] },
+    { name: 'head_m', shape: 'sphere', p: [0, 0.1, 0.01], s: [0.2, 0.2, 0.18], color: MONKEY },
+    { name: 'eye_l', p: [0.035, 0.11, 0.1], s: [0.028, 0.03, 0.02] },
+    { name: 'eye_r', p: [-0.035, 0.11, 0.1], s: [0.028, 0.03, 0.02] },
+    ...['l', 'r'].flatMap((s) => [
+      { name: `arm_${s}`, p: [s === 'l' ? 0.155 : -0.155, 0.27, 0], r: [0, 0, s === 'l' ? 5 : -5] },
+      { name: `upper_arm_${s}`, p: [0, -0.1, 0], s: [0.055, 0.2, 0.055], color: MONKEY },
+      { name: `elbow_${s}`, p: [0, -0.2, 0] },
+      { name: `forearm_${s}`, p: [0, -0.1, 0], s: [0.05, 0.2, 0.05], color: MONKEY },
+      { name: `leg_${s}`, p: [s === 'l' ? 0.06 : -0.06, -0.03, 0] },
+      { name: `thigh_${s}`, p: [0, -0.1, 0], s: [0.075, 0.2, 0.075], color: MONKEY },
+      { name: `knee_${s}`, p: [0, -0.2, 0] },
+      { name: `shin_${s}`, p: [0, -0.09, 0], s: [0.065, 0.18, 0.065], color: MONKEY },
+      { name: `foot_${s}`, p: [0, -0.195, 0.03], s: [0.08, 0.03, 0.12], color: MONKEY_FACE },
+    ]),
+  ],
+  animations: {
+    // every 6 s the right hand goes up and scratches the head
+    idle: {
+      duration: 6,
+      tracks: {
+        'arm_r.rx': [[0, 0], [3, 0], [3.4, -160], [4.6, -160], [5, 0], [6, 0]],
+        'arm_r.rz': [[0, 0], [3, 0], [3.4, 30], [4.6, 30], [5, 0], [6, 0]],
+        'elbow_r.rx': [[0, 0], [3, 0], [3.4, -70], [3.7, -50], [4, -70], [4.3, -50], [4.6, -70], [5, 0], [6, 0]],
+        'tail.ry': 'sin(t*1.3)*20',
+        'tail2.rx': 'sin(t*1.9)*15',
+      },
+    },
+    walk: { tracks: { 'tail.ry': 'sin(phase*tau)*15', 'tail2.rx': 'sin(phase*tau*2)*10' } },
+    die: { tracks: { 'root.py': 'smoothstep(0, 0.8, st)*0.09' } },
+  },
+}
+
+// -- rooster: a russet bird, taller, with a big comb, a wattle and a dark tail fan;
+//    its head bobs as it walks
+const ROOSTER = '#c25a22'
+const HACKLE = '#e09030'
+const COMB = '#d81e1e'
+const rooster = {
+  extends: 'bird',
+  description: 'A tall russet bird with golden hackles, a big red comb and wattle and a dark green tail fan. Its head bobs as it walks.',
+  stride: 0.4,
+  runSpeed: 3.5,
+  nodes: [
+    { name: 'body', p: [0, 0.5, 0], s: [0.32, 0.34, 0.44], color: ROOSTER },
+    { name: 'seat', p: [0, 0.17, -0.02] },
+    { name: 'neck', p: [0, 0.12, 0.14], children: [box('', [0, 0.06, 0], [0.11, 0.18, 0.11], HACKLE, { r: [-15, 0, 0] })] },
+    { name: 'head', p: [0, 0.17, 0.04], s: [0.15, 0.15, 0.17], color: HACKLE, children: [box('wattle', [0, -0.08, 0.08], [0.035, 0.07, 0.035], COMB)] },
+    { name: 'comb', p: [0, 0.1, 0.01], s: [0.035, 0.08, 0.13], color: COMB, children: [
+      { shape: 'sphere', p: [0, 0.04, 0.035], s: [0.035, 0.05, 0.045], color: COMB },
+      { shape: 'sphere', p: [0, 0.045, -0.025], s: [0.035, 0.05, 0.045], color: COMB },
+    ] },
+    { name: 'feathers_l', color: '#7a2e14' },
+    { name: 'feathers_r', color: '#7a2e14' },
+    { name: 'tail', p: [0, 0.08, -0.2], r: [40, 0, 0], children: [
+      box('', [0, 0.03, -0.16], [0.03, 0.05, 0.34], '#1d4a34', { r: [20, 0, 0] }),
+      box('', [0.07, 0.02, -0.14], [0.03, 0.05, 0.3], '#123826', { r: [12, 25, 0] }),
+      box('', [-0.07, 0.02, -0.14], [0.03, 0.05, 0.3], '#123826', { r: [12, -25, 0] }),
+    ] },
+    { name: 'tail_m', p: [0, 0, -0.08], s: [0.2, 0.04, 0.16], color: '#1d4a34' },
+    ...['l', 'r'].flatMap((s) => [
+      { name: `leg_${s}`, p: [s === 'l' ? 0.07 : -0.07, -0.15, 0] },
+      { name: `shank_${s}`, p: [0, -0.17, 0], s: [0.04, 0.34, 0.04] },
+      { name: `foot_${s}`, p: [0, -0.34, 0.03], s: [0.09, 0.02, 0.11] },
+    ]),
+  ],
+  animations: {
+    idle: { tracks: { 'wattle.rx': 'sin(t*2.3)*8' } },
+    walk: {
+      tracks: {
+        'neck.pz': 'saturate(sin(phase*tau*2))*0.07 - 0.02',
+        'neck.py': '-abs(sin(phase*tau*2))*0.015',
+        'head.rx': 'sin(phase*tau*2)*8',
+        'wattle.rx': 'sin(phase*tau*2 + 1)*15',
+        'tail.rx': 'sin(phase*tau*2)*4',
+      },
+    },
+  },
+}
+
+// -- wizard: a robed biped in a tall hat, with a white beard and a staff with a
+//    crystal; the attack state casts (arm and staff up, the crystal pulsing)
+const ROBE = '#3b2a7a'
+const ROBE_DARK = '#2a1e5a'
+const TRIM = '#d8b040'
+const SKIN = '#e0b896'
+const wizard = {
+  extends: 'biped',
+  description: 'A robed biped in a tall pointed hat, with a long white beard and a staff topped by a crystal. Its attack is a cast.',
+  nodes: [
+    { name: 'hips', color: ROBE_DARK, children: [box('', [0, 0.06, 0], [0.42, 0.05, 0.27], TRIM)] }, // belt
+    { name: 'chest', color: ROBE },
+    { name: 'head_m', color: SKIN },
+    { name: 'head', children: [
+      { name: 'hat_brim', shape: 'cylinder', p: [0, 0.28, 0.01], s: [0.44, 0.025, 0.44], color: ROBE_DARK },
+      { name: 'hat', shape: 'cone', p: [0, 0.5, -0.01], r: [-6, 0, 0], s: [0.3, 0.46, 0.3], color: ROBE, children: [
+        box('', [0, -0.08, 0.1], [0.05, 0.05, 0.02], TRIM, { r: [0, 0, 45] }), // a star on the front
+      ] },
+      { name: 'beard', shape: 'cone', p: [0, -0.02, 0.15], r: [180, 0, 0], s: [0.2, 0.26, 0.08], color: '#eeeeee' },
+    ] },
+    ...['l', 'r'].flatMap((s) => [
+      { name: `upper_arm_${s}`, color: ROBE },
+      { name: `forearm_${s}`, color: ROBE },
+      { name: `elbow_${s}`, children: [{ shape: 'sphere', p: [0, -0.3, 0], s: [0.08, 0.08, 0.08], color: SKIN }] }, // hand
+      { name: `thigh_${s}`, color: ROBE_DARK },
+      { name: `shin_${s}`, color: ROBE_DARK },
+    ]),
+    { name: 'arm_r', children: [
+      { name: 'staff', shape: 'cylinder', p: [0, -0.56, 0.09], s: [0.04, 1.6, 0.04], color: '#6b4a2e', children: [
+        { name: 'crystal', shape: 'box', p: [0, 0.86, 0], r: [45, 0, 45], s: [0.11, 0.11, 0.11], color: '#7fe0ff', roughness: 0.15, metalness: 0.2 },
+      ] },
+    ] },
+  ],
+  animations: {
+    idle: { tracks: { 'beard.rz': 'sin(t*0.9)*3' } },
+    // a layer of its own, over idle: the staff bobs and the crystal turns
+    staffbob: { tracks: { 'staff.py': 'abs(sin(t*1.4))*0.04', 'crystal.ry': 't*90', 'crystal.sy': '1 + sin(t*3)*0.06' } },
+    // the staff arm swings less than a free arm
+    walk: { tracks: { 'arm_r.rx': '-sin(phase*tau)*8' } },
+    run: { tracks: { 'arm_r.rx': '-sin(phase*tau)*12' } },
+    // raise the staff overhead (the staff counter-rotates to stay upright), the
+    // crystal pulses and spins, then back down
+    cast: {
+      once: true,
+      duration: 1.4,
+      tracks: {
+        'arm_r.rx': [[0, 0], [0.3, -140], [1.05, -140], [1.4, 0]],
+        'staff.rx': [[0, 0], [0.3, 140], [1.05, 140], [1.4, 0]],
+        'arm_l.rz': [[0, 0], [0.3, 35], [1.05, 35], [1.4, 0]],
+        'torso.rx': '-sin(saturate(st/1.4)*pi)*6',
+        'crystal.sx': '1 + saturate((st - 0.2)/0.2)*saturate((1.2 - st)/0.2)*(0.7 + 0.5*sin(st*25))',
+        'crystal.sy': '1 + saturate((st - 0.2)/0.2)*saturate((1.2 - st)/0.2)*(0.7 + 0.5*sin(st*25))',
+        'crystal.sz': '1 + saturate((st - 0.2)/0.2)*saturate((1.2 - st)/0.2)*(0.7 + 0.5*sin(st*25))',
+        'crystal.ry': 'st*540',
+      },
+    },
+  },
+  controller: { states: { idle: ['idle', 'breathe', 'staffbob'], attack: 'cast' } },
+}
+
+// the zodiac order, then the wizard (horse is a seed model above)
+export const ZOO_MODELS = Object.freeze(['rat', 'ox', 'tiger', 'rabbit', 'dragon', 'snake', 'horse', 'goat', 'monkey', 'rooster', 'dog', 'pig', 'wizard'])
+
+export const MODEL_LIBRARY = deepFreeze({ quadruped, biped, serpent, bird, horse, sheep, trex, rat, ox, tiger, rabbit, dragon, snake, goat, monkey, rooster, dog, pig, wizard })
 
 // ---------------------------------------------------------------- helpers
 

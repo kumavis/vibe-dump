@@ -4,6 +4,7 @@ import { seeded, A } from './a-helpers.mjs'
 import { SCHEMA_VERSION, IMMUTABLE_KEYS, newId, isName, initDoc, migrate } from '../../src/doc/schema.js'
 import { COMPONENT_DEFS, PRESETS, effectiveComponents } from '../../src/doc/presets.js'
 import { seedDoc, STARTER } from '../../src/doc/seed.js'
+import { libraryPresets, templateEntities } from '../../src/doc/templates.js'
 import { plain, entityData, listEntities, presetData, hp, docSummary } from '../../src/doc/read.js'
 import { validateComponent, validateFilter, validateSystemMeta, validateSchema } from '../../src/doc/validate.js'
 import { validateOps } from '../../src/doc/ops.js'
@@ -26,18 +27,20 @@ test('seedDoc: vocabulary, presets and the starter meadow, all valid against the
   const doc = h.doc()
   const s = docSummary(doc)
   assert.equal(s.title, 'Meadow')
-  assert.deepEqual(s.presets, Object.keys(PRESETS).sort())
+  assert.deepEqual(s.presets, Object.keys(libraryPresets()).sort())
   assert.deepEqual(s.components, Object.keys(COMPONENT_DEFS).sort())
   const count = (p) => STARTER.filter((x) => x[1] === p).length
   assert.deepEqual([count('tree'), count('rock'), count('lamp'), count('trex'), count('sheep'), count('horse')], [6, 2, 1, 1, 3, 1])
   for (const [id, , p] of STARTER) { assert.ok(p.every((x) => Math.abs(x) <= 15), id); assert.ok(doc.entities[id]) }
-  assert.equal(s.entities, STARTER.length)
+  // the Animal meadow: the starter plus the wizard and the zodiac animals (design §18.2)
+  assert.equal(s.entities, templateEntities('meadow').length)
+  assert.ok(s.entities > STARTER.length && doc.entities['wizard-1'])
   // every preset re-validates as an op against the seeded defs
-  assert.doesNotThrow(() => validateOps(doc, Object.entries(PRESETS).map(([name, preset]) => ({ op: 'definePreset', name, preset }))))
+  assert.doesNotThrow(() => validateOps(doc, Object.entries(libraryPresets()).map(([name, preset]) => ({ op: 'definePreset', name, preset }))))
   assert.doesNotThrow(() => validateOps(doc, Object.entries(COMPONENT_DEFS).map(([name, def]) => ({ op: 'defineComponent', name, def }))))
   // representation.kind is the enum of the five kinds; billboards are emoji
   assert.deepEqual(plain(doc.components.representation.schema.properties.kind.enum), ['billboard', 'primitive', 'tree', 'rig', 'model'])
-  assert.equal(entityData(doc, 'trex-1').effective.representation.image, 'emoji:🦖')
+  assert.deepEqual(plain(entityData(doc, 'trex-1').effective.representation), { kind: 'rig', model: 'trex' })
   assert.equal(entityData(doc, 'horse-1').effective.mount.seats[0].anchor, 'seat')
   // strings in the doc are ImmutableString, the seed's plain JS stays plain
   assert.ok(doc.presets.sheep.components.brain.drives.flee.act instanceof A.ImmutableString)
@@ -57,7 +60,8 @@ test('effective components: preset chain -> own -> groups, null removes, groups 
   for (const k of ['brain', 'attack', 'perception', 'body']) assert.equal(dead[k], undefined, k)
   assert.equal(dead.tags.dead, true)
   assert.equal(dead.representation.tint, '#555555')
-  assert.equal(dead.representation.image, 'emoji:🦖', 'tint merges into whatever look it has')
+  assert.equal(dead.representation.kind, 'rig', 'tint merges into whatever look it has')
+  assert.equal(dead.representation.model, 'trex')
   // structural sharing: an untouched inherited component is the doc's own object
   assert.equal(effectiveComponents(h.doc(), 'sheep-1').representation, h.doc().presets.sheep.components.representation)
   assert.notEqual(effectiveComponents(h.doc(), 'sheep-1').perception, h.doc().presets.sheep.components.perception, 'two layers merge into a fresh object')
@@ -65,9 +69,9 @@ test('effective components: preset chain -> own -> groups, null removes, groups 
 
 test('read: listEntities filters on effective components; rows are fresh plain copies', () => {
   const doc = seeded().doc()
-  assert.deepEqual(listEntities(doc, { tags: ['prey'] }).map((r) => r.id), ['horse-1', 'sheep-1', 'sheep-2', 'sheep-3'])
+  assert.deepEqual(listEntities(doc, { tags: ['prey'] }).map((r) => r.id), ['goat-1', 'horse-1', 'pig-1', 'rabbit-1', 'rooster-1', 'sheep-1', 'sheep-2', 'sheep-3'])
   assert.deepEqual(listEntities(doc, { has: 'mount' }).map((r) => r.id), ['horse-1'])
-  assert.deepEqual(listEntities(doc, { preset: 'creature' }).length, 5)
+  assert.deepEqual(listEntities(doc, { preset: 'creature' }).length, 11, 'T-rex, 3 sheep, horse, wizard, 5 zodiac animals')
   assert.deepEqual(listEntities(doc, { name: 'Lamp' }).map((r) => r.id), ['lamp-1'])
   const row = entityData(doc, 'sheep-1')
   assert.equal(typeof row.name, 'string')

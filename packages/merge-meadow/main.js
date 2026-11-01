@@ -1,5 +1,5 @@
 // Composition root (ARCHITECTURE §3.5), in exactly this order:
-//   1 link (or create a seeded world)  2 repo + doc  3 world, sim, system host, safe mode
+//   1 link, `#new=<template>`, or the launcher (design §18)  2 repo + doc  3 world, sim, system host, safe mode
 //   4 scene, reconciler, rig/pointers/controllers/interaction, VR button
 //   5 presence/ownership/stream/checkpointer  6 agent host (only with `key`)
 //   7 editor  8 watch(handle) -> world, systems, editor  9 the animation loop.
@@ -12,7 +12,9 @@ import { makePresence } from './src/net/presence.js'
 import { makeOwnership } from './src/net/ownership.js'
 import { makePoseStream } from './src/net/stream.js'
 import { makeCheckpointer } from './src/net/checkpoint.js'
-import { seedOps } from './src/doc/seed.js'
+import { templateOps, TEMPLATES, TEMPLATE_ORDER, isTemplate } from './src/doc/templates.js'
+import { recentWorlds } from './src/net/recent.js'
+import { makeLauncher, newTemplateOf } from './src/editor/launcher.js'
 import { ensureLibraryOps } from './src/doc/models.js'
 import { applyOps as applyDocOps, applyValidOps, withMoves, healModels } from './src/doc/ops.js'
 import * as read from './src/doc/read.js'
@@ -39,7 +41,7 @@ import { makeUndo } from './src/editor/undo.js'
 import { makeShare } from './src/editor/share.js'
 import { peerColor } from './src/editor/dom.js'
 import { view } from '@automerge/automerge/slim'
-import { bootStatus, hideBoot, banner } from './src/boot/overlay.js'
+import { bootStatus, hideBoot, pauseBoot, banner } from './src/boot/overlay.js'
 import { makeLog, makeCallLog } from './src/boot/log.js'
 import { makePlayers } from './src/boot/players.js'
 import { makeHostPowers, makeCompartmentFactory } from './src/boot/host-powers.js'
@@ -64,27 +66,119 @@ async function boot () {
   addEventListener('unhandledrejection', (e) => log.error('unhandled', String(e.reason?.message ?? e.reason)))
   const mm = globalThis.__mm = { boot: globalThis.__boot, top: TOP, log, ready: false }
 
-  // ---- 1 link
-  let link = parseLink(location.hash)
+  // ---- 1 link: a world in the hash, `#new=<template>` (create at once), or the
+  // launcher (design §18.1): a bare URL creates nothing until the person chooses.
+  // pageLink is what the page was opened with: a launcher choice that fails leaves
+  // it alone, so the next one goes to the page's own sync server (and safe flag);
+  // `link` is committed only once a choice succeeds
+  const pageLink = parseLink(location.hash)
+  let link = pageLink
   const peerId = peerIdFor()
+  const recent = recentWorlds()
+  const repoFor = (sync) => openRepo(sync, { peerId })
+  let launcher = null
+  let choice = null
+  if (link.docUrl) choice = { kind: 'open', link, urlSet: true }
+  else {
+    const t = newTemplateOf(location.hash)
+    if (t && isTemplate(t)) choice = { kind: 'create', template: t, replace: true, sync: link.sync, safe: link.safe }
+    else if (t) log.warn(`[launcher] no template called ${JSON.stringify(t)}: showing the launcher`)
+  }
 
   // ---- 2 repo + doc (the wasm loads inside openRepo)
-  bootStatus('loading Automerge…')
-  const { repo, ws } = await openRepo(link.sync, { peerId })
-  let handle; let created = false
-  if (link.docUrl) {
-    bootStatus('opening the world…')
-    handle = await findDoc(repo, link.docUrl, { onWait: ({ attempt, tries }) => bootStatus(`waiting for the world… (try ${attempt + 1} of ${tries})`, { waiting: true }) })
-  } else {
-    // a bare URL is "make me a world": seed through the one write path, then
-    // rewrite the hash so a reload, a copy or the Share button carries doc + key
-    bootStatus('planting a new meadow…')
-    handle = repo.create()
-    applyDocOps(handle, seedOps({ title: 'Merge Meadow' }), { message: 'seed', peerId })
-    link = { ...link, docUrl: handle.url, key: newKey() }
-    history.replaceState(null, '', buildLink({ docUrl: handle.url, key: link.key, sync: link.sync }, location))
-    created = true
+  let repo; let ws; let handle; let created = false; let unsynced = false
+  for (;;) {
+    if (!choice) {
+      // the repo (and its wasm) loads in the background while the launcher is up,
+      // so a click is fast; a failure here resurfaces on the awaited call below
+      repoFor(pageLink.sync).catch(() => {})
+      choice = await chooseWorld()
+    }
+    try {
+      if (choice.kind === 'open') {
+        const l = choice.link
+        const next = { ...l, safe: pageLink.safe || l.safe }
+        bootStatus('loading Automerge…');
+        ({ repo, ws } = await repoFor(next.sync))
+        bootStatus('opening the world…')
+        handle = await findDoc(repo, next.docUrl, { onWait: ({ attempt, tries }) => bootStatus(`waiting for the world… (try ${attempt + 1} of ${tries})`, { waiting: true }) })
+        if (!choice.urlSet) history.pushState(null, '', buildLink({ docUrl: next.docUrl, key: next.key || undefined, view: next.key ? undefined : next.view || undefined, sync: next.sync, heads: next.heads, safe: next.safe }, location))
+        link = next
+      } else if (choice.kind === 'file') {
+        // the topbar's Open, before any world: an imported copy under a fresh agent key
+        bootStatus('loading Automerge…');
+        ({ repo, ws } = await repoFor(pageLink.sync))
+        bootStatus(`opening ${choice.file.name}…`)
+        const bytes = new Uint8Array(await choice.file.arrayBuffer())
+        handle = repo.import(bytes)
+        try { await repo.flush?.([handle.documentId]) } catch {}
+        link = { ...pageLink, docUrl: handle.url, key: newKey(), view: '', heads: null }
+        history.pushState(null, '', buildLink({ docUrl: handle.url, key: link.key, sync: link.sync, safe: link.safe }, location))
+        unsynced = true
+      } else {
+        // "make me a world": seed the template through the one write path, then
+        // rewrite the hash so a reload, a copy or the Share button carries doc + key.
+        // A `#new=` link (boot, hashchange or pasted) names its own sync and safe flag;
+        // a template card uses the page's
+        const base = { ...pageLink, sync: choice.sync ?? pageLink.sync, safe: pageLink.safe || !!choice.safe }
+        bootStatus('loading Automerge…');
+        ({ repo, ws } = await repoFor(base.sync))
+        bootStatus(choice.template === 'blank' ? 'clearing a blank meadow…' : 'planting a new meadow…')
+        const h = repo.create()
+        applyDocOps(h, templateOps(choice.template, { title: TEMPLATES[choice.template].title }), { message: `seed ${choice.template}`, peerId })
+        handle = h
+        link = { ...base, docUrl: handle.url, key: newKey(), view: '', heads: null }
+        // `#new=` is replaced (Back must not plant another world); a launcher click is
+        // pushed, so Back returns to the launcher
+        const href = buildLink({ docUrl: handle.url, key: link.key, sync: link.sync, safe: link.safe }, location)
+        if (choice.replace) history.replaceState(null, '', href); else history.pushState(null, '', href)
+        created = true; unsynced = true
+      }
+      break
+    } catch (e) {
+      // a launcher choice that fails goes back to the launcher; a link that fails is a boot error
+      if (!launcher) throw e
+      log.warn('[launcher]', e?.message ?? e)
+      pauseBoot()
+      launcher.show()
+      launcher.error(`${choice.kind === 'create' ? 'Could not create the world' : choice.kind === 'file' ? 'Could not open that file' : 'Could not open that world'}: ${String(e?.message ?? e).slice(0, 300)}`)
+      choice = null
+    }
   }
+  if (launcher) { launcher.destroy(); launcher = null; delete mm.launcher }
+  // the recent list (design §18.1): every successful open or create
+  const titleNow = () => { try { return read.docSummary(handle.doc()).title } catch { return '' } }
+  let recentTitle = titleNow()
+  try { recent.upsert({ docUrl: link.docUrl, key: link.key, view: link.view, sync: link.sync, title: recentTitle }) } catch {}
+
+  // the launcher's promise: resolves with the person's choice (or a hash a
+  // pasted URL bar navigated to); the panel stays until boot moves on
+  function chooseWorld () {
+    return new Promise((resolve) => {
+      const done = (c) => { removeEventListener('hashchange', onHash); launcher.hide(); resolve(c) }
+      const onHash = () => {
+        const l = parseLink(location.hash); const t = newTemplateOf(location.hash)
+        if (l.docUrl) done({ kind: 'open', link: l, urlSet: true })
+        else if (t && isTemplate(t)) done({ kind: 'create', template: t, replace: true, sync: l.sync, safe: l.safe })
+      }
+      addEventListener('hashchange', onHash)
+      if (!launcher) {
+        launcher = makeLauncher({
+          root: document.body, recent, templates: TEMPLATES, order: [...TEMPLATE_ORDER],
+          onOpen: (l) => done({ kind: 'open', link: { ...l, sync: l.sync || pageLink.sync } }),
+          // a pasted `#new=` link passes its own { sync, safe }; a template card passes none
+          onCreate: (name, opts) => done({ kind: 'create', template: name, sync: opts?.sync, safe: opts?.safe }),
+          onOpenFile: (file) => done({ kind: 'file', file }),
+        })
+        mm.launcher = launcher
+      }
+      pauseBoot()
+      mm.phase = 'launcher'
+      launcher.setBusy(false)
+      launcher.show()
+    })
+  }
+  mm.phase = 'boot'
   addEventListener('hashchange', () => { if (parseLink(location.hash).docUrl !== link.docUrl) location.reload() })
   const readOnly = !!link.heads
   let docView = null
@@ -94,15 +188,17 @@ async function boot () {
       banner({ id: 'heads', level: 'error', text: `This version link names heads this world does not have (${e?.message ?? e}); showing the current world, read-only.` })
     }
   }
-  // a world made before rigs (or one whose library model was removed) gets the
-  // shared model library; an edited model is never overwritten (design §17.3).
-  // Two peers creating doc.models at once conflict on the key: heal that first, so
-  // the library only fills in what neither map had (ops.js healModels)
+  // a world made before rigs (no doc.models at all) gets the shared model
+  // library (design §17.3); a world that has a library keeps it as its people
+  // left it: a model someone removed is never put back. Two peers creating
+  // doc.models at once conflict on the key: heal that first (ops.js healModels)
   if (!readOnly && !created) {
     try {
       healModels(handle)
-      const lib = ensureLibraryOps(handle.doc())
-      if (lib.length) applyDocOps(handle, lib, { message: 'model library', peerId })
+      if (handle.doc().models == null) {
+        const lib = ensureLibraryOps(handle.doc())
+        if (lib.length) applyDocOps(handle, lib, { message: 'model library', peerId })
+      }
     } catch (e) { log.warn('[models] could not add the model library:', e?.message ?? e) }
   }
   const docNow = () => (readOnly ? docView : handle.doc())
@@ -293,7 +389,7 @@ async function boot () {
     onMode: (m) => desktop.setMode(m === 'play' ? 'play' : 'editor'),
     onMount: toggleMount,
     deferKeys: ['grab', 'delete', 'focus', 'mount'], // desktop.js binds G, Delete, F, E
-    enableAgents: () => { location.hash = buildLink({ docUrl: handle.url, key: newKey(), sync: link.sync }, location).split('#')[1]; location.reload() },
+    enableAgents: () => { location.hash = buildLink({ docUrl: handle.url, key: newKey(), sync: link.sync, safe: link.safe }, location).split('#')[1]; location.reload() },
     builtinSystems: () => [...BUILTIN_SYSTEMS],
   })
 
@@ -312,6 +408,11 @@ async function boot () {
     if (initial) world.load(d); else world.applyPatches(d, patches)
     syncSystems(d)
     if (initial || patches.some((p) => p.path?.[0] === 'world')) stage.applyWorldSettings(read.docSummary(d).world)
+    // the recent list follows the world's title (design §18.1)
+    if (!readOnly && (initial || patches.some((p) => p.path?.[0] === 'meta' || p.path?.length === 0))) {
+      const t = read.docSummary(d).title
+      if (t !== recentTitle) { recentTitle = t; try { recent.touch(link.docUrl, { title: t }) } catch {} }
+    }
     editor.docChanged(patches)
   })
 
@@ -386,7 +487,7 @@ async function boot () {
       editor.frame()
       stage.render()
     } catch (e) { frameError(e) }
-    if (++frames === 2) { hideBoot(); mm.ready = true }
+    if (++frames === 2) { hideBoot(); mm.ready = true; mm.phase = 'ready' }
   })
   addEventListener('resize', () => stage.resize())
 
@@ -413,10 +514,10 @@ async function boot () {
   // Share enables once the sync server holds the doc: a joiner opened earlier
   // gets 'unavailable' (design §2.3). A found doc is already there.
   if (readOnly) editor.setShareReady(true, 'a version link')
-  else if (!ws || !created) editor.setShareReady(true)
+  else if (!ws || !unsynced) editor.setShareReady(true)
   else waitForServer(handle, ws).then(() => editor.setShareReady(true), () => editor.setShareReady(true, 'the sync server has not confirmed yet; the link may need a moment'))
 
-  Object.assign(mm, { world, systemHost, editor, stage, renderer: stage.renderer, resources, reconciler, interaction, desktop, rig, presence, ownership, stream, players, agentHost, undo, share, KINDS, calls, safe, lockedDown })
+  Object.assign(mm, { recent, world, systemHost, editor, stage, renderer: stage.renderer, resources, reconciler, interaction, desktop, rig, presence, ownership, stream, players, agentHost, undo, share, KINDS, calls, safe, lockedDown })
   return mm
 }
 

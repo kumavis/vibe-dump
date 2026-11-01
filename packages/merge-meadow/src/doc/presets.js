@@ -71,6 +71,11 @@ export const COMPONENT_DEFS = deepFreeze({
 
 const drive = (act, match, extra = {}) => ({ act, match, ...extra })
 
+// A preset may carry `icon` (an emoji) at its top level: the palette shows it
+// first (design §18.3). The animals' looks are rig models of the shared library
+// (design §17.3, doc.models); the billboard stays one kind-switch away as the
+// first rung of the upgrade ladder (billboard -> primitive -> tree -> rig -> model).
+
 export const PRESETS = deepFreeze({
   creature: {
     extends: '',
@@ -88,6 +93,7 @@ export const PRESETS = deepFreeze({
     },
   },
   trex: {
+    icon: '🦖',
     extends: 'creature',
     components: {
       tags: { predator: true },
@@ -97,10 +103,11 @@ export const PRESETS = deepFreeze({
       brain: { drives: { hunt: drive('pursue', { tags: ['prey'], notTags: ['dead'] }, { weight: 2, range: 15 }) } },
       attack: { damage: 25, reach: 1.5, cooldown: 1.2 },
       health: { max: 200, armor: 2 },
-      representation: { kind: 'billboard', image: 'emoji:🦖', size: 3 },
+      representation: { kind: 'rig', model: 'trex' },
     },
   },
   sheep: {
+    icon: '🐑',
     extends: 'creature',
     components: {
       tags: { prey: true },
@@ -109,10 +116,11 @@ export const PRESETS = deepFreeze({
       perception: { radius: 15 },
       brain: { drives: { flee: drive('flee', { tags: ['predator'], notTags: ['dead'] }, { weight: 3, range: 12 }) } },
       health: { max: 30, armor: 0 },
-      representation: { kind: 'billboard', image: 'emoji:🐑', size: 1.2 },
+      representation: { kind: 'rig', model: 'sheep' },
     },
   },
   horse: {
+    icon: '🐎',
     extends: 'creature',
     components: {
       tags: { prey: true },
@@ -121,10 +129,11 @@ export const PRESETS = deepFreeze({
       brain: { drives: { flee: drive('flee', { tags: ['predator'], notTags: ['dead'] }, { weight: 2, range: 14 }) } },
       mount: { seats: [{ name: 'saddle', anchor: 'seat', offset: [0, 1.6, -0.2], controls: true }], panicPriority: 5 },
       health: { max: 80, armor: 0 },
-      representation: { kind: 'billboard', image: 'emoji:🐎', size: 2.2 },
+      representation: { kind: 'rig', model: 'horse' },
     },
   },
   tree: {
+    icon: '🌳',
     extends: '',
     components: {
       tags: { tree: true, static: true },
@@ -135,6 +144,7 @@ export const PRESETS = deepFreeze({
     },
   },
   rock: {
+    icon: '🪨',
     extends: '',
     components: {
       tags: { rock: true, static: true },
@@ -142,6 +152,7 @@ export const PRESETS = deepFreeze({
     },
   },
   lamp: {
+    icon: '💡',
     extends: '',
     components: {
       tags: { lamp: true, static: true },

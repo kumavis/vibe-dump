@@ -133,7 +133,8 @@ export function makeInspector (ctx) {
       const baseRep = (r) => ctx.read.baseComponents?.(doc(), r.id)?.representation ?? r.effective.representation
       const sw = renderKindSwitcher(ctx.kinds ?? {}, data, (target, { model } = {}) => {
         const r = rowOf(); if (!r) return
-        write([switchKindOps(r.id, baseRep(r), target, ctx.kinds, { inherited: inheritedRep(), model })], `look ${kind} → ${target}${target === 'rig' && model ? ` (${model})` : ''}`)
+        const icon = r.preset ? ctx.read.presetData(doc(), r.preset)?.icon ?? '' : ''
+        write([switchKindOps(r.id, baseRep(r), target, ctx.kinds, { inherited: inheritedRep(), model, icon })], `look ${kind} → ${target}${target === 'rig' && model ? ` (${model})` : ''}`)
       }, { models: modelNames() })
       const form = h('div')
       // kind belongs to the switcher; a rig's model and layers belong to the rig panel

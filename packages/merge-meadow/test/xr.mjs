@@ -71,7 +71,7 @@ async function main () {
     const dist = path.join(here, '..', 'dist')
     if (!existsSync(path.join(dist, 'index.html'))) throw new Error('no dist/: build the package first, or pass --url')
     srv = await serve(dist)
-    url = `http://127.0.0.1:${srv.address().port}/#sync=none`
+    url = `http://127.0.0.1:${srv.address().port}/#new=meadow&sync=none` // a bare URL now shows the launcher (design §18.1)
   }
   await mkdir(OUT, { recursive: true })
   const browser = await launch(chromium)

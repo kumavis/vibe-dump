@@ -19,8 +19,8 @@ const parentOf = (nodes, name, parent = null) => {
   return undefined
 }
 
-test('library: four bases and three species, plain frozen data', () => {
-  assert.deepEqual(Object.keys(MODEL_LIBRARY).sort(), ['biped', 'bird', 'horse', 'quadruped', 'serpent', 'sheep', 'trex'])
+test('library: four bases and fifteen species, plain frozen data', () => {
+  assert.deepEqual(Object.keys(MODEL_LIBRARY).sort(), ['biped', 'bird', 'dog', 'dragon', 'goat', 'horse', 'monkey', 'ox', 'pig', 'quadruped', 'rabbit', 'rat', 'rooster', 'serpent', 'sheep', 'snake', 'tiger', 'trex', 'wizard'])
   for (const b of ['quadruped', 'biped', 'serpent', 'bird']) assert.equal(MODEL_LIBRARY[b].extends, '', b)
   assert.equal(MODEL_LIBRARY.horse.extends, 'quadruped')
   assert.equal(MODEL_LIBRARY.sheep.extends, 'quadruped')
@@ -125,7 +125,7 @@ test('resolveModel: missing model is null; cycles, missing bases and deep chains
   const ok = chain(LIMITS.extendsDepth + 1) // m8 extends 8 deep
   assert.equal(nodeNames(resolveModel(ok, `m${LIMITS.extendsDepth}`).nodes).length, LIMITS.extendsDepth + 1)
   assert.throws(() => resolveModel(chain(LIMITS.extendsDepth + 2), `m${LIMITS.extendsDepth + 1}`), /deeper than 8/)
-  assert.deepEqual(dependentsOf(library(), 'quadruped'), ['horse', 'sheep'])
+  assert.deepEqual(dependentsOf(library(), 'quadruped'), ['dog', 'goat', 'horse', 'ox', 'pig', 'rabbit', 'rat', 'sheep', 'tiger'])
   assert.deepEqual(dependentsOf(library(), 'horse'), [])
 })
 

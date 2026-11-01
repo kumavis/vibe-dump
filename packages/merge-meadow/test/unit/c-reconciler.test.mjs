@@ -127,7 +127,9 @@ test('pick(): ray -> entity id by bounds and meshes; anchors with fallbacks', ()
   s.ops([
     { op: 'spawn', id: 'box', components: { transform: { p: [0, 0, -5] }, representation: { kind: 'primitive', shape: 'box', size: [1, 2, 1] } } },
     { op: 'spawn', id: 'far', components: { transform: { p: [0, 0, -20] }, representation: { kind: 'billboard', image: 'emoji:🐑', size: 2 } } },
-    { op: 'spawn', id: 'horse', preset: 'horse', at: [10, 0, 0] },
+    // the horse preset is a rig (design §18.2); an own billboard look keeps the kind-anchor path covered
+    { op: 'spawn', id: 'horse', preset: 'horse', at: [10, 0, 0], components: { representation: { kind: 'billboard', image: 'emoji:🐎', size: 2.2 } } },
+    { op: 'spawn', id: 'rigged', preset: 'horse', at: [10, 0, 10] },
     { op: 'spawn', id: 'crate', components: { transform: { p: [-10, 0, 0], s: [2, 2, 2] }, representation: { kind: 'tree', nodes: [{ shape: 'box', p: [0, 0.5, 0] }] } } },
   ])
   s.rec.frame(0); s.scene.updateMatrixWorld(true)
@@ -143,6 +145,9 @@ test('pick(): ray -> entity id by bounds and meshes; anchors with fallbacks', ()
   const seat = s.rec.anchor('horse', 'seat')
   assert.ok(Math.abs(seat.x - 10) < 1e-9 && Math.abs(seat.y - 2.2 * 0.62) < 1e-9)
   assert.deepEqual(s.rec.anchorArray('horse', 'seat').map((v) => +v.toFixed(3)), [10, 1.364, 0])
+  // the rig horse: the model's own `seat` anchor (the saddle bone), above the billboard's
+  const saddle = s.rec.anchor('rigged', 'seat')
+  assert.ok(Math.hypot(saddle.x - 10, saddle.z - 10) < 0.3 && saddle.y > 1 && saddle.y < 2.5, saddle.toArray().join())
   // a tree without anchors: the top of its bounds, in world space (scaled root)
   const top = s.rec.anchor('crate', 'head')
   assert.ok(Math.abs(top.y - 2) < 1e-9 && Math.abs(top.x + 10) < 1e-9)
@@ -182,12 +187,19 @@ test('dispose() unregisters from the world and releases everything', () => {
 test('anchor() seats riders from the sim pose, not the tick-late rendered root', () => {
   const s = stage()
   installSim(s.world, { inputs: () => new Map() })
-  s.ops([{ op: 'spawn', id: 'horse', preset: 'horse', at: [0, 0, 0] }])
+  s.ops([{ op: 'spawn', id: 'horse', preset: 'horse', at: [0, 0, 0], components: { representation: { kind: 'billboard', image: 'emoji:🐎', size: 2.2 } } }, { op: 'spawn', id: 'rigged', preset: 'horse', at: [0, 0, 20] }])
   s.rec.frame(0)
   const L = s.world.get('horse').live
   L.p = [5, 0, 0]; L.yaw = Math.PI / 2 // the sim moved it this tick; nothing rendered yet
   const a = s.rec.anchor('horse', 'seat')
   assert.ok(Math.abs(a.x - 5) < 1e-9 && Math.abs(a.y - 2.2 * 0.62) < 1e-9, a.toArray().join())
   assert.equal(s.rec.objectFor('horse').position.x, 0, 'the rendered root has not moved yet')
+  // the same for a rig mount: its seat bone is carried by the sim pose too
+  const R = s.world.get('rigged').live
+  const rest = s.rec.anchor('rigged', 'seat').clone()
+  R.p = [5, 0, 20]; R.yaw = Math.PI / 2
+  const b = s.rec.anchor('rigged', 'seat')
+  assert.ok(Math.hypot(b.x - 5, b.z - 20) < 0.3 && Math.abs(b.y - rest.y) < 1e-6, b.toArray().join())
+  assert.equal(s.rec.objectFor('rigged').position.x, 0, 'the rendered rig root has not moved yet')
   s.stop()
 })

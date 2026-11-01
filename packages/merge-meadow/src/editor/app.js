@@ -226,7 +226,7 @@ export function makeEditor ({
         const p = read.presetData(d, n)
         const ext = Array.isArray(p?.extends) ? p.extends : p?.extends ? [p.extends] : []
         const comps = presetComponents(read, d, n)
-        return { name: n, extends: ext.map(String), look: comps.representation ?? null, light: !!comps.light }
+        return { name: n, extends: ext.map(String), icon: p?.icon ?? '', look: comps.representation ?? null, light: !!comps.light }
       }))
     }
     if (dirty.title) { dirty.title = false; const t = read.docSummary(d).title; topbar.setTitle(t); if (typeof document !== 'undefined' && t) document.title = `${t} — Merge Meadow` }

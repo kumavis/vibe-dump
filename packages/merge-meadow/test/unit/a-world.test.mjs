@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { seeded, fork } from './a-helpers.mjs'
+import { templateEntities, libraryPresets } from '../../src/doc/templates.js'
 import { World } from '../../src/core/world.js'
 import { watch } from '../../src/doc/watch.js'
 import { applyOps } from '../../src/doc/ops.js'
@@ -22,12 +23,13 @@ function mirrored (h, opts) {
 test('reconcile from real patches: add (in component order), nested edit, delete', () => {
   const h = seeded()
   const { w, log } = mirrored(h)
-  assert.equal(w.entities.size, 14)
+  assert.equal(w.entities.size, templateEntities('meadow').length)
   // transform (-100) is added before representation (10) for every entity
-  const i = log.indexOf('add transform trex-1'); const j = log.indexOf('add rep trex-1 billboard')
+  const i = log.indexOf('add transform trex-1'); const j = log.indexOf('add rep trex-1 rig')
   assert.ok(i >= 0 && j > i)
   log.length = 0
-  applyOps(h, [{ op: 'spawn', id: 'dolly', preset: 'sheep', at: [3, 0, 3] }])
+  // the sheep preset is a rig now (design §18.2): an own billboard look starts the ladder
+  applyOps(h, [{ op: 'spawn', id: 'dolly', preset: 'sheep', at: [3, 0, 3], components: { representation: { kind: 'billboard', image: 'emoji:🐑', size: 1.2 } } }])
   assert.deepEqual(log, ['add transform dolly', 'add rep dolly billboard'])
   assert.ok(w.has('dolly', 'brain') && w.get('dolly').c.tags.prey)
   log.length = 0
@@ -148,11 +150,13 @@ test('systems run in order, disabledSystems skip, a throwing system is isolated'
     w.addSystem({ name: 'boom', order: 5, update: () => { throw new Error('x') } })
     w.addSystem({ name: 'q', order: 1, query: ['brain'], update: (world, dt, set) => ran.push(`q${set.size}`) })
     w.tick(1 / 30)
-    assert.deepEqual(ran, ['q5', 'a', 'b'])
+    const brains = String(templateEntities('meadow').filter((e) => libraryPresets()[e.preset]?.extends === 'creature').length)
+    assert.equal(brains, '11', 'T-rex, 3 sheep, horse, wizard and 5 zodiac animals think')
+    assert.deepEqual(ran, [`q${brains}`, 'a', 'b'])
     applyOps(h, [{ op: 'setWorld', patch: { disabledSystems: { a: true } } }])
     ran.length = 0
     w.tick(1 / 30)
-    assert.deepEqual(ran, ['q5', 'b'])
+    assert.deepEqual(ran, [`q${brains}`, 'b'])
     assert.equal(w.errors()[0].count, 2)
     assert.equal(w.tickCount, 2)
     assert.ok(Math.abs(w.time - 2 / 30) < 1e-12)
