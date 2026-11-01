@@ -439,3 +439,68 @@ ES-module string exporting `default { init(world, hot), update(world, dt), on(ev
 the real modules, runs `npm test` per track, then `test/e2e.mjs`. Mismatches
 are fixed in the track that owns the module, against this contract; the
 contract is amended only by the PM, with the reason recorded in `STATUS.md`.
+
+## 6. Rigs (added 2026-11-01, design §17) — supersedes the `critter` rows above
+
+New files and owners for the rig build:
+
+```
+src/doc/expr.js                 track A   expression parser/compiler (pure JS, no eval)
+src/doc/models.js               track A   model library seed data, resolveModel (extends), validateModel, ensureLibrary ops
+src/doc/ops.js, ops-validate.js track A   + defineModel / removeModel, rig representation validation
+src/render/rig/evaluator.js     track C   tracks + keyframes + layering -> node offsets
+src/render/rig/controller.js    track C   state -> layers, crossfade, once/halt
+src/render/kinds/rig.js         track C   the kind (model or inline); `tree` becomes an alias of it; critter.js is deleted
+src/render/reconciler.js        track C   per-instance vars (t, st, phase, speed, gait, turn, hp, rand, idx)
+src/agent/world-caps.js, agent/ track B   defineModel / models / removeModel verbs, MCP + CLI tools
+src/editor/*                    track B   rig inspector (model dropdown, Fork, x-json nodes/animations/controller, preview state), kind switcher
+```
+
+### 6.1 Track A — `src/doc/expr.js`, `src/doc/models.js`
+
+```js
+// src/doc/expr.js
+export const EXPR_FUNCS                         // { sin, cos, tan, abs, min, max, clamp, lerp, smoothstep, floor, ceil, round, sign, sqrt, pow, saturate, step }
+export const EXPR_VARS                          // ['t','st','phase','speed','gait','turn','hp','rand','idx','pi','tau']
+export function parseExpr(src)                  // -> AST; throws SyntaxError with column on bad input or an unknown identifier
+export function compileExpr(src)                // -> (vars: object) => number   (closures; NaN/Infinity -> 0; no eval/Function)
+export function isExpr(v)                       // string -> true
+
+// src/doc/models.js
+export const MODEL_LIBRARY                      // { quadruped, biped, serpent, bird, horse, sheep, trex } as plain data (design §17.3)
+export const CHANNELS                           // ['rx','ry','rz','px','py','pz','sx','sy','sz']
+export const LIMITS                             // { nodes: 200, tracks: 400, depth: 8, extendsDepth: 8 }
+export function resolveModel(models, name)      // follows `extends` (nodes patch by name, clips merge by name, controller shallow merge); -> plain resolved model or null; throws on a cycle / depth
+export function resolveRepresentation(doc, rep) // rig rep (model or inline) -> resolved { nodes, animations, controller, stride, runSpeed, key } ; key = 'model:<name>:<rev>' or 'inline:<hash>'
+export function validateModel(model, models)    // -> problems[]: node names unique and valid, tracks target existing node.channel, expressions compile, keyframes sorted, limits, extends resolvable
+export function ensureLibraryOps(doc)           // -> ops that add any MODEL_LIBRARY entry missing from doc.models (never overwrites an edited one)
+export function nodeNames(nodes)                // flat list, depth-first
+```
+
+Ops: `defineModel {name, model}` (validateModel before the change; `rev` increments),
+`removeModel {name}` (refused while a model `extends` it). `validateOps` with
+`kinds` validates a `rig` representation: `model` must exist or inline `nodes`
+must validate. Doc: `doc.models[name] = { extends, stride, runSpeed, nodes, animations, controller, rev }`
+with ImmutableString for `extends`, node `name`/`shape`/`anchor`, clip-name keys and
+controller clip references; expression strings are ImmutableString too.
+
+### 6.2 Track C — render
+
+```js
+// src/render/rig/evaluator.js
+export function makeRigEvaluator(resolved)      // compiles every track once; -> { clips: names[], evaluate(layers /* [{clip, weight, time, st}] */, vars) -> Map<node, offsets>, dispose() }
+export function applyOffsets(rootGroup, offsets)// rest + offsets into node groups (r/p add, s multiply on the node's mesh)
+// src/render/rig/controller.js
+export function makeRigController(resolved)     // -> { set(state, now), layers(now) -> [{clip, weight, time, st}], state }  (fallback chain of animation.js, blend crossfade, once/halt)
+// src/render/kinds/rig.js — handler: schema { kind, model, color, scale } (+ inline nodes/animations/controller), create/update(false when the resolved key changes)/dispose, anchors from named nodes with `anchor`, animate(obj, state, mapping, dt, vars)
+// kinds/index.js: KINDS = { billboard, primitive, tree: rigAlias, rig, model }; no critter
+// reconciler: keeps per-instance { t0, stateT0, dist, lastP, rand, idx } and passes vars to kind.animate; `preview.anim` on a rec overrides live.anim (editor preview state)
+```
+
+### 6.3 Track B — agent and editor
+
+World verbs `defineModel(name, model)`, `models()` → plain library summary `{ name, extends, nodes, clips, rev }[]`,
+`model(name)` → resolved plain model, `removeModel(name)`; MCP tools `define_model`, `models`, `model`, `remove_model`;
+CLI verbs `define-model`, `models`, `model`. Editor: `src/editor/rig-panel.js` (`makeRigPanel({ read, applyOps, kinds, ... })`),
+kind switcher: `rig` with a model dropdown; Fork = `defineModel(newName, resolved)` + `replace representation`;
+preview state writes `reconciler.preview(id, { anim })` and clears on deselect.

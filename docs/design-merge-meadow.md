@@ -700,3 +700,131 @@ source side, reverse index derived) · PlayCanvas Editor (an agent "driver"
 API with capture, logs and undo) · Hyperfy (SES Compartment scripts, crash
 placeholder, blueprint vs instance) · A-Frame (component lifecycle with
 `order`/dependencies, schema-driven inspector).
+
+## 17. Rigs: data-driven articulated looks (v1.2, 2026-11-01)
+
+**Why.** The `critter` kind was a generator: a closed function of six numbers
+that baked the body shape, the skeleton and the motion clips into renderer
+code. Twelve zodiac animals built with it showed the ceiling: a snake was a
+stick, a dragon was a red T-rex, a rooster and a monkey were one biped in two
+colours. It is removed. In its place the three layers it fused become
+**document data interpreted by one small renderer**, the way Minecraft
+Bedrock's geometry / animation / animation-controller files do. Nothing in the
+renderer knows what an animal is; generators (a serpent with N segments) are
+scripts or agents that *write* models into the doc.
+
+### 17.1 The three layers
+
+1. **Geometry = the node tree, with names.** A `rig` model's `nodes` are the
+   existing `tree` nodes plus `name`. A named node is a bone: its children
+   move with it. Legs are nested nodes (hip → knee → foot); a snake is a chain
+   of segments; a bird has wing nodes. Articulation comes from nesting, so
+   there is no body-plan enum. The `tree` kind is kept as an alias of `rig`
+   with no animations, so animating a sculpt is *adding tracks to the same
+   component*, never a kind swap.
+2. **Animation = clips of tracks over named bones**, additive to the rest
+   pose. A track is a channel of one node (`<node>.rx|ry|rz` degrees,
+   `px|py|pz` metres, `sx|sy|sz` scale factor) whose value is either
+   - an **expression** string in a tiny safe language, or
+   - **keyframes** `[[t, v], …]` (seconds, linear, wrapping when the clip loops).
+   Rotation and position tracks add to the node's rest `r`/`p`; scale tracks
+   multiply its rest `s`. Because everything is additive, clips **layer**: a
+   `walk` state can play `gait` + `tailwag` + `breathe` at once.
+3. **Controller = semantic state → clip layers.** The sim keeps writing
+   `live.anim` (idle/walk/run/attack/die/sit) and `live.v`; the controller is
+   a table `{ states: { walk: ['gait','breathe'], attack: 'bite', die: 'fall' }, blend: 0.15 }`
+   with crossfades over `blend` seconds and the existing fallback chain
+   (run → walk → idle, attack → idle, sit → idle; no `die` clip halts).
+   A clip marked `once: true` plays from state entry and clamps.
+
+### 17.2 Expressions
+
+Grammar: numbers; `+ - * / %`; unary `-`; parentheses; comparisons
+`< <= > >= == !=`; `&& || !`; the ternary `a ? b : c`; calls to
+`sin cos tan abs min max clamp lerp smoothstep floor ceil round sign sqrt pow saturate step`;
+constants `pi tau`. Variables the renderer supplies every frame:
+
+| var | meaning |
+| --- | --- |
+| `t` | seconds since the look was created |
+| `st` | seconds since the current state was entered (for `once` clips) |
+| `phase` | stride phase in cycles: distance travelled ÷ `stride` (model field, default 1 m) |
+| `speed` | horizontal speed, m/s |
+| `gait` | `clamp(speed / runSpeed, 0, 1)` with `runSpeed` a model field (default 4) |
+| `turn` | yaw rate, rad/s |
+| `hp` | health fraction 0..1 (1 when no health) |
+| `rand`, `idx` | a per-entity constant in 0..1 and a per-entity integer, for variety |
+
+Compiled by **our own parser** to closures, once per model revision; unknown
+identifiers are compile errors reported at `defineModel` time; the result is
+guarded (`NaN` → 0). No `eval`, no `Function`, so it runs under lockdown and
+is deterministic per peer. An agent asked to "wag the tail faster" edits one
+number in one string.
+
+### 17.3 Where it lives
+
+```js
+doc.models[name] = {
+  extends: ImmutableString,            // '' or another model: nodes patch by name, clips merge by name, controller shallow-merges; depth ≤ 8, cycles rejected
+  stride: 1.0, runSpeed: 4,             // locomotion scaling for `phase` and `gait`
+  nodes: [ { name, shape, p, r, s, color, roughness, metalness, anchor, children } ],
+  animations: { [clip]: { loop: true, once: false, duration?, tracks: { 'hips.py': 'sin(t*2)*0.01', 'leg_fl.rx': [[0,-30],[0.5,30],[1,-30]] } } },
+  controller: { states: { idle: 'idle', walk: ['gait'], run: ['gait','lean'], attack: 'bite', die: 'fall', sit: 'sit' }, blend: 0.15 },
+  rev: n,
+}
+representation = { kind: 'rig', model: ImmutableString, color: '#ffffff' /* multiplies node colours */, scale: 1 }
+             |  { kind: 'rig', nodes, animations?, controller? }      // inline, what `tree` is an alias for
+```
+
+A **shared library** with `extends` is what the zodiac lineup lacked: twelve
+animals shared nothing, and improving the horse improved one horse. The seed
+library ships as data (`src/doc/models.js`, written into `doc.models` by the
+seed and by `ensureLibrary` on open): `quadruped`, `biped`, `serpent`, `bird`
+as bases, and `horse`, `sheep`, `trex` extending them with species parts
+(neck, mane, ears, wool, big head, long tail). Seed presets stay billboards;
+upgrading a horse is `replace representation { kind:'rig', model:'horse' }`.
+Resources key on `model:<name>:<rev>` (geometry template) and node materials,
+so 300 instances of one model share one template as the critters did.
+
+### 17.4 Per-frame evaluation
+
+For each rig instance: compute the variables from `live` (speed from
+`live.v`, phase accumulated from distance moved, state and `st` from
+`live.anim`), take the controller's current and previous layer sets with
+crossfade weights, evaluate each active clip's tracks (expression or sampled
+keyframes), sum the offsets per node channel, and write rest + offset into the
+node groups. Cost: ~20 tracks × 300 entities ≈ 6000 closure calls, well under a
+millisecond; the transforms are the ~20 rigid parts per entity the critters
+already paid for.
+
+### 17.5 What changes elsewhere
+
+- Ops: `defineModel {name, model}`, `removeModel {name}`; `validateOps`
+  compiles every expression and checks node names, track targets, `extends`
+  chains and limits (≤ 200 nodes, ≤ 400 tracks). Agent verbs `defineModel`,
+  `models`, `removeModel`; MCP `define_model`, `models`, `remove_model`.
+- Editor: the kind switcher offers `rig` with a model dropdown from
+  `doc.models`; the inspector for a rig shows the model, a **Fork** button
+  (copies the resolved model into `doc.models` under a new name and points
+  the entity at it), the node tree, clips and controller as `x-json` fields
+  with live preview, and a **preview state** selector that forces
+  `live.anim` on the selected entity so clips can be watched without the sim.
+- The `critter` kind is deleted. A doc that still names it renders the
+  unknown-kind placeholder; the editor's kind switcher converts it to `rig`
+  with the matching library model. Existing worlds are migrated by hand.
+- `model` (glTF) stays for external assets; the same skeleton idea lets a
+  future skinned mesh be driven by a rig's nodes, which is how the two paths
+  would merge.
+
+### 17.6 Verification
+
+Unit: parser precedence, functions, errors and the absence of any global
+access (also under `lockdown()`); keyframe sampling with wrap and `once`;
+additive layering restores the rest pose when a clip stops; `extends`
+resolution (node patch by name, clip merge, controller merge, cycle and depth
+rejection); the seed library validates and every clip targets existing
+nodes; `defineModel` with a bad expression leaves heads unchanged. E2E: the
+upgrade path becomes billboard → primitive → tree → **tree + animations (same
+root, same meshes)** → rig model → model(glTF) → billboard with zero leaks;
+300 rigs animating with CPU ms/frame reported; the dead group tints a rig;
+preview state drives clips with the sim idle.
