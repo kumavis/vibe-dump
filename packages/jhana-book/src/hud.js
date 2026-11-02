@@ -34,6 +34,7 @@ export class Hud {
       b.setAttribute('aria-label', title)
       b.addEventListener('click', (e) => {
         e.stopPropagation()
+        if (e.detail > 0) b.blur() // pointer click: keep the keys for turning
         opts.onDot(i)
       })
       this.dotsEl.appendChild(b)
@@ -43,6 +44,7 @@ export class Hud {
     const button = (el, fn) =>
       el.addEventListener('click', (e) => {
         e.stopPropagation()
+        if (e.detail > 0) el.blur()
         fn()
       })
     button(this.prevEl, opts.onPrev)

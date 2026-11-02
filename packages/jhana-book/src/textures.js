@@ -188,7 +188,7 @@ export function drawPage(mod, side, width = 1024) {
 
   if (left) {
     if (mod.label) {
-      const s = h * 0.03
+      const s = h * 0.034
       g.globalAlpha = 0.72
       g.font = `${Math.round(s)}px ${SERIF}`
       setSpacing(0.08, s)
@@ -263,13 +263,17 @@ function drawCloth(g, w, h, seed) {
   edge.addColorStop(1, 'rgba(255,235,210,0.07)')
   g.fillStyle = edge
   g.fillRect(0, 0, w, h)
-  for (let i = 0; i < 40; i++) {
-    g.globalAlpha = 0.02 + rnd() * 0.03
-    g.fillStyle = rnd() < 0.5 ? '#000' : '#e8d5b8'
-    const r = (20 + rnd() * 90) * (w / 1024)
-    g.beginPath()
-    g.arc(rnd() * w, rnd() * h, r, 0, Math.PI * 2)
-    g.fill()
+  // faint wear: soft-edged, so it reads as cloth, not as spots
+  for (let i = 0; i < 18; i++) {
+    const x = rnd() * w
+    const y = rnd() * h
+    const r = (60 + rnd() * 160) * (w / 1024)
+    const light = rnd() < 0.5
+    const wear = g.createRadialGradient(x, y, 0, x, y, r)
+    wear.addColorStop(0, light ? 'rgba(232,213,184,0.025)' : 'rgba(0,0,0,0.05)')
+    wear.addColorStop(1, 'rgba(0,0,0,0)')
+    g.fillStyle = wear
+    g.fillRect(x - r, y - r, r * 2, r * 2)
   }
   g.globalAlpha = 1
 }

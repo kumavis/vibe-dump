@@ -11,6 +11,7 @@ import { W, H, LEAF, COVER, OVERHANG } from './dims.js'
 import { createLayout, layoutRest, layoutTurn } from './layout.js'
 import { Paper } from './paper.js'
 import { drawPage, drawCover, drawBackCover, drawClothTile, drawEdgeTile, toTexture } from './textures.js'
+import { DEFAULT_AUDIO } from './audio.js'
 
 export { W, H, LEAF, COVER }
 
@@ -30,7 +31,6 @@ export const turnEase = (u) => 0.5 - 0.5 * Math.cos(PI * Math.pow(clamp(u, 0, 1)
 
 // Palette of the closed book (no spread open).
 export const BOOK_PALETTE = { bg: '#12100e', paper: '#efe6d4', ink: '#3b322a', accent: '#e3bf86' }
-const DEFAULT_AUDIO = { root: 98, intervals: [0, 7, 12], brightness: 0.35, shimmer: 0.2, breathe: 0.5 }
 
 // ---------------------------------------------------------------------------
 // Solid: one prism of the book (a board, a paper stack, the moving block),
@@ -52,6 +52,7 @@ class Solid {
   constructor(materials, z0, z1) {
     this.z0 = z0
     this.z1 = z1
+    this.layerV = [0, 0, 0, 0]
     const g = new THREE.BufferGeometry()
     this.pos = new Float32Array(24 * 3)
     this.nrm = new Float32Array(24 * 3)
@@ -93,17 +94,19 @@ class Solid {
       this.ccw = ccw
     }
     const sgn = ccw ? 1 : -1
-    // v across the leaves for the striped edge texture (16 leaves per tile)
+    // v across the leaves for the striped edge texture (16 leaves per tile):
+    // 0 on face 0 (corners A, B), L on face 1 (C, D)
     const L = layers > 0 ? layers / 16 : 0.3
-    const layerV = [0, 0, L, L]
+    const layerV = this.layerV
+    layerV[2] = layerV[3] = L
     for (let q = 0; q < 6; q++) {
       const quad = QUADS[q]
       let nx = 0
       let ny = 0
       let nz = 0
       if (q < 4) {
-        const [c0] = quad[0]
-        const [c1] = quad[1]
+        const c0 = quad[0][0]
+        const c1 = quad[1][0]
         const dx = poly[c1 * 2] - poly[c0 * 2]
         const dy = poly[c1 * 2 + 1] - poly[c0 * 2 + 1]
         const len = Math.hypot(dx, dy)
@@ -113,7 +116,8 @@ class Solid {
         } else ny = 1
       } else nz = q === 4 ? 1 : -1
       for (let k = 0; k < 4; k++) {
-        const [c, e] = quad[k]
+        const c = quad[k][0]
+        const e = quad[k][1]
         const vi = q * 4 + k
         pos[vi * 3] = poly[c * 2]
         pos[vi * 3 + 1] = poly[c * 2 + 1]
@@ -233,6 +237,7 @@ export class Book {
     this.queued = 0 // one queued step (+1 / −1) while a turn runs
     this.frozen = null // { nA, nB, progress } for ?theta / ?scrub
     this.restTime = 0
+    this.warmedAt = -1
     this.dirty = true
     this.look = { bg: new THREE.Color(BOOK_PALETTE.bg), accent: new THREE.Color(BOOK_PALETTE.accent), open: 0 }
     this.pointer = { x: 0, y: 0 } // shared with every frame (main eases it)
@@ -409,9 +414,9 @@ export class Book {
   // Build the neighbours of the resting spread ahead of time (one per call) so
   // a turn never stalls on scene construction or texture upload.
   prewarm() {
-    if (this.frozen || this.turn || this.restTime < 0.6) return
-    for (const n of [this.n + 1, this.n - 1]) {
-      const k = Book.spreadAt(n)
+    if (this.frozen || this.turn || this.restTime < 0.6 || this.warmedAt === this.n) return
+    for (let i = 0; i < 2; i++) {
+      const k = Book.spreadAt(i === 0 ? this.n + 1 : this.n - 1)
       if (k < 0 || this.spreads[k].built) continue
       const sp = this.ensureBuilt(k)
       if (this.renderer.initTexture) {
@@ -420,6 +425,7 @@ export class Book {
       }
       return
     }
+    this.warmedAt = this.n // both neighbours ready: nothing to do until we move
   }
 
   // ---- per frame ---------------------------------------------------------------

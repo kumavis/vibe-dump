@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="A pop-up book of the eight jhānas." />
+    <title>Jhāna Book</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div id="hud">
+      <p id="hint">click the book</p>
+      <button id="arrow-prev" class="arrow none" type="button" aria-label="Previous page">‹</button>
+      <button id="arrow-next" class="arrow" type="button" aria-label="Next page">›</button>
+      <button id="again" type="button">begin again</button>
+      <nav id="dots" aria-label="Spreads"></nav>
+      <div id="breath" aria-hidden="true"><span></span></div>
+      <button id="sound" type="button" aria-label="Sound off" aria-pressed="false" title="Sound off">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor" stroke="none" />
+          <path class="wave" d="M15.5 9.2a4 4 0 0 1 0 5.6M18 6.8a7.4 7.4 0 0 1 0 10.4" />
+          <path class="mute" d="M16 9.5l5 5M21 9.5l-5 5" />
+        </svg>
+      </button>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

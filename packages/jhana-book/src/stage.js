@@ -59,7 +59,8 @@ export class Stage {
     // detaching the contact shadows ("peter-panning").
     key.shadow.bias = -0.0004
     key.shadow.normalBias = 0.012
-    key.shadow.radius = 3
+    key.shadow.radius = 18 // VSM blur: a soft, paper-lamp penumbra
+    key.shadow.blurSamples = 20
     scene.add(key, key.target)
     this.key = key
 
