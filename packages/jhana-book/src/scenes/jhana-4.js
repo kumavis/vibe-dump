@@ -229,7 +229,7 @@ function build(ctx) {
       const a = (time / 180) * TAU + 1.2
       sweep.position.set(Math.sin(a) * 2.4, 0.9, 2.2 + 0.3 * Math.cos(a))
       sweep.intensity = reveal * (0.85 + 0.06 * b)
-      fill.intensity = 0.5 * (0.5 + 0.5 * reveal)
+      fill.intensity = 0.5 * reveal
       moonMat.emissiveIntensity = 0.38 + 0.07 * b * reveal
     },
     dispose() {

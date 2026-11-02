@@ -45,7 +45,14 @@ function pageToRest(v) {
 const startRest = pageToRest(q.get('page'))
 
 // ---- renderer / scene ----------------------------------------------------------
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
+let renderer
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
+} catch (err) {
+  // no WebGL: say so instead of inviting a click on an empty table
+  document.getElementById('hint').textContent = 'This book needs WebGL, which this browser has turned off.'
+  throw err // stop here: a module can't return
+}
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === 'low' ? 1.5 : 2))
 renderer.outputColorSpace = THREE.SRGBColorSpace
 renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -57,7 +64,7 @@ document.getElementById('app').appendChild(renderer.domElement)
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 60)
 const stage = new Stage({ renderer, scene, camera, quality, reducedMotion })
-const book = new Book({ scene, renderer, scenes, quality })
+const book = new Book({ scene, renderer, camera, scenes, quality })
 const breath = new Breath()
 const drone = new Drone()
 
@@ -75,6 +82,7 @@ if (thetaParam !== null || scrub) {
 const hud = new Hud({
   canvas: renderer.domElement,
   titles: scenes.map((m) => m.title),
+  lines: scenes.map((m) => `${[m.title, m.pali].filter(Boolean).join(' · ')} — ${m.line}`),
   nohud,
   orbit: stage.orbit,
   onNext: () => book.next(),
@@ -94,6 +102,12 @@ book.onTurnStart = (to) => {
   hud.firstTurn()
   drone.setSpread(book.audioFor(to))
 }
+book.onArrive = (n) => hud.announce(n)
+hud.announce(book.target)
+// an OS interruption (a call, another app) can leave the drone suspended
+renderer.domElement.addEventListener('pointerdown', () => {
+  if (drone.on && drone.ctx && drone.ctx.state !== 'running') drone.ctx.resume()
+})
 
 if (scrub) {
   const n = book.frozen.nB
@@ -115,16 +129,30 @@ if (scrub) {
 
 // ---- resize ------------------------------------------------------------------------
 function resize() {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === 'low' ? 1.5 : 2))
   const w = window.innerWidth
   const h = window.innerHeight
   renderer.setSize(w, h)
   stage.resize(w, h)
 }
 window.addEventListener('resize', resize)
+// zoom or a move to another screen changes the DPR, not always with a resize
+function watchDpr() {
+  matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`).addEventListener(
+    'change',
+    () => {
+      resize()
+      watchDpr()
+    },
+    { once: true },
+  )
+}
+watchDpr()
 resize()
 
 // ---- loop ----------------------------------------------------------------------------
 const ZERO = { x: 0, y: 0 }
+const _tint = new THREE.Color()
 let last = performance.now()
 let running = false
 let rafId = 0
@@ -144,7 +172,7 @@ function frame(now) {
   book.update(dt, breath)
   stage.update(dt, book.look, breath, book.pointer)
   hud.setState(book.target, book.turning || !!book.frozen)
-  hud.setTint(book.look.accent)
+  hud.setTint(_tint.copy(book.look.accent).convertLinearToSRGB()) // look is linear, CSS wants sRGB
   hud.setBreath(breath.breath)
   drone.update(dt, breath.breath)
   renderer.render(scene, camera)
@@ -162,7 +190,15 @@ function stop() {
   cancelAnimationFrame(rafId)
 }
 
-document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()))
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stop()
+  else start()
+  // the drone pauses with the tab
+  if (drone.on && drone.ctx) {
+    if (document.hidden) drone.ctx.suspend()
+    else drone.ctx.resume()
+  }
+})
 start()
 
 // handy from the console / Playwright

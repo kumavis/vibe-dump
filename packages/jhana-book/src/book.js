@@ -19,6 +19,9 @@ const PI = Math.PI
 // Dihedral (radians, ≈3.4°) under which a spread counts as shut and is hidden.
 const CLOSED_THETA = 0.06
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
+// Run fn in idle time where the browser offers it, else as the next task.
+const idle = (fn) =>
+  typeof requestIdleCallback === 'function' ? requestIdleCallback(fn, { timeout: 500 }) : setTimeout(fn, 0)
 const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a), 0, 1)
   return t * t * (3 - 2 * t)
@@ -153,8 +156,10 @@ class Solid {
 // Book
 // ---------------------------------------------------------------------------
 export class Book {
-  constructor({ scene, renderer, scenes, quality = 'high' }) {
+  constructor({ scene, renderer, camera, scenes, quality = 'high' }) {
     this.renderer = renderer
+    this.scene = scene // scene + camera: for renderer.compile() in prewarm
+    this.camera = camera
     this.quality = quality
     this.root = new THREE.Group()
     this.root.name = 'book'
@@ -225,6 +230,7 @@ export class Book {
       inst: null,
       builtAt: 0,
       failed: false,
+      needsCompile: false, // built by prewarm, shaders not compiled yet
       visible: false,
       mats: { left: null, right: null },
       frame: null,
@@ -240,6 +246,7 @@ export class Book {
     this.frozen = null // { nA, nB, progress } for ?theta / ?scrub
     this.restTime = 0
     this.warmedAt = -1
+    this.warming = false // a prewarm step is waiting for idle time
     this.dirty = true
     this.look = { bg: new THREE.Color(BOOK_PALETTE.bg), accent: new THREE.Color(BOOK_PALETTE.accent), open: 0 }
     this.pointer = { x: 0, y: 0 } // shared with every frame (main eases it)
@@ -305,7 +312,7 @@ export class Book {
   next() {
     if (this.frozen) return
     if (this.turn) {
-      this.queued = 1
+      if (this.canQueue()) this.queued = 1
       return
     }
     if (this.n >= 11) return this.again()
@@ -315,11 +322,18 @@ export class Book {
   prev() {
     if (this.frozen) return
     if (this.turn) {
-      this.queued = -1
+      if (this.canQueue()) this.queued = -1
       return
     }
     if (this.n <= 0) return
     this.startTurn(this.n, this.n - 1)
+  }
+
+  // No queued step around the covers: a double click on the closed book lands
+  // on the intro, and a double → at the outro stops at "begin again".
+  canQueue() {
+    const t = this.turn
+    return !!t && t.from !== 0 && t.to !== 0 && t.to !== 11
   }
 
   // Jump to spread k (a dot): one block of leaves turns together.
@@ -413,21 +427,71 @@ export class Book {
     return sp.mats[side]
   }
 
-  // Build the neighbours of the resting spread ahead of time (one per call) so
-  // a turn never stalls on scene construction or texture upload.
+  // Get the neighbours of the resting spread ready ahead of time so a turn
+  // never stalls: page textures, then the scene, then its shaders, one step
+  // per frame in idle time. ensureBuilt() stays synchronous, so a turn that
+  // starts first simply builds what it needs.
   prewarm() {
-    if (this.frozen || this.turn || this.restTime < 0.6 || this.warmedAt === this.n) return
+    if (this.frozen || this.turn || this.restTime < 0.6 || this.warmedAt === this.n || this.warming) return
     for (let i = 0; i < 2; i++) {
       const k = Book.spreadAt(i === 0 ? this.n + 1 : this.n - 1)
-      if (k < 0 || this.spreads[k].built) continue
-      const sp = this.ensureBuilt(k)
-      if (this.renderer.initTexture) {
-        this.renderer.initTexture(sp.mats.left.map)
-        this.renderer.initTexture(sp.mats.right.map)
-      }
+      if (k < 0) continue
+      const sp = this.spreads[k]
+      if (sp.built && !sp.needsCompile) continue
+      const n = this.n
+      this.warming = true
+      idle(() => {
+        this.warming = false
+        if (this.frozen || this.turn || this.n !== n) return // moved on: try again at rest
+        if (!sp.mats.left || !sp.mats.right) {
+          for (const side of ['left', 'right']) {
+            const map = this.pageMaterial(k, side).map
+            if (this.renderer.initTexture) this.renderer.initTexture(map)
+          }
+        } else if (!sp.built) {
+          this.ensureBuilt(k)
+          sp.needsCompile = true
+        } else {
+          this.compileFor(k)
+          sp.needsCompile = false
+        }
+      })
       return
     }
     this.warmedAt = this.n // both neighbours ready: nothing to do until we move
+  }
+
+  // Lights live in the spread groups and three keys its shaders on the light
+  // count, so showing a new spread would recompile every visible material at
+  // the start of a turn. Compile now for what a turn to spread k shows: the
+  // resting spread and k together, then k alone. Visibility is restored
+  // before anything renders. Then upload k's own textures.
+  compileFor(k) {
+    const { renderer, scene, camera } = this
+    const next = this.spreads[k].group
+    if (renderer.compile && scene && camera) {
+      const c = Book.spreadAt(this.n)
+      const cur = c >= 0 && c !== k ? this.spreads[c].group : null
+      const nextWas = next.visible
+      const curWas = cur ? cur.visible : false
+      next.visible = true
+      if (cur) {
+        cur.visible = true
+        renderer.compile(scene, camera)
+        cur.visible = false
+      }
+      renderer.compile(scene, camera)
+      next.visible = nextWas
+      if (cur) cur.visible = curWas
+    }
+    if (renderer.initTexture) {
+      next.traverse((o) => {
+        const mats = Array.isArray(o.material) ? o.material : o.material ? [o.material] : []
+        for (const m of mats) {
+          for (const t of [m.map, m.emissiveMap, m.alphaMap]) if (t) renderer.initTexture(t)
+        }
+      })
+    }
   }
 
   // ---- per frame ---------------------------------------------------------------
@@ -460,7 +524,7 @@ export class Book {
         nA = nB = this.n
         psi = 0
         if (this.onArrive) this.onArrive(this.n)
-        const q = this.queued
+        const q = this.n === 0 || this.n === 11 ? 0 : this.queued // never past a cover
         this.queued = 0
         if (q > 0) this.next()
         else if (q < 0) this.prev()
@@ -544,10 +608,10 @@ export class Book {
       f.breathPhase = breath.phase
       f.breathVel = breath.vel
       f.active = sp.index === restSpread
-      sp.paper.update(theta)
-      if (sp.inst && sp.inst.update && !sp.updateFailed) {
+      if (!sp.updateFailed) {
         try {
-          sp.inst.update(f)
+          sp.paper.update(theta)
+          if (sp.inst && sp.inst.update) sp.inst.update(f)
         } catch (err) {
           // one broken scene must not take the book down: report once, freeze it
           console.error(`[jhana-book] update() failed for "${sp.mod.id}":`, err)

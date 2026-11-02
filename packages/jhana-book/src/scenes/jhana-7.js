@@ -169,8 +169,7 @@ function build(ctx) {
       moteMat.opacity = lit * (0.62 + 0.38 * b)
       moteMat.size = MOTE_SIZE * (0.92 + 0.14 * b)
       mote.visible = lit > 0.002
-      glow.intensity = lit * (0.07 + 0.03 * b)
-      glow.visible = mote.visible
+      glow.intensity = lit * (0.07 + 0.03 * b) // stays visible: a light count change recompiles shaders
     },
     dispose() {
       moteGeo.dispose()

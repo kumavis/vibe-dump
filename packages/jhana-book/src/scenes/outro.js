@@ -151,7 +151,17 @@ function floorLightTexture() {
   const v = (s) => ((s * k) / L) * H
   const u0 = (mullion / half) * W
   const u1 = ((half - border) / half) * W
-  g.filter = 'blur(3px)'
+  // Soft edges: a canvas blur filter, or where that is missing (some Safari)
+  // the same panes drawn off the canvas with only their blurred shadow on it
+  // (a shadowBlur of 6 is a 3 px gaussian).
+  const filter = 'filter' in g
+  if (filter) g.filter = 'blur(3px)'
+  else {
+    g.shadowColor = 'rgba(255,255,255,1)'
+    g.shadowBlur = 6
+    g.shadowOffsetX = 2 * W
+    g.translate(-2 * W, 0)
+  }
   g.fillStyle = 'rgba(255,255,255,1)'
   g.fillRect(u0, v(sill), u1 - u0, v(bars[0][0]) - v(sill))
   g.fillRect(u0, v(bars[0][1]), u1 - u0, v(bars[1][0]) - v(bars[0][1]))
@@ -166,7 +176,13 @@ function floorLightTexture() {
   g.closePath()
   g.fill()
   // fade toward the reader
-  g.filter = 'none'
+  if (filter) g.filter = 'none'
+  else {
+    g.setTransform(1, 0, 0, 1, 0, 0)
+    g.shadowColor = 'rgba(0,0,0,0)'
+    g.shadowBlur = 0
+    g.shadowOffsetX = 0
+  }
   g.globalCompositeOperation = 'destination-in'
   const fade = g.createLinearGradient(0, 0, 0, H)
   fade.addColorStop(0, 'rgba(255,255,255,1)')

@@ -183,7 +183,7 @@ function build(ctx) {
   const keep = (list, x) => (list.push(x), x)
 
   // ---- pond bed + water --------------------------------------------------------------
-  const bedTex = keep(own.textures, pondBedTexture(low ? 512 : 1024, rnd))
+  const bedTex = keep(own.textures, pondBedTexture(512, rnd)) // 512 at every quality: keeps the build quick
   const tintTex = keep(own.textures, causticTexture(256, 7, paper.rng('caustic-a'), 'tint'))
   const lightTex = keep(own.textures, causticTexture(256, 6, paper.rng('caustic-b'), 'light'))
   const bedMat = keep(own.materials, new THREE.MeshStandardMaterial({ map: bedTex, roughness: 0.95, side: THREE.DoubleSide }))

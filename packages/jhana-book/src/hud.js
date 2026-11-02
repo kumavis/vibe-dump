@@ -6,7 +6,7 @@ const DEG = Math.PI / 180
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
 
 export class Hud {
-  // opts: { canvas, titles, nohud, orbit, onPrev, onNext, onDot, onSound, onAgain }
+  // opts: { canvas, titles, lines, nohud, orbit, onPrev, onNext, onDot, onSound, onAgain }
   constructor(opts) {
     this.o = opts
     this.el = document.getElementById('hud')
@@ -17,6 +17,8 @@ export class Hud {
     this.againEl = document.getElementById('again')
     this.prevEl = document.getElementById('arrow-prev')
     this.nextEl = document.getElementById('arrow-next')
+    this.liveEl = document.getElementById('live')
+    this.lines = opts.lines || []
     this.hidden = false
     this.tint = ''
     this.current = -2
@@ -63,7 +65,12 @@ export class Hud {
     let down = null
     canvas.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0) return
+      if (down) {
+        down.cancelled = true // a second finger: a pinch, not a tap or a swipe
+        return
+      }
       down = { x: e.clientX, y: e.clientY, type: e.pointerType, drag: false, yaw: orbit.yaw, pitch: orbit.pitch }
+      down.id = e.pointerId
       canvas.setPointerCapture?.(e.pointerId)
     })
     canvas.addEventListener('pointermove', (e) => {
@@ -79,11 +86,11 @@ export class Hud {
       }
     })
     const end = (e, cancelled) => {
-      if (!down) return
+      if (!down || e.pointerId !== down.id) return
       const d = down
       down = null
       orbit.dragging = false
-      if (cancelled || d.drag) return
+      if (cancelled || d.drag || d.cancelled) return
       const dx = e.clientX - d.x
       const dy = e.clientY - d.y
       if (d.type !== 'mouse' && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
@@ -151,6 +158,7 @@ export class Hud {
   toggle() {
     this.hidden = !this.hidden
     this.el.classList.toggle('hidden', this.hidden)
+    this.el.inert = this.hidden // hidden buttons leave the tab order
   }
 
   // n: rest/target state (0…11), turning: bool
@@ -170,6 +178,12 @@ export class Hud {
 
   firstTurn() {
     this.hintEl.classList.add('gone')
+  }
+
+  // For screen readers: the text printed on the spread at rest n (0…11).
+  announce(n) {
+    const text = (n >= 1 && n <= 10 && this.lines[n - 1]) || 'The Jhānas, a pop-up book'
+    if (this.liveEl && this.liveEl.textContent !== text) this.liveEl.textContent = text
   }
 
   setTint(color) {
@@ -192,7 +206,6 @@ export class Hud {
   setSound(on) {
     this.soundEl.classList.toggle('on', on)
     this.soundEl.setAttribute('aria-pressed', on ? 'true' : 'false')
-    this.soundEl.setAttribute('aria-label', on ? 'Sound on' : 'Sound off')
     this.soundEl.title = on ? 'Sound on' : 'Sound off'
   }
 }

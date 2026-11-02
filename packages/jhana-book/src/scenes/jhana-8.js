@@ -70,6 +70,9 @@ const GHOSTS = [
 // How strongly each one shows: those that sit over the pale page are kept
 // faint (additive light on near-white paper clips to white very quickly).
 const GHOST_GAIN = [0.11, 0.12, 0.035, 0.1, 0.1, 0.07, 0.035, 0.04]
+// The ghosts were points of size 1 × their size; under the book's 34° camera
+// such a point covers tan(17°) world units, so the sprites scale by that.
+const GHOST_SCALE = Math.tan((17 * PI) / 180)
 
 export default {
   id: 'jhana-8',
@@ -146,15 +149,11 @@ function build(ctx) {
   // ---- ghosts: soft additive sprites that come with the in-breath -----------------
   const n = quality === 'low' ? 4 : GHOSTS.length
   const rnd = paper.rng('jhana-8 ghosts')
-  const gPos = new Float32Array(n * 3)
-  const gCol = new Float32Array(n * 3)
-  const gSize = new Float32Array(n)
   const home = new Float32Array(n * 3) // this breath's resting place
   const baseSize = new Float32Array(n)
   const weight = new Float32Array(n) // brightness this breath
   const lag = new Float32Array(n) // how late in the in-breath it arrives
   const tint = [new THREE.Color('#f4eef6'), new THREE.Color('#e6d8ee'), new THREE.Color('#f3ece4')]
-  const tints = new Float32Array(n * 3)
   const reseed = () => {
     for (let i = 0; i < n; i++) {
       const g = GHOSTS[i]
@@ -168,38 +167,25 @@ function build(ctx) {
     }
   }
   reseed()
-  for (let i = 0; i < n; i++) {
-    const c = tint[i % tint.length]
-    tints[i * 3] = c.r
-    tints[i * 3 + 1] = c.g
-    tints[i * 3 + 2] = c.b
-  }
-  const gGeo = new THREE.BufferGeometry()
-  gGeo.setAttribute('position', new THREE.BufferAttribute(gPos, 3))
-  gGeo.setAttribute('color', new THREE.BufferAttribute(gCol, 3))
-  gGeo.setAttribute('aSize', new THREE.BufferAttribute(gSize, 1))
   const gTex = softTexture(THREE, paper.rng('jhana-8 ghost rim'))
-  const gMat = new THREE.PointsMaterial({
-    size: 1,
-    map: gTex,
-    vertexColors: true,
-    transparent: true,
-    opacity: 1,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-  })
-  // Per-ghost size: PointsMaterial has one size, so scale it by an attribute.
-  gMat.onBeforeCompile = (shader) => {
-    shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nattribute float aSize;')
-      .replace('gl_PointSize = size;', 'gl_PointSize = size * aSize;')
+  // One sprite each, not points: a ghost grows past the largest point size
+  // many GPUs allow, and a point vanishes once its centre leaves the view.
+  const ghosts = []
+  for (let i = 0; i < n; i++) {
+    const mat = new THREE.SpriteMaterial({
+      color: 0x000000,
+      map: gTex,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+    const s = new THREE.Sprite(mat)
+    s.name = 'jhana-8 ghost'
+    s.renderOrder = 10
+    s.frustumCulled = false
+    group.add(s)
+    ghosts.push(s)
   }
-  gMat.customProgramCacheKey = () => 'jhana-8-ghost'
-  const ghosts = new THREE.Points(gGeo, gMat)
-  ghosts.name = 'jhana-8 ghosts'
-  ghosts.renderOrder = 10
-  ghosts.frustumCulled = false
-  group.add(ghosts)
 
   // ---- a faint pearl light along the far edge ----------------------------------
   const pearl = new THREE.PointLight('#f1e8f4', 0, 2.4, 2)
@@ -232,32 +218,29 @@ function build(ctx) {
         // arrive late or early in the in-breath; leave with the out-breath
         const a = out ? b : smooth((breath - lag[i]) / (1 - lag[i]))
         const k = vis * weight[i] * a * GHOST_GAIN[i]
-        gCol[i * 3] = tints[i * 3] * k
-        gCol[i * 3 + 1] = tints[i * 3 + 1] * k
-        gCol[i * 3 + 2] = tints[i * 3 + 2] * k
+        const s = ghosts[i]
+        s.material.color.copy(tint[i % tint.length]).multiplyScalar(k)
         // dissolving: swell and rise a little as the breath leaves
         const going = out ? 1 - breath : 0
-        gSize[i] = baseSize[i] * (0.85 + 0.15 * a + 0.55 * going)
-        gPos[i * 3] = home[i * 3] + 0.01 * Math.sin(0.11 * time + i)
-        gPos[i * 3 + 1] = (home[i * 3 + 1] + 0.06 * going) * (0.4 + 0.6 * reveal)
-        gPos[i * 3 + 2] = home[i * 3 + 2]
+        s.scale.setScalar(baseSize[i] * (0.85 + 0.15 * a + 0.55 * going) * GHOST_SCALE)
+        s.position.set(
+          home[i * 3] + 0.01 * Math.sin(0.11 * time + i),
+          (home[i * 3 + 1] + 0.06 * going) * (0.4 + 0.6 * reveal),
+          home[i * 3 + 2],
+        )
+        s.visible = vis > 0.002
       }
-      gGeo.attributes.position.needsUpdate = true
-      gGeo.attributes.color.needsUpdate = true
-      gGeo.attributes.aSize.needsUpdate = true
-      ghosts.visible = vis > 0.002
 
+      // stays visible at 0: a light count change recompiles shaders
       pearl.intensity = reveal * (0.5 + 0.16 * b)
-      pearl.visible = reveal > 0.002
     },
     dispose() {
-      gGeo.dispose()
-      gMat.dispose()
+      for (const s of ghosts) s.material.dispose()
       gTex.dispose()
       shadowMat.dispose()
       dither.dispose()
       for (const c of casters) c.parent && c.parent.remove(c)
-      group.remove(ghosts, pearl)
+      group.remove(...ghosts, pearl)
       paper.dispose()
     },
   }
