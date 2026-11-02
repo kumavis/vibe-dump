@@ -22,7 +22,7 @@
       "Opus 5.5",
       "Fable 5.1"
     ],
-    "thinking": "high",
+    "thinking": "unknown",
     "thumbnail": {
       "click": "#dots .dot:nth-child(2)",
       "settle": 45000
