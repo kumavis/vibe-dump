@@ -121,10 +121,10 @@
 // two more). The blasts are the match's own terrain's (G.terrain), from
 // outside any command: ?debug's scenery.blast serves only the title, and
 // the page is shot and thrown away, nothing played on after. FORT_REF is
-// null again until F7c's code commit lands: a556cfc's posts never break,
-// and F7c boards in the platform's space under its slab, so its frames are
-// no reference for F7c's (the working tree against itself, the header's
-// control, its PNGs F7c's references).
+// F7c's code commit, 4e416f9: a556cfc's posts never break, and F7c boards
+// in the platform's space under its slab, so its frames are no reference
+// for F7c's (until that commit landed, the working tree against itself, the
+// header's control).
 //
 //   node sim/terrain-shots.mjs [...] [--fort-seeds 1,2,3,4,5,30] [--fort-ref <git ref>]
 import { parseArgs } from 'node:util'
@@ -148,9 +148,9 @@ const RESHOOTS = 2
 const KINDS = ['table', 'wrecked']
 // (F7b) the fortified boards' reference: F7b's code commit, once it lands
 // (null until then: the working tree against itself, the header); (F7c)
-// a556cfc's until F7c, null again until F7c's code commit lands (the
-// header: its posts break, its platforms are boarded in)
-const FORT_REF = null
+// a556cfc's until F7c, then F7c's code commit, 4e416f9 (its posts break,
+// its platforms are boarded in)
+const FORT_REF = '4e416f9'
 
 function usage(why) {
   console.error(`terrain-shots: ${why}\nusage: node sim/terrain-shots.mjs [--ref <git ref>] [--seeds 1,4242,90210,411,22392] [--full] [--out <dir>]`)

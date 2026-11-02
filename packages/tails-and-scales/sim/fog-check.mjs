@@ -244,7 +244,9 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
 {
   // ((F9a) and a Field battle with War-Carts, a hull wrecked with riders
   // aboard: a rider is no eye, and is seen exactly when its hull is)
-  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-3.json']
+  // ((F7c) and fort/'s collapse log: two platforms shot out, a unit falling
+  // with each, its fall's D3 row among the events marked)
+  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-3.json']
   for (const file of logs) {
     const log = JSON.parse(readFileSync(join(PKG, file), 'utf8'))
     const G = core.createMatch(log.setup, { out: [] })
