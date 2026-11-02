@@ -1124,27 +1124,47 @@ follows N3.
   height against its fall is a tuning of its own, rule 10's. And a
   stray `/tshots.log` at the filesystem root of F7c's machine, a mistaken
   redirect, for a person to delete.
-- [ ] **Later (main's, found at F7b's merge):** each main's own, the
-  last three run on ab8cee6 too: P-prop's self-test finds its
-  `aishoot-fears-riders` edit stale (its anchor still indented as
-  core/ai/policy.js was before the V3 merge; the edit and the file are
-  ab8cee6's, byte for byte); input-check's tips lane on the 390×844 phone, "Elder
-  Chitterwick's card's high: no tip shown"; lobby-rig's `size` ("the
-  host's page offers every size, the Powder keg among them"); and
-  playback-check's Grand battle as watched, 203.9 s against its 200 s
-  (V3c's note's 204 s). Found at F7c's integration, each main's own (the
-  check and the code it edits 81866f2's byte for byte, and judged the
-  same on a copy of 81866f2's package): two self-test edits stale, each
-  anchored on a line a later step rewrote, mended in commits of their own
-  (replay-check's `relog-unstamped`, F16's veiled log line, 38c903d;
-  macro-check's `fire-one`, V3c's spell in a group's Fire, b40e2e7); and
-  four edits the edited code passes, open: snap-check's `over-stale` (on
-  4242-99), `collapse-hangs` and `shudder-holds` (R0's and F8b's, on
-  64886-198528, which drops ten blocks but none the checks see hanging,
-  and hurts none: each wants a battle where a dropped block outlives its
-  blast and one is hurt as it falls; watch-carts-swapped-101, whose
-  dropped blocks two of stand to the end and two are hurt, is the
-  likeliest, untried), and present-check's `no-embark-owners`.
+- [ ] **Later (main's, found at F7b's merge):** four checks failing on
+  main, each main's own (ab8cee6's too); three mended after the merge, each a
+  check gone stale or tapping wrong, the app right (DESIGN's "Mends after
+  F7b's merge"), one open. Mended: P-prop's self-test's
+  `aishoot-fears-riders` edit, whose anchor was the friendly-fire loop as
+  it stood before the V3 merge moved it into `weighed()` (the anchor
+  follows it: all 110 caught); input-check's tips lane on the 390×844
+  phone, "Elder Chitterwick's card's high: no tip shown", the check
+  tapping the middle of a wrapped word's bounding box, the gap between
+  its two lines (it taps the word's first line now: `--only tips` and the
+  whole check pass, 70 rows); lobby-rig's `size`, written before V3d's
+  Powder Field joined the lobby's sizes (the row offers five now: the
+  case and the whole rig pass, 19 of 19). Open: **playback-check's Grand
+  battle as watched, 203.9 s against its 200 s** (board 4, dice 15; the
+  four battles 181 s on average, F8b's 174 and at most 185). It is
+  `present/pace.js`'s estimate, a pure function of the event stream, so
+  the same at any load (203.9 at loads of 9 and 20). The time is V3c's
+  spells: the same battle played 187.1 s on 0a2825f, before them, and
+  203.9 s from the V3 merge on (ab8cee6 and here: F9a's carts are in no
+  ×3 preset, F7b's parapets stand only on `fortified`), its attacks
+  batched 64 → 99 (casts 10 → 19, templates 20 → 30, volleys 31 → 39,
+  strikes 22 → 29) and its attack batches 34.5 → 54.6 s, while its walk
+  batches (48.6 → 47.9 s) and banners (34.8 → 36.0 s) held; no batch is
+  cut short by an event it can't hold. No cheap fix is clearly right:
+  the battle plays more attacks, each at the spec's spacing (0.3 s apart, a
+  template's throw held 0.5 s and its scatter 0.5 s more), so what is left is a pacing call
+  (the spacing, a template's hold, a cast on a friend's) or a budget
+  call, the step's to make, not a mend's. The budget stays 200 s. Found at
+  F7c's integration, each main's own (the check and the code it edits
+  81866f2's byte for byte, and judged the same on a copy of 81866f2's
+  package): two self-test edits stale, each anchored on a line a later
+  step rewrote, mended in commits of their own (replay-check's
+  `relog-unstamped`, F16's veiled log line, 38c903d; macro-check's
+  `fire-one`, V3c's spell in a group's Fire, b40e2e7); and four edits the
+  edited code passes, open: snap-check's `over-stale` (on 4242-99),
+  `collapse-hangs` and `shudder-holds` (R0's and F8b's, on 64886-198528,
+  which drops ten blocks but none the checks see hanging, and hurts none:
+  each wants a battle where a dropped block outlives its blast and one is
+  hurt as it falls; watch-carts-swapped-101, whose dropped blocks two of
+  stand to the end and two are hurt, is the likeliest, untried), and
+  present-check's `no-embark-owners`.
 - [x] **F7c** Timber platforms that collapse under their defenders.
   (4e416f9; `CORE_VERSION` 14, `RULES_ID` unmoved; every classic, open,
   keg and powder battle byte-identical, and `scale/`'s 10 open pairs. A
