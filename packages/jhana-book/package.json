@@ -25,7 +25,7 @@
     "thinking": "high",
     "thumbnail": {
       "click": "#dots .dot:nth-child(2)",
-      "settle": 12000
+      "settle": 45000
     }
   }
 }
