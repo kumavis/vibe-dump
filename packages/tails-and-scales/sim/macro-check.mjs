@@ -566,7 +566,10 @@ const MUTANTS = [
   ['slots-lost', 'input/orders.js', 'target, first.slots, opts)', 'target, null, opts)'],
   ['engaged-falls-back', 'present/orders.js', ": q.isEngaged(G, u) ? 'in combat' : ''", ": ''", 2],
   ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
-  ['fire-one', 'input/orders.js', "      if (verb === 'fire') await send({ t: 'shoot', u: id, tg: tg.id }, u)", "      if (verb === 'fire') {\n        await send({ t: 'shoot', u: id, tg: tg.id }, u)\n        break\n      }"],
+  // a group's Fire stops after its first member's shot (the anchor follows
+  // the send as V3c's spell bar left it, a4bac3e, naming the spell the
+  // member's plan picked: the edit is what it was, a break after that send)
+  ['fire-one', 'input/orders.js', "      if (verb === 'fire') await send(plan.sp === undefined ? { t: 'shoot', u: id, tg: tg.id } : { t: 'shoot', u: id, tg: tg.id, sp: plan.sp }, u)", "      if (verb === 'fire') {\n        await send(plan.sp === undefined ? { t: 'shoot', u: id, tg: tg.id } : { t: 'shoot', u: id, tg: tg.id, sp: plan.sp }, u)\n        break\n      }"],
   // (F10c) the orders' pilot names every unit of the seat, ordered or not
   ['pilot-everyone', 'input/orders.js', "orderedUnits(G, q, seat, orders, phase).filter((u) => !skip.has(u.id) && stepOf(G, q, u, orders.get(u.id), phase).how === 'pilot').map((u) => u.id)", "G.units.filter((u) => u.side === seat && u.alive > 0 && q.canAct(G, u)).map((u) => u.id)"],
   // a march planned once, not again on its advance's roll (it moves on a
