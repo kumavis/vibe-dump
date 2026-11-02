@@ -16,6 +16,8 @@ import { DEFAULT_AUDIO } from './audio.js'
 export { W, H, LEAF, COVER }
 
 const PI = Math.PI
+// Dihedral (radians, ≈3.4°) under which a spread counts as shut and is hidden.
+const CLOSED_THETA = 0.06
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
 const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a), 0, 1)
@@ -516,7 +518,13 @@ export class Book {
       const m = L.mounts[i]
       const sp = this.ensureBuilt(m.spread)
       sp._mounted = true
-      sp.group.visible = true
+      // Below ~2° the two pages are touching: everything glued between them is
+      // hidden by the paper, except stand-offs (a flap's hinge gap, a decoration
+      // 0.002 above the page) that poke through the other page near the spine.
+      // Nothing legitimately visible is lost by hiding the whole spread there.
+      const theta = clamp(m.aL - m.aR, 0, PI)
+      const shown = theta > CLOSED_THETA
+      sp.group.visible = shown
       sp.visible = true
       // Spread space: the group's local +y must be the bisector of the two
       // pages. The pages' world directions are the angles aL (left) and aR
@@ -526,7 +534,6 @@ export class Book {
       // aR = tilt → rotation = tilt + ψ/2 − π/2 (DESIGN.md, with tilt = 0).
       sp.group.position.set(m.x, m.y, 0)
       sp.group.rotation.set(0, 0, (m.aL + m.aR) / 2 - PI / 2)
-      const theta = clamp(m.aL - m.aR, 0, PI)
       const f = sp.frame
       f.dt = dt
       f.time = this.time - sp.builtAt
@@ -547,6 +554,9 @@ export class Book {
           sp.updateFailed = true
         }
       }
+      // A scene may hide its own group; the engine's closed-state hiding wins
+      // either way.
+      if (!shown) sp.group.visible = false
     }
     for (const sp of this.spreads) {
       if (sp.visible && !sp._mounted) {
