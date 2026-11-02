@@ -98,6 +98,19 @@
 //   with the frame's −z at the top — e.g. a page from above, far edge up).
 //   thickness > 0 extrudes a slab centred on y = 0.
 //
+// ─── SHADOWS, STAND-OFFS — two things every author ran into ─────────────────
+//   • The engine uses VSM shadows, and three.js draws every mesh that
+//     *receives* shadows into a VSM shadow map too. So a translucent or glow
+//     card with castShadow = false still throws a solid shadow unless
+//     receiveShadow is false as well. card() turns both on: clear both for
+//     water, veils, acetate, glows.
+//   • The pages meet at the spine with no clearance, so anything held above a
+//     page (a flap's 0.002 hinge gap, a decoration at y = 0.002) can show
+//     through the other page near the gutter while the spread is nearly shut.
+//     The engine hides a spread entirely under ~3° (CLOSED_THETA in book.js);
+//     for the few degrees above that, sink printed layers toward the page as
+//     θ → 0 and keep them a few mm off the spine.
+//
 // ─── THREE SNIPPETS ─────────────────────────────────────────────────────────
 //   // 1. A tent 0.36 high, glued 0.35 from the spine, with a lamp on its ridge
 //   const tent = paper.parallelFold({ a: 0.35, b: 0.35, p: 0.5, q: 0.5, z0: -0.3, z1: 0.1 })
