@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paper Harness</title>
+    <style>
+      :root {
+        --bg: #121317;
+        --ink: #d8d4cc;
+        --dim: #8a8780;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--ink);
+        font: 13px/1.4 ui-sans-serif, system-ui, sans-serif;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+      #ui {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      #ui input[type='range'] {
+        flex: 1 1 240px;
+        accent-color: #e0a030;
+      }
+      #val {
+        font-variant-numeric: tabular-nums;
+        min-width: 11em;
+      }
+      #legend {
+        position: fixed;
+        top: 12px;
+        left: 16px;
+        color: var(--dim);
+        max-width: calc(100% - 32px);
+      }
+      #legend b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      #legend span {
+        display: inline-block;
+        margin-right: 12px;
+        white-space: nowrap;
+      }
+      #legend i {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 2px;
+        margin-right: 5px;
+        vertical-align: -1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="legend"></div>
+    <div id="ui">
+      <label for="theta">θ</label>
+      <input id="theta" type="range" min="0" max="3.14159265" step="0.001" />
+      <span id="val"></span>
+      <label><input id="sweep" type="checkbox" /> sweep</label>
+      <label><input id="axes" type="checkbox" /> frames</label>
+    </div>
+    <script type="module" src="./paper-harness.js"></script>
+  </body>
+</html>
