@@ -114,7 +114,17 @@ the commit, and add whatever the work turned up.
   match by `sim/height-probe.mjs`; from F7b its F7b row too, a shooter
   firing from a deck in ≥ 50% of the same battles) passes, and from F7b
   P-height's parapet scenes, terrain-check's parapet rows (section 6 and
-  P-climb) and data-check's per-recipe parapets, and from
+  P-climb) and data-check's per-recipe parapets, and from F7c P-height's
+  collapse scenes (the cascade, a unit staying, landing and crushed, the
+  three sites, the AI's `fallGain`) and P-prop's boundary rows
+  (`terrain.dropped` empty and the nav clean at every command boundary),
+  data-check's posts and decks (each recipe's draws pinned), terrain-check's
+  `postRows` and the tiles section's falls (each deck dropping, its planks
+  held till it lands, `?fast`'s end state at once), present-check's
+  collapse rows, play-report's F7c row (a unit falls with its platform in
+  `fort/`, its collapse log `hotseat-collapse-platform-8`; a post shot out
+  where a platform stands in ≥ 50% of the `fort/` AI pairs) and fog-check's
+  sight pass over the collapse log, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
   every Field and Grand board of seeds 1-500, on every set the mission
@@ -192,7 +202,9 @@ the commit, and add whatever the work turned up.
   each exiting 0: `node sim/snap-check.mjs` (and `--self-test`: the table
   built event by event is a fresh snap's, and each battle's table snapped
   in place at its end; by default seven battles, and the whole corpus,
-  `--only ai,human`, at milestones, as P-browser),
+  `--only ai,human`, at milestones, as P-browser; from F7c its collapse
+  row, a hotseat battle on the `collapse` policy played without `?fast`,
+  two platforms falling with a unit on each, and its fall edits),
   `node sim/rematch-memory.mjs` (and `--self-test`, an edit for each rule
   it judges: renderer.info flat over 5 rematches, the page's own heap not
   growing a rematch (R7b: from heap snapshots, V8's compiled code left
@@ -203,7 +215,9 @@ the commit, and add whatever the work turned up.
   `node sim/terrain-shots.mjs` (the five boards against R0, run at every
   step that touched the view since R3, listed here from R7a; from F7b five
   fortified boards too, a hotseat battle's table at its deployment, against
-  `FORT_REF`, F7b's code commit) and, from
+  `FORT_REF`, F7b's code commit; from F7c six, board 30 among them, each
+  wrecked too with its timber platforms dropped, against F7c's code
+  commit) and, from
   R7b, `node sim/hud-check.mjs` (and `--self-test`: a snap mid-battle, in
   the deployment, the roll-off, a seat's phase, at a charge's end and past
   the end, leaves the HUD right: Begin battle, End and Auto up for a local
@@ -1097,7 +1111,19 @@ follows N3.
   machine at all three sizes. (F7b's other two Later items are gone at
   the merge: rematch-memory `--terrain fortified` gives 2.3 KB a rematch,
   and the ghost plan's tooltip wasn't seen; the connectivity rows and
-  play-check's layout lane pass on main's fixes.)
+  play-check's layout lane pass on main's fixes.) At F7c (4e416f9) the
+  Trebuchet fits 33 ± 7 and the Venom Engine 71 ± 7 (both score gates
+  holding, `fortified` 50.7%): F7c moves neither past its SE, and the
+  retune stands as it was.
+- [ ] **Later (F7c's):** the AI seldom mans a timber platform (no
+  parapets, so no cover band draws its shooters up as the ramparts' do;
+  a unit stood on one in 1 of 200 Skirmish AI battles and 2 of 20 Grand
+  ones), so AI-against-AI play almost never shoots one out from under its
+  defenders (no unit fell in 250 battles; `fallGain` aims at them once
+  they are there). Whether the position score should weigh a platform's
+  height against its fall is a tuning of its own, rule 10's. And a
+  stray `/tshots.log` at the filesystem root of F7c's machine, a mistaken
+  redirect, for a person to delete.
 - [ ] **Later (main's, found at F7b's merge):** each main's own, the
   last three run on ab8cee6 too: P-prop's self-test finds its
   `aishoot-fears-riders` edit stale (its anchor still indented as
@@ -1106,20 +1132,59 @@ follows N3.
   Chitterwick's card's high: no tip shown"; lobby-rig's `size` ("the
   host's page offers every size, the Powder keg among them"); and
   playback-check's Grand battle as watched, 203.9 s against its 200 s
-  (V3c's note's 204 s).
-- [ ] **F7c** Timber platforms that collapse under their defenders. (F7a
-  draws the platform as an open slab on braced posts while its deck's
-  line-of-sight body is solid from the ground, as the piece table says: a
-  thin timber body, or the view closing the gap, goes with the posts made
-  breakable.) What F7b left it: the posts still `hp: Infinity` (F7c's
-  `hp: 3`); the cascade in `Terrain.destroy(post)` (each deck listing the
-  post in `supports` down once `fallsAt` of them are, with its ladders by
-  `on`, a timber rubble pile at ground level, `terrain.dropped`); `settle(G)`
-  after the refreshNav of `blastLands`, `doMove` and `finishCharge` (the
-  only new draws: D3 mortal wounds); `unit.fall` and its view. A platform
-  has no parapets, so none falls with it; a parapet already breaks at
-  hp 3 with no rubble, and the view's debris for it is F7b's. `fort/` is
-  re-recorded again at F7c (a platform shot out).
+  (V3c's note's 204 s). Found at F7c's integration, each main's own (the
+  check and the code it edits 81866f2's byte for byte, and judged the
+  same on a copy of 81866f2's package): two self-test edits stale, each
+  anchored on a line a later step rewrote, mended in commits of their own
+  (replay-check's `relog-unstamped`, F16's veiled log line, 38c903d;
+  macro-check's `fire-one`, V3c's spell in a group's Fire, b40e2e7); and
+  four edits the edited code passes, open: snap-check's `over-stale` (on
+  4242-99), `collapse-hangs` and `shudder-holds` (R0's and F8b's, on
+  64886-198528, which drops ten blocks but none the checks see hanging,
+  and hurts none: each wants a battle where a dropped block outlives its
+  blast and one is hurt as it falls; watch-carts-swapped-101, whose
+  dropped blocks two of stand to the end and two are hurt, is the
+  likeliest, untried), and present-check's `no-embark-owners`.
+- [x] **F7c** Timber platforms that collapse under their defenders.
+  (4e416f9; `CORE_VERSION` 14, `RULES_ID` unmoved; every classic, open,
+  keg and powder battle byte-identical, and `scale/`'s 10 open pairs. A
+  platform's posts at `hp: 3` and its deck falling once 2 of its 4 are
+  down (`FALLS_AT`, the recipe's choice: the spec gives no number,
+  recorded for approval), fields and no draws; the barn's posts unbroken.
+  The deck's line-of-sight body kept solid, and the view boards in the
+  space under the slab instead. `Terrain.destroy(post)`'s cascade (the
+  deck, its ladders by `on`, its planks' pile, `terrain.dropped`);
+  `core/actions/settle.js` after the refreshNav of a template's landing,
+  `doMove`, `finishCharge` and the boarding walk (stay, land on the
+  nearest clear ground within u.r + 6", or crushed; one D6 for the D3);
+  `unit.fall` before the D3's row (a deviation in the events' order, not
+  the draws', recorded), `crushed` on it. The AI tuned within the spec's
+  letter: `fallGain`, a template worth the manned platforms it would help
+  bring down. The view: posts splintering, decks sagging and dropping,
+  ladders toppling, the planks' heap held till it lands, `?fast`'s end
+  state, the figures falling with "falls! D3"; the mirror, the attack
+  batch and the fog. P-height (F7c)'s scenes and 18 mutants, the boundary
+  rows, data-check's posts and decks, terrain-check's `postRows` and the
+  tiles' falls (8 edits), present-check's and snap-check's collapse rows,
+  terrain-shots' wrecked fortified boards (board 30 added, `FORT_REF`
+  4e416f9), play-report's F7c row (defined at F7c: a unit falls with its
+  platform in `fort/`; a post shot out in ≥ 50% of the AI pairs standing
+  a platform), `sim/collapse-probe.mjs`, corpus-add's `collapse` and
+  `fall` needs and the human-bot's `collapse` policy. `fort/` re-recorded
+  and extended in 1179df2, the PIN on 4e416f9: the 6 fortified pairs whose
+  boards stand a platform re-recorded (watch-fort-7, -8, -9 and scale/'s
+  304, 205 and 305, every setup and name its own), and two added,
+  hotseat-collapse-platform-8 (two platforms shot out, a unit falling with
+  each) and watch-fort-46 (a deck falls in AI play: 4 of 400 candidates);
+  the corpus 91 battles, 91 of 91 in Node, `--page` and `--pin`, 24 of 24
+  `--browser --only fort,scale`. play-report: F7c 1 of 10 and 4 of 4, the
+  sweep 13 of 24; AI-against-AI play mans a platform so seldom that no
+  unit fell in 250 Skirmish, Field and Grand battles; against a seat that
+  mans them the Bushtails' templates shot two out (none before the
+  tuning). army-sim's Skirmish score gates hold (classic 48.6%,
+  `fortified` 50.7%); the per-unit gate fails on the Trebuchet alone, 33
+  ± 7 against 50 (32 at the F7b merge): the Later item below. DESIGN's
+  "F7c as built".)
 - [x] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
   battles: their presets and list limits, prices retuned on the real
   boards, the `open` set, a minimap (March from it), semantic zoom, terrain
@@ -1445,9 +1510,16 @@ follows N3.
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
   call: the big boards and vehicles come first.)
 - [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
-  bird-people's Sky-Basket (which may land on ramparts).
+  bird-people's Sky-Basket (which may land on ramparts). (From F7c: a
+  Basket landed on a timber platform falls with it as any unit does,
+  its riders aboard, `settle`'s `moveUnitTo`; untested until it exists,
+  so P-height (F7c)'s collapse scenes take a flying hull on a deck that
+  falls.)
 - [ ] **F9d** Siege towers that unload onto ramparts (round for every race
-  in v1).
+  in v1). (From F7c: a rampart's walk never falls; a drawbridge onto a
+  timber platform, if ever allowed, puts its riders on a deck that can
+  fall under them, and `settle` then moves them as any unit, the tower
+  untouched.)
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 
