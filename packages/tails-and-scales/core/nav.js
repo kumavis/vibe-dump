@@ -318,6 +318,20 @@ export class NavGrid {
   // their cover is the band behind them, their `coverShape`); then the
   // clearance fields, as ever. (7, F9b:
   // the hull memo is cleared.)
+  //
+  // (F7c) A timber deck shot out from under its defenders (core/terrain/
+  // terrain.js's cascade) is a chunk no longer alive, and so are its
+  // ladders: the rebuild after it (the refreshNav that ends the blast, the
+  // move or the charge, right before core/actions/settle.js) rasters no
+  // floor for the deck and no link for its ladders, so its footprint is
+  // ground again, its rims are ledges no more (their cliff field with
+  // them), its level and its gates are gone (gateGraph's memo is keyed by
+  // the epoch: queries.js levelDist), and the pile of planks it left is
+  // difficult ground and cover there, rastered at the ground's level as any
+  // chunk with no base. Nothing here is new: every array is derived from the
+  // live chunks. A board whose last raised piece falls (one whose only
+  // pieces were platforms) builds no height layer at its next rebuild
+  // (rebuild, above), and plays on as a flat board does.
   rebuildHeight(chunks) {
     const N = this.N
     if (!this.hasHeight) {

@@ -36,6 +36,25 @@
 // the battles with one: the parapets' cover band behind a deck's rim is
 // what draws the AI's shooters up there.
 //
+// F7c's row (DESIGN §4.2.9's thresholds; defined at F7c, in the letter of
+// F7a's and F7b's), over the `fort/` corpus, every battle folded with
+// sim/collapse-probe.mjs looking on:
+//   - a timber platform is shot out from under its defenders (a unit falls
+//     with its deck: a `unit.fall`) in ≥ 1 battle of `fort/`, its human
+//     logs among them (the collapse log, a hotseat human-bot log on the
+//     `collapse` policy, which mans the platforms and aims at their posts);
+//   - where a platform stands, a post of it is shot out (a `terrain.destroy`
+//     of a post) in ≥ 50% of the `fort/` AI pairs whose board stands one
+//     (with --sweep, of a seeded sweep of fortified AI battles whose boards
+//     stand one, seeded as F7a's, the boards with none passed over).
+// Beside them, per battle: the platforms, the blows the posts took and
+// stood, the posts broken, the decks fallen, the units fallen (and those
+// crushed), their D3s' wounds and the models the falls slew. The AI's own
+// play rarely mans a platform (no parapets: no cover band to draw its
+// shooters up, as the ramparts' do), so the falls are the human logs'; its
+// templates chew the posts all the same, and (F7c, core/ai/score.js
+// fallGain) aim at a manned platform's defenders for their fall.
+//
 // F10b's row (at F8b, on the Grand boards): 4 Grand battles with one army
 // on `pilot` every phase; that army reaches melee by round 3 in ≥ 3 of 4.
 // The pilot army's seat is the human's, and every phase it is handed a
@@ -82,8 +101,8 @@
 // as corpus-add's candidates are, the races swapping seats.
 //
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f9a, f10b, f19a; comma-separated for more)
-//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's and F9a's rows: a seeded sweep of AI battles instead
+//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f7c, f9a, f10b, f19a; comma-separated for more)
+//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's, (F7c) F7c's post row and F9a's rows: a seeded sweep of AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
 // F7a's and F7b's rows: with no fort/ AI pair in the corpus (before F7a's
@@ -102,7 +121,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f7b', 'f9a', 'f10b', 'f19a']
+const ROWS = ['f7a', 'f7b', 'f7c', 'f9a', 'f10b', 'f19a']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -249,6 +268,55 @@ async function f7b() {
   console.log(`\n  ${n} battles: ${sum('shots')} shots, ${sum('deckShots')} from a deck in ${fired} battles (${sum('deckVolleys')} volleys, in ${rows.filter((r) => r.deckVolleys).length}), ${sum('climbedShots')} by a shooter that climbed to its deck in ${rows.filter((r) => r.climbedShots).length}, ${sum('lobs')} past the printed range in ${rows.filter((r) => r.lobs).length}, ${sum('upShots')} up at a raised target`)
   const checks = [
     { name: 'a shooter fires from a deck', ok: n > 0 && fired * 2 >= n, got: `${fired} of ${n} battles (${pct(fired, n)})`, want: '≥ 50%' },
+  ]
+  return { checks, failed }
+}
+
+// ── F7c: platforms shot out ─────────────────────────────────────────────────
+// { checks, failed }, or null when the code's platforms never fall (no
+// core/actions/settle.js)
+async function f7c() {
+  if (!existsSync(join(dir, 'core', 'actions', 'settle.js'))) return null
+  const { collapseProbe } = await import(pathToFileURL(fileURLToPath(new URL('./collapse-probe.mjs', import.meta.url))).href)
+  const match = await loadMatch(dir)
+  const fold = (id, job, kind) => {
+    const probe = collapseProbe()
+    const res = foldJob(core, job, { match, probe })
+    return res.error ? { id, kind, error: res.error.split('\n')[0] } : { id, kind, ...probe.result() }
+  }
+  const failed = []
+  const kept = (rs) => rs.filter((r) => (r.error ? (failed.push(`${r.id}: ${r.error}`), false) : true))
+  const fort = kept(loadCorpus().items.filter((it) => it.set === 'fort').map((it) => fold(it.id, it.job, it.kind)))
+  // the post row's battles: fort/'s AI pairs standing a platform, or the
+  // sweep's (as F7a's: board and dice from the seed's own stream), boards
+  // standing none passed over, up to 40 draws a battle wanted
+  let posted, what, passed = 0
+  if (SWEEP !== null) {
+    posted = []
+    for (let i = 0; posted.length < SWEEP && i < SWEEP * 40; i++) {
+      const r = mulberry32(Number(a.seed ?? 7000) + i + 1)
+      const setup = { ...setupFor('watch', 1 + Math.floor(r() * 99999), 1 + Math.floor(r() * 999999)), terrain: 'fortified' }
+      const row = fold(`sweep-${setup.board}-${setup.dice}`, { setup, entries: [] }, 'ai')
+      if (row.error) failed.push(`${row.id}: ${row.error}`)
+      else if (row.platforms) posted.push(row)
+      else passed++
+    }
+    what = `a sweep of ${posted.length} fortified AI battles whose boards stand a platform (${passed} boards standing none passed over)`
+  } else {
+    posted = fort.filter((r) => r.kind === 'ai' && r.platforms)
+    what = `the ${posted.length} fort/ AI pairs whose boards stand a platform (of ${fort.filter((r) => r.kind === 'ai').length})`
+  }
+  const line = (r) => `  ${r.id.padEnd(34)} ${r.kind === 'ai' ? 'AI   ' : 'human'} platforms ${r.platforms}: posts hit ${r.postsHit} and stood, ${r.posts} broken; decks fallen ${r.decks}; units fallen ${r.falls}${r.crushed ? ` (${r.crushed} crushed)` : ''}${r.falls ? `, ${r.fallWounds} wounds from their D3s, ${r.fallSlain} models slain` : ''}`
+  console.log(`\nF7c's row: the ${fort.length} battles of fort/ (a unit fallen), and ${what} (a post shot out)`)
+  for (const r of fort) console.log(line(r))
+  if (SWEEP !== null) for (const r of posted) console.log(line(r))
+  for (const x of failed) console.log(`  FAILED ${x}`)
+  const sum = (rs, k) => rs.reduce((s, r) => s + r[k], 0)
+  const fell = fort.filter((r) => r.falls > 0), broke = posted.filter((r) => r.posts > 0), n = posted.length
+  for (const [name, rs] of [['fort/', fort], ...(SWEEP !== null ? [['the sweep', posted]] : [])]) console.log(`\n  ${name}: ${rs.length} battles, ${rs.filter((r) => r.platforms).length} standing ${sum(rs, 'platforms')} platforms; posts hit ${sum(rs, 'postsHit')} and stood, ${sum(rs, 'posts')} broken in ${rs.filter((r) => r.posts).length}; ${sum(rs, 'decks')} decks fallen in ${rs.filter((r) => r.decks).length}; ${sum(rs, 'falls')} units fallen in ${rs.filter((r) => r.falls).length} (${sum(rs, 'crushed')} crushed, ${sum(rs, 'fallWounds')} wounds, ${sum(rs, 'fallSlain')} models slain)`)
+  const checks = [
+    { name: 'a platform shot out from under its defenders (a unit falls with its deck)', ok: fell.length > 0, got: `in ${fell.length} of the ${fort.length} battles of fort/${fell.length ? ` (${fell.map((r) => r.id).join(', ')})` : ''}`, want: '≥ 1 battle of fort/' },
+    { name: 'a post shot out where a platform stands', ok: n > 0 && broke.length * 2 >= n, got: `${broke.length} of ${n} battles (${pct(broke.length, n)})`, want: '≥ 50%' },
   ]
   return { checks, failed }
 }
@@ -444,9 +512,9 @@ async function f19a() {
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f9a' ? await f9a() : row === 'f19a' ? await f19a() : await f10b()
+  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f7c' ? await f7c() : row === 'f9a' ? await f9a() : row === 'f19a' ? await f19a() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'f7c' ? "F7c's row: not judged: this code's platforms never fall (no core/actions/settle.js)" : row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
     continue
   }
   judged++

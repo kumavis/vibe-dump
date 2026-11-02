@@ -57,7 +57,10 @@
 //    seeds 1-500 (recipes.js reachOf: its chunks' corners and its ladders'
 //    feet) plus 0.25", to the nearest tenth, and holds its gates. (F7b)
 //    Each recipe stands the recipe table's parapets on its deck, each the
-//    piece table's, and draws nothing for them. (F8b) It passes
+//    piece table's, and draws nothing for them. (F7c) Each recipe's posts
+//    stand under the deck that lists them, a platform's at hp 3 with its
+//    deck's fallsAt 2, the barn's never breaking, nothing but ladders on a
+//    deck that can fall, and its draws those it made before. (F8b) It passes
 //    `open` too, refuses a copy of it with an unknown scale, and classic
 //    has no `scale` (its draws are frozen). (The tower ring's fix, with
 //    F19a) It refuses a fortified copy whose `largeCentre`, the larger
@@ -745,6 +748,67 @@ if ('PARAPET_H' in (await imp(PKG, 'core/terrain/recipes.js'))) {
     check(!bad.length && !late, `the ${name} stands ${PARAPETS[name] ?? 0} parapets on its deck, each the piece table's (${n} on seeds 1-200), and draws nothing for them (every draw made before the first joins)`, [...bad.slice(0, 3), late ? `${late} builds drew after a parapet joined` : ''].filter(Boolean).join('; '))
   }
 }
+// (F7c) the collapsing platforms (DESIGN §4.2.4's piece table and its
+// "Destruction and settle"), each recipe built at the origin from seeds
+// 1-200 with its own stream counted: every post the piece table's (kind
+// 'post', navKind null, los 'block', 0.4" square, its deck's height) and
+// listed in exactly one deck's `supports`; every deck that falls (a
+// `fallsAt`) listing only posts, standing over them (each post's centre
+// inside its footprint), its `fallsAt` a whole number within 1 to
+// supports.length, and its posts breakable (hp 3); a deck that lists
+// supports with no `fallsAt` (V3d's barn's hayloft) standing on posts that
+// never break (hp Infinity), so the Powder Field plays as it did; the
+// platform four posts, falling at two (the recipe's FALLS_AT); every
+// ladder's `on` its deck, and nothing but ladders standing by `on` on a
+// deck that can fall (the cascade takes them with it); and the draws each
+// recipe makes the draws it made before F7c (F7a's, and V3d's for the
+// Powder Field's: the sum over the 200 seeds pinned here, F7c's posts and
+// decks gaining fields, not draws). Code before F7c,
+// whose platforms never fall, is held to none of it.
+const RECIPES = await imp(PKG, 'core/terrain/recipes.js')
+const DRAWS = { rampart: 800, bastion: 400, watchtower: 400, platform: 400, keep: 200, farm: 1600, barn: 8684, trebuchet: 1400, wagon: 1924, engine: 2600, magazine: 6535, farmstead: 800 }
+if ('FALLS_AT' in RECIPES) {
+  const F0 = { p: (lx, lz) => ({ x: lx, z: lz }), yaw: (ly = 0) => ly }
+  const inside = (d, p) => Math.abs(p.shape.x - d.shape.x) <= d.shape.hx && Math.abs(p.shape.z - d.shape.z) <= d.shape.hz
+  check(RECIPES.POST_HP === 3 && RECIPES.FALLS_AT === 2, `a platform's posts break at hp 3 and its deck falls at 2 of its 4 (${RECIPES.POST_HP}, ${RECIPES.FALLS_AT})`, `POST_HP ${RECIPES.POST_HP}, FALLS_AT ${RECIPES.FALLS_AT}`)
+  for (const name of Object.keys(FORTS)) {
+    const bad = []
+    let draws = 0, posts = 0, falling = 0
+    for (let seed = 1; seed <= 200; seed++) {
+      const rand = mulberry32(seed)
+      const rng = () => (draws++, rand())
+      const defs = []
+      FORTS[name]({ W: 40, H: 28, add: (def) => (defs.push(def), { ...def, id: defs.length }) }, F0, rng)
+      const of = (id) => defs[id - 1]
+      for (const [k, p] of defs.entries()) {
+        if (p.kind !== 'post') continue
+        posts++
+        const by = defs.filter((d) => d.supports?.includes(k + 1))
+        if (by.length !== 1) bad.push(`seed ${seed}: post ${k + 1} listed in ${by.length} decks' supports`)
+        if (p.navKind !== null || p.los !== 'block' || p.shape.hx !== 0.2 || p.shape.hz !== 0.2) bad.push(`seed ${seed}: post ${k + 1} not the piece table's (navKind ${p.navKind}, los ${p.los}, ${2 * p.shape.hx}×${2 * p.shape.hz}")`)
+        if (by[0] && (2 * p.shape.hy !== by[0].surface.y || !inside(by[0], p))) bad.push(`seed ${seed}: post ${k + 1} not under its deck, its height (${2 * p.shape.hy}" against ${by[0].surface.y}")`)
+      }
+      for (const [k, d] of defs.entries()) {
+        if (d.kind !== 'deck' || !d.supports) continue
+        const ps = d.supports.map(of)
+        if (ps.some((p) => p?.kind !== 'post')) bad.push(`seed ${seed}: deck ${k + 1}'s supports name a chunk that is no post`)
+        if (d.fallsAt === undefined) {
+          if (ps.some((p) => p?.hp !== Infinity)) bad.push(`seed ${seed}: deck ${k + 1} has supports and no fallsAt, but a post that breaks`)
+          continue
+        }
+        falling++
+        if (!(Number.isInteger(d.fallsAt) && d.fallsAt >= 1 && d.fallsAt <= d.supports.length)) bad.push(`seed ${seed}: deck ${k + 1}'s fallsAt ${d.fallsAt} not a whole number in 1-${d.supports.length}`)
+        if (ps.some((p) => p?.hp !== 3)) bad.push(`seed ${seed}: deck ${k + 1} falls but stands on a post of hp ${ps.find((p) => p?.hp !== 3)?.hp}`)
+        const on = defs.filter((c) => c.on === k + 1)
+        if (on.some((c) => c.kind !== 'ladder')) bad.push(`seed ${seed}: a ${on.find((c) => c.kind !== 'ladder').kind} stands on deck ${k + 1}, which can fall`)
+        if (name === 'platform' && (d.supports.length !== 4 || d.fallsAt !== 2 || on.length !== 1)) bad.push(`seed ${seed}: the platform's deck on ${d.supports.length} posts falling at ${d.fallsAt}, with ${on.length} ladders`)
+      }
+      for (const [k, c] of defs.entries()) if (c.kind === 'ladder' && of(c.on)?.kind !== 'deck') bad.push(`seed ${seed}: ladder ${k + 1}'s on (${c.on}) names no deck`)
+    }
+    if (DRAWS[name] !== draws) bad.push(`${draws} draws over seeds 1-200, not the ${DRAWS[name]} it drew before F7c`)
+    check(!bad.length, `the ${name}'s posts and decks as F7c's piece table has them (${posts} posts, ${falling} decks that can fall, on seeds 1-200), its ladders on their decks, and its draws those before F7c (${draws})`, bad.slice(0, 3).join('; '))
+  }
+}
 // (F8b) the open set's own field, `scale`: only 'area' scatters; classic
 // has none (its draws are frozen)
 check(!('scale' in SETS.classic), "classic has no scale: its pair count and attempts are classic's own", JSON.stringify(SETS.classic.scale))
@@ -1058,7 +1122,10 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // under 10 there; 13, F7b (built as 8 on 7): the parapets, new chunks on
   // fortified boards only, hashed as every chunk always was, and nothing
   // shadowState prints changed its form, nor a classic match's play: every
-  // pin as under 12)
+  // pin as under 12; 14, F7c: a platform's posts at hp 3, a deck falling
+  // and settle, on fortified boards only (a post's hp is printed as every
+  // chunk's always was, a fallen deck's planks a chunk like a wall's
+  // rubble): every pin as under 13)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
@@ -1066,7 +1133,7 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
   const V12 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)

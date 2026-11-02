@@ -23,6 +23,12 @@
 //   nowhere to bail out to is lost where it rode)
 //   (V3c) a unit's spell marks, snared (Root Snare), warded (Barkskin) and
 //   resolute (Cold Blood): the `status` event's lists, as mesmerized is
+//   (F7c) a timber deck falling is three things folded as any: its post's
+//   `terrain.destroy`, its own and its ladders' after it, and its planks'
+//   `terrain.add` (whose def, like every height piece's, carries surface,
+//   link, base, supports, fallsAt and on: the view's, keyed by the add, the
+//   mirror keeping only whether a chunk stands and its height); then each
+//   unit that stood on it falls, `unit.fall`, onto the ground
 //
 // project(G) is the mirror of a match that is not running ahead of its view
 // (a new table, or a snap); applyEvent(M, e) folds one event into it. Once
@@ -117,6 +123,14 @@ export function applyEvent(M, e) {
       u.aboard = 0
       u.pos = { x: e.to.x, z: e.to.z }
       u.y = e.to.y ?? 0
+      break
+    // (F7c) a unit falls with the timber deck it stood on (core/actions/
+    // settle.js): onto `to`, the ground where it landed (or, `crushed`,
+    // where it stood), `dy` below where it was; a hull's riders fall with it
+    case 'unit.fall':
+      u.pos = { x: e.to.x, z: e.to.z }
+      u.y = e.to.y
+      carry(M, e.u, u)
       break
     // (F9a) a hull destroyed rides nobody: its riders bail out (each that
     // finds a spot steps off with its own unit.disembark, after this) or are

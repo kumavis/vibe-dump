@@ -21,7 +21,9 @@
 //      destroyed line by the unit that fell, a template landing out of
 //      sight (its explosion, its victims' rows and lines but the seat's
 //      own, its scenery line and the scenery's events) and its throw by a
-//      hidden shooter, a stale chunk's events (a walk's smashes too, a
+//      hidden shooter, (F7c) the units its blast shot a platform out from
+//      under (each fall untouched, its D3's row shown for the seat's own
+//      and a seen enemy's, hidden for an unseen one's), a stale chunk's events (a walk's smashes too, a
 //      collapse's unseen drops named apart), lines of nobody's (-1) and of
 //      the seat's own kept; and no mark ever touching what the mirror
 //      folds (applyEvent over the marked events is the mirror of the
@@ -185,7 +187,13 @@ section('3. the events marked: lines, trays, rows, templates and the scenery')
     { t: 'dice', label: 'Oak Guard: 2 hits · wound 4+', dice: [4, 5], need: 4 }, { t: 'unit.wound', u: 1, m: 1, dmg: 1 }, { t: 'log', side: 1, html: 'Boulder hits Oak Guard: 2 wound, 1 unsaved.', traced: true },
     { t: 'dice', label: '⚠ Spitters: 1 hit · wound 4+', dice: [2], need: 4 }, { t: 'log', side: 1, html: '<b>Friendly fire!</b> Boulder hits Spitters: 0 wound, 0 unsaved.', traced: true },
     { t: 'terrain.destroy', id: 5, kind: 'block', from: { x: 1, z: 1 }, at: { x: 0, y: 0, z: 0 } }, { t: 'terrain.collapse', drops: [{ id: 6, dy: 1 }, { id: 7, dy: 1 }], by: 1 },
-    { t: 'log', side: 1, html: '…and 1 piece of scenery is wrecked.', traced: true }, { t: 'act', tag: 'shoot' },
+    { t: 'log', side: 1, html: '…and 1 piece of scenery is wrecked.', traced: true },
+    // ((F7c) the platform it shot out: the seat's Oak Guard, the unseen
+    // Spitters (11) and the seen ones (12) falling, each its D3's row)
+    { t: 'unit.fall', u: 1, to: { x: 1, y: 0, z: 1 }, dy: 2 }, { t: 'dice', label: 'Oak Guard: the fall, D3 mortal wounds', dice: [2], need: 0, sum: true, note: '2' }, { t: 'unit.wound', u: 1, m: 2, dmg: 1 },
+    { t: 'unit.fall', u: 11, to: { x: 2, y: 0, z: 1 }, dy: 2 }, { t: 'dice', label: 'Spitters: the fall, D3 mortal wounds', dice: [1], need: 0, sum: true, note: '1' },
+    { t: 'unit.fall', u: 12, to: { x: 3, y: 0, z: 1 }, dy: 2 }, { t: 'dice', label: 'Spitters: the fall, D3 mortal wounds', dice: [3], need: 0, sum: true, note: '3' },
+    { t: 'act', tag: 'shoot' },
   ]
   const M = mirror({ units: { 2: unit(-10, 5, 0), 11: unit(10, 5, 0) }, chunks: { 5: { alive: false, y: 1 }, 6: { alive: true, y: 0 }, 7: { alive: true, y: 1 } } })
   const hidden = fogStep(F0, M, sideOf, sees({ units: [12], chunks: [7] }))
@@ -217,6 +225,7 @@ section('3. the events marked: lines, trays, rows, templates and the scenery')
   check(veil(D, 10) === 'show' && veil(D, 12) === 'show', 'the seat\'s own unit under it: its wound row and line kept (damage to the seat\'s units always shows)')
   check(veil(D, 13) === 'hide' && veil(D, 14) === 'hide', 'an enemy victim under it, out of sight: its row and line hidden')
   check(veil(D, 15) === 'hide' && veil(D, 16) === 'hide' && D[16].drops.length === 2 && veil(D, 17) === 'hide', 'the scenery it wrecks out of sight: its break and drops play nothing (a chunk seen as the entry closes is brought up to date then: fogReveal), its line hidden')
+  check([18, 21, 23].every((k) => D[k] === E3[k]) && veil(D, 19) === 'show' && veil(D, 20) === 'show' && veil(D, 22) === 'hide' && veil(D, 24) === 'show', '(F7c) the platform it shot out: each fall untouched (the view\'s, by the unit), the D3\'s row of the seat\'s own unit and its wound kept, an unseen enemy\'s hidden, a seen one\'s kept', [19, 20, 22, 24].map((k) => veil(D, k)).join(' '))
   const D2 = mark(E3, hidden, [true])
   check(veil(D2, 9) === 'show' && veil(D2, 13) === 'show' && veil(D2, 17) === 'show', 'the same template landing in sight: its explosion, its victims and its scenery line shown')
   check(veil(D2, 15) === 'hide' && D2[16].veil === 'part' && JSON.stringify(D2[16].unseen) === '[6]' && D2[16].drops.length === 2, '…but a chunk stale as the entry closes still plays nothing (the unseen drop of a collapse named apart, its drops untouched)', `${D2[16].veil} ${JSON.stringify(D2[16].unseen)}`)

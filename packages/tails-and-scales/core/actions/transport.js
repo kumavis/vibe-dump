@@ -36,6 +36,7 @@ import { pathLength } from '../nav.js'
 import { alive, isEngaged, groundY, ownersOf, statusOf } from '../queries.js'
 import { movePlan, validEnd, forbidMask, climbs, resolveWalk, walkCost } from './move.js'
 import { damage, killModel } from './damage.js'
+import { settle } from './settle.js'
 
 const unitOf = (G, id) => G.units.find((u) => u.id === id)
 
@@ -139,6 +140,10 @@ export function doEmbark(G, u, v, inPhase) {
   const L = G.nav.hasHeight ? walkCost(pts) : pathLength(pts)
   resolveWalk(G, u, pts, { fly: plan.mode === 'fly' })
   refreshNav(G)
+  // ((F7c, §4.1 rules 17 and 20) a boarding's walk ends as a move's does:
+  // the units on a deck whose posts it smashed (a wrecker's walk alone
+  // smashes) fall, before it rides)
+  settle(G)
   u.aboard = v.id
   moveUnitTo(G, u, v.pos.x, v.pos.z)
   u.flags.moved = true

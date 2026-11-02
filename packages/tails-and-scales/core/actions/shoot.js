@@ -64,6 +64,7 @@ import { alive, enemiesOf, gap, inCover, isEngaged, mx, mz, sight, statusOf, flo
 import { damage } from './damage.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { kegsIn } from '../terrain/terrain.js'
+import { settle } from './settle.js'
 
 // (V3c) The weapon a shot or a cast uses: the unit's ranged weapon, or with
 // `sp` its spell of that index; null for a spell it doesn't have (the
@@ -354,6 +355,11 @@ export function eruption(G, u, target, w) {
 //
 // (F19a, §4.1 rule 28) Then any powder keg the blast broke goes off
 // (kegsGoOff): on a board with no keg (every set but `keg`) nothing more.
+//
+// (F7c, §4.1 rule 17) A platform's post the blast broke may bring its deck
+// down: right after the nav follows the scenery, at the end of the
+// landing, the units that stood on it fall (core/actions/settle.js), so a
+// volley's next template finds them where they landed.
 export function blastLands(G, u, land, w) {
   const kegs = landing(G, u, land, w)
   if (kegs.length) kegsGoOff(G, u, kegs)
@@ -425,6 +431,10 @@ function landing(G, u, land, w, from = u.pos) {
   if (broke.length) log(G, u.side, `…and ${broke.length} piece${broke.length > 1 ? 's' : ''} of scenery ${broke.length > 1 ? 'are' : 'is'} wrecked.`)
   // (the nav follows the scenery, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  // ((F7c, §4.1 rule 17) then the units on a timber deck the blast brought
+  // down fall, before the next template is thrown and before a keg it broke
+  // goes off: nothing where no deck fell)
+  settle(G)
   return kegsIn(broke)
 }
 

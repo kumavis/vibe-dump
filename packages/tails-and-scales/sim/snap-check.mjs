@@ -64,6 +64,33 @@
 // default row.) It runs by default and with --only cart; the self-test's
 // deck edits run on it.
 //
+// (F7c) And the collapse row (DESIGN §4.2.4's "Destruction and settle":
+// timber platforms shot out from under their defenders, who fall, and the
+// view's falls: view/terrain.js's drop, view/units.js's fell). No corpus
+// battle drops a platform with a unit on it (the AI seldom mans one or
+// aims at one: F7c's smoke), so the row makes its own: candidate
+// COLLAPSE_SEED of corpus-add's `--mode hotseat --policy collapse
+// --terrain fortified` (the human-bot's `collapse` policy,
+// sim/oracle/human-bot.mjs: its template shooters aim at a platform's
+// defenders and posts, its climbers make for the decks), played first in
+// Node on the code under test (sim/lib.mjs runOracle, as corpus-add plays
+// a candidate: on seed 8, two platforms shot out and a unit on each), then
+// its log driven in Chromium as a corpus human log is, the page's trace,
+// shadow and battle log held to Node's. Unlike every other row it plays
+// without ?fast, at clock speed COLLAPSE_SPEED, so a fall plays the way a
+// player sees it (the deck sagging and dropping with its ladders, its
+// planks held hidden until it lands, the figures dropping with it), the
+// animated path that ?fast skips for the end state alone. Its table is
+// held as every battle's is: at every drain and every checkpoint, so before
+// each fall, at the checkpoint of the action that drops it and after, and
+// snapped in place at its end, each chunk shown and drawn as a snap draws
+// it (the TerrainView's state(): no mesh of a fallen deck or ladder left
+// up, the planks' pile on the table and drawn) and every fallen unit's
+// figures, ring, hit cylinder and label at its landing, on the ground. It
+// must have seen a deck fall with a unit on it, and a check after each
+// fall, or it proves nothing. It runs by default and with --only collapse;
+// the self-test's fall edits run on it.
+//
 // (V3d) And the Powder Field's row (`powder-row`): the same, a watched
 // battle of the powder mission in place of the grand one's, its table's
 // fires held too: at every Grand checkpoint some chunk burns (the
@@ -97,11 +124,11 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
-import { loadCorpus, select, verdict, buildApp, copyCode } from './lib.mjs'
+import { loadCorpus, select, verdict, buildApp, copyCode, runOracle, hashLines } from './lib.mjs'
 import { IDLE_MS } from './chromium.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { shadowString, shadowParts, shadowOf, instrument } from './oracle/shadow.mjs'
-import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './oracle/human-bot.mjs'
+import { humanDriver, jobSetup, pageStart, playedAs, missingHooks, setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
 let a
 try {
@@ -119,7 +146,9 @@ const GRAND_ROW = !a.only || only.includes('grand')
 const CART_ROW = !a.only || only.includes('cart')
 // ((V3d) and the Powder Field's)
 const POWDER_ROW = !a.only || only.includes('powder-row')
-const ROWS = new Set(['grand', 'cart', 'powder-row'])
+// ((F7c) and the collapse row's)
+const COLLAPSE_ROW = !a.only || only.includes('collapse')
+const ROWS = new Set(['grand', 'cart', 'powder-row', 'collapse'])
 try {
   items = only.filter((x) => !ROWS.has(x)).length ? select(loadCorpus().items, only.filter((x) => !ROWS.has(x)).join(',')) : []
 } catch (e) {
@@ -187,18 +216,39 @@ const MUTATIONS = {
   // (F9a, on the cart row) a rider stepped off left without its ring and
   // hit cylinder, as it rode
   'ringless-off': ['view/units.js', '    this.stands(v, this.shown(e.u).alive > 0)\n    this.layDeck(e.v)\n', '    this.layDeck(e.v)\n', 'cart'],
+  // (F7c, on the collapse row) a fallen platform's deck left up once it
+  // has dropped (its mesh never taken off the table)
+  'deck-stays': ['view/terrain.js', '        v.drop = null\n        this.group.remove(o)\n', '        v.drop = null\n', 'collapse'],
+  // (F7c, on the collapse row) its planks' pile left hidden once the deck
+  // it waited on has landed
+  'pile-held': ['view/terrain.js', '        if (pile && this.items.get(pile.c.id) === pile && pile.obj) pile.obj.visible = true\n', '', 'collapse'],
+  // (F7c, on the collapse row) a fallen unit's ring, hit cylinder and
+  // label left up on the deck it fell from
+  'fall-ringless': ['view/units.js', "    this.disc(e.u)\n    this.label(e.u)\n    if (!hid) {\n      const top = this.top(e.u)\n", "    if (!hid) {\n      const top = this.top(e.u)\n", 'collapse'],
 }
 // (F9a) the cart row's battle: the Field mission, seat 0's Bushtails with
 // two War-Carts (950 points), seat 1 its preset
 const CART_ARMIES = '1222112,field'
+// (F7c) the collapse row's battle: corpus-add's candidate (its board and
+// dice from mulberry32(9000 + k), the bot's policy seed k), and the clock
+// speed it plays at without ?fast (a fall's drop and a figure's death end
+// within the SETTLE frames a check waits: up to 0.05 s × speed a frame)
+const COLLAPSE_SEED = 8
+const COLLAPSE_SPEED = 12
 const SELF_TEST_ON = 'hotseat-aggressive-103'
 
 // In the page, before main.js: catch window.__ts, record (the shadow and
 // battle log, as P-browser does), and run the battle frame by frame: the
 // driver plays the log's next entry when the page asks, except while a
 // check waits for the figures to settle; at every idle point a check.
-function pageHarness(job, mode, settle) {
-  const sim = (window.__sim = { error: null, rec: null, driver: null, checks: [], done: false })
+// ((F7c) `speed`: no ?fast, the clock at that speed (the collapse row);
+// and the falls played, counted (each unit.fall, each deck broken), each
+// check recording how many had played by then; and the battle stopped at
+// the first check that differs, its verdict reached: a page that draws
+// every frame plays its battle in an hour or two on a shared machine, so a
+// self-test edit caught at a fall ends there)
+function pageHarness(job, mode, settle, speed = 0) {
+  const sim = (window.__sim = { error: null, rec: null, driver: null, checks: [], done: false, falls: 0, decks: 0 })
   let ts = null
   addEventListener('error', (e) => (sim.error ??= String(e.error?.stack ?? e.message)))
   addEventListener('unhandledrejection', (e) => (sim.error ??= String(e.reason?.stack ?? e.reason)))
@@ -211,6 +261,11 @@ function pageHarness(job, mode, settle) {
       if (missing.length) return void (sim.error = `window.__ts lacks ${missing.join(', ')}`)
       sim.rec = instrument(v)
       if (mode !== 'watch') sim.driver = humanDriver(ts, { entries: job.entries })
+      if (speed) {
+        ts.clock.speed = speed
+        const obs = ts.player.observer
+        ts.present.listen({ ...obs, event: (ev, M) => ((ev.t === 'unit.fall' && sim.falls++), (ev.t === 'terrain.destroy' && ev.kind === 'deck' && sim.decks++), obs?.event?.(ev, M)), reset: (M) => obs?.reset?.(M) })
+      }
       // at every checkpoint, the player waits while the figures settle and
       // the table is held to the match as it stood there
       ts.view.pauseAtChecks((e) => new Promise((resolve) => {
@@ -218,7 +273,8 @@ function pageHarness(job, mode, settle) {
         const f = () => {
           if (--n > 0) return void requestAnimationFrame(f)
           try {
-            sim.checks.push({ mark: `check at trace line ${ts.trace.length}`, stage: 'checkpoint', ...ts.view.snapDiff(e.proj) })
+            sim.checks.push({ mark: `check at trace line ${ts.trace.length}`, stage: 'checkpoint', falls: sim.falls, ...ts.view.snapDiff(e.proj) })
+            if (speed && sim.checks.at(-1).n) sim.stop = sim.done = true
           } catch (err) {
             sim.error ??= String(err.stack ?? err)
           }
@@ -231,6 +287,9 @@ function pageHarness(job, mode, settle) {
   })
   let last = null, waiting = 0
   function loop() {
+    // ((F7c) stopped at a check that differs: no more entries played, so the
+    // snap in place that follows finds the player idle)
+    if (sim.stop) return
     try {
       // (no battle yet: the title)
       if (ts.G && ts.player.idle) {
@@ -240,7 +299,8 @@ function pageHarness(job, mode, settle) {
           waiting = 0
           last = mark
           const r = ts.view.snapDiff()
-          sim.checks.push({ mark, stage: ts.S.stage, ...r })
+          sim.checks.push({ mark, stage: ts.S.stage, falls: sim.falls, ...r })
+          if (speed && r.n) return void (sim.stop = sim.done = true)
         }
       } else waiting = 0
       if (ts.S.stage === 'over' && ts.player.idle && last === `${ts.trace.length}/${sim.driver?.played.length ?? 0}/over`) {
@@ -265,22 +325,29 @@ async function ask(page, fn, arg) {
   }
 }
 
-async function run(browser, url, item) {
+// ((F7c) `speed`: played without ?fast, at that clock speed: the collapse
+// row's)
+async function run(browser, url, item, { speed = 0 } = {}) {
   const setup = jobSetup(item.job)
   const { mode, query } = pageStart(setup)
-  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+  // ((F7c) the collapse row's page, drawing every frame, small: what the
+  // checks compare is the table's objects, not its pixels)
+  const ctx = await browser.newContext({ viewport: speed ? { width: 480, height: 300 } : { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     const fns = [shadowString, shadowParts, shadowOf, instrument, missingHooks, humanDriver].join('\n')
-    await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE})` })
-    await page.goto(`${url}/?debug&fast&${query}`, { timeout: IDLE_MS })
+    await page.addInitScript({ content: `${fns}\n(${pageHarness})(${JSON.stringify(item.job)}, ${JSON.stringify(mode)}, ${SETTLE}, ${speed})` })
+    await page.goto(`${url}/?debug${speed ? '' : '&fast'}&${query}`, { timeout: IDLE_MS })
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
-    await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
+    // ((F7c) a page drawing every frame, the collapse row's without ?fast,
+    // answers a click more slowly on a loaded machine: it waits as long as
+    // the page may be idle)
+    await page.click(`[data-mode="${mode}"]`, { timeout: speed ? IDLE_MS : 30000 })
     // (F6) the battle-setup panel's Start, its races the URL's
-    await page.click('#setupStart', { timeout: 30000 })
+    await page.click('#setupStart', { timeout: speed ? IDLE_MS : 30000 })
     const t0 = Date.now()
     let mark = '', since = Date.now()
     for (;;) {
@@ -290,7 +357,7 @@ async function run(browser, url, item) {
       else if (Date.now() - since > IDLE_MS) throw new Error(`stalled at ${p.mark}`)
       await new Promise((r) => setTimeout(r, 500))
     }
-    const r = await ask(page, () => ({ trace: window.__ts.trace.slice(), shadow: window.__sim.rec.shadow, written: window.__sim.rec.written, checks: window.__sim.checks, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0, setup: window.__ts.G?.setup }))
+    const r = await ask(page, () => ({ trace: window.__ts.trace.slice(), shadow: window.__sim.rec.shadow, written: window.__sim.rec.written, checks: window.__sim.checks, error: window.__sim.error, unused: window.__sim.driver?.unused ?? 0, setup: window.__ts.G?.setup, falls: window.__sim.falls, decks: window.__sim.decks, stopped: !!window.__sim.stop }))
     // the battle played is the log's, field for field
     r.error ??= playedAs(r.setup, setup)
     // the page's own table snapped where it stands, once the battle is
@@ -310,7 +377,9 @@ async function run(browser, url, item) {
       }), SETTLE))
     }
     if (!r.error && errors.length) r.error = errors.join('\n')
-    if (!r.error && r.unused) r.error = `the battle ended with ${r.unused} log entries unplayed`
+    // ((F7c) but for a battle the collapse row stopped at a check that
+    // differs: its entries left are the stop's, and its verdict the check's)
+    if (!r.error && r.unused && !r.stopped) r.error = `the battle ended with ${r.unused} log entries unplayed`
     r.secs = Math.round((Date.now() - t0) / 1000)
     return r
   } finally {
@@ -459,6 +528,29 @@ async function cartRow(browser, url) {
     await ctx.close()
   }
 }
+// (F7c) The collapse row (above): the battle made in Node on the code in
+// `dir`, then played in the page at COLLAPSE_SPEED. Returns { it, r }: the
+// battle as an item of the corpus (its hashes Node's), and run's result.
+async function collapseRow(browser, url, dir) {
+  const k = COLLAPSE_SEED, rnd = mulberry32(9000 + k)
+  const setup = { ...setupFor('hotseat', 1 + Math.floor(rnd() * 99999), 1 + Math.floor(rnd() * 999999)), terrain: 'fortified' }
+  const node = await runOracle({ setup, bot: { policy: 'collapse', seed: k } }, dir)
+  const it = { id: `hotseat-collapse-${k}`, kind: 'human', mode: 'hotseat', n: node.trace.length, trace: hashLines(node.trace), shadow: hashLines(node.shadow), written: hashLines(node.written), job: { setup, entries: node.entries } }
+  return { it, r: await run(browser, url, it, { speed: COLLAPSE_SPEED }) }
+}
+// what the collapse row says is wrong ('' when nothing is): every battle's
+// judgement (judge), and that it saw what it is for
+function judgeCollapse(it, r) {
+  // (a check that differs stopped the battle there: that is the verdict)
+  const bad = r.checks.filter((c) => c.n)
+  if (!r.error && bad.length) return `${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`
+  const why = judge(it, r)
+  if (why || r.error) return why
+  const after = r.checks.filter((c) => c.falls > 0 && c.stage !== 'in place').length
+  if (!(r.decks > 0) || !(r.falls > 0) || !after) return `board: ${r.decks ?? 0} platforms fell and ${r.falls ?? 0} units with them, ${after} checks after a fall (a platform falling with a unit on it, and the table checked after)`
+  return ''
+}
+
 // what the cart row says is wrong ('' when nothing is)
 function judgeCart(r) {
   if (r.error) return r.error.split('\n')[0]
@@ -533,15 +625,18 @@ if (a['self-test']) {
         writeFileSync(join(dir, f), src.replace(from, to))
       }
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
-      let r
+      let r, fell = null
       try {
-        r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
+        if (id === 'collapse') {
+          fell = await collapseRow(browser, served.url, dir)
+          r = fell.r
+        } else r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
         served.close()
       }
-      const why = it ? judge(it, r) : id === 'cart' ? judgeCart(r) : judgeGrand(r)
+      const why = fell ? judgeCollapse(fell.it, r) : id === 'collapse' ? (r.error ?? 'no run').split('\n')[0] : it ? judge(it, r) : id === 'cart' ? judgeCart(r) : judgeGrand(r)
       const ok = name === 'unedited' ? !why : /checks differ|^board: /.test(why)
       if (!ok) missed++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(16)} ${id.padEnd(23)} ${(why || `the same at ${r.checks.length} checks`).slice(0, 220)}`)
@@ -600,6 +695,19 @@ try {
     checks += r.checks.length
     console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, and snapped in place (${r.secs} s)`}`)
   }
+  if (COLLAPSE_ROW) {
+    let it = null, r
+    try {
+      ({ it, r } = await collapseRow(browser, url, PKG))
+    } catch (e) {
+      r = { error: e.message, checks: [] }
+    }
+    const why = it ? judgeCollapse(it, r) : (r.error ?? 'no run').split('\n')[0]
+    if (why) failed++
+    checks += r.checks.length
+    const played = r.checks.filter((c) => c.stage !== 'in place'), last = played.at(-1)
+    console.log(`  fall  ${(it?.id ?? 'hotseat-collapse').padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${played.length} checks (${played.filter((c) => c.falls > 0).length} after a fall), the page's battle Node's, ${r.decks} platforms fallen and ${r.falls} units with them, played at speed ${COLLAPSE_SPEED} without ?fast, and snapped in place (at the end ${last.figures} figures standing, ${last.shown} of ${last.chunks} chunks shown; ${r.secs} s)`}`)
+  }
   if (POWDER_ROW) {
     let r
     try {
@@ -618,5 +726,5 @@ try {
   close()
   rmSync(work, { recursive: true, force: true })
 }
-console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
+console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0) + (COLLAPSE_ROW ? 1 : 0) + (POWDER_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}${COLLAPSE_ROW ? ' and the collapse row' : ''}${POWDER_ROW ? ' and the Powder Field\'s row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
 process.exit(failed ? 1 : 0)

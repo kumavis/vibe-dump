@@ -64,9 +64,12 @@ export function sightOf(G, q, u, tg) {
 }
 
 // what a chunk is called in the reasons ((at the F7b merge) and the pieces
-// main brought beside them: F19a's keg, F9a's wreck, V3d's Powder Field's)
+// main brought beside them: F19a's keg, F9a's wreck, V3d's Powder Field's;
+// (F7c) a timber platform's post, which can be shot out now, "the post",
+// as the piece it is, and the planks a fallen one left "the fallen
+// platform": nameOf)
 const NAMES = {
-  parapet: 'a parapet', tree: 'the trees', hedge: 'the hedge', rock: 'the rocks', mushroom: 'the mushrooms', rubble: 'the rubble', log: 'the fallen tree', post: 'a post', floor: 'the wood',
+  parapet: 'a parapet', tree: 'the trees', hedge: 'the hedge', rock: 'the rocks', mushroom: 'the mushrooms', rubble: 'the rubble', log: 'the fallen tree', post: 'the post', floor: 'the wood',
   keg: 'the powder kegs', wreck: 'the wreck', crater: 'the shell hole', stump: 'the burned stumps', cart: 'the broken cart', sandbag: 'the sandbags', pyre: 'the burning wreckage', hulk: 'the wreckage',
 }
 // ((F7b's merge review) and V3d's wrecked sites' decks by what they were, not
@@ -82,6 +85,7 @@ export function nameOf(c) {
   if (c.kind === 'deck') return DECKS[c.look.recipe] ?? `the ${c.look.recipe}`
   if (c.kind === 'block') return c.look.piece === 'log' ? 'the log wall' : 'the wall'
   if (c.kind === 'crate') return c.look.piece === 'barrel' ? 'the barrels' : c.look.piece === 'sack' ? 'the sacks' : 'the crates'
+  if (c.kind === 'rubble' && c.look.style === 'timber') return 'the fallen platform'
   return NAMES[c.kind] ?? `the ${c.kind}`
 }
 

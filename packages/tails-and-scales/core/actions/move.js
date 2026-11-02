@@ -22,6 +22,7 @@ import { refreshNav } from '../match.js'
 import { moveUnitTo } from '../units.js'
 import { pathLength, STEP } from '../nav.js'
 import { kegsIn } from '../terrain/terrain.js'
+import { settle } from './settle.js'
 import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
 
 export function moveMode(u) {
@@ -205,6 +206,9 @@ export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.fl
   const kegs = resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  // ((F7c, §4.1 rule 17) and the units on a timber deck whose posts the
+  // walk smashed fall, before a keg it smashed goes off)
+  settle(G)
   return kegs
 }
 

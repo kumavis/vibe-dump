@@ -15,6 +15,7 @@ import { hypot, hypot3 } from '../dmath.js'
 import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
 import { climbs, moveMode } from '../actions/move.js'
 import { friendsUnder } from '../actions/shoot.js'
+import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
 
 // a unit's points still standing
@@ -149,6 +150,78 @@ export function kegWalk(G, u, at, kegs) {
   return gain
 }
 
+// ── (F7c) The timber platforms ──────────────────────────────────────────────
+// What the AI makes of a timber platform's posts (rule 10: it bumps with
+// F7c), in one term, skipped where no platform stands manned (every board
+// but a fortified one, and every fortified one whose platforms stand empty,
+// so those battles score as they did, to the bit): a template is also
+// worth the platforms it would help shoot out from under their defenders.
+// A post with defenders above it is a target worth its wounds: the D3
+// mortal wounds each unit on the deck takes as it falls (core/actions/
+// settle.js), the enemy's gained and u's own side's lost, as kegValue
+// weighs a keg's blast. No draw, and no field is built.
+
+// The decks that can fall standing manned: { d, on }, each alive deck with
+// a `fallsAt` (a platform's: the barn's hayloft has none) and the units on
+// the table whose centres lie inside its footprint (settle's own test), in
+// chunk order; none without height
+export function platformsOf(G) {
+  if (!G.nav.hasHeight) return []
+  const out = []
+  for (const d of G.terrain.chunks) {
+    if (!d.alive || d.kind !== 'deck' || d.fallsAt === undefined) continue
+    const on = G.units.filter((x) => alive(x) && !x.aboard && inFootprint(d.shape, x.pos))
+    if (on.length) out.push({ d, on })
+  }
+  return out
+}
+
+// What a fall is worth: the D3's mean in wounds (FALL_WOUNDS, no save, one
+// damage each), as expected() counts kills and their points; and the share
+// of a deck's fall a template that only chips its posts is credited with
+// (FALL_CHIP: the next template has to finish the work)
+export const FALL_WOUNDS = 2, FALL_CHIP = 0.5
+const fallValue = (x) => Math.min(x.alive, FALL_WOUNDS / x.t.W) * x.t.pts
+
+// What `u`'s template `w` landing square on `e` is worth by the manned
+// platforms (of `plats`, platformsOf's) it would help bring down: for each,
+// its posts still standing chipped as blast chips them (terrain.js
+// blastDamage, measured from e's floor as the landing is), each by the
+// share of its hit points the blow takes (at most all), the `need` best of
+// them (the posts still to fall before the deck does: fallsAt less those
+// down) summed and shared by `need`; a deck the template alone brings down
+// is worth its whole fall, one it only chips FALL_CHIP of that share of
+// it. A fall's worth is its defenders' (fallValue), each of the enemy's
+// gained and each of u's own side's lost. 0 for a template of scenery 0
+// (Venom Mist's wrecks nothing), and where no platform stands manned.
+export function fallGain(G, u, e, w = u.t.ranged, plats = platformsOf(G)) {
+  if (!plats.length || !w?.blast || w.scenery === 0) return 0
+  const T = G.terrain, y = floorAt(G, e.pos.x, e.pos.z) + 0.5
+  let gain = 0
+  for (const { d, on } of plats) {
+    let down = 0
+    const chip = []
+    for (const id of d.supports) {
+      const p = T.byId(id)
+      if (!p.alive) {
+        down++
+        continue
+      }
+      const amount = T.blastDamage(p, e.pos.x, y, e.pos.z, w.blast, w.scenery || 1, !!w.corrodes)
+      chip.push(amount === null ? 0 : Math.min(1, amount / p.hp))
+    }
+    const need = d.fallsAt - down
+    chip.sort((a, b) => b - a)
+    let k = 0
+    for (let j = 0; j < need && j < chip.length; j++) k += chip[j]
+    if (!(need > 0 && k > 0)) continue
+    let v = 0
+    for (const x of on) v += x.side === u.side ? -fallValue(x) : fallValue(x)
+    gain += k >= need ? v : v * (k / need) * FALL_CHIP
+  }
+  return gain
+}
+
 // How much a unit fears a keg's blast at a place, a weight on the points it
 // would lose there (the danger term's scale, between its fragile and
 // robust weights); and how much a wrecker values a walk that sets one off
@@ -179,6 +252,11 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // powder kegs it would set off landing on `e` (kegGain), once a shot, on
 // its hit: nothing where no keg stands.
 //
+// (F7c; rule 10: it bumps with F7c) And every template (a blast spell's
+// too) is worth the manned timber platforms it would help shoot out from
+// under their defenders (fallGain), once a shot, on its hit: nothing where
+// no platform stands manned.
+//
 // (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
 // strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
 // by default; `pre` is only ever its ranged weapon's.
@@ -200,7 +278,10 @@ export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
     const under = e.t.big ? 3 : Math.max(1, Math.min(e.alive, Math.round(e.alive * Math.min(1, (w.blast * w.blast) / (e.r * e.r)) * 0.8)))
     const value = attackCount(u, w, false) * pHit * (expected(under, 1, w, e, s.cover).value - (pre ? pre.own : ownUnder(G, u, e, w)))
     const keg = pre ? pre.keg : kegGain(G, u, e)
-    return keg ? value + pHit * keg : value
+    // ((F7c) keg + 0 is keg to the bit, so a board with no manned platform
+    // scores as it did)
+    const more = keg + (pre ? pre.fall : fallGain(G, u, e, w))
+    return more ? value + pHit * more : value
   }
   const n = attackCount(u, w, false), need = hitNeed(u.t.BS, mod)
   const fight = pre ? pre.fight : fightOf(G, u, e)
@@ -354,7 +435,9 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
 // under it (ownUnder), each asked only of the weapon whose value reads it
 //
 // (F19a) and the kegs standing, whether an enemy could set one off, and
-// what a gun's template on each enemy would set off (kegGain). (F9a) `role`
+// what a gun's template on each enemy would set off (kegGain); (F7c) and
+// what a template on each would do to the manned platforms (fallGain).
+// (F9a) `role`
 // is the role the unit plays as (bestSpot's: a hull's by its riders).
 function scoring(G, u, claimed, role) {
   const enemies = enemiesOf(G, u)
@@ -362,10 +445,12 @@ function scoring(G, u, claimed, role) {
   const owners = G.objectives.map((o) => controlOf(G, o))
   const w = u.t.ranged, shoots = !!w && role !== 'melee'
   const kegs = kegsOf(G)
+  const plats = shoots && w.blast ? platformsOf(G) : []
   const pre = new Map(enemies.map((e) => [e, {
     cover: inCover(G, e), hit: meleeValue(u, e), back: meleeValue(e, u),
     fight: shoots && !w.blast && !w.mesmerize ? fightOf(G, u, e) : null, own: shoots && w.blast ? ownUnder(G, u, e) : 0,
     keg: shoots && w.blast ? kegGain(G, u, e, kegs) : 0,
+    fall: plats.length ? fallGain(G, u, e, w, plats) : 0,
   }]))
   return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
 }

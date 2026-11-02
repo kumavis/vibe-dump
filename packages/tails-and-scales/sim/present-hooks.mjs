@@ -200,6 +200,10 @@ export const MUTATIONS = {
   'no-embark-owners': ['/core/actions/transport.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n  log(G, u.side, `<b>${u.t.short}</b> board", "  log(G, u.side, `<b>${u.t.short}</b> board"],
   'no-carry': ['/present/mirror.js', '      u.y = e.to.y ?? 0\n      carry(M, e.u, u)', '      u.y = e.to.y ?? 0'],
   'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
+  // (F7c) a unit's fall with its deck not reported, and the mirror's fall
+  // keeping the floor the unit stood on: present-check's falls in Node
+  'no-fall': ['/core/actions/settle.js', "  emit(G, 'unit.fall',", "  if (false) emit(G, 'unit.fall',"],
+  'fall-y-kept': ['/present/mirror.js', '      u.y = e.to.y\n      carry(M, e.u, u)', '      carry(M, e.u, u)'],
   'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],
   // (R7b) the card's record of what each unit did this turn kept from the
   // battle's start: an action's end never updates it (app/flow.js)

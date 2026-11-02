@@ -707,9 +707,15 @@ export const FEATURES = deepFreeze(Object.assign(Object.create(null), {
 // chunk's own frame: a deck's y, a stair's ramp from y0 at its own −x end to
 // y1 at its +x end), `link` (a ladder's foot and top, on the table, and the
 // height it climbs) and, for F7c, a timber deck's `supports` (its posts' ids)
-// and a ladder's `on` (its deck's id). core/nav.js builds the height layer
-// from them; in classic and `open` nothing has them and no floor is built.
-// None of them breaks in F7a (hp Infinity); F7c makes posts breakable.
+// and `fallsAt` (how many of them down bring it down), and a ladder's `on`
+// (its deck's id). core/nav.js builds the height layer from them; in
+// classic and `open` nothing has them and no floor is built. Decks, stairs
+// and ladders never break of themselves (hp Infinity); (F7c) a timber
+// platform's posts do (hp 3: POST_HP), and its deck falls with its ladders
+// once FALLS_AT of them are down (core/terrain/terrain.js's cascade, then
+// the rules' settle: core/actions/settle.js). The Powder Field's barn
+// stands its hayloft on posts too, F7a's (hp Infinity, no `fallsAt`): its
+// posts never break, so no board but a fortified one changes.
 //
 // Every fortification is a recipe with its own stream, like any feature: the
 // draws it makes (its colours, which end a rampart's stair is at, where its
@@ -735,8 +741,14 @@ export const GATE_OUT = 0.5
 // a ladder is drawn as a strip this wide against its face, this thick
 const LADDER_W = 1, LADDER_T = 0.3
 // a timber deck's posts: 0.4" square, set in by their half-width from the
-// deck's corners
+// deck's corners; (F7c, DESIGN §4.2.4's piece table) a platform's break at
+// hp 3, as a parapet does, and its deck falls once two of its four are down
+// (the spec leaves the number to the recipe: on three posts a platform
+// still stands, on two it can't, whichever two), so a template landing on
+// the deck, which chips all four alike, brings it down when it breaks them
 const POST = 0.4
+export const POST_HP = 3
+export const FALLS_AT = 2
 // what decks are made of, and their palettes (drawn from the layout stream)
 const EARTH = Object.freeze(['#8b7350', '#7f6846', '#957c57', '#86704c'])
 const DECK_STONE = Object.freeze(['#8f8b82', '#9c978d', '#878378', '#a19c91'])
@@ -753,7 +765,11 @@ const TIMBER = Object.freeze(['#8a6038', '#7a5232', '#9a7048'])
 // it: the "dead ground" at the foot of a wall), w × d, its own frame the
 // fortification's turned by ly. ((V3d) `extra`, more for its look: a
 // wreck's burning, its smoke's vents, its scorch on the turf: the view's.)
-function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports, extra }) {
+//
+// (F7c) `supports`, a timber deck's posts' ids, and `fallsAt`, how many of
+// them down bring it down (a deck with supports and no fallsAt, the barn's,
+// never falls): fields on the def, never draws.
+function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports, fallsAt, extra }) {
   const p = F.p(lx, lz)
   const def = {
     kind: 'deck', hp: Infinity,
@@ -763,6 +779,7 @@ function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports
     look: { piece: 'deck', recipe, material, w, d, h, color, chip: color, ...extra },
   }
   if (supports) def.supports = supports
+  if (fallsAt !== undefined) def.fallsAt = fallsAt
   return T.add(def)
 }
 
@@ -801,11 +818,14 @@ function ladder(T, F, { lx, lz, ly, h, color, recipe, foot, top, on }) {
 }
 
 // A timber deck's post, 0.4" square, the deck's height (under its deck, so
-// it has no nav effect; it blocks a line of sight under the deck).
-function post(T, F, lx, lz, h, color, recipe) {
+// it has no nav effect; it blocks a line of sight under the deck). (F7c)
+// `hp`: a platform's POST_HP, so a blast chips it and a wrecker's smash
+// breaks it (core/terrain/terrain.js's cascade takes its deck down at
+// fallsAt); the barn's Infinity, F7a's.
+function post(T, F, lx, lz, h, color, recipe, hp = Infinity) {
   const p = F.p(lx, lz)
   return T.add({
-    kind: 'post', hp: Infinity,
+    kind: 'post', hp,
     shape: { x: p.x, y: h / 2, z: p.z, hx: POST / 2, hy: h / 2, hz: POST / 2, yaw: F.yaw() },
     navKind: null, los: 'block', cover: false,
     look: { piece: 'post', recipe, material: 'timber', w: POST, d: POST, h, color, chip: color },
@@ -960,14 +980,20 @@ function watchtower(T, F, rng) {
 
 // A timber deck, 4.5 × 4.5", 2" high, on four posts, reached by one ladder.
 // 4.5 × 6.75": the deck from z = −1.125 to 3.375, the ladder's foot at
-// −3.375. The posts are added first, so the deck can list them (F7c: it
-// falls once enough of them are down).
+// −3.375. The posts are added first, so the deck can list them. (F7c) Its
+// posts break at POST_HP, and the deck falls once FALLS_AT of them are
+// down, its ladder with it (`on`): fields, no draw, so the recipe's draws
+// are F7a's in F7a's order. Its deck's line-of-sight body stays the piece
+// table's solid one (`y = h/2, hy = h/2`, as every deck's): the table gives
+// the timber deck no thin body, and a thinner one would change what every
+// fortified board's shots see whether or not a post ever breaks, so the
+// gap under the slab is the view's to close (F7a's "Not here").
 function platform(T, F, rng) {
   const color = pick(TIMBER, rng)
   const wood = pick(WOOD, rng)
   const h = 2, dz = 1.125, k = 2.25 - POST / 2
-  const supports = [[-k, dz - k], [k, dz - k], [k, dz + k], [-k, dz + k]].map(([x, z]) => post(T, F, x, z, h, color, 'platform').id)
-  const d = deck(T, F, { lx: 0, lz: dz, w: 4.5, d: 4.5, h, material: 'timber', color, recipe: 'platform', supports })
+  const supports = [[-k, dz - k], [k, dz - k], [k, dz + k], [-k, dz + k]].map(([x, z]) => post(T, F, x, z, h, color, 'platform', POST_HP).id)
+  const d = deck(T, F, { lx: 0, lz: dz, w: 4.5, d: 4.5, h, material: 'timber', color, recipe: 'platform', supports, fallsAt: FALLS_AT })
   ladder(T, F, { lx: 0, lz: dz - 2.25, ly: 0, h, color: wood, recipe: 'platform', foot: [0, dz - 2.25 - LADDER_OUT], top: [0, dz], on: d.id })
   return [{ ...F.p(0, dz - 2.25 - LADDER_OUT), by: 'ladder' }]
 }

@@ -15,6 +15,7 @@
 //   node sim/corpus-add.mjs --set army --mode watch --tag lists-swapped --races serpent,squirrel --auto-armies 90 --need lists --count 2 --from 101
 //   node sim/corpus-add.mjs --set army --mode hotseat --policy aggressive --tag lists --auto-armies 90 --need lists,wipe
 //   node sim/corpus-add.mjs --set fort --mode watch --terrain fortified --tag fort --need works,keep --count 3
+//   node sim/corpus-add.mjs --set fort --mode hotseat --policy collapse --terrain fortified --tag collapse --need collapse,fall
 //   node sim/corpus-add.mjs --set scale --mission grand --terrain open --mode watch --tag grand --auto-armies 90 --count 2
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode watch --tag carts --races squirrel,serpent --auto-armies 90 --carts 1 --count 3
@@ -39,7 +40,8 @@
 // option: the log's own setup is the setup.
 //
 // --mode bushtail, serpent, hotseat or watch; --policy (not with watch)
-// random, late, aggressive, pilot or (F9a) ride (sim/oracle/human-bot.mjs);
+// random, late, aggressive, pilot, (F9a) ride or (F7c) collapse
+// (sim/oracle/human-bot.mjs);
 // --overtime
 // the setup's (F4: 'vote'); --races <seat 0>,<seat 1> the seats' races
 // (default squirrel,serpent, the title screen's: serpent,squirrel puts the
@@ -124,6 +126,11 @@
 // (DESIGN §4.2.9: War-Carts against the Coil, and Bushtail mirrors).
 //   (F19a, read off the trace: the keg's line is a traced battle-log line)
 //   keg        a powder keg went off ("The powder keg goes up!")
+//   (F7c, read off the match's events as the log is folded again in Node on
+//   the PIN code, sim/collapse-probe.mjs, as the height needs are)
+//   collapse   a timber platform shot out: a deck fell (its posts broken
+//              by a template, or smashed by a wrecker)
+//   fall       a unit fell with one (and took its D3, or was crushed)
 // --from <k> the first candidate seed (default 1): candidate k plays board
 // and dice drawn from mulberry32(9000 + k), and the bot's policy seed k.
 // Logs are named <mode>-<policy>-<tag>-<k> (watch: watch-<tag>-<k>); an
@@ -139,6 +146,7 @@ import { setupFor, mulberry32, MODES } from './oracle/human-bot.mjs'
 import { foldJob, loadMatch } from './run.mjs'
 import { heightProbe } from './height-probe.mjs'
 import { riderProbe } from './rider-probe.mjs'
+import { collapseProbe } from './collapse-probe.mjs'
 
 // (each played result's `entries` is a list, an AI pair's empty: below)
 const NEEDS = {
@@ -166,9 +174,13 @@ const NEEDS = {
   rearranged: (r) => r.rides.rearranged > 0,
   // (F19a: the keg's own line, traced as every battle-log line is)
   keg: (r) => r.trace.some((l) => /^log \d The powder keg goes up! rng:/.test(l)),
+  // (F7c: the probe's, r.falls)
+  collapse: (r) => r.falls.decks > 0,
+  fall: (r) => r.falls.falls > 0,
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const RIDE_NEEDS = ['bailout', 'rearranged']
+const FALL_NEEDS = ['collapse', 'fall']
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
@@ -201,7 +213,7 @@ const bad = REGEN ? [
   !Object.keys(MODES).includes(a.mode) && `--mode takes ${Object.keys(MODES).join(', ')}`,
   watch && a.policy !== undefined && '--mode watch records an AI pair: no bot plays it, so it takes no --policy',
   watch && a.overtime !== undefined && '--mode watch has no human seat to vote, so it takes no --overtime',
-  !watch && !['random', 'late', 'aggressive', 'pilot', 'ride'].includes(a.policy) && '--policy takes random, late, aggressive, pilot or ride',
+  !watch && !['random', 'late', 'aggressive', 'pilot', 'ride', 'collapse'].includes(a.policy) && '--policy takes random, late, aggressive, pilot, ride or collapse',
   !LOG_SETS.includes(a.set ?? 'human') && `--set takes ${LOG_SETS.join(' or ')}`,
   !/^[a-z]+(-[a-z]+)*$/.test(a.tag ?? '') && '--tag takes lowercase words joined by hyphens (it names the logs)',
   need.some((n) => !NEEDS[n]) && `--need takes ${Object.keys(NEEDS).join(', ')}`,
@@ -264,7 +276,7 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n)) || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n)) || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)
@@ -274,6 +286,13 @@ const heightOf = (log) => {
 // (F9a) the same for the transports: sim/rider-probe.mjs's counts
 const ridesOf = (log) => {
   const probe = riderProbe()
+  const r = foldJob(pinCore, log, { match: pinMatch, probe })
+  return r.error ? { error: r.error, ...probe.result() } : probe.result()
+}
+
+// (F7c) the same for the platforms: sim/collapse-probe.mjs's counts
+const fallsOf = (log) => {
+  const probe = collapseProbe()
   const r = foldJob(pinCore, log, { match: pinMatch, probe })
   return r.error ? { error: r.error, ...probe.result() } : probe.result()
 }
@@ -330,8 +349,10 @@ const played = (await run(cands.map((c) => c.job))).map((r) => (r.error ? r : { 
 if (pinCore) played.forEach((r, i) => !r.error && (r.height = heightOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F9a) and with its transports, where a need asks
 if (need.some((n) => RIDE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.rides = ridesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
+// (F7c) and with its platforms, where a need asks or the board is fortified
+if (pinCore) played.forEach((r, i) => !r.error && (r.falls = fallsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 const fits = cands.map((c, i) => ({ ...c, res: played[i] })).filter((c) => {
-  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
+  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
   const end = c.res.error ? '' : c.res.over.wiped >= 0 ? `seat ${c.res.over.wiped} wiped out` : `${c.res.over.vp.join('-')} on the score`
   console.log(`  ${c.label.padEnd(30)} ${miss ? (c.res.error ? miss : `lacks ${miss}`) : 'fits'}${end ? `  (${end}${c.job.setup.seats.some((s) => s.army != null) ? `; ${c.job.setup.seats.map((s) => s.army ?? '-').join(' v ')}` : ''})` : ''}  [played in ${c.res.secs.toFixed(1)} s]`)
   return !miss
@@ -370,7 +391,10 @@ for (const c of chosen) {
   // ((F9a) what it did with its transports: sim/rider-probe.mjs's counts)
   const rd = c.res.rides
   const rides = rd && [rd.rearranged && `re-arranged ${rd.rearranged}`, rd.embarks && `embarks ${rd.embarks} (${rd.embarkPhase} in a phase)`, rd.steps && `steps off ${rd.steps}`, rd.bailed && `bail-outs ${rd.bailed} (${rd.bailDeaths} models lost)`, rd.lost && `riders lost ${rd.lost}`].filter(Boolean).join(', ')
-  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, describe(features(c.res.trace))].filter(Boolean).join(', ')
+  // ((F7c) what it did with its platforms: sim/collapse-probe.mjs's counts)
+  const fl = c.res.falls
+  const falls = fl && (fl.posts || fl.postsHit) && [`posts hit ${fl.postsHit + fl.posts} (${fl.posts} broken)`, fl.decks && `platforms fallen ${fl.decks}`, fl.falls && `units fallen ${fl.falls} (${fl.fallSlain} models slain${fl.crushed ? `, ${fl.crushed} crushed` : ''})`].filter(Boolean).join(', ')
+  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, falls, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
   // ((F18) --regen writes all its logs or none: each over itself, in its set)
   if (!a.dry && !(REGEN && chosen.length < COUNT)) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, c.set ?? a.set ?? 'human')

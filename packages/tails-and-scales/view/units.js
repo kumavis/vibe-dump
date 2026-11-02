@@ -124,6 +124,12 @@ const pipShapes = (n) => {
 }
 // how long a figure's hop onto or off a deck takes (s), and how high it goes
 const HOP = 0.4, HOP_H = 0.55
+// (F7c) A fall with a timber platform (fell()): the figures ride the deck's
+// sag (FALL_SAG s, view/terrain.js's DROP_SAG) and then drop as it does,
+// faster as they go, in FALL_T(dy) s for a fall of dy" (2" in about a third
+// of a second, the deck's own DROP_FALL), pitching forward as they go
+const FALL_SAG = 0.15
+const FALL_T = (dy) => Math.max(0.2, Math.sqrt(Math.max(0, dy) / 16))
 // (F8b) past how far from the camera a unit's figures are its far
 // stand-ins, and how near it must come again to be drawn in full (so a
 // unit on the line doesn't flicker)
@@ -443,8 +449,10 @@ export class UnitViews {
           this.scene.add(mesh)
           f = v.models[k] = { mesh, x: 0, y: 0, z: 0, yaw: v.facing, lunge: 0, lungeDir: 0, lift: 0 }
         }
-        Object.assign(f, { yaw: v.facing, look: undefined, lunge: 0, lift: 0, flash: 0, flying: false, moving: false })
+        Object.assign(f, { yaw: v.facing, look: undefined, lunge: 0, lift: 0, flash: 0, flying: false, moving: false, fall: null })
         f.mesh.position.y = 0
+        // ((F7c) a fall cut short ends upright)
+        f.mesh.rotation.x = 0
         f.mesh.userData.fig.position.x = 0
         // (a war machine's arm at rest, the acid engine's globe back on it:
         // a throw cut off by the snap gives back neither)
@@ -626,6 +634,43 @@ export class UnitViews {
       sfx.thwack()
     }
     return wait(e.forced ? HOP + 0.2 : 0.2)
+  }
+  // (F7c) A unit falls with the timber platform shot out from under it
+  // (unit.fall, core/actions/settle.js): its standing figures ride the
+  // deck's sag and drop with it to their slots at `to`, the mirror's place
+  // by now (the ground where it landed: where it stood, or the nearest
+  // clear ground it scrambled to), pitching as they go (the frame loop's
+  // `fall`, animate()); its ring, hit cylinder and label there at once, its
+  // drop line gone. "falls! D3" over it as it goes, a thud and dust where
+  // it lands. The fall is waited on: the next event, its D3's dice row (or,
+  // a unit crushed under the wreckage, its models slain), plays once it is
+  // down, so a crushed unit's figures die where they landed, which is where
+  // it stood. (F16) A fall the fog veils plays unseen and unheard; (F9a)
+  // a hull's riders fall with it on its deck, carried.
+  fell(e) {
+    const v = this.views.get(e.u), gen = this.gen, hid = this.hid(e.u)
+    const mu = this.shown(e.u), T = FALL_T(e.dy)
+    v.at = null
+    v.climb = null
+    v.moving = false
+    for (const [k, f] of v.models.entries()) {
+      if (!f.mesh || f.deck || f.dying || !mu.models[k].alive) continue
+      f.fall = { t: 0, T, x0: f.x, y0: f.y ?? 0, z0: f.z, pitch: k % 2 ? 0.35 : -0.25 }
+    }
+    this.disc(e.u)
+    this.label(e.u)
+    if (!hid) {
+      const top = this.top(e.u)
+      // ((F7c) a unit with nowhere to land is crushed, and takes no D3)
+      this.effects.text({ ...top, y: top.y + e.dy }, e.crushed ? 'crushed!' : 'falls! D3', e.crushed ? '#ff6a5a' : '#ffb36a', { size: 16 })
+    }
+    return wait(FALL_SAG + T).then(() => {
+      if (this.gone(e.u, v, gen) || hid) return
+      const p = this.shown(e.u).pos, y = this.shown(e.u).y ?? 0
+      this.effects.debris(p.x, y + 0.2, p.z, ['#9a8a70', '#7a6a50'], 6, { power: 2, size: 0.07 })
+      this.effects.smoke({ x: p.x, y: y + 0.2, z: p.z, size: Math.max(0.5, mu.r), color: '#9a8a70', life: 1.2 })
+      sfx.thwack()
+    }).then(() => wait(0.15))
   }
   // A unit placed (unit.place): a rider placed steps off its hull (the
   // deployment's re-arranging), the hull's deck closing up; a hull placed
@@ -867,6 +912,23 @@ export class UnitViews {
           const onLadder = at > c.toCol && at < c.toCol + c.dh
           const want = onLadder ? Math.atan2(c.up ? c.ux : -c.ux, c.up ? c.uz : -c.uz) : Math.atan2(c.ux, c.uz)
           m.yaw += wrapAngle(want - m.yaw) * (1 - Math.exp(-dt * 12))
+        } else if (model.alive && m.fall) {
+          // (F7c) falling with its platform (fell()): it rides the sag,
+          // then drops to its slot at the landing, faster as it goes,
+          // pitching forward and upright again as it lands
+          const F = m.fall
+          F.t += dt
+          const k = Math.min(1, Math.max(0, F.t - FALL_SAG) / F.T)
+          const tx = p.x + model.ox, tz = p.z + model.oz
+          m.x = lerp(F.x0, tx, easeOut(k))
+          m.z = lerp(F.z0, tz, easeOut(k))
+          m.y = F.y0 + (py - F.y0) * k * k
+          m.moving = false
+          m.mesh.rotation.x = Math.sin(k * Math.PI) * F.pitch
+          if (k >= 1) {
+            m.fall = null
+            m.mesh.rotation.x = 0
+          }
         } else if (model.alive) {
           const tx = p.x + model.ox, tz = p.z + model.oz
           const k = 1 - Math.exp(-dt * (v.moving ? 16 : 7))

@@ -128,6 +128,25 @@ export const MUTATIONS = {
   'keg-off-centre': ['/core/terrain/recipes.js', '    powderKeg(T, 0, 0, yaw, pick(KEG_WOOD, rng))', '    powderKeg(T, 0.1, 0, yaw, pick(KEG_WOOD, rng))', '1-3'],
   'keg-tougher': ['/core/terrain/recipes.js', "    kind: 'keg', hp: HAZARDS.keg.hp,", "    kind: 'keg', hp: HAZARDS.keg.hp + 1,", '1-3'],
   'blast-rim-full': ['/core/terrain/terrain.js', '    let amount = d < r * 0.6 ? dmg : Math.ceil(dmg / 2)', '    let amount = dmg', '1-3'],
+  // ── (F7c) the posts and what stands on a deck (section 6's postRows) ──
+  // a platform's posts set out past its deck's corners, from under it
+  'post-astray': ['/core/terrain/recipes.js', '  const h = 2, dz = 1.125, k = 2.25 - POST / 2\n', '  const h = 2, dz = 1.125, k = 2.25 + POST / 2\n', '1-3'],
+  // a platform's posts a quarter-inch short of its deck's top
+  'post-short': ['/core/terrain/recipes.js', ".map(([x, z]) => post(T, F, x, z, h, color, 'platform', POST_HP).id)", ".map(([x, z]) => post(T, F, x, z, h - 0.25, color, 'platform', POST_HP).id)", '1-3'],
+  // a platform's deck listing three of its four posts
+  'post-unlisted': ['/core/terrain/recipes.js', ".map(([x, z]) => post(T, F, x, z, h, color, 'platform', POST_HP).id)", ".map(([x, z]) => post(T, F, x, z, h, color, 'platform', POST_HP).id).slice(1)", '1-3'],
+  // a platform's ladder standing on a post, not its deck
+  'ladder-on-post': ['/core/terrain/recipes.js', "recipe: 'platform', foot: [0, dz - 2.25 - LADDER_OUT], top: [0, dz], on: d.id })", "recipe: 'platform', foot: [0, dz - 2.25 - LADDER_OUT], top: [0, dz], on: supports[0] })", '1-3'],
+  // a platform's posts that never break
+  'post-unbreakable': ['/core/terrain/recipes.js', 'export const POST_HP = 3\n', 'export const POST_HP = Infinity\n', '1-3'],
+  // a platform's deck that never falls (no fallsAt), on posts that break
+  'falls-never': ['/core/terrain/recipes.js', "recipe: 'platform', supports, fallsAt: FALLS_AT })", "recipe: 'platform', supports })", '1-3'],
+  // ── (F7c) a platform's fall drawn (the tiles section's fall rows) ──
+  // under ?fast a falling deck animates its drop all the same
+  'drop-fast-slow': ['/view/terrain.js', '    if (this.fast || !o?.parent) {\n', '    if (!o?.parent) {\n', '1-3'],
+  // a fallen platform's planks shown as they join, under a deck still
+  // dropping onto them
+  'planks-early': ['/view/terrain.js', '      item.obj.visible = false\n      it.drop.pile = item\n', '      it.drop.pile = item\n', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws
