@@ -118,7 +118,7 @@ function build(ctx) {
   // ---- the spring: a slender vertical V-fold ---------------------------------
   // gamma = π/2: the crease stands straight up when open whatever alpha is;
   // alpha sets how far the V's two halves splay (dihedral 2·alpha when open).
-  const SPRING_H = 0.46
+  const SPRING_H = 0.5
   const spring = paper.vFold({ z: LAKE_Z, alpha: 0.55, gamma: Math.PI / 2, length: SPRING_H })
   const drop = teardropShape(THREE, { height: SPRING_H, width: 0.1 })
   paper.card(spring.left, { shape: drop, material: gold })
@@ -188,7 +188,7 @@ function build(ctx) {
       glow += (breath - glow) * Math.min(1, dt * 1.4)
       phase += dt * 0.05
 
-      // the wave: each ring flashes as the front passes, eased in and out
+      // the wave: each ring brightens as the front passes, eased in and out
       let sum = 0
       for (let i = 0; i < waveMats.length; i++) {
         const u = (wave - WAVE_START - i * WAVE_STEP) / WAVE_WIDTH

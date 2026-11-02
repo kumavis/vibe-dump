@@ -11,7 +11,7 @@
 //   caustic-light card between the two. One card per page means the water
 //   simply folds with its page; nothing spans the spine.
 // • Lily pads are flat notched cut shapes lying on the water (one merged mesh
-//   per page, so nine pads cost two draw calls).
+//   per page, so ten pads cost two draw calls).
 // • Each lotus is a ring of petal FLAPS hinged round a cut seed-pod card on one
 //   page. A flap's hinge line is tangent to its ring; its petal points outward
 //   and lift(θ) raises it toward the page normal, so the petals form a cup that
@@ -21,7 +21,7 @@
 //   passes through a neighbour. Every blossom sits ≥ 0.2 from the spine, where
 //   a petal leaning toward its page normal can't cross into the other page.
 //   (The flaps are posed by paper; the petals are drawn as one InstancedMesh
-//   that copies each flap's pose every frame — 46 petals, one draw call.)
+//   that copies each flap's pose every frame — 54 petals, one draw call.)
 // • Behind the pond, two reed-bank V-folds stand on the spine ('near': apex at
 //   the far side, arms angled toward the reader; γ = π/2 stands the crease
 //   straight up). Same α and γ, so the two banks stay parallel at every θ and
@@ -36,8 +36,8 @@
 //   which reaches 0 as the spread closes and 1 well before it is half open.
 // • Light is the only unreal thing: caustics, a soft glow in each blossom, one
 //   small pink point light inside the largest cup, a low cool light from the
-//   reader's side, and a few slow motes — all fading with frame.reveal. On the in-breath the caustics brighten and the
-//   blossoms swell, very slightly.
+//   reader's side, and a few slow motes — all fading with frame.reveal. On the
+//   in-breath the caustics brighten and the blossoms swell, very slightly.
 
 import * as THREE from 'three'
 import {
@@ -289,7 +289,7 @@ function build(ctx) {
   // petals barely stir until the page is well open, so nothing reaches across.
   let swell = 0
   const opening = (th) => Math.sin(th / 2) ** 2
-  const petals = [] // { flap, page, sx, sz, dir }
+  const petals = [] // { flap, page, L, w, dir }
   const podMat = paper.material({ color: '#f1e3a0', emissive: '#6b5a20', roughness: 0.85 })
   const petalCol = []
   for (const lotus of LOTUSES) {
@@ -435,7 +435,7 @@ function build(ctx) {
       group.visible = frame.theta > CLOSED
       const sink = sinkAt(frame.theta)
       for (let i = 0; i < sinking.length; i++) sinking[i][0].position.y = sinking[i][1] * sink
-      for (let i = 0; i < padMeshes.length; i++) padMeshes[i].scale.y = sink
+      for (let i = 0; i < padMeshes.length; i++) padMeshes[i].scale.y = Math.max(1e-3, sink)
 
       // petals copy their flap's pose (paper has already posed the flaps),
       // with the flap's hinge gap sunk like everything else
@@ -458,13 +458,18 @@ function build(ctx) {
       lightTex.offset.set(-time * 0.0036, time * 0.0049)
       lightMat.opacity = reveal * (0.13 + 0.09 * b)
 
-      for (const s of glows) {
+      // The glows draw without a depth test (soft light through the petals),
+      // so they wait until the page is past upright: before that a leaf can
+      // stand between them and the reader.
+      const glowOn = reveal * smooth(0.5, 0.75, frame.openness)
+      for (let i = 0; i < glows.length; i++) {
+        const s = glows[i]
         const { page, local: L, size } = s.userData
         v3.copy(L).applyMatrix4(page.matrix)
         s.position.copy(v3)
-        s.material.opacity = reveal * (0.14 + 0.12 * b)
+        s.material.opacity = glowOn * (0.14 + 0.12 * b)
         s.scale.setScalar(size * (0.9 + 0.12 * b) * (0.4 + 0.6 * reveal))
-        s.visible = reveal > 0.001
+        s.visible = glowOn > 0.001
       }
       heart.position.copy(glows[0].position)
       front.intensity = 0.55 * reveal

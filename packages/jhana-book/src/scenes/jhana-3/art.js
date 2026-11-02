@@ -245,20 +245,14 @@ export function padShape(R, rot, notch = 0.32) {
 }
 
 // ---- seed pod: a disc with its seed holes cut out ---------------------------------
-export function podShape(r, cx = 0, cy = 0, half = 0) {
+export function podShape(r) {
   const s = new THREE.Shape()
-  if (half) {
-    // the half that lies on one page of a pod centred on the spine
-    s.moveTo(cx, cy - r)
-    s.absarc(cx, cy, r, -Math.PI / 2, Math.PI / 2, false)
-    s.lineTo(cx, cy - r)
-  } else s.absarc(cx, cy, r, 0, TAU, false)
+  s.absarc(0, 0, r, 0, TAU, false)
   const holes = [[0, 0]]
   for (let k = 0; k < 6; k++) holes.push([0.58 * Math.cos((TAU * k) / 6 + 0.3), 0.58 * Math.sin((TAU * k) / 6 + 0.3)])
   for (const [hx, hy] of holes) {
-    if (half && hx * r < 0.22 * r) continue
     const hole = new THREE.Path()
-    hole.absarc(cx + hx * r, cy + hy * r, r * 0.13, 0, TAU, true)
+    hole.absarc(hx * r, hy * r, r * 0.13, 0, TAU, true)
     s.holes.push(hole)
   }
   return s
