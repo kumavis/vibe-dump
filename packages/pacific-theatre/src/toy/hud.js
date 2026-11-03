@@ -310,7 +310,7 @@ export class ToyHud {
     if (me && w.t > 0) {
       for (const th of w.things) {
         if (!th.enemy || th.alive !== 1) continue
-        const top = th.kind === 'ship' ? (th.model?.H ?? 20) * 0.9 + 6 : 0
+        const top = th.kind === 'ship' ? (th.model?.H ?? 20) * 0.35 : 0
         const p = this.project(w, th.x, th.y + top, th.z)
         if (!p.on) {
           off.push({ th, p, d: Math.hypot(th.x - me.x, th.z - me.z) })
@@ -350,15 +350,17 @@ export class ToyHud {
         const cx = W / 2
         const cy = H / 2
         const ang = Math.atan2(o.p.y - cy, o.p.x - cx)
+        // (inside the screen's edge, clear of the corners' readouts and the status at the foot)
         const rx = W / 2 - 34
         const ry = H / 2 - 34
         const k = Math.min(rx / Math.abs(Math.cos(ang) || 1e-6), ry / Math.abs(Math.sin(ang) || 1e-6))
+        const ay = Math.max(110 - cy, Math.min(H - 130 - cy, Math.sin(ang) * k))
         const cls = `toy-mark arrow ${o.th.kind}${o.th.aiming ? ' aiming' : ''}`
         if (m.cls !== cls) {
           m.el.className = cls
           m.cls = cls
         }
-        m.el.style.transform = `translate(${(cx + Math.cos(ang) * k).toFixed(0)}px, ${(cy + Math.sin(ang) * k).toFixed(0)}px) rotate(${ang.toFixed(3)}rad)`
+        m.el.style.transform = `translate(${(cx + Math.cos(ang) * k).toFixed(0)}px, ${(cy + ay).toFixed(0)}px) rotate(${ang.toFixed(3)}rad)`
         m.el.style.display = ''
       }
     }
@@ -380,7 +382,8 @@ export class ToyHud {
       el.lock.style.transform = `translate(${p.x.toFixed(0)}px, ${p.y.toFixed(0)}px)`
       el.lock.style.width = el.lock.style.height = `${s.toFixed(0)}px`
       el.lock.classList.toggle('locked', !!lk.locked)
-      el.lock.querySelector('span').textContent = lk.locked ? (lk.weapon === 'torpedo' ? 'Locked · torpedo' : 'Locked') : ''
+      el.lock.classList.toggle('far', !!lk.locked && !lk.inRange)
+      el.lock.querySelector('span').textContent = !lk.locked ? '' : !lk.weapon ? 'Locked · reloading' : lk.inRange ? (lk.weapon === 'torpedo' ? 'Drop! · torpedo' : 'Drop!') : 'Locked · closer'
     } else el.lock.style.display = 'none'
     // the damage numbers rise from where they landed
     for (const nm of this.nums) {

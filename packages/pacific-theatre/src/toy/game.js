@@ -5,8 +5,9 @@
 // the longest gap without a target in view).
 
 import { World, fly, steamCarrier, ARENA, wrapPi } from './world.js'
-import { playerGuns, moveShots, wreckage, playerLife, PLAYER } from './combat.js'
+import { playerGuns, moveShots, wreckage, playerLife, pointWorld, PLAYER } from './combat.js'
 import { fighters, spawnFlight } from './enemies.js'
+import { shipsAI, spawnShip, lockOn, ordnance, ORD } from './ships.js'
 
 /** In view: an enemy within the chase camera's cone ahead of the player (about its field of view) and a kilometre. */
 function sight(world) {
@@ -59,8 +60,10 @@ function refill(world) {
 export function newGame(side, kits, opts = {}) {
   const w = new World(side, kits, opts)
   w.notch = 0
+  w.pointOf = pointWorld
   w.lives = PLAYER.lives
   w.score = 0
+  w.ammo = { bombs: ORD.bombs, bombsMax: ORD.bombs, torpedo: 1, reloadIn: ORD.reload, armed: false }
   w.carrier = w.spawn('carrier', { hp: 600, hpMax: 600, phase: 0, name: side.carrier.name })
   steamCarrier(w, 0)
   w.me = w.spawn('player', { x: 0, y: 70, z: 140, yaw: 0, v: ARENA.speed, hp: PLAYER.hp, hpMax: PLAYER.hp, radius: PLAYER.radius, shield: 0 })
@@ -76,7 +79,10 @@ export function newGame(side, kits, opts = {}) {
       if (me && me.alive === 1 && !me.down) fly(world, me, world.input.sx, world.input.sy, dt)
     },
     playerGuns,
+    lockOn,
+    ordnance,
     fighters,
+    shipsAI,
     moveShots,
     wreckage,
     playerLife,
@@ -86,6 +92,17 @@ export function newGame(side, kits, opts = {}) {
         // the first three, straight ahead and coming at you (TOY.md §2: in your sights within five seconds)
         spawnFlight(world, 3, { from: 0, dist: 470, y: 85, notch: 0, around: { x: 0, z: 140 } })
         world.emit('banner', { text: 'Wave 1' })
+      }
+      if (world.t > 30 && !world.w2) {
+        world.w2 = true
+        spawnShip(world, 'destroyer', { from: Math.PI / 2, dist: 640, offset: -90, notch: 1 })
+        spawnShip(world, 'destroyer', { from: Math.PI / 2, dist: 690, offset: 90, notch: 1 })
+        world.emit('banner', { text: 'Wave 2', sub: 'Destroyers from the east' })
+      }
+      if (world.t > 60 && !world.w3) {
+        world.w3 = true
+        spawnShip(world, 'cruiser', { from: Math.PI * 0.8, dist: 660, notch: 2 })
+        world.emit('banner', { text: 'Wave 3', sub: 'A cruiser' })
       }
       if (world.opened) refill(world)
     },

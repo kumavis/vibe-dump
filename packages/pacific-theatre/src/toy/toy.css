@@ -82,6 +82,8 @@ body.toy-on #ui, body.toy-on #dev-status { display: none !important; }
 .toy-lock { position: absolute; left: 0; top: 0; pointer-events: none; margin: 0; }
 .toy-lock { width: 90px; height: 90px; translate: -50% -50%; border: 3px dashed rgba(255,214,120,.9); border-radius: 8px; transition: width .1s, height .1s; }
 .toy-lock.locked { border-style: solid; border-color: var(--red); box-shadow: 0 0 14px var(--red); }
+.toy-lock.locked.far { border-color: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.toy-lock.far span { color: var(--gold); }
 .toy-lock span { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--red); white-space: nowrap; }
 /* the numbers, the stamps, the banners, the warnings, the hurt flash */
 .toy-num { position: absolute; transform: translate(-50%, -50%); font-size: 18px; color: #fff; opacity: 0; -webkit-text-stroke: 1px rgba(0,0,0,.6); }

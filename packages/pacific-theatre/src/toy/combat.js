@@ -6,7 +6,7 @@
 // health that comes back when nothing is hitting it, the three lives and the
 // two-second respawn over the carrier.
 
-import { forward, ARENA } from './world.js'
+import { forward, wrapPi, ARENA } from './world.js'
 
 export const GUN = {
   interval: 1 / 14, // s between rounds (two guns, alternating)
@@ -91,8 +91,16 @@ function shootOnce(world, me, g) {
       const ax = (L.x - me.x) / L.d
       const ay = (L.y - me.y) / L.d
       const az = (L.z - me.z) / L.d
-      const ang = Math.acos(Math.max(-1, Math.min(1, ax * dx + ay * dy + az * dz)))
-      const cone = GUN.assist * (th.kind === 'ship' ? 0.8 : 1)
+      let ang = Math.acos(Math.max(-1, Math.min(1, ax * dx + ay * dy + az * dz)))
+      let cone = GUN.assist
+      if (th.kind === 'ship') {
+        // a ship: wide across her length, and very forgiving up and down (the sea is below the nose)
+        const hz = Math.abs(wrapPi(Math.atan2(L.x - me.x, -(L.z - me.z)) - me.yaw))
+        const vt = Math.abs(Math.asin(Math.max(-1, Math.min(1, ay))) - me.pitch)
+        cone = 0.14 + Math.atan2((th.model?.L ?? 100) * (p === th ? 0.3 : 0.05), L.d)
+        if (vt > 0.6) continue
+        ang = hz
+      }
       if (ang > cone) continue
       const sc = ang + L.d / 3000
       if (sc < bestScore) {
@@ -202,7 +210,7 @@ export function moveShots(world, dt) {
       if (s.onWater) s.onWater(world, s)
       else if (s.kind === 'bullet' && world.random() < 0.15) world.emit('spray', { x: s.x, z: s.z })
     }
-    if (!gone) {
+    if (!gone && !s.inert) {
       for (const th of targets) {
         if (th.alive !== 1) continue
         if (s.by === 'me' ? !th.enemy : th.enemy || th.alive !== 1) continue
@@ -252,7 +260,7 @@ export function hurt(world, th, dmg, { by = 'me', x = th.x, y = th.y, z = th.z, 
   if (th.alive !== 1) return
   if (th.role === 'player' && (th.shield > world.t || th.down)) return
   let amount = dmg
-  if (th.armour && !part) amount = Math.max(1, Math.round(dmg * th.armour))
+  if (th.armour && !part && weapon === 'bullet') amount = Math.max(1, Math.round(dmg * th.armour))
   if (part) {
     part.hp = Math.max(0, part.hp - amount)
     th.hitT = world.t
