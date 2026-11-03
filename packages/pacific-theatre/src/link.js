@@ -246,7 +246,9 @@ export function link(app, ui) {
     ui.card.close()
     if (L.wg) endWargameState()
     setToyUrl(boxId, side)
-    app.pushUrl()
+    // (from the card a history entry, so Back leaves it; from a URL the entry it came in on)
+    if (from === 'url') app.replaceUrl()
+    else app.pushUrl()
     try {
       await toy.enter(boxId, { side, from })
     } catch (err) {

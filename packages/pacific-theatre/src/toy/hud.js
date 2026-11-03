@@ -248,7 +248,7 @@ export class ToyHud {
         el.combo.classList.add('pop')
       }
       el.combo.querySelector('span').textContent = `combo ${c.count}`
-      el.combo.querySelector('u').style.width = `${Math.max(0, ((c.until - w.t) / 2.6) * 100).toFixed(1)}%`
+      el.combo.querySelector('u').style.width = `${Math.min(100, Math.max(0, ((c.until - w.t) / 2.6) * 100)).toFixed(1)}%`
     } else this.last.mult = null
     // the clock and the wave
     const left = w.duration ? fmtClock(w.duration - w.t) : ''

@@ -52,6 +52,12 @@ export function fighters(world, dt) {
     ai.t += dt
     ai.cd -= dt
     th.aiming = false
+    if (th.home) {
+      // turning for home: straight out of the arena, and gone past its edge
+      fly(world, th, Math.max(-1, Math.min(1, wrapPi(Math.atan2(th.x, -th.z) - th.yaw) * 2)), (110 - th.y) / 60, dt, { speed: FIGHTER.speed * 1.2, yawRate: FIGHTER.yawRate, auto: false })
+      if (Math.hypot(th.x, th.z) > ARENA.radius + 250) world.remove(th)
+      continue
+    }
     const meOk = me && me.alive === 1 && !me.down
     const goCarrier = th.mission === 'carrier' && world.carrier?.alive === 1
     const tgt = goCarrier ? world.carrier : meOk ? me : world.carrier?.alive === 1 ? world.carrier : null

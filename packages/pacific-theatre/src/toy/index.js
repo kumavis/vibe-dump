@@ -13,9 +13,8 @@
 // bot) steps the game without drawing (the smoke test's bot plays it under
 // SwiftShader at a frame a second), toy.metrics().
 
-import { shipGeometry } from '../battle/kits/index.js'
 import { SIDES, sideOf } from './sides.js'
-import { newGame } from './game.js'
+import { newGame, modelsFor } from './game.js'
 import { ToyScene } from './scene.js'
 import { ToyInput } from './input.js'
 import { ToyHud } from './hud.js'
@@ -26,20 +25,6 @@ import { pointWorld } from './combat.js'
 const BEST_KEY = 'pt.toy.best'
 
 const STEP = 1 / 60
-
-/** The ship kits' sizes and turrets the world needs (from the same cached geometry the renderer draws). */
-function modelsFor(side, kitsById) {
-  const out = {}
-  for (const role of ['carrier', 'destroyer', 'cruiser', 'boss']) {
-    const kit = kitsById[side[role].kit]
-    if (!kit) continue
-    const g = shipGeometry(kit, { colourDate: side.colourDate })
-    const b = g.bounds
-    const main = g.turrets.filter((t) => t.battery === g.turrets[0]?.battery).slice(0, 3)
-    out[kit.id] = { L: b.length, B: b.beam, H: b.height, deck: Math.max(5, b.height * 0.3), turrets: main.map((t, j) => ({ at: t.at, battery: t.battery, j, rest: t.rest })) }
-  }
-  return out
-}
 
 export class Toy {
   constructor(app) {
@@ -123,6 +108,8 @@ export class Toy {
     this.games++
     const world = newGame(S, this.kitsById, { centre: this.scene.centre, seed: this.seed ?? 1000 + this.games, models: modelsFor(S, this.kitsById) })
     this.world = world
+    this.log = []
+    this.pendingSunk = null
     await this.scene.setWorld(world)
     this.hud.bind(world)
     this.running = running
@@ -193,6 +180,8 @@ export class Toy {
   /** The world's events to the effects (when drawn) and the HUD; the sinking's slow motion and cut; the end screen. */
   drain(w, draw) {
     for (const e of w.events) {
+      if (!e.replay && ['wave', 'sunk', 'shotdown', 'lost', 'point-out', 'over', 'carrier-lost'].includes(e.type)) this.log.push({ type: e.type, t: +e.t.toFixed(2), role: e.th?.role, n: e.n, reason: e.reason })
+      if (!draw && e.type === 'sunk') this.pendingSunk = e
       if (draw) this.fx.event(e, w)
       this.hud.event(e, w)
       if (e.type === 'sunk' && draw) {
@@ -227,10 +216,11 @@ export class Toy {
   }
 
   /** For the tools: step the game `seconds` without drawing, `bot(world)` steering (the HUD's events are drained as they come). */
-  simulate(seconds, bot = this.bot) {
+  simulate(seconds, bot = this.bot, until = null) {
     const w = this.world
     const n = Math.round(seconds / STEP)
     for (let i = 0; i < n && !w.over; i++) {
+      if (i % 6 === 0 && until?.(w, this)) break
       const inp = bot ? bot(w) : { sx: 0, sy: 0, fire: false, drop: 0 }
       w.input.sx = inp.sx
       w.input.sy = inp.sy
@@ -246,6 +236,16 @@ export class Toy {
     this.hud.update(0, w)
     if (this.scene) this.scene.chase.snap = true
     return w.t
+  }
+
+  /** For the tools: the last sinking a simulate() stepped past, drawn as play draws it (its explosions, the slow motion, the cut). */
+  showSunk() {
+    const e = this.pendingSunk
+    if (!e) return false
+    this.pendingSunk = null
+    this.world.events.push({ ...e, t: this.world.t, replay: true })
+    this.drain(this.world, true)
+    return true
   }
 
   /** Back where the page was: the table (or the dev page's idle scene), the toy's scene let go. */

@@ -313,7 +313,7 @@ function launchTorpedo(world, me, target) {
     onHit: (w, s, t, h) => {
       w.stats.ordHits = (w.stats.ordHits || 0) + 1
       w.emit('boom', { x: h.x, y: 2, z: h.z, size: 1.6 })
-      hurt(w, t, s.dmg, { by: 'me', x: h.x, y: 4, z: h.z, weapon: 'torpedo' })
+      hurt(w, t, s.dmg, { by: 'me', x: h.x, y: 4, z: h.z, part: h.part, weapon: 'torpedo' })
     },
   })
   world.emit('drop', { weapon: 'torpedo' })

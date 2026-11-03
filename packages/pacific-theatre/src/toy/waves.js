@@ -13,7 +13,7 @@ import { spawnShip } from './ships.js'
 import { addScore, destroy, pointWorld, SCORE } from './combat.js'
 
 export const DURATION = 180
-export const BOSS = { turret: 90, magazine: 120, turretRadius: 15, magazineRadius: 20 }
+export const BOSS = { turret: 80, magazine: 100, turretRadius: 15, magazineRadius: 20 }
 const MAX_FIGHTERS = 12
 const MAX_SHIPS = 6
 
@@ -71,6 +71,8 @@ export function waveList(side) {
 export function spawnBoss(w) {
   const th = ship(w, 'boss', { from: Math.PI / 2, dist: 640 })
   if (!th) return null
+  // the stage cleared for her: the fighters still up turn for home
+  for (const f of w.things) if (f.role === 'fighter' && f.alive === 1) f.home = true
   const m = th.model
   const turrets = (m.turrets || []).slice(0, 3)
   th.noHull = true
@@ -158,20 +160,19 @@ export function spawner(w) {
   if (w.t >= DURATION) w.end('time')
 }
 
-/** Something to shoot within a few seconds whenever the sky goes empty (TOY.md §2: never more than five seconds without a target). */
+/** Something to shoot within a few seconds whenever nothing is in view (TOY.md §2: never more than five seconds without a target): a pair ahead, coming at you. */
 function refill(w) {
-  if (w.things.some((th) => th.enemy && th.alive === 1)) {
+  if (w.stats.inSightNow || !w.me || w.me.alive !== 1) {
     w.emptySince = null
     return
   }
   w.emptySince ??= w.t
   if (w.t - w.emptySince < 2.5) return
-  // (not just before a wave: it will bring its own)
+  // (not just before a wave: it brings its own; and not a swarm while the player is busy elsewhere)
   const next = w.waves[w.waveAt]
-  if (next && next.at - w.t < 4) return
+  if ((next && next.at - w.t < 4) || fightersAlive(w) >= (w.boss ? 2 : 6)) return
   w.emptySince = null
   const me = w.me
-  const ahead = me ? me.yaw + (w.random() - 0.5) * 0.6 : w.random() * 6.28
-  flight(w, 2, { from: ahead, dist: 420, y: Math.max(50, Math.min(140, me?.y ?? 90)), around: me ? { x: me.x, z: me.z } : null })
+  flight(w, 2, { from: me.yaw + (w.random() - 0.5) * 0.6, dist: 420, y: Math.max(50, Math.min(140, me.y)), around: { x: me.x, z: me.z } })
   w.emit('banner', { text: `${w.side.fighter.plural} inbound`, small: true })
 }

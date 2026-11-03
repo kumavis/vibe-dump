@@ -138,25 +138,31 @@ body.toy-on #ui, body.toy-on #dev-status { display: none !important; }
 .toy-touch[data-k=aircraft] .t-fire { min-width: 72px; min-height: 72px; border-radius: 36px; font-size: 14px; font-weight: 700; }
 .toy-touch[data-k=aircraft] .t-bomb { font-weight: 700; }
 body:has(.toy.screen-up) .toy-touch { display: none; }
-/* a phone (the page's query, controls/touch.js keeps the same one): the status under the clock, the corners for the thumbs */
+/* a phone (the page's query, controls/touch.js keeps the same one): three rows at the top (the score, the clock and the
+   lives; the boss bar across; the status), the corners at the foot for the thumbs */
 @media (max-width: 700px), (pointer: coarse) {
   .toy { font-size: 12px; }
   .toy-score { font-size: 22px; }
-  .toy-combo { width: 110px; }
+  .toy-combo { width: 104px; }
   .toy-combo b { font-size: 22px; }
-  .toy-tm { width: min(300px, 46vw); }
+  .toy-combo i { overflow: hidden; }
+  .toy-combo span { display: none; }
+  .toy-tm { left: calc(var(--gl) + 110px); right: calc(var(--gr) + 100px); width: auto; transform: none; }
   .toy-clock { font-size: 20px; }
-  .toy-tr { width: 110px; }
+  .toy-wave { font-size: 10px; letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .toy-tr { width: 96px; }
   .toy-lives svg { width: 18px; height: 18px; }
-  .toy-status { top: calc(var(--gt) + 46px); bottom: auto; left: 50%; width: min(240px, 46vw); grid-template-columns: 1fr; gap: 2px; font-size: 9.5px; }
-  .toy-hud:has(.toy-boss:not([hidden])) .toy-status { top: calc(var(--gt) + 84px); }
+  .toy-boss { position: fixed; left: var(--gl); right: var(--gr); top: calc(var(--gt) + 72px); margin: 0; }
+  .toy-boss-name { font-size: 11px; }
+  .toy-status { top: calc(var(--gt) + 74px); bottom: auto; left: 50%; width: min(240px, 60vw); grid-template-columns: 1fr 1fr; gap: 2px 8px; font-size: 9.5px; }
+  .toy-hud:has(.toy-boss:not([hidden])) .toy-status { top: calc(var(--gt) + 112px); }
   .toy-status .toy-meter i { height: 7px; }
   .toy-ammo { gap: 6px; }
   .toy-bombs b, .toy-torp b { width: 10px; height: 10px; }
   .toy-torp b { width: 20px; }
   .toy-stamp b { font-size: 30px; }
   .toy-stamp.sunk b { font-size: 42px; }
-  .toy-banner b { font-size: 38px; }
+  .toy-banner b { font-size: 34px; }
   .toy-warn { top: auto; bottom: calc(var(--gb) + 150px); font-size: 14px; }
   .toy-card { padding: 12px 14px; }
   .toy-card h1 { font-size: 28px; }
@@ -170,9 +176,9 @@ body:has(.toy.screen-up) .toy-touch { display: none; }
   .toy-pitch { display: none; }
   .toy-nums-end { grid-template-columns: repeat(4, 1fr); }
   .toy-big { font-size: 34px; }
-  .toy-warn { bottom: calc(var(--gb) + 8px); }
-  .toy-status { top: calc(var(--gt) + 40px); width: min(220px, 30vw); }
-  .toy-hud:has(.toy-boss:not([hidden])) .toy-status { top: calc(var(--gt) + 78px); }
+  .toy-warn { bottom: calc(var(--gb) + 70px); }
+  .toy-boss { left: 25%; right: 25%; }
+  .toy-status, .toy-hud:has(.toy-boss:not([hidden])) .toy-status { top: auto; bottom: var(--gb); width: min(300px, 36vw); }
 }
 /* the door on a battle's card: third in the row, compact */
 .card footer .nav.toy-door { order: -1; flex: 0 0 auto; height: 38px; padding: 0 10px; justify-content: center; gap: 5px; background: rgba(255,214,120,.12); border-color: rgba(255,214,120,.7); color: #ffd678; font-weight: 700; font-size: 12.5px; white-space: nowrap; }

@@ -6,7 +6,7 @@
 // health that comes back when nothing is hitting it, the three lives and the
 // two-second respawn over the carrier.
 
-import { forward, wrapPi, ARENA } from './world.js'
+import { forward, wrapPi } from './world.js'
 
 export const GUN = {
   interval: 1 / 14, // s between rounds (two guns, alternating)
@@ -184,16 +184,16 @@ export function strike(shot, x0, y0, z0, th) {
     const qz = z0 + ((z1 - z0) * k) / 2
     if (qy > cy + m.H * 0.7 + shot.r || qy < -3) continue
     const [d2] = segDist2(th.x - hx, cy, th.z - hz, th.x + hx, cy, th.z + hz, qx, Math.min(Math.max(qy, cy - 4), cy + 4), qz)
-    if (d2 < r * r) return { x: qx, y: Math.max(qy, 1), z: qz, part: nearPoint(th, qx, qz) }
+    if (d2 < r * r) return { x: qx, y: Math.max(qy, 1), z: qz, part: nearPoint(th, qx, qz), near: true }
   }
   return null
 }
 
-/** A hull hit close to an open weak point counts on it (generous: the turret is the big glowing thing there). */
+/** A hull hit counts at half on her nearest open weak point (generous: the turrets are the big glowing things on her). */
 function nearPoint(th, x, z) {
   if (!th.points) return null
   let best = null
-  let bd = 45 * 45
+  let bd = Infinity
   for (const p of th.points) {
     if (p.hp <= 0 || !p.open) continue
     const P = pointWorld(th, p)
@@ -237,7 +237,7 @@ export function moveShots(world, dt) {
         if (!h) continue
         gone = true
         if (s.onHit) s.onHit(world, s, th, h)
-        else hurt(world, th, s.dmg, { by: s.by, x: h.x, y: h.y, z: h.z, part: h.part, weapon: s.kind })
+        else hurt(world, th, h.near && h.part ? Math.ceil(s.dmg / 2) : s.dmg, { by: s.by, x: h.x, y: h.y, z: h.z, part: h.part, weapon: s.kind })
         break
       }
     }
@@ -378,9 +378,3 @@ export function playerLife(world, dt) {
     world.emit('respawn', {})
   }
 }
-
-export function lostPlayer(world, th, dmg) {
-  hurt(world, th, dmg, { by: 'them' })
-}
-
-export { ARENA }

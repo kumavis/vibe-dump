@@ -130,6 +130,8 @@ export class ToyScene {
     const aspect = innerWidth / Math.max(1, innerHeight)
     if (Math.abs(cam.aspect - aspect) > 1e-3) {
       cam.aspect = aspect
+      // (a phone held upright sees as wide as one on its side would)
+      cam.fov = aspect < 1 ? 50 + 22 * Math.min(1, (1 - aspect) * 2) : 55
       cam.updateProjectionMatrix()
     }
     const fxDt = this.onTick ? this.onTick(dt) : dt

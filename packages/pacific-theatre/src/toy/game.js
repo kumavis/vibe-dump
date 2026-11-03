@@ -9,6 +9,21 @@ import { playerGuns, moveShots, wreckage, playerLife, pointWorld, PLAYER } from 
 import { fighters } from './enemies.js'
 import { shipsAI, lockOn, ordnance, ORD } from './ships.js'
 import { spawner, DURATION } from './waves.js'
+import { shipGeometry } from '../battle/kits/index.js'
+
+/** The ship kits' sizes and main turrets the world needs, from the same cached geometry the renderer draws. */
+export function modelsFor(side, kitsById) {
+  const out = {}
+  for (const role of ['carrier', 'destroyer', 'cruiser', 'boss']) {
+    const kit = kitsById[side[role].kit]
+    if (!kit) continue
+    const g = shipGeometry(kit, { colourDate: side.colourDate })
+    const b = g.bounds
+    const main = g.turrets.filter((t) => t.battery === g.turrets[0]?.battery).slice(0, 3)
+    out[kit.id] = { L: b.length, B: b.beam, H: b.height, deck: Math.max(5, b.height * 0.3), turrets: main.map((t, j) => ({ at: t.at, battery: t.battery, j, rest: t.rest })) }
+  }
+  return out
+}
 
 /** In view: an enemy within the chase camera's cone ahead of the player (about its field of view) and a kilometre. */
 function sight(world) {
