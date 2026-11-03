@@ -8,7 +8,7 @@ import { TouchControls } from '../battle/controls/touch.js'
 
 const KEYS = { ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r', ArrowUp: 'u', KeyW: 'u', ArrowDown: 'd', KeyS: 'd' }
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
-const dead = (v, d) => (Math.abs(v) < d ? 0 : (v - Math.sign(v) * d) / (1 - d))
+const deadZone = (v, d) => (Math.abs(v) < d ? 0 : (v - Math.sign(v) * d) / (1 - d))
 
 export class ToyInput {
   /** el: the toy's root (pointer events land on it); hooks: { pause() }. */
@@ -125,8 +125,8 @@ export class ToyInput {
     const pads = navigator.getGamepads?.() || []
     for (const p of pads) {
       if (!p || !p.connected) continue
-      const ax = dead(p.axes[0] || 0, 0.15)
-      const ay = dead(p.axes[1] || 0, 0.15)
+      const ax = deadZone(p.axes[0] || 0, 0.15)
+      const ay = deadZone(p.axes[1] || 0, 0.15)
       if (ax || ay) this.last = 'pad'
       if (this.last === 'pad') {
         sx = ax
@@ -165,8 +165,8 @@ export class ToyInput {
     } else if (this.last === 'mouse' && this.mouse.on) {
       // the nose follows the pointer: its offset from the middle, level inside a small dead zone
       const R = 0.36 * Math.min(width, height)
-      sx = clamp(dead((this.mouse.x - width / 2) / R, 0.06), -1, 1)
-      sy = clamp(dead(-(this.mouse.y - height * 0.45) / R, 0.06), -1, 1)
+      sx = clamp(deadZone((this.mouse.x - width / 2) / R, 0.06), -1, 1)
+      sy = clamp(deadZone(-(this.mouse.y - height * 0.45) / R, 0.06), -1, 1)
     }
     fire = fire || this.fireKey || this.mouse.fire
     drop += this.drops

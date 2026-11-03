@@ -109,7 +109,7 @@ export function spawnBoss(w) {
   return th
 }
 
-/** The boss's turrets track the player (and the dead ones hang askew); her bar is the sum of her weak points. */
+/** The boss's turrets track the player (and the ones knocked out hang askew); her bar is the sum of her weak points. */
 function bossTick(w) {
   const th = w.boss
   if (!th || th.alive === 0) return
