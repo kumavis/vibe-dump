@@ -15,10 +15,14 @@
 
 import { shipGeometry } from '../battle/kits/index.js'
 import { SIDES, sideOf } from './sides.js'
-import { newWorld } from './world.js'
+import { newGame } from './game.js'
 import { ToyScene } from './scene.js'
 import { ToyInput } from './input.js'
 import { ToyHud } from './hud.js'
+import { ToyFx } from './fx.js'
+import { pointWorld } from './combat.js'
+
+const BEST_KEY = 'pt.toy.best'
 
 const STEP = 1 / 60
 
@@ -46,6 +50,26 @@ export class Toy {
     this.acc = 0
     this.realT = 0
     this.games = 0
+    this.pointWorld = pointWorld
+  }
+
+  /** The high score this browser kept for a side (0 when it keeps nothing). */
+  best(side = this.side) {
+    try {
+      return Number(JSON.parse(localStorage.getItem(BEST_KEY) || '{}')[side]) || 0
+    } catch {
+      return 0
+    }
+  }
+
+  saveBest(side, score) {
+    try {
+      const all = JSON.parse(localStorage.getItem(BEST_KEY) || '{}')
+      all[side] = score
+      localStorage.setItem(BEST_KEY, JSON.stringify(all))
+    } catch {
+      // (a private window keeps nothing: the end screen still shows the score)
+    }
   }
 
   get active() {
@@ -75,6 +99,7 @@ export class Toy {
     document.body.classList.add('toy-on')
     this.input = new ToyInput(this.root, { pause: () => this.togglePause(), paused: () => this.paused || !this.running, blur: () => this.running && this.pause(true) })
     this.hud = new ToyHud(this.root, this)
+    this.fx = new ToyFx(this.scene)
     await this.newGame(side, { running: false })
     await app.cut(() => {
       app.setActive(this.scene)
@@ -95,7 +120,7 @@ export class Toy {
       this.scene.side = S
     }
     this.games++
-    const world = newWorld(S, this.kitsById, { centre: this.scene.centre, seed: this.seed ?? 1000 + this.games, models: modelsFor(S, this.kitsById) })
+    const world = newGame(S, this.kitsById, { centre: this.scene.centre, seed: this.seed ?? 1000 + this.games, models: modelsFor(S, this.kitsById) })
     this.world = world
     await this.scene.setWorld(world)
     this.hud.bind(world)
@@ -159,8 +184,45 @@ export class Toy {
       }
       if (n === 8) this.acc = 0
     }
+    this.drain(w, true)
     this.hud.update(dt, w)
     return dt * k
+  }
+
+  /** The world's events to the effects (when drawn) and the HUD; the sinking's slow motion and cut; the end screen. */
+  drain(w, draw) {
+    for (const e of w.events) {
+      if (draw) this.fx.event(e, w)
+      this.hud.event(e, w)
+      if (e.type === 'sunk' && draw) {
+        this.slowmo(e.th?.role === 'boss' ? 1.6 : 1.1)
+        const c = w.centre
+        this.scene.chase.cut(e.x + c.x, 0, e.z + c.z, e.th?.role === 'boss' ? 1.9 : 1.3, e.th?.model?.L ?? 120)
+      }
+      if (e.type === 'over') this.finish(w)
+    }
+    w.events.length = 0
+  }
+
+  /** The end screen's numbers (and the high score kept). */
+  results(w = this.world) {
+    const shots = w.stats.shots || 0
+    const hits = w.stats.hits || 0
+    const score = w.score || 0
+    const prev = this.best(this.side)
+    return { reason: w.over?.reason ?? 'time', side: this.side, score, best: Math.max(prev, score), newBest: score > prev && score > 0, combo: w.combo?.best ?? 1, sunk: w.sunk || 0, downed: w.downed || 0, accuracy: shots ? Math.round((hits / shots) * 100) : 0, lost: w.lost || 0, t: +w.t.toFixed(1) }
+  }
+
+  finish(w) {
+    if (this.ended === w) return
+    this.ended = w
+    const r = this.results(w)
+    this.lastResults = r
+    if (r.newBest) this.saveBest(this.side, r.score)
+    this.running = false
+    // (a beat to see the last explosion before the card)
+    setTimeout(() => this.world === w && this.hud?.endScreen(r), this.bot ? 0 : 1600)
+    this.app.events?.dispatchEvent(new CustomEvent('toy', { detail: { kind: 'end', ...r } }))
   }
 
   /** For the tools: step the game `seconds` without drawing, `bot(world)` steering (the HUD's events are drained as they come). */
@@ -174,8 +236,12 @@ export class Toy {
       w.input.fire = inp.fire
       w.input.drop += inp.drop || 0
       w.step(STEP)
-      if (i % 6 === 0) this.hud.update(STEP * 6, w)
+      if (i % 6 === 0) {
+        this.drain(w, false)
+        this.hud.update(STEP * 6, w)
+      }
     }
+    this.drain(w, false)
     this.hud.update(0, w)
     return w.t
   }

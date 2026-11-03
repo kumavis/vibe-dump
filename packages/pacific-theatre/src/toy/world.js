@@ -94,7 +94,7 @@ export class World {
   spawn(role, props) {
     const slot = this.slotsByRole[role].find((i) => !this.slots[i].thing)
     if (slot === undefined) return null
-    const th = { role, kind: this.slots[slot].kind, slot, x: 0, y: 0, z: 0, yaw: 0, pitch: 0, roll: 0, v: 0, hp: 1, hpMax: 1, alive: 1, born: this.t, ...props }
+    const th = { role, kind: this.slots[slot].kind, slot, model: this._X[slot].model, x: 0, y: 0, z: 0, yaw: 0, pitch: 0, roll: 0, v: 0, hp: 1, hpMax: 1, alive: 1, born: this.t, ...props }
     this.slots[slot].thing = th
     this.things.push(th)
     return th
@@ -224,19 +224,4 @@ export function steamCarrier(world, dt) {
   c.z = Math.sin(c.phase) * 70
   c.yaw = wrapPi(c.phase + Math.PI) // the tangent, clockwise
   c.v = 3
-}
-
-/** A fresh world with the player over her carrier. */
-export function newWorld(side, kits, opts) {
-  const w = new World(side, kits, opts)
-  w.carrier = w.spawn('carrier', { hp: 600, hpMax: 600, phase: 0, name: side.carrier.name })
-  steamCarrier(w, 0)
-  w.me = w.spawn('player', { x: 0, y: 70, z: 140, yaw: 0, v: ARENA.speed, hp: 100, hpMax: 100 })
-  w.modules.push((world, dt) => steamCarrier(world, dt))
-  w.modules.push((world, dt) => {
-    const me = world.me
-    if (me && me.alive === 1 && !me.down) fly(world, me, world.input.sx, world.input.sy, dt)
-  })
-  w.writeState()
-  return w
 }
