@@ -108,7 +108,8 @@ body.toy-on #ui, body.toy-on #dev-status { display: none !important; }
 .toy-vignette { position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 120px 30px rgba(255,30,10,.75); opacity: 0; }
 .toy-vignette.go { animation: toy-vig .45s ease-out; }
 @keyframes toy-vig { 0% { opacity: 1; } 100% { opacity: 0; } }
-/* the screens */
+/* the screens (the stamps and banners stand down under them) */
+.toy.screen-up .toy-stamp, .toy.screen-up .toy-banner, .toy.screen-up .toy-warn, .toy.screen-up .toy-lock, .toy.screen-up .toy-marks, .toy.screen-up .toy-nums { display: none; }
 .toy-screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(6,12,20,.5); z-index: 40; cursor: default; padding: 12px var(--gr) 12px var(--gl); }
 .toy-card { background: rgba(12,18,28,.9); border: 2px solid rgba(255,214,120,.7); border-radius: 14px; padding: 16px 20px; text-align: center; width: min(560px, 100%); max-height: 100%; overflow: auto; box-shadow: 0 8px 40px rgba(0,0,0,.5); text-shadow: none; }
 .toy-card h1 { margin: 0 0 4px; font-size: 36px; letter-spacing: .04em; text-transform: uppercase; color: var(--gold); text-shadow: 0 2px 0 #7a3a10; }

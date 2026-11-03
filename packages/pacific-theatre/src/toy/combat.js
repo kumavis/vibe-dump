@@ -184,9 +184,26 @@ export function strike(shot, x0, y0, z0, th) {
     const qz = z0 + ((z1 - z0) * k) / 2
     if (qy > cy + m.H * 0.7 + shot.r || qy < -3) continue
     const [d2] = segDist2(th.x - hx, cy, th.z - hz, th.x + hx, cy, th.z + hz, qx, Math.min(Math.max(qy, cy - 4), cy + 4), qz)
-    if (d2 < r * r) return { x: qx, y: Math.max(qy, 1), z: qz, part: null }
+    if (d2 < r * r) return { x: qx, y: Math.max(qy, 1), z: qz, part: nearPoint(th, qx, qz) }
   }
   return null
+}
+
+/** A hull hit close to an open weak point counts on it (generous: the turret is the big glowing thing there). */
+function nearPoint(th, x, z) {
+  if (!th.points) return null
+  let best = null
+  let bd = 45 * 45
+  for (const p of th.points) {
+    if (p.hp <= 0 || !p.open) continue
+    const P = pointWorld(th, p)
+    const d = (P.x - x) ** 2 + (P.z - z) ** 2
+    if (d < bd) {
+      bd = d
+      best = p
+    }
+  }
+  return best
 }
 
 /** Shots fly, fall, run and strike, once a step. */
@@ -265,7 +282,7 @@ export function hurt(world, th, dmg, { by = 'me', x = th.x, y = th.y, z = th.z, 
     part.hp = Math.max(0, part.hp - amount)
     th.hitT = world.t
     if (part.hp <= 0) world.emit('point-out', { th, part, x, y, z })
-  } else th.hp -= amount
+  } else if (!th.noHull) th.hp -= amount
   th.hitT = world.t
   if (by === 'me') {
     if (!world.stats.firstHit) world.stats.firstHit = world.t

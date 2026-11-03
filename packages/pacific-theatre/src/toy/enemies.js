@@ -159,7 +159,7 @@ function dropOnCarrier(world, th) {
     vz: (c.z - th.z) / 1.8,
     life: 6,
     by: 'them',
-    dmg: 22,
+    dmg: 16,
     r: 4,
     only: 'ship',
     update: (w, s, dt) => (s.vy -= 9.8 * dt * 2),

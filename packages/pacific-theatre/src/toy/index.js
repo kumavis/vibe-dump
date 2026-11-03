@@ -243,6 +243,7 @@ export class Toy {
     }
     this.drain(w, false)
     this.hud.update(0, w)
+    if (this.scene) this.scene.chase.snap = true
     return w.t
   }
 

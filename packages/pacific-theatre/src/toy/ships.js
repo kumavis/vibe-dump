@@ -11,9 +11,9 @@ import { bearingTo, wrapPi, forward } from './world.js'
 import { fire, hurt, pointWorld, strike } from './combat.js'
 
 export const SHIPS = {
-  destroyer: { hp: 150, armour: 0.3, speed: 7, standoff: 280, gunEvery: 4.5, gunDmg: 6, flakEvery: 2.8 },
-  cruiser: { hp: 260, armour: 0.25, speed: 5.5, standoff: 340, gunEvery: 3.4, gunDmg: 9, flakEvery: 1.8 },
-  boss: { hp: 9999, armour: 0.1, speed: 4, standoff: 560, gunEvery: 5.5, gunDmg: 16, flakEvery: 0.9 },
+  destroyer: { hp: 150, armour: 0.3, speed: 7, standoff: 280, gunEvery: 4.5, gunDmg: 4, flakEvery: 2.8 },
+  cruiser: { hp: 260, armour: 0.25, speed: 5.5, standoff: 340, gunEvery: 3.4, gunDmg: 6, flakEvery: 1.8 },
+  boss: { hp: 9999, armour: 0.1, speed: 5, standoff: 380, gunEvery: 5.5, gunDmg: 14, flakEvery: 0.9 },
 }
 export const FLAK = { speed: 170, radius: 26, dmg: 12, error: 26, range: 650 }
 export const ORD = { bombs: 3, reload: 20, bombDmg: 50, torpDmg: 100, armBelow: 45, lockTime: 0.7, lockCone: 0.3, lockRange: 400, hold: 1.5 }
