@@ -147,6 +147,9 @@ export const MUTATIONS = {
   // a fallen platform's planks shown as they join, under a deck still
   // dropping onto them
   'planks-early': ['/view/terrain.js', '      item.obj.visible = false\n      it.drop.pile = item\n', '      it.drop.pile = item\n', '1-3'],
+  // ((F7c's review) a snap mid-drop keeps the dropping deck as it is drawn:
+  // sunk and tipped, and gone from the table once its tween ends)
+  'drop-snap-kept': ['/view/terrain.js', '(c.alive ? this.shows(item) : !this.shows(item)) && !item.drop) continue', '(c.alive ? this.shows(item) : !this.shows(item))) continue', '1-3'],
 }
 
 // [the R0 text, the edit]: both lines must be found, or the hook throws

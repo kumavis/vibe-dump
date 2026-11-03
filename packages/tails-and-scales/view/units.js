@@ -646,10 +646,18 @@ export class UnitViews {
   // a unit crushed under the wreckage, its models slain), plays once it is
   // down, so a crushed unit's figures die where they landed, which is where
   // it stood. (F16) A fall the fog veils plays unseen and unheard; (F9a)
-  // a hull's riders fall with it on its deck, carried.
+  // a hull's riders fall with it on its deck, carried. ((The review) A
+  // model the blow that dropped the deck slew, keeling over on it as it
+  // goes, drops straight down with it (sink()), where it lay; and a unit
+  // destroyed on the deck before it fell, `dead`, has only those: no
+  // words, no dust, nothing waited on.)
   fell(e) {
     const v = this.views.get(e.u), gen = this.gen, hid = this.hid(e.u)
     const mu = this.shown(e.u), T = FALL_T(e.dy)
+    for (const f of v.models) if (f.mesh && f.dying && !f.fleeing && !f.deck) this.sink(f, e.to.y, T, gen)
+    if (e.dead) return
+    // ((the review) its D3 next, dealt it by itself: slain(), destroyed())
+    v.fallen = true
     v.at = null
     v.climb = null
     v.moving = false
@@ -671,6 +679,18 @@ export class UnitViews {
       this.effects.smoke({ x: p.x, y: y + 0.2, z: p.z, size: Math.max(0.5, mu.r), color: '#9a8a70', life: 1.2 })
       sfx.thwack()
     }).then(() => wait(0.15))
+  }
+  // ((The review) A dying figure (slain()'s keel-and-sink, under way) on a
+  // deck that falls: down to the ground under it, `y`, as the deck sags
+  // and drops (FALL_SAG, then T s, faster as it goes), its sink sunk from
+  // wherever it has got to (f.sunk). Stops if the table is snapped.
+  sink(f, y, T, gen) {
+    const y0 = f.y ?? 0
+    wait(FALL_SAG).then(() => this.gen === gen && tween(T, (k) => {
+      if (this.gen !== gen || !f.mesh) return
+      f.y = y0 + (y - y0) * k * k
+      f.mesh.position.y = f.y - (f.sunk ?? 0)
+    }))
   }
   // A unit placed (unit.place): a rider placed steps off its hull (the
   // deployment's re-arranging), the hull's deck closing up; a hull placed
@@ -1114,7 +1134,12 @@ export class UnitViews {
 
   // A model slain: the number, its race's voice (a squeak or a hiss), fur
   // or scales flying, and the figure keels over away from whoever did it,
-  // then sinks out of sight and leaves the table.
+  // then sinks out of sight and leaves the table. ((F7c's review) It sinks
+  // from where it is drawn (f.y, less f.sunk): a deck falling under it
+  // takes it down meanwhile (sink()). A fall's D3 is dealt the fallen unit
+  // by itself (core/actions/settle.js, the spec's damage(G, u, n, 1, u)),
+  // `by` its own id: no foe did it, so a unit that has fallen keels as one
+  // slain by nobody.)
   slain(e, M) {
     const v = this.views.get(e.u), u = v.u, f = v.models[e.m], fy = f.y ?? 0
     // ((F16) one the fog veils falls unseen and unheard)
@@ -1127,11 +1152,12 @@ export class UnitViews {
     // ((F9a) a figure still on a deck, a rider lost with its hull: off it)
     if (f.deck) this.offDeck(f, true)
     f.dying = true
+    f.sunk = 0
     // the race's own voice and gore
     const look = RACES[u.race].look
     if (!hid) sfx.voice(look.voice)
     const fig = f.mesh.userData.fig
-    const by = e.by === null ? null : M.units[e.by]
+    const by = e.by === null || (e.by === e.u && v.fallen) ? null : M.units[e.by]
     const dir = by ? Math.atan2(f.x - by.pos.x, f.z - by.pos.z) - f.yaw : 0
     const side = Math.sin(dir) >= 0 ? 1 : -1
     if (!hid) this.effects.debris(f.x, fy + 0.5, f.z, look.gore, 6, { power: 2, size: 0.07 })
@@ -1140,7 +1166,11 @@ export class UnitViews {
       fig.position.y = (u.t.big ? 0.09 : 0.06) + Math.sin(k * Math.PI) * 0.15
     }, easeOut)
       .then(() => wait(1.4))
-      .then(() => tween(0.8, (k) => (f.mesh.position.y = fy - k * 1.4)))
+      .then(() => tween(0.8, (k) => {
+        if (!f.mesh) return
+        f.sunk = k * 1.4
+        f.mesh.position.y = (f.y ?? 0) - f.sunk
+      }))
       .then(() => {
         this.unfigure(f)
         f.dying = false
@@ -1191,7 +1221,8 @@ export class UnitViews {
   }
 
   // A unit gone: its label, ring and hit cylinder go, and the table says so
-  // in the colours of whoever did it.
+  // in the colours of whoever did it ((F7c's review) a unit its own fall's
+  // D3 destroyed, `by` itself, in its foe's, as one destroyed by nobody).
   destroyed(e, M) {
     const v = this.views.get(e.u), u = v.u, p = M.units[e.u].pos
     v.label.style.display = 'none'
@@ -1201,7 +1232,7 @@ export class UnitViews {
     this.scene.remove(v.hit)
     if (v.dropLine?.parent) this.scene.remove(v.dropLine)
     if (this.hid(e.u)) return
-    this.effects.text({ x: p.x, y: yOf(M.units[e.u]) + 2.2, z: p.z }, `${u.t.short} destroyed`, this.colorOf(e.by !== null ? this.unit(e.by).side : 1 - u.side), { size: 20, life: 2 })
+    this.effects.text({ x: p.x, y: yOf(M.units[e.u]) + 2.2, z: p.z }, `${u.t.short} destroyed`, this.colorOf(e.by !== null && !(e.by === e.u && v.fallen) ? this.unit(e.by).side : 1 - u.side), { size: 20, life: 2 })
   }
 
   // `e.u` turns to face `e.tg`, as both are shown (a unit.face event's).

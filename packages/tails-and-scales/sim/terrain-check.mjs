@@ -2032,12 +2032,16 @@ async function tileBoard(name, m, set, seed) {
   // needs to fall broken outright, in chunk order, the cascade's deck,
   // ladders and planks played into every table)
   const fell = []
+  // ((F7c's review) the chunks as they stand before the posts break: what
+  // a snap mid-drop goes back to, below)
+  const pre = T.chunks.map((c) => ({ ...c, shape: { ...c.shape } }))
   for (const d of T.chunks.filter((c) => c.alive && c.kind === 'deck' && c.fallsAt !== undefined)) {
     const standing = d.supports.map((id) => T.byId(id)).filter((p) => p.alive)
     const need = d.fallsAt - (d.supports.length - standing.length)
     for (const p of standing.slice(0, Math.max(0, need))) T.hurt(p, 99, { x: p.shape.x, z: p.shape.z }, out)
     if (!d.alive) fell.push(d)
   }
+  const falls = out.slice()
   play()
   const planksOf = (d) => T.chunks.find((c) => c.alive && c.kind === 'rubble' && c.look.style === 'timber' && c.shape.x === d.shape.x && c.shape.z === d.shape.z)
   for (const d of fell) {
@@ -2055,8 +2059,46 @@ async function tileBoard(name, m, set, seed) {
     if (!fast.state(pile.id).drawn) why.push(`?fast: the fallen platform ${d.id}'s planks (${pile.id}) not drawn`)
   }
   if (fell.length) check('platforms falling')
+  // ((F7c's review) a snap landing mid-drop (an undo of the move that broke
+  // the posts, a replay's scrub, an online re-sync), the decks standing in
+  // the match it is synced to: an untiled table synced from the chunks as
+  // they stood before the posts broke, the falls played into it and their
+  // tweens stepped a third of a second (each deck sagging and dropping),
+  // then synced back to them. Each deck and ladder must be the fresh snap's
+  // of those chunks, place and turn (a deck kept mid-drop stays sunk and
+  // tipped), its deck a walkable top and its ladder a ladder, its planks
+  // off the table; and so once every tween has ended (a deck kept mid-drop
+  // is taken off the table as its drop ends))
+  let mid = null, snapRef = null
+  if (fell.length) {
+    mid = new TerrainView(new THREE.Scene(), recorder().proxy)
+    mid.sync(pre)
+    for (const e of falls) mid.apply(e, mirror)
+    for (let i = 0; i < 10; i++) {
+      tmine.stepTweens(1 / 30)
+      await new Promise((r) => setImmediate(r))
+    }
+    mid.sync(pre)
+    snapRef = new TerrainView(new THREE.Scene(), recorder().proxy)
+    snapRef.sync(pre)
+  }
+  const midSnap = (when) => {
+    tiles.checks++
+    for (const d of fell) {
+      const ladders = pre.filter((c) => c.on === d.id && c.kind === 'ladder'), pile = planksOf(d)
+      for (const c of [d, ...ladders]) {
+        const x = mid.state(c.id), y = snapRef.state(c.id)
+        if (x.shown !== y.shown || (x.shown && (['x', 'y', 'z'].some((k) => Math.abs(x[k] - y[k]) > 1e-9) || x.q.some((v, k) => Math.abs(v - y.q[k]) > 1e-9)))) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s ${c.kind} ${c.id} ${JSON.stringify(x)}, a fresh snap's ${JSON.stringify(y)}`)
+      }
+      if (!mid.surfaces().some((c) => c.id === d.id)) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s deck no walkable top`)
+      for (const l of ladders) if (!mid.ladders().some((c) => c.id === l.id)) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s ladder ${l.id} not among the ladders`)
+      if (pile && mid.state(pile.id).shown) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s planks (${pile.id}) on the table under it standing`)
+    }
+  }
+  if (mid) midSnap('at once')
   await settle(tmine)
   check('blasts settled')
+  if (mid) midSnap('its tweens ended')
   for (const d of fell) {
     const pile = planksOf(d)
     if (pile && !plain.state(pile.id).drawn) why.push(`platform ${d.id} landed: its planks (${pile.id}) never drawn`)
@@ -2073,7 +2115,7 @@ async function tileBoard(name, m, set, seed) {
   if (off.tiles || off.meshes || off.tiled) why.push(`tiling off: ${off.tiles} tiles and ${off.meshes} meshes left`)
   for (const b of off.bad) why.push(`tiling off: ${b}`)
   for (const d of sameStates(T, tiled, plain)) why.push(`tiling off: ${d}`)
-  for (const v of [tiled, plain, fast, synced]) v.dispose()
+  for (const v of [tiled, plain, fast, synced, mid, snapRef]) v?.dispose()
   return { why, chunks: T.chunks.length, tiles: fresh.tiles, meshes: fresh.meshes }
 }
 for (const [name, m] of Object.entries(MISSIONS)) {
@@ -2100,7 +2142,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
 }
 Math.random = realRandom
 const span = (a) => `${Math.min(...a)}-${Math.max(...a)} (mean ${(a.reduce((x, y) => x + y, 0) / a.length).toFixed(0)})`
-console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast, ${tiles.faded} faded and solid again, ${tiles.dropped} platforms shot out): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, seen through and solid again (drawn in the same task), mid-blast, (F7c) mid-fall (each deck dropping, its planks held till it lands; under ?fast its end state at once, and settled the animated table's), settled, synced and untiled again`)
+console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast, ${tiles.faded} faded and solid again, ${tiles.dropped} platforms shot out): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, seen through and solid again (drawn in the same task), mid-blast, (F7c) mid-fall (each deck dropping, its planks held till it lands; under ?fast its end state at once, and settled the animated table's; (F7c's review) a snap mid-drop back to the decks standing, the fresh snap's at once and once its tweens end), settled, synced and untiled again`)
 for (const [key, r] of Object.entries(tiles.rows)) console.log(`  ${key}: ${span(r.chunks)} chunks in ${span(r.tiles)} tiles, ${span(r.meshes)} draw calls`)
 if (tiles.failed) {
   console.log(`MISMATCH: tiles failed on ${tiles.failed} of ${tiles.boards} board(s):`)

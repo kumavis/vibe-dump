@@ -202,7 +202,11 @@ export const MUTATIONS = {
   'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
   // (F7c) a unit's fall with its deck not reported, and the mirror's fall
   // keeping the floor the unit stood on: present-check's falls in Node
-  'no-fall': ['/core/actions/settle.js', "  emit(G, 'unit.fall',", "  if (false) emit(G, 'unit.fall',"],
+  'no-fall': ['/core/actions/settle.js', "  emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...(", "  if (false) emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...("],
+  // ((the review) a unit destroyed on a deck before it fell never reported
+  // falling with it: the mirror keeps it at the deck's height, a snap on
+  // the ground: present-check's `falls-board-4-slain`)
+  'no-fall-dead': ['/core/actions/settle.js', "  emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, dead: true })", "  if (false) emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, dead: true })"],
   'fall-y-kept': ['/present/mirror.js', '      u.y = e.to.y\n      carry(M, e.u, u)', '      carry(M, e.u, u)'],
   'card-reads-match': ['/ui/card.js', 'f = this.live() ? this.ask((G) => factOf(G, u)) : this.facts()[u.id]', 'f = this.ask((G) => factOf(G, u))'],
   // (R7b) the card's record of what each unit did this turn kept from the

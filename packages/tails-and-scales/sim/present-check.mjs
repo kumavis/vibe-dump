@@ -248,12 +248,15 @@ const RIDES = [
   ['riders-hotseat-6', { board: 808, dice: 41, mission: 'field', terrain: 'fortified', races: ['squirrel', 'serpent'] }, true],
 ]
 
-// (F7c) The falls: [id, board, crush]. Each a fortified Skirmish board
-// standing a timber platform, the first it stands shot out from under a
-// squad (below, fallsChild).
+// (F7c) The falls: [id, board, moved, slain]. Each a fortified Skirmish
+// board standing a timber platform, the first it stands shot out from
+// under a squad (below, fallsChild); ((the review) `slain`, a hero of one
+// wound in the squad's place, slain by the first template before the
+// second brings its deck down)
 const FALLS = [
-  ['falls-board-4', 4, false],
-  ['falls-board-30-moved', 30, true],
+  ['falls-board-4', 4, false, false],
+  ['falls-board-30-moved', 30, true, false],
+  ['falls-board-4-slain', 4, false, true],
 ]
 
 if (a.child) await page(a.child)
@@ -1077,9 +1080,12 @@ async function ridersChild(dir) {
 }
 
 // ── (F7c) The falls, in Node ────────────────────────────────────────────────
-// No corpus battle yet sees a platform fall under a unit (fort/ is
-// re-recorded on F7c's code), so the mirror's `unit.fall` is held here, in
-// Node through the core alone, the self-test's module hooks registered: a
+// The corpus's one battle with a platform falling under a unit
+// (hotseat-collapse-platform-8, fort/, the battles above) is played through
+// the page; these rows hold the mirror's `unit.fall` on scenes of their own
+// as well, each fall's kind (a template's, a move's, a defender slain
+// before its deck falls) on purpose, in Node through the core alone, the
+// self-test's module hooks registered: a
 // fortified board's first timber platform with a squad of the Coil on its
 // deck (set there by hand and the mirror then taken from the match, as a
 // snap takes it), the Bushtails' Trebuchet throwing its pinecone at the
@@ -1093,12 +1099,17 @@ async function ridersChild(dir) {
 // settled by a move's end (core/actions/move.js doMove, of a unit of the
 // other side standing still), so no template wounds it first and it lands
 // standing. The squad must have fallen (a `unit.fall` folded) and stand,
-// in the mirror, at 0.
+// in the mirror, at 0. ((The review) With `slain` it is the side's first
+// climbing hero, its one model at one wound: the first template slays it on
+// the deck, and the deck falls under it dead, its `unit.fall` (`dead`) the
+// only thing that brings it to the ground in the mirror, where project(G),
+// reading the floor under every unit, the dead's too, puts it; it must lie
+// at 0, slain before its deck fell.)
 // Reports { id, events, kinds, falls, y, mismatch, error }.
 async function fallsChild(dir) {
   const { register } = await import('node:module')
   register('./present-hooks.mjs', import.meta.url)
-  const [id, board, moved] = JSON.parse(readFileSync(0, 'utf8'))
+  const [id, board, moved, slain] = JSON.parse(readFileSync(0, 'utf8'))
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
   const [core, mirror, shoot, move] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('core/actions/shoot.js'), at('core/actions/move.js')])
   const out = { id, events: 0, kinds: {}, falls: 0, y: null, mismatch: null, error: null }
@@ -1108,7 +1119,8 @@ async function fallsChild(dir) {
     const nav = G.nav, q = core.q
     const d = G.terrain.chunks.find((c) => c.kind === 'deck' && c.fallsAt !== undefined)
     if (!d) throw new Error(`fortified board ${board} stands no timber platform`)
-    const u = G.units.filter((x) => x.side === 1 && x.t.climb && !x.t.fly).reduce((x, y) => (y.r > x.r ? y : x))
+    const u = slain ? G.units.find((x) => x.side === 1 && x.t.climb && !x.t.fly && x.t.models === 1) : G.units.filter((x) => x.side === 1 && x.t.climb && !x.t.fly).reduce((x, y) => (y.r > x.r ? y : x))
+    if (slain) u.models[0].w = 1
     const gun = G.units.filter((x) => x.side === 0 && x.t.ranged?.blast && !x.t.ranged.spell).reduce((x, y) => (y.t.ranged.blast > x.t.ranged.blast ? y : x))
     let top = -1, best = Infinity
     for (let i = 0; i < nav.N; i++) {
@@ -1128,6 +1140,7 @@ async function fallsChild(dir) {
     const M = mirror.project(G)
     G.out.length = 0
     const was = { x: u.pos.x, z: u.pos.z }
+    let died = -1, fellAt = -1, seen = 0
     for (let k = 0; k < 8 && d.alive && !out.mismatch; k++) {
       if (!moved) shoot.blastLands(G, gun, { x: d.shape.x, z: d.shape.z }, gun.t.ranged)
       else {
@@ -1142,6 +1155,9 @@ async function fallsChild(dir) {
         out.events++
         out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
         if (e.t === 'unit.fall' && e.u === u.id) out.falls++
+        if (e.t === 'unit.destroyed' && e.u === u.id) died = seen
+        if (e.t === 'terrain.destroy' && e.id === d.id) fellAt = seen
+        seen++
       }
       const diff = differ(M, mirror.project(G))
       if (diff) miss(`${moved ? 'move' : 'template'} ${k + 1}: the mirror folded from the events differs from the match: ${diff}`)
@@ -1151,6 +1167,8 @@ async function fallsChild(dir) {
     if (!out.falls && q.alive(u)) miss(`the ${u.t.short} stood on the deck as it fell, but no unit.fall of it was folded`)
     if (q.alive(u) && out.y !== 0) miss(`the ${u.t.short} stands at ${out.y} in the mirror after its fall`)
     if (moved && q.alive(u) && M.units[u.id].pos.x === was.x && M.units[u.id].pos.z === was.z) miss(`the ${u.t.short} landed off the hard ground, but the mirror holds it where it stood`)
+    if (slain && (q.alive(u) || died < 0 || died > fellAt)) miss(`the ${u.t.short} (one wound) was not slain on the deck before it fell (${q.alive(u) ? 'it stands' : `destroyed at event ${died}, the deck at ${fellAt}`}): the row holds nothing`)
+    if (slain && out.y !== 0) miss(`the ${u.t.short}, slain on the deck, lies at ${out.y} in the mirror after it fell`)
   } catch (e) {
     out.error = String(e?.stack ?? e)
   }
@@ -1437,9 +1455,9 @@ async function parent({ env = process.env, quiet = false } = {}) {
       const why = r.error ?? r.mismatch
       if (why) failed++
       n += r.falls ?? 0
-      say(`  ${'ai'.padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.events).padStart(5)} events: the mirror is the match after every ${job[2] ? 'move' : 'template'}, the squad fallen (${r.falls} unit.fall) and standing at ${r.y}`}`)
+      say(`  ${'ai'.padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.events).padStart(5)} events: the mirror is the match after every ${job[2] ? 'move' : 'template'}, the ${job[3] ? 'hero slain on it' : 'squad'} fallen (${r.falls} unit.fall) and ${job[3] ? 'lying' : 'standing'} at ${r.y}`}`)
     })
-    say(`  (F7c) the falls: ${FALLS.length} platforms shot out from under a squad in Node, ${n} falls folded by the mirror`)
+    say(`  (F7c) the falls: ${FALLS.length} platforms shot out from under a squad or a slain hero in Node, ${n} falls folded by the mirror`)
   }
   const kinds = Object.entries(total.kinds).filter(([k]) => /^(unit|terrain|blast|spell)\.|^(smashed|melee|charge\.result|volley)$/.test(k)).sort().map(([k, n]) => `${k} ${n}`).join(', ')
   const ordered = Object.entries(total.ordered)

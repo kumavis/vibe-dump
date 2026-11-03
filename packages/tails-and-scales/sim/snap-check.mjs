@@ -66,15 +66,19 @@
 //
 // (F7c) And the collapse row (DESIGN §4.2.4's "Destruction and settle":
 // timber platforms shot out from under their defenders, who fall, and the
-// view's falls: view/terrain.js's drop, view/units.js's fell). No corpus
-// battle drops a platform with a unit on it (the AI seldom mans one or
-// aims at one: F7c's smoke), so the row makes its own: candidate
-// COLLAPSE_SEED of corpus-add's `--mode hotseat --policy collapse
+// view's falls: view/terrain.js's drop, view/units.js's fell). The AI seldom
+// mans a platform or aims at one (F7c's smoke), so the battle is the
+// human-bot's: candidate COLLAPSE_SEED of corpus-add's `--mode hotseat
+// --policy collapse
 // --terrain fortified` (the human-bot's `collapse` policy,
 // sim/oracle/human-bot.mjs: its template shooters aim at a platform's
 // defenders and posts, its climbers make for the decks), played first in
 // Node on the code under test (sim/lib.mjs runOracle, as corpus-add plays
-// a candidate: on seed 8, two platforms shot out and a unit on each), then
+// a candidate: on seed 8, two platforms shot out and a unit on each: the
+// battle corpus-add recorded as fort/'s hotseat-collapse-platform-8, board
+// 95722, dice 20919, which the whole corpus's rows (`--only ai,human`) play
+// under ?fast alone; the row plays its own, the bot on the code under test
+// rather than the corpus's entries, without ?fast), then
 // its log driven in Chromium as a corpus human log is, the page's trace,
 // shadow and battle log held to Node's. Unlike every other row it plays
 // without ?fast, at clock speed COLLAPSE_SPEED, so a fall plays the way a
@@ -264,7 +268,9 @@ function pageHarness(job, mode, settle, speed = 0) {
       if (speed) {
         ts.clock.speed = speed
         const obs = ts.player.observer
-        ts.present.listen({ ...obs, event: (ev, M) => ((ev.t === 'unit.fall' && sim.falls++), (ev.t === 'terrain.destroy' && ev.kind === 'deck' && sim.decks++), obs?.event?.(ev, M)), reset: (M) => obs?.reset?.(M) })
+        // ((F7c's review) a unit destroyed on its deck before it fell is no
+      // unit fallen: its `dead` fall only takes it to the ground)
+      ts.present.listen({ ...obs, event: (ev, M) => ((ev.t === 'unit.fall' && !ev.dead && sim.falls++), (ev.t === 'terrain.destroy' && ev.kind === 'deck' && sim.decks++), obs?.event?.(ev, M)), reset: (M) => obs?.reset?.(M) })
       }
       // at every checkpoint, the player waits while the figures settle and
       // the table is held to the match as it stood there

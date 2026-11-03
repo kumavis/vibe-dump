@@ -33,7 +33,19 @@
 //   3. one D6 for its D3 mortal wounds (ceil(d6 / 2)), its dice row, and
 //      damage(G, u, n, 1, u): no save, the wounds going to the models
 //      nearest its own centre;
-//   4. the flags and labels as it leaves them (`objectives`, `status`).
+//   4. the flags and labels as it leaves them (`objectives`, `status`),
+//      landed or crushed ((the review) a crushed unit's too: killModel
+//      tells neither, and the move or charge the settle ends tells no
+//      status after it, so the table kept a crushed unit, or its last foe,
+//      engaged).
+// (The review) A unit already destroyed (or fled) where it stood on the
+// deck falls too, as it lies: `unit.fall { u, to, dy, dead: true }`, where
+// it lay and the floor there now, no draw and nothing else. project(G)
+// reads every unit's `y` off the floor under it, the dead's included, and
+// F7c is the first change that can take a floor from under a dead unit (a
+// wreck has no top), so without it the mirror kept a dead defender 2" up
+// for the rest of the battle and a snap put it on the ground (P-present's
+// `falls-board-4-slain`). The view drops its dying figures with it.
 // Then `dropped` is empty again, as it is between commands (§4.1 rule 20;
 // P-prop holds it at every boundary).
 //
@@ -68,9 +80,20 @@ export function settle(G) {
   const T = G.terrain
   if (!T.dropped.length) return
   const decks = T.dropped.slice().sort((a, b) => a.id - b.id)
-  const on = decks.map((d) => G.units.filter((u) => alive(u) && !u.aboard && inFootprint(d.shape, u.pos)))
-  for (let k = 0; k < decks.length; k++) for (const u of on[k]) if (alive(u)) fall(G, u, decks[k])
+  // (the living on each deck, and (the review) the dead lying there: in
+  // G.units order together, the dead drawing nothing, so the living's
+  // draws are as they were)
+  const on = decks.map((d) => G.units.filter((u) => !u.aboard && inFootprint(d.shape, u.pos)))
+  for (let k = 0; k < decks.length; k++) for (const u of on[k]) (alive(u) ? fall : lies)(G, u, decks[k])
   T.dropped.length = 0
+}
+
+// (The review) Unit `u`, destroyed where it stood on deck `d` before the
+// deck fell, falls with it as it lies: where it lay, the floor there now
+// (the planks' ground), no draw (above).
+function lies(G, u, d) {
+  const y = groundY(G, u)
+  emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, dead: true })
 }
 
 // Whether (x, z) lies inside box s's footprint (its own frame: the nav's
@@ -94,11 +117,11 @@ function fall(G, u, d) {
   emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...(i < 0 ? { crushed: true } : {}) })
   if (i < 0) {
     for (const m of u.models) if (m.alive) killModel(G, u, m, null, m.w)
-    return
+  } else {
+    const n = Math.ceil(d6(G) / 2)
+    emit(G, 'dice', { label: `${u.t.short}: the fall, D3 mortal wounds`, dice: [n], need: 0, sum: true, note: `${n}` })
+    damage(G, u, n, 1, u)
   }
-  const n = Math.ceil(d6(G) / 2)
-  emit(G, 'dice', { label: `${u.t.short}: the fall, D3 mortal wounds`, dice: [n], need: 0, sum: true, note: `${n}` })
-  damage(G, u, n, 1, u)
   if (G.out) {
     emit(G, 'objectives', { owners: ownersOf(G) })
     emit(G, 'status', statusOf(G))

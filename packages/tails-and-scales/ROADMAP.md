@@ -116,15 +116,20 @@ the commit, and add whatever the work turned up.
   P-height's parapet scenes, terrain-check's parapet rows (section 6 and
   P-climb) and data-check's per-recipe parapets, and from F7c P-height's
   collapse scenes (the cascade, a unit staying, landing and crushed, the
-  three sites, the AI's `fallGain`) and P-prop's boundary rows
+  three sites, the AI's `fallGain`; since F7c's review the rule's edges:
+  the reach, the ground, the spacing, two decks in one settle) and P-prop's
+  boundary rows
   (`terrain.dropped` empty and the nav clean at every command boundary),
   data-check's posts and decks (each recipe's draws pinned), terrain-check's
   `postRows` and the tiles section's falls (each deck dropping, its planks
-  held till it lands, `?fast`'s end state at once), present-check's
-  collapse rows, play-report's F7c row (a unit falls with its platform in
-  `fort/`, its collapse log `hotseat-collapse-platform-8`; a post shot out
-  where a platform stands in ≥ 50% of the `fort/` AI pairs) and fog-check's
-  sight pass over the collapse log, and from
+  held till it lands, `?fast`'s end state at once; since F7c's review a
+  snap mid-drop), present-check's collapse rows (since F7c's review a
+  defender slain before its deck falls), play-report's F7c row (a unit of the human-bot's
+  `collapse` seat falls with its platform in ≥ 1 of 96 seeded Skirmish
+  battles against the AI, since F7c's review: over `fort/` alone it was
+  met by the collapse log corpus-add chose for it; a post shot out where a
+  platform stands in ≥ 50% of the `fort/` AI pairs not chosen for a
+  collapse) and fog-check's sight pass over the collapse log, and from
   F8b terrain-check's **connectivity** rows (a hull of r 1.5 and a squad of
   r 1.18 cross zone to zone, and the squad controls every objective, on
   every Field and Grand board of seeds 1-500, on every set the mission
@@ -1121,7 +1126,12 @@ follows N3.
   ones), so AI-against-AI play almost never shoots one out from under its
   defenders (no unit fell in 250 battles; `fallGain` aims at them once
   they are there). Whether the position score should weigh a platform's
-  height against its fall is a tuning of its own, rule 10's. And a
+  height against its fall is a tuning of its own, rule 10's. (F7c's
+  review) The posts a fallen deck leaves standing have no nav footprint
+  (the piece table's `navKind: null`, "under its deck"): they block sight,
+  but a unit walks through them. A hard footprint for a post standing
+  alone changes play on the platform boards, so it is a bumped step's,
+  re-recording what it changes, if it is wanted. And a
   stray `/tshots.log` at the filesystem root of F7c's machine, a mistaken
   redirect, for a person to delete.
 - [ ] **Later (main's, found at F7b's merge):** four checks failing on
@@ -1204,7 +1214,15 @@ follows N3.
   tuning). army-sim's Skirmish score gates hold (classic 48.6%,
   `fortified` 50.7%); the per-unit gate fails on the Trebuchet alone, 33
   ± 7 against 50 (32 at the F7b merge): the Later item below. DESIGN's
-  "F7c as built".)
+  "F7c as built". The review's fixes, events and checks only, the PIN
+  unmoved: a unit slain on a deck before it falls falls with it, `dead`,
+  so the mirror is a snap's; a crushed unit's flags and labels told; a
+  snap mid-drop stands the deck again; a dying figure drops with its
+  deck; play-report's fall clause judged over 96 battles against the
+  human-bot's `collapse` seat, 2 of 96 (0 with the AI blind to the fall);
+  P-height's rule's edges and six edits; rule 17's crushed unit, no die.
+  The posts a fallen deck leaves standing, walked through, kept for a
+  bumped step: DESIGN's "The review".)
 - [x] **F8b** Field (60×40, 1,000 points) and Grand (80×56, 1,500 points)
   battles: their presets and list limits, prices retuned on the real
   boards, the `open` set, a minimap (March from it), semantic zoom, terrain
@@ -1532,9 +1550,10 @@ follows N3.
 - [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
   bird-people's Sky-Basket (which may land on ramparts). (From F7c: a
   Basket landed on a timber platform falls with it as any unit does,
-  its riders aboard, `settle`'s `moveUnitTo`; untested until it exists,
-  so P-height (F7c)'s collapse scenes take a flying hull on a deck that
-  falls.)
+  its riders aboard, `settle`'s `moveUnitTo`; untested until it exists
+  (P-height (F7c)'s collapse scenes have no hull and their movers no
+  fliers), so F5b adds to P-height's collapse scenes a flying hull on a
+  deck that falls.)
 - [ ] **F9d** Siege towers that unload onto ramparts (round for every race
   in v1). (From F7c: a rampart's walk never falls; a drawbridge onto a
   timber platform, if ever allowed, puts its riders on a deck that can

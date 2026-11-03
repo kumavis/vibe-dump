@@ -17,7 +17,11 @@
 //              each fell (the lines the battle had written by the time its
 //              events were taken: an AI battle's arrive all at once, after
 //              its last line, a human log's after each entry)
-//   falls      the units that fell with them (`unit.fall`), and of them
+//   falls      the units that fell with them (`unit.fall`; (the review) not
+//              one destroyed before its deck fell, whose `dead` fall only
+//              brings it to the ground: `dead` counts those), `fallenBy`
+//              those per seat ([seat 0's, seat 1's]: play-report's F7c row
+//              counts the human-bot's), and of them
 //   crushed    those with nowhere to land (their models slain by nobody)
 //   fallWounds the D3 mortal wounds the fallen took (their dice rows' sum)
 //   fallSlain  the models slain by a fall: each `unit.slain` of the fallen
@@ -29,7 +33,7 @@
 // ends a D3's damage
 const DAMAGE = new Set(['dice', 'unit.wound', 'unit.slain', 'unit.destroyed', 'pause', 'unit.formation', 'objectives', 'terrain.add', 'unit.disembark'])
 export function collapseProbe() {
-  const r = { platforms: 0, postsHit: 0, posts: 0, decks: 0, fellAt: [], falls: 0, crushed: 0, fallWounds: 0, fallSlain: 0 }
+  const r = { platforms: 0, postsHit: 0, posts: 0, decks: 0, fellAt: [], falls: 0, fallenBy: [0, 0], dead: 0, crushed: 0, fallWounds: 0, fallSlain: 0 }
   // the breakable posts by id (their hp under Infinity, as each joined)
   const breakable = new Set(), crushed = new Set()
   let lines = 0, falling = null
@@ -48,8 +52,12 @@ export function collapseProbe() {
         else if (e.t === 'terrain.destroy' && e.kind === 'deck') {
           r.decks++
           r.fellAt.push(lines)
+        } else if (e.t === 'unit.fall' && e.dead) {
+          r.dead++
+          falling = null
         } else if (e.t === 'unit.fall') {
           r.falls++
+          r.fallenBy[G.units.find((u) => u.id === e.u).side]++
           falling = e.u
         } else if (falling !== null && !DAMAGE.has(e.t)) falling = null
         else if (e.t === 'dice' && falling !== null && / the fall, D3 mortal wounds$/.test(e.label ?? '')) r.fallWounds += e.dice[0]
@@ -59,6 +67,6 @@ export function collapseProbe() {
         }
       }
     },
-    result: () => ({ ...r, crushed: crushed.size, fellAt: [...r.fellAt] }),
+    result: () => ({ ...r, crushed: crushed.size, fellAt: [...r.fellAt], fallenBy: [...r.fallenBy] }),
   }
 }

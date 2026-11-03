@@ -1256,7 +1256,11 @@ export class TerrainView {
   // its chunk as it stands is kept (a block that dropped since is set at its
   // height); the rest are taken off and built as the chunk's events would
   // have left them, in chunk order (so a fresh table is built mesh for mesh
-  // as its adds build it).
+  // as its adds build it). ((F7c's review) A timber deck or ladder whose
+  // drop is under way (drop()) is never kept: sunk and tipped, no walkable
+  // top, and its tween would take it off the table as it ended, the match
+  // it is synced to standing it or not; it is freed (the tween stops on its
+  // token) and built again as the chunk stands.)
   sync(chunks) {
     this.freeSpares()
     const byId = new Map(chunks.map((c) => [c.id, c]))
@@ -1265,7 +1269,7 @@ export class TerrainView {
     for (const c of chunks) this.burnMark(c)
     for (const [id, item] of [...this.items]) {
       const c = byId.get(id)
-      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item))) continue
+      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item)) && !item.drop) continue
       this.free(item)
       this.items.delete(id)
     }
@@ -1335,7 +1339,8 @@ export class TerrainView {
     for (const { def, alive, tree } of list) {
       if (!alive) continue
       const item = this.items.get(def.id)
-      if (item?.obj && this.shows(item)) {
+      // ((F7c's review) one dropping is built again, as sync builds it)
+      if (item?.obj && this.shows(item) && !item.drop) {
         // ((F7c) a fallen platform's planks shown, as sync shows them)
         if (def.kind === 'rubble') item.obj.visible = true
         if (SET_Y.has(def.look.piece) && item.obj.position.y !== def.shape.y) {
