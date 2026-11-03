@@ -295,6 +295,10 @@ export const fogStale = (F, M, id) => !!F?.table && !F.over && !sameChunk(F.tabl
 //     seen: fogReveal).
 // The figures' own events (a walk, a volley, a fall) are the view's to
 // hide by the unit (fogOpen's live set): they are never marked here.
+// ((F7c) a unit falling with a timber platform, `unit.fall`, is one of
+// them; its D3's row after it (" the fall, D3 mortal wounds") is shown
+// when the fallen unit is seen, or is the seat's own: the damage to the
+// seat's units always shows, an unseen enemy's never.)
 const OWN = new Set(['phase.start', 'round.scored', 'stage', 'game.over'])
 const OPENS = new Set(['focus', 'unit.face', 'tray.open'])
 // ((F9a) a unit boarding or stepping off its hull acts as a walker does;
@@ -303,6 +307,8 @@ const DEEDS = new Set(['unit.move', 'unit.place', 'volley', 'melee', 'blast.aim'
 const ACTS = new Set(['unit.face', 'volley', 'melee', 'charge.result', 'spell.cast', 'spell.fizzle', 'spell.gaze', 'spell.thorns', 'spell.snare', 'spell.ward', 'blast.fire', 'unit.move', 'unit.place', 'unit.embark', 'unit.disembark'])
 const TERRAIN = new Set(['terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble'])
 const VICTIM = /^(⚠ )?.+: \d+ hits? · wound/
+// ((F7c) a fall's D3: core/actions/settle.js's row)
+const FALL_ROW = /: the fall, D3 mortal wounds$/
 // the name a line or a tray title starts with
 const lineName = (html) => /^<b>(.*?)<\/b>/.exec(html ?? '')?.[1] ?? null
 const trayName = (title) => (title ? String(title).split(/ → | fight | charge | — |: /)[0].trim() : null)
@@ -379,7 +385,7 @@ export function fogEvents(events, { seat, before, after, sees, M, sideOf, units 
     let sub = null
     // (a template's victims: from its landing to the next aim, throw or
     // landing, each group a wound row to its line)
-    let victims = false, victim = null, group = []
+    let victims = false, victim = null, group = [], falling = null
     const endGroup = (shown) => {
       for (const k of group) if (!shown) mark(k, 'hide')
       group = []
@@ -417,6 +423,18 @@ export function fogEvents(events, { seat, before, after, sees, M, sideOf, units 
         const hiddenWalk = !shownFig(e.u)
         const smashes = e.smashes.map((sm) => ({ ...sm, ev: sm.ev.map((x) => (TERRAIN.has(x.t) ? terrainVeil(x, (id) => stale(id) || hiddenWalk) : x)) }))
         if (smashes.some((sm, i) => sm.ev.some((x, j) => x !== e.smashes[i].ev[j]))) out[k] = { ...out[k], smashes }
+        continue
+      }
+      // ((F7c) a unit falling with a platform: its figure's, untouched; its
+      // D3's row by the unit)
+      if (e.t === 'unit.fall') {
+        endGroup(groupShown(victim, lands[land]))
+        falling = e.u
+        continue
+      }
+      if (falling !== null && e.t === 'dice' && FALL_ROW.test(e.label ?? '')) {
+        if (!vis(falling)) mark(k, 'hide')
+        falling = null
         continue
       }
       // a template's victims

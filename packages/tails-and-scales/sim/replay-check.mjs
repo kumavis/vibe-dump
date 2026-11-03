@@ -451,8 +451,10 @@ const MUTANTS = {
   'no-refold-check': ['app/replay.js', 'if (at.length !== this.k + 1 || at[this.k] !== moves[this.k]?.id) {', 'if (false) {'],
   // (F15) a log line names the move after its own
   'log-k-next': ['app/flow.js', 'const facts = this.acted.splice(0), k = ses.accepted.length - 1', 'const facts = this.acted.splice(0), k = ses.accepted.length'],
-  // (F15) the log made again after a snap names no move
-  'relog-unstamped': ['app/flow.js', "if (x.t === 'log') lines.push({ ...x, k })", "if (x.t === 'log') lines.push(x)"],
+  // (F15) the log made again after a snap names no move (the anchor follows
+  // the line as F16's fog left it, 6209036, a veiled line kept out: the
+  // edit is what it was, the line pushed without its move)
+  'relog-unstamped': ['app/flow.js', "if (x.t === 'log' && x.veil !== 'hide') lines.push({ ...x, k })", "if (x.t === 'log' && x.veil !== 'hide') lines.push(x)"],
   // (F15) a click shows the match after the line's move, not before it
   'click-after': ['app/replay.js', '    this.scrub(k - 1)\n', '    this.scrub(k)\n'],
   // (F15) a peek put away at Live stays on the bar

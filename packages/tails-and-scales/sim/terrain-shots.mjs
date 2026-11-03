@@ -109,7 +109,24 @@
 // the next step's run against FORT_REF must reproduce. --fort-seeds picks
 // the boards ('' for none), --fort-ref another reference.
 //
-//   node sim/terrain-shots.mjs [...] [--fort-seeds 1,2,3,4,5] [--fort-ref <git ref>]
+// (F7c) And each fortified board is shot `wrecked` too, as classic's are:
+// after the same blasts on both sides (every seventh breakable chunk, as
+// classic's, Math.random seeded alike just before), and on each timber
+// platform a small blast on each of its first two posts, which breaks both
+// and so drops the deck (its fallsAt, 2) with its ladder, run on to the end of
+// every drop (view/terrain.js's: the page plays without ?fast), so the
+// shot holds the posts gone, the planks' heap where the deck stood and the
+// parapets broken; the board's platforms and the decks that fell are
+// counted, and some board must drop one (board 4 stands two, board 30
+// two more). The blasts are the match's own terrain's (G.terrain), from
+// outside any command: ?debug's scenery.blast serves only the title, and
+// the page is shot and thrown away, nothing played on after. FORT_REF is
+// F7c's code commit, 4e416f9: a556cfc's posts never break, and F7c boards
+// in the platform's space under its slab, so its frames are no reference
+// for F7c's (until that commit landed, the working tree against itself, the
+// header's control).
+//
+//   node sim/terrain-shots.mjs [...] [--fort-seeds 1,2,3,4,5,30] [--fort-ref <git ref>]
 import { parseArgs } from 'node:util'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -130,8 +147,10 @@ const MIN_WRECKED = 2000
 const RESHOOTS = 2
 const KINDS = ['table', 'wrecked']
 // (F7b) the fortified boards' reference: F7b's code commit, once it lands
-// (null until then: the working tree against itself, the header)
-const FORT_REF = 'a556cfc'
+// (null until then: the working tree against itself, the header); (F7c)
+// a556cfc's until F7c, then F7c's code commit, 4e416f9 (its posts break,
+// its platforms are boarded in)
+const FORT_REF = '4e416f9'
 
 function usage(why) {
   console.error(`terrain-shots: ${why}\nusage: node sim/terrain-shots.mjs [--ref <git ref>] [--seeds 1,4242,90210,411,22392] [--full] [--out <dir>]`)
@@ -150,8 +169,9 @@ const seedList = (a.seeds ?? '1,4242,90210,411,22392').split(',').filter(Boolean
 if (!seedList.every((v) => /^\d+$/.test(v))) usage(`--seeds ${a.seeds}: give whole numbers, comma-separated`)
 const seeds = seedList.map(Number)
 // (F7b) the fortified boards: five by default, each with the works (both
-// ramparts and their parapets)
-const fortList = (a['fort-seeds'] ?? '1,2,3,4,5').split(',').filter(Boolean)
+// ramparts and their parapets); ((F7c) and board 30, whose two timber
+// platforms, with board 4's, the wrecked shots drop)
+const fortList = (a['fort-seeds'] ?? '1,2,3,4,5,30').split(',').filter(Boolean)
 if (!fortList.every((v) => /^\d+$/.test(v))) usage(`--fort-seeds ${a['fort-seeds']}: give whole numbers, comma-separated`)
 const fortSeeds = fortList.map(Number)
 const fortRef = a['fort-ref'] ?? FORT_REF
@@ -312,9 +332,44 @@ function differing(f, g) {
   return n
 }
 
+// (F7c) The fortified boards' blasts (the header): classic's, and one on
+// each of each timber platform's first two posts; the match's own terrain
+// blasted from outside any command, its reports played on the table as a
+// blast's are, then the clock run on to the end of every drop and fall.
+// Returns the chunks broken, the platforms and the decks that fell.
+async function wreckFort(page) {
+  const n = await page.evaluate(() => {
+    let x = 99
+    Math.random = () => {
+      x = (x + 0x6d2b79f5) | 0
+      let t = Math.imul(x ^ (x >>> 15), 1 | x)
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    }
+    const ts = window.__ts, T = ts.G.terrain, out = []
+    const targets = T.chunks.filter((c) => c.destructible).filter((_, i) => i % 7 === 0).map((c) => ({ x: c.shape.x, z: c.shape.z }))
+    let broke = 0
+    targets.forEach((t, i) => (broke += T.blast(t.x + 0.3, t.z - 0.2, 2.4, 3, { acid: i % 3 === 0 }, out).length))
+    const platforms = T.chunks.filter((c) => c.kind === 'deck' && c.fallsAt !== undefined)
+    // (each of its first two posts at the heart of a small blast of its own:
+    // full damage, 3, breaks it, its hp; the second brings the deck down)
+    for (const d of platforms.filter((c) => c.alive)) {
+      for (const id of d.supports.slice(0, 2)) {
+        const p = T.chunks[id - 1].shape
+        broke += T.blast(p.x, p.z, 1, 3, {}, out).length
+      }
+    }
+    ts.player.push(out)
+    ts.clock.speed = 40
+    return { broke, platforms: platforms.length, fell: out.filter((e) => e.t === 'terrain.destroy' && e.kind === 'deck').length }
+  })
+  await frames(page, 12)
+  return n
+}
+
 // (F7b) one fortified board on one side (the header): a hotseat battle's
 // table at its deployment, Math.random seeded at load and again just
-// before the start
+// before the start; ((F7c) then wrecked: wreckFort)
 let fortServer = null, fortKept = false
 async function shootFort(seed, name, url) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 })
@@ -331,12 +386,15 @@ async function shootFort(seed, name, url) {
     await frames(page, 30)
     await freeze(page)
     const table = await page.evaluate(shoot, !!a.full)
-    if (errors.length) throw new Error(`${name}: ${errors.join('; ')}`)
     const { chunks, parapets, terrain } = await page.evaluate(() => {
       const cs = window.__ts.scenery.chunks
       return { chunks: cs.length, parapets: cs.filter((c) => c.kind === 'parapet').length, terrain: window.__ts.G.setup.terrain }
     })
-    return { table, chunks, parapets, terrain }
+    const wrecked = await wreckFort(page)
+    await freeze(page)
+    wrecked.shot = await page.evaluate(shoot, !!a.full)
+    if (errors.length) throw new Error(`${name}: ${errors.join('; ')}`)
+    return { table, wrecked: wrecked.shot, broke: wrecked.broke, platforms: wrecked.platforms, fell: wrecked.fell, chunks, parapets, terrain }
   } catch (e) {
     throw new Error(`${name}: ${e.message}`)
   } finally {
@@ -363,7 +421,7 @@ const browser = await chromium.launch({
   args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-accelerated-2d-canvas', '--disable-gpu-rasterization'],
 })
 const servers = await Promise.all(sides.map((s) => startStaticServer(s.dir)))
-let failed = 0, noisy = 0, looked = false
+let failed = 0, noisy = 0, looked = false, fell = 0
 try {
   console.log(`terrain shots: ${sides[0].name} (${ref.slice(0, 9)}) against the working tree, ${a.full ? 'everything drawn' : 'tufts, flowers and figures hidden'}`)
   for (const seed of seeds) {
@@ -448,7 +506,7 @@ try {
     const nowUrl = servers[1].url
     fortServer = fortSide && (await startStaticServer(fortSide.dir))
     const refName = fortSide ? fortSide.name : 'now (again)'
-    console.log(`\nfortified boards: ${fortSide ? `${fortSide.name} (FORT_REF) against the working tree` : 'no FORT_REF yet (F7b\'s code commit, once it lands): the working tree against itself, in fresh pages, its frames kept as the references'}, a hotseat battle's table at its deployment, the figures hidden`)
+    console.log(`\nfortified boards: ${fortSide ? `${fortSide.name} (FORT_REF) against the working tree` : 'no FORT_REF yet (F7c\'s code commit, once it lands): the working tree against itself, in fresh pages, its frames kept as the references'}, a hotseat battle's table at its deployment, the figures hidden, then (F7c) wrecked, its timber platforms dropped`)
     for (const seed of fortSeeds) {
       const where = `  fort ${String(seed).padEnd(6)}`
       // (a page that times out, on a machine others share, is shot again,
@@ -472,33 +530,49 @@ try {
         console.log(`${where} NOT RUN: ${String(e.message ?? e).split('\n')[0].slice(0, 300)}`)
         continue
       }
-      const pa = Buffer.from(A.table.px, 'base64'), pb = Buffer.from(B.table.px, 'base64')
-      let diff = 0, max = 0
-      const mask = Buffer.alloc(pa.length)
-      for (let p = 0; p < pa.length; p += 4) {
-        const d = Math.max(Math.abs(pa[p] - pb[p]), Math.abs(pa[p + 1] - pb[p + 1]), Math.abs(pa[p + 2] - pb[p + 2]), Math.abs(pa[p + 3] - pb[p + 3]))
-        if (d) diff++
-        if (d > max) max = d
-        if (d) mask.set([255, 0, 0, 255], p)
-        else mask.set([pa[p] >> 2, pa[p + 1] >> 2, pa[p + 2] >> 2, 255], p)
-      }
-      const base = join(out, `fort${seed}-table`)
-      writeFileSync(`${base}-${fortSide ? fortSide.name : 'ref'}.png`, png(A.table.w, A.table.h, pa))
-      writeFileSync(`${base}-now.png`, png(B.table.w, B.table.h, pb))
-      if (diff) writeFileSync(`${base}-diff.png`, png(A.table.w, A.table.h, mask))
+      // ((F7c) both kinds, the table and the wrecked table)
       fortKept = true
+      for (const kind of KINDS) {
+        const pa = Buffer.from(A[kind].px, 'base64'), pb = Buffer.from(B[kind].px, 'base64')
+        let diff = 0, max = 0
+        const mask = Buffer.alloc(pa.length)
+        for (let p = 0; p < pa.length; p += 4) {
+          const d = Math.max(Math.abs(pa[p] - pb[p]), Math.abs(pa[p + 1] - pb[p + 1]), Math.abs(pa[p + 2] - pb[p + 2]), Math.abs(pa[p + 3] - pb[p + 3]))
+          if (d) diff++
+          if (d > max) max = d
+          if (d) mask.set([255, 0, 0, 255], p)
+          else mask.set([pa[p] >> 2, pa[p + 1] >> 2, pa[p + 2] >> 2, 255], p)
+        }
+        const base = join(out, `fort${seed}-${kind}`)
+        writeFileSync(`${base}-${fortSide ? fortSide.name : 'ref'}.png`, png(A[kind].w, A[kind].h, pa))
+        writeFileSync(`${base}-now.png`, png(B[kind].w, B[kind].h, pb))
+        if (diff) writeFileSync(`${base}-diff.png`, png(A[kind].w, A[kind].h, mask))
+        const note = kind === 'wrecked'
+          ? ` (${A.broke}/${B.broke} chunks broken; ${B.platforms} timber platforms, ${A.fell}/${B.fell} fallen; ${differing(A.table, A.wrecked)}/${differing(B.table, B.wrecked)} pixels changed by the blasts)`
+          : ` (${colours(A.table)}/${colours(B.table)} colours; ${B.chunks} chunks, ${B.parapets} of them parapets)`
+        console.log(`${where} ${kind.padEnd(8)} ${A[kind].w}x${A[kind].h}: ${diff ? `${diff} pixels differ (max channel delta ${max})` : 'identical'}${note}`)
+        if (diff) failed++
+      }
+      fell += B.fell
       const vac = []
       for (const [name, sh] of [[refName, A], ['now', B]]) {
         if (colours(sh.table) < MIN_COLOURS) vac.push(`${name}: ${colours(sh.table)} colours`)
         if (!sh.parapets) vac.push(`${name}: no parapet on the board`)
         if (sh.terrain !== 'fortified') vac.push(`${name}: fought on ${sh.terrain}`)
+        if (!sh.broke) vac.push(`${name}: the blasts broke nothing`)
+        if (differing(sh.table, sh.wrecked) < MIN_WRECKED) vac.push(`${name}: wrecked differs from table by ${differing(sh.table, sh.wrecked)} pixels`)
+        if (sh.fell !== sh.platforms) vac.push(`${name}: ${sh.fell} of ${sh.platforms} timber platforms fell`)
       }
-      console.log(`${where} table    ${A.table.w}x${A.table.h}: ${diff ? `${diff} pixels differ (max channel delta ${max})` : 'identical'} (${colours(A.table)}/${colours(B.table)} colours; ${B.chunks} chunks, ${B.parapets} of them parapets)`)
-      if (diff) failed++
+      if (A.broke !== B.broke || A.fell !== B.fell) vac.push(`the blasts broke ${A.broke} chunks and dropped ${A.fell} platforms on ${refName}, ${B.broke} and ${B.fell} now`)
       if (vac.length) {
         failed++
         console.log(`${where} VACUOUS: ${vac.join('; ')}`)
       }
+    }
+    // ((F7c) some board must have dropped a platform)
+    if (!fell) {
+      failed++
+      console.log(`  fort VACUOUS: no timber platform fell on boards ${fortSeeds.join(', ')}`)
     }
   }
 } finally {

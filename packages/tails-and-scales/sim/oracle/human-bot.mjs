@@ -328,14 +328,68 @@ export function mulberry32(seed) {
 // in a phase or the deployment as the decision is), and sends through its
 // hooks embark(u, v) and disembark(u, c) (the driver's): the ?debug
 // block's F9a members.
+// `collapse` (F7c): `aggressive`, but a unit whose ranged weapon throws a
+// template (`blast`, not a spell) aims it at a timber platform's post when
+// one is in reach: of the targets it may shoot, the one whose centre is
+// nearest a standing post that can break (the page's scenery chunks: kind
+// 'post', alive, destructible), when that post lies within the template's
+// radius and half an inch of it (a target on the platform's deck stands
+// some 2.9" from its posts, under a pinecone's 3"); else aggressive's
+// weakest; a target standing on a platform's deck first of all. And in the
+// movement phase a climber that can end its move on a standing platform's
+// deck (a cell its plan reaches over a floor above STEP, inside the
+// footprint of a deck that can fall) climbs up onto it, the first such cell
+// of its plan, and the seat's first standing climber that can't yet heads
+// for the nearest standing platform's ladder (the cell of its plan nearest
+// the ladder's foot). So a fortified board's platforms get
+// manned and shot out from under their defenders (a hotseat game plays
+// both seats so), and the `fort/` corpus can hold a human log with a
+// collapse (sim/corpus-add.mjs's `collapse` and `fall` needs).
 // Every policy leaves a rider out of its moves, advances and pilots (it
 // moves only with its hull: the AI's), so a battle with transports plays
 // under any of them.
 export function makePolicy(name, seed) {
   const rand = mulberry32(seed)
   const pick = (a) => a[Math.floor(rand() * a.length)]
-  const aggressive = name === 'aggressive', late = name === 'late', pilot = name === 'pilot', ride = name === 'ride'
+  const collapse = name === 'collapse'
+  const aggressive = name === 'aggressive' || collapse, late = name === 'late', pilot = name === 'pilot', ride = name === 'ride'
   if (!aggressive && !late && !pilot && !ride && name !== 'random') throw new Error(`unknown policy ${name}`)
+  // (collapse) of `tgs`, the target nearest a breakable post within reach
+  // of u's template, or null: the posts as the page's scenery has them
+  const atPost = (ts, u, tgs) => {
+    const w = u.t.ranged
+    if (!w?.blast || w.spell) return null
+    const posts = (ts.scenery?.chunks ?? []).filter((c) => c.kind === 'post' && c.alive && c.destructible)
+    const up = tgs.find((tg) => onPlatform(ts, ts.nav.index(tg.pos.x, tg.pos.z)))
+    if (up) return up
+    let best = null, bd = w.blast + 0.5
+    for (const tg of tgs) {
+      for (const p of posts) {
+        const d = Math.hypot(p.shape.x - tg.pos.x, p.shape.z - tg.pos.z)
+        if (d < bd) (bd = d), (best = tg)
+      }
+    }
+    return best
+  }
+  // (collapse) the feet of the ladders up the standing platforms' decks
+  const ladderFeet = (ts) => {
+    const chunks = ts.scenery?.chunks ?? []
+    const decks = new Set(chunks.filter((c) => c.kind === 'deck' && c.alive && c.fallsAt !== undefined).map((c) => c.id))
+    return chunks.filter((c) => c.kind === 'ladder' && c.alive && decks.has(c.on)).map((c) => c.link.foot)
+  }
+  // (collapse) whether cell i of the nav is on a standing platform's deck:
+  // over a floor above STEP, inside the footprint of an alive deck that can
+  // fall (the page's scenery chunks)
+  const onPlatform = (ts, i) => {
+    const { nav } = ts
+    if (!nav.hasHeight || !(nav.floor[i] > 0.4)) return false
+    const x = nav.x(i), z = nav.z(i)
+    return (ts.scenery?.chunks ?? []).some((c) => {
+      if (c.kind !== 'deck' || !c.alive || c.fallsAt === undefined) return false
+      const s = c.shape, cs = Math.cos(s.yaw), sn = Math.sin(s.yaw), dx = x - s.x, dz = z - s.z
+      return Math.abs(dx * cs - dz * sn) <= s.hx && Math.abs(dx * sn + dz * cs) <= s.hz
+    })
+  }
   // (ride) the seats whose autoload it has re-arranged, and the rider each
   // placed off its hull (by id: the policy never marks the match's units)
   const arranged = new Set(), offed = new Map()
@@ -464,6 +518,17 @@ export function makePolicy(name, seed) {
           continue
         }
         let c = pick(ok)
+        const up = collapse && u.t.climb ? ok.find((i) => onPlatform(ts, i)) : undefined
+        if (up !== undefined) return acted++, { s, t: 'move', u: u.id, c: up }
+        // (collapse) the seat's first standing climber off the platforms
+        // makes for the nearest platform's ladder
+        const lead = collapse && ts.units.find((x) => x.side === s && q.alive(x) && x.t.climb && !x.t.fly && !x.aboard)
+        const feet = lead === u && !onPlatform(ts, ts.nav.index(u.pos.x, u.pos.z)) ? ladderFeet(ts) : []
+        if (feet.length) {
+          const far = (i) => Math.min(...feet.map((f) => Math.hypot(ts.nav.x(i) - f.x, ts.nav.z(i) - f.z)))
+          const i = ok.reduce((a, b) => (far(b) < far(a) ? b : a))
+          if (far(i) < far(ts.nav.index(u.pos.x, u.pos.z))) return acted++, { s, t: 'move', u: u.id, c: i }
+        }
         if (aggressive) {
           let best = nearest(ts, u, u.pos.x, u.pos.z) - 0.3
           c = -1
@@ -494,7 +559,7 @@ export function makePolicy(name, seed) {
       }
       if (d.phase === 'shoot') {
         const tgs = q.shootTargets(u)
-        const tg = aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs)
+        const tg = (collapse && atPost(ts, u, tgs)) || (aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs))
         return acted++, { s, t: 'shoot', u: u.id, tg: tg.id }
       }
       if (d.phase === 'charge') {

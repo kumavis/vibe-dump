@@ -96,7 +96,12 @@
 //     their footprints), each deck stands its recipe's count of them, each
 //     on its deck's rim, its band PARAPET_BAND deep behind it, clear of
 //     every stair's top and ladder's climb (parapetRows); P-climb holds them
-//     to the nav (parapetNav).
+//     to the nav (parapetNav). (F7c) The posts and what stands on a deck,
+//     both ways (postRows): every post under the one deck that lists it in
+//     `supports`, a deck that falls falling at a whole number of them, on
+//     posts that break at the piece table's hp (the barn's, which never
+//     falls, on posts that never do), every ladder's `on` its deck (its top
+//     on it, its foot off it), and nothing but ladders on a deck that falls.
 //  (7, P-climb and the lob rows, and the connectivity and tiles rows, say
 //  what they hold where they stand below.)
 //  8. (F19a) the powder keg: the keg set's boards (one keg, at the centre
@@ -731,6 +736,10 @@ const { FOOTPRINT, GATE_OUT, LADDER_OUT } = await imp(PKG, 'core/terrain/recipes
 // (DESIGN §4.2.4's recipe table): older code has none, and is held to none
 const PARAPET = await imp(PKG, 'core/terrain/recipes.js').then((m) => ('PARAPET_H' in m ? { H: m.PARAPET_H, T: m.PARAPET_T, BAND: m.PARAPET_BAND } : null))
 const PARAPETS = Object.freeze({ rampart: 4, bastion: 6, watchtower: 8, platform: 0, keep: 10 })
+// (F7c) a platform's posts' hit points and how many down bring its deck
+// down (DESIGN §4.2.4's piece table; the recipe's POST_HP and FALLS_AT):
+// older code, whose posts never break, is held to none of postRows
+const FALLS = await imp(PKG, 'core/terrain/recipes.js').then((m) => ('FALLS_AT' in m ? { HP: m.POST_HP, AT: m.FALLS_AT } : null))
 // the pad core/nav.js rasters every cover shape with (its raster's 0.6)
 const COVER_PAD = 0.6
 // the height fields an add's def carries where its chunk has them (DESIGN
@@ -759,7 +768,7 @@ const turn = (a, b) => {
   const d = Math.abs(a - b) % (2 * Math.PI)
   return d > Math.PI ? 2 * Math.PI - d : d
 }
-const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 0, pairs: 0, selfPairs: 0, others: 0, defs: 0, viewed: 0, synced: 0, tops: 0, taken: 0, parapets: 0 }
+const fort = { boards: 0, failed: 0, chunks: 0, pieces: {}, links: 0, surfaces: 0, pairs: 0, selfPairs: 0, others: 0, defs: 0, viewed: 0, synced: 0, tops: 0, taken: 0, parapets: 0, posts: 0, falling: 0, onDecks: 0 }
 const fortRows = []
 // a board, built twice; the differences thrown as `differ` does
 function fortBoard(B, seed) {
@@ -896,6 +905,7 @@ function fortBoard(B, seed) {
     if (Math.abs(x - (-B.W / 2 + B.deploy + LADDER_OUT)) > 1e-9) differ(`${where} works ${f.works}'s ladder: its foot ${LADDER_OUT}" out from the zone`, -B.W / 2 + B.deploy + LADDER_OUT, x)
   }
   if (PARAPET) parapetRows(where, chunks)
+  if (FALLS) postRows(where, chunks)
   // ((V3d) but a magazine, a site with no deck: its kegs are features')
   for (const [f, n] of held) if (!n && f.fort !== 'magazine') differ(`${where} the ${f.fort} at (${f.x.toFixed(2)}, ${f.z.toFixed(2)}): its pieces`, 'some', 'none')
   for (const f of forts) if (f.r !== FOOTPRINT[f.fort]) differ(`${where} the ${f.fort}'s footprint`, FOOTPRINT[f.fort], f.r)
@@ -1009,6 +1019,66 @@ function parapetRows(where, chunks) {
   }
 }
 
+// (F7c, DESIGN §4.2.4's piece table and "Destruction and settle") The
+// posts and what stands on a deck, both ways: every post listed in the
+// supports of exactly one deck, standing under it (its centre inside the
+// deck's footprint, in the deck's frame, its box from the ground to the
+// deck's top, 0.4" square), navKind null and los 'block', of the deck's
+// recipe; every deck's supports naming posts only, and a deck that falls
+// (`fallsAt`) falling at a whole number of them within 1 to their count,
+// each of its posts breakable at the piece table's hp (a deck with
+// supports and no fallsAt, the Powder Field's barn's, standing on posts
+// that never break); every ladder's `on` naming a deck, its link's top on
+// that deck's footprint, and its foot off it; and nothing standing on a
+// deck that falls (by `on`) but its ladders, which the cascade takes with
+// it. The platform: four posts, falling at FALLS_AT, one ladder.
+function postRows(where, chunks) {
+  const byId = new Map(chunks.map((c) => [c.id, c]))
+  const decks = chunks.filter((c) => c.kind === 'deck')
+  const inDeck = (D, x, z) => inFrame([[x, z]], D).every(([lx, lz]) => Math.abs(lx) <= D.hx + 1e-9 && Math.abs(lz) <= D.hz + 1e-9)
+  for (const p of chunks) {
+    if (p.kind !== 'post') continue
+    fort.posts++
+    const w = `${where} post ${p.id}`, s = p.shape
+    const by = decks.filter((d) => d.supports?.includes(p.id))
+    if (by.length !== 1) {
+      differ(`${w}: in one deck's supports`, 1, by.length)
+      continue
+    }
+    const d = by[0]
+    same(`${w}: its recipe, its deck's`, d.look.recipe, p.look.recipe)
+    same(`${w}: navKind (under its deck)`, null, p.navKind)
+    same(`${w}: los`, 'block', p.los)
+    same(`${w}: 0.4" square`, '0.4x0.4', `${2 * s.hx}x${2 * s.hz}`)
+    near(`${w}: from the ground`, 0, s.y - s.hy)
+    near(`${w}: up to its deck's top`, d.surface.y, s.y + s.hy)
+    if (!inDeck(d.shape, s.x, s.z)) differ(`${w}: under deck ${d.id} (its centre inside the deck's footprint)`, 'inside', JSON.stringify(inFrame([[s.x, s.z]], d.shape)[0].map((v) => +v.toFixed(3))))
+    same(`${w}: hp (its deck ${d.fallsAt === undefined ? 'never falls' : 'falls'})`, d.fallsAt === undefined ? Infinity : FALLS.HP, p.hp)
+    same(`${w}: destructible`, d.fallsAt !== undefined, p.destructible)
+  }
+  for (const d of decks) {
+    const w = `${where} the ${d.look.recipe}'s deck ${d.id}`
+    for (const id of d.supports ?? []) if (byId.get(id)?.kind !== 'post') differ(`${w}: its supports, posts`, 'a post', `${byId.get(id)?.kind ?? 'nothing'} (${id})`)
+    const on = chunks.filter((c) => c.on === d.id)
+    fort.onDecks += on.length
+    if (d.look.recipe === 'platform') same(`${w}: its posts and its fall (supports, fallsAt, ladders)`, `4,${FALLS.AT},1`, `${d.supports?.length},${d.fallsAt},${on.length}`)
+    if (d.fallsAt === undefined) continue
+    fort.falling++
+    if (!(Number.isInteger(d.fallsAt) && d.fallsAt >= 1 && d.fallsAt <= d.supports.length)) differ(`${w}: fallsAt`, `a whole number in 1-${d.supports.length}`, d.fallsAt)
+    for (const c of on) if (c.kind !== 'ladder') differ(`${w}: what stands on it, which falls with it`, 'ladders only', `a ${c.kind} (${c.id})`)
+  }
+  for (const l of chunks) {
+    if (l.kind !== 'ladder') continue
+    const w = `${where} ladder ${l.id}`, d = byId.get(l.on)
+    if (d?.kind !== 'deck') {
+      differ(`${w}: on a deck`, 'a deck', d?.kind ?? `nothing (${l.on})`)
+      continue
+    }
+    if (!inDeck(d.shape, l.link.top.x, l.link.top.z)) differ(`${w}: its top on deck ${d.id}`, 'inside its footprint', JSON.stringify(l.link.top))
+    if (inDeck(d.shape, l.link.foot.x, l.link.foot.z)) differ(`${w}: its foot off deck ${d.id}`, 'outside its footprint', JSON.stringify(l.link.foot))
+  }
+}
+
 // The view of a fortified board (TerrainView, view/terrain.js): its adds
 // played into a table as the player plays them; a table synced from the
 // chunks is that table (syncCheck: every chunk shown alike, every mesh where
@@ -1083,6 +1153,7 @@ for (const r of fortRows) {
 console.log(`  ${fort.chunks} chunks built twice alike, Math.random never called; ${fort.defs} adds' defs carrying the chunk's height fields; pieces ${Object.entries(fort.pieces).map(([k, v]) => `${k} ${v}`).join(', ')} (${fort.surfaces} surfaces, ${fort.links} links)`)
 console.log(`  ${fort.pairs} mirrored pairs of pieces exact (and ${fort.selfPairs} decks their own mirror), ${fort.others} other chunks within 1e-9; every piece, foot and gate inside its fortification's footprint`)
 if (PARAPET) console.log(`  (F7b) ${fort.parapets} parapets, each recipe's count on its deck, on its deck's rim, its band ${PARAPET.BAND}" deep behind it, clear of every stair's top and ladder's climb`)
+if (FALLS) console.log(`  (F7c) ${fort.posts} posts, each under the one deck that lists it; ${fort.falling} decks that fall (at ${FALLS.AT} of their posts down, each breakable at hp ${FALLS.HP}), nothing on them but their ladders; ${fort.onDecks} pieces standing on decks by \`on\`, every ladder's top on its deck and its foot off it`)
 console.log(`  the view: ${fort.viewed} boards' adds played into a TerrainView, each add's def the view's defOf of its chunk; ${fort.synced} chunks synced alike; ${fort.tops} walkable tops listed, a picker's quad on each; ${fort.taken} meshes taken back by the board's adds played again`)
 
 if (failedSeeds || fort.failed) {
@@ -1095,7 +1166,7 @@ if (!boards || !stats.chunks) {
   console.log(`terrain-check: VACUOUS: ${boards} board(s), ${stats.chunks} chunks compared`)
   process.exit(2)
 }
-if (!fort.chunks || !fort.pairs || !fort.links || !fort.viewed || !fort.tops || (PARAPET && !fort.parapets)) {
+if (!fort.chunks || !fort.pairs || !fort.links || !fort.viewed || !fort.tops || (PARAPET && !fort.parapets) || (FALLS && !fort.posts)) {
   console.log(`terrain-check: VACUOUS: ${fort.boards} fortified board(s), ${fort.chunks} chunks, ${fort.pairs} mirrored pairs of pieces, ${fort.links} links checked`)
   process.exit(2)
 }
@@ -1868,13 +1939,20 @@ if (conn.failed) {
 // mid-destruction (blasts played, their tweens not yet
 // stepped: each chunk they touched promoted out of its tile, the tiles
 // merged again without it) and after it (every animation ended: back in
-// their tiles); then on a tiled table synced from the chunks as they stand
+// their tiles); ((F7c) with every timber platform then shot out, FALLS_AT
+// of each one's posts broken and the cascade played: on the tables
+// animating, each deck and its ladders still dropping, the planks it left
+// held hidden (drawn by neither mesh nor tile) until it lands; on a table
+// made under ?fast (`fast`, the view's end state at once) each deck and
+// ladder off the table and the planks drawn as the events play, and once
+// every animation has ended that table the untiled one); then on a tiled
+// table synced from the chunks as they stand
 // (the snap's), and on the event-built one with tiling turned off (back to
 // classic: every chunk its own mesh again, no tile left). It prints the
 // tiles and their draw calls per board (§4.2.7 expects about 70 tiles and
 // 150 calls at Grand).
 const TILE_SEEDS = Number(process.env.TILE_SEEDS ?? 12)
-const tiles = { boards: 0, failed: 0, checks: 0, promoted: 0, faded: 0, rows: {} }
+const tiles = { boards: 0, failed: 0, checks: 0, promoted: 0, faded: 0, dropped: 0, rows: {} }
 const tileShown = []
 const tt0 = Date.now()
 const tmine = { ...(await imp(PKG, 'view/clock.js')) }
@@ -1896,11 +1974,14 @@ async function tileBoard(name, m, set, seed) {
   const tiled = new TerrainView(new THREE.Scene(), recorder().proxy)
   tiled.tiling(true)
   const plain = new TerrainView(new THREE.Scene(), recorder().proxy)
+  // ((F7c) and ?fast's, untiled: a platform's fall its end state at once)
+  const fast = new TerrainView(new THREE.Scene(), recorder().proxy, { fast: true })
   const play = () => {
     for (const e of out.splice(0)) {
       const M = applyEvent(mirror, e)
       tiled.apply(e, M)
       plain.apply(e, M)
+      fast.apply(e, M)
     }
   }
   const why = []
@@ -1947,8 +2028,82 @@ async function tileBoard(name, m, set, seed) {
     tiles.promoted += [...tiled.items.values()].filter((it) => it.anims > 0).length
     check(`blast ${k + 1}, playing`)
   }
+  // ((F7c) every platform still standing shot out: the posts it still
+  // needs to fall broken outright, in chunk order, the cascade's deck,
+  // ladders and planks played into every table)
+  const fell = []
+  // ((F7c's review) the chunks as they stand before the posts break: what
+  // a snap mid-drop goes back to, below)
+  const pre = T.chunks.map((c) => ({ ...c, shape: { ...c.shape } }))
+  for (const d of T.chunks.filter((c) => c.alive && c.kind === 'deck' && c.fallsAt !== undefined)) {
+    const standing = d.supports.map((id) => T.byId(id)).filter((p) => p.alive)
+    const need = d.fallsAt - (d.supports.length - standing.length)
+    for (const p of standing.slice(0, Math.max(0, need))) T.hurt(p, 99, { x: p.shape.x, z: p.shape.z }, out)
+    if (!d.alive) fell.push(d)
+  }
+  const falls = out.slice()
+  play()
+  const planksOf = (d) => T.chunks.find((c) => c.alive && c.kind === 'rubble' && c.look.style === 'timber' && c.shape.x === d.shape.x && c.shape.z === d.shape.z)
+  for (const d of fell) {
+    tiles.dropped++
+    const pile = planksOf(d), ladders = T.chunks.filter((c) => c.on === d.id && c.kind === 'ladder')
+    if (!pile) {
+      why.push(`platform ${d.id} fell and left no planks`)
+      continue
+    }
+    for (const [name, view] of [['tiled', tiled], ['untiled', plain]]) {
+      if (!view.state(d.id).shown) why.push(`platform ${d.id} falling (${name}): its deck already off the table, no drop played`)
+      if (view.state(pile.id).drawn) why.push(`platform ${d.id} falling (${name}): its planks (${pile.id}) drawn before it lands`)
+    }
+    for (const c of [d, ...ladders]) if (fast.state(c.id).shown) why.push(`?fast: the fallen platform's ${c.kind} ${c.id} still on the table`)
+    if (!fast.state(pile.id).drawn) why.push(`?fast: the fallen platform ${d.id}'s planks (${pile.id}) not drawn`)
+  }
+  if (fell.length) check('platforms falling')
+  // ((F7c's review) a snap landing mid-drop (an undo of the move that broke
+  // the posts, a replay's scrub, an online re-sync), the decks standing in
+  // the match it is synced to: an untiled table synced from the chunks as
+  // they stood before the posts broke, the falls played into it and their
+  // tweens stepped a third of a second (each deck sagging and dropping),
+  // then synced back to them. Each deck and ladder must be the fresh snap's
+  // of those chunks, place and turn (a deck kept mid-drop stays sunk and
+  // tipped), its deck a walkable top and its ladder a ladder, its planks
+  // off the table; and so once every tween has ended (a deck kept mid-drop
+  // is taken off the table as its drop ends))
+  let mid = null, snapRef = null
+  if (fell.length) {
+    mid = new TerrainView(new THREE.Scene(), recorder().proxy)
+    mid.sync(pre)
+    for (const e of falls) mid.apply(e, mirror)
+    for (let i = 0; i < 10; i++) {
+      tmine.stepTweens(1 / 30)
+      await new Promise((r) => setImmediate(r))
+    }
+    mid.sync(pre)
+    snapRef = new TerrainView(new THREE.Scene(), recorder().proxy)
+    snapRef.sync(pre)
+  }
+  const midSnap = (when) => {
+    tiles.checks++
+    for (const d of fell) {
+      const ladders = pre.filter((c) => c.on === d.id && c.kind === 'ladder'), pile = planksOf(d)
+      for (const c of [d, ...ladders]) {
+        const x = mid.state(c.id), y = snapRef.state(c.id)
+        if (x.shown !== y.shown || (x.shown && (['x', 'y', 'z'].some((k) => Math.abs(x[k] - y[k]) > 1e-9) || x.q.some((v, k) => Math.abs(v - y.q[k]) > 1e-9)))) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s ${c.kind} ${c.id} ${JSON.stringify(x)}, a fresh snap's ${JSON.stringify(y)}`)
+      }
+      if (!mid.surfaces().some((c) => c.id === d.id)) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s deck no walkable top`)
+      for (const l of ladders) if (!mid.ladders().some((c) => c.id === l.id)) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s ladder ${l.id} not among the ladders`)
+      if (pile && mid.state(pile.id).shown) why.push(`snapped mid-drop, ${when}: platform ${d.id}'s planks (${pile.id}) on the table under it standing`)
+    }
+  }
+  if (mid) midSnap('at once')
   await settle(tmine)
   check('blasts settled')
+  if (mid) midSnap('its tweens ended')
+  for (const d of fell) {
+    const pile = planksOf(d)
+    if (pile && !plain.state(pile.id).drawn) why.push(`platform ${d.id} landed: its planks (${pile.id}) never drawn`)
+  }
+  for (const x of sameStates(T, fast, plain)) why.push(`?fast, settled: ${x.replace(' tiled,', ' under ?fast,').replace(' untiled', ' animated')}`)
   // a snap's table, tiled, synced from the chunks as they stand
   const synced = new TerrainView(new THREE.Scene(), recorder().proxy)
   synced.tiling(true)
@@ -1960,7 +2115,7 @@ async function tileBoard(name, m, set, seed) {
   if (off.tiles || off.meshes || off.tiled) why.push(`tiling off: ${off.tiles} tiles and ${off.meshes} meshes left`)
   for (const b of off.bad) why.push(`tiling off: ${b}`)
   for (const d of sameStates(T, tiled, plain)) why.push(`tiling off: ${d}`)
-  for (const v of [tiled, plain, synced]) v.dispose()
+  for (const v of [tiled, plain, fast, synced, mid, snapRef]) v?.dispose()
   return { why, chunks: T.chunks.length, tiles: fresh.tiles, meshes: fresh.meshes }
 }
 for (const [name, m] of Object.entries(MISSIONS)) {
@@ -1987,7 +2142,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
 }
 Math.random = realRandom
 const span = (a) => `${Math.min(...a)}-${Math.max(...a)} (mean ${(a.reduce((x, y) => x + y, 0) / a.length).toFixed(0)})`
-console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast, ${tiles.faded} faded and solid again): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, seen through and solid again (drawn in the same task), mid-blast, settled, synced and untiled again`)
+console.log(`\ntiles (F8b): ${tiles.boards} Field and Grand boards, seeds ${lo}-${Math.min(hi, lo + TILE_SEEDS - 1)} (${((Date.now() - tt0) / 1000).toFixed(1)} s, ${tiles.checks} checks, ${tiles.promoted} chunks promoted out of their tiles mid-blast, ${tiles.faded} faded and solid again, ${tiles.dropped} platforms shot out): every tiled chunk drawn as its own mesh, vertex for vertex and in its colour, the tiled table's chunks the untiled one's, fresh, seen through and solid again (drawn in the same task), mid-blast, (F7c) mid-fall (each deck dropping, its planks held till it lands; under ?fast its end state at once, and settled the animated table's; (F7c's review) a snap mid-drop back to the decks standing, the fresh snap's at once and once its tweens end), settled, synced and untiled again`)
 for (const [key, r] of Object.entries(tiles.rows)) console.log(`  ${key}: ${span(r.chunks)} chunks in ${span(r.tiles)} tiles, ${span(r.meshes)} draw calls`)
 if (tiles.failed) {
   console.log(`MISMATCH: tiles failed on ${tiles.failed} of ${tiles.boards} board(s):`)

@@ -28,6 +28,7 @@ import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
 import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
 import { kegsGoOff } from './shoot.js'
+import { settle } from './settle.js'
 
 // (F9a) A rider charges nobody while aboard, nor once it has stepped off a
 // hull that had moved this turn (`rode`: DESIGN §4.2.5's disembarking).
@@ -164,5 +165,8 @@ export function finishCharge(G, u, target, cell, plan = chargePlan(G, u, target)
   const kegs = resolveWalk(G, u, pts, { speed: 11, fly: plan.mode === 'fly' })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
+  // ((F7c, §4.1 rule 17) and the units on a timber deck whose posts the
+  // charger smashed fall, before a keg it smashed goes off)
+  settle(G)
   if (kegs.length) kegsGoOff(G, u, kegs)
 }

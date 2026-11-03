@@ -10,6 +10,10 @@
 // (F19a) A powder keg bursts as a crate does here; that it goes off, a blast
 // that hits units, is the rules' (core/actions/shoot.js kegsGoOff), read
 // off the list of what broke (blast's, and the wrecker's smashAround's).
+// (F7c) A timber platform's post breaks too, and once enough of a deck's
+// posts are down the deck falls with its ladders into a pile of planks on
+// the ground (destroy's cascade); what becomes of the units that stood on
+// it is the rules' (core/actions/settle.js settle), read off `dropped`.
 //
 // This is consensus code: no meshes, no clock, and no randomness but the
 // board's layout stream. Destruction is instant here (a block's fall lowers
@@ -24,7 +28,8 @@
 //   terrain.clear    {}                         a new table
 //   terrain.add      { def }                    a chunk joined (a board's, a
 //                                               rubble pile's, a fallen tree's
-//                                               log, (F9a) a hull's wreck):
+//                                               log, (F9a) a hull's wreck,
+//                                               (F7c) a fallen deck's planks):
 //                                               def is { id, kind,
 //                                               shape, look }, a copy of its
 //                                               place and look as it joined
@@ -32,7 +37,10 @@
 //                                               base, supports, fallsAt and
 //                                               on, where it has them)
 //   terrain.hurt     { id, from, at }           it took damage and stands
-//   terrain.destroy  { id, kind, from, at }     it broke (then its consequences)
+//   terrain.destroy  { id, kind, from, at }     it broke (then its consequences:
+//                                               (F7c) a post's deck falling,
+//                                               reported broken in turn,
+//                                               its ladders after it)
 //   terrain.collapse { drops: [{ id, dy }], by }   blocks fell into a gap
 //   terrain.rubble   { id, from }               more rubble on a pile
 //
@@ -110,6 +118,11 @@ export class Terrain {
     this.seen = new Uint32Array(64)
     this.stamp = 0
     this.met = new Int32Array(64)
+    // (F7c) the decks that fell since the rules last settled them (destroy's
+    // cascade), in the order they fell: core/actions/settle.js empties it
+    // right after the nav follows, so it is empty between commands, as the
+    // journal's pendingLog is (DESIGN §4.1 rules 17 and 20; P-prop holds it)
+    this.dropped = []
     emitTo(out, 'terrain.clear', {})
   }
 
@@ -323,7 +336,73 @@ export class Terrain {
       // (F7b) a parapet leaves nothing: it had no nav effect, and the view
       // spills its debris; its cover band goes with it at the nav's rebuild
       // (dirty, above)
+      // (F7c) a post may bring its deck down
+      case 'post':
+        this.cascade(c, from, out)
+        break
     }
+  }
+
+  // (F7c, DESIGN §4.2.4's "Destruction and settle") Post `p` is down: every
+  // alive deck that lists it in `supports` and now has `fallsAt` of them
+  // down, in chunk order, falls (a deck with no `fallsAt`, the Powder
+  // Field's barn's hayloft, never does: its posts never break either). A
+  // deck falls with every alive chunk standing on it by `on` (its ladders:
+  // no recipe stands anything else on a deck that can fall, which
+  // sim/data-check.mjs holds), each reported broken as any chunk (deck
+  // first, then them, in chunk order, all from the blow that broke the
+  // post), and leaves a pile of its planks on the ground where it stood
+  // (planks): difficult ground that obscures sight and gives cover, as a
+  // wall's rubble does. It joins `dropped`, for the rules to settle the
+  // units that stood on it once the nav has followed (core/actions/
+  // settle.js, right after the refreshNav that ends the blast, the move or
+  // the charge: §4.1 rule 17). Decks, stairs and ladders break no other
+  // way; the rest of a fallen deck's posts stand. No draw, and nothing in
+  // the order of what came before changes: the post's own report comes
+  // first, as ever.
+  cascade(p, from, out = null) {
+    for (const d of this.chunks) {
+      if (!d.alive || d.fallsAt === undefined || !d.supports?.includes(p.id)) continue
+      let down = 0
+      for (const id of d.supports) if (!this.byId(id).alive) down++
+      if (down < d.fallsAt) continue
+      d.alive = false
+      emitTo(out, 'terrain.destroy', { id: d.id, kind: d.kind, from, at: place(d) })
+      for (const c of this.chunks) {
+        if (!c.alive || c.on !== d.id) continue
+        c.alive = false
+        emitTo(out, 'terrain.destroy', { id: c.id, kind: c.kind, from, at: place(c) })
+      }
+      this.planks(d, out)
+      this.dropped.push(d)
+      this.dirty = true
+    }
+  }
+
+  // The chunk of id `id` (ids count from 1 on every table, one a chunk, in
+  // the order they joined: so its place in `chunks` is id − 1)
+  byId(id) {
+    const c = this.chunks[id - 1]
+    if (c?.id !== id) throw new Error(`terrain: no chunk ${id} at its place`)
+    return c
+  }
+
+  // (F7c) What a fallen timber deck leaves: its planks and beams in a heap
+  // on the ground, over the deck's own footprint (its place, half-sizes and
+  // yaw), 0.4" high, as a wall's rubble is: `diff`, `obscure` and cover,
+  // unbreakable. `look` is the view's: { piece: 'rubble', style: 'timber',
+  // recipe, color, w, d }, the deck's recipe and colour and the footprint's
+  // size (the view draws the timber heap; a wall's rubble's pieces come
+  // with its `terrain.rubble` events, which this pile never has). It joins
+  // as any chunk (`terrain.add`).
+  planks(d, out = null) {
+    const s = d.shape
+    return this.add({
+      kind: 'rubble', hp: Infinity,
+      shape: { x: s.x, y: 0.2, z: s.z, hx: s.hx, hy: 0.2, hz: s.hz, yaw: s.yaw },
+      navKind: 'diff', los: 'obscure', cover: true,
+      look: { piece: 'rubble', style: 'timber', recipe: d.look.recipe, color: d.look.color, w: s.hx * 2, d: s.hz * 2 },
+    }, out)
   }
 
   // Blocks above a broken one fall into the gap.

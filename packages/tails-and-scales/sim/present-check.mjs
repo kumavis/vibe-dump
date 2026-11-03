@@ -230,7 +230,7 @@ import { readFileSync, existsSync } from 'node:fs'
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, riders: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { only: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, child: { type: 'string' }, riders: { type: 'string' }, falls: { type: 'string' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } }))
 } catch (e) {
   console.error(`present-check: ${e.message}\nusage: node sim/present-check.mjs [--only <kinds, modes or ids>] [--ref <ref> | --dir <packageDir>] | --self-test [--mutations <names>] [--only <kinds, modes or ids>]`)
   process.exit(2)
@@ -248,8 +248,20 @@ const RIDES = [
   ['riders-hotseat-6', { board: 808, dice: 41, mission: 'field', terrain: 'fortified', races: ['squirrel', 'serpent'] }, true],
 ]
 
+// (F7c) The falls: [id, board, moved, slain]. Each a fortified Skirmish
+// board standing a timber platform, the first it stands shot out from
+// under a squad (below, fallsChild); ((the review) `slain`, a hero of one
+// wound in the squad's place, slain by the first template before the
+// second brings its deck down)
+const FALLS = [
+  ['falls-board-4', 4, false, false],
+  ['falls-board-30-moved', 30, true, false],
+  ['falls-board-4-slain', 4, false, true],
+]
+
 if (a.child) await page(a.child)
 else if (a.riders) await ridersChild(a.riders)
+else if (a.falls) await fallsChild(a.falls)
 else if (a['self-test']) await selfTest()
 else process.exit(await parent())
 
@@ -1067,6 +1079,102 @@ async function ridersChild(dir) {
   process.stdout.write(JSON.stringify(out))
 }
 
+// ── (F7c) The falls, in Node ────────────────────────────────────────────────
+// The corpus's one battle with a platform falling under a unit
+// (hotseat-collapse-platform-8, fort/, the battles above) is played through
+// the page; these rows hold the mirror's `unit.fall` on scenes of their own
+// as well, each fall's kind (a template's, a move's, a defender slain
+// before its deck falls) on purpose, in Node through the core alone, the
+// self-test's module hooks registered: a
+// fortified board's first timber platform with a squad of the Coil on its
+// deck (set there by hand and the mirror then taken from the match, as a
+// snap takes it), the Bushtails' Trebuchet throwing its pinecone at the
+// deck's centre (core/actions/shoot.js blastLands) until it falls; every
+// event folded as it comes, and after each template the mirror must equal
+// project(G) (the squad's place and its `y`, the chunks that broke, the
+// planks that joined). With `moved` the deck's footprint is made hard on
+// the ground by a scene chunk (in the match and the mirror alike), so the
+// squad lands off it: its place moves as well as its floor; and the posts
+// are broken by hand (Terrain.hurt, into the match's out) and the fall
+// settled by a move's end (core/actions/move.js doMove, of a unit of the
+// other side standing still), so no template wounds it first and it lands
+// standing. The squad must have fallen (a `unit.fall` folded) and stand,
+// in the mirror, at 0. ((The review) With `slain` it is the side's first
+// climbing hero, its one model at one wound: the first template slays it on
+// the deck, and the deck falls under it dead, its `unit.fall` (`dead`) the
+// only thing that brings it to the ground in the mirror, where project(G),
+// reading the floor under every unit, the dead's too, puts it; it must lie
+// at 0, slain before its deck fell.)
+// Reports { id, events, kinds, falls, y, mismatch, error }.
+async function fallsChild(dir) {
+  const { register } = await import('node:module')
+  register('./present-hooks.mjs', import.meta.url)
+  const [id, board, moved, slain] = JSON.parse(readFileSync(0, 'utf8'))
+  const at = (f) => import(pathToFileURL(join(dir, f)).href)
+  const [core, mirror, shoot, move] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('core/actions/shoot.js'), at('core/actions/move.js')])
+  const out = { id, events: 0, kinds: {}, falls: 0, y: null, mismatch: null, error: null }
+  const miss = (why) => (out.mismatch ??= why)
+  try {
+    const G = core.createMatch({ board, dice: board, terrain: 'fortified', seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+    const nav = G.nav, q = core.q
+    const d = G.terrain.chunks.find((c) => c.kind === 'deck' && c.fallsAt !== undefined)
+    if (!d) throw new Error(`fortified board ${board} stands no timber platform`)
+    const u = slain ? G.units.find((x) => x.side === 1 && x.t.climb && !x.t.fly && x.t.models === 1) : G.units.filter((x) => x.side === 1 && x.t.climb && !x.t.fly).reduce((x, y) => (y.r > x.r ? y : x))
+    if (slain) u.models[0].w = 1
+    const gun = G.units.filter((x) => x.side === 0 && x.t.ranged?.blast && !x.t.ranged.spell).reduce((x, y) => (y.t.ranged.blast > x.t.ranged.blast ? y : x))
+    let top = -1, best = Infinity
+    for (let i = 0; i < nav.N; i++) {
+      const dd = Math.hypot(nav.x(i) - d.shape.x, nav.z(i) - d.shape.z)
+      if (dd < best && nav.floor[i] > 0.4 && nav.standable(i, u.r, 'walk')) (best = dd), (top = i)
+    }
+    if (top < 0 || best > 2) throw new Error(`no cell on the platform's deck holds the ${u.t.short}`)
+    u.pos.x = nav.x(top)
+    u.pos.z = nav.z(top)
+    // (moved: the footprint hard on the ground, under the deck until it
+    // falls, in the match and in the mirror)
+    if (moved) {
+      const s = d.shape
+      G.terrain.chunks.push({ id: -7, kind: 'scene', alive: true, destructible: false, hp: Infinity, maxHp: Infinity, navKind: 'hard', los: null, cover: false, look: {}, shape: { x: s.x, y: 0.5, z: s.z, hx: s.hx, hy: 0.5, hz: s.hz, yaw: s.yaw, reach: Math.hypot(s.hx, s.hz) + 0.05 } })
+      G.terrain.dirty = true
+    }
+    const M = mirror.project(G)
+    G.out.length = 0
+    const was = { x: u.pos.x, z: u.pos.z }
+    let died = -1, fellAt = -1, seen = 0
+    for (let k = 0; k < 8 && d.alive && !out.mismatch; k++) {
+      if (!moved) shoot.blastLands(G, gun, { x: d.shape.x, z: d.shape.z }, gun.t.ranged)
+      else {
+        for (const id of d.supports.slice(0, d.fallsAt)) {
+          const p = G.terrain.chunks.find((c) => c.id === id)
+          G.terrain.hurt(p, 99, { x: p.shape.x + 1, z: p.shape.z }, G.out, [])
+        }
+        move.doMove(G, gun, nav.index(gun.pos.x, gun.pos.z))
+      }
+      for (const e of G.out.splice(0)) {
+        mirror.applyEvent(M, e)
+        out.events++
+        out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
+        if (e.t === 'unit.fall' && e.u === u.id) out.falls++
+        if (e.t === 'unit.destroyed' && e.u === u.id) died = seen
+        if (e.t === 'terrain.destroy' && e.id === d.id) fellAt = seen
+        seen++
+      }
+      const diff = differ(M, mirror.project(G))
+      if (diff) miss(`${moved ? 'move' : 'template'} ${k + 1}: the mirror folded from the events differs from the match: ${diff}`)
+    }
+    if (d.alive) throw new Error(`eight templates at the platform's centre never brought it down`)
+    out.y = M.units[u.id].y
+    if (!out.falls && q.alive(u)) miss(`the ${u.t.short} stood on the deck as it fell, but no unit.fall of it was folded`)
+    if (q.alive(u) && out.y !== 0) miss(`the ${u.t.short} stands at ${out.y} in the mirror after its fall`)
+    if (moved && q.alive(u) && M.units[u.id].pos.x === was.x && M.units[u.id].pos.z === was.z) miss(`the ${u.t.short} landed off the hard ground, but the mirror holds it where it stood`)
+    if (slain && (q.alive(u) || died < 0 || died > fellAt)) miss(`the ${u.t.short} (one wound) was not slain on the deck before it fell (${q.alive(u) ? 'it stands' : `destroyed at event ${died}, the deck at ${fellAt}`}): the row holds nothing`)
+    if (slain && out.y !== 0) miss(`the ${u.t.short}, slain on the deck, lies at ${out.y} in the mirror after it fell`)
+  } catch (e) {
+    out.error = String(e?.stack ?? e)
+  }
+  process.stdout.write(JSON.stringify(out))
+}
+
 function child(dir, job, env = process.env, mode = '--child') {
   const self = fileURLToPath(import.meta.url)
   return new Promise((done) => {
@@ -1285,9 +1393,11 @@ async function parent({ env = process.env, quiet = false } = {}) {
   let items, whole
   const tokens = a.only === undefined ? null : a.only.split(',').map((x) => x.trim()).filter(Boolean)
   const rides = (tokens === null || tokens.includes('riders')) && existsSync(join(dir, 'core', 'actions', 'transport.js'))
+  // ((F7c) `falls`, the same: FALLS, for code whose platforms fall)
+  const falls = (tokens === null || tokens.includes('falls')) && existsSync(join(dir, 'core', 'actions', 'settle.js'))
   try {
     const all = loadCorpus().items
-    const rest = tokens?.filter((x) => x !== 'riders')
+    const rest = tokens?.filter((x) => x !== 'riders' && x !== 'falls')
     items = rest === undefined ? all : rest.length ? select(all, rest.join(',')) : []
     whole = items.length === all.length
   } catch (e) {
@@ -1336,6 +1446,18 @@ async function parent({ env = process.env, quiet = false } = {}) {
       say(`  ${(job[2] ? 'human' : 'ai').padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.stops).padStart(3)} stops, ${String(r.events).padStart(5)} events: the mirror is the match, riders aboard at ${r.aboard} acts`}`)
     })
     say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)`)
+  }
+  // (F7c) the falls, in Node
+  if (falls) {
+    let n = 0
+    await pool(FALLS, CPUS, async (job) => {
+      const r = await child(dir, job, env, '--falls')
+      const why = r.error ?? r.mismatch
+      if (why) failed++
+      n += r.falls ?? 0
+      say(`  ${'ai'.padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.events).padStart(5)} events: the mirror is the match after every ${job[2] ? 'move' : 'template'}, the ${job[3] ? 'hero slain on it' : 'squad'} fallen (${r.falls} unit.fall) and ${job[3] ? 'lying' : 'standing'} at ${r.y}`}`)
+    })
+    say(`  (F7c) the falls: ${FALLS.length} platforms shot out from under a squad or a slain hero in Node, ${n} falls folded by the mirror`)
   }
   const kinds = Object.entries(total.kinds).filter(([k]) => /^(unit|terrain|blast|spell)\.|^(smashed|melee|charge\.result|volley)$/.test(k)).sort().map(([k, n]) => `${k} ${n}`).join(', ')
   const ordered = Object.entries(total.ordered)

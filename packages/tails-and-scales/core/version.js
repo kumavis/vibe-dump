@@ -106,5 +106,15 @@ export const RULES_ID = rulesId()
 // fortified board, standing on its deck's rim and drawing nothing, its
 // cover band rastered at its deck's level, and a shooter on its own deck
 // firing over that deck's parapets (nav.onLevel, Terrain.los's over): code,
-// no rules data, so RULES_ID stays, and no other board changes)
-export const CORE_VERSION = 13
+// no rules data, so RULES_ID stays, and no other board changes; 14: F7c's
+// collapsing platforms: posts break, decks fall, their defenders take D3
+// (a timber platform's posts at hp 3, its deck falling with its ladder
+// once two are down into a pile of planks, Terrain.destroy's cascade and
+// `dropped`, and settle after the refreshNav that ends a blast, a move, a
+// charge or a boarding's walk: each unit that stood on it where it stands
+// or the nearest clear ground within 6", then one D6 for its D3 mortal
+// wounds, §4.1 rule 17), and the AI's templates weighing the fall of a
+// manned platform they would help bring down (core/ai/score.js fallGain,
+// rule 10): recipe, rules and AI code, no rules data, so RULES_ID stays,
+// and only a fortified board standing a platform changes)
+export const CORE_VERSION = 14

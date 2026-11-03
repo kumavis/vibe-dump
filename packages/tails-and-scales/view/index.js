@@ -65,8 +65,10 @@ export class View {
     // G.out, among the events of the entry the Session folds, and the player
     // plays each report (the terrain.* handlers) when it reaches it in those
     // events, in order (a wrecker's smashes as its walk passes them).
-    // ((V3d) the turf the battlefield burned, painted into the mat)
+    // ((V3d) the turf the battlefield burned, painted into the mat; (F7c)
+    // and under ?fast a falling platform's end state alone)
     this.terrain = new TerrainView(scene, this.effects, {
+      fast,
       scorch: (marks) => {
         this.table.scorch(marks)
         // ((V3d) and under a burning field's evening light)
@@ -175,6 +177,9 @@ export class View {
       // wreck: view/units.js's deck)
       'unit.embark': (e) => units.embarked(e),
       'unit.disembark': (e) => units.disembarked(e),
+      // ((F7c) a unit falls with the timber platform shot out from under
+      // it: its figures drop to where it landed, the D3's row after them)
+      'unit.fall': (e) => units.fell(e),
       // (what a wrecker smashed breaks as the walker passes it)
       'unit.move': (e, M) => units.walk(e, M, (ev) => {
         for (const x of ev) if (x.veil !== 'hide') terrain.apply(x, M)

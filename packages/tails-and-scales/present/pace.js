@@ -159,7 +159,10 @@ const OPENING = new Set(['focus', 'unit.face'])
 // (core/actions/transport.js hullDestroyed, mid-damage): each rider's hop
 // off, a forced `unit.disembark`, then its dice and its wounds; a rider
 // stepping off of its own accord is a move, never in an attack)
-const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'spell.snare', 'spell.ward', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
+// ((F7c) and a timber platform the attack shot out drops its defenders
+// inside it: each unit's `unit.fall` (core/actions/settle.js, straight
+// after the template's scenery), then its D3's row and its wounds)
+const IN_ATTACK = new Set([...ANCHOR, 'blast.aim', 'blast.scatter', 'blast.land', 'keg.fuse', 'spell.thorns', 'spell.fade', 'spell.gaze', 'spell.mesmerized', 'spell.snare', 'spell.ward', 'unit.fall', 'unit.wound', 'unit.slain', 'unit.formation', 'unit.destroyed', 'terrain.add', 'terrain.hurt', 'terrain.destroy', 'terrain.collapse', 'terrain.rubble', 'objectives', 'status', 'act', 'log', 'check', 'pending', 'fog'])
 const inRun = (e) => OPENING.has(e.t) || e.t === 'tray.open' || IN_ATTACK.has(e.t) || (e.t === 'unit.disembark' && e.forced) || (e.t === 'pause' && (e.s ?? 0) <= 0.3) || (e.t === 'dice' && !/^(Advance|Charge)/.test(e.label ?? ''))
 // what an attack in a batch waits on before the next may start: a volley
 // PACE.lead, a scatter, a throw and the slower spells their half second

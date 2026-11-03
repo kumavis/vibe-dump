@@ -83,7 +83,7 @@
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { pick, tween, easeIn, bounce } from './clock.js'
+import { pick, tween, easeIn, easeOut, bounce } from './clock.js'
 import { STYLES, WOOD } from '../core/terrain/recipes.js'
 import { sfx } from './sfx.js'
 
@@ -299,9 +299,12 @@ const PIECES = {
     return { obj: m }
   },
   // a pile at a column's foot; its pieces come with each break (rubble())
+  // ((F7c) a fallen timber platform's planks, look.style 'timber', are a
+  // heap of their own from the start: timberHeap)
   rubble(c) {
     const g = new THREE.Group()
     g.position.set(c.shape.x, 0, c.shape.z)
+    if (c.look.style === 'timber') timberHeap(c, g)
     return { obj: g, pieces: 0 }
   },
   // (F9a) A hull's burning wreck, on the floor it stood on (`base`), within
@@ -632,6 +635,14 @@ let fortKit = null
 const kit = () => (fortKit ??= { pick: new THREE.MeshBasicMaterial({ visible: false }) })
 // a colour lighter or darker by k (a deck's top and rim against its body)
 const shade = (color, k) => `#${new THREE.Color(color).multiplyScalar(k).getHexString()}`
+// (F7c) a timber post's width (core/terrain/recipes.js's POST), and how far
+// a ladder's foot leans out from the middle of its strip (the ladder
+// piece's, which its fall topples it about); a falling platform's sag
+// and fall (s) and how far it tips toward the posts that went (radians:
+// TerrainView's drop)
+const POST_W = 0.4
+const LADDER_LEAN = 0.45
+const DROP_SAG = 0.15, DROP_FALL = 0.35, DROP_TIP = 0.3
 // a w × h × d box centred at (x, y, z), turned ry about y
 function boxAt(w, h, d, x, y, z, ry = 0) {
   const g = new THREE.BoxGeometry(w, h, d)
@@ -672,6 +683,15 @@ const FORT_PIECES = {
   // its posts), a rim round its top, and its walk (planks along the deck's
   // length on earth and timber, flagstones on stone). ((V3d) A wreck's is
   // its own: WRECK_DECKS, by its material.)
+  // ((F7c, F7a's "Not here") A timber platform's space under its slab is
+  // boarded in: the rules keep the deck's line-of-sight body solid from the
+  // ground (the piece table's `y = h/2, hy = h/2`, core/terrain/recipes.js
+  // platform), so no shot passes under it, and the view drew a gap there
+  // that looked as if one would. Planked walls now close it on all four
+  // sides, set in behind the braces and between the posts (the post chunks
+  // stand proud at the corners, so a post shot out leaves its corner
+  // bare), the boards in two darker shades of the deck's timber, turn and
+  // turn about: two meshes more a platform, no draw.)
   deck(c) {
     if (WRECK_DECKS[c.look.material]) return WRECK_DECKS[c.look.material](c)
     const { w, d, h, material, color } = c.look
@@ -690,6 +710,18 @@ const FORT_PIECES = {
         braces.push(beam([x0, lo, z0], [x1, hi, z1], 0.12, 0.08), beam([x0, hi, z0], [x1, lo, z1], 0.12, 0.08))
       }
       g.add(merged([slab, ...joists], shade(color, 0.85)), merged(braces, shade(color, 0.7)))
+      // (F7c) the boarding: BOARDS planks up each side, from just off the
+      // ground to the slab's underside, 0.06" thick, their outer face
+      // 0.07" behind the braces' plane, between the posts' inner faces
+      const BOARDS = 5, y0 = 0.04, y1 = h - T - 0.24, bh = (y1 - y0) / BOARDS, at = d / 2 - P - 0.12, ax = w / 2 - P - 0.12
+      const boards = [[], []]
+      for (let i = 0; i < BOARDS; i++) {
+        const y = y0 + (i + 0.5) * bh
+        for (const s of [-1, 1]) {
+          boards[(i + (s > 0 ? 1 : 0)) % 2].push(boxAt(w - 2 * POST_W, bh - 0.025, 0.06, 0, y, s * at), boxAt(0.06, bh - 0.025, d - 2 * POST_W, s * ax, y, 0))
+        }
+      }
+      g.add(merged(boards[0], shade(color, 0.58)), merged(boards[1], shade(color, 0.66)))
     } else {
       // the body, and on stone a darker plinth course and a string course
       g.add(mesh(boxAt(w, h - T, d, 0, (h - T) / 2, 0), mat(color)))
@@ -747,7 +779,7 @@ const FORT_PIECES = {
   ladder(c) {
     const { w, d, h, color } = c.look
     const g = framed(c)
-    const top = h + 0.4, out = 0.45, x = w / 2 - 0.12
+    const top = h + 0.4, out = LADDER_LEAN, x = w / 2 - 0.12
     // (the face is at the strip's own +z side, d/2 from its centre)
     const at = (y) => -out + (out + d / 2 - 0.05) * (y / top)
     const parts = [-1, 1].map((s) => beam([s * x, 0, at(0)], [s * x, top, at(top)], 0.09, 0.09))
@@ -789,6 +821,46 @@ const FORT_PIECES = {
     return { obj: g }
   },
 }
+// (F7c) A fallen timber platform's planks (core/terrain/terrain.js's planks:
+// a 'rubble' chunk, look.style 'timber', over the deck's footprint, w × d,
+// in its colour), built from its def alone as every piece is, so a snap
+// builds the heap the fall left: the slab's planks broken and strewn in a
+// low heap over the footprint in three courses, each higher one drawn in
+// tighter, some lying across the others; the joists and braces among them;
+// the boarding's darker boards; splinters. No higher than its 0.4" body
+// (the rules' y 0.2, hy 0.2) but for a plank's end propped on another. Its
+// jitter is the piece's own stream from its place (hash), never
+// Math.random, so two builds lie alike; three meshes, by shade.
+function timberHeap(c, g) {
+  const { w, d, color } = c.look
+  g.rotation.y = c.shape.yaw ?? 0
+  const rnd = hash(c, 7)
+  const light = [], mid = [], dark = []
+  // a box L long (its own x), t thick and b broad, tipped `tilt` about its
+  // breadth and turned `ry`, at (x, y, z) in the heap's frame
+  const lay = (out, L, t, b, x, y, z, ry, tilt) => out.push(new THREE.BoxGeometry(L, t, b).rotateZ(tilt).rotateY(ry).translate(x, y, z))
+  const inX = (L) => Math.max(0, w / 2 - L * 0.3), inZ = (L) => Math.max(0, d / 2 - L * 0.3)
+  for (let i = 0; i < 18; i++) {
+    const course = i % 3, L = 0.8 + rnd() * Math.min(2.4, w * 0.5), tight = 1 - course * 0.25
+    const x = (rnd() * 2 - 1) * inX(L) * tight, z = (rnd() * 2 - 1) * inZ(L) * tight
+    lay(i % 2 ? light : mid, L, 0.08, 0.4, x, 0.05 + course * 0.085, z, rnd() * Math.PI, (rnd() - 0.5) * 0.12 * (course + 1))
+  }
+  // the joists and braces, thrown across the planks
+  for (let i = 0; i < 4; i++) {
+    const L = i < 2 ? 2.2 + rnd() * 1.4 : 1.2 + rnd() * 1.2, t = i < 2 ? 0.22 : 0.1
+    lay(dark, L, t, i < 2 ? 0.26 : 0.12, (rnd() * 2 - 1) * inX(L) * 0.6, 0.2 + t / 2, (rnd() * 2 - 1) * inZ(L) * 0.6, rnd() * Math.PI, (rnd() - 0.5) * 0.2)
+  }
+  // the boarding's boards, at the heap's edges, and splinters
+  for (let i = 0; i < 6; i++) {
+    const side = i % 4, L = 1 + rnd() * 1.6
+    const x = side % 2 ? (side === 1 ? 1 : -1) * (w / 2 - 0.4) : (rnd() * 2 - 1) * inX(L), z = side % 2 ? (rnd() * 2 - 1) * inZ(L) : (side === 0 ? 1 : -1) * (d / 2 - 0.4)
+    lay(mid, L, 0.06, 0.3, x, 0.04, z, (side % 2 ? Math.PI / 2 : 0) + (rnd() - 0.5) * 0.5, (rnd() - 0.5) * 0.1)
+  }
+  for (let i = 0; i < 12; i++) lay(light, 0.18 + rnd() * 0.3, 0.05, 0.06, (rnd() * 2 - 1) * (w / 2), 0.03 + rnd() * 0.2, (rnd() * 2 - 1) * (d / 2), rnd() * Math.PI, (rnd() - 0.5) * 0.8)
+  g.add(merged(light, shade(color, 1.15)), merged(mid, shade(color, 0.8)), merged(dark, shade(color, 0.55)))
+  return g
+}
+
 // (V3d) The wrecks' decks, each drawn round its walkable top (w × d at h,
 // in the chunk's own frame): the top itself always a flat walk at h (planks
 // or a burned floor), so a figure standing on it stands on what it sees.
@@ -1009,10 +1081,13 @@ export class TerrainView {
   // leave round them, [{ x, z, r }], as it changes (view/index.js hands it
   // to the table's mat: view/table.js scorch); a table built off the page,
   // a snap check's, passes none)
-  constructor(scene, fx, { scorch = null } = {}) {
+  // ((F7c) `fast`, ?fast's: a falling platform drops in no animation
+  // there, its end state alone, at once)
+  constructor(scene, fx, { scorch = null, fast = false } = {}) {
     this.scene = scene
     this.effects = fx
     this.onScorch = scorch
+    this.fast = fast
     // (V3d) the burned turf, by chunk id: { x, z, r } (scorched), and its
     // signature as last handed on
     this.marks = new Map()
@@ -1095,6 +1170,22 @@ export class TerrainView {
     this.tile(item)
     this.ventOn(item)
     this.burnMark(c)
+    // ((F7c) a fallen platform's planks wait for their deck to land)
+    this.hold(item)
+  }
+
+  // (F7c) A fallen platform's planks (a timber rubble pile) joining while
+  // their deck is still dropping onto the spot (drop(): the cascade's
+  // terrain.add comes straight after the deck's and its ladders' breaks):
+  // hidden until it lands, then shown. A sync or a snap shows them at once
+  // (sync, reveal).
+  hold(item) {
+    if (item.c.kind !== 'rubble' || item.c.look.style !== 'timber') return
+    for (const it of this.items.values()) {
+      if (!it.drop || it.c.kind !== 'deck' || it.c.shape.x !== item.c.shape.x || it.c.shape.z !== item.c.shape.z) continue
+      item.obj.visible = false
+      it.drop.pile = item
+    }
   }
 
   // ── Fires and scorched turf (V3d) ─────────────────────────────────────────
@@ -1165,7 +1256,11 @@ export class TerrainView {
   // its chunk as it stands is kept (a block that dropped since is set at its
   // height); the rest are taken off and built as the chunk's events would
   // have left them, in chunk order (so a fresh table is built mesh for mesh
-  // as its adds build it).
+  // as its adds build it). ((F7c's review) A timber deck or ladder whose
+  // drop is under way (drop()) is never kept: sunk and tipped, no walkable
+  // top, and its tween would take it off the table as it ended, the match
+  // it is synced to standing it or not; it is freed (the tween stops on its
+  // token) and built again as the chunk stands.)
   sync(chunks) {
     this.freeSpares()
     const byId = new Map(chunks.map((c) => [c.id, c]))
@@ -1174,7 +1269,7 @@ export class TerrainView {
     for (const c of chunks) this.burnMark(c)
     for (const [id, item] of [...this.items]) {
       const c = byId.get(id)
-      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item))) continue
+      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item)) && !item.drop) continue
       this.free(item)
       this.items.delete(id)
     }
@@ -1195,6 +1290,9 @@ export class TerrainView {
           kept.obj.position.set(c.shape.x, c.shape.y, c.shape.z)
           kept.c = defOf(c)
         }
+        // ((F7c) a fallen platform's planks held for a drop the snap cut
+        // short: shown, the deck they waited on gone with it)
+        if (kept.c.kind === 'rubble' && kept.obj) kept.obj.visible = true
         // ((F8b) a chunk promoted out of its tile by an event whose
         // playback the snap cut short: back in it)
         this.tile(kept)
@@ -1241,7 +1339,10 @@ export class TerrainView {
     for (const { def, alive, tree } of list) {
       if (!alive) continue
       const item = this.items.get(def.id)
-      if (item?.obj && this.shows(item)) {
+      // ((F7c's review) one dropping is built again, as sync builds it)
+      if (item?.obj && this.shows(item) && !item.drop) {
+        // ((F7c) a fallen platform's planks shown, as sync shows them)
+        if (def.kind === 'rubble') item.obj.visible = true
         if (SET_Y.has(def.look.piece) && item.obj.position.y !== def.shape.y) {
           item.fall = null
           item.anims = 0
@@ -1273,9 +1374,10 @@ export class TerrainView {
   // (F7a) The walkable tops the table shows standing: the defs of its decks
   // and stairs (the reach overlay tints each, view/overlay.js), and the
   // invisible quads on them the picker casts at (input/picking.js).
+  // ((F7c) a deck dropping is none: drop())
   surfaces() {
     const out = []
-    for (const item of this.items.values()) if (item.c.surface && this.shows(item)) out.push(item.c)
+    for (const item of this.items.values()) if (item.c.surface && this.shows(item) && !item.drop) out.push(item.c)
     return out
   }
   // (each quad's world matrix brought up to date: a table drawn under ?fast
@@ -1283,7 +1385,7 @@ export class TerrainView {
   tops() {
     const out = []
     for (const item of this.items.values()) {
-      if (!item.c.surface || !this.shows(item)) continue
+      if (!item.c.surface || !this.shows(item) || item.drop) continue
       for (const o of item.obj.children) {
         if (!o.userData.top) continue
         o.updateWorldMatrix(true, false)
@@ -1295,7 +1397,7 @@ export class TerrainView {
   // the ladders the table shows standing: their defs (each with its link)
   ladders() {
     const out = []
-    for (const item of this.items.values()) if (item.c.link && this.shows(item)) out.push(item.c)
+    for (const item of this.items.values()) if (item.c.link && this.shows(item) && !item.drop) out.push(item.c)
     return out
   }
   // the highest walkable top the table shows at (x, z), 0 on the ground (the
@@ -1319,7 +1421,9 @@ export class TerrainView {
     const shown = !!item && this.shows(item)
     if (!shown) return { shown }
     const o = item.obj
-    return { shown, x: o.position.x, y: o.position.y, z: o.position.z, q: o.quaternion.toArray() }
+    // ((F7c) and whether it is drawn: by its own mesh, or by its tile; a
+    // fallen platform's planks held hidden while their deck drops are not)
+    return { shown, drawn: o.visible || !!item.tile, x: o.position.x, y: o.position.y, z: o.position.z, q: o.quaternion.toArray() }
   }
 
   // ── Tiles (F8b) ───────────────────────────────────────────────────────────
@@ -1554,9 +1658,13 @@ export class TerrainView {
       for (const id of t.parts.keys()) if (!t.ids.has(id)) bad.push(`chunk ${id}: drawn by tile ${t.at}, which it has left`)
     }
     // a standing chunk that could be tiled and isn't, or is hidden untiled
+    // ((F7c) but a fallen platform's planks, held hidden while their deck
+    // drops onto them: hold())
+    const held = new Set()
+    for (const item of this.items.values()) if (item.drop?.pile) held.add(item.drop.pile)
     for (const [id, item] of this.items) {
       if (!item.obj || item.obj.parent !== this.group || item.shared) continue
-      if (!item.tile && !item.obj.visible) bad.push(`chunk ${id}: neither in a tile nor shown`)
+      if (!item.tile && !item.obj.visible && !held.has(item)) bad.push(`chunk ${id}: neither in a tile nor shown`)
       if (this.tiled && !item.tile && this.tileable(item)) bad.push(`chunk ${id}: standing at rest but not in a tile`)
     }
     return { tiles: this.tiles.size, meshes, tiled, bad }
@@ -1802,10 +1910,146 @@ export class TerrainView {
         fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.35, color: stone ? '#a09a8a' : '#8a7458', life: 1.3 })
         break
       }
+      // (F7c) a timber platform's post shot out (or smashed): like a
+      // parapet, no rubble piece of its own (core's terrain adds none: it
+      // stood under its deck, with no nav effect), its splinters flying
+      // and a puff of dust at its foot; the deck it held creaks on the
+      // posts left (creak), unless this was the one that brings it down
+      case 'post': {
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, [c.look.chip ?? c.look.color, '#7a5232', '#5f3e24'], 14, { from, power: 5, size: 0.1 })
+        fx.smoke({ x: s.x, y: 0.3, z: s.z, size: 0.4, color: '#8a7458', life: 1.3 })
+        this.creak(c.id)
+        break
+      }
+      // (F7c) the platform itself falling once enough of its posts are
+      // down (core's cascade: the deck, then each ladder standing on it),
+      // each dropping and breaking up as it lands (drop), its planks' heap
+      // the terrain.add that follows
+      case 'deck':
+      case 'ladder':
+        this.drop(v, from)
+        break
     }
-    // the break's sound: stone crumbles, the rest thwacks
+    // the break's sound: stone crumbles, the rest thwacks ((F7c) a falling
+    // deck and its ladders as they land: drop)
     if (c.kind === 'block' || (c.kind === 'parapet' && c.look.material === 'stone')) sfx.crumble()
-    else sfx.thwack()
+    else if (c.kind !== 'deck' && c.kind !== 'ladder') sfx.thwack()
+  }
+
+  // (F7c) Post `postId` gone from under a deck that still stands on the
+  // rest: the deck creaks and shudders on them (a third of a second,
+  // sideways, then back where it stood), out of its tile while it does and
+  // back in it after (promote, settle), as a hurt chunk shudders. Its deck:
+  // the one that lists the post in its supports, still shown and not
+  // dropping (a deck this post brings down drops instead, its break the
+  // next event). Token-checked, as a hurt's shudder is: a drop or a sync
+  // that takes the deck off stops it. Cosmetic, on Math.random.
+  creak(postId) {
+    for (const v of this.items.values()) {
+      if (v.c.kind !== 'deck' || !v.c.supports?.includes(postId) || !this.shows(v) || v.drop) continue
+      const m = v.obj, p0 = m.position.clone()
+      this.promote(v)
+      const shake = (v.shake = {})
+      tween(0.35, (k) => {
+        if (v.shake !== shake || v.drop) return
+        const a = (1 - k) * 0.05
+        m.position.x = p0.x + (Math.random() - 0.5) * a
+        m.position.z = p0.z + (Math.random() - 0.5) * a
+      }).then(() => {
+        if (v.shake === shake && !v.drop) {
+          v.shake = null
+          m.position.x = p0.x
+          m.position.z = p0.z
+        }
+        this.settle(v.c.id, v)
+      })
+      sfx.thwack()
+    }
+  }
+
+  // (F7c) A timber platform's deck, or a ladder standing on it, falling
+  // with it (core/terrain/terrain.js's cascade). Out of its tile already
+  // (destroy's promote: the tile merged again without it, as on any
+  // break). Under ?fast, the end state alone: off the table at once, its
+  // splinters thrown. Otherwise it drops: the deck sags toward the posts
+  // that went (DROP_SAG s, tipping DROP_TIP), then falls flat under its own
+  // weight (DROP_FALL s, easeIn) until its walk lies a few tenths over the
+  // ground, its boarding and frame sunk out of sight, and there breaks up:
+  // planks and dust thrown from its corners and its middle, a thud and a
+  // shake, and it goes, its planks' heap (held hidden until then: hold())
+  // showing where it lay. A ladder topples outward from its foot over the
+  // same time, away from the deck's face, and splinters where it lands.
+  // While dropping an item is no walkable top and no ladder (surfaces(),
+  // tops(), ladders(): the figures falling with it, view/units.js fell,
+  // land on the ground under it); a sync or a snap that takes it off the
+  // table stops it (the token, as a block's fall's). Cosmetic, on
+  // Math.random (the splinters and dust).
+  drop(v, from) {
+    const c = v.c, o = v.obj, fx = this.effects
+    v.shake = null
+    const deck = c.kind === 'deck'
+    const s = c.shape, h = c.look.h ?? 2
+    // the burst where it lands: on the deck's footprint or along the ladder
+    const burst = () => {
+      if (deck) {
+        const co = Math.cos(s.yaw ?? 0), sn = Math.sin(s.yaw ?? 0), cs = [c.look.color, shade(c.look.color, 1.15), shade(c.look.color, 0.7), '#5f3e24']
+        for (const [lx, lz] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+          const x = s.x + (co * lx * s.hx + sn * lz * s.hz) * 0.7, z = s.z + (-sn * lx * s.hx + co * lz * s.hz) * 0.7
+          fx.debris(x, 0.4, z, cs, lx || lz ? 7 : 12, { from, power: 4, size: 0.14 })
+          fx.smoke({ x, y: 0.3, z, size: lx || lz ? 0.6 : 0.9, color: '#9a8a70', life: 1.8 })
+        }
+        fx.shake = Math.max(fx.shake ?? 0, 0.12)
+        sfx.crumble()
+        sfx.boom?.(0.3)
+      } else {
+        fx.debris(s.x, 0.2, s.z, [c.look.color, '#5f3e24'], 8, { from, power: 3, size: 0.1 })
+        sfx.thwack()
+      }
+    }
+    if (this.fast || !o?.parent) {
+      if (o?.parent) this.group.remove(o)
+      return burst()
+    }
+    const token = (v.drop = { pile: null })
+    const live = () => v.drop === token && this.items.get(c.id) === v && o.parent === this.group
+    let step
+    if (deck) {
+      // toward the posts that went (their places as the table drew them),
+      // else straight down
+      let dx = 0, dz = 0
+      for (const id of c.supports ?? []) {
+        const p = this.items.get(id)
+        if (p && !this.shows(p)) (dx += p.c.shape.x - s.x), (dz += p.c.shape.z - s.z)
+      }
+      const L = Math.hypot(dx, dz)
+      const axis = L > 1e-6 ? new THREE.Vector3(dz / L, 0, -dx / L) : null
+      const q0 = o.quaternion.clone(), tip = new THREE.Quaternion()
+      step = (sag, fall) => {
+        if (axis) o.quaternion.copy(q0).premultiply(tip.setFromAxisAngle(axis, DROP_TIP * (0.4 * sag + 0.6 * fall)))
+        o.position.y = -(h - 0.3) * fall
+      }
+    } else {
+      // (about its foot, LADDER_LEAN out from the strip's centre, toward
+      // its own −z)
+      const part = o.children[0], P = LADDER_LEAN
+      step = (sag, fall) => {
+        if (!part) return
+        const a = -1.45 * (0.15 * sag + 0.85 * fall)
+        part.rotation.x = a
+        part.position.set(0, -P * Math.sin(a), -P + P * Math.cos(a))
+      }
+    }
+    tween(DROP_SAG, (k) => live() && step(k, 0), easeOut)
+      .then(() => live() && tween(DROP_FALL, (k) => live() && step(1, k), easeIn))
+      .then(() => {
+        if (!live()) return
+        v.drop = null
+        this.group.remove(o)
+        const pile = token.pile
+        if (pile && this.items.get(pile.c.id) === pile && pile.obj) pile.obj.visible = true
+        burst()
+      })
   }
 
   // Blocks above a gap drop into it, each from where it is drawn to where

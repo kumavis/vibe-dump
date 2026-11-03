@@ -37,7 +37,9 @@
 //    ends nearest an enemy), which is what wipes an army out. Every apply must
 //    succeed, the battle must end within a bound, and between commands:
 //    the match waits on someone exactly while it isn't over, only on human
-//    seats; the nav grid is never dirty (§4.1 rule 9); every standing unit
+//    seats; the nav grid is never dirty (§4.1 rule 9), (F7c) no fallen deck
+//    is left in terrain.dropped and no plan memo open (rules 20 and 21);
+//    every standing unit
 //    is on the table; the dice are unlocked; the trace and the dice only
 //    go forward; and G holds no closure, promise or generator but its two
 //    I/O fields (§0.2 #12). At the end the result agrees with the score,
@@ -554,6 +556,10 @@ function invariants(core, G, where, last) {
   if (G.pending && !G.pending.seats.every((s) => human.includes(s))) throw new Error(`${where}: waiting on a seat no human plays: ${JSON.stringify(G.pending)}`)
   if (!['deploy', 'battle', 'over'].includes(T.stage)) throw new Error(`${where}: stage ${T.stage}`)
   if (G.terrain.dirty) throw new Error(`${where}: the nav grid is dirty between commands (§4.1 rule 9)`)
+  // (F7c, DESIGN §4.2.9's P-prop row: §4.1 rules 20 and 21) no fallen deck
+  // left unsettled, and no plan memo left open, between two commands
+  if (G.terrain.dropped?.length) throw new Error(`${where}: ${G.terrain.dropped.length} fallen deck(s) left in terrain.dropped between commands (§4.1 rule 20: settle empties it)`)
+  if (G.nav.memo != null) throw new Error(`${where}: the plan memo (G.nav.memo) left open between commands (§4.1 rule 21)`)
   if (G.rng.locked) throw new Error(`${where}: the dice are left locked`)
   const { W, H } = G.nav
   for (const u of G.units) {
@@ -1449,8 +1455,9 @@ const V1_PINS = {
 // serpent-random-2 played again by its bot, and V3d's Powder Field, which
 // no pinned match is fought on: data-check's V12; 13, F7b's parapets
 // (built as 8 on 7), which stand on fortified boards alone: the pins as
-// under 12)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+// under 12; 14, F7c's collapsing platforms, on fortified boards alone:
+// the pins as under 13)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 const PINS_UNDER = (v) => (v >= 12
   ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
   : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
@@ -1827,7 +1834,12 @@ function heightRules(core, G, where, rand) {
     for (const u of G.units) if (q.groundY(G, u) !== 0) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)} on a ${G.setup.terrain} board`)
     return 0
   }
-  if (!nav.hasHeight) throw new Error(`${where}: a fortified board built no height layer`)
+  // ((F7c) a board whose every raised piece has fallen builds none: the
+  // platforms the only ones it stood, all shot out)
+  if (!nav.hasHeight) {
+    if (G.terrain.chunks.some((c) => c.alive && (c.surface || c.link))) throw new Error(`${where}: a fortified board built no height layer`)
+    return 1
+  }
   const live = G.units.filter((u) => q.alive(u))
   for (const u of live) {
     const i = nav.index(u.pos.x, u.pos.z)
@@ -1877,6 +1889,9 @@ function heightEvents(G, events, where) {
     } else if (e.t === 'unit.place' || e.t === 'unit.formation') {
       const has = e.t === 'unit.place' ? 'y' in e : 'y' in e.pos
       if (high !== has) throw new Error(`${where}: a ${e.t} ${high ? 'without' : 'with'} its floor on a board ${high ? 'with' : 'without'} height: ${JSON.stringify(e).slice(0, 160)}`)
+    } else if (e.t === 'unit.fall') {
+      // (F7c) a unit falls with its deck onto the ground, from above STEP
+      if (!(e.to?.y <= 0.4) || !(e.dy > 0.4)) throw new Error(`${where}: unit ${e.u} fell ${e.dy}" to a floor of ${e.to?.y}: ${JSON.stringify(e).slice(0, 160)}`)
     }
   }
 }
@@ -2908,6 +2923,578 @@ function fightTask(core, mods) {
 //    enemy could set it off (score's term: a cell's score with the keg
 //    standing below the same with it gone).
 // Every scene must be met, or the run says which it never met and fails.
+// (F7c) P-height's collapse: DESIGN §4.2.4's "Destruction and settle" and
+// §4.1 rule 17, on scenes of its own (a post breaks too seldom in the random
+// games and the corpus for them to judge it), on the first COLLAPSE_PLATFORMS
+// fortified boards that stand a timber platform (its deck's `fallsAt`), each
+// scene on a fresh match, every unit but the scene's off the table (only):
+//  - the cascade: the deck's posts broken one by one (Terrain.hurt, 99): the
+//    deck stands until fallsAt of them are down and falls then, not before;
+//    its fall reported as the post's break, the deck's, its ladders' (every
+//    chunk standing on it by `on`, in chunk order) and a pile of planks
+//    joining, the pile a chunk of kind 'rubble' over the deck's own
+//    footprint (its place, half-sizes and yaw) on the ground, difficult,
+//    obscuring and in cover, unbreakable; the deck and nothing else in
+//    `dropped`; and once the nav follows (refreshNav), every cell whose
+//    centre lies in the footprint ground again (floor within STEP, level 0)
+//    and difficult, no link left at its ladders' ends and no gate of them;
+//    a post more breaks nothing more and drops it no second time; and
+//    settle empties `dropped`;
+//  - staying: a squad on the deck by its centre and a hero of the other
+//    side clear of it on the same deck (when the deck fits both): each
+//    falls where it stood (its cell ground, standable and clear), the
+//    events one `unit.fall` per unit in G.units order (`to` where it stands
+//    and its floor, `dy` the deck's top less it), each followed by its dice
+//    row, the D3 of one D6 drawn in that order from a copy of the stream
+//    (ceil(d6 / 2)), exactly one draw a unit, and each unit's wounds that
+//    many fewer (or none left); `dropped` empty and the nav clean after;
+//  - moving: a squad on the deck with the deck's footprint made hard under
+//    it (a scene chunk standing on the ground there, so it can't stay), an
+//    enemy on the ground at the deck's foot beside it: it lands on the cell a
+//    reference search gives, the nearest to it within u.r + 6" that is on
+//    the ground, standable for it, outside its enemies' 1" (forbidMask) and
+//    clear of every other unit by o.r + u.r + 0.08, ties to the lowest
+//    index, its centre on that cell's;
+//  - crushed: the same with every cell within that reach made hard: its
+//    fall reported where it stood, every model slain by nobody, no die
+//    drawn;
+//  - the three sites: a template (the Trebuchet's) landing on the deck's
+//    centre through blastLands until the deck falls, a move (doMove, of a
+//    unit standing still) and a charge (finishCharge) each ending after the
+//    deck fell: the squad on it has fallen when each returns, and
+//    `dropped` is empty and the nav clean;
+//  - (the review) the rule's edges: the reach (the ground hard round the
+//    deck out to where the nearest standable ground cell lies within
+//    0.25" inside u.r + 6": it lands there; within 0.25" past it: it is
+//    crushed), the ground (a raised top nearer than any ground: it lands
+//    on the ground), the spacing (a second unit's rim 0-0.08" past the
+//    first's: the first can't stay and lands, the second then stays), two
+//    decks in one settle (the later deck dropped first, the unit earlier
+//    in G.units on it: the falls in the decks' chunk order, a D6 each in
+//    that order), and a crushed unit's flags and labels told after it;
+//  - (the AI, rule 10) a gun's template at a squad on the deck, the gun on
+//    the ground 10-20" off: worth the squad's fall (fallGain above 0, and
+//    the shot valued more than with the deck made one that never falls),
+//    and with a friend of the gun's beside the squad on the deck, worth
+//    less (its own side's fall weighed against it).
+const COLLAPSE_PLATFORMS = 6, COLLAPSE_BOARDS = 300
+function collapseTask(core, mods) {
+  const q = core.q, STEP = mods.nav.STEP, ENGAGE = mods.rules.ENGAGE
+  const counts = { platforms: 0, cascades: 0, notBefore: 0, ladders: 0, piles: 0, groundCells: 0, after: 0, stays: 0, pairs: 0, moved: 0, bubbled: 0, crushed: 0, d3: 0, blasts: 0, moves: 0, charges: 0, aiValues: 0, aiOwn: 0, reachIn: 0, reachOut: 0, groundOnly: 0, spaced: 0, twoDecks: 0 }
+  const SEATS = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
+  const at = (u, nav, i) => {
+    u.pos.x = nav.x(i)
+    u.pos.z = nav.z(i)
+  }
+  const byId = (G, id) => G.terrain.chunks.find((c) => c.id === id)
+  // (x, z) inside box s's footprint (its own frame, the rasters' turn)
+  const inside = (s, x, z) => {
+    const c = Math.cos(s.yaw), sn = Math.sin(s.yaw), dx = x - s.x, dz = z - s.z
+    return Math.abs(dx * c - dz * sn) <= s.hx + 1e-6 && Math.abs(dx * sn + dz * c) <= s.hz + 1e-6
+  }
+  const wounds = (u) => u.models.reduce((s, m) => s + (m.alive ? m.w : 0), 0)
+  const clearOf = (G, u, x, z) => G.units.every((o) => o === u || !q.alive(o) || o.aboard || Math.hypot(o.pos.x - x, o.pos.z - z) >= o.r + u.r + 0.08)
+  const modeOf = (u) => (u.t.move === 'wreck' ? 'wreck' : 'walk')
+  // fallsAt of deck d's posts broken, in its supports' order (no settle:
+  // the scene's own call follows)
+  const fell = (G, d, out = null) => {
+    for (const id of d.supports.slice(0, d.fallsAt)) {
+      const p = byId(G, id)
+      G.terrain.hurt(p, 99, { x: p.shape.x + 1, z: p.shape.z }, out, [])
+    }
+    if (d.alive) throw new Error(`P-height (F7c): deck ${d.id} stands with ${d.fallsAt} of its posts broken (it falls at ${d.fallsAt})`)
+  }
+  // the deck top cells standable for a disc of r (inside the footprint, at
+  // its top's floor)
+  const tops = (G, d, r) => {
+    const nav = G.nav, out = []
+    for (let i = 0; i < nav.N; i++) if (inside(d.shape, nav.x(i), nav.z(i)) && nav.floor[i] > STEP && nav.standable(i, r, 'walk')) out.push(i)
+    return out
+  }
+  const climbers = (G, side) => G.units.filter((u) => u.side === side && u.t.climb && !u.t.fly)
+  // the reference: where u lands when it can't stay (DESIGN's rule, by a
+  // search of every cell in index order), with or without the bubbles
+  // ((the review) and, for the edges' scenes, with another reach or any
+  // floor)
+  const landing = (G, u, bubbles = true, reach = 6, ground = true) => {
+    const nav = G.nav, forbid = bubbles ? q.forbidMask(G, u, ENGAGE + 0.05) : null
+    let best = -1, bd = Infinity
+    for (let i = 0; i < nav.N; i++) {
+      const d = Math.hypot(nav.x(i) - u.pos.x, nav.z(i) - u.pos.z)
+      if (d > u.r + reach || !(d < bd)) continue
+      if (ground && nav.hasHeight && nav.floor[i] > STEP) continue
+      if (!nav.standable(i, u.r, modeOf(u), forbid) || !clearOf(G, u, nav.x(i), nav.z(i))) continue
+      bd = d
+      best = i
+    }
+    return best
+  }
+  // a scene chunk on the ground over box s (grown by `grow`), hard: what a
+  // unit falling there can't stand on
+  const hardOver = (G, s, grow) => {
+    const c = { id: -7, kind: 'scene', alive: true, destructible: false, hp: Infinity, maxHp: Infinity, navKind: 'hard', los: null, cover: false, look: {}, shape: { x: s.x, y: 0.5, z: s.z, hx: s.hx + grow, hy: 0.5, hz: s.hz + grow, yaw: s.yaw, reach: Math.hypot(s.hx + grow, s.hz + grow) + 0.05 } }
+    G.terrain.chunks.push(c)
+    G.terrain.dirty = true
+    return c
+  }
+  // the falls the scene's events report, each with its dice row
+  const fallsIn = (G, events, where) => {
+    const out = []
+    for (let k = 0; k < events.length; k++) {
+      const e = events[k]
+      if (e.t !== 'unit.fall') continue
+      const u = G.units.find((x) => x.id === e.u)
+      const row = events.slice(k + 1).find((x) => x.t === 'dice' || x.t === 'unit.fall')
+      out.push({ e, u, row: row?.t === 'dice' && row.label === `${u.t.short}: the fall, D3 mortal wounds` ? row : null })
+    }
+    for (const { e, u } of out) {
+      if (!e.to || !('y' in e.to)) throw new Error(`${where}: unit ${u.id}'s unit.fall carries no floor: ${JSON.stringify(e)}`)
+      if (e.to.y > STEP || !(e.dy > STEP)) throw new Error(`${where}: unit ${u.id} fell ${e.dy}" to a floor of ${e.to.y}: ${JSON.stringify(e)}`)
+    }
+    return out
+  }
+  const after = (G, where) => {
+    if (G.terrain.dropped.length) throw new Error(`${where}: ${G.terrain.dropped.length} deck(s) left in terrain.dropped after the settle (§4.1 rule 20)`)
+    if (G.terrain.dirty) throw new Error(`${where}: the nav grid is dirty after the settle`)
+    counts.after++
+  }
+  let board = 0
+  while (counts.platforms < COLLAPSE_PLATFORMS && board < COLLAPSE_BOARDS) {
+    board++
+    const fresh = () => core.createMatch({ board, dice: board, terrain: 'fortified', seats: SEATS })
+    const G0 = fresh()
+    const d0 = G0.terrain.chunks.find((c) => c.kind === 'deck' && c.fallsAt !== undefined)
+    if (!d0) continue
+    counts.platforms++
+    const where = `P-height (F7c), fortified board ${board}, the ${d0.look.recipe}'s deck ${d0.id}`
+    const deckOf = (G) => byId(G, d0.id)
+    // the cascade
+    {
+      const G = fresh(), d = deckOf(G), T = G.terrain
+      const posts = d.supports.map((id) => byId(G, id)), ladders = T.chunks.filter((c) => c.on === d.id)
+      if (!ladders.length) throw new Error(`${where}: no ladder stands on it`)
+      const n0 = T.chunks.length
+      for (let k = 1; k <= posts.length; k++) {
+        const out = [], p = posts[k - 1]
+        T.hurt(p, 99, { x: p.shape.x + 1, z: p.shape.z }, out, [])
+        if (p.alive) throw new Error(`${where}: post ${p.id} hit for 99 stands (hp ${p.hp})`)
+        const down = k >= d.fallsAt
+        if (d.alive === down) throw new Error(`${where}: with ${k} of its ${posts.length} posts down (it falls at ${d.fallsAt}) the deck ${d.alive ? 'stands' : 'has fallen'}`)
+        const told = out.map((e) => (e.t === 'terrain.add' ? `add:${e.def.kind}` : e.t === 'terrain.destroy' ? `destroy:${e.id}` : e.t)).join(' ')
+        if (!down) {
+          if (ladders.some((l) => !l.alive) || T.dropped.length || T.chunks.length !== n0 || told !== `destroy:${p.id}`) throw new Error(`${where}: with ${k} post(s) down, before it falls, a ladder fell, a deck was dropped or a chunk joined: ${told}`)
+          counts.notBefore++
+          continue
+        }
+        if (k > d.fallsAt) {
+          if (told !== `destroy:${p.id}` || T.dropped.length !== 1 || T.chunks.length !== n0 + 1) throw new Error(`${where}: post ${k} of a fallen deck broken: ${told}, ${T.dropped.length} dropped`)
+          continue
+        }
+        const want = [`destroy:${p.id}`, `destroy:${d.id}`, ...ladders.map((l) => `destroy:${l.id}`), 'add:rubble'].join(' ')
+        if (told !== want) throw new Error(`${where}: its fall reported as ${told}, not ${want}`)
+        if (ladders.some((l) => l.alive)) throw new Error(`${where}: a ladder stands on the fallen deck`)
+        if (T.dropped.length !== 1 || T.dropped[0] !== d) throw new Error(`${where}: terrain.dropped holds ${T.dropped.map((c) => c.id).join(', ') || 'nothing'}, not the fallen deck alone`)
+        if (!T.dirty) throw new Error(`${where}: the deck fell with the nav grid clean`)
+        const pile = T.chunks[n0], s = pile?.shape, D = d.shape
+        const ok = pile && pile.kind === 'rubble' && pile.alive && !pile.destructible && pile.navKind === 'diff' && pile.los === 'obscure' && pile.cover &&
+          s.x === D.x && s.z === D.z && s.yaw === D.yaw && s.hx === D.hx && s.hz === D.hz && Math.abs(s.y - s.hy) <= 1e-12
+        if (!ok) throw new Error(`${where}: the pile where it stood is ${JSON.stringify(pile && { kind: pile.kind, navKind: pile.navKind, los: pile.los, cover: pile.cover, shape: s })}, not a difficult, obscuring heap in cover on the ground over the deck's footprint`)
+        counts.cascades++
+        counts.ladders += ladders.length
+        counts.piles++
+        mods.match.refreshNav(G)
+        const nav = G.nav
+        for (let i = 0; i < nav.N; i++) {
+          if (!inside(D, nav.x(i), nav.z(i))) continue
+          if (nav.hasHeight && (nav.floor[i] > STEP || nav.level[i] !== 0)) throw new Error(`${where}: cell ${i} under the fallen deck stands at ${nav.floor[i]} (level ${nav.level[i]}), not ground`)
+          if (!nav.diff[i]) throw new Error(`${where}: cell ${i} under the fallen deck isn't difficult (its planks)`)
+          counts.groundCells++
+        }
+        for (const l of ladders) {
+          const f = nav.index(l.link.foot.x, l.link.foot.z), t = nav.index(l.link.top.x, l.link.top.z)
+          if (nav.hasHeight && (nav.linkCostOf(f, t) >= 0 || nav.linkCostOf(t, f) >= 0 || nav.gates.some((g) => g.id === l.id))) throw new Error(`${where}: the fallen ladder ${l.id} still joins cell ${f} to cell ${t}, or stands among the gates`)
+        }
+      }
+      mods.match.refreshNav(G)
+      mods.settle.settle(G)
+      after(G, `${where}, the cascade`)
+    }
+    // staying, a squad and (when the deck fits both) a hero of the other side
+    {
+      const G = fresh(), d = deckOf(G), nav = G.nav
+      const a = climbers(G, 1).reduce((x, y) => (y.r > x.r ? y : x)), b = climbers(G, 0).reduce((x, y) => (y.r < x.r ? y : x))
+      const ta = tops(G, d, a.r)
+      if (!ta.length) throw new Error(`${where}: no top cell holds the ${a.t.short} (r ${a.r})`)
+      const ia = ta.reduce((x, y) => (Math.hypot(nav.x(y) - d.shape.x, nav.z(y) - d.shape.z) < Math.hypot(nav.x(x) - d.shape.x, nav.z(x) - d.shape.z) ? y : x))
+      const tb = tops(G, d, b.r).filter((i) => Math.hypot(nav.x(i) - nav.x(ia), nav.z(i) - nav.z(ia)) >= a.r + b.r + 0.08)
+      const ib = tb.length ? tb.reduce((x, y) => (Math.hypot(nav.x(y) - nav.x(ia), nav.z(y) - nav.z(ia)) > Math.hypot(nav.x(x) - nav.x(ia), nav.z(x) - nav.z(ia)) ? y : x)) : -1
+      const on = (ib >= 0 ? [a, b] : [a]).sort((x, y) => G.units.indexOf(x) - G.units.indexOf(y))
+      only(G, on, () => {
+        at(a, nav, ia)
+        if (ib >= 0) at(b, nav, ib)
+        const pos = new Map(on.map((u) => [u, { x: u.pos.x, z: u.pos.z }])), w0 = new Map(on.map((u) => [u, wounds(u)]))
+        fell(G, d)
+        mods.match.refreshNav(G)
+        const stay = new Map(on.map((u) => [u, nav.standable(nav.index(u.pos.x, u.pos.z), u.r, modeOf(u), null) && clearOf(G, u, u.pos.x, u.pos.z)]))
+        const r = { ...G.rng }, n0 = G.rng.n
+        G.out = []
+        try {
+          mods.settle.settle(G)
+          const falls = fallsIn(G, G.out, where)
+          if (falls.map((f) => f.u.id).join() !== on.map((u) => u.id).join()) throw new Error(`${where}: the units on the deck fell as ${falls.map((f) => f.u.id).join(', ') || 'none'}, not in G.units order (${on.map((u) => u.id).join(', ')})`)
+          if (G.rng.n - n0 !== on.length) throw new Error(`${where}: the settle of ${on.length} unit(s) drew ${G.rng.n - n0} dice, not one D6 each`)
+          for (const { e, u, row } of falls) {
+            const d3 = Math.ceil((1 + Math.floor(mods.rng.draw(r) * 6)) / 2)
+            if (!row || row.dice[0] !== d3) throw new Error(`${where}: unit ${u.id}'s fall's dice row ${JSON.stringify(row)}, not its D3 of ${d3} (the stream's next D6 halved up, in G.units order)`)
+            if (w0.get(u) - wounds(u) !== Math.min(d3, w0.get(u))) throw new Error(`${where}: unit ${u.id} took ${w0.get(u) - wounds(u)} wounds from a fall's D3 of ${d3} (it had ${w0.get(u)})`)
+            const p = pos.get(u)
+            if (stay.get(u) && (u.pos.x !== p.x || u.pos.z !== p.z)) throw new Error(`${where}: unit ${u.id} could stay where it stood at (${p.x}, ${p.z}), but stands at (${u.pos.x}, ${u.pos.z})`)
+            if (e.to.x !== u.pos.x || e.to.z !== u.pos.z || e.to.y !== q.groundY(G, u) || e.dy !== d.surface.y - e.to.y) throw new Error(`${where}: unit ${u.id}'s unit.fall ${JSON.stringify(e)} isn't where it stands, its floor and the deck's height above it`)
+            if (q.alive(u) && q.groundY(G, u) > STEP) throw new Error(`${where}: unit ${u.id} stands at ${q.groundY(G, u)} after its fall`)
+            if (stay.get(u)) counts.stays++
+            counts.d3++
+          }
+          if (on.length > 1) counts.pairs++
+          after(G, `${where}, staying`)
+        } finally {
+          G.out = null
+        }
+      })
+    }
+    // moving and crushed, the deck's footprint (or all its reach) made hard
+    for (const crush of [false, true]) {
+      const G = fresh(), d = deckOf(G), nav = G.nav
+      const u = climbers(G, 1).reduce((x, y) => (y.r > x.r ? y : x)), e = G.units.find((x) => x.side === 0 && !x.t.fly && x.t.climb)
+      const ta = tops(G, d, u.r)
+      only(G, [u, e], () => {
+        at(u, nav, ta[0])
+        const p0 = { x: u.pos.x, z: u.pos.z }, alive0 = u.alive
+        fell(G, d)
+        hardOver(G, d.shape, crush ? u.r + 7 : 0)
+        mods.match.refreshNav(G)
+        // the enemy on the ground just past where the squad would land were
+        // it not there (its centre e.r + u.r + 0.5 beyond that cell, away
+        // from the squad, on the nearest cell it stands on): that cell clear
+        // of it, but in its 1"
+        const e0 = e.alive
+        e.alive = 0
+        const free = landing(G, u, false)
+        e.alive = e0
+        if (free >= 0) {
+          const L = Math.hypot(nav.x(free) - u.pos.x, nav.z(free) - u.pos.z) || 1, k = (e.r + u.r + 0.5) / L
+          const px = nav.x(free) + (nav.x(free) - u.pos.x) * k, pz = nav.z(free) + (nav.z(free) - u.pos.z) * k
+          let ie = -1, be = Infinity
+          for (let i = 0; i < nav.N; i++) {
+            const dd = Math.hypot(nav.x(i) - px, nav.z(i) - pz)
+            if (dd < be && nav.floor[i] <= STEP && nav.standable(i, e.r, 'walk') && clearOf(G, e, nav.x(i), nav.z(i))) (be = dd), (ie = i)
+          }
+          if (ie >= 0) at(e, nav, ie)
+        }
+        const want = landing(G, u), loose = landing(G, u, false)
+        const r0 = G.rng.n
+        G.out = []
+        try {
+          mods.settle.settle(G)
+          const falls = fallsIn(G, G.out, where)
+          if (falls.length !== 1 || falls[0].u !== u) throw new Error(`${where}: ${crush ? 'crushed' : 'moving'}, the falls reported ${falls.map((f) => f.u.id).join(', ') || 'none'}, not unit ${u.id}'s alone`)
+          if (crush) {
+            if (want >= 0) throw new Error(`${where}: the scene left cell ${want} to land on`)
+            const slain = G.out.filter((x) => x.t === 'unit.slain' && x.u === u.id)
+            if (q.alive(u) || slain.length !== alive0 || slain.some((x) => x.by !== null)) throw new Error(`${where}: with nowhere to land unit ${u.id} lost ${slain.length} of its ${alive0} models, ${slain.filter((x) => x.by !== null).length} of them to someone`)
+            if (G.rng.n !== r0) throw new Error(`${where}: a crushed unit's fall drew ${G.rng.n - r0} dice`)
+            // ((the review) and the flags and labels told after it, as a
+            // landed unit's are: killModel tells neither)
+            const last = G.out.findLastIndex((x) => x.t === 'unit.slain' && x.u === u.id)
+            if (!G.out.slice(last + 1).some((x) => x.t === 'status') || !G.out.slice(last + 1).some((x) => x.t === 'objectives')) throw new Error(`${where}: a crushed unit's fall tells no objectives or status after its models are slain`)
+            if (u.pos.x !== p0.x || u.pos.z !== p0.z || falls[0].e.to.x !== p0.x || falls[0].e.to.z !== p0.z) throw new Error(`${where}: the crushed unit ${u.id} moved, or fell elsewhere than where it stood`)
+            counts.crushed++
+          } else {
+            if (want < 0) throw new Error(`${where}: the scene left nowhere to land within ${u.r + 6}"`)
+            if (u.pos.x !== nav.x(want) || u.pos.z !== nav.z(want)) throw new Error(`${where}: unit ${u.id} landed at (${u.pos.x}, ${u.pos.z}), not on cell ${want} (${nav.x(want)}, ${nav.z(want)}): the nearest on the ground within u.r + 6", standable, outside its enemies' 1" and clear, ties to the lowest index`)
+            if (G.rng.n - r0 !== 1) throw new Error(`${where}: a unit's fall drew ${G.rng.n - r0} dice, not one D6`)
+            counts.moved++
+            if (loose !== want) counts.bubbled++
+          }
+          after(G, `${where}, ${crush ? 'crushed' : 'moving'}`)
+        } finally {
+          G.out = null
+        }
+      })
+    }
+    // ((the review) the rule's edges, each on a scene of its own)
+    const big = (G) => climbers(G, 1).reduce((x, y) => (y.r > x.r ? y : x))
+    const centre = (G, d, r) => {
+      const nav = G.nav, ta = tops(G, d, r)
+      if (!ta.length) throw new Error(`${where}: no top cell holds a disc of r ${r}`)
+      return ta.reduce((x, y) => (Math.hypot(nav.x(y) - d.shape.x, nav.z(y) - d.shape.z) < Math.hypot(nav.x(x) - d.shape.x, nav.z(x) - d.shape.z) ? y : x))
+    }
+    // the ring of hard ground round box s grown by g
+    const grow = (G, s, ring, g) => {
+      Object.assign(ring.shape, { hx: s.hx + g, hz: s.hz + g, reach: Math.hypot(s.hx + g, s.hz + g) + 0.05 })
+      G.terrain.dirty = true
+      mods.match.refreshNav(G)
+    }
+    //  - the reach: a hard ring round the fallen deck grown (by 0.05") until
+    //    the nearest standable ground cell lies past u.r + 6": at the last
+    //    ring short of that, the cell within 0.25" inside the edge, the
+    //    unit lands there (one D6); at the first past it, within 0.25"
+    //    past the edge, it is crushed (no die)
+    {
+      let gIn = -1, gOut = -1
+      {
+        const G = fresh(), d = deckOf(G), nav = G.nav, v = big(G), R = v.r + 6
+        only(G, [v], () => {
+          at(v, nav, centre(G, d, v.r))
+          fell(G, d)
+          const ring = hardOver(G, d.shape, 0)
+          let last = -1, lastD = Infinity
+          for (let k = 0; k <= 160; k++) {
+            grow(G, d.shape, ring, k * 0.05)
+            const i = landing(G, v, true, Infinity)
+            const D = i < 0 ? Infinity : Math.hypot(nav.x(i) - v.pos.x, nav.z(i) - v.pos.z)
+            if (D <= R) {
+              last = k * 0.05
+              lastD = D
+              continue
+            }
+            if (last >= 0 && R - lastD <= 0.25 && D - R <= 0.25) (gIn = last), (gOut = k * 0.05)
+            break
+          }
+        })
+      }
+      for (const [g, lands] of gIn < 0 ? [] : [[gIn, true], [gOut, false]]) {
+        const G = fresh(), d = deckOf(G), nav = G.nav, v = big(G)
+        only(G, [v], () => {
+          at(v, nav, centre(G, d, v.r))
+          fell(G, d)
+          grow(G, d.shape, hardOver(G, d.shape, 0), g)
+          const want = landing(G, v), far = landing(G, v, true, Infinity), r0 = G.rng.n, R = v.r + 6
+          const D = far < 0 ? Infinity : Math.hypot(nav.x(far) - v.pos.x, nav.z(far) - v.pos.z)
+          G.out = []
+          try {
+            mods.settle.settle(G)
+            const falls = fallsIn(G, G.out, where)
+            if (falls.length !== 1 || falls[0].u !== v) throw new Error(`${where}: at the reach's edge the falls reported ${falls.map((f) => f.u.id).join(', ') || 'none'}, not unit ${v.id}'s alone`)
+            if (lands) {
+              if (want < 0 || !q.alive(v) || v.pos.x !== nav.x(want) || v.pos.z !== nav.z(want)) throw new Error(`${where}: with the nearest ground ${D.toFixed(3)}" off, inside u.r + 6" (${R.toFixed(3)}), unit ${v.id} ${q.alive(v) ? `landed at (${v.pos.x}, ${v.pos.z}), not on cell ${want}` : 'was crushed'}`)
+              if (G.rng.n - r0 !== 1) throw new Error(`${where}: a unit's fall drew ${G.rng.n - r0} dice, not one D6`)
+              counts.reachIn++
+            } else {
+              if (want >= 0) throw new Error(`${where}: the ring left cell ${want} to land on within u.r + 6"`)
+              if (q.alive(v) || !falls[0].e.crushed || G.rng.n !== r0) throw new Error(`${where}: with the nearest ground ${D.toFixed(3)}" off, past u.r + 6" (${R.toFixed(3)}), unit ${v.id} ${q.alive(v) ? `landed at (${v.pos.x}, ${v.pos.z})` : `was crushed but drew ${G.rng.n - r0} dice`}`)
+              counts.reachOut++
+            }
+            after(G, `${where}, the reach's edge`)
+          } finally {
+            G.out = null
+          }
+        })
+      }
+    }
+    //  - the ground: the ground hard for 3" round the fallen deck, and a
+    //    raised piece (a scene chunk with a walkable top 1" up, 3.8"
+    //    square) on its +x side, overlapping it by 0.3": when a cell on the
+    //    piece, standable, is nearer than any on the ground, the unit lands
+    //    on the ground all the same
+    {
+      const G = fresh(), d = deckOf(G), nav = G.nav, v = big(G)
+      only(G, [v], () => {
+        at(v, nav, centre(G, d, v.r))
+        fell(G, d)
+        const s = d.shape, lx = s.hx + 1.6
+        hardOver(G, s, 3)
+        G.terrain.chunks.push({ id: -8, kind: 'scene', alive: true, destructible: false, hp: Infinity, maxHp: Infinity, navKind: null, los: null, cover: false, look: {}, surface: { y: 1 }, shape: { x: s.x + lx * Math.cos(s.yaw), y: 0.5, z: s.z - lx * Math.sin(s.yaw), hx: 1.9, hy: 0.5, hz: 1.9, yaw: s.yaw, reach: Math.hypot(1.9, 1.9) + 0.05 } })
+        G.terrain.dirty = true
+        mods.match.refreshNav(G)
+        const want = landing(G, v), any = landing(G, v, true, 6, false)
+        if (want < 0 || any < 0 || !(nav.floor[any] > STEP)) return
+        G.out = []
+        try {
+          mods.settle.settle(G)
+          if (!q.alive(v) || v.pos.x !== nav.x(want) || v.pos.z !== nav.z(want) || q.groundY(G, v) > STEP) throw new Error(`${where}: with a raised top nearer (cell ${any}, ${nav.floor[any]}" up) than the nearest ground (cell ${want}), unit ${v.id} landed at (${v.pos.x}, ${v.pos.z}) on a floor of ${q.groundY(G, v)}, not on the ground`)
+          counts.groundOnly++
+          after(G, `${where}, the ground`)
+        } finally {
+          G.out = null
+        }
+      })
+    }
+    //  - the spacing: two units on the deck, the second's rim 0-0.08"
+    //    past the first's: the one earlier in G.units can't stay (the
+    //    other within o.r + u.r + 0.08 of it) and lands where the
+    //    reference search puts it; the later then stays where it stood
+    {
+      const G = fresh(), d = deckOf(G), nav = G.nav
+      const a = big(G), b = climbers(G, 0).reduce((x, y) => (y.r < x.r ? y : x))
+      const ta = tops(G, d, a.r), tb = tops(G, d, b.r)
+      let pair = null
+      for (const i of ta) {
+        for (const j of tb) {
+          const g = Math.hypot(nav.x(j) - nav.x(i), nav.z(j) - nav.z(i)) - a.r - b.r
+          if (g >= 0 && g < 0.08) pair = [i, j]
+          if (pair) break
+        }
+        if (pair) break
+      }
+      if (pair) only(G, [a, b], () => {
+        at(a, nav, pair[0])
+        at(b, nav, pair[1])
+        fell(G, d)
+        mods.match.refreshNav(G)
+        const [p, s] = [a, b].sort((x, y) => G.units.indexOf(x) - G.units.indexOf(y))
+        const ss = { x: s.pos.x, z: s.pos.z }
+        if (![p, s].every((u) => nav.standable(nav.index(u.pos.x, u.pos.z), u.r, modeOf(u), null))) return
+        const want = landing(G, p)
+        if (want < 0) return
+        G.out = []
+        try {
+          mods.settle.settle(G)
+          if (!q.alive(p) || p.pos.x !== nav.x(want) || p.pos.z !== nav.z(want)) throw new Error(`${where}: unit ${p.id}, with unit ${s.id}'s rim under 0.08" from its own, ${q.alive(p) ? `stands at (${p.pos.x}, ${p.pos.z}), not on cell ${want} (it can't stay: o.r + u.r + 0.08)` : 'was crushed'}`)
+          if (!q.alive(s) || s.pos.x !== ss.x || s.pos.z !== ss.z) throw new Error(`${where}: unit ${s.id}, clear once unit ${p.id} had landed, didn't stay where it stood`)
+          counts.spaced++
+          after(G, `${where}, the spacing`)
+        } finally {
+          G.out = null
+        }
+      })
+    }
+    //  - two decks in one settle: the board's first two platforms, the
+    //    later one's posts broken first (so `dropped` holds it first), the
+    //    unit earlier in G.units on the later deck: the falls go in the
+    //    decks' chunk order first, then G.units order, one D6 each in that
+    //    order from a copy of the stream
+    {
+      const G = fresh(), nav = G.nav
+      const ds = G.terrain.chunks.filter((c) => c.kind === 'deck' && c.fallsAt !== undefined).sort((x, y) => x.id - y.id)
+      if (ds.length >= 2) {
+        const a = big(G), b = climbers(G, 0).reduce((x, y) => (y.r < x.r ? y : x))
+        const [p, s] = [a, b].sort((x, y) => G.units.indexOf(x) - G.units.indexOf(y))
+        only(G, [p, s], () => {
+          at(p, nav, centre(G, ds[1], p.r))
+          at(s, nav, centre(G, ds[0], s.r))
+          fell(G, ds[1])
+          fell(G, ds[0])
+          if (G.terrain.dropped.map((c) => c.id).join() !== `${ds[1].id},${ds[0].id}`) throw new Error(`${where}: terrain.dropped holds ${G.terrain.dropped.map((c) => c.id).join(', ')}, not the two decks in the order they fell`)
+          mods.match.refreshNav(G)
+          const r = { ...G.rng }, n0 = G.rng.n
+          G.out = []
+          try {
+            mods.settle.settle(G)
+            const falls = fallsIn(G, G.out, where)
+            if (falls.map((f) => f.u.id).join() !== `${s.id},${p.id}`) throw new Error(`${where}: two decks dropped (${ds[1].id} first, then ${ds[0].id}), the units on them fell as ${falls.map((f) => f.u.id).join(', ') || 'none'}, not in the decks' chunk order (${s.id} on ${ds[0].id}, then ${p.id} on ${ds[1].id})`)
+            if (G.rng.n - n0 !== 2) throw new Error(`${where}: two units' falls from two decks drew ${G.rng.n - n0} dice, not one D6 each`)
+            for (const { u, row } of falls) {
+              const d3 = Math.ceil((1 + Math.floor(mods.rng.draw(r) * 6)) / 2)
+              if (!row || row.dice[0] !== d3) throw new Error(`${where}: unit ${u.id}'s fall's dice row ${JSON.stringify(row)}, not its D3 of ${d3} (the stream's next D6 halved up, in the decks' order)`)
+            }
+            counts.twoDecks++
+            after(G, `${where}, two decks`)
+          } finally {
+            G.out = null
+          }
+        })
+      }
+    }
+    // (the AI) a template at the deck's defenders is worth their fall
+    {
+      const G = fresh(), d = deckOf(G), nav = G.nav
+      const u = climbers(G, 1).reduce((x, y) => (y.r > x.r ? y : x))
+      const gun = G.units.filter((x) => x.side === 0 && x.t.ranged?.blast && !x.t.ranged.spell).reduce((x, y) => (y.t.ranged.blast > x.t.ranged.blast ? y : x))
+      const f = climbers(G, 0).reduce((x, y) => (y.r < x.r ? y : x))
+      only(G, [u, gun, f], () => {
+        const iu = tops(G, d, u.r)[0]
+        at(u, nav, iu)
+        // (the friend out of the way: as far from the deck as the board goes)
+        let far = -1
+        for (let i = 0; i < nav.N; i++) if (nav.floor[i] <= STEP && nav.standable(i, f.r, 'walk') && (far < 0 || Math.hypot(nav.x(i) - d.shape.x, nav.z(i) - d.shape.z) > Math.hypot(nav.x(far) - d.shape.x, nav.z(far) - d.shape.z))) far = i
+        at(f, nav, far)
+        let ig = -1
+        for (let i = 0; i < nav.N && ig < 0; i++) {
+          const g = Math.hypot(nav.x(i) - d.shape.x, nav.z(i) - d.shape.z)
+          if (g >= 10 && g <= 20 && nav.floor[i] <= STEP && nav.standable(i, gun.r, 'walk') && clearOf(G, gun, nav.x(i), nav.z(i))) ig = i
+        }
+        if (ig < 0) throw new Error(`${where}: no ground 10-20" off the deck for the ${gun.t.short}`)
+        at(gun, nav, ig)
+        const gain = mods.score.fallGain(G, gun, u)
+        if (!(gain > 0)) throw new Error(`${where}: the AI's fallGain for the ${gun.t.short}'s template at the ${u.t.short} on the deck is ${gain}, not above 0`)
+        const v = mods.score.shotValue(G, gun, u, gun.pos, false)
+        const at_ = d.fallsAt
+        delete d.fallsAt
+        const bare = mods.score.shotValue(G, gun, u, gun.pos, false)
+        d.fallsAt = at_
+        if (!(v > bare)) throw new Error(`${where}: the AI values the ${gun.t.short}'s shot at the ${u.t.short} on the deck at ${v}, and at ${bare} were the deck never to fall: its fall not weighed`)
+        counts.aiValues++
+        // a friend of the gun's beside it on the deck
+        const ifr = tops(G, d, f.r).find((i) => Math.hypot(nav.x(i) - nav.x(iu), nav.z(i) - nav.z(iu)) >= u.r + f.r + 0.08)
+        if (ifr !== undefined) {
+          at(f, nav, ifr)
+          const mixed = mods.score.fallGain(G, gun, u)
+          if (!(mixed < gain)) throw new Error(`${where}: with the ${f.t.short}, the ${gun.t.short}'s own side's, on the deck too, the fall is worth ${mixed} to the AI, not less than ${gain}`)
+          counts.aiOwn++
+        }
+      })
+    }
+    // the three sites: a template's landing, a move's end and a charge's
+    for (const site of ['blast', 'move', 'charge']) {
+      const G = fresh(), d = deckOf(G), nav = G.nav
+      const u = climbers(G, 1).reduce((x, y) => (y.r > x.r ? y : x))
+      // (the widest template the seat throws: the Trebuchet's pinecone, 3")
+      const gun = G.units.filter((x) => x.side === 0 && x.t.ranged?.blast && !x.t.ranged.spell).reduce((x, y) => (y.t.ranged.blast > x.t.ranged.blast ? y : x))
+      const mover = G.units.find((x) => x.side === 0 && x !== gun && !x.t.fly && !x.t.wrecker)
+      const prey = G.units.find((x) => x.side === 1 && x !== u && !x.t.fly)
+      only(G, [u, gun, mover, prey], () => {
+        at(u, nav, tops(G, d, u.r)[0])
+        G.out = []
+        try {
+          if (site === 'blast') {
+            for (let k = 0; k < 8 && d.alive; k++) {
+              mods.shoot.blastLands(G, gun, { x: d.shape.x, z: d.shape.z }, gun.t.ranged)
+              if (G.terrain.dropped.length || G.terrain.dirty) throw new Error(`${where}: a template landed (blastLands) with ${G.terrain.dropped.length} deck(s) dropped and the nav ${G.terrain.dirty ? 'dirty' : 'clean'} after it`)
+            }
+            if (d.alive) throw new Error(`${where}: eight of the ${gun.t.short}'s templates at the deck's centre never brought it down`)
+          } else {
+            fell(G, d)
+            if (site === 'move') mods.move.doMove(G, mover, nav.index(mover.pos.x, mover.pos.z))
+            else {
+              // the prey on open ground, the charger 2" off it
+              let done = false
+              for (let i = 0; i < nav.N && !done; i++) {
+                if (nav.floor[i] > STEP || !nav.standable(i, prey.r, 'walk') || Math.hypot(nav.x(i) - d.shape.x, nav.z(i) - d.shape.z) < 8) continue
+                at(prey, nav, i)
+                for (let j = 0; j < nav.N && !done; j++) {
+                  const g = Math.hypot(nav.x(j) - nav.x(i), nav.z(j) - nav.z(i)) - prey.r - mover.r
+                  if (g < 1.75 || g > 2.25 || nav.floor[j] > STEP || !nav.standable(j, mover.r, 'walk') || !clearOf(G, mover, nav.x(j), nav.z(j))) continue
+                  at(mover, nav, j)
+                  const plan = q.chargePlan(G, mover, prey)
+                  if (!plan) continue
+                  mods.charge.finishCharge(G, mover, prey, plan.cell, plan)
+                  done = true
+                }
+              }
+              if (!done) throw new Error(`${where}: no charge 2" across open ground found for the charge's scene`)
+            }
+            if (G.terrain.dropped.length || G.terrain.dirty) throw new Error(`${where}: a ${site === 'move' ? 'move (doMove)' : 'charge (finishCharge)'} ended after the deck fell with ${G.terrain.dropped.length} deck(s) dropped and the nav ${G.terrain.dirty ? 'dirty' : 'clean'}`)
+          }
+          const deckDown = G.out.findIndex((x) => x.t === 'terrain.destroy' && x.id === d.id)
+          const falls = fallsIn(G, G.out, where).filter((f) => f.u === u)
+          if (site !== 'blast' || q.alive(u) || falls.length) {
+            if (falls.length !== 1) throw new Error(`${where}: after the ${site} the ${u.t.short} that stood on the fallen deck fell ${falls.length} times`)
+            if (G.out.indexOf(falls[0].e) < deckDown) throw new Error(`${where}: the ${u.t.short}'s fall reported before its deck's`)
+            if (q.alive(u) && q.groundY(G, u) > STEP) throw new Error(`${where}: after the ${site} the ${u.t.short} stands at ${q.groundY(G, u)}`)
+            counts[site === 'blast' ? 'blasts' : site === 'move' ? 'moves' : 'charges']++
+          }
+        } finally {
+          G.out = null
+        }
+      })
+    }
+  }
+  if (counts.platforms < COLLAPSE_PLATFORMS) throw new Error(`P-height (F7c) met ${counts.platforms} timber platforms on ${board} fortified boards, not ${COLLAPSE_PLATFORMS}`)
+  const wants = { cascades: 'a deck falling', notBefore: 'a deck standing short of its fallsAt', stays: 'a unit falling where it stood', pairs: 'two units falling from one deck', moved: 'a unit landing off the hard ground', bubbled: "a landing an enemy's 1\" moved", crushed: 'a unit crushed', blasts: "a template's fall", moves: "a move's fall", charges: "a charge's fall", aiValues: "the AI's template worth a fall", aiOwn: "the AI's own side's fall weighed", reachIn: 'a landing just inside u.r + 6"', reachOut: 'a unit crushed with ground just past u.r + 6"', groundOnly: 'a landing on the ground with a raised top nearer', spaced: "a unit that can't stay for another's rim under 0.08\" off", twoDecks: 'two decks in one settle' }
+  for (const [k, what] of Object.entries(wants)) if (!counts[k]) throw new Error(`P-height (F7c) met no scene with ${what} on ${counts.platforms} platforms`)
+  return counts
+}
+
 const KEG_BOARDS = 4, KEG_SETS_SEEDS = 40
 function kegTask(core, mods) {
   const q = core.q
@@ -4460,6 +5047,11 @@ if (a.child) {
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
       const [nav, damage, shoot, move, terrain, score, geom] = await Promise.all([mod('nav.js'), mod('actions', 'damage.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('terrain', 'terrain.js'), mod('ai', 'score.js'), mod('terrain', 'geom.js')])
       out = { ok: true, counts: heightTask(core, { nav, damage, shoot, move, terrain, score, geom, MISSIONS: await missionsOf() }) }
+    } else if (task.kind === 'collapse') {
+      // (F7c: P-height's collapse scenes)
+      const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
+      const [nav, matchMod, settleMod, shoot, move, charge, rules, score] = await Promise.all([mod('nav.js'), mod('match.js'), mod('actions', 'settle.js'), mod('actions', 'shoot.js'), mod('actions', 'move.js'), mod('actions', 'charge.js'), mod('rules.js'), mod('ai', 'score.js')])
+      out = { ok: true, counts: collapseTask(core, { nav, match: matchMod, settle: settleMod, shoot, move, charge, rules, rng, score }) }
     } else if (task.kind === 'fight') {
       // (F18: P-fight's scenes)
       const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
@@ -4601,6 +5193,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   if (/export function levelDist/.test(readFileSync(join(pkg, 'core', 'queries.js'), 'utf8'))) {
     const r = await child({ kind: 'height' }, pkg)
     say(`  P-height and P-level: ${r.ok ? `ok   3 classic boards flat; ${r.counts.boards} fortified boards (and ${r.counts.grand} Grand-sized for P-level): ${r.counts.cells} cells standable only off the ledges' bands, ${r.counts.steps} reach steps within STEP (${r.counts.links} over ladders, at their cost, climbing), ${r.counts.plans} move plans at ladders' feet climbing for exactly the climbers, ${r.counts.ledges} pairs under 1" apart but more than 1.2" apart in height unengaged (no bubble, no charge spot off the level) and ${r.counts.flat} on one level engaged; the scenes: the keep held from its top (${r.counts.keepTop}), ${r.counts.controlAbove} ground objectives not held from a deck beside them, ${r.counts.blastSpared} templates on decks sparing the ground below, ${r.counts.smashSkipped} smashes skipping a raised piece (${r.counts.smashHit} taking a grounded one), ${r.counts.pileRefused} pile-ins onto a ledge's band refused (${r.counts.pileIn} onto open deck taken), ${r.counts.chargeOver} charges onto a deck beside an enemy below${r.counts.parapets ? `; (F7b) ${r.counts.parapets} parapets: ${r.counts.parapetMoves} reaches the same without them, ${r.counts.parapetCover} units in cover in their bands and ${r.counts.parapetDitch} out of it under them on the ground, ${r.counts.parapetGround} deck units in cover from the ground behind one, ${r.counts.parapetDeck} seen out of cover from their own deck (${r.counts.parapetOwn} sights from a deck, its own parapets never in the way, ${r.counts.parapetOver} boards' rays down over one)` : ''}; levelDist the gate graph's Dijkstra on ${r.counts.pairs} pairs${r.counts.lobPairs ? `; (F17) rangeOf the physics' reach, shotInfo's and the AI's range tests by it, on ${r.counts.lobPairs} shooter-target pairs, ${r.counts.lobDown} lobs from a deck past the printed range taken (${r.counts.lobValued} valued by the AI), ${r.counts.lobUp} up at a deck within it refused` : ''}` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
+  // (F7c) P-height's collapse scenes, for code whose platforms fall
+  if (existsSync(join(pkg, 'core', 'actions', 'settle.js'))) {
+    const r = await child({ kind: 'collapse' }, pkg)
+    say(`  P-height (F7c): ${r.ok ? `ok   ${r.counts.platforms} timber platforms: ${r.counts.cascades} decks falling at their fallsAt and not before (${r.counts.notBefore} standing short of it), with their ${r.counts.ladders} ladders, a pile of planks where each stood and ${r.counts.groundCells} cells under them ground again; ${r.counts.d3} falls held die for die in G.units order (${r.counts.stays} where they stood, ${r.counts.pairs} decks with two on them), ${r.counts.moved} landings on the nearest clear ground within u.r + 6" (${r.counts.bubbled} moved by an enemy's 1"), ${r.counts.crushed} crushed with nowhere to land; (the review) the rule's edges: ${r.counts.reachIn} landings just inside u.r + 6" and ${r.counts.reachOut} crushed just past it, ${r.counts.groundOnly} on the ground with a raised top nearer, ${r.counts.spaced} moved for another's rim under 0.08" off, ${r.counts.twoDecks} settles of two decks in their chunk order; the falls after a template's landing (${r.counts.blasts}), a move (${r.counts.moves}) and a charge (${r.counts.charges}), terrain.dropped empty and the nav clean after every settle (${r.counts.after})` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
   // (F18) P-fight's scenes, for code that shoots into a fight
@@ -4758,7 +5356,7 @@ const MUTATIONS = {
   'keg-depth-first': ['core/actions/shoot.js', '    for (const next of landing(G, u, at, w, at)) line.push(next)\n', '    line.splice(i + 1, 0, ...landing(G, u, at, w, at))\n'],
   'keg-walk-dud': ['core/commands.js', '    if (kegs.length) kegsGoOff(G, unit, kegs)\n', ''],
   'keg-on-classic': ['core/terrain/sets.js', "    centre: [['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],", "    centre: [['keg', 0.1], ['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],"],
-  'keg-ai-blind': ['core/ai/score.js', '    return keg ? value + pHit * keg : value\n', '    return value\n'],
+  'keg-ai-blind': ['core/ai/score.js', '    const more = keg + (pre ? pre.fall : fallGain(G, u, e, w))\n', '    const more = (pre ? pre.fall : fallGain(G, u, e, w))\n'],
   'friend-rows-first': ['core/actions/shoot.js', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  if (stray) (strayHits(G, u, fight.onto, stray, w), stray = 0)\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n'],
   'stray-tie-last': ['core/queries.js', '    if (f.alive > onto.alive) onto = f\n', '    if (f.alive >= onto.alive) onto = f\n'],
   'ai-ignores-strays': ['core/ai/score.js', ' - (fight ? strayCost(n, need, w, fight) : 0)', ''],
@@ -4829,8 +5427,46 @@ const MUTATIONS = {
   // a quiet fold (G.out null) walks a wrecker without smashing anything: the
   // smash is skipped with the events nobody keeps
   'quiet-smash': ['core/actions/move.js', 'if (smashAround(G, u, p, ev, broke) && ev)', 'if (ev && smashAround(G, u, p, ev, broke))'],
+  // (F7c) P-height's collapse scenes: a deck falling at one post fewer than
+  // its fallsAt, its ladders standing, no planks where it stood, its floor
+  // kept by the nav, the units on it settled in the reverse of G.units
+  // order, staying where they can't stand, landing in an enemy's 1",
+  // ties to the highest index, a D6 for a D3, no unit.fall, `dropped` not
+  // emptied, a deck never handed to settle, and each site's settle gone
+  // (a template's, a move's, a charge's); and P-prop's boundary rows: a
+  // plan memo left open after an apply
+  'cascade-early': ['core/terrain/terrain.js', '      if (down < d.fallsAt) continue\n', '      if (down < d.fallsAt - 1) continue\n'],
+  'cascade-keeps-ladder': ['core/terrain/terrain.js', '        if (!c.alive || c.on !== d.id) continue\n', "        if (!c.alive || c.on !== d.id || c.kind === 'ladder') continue\n"],
+  'cascade-no-planks': ['core/terrain/terrain.js', '      this.planks(d, out)\n', ''],
+  'cascade-not-dropped': ['core/terrain/terrain.js', '      this.dropped.push(d)\n', ''],
+  'nav-keeps-deck': ['core/nav.js', 'for (const c of chunks) if (c.alive && c.surface) this.rasterFloor(', "for (const c of chunks) if ((c.alive || c.kind === 'deck') && c.surface) this.rasterFloor("],
+  'settle-reversed': ['core/actions/settle.js', 'for (const u of on[k]) (alive(u) ? fall : lies)', 'for (const u of [...on[k]].reverse()) (alive(u) ? fall : lies)'],
+  'fall-stays': ['core/actions/settle.js', '  const stays = nav.standable(here, u.r, mode, null) && clear(G, u, u.pos.x, u.pos.z)\n', '  const stays = true\n'],
+  'fall-in-bubble': ['core/actions/settle.js', '    if (!nav.standable(i, u.r, mode, forbid) || !clear(G, u, x, z)) continue\n', '    if (!nav.standable(i, u.r, mode, null) || !clear(G, u, x, z)) continue\n'],
+  'fall-ties-high': ['core/actions/settle.js', '    if (dd > R || !(dd < bd)) continue\n', '    if (dd > R || !(dd <= bd)) continue\n'],
+  'fall-d6': ['core/actions/settle.js', '    const n = Math.ceil(d6(G) / 2)\n', '    const n = d6(G)\n'],
+  'fall-silent': ['core/actions/settle.js', "  emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...(i < 0 ? { crushed: true } : {}) })\n", ''],
+  // (F7c, rule 10) the AI blind to a platform's fall: a template at its
+  // defenders worth only its blast
+  'fall-ai-blind': ['core/ai/score.js', '    const more = keg + (pre ? pre.fall : fallGain(G, u, e, w))\n', '    const more = keg\n'],
+  // the AI weighing its own side's fall as the enemy's
+  'fall-ai-own': ['core/ai/score.js', '    for (const x of on) v += x.side === u.side ? -fallValue(x) : fallValue(x)\n', '    for (const x of on) v += fallValue(x)\n'],
+  'dropped-kept': ['core/actions/settle.js', '  T.dropped.length = 0\n', ''],
+  // ((the review) the rule's edges: the reach a foot short and two inches
+  // long, any floor taken for a landing, no spacing pad, the decks in the
+  // order they fell, a crushed unit's flags and labels left untold)
+  'fall-reach-short': ['core/actions/settle.js', 'export const FALL_REACH = 6\n', 'export const FALL_REACH = 5\n'],
+  'fall-reach-long': ['core/actions/settle.js', 'export const FALL_REACH = 6\n', 'export const FALL_REACH = 8\n'],
+  'fall-any-floor': ['core/actions/settle.js', '    if (nav.hasHeight && nav.floor[i] > STEP) continue\n', ''],
+  'fall-no-pad': ['core/actions/settle.js', '    if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false\n', '    if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r) return false\n'],
+  'settle-unsorted': ['core/actions/settle.js', '  const decks = T.dropped.slice().sort((a, b) => a.id - b.id)\n', '  const decks = T.dropped.slice()\n'],
+  'crushed-silent': ['core/actions/settle.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n}\n\n// Whether `u` standing", "  if (G.out && i >= 0) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n}\n\n// Whether `u` standing"],
+  'settle-skips-blast': ['core/actions/shoot.js', '  settle(G)\n  return kegsIn(broke)\n', '  return kegsIn(broke)\n'],
+  'settle-skips-move': ['core/actions/move.js', '  settle(G)\n  return kegs\n', '  return kegs\n'],
+  'settle-skips-charge': ['core/actions/charge.js', '  settle(G)\n  if (kegs.length) kegsGoOff(G, u, kegs)\n', '  if (kegs.length) kegsGoOff(G, u, kegs)\n'],
+  'memo-open': ['core/index.js', '  } finally {\n    G.nav.memo = null\n  }\n', '  } finally {\n  }\n'],
   // a command's handler leaves the nav grid stale
-  'nav-dirty': ['core/actions/move.js', '  // (the nav follows the walk, at today\'s site: DESIGN §4.1 rule 9)\n  refreshNav(G)\n  return kegs\n}', '  G.terrain.dirty = true\n  return kegs\n}'],
+  'nav-dirty': ['core/actions/move.js', '  // (the nav follows the walk, at today\'s site: DESIGN §4.1 rule 9)\n  refreshNav(G)\n', '  G.terrain.dirty = true\n'],
   // the engine scores a round without telling the view (nothing parity
   // records: the score's events are the view's alone)
   'score-silent': ['core/engine.js', "  emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners })\n", ''],
