@@ -1245,7 +1245,9 @@ const ARMY_REFUSALS = {
   "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
   // ((F8b) a larger battle's preset is a preset like any, held to the
   // mission's own limit: a Skirmish can't field the ×2 or ×3 list)
-  "the field preset in a Skirmish": ['field', NO, /^seat 0's army: 970 points, over the Skirmish limit of 500$/],
+  // (the Skirmish prices after the parapets: the Trebuchet at 40, so the
+  // Bushtails' ×2 list at Skirmish prices 950, v6's 970)
+  "the field preset in a Skirmish": ['field', NO, /^seat 0's army: 950 points, over the Skirmish limit of 500$/],
   "the grand preset in a Skirmish": [NO, 'grand', /^seat 1's army: 1485 points, over the Skirmish limit of 500$/],
   'neither a name nor counts': ['11a', NO, /^seat 0's army "11a" is neither a preset nor a list of counts$/],
   'an empty army': ['', NO, /^seat 0's army "" is neither a preset nor a list of counts$/],
@@ -1257,7 +1259,10 @@ const ARMY_REFUSALS = {
   'a list longer than the roster': ['11211131', NO, /^seat 0's list "11211131" counts 8 kinds of unit; the Bushtail Clans muster 7 \(elder oakguard nutkin grenadier glider trebuchet warcart\)$/],
   'a leading zero past the roster': [NO, '0112111', /^seat 1's list "0112111" counts 7 kinds of unit; the Coil of Ssithra muster 6 \(hierophant brute scaleguard spitter sidewinder engine\)$/],
   '515 points': [NO, '100034', /^seat 1's army: 515 points, over the Skirmish limit of 500$/],
-  '505 points': ['100233', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
+  // (the Skirmish prices after the parapets: v6's '100233' costs 475 with
+  // the Trebuchet at 40, so a list of no Trebuchet, 3 Fast units past the
+  // points as '100233' had)
+  '505 points': ['10223', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
   'points before a role (540 points, no hero)': ['033', NO, /^seat 0's army: 540 points, over the Skirmish limit of 500$/],
   '37 models': [NO, '106', /^seat 1's army: 37 models; a Skirmish army has at most 36$/],
   'models before a role (41 models, no hero)': [NO, '0061', /^seat 1's army: 41 models; a Skirmish army has at most 36$/],

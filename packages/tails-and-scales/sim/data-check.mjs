@@ -125,9 +125,11 @@
 // the mission's and the army's keys land.)
 // 11. (F11a, DESIGN §4.2.8, §4.2.9) The army builder's data:
 //    - prices: every unit has `cost`, a whole multiple of 5 above 0; each
-//      race's classic list costs what the v6 table says (485 and 495), at
-//      most its mission's limit (500); (F8b) and each race's Field and
-//      Grand presets what F8b's retune of those missions' own prices says
+//      race's classic list costs what the table says (v6's 485 and 495;
+//      the Bushtails' 475 since the Skirmish prices after the parapets,
+//      the Trebuchet at 40), at most its mission's limit (500); (F8b) and
+//      each race's Field and Grand presets what F8b's retune of those
+//      missions' own prices says
 //      (990 and 950, 1,350 and 1,485), within their limits;
 //    - rosters: each race's lists each of its units once, and starts with
 //      the roster pinned below (ROSTER_PIN: a reorder or an insert would
@@ -1194,12 +1196,15 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   // prices
   const unpriced = ALL.filter((t) => !Number.isInteger(t.cost) || t.cost <= 0 || t.cost % 5 !== 0)
   check(!unpriced.length, `every one of the ${ALL.length} units has a cost, a whole multiple of 5 above 0 (${Object.values(RACES).map((r) => r.roster.map((k) => `${k} ${r.units[k].cost}`).join(', ')).join('; ')})`, unpriced.map((t) => `${t.key}: ${t.cost}`).join(', '))
-  // the v6 table's classic lists (DESIGN §4.2.8.2): a retune re-pins them
-  // here, and each stays within its mission's limit (army-sim's gate)
-  const CLASSIC_COST = { squirrel: 485, serpent: 495 }
+  // the classic lists at the table's prices (DESIGN §4.2.8.2): a retune
+  // re-pins them here, and each stays within its mission's limit
+  // (army-sim's gate). v6's 485 and 495; the Bushtails' 475 since the
+  // Skirmish prices after the parapets (DESIGN's note of that name: the
+  // Trebuchet 50 → 40, fitted on seeds 1111 and 2222, judged on 5555)
+  const CLASSIC_COST = { squirrel: 475, serpent: 495 }
   for (const [key, want] of Object.entries(CLASSIC_COST)) {
     const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))
-    check(cost === want && cost <= MISSIONS.classic.list.points, `the ${r.short}' classic list ('${r.armies.classic}') costs ${cost}, the v6 table's ${want}, within the Skirmish limit of ${MISSIONS.classic.list.points}`, cost !== want ? 'a price changed: re-pin CLASSIC_COST with the retune (and run sim/army-sim.mjs --check)' : 'over the limit')
+    check(cost === want && cost <= MISSIONS.classic.list.points, `the ${r.short}' classic list ('${r.armies.classic}') costs ${cost}, the table's ${want}, within the Skirmish limit of ${MISSIONS.classic.list.points}`, cost !== want ? 'a price changed: re-pin CLASSIC_COST with the retune (and run sim/army-sim.mjs --check)' : 'over the limit')
   }
   // (F8b) the larger battles' presets at those missions' own prices (the
   // fallback's `list.prices`, as F8b's retune fitted them, DESIGN

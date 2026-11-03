@@ -879,7 +879,9 @@ function aiScenario(M, it, seed) {
 // 0's reason). Refused alike on every peer, the match waiting in its lobby
 // until the good start.
 const BAD_LISTS = [
-  ['over the points', ['100233', null], /^start: seat 0's army: 505 points, over the Skirmish limit of 500$/],
+  // (the Skirmish prices after the parapets: '10223', no Trebuchet, for
+  // v6's '100233', 475 points with the Trebuchet at 40)
+  ['over the points', ['10223', null], /^start: seat 0's army: 505 points, over the Skirmish limit of 500$/],
   ['a hero too many', [null, '2011'], /^start: seat 1's army: 2 Hero units; at most 1 in a Skirmish$/],
   ["'toString' as a preset", [null, 'toString'], /^start: seat 1's army "toString" is neither a preset nor a list of counts$/],
   ["'01121111'", ['01121111', null], /^start: seat 0's list "01121111" counts 8 kinds of unit; the Bushtail Clans muster 7 \(elder oakguard nutkin grenadier glider trebuchet warcart\)$/],
