@@ -9,7 +9,6 @@
 // warnings. The screens (start, pause, end) are screens.js's.
 
 import * as THREE from 'three'
-import './toy.css'
 import { Screens } from './screens.js'
 
 const _v = new THREE.Vector3()

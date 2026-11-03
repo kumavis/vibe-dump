@@ -34,6 +34,10 @@
 // Battle.release() returns. research/ui-2.md lists every call into Battle
 // with the signature this file expects.
 //
+// The toy (TOY.md §3, §5): *Arcade*, the third door on a box event's card
+// (ui.toyFor / ui.onToy), opens src/toy/ over that box's sea, and
+// #toy=<box>&side=<jp|us> (app.urlToy) offers its start screen.
+//
 // Round three (ROUND-3.md §1, §4–5), the Wargame: a box event's card, the
 // briefing and the bar (watching) offer it where the box has one; the start
 // sheet shows the two sides' forces and goals from the scenario
@@ -63,6 +67,8 @@ import { UnitList } from './ui/unitlist.js'
 import { sideName } from './ui/names.js'
 import { STATION, stationLabel, kitShort, kitLine, shipType, rolePhrase, aircraftRole, eventLine, attackLine, countWords, damageWords, asSentence, midName, ASSIST, SIDE_ORDER as SIDES, FATE_VERB } from './ui/roles.js'
 import { WargameHud, HOP_ICON, TYPE_ORDER, WARGAME_LABEL, numWord, typeCount, clockText } from './ui/wargame.js'
+import { Toy } from './toy/index.js'
+import { toyBoxFor } from './toy/door.js'
 
 const SIDE_ORDER = { ...SIDES }
 const WATCH_SCALES = [1, 2, 4, 8, 15, 30, 60]
@@ -215,6 +221,54 @@ export function link(app, ui) {
   ui.onWargameStart = (side) => startWargame(L.sheet, side)
   ui.onWargameRestart = (side) => restartWargame(side)
   ui.onHop = (kind) => hop(kind)
+  // the toy (TOY.md §3, §5): *Arcade* on a battle's card opens it over that box's sea; #toy=<box>&side=<jp|us>
+  const toy = new Toy(app)
+  app.toy = toy
+  ui.toyFor = (ev) => toyBoxFor(ev, app.data)
+  ui.onToy = (boxId) => openToy(boxId)
+  app.urlToy = (h) => {
+    const id = h.get('toy')
+    if (!id) return toy.active ? toy.leave() : null
+    if (toy.active && toy.boxId === id) return
+    if (!app.data.boxById.has(id)) return app.warn(`#toy=${id}: no such box`)
+    openToy(id, { side: h.get('side'), from: 'url' })
+  }
+  app.events.addEventListener('toy', (e) => {
+    const d = e.detail
+    if (d.kind === 'start') setToyUrl(toy.boxId, d.side)
+    if (d.kind === 'leave') clearToyUrl()
+    if (d.kind === 'start' || d.kind === 'leave') app.replaceUrl()
+  })
+  /** The toy over a box: the card stands down, a history entry (Back leaves it), the start screen with a side focused (never a game without a click). */
+  async function openToy(boxId, { side = null, from = 'table' } = {}) {
+    if (toy.active || L.busy || app.mode === 'flying') return
+    side = side === 'jp' || side === 'us' ? side : boxId === 'midway' ? 'jp' : 'us'
+    ui.card.close()
+    if (L.wg) endWargameState()
+    setToyUrl(boxId, side)
+    app.pushUrl()
+    try {
+      await toy.enter(boxId, { side, from })
+    } catch (err) {
+      app.warn(`toy ${boxId}: ${err.message}`)
+      clearToyUrl()
+      app.replaceUrl()
+    }
+  }
+  function setToyUrl(boxId, side) {
+    const { wargame, side: s0, toy: t0, ...rest } = app.url.kept || {}
+    app.url.battle = null
+    app.url.t = null
+    app.url.moment = null
+    app.url.unit = null
+    app.url.station = null
+    app.url.kept = { ...rest, toy: boxId, side }
+  }
+  function clearToyUrl() {
+    const { toy: t0, side, ...rest } = app.url.kept || {}
+    if (t0 !== undefined) app.url.kept = rest
+  }
+  L.openToy = openToy
   // (the start sheet closed without a start: the URL lets the wargame go)
   const cardClosed = ui.onCardClosed?.bind(ui)
   ui.onCardClosed = (was, mode) => {

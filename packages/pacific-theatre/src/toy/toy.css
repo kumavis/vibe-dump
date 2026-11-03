@@ -174,3 +174,7 @@ body:has(.toy.screen-up) .toy-touch { display: none; }
   .toy-status { top: calc(var(--gt) + 40px); width: min(220px, 30vw); }
   .toy-hud:has(.toy-boss:not([hidden])) .toy-status { top: calc(var(--gt) + 78px); }
 }
+/* the door on a battle's card: third in the row, compact */
+.card footer .nav.toy-door { order: -1; flex: 0 0 auto; height: 38px; padding: 0 10px; justify-content: center; gap: 5px; background: rgba(255,214,120,.12); border-color: rgba(255,214,120,.7); color: #ffd678; font-weight: 700; font-size: 12.5px; white-space: nowrap; }
+.card footer .nav.toy-door:hover { background: rgba(255,214,120,.26); }
+.card footer .nav.enter:has(+ .nav.toy-door) { flex: 1 1 0; min-width: 0; white-space: nowrap; padding: 0 8px; }

@@ -38,7 +38,8 @@
 //   ui.onLeave()); wargame.js holds both templates. A box event's footer
 //   offers *Play it as a wargame* beside *Enter the battle* where its box
 //   has a wargame (ui.wargameFor(ev), set by link.js), raising
-//   ui.onWargame(scenarioId).
+//   ui.onWargame(scenarioId). The toy (TOY.md §3) adds *Arcade* as the third
+//   door of the row where ui.toyFor(ev) names the box, raising ui.onToy(box).
 //
 // The footer steps the tour (tour.js) back and on, as the buttons by the
 // timeline do: it sits where the reading ends.
@@ -60,6 +61,7 @@ import { afterHTML } from './after.js'
 import { creditsHTML } from './credits.js'
 import { STATION } from './roles.js'
 import { startSheetHTML, endCardHTML, WARGAME_ICON, WARGAME_LABEL } from './wargame.js'
+import { TOY_ICON, TOY_LABEL } from '../toy/door.js'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
@@ -250,6 +252,7 @@ export class EventCard {
       const ev = this.events.get(b.dataset.enter)
       if (ev) ui.onEnter(ev)
     } else if (b.dataset.wargame) ui.onWargame?.(b.dataset.wargame)
+    else if (b.dataset.toy) ui.onToy?.(b.dataset.toy)
     else if (b.dataset.wgSide) ui.onWargameStart?.(b.dataset.wgSide)
     else if (b.dataset.wgRestart) ui.onWargameRestart?.(b.dataset.wgRestart)
     else if (b.dataset.shot) this.zoom(Number(b.dataset.shot))
@@ -315,7 +318,10 @@ export class EventCard {
   footer() {
     const tour = this.ui.tour
     const wg = this.mode === 'event' && this.ev?.box ? this.ui.wargameFor?.(this.ev) : null
-    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>${wg ? `<button class="nav wg-door" data-wargame="${esc(wg)}" title="${esc(WARGAME_LABEL)}">${WARGAME_ICON}<span>Play it as a wargame</span></button><p class="wg-door-label">${esc(WARGAME_LABEL)}</p>` : ''}` : ''
+    // (the toy's door, TOY.md §3: *Arcade*, third in the row, where the box can hold the toy's arena)
+    const toy = this.mode === 'event' && this.ev?.box ? this.ui.toyFor?.(this.ev) : null
+    const toyDoor = toy ? `<button class="nav toy-door" data-toy="${esc(toy)}" title="${esc(TOY_LABEL)}">${TOY_ICON}<span>Arcade</span></button>` : ''
+    const enter = this.mode === 'event' && this.ev?.box ? `<button class="nav enter" data-enter="${esc(this.ev.id)}">${icon('enter', 16)}<span>Enter the battle</span></button>${wg ? `<button class="nav wg-door" data-wargame="${esc(wg)}" title="${esc(WARGAME_LABEL)}">${WARGAME_ICON}<span>Play it as a wargame</span></button>` : ''}${toyDoor}${wg ? `<p class="wg-door-label">${esc(WARGAME_LABEL)}</p>` : ''}` : ''
     if (!tour?.active) return enter ? `<footer>${enter}</footer>` : ''
     const ch = tour.current
     let count

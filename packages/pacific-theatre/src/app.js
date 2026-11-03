@@ -17,6 +17,8 @@
 // #t, #moment), the query string the tools' switches (?data=, ?q=, ?fixedq,
 // ?debug=). #battle, #t and #moment act through src/link.js (app.urlBattle);
 // entering and leaving a box push a history entry, so Back leaves the box.
+// The toy (TOY.md §3): #toy=<box>&side=<jp|us> is read here and acted on by
+// link.js (app.urlToy); while the toy runs the hash carries only those two.
 // Round two (ROUND-2.md §5): #unit and #station name a held unit (written on
 // take and release by link.js through app.url, read at boot once the box is
 // entered); a bookmark keeps #moment.
@@ -258,6 +260,8 @@ export class App {
       } else this.warn(`#cam=${cam}: want x,z,distance,yaw,pitch`)
     }
     for (const k of BOX_KEYS) this.url[k] = h.get(k)
+    // the toy (TOY.md §3): #toy=<box>&side=<jp|us> offers its start screen over that box's sea; a hash without it leaves the toy
+    if (h.get('toy') || this.toy?.active) return this.urlToy?.(h)
     this.urlBattle?.(h)
   }
 
@@ -306,6 +310,11 @@ export class App {
     }
     const d = new Date(this.clock.date)
     p.set('date', `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`)
+    // (the toy's hash is #toy and #side alone, kept by link.js: its chase camera has no pose to write)
+    if (this.toy?.active) {
+      for (const [k, v] of Object.entries(this.url.kept)) p.set(k, v)
+      return `#${p.toString()}`
+    }
     const s = this.active.rig.goal
     p.set('cam', [s.target.x, s.target.z, s.distance, s.yaw, s.pitch].map((v) => (+v.toFixed(4)).toString()).join(','))
     // (#t, #unit and #station only while a box is the scene: a table hash carries none)

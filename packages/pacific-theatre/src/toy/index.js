@@ -19,6 +19,7 @@ import { newGame } from './game.js'
 import { ToyScene } from './scene.js'
 import { ToyInput } from './input.js'
 import { ToyHud } from './hud.js'
+import './toy.css'
 import { ToyFx } from './fx.js'
 import { pointWorld } from './combat.js'
 
