@@ -1121,11 +1121,13 @@ follows N3.
   holding, `fortified` 50.7%): F7c moves neither past its SE, and the
   retune stands as it was. Judged after F7c and kept at 50 (no data
   moves: `RULES_ID` 1jdolspb0fd, the corpus and the PIN untouched),
-  three prices fitted and judged on seven seeds. At 50 the Trebuchet
-  fits 33 to 56 by seed (1111 33 ± 7, 2222 34, 3333 37, 6666 49; 4444
-  47, 5555 56, 7777 50), the seven pooled 44.65 ± 2.46 (Q 11.1 on 6
-  degrees of freedom); the Venom Engine lies inside its band on every
-  pool, so it stays. 35 (two tuning seeds' pooled fit) failed on 4444;
+  its 50 fitted on seven seeds, 35, 40 and 45 on up to four pooled, and
+  40, 45 and 50 judged on the same four seeds (35 on one). At 50 the
+  Trebuchet fits 33 to 56 by seed (1111 33 ± 7, 2222 34, 3333 37, 6666
+  49; 4444 47, 5555 56, 7777 50), the seven pooled about 45 ± 2.5 (Q
+  about 11 on 6 degrees of freedom; from the printed, rounded fits);
+  the Venom Engine lies inside its band on every pool, so it stays. 35
+  (two tuning seeds' pooled fit) failed on 4444;
   40 (a1a236f) beat 50 only on the seeds it was tuned on (5555 55 ± 7
   against 40, band 14; the Bushtails about 52.6% against 49.7%); 45
   (four seeds pooled, 38 ± 3, band 9) failed the rule fixed before its
@@ -1138,12 +1140,15 @@ follows N3.
   the Pinecone Trebuchet alone, 33 ± 7 against 50 (band 13): a known
   miss of the standing check now, not a price to move. Its fitted value
   moves with the seed by more than the band at Skirmish N (at 50, 33 to
-  56 over seven seeds, each ± 6-7; pooled 44.65 ± 2.46, Q 11.1 on 6
-  degrees of freedom, p 0.085), and no price tried passes every seed
-  (50 and 45 miss 1111 by 4 and 2, 40 misses 5555 by 1). The fix is a
-  later check change, a gate that pools seeds or an artillery band of
-  its own, never a loosening by hand. Found on main by the whole gate
-  (a165618): Field's `fortified` score gate fails, 44.7% and on its
+  56 over seven seeds, each ± 6-7; pooled about 45 ± 2.5, Q about 11
+  on 6 degrees of freedom, p about 0.09, from the printed, rounded
+  fits), and no price tried passes every seed (50 and 45 miss 1111 by 4
+  and 2, 40 misses 5555 by 1). The candidate fix is a later check
+  change, a per-unit gate that pools seeds: a change to §4.2.8.2's
+  procedure, argued on its own and never a loosening by hand (a band
+  widened for one role would be one). A later pool wants army-sim's
+  fits printed to a decimal (its SE now prints whole). Found on main
+  by the whole gate (a165618): Field's `fortified` score gate fails, 44.7% and on its
   re-run 44.8% ± 1.6 against its 5 points (Field's per-unit gate and
   `open`, 45.6%, hold); and the keg mission's gates fail as they have
   since F19a (35.1% ± 1.2 on its re-run, 4 units outside their bands).
