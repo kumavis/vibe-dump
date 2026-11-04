@@ -2464,3 +2464,132 @@ copy of the data was used to see the rule pass, and fail on wrong stats and an o
 - Raise Nuʻuanu and Wailau to `mapped` from Moore and Clague 2002; replace every `sketch` field from Moore et al. 1989.
 - Find Kāʻohe, or drop it from the contract's list.
 - A plate azimuth with a source.
+
+## 18. Hōkūleʻa, 1976
+
+The departure for Tahiti on 1 May 1976, drawn as described (DESIGN.md §14), November 2026: a district pack of its own at
+Honolua on Maui, the scene in it as vessels and crowds (DATA.md "Vessels and crowds, in a district"), four near stops and
+two far ones on `hokulea-1976`, and the launching at Kualoa on 8 March 1975 as an event of its own with one near stop in
+Koʻolaupoko. `check-data.mjs` is clean, with the four warnings it had before; `bake-district.mjs --check` passes.
+
+| file | change |
+| --- | --- |
+| `districts/manifest.json` | the third district, `honolua` (Maui, moku Kāʻanapali, `parent: "maui"`), after the two Oʻahu packs, whose entries are byte for byte as they were |
+| `districts/honolua/` | `height.png`, `rain.png` (0.45 MB with the features) and the hand-made `features.json`: six vessels, five crowds, six labels, three streams |
+| `districts/koolaupoko/features.json` | two features added at the end (`vessel-hokulea-launch`, `crowd-kualoa-launch`); the other 96 unchanged |
+| `events.json` | 64 events (was 63): `hokulea-1976` gains six stops, a fuller summary, seven tellings and its sources; `hokulea-launch-1975` is new, before it |
+| `places.json` | 111 places (was 109): `honolua-beach` and `lipoa-point`, both exact at GNIS points |
+| `sources.json` | 245 sources (was 230): fifteen added, twelve opened (two of them tertiary) and three not |
+| `tools/check-data.mjs` | the `vessel` and `crowd` kinds, checked as the contract has them, in a block of their own (`checkSceneFeature`) |
+| `tools/lib/district-*.mjs` | the third district declared; a district may take no patches (`patches: false`), measure its own datum shift (`lidarShift`) and have no CUDEM land; the check's sea, land and rain points for Honolua |
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `finney-1979-way-to-tahiti` | Finney's book, a lending copy on the Internet Archive (`hokuleawaytotahi0000finn`), not borrowed: the search inside the item refused, but the archive's full-text search answers with a line or two around each term, and some sixty queries chained from one fragment to the next gave these passages. The arrival: "Monday morning, after a smooth crossing, we pulled into Honolua Bay, a deep indentation in Maui's rocky western shore that would shelter us for the next six days"; hours ahead of schedule, a helicopter "loosed a cascade of plumeria blossoms over the beach and the canoe moored just offshore. Then came formal Hawaiian prayers and a kava circle modeled, curiously, on protocol borrowed from the Samoan Islands", the crew cross-legged on the beach in a large circle, each name called and a coconut cup served. The departure ceremony "scheduled for midday" on Friday 30 April, "we would sail the following day, Saturday, May 1"; a fine misty rain, "a blessing rain according to Hawaiian belief"; from the beach "up to a grassy clearing", where Sam Kaʻai, "our chief host on Maui", seated them in a large circle, and "the deep-throated sound of conches, echoing against the valley walls". On 1 May: "the huge crowd there to see us off"; at noon a crewman dismissed the day before agitating for a delay until Tuesday; a kahuna, Edward Kealanahele, asking Sam Kalalau, the oldest, whether the canoe was ready, and "blessing us one by one as we were shuttled out to Hokuleʻa"; "'Let go! Let go!' shouted Kawika. Only a thin line tied the canoe to the land. On shore Kealanahele strained to hold on. He could not hear us above the noise of the wind and the crowd ... he let go. The canoe began to move out. The crowd on shore and lining the cliffs above cheered ... First we let out the big sail forward, then the smaller sail aft. ... Kawika guided us out of the bay ... We skirted the waves curving around the headland. Then the full force of the trades hit us as we broke away from the lee of the cliffs. The canoe surged forward, her sails drawing her into the open ocean as we headed north." The Meotai, "the big steel-hulled motor sailer that is trailing us", chartered largely by the film team. The launching at Kualoa: the canoe "resting on the rise of the beach", the haulers digging in, "all 60 feet and 6 tons of her", "the stunned crowd remains mute for a moment, then lets out a spontaneous cheer", the paddle out, the turn, the white sand beach under green mountains. |
+| `lewis-1976-natgeo` | David Lewis's article in *National Geographic* for October 1976, with Nicholas deVore's photographs and the editor's foreword, in the text layer of a magazine pack on the Internet Archive (`edg-ng-1961`); the photographs were not seen. "Conch-shell trumpets blared from shore as Capt. Kawika Kapahulehua ordered Hokuleʻa's sails unbrailed and her anchor raised. The heavily laden canoe, reverently garlanded in ti leaves for good fortune, pitched into the seas as she came out from under the land and headed north on the first of the long series of tacks that would take us past the 'Big Island' of Hawaii. Far behind followed Meotai, a large ketch." Seventeen men: a Micronesian, a New Zealander, two mainland photographers and thirteen of Hawaiʻi. A caption: Dukie Kuahulu hugging a well-wisher at the departure. The foreword: 15,000 at Papeʻete. |
+| `lewis-1978-voyaging-stars` | The same story in Lewis's *The Voyaging Stars*, read whole in an Australian schoolbook's excerpt (ERIC ED265027 on the Internet Archive), the book itself being a lending copy: "nearing three o'clock in the afternoon"; the watches surrendered; "On the shore at Honolua Bay ... a kahuna, or Hawaiian priest, touched each of us in turn and spoke of the final blessing: 'You belong no more to the land; you are now dedicated to the sea.' We went down to stand knee-deep in the water, whence we were ferried out to Hokuleʻa in a specially consecrated outrigger canoe"; "17 men and the poi dog, Hoku"; "the 20 metre, twin-hulled Hokuleʻa carried claw-shaped cotton sails on her two masts"; the kava ceremony on the eve; the pig Maxwell, a cock and a hen, the plants in tapa. |
+| `lewis-1977-topics` | Lewis's navigational report in *Topics in Culture Learning* 5 (ERIC ED145706): "Next day, 1st May 1976, we unbrailed the sails and put to sea around 1500 ... There were 17 men (including two photographers) aboard ... headed north on the starboard tack ... The northeast trades were variable in direction but generally from east-northeast, force 3 (8–12 knots). The weather was mainly cloudy. The 60 foot auxiliary ketch Meotai, the 'chase boat', followed the canoe"; came about at midnight some 30 miles out, tacked at 0900 on 2 May two miles off Huelo. |
+| `pvs-newsletter-1975-08`, `finney-1992-sea-to-space`, `pvs-archive-1976`, `emory-1975-launching` | The Society's archive (archive.hokulea.com): the canoe as launched (60 feet overall, 15 feet abeam, hulls 3.5 feet wide and five deep, ten crosspieces of 17 feet; or hulls of 62 feet and eight crossbeams in Finney's later account; plywood strips over frames, lashed with modern line, sprit sails); the crew lists; Emory's account of the launching ceremony and Kāne's note on the lūʻau for 2,000. archive.hokulea.com/holokai/1976.html answered 500; hokulea.com's anniversary pages give only the date and the crew. |
+| `mauinow-2021-honolua`, `mauinews-2021-hokulea` | Tertiary, after the Society's release for the forty-fifth anniversary: Kālepa Baybayan as a young man helped paddle the crew from the shore to the canoe; deVore and the filmmaker Dale Bell aboard. |
+| `samlow-moolelo-hokulea` | Sam Low's page on the escort boats: Meotai a 65-foot ketch built in Taiwan by Alex and Elsa Jakubenko, launched in 1974, bought by Bob Burke and used as the escort in 1976. |
+| `upi-1976-lompoc` | A UPI story written before the departure: the crew planned to leave on Friday or when the winds served; Meotai to stay about 10 miles behind. |
+| `usgs-gnis`, `state-gis-streams-dar` | Queried again over the box on 2026-11-04: Honolua Bay, Līpoa Point, Mokulēʻia (Makuleia) Bay, Honokōhau and Honokahua bays, and the three streams. |
+
+### What the scene rests on
+
+**Firm** (two or more accounts by people aboard): the day, Saturday 1 May 1976, and the hour, about three in the
+afternoon; the blessing on the shore, each man in turn, and the crew taken out from knee-deep water in an outrigger canoe;
+the canoe at anchor off the beach with a line to the shore; the conch shells from the shore; the sails let out (the big
+one forward first) and the anchor raised; no tow; the crowd on the shore and on the cliffs, cheering; north on the
+starboard tack with the trade wind from the east-north-east, force 3, under a mainly cloudy sky (Finney has a fine rain
+the day before); Meotai, an auxiliary ketch, following far behind; seventeen aboard with a dog, a pig and two fowls; the
+canoe garlanded in ti leaves. The canoe as built in 1975: two hulls of plywood over frames, a deck on crossbeams between
+them, two masts, two crab-claw (sprit) sails of cotton canvas, steering paddles, the hale (thatched shelters) on deck.
+
+**Inferred**, and said so in each feature's note: where in the bay she lay (a little off the stream mouth, the line in
+reach of the shore); her line across the bay and round Līpoa Point; which cliffs the crowd lined (here both sides of the
+bay, and the point itself at the third stop); the crowd's size, for which no source read gives a number (densities that
+put nearly two thousand people on the beach and the cliffs as she casts off, against Finney's "huge"); where Meotai
+waited (off the mouth); the ferry canoe's size (a club racing canoe's); the canoe's length for drawing, 18.9 m (Finney's
+62-foot hulls) with a 4.6 m beam; Meotai's, 19.8 m (her builder's 65 feet). The times on the features step through the
+afternoon in Hawaiʻi standard time around Lewis's "around 1500"; the crew had given up their watches, and none of the
+times but that one is in a source.
+
+**The shore in 1976.** No patch. The State's geologic map has no fill polygon in the box (the bake's query returned none),
+and nothing read shows made ground in the bay or at the stream mouth by 1976; the tsunami of 1946 (24 feet of run-up,
+by Images of Old Hawaiʻi's page on Honolua, read but not added as a source) is said to have destroyed the coastal improvements, which no source read maps. The beach is today's.
+
+**The launching at Kualoa.** Emory's account is a full order of ceremony, and Finney's opening chapter tells it again; with
+Kāne's figure for the lūʻau it is enough for one near stop: the canoe hauled down a ramp of coconut logs by the men of
+the crowd, paddled out, turned and paddled back. Where on the park's beach she went in is "at the border of Kualoa and
+Hakipuʻu", so the features stand at the beach's southern end, inferred. It is an event of its own (`hokulea-launch-1975`)
+rather than a stop of `hokulea-1976`, whose dates are the voyage's.
+
+### The pack
+
+`honolua`: 156.674–156.600 W, 20.996–21.040 N, 1270 × 801 at 6.08 m (the lidar's 0.5 m, area-averaged), from Kapalua Bay
+and Hāwea Point to Honokōhau Bay, with 2 km of sea off the bay. The Maui part of `HI_NOAAMauiOahu_2020_B20` (99 tiles,
+part 2, flown January to July 2023) sits on the same zero as Oʻahu's: less 0.72 m, it stands −0.01 m over the CUDEM on
+13,154 flat texels, so the shift is kept and declared per district (`lidarShift`). 77 of the 176 squares have no tile,
+all open sea; no land texel comes from the CUDEM. Two CUDEM tiles give the sea floor. Land 44.3%, heights −123 to 284 m;
+against the Maui island pack at 77 m, land IoU 0.985 and heights −0.79 m (median). The routed Honokahua, Honolua and
+Honokōhau streams keep to the State's lines all the way to their mouths with no breach. Rain from the State atlas, 890 to
+1,860 mm. Sea points in the bay and off the point, land points on the point, the beach and the west point, and two rain
+spots are in the district check; no summit in the box has a mapped height in a source read, so no known height is.
+
+### The stops
+
+| stop | place | what it draws | camera |
+| --- | --- | --- | --- |
+| 0, near | `honolua-beach` | the canoe at anchor, the ferry canoe out and back, the crowd on the beach (`gather`) | 110°, 0.3, 8, on the beach |
+| 1, near | `honolua-bay` | the canoe under sail across the bay; the beach crowd (`chant`, the conches), the cliffs under Līpoa Point and the west point (`wave`) | 330°, 0.35, 9, mid-bay |
+| 2, near | `lipoa-point` | the canoe rounding the point and heading north; Meotai behind; watchers on the point in the foreground | 280°, 0.15, 8, off the point |
+| 3, near | `honolua-bay` | the canoe standing out north to the district's edge, Meotai astern | 345°, 0.2, 22, north of the bay |
+| 4, far | `kahiki` | Mataiva, 1 June | none |
+| 5, far | `kahiki` | Papeʻete, 4 June | none |
+
+The launching: one near stop at `kualoa`, 250°, 0.3, 8, on the beach at the park's southern end.
+
+### Where the tellings diverge
+
+- **The departure time.** Lewis: "nearing three o'clock" at the blessing, "around 1500" putting to sea, with every time
+  approximate for want of watches. Finney: the departure ceremony at midday on the Friday; on the Saturday a dispute at
+  noon, the blessing after it. UPI's story, written before, has a Friday departure planned. The stops follow Lewis.
+- **The tow.** None in any account read: she cast off the shore line, let out her sails and raised her anchor, and sailed
+  out. The brief expected a tow or a paddle; the record gives a sail.
+- **The crowd's size.** At Honolua no number in any source read: "huge" (Finney). At Papeʻete 15,000 (*National
+  Geographic*'s foreword), "more than 17,000" (Thompson, in the Society's archive and the Star-Advertiser). At Kualoa
+  the lūʻau was for 2,000 (Kāne).
+- **The canoe's length.** 60 feet overall (the Society's newsletter of 1975; Lewis's 60-foot and "20 metre"), hulls of 62
+  feet (Finney, later); today's canoe, rebuilt, is 61 feet 5 inches. Crosspieces: ten (1975) or eight (Finney, later).
+- **Meotai.** A 60-foot auxiliary ketch (Lewis, twice), a 65-foot ketch (her builder, by way of Low), "the big
+  steel-hulled motor sailer" (Finney); about 10 miles behind (UPI, before the voyage), "far behind" (Lewis).
+- **Who was aboard.** The Society lists fifteen; Lewis counts seventeen men, the two photographers with them (deVore and
+  the filmmaker Dale Bell, by the Maui News). The names stay in tellings.
+- **The article.** The brief gave *National Geographic*'s "Hōkūleʻa Follows the Stars to Tahiti" to Finney; it is
+  Lewis's.
+
+### What was left out, and why
+
+- The dispute among the crew on the beach and on the voyage, and the protest group's wish to be carried to Kahoʻolawe:
+  told in Finney, and part of the record, but not drawn; the stops name what the scene shows.
+- The words of the chants and prayers at Kualoa, and the offering, which Emory sets down: the features draw the people,
+  not the rite. Kealanahele's rite at Honolua is named in the copy only as a blessing.
+- The arrival at Honolua on Monday 26 April (the plumeria from the helicopter, the kava circle) and the departure
+  ceremony of the Friday in the grassy clearing: in the record, but not among the four stops the brief asked for; they
+  would make two more near stops in the same pack.
+
+### What could not be reached
+
+- Finney's 1979 book whole (lending only; read through search fragments), Lewis's *The Voyaging Stars* whole (lending),
+  Finney's *Voyage of Rediscovery* (`finney-1994-voyage-rediscovery`, not found open), Low's *Hawaiki Rising*
+  (`low-2013-hawaiki-rising`, print).
+- The Honolulu Advertiser and Star-Bulletin for 30 April to 3 May 1976 (`honolulu-papers-1976-05`): newspapers.com
+  answered 403, and no other copy was found.
+- The photographs: the Society's (one is captioned "In Honolua Bay"), deVore's in *National Geographic* (only the text
+  layer of the scan was read), the Bishop Museum's. What the crowd wore and carried beyond the ti garlands and the
+  conches is therefore not in the features; `dress: "1970s"` is the contract's own.
+- The film *Hokuleʻa: The Voyage of Rediscovery*'s notes; the American Cinematographer article of February 1977 on the
+  filming (open on the Internet Archive as `1977-02`, found but not read).

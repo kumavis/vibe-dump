@@ -23079,6 +23079,137 @@
      21.5211
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-hokulea-launch",
+   "properties": {
+    "kind": "vessel",
+    "name": "Hōkūleʻa",
+    "design": "waa-kaulua",
+    "length": 18.9,
+    "beam": 4.6,
+    "masts": 2,
+    "sails": 2,
+    "from": 1975,
+    "to": 1975,
+    "event": "hokulea-launch-1975",
+    "behaviour": "paddle",
+    "when": "1975-03-08",
+    "until": "1975-03-08",
+    "stop": 0,
+    "precision": "inferred",
+    "sources": [
+     "emory-1975-launching",
+     "finney-1979-way-to-tahiti",
+     "pvs-newsletter-1975-08"
+    ],
+    "tellings": [
+     {
+      "source": "emory-1975-launching",
+      "says": "Below the peak of Kanehoalani and the broad cliffs of Moʻo Kapu o Hāloa at the north end of Kāneʻohe Bay, Hōkūleʻa slid down a coconut log ramp and floated calmly at sea, at the border of Kualoa and Hakipuʻu in Kualoa Regional Park."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The canoe literally flies down the beach and into the water, all 60 feet and 6 tons of her."
+     }
+    ],
+    "note": "Launched from the beach of the park at Kualoa, paddled out some way from the shore, turned, and paddled back to the beach with the paddles struck against the hulls in time with the chant. Where on the beach she went in, and how far out she went, are not given; here near the park’s southern end, toward Hakipuʻu, and a short way out over the reef flat."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -157.8351,
+      21.5104
+     ],
+     [
+      -157.833,
+      21.5106
+     ],
+     [
+      -157.831,
+      21.511
+     ],
+     [
+      -157.83,
+      21.5104
+     ],
+     [
+      -157.832,
+      21.51
+     ],
+     [
+      -157.8345,
+      21.5101
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-kualoa-launch",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1975,
+    "to": 1975,
+    "event": "hokulea-launch-1975",
+    "count": 2000,
+    "behaviour": "gather",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1975-03-08",
+    "until": "1975-03-08",
+    "stop": 0,
+    "precision": "inferred",
+    "sources": [
+     "emory-1975-launching",
+     "finney-1979-way-to-tahiti"
+    ],
+    "tellings": [
+     {
+      "source": "emory-1975-launching",
+      "says": "Herb Kāne: the launching festivities and lūʻau for 2,000 were done entirely by volunteers."
+     },
+     {
+      "source": "emory-1975-launching",
+      "says": "The master of ceremonies, Moroni Medeiros, invited all males in the audience to help pull the ropes for the launching."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The stunned crowd remains mute for a moment, then lets out a spontaneous cheer."
+     }
+    ],
+    "note": "The people on the beach and the lawn behind it, the men among them on the hauling lines. The count is the feast’s, which Kāne gives; how many stood on the beach at the moment of the launch is in no source read."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -157.8375,
+       21.5101
+      ],
+      [
+       -157.8359,
+       21.51
+      ],
+      [
+       -157.8358,
+       21.5113
+      ],
+      [
+       -157.8376,
+       21.5117
+      ],
+      [
+       -157.8375,
+       21.5101
+      ]
+     ]
+    ]
+   }
   }
  ]
 }

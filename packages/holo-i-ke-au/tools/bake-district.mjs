@@ -4,7 +4,7 @@
 // lidar, with the patches that put the shoreline back where it was.
 //
 //   node packages/holo-i-ke-au/tools/bake-district.mjs --all            download, bake, check, delete the downloads
-//   node packages/holo-i-ke-au/tools/bake-district.mjs --download       fetch every source (nuuanu ~1.5 GB, koolaupoko ~3.6 GB)
+//   node packages/holo-i-ke-au/tools/bake-district.mjs --download       fetch every source (nuuanu ~1.5 GB, koolaupoko ~3.6 GB, honolua ~1.2 GB)
 //   node packages/holo-i-ke-au/tools/bake-district.mjs --bake           write public/data/districts/ from the downloads
 //   node packages/holo-i-ke-au/tools/bake-district.mjs --check          read public/data/districts/ back and check it
 //   node packages/holo-i-ke-au/tools/bake-district.mjs --preview DIR    shaded relief, lines, streams, breaches, patches
@@ -12,8 +12,8 @@
 //   node packages/holo-i-ke-au/tools/bake-district.mjs --clean          delete the downloads directory
 //
 // Options:
-//   --district id     the district to download, bake or find breaches for: nuuanu (the default)
-//                     or koolaupoko (lib/district-sources.mjs); --check and --preview take every district
+//   --district id     the district to download, bake or find breaches for: nuuanu (the default),
+//                     koolaupoko or honolua (lib/district-sources.mjs); --check and --preview take every district
 //   --downloads DIR   where raw downloads go (default: $HOLO_DISTRICT_DOWNLOADS, else
 //                     <os tmpdir>/holo-i-ke-au-bake/district-downloads). Keep it outside the repo.
 //   --breach LIST     carve these instead of the district's own breaches: polylines

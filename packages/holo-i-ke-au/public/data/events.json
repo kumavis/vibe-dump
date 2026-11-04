@@ -3881,6 +3881,74 @@
     ]
   },
   {
+    "id": "hokulea-launch-1975",
+    "title": "Hōkūleʻa launched",
+    "gloss": "a voyaging canoe takes to the sea at Kualoa",
+    "when": {
+      "from": "1975-03-08",
+      "to": "1975-03-08",
+      "precision": "day"
+    },
+    "era": "coda",
+    "where": [
+      {
+        "place": "kualoa",
+        "role": "launching"
+      }
+    ],
+    "zoom": [
+      "near"
+    ],
+    "kind": "other",
+    "summary": "On 8 March 1975 the Polynesian Voyaging Society launches Hōkūleʻa, a double-hulled voyaging canoe, from the beach at Kualoa on the border with Hakipuʻu, lands remembered as the homes of the voyaging chiefs Laʻamaikahiki and Kahaʻi. After the conches, the purification and the chants, the men of the crowd haul her down a ramp of coconut logs into the sea. She is paddled out, turned, and brought back to the beach, a Christian blessing follows, and the day ends in a lūʻau.",
+    "sources": [
+      {
+        "id": "emory-1975-launching",
+        "where": "whole page, and Kāne’s note"
+      },
+      {
+        "id": "finney-1979-way-to-tahiti",
+        "where": "ch. 1, “The Launching” (through the archive’s full-text search)"
+      },
+      {
+        "id": "finney-1992-sea-to-space",
+        "where": "the building"
+      }
+    ],
+    "confidence": {
+      "date": "firm",
+      "place": "firm",
+      "numbers": "soft"
+    },
+    "tellings": [
+      {
+        "source": "emory-1975-launching",
+        "says": "Herb Kāne: the launching festivities and lūʻau for 2,000 were done entirely by volunteers, led largely by Paige Barber."
+      },
+      {
+        "source": "finney-1979-way-to-tahiti",
+        "says": "The canoe flies down the beach and into the water, all 60 feet and 6 tons of her."
+      }
+    ],
+    "stops": [
+      {
+        "text": "On 8 March 1975, below the cliffs of Kualoa, the men of the crowd haul Hōkūleʻa down the beach into the sea. Her paddlers take her out, turn her, and bring her back to the shore.",
+        "place": "kualoa",
+        "zoom": "near",
+        "year": 1975,
+        "camera": {
+          "bearing": 250,
+          "pitch": 0.3,
+          "distance": 8,
+          "target": [
+            -157.8345,
+            21.5106
+          ]
+        }
+      }
+    ]
+  },
+  {
     "id": "hokulea-1976",
     "title": "Hōkūleʻa",
     "gloss": "a canoe sails to Tahiti by the stars",
@@ -3901,10 +3969,11 @@
       }
     ],
     "zoom": [
-      "far"
+      "far",
+      "near"
     ],
     "kind": "voyage",
-    "summary": "The voyaging canoe Hōkūleʻa sails from Honolua Bay on Maui for Tahiti. Mau Piailug, a master navigator from Satawal in Micronesia, guides her by stars, swells and other signs of sea and sky, with no modern instruments. She sights Mataiva in the Tuamotu and reaches Papeʻete in June to a crowd that fills the harbor. The voyage becomes a catalyst for what is called the Hawaiian Renaissance.",
+    "summary": "The voyaging canoe Hōkūleʻa sails from Honolua Bay on Maui for Tahiti on the afternoon of 1 May 1976, blessed on the beach and cheered from the shore and the cliffs. Mau Piailug, a master navigator from Satawal in Micronesia, guides her by stars, swells and other signs of sea and sky, with no modern instruments, the ketch Meotai following far behind. She sights Mataiva in the Tuamotu and reaches Papeʻete in June to a crowd that fills the harbor. The voyage becomes a catalyst for what is called the Hawaiian Renaissance.",
     "sources": [
       {
         "id": "staradvertiser-2026-hokulea",
@@ -3917,17 +3986,171 @@
       {
         "id": "ks-kealaikahiki-2020",
         "where": "pp. 1–2"
+      },
+      {
+        "id": "finney-1979-way-to-tahiti",
+        "where": "ch. “May 1—Departure for Tahiti” and the days at Honolua before it (through the archive’s full-text search)"
+      },
+      {
+        "id": "lewis-1976-natgeo",
+        "where": "the departure, and the editor’s foreword"
+      },
+      {
+        "id": "lewis-1978-voyaging-stars",
+        "where": "the departure, in the excerpt of ERIC ED265027"
+      },
+      {
+        "id": "lewis-1977-topics",
+        "where": "pp. 13–14"
+      },
+      {
+        "id": "pvs-archive-1976",
+        "where": "whole page"
+      },
+      {
+        "id": "pvs-newsletter-1975-08",
+        "where": "the canoe"
+      },
+      {
+        "id": "finney-1992-sea-to-space",
+        "where": "the building"
+      },
+      {
+        "id": "mauinow-2021-honolua",
+        "where": "whole article"
+      },
+      {
+        "id": "mauinews-2021-hokulea",
+        "where": "whole article"
+      },
+      {
+        "id": "samlow-moolelo-hokulea",
+        "where": "the escort boats"
+      },
+      {
+        "id": "upi-1976-lompoc",
+        "where": "whole article"
+      },
+      {
+        "id": "low-2013-hawaiki-rising",
+        "where": "not read"
+      },
+      {
+        "id": "finney-1994-voyage-rediscovery",
+        "where": "not read"
+      },
+      {
+        "id": "honolulu-papers-1976-05",
+        "where": "not read"
       }
     ],
     "confidence": {
       "date": "firm",
       "place": "firm",
-      "numbers": "firm"
+      "numbers": "soft"
     },
     "tellings": [
       {
         "source": "staradvertiser-2026-hokulea",
         "says": "Thirty-one days out the crew sighted Mataiva; more than 17,000 people met the canoe at Papeʻete on 4 June."
+      },
+      {
+        "source": "lewis-1976-natgeo",
+        "says": "A crowd of 15,000 people, the largest assembly in the history of Tahiti, swarmed around and even into the waters of Papeʻete harbor (the editor’s foreword)."
+      },
+      {
+        "source": "lewis-1977-topics",
+        "says": "Next day, 1st May 1976, we unbrailed the sails and put to sea around 1500. There were 17 men (including two photographers) aboard."
+      },
+      {
+        "source": "lewis-1978-voyaging-stars",
+        "says": "It was nearing three o’clock in the afternoon, although none of us could be certain of the time; we had already surrendered our watches. And so 17 men and the poi dog, Hoku, left Hawaiʻi for Tahiti on May 1, 1976."
+      },
+      {
+        "source": "finney-1979-way-to-tahiti",
+        "says": "We pulled into Honolua Bay on the Monday morning, a deep indentation in Maui’s rocky western shore that would shelter us for the next six days; the departure ceremony was set for midday on Friday, and we would sail the following day, Saturday, May 1."
+      },
+      {
+        "source": "upi-1976-lompoc",
+        "says": "The crew planned to depart Friday or as soon after as winds are favorable."
+      },
+      {
+        "source": "pvs-archive-1976",
+        "says": "After a day and a half on Mataiva the canoe sailed on a reach to Tahiti, arriving on June 4, thirty-four days after departing from Maui."
+      }
+    ],
+    "stops": [
+      {
+        "text": "On the afternoon of 1 May a crowd fills the beach at the head of Honolua Bay. Hōkūleʻa lies at anchor just offshore. A kahuna blesses the crew one by one at the water’s edge, and an outrigger canoe carries them out to her.",
+        "place": "honolua-beach",
+        "zoom": "near",
+        "year": 1976,
+        "camera": {
+          "bearing": 110,
+          "pitch": 0.3,
+          "distance": 8,
+          "target": [
+            -156.638,
+            21.0133
+          ]
+        }
+      },
+      {
+        "text": "At about three the conch shells sound from the shore. Her sails are let out, the anchor comes up, the last line to the land is let go, and she crosses the bay under sail while the people on the beach and along the cliffs above cheer.",
+        "place": "honolua-bay",
+        "zoom": "near",
+        "year": 1976,
+        "camera": {
+          "bearing": 330,
+          "pitch": 0.35,
+          "distance": 9,
+          "target": [
+            -156.64,
+            21.016
+          ]
+        }
+      },
+      {
+        "text": "She rounds Līpoa Point. Out of the lee of the cliffs the trade wind fills her two sails, and she heads north on the first long tack, the escort ketch Meotai far behind.",
+        "place": "lipoa-point",
+        "zoom": "near",
+        "year": 1976,
+        "camera": {
+          "bearing": 280,
+          "pitch": 0.15,
+          "distance": 8,
+          "target": [
+            -156.6435,
+            21.0255
+          ]
+        }
+      },
+      {
+        "text": "She stands out to the north, to work east around Maui and Hawaiʻi Island before she turns south for the Tuamotu.",
+        "place": "honolua-bay",
+        "zoom": "near",
+        "year": 1976,
+        "camera": {
+          "bearing": 345,
+          "pitch": 0.2,
+          "distance": 22,
+          "target": [
+            -156.638,
+            21.034
+          ]
+        }
+      },
+      {
+        "text": "On 1 June, a month out, the crew sight Mataiva, an atoll at the western edge of the Tuamotu, found by the stars, the swells and the terns that fish near land.",
+        "place": "kahiki",
+        "zoom": "far",
+        "year": 1976
+      },
+      {
+        "text": "On 4 June Hōkūleʻa sails into the harbor of Papeʻete, and a crowd that fills the shore comes out to meet her.",
+        "place": "kahiki",
+        "zoom": "far",
+        "year": 1976
       }
     ]
   },

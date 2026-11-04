@@ -166,6 +166,41 @@ export const DISTRICTS = {
     inlandWater: 'the stream mouths, the canals and the open water of the ponds and marshes',
     chartedSea: 'the bay’s channels and dredged areas',
   },
+  honolua: {
+    id: 'honolua',
+    name: 'Honolua',
+    island: 'maui',
+    moku: 'Kāʻanapali',
+    // The bay Hōkūleʻa left for Tahiti on 1 May 1976 (DESIGN.md §14), with
+    // its headlands and the coast either side: West, past Hāwea Point and
+    // Kapalua Bay (156.668 W). East, Honokōhau Bay and the mouth of its
+    // stream (156.609 W) with 900 m to spare. South, the slopes above the bay
+    // to about 300 m. North, 2 km of open sea off the bay's mouth, for the
+    // canoe's course out. About 7.7 by 4.9 km, so 6.06 m on 1,270 texels.
+    bbox: [-156.674, 20.996, -156.6, 21.04],
+    longSide: 1270,
+    breaches: [],
+    // the three perennial streams of the box, to their mouths in Honokahua,
+    // Honolua and Honokōhau bays
+    streams: [
+      { name: 'Honokahua Stream', stream: 'Honokahua', trib: 'Honokahua' },
+      { name: 'Honolua Stream', stream: 'Honolua', trib: 'Honolua' },
+      { name: 'Honokōhau Stream', stream: 'Honokohau', trib: 'Honokohau' },
+    ],
+    // The Government Survey sheets the State serves here are Oʻahu's, so
+    // none is exported; and no patch: the geologic map's fill unit has no
+    // polygon in the box, and nothing read shows made ground in the bay by
+    // 1976 (RESEARCH.md §18)
+    maps: [],
+    patches: false,
+    // the survey's zero against local mean sea level, measured on Maui too
+    // (residual −0.01 m against the CUDEM over this box)
+    lidarShift: 0.72,
+    // every square without a lidar tile is open sea here
+    missingWhere: 'open sea',
+    inlandWater: 'the stream mouths',
+    chartedSea: 'the bay and the open sea',
+  },
 }
 
 export function districtGrid(d) {
@@ -493,7 +528,9 @@ export function downloadFill(ledger, dir, d, grid, log) {
   const r = fetchTo(ledger, url, p.fill, { force: true })
   if (!r.ok) throw new Error(`fill polygons: HTTP ${r.status}`)
   const fc = JSON.parse(readFileSync(p.fill, 'utf8'))
-  if (fc.type !== 'FeatureCollection' || !fc.features?.length) throw new Error('fill polygons: no features')
+  if (fc.type !== 'FeatureCollection') throw new Error('fill polygons: not a FeatureCollection')
+  // (a district with no patches may have no made ground at all: Honolua's box holds none)
+  if (!fc.features?.length && d.patches !== false) throw new Error('fill polygons: no features')
   log(`  fill: ${fc.features.length} polygons`)
 }
 

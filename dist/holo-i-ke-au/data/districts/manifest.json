@@ -2100,6 +2100,152 @@
           "note": "674 lines; the Division of Aquatic Resources stream lines (stream_nam, trib_nam); used only to check the routed trunks, never baked"
         }
       ]
+    },
+    {
+      "id": "honolua",
+      "name": "Honolua",
+      "island": "maui",
+      "parent": "maui",
+      "moku": "Kāʻanapali",
+      "bounds": [
+        -156.674,
+        20.9959941,
+        -156.6,
+        21.0400059
+      ],
+      "size": [
+        1270,
+        801
+      ],
+      "metresPerTexel": [
+        6.0756,
+        6.0756
+      ],
+      "height": {
+        "file": "honolua/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "rain": {
+        "file": "honolua/rain.png"
+      },
+      "patches": [],
+      "features": "honolua/features.json",
+      "breaches": [],
+      "streams": [
+        {
+          "name": "Honokahua Stream",
+          "mapped": "Honokahua / Honokahua",
+          "from": [
+            -156.647401,
+            20.998055
+          ],
+          "outlet": [
+            -156.649731,
+            21.005417
+          ],
+          "mouth": [
+            -156.649633,
+            21.00567
+          ],
+          "outletOffStreamMetres": 12,
+          "outletFromMouthMetres": 30,
+          "withinMappedShare": 1,
+          "lengthKm": 1.163,
+          "catchmentKm2": 1.36,
+          "deepestPitMetres": 0.8,
+          "ok": true
+        },
+        {
+          "name": "Honolua Stream",
+          "mapped": "Honolua / Honolua",
+          "from": [
+            -156.622054,
+            20.998
+          ],
+          "outlet": [
+            -156.638544,
+            21.013
+          ],
+          "mouth": [
+            -156.638624,
+            21.013006
+          ],
+          "outletOffStreamMetres": 6,
+          "outletFromMouthMetres": 8,
+          "withinMappedShare": 1,
+          "lengthKm": 3.354,
+          "catchmentKm2": 3.38,
+          "deepestPitMetres": 1.3,
+          "ok": true
+        },
+        {
+          "name": "Honokōhau Stream",
+          "mapped": "Honokohau / Honokohau",
+          "from": [
+            -156.605506,
+            20.998
+          ],
+          "outlet": [
+            -156.609527,
+            21.021077
+          ],
+          "mouth": [
+            -156.608974,
+            21.02162
+          ],
+          "outletOffStreamMetres": 54,
+          "outletFromMouthMetres": 83,
+          "withinMappedShare": 1,
+          "lengthKm": 3.036,
+          "catchmentKm2": 2.16,
+          "deepestPitMetres": 0.8,
+          "ok": true
+        }
+      ],
+      "stats": {
+        "landFraction": 0.4433,
+        "minMetres": -123,
+        "maxMetres": 283.75,
+        "rainCoverage": 1,
+        "lidarShare": 1,
+        "datumShiftMetres": 0.72
+      },
+      "sources": [
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-11-04",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA",
+          "collected": "2023-01-11 to 2023-07-07",
+          "note": "99 tiles (USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QGJ420230 … USGS_OPR_HI_NOAAMauiOahu_2020_B20_4QGJ490275, part HI_NOAAMauiOahu_2_B20); every 0.5 m cell counts toward the texel its centre falls in. The survey's zero is 0.72 m below mean sea level (measured against the CUDEM on flat ground; residual -0.01 m) and is moved to it. A cell is land above +0.2 m, because water inside the coast is flattened to the level of the day it was flown (−0.35 to +0.1 m); a texel is land when at least half its cells are, and holds their mean (never below 0.25 m). 77 of the 176 squares over the box have no tile: open sea"
+        },
+        {
+          "id": "noaa-ncei-cudem-ninth-hawaii",
+          "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
+          "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
+          "fetched": "2026-11-04",
+          "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
+          "note": "tile ncei19_n21x00_w156x75_2021v1, ncei19_n21x25_w156x75_2021v1, about 3 m cells. Sea texels: the area-weighted mean of the cells below mean sea level, never shallower than -1 m (565696 texels; the reef flats from topobathymetric lidar, the bay and the open sea from NOAA surveys); 652 texels of water inside the coast that the CUDEM holds as land (the stream mouths) are a flat -1 m. Land: every land texel is the lidar’s; none is taken from the CUDEM"
+        },
+        {
+          "id": "rainfall-atlas-hawaii-2013",
+          "title": "Rainfall Atlas of Hawaiʻi, statewide mean annual rainfall grid (mm), ASCII grid",
+          "url": "https://atlas.uhtapis.org/rainfall/assets/files/GISLayers/StateASCIIGrids_mm.zip",
+          "fetched": "2026-11-04",
+          "licence": "free to use with citation: Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid and D.M. Delparte, 2013: Online Rainfall Atlas of Hawaiʻi. Bull. Amer. Meteor. Soc. 94, 313-316, doi:10.1175/BAMS-D-11-00228.1",
+          "note": "rfgrid_mm_state_ann.txt, 0.00225 degree cells; interpolated onto the pack (the cells are 40 times the texel), 0 over sea, encoded r = ln(mm/300)/ln(40)"
+        },
+        {
+          "id": "hawaii-gis-streams-dar",
+          "title": "State of Hawaiʻi GIS, Streams (DAR), FreshWater MapServer layer 1, in the district box",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/FreshWater/MapServer/1",
+          "fetched": "2026-11-04",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
+          "note": "20 lines; the Division of Aquatic Resources stream lines (stream_nam, trib_nam); used only to check the routed trunks, never baked"
+        }
+      ]
     }
   ]
 }

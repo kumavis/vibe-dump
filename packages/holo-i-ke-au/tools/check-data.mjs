@@ -112,8 +112,18 @@ const ROUTE_END_KM = 1.5 // a route may touch land this close to either end (a l
 const COAST_TOLERANCE_M = 200 // and elsewhere this far inside the simplified coastline
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 // district packs (DATA.md "District packs")
-const FEATURE_KINDS = new Set(['loi', 'fishpond', 'village', 'heiau', 'trail', 'stream', 'force', 'line', 'label'])
+const FEATURE_KINDS = new Set(['loi', 'fishpond', 'village', 'heiau', 'trail', 'stream', 'force', 'line', 'label', 'vessel', 'crowd'])
 const FEATURE_PRECISION = new Set(['exact', 'mapped', 'inferred', 'schematic'])
+// vessels and crowds in a district (DATA.md "Vessels and crowds, in a district"; checkSceneFeature below)
+const VESSEL_DESIGNS = new Set(['waa-kaulua', 'waa', 'motor', 'ship'])
+const VESSEL_BEHAVIOURS = new Set(['moored', 'paddle', 'tow', 'sail', 'anchor'])
+const CROWD_BEHAVIOURS = new Set(['gather', 'wave', 'chant', 'procession', 'watch'])
+const CROWD_DRESS = new Set(['1970s', 'kingdom', 'precontact'])
+// a crowd stands on land: at most this share of its texels may be sea (wet sand at the water's edge)
+const CROWD_SEA_SHARE = 0.1
+// an ISO date or datetime, with an optional zone: 1976-05-01, 1976-05-01T15:00, 1976-05-01T15:00-10:00
+const ISO_DATETIME = /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})?)?$/
+const sceneHeights = new Map() // district id → (lon, lat) → metres on its heights, or null
 // the sides a force moves for: DATA.md names oahu and hawaii (1795); maui is Kahekili's army of 1783
 const FORCE_ROLES = new Set(['oahu', 'hawaii', 'maui'])
 const LINE_ROLES = new Set(['advance', 'stand', 'retreat'])
@@ -901,6 +911,7 @@ function checkDistrict(d) {
   const lois = [] // [at, polygon], for the slope rule
   const outlines = {} // a loʻi's rings as JSON → [{ at, a, b }], its years, for the one-loʻi-a-year rule
   const crops = {} // loʻi by crop, where a crop is given
+  const scene = { vessels: new Set(), escorts: [] } // vessel ids, and what each escorts, for the escort rule
   for (const [i, f] of fc.features.entries()) {
     const at = `${d.file} ${f?.id ?? `#${i}`}`
     if (f?.type !== 'Feature' || !f.properties || typeof f.properties !== 'object') { bad(at, 'must be a Feature with properties'); continue }
@@ -912,7 +923,7 @@ function checkDistrict(d) {
     }
     const p = f.properties
     kinds[p.kind] = (kinds[p.kind] || 0) + 1
-    if (!FEATURE_KINDS.has(p.kind)) { bad(at, `kind “${p.kind}” is not loi | fishpond | village | heiau | trail | stream | force | line | label`); continue }
+    if (!FEATURE_KINDS.has(p.kind)) { bad(at, `kind “${p.kind}” is not ${[...FEATURE_KINDS].join(' | ')}`); continue }
     if (!(p.name === null || (typeof p.name === 'string' && p.name))) bad(at, 'name must be a name or null')
     checkHawaiian(`${at} name`, p.name)
     checkHawaiian(`${at} note`, p.note)
@@ -948,7 +959,7 @@ function checkDistrict(d) {
 
     // geometry: the type the kind wants, valid, inside the district's box
     const g = f.geometry
-    const want = ['loi', 'fishpond'].includes(p.kind) ? ['Polygon'] : p.kind === 'village' ? ['Polygon', 'Point'] : ['heiau', 'label'].includes(p.kind) ? ['Point'] : ['LineString']
+    const want = ['loi', 'fishpond', 'crowd'].includes(p.kind) ? ['Polygon'] : p.kind === 'village' ? ['Polygon', 'Point'] : ['heiau', 'label'].includes(p.kind) ? ['Point'] : ['LineString']
     if (!g || !want.includes(g.type)) { bad(at, `a ${p.kind} must be a ${want.join(' or ')}`); continue }
     const positions = g.type === 'Point' ? [g.coordinates] : g.type === 'LineString' ? g.coordinates : g.coordinates.flat()
     if (!positions.every((c) => Array.isArray(c) && c.length === 2 && c.every(Number.isFinite))) { bad(at, 'has a position that is not [lon, lat]'); continue }
@@ -1014,6 +1025,8 @@ function checkDistrict(d) {
       // the app routes water from the heights; a mapped course is kept for its label and for checks
       if (!STREAM_ROLES.has(p.role)) bad(at, `a stream's role “${p.role}” is not ${[...STREAM_ROLES].join(' | ')}`)
       if (!p.name) bad(at, 'a stream needs its name, for its label')
+    } else if (p.kind === 'vessel' || p.kind === 'crowd') {
+      checkSceneFeature(at, f.id, p, g, d, scene)
     } else if (p.role !== undefined) bad(at, `a ${p.kind} has no role`)
 
     // heiau: ahupuaʻa precision unless an established public landmark (DATA.md §4, DESIGN.md §7.4)
@@ -1032,6 +1045,11 @@ function checkDistrict(d) {
         }
       }
     }
+  }
+  // an escort names another vessel of the same district
+  for (const { at, id, escort } of scene.escorts) {
+    if (escort === id) bad(at, 'a vessel cannot escort itself')
+    else if (!scene.vessels.has(escort)) bad(at, `escort “${escort}” is not the id of a vessel in this district`)
   }
   // a leap goes over an edge: its line ends at a place of kind pali
   const edges = places.filter((q) => q.kind === 'pali').map((q) => [q, placePoint(q)]).filter(([, c]) => c)
@@ -1061,6 +1079,129 @@ function checkDistrict(d) {
   const armed = fc.features.filter((f) => f?.properties?.arms).length
   const cannon = fc.features.reduce((n, f) => n + (f?.properties?.arms?.cannon || 0), 0)
   districtCounts.push({ id: d.id, n: fc.features.length, kinds, from: d.from, steep, moves, armed, cannon, crops })
+}
+
+// ---------------------------------------------------------------------------
+// Vessels and crowds, in a district (DATA.md "Vessels and crowds, in a district")
+//
+// A vessel is a LineString track with a design, a length, a behaviour (one, or one per segment), a
+// when and an optional until, the stop or stops of its event at which it shows, and an optional
+// escort; who was aboard goes in a telling, never in a field. A crowd is a Polygon on the shore with
+// a count or a density (the number in a telling), a behaviour, a dress and a facing. A track keeps to
+// the water and a crowd to the land, on the district's own heights.
+function sceneTime(s) {
+  if (typeof s !== 'string' || !ISO_DATETIME.test(s)) return null
+  const t = Date.parse(s.length === 10 ? `${s}T00:00Z` : s)
+  return Number.isFinite(t) ? t : null
+}
+
+function districtSampler(d) {
+  if (sceneHeights.has(d.id)) return sceneHeights.get(d.id)
+  let f = null
+  const path = d.height?.file && join(DATA, 'districts', d.height.file)
+  if (path && Array.isArray(d.size) && d.bounds && existsSync(path)) {
+    try {
+      const img = readPNG(path)
+      const [W, H] = d.size
+      if (img.width === W && img.height === H && img.channels === 3) {
+        const [west, south, east, north] = d.bounds
+        const dLon = (east - west) / W
+        const dLat = (north - south) / H
+        const scale = d.height.scale ?? 0.25
+        const offset = d.height.offset ?? -6000
+        f = (lon, lat) => {
+          const i = Math.max(0, Math.min(W - 1, Math.floor((lon - west) / dLon)))
+          const j = Math.max(0, Math.min(H - 1, Math.floor((north - lat) / dLat)))
+          const o = (j * W + i) * 3
+          return (img.data[o] * 256 + img.data[o + 1]) * scale + offset
+        }
+        f.texel = { dLon, dLat }
+      }
+    } catch { f = null }
+  }
+  sceneHeights.set(d.id, f)
+  return f
+}
+
+function checkSceneFeature(at, id, p, g, d, scene) {
+  const stops = Array.isArray(p.stop) ? p.stop : [p.stop]
+  if (!stops.length || !stops.every((k) => Number.isInteger(k) && k >= 0)) bad(at, `a ${p.kind} needs a stop: the index, from 0, of the stop of its event at which it shows (or a list of them)`)
+  const w = sceneTime(p.when)
+  if (w === null) bad(at, `a ${p.kind} needs a when, an ISO date or datetime (as 1976-05-01T15:00-10:00)`)
+  if (p.until !== undefined) {
+    const u = sceneTime(p.until)
+    if (u === null) bad(at, `until ${p.until} is not an ISO date or datetime`)
+    else if (w !== null && u < w) bad(at, `until ${p.until} is before when ${p.when}`)
+  }
+  if (p.event === undefined) warn(at, `a ${p.kind} names no event`)
+  else {
+    const ev = V.get(p.event)
+    if (!ev) bad(at, `event “${p.event}” is not in events.json`)
+    else {
+      const a = parseDate(ev.when?.from), b = parseDate(ev.when?.to ?? ev.when?.from)
+      const t = w === null ? null : new Date(w)
+      const y = t && t.getUTCFullYear() + t.getUTCMonth() / 12 + (t.getUTCDate() - 1) / 365
+      if (a && b && y !== null && (y < a.start - 1 / 12 || y > b.end + 1 / 12)) bad(at, `when ${p.when} falls outside event ${ev.id} (${ev.when.from}–${ev.when.to})`)
+      const n = (ev.stops || []).length
+      for (const k of stops) if (Number.isInteger(k) && k >= n) bad(at, `stop index ${k} is not a stop of event ${ev.id}, whose stops are indexed 0 to ${n - 1}`)
+    }
+  }
+  for (const k of ['crew', 'aboard', 'people']) if (p[k] !== undefined) bad(at, `${k} goes in a telling, not in a field`)
+  const sample = districtSampler(d)
+  if (p.kind === 'vessel') {
+    if (typeof id === 'string') scene.vessels.add(id)
+    if (!VESSEL_DESIGNS.has(p.design)) bad(at, `design “${p.design}” is not ${[...VESSEL_DESIGNS].join(' | ')}`)
+    if (!(Number.isFinite(p.length) && p.length > 0 && p.length < 400)) bad(at, `length ${p.length} is not metres between 0 and 400`)
+    if (p.beam !== undefined && !(Number.isFinite(p.beam) && p.beam > 0 && p.beam < p.length)) bad(at, `beam ${p.beam} is not metres, less than the length`)
+    for (const k of ['sails', 'masts']) if (p[k] !== undefined && !(Number.isInteger(p[k]) && p[k] >= 0 && p[k] <= 8)) bad(at, `${k} ${p[k]} is not a count from 0 to 8`)
+    if (p.design === 'waa-kaulua' && !(Number.isInteger(p.masts) && Number.isInteger(p.sails))) bad(at, 'a waa-kaulua needs its masts and sails')
+    if (p.sails > 0 && !(p.masts > 0)) bad(at, 'sails need a mast')
+    const segments = g.type === 'LineString' ? g.coordinates.length - 1 : 0
+    const bs = Array.isArray(p.behaviour) ? p.behaviour : [p.behaviour]
+    if (!bs.length || !bs.every((b) => VESSEL_BEHAVIOURS.has(b))) bad(at, `behaviour ${JSON.stringify(p.behaviour)} is not ${[...VESSEL_BEHAVIOURS].join(' | ')} (one, or a list with one per segment)`)
+    else if (Array.isArray(p.behaviour) && p.behaviour.length !== segments) bad(at, `behaviour lists ${p.behaviour.length} for a track of ${segments} segment(s); a list has one per segment`)
+    if (p.escort !== undefined) {
+      if (typeof p.escort !== 'string' || !p.escort) bad(at, 'escort must be the id of a vessel')
+      else scene.escorts.push({ at, id, escort: p.escort })
+    }
+    // the track keeps to the water: every vertex and every segment's middle on the district's sea
+    if (sample && g.type === 'LineString') {
+      const cs = g.coordinates
+      const probes = cs.flatMap((c, k) => (k ? [[(c[0] + cs[k - 1][0]) / 2, (c[1] + cs[k - 1][1]) / 2], c] : [c]))
+      const dry = probes.filter((c) => sample(c[0], c[1]) > 0)
+      if (dry.length) bad(at, `its track crosses land at ${dry.length} of ${probes.length} probes (the first at ${dry[0].map((v) => v.toFixed(5)).join(', ')})`)
+    }
+  } else {
+    if (p.count === undefined && p.density === undefined) bad(at, 'a crowd needs a count or a density (people per m²), with the number in a telling')
+    if (p.count !== undefined && !(Number.isInteger(p.count) && p.count > 0)) bad(at, `count ${p.count} is not a whole number of people`)
+    if (p.density !== undefined && !(Number.isFinite(p.density) && p.density > 0 && p.density <= 4)) bad(at, `density ${p.density} is not people per m² between 0 and 4`)
+    if (!(p.tellings || []).length) bad(at, 'a crowd carries its number, or what the sources say of its size, in a telling (none here)')
+    if (!CROWD_BEHAVIOURS.has(p.behaviour)) bad(at, `behaviour “${p.behaviour}” is not ${[...CROWD_BEHAVIOURS].join(' | ')}`)
+    if (!CROWD_DRESS.has(p.dress)) bad(at, `dress “${p.dress}” is not ${[...CROWD_DRESS].join(' | ')}`)
+    if (!(p.facing === 'sea' || (Number.isFinite(p.facing) && p.facing >= 0 && p.facing < 360))) bad(at, `facing ${p.facing} is not sea or a bearing from 0 to under 360`)
+    // on the land: the texels whose centres fall inside the outline (even-odd), at most a sliver of them sea
+    if (sample && g.type === 'Polygon') {
+      const ring = g.coordinates[0]
+      const xs = ring.map((c) => c[0])
+      const ys = ring.map((c) => c[1])
+      const { dLon, dLat } = sample.texel
+      let n = 0
+      let wet = 0
+      for (let lat = Math.min(...ys) + dLat / 2; lat < Math.max(...ys); lat += dLat) {
+        for (let lon = Math.min(...xs) + dLon / 2; lon < Math.max(...xs); lon += dLon) {
+          let inside = false
+          for (let a = 0, b = ring.length - 1; a < ring.length; b = a++) {
+            if ((ring[a][1] > lat) !== (ring[b][1] > lat) && lon < ((ring[b][0] - ring[a][0]) * (lat - ring[a][1])) / (ring[b][1] - ring[a][1]) + ring[a][0]) inside = !inside
+          }
+          if (!inside) continue
+          n++
+          if (!(sample(lon, lat) > 0)) wet++
+        }
+      }
+      if (!n) bad(at, 'covers no texel of the district')
+      else if (wet / n > CROWD_SEA_SHARE) bad(at, `${((wet / n) * 100).toFixed(0)}% of its texels are sea; a crowd stands on the shore (at most ${CROWD_SEA_SHARE * 100}%)`)
+    }
+  }
 }
 
 /**

@@ -142,7 +142,9 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   // --- lidar
   const tiles = JSON.parse(readFileSync(p.lidarTiles, 'utf8'))
   const squares = squaresOver(utmExtent(grid.bounds), tiles)
-  const lidar = await cachedLidar(p, squares, grid, log)
+  // the survey's zero below mean sea level: a district on another island may measure its own
+  const SHIFT = d.lidarShift ?? LIDAR_SHIFT
+  const lidar = await cachedLidar(p, squares, grid, log, SHIFT)
   log(`  lidar: ${lidar.read} tiles read, ${lidar.missing} squares with none (${((Date.now() - t0) / 1000).toFixed(0)} s)`)
 
   // --- CUDEM: sea floor, the datum check, and the gap
@@ -167,7 +169,7 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
     if (lidar.landFrac[o] > 0.999 && cudemAll[o] > 0.5 && lidar.landMean[o] > 0.5 && lidar.landMean[o] < 20) diffs.push(lidar.landMean[o] - cudemAll[o])
   }
   const residual = median(diffs)
-  log(`  datum: lidar less ${LIDAR_SHIFT} m stands ${residual.toFixed(3)} m over the CUDEM on ${diffs.length} flat texels`)
+  log(`  datum: lidar less ${SHIFT} m stands ${residual.toFixed(3)} m over the CUDEM on ${diffs.length} flat texels`)
   if (!(Math.abs(residual) <= SHIFT_TOLERANCE)) throw new Error(`the lidar's datum shift moved: residual ${residual} m against the CUDEM (expected within ${SHIFT_TOLERANCE})`)
 
   const cudemSeaMask = new Uint8Array(N)
@@ -355,8 +357,11 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
   for (const s of streams) log(`  stream ${s.name}: ${s.summary}`)
 
   // --- patches (the district's own module, or nuuanu's in district-maps.mjs)
-  const { buildPatches } = await import(`./${d.patchModule || 'district-maps.mjs'}`)
-  const patches = await buildPatches({ dir, d, grid, land, metres, outDir, ledger, log })
+  // (a district that takes none: `patches: false`)
+  const patches =
+    d.patches === false
+      ? { entries: [], sources: [], files: [] }
+      : await (await import(`./${d.patchModule || 'district-maps.mjs'}`)).buildPatches({ dir, d, grid, land, metres, outDir, ledger, log })
 
   // --- provenance
   const lidarMeta = existsSync(p.lidarMeta) ? readFileSync(p.lidarMeta, 'utf8') : ''
@@ -374,11 +379,11 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
       ...(beg ? { collected: `${iso(beg)} to ${iso(end)}` } : {}),
       note:
         `${lidar.read} tiles (${tiles[0].name} … ${tiles[tiles.length - 1].name}, part ${[...new Set(tiles.map((t) => t.part))].join(', ')}); ` +
-        `every 0.5 m cell counts toward the texel its centre falls in. The survey's zero is ${LIDAR_SHIFT} m below mean sea level ` +
+        `every 0.5 m cell counts toward the texel its centre falls in. The survey's zero is ${SHIFT} m below mean sea level ` +
         `(measured against the CUDEM on flat ground; residual ${residual.toFixed(2)} m) and is moved to it. A cell is land above ` +
         `+${LAND_ABOVE} m, because water inside the coast is flattened to the level of the day it was flown (−0.35 to +0.1 m); ` +
         `a texel is land when at least half its cells are, and holds their mean (never below ${LAND_MIN * SCALE + OFFSET} m). ` +
-        `${lidar.missing} of the ${squares.length} squares over the box have no tile: open sea, and the windward face of the pali (see the CUDEM)` +
+        `${lidar.missing} of the ${squares.length} squares over the box have no tile: ${d.missingWhere ?? 'open sea, and the windward face of the pali (see the CUDEM)'}` +
         (d.walls ? `. ${wallTexels} texels a tenth to a half land, on a line one or two texels across with water on both sides (fishpond walls, causeways, spits), are land too` : ''),
     },
     {
@@ -390,10 +395,13 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
       note:
         `tile ${cudemTiles.join(', ')}, about 3 m cells. Sea texels: the area-weighted mean of the cells below mean sea level, never shallower than ${FLAT_SEA} m ` +
         `(${seaFromCudem} texels; the reef flats from topobathymetric lidar, ${d.chartedSea} from NOAA surveys); ${seaInland} texels of water inside ` +
-        `the coast that the CUDEM holds as land (${d.inlandWater}) are a flat ${FLAT_SEA} m. Land: ${gapTexels} texels ` +
-        `(${((gapTexels / N) * 100).toFixed(1)}% of the pack) on the windward face of the pali, where the lidar has no tile, are the CUDEM's land there ` +
-        `(the 2013 NOAA Oʻahu lidar on the lower slopes, the USGS 1/3 arc-second DEM on the cliffs, per its spatial metadata) plus a smooth correction ` +
-        `that meets the lidar along the seam (seam difference median ${median(seamVals).toFixed(1)} m)` +
+        `the coast that the CUDEM holds as land (${d.inlandWater}) are a flat ${FLAT_SEA} m. ` +
+        (gapTexels
+          ? `Land: ${gapTexels} texels ` +
+            `(${((gapTexels / N) * 100).toFixed(1)}% of the pack) on the windward face of the pali, where the lidar has no tile, are the CUDEM's land there ` +
+            `(the 2013 NOAA Oʻahu lidar on the lower slopes, the USGS 1/3 arc-second DEM on the cliffs, per its spatial metadata) plus a smooth correction ` +
+            `that meets the lidar along the seam (seam difference median ${median(seamVals).toFixed(1)} m)`
+          : 'Land: every land texel is the lidar’s; none is taken from the CUDEM') +
         (d.islets ? `. ${isletTexels} texels on ${isletPieces} islets the survey left out (${d.islets}) are the CUDEM's land` : ''),
     },
   ]
@@ -448,7 +456,7 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
       maxMetres: max,
       rainCoverage: round(rainCoverage, 4),
       lidarShare: round((nLand - countGapLand(gap, land) - isletTexels) / Math.max(1, nLand), 4),
-      datumShiftMetres: LIDAR_SHIFT,
+      datumShiftMetres: SHIFT,
     },
     sources,
   }
@@ -473,9 +481,9 @@ export async function bakeDistrict({ dir, data, d, breaches: breachArg, log }) {
 // The accumulation reads 1.3 GB of tiles; its result is kept in the downloads
 // directory, keyed by everything it depends on, so a re-bake from the same
 // downloads (to change a patch or a breach) takes seconds.
-async function cachedLidar(p, squares, grid, log) {
+async function cachedLidar(p, squares, grid, log, shift = LIDAR_SHIFT) {
   const key = createHash('sha256')
-    .update(JSON.stringify({ squares, bounds: grid.bounds, W: grid.W, H: grid.H, shift: LIDAR_SHIFT, landAbove: LAND_ABOVE, v: 1 }))
+    .update(JSON.stringify({ squares, bounds: grid.bounds, W: grid.W, H: grid.H, shift, landAbove: LAND_ABOVE, v: 1 }))
     .digest('hex')
     .slice(0, 16)
   const file = join(p.root, 'cache', `lidar-${key}.bin`)
@@ -492,7 +500,7 @@ async function cachedLidar(p, squares, grid, log) {
     log(`  lidar: from the cache (${file})`)
     return { ...head, landFrac: take(), landMean: take(), dataFrac: take() }
   }
-  const r = await accumulateLidar(squares, grid, p.lidarTile, { shift: LIDAR_SHIFT, landAbove: LAND_ABOVE, log })
+  const r = await accumulateLidar(squares, grid, p.lidarTile, { shift, landAbove: LAND_ABOVE, log })
   const head = Buffer.from(JSON.stringify({ read: r.read, missing: r.missing, histFrom: r.histFrom, hist: [...r.hist] }))
   const len = Buffer.alloc(4)
   len.writeUInt32LE(head.length)

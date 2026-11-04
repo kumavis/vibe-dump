@@ -677,6 +677,19 @@ stop of the coda, in a small district of its own (DATA.md "District packs"),
 with vessels and crowds as features (DATA.md "Vessels and crowds"). The same
 kinds serve any landing or departure the record describes.
 
+As built (RESEARCH.md §18): the district is `honolua`, and the scene is four
+near stops on the afternoon of 1 May, from the accounts of two men aboard,
+Finney and Lewis. The crew are blessed on the beach and carried out to the
+anchored canoe in an outrigger canoe; the conch shells sound, she lets out her
+sails, raises her anchor and casts off the last line to the shore, and sails
+out of the bay with the crowd cheering on the beach and the cliffs (no tow:
+the record gives none); she rounds Līpoa Point into the trade wind and stands
+north, the ketch Meotai far behind. The far stops, Mataiva and Papeʻete,
+follow. The launching at Kualoa in March 1975 is a near stop of its own in
+Koʻolaupoko. What the accounts do not fix, the canoe's mooring, her line
+across the bay, which cliffs the people lined and how many came, is inferred
+and said so in each feature's note.
+
 ## 15. References
 
 Checked during the brainstorm (October 2026). Everything else named above is to

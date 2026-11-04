@@ -1,0 +1,1632 @@
+{
+ "type": "FeatureCollection",
+ "about": "Honolua Bay on the afternoon of 1 May 1976, when Hōkūleʻa left for Tahiti (DESIGN.md §14): the canoe at her anchor and under sail, the outrigger canoe that carried the crew out, the escort, the people on the beach and the cliffs, the names of the bay and its point, and the streams. DATA.md “Vessels and crowds, in a district” gives the schema; RESEARCH.md §18 says what each feature rests on. Times are Hawaiʻi standard time and approximate, for the crew had given up their watches; positions in the bay are inferred from the accounts, none of which maps them.",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "vessel-hokulea-at-anchor",
+   "properties": {
+    "kind": "vessel",
+    "name": "Hōkūleʻa",
+    "design": "waa-kaulua",
+    "length": 18.9,
+    "beam": 4.6,
+    "masts": 2,
+    "sails": 2,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": "moored",
+    "when": "1976-05-01T14:30-10:00",
+    "until": "1976-05-01T15:00-10:00",
+    "stop": 0,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti",
+     "lewis-1976-natgeo",
+     "pvs-newsletter-1975-08"
+    ],
+    "tellings": [
+     {
+      "source": "pvs-newsletter-1975-08",
+      "says": "An overall length of 60 feet and a beam of 15 feet; each hull 3.5 feet wide and five feet deep; ten crosspieces, each 17 feet long; about five tons, carrying up to 7.5 tons more; two masts, each with a single Polynesian sprit sail."
+     },
+     {
+      "source": "finney-1992-sea-to-space",
+      "says": "Two hulls each 62 feet in length, eight crossbeams, decking, rails and two masts; the hulls of frames covered with layers of plywood strips."
+     },
+     {
+      "source": "lewis-1976-natgeo",
+      "says": "17 men aboard a 60-foot canoe."
+     },
+     {
+      "source": "lewis-1977-topics",
+      "says": "There were 17 men (including two photographers) aboard, plus the poi dog Hoku, the pig Maxwell and a cock and a hen."
+     },
+     {
+      "source": "pvs-archive-1976",
+      "says": "The crew from Hawaiʻi to Tahiti: Mau Piailug, navigator; Kawika Kapahulehua, captain; Clifford Ah Mow, Shorty Bertelmann, Ben Finney, Tommy Holmes, Sam Kalalau, Boogie Kalama, Buffalo Keaulana, John Kruse, Dukie Kuahulu, David Lewis, Dave Lyman, Billy Richards and Rodo Williams."
+     },
+     {
+      "source": "mauinews-2021-hokulea",
+      "says": "The National Geographic photographer Nicholas DeVore and the filmmaker Dale Bell were also aboard."
+     }
+    ],
+    "note": "At anchor off the beach at the head of the bay, a line run to the shore, as Finney has her at the moment of casting off; the National Geographic account has her anchor raised as the sails are let out. Where in the bay she lay is not given: here a little off the beach at the stream mouth, the line within reach of the shore."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.63875,
+      21.01355
+     ],
+     [
+      -156.63879,
+      21.01357
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-ferry-canoe",
+   "properties": {
+    "kind": "vessel",
+    "name": null,
+    "design": "waa",
+    "length": 13.5,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": [
+     "paddle",
+     "paddle"
+    ],
+    "when": "1976-05-01T14:40-10:00",
+    "until": "1976-05-01T15:00-10:00",
+    "stop": 0,
+    "escort": "vessel-hokulea-at-anchor",
+    "precision": "inferred",
+    "sources": [
+     "lewis-1978-voyaging-stars",
+     "mauinow-2021-honolua"
+    ],
+    "tellings": [
+     {
+      "source": "lewis-1978-voyaging-stars",
+      "says": "We went down to stand knee-deep in the water, whence we were ferried out to Hokuleʻa in a specially consecrated outrigger canoe."
+     },
+     {
+      "source": "mauinow-2021-honolua",
+      "says": "On May 1, 1976, Kālepa Baybayan, then a young man, helped to paddle crew members from the shore of Honolua Bay to Hōkūleʻa for departure."
+     }
+    ],
+    "note": "The canoe that carried the crew from the water’s edge to Hōkūleʻa, out and back. Its kind and size are not given; it is drawn as a racing canoe of the paddling clubs."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.63822,
+      21.01334
+     ],
+     [
+      -156.63866,
+      21.01352
+     ],
+     [
+      -156.63822,
+      21.01334
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-hokulea-casting-off",
+   "properties": {
+    "kind": "vessel",
+    "name": "Hōkūleʻa",
+    "design": "waa-kaulua",
+    "length": 18.9,
+    "beam": 4.6,
+    "masts": 2,
+    "sails": 2,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": [
+     "anchor",
+     "sail",
+     "sail",
+     "sail",
+     "sail"
+    ],
+    "when": "1976-05-01T15:00-10:00",
+    "until": "1976-05-01T15:25-10:00",
+    "stop": 1,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti",
+     "lewis-1976-natgeo",
+     "lewis-1977-topics"
+    ],
+    "tellings": [
+     {
+      "source": "lewis-1977-topics",
+      "says": "Next day, 1st May 1976, we unbrailed the sails and put to sea around 1500."
+     },
+     {
+      "source": "lewis-1976-natgeo",
+      "says": "Conch-shell trumpets blared from shore as Capt. Kawika Kapahulehua ordered Hokuleʻa’s sails unbrailed and her anchor raised."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "“Let go! Let go!” shouted Kawika. Only a thin line tied the canoe to the land. … The canoe began to move out. … First we let out the big sail forward, then the smaller sail aft."
+     }
+    ],
+    "note": "She leaves the bay under her own sails: the accounts read give no tow and no paddling, the big sail forward let out first and then the one aft. The line of her course across the bay is not recorded; here down the middle of the bay to its mouth."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.63875,
+      21.01355
+     ],
+     [
+      -156.63905,
+      21.01385
+     ],
+     [
+      -156.6396,
+      21.0143
+     ],
+     [
+      -156.6408,
+      21.016
+     ],
+     [
+      -156.6422,
+      21.0185
+     ],
+     [
+      -156.6432,
+      21.0212
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-hokulea-rounding",
+   "properties": {
+    "kind": "vessel",
+    "name": "Hōkūleʻa",
+    "design": "waa-kaulua",
+    "length": 18.9,
+    "beam": 4.6,
+    "masts": 2,
+    "sails": 2,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": "sail",
+    "when": "1976-05-01T15:25-10:00",
+    "until": "1976-05-01T15:55-10:00",
+    "stop": 2,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti",
+     "lewis-1976-natgeo",
+     "lewis-1977-topics"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "Kawika guided us out of the bay that had sheltered us since arriving from Honolulu. We skirted the waves curving around the headland. Then the full force of the trades hit us as we broke away from the lee of the cliffs. The canoe surged forward, her sails drawing her into the open ocean as we headed north."
+     },
+     {
+      "source": "lewis-1977-topics",
+      "says": "The heavy-laden Hokuleʻa pitched into the seas as she came out from under the land and headed north on the starboard tack. The northeast trades were variable in direction but generally from east-northeast, force 3 (8–12 knots). The weather was mainly cloudy."
+     }
+    ],
+    "note": "Out of the bay and round Līpoa Point, the headland on its north-east side, which Finney does not name; then north on the starboard tack with the trade wind over the bow from the east-north-east. How close she passed the point is not given."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.6432,
+      21.0212
+     ],
+     [
+      -156.6442,
+      21.024
+     ],
+     [
+      -156.6436,
+      21.0268
+     ],
+     [
+      -156.6411,
+      21.03
+     ],
+     [
+      -156.6386,
+      21.0335
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-hokulea-away",
+   "properties": {
+    "kind": "vessel",
+    "name": "Hōkūleʻa",
+    "design": "waa-kaulua",
+    "length": 18.9,
+    "beam": 4.6,
+    "masts": 2,
+    "sails": 2,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": "sail",
+    "when": "1976-05-01T15:55-10:00",
+    "until": "1976-05-01T16:30-10:00",
+    "stop": 3,
+    "precision": "schematic",
+    "sources": [
+     "lewis-1977-topics",
+     "lewis-1976-natgeo"
+    ],
+    "tellings": [
+     {
+      "source": "lewis-1977-topics",
+      "says": "At Piailug’s direction, we came about at midnight when we were roughly 30 miles offshore, and tacked once more at 0900 on May 2nd two miles off Huelo, Maui."
+     },
+     {
+      "source": "lewis-1976-natgeo",
+      "says": "“First we go northeast, go around Maui and Big Island. This be maybe three days.”"
+     }
+    ],
+    "note": "The first long tack, north from the bay, as far as the district reaches; she came about that night well out to sea and worked east past Maui and Hawaiʻi Island before turning south. The line is the heading the accounts give, not a fix."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.6386,
+      21.0335
+     ],
+     [
+      -156.6375,
+      21.0363
+     ],
+     [
+      -156.6364,
+      21.0392
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "vessel-meotai",
+   "properties": {
+    "kind": "vessel",
+    "name": "Meotai",
+    "design": "motor",
+    "length": 19.8,
+    "masts": 2,
+    "sails": 0,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "behaviour": "sail",
+    "when": "1976-05-01T15:30-10:00",
+    "until": "1976-05-01T16:30-10:00",
+    "stop": [
+     2,
+     3
+    ],
+    "escort": "vessel-hokulea-away",
+    "precision": "schematic",
+    "sources": [
+     "lewis-1976-natgeo",
+     "lewis-1977-topics",
+     "finney-1979-way-to-tahiti",
+     "samlow-moolelo-hokulea"
+    ],
+    "tellings": [
+     {
+      "source": "lewis-1976-natgeo",
+      "says": "Far behind followed Meotai, a large ketch that would “shadow” us during the entire voyage; she was strictly forbidden to provide any navigational data or hint of our position."
+     },
+     {
+      "source": "lewis-1977-topics",
+      "says": "The 60 foot auxiliary ketch Meotai, the ‘chase boat’, followed the canoe."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The Meotai, the big steel-hulled motor sailer that is trailing us."
+     },
+     {
+      "source": "samlow-moolelo-hokulea",
+      "says": "Alex and Elsa Jakubenko built a 65-foot ketch, Meotai, in Taiwan; she was launched in 1974 and bought by the Honolulu businessman Bob Burke, who used her as Hokuleʻa’s escort on the voyage of 1976."
+     },
+     {
+      "source": "upi-1976-lompoc",
+      "says": "The steel motorsailer Meotai will stay about 10 miles behind the Hokuleʻa and will not assist or communicate with the canoe except in an emergency."
+     }
+    ],
+    "note": "The escort, a steel ketch with an engine, drawn as a motor vessel with her two masts bare. The accounts put her far behind the canoe; where she waited while the canoe left the bay is not given, and here she comes up from off the bay’s mouth onto the canoe’s wake."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.6455,
+      21.0205
+     ],
+     [
+      -156.6452,
+      21.0245
+     ],
+     [
+      -156.6436,
+      21.0285
+     ],
+     [
+      -156.6414,
+      21.0322
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-beach-blessing",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "density": 0.05,
+    "behaviour": "gather",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1976-05-01T14:30-10:00",
+    "until": "1976-05-01T15:00-10:00",
+    "stop": 0,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti",
+     "lewis-1978-voyaging-stars"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "Society regulars and volunteers drawn from the huge crowd there to see us off."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "He could not hear us above the noise of the wind and the crowd."
+     },
+     {
+      "source": "lewis-1978-voyaging-stars",
+      "says": "On the shore at Honolua Bay a kahuna, or Hawaiian priest, touched each of us in turn and spoke of the final blessing: “You belong no more to the land; you are now dedicated to the sea.”"
+     }
+    ],
+    "note": "The people on the beach at the head of the bay, on the low ground at the mouth of the stream, while the kahuna blesses the crew one by one at the water’s edge. No source read gives their number; Finney calls it huge. The density is a guess that fills the beach without packing it."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -156.6372,
+       21.0126
+      ],
+      [
+       -156.6362,
+       21.0128
+      ],
+      [
+       -156.6363,
+       21.0134
+      ],
+      [
+       -156.6373,
+       21.0136
+      ],
+      [
+       -156.638,
+       21.0135
+      ],
+      [
+       -156.638,
+       21.0129
+      ],
+      [
+       -156.6372,
+       21.0126
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-beach-casting-off",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "density": 0.06,
+    "behaviour": "chant",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1976-05-01T15:00-10:00",
+    "until": "1976-05-01T15:25-10:00",
+    "stop": 1,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti",
+     "lewis-1976-natgeo"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "Society regulars and volunteers drawn from the huge crowd there to see us off."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "He could not hear us above the noise of the wind and the crowd."
+     },
+     {
+      "source": "lewis-1976-natgeo",
+      "says": "Conch-shell trumpets blared from shore."
+     },
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The crowd on shore and lining the cliffs above cheered."
+     }
+    ],
+    "note": "The same people as the canoe casts off: the conch shells sounding from the shore, the rest cheering. Their number is in no source read."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -156.6372,
+       21.0126
+      ],
+      [
+       -156.6362,
+       21.0128
+      ],
+      [
+       -156.6363,
+       21.0134
+      ],
+      [
+       -156.6373,
+       21.0136
+      ],
+      [
+       -156.638,
+       21.0135
+      ],
+      [
+       -156.638,
+       21.0129
+      ],
+      [
+       -156.6372,
+       21.0126
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-cliffs-east",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "density": 0.03,
+    "behaviour": "wave",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1976-05-01T15:00-10:00",
+    "until": "1976-05-01T15:30-10:00",
+    "stop": 1,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The crowd on shore and lining the cliffs above cheered. We were underway at last, bound for Tahiti."
+     }
+    ],
+    "note": "People along the top of the cliffs on the bay’s north-east side, under Līpoa Point. Finney has the crowd lining the cliffs above the shore without saying which; these and the point across the bay are the cliffs that look down on the canoe’s way out."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -156.6368,
+       21.0151
+      ],
+      [
+       -156.6369,
+       21.0174
+      ],
+      [
+       -156.6377,
+       21.0172
+      ],
+      [
+       -156.6377,
+       21.0151
+      ],
+      [
+       -156.6368,
+       21.0151
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-point-west",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "density": 0.03,
+    "behaviour": "wave",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1976-05-01T15:00-10:00",
+    "until": "1976-05-01T15:30-10:00",
+    "stop": 1,
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The crowd on shore and lining the cliffs above cheered. We were underway at last, bound for Tahiti."
+     }
+    ],
+    "note": "People on the low point between Honolua and Mokulēʻia bays, across the water from the cliffs under Līpoa Point. Placed by reading Finney’s cliffs as both sides of the bay."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -156.6399,
+       21.0119
+      ],
+      [
+       -156.6398,
+       21.0128
+      ],
+      [
+       -156.6406,
+       21.0129
+      ],
+      [
+       -156.6409,
+       21.0121
+      ],
+      [
+       -156.6399,
+       21.0119
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "crowd-lipoa-point",
+   "properties": {
+    "kind": "crowd",
+    "name": null,
+    "from": 1976,
+    "to": 1976,
+    "event": "hokulea-1976",
+    "density": 0.03,
+    "behaviour": "watch",
+    "dress": "1970s",
+    "facing": "sea",
+    "when": "1976-05-01T15:20-10:00",
+    "until": "1976-05-01T16:00-10:00",
+    "stop": [
+     2,
+     3
+    ],
+    "precision": "inferred",
+    "sources": [
+     "finney-1979-way-to-tahiti"
+    ],
+    "tellings": [
+     {
+      "source": "finney-1979-way-to-tahiti",
+      "says": "The crowd on shore and lining the cliffs above cheered. We were underway at last, bound for Tahiti."
+     }
+    ],
+    "note": "Watchers on the end of Līpoa Point as the canoe rounds it and stands out to sea. No source read puts people on the point itself; it is the cliff top nearest her course."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -156.6385,
+       21.0233
+      ],
+      [
+       -156.6386,
+       21.0242
+      ],
+      [
+       -156.6398,
+       21.024
+      ],
+      [
+       -156.64,
+       21.0232
+      ],
+      [
+       -156.6385,
+       21.0233
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-honolua-bay",
+   "properties": {
+    "kind": "label",
+    "name": "Honolua Bay",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "place": "honolua-bay",
+    "sources": [
+     "usgs-gnis",
+     "pvs-archive-1976"
+    ],
+    "note": "The bay at the GNIS point; Hōkūleʻa left it for Tahiti on the first day of May 1976."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.63956,
+     21.01449
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-lipoa-point",
+   "properties": {
+    "kind": "label",
+    "name": "Līpoa Point",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "place": "lipoa-point",
+    "sources": [
+     "usgs-gnis"
+    ],
+    "note": "The headland on the bay’s north-east side, at the GNIS point."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.64094,
+     21.02351
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-honolua-beach",
+   "properties": {
+    "kind": "label",
+    "name": "Honolua",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "place": "honolua-beach",
+    "sources": [
+     "usgs-gnis",
+     "finney-1979-way-to-tahiti"
+    ],
+    "note": "The beach at the head of the bay, where Honolua Stream comes out; GNIS gives it no name of its own, and it takes the land’s."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.63745,
+     21.0131
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-mokuleia-bay",
+   "properties": {
+    "kind": "label",
+    "name": "Mokulēʻia Bay",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "sources": [
+     "usgs-gnis"
+    ],
+    "note": "The next bay to the south-west, at the GNIS point (which spells it Makuleia; its beach Mokulēʻia)."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.64272,
+     21.01227
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-honokohau-bay",
+   "properties": {
+    "kind": "label",
+    "name": "Honokōhau Bay",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "sources": [
+     "usgs-gnis"
+    ],
+    "note": "At the GNIS point."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.61029,
+     21.02255
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "label-honokahua-bay",
+   "properties": {
+    "kind": "label",
+    "name": "Honokahua Bay",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "sources": [
+     "usgs-gnis"
+    ],
+    "note": "At the GNIS point."
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.65218,
+     21.00652
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "stream-honolua",
+   "properties": {
+    "kind": "stream",
+    "name": "Honolua Stream",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "role": "reference",
+    "sources": [
+     "state-gis-streams-dar"
+    ],
+    "note": "The modern course from the State stream layer, its main stem followed from the mouth at the head of the bay upstream to the edge of the district."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.63862,
+      21.01301
+     ],
+     [
+      -156.63841,
+      21.01281
+     ],
+     [
+      -156.63816,
+      21.01265
+     ],
+     [
+      -156.6377,
+      21.01252
+     ],
+     [
+      -156.63736,
+      21.01259
+     ],
+     [
+      -156.63719,
+      21.01277
+     ],
+     [
+      -156.637,
+      21.01303
+     ],
+     [
+      -156.63657,
+      21.01319
+     ],
+     [
+      -156.6362,
+      21.01323
+     ],
+     [
+      -156.63592,
+      21.01334
+     ],
+     [
+      -156.63562,
+      21.01359
+     ],
+     [
+      -156.63527,
+      21.01388
+     ],
+     [
+      -156.63494,
+      21.01401
+     ],
+     [
+      -156.63422,
+      21.01397
+     ],
+     [
+      -156.63389,
+      21.01391
+     ],
+     [
+      -156.63342,
+      21.01378
+     ],
+     [
+      -156.63291,
+      21.01358
+     ],
+     [
+      -156.63252,
+      21.01356
+     ],
+     [
+      -156.63227,
+      21.0136
+     ],
+     [
+      -156.63192,
+      21.01363
+     ],
+     [
+      -156.63155,
+      21.01346
+     ],
+     [
+      -156.63127,
+      21.01325
+     ],
+     [
+      -156.63116,
+      21.01292
+     ],
+     [
+      -156.63119,
+      21.01261
+     ],
+     [
+      -156.63136,
+      21.01231
+     ],
+     [
+      -156.63133,
+      21.0119
+     ],
+     [
+      -156.63123,
+      21.0116
+     ],
+     [
+      -156.63108,
+      21.01132
+     ],
+     [
+      -156.63065,
+      21.01091
+     ],
+     [
+      -156.63041,
+      21.01047
+     ],
+     [
+      -156.63035,
+      21.01024
+     ],
+     [
+      -156.63039,
+      21.00992
+     ],
+     [
+      -156.63037,
+      21.00951
+     ],
+     [
+      -156.63027,
+      21.00916
+     ],
+     [
+      -156.63009,
+      21.00881
+     ],
+     [
+      -156.62984,
+      21.00855
+     ],
+     [
+      -156.62941,
+      21.00831
+     ],
+     [
+      -156.62911,
+      21.00813
+     ],
+     [
+      -156.62882,
+      21.00785
+     ],
+     [
+      -156.62846,
+      21.00747
+     ],
+     [
+      -156.62837,
+      21.00724
+     ],
+     [
+      -156.6284,
+      21.0069
+     ],
+     [
+      -156.62853,
+      21.00656
+     ],
+     [
+      -156.62852,
+      21.00597
+     ],
+     [
+      -156.6284,
+      21.00562
+     ],
+     [
+      -156.62806,
+      21.00551
+     ],
+     [
+      -156.62775,
+      21.00539
+     ],
+     [
+      -156.62757,
+      21.00515
+     ],
+     [
+      -156.62762,
+      21.00489
+     ],
+     [
+      -156.62751,
+      21.00452
+     ],
+     [
+      -156.62736,
+      21.00423
+     ],
+     [
+      -156.6269,
+      21.00393
+     ],
+     [
+      -156.62656,
+      21.00382
+     ],
+     [
+      -156.62621,
+      21.00376
+     ],
+     [
+      -156.62595,
+      21.00351
+     ],
+     [
+      -156.62592,
+      21.00313
+     ],
+     [
+      -156.62589,
+      21.0026
+     ],
+     [
+      -156.6256,
+      21.00235
+     ],
+     [
+      -156.62534,
+      21.00189
+     ],
+     [
+      -156.62524,
+      21.00152
+     ],
+     [
+      -156.62503,
+      21.00113
+     ],
+     [
+      -156.62489,
+      21.00087
+     ],
+     [
+      -156.62473,
+      21.00068
+     ],
+     [
+      -156.6245,
+      21.00044
+     ],
+     [
+      -156.62423,
+      21.0003
+     ],
+     [
+      -156.62357,
+      21.00017
+     ],
+     [
+      -156.62344,
+      20.99989
+     ],
+     [
+      -156.62343,
+      20.9996
+     ],
+     [
+      -156.6234,
+      20.99923
+     ],
+     [
+      -156.62337,
+      20.99885
+     ],
+     [
+      -156.62317,
+      20.9984
+     ],
+     [
+      -156.6229,
+      20.99822
+     ],
+     [
+      -156.62252,
+      20.99812
+     ],
+     [
+      -156.62215,
+      20.99795
+     ],
+     [
+      -156.62182,
+      20.99779
+     ],
+     [
+      -156.62175,
+      20.9975
+     ],
+     [
+      -156.62158,
+      20.99711
+     ],
+     [
+      -156.62147,
+      20.99671
+     ],
+     [
+      -156.62147,
+      20.99607
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "stream-honokohau",
+   "properties": {
+    "kind": "stream",
+    "name": "Honokōhau Stream",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "role": "reference",
+    "sources": [
+     "state-gis-streams-dar"
+    ],
+    "note": "The modern course from the State stream layer, its main stem followed from the mouth upstream to the edge of the district."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.60897,
+      21.02162
+     ],
+     [
+      -156.60892,
+      21.02128
+     ],
+     [
+      -156.60904,
+      21.02086
+     ],
+     [
+      -156.60904,
+      21.02062
+     ],
+     [
+      -156.60891,
+      21.02034
+     ],
+     [
+      -156.60869,
+      21.0201
+     ],
+     [
+      -156.60861,
+      21.01988
+     ],
+     [
+      -156.60858,
+      21.01954
+     ],
+     [
+      -156.60841,
+      21.01922
+     ],
+     [
+      -156.60823,
+      21.0188
+     ],
+     [
+      -156.60798,
+      21.01844
+     ],
+     [
+      -156.60772,
+      21.01818
+     ],
+     [
+      -156.60754,
+      21.01782
+     ],
+     [
+      -156.60738,
+      21.01726
+     ],
+     [
+      -156.60722,
+      21.0169
+     ],
+     [
+      -156.60687,
+      21.01626
+     ],
+     [
+      -156.60653,
+      21.01556
+     ],
+     [
+      -156.60647,
+      21.01533
+     ],
+     [
+      -156.60641,
+      21.01488
+     ],
+     [
+      -156.60631,
+      21.01456
+     ],
+     [
+      -156.6062,
+      21.01427
+     ],
+     [
+      -156.60609,
+      21.01381
+     ],
+     [
+      -156.60604,
+      21.01346
+     ],
+     [
+      -156.60603,
+      21.01303
+     ],
+     [
+      -156.60614,
+      21.0126
+     ],
+     [
+      -156.60634,
+      21.01232
+     ],
+     [
+      -156.60664,
+      21.01198
+     ],
+     [
+      -156.6068,
+      21.01175
+     ],
+     [
+      -156.60692,
+      21.01149
+     ],
+     [
+      -156.60685,
+      21.01106
+     ],
+     [
+      -156.60664,
+      21.01062
+     ],
+     [
+      -156.60651,
+      21.01017
+     ],
+     [
+      -156.60624,
+      21.00963
+     ],
+     [
+      -156.60595,
+      21.00916
+     ],
+     [
+      -156.60549,
+      21.00877
+     ],
+     [
+      -156.60544,
+      21.00847
+     ],
+     [
+      -156.60549,
+      21.00824
+     ],
+     [
+      -156.60562,
+      21.00792
+     ],
+     [
+      -156.60573,
+      21.00769
+     ],
+     [
+      -156.60586,
+      21.00741
+     ],
+     [
+      -156.60591,
+      21.00683
+     ],
+     [
+      -156.60586,
+      21.00647
+     ],
+     [
+      -156.60582,
+      21.00605
+     ],
+     [
+      -156.60584,
+      21.00554
+     ],
+     [
+      -156.6058,
+      21.00528
+     ],
+     [
+      -156.60581,
+      21.00503
+     ],
+     [
+      -156.60588,
+      21.00481
+     ],
+     [
+      -156.60595,
+      21.00457
+     ],
+     [
+      -156.60595,
+      21.0043
+     ],
+     [
+      -156.60585,
+      21.00409
+     ],
+     [
+      -156.60575,
+      21.00362
+     ],
+     [
+      -156.60571,
+      21.00318
+     ],
+     [
+      -156.60556,
+      21.00283
+     ],
+     [
+      -156.60538,
+      21.00255
+     ],
+     [
+      -156.60534,
+      21.0023
+     ],
+     [
+      -156.60536,
+      21.00169
+     ],
+     [
+      -156.60526,
+      21.00137
+     ],
+     [
+      -156.60515,
+      21.00093
+     ],
+     [
+      -156.60503,
+      21.00059
+     ],
+     [
+      -156.60484,
+      21.0001
+     ],
+     [
+      -156.60464,
+      20.99977
+     ],
+     [
+      -156.60449,
+      20.99933
+     ],
+     [
+      -156.60443,
+      20.99872
+     ],
+     [
+      -156.6043,
+      20.99834
+     ],
+     [
+      -156.60414,
+      20.99806
+     ],
+     [
+      -156.60395,
+      20.99782
+     ],
+     [
+      -156.60371,
+      20.99759
+     ],
+     [
+      -156.60324,
+      20.99739
+     ],
+     [
+      -156.60216,
+      20.99636
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "stream-honokahua",
+   "properties": {
+    "kind": "stream",
+    "name": "Honokahua Stream",
+    "from": null,
+    "to": null,
+    "precision": "mapped",
+    "role": "reference",
+    "sources": [
+     "state-gis-streams-dar"
+    ],
+    "note": "The modern course from the State stream layer, its main stem followed from the mouth upstream to the edge of the district."
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -156.64963,
+      21.00567
+     ],
+     [
+      -156.64963,
+      21.00513
+     ],
+     [
+      -156.64989,
+      21.00476
+     ],
+     [
+      -156.65038,
+      21.00449
+     ],
+     [
+      -156.65057,
+      21.00431
+     ],
+     [
+      -156.65068,
+      21.00409
+     ],
+     [
+      -156.65083,
+      21.00382
+     ],
+     [
+      -156.65135,
+      21.00302
+     ],
+     [
+      -156.65148,
+      21.00275
+     ],
+     [
+      -156.65149,
+      21.00224
+     ],
+     [
+      -156.6514,
+      21.00184
+     ],
+     [
+      -156.65135,
+      21.00157
+     ],
+     [
+      -156.65129,
+      21.00131
+     ],
+     [
+      -156.65114,
+      21.00106
+     ],
+     [
+      -156.65075,
+      21.00073
+     ],
+     [
+      -156.65023,
+      21.00039
+     ],
+     [
+      -156.64991,
+      21.00021
+     ],
+     [
+      -156.64969,
+      20.99992
+     ],
+     [
+      -156.6493,
+      20.9995
+     ],
+     [
+      -156.64913,
+      20.9992
+     ],
+     [
+      -156.64894,
+      20.99899
+     ],
+     [
+      -156.64879,
+      20.99875
+     ],
+     [
+      -156.6484,
+      20.99848
+     ],
+     [
+      -156.64772,
+      20.9984
+     ],
+     [
+      -156.64743,
+      20.99827
+     ],
+     [
+      -156.64711,
+      20.99777
+     ],
+     [
+      -156.64696,
+      20.99743
+     ],
+     [
+      -156.64678,
+      20.99719
+     ],
+     [
+      -156.64655,
+      20.997
+     ],
+     [
+      -156.64627,
+      20.9968
+     ],
+     [
+      -156.64569,
+      20.99643
+     ],
+     [
+      -156.64546,
+      20.99621
+     ]
+    ]
+   }
+  }
+ ]
+}

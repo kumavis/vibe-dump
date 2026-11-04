@@ -1732,6 +1732,54 @@
     ]
   },
   {
+    "id": "honolua-beach",
+    "name": "Honolua",
+    "alt": [
+      "the beach at Honolua Bay"
+    ],
+    "kind": "beach",
+    "island": "maui",
+    "moku": "Kāʻanapali",
+    "ahupuaa": "Honolua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.63745,
+        21.0131
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis",
+      "finney-1979-way-to-tahiti",
+      "lewis-1976-natgeo"
+    ],
+    "note": "The beach at the head of Honolua Bay, at the mouth of Honolua Stream, on the low ground between the cliffs; GNIS gives it no name of its own. Where the crowd stood and the crew were blessed on 1 May 1976."
+  },
+  {
+    "id": "lipoa-point",
+    "name": "Līpoa Point",
+    "alt": [
+      "Lipoa Point"
+    ],
+    "kind": "other",
+    "island": "maui",
+    "moku": "Kāʻanapali",
+    "ahupuaa": "Honolua",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.64094,
+        21.02351
+      ]
+    },
+    "placePrecision": "exact",
+    "sources": [
+      "usgs-gnis"
+    ],
+    "note": "The headland on the north-east side of Honolua Bay, at the GNIS point."
+  },
+  {
     "id": "waiahole",
     "name": "Waiāhole",
     "alt": [

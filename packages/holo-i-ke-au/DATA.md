@@ -532,7 +532,9 @@ and features that let one valley be drawn in a chosen year. Under
 touches it). The first district is `nuuanu`: Honolulu's harbour and plain,
 Nuʻuanu to the pali, with Kalihi and Mānoa at the edges. The second is
 `koolaupoko`: the whole windward moku from Kualoa to Makapuʻu, with Kāneʻohe
-Bay and Mōkapu, Kailua and Waimānalo.
+Bay and Mōkapu, Kailua and Waimānalo. The third is `honolua`, on Maui: Honolua
+Bay and its headlands, from Kapalua to Honokōhau, for the departure of
+Hōkūleʻa in 1976 (DESIGN.md §14).
 
 ```jsonc
 // public/data/districts/manifest.json
@@ -661,6 +663,7 @@ never writes `features.json`, which is hand-written.
 ```bash
 node packages/holo-i-ke-au/tools/bake-district.mjs --all                        # nuuanu: download (~1.5 GB), bake, check, delete the downloads (~6 min)
 node packages/holo-i-ke-au/tools/bake-district.mjs --all --district koolaupoko  # koolaupoko: ~3.6 GB, about 25 min (1,419 lidar tiles)
+node packages/holo-i-ke-au/tools/bake-district.mjs --all --district honolua     # honolua: ~1.2 GB, about 2 min (99 lidar tiles)
 node packages/holo-i-ke-au/tools/bake-district.mjs --preview /tmp/district      # every district: relief, lines, streams, breaches, patches, the old shores
 ```
 
@@ -769,6 +772,33 @@ What `koolaupoko` rests on:
   tidewater, holding a trunk to six texels (78 m) of the State's lines where
   the texel passes 10 m, and Maunawili, which ends in the open water of
   Kawainui at the Hāmākua canal, to 100 m.
+
+What `honolua` rests on (RESEARCH.md §18):
+
+- **Box**: Honolua Bay with Līpoa Point and the point toward Mokulēʻia, from
+  Kapalua Bay and Hāwea Point to Honokōhau Bay and its stream mouth, and 2 km
+  of sea off the bay for the canoe's course out (156.674–156.600 W,
+  20.996–21.040 N): 1270 × 801 at 6.08 m, `parent: "maui"`, `moku:
+  "Kāʻanapali"`, listed after the two Oʻahu districts. It overlaps no other
+  district.
+- **Heights**: the same lidar, `HI_NOAAMauiOahu_2020_B20`, whose Maui part
+  (99 tiles, flown January to July 2023) sits on the same zero: less 0.72 m it
+  stands −0.01 m over the CUDEM, so the shift is kept, declared on the
+  district (`lidarShift` in `district-sources.mjs`, 0.72 m unless a district
+  says otherwise). Every square with no tile is open sea; no land texel comes
+  from the CUDEM. No walls, no islets.
+- **Sea**: the CUDEM's two tiles; the stream mouths it holds as land are a
+  flat −1 m.
+- **Rain**: as for `nuuanu`.
+- **Patches**: none (`patches: false`). The geologic map's fill unit has no
+  polygon in the box, and nothing read shows made ground in the bay by 1976;
+  the Government Survey sheets the State serves are Oʻahu's, so none is
+  exported (`maps: []`).
+- **Streams**: routed by the app with no breach; the check follows Honokahua,
+  Honolua and Honokōhau streams to tidewater, each 100% on the State's lines.
+- **Features**: the departure of Hōkūleʻa on 1 May 1976 as vessels and crowds
+  (below, "Vessels and crowds, in a district"), with labels and the three
+  streams.
 
 Beyond the contract the manifest carries `parent`, `moku`, `files`
 (supporting files), `breaches`, `streams` (the check's findings), `stats`,
@@ -1656,3 +1686,19 @@ Hōkūleʻa, 1976; a fleet's landing), two more feature kinds in a district's
   water or on a building.
 - A scene's stops carry `camera` as before; `text` names what the sources
   describe and nothing the app does not draw.
+- **From the first scene (Honolua, 1976).** A vessel's or a crowd's `when`
+  and `until` may be datetimes with a zone (`1976-05-01T15:00-10:00`, Hawaiʻi
+  standard time); a date alone is the whole day. A vessel that does
+  different things at different stops is one feature per stop (the canoe at
+  anchor, under sail across the bay, rounding the point, standing out), each
+  with its own track, times and `stop`, rather than one long track; a crowd
+  likewise, when its behaviour changes. `behaviour` as a list has exactly one
+  entry per segment of the track. `escort` names the id of another vessel in
+  the same district. A crowd with no number in the record carries `density`
+  and a telling of what the sources say of its size; `count` is for a crowd
+  some source numbers. `masts` and `sails` on a `motor` vessel are its rig
+  (Meotai, a ketch with an engine: two masts, no sail set). `check-data.mjs`
+  holds all of this, and holds a track to the water (every vertex and every
+  segment's middle on the district's sea) and a crowd to the land (at most a
+  tenth of its texels sea); `crew`, `aboard` and `people` as fields fail, for
+  who was aboard goes in a telling.

@@ -68,6 +68,12 @@ const SEA_POINTS = {
     ['a patch reef off Heʻeia', -157.8008, 21.4529, -1, -4],
     ['inside Heʻeia’s fishpond', -157.8075, 21.4365, -1, -3],
   ],
+  // the bay Hōkūleʻa lay in, its mouth, and the open sea past Līpoa Point
+  honolua: [
+    ['Honolua Bay, off the beach', -156.6405, 21.017, -1, -6],
+    ['Honolua Bay, the mouth', -156.6425, 21.019, -3],
+    ['off Līpoa Point', -156.645, 21.03, -20],
+  ],
 }
 // Points that must be land: [name, lon, lat, search radius m] (the highest texel within it)
 const LAND_POINTS = {
@@ -75,6 +81,11 @@ const LAND_POINTS = {
     ['Heʻeia’s pond wall, east side', -157.805, 21.4345, 15],
     ['Mokumanu', -157.7218, 21.47, 40],
     ['Mokolea', -157.7195, 21.4319, 25],
+  ],
+  honolua: [
+    ['Līpoa Point', -156.64094, 21.02351, 30],
+    ['the beach at the head of the bay', -156.63745, 21.0131, 15],
+    ['the point between Honolua and Mokulēʻia', -156.6402, 21.0124, 15],
   ],
 }
 // Rain: [name, lon, lat, radius m, 'max' | 'min', lo mm, hi mm]
@@ -90,6 +101,11 @@ const RAIN_SPOTS = {
     ['the head of Waiāhole (wet)', -157.875, 21.47, 800, 'max', 2500, 6000],
     ['Mōkapu (dry)', -157.745, 21.452, 600, 'min', 0, 900],
     ['Makapuʻu (dry)', -157.66, 21.315, 400, 'min', 0, 900],
+  ],
+  // the coast is drier than the slopes behind it; the box stops below the wet uplands of Mauna Kahālāwai
+  honolua: [
+    ['the slopes above Honokōhau (wetter)', -156.61, 20.999, 600, 'max', 1500, 3000],
+    ['Kapalua’s shore (dry)', -156.665, 21.0, 400, 'min', 0, 1200],
   ],
 }
 
