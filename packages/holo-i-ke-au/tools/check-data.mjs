@@ -16,7 +16,8 @@
 // class raster read back against its pack's height image and stats, and the
 // crops' historical sources held to sources.json); and, when works/manifest.json
 // exists, the works (DATA.md, “Works, dated”), held to their island packs in
-// manifest.json.
+// manifest.json; and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
+// and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -80,7 +81,12 @@ const MOKU_LAYER = [
 // ---------------------------------------------------------------------------
 // Vocabularies (DATA.md §4)
 const PLACE_KINDS = new Set(['valley', 'bay', 'beach', 'heiau', 'puuhonua', 'fishpond', 'peak', 'pali', 'town', 'ahupuaa', 'moku', 'island',
-  'channel', 'sea', 'landmark', 'other', 'burial', 'shrine'])
+  'channel', 'sea', 'landmark', 'other', 'burial', 'shrine',
+  // the geology prologue (DATA.md "Geology"): summits, calderas, seamounts and debris fields, at island or sea precision
+  'volcano', 'caldera', 'seamount', 'landslide'])
+const GEO_KINDS = new Set(['volcano', 'caldera', 'seamount', 'landslide'])
+// the seafloor pack's box (DATA.md "Geology"), wide enough for every debris field; geology places and cameras keep to it
+const GEO_BOX = { south: 17.5, north: 24.5, west: -162, east: -153 }
 const RESTRICTED_KINDS = new Set(['heiau', 'puuhonua', 'burial', 'shrine'])
 const PLACE_PRECISION = ['exact', 'ahupuaa', 'moku', 'island', 'sea'] // finest first
 const DATE_PRECISION = new Set(['day', 'month', 'year', 'decade', 'generation', 'century'])
@@ -352,8 +358,9 @@ for (const p of places) {
       if (!Array.isArray(c) || c.length < 2 || !c.every(Number.isFinite)) { bad(at, 'has a coordinate that is not [lon, lat]'); break }
       const [lon, lat] = c
       if (Math.abs(lat) > 90 || Math.abs(lon) > 180) { bad(at, `coordinate ${c} is out of range (is it [lon, lat]?)`); break }
-      const inBox = lat >= BOX.south && lat <= BOX.north && lon >= BOX.west && lon <= BOX.east
-      if (!inBox && p.kind !== 'sea' && p.kind !== 'channel') { bad(at, `coordinate ${c} is outside the archipelago box`); break }
+      const box = GEO_KINDS.has(p.kind) ? GEO_BOX : BOX
+      const inBox = lat >= box.south && lat <= box.north && lon >= box.west && lon <= box.east
+      if (!inBox && p.kind !== 'sea' && p.kind !== 'channel') { bad(at, `coordinate ${c} is outside the ${box === GEO_BOX ? 'seafloor pack’s' : 'archipelago'} box`); break }
     }
   }
   // sensitive sites (DATA.md §4; DESIGN.md §7.4)
@@ -364,6 +371,7 @@ for (const p of places) {
   }
   if (p.landmark === true && !(p.sources || []).some(sourceShowsPublicSite)) warn(at, 'landmark: true without a source naming a park, register or monument')
   if ('landmark' in p && typeof p.landmark !== 'boolean') bad(at, 'landmark must be true or false')
+  if (GEO_KINDS.has(p.kind) && !['island', 'sea'].includes(p.placePrecision)) bad(at, `a ${p.kind} is held at island or sea precision`)
 }
 
 // ---------------------------------------------------------------------------
@@ -1465,6 +1473,323 @@ function worksSample(coords, step) {
 }
 
 // ---------------------------------------------------------------------------
+// geology/: the prologue (DATA.md "Geology: the making of the islands"). The hand-written files
+// (volcanoes.json, landslides.geojson, chapters.json) are required once the directory exists; the bake's
+// manifest.json and its seafloor and stage images are checked when present and may be absent while it runs.
+let geoCounts = null
+if (existsSync(join(DATA, 'geology'))) checkGeology()
+
+function checkGeology() {
+  const GD = join(DATA, 'geology')
+  const BUDGET = 12 * 1024 * 1024
+  const STATUS = new Set(['extinct', 'dormant', 'active', 'submarine'])
+  const BASIS = new Set(['dated', 'bracketed', 'modelled', 'map'])
+  const SLIDE_KINDS = new Set(['avalanche', 'slump'])
+  const FIELD_PRECISION = new Set(['mapped', 'traced', 'sketch'])
+  const STEP_KINDS = new Set(['birth', 'slide', 'join', 'part', 'subsidence', 'eruption', 'now'])
+  const STAGE_CONFIDENCE = new Set(['firm', 'soft', 'sketch'])
+  const CALDERA_PRECISION = new Set(['mapped', 'sketch'])
+  const FAR_TARGET_KM = 400 // a far stop's camera may centre this far from its place
+  // the volcanoes the record and the brief name (DATA.md "Geology")
+  const EXPECTED = ['niihau', 'kauai', 'waianae', 'koolau', 'west-molokai', 'east-molokai', 'lanai', 'kahoolawe', 'west-maui', 'haleakala',
+    'kohala', 'mauna-kea', 'hualalai', 'mauna-loa', 'kilauea', 'kamaehuakanaloa']
+  const gat = (f) => `geology/${f}`
+  const gload = (f) => {
+    const p = join(GD, f)
+    if (!existsSync(p)) { bad(gat(f), 'file is missing'); return null }
+    try { return JSON.parse(readFileSync(p, 'utf8')) } catch (e) { bad(gat(f), `does not parse: ${e.message}`); return null }
+  }
+  const inGeo = (c) => Array.isArray(c) && c.length >= 2 && c.every(Number.isFinite) && c[1] >= GEO_BOX.south && c[1] <= GEO_BOX.north && c[0] >= GEO_BOX.west && c[0] <= GEO_BOX.east
+  const opened = (id) => !!S.get(id)?.opened
+  // a list of source ids that exist, at least one of them opened (inline provenance objects with a url are the bake's and pass)
+  const citeList = (at, list, need = true) => {
+    if (!Array.isArray(list) || !list.length) { if (need) bad(at, 'cites no source'); return }
+    let anyOpen = false
+    for (const s of list) {
+      if (typeof s === 'string') { useSource(at, s); if (opened(s)) anyOpen = true } else if (s && typeof s === 'object' && /^https?:\/\//.test(s.url || '')) anyOpen = true
+      else bad(at, 'a source must be a sources.json id or an object with its url')
+    }
+    if (!anyOpen) bad(at, 'none of its sources has been opened')
+  }
+  const age = (at, v, what = 'age') => { if (!(Number.isFinite(v) && v >= 0)) bad(at, `${what} ${v} is not a non-negative number of Ma`) }
+  const polygonOK = (at, g, what) => {
+    if (!g || g.type !== 'Polygon' || !Array.isArray(g.coordinates) || !g.coordinates.length) { bad(at, `${what} must be a Polygon`); return false }
+    for (const [k, r] of g.coordinates.entries()) {
+      if (!r.every(inGeo)) { bad(at, `${what} has a point outside the seafloor box or not [lon, lat]`); return false }
+      checkRing(`${at} ${what}`, r, k === 0)
+    }
+    return true
+  }
+
+  // the stages: the bake's manifest when it exists, else the list volcanoes.json proposes
+  const manifest = existsSync(join(GD, 'manifest.json')) ? gload('manifest.json') : null
+  const vdoc = gload('volcanoes.json')
+  const lsdoc = gload('landslides.geojson')
+  const cdoc = gload('chapters.json')
+  if (!vdoc || !lsdoc || !cdoc) return
+  const stageList = manifest?.stages || vdoc.stagesProposed || []
+  const STAGES = new Map(stageList.map((s) => [s.id, s]))
+  if (!STAGES.size) bad('geology', 'no stages: neither manifest.json nor volcanoes.json stagesProposed lists any')
+  if (manifest && vdoc.stagesProposed) {
+    const want = vdoc.stagesProposed.map((s) => s.id).filter((id) => !STAGES.has(id))
+    if (want.length) warn('geology/manifest.json', `stages proposed in volcanoes.json but not baked: ${want.join(', ')}`)
+  }
+  for (const s of vdoc.stagesProposed || []) {
+    const at = `${gat('volcanoes.json')} stage ${s.id}`
+    if (!ID.test(s.id || '')) bad(at, 'id is not kebab-case ASCII')
+    age(at, s.age)
+    if (!(Number.isFinite(s.agePrecision) && s.agePrecision >= 0)) bad(at, 'agePrecision must be ± Ma')
+    if (!STAGE_CONFIDENCE.has(s.confidence)) bad(at, `confidence “${s.confidence}” is not firm | soft | sketch`)
+    if (!s.rule) bad(at, 'says no rule')
+  }
+
+  // volcanoes.json
+  if (!Array.isArray(vdoc.volcanoes)) { bad(gat('volcanoes.json'), 'volcanoes must be an array'); return }
+  const VO = checkIds(vdoc.volcanoes, 'geology/volcanoes.json')
+  for (const id of EXPECTED) if (!VO.has(id)) bad(gat('volcanoes.json'), `has no volcano “${id}”`)
+  const range = (at, r, what) => {
+    if (r === null || r === undefined) return
+    if (typeof r !== 'object') { bad(at, `${what} must be an object or null`); return }
+    if (r.from === undefined && r.note) { for (const s of r.sources || []) useSource(`${at} ${what}`, s); return } // known only in words
+    age(`${at} ${what}`, r.from, 'from'); age(`${at} ${what}`, r.to, 'to')
+    if (r.from < r.to) bad(at, `${what} runs from ${r.from} to ${r.to} Ma: from must be the older`)
+    if (!(Number.isFinite(r.precision) && r.precision >= 0)) bad(at, `${what} has no precision (± Ma)`)
+    if (!BASIS.has(r.basis)) bad(at, `${what} basis “${r.basis}” is not dated | bracketed | modelled | map`)
+    citeList(`${at} ${what}`, r.sources)
+  }
+  for (const v of vdoc.volcanoes) {
+    const at = `geology/volcanoes.json ${v.id}`
+    if (!v.name) bad(at, 'has no name')
+    checkHawaiian(`${at} name`, v.name)
+    for (const k of ['note']) { checkHawaiian(`${at} ${k}`, v[k]); checkCopy(`${at} ${k}`, v[k]) }
+    if (v.island !== null && v.island !== undefined && !ISLANDS.has(v.island)) bad(at, `island “${v.island}” is not a pack id`)
+    const s = v.summit
+    if (!s || s.type !== 'Point' || !inGeo(s.coordinates)) bad(at, 'summit must be a Point inside the seafloor box')
+    else if (s.height !== null && !Number.isFinite(s.height)) bad(at, 'summit height must be metres or null')
+    else if (v.status === 'submarine' && s.height > 0) bad(at, 'a submarine volcano’s summit is below the sea')
+    if (v.caldera) {
+      const c = v.caldera
+      if (c.type !== 'Point' && c.type !== 'Polygon') bad(at, 'caldera must be a Point (with radiusKm) or a Polygon')
+      if (c.type === 'Point' && !inGeo(c.coordinates)) bad(at, 'caldera point is outside the seafloor box')
+      if (c.type === 'Polygon') polygonOK(at, c, 'caldera')
+      if (c.radiusKm !== null && c.radiusKm !== undefined && !(c.radiusKm > 0)) bad(at, 'caldera radiusKm must be positive or null')
+      if (!CALDERA_PRECISION.has(c.precision)) bad(at, `caldera precision “${c.precision}” is not mapped | sketch`)
+      if (c.type === 'Point' && s?.coordinates && kmBetween(c.coordinates, s.coordinates) > 25) bad(at, 'caldera lies more than 25 km from the summit')
+      citeList(`${at} caldera`, c.sources)
+    }
+    if (v.status !== 'submarine' || v.shield) range(at, v.shield, 'shield')
+    range(at, v.preshield, 'preshield'); range(at, v.postshield, 'postshield'); range(at, v.rejuvenated, 'rejuvenated')
+    if (!v.shield && !v.preshield) bad(at, 'has neither a shield nor a preshield stage')
+    if (v.shield && v.postshield?.from !== undefined && v.postshield.from > v.shield.from) bad(at, 'its postshield begins before its shield')
+    if (!STATUS.has(v.status)) bad(at, `status “${v.status}” is not extinct | dormant | active | submarine`)
+    const le = v.lastEruption
+    if (le && !(Number.isFinite(le.ma) || Number.isInteger(le.year))) bad(at, 'lastEruption must give ma or year')
+    if (le && Number.isInteger(le.year) && (le.year < 900 || le.year > 2026)) bad(at, `lastEruption year ${le.year} is not historical`)
+    if (v.status === 'active' && !(le && Number.isInteger(le.year))) bad(at, 'an active volcano gives its last eruption as a year')
+    if (v.subsidence) {
+      if (!Number.isFinite(v.subsidence.rate)) bad(at, 'subsidence rate must be a number (mm/yr, negative for uplift)')
+      citeList(`${at} subsidence`, v.subsidence.sources)
+    }
+    citeList(at, v.sources)
+  }
+  // works still to be read for the prologue, each with its wanted in sources.json
+  for (const s of vdoc.wanted?.sources || []) { useSource(`${gat('volcanoes.json')} wanted`, s); if (opened(s)) warn(`${gat('volcanoes.json')} wanted`, `${s} is opened; drop it from wanted`) }
+  const h = vdoc.hotspot
+  if (!h) bad(gat('volcanoes.json'), 'has no hotspot')
+  else {
+    if (!inGeo(h.position)) bad(gat('volcanoes.json'), 'hotspot position is outside the seafloor box')
+    if (!(h.speed > 0)) bad(gat('volcanoes.json'), 'hotspot speed must be positive')
+    if (!(h.azimuth >= 0 && h.azimuth < 360)) bad(gat('volcanoes.json'), 'hotspot azimuth must be compass degrees')
+    citeList(`${gat('volcanoes.json')} hotspot speed`, h.speedSources)
+    citeList(`${gat('volcanoes.json')} hotspot azimuth`, h.azimuthSources)
+  }
+
+  // landslides.geojson
+  if (lsdoc.type !== 'FeatureCollection' || !Array.isArray(lsdoc.features)) { bad(gat('landslides.geojson'), 'must be a FeatureCollection'); return }
+  const LF = new Map()
+  for (const f of lsdoc.features) {
+    const p = f.properties || {}
+    const at = `geology/landslides.geojson ${p.id}`
+    if (!ID.test(p.id || '') || f.id !== p.id) bad(at, 'id is not kebab-case ASCII, or the feature id and properties.id differ')
+    if (LF.has(p.id)) bad(at, 'id is not unique')
+    LF.set(p.id, f)
+    if (!p.name) bad(at, 'has no name')
+    checkHawaiian(`${at} name`, p.name); checkHawaiian(`${at} note`, p.note); checkCopy(`${at} note`, p.note)
+    if (!VO.has(p.volcano)) bad(at, `volcano “${p.volcano}” is not in volcanoes.json`)
+    if (!SLIDE_KINDS.has(p.kind)) bad(at, `kind “${p.kind}” is not avalanche | slump`)
+    if (!(p.age > 0)) bad(at, `age ${p.age} must be positive (Ma)`)
+    if (!(Number.isFinite(p.agePrecision) && p.agePrecision >= 0)) bad(at, 'agePrecision must be ± Ma')
+    if (!(p.runout > 0)) bad(at, 'runout must be positive km')
+    if (p.volume !== null && p.volume !== undefined && !(p.volume > 0)) bad(at, 'volume must be positive km³ or null')
+    if (!FIELD_PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not mapped | traced | sketch`)
+    polygonOK(at, f.geometry, 'field')
+    if (p.scar) polygonOK(at, p.scar, 'scar')
+    if (!Array.isArray(p.blocks)) bad(at, 'blocks must be an array')
+    for (const b of p.blocks || []) {
+      if (b.type !== 'Point' || !inGeo(b.coordinates)) bad(at, 'a block must be a Point inside the seafloor box')
+      if (!b.name) bad(at, 'a block has no name')
+      if (!(b.height > 0)) bad(at, `block ${b.name} has no height`)
+      if (b.sources) citeList(`${at} block ${b.name}`, b.sources)
+    }
+    const v = VO.get(p.volcano)
+    if (v?.summit?.coordinates && f.geometry?.coordinates?.[0]) {
+      const near = Math.min(...f.geometry.coordinates[0].map((c) => kmBetween(c, v.summit.coordinates)))
+      if (near > 120) bad(at, `the field comes no nearer than ${near.toFixed(0)} km to the summit of ${v.name}`)
+    }
+    citeList(at, p.sources)
+  }
+
+  // chapters.json
+  const chapters = cdoc.chapters
+  if (!Array.isArray(chapters) || !chapters.length) { bad(gat('chapters.json'), 'chapters must be a non-empty array'); return }
+  const CH = checkIds(chapters, 'geology/chapters.json')
+  const stepIds = new Set()
+  let lastChapter = Infinity, steps = 0, stops = 0, tellings = 0
+  for (const c of chapters) {
+    const at = `geology/chapters.json ${c.id}`
+    if (!c.label) bad(at, 'has no label')
+    for (const k of ['label', 'note']) { checkHawaiian(`${at} ${k}`, c[k]); checkCopy(`${at} ${k}`, c[k]); checkNoNumbers(`${at} ${k}`, c[k]) }
+    age(at, c.age)
+    if (!(Array.isArray(c.ageSpan) && c.ageSpan.length === 2 && c.ageSpan[0] >= c.ageSpan[1] && c.ageSpan[1] >= 0)) bad(at, 'ageSpan must be [older, younger] in Ma')
+    if (c.age > lastChapter) bad(at, 'chapters must run from the oldest to the youngest')
+    lastChapter = c.age
+    citeList(at, c.sources)
+    let last = Infinity
+    for (const s of c.steps || []) {
+      steps++
+      const sat = `${at} step ${s.id}`
+      if (!ID.test(s.id || '')) bad(sat, 'id is not kebab-case ASCII')
+      if (stepIds.has(s.id)) bad(sat, 'step id is not unique')
+      stepIds.add(s.id)
+      if (!s.title) bad(sat, 'has no title')
+      if (!s.summary) bad(sat, 'has no summary')
+      for (const k of ['title', 'gloss', 'summary']) { checkHawaiian(`${sat} ${k}`, s[k]); checkCopy(`${sat} ${k}`, s[k]); checkNoNumbers(`${sat} ${k}`, s[k]) }
+      if (!STEP_KINDS.has(s.kind)) bad(sat, `kind “${s.kind}” is not birth | slide | join | part | subsidence | eruption | now`)
+      // the prologue's clock: ages positive, zero only for the present
+      if (!(Number.isFinite(s.age) && (s.age > 0 || (s.age === 0 && s.kind === 'now')))) bad(sat, `age ${s.age} must be positive Ma (zero only for a now step)`)
+      if (!(Number.isFinite(s.agePrecision) && s.agePrecision >= 0)) bad(sat, 'agePrecision must be ± Ma')
+      if (s.age > last) bad(sat, `age ${s.age} is older than the step before it (${last}); steps run toward the present`)
+      last = s.age
+      if (Array.isArray(c.ageSpan) && (s.age > c.ageSpan[0] || s.age < c.ageSpan[1])) warn(sat, `age ${s.age} lies outside its chapter’s span ${c.ageSpan.join('–')}`)
+      if (!STAGES.has(s.stage)) bad(sat, `stage “${s.stage}” is not a stage (${[...STAGES.keys()].join(', ')})`)
+      if (!Array.isArray(s.places) || !s.places.length) bad(sat, 'names no places')
+      for (const p of s.places || []) { if (!P.has(p)) bad(sat, `place “${p}” is not in places.json`); else usedPlaces.add(p) }
+      if (!Array.isArray(s.landslides)) bad(sat, 'landslides must be an array')
+      for (const l of s.landslides || []) if (!LF.has(l)) bad(sat, `landslide “${l}” is not in landslides.geojson`)
+      if (s.kind === 'slide' && !(s.landslides || []).length) bad(sat, 'a slide step lights no landslide')
+      for (const t of s.tellings || []) { tellings++; if (!t.source || !t.says) bad(sat, 'a telling needs a source and says'); else useSource(`${sat} telling`, t.source) }
+      if (!(s.tellings || []).length) warn(sat, 'has no tellings')
+      if (!Array.isArray(s.stops) || !s.stops.length) bad(sat, 'has no stops')
+      for (const [i, st] of (s.stops || []).entries()) {
+        stops++
+        const tat = `${sat} stop ${i + 1}`
+        if (!st.text) bad(tat, 'has no text')
+        checkHawaiian(tat, st.text); checkCopy(tat, st.text); checkNoNumbers(tat, st.text)
+        if (st.zoom !== 'far') bad(tat, 'the prologue’s only view is far')
+        if ('year' in st) bad(tat, 'the prologue runs on age, not year')
+        if ('age' in st && !(Number.isFinite(st.age) && st.age >= 0)) bad(tat, 'age must be Ma')
+        const p = P.get(st.place)
+        if (!p) bad(tat, `place “${st.place}” is not in places.json`)
+        else usedPlaces.add(st.place)
+        const cm = st.camera
+        if (!cm) { bad(tat, 'a prologue stop carries a camera'); continue }
+        for (const k of Object.keys(cm)) if (!['bearing', 'pitch', 'distance', 'target'].includes(k)) bad(tat, `camera has an unknown key “${k}”`)
+        if (!(Number.isFinite(cm.bearing) && cm.bearing >= 0 && cm.bearing < 360)) bad(tat, `camera bearing ${cm.bearing} is not compass degrees`)
+        if (!(Number.isFinite(cm.pitch) && cm.pitch >= 0 && cm.pitch <= 1)) bad(tat, `camera pitch ${cm.pitch} is not within 0..1`)
+        if (!(Number.isFinite(cm.distance) && cm.distance >= CAMERA_DISTANCE[0] && cm.distance <= CAMERA_DISTANCE[1])) bad(tat, `camera distance ${cm.distance} is outside the rig’s range`)
+        if (!inGeo(cm.target)) bad(tat, 'camera target must be [lon, lat] inside the seafloor box')
+        else if (p) { const d = kmBetween(cm.target, placePoint(p)); if (d > FAR_TARGET_KM) bad(tat, `camera target lies ${d.toFixed(0)} km from the stop’s place`) }
+      }
+      if (!Array.isArray(s.sources) || !s.sources.length) bad(sat, 'cites no source')
+      else citeList(sat, s.sources.map((x) => (typeof x === 'string' ? x : x?.id)))
+      for (const [k, v] of Object.entries(s.confidence || {})) if (!['date', 'place', 'numbers'].includes(k) || !CONFIDENCE.has(v)) bad(sat, `confidence ${k} “${v}” is not allowed`)
+    }
+    if (!(c.steps || []).length) bad(at, 'has no steps')
+  }
+  for (const id of LF.keys()) if (!chapters.some((c) => (c.steps || []).some((s) => (s.landslides || []).includes(id)))) warn(`geology/landslides.geojson ${id}`, 'is lit by no step')
+
+  // manifest.json and the bake's images, when present
+  let images = 0
+  if (manifest) {
+    const at = gat('manifest.json')
+    const sf = manifest.seafloor
+    let grid = null
+    if (!sf) bad(at, 'has no seafloor')
+    else {
+      const [w, s, e, n] = sf.bounds || []
+      if (![w, s, e, n].every(Number.isFinite) || w >= e || s >= n) bad(at, 'seafloor bounds must be [west, south, east, north]')
+      else if (w > -159.9 || e < -154.5 || s > 18.8 || n < 23.0) bad(at, 'seafloor bounds do not hold every debris field (Nuʻuanu to the Arch, Kaʻena and Waiʻanae west, ʻĀlika south-west)')
+      const [W, H] = sf.size || []
+      if (!(Number.isInteger(W) && Number.isInteger(H) && W > 0 && H > 0 && Math.max(W, H) <= 2048)) bad(at, 'seafloor size must be [W, H], at most 2048 on the long side')
+      else grid = { W, H }
+      if (!(sf.metresPerTexel > 0)) bad(at, 'seafloor metresPerTexel must be positive')
+      citeList(`${at} seafloor`, sf.sources)
+      if (grid && [w, s, e, n].every(Number.isFinite)) for (const f of lsdoc.features) {
+        const out = (f.geometry?.coordinates?.[0] || []).filter(([x, y]) => x < w || x > e || y < s || y > n)
+        if (out.length) bad(`${at} seafloor`, `landslide ${f.id} has ${out.length} points outside the seafloor bounds`)
+      }
+      images += checkGeoHeight(`${at} seafloor`, sf.height, sf.stats, grid)
+    }
+    if (!Array.isArray(manifest.stages)) bad(at, 'stages must be an array')
+    let lastStage = Infinity
+    for (const st of manifest.stages || []) {
+      const sat = `${at} stage ${st.id}`
+      if (!ID.test(st.id || '')) bad(sat, 'id is not kebab-case ASCII')
+      age(sat, st.age)
+      if (st.age > lastStage) bad(sat, 'stages run from the oldest to the present')
+      lastStage = st.age
+      if (!(Number.isFinite(st.agePrecision) && st.agePrecision >= 0)) bad(sat, 'agePrecision must be ± Ma')
+      if (st.id !== 'present' && st.method !== 'modelled') bad(sat, 'every stage before the present is modelled and says so (method: modelled)')
+      if (!st.rule) bad(sat, 'writes out no rule')
+      if (!STAGE_CONFIDENCE.has(st.confidence)) bad(sat, `confidence “${st.confidence}” is not firm | soft | sketch`)
+      citeList(sat, st.sources)
+      const file = st.height ?? (st.id === 'present' ? null : `stages/${st.id}/height.png`)
+      if (file) images += checkGeoHeight(sat, file, st.stats, grid)
+    }
+    if (manifest.hotspot) {
+      if (!inGeo(manifest.hotspot.position)) bad(`${at} hotspot`, 'position is outside the seafloor box')
+      if (!(manifest.hotspot.speed > 0)) bad(`${at} hotspot`, 'speed must be positive')
+    } else bad(at, 'has no hotspot')
+  } else warn('geology', 'no manifest.json yet: the seafloor pack and the stage images are the bake’s, not checked')
+
+  // the directory budget
+  let bytes = 0
+  const walk = (d) => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); if (e.isDirectory()) walk(p); else bytes += readFileSync(p).length } }
+  walk(GD)
+  if (bytes > BUDGET) bad('geology', `the directory holds ${(bytes / 1048576).toFixed(1)} MB, over the 12 MB budget`)
+  geoCounts = { volcanoes: vdoc.volcanoes.length, fields: lsdoc.features.length, blocks: lsdoc.features.reduce((n, f) => n + (f.properties.blocks || []).length, 0),
+    chapters: chapters.length, steps, stops, tellings, stages: STAGES.size, stagesFrom: manifest ? 'manifest.json' : 'volcanoes.json stagesProposed', images, bytes }
+}
+
+// a split-byte height image on the seafloor grid (DATA.md §2): RGB, B = 0, metres = (R·256 + G)·0.25 − 6000, with its stats
+function checkGeoHeight(at, file, stats, grid) {
+  const STATS_TOLERANCE_G = { metres: 0.5, fraction: 0.002 } // the stats as written against the image read back
+  if (!file) { bad(at, 'names no height image'); return 0 }
+  const path = join(DATA, 'geology', typeof file === 'string' ? file : file.file)
+  if (!existsSync(path)) { warn(at, `${typeof file === 'string' ? file : file.file} is not baked yet`); return 0 }
+  let img
+  try { img = readPNG(path) } catch (e) { bad(at, `height image does not decode: ${e.message}`); return 0 }
+  if (img.channels !== 3) { bad(at, 'height image is not split-byte RGB'); return 0 }
+  if (grid && (img.width !== grid.W || img.height !== grid.H)) bad(at, `height image is ${img.width}x${img.height}, the seafloor grid ${grid.W}x${grid.H}`)
+  let min = Infinity, max = -Infinity, land = 0, blue = 0
+  const n = img.width * img.height
+  for (let i = 0; i < n; i++) {
+    const m = (img.data[3 * i] * 256 + img.data[3 * i + 1]) * 0.25 - 6000
+    if (img.data[3 * i + 2] !== 0) blue++
+    if (m < min) min = m
+    if (m > max) max = m
+    if (m > 0) land++
+  }
+  if (blue) bad(at, `${blue} texels have B ≠ 0`)
+  if (!stats) bad(at, 'has no stats')
+  else {
+    if (Math.abs(stats.minMetres - min) > STATS_TOLERANCE_G.metres) bad(at, `stats.minMetres ${stats.minMetres}, the image ${min}`)
+    if (Math.abs(stats.maxMetres - max) > STATS_TOLERANCE_G.metres) bad(at, `stats.maxMetres ${stats.maxMetres}, the image ${max}`)
+    if ('landFraction' in stats && Math.abs(stats.landFraction - land / n) > STATS_TOLERANCE_G.fraction) bad(at, `stats.landFraction ${stats.landFraction}, the image ${(land / n).toFixed(4)}`)
+  }
+  return 1
+}
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -1507,6 +1832,11 @@ function finish() {
   if (worksCounts) {
     console.log(`  works     ${worksCounts.n} features, ${(worksCounts.bytes / 1024).toFixed(0)} KB (${fmt(worksCounts.kinds)}); dated by a sheet or record: ${worksCounts.by.length}`)
     console.log(`            ${Object.entries(worksCounts.islands).map(([i, t]) => `${i} ${Object.values(t).reduce((a, b) => a + b, 0)}`).join(', ')}`)
+  }
+  if (geoCounts) {
+    const g = geoCounts
+    console.log(`  geology   ${g.volcanoes} volcanoes, ${g.fields} fields (${g.blocks} blocks), ${g.chapters} chapters, ${g.steps} steps, ${g.stops} stops, ${g.tellings} tellings`)
+    console.log(`            ${g.stages} stages from ${g.stagesFrom}; ${g.images} height images read back; ${(g.bytes / 1024).toFixed(0)} KB of the 12 MB budget`)
   }
   if (warnings.length) console.log(`  warnings  ${warnings.length}`)
 }

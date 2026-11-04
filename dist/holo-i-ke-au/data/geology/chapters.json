@@ -1,0 +1,1516 @@
+{
+  "about": "The prologue: the making of the islands. Ages in Ma (millions of years before present); each step is drawn on a stage (volcanoes.json stagesProposed, then geology/manifest.json). See RESEARCH.md §17.",
+  "chapters": [
+    {
+      "id": "over-the-hotspot",
+      "label": "over the hotspot",
+      "age": 5.1,
+      "ageSpan": [
+        6.3,
+        2.9
+      ],
+      "note": "The oldest of the main islands and the first of Oʻahu’s two shields.",
+      "sources": [
+        "clague-sherrod-2014",
+        "sherrod-2007-geologic-map",
+        "eakins-2003-i2809"
+      ],
+      "steps": [
+        {
+          "id": "the-chain",
+          "title": "The chain",
+          "gloss": "volcanoes born over one hot place and carried away",
+          "kind": "birth",
+          "age": 5.1,
+          "agePrecision": 0.5,
+          "stage": "kauai-alone",
+          "places": [
+            "kauai-volcano",
+            "niihau-volcano",
+            "kilauea-volcano",
+            "kamaehuakanaloa"
+          ],
+          "landslides": [],
+          "summary": "The islands are the youngest of a long line of volcanoes. Each was born over the same hot place deep under the sea floor and carried north-west with the Pacific plate, away from its source, to die, wear down and sink. So the volcanoes are older the farther they lie from Hawaiʻi Island, and every shape drawn before today’s is fitted to the living shields and to the ages of their dated rocks.",
+          "tellings": [
+            {
+              "source": "clague-sherrod-2014",
+              "says": "“The 19 known shield volcanoes of the main Hawaiian Islands—15 now emergent, 3 submerged, and 1 newly born and still submarine—lie at the southeast end of a long-lived hot spot chain. As the Pacific Plate … moves slowly northwestward over the Hawaiian hot spot, volcanoes are successively born above it, evolve as they drift away from it, and eventually die and subside beneath the ocean surface.” (p. 97)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "The chain of more than 129 volcanoes stretches across more than 6,100 km of the North Pacific; the oldest, about 81 Ma, lie east of Kamchatka. Its bend, a gradual change from 55 to 45 Ma, lies more than 3,550 km west-north-west of Hawaiʻi, far beyond the map (p. 99)."
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "On their plot of age against distance from Kīlauea, the line of volcano birth has a slope of 10 cm a year, the average plate motion (fig. 14, p. 121)."
+            },
+            {
+              "source": "moore-clague-1992-hawaii",
+              "says": "The end of shield building moved south-east (S 40° E) at about 13 cm a year from Haleakalā to Hualālai, “the postulated movement rate of the Pacific plate over the Hawaiian hotspot”; each volcano takes about 600,000 years to grow from the sea floor to the end of its shield, and reaches the surface about midway."
+            },
+            {
+              "source": "eakins-2003-i2809",
+              "says": "The interpretive map gives the age of shield-stage lavas for each volcano: Kaʻula 4.0 Ma, Niʻihau 4.9, Waiʻaleʻale (Kauaʻi) 5.1, Waiʻanae 3.7, Koʻolau 2.6, West Molokaʻi 1.9, East Molokaʻi 1.8, Lānaʻi 1.3, West Maui 1.3, Kahoʻolawe 1.0, Haleakalā 1.0, Māhukona 0.5, Kohala 0.4, Mauna Kea 0.4, and 0 for Hualālai, Mauna Loa, Kīlauea and Lōʻihi; the westward increase “continues along the Hawaiian Ridge and on through the Emperor Seamounts (76 Ma at the northern end), supporting the plate-motion theory.”"
+            }
+          ],
+          "stops": [
+            {
+              "text": "The chain from the south-east, looking up it toward Kauaʻi: the youngest volcanoes nearest, the oldest farthest away.",
+              "place": "kilauea-volcano",
+              "zoom": "far",
+              "age": 5.1,
+              "camera": {
+                "bearing": 305,
+                "pitch": 0.35,
+                "distance": 1000,
+                "target": [
+                  -157.4,
+                  20.6
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "clague-sherrod-2014",
+              "where": "pp. 97–99, fig. 14"
+            },
+            {
+              "id": "moore-clague-1992-hawaii",
+              "where": "abstract"
+            },
+            {
+              "id": "eakins-2003-i2809",
+              "where": "interpretive map"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "kauai-niihau",
+          "title": "Niʻihau and Kauaʻi",
+          "gloss": "the oldest shields of the main islands",
+          "kind": "birth",
+          "age": 4.5,
+          "agePrecision": 0.5,
+          "stage": "kauai-alone",
+          "places": [
+            "kauai-volcano",
+            "olokele-caldera",
+            "niihau-volcano",
+            "kaula-volcano"
+          ],
+          "landslides": [
+            "north-kauai",
+            "south-kauai"
+          ],
+          "summary": "Niʻihau, Kaʻula and Kauaʻi were built and finished while nothing yet stood above the sea to the south-east. Kauaʻi’s summit held a great caldera, Olokele, which filled with ponded lava and was then let down into a graben to the south. Niʻihau’s summit and north rift are gone, into the sea where Kauaʻi later grew over them. Long after, small vents broke out again on both islands.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "Niʻihau’s shield lavas, the Pānīʻau Basalt, range from about 6.3 to 4.3 Ma, though the true span is likely less than a million years; its rejuvenated lavas, the Kiʻekiʻe Basalt, from about 2.32 to 0.35 Ma (p. 9)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "Kauaʻi’s subaerial shield grew mainly between 5.5 and 4 Ma; a caldera “ultimately expanding to encompass a roughly circular area 18–19 km across” was filled by the Olokele lavas about 4 Ma; the Makaweli graben took lava from about 4 to 3.5 Ma; the rejuvenated Kōloa lavas came mainly between 2.6 and 0.15 Ma (pp. 13–16)."
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Niʻihau’s whole summit caldera and north rift are missing with no deposit found on the sea floor: “The growth of the Kauaʻi edifice has presumably covered the area northeast of Niʻihau where the landslide would have gone.” (p. 130)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "On Kauaʻi the rejuvenated stage may follow the postshield with no break at all: “Plausibly, volcanic activity on Kauaʻi continued uninterrupted from shield to postshield to rejuvenated stage.” (p. 129)"
+            }
+          ],
+          "stops": [
+            {
+              "text": "Kauaʻi and Niʻihau alone, with the caldera of Olokele at Kauaʻi’s summit.",
+              "place": "kauai-volcano",
+              "zoom": "far",
+              "age": 4.5,
+              "camera": {
+                "bearing": 320,
+                "pitch": 0.45,
+                "distance": 700,
+                "target": [
+                  -159.7,
+                  22
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 9–18"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "pp. 122, 129–130"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "waianae-rises",
+          "title": "Waiʻanae",
+          "gloss": "the first of Oʻahu’s two shields",
+          "kind": "birth",
+          "age": 3.5,
+          "agePrecision": 0.4,
+          "stage": "waianae",
+          "places": [
+            "waianae-volcano",
+            "lualualei-caldera"
+          ],
+          "landslides": [
+            "kaena"
+          ],
+          "summary": "South-east of Kauaʻi a new shield rose, Waiʻanae, the western half of the Oʻahu to come. A caldera stood at the head of what is now Lualualei Valley and filled as the shield grew; late in its life the volcano poured out some of the most silica-rich lava known in the islands, and its last lavas came after a sudden, deep wearing-down of its slopes.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Lualualei Member, the oldest exposed, from slightly older than about 3.9 to 3.55 Ma; the Kamaileʻunu Member, a later shield stage that filled the caldera, from 3.55 to 3.06 Ma; the postshield Pālehua and Kolekole Members after, the change between them about 2.98 Ma (pp. 21–22)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Mauna Kūwale Rhyodacite Flow, erupted about 3.3 Ma, “contains 68 percent SiO2, is the most silicic lava composition reported from the Hawaiian island chain” (p. 22)."
+            },
+            {
+              "source": "eakins-2003-i2809",
+              "says": "The interpretive map labels Waiʻanae 3.7 Ma and Waiʻaleʻale (Kauaʻi) 5.1 Ma."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Waiʻanae standing alone south-east of Kauaʻi, its caldera at the head of Lualualei.",
+              "place": "waianae-volcano",
+              "zoom": "far",
+              "age": 3.5,
+              "camera": {
+                "bearing": 300,
+                "pitch": 0.45,
+                "distance": 600,
+                "target": [
+                  -158.3,
+                  21.5
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 18–22"
+            },
+            {
+              "id": "eakins-2003-i2809",
+              "where": "interpretive map"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "waianae-slump",
+          "title": "The Waiʻanae slump",
+          "gloss": "the volcano’s south-west flank",
+          "kind": "slide",
+          "age": 3.06,
+          "agePrecision": 0.1,
+          "stage": "waianae",
+          "places": [
+            "waianae-slump-field"
+          ],
+          "landslides": [
+            "waianae",
+            "kaena"
+          ],
+          "summary": "Waiʻanae’s south-west flank moved out over the sea floor as a slump: a slow mass that kept its structure, perhaps in many movements, its blocky ridges still lying along the old coast. Its time is read from what it holds and what came after it: no lava of the volcano’s last stage has been found in it, and the deep erosion before the last lavas may be one of its movements.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "“Covering roughly 5,500 km2, the Waiʻanae Slump is one of the larger submarine landslides associated with the Hawaiian Islands”; by one reading it came before Pālehua time, before about 3.06 Ma, because no alkalic rocks have been collected from it (Coombs et al. 2004), but the slump is sparsely sampled “owing to the ominous plexus of telecommunication cables that traverse the region” (p. 22)."
+            },
+            {
+              "source": "moore-1989-prodigious",
+              "says": "The slumps “are slow moving, wide (up to 110 km), and thick (about 10 km) with transverse blocky ridges and steep toes.”"
+            }
+          ],
+          "stops": [
+            {
+              "text": "The slump south-west of Oʻahu, its ridges lying along the coast it moved away from.",
+              "place": "waianae-slump-field",
+              "zoom": "far",
+              "age": 3.06,
+              "camera": {
+                "bearing": 40,
+                "pitch": 0.45,
+                "distance": 900,
+                "target": [
+                  -158.4,
+                  21.25
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "p. 22"
+            },
+            {
+              "id": "moore-1989-prodigious",
+              "where": "abstract"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "soft",
+            "numbers": "soft"
+          }
+        }
+      ]
+    },
+    {
+      "id": "koolau",
+      "label": "the Koʻolau shield and its fall",
+      "age": 2.1,
+      "ageSpan": [
+        3,
+        0.1
+      ],
+      "note": "Koʻolau grown whole against Waiʻanae, its north-east flank into the sea as the Nuʻuanu avalanche, and what the streams made of the rest.",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami"
+      ],
+      "steps": [
+        {
+          "id": "koolau-whole",
+          "title": "Koʻolau whole",
+          "gloss": "the eastern shield of Oʻahu",
+          "kind": "birth",
+          "age": 2.1,
+          "agePrecision": 0.1,
+          "stage": "koolau-whole",
+          "places": [
+            "koolau-volcano",
+            "kailua-caldera"
+          ],
+          "landslides": [],
+          "summary": "Koʻolau grew against Waiʻanae’s eastern flank until the two made one island. At the end of its shield it stood whole: a broad dome with its caldera over what is now Kailua and Kāneʻohe, a rift zone of dikes running north-west and south-east through it, and a north-east flank running far out beyond today’s windward shore. Its lavas grew no cap of the later kinds; it is one of only two volcanoes in the islands without one.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The oldest subaerial Koʻolau lavas are about 3 Ma; the youngest dated 1.78±0.26 Ma (Doell and Dalrymple 1973), though Ozawa and others (2005) argued that its volcanism ended about 2.0–2.1 Ma (p. 22)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Kailua caldera, of the shield stage, demarcates “a roughly equant caldera 9–10 km in diameter”; the dike complex holds more than 7,400 dikes in a zone 3–5 km wide (p. 22)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The volcano originally held about 34 thousand km³; Walker (1995) suggested the exposed lavas are the upper remnants of mountains “that once projected above the altitude of trade winds (~3000 m above present sea level)” (pp. 20, 22)."
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Of the volcanoes old enough, “Only two, Koʻolau and Lānaʻi, lack rocks of postshield composition.” (p. 97)"
+            }
+          ],
+          "stops": [
+            {
+              "text": "Oʻahu with Koʻolau whole, its north-east flank reaching out to sea.",
+              "place": "koolau-volcano",
+              "zoom": "far",
+              "age": 2.1,
+              "camera": {
+                "bearing": 225,
+                "pitch": 0.4,
+                "distance": 700,
+                "target": [
+                  -157.75,
+                  21.5
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 20–22"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 97"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "nuuanu-avalanche",
+          "title": "The Nuʻuanu avalanche",
+          "gloss": "Koʻolau’s north-east flank into the sea",
+          "kind": "slide",
+          "age": 1.95,
+          "agePrecision": 0.15,
+          "stage": "koolau-after-nuuanu",
+          "places": [
+            "nuuanu-avalanche",
+            "tuscaloosa-seamount",
+            "hawaiian-arch",
+            "koolau-volcano"
+          ],
+          "landslides": [
+            "nuuanu"
+          ],
+          "summary": "Near the end of Koʻolau’s life, or soon after, its north-east side broke away. The flank fell into the sea as a debris avalanche: from a head in what is now the sea off the windward coast it ran down the slope, across the floor of the deep and up onto the Hawaiian Arch beyond, uphill, which only a fast-moving mass could do. Blocks the size of mountains rode with it; the largest, Tuscaloosa Seamount, lies on the sea floor north-east of Oʻahu. A fall like this displaces the sea above it, and the record models a wave that reached every island of the chain within the hour. The record is not settled on whether there was one avalanche or several, nor on its age. What was left of Koʻolau was its western slope and its core.",
+          "tellings": [
+            {
+              "source": "moore-1989-prodigious",
+              "says": "GLORIA surveys show slumps and debris avalanches over about 100,000 km² from Kauaʻi to Hawaiʻi; “Some of the individual debris avalanches are more than 200 km long and about 5000 km3 in volume”; they are “fast moving, long (up to 230 km) compared to width, and thinner (0.05–2 km)”, with “a well-defined amphitheater at their head and hummocky terrain in the lower part.”"
+            },
+            {
+              "source": "odp-200-ir-nuuanu",
+              "says": "The Nuʻuanu landslide “is spread over a 23,000-km2 area” with “distal portions extending up the Hawaiian Arch” (Normark et al. 1993; Naka et al. 2000), “more than 200 km from the island”, and would have had to travel over 100 km uphill; it holds blocks “such as the Tuscaloosa Seamount, which is ~30 km long, 17 km wide, and at least 2 km tall.” Herrero-Bervera and others (2002) estimated its age at 2.1–1.8 Ma; “the size, the age, and the number of Nuuanu Landslides are still in question.”"
+            },
+            {
+              "source": "satake-2002-nuuanu-tsunami",
+              "says": "The slide volume is about 3 × 10³ km³ with a subaerial headwall and 2 × 10³ km³ with a submarine one; the debris about 3 × 10³ km³. In their model the tsunami “reaches most of the Hawaiian Islands within half an hour”, with heights “greater than 100 m on the northern coasts of Oahu and Molokai islands, and 20 - 30 m on the southern coasts”, reaching the coast of North America in about 5 hours."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "About 10 percent of the volcano’s east half was carved away, 2–4 × 10³ km³ of about 34 × 10³ km³; the head of the avalanche is thought to coincide with “an arcuate embayment in the submarine bathymetric contours 15 km northeast of the present shoreline” (pp. 22, 25)."
+            },
+            {
+              "source": "moore-normark-holcomb-1994-science",
+              "says": "Avalanche blocks are “commonly 1 to 10 km in diameter”; rapid movement is shown “by the thinness and great length of the avalanches, by movement uphill in their distal reaches in some places, and by their hummocky, fragmented surfaces.”"
+            },
+            {
+              "source": "wikipedia-nuuanu-slide",
+              "says": "Wikipedia (tertiary) has the slide break away “between 1 and 1.5 million years ago” and run 200 km."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The field from the north-east, looking back toward Oʻahu: the great blocks strewn down the slope and across the deep, the finer debris beyond them on the rise of the Arch.",
+              "place": "nuuanu-avalanche",
+              "zoom": "far",
+              "age": 1.95,
+              "camera": {
+                "bearing": 225,
+                "pitch": 0.4,
+                "distance": 2600,
+                "target": [
+                  -157.1,
+                  22.15
+                ]
+              }
+            },
+            {
+              "text": "Tuscaloosa Seamount, a piece of the Koʻolau shield carried out across the deep whole.",
+              "place": "tuscaloosa-seamount",
+              "zoom": "far",
+              "age": 1.95,
+              "camera": {
+                "bearing": 235,
+                "pitch": 0.5,
+                "distance": 600,
+                "target": [
+                  -157.143,
+                  22.095
+                ]
+              }
+            },
+            {
+              "text": "The toe of the avalanche on the Hawaiian Arch, the swell of sea floor the islands’ weight raises round them: the debris ran uphill to reach it.",
+              "place": "hawaiian-arch",
+              "zoom": "far",
+              "age": 1.95,
+              "camera": {
+                "bearing": 210,
+                "pitch": 0.4,
+                "distance": 1800,
+                "target": [
+                  -156.45,
+                  22.7
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "moore-1989-prodigious",
+              "where": "abstract"
+            },
+            {
+              "id": "odp-200-ir-nuuanu",
+              "where": "Nuuanu Landslide"
+            },
+            {
+              "id": "satake-2002-nuuanu-tsunami",
+              "where": "abstract"
+            },
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 22, 25"
+            }
+          ],
+          "confidence": {
+            "date": "contested",
+            "place": "firm",
+            "numbers": "contested"
+          }
+        },
+        {
+          "id": "the-pali",
+          "title": "The windward cliffs",
+          "gloss": "what rain and streams made of the scar",
+          "kind": "slide",
+          "age": 1.8,
+          "agePrecision": 0.2,
+          "stage": "koolau-after-nuuanu",
+          "places": [
+            "koolau-volcano"
+          ],
+          "landslides": [
+            "nuuanu"
+          ],
+          "summary": "The great cliff of the Koʻolau, running the length of the windward side, is not the break itself. The record reads it as the work of rain and streams on the side the avalanche laid bare, cut back from the scar into a line of scalloped valley heads, with the dikes of the rift zone steering the wearing. On East Molokaʻi, by contrast, the north cliffs are now read as the headwall of its own great slide.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "“the great northeast-facing cliff that extends for more than 40 km along the present-day crest of the Koʻolau volcano … ranges in height from about 150 to 800 m above the surrounding terrain. The pali originated mainly by subaerial fluvial erosion”; it “extends far beyond the western edge of the Koʻolau caldera, and it is characterized along its entire length by a pattern of scallops that resemble coalesced amphitheater heads of a Hawaiian stream valley” (p. 25)."
+            },
+            {
+              "source": "moore-1989-prodigious",
+              "says": "“Most present-day submarine canyons were originally carved subaerially in the upper parts of debris avalanches. Subaerial canyon cutting was apparently promoted by the recently steepened and stripped slopes of the landslide amphitheaters.”"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Features once thought wholly erosional, “such as the pali (cliff) on the north side of East Molokaʻi, are now interpreted as landslide headwalls (on Molokaʻi, of the Wailau slide) or backstepping of those headwalls” (p. 129)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The windward side from the sea: the cliff scalloped by valley heads along the crest.",
+              "place": "koolau-volcano",
+              "zoom": "far",
+              "age": 1.8,
+              "camera": {
+                "bearing": 235,
+                "pitch": 0.3,
+                "distance": 350,
+                "target": [
+                  -157.8,
+                  21.42
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "p. 25"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 129"
+            },
+            {
+              "id": "moore-1989-prodigious",
+              "where": "abstract"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "firm"
+          }
+        },
+        {
+          "id": "honolulu-volcanics",
+          "title": "The late vents of Koʻolau",
+          "gloss": "Lēʻahi, Puowaina and their kin",
+          "kind": "eruption",
+          "age": 0.5,
+          "agePrecision": 0.4,
+          "stage": "maui-nui-parting",
+          "places": [
+            "leahi",
+            "puowaina",
+            "koolau-volcano"
+          ],
+          "landslides": [],
+          "summary": "Long after its shield had died and its flank had gone, small vents broke out again across the south-east end of the Koʻolau: Lēʻahi, Puowaina, Salt Lake and Koko Head among them, and last of all the vents of Tantalus and Koko. Claims of eruptions there in human times rest on misread dates.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Honolulu Volcanics have K–Ar ages from about 0.80 to somewhat younger than 0.1 Ma; the Tantalus–Sugar Loaf and Koko vents are chiefly about 0.1 Ma, perhaps as young as 0.04 Ma; reports of ages younger than 30,000 years “probably arise from misinterpretations of the data” (pp. 23–24)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The south-east end of the Koʻolau, where the late vents broke out.",
+              "place": "leahi",
+              "zoom": "far",
+              "age": 0.5,
+              "camera": {
+                "bearing": 20,
+                "pitch": 0.45,
+                "distance": 300,
+                "target": [
+                  -157.78,
+                  21.3
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 23–24"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "firm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "maui-nui",
+      "label": "Maui Nui",
+      "age": 1.9,
+      "ageSpan": [
+        2.5,
+        0.3
+      ],
+      "note": "The volcanoes between Oʻahu and Hawaiʻi Island, one island and then four.",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "price-elliott-fisk-2004-maui-nui",
+        "eakins-2003-i2809"
+      ],
+      "steps": [
+        {
+          "id": "molokai-rises",
+          "title": "Molokaʻi",
+          "gloss": "two shields, and a bank between them and Oʻahu",
+          "kind": "birth",
+          "age": 1.9,
+          "agePrecision": 0.2,
+          "stage": "koolau-after-nuuanu",
+          "places": [
+            "penguin-bank",
+            "west-molokai-volcano",
+            "east-molokai-volcano"
+          ],
+          "landslides": [],
+          "summary": "South-east of Oʻahu new shields rose in turn: Penguin Bank, perhaps a volcano of its own, then West Molokaʻi, low and soon finished, then East Molokaʻi, which grew over the downdropped edge of its neighbour and stood far higher.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "West Molokaʻi’s shield probably ended about 1.84 Ma, its postshield cones about 1.80 and 1.73 Ma; East Molokaʻi’s oldest age is 1.75±0.14 Ma, its shield–postshield contact about 1.49 Ma, its postshield upper member as thick as 520 m (pp. 25–28)."
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Penguin Bank “may be a West Molokaʻi rift zone or it may be a separate volcano. In some reconstructions, Penguin Bank is the first of the several volcanoes that coalesced to form Maui Nui” (p. 107)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Molokaʻi’s two shields rising beside Oʻahu, Penguin Bank between.",
+              "place": "east-molokai-volcano",
+              "zoom": "far",
+              "age": 1.9,
+              "camera": {
+                "bearing": 300,
+                "pitch": 0.4,
+                "distance": 900,
+                "target": [
+                  -157.2,
+                  21.1
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 25–28"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 107"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "wailau-slide",
+          "title": "The Wailau avalanche",
+          "gloss": "the north half of East Molokaʻi",
+          "kind": "slide",
+          "age": 1.4,
+          "agePrecision": 0.3,
+          "stage": "maui-nui",
+          "places": [
+            "wailau-avalanche",
+            "east-molokai-volcano"
+          ],
+          "landslides": [
+            "wailau"
+          ],
+          "summary": "East Molokaʻi lost its north half to the sea. The Wailau avalanche ran north across the deep, its blocks lying among Nuʻuanu’s, and the island was left long and narrow, its north side a wall of cliffs. Later a single small shield grew at their foot, Kalaupapa.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "Molokaʻi “was probably somewhat more equant earlier in its history, before the Wailau Slide chopped off the” north half of East Molokaʻi; the Kalaupapa Volcanics “grew along the northern sea cliffs after the island’s last major landslide”, with K–Ar ages of about 0.34 to 0.57 Ma (pp. 25–29)."
+            },
+            {
+              "source": "satake-2002-nuuanu-tsunami",
+              "says": "For the Wailau landslide the missing slide volume is 1.5 × 10³ km³ with a subaerial headwall and 0.8 × 10³ km³ with a submarine one, the debris 1.5 × 10³ km³; its tsunami heights “are about 60 - 70 % of those from the Nuuanu landslide and are differently oriented.”"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "The north pali of East Molokaʻi is now read as the Wailau headwall or its backstepping (Clague and Moore 2002, p. 129)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "East Molokaʻi from the north, the wall of its cliffs and the avalanche below.",
+              "place": "wailau-avalanche",
+              "zoom": "far",
+              "age": 1.4,
+              "camera": {
+                "bearing": 180,
+                "pitch": 0.4,
+                "distance": 1400,
+                "target": [
+                  -156.87,
+                  21.55
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 25–29"
+            },
+            {
+              "id": "satake-2002-nuuanu-tsunami",
+              "where": "abstract"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 129"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "clark-slide",
+          "title": "The Clark avalanche",
+          "gloss": "Lānaʻi’s south-west flank",
+          "kind": "slide",
+          "age": 1.3,
+          "agePrecision": 0.3,
+          "stage": "maui-nui",
+          "places": [
+            "clark-avalanche",
+            "lanai-volcano"
+          ],
+          "landslides": [
+            "clark-1",
+            "clark-2"
+          ],
+          "summary": "Lānaʻi, a single small shield, sent part of its south-west side out across the sea floor as the Clark avalanche. The faults that nearly cut the island in two may mark where the failure reached, and the basin at Lānaʻi’s heart may be a sag from the same time rather than a caldera.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Clark debris avalanche “can be traced back to the outer slope of Lānaʻi”; its upper limit “may be marked by the northwest-striking faults that nearly bisect the island (Moore and others, 1989)”, and the Pālāwai Basin may have “formed instead as a shallow sag when the island was weakly extended during Clark time” (pp. 29–30). Lānaʻi’s ages range from about 1.51 to 1.24 Ma (p. 30)."
+            },
+            {
+              "source": "eakins-2003-i2809",
+              "says": "The sheet names two lobes, Clark 1 Slide and Clark 2 Slide, the second farther to the south-west."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The Clark avalanche south-west of Lānaʻi.",
+              "place": "clark-avalanche",
+              "zoom": "far",
+              "age": 1.3,
+              "camera": {
+                "bearing": 50,
+                "pitch": 0.45,
+                "distance": 1000,
+                "target": [
+                  -157.35,
+                  20.25
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 29–30"
+            },
+            {
+              "id": "eakins-2003-i2809",
+              "where": "main map"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "soft",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "maui-nui-one",
+          "title": "Maui Nui",
+          "gloss": "one island",
+          "kind": "join",
+          "age": 1.2,
+          "agePrecision": 0.1,
+          "stage": "maui-nui",
+          "places": [
+            "penguin-bank",
+            "west-molokai-volcano",
+            "east-molokai-volcano",
+            "lanai-volcano",
+            "kahoolawe-volcano",
+            "west-maui-volcano",
+            "haleakala-volcano",
+            "haleakala-crater"
+          ],
+          "landslides": [],
+          "summary": "For a time the volcanoes between Oʻahu and Hawaiʻi Island stood as one island, Maui Nui: Penguin Bank, the two Molokaʻi shields, Lānaʻi, Kahoʻolawe, West Maui and the young Haleakalā, joined by wide lowlands where the channels run now. It was larger than Hawaiʻi Island is today. The shapes are a model of growth, sinking and sea level, not a survey.",
+          "tellings": [
+            {
+              "source": "price-elliott-fisk-2004-maui-nui",
+              "says": "“The model indicates that Maui Nui was a single landmass that reached its maximum areal extent around 1.2 Ma, when it was larger than the current island of Hawaiʻi.” (abstract)"
+            },
+            {
+              "source": "eakins-2003-i2809",
+              "says": "“Prominent terraces (shown in orange and yellow) illustrate the larger size of the islands in the past; Oʻahu and the Maui-Nui complex (Maui, Molokaʻi, Lānaʻi, and Kahoʻolawe islands, and Penguin Bank), in particular, are mere vestiges of their former extent.”"
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "West Maui’s shield lavas range from about 2 to 1.3 Ma; Haleakalā’s oldest exposed lavas, the Honomanū Basalt, from about 1.1 to 0.97 Ma; Kahoʻolawe’s shield about 1.25 Ma (pp. 33–37)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Maui Nui as one island, from the south.",
+              "place": "lanai-volcano",
+              "zoom": "far",
+              "age": 1.2,
+              "camera": {
+                "bearing": 0,
+                "pitch": 0.4,
+                "distance": 1200,
+                "target": [
+                  -156.75,
+                  20.85
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "price-elliott-fisk-2004-maui-nui",
+              "where": "abstract"
+            },
+            {
+              "id": "eakins-2003-i2809",
+              "where": "text"
+            },
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 33–37"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "maui-nui-parting",
+          "title": "Maui Nui parts",
+          "gloss": "four islands and a drowned bank",
+          "kind": "part",
+          "age": 0.6,
+          "agePrecision": 0.1,
+          "stage": "maui-nui-parting",
+          "places": [
+            "penguin-bank",
+            "east-molokai-volcano",
+            "lanai-volcano",
+            "kahoolawe-volcano",
+            "west-maui-volcano"
+          ],
+          "landslides": [
+            "hana"
+          ],
+          "summary": "As the land sank under its own weight, the sea in the warm times between the ice ages came in over the lowlands and Maui Nui parted into the islands of today. Whenever the ice grew and the sea fell, they joined again; for most of its history Maui Nui was one. Penguin Bank went under and stayed under.",
+          "tellings": [
+            {
+              "source": "price-elliott-fisk-2004-maui-nui",
+              "says": "“As subsidence ensued, the island divided during high sea stands of interglacial periods starting around 0.6 Ma; however during lower sea stands of glacial periods, islands reunited. The net effect is that the Maui Nui complex was a single large landmass for more than 75% of its history”. (abstract)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Sea level swings with the ice ages by about 125 m; a volcano sunk deeper than that is unlikely to re-emerge (p. 131). Penguin Bank’s summit lies about 200 m deep (table 1)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The channels opening between Molokaʻi, Lānaʻi, Kahoʻolawe and Maui.",
+              "place": "lanai-volcano",
+              "zoom": "far",
+              "age": 0.6,
+              "camera": {
+                "bearing": 20,
+                "pitch": 0.45,
+                "distance": 1000,
+                "target": [
+                  -156.75,
+                  20.85
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "price-elliott-fisk-2004-maui-nui",
+              "where": "abstract"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 131, table 1"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hawaii-island",
+      "label": "Hawaiʻi rising and sinking",
+      "age": 0.6,
+      "ageSpan": [
+        1.2,
+        0
+      ],
+      "note": "The youngest island grows, slides and sinks; the older islands wait in their own long decline.",
+      "sources": [
+        "moore-clague-1992-hawaii",
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "lipman-1988-alika",
+        "ludwig-1991-subsidence"
+      ],
+      "steps": [
+        {
+          "id": "hawaii-shields",
+          "title": "Hawaiʻi’s shields",
+          "gloss": "each grown on the flank of the one before",
+          "kind": "birth",
+          "age": 0.6,
+          "agePrecision": 0.2,
+          "stage": "hawaii-rising",
+          "places": [
+            "mahukona",
+            "kohala-volcano",
+            "mauna-kea-volcano",
+            "hualalai-volcano",
+            "mauna-loa-volcano"
+          ],
+          "landslides": [],
+          "summary": "Hawaiʻi Island is seven volcanoes, each born on the south-east flank of an older one. Māhukona, the first, reached the air briefly and then sank; Kohala, Mauna Kea and Hualālai finished their shields in turn; Mauna Loa and Kīlauea are still building theirs. The island has grown to about its greatest size and will now begin to shrink.",
+          "tellings": [
+            {
+              "source": "moore-clague-1992-hawaii",
+              "says": "“Mahukona completed shield building about 465 ka; Kohala, 245 ka; Mauna Kea, 130 ka; and Hualalai, 130 ka”; the island “has grown at an average rate of about 0.02 km2/yr for the past 600 k.y. and presently is close to its maximum size.” (abstract)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Māhukona’s inception was likely about 1.5–1 Ma; its summit now lies at about 1,100 m depth, and dredged samples suggest it “survived at least briefly as a subaerial volcano” (p. 107)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "Kohala’s exposed lavas are all younger than 0.78 Ma, its oldest buried parts perhaps about 1 Ma; clasts from the toe of the Hilo Ridge, a Kohala rift, are about 1.1–1.2 Ma (p. 41)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Hawaiʻi Island’s shields rising, Māhukona already sinking off the north-west coast.",
+              "place": "mauna-kea-volcano",
+              "zoom": "far",
+              "age": 0.6,
+              "camera": {
+                "bearing": 320,
+                "pitch": 0.4,
+                "distance": 1100,
+                "target": [
+                  -155.6,
+                  19.8
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "moore-clague-1992-hawaii",
+              "where": "abstract"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 107"
+            },
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "p. 41"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "kauai-and-hawaii",
+          "title": "Old island and young",
+          "gloss": "Kauaʻi and Hawaiʻi side by side in time",
+          "kind": "birth",
+          "age": 0.4,
+          "agePrecision": 0.1,
+          "stage": "hawaii-rising",
+          "places": [
+            "kauai-volcano",
+            "mauna-loa-volcano"
+          ],
+          "landslides": [],
+          "summary": "While Mauna Kea and Mauna Loa were young, Kauaʻi’s shield had long been finished and worn into canyons; its small late vents were still erupting. Almost every island from Niʻihau to Hawaiʻi had an eruption in the same short span, though only Hawaiʻi Island had volcanoes in their main growth.",
+          "tellings": [
+            {
+              "source": "clague-sherrod-2014",
+              "says": "“almost every island from Niʻihau to Hawaiʻi had an eruption in the time between 0.3 and 0.4 million years ago, even though only the Island of Hawaiʻi had active volcanoes in their shield stage during that time.” (p. 97)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Rainfall locally exceeding 9 m a year carves “deep canyons in <1 million years” (p. 129)."
+            },
+            {
+              "source": "eakins-2003-i2809",
+              "says": "The interpretive map gives Waiʻaleʻale (Kauaʻi) 5.1 Ma and Mauna Loa and Kīlauea 0 Ma."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The whole chain again, its old end and its young.",
+              "place": "mauna-loa-volcano",
+              "zoom": "far",
+              "age": 0.4,
+              "camera": {
+                "bearing": 305,
+                "pitch": 0.3,
+                "distance": 1100,
+                "target": [
+                  -157.4,
+                  20.6
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "clague-sherrod-2014",
+              "where": "pp. 97, 129"
+            },
+            {
+              "id": "eakins-2003-i2809",
+              "where": "interpretive map"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "firm"
+          }
+        },
+        {
+          "id": "pololu-slump",
+          "title": "The Pololū slump",
+          "gloss": "Kohala’s north-east side",
+          "kind": "slide",
+          "age": 0.3,
+          "agePrecision": 0.07,
+          "stage": "hawaii-rising",
+          "places": [
+            "pololu-slump-field",
+            "kohala-volcano"
+          ],
+          "landslides": [
+            "pololu",
+            "laupahoehoe"
+          ],
+          "summary": "Late in its shield, Kohala’s north-east side slid or slumped into the sea, leaving the long indentation of the coast from Waipiʻo to Pololū. Its streams, their courses cut short, carved the deep valleys of that coast, and the last Kohala lavas flowed down into them.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The north-east coast “has a prominent indentation extending along 20 km of shoreline from Waipiʻo to Pololū Valleys”; Moore and others (1989) took the summit graben for a pull-apart at the landslide’s head, while Sherrod and others prefer a headscarp at the coast; Hāwī lavas later “draped the valley walls and flowed down into Pololū Valley” (pp. 41–44)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The slump off Kohala’s north-east coast.",
+              "place": "pololu-slump-field",
+              "zoom": "far",
+              "age": 0.3,
+              "camera": {
+                "bearing": 220,
+                "pitch": 0.45,
+                "distance": 700,
+                "target": [
+                  -155.6,
+                  20.3
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 41–44"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "firm"
+          }
+        },
+        {
+          "id": "alika",
+          "title": "The ʻĀlika avalanches",
+          "gloss": "Mauna Loa’s west flank, and the gravels on Lānaʻi",
+          "kind": "slide",
+          "age": 0.125,
+          "agePrecision": 0.02,
+          "stage": "present",
+          "places": [
+            "alika-avalanche",
+            "mauna-loa-volcano",
+            "hulopoe"
+          ],
+          "landslides": [
+            "alika-1",
+            "alika-2",
+            "north-kona",
+            "south-kona-slide",
+            "south-kona-slump",
+            "punaluu"
+          ],
+          "summary": "Mauna Loa’s west flank failed in two great avalanches, one soon after the other, running from near the shore far out into the deep. A wave from a slide like these is one reading of the coral-bearing gravels found high on the slopes of Lānaʻi, Molokaʻi and Kohala. Others read the same gravels as old shorelines and storm beaches lifted with the land, or as the work of many events, not one; the record has not settled it.",
+          "tellings": [
+            {
+              "source": "lipman-1988-alika",
+              "says": "Two debris avalanche lobes “travelled from their breakaway area near the present shoreline as much as 100 km into the Hawaiian Deep at water depths of 4800 m”, “probably formed in rapid succession”, 200–600 km³ together; the whole slide and slump terrane is probably 1500–2000 km³. “The Alika slide … probably triggered a giant wave that washed 325 m high on Lanai at about 100 ka.”"
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The ʻĀlika 2 slide was emplaced about 125 ka (McMurtry et al. 1999). Against a giant-wave origin: coral clasts in some deposits show internal order (Rubin et al. 2000); some of the Lānaʻi beds are not all tsunami deposits (Felton et al. 2000); notches and terraces above sea level call the islands’ uplift into question (Grigg and Jones 1997). For it: on subsiding Kohala the breccia, now from sea level to 100 m, “must have been deposited originally at altitude 350 to 390 m higher” (McMurtry et al. 2004) (p. 7)."
+            },
+            {
+              "source": "moore-moore-1984-lanai",
+              "says": "The Hulopoe Gravel “reaches a maximum altitude of 326 meters” and was “deposited during the Pleistocene by a giant wave generated by a submarine landslide on a sea scarp south of Lanai.” (abstract)"
+            },
+            {
+              "source": "moore-1989-prodigious",
+              "says": "Rapid emplacement of debris avalanches “may have produced high-level wave deposits (such as the 365-m elevation Hulopoe Gravel on Lanai)”. (abstract)"
+            },
+            {
+              "source": "moore-normark-holcomb-1994-science",
+              "says": "Tsunami deposits at elevations as high as 70 m on Molokaʻi and 325 m on Lānaʻi “have been dated at about 200,000 and 100,000 years ago, respectively.”"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Breccia is preserved as high as 155 m on Lānaʻi and Molokaʻi; the uplift readings are argued in several papers, but “No other data suggest that Lānaʻi is, or has been, uplifted”, and drowned reefs south of Lānaʻi argue against it (Webster et al. 2006, 2007) (p. 130)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The two avalanches west of Hawaiʻi Island, from the open sea.",
+              "place": "alika-avalanche",
+              "zoom": "far",
+              "age": 0.125,
+              "camera": {
+                "bearing": 90,
+                "pitch": 0.4,
+                "distance": 1300,
+                "target": [
+                  -156.35,
+                  19.5
+                ]
+              }
+            },
+            {
+              "text": "Lānaʻi’s south shore, where the gravels climb the slopes.",
+              "place": "hulopoe",
+              "zoom": "far",
+              "age": 0.1,
+              "camera": {
+                "bearing": 0,
+                "pitch": 0.4,
+                "distance": 350,
+                "target": [
+                  -156.9,
+                  20.78
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "lipman-1988-alika",
+              "where": "abstract"
+            },
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "p. 7"
+            },
+            {
+              "id": "moore-moore-1984-lanai",
+              "where": "abstract"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 130"
+            },
+            {
+              "id": "rubin-2000-lanai",
+              "where": "title only; summarised by Sherrod et al. 2007 and Clague and Sherrod 2014"
+            }
+          ],
+          "confidence": {
+            "date": "soft",
+            "place": "firm",
+            "numbers": "contested"
+          }
+        },
+        {
+          "id": "drowned-reefs",
+          "title": "The drowned reefs",
+          "gloss": "a stair of coral carried down",
+          "kind": "subsidence",
+          "age": 0.013,
+          "agePrecision": 0.001,
+          "stage": "present",
+          "places": [
+            "drowned-reefs-hawaii",
+            "kohala-volcano"
+          ],
+          "landslides": [],
+          "summary": "Hawaiʻi Island sinks under its own weight. Off its north-west coast a stair of drowned coral reefs records the sinking: each grew at the sea’s edge while the sea rose slowly, and drowned when the sea rose faster than the coral could grow and the land went down beneath it. The deeper the reef, the older.",
+          "tellings": [
+            {
+              "source": "ludwig-1991-subsidence",
+              "says": "Ages for samples from six submerged reefs off north-west Hawaiʻi “range from 17 to 475 ka and indicate that this part of the Hawaiian Ridge has been subsiding at a roughly uniform rate of 2.6 mm/yr for the past 475 ka.” (abstract)"
+            },
+            {
+              "source": "moore-fornari-1984-reefs",
+              "says": "The −150 m terrace drowned about 13,000 years ago, the −390 m terrace about 145,000 and the −580 m terrace about 255,000; the north-west coast “has subsided at an absolute rate of 1.8 to 3 + mm/yr”. (abstract)"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "The rapid phase of subsidence, under a growing volcano’s load, “lasts perhaps 1 m.y., submerges shorelines and reef complexes by more than 1 km”; after it the cooling plate sinks at about 0.01 m per 1,000 years, and in about 15 m.y. nothing of a volcano is left above the sea (pp. 130–131)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The reefs stepping down off the Kohala coast.",
+              "place": "drowned-reefs-hawaii",
+              "zoom": "far",
+              "age": 0.013,
+              "camera": {
+                "bearing": 90,
+                "pitch": 0.35,
+                "distance": 500,
+                "target": [
+                  -155.97,
+                  20.05
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "ludwig-1991-subsidence",
+              "where": "abstract"
+            },
+            {
+              "id": "moore-fornari-1984-reefs",
+              "where": "abstract"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "pp. 130–131"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "soft",
+            "numbers": "firm"
+          }
+        },
+        {
+          "id": "hilina",
+          "title": "The Hilina slump",
+          "gloss": "Kīlauea’s south flank, moving now",
+          "kind": "slide",
+          "age": 0.001,
+          "agePrecision": 0.001,
+          "stage": "present",
+          "places": [
+            "hilina-slump-field",
+            "kilauea-volcano"
+          ],
+          "landslides": [
+            "hilina"
+          ],
+          "summary": "Kīlauea’s south flank is a slump in motion. It creeps seaward as the volcano grows, and now and then lurches, in the great earthquakes of 1868 and 1975.",
+          "tellings": [
+            {
+              "source": "moore-normark-holcomb-1994-science",
+              "says": "Slumps “may creep slowly as they keep pace with the load of volcanic material erupted on their upper part, or they may abruptly surge forward several meters, causing the largest of Hawaii’s historic earthquakes, in 1868 and 1975.”"
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "The movement of Kīlauea’s south flank and the Hilina slump “suggests that tectonics of the active volcanoes may trigger the slides” (p. 130)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Kīlauea’s south flank and the slump below it.",
+              "place": "hilina-slump-field",
+              "zoom": "far",
+              "age": 0.001,
+              "camera": {
+                "bearing": 340,
+                "pitch": 0.4,
+                "distance": 700,
+                "target": [
+                  -155.1,
+                  19.2
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "moore-normark-holcomb-1994-science",
+              "where": "p. 46"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 130"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "soft",
+            "numbers": "firm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kamaehuakanaloa",
+      "label": "Kamaʻehuakanaloa and after",
+      "age": 0.00003,
+      "ageSpan": [
+        0.4,
+        0
+      ],
+      "note": "The volcano being born now, and the islands as they are.",
+      "sources": [
+        "clague-sherrod-2014",
+        "wikipedia-kamaehuakanaloa"
+      ],
+      "steps": [
+        {
+          "id": "kamaehuakanaloa",
+          "title": "Kamaʻehuakanaloa",
+          "gloss": "the next island, still under the sea",
+          "kind": "eruption",
+          "age": 0.00003,
+          "agePrecision": 0.00001,
+          "stage": "present",
+          "places": [
+            "kamaehuakanaloa"
+          ],
+          "landslides": [],
+          "summary": "Off the south-east coast of Hawaiʻi Island a new volcano is growing on the flanks of Kīlauea and Mauna Loa, still deep under the sea and still in the first stage of a volcano’s life. Its summit holds a caldera with pit craters; the newest fell in during the earthquakes of 1996. It was called Lōʻihi until 2021. In time it will break the surface and become an island.",
+          "tellings": [
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Its summit lies 975 m below sea level; its volume is roughly 1,700 km³, most of it from the preshield stage; three pit craters 0.6–1.2 km across, the southernmost formed in 1996. It may form an island “in as little as 50,000 years from now”, or, at 5 m per 1,000 years, “as much as 200,000 years in the future” (p. 105)."
+            },
+            {
+              "source": "wikipedia-kamaehuakanaloa",
+              "says": "Named Kamaʻehuakanaloa, “glowing child of Kanaloa”, by the Hawaiʻi Board on Geographic Names in 2021; “expected to begin emerging above sea level about 10,000–100,000 years from now” (tertiary)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "Kamaʻehuakanaloa on the sea floor south-east of Hawaiʻi Island.",
+              "place": "kamaehuakanaloa",
+              "zoom": "far",
+              "age": 0.00003,
+              "camera": {
+                "bearing": 330,
+                "pitch": 0.45,
+                "distance": 500,
+                "target": [
+                  -155.26,
+                  18.95
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 105"
+            },
+            {
+              "id": "wikipedia-kamaehuakanaloa",
+              "where": "lead"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "soft"
+          }
+        },
+        {
+          "id": "islands-today",
+          "title": "The islands now",
+          "gloss": "young over the hotspot, old and sinking to the north-west",
+          "kind": "now",
+          "age": 0,
+          "agePrecision": 0,
+          "stage": "present",
+          "places": [
+            "kilauea-volcano",
+            "kaluapele",
+            "mauna-loa-volcano",
+            "mokuaweoweo",
+            "haleakala-volcano",
+            "hualalai-volcano"
+          ],
+          "landslides": [],
+          "summary": "Kīlauea and Mauna Loa are in their main growth over the hotspot, and both have erupted in these years; Hualālai and Haleakalā can still erupt; the older islands are extinct, worn and sinking, Oʻahu alone rising a little on the swell of the Arch. In time each will go under, as the islands to the north-west of Kauaʻi already have.",
+          "tellings": [
+            {
+              "source": "wikipedia-kilauea",
+              "says": "An eruption inside Halemaʻumaʻu began on 23 December 2024 and continues in episodes into late 2026 (tertiary)."
+            },
+            {
+              "source": "wikipedia-mauna-loa",
+              "says": "Mauna Loa last erupted from 27 November to 13 December 2022 (tertiary)."
+            },
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "Haleakalā’s youngest lava formed between A.D. 1449 and 1633, and it has erupted every 200 to 500 years (p. 40); Hualālai’s flows of 1801–02 lie under the Kona airport (p. 48). Oʻahu has risen 0.020–0.024 m per 1,000 years over the past 400,000 years (p. 7)."
+            },
+            {
+              "source": "clague-sherrod-2014",
+              "says": "Subsidence and erosion erase “any volcanic remnant above sea level in about 15 m.y.”; Gardner Pinnacles, of that age, is the oldest island in the chain with lava above the sea (p. 131)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The chain as it is, from above the hotspot.",
+              "place": "kilauea-volcano",
+              "zoom": "far",
+              "age": 0,
+              "camera": {
+                "bearing": 305,
+                "pitch": 0.35,
+                "distance": 1000,
+                "target": [
+                  -157.4,
+                  20.6
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 7, 40, 48"
+            },
+            {
+              "id": "clague-sherrod-2014",
+              "where": "p. 131"
+            },
+            {
+              "id": "wikipedia-kilauea",
+              "where": "lead"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "firm"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,9 +2,9 @@
 
 A standing list of what the research could not reach from the build container, why, and what each
 would unlock if the project's owner can open it: a host to allow, a lending scan to borrow, a book to
-buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–15. Each entry names the events,
+buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–17. Each entry names the events,
 places, layers or questions it would settle: what to look for in it, not only that it is wanted. For the
-twenty-six sources held unread (`opened: false` in `sources.json`), the same want is on
+thirty-four sources held unread (`opened: false` in `sources.json`), the same want is on
 the entry itself, in `wanted`, and `check-data` requires it; this file carries the rest: the sources no
 entry cites yet, and the hosts and datasets that are not sources. When one is opened, read it, turn its
 `sources.json` entry from `opened: false` to `true` with its `read`, drop or narrow its `wanted`, and
@@ -21,7 +21,13 @@ strike it here.
 | [HathiTrust](https://babel.hathitrust.org/) full text | 403 | public-domain kingdom and territorial reports the Internet Archive lacks (the Surveyor General's and the Interior's), and a second scan where an Internet Archive copy is poor; the 1900 U.S. census of agriculture for Hawaii (acres in rice, coffee and pasture by island, 1899), which was not found on the Internet Archive, to calibrate the 1896 crop classes |
 | [Chronicling America](https://chroniclingamerica.loc.gov/) / loc.gov | 403, then Cloudflare | the Hawaiian Gazette, Pacific Commercial Advertiser, Evening Bulletin and Hawaiian Star for 1897–98: whether the Pali road cut found remains, which the Nuʻuanu tellings now trace only to a travel guide (§3) |
 | [Biodiversity Heritage Library](https://www.biodiversitylibrary.org/) | Cloudflare challenge, 403 | the Bishop Museum Bulletins: McAllister on Oʻahu (1933; also below), Bennett on Kauaʻi (1931), Emory on Lānaʻi (1924), Stokes; the heiau and fishponds of each island at the precision §7.4 allows |
-| [usgs.gov](https://www.usgs.gov/) | 403, timeouts | the Volcano Watch column of 2008 on the Kaʻū footprints and the dead of 1790 (`keanakakoi-1790`); the observatory's pages on the 1868 earthquake and Mauna Loa flow, a second source for `kau-earthquake-1868` |
+| [usgs.gov](https://www.usgs.gov/) | 403, timeouts | the Volcano Watch column of 2008 on the Kaʻū footprints and the dead of 1790 (`keanakakoi-1790`); the observatory's pages on the 1868 earthquake and Mauna Loa flow, a second source for `kau-earthquake-1868`. **pubs.usgs.gov answered on 2026-11-04** (RESEARCH §17): OFR 2007-1089, PP 1801 chap. 3, I-2809 and PP 1350 were fetched; usgs.gov itself was not tried again |
+| [AGU / Wiley](https://agupubs.onlinelibrary.wiley.com/) | 403 | Moore et al. 1989, “Prodigious submarine landslides” (`moore-1989-prodigious`): the map and table of the seventeen slides, which would replace the I-2809 traces in `geology/landslides.geojson` and give the undated slides their ages and Kāʻohe its place; Lipman et al. 1988 (`lipman-1988-alika`), the ʻĀlika lobes as mapped; the AGU monograph chapters of 2002, Moore and Clague (`moore-clague-2002-nuuanu-wailau`, the multibeam outlines of Nuʻuanu and Wailau) and Satake et al. (`satake-2002-nuuanu-tsunami`, the Koʻolau reconstruction before the slide, for the `koolau-whole` stage) |
+| [Annual Reviews](https://www.annualreviews.org/) | 403 | Moore, Normark and Holcomb 1994, “Giant Hawaiian landslides” (`moore-normark-holcomb-1994-annrev`): the synthesis table of lengths, areas, volumes and ages for every field |
+| [ScienceDirect](https://www.sciencedirect.com/) | 403 (pages and abstracts) | Clague and Moore 2002 (`clague-moore-2002-wailau`): the Wailau age and headwall; Garcia et al. 2006 (`garcia-2006-koolau-landslides`): how many Nuʻuanu slides and when; McMurtry et al. 1999 (`mcmurtry-1999-alika2`): the ʻĀlika 2 age at first hand |
+| SOEST faculty pages (soest.hawaii.edu) | a certificate the proxy does not trust, then 503 | the author's copy of Garcia et al. 2006 (`www.soest.hawaii.edu/moore/pubs/Garcia_ODP_200.pdf`) |
+| [Project MUSE](https://muse.jhu.edu/) | a verification challenge | Price and Elliott-Fisk 2004 in full (`price-elliott-fisk-2004-maui-nui`): the Maui Nui model, its subsidence rates and sea-level curve, its maps through time, to check or build the `maui-nui` and `maui-nui-parting` stages |
+| Semantic Scholar API; OpenAlex | 429 at times (OpenAlex answered after a pause) | abstracts of the AGU and Elsevier papers above; Crossref and OpenAlex supplied most of those read |
 | [Wayback Machine](https://web.archive.org/) | reset every connection in the second pass | a re-read of the Pacific Worlds Nuʻuanu page (the oral account), for its exact words on the guns of both sides |
 | [oha.org](https://www.oha.org/) | 403 (Kīpuka's own site and services answer) | Kīpuka's documentation and terms of use, for the licence question below |
 | [Waikalua Loko Iʻa](https://www.waikalualoko.org/) | 502 through the proxy | the pond's own history and its restoration: when the wall was rebuilt and who keeps it, for `fishpond-waikalua` and a stop in the coda (RESEARCH §13) |
@@ -46,6 +52,7 @@ strike it here.
 | *Atlas of Kaneohe Bay* (1973); *Kaneohe Bay Water Resources Data Evaluation* (1976) | [Internet Archive](https://archive.org/details/atlasofkaneoheba0000vari), lending only | the reefs, sediments and shore of the bay before and after the dredging and fill of 1939–43, for the Kāneʻohe Bay patches |
 | Van Dyke, *Who Owns the Crown Lands of Hawaiʻi?* (2008) | [Internet Archive](https://archive.org/details/whoownscrownland0000vand), lending only | the Crown lands from 1848 to 1893: sales before 1865, the 1890 additions, a check on `mahele.json`'s crown and `later` classes |
 
+| Macdonald, Abbott and Peterson, *Volcanoes in the Sea* (1970; the second edition of 1983 in print) | [Internet Archive](https://archive.org/details/volcanoesinseage00macd), lending only | the island-by-island geology in plain words for the prologue’s steps, and the older reading of the Koʻolau pali (`macdonald-1983-volcanoes-in-the-sea`, RESEARCH §17) |
 | Coulter, *Population and Utilization of Land and Sea in Hawaii, 1853* (Bishop Museum Bulletin 88, 1931; reprint 1971) | [Internet Archive](https://archive.org/details/populationutiliz0000coul), lending only; its search-inside refused; not among the Bishop Museum's bulletin PDFs | his maps of land use at the Māhele, island by island: where taro, sweet potato, cane and grazing were in 1853, to map the 1853 crop classes instead of modelling them (`coulter-1931-land-1853`, §9, Crops) |
 
 ## Print (a library card, or a purchase)
@@ -76,6 +83,8 @@ strike it here.
 
 | dataset | status | what it would unlock |
 | --- | --- | --- |
+| Clague and Dalrymple 1987 and Moore 1987, USGS PP 1350 vol. 1 | fetched from pubs.usgs.gov (406 MB), but the chapter pages are scans with no text layer, and the container has no OCR | the chain’s age–distance fit with its plate rate and azimuth (the drift azimuth in `geology/volcanoes.json` is derived from summit bearings for want of it), and Moore’s subsidence curves per island for the stage rule (`clague-dalrymple-1987`) |
+| The radiometric-age GIS of the 2007 state geologic map | on pubs.usgs.gov with OFR 2007-1089, not downloaded | every dated sample with its coordinates and stage, to fit each modelled shield to its own dated points instead of to stage ranges |
 | The Buke Māhele (1848), read by a person | the scan is open on the [Internet Archive](https://archive.org/details/esrp777824242) but handwritten in Hawaiian; no machine reads it | the primary record behind `mahele.json`: every class and awardee, and the 27 disputes |
 | The 1850 census by island | not found open; Thrum's table starts at 1853 | an 1850 base for the Māhele keyframe's settlement layer (§9) |
 | UH coastal-geology pages (SOEST) | known only at second hand: the patches cite "the University of Hawaiʻi's coastal surveys" for the Ala Wai boat harbour | the dates and extents of fill and dredging on the Waikīkī and Kālia shore, from the surveys themselves (DATA.md "Patches") |

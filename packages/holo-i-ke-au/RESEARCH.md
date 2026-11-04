@@ -2277,3 +2277,190 @@ Hanapēpē and Wahiawa passed on the way.
 - Kamakau's Hawaiian, in *Ka Nūpepa Kūʻokoʻa* of March and April 1868: Ulukau and Papakilo are blocked.
 - The missionary letters and journals the secondary accounts quote (Whitney, Chamberlain, Ruggles, Hunnewell), held by
   the Hawaiian Mission Children's Society, were not looked for.
+
+## 17. The making of the islands
+
+The record behind the prologue (DESIGN §13; DATA.md "Geology: the making of the islands"): the volcanoes, the giant
+landslides, and the chapters and steps the tour walks through on its clock of millions of years. November 2026. The
+seafloor pack and the stage heightmaps are the bake's, built from `volcanoes.json` and `landslides.geojson` in
+parallel; the prologue's rendering is the app's. `check-data.mjs` is clean, with one new warning (no
+`geology/manifest.json` yet) beside the two it had.
+
+| file | contents |
+| --- | --- |
+| `geology/volcanoes.json` | 19 volcanoes: the 16 the contract names, with Kaʻula, Penguin Bank and Māhukona; the hotspot and drift; the subsidence rule; the eight proposed stages |
+| `geology/landslides.geojson` | 18 fields (9 avalanches, 9 slumps; 4 traced, 14 sketch), 4 scars, 1 block (Tuscaloosa Seamount) |
+| `geology/chapters.json` | 5 chapters, 21 steps, 24 stops (all far, all with a camera), 64 tellings |
+| `places.json` | 145 places (was 109): 18 volcanoes and seamounts, 5 calderas, 7 debris fields, Tuscaloosa, the Hawaiian Arch, Haleakalā Crater, Hulopoe, the drowned reefs |
+| `sources.json` | 255 sources (was 230): 25 added, 17 opened (4 of them tertiary), 8 not |
+
+### What was read
+
+USGS publications answered this time (pubs.usgs.gov; ACCESS.md had it blocked), which settled most of what the brief
+asked for.
+
+| source | what, and where |
+| --- | --- |
+| `sherrod-2007-geologic-map` | The explanatory pamphlet of OFR 2007-1089, pp. 6–50 (printed page = PDF page − 2): the stages (pp. 6–7), the megatsunami debate and island uplift (p. 7), and every island: Niʻihau p. 9, Kauaʻi pp. 13–18, Waiʻanae pp. 20–22, Koʻolau pp. 22–25 (the pali, p. 25), Molokaʻi pp. 25–29, Lānaʻi pp. 29–31, Kahoʻolawe pp. 32–34, West Maui p. 34, Haleakalā pp. 37–40, Kohala pp. 41–44, Mauna Kea pp. 44–47, Hualālai pp. 48–50, Mauna Loa p. 50. The ages with their analytical errors and which ones the authors distrust. |
+| `clague-sherrod-2014` | PP 1801 chap. 3 (printed page = PDF page + 96): abstract pp. 97–98; the chain and the bend p. 99; table 1 of summits p. 104 (every `summit` comes from it); Lōʻihi and Kīlauea's preshield pp. 105–106; Māhukona, Penguin Bank and Kaʻena Ridge p. 107; fig. 14 (age against distance, 10 cm/yr) p. 121; postshield and rejuvenated stages in part pp. 122–129; erosion, landslides and subsidence pp. 129–131. |
+| `eakins-2003-i2809` | The whole sheet: its text, the labelled slides and slumps of the main map, and the interpretive inset (each volcano's extent with its debris, and its shield age). The landslide fields were traced on it (below). |
+| `moore-normark-holcomb-1994-science` | The two-page Science note, from Zenodo's scan: block sizes, uphill run-out, tsunami deposits and their dates, the 1868 and 1975 earthquakes. |
+| `odp-200-ir-nuuanu` | The ODP Leg 200 report's section on the Nuʻuanu landslide: area, run-out onto the Arch, Tuscaloosa's dimensions, the age 2.1–1.8 Ma. |
+| abstracts | Through Crossref and OpenAlex: Moore et al. 1989, Satake et al. 2002, Lipman et al. 1988, Moore and Moore 1984, Ludwig et al. 1991, Moore and Fornari 1984, Moore and Clague 1992, Price and Elliott-Fisk 2004. Each is `read: part`. |
+| Wikipedia (tertiary) | Nuʻuanu Slide, Mauna Loa, Kīlauea, Kamaʻehuakanaloa Seamount: the eruptions of 2022 and since December 2024, the renaming of 2021, two caldera sizes, and a dissenting Nuʻuanu age. |
+
+### The volcanoes
+
+Each stage range carries `from`, `to` (Ma), `precision` (± Ma) and a `basis`: `dated` (the stage's own rocks),
+`bracketed` (one end dated, the other modelled or bounded), `modelled` (placed by the growth model) or `map` (Kaʻula's
+age, read off the I-2809 inset). Where an end is modelled the rule is Moore and Clague's: about 600,000 years from the
+sea floor to the end of the shield, the volcano reaching the surface about midway. Calderas are Points with `radiusKm`
+(null where no size was read) and `precision` `mapped` (Mokuʻāweoweo and Kaluapele, whose centres are in table 1) or
+`sketch` (placed by eye from the description: Olokele, Lualualei, Kailua, Pālāwai, ʻĪao, Kahoʻolawe's, Māhukona's,
+Kamaʻehuakanaloa's). Haleakalā Crater is carried with `erosional: true`: Sherrod et al. describe a summit depression
+walled by Kula lavas, not a caldera. East Molokaʻi has none placed, because Sherrod et al. doubt the one Holcomb drew.
+The Koʻolau caldera is the Kailua caldera, 9–10 km across, under the windward lowland between Kailua and Kāneʻohe; the
+brief's "at Kāneʻohe" is that one.
+
+### The stages, for the bake
+
+| id | age, Ma | what it shows | rests on |
+| --- | --- | --- | --- |
+| `kauai-alone` | 4.2 ± 0.3 | Niʻihau, Kaʻula, Kauaʻi complete; nothing south-east above the sea | Sherrod (Niʻihau 6.3–4.3, Kauaʻi 5.5–4); I-2809 |
+| `waianae` | 3.0 ± 0.1 | Waiʻanae at the end of its shield, its slump fallen; Koʻolau barely at the sea | Sherrod (Waiʻanae to 3.06; slump before about 3.06–2.98) |
+| `koolau-whole` | 2.0 ± 0.1 | Koʻolau whole, the Nuʻuanu scar refilled to the profile; West Molokaʻi and Penguin Bank rising | Sherrod (end of shield 1.78, or 2.0–2.1) |
+| `koolau-after-nuuanu` | 1.8 ± 0.1 | the scar open to the offshore head, the field on the floor | ODP (2.1–1.8); Sherrod (head 15 km offshore) |
+| `maui-nui` | 1.2 ± 0.1 | Maui Nui one island, the Wailau and Clark scars open | Price and Elliott-Fisk (maximum about 1.2 Ma) |
+| `maui-nui-parting` | 0.6 ± 0.1 | Maui Nui parted at an interglacial high stand | Price and Elliott-Fisk (from about 0.6 Ma) |
+| `hawaii-rising` | 0.3 ± 0.05 | Māhukona sunk, Kohala ending its shield, Mauna Kea, Hualālai and Mauna Loa rising | Moore and Clague (end-of-shield ages) |
+| `present` | 0 | the seafloor pack itself | |
+
+The shoreline of every modelled stage is 0 m on the reconstructed surface, at today's sea level, an interglacial high
+stand; `maui-nui-parting` is drawn at a high stand on purpose, since in the glacial lows (about −125 m, Clague and
+Sherrod p. 131) its islands rejoined. The subsidence the bake applies, per `volcanoes.json` `subsidenceRule`: the load
+rate, 2.6 mm/yr (Ludwig et al. 1991, off north-west Hawaiʻi; Moore and Fornari had 1.8 to 3+), for about the first
+1 m.y. after a volcano's shield ends ("more than 1 km", Clague and Sherrod p. 131); after that the thermal rate, about
+0.01 mm/yr; Oʻahu instead rising 0.020–0.024 m per 1,000 yr over the last 0.4 m.y. (Hearty 2002, in Sherrod p. 7);
+Lānaʻi near stable over the last 30,000 years (Webster et al. 2006, in Sherrod p. 7). A scar is refilled to the shield
+profile before its slide's `age` and left open after it.
+
+The drift, in `volcanoes.json` `hotspot`: the hotspot at the midpoint of the Kīlauea and Kamaʻehuakanaloa summits; the
+speed 10 cm/yr, the slope of the line of volcano birth in Clague and Sherrod's fig. 14 ("average plate motion"), with
+13 cm/yr (Moore and Clague 1992, end-of-shield progression from Haleakalā to Hualālai, S 40° E) as the alternative; the
+azimuth 305° (N 55° W), **derived here, not read**: the mean bearing from Kīlauea's summit to Kauaʻi, Niʻihau, Waiʻanae
+and Koʻolau in table 1 (304°, 299°, 308°, 309°). The contract's "about N 65° W" has no source among those read; Clague
+and Dalrymple 1987, which may give a fitted azimuth, was fetched but is a scan without a text layer.
+
+### The landslides, and how they were traced
+
+No published outline was open as data. Moore et al. 1989's map, from which Sherrod et al. draw the Clark outline, is
+behind AGU's wall. The fields were therefore traced by hand on USGS I-2809 (Eakins et al. 2003), which names every
+slide and slump on its main map. The PDF was rendered at 108–200 dpi in crops; the main map is Mercator, and its
+graticule labels (located with `pdftotext -bbox`) fit a Mercator transform to 0.0003°, so a pixel traced on a crop
+converts to lon/lat as well as the eye places it. The traces were drawn back onto the crops to check them (Tuscaloosa's
+mark falls on the block; two Kona fields that strayed onto land were moved seaward). `traced` means the field's edge
+is visible on the sheet and followed: Nuʻuanu, Waiʻanae, ʻĀlika 1 and 2. `sketch` means a shape drawn round the
+sheet's label and texture: the rest. The Nuʻuanu field's west margin and blocks come from the main map, its outer limit
+from the interpretive inset, where Koʻolau and its debris share one colour; its traced toe lies about 220 km from
+Kāneʻohe. Scars: the Koʻolau flank between the pali crest and the offshore head; East Molokaʻi's north cliffs; Kohala's
+coast from Waipiʻo to Pololū; Mauna Loa's west flank between the Kealakekua and Kahuku faults (the ʻĀlika head). The
+only named block in what was read is Tuscaloosa Seamount.
+
+The fields as I-2809 names them: Nuʻuanu, Wailau, Kaʻena, Waiʻanae, North and South Kauaʻi, Clark 1 and 2, Hāna,
+Pololū, Laupāhoehoe, ʻĀlika 1 and 2, North Kona, South Kona (slide and slump), Punaluʻu, Hilina. **Kāʻohe**, which the
+brief names, is not on the sheet and is in no source read; it is left for Moore et al. 1989's table. Ka Lae West and Ka
+Lae East, on the sheet, were not drawn. `runout` is the record's where it gives one (Nuʻuanu 230, ʻĀlika 100) and
+otherwise measured on the trace (`runoutBasis: trace`).
+
+### Where the record disagrees
+
+- **Ages of the shields.** The I-2809 inset's labels do not always match the dated rocks: Koʻolau 2.6 Ma there against
+  Sherrod's youngest 1.78 Ma or Ozawa's end at 2.0–2.1 Ma; Kahoʻolawe 1.0 against about 1.25; Kauaʻi 5.1 against a
+  subaerial shield of 5.5–4. Niʻihau's ages spread over 6.3–4.3 Ma for what is probably under a million years. Mauna Kea
+  and Haleakalā may show no true shield lava at all. Kīlauea's own Wikipedia page gives ages that do not agree.
+- **The Nuʻuanu age.** 2.1–1.8 Ma (Herrero-Bervera et al. 2002, as the ODP report gives it) against "between 1 and
+  1.5 million years ago" (Wikipedia, citing a USGS image and Dunn 2009). The step uses 1.95 ± 0.15 and rates its date
+  `contested`. Whether there was one avalanche or several (Garcia et al. 2006, unread) is open.
+- **The run-out.** "up to 230 km" for the longest avalanches (Moore et al. 1989); "more than 200 km" (ODP); "200 km"
+  (Wikipedia); "as much as 200 km" (I-2809's text). The trace reaches about 220 km.
+- **The volume.** About 3,000 km³ of debris, 2,000–3,000 km³ missing from the slope depending on where the headwall
+  stood (Satake et al. 2002); 2–4 thousand km³ of a 34-thousand-km³ volcano (Sherrod et al.); Moore et al. 1989 give
+  "about 5000 km3" for the largest avalanches without naming them in the abstract.
+- **The pali.** The brief has the pali left by the slide. Sherrod et al. hold that it "originated mainly by subaerial
+  fluvial erosion", the slide's head lying 15 km offshore, the pali scalloped by stream heads and following the dike
+  complex. On East Molokaʻi the reverse is now held: its north pali is the Wailau headwall or its backstepping (Clague
+  and Moore 2002, in Clague and Sherrod). The step "The windward cliffs" tells it Sherrod's way.
+- **The tsunami and the Lānaʻi gravels.** The Hulopoe Gravel reaches 326 m (Moore and Moore 1984), 365 m (Moore et
+  al. 1989), 325 m (Lipman et al. 1988; Moore et al. 1994); Clague and Sherrod say breccia is preserved as high as
+  155 m, and Sherrod has calcite veins to about 375 m. Lipman and Moore et al. date the Lānaʻi wave about 100 ka, the
+  Molokaʻi deposits (to 70 m) about 200 ka; ʻĀlika 2 is about 125 ka (McMurtry et al. 1999, via Sherrod). Against one
+  giant wave: ordered coral ages (Rubin et al. 2000), facies not all tsunamigenic (Felton et al. 2000), notches and
+  terraces implying uplift (Grigg and Jones 1997). For it: Kohala's breccia, on a sinking island, once 350–390 m higher
+  (McMurtry et al. 2004); drowned reefs showing Lānaʻi has not risen (Webster et al. 2006, 2007). The ʻĀlika step says
+  the record has not settled it.
+- **Satake's tsunami** reaches most islands in half an hour, over 100 m on the north coasts of Oʻahu and Molokaʻi: a
+  model run on today's sea floor. The step says the record models a wave, not that one struck.
+- **The drift.** 10 cm/yr (Clague and Sherrod, the birth line) or 13 cm/yr (Moore and Clague, end of shield on
+  Hawaiʻi Island); the azimuth is derived, as above.
+- **Kamaʻehuakanaloa's emergence.** 50,000 to 200,000 years (Clague and Sherrod) or 10,000–100,000 (Wikipedia).
+
+### What is modelled
+
+Every stage before `present` is a model and says so (`method: modelled` in the bake's manifest). Modelled in the data
+themselves: the start of every shield whose start is not dated (`basis: modelled` or `bracketed`); Penguin Bank's whole
+range; the caldera centres marked `sketch`; every landslide age the record read does not give (Kaʻena, the Kauaʻi
+slides, Wailau, Clark, Hāna, Laupāhoehoe, the Kona slides, Punaluʻu: each note says so); the run-outs measured on
+traces; the drift azimuth.
+
+### Copy
+
+Numbers stay in the tellings; summaries and stops carry none (the check holds the prologue to the events' rule, so
+"millions" and "thousands" never appear there). The cliffs step frames the windward side from the far zoom on the
+Koʻolau summit place rather than at `nuuanu-pali`, the place of the 1795 stops, whose stop says what DESIGN §7.4 asks of
+it; the prologue's cliff is a landform a long age before anyone stood there.
+
+### Where the schema grew
+
+- `volcanoes.json` is an object, not a bare list: `volcanoes` (the array the contract describes), `hotspot`,
+  `subsidenceRule`, `stagesProposed` (the stage ids and rules for the bake; the manifest's own `stages` take over once it
+  exists, and the check warns on a proposed stage not baked), `ageBasis` and `wanted`.
+- Stage ranges carry `precision`, `basis`, `sources` and `note`; Kamaʻehuakanaloa has `preshield` and `future`;
+  `lastEruption` is `{ ma }` or `{ year }` with a precision; `subsidence` is `{ rate (mm/yr, negative for uplift), since }`.
+- Landslides carry `runoutBasis`, `volumeBasis`, `area` where the record gives it, `scarNote`, and block `length`,
+  `width` and `sources`.
+- Steps carry `sources` (with `where`) and `confidence` as events do; stops carry `age` in place of `year`. A step's age
+  may be zero only for a `now` step.
+- Places of kind `volcano`, `caldera`, `seamount` and `landslide` may lie anywhere in the seafloor box
+  (17.5–24.5° N, 162–153° W), and only at island or sea precision.
+
+### What the check now enforces
+
+The geology block of `check-data.mjs`: the three hand-written files present once `geology/` exists; every volcano the
+contract names; summits, calderas, fields, scars and blocks inside the seafloor box, rings valid; stage ranges ordered,
+with a precision, a basis and sources; every volcano, field, stage range, step and chapter citing at least one opened
+source; field ages positive; step ages non-negative (zero only for `now`) and running toward the present in each
+chapter, chapters likewise; every step's stage a known stage, its places and landslides existing; the copy rules
+(numbers, the ʻokina and kahakō, nothing announced) on labels, titles, glosses, summaries and stops; every stop far,
+with a camera whose target lies in the box within 400 km of its place. When `geology/manifest.json` exists: the
+seafloor's bounds (holding every field), size (at most 2048), sources; each stage's age order, `method: modelled`, rule,
+confidence and sources; each height image read back as split-byte RGB with B = 0, on the seafloor grid, its min, max and
+land fraction against the stats; images not yet baked only warn. The whole directory under 12 MB. A synthetic bake in a
+copy of the data was used to see the rule pass, and fail on wrong stats and an off-grid stage.
+
+### What could not be reached
+
+- Moore et al. 1989 beyond its abstract, and Moore, Normark and Holcomb's Annual Review of 1994 at all (AGU/Wiley and
+  Annual Reviews answer 403): the map and table of the slides, Kāʻohe, the undated ages.
+- Moore and Clague 2002 and Satake et al. 2002 in full (AGU monograph), Clague and Moore 2002 (ScienceDirect 403): the
+  multibeam outlines of Nuʻuanu and Wailau, and the Wailau age.
+- Garcia et al. 2006: the author's copy at SOEST failed on its certificate, then answered 503.
+- Price and Elliott-Fisk 2004 in full: Project MUSE answered with a verification challenge; eVols is blocked.
+- Clague and Dalrymple 1987 and Moore 1987 (PP 1350): fetched, but scans without text, and no OCR here.
+- *Volcanoes in the Sea*: lending only at the Internet Archive.
+
+### Left for others
+
+- The bake: the stage ids and rules above, and a `manifest.json` the check now reads back.
+- Raise Nuʻuanu and Wailau to `mapped` from Moore and Clague 2002; replace every `sketch` field from Moore et al. 1989.
+- Find Kāʻohe, or drop it from the contract's list.
+- A plate azimuth with a source.

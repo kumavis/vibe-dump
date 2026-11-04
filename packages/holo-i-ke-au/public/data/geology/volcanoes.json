@@ -1,0 +1,1285 @@
+{
+  "about": "The volcanoes of the main islands: summits (Clague and Sherrod 2014, table 1), stage ages from the dated rocks as the record gives them (ages in Ma, millions of years before present; precision ± Ma), calderas where known, status. Hand-written; see RESEARCH.md §17. Every shape drawn before today’s is a model.",
+  "ageBasis": {
+    "dated": "radiometric ages of the stage’s own rocks",
+    "bracketed": "an end dated, the other end modelled or bounded",
+    "modelled": "placed by the growth model, not dated",
+    "map": "read from the labels of a published map"
+  },
+  "hotspot": {
+    "position": [
+      -155.27,
+      19.17
+    ],
+    "positionNote": "Between Kīlauea and Kamaʻehuakanaloa, the volcanoes over it now (Clague and Sherrod 2014, p. 97); the point is the midpoint of their summits.",
+    "speed": 10,
+    "speedUnit": "cm/yr",
+    "speedSources": [
+      "clague-sherrod-2014"
+    ],
+    "speedNote": "The line of volcano birth in Clague and Sherrod’s fig. 14 (p. 122) has a slope of 10 cm/yr, “average plate motion”. Moore and Clague (1992) find the end of shield building moving south-east at about 13 cm/yr from Haleakalā to Hualālai.",
+    "speedAlternatives": [
+      {
+        "speed": 13,
+        "sources": [
+          "moore-clague-1992-hawaii"
+        ],
+        "note": "end-of-shield progression, Haleakalā to Hualālai, toward S 40° E"
+      }
+    ],
+    "azimuth": 305,
+    "azimuthUnit": "degrees, compass, the direction the plate carries a volcano",
+    "azimuthNote": "Derived here, not read: the mean bearing from Kīlauea’s summit to the summits of Kauaʻi, Niʻihau, Waiʻanae and Koʻolau in Clague and Sherrod’s table 1 (kauai 303.6°, niihau 299.1°, waianae 307.8°, koolau 309.4°). A stage at age A is drawn displaced by A × speed toward the opposite bearing.",
+    "azimuthSources": [
+      "clague-sherrod-2014"
+    ],
+    "chain": [
+      {
+        "volcano": "kauai",
+        "bearingFromKilauea": 303.6,
+        "km": 527
+      },
+      {
+        "volcano": "niihau",
+        "bearingFromKilauea": 299.1,
+        "km": 572
+      },
+      {
+        "volcano": "waianae",
+        "bearingFromKilauea": 307.8,
+        "km": 377
+      },
+      {
+        "volcano": "koolau",
+        "bearingFromKilauea": 309.4,
+        "km": 338
+      }
+    ]
+  },
+  "subsidenceRule": {
+    "note": "Two processes (Moore 1987, in Clague and Sherrod 2014, p. 131): the load of a growing volcano presses the plate down fast for perhaps 1 m.y., drowning shorelines and reefs by more than 1 km; then the ageing plate cools and sinks at about 0.01 m per 1,000 yr. Oʻahu has risen slightly over the past 400,000 years, on the Hawaiian Arch’s flexure.",
+    "loadRate": 2.6,
+    "loadRateUnit": "mm/yr",
+    "loadDurationMa": 1,
+    "loadSources": [
+      "ludwig-1991-subsidence",
+      "clague-sherrod-2014"
+    ],
+    "thermalRate": 0.01,
+    "thermalRateUnit": "mm/yr",
+    "thermalSources": [
+      "clague-sherrod-2014"
+    ],
+    "oahuUpliftRate": 0.022,
+    "oahuUpliftUnit": "mm/yr",
+    "oahuUpliftSince": 0.4,
+    "oahuSources": [
+      "sherrod-2007-geologic-map"
+    ],
+    "seaLevel": {
+      "glacialLow": -125,
+      "unit": "m",
+      "sources": [
+        "clague-sherrod-2014"
+      ],
+      "note": "glacio-eustatic swings of about 125 m (Clague and Sherrod 2014, p. 131); a volcano sunk deeper than that does not re-emerge"
+    }
+  },
+  "stagesProposed": [
+    {
+      "id": "kauai-alone",
+      "age": 4.2,
+      "agePrecision": 0.3,
+      "confidence": "soft",
+      "rule": "Niʻihau and Kauaʻi shields complete (Niʻihau’s caldera and north rift still standing); Kaʻula beside them; nothing yet above the sea to the south-east. Shoreline: 0 m on the model, sea level as today."
+    },
+    {
+      "id": "waianae",
+      "age": 3,
+      "agePrecision": 0.1,
+      "confidence": "soft",
+      "rule": "Waiʻanae at the end of its shield, its caldera filled, the Waiʻanae slump fallen; Koʻolau a young shield barely at the sea. Kauaʻi and Niʻihau worn and sunk by the load rate for the time since their shields ended (capped at the load duration), then the thermal rate. Shoreline 0 m."
+    },
+    {
+      "id": "koolau-whole",
+      "age": 2,
+      "agePrecision": 0.1,
+      "confidence": "soft",
+      "rule": "Koʻolau whole: its shield complete with the north-east flank standing, the Nuʻuanu scar refilled to the shield profile out to the offshore headwall, the Kailua caldera at its summit. West Molokaʻi and Penguin Bank rising. Shoreline 0 m."
+    },
+    {
+      "id": "koolau-after-nuuanu",
+      "age": 1.8,
+      "agePrecision": 0.1,
+      "confidence": "soft",
+      "rule": "As koolau-whole, the Nuʻuanu scar left open (the flank gone to the headwall about 15 km off today’s shore) and the field drawn on the sea floor. East Molokaʻi rising. Shoreline 0 m."
+    },
+    {
+      "id": "maui-nui",
+      "age": 1.2,
+      "agePrecision": 0.1,
+      "confidence": "soft",
+      "rule": "Penguin Bank, West and East Molokaʻi, Lānaʻi, Kahoʻolawe, West Maui and Haleakalā one island, larger than Hawaiʻi Island is now (Price and Elliott-Fisk 2004); the Wailau and Clark scars open. Shoreline 0 m."
+    },
+    {
+      "id": "maui-nui-parting",
+      "age": 0.6,
+      "agePrecision": 0.1,
+      "confidence": "soft",
+      "rule": "Maui Nui sinking and parting at an interglacial high stand (Price and Elliott-Fisk 2004): shoreline 0 m; in the glacial lows (−125 m) it rejoined, which the stage does not draw."
+    },
+    {
+      "id": "hawaii-rising",
+      "age": 0.3,
+      "agePrecision": 0.05,
+      "confidence": "soft",
+      "rule": "Māhukona sunk; Kohala near the end of its shield; Mauna Kea, Hualālai and Mauna Loa rising; Kīlauea not yet above the sea. Shoreline 0 m."
+    },
+    {
+      "id": "present",
+      "age": 0,
+      "agePrecision": 0,
+      "confidence": "firm",
+      "rule": "The seafloor pack itself."
+    }
+  ],
+  "wanted": {
+    "sources": [
+      "clague-dalrymple-1987",
+      "macdonald-1983-volcanoes-in-the-sea",
+      "moore-normark-holcomb-1994-annrev"
+    ],
+    "note": "Unread works that would settle the ages, the plate rate and azimuth, and the shapes; each source’s wanted says what to bring back."
+  },
+  "volcanoes": [
+    {
+      "id": "kaula",
+      "name": "Kaʻula",
+      "island": null,
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -160.541,
+          21.655
+        ],
+        "height": null
+      },
+      "caldera": null,
+      "shield": {
+        "from": 4.2,
+        "to": 3.8,
+        "precision": 0.3,
+        "basis": "map",
+        "sources": [
+          "eakins-2003-i2809"
+        ],
+        "note": "The interpretive map of I-2809 labels the Kaʻula shield 4.0 Ma; no dated rock from the islet was read."
+      },
+      "postshield": null,
+      "rejuvenated": {
+        "note": "Rejuvenated-stage flows lie widespread offshore around Kaʻula (Clague and Sherrod 2014, p. 127).",
+        "sources": [
+          "clague-sherrod-2014"
+        ]
+      },
+      "status": "extinct",
+      "lastEruption": null,
+      "subsidence": null,
+      "sources": [
+        "eakins-2003-i2809",
+        "clague-sherrod-2014"
+      ],
+      "note": "An islet 37 km south-west of Niʻihau (Clague and Sherrod 2014, p. 127). The summit point is the eruptive centre the I-2809 inset marks, read off its graticule; the islet’s height was not in any source read."
+    },
+    {
+      "id": "niihau",
+      "name": "Niʻihau",
+      "island": "niihau",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -160.0834,
+          21.9386
+        ],
+        "height": 392
+      },
+      "caldera": null,
+      "shield": {
+        "from": 6.3,
+        "to": 4.3,
+        "precision": 0.3,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809"
+        ],
+        "note": "Pānīʻau Basalt K–Ar ages 6.3–4.3 Ma (Sherrod et al. 2007, p. 9, table 1); the true span is likely under 1 m.y., chiefly in the reversed epoch 4.799–4.631 Ma. I-2809 labels the shield 4.9 Ma."
+      },
+      "postshield": {
+        "from": 5.15,
+        "to": 4.67,
+        "precision": 0.2,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Kaʻeo plug 5.15±0.11 and 4.67±0.08 Ma; offshore cones 4.93 and 4.74 Ma (Clague and Sherrod 2014, p. 122)."
+      },
+      "rejuvenated": {
+        "from": 2.32,
+        "to": 0.35,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Kiʻekiʻe Basalt, most of it younger than 1 Ma; Clague and Sherrod give 2.2–0.4 Ma. Lehua, the youngest vent, is undated."
+      },
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.35,
+        "precision": 0.05,
+        "note": "the youngest dated Kiʻekiʻe flow; Lehua cone may be younger"
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "The eroded remnant of a single shield. Its summit caldera and north rift are missing and no seafloor deposit for them is known: the slide went where Kauaʻi later grew (Clague and Sherrod 2014, p. 130)."
+    },
+    {
+      "id": "kauai",
+      "name": "Kauaʻi",
+      "island": "kauai",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -159.4974,
+          22.0585
+        ],
+        "height": 1598
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -159.55,
+          22.07
+        ],
+        "radiusKm": 9.3,
+        "name": "Olokele",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Roughly circular, 18–19 km across at its widest, filled by the Olokele Member about 4 Ma (Sherrod et al. 2007, p. 13). The centre is placed by eye on the summit plateau, not read from a map."
+      },
+      "shield": {
+        "from": 5.5,
+        "to": 4,
+        "precision": 0.2,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809"
+        ],
+        "note": "Nāpali Member, the subaerial shield, mainly 5.5–4 Ma (Sherrod et al. 2007, p. 13); I-2809 labels the shield (as Waiʻaleʻale) 5.1 Ma."
+      },
+      "postshield": {
+        "from": 4.39,
+        "to": 3.81,
+        "precision": 0.1,
+        "basis": "dated",
+        "sources": [
+          "clague-sherrod-2014"
+        ],
+        "note": "An alkalic dike at Kālepa Ridge 4.39 Ma to hawaiite at the top of the Olokele and Makaweli Members 3.84–3.81 Ma (Clague and Sherrod 2014, p. 122): about 600,000 years."
+      },
+      "rejuvenated": {
+        "from": 3.65,
+        "to": 0.15,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Kōloa Volcanics mainly 2.6–0.15 Ma (Clague and Dalrymple 1988, in Sherrod et al. 2007); a 3.65 Ma basanite and well ages of 3.42–3.11 Ma close the gap, so on Kauaʻi the rejuvenated stage may follow the postshield with no break (Clague and Sherrod 2014, p. 129)."
+      },
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.15,
+        "precision": 0.05,
+        "note": "the youngest Kōloa ages"
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "Thought a single shield; strontium isotopes have suggested two (Holcomb et al. 1997), which Sherrod et al. leave open. The Līhuʻe basin they favour reading as a landslide scar."
+    },
+    {
+      "id": "waianae",
+      "name": "Waiʻanae",
+      "island": "oahu",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -158.1416,
+          21.5072
+        ],
+        "height": 1227
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -158.14,
+          21.43
+        ],
+        "radiusKm": null,
+        "name": "Lualualei",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "A well-developed caldera near the head of Lualualei Valley through Lualualei time, filled by Kamaileʻunu lavas (Sherrod et al. 2007, p. 21); no size was read. The point is the valley head."
+      },
+      "shield": {
+        "from": 3.9,
+        "to": 3.06,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809"
+        ],
+        "note": "Lualualei Member from slightly older than 3.9 to 3.55 Ma; Kamaileʻunu (late shield, caldera-filling) 3.55–3.06 Ma (Sherrod et al. 2007, p. 21). I-2809 labels the shield 3.7 Ma."
+      },
+      "postshield": {
+        "from": 3.06,
+        "to": 2.9,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Pālehua and Kolekole Members, the transition about 2.98 Ma (Presley et al. 1997). Kolekole, once called rejuvenated, is now postshield."
+      },
+      "rejuvenated": null,
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 2.9,
+        "precision": 0.1,
+        "note": "the youngest accepted Waiʻanae ages"
+      },
+      "subsidence": {
+        "rate": -0.022,
+        "unit": "mm/yr",
+        "since": 0.4,
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Oʻahu rises slightly: 0.020–0.024 m per 1,000 yr over the past 400,000 yr (Hearty 2002, in Sherrod et al. 2007, p. 7); the sign is uplift."
+      },
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "The south-west flank is the Waiʻanae Slump."
+    },
+    {
+      "id": "koolau",
+      "name": "Koʻolau",
+      "island": "oahu",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -157.7881,
+          21.3581
+        ],
+        "height": 960
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -157.77,
+          21.38
+        ],
+        "radiusKm": 4.75,
+        "name": "Kailua",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "The Kailua caldera, a roughly equant caldera 9–10 km across formed during the shield stage, its rocks the Kailua Member (Sherrod et al. 2007, p. 22). It lies under the windward lowland between Kailua and Kāneʻohe; the centre is placed by eye."
+      },
+      "shield": {
+        "from": 3,
+        "to": 1.8,
+        "precision": 0.1,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014",
+          "eakins-2003-i2809"
+        ],
+        "note": "Oldest subaerial Koʻolau Basalt about 3 Ma; the youngest 1.78±0.26 Ma (Doell and Dalrymple 1973), though Ozawa et al. (2005) end the shield about 2.0–2.1 Ma (Sherrod et al. 2007, p. 22). I-2809 labels the shield 2.6 Ma."
+      },
+      "postshield": null,
+      "rejuvenated": {
+        "from": 0.8,
+        "to": 0.04,
+        "precision": 0.03,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Honolulu Volcanics (Diamond Head, Punchbowl, Salt Lake, Koko Head), about 0.8 to about 0.1 Ma, the Tantalus–Sugar Loaf and Koko vents perhaps as young as 0.04 Ma (Sherrod et al. 2007, pp. 22–24)."
+      },
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.1,
+        "precision": 0.06,
+        "note": "Tantalus–Sugar Loaf and Koko; claims under 30,000 years are misreadings (Sherrod et al. 2007, p. 24)"
+      },
+      "subsidence": {
+        "rate": -0.022,
+        "unit": "mm/yr",
+        "since": 0.4,
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "as Waiʻanae: Oʻahu has risen slightly over the past 400,000 years"
+      },
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "One of two volcanoes with no postshield lavas (Clague and Sherrod 2014, p. 97). About 10 percent of its east half, 2–4 thousand km³ of an original 34 thousand, was carried away by the Nuʻuanu avalanche (Sherrod et al. 2007, p. 22)."
+    },
+    {
+      "id": "west-molokai",
+      "name": "West Molokaʻi",
+      "island": "molokai",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -157.157,
+          21.1422
+        ],
+        "height": 421
+      },
+      "caldera": null,
+      "shield": {
+        "from": 2.3,
+        "to": 1.84,
+        "precision": 0.1,
+        "basis": "bracketed",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809",
+          "moore-clague-1992-hawaii"
+        ],
+        "note": "The end from an age of 1.84 Ma near the summit (McDougall 1964); I-2809 labels 1.9 Ma. The start is modelled: about 600,000 years of growth before the end of the shield (Moore and Clague 1992)."
+      },
+      "postshield": {
+        "from": 1.8,
+        "to": 1.73,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "two postshield cones (Clague 1987)"
+      },
+      "rejuvenated": null,
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 1.73,
+        "precision": 0.05
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "moore-clague-1992-hawaii"
+      ],
+      "note": "Its summit slumped east, leaving small fault scarps, and was buried by East Molokaʻi (Clague and Sherrod 2014, p. 130)."
+    },
+    {
+      "id": "penguin-bank",
+      "name": "Penguin Bank",
+      "island": null,
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -157.6488,
+          20.9722
+        ],
+        "height": -200
+      },
+      "caldera": null,
+      "shield": {
+        "from": 2.5,
+        "to": 2,
+        "precision": 0.4,
+        "basis": "modelled",
+        "sources": [
+          "clague-sherrod-2014",
+          "price-elliott-fisk-2004-maui-nui"
+        ],
+        "note": "Undated. Placed before West Molokaʻi because some reconstructions make it the first of the volcanoes of Maui Nui (Price and Elliott-Fisk 2004, as Clague and Sherrod 2014 give them, p. 107)."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "submarine",
+      "lastEruption": null,
+      "subsidence": null,
+      "sources": [
+        "clague-sherrod-2014",
+        "price-elliott-fisk-2004-maui-nui"
+      ],
+      "note": "A West Molokaʻi rift zone or a volcano of its own; dredged lavas differ subtly from West Molokaʻi’s (Xu et al. 2007). The summit is the closed contour Clague and Sherrod chose, about 200 m deep."
+    },
+    {
+      "id": "east-molokai",
+      "name": "East Molokaʻi",
+      "island": "molokai",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.8684,
+          21.1065
+        ],
+        "height": 1515
+      },
+      "caldera": null,
+      "shield": {
+        "from": 2,
+        "to": 1.5,
+        "precision": 0.1,
+        "basis": "bracketed",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809",
+          "moore-clague-1992-hawaii"
+        ],
+        "note": "Lower member from 1.75±0.14 Ma to about 1.52 Ma; the contact with the postshield about 1.49 Ma (Sherrod et al. 2007, p. 28). I-2809 labels 1.8 Ma. The start is modelled, as for West Molokaʻi. If the lower member is late shield, no true shield lava is exposed (Sherrod et al. 2007, p. 46)."
+      },
+      "postshield": {
+        "from": 1.49,
+        "to": 1.35,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "upper member, as thick as 520 m"
+      },
+      "rejuvenated": {
+        "from": 0.57,
+        "to": 0.34,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Kalaupapa Volcanics, one shield grown at the foot of the north cliffs after the last great slide; Clague and Sherrod take about 350 ka"
+      },
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.34,
+        "precision": 0.05
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "moore-clague-1992-hawaii"
+      ],
+      "note": "Its north half is missing, carried off by the Wailau slide; the north pali is now read as the slide’s headwall or its backstepping (Clague and Sherrod 2014, p. 129). A caldera complex was mapped by Stearns and Macdonald; Holcomb’s larger one, 11 km across, Sherrod et al. view skeptically, so no caldera is placed."
+    },
+    {
+      "id": "lanai",
+      "name": "Lānaʻi",
+      "island": "lanai",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.8731,
+          20.8121
+        ],
+        "height": 1030
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -156.93,
+          20.79
+        ],
+        "radiusKm": 2.5,
+        "name": "Pālāwai Basin",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "A partly filled caldera about 5 km across “supposedly” in the Pālāwai Basin; it may instead be a sag formed in Clark time, though a gravity high there suggests a magma chamber (Sherrod et al. 2007, pp. 29–30)."
+      },
+      "shield": {
+        "from": 1.5,
+        "to": 1.28,
+        "precision": 0.06,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809"
+        ],
+        "note": "Six ages 1.51–1.24 Ma, indistinguishable, weighted mean 1.30±0.06 Ma; an isochron 1.32±0.04 Ma for the top of the shield (Sherrod et al. 2007, p. 30). I-2809 labels 1.3 Ma."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 1.28,
+        "precision": 0.06
+      },
+      "subsidence": {
+        "rate": 0.15,
+        "unit": "mm/yr",
+        "since": 0.03,
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Over the past 30,000 years between +0.1 and −0.4 m per 1,000 yr (Webster et al. 2006, in Sherrod et al. 2007, p. 7): near stable. The value is the middle of that bracket, sinking."
+      },
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "No postshield lavas. The north-west faults that nearly bisect the island may mark the upper limit of the Clark slide (Moore et al. 1989, in Sherrod et al. 2007)."
+    },
+    {
+      "id": "kahoolawe",
+      "name": "Kahoʻolawe",
+      "island": "kahoolawe",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.5715,
+          20.5617
+        ],
+        "height": 452
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -156.56,
+          20.55
+        ],
+        "radiusKm": null,
+        "name": "Kahoʻolawe caldera",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "A late caldera; its eastern half is missing, presumably buried beneath Haleakalā (Clague and Sherrod 2014, p. 130), and Kanapou Bay was carved by a slope collapse (Sherrod et al. 2007, p. 32). The point is placed by eye."
+      },
+      "shield": {
+        "from": 1.4,
+        "to": 1.25,
+        "precision": 0.08,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809"
+        ],
+        "note": "About 1.25 Ma for the shield; Fodor et al. average 1.34±0.08 Ma (Sherrod et al. 2007, p. 33). I-2809 labels 1.0 Ma."
+      },
+      "postshield": {
+        "from": 1.2,
+        "to": 0.98,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "postshield 1.20–1.14 Ma; the dikes in Kanapou Bay’s wall about 1 Ma, in the Jaramillo subchron about 0.98 Ma"
+      },
+      "rejuvenated": null,
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.98,
+        "precision": 0.05
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "No eruption in about the last million years."
+    },
+    {
+      "id": "west-maui",
+      "name": "West Maui",
+      "island": "maui",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.5863,
+          20.8904
+        ],
+        "height": 1764
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -156.56,
+          20.88
+        ],
+        "radiusKm": 1.5,
+        "name": "ʻĪao",
+        "precision": "sketch",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "A roughly circular caldera about 3 km across, coinciding with the south half of the ʻĪao Valley headwall (Sherrod et al. 2007, p. 34); placed by eye."
+      },
+      "shield": {
+        "from": 2,
+        "to": 1.3,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014",
+          "eakins-2003-i2809"
+        ],
+        "note": "Wailuku Basalt about 2 to 1.3 Ma (Clague and Sherrod: 2 to 1.35 Ma). I-2809 labels 1.3 Ma."
+      },
+      "postshield": {
+        "from": 1.3,
+        "to": 1.1,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Honolua Volcanics 1.3–1.1 Ma (Clague and Sherrod: 1.35–1.2 Ma)"
+      },
+      "rejuvenated": {
+        "from": 0.61,
+        "to": 0.3,
+        "precision": 0.03,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "clague-sherrod-2014"
+        ],
+        "note": "Lahaina Volcanics, four cones in two groups about 0.6 and 0.3 Ma (Tagami et al. 2003)"
+      },
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.3,
+        "precision": 0.03
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": ""
+    },
+    {
+      "id": "haleakala",
+      "name": "Haleakalā",
+      "island": "maui",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.2533,
+          20.7097
+        ],
+        "height": 3055
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -156.2,
+          20.71
+        ],
+        "radiusKm": null,
+        "name": "Haleakalā Crater",
+        "precision": "sketch",
+        "erosional": true,
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Not a caldera: the summit depression walled by more than 1 km of Kula lavas (Sherrod et al. 2007, p. 37), cut by erosion. Drawn as a landmark only."
+      },
+      "shield": {
+        "from": 1.3,
+        "to": 0.97,
+        "precision": 0.05,
+        "basis": "bracketed",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "eakins-2003-i2809",
+          "moore-clague-1992-hawaii"
+        ],
+        "note": "Honomanū Basalt 1.1–0.97 Ma, late shield or transitional; no typical shield lava may be exposed (Sherrod et al. 2007, pp. 37, 46). I-2809 labels 1.0 Ma. The start is modelled."
+      },
+      "postshield": {
+        "from": 0.93,
+        "to": 0,
+        "precision": 0.03,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Kula Volcanics from 0.93±0.33 Ma to about 0.15 Ma, then the Hāna Volcanics from about 0.12 Ma, the gap between them about 0.03 m.y.: postshield, not rejuvenated, and more than 900,000 years long, the longest in the chain (Sherrod et al. 2007, pp. 37–40)."
+      },
+      "rejuvenated": null,
+      "status": "dormant",
+      "lastEruption": {
+        "year": 1540,
+        "precision": 92,
+        "note": "between A.D. 1449 and 1633 (Sherrod et al. 2006), no longer the 1750–90 once thought; eruptions every 200 to 500 years (Sherrod et al. 2007, p. 40)"
+      },
+      "subsidence": null,
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "moore-clague-1992-hawaii"
+      ],
+      "note": "Considered potentially active, the only one beyond Hawaiʻi Island."
+    },
+    {
+      "id": "mahukona",
+      "name": "Māhukona",
+      "island": null,
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -156.1399,
+          20.1315
+        ],
+        "height": -1100
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -156.14,
+          20.13
+        ],
+        "radiusKm": null,
+        "name": "Māhukona",
+        "precision": "sketch",
+        "sources": [
+          "clague-sherrod-2014"
+        ],
+        "note": "a small circular depression that may mark a caldera (Clague and Moore 1991, in Clague and Sherrod 2014, p. 107)"
+      },
+      "shield": {
+        "from": 1.2,
+        "to": 0.465,
+        "precision": 0.05,
+        "basis": "bracketed",
+        "sources": [
+          "moore-clague-1992-hawaii",
+          "clague-sherrod-2014",
+          "eakins-2003-i2809"
+        ],
+        "note": "End of shield about 465 ka from the depth of its slope break (Moore and Clague 1992); its inception likely 1.5–1 Ma (Clague and Sherrod 2014, p. 107). I-2809 labels 0.5 Ma."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "submarine",
+      "lastEruption": null,
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence"
+        ],
+        "note": "off north-west Hawaiʻi"
+      },
+      "sources": [
+        "moore-clague-1992-hawaii",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809"
+      ],
+      "note": "Survived at least briefly as an island, then sank; its drowned reefs step down its flanks (Clague and Sherrod 2014, pp. 107, 131)."
+    },
+    {
+      "id": "kohala",
+      "name": "Kohala",
+      "island": "hawaii",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.7171,
+          20.086
+        ],
+        "height": 1678
+      },
+      "caldera": null,
+      "shield": {
+        "from": 1.1,
+        "to": 0.245,
+        "precision": 0.05,
+        "basis": "bracketed",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "moore-clague-1992-hawaii",
+          "eakins-2003-i2809"
+        ],
+        "note": "Exposed Pololū lavas 0.45–0.32 Ma, all younger than 0.78 Ma; Hilo Ridge clasts 1.1–1.2 Ma (Calvert, in Sherrod et al. 2007, p. 41). End of shield 245 ka (Moore and Clague 1992). I-2809 labels 0.4 Ma."
+      },
+      "postshield": {
+        "from": 0.26,
+        "to": 0.12,
+        "precision": 0.02,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Hāwī Volcanics, mostly 0.26–0.14 Ma, accepted to 0.12 Ma; perhaps younger"
+      },
+      "rejuvenated": null,
+      "status": "extinct",
+      "lastEruption": {
+        "ma": 0.12,
+        "precision": 0.02
+      },
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence",
+          "moore-fornari-1984-reefs"
+        ],
+        "note": "Six drowned reefs off north-west Hawaiʻi give a roughly uniform 2.6 mm/yr over 475,000 years (Ludwig et al. 1991); Moore and Fornari had 1.8 to 3+ mm/yr."
+      },
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "moore-clague-1992-hawaii",
+        "eakins-2003-i2809"
+      ],
+      "note": "Its north-east side slid or slumped late in Pololū time; Hāwī lavas later draped the valley walls (Sherrod et al. 2007, p. 44)."
+    },
+    {
+      "id": "mauna-kea",
+      "name": "Mauna Kea",
+      "island": "hawaii",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.4681,
+          19.8206
+        ],
+        "height": 4205
+      },
+      "caldera": null,
+      "shield": {
+        "from": 0.73,
+        "to": 0.13,
+        "precision": 0.05,
+        "basis": "bracketed",
+        "sources": [
+          "moore-clague-1992-hawaii",
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "End of shield 130 ka (Moore and Clague 1992); no shield lava is exposed, the Hāmākua Volcanics being postshield (Wolfe et al. 1997, in Sherrod et al. 2007, p. 46). The start is modelled, about 600,000 years before the end."
+      },
+      "postshield": {
+        "from": 0.3,
+        "to": 0.0046,
+        "precision": 0.01,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Hāmākua Volcanics about 300–65 ka; Laupāhoehoe Volcanics to about 4.6 ka"
+      },
+      "rejuvenated": null,
+      "status": "dormant",
+      "lastEruption": {
+        "ma": 0.0046,
+        "precision": 0.0005,
+        "note": "about 4.6 ka, calibrated (Sherrod et al. 2007, p. 47)"
+      },
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence"
+        ]
+      },
+      "sources": [
+        "moore-clague-1992-hawaii",
+        "sherrod-2007-geologic-map",
+        "eakins-2003-i2809"
+      ],
+      "note": "The only glaciated volcano in the state."
+    },
+    {
+      "id": "hualalai",
+      "name": "Hualālai",
+      "island": "hawaii",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.8644,
+          19.6888
+        ],
+        "height": 2521
+      },
+      "caldera": null,
+      "shield": {
+        "from": 0.73,
+        "to": 0.13,
+        "precision": 0.05,
+        "basis": "bracketed",
+        "sources": [
+          "moore-clague-1992-hawaii",
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "End of shield 130 ka (Moore and Clague 1992); tholeiite persisted until sometime after 130 ka. Shield lavas are found only offshore and in wells (Sherrod et al. 2007, p. 50). The start is modelled."
+      },
+      "postshield": {
+        "from": 0.114,
+        "to": 0,
+        "precision": 0.005,
+        "basis": "dated",
+        "sources": [
+          "sherrod-2007-geologic-map"
+        ],
+        "note": "Waʻawaʻa Trachyte 114–92 ka at the base of the Hualālai Volcanics; postshield lavas coat the whole subaerial edifice"
+      },
+      "rejuvenated": null,
+      "status": "active",
+      "lastEruption": {
+        "year": 1801,
+        "precision": 1,
+        "note": "the flows of 1801–02 the Kona airport stands on (Sherrod et al. 2007, p. 48)"
+      },
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence"
+        ]
+      },
+      "sources": [
+        "moore-clague-1992-hawaii",
+        "sherrod-2007-geologic-map",
+        "eakins-2003-i2809"
+      ],
+      "note": ""
+    },
+    {
+      "id": "mauna-loa",
+      "name": "Mauna Loa",
+      "island": "hawaii",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.6054,
+          19.4755
+        ],
+        "height": 4169
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -155.592,
+          19.4722
+        ],
+        "radiusKm": 2.2,
+        "name": "Mokuʻāweoweo",
+        "precision": "mapped",
+        "sources": [
+          "clague-sherrod-2014",
+          "wikipedia-mauna-loa"
+        ],
+        "note": "Caldera centre from Clague and Sherrod 2014, table 1; 6.2 by 2.5 km (Wikipedia, tertiary); the radius is the mean half-axis."
+      },
+      "shield": {
+        "from": 0.7,
+        "to": 0,
+        "precision": 0.3,
+        "basis": "modelled",
+        "sources": [
+          "sherrod-2007-geologic-map",
+          "wikipedia-mauna-loa"
+        ],
+        "note": "In the shield stage now. Its oldest exposed rocks, the Nīnole Basalt, are thought 0.1–0.2 Ma (Lipman et al. 1990, in Sherrod et al. 2007, p. 50); Wikipedia (tertiary) has it erupting for at least 700,000 years and above the sea about 400,000 years ago."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "active",
+      "lastEruption": {
+        "year": 2022,
+        "precision": 0,
+        "note": "27 November to 13 December 2022 (Wikipedia, tertiary)"
+      },
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence"
+        ]
+      },
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "wikipedia-mauna-loa"
+      ],
+      "note": "The world’s largest volcano, 65,000–80,000 km³ including the 8–9 km by which it has pressed the plate down (Sherrod et al. 2007, p. 50). Its west flank is the head of the ʻĀlika slides."
+    },
+    {
+      "id": "kilauea",
+      "name": "Kīlauea",
+      "island": "hawaii",
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.2868,
+          19.4209
+        ],
+        "height": 1269
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -155.2839,
+          19.4064
+        ],
+        "radiusKm": 1.8,
+        "name": "Kaluapele",
+        "precision": "mapped",
+        "sources": [
+          "clague-sherrod-2014",
+          "wikipedia-kilauea"
+        ],
+        "note": "Caldera centre from Clague and Sherrod 2014, table 1; 4 by 3.2 km (Wikipedia, tertiary)."
+      },
+      "shield": {
+        "from": 0.15,
+        "to": 0,
+        "precision": 0.05,
+        "basis": "dated",
+        "sources": [
+          "clague-sherrod-2014"
+        ],
+        "note": "Preshield born less than 300,000 years ago; the change to the shield stage about 150 ka (Calvert and Lanphere 2006, in Clague and Sherrod 2014, p. 106)."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "active",
+      "lastEruption": {
+        "year": 2026,
+        "precision": 0,
+        "note": "an episodic eruption in Halemaʻumaʻu since 23 December 2024, continuing into late 2026 (Wikipedia, tertiary, read 2026-11-04)"
+      },
+      "subsidence": {
+        "rate": 2.6,
+        "unit": "mm/yr",
+        "since": 0.475,
+        "sources": [
+          "ludwig-1991-subsidence"
+        ]
+      },
+      "sources": [
+        "clague-sherrod-2014",
+        "wikipedia-kilauea"
+      ],
+      "note": "Perhaps only a thin skin on Mauna Loa’s flank (Clague and Sherrod 2014, p. 106). Its south flank moves seaward over the Hilina slump."
+    },
+    {
+      "id": "kamaehuakanaloa",
+      "name": "Kamaʻehuakanaloa",
+      "alt": [
+        "Lōʻihi"
+      ],
+      "island": null,
+      "summit": {
+        "type": "Point",
+        "coordinates": [
+          -155.2601,
+          18.9201
+        ],
+        "height": -975
+      },
+      "caldera": {
+        "type": "Point",
+        "coordinates": [
+          -155.26,
+          18.92
+        ],
+        "radiusKm": null,
+        "name": "Kamaʻehuakanaloa",
+        "precision": "sketch",
+        "sources": [
+          "clague-sherrod-2014"
+        ],
+        "note": "a summit caldera complex with three pit craters 0.6–1.2 km across; the southernmost formed in 1996 (Clague and Sherrod 2014, p. 105)"
+      },
+      "shield": null,
+      "preshield": {
+        "from": 0.4,
+        "to": 0,
+        "precision": 0.1,
+        "basis": "bracketed",
+        "sources": [
+          "clague-sherrod-2014"
+        ],
+        "note": "In the preshield stage. Its exposed flanks give K–Ar ages from about 100 ka at the base to 5 ka at the top; most of its 1,700 km³ formed in the preshield stage (Clague and Sherrod 2014, p. 105). The start is not dated."
+      },
+      "postshield": null,
+      "rejuvenated": null,
+      "status": "submarine",
+      "lastEruption": {
+        "year": 1996,
+        "precision": 0,
+        "note": "before the earthquake swarm of summer 1996 (Wikipedia, tertiary)"
+      },
+      "subsidence": null,
+      "sources": [
+        "clague-sherrod-2014",
+        "wikipedia-kamaehuakanaloa"
+      ],
+      "future": {
+        "note": "An island in as little as 50,000 years (DePaolo and Stolper 1996) or as much as 200,000 (Clague and Sherrod 2014, p. 105); Wikipedia (tertiary) says 10,000–100,000 years.",
+        "sources": [
+          "clague-sherrod-2014",
+          "wikipedia-kamaehuakanaloa"
+        ]
+      },
+      "note": "Named Lōʻihi until the Hawaiʻi Board on Geographic Names gave it this name in 2021 (Wikipedia, tertiary)."
+    }
+  ]
+}

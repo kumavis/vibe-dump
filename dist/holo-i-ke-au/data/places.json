@@ -2625,5 +2625,719 @@
       "fornander-v2"
     ],
     "note": "The land of Kalaupapa on the Molokaʻi peninsula, where the Koʻolau chiefs gathered against Kūaliʻi and the Kona chiefs (Fornander); within Kalaupapa National Historical Park. The point is the Kalaupapa centroid of the State layer."
+  },
+  {
+    "id": "kaula-volcano",
+    "name": "Kaʻula",
+    "alt": [],
+    "kind": "volcano",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -160.541,
+        21.655
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "eakins-2003-i2809",
+      "clague-sherrod-2014"
+    ],
+    "note": "The eruptive centre of the Kaʻula shield as the I-2809 inset marks it, south-west of Niʻihau."
+  },
+  {
+    "id": "niihau-volcano",
+    "name": "Niʻihau",
+    "alt": [],
+    "kind": "volcano",
+    "island": "niihau",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -160.0834,
+        21.9386
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Niʻihau shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "kauai-volcano",
+    "name": "Kauaʻi",
+    "alt": [
+      "Waiʻaleʻale"
+    ],
+    "kind": "volcano",
+    "island": "kauai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.4974,
+        22.0585
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Kauaʻi shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "waianae-volcano",
+    "name": "Waiʻanae",
+    "alt": [],
+    "kind": "volcano",
+    "island": "oahu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.1416,
+        21.5072
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Waiʻanae shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "koolau-volcano",
+    "name": "Koʻolau",
+    "alt": [],
+    "kind": "volcano",
+    "island": "oahu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.7881,
+        21.3581
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Koʻolau shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "west-molokai-volcano",
+    "name": "West Molokaʻi",
+    "alt": [],
+    "kind": "volcano",
+    "island": "molokai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.157,
+        21.1422
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the West Molokaʻi shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "east-molokai-volcano",
+    "name": "East Molokaʻi",
+    "alt": [],
+    "kind": "volcano",
+    "island": "molokai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.8684,
+        21.1065
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the East Molokaʻi shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "penguin-bank",
+    "name": "Penguin Bank",
+    "alt": [],
+    "kind": "volcano",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.6488,
+        20.9722
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The shallow bank south-west of Molokaʻi, a rift of West Molokaʻi or a volcano of its own; the point is the summit Clague and Sherrod chose."
+  },
+  {
+    "id": "lanai-volcano",
+    "name": "Lānaʻi",
+    "alt": [],
+    "kind": "volcano",
+    "island": "lanai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.8731,
+        20.8121
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Lānaʻi shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "kahoolawe-volcano",
+    "name": "Kahoʻolawe",
+    "alt": [],
+    "kind": "volcano",
+    "island": "kahoolawe",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.5715,
+        20.5617
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Kahoʻolawe shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "west-maui-volcano",
+    "name": "West Maui",
+    "alt": [],
+    "kind": "volcano",
+    "island": "maui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.5863,
+        20.8904
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the West Maui shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "haleakala-volcano",
+    "name": "Haleakalā",
+    "alt": [],
+    "kind": "volcano",
+    "island": "maui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.2533,
+        20.7097
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Haleakalā shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "mahukona",
+    "name": "Māhukona",
+    "alt": [],
+    "kind": "seamount",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.1399,
+        20.1315
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Māhukona shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "kohala-volcano",
+    "name": "Kohala",
+    "alt": [],
+    "kind": "volcano",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.7171,
+        20.086
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Kohala shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "mauna-kea-volcano",
+    "name": "Mauna Kea",
+    "alt": [],
+    "kind": "volcano",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.4681,
+        19.8206
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Mauna Kea shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "hualalai-volcano",
+    "name": "Hualālai",
+    "alt": [],
+    "kind": "volcano",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.8644,
+        19.6888
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Hualālai shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "mauna-loa-volcano",
+    "name": "Mauna Loa",
+    "alt": [],
+    "kind": "volcano",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.6054,
+        19.4755
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Mauna Loa shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "kilauea-volcano",
+    "name": "Kīlauea",
+    "alt": [],
+    "kind": "volcano",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.2868,
+        19.4209
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Kīlauea shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "kamaehuakanaloa",
+    "name": "Kamaʻehuakanaloa",
+    "alt": [
+      "Lōʻihi"
+    ],
+    "kind": "seamount",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.2601,
+        18.9201
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "clague-sherrod-2014"
+    ],
+    "note": "The summit of the Kamaʻehuakanaloa shield as Clague and Sherrod give it (table 1)."
+  },
+  {
+    "id": "olokele-caldera",
+    "name": "Olokele",
+    "alt": [],
+    "kind": "caldera",
+    "island": "kauai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.55,
+        22.07
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "sherrod-2007-geologic-map"
+    ],
+    "note": "The Olokele caldera of Kauaʻi; its centre is placed by eye from the description."
+  },
+  {
+    "id": "lualualei-caldera",
+    "name": "Lualualei",
+    "alt": [],
+    "kind": "caldera",
+    "island": "oahu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.14,
+        21.43
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "sherrod-2007-geologic-map"
+    ],
+    "note": "The Lualualei caldera of Waiʻanae; its centre is placed by eye from the description."
+  },
+  {
+    "id": "kailua-caldera",
+    "name": "Kailua",
+    "alt": [],
+    "kind": "caldera",
+    "island": "oahu",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.77,
+        21.38
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "sherrod-2007-geologic-map"
+    ],
+    "note": "The Kailua caldera of Koʻolau; its centre is placed by eye from the description."
+  },
+  {
+    "id": "mokuaweoweo",
+    "name": "Mokuʻāweoweo",
+    "alt": [],
+    "kind": "caldera",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.592,
+        19.4722
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014",
+      "wikipedia-mauna-loa"
+    ],
+    "note": "The Mokuʻāweoweo caldera of Mauna Loa; its centre is from Clague and Sherrod’s table 1."
+  },
+  {
+    "id": "kaluapele",
+    "name": "Kaluapele",
+    "alt": [],
+    "kind": "caldera",
+    "island": "hawaii",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.2839,
+        19.4064
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "clague-sherrod-2014",
+      "wikipedia-kilauea"
+    ],
+    "note": "The Kaluapele caldera of Kīlauea; its centre is from Clague and Sherrod’s table 1."
+  },
+  {
+    "id": "haleakala-crater",
+    "name": "Haleakalā Crater",
+    "alt": [],
+    "kind": "other",
+    "island": "maui",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.2,
+        20.71
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "sherrod-2007-geologic-map"
+    ],
+    "note": "The summit depression of Haleakalā, walled by Kula lavas and cut by erosion; not a caldera. Placed by eye."
+  },
+  {
+    "id": "nuuanu-avalanche",
+    "name": "Nuʻuanu",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.05,
+        22.196
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "moore-1989-prodigious",
+      "odp-200-ir-nuuanu",
+      "satake-2002-nuuanu-tsunami",
+      "sherrod-2007-geologic-map",
+      "eakins-2003-i2809",
+      "moore-clague-2002-nuuanu-wailau",
+      "garcia-2006-koolau-landslides",
+      "moore-normark-holcomb-1994-annrev"
+    ],
+    "note": "The Nuʻuanu debris avalanche north-east of Oʻahu; the point is the middle of the traced field."
+  },
+  {
+    "id": "wailau-avalanche",
+    "name": "Wailau",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.86,
+        21.656
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "sherrod-2007-geologic-map",
+      "clague-sherrod-2014",
+      "satake-2002-nuuanu-tsunami",
+      "eakins-2003-i2809",
+      "clague-moore-2002-wailau",
+      "moore-clague-2002-nuuanu-wailau",
+      "moore-normark-holcomb-1994-annrev"
+    ],
+    "note": "The Wailau debris avalanche north of Molokaʻi; the point is the middle of the traced field."
+  },
+  {
+    "id": "waianae-slump-field",
+    "name": "Waiʻanae slump",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -158.402,
+        21.244
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "sherrod-2007-geologic-map",
+      "eakins-2003-i2809",
+      "moore-1989-prodigious"
+    ],
+    "note": "The slump south-west of Oʻahu; the point is the middle of the traced field."
+  },
+  {
+    "id": "clark-avalanche",
+    "name": "Clark",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.474,
+        20.284
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "sherrod-2007-geologic-map",
+      "eakins-2003-i2809",
+      "moore-1989-prodigious"
+    ],
+    "note": "The Clark debris avalanche south-west of Lānaʻi; the point is the middle of the nearer lobe."
+  },
+  {
+    "id": "pololu-slump-field",
+    "name": "Pololū slump",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.484,
+        20.343
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "sherrod-2007-geologic-map",
+      "eakins-2003-i2809",
+      "moore-1989-prodigious"
+    ],
+    "note": "Off Kohala’s north-east coast; the point is the middle of the traced field."
+  },
+  {
+    "id": "alika-avalanche",
+    "name": "ʻĀlika",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.39,
+        19.645
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "lipman-1988-alika",
+      "sherrod-2007-geologic-map",
+      "eakins-2003-i2809",
+      "mcmurtry-1999-alika2"
+    ],
+    "note": "The ʻĀlika debris avalanches west of Hawaiʻi Island; the point is the middle of the northern lobe."
+  },
+  {
+    "id": "hilina-slump-field",
+    "name": "Hilina slump",
+    "alt": [],
+    "kind": "landslide",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.077,
+        19.116
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "clague-sherrod-2014",
+      "eakins-2003-i2809",
+      "moore-normark-holcomb-1994-science"
+    ],
+    "note": "Off Kīlauea’s south flank; the point is the middle of the traced field."
+  },
+  {
+    "id": "tuscaloosa-seamount",
+    "name": "Tuscaloosa Seamount",
+    "alt": [],
+    "kind": "seamount",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -157.143,
+        22.095
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "eakins-2003-i2809",
+      "odp-200-ir-nuuanu"
+    ],
+    "note": "The largest block of the Nuʻuanu avalanche, at its centre on I-2809."
+  },
+  {
+    "id": "hawaiian-arch",
+    "name": "Hawaiian Arch",
+    "alt": [],
+    "kind": "sea",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          -156.133,
+          23.062
+        ],
+        [
+          -155.119,
+          22.605
+        ],
+        [
+          -154.185,
+          22.067
+        ]
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "eakins-2003-i2809",
+      "clague-sherrod-2014"
+    ],
+    "note": "The swell of sea floor round the islands raised by their weight (Clague and Sherrod 2014, p. 97). The line follows the lettering of its name on I-2809 north-east of the islands, not a surveyed crest."
+  },
+  {
+    "id": "hulopoe",
+    "name": "Hulopoe",
+    "alt": [],
+    "kind": "bay",
+    "island": "lanai",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -156.89,
+        20.74
+      ]
+    },
+    "placePrecision": "island",
+    "sources": [
+      "moore-moore-1984-lanai"
+    ],
+    "note": "The Hulopoe Gravel, named for the bay on Lānaʻi’s south shore, blankets the coastal slopes; the point stands at the south shore at island precision."
+  },
+  {
+    "id": "drowned-reefs-hawaii",
+    "name": "the drowned reefs off north-west Hawaiʻi",
+    "alt": [],
+    "kind": "sea",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -155.97,
+        20.05
+      ]
+    },
+    "placePrecision": "sea",
+    "sources": [
+      "ludwig-1991-subsidence",
+      "moore-fornari-1984-reefs"
+    ],
+    "note": "The stair of submerged reefs off north-west Hawaiʻi Island (Ludwig et al. 1991); the point stands off the Kohala coast at sea precision."
   }
 ]
