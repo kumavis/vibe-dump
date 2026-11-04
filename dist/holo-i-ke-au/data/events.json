@@ -3937,12 +3937,12 @@
         "zoom": "near",
         "year": 1975,
         "camera": {
-          "bearing": 250,
-          "pitch": 0.3,
-          "distance": 8,
+          "bearing": 104,
+          "pitch": 0.16,
+          "distance": 3,
           "target": [
-            -157.8345,
-            21.5106
+            -157.8351,
+            21.5104
           ]
         }
       }
@@ -4086,12 +4086,12 @@
         "zoom": "near",
         "year": 1976,
         "camera": {
-          "bearing": 110,
-          "pitch": 0.3,
-          "distance": 8,
+          "bearing": 286,
+          "pitch": 0.16,
+          "distance": 3,
           "target": [
-            -156.638,
-            21.0133
+            -156.63875,
+            21.01355
           ]
         }
       },
@@ -4101,11 +4101,11 @@
         "zoom": "near",
         "year": 1976,
         "camera": {
-          "bearing": 330,
-          "pitch": 0.35,
-          "distance": 9,
+          "bearing": 130,
+          "pitch": 0.1,
+          "distance": 3,
           "target": [
-            -156.64,
+            -156.6408,
             21.016
           ]
         }
@@ -4116,12 +4116,12 @@
         "zoom": "near",
         "year": 1976,
         "camera": {
-          "bearing": 280,
-          "pitch": 0.15,
-          "distance": 8,
+          "bearing": 274,
+          "pitch": 0.14,
+          "distance": 6,
           "target": [
-            -156.6435,
-            21.0255
+            -156.6442,
+            21.024
           ]
         }
       },
