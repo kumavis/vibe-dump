@@ -1200,7 +1200,8 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   // re-pins them here, and each stays within its mission's limit
   // (army-sim's gate). v6's 485 and 495; the Bushtails' 475 since the
   // Skirmish prices after the parapets (DESIGN's note of that name: the
-  // Trebuchet 50 → 40, fitted on seeds 1111 and 2222, judged on 5555)
+  // Trebuchet 50 → 40, fitted on seeds 1111 and 2222; judged on 5555,
+  // where it fails by a point, and the price is open: the note says why)
   const CLASSIC_COST = { squirrel: 475, serpent: 495 }
   for (const [key, want] of Object.entries(CLASSIC_COST)) {
     const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))

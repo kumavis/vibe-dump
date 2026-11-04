@@ -61,9 +61,15 @@ export default {
       // 33 ± 7 and 34 ± 7, pooled 33 ± 5, outside its band of 10. At 35
       // (the pooled fit to 5) the judging seed 4444 fitted it 51 ± 6, out,
       // so 40, between the fits and the most the tuning seeds allow (pooled
-      // 32 ± 5 at 40); judged on 5555 it fits 55 ± 7, one point past its
-      // band of 14, both score gates holding. Its value swings 29-55 from
-      // seed to seed, past its SE: an open question, not a settled price.
+      // 32 ± 5 at 40). Judged at 40 the per-unit gate fails on two of the
+      // three seeds no fit used: on 5555 the Trebuchet, 55 ± 7, one point
+      // past its band of 14; on 4444 the Grenadiers. Both score gates hold,
+      // nearer their edge than at 50 (the Bushtails 51.9-53.5% against
+      // 47.7-51.6%). At 50 it is inside its band on every seed no fit used
+      // (the review's: 47, 56 and 50 on 4444, 5555 and 7777; five seeds
+      // pooled 45 ± 3), so 40 beats 50 only on the seeds it was tuned on:
+      // an open question (40, 45 or 50, ROADMAP's Later item), not a
+      // settled price.
       // The classic list 475. Its price in a Skirmish and the keg's;
       // Field's and Grand's own `prices` in data/mission.js (55, 15) are
       // its price there.

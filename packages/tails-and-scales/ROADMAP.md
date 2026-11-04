@@ -1129,18 +1129,30 @@ follows N3.
   4444 (the Trebuchet 51 ± 6, the Grenadiers 49 ± 4), so 40, the most the
   tuning seeds allow; judged on 5555 both score gates hold (52.1% and
   52.6% ± 1.2) and the per-unit gate fails on the Trebuchet by a point
-  (55 ± 7 against 40, band 14); the standing seed passes every gate
-  (52.3% and 52.7%, the Trebuchet 29 ± 7). Field, Grand and the Powder
+  (55 ± 7 against 40, band 14), on 4444 on the Grenadiers (51 ± 4
+  against 65, band 13); the standing seed passes every gate (52.3% and
+  52.7%, the Trebuchet 29 ± 7). The review judged 50 on the same seeds
+  and found it no worse (the next item): the price is open. Field, Grand and the Powder
   Field are main's to the digit (their own prices name both units).
   DESIGN's "The Skirmish prices after the parapets"; what stays open is
   the next item.
-- [ ] **Later (the Skirmish retune's):** the Trebuchet's Skirmish fit
-  moves with the seed by more than its SE (33 and 34 on seeds 1111 and
-  2222 at 50; 29, 51 and 55 on 1111, 4444 and 5555 at 40), so no price
-  lies in its band on both the tuning seeds pooled (at most 40) and 5555
-  (at least 45): at 40 the judging seed fails by a point. Pooling more
-  seeds, or a larger fit, would say whether 40 or 45 is the price; human
-  play will tell too. Found on main by the whole gate (a165618 and here
+- [ ] **Later (the Skirmish retune's):** the Trebuchet's Skirmish price
+  is open: 40, 45 or 50. Its fit moves with the seed by more than its SE,
+  the low fits the tuning seeds' (at 50: 33 and 34 on 1111 and 2222; 47,
+  56 and 50 on 4444, 5555 and 7777; the five pooled 45 ± 3, Q 9.4 on 4
+  degrees of freedom, p ≈ 0.05). At 40 two of the three seeds no fit used
+  fail the per-unit gate (5555 on the Trebuchet, 55 ± 7 against 40, band
+  14; 4444 on the Grenadiers, 51 ± 4 against 65, band 13); at 50 the
+  Trebuchet is inside its band on all three (the whole per-unit gate
+  passes on one of the three at either price, 7777). Both score gates
+  hold on every seed, but the Bushtails' score moves from about 49.7% at
+  50 to 52.6% at 40 (1111, 4444, 5555 and 7777). So 40 beats 50 only on
+  the seeds it was tuned on. Either keep 50 (seed 1111's per-unit failure
+  the fit's seed noise, as F8b's review read it), or fit 45 on more pooled
+  seeds (1111-3333 and 6666) and judge 40, 45 and 50 alike on 4444, 5555
+  and 7777; human play will tell too. The gallery's bundle is not rebuilt
+  on wt/retune (it ships 50 under 1jdolspb0fd): its rebuild commit
+  follows the price that merges. Found on main by the whole gate (a165618 and here
   alike, the same battles): Field's `fortified` score gate fails, 44.7%
   and on its re-run 44.8% ± 1.6 against its 5 points (Field's per-unit
   gate and `open`, 45.6%, hold); and the keg mission's gates fail as
