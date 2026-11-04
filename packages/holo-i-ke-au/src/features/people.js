@@ -406,7 +406,7 @@ function paint(fr, pal) {
  */
 export function buildPeopleSheet() {
   const rows = rowsWanted()
-  const width = FACINGS.length * FRAMES * W
+  const width = FACINGS.length * FRAMES * W + SMALL_W * 2 + TINY_W + 2
   const height = rows.length * H
   const data = new Uint8Array(width * height * 4)
   rows.forEach((r, ri) => {
@@ -418,6 +418,19 @@ export function buildPeopleSheet() {
         for (let y = 0; y < H; y++) data.set(px.subarray(y * W * 4, (y + 1) * W * 4), ((r.y + y) * width + x0) * 4)
       })
     })
+    // the small and the tiny figure, standing at the foot of the row's cell
+    const put = (grid, x0, y0) =>
+      grid.forEach((line, y) => {
+        for (let x = 0; x < line.length; x++) {
+          const c = r.pal[line[x]]
+          if (line[x] === '.' || !c) continue
+          data.set([...hex(c), 255], ((r.y + y0 + y) * width + x0 + x) * 4)
+        }
+      })
+    const sm = small(r)
+    put(sm[0], SMALL_X, H - SMALL_H)
+    put(sm[1], SMALL_X + SMALL_W, H - SMALL_H)
+    put(tiny(r), TINY_X, H - TINY_H)
   })
   const of = (body, dress) => {
     const list = rows.filter((r) => r.body === body && r.dress === dress)
@@ -427,5 +440,53 @@ export function buildPeopleSheet() {
     const [first, n] = ANIM[anim]
     return [(facing * FRAMES + first + (f % n)) * W, row.y, W, H]
   }
-  return { width, height, data, rows, of, cell }
+  /** The far figures: 'small' (idle or wave) and 'tiny', as [x, y, w, h]. */
+  const far = (row, tier, wave = false) => (tier === 'tiny' ? [TINY_X, row.y + H - TINY_H, TINY_W, TINY_H] : [SMALL_X + (wave ? SMALL_W : 0), row.y + H - SMALL_H, SMALL_W, SMALL_H])
+  return { width, height, data, rows, of, cell, far }
+}
+
+// --- the far figures --------------------------------------------------------------------
+//
+// Where a person is drawn at the scene's own scale (vessels.js, crowd.js) a
+// figure may be less than a whole sprite tall on the screen: under some
+// fourteen pixels it is drawn as a small figure of 4 by 8 (a head, a shirt
+// with the arms at its sides, what is worn below, the legs; an arm up for one
+// waving), and under some six as a tiny one of 2 by 4 (the head, the shirt,
+// what is below), in the row's own colours and without an outline.
+export const SMALL_W = 4
+export const SMALL_H = 8
+export const TINY_W = 2
+export const TINY_H = 4
+const SMALL_X = FACINGS.length * FRAMES * W
+const TINY_X = SMALL_X + SMALL_W * 2
+
+function small(r) {
+  const b = r.look.bottom
+  const long = r.look.hair === 'long'
+  let g
+  if (r.body === 'paddler') g = ['.hh.', '.ss.', 'tttt', 'sTts', 'uuuu', '....', '....', '....']
+  else {
+    const head = long ? ['hhhh', 'hssh'] : ['.hh.', '.ss.']
+    const top = [r.look.lei ? 'tllt' : 'tttt', 'sTts']
+    const below = b === 'skirt' ? ['.rr.', 'rrrr', 'rRrr', '.ss.'] : b === 'pau' ? ['.rr.', 'rrrr', '.ss.', '.dd.'] : b === 'trousers' ? ['.tt.', '.uu.', '.uu.', '.dd.'] : b === 'malo' ? ['.tt.', '.uu.', '.ss.', '.dd.'] : ['.tt.', '.uu.', '.ss.', '.dd.']
+    g = [...head, ...top, ...below]
+    // (a child: two rows shorter, the head on the shoulders)
+    if (r.body === 'boy' || r.body === 'girl') g = ['....', '....', g[0], g[1], g[2], g[4], g[5], g[7]]
+  }
+  const wave = g.slice()
+  const top = r.body === 'boy' || r.body === 'girl' ? 2 : 0
+  if (r.body !== 'paddler') {
+    wave[top] = 's' + wave[top].slice(1)
+    wave[top + 1] = 's' + wave[top + 1].slice(1)
+    wave[top + 3] = '.' + wave[top + 3].slice(1)
+  }
+  return [g, wave]
+}
+
+function tiny(r) {
+  const b = r.look.bottom
+  if (r.body === 'paddler') return ['hh', 'tt', 'uu', '..']
+  const below = b === 'skirt' ? ['rr', 'rr'] : b === 'pau' ? ['rr', 'dd'] : b === 'malo' ? ['uu', 'dd'] : ['uu', 'dd']
+  if (r.body === 'boy' || r.body === 'girl') return ['..', 'hh', 'tt', below[1]]
+  return ['hh', 'tt', ...below]
 }

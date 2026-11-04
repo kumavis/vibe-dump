@@ -190,11 +190,11 @@ export function waaKaulua(B, rand, o = {}, part = 'hull') {
     const tack = [x, deckY + 0.35, 0]
     if (part === 'set') {
       // in the sail's plane: u along it (forward +), v up; trimmed to one side, the cloth bellied
-      const trim = 0.42 + m * 0.08
+      const trim = 0.3 + m * 0.06
       const du = [Math.cos(trim), 0, -Math.sin(trim)]
       const dn = [Math.sin(trim), 0, Math.cos(trim)]
-      const T1 = [0.04 * L, 0.56 * L]
-      const T2 = [-0.42 * L, 0.36 * L]
+      const T1 = [0.08 * L, 0.58 * L]
+      const T2 = [-0.5 * L, 0.34 * L]
       const P = (u, v, w) => [tack[0] + du[0] * u + dn[0] * w, tack[1] + v, tack[2] + du[2] * u + dn[2] * w]
       const na = 9
       const nr = 5
@@ -202,7 +202,7 @@ export function waaKaulua(B, rand, o = {}, part = 'hull') {
       for (let i = 0; i <= na; i++) {
         const s = i / na
         // the top edge drawn in toward the tack between the spars' tips: the claw
-        const k = 1 - 0.34 * Math.sin(Math.PI * s)
+        const k = 1 - 0.42 * Math.sin(Math.PI * s)
         const eu = (T1[0] + (T2[0] - T1[0]) * s) * k
         const ev = (T1[1] + (T2[1] - T1[1]) * s) * k
         const row = []

@@ -4761,7 +4761,7 @@ if (!geoHere) {
             if (!inside(c.rings[0], g.x, g.z)) out.outside++
             if (app.world.metresAt(g.x, g.z) < 0.15) out.wet++
             if (S.clearData) { const r = S.rec.d.rect, N = S.clearN, ii = Math.floor(((g.x - r.x0) / (r.x1 - r.x0)) * N), jj = Math.floor(((g.z - r.z0) / (r.z1 - r.z0)) * N); if (S.clearData[jj * N + ii] > 128) { out.built++; (out.on ||= []).push(g.mode + (P.f.built[g.i] ? "" : " (unflagged)") + " vis " + P.f.vis[g.i].toFixed(2)) } }
-            if (c.p.facing === 'sea' && g.mode !== 'walk') { const s = P.seaFrom(g.x, g.z, c.sea) || c.sea; if (s) { out.faced++; if (s[0] * g.hx + s[1] * g.hz < 0.7) out.away++ } }
+            if (c.p.facing === 'sea' && g.mode !== 'walk' && !g.talk) { const s = P.seaFrom(g.x, g.z, c.sea) || c.sea; if (s) { out.faced++; if (s[0] * g.hx + s[1] * g.hz < 0.7) out.away++ } }
           }
           return out
         })()`)

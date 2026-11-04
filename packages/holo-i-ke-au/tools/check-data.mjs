@@ -162,8 +162,9 @@ const HEIAU_CENTROID_KM = 0.3 // a heiau at ahupuaʻa precision stands at its ah
 // the box tools/lib/district-sources.mjs bakes, used only when districts/manifest.json is absent
 const FALLBACK_DISTRICTS = { nuuanu: { island: 'oahu', bounds: [-157.897, 21.269, -157.779, 21.381] } }
 // stop cameras: bearing in compass degrees, pitch 0..1, distance in world units (100 m) within the
-// camera rig's range (src/config.js MIN_DISTANCE and MAX_DISTANCE)
-const CAMERA_DISTANCE = [8, 9000]
+// camera rig's range (src/config.js MIN_DISTANCE and MAX_DISTANCE; a near stop may stand as close as
+// 100 m, the rig's floor following it there: ui/tour.js closeFloor)
+const CAMERA_DISTANCE = [1, 9000]
 const NEAR_CAMERA_MAX = 150 // 15 km: a near stop standing farther back than this is suspect
 const MONTHS = 'January|February|March|April|May|June|July|August|September|October|November|December'
 // The sensitive-site rule is practised, not announced (DESIGN.md §7.4): no user-facing text says what the

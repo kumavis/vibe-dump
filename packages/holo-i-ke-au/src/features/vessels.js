@@ -26,8 +26,8 @@
 // stop of its `event`), the vessels stand where the stop's moment puts them
 // (the stop's `when`; failing that, the principal vessel's, momentOf: a
 // feature of its own for the stop, as each of the canoe's at Honolua is,
-// at its first moving segment a little early, so the loop sees it cast off;
-// one track over several stops, at its k-th run of one behaviour for its
+// under way where it passes nearest what the stop looks at, or at its start
+// if it only holds; one track over several stops, at its k-th run of one behaviour for its
 // k-th stop) and the scene runs on from there, all its
 // vessels on one clock RATE times faster than life, for LOOP seconds or up
 // to the next stop's moment, then dissolves and begins again. Off the tour
@@ -49,7 +49,7 @@ const HOLDS = new Set(['moored', 'anchor'])
 const PACE = { paddle: 1.6, tow: 2.4, sail: 3.0, 'under-way': 3.0, moored: 0, anchor: 0 }
 // the vessels drawn larger than life, as the village's canoes are (index.js HALE_S)
 export const VESSEL_S = S * 1.4
-export const RATE = 4
+export const RATE = 2
 export const LOOP = 45
 const DEFAULT_LENGTH = { 'waa-kaulua': 19, waa: 8, motor: 15, ship: 35 }
 
@@ -86,7 +86,8 @@ export function trackTimes(p, len) {
   const total = Number.isFinite(ms(p.until)) ? (ms(p.until) - t0) / 1000 : moving
   const held = moves.filter((m) => HOLDS.has(m)).length
   const spare = Math.max(0, total - moving)
-  const k = moving > 0 && total < moving ? total / moving : 1
+  // (too little time for the pace, or nothing that holds to take what is over: the pace is stretched to fit)
+  const k = moving > 0 && (total < moving || !held) ? total / moving : 1
   const out = [t0]
   for (let i = 0; i < len.length; i++) out.push(out[i] + 1000 * (HOLDS.has(moves[i]) ? (held ? spare / held : 0) : need[i] * k))
   return out
@@ -137,7 +138,7 @@ export class Vessels {
       this.geometries.push(g)
       this.materials.push(m)
     }
-    this.people = new People(app, shared, this.crowds, this.crewList, ground, settlements)
+    this.people = new People(app, shared, this.crowds, this.crewList, ground, settlements, VESSEL_S)
     this.group.add(this.people.group)
     this.clock = NaN
     this.t = 0
@@ -333,19 +334,17 @@ export class Vessels {
       const k = named.indexOf(i)
       return lead.runs[Math.max(0, Math.min(lead.runs.length - 1, k))]
     }
-    // a feature of its own for this stop: the start of its first moving run, a quarter of the loop
-    // early when it holds before it (so the loop sees it cast off); one that only holds, its start
+    // a feature of its own for this stop: one that only holds, at its start; one that moves, under
+    // way, the loop passing, a sixth of the way in, where it comes nearest what the stop looks at (its camera's target,
+    // else its place), from its first moving segment on
     const go = lead.segs.find((sg) => !HOLDS.has(sg.move))
     if (!go) return lead.times[0]
     const loop = LOOP * RATE * 1000
-    if (HOLDS.has(lead.segs[0].move)) return Math.max(lead.times[0], go.t0 - loop / 4)
-    // under way throughout: the loop centred on where it passes nearest what the stop looks at
-    // (its camera's target, else its place)
     const look = st?.camera?.target || (() => {
       const g = this.app.tour?.places?.get(st?.place)?.geometry
       return g ? geometryPoint(g) : null
     })()
-    const t0 = lead.times[0]
+    const t0 = go.t0
     const t1 = lead.times.at(-1)
     if (!look || t1 - t0 <= loop) return t0
     const [lx, lz] = this.app.data.proj.toWorld(look)
@@ -361,7 +360,7 @@ export class Vessels {
         best = t
       }
     }
-    return Math.max(t0, Math.min(t1 - loop, best - loop / 2))
+    return Math.max(t0, Math.min(t1 - loop, best - loop / 6))
   }
 
   /** What shows now: the tour's stop of an event some vessel or crowd belongs to, or nothing. */
@@ -387,7 +386,8 @@ export class Vessels {
     const now = this.choose()
     const ease = dt > 0 ? 1 - Math.exp(-dt * 2) : 1
     // (the people and the full models belong to the near zoom; the small hulls reach out past it)
-    const nearK = show * (1 - smooth(40, 65, distance))
+    // (the people at the scene's own scale: they grow too small to draw on their own as the view widens)
+    const nearK = show
     const fullK = 1 - smooth(32, 52, distance)
     const markK = show
     if (now && Number.isFinite(now.base)) {
@@ -507,9 +507,7 @@ export class Vessels {
       out[1] = v.z + (lx * sa + lz * ca) * VESSEL_S
       out[2] = footMetres(ly, VESSEL_S)
       out[3] = v.a
-      // (a crew as big as its vessel on the screen allows: one for every fourteen sprite pixels of its length)
-      const px = (v.length * VESSEL_S) / Math.max(1e-6, this.people.unit)
-      out[4] = v.group.visible && px >= 14 * (c.k + 1) ? (v.shown || 0) / Math.max(1e-6, nearK) : 0
+      out[4] = v.group.visible ? (v.shown || 0) / Math.max(1e-6, nearK) : 0
       out[5] = v.speed
     })
     // (how strongly the stop's own scene is drawn: the pin stands aside for it, as for the forces)

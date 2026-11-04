@@ -1037,9 +1037,9 @@ function testVoyage(spots) {
       kind: 'voyage',
       summary: 'A test event: a voyaging canoe moored off a beach, towed out of the bay, and under sail.',
       stops: [
-        { text: 'The test canoe off the beach, the people on the shore.', place: 'test-voyage-beach', zoom: 'near', year: 1978, when: T('09:00'), camera: { bearing: (sea + 180) % 360, pitch: 0.3, distance: 10, target: P[0] } },
-        { text: 'Towed out of the test bay.', place: 'test-voyage-bay', zoom: 'near', year: 1978, when: T('10:03'), camera: { bearing: (sea + 90) % 360, pitch: 0.32, distance: 11, target: ahead(2, -0.25) } },
-        { text: 'Under sail.', place: 'test-voyage-bay', zoom: 'near', year: 1978, camera: { bearing: sea, pitch: 0.3, distance: 12, target: ahead(3, 0.08) } },
+        { text: 'The test canoe off the beach, the people on the shore.', place: 'test-voyage-beach', zoom: 'near', year: 1978, when: T('09:00'), camera: { bearing: sea, pitch: 0.14, distance: 4, target: P[0] } },
+        { text: 'Towed out of the test bay.', place: 'test-voyage-bay', zoom: 'near', year: 1978, when: T('10:03'), camera: { bearing: (sea + 90) % 360, pitch: 0.12, distance: 4, target: ahead(2, -0.25) } },
+        { text: 'Under sail.', place: 'test-voyage-bay', zoom: 'near', year: 1978, camera: { bearing: (sea + 60) % 360, pitch: 0.12, distance: 4, target: ahead(3, 0.08) } },
       ],
       sources: [{ id: 'test-source-a', where: 'p. 7' }],
       confidence: { date: 'firm', place: 'soft' },

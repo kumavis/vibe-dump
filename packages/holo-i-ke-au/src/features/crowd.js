@@ -2,9 +2,19 @@
 // and crowds"): the `crowd` polygons of features.json, and the crews of the
 // vessels (vessels.js), as billboarded pixel-art figures (people.js), in one
 // instanced draw and one for their shadows, with the battles' shader
-// (render/shaders/sprite.glsl.js), the battles' one scale and its dither
-// crossfade (soldiers.js Scale), so a figure never jumps in size and a
-// crowd of thousands costs what the soldiers do.
+// (render/shaders/sprite.glsl.js), so a crowd of thousands costs what the
+// soldiers do.
+//
+// Unlike the battles' people, who keep a readable size at every distance,
+// these stand at the scene's own scale: a person of 1.7 m at the scale the
+// canoe beside them is drawn at (vessels.js VESSEL_S), so a crowd that fills
+// a beach is hundreds of small figures and not a few large ones. Each figure
+// takes, from its own distance, the whole number of screen pixels to the
+// sprite pixel that comes nearest that height; under a whole sprite it is a
+// small figure of 4 by 8, under that a tiny one of 2 by 4 (people.js), and
+// under about three pixels it thins out and is gone. From one size to the
+// next it dissolves through the ordered dither, as the soldiers do across
+// theirs, so nobody jumps in size.
 //
 // A crowd is scattered over its polygon by `count` (or `density` times its
 // area) from a seed of its id, on the ground: a figure stands only where the
@@ -34,18 +44,34 @@
 
 import * as THREE from 'three'
 import { buildPeopleSheet, ANIM, FRAMES, W as SW, H as SH } from './people.js'
-import { Scale, wantScale, FACE, HOLD } from './soldiers.js'
+import { FACE, HOLD } from './soldiers.js'
 import { spriteVertex, spriteFragment, shadowVertex, shadowFragment } from '../render/shaders/sprite.glsl.js'
 import { NEAR_EXAG } from '../config.js'
 
-export const MAX_DRAWN = 2400
+export const MAX_DRAWN = 4000
 export const MAX_PER_CROWD = 8000
 export const CROWD_BEHAVIOURS = ['gather', 'wave', 'chant', 'procession', 'watch']
 export const CROWD_DRESS = ['1970s', 'kingdom', 'precontact']
 const MODE = { stand: 0, wave: 1, chant: 2, walk: 3, watch: 4, crew: 5, paddle: 6 }
 const COLUMN = [0, 0, 1, 2]
-const GAIT = 4 // sprite pixels a second, a slow walk
+const WALK_MS = 0.7 // a procession's pace, metres a second at the scene's scale
 const FADE_S = 0.35
+const FIG_M = 1.7 // a person's height
+// the sizes a figure is drawn at, screen pixels tall: tiny, small, then a whole sprite at 1, 2, 3 … to the pixel
+const TIERS = [4, 8, 14, 28, 42, 56, 70, 84]
+const BAND = 0.03 // the crossfade between two sizes: this share either side of their geometric mean
+const GONE = 2.5 // under this many pixels tall a figure is gone; a pixel over, it thins in
+
+/** The size a figure of h screen pixels is drawn at: [a, b, t], from tier a toward b by t (t 0: a alone). */
+function tierOf(h, out) {
+  for (let q = 0; q + 1 < TIERS.length; q++) {
+    const m = Math.sqrt(TIERS[q] * TIERS[q + 1])
+    if (h < m * (1 - BAND)) return ((out[0] = q), (out[1] = q), (out[2] = 0), out)
+    if (h < m * (1 + BAND)) return ((out[0] = q), (out[1] = q + 1), (out[2] = (h - m * (1 - BAND)) / (2 * BAND * m)), out)
+  }
+  const q = TIERS.length - 1
+  return ((out[0] = q), (out[1] = q), (out[2] = 0), out)
+}
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -94,8 +120,10 @@ export class People {
    * metres, body, dress }]; ground: the district's metres at (x, z), today's; settlements: for what
    * the town has built in the year.
    */
-  constructor(app, shared, crowds, crews, ground, settlements = null) {
+  constructor(app, shared, crowds, crews, ground, settlements = null, scale = 0.0336) {
     this.app = app
+    // world units to the metre, for the people as for the vessels they stand by
+    this.S = scale
     this.crowds = crowds
     this.crews = crews
     this.ground = ground
@@ -111,9 +139,10 @@ export class People {
     const F = () => new Float32Array(n1)
     const U = () => new Uint8Array(n1)
     const I = () => new Int8Array(n1)
-    this.f = { src: U(), rec: new Uint16Array(n1), mode: U(), row: F(), x: F(), z: F(), hx: F(), hz: F(), dx: I(), dy: I(), face0: new Int8Array(n1).fill(-1), thr: F(), ph: F(), tm: F(), st: U(), tt: F(), s: F(), lat: F(), spd: F(), grp: new Int32Array(n1), vis: F(), face: U(), fr: U(), k: F(), gm: F(), gx: F(), gz: F(), wet: U(), built: U(), tint: F(), mir: I(), mx: F(), mz: F() }
+    this.f = { src: U(), rec: new Uint16Array(n1), mode: U(), row: F(), x: F(), z: F(), hx: F(), hz: F(), dx: I(), dy: I(), talk: U(), thr: F(), ph: F(), tm: F(), st: U(), tt: F(), s: F(), lat: F(), spd: F(), grp: new Int32Array(n1), vis: F(), face: U(), fr: U(), k: F(), gm: F(), gx: F(), gz: F(), wet: U(), built: U(), tint: F(), mir: I(), mx: F(), mz: F() }
     const f = this.f
     const rand = mulberry32(1976)
+    this.rowOf = specs.map((sp) => sp.row)
     specs.forEach((sp, i) => {
       f.src[i] = sp.src
       f.rec[i] = sp.rec
@@ -125,7 +154,7 @@ export class People {
       f.hz[i] = sp.hz
       f.dx[i] = sp.dx
       f.dy[i] = sp.dy
-      f.face0[i] = sp.face0 ?? -1
+      f.talk[i] = sp.talk ? 1 : 0
       f.thr[i] = sp.thr ?? rand()
       f.ph[i] = sp.ph ?? rand()
       f.tm[i] = 1 + rand() * 8
@@ -177,7 +206,6 @@ export class People {
     this.group = new THREE.Group()
     this.group.name = 'people'
     this.group.add(this.shadows, this.mesh)
-    this.scale = new Scale()
     this.view = { rx: 1, rz: 0, ax: 0, az: -1, sinP: 0.5 }
     this.time = 0
     this.frame = 0
@@ -254,7 +282,10 @@ export class People {
     c.area = Math.max(1e-6, areaOf(ring) - rings.slice(1).reduce((a, h) => a + areaOf(h), 0))
     // (world units are 100 m: the area in m² is 10⁴ times it)
     const want = Number.isFinite(p.count) ? p.count : Number.isFinite(p.density) ? p.density * c.area * 1e4 : 200
-    const n = Math.max(1, Math.min(MAX_PER_CROWD, Math.round(want)))
+    // (drawn at the scene's scale, larger than life on ground of its true size, a figure stands for as
+    // many people as it is times taller than life, so a crowd that filled a beach fills it here and
+    // does not bury it)
+    const n = Math.max(1, Math.min(MAX_PER_CROWD, Math.round(want * Math.min(1, 0.01 / this.S))))
     c.wanted = Math.round(want)
     const facing = p.facing
     const bearing = Number.isFinite(facing) ? [Math.sin((facing * Math.PI) / 180), -Math.cos((facing * Math.PI) / 180)] : null
@@ -317,13 +348,31 @@ export class People {
           const ph = rand()
           grp++
           for (let q = 0; q < size; q++) {
-            // set apart across the screen by whole sprite pixels, a row behind for a big knot
-            const back = k === 'gather' && q >= 4 ? 1 : 0
-            const slot = back ? q - 4 : q
-            const span = (back ? size - 4 : Math.min(size, 4)) - 1
-            const dx = Math.round((slot - span / 2) * (k === 'chant' ? 7 : 6) + (rand() - 0.5) * 2)
+            // a knot a step or two across (a chant in a row across the way it faces), each on dry ground
+            const step = 0.8 * this.S
+            let px
+            let pz
+            if (k === 'chant') {
+              const u = (q - (size - 1) / 2) * step
+              px = at[0] - h[1] * u
+              pz = at[1] + h[0] * u
+            } else {
+              const a = (q / size) * Math.PI * 2 + rand() * 0.6
+              const r = q ? step * (0.9 + rand() * 0.6) : 0
+              px = at[0] + Math.cos(a) * r
+              pz = at[1] + Math.sin(a) * r
+            }
+            if (!inPoly(rings, px, pz) || this.ground(px, pz) < 0.4) {
+              px = at[0]
+              pz = at[1]
+            }
             const mode = k === 'chant' ? MODE.chant : MODE.stand
-            specs.push({ src: 0, rec: ci, mode, row: row(body(mode)), x: at[0], z: at[1], hx: h[0], hz: h[1], dx, dy: back * 2, grp, thr, ph: k === 'chant' ? ph : rand(), face0: talk ? (dx < 0 ? FACE.right : dx > 0 ? FACE.left : -1) : -1 })
+            // (those talking among themselves face the knot's middle)
+            const tx = at[0] - px
+            const tz = at[1] - pz
+            const tl = Math.hypot(tx, tz)
+            const fh = talk && tl > 1e-6 ? [tx / tl, tz / tl] : h
+            specs.push({ src: 0, rec: ci, mode, row: row(body(mode)), x: px, z: pz, hx: fh[0], hz: fh[1], dx: 0, dy: 0, grp, thr, ph: k === 'chant' ? ph : rand(), talk: fh !== h })
             c.by[k]++
           }
           m -= size
@@ -423,24 +472,18 @@ export class People {
     const clearV = clear ? `${S.yearCleared}/${S.townsCleared}` : ''
     const restamp = clearV !== this._clearV
     this._clearV = clearV
-    const d0 = app.rig?.state?.distance ?? 16
-    const sc = this.hold ? this.scale : this.scale.step(wantScale(d0, dpr), dt, 2, Math.max(2, Math.round(4 * dpr)))
-    const unit = ((sc.L / dpr) * d0 * 2 * tanH) / Math.max(1, innerHeight)
-    this.unit = unit
+    // device pixels a world unit spans at a unit's distance; a person's height in world units
+    const pxPer = size.y / (2 * tanH)
+    const figW = FIG_M * this.S
+    const walkW = WALK_MS * this.S
     const fade = dt > 0 ? dt / FADE_S : 1
-    const kA = sc.k
-    const tB = sc.t
-    const drawA = tB <= 15.5 / 16
-    const drawB = tB > 0.5 / 16
+    const tq = this._tq || (this._tq = [0, 0, 0])
     const foot = this.aFoot.array
     const cell = this.aCell.array
     const draw = this.aDraw.array
     const mix = this.aMix.array
     const M = this.marks
     const cap = this.cap
-    // how many of a crowd the polygon holds on the screen: about a figure to every 4 by 3 sprite pixels of it
-    // (about a figure to every 6 by 5 sprite pixels of the screen, the ground foreshortened by the pitch)
-    for (const c of this.crowds) c.fit = Math.min(1, c.area / Math.max(1e-9, c.n * 6 * unit * ((5 * unit) / V.sinP)))
     let j = 0
     let figures = 0
     let wanted = 0
@@ -468,7 +511,7 @@ export class People {
         speed = tmp[5]
       } else {
         const c = this.crowds[f.rec[i]]
-        w = c.w * show * c.fit * this.thin
+        w = c.w * show * this.thin
         if (w <= 0.002 && f.vis[i] <= 0) continue
       }
       let on = crew ? w > 0.01 : w > f.thr[i]
@@ -476,7 +519,7 @@ export class People {
         const c = this.crowds[f.rec[i]]
         const A = c.axis
         const L = A.hi - A.lo
-        let s = f.s[i] + (GAIT * unit * f.spd[i] * dt) / Math.max(1e-6, L)
+        let s = f.s[i] + (walkW * f.spd[i] * dt) / Math.max(1e-6, L)
         if (s > 1) s -= 1
         f.s[i] = s
         const along = A.lo + s * L
@@ -526,7 +569,7 @@ export class People {
             // (one walking looks as far ahead as it goes while it dissolves, so it is gone before it
             // reaches the water or a building, and back once past)
             const c = this.crowds[f.rec[i]]
-            const r = GAIT * unit * f.spd[i] * FADE_S * 1.5
+            const r = walkW * f.spd[i] * FADE_S * 1.5
             const ax = x + c.axis.ux * r
             const az = z + c.axis.uz * r
             if (app.world.metresAt(ax, az) < 0.15 || (clear && builtAt(clear, S.clearN, cr, ax, az))) f.wet[i] = 2
@@ -539,6 +582,10 @@ export class People {
       const gy = Math.max(metres, 0) * vert
       const depth = (x - cx) * fx + (gy - cy) * fy + (z - cz) * fz
       if (depth < 0.05) on = false
+      // how tall it stands on the screen, and so the size it is drawn at; too small, gone or thinning
+      const hpx = (figW * pxPer) / Math.max(0.05, depth)
+      if (hpx < GONE || (hpx < GONE + 1 && f.thr[i] > hpx - GONE)) on = false
+      tierOf(hpx, tq)
       if (on && !crew) wanted++
       let vis = f.vis[i]
       vis = on ? Math.min(1, vis + fade) : Math.max(0, vis - fade)
@@ -550,13 +597,13 @@ export class People {
         f.mx[i] = x
         f.mz[i] = z
       }
-      let facing = f.face0[i] >= 0 ? f.face0[i] : this.faceOf(hx, hz, f.face[i])
+      const facing = this.faceOf(hx, hz, f.face[i])
       f.face[i] = facing
       const mirror = facing === FACE.left ? -1 : facing === FACE.right ? 1 : f.mir[i]
       const [first] = ANIM[anim]
       f.fr[i] = first + fi
-      const k = tB < 0.5 ? kA : kA + 1
-      f.k[i] = vis > 0 ? k : 0
+      // (for the tools: the size drawn, the nearer of two in a crossfade: 1 tiny, 2 small, 3 a whole sprite at 1 …)
+      f.k[i] = vis > 0 ? 1 + (tq[2] < 0.5 ? tq[0] : tq[1]) : 0
       const m4 = i * 4
       M[m4] = x
       M[m4 + 1] = z
@@ -565,26 +612,39 @@ export class People {
       f.gm[i] = crew ? metres : f.gm[i]
       if (vis <= 0 || figures >= cap) continue
       figures++
-      const cellX = (COLUMN[facing] * FRAMES + first + fi) * SW
+      const rowO = this.rowOf[i]
+      const waving = anim === 'wave' && fi === 0
+      // the size it comes from, keeping its part of the dither, and the one it goes to the rest
       for (let cc = 0; cc < 2; cc++) {
-        if (cc === 0 ? !drawA : !drawB) continue
+        const q = cc === 0 ? tq[0] : tq[1]
+        const t = tq[2]
+        if (cc === 0 ? t > 15.5 / 16 : tq[1] === tq[0] || t <= 0.5 / 16) continue
         const o = j * 4
         foot[o] = x
         foot[o + 1] = metres
         foot[o + 2] = z
         foot[o + 3] = crew ? 0.02 : 0
-        cell[o] = cellX
-        cell[o + 1] = f.row[i]
-        cell[o + 2] = SW
-        cell[o + 3] = SH
-        draw[o] = cc === 0 ? kA : kA + 1
+        if (q < 2) {
+          const r = this.sheet.far(rowO, q === 0 ? 'tiny' : 'small', waving)
+          cell[o] = r[0]
+          cell[o + 1] = r[1]
+          cell[o + 2] = r[2]
+          cell[o + 3] = r[3]
+          draw[o] = 1
+        } else {
+          cell[o] = (COLUMN[facing] * FRAMES + first + fi) * SW
+          cell[o + 1] = f.row[i]
+          cell[o + 2] = SW
+          cell[o + 3] = SH
+          draw[o] = q - 1
+        }
         draw[o + 1] = mirror * f.tint[i]
         draw[o + 2] = vis
-        draw[o + 3] = f.dx[i]
-        mix[o] = cc === 0 ? tB : 0
-        mix[o + 1] = cc === 0 ? 1 : tB
-        mix[o + 2] = f.dy[i]
-        mix[o + 3] = crew ? 0 : SW
+        draw[o + 3] = 0
+        mix[o] = cc === 0 ? t : 0
+        mix[o + 1] = cc === 0 ? 1 : t
+        mix[o + 2] = 0
+        mix[o + 3] = crew || q < 2 ? 0 : SW
         j++
       }
     }
@@ -623,33 +683,21 @@ export class People {
     for (let i = 0; i < this.count; i++) {
       if (f.vis[i] <= 0 || (src !== null && f.src[i] !== src)) continue
       const walk = f.mode[i] === MODE.walk
-      out.push({ i, crowd: f.src[i] === 0 ? this.crowds[f.rec[i]].id : null, vessel: f.src[i] === 1 ? this.crews[f.rec[i]].vessel : null, mode: modes[f.mode[i]], x: walk ? f.mx[i] : f.x[i], z: walk ? f.mz[i] : f.z[i], hx: f.hx[i], hz: f.hz[i], gm: f.gm[i], fr: f.fr[i], face: f.face[i], k: f.k[i] })
+      out.push({ i, talk: f.talk[i] === 1, crowd: f.src[i] === 0 ? this.crowds[f.rec[i]].id : null, vessel: f.src[i] === 1 ? this.crews[f.rec[i]].vessel : null, mode: modes[f.mode[i]], x: walk ? f.mx[i] : f.x[i], z: walk ? f.mz[i] : f.z[i], hx: f.hx[i], hz: f.hz[i], gm: f.gm[i], fr: f.fr[i], face: f.face[i], k: f.k[i] })
     }
     return out
   }
 
-  /** For the tools: where figure i stands on the screen, as the shader puts it (target pixels from the top left). */
-  screenRect(i) {
-    const f = this.f
-    if (f.vis[i] <= 0 || !f.k[i]) return null
-    const cam = this.app.camera
-    const walk = f.mode[i] === MODE.walk
-    const v = this._v4.set(walk ? f.mx[i] : f.x[i], Math.max(f.gm[i], 0) * this.app.world.uniforms.uVert.value, walk ? f.mz[i] : f.z[i], 1)
-    v.applyMatrix4(cam.matrixWorldInverse).applyMatrix4(cam.projectionMatrix)
-    if (v.w <= 0) return null
-    const Wd = this.own.uViewport.value.x
-    const Ht = this.own.uViewport.value.y
-    const k = f.k[i]
-    const px = Math.floor(((v.x / v.w) * 0.5 + 0.5) * Wd + 0.5) + f.dx[i] * k
-    const py = Math.floor(((v.y / v.w) * 0.5 + 0.5) * Ht + 0.5) + f.dy[i] * k
-    return { x: px - (SW * k) / 2, y: Ht - py - SH * k, w: SW * k, h: SH * k, k }
-  }
-
   stats() {
     const f = this.f
-    const out = { planned: this.count, crew: this.count - this.crewFrom, drawn: this.drawn, instances: this.instances, k: this.scale.k, t: +this.scale.t.toFixed(3), by: {}, crowds: this.crowds.map((c) => ({ id: c.id, planned: c.n, wanted: c.wanted, by: c.by, w: +c.w.toFixed(2) })) }
+    const out = { planned: this.count, crew: this.count - this.crewFrom, drawn: this.drawn, instances: this.instances, sizes: {}, by: {}, crowds: this.crowds.map((c) => ({ id: c.id, planned: c.n, wanted: c.wanted, by: c.by, w: +c.w.toFixed(2) })) }
     const modes = Object.keys(MODE)
-    for (let i = 0; i < this.count; i++) if (f.vis[i] > 0) out.by[modes[f.mode[i]]] = (out.by[modes[f.mode[i]]] || 0) + 1
+    const names = ['tiny', 'small', ...TIERS.slice(2).map((_, q) => `k${q + 1}`)]
+    for (let i = 0; i < this.count; i++) {
+      if (f.vis[i] <= 0) continue
+      out.by[modes[f.mode[i]]] = (out.by[modes[f.mode[i]]] || 0) + 1
+      if (f.k[i]) out.sizes[names[f.k[i] - 1]] = (out.sizes[names[f.k[i] - 1]] || 0) + 1
+    }
     return out
   }
 

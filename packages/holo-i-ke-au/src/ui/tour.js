@@ -33,6 +33,7 @@
 // prologue frames what the plate carried where it stood at the step's age.
 
 import { geometryPoint } from '../geo.js'
+import { MIN_DISTANCE } from '../config.js'
 import { eventSpan, eventStart } from '../time.js'
 import { preferredPitch, CHAIN_REACH } from '../render/camera.js'
 import { driftAt } from '../data/geology.js'
@@ -310,6 +311,7 @@ export class Tour {
   goTo(c, s = -1, { jump = false, gentle = false, stop = -1, forward = false } = {}) {
     const ch = this.chapterAt(c)
     if (!ch) return
+    this.closeFloor(null)
     this.active = true
     this.chapter = c
     this.step = clamp(s, -1, ch.events.length - 1)
@@ -385,6 +387,7 @@ export class Tour {
     const place = s ? this.places.get(s.place) : null
     const pt = place && geometryPoint(place.geometry)
     ui.pins.setStopPlace(pt ? place : null)
+    this.closeFloor(s?.camera)
     this.prefetch(ev)
     if (s) {
       // a stop's own camera, if it has one; else its place at its zoom
@@ -673,6 +676,18 @@ export class Tour {
    * place low in the frame and look past it (Kou, below the valley it
    * looks up); the pin stays at the place.
    */
+  /**
+   * A near stop whose camera stands closer than the rig's own floor (a
+   * departure's scene, framed at a few hundred metres: DATA.md "Vessels and
+   * crowds") lowers the floor to it while the tour is on that stop; any other
+   * step puts it back.
+   */
+  closeFloor(cam) {
+    const rig = this.app.rig
+    if (!rig) return
+    rig.minDistance = Number.isFinite(cam?.distance) ? Math.min(MIN_DISTANCE, Math.max(1, cam.distance)) : MIN_DISTANCE
+  }
+
   cameraView(place, cam) {
     const at = Array.isArray(cam.target) && cam.target.length >= 2 && cam.target.every(Number.isFinite) ? cam.target : geometryPoint(place.geometry)
     const [x, z] = this.app.data.proj.toWorld(at)

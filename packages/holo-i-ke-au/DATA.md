@@ -1887,7 +1887,8 @@ Hōkūleʻa, 1976; a fleet's landing), two more feature kinds in a district's
     first its `when` and the last its `until`. Without them the moments are
     shared out between `when` and `until` over the segments by their lengths
     at each behaviour's pace (paddle 1.6, tow 2.4, sail and under way 3.0
-    m/s), a `moored` or `anchor` segment taking what is left over.
+    m/s), a `moored` or `anchor` segment taking what is left over (with
+    none, the pace stretched to reach `until`).
   - A `moored` or `anchor` segment holds the vessel at its start (the checker
     fails one longer than 50 m); the vessel heads the way its next moving
     segment goes. One more behaviour, `under-way`, for a vessel moving under
@@ -1902,17 +1903,25 @@ Hōkūleʻa, 1976; a fleet's landing), two more feature kinds in a district's
     vessels and crowds stand at. A stop without one takes it from the
     principal vessel of the stop (the waʻa kaulua the others escort, else
     the first that escorts nothing). A principal that is a feature of its own
-    for the stop (one feature per stop, as at Honolua) is taken at the start
-    of its first moving segment less a quarter of the loop when it holds
-    before it (so the loop sees it cast off), at its `when` if it only holds,
-    and, under way throughout, with the loop centred where it passes nearest
+    for the stop (one feature per stop, as at Honolua) is taken at its
+    `when` if it only holds; one that moves is taken under way, from its
+    first moving segment on, a sixth of the loop before it passes nearest
     the stop's camera `target` (else its place); one track shown at several stops is taken, at its k-th stop, at
     the start of its k-th run of segments of one behaviour (its first stop
     its first run, `moored`; its second the next, `tow`; and so on). From
-    that moment the scene runs at four times life for 45 seconds, or to the
+    that moment the scene runs at twice life for 45 seconds, or to the
     next stop's moment, and begins again.
   - A crowd's `behaviour` may be a list (equal shares) or shares
     (`{ "gather": 0.6, "wave": 0.4 }`); `facing` is `sea` (each figure toward
     the nearest water) or a compass bearing; a crowd may be a MultiPolygon;
-    `count` is drawn up to 8,000, and the figures thin on the screen to about
-    as many as the polygon holds there, as the battles' do.
+    `count` is drawn up to 8,000.
+  - The people of a scene stand at the scene's own scale, the vessels'
+    (a person of 1.7 m beside an 18.9 m hull), not at the battles' readable
+    floor: each figure is as tall on the screen as its distance makes it, a
+    small or a tiny figure where that is less than a whole sprite, and gone
+    under about three pixels. Drawn larger than life on ground of its true
+    size, one figure stands for as many people as it is times taller than
+    life.
+  - A near stop's camera may stand as close as 1 world unit (100 m); the
+    rig's floor follows it while the tour is on that stop (`ui/tour.js`
+    `closeFloor`).
