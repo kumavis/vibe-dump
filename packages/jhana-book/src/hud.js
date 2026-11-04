@@ -1,4 +1,4 @@
-// hud.js — the quiet DOM layer: dots, edge arrows, sound toggle, breath ring,
+// hud.js — the quiet DOM layer: dots, edge arrows, sound and guide toggles, breath ring,
 // first-load hint, "begin again"; plus all reader input (click halves, keys,
 // swipe, drag-orbit) routed to callbacks.
 
@@ -6,7 +6,7 @@ const DEG = Math.PI / 180
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
 
 export class Hud {
-  // opts: { canvas, titles, lines, nohud, orbit, onPrev, onNext, onDot, onSound, onAgain }
+  // opts: { canvas, titles, lines, nohud, orbit, onPrev, onNext, onDot, onSound, onGuide, onAgain }
   constructor(opts) {
     this.o = opts
     this.el = document.getElementById('hud')
@@ -14,6 +14,7 @@ export class Hud {
     this.hintEl = document.getElementById('hint')
     this.ringEl = document.querySelector('#breath span')
     this.soundEl = document.getElementById('sound')
+    this.guideEl = document.getElementById('guide')
     this.againEl = document.getElementById('again')
     this.prevEl = document.getElementById('arrow-prev')
     this.nextEl = document.getElementById('arrow-next')
@@ -53,6 +54,7 @@ export class Hud {
     button(this.nextEl, opts.onNext)
     button(this.againEl, opts.onAgain)
     button(this.soundEl, opts.onSound)
+    if (opts.onGuide) button(this.guideEl, opts.onGuide)
 
     this.bindPointer(opts.canvas)
     this.bindKeys()
@@ -180,9 +182,15 @@ export class Hud {
     this.hintEl.classList.add('gone')
   }
 
-  // For screen readers: the text printed on the spread at rest n (0…11).
-  announce(n) {
-    const text = (n >= 1 && n <= 10 && this.lines[n - 1]) || 'The Jhānas, a pop-up book'
+  // For screen readers: the text printed on the spread at rest n (0…11), plus
+  // the guide line showing there if it has moved on from the printed one.
+  announce(n, extra = '') {
+    const base = (n >= 1 && n <= 10 && this.lines[n - 1]) || 'The Jhānas, a pop-up book'
+    this.say(extra ? `${base} ${extra}` : base)
+  }
+
+  // A new guide line (or any short text) for the live region.
+  say(text) {
     if (this.liveEl && this.liveEl.textContent !== text) this.liveEl.textContent = text
   }
 
@@ -201,6 +209,12 @@ export class Hud {
     // the ring's fill swells from a seed to the full 22 px circle
     this.ringEl.style.transform = `scale(${(0.32 + 0.68 * b).toFixed(3)})`
     this.ringEl.style.opacity = (0.18 + 0.32 * b).toFixed(3)
+  }
+
+  setGuide(on) {
+    this.guideEl.classList.toggle('on', on)
+    this.guideEl.setAttribute('aria-pressed', on ? 'true' : 'false')
+    this.guideEl.title = on ? 'Guide on' : 'Guide off'
   }
 
   setSound(on) {

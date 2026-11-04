@@ -74,6 +74,12 @@ const GHOST_GAIN = [0.11, 0.12, 0.035, 0.1, 0.1, 0.07, 0.035, 0.04]
 // such a point covers tan(17°) world units, so the sprites scale by that.
 const GHOST_SCALE = Math.tan((17 * PI) / 180)
 
+// The story layer (DESIGN.md addendum). `stage` chases frame.beat with
+// STAGE_TAU (≈ 3 s to settle), so the vellum never changes in a step.
+const STAGE_TAU = 1.0
+const THIN = 0.06 // beat 1: every veil's opacity drops this much
+const THIN_PULL = 0.08 // the pull tab thins them this much further while held
+
 export default {
   id: 'jhana-8',
   label: '8',
@@ -205,10 +211,18 @@ function build(ctx) {
   group.add(pearl)
 
   let lastPhase = 'out'
+  let stage = -1 // the eased beat (−1 until the first frame, which snaps)
 
   return {
     update(frame) {
-      const { reveal, breath, breathPhase, time } = frame
+      const { reveal, breath, breathPhase, time, dt } = frame
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      stage = stage < 0 ? beat : stage + (beat - stage) * (1 - Math.exp(-dt / STAGE_TAU))
+      // beat 1 "Let the vastness go too": the veils thin one step; the pull thins them more
+      const thin = THIN * clamp(stage, 0, 1) + THIN_PULL * pull
+      // beat 3 "Too fine to call it perceiving": the ghosts fade, every other one almost away
+      const fine = clamp(stage - 2, 0, 1)
 
       // A new breath begins: the ghosts (invisible at the bottom of the
       // out-breath) choose new places, close to but not where they were.
@@ -220,7 +234,7 @@ function build(ctx) {
       const b = smooth(breath)
       for (let i = 0; i < veilMats.length; i++) {
         const vm = veilMats[i]
-        vm.mat.opacity = vm.base * (1 - 0.2 * b) * (0.35 + 0.65 * reveal)
+        vm.mat.opacity = Math.max(0.05, vm.base - thin) * (1 - 0.2 * b) * (0.35 + 0.65 * reveal)
       }
 
       const out = breathPhase === 'out'
@@ -228,7 +242,7 @@ function build(ctx) {
       for (let i = 0; i < n; i++) {
         // arrive late or early in the in-breath; leave with the out-breath
         const a = out ? b : smooth((breath - lag[i]) / (1 - lag[i]))
-        const k = vis * weight[i] * a * GHOST_GAIN[i]
+        const k = vis * weight[i] * a * GHOST_GAIN[i] * (1 - fine * (i % 2 ? 0.85 : 0.3))
         const s = ghosts[i]
         s.material.color.copy(tint[i % tint.length]).multiplyScalar(k)
         // dissolving: swell and rise a little as the breath leaves

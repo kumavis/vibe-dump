@@ -51,6 +51,16 @@ const MOTE_ZC = -0.06
 const MOTE_PHASE = -0.95 // where the ellipse starts (front-left of the card)
 const MOTE_SIZE = 0.26 // world size of the sprite (halo included)
 
+// ---- the story layer (DESIGN.md addendum) ----------------------------------------
+// Beats only take things away here. `stage` chases frame.beat with STAGE_TAU
+// (≈ 4 s to settle: the slowest spread in the book).
+//   beat 2 "Nothing.": the thread fades out, the mote eases to rest and stops
+//     breathing — a steady faint glow;
+//   beat 3 "Rest in that.": the mote's little light steps down once more.
+// The pull tab deliberately does nothing on this spread: there is nothing here
+// to pull on, and an answering movement would contradict the page.
+const STAGE_TAU = 1.3
+
 export default {
   id: 'jhana-7',
   label: '7',
@@ -147,9 +157,21 @@ function build(ctx) {
   glow.castShadow = false
   group.add(glow)
 
+  let stage = -1 // the eased beat (−1 until the first frame, which snaps)
+  let clock = 0 // the mote's own clock: it slows to a stop at "Nothing."
+
   return {
     update(frame) {
-      const { time, reveal, breath, theta } = frame
+      const { reveal, theta, dt } = frame
+      const beat = frame.beat ?? 0 // (frame.pull is ignored on purpose: see STAGE_TAU above)
+      stage = stage < 0 ? beat : stage + (beat - stage) * (1 - Math.exp(-dt / STAGE_TAU))
+      const nothing = clamp(stage - 1, 0, 1) // beat 2: thread gone, mote at rest
+      const rest = clamp(stage - 2, 0, 1) // beat 3: the light one step lower
+      // the mote's clock runs slower and slower and stops as "Nothing." settles
+      clock += dt * (1 - nothing)
+      const time = clock
+      // and it stops brightening with the breath: one steady, faint glow
+      const breath = frame.breath * (1 - nothing)
 
       // A slow, never-quite-repeating ellipse around the card (~6 minutes per
       // turn), with a gentle rise and fall on a different clock.
@@ -176,10 +198,15 @@ function build(ctx) {
       // Brightens faintly on the in-breath; gone before the pages meet.
       const lit = reveal * reveal
       const b = breath * breath * (3 - 2 * breath)
-      moteMat.opacity = lit * (0.62 + 0.38 * b)
+      moteMat.opacity = lit * (0.62 + 0.38 * b) * (1 - 0.25 * nothing)
       moteMat.size = MOTE_SIZE * (0.92 + 0.14 * b)
       mote.visible = lit > 0.002
-      glow.intensity = lit * (0.07 + 0.03 * b) // stays visible: a light count change recompiles shaders
+      // beat 3: its light steps down to about half
+      glow.intensity = lit * (0.07 + 0.03 * b) * (1 - 0.5 * rest) // stays visible: a light count change recompiles shaders
+
+      // beat 2: the printed thread fades away (about 4 s); gone, it stops drawing
+      threadMatR.opacity = threadMatL.opacity = 1 - nothing
+      threads[0].visible = threads[1].visible = nothing < 0.995
     },
     dispose() {
       moteGeo.dispose()

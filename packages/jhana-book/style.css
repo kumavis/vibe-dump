@@ -250,6 +250,45 @@ body {
   display: none;
 }
 
+/* the guide lamp: the sound toggle's quiet twin, just left of it */
+#guide {
+  position: absolute;
+  right: calc(54px + env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  opacity: 0.55;
+  transition: opacity 0.4s ease;
+}
+
+#guide:hover {
+  opacity: 0.9;
+}
+
+#guide svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#guide.on .flame,
+#guide .dish {
+  fill: currentColor;
+  stroke: none;
+}
+
+#guide .glow {
+  display: none;
+}
+
+#guide.on .glow {
+  display: inline;
+}
+
 /* the page text, for screen readers only */
 .sr-only {
   position: absolute;
@@ -287,6 +326,8 @@ body {
   #hint,
   #again,
   .arrow,
+  #guide,
+  #sound,
   #dots .dot::after {
     transition: none;
   }

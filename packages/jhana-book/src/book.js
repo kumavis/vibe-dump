@@ -10,7 +10,16 @@ import * as THREE from 'three'
 import { W, H, LEAF, COVER, OVERHANG } from './dims.js'
 import { createLayout, layoutRest, layoutTurn } from './layout.js'
 import { Paper } from './paper.js'
-import { drawPage, drawCover, drawBackCover, drawClothTile, drawEdgeTile, toTexture } from './textures.js'
+import {
+  drawPage,
+  drawCover,
+  drawBackCover,
+  drawCaption,
+  captionSize,
+  drawClothTile,
+  drawEdgeTile,
+  toTexture,
+} from './textures.js'
 import { DEFAULT_AUDIO } from './audio.js'
 
 export { W, H, LEAF, COVER }
@@ -26,6 +35,16 @@ const smoothstep = (a, b, x) => {
   const t = clamp((x - a) / (b - a), 0, 1)
   return t * t * (3 - 2 * t)
 }
+
+// Guide captions (DESIGN.md, the story layer). A new line fades in over this
+// long while the old one fades out; the first advance waits for this many
+// in-breath starts at rest (= two full cycles after the one you arrived in),
+// then every in-breath start brings the next line.
+export const CAPTION_FADE = 2.5
+const FIRST_BEAT_INHALES = 3
+// Caption height above its page: clear of the paper's depth, far below anything
+// a reader could see as a gap.
+const CAPTION_LIFT = 0.0015
 
 export const TURN_SECONDS = 2.6
 export const JUMP_SECONDS = 1.8
@@ -156,7 +175,7 @@ class Solid {
 // Book
 // ---------------------------------------------------------------------------
 export class Book {
-  constructor({ scene, renderer, camera, scenes, quality = 'high' }) {
+  constructor({ scene, renderer, camera, scenes, quality = 'high', colophon = [] }) {
     this.renderer = renderer
     this.scene = scene // scene + camera: for renderer.compile() in prewarm
     this.camera = camera
@@ -179,7 +198,7 @@ export class Book {
     this.clothMat = new THREE.MeshStandardMaterial({ color: '#ffffff', map: cloth, roughness: 0.82, ...offset })
     this.edgeMat = new THREE.MeshStandardMaterial({ color: '#efe6d3', map: edge, roughness: 0.94, ...offset })
     const coverTex = toTexture(drawCover(quality === 'low' ? 768 : 1024), { anisotropy: aniso })
-    const backTex = toTexture(drawBackCover(512), { anisotropy: aniso })
+    const backTex = toTexture(drawBackCover(quality === 'low' ? 768 : 1024, colophon), { anisotropy: aniso })
     this.coverMat = new THREE.MeshStandardMaterial({ map: coverTex, roughness: 0.78, ...offset })
     this.backMat = new THREE.MeshStandardMaterial({ map: backTex, roughness: 0.82, ...offset })
 
@@ -220,6 +239,16 @@ export class Book {
       pageMB: plane(leftGeo, 'left'),
     }
 
+    // ---- captions --------------------------------------------------------------
+    // The right page's line lives on a caption plane over the page's near strip
+    // (same texel density as the page), parented to whichever right-type page
+    // plane (pageR or pageMF) shows that spread's right page.
+    this.captionDims = captionSize(this.pageWidth)
+    const cd = this.captionDims.depth
+    this.captionGeo = new THREE.PlaneGeometry(W, cd)
+      .rotateX(-PI / 2)
+      .translate(W / 2, CAPTION_LIFT, H / 2 - cd / 2)
+
     // ---- spreads -------------------------------------------------------------
     this.spreads = scenes.map((mod, index) => ({
       index,
@@ -234,6 +263,10 @@ export class Book {
       visible: false,
       mats: { left: null, right: null },
       frame: null,
+      caption: null, // see caption()
+      beat: 0, // guide beat reached (0 = `line`), remembered across visits
+      inhales: 0, // in-breath starts counted during this visit at rest
+      wasActive: false,
     }))
     this.palettes = scenes.map((m) => ({ ...BOOK_PALETTE, ...(m.palette || {}) }))
     this.bookColors = { bg: new THREE.Color(BOOK_PALETTE.bg), accent: new THREE.Color(BOOK_PALETTE.accent) }
@@ -252,6 +285,13 @@ export class Book {
     this.pointer = { x: 0, y: 0 } // shared with every frame (main eases it)
     this.onTurnStart = null // (toN, fromN) → void
     this.onArrive = null // (n) → void
+    this.onBeat = null // (spreadIndex, beat, text) → void, when a guide line advances
+
+    // ---- guide ---------------------------------------------------------------
+    this.guide = true // off: captions show `line`, frame.beat = the final beat
+    this.forceBeat = null // { k, beat } for ?beat: spread k always shows `beat`
+    this.forcePull = null // ?pull: frame.pull for every spread
+    this._phase = 'in' // last breath phase, to catch the start of an in-breath
   }
 
   // ---- queries ---------------------------------------------------------------
@@ -274,6 +314,35 @@ export class Book {
   audioFor(n) {
     const k = Book.spreadAt(n)
     return k < 0 ? DEFAULT_AUDIO : { ...DEFAULT_AUDIO, ...(this.spreads[k].mod.audio || {}) }
+  }
+
+  // Guide line `beat` of spread k (0 = the printed line).
+  lineFor(k, beat) {
+    const mod = this.spreads[k].mod
+    if (beat <= 0) return mod.line || ''
+    const g = mod.guide || []
+    return g[Math.min(beat, g.length) - 1] || mod.line || ''
+  }
+
+  // The line spread k's caption shows right now: its beat with the guide on,
+  // `line` (0) with it off; ?beat overrides either way.
+  shownBeat(k) {
+    const f = this.forceBeat
+    if (f && f.k === k) return f.beat
+    return this.guide ? this.spreads[k].beat : 0
+  }
+
+  // What frame.beat carries: the shown beat with the guide on; with it off the
+  // final beat, so a reader without the guide sees every picture in its
+  // complete resting state while the caption shows `line` only.
+  sceneBeat(k) {
+    const f = this.forceBeat
+    if (f && f.k === k) return f.beat
+    return this.guide ? this.spreads[k].beat : (this.spreads[k].mod.guide || []).length
+  }
+
+  setGuide(on) {
+    this.guide = !!on
   }
 
   paletteFor(n) {
@@ -402,6 +471,8 @@ export class Book {
       breathVel: 0,
       pointer: this.pointer,
       active: false,
+      beat: 0, // guide beat: 0 = `line`, k = guide[k − 1]; guide off → guide.length
+      pull: 0, // the pull tab, 0 … 1 (eased); ?pull forces it
     }
     try {
       sp.paper.update(PI)
@@ -427,6 +498,68 @@ export class Book {
     return sp.mats[side]
   }
 
+  // Spread k's caption: two planes (front / back) for the cross-fade, each with
+  // its own canvas redrawn once per beat: a copy of the right page's near strip
+  // with the line printed on it, so it is opaque paper. The back layer draws
+  // first at full opacity; the front fades in over it. Both carry the same
+  // paper, so only the type changes.
+  caption(k) {
+    const sp = this.spreads[k]
+    if (sp.caption) return sp.caption
+    const group = new THREE.Group()
+    group.name = `caption:${sp.mod.id}`
+    const page = this.pageMaterial(k, 'right').map.image
+    const layers = [0, 1].map(() => {
+      const c = drawCaption(document.createElement('canvas'), '', page, this.palettes[k].ink)
+      const tex = toTexture(c, { anisotropy: this.aniso })
+      const mat = new THREE.MeshStandardMaterial({
+        map: tex,
+        roughness: 0.9,
+        metalness: 0,
+        transparent: true,
+        depthWrite: false,
+        opacity: 0,
+      })
+      const mesh = new THREE.Mesh(this.captionGeo, mat)
+      mesh.castShadow = false
+      // opaque paper over the page: it must take the pop-ups' shadows as the
+      // page under it would (VSM, 1.5 mm up: no acne)
+      mesh.receiveShadow = true
+      mesh.visible = false
+      group.add(mesh)
+      return { canvas: c, tex, mat, mesh }
+    })
+    sp.caption = { group, layers, page, front: 0, beat: -1, fade: 1, attached: false }
+    return sp.caption
+  }
+
+  // Show `beat` on spread k's caption, cross-fading from what it showed. Snaps
+  // the first time (nothing to fade from) or while the spread is out of sight.
+  updateCaption(sp, beat, dt, snap) {
+    const cap = sp.caption
+    if (!cap) return
+    if (beat !== cap.beat) {
+      const first = cap.beat < 0
+      cap.front ^= 1
+      const L = cap.layers[cap.front]
+      drawCaption(L.canvas, this.lineFor(sp.index, beat), cap.page, this.palettes[sp.index].ink)
+      L.tex.needsUpdate = true
+      cap.beat = beat
+      cap.fade = first || snap ? 1 : 0
+    } else if (snap) cap.fade = 1
+    cap.fade = Math.min(1, cap.fade + dt / CAPTION_FADE)
+    const e = cap.fade * cap.fade * (3 - 2 * cap.fade)
+    const F = cap.layers[cap.front]
+    const B = cap.layers[cap.front ^ 1]
+    // after the paper (0), back before front
+    B.mesh.renderOrder = 2
+    F.mesh.renderOrder = 3
+    B.mat.opacity = 1
+    B.mesh.visible = e < 1
+    F.mat.opacity = e
+    F.mesh.visible = true
+  }
+
   // Get the neighbours of the resting spread ready ahead of time so a turn
   // never stalls: page textures, then the scene, then its shaders, one step
   // per frame in idle time. ensureBuilt() stays synchronous, so a turn that
@@ -448,6 +581,7 @@ export class Book {
             const map = this.pageMaterial(k, side).map
             if (this.renderer.initTexture) this.renderer.initTexture(map)
           }
+          this.caption(k)
         } else if (!sp.built) {
           this.ensureBuilt(k)
           sp.needsCompile = true
@@ -548,7 +682,10 @@ export class Book {
     this.look.accent.copy(from.accent).lerp(to.accent, t)
     this.look.open = 1 - L.closed
 
-    this.updateSpreads(dt, breath)
+    // the start of an in-breath: the moment a guide line may advance
+    const inhale = breath.phase === 'in' && this._phase === 'out'
+    this._phase = breath.phase
+    this.updateSpreads(dt, breath, inhale)
     this.prewarm()
   }
 
@@ -570,11 +707,23 @@ export class Book {
       // turned by (angle − π)
       mesh.rotation.z = mesh.userData.side === 'left' ? pg.angle - PI : pg.angle
       mesh.material = this.pageMaterial(pg.spread, mesh.userData.side)
+      if (mesh.userData.side === 'right') {
+        const cap = this.caption(pg.spread)
+        if (cap.group.parent !== mesh) mesh.add(cap.group)
+        cap.attached = true
+      }
+    }
+    // a caption whose right page is on no plane this frame leaves the scene
+    for (const sp of this.spreads) {
+      const cap = sp.caption
+      if (!cap) continue
+      if (!cap.attached && cap.group.parent) cap.group.parent.remove(cap.group)
+      cap.attached = false
     }
     this.root.position.x = L.offX
   }
 
-  updateSpreads(dt, breath) {
+  updateSpreads(dt, breath, inhale = false) {
     const L = this.layout
     const restSpread = !this.turn && !this.frozen ? Book.spreadAt(this.n) : -1
     for (const sp of this.spreads) sp._mounted = false
@@ -608,6 +757,23 @@ export class Book {
       f.breathPhase = breath.phase
       f.breathVel = breath.vel
       f.active = sp.index === restSpread
+      // guide beats: count in-breath starts while resting here with the guide on
+      if (f.active) {
+        if (!sp.wasActive) sp.inhales = 0
+        const forced = this.forceBeat && this.forceBeat.k === sp.index
+        const last = (sp.mod.guide || []).length
+        if (inhale && this.guide && !forced && sp.beat < last && ++sp.inhales >= FIRST_BEAT_INHALES) {
+          sp.beat++
+          if (this.onBeat) this.onBeat(sp.index, sp.beat, this.lineFor(sp.index, sp.beat))
+        }
+      }
+      sp.wasActive = f.active
+      f.beat = this.sceneBeat(sp.index)
+      f.pull = this.forcePull ?? 0
+      if (sp.caption) {
+        sp.caption.group.visible = shown
+        this.updateCaption(sp, this.shownBeat(sp.index), dt, !shown)
+      }
       if (!sp.updateFailed) {
         try {
           sp.paper.update(theta)
@@ -623,6 +789,7 @@ export class Book {
       if (!shown) sp.group.visible = false
     }
     for (const sp of this.spreads) {
+      if (!sp._mounted) sp.wasActive = false
       if (sp.visible && !sp._mounted) {
         sp.group.visible = false
         sp.visible = false

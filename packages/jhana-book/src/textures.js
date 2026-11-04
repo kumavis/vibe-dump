@@ -198,9 +198,11 @@ export function drawPage(mod, side, width = 1024) {
     }
     const t = fitLines(g, mod.title || '', h * 0.05, 0.84, maxW, '')
     const pali = mod.pali || ''
+    const hinge = mod.hinge || ''
     const ps = h * 0.024
+    const hs = h * 0.0205
     const lineH = t.size * 1.18
-    const block = t.lines.length * lineH + (pali ? ps * 1.9 : 0)
+    const block = t.lines.length * lineH + (pali ? ps * 1.9 : 0) + (hinge ? hs * 1.75 : 0)
     // centre the title block in the strip, nudged toward the page's middle
     let y = strip + (h - strip - block) / 2 + t.size * 0.9 - h * 0.006
     g.globalAlpha = 0.9
@@ -210,26 +212,72 @@ export function drawPage(mod, side, width = 1024) {
       g.fillText(line, cx, y)
       y += lineH
     }
+    // baseline of the last thing printed, for the next line to hang under
+    let base = y - lineH
     if (pali) {
+      base += t.size * 0.3 + ps * 1.75
       g.globalAlpha = 0.68
       g.font = `italic ${Math.round(ps)}px ${SERIF}`
       setSpacing(0.04, ps)
-      g.fillText(pali, cx, y - lineH + t.size * 0.3 + ps * 1.75)
+      g.fillText(pali, cx, base)
     }
-  } else {
-    const t = fitLines(g, mod.line || '', h * 0.036, 0.84, maxW, '')
-    const lineH = t.size * 1.3
-    const block = t.lines.length * lineH
-    let y = strip + (h - strip - block) / 2 + t.size * 0.95 - h * 0.006
-    g.globalAlpha = 0.86
-    g.font = `${Math.round(t.size)}px ${SERIF}`
-    setSpacing(0.02, t.size)
-    for (const line of t.lines) {
-      g.fillText(line, cx, y)
-      y += lineH
+    // the hinge line: what was let go of to arrive here (STORY.md, Layer 1)
+    if (hinge) {
+      base += hs * 1.75
+      g.globalAlpha = 0.6
+      g.font = `italic ${Math.round(hs)}px ${SERIF}`
+      setSpacing(0.03, hs)
+      g.fillText(hinge, cx, base)
     }
   }
+  // The right page's line is not printed: it is a caption plane (drawCaption)
+  // so the guide's lines can follow it (DESIGN.md, the story layer).
   g.globalAlpha = 1
+  return c
+}
+
+// The right page's near strip as its own canvas: the same pixels per unit as
+// the page (width px for W, NEAR_STRIP of its height), so text drawn here is
+// exactly as sharp as the printed title. It carries a copy of the page's own
+// strip under the text, so it is opaque paper: same grain, same mipmaps, same
+// shading as the printed type (an alpha-only caption reads bolder at a glance,
+// because the GPU filters it differently from the page).
+export const NEAR_STRIP = 0.25 // book units: the near strip's depth (z > H/2 − 0.25)
+export function captionSize(width = 1024) {
+  const h = Math.round((width * H) / W)
+  const sh = Math.round((h * NEAR_STRIP) / H)
+  return { w: width, h: sh, pageH: h, depth: (sh / h) * H }
+}
+
+// c: the caption canvas; page: the right page's canvas (drawPage); ink: CSS colour.
+export function drawCaption(c, text, page, ink) {
+  const { w, h: sh, pageH: h } = captionSize(page.width)
+  if (c.width !== w || c.height !== sh) {
+    c.width = w
+    c.height = sh
+  }
+  const g = c.getContext('2d')
+  g.globalAlpha = 1
+  g.drawImage(page, 0, h - sh, w, sh, 0, 0, w, sh)
+  if (!text) return c
+  g.save()
+  g.translate(0, sh - h) // page coordinates: the strip starts at h − sh
+  g.fillStyle = ink
+  g.textAlign = 'center'
+  g.textBaseline = 'alphabetic'
+  const strip = h * (1 - NEAR_STRIP / H) // as drawPage lays it out
+  const t = fitLines(g, text, h * 0.036, 0.84, w * 0.82, '')
+  const lineH = t.size * 1.3
+  const block = t.lines.length * lineH
+  let y = strip + (h - strip - block) / 2 + t.size * 0.95 - h * 0.006
+  g.globalAlpha = 0.86
+  g.font = `${Math.round(t.size)}px ${SERIF}`
+  if ('letterSpacing' in g) g.letterSpacing = `${(0.02 * t.size).toFixed(1)}px`
+  for (const line of t.lines) {
+    g.fillText(line, w / 2, y)
+    y += lineH
+  }
+  g.restore()
   return c
 }
 
@@ -368,20 +416,45 @@ export function drawCover(width = 1024) {
   return c
 }
 
-// Back cover, outside: blank cloth, one tiny mark (symmetric, so it reads the
-// same from either side).
-export function drawBackCover(width = 512) {
+// Back cover, outside: cloth, one tiny mark (symmetric) and, low and quiet in
+// the gilt, the colophon's lines.
+export function drawBackCover(width = 512, colophon = []) {
   const w = width
   const h = Math.round((width * (H + 2 * OVERHANG)) / (W + OVERHANG))
   const c = canvas(w, h)
   const g = c.getContext('2d')
   drawCloth(g, w, h, 12)
+  const lines = colophon.filter(Boolean)
+  const cs = w * 0.0195
+  const lh = cs * 1.55
+  const top = h * 0.905 - (lines.length - 1) * lh // last baseline at 0.905 h
   g.strokeStyle = GILT
   g.globalAlpha = 0.55
   g.lineWidth = Math.max(1, w / 400)
   g.beginPath()
-  g.arc(w / 2, h * 0.88, w * 0.022, 0, Math.PI * 2)
+  g.arc(w / 2, lines.length ? top - cs * 2.6 : h * 0.88, w * 0.022, 0, Math.PI * 2)
   g.stroke()
+  if (lines.length) {
+    // the board's u runs spine → outer, which on the closed back (spine on the
+    // right) reads mirrored: print the lines flipped so they read on the table
+    g.save()
+    g.translate(w, 0)
+    g.scale(-1, 1)
+    g.textAlign = 'center'
+    g.textBaseline = 'alphabetic'
+    g.font = `italic ${Math.round(cs)}px ${SERIF}`
+    if ('letterSpacing' in g) g.letterSpacing = `${(cs * 0.04).toFixed(1)}px`
+    lines.forEach((line, i) => {
+      const y = top + i * lh
+      g.globalAlpha = 0.5
+      g.fillStyle = 'rgba(0,0,0,0.6)'
+      g.fillText(line, w / 2, y + Math.max(1, w / 900))
+      g.globalAlpha = 0.5
+      g.fillStyle = GILT
+      g.fillText(line, w / 2, y)
+    })
+    g.restore()
+  }
   g.globalAlpha = 1
   return c
 }

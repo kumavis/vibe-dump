@@ -193,6 +193,13 @@ function floorLightTexture() {
   return toTexture(c)
 }
 
+// The story layer (DESIGN.md addendum). `stage` chases frame.beat with
+// STAGE_TAU (≈ 3 s to settle). Beats 1–4 ("Down the way you came" … "This is
+// where insight begins") warm the window light a step each; at beat 4 the
+// birds lift and glide a little higher. The orb never changes: steady now.
+const STAGE_TAU = 1.0
+const WARM = 4 // the last beat that warms the light
+
 function build(ctx) {
   const { group, paper, quality } = ctx
   const rnd = paper.rng('outro · return')
@@ -284,7 +291,7 @@ function build(ctx) {
   })
   const birdMat = mat('#7a5052', 0.9)
   made.push(acetate)
-  const glide = { v: 0 }
+  const glide = { v: 0, up: 0 } // up: beat 4, the birds ride higher
   const birds = []
   const addBird = (side, x, above, span, sign) => {
     const t = Math.abs(x) / SIN_A
@@ -299,7 +306,7 @@ function build(ctx) {
       length: rise,
       lift: (th) => {
         const open = Math.sin(th / 2) ** 2
-        return open * (0.36 + sign * glide.v)
+        return open * (0.36 - glide.up + sign * glide.v) // less tip toward the reader = higher
       },
     })
     const strip = paper.card(flap.panel, { length: rise - 0.012, z0: -0.004, z1: 0.004, material: acetate })
@@ -377,8 +384,22 @@ function build(ctx) {
     map: moteMap,
   })
 
+  // the window light's colours at beat 0 and fully warmed (no per-frame allocation)
+  const paneCool = new THREE.Color('#ffc887')
+  const paneWarm = new THREE.Color('#ffaa5c')
+  const floorCool = new THREE.Color('#ffc07e')
+  const floorWarm = new THREE.Color('#ffa257')
+  const sunCool = new THREE.Color('#ffc888')
+  const sunWarm = new THREE.Color('#ffb070')
+  let stage = -1 // the eased beat (−1 until the first frame, which snaps)
+
   return {
     update(frame) {
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      stage = stage < 0 ? beat : stage + (beat - stage) * (1 - Math.exp(-frame.dt / STAGE_TAU))
+      const warm = Math.min(WARM, Math.max(0, stage)) / WARM // beats 1–4: a quarter warmer each
+      const soar = Math.min(1, Math.max(0, stage - (WARM - 1))) // beat 4: the birds lift
       const rv = frame.reveal
       const b = frame.breath
       const on = rv > 0.002
@@ -395,16 +416,23 @@ function build(ctx) {
       orb.ring.material.opacity = rv * 0.07
       orb.lamp.intensity = rv * (0.3 + 0.06 * b)
 
-      // morning light: present, breathing only a little
-      sun.intensity = rv * (0.16 + 0.04 * b)
-      paneGlowMat.opacity = rv * (0.26 + 0.06 * b)
-      floorMat.opacity = rv * (0.24 + 0.06 * b)
+      // morning light: present, breathing only a little; each beat it warms
+      // (deeper gold, a little brighter); the pull tab makes it flare gently
+      const gain = 1 + 0.35 * warm + 0.45 * pull
+      sun.color.lerpColors(sunCool, sunWarm, warm)
+      paneGlowMat.color.lerpColors(paneCool, paneWarm, warm)
+      floorMat.color.lerpColors(floorCool, floorWarm, warm)
+      sun.intensity = rv * (0.16 + 0.04 * b) * gain
+      paneGlowMat.opacity = rv * (0.26 + 0.06 * b) * gain
+      floorMat.opacity = rv * (0.24 + 0.06 * b) * gain
       dawn.visible = on
       dawnMat.opacity = rv * (0.72 + 0.08 * b)
 
       // birds glide: a slow tilt toward / away from the reader and a slight roll
-      glide.v = 0.06 * (b - 0.5)
-      for (const bird of birds) bird.pivot.rotation.y = rv * bird.sign * 0.07 * (b - 0.5)
+      // beat 4: they rise (stand more upright on their strips) and glide wider
+      glide.up = 0.16 * soar
+      glide.v = 0.06 * (1 + 0.5 * soar) * (b - 0.5)
+      for (const bird of birds) bird.pivot.rotation.y = rv * bird.sign * 0.07 * (1 + 0.5 * soar) * (b - 0.5)
 
       motes.points.visible = on
       motes.material.opacity = rv * (0.35 + 0.3 * b)

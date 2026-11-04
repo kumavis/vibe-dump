@@ -35,6 +35,14 @@ const ALPHA = 1.12
 const GAMMA = Math.PI / 2
 const HORIZON_V = 0.3 // the painted horizon, as a fraction of the far card's height
 
+// The story layer (DESIGN.md addendum). Beats 1–4 ("Find the edges of
+// yourself" … "The edges give way") each push the vanishing point one step
+// further off: the far glow shrinks and dims a little, the painted distance
+// glows less, and a deeper, finer star field fills in. `stage` chases the beat
+// with this time constant (≈ 3 s to settle), so a beat is never a cut.
+const STAGE_TAU = 1.0
+const DEEP = 4 // the last beat that deepens the tunnel
+
 // z: apex on the spine · L: height (crease length) · R: half-width along the
 // glue line · r, sS: the opening's radius and the height its arch springs from
 const FRAMES = [
@@ -299,20 +307,49 @@ export default {
       },
       color: starColor,
     })
-    group.add(farDust.points, nearDust.points)
+    // The deeper field: smaller, fainter stars further off than the far
+    // field, invisible at beat 0 and filling in one step per beat.
+    const deepDust = createDust(THREE, paper.rng('jhana-5 deep dust'), {
+      count: Math.round(300 * n),
+      wrapX: 4.2,
+      place(rr, o) {
+        do {
+          o.x = (rr() * 2 - 1) * 4.2
+          o.y = 0.25 + Math.pow(rr(), 1.2) * 1.7
+        } while (tooLow(o.x, o.y))
+        o.z = -2.2 - rr() * 3.2
+        o.size = 0.014 + Math.pow(rr(), 4) * 0.03
+        o.drift = 0.003 + rr() * 0.004
+      },
+      color: starColor,
+    })
+    group.add(farDust.points, nearDust.points, deepDust.points)
+
+    let stage = -1 // the eased beat (−1 until the first frame, which snaps)
+    let clock = 0 // the dust's own clock, so the pull can speed the drift without a jump
 
     return {
       update(frame) {
-        const { reveal, breath, time, openness } = frame
+        const { reveal, breath, openness, dt } = frame
+        const beat = frame.beat ?? 0
+        const pull = frame.pull ?? 0
+        const target = Math.min(DEEP, Math.max(0, beat))
+        stage = stage < 0 ? target : stage + (target - stage) * (1 - Math.exp(-dt / STAGE_TAU))
+        const deep = stage / DEEP // 0 at the printed line, 1 at "The edges give way"
+        // pull tab: the stars drift (and twinkle) up to 3.5× faster while it is out
+        clock += dt * (1 + 2.5 * pull)
         const fade = reveal * Math.sqrt(reveal) // stars arrive late and leave early
-        farDust.update(time, openness, fade)
-        nearDust.update(time, openness, fade * 0.8)
-        // the far glow breathes: brighter on the in-breath, never off
-        backMat.emissiveIntensity = (0.1 + 0.2 * breath) * (0.35 + 0.65 * reveal)
-        glowMat.opacity = reveal * (0.22 + 0.3 * breath)
-        glow.scale.setScalar(0.34 + 0.08 * breath)
+        farDust.update(clock, openness, fade)
+        nearDust.update(clock, openness, fade * 0.8)
+        // beats 1–4: the deeper field fills in a quarter at a time
+        deepDust.update(clock, openness, fade * deep)
+        // the far glow breathes: brighter on the in-breath, never off; each beat
+        // it recedes (smaller, dimmer); the pull tab brightens it while held
+        backMat.emissiveIntensity = (0.1 + 0.2 * breath) * (0.35 + 0.65 * reveal) * (1 - 0.3 * deep + 0.8 * pull)
+        glowMat.opacity = reveal * (0.22 + 0.3 * breath) * (1 - 0.4 * deep + 0.9 * pull)
+        glow.scale.setScalar((0.34 + 0.08 * breath) * (1 - 0.3 * deep + 0.2 * pull))
         glow.visible = reveal > 0.002
-        light.intensity = reveal * (0.45 + 0.35 * breath)
+        light.intensity = reveal * (0.45 + 0.35 * breath) * (1 - 0.2 * deep + 0.4 * pull)
         // the printed grid surfaces as space opens (and is gone when shut)
         gridMat.opacity = 0.5 * reveal
         gridMat.visible = reveal > 0.01
@@ -326,6 +363,7 @@ export default {
       dispose() {
         farDust.dispose()
         nearDust.dispose()
+        deepDust.dispose()
         pierced.dispose()
         glowMat.dispose()
         backMat.dispose()

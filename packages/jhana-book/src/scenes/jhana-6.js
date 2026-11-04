@@ -19,6 +19,14 @@ const FLOOR = 0.1 // a wave stops when its answers get this faint
 const HEAT_TAU = 1.3 // how long a lit jewel takes to fade (s)
 const ATTACK_TAU = 0.22 // how softly a jewel brightens (s)
 
+// The story layer (DESIGN.md addendum). `stage` chases frame.beat with
+// STAGE_TAU (≈ 3 s to settle) so nothing changes as a cut.
+const STAGE_TAU = 1.0
+const UNISON_RISE = 1.4 // "Turn toward the knowing": all jewels swell together over this (s)…
+const UNISON_TAU = 2.2 // …then settle back into the ordinary waves with this time constant
+
+const smooth = (x) => x * x * (3 - 2 * x)
+
 export default {
   id: 'jhana-6',
   label: '6',
@@ -94,7 +102,7 @@ export default {
       heat[i] = Math.max(heat[i], e)
       firedWave[i] = wave
       const next = e * DECAY
-      if (next < FLOOR) return
+      if (next < floor) return
       const list = nbrs[i]
       for (let k = 0; k < list.length; k++) {
         const j = list[k]
@@ -109,6 +117,7 @@ export default {
       fire(net.origins[originIdx % net.origins.length], 1.15, time)
       originIdx++
     }
+    let floor = FLOOR // lowered at beat 3 so every wave carries one hop further
 
     // ---- one soft teal light above the net (no shadows) ---------------------------
     const light = new THREE.PointLight(new THREE.Color('#5ff0d6'), 0, 2.2, 2)
@@ -136,10 +145,35 @@ export default {
     group.add(motes.points)
 
     const setGlow = new Float32Array(net.sets.length)
+    let stage = -1 // the eased beat (−1 until the first frame, which snaps)
+    let unisonAt = -1 // when the all-together lighting began (−1: not yet)
+    let unisonDone = false // it happens once: the first time the reader reaches beat 2
 
     return {
       update(frame) {
         const { dt, time, reveal, breath, breathPhase, openness } = frame
+        const beat = frame.beat ?? 0
+        const pull = frame.pull ?? 0
+        const first = stage < 0
+        stage = first ? beat : stage + (beat - stage) * (1 - Math.exp(-dt / STAGE_TAU))
+        // beat 3 "It has no edge either": waves reach one hop further, glow rises ~15 %
+        const edgeless = Math.min(1, Math.max(0, stage - 2))
+        floor = FLOOR * (1 - 0.25 * edgeless) // DECAY = 0.75: one more answer before the cut-off
+        const lift = 1 + 0.15 * edgeless
+        // beat 2 "Turn toward the knowing": once, every jewel lights together
+        if (first && beat >= 2) unisonDone = true // arrived here already past it: don't replay
+        if (!unisonDone && beat === 2 && reveal > 0.3) {
+          unisonAt = time
+          unisonDone = true
+        }
+        let unison = 0
+        if (unisonAt >= 0) {
+          const u = time - unisonAt
+          unison = u < UNISON_RISE ? smooth(u / UNISON_RISE) : Math.exp(-(u - UNISON_RISE) / UNISON_TAU)
+          if (unison < 0.003 && u > UNISON_RISE) unisonAt = -1
+        }
+        // pull tab: the whole net lit at once, breathing, for as long as it is out
+        let all = 0.85 * unison + pull * (0.6 + 0.25 * breath)
 
         // a new wave on each in-breath (and one soon after the page first opens)
         if (breathPhase === 'in' && lastPhase === 'out' && reveal > 0.3) startWave(time)
@@ -165,8 +199,8 @@ export default {
         setGlow.fill(0)
         for (let i = 0; i < N; i++) {
           heat[i] *= fadeK
-          const base = 0.22 + 0.2 * breath + 0.05 * Math.sin(time * 0.31 + phase[i])
-          shown[i] += (base + 1.2 * heat[i] - shown[i]) * easeK
+          const base = (0.22 + 0.2 * breath + 0.05 * Math.sin(time * 0.31 + phase[i])) * lift
+          shown[i] += (base + 1.2 * Math.max(heat[i], all) - shown[i]) * easeK
           jewels.glow[i] = shown[i]
           total += heat[i]
         }
@@ -174,12 +208,13 @@ export default {
           const ids = net.sets[k].nodes
           let h = 0
           for (let j = 0; j < ids.length; j++) h += heat[ids[j]]
-          net.sets[k].material.emissiveIntensity = (0.06 + 0.05 * breath + (0.55 * h) / ids.length) * (0.3 + 0.7 * reveal)
+          h = Math.max(h / ids.length, all)
+          net.sets[k].material.emissiveIntensity = ((0.06 + 0.05 * breath) * lift + 0.55 * h) * (0.3 + 0.7 * reveal)
         }
 
         jewels.update(reveal)
         motes.update(time, openness, reveal * reveal * 0.9)
-        light.intensity = reveal * (0.35 + 0.25 * breath + 0.06 * Math.min(6, total))
+        light.intensity = reveal * ((0.35 + 0.25 * breath) * lift + 0.06 * Math.min(6, total) + 0.25 * all)
       },
       dispose() {
         jewels.dispose()

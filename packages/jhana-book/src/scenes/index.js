@@ -12,3 +12,10 @@ import jhana8 from './jhana-8.js'
 import outro from './outro.js'
 
 export default [intro, jhana1, jhana2, jhana3, jhana4, jhana5, jhana6, jhana7, jhana8, outro]
+
+// Printed small on the outside of the back cover (DESIGN.md, the story layer).
+export const colophon = [
+  'Similes from the Sāmaññaphala Sutta, DN 2.',
+  'Instructions after Leigh Brasington, Right Concentration.',
+  'The formless bases are counted as jhānas five to eight by convention.',
+]

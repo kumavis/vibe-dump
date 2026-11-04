@@ -10,6 +10,12 @@
 //   ?quality=low|high  low: DPR ≤ 1.5, 1024 shadows, smaller page textures,
 //                      scenes halve particles (default: low on small touch screens)
 //   ?nohud=1           hide the HUD (input still works)
+//   ?guide=0           the guide off: captions show each spread's `line` only
+//                      (frame.beat = the final beat: scenes show their resting state)
+//                      (the lamp in the HUD; otherwise remembered per browser)
+//   ?beat=<n>          force the open spread's guide beat (0 = `line`, k =
+//                      guide[k − 1]); shows that line even with the guide off
+//   ?pull=<0..1>       force frame.pull (the pull tab) on every spread
 
 import * as THREE from 'three'
 import { Book } from './src/book.js'
@@ -17,7 +23,7 @@ import { Stage } from './src/stage.js'
 import { Breath } from './src/breath.js'
 import { Hud } from './src/hud.js'
 import { Drone } from './src/audio.js'
-import scenes from './src/scenes/index.js'
+import scenes, { colophon } from './src/scenes/index.js'
 
 const q = new URLSearchParams(location.search)
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
@@ -28,6 +34,27 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 const nohud = q.get('nohud') === '1'
 const scrub = q.get('scrub') === '1'
 const thetaParam = q.has('theta') ? clamp(parseFloat(q.get('theta')) || 0, 0, 1) : null
+const beatParam = q.has('beat') ? Math.max(0, parseInt(q.get('beat'), 10) || 0) : null
+const pullParam = q.has('pull') ? clamp(parseFloat(q.get('pull')) || 0, 0, 1) : null
+
+// The guide: on unless ?guide=0 or the reader turned it off (remembered best
+// effort; ?guide never writes the preference).
+const GUIDE_KEY = 'jhana-book:guide'
+function storedGuide() {
+  try {
+    return localStorage.getItem(GUIDE_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
+function storeGuide(on) {
+  try {
+    localStorage.setItem(GUIDE_KEY, on ? '1' : '0')
+  } catch {
+    /* private mode, blocked storage: the choice lasts this visit */
+  }
+}
+const guideOn = q.get('guide') === '0' ? false : q.get('guide') === '1' ? true : storedGuide()
 
 // ?page → rest state n (0 closed front, k + 1 spread k, 11 closed back)
 function pageToRest(v) {
@@ -64,7 +91,9 @@ document.getElementById('app').appendChild(renderer.domElement)
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 60)
 const stage = new Stage({ renderer, scene, camera, quality, reducedMotion })
-const book = new Book({ scene, renderer, camera, scenes, quality })
+const book = new Book({ scene, renderer, camera, scenes, quality, colophon })
+book.setGuide(guideOn)
+if (pullParam !== null) book.forcePull = pullParam
 const breath = new Breath()
 const drone = new Drone()
 
@@ -76,6 +105,10 @@ if (thetaParam !== null || scrub) {
   book.setRest(startRest)
 } else {
   book.setRest(0)
+}
+if (beatParam !== null) {
+  const k = Book.spreadAt(book.target)
+  if (k >= 0) book.forceBeat = { k, beat: Math.min(beatParam, (scenes[k].guide || []).length) }
 }
 
 // ---- HUD + input -----------------------------------------------------------------
@@ -95,15 +128,29 @@ const hud = new Hud({
     if (on && wasOff) drone.apply(book.audioFor(book.target), true)
     hud.setSound(on)
   },
+  onGuide: () => {
+    book.setGuide(!book.guide)
+    storeGuide(book.guide)
+    hud.setGuide(book.guide)
+  },
 })
 hud.setSound(false)
+hud.setGuide(book.guide)
 if (startRest !== null || thetaParam !== null || scrub) hud.firstTurn()
 book.onTurnStart = (to) => {
   hud.firstTurn()
   drone.setSpread(book.audioFor(to))
 }
-book.onArrive = (n) => hud.announce(n)
-hud.announce(book.target)
+// the live region: the spread's text on arrival (with the guide line showing,
+// if it has moved on from `line`), then each new guide line as it appears
+const shownLine = (n) => {
+  const k = Book.spreadAt(n)
+  const beat = k >= 0 ? book.shownBeat(k) : 0
+  return beat > 0 ? book.lineFor(k, beat) : ''
+}
+book.onArrive = (n) => hud.announce(n, shownLine(n))
+book.onBeat = (k, beat, text) => hud.say(text)
+hud.announce(book.target, shownLine(book.target))
 // an OS interruption (a call, another app) can leave the drone suspended
 renderer.domElement.addEventListener('pointerdown', () => {
   if (drone.on && drone.ctx && drone.ctx.state !== 'running') drone.ctx.resume()
