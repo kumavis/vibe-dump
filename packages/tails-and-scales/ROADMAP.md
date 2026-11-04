@@ -259,7 +259,14 @@ the commit, and add whatever the work turned up.
   F15 `node sim/undo-check.mjs` (and `--self-test`: a hotseat battle's
   placement and move taken back by Undo and Ctrl-Z, the phase still open,
   and a battle-log line's scrub, no seat to act there, Live, ✕ and ▶
-  coming back; lobby-rig's `play` holds Undo hidden online). A step that changes what one of them reads ports it in the same
+  coming back; lobby-rig's `play` holds Undo hidden online), and from F11b
+  `node sim/ui-check.mjs` (and `--self-test`: the Muster screen's + disabled
+  at each cap with its why, Ready with the first refusal, Random always
+  legal, a saved list round-tripping, a list over its limit red after a
+  size change, a race change resetting the panel's army line, a 360 px
+  phone scrolling nothing sideways, the hotseat's pass screen holding
+  nothing of the first list, and a list built on the screen fielded unit
+  for unit). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
