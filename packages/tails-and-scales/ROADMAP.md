@@ -241,7 +241,9 @@ the commit, and add whatever the work turned up.
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
   rematch; from N3 the replay bar, replay files and the page that comes
-  back; from F10a a group placed and moved online), and from F10a
+  back; from F10a a group placed and moved online; from F11b the lists in
+  the lobby, a list sealed from the other page's DOM until the start, a
+  host-altered army and an AI seat), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback; from F13 the touch aim,
@@ -1046,14 +1048,46 @@ follows N3.
   (F8b's scale-bench builds its cap lists within the grand mission's limit
   by an exhaustive search, `capList`; F8b's retune never wanted the lifted
   fit; the fixture itself was deleted at the merged build's gate.)
-- [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
+- [x] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
   race resets the army.
   (Built at F11a: the `?armies=` door, checked by the fold's own `armyOf`,
   a race change on the panel already dropping that seat's list; the unit
-  card's cost and the group line's points standing. Still F11b's: the
-  cost on F6's race picker, the deployment's points banner.)
+  card's cost and the group line's points standing.)
+  (Client only: no bump, nothing under core/, present/, data/, match/ or
+  sim/oracle/, the corpus byte-identical and the PIN unmoved, nothing new
+  in the setup. `ui/screens/muster.js`: a row per roster entry with its
+  glyph, card, price and − +, a disabled + saying why in the tooltip, the
+  role-coloured points bar, the role chips, the presets, Random, Clear,
+  Saved and Save list…, Ready worded by `checkList`'s own refusal, the
+  War-Cart's riders, a 360 px phone layout; the hotseat's pass screen;
+  `app/lists.js`, saved lists by unit key (`ts.lists`, at most 50) and each
+  race's last list per size. The battle-setup panel's army line (preset ▾
+  · Build…, an AI seat's Random on §4.2.8.6's seed, its units a tap away
+  against the AI; red with why and Start disabled when the size refuses it;
+  reset by a race change), `Flow.start`'s `armies`, the race picker's
+  prices, the deployment's points banner. Online, a seat's `army` in N2's
+  lobby (un-ready on a change, let go on a race change, held by
+  `verifyStart`), courtesy sealing (another seat a sentence alone), and the
+  host's AI seat (`seatAI`, preset or Random, played inside the fold on
+  every page). `sim/ui-check.mjs` (ten cases, an 11-edit self-test),
+  lobby-rig's `lists`, `sealed`, `altered-army` and `ai-seat` and eight
+  mutants, net-check's armies. DESIGN's F11b notes.)
+- [ ] **Later (F11b's):** the result screen's totals for both armies
+  (§4.2.8.1; `ui/screens/result.js`); figure thumbnails on the Muster
+  screen's rows (a cheap still of each figure, not the diorama's window);
+  the Howdah's fire-slots tip, with F9c's firing decks; points in the group
+  bar's own count; the lobby's army line held to 44 px buttons at phone
+  width; the host's mission change keeping each seat's list and checking it
+  again ("over by N", §4.2.8.9) instead of dropping it, as F8b's
+  `editBattle` does; an online AI seat's Random on §4.2.8.6's seed, and
+  its Random kept by a rematch. Found on main by F11b's sweep: lobby-rig's
+  `no-relog` mutant, stale since F16 (its anchor lacks the second argument
+  `relog` gained), whose error the empty `uncaughtException` handler the
+  first case installs swallows, so `--self-test` ends after seven mutants
+  with exit 0 and no verdict line (the 29 after it, run by `--only`, are
+  each caught).
 - [x] **F7a** Climbable fortifications: decks, stairs and ladders sized for
   whole squads; ramparts, bastions, watchtowers, timber platforms and a keep
   on the centre objective; each side's own rampart at its zone's front (the
