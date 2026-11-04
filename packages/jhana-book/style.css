@@ -156,6 +156,29 @@ body {
   opacity: 0 !important;
 }
 
+/* the one-time "pull the tab" hint, in the same place once the first is gone */
+#tabhint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+#tabhint.show {
+  opacity: 0.85;
+}
+
+#tabhint.gone {
+  opacity: 0 !important;
+}
+
 @keyframes hint-in {
   to {
     opacity: 0.85;
@@ -324,6 +347,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   #hud,
   #hint,
+  #tabhint,
   #again,
   .arrow,
   #guide,

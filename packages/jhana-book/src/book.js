@@ -18,6 +18,8 @@ import {
   captionSize,
   drawClothTile,
   drawEdgeTile,
+  drawTab,
+  drawTabStrip,
   toTexture,
 } from './textures.js'
 import { DEFAULT_AUDIO } from './audio.js'
@@ -36,15 +38,44 @@ const smoothstep = (a, b, x) => {
   return t * t * (3 - 2 * t)
 }
 
-// Guide captions (DESIGN.md, the story layer). A new line fades in over this
-// long while the old one fades out; the first advance waits for this many
-// in-breath starts at rest (= two full cycles after the one you arrived in),
-// then every in-breath start brings the next line.
-export const CAPTION_FADE = 2.5
+// Guide captions (DESIGN.md, the story layer). A line changes in sequence,
+// never crossed: the old line fades out to blank paper, the paper rests blank
+// a moment, then the new line fades in. 1.2 s from the change to the new line
+// starting, 2.7 s in all. The first advance waits for this many in-breath
+// starts at rest (= two full cycles after the one you arrived in), then every
+// in-breath start brings the next line.
+export const CAPTION_OUT = 0.55
+export const CAPTION_HOLD = 0.65
+export const CAPTION_IN = 1.5
 const FIRST_BEAT_INHALES = 3
 // Caption height above its page: clear of the paper's depth, far below anything
 // a reader could see as a gap.
 const CAPTION_LIFT = 0.0015
+
+// The pull tab (STORY.md, Layer 4), in the right page plane's local space (x 0
+// at the spine … W at the outer edge, z −H/2 far … H/2 near, y up off the
+// page). The tab sticks out of the outer edge a little behind mid-height,
+// clear of the caption's near strip and of the far strip; its root lies on the
+// page, lifted over the caption. The strip lies just under the page (the page
+// and the paper block hide it) and slides out along +x carrying the tab on its
+// leading edge; a sliver stays tucked under the page when it is fully out.
+export const TAB = {
+  w: 0.09, // tab size
+  d: 0.05,
+  root: 0.035, // how much of it lies on the page
+  z: -0.05, // centre of tab and strip
+  lift: 0.003, // tab above the page
+  stripW: 0.62,
+  stripD: 0.34,
+  drop: -0.004, // strip below the page
+  reach: 0.6, // how far the strip comes out
+  seconds: 1.2, // a full pull or push
+  minOpen: 0.9, // openness under which the tab is hidden
+}
+const TAB_FADE_IN = 0.8 // the tab appears this softly once the spread is at rest
+const _m4 = new THREE.Matrix4()
+const _ray = new THREE.Ray()
+const _hit = new THREE.Vector3()
 
 export const TURN_SECONDS = 2.6
 export const JUMP_SECONDS = 1.8
@@ -264,6 +295,7 @@ export class Book {
       mats: { left: null, right: null },
       frame: null,
       caption: null, // see caption()
+      tab: null, // see tabFor()
       beat: 0, // guide beat reached (0 = `line`), remembered across visits
       inhales: 0, // in-breath starts counted during this visit at rest
       wasActive: false,
@@ -281,7 +313,8 @@ export class Book {
     this.warmedAt = -1
     this.warming = false // a prewarm step is waiting for idle time
     this.dirty = true
-    this.look = { bg: new THREE.Color(BOOK_PALETTE.bg), accent: new THREE.Color(BOOK_PALETTE.accent), open: 0 }
+    // pull: how far the camera makes room for an open strip (stage.js)
+    this.look = { bg: new THREE.Color(BOOK_PALETTE.bg), accent: new THREE.Color(BOOK_PALETTE.accent), open: 0, pull: 0 }
     this.pointer = { x: 0, y: 0 } // shared with every frame (main eases it)
     this.onTurnStart = null // (toN, fromN) → void
     this.onArrive = null // (n) → void
@@ -290,7 +323,17 @@ export class Book {
     // ---- guide ---------------------------------------------------------------
     this.guide = true // off: captions show `line`, frame.beat = the final beat
     this.forceBeat = null // { k, beat } for ?beat: spread k always shows `beat`
-    this.forcePull = null // ?pull: frame.pull for every spread
+    this.forcePull = null // ?pull: frame.pull for every spread, whatever the tab does
+
+    // ---- pull tab --------------------------------------------------------------
+    // One strip open at a time: k is the spread it belongs to, u its exposure
+    // (0 hidden … 1 out), eased from `from` to `to` over `dur`; while dragged, u
+    // follows the pointer.
+    this.pull = { k: -1, u: 0, from: 0, to: 0, t: 0, dur: 0, dragging: false, x0: 0, u0: 0 }
+    this.tabHover = false
+    this.onPull = null // (spreadIndex) → void, when a reader pulls a strip out
+    this.tabGeo = new THREE.PlaneGeometry(TAB.w, TAB.d).rotateX(-PI / 2)
+    this.stripGeo = new THREE.PlaneGeometry(TAB.stripW, TAB.stripD).rotateX(-PI / 2)
     this._phase = 'in' // last breath phase, to catch the start of an in-breath
   }
 
@@ -345,6 +388,197 @@ export class Book {
     this.guide = !!on
   }
 
+  // The spread resting open right now (no turn, no ?theta freeze), or −1.
+  get restSpread() {
+    return !this.turn && !this.frozen ? Book.spreadAt(this.n) : -1
+  }
+
+  // ---- pull tab ----------------------------------------------------------------
+
+  // Exposure of spread k's strip, 0 … 1 (eased).
+  pullOf(k) {
+    return this.pull.k === k ? this.pull.u : 0
+  }
+
+  // Is a strip out (or on its way out)?
+  get pullOpen() {
+    const p = this.pull
+    return p.k >= 0 && (p.u > 0.001 || p.to > 0)
+  }
+
+  // Ease spread k's strip to exposure v (1 out, 0 back) over TAB.seconds per
+  // full travel; `instant` jumps. Another spread's strip goes back at once.
+  pullTab(k, v = 1, instant = false) {
+    const p = this.pull
+    if (k < 0 || k >= this.spreads.length) return
+    if (p.k !== k) {
+      p.k = k
+      p.u = 0
+    }
+    p.dragging = false
+    p.from = p.u
+    p.to = clamp(v, 0, 1)
+    p.t = 0
+    p.dur = TAB.seconds * Math.abs(p.to - p.from)
+    if (instant || p.dur < 1e-3) p.u = p.to
+    this.ensureBuilt(k)
+    if (p.to > p.from && this.onPull) this.onPull(k)
+  }
+
+  // Pull the resting spread's strip out, or push it back. False when no
+  // spread is at rest.
+  togglePull() {
+    const k = this.restSpread
+    if (k < 0) return false
+    const p = this.pull
+    this.pullTab(k, p.k === k && p.to > 0.5 ? 0 : 1)
+    return true
+  }
+
+  // Push the strip back at once (a turn starts, the book jumps).
+  retractPull() {
+    const p = this.pull
+    p.u = p.from = p.to = 0
+    p.dur = 0
+    p.dragging = false
+    this.tabHover = false
+  }
+
+  // Where `ray` (world space) meets the resting spread's right page plane at
+  // height y, in that plane's local space; null if it misses or nothing rests.
+  _tabRay(ray, y) {
+    const k = this.restSpread
+    const tb = k >= 0 ? this.spreads[k].tab : null
+    if (!tb || !tb.group.parent) return null
+    _m4.copy(tb.group.parent.matrixWorld).invert()
+    _ray.copy(ray).applyMatrix4(_m4)
+    const dy = _ray.direction.y
+    if (Math.abs(dy) < 1e-6) return null
+    const t = (y - _ray.origin.y) / dy
+    return t > 0 ? _ray.at(t, _hit) : null
+  }
+
+  // What `ray` hits of the resting spread's tab: 'tab', 'strip' (only the part
+  // out from under the page) or null. pad widens the tab's target (touch).
+  tabHit(ray, pad = 0.015) {
+    const k = this.restSpread
+    const tb = k >= 0 ? this.spreads[k].tab : null
+    if (!tb || !tb.group.visible || tb.show < 0.3) return null
+    const d = this.pullOf(k) * TAB.reach
+    let p = this._tabRay(ray, TAB.lift)
+    if (
+      p &&
+      p.x >= W + d - TAB.root - pad &&
+      p.x <= W + d + TAB.w - TAB.root + pad &&
+      Math.abs(p.z - TAB.z) <= TAB.d / 2 + pad
+    )
+      return 'tab'
+    if (d > 0.005) {
+      p = this._tabRay(ray, TAB.drop)
+      if (p && p.x >= W && p.x <= W + d && Math.abs(p.z - TAB.z) <= TAB.stripD / 2) return 'strip'
+    }
+    return null
+  }
+
+  // Drag: grab at the ray's page-plane x, follow it outward/inward, let go.
+  tabGrab(ray) {
+    const k = this.restSpread
+    const p = this._tabRay(ray, 0)
+    if (k < 0 || !p) return false
+    const pl = this.pull
+    if (pl.k !== k) this.pullTab(k, 0, true)
+    pl.dragging = true
+    pl.x0 = p.x
+    pl.u0 = pl.u
+    pl.to = pl.u
+    return true
+  }
+
+  tabDrag(ray) {
+    const pl = this.pull
+    if (!pl.dragging || this.restSpread !== pl.k) return
+    const p = this._tabRay(ray, 0)
+    if (p) pl.u = clamp(pl.u0 + (p.x - pl.x0) / TAB.reach, 0, 1)
+  }
+
+  // tap: the press barely moved, so it toggles. Otherwise it settles the way
+  // it was dragged (or, a nudge, to the nearer end).
+  tabRelease(tap) {
+    const pl = this.pull
+    if (!pl.dragging) return
+    pl.dragging = false
+    const moved = pl.u - pl.u0
+    let to
+    if (tap) to = pl.u0 > 0.5 ? 0 : 1
+    else if (moved > 0.08) to = 1
+    else if (moved < -0.08) to = 0
+    else to = pl.u > 0.5 ? 1 : 0
+    this.pullTab(pl.k, to)
+  }
+
+  // Spread k's tab and strip: two meshes in one group, parented with the
+  // caption to whichever plane shows k's right page. The strip's canvas is
+  // drawn once.
+  tabFor(k) {
+    const sp = this.spreads[k]
+    if (sp.tab) return sp.tab
+    const pal = this.palettes[k]
+    const group = new THREE.Group()
+    group.name = `tab:${sp.mod.id}`
+    group.visible = false
+    const density = (this.pageWidth / W) * 1.5 // a little finer than the page: small type
+    const sw = Math.round(TAB.stripW * density)
+    const sh = Math.round(TAB.stripD * density)
+    const free = TAB.reach / TAB.stripW
+    const stripTex = toTexture(drawTabStrip(sp.mod.tab || {}, pal, sw, sh, free, density), {
+      anisotropy: this.aniso,
+    })
+    const stripMat = new THREE.MeshStandardMaterial({ map: stripTex, roughness: 0.9, metalness: 0 })
+    const strip = new THREE.Mesh(this.stripGeo, stripMat)
+    strip.position.set(W - TAB.stripW / 2, TAB.drop, TAB.z)
+    strip.castShadow = true
+    strip.receiveShadow = true
+    strip.visible = false
+    group.add(strip)
+    const tabTex = toTexture(drawTab(pal, 144, 80, TAB.root / TAB.w), { anisotropy: this.aniso })
+    const tabMat = new THREE.MeshStandardMaterial({
+      map: tabTex,
+      roughness: 0.9,
+      metalness: 0,
+      transparent: true,
+      depthWrite: false,
+      opacity: 0,
+    })
+    const tab = new THREE.Mesh(this.tabGeo, tabMat)
+    tab.position.set(W + TAB.w / 2 - TAB.root, TAB.lift, TAB.z)
+    tab.renderOrder = 4 // over the page and the caption
+    // no shadows either way: under VSM a receiver is drawn into the shadow map
+    // too, and a tab that casts throws a blot on the table
+    tab.receiveShadow = false
+    group.add(tab)
+    sp.tab = { group, strip, tab, stripMat, tabMat, show: 0, glow: 1, attached: false }
+    return sp.tab
+  }
+
+  // Per frame, for a mounted spread: the tab shows only at rest (fading in),
+  // the strip only while out; turning or closing hides both at once.
+  updateTab(sp, dt, shown) {
+    const tb = sp.tab
+    if (!tb) return
+    const f = sp.frame
+    const rest = shown && f.active && f.openness > TAB.minOpen
+    tb.show = rest ? Math.min(1, tb.show + dt / TAB_FADE_IN) : 0
+    tb.group.visible = rest
+    if (!rest) return
+    const d = this.pullOf(sp.index)
+    tb.group.position.x = d * TAB.reach
+    tb.strip.visible = d > 0.0005
+    const glow = this.tabHover || this.pull.dragging ? 1.16 : 1
+    tb.glow += (glow - tb.glow) * (1 - Math.exp(-dt * 10))
+    tb.tabMat.color.setScalar(tb.glow)
+    tb.tabMat.opacity = tb.show * tb.show * (3 - 2 * tb.show)
+  }
+
   paletteFor(n) {
     const k = Book.spreadAt(n)
     return k < 0 ? BOOK_PALETTE : this.palettes[k]
@@ -353,6 +587,7 @@ export class Book {
   // ---- navigation ------------------------------------------------------------
 
   setRest(n) {
+    this.retractPull()
     this.n = clamp(n | 0, 0, 11)
     this.turn = null
     this.frozen = null
@@ -365,6 +600,7 @@ export class Book {
   // closing, n's spread opening with θ = p·π.
   freeze(n, p) {
     n = clamp(n | 0, 1, 11)
+    this.retractPull()
     this.turn = null
     this.frozen = { nA: n - 1, nB: n, progress: clamp(p, 0, 1) }
     this.n = n
@@ -425,6 +661,7 @@ export class Book {
     const whole = nA === 0 && nB === 11
     const dur = nB - nA > 1 && !whole ? JUMP_SECONDS : TURN_SECONDS
     this.turn = { nA, nB, dir: to > from ? 1 : -1, t: 0, dur, to, from }
+    this.retractPull() // turning the page puts the strip straight back
     for (const k of [Book.spreadAt(nA), Book.spreadAt(nB)]) if (k >= 0) this.ensureBuilt(k)
     this.dirty = true
     if (this.onTurnStart) this.onTurnStart(to, from)
@@ -498,11 +735,10 @@ export class Book {
     return sp.mats[side]
   }
 
-  // Spread k's caption: two planes (front / back) for the cross-fade, each with
-  // its own canvas redrawn once per beat: a copy of the right page's near strip
-  // with the line printed on it, so it is opaque paper. The back layer draws
-  // first at full opacity; the front fades in over it. Both carry the same
-  // paper, so only the type changes.
+  // Spread k's caption: two planes over the right page's near strip, each a
+  // copy of the page's own strip so they are opaque paper. The base is blank
+  // paper, drawn once; the text layer is redrawn once per beat and fades over
+  // it. Both carry the same paper, so only the type changes.
   caption(k) {
     const sp = this.spreads[k]
     if (sp.caption) return sp.caption
@@ -529,35 +765,51 @@ export class Book {
       group.add(mesh)
       return { canvas: c, tex, mat, mesh }
     })
-    sp.caption = { group, layers, page, front: 0, beat: -1, fade: 1, attached: false }
+    const [base, text] = layers
+    base.mat.opacity = 1
+    base.mesh.renderOrder = 2 // after the paper (0): base, then the text over it
+    text.mesh.renderOrder = 3
+    // beat: wanted; shown: on the text canvas (−1 = never drawn); vis: the text
+    // layer's linear visibility 0…1; hold: blank-paper time still to wait
+    sp.caption = { group, base, text, page, beat: -1, shown: -1, vis: 1, hold: 0, attached: false }
     return sp.caption
   }
 
-  // Show `beat` on spread k's caption, cross-fading from what it showed. Snaps
-  // the first time (nothing to fade from) or while the spread is out of sight.
+  // Show `beat` on spread k's caption: the line on the text layer fades out to
+  // blank paper, the paper rests, the new line is printed and fades in. A
+  // change that arrives mid-way just steers the same fade. Snaps the first time
+  // (nothing to fade from) or while the spread is out of sight.
   updateCaption(sp, beat, dt, snap) {
     const cap = sp.caption
     if (!cap) return
-    if (beat !== cap.beat) {
-      const first = cap.beat < 0
-      cap.front ^= 1
-      const L = cap.layers[cap.front]
-      drawCaption(L.canvas, this.lineFor(sp.index, beat), cap.page, this.palettes[sp.index].ink)
-      L.tex.needsUpdate = true
-      cap.beat = beat
-      cap.fade = first || snap ? 1 : 0
-    } else if (snap) cap.fade = 1
-    cap.fade = Math.min(1, cap.fade + dt / CAPTION_FADE)
-    const e = cap.fade * cap.fade * (3 - 2 * cap.fade)
-    const F = cap.layers[cap.front]
-    const B = cap.layers[cap.front ^ 1]
-    // after the paper (0), back before front
-    B.mesh.renderOrder = 2
-    F.mesh.renderOrder = 3
-    B.mat.opacity = 1
-    B.mesh.visible = e < 1
-    F.mat.opacity = e
-    F.mesh.visible = true
+    cap.beat = beat
+    const T = cap.text
+    const print = () => {
+      drawCaption(T.canvas, this.lineFor(sp.index, beat), cap.page, this.palettes[sp.index].ink)
+      T.tex.needsUpdate = true
+      cap.shown = beat
+    }
+    if (snap || cap.shown < 0) {
+      if (cap.shown !== beat) print()
+      cap.vis = 1
+      cap.hold = 0
+    } else if (cap.shown !== beat) {
+      cap.vis -= dt / CAPTION_OUT
+      if (cap.vis <= 0) {
+        cap.vis = 0
+        cap.hold = CAPTION_HOLD
+        print()
+      }
+    } else if (cap.hold > 0) {
+      cap.hold -= dt
+    } else if (cap.vis < 1) {
+      cap.vis = Math.min(1, cap.vis + dt / CAPTION_IN)
+    }
+    const v = clamp(cap.vis, 0, 1)
+    const e = v * v * (3 - 2 * v)
+    T.mat.opacity = e
+    T.mesh.visible = e > 0
+    cap.base.mesh.visible = e < 1
   }
 
   // Get the neighbours of the resting spread ready ahead of time so a turn
@@ -582,6 +834,7 @@ export class Book {
             if (this.renderer.initTexture) this.renderer.initTexture(map)
           }
           this.caption(k)
+          this.tabFor(k)
         } else if (!sp.built) {
           this.ensureBuilt(k)
           sp.needsCompile = true
@@ -682,6 +935,17 @@ export class Book {
     this.look.accent.copy(from.accent).lerp(to.accent, t)
     this.look.open = 1 - L.closed
 
+    // the pull tab's travel, and the camera making room for it (held while a
+    // drag is under way, so the page doesn't slide under the pointer)
+    const pl = this.pull
+    if (!pl.dragging && pl.u !== pl.to) {
+      pl.t += dt
+      const u = pl.dur > 0 ? clamp(pl.t / pl.dur, 0, 1) : 1
+      pl.u = u >= 1 ? pl.to : pl.from + (pl.to - pl.from) * (u * u * (3 - 2 * u))
+    }
+    const view = this.restSpread >= 0 && pl.k === this.restSpread ? pl.u : 0
+    if (!pl.dragging) this.look.pull += (view - this.look.pull) * (1 - Math.exp(-dt * 3.5))
+
     // the start of an in-breath: the moment a guide line may advance
     const inhale = breath.phase === 'in' && this._phase === 'out'
     this._phase = breath.phase
@@ -711,14 +975,18 @@ export class Book {
         const cap = this.caption(pg.spread)
         if (cap.group.parent !== mesh) mesh.add(cap.group)
         cap.attached = true
+        const tb = this.tabFor(pg.spread)
+        if (tb.group.parent !== mesh) mesh.add(tb.group)
+        tb.attached = true
       }
     }
-    // a caption whose right page is on no plane this frame leaves the scene
+    // a caption (or tab) whose right page is on no plane this frame leaves the scene
     for (const sp of this.spreads) {
-      const cap = sp.caption
-      if (!cap) continue
-      if (!cap.attached && cap.group.parent) cap.group.parent.remove(cap.group)
-      cap.attached = false
+      for (const o of [sp.caption, sp.tab]) {
+        if (!o) continue
+        if (!o.attached && o.group.parent) o.group.parent.remove(o.group)
+        o.attached = false
+      }
     }
     this.root.position.x = L.offX
   }
@@ -769,11 +1037,12 @@ export class Book {
       }
       sp.wasActive = f.active
       f.beat = this.sceneBeat(sp.index)
-      f.pull = this.forcePull ?? 0
+      f.pull = this.forcePull ?? this.pullOf(sp.index)
       if (sp.caption) {
         sp.caption.group.visible = shown
         this.updateCaption(sp, this.shownBeat(sp.index), dt, !shown)
       }
+      this.updateTab(sp, dt, shown)
       if (!sp.updateFailed) {
         try {
           sp.paper.update(theta)
@@ -793,6 +1062,10 @@ export class Book {
       if (sp.visible && !sp._mounted) {
         sp.group.visible = false
         sp.visible = false
+        if (sp.tab) {
+          sp.tab.group.visible = false
+          sp.tab.show = 0
+        }
       }
     }
   }

@@ -1,17 +1,28 @@
 // hud.js — the quiet DOM layer: dots, edge arrows, sound and guide toggles, breath ring,
-// first-load hint, "begin again"; plus all reader input (click halves, keys,
-// swipe, drag-orbit) routed to callbacks.
+// first-load hint, the one-time "pull the tab" hint, "begin again"; plus all
+// reader input (click halves, keys, swipe, drag-orbit, the pull tab) routed to
+// callbacks.
 
 const DEG = Math.PI / 180
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v)
 
 export class Hud {
-  // opts: { canvas, titles, lines, nohud, orbit, onPrev, onNext, onDot, onSound, onGuide, onAgain }
+  // opts: { canvas, titles, lines, nohud, orbit, onPrev, onNext, onDot, onSound, onGuide, onAgain,
+  //         onInfo, onEscape, grab }
+  //   onInfo(): the `i` key (the pull tab). onEscape() → true if it consumed the key.
+  //   grab: the pull tab's pointer hooks, asked before any turn or orbit:
+  //     hit(e) → bool        the pointer is on the tab or an open strip
+  //     start(e), move(e)    a press on it, and its drag
+  //     end(e, tap)          released (tap: it barely moved)
+  //     cancel()             a second finger or a cancelled pointer
+  //     hover(e) → bool      mouse over it, nothing pressed (cursor / glow)
   constructor(opts) {
     this.o = opts
     this.el = document.getElementById('hud')
     this.dotsEl = document.getElementById('dots')
     this.hintEl = document.getElementById('hint')
+    this.tabHintEl = document.getElementById('tabhint')
+    this.tabHintTimer = 0
     this.ringEl = document.querySelector('#breath span')
     this.soundEl = document.getElementById('sound')
     this.guideEl = document.getElementById('guide')
@@ -64,19 +75,34 @@ export class Hud {
 
   bindPointer(canvas) {
     const orbit = this.o.orbit
+    const grab = this.o.grab
     let down = null
     canvas.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0) return
       if (down) {
         down.cancelled = true // a second finger: a pinch, not a tap or a swipe
+        if (down.grab) grab.cancel()
         return
       }
       down = { x: e.clientX, y: e.clientY, type: e.pointerType, drag: false, yaw: orbit.yaw, pitch: orbit.pitch }
       down.id = e.pointerId
+      // the pull tab (or an open strip) takes the press: it never turns the page
+      down.grab = !!(grab && grab.hit(e))
+      if (down.grab) {
+        grab.start(e)
+        canvas.style.cursor = 'grabbing'
+      }
       canvas.setPointerCapture?.(e.pointerId)
     })
     canvas.addEventListener('pointermove', (e) => {
-      if (!down) return
+      if (!down) {
+        if (grab && e.pointerType === 'mouse') canvas.style.cursor = grab.hover(e) ? 'grab' : ''
+        return
+      }
+      if (down.grab) {
+        if (e.pointerId === down.id && !down.cancelled) grab.move(e)
+        return
+      }
       const dx = e.clientX - down.x
       const dy = e.clientY - down.y
       // a mouse drag gently orbits; touch keeps horizontal swipes for turning
@@ -92,6 +118,12 @@ export class Hud {
       const d = down
       down = null
       orbit.dragging = false
+      if (d.grab) {
+        canvas.style.cursor = ''
+        if (cancelled) grab.cancel()
+        else if (!d.cancelled) grab.end(e, Math.hypot(e.clientX - d.x, e.clientY - d.y) <= 12)
+        return
+      }
       if (cancelled || d.drag || d.cancelled) return
       const dx = e.clientX - d.x
       const dy = e.clientY - d.y
@@ -134,10 +166,15 @@ export class Hud {
       const tag = e.target && e.target.tagName
       const control = tag === 'INPUT' || tag === 'BUTTON' || tag === 'SELECT' || tag === 'TEXTAREA'
       if (e.key === 'Escape') {
-        this.toggle()
+        // an open strip goes back first; otherwise Escape hides the HUD
+        if (!(this.o.onEscape && this.o.onEscape())) this.toggle()
         return
       }
       if (control && (e.key === ' ' || e.key === 'Enter' || tag === 'INPUT')) return
+      if ((e.key === 'i' || e.key === 'I') && this.o.onInfo && tag !== 'INPUT') {
+        this.o.onInfo()
+        return
+      }
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
         e.preventDefault()
         this.o.onNext()
@@ -180,6 +217,24 @@ export class Hud {
 
   firstTurn() {
     this.hintEl.classList.add('gone')
+  }
+
+  // The one-time "pull the tab" hint: in the hint's place, gone after 4 s or
+  // at the first pull.
+  showTabHint() {
+    const el = this.tabHintEl
+    if (!el || el.classList.contains('show')) return
+    el.classList.add('show')
+    this.tabHintTimer = setTimeout(() => this.hideTabHint(), 4000)
+  }
+
+  hideTabHint() {
+    const el = this.tabHintEl
+    clearTimeout(this.tabHintTimer)
+    if (el && el.classList.contains('show')) {
+      el.classList.remove('show')
+      el.classList.add('gone')
+    }
   }
 
   // For screen readers: the text printed on the spread at rest n (0…11), plus

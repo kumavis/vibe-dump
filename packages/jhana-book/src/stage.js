@@ -24,6 +24,22 @@ const OPEN_BOX = [
   ...boxCorners(-0.85 * W, 0.85 * W, YS, YS + 0.9, -0.6, 0.42),
 ]
 const CLOSED_BOX = boxCorners(-(W + OVERHANG) / 2 - 0.01, (W + OVERHANG) / 2 + 0.01, 0, T, -HZ, HZ)
+// Pulled: the pull tab's strip is out past the right page's outer edge (book.js
+// TAB: out to W + 0.6 + the tab, z −0.22 … 0.12). The view leans that way so
+// the strip is readable: it looks a little more from above (less
+// foreshortening on the type) and gives up some of the left page on a wide
+// screen, most of it on a portrait one. x0: the left edge kept.
+const PULL_TILT = 6 * DEG
+const PULL_HEADROOM = 0.6
+const PULL_RIGHT = W + 0.6 + 0.08
+function pullBox(x0) {
+  return [
+    ...boxCorners(x0, W + OVERHANG, 0, YS, -HZ, HZ),
+    ...boxCorners(W, PULL_RIGHT, 0, YS + 0.08, -0.26, 0.16),
+    // the pop-up volume, a little lower: its very top may leave the frame
+    ...boxCorners(Math.max(x0, -0.85 * W), 0.85 * W, YS, YS + PULL_HEADROOM, -0.6, 0.42),
+  ]
+}
 
 // Allowed NDC extents [x, top, bottom] — the bottom keeps room for the HUD.
 const OPEN_MARGIN = [1 / 1.06, 0.9, 0.8]
@@ -85,7 +101,7 @@ export class Stage {
 
     // ---- camera rig ----------------------------------------------------------
     this.aspect = 1
-    this.fits = { open: null, closed: null }
+    this.fits = { open: null, closed: null, pulled: null }
     this.parallax = new THREE.Vector2()
     this.orbit = { yaw: 0, pitch: 0, dragging: false }
     this._target = new THREE.Vector3()
@@ -104,7 +120,8 @@ export class Stage {
     return closed ? lerp(46, 62, portrait) * DEG : lerp(33, 55, portrait) * DEG
   }
 
-  fit(corners, el, margin) {
+  // centreX: also centre the content horizontally (an asymmetric box).
+  fit(corners, el, margin, centreX = false) {
     const cam = this.camera
     const tanY = Math.tan((cam.fov * DEG) / 2)
     const tanX = tanY * this.aspect
@@ -147,6 +164,15 @@ export class Stage {
       })
       const off = (ymin + ymax) / 2 - (mt - mb) / 2
       target.addScaledVector(up, off * dist * tanY)
+      if (centreX) {
+        let xmin = Infinity
+        let xmax = -Infinity
+        project(dist, (x) => {
+          xmin = Math.min(xmin, x)
+          xmax = Math.max(xmax, x)
+        })
+        target.addScaledVector(right, ((xmin + xmax) / 2) * dist * tanX)
+      }
     }
     return { dist, target, el }
   }
@@ -157,17 +183,21 @@ export class Stage {
     this.camera.updateProjectionMatrix()
     this.fits.open = this.fit(OPEN_BOX, this.elevation(false), OPEN_MARGIN)
     this.fits.closed = this.fit(CLOSED_BOX, this.elevation(true), CLOSED_MARGIN)
+    const portrait = clamp((1.25 - this.aspect) / (1.25 - 0.6), 0, 1)
+    const x0 = lerp(-0.5 * W, 0.5 * W, portrait)
+    this.fits.pulled = this.fit(pullBox(x0), this.elevation(false) + PULL_TILT, OPEN_MARGIN, true)
   }
 
   // ---- per frame --------------------------------------------------------------
 
-  // look: { bg: Color, accent: Color, open: 0..1 }; pointer: eased {x, y}.
+  // look: { bg: Color, accent: Color, open: 0..1, pull: 0..1 }; pointer: eased {x, y}.
   update(dt, look, breath, pointer) {
-    const { open, closed } = this.fits
+    const { open, closed, pulled } = this.fits
     const o = smooth(clamp(look.open, 0, 1))
-    const dist = lerp(closed.dist, open.dist, o)
-    const el = lerp(closed.el, open.el, o)
-    this._target.lerpVectors(closed.target, open.target, o)
+    const pu = smooth(clamp(look.pull || 0, 0, 1)) * o
+    const dist = lerp(lerp(closed.dist, open.dist, o), pulled.dist, pu)
+    const el = lerp(lerp(closed.el, open.el, o), pulled.el, pu)
+    this._target.lerpVectors(closed.target, open.target, o).lerp(pulled.target, pu)
 
     // drag-orbit eases back to rest once released
     const ob = this.orbit

@@ -74,8 +74,10 @@ function luminance(hex) {
 }
 
 // Paper: tint + grain + fibres + gutter shade. `spineRight` puts the gutter on
-// the canvas's right edge (a left page).
-function drawPaper(g, w, h, tint, ink, seed, spineRight) {
+// the canvas's right edge (a left page). `plain` skips the gutter and edge
+// shading (a loose card, not a bound page); `fibreScale` sizes the fibres for a
+// canvas whose texel density differs from a page's.
+function drawPaper(g, w, h, tint, ink, seed, spineRight, plain = false, fibreScale = w / 1024) {
   g.fillStyle = tint
   g.fillRect(0, 0, w, h)
   const dark = luminance(tint) < 0.3
@@ -94,12 +96,12 @@ function drawPaper(g, w, h, tint, ink, seed, spineRight) {
   for (let i = 0; i < fibres; i++) {
     const x = rnd() * w
     const y = rnd() * h
-    const len = (6 + rnd() * 26) * (w / 1024)
+    const len = (6 + rnd() * 26) * fibreScale
     const a = rnd() * Math.PI * 2
     const bend = (rnd() - 0.5) * 0.9
     g.strokeStyle = rnd() < 0.55 ? ink : dark ? '#ffffff' : '#fffaf0'
     g.globalAlpha = 0.025 + rnd() * 0.035
-    g.lineWidth = (0.5 + rnd() * 1.1) * (w / 1024)
+    g.lineWidth = (0.5 + rnd() * 1.1) * fibreScale
     g.beginPath()
     g.moveTo(x, y)
     g.quadraticCurveTo(
@@ -111,6 +113,7 @@ function drawPaper(g, w, h, tint, ink, seed, spineRight) {
     g.stroke()
   }
   g.restore()
+  if (plain) return
   // gutter: a soft shade near the spine plus a faint crease line
   const gx = spineRight ? w : 0
   const gw = w * 0.16
@@ -278,6 +281,180 @@ export function drawCaption(c, text, page, ink) {
     y += lineH
   }
   g.restore()
+  return c
+}
+
+// ---- pull tab (STORY.md, Layer 4) ------------------------------------------------
+
+// The tab's paper and the strip's: the page tint, the strip a little lighter
+// (it lives under the page, out of the light's wear).
+function lighten(hex, k) {
+  return '#' + new THREE.Color(hex).lerp(new THREE.Color('#ffffff'), k).getHexString()
+}
+
+// The small paper tab at the right page's outer edge: `w`×`h` px for a tab
+// whose root (the left `root` fraction) lies on the page and whose outer end is
+// rounded. A chevron points outward. Transparent outside the shape.
+export function drawTab(palette, w = 144, h = 80, root = 0.38) {
+  const c = canvas(w, h)
+  const g = c.getContext('2d')
+  const tint = palette.paper || '#efe6d4'
+  const ink = palette.ink || '#3b322a'
+  const dark = luminance(tint) < 0.3
+  const r = h * 0.36
+  const path = () => {
+    g.beginPath()
+    g.moveTo(0, 0)
+    g.lineTo(w - r, 0)
+    g.arcTo(w, 0, w, r, r)
+    g.lineTo(w, h - r)
+    g.arcTo(w, h, w - r, h, r)
+    g.lineTo(0, h)
+    g.closePath()
+  }
+  g.save()
+  path()
+  g.clip()
+  g.fillStyle = lighten(tint, dark ? 0.015 : 0.04)
+  g.fillRect(0, 0, w, h)
+  g.globalCompositeOperation = 'overlay'
+  g.globalAlpha = dark ? 0.32 : 0.42
+  g.fillStyle = g.createPattern(grainTile(), 'repeat')
+  g.fillRect(0, 0, w, h)
+  g.globalCompositeOperation = 'source-over'
+  // where it leaves the page: a faint fold shade across the root
+  const fx = w * root
+  const fold = g.createLinearGradient(fx - w * 0.06, 0, fx + w * 0.1, 0)
+  fold.addColorStop(0, 'rgba(0,0,0,0)')
+  fold.addColorStop(0.45, `rgba(0,0,0,${dark ? 0.22 : 0.09})`)
+  fold.addColorStop(1, 'rgba(0,0,0,0)')
+  g.globalAlpha = 1
+  g.fillStyle = fold
+  g.fillRect(0, 0, w, h)
+  g.restore()
+  // thin darker edge, round the free end only (the root lies on paper)
+  g.save()
+  g.beginPath()
+  g.rect(fx - w * 0.02, 0, w, h)
+  g.clip()
+  path()
+  g.lineWidth = Math.max(2, h * 0.05)
+  g.strokeStyle = dark ? 'rgba(255,255,255,0.12)' : 'rgba(40,28,16,0.3)'
+  g.stroke()
+  g.restore()
+  // the chevron, on the free end
+  const cx = fx + (w - fx) * 0.5
+  const cy = h / 2
+  const s = h * 0.17
+  g.save()
+  g.strokeStyle = ink
+  g.globalAlpha = 0.6
+  g.lineWidth = Math.max(2, h * 0.065)
+  g.lineCap = 'round'
+  g.lineJoin = 'round'
+  g.beginPath()
+  g.moveTo(cx - s * 0.5, cy - s)
+  g.lineTo(cx + s * 0.5, cy)
+  g.lineTo(cx - s * 0.5, cy + s)
+  g.stroke()
+  g.restore()
+  // the root melts into the paper it lies on, so the tab seems to come out
+  // from under the edge rather than sit on the page like a sticker
+  g.save()
+  g.beginPath()
+  g.rect(0, 0, fx, h)
+  g.clip() // destination-in would clear everything outside the gradient's rect
+  g.globalCompositeOperation = 'destination-in'
+  const melt = g.createLinearGradient(0, 0, fx, 0)
+  melt.addColorStop(0, 'rgba(0,0,0,0)')
+  melt.addColorStop(1, 'rgba(0,0,0,1)')
+  g.fillStyle = melt
+  g.fillRect(0, 0, fx, h)
+  g.restore()
+  return c
+}
+
+// Greedy word wrap at maxW px in the current font.
+function wrap(g, text, maxW) {
+  const lines = []
+  let line = ''
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const next = line ? `${line} ${word}` : word
+    if (line && g.measureText(next).width > maxW) {
+      lines.push(line)
+      line = word
+    } else line = next
+  }
+  if (line) lines.push(line)
+  return lines
+}
+
+// The strip that slides out from under the right page: `tab.text` in a small
+// serif, wrapped to ~34 characters a line, `tab.source` under it in smaller
+// italics. w×h px; `free` is the fraction of the width that comes out from
+// under the page (the text keeps to it). Drawn once per spread.
+export function drawTabStrip(tab, palette, w, h, free = 1, density = 1024) {
+  const c = canvas(w, h)
+  const g = c.getContext('2d')
+  const tint = palette.paper || '#efe6d4'
+  const ink = palette.ink || '#3b322a'
+  const dark = luminance(tint) < 0.3
+  drawPaper(g, w, h, lighten(tint, dark ? 0.07 : 0.3), ink, hashString(`tab:${tab.text}`), false, true, density / 1024)
+  // a thin darker rule just inside the edge, like a printed card
+  const inset = h * 0.045
+  g.strokeStyle = dark ? 'rgba(255,255,255,0.14)' : 'rgba(40,28,16,0.16)'
+  g.lineWidth = Math.max(1, h * 0.004)
+  g.strokeRect(w * (1 - free) + inset, inset, w * free - inset * 2, h - inset * 2)
+  // edges: barely darker, like handled card
+  const eg = g.createLinearGradient(0, 0, 0, h)
+  eg.addColorStop(0, 'rgba(0,0,0,0.05)')
+  eg.addColorStop(0.06, 'rgba(0,0,0,0)')
+  eg.addColorStop(0.94, 'rgba(0,0,0,0)')
+  eg.addColorStop(1, 'rgba(0,0,0,0.05)')
+  g.fillStyle = eg
+  g.fillRect(0, 0, w, h)
+
+  const text = (tab && tab.text) || ''
+  const source = (tab && tab.source) || ''
+  const x0 = w * (1 - free) + w * free * 0.1
+  const maxW = w * free * 0.8
+  const maxH = h * 0.78
+  g.textBaseline = 'alphabetic'
+  g.textAlign = 'left'
+  // size for ~34 characters a line, then shrink until the block fits
+  g.font = `100px ${SERIF}`
+  const avg = text ? g.measureText(text).width / text.length : 50
+  let size = (100 * maxW) / (34 * avg)
+  let lines = []
+  let lineH = 0
+  let srcSize = 0
+  let block = 0
+  for (let i = 0; i < 12; i++) {
+    g.font = `${size.toFixed(1)}px ${SERIF}`
+    lines = wrap(g, text, maxW)
+    lineH = size * 1.36
+    srcSize = size * 0.8
+    block = lines.length * lineH + (source ? srcSize * 1.9 : 0)
+    if (block <= maxH) break
+    size *= 0.94
+  }
+  let y = (h - block) / 2 + size * 0.98
+  g.fillStyle = ink
+  g.globalAlpha = 0.9
+  g.font = `${size.toFixed(1)}px ${SERIF}`
+  if ('letterSpacing' in g) g.letterSpacing = `${(0.01 * size).toFixed(1)}px`
+  for (const line of lines) {
+    g.fillText(line, x0, y)
+    y += lineH
+  }
+  if (source) {
+    y += srcSize * 1.9 - lineH
+    g.globalAlpha = 0.66
+    g.font = `italic ${srcSize.toFixed(1)}px ${SERIF}`
+    if ('letterSpacing' in g) g.letterSpacing = `${(0.03 * srcSize).toFixed(1)}px`
+    g.fillText(`— ${source}`, x0, y)
+  }
+  g.globalAlpha = 1
   return c
 }
 

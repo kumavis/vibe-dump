@@ -15,7 +15,11 @@
 //                      (the lamp in the HUD; otherwise remembered per browser)
 //   ?beat=<n>          force the open spread's guide beat (0 = `line`, k =
 //                      guide[k − 1]); shows that line even with the guide off
-//   ?pull=<0..1>       force frame.pull (the pull tab) on every spread
+//   ?pull=<0..1>       force frame.pull (the pull tab) on every spread, whatever
+//                      the tab itself does (book.pullTab(k, v) pulls it for real)
+//
+// Keys: ← → space enter turn; i pulls the tab (and pushes it back); Escape
+// pushes an open strip back, else hides the HUD.
 
 import * as THREE from 'three'
 import { Book } from './src/book.js'
@@ -55,6 +59,23 @@ function storeGuide(on) {
   }
 }
 const guideOn = q.get('guide') === '0' ? false : q.get('guide') === '1' ? true : storedGuide()
+
+// The "pull the tab" hint shows once per browser (best effort).
+const TABHINT_KEY = 'jhana-book:tabhint'
+function tabHintSeen() {
+  try {
+    return localStorage.getItem(TABHINT_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+function markTabHint() {
+  try {
+    localStorage.setItem(TABHINT_KEY, '1')
+  } catch {
+    /* blocked storage: it may show again next visit */
+  }
+}
 
 // ?page → rest state n (0 closed front, k + 1 spread k, 11 closed back)
 function pageToRest(v) {
@@ -112,6 +133,32 @@ if (beatParam !== null) {
 }
 
 // ---- HUD + input -----------------------------------------------------------------
+// The pull tab is hit-tested by a ray through the pointer against the resting
+// spread's page plane (book.tabHit): cheap, and only at rest.
+const raycaster = new THREE.Raycaster()
+const ndc = new THREE.Vector2()
+function rayAt(e) {
+  const r = renderer.domElement.getBoundingClientRect()
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1)
+  raycaster.setFromCamera(ndc, camera)
+  return raycaster.ray
+}
+const tabPad = (e) => (e.pointerType === 'mouse' ? 0.015 : 0.04) // fingers get a wider target
+const grab = {
+  hit: (e) => book.restSpread >= 0 && !!book.tabHit(rayAt(e), tabPad(e)),
+  start: (e) => {
+    book.tabHover = false
+    book.tabGrab(rayAt(e))
+  },
+  move: (e) => book.tabDrag(rayAt(e)),
+  end: (e, tap) => book.tabRelease(tap),
+  cancel: () => book.tabRelease(false),
+  hover: (e) => {
+    book.tabHover = book.restSpread >= 0 && !!book.tabHit(rayAt(e), tabPad(e))
+    return book.tabHover
+  },
+}
+
 const hud = new Hud({
   canvas: renderer.domElement,
   titles: scenes.map((m) => m.title),
@@ -122,6 +169,13 @@ const hud = new Hud({
   onPrev: () => (book.n === 0 && !book.turning ? book.next() : book.prev()), // any first click opens the cover
   onDot: (k) => book.goTo(k),
   onAgain: () => book.again(),
+  onInfo: () => book.togglePull(),
+  onEscape: () => {
+    if (!book.pullOpen || book.pull.to === 0) return false // out, or on its way out
+    book.pullTab(book.pull.k, 0)
+    return true
+  },
+  grab,
   onSound: () => {
     const wasOff = !drone.ctx
     const on = drone.toggle()
@@ -149,7 +203,15 @@ const shownLine = (n) => {
   return beat > 0 ? book.lineFor(k, beat) : ''
 }
 book.onArrive = (n) => hud.announce(n, shownLine(n))
-book.onBeat = (k, beat, text) => hud.say(text)
+book.onBeat = (k, beat, text) => {
+  hud.say(text)
+  // the first spread to settle into its guide offers the tab, once
+  if (beat >= 1 && book.guide && !tabHintSeen()) {
+    markTabHint()
+    hud.showTabHint()
+  }
+}
+book.onPull = () => hud.hideTabHint()
 hud.announce(book.target, shownLine(book.target))
 // an OS interruption (a call, another app) can leave the drone suspended
 renderer.domElement.addEventListener('pointerdown', () => {
