@@ -1195,7 +1195,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   const unpriced = ALL.filter((t) => !Number.isInteger(t.cost) || t.cost <= 0 || t.cost % 5 !== 0)
   check(!unpriced.length, `every one of the ${ALL.length} units has a cost, a whole multiple of 5 above 0 (${Object.values(RACES).map((r) => r.roster.map((k) => `${k} ${r.units[k].cost}`).join(', ')).join('; ')})`, unpriced.map((t) => `${t.key}: ${t.cost}`).join(', '))
   // the v6 table's classic lists (DESIGN §4.2.8.2): a retune re-pins them
-  // here, and each stays within its mission's limit (army-sim's gate)
+  // here, and each stays within its mission's limit (army-sim's gate);
+  // v6's still, judged after the parapets and kept (DESIGN's note of that
+  // name)
   const CLASSIC_COST = { squirrel: 485, serpent: 495 }
   for (const [key, want] of Object.entries(CLASSIC_COST)) {
     const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))

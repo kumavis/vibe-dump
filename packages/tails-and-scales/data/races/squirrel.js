@@ -51,6 +51,14 @@ export default {
       abilities: ['Fly — moves over scenery and enemy units.', 'Swoop — may shoot after Advancing.'],
     },
     trebuchet: {
+      // (the Skirmish prices after the parapets, DESIGN's note of that name)
+      // v6's 50, judged after F7b's parapets and kept: at 50 its fit moves
+      // with the seed by more than its band (33 to 56 at Skirmish N over
+      // seven seeds); 40, tuned on two seeds, fell outside its band on 5555; 45,
+      // fitted on four pooled seeds, failed the rule fixed before its runs
+      // on the standing seed 1111 (30 ± 7, 2 past its band of 13; 50 is 4
+      // past its), so v6's 50 stays as that rule's default, not as the
+      // price that judged better (45 held every gate 50 held, and two more)
       name: 'Pinecone Trebuchet', short: 'Trebuchet', role: 'Artillery', ai: 'artillery', models: 1, base: 1.05, pts: 95, cost: 50, big: true,
       stats: 'M3 WS6 BS4 S3 T5 W7 A2 Ld7 Sv4 OC0',
       ranged: { name: 'Flaming pinecone', range: 36, shots: 1, blast: 3, S: 6, AP: 1, D: 2, indirect: true, heavy: true, scenery: 3, fx: 'pinecone' },
