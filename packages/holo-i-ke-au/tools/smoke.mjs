@@ -18,7 +18,8 @@
 // the island zoom and in a district, the settlements off them, let go with
 // their island; what grows, by class (an island's crop map coming and going
 // with it, each class's look on the ground, the year's nearest keyframe, a
-// district loʻi's own crop, the trees of the fields); then what the page
+// district loʻi's own crop, the trees of the fields); a departure's vessels
+// and crowds, stop by stop, where the data has them; then what the page
 // costs in heap and frame time. And the prologue, where the data has a
 // geology (the test data does): its chapters before chapter 1 walked with Next
 // and Back and crossed into chapter 1 and back, the clock in Ma and its reset
@@ -4600,6 +4601,224 @@ if (!geoHere) {
   })
 }
 // ==== [geology] end ====
+
+// ==== a departure: vessels and crowds (features/vessels.js, crowd.js, people.js) ===== [voyage]
+// The scene of a departure as DATA.md "Vessels and crowds" has it, for every
+// event whose district features carry a waʻa kaulua (the test data's canoe
+// off a beach of the test Koʻolaupoko; Hōkūleʻa at Honolua and at Kualoa in
+// the real): the canoe built from its design, two hulls and two sails; at
+// each near stop that shows it, standing where the stop's moment puts it and
+// then, over the scene's loop, doing what its segment says: holding while
+// moored or at anchor, its sails furled; towed, the sails furled and the line
+// drawn; under sail, the sails set, heading along its track and leaving a
+// wake; the vessels with it moving with it; the crowds on the shore inside
+// their polygons, none in the water or on a building, facing the sea, alive;
+// at the island zoom a small hull on the water; and let go with the district.
+{
+  const scenes = await ui(`(() => {
+    const out = {}
+    for (const d of app.districts?.list || []) for (const f of d.features?.features || []) {
+      const p = f.properties || {}
+      if (p.kind !== 'vessel' || !p.event || p.design !== 'waa-kaulua') continue
+      ;(out[p.event] ||= { event: p.event, district: d.id, canoes: [] }).canoes.push(f.id)
+    }
+    return Object.values(out)
+      .map((s) => { const ev = app.data.events.find((e) => e.id === s.event); return ev ? { ...s, at: app.tour.locate(ev), near: (ev.stops || []).map((st, i) => (st.zoom === 'near' ? i : -1)).filter((i) => i >= 0) } : null })
+      .filter((s) => s && s.at)
+      // (the one with the most near stops first: the crowds, the zoom and the letting go are tried there)
+      .sort((a, b) => b.near.length - a.near.length)
+  })()`)
+  if (!scenes.length) console.log('  - no waʻa kaulua in the districts’ features: the departure checks skipped')
+  const VS = 'app.districts.cur.features.vessels'
+  const shotDir = process.env.SHOTS || '/tmp'
+  const step = (s) => run(`const V = ${VS}; for (let k = 0; k < ${Math.round(s / 0.25)}; k++) V.update(0.25, app.districts.k, app.rig.state.distance)`)
+  for (const [si, sc] of scenes.entries()) {
+    const gotoScene = async (i) => {
+      await run(`app.tour.goTo(${sc.at[0]}, ${sc.at[1]}); app.settle()`)
+      await run(`app.tour.goStop(${i})`)
+      await page.evaluate(() => window.__app.rig.finishFlight())
+      await yearSettles()
+      await page.waitForFunction((id) => { const a = window.__app; a.settle(); return a.districts.cur?.d.id === id && a.districts.cur.state === 'ready' && a.districts.k > 0.99 }, sc.district, { timeout: 300000 })
+      await run('app.settle(); app.settle()')
+      await frames(2)
+    }
+    await check(`${sc.event}: each waʻa kaulua is built from its design, two hulls and two sails (${sc.canoes.length})`, async () => {
+      await gotoScene(sc.near[0])
+      const b = await ui(`(() => {
+        const V = ${VS}, tris = (p) => (p ? p.mesh.geometry.attributes.position.count / 3 : 0)
+        return V.vessels.filter((v) => v.design === 'waa-kaulua' && v.event === '${sc.event}').map((v) => ({ id: v.id, hull: tris(v.parts.hull), set: tris(v.parts.set), furled: tris(v.parts.furled), mark: tris(v.parts.mark), st: V.stats().vessels.find((x) => x.id === v.id), crew: V.people.crews.filter((c) => c.vessel === v.id).length, masts: v.p.masts, sails: v.p.sails }))
+      })()`)
+      if (b.length !== sc.canoes.length) throw new Error(`${b.length} built of ${sc.canoes.length}`)
+      for (const v of b) if (!(v.st.hulls === 2 && v.st.sailCount === Math.min(v.masts ?? 2, v.sails ?? 2) && v.st.sailCount === 2 && v.set > 100 && v.furled > 20 && v.hull > 500 && v.crew >= 2 && v.mark > 0)) throw new Error(JSON.stringify(v))
+      const others = await ui(`${VS}.vessels.filter((v) => v.design !== 'waa-kaulua' && v.event === '${sc.event}').map((v) => v.design + ' ' + v.id)`)
+      console.log(`      ${b.map((v) => `${v.id}: hulls ${v.hull} triangles, sails set ${v.set}, furled ${v.furled}, ${v.crew} crew`).join('; ')}${others.length ? `; with ${others.join(', ')}` : ''}`)
+    })
+    // what each stop shows over its loop, for the checks after
+    const loops = []
+    for (const i of sc.near) {
+      const shows = await ui(`(() => { const ev = app.data.events.find((e) => e.id === '${sc.event}'); return app.districts.list.find((d) => d.id === '${sc.district}').features.features.some((f) => f.properties.kind === 'vessel' && f.properties.design === 'waa-kaulua' && f.properties.event === ev.id && [f.properties.stop ?? i].flat().includes(${i})) })()`)
+      if (!shows) continue
+      await check(`${sc.event}, stop ${i + 1}: the canoe stands where the stop's moment puts it and does what its segment says, its sails furled or set, a tow's line drawn`, async () => {
+        await gotoScene(i)
+        const sample = () =>
+          ui(`(() => {
+            const V = ${VS}, S = V.constructor.SCALE
+            return { clock: V.clock, t: V.t, vessels: V.vessels.filter((v) => v.group.visible && v.shown > 0.5).map((v) => {
+              const a = v.pts[v.seg], b = v.pts[v.seg + 1], l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1
+              const want = V.at(v, V.clock, [0, 0])
+              let shore = Infinity
+              if (v.design === 'waa-kaulua') for (let r = 0.02; r < 8 && shore === Infinity; r += 0.02) for (let q = 0; q < 24; q++) { const t = (q / 24) * Math.PI * 2; if (app.world.metresAt(v.x + Math.cos(t) * r, v.z + Math.sin(t) * r) > 0.3) { shore = r; break } }
+              const o = v.towing
+              let line = null
+              if (v.line?.visible) {
+                const pos = v.line.geometry.attributes.position.array, n = pos.length / 3 - 1
+                const stern = [v.x - Math.cos(v.a) * v.length * S * 0.5, v.z - Math.sin(v.a) * v.length * S * 0.5]
+                const bow = [o.x + Math.cos(o.a) * o.length * S * 0.5, o.z + Math.sin(o.a) * o.length * S * 0.5]
+                line = [Math.hypot(pos[0] - stern[0], pos[2] - stern[1]), Math.hypot(pos[n * 3] - bow[0], pos[n * 3 + 2] - bow[1])]
+              }
+              return { id: v.id, design: v.design, x: v.x, z: v.z, off: Math.hypot(v.x - want[0], v.z - want[1]), move: v.move, sails: v.sails, set: v.parts.set?.mesh.visible ?? null, furled: v.parts.furled?.mesh.visible ?? null, dot: Math.cos(v.a) * (b[0] - a[0]) / l + Math.sin(v.a) * (b[1] - a[1]) / l, speed: v.speed, wake: v.wake.visible ? v.wake.material.uniforms.uAlpha.value : 0, shore, towing: o?.id ?? null, line, tows: o ? v.move === 'tow' && o.move === 'tow' : false }
+            }) }
+          })()`)
+        const S = [await sample()]
+        await shot(`${sc.event}-stop${i + 1}`)
+        for (let k = 0; k < 3; k++) {
+          await step(10)
+          S.push(await sample())
+        }
+        const seen = new Set()
+        for (const [k, s] of S.entries()) {
+          const canoes = s.vessels.filter((v) => v.design === 'waa-kaulua')
+          if (!canoes.length) throw new Error(`at ${s.t.toFixed(0)} s no canoe shown`)
+          for (const v of s.vessels) {
+            if (v.off > 1e-6) throw new Error(`${v.id} stands ${(v.off * 100).toFixed(1)} m off its track's place for the moment`)
+            if (v.design === 'waa-kaulua') {
+              seen.add(v.move)
+              const set = v.move === 'sail'
+              if (v.sails !== (set ? 'set' : 'furled') || v.set !== set || v.furled !== !set) throw new Error(`${v.id} ${v.move}: sails ${v.sails} (set drawn ${v.set}, furled ${v.furled})`)
+            }
+            const held = v.move === 'moored' || v.move === 'anchor'
+            const prev = k ? S[k - 1].vessels.find((x) => x.id === v.id) : null
+            if (held && prev && prev.move === v.move && Math.hypot(prev.x - v.x, prev.z - v.z) > 1e-6) throw new Error(`${v.id} ${v.move}, and it moved`)
+            if (!held && v.speed > 0.3) {
+              if (v.dot < 0.8) throw new Error(`${v.id} ${v.move}: heading ${v.dot.toFixed(2)} off its track's way`)
+              if (v.design === 'waa-kaulua' && !(v.wake > 0.1)) throw new Error(`${v.id} ${v.move} at ${v.speed.toFixed(1)} m/s: no wake`)
+            }
+            if (v.tows && !(v.line && v.line[0] < 0.1 && v.line[1] < 0.1)) throw new Error(`${v.id} tows ${v.towing}: the line ${JSON.stringify(v.line)}`)
+            if (!v.tows && v.line) throw new Error(`${v.id}: a line drawn while it does not tow`)
+          }
+        }
+        if (sc.near.indexOf(i) === 0) {
+          // at the first stop, off the beach
+          const c = S[0].vessels.find((v) => v.design === 'waa-kaulua')
+          if (c.shore > 5) throw new Error(`at the first stop: ${c.move}, ${(c.shore * 100).toFixed(0)} m from the shore`)
+        }
+        const first = S[0].vessels.find((v) => v.design === 'waa-kaulua')
+        loops.push({ i, seen: [...seen], S })
+        console.log(`      over the loop: ${[...seen].join(' then ')}; at the moment ${(first.shore * 100).toFixed(0)} m from the shore; with ${S[0].vessels.filter((v) => v.design !== 'waa-kaulua').map((v) => `${v.design} ${v.move}${v.tows ? ' (towing)' : ''}`).join(', ') || 'nothing else'}`)
+      })
+    }
+    await check(`${sc.event}: over its stops the canoe does what its track says, under sail with its sails set where it sails${sc.event === 'test-departure' ? ' (moored, towed, under sail)' : ''}; the vessels with it move with it`, async () => {
+      const all = loops.flatMap((l) => l.seen)
+      // every behaviour its tracks have within the stops' loops was seen, and the canoe went somewhere
+      const has = await ui(`[...new Set(${VS}.vessels.filter((v) => v.design === 'waa-kaulua' && v.event === '${sc.event}').flatMap((v) => v.segs.map((s) => s.move)))]`)
+      if (!loops.length || !all.some((m) => m !== 'moored' && m !== 'anchor')) throw new Error(JSON.stringify(loops.map((l) => [l.i, l.seen])))
+      if (has.includes('sail') && !all.includes('sail')) throw new Error(`its tracks sail, but no stop shows it: ${JSON.stringify(loops.map((l) => [l.i, l.seen]))}`)
+      // the test departure is moored at its first stop, towed at its second, under sail at its third
+      if (sc.event === 'test-departure' && JSON.stringify(loops.map((l) => l.seen)) !== JSON.stringify([['moored'], ['tow'], ['sail']])) throw new Error(JSON.stringify(loops.map((l) => [l.i, l.seen])))
+      const rows = []
+      for (const l of loops) {
+        const ids = [...new Set(l.S.flatMap((s) => s.vessels.filter((v) => v.design !== 'waa-kaulua').map((v) => v.id)))]
+        for (const id of ids) {
+          const at = l.S.map((s) => ({ v: s.vessels.find((x) => x.id === id), c: s.vessels.find((x) => x.design === 'waa-kaulua') })).filter((q) => q.v && q.c)
+          const moving = at.filter((q) => q.v.move !== 'moored' && q.v.move !== 'anchor' && q.v.speed > 0.3)
+          const went = at.length > 1 ? Math.hypot(at.at(-1).v.x - at[0].v.x, at.at(-1).v.z - at[0].v.z) : 0
+          const gap = Math.max(...at.map((q) => Math.hypot(q.v.x - q.c.x, q.v.z - q.c.z)))
+          if (moving.length > 1 && went < 0.01) throw new Error(`stop ${l.i + 1}: ${id} under way and still`)
+          if (gap > 30) throw new Error(`stop ${l.i + 1}: ${id} ${(gap * 100).toFixed(0)} m from the canoe`)
+          rows.push(`stop ${l.i + 1} ${id} ${(went * 100).toFixed(0)} m, at most ${(gap * 100).toFixed(0)} m off`)
+        }
+      }
+      if (sc.event === 'test-departure' && rows.length < 3) throw new Error(`with it: ${rows}`)
+      console.log(`      ${rows.join('; ') || 'nothing else under way'}`)
+    })
+    if (si > 0) continue
+    // (the crowds, the zoom and the letting go: once, in the first scene)
+    await check(`${sc.event}: the crowds stand on the shore inside their polygons, none in the water or on a building, facing the sea, alive`, async () => {
+      const seen = {}
+      let figs = 0
+      let lively = { i: sc.near.at(-1), n: -1 }
+      for (const i of sc.near) {
+        await gotoScene(i)
+        await step(1)
+        const r = await ui(`(() => {
+          const V = ${VS}, P = V.people, out = { figs: 0, outside: 0, wet: 0, built: 0, away: 0, faced: 0, by: {} }
+          const inside = (ring, x, z) => { let c = false; for (let a = 0, b = ring.length - 1; a < ring.length; b = a++) { const p = ring[a], q = ring[b]; if (p[1] > z !== q[1] > z && x < ((q[0] - p[0]) * (z - p[1])) / (q[1] - p[1]) + p[0]) c = !c } return c }
+          const S = app.districts.cur.features.settlements
+          for (const g of P.shown(0)) {
+            const c = V.crowds.find((x) => x.id === g.crowd)
+            out.figs++
+            out.by[g.mode] = (out.by[g.mode] || 0) + 1
+            if (!inside(c.rings[0], g.x, g.z)) out.outside++
+            if (app.world.metresAt(g.x, g.z) < 0.15) out.wet++
+            if (S.clearData) { const r = S.rec.d.rect, N = S.clearN, ii = Math.floor(((g.x - r.x0) / (r.x1 - r.x0)) * N), jj = Math.floor(((g.z - r.z0) / (r.z1 - r.z0)) * N); if (S.clearData[jj * N + ii] > 128) { out.built++; (out.on ||= []).push(g.mode + (P.f.built[g.i] ? "" : " (unflagged)") + " vis " + P.f.vis[g.i].toFixed(2)) } }
+            if (c.p.facing === 'sea' && g.mode !== 'walk') { const s = P.seaFrom(g.x, g.z, c.sea) || c.sea; if (s) { out.faced++; if (s[0] * g.hx + s[1] * g.hz < 0.7) out.away++ } }
+          }
+          return out
+        })()`)
+        if (r.outside || r.wet || r.built || r.away > r.faced * 0.02) throw new Error(`stop ${i + 1}: ${JSON.stringify(r)}`)
+        figs += r.figs
+        if ((r.by.wave || 0) + (r.by.walk || 0) > lively.n) lively = { i, n: (r.by.wave || 0) + (r.by.walk || 0) }
+        for (const [k, v] of Object.entries(r.by)) seen[k] = Math.max(seen[k] || 0, v)
+        console.log(`      stop ${i + 1}: ${r.figs} figures${r.figs ? `, ${Object.entries(r.by).map(([k, v]) => `${k} ${v}`).join(', ')}; ${r.faced} facing the sea, ${r.away} not` : ''}`)
+      }
+      if (!figs) throw new Error('nobody on the shore at any stop')
+      // alive, at the stop with the most waving and walking: a waving arm goes up and sways, the others shift; the procession walks
+      await gotoScene(lively.i)
+      const live = await ui(`(() => {
+        const V = ${VS}, P = V.people, f = P.f, M = P.constructor.MODE
+        const before = Array.from(f.fr), xs = Array.from(f.mx)
+        let changed = 0, waved = 0, walked = 0
+        for (let k = 0; k < 40; k++) {
+          V.update(0.25, app.districts.k, app.rig.state.distance)
+          for (let i = 0; i < P.count; i++) if (f.vis[i] > 0 && f.mode[i] === M.wave && f.fr[i] >= 6 && f.fr[i] <= 7) { waved++; break }
+        }
+        for (let i = 0; i < P.count; i++) {
+          if (f.vis[i] <= 0) continue
+          if (f.fr[i] !== before[i]) changed++
+          if (f.mode[i] === M.walk && Math.abs(f.mx[i] - xs[i]) > 1e-4) walked++
+        }
+        return { changed, waved, walked }
+      })()`)
+      console.log(`      ten seconds on at stop ${lively.i + 1}: ${live.changed} figures in another frame, an arm up in ${live.waved} of 40 frames, ${live.walked} walking`)
+      if (!live.changed || (seen.wave && !live.waved) || (seen.walk && !live.walked)) throw new Error(`after ten seconds: ${JSON.stringify(live)}`)
+    })
+    await check(`${sc.event}: at the island zoom the canoe is a small hull on the water, its people gone`, async () => {
+      await gotoScene(sc.near[0])
+      await run(`const s = app.rig.state; app.rig.jump({ x: s.target.x, z: s.target.z, distance: 70, yaw: s.yaw, pitch: Math.max(0.5, s.pitch) }); app.settle()`)
+      await frames(2)
+      const r = await ui(`(() => { const V = ${VS}, v = V.vessels.find((x) => x.design === 'waa-kaulua' && x.group.visible); return v ? { full: v.parts.hull.mesh.visible, mark: v.parts.mark.mesh.visible || !!v.parts.markSail?.mesh.visible, scale: v.parts.mark.mesh.scale.x, people: V.people.drawn } : null })()`)
+      if (!r || r.full || !r.mark || r.people) throw new Error(JSON.stringify(r))
+      await shot(`${sc.event}-island`)
+      console.log(`      at 7 km: a hull drawn ${(r.scale * 100).toFixed(0)} m long, nobody on the shore`)
+    })
+    await check(`${sc.event}: the vessels and the crowds are let go with the district`, async () => {
+      await gotoScene(sc.near[0])
+      const before = await ui('({ ...app.renderer.info.memory })')
+      await run(`window.__vs = ${VS}; app.tour.exit?.(); app.ui.card.close(); app.ui.onScrub(); app.districts.drop(); app.settle()`)
+      const r = await ui(`({ v: window.__vs.disposed === true, p: window.__vs.people.disposed === true, inScene: app.scene.getObjectByName('vessels') ? 1 : 0, mem: { ...app.renderer.info.memory } })`)
+      await run('window.__vs = null')
+      if (!r.v || !r.p || r.inScene) throw new Error(JSON.stringify(r))
+      if (r.mem.geometries >= before.geometries || r.mem.textures >= before.textures) throw new Error(`the GPU holds ${JSON.stringify(r.mem)}, before ${JSON.stringify(before)}`)
+      console.log(`      geometries ${before.geometries} → ${r.mem.geometries}, textures ${before.textures} → ${r.mem.textures}`)
+    })
+  }
+  async function shot(name) {
+    const path = `${shotDir}/voyage-${name}.png`
+    await page.screenshot({ path, timeout: 300000 })
+    console.log(`      shot ${path}`)
+  }
+}
+// ==== [voyage] end ====
 
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in

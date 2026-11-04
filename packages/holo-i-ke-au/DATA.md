@@ -1875,3 +1875,44 @@ Hōkūleʻa, 1976; a fleet's landing), two more feature kinds in a district's
   segment's middle on the district's sea) and a crowd to the land (at most a
   tenth of its texels sea); `crew`, `aboard` and `people` as fields fail, for
   who was aboard goes in a telling.
+- **Accepted extensions** (from the first build: `src/features/vessels.js`,
+  `crowd.js`, `people.js`; `check-data.mjs` holds them):
+  - Every `vessel` and `crowd` names its `event` and shows at the stops its
+    `stop` names (an index or a list; the app also reads a stop's place, as
+    for the forces, but the checker holds the data to indexes). Off the tour a scene does not show: it is a
+    moment, not a year. `from` and `to` stay years (or null), as on every
+    feature; `when` and `until` are ISO dates or datetimes with their offset
+    (`1976-05-01T10:00:00-10:00`).
+  - A vessel's `times`: one ISO datetime for each position of its track, the
+    first its `when` and the last its `until`. Without them the moments are
+    shared out between `when` and `until` over the segments by their lengths
+    at each behaviour's pace (paddle 1.6, tow 2.4, sail and under way 3.0
+    m/s), a `moored` or `anchor` segment taking what is left over.
+  - A `moored` or `anchor` segment holds the vessel at its start (the checker
+    fails one longer than 50 m); the vessel heads the way its next moving
+    segment goes. One more behaviour, `under-way`, for a vessel moving under
+    power without towing (an escort alongside). The tow line is drawn from
+    the stern of the vessel whose `escort` names another to that one's bow,
+    while both are on a `tow` segment.
+  - A vessel's `colours`: `{ hull, sail, deck, trim }` as `#rrggbb`, with the
+    `note` saying what in the record they rest on; without them, dark hulls
+    and a plain cream sail. A vessel's `dress` dresses its crew as a crowd's
+    (default `1970s`).
+  - A stop's `when`: the moment (an ISO datetime in the stop's `year`) its
+    vessels and crowds stand at. A stop without one takes it from the
+    principal vessel of the stop (the waʻa kaulua the others escort, else
+    the first that escorts nothing). A principal that is a feature of its own
+    for the stop (one feature per stop, as at Honolua) is taken at the start
+    of its first moving segment less a quarter of the loop when it holds
+    before it (so the loop sees it cast off), at its `when` if it only holds,
+    and, under way throughout, with the loop centred where it passes nearest
+    the stop's camera `target` (else its place); one track shown at several stops is taken, at its k-th stop, at
+    the start of its k-th run of segments of one behaviour (its first stop
+    its first run, `moored`; its second the next, `tow`; and so on). From
+    that moment the scene runs at four times life for 45 seconds, or to the
+    next stop's moment, and begins again.
+  - A crowd's `behaviour` may be a list (equal shares) or shares
+    (`{ "gather": 0.6, "wave": 0.4 }`); `facing` is `sea` (each figure toward
+    the nearest water) or a compass bearing; a crowd may be a MultiPolygon;
+    `count` is drawn up to 8,000, and the figures thin on the screen to about
+    as many as the polygon holds there, as the battles' do.

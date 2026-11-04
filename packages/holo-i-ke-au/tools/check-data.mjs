@@ -116,7 +116,7 @@ const FEATURE_KINDS = new Set(['loi', 'fishpond', 'village', 'heiau', 'trail', '
 const FEATURE_PRECISION = new Set(['exact', 'mapped', 'inferred', 'schematic'])
 // vessels and crowds in a district (DATA.md "Vessels and crowds, in a district"; checkSceneFeature below)
 const VESSEL_DESIGNS = new Set(['waa-kaulua', 'waa', 'motor', 'ship'])
-const VESSEL_BEHAVIOURS = new Set(['moored', 'paddle', 'tow', 'sail', 'anchor'])
+const VESSEL_BEHAVIOURS = new Set(['moored', 'paddle', 'tow', 'sail', 'anchor', 'under-way'])
 const CROWD_BEHAVIOURS = new Set(['gather', 'wave', 'chant', 'procession', 'watch'])
 const CROWD_DRESS = new Set(['1970s', 'kingdom', 'precontact'])
 // a crowd stands on land: at most this share of its texels may be sea (wet sand at the water's edge)
@@ -771,6 +771,55 @@ function seaHits(pts, land) {
 // ---------------------------------------------------------------------------
 // District packs (DATA.md "District packs"): what stood in a district, and the
 // battles as masses and lines
+// ==== [voyage] the accepted extensions of "Vessels and crowds" (DATA.md), beyond checkSceneFeature =====
+const VESSEL_HOLD_M = 50 // a moored or anchored segment holds its vessel: its own length is at most this
+const CROWD_MAX = 8000 // the app draws at most this many of one crowd
+const VESSEL_COLOURS = new Set(['hull', 'sail', 'deck', 'trim'])
+const HEX = /^#[0-9a-f]{6}$/i
+/** A crowd's behaviours: one, a list, or the keys of shares. */
+const crowdBehaviours = (b) => (typeof b === 'string' ? [b] : Array.isArray(b) ? b : b && typeof b === 'object' ? Object.keys(b) : [String(b)])
+function checkSceneExtras(at, p, g) {
+  if (p.kind === 'vessel') {
+    if (p.colours !== undefined) {
+      if (typeof p.colours !== 'object' || Array.isArray(p.colours)) bad(at, 'colours must be { hull, sail, deck, trim } as #rrggbb')
+      else for (const [k, v] of Object.entries(p.colours)) if (!VESSEL_COLOURS.has(k) || !HEX.test(v)) bad(at, `colours ${k}: ${v} is not one of hull | sail | deck | trim as #rrggbb`)
+      if (!p.note) warn(at, 'gives colours but no note saying what in the record they rest on')
+    }
+    if (g?.type !== 'LineString') return
+    const segs = g.coordinates.length - 1
+    if (p.times !== undefined) {
+      if (!Array.isArray(p.times) || p.times.length !== segs + 1) bad(at, `times must give a moment for each of the track's ${segs + 1} positions`)
+      else {
+        const t = p.times.map(sceneTime)
+        if (!t.every((v) => v !== null)) bad(at, 'times must be ISO datetimes')
+        else {
+          for (let k = 1; k < t.length; k++) if (t[k] < t[k - 1]) bad(at, `times go back at position ${k}`)
+          if (sceneTime(p.when) !== null && t[0] !== sceneTime(p.when)) bad(at, 'the first of times is not its when')
+          if (sceneTime(p.until) !== null && t.at(-1) !== sceneTime(p.until)) bad(at, 'the last of times is not its until')
+        }
+      }
+    }
+    for (let k = 0; k < segs; k++) {
+      const m = Array.isArray(p.behaviour) ? p.behaviour[k] : p.behaviour
+      const run = kmBetween(g.coordinates[k], g.coordinates[k + 1]) * 1000
+      if ((m === 'moored' || m === 'anchor') && run > VESSEL_HOLD_M) bad(at, `segment ${k + 1} is ${m} but runs ${Math.round(run)} m; the app holds a vessel there`)
+    }
+  } else {
+    const b = p.behaviour
+    if (b && typeof b === 'object' && !Array.isArray(b) && !Object.values(b).every((v) => Number.isFinite(v) && v > 0)) bad(at, 'behaviour shares must be numbers above 0')
+    if (p.count !== undefined && p.count > CROWD_MAX) warn(at, `count ${p.count} is more than the ${CROWD_MAX} the app draws of one crowd`)
+  }
+}
+// a stop's moment, for the vessels and crowds at it: an ISO datetime in the stop's year
+for (const ev of events) {
+  for (const [i, s] of (ev.stops || []).entries()) {
+    if (s.when === undefined) continue
+    if (sceneTime(s.when) === null || !/T/.test(s.when)) bad(`events.json ${ev.id} stop ${i + 1}`, 'when must be an ISO datetime with its zone')
+    else if (Number.isInteger(s.year) && Number(s.when.slice(0, 4)) !== s.year) bad(`events.json ${ev.id} stop ${i + 1}`, `when ${s.when} is not in its year ${s.year}`)
+  }
+}
+// ==== [voyage] end ====
+
 const districts = loadDistricts()
 for (const d of districts) checkDistrict(d)
 // a near stop whose place lies in a district should frame it with a camera
@@ -959,9 +1008,9 @@ function checkDistrict(d) {
 
     // geometry: the type the kind wants, valid, inside the district's box
     const g = f.geometry
-    const want = ['loi', 'fishpond', 'crowd'].includes(p.kind) ? ['Polygon'] : p.kind === 'village' ? ['Polygon', 'Point'] : ['heiau', 'label'].includes(p.kind) ? ['Point'] : ['LineString']
+    const want = ['loi', 'fishpond'].includes(p.kind) ? ['Polygon'] : p.kind === 'village' ? ['Polygon', 'Point'] : ['heiau', 'label'].includes(p.kind) ? ['Point'] : p.kind === 'crowd' ? ['Polygon', 'MultiPolygon'] : ['LineString']
     if (!g || !want.includes(g.type)) { bad(at, `a ${p.kind} must be a ${want.join(' or ')}`); continue }
-    const positions = g.type === 'Point' ? [g.coordinates] : g.type === 'LineString' ? g.coordinates : g.coordinates.flat()
+    const positions = g.type === 'Point' ? [g.coordinates] : g.type === 'LineString' ? g.coordinates : g.type === 'MultiPolygon' ? g.coordinates.flat(2) : g.coordinates.flat()
     if (!positions.every((c) => Array.isArray(c) && c.length === 2 && c.every(Number.isFinite))) { bad(at, 'has a position that is not [lon, lat]'); continue }
     if (d.bounds) {
       const out = positions.find((c) => !inBounds(c, d.bounds))
@@ -1147,6 +1196,7 @@ function checkSceneFeature(at, id, p, g, d, scene) {
     }
   }
   for (const k of ['crew', 'aboard', 'people']) if (p[k] !== undefined) bad(at, `${k} goes in a telling, not in a field`)
+  checkSceneExtras(at, p, g) // [voyage] the app's accepted extensions
   const sample = districtSampler(d)
   if (p.kind === 'vessel') {
     if (typeof id === 'string') scene.vessels.add(id)
@@ -1176,7 +1226,7 @@ function checkSceneFeature(at, id, p, g, d, scene) {
     if (p.count !== undefined && !(Number.isInteger(p.count) && p.count > 0)) bad(at, `count ${p.count} is not a whole number of people`)
     if (p.density !== undefined && !(Number.isFinite(p.density) && p.density > 0 && p.density <= 4)) bad(at, `density ${p.density} is not people per m² between 0 and 4`)
     if (!(p.tellings || []).length) bad(at, 'a crowd carries its number, or what the sources say of its size, in a telling (none here)')
-    if (!CROWD_BEHAVIOURS.has(p.behaviour)) bad(at, `behaviour “${p.behaviour}” is not ${[...CROWD_BEHAVIOURS].join(' | ')}`)
+    for (const b of crowdBehaviours(p.behaviour)) if (!CROWD_BEHAVIOURS.has(b)) bad(at, `behaviour “${b}” is not ${[...CROWD_BEHAVIOURS].join(' | ')} (one, a list, or shares)`)
     if (!CROWD_DRESS.has(p.dress)) bad(at, `dress “${p.dress}” is not ${[...CROWD_DRESS].join(' | ')}`)
     if (!(p.facing === 'sea' || (Number.isFinite(p.facing) && p.facing >= 0 && p.facing < 360))) bad(at, `facing ${p.facing} is not sea or a bearing from 0 to under 360`)
     // on the land: the texels whose centres fall inside the outline (even-odd), at most a sliver of them sea

@@ -17,7 +17,9 @@
 //   the settlement layer's density for the year, their kind by the era and
 //   their value, the streets of the town under them; they yield to the
 //   village at Kou while it stands, and toward the district's edge to the
-//   island's own (towns.js), which the trees keep clear of too.
+//   island's own (towns.js), which the trees keep clear of too;
+// - and a departure or a landing: vessels on the water and the crowd on the
+//   shore (vessels.js, crowd.js).
 //
 // Each thing belongs to a feature, and shows while the year is within that
 // feature's from and to (the shared uFeatK for the rastered ones, a weight of
@@ -33,6 +35,7 @@ import { Ribbons } from './ribbons.js'
 import { Forces } from './forces.js'
 import { Labels } from './labels.js'
 import { Settlements } from './settlements.js'
+import { Vessels } from './vessels.js'
 import { holds } from '../data/district.js'
 import { patchLevel, fromHalf } from '../data/district-decode.js'
 
@@ -179,6 +182,10 @@ export class DistrictFeatures {
     // --- the town of the year, and the houses of the countryside ------------------------
     this.settlements = new Settlements(app, districts, rec, this.own, this.ribbons)
     this.group.add(this.settlements.group)
+
+    // --- a departure or a landing: vessels on the water, the crowd on the shore (vessels.js) ---
+    this.vessels = new Vessels(app, feats, shared, this.own, (x, z) => this.groundAt(x, z, false), this.settlements)
+    this.group.add(this.vessels.group)
 
     // --- names ----------------------------------------------------------------------
     this.labels = new Labels(app, feats)
@@ -345,6 +352,7 @@ export class DistrictFeatures {
     this.forest.update(this.app.camera, show, this.rec.data.hi * this.app.world.uniforms.uVert.value + 1, distance)
     this.forces.update(dt, show, distance)
     this.settlements.update(dt, show, distance)
+    this.vessels.update(dt, show, distance)
     this.ribbons.update(this.app.renderer)
     this.labels.update(show)
   }
@@ -364,6 +372,7 @@ export class DistrictFeatures {
       forces: this.forces.stats(),
       labels: this.labels.visible(),
       settlements: this.settlements.stats(),
+      vessels: this.vessels.stats(),
     }
   }
 
@@ -374,6 +383,7 @@ export class DistrictFeatures {
     this.ribbons.dispose()
     this.forces.dispose()
     this.settlements.dispose()
+    this.vessels.dispose()
     this.labels.dispose()
   }
 }

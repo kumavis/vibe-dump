@@ -636,6 +636,10 @@ writeFileSync(join(out, 'boundaries', 'moku.geojson'), JSON.stringify(b.moku))
 writeFileSync(join(out, 'boundaries', 'ahupuaa.geojson'), JSON.stringify(b.ahupuaa))
 const spots = districtSpots()
 const g = gazetteer(spots)
+// [voyage]
+spots.voyage = testVoyage(spots)
+g.places.push(...spots.voyage.places)
+g.events.push(...spots.voyage.events)
 for (const k of ['eras', 'places', 'sources', 'events', 'polities']) writeFileSync(join(out, `${k}.json`), JSON.stringify(g[k], null, 2))
 testPatches()
 testZoning()
@@ -915,6 +919,136 @@ function seaward([lon, lat]) {
   return best
 }
 
+// ==== a departure (DATA.md "Vessels and crowds") ================================== [voyage]
+/**
+ * A synthetic departure in the test Koʻolaupoko, so DATA=fake drives every
+ * path of vessels.js and crowd.js: a waʻa kaulua moored off a beach, towed
+ * out of the bay by a motor vessel and then under sail, two waʻa paddling
+ * alongside, a crowd on the beach and one on a point; an event of three near
+ * stops naming them. The canoe's track carries `times`, one waʻa's too, the
+ * other waʻa's none (its moments shared out by pace); the last stop has no
+ * `when`, so the canoe's third run of one behaviour (the sail) places it.
+ * Shapes for trying the paths; not a record.
+ */
+function testVoyage(spots) {
+  const used = Object.values(spots).flatMap((v) => (Array.isArray(v) && typeof v[0] === 'number' ? [v] : Array.isArray(v) ? v : []))
+  const off = ([lon, lat], e, n) => [r7(lon + e / KX), r7(lat + n / KZ)]
+  const h = ([lon, lat]) => heightAt(xkm(lon), zkm(lat))
+  const rot = ([e, n], deg) => [e * Math.cos(deg * DEG) - n * Math.sin(deg * DEG), e * Math.sin(deg * DEG) + n * Math.cos(deg * DEG)]
+  const wet = (a, b, d = -2) => {
+    for (let k = 0; k <= 20; k++) if (h([a[0] + ((b[0] - a[0]) * k) / 20, a[1] + ((b[1] - a[1]) * k) / 20]) > d) return false
+    return true
+  }
+  let best = null
+  for (let dz = -3; dz <= 3 && !best; dz += 0.1) {
+    for (let dx = -3; dx <= 3 && !best; dx += 0.1) {
+      const B = [r7(-157.725 + dx / KX), r7(21.365 + dz / KZ)]
+      const g = h(B)
+      if (!(g > 0.3 && g < 3) || used.some((u) => Math.hypot((u[0] - B[0]) * KX, (u[1] - B[1]) * KZ) < 1.2)) continue
+      const a = seaward(B)
+      const u = [Math.cos(a * DEG), Math.sin(a * DEG)]
+      // the water a metre deep or more off the beach
+      let s = 0.02
+      while (s < 0.4 && h(off(B, u[0] * s, u[1] * s)) > -1.2) s += 0.01
+      if (s >= 0.4) continue
+      const P0 = off(B, u[0] * (s + 0.03), u[1] * (s + 0.03))
+      for (const turn of [1, -1]) {
+        const v1 = rot(u, 15 * turn)
+        const v2 = rot(u, 35 * turn)
+        const P1 = off(P0, u[0] * 0.6, u[1] * 0.6)
+        const P2 = off(P1, v1[0] * 0.6, v1[1] * 0.6)
+        const P3 = off(P2, v2[0] * 1.2, v2[1] * 1.2)
+        const P4 = off(P3, v2[0] * 1.5, v2[1] * 1.5)
+        if (!(wet(P0, P1, -1) && wet(P1, P2) && wet(P2, P3) && wet(P3, P4))) continue
+        // a point along the shore, 0.5 to 1 km off, its sea on the bay's side
+        let head = null
+        for (let r = 0.5; r <= 1.0 && !head; r += 0.05) {
+          for (const side of [1, -1]) {
+            const pe = rot(u, 90 * side)
+            for (let q = -0.25; q <= 0.25; q += 0.01) {
+              const H = off(B, pe[0] * r + u[0] * q, pe[1] * r + u[1] * q)
+              const hh = h(H)
+              if (hh > 1 && hh < 12) {
+                head = H
+                break
+              }
+            }
+            if (head) break
+          }
+        }
+        if (!head) continue
+        best = { B, u, P: [P0, off(P0, u[0] * 0.006, u[1] * 0.006), P1, P2, P3, P4], head }
+        break
+      }
+    }
+  }
+  if (!best) throw new Error('no beach for the test departure')
+  const { B, u, P, head } = best
+  const T = (hm) => `1978-05-01T${hm}:00-10:00`
+  // the canoe: moored till ten, towed out of the bay, then under sail
+  const canoeTimes = [T('08:00'), T('10:00'), T('10:05'), T('10:09'), T('10:17'), T('10:27')]
+  // the escort: anchored off, then towing ahead on the line, then alongside
+  const ahead = (k, d, side = 0) => {
+    const a = P[Math.min(k + 1, P.length - 1)]
+    const b = P[Math.max(k - 1, 0)]
+    const de = (a[0] - b[0]) * KX
+    const dn = (a[1] - b[1]) * KZ
+    const l = Math.hypot(de, dn) || 1
+    return off(P[k], (de / l) * d - (dn / l) * side, (dn / l) * d + (de / l) * side)
+  }
+  const M = [off(P[0], u[0] * 0.25, u[1] * 0.25), off(P[0], u[0] * 0.256, u[1] * 0.256), ahead(2, 0.22), ahead(3, 0.22), ahead(4, 0.05, 0.3), ahead(5, 0.05, 0.3)]
+  const near = (k, side) => ahead(k, 0.01, side)
+  const F = (id, kind, name, geometry, extra = {}) => ({ type: 'Feature', id, properties: { kind, name, from: 1978, to: 1978, precision: 'schematic', sources: ['test-source-a'], event: 'test-departure', ...extra }, geometry })
+  const line = (pts) => ({ type: 'LineString', coordinates: pts })
+  const strip = (c, w, d, deg) => rectRing(c, w, d, deg)
+  const along = (Math.atan2(u[1], u[0]) / DEG + 90 + 360) % 360
+  const back = off(B, -u[0] * 0.05, -u[1] * 0.05)
+  const hu = (() => {
+    const a = seaward(head)
+    return [Math.cos(a * DEG), Math.sin(a * DEG)]
+  })()
+  const headIn = off(head, -hu[0] * 0.03, -hu[1] * 0.03)
+  // the headland's people look toward the bay: the compass bearing from the point to where the sails go up
+  const bearing = Math.round((Math.atan2((P[3][0] - head[0]) * KX, (P[3][1] - head[1]) * KZ) / DEG + 360) % 360)
+  const features = [
+    F('test-voyaging-canoe', 'vessel', 'Test waʻa kaulua', line(P), { design: 'waa-kaulua', length: 19, beam: 5.3, masts: 2, sails: 2, behaviour: ['moored', 'tow', 'tow', 'sail', 'sail'], when: canoeTimes[0], until: canoeTimes.at(-1), times: canoeTimes, stop: [0, 1, 2], note: 'Test vessel: dark hulls, cream sails.' }),
+    F('test-escort', 'vessel', 'Test escort', line(M), { design: 'motor', length: 15, behaviour: ['anchor', 'tow', 'tow', 'under-way', 'under-way'], escort: 'test-voyaging-canoe', when: canoeTimes[0], until: canoeTimes.at(-1), times: canoeTimes, stop: [0, 1, 2] }),
+    F('test-waa-1', 'vessel', 'Test waʻa ʻakahi', line([near(1, 0.16), near(2, 0.16), near(3, 0.16), near(4, 0.16), near(5, 0.16)]), { design: 'waa', length: 8, behaviour: 'paddle', when: canoeTimes[1], until: canoeTimes.at(-1), times: canoeTimes.slice(1), stop: [1, 2] }),
+    F('test-waa-2', 'vessel', 'Test waʻa ʻelua', line([near(1, -0.16), near(2, -0.16), near(3, -0.16), near(4, -0.16), near(5, -0.16)]), { design: 'waa', length: 7, behaviour: 'paddle', when: canoeTimes[1], until: canoeTimes.at(-1), stop: [1, 2] }),
+    F('test-crowd-beach', 'crowd', 'Test crowd on the beach', strip(back, 0.36, 0.09, along), { count: 1800, tellings: [{ source: 'test-source-a', says: 'Test telling: a large crowd on the beach.' }], behaviour: ['gather', 'wave', 'chant'], dress: '1970s', facing: 'sea', when: T('07:00'), until: T('11:00'), stop: [0, 1] }),
+    F('test-crowd-point', 'crowd', 'Test crowd on the point', strip(headIn, 0.2, 0.08, (Math.atan2(hu[1], hu[0]) / DEG + 90 + 360) % 360), { density: 0.02, tellings: [{ source: 'test-source-a', says: 'Test telling: people along the point.' }], behaviour: { procession: 0.4, watch: 0.4, wave: 0.2 }, dress: '1970s', facing: bearing, when: T('09:00'), until: T('11:00'), stop: [1, 2] }),
+  ]
+  const moku = { island: 'oahu', moku: 'Koʻolaupoko' }
+  const places = [
+    { id: 'test-voyage-beach', name: 'Test beach Hoʻomaka', alt: [], kind: 'beach', ...moku, geometry: { type: 'Point', coordinates: B }, placePrecision: 'exact', sources: ['test-source-a'] },
+    { id: 'test-voyage-bay', name: 'Test bay Holo', alt: [], kind: 'bay', ...moku, geometry: { type: 'Point', coordinates: P[2] }, placePrecision: 'exact', sources: ['test-source-a'] },
+  ]
+  const look = (from, to) => Math.round((Math.atan2((to[0] - from[0]) * KX, (to[1] - from[1]) * KZ) / DEG + 360) % 360)
+  const sea = look(B, P[2])
+  const events = [
+    {
+      id: 'test-departure',
+      title: 'Test: a canoe sets off',
+      gloss: 'a synthetic departure with three near stops',
+      when: { from: '1978-05-01', to: '1978-05-01', precision: 'day' },
+      era: 'coda',
+      where: [{ place: 'test-voyage-beach', role: 'departure' }, { place: 'test-voyage-bay', role: 'route' }],
+      zoom: ['island', 'near'],
+      kind: 'voyage',
+      summary: 'A test event: a voyaging canoe moored off a beach, towed out of the bay, and under sail.',
+      stops: [
+        { text: 'The test canoe off the beach, the people on the shore.', place: 'test-voyage-beach', zoom: 'near', year: 1978, when: T('09:00'), camera: { bearing: (sea + 180) % 360, pitch: 0.3, distance: 10, target: P[0] } },
+        { text: 'Towed out of the test bay.', place: 'test-voyage-bay', zoom: 'near', year: 1978, when: T('10:03'), camera: { bearing: (sea + 90) % 360, pitch: 0.32, distance: 11, target: ahead(2, -0.25) } },
+        { text: 'Under sail.', place: 'test-voyage-bay', zoom: 'near', year: 1978, camera: { bearing: sea, pitch: 0.3, distance: 12, target: ahead(3, 0.08) } },
+      ],
+      sources: [{ id: 'test-source-a', where: 'p. 7' }],
+      confidence: { date: 'firm', place: 'soft' },
+    },
+  ]
+  console.log(`  test departure off ${B.join(', ')}: ${features.length} vessels and crowds, ${events[0].stops.length} stops`)
+  return { features, places, events }
+}
+
 function testDistricts(spots) {
   const B = districtBoxes()
   const MPT = 24 // metres a texel: coarser than the real 6 m, so the test decodes quickly
@@ -962,6 +1096,8 @@ function testDistricts(spots) {
       F('test-label-kailua', 'label', 'Kailua (test)', point(spots.kailua)),
       F('test-label-mokapu', 'label', 'Mōkapu (test)', point(spots.military)),
       F('test-label-waimanalo', 'label', 'Waimānalo (test)', point(spots.pondPahonu)),
+      // [voyage]
+      ...(spots.voyage?.features || []),
     ],
   }
   for (const e of entries) writeFileSync(join(base, e.id, 'features.json'), JSON.stringify({ type: 'FeatureCollection', features: features[e.id] }, null, 1))
