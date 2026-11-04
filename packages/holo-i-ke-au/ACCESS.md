@@ -4,7 +4,7 @@ A standing list of what the research could not reach from the build container, w
 would unlock if the project's owner can open it: a host to allow, a lending scan to borrow, a book to
 buy or borrow, a dataset to obtain. Consolidated from RESEARCH.md §§2–15. Each entry names the events,
 places, layers or questions it would settle: what to look for in it, not only that it is wanted. For the
-twenty-four sources held unread (`opened: false` in `sources.json`), the same want is on
+twenty-six sources held unread (`opened: false` in `sources.json`), the same want is on
 the entry itself, in `wanted`, and `check-data` requires it; this file carries the rest: the sources no
 entry cites yet, and the hosts and datasets that are not sources. When one is opened, read it, turn its
 `sources.json` entry from `opened: false` to `true` with its `read`, drop or narrow its `wanted`, and
@@ -26,6 +26,7 @@ strike it here.
 | [oha.org](https://www.oha.org/) | 403 (Kīpuka's own site and services answer) | Kīpuka's documentation and terms of use, for the licence question below |
 | [Waikalua Loko Iʻa](https://www.waikalualoko.org/) | 502 through the proxy | the pond's own history and its restoration: when the wall was rebuilt and who keeps it, for `fishpond-waikalua` and a stop in the coda (RESEARCH §13) |
 | [HIMB](https://himb.hawaii.edu/) (the Hawaiʻi Institute of Marine Biology) | 502 through the proxy | the history of Moku o Loʻe: how much of today's island Holmes made in 1934–36 and how much the Navy and the laboratory added after, which the `moku-o-loe-fill` patch cannot separate (DATA.md "What `koolaupoko` rests on") |
+| [Puna Wai Ola](https://manoa.hawaii.edu/punawaiola/) (UH Mānoa) | TLS failed through the proxy (a self-signed certificate in the chain), then 503 | Hoapili’s letter to Liholiho of 13 September 1824 (`punawaiola-hoapili-1824`), his own report of the battle on Kauaʻi: the place of the defeat, Keahuokawelo, and perhaps its day, for `kauai-1824` (RESEARCH §16) |
 | [Justia](https://law.justia.com/) | Cloudflare challenge, 403 | the Hawaiʻi Supreme Court's Waiāhole Ditch decision of 2000 (*In re Water Use Permit Applications*): the ditch, the windward streams and the return of water, for `waiahole-1977` |
 | Wikimedia Commons API, Google Books API | rate limit, quota | the 1825 chart of Honolulu harbour from the Blonde's survey: the shore ponds thirty years after the battle (§10) |
 | Wikipedia's API | rate limit (429) after a few pages | the pages on Aubrey Robinson (Gay & Robinson's Makaweli ranch) and ʻUlupalakua Ranch, tertiary checks on Kauaʻi's and Maui's ranches of the 1890s (§9, Crops) |

@@ -2461,6 +2461,192 @@
     ]
   },
   {
+    "id": "kauai-1824",
+    "title": "The rising on Kauaʻi",
+    "gloss": "the fort at Waimea and the battle of Wahiawa",
+    "when": {
+      "from": "1824-05-26",
+      "to": "1824-09-16",
+      "precision": "day"
+    },
+    "era": "kaahumanu",
+    "where": [
+      {
+        "place": "honolulu",
+        "role": "death"
+      },
+      {
+        "place": "waimea-kauai",
+        "role": "council"
+      },
+      {
+        "place": "paulaula",
+        "role": "attack"
+      },
+      {
+        "place": "hanapepe",
+        "role": "march"
+      },
+      {
+        "place": "wahiawa-kauai",
+        "role": "battle"
+      },
+      {
+        "place": "lahaina",
+        "role": "reinforcements"
+      }
+    ],
+    "zoom": [
+      "far",
+      "island"
+    ],
+    "kind": "battle",
+    "summary": "Kaumualiʻi, the last ruling chief of Kauaʻi, dies at Honolulu in May 1824 and leaves his island to the king. Kalanimoku comes to Waimea to settle the succession and holds to the dead chief’s word that the lands stay as they are. The Kauaʻi chiefs who wanted them divided anew rise against the windward rulers, with Kaumualiʻi’s son Humehume at their head. On 8 August they try to take the fort at Waimea and are beaten off. Companies from Oʻahu and Maui under Hoapili march on their camp at Wahiawa, above the Hanapēpē valley, and break the rising in a short fight and a long pursuit. The Kauaʻi chiefs lose their lands to chiefs from the windward islands, Humehume is taken to Oʻahu, and Kaikioʻewa governs the island for the kingdom. It is the last war of Kauaʻi as a kingdom of its own.",
+    "stops": [
+      {
+        "text": "Kaumualiʻi dies at Honolulu on 26 May 1824. Asked at the last who is to follow him, he names “our son”, the king; asked about the lands, he says to let them stay as they are, with those who hold land keeping it. The chiefs send Kalanimoku’s nephew Kahalaiʻa to Kauaʻi as governor, and he takes over the arms of the fort at Waimea.",
+        "place": "honolulu",
+        "zoom": "far",
+        "year": 1824
+      },
+      {
+        "text": "On 1 August Kalanimoku lands at Waimea to proclaim the dead chief’s will. Before the council of the chiefs he holds to it: the lands are to stay as they are. Kiʻaimakani, an old chief, asks for them to be put together and divided anew under the new ruler. Kalanimoku refuses, and refuses again.",
+        "place": "waimea-kauai",
+        "zoom": "island",
+        "year": 1824
+      },
+      {
+        "text": "Before dawn on 8 August the Kauaʻi chiefs, with Humehume, rush Pāʻulaʻula, the fort at the river mouth, to seize its arms. A woman of the garrison raises the cry, the bell rings, and the men inside hold the walls. The attackers are driven out and fall back east toward Hanapēpē. Kalanimoku sends his schooner to Oʻahu for help.",
+        "place": "paulaula",
+        "zoom": "island",
+        "year": 1824
+      },
+      {
+        "text": "The rebels gather at Wahiawa, Humehume’s land beyond Hanapēpē. Humehume writes to Kalanimoku that his quarrel is with the Kauaʻi chiefs who stand with the government, not with the men of the windward islands; no answer comes. Companies from Oʻahu land at Waimea, and from Lahaina come Hoapili, the commander, with the chiefs Kaikioʻewa and Kahekili. In the middle of August the army marches east, crosses the Hanapēpē river and climbs the heights on the far side of the valley.",
+        "place": "hanapepe",
+        "zoom": "island",
+        "year": 1824
+      },
+      {
+        "text": "Above the valley the Kauaʻi men hold a stone wall with a single field gun, many of them armed only with wooden spears and digging sticks. The gun fires, the advancing line drops flat, rises and comes on, and the rising breaks. The flight is worse than the fight: the pursuers kill men, women and children through the back country, and Kiʻaimakani dies hiding in the grass. Humehume escapes into the mountains.",
+        "place": "wahiawa-kauai",
+        "zoom": "island",
+        "year": 1824
+      },
+      {
+        "text": "Humehume is found in the mountains in September, spared by Kalanimoku and sent to Oʻahu. The lands of Kauaʻi are taken from its chiefs, even from those who had fought for the government, and given out to chiefs from the windward islands, and many of its people are carried off as captives. In 1825 Kaikioʻewa, a chief of Kamehameha’s wars, is made governor, and Kauaʻi is ruled from then on as part of the kingdom.",
+        "place": "waimea-kauai",
+        "zoom": "far",
+        "year": 1825
+      }
+    ],
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "ch. IX, pp. 223–245 (the death, the council, the attack on the fort, the battle, the governors); ch. X, pp. 247–249 (the dead)"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXI, pp. 265–269; p. 233 (the name of the fight); pp. 236, 274 (Humehume’s death); p. 353 (Hoapili)"
+      },
+      {
+        "id": "stewart-1828",
+        "where": "pp. 229–231, 235–236, 239–240"
+      },
+      {
+        "id": "imagesofoldhawaii-humehumes-rebellion",
+        "where": "the whole post"
+      },
+      {
+        "id": "imagesofoldhawaii-humehume",
+        "where": "the rising, the capture, the death"
+      },
+      {
+        "id": "imagesofoldhawaii-liholiho-london",
+        "where": "Hoapili’s letter of 13 September 1824, and Kuykendall, as quoted"
+      },
+      {
+        "id": "tgi-2019-kauai-rebellion",
+        "where": "the whole column"
+      },
+      {
+        "id": "tgi-2022-humehume",
+        "where": "the rising and its end"
+      },
+      {
+        "id": "tgi-2021-kaikioewa",
+        "where": "the reinforcements and the governorship"
+      },
+      {
+        "id": "wikipedia-humehume",
+        "where": "finding aid"
+      },
+      {
+        "id": "punawaiola-hoapili-1824",
+        "where": "not read (known from the excerpts Images of Old Hawaiʻi quotes)"
+      },
+      {
+        "id": "warne-2008-humehume",
+        "where": "not read"
+      },
+      {
+        "id": "kuykendall-1938-v1",
+        "where": "not read (vol. I as Images of Old Hawaiʻi quotes it)"
+      }
+    ],
+    "confidence": {
+      "date": "contested",
+      "place": "soft",
+      "numbers": "contested"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "Kaumualiʻi died “about nine o’clock on the morning of the 26th of May” (p. 223). Kalanimoku “arrived at Waimea on the first of August, 1824” (p. 232); “Before the dawn of the next morning, August 8th, 1824” the fort was attacked, and “The noise of the battle continued about thirty minutes” (pp. 233–234). The fort had “mounted about fifty guns, larger and smaller” (p. 228). At Honolulu “in a few hours a thousand men were ready”, and embarked the next day (p. 236); from Lahaina “Hoopili, Kaikioewa, Kahekili (thunder), a stern warrior chief, and two companies of men, embarked immediately on board two schooners” (p. 238)."
+      },
+      {
+        "source": "bingham-1847",
+        "says": "“On the 18th of August, a force under Hoapili marched from Waimea towards Hanapepe and Wahiawa, where the enemy held a position overlooking the valley of Hanapepe, nearly two miles from the sea-shore”; though it was “scarcely more than eight miles” the army “halted and rested on the Sabbath. The next day they proceeded, crossed the river, and ascended the heights on the east side of the valley” (pp. 238–239). The 18th was a Wednesday, so by his own account the battle came after the following Sunday. Of the insurgents “some forty or fifty were killed” (p. 239). His tally of the war: “but four or five of the loyal party” and “scarcely more than half a hundred lives on the part of the insurgents”; “In the first battle at Waimea, but fourteen of the insurgents were reported as killed and in the next battle and rout, at Wahiawa, forty or fifty” (p. 249). Humehume, “After some weeks spent in the search”, was found, spared and “sent to Oahu where he remained several years, until his death” (p. 239)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“On August 8 the battle of Wahiawa was fought close to Hanapepe” — the day Bingham gives to the attack on the fort. The Kauaʻi forces were “at Wahiawa, where a fort had been hastily erected and a single cannon (named ʻHumehume) mounted”; they “were terrified when they saw more than ten ships arriving”. “No one was killed on the field, but as they took to flight they were pursued and slain. So Kiaʻi-makani, Na-keʻu, and their followers met death. For ten days the soldiers harried the land killing men, women, and children” (pp. 267–268). He puts Kaumualiʻi’s death in 1825 (p. 265). Elsewhere he gives the fight its name, “Pig eating” (ʻAipuaʻa), one in which “few of the fighting men were killed, but many, even women and children, were shot or thrust through with bayonets indiscriminately” (p. 233)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“After the battle the chiefs all came together and Ka-lani-moku redistributed the lands of Kauai … Some Kauai chiefs were with the chiefs on Maui attending the burial of their dead ruler, some fought loyally against the rebels; yet their lands were seized with the others” (p. 268). “Ka-iki-o-ʻewa was appointed governor and Kahala-iʻa recalled … the loafers and hangers-on (palaualelo) of Oahu and Maui obtained the rich lands of Kauai” (p. 269). Of the captives: “All the rest took prisoners and brought them to Oahu and even to Maui and Hawaii” (p. 268). Humehume died at Honolulu in the epidemic of 1826 (p. 274; p. 236)."
+      },
+      {
+        "source": "stewart-1828",
+        "says": "At Honolulu on the night of Tuesday 10 August the schooner brought the news: the fort was saved “not till ten of the assailants and six of the government party were killed”, and “A thousand men are already ordered to be prepared to embark, at sunrise to-morrow morning, for the relief of Karaimoku” (pp. 229–230). On 23 September Kalanimoku “has been successful in putting down the insurrection”, and Humehume “will be brought to Honorurii, and kept as a prisoner at large” (p. 239)."
+      },
+      {
+        "source": "tgi-2019-kauai-rebellion",
+        "says": "The rebels “fled to Hanapepe, leaving behind 10 dead, while 8 defenders were killed”; Hoapili, with “as many as 1,000 warriors from Oahu and 300 to 400 volunteers from Maui”, “marched towards Hanapepe on Aug. 20”; “As many as 130 insurgents were slaughtered, while only 1 of Hoapili’s soldiers was killed.” The column names no sources."
+      },
+      {
+        "source": "wikipedia-humehume",
+        "says": "“On August 18, 1824 Hoapili, Kahekili, Laʻanui and Kaikioewa arrived with an estimated one thousand troops”; “It was estimated 130 Kauaians died while only 1 Hawaiian fell.” Humehume died at Honolulu on 3 May 1826. Tertiary."
+      },
+      {
+        "source": "imagesofoldhawaii-humehumes-rebellion",
+        "says": "Quoting Hunnewell by way of Warne: Humehume’s party “retreated for about eight miles, leaving ten men and two women dead in the fort. They carried off a few casks of powder and about 100 muskets.” Three of the defenders were killed, among them the chief Niʻau."
+      },
+      {
+        "source": "imagesofoldhawaii-humehume",
+        "says": "The insurrection “began at Fort Elizabeth and ended about ten days later in Wahiawa”. Quoting Whitney: “On the morning of the 16th (September) he was found”; Humehume died on 3 May 1826, of influenza, at Honolulu."
+      },
+      {
+        "source": "imagesofoldhawaii-liholiho-london",
+        "says": "Hoapili’s letter to Liholiho of 13 September 1824, in the excerpt’s English: “We, of Lahaina, all fought in the battle, two ships, with four other vessels … At Keahuokawelo is where the defeat occurred … Two chiefs died, Nakeu and Kiaʻimakani. Humehume slipped away, and fled into the woods.”"
+      }
+    ],
+    "routes": [
+      "kalanimoku-1824",
+      "hoapili-1824-fleet"
+    ]
+  },
+  {
     "id": "whaling",
     "title": "Whaling ports",
     "gloss": "Lahaina and Honolulu",

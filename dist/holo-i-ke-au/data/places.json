@@ -1448,6 +1448,85 @@
     ]
   },
   {
+    "id": "paulaula",
+    "name": "Pāʻulaʻula",
+    "alt": [
+      "Pāʻulaʻula o Hipo",
+      "Fort Hipo",
+      "Fort Elizabeth",
+      "Russian fort",
+      "the fort at Waimea"
+    ],
+    "kind": "landmark",
+    "island": "kauai",
+    "moku": "Kona",
+    "ahupuaa": "Makaweli",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.66417,
+        21.95167
+      ]
+    },
+    "placePrecision": "exact",
+    "landmark": true,
+    "sources": [
+      "wikipedia-fort-elizabeth",
+      "bingham-1847",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The fort on the east bank at the mouth of the Waimea river, built for Kaumualiʻi in 1817; Kamakau calls it Fort Hipo. A state historical park."
+  },
+  {
+    "id": "hanapepe",
+    "name": "Hanapēpē",
+    "alt": [
+      "Hanapepe"
+    ],
+    "kind": "valley",
+    "island": "kauai",
+    "moku": "Kona",
+    "ahupuaa": "Hanapēpē",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.585,
+        21.925
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "bingham-1847"
+    ],
+    "note": "The valley and its river, east of Waimea; the point lies in the lower valley, inside the ahupuaʻa."
+  },
+  {
+    "id": "wahiawa-kauai",
+    "name": "Wahiawa",
+    "alt": [
+      "Wahiawā"
+    ],
+    "kind": "ahupuaa",
+    "island": "kauai",
+    "moku": "Kona",
+    "ahupuaa": "Wahiawa",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -159.558,
+        21.905
+      ]
+    },
+    "placePrecision": "ahupuaa",
+    "sources": [
+      "state-gis-ahupuaa",
+      "bingham-1847",
+      "kamakau-ruling-chiefs"
+    ],
+    "note": "The land east of Hanapēpē that Bingham calls Humehume’s estate; not the Wahiawā of Oʻahu. The State layer spells it without the kahakō."
+  },
+  {
     "id": "thomas-square",
     "name": "Thomas Square",
     "alt": [],

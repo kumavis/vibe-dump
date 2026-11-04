@@ -2536,6 +2536,278 @@
     ]
   },
   {
+    "id": "kalanimoku-1824",
+    "title": "Kalanimoku to Kauaʻi",
+    "gloss": "Honolulu to Waimea by Hanalei, 1824",
+    "kind": "ship",
+    "when": {
+      "from": "1824-07",
+      "to": "1824-08",
+      "precision": "month"
+    },
+    "era": "kaahumanu",
+    "event": "kauai-1824",
+    "from": "honolulu-harbor",
+    "to": "waimea-kauai",
+    "points": [
+      [
+        -157.875,
+        21.293
+      ],
+      [
+        -157.95,
+        21.28
+      ],
+      [
+        -158.12,
+        21.27
+      ],
+      [
+        -158.6,
+        21.62
+      ],
+      [
+        -159.25,
+        22.3
+      ],
+      [
+        -159.5,
+        22.25
+      ],
+      [
+        -159.505,
+        22.217
+      ],
+      [
+        -159.53,
+        22.245
+      ],
+      [
+        -159.65,
+        22.24
+      ],
+      [
+        -159.8,
+        22.13
+      ],
+      [
+        -159.83,
+        22.03
+      ],
+      [
+        -159.75,
+        21.94
+      ],
+      [
+        -159.68,
+        21.935
+      ],
+      [
+        -159.6689,
+        21.9571
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "schematicSegments": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Honolulu, in Kalanimoku’s own schooner"
+      },
+      {
+        "at": 6,
+        "note": "Hanalei bay, by Waiʻoli, to raise what could be saved of the king’s wrecked ship"
+      },
+      {
+        "at": 13,
+        "date": "1824-08-01",
+        "note": "Waimea, in a brig of the late Kaumualiʻi"
+      }
+    ],
+    "summary": "Kalanimoku sails from Honolulu in his own schooner to settle Kauaʻi after Kaumualiʻi’s death. He puts in first on the north coast at Hanalei, where Liholiho’s ship had been wrecked, to have divers raise what they can; Kauaʻi chiefs who hear of it come to attack him there by night and find him gone. From Hanalei he goes on round the island in one of the dead chief’s brigs and lands at Waimea on 1 August. The sources do not say which way round he went; the line takes the shorter way, past Nāpali, and draws it dashed.",
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "ch. IX, p. 232"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXI, pp. 266–267"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "“Leaving Honolulu in his own little schooner or pilot boat, the New York, he crossed the channel, accompanied by Kekauluohi, and touched at Waioli first, to look after the wrecked Cleopatra’s Barge. Thence, on board the Tamahololani, a brig of the late Kaumualii, he passed around, and arrived at Waimea on the first of August, 1824” (p. 232)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“He landed first at Hanalei in order to have [men] dive for the bell and anchor which had been sunk when Liholiho’s ship, Haʻaheo, went ashore off that coast, and he did not sail until evening for Waimea” (p. 266)."
+      }
+    ]
+  },
+  {
+    "id": "hoapili-1824-fleet",
+    "title": "Hoapili’s reinforcement",
+    "gloss": "Lahaina and Honolulu to Waimea, August 1824",
+    "kind": "fleet",
+    "when": {
+      "from": "1824-08",
+      "to": "1824-08",
+      "precision": "month"
+    },
+    "era": "kaahumanu",
+    "event": "kauai-1824",
+    "from": "lahaina",
+    "to": "waimea-kauai",
+    "points": [
+      [
+        -156.68,
+        20.874
+      ],
+      [
+        -156.72,
+        20.88
+      ],
+      [
+        -156.9,
+        20.97
+      ],
+      [
+        -157.02,
+        21.0
+      ],
+      [
+        -157.25,
+        21.04
+      ],
+      [
+        -157.48,
+        21.2
+      ],
+      [
+        -157.7,
+        21.24
+      ],
+      [
+        -157.79,
+        21.25
+      ],
+      [
+        -157.815,
+        21.247
+      ],
+      [
+        -157.85,
+        21.27
+      ],
+      [
+        -157.875,
+        21.293
+      ],
+      [
+        -157.95,
+        21.28
+      ],
+      [
+        -158.06,
+        21.27
+      ],
+      [
+        -158.3,
+        21.37
+      ],
+      [
+        -158.8,
+        21.6
+      ],
+      [
+        -159.38,
+        21.84
+      ],
+      [
+        -159.61,
+        21.875
+      ],
+      [
+        -159.66,
+        21.925
+      ],
+      [
+        -159.6689,
+        21.9571
+      ]
+    ],
+    "pointPrecision": "narrative",
+    "direction": "oneway",
+    "waypoints": [
+      {
+        "at": 0,
+        "note": "Lahaina: the schooner from Kauaʻi comes in with its flag flying for distress; Hoapili, Kaikioʻewa and Kahekili embark with their men"
+      },
+      {
+        "at": 10,
+        "note": "Honolulu, where the Oʻahu companies have already sailed, and guns and powder are put aboard"
+      },
+      {
+        "at": 18,
+        "note": "Waimea, where the army joins Kalanimoku at the fort"
+      }
+    ],
+    "summary": "When Kalanimoku’s schooner brings word of the attack on the fort, Oʻahu sends its companies to Waimea at once, and the schooner sails on to Lahaina for Hoapili, the commander, who is there with the court. Hoapili, Kaikioʻewa and Kahekili embark with their men, take on guns and powder at Oʻahu, and cross to Waimea, where the Kauaʻi men see the ships come in and are dismayed. The ends and the call at Honolulu are the sources’; the courses between them are not told, and the line takes the usual way through the channels and along the leeward coasts.",
+    "sources": [
+      {
+        "id": "bingham-1847",
+        "where": "ch. IX, pp. 236–238"
+      },
+      {
+        "id": "kamakau-ruling-chiefs",
+        "where": "ch. XXI, pp. 267–268"
+      },
+      {
+        "id": "stewart-1828",
+        "where": "p. 230"
+      },
+      {
+        "id": "imagesofoldhawaii-liholiho-london",
+        "where": "Hoapili’s letter, as quoted"
+      }
+    ],
+    "confidence": {
+      "date": "soft",
+      "place": "firm",
+      "course": "soft"
+    },
+    "tellings": [
+      {
+        "source": "bingham-1847",
+        "says": "The express schooner “approached Lahaina with a signal of distress, and as the captain sprung on shore, he cried out, ‘Ua kaua o Kauai! I kii kanaka mai au — Kauai wages war! I have come for men’”; “Hoopili, Kaikioewa, Kahekili (thunder), a stern warrior chief, and two companies of men, embarked immediately on board two schooners” (pp. 237–238). From Honolulu “a thousand men” embarked “the next day, and quickly reached Waimea” (p. 236)."
+      },
+      {
+        "source": "kamakau-ruling-chiefs",
+        "says": "“Recruits were drawn in from Honolulu, The Okaka, Kaʻaiohiʻa, Nouo, Kalaʻilua, and other companies were sent to Kauai, and the Paʻalua sailed to Maui after Hoa-pili, the commander in chief … At Oahu guns and ammunition were provided. The Kauai men … were terrified when they saw more than ten ships arriving” (pp. 267–268)."
+      },
+      {
+        "source": "imagesofoldhawaii-liholiho-london",
+        "says": "Hoapili, in the excerpt’s English: “We, of Lahaina, all fought in the battle, two ships, with four other vessels.”"
+      }
+    ]
+  },
+  {
     "id": "iliahi-lane",
     "title": "ʻIliahi",
     "gloss": "the sandalwood lane, Kawaihae to Honolulu and on to Canton",

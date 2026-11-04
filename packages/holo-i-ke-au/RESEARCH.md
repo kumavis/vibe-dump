@@ -342,6 +342,8 @@ below. Run `tools/check-data.mjs` as before; it now checks the routes too.
 | `peleleu-1802` | narrative | Kamakau pp. 187–189, Dibble p. 71, Jarves pp. 96–97 | Hilo (dashed to Kīpahulu), Kīpahulu, Kaupō, Lahaina, Oʻahu |
 | `kaumualii-1810` | narrative | Kamakau pp. 195–196 | Waimea (dashed), the Kaʻieʻiewaho channel, the sea of Māmala, there and back |
 | `thaddeus-1820` | narrative | Bingham pp. 79–92 | the dated places of the brig's approach, Kailua, and the passage outside the islands to Honolulu |
+| `kalanimoku-1824` | narrative | Bingham p. 232, Kamakau pp. 266–267 | Honolulu, Hanalei by Waiʻoli, Waimea (1 August 1824); the way round from Hanalei to Waimea is not told, so the shorter way past Nāpali is drawn dashed (§16) |
+| `hoapili-1824-fleet` | narrative | Bingham pp. 236–238, Kamakau pp. 267–268 | Lahaina, Honolulu (the call for guns and powder), Waimea; the courses between are the usual channels, not told (§16) |
 | `iliahi-lane` | schematic | Merlin pp. 50–52 | Kawaihae to Honolulu and on west towards Canton |
 | `whaling-lane` | schematic | Bingham pp. 134, 358; Jarves's table | from the west (the Japan grounds) to Honolulu and Lahaina, and back |
 
@@ -2166,3 +2168,112 @@ sheets inside Waikele and Kīpapa gulches among the ditches and roads, too faint
 railway has no source read for its dates. Barbers Point's wharves are now drawn from the chart, by the 2000 sheet;
 Kaumalapau's breakwater and Hāna's pier are not drawn on the 2000 sheet clearly enough to trace, and neither is charted
 at the scales fetched.
+
+## 16. Kauaʻi, 1824
+
+One event, November 2026: the rising on Kauaʻi after Kaumualiʻi's death, the last war of Kauaʻi as a kingdom of its own,
+from the death at Honolulu to the lands given out and Kaikioʻewa's governorship. The owner's brief was the rebellion and the
+fight for the island; the family histories that the biographies of Humehume run into are left out on purpose. `check-data.mjs`
+is clean, with the four warnings it had before.
+
+| file | change |
+| --- | --- |
+| `events.json` | 63 events (was 62): `kauai-1824` in the `kaahumanu` era, after `missionaries-1820`; six stops, ten tellings, two routes |
+| `places.json` | 109 places (was 106): `paulaula` (exact, a state historical park), `hanapepe` and `wahiawa-kauai` (ahupuaʻa) |
+| `routes.json` | 22 routes (was 20): `kalanimoku-1824`, `hoapili-1824-fleet` |
+| `sources.json` | 230 sources (was 219): eleven added, nine opened (all but `stewart-1828` tertiary) and two not |
+
+### What was read
+
+| source | what, and where |
+| --- | --- |
+| `bingham-1847` | Ch. IX ("Fifth year of the mission, and first of Kaahumanu. 1824"), in the Internet Archive full text (`residenceoftwent00bing`), pages from its running heads: Kaumualiʻi's will and death on 26 May (pp. 222–223); Kahalaiʻa made governor, the fort's guns, Humehume at Wahiawa (pp. 228–230); Kalanimoku's crossing by Waiʻoli, his landing on 1 August, the council and Kiaimakani's demand (pp. 232–233); the attack on the fort before dawn on 8 August (pp. 233–235); the schooner to Honolulu and the call for men (pp. 235–236); Humehume's letter, the express to Lahaina, Kaikioʻewa's speech and the reinforcement (pp. 237–238); the march of 18 August and the battle (pp. 238–239); the search for Humehume (p. 239); Kaikioʻewa governor and the warriors' return (pp. 243–245). Ch. X, pp. 247–249: Kalanimoku at the fort, and the tally of the dead. Bingham was at Waimea for the attack and sailed that evening; the battle he had from others. |
+| `kamakau-ruling-chiefs` | Ch. XXI, pp. 265–269, in the djvu text of `chiefs_202607`: the will, Kahalaiʻa at Fort Hipo, the eclipse of 21 June, Kalanimoku at Hanalei and Waimea, Kiʻaimakani, the attack on the fort, the companies from Honolulu and Hoapili from Maui, the battle of Wahiawa, the harrying, the lands divided twice over, Kaikioʻewa appointed. Also p. 233 (the fight called ʻAipuaʻa; the prisoner Kanemakakini), pp. 236 and 274 (Humehume dies at Honolulu in the epidemic of 1826), p. 353 (Hoapili's command). The chapter ran in *Ka Nūpepa Kūʻokoʻa* in March and April 1868. |
+| `stewart-1828` | New. Pp. 228–240 of the New York edition (`journalaresiden00stewgoog`): the schooner's news at Honolulu on 10 August and the men ordered out for the next morning (pp. 229–230); Hoapili among the chiefs at Lahaina on 6 September (pp. 233–234); the scholars "sent to Taui, as soldiers" (p. 236); 23 September, the rising put down and Humehume to be kept "a prisoner at large" (p. 239), with Ellis's footnote on how the war began. |
+| `imagesofoldhawaii-humehumes-rebellion`, `imagesofoldhawaii-humehume`, `imagesofoldhawaii-liholiho-london` | New, tertiary. Peter T. Young's posts of 2017 and 2024, in full: Warne's narrative with Hunnewell's letter on the dead in the fort; Whitney on the capture; Chamberlain on the death; Hoapili's letter of 13 September 1824 in excerpt; Kuykendall in quotation. |
+| `tgi-2019-kauai-rebellion`, `tgi-2022-humehume`, `tgi-2021-kaikioewa` | New, tertiary. Hank Soboleski's columns in *The Garden Island*, in full. None names a source. |
+| `wikipedia-humehume` | New, tertiary: the paragraphs on the rising and the death, in quotation (the API answered 429). |
+| `wikipedia-fort-elizabeth` | New, tertiary: the fort's coordinates, its Hawaiian name, and its standing as a park and a landmark. |
+| `state-gis-ahupuaa` | The Hanapēpē, Wahiawa, Makaweli and Waimea polygons, to put the new places inside their lands. |
+
+### The stops
+
+1. **Honolulu, far.** The death of 26 May, the will ("our son"; the lands to stay as they are), Kahalaiʻa sent as governor.
+2. **Waimea, island.** Kalanimoku's landing on 1 August and the council; Kiʻaimakani asks for the lands to be divided anew.
+3. **Pāʻulaʻula, island.** The attack before dawn on 8 August and its repulse; the schooner sent for help.
+4. **Hanapēpē, island.** The rebels at Wahiawa, Humehume's letter, the reinforcements, the march across the river.
+5. **Wahiawa, island.** The wall and the field gun, the rout, the pursuit through the back country, Humehume's escape.
+6. **Waimea, far, 1825.** Humehume taken and sent to Oʻahu; the lands given out to windward chiefs; Kaikioʻewa governor.
+
+The death stop stands at Honolulu, where Bingham has Kaumualiʻi die and Kamakau has him living at Pākākā; the rest are on
+Kauaʻi. The battle stop is `wahiawa-kauai`, at ahupuaʻa precision: Bingham's "heights on the east side of the valley of
+Hanapepe, nearly two miles from the sea-shore" and Kamakau's "Kauai forces at Wahiawa" agree on the side of the valley but
+not on a spot, and Hoapili's letter names a third place, Keahuokawelo, that no source read locates. *The Garden Island*
+puts the wall near today's Hanapēpē Lookout, which lies inside the Hanapēpē ahupuaʻa a little west of the Wahiawa line;
+no stop claims that point. The fort is placed exact, as a state historical park on the National Register. It stands on
+the east bank of the river, in Makaweli by the State layer, and Bingham's cry from its walls, "Ho Waimea! — Ho Makawele!",
+calls to the two sides of the valley. Kauaʻi's Wahiawa is written without a kahakō, as the State layer has it; `alt`
+carries Wahiawā.
+
+### The routes
+
+`kalanimoku-1824` is Kalanimoku's crossing: Honolulu to Hanalei, where both Bingham (Waiʻoli) and Kamakau have him stop
+for the wreck of Liholiho's ship, then round to Waimea, where Bingham lands him on 1 August in a brig of Kaumualiʻi's.
+Neither says which way round he went from Hanalei, so the shorter way past Nāpali is drawn dashed; the day he left
+Honolulu is not given, so the route is dated by month. `hoapili-1824-fleet` is the reinforcement from Lahaina by Honolulu,
+where Kamakau has guns and powder put aboard, to Waimea; the Oʻahu companies that sailed straight from Honolulu share its
+last leg, and no source gives either fleet's course between the ends. Both are narrative lines. The schooner's run from
+Waimea to Honolulu on 8–10 August, with the Bingham and Whitney families aboard, has no route: Bingham names only
+Hanapēpē and Wahiawa passed on the way.
+
+### Where the tellings diverge
+
+- **The day of the battle.** Bingham dates the attack on the fort to dawn on Sunday 8 August, and has Hoapili's force
+  march from Waimea "On the 18th of August", rest on the Sabbath and fight "the next day"; the 18th was a Wednesday, so
+  his own account puts the battle after Sunday 22 August, which sits badly with a march of eight miles. Kamakau dates
+  "the battle of Wahiawa" to 8 August, the day of the fort, and runs the two together. Wikipedia has the reinforcements
+  arrive on 18 August; *The Garden Island* has them march on 20 August; Images of Old Hawaiʻi has the rising end "about
+  ten days later" than the fort. Stewart has Hoapili back at Lahaina by 6 September, and Hoapili wrote of the defeat on
+  13 September. The event gives no day for the battle: its stop says "the middle of August", and its date confidence is
+  `contested`.
+- **The dead at the fort.** Stewart, from Bingham's mouth on 10 August: ten assailants and six of the government party.
+  Bingham in 1847: fourteen insurgents. Hunnewell, by way of Warne: ten men and two women. *The Garden Island*: ten rebels
+  and eight defenders. Kamakau: Niʻau shot and "several others" killed.
+- **The dead at Wahiawa.** Bingham: forty or fifty of the rebels and at most one of the government side, in a war that
+  cost "scarcely more than half a hundred" insurgents, which his own two figures exceed. Kamakau: none on the field, the
+  killing in the flight and in ten days of harrying, men, women and children. *The Garden Island* and Wikipedia: as many
+  as a hundred and thirty, and one. No figure appears outside the tellings.
+- **The forces.** A thousand men at Honolulu in Bingham and Stewart; two companies from Lahaina in two schooners in
+  Bingham; more than ten ships in Kamakau; "two ships, with four other vessels" from Lahaina in Hoapili's letter as
+  excerpted; three or four hundred from Maui in *The Garden Island*, which cites nothing.
+- **Humehume's fate.** Taken in the mountains after "some weeks" (Bingham), on 16 September (Whitney, as Images of Old
+  Hawaiʻi quotes him); kept at Honolulu "a prisoner at large" (Stewart). Bingham says he lived there "several years, until
+  his death"; Kamakau has him die at Honolulu in the epidemic of 1826, and Chamberlain, Wikipedia and *The Garden Island*
+  give 3 May 1826. The event follows him only as far as Oʻahu.
+- **Kaumualiʻi's death.** Bingham gives 26 May 1824 and every other source agrees; Kamakau's p. 265 says 1825, a slip
+  against his own chronology.
+- **The governors.** Kahalaiʻa, Kalanimoku's nephew, is the first governor in both Bingham and Kamakau; Kaikioʻewa replaces
+  him after Kalanimoku's return to Oʻahu at the turn of 1824–25. The last stop dates Kaikioʻewa's appointment 1825.
+
+### What was left out, and why
+
+- Humehume's childhood in New England, his marriage and children, and the families that descend from the chiefs of 1824:
+  the brief excludes family history, and the event is the rising. The comments under the Images of Old Hawaiʻi posts are
+  not used.
+- Kaumualiʻi's burial at Lahaina, and the burial of the dead inside the fort, which Bingham describes: burials are not
+  placed (DESIGN §7.4). The Wahiawa stop says that the pursuers killed men, women and children, and stops; what became of
+  the bodies, and the name the fight was known by, stay in Kamakau's telling.
+- The prisoner Kanemakakini, drowned from the schooner on the way to Oʻahu (Bingham, Stewart, Kamakau): a single killing,
+  told in all three, and not part of the fight for the island.
+- Hoapili's reading of the stars and the rainbow (Bingham, Kamakau): left out of the stops for length.
+
+### What could not be reached
+
+- Hoapili's letter to Liholiho of 13 September 1824 at Puna Wai Ola (`punawaiola-hoapili-1824`): TLS failed through the
+  proxy, then 503. Known only from Images of Old Hawaiʻi's excerpts; its Hawaiian would settle the place (Keahuokawelo) and
+  perhaps the day.
+- Warne, *Humehume of Kauaʻi* (2008; `warne-2008-humehume`): print. It carries Hunnewell's and Whitney's letters.
+- Kuykendall vol. I (`kuykendall-1938-v1`): still unread; quoted only through Images of Old Hawaiʻi.
+- Kamakau's Hawaiian, in *Ka Nūpepa Kūʻokoʻa* of March and April 1868: Ulukau and Papakilo are blocked.
+- The missionary letters and journals the secondary accounts quote (Whitney, Chamberlain, Ruggles, Hunnewell), held by
+  the Hawaiian Mission Children's Society, were not looked for.
