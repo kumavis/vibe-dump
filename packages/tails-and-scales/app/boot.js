@@ -492,7 +492,9 @@ export function boot(location) {
       if (!online) {
         const { Online, loadNet } = await import('./online.js')
         await loadNet()
-        online ??= new Online({ flow, params })
+        // ((F11b) with the page's Muster screen and saved lists: the
+        // lobby's Build… opens the panel's own screen)
+        online ??= new Online({ flow, params, muster, lists })
       }
       return how === 'host' ? online.host() : online.route()
     }

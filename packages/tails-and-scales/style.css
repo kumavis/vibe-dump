@@ -2314,6 +2314,25 @@ body:not(.playing) #roster {
 #setup #setupWhy.hidden {
   display: none;
 }
+/* (F11b) the lobby's army lines, inside a seat's card (ui/screens/lobby.js):
+   your own and the host's AI seat's; another seat's a sentence alone */
+.seat .seatCtl .armyLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.seat .seatCtl .armyLine.bad select {
+  border-color: var(--bad);
+}
+.seat .armyState {
+  color: #e0d4bc;
+}
+/* the Muster screen opened from the lobby: over it (both are modals, the
+   lobby later in the page) */
+body:has(#lobby:not(.hidden)) #muster {
+  z-index: 32;
+}
 
 /* the Muster screen: a dialog over the battle-setup panel */
 #muster {
