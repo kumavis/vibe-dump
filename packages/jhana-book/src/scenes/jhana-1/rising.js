@@ -20,6 +20,7 @@ uniform float uSway;
 uniform float uLift;
 uniform float uTwinkle;
 uniform float uShrink;
+uniform float uRate;
 varying float vAlpha;
 varying float vLife;
 void main() {
@@ -35,6 +36,10 @@ void main() {
   gl_Position = projectionMatrix * mv;
   float tw = 0.5 + 0.5 * sin(uTime * (0.55 + 0.9 * aSeed.w) + aSeed.z * 19.0);
   vAlpha = smoothstep(0.0, 0.14, life) * (1.0 - smoothstep(0.55, 1.0, life)) * (1.0 - uTwinkle * tw);
+  // uRate < 1 thins the stream: each particle has a fixed rank, and those
+  // ranked above the rate fade out (softly, so a changing rate never pops)
+  float rank = fract(aSeed.x * 7.31 + aSeed.z * 3.17);
+  vAlpha *= smoothstep(rank - 0.08, rank, uRate * 1.08);
   vLife = life;
   float size = uSize * (0.55 + 0.9 * aSeed.w) * (1.0 - uShrink * life);
   gl_PointSize = max(1.0, size * uScale / max(0.05, -mv.z));
@@ -58,13 +63,23 @@ void main() {
 `
 
 // Canvas sprites. 'spark': hot core, soft falloff. 'bubble': a thin bright
-// ring with a faint fill. 'glow': a wide soft disc for halos.
+// ring with a faint fill. 'glow': a wide soft disc for halos. 'mark': a short
+// pencil stroke.
 export function spriteTexture(THREE, kind = 'spark', size = 64) {
   const c = document.createElement('canvas')
   c.width = c.height = size
   const g = c.getContext('2d')
   const r = size / 2
-  if (kind === 'bubble') {
+  if (kind === 'mark') {
+    // a pencil mark: a short, slightly wavering stroke with a soft edge
+    g.lineCap = 'round'
+    g.strokeStyle = 'rgba(255,255,255,0.9)'
+    g.lineWidth = size * 0.07
+    g.beginPath()
+    g.moveTo(size * 0.16, r * 1.04)
+    g.bezierCurveTo(size * 0.36, r * 0.82, size * 0.52, r * 1.2, size * 0.84, r * 0.94)
+    g.stroke()
+  } else if (kind === 'bubble') {
     const grad = g.createRadialGradient(r, r, 0, r, r, r)
     grad.addColorStop(0, 'rgba(255,255,255,0.06)')
     grad.addColorStop(0.55, 'rgba(255,255,255,0.14)')
@@ -104,7 +119,8 @@ export function spriteTexture(THREE, kind = 'spark', size = 64) {
 //   spawn(i, rnd, out) fills out.origin [x,y,z] and out.drift [dx,dy,dz]: where
 //   the particle starts and how far it travels over one life (spread space).
 //   The returned uniforms are live: the scene sets uPhase, uTime, uOpacity,
-//   uLift (0..1, squash toward the page as it closes) each frame.
+//   uLift (0..1, squash toward the page as it closes) each frame, and may set
+//   uRate (0..1, the share of particles shown; 1 by default).
 export function risingPoints(THREE, opts) {
   const { count, rnd, spawn, map, size = 0.03, colorA, colorB, sway = 0.03, twinkle = 0.4, shrink = 0.4 } = opts
   const pos = new Float32Array(count * 3)
@@ -133,6 +149,7 @@ export function risingPoints(THREE, opts) {
     uLift: { value: 1 },
     uTwinkle: { value: twinkle },
     uShrink: { value: shrink },
+    uRate: { value: 1 },
     uOpacity: { value: 0 },
     uMap: { value: map },
     uColorA: { value: new THREE.Color(colorA) },

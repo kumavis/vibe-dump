@@ -299,6 +299,9 @@ function build(ctx) {
   // Opening curve: sin²(θ/2) is 0 closed, ½ at a right angle, 1 open — the
   // petals barely stir until the page is well open, so nothing reaches across.
   let swell = 0
+  // the story layer's unfurl: 1 as built, a little less once contentment
+  // remains (every lift scales together, so the rings' nesting still holds)
+  let unfurl = 1
   const opening = (th) => Math.sin(th / 2) ** 2
   const petals = [] // { flap, page, L, w, dir }
   const podMat = paper.material({ color: '#f1e3a0', emissive: '#6b5a20', roughness: 0.85 })
@@ -321,7 +324,7 @@ function build(ctx) {
           z: hz,
           alpha: side === 'right' ? -phi : phi + PI,
           length: ring.L * k,
-          lift: (th) => opening(th) * (peak + 0.05 * swell),
+          lift: (th) => opening(th) * (peak * unfurl + 0.05 * swell),
         })
         const jitter = 0.94 + 0.12 * rnd()
         petals.push({ flap, page, L: ring.L * k * jitter, w: ring.w * k, dir: side === 'right' ? 1 : -1 })
@@ -432,12 +435,37 @@ function build(ctx) {
   const v3 = new THREE.Vector3()
   let breathEase = 0
 
+  // ---- the story layer (STORY.md, Layer 3) -------------------------------------------
+  // `stage` chases frame.beat linearly, at most one beat per STAGE_SECS (a
+  // bigger jump takes the same time), starting on the beat the spread opens at.
+  const STAGE_SECS = 3.5
+  let stage = -1
+  const window01 = (k) => {
+    const u = Math.min(1, Math.max(0, stage - (k - 1)))
+    return u * u * (3 - 2 * u)
+  }
+  let drift = 0 // the caustics' own clock: time, until the volume is turned down
+
   return {
     update(frame) {
       const { time, reveal } = frame
       breathEase += (frame.breath - breathEase) * Math.min(1, frame.dt * 2.5)
       const b = breathEase
-      swell = b
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      if (stage < 0) stage = beat
+      else {
+        const d = beat - stage
+        const step = (Math.min(frame.dt, 0.25) / STAGE_SECS) * Math.max(1, Math.abs(d))
+        stage += Math.abs(d) <= step ? d : Math.sign(d) * step
+      }
+      // The pull tab swells the blossoms slightly, on top of the breath's swell.
+      swell = b + 0.4 * pull
+      // Beat 2, 'Contentment remains': the petals unfurl a last tenth, every cup a little wider (~3.5 s).
+      unfurl = 1 - 0.1 * window01(2)
+      // Beat 3, 'Turn the volume down': the caustics drift 40 % slower and 40 % dimmer (~3.5 s).
+      const hush = 1 - 0.4 * window01(3)
+      drift += frame.dt * hush
 
       // Fully closed (under 0.7°) the spread is sandwiched between leaves that
       // meet with no thickness at the spine; hide it rather than let its
@@ -453,7 +481,7 @@ function build(ctx) {
       root.left.updateMatrix()
       root.right.updateMatrix()
       drop.makeTranslation(0, -FLAP_GAP * (1 - sink), 0)
-      const g = 1 + 0.022 * b
+      const g = 1 + 0.022 * b + 0.03 * pull
       for (let i = 0; i < petals.length; i++) {
         const p = petals[i]
         p.flap.panel.updateMatrix()
@@ -465,9 +493,9 @@ function build(ctx) {
       petalMesh.instanceMatrix.needsUpdate = true
 
       // the water's light drifts, two networks crossing very slowly
-      tintTex.offset.set(time * 0.0042, time * 0.0027)
-      lightTex.offset.set(-time * 0.0036, time * 0.0049)
-      lightMat.opacity = reveal * (0.13 + 0.09 * b)
+      tintTex.offset.set(drift * 0.0042, drift * 0.0027)
+      lightTex.offset.set(-drift * 0.0036, drift * 0.0049)
+      lightMat.opacity = reveal * (0.13 + 0.09 * b) * hush
 
       // The glows draw without a depth test (soft light through the petals),
       // so they wait until the page is past upright: before that a leaf can

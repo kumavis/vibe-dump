@@ -186,6 +186,51 @@ function build(ctx) {
   })
   group.add(sparks.points, bubbles.points)
 
+  // ---- the muttering thoughts (story layer) -----------------------------------
+  // A few faint pencil marks drifting low over each page's outer and far
+  // edges. They ride the page frames (so they fold with the paper and squash
+  // flat onto it through uLift) and are ordinary alpha, not light: grey ink.
+  const markTex = spriteTexture(THREE, 'mark', 64)
+  const marks = [paper.root.left, paper.root.right].map((page, side) => {
+    const dir = side === 0 ? -1 : 1
+    const m = risingPoints(THREE, {
+      count: low ? 5 : 9,
+      rnd,
+      map: markTex,
+      size: 0.05,
+      colorA: '#7d6b5c',
+      colorB: '#9a8676',
+      sway: 0.03,
+      twinkle: 0.25,
+      shrink: 0.2,
+      spawn(i, r, out) {
+        // two thirds along the outer edge, the rest along the far edge
+        const outer = i % 3 !== 2
+        out.origin[0] = dir * (outer ? 0.83 + 0.11 * r() : 0.3 + 0.55 * r())
+        out.origin[1] = 0.012 + 0.03 * r()
+        out.origin[2] = outer ? -0.58 + 0.94 * r() : -0.64 + 0.06 * r()
+        out.drift[0] = dir * 0.05 * (r() - 0.5)
+        out.drift[1] = 0.025 + 0.02 * r()
+        out.drift[2] = 0.12 * (r() - 0.5)
+      },
+    })
+    m.points.material.blending = THREE.NormalBlending
+    const holder = paper.place(page)
+    holder.add(m.points)
+    return m
+  })
+  let markPhase = 0
+
+  // ---- the story layer (STORY.md, Layer 3) -------------------------------------
+  // `stage` chases frame.beat linearly, at most one beat per STAGE_SECS (a
+  // bigger jump takes the same time), starting on the beat the spread opens at.
+  const STAGE_SECS = 3
+  let stage = -1
+  const window01 = (k) => {
+    const u = Math.min(1, Math.max(0, stage - (k - 1)))
+    return u * u * (3 - 2 * u)
+  }
+
   // The breath drives one accumulated phase per particle system: a slow steady
   // rise that quickens while breathing in and never stops or reverses.
   let sparkPhase = 0
@@ -195,6 +240,22 @@ function build(ctx) {
   return {
     update(frame) {
       const { dt, time, reveal, breath, breathVel } = frame
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      if (stage < 0) stage = beat
+      else {
+        const d = beat - stage
+        const step = (Math.min(dt, 0.25) / STAGE_SECS) * Math.max(1, Math.abs(d))
+        stage += Math.abs(d) <= step ? d : Math.sign(d) * step
+      }
+      // Beat 1, 'Stay with the pleasant': the fan's light rises from 85 % to full (~3 s).
+      const rise = window01(1)
+      // The pull tab opens the fan's glow a little wider and brighter.
+      const fan = (0.85 + 0.15 * rise) * (1 + 0.15 * pull)
+      // Beat 4, 'Tingling, heat, light': sparks and bubbles go from half to full rate (~3 s).
+      const rate = 0.5 + 0.5 * window01(4)
+      // Beat 5, 'Thoughts still mutter. Ignore them.': the edge marks dim to nothing (~3 s).
+      const mutter = 1 - window01(5)
       const inhale = Math.max(0, breathVel) / VEL_MAX // 0..1 while breathing in
       sparkPhase += dt * (0.07 + 0.09 * inhale + 0.02 * breath)
       bubblePhase += dt * (0.04 + 0.035 * inhale)
@@ -216,21 +277,40 @@ function build(ctx) {
       bu.uTime.value = time
       bu.uOpacity.value = reveal * (0.3 + 0.15 * glow)
       bu.uLift.value = su.uLift.value
+      su.uRate.value = bu.uRate.value = rate
+
+      markPhase += dt * 0.035
+      const marksOn = on && mutter > 0.001
+      for (let i = 0; i < marks.length; i++) {
+        const mu = marks[i].uniforms
+        marks[i].points.visible = marksOn
+        mu.uPhase.value = markPhase
+        mu.uTime.value = time
+        mu.uOpacity.value = reveal * 0.5 * mutter
+        mu.uLift.value = su.uLift.value
+      }
 
       // as the page first lifts, warm light spills out of the gap before the
       // sun itself is seen
       const spill = leak(frame.openness)
-      front.intensity = reveal * (0.3 + 0.5 * glow) + 0.5 * spill
-      back.intensity = reveal * (0.6 + 0.6 * glow) + 0.7 * spill
-      haloMat.opacity = reveal * (0.25 + 0.2 * glow)
-      halo.scale.setScalar(1.3 + 0.12 * glow)
-      core.emissiveIntensity = reveal * (0.03 + 0.1 * glow)
-      heart.emissiveIntensity = reveal * (0.08 + 0.42 * glow)
+      front.intensity = reveal * (0.3 + 0.5 * glow) * fan + 0.5 * spill
+      back.intensity = reveal * (0.6 + 0.6 * glow) * fan + 0.7 * spill
+      haloMat.opacity = reveal * (0.25 + 0.2 * glow) * fan
+      // the halo also sits a little lower until the rays rise
+      halo.position.y = 0.44 + 0.06 * rise
+      halo.scale.setScalar((1.3 + 0.12 * glow) * (0.9 + 0.1 * rise) * (1 + 0.12 * pull))
+      core.emissiveIntensity = reveal * (0.03 + 0.1 * glow) * fan
+      heart.emissiveIntensity = reveal * (0.08 + 0.42 * glow) * fan
     },
     dispose() {
       group.remove(front, back, halo, sparks.points, bubbles.points)
       sparks.dispose()
       bubbles.dispose()
+      for (const m of marks) {
+        m.points.parent?.remove(m.points)
+        m.dispose()
+      }
+      markTex.dispose()
       sparkTex.dispose()
       bubbleTex.dispose()
       glowTex.dispose()

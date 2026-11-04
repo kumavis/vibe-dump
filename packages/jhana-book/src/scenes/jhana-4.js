@@ -214,11 +214,36 @@ function build(ctx) {
   sweep.target = target
 
   let breathEase = 0
+
+  // ---- the story layer (STORY.md, Layer 3) -------------------------------------------
+  // `stage` chases frame.beat linearly, at most one beat per STAGE_SECS (a
+  // bigger jump takes the same time), starting on the beat the spread opens at.
+  // Slower than anywhere else: this is the stillest page.
+  const STAGE_SECS = 4
+  let stage = -1
+  const window01 = (k) => {
+    const u = Math.min(1, Math.max(0, stage - (k - 1)))
+    return u * u * (3 - 2 * u)
+  }
+  let sweepAngle = 1.2 // the slow light's angle; advances at TAU / 180 s until it halts
+
   return {
     update(frame) {
-      const { time, reveal } = frame
+      const { reveal } = frame
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      if (stage < 0) stage = beat
+      else {
+        const d = beat - stage
+        const step = (Math.min(frame.dt, 0.25) / STAGE_SECS) * Math.max(1, Math.abs(d))
+        stage += Math.abs(d) <= step ? d : Math.sign(d) * step
+      }
+      // Beat 1, 'Let even the contentment go': the sweeping light eases to a halt where it is (~4 s).
+      sweepAngle += (frame.dt * TAU * (1 - window01(1))) / 180
+      // Beat 3, 'The breath, almost nothing': the breath's brightness lift fades to a tenth (~4 s).
+      const breathing = 1 - 0.9 * window01(3)
       breathEase += (frame.breath - breathEase) * Math.min(1, frame.dt * 1.2)
-      const b = breathEase
+      const b = breathEase * breathing
 
       // Fully closed (under 0.7°) the spread is sandwiched between leaves that
       // meet with no thickness at the spine; hide it rather than let its
@@ -237,11 +262,12 @@ function build(ctx) {
       haloMat.opacity = reveal * (0.2 + 0.05 * b)
       halo.visible = reveal > 0.001
 
-      const a = (time / 180) * TAU + 1.2
+      const a = sweepAngle
       sweep.position.set(Math.sin(a) * 2.4, 0.9, 2.2 + 0.3 * Math.cos(a))
       sweep.intensity = reveal * (0.85 + 0.06 * b)
       fill.intensity = 0.5 * reveal
-      moonMat.emissiveIntensity = 0.38 + 0.07 * b * reveal
+      // The pull tab brightens the moon a hair.
+      moonMat.emissiveIntensity = 0.38 + 0.07 * b * reveal + 0.04 * pull * reveal
     },
     dispose() {
       for (const x of own.materials) x.dispose()

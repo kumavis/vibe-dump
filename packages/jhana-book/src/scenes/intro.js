@@ -174,29 +174,54 @@ function build(ctx) {
     map: moteMap,
   })
 
+  // ---- the story layer (STORY.md, Layer 3) -----------------------------------
+  // `stage` chases frame.beat linearly, at most one beat per STAGE_SECS (a
+  // jump of several beats takes the same time), and starts on the beat the
+  // spread opens at, so a revisit or a ?beat= is never a fade-in.
+  const STAGE_SECS = 4
+  const ORB_BEAT = 7 // 'Something pleasant. Stay there.'
+  let stage = -1
+
   return {
     update(frame) {
       const rv = frame.reveal
       const b = frame.breath
       const on = rv > 0.002
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      if (stage < 0) stage = beat
+      else {
+        const d = beat - stage
+        const step = (Math.min(frame.dt, 0.25) / STAGE_SECS) * Math.max(1, Math.abs(d))
+        stage += Math.abs(d) <= step ? d : Math.sign(d) * step
+      }
+      // Beat 7, 'Something pleasant': the orb rises from a small dim glow to
+      // full over ~4 s; before it the pond holds only a dim shimmer.
+      const u = Math.min(1, Math.max(0, stage - (ORB_BEAT - 1)))
+      const arrive = u * u * (3 - 2 * u)
+      // The pull tab brightens the orb a little.
+      const glow = (0.32 + 0.68 * arrive) * (1 + 0.2 * pull)
+      const grow = 0.7 + 0.3 * arrive
 
       // The orb is the meditation aid: it swells and brightens over the 4.5 s
       // in-breath, holds, and settles over the out-breath. Big, slow, unmistakable.
       orb.root.position.y = orb.baseY + 0.03 * (b - 0.5)
       orb.halo.visible = orb.core.visible = orb.ring.visible = on
-      const hs = 0.26 + 0.2 * b
+      const hs = (0.26 + 0.2 * b) * grow
       orb.halo.scale.set(hs, hs, 1)
-      orb.halo.material.opacity = rv * (0.32 + 0.58 * b)
-      const cs = 0.065 + 0.035 * b
+      orb.halo.material.opacity = rv * (0.32 + 0.58 * b) * glow
+      const cs = (0.065 + 0.035 * b) * grow
       orb.core.scale.set(cs, cs, 1)
-      orb.core.material.opacity = rv * (0.72 + 0.28 * b)
+      // the core keeps more of its brightness than the halo: a small, dim
+      // light rather than a ghost
+      orb.core.material.opacity = Math.min(1, rv * (0.72 + 0.28 * b) * (0.55 + 0.45 * glow))
       // the ring opens outward as the breath fills, like the HUD's breath ring
-      const rs = 0.15 + 0.29 * b
+      const rs = (0.15 + 0.29 * b) * grow
       orb.ring.scale.set(rs, rs, 1)
-      orb.ring.material.opacity = rv * (0.05 + 0.22 * b)
-      orb.lamp.intensity = rv * (0.08 + 0.42 * b)
+      orb.ring.material.opacity = rv * (0.05 + 0.22 * b) * glow
+      orb.lamp.intensity = rv * (0.08 + 0.42 * b) * glow
 
-      sheenMat.opacity = rv * (0.16 + 0.42 * b)
+      sheenMat.opacity = rv * (0.16 + 0.42 * b) * (0.25 + 0.75 * arrive) * (1 + 0.2 * pull)
       sway.v = 0.035 * (b - 0.5)
 
       motes.points.visible = on

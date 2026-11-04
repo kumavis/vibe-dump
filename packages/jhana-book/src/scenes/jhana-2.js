@@ -76,7 +76,9 @@ function build(ctx) {
   }
   // the spring's gold, shared by the spring and the welling point at its foot
   const gold = paper.material({ color: '#efbd55', roughness: 0.7, emissive: '#ffb340', emissiveIntensity: 0 })
-  const deep = paper.material({ color: '#123a5a', roughness: 0.9 })
+  // (deep water carries an emissive, dark by default, so a 'soaked through'
+  // wave can reach past the last ring into the lake itself)
+  const deep = paper.material({ color: '#123a5a', roughness: 0.9, emissive: '#9ff0e6', emissiveIntensity: 0, name: 'jhana-2 deep' })
   const shallows = paper.material({ color: '#1d5f7a', roughness: 0.9 })
   const flatRings = [waterMat(4, '#4c9fb2'), waterMat(5, '#3d8aa3')]
   // Printed layers settle onto the paper as the spread closes (settle.js).
@@ -114,6 +116,9 @@ function build(ctx) {
     paper.card(fold.right, { shape, material })
   })
   const waveMats = [...ringMats, ...flatRings] // the order the wave reaches them
+  // the printed rings' own colours, and the deep water they fade into
+  const ringBase = flatRings.map((m) => m.color.clone())
+  const deepColor = deep.color.clone()
 
   // ---- the spring: a slender vertical V-fold ---------------------------------
   // gamma = π/2: the crease stands straight up when open whatever alpha is;
@@ -179,9 +184,35 @@ function build(ctx) {
   let lastPhase = 'in'
   let phase = 0
 
+  // ---- the story layer (STORY.md, Layer 3) ------------------------------------
+  // `stage` chases frame.beat linearly, at most one beat per STAGE_SECS (a
+  // bigger jump takes the same time), starting on the beat the spread opens at.
+  const STAGE_SECS = 3
+  let stage = -1
+  const window01 = (k) => {
+    const u = Math.min(1, Math.max(0, stage - (k - 1)))
+    return u * u * (3 - 2 * u)
+  }
+  // how far each printed ring sinks into the deep at 'Nothing comes in from outside'
+  const RING_FADE = [0.45, 1]
+
   return {
     update(frame) {
       const { dt, time, reveal, breath, breathPhase } = frame
+      const beat = frame.beat ?? 0
+      const pull = frame.pull ?? 0
+      if (stage < 0) stage = beat
+      else {
+        const d = beat - stage
+        const step = (Math.min(dt, 0.25) / STAGE_SECS) * Math.max(1, Math.abs(d))
+        stage += Math.abs(d) <= step ? d : Math.sign(d) * step
+      }
+      // Beat 3, 'Nothing comes in from outside': the outer printed ripples sink into the deep (~3 s).
+      const shut = window01(3)
+      // Beat 4, 'Soaked through': the spring brightens ~30 % and the wave runs on into the lake (~3 s).
+      const soak = window01(4)
+      // The pull tab makes the spring well harder: a taller, brighter glow.
+      const well = 1 + 0.3 * soak + 0.35 * pull
       if (breathPhase === 'out' && lastPhase === 'in') wave = 0
       lastPhase = breathPhase
       wave += dt
@@ -194,20 +225,31 @@ function build(ctx) {
         const u = (wave - WAVE_START - i * WAVE_STEP) / WAVE_WIDTH
         const pulse = Math.exp(-u * u)
         sum += pulse
-        waveMats[i].emissiveIntensity = reveal * (0.02 + 0.85 * pulse)
+        const keep = i < ringMats.length ? 1 : 1 - RING_FADE[i - ringMats.length] * shut
+        waveMats[i].emissiveIntensity = reveal * (0.02 + 0.85 * pulse) * keep
+      }
+      for (let i = 0; i < flatRings.length; i++) flatRings[i].color.lerpColors(ringBase[i], deepColor, RING_FADE[i] * shut)
+      // the wave's last step: past the rings, into the deep water itself
+      {
+        const u = (wave - WAVE_START - waveMats.length * WAVE_STEP) / (WAVE_WIDTH * 1.4)
+        const pulse = Math.exp(-u * u) * soak
+        sum += pulse
+        deep.emissiveIntensity = reveal * 0.22 * pulse
       }
 
       seat(printed, frame.openness)
 
       const on = reveal > 0.001
       glowSprite.visible = motes.points.visible = on
-      gold.emissiveIntensity = reveal * (0.1 + 0.35 * glow)
+      gold.emissiveIntensity = reveal * (0.1 + 0.35 * glow) * well
       // as the page first lifts, cool light spills out of the gap
       const spill = leak(frame.openness)
-      light.intensity = reveal * (0.12 + 0.35 * glow) + 0.3 * spill
+      light.intensity = reveal * (0.12 + 0.35 * glow) * well + 0.3 * spill
       cool.intensity = reveal * (0.15 + 0.25 * Math.min(1, sum)) + 0.6 * spill
-      glowMat.opacity = reveal * (0.35 + 0.5 * glow)
-      glowSprite.scale.setScalar(0.22 + 0.14 * glow)
+      glowMat.opacity = Math.min(1, reveal * (0.35 + 0.5 * glow) * well)
+      const gs = 0.22 + 0.14 * glow
+      glowSprite.scale.set(gs * (1 + 0.1 * pull), gs * (1 + 0.1 * soak + 0.6 * pull), 1)
+      glowSprite.position.z = 0.05 * pull // up the crease
 
       const mu = motes.uniforms
       mu.uPhase.value = phase
