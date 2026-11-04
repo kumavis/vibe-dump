@@ -1105,7 +1105,7 @@ follows N3.
   the PIN on it (78bca8a, hotseat-aggressive-climb-8 replaced by -5),
   input-check's fortified lane ported to the merged page (e252bfe):
   DESIGN's "F7b merged onto main".)
-- [ ] **Later (F7b's):** at F7b's merge onto main (17c41b0) army-sim's
+- [x] **Later (F7b's):** at F7b's merge onto main (17c41b0) army-sim's
   Skirmish per-unit gate fails: the Pinecone Trebuchet fits 32 ± 7
   against its 50 (band 13), where ab8cee6 passes at 48 ± 7; both score
   gates hold (classic 48.6%, `fortified` 50.6%). On `fortified` alone the
@@ -1119,7 +1119,33 @@ follows N3.
   play-check's layout lane pass on main's fixes.) At F7c (4e416f9) the
   Trebuchet fits 33 ± 7 and the Venom Engine 71 ± 7 (both score gates
   holding, `fortified` 50.7%): F7c moves neither past its SE, and the
-  retune stands as it was.
+  retune stands as it was. Retuned after F7c (a1a236f, data only:
+  `RULES_ID` 1jdolspb0fd → 24hjufvs4uq, no bump, no battle changed):
+  the Trebuchet 50 → 40, the Bushtails' classic list 475, nothing else
+  moved. Fitted at 50 on both sets, seeds 1111 and 2222: 33 ± 7 and
+  34 ± 7, pooled 33 ± 5 (band 10), the Venom Engine pooled 69 ± 5
+  (inside its 13, so it stays; alone on `classic` 59 ± 6, on `fortified`
+  83 ± 7, the Trebuchet 51 ± 6 and 34 ± 7). The pooled fit's 35 failed on
+  4444 (the Trebuchet 51 ± 6, the Grenadiers 49 ± 4), so 40, the most the
+  tuning seeds allow; judged on 5555 both score gates hold (52.1% and
+  52.6% ± 1.2) and the per-unit gate fails on the Trebuchet by a point
+  (55 ± 7 against 40, band 14); the standing seed passes every gate
+  (52.3% and 52.7%, the Trebuchet 29 ± 7). Field, Grand and the Powder
+  Field are main's to the digit (their own prices name both units).
+  DESIGN's "The Skirmish prices after the parapets"; what stays open is
+  the next item.
+- [ ] **Later (the Skirmish retune's):** the Trebuchet's Skirmish fit
+  moves with the seed by more than its SE (33 and 34 on seeds 1111 and
+  2222 at 50; 29, 51 and 55 on 1111, 4444 and 5555 at 40), so no price
+  lies in its band on both the tuning seeds pooled (at most 40) and 5555
+  (at least 45): at 40 the judging seed fails by a point. Pooling more
+  seeds, or a larger fit, would say whether 40 or 45 is the price; human
+  play will tell too. Found on main by the whole gate (a165618 and here
+  alike, the same battles): Field's `fortified` score gate fails, 44.7%
+  and on its re-run 44.8% ± 1.6 against its 5 points (Field's per-unit
+  gate and `open`, 45.6%, hold); and the keg mission's gates fail as
+  they have since F19a (38.5% here, 35.1% on a165618: the cheaper
+  Trebuchet is a Skirmish price there too).
 - [ ] **Later (F7c's):** the AI seldom mans a timber platform (no
   parapets, so no cover band draws its shooters up as the ramparts' do;
   a unit stood on one in 1 of 200 Skirmish AI battles and 2 of 20 Grand
