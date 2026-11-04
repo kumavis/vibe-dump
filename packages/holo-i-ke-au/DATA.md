@@ -1655,6 +1655,46 @@ geology/chapters.json             the prologue's chapters and their steps (its e
   exist; the seafloor and stage images on their grid with the stated `stats`;
   the whole directory under 12 MB.
 
+### Accepted extensions (geology)
+
+What the app (data/geology.js, ui/tour.js, render/geology.js) reads beyond
+the list above, and how it reads what the list leaves open:
+
+- **The manifest's shape**: `seafloor` as above; `stages`, each with its
+  `height` `{ file, scale, offset }` on the seafloor grid, and an optional
+  `name` the card uses for the shape a step is drawn on (without one the card
+  says "the islands modelled as they stood about … years ago"; the `rule` is
+  its tooltip). A stage whose `height.file` is the seafloor's own (`present`)
+  is drawn from the seafloor pack, with no second image read; with no stage
+  `present` listed, one is implied at age 0.
+- **A stage is the whole ground of the box** at its age (sea floor and
+  islands), in today's coordinates; the app carries the whole image by the
+  drift. Where a stage is only today's floor smoothed (within a few hundred
+  metres of the seafloor pack) the app draws the seafloor pack's detail, so
+  crossfades move only what the stages change.
+- **The hotspot**: from the manifest, else from `volcanoes.json`'s `hotspot`
+  (that file may be an object with `volcanoes` and `hotspot`); its point as
+  `position: [lon, lat]` or `lon` and `lat`; `speed` in cm a year and
+  `azimuth` the compass bearing the plate moves toward. The drift at age A
+  is `A × speed × 10` km toward `azimuth + 180°`.
+- **Chapters**: `short` (optional) names a chapter in the pill as an era's
+  does; `ageSpan` is `[oldest, youngest]` and may overlap the next chapter's
+  (the clock names the chapter with a step nearest the age). Steps keep their
+  file order, oldest first; a step's `sources` (else its chapter's) are its
+  card's Sources, and its `confidence` its chips, with the stage's
+  `confidence` as `shape`.
+- **Far stops**: `camera` `{ target: [lon, lat] today, distance, bearing,
+  pitch }`, each optional (without a target the stop's place; without the
+  rest the far zoom and the chain view's turn); a stop's `age` sets the
+  clock, and everything framed is carried by the drift to that age.
+- **A slide's run**: a step of kind `slide` runs the mass along the first
+  field it lights that the step before did not, from the field's `scar`
+  (else its volcano) out through the far edge of its polygon. The stages
+  crossfade during the run from the step before's stage to the step's own
+  only when that field has a `scar` and the two stages differ; a step may
+  name the stage to run from outright with `from`. Otherwise the run is laid
+  on the step's own stage. Blocks are named on the floor by their `name`.
+
 ### How to bake the geology
 
 How `geology/manifest.json`, the seafloor pack and the stage images are made.

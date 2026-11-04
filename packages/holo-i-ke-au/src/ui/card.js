@@ -15,20 +15,31 @@
 //   the chapter the same way.
 // - A cluster of pins that share a spot on the screen: their events in date
 //   order, any of which opens its own card.
+// - The prologue's (DATA.md "Geology"), in the same house: a chapter of it
+//   set as a chapter is, its number "Prologue" (with a Roman numeral when it
+//   has more than one), its span of ages beneath the title; a step as an
+//   event is, its age where an event's date is, its places, the stage it is
+//   drawn on and how sure that shape is, its tellings and sources, and for
+//   a slide the control that runs it again.
 //
 // The footer steps the tour (tour.js) back and on, as the buttons by the
 // timeline do: it sits where the reading ends.
 
 import { h, esc } from './dom.js'
 import { icon, hasIcon } from './icons.js'
-import { formatWhen, formatYear, eventYear } from '../time.js'
+import { formatWhen, formatYear, eventYear, formatAge, formatAgeShort, formatAgeSpan } from '../time.js'
+import { roman } from './tour.js'
 
 const KIND = {
   arrival: 'arrival', battle: 'battle', founding: 'founding', construction: 'construction', eruption: 'eruption',
   epidemic: 'epidemic', law: 'law', treaty: 'treaty', voyage: 'voyage', death: 'death', protest: 'protest', restoration: 'restoration', other: 'event',
 }
 
-const kindIcon = (ev) => (hasIcon(ev.kind) ? ev.kind : 'other')
+// the prologue's kinds of step, as a card names them, and the icon each takes
+const STEP_KIND = { birth: 'a shield rises', slide: 'landslide', join: 'islands join', part: 'islands part', subsidence: 'sinking', eruption: 'eruption', now: 'now' }
+const STEP_ICON = { birth: 'eruption', eruption: 'eruption', slide: 'slide', join: 'isles', part: 'isles', subsidence: 'isles', now: 'isles' }
+
+const kindIcon = (ev) => (ev.prologue ? (hasIcon(STEP_ICON[ev.kind]) ? STEP_ICON[ev.kind] : 'other') : hasIcon(ev.kind) ? ev.kind : 'other')
 
 /**
  * Whether a source may be cited: one read in full or in part (sources.json
@@ -119,8 +130,9 @@ export class EventCard {
     if (b.classList.contains('card-close')) this.close()
     else if (b.classList.contains('prev')) tour.back()
     else if (b.classList.contains('next')) tour.next()
+    else if (b.classList.contains('replay')) tour.replaySlide()
     else if (b.dataset.ev) {
-      const ev = this.events.get(b.dataset.ev)
+      const ev = this.events.get(b.dataset.ev) || tour.steps?.get(b.dataset.ev)
       // from a chapter's list, the full step; from a cluster, come to it gently
       if (ev) tour.open(ev, { gentle: this.mode === 'cluster' })
     }
@@ -158,7 +170,7 @@ export class EventCard {
       .map(
         (ev) => `<li><button class="ev-row" data-ev="${esc(ev.id)}">
           <span class="ev-ic">${icon(kindIcon(ev), 16)}</span>
-          <span class="ev-y">${esc(eventYear(ev))}</span>
+          <span class="ev-y">${esc(ev.prologue ? formatAgeShort(ev.age) : eventYear(ev))}</span>
           <span class="ev-t"><b>${esc(ev.title)}</b>${gloss && ev.gloss ? `<em>${esc(ev.gloss)}</em>` : ''}</span>
         </button></li>`,
       )
@@ -172,14 +184,17 @@ export class EventCard {
     const ch = tour.current
     let count
     let nextLabel = 'Next'
+    const P = tour.prologue?.length || 0
     if (this.mode === 'era' && this.chapter === ch && tour.step < 0) {
       // (as the pill over the timeline names it, and the card's own numeral)
-      count = `<span class="ch-count">Chapter <b>${ch.index + 1}</b> of ${tour.chapters.length}</span>`
+      if (ch.prologue) count = `<span class="ch-count">Prologue${P > 1 ? ` <b>${roman(ch.index + 1)}</b> of ${roman(P)}` : ''}</span>`
+      else count = `<span class="ch-count">Chapter <b>${ch.index + 1}</b> of ${tour.chapters.length}</span>`
     } else if (this.mode === 'event' && this.ev && this.ev === tour.event) {
       const n = this.ev.stops?.length || 0
       if (tour.stop >= 0) count = esc(`stop ${tour.stop + 1} of ${n}`)
       else {
-        count = esc(`${tour.step + 1} of ${ch.events.length} in chapter ${ch.index + 1}`)
+        const where = ch.prologue ? (P > 1 ? `prologue ${roman(ch.index + 1)}` : 'the prologue') : `chapter ${ch.index + 1}`
+        count = esc(`${tour.step + 1} of ${ch.events.length} in ${where}`)
         if (n) nextLabel = `Walk ${n} stops`
       }
     } else return ''
@@ -210,6 +225,7 @@ export class EventCard {
   }
 
   eventHTML() {
+    if (this.ev.prologue) return this.stepHTML()
     const ev = this.ev
     const placeNames = (ev.where || [])
       .map((w) => {
@@ -241,6 +257,43 @@ export class EventCard {
       ${this.footer()}`
   }
 
+  /** A prologue step: its age, its places, the stage it is drawn on, its tellings, and for a slide the control that runs it again. */
+  stepHTML() {
+    const st = this.ev
+    const tour = this.ui.tour
+    const places = (st.places || []).map((id) => this.places.get(id)).filter(Boolean)
+    const stage = this.app.data.geology?.stages.find((x) => x.id === st.stage)
+    const tellings = (st.tellings || [])
+      .map((t) => {
+        const s = this.cited(t.source)
+        return s ? `<li><span class="src-title">${esc(s.title)}</span>: ${esc(t.says)}</li>` : ''
+      })
+      .join('')
+    const stops = st.stops || []
+    const sp = this.stop >= 0 ? stops[this.stop] : null
+    const spPlace = sp?.place ? this.places.get(sp.place) : null
+    // how sure: the step's own record, and the shape it is drawn on (a model, by its stage's confidence)
+    const conf = Object.entries({ ...(st.confidence || {}), ...(stage?.confidence && !stage.seafloor ? { shape: stage.confidence } : {}) })
+      .map(([k, v]) => `<span class="conf ${esc(v)}"><b>${esc(k)}</b> ${esc(v)}</span>`)
+      .join('')
+    // (what the shape rests on: the stage by its name, or as the model of its age; its written rule on hover)
+    const what = stage?.name || (stage ? `the islands modelled as they stood ${formatAge(stage.age)}` : '')
+    const shape = stage && !stage.seafloor ? `<div class="card-stage"${stage.rule ? ` title="${esc(stage.rule)}"` : ''}><span>drawn on</span> ${esc(what)}</div>` : ''
+    const replay = st.kind === 'slide' && this.app.geology?.canSlide(st) ? `<button class="replay" type="button">${icon('replay', 16)}<span>Run the slide again</span></button>` : ''
+    const sources = (st.sources?.length ? st.sources : tour?.current?.prologue ? tour.current.era.sources : []) || []
+    return `
+      ${this.header(kindIcon(st), st.title, st.gloss)}
+      <div class="card-meta"><span class="when">${esc(formatAge(st.age))}</span><span class="kind">${esc(STEP_KIND[st.kind] || st.kind || 'step')}</span></div>
+      ${places.length ? `<div class="card-where">${places.map((p) => esc(p.name)).join('<i>·</i>')}</div>` : ''}
+      ${sp ? `<div class="stop"><div class="stop-n">${this.stop + 1} / ${stops.length}${spPlace ? ` · ${esc(spPlace.name)}` : ''}</div><p>${esc(sp.text)}</p></div>` : ''}
+      <div class="card-body">${st.summary ? `<p>${esc(st.summary)}</p>` : ''}${replay}</div>
+      ${shape}
+      ${conf ? `<div class="card-conf">${conf}</div>` : ''}
+      ${tellings ? `<div class="card-sec"><h2>Tellings</h2><ul class="tellings">${tellings}</ul></div>` : ''}
+      ${this.sourcesSection(sources)}
+      ${this.footer()}`
+  }
+
   eraHTML() {
     const ch = this.chapter
     const e = ch.era
@@ -249,11 +302,16 @@ export class EventCard {
     const note = String(e.note || '')
     const m = note.match(/^([ʻʼ'‘“"(]*.)([\s\S]*)$/u)
     const body = m ? `<p><span class="initial">${esc(m[1])}</span>${esc(m[2])}</p>` : ''
+    // (a prologue's chapter: "Prologue" for its number, with a Roman numeral when there are more than one, and its ages for its year)
+    const P = this.ui.tour?.prologue?.length || 0
+    const word = ch.prologue ? 'Prologue' : 'Chapter'
+    const num = ch.prologue ? (P > 1 ? roman(ch.index + 1) : '') : String(ch.index + 1)
+    const when = ch.prologue ? formatAgeSpan(e.ageSpan) || formatAge(e.age) : formatYear(e.year, Math.max(10, e.yearPrecision ?? 10))
     return `
-      <header class="ch-head">
-        <div class="ch-mark"><span class="ch-word">Chapter</span><span class="ch-num">${ch.index + 1}</span></div>
+      <header class="ch-head${ch.prologue ? ' prologue' : ''}">
+        <div class="ch-mark"><span class="ch-word">${word}</span>${num ? `<span class="ch-num">${esc(num)}</span>` : ''}</div>
         <h1 class="ch-title">${t.lead ? `<span class="ch-lead">${esc(t.lead)}</span>${esc(t.gap)}` : ''}<span class="ch-name">${esc(t.name)}</span></h1>
-        <div class="ch-year">${esc(formatYear(e.year, Math.max(10, e.yearPrecision ?? 10)))}</div>
+        <div class="ch-year">${esc(when)}</div>
         <button class="card-close" aria-label="Close">${icon('close', 18)}</button>
       </header>
       <div class="card-body ch-note">${body}</div>

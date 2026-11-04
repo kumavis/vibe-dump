@@ -19,7 +19,13 @@
 // their island; what grows, by class (an island's crop map coming and going
 // with it, each class's look on the ground, the year's nearest keyframe, a
 // district loʻi's own crop, the trees of the fields); then what the page
-// costs in heap and frame time. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
+// costs in heap and frame time. And the prologue, where the data has a
+// geology (the test data does): its chapters before chapter 1 walked with Next
+// and Back and crossed into chapter 1 and back, the clock in Ma and its reset
+// to years, the seafloor pack drawn only while it is open, the stages
+// crossfading and carried along the drift, Maui Nui joining and parting, a
+// debris field lit and the Nuʻuanu slide run to its after stage, and its GPU
+// memory given back on leaving. Run `npm run build -w @vibe-dump/holo-i-ke-au` first (and
 // `node tools/fake-data.mjs` for the test masks and the test data).
 //
 //   node tools/smoke.mjs                 (real data if public/data has events, else test-data/)
@@ -4291,6 +4297,309 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
   })
 }
 // ==== [ui6] end ====
+
+// ==== [geology] the prologue ====
+// The prologue (DATA.md "Geology"; ui/tour.js, render/geology.js): its
+// chapters before chapter 1, walked with Next and Back and crossed into
+// chapter 1 and back; the timeline as its clock in Ma and back to years; its
+// far view (the seafloor pack, only while it is open), the stages crossfading
+// as the age runs and carried along the drift, Maui Nui joining and parting;
+// a debris field lit with its blocks named, the Nuʻuanu slide run and ending
+// in the after stage, again from its card; and every texture of it let go on
+// leaving. Without a geology/ directory, only that there is no prologue.
+const geoHere = await ui('!!app.data.geology && app.tour.prologue.length > 0')
+if (!geoHere) {
+  await check('no geology: no prologue, the tour and the timeline as they were', async () => {
+    await expect('JSON.stringify([app.tour.prologue.length, app.tour.first, !!app.geology, !!app.geoClock, app.prologue])', JSON.stringify([0, 0, false, false, false]))
+    await run('app.tour.goTo(0, -1); app.settle()')
+    await expect('app.tour.atStart', true)
+    await expect("document.querySelector('.tl-back').disabled", true)
+    await expect("document.querySelector('.timeline').classList.contains('ma')", false)
+  })
+} else {
+  // (Next and Back with the flights and the clock landed, as the walks above do)
+  const press = async (key) => {
+    await page.keyboard.press(key)
+    await ui('(app.rig.finishFlight(), app.ui.timeline.finish(), app.settle(), 0)')
+  }
+  const geo = () => ui('app.geology.stats()')
+  // the prologue up and drawn: the sea floor decoded, the sea cleared, the step's stages in
+  const geoReady = async () => {
+    // (and drawing the stages the age asks for, not the last ones it had)
+    await page.waitForFunction(() => { const app = window.__app, g = app.geology, p = g.want && g.pair(app.geoClock.age); return p && g.k >= 1 && g.drawn?.a === p.a && g.drawn?.b === p.b && g.ready(p.a) && g.ready(p.b) }, null, { timeout: 300000 })
+    await ui('(app.settle(), 0)')
+  }
+  const P = await ui('app.tour.prologue.length')
+  const nSteps = await ui('app.tour.prologue.reduce((k, c) => k + c.events.length, 0)')
+  const ageWords = /^(about [\d.,]+ (million )?years ago|now|in about [\d,]+ years)$/
+
+  await check('nothing of the main chapters has an age, and nothing of the prologue a year', async () => {
+    const bad = await ui(`(() => {
+      const out = []
+      for (const ev of app.data.events) if (ev.age !== undefined || (ev.stops || []).some((s) => s.age !== undefined)) out.push(ev.id)
+      for (const ch of app.tour.prologue) for (const st of ch.events) if (st.when || st.year !== undefined || (st.stops || []).some((s) => s.year !== undefined)) out.push(st.id)
+      return out
+    })()`)
+    if (bad.length) throw new Error(`mixed clocks: ${bad.join(', ')}`)
+  })
+
+  await check(`the prologue comes before chapter 1: ${P} chapters, ${nSteps} steps, Back from chapter 1 walks into its last`, async () => {
+    await run('app.tour.goTo(0, -1); app.settle()')
+    await frames(3)
+    await expect('app.tour.atStart', false)
+    await expect("document.querySelector('.tl-back').disabled", false)
+    await page.focus('#scene')
+    await press('ArrowLeft')
+    const [c, s, stop, last, lastStops, title] = await ui('[app.tour.chapter, app.tour.step, app.tour.stop, app.tour.prologue.at(-1).events.length - 1, app.tour.prologue.at(-1).events.at(-1).stops?.length ?? 0, app.tour.prologue.at(-1).events.at(-1).title]')
+    if (c !== -1 || s !== last || stop !== lastStops - 1) throw new Error(`at ${c}/${s}/${stop}, wanted -1/${last}/${lastStops - 1}`)
+    const got = await cardTitle()
+    if (got !== title) throw new Error(`the card reads “${got}”, wanted “${title}”`)
+    const pill = await ui("document.querySelector('.tl-tour').textContent.replace(/·/g, ' · ').replace(/\\s+/g, ' ').trim()")
+    const want = P > 1 ? /^Prologue [IVX]+ of [IVX]+ · / : /^Prologue · /
+    if (!want.test(pill)) throw new Error(`the pill reads “${pill}”`)
+    await expect('app.prologue', true)
+    await expect("document.querySelector('.timeline').classList.contains('ma')", true)
+    console.log(`      ${pill}`)
+  })
+
+  await check('Next and Back walk the prologue’s cards and steps, and cross into chapter 1 and back', async () => {
+    await run(`app.tour.goTo(${-P}, -1, { jump: true }); app.settle()`)
+    await expect('app.tour.atStart', true)
+    await expect("document.querySelector('.tl-back').disabled", true)
+    const head = await ui(`(() => { const c = document.querySelector('.card.show'); const q = (s) => c?.querySelector(s)?.textContent.trim() ?? null; return { chapter: c?.classList.contains('chapter'), word: q('.ch-word'), num: q('.ch-num'), title: q('h1'), year: q('.ch-year'), count: q('footer .count') } })()`)
+    const label = await ui(`app.tour.prologue[0].era.label`)
+    if (!head.chapter || head.word !== 'Prologue' || head.title !== label) throw new Error(`the first card: ${JSON.stringify(head)}`)
+    if (P > 1 && head.num !== 'I') throw new Error(`its numeral is “${head.num}”`)
+    if (!/years ago|now/.test(head.year || '')) throw new Error(`its ages read “${head.year}”`)
+    const seen = []
+    for (let i = 0; i < 60; i++) {
+      await press('ArrowRight')
+      const at = await ui('[app.tour.chapter, app.tour.step, app.tour.stop, app.tour.event?.title ?? app.tour.current.era.label, app.tour.event ? (app.tour.event.stops?.[app.tour.stop]?.age ?? app.tour.event.age) : null, app.geoClock.age, app.prologue]')
+      const [c, s, stop, title, age, clock, pro] = at
+      if (c >= 0) {
+        // across into chapter 1: its card, the years back
+        if (c !== 0 || s !== -1) throw new Error(`out of the prologue at ${c}/${s}`)
+        await expect(`document.querySelector('.card.show h1')?.textContent === app.timeline.eras[0].label`, true)
+        await expect("document.querySelector('.timeline').classList.contains('ma')", false)
+        await expect("document.querySelector('.tl-era').textContent === app.timeline.era.label", true)
+        await expect('app.prologue', false)
+        if (/years ago/.test(await ui("document.querySelector('.tl-year').textContent"))) throw new Error('the year reads as an age')
+        break
+      }
+      if (!pro) throw new Error(`at ${c}/${s} the prologue is not open`)
+      const got = await cardTitle()
+      if (got !== title) throw new Error(`at ${c}/${s}/${stop}: the card reads “${got}”, wanted “${title}”`)
+      if (age !== null && Math.abs(clock - age) > 1e-6) throw new Error(`at ${c}/${s}/${stop}: the clock at ${clock}, wanted ${age}`)
+      seen.push(`${c}/${s}${stop >= 0 ? `.${stop}` : ''}`)
+    }
+    const want = await ui('app.tour.prologue.reduce((k, c) => k + 1 + c.events.reduce((j, e) => j + 1 + (e.stops?.length || 0), 0), 0) - 1')
+    if (seen.length !== want) throw new Error(`walked ${seen.length} cards (${seen.join(' ')}), wanted ${want}`)
+    // and Back, into the prologue again and step by step to its start
+    let back = 0
+    for (let i = 0; i < 60 && !(await ui('app.tour.atStart')); i++, back++) {
+      await press('ArrowLeft')
+      if (!(await ui('app.prologue'))) throw new Error(`Back left the prologue at ${await ui('app.tour.chapter')}`)
+    }
+    if (back !== want + 1) throw new Error(`Back took ${back} presses to the start, wanted ${want + 1}`)
+    console.log(`      ${seen.length + 1} cards forward to chapter 1, ${back} back`)
+  })
+
+  await check('the clock in Ma: a log track from the oldest stage to now, the age in words, and the years again in chapter 1', async () => {
+    await run(`app.tour.goTo(${-P}, 0, { jump: true }); app.settle()`)
+    const t = await ui(`(() => { const ticks = [...document.querySelectorAll('.tl-tick')]; return { labels: ticks.map((e) => e.textContent.trim()), lefts: ticks.map((e) => parseFloat(e.style.left)), max: document.querySelector('.tl-input').max, year: document.querySelector('.tl-year').textContent, era: document.querySelector('.tl-era').textContent } })()`)
+    if (t.labels.at(-1) !== 'now' || !/Ma$/.test(t.labels[0])) throw new Error(`the ticks read ${t.labels.join(' ')}`)
+    if (t.lefts.some((v, i) => i && v <= t.lefts[i - 1]) || t.lefts.at(-1) !== 100) throw new Error(`the ticks stand at ${t.lefts.join(' ')}`)
+    if (t.max !== '1' || !ageWords.test(t.year)) throw new Error(`the slider runs to ${t.max}, its label reads “${t.year}”`)
+    // a log scale: a million years near the start is a shorter stretch than the last hundred thousand
+    const [u1, u2, u3, u4] = await ui('[app.geoClock.uAt(2), app.geoClock.uAt(1), app.geoClock.uAt(0.1), app.geoClock.uAt(0)]')
+    if (!(u2 - u1 < u4 - u3)) throw new Error(`2→1 Ma spans ${(u2 - u1).toFixed(3)}, 0.1→0 ${(u4 - u3).toFixed(3)}`)
+    // the slider, taken: off the tour, the age read off it, and Next resumes in the prologue
+    await page.evaluate(() => {
+      const el = document.querySelector('.tl-input')
+      el.value = '0.62'
+      el.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+    const [active, age, u] = await ui('[app.tour.active, app.geoClock.age, app.geoClock.u]')
+    if (active || Math.abs(u - 0.62) > 1e-3) throw new Error(`after the slider: active ${active}, u ${u}`)
+    const pill = await ui("document.querySelector('.tl-tour').textContent.replace(/\\s+/g, ' ')")
+    if (!/Next resumes at the prologue/.test(pill)) throw new Error(`the pill reads “${pill}”`)
+    const label = await ui("document.querySelector('.tl-year').textContent")
+    if (!ageWords.test(label)) throw new Error(`the label reads “${label}” at ${age} Ma`)
+    await press('ArrowRight')
+    const [c, s] = await ui('[app.tour.chapter, app.tour.step]')
+    const near = await ui(`app.tour.prologueAt(${age}).at`)
+    if (c !== near || s !== -1) throw new Error(`Next resumed at ${c}/${s}, wanted ${near}/-1`)
+    // into chapter 1: the years' track, ticks and label as they were
+    await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
+    const y = await ui(`({ n: document.querySelectorAll('.tl-tick').length, max: document.querySelector('.tl-input').max, era: document.querySelector('.tl-era').textContent, year: document.querySelector('.tl-year').textContent })`)
+    const [n, max, era] = await ui('[app.timeline.n, String(app.timeline.max), app.timeline.era.label]')
+    if (y.n !== n || y.max !== max || y.era !== era || /ago/.test(y.year)) throw new Error(`back in chapter 1: ${JSON.stringify(y)}`)
+    console.log(`      ${t.labels.join(' · ')}; “${label}” off the tour; back to ${y.n} ticks and “${y.era} · ${y.year}”`)
+  })
+
+  await check('the sea floor is drawn only in the prologue, in place of the packs, the sea and the pins', async () => {
+    await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
+    // (the sea eases back to opaque before the packs take over again)
+    await page.waitForFunction(() => !window.__app.geology.covers, null, { timeout: 120000 })
+    await frames(2)
+    const main = await ui('[app.geology.covers, app.world.group.visible, app.ocean.mesh.visible, !!app.geology.stats().seafloor]')
+    if (main.join() !== 'false,true,true,false') throw new Error(`in chapter 1: ${main}`)
+    await run(`app.tour.goTo(${-P}, 1, { jump: true }); app.settle()`)
+    await geoReady()
+    await frames(2)
+    const pro = await ui("[app.geology.covers, app.world.group.visible, app.ocean.mesh.visible, app.geology.stats().seafloor, app.lines.group.visible, document.querySelectorAll('.pin.show, .cluster.show').length, document.querySelector('.legend').classList.contains('show')]")
+    if (pro.join() !== 'true,false,false,true,false,0,false') throw new Error(`in the prologue: ${pro}`)
+    const g = await geo()
+    console.log(`      the seafloor pack ${g.size.join('×')}, ${g.gpuMB} MB with the stage textures and the fields' mask`)
+  })
+
+  await check('the stages crossfade as the age runs, carried along the hotspot’s drift', async () => {
+    // (from a step on one stage to a step on another, the clock caught halfway along its log track)
+    const [from, to] = await ui(`(() => { const all = app.tour.prologue.flatMap((ch, k) => ch.events.map((e, s) => [k - app.tour.prologue.length, s, e])); for (let i = 0; i + 1 < all.length; i++) if (all[i][2].stage !== all[i + 1][2].stage && all[i][2].age > all[i + 1][2].age && all[i + 1][2].kind !== 'slide') return [all[i].slice(0, 2), all[i + 1].slice(0, 2)]; return null })()`)
+    await run(`app.tour.goTo(${from[0]}, ${from[1]}, { jump: true }); app.settle()`)
+    await geoReady()
+    const a = await geo()
+    const [ageA, ageB] = await ui(`[app.tour.chapterAt(${from[0]}).events[${from[1]}].age, app.tour.chapterAt(${to[0]}).events[${to[1]}].age]`)
+    await run(`app.tour.goTo(${to[0]}, ${to[1]})`)
+    await run('app.rig.finishFlight(); app.ui.timeline.tween = null')
+    const mid = await ui(`app.geoClock.ageAt((app.geoClock.uAt(${ageA}) + app.geoClock.uAt(${ageB})) / 2)`)
+    await run(`app.geoClock.set(${mid})`)
+    await page.waitForFunction((want) => { const d = window.__app.geology.drawn; return d && d.a !== d.b && window.__app.geology.ready(d.b) }, null, { timeout: 300000 })
+    await frames(1)
+    const m = await geo()
+    if (m.drawn.a !== a.drawn.a || m.drawn.mix < 0.2 || m.drawn.mix > 0.8) throw new Error(`halfway: ${JSON.stringify(m.drawn)} (from ${JSON.stringify(a.drawn)})`)
+    // the drift: the formula's, at both ages, the islands further south-east the older the age
+    const want = await ui(`(() => { const h = app.data.geology.hotspot, k = (A) => A * h.speed * 100, az = h.azimuth * Math.PI / 180; return [${ageA}, ${mid}].map((A) => [-Math.sin(az) * k(A), Math.cos(az) * k(A)]) })()`)
+    const close = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]) < 0.05
+    if (!close(a.drift, want[0]) || !close(m.drift, want[1])) throw new Error(`drift ${a.drift} and ${m.drift}, wanted ${want[0]} and ${want[1]}`)
+    if (!(Math.hypot(...m.drift) < Math.hypot(...a.drift))) throw new Error('the islands did not slide back toward today as the age ran down')
+    await run(`app.geoClock.set(${ageB}); app.settle()`)
+    await geoReady()
+    const b = await geo()
+    if (b.drawn.a !== b.drawn.b || b.drawn.a !== (await ui(`app.tour.chapterAt(${to[0]}).events[${to[1]}].stage`))) throw new Error(`landed on ${JSON.stringify(b.drawn)}`)
+    // and the drawn ground goes with it: an island's summit stands where the drift put it, not where it is now
+    const pt = await ui(`(() => { const st = app.tour.chapterAt(${from[0]}).events[${from[1]}]; const id = st.places.find((p) => app.tour.places.get(p)?.kind === 'volcano'); return id })()`)
+    if (pt) {
+      await run(`app.tour.goTo(${from[0]}, ${from[1]}, { jump: true }); app.settle()`)
+      await geoReady()
+      const [there, here] = await ui(`(() => { const p = app.tour.places.get('${pt}'), A = app.geoClock.age, [x, z] = app.data.proj.toWorld(p.geometry.coordinates), [cx, cz] = app.tour.carried(p.geometry.coordinates, A); return [app.geology.metresAt(cx, cz), app.geology.metresAt(x, z)] })()`)
+      if (!(there > 0)) throw new Error(`${pt} carried to its age: ${there} m`)
+      console.log(`      ${pt}: ${Math.round(there)} m where the drift puts it, ${Math.round(here)} m at today's place`)
+    }
+    console.log(`      ${a.drawn.a} → ${b.drawn.a}: halfway ${m.drawn.mix} at ${mid.toFixed(2)} Ma, drift ${a.drift} → ${m.drift}`)
+  })
+
+  await check('Maui Nui: joined at the joining step, parted today', async () => {
+    const join = await ui(`(() => { for (const ch of app.tour.prologue) { const s = ch.events.findIndex((e) => e.kind === 'join'); if (s >= 0) return [ch.at, s] } return null })()`)
+    const now = await ui(`(() => { for (const ch of [...app.tour.prologue].reverse()) { const s = ch.events.findIndex((e) => e.stage === 'present'); if (s >= 0) return [ch.at, s] } return null })()`)
+    if (!join || !now) throw new Error('no joining step, or none on the present')
+    const ids = await ui(`app.tour.chapterAt(${join[0]}).events[${join[1]}].places.filter((id) => ['volcano', 'seamount', 'caldera'].includes(app.tour.places.get(id)?.kind))`)
+    // which of the joining step's volcanoes stand on land, and on which piece of it: a flood fill
+    // of the drawn ground (the CPU's copy) over the box round them, a kilometre and a half a cell
+    const pieces = (age) =>
+      ui(`(() => {
+        const pts = ${JSON.stringify(ids)}.map((id) => [id, app.tour.carriedPlace(id, ${age})])
+        let x0 = Infinity, z0 = Infinity, x1 = -Infinity, z1 = -Infinity
+        for (const [, [x, z]] of pts) { x0 = Math.min(x0, x); z0 = Math.min(z0, z); x1 = Math.max(x1, x); z1 = Math.max(z1, z) }
+        const c = 15, m = 150
+        x0 -= m; z0 -= m
+        const W = Math.ceil((x1 + m - x0) / c), H = Math.ceil((z1 + m - z0) / c)
+        const land = new Uint8Array(W * H), lab = new Int32Array(W * H).fill(-1)
+        for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) land[j * W + i] = app.geology.metresAt(x0 + (i + 0.5) * c, z0 + (j + 0.5) * c) > 0 ? 1 : 0
+        let n = 0
+        for (let k = 0; k < W * H; k++) {
+          if (!land[k] || lab[k] >= 0) continue
+          const q = [k]
+          lab[k] = n
+          while (q.length) { const v = q.pop(), i = v % W, j = (v - i) / W; for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const a = i + di, b = j + dj, w = b * W + a; if (a >= 0 && b >= 0 && a < W && b < H && land[w] && lab[w] < 0) { lab[w] = n; q.push(w) } } }
+          n++
+        }
+        const on = {}
+        for (const [id, [x, z]] of pts) { const i = Math.floor((x - x0) / c), j = Math.floor((z - z0) / c); const l = lab[j * W + i]; if (l >= 0) on[id] = l }
+        return on
+      })()`)
+    const at = async ([c, s]) => {
+      await run(`app.tour.goTo(${c}, ${s}, { jump: true }); app.settle()`)
+      await geoReady()
+      return pieces(await ui('app.geoClock.age'))
+    }
+    const joined = await at(join)
+    const today = await at(now)
+    // (pieces: the islands they stand on, and each one drowned on its own)
+    const count = (on) => new Set(Object.values(on)).size + ids.length - Object.keys(on).length
+    const big = Math.max(0, ...Object.values(joined).map((l) => Object.values(joined).filter((m) => m === l).length))
+    if (big < 2 || count(joined) >= count(today)) throw new Error(`at the join ${JSON.stringify(joined)}; today ${JSON.stringify(today)}`)
+    console.log(`      ${ids.length} volcanoes: ${big} of them on one island at the join, in ${count(joined)} pieces; today in ${count(today)} (${Object.keys(today).length} above the sea)`)
+  })
+
+  await check('a debris field lit on the floor, its blocks named; the Nuʻuanu slide run and ending in the after stage', async () => {
+    const at = await ui(`(() => { for (const ch of app.tour.prologue) { const s = ch.events.findIndex((e) => e.kind === 'slide' && app.geology.slideOf(e, app.tour.prevStep(e))?.from !== e.stage); if (s >= 0) return [ch.at, s] } return null })()`)
+    if (!at) throw new Error('no slide step that makes its stage')
+    await run(`app.tour.goTo(${at[0]}, ${at[1] - 1}, { jump: true, stop: 'last' }); app.settle()`)
+    await geoReady()
+    await page.focus('#scene')
+    await page.keyboard.press('ArrowRight')
+    await ui('(app.rig.finishFlight(), app.ui.timeline.finish(), 0)')
+    const run0 = await geo()
+    if (!run0.slide) throw new Error(`no slide running: ${JSON.stringify(run0)}`)
+    const step = await ui('({ stage: app.tour.event.stage, fields: app.tour.event.landslides })')
+    if (run0.slide.to !== step.stage || run0.slide.from === step.stage) throw new Error(`the slide runs ${run0.slide.from} → ${run0.slide.to}`)
+    if (!run0.lit.includes(run0.slide.id)) throw new Error(`lit ${run0.lit}, running ${run0.slide.id}`)
+    // the flank whole first, then the mass partway out along the field
+    await page.waitForFunction(() => { const g = window.__app.geology; return g.ready(g.slide?.from) && g.ready(g.slide?.to) }, null, { timeout: 300000 })
+    await run('app.geology.slide.t = 2.4')
+    await frames(2)
+    const midRun = await geo()
+    if (!midRun.slide || !(midRun.slide.front > 0.1 && midRun.slide.front < 0.9) || !(midRun.slide.body > 0.3) || !(midRun.drawn.mix > 0.2)) throw new Error(`partway: ${JSON.stringify(midRun.slide)} ${JSON.stringify(midRun.drawn)}`)
+    // the wash in the fields' mask, under the field
+    const lit = await ui(`(() => { const f = app.data.geology.fields.get('${run0.slide.id}'), [w, s, e, n] = app.data.geology.manifest.seafloor.bounds, c = app.geology.fieldCanvas; const lon = f.ring.reduce((a, p) => a + p[0], 0) / f.ring.length, lat = f.ring.reduce((a, p) => a + p[1], 0) / f.ring.length; return c.getContext('2d').getImageData(Math.round((lon - w) / (e - w) * c.width), Math.round((n - lat) / (n - s) * c.height), 1, 1).data[0] })()`)
+    if (!(lit > 100)) throw new Error(`the mask under the field reads ${lit}`)
+    await run('app.geology.finishSlide(); app.settle()')
+    await frames(3)
+    const done = await geo()
+    if (done.slide || done.drawn.a !== step.stage || done.drawn.b !== step.stage || done.slides !== run0.slides + 1) throw new Error(`after: ${JSON.stringify(done)}`)
+    const blocks = await ui(`app.data.geology.fields.get('${run0.slide.id}').blocks.map((b) => b.name)`)
+    if (blocks.length && !blocks.some((b) => done.marks.includes(b))) throw new Error(`blocks ${blocks}, shown ${done.marks}`)
+    // again, from the card's control
+    await page.click('.card.show .replay', opts)
+    const again = await geo()
+    if (!again.slide || again.slide.from !== run0.slide.from) throw new Error(`the replay: ${JSON.stringify(again.slide)}`)
+    await run('app.geology.finishSlide(); app.settle()')
+    // and Back onto it from the step after shows it done, not run
+    const n = await ui('app.tour.event.stops?.length ?? 0')
+    for (let i = 0; i <= n; i++) await press('ArrowRight')
+    await press('ArrowLeft')
+    while (await ui('app.tour.stop >= 0')) await press('ArrowLeft')
+    const back = await geo()
+    if (back.slide) throw new Error('Back onto the slide ran it again')
+    console.log(`      ${run0.slide.id}: ${run0.slide.from} → ${run0.slide.to}, front ${midRun.slide.front} at 2.4 s, blocks ${done.marks.join(', ') || 'none'}`)
+  })
+
+  await check('leaving the prologue gives its GPU memory back: the sea floor, the stages, the mask and the grid', async () => {
+    await run(`app.tour.goTo(${-P}, 0, { jump: true }); app.settle()`)
+    await geoReady()
+    await frames(2)
+    const g0 = await geo()
+    if (!g0.seafloor) throw new Error('the prologue is not up')
+    // (the prologue's own, each watched for its dispose and its texture on the GPU)
+    const held = await ui(`(() => {
+      const g = app.geology, own = [g.sfTex, ...g.tex, g.fieldTex], gone = (window.__geoGone = { n: 0 })
+      for (const o of [...own, g.mesh.geometry, g.material]) o.addEventListener('dispose', () => gone.n++)
+      window.__geoOwn = own
+      return { n: own.length + 2, onGpu: own.filter((t) => !!app.renderer.properties.get(t).__webglTexture).length, textures: app.renderer.info.memory.textures, geometries: app.renderer.info.memory.geometries }
+    })()`)
+    if (held.onGpu < 3) throw new Error(`only ${held.onGpu} of its textures on the GPU`)
+    await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
+    await page.waitForFunction(() => !window.__app.geology.mesh && !window.__app.geology.sfTex, null, { timeout: 120000 })
+    await frames(3)
+    const after = await ui(`({ gone: window.__geoGone.n, onGpu: window.__geoOwn.filter((t) => !!app.renderer.properties.get(t).__webglTexture).length, textures: app.renderer.info.memory.textures, geometries: app.renderer.info.memory.geometries })`)
+    const g1 = await geo()
+    if (after.gone !== held.n || after.onGpu || g1.seafloor || g1.gpuMB !== 0 || g1.releases !== g0.releases + 1) throw new Error(`after leaving: ${JSON.stringify(after)} ${JSON.stringify(g1)}`)
+    if (after.textures > held.textures - held.onGpu || after.geometries > held.geometries - 1) throw new Error(`the renderer's textures and geometries ${held.textures}/${held.geometries} inside, ${after.textures}/${after.geometries} after`)
+    console.log(`      ${held.n} let go, ${g0.gpuMB} MB; the renderer's textures ${held.textures} → ${after.textures}, geometries ${held.geometries} → ${after.geometries}`)
+  })
+}
+// ==== [geology] end ====
 
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in

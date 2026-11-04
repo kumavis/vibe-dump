@@ -38,6 +38,16 @@
 // in public/data/, a few of the same over the real Oʻahu
 // (test-data/real/works/: a runway at Mōkapu, roads through Nuʻuanu), for
 // the smoke to lay on the lidar. Shapes, not a record of any of them.
+//
+// And a test geology (DATA.md "Geology"; test-data/geology/): a seafloor
+// pack over a box wider than the test archipelago, four stages with their
+// ages over a toy model of the made-up shields (grown in over their shield
+// ages, standing higher by their subsidence since, the test Koʻolau's flank
+// standing until its slide, a drowned bank lifted so Maui Nui joins and
+// parts), a hotspot, two debris fields with their blocks and a scar, the
+// volcanoes, and two prologue chapters of six steps with far stops and
+// tellings; the geology's places in places.json and its source in
+// sources.json.
 import { deflateSync } from 'node:zlib'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -1388,3 +1398,330 @@ function testRealWorks() {
 }
 // ==== test works end ==================================================================
 
+
+// ==== test geology ====================================================================
+// The prologue's data (DATA.md "Geology: the making of the islands") over the
+// made-up islands: a seafloor pack over a box wider than the test archipelago,
+// four stages with their ages, a hotspot, two debris fields with their blocks
+// and a scar, the volcanoes, and two chapters of six steps between them, with
+// far stops and tellings. The shapes are a toy model (each made-up shield
+// grown in over its shield ages and standing higher by its subsidence since;
+// the test Koʻolau's north-east flank there until its slide; a drowned bank
+// west of the test Maui lifted above the sea at a million years, so Maui Nui
+// joins and parts), not a reconstruction of anything.
+const GEO_BOUNDS = [-161.5, 17.6, -153.5, 23.8]
+const GEO_W = 2048
+// (the deep floor heightAt settles to far from every dome: its soft max of them)
+const ABYSS = FLOOR + 300 * Math.log(ALL.length)
+const GEO_VOLCANOES = [
+  { id: 'test-v-waianae', name: 'Test shield Komohana', island: 'oahu', lon: -158.14, lat: 21.47, R: 38, shield: { from: 3.4, to: 2.9 }, subsidence: 0.3 },
+  { id: 'test-v-koolau', name: 'Test shield Koʻolau', island: 'oahu', lon: -157.798, lat: 21.37, R: 40, shield: { from: 2.9, to: 2.25 }, subsidence: 0.3 },
+  { id: 'test-v-bank', name: 'Test bank Waena-komohana', island: 'maui', lon: -156.79, lat: 20.96, R: 14, shield: { from: 1.9, to: 1.4 }, subsidence: 3.0, bank: -350 },
+  { id: 'test-v-west-maui', name: 'Test shield Mauna Kahālāwai', island: 'maui', lon: -156.6, lat: 20.88, R: 16, shield: { from: 1.8, to: 1.2 }, subsidence: 3.0 },
+  { id: 'test-v-haleakala', name: 'Test shield Haleakalā', island: 'maui', lon: -156.25, lat: 20.71, R: 30, shield: { from: 1.3, to: 0.8 }, subsidence: 1.2 },
+  { id: 'test-v-kohala', name: 'Test shield Kohala', island: 'hawaii', lon: -155.82, lat: 20.1, R: 24, shield: { from: 0.6, to: 0.3 }, subsidence: 2.2 },
+  { id: 'test-v-mauna-kea', name: 'Test shield Mauna Kea', island: 'hawaii', lon: -155.47, lat: 19.82, R: 45, shield: { from: 0.5, to: 0.15 }, subsidence: 2.2 },
+  { id: 'test-v-hualalai', name: 'Test shield Hualālai', island: 'hawaii', lon: -155.87, lat: 19.69, R: 24, shield: { from: 0.4, to: 0.1 }, subsidence: 2.2 },
+  { id: 'test-v-mauna-loa', name: 'Test shield Mauna Loa', island: 'hawaii', lon: -155.6, lat: 19.47, R: 52, shield: { from: 0.4, to: 0 }, subsidence: 2.2 },
+  { id: 'test-v-kilauea', name: 'Test shield Kīlauea', island: 'hawaii', lon: -155.15, lat: 19.38, R: 26, shield: { from: 0.2, to: 0 }, subsidence: 2.2 },
+  { id: 'test-v-kamaehu', name: 'Test seamount Kamaʻehu', island: null, lon: -155.27, lat: 18.92, R: 12, shield: { from: 0.08, to: 0 }, subsidence: 0, seamount: -1000 },
+]
+const GEO_HOTSPOT = { lon: -155.25, lat: 19.05, speed: 9.5, azimuth: 295 }
+// the two debris fields, in km from their volcano's summit: along `az` (compass
+// degrees) from `r0` to `r1`, `w` wide at the far end; blocks `at` km along, `off` to the right
+const GEO_FIELDS = [
+  { id: 'test-nuuanu', name: 'Test slide Nuʻuanu', volcano: 'test-v-koolau', age: 2.1, agePrecision: 0.2, az: 40, r0: 18, r1: 190, w: 70, scar: { r: 11, a: 13, b: 8 }, blocks: [{ name: 'Test block Tuscaloosa', at: 125, off: 6, height: 1800 }, { name: 'Test block ʻElua', at: 70, off: -12, height: 900 }] },
+  { id: 'test-alika', name: 'Test slide ʻĀlika', volcano: 'test-v-mauna-loa', age: 0.11, agePrecision: 0.03, az: 245, r0: 42, r1: 120, w: 40, blocks: [{ name: 'Test block ʻĀlika', at: 95, off: 0, height: 600 }] },
+]
+const GEO_STAGES = [
+  { id: 'test-oahu-young', name: 'the test western island young, its eastern shield half grown', age: 2.8, agePrecision: 0.2, confidence: 'sketch' },
+  { id: 'koolau-whole', name: 'the test Koʻolau shield whole, its north-east flank standing', age: 2.2, agePrecision: 0.1, confidence: 'soft' },
+  { id: 'koolau-after-nuuanu', name: 'the test Koʻolau after its slide, the pali new', age: 2.1, agePrecision: 0.1, confidence: 'soft' },
+  { id: 'test-maui-nui', name: 'test Maui Nui, one island with the bank', age: 1.0, agePrecision: 0.2, confidence: 'sketch' },
+]
+const geoSrc = [{ id: 'test-source-geo', where: 'fig. 1' }]
+
+/** The geology's places, added to places.json (volcanoes, a caldera, a seamount, the fields), and its source to sources.json. */
+function geologyGazetteer() {
+  const read = (k) => JSON.parse(readFileSync(join(out, `${k}.json`), 'utf8'))
+  const g = { places: read('places'), sources: read('sources') }
+  const pt = (lon, lat) => ({ type: 'Point', coordinates: [lon, lat] })
+  const k = GEO_VOLCANOES.find((x) => x.id === 'test-v-koolau')
+  for (const x of GEO_VOLCANOES) g.places.push({ id: x.id, name: x.name, alt: [], kind: x.seamount ? 'seamount' : 'volcano', island: x.island, geometry: pt(x.lon, x.lat), placePrecision: x.island ? 'island' : 'sea', sources: ['test-source-geo'] })
+  g.places.push({ id: 'test-koolau-caldera', name: 'Test caldera Kāneʻohe', alt: [], kind: 'caldera', island: 'oahu', geometry: pt(k.lon + 0.04, k.lat + 0.03), placePrecision: 'island', sources: ['test-source-geo'] })
+  for (const f of GEO_FIELDS) g.places.push({ id: `${f.id}-field`, name: f.name, alt: [], kind: 'landslide', island: null, geometry: pt(...fieldPoint(f, (f.r0 + f.r1) / 2, 0)), placePrecision: 'sea', sources: ['test-source-geo'] })
+  g.sources.push({ id: 'test-source-geo', title: 'A test source for the made-up geology', author: 'Test Author ʻEhā', year: 2010, url: 'about:blank', access: 'open', opened: true, read: 'full', note: 'synthetic' })
+  for (const k of ['places', 'sources']) writeFileSync(join(out, `${k}.json`), JSON.stringify(g[k], null, 2))
+}
+
+/** [lon, lat] of a point `along` km from a field's volcano toward its azimuth, `off` km to the right of that line. */
+function fieldPoint(f, along, off) {
+  const v = GEO_VOLCANOES.find((x) => x.id === f.volcano)
+  const a = f.az * DEG
+  const x = xkm(v.lon) + Math.sin(a) * along + Math.cos(a) * off
+  const z = zkm(v.lat) - Math.cos(a) * along + Math.sin(a) * off
+  return [r7(lonOf(x)), r7(latOf(z))]
+}
+
+/** A field's lobe: narrow at the scar, widening to the far edge and rounded there. */
+function fieldPolygon(f) {
+  const N = 14
+  const half = (t) => (f.w / 2) * (0.25 + 0.75 * Math.sqrt(t))
+  const ring = []
+  for (let i = 0; i <= N; i++) ring.push(fieldPoint(f, f.r0 + ((f.r1 - f.r0) * i) / N, half(i / N)))
+  for (let i = 1; i < 8; i++) {
+    const th = (i / 8) * Math.PI
+    ring.push(fieldPoint(f, f.r1 + Math.sin(th) * f.w * 0.3, (f.w / 2) * Math.cos(th)))
+  }
+  for (let i = N; i >= 0; i--) ring.push(fieldPoint(f, f.r0 + ((f.r1 - f.r0) * i) / N, -half(i / N)))
+  ring.push(ring[0])
+  return ring
+}
+
+/** A ring of an ellipse round [lon, lat], semi-axes a and b km, the a axis toward compass `az`. */
+function ellipseRing([lon, lat], a, b, az) {
+  const x0 = xkm(lon)
+  const z0 = zkm(lat)
+  const r = az * DEG
+  const ring = []
+  for (let i = 0; i < 24; i++) {
+    const t = (i / 24) * 2 * Math.PI
+    const u = Math.cos(t) * a
+    const v = Math.sin(t) * b
+    ring.push([r7(lonOf(x0 + Math.sin(r) * u + Math.cos(r) * v)), r7(latOf(z0 - Math.cos(r) * u + Math.sin(r) * v))])
+  }
+  ring.push(ring[0])
+  return ring
+}
+
+function inRing(ring, lon, lat) {
+  let c = false
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i]
+    const [xj, yj] = ring[j]
+    if (yi > lat !== yj > lat && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) c = !c
+  }
+  return c
+}
+
+/** How far a shield has grown at age A (Ma): nothing before its shield began, whole once it was built. */
+const grownAt = (v, A) => Math.max(0, Math.min(1, (v.shield.from - A) / Math.max(1e-6, v.shield.from - v.shield.to)))
+
+function testGeology() {
+  const t0 = Date.now()
+  const dir = join(out, 'geology')
+  mkdirSync(join(dir, 'seafloor'), { recursive: true })
+  const [w, s, e, n] = GEO_BOUNDS
+  const W = GEO_W
+  const H = Math.round((W * (n - s) * KZ) / ((e - w) * KX))
+  const N = W * H
+  const [aw0, as0, ae0, an0] = archBounds
+  // the present: the test archipelago's own ground inside its box (and the
+  // drowned bank), eased into a plain abyssal floor outside it; the debris on
+  // the floor, field by field; the Koʻolau's flank as it stood; and each
+  // shield's share of the ground at every texel, by its distance
+  const floor = new Float32Array(N)
+  const bare = new Float32Array(N)
+  const debris = GEO_FIELDS.map(() => new Float32Array(N))
+  const flank = new Float32Array(N)
+  const share = GEO_VOLCANOES.map(() => new Float32Array(N))
+  const open = new Float32Array(N)
+  const vk = GEO_VOLCANOES.map((v) => ({ x: xkm(v.lon), z: zkm(v.lat) }))
+  const rings = GEO_FIELDS.map((f) => fieldPolygon(f))
+  const kq = GEO_VOLCANOES.findIndex((v) => v.id === 'test-v-koolau')
+  const kf = GEO_FIELDS[0].az * DEG
+  for (let j = 0; j < H; j++) {
+    const lat = n - ((j + 0.5) / H) * (n - s)
+    const z = zkm(lat)
+    for (let i = 0; i < W; i++) {
+      const lon = w + ((i + 0.5) / W) * (e - w)
+      const x = xkm(lon)
+      const c = j * W + i
+      const fl = ABYSS + (fbm(x * 0.02, z * 0.02, 41, 4) - 0.5) * 360
+      floor[c] = fl
+      const k = smooth(0, 30, Math.min(lon - aw0, ae0 - lon, lat - as0, an0 - lat) * 100)
+      let m = k > 0 ? heightAt(x, z) : ABYSS
+      for (let q = 0; q < vk.length; q++) {
+        const top = GEO_VOLCANOES[q].bank ?? GEO_VOLCANOES[q].seamount
+        if (top === undefined) continue
+        const r = Math.hypot(x - vk[q].x, z - vk[q].z) / GEO_VOLCANOES[q].R
+        m = Math.max(m, ABYSS + (top - ABYSS) * Math.exp(-Math.pow(r, 1.5)))
+      }
+      m += (fl - ABYSS) * smooth(-2000, -4000, m)
+      bare[c] = fl + (m - fl) * Math.max(k, smooth(-4000, -2500, m))
+      GEO_FIELDS.forEach((f, q) => {
+        if (!inRing(rings[q], lon, lat)) return
+        let d = 140 * fbm(x * 0.15, z * 0.15, 51 + q, 3)
+        for (const b of f.blocks) {
+          const [bl, bt] = fieldPoint(f, b.at, b.off)
+          d += b.height * Math.exp(-Math.pow(Math.hypot(x - xkm(bl), z - zkm(bt)) / 9, 2))
+        }
+        debris[q][c] = d
+      })
+      const dx = x - vk[kq].x
+      const dz = z - vk[kq].z
+      const along = dx * Math.sin(kf) - dz * Math.cos(kf)
+      const across = dx * Math.cos(kf) + dz * Math.sin(kf)
+      flank[c] = along > -4 ? 1800 * Math.exp(-Math.pow((along - 14) / 16, 2) - Math.pow(across / 15, 2)) : 0
+      let tot = 0.02
+      for (let q = 0; q < vk.length; q++) {
+        const r = Math.hypot(x - vk[q].x, z - vk[q].z) / GEO_VOLCANOES[q].R
+        const wq = Math.exp(-r * r)
+        share[q][c] = wq
+        tot += wq
+      }
+      for (let q = 0; q < vk.length; q++) share[q][c] /= tot
+      open[c] = 0.02 / tot
+    }
+  }
+  const clampSea = (m) => (m <= 0 ? Math.min(m, -1) : Math.max(m, 0.2))
+  // a stage at age A: each shield grown as far as the age allows and standing
+  // higher by its subsidence since; a field's debris only after its slide;
+  // the flank only before the Nuʻuanu slide
+  const ground = (A) => {
+    const m = new Float32Array(N)
+    const fieldOn = GEO_FIELDS.map((f) => A <= f.age)
+    const gr = GEO_VOLCANOES.map((v) => grownAt(v, A))
+    for (let c = 0; c < N; c++) {
+      let g = open[c]
+      let lift = 0
+      for (let q = 0; q < vk.length; q++) {
+        const sh = share[q][c]
+        g += sh * gr[q]
+        lift += sh * gr[q] * GEO_VOLCANOES[q].subsidence * A * 1000
+      }
+      let h = floor[c] + (bare[c] - floor[c]) * g + lift
+      if (A > GEO_FIELDS[0].age) h += flank[c] * share[kq][c] * gr[kq]
+      GEO_FIELDS.forEach((f, q) => {
+        if (fieldOn[q]) h += debris[q][c]
+      })
+      m[c] = clampSea(h)
+    }
+    return m
+  }
+  const stats = (m) => {
+    let lo = Infinity
+    let hi = -Infinity
+    let land = 0
+    for (const v of m) {
+      if (v < lo) lo = v
+      if (v > hi) hi = v
+      if (v > 0) land++
+    }
+    return { min: Math.round(lo), max: Math.round(hi), land: +(land / m.length).toFixed(4) }
+  }
+  const writeHeight = (path, m) => {
+    const rgb = new Uint8Array(N * 3)
+    for (let c = 0; c < N; c++) {
+      const v = Math.max(0, Math.min(65535, Math.round((m[c] - OFFSET) / SCALE)))
+      rgb[c * 3] = v >> 8
+      rgb[c * 3 + 1] = v & 255
+    }
+    writePNG(path, W, H, rgb, 3)
+  }
+  const present = ground(0)
+  writeHeight(join(dir, 'seafloor', 'height.png'), present)
+  const stages = GEO_STAGES.map((st) => {
+    mkdirSync(join(dir, 'stages', st.id), { recursive: true })
+    const m = ground(st.age)
+    writeHeight(join(dir, 'stages', st.id, 'height.png'), m)
+    return {
+      id: st.id,
+      name: st.name,
+      age: st.age,
+      agePrecision: st.agePrecision,
+      method: 'modelled',
+      rule: 'test: each made-up shield grown in over its shield ages and standing higher by its subsidence since; the test Koʻolau flank standing before its slide',
+      confidence: st.confidence,
+      sources: ['test-source-geo'],
+      height: { file: `stages/${st.id}/height.png`, scale: SCALE, offset: OFFSET },
+      stats: stats(m),
+    }
+  })
+  const manifest = {
+    about: 'test geology (tools/fake-data.mjs): a toy model over the made-up islands, not a reconstruction',
+    seafloor: {
+      bounds: GEO_BOUNDS,
+      size: [W, H],
+      metresPerTexel: [Math.round((((e - w) * KX) / W) * 1e4) / 10, Math.round((((n - s) * KZ) / H) * 1e4) / 10],
+      height: { file: 'seafloor/height.png', scale: SCALE, offset: OFFSET },
+      stats: stats(present),
+      sources: [{ id: 'synthetic', title: 'Synthetic test sea floor (tools/fake-data.mjs)', url: 'about:blank', fetched: new Date().toISOString().slice(0, 10), licence: 'test data, not for release' }],
+    },
+    stages,
+    hotspot: { position: [GEO_HOTSPOT.lon, GEO_HOTSPOT.lat], speed: GEO_HOTSPOT.speed, speedUnit: 'cm/yr', azimuth: GEO_HOTSPOT.azimuth, sources: ['test-source-geo'], note: 'test: the plate’s speed, and the compass bearing it moves toward' },
+    subsidence: { oahu: 0.3, maui: 1.2, hawaii: 2.2 },
+    sources: ['test-source-geo'],
+  }
+  writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2))
+  const features = GEO_FIELDS.map((f, q) => ({
+    type: 'Feature',
+    geometry: { type: 'Polygon', coordinates: [rings[q]] },
+    properties: {
+      id: f.id,
+      name: f.name,
+      volcano: f.volcano,
+      kind: 'avalanche',
+      age: f.age,
+      agePrecision: f.agePrecision,
+      runout: f.r1,
+      volume: q === 0 ? 5000 : 200,
+      scar: f.scar ? { type: 'Polygon', coordinates: [ellipseRing(fieldPoint(f, f.scar.r, 0), f.scar.a, f.scar.b, f.az)] } : null,
+      blocks: f.blocks.map((b) => ({ type: 'Point', coordinates: fieldPoint(f, b.at, b.off), name: b.name, height: b.height })),
+      precision: 'sketch',
+      sources: ['test-source-geo'],
+      note: 'test field, a lobe drawn by tools/fake-data.mjs',
+    },
+  }))
+  writeFileSync(join(dir, 'landslides.geojson'), JSON.stringify({ type: 'FeatureCollection', features }, null, 1))
+  const volcanoes = GEO_VOLCANOES.map((v, q) => ({
+    id: v.id,
+    name: v.name,
+    island: v.island,
+    summit: [v.lon, v.lat, Math.round(present[Math.min(H - 1, Math.floor(((n - v.lat) / (n - s)) * H)) * W + Math.min(W - 1, Math.floor(((v.lon - w) / (e - w)) * W))])],
+    caldera: q === kq ? { type: 'Point', coordinates: [v.lon + 0.04, v.lat + 0.03], radius: 5000 } : null,
+    shield: v.shield,
+    status: v.seamount !== undefined ? 'submarine' : v.shield.to <= 0 ? 'active' : 'extinct',
+    subsidence: v.subsidence,
+    sources: ['test-source-geo'],
+    note: 'test volcano',
+  }))
+  // (as the research writes it: an object with the volcanoes and the hotspot)
+  writeFileSync(join(dir, 'volcanoes.json'), JSON.stringify({ about: 'test volcanoes (tools/fake-data.mjs)', hotspot: manifest.hotspot, volcanoes }, null, 1))
+  const cam = (target, distance, extra = {}) => ({ target, distance, ...extra })
+  const chapters = [
+    {
+      id: 'test-making',
+      label: 'when the test islands were made',
+      short: 'the test shields',
+      age: 2.8,
+      ageSpan: [3.0, 1.5],
+      note: 'Test prologue chapter: the western test island rises over the hotspot and is carried away from it, and its eastern shield loses a flank.',
+      sources: ['test-source-geo'],
+      steps: [
+        { id: 'test-oahu-rises', title: 'Test: the western shields rise', gloss: 'a synthetic birth, on a sketched stage', summary: 'The first test shield stands whole and the second grows beside it, over the hotspot.', age: 2.8, agePrecision: 0.2, kind: 'birth', stage: 'test-oahu-young', places: ['test-v-waianae'], landslides: [], sources: geoSrc, tellings: [] },
+        { id: 'test-koolau-whole', title: 'Test: the Koʻolau shield whole', gloss: 'its caldera at Kāneʻohe, its flank standing', summary: 'The eastern test shield at its full height, its north-east flank still there.', age: 2.2, agePrecision: 0.1, kind: 'birth', stage: 'koolau-whole', places: ['test-koolau-caldera'], landslides: [], sources: geoSrc, tellings: [{ source: 'test-source-geo', says: 'Test telling: about 3,000 m above the sea at its summit.' }], stops: [{ text: 'The test caldera, from the north-east.', place: 'test-koolau-caldera', zoom: 'far', camera: cam(fieldPoint(GEO_FIELDS[0], 20, 0), 1500, { bearing: 220 }) }] },
+        { id: 'test-nuuanu-slide', title: 'Test: the Nuʻuanu slide', gloss: 'the north-east flank lets go', summary: 'The test flank runs out across the sea floor, and the pali is left behind.', age: 2.1, agePrecision: 0.2, kind: 'slide', stage: 'koolau-after-nuuanu', places: ['test-nuuanu-field'], landslides: ['test-nuuanu'], sources: geoSrc, tellings: [{ source: 'test-source-geo', says: 'Test telling: about 5,000 km³, run out about 190 km.' }], stops: [{ text: 'The test Tuscaloosa block, far out on the floor.', place: 'test-nuuanu-field', zoom: 'far', camera: cam(fieldPoint(GEO_FIELDS[0], 125, 6), 1800) }] },
+      ],
+    },
+    {
+      id: 'test-maui-nui-chapter',
+      label: 'Test Maui Nui, and the islands sinking',
+      age: 1.0,
+      ageSpan: [1.5, 0],
+      note: 'Test prologue chapter: the middle test island joins its bank and parts from it as the sea rises over the saddle.',
+      sources: ['test-source-geo'],
+      steps: [
+        { id: 'test-maui-nui', title: 'Test: Maui Nui', gloss: 'one island with the bank', summary: 'The test bank stands above the sea, joined to the middle island by a saddle.', age: 1.0, agePrecision: 0.2, kind: 'join', stage: 'test-maui-nui', places: ['test-v-west-maui', 'test-v-bank'], landslides: [], sources: geoSrc, tellings: [] },
+        { id: 'test-maui-parts', title: 'Test: the saddle goes under', gloss: 'Maui Nui parts', summary: 'The test bank sinks back under the sea and the middle island stands alone.', age: 0.3, agePrecision: 0.1, kind: 'part', stage: 'present', places: ['test-v-bank'], landslides: [], sources: geoSrc, tellings: [] },
+        { id: 'test-now', title: 'Test: the islands now', gloss: 'and the youngest field', summary: 'The test islands as they are, the youngest debris field off the eastern island, and a seamount over the hotspot.', age: 0, agePrecision: 0, kind: 'now', stage: 'present', places: ['test-alika-field'], landslides: ['test-alika'], sources: geoSrc, tellings: [], stops: [{ text: 'The test ʻĀlika field.', place: 'test-alika-field', zoom: 'far', camera: cam(fieldPoint(GEO_FIELDS[1], 80, 0), 1600) }, { text: 'The test seamount over the hotspot.', place: 'test-v-kamaehu', zoom: 'far', camera: cam([GEO_HOTSPOT.lon, GEO_HOTSPOT.lat], 1400) }] },
+      ],
+    },
+  ]
+  writeFileSync(join(dir, 'chapters.json'), JSON.stringify({ chapters }, null, 2))
+  console.log(`  test geology: seafloor ${W}×${H}, ${stages.length} stages, ${features.length} fields, ${chapters.reduce((k, c) => k + c.steps.length, 0)} steps in ${chapters.length} chapters, ${((Date.now() - t0) / 1000).toFixed(1)} s`)
+}
+// (after everything else: the declarations above are not reached before the main run's end)
+geologyGazetteer()
+testGeology()
+// ==== test geology end ================================================================

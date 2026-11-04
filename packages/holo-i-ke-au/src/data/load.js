@@ -1,6 +1,6 @@
 // Everything the app reads, from one base URL (config.js dataBase): the pack
-// manifest and its images, the boundary files, and the gazetteer. Nothing is
-// fetched from anywhere else.
+// manifest and its images, the boundary files, the gazetteer, and the
+// prologue's geology where there is one. Nothing is fetched from anywhere else.
 //
 // Packs decode in a small pool of workers. The archipelago is decoded first,
 // during boot; the islands follow in the background, nearest first, and take
@@ -10,6 +10,7 @@ import { UNIT } from '../config.js'
 import { Projection } from '../geo.js'
 import { decodeImage } from './image.js'
 import { derivePack } from './decode.js'
+import { loadGeology } from './geology.js'
 
 async function getJSON(url, fallback, warn) {
   try {
@@ -30,6 +31,9 @@ const list = (v, key) => (Array.isArray(v) ? v : Array.isArray(v?.[key]) ? v[key
 export async function loadData(base, warn = console.warn) {
   const abs = (p) => new URL(p, new URL(base, location.href)).href
   const manifest = await getJSON(abs('manifest.json'))
+  const proj = new Projection(manifest.projection || {})
+  // (the prologue's, if the data has one: data/geology.js)
+  const geology = loadGeology(abs, proj, warn)
   const [moku, ahupuaa, eras, places, events, sources, polities] = await Promise.all([
     getJSON(abs('boundaries/moku.geojson'), null, warn),
     getJSON(abs('boundaries/ahupuaa.geojson'), null, warn),
@@ -39,7 +43,6 @@ export async function loadData(base, warn = console.warn) {
     getJSON(abs('sources.json'), [], warn),
     getJSON(abs('polities.json'), { polities: [], byEra: {} }, warn),
   ])
-  const proj = new Projection(manifest.projection || {})
   const packs = (manifest.packs || []).map((d) => describePack(d, proj, abs))
   return {
     base,
@@ -54,6 +57,7 @@ export async function loadData(base, warn = console.warn) {
     events: list(events, 'events'),
     sources: list(sources, 'sources'),
     polities: { polities: polities?.polities || [], byEra: polities?.byEra || {} },
+    geology: await geology,
   }
 }
 

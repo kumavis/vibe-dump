@@ -443,3 +443,26 @@ button { font: inherit; color: inherit; }
   .timeline.invite .tl-next { animation: none; }
   .boot-art .waa, .boot-art .current { animation: none; }
 }
+
+/* --- the prologue: its cards' stage line and slide control, the blocks named on the floor, the clock -------- */
+.conf.sketch { background: rgba(170, 160, 215, 0.16); }
+.card-stage { margin: 0 0 10px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.card-stage span { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
+.replay {
+  display: inline-flex; align-items: center; gap: 7px; margin: 0 0 10px; padding: 6px 12px 6px 10px;
+  border-radius: 999px; border: 1px solid rgba(242, 200, 121, 0.4); background: rgba(242, 200, 121, 0.08);
+  color: var(--gold); font-size: 12.5px; cursor: pointer;
+}
+.replay:hover { background: rgba(242, 200, 121, 0.18); }
+.geo-mark {
+  position: absolute; left: 0; top: 0; z-index: 0; display: flex; align-items: center; gap: 6px;
+  pointer-events: none; opacity: 0; transition: opacity 0.4s; white-space: nowrap;
+  margin: -5px 0 0 -5px;
+}
+.geo-mark.show { opacity: 1; }
+.geo-mark i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid rgba(246, 222, 180, 0.9); background: rgba(201, 139, 78, 0.55); }
+.geo-mark span { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: rgba(246, 236, 214, 0.92); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+.timeline.ma .tl-year { letter-spacing: 0.02em; }
+@media (prefers-reduced-motion: reduce) {
+  .geo-mark { transition: none; }
+}

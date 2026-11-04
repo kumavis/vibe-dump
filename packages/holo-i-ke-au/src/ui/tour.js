@@ -22,10 +22,20 @@
 // division was read from (mahele.json `sources`), which is the division
 // itself. An event may name its view outright (`view: "land"`). Once the
 // viewer has used the switch themselves, the tour leaves it alone.
+//
+// Where the data has a geology (DATA.md "Geology"), its chapters come before
+// chapter 1 as a prologue: their indices run below zero (-P .. -1, so the
+// main chapters keep theirs), Next and Back walk them and cross into chapter
+// 1 and back, and while the tour is in them the timeline is the prologue's
+// clock in millions of years (ui/timeline.js) and the far view is the
+// prologue's own (render/geology.js): the step's stage, carried along the
+// drift by its age, its debris fields lit, a slide run. Every view of the
+// prologue frames what the plate carried where it stood at the step's age.
 
 import { geometryPoint } from '../geo.js'
 import { eventSpan, eventStart } from '../time.js'
 import { preferredPitch, CHAIN_REACH } from '../render/camera.js'
+import { driftAt } from '../data/geology.js'
 
 // camera distance for DATA.md's zooms; `island` frames the whole island
 // instead, where the place has one
@@ -62,6 +72,14 @@ export function chapterName(era) {
 }
 
 /** The deepest of an event's zooms (DATA.md §4 lists them shallow to deep). */
+/** I, II, III … for the prologue's chapters. */
+export function roman(n) {
+  const R = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]
+  let out = ''
+  for (const [v, r] of R) while (n >= v) [n, out] = [n - v, out + r]
+  return out
+}
+
 export function deepestZoom(zooms) {
   let best = null
   for (const z of zooms || []) if (z in DEPTH && (best === null || DEPTH[z] > DEPTH[best])) best = z
@@ -75,6 +93,10 @@ export class Tour {
     this.places = new Map(app.data.places.map((p) => [p.id, p]))
     this.islands = new Map(app.data.packs.filter((p) => p !== app.world.archPack).map((p) => [p.id, p]))
     this.chapters = this.build()
+    // the prologue's chapters, before chapter 1 (index -P .. -1), and their steps by id
+    this.prologue = this.buildPrologue()
+    this.first = -this.prologue.length
+    this.steps = new Map(this.prologue.flatMap((ch) => ch.events.map((st) => [st.id, st])))
     this.active = false
     this.chapter = 0
     this.step = -1
@@ -108,6 +130,43 @@ export class Tour {
       ch.island = this.gathering(ch.events)
     })
     return chapters
+  }
+
+  /**
+   * The prologue, from geology/chapters.json: each chapter with its label,
+   * note and ages, its steps in the order written (oldest first).
+   */
+  buildPrologue() {
+    const G = this.app.data.geology
+    if (!G) return []
+    const P = G.chapters.length
+    return G.chapters.map((c, k) => {
+      const era = { id: c.id, label: c.label || c.id, short: c.short, note: c.note || '', sources: c.sources || [], age: c.age, ageSpan: c.ageSpan }
+      const events = (c.steps || []).filter((st) => st?.id && Number.isFinite(st.age)).map((st) => ({ ...st, prologue: true }))
+      return { prologue: true, index: k, at: k - P, era, name: chapterName(era), events, island: null }
+    })
+  }
+
+  /** The chapter at index c: a main chapter from 0, the prologue's below it. */
+  chapterAt(c) {
+    return c < 0 ? this.prologue[this.prologue.length + c] || null : this.chapters[c] || null
+  }
+
+  /**
+   * The prologue chapter an age falls in: of those whose span holds it (the
+   * spans may overlap), the one with a step nearest it; else the nearest by age.
+   */
+  prologueAt(A) {
+    let best = null
+    let d0 = Infinity
+    for (const ch of this.prologue) {
+      const span = ch.era.ageSpan
+      const holds = Array.isArray(span) && A <= Math.max(...span) + 1e-9 && A >= Math.min(...span) - 1e-9
+      const ages = [ch.era.age, ...ch.events.map((e) => e.age)].filter(Number.isFinite)
+      const d = Math.min(...ages.map((a) => Math.abs(a - A))) - (holds ? 1e6 : 0)
+      if (d < d0) [d0, best] = [d, ch]
+    }
+    return best
   }
 
   /**
@@ -149,7 +208,7 @@ export class Tour {
   }
 
   get current() {
-    return this.chapters[this.chapter] || null
+    return this.chapterAt(this.chapter)
   }
 
   /** The event the tour stands at, or null on an era's card. */
@@ -163,7 +222,7 @@ export class Tour {
   }
 
   get atStart() {
-    return this.active && this.chapter === 0 && this.step < 0
+    return this.active && this.chapter === this.first && this.step < 0
   }
 
   get atEnd() {
@@ -177,6 +236,8 @@ export class Tour {
   }
 
   nearestChapter() {
+    // (off the tour in the prologue, by the clock)
+    if (this.app.prologue && this.prologue.length) return this.prologueAt(this.app.geoClock.age).at
     return clamp(Math.round(this.app.timeline.s), 0, this.chapters.length - 1)
   }
 
@@ -190,7 +251,7 @@ export class Tour {
     if (!this.active) return this.goTo(this.nearestChapter(), -1)
     const ev = this.event
     if (ev && this.stop < (ev.stops?.length || 0) - 1) return this.goStop(this.stop + 1)
-    if (this.step < this.current.events.length - 1) return this.goTo(this.chapter, this.step + 1)
+    if (this.step < this.current.events.length - 1) return this.goTo(this.chapter, this.step + 1, { forward: true })
     if (this.chapter < this.chapters.length - 1) return this.goTo(this.chapter + 1, -1)
   }
 
@@ -202,8 +263,8 @@ export class Tour {
     if (this.event && this.stop === 0) return this.goTo(this.chapter, this.step)
     if (this.step > 0) return this.goTo(this.chapter, this.step - 1, { stop: 'last' })
     if (this.step === 0) return this.goTo(this.chapter, -1)
-    if (this.chapter > 0) {
-      const prev = this.chapters[this.chapter - 1]
+    if (this.chapter > this.first) {
+      const prev = this.chapterAt(this.chapter - 1)
       return this.goTo(this.chapter - 1, prev.events.length - 1, { stop: 'last' })
     }
   }
@@ -213,7 +274,7 @@ export class Tour {
     if (!this.chapters.length) return
     const at = this.active ? this.chapter : this.nearestChapter()
     const to = dir < 0 && this.active && this.step >= 0 ? at : at + dir
-    if (to >= 0 && to < this.chapters.length) this.goTo(to, -1)
+    if (to >= this.first && to < this.chapters.length) this.goTo(to, -1)
   }
 
   /** Off the tour: the viewer has taken the timeline. */
@@ -225,8 +286,8 @@ export class Tour {
 
   /** Where an event stands in the tour: [chapter, step], or null. */
   locate(ev) {
-    for (let c = 0; c < this.chapters.length; c++) {
-      const s = this.chapters[c].events.indexOf(ev)
+    for (let c = this.first; c < this.chapters.length; c++) {
+      const s = this.chapterAt(c).events.indexOf(ev)
       if (s >= 0) return [c, s]
     }
     return null
@@ -246,13 +307,27 @@ export class Tour {
     this.fly(this.gentleView(ev), false, this.placeOf(ev))
   }
 
-  goTo(c, s = -1, { jump = false, gentle = false, stop = -1 } = {}) {
-    const ch = this.chapters[c]
+  goTo(c, s = -1, { jump = false, gentle = false, stop = -1, forward = false } = {}) {
+    const ch = this.chapterAt(c)
     if (!ch) return
     this.active = true
     this.chapter = c
     this.step = clamp(s, -1, ch.events.length - 1)
     this.stop = -1
+    this.setPrologue(!!ch.prologue)
+    if (ch.prologue) {
+      if (this.step < 0) this.showPrologueChapter(ch, jump)
+      else {
+        const st = ch.events[this.step]
+        const n = st.stops?.length || 0
+        if (stop === 'last' && n) {
+          this.showStep(st, { jump, quiet: true })
+          return this.goStop(n - 1, { jump })
+        }
+        this.showStep(st, { jump, forward: forward || gentle })
+      }
+      return this.notify()
+    }
     if (this.step < 0) this.showEra(ch, jump)
     else {
       const ev = ch.events[this.step]
@@ -298,6 +373,7 @@ export class Tour {
     const ev = this.event
     const stops = ev?.stops || []
     if (!ev || i < -1 || i >= stops.length) return
+    if (ev.prologue) return this.goPrologueStop(ev, i, { jump })
     const ui = this.ui
     this.active = true
     this.stop = i
@@ -365,6 +441,169 @@ export class Tour {
       bar.tween = null
       this.app.timeline.set(s)
     } else bar.easeTo(s, clamp(dur * 0.8, 0.6, 2.4))
+  }
+
+  // --- the prologue ---------------------------------------------------------------
+
+  /** Into the prologue, or out of it into the main chapters: its view and the clock, or the packs and the years. */
+  setPrologue(on) {
+    const app = this.app
+    if (!app.geology || on === app.prologue) return
+    app.setPrologue(on)
+    this.ui.timeline.setMode(on ? 'ma' : 'years')
+    if (!on) app.geology.light([])
+  }
+
+  /** A prologue chapter's card: the clock to its age, its first step's stage, the chain where it then stood. */
+  showPrologueChapter(ch, jump) {
+    const ui = this.ui
+    const G = this.app.geology
+    ui.pins.activeEvent = null
+    ui.pins.setStopPlace(null)
+    ui.card.openEra(ch)
+    const age = Number.isFinite(ch.era.age) ? ch.era.age : ch.events[0]?.age ?? 0
+    if (ch.events[0]?.stage) G.show(ch.events[0].stage, age, { jump })
+    G.light([])
+    const dur = this.fly(this.prologueChapterView(ch), jump)
+    this.setAge(age, dur, jump)
+  }
+
+  /** A step: its stage at its age, its fields lit, its first place where it then stood; a slide run once the camera is there. */
+  showStep(st, { jump = false, forward = false, quiet = false } = {}) {
+    const ui = this.ui
+    const G = this.app.geology
+    ui.pins.activeEvent = null
+    ui.pins.setStopPlace(null)
+    ui.card.open(st)
+    if (st.stage) G.show(st.stage, st.age, { jump })
+    G.light(st.landslides || [])
+    for (const n of this.nextStages(st)) G.load(n)
+    const ease = quiet ? 0 : this.setAge(st.age, this.fly(this.stepView(st), jump), jump)
+    if (quiet) this.setAge(st.age, 1, jump)
+    // (a slide runs once the camera and the clock are there, going forward
+    // onto a field the step before did not light; going back, or onto the
+    // same field again, it is shown done)
+    const prev = this.prevStep(st)
+    if (st.kind === 'slide' && forward && G.slideOf(st, prev)?.fresh) G.playSlide(st, { delay: jump ? 0 : ease + 0.6, prev })
+  }
+
+  /** The prologue's step before st, in the tour's order. */
+  prevStep(st) {
+    const all = this.prologue.flatMap((ch) => ch.events)
+    return all[all.indexOf(st) - 1] || null
+  }
+
+  /** The stages of the steps either side, read ahead. */
+  nextStages(st) {
+    const all = this.prologue.flatMap((ch) => ch.events)
+    const i = all.indexOf(st)
+    return [all[i + 1]?.stage, all[i - 1]?.stage].filter(Boolean)
+  }
+
+  goPrologueStop(st, i, { jump = false } = {}) {
+    const ui = this.ui
+    this.active = true
+    this.stop = i
+    if (ui.card.ev !== st) ui.card.open(st)
+    ui.card.setStop(i)
+    const s = st.stops[i]
+    if (s) {
+      const age = Number.isFinite(s.age) ? s.age : st.age
+      const dur = this.fly(this.prologueStopView(st, s, age), jump)
+      if (Number.isFinite(s.age)) this.setAge(s.age, dur, jump)
+    } else this.fly(this.stepView(st), jump)
+    this.notify()
+  }
+
+  /** Run the step's slide again (the card's control). */
+  replaySlide() {
+    const st = this.event
+    if (st?.prologue && st.kind === 'slide') this.app.geology?.playSlide(st, { delay: 0, prev: this.prevStep(st) })
+  }
+
+  /** Ease the clock to age A; how long the easing takes. */
+  setAge(A, dur, jump) {
+    const bar = this.ui.timeline
+    if (jump) {
+      bar.tween = null
+      this.app.geoClock.set(A)
+      return 0
+    }
+    const d = clamp(dur * 0.8, 0.6, 2.4)
+    bar.easeToAge(A, d)
+    return d
+  }
+
+  /** Where a point the plate carries ([lon, lat] today) stood at age A: world [x, z]. */
+  carried(lonlat, A) {
+    const [x, z] = this.app.data.proj.toWorld(lonlat)
+    const [dx, dz] = driftAt(this.app.data.geology.hotspot, A)
+    return [x + dx, z + dz]
+  }
+
+  /** A place's point, carried to age A (a seamount and a debris field are on the plate as an island is). */
+  carriedPlace(id, A) {
+    const p = this.places.get(id)
+    const pt = p && geometryPoint(p.geometry)
+    return pt ? this.carried(pt, A) : null
+  }
+
+  /** The chain as a prologue chapter opens on it: its steps' places where each then stood, and the hotspot, in the chain view's turn. */
+  prologueChapterView(ch) {
+    const pts = []
+    for (const st of ch.events) for (const id of st.places || []) {
+      const p = this.carriedPlace(id, st.age)
+      if (p) pts.push(p)
+    }
+    const hs = this.app.data.geology.hotspot.at
+    if (hs) pts.push(hs)
+    if (pts.length < 2) return this.carriedChainView(ch.era.age ?? 0)
+    const box = this.ui.freeBox()
+    const yaw = this.homeYaw(box)
+    const v = this.app.rig.fit({ points: pts, yaw, box, reach: CHAIN_REACH, pad: 1.4 })
+    const min = this.farDistance(box)
+    if (v.distance < min) return this.app.rig.fit({ rect: { x0: v.target.x, x1: v.target.x, z0: v.target.z, z1: v.target.z }, distance: min, yaw, box })
+    this.app.rig.reach(v.distance)
+    return v
+  }
+
+  /** The whole chain's view, slid with the drift to age A. */
+  carriedChainView(A) {
+    const v = this.chainView()
+    const [dx, dz] = driftAt(this.app.data.geology.hotspot, A)
+    v.target.x += dx
+    v.target.z += dz
+    return v
+  }
+
+  /** A step's view: its first place where it then stood, at the far zoom, in the chain view's turn. */
+  stepView(st) {
+    const id = (st.places || []).find((p) => this.places.has(p))
+    const at = id ? this.carriedPlace(id, st.age) : null
+    if (!at) return this.carriedChainView(st.age)
+    const box = this.ui.freeBox()
+    return this.app.rig.fit({ rect: { x0: at[0], x1: at[0], z0: at[1], z1: at[1] }, distance: this.farDistance(box), yaw: this.homeYaw(box), tilt: this.tilt(), box })
+  }
+
+  /**
+   * A far stop's view (DATA.md "Geology", a step's `stops`): its camera's
+   * target ([lon, lat] today), else its place, carried to the age; at its
+   * distance, toward its bearing and at its pitch where it gives them, else
+   * the far zoom and the chain view's turn.
+   */
+  prologueStopView(st, s, age) {
+    const cam = s.camera || {}
+    const target = Array.isArray(cam.target) && cam.target.length >= 2 && cam.target.every(Number.isFinite) ? this.carried(cam.target, age) : s.place ? this.carriedPlace(s.place, age) : null
+    if (!target) return this.stepView(st)
+    const box = this.ui.freeBox()
+    return this.app.rig.fit({
+      rect: { x0: target[0], x1: target[0], z0: target[1], z1: target[1] },
+      distance: Number.isFinite(cam.distance) ? cam.distance : this.farDistance(box),
+      yaw: Number.isFinite(cam.bearing) ? (-cam.bearing * Math.PI) / 180 : this.homeYaw(box),
+      pitch: Number.isFinite(cam.pitch) ? (cam.pitch * Math.PI) / 2 : undefined,
+      tilt: this.tilt(),
+      box,
+    })
   }
 
   // --- views ------------------------------------------------------------------
@@ -510,16 +749,39 @@ export class Tour {
    * tour; `opening` while the tour stands on a chapter's own card.
    */
   describe() {
-    const ch = this.chapters.length ? this.chapters[this.active ? this.chapter : this.nearestChapter()] : null
+    const ch = this.chapters.length || this.prologue.length ? this.chapterAt(this.active ? this.chapter : this.nearestChapter()) : null
     if (!ch) return null
+    const step = this.active && this.step >= 0 ? `${this.step + 1} of ${ch.events.length}` : ''
+    if (ch.prologue) {
+      // "Prologue II of II", or "Prologue" alone for a prologue of one chapter
+      const P = this.prologue.length
+      const n = roman(ch.index + 1)
+      return {
+        active: this.active,
+        opening: this.active && this.step < 0,
+        prologue: true,
+        word: 'Prologue',
+        number: n,
+        of: P,
+        ofLabel: roman(P),
+        chapter: P > 1 ? `Prologue ${n} of ${roman(P)}` : 'Prologue',
+        resume: P > 1 ? `the prologue, ${n} of ${roman(P)}` : 'the prologue',
+        name: ch.name,
+        step,
+      }
+    }
     return {
       active: this.active,
       opening: this.active && this.step < 0,
+      prologue: false,
+      word: 'Chapter',
       number: ch.index + 1,
       of: this.chapters.length,
+      ofLabel: String(this.chapters.length),
       chapter: `Chapter ${ch.index + 1} of ${this.chapters.length}`,
+      resume: `chapter ${ch.index + 1} of ${this.chapters.length}`,
       name: ch.name,
-      step: this.active && this.step >= 0 ? `${this.step + 1} of ${ch.events.length}` : '',
+      step,
     }
   }
 }

@@ -42,6 +42,8 @@ export class World {
     // debugging switches (the tools use them to check the hand-over): no
     // island packs at all, or every slotted pack held at one weight
     this.noIslands = false
+    // and while the prologue's view stands in for the packs (app.js), none takes a slot
+    this.held = false
     this.forceK = null
     const dummy = heightTexture(new Float32Array([-4000]), 1, 1)
     const dummyAux = new THREE.DataTexture(new Uint8Array(4), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType)
@@ -143,7 +145,8 @@ export class World {
     const isl = this.islands
     this._m.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
     this._frustum.setFromProjectionMatrix(this._m)
-    for (const t of isl) t.want = this.noIslands ? 0 : this.wantFor(t, camera)
+    const off = this.noIslands || this.held
+    for (const t of isl) t.want = off ? 0 : this.wantFor(t, camera)
     // the packs that may hold a slot: the SLOTS that want it most
     const ranked = isl.filter((t) => t.want > 0).sort((a, b) => b.score - a.score)
     const keep = new Set(ranked.slice(0, SLOTS))
@@ -160,7 +163,7 @@ export class World {
       }
     }
     if (this.forceK !== null) for (const t of this.slots) if (t) t.k = this.forceK
-    if (this.noIslands) for (const t of this.slots) if (t) this.release(t)
+    if (off) for (const t of this.slots) if (t) this.release(t)
     const u = this.uniforms
     for (let s = 0; s < SLOTS; s++) {
       const t = this.slots[s]
@@ -187,7 +190,7 @@ export class World {
     const isl = this.islands
     this._m.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
     this._frustum.setFromProjectionMatrix(this._m)
-    for (const t of isl) t.want = this.wantFor(t, camera)
+    for (const t of isl) t.want = this.held ? 0 : this.wantFor(t, camera)
     const ranked = isl.filter((t) => t.want > 0).sort((a, b) => b.score - a.score).slice(0, this.slots.length)
     for (const t of isl) if (t.slot >= 0 && !ranked.includes(t)) this.release(t)
     for (const t of ranked) {

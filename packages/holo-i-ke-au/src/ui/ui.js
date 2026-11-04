@@ -12,6 +12,9 @@
 // hover card goes too wherever a district is down. Once gone for the near
 // zoom, the hover card stays gone until the camera is back out where the
 // legend shows again, so it doesn't flicker at the edge of the rule.
+//
+// In the prologue (ui/tour.js) the far view is the geology's alone: the
+// pins of the main chapters, the legend and the hover card stand aside.
 
 // the far view's strength under which the hover card goes, and over which
 // the legend (and the hover card with it) comes back
@@ -276,6 +279,13 @@ export class UI {
     }
   }
 
+  /** The viewer has taken the prologue's clock: off the tour, and a prologue chapter's card the age has left goes. */
+  onScrubAge(A = this.app.geoClock.age) {
+    const tour = this.tour
+    tour.leave()
+    if (this.card.mode === 'era' && this.card.chapter?.prologue && this.card.chapter !== tour.prologueAt(A)) this.card.close()
+  }
+
   /**
    * The part of the screen the scene can be seen in: below the title, above
    * the timeline, and beside the card (down the right on a wide screen) or
@@ -339,7 +349,7 @@ export class UI {
   hover(cx, cy) {
     const app = this.app
     const u = app.shared.uniforms
-    if (cx === null || cx === undefined || !this.inspectorAllowed()) return this.hideInspector()
+    if (cx === null || cx === undefined || app.prologue || !this.inspectorAllowed()) return this.hideInspector()
     const p = app.rig.pickGround(cx, cy)
     const m = p && app.world.metresAt(p.x, p.z) > 0 ? app.polity.mokuAt(p.x, p.z) : null
     // (in the land view the moku isn't lit in its polity's colour, which would
@@ -432,11 +442,12 @@ export class UI {
     const app = this.app
     const now = performance.now()
     this.timeline.update(dt)
-    this.pins.update(app.overlay.pins)
+    // (the main chapters' pins stand aside in the prologue)
+    this.pins.update(app.overlay.pins && !app.prologue)
     // the legend, and the switch on it, while the far view's overlays can
     // show; and the hover card, by the same rule (a card left up as the
     // camera flies in under a resting pointer goes with it)
-    const far = this.farStrength() > FAR_BACK
+    const far = this.farStrength() > FAR_BACK && !app.prologue
     if (far !== this.legend.classList.contains('show')) {
       this.legend.classList.toggle('show', far)
       this.legend.inert = !far

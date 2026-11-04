@@ -189,3 +189,104 @@ export function formatYear(y, precision = 1) {
   const ys = r < 0 ? `${-r} BCE` : String(r)
   return precision >= 10 ? `c. ${ys}` : ys
 }
+
+// --- the prologue's clock ------------------------------------------------------
+//
+// The prologue (DATA.md "Geology") runs on a clock of its own, in millions of
+// years before the present (Ma), never in years: nothing of the main chapters
+// has an age, and nothing of the prologue has a year. Its track is a log
+// scale from the oldest stage to now, since the first few million years hold
+// as much change as the last fifty thousand: position u (0 the oldest, 1 now)
+// goes by the log of the age plus a small constant (AGE_K), so the scale
+// reaches now without running off to infinity there. A step may run on past
+// now (a seamount's future), as far as the constant allows.
+
+const AGE_K = 0.05
+
+export class GeoClock {
+  /** `ages`: every age the prologue names (its stages, chapters and steps), in Ma. */
+  constructor(ages) {
+    const A = ages.filter(Number.isFinite)
+    this.oldest = Math.max(0.1, ...A)
+    this.youngest = Math.max(-AGE_K * 0.8, Math.min(0, ...A))
+    this.age = this.oldest
+    this.listeners = []
+  }
+
+  get span() {
+    const top = Math.log((this.oldest + AGE_K) / AGE_K)
+    return [top, Math.log((this.youngest + AGE_K) / AGE_K)]
+  }
+
+  /** Track position (0..1) of age A. */
+  uAt(A) {
+    const [top, end] = this.span
+    const a = Math.max(this.youngest, Math.min(this.oldest, A))
+    return (top - Math.log((a + AGE_K) / AGE_K)) / Math.max(1e-6, top - end)
+  }
+
+  /** Age at track position u. */
+  ageAt(u) {
+    const [top, end] = this.span
+    const t = Math.max(0, Math.min(1, u))
+    return AGE_K * Math.exp(top - t * (top - end)) - AGE_K
+  }
+
+  get u() {
+    return this.uAt(this.age)
+  }
+
+  set(A) {
+    const a = Math.max(this.youngest, Math.min(this.oldest, A))
+    if (Math.abs(a - this.age) < 1e-9) return
+    this.age = a
+    for (const f of this.listeners) f(this)
+  }
+
+  setU(u) {
+    this.set(this.ageAt(u))
+  }
+
+  onChange(f) {
+    this.listeners.push(f)
+  }
+
+  /** The ticks the track carries, in Ma: the round ages it spans, and now (0). */
+  ticks() {
+    const out = [20, 10, 5, 2, 1, 0.5, 0.2, 0.1].filter((a) => a <= this.oldest * 1.0001)
+    out.push(0)
+    return out
+  }
+}
+
+const thousands = (A) => Number((A * 1e6).toPrecision(2)).toLocaleString('en-US')
+const millions = (A) => {
+  const r = Math.round(A * 10) / 10
+  return Number.isInteger(r) ? String(r) : r.toFixed(1)
+}
+
+/** An age as the cards and the clock say it: "about 2.1 million years ago", "about 470,000 years ago", "now". */
+export function formatAge(A) {
+  if (!Number.isFinite(A)) return ''
+  if (Math.abs(A) < 0.0005) return 'now'
+  if (A < 0) return `in about ${thousands(-A)} years`
+  return A >= 1 ? `about ${millions(A)} million years ago` : `about ${thousands(A)} years ago`
+}
+
+/** An age short, for a list and the clock's ticks: "2.1 Ma", "470 ka", "now". */
+export function formatAgeShort(A) {
+  if (!Number.isFinite(A)) return ''
+  if (Math.abs(A) < 0.0005) return 'now'
+  if (Math.abs(A) >= 1) return `${millions(A)} Ma`
+  return `${Number((A * 1000).toPrecision(2))} ka`
+}
+
+/** A chapter's span of ages, oldest first: "about 3 to 1.5 million years ago", "about 1.5 million years ago to now". */
+export function formatAgeSpan(span) {
+  if (!Array.isArray(span) || span.length < 2 || !span.every(Number.isFinite)) return ''
+  const [a, b] = span
+  if (Math.abs(b) < 0.0005) return `${formatAge(a)} to now`
+  if (a >= 1 && b >= 1) return `about ${millions(a)} to ${millions(b)} million years ago`
+  if (a >= 1) return `about ${millions(a)} million to ${thousands(b)} years ago`
+  return `about ${thousands(a)} to ${thousands(b)} years ago`
+}

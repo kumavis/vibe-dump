@@ -14,6 +14,12 @@
 // tour may pick for a step until they have (ui/tour.js). Before 1848 a
 // choice of the Māhele shows the chiefdoms (`farView`), and the Māhele again
 // once the year comes back to it.
+//
+// Before chapter 1, where the data has a geology, the prologue (DESIGN.md
+// §13): on its own clock in millions of years (time.js GeoClock), with its
+// own far view (render/geology.js), the sea floor and the islands of a stage
+// in place of the packs, the sea, the lines, the routes and the overlays,
+// which come back as the tour crosses into chapter 1.
 
 import * as THREE from 'three'
 import { World } from './render/world.js'
@@ -29,7 +35,8 @@ import { PolityOverlay } from './overlay/polity.js'
 import { LandOverlay } from './overlay/land.js'
 import { MaheleOverlay } from './overlay/mahele.js'
 import { CropLayer } from './overlay/crops.js'
-import { Timeline } from './time.js'
+import { Timeline, GeoClock } from './time.js'
+import { Geology } from './render/geology.js'
 import { Towns } from './features/towns.js'
 import { Works } from './features/works.js'
 import { CropTrees } from './features/crops.js'
@@ -101,6 +108,9 @@ export class App {
     // the patches (render/patches.js): read behind the first frame (main.js)
     this.patches = new Patches(this)
     this.timeline = new Timeline(data.eras)
+    // the prologue's clock, in Ma, where the data has a geology
+    const G = data.geology
+    this.geoClock = G ? new GeoClock([...G.stages.map((s) => s.age), ...G.chapters.flatMap((c) => [c.age, ...(c.ageSpan || []), ...(c.steps || []).map((st) => st.age)])]) : null
     this.polity = new PolityOverlay(data, this.world.archPack.rect, this.shared.uniforms, warn)
     this.land = new LandOverlay(this)
     // what grows where, by class, at the island zooms and in the districts
@@ -157,6 +167,8 @@ export class App {
     // the Māhele's file, small, behind the first frame (its map waits until it is wanted)
     this.mahele.load()
     this.rig = new CameraRig(this.camera, this.canvas, this.world)
+    // the prologue's far view, its textures made only while it is open
+    if (this.data.geology) this.geology = new Geology(this, this.data.geology)
     const cam = this.params.get('cam')
     if (cam) {
       const [x, z, distance, yaw, pitch] = cam.split(',').map(Number)
@@ -326,11 +338,34 @@ export class App {
     this.shared.uniforms.uPolityK.value = this.polityK
     this.land.settle(this.landK)
     this.routes?.settle(this.timeline.year, g.distance, this.routeOptions())
+    this.geology?.settle()
+  }
+
+  /** Whether the prologue is open (ui/tour.js opens and closes it). */
+  get prologue() {
+    return !!this.geology?.want
+  }
+
+  /** Open or close the prologue's view. */
+  setPrologue(on) {
+    if (!this.geology || on === this.prologue) return
+    // (the camera may stand anywhere over the seafloor box while it is open:
+    // its places reach well beyond the archipelago's)
+    const w = this.world
+    if (on) {
+      this.archBounds = { ...w.bounds }
+      const r = this.geology.sf.rect
+      w.bounds = { x0: Math.min(r.x0, w.bounds.x0), z0: Math.min(r.z0, w.bounds.z0), x1: Math.max(r.x1, w.bounds.x1), z1: Math.max(r.z1, w.bounds.z1) }
+      this.geology.enter()
+    } else {
+      if (this.archBounds) w.bounds = this.archBounds
+      this.geology.leave()
+    }
   }
 
   stats() {
     const info = this.renderer.info
-    return { ...this.world.stats(), view: this.view, farView: this.farView, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
+    return { ...this.world.stats(), geology: this.geology?.stats() ?? null, view: this.view, farView: this.farView, frameMs: +(this.frameAvg ?? 0).toFixed(1), calls: info.render.calls, triangles: info.render.triangles, textures: info.memory.textures, quality: this.quality.level }
   }
 
   syncEras() {
@@ -422,10 +457,19 @@ export class App {
     this.landK += (lk - this.landK) * ease
     this.land.update(dt, this.landK)
     this.crops.update(dt)
-    this.lines.visible = this.overlay.lines
+    // (the prologue's view, once it is up, stands in for the packs, the sea, the lines and the routes)
+    this.geology?.update(dt)
+    const geo = !!this.geology?.covers
+    // (and the island packs keep out of their slots meanwhile: nothing of them is drawn)
+    this.world.held = geo
+    this.world.group.visible = !geo
+    this.ocean.mesh.visible = !geo
+    this.routes.group.visible = !geo
+    this.lines.visible = this.overlay.lines && !geo
     const L = this.light
     const lightLevel = Math.min(1, 0.25 + (L.sunColor.r + L.skyColor.r) * 0.35)
     this.lines.update(this.camera, this.renderer, d, lightLevel)
+    if (geo) this.lines.group.visible = false
     this.routes.update(this.timeline.year, d, this.routeOptions({ light: lightLevel }))
     for (const u of this.updaters) u(dt, this.time)
     const pu = this.pipeline.uniforms

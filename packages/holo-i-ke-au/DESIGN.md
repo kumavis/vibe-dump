@@ -667,6 +667,35 @@ The contract is DATA.md "Geology"; the chapters, stages and fields are the
 research's to settle. The main timeline (years) and the island and district
 zooms are not used in the prologue.
 
+**As drawn.** The tour opens on chapter 1 as before; Back from its card
+walks into the prologue's last step, and Next from there crosses back. The
+prologue's chapters are numbered "Prologue I … V" on their cards and in the
+pill. While the tour is in them the timeline is their clock: a log track in
+Ma ticked at 5, 2, 1, 0.5, 0.2, 0.1 and now, its label "about 2.1 million
+years ago"; the years' track comes back unchanged in chapter 1. The far
+view is the geology's alone: one fixed grid drawn from the seafloor pack
+and two stage textures whose contents are swapped as the age crosses from
+stage to stage, the sea made clear enough that the floor four kilometres
+down still reads, the packs, the sea surface, the lines, the routes, the
+pins, the legend and the hover card stood aside (and the island packs out
+of their slots). Everything the plate carries is drawn displaced by the
+drift at the clock's age, so as the clock runs down the islands slide
+north-west past a faint mark at the hotspot, which stays. A step's debris
+fields are a warm wash with their outline on the floor, the blocks named.
+A slide whose field has a scar runs once as the step opens (going forward):
+the flank whole, then a translucent mass running from the scar along the
+field to its far edge over five and a half seconds, the wash revealed
+behind it, the stage crossfading to the one after; its card has a control
+to run it again. Nothing splashes. On leaving, the sea eases back to
+opaque and every texture of the prologue is let go.
+
+The main far view does not offer the sea floor as a toggle. It would hold
+the seafloor pack (one more 2048 texture and its decode) through the whole
+tour, and the sea floor drawn there would have to be drawn under the
+chiefdoms', the land's and the Māhele's overlays and the opaque sea the
+far view is built on; the sea floor reads as the prologue's subject, and
+the overlays as the main view's.
+
 ## 14. A departure drawn as described
 
 Hōkūleʻa leaves Honolua Bay for Tahiti on 1 May 1976, and the record of that
