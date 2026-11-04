@@ -1535,3 +1535,124 @@ source in `sources.json`.
   the year and drawn as the one that does; where their outlines differ a
   little, the texels of either stand in the years of both. Two loʻi of the
   same years but different crops never share an index.
+
+## Geology: the making of the islands
+
+A prologue before the first chapter, on a time scale of its own: the islands
+rising over the hotspot, carried north-west, worn down and sinking; the shapes
+they had; the great landslides that took their flanks into the sea. Under
+`public/data/geology/`, read only while the tour is in the prologue (and by the
+far view's geology toggle), never at the island or district zoom.
+
+```
+geology/manifest.json             what is here, with sources, methods and the hotspot track
+geology/seafloor/height.png       the sea floor and the islands over a wider box, split-byte like a pack
+geology/stages/<stage>/height.png the reconstructed islands at a stage, on the seafloor pack's grid
+geology/landslides.geojson        the debris fields and their blocks
+geology/volcanoes.json            each volcano: ages, stage, summit, caldera, status
+geology/chapters.json             the prologue's chapters and their steps (its events)
+```
+
+- **The seafloor pack**: like an island pack (DATA.md §2: split-byte RGB,
+  `value = R·256 + G`, metres `= value·0.25 − 6000`), at most 2048 on the
+  long side, over a box wide enough to hold every debris field named below
+  (the Nuʻuanu field reaches about 230 km north-east of Oʻahu onto the
+  Hawaiian Arch; the Kaʻena and Waiʻanae fields west; the ʻĀlika fields
+  south-west of Hawaiʻi): about 17.5°–24.5° N, 162°–153° W. From the GMRT
+  synthesis the pack bake already fetches (its 100 m multibeam where the
+  Hawaiian surveys exist, else its gridded fill), with the islands' land from
+  the 3DEP tiles, never shallower than −1 m at sea and the land ≥ 0.2 m.
+  Registered in `manifest.json` as `seafloor: { bounds, size, metresPerTexel,
+  height, stats, sources }`.
+- **Stages**: a reconstructed height image per stage on the seafloor grid,
+  each listed in the manifest with `id`, `age` (millions of years before
+  present, `Ma`), `agePrecision` (± Ma), `method` (`modelled`), the `rule`
+  written out, `confidence` (`firm | soft | sketch`), `sources`, and `stats`.
+  The stages, from the record as the research reads it: the Kauaʻi and
+  Niʻihau shields complete and alone; Waiʻanae grown beside them; the Koʻolau
+  shield whole, its caldera at Kāneʻohe and its north-east flank still
+  standing; after the Nuʻuanu avalanche, the flank gone and the pali new;
+  Maui Nui, the four islands and Penguin Bank one island; Maui Nui parting as
+  the sea rises and the land sinks; Hawaiʻi's shields rising; the present.
+  The rule for a shield is a profile (slope by distance from the summit, as
+  the living shields show) fitted to the volcano's summit and base in
+  `volcanoes.json`, less the subsidence since (the islands sink; the rate per
+  island in the manifest), cut by the shoreline of the stage; a scar is
+  refilled to the profile before its slide and left after. Every stage is a
+  model and says so; nothing in it is a survey.
+- **The drift**: the manifest's `hotspot` gives the hotspot's position today
+  (under Kīlauea and Kamaʻehuakanaloa), the plate's speed and azimuth (about
+  9.5 cm a year toward about N 65° W, with its source), so the app can place a
+  stage's islands where they stood over the hotspot: a stage at age `A` is
+  drawn displaced south-east by `A × speed` along the azimuth, and the islands
+  slide north-west as the age runs down.
+- **`landslides.geojson`**: each field a Polygon (the debris spread on the
+  sea floor) with `id`, `name`, `volcano`, `kind` (`avalanche` for a debris
+  avalanche, `slump` for a slow slump), `age` and `agePrecision` (Ma), `runout`
+  (km), `volume` (km³, in a telling if a user-facing card shows it), `scar`
+  (a Polygon on the island where the flank was, where the record gives one),
+  `blocks` (Points with `name` and `height` m for the great blocks, Tuscaloosa
+  Seamount among them), `precision` (`mapped | traced | sketch`), `sources`,
+  `note`. Nuʻuanu, Wailau, Kaʻena, Waiʻanae, Clark, Pololū, ʻĀlika 1 and 2,
+  South Kona, Hilina, Kāʻohe, and whatever else the record maps.
+- **`volcanoes.json`**: `id`, `name`, `island`, `summit` (lon, lat, height m
+  today), `caldera` (a Polygon or a Point with radius, where known), `shield`
+  (`from`, `to` in Ma: the main shield building), `postshield`, `rejuvenated`
+  (ages, where known), `status` (`extinct | dormant | active | submarine`),
+  `lastEruption` (year or Ma), `subsidence` (mm a year, where measured),
+  `sources`, `note`. Niʻihau, Kauaʻi, Waiʻanae, Koʻolau, West Molokaʻi, East
+  Molokaʻi, Lānaʻi, Kahoʻolawe, West Maui, Haleakalā, Kohala, Mauna Kea,
+  Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa (Lōʻihi), and Penguin Bank
+  and the Kaʻula and Kaʻena stages if the record names them.
+- **`chapters.json`**: the prologue's chapters, each with `id`, `label`
+  ("when the islands were made", or as the research writes it), `age` and
+  `ageSpan` in Ma, `note`, `sources`, and `steps`: its events, each with
+  `id`, `title`, `gloss`, `summary`, `age`, `agePrecision`, `kind`
+  (`birth | slide | join | part | subsidence | eruption | now`), `stage` (the
+  stage it is drawn on), `places` (ids in `places.json`: a volcano's summit or
+  caldera, a debris field, a seamount; new kinds `volcano`, `caldera`,
+  `seamount`, `landslide`, at `island` or `sea` precision), `landslides`
+  (ids to light), `tellings` with sources, and `stops` with `zoom: "far"` and
+  a `camera`. Copy follows §4's rules: numbers only in tellings; the copy
+  rule of DESIGN §7.4.
+- **Time**: the prologue's timeline runs in millions of years on a log
+  scale from the oldest stage to now (and on into the future for
+  Kamaʻehuakanaloa, if a step says so); `age` is the only clock. The main
+  timeline (years) is not used in the prologue, and no event of the main
+  chapters has an `age`.
+- **Checks**: `check-data.mjs` holds the manifest's shape; every stage and
+  field cites opened sources; ages positive and in order per chapter; places
+  exist; the seafloor and stage images on their grid with the stated `stats`;
+  the whole directory under 12 MB.
+
+## Vessels and crowds, in a district
+
+For a scene on the water with people on the shore (the departure of
+Hōkūleʻa, 1976; a fleet's landing), two more feature kinds in a district's
+`features.json`, under the "District packs" contract:
+
+- **`vessel`**: a LineString track in lon/lat with `id`, `name`, `design`
+  (`waa-kaulua`, a double-hulled voyaging canoe; `waa`, a single-hulled
+  outrigger; `motor`, a motor vessel; `ship`), `length` (m), `beam` (m,
+  optional), `sails` (count, for a canoe), `masts`, `behaviour` (`moored |
+  paddle | tow | sail | anchor`, one per segment allowed as a list), `when`
+  (an ISO date or datetime for the start of the track; `until` for its end),
+  `stop` (as forces: the stop index or indexes at which it shows), `escort`
+  (the id of the vessel it escorts or tows), `crew` and `aboard` only in a
+  telling, `precision`, `sources`, `note`. The app builds the design
+  procedurally (the kit's waʻa for `waa`; for `waa-kaulua` two hulls with
+  ʻiako and a deck, two masts with crab-claw sails that are furled while
+  `tow` or `paddle` and set while `sail`, a hale on the deck), moves it along
+  the track between its `when` and `until` at the stop that names it,
+  heading along the track, and draws its wake.
+- **`crowd`**: a Polygon on the shore with `id`, `name`, `count` or
+  `density` (people per m², the count in a telling), `behaviour` (`gather |
+  wave | chant | procession | watch`), `dress` (`1970s | kingdom | precontact`,
+  what the sprites wear), `facing` (`sea` or a bearing), `when`, `until`,
+  `stop`, `precision`, `sources`, `note`. The app draws the crowd as the same
+  billboarded pixel-art figures as the forces, in the dress named, facing the
+  sea, with the behaviour as a quiet animation (waving arms, a conch raised,
+  a procession walking its polygon's long axis), and never a figure in the
+  water or on a building.
+- A scene's stops carry `camera` as before; `text` names what the sources
+  describe and nothing the app does not draw.

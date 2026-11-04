@@ -651,7 +651,33 @@ Draft gallery card, for `package.json` when there is an app:
 
 ---
 
-## 13. References
+## 13. A prologue: the making of the islands
+
+Before the first canoes, the land itself. A prologue of chapters before chapter
+1, on its own clock in millions of years (a log scale, since the first five
+million years hold as much change as the last fifty thousand), with the far
+view the only view: the sea floor shown, the islands rising one by one over
+the hotspot and carried north-west with the plate, Maui Nui as one island and
+then four, the great landslides laid on the sea floor, and the Koʻolau shield
+whole and then without its north-east flank, the Nuʻuanu avalanche run out two
+hundred kilometres onto the Hawaiian Arch and the pali left behind. Every shape
+before today's is a model fitted to the living shields and the dated rocks, and
+the cards say so in the house manner: by what it rests on, not by disclaimer.
+The contract is DATA.md "Geology"; the chapters, stages and fields are the
+research's to settle. The main timeline (years) and the island and district
+zooms are not used in the prologue.
+
+## 14. A departure drawn as described
+
+Hōkūleʻa leaves Honolua Bay for Tahiti on 1 May 1976, and the record of that
+morning (the crew's accounts, the Society's own, the newspapers) is enough to
+draw it: the canoe as she was built, two hulls, two masts, crab-claw sails, the
+escort vessel, the crowd on the shore and what they did. The scene is a near
+stop of the coda, in a small district of its own (DATA.md "District packs"),
+with vessels and crowds as features (DATA.md "Vessels and crowds"). The same
+kinds serve any landing or departure the record describes.
+
+## 15. References
 
 Checked during the brainstorm (October 2026). Everything else named above is to
 be cited in the gazetteer as it is used.
