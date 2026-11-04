@@ -76,6 +76,15 @@
 // for it, nothing is appended), as it does in a battle against the AI
 // played alone, so begin() makes no seat of it local: the host's page plays
 // its own human seat, if it sits, and the AI's moves fold alike everywhere.
+// (F11b's review) The host's page adopts only an AI seat it seated itself
+// in this lobby (kept per match and device, `ts.ai.<id>.<dev>`, as the
+// records it readied are; a rematch's AI seat the page that made it): an
+// AI-shaped record another peer wrote, naming the host's device, is shown
+// as another seat, with Unseat, never readied here, and the lobby starts
+// no battle while it sits; the AI is readied only on an army the battle
+// takes. And a lobby that can't start because another seat's army is one
+// the battle refuses says so without quoting it (the refusal names the
+// list's digits or its units: courtesy sealing).
 import { Session } from '../match/session.js'
 import { SIMULTANEOUS, knownOf } from '../match/fold.js'
 import { stateHash, createMatch, CORE_VERSION, RULES_ID } from '../core/index.js'
@@ -152,6 +161,8 @@ const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: s
 // null for a list), counts, cost, units, why (null, or the fold's refusal),
 // over (the points past the limit, 0 within it) }, or null where this game
 // knows no such race or mission (a peer's).
+// (a name no preset has is quoted cut short, as core/army.js's refusals
+// quote a seat's field: any peer may write a string of any length into it)
 const PRESET_NAME = /^[a-z][a-z0-9-]*$/
 const plural = (n, one) => `${n} ${one}${n === 1 ? '' : 's'}`
 export function judgeArmy(race, mission, army) {
@@ -161,7 +172,7 @@ export function judgeArmy(race, mission, army) {
   let preset = null, counts = null, why = null
   if (typeof text === 'string' && PRESET_NAME.test(text)) {
     if (Object.hasOwn(r.armies, text)) [preset, counts] = [text, presetCounts(race, text)]
-    else why = `the ${r.name} have no army "${text}"`
+    else why = `the ${r.name} have no army "${text.length > 47 ? `${text.slice(0, 47)}…` : text}"`
   } else if (typeof text === 'string' && LIST.test(text) && text.length <= r.roster.length) {
     counts = r.roster.map((k, i) => (i < text.length ? text.charCodeAt(i) - 48 : 0))
   } else why = 'that is no army this game can read'
@@ -209,6 +220,7 @@ export class Online {
         unseat: (i) => {
           if (!this.isHost() || !N.unseatAI(this.handle, i, this.dev)) return
           this.aiRandom.delete(i)
+          this.markAI(i, null)
           kept.set(this.readyKey(), JSON.stringify(this.readied().filter((x) => x.seat !== i)))
         },
       },
@@ -375,8 +387,15 @@ export class Online {
     const other = me < 0 ? null : L.seats[1 - me]
     const hostHere = L.host === this.dev || this.presence.live().some((p) => p.dev === L.host)
     const problem = N.ready(L) ? this.startProblem(L) : null
+    // ((F11b's review) a refusal of another seat's army said without its
+    // words, which quote the list; and an AI seat this host page didn't
+    // seat, which it never plays for)
+    const theirs = problem ? L.seats.findIndex((r, i) => r && i !== me && !this.mineAI(r, i) && judgeArmy(r.race, L.mission, r.army)?.why) : -1
+    const foreign = this.foreignAI(L)
     const status = this.lost && me < 0 ? `Seat ${this.lost.seat + 1} was taken by ${this.lost.by} at the same moment.`
       : !this.store.length ? 'Waiting for the host…'
+        : foreign >= 0 ? `The AI in seat ${foreign + 1} isn't one this page seated: unseat it to start a battle.`
+        : theirs >= 0 ? `This lobby can't start a battle: seat ${theirs + 1}'s army isn't one this battle takes.`
         : problem ? `This lobby can't start a battle: ${problem}`
         : me < 0 ? (L.seats.some((r) => !r) ? 'Take a free seat to play, or just watch.' : 'Both seats are taken: you will watch the battle.')
           : !other ? 'Copy the link and send it to your opponent.'
@@ -399,9 +418,9 @@ export class Online {
       status, link: this.linkFor(this.id), board: L.board, host, terrain: L.terrain ?? sets[0], terrains: [...sets],
       mission: L.mission, sizes: SIZES, fog: L.fog,
       seats: L.seats.map((r, i) => {
-        const ai = !!r && r.ctrl === 'ai' && r.dev === this.dev && host
+        const ai = !!r && host && this.mineAI(r, i)
         const mine = !!r && r.dev === this.dev && r.ctrl === 'human'
-        const seat = r ? { name: r.name, ready: r.ready, mine, ai } : { free: true, canSit: true, canSeatAI: host && !L.seats.some((x) => x?.ctrl === 'ai') }
+        const seat = r ? { name: r.name, ready: r.ready, mine, ai, ...(i === foreign ? { foreignAI: true } : {}) } : { free: true, canSit: true, canSeatAI: host && !L.seats.some((x) => x?.ctrl === 'ai') }
         if (r && (mine || ai)) seat.army = this.armyLine(r, L.mission, ai ? { random: this.aiRandom.has(i) } : null)
         else if (r) seat.armyLine = this.sealedLine(r, L.mission)
         return { ...seat, race: races[i], color: sides?.[i].color ?? '#9a8a70' }
@@ -420,9 +439,16 @@ export class Online {
       this.flow.ui.toast?.show('The battle changed while you mustered: build your army for it again', 6000)
     }
     // ((F11b) the host's AI seats readied again, as its own say, once a
-    // change of the battle un-readied them)
-    if (this.isHost() && this.opened()) L.seats.forEach((r, i) => r?.ctrl === 'ai' && r.dev === this.dev && !r.ready && this.editAI(i, {}))
-    if (this.autoStart && this.isHost() && N.ready(L) && !problem) this.startMatch()
+    // change of the battle un-readied them ((F11b's review) only one this
+    // page seated, and only on an army the battle takes: an AI left
+    // unready on one is written no more, its line saying why)
+    if (this.isHost() && this.opened()) {
+      L.seats.forEach((r, i) => {
+        const j = this.aiOf(i) && !r.ready ? judgeArmy(r.race, L.mission, r.army) : null
+        if (j && !j.why) this.editAI(i, {})
+      })
+    }
+    if (this.autoStart && this.isHost() && N.ready(L) && !problem && foreign < 0) this.startMatch()
   }
 
   // ── Armies (F11b) ───────────────────────────────────────────────────────
@@ -494,7 +520,43 @@ export class Online {
   // the host's AI seat i, on the host's page, or null
   aiOf(i) {
     const r = Number.isInteger(i) && this.handle ? N.lobbyOf(this.handle.doc()).seats[i] : null
-    return r?.ctrl === 'ai' && r.dev === this.dev && this.isHost() ? r : null
+    return this.isHost() && this.mineAI(r, i) ? r : null
+  }
+  // ((F11b's review) record r, in seat i, the AI seat this page seated, as
+  // it last wrote it: the AI's shape naming this device, its race and army
+  // the ones this page kept for the seat (`ts.ai.<id>.<dev>`, so a reload's
+  // too), or its army let go by a size change (net/lobby.js's editBattle).
+  // Any peer can write a record of the AI's shape naming the host's device,
+  // or change the one the host wrote; only the host's page keeps its own.)
+  // (held as verifyStart holds a seat: net/seed.js's seatDiff, the record
+  // as the start would write it against the one this page wrote)
+  mineAI(r, i) {
+    const e = this.seatedAI().find((x) => x?.seat === i)
+    if (!e || !r) return false
+    const say = { race: e.race, ctrl: 'ai', dev: this.dev, name: N.AI_NAME, nonce: '' }, rec = N.startSeat(r)
+    return [say, ...(typeof e.army === 'string' ? [{ ...say, army: e.army }] : [])].some((x) => !N.seatDiff(x, rec).length)
+  }
+  aiKey(id = this.id) {
+    return `ts.ai.${id}.${this.dev}`
+  }
+  seatedAI(id = this.id) {
+    try {
+      const list = JSON.parse(kept.get(this.aiKey(id)) ?? '[]')
+      return Array.isArray(list) ? list : []
+    } catch {
+      return []
+    }
+  }
+  // the AI's seat i as this page wrote it ({ race, army: a string or
+  // null }), or none (unseated)
+  markAI(i, say, id = this.id) {
+    const was = this.seatedAI(id).filter((x) => x?.seat !== i)
+    kept.set(this.aiKey(id), JSON.stringify(say ? [...was, { seat: i, race: say.race, army: say.army ?? null }] : was))
+  }
+  // the seat of an AI-shaped record naming this host page's device that it
+  // didn't seat, or -1 (on another page: -1)
+  foreignAI(L) {
+    return this.isHost() ? L.seats.findIndex((r, i) => r?.ctrl === 'ai' && r.dev === this.dev && !this.mineAI(r, i)) : -1
   }
   // The host seats the AI in seat i, or changes its seat: `to` its race
   // (another lets its army go: a Random seat draws again), `army` (a preset's, or
@@ -505,7 +567,7 @@ export class Online {
   editAI(i, { to = null, army, random } = {}) {
     if (!this.isHost()) return
     const L = N.lobbyOf(this.handle.doc()), r = L.seats[i]
-    if (r && !(r.ctrl === 'ai' && r.dev === this.dev)) return
+    if (r && !this.mineAI(r, i)) return
     // (the seat's race as it stands, a free seat's the one it would bring)
     const was = r ? L.seats.map((x) => x?.race)[i] : this.freeRace(L, i)
     const race = to ?? was, moved = race !== was
@@ -515,9 +577,12 @@ export class Online {
     if (this.aiRandom.has(i) && (random === true || moved || a == null) && Object.hasOwn(RACES, race) && Object.hasOwn(MISSIONS, L.mission)) {
       a = listText(autoList(RACES[race], MISSIONS[L.mission].list, ((Math.random() * 1e9) | 0) >>> 0))
     }
-    const open = this.opened()
-    if (!N.seatAI(this.handle, i, { host: this.dev, race, army: a, ready: !!open })) return
-    if (open) this.keepReadied(i, open)
+    // ((F11b's review) readied only on an army the battle takes, as a
+    // human's Ready is: else seated unready, its line red with why)
+    const open = this.opened(), j = judgeArmy(race, L.mission, a ?? undefined), ready = !!open && !!j && !j.why
+    if (!N.seatAI(this.handle, i, { host: this.dev, race, army: a, ready })) return
+    this.markAI(i, { race, army: a })
+    if (ready) this.keepReadied(i, open)
   }
   // a lobby record this device readied (seat i as it stands), kept with the
   // log's commitment: what verifyStart holds the start to
@@ -626,7 +691,7 @@ export class Online {
       if (gen !== this.gen || !this.lobbySes || this.lobbySes.status !== 'lobby' || JSON.stringify(N.lobbyOf(this.handle.doc())) !== JSON.stringify(L)) return
       // (one start per lobby as it stands: one the log refused is never
       // written again, startProblem saying why)
-      if (this.startProblem(L)) return
+      if (this.startProblem(L) || this.foreignAI(L) >= 0) return
       this.lobbySes.start(change(N.setupOf(L, dice)), { a })
       if (this.lobbySes.status === 'lobby') this.refused = { at: JSON.stringify(L), why: this.lobbySes.error ?? 'the start was refused' }
     } finally {
@@ -884,6 +949,8 @@ export class Online {
     })
     const handle = repo.create(doc)
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
+    // ((F11b's review) its AI seat one this page seated)
+    G.setup.seats.forEach((s, i) => s.ctrl === 'ai' && this.markAI(i, { race: s.race, army: doc.lobby.seats[N.SEAT_KEYS[i]].army }, handle.documentId))
     if (!N.setNext(this.handle, handle.documentId)) return this.goTo(N.lobbyOf(this.handle.doc()).next)
     this.goTo(handle.documentId)
   }

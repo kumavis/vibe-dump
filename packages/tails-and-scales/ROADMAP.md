@@ -243,7 +243,7 @@ the commit, and add whatever the work turned up.
   rematch; from N3 the replay bar, replay files and the page that comes
   back; from F10a a group placed and moved online; from F11b the lists in
   the lobby, a list sealed from the other page's DOM until the start, a
-  host-altered army and an AI seat), and from F10a
+  host-altered army, an AI seat and one a guest forged), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback; from F13 the touch aim,
@@ -266,9 +266,10 @@ the commit, and add whatever the work turned up.
   at each cap with its why, Ready with the first refusal, Random always
   legal, a saved list round-tripping, a list over its limit red after a
   size change, a race change resetting the panel's army line, a 360 px
-  phone scrolling nothing sideways, the hotseat's pass screen holding
-  nothing of the first list, and a list built on the screen fielded unit
-  for unit). A step that changes what one of them reads ports it in the same
+  phone scrolling nothing sideways with 44 px buttons, the hotseat's pass
+  screen holding nothing of the first list and standing between a built
+  seat and its list, and a list built on the screen fielded unit for
+  unit). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -1071,15 +1072,22 @@ follows N3.
   lobby (un-ready on a change, let go on a race change, held by
   `verifyStart`), courtesy sealing (another seat a sentence alone), and the
   host's AI seat (`seatAI`, preset or Random, played inside the fold on
-  every page). `sim/ui-check.mjs` (ten cases, an 11-edit self-test),
-  lobby-rig's `lists`, `sealed`, `altered-army` and `ai-seat` and eight
-  mutants, net-check's armies. DESIGN's F11b notes.)
+  every page). `sim/ui-check.mjs` (ten cases, a 24-edit self-test),
+  lobby-rig's `lists`, `sealed`, `altered-army`, `ai-seat` and `forged` and
+  ten mutants, net-check's armies. Two reviews' ten findings, nine fixed
+  and one recorded below. DESIGN's F11b notes.)
 - [ ] **Later (F11b's):** the result screen's totals for both armies
   (§4.2.8.1; `ui/screens/result.js`); figure thumbnails on the Muster
   screen's rows (a cheap still of each figure, not the diorama's window);
   the Howdah's fire-slots tip, with F9c's firing decks; points in the group
   bar's own count; the lobby's army line held to 44 px buttons at phone
-  width; the host's mission change keeping each seat's list and checking it
+  width, and the panel's (its preset ▾, Build… and Random 33 px at 360 px,
+  F11b's review); `verifyStart` holding a start to the latest record each
+  device readied under the commitment rather than any of the last 8 it
+  kept (F11b's review: a host may start with a list the guest readied
+  earlier and then replaced, N2's "any of them will do"; tightening it
+  alone refuses an honest start that races a re-Ready, so it closes with
+  N4's real sealing, §4.2.8.9's commitments); the host's mission change keeping each seat's list and checking it
   again ("over by N", §4.2.8.9) instead of dropping it, as F8b's
   `editBattle` does; an online AI seat's Random on §4.2.8.6's seed, and
   its Random kept by a rematch. Found on main by F11b's sweep: lobby-rig's
@@ -1247,7 +1255,10 @@ follows N3.
   each wants a battle where a dropped block outlives its blast and one is
   hurt as it falls; watch-carts-swapped-101, whose dropped blocks two of
   stand to the end and two are hurt, is the likeliest, untried), and
-  present-check's `no-embark-owners`.
+  present-check's `no-embark-owners`. Found at F11b's sweep, open:
+  lobby-rig's `no-relog` mutant, stale since F16, which ends the rig's
+  `--self-test` after seven mutants with exit 0 and no verdict (F11b's
+  Later item says how; the others run alone by `--only`).
 - [x] **F7c** Timber platforms that collapse under their defenders.
   (4e416f9; `CORE_VERSION` 14, `RULES_ID` unmoved; every classic, open,
   keg and powder battle byte-identical, and `scale/`'s 10 open pairs. A

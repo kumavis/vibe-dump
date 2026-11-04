@@ -555,11 +555,14 @@ export function boot(location) {
   // judged one for this race and size; else, for a seat played here, the
   // last list its race took into this size (ts.lists.last, its lost units
   // dropped, taken only if legal under today's prices: a default never
-  // blocks Start), else the size's own preset.
+  // blocks Start), else the size's own preset. ((F11b's review) Never in
+  // hotseat: the device's last list is whichever player's Ready wrote it,
+  // the other player's in a mirror match, and the courtesy of §4.2.8.8's
+  // per-mode table shows a player nothing of the other's list.)
   const armyDefault = (s, race, mission, mode) => {
     const u = flow.armyFor(s, race, mission)
     if (u != null) return NAME.test(u) ? { preset: u, url: u, dflt: true } : { counts: digits(race, u), url: u, dflt: true }
-    const last = played(mode, s) ? lists.last(race, mission) : null
+    const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null
     if (last && !army.checkList(RACES[race], MISSIONS[mission].list, last.counts) && !same(last.counts, presetCounts(race, MISSIONS[mission].army))) return { counts: last.counts, dflt: true }
     return { preset: null, dflt: true }
   }
@@ -601,9 +604,12 @@ export function boot(location) {
   // Ready passes the screen to player 2 (the pass screen: player 1's total
   // and Ready alone, the Muster screen's rows gone from the page), whose
   // Ready comes back to the panel; both armies take the table at the
-  // deployment.
-  const openMuster = (s) => {
+  // deployment. ((F11b's review) A hotseat seat already built opens again
+  // only through the pass screen, handed back to its player: the panel
+  // shows the other player its total and Ready alone.)
+  const openMuster = (s, handed = false) => {
     const { mode, races, mission } = picking, race = races[s], a = picking.armies[s]
+    if (mode === 'hotseat' && a.built && !handed) return pass.show({ to: s + 1, line: `Player ${s + 1}'s army is sealed: hand the screen to player ${s + 1} to change it`, onGo: () => openMuster(s, true), onBack: showSetup })
     muster.open({
       race, mission, counts: countsOf(race, mission, a),
       onReady: (counts) => {

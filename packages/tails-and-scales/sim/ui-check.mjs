@@ -43,21 +43,29 @@
 //             scroll nothing sideways (the page's width, and every box of
 //             the screen inside it but the role chips' own scroller), the
 //             points bar and Ready stay put while the rows scroll to their
-//             end, − and + and Ready at least 44 px, a tap on a disabled +
-//             pins its why
+//             end, − and + and Ready, the units' names (a tap: the card),
+//             Save list… and the tools at least 44 px, a tap on a disabled
+//             + pins its why
 //   pass      hotseat: player 1's Ready shows the pass screen, which holds
 //             nothing of player 1's list (the Muster screen's rows gone
 //             from the page, no unit of the list named outside the rules'
-//             help, its total and Ready alone); player 2 builds; both
-//             armies take the table at the deployment, unit for unit
+//             help, its total and Ready alone); player 2 builds; back on
+//             the panel nothing of either list is in the page, and a built
+//             seat's Build… opens the pass screen (the screen handed back
+//             to its player), not its list; a mirror (player 2 on player
+//             1's race) opens on the preset, never on the device's last
+//             list (player 1's); both armies take the table at the
+//             deployment, unit for unit
 //   field     a list built on the Muster screen against the AI, the AI's
 //             line on Random, Start: the battle's setup names both lists
 //             and each seat's units on the table are its list's, unit for
 //             unit in roster order (core/army.js keysOf), and the
 //             deployment's banner reads both totals and unit counts
 //   door      ?armies=classic,110211 and the panel's Start pressed as it
-//             opens: the setup names the URL's values as given (the door
-//             every Chromium harness starts a battle with lists by)
+//             opens: the setup, and the start entry as written, name the
+//             URL's values as given (the door every Chromium harness starts
+//             a battle with lists by); without it the start entry names
+//             none
 //
 //   node sim/ui-check.mjs [--only <cases>] [--dist <dir>]
 //   node sim/ui-check.mjs --self-test     each edit of MUTATIONS (a page
@@ -151,6 +159,20 @@ async function started(page) {
   await page.click('#setupStart')
   await page.waitForFunction(() => window.__ts?.G?.units?.length > 0 && document.body.classList.contains('playing'), null, { timeout: 120000 })
   return page.evaluate(() => ({ setup: window.__ts.G.setup, units: [0, 1].map((s) => window.__ts.G.units.filter((u) => u.side === s).map((u) => u.key)), banner: document.querySelector('#armyBanner')?.textContent ?? '' }))
+}
+
+// (in the page) where the names `names` stand in its text but the rules'
+// help and the table's labels, the Muster screen's rows left, and the pass
+// screen's and the labels' text
+function leakOf(names) {
+  const found = []
+  const walk = (n) => {
+    if (n.nodeType === 3) {
+      for (const x of names) if (n.textContent.includes(x) && !n.parentElement.closest('#help, #labels')) found.push(`${x} in ${n.parentElement.tagName.toLowerCase()}${n.parentElement.id ? `#${n.parentElement.id}` : ''}`)
+    } else for (const c of n.childNodes) walk(c)
+  }
+  walk(document.body)
+  return { found, rows: document.querySelectorAll('#muster .mRow, #muster [data-unit]').length, muster: document.querySelector('#muster').textContent.length, pass: document.querySelector('#pass').textContent, labels: document.querySelector('#labels').textContent }
 }
 
 // ── The cases ─────────────────────────────────────────────────────────────
@@ -434,9 +456,18 @@ const CHECKS = {
       if (!scroll.can) out.why.push('the rows never scroll at 360×640 (nothing to hold still)')
       else if (Math.abs(after['#musterBar'].top - before['#musterBar'].top) > 0.5 || after['#musterBar'].top < 0 || after['#musterReady'].bottom > H + 0.5 || Math.abs(after['#musterReady'].top - before['#musterReady'].top) > 0.5) out.why.push(`the rows scrolled ${scroll.top} px: the bar ${Math.round(before['#musterBar'].top)} → ${Math.round(after['#musterBar'].top)}, Ready ${Math.round(before['#musterReady'].top)} → ${Math.round(after['#musterReady'].top)} (screen ${H})`)
       else out.rows.push(`at 360×640 the rows scrolled ${scroll.top} px: the bar at ${Math.round(after['#musterBar'].top)}, Ready at ${Math.round(after['#musterReady'].top)}-${Math.round(after['#musterReady'].bottom)}`)
-      const small = await page.evaluate(() => [...document.querySelectorAll('#muster .mStep button, #musterReady, #musterClose, #musterTools button')].map((b) => b.getBoundingClientRect()).filter((r) => r.width < 43.5 || r.height < 43.5).length)
-      if (small) out.why.push(`${small} buttons of the Muster screen under 44 px`)
-      else out.rows.push('its buttons 44 px')
+      // (every button of the screen shown: the steppers, the names, the
+      // tools, Save list…, Ready and ✕)
+      const small = await page.evaluate(() => {
+        const shown = [...document.querySelectorAll('#muster button')].filter((b) => b.getClientRects().length && getComputedStyle(b).visibility !== 'hidden')
+        const bad = shown.filter((b) => {
+          const r = b.getBoundingClientRect()
+          return r.width < 43.5 || r.height < 43.5
+        }).map((b) => `${b.id || b.className} ${Math.round(b.getBoundingClientRect().width)}×${Math.round(b.getBoundingClientRect().height)}`)
+        return { n: shown.length, names: shown.filter((b) => b.classList.contains('mName')).length, bad }
+      })
+      if (small.bad.length || !small.names) out.why.push(`${small.bad.length} of the Muster screen's ${small.n} buttons under 44 px (${small.bad.slice(0, 4).join(', ')})${small.names ? '' : ', no unit name among them'}`)
+      else out.rows.push(`its ${small.n} buttons 44 px, the ${small.names} names among them`)
       // a tap on a disabled +: its why pinned
       await page.locator('.mRow[data-unit="elder"] .plus').tap({ force: true })
       const tip = await page.evaluate(() => ({ shown: document.querySelector('#tooltip').style.display === 'block', text: document.querySelector('#tooltip').textContent }))
@@ -467,16 +498,7 @@ const CHECKS = {
       // held to what they were as the panel opened), the pass screen its
       // total and Ready alone
       const names = RACES.squirrel.roster.flatMap((k, i) => (c0[i] ? [RACES.squirrel.units[k].name, RACES.squirrel.units[k].short] : []))
-      const leak = await page.evaluate((names) => {
-        const found = []
-        const walk = (n) => {
-          if (n.nodeType === 3) {
-            for (const x of names) if (n.textContent.includes(x) && !n.parentElement.closest('#help, #labels')) found.push(`${x} in ${n.parentElement.tagName.toLowerCase()}${n.parentElement.id ? `#${n.parentElement.id}` : ''}`)
-          } else for (const c of n.childNodes) walk(c)
-        }
-        walk(document.body)
-        return { found, rows: document.querySelectorAll('#muster .mRow, #muster [data-unit]').length, muster: document.querySelector('#muster').textContent.length, pass: document.querySelector('#pass').textContent, labels: document.querySelector('#labels').textContent }
-      }, names)
+      const leak = await page.evaluate(leakOf, names)
       if (leak.labels !== labels) leak.found.push('the table\'s labels changed')
       const total = `${cost('squirrel', 'classic', c0)} pts · ${c0.reduce((x, y) => x + y, 0)} units`
       if (leak.found.length || leak.rows || !leak.pass.includes(`Ready · ${total}`)) out.why.push(`the pass screen: ${leak.rows} rows left, ${leak.found.length} names of the list in the page (${leak.found.slice(0, 4).join(', ')}), it says "${leak.pass.slice(0, 120)}"`)
@@ -491,6 +513,45 @@ const CHECKS = {
       await page.waitForSelector('#muster.hidden', { state: 'attached' })
       const l0 = await lineOf(page, 0), l1 = await lineOf(page, 1)
       if (!l0.total.startsWith('Ready · ') || !l1.total.startsWith('Ready · ')) out.why.push(`the panel after both: "${l0.total}", "${l1.total}"`)
+      // back on the panel: nothing of either list in the page
+      const names1 = RACES.serpent.roster.flatMap((k, i) => (c1[i] ? [RACES.serpent.units[k].name, RACES.serpent.units[k].short] : []))
+      const after = await page.evaluate(leakOf, [...names, ...names1])
+      if (after.found.length || after.rows) out.why.push(`the panel after both Readies: ${after.rows} rows, ${after.found.length} names of the lists in the page (${after.found.slice(0, 4).join(', ')})`)
+      else out.rows.push('the panel after both: nothing of either list')
+      // a built seat's Build…: the pass screen, the screen handed back to
+      // its player, and not its list
+      await page.click('.setupSeat[data-seat="0"] .armyBuild')
+      await page.waitForSelector('#pass:not(.hidden)')
+      const back = await page.evaluate(() => ({ pass: document.querySelector('#pass').textContent, rows: document.querySelectorAll('#muster .mRow').length, muster: !document.querySelector('#muster').classList.contains('hidden') }))
+      if (back.rows || back.muster || !back.pass.includes('hand the screen to player 1')) out.why.push(`player 1's built seat's Build… from the panel: ${back.muster ? 'the Muster screen up' : 'the screen hidden'}, ${back.rows} rows, the pass screen "${back.pass.slice(0, 120)}"`)
+      else out.rows.push('a built seat\'s Build… asks for the screen handed back first')
+      await page.click('#passGo')
+      await page.waitForSelector('#muster:not(.hidden) #musterRows .mRow')
+      const own = (await rows(page)).map(([, n]) => n)
+      if (listText(own) !== listText(c0)) out.why.push(`handed back, player 1's Muster screen opens on ${listText(own)} (want ${listText(c0)})`)
+      await page.click('#musterClose')
+      await page.waitForSelector('#muster.hidden', { state: 'attached' })
+      // a mirror: player 2 on player 1's race opens on the preset, never on
+      // the device's last list for it (player 1's)
+      const pick = (s, race) => page.click(`.setupSeat[data-seat="${s}"] .raceRow button[data-race="${race}"]`)
+      await pick(1, 'squirrel')
+      const mirror = await lineOf(page, 1)
+      if (mirror.value === 'list' || mirror.options.includes('list') || mirror.total.startsWith(`Ready · `)) out.why.push(`player 2 on the Bushtails: the line ${mirror.value} (${mirror.options.join(', ')}), "${mirror.total}" (want the preset, not player 1's list)`)
+      else {
+        await build(page, 1)
+        const m = (await rows(page)).map(([, n]) => n)
+        const pc = counts('squirrel', Object.fromEntries(RACES.squirrel.roster.map((k, i) => [k, Number(RACES.squirrel.armies[MISSIONS.classic.army][i] ?? 0)])))
+        if (listText(m) !== listText(pc)) out.why.push(`player 2's Muster screen on the Bushtails opens on ${listText(m)} (want the preset ${listText(pc)}, not player 1's ${listText(c0)})`)
+        else out.rows.push('a mirror opens on the preset, not player 1\'s list')
+        await page.click('#musterClose')
+        await page.waitForSelector('#muster.hidden', { state: 'attached' })
+      }
+      // player 2 back on the Serpents, built again
+      await pick(1, 'serpent')
+      await build(page, 1)
+      await setTo(page, c1)
+      await page.click('#musterReady')
+      await page.waitForSelector('#muster.hidden', { state: 'attached' })
       const b = await started(page)
       const ok = [[c0, 'squirrel'], [c1, 'serpent']].every(([c, race], s) => b.setup.seats[s].army === listText(c) && JSON.stringify(b.units[s]) === JSON.stringify(keysOf(RACES[race], c)))
       if (!ok) out.why.push(`the deployment: ${JSON.stringify(b.setup.seats.map((x) => x.army))}, ${JSON.stringify(b.units)}`)
@@ -540,8 +601,11 @@ const CHECKS = {
     try {
       const b = await started(page)
       const seats = b.setup.seats.map((x) => x.army)
-      if (JSON.stringify(seats) !== JSON.stringify(['classic', '110211']) || JSON.stringify(b.units[1]) !== JSON.stringify(keysOf(RACES.serpent, '110211'))) out.why.push(`?armies=classic,110211, Start as the panel opens: the setup names ${JSON.stringify(seats)}`)
-      else out.rows.push('?armies= as given: classic, 110211')
+      // (and as the start entry writes it: G.setup is fullSetup's, a seat
+      // naming none filled in with its mission's preset)
+      const written = await page.evaluate(() => window.__ts.session.store.entries().find((e) => e?.t === 'start')?.setup?.seats?.map((x) => x.army ?? null))
+      if (JSON.stringify(seats) !== JSON.stringify(['classic', '110211']) || JSON.stringify(written) !== JSON.stringify(['classic', '110211']) || JSON.stringify(b.units[1]) !== JSON.stringify(keysOf(RACES.serpent, '110211'))) out.why.push(`?armies=classic,110211, Start as the panel opens: the setup names ${JSON.stringify(seats)}, the start entry ${JSON.stringify(written)}`)
+      else out.rows.push('?armies= as given, in the setup and the start entry: classic, 110211')
       if (errors.length) out.why.push(`page errors: ${errors.join(' | ')}`)
     } finally {
       await ctx.close()
@@ -587,6 +651,36 @@ const MUTATIONS = {
   'pass-leaks': ['ui/screens/muster.js', "    for (const e of this.root.querySelectorAll('.mFill')) e.replaceChildren()", '    // (kept)', ['pass']],
   // the panel's armies never reach the battle
   'unfielded': ['app/flow.js', '    const fielded = armies === undefined ? this.armies : armies.some((a) => a != null) ? [...armies] : null', '    const fielded = this.armies', ['field', 'pass', 'race']],
+  // (F11b's review: each assertion a case makes broken by an edit)
+  // a line on its ?armies= value respelled: the size's own preset handed
+  // on as none
+  'door-respelled': ['app/boot.js', '  const valueOf = (mission, a) => a.url ?? (a.counts ?', '  const valueOf = (mission, a) => (a.counts ?', ['door']],
+  // the deployment's banner with the seats' totals swapped
+  'banner-swapped': ['app/flow.js', '    return [0, 1].map((s) => {\n      const { counts } = army.armyOf(setup, s)', '    return [1, 0].map((s) => {\n      const { counts } = army.armyOf(setup, s)', ['field']],
+  // a seat played here never defaults to its race's last list
+  'last-forgotten': ['app/boot.js', "    const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null", '    const last = null', ['race']],
+  // the rows' box as tall as its rows: the screen no longer holds the bar
+  // and Ready while they scroll
+  'rows-unheld': ['style.css', '.muster .mRows {\n  flex: 1 1 auto;', '.muster .mRows {\n  flex: none;', ['phone']],
+  // the steppers 36 px on a phone
+  'small-steps': ['style.css', '  .muster .mStep button {\n    width: 44px;\n    height: 44px;', '  .muster .mStep button {\n    width: 36px;\n    height: 36px;', ['phone']],
+  // the units' names their text's height on a phone
+  'small-names': ['style.css', '  .muster .mName {\n    min-height: 44px;', '  .muster .mName {\n    min-height: 0;', ['phone']],
+  // the tooltip under the Muster screen
+  'tip-under': ['style.css', 'body:has(#muster:not(.hidden)) #tooltip {\n  z-index: 40;', 'body:has(#muster:not(.hidden)) #tooltip {\n  z-index: 20;', ['plus']],
+  // Saved says nothing of a price change
+  'prices-unsaid': ['ui/screens/muster.js', "over > 0 ? (l.mission === at.mission ? `Prices changed: ${over} over` :", 'over > 0 ? (l.mission === at.mission ? `${over} over` :', ['saved']],
+  // a lost unit dropped without its note
+  'lost-unsaid': ['ui/screens/muster.js', '        this.set(counts, [...notes.map(capital),', '        this.set(counts, [', ['saved']],
+  // hotseat seats default to the device's last list (the other player's)
+  'hotseat-last': ['app/boot.js', "    const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null", '    const last = played(mode, s) ? lists.last(race, mission) : null', ['pass']],
+  // a built hotseat seat's Build… opens its list on the panel
+  'hotseat-reopen': ['app/boot.js', "    if (mode === 'hotseat' && a.built && !handed) return pass.show(", "    if (false) return pass.show(", ['pass']],
+  // a Random AI seat's race changed: its Random let go for the default,
+  // never rerolled
+  'reroll-dropped': ['app/boot.js', '      picking.armies[s] = picking.armies[s].random ? { counts: randomOf(s, race, picking.mission), random: true } : armyDefault(s, race,', '      picking.armies[s] = armyDefault(s, race,', ['race']],
+  // a finger lifted on a marked element pins nothing (a hover's tip alone)
+  'tap-unpinned': ['ui/tooltip.js', '      if (m) this.tip(m, { x: e.clientX, y: e.clientY }, true)\n', '', ['phone']],
 }
 
 async function runCases(browser, url, names) {

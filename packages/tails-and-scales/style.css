@@ -2671,6 +2671,12 @@ body:has(#lobby:not(.hidden)) #muster {
     width: 44px;
     height: 44px;
   }
+  /* (F11b's review) the unit's name, a tap opening its card, a 44 px target
+     too (its row a little taller for it) */
+  .muster .mName {
+    min-height: 44px;
+    align-items: center;
+  }
   .muster .mSum {
     flex-direction: column;
     align-items: stretch;

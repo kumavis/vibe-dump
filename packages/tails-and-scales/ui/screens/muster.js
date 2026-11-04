@@ -334,7 +334,7 @@ export class MusterScreen {
     const at = this.at, box = this.savedEl
     const lists = this.lists.all(at.race)
     if (!lists.length) {
-      box.replaceChildren(el('p', 'small', 'No lists saved on this device yet: build one and press Save list….'))
+      box.replaceChildren(el('p', 'small', 'No lists saved on this device yet: build one, then press Save list…'))
       return
     }
     box.replaceChildren(...lists.map((l) => {

@@ -33,7 +33,10 @@
 // and units, red with why when it isn't legal in the size chosen (a list
 // built for a larger battle), and Start then disabled with the first
 // seat's why. In hotseat a seat's line shows a built list by its total
-// alone ("Ready · 970 pts · 14 units"), never its units. What each line
+// alone ("Ready · 970 pts · 14 units"), never its units, and its Build…
+// opens it again only through the pass screen, handed back to its player
+// (app/boot.js: nor does a hotseat seat default to the device's last list,
+// which may be the other player's). What each line
 // holds is app/boot.js's (the picking); this draws it, and every line's
 // DOM is made here with textContent: nothing of a list but its totals is
 // written into the panel.

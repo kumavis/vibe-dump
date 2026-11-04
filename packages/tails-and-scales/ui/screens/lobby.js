@@ -29,7 +29,10 @@
 // app/online.js hands render nothing more). The AI online: a free seat
 // offers the host "Seat the AI here"; the host's AI seat is the host's to
 // change (its race in the picker, its preset, Random, Unseat), and every
-// other page sees it as another seat, sealed alike.
+// other page sees it as another seat, sealed alike. ((F11b's review) An
+// AI-shaped seat naming the host's device that the host's page didn't
+// seat, another peer's write, shows there as another seat, sealed, with
+// Unseat: the page never readies it, and starts nothing while it sits.)
 import { RacePicker } from './races.js'
 import { terrainName } from './setup.js'
 
@@ -135,7 +138,8 @@ export class LobbyScreen {
   // courtesy fog agreed: on or off), seats: [{ name,
   // race (a free seat's: the race it would bring), color (its bases' rims),
   // ready, mine, free, canSit, (F11b) canSeatAI (a free seat, the host's
-  // page), ai (the host's own AI seat, on the host's page), army (your
+  // page), ai (the host's own AI seat, on the host's page), foreignAI (an
+  // AI seat on the host's page it didn't seat: Unseat), army (your
   // seat's and the host's AI seat's: { options [{ value, label }], value,
   // total, why, random }), armyLine (another seat's: its sentence alone) }] }
   render(m) {
@@ -212,7 +216,9 @@ export class LobbyScreen {
     if (s.ai) {
       const unseat = el('button', 'unseatAI', 'Unseat the AI')
       unseat.onclick = () => this.on.ai?.unseat(i)
-      box.replaceChildren(head(`${s.name} · seated by you`), root, ctl(this.armyRow(i, s.army, { ai: true }), el('div', 'ok', '✓ Ready (the AI is always ready)'), unseat))
+      // ((F11b's review) ready only on an army the battle takes: its line
+      // says why it isn't)
+      box.replaceChildren(head(`${s.name} · seated by you`), root, ctl(this.armyRow(i, s.army, { ai: true }), el('div', s.ready ? 'ok' : 'wait', s.ready ? '✓ Ready (the AI is always ready)' : 'Not ready: pick it an army this battle takes'), unseat))
       return
     }
     if (!s.mine) {
@@ -222,6 +228,12 @@ export class LobbyScreen {
       const parts = [state]
       if (s.armyLine && s.ready) state.append(el('span', 'armyState', s.armyLine))
       else if (s.armyLine) parts.push(el('div', 'armyState small', s.armyLine))
+      // ((F11b's review) an AI seat the host's page didn't seat: Unseat)
+      if (s.foreignAI) {
+        const unseat = el('button', 'unseatAI', 'Unseat the AI')
+        unseat.onclick = () => this.on.ai?.unseat(i)
+        parts.push(unseat)
+      }
       box.replaceChildren(head(s.name || '…'), root, ctl(...parts))
       return
     }
