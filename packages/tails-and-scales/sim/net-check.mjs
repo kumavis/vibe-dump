@@ -14,7 +14,22 @@
 //             or a seat it never readied; a spectator's page checks the seed;
 //             only records readied under this match's commitment count, and
 //             a page that kept none (another browser on the seat's link)
-//             checks the seed alone
+//             checks the seed alone; (F11b) an army changed, added or
+//             dropped is "The start changed your seat (army)", and the
+//             host's page holds the start's AI seat (its own device's) to the
+//             record it readied it with
+//   armies    (F11b, DESIGN §4.2.8.9) the lobby's seat records on a local
+//             document: lobbyOf reads a seat's army (a string) and reads
+//             anything else as absent; startSeat and setupOf carry it, a
+//             seat with none naming none; seatDiff over army; editSeat's
+//             army un-readies, a race change lets it go unless the same
+//             change names one; the host's AI seat (seatAI): ctrl 'ai', the
+//             host's dev, nonce '', the host's alone to seat, change or
+//             unseat, never a seat a device sits in (seatOf, claim, leave,
+//             editSeat); ready() takes it beside the host's own seat or a
+//             guest's, and nothing else (two AIs, an AI of another device's,
+//             one with a nonce or unready, two human seats of one device);
+//             a mission change lets every army go and un-readies the AI too
 //   lobby     through a real sync server (sim/sync-server.mjs) and three
 //             Node repos on websockets: the host makes the match (its
 //             open), two guests claim the same seat at once and one claim
@@ -38,7 +53,7 @@ import { WebSocketClientAdapter } from '@automerge/automerge-repo-network-websoc
 import { AutomergeStore } from '../net/automerge-store.js'
 import { fitName, nameOk, nameBytes, isNonce, isDevice, newNonce, deviceId, MAX_NAME_CHARS, MAX_NAME_BYTES } from '../net/ids.js'
 import { commitOf, diceOf, verifyStart, seatDiff } from '../net/seed.js'
-import { lobbyOf, claim, editSeat, ready, setupOf, startSeat, seatOf } from '../net/lobby.js'
+import { lobbyOf, lobbyDoc, claim, leave, editSeat, editBattle, seatAI, unseatAI, AI_NAME, ready, setupOf, startSeat, seatOf } from '../net/lobby.js'
 import { Session } from '../match/session.js'
 import { decode } from '../match/envelope.js'
 import { stateHash } from '../core/index.js'
@@ -120,6 +135,93 @@ console.log('verify')
   const elsewhere = { dev: guest, readied: [{ seat: 1, record: { ...seats[1] }, commit: 'f'.repeat(64) }] }
   check((await v(flipped, elsewhere)) === null && (await v(flipped, { dev: guest, readied: [] })) === null && (await v(flipped, mine)) === 'The start changed your seat (ctrl)', 'only records readied under this match\'s commitment count: one under another, or none (another browser on the seat\'s link), checks the seed alone')
   check(isDeepStrictEqual(seatDiff({ a: 1, ready: true }, { a: 1 }), []) && isDeepStrictEqual(seatDiff({ a: 1 }, { a: 1, b: undefined }), ['b']), 'a seat is compared whole but for ready, a field absent on one side and present on the other a difference')
+  // (F11b) the army: a list the guest readied, then the start's
+  {
+    const listed = { ...seats[1], army: '2242220011' }
+    const theirs = { dev: guest, readied: [{ seat: 1, record: listed, commit: c }] }
+    check((await v(await startOf([seats[0], listed]), theirs)) === null, 'a start carrying the list the guest readied passes')
+    const cases = [['another list', { ...listed, army: '2242220012' }], ['a preset for the list', { ...listed, army: 'classic' }], ['no army for the list', seats[1]]]
+    const said = []
+    for (const [what, seat] of cases) said.push([what, await v(await startOf([seats[0], seat]), theirs)])
+    check(said.every(([, why]) => why === 'The start changed your seat (army)'), 'a start with the guest\'s army changed (another list, a preset in its place, or none) fails: "The start changed your seat (army)"', JSON.stringify(said))
+    check(isDeepStrictEqual(seatDiff(listed, { ...listed, army: '1' }), ['army']) && isDeepStrictEqual(seatDiff(seats[1], listed), ['army']) && isDeepStrictEqual(seatDiff(listed, { ...listed, ready: false }), []), 'seatDiff names army when it differs or one side alone has it')
+    // the host's page: its own seat and the AI's, both readied here
+    const ai = { race: 'serpent', ctrl: 'ai', dev: host, name: AI_NAME, nonce: '', army: '1111' }
+    const hostMine = { dev: host, readied: [{ seat: 1, record: ai, commit: c }, { seat: 0, record: seats[0], commit: c }] }
+    check((await v(await startOf([seats[0], ai]), hostMine)) === null, "the host's page passes a start with its seat and its AI seat as it readied them")
+    const unasked = await v(await startOf([seats[0], ai]), { dev: host, readied: [{ seat: 0, record: seats[0], commit: c }] })
+    check(unasked === 'The start gave you a seat you never readied (seat 2)', "… and refuses one whose AI seat (its device's) it never readied", unasked)
+    const swapped = await v(await startOf([seats[0], { ...ai, army: '2222' }]), hostMine)
+    check(swapped === 'The start gave you a seat you never readied (seat 2)', "… or one with the AI's army changed", swapped)
+  }
+}
+
+console.log('armies (a lobby on a local document)')
+{
+  const repo = new Repo({ network: [] })
+  const host = 'hosthost', guest = 'guestgst', other = 'otherdev'
+  const H = repo.create(lobbyDoc({ host, board: 7, mission: 'classic', rounds: 5, me: { ctrl: 'human', dev: host, name: 'Ann', race: 'squirrel' } }))
+  const L = () => lobbyOf(H.doc())
+  claim(H, 1, { dev: guest, name: 'Ben', race: 'serpent', host })
+  H.change((d) => {
+    d.lobby.seats.s0.army = '2242220011'
+    d.lobby.seats.s1.army = 5
+  })
+  check(L().seats[0].army === '2242220011' && !('army' in L().seats[1]), 'lobbyOf reads a seat\'s army as a string, and a number a peer wrote as no army', JSON.stringify(L().seats))
+  for (const junk of [null, ['1'], { x: 1 }, true]) {
+    H.change((d) => {
+      d.lobby.seats.s1.army = junk
+    })
+    if ('army' in L().seats[1]) check(false, `lobbyOf reads ${JSON.stringify(junk)} as no army`)
+  }
+  check(!('army' in L().seats[1]), 'and null, an array, an object or a boolean alike')
+  H.change((d) => {
+    delete d.lobby.seats.s1.army
+  })
+  const st = setupOf(L(), 1)
+  check(st.seats[0].army === '2242220011' && !('army' in st.seats[1]) && isDeepStrictEqual(startSeat(L().seats[0]), { race: 'squirrel', ctrl: 'human', dev: host, name: 'Ann', nonce: '', army: '2242220011' }), "setupOf (through startSeat) carries a seat's army, and a seat with none names none", JSON.stringify(st.seats))
+  // editSeat: the army, un-readying; a race change lets it go
+  editSeat(H, 1, guest, { ready: true })
+  editSeat(H, 1, guest, { army: '1111' })
+  check(L().seats[1].army === '1111' && !L().seats[1].ready, 'a list written into your seat un-readies it')
+  editSeat(H, 1, guest, { race: 'squirrel' })
+  check(!('army' in L().seats[1]) && L().seats[1].race === 'squirrel', 'a race change lets the army go (a list\'s digits are another roster\'s)')
+  editSeat(H, 1, guest, { army: '1111' })
+  editSeat(H, 1, guest, { race: 'serpent', army: '2222' })
+  check(L().seats[1].army === '2222', '… unless the same change names the race\'s last list')
+  editSeat(H, 1, guest, { army: null })
+  check(!('army' in L().seats[1]), 'army null: the mission\'s preset, none named')
+  check(!editSeat(H, 1, host, { army: '9' }) && !('army' in L().seats[1]), "another device's seat isn't yours to change")
+  // the AI seat
+  leave(H, 1, guest)
+  check(!seatAI(H, 1, { host: guest, race: 'serpent' }) && !L().seats[1], 'only the host seats the AI')
+  check(seatAI(H, 1, { host, race: 'serpent', army: '1111' }), 'the host seats the AI in a free seat')
+  const ai = L().seats[1]
+  check(ai.ctrl === 'ai' && ai.dev === host && ai.name === AI_NAME && ai.nonce === '' && ai.ready && ai.army === '1111', "the AI's seat: ctrl 'ai', the host's dev, its name, nonce '', ready, its army", JSON.stringify(ai))
+  check(seatOf(L(), host) === 0 && seatOf({ seats: [L().seats[1], L().seats[0]] }, host) === 1 && seatOf({ seats: [L().seats[1], null] }, host) === -1, "the host's own seat is still the one it sits in (seatOf never names the AI's, in either seat)")
+  check(!claim(H, 1, { dev: guest, name: 'Ben', race: 'serpent', host }) && !claim(H, 1, { dev: host, name: 'Ann', race: 'serpent', host }) && L().seats[1].ctrl === 'ai' && L().seats[0]?.dev === host, "no device claims the AI's seat, the host's neither (its own seat kept)")
+  check(!editSeat(H, 1, host, { name: 'Bob' }) && L().seats[1].name === AI_NAME, "editSeat never changes the AI's seat (seatAI does)")
+  leave(H, 1, host)
+  check(L().seats[1]?.ctrl === 'ai', "leave never unseats the AI")
+  editSeat(H, 0, host, { ready: true })
+  check(ready(L()), "ready(): the host's seat and the AI's beside it")
+  const variant = (change) => {
+    const x = JSON.parse(JSON.stringify(L()))
+    change(x)
+    return ready(x)
+  }
+  check(!variant((x) => (x.seats[1].dev = other)) && !variant((x) => (x.seats[1].nonce = '0123456789abcdef')) && !variant((x) => (x.seats[1].ready = false)) && !variant((x) => (x.seats[0] = { ...x.seats[1] })) && !variant((x) => (x.seats[0].ready = false)), "… and not an AI of another device's, one with a nonce, an unready one, two AIs, or the host unready")
+  check(variant((x) => (x.seats[0] = { ctrl: 'human', dev: guest, name: 'Ben', race: 'squirrel', ready: true, nonce: '0123456789abcdef' })) && !variant((x) => (x.seats[1] = { ...x.seats[0] })), "a guest's seat beside the host's AI is ready too; two human seats of one device are not")
+  check(!unseatAI(H, 1, guest) && L().seats[1]?.ctrl === 'ai', "only the host unseats the AI")
+  // a mission change: every army let go, every seat un-readied, the AI's too
+  H.change((d) => {
+    d.lobby.seats.s0.army = '2242220011'
+  })
+  editBattle(H, { mission: 'field' })
+  check(L().seats.every((r) => !r.ready && !('army' in r)), "a mission change lets every seat's army go and un-readies every seat, the AI's too (its host readies it again)", JSON.stringify(L().seats))
+  check(seatAI(H, 1, { host, race: 'squirrel' }) && L().seats[1].ready && !('army' in L().seats[1]) && L().seats[1].race === 'squirrel', 'the host re-seats its AI (another race, its preset)')
+  check(unseatAI(H, 1, host) && !L().seats[1], 'the host unseats the AI: the seat free again')
+  await repo.shutdown?.().catch(() => {})
 }
 
 console.log('lobby (through a sync server)')
