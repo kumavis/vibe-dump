@@ -93,6 +93,17 @@ export default {
   title: 'Fourth Jhāna',
   pali: 'catuttha jhāna · upekkhā',
   line: 'Still. A white cloth over everything.',
+  hinge: 'with the abandoning of pleasure and pain',
+  guide: [
+    'Let even the contentment go.',
+    'Neither pleasant nor unpleasant.',
+    'The breath, almost nothing.',
+    'Covered, head to foot.',
+  ],
+  tab: {
+    text: 'A man sitting covered from the head down by a white cloth, no part of him uncovered. From here the Buddha turned the mind to insight.',
+    source: 'DN 2',
+  },
   palette: { bg: '#0e1012', paper: '#f4f3ef', ink: '#585c62', accent: '#dfe6ee' },
   audio: { root: 73.42, intervals: [0, 7, 12, 19], brightness: 0.28, shimmer: 0.04, breathe: 0.25 },
   build,

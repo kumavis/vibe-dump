@@ -248,6 +248,18 @@ export default {
   title: 'First Jhāna',
   pali: 'paṭhama jhāna · pīti',
   line: 'Rapture rises, born of letting go.',
+  hinge: 'born of seclusion',
+  guide: [
+    'Stay with the pleasant.',
+    'Don\'t help it grow.',
+    'It arrives on its own.',
+    'Tingling, heat, light. Let it.',
+    'Thoughts still mutter. Ignore them.',
+  ],
+  tab: {
+    text: 'Like a bath attendant kneading soap-powder with water until the ball is moist through and through, yet does not drip. Rapture is bodily: shivers, heat, light. The first jhāna is not a calm state.',
+    source: 'DN 2',
+  },
   palette: { bg: '#260907', paper: '#f4e0c4', ink: '#4a1a10', accent: '#ffad42' },
   audio: { root: 110, intervals: [0, 7, 12, 16, 19], brightness: 0.62, shimmer: 0.55, breathe: 0.7 },
   build,

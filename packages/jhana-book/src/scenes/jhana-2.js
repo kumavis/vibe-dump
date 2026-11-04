@@ -235,6 +235,17 @@ export default {
   title: 'Second Jhāna',
   pali: 'dutiya jhāna · samādhi',
   line: 'A spring wells up from within.',
+  hinge: 'with the stilling of thought',
+  guide: [
+    'Turn from the thrill to the gladness.',
+    'Thinking falls quiet.',
+    'Nothing comes in from outside.',
+    'Soaked through.',
+  ],
+  tab: {
+    text: 'A deep lake with no inlet from any side, fed by a cool spring welling up from within, until no part of it is unsuffused.',
+    source: 'DN 2',
+  },
   palette: { bg: '#05121c', paper: '#e2e9e5', ink: '#163246', accent: '#6fd0cb' },
   audio: { root: 87.31, intervals: [0, 7, 14, 19], brightness: 0.42, shimmer: 0.3, breathe: 0.6 },
   build,

@@ -543,3 +543,58 @@ as the seed, not a storyboard):
 - Never run `git`. Never touch files you do not own. Do not run `npm run build`
   at the repo root (it empties shared output); if you must build, use
   `npx vite build --outDir /tmp/<you>` from the package.
+
+---
+
+## Addendum — the story layer (see STORY.md)
+
+STORY.md explains the why; this is the contract. Every scene module now carries
+three more fields, already filled in from STORY.md (do not rewrite the copy):
+
+```js
+hinge: 'with the fading of rapture',   // '' on the intro
+guide: ['Let the thrill drain away.', 'Contentment remains.', …],  // lines after `line`
+tab: { text: 'Lotuses born in the water…', source: 'DN 2' },
+```
+
+**Beats.** While the reader rests on a spread (`frame.active`), the right page's
+printed line is **beat 0** (`line`). After two full breath cycles at rest the
+engine shows `guide[0]` (beat 1), then one more line per breath cycle, each
+fading in over the in-breath; the last line stays. A spread remembers its beat
+when you leave and come back. The engine passes `frame.beat` (0 = `line`,
+k = `guide[k − 1]`); scenes read it as `frame.beat ?? 0` and may stage
+themselves by beat (STORY.md, Layer 3) — subtly, never a cut.
+
+**Rendering the lines.** The engine stops printing `line` into the right page
+texture; instead a caption plane lies in the right page's near strip (a
+transparent canvas texture, redrawn once per beat, cross-faded with a second
+plane) and shows the current beat's line in the same type the page used. The
+**hinge line** is printed into the left page texture, small italic, under the
+Pāli (so it is read on the back of the turning leaf).
+
+**Guide toggle.** On by default. A small lamp icon in the HUD turns it off
+(remembered in localStorage, best effort); `?guide=0` too. Off = the page shows
+`line` only and `frame.beat` stays 0.
+
+**Frontispiece & colophon.** The intro's first guide lines carry the "why"
+(already in its `guide`). The **outside of the back cover** prints the
+colophon, small and centred low, from `colophon` exported by
+`src/scenes/index.js`:
+
+```js
+export const colophon = [
+  'Similes from the Sāmaññaphala Sutta, DN 2.',
+  'Instructions after Leigh Brasington, Right Concentration.',
+  'The formless bases are counted as jhānas five to eight by convention.',
+]
+```
+
+**Pull tab (Layer 4, later).** Each right page gets a small paper tab at its
+outer edge; pulling it (click/drag, or the `i` key) slides a strip out from
+under the page with `tab.text` and `tab.source`; pulling again pushes it back.
+The engine passes `frame.pull` (0–1, eased) and scenes may respond
+(`frame.pull ?? 0`): the spring wells harder, the fan opens wider, the veils
+thin.
+
+**Debug params.** `?beat=N` forces `frame.beat` on the open spread (and shows
+that line); `?pull=0..1` forces `frame.pull`; `?guide=0` disables the guide.

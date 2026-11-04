@@ -57,6 +57,16 @@ export default {
   title: 'Nothingness',
   pali: 'ākiñcaññāyatana',
   line: 'There is nothing here.',
+  hinge: 'beyond consciousness',
+  guide: [
+    'What does the knowing hold?',
+    'Nothing.',
+    'Rest in that.',
+  ],
+  tab: {
+    text: '“There is nothing.” Attention turns from the knowing to what it holds, and finds nothing there.',
+    source: 'MN 111 · Brasington',
+  },
   palette: { bg: '#050506', paper: '#25272a', ink: '#bdb9b0', accent: '#8d8b86' },
   audio: { root: 55, intervals: [0, 12], brightness: 0.15, shimmer: 0.04, breathe: 0.22 },
   build,

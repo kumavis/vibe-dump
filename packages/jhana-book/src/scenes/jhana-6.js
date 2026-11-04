@@ -25,6 +25,16 @@ export default {
   title: 'Infinite Consciousness',
   pali: 'viññāṇañcāyatana',
   line: 'Knowing, without edge.',
+  hinge: 'beyond space',
+  guide: [
+    'What knows the space?',
+    'Turn toward the knowing.',
+    'It has no edge either.',
+  ],
+  tab: {
+    text: '“Consciousness is infinite.” To behold boundless space, the knowing must be boundless; attention turns to the knowing.',
+    source: 'MN 111 · Brasington',
+  },
   palette: { bg: '#03111a', paper: '#123540', ink: '#c3efe6', accent: '#62efd5' },
   audio: { root: 77.78, intervals: [0, 7, 11, 14, 18], brightness: 0.5, shimmer: 0.4, breathe: 0.5 },
 

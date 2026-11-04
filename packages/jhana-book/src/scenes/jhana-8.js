@@ -80,6 +80,17 @@ export default {
   title: 'Neither Perception nor Non-Perception',
   pali: 'nevasaññānāsaññāyatana',
   line: 'Almost nothing. Almost.',
+  hinge: 'beyond nothing',
+  guide: [
+    'Let the vastness go too.',
+    'A natural, quiet place.',
+    'Too fine to call it perceiving.',
+    'Don\'t look. It is here.',
+  ],
+  tab: {
+    text: 'Perception too subtle to call perceiving, too present to call its absence. The mind finds this place better than words do.',
+    source: 'MN 111 · Brasington',
+  },
   palette: { bg: '#131016', paper: '#e9e2e5', ink: '#5b4d58', accent: '#cfbfd8' },
   audio: { root: 61.74, intervals: [0, 7, 13, 18], brightness: 0.24, shimmer: 0.18, breathe: 0.35 },
   build,

@@ -131,6 +131,17 @@ export default {
   title: 'Infinite Space',
   pali: 'ākāsānañcāyatana',
   line: 'Space, without edge.',
+  hinge: 'beyond form',
+  guide: [
+    'Find the edges of yourself.',
+    'Push them outward.',
+    'The room. The city. The sky.',
+    'The edges give way.',
+  ],
+  tab: {
+    text: '“Space is infinite.” Not attending to form or to diversity. In the suttas the formless states are bases, āyatana, rather than jhānas.',
+    source: 'MN 111',
+  },
   palette: { bg: '#06061a', paper: '#2b2752', ink: '#d6cff7', accent: '#9d8cff' },
   audio: { root: 65.41, intervals: [0, 7, 14, 19, 26], brightness: 0.34, shimmer: 0.22, breathe: 0.45 },
 

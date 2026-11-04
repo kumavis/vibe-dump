@@ -168,6 +168,17 @@ export default {
   title: 'Third Jhāna',
   pali: 'tatiya jhāna · sukha',
   line: 'Lotuses, drinking the cool water.',
+  hinge: 'with the fading of rapture',
+  guide: [
+    'Let the thrill drain away.',
+    'Contentment remains.',
+    'Turn the volume down.',
+    'Mindful. Clearly knowing.',
+  ],
+  tab: {
+    text: 'Lotuses born in the water, grown in the water, that never rise above it, drenched from tip to root.',
+    source: 'DN 2',
+  },
   palette: { bg: '#0e1917', paper: '#f2ebe4', ink: '#4a3540', accent: '#f4b3c2' },
   audio: { root: 116.54, intervals: [0, 4, 7, 11, 16], brightness: 0.48, shimmer: 0.22, breathe: 0.5 },
   build,
