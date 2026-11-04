@@ -1,0 +1,1416 @@
+{
+  "seafloor": {
+    "bounds": [
+      -162,
+      17.4983151,
+      -153,
+      24.5016849
+    ],
+    "size": [
+      2048,
+      1690
+    ],
+    "metresPerTexel": [
+      458.2193,
+      458.2193
+    ],
+    "height": {
+      "file": "seafloor/height.png",
+      "scale": 0.25,
+      "offset": -6000
+    },
+    "stats": {
+      "landFraction": 0.02289,
+      "landKm2": 16633,
+      "minMetres": -5908.5,
+      "maxMetres": 4136
+    },
+    "sources": [
+      {
+        "id": "gmrt",
+        "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+        "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+        "fetched": "2026-11-04",
+        "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332",
+        "attribution": "Ryan, W.B.F., S.M. Carbotte, J.O. Coplan, S. O'Hara, A. Melkonian, R. Arko, R.A. Weissel, V. Ferrini, A. Goodwillie, F. Nitsche, J. Bonczkowski and R. Zemsky (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332; data from the GMRT synthesis 4.5.0, gmrt.org, CC BY 4.0. GMRT merges ship multibeam swaths (the Hawaiian surveys among them) gridded at up to 100 m, over GEBCO where no multibeam exists.",
+        "note": "sea texels only, area-weighted from GMRT's 244.60 m grid (ESRI ASCII) onto 458 m texels, never shallower than −1 m (1042 sea texels where GMRT itself stands above −1 m, at the coasts and on Nihoa, are −1 m); cells deeper than 6000 m are spikes and treated as gaps; land comes from the DEM"
+      },
+      {
+        "id": "usgs-3dep-1as",
+        "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+        "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+        "fetched": "2026-11-04",
+        "licence": "public domain (U.S. Geological Survey)",
+        "note": "tiles n19w156, n20w155, n20w156, n20w157, n21w156, n21w157, n21w158, n22w157, n22w158, n22w159, n22w160, n22w161, n23w160, n23w161; the other 66 one-degree cells in the box have no tile (no land; Nihoa, at 23.06° N 161.92° W, lies in n24w162, which the USGS does not publish, so it is sea here); a texel is land where at least half its area is land in the DEM, and then takes the area-weighted mean of the land cells (never below 0.25 m)"
+      }
+    ]
+  },
+  "subsidence": {
+    "rule": "a volcano sinks at r0 while its shield builds and at r0·exp(−τ/τ0) after, τ the time since its shield ended, fitted (least squares on ln r) to the measured rates below; where a volcano rises (Oʻahu on the arch) it stood lower by that uplift; at a stage a volcano stands higher than today by what it has sunk since, a field that blends the volcanoes by distance and tapers to nothing at the base",
+    "from": "fitted",
+    "r0MmPerYear": 2.6,
+    "tau0Ma": 0.534,
+    "totalAfterShieldMetres": 1387,
+    "calibration": [
+      {
+        "volcano": "lanai",
+        "rate": 0.15,
+        "what": "volcanoes.json, Lānaʻi",
+        "tauMa": 1.28
+      },
+      {
+        "volcano": "kohala",
+        "rate": 2.6,
+        "what": "volcanoes.json, Kohala",
+        "tauMa": 0.245
+      },
+      {
+        "volcano": "mauna-kea",
+        "rate": 2.6,
+        "what": "volcanoes.json, Mauna Kea",
+        "tauMa": 0.13
+      },
+      {
+        "volcano": "hualalai",
+        "rate": 2.6,
+        "what": "volcanoes.json, Hualālai",
+        "tauMa": 0.13
+      },
+      {
+        "volcano": "mauna-loa",
+        "rate": 2.6,
+        "what": "volcanoes.json, Mauna Loa",
+        "tauMa": 0
+      },
+      {
+        "volcano": "kilauea",
+        "rate": 2.6,
+        "what": "volcanoes.json, Kīlauea",
+        "tauMa": 0
+      },
+      {
+        "volcano": "mahukona",
+        "rate": 2.6,
+        "what": "volcanoes.json, Māhukona",
+        "tauMa": 0.465
+      }
+    ],
+    "confidence": "sketch",
+    "sources": [
+      "sherrod-2007-geologic-map",
+      "ludwig-1991-subsidence",
+      "moore-fornari-1984-reefs"
+    ],
+    "ruleNotUsed": "volcanoes.json's subsidenceRule (2.6 mm a year for 1 Ma after a shield, then 0.01) lifts every young shield 2600 m, which in this model joins Oʻahu to Penguin Bank and Molokaʻi from 2 Ma and Maui Nui to Oʻahu at 1.2 Ma; the curve fitted to the measured rates is used instead (bake-geology.mjs --subsidence rule draws the rule)"
+  },
+  "profile": {
+    "rule": "z(d) at distance d from a summit of height h: above sea level h − d·tan(α); below it, the slope of each 500 m band of depth; down to the base. Fitted to the median heights by distance on the sectors named, from the seafloor pack.",
+    "subaerialSlopeDeg": 5.89,
+    "submarine": [
+      {
+        "fromMetres": 0,
+        "toMetres": -500,
+        "slopeDeg": 8.3
+      },
+      {
+        "fromMetres": -500,
+        "toMetres": -1000,
+        "slopeDeg": 8.3
+      },
+      {
+        "fromMetres": -1000,
+        "toMetres": -1500,
+        "slopeDeg": 7.71
+      },
+      {
+        "fromMetres": -1500,
+        "toMetres": -2000,
+        "slopeDeg": 6.24
+      },
+      {
+        "fromMetres": -2000,
+        "toMetres": -2500,
+        "slopeDeg": 5.06
+      },
+      {
+        "fromMetres": -2500,
+        "toMetres": -3000,
+        "slopeDeg": 4.76
+      },
+      {
+        "fromMetres": -3000,
+        "toMetres": -3500,
+        "slopeDeg": 4.7
+      },
+      {
+        "fromMetres": -3500,
+        "toMetres": -4000,
+        "slopeDeg": 4.06
+      },
+      {
+        "fromMetres": -4000,
+        "toMetres": -4500,
+        "slopeDeg": 2.65
+      },
+      {
+        "fromMetres": -4500,
+        "toMetres": -5000,
+        "slopeDeg": 1.5
+      },
+      {
+        "fromMetres": -5000,
+        "toMetres": -5500,
+        "slopeDeg": 1.19
+      },
+      {
+        "fromMetres": -5500,
+        "toMetres": -6000,
+        "slopeDeg": 1.19
+      }
+    ],
+    "fittedTo": [
+      {
+        "volcano": "mauna-loa",
+        "summitMetres": 4133,
+        "sectorsDeg": [
+          [
+            200,
+            280
+          ]
+        ],
+        "why": "the south-west rift and the Kona flank, away from Hualālai, Mauna Kea and Kīlauea",
+        "coastKm": 36.5,
+        "crossKm": [
+          36.5,
+          39.5,
+          40.5,
+          42.5,
+          45.5,
+          51.5,
+          59.5,
+          62.5,
+          77.5,
+          94.5,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "volcano": "kilauea",
+        "summitMetres": 1248,
+        "sectorsDeg": [
+          [
+            145,
+            215
+          ]
+        ],
+        "why": "the south flank, from the summit to the toe of the Hilina bench",
+        "coastKm": 20.5,
+        "crossKm": [
+          20.5,
+          24.5,
+          26.5,
+          34.5,
+          46.5,
+          52.5,
+          56.5,
+          58.5,
+          62.5,
+          71.5,
+          95.5,
+          null,
+          null
+        ]
+      }
+    ]
+  },
+  "hotspot": {
+    "position": [
+      -155.27,
+      19.17
+    ],
+    "positionNote": "Between Kīlauea and Kamaʻehuakanaloa, the volcanoes over it now (Clague and Sherrod 2014, p. 97); the point is the midpoint of their summits.",
+    "speed": 10,
+    "speedUnit": "cm/yr",
+    "speedSources": [
+      "clague-sherrod-2014"
+    ],
+    "speedNote": "The line of volcano birth in Clague and Sherrod’s fig. 14 (p. 122) has a slope of 10 cm/yr, “average plate motion”. Moore and Clague (1992) find the end of shield building moving south-east at about 13 cm/yr from Haleakalā to Hualālai.",
+    "speedAlternatives": [
+      {
+        "speed": 13,
+        "sources": [
+          "moore-clague-1992-hawaii"
+        ],
+        "note": "end-of-shield progression, Haleakalā to Hualālai, toward S 40° E"
+      }
+    ],
+    "azimuth": 305,
+    "azimuthUnit": "degrees, compass, the direction the plate carries a volcano",
+    "azimuthNote": "Derived here, not read: the mean bearing from Kīlauea’s summit to the summits of Kauaʻi, Niʻihau, Waiʻanae and Koʻolau in Clague and Sherrod’s table 1 (kauai 303.6°, niihau 299.1°, waianae 307.8°, koolau 309.4°). A stage at age A is drawn displaced by A × speed toward the opposite bearing.",
+    "azimuthSources": [
+      "clague-sherrod-2014"
+    ],
+    "chain": [
+      {
+        "volcano": "kauai",
+        "bearingFromKilauea": 303.6,
+        "km": 527
+      },
+      {
+        "volcano": "niihau",
+        "bearingFromKilauea": 299.1,
+        "km": 572
+      },
+      {
+        "volcano": "waianae",
+        "bearingFromKilauea": 307.8,
+        "km": 377
+      },
+      {
+        "volcano": "koolau",
+        "bearingFromKilauea": 309.4,
+        "km": 338
+      }
+    ],
+    "displacement": {
+      "formula": "a stage at age A (Ma) is drawn moved by A × speed toward the bearing azimuth + 180° (the islands slide back along the plate's path as the age runs down): x_m += 1e4 · A · speed · sin(azimuth + 180°), z_m −= 1e4 · A · speed · cos(azimuth + 180°), speed in cm a year, x east and z south in metres in the shared projection (DATA.md §1); the whole stage image moves as one, since the plate carries every volcano on it together",
+      "metresPerMa": 100000,
+      "bearingDeg": 125,
+      "xMetresPerMa": 81915,
+      "zMetresPerMa": 57358
+    }
+  },
+  "stages": [
+    {
+      "id": "kauai-alone",
+      "label": "Kauaʻi and Niʻihau, complete and alone",
+      "age": 4.2,
+      "agePrecision": 0.3,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 1493 m, lifted 1150 m, 95% of its erosion still to come; Kauaʻi, 95% grown (its shield ends at 4 Ma), summit 2564 m, today's shape raised 1036 m): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (none): the profile alone. Not yet begun (Waiʻanae, Koʻolau, Penguin Bank, West Molokaʻi, East Molokaʻi, West Maui, Lānaʻi, Kahoʻolawe, Haleakalā, Kohala, Mauna Kea, Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa, Kaʻula, Māhukona): the base. Slides on the volcanoes standing (North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today).",
+      "proposed": "Niʻihau and Kauaʻi shields complete (Niʻihau’s caldera and north rift still standing); Kaʻula beside them; nothing yet above the sea to the south-east. Shoreline: 0 m on the model, sea level as today.",
+      "volcanoes": {
+        "niihau": "complete, summit 1493 m",
+        "kauai": "complete, summit 2564 m",
+        "waianae": "unborn",
+        "koolau": "unborn",
+        "penguin-bank": "unborn",
+        "west-molokai": "unborn",
+        "east-molokai": "unborn",
+        "west-maui": "unborn",
+        "lanai": "unborn",
+        "kahoolawe": "unborn",
+        "haleakala": "unborn",
+        "kohala": "unborn",
+        "mauna-kea": "unborn",
+        "hualalai": "unborn",
+        "mauna-loa": "unborn",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "unborn",
+        "mahukona": "unborn"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/kauai-alone/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 3759,
+        "landFraction": 0.00517,
+        "minMetres": -5752,
+        "maxMetres": 2484,
+        "islands": [
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 2406,
+            "highest": {
+              "metres": 2484,
+              "lon": -159.4973,
+              "lat": 22.0588
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 1353,
+            "highest": {
+              "metres": 1428,
+              "lon": -160.0862,
+              "lat": 21.9386
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "waianae",
+      "label": "Waiʻanae grown beside them",
+      "age": 3,
+      "agePrecision": 0.1,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 464 m, lifted 121 m, 49% of its erosion still to come; Kauaʻi, summit 1740 m, lifted 212 m, 56% of its erosion still to come; Waiʻanae, summit 2420 m, lifted 1227 m, 96% of its erosion still to come; Kaʻula, summit 369 m, lifted 309 m, 62% of its erosion still to come): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (none): the profile alone. Not yet begun (Koʻolau, Penguin Bank, West Molokaʻi, East Molokaʻi, West Maui, Lānaʻi, Kahoʻolawe, Haleakalā, Kohala, Mauna Kea, Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa, Māhukona): the base. Slides on the volcanoes standing (Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today).",
+      "proposed": "Waiʻanae at the end of its shield, its caldera filled, the Waiʻanae slump fallen; Koʻolau a young shield barely at the sea. Kauaʻi and Niʻihau worn and sunk by the load rate for the time since their shields ended (capped at the load duration), then the thermal rate. Shoreline 0 m.",
+      "volcanoes": {
+        "niihau": "complete, summit 464 m",
+        "kauai": "complete, summit 1740 m",
+        "waianae": "complete, summit 2420 m",
+        "koolau": "unborn",
+        "penguin-bank": "unborn",
+        "west-molokai": "unborn",
+        "east-molokai": "unborn",
+        "west-maui": "unborn",
+        "lanai": "unborn",
+        "kahoolawe": "unborn",
+        "haleakala": "unborn",
+        "kohala": "unborn",
+        "mauna-kea": "unborn",
+        "hualalai": "unborn",
+        "mauna-loa": "unborn",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 369 m",
+        "mahukona": "unborn"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/waianae/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 5490,
+        "landFraction": 0.00755,
+        "minMetres": -5752,
+        "maxMetres": 2352,
+        "islands": [
+          {
+            "name": "Oʻahu",
+            "volcanoes": [
+              "waianae"
+            ],
+            "landKm2": 3883,
+            "highest": {
+              "metres": 2352,
+              "lon": -158.1394,
+              "lat": 21.5076
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1408,
+            "highest": {
+              "metres": 1608,
+              "lon": -159.5017,
+              "lat": 22.0671
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 170,
+            "highest": {
+              "metres": 400,
+              "lon": -160.0906,
+              "lat": 21.9386
+            }
+          },
+          {
+            "name": "Kaʻula",
+            "volcanoes": [
+              "kaula"
+            ],
+            "landKm2": 28,
+            "highest": {
+              "metres": 264,
+              "lon": -160.5432,
+              "lat": 21.6568
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "koolau-whole",
+      "label": "the Koʻolau shield whole",
+      "age": 2,
+      "agePrecision": 0.1,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 361 m, lifted 18 m, 22% of its erosion still to come; Kauaʻi, summit 1560 m, lifted 32 m, 25% of its erosion still to come; Waiʻanae, summit 1370 m, lifted 177 m, 43% of its erosion still to come; Koʻolau, 94% grown (its shield ends at 1.8 Ma), summit 1756 m, today's shape raised 921 m; Penguin Bank, summit 1310 m, lifted 1355 m, 100% of its erosion still to come; West Molokaʻi, 87% grown (its shield ends at 1.84 Ma), summit 870 m, today's shape raised 453 m; Kaʻula, summit 107 m, lifted 46 m, 28% of its erosion still to come): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (none): the profile alone. Not yet begun (East Molokaʻi, West Maui, Lānaʻi, Kahoʻolawe, Haleakalā, Kohala, Mauna Kea, Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa, Māhukona): the base. Slides on the volcanoes standing (Nuʻuanu 1.95 Ma still to come: scar refilled to the profile, debris lifted off; Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today).",
+      "proposed": "Koʻolau whole: its shield complete with the north-east flank standing, the Nuʻuanu scar refilled to the shield profile out to the offshore headwall, the Kailua caldera at its summit. West Molokaʻi and Penguin Bank rising. Shoreline 0 m.",
+      "volcanoes": {
+        "niihau": "complete, summit 361 m",
+        "kauai": "complete, summit 1560 m",
+        "waianae": "complete, summit 1370 m",
+        "koolau": "complete, summit 1756 m",
+        "penguin-bank": "complete, summit 1310 m",
+        "west-molokai": "complete, summit 870 m",
+        "east-molokai": "unborn",
+        "west-maui": "unborn",
+        "lanai": "unborn",
+        "kahoolawe": "unborn",
+        "haleakala": "unborn",
+        "kohala": "unborn",
+        "mauna-kea": "unborn",
+        "hualalai": "unborn",
+        "mauna-loa": "unborn",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 107 m",
+        "mahukona": "unborn"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "price-elliott-fisk-2004-maui-nui",
+        "moore-clague-1992-hawaii",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/koolau-whole/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 7804,
+        "landFraction": 0.01074,
+        "minMetres": -5744,
+        "maxMetres": 1692,
+        "islands": [
+          {
+            "name": "Oʻahu–Penguin Bank",
+            "volcanoes": [
+              "waianae",
+              "koolau",
+              "penguin-bank"
+            ],
+            "landKm2": 5723,
+            "highest": {
+              "metres": 1692,
+              "lon": -157.7878,
+              "lat": 21.3585
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1274,
+            "highest": {
+              "metres": 1436,
+              "lon": -159.5017,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Molokaʻi",
+            "volcanoes": [
+              "west-molokai"
+            ],
+            "landKm2": 693,
+            "highest": {
+              "metres": 820,
+              "lon": -157.1594,
+              "lat": 21.143
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 113,
+            "highest": {
+              "metres": 300,
+              "lon": -160.095,
+              "lat": 21.9303
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "koolau-after-nuuanu",
+      "label": "after the Nuʻuanu avalanche",
+      "age": 1.8,
+      "agePrecision": 0.1,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 355 m, lifted 12 m, 18% of its erosion still to come; Kauaʻi, summit 1549 m, lifted 22 m, 20% of its erosion still to come; Waiʻanae, summit 1311 m, lifted 118 m, 35% of its erosion still to come; Koʻolau, summit 2158 m, lifted 1331 m, 100% of its erosion still to come; Penguin Bank, summit 877 m, lifted 921 m, 81% of its erosion still to come; West Molokaʻi, summit 1660 m, lifted 1243 m, 96% of its erosion still to come; Kaʻula, summit 92 m, lifted 32 m, 22% of its erosion still to come): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (East Molokaʻi, summit 691 m, 74% of its final height above the base; West Maui, summit 219 m, 66% of its final height above the base): the profile alone. Not yet begun (Lānaʻi, Kahoʻolawe, Haleakalā, Kohala, Mauna Kea, Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa, Māhukona): the base. Slides on the volcanoes standing (Nuʻuanu 1.95 Ma happened: scar and debris as today; Wailau 1.4 Ma still to come: scar refilled to the profile, debris lifted off; Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today).",
+      "proposed": "As koolau-whole, the Nuʻuanu scar left open (the flank gone to the headwall about 15 km off today’s shore) and the field drawn on the sea floor. East Molokaʻi rising. Shoreline 0 m.",
+      "volcanoes": {
+        "niihau": "complete, summit 355 m",
+        "kauai": "complete, summit 1549 m",
+        "waianae": "complete, summit 1311 m",
+        "koolau": "complete, summit 2158 m",
+        "penguin-bank": "complete, summit 877 m",
+        "west-molokai": "complete, summit 1660 m",
+        "east-molokai": "growing, summit 691 m",
+        "west-maui": "growing, summit 219 m",
+        "lanai": "unborn",
+        "kahoolawe": "unborn",
+        "haleakala": "unborn",
+        "kohala": "unborn",
+        "mauna-kea": "unborn",
+        "hualalai": "unborn",
+        "mauna-loa": "unborn",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 92 m",
+        "mahukona": "unborn"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "price-elliott-fisk-2004-maui-nui",
+        "moore-clague-1992-hawaii",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/koolau-after-nuuanu/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 9585,
+        "landFraction": 0.01319,
+        "minMetres": -5720,
+        "maxMetres": 2000,
+        "islands": [
+          {
+            "name": "Oʻahu–Penguin Bank–Molokaʻi",
+            "volcanoes": [
+              "waianae",
+              "koolau",
+              "penguin-bank",
+              "west-molokai"
+            ],
+            "landKm2": 8029,
+            "highest": {
+              "metres": 2000,
+              "lon": -157.7922,
+              "lat": 21.3502
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1288,
+            "highest": {
+              "metres": 1432,
+              "lon": -159.5061,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Molokaʻi",
+            "volcanoes": [
+              "east-molokai"
+            ],
+            "landKm2": 124,
+            "highest": {
+              "metres": 600,
+              "lon": -156.8694,
+              "lat": 21.1057
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 113,
+            "highest": {
+              "metres": 296,
+              "lon": -160.095,
+              "lat": 21.9303
+            }
+          },
+          {
+            "name": "Maui",
+            "volcanoes": [
+              "west-maui"
+            ],
+            "landKm2": 32,
+            "highest": {
+              "metres": 164,
+              "lon": -156.5881,
+              "lat": 20.8902
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "maui-nui",
+      "label": "Maui Nui, one island",
+      "age": 1.2,
+      "agePrecision": 0.1,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 346 m, lifted 4 m, 8% of its erosion still to come; Kauaʻi, summit 1534 m, lifted 7 m, 9% of its erosion still to come; Waiʻanae, summit 1222 m, lifted 29 m, 15% of its erosion still to come; Koʻolau, summit 1221 m, lifted 394 m, 44% of its erosion still to come; Penguin Bank, summit 233 m, lifted 277 m, 36% of its erosion still to come; West Molokaʻi, summit 791 m, lifted 374 m, 43% of its erosion still to come; East Molokaʻi, summit 2143 m, lifted 707 m, 64% of its erosion still to come; West Maui, summit 2732 m, lifted 1029 m, 85% of its erosion still to come; Lānaʻi, summit 2057 m, lifted 1068 m, 88% of its erosion still to come; Kahoʻolawe, summit 1565 m, lifted 1130 m, 92% of its erosion still to come; Kaʻula, summit 70 m, lifted 10 m, 10% of its erosion still to come): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (Haleakalā, summit 1128 m, 67% of its final height above the base): the profile alone. Not yet begun (Kohala, Mauna Kea, Hualālai, Mauna Loa, Kīlauea, Kamaʻehuakanaloa, Māhukona): the base. Slides on the volcanoes standing (Nuʻuanu 1.95 Ma happened: scar and debris as today; Wailau 1.4 Ma happened: scar and debris as today; Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today; Clark 1 1.3 Ma happened: scar and debris as today; Clark 2 1.3 Ma happened: scar and debris as today; Hāna 0.9 Ma still to come: scar refilled to the profile, debris lifted off).",
+      "proposed": "Penguin Bank, West and East Molokaʻi, Lānaʻi, Kahoʻolawe, West Maui and Haleakalā one island, larger than Hawaiʻi Island is now (Price and Elliott-Fisk 2004); the Wailau and Clark scars open. Shoreline 0 m.",
+      "volcanoes": {
+        "niihau": "complete, summit 346 m",
+        "kauai": "complete, summit 1534 m",
+        "waianae": "complete, summit 1222 m",
+        "koolau": "complete, summit 1221 m",
+        "penguin-bank": "complete, summit 233 m",
+        "west-molokai": "complete, summit 791 m",
+        "east-molokai": "complete, summit 2143 m",
+        "west-maui": "complete, summit 2732 m",
+        "lanai": "complete, summit 2057 m",
+        "kahoolawe": "complete, summit 1565 m",
+        "haleakala": "growing, summit 1128 m",
+        "kohala": "unborn",
+        "mauna-kea": "unborn",
+        "hualalai": "unborn",
+        "mauna-loa": "unborn",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 70 m",
+        "mahukona": "unborn"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "price-elliott-fisk-2004-maui-nui",
+        "moore-clague-1992-hawaii",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/maui-nui/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 13164,
+        "landFraction": 0.01811,
+        "minMetres": -5608,
+        "maxMetres": 2644,
+        "islands": [
+          {
+            "name": "Maui Nui",
+            "volcanoes": [
+              "west-molokai",
+              "east-molokai",
+              "west-maui",
+              "lanai",
+              "kahoolawe",
+              "haleakala"
+            ],
+            "landKm2": 8875,
+            "highest": {
+              "metres": 2644,
+              "lon": -156.5881,
+              "lat": 20.8943
+            }
+          },
+          {
+            "name": "Oʻahu",
+            "volcanoes": [
+              "waianae",
+              "koolau"
+            ],
+            "landKm2": 2479,
+            "highest": {
+              "metres": 1060,
+              "lon": -158.1438,
+              "lat": 21.5076
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1357,
+            "highest": {
+              "metres": 1428,
+              "lon": -159.5061,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Penguin Bank",
+            "volcanoes": [
+              "penguin-bank"
+            ],
+            "landKm2": 336,
+            "highest": {
+              "metres": 228,
+              "lon": -157.6472,
+              "lat": 20.9772
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 117,
+            "highest": {
+              "metres": 292,
+              "lon": -160.095,
+              "lat": 21.9345
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "maui-nui-parting",
+      "label": "Maui Nui parting",
+      "age": 0.6,
+      "agePrecision": 0.1,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 344 m, lifted 1 m, 2% of its erosion still to come; Kauaʻi, summit 1529 m, lifted 2 m, 2% of its erosion still to come; Waiʻanae, summit 1194 m, lifted 1 m, 4% of its erosion still to come; Koʻolau, summit 917 m, lifted 90 m, 11% of its erosion still to come; Penguin Bank, summit 24 m, lifted 68 m, 9% of its erosion still to come; West Molokaʻi, summit 508 m, lifted 92 m, 11% of its erosion still to come; East Molokaʻi, summit 1609 m, lifted 173 m, 16% of its erosion still to come; West Maui, summit 1955 m, lifted 252 m, 21% of its erosion still to come; Lānaʻi, summit 1251 m, lifted 262 m, 22% of its erosion still to come; Kahoʻolawe, summit 712 m, lifted 277 m, 23% of its erosion still to come; Haleakalā, summit 3481 m, lifted 468 m, 38% of its erosion still to come; Kaʻula, summit 63 m, lifted 2 m, 2% of its erosion still to come; Māhukona, 93% grown (its shield ends at 0.465 Ma), summit -550 m, today's shape raised 496 m): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (Kohala, summit 948 m, 84% of its final height above the base; Mauna Kea, summit 600 m, 60% of its final height above the base; Hualālai, summit -339 m, 60% of its final height above the base; Mauna Loa, summit -260 m, 52% of its final height above the base): the profile alone. Not yet begun (Kīlauea, Kamaʻehuakanaloa): the base. Slides on the volcanoes standing (Nuʻuanu 1.95 Ma happened: scar and debris as today; Wailau 1.4 Ma happened: scar and debris as today; Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today; Clark 1 1.3 Ma happened: scar and debris as today; Clark 2 1.3 Ma happened: scar and debris as today; Hāna 0.9 Ma happened: scar and debris as today; Pololū 0.3 Ma still to come: scar refilled to the profile, debris lifted off; Laupāhoehoe 0.2 Ma still to come: scar refilled to the profile, debris lifted off; ʻĀlika 2 0.125 Ma still to come: scar refilled to the profile, debris lifted off; ʻĀlika 1 0.13 Ma still to come: scar refilled to the profile, debris lifted off; North Kona 0.15 Ma still to come: scar refilled to the profile, debris lifted off; South Kona 0.2 Ma still to come: scar refilled to the profile, debris lifted off; South Kona slump 0.2 Ma still to come: scar refilled to the profile, debris lifted off; Punaluʻu 0.1 Ma still to come: scar refilled to the profile, debris lifted off).",
+      "proposed": "Maui Nui sinking and parting at an interglacial high stand (Price and Elliott-Fisk 2004): shoreline 0 m; in the glacial lows (−125 m) it rejoined, which the stage does not draw.",
+      "volcanoes": {
+        "niihau": "complete, summit 344 m",
+        "kauai": "complete, summit 1529 m",
+        "waianae": "complete, summit 1194 m",
+        "koolau": "complete, summit 917 m",
+        "penguin-bank": "complete, summit 24 m",
+        "west-molokai": "complete, summit 508 m",
+        "east-molokai": "complete, summit 1609 m",
+        "west-maui": "complete, summit 1955 m",
+        "lanai": "complete, summit 1251 m",
+        "kahoolawe": "complete, summit 712 m",
+        "haleakala": "complete, summit 3481 m",
+        "kohala": "growing, summit 948 m",
+        "mauna-kea": "growing, summit 600 m",
+        "hualalai": "growing, summit -339 m",
+        "mauna-loa": "growing, summit -260 m",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 63 m",
+        "mahukona": "complete, summit -550 m"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "price-elliott-fisk-2004-maui-nui",
+        "moore-clague-1992-hawaii",
+        "wikipedia-mauna-loa",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/maui-nui-parting/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 11138,
+        "landFraction": 0.01533,
+        "minMetres": -5744,
+        "maxMetres": 3328,
+        "islands": [
+          {
+            "name": "Maui Nui",
+            "volcanoes": [
+              "west-molokai",
+              "east-molokai",
+              "west-maui",
+              "lanai",
+              "kahoolawe",
+              "haleakala"
+            ],
+            "landKm2": 6966,
+            "highest": {
+              "metres": 3328,
+              "lon": -156.2542,
+              "lat": 20.712
+            }
+          },
+          {
+            "name": "Oʻahu",
+            "volcanoes": [
+              "waianae",
+              "koolau"
+            ],
+            "landKm2": 1974,
+            "highest": {
+              "metres": 976,
+              "lon": -158.1438,
+              "lat": 21.5076
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1438,
+            "highest": {
+              "metres": 1428,
+              "lon": -159.5061,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Hawaiʻi",
+            "volcanoes": [
+              "kohala"
+            ],
+            "landKm2": 440,
+            "highest": {
+              "metres": 884,
+              "lon": -155.718,
+              "lat": 20.0862
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 135,
+            "highest": {
+              "metres": 292,
+              "lon": -160.095,
+              "lat": 21.9303
+            }
+          },
+          {
+            "name": "Hawaiʻi",
+            "volcanoes": [
+              "mauna-kea"
+            ],
+            "landKm2": 122,
+            "highest": {
+              "metres": 520,
+              "lon": -155.4675,
+              "lat": 19.821
+            }
+          },
+          {
+            "name": "Penguin Bank",
+            "volcanoes": [
+              "penguin-bank"
+            ],
+            "landKm2": 51,
+            "highest": {
+              "metres": 20,
+              "lon": -157.6516,
+              "lat": 20.9814
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 11,
+            "highest": {
+              "metres": 12,
+              "lon": -160.2224,
+              "lat": 21.8267
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "hawaii-rising",
+      "label": "Hawaiʻi rising",
+      "age": 0.3,
+      "agePrecision": 0.05,
+      "method": "modelled",
+      "seaLevel": 0,
+      "confidence": "soft",
+      "rule": "sea level as today (0 m); land ≥ 0.25 m, sea ≤ −1 m. Complete shields, or within 15% of their full height (Niʻihau, summit 343 m, lifted 0 m, 0% of its erosion still to come; Kauaʻi, summit 1528 m, lifted 1 m, 1% of its erosion still to come; Waiʻanae, summit 1190 m, lifted -3 m, 1% of its erosion still to come; Koʻolau, summit 856 m, lifted 29 m, 3% of its erosion still to come; Penguin Bank, summit -20 m, lifted 25 m, 2% of its erosion still to come; West Molokaʻi, summit 450 m, lifted 33 m, 3% of its erosion still to come; East Molokaʻi, summit 1498 m, lifted 63 m, 4% of its erosion still to come; West Maui, summit 1794 m, lifted 92 m, 5% of its erosion still to come; Lānaʻi, summit 1084 m, lifted 95 m, 5% of its erosion still to come; Kahoʻolawe, summit 536 m, lifted 101 m, 6% of its erosion still to come; Haleakalā, summit 3182 m, lifted 170 m, 10% of its erosion still to come; Kohala, 98% grown (its shield ends at 0.245 Ma), summit 1977 m, today's shape raised 352 m; Mauna Kea, 89% grown (its shield ends at 0.13 Ma), summit 3427 m, today's shape lowered 709 m; Hualālai, 89% grown (its shield ends at 0.13 Ma), summit 1944 m, today's shape lowered 516 m; Kaʻula, summit 61 m, lifted 1 m, 1% of its erosion still to come; Māhukona, summit -608 m, lifted 438 m, 42% of its erosion still to come): below -2600 m today the sea floor as it is now, lifted by the subsidence since; above -2000 m the profile at the summit, blended toward today's lifted surface as its erosion runs, by (A / shield end)² of the difference still to go. Shields still building (Mauna Loa, summit 2566 m, 83% of its final height above the base): the profile alone. Not yet begun (Kīlauea, Kamaʻehuakanaloa): the base. Slides on the volcanoes standing (Nuʻuanu 1.95 Ma happened: scar and debris as today; Wailau 1.4 Ma happened: scar and debris as today; Kaʻena 3.2 Ma happened: scar and debris as today; Waiʻanae 3.06 Ma happened: scar and debris as today; North Kauaʻi 4.5 Ma happened: scar and debris as today; South Kauaʻi 4.5 Ma happened: scar and debris as today; Clark 1 1.3 Ma happened: scar and debris as today; Clark 2 1.3 Ma happened: scar and debris as today; Hāna 0.9 Ma happened: scar and debris as today; Pololū 0.3 Ma happened: scar and debris as today; Laupāhoehoe 0.2 Ma still to come: scar refilled to the profile, debris lifted off; ʻĀlika 2 0.125 Ma still to come: scar refilled to the profile, debris lifted off; ʻĀlika 1 0.13 Ma still to come: scar refilled to the profile, debris lifted off; North Kona 0.15 Ma still to come: scar refilled to the profile, debris lifted off; South Kona 0.2 Ma still to come: scar refilled to the profile, debris lifted off; South Kona slump 0.2 Ma still to come: scar refilled to the profile, debris lifted off; Punaluʻu 0.1 Ma still to come: scar refilled to the profile, debris lifted off).",
+      "proposed": "Māhukona sunk; Kohala near the end of its shield; Mauna Kea, Hualālai and Mauna Loa rising; Kīlauea not yet above the sea. Shoreline 0 m.",
+      "volcanoes": {
+        "niihau": "complete, summit 343 m",
+        "kauai": "complete, summit 1528 m",
+        "waianae": "complete, summit 1190 m",
+        "koolau": "complete, summit 856 m",
+        "penguin-bank": "complete, summit -20 m",
+        "west-molokai": "complete, summit 450 m",
+        "east-molokai": "complete, summit 1498 m",
+        "west-maui": "complete, summit 1794 m",
+        "lanai": "complete, summit 1084 m",
+        "kahoolawe": "complete, summit 536 m",
+        "haleakala": "complete, summit 3182 m",
+        "kohala": "complete, summit 1977 m",
+        "mauna-kea": "complete, summit 3427 m",
+        "hualalai": "complete, summit 1944 m",
+        "mauna-loa": "growing, summit 2566 m",
+        "kilauea": "unborn",
+        "kamaehuakanaloa": "unborn",
+        "kaula": "complete, summit 61 m",
+        "mahukona": "complete, summit -608 m"
+      },
+      "inputs": "volcanoes from volcanoes.json (18 of 19 with summit and shield ages); slides from landslides.geojson (18 fields with an age)",
+      "sources": [
+        "sherrod-2007-geologic-map",
+        "clague-sherrod-2014",
+        "eakins-2003-i2809",
+        "price-elliott-fisk-2004-maui-nui",
+        "moore-clague-1992-hawaii",
+        "wikipedia-mauna-loa",
+        "moore-1989-prodigious",
+        "odp-200-ir-nuuanu",
+        "satake-2002-nuuanu-tsunami",
+        "wikipedia-nuuanu-slide",
+        "moore-clague-2002-nuuanu-wailau",
+        "garcia-2006-koolau-landslides",
+        "moore-normark-holcomb-1994-annrev",
+        "clague-moore-2002-wailau",
+        "lipman-1988-alika",
+        "mcmurtry-1999-alika2",
+        "moore-normark-holcomb-1994-science",
+        "ludwig-1991-subsidence",
+        "moore-fornari-1984-reefs",
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "stages/hawaii-rising/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 15572,
+        "landFraction": 0.02143,
+        "minMetres": -5744,
+        "maxMetres": 3344,
+        "islands": [
+          {
+            "name": "Hawaiʻi",
+            "volcanoes": [
+              "kohala",
+              "mauna-kea",
+              "hualalai",
+              "mauna-loa"
+            ],
+            "landKm2": 7269,
+            "highest": {
+              "metres": 3344,
+              "lon": -155.4675,
+              "lat": 19.8169
+            }
+          },
+          {
+            "name": "Maui–Lānaʻi",
+            "volcanoes": [
+              "west-maui",
+              "lanai",
+              "haleakala"
+            ],
+            "landKm2": 3660,
+            "highest": {
+              "metres": 3040,
+              "lon": -156.2542,
+              "lat": 20.7078
+            }
+          },
+          {
+            "name": "Oʻahu",
+            "volcanoes": [
+              "waianae",
+              "koolau"
+            ],
+            "landKm2": 1815,
+            "highest": {
+              "metres": 960,
+              "lon": -158.1438,
+              "lat": 21.5076
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1475,
+            "highest": {
+              "metres": 1428,
+              "lon": -159.5061,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Molokaʻi",
+            "volcanoes": [
+              "west-molokai",
+              "east-molokai"
+            ],
+            "landKm2": 948,
+            "highest": {
+              "metres": 1244,
+              "lon": -156.8782,
+              "lat": 21.1057
+            }
+          },
+          {
+            "name": "Kahoʻolawe",
+            "volcanoes": [
+              "kahoolawe"
+            ],
+            "landKm2": 215,
+            "highest": {
+              "metres": 512,
+              "lon": -156.5706,
+              "lat": 20.5587
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 191,
+            "highest": {
+              "metres": 292,
+              "lon": -160.095,
+              "lat": 21.9303
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "present",
+      "label": "today",
+      "age": 0,
+      "agePrecision": 0,
+      "method": "survey",
+      "seaLevel": 0,
+      "confidence": "firm",
+      "rule": "today: the seafloor pack (GMRT and 3DEP), a survey, not a model",
+      "proposed": "The seafloor pack itself.",
+      "sources": [
+        {
+          "id": "gmrt",
+          "title": "Global Multi-Resolution Topography (GMRT) synthesis, topo layer (multibeam bathymetry with GEBCO fill), version 4.5.0 (June 2026)",
+          "url": "https://www.gmrt.org/services/GridServer?minlongitude=-162.00879&maxlongitude=-152.99121&minlatitude=17.49003&maxlatitude=24.50997&layer=topo&format=esriascii&mresolution=458",
+          "licence": "CC BY 4.0; cite Ryan, W.B.F. et al. (2009), Global Multi-Resolution Topography synthesis, Geochem. Geophys. Geosyst. 10, Q03014, doi:10.1029/2008GC002332"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "height": {
+        "file": "seafloor/height.png",
+        "scale": 0.25,
+        "offset": -6000
+      },
+      "stats": {
+        "landKm2": 16633,
+        "landFraction": 0.02289,
+        "minMetres": -5908.5,
+        "maxMetres": 4136,
+        "islands": [
+          {
+            "name": "Hawaiʻi",
+            "volcanoes": [
+              "kohala",
+              "mauna-kea",
+              "hualalai",
+              "mauna-loa",
+              "kilauea"
+            ],
+            "landKm2": 10363,
+            "highest": {
+              "metres": 4136,
+              "lon": -155.4675,
+              "lat": 19.821
+            }
+          },
+          {
+            "name": "Maui",
+            "volcanoes": [
+              "west-maui",
+              "haleakala"
+            ],
+            "landKm2": 1890,
+            "highest": {
+              "metres": 3012,
+              "lon": -156.2542,
+              "lat": 20.7078
+            }
+          },
+          {
+            "name": "Oʻahu",
+            "volcanoes": [
+              "waianae",
+              "koolau"
+            ],
+            "landKm2": 1563,
+            "highest": {
+              "metres": 1193,
+              "lon": -158.1438,
+              "lat": 21.5076
+            }
+          },
+          {
+            "name": "Kauaʻi",
+            "volcanoes": [
+              "kauai"
+            ],
+            "landKm2": 1454,
+            "highest": {
+              "metres": 1528,
+              "lon": -159.4973,
+              "lat": 22.0754
+            }
+          },
+          {
+            "name": "Molokaʻi",
+            "volcanoes": [
+              "west-molokai",
+              "east-molokai"
+            ],
+            "landKm2": 684,
+            "highest": {
+              "metres": 1436,
+              "lon": -156.8694,
+              "lat": 21.1057
+            }
+          },
+          {
+            "name": "Lānaʻi",
+            "volcanoes": [
+              "lanai"
+            ],
+            "landKm2": 367,
+            "highest": {
+              "metres": 989,
+              "lon": -156.8694,
+              "lat": 20.8114
+            }
+          },
+          {
+            "name": "Niʻihau",
+            "volcanoes": [
+              "niihau"
+            ],
+            "landKm2": 189,
+            "highest": {
+              "metres": 343,
+              "lon": -160.0862,
+              "lat": 21.9386
+            }
+          },
+          {
+            "name": "Kahoʻolawe",
+            "volcanoes": [
+              "kahoolawe"
+            ],
+            "landKm2": 117,
+            "highest": {
+              "metres": 435,
+              "lon": -156.5662,
+              "lat": 20.5628
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

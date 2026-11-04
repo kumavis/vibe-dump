@@ -1655,6 +1655,139 @@ geology/chapters.json             the prologue's chapters and their steps (its e
   exist; the seafloor and stage images on their grid with the stated `stats`;
   the whole directory under 12 MB.
 
+### How to bake the geology
+
+How `geology/manifest.json`, the seafloor pack and the stage images are made.
+`volcanoes.json`, `landslides.geojson` and `chapters.json` are the research's,
+hand-written; the bake only reads them, and keeps any key of the manifest it
+does not own. Like the other bakes, a by-hand step whose output is committed.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-geology.mjs --all        # download, bake, check, delete the downloads
+```
+
+or step by step:
+
+```bash
+node packages/holo-i-ke-au/tools/bake-geology.mjs --download   # ~200 MB: 14 DEM tiles and one GMRT grid, a minute or two
+node packages/holo-i-ke-au/tools/bake-geology.mjs --bake       # the seafloor pack, then the stages; about 3 minutes
+node packages/holo-i-ke-au/tools/bake-geology.mjs --stages     # the stages alone, from the committed seafloor pack (no downloads); about 80 s
+node packages/holo-i-ke-au/tools/bake-geology.mjs --check      # read geology/ back
+node packages/holo-i-ke-au/tools/bake-geology.mjs --preview /tmp/holo-geology   # each stage as shaded relief beside today's
+node packages/holo-i-ke-au/tools/bake-geology.mjs --clean      # delete the downloads
+```
+
+`--downloads DIR` (or `$HOLO_GEOLOGY_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/geology-downloads`; keep it outside the repo.
+The ledger (`fetched.json` there) records each file's URL, date, size and
+SHA-256, as the pack bake's does. `--subsidence rule` draws the stages with
+the research's stated subsidence rule instead of the fitted curve (below). A
+re-bake from the same downloads gives the same bytes.
+
+**The seafloor pack.** 2048 × 1690 texels of 458.2 m over 162°–153° W and
+17.498°–24.502° N (the contract's box, its short side rounded up to whole
+texels). The land and sea rules are the island packs' (§2, "What the app can
+rely on"): the 3DEP 1 arc-second tiles (all 14 the USGS publishes in the box;
+every other one-degree cell is asked for and answers 404, Nihoa's n24w162
+among them, so Nihoa is sea here) decide land at half a texel's area and give
+its mean; the sea is GMRT's synthesis (version 4.5.0, one request over the box
+at `mresolution` 458, which GMRT serves from its 244.6 m level: multibeam
+where the surveys exist, GEBCO under it), area-weighted, never shallower than
+−1 m, cells deeper than 6,000 m treated as gaps. The GMRT entry in `sources`
+carries the citation its CC BY 4.0 terms ask for (Ryan et al. 2009, with the
+version). Land 16,633 km², −5,908.5 m to 4,136 m (Mauna Kea's summit texel).
+
+**The stages.** Their ids, ages, precisions and confidence are
+`volcanoes.json`'s `stagesProposed`; each stage keeps the research's text as
+`proposed` beside the bake's own `rule`, which names every standing volcano's
+state and height and every slide's. Each stage is modelled on the seafloor
+grid from the seafloor pack alone:
+
+- *The base*: the sea floor with the volcanoes taken off. Today's floor where
+  it is deeper than −4,000 m and more than 12 km from anything shallower (a
+  quarter-percentile over 3.7 km cells), carried under the ridge by a harmonic
+  fill. Where a volcano is not yet born, or a debris field not yet laid, the
+  stage is the base.
+- *Ownership*: each texel standing 100 m above the base belongs to the volcano
+  whose summit (`volcanoes.json`) is nearest, the distance divided by the
+  volcano's relief, within 130 km.
+- *The profile*, fitted to the living shields on the seafloor pack (`profile`
+  in the manifest: Mauna Loa's south-west and west flanks, 200°–280°, and
+  Kīlauea's south flank, 145°–215°, the median height per kilometre of
+  distance): 5.9° above sea level through the summit, then a slope per 500 m
+  of depth, 8.3° near the shore easing to about 5° at 2,500 m, 2.6° at
+  4,000 m and 1.2° at the toe (the bands are made never to steepen with
+  depth). Each volcano gets it at its own summit, stretched by direction so
+  that it crosses −2,000 m (lifted by the subsidence since) where the
+  volcano's own flank crosses −2,000 m today, outside its scars, held within
+  0.6–1.6 times its median reach and smoothed over ±16°: the rift zones keep
+  their reach and the islands their outline.
+- *Subsidence* (`subsidence`): a volcano sinks at r0 while its shield builds
+  and at r0·exp(−τ/τ0) after, τ the time since its shield ended, fitted to the
+  rates `volcanoes.json` measures (Hawaiʻi's 2.6 mm a year, Lānaʻi's 0.15):
+  r0 2.6 mm a year, τ0 0.53 Ma, about 1.4 km in all after a shield ends;
+  Oʻahu's uplift (0.022 mm a year over 0.4 Ma) is taken off. At a stage the
+  ground stands higher than today by what it has sunk since, a field that
+  blends the standing volcanoes over about 30 km and tapers to nothing over
+  the 2.5 km above the base. The research's stated rule (2.6 mm a year for
+  1 Ma after a shield, then 0.01) lifts every young shield 2.6 km and in this
+  model joins Oʻahu to Penguin Bank and Molokaʻi from 2 Ma and Maui Nui to
+  Oʻahu at 1.2 Ma; the manifest says so (`ruleNotUsed`) and uses the fit.
+- *A complete shield*, or one within 15% of its full height (the cube root of
+  the share of its shield time built): below −2,600 m today the sea floor as
+  it is now, lifted; above −2,000 m the profile at its summit (its height
+  today plus the lift, or less the height still to grow), blended toward
+  today's lifted surface as its erosion runs, by (A / shield end)²; a blend
+  between. Toward ground that is not there yet the surface eases into the
+  profile over 8 km, so no cliff stands where a younger neighbour will grow.
+- *A shield still building*: the profile alone, its height above the base the
+  cube root of the share of its shield time built.
+- *Slides* (`landslides.geojson`): before its age a slide's scar (where the
+  file gives one) is refilled to the profile and its debris below −3,000 m is
+  the base; after, both are today's. The scars are the file's polygons, not
+  the pali: the Nuʻuanu head lies about 15 km offshore.
+- *The shoreline*: today's sea level, 0 m on the modelled surface.
+- *Smoothing and steps*: what the model knows is coarser than a texel, so a
+  stage is smoothed over about 0.7 km on the islands and their flanks above
+  −2,500 m and about 5 km on the deep floor (where it is today's floor and the
+  model sets nothing), and rounded to 4 m (8 m below −2,500 m), in the pack
+  encoding (0.25 m, −6,000 m). That is what keeps the images under the 12 MB
+  budget. `present` is the seafloor pack itself (`height.file` is
+  `seafloor/height.png`, `method` `survey`).
+
+Each stage's `stats` are read off the encoded image: `landKm2`,
+`landFraction`, `minMetres`, `maxMetres`, and `islands` (each connected piece
+of land over 5 km², the volcanoes whose summits stand on it, its area and its
+highest texel).
+
+**The drift** (`hotspot`): `volcanoes.json`'s hotspot as it gives it (the
+midpoint of Kīlauea's and Kamaʻehuakanaloa's summits, 10 cm a year, azimuth
+305°, which the research derived from the chain's bearings rather than read
+from a source), with `displacement` written out: a stage at age A moves
+A × 100 km toward bearing 125°, `x += 81,915·A` and `z += 57,358·A` metres in
+the shared projection (z grows south). The whole image moves as one.
+
+**What the check covers.** The manifest's shape and the GMRT attribution;
+every image read back: on the seafloor grid, RGB with B = 0, nothing between
+−1 m and 0.2 m, no land on the box's edge, `stats` as the image has them; the
+seafloor's deepest point and five summits at their heights; ages falling in
+order, `method`, `rule`, `confidence`, `sources`; the hotspot inside the box
+with its speed, azimuth and formula; the directory under 12 MB. Then notes,
+not failures, where a stage does not show what it is named for.
+
+**What each stage rests on, and where it falls short of its rule.**
+
+| stage | Ma | rests on | short of the rule |
+| --- | --- | --- | --- |
+| `kauai-alone` | 4.2 | Niʻihau's shield ended (4.3 Ma); Kauaʻi 95% grown (its shield to 4.0), its profile at 2,484 m; Waiʻanae not begun | Kaʻula (4.2–3.8) begins at 4.2 exactly, so is not drawn |
+| `waianae` | 3.0 | Waiʻanae's shield just ended (3.06), 2,352 m; the Kaʻena and Waiʻanae slides fallen; Kauaʻi and Niʻihau sunk by the curve | Koʻolau begins at 3.0 exactly, so is not drawn even barely at the sea |
+| `koolau-whole` | 2.0 | Koʻolau 94% grown (its shield ends at 1.8 in `volcanoes.json`), the Nuʻuanu scar refilled; Penguin Bank complete, West Molokaʻi 87% grown | Penguin Bank, lifted 1.35 km, joins Oʻahu across the Kaiwi channel; the profile is centred on the summit the file gives (Konahuanui), not the Kailua caldera |
+| `koolau-after-nuuanu` | 1.8 | Koʻolau complete, the Nuʻuanu scar open and its field on the floor | Oʻahu, Penguin Bank and West Molokaʻi one island |
+| `maui-nui` | 1.2 | West and East Molokaʻi, Lānaʻi, West Maui and Kahoʻolawe complete, Haleakalā growing: Maui Nui 8,875 km², 2,644 m | Penguin Bank a separate 336 km² island; the whole smaller than Hawaiʻi is now |
+| `maui-nui-parting` | 0.6 | the same sinking, at today's sea level | still one island at 0.6 (in the model Molokaʻi parts between 0.6 and 0.3) |
+| `hawaii-rising` | 0.3 | Kohala, Mauna Kea and Hualālai near their full heights, in today's shapes lowered; Mauna Loa 83% grown, the profile alone; Kīlauea not begun; Māhukona sunk | — |
+| `present` | 0 | the seafloor pack | — |
+
 ## Vessels and crowds, in a district
 
 For a scene on the water with people on the shore (the departure of

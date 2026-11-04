@@ -1863,7 +1863,7 @@ function checkGeology() {
       const [W, H] = sf.size || []
       if (!(Number.isInteger(W) && Number.isInteger(H) && W > 0 && H > 0 && Math.max(W, H) <= 2048)) bad(at, 'seafloor size must be [W, H], at most 2048 on the long side')
       else grid = { W, H }
-      if (!(sf.metresPerTexel > 0)) bad(at, 'seafloor metresPerTexel must be positive')
+      if (![].concat(sf.metresPerTexel).every((v) => v > 0)) bad(at, 'seafloor metresPerTexel must be positive ([mx, mz] as a pack has it, or one number)')
       citeList(`${at} seafloor`, sf.sources)
       if (grid && [w, s, e, n].every(Number.isFinite)) for (const f of lsdoc.features) {
         const out = (f.geometry?.coordinates?.[0] || []).filter(([x, y]) => x < w || x > e || y < s || y > n)

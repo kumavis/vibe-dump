@@ -2465,6 +2465,30 @@ copy of the data was used to see the rule pass, and fail on wrong stats and an o
 - Find Kāʻohe, or drop it from the contract's list.
 - A plate azimuth with a source.
 
+### Bake
+
+`tools/bake-geology.mjs` (DATA.md "How to bake the geology") turns the files above into the seafloor pack and seven
+modelled stages. What the profile fit can and cannot carry:
+
+- The profile is fitted on the seafloor pack to the living shields only: Mauna Loa's south-west and west flanks and
+  Kīlauea's south flank. It gives 5.9° above sea level and 8.3° easing to 1.2° below; both shields carry big slides
+  and slumps (ʻĀlika, Hilina), so the fit is the slope of a shield that has already shed some of its flank. One
+  profile serves every volcano: Kauaʻi's and Koʻolau's own shapes survive only through the stretch by direction,
+  read off today's −2,000 m contour, which is below the erosion but not below the slides.
+- Summits are where `volcanoes.json` puts them (the highest point today), so Koʻolau's profile stands on Konahuanui,
+  not on the Kailua caldera, and no shield is given back the height its summit has lost to erosion: only the valleys
+  are refilled (toward the profile, by (A / shield end)²), and the scars before their slides.
+- The subsidence is a curve fitted to the measured rates (Hawaiʻi 2.6 mm a year, Lānaʻi 0.15; Oʻahu's uplift taken
+  off): about 1.4 km after a shield ends. The stated rule here (2.6 mm a year for 1 Ma, then 0.01) gives 2.6 km and
+  joins Oʻahu to Molokaʻi and Maui Nui; with it the Penguin Bank platform, 50–200 m deep today, would have stood
+  2.5 km high at the end of its shield. One of the two (the rule, or Penguin Bank's undated shield ages) wants
+  revisiting. Even with the fit, Penguin Bank joins Oʻahu across the Kaiwi channel at 2.0 and 1.8 Ma and stands apart
+  from Maui Nui at 1.2 Ma, and Maui Nui is still one island at 0.6 Ma at today's sea level (it parts between 0.6 and
+  0.3 Ma in the model).
+- Kaʻula and Koʻolau begin exactly at the ages of `kauai-alone` and `waianae`, so neither is drawn at those stages.
+- A stage is smoothed over about 0.7 km on the islands and 5 km on the deep floor, and rounded to 4 m (8 m deep); the
+  deep floor of a stage is today's floor, smoothed, except where a debris field is not yet laid.
+
 ## 18. Hōkūleʻa, 1976
 
 The departure for Tahiti on 1 May 1976, drawn as described (DESIGN.md §14), November 2026: a district pack of its own at
