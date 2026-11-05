@@ -894,7 +894,24 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       const mv = moving
       // (F7a: with a climb, what the walk cost)
       const cost = e.path.some((p) => p.climb) ? e.path.reduce((L, p, i) => (i ? L + (p.climb ? ladderMul * Math.abs(p.y - e.path[i - 1].y) : hypot(p.x - e.path[i - 1].x, p.z - e.path[i - 1].z)) : 0), 0) : e.L
-      if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
+      // ((F9b) a long hull's line prints its plan's cost, its turning and
+      // backing in (DESIGN §4.2.5's paths), and its walk's L is the path's
+      // inches plus 0.5" a pivot, the view's timing: so its line's inches lie
+      // between the path's cost on open ground (each run's inches, a backing
+      // run's times the footprint's rev, and turn a 45° pivot) and twice it,
+      // difficult ground or a plough doubling a step)
+      const fp = unitOf(e.u)?.t.fp
+      if (fp && e.path[0]?.f !== undefined) {
+        const D = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
+        let lo = 0
+        for (let i = 1; i < e.path.length; i++) {
+          const a = e.path[i - 1], b = e.path[i], d = hypot(b.x - a.x, b.z - a.z)
+          if (!d) lo += a.f !== b.f ? fp.turn : 0
+          else lo += (b.x - a.x) * D[b.f][0] + (b.z - a.z) * D[b.f][1] < 0 ? d * fp.rev : d
+        }
+        const len = Number(mv?.len)
+        if (mv && (nameOf(e.u) !== mv.name || !(len >= lo - 0.05 && len <= 2 * lo + 0.05))) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, its path's cost ${lo.toFixed(2)}" on open ground, ${e.L.toFixed(1)}" its timing)`
+      } else if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
       const stomp = !!mv && !!unitOf(e.u)?.t.wrecker && e.L > 0.1
       if (mv && e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (a move) has stomp ${e.stomp}, not ${stomp}`
       // flying exactly when its unit flies; a move's pace, or a charge's
