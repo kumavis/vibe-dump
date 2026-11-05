@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advogato Flow — a maximum-flow trust metric, step by step</title>
+    <meta
+      name="description"
+      content="An interactive explainer and simulator of Advogato's maximum-flow certification metric: trusted seeds, capacity schedules, node splitting, augmenting paths, and why a cluster of fake accounts cannot buy admission slots."
+    />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='8' cy='16' r='5' fill='%232f7d5b'/%3E%3Ccircle cx='24' cy='8' r='4' fill='%231f2328'/%3E%3Ccircle cx='24' cy='24' r='4' fill='%23b5651d'/%3E%3Cpath d='M12 14 L20 9 M12 18 L20 23' stroke='%231f2328' stroke-width='2'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="top__text">
+        <h1>Advogato Flow</h1>
+        <p class="lede">
+          Advogato admitted an account when one unit of <em>integer network flow</em> could reach it from a few
+          trusted seeds, through a web of certifications whose capacity shrinks with distance. Draw a graph, pick
+          seeds, edit the schedule, and step through the computation — the explanation on the right always describes
+          the state you are looking at.
+        </p>
+      </div>
+      <nav class="sources" aria-label="Reference implementation and papers">
+        <span>Built from</span>
+        <a href="https://github.com/steevithak/mod_virgule/blob/Raph/tmetric.c" target="_blank" rel="noopener">tmetric.c</a>
+        <a href="https://github.com/steevithak/mod_virgule/blob/Raph/net_flow.c" target="_blank" rel="noopener">net_flow.c</a>
+        <a href="https://www.areto.ethz.ch/CDstore/www2003/papers/refereed/p446/p446-kamvar/" target="_blank" rel="noopener">EigenTrust (2003)</a>
+        <a href="https://www.squarefree.com/2005/05/26/advogato/" target="_blank" rel="noopener">Ruderman's attack (2005)</a>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section class="stage" aria-label="Graph">
+        <div class="toolbar">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-view="social" class="on">Social graph</button>
+            <button type="button" data-view="flow">Flow network</button>
+          </div>
+          <div class="seg" role="group" aria-label="Editing mode">
+            <button type="button" data-mode="move" class="on" title="Drag accounts; click to inspect">Move</button>
+            <button type="button" data-mode="add" title="Click an empty spot to add an account">Add account</button>
+            <button type="button" data-mode="cert" title="Click the certifier, then the account being certified">Certify</button>
+            <button type="button" data-mode="delete" title="Click an account or certification to delete it">Delete</button>
+          </div>
+          <label class="inline">
+            <span>New cert level</span>
+            <select id="new-level" aria-label="Level for new certifications">
+              <option value="1">Apprentice</option>
+              <option value="2" selected>Journeyer</option>
+              <option value="3">Master</option>
+            </select>
+          </label>
+          <label class="inline grow">
+            <span>Scenario</span>
+            <select id="scenario" aria-label="Guided scenario"></select>
+          </label>
+        </div>
+        <p class="hint" id="hint" aria-live="polite"></p>
+        <div class="canvas-wrap">
+          <svg id="graph" viewBox="0 0 960 600" role="img" aria-labelledby="graph-title graph-desc">
+            <title id="graph-title">Certification graph</title>
+            <desc id="graph-desc">Accounts and the directed certifications between them.</desc>
+          </svg>
+        </div>
+        <div class="legend" aria-label="Legend">
+          <span class="lg lg-accepted"><i></i> accepted ✓</span>
+          <span class="lg lg-rejected"><i></i> reachable, rejected ✕</span>
+          <span class="lg lg-unreachable"><i></i> unreachable –</span>
+          <span class="lg lg-seed"><i></i> seed</span>
+          <span class="lg lg-edge"><svg viewBox="0 0 44 10" width="44" height="10"><line x1="1" y1="5" x2="40" y2="5" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2 5"/></svg> Apprentice</span>
+          <span class="lg lg-edge"><svg viewBox="0 0 44 10" width="44" height="10"><line x1="1" y1="5" x2="40" y2="5" stroke="currentColor" stroke-width="1.6" stroke-dasharray="9 6"/></svg> Journeyer</span>
+          <span class="lg lg-edge"><svg viewBox="0 0 44 10" width="44" height="10"><line x1="1" y1="5" x2="40" y2="5" stroke="currentColor" stroke-width="1.6"/></svg> Master</span>
+          <span class="lg lg-flow"><i></i> carries flow</span>
+          <span class="lg">under a node: <code>d</code> distance · <code>c</code> capacity · <code>consumed+forwarded</code></span>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card" aria-labelledby="h-step">
+          <div class="card__head">
+            <h2 id="h-step">Computation</h2>
+            <span class="progress" id="progress"></span>
+          </div>
+          <div class="stepper">
+            <button type="button" id="btn-reset" title="Back to the graph as drawn">Reset</button>
+            <button type="button" id="btn-back" title="Previous step">◀ Back</button>
+            <button type="button" id="btn-next" class="primary" title="Next step">Step ▶</button>
+            <button type="button" id="btn-run" title="Run to the end">Run</button>
+          </div>
+          <h3 class="phase" id="phase"></h3>
+          <div class="explain" id="explain" aria-live="polite"></div>
+        </section>
+
+        <section class="card" aria-labelledby="h-settings">
+          <h2 id="h-settings">Settings</h2>
+          <fieldset class="threshold">
+            <legend>Certification threshold</legend>
+            <label><input type="radio" name="threshold" value="1" /> Apprentice</label>
+            <label><input type="radio" name="threshold" value="2" checked /> Journeyer</label>
+            <label><input type="radio" name="threshold" value="3" /> Master</label>
+          </fieldset>
+          <div class="schedule">
+            <div class="schedule__head">
+              <span>Capacity by distance from the source</span>
+              <span class="schedule__btns">
+                <button type="button" id="caps-less" title="Drop the last entry">−</button>
+                <button type="button" id="caps-more" title="Add an entry">+</button>
+              </span>
+            </div>
+            <div id="schedule" class="schedule__row"></div>
+            <p class="fine">Distance 0 is the synthetic source, distance 1 the seeds. Beyond the last entry the last value persists, as in <code>net_flow_assign_capacities</code>. Entries are whole numbers ≥ 1.</p>
+          </div>
+          <label class="check"><input type="checkbox" id="animate" checked /> Animate each augmenting path</label>
+        </section>
+
+        <section class="card" aria-labelledby="h-scenario">
+          <h2 id="h-scenario">Scenario</h2>
+          <p class="lesson" id="scenario-lesson"></p>
+          <p class="intro" id="scenario-intro"></p>
+          <div class="actions" id="scenario-actions"></div>
+          <div class="notes" id="scenario-notes" aria-live="polite"></div>
+        </section>
+
+        <section class="card" aria-labelledby="h-inspect">
+          <h2 id="h-inspect">Inspector</h2>
+          <div id="inspector" class="inspector"></div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="wide card" aria-labelledby="h-results">
+      <div class="card__head">
+        <h2 id="h-results">Every account at every threshold</h2>
+        <span class="verify" id="verify"></span>
+      </div>
+      <div class="table-wrap">
+        <table id="results">
+          <thead>
+            <tr>
+              <th scope="col">Account</th>
+              <th scope="col">Seed</th>
+              <th scope="col" class="thr">Distance</th>
+              <th scope="col" class="thr">Capacity c(v)</th>
+              <th scope="col" class="thr">Consumed</th>
+              <th scope="col" class="thr">Forwarded</th>
+              <th scope="col" class="thr">Result</th>
+              <th scope="col">Apprentice</th>
+              <th scope="col">Journeyer</th>
+              <th scope="col">Master</th>
+              <th scope="col">Reported level</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="fine">Distance, capacity, consumed and forwarded are for the selected threshold. "Reported level" is the highest threshold at which the account was accepted, which is what <code>tmetric_run</code> records: it runs the metric once per level and overwrites the level upward.</p>
+    </section>
+
+    <details class="wide card" id="how">
+      <summary><h2>How the computation works</h2></summary>
+      <ol class="how">
+        <li>
+          <b>Choose a certification threshold</b> — Apprentice, Journeyer or Master. Keep only the certifications at that
+          level or higher. In <code>tmetric_run</code> a certification at level <i>L</i> is added to the flow graphs of
+          every level 1 … <i>L</i>, so the Master graph is a subgraph of the Journeyer graph, which is a subgraph of the
+          Apprentice graph.
+        </li>
+        <li>
+          <b>Connect a synthetic source</b> — a node named <code>-</code>, created first so it has index 0 — to every
+          trusted seed. The reference treats it like any other node: it is at distance 0, it gets <code>caps[0]</code>,
+          and one of those units is spent on its own sink edge, so at most <code>caps[0] − 1</code> real accounts can
+          ever be accepted.
+        </li>
+        <li>
+          <b>Breadth-first search</b> from the source assigns every reachable node a distance <i>d</i> and a capacity
+          <i>c</i>(<i>v</i>) = <code>caps[d]</code>; past the end of the schedule the last entry persists. A node with
+          no certification path from a seed is never reached, keeps capacity −1, and receives no trust at all.
+        </li>
+        <li>
+          <b>Split every node</b> <i>v</i> into <i>v</i><sub>in</sub> and <i>v</i><sub>out</sub>, and add three kinds
+          of edge: <i>v</i><sub>in</sub> → <i>v</i><sub>out</sub> with capacity <i>c</i>(<i>v</i>) − 1;
+          <i>v</i><sub>in</sub> → shared sink with capacity 1; and, for every certification <i>u</i> → <i>v</i>,
+          <i>u</i><sub>out</sub> → <i>v</i><sub>in</sub> with no capacity limit. The one unit a node may send to the
+          sink is the unit that admits it; the other <i>c</i>(<i>v</i>) − 1 units are all it can ever forward. In
+          <code>net_flow_max_flow</code> this is the <code>TWEAK</code>: <code>capacity[i]--</code> plus a per-node
+          <code>node_sink ∈ {0, 1}</code>.
+        </li>
+        <li>
+          <b>Compute an integer maximum flow</b> from the source to the shared sink. The reference finds augmenting
+          paths by breadth-first search over the residual graph (<code>net_flow_augment</code>): forward along
+          certifications, through a node if it still has forwarding capacity, and <em>backwards</em> along any edge
+          that already carries flow, which is how a unit gets re-routed to make room for another. The first in-node the
+          search reaches whose sink edge is empty gets the next unit.
+        </li>
+        <li>
+          <b>Accept</b> every account whose sink edge carries one unit. Every accepted account consumed exactly one
+          unit; every unit that reached the sink admitted exactly one account. The total flow is the number of accepted
+          accounts, counting the source.
+        </li>
+        <li>
+          <b>Repeat for each threshold</b> and report, for every account, the highest level at which it was accepted.
+          The three runs are independent maximum flows, so an account can in principle be accepted at Master and lose a
+          tie at Journeyer; the reference still reports Master, because it overwrites the level upward.
+        </li>
+      </ol>
+    </details>
+
+    <details class="wide card" id="choices">
+      <summary><h2>Modeling choices and simplifications</h2></summary>
+      <ul class="prose">
+        <li>
+          <b>Kept from the reference:</b> the synthetic source as node 0 with its own reserved unit; capacity indexed by
+          BFS distance with the last schedule entry persisting; the in/out split with <i>c</i>(<i>v</i>) − 1 on the
+          through-edge and 1 on the sink edge; breadth-first augmenting paths visited in the same order as
+          <code>net_flow_augment</code>; the per-level run with the highest accepting level reported; dropping
+          self-certifications the way <code>net_flow_init_graph</code> drops self-edges.
+        </li>
+        <li>
+          <b>Simplified:</b> the reference first builds a greedy tree (<code>net_flow_assign_tree</code>) and starts the
+          flow from it before augmenting; this simulator starts from zero flow. The maximum flow <em>value</em> is the
+          same either way. What can differ is which of several equally valid accepted sets comes out, because a
+          maximum flow is not unique — and no tie-break is a trust judgement. Likewise, the order in which accounts and
+          certifications were created is the traversal order here (the reference reads accounts from a directory), so
+          identical inputs always give identical results, but the particular winners of a tie are an artefact of order.
+        </li>
+        <li>
+          <b>Schedule entries must be ≥ 1.</b> The reference reads its schedule up to the first zero, so a zero cannot
+          appear inside it; a capacity of 1 is "may be accepted, forwards nothing".
+        </li>
+        <li>
+          <b>Labels are not inputs.</b> Scenario accounts marked "fake", "bad" or "confused" are drawn that way for the
+          reader. The metric sees only accounts, certifications and seeds, and never which accounts are malicious.
+        </li>
+        <li>
+          <b>Out of scope:</b> Advogato's separate diary-rating system, which ranked diary entries with a different
+          computation, is not modelled here. Neither is the reference's duplicate-edge handling (a profile holds one
+          certification per subject, and the editor here does the same).
+        </li>
+      </ul>
+    </details>
+
+    <details class="wide card" id="eigen">
+      <summary><h2>Compared with EigenTrust</h2></summary>
+      <div class="compare">
+        <table class="cmp">
+          <thead>
+            <tr><th scope="col"></th><th scope="col">Advogato (Levien)</th><th scope="col">EigenTrust (Kamvar, Schlosser, Garcia-Molina)</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Output</th><td>An integer <b>admission set</b>: each account is in or out, once per level.</td><td>A continuous <b>reputation vector</b> <i>t</i> summing to 1; accounts are ranked.</td></tr>
+            <tr><th scope="row">Mechanism</th><td>Maximum flow through capacities that fall with distance from the seeds.</td><td>Power iteration of normalised local trust, mixed with pre-trusted peers.</td></tr>
+            <tr><th scope="row">Formula</th><td>Accept <i>v</i> iff the sink edge of <i>v</i><sub>in</sub> carries 1 unit in a max flow.</td><td class="formula"><i>t</i><sub>next</sub> = (1 − α) <i>C</i><sup>⊤</sup> <i>t</i> + α <i>p</i></td></tr>
+            <tr><th scope="row">Role of the seeds</th><td>The source feeds them; capacity is a function of distance from them.</td><td>The pre-trust vector <i>p</i>, uniform over the seeds; a peer that trusts nobody defers to <i>p</i>.</td></tr>
+            <tr><th scope="row">What a cluster of fakes gets</th><td>At most the units that cross the cut into the cluster — a count.</td><td>The share of score that flows in, redistributed among its members — a fraction.</td></tr>
+          </tbody>
+        </table>
+        <div class="eigen-live">
+          <div class="card__head">
+            <h3>Same graph, same threshold, same seeds as pre-trusted peers</h3>
+            <label class="inline"><span>α</span> <input type="number" id="alpha" min="0.01" max="0.99" step="0.05" value="0.15" /></label>
+          </div>
+          <table id="eigen-table">
+            <thead><tr><th scope="col">Account</th><th scope="col">EigenTrust score</th><th scope="col">Advogato result</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p class="fine">
+            Here every certification at or above the threshold is a local trust value of 1, normalised per certifier.
+            α is left open in the paper; 0.15 is this page's default. Advogato's diary-rating system is a different
+            computation and is outside this simulator's scope.
+          </p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wide card" id="sources">
+      <summary><h2>Sources</h2></summary>
+      <ul class="prose">
+        <li><a href="https://github.com/steevithak/mod_virgule/blob/Raph/tmetric.c" target="_blank" rel="noopener">tmetric.c</a> — mod_virgule's certification graph and per-level runs: the source node <code>-</code>, seeds, thresholds, and the highest-level report.</li>
+        <li><a href="https://github.com/steevithak/mod_virgule/blob/Raph/net_flow.c" target="_blank" rel="noopener">net_flow.c</a> — capacity assignment by breadth-first search, the in/out split (<code>TWEAK</code>), and the augmenting-path maximum flow.</li>
+        <li><a href="https://www.areto.ethz.ch/CDstore/www2003/papers/refereed/p446/p446-kamvar/" target="_blank" rel="noopener">The EigenTrust Algorithm for Reputation Management in P2P Networks</a> — Kamvar, Schlosser and Garcia-Molina, WWW 2003.</li>
+        <li><a href="https://www.squarefree.com/2005/05/26/advogato/" target="_blank" rel="noopener">Jesse Ruderman, "Advogato's trust metric is not attack-resistant" (2005)</a> — the distance-shortening attack behind the fourth scenario.</li>
+        <li><a href="https://github.com/steevithak/mod_virgule/tree/Raph" target="_blank" rel="noopener">mod_virgule (Raph branch)</a> — the whole Advogato code base, GPL.</li>
+      </ul>
+    </details>
+
+    <footer class="foot">
+      <p>Everything on this page runs in your browser. Positions are yours; the arithmetic is the reference's.</p>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

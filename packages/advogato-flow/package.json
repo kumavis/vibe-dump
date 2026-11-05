@@ -1,0 +1,25 @@
+{
+  "name": "@vibe-dump/advogato-flow",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test test/*.test.mjs"
+  },
+  "gallery": {
+    "title": "Advogato Flow",
+    "description": "An interactive explainer and simulator of Advogato's maximum-flow trust metric: draw a certification graph, pick seeds and a capacity schedule, step through the flow, and see why a cluster of fake accounts can't buy admission slots.",
+    "tags": [
+      "simulation",
+      "tutorial",
+      "tool"
+    ],
+    "status": "done",
+    "models": [
+      "Fable 5.1"
+    ],
+    "thinking": "high"
+  }
+}
