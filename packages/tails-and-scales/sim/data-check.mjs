@@ -1887,9 +1887,12 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
   check(isDeepStrictEqual(how?.transport, { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, wreck: { hx: 1.2, hy: 0.7, hz: 2.9 }, deckAt: [0, 0] }) && Object.isFrozen(how.transport.deckAt), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 3, deck 1.6\" at deckAt [0, 0], a wreck 2.4 × 1.4 × 5.8\" along its facing), copied and frozen", JSON.stringify(how?.transport))
   const w = how?.ranged, m = how?.melee
   check(w?.name === 'Venom lobber' && w.range === 18 && w.shots === 1 && w.blast === 1.6 && w.S === 5 && w.AP === 1 && w.D === 1 && w.fx === 'spit' && m?.name === 'Coil crush' && m.S === 6 && m.AP === 1 && m.D === 2, "its weapons are DESIGN's: a Venom lobber 18\", 1 shot, a 1.6\" blast, S5 AP1 D1, its look 'spit'; Coil crush S6 AP1 D2", JSON.stringify({ ranged: w, melee: m }))
-  check(how?.cost === 5, `its cost is the 5 army-sim's fit gave it at Field (${how?.cost}: the floor, its fitted worth −13 ± 8 pooled over seeds 1111-3333), a whole multiple of 5 (DESIGN §4.2.5's data)`)
+  // ((F9b's sweep) 20, not the fit's floor of 5: at 5 the Coil's lists took
+  // it all but free and Field's score gate failed, 44.9% on open; at 20 both
+  // score gates pass on seeds 1111 and 4444, the Howdah inside its band)
+  check(how?.cost === 20, `its cost is the 20 army-sim's Field gates gave it (${how?.cost}: its fitted worth −13 ± 8 pooled over seeds 1111-3333 at a trial 50, but at the floor, 5, the Field score gate failed on open, 44.9%; at 20 both score gates pass on 1111 and 4444, the Howdah fitted −13 ± 17 and −4 ± 15), a whole multiple of 5 (DESIGN §4.2.5's data)`)
   const grand = MISSIONS.grand.list.prices?.serpent?.howdah, powder = MISSIONS.powder.list.prices?.serpent?.howdah
-  check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is its Field cost, the War-Cart's test at Grand turned the other way (the floor: at its Field price the Coil already scores under its band, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
+  check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is the floor, 5, below its Field cost (${how?.cost}): the War-Cart's test at Grand turned the other way (the floor: at the Field price it then had, 5, the Coil already scored under its band at Grand, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
   const deckFire = (how?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
   check(how?.abilities?.length > 0 && !deckFire.length, `its card text (${how?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
   check(RACES.serpent.roster.at(-1) === 'howdah' && Object.values(RACES).every((r) => Object.values(r.armies).every((list) => !(Number(list[r.roster.indexOf('howdah')] ?? 0) > 0))), "the Howdah is the Coil's roster's last entry, appended, and no preset fields one (so no corpus battle holds a Howdah: its lists are presets or recorded counts of today's units)")
@@ -2075,7 +2078,7 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
     ["the head disc's r (0.95 → 1.0)", () => howId((u) => (u.footprint.discs[0][2] = 1))],
     ["the tail disc's r (0.95 → 0.9)", () => howId((u) => (u.footprint.discs[2][2] = 0.9))],
     ["the deck's place (deckAt [0, 0] → [0, 0.5])", () => howId((u) => (u.transport.deckAt = [0, 0.5]))],
-    ["the Howdah's cost (5 → 10)", () => howId((u) => (u.cost = 10))],
+    ["the Howdah's cost (20 → 25)", () => howId((u) => (u.cost = 25))],
     ["the Howdah's Grand price (5 → 10)", () => rulesId({ missions: { ...MISSIONS, grand: { ...MISSIONS.grand, list: { ...MISSIONS.grand.list, prices: { ...MISSIONS.grand.list.prices, serpent: { ...MISSIONS.grand.list.prices.serpent, howdah: 10 } } } } } })],
   ]) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
   check(howId((u) => (u.abilities = ['A howdah.'])) === RULES_ID && howId((u) => (u.name = 'Shell Howdah')) === RULES_ID && howId(() => {}) === RULES_ID, "RULES_ID stays on the Howdah's card text, its name, and an unchanged copy (the control)")

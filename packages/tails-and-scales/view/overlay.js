@@ -478,7 +478,11 @@ export class Overlay {
       for (const l of this.fPaths ?? []) l.visible = false
       for (const k of Object.values(this.knobs ?? {})) k.visible = false
       for (const g of this.hullRings ?? []) g.visible = false
-      for (const t of this.fTicks ?? []) t.visible = false
+      // ((F9b's sweep) a path with no pivot leaves its slot empty, ticks()
+      // making no mesh for it, so the slots are tested: input-check's group
+      // lane threw here, "Cannot set properties of undefined", and the
+      // group never finished sending)
+      for (const t of this.fTicks ?? []) if (t) t.visible = false
       for (const k of this.rotKnobs ?? []) k.visible = false
       return
     }

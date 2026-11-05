@@ -124,7 +124,12 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     // runs each, at a load under 1.2 on 4 CPUs); with the budget 442-466 ms
     // and 407-457, the p90 35-51 and 32-38, every row inside it (1.45× at
     // the most), and the ×3 presets' battles 255-275 ms against 333-395
-    // without. A lattice of 3 cells, the fast units' own: at 4 (2") the
+    // without. ((F9b's sweep) Those rows were taken before the long hull's
+    // anti-bunching tuning; on F9b's final code, six runs at a load of
+    // 0.1-1.4, the open cap battles took 466-722 ms, three runs over 1.5×
+    // (546, 530 and 722, the last with the box slow), the fortified
+    // 412-497, the p90 41-50 and 37-40: still over BUDGET, a ROADMAP
+    // item.) A lattice of 3 cells, the fast units' own: at 4 (2") the
     // rows came no lower within the noise (468-521 and 367-522 ms), and the
     // Howdahs moved in 88% of their movement phases, under the play-report's
     // F9b row (91% at 3, on the same 64 battles).)
@@ -151,7 +156,8 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // 1111) and the fit put it at 103 ± 39; at 150 the points bind their
       // lists again (612 of 1,000), open is 47.2%, fortified 57.2%, and
       // every unit sits inside its band, the cart 112 ± 30.)
-      // ((F9b) The Howdah at 5 here, as at Field, by the cart's own test
+      // ((F9b) The Howdah at 5 here (its Field cost 5 when this was played;
+      // 20 since F9b's sweep, data/races/serpent.js), by the cart's own test
       // turned the other way: played at its Field price (sim/army-sim.mjs
       // --check, seed 1111) the Coil scored 40.3% open and 35.4% fortified
       // (the Bushtails 59.7% and 64.6%; 47.4% and 52.0% before the Howdah)
@@ -233,7 +239,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // walk sets a keg off as any wrecker's (F19a), and a hull never climbs a
   // wreck's deck (no vehicle climbs). The ×3 presets field none, so the
   // powder/ corpus, preset against preset, is the same battle either way.
-  // (F9b) The same for the Howdah, at Grand's price, its Field 5.)
+  // (F9b) The same for the Howdah, at Grand's price, 5, its Field 20.)
   powder: {
     board: { W: 80, H: 56 },
     deploy: 14,

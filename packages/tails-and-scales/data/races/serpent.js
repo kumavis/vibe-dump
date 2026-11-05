@@ -85,16 +85,25 @@ export default {
       name: 'Shell-Back Howdah', short: 'Howdah', role: 'Vehicle', ai: 'transport', models: 1, base: 1.25, pts: 140,
       // (F9b, fitted at Field by sim/army-sim.mjs, §4.2.8.2: seeds 1111,
       // 2222 and 3333 at a trial 50, −3 ± 13, −27 ± 18 and −16 ± 14 points,
-      // −13 ± 8 pooled, so the floor, 5. As the AI plays it the Howdah is
-      // worth about nothing: its riders, kept from shooting until they step
-      // off (no firing deck before F9c: core/actions/transport.js
-      // fireSlots), ride at M6, barely ahead of their own feet, and it
-      // fights and shoots little for itself. Judged on 4444 at 5: the
-      // score 50.2% open and 54.1% fortified, the Howdah 37 ± 27. Its
-      // price at Field; at Grand data/mission.js's `prices` keep it at 5
-      // (the War-Cart's test there turned the other way). F9c's firing
-      // deck re-fits it, as it does the War-Cart.)
-      cost: 5,
+      // −13 ± 8 pooled, so first the floor, 5. As the AI plays it the
+      // Howdah is worth little for itself: its riders, kept from shooting
+      // until they step off (no firing deck before F9c:
+      // core/actions/transport.js fireSlots), ride at M6, and it fights and
+      // shoots little. ((F9b's sweep) But once the AI drove it forward (its
+      // anti-bunching by its body disc, core/ai/score.js), at 5 the Coil's
+      // lists took it all but free, the points binding only 676 of 1,000 of
+      // them, and the Field score gate failed: the Bushtails 44.9% ± 1.6
+      // on open (its band 5), 45.1% fortified, seed 1111. Priced 20, the
+      // points bind 834 of 1,000 again and both seeds pass both score
+      // gates: 47.4% and 47.7% on 1111, 47.4% and 49.7% on 4444, the
+      // Howdah itself fitted −13 ± 17 and −4 ± 15, inside its band (at 25:
+      // 49.6% and 49.7% on 1111, 48.4% and 52.0% on 4444, the Howdah
+      // −5 ± 15 there, outside its band of 30; at 50, 52.1% and 54.7%,
+      // the Howdah 17 ± 13 against its 50). Its price at Field; at Grand
+      // data/mission.js's `prices` keep it at 5 (the War-Cart's test there
+      // turned the other way). F9c's firing deck re-fits it, as it does
+      // the War-Cart.)
+      cost: 20,
       stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
       transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
