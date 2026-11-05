@@ -112,6 +112,23 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     deploy: 14,
     rounds: 7,
     army: 'grand',
+    // ((F9b) DESIGN §4.2.2's AI count budget, rules data and never a clock
+    // (core/ai/score.js budgetOf): the AI's move scan samples its plan on a
+    // lattice of `lattice` cells at least (1.5", not 1"), scores only the
+    // `targets` nearest enemies (by gap, ties in G.units order), and a long
+    // hull weighs only its nearest chargeable target. Its trigger was met
+    // at F9b: on scale-bench's cap lists with two hulls a side (the Coil's
+    // two Howdahs) a battle took 617-792 ms on open and 535-574 fortified
+    // (1.53-2.26× its 350 ms), a movement phase's p90 57-64 ms on open and
+    // 41-56 fortified (1.18-1.83× its 35), past the bench's 1.5× line (three
+    // runs each, at a load under 1.2 on 4 CPUs); with the budget 442-466 ms
+    // and 407-457, the p90 35-51 and 32-38, every row inside it (1.45× at
+    // the most), and the ×3 presets' battles 255-275 ms against 333-395
+    // without. A lattice of 3 cells, the fast units' own: at 4 (2") the
+    // rows came no lower within the noise (468-521 and 367-522 ms), and the
+    // Howdahs moved in 88% of their movement phases, under the play-report's
+    // F9b row (91% at 3, on the same 64 battles).)
+    ai: { lattice: 3, targets: 6 },
     // 1,500 points, one to three heroes, at least 3 Troops units, at most 7
     // of any one unit (the ×3 presets cost 1,350 and 1,485 at its prices);
     // (F9a) at most two vehicles
@@ -222,6 +239,12 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     deploy: 14,
     rounds: 7,
     army: 'grand',
+    // ((F9b) and Grand's AI count budget: its cap lists with two Howdahs
+    // took 644 ms a battle, a movement phase's p90 64 ms (1.84× each; the
+    // base commit's, with no Howdah, 505 and 54), and with the budget 509
+    // and 48 (1.45× and 1.36×; scale-bench's row run on this mission, one
+    // run, a load under 1.2))
+    ai: { lattice: 3, targets: 6 },
     list: {
       size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
       roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
@@ -263,6 +286,14 @@ export function checkMission(name, m) {
   if (!Array.isArray(m.sets) || !m.sets.length || !m.sets.every((s) => typeof s === 'string' && s in SETS)) bad(`its sets ${JSON.stringify(m.sets)} aren't terrain sets (there are ${Object.keys(SETS).join(', ')})`)
   if (typeof m.army !== 'string' || !m.army) bad('its army has no name')
   checkListRules(m.list, bad)
+  // ((F9b) the AI count budget, when given (DESIGN §4.2.2): the move scan's
+  // lattice in cells, 1-8, and the enemies scored, whole numbers from 1)
+  if (m.ai !== undefined) {
+    const ai = m.ai, whole = (n, lo, hi) => Number.isInteger(n) && n >= lo && n <= hi
+    if (!record(ai) || Object.keys(ai).sort().join() !== 'lattice,targets') bad(`its AI count budget is ${JSON.stringify(ai)}, not { lattice, targets }`)
+    if (!whole(ai.lattice, 1, 8)) bad(`its AI count budget's lattice is ${JSON.stringify(ai.lattice)}, not a whole number of cells from 1 to 8`)
+    if (!whole(ai.targets, 1, Infinity)) bad(`its AI count budget's targets is ${JSON.stringify(ai.targets)}, not a whole number above 0`)
+  }
   if (!Array.isArray(m.objectives) || !m.objectives.length) bad('it has no objectives')
   for (const o of m.objectives) {
     const at = `the objective at (${o.x}, ${o.z})`

@@ -124,8 +124,11 @@ export const RULES_ID = rulesId()
 // hullReach: forward, reverse and pivots where the sweep is clear) and
 // every rule measuring a footprint unit by its nearest disc, and the AI's
 // room term and charge prefilter (rule 10); each a branch only a footprint
-// unit (or a unit beside one) reaches, so every earlier battle plays as it
-// did; RULES_ID moves with the Howdah (appended to the Coil's roster, its
-// Grand and Powder prices), the footprint field and the transport's
-// `deckAt`)
+// unit (or a unit beside one) reaches; and the AI count budget (DESIGN
+// §4.2.2: a mission's `ai`, { lattice, targets }, on Grand and the Powder
+// Field, its trigger met by the long hulls), the move scan's lattice and
+// the enemies scored cut down there, so those two missions' battles play
+// otherwise and every other battle as it did; RULES_ID moves with the
+// Howdah (appended to the Coil's roster, its Grand and Powder prices), the
+// footprint field, the transport's `deckAt` and the missions' `ai`)
 export const CORE_VERSION = 15

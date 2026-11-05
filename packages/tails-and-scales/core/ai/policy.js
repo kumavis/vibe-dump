@@ -47,7 +47,7 @@ import {
 import { hold } from '../actions/move.js'
 import { chargeReach } from '../actions/charge.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding } from './score.js'
+import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports
@@ -316,7 +316,9 @@ export function spellFor(G, u, tg) {
 // (chargeReach: its body disc's reach, a lower bound on its lattice, finds
 // a cell near enough to it within 12"), its lattice planned only then: a
 // target it skips is one no roll could reach, which the odds below would
-// pass over anyway.)
+// pass over anyway.) ((F9b, DESIGN §4.2.2's AI count budget) On a mission
+// with one, a long hull weighs only the nearest of the targets past its
+// prefilter, by gap: core/ai/score.js nearestOf.)
 function* aiCharge(G, side, mask) {
   const mine = G.units.filter((u) => u.side === side && canCharge(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
@@ -326,7 +328,8 @@ function* aiCharge(G, side, mask) {
     const role = roleOf(G, u)
     let best = null, bs = 0
     const near = u.t.fp ? chargeReach(G, u) : null
-    for (const e of chargeTargets(G, u)) {
+    const tgs = near && budgetOf(G) ? nearestOf(G, u, chargeTargets(G, u).filter((e) => near(e)), 1) : chargeTargets(G, u)
+    for (const e of tgs) {
       if (near && !near(e)) continue
       const plan = chargePlan(G, u, e)
       if (!plan) continue

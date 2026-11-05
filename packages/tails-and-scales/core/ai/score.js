@@ -18,6 +18,7 @@ import { clearOf } from '../footprint.js'
 import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
+import { MISSIONS } from '../../data/mission.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -423,6 +424,10 @@ export function scanBox(nav, x, z, reach) {
 // the memo's bits) scores ROOM less, at the cell's best heading (cellBest's,
 // the move's default where it is a valid end) or, staying put, where it
 // stands and faces, so it keeps out of the pockets it couldn't leave.
+//
+// (F9b, DESIGN §4.2.2's AI count budget; rule 10: it bumps with F9b) On a
+// mission with `ai` (Grand and the Powder Field), the lattice's step is
+// its `lattice` cells at least, the unit's own step where that is coarser.
 export const ROOM = 1.5
 export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const { nav } = G
@@ -430,7 +435,8 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const fp = plan.fp, roomOf = fp ? (c, h) => (nav.hullRoom(c, h, fp, latticeMode(plan.mode)) ? 0 : -ROOM) : null
   // stay put is always an option
   let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false) + (fp ? roomOf(nav.index(u.pos.x, u.pos.z), u.facing) : 0), dist: 0, ...ctx.last }
-  const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
+  const B = budgetOf(G)
+  const step = B ? Math.max(B.lattice, u.t.M > 8 ? 3 : 2) : u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
   const res = fp ? plan.cells : plan.res
   const box = scanBox(nav, plan.res.sx, plan.res.sz, plan.max)
   for (let iz = Math.ceil(box.z0 / step) * step; iz <= box.z1; iz += step) {
@@ -461,8 +467,11 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
 // what a template on each would do to the manned platforms (fallGain).
 // (F9a) `role`
 // is the role the unit plays as (bestSpot's: a hull's by its riders).
+// ((F9b) On a mission with an AI count budget, only its `targets` nearest
+// enemies: nearestOf.)
 function scoring(G, u, claimed, role) {
-  const enemies = enemiesOf(G, u)
+  const B = budgetOf(G)
+  const enemies = B ? nearestOf(G, u, enemiesOf(G, u), B.targets) : enemiesOf(G, u)
   const friends = friendsOf(G, u)
   const owners = G.objectives.map((o) => controlOf(G, o))
   const w = u.t.ranged, shoots = !!w && role !== 'melee'
@@ -475,6 +484,22 @@ function scoring(G, u, claimed, role) {
     fall: plats.length ? fallGain(G, u, e, w, plats) : 0,
   }]))
   return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
+}
+
+// (F9b) A mission's AI count budget (DESIGN §4.2.2: `ai`, { lattice,
+// targets }, rules data that RULES_ID hashes with the mission), or null
+export const budgetOf = (G) => MISSIONS[G.setup.mission ?? 'classic']?.ai ?? null
+
+// (F9b) The `k` of `enemies` nearest `u` by gap (the rules' edge gap: a
+// long hull's nearest disc, fpGap), ties to the earlier in the list (G.units
+// order, as enemiesOf gives them), kept in the list's order; the list
+// itself when it holds k or fewer. No draw.
+export function nearestOf(G, u, enemies, k) {
+  if (enemies.length <= k) return enemies
+  const by = enemies.map((e, i) => ({ g: gap(u, e), i }))
+  by.sort((a, b) => a.g - b.g || a.i - b.i)
+  const keep = new Set(by.slice(0, k).map((x) => x.i))
+  return enemies.filter((e, i) => keep.has(i))
 }
 
 // (F9a) Where rider `u` steps off to, of `cells` (its landing cells, in

@@ -6,16 +6,23 @@
 // themselves, never the rules they call.
 
 // bestSpot over the whole board's lattice (core/ai/score.js before S0),
-// scoring as it did before S1 (refScore, below)
-export function fullBestSpot(M, R, G, u, plan, claimed) {
+// scoring as it did before S1 (refScore, below). ((F9b) `budget`, the
+// mission's AI count budget (DESIGN §4.2.2's `ai`, read off the mission by
+// the caller), or null: its lattice the step's least, and only its
+// `targets` nearest enemies scored, by the rules' gap, ties in G.units
+// order, worked out here afresh, never by the code under test's
+// nearestOf.)
+export function fullBestSpot(M, R, G, u, plan, claimed, budget = null) {
   const { nav } = G
-  const enemies = M.enemiesOf(G, u)
+  const all = M.enemiesOf(G, u)
+  const near = budget && all.length > budget.targets ? new Set(all.map((e) => [M.gap(u, e), G.units.indexOf(e), e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).slice(0, budget.targets).map((x) => x[2])) : null
+  const enemies = near ? all.filter((e) => near.has(e)) : all
   const friends = M.friendsOf(G, u)
   const owners = G.objectives.map((o) => M.controlOf(G, o))
   const role = u.t.ai
   const ctx = { enemies, friends, owners, claimed, role }
   let best = { cell: -1, score: refScore(M, R, G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
-  const step = u.t.M > 8 ? 3 : 2
+  const step = Math.max(budget?.lattice ?? 0, u.t.M > 8 ? 3 : 2)
   const res = plan.res
   for (let iz = 0; iz < nav.nz; iz += step) {
     for (let ix = (iz / step) % 2 ? 1 : 0; ix < nav.nx; ix += step) {

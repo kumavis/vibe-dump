@@ -160,7 +160,8 @@ function scanProbe(C, G, rand) {
     const dice = { ...G.rng }
     const got = M.bestSpot(G, u, plan, claimed), gotDice = { ...G.rng }
     Object.assign(G.rng, dice)
-    const want = ref.fullBestSpot(M, C.rules, G, u, plan, claimed), wantDice = { ...G.rng }
+    // ((F9b) the mission's AI count budget, as its data has it)
+    const want = ref.fullBestSpot(M, C.rules, G, u, plan, claimed, C.missions[G.setup.mission ?? 'classic']?.ai ?? null), wantDice = { ...G.rng }
     Object.assign(G.rng, dice)
     if (json(got) !== json(want)) return `bestSpot for ${u.t.short} (+${extra}): ${json(got)}, the whole board's ${json(want)}`
     if (json(gotDice) !== json(wantDice)) return `bestSpot for ${u.t.short} (+${extra}) left the dice at ${json(gotDice)}, the whole board's at ${json(wantDice)}`
@@ -558,6 +559,11 @@ const MUTANTS = [
   // ((F9b) a key that forgets a long hull's facing)
   ['memo-key-facing', 'memo', 'core/actions/move.js', "const faced = (u) => (u.facing !== undefined ? ` f${u.facing}` : '')", "const faced = () => ''"],
   ['memo-leak', 'memo', 'core/index.js', '  try {\n    return fn()\n  } finally {\n    G.nav.memo = null\n  }', '  const r = fn()\n  G.nav.memo = null\n  return r'],
+  // ((F9b) the AI count budget's two cuts, each forgotten by the scan
+  // while the mission keeps it: on the grand mission's boards, where only
+  // a mission with `ai` shows them)
+  ['budget-targets', 'scan', 'core/ai/score.js', 'const enemies = B ? nearestOf(G, u, enemiesOf(G, u), B.targets) : enemiesOf(G, u)', 'const enemies = enemiesOf(G, u)', { grand: true }],
+  ['budget-lattice', 'scan', 'core/ai/score.js', 'const step = B ? Math.max(B.lattice, u.t.M > 8 ? 3 : 2) : u.t.M > 8 ? 3 : 2', 'const step = u.t.M > 8 ? 3 : 2', { grand: true }],
 ]
 
 async function selfTest() {
@@ -566,7 +572,7 @@ async function selfTest() {
   const clean = await run(PKG, { quick: true, grand: false, say: () => {} })
   console.log(`  ${clean ? 'FAIL' : 'ok  '} the working tree passes (quick, classic)`)
   if (clean) bad++
-  for (const [name, check, file, from, to] of MUTANTS) {
+  for (const [name, check, file, from, to, opts = {}] of MUTANTS) {
     const dir = mkdtempSync(join(tmpdir(), `scale-check-${name}-`))
     try {
       for (const d of ['core', 'data', 'match']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
@@ -579,7 +585,7 @@ async function selfTest() {
       }
       writeFileSync(p, text.replace(from, () => to))
       const lines = []
-      const failed = await run(dir, { quick: true, grand: false, only: [check], say: (l) => lines.push(l) })
+      const failed = await run(dir, { quick: true, grand: !!opts.grand, only: [check], say: (l) => lines.push(l) })
       const caught = lines.filter((l) => l.includes('FAIL')).map((l) => l.trim().split('\n')[0].slice(5, 90))
       console.log(`  ${failed ? 'ok  ' : 'FAIL'} ${name.padEnd(15)} ${failed ? `caught: ${caught[0]}` : `not caught by ${check}`}`)
       if (!failed) bad++

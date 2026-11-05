@@ -571,6 +571,10 @@ const moves = [
   ['the grand board (80×56 → 80×54)', () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), board: { W: 80, H: 54 } } } })],
   ["the field mission's points (1,000 → 1,005)", () => rulesId({ missions: { ...MISSIONS, field: (({ list, ...m }) => ({ ...m, list: { ...list, points: 1005 } }))(structuredClone(MISSIONS.field)) } })],
   ['the field mission dropped', () => rulesId({ missions: (({ field, ...m }) => m)(MISSIONS) })],
+  // ((F9b) the AI count budget is rules data)
+  ["the grand mission's AI count budget lattice (3 → 4)", () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), ai: { lattice: 4, targets: 6 } } } })],
+  ["the grand mission's AI count budget targets (6 → 7)", () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), ai: { lattice: 3, targets: 7 } } } })],
+  ["the powder mission's AI count budget dropped", () => rulesId({ missions: { ...MISSIONS, powder: (({ ai, ...m }) => m)(structuredClone(MISSIONS.powder)) } })],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
@@ -868,12 +872,26 @@ const brokenMissions = [
   ['a set named by an Object.prototype member', /aren't terrain sets/, (m) => (m.sets = ['toString'])],
   ['no sets', /aren't terrain sets/, (m) => (m.sets = [])],
   ['no army', /army has no name/, (m) => delete m.army],
+  // ((F9b) the AI count budget, DESIGN §4.2.2's `ai`)
+  ['an AI count budget that is a number', /AI count budget is 4, not \{ lattice, targets \}/, (m) => (m.ai = 4)],
+  ['an AI count budget with a field it takes not', /AI count budget is .*, not \{ lattice, targets \}/, (m) => (m.ai = { lattice: 4, targets: 6, clock: 50 })],
+  ['an AI count budget missing its targets', /AI count budget is .*, not \{ lattice, targets \}/, (m) => (m.ai = { lattice: 4 })],
+  ['an AI count budget lattice of 0 cells', /lattice is 0, not a whole number of cells from 1 to 8/, (m) => (m.ai = { lattice: 0, targets: 6 })],
+  ['an AI count budget lattice of 2.5 cells', /lattice is 2.5, not a whole number/, (m) => (m.ai = { lattice: 2.5, targets: 6 })],
+  ['an AI count budget lattice of 9 cells', /lattice is 9, not a whole number/, (m) => (m.ai = { lattice: 9, targets: 6 })],
+  ['an AI count budget of no targets', /targets is 0, not a whole number above 0/, (m) => (m.ai = { lattice: 4, targets: 0 })],
 ]
 for (const [what, want, edit] of brokenMissions) {
   const m = structuredClone(MISSIONS.classic)
   edit(m)
   const err = missionError(m)
   check(err && want.test(err), `checkMission refuses ${what}`, err ?? 'accepted')
+}
+// ((F9b) the AI count budget as shipped: on Grand and the Powder Field
+// alone, its trigger met by the long hulls there, DESIGN §4.2.2)
+{
+  const budgets = Object.fromEntries(Object.entries(MISSIONS).filter(([, m]) => m.ai !== undefined).map(([k, m]) => [k, m.ai]))
+  check(isDeepStrictEqual(budgets, { grand: { lattice: 3, targets: 6 }, powder: { lattice: 3, targets: 6 } }), "the AI count budget is Grand's and the Powder Field's alone, a lattice of 3 cells (1.5\") and the 6 nearest enemies (F9b: its trigger met by two Howdahs a side on scale-bench's cap lists)", JSON.stringify(budgets))
 }
 
 // ── 8. each module loads alone ──────────────────────────────────────────────
