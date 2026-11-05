@@ -50,8 +50,11 @@
 //             nothing of player 1's list (the Muster screen's rows gone
 //             from the page, no unit of the list named outside the rules'
 //             help, its total and Ready alone); player 2 builds; back on
-//             the panel nothing of either list is in the page, and a built
-//             seat's Build… opens the pass screen (the screen handed back
+//             the panel nothing of either list is in the page, nor once
+//             the size changes to one that refuses player 1's list (the
+//             line red and Start disabled, saying so without the
+//             refusal's words, which name the list's units or roles), and
+//             a built seat's Build… opens the pass screen (the screen handed back
 //             to its player), not its list; a mirror (player 2 on player
 //             1's race) opens on the preset, never on the device's last
 //             list (player 1's); both armies take the table at the
@@ -518,10 +521,29 @@ const CHECKS = {
       const after = await page.evaluate(leakOf, [...names, ...names1])
       if (after.found.length || after.rows) out.why.push(`the panel after both Readies: ${after.rows} rows, ${after.found.length} names of the lists in the page (${after.found.slice(0, 4).join(', ')})`)
       else out.rows.push('the panel after both: nothing of either list')
+      // ((F11b's review, second pass) the size changed after both Readies,
+      // to one that refuses player 1's list: the panel says so without the
+      // refusal's words (they are the list: a unit and its count, or how
+      // many of a role), Start disabled; back at the Skirmish both stand)
+      const refused = checkList(RACES.squirrel, MISSIONS.grand.list, c0)
+      await size(page, 'grand')
+      const sealed = await lineOf(page, 0), st = await startOf(page)
+      const grand = await page.evaluate(leakOf, [...names, ...names1, ...(refused ? [refused] : [])])
+      const said = "It doesn't fit a Grand battle: hand the screen to player 1 to change it"
+      if (!refused || grand.found.length || grand.rows || !sealed.bad || sealed.why !== said || !st.disabled || st.why !== `Player 1's army ${said.slice(3)}.`) out.why.push(`a Grand size after both Readies: ${grand.found.length} words of the lists in the page (${grand.found.slice(0, 4).join(', ')}), player 1's line ${sealed.bad ? 'red' : 'not red'} ("${sealed.why}"), Start ${st.disabled ? 'disabled' : 'enabled'} ("${st.why}"); checkList says "${refused}"`)
+      else out.rows.push(`a Grand size after both: "${st.why}", nothing of the lists`)
+      await size(page, 'classic')
+      const st2 = await startOf(page), b0 = await lineOf(page, 0)
+      if (st2.disabled || b0.bad || !b0.total.startsWith('Ready · ')) out.why.push(`back at the Skirmish: player 1's line "${b0.total}" ${b0.bad ? 'red' : ''}, Start ${st2.disabled ? `disabled ("${st2.why}")` : 'enabled'}`)
       // a built seat's Build…: the pass screen, the screen handed back to
       // its player, and not its list
       await page.click('.setupSeat[data-seat="0"] .armyBuild')
-      await page.waitForSelector('#pass:not(.hidden)')
+      // (a short wait, so a Muster screen opened instead says so)
+      if (!(await page.waitForSelector('#pass:not(.hidden)', { timeout: 3000 }).then(() => true, () => false))) {
+        const up = await page.evaluate(() => ({ rows: document.querySelectorAll('#muster .mRow').length, muster: !document.querySelector('#muster').classList.contains('hidden') }))
+        out.why.push(`player 1's built seat's Build… from the panel: no pass screen, ${up.muster ? `the Muster screen up on its list (${up.rows} rows)` : 'nothing shown'}`)
+        return out
+      }
       const back = await page.evaluate(() => ({ pass: document.querySelector('#pass').textContent, rows: document.querySelectorAll('#muster .mRow').length, muster: !document.querySelector('#muster').classList.contains('hidden') }))
       if (back.rows || back.muster || !back.pass.includes('hand the screen to player 1')) out.why.push(`player 1's built seat's Build… from the panel: ${back.muster ? 'the Muster screen up' : 'the screen hidden'}, ${back.rows} rows, the pass screen "${back.pass.slice(0, 120)}"`)
       else out.rows.push('a built seat\'s Build… asks for the screen handed back first')
@@ -674,6 +696,16 @@ const MUTATIONS = {
   'lost-unsaid': ['ui/screens/muster.js', '        this.set(counts, [...notes.map(capital),', '        this.set(counts, [', ['saved']],
   // hotseat seats default to the device's last list (the other player's)
   'hotseat-last': ['app/boot.js', "    const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null", '    const last = played(mode, s) ? lists.last(race, mission) : null', ['pass']],
+  // ((F11b's review, second pass) a sealed hotseat line's why in
+  // checkList's words, the list's units or roles, after a size change)
+  'sealed-why': ['app/boot.js', '    const why = sealed && refused ? `it ${unfit(s, mission)}` : refused', '    const why = refused', ['pass']],
+  // the panel's army line never red
+  'line-unred': ['ui/screens/setup.js', "    line.classList.toggle('bad', !!a.why)", "    line.classList.toggle('bad', false)", ['over']],
+  // the panel's army line's preset ▾ 400 px at the least: past a phone's
+  // edge
+  'panel-wide': ['style.css', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 0;\n}\n.armyLine .armyTotal {', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 400px;\n}\n.armyLine .armyTotal {', ['phone']],
+  // a line no ?armies= names handed on as its preset's name
+  'door-named': ['app/boot.js', ': a.preset && a.preset !== MISSIONS[mission].army ? a.preset : null)', ': a.preset ?? MISSIONS[mission].army)', ['door']],
   // a built hotseat seat's Build… opens its list on the panel
   'hotseat-reopen': ['app/boot.js', "    if (mode === 'hotseat' && a.built && !handed) return pass.show(", "    if (false) return pass.show(", ['pass']],
   // a Random AI seat's race changed: its Random let go for the default,

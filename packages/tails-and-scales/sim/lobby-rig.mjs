@@ -169,7 +169,13 @@
 //                "seated by you"), says why, and, the guest readying it and
 //                the host its own seat, starts no battle (asked to: the
 //                host's page's autoStart off); Unseat frees the
-//                seat, and the host's own AI seated there is readied. Then
+//                seat, and the host's own AI seated there is readied.
+//                ((F11b's review, second pass) On Random, it stays the
+//                host's own through a size change and a reload, a list
+//                drawn again for each size, "Random list" still on its
+//                line; the guest deleting that list from the AI's record
+//                makes it another seat, never drawn again nor readied, the
+//                kept seat unchanged.) Then
 //                the guest, seated, writes an army past any roster into its
 //                own seat and readies it (no honest page can): the host's
 //                page says the lobby can't start for seat 2's army without
@@ -654,6 +660,50 @@ async function runCases(dist, cases) {
       await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Seat the AI here').click())
       await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 10000, "the host's own AI readied")
       must((await host.evaluate(() => document.querySelector('.seat[data-seat="1"]').textContent)).includes('seated by you'), "the host's own AI seat shown as its own")
+      // ((F11b's review, second pass) the host's own AI on Random, through
+      // a size change and a reload: its own still, a list drawn again for
+      // each size; then a peer deleting that list from the AI's record: a
+      // seat the host's page didn't write, never drawn again nor readied)
+      const own = async (what) => {
+        await host.waitForFunction(() => { const r = window.__ts.net.handle.doc().lobby.seats.s1; return typeof r?.army === 'string' && r.ready === true && document.querySelector('.seat[data-seat="1"]')?.textContent.includes('seated by you') }, null, { timeout: 20000, polling: 100 }).catch(async () => {
+          const at = await host.evaluate(() => ({ s1: window.__ts.net.handle.doc().lobby.seats.s1 ?? null, mission: window.__ts.net.handle.doc().lobby.mission, kept: localStorage.getItem(window.__ts.net.aiKey()), status: document.querySelector('#lobbyStatus').textContent })).catch((e) => e.message.split('\n')[0])
+          throw new Fail(`${what} never held: ${JSON.stringify(at)}`)
+        })
+        return recOf(host, 's1')
+      }
+      await host.click('.seat[data-seat="1"] .armyRandom')
+      const drawn = await own("the host's own AI on Random, readied")
+      await host.selectOption('#lobbySize', 'field')
+      await until(host, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 10000, 'the size changed')
+      const sized = await own("the host's own AI, a list drawn for the new size, readied")
+      // (each write seen by the guest's page before the next step: through
+      // the sync server, so a reload finds it there, and a guest's write
+      // is made on the record as it stands, not on one it hasn't seen)
+      const seen = (army, what) => until(guest, (t) => window.__ts.net.handle.doc().lobby.seats.s1?.army === t, army, 20000, what)
+      await seen(sized.army, "the new size's list reaching the guest's page")
+      await host.reload()
+      await until(host, () => window.__ts?.net?.handle?.doc()?.lobby && document.querySelector('.seat[data-seat="1"]'), null, 60000, "the host's page back on the lobby")
+      await host.evaluate(() => (window.__ts.net.autoStart = false))
+      await own("the host's own AI after a reload")
+      await host.selectOption('#lobbySize', 'classic')
+      await until(host, () => window.__ts.net.handle.doc().lobby.mission === 'classic', null, 10000, 'the size changed back')
+      const reloaded = await own("the host's own AI, after a reload, a list drawn for the new size")
+      const line = await host.$eval('.seat[data-seat="1"]', (e) => e.textContent)
+      must(sized.army !== drawn.army || reloaded.army !== sized.army, `a list drawn again for each size: ${drawn.army}, ${sized.army}, ${reloaded.army}`)
+      must(line.includes('Random list'), `the host's own AI still on Random after a reload: ${line.slice(0, 200)}`)
+      const keptAI = () => host.evaluate(() => localStorage.getItem(window.__ts.net.aiKey()))
+      const before = await keptAI()
+      await seen(reloaded.army, "the list after the reload reaching the guest's page")
+      await guest.evaluate(() => window.__ts.net.handle.change((d) => {
+        delete d.lobby.seats.s1.army
+        d.lobby.seats.s1.ready = false
+      }))
+      await until(host, () => /isn't one this page seated/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host's page saying its AI's stripped record isn't its own")
+      await sleep(1500)
+      const stripped = await recOf(host, 's1')
+      must(!('army' in stripped) && stripped.ready === false && (await keptAI()) === before, `the AI's list deleted by a peer: never drawn again nor readied, the kept seat unchanged: ${JSON.stringify(stripped)}, ${await keptAI()}`)
+      await press(host, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.ready === true, null, 10000, "the host's Ready again")
       // the guest seated, its army one no roster holds, readied by a write
       // of its own: the host's page says why without quoting it
       await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Unseat the AI').click())
@@ -671,7 +721,7 @@ async function runCases(dist, cases) {
       await until(host, () => /can't start a battle/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host's page saying the lobby can't start")
       const said = await host.$eval('#lobbyStatus', (e) => e.textContent)
       must(said === "This lobby can't start a battle: seat 2's army isn't one this battle takes." && !(await domOf(host)).includes(digits), `the host's page on the guest's refused army: "${said}", the digits ${(await domOf(host)).includes(digits) ? 'in' : 'not in'} its DOM`)
-      return `the forged AI seat left unready and unkept, shown with Unseat, no start on both Readies; the host's own AI readied after Unseat; a refused guest army: "${said}"`
+      return `the forged AI seat left unready and unkept, shown with Unseat, no start on both Readies; the host's own AI readied after Unseat, on Random ${drawn.army}, ${sized.army} (field), ${reloaded.army} (a reload, classic); its list deleted by a peer: foreign; a refused guest army: "${said}"`
     },
 
     async play() {
@@ -1512,9 +1562,16 @@ const MUTANTS = {
   'ai-unrecorded': ['ai-seat', 'app/online.js', '    if (ready) this.keepReadied(i, open)\n', ''],
   // (F11b's review) the host's page adopting any AI-shaped seat naming it
   'ai-adopted': ['forged', 'app/online.js', '    if (!e || !r) return false\n', "    if (!e || !r) return r?.ctrl === 'ai' && r.dev === this.dev\n"],
+  // ((F11b's review, second pass) the AI's record with no army its own
+  // whatever this page kept; a size change that keeps no word of the army
+  // it let go (the host's own AI then another seat); Random forgotten by a
+  // reload)
+  'ai-stripped': ['forged', 'app/online.js', "    return !N.seatDiff(typeof e.army === 'string' ? { ...say, army: e.army } : say, rec).length\n", "    return [say, ...(typeof e.army === 'string' ? [{ ...say, army: e.army }] : [])].some((x) => !N.seatDiff(x, rec).length)\n"],
+  'size-unmarked': ['forged', 'app/online.js', '        for (const [i, race] of ais) this.markAI(i, { race, army: null, random: this.aiRandom.has(i) })\n', ''],
+  'random-forgotten': ['forged', 'app/online.js', '    this.aiRandom = new Set(this.seatedAI().filter((x) => x?.random === true && Number.isInteger(x.seat)).map((x) => x.seat))\n', ''],
   // another seat's refused army quoted in the status line
   'problem-unsealed': ['forged', 'app/online.js', "        : theirs >= 0 ? `This lobby can't start a battle: seat ${theirs + 1}'s army isn't one this battle takes.`\n", ''],
-  'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
+  'size-unwired': ['size', 'app/online.js', '        N.editBattle(this.handle, { mission: name, ...keptTerrain(L, name) })\n', ''],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

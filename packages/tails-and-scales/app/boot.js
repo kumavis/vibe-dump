@@ -568,15 +568,23 @@ export function boot(location) {
   }
   // what the panel says whose army it is
   const ownerOf = (mode, s) => (mode === 'hotseat' ? `player ${s + 1}'s army` : played(mode, s) ? 'your army' : "the AI's army")
+  // ((F11b's review, second pass) why a sealed hotseat list can't take
+  // the table, said without checkList's words: they name a unit and its
+  // count, or how many of a role, which is the list itself, and the other
+  // player reads the panel too (a size changed after both Readies). Its
+  // own player reads the refusal on the Muster screen, through the pass
+  // screen)
+  const unfit = (s, mission) => `doesn't fit a ${sizeName(mission, MISSIONS[mission])} battle: hand the screen to player ${s + 1} to change it`
   const armyLine = (s) => {
     const { mode, races, mission } = picking, race = races[s], a = picking.armies[s], r = RACES[race], rules = MISSIONS[mission].list
     const presets = presetsFor(race, mission)
     const options = presets.map((p) => ({ value: p, label: presetName(p) }))
     if (a.preset && !presets.includes(a.preset) && !a.counts) options.push({ value: a.preset, label: presetName(a.preset) })
     if (a.counts) options.push({ value: 'list', label: a.random ? 'Random list' : 'List' })
-    const counts = countsOf(race, mission, a), why = whyOf(race, mission, a)
+    const counts = countsOf(race, mission, a), refused = whyOf(race, mission, a)
     const cost = army.listCost(r, counts, rules), n = counts.reduce((x, y) => x + y, 0)
     const sealed = mode === 'hotseat' && a.built
+    const why = sealed && refused ? `it ${unfit(s, mission)}` : refused
     const total = `${sealed ? 'Ready · ' : ''}${cost.toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
     // (against the AI, its units a tap away: no secrecy against the AI)
     const units = !played(mode, s) && FOG_MODES.includes(mode) ? r.roster.flatMap((k, i) => (counts[i] ? [`${r.units[k].name}${counts[i] > 1 ? ` ×${counts[i]}` : ''}`] : [])).join(', ') : null
@@ -589,7 +597,7 @@ export function boot(location) {
     const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
     const armies = [0, 1].map(armyLine)
     const bad = armies.findIndex((x) => x.why)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : `${ownerOf(mode, bad)}: ${armies[bad].why}` })
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}` })
   }
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)

@@ -268,8 +268,8 @@ the commit, and add whatever the work turned up.
   size change, a race change resetting the panel's army line, a 360 px
   phone scrolling nothing sideways with 44 px buttons, the hotseat's pass
   screen holding nothing of the first list and standing between a built
-  seat and its list, and a list built on the screen fielded unit for
-  unit). A step that changes what one of them reads ports it in the same
+  seat and its list, nor the panel after a size change refuses a sealed
+  list, and a list built on the screen fielded unit for unit). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -1072,10 +1072,11 @@ follows N3.
   lobby (un-ready on a change, let go on a race change, held by
   `verifyStart`), courtesy sealing (another seat a sentence alone), and the
   host's AI seat (`seatAI`, preset or Random, played inside the fold on
-  every page). `sim/ui-check.mjs` (ten cases, a 24-edit self-test),
+  every page). `sim/ui-check.mjs` (ten cases, a 28-edit self-test),
   lobby-rig's `lists`, `sealed`, `altered-army`, `ai-seat` and `forged` and
-  ten mutants, net-check's armies. Two reviews' ten findings, nine fixed
-  and one recorded below. DESIGN's F11b notes.)
+  thirteen mutants, net-check's armies. Two reviews' ten findings, nine
+  fixed and one recorded below, and a second pass's four, fixed. DESIGN's
+  F11b notes.)
 - [ ] **Later (F11b's):** the result screen's totals for both armies
   (§4.2.8.1; `ui/screens/result.js`); figure thumbnails on the Muster
   screen's rows (a cheap still of each figure, not the diorama's window);

@@ -228,8 +228,17 @@ export class Online {
       // (F7a) the terrain, one of the mission's sets
       terrain: (set) => this.isHost() && N.editBattle(this.handle, { terrain: set }),
       // (F8b) the battle size: a mission this page knows (the terrain chosen
-      // kept where the new size is fought on it)
-      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),
+      // kept where the new size is fought on it; (F11b's review, second
+      // pass) an AI seat this page seated kept as letting its army go, as
+      // editBattle has it do: the AI's record with no army is its own only
+      // then)
+      mission: (name) => {
+        if (!this.isHost() || !Object.hasOwn(MISSIONS, name)) return
+        const L = N.lobbyOf(this.handle.doc())
+        const ais = name !== L.mission ? L.seats.flatMap((r, i) => (this.mineAI(r, i) ? [[i, r.race]] : [])) : []
+        N.editBattle(this.handle, { mission: name, ...keptTerrain(L, name) })
+        for (const [i, race] of ais) this.markAI(i, { race, army: null, random: this.aiRandom.has(i) })
+      },
       reroll: () => this.isHost() && N.editBattle(this.handle, { board: (Math.random() * 1e6) | 0 }),
       // (F16) the courtesy fog, on or off
       fog: (on) => this.isHost() && N.editBattle(this.handle, { fog: on === true }),
@@ -322,6 +331,9 @@ export class Online {
   // start), presence, and the lobby or the battle.
   enter(handle) {
     this.handle = handle
+    // ((F11b's review, second pass) the AI seats this page put on Random,
+    // as it kept them: a reload's still draw again for a new size)
+    this.aiRandom = new Set(this.seatedAI().filter((x) => x?.random === true && Number.isInteger(x.seat)).map((x) => x.seat))
     this.store = new N.AutomergeStore(handle)
     this.lobbySes = new Session({ store: this.store, dev: this.dev, rand: () => N.randomId(4), sink: { status: () => this.soon(), settled: () => this.soon() } })
     this.onDoc = () => this.soon()
@@ -525,16 +537,20 @@ export class Online {
   // ((F11b's review) record r, in seat i, the AI seat this page seated, as
   // it last wrote it: the AI's shape naming this device, its race and army
   // the ones this page kept for the seat (`ts.ai.<id>.<dev>`, so a reload's
-  // too), or its army let go by a size change (net/lobby.js's editBattle).
-  // Any peer can write a record of the AI's shape naming the host's device,
-  // or change the one the host wrote; only the host's page keeps its own.)
+  // too). Any peer can write a record of the AI's shape naming the host's
+  // device, or change the one the host wrote; only the host's page keeps
+  // its own. ((F11b's review, second pass) A record with no army is its
+  // own only where it kept none, a preset's, or a size change let it go:
+  // the host's mission handler keeps that, as net/lobby.js's editBattle
+  // writes it; a peer deleting the army of a list this page drew would
+  // else have it drawn again, or reset to the preset, and readied.)
   // (held as verifyStart holds a seat: net/seed.js's seatDiff, the record
   // as the start would write it against the one this page wrote)
   mineAI(r, i) {
     const e = this.seatedAI().find((x) => x?.seat === i)
     if (!e || !r) return false
     const say = { race: e.race, ctrl: 'ai', dev: this.dev, name: N.AI_NAME, nonce: '' }, rec = N.startSeat(r)
-    return [say, ...(typeof e.army === 'string' ? [{ ...say, army: e.army }] : [])].some((x) => !N.seatDiff(x, rec).length)
+    return !N.seatDiff(typeof e.army === 'string' ? { ...say, army: e.army } : say, rec).length
   }
   aiKey(id = this.id) {
     return `ts.ai.${id}.${this.dev}`
@@ -548,10 +564,11 @@ export class Online {
     }
   }
   // the AI's seat i as this page wrote it ({ race, army: a string or
-  // null }), or none (unseated)
+  // null, (F11b's review, second pass) random: on Random, so a reload
+  // draws it again for a new size too }), or none (unseated)
   markAI(i, say, id = this.id) {
     const was = this.seatedAI(id).filter((x) => x?.seat !== i)
-    kept.set(this.aiKey(id), JSON.stringify(say ? [...was, { seat: i, race: say.race, army: say.army ?? null }] : was))
+    kept.set(this.aiKey(id), JSON.stringify(say ? [...was, { seat: i, race: say.race, army: say.army ?? null, ...(say.random === true ? { random: true } : {}) }] : was))
   }
   // the seat of an AI-shaped record naming this host page's device that it
   // didn't seat, or -1 (on another page: -1)
@@ -581,7 +598,7 @@ export class Online {
     // human's Ready is: else seated unready, its line red with why)
     const open = this.opened(), j = judgeArmy(race, L.mission, a ?? undefined), ready = !!open && !!j && !j.why
     if (!N.seatAI(this.handle, i, { host: this.dev, race, army: a, ready })) return
-    this.markAI(i, { race, army: a })
+    this.markAI(i, { race, army: a, random: this.aiRandom.has(i) })
     if (ready) this.keepReadied(i, open)
   }
   // a lobby record this device readied (seat i as it stands), kept with the
