@@ -134,14 +134,22 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // 1111) and the fit put it at 103 ± 39; at 150 the points bind their
       // lists again (612 of 1,000), open is 47.2%, fortified 57.2%, and
       // every unit sits inside its band, the cart 112 ± 30.)
-      // ((F9b) The Howdah at 190 here, provisional: its trial Field cost,
-      // 50, times the War-Cart's Grand to Field (150 to 40), 187.5, up to
-      // the next 5, so a one-model unit can't fill the slots and models a
-      // list's points leave over, as the cart did at its Field price; the
-      // fit (sim/army-sim.mjs) sets it with the Field cost.)
+      // ((F9b) The Howdah at 5 here, as at Field, by the cart's own test
+      // turned the other way: played at its Field price (sim/army-sim.mjs
+      // --check, seed 1111) the Coil scored 40.3% open and 35.4% fortified
+      // (the Bushtails 59.7% and 64.6%; 47.4% and 52.0% before the Howdah)
+      // and the fit put the Howdah at −116 ± 44, so no price above the
+      // floor answers it. A Random list fields it however it is priced
+      // (1.9 a Coil list at 5, 1.5 at 190: one unit and one model while the
+      // slots have room), so a higher price only takes points from the
+      // units beside it: at the provisional 190 (its trial Field 50 times
+      // the cart's 150 to 40) the points bind 984 of 1,000 Coil lists (900
+      // before the Howdah, 316 at 5), and the Bushtails score 79.0% open
+      // and 80.4% fortified, the Howdah −53 ± 40. Reported, not judged, as
+      // all of Grand: the Grand rebalance's.)
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 190 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
       },
     },
     // (F7a) and `fortified`, as every mission's
@@ -208,7 +216,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // walk sets a keg off as any wrecker's (F19a), and a hull never climbs a
   // wreck's deck (no vehicle climbs). The ×3 presets field none, so the
   // powder/ corpus, preset against preset, is the same battle either way.
-  // (F9b) The same for the Howdah, at Grand's price.)
+  // (F9b) The same for the Howdah, at Grand's price, its Field 5.)
   powder: {
     board: { W: 80, H: 56 },
     deploy: 14,
@@ -219,7 +227,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 190 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
       },
     },
     // (the Powder Field's own set alone)

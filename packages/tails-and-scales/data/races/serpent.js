@@ -83,10 +83,18 @@ export default {
     // Field or Grand battle (the Vehicle slot, data/mission.js).
     howdah: {
       name: 'Shell-Back Howdah', short: 'Howdah', role: 'Vehicle', ai: 'transport', models: 1, base: 1.25, pts: 140,
-      // (F9b: a trial price at Field, fitted by sim/army-sim.mjs, §4.2.8.2,
-      // before the Howdah is offered; at Grand data/mission.js's `prices`
-      // say what it costs there)
-      cost: 50,
+      // (F9b, fitted at Field by sim/army-sim.mjs, §4.2.8.2: seeds 1111,
+      // 2222 and 3333 at a trial 50, −3 ± 13, −27 ± 18 and −16 ± 14 points,
+      // −13 ± 8 pooled, so the floor, 5. As the AI plays it the Howdah is
+      // worth about nothing: its riders, kept from shooting until they step
+      // off (no firing deck before F9c: core/actions/transport.js
+      // fireSlots), ride at M6, barely ahead of their own feet, and it
+      // fights and shoots little for itself. Judged on 4444 at 5: the
+      // score 50.2% open and 54.1% fortified, the Howdah 37 ± 27. Its
+      // price at Field; at Grand data/mission.js's `prices` keep it at 5
+      // (the War-Cart's test there turned the other way). F9c's firing
+      // deck re-fits it, as it does the War-Cart.)
+      cost: 5,
       stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
       transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
