@@ -11,8 +11,9 @@ export default {
   // (F11a) the army builder's order of the race's units, each once: a list
   // of counts (core/army.js) carries one digit per entry, in this order, so
   // the roster is append-only (a new unit goes at the end; data-check pins
-  // its start). `army` above, the classic list, is in roster order.
-  roster: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine'],
+  // its start). `army` above, the classic list, is in roster order. (F9b
+  // appends the Howdah.)
+  roster: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine', 'howdah'],
   // (F8b) the presets of the larger battles, as counts in roster order: the
   // classic list twice over for a Field battle, three times for a Grand one
   // (data/mission.js names them; sim/data-check.mjs holds each legal there)
@@ -65,6 +66,39 @@ export default {
       ],
       melee: { name: 'Fang staff', S: 5, AP: 2, D: 2, poison: 3 },
       abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; a Mesmerized target can’t shoot or charge next turn and hits at −1 in melee.', `Coiled will — friends within ${AURA}" use her Ld 9.`],
+    },
+    // (F9b, DESIGN §4.2.5) the Coil's transport: a great serpent carrying a
+    // long tortoise-shell howdah on its back. Long, so a footprint of three
+    // discs front to back (its head r 0.95 2" ahead, its body r 1.25, its
+    // `base`, where it stands, and its tail r 0.95 2" behind: 5.9 × 2.5",
+    // 6.14" on the diagonals, its bounding R 3.07) and a facing: it drives
+    // forward, backs up at half speed (rev 2) and pivots where its 6" body
+    // has room, at 0.25" a 45° pivot (core/nav.js hullReach). M6. Its deck,
+    // the long shell, carries two squads (12 models, bases up to 0.45),
+    // loaded at the deployment by the autoload, its riders stepping off
+    // within 3" of any of its discs (so at its head or tail, about 2"
+    // farther than off a War-Cart); `fire` is the deck's three firing
+    // slots, F9c's: nothing reads it yet. Destroyed, it leaves a burning
+    // wreck along its facing. None in a Skirmish, at most two a side in a
+    // Field or Grand battle (the Vehicle slot, data/mission.js).
+    howdah: {
+      name: 'Shell-Back Howdah', short: 'Howdah', role: 'Vehicle', ai: 'transport', models: 1, base: 1.25, pts: 140,
+      // (F9b: a trial price at Field, fitted by sim/army-sim.mjs, §4.2.8.2,
+      // before the Howdah is offered; at Grand data/mission.js's `prices`
+      // say what it costs there)
+      cost: 50,
+      stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
+      footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
+      transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
+      ranged: { name: 'Venom lobber', range: 18, shots: 1, blast: 1.6, S: 5, AP: 1, D: 1, fx: 'spit' },
+      melee: { name: 'Coil crush', S: 6, AP: 1, D: 2 },
+      abilities: [
+        'Transport — carries two squads (12 models) under its shell; a unit boards or steps off it as its move.',
+        'Riders — ride along, can’t be shot or charged, and hold no objectives; they step off at its head or tail.',
+        'Long hull — drives forward, backs up at half speed, and turns only where its whole body has room to swing.',
+        'Coil crush — ploughs through anything breakable in its way.',
+        'Burning wreck — destroyed, it leaves a wreck; each rider bails out, a 1 is a mortal wound.',
+      ],
     },
   },
 }

@@ -214,6 +214,15 @@
 //    merge) no shot or spell by a rider or at one (the battery casts every
 //    spell at every rider of either side); and every spell of
 //    both casters cast by a random game's human seat over the run.
+// 16. (F9b) P-lattice, on code with the long hulls' lattice (core/nav.js
+//    hullReach; latticeTask below says what it holds): every plan of the
+//    lattice, memoised and reset by its touched list, the plain reference
+//    lattice's (sim/lattice-ref.mjs) state for state, dist and prev, on
+//    Field and Grand boards, open and fortified, with forbid masks by
+//    radius class and after blasts (the memo cleared by each rebuild); its
+//    plan by cell (cellBest), the body disc's reach as its lower bound, its
+//    paths and the rules' stand, sweep and room questions held with it.
+//    `--only lattice` runs it alone.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -225,7 +234,8 @@
 // to reach (that rule is the full run's).
 //
 // --games (default 32) random games from --seed (default 1); --only picks
-// the corpus battles (default all 40; `none` for none). One child process
+// the corpus battles (default all 40; `none` for none), or (F9b)
+// `lattice` runs P-lattice alone. One child process
 // per battle or game, up to one per CPU. Exit 0 when every property holds
 // (the self-test: when every mutation is caught), 1 otherwise, 2 on bad
 // arguments.
@@ -1255,7 +1265,8 @@ const ARMY_REFUSALS = {
   'fullwidth digits': ['１１２', NO, /^seat 0's army "１１２" is neither a preset nor a list of counts$/],
   // (F9a: the Bushtails' roster is seven long, the War-Cart appended)
   'a list longer than the roster': ['11211131', NO, /^seat 0's list "11211131" counts 8 kinds of unit; the Bushtail Clans muster 7 \(elder oakguard nutkin grenadier glider trebuchet warcart\)$/],
-  'a leading zero past the roster': [NO, '0112111', /^seat 1's list "0112111" counts 7 kinds of unit; the Coil of Ssithra muster 6 \(hierophant brute scaleguard spitter sidewinder engine\)$/],
+  // ((F9b) the Coil's roster seven long with the Howdah)
+  'a leading zero past the roster': [NO, '01121111', /^seat 1's list "01121111" counts 8 kinds of unit; the Coil of Ssithra muster 7 \(hierophant brute scaleguard spitter sidewinder engine howdah\)$/],
   '515 points': [NO, '100034', /^seat 1's army: 515 points, over the Skirmish limit of 500$/],
   '505 points': ['100233', NO, /^seat 0's army: 505 points, over the Skirmish limit of 500$/],
   'points before a role (540 points, no hero)': ['033', NO, /^seat 0's army: 540 points, over the Skirmish limit of 500$/],
@@ -4996,6 +5007,176 @@ function hullDeployTask(core, mods, RACES, MISSIONS, mission, n, seed) {
   return c
 }
 
+// ── P-lattice (F9b) ─────────────────────────────────────────────────────────
+// (DESIGN §4.2.5, §4.2.9's P-lattice; §4.1 rules 21, 24 and 25) The long
+// hulls' lattice, core/nav.js hullReach (its memo warm across a board's
+// plans and cleared by each rebuild, its arrays now fresh, now lent by the
+// plan before through `into`, reset by that plan's touched list), held to
+// the plain lattice of sim/lattice-ref.mjs (written from DESIGN's formulas,
+// with no memo and no touched list): `dist` and `prev` on every state, N·8,
+// of every plan. The plans: on Field and Grand boards, `open` and
+// `fortified` (so with height: each disc's cliff and floor), from starts
+// that stand and from some that don't (the start is taken as it stands),
+// at every heading, out to a move's, an advance's, a charge's and a long
+// march's inches and the whole board, in walk and wreck mode, with forbid
+// masks drawn for each radius class (bubbles round random points, a class
+// now and then unmasked, a plan now and then with none at all); then
+// again after random blasts (Terrain.blast, the grid rebuilt: the memo
+// empty after every rebuild, every plan the reference's still). On every
+// plan, too:
+//   - cellBest, the plan by cell, is the reference's least state of each
+//     cell (ties to the lowest heading), and its cell chain the one that
+//     state's path last left from;
+//   - the body disc alone (nav.reach with the body's r, its class's mask,
+//     the same mode and inches) reaches every cell the lattice reaches at
+//     some heading, never at a greater distance: DESIGN's lower bound,
+//     exact (each lattice step is a reach step at no less cost, a pivot
+//     costs turn ≥ 0);
+//   - hullPath to a sample of reached states starts where the hull stands
+//     and ends on the state's cell at its heading, each run a straight
+//     line of whole steps along its facing (forward or back), each pivot a
+//     repeated point one heading round, as many pivots as the plan's
+//     chain of states turns;
+//   - hullStands, hullSwings and hullRoom, the rules' questions, answer as
+//     the reference's tests do on random states, masks and all.
+// Two footprints: the Howdah's (the race data's t.fp, a pivot costing
+// 0.25") and DESIGN's Brood Beetle (F5b's, derived here by
+// core/footprint.js: three discs of two radius classes, a free pivot).
+function latticeTask({ nav: navMod, terrain, footprint, MISSIONS, RACES, ref }) {
+  const { NavGrid, DIRS } = navMod
+  const fps = [RACES.serpent.units.howdah.fp, footprint.deriveFootprint({ discs: [[0, 1.5, 1.35], [0, 0, 1.5], [0, -1.5, 1.35]], turn: 0, rev: 2 }, 'insect.beetle').fp]
+  const counts = { boards: 0, plans: 0, states: 0, reached: 0, fresh: 0, lent: 0, blasts: 0, cells: 0, bounded: 0, paths: 0, pivots: 0, questions: 0, unstood: 0, masked: 0 }
+  const rand = mulberry32(90210)
+  const pick = (a) => a[Math.floor(rand() * a.length)]
+  for (const mission of ['field', 'grand']) {
+    for (const set of ['open', 'fortified']) {
+      for (const seed of [3, 8, 13]) {
+        const m = MISSIONS[mission], where = `P-lattice, ${mission} on ${set}, seed ${seed}`
+        const T = new terrain.Terrain(m.board.W, m.board.H)
+        T.generate(seed, m.objectives, m.deploy, set, null)
+        const nav = new NavGrid(m.board.W, m.board.H, 0.5)
+        nav.rebuild(T.chunks)
+        if (nav.hullMemo.size) throw new Error(`${where}: the hull memo holds ${nav.hullMemo.size} tables after a rebuild`)
+        if (set === 'fortified' && !nav.hasHeight) throw new Error(`${where}: a fortified board built no height layer`)
+        counts.boards++
+        let lent = null
+        for (let round = 0; round < 3; round++) {
+          if (round) {
+            // a few blasts, then the rebuild (the memo cleared)
+            for (let b = 0; b < 4; b++) T.blast((rand() - 0.5) * m.board.W * 0.8, (rand() - 0.5) * m.board.H * 0.8, 2 + rand() * 3, 4 + Math.floor(rand() * 8))
+            nav.rebuild(T.chunks)
+            counts.blasts++
+            if (nav.hullMemo.size) throw new Error(`${where}, after blasts ${round}: the hull memo holds ${nav.hullMemo.size} tables after a rebuild`)
+          }
+          for (let k = 0; k < (round ? 5 : 9); k++) {
+            const fp = fps[k % 2], mode = rand() < 0.5 ? 'wreck' : 'walk'
+            const max = k === 0 && round === 0 ? 1e9 : pick([6, 9, 12, 12.5, 14, 24])
+            // a start: mostly one the hull stands on (at its heading), now
+            // and then any cell of the board
+            let c = -1, h0 = Math.floor(rand() * 8)
+            const any = rand() < 0.15
+            for (let tries = 0; tries < 2000 && c < 0; tries++) {
+              const i = Math.floor(rand() * nav.N)
+              if (any || nav.hullStands(i, h0, fp, mode)) c = i
+            }
+            if (c < 0) continue
+            if (!nav.hullStands(c, h0, fp, mode)) counts.unstood++
+            const sx = nav.x(c), sz = nav.z(c)
+            // the masks, one per radius class
+            let forbid = null
+            if (rand() < 0.8) {
+              forbid = fp.radii.map((r) => {
+                if (rand() < 0.25) return null
+                const f = new Uint8Array(nav.N)
+                for (let b = 0, nb = 1 + Math.floor(rand() * 4); b < nb; b++) {
+                  const bx = sx + (rand() - 0.5) * 16, bz = sz + (rand() - 0.5) * 16, R = r + 1 + rand() * 1.5
+                  for (let i = 0; i < nav.N; i++) if (Math.hypot(nav.x(i) - bx, nav.z(i) - bz) < R) f[i] = 1
+                }
+                return f
+              })
+              counts.masked++
+            }
+            const opts = { max, mode, forbid }
+            const useInto = lent && rand() < 0.5
+            const res = nav.hullReach(sx, sz, h0, fp, useInto ? { ...opts, into: lent } : opts)
+            counts[useInto ? 'lent' : 'fresh']++
+            const want = ref.refLattice(nav, sx, sz, h0, fp, opts)
+            const what = `${where}: ${fp.id} from cell ${c} facing ${h0}${nav.hullStands(c, h0, fp, mode) ? '' : ' (not standing)'}, max ${max}, ${mode}, ${forbid ? `masks ${forbid.map((f) => (f ? 'on' : 'off')).join('/')}` : 'no masks'}${useInto ? ', its arrays lent' : ''}`
+            if (res.start !== want.start) throw new Error(`${what}: start state ${res.start}, the reference's ${want.start}`)
+            let reached = 0
+            for (let s = 0; s < want.dist.length; s++) {
+              if (!Object.is(res.dist[s], want.dist[s]) || res.prev[s] !== want.prev[s]) throw new Error(`${what}: state ${s} (cell ${s >> 3}, heading ${s & 7}) has dist ${res.dist[s]} and prev ${res.prev[s]}, the reference's ${want.dist[s]} and ${want.prev[s]}`)
+              if (want.dist[s] < Infinity) reached++
+            }
+            if (res.touched.length !== reached || new Set(res.touched).size !== reached || ![...res.touched].every((s) => res.dist[s] < Infinity)) throw new Error(`${what}: touched lists ${res.touched.length} states (${new Set(res.touched).size} distinct), the plan reaches ${reached}`)
+            counts.plans++
+            counts.states += want.dist.length
+            counts.reached += reached
+            // the plan by cell
+            const cells = nav.cellBest(res)
+            for (let i = 0; i < nav.N; i++) {
+              let bd = Infinity, bh = -1
+              for (let h = 0; h < 8; h++) if (want.dist[i * 8 + h] < bd) [bd, bh] = [want.dist[i * 8 + h], h]
+              let pc = -1
+              if (bh >= 0) {
+                let p = want.prev[i * 8 + bh]
+                while (p !== -1 && p >> 3 === i) p = want.prev[p]
+                pc = p < 0 ? -1 : p >> 3
+              }
+              if (!Object.is(cells.dist[i], bd) || cells.h[i] !== bh || cells.prev[i] !== pc) throw new Error(`${what}: cellBest says cell ${i} is ${cells.dist[i]} at heading ${cells.h[i]} from cell ${cells.prev[i]}, the reference ${bd} at ${bh} from ${pc}`)
+              if (bh >= 0) counts.cells++
+            }
+            // the body disc's bound
+            const body = fp.body, disc = nav.reach(sx, sz, { r: fp.r[body], max, mode, forbid: forbid?.[fp.cls[body]] ?? null })
+            for (let i = 0; i < nav.N; i++) {
+              if (!(cells.dist[i] < Infinity)) continue
+              if (!(disc.dist[i] <= cells.dist[i])) throw new Error(`${what}: the body disc reaches cell ${i} at ${disc.dist[i]}, the lattice at ${cells.dist[i]}: no lower bound`)
+              counts.bounded++
+            }
+            // paths to a sample of reached states
+            const reachedStates = [...res.touched]
+            for (let p = 0; p < Math.min(12, reachedStates.length); p++) {
+              const s = pick(reachedStates), cc = s >> 3, hh = s & 7
+              const pts = nav.hullPath(res, cc, hh)
+              const at = `${what}: the path to cell ${cc} at heading ${hh}`
+              if (!pts.length || pts[0].x !== sx || pts[0].z !== sz || pts[0].f !== h0) throw new Error(`${at} starts ${JSON.stringify(pts[0])}, not where the hull stands`)
+              const end = pts[pts.length - 1]
+              if (end.x !== nav.x(cc) || end.z !== nav.z(cc) || end.f !== hh) throw new Error(`${at} ends ${JSON.stringify(end)}`)
+              let pivots = 0
+              for (let j = 1; j < pts.length; j++) {
+                const a = pts[j - 1], b = pts[j]
+                if (a.x === b.x && a.z === b.z) {
+                  if (![1, 7].includes((b.f - a.f + 8) % 8)) throw new Error(`${at}: a pivot from ${a.f} to ${b.f}`)
+                  pivots++
+                  continue
+                }
+                const [dx, dz] = DIRS[a.f], ux = (b.x - a.x) / nav.cell, uz = (b.z - a.z) / nav.cell
+                const k1 = dx ? ux / dx : uz / dz
+                if (b.f !== a.f || !Number.isInteger(k1) || !k1 || ux !== k1 * dx || uz !== k1 * dz) throw new Error(`${at}: a run from ${JSON.stringify(a)} to ${JSON.stringify(b)} is no straight line of steps along its facing`)
+              }
+              let turns = 0
+              for (let q = s; q !== res.start && q !== -1; q = res.prev[q]) if (res.prev[q] >> 3 === q >> 3) turns++
+              if (turns !== pivots) throw new Error(`${at} pivots ${pivots} times, its chain of states ${turns}`)
+              counts.paths++
+              counts.pivots += pivots
+            }
+            // the rules' questions
+            for (let qn = 0; qn < 40; qn++) {
+              const i = Math.floor(rand() * nav.N), h = Math.floor(rand() * 8)
+              const st = ref.stands(nav, fp, i, h, mode, forbid), sw = ref.sweeps(nav, fp, i, h, mode, forbid)
+              const room = (ref.sweeps(nav, fp, i, h, mode, forbid) && ref.stands(nav, fp, i, (h + 1) % 8, mode, forbid)) || (ref.sweeps(nav, fp, i, (h + 7) % 8, mode, forbid) && ref.stands(nav, fp, i, (h + 7) % 8, mode, forbid))
+              if (nav.hullStands(i, h, fp, mode, forbid) !== st || nav.hullSwings(i, h, fp, mode, forbid) !== sw || nav.hullRoom(i, h, fp, mode, forbid) !== room) throw new Error(`${what}: at cell ${i} heading ${h} hullStands, hullSwings and hullRoom say ${nav.hullStands(i, h, fp, mode, forbid)}, ${nav.hullSwings(i, h, fp, mode, forbid)}, ${nav.hullRoom(i, h, fp, mode, forbid)}; the reference ${st}, ${sw}, ${room}`)
+              counts.questions++
+            }
+            lent = res
+          }
+        }
+      }
+    }
+  }
+  return counts
+}
+
 let FOLDING = null
 
 if (a.child) {
@@ -5068,6 +5249,12 @@ if (a.child) {
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
       const [shoot, recipes, terrain, score, matchMod, hazards] = await Promise.all([mod('core', 'actions', 'shoot.js'), mod('core', 'terrain', 'recipes.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'ai', 'score.js'), mod('core', 'match.js'), mod('data', 'hazards.js')])
       out = { ok: true, counts: kegTask(core, { rng, shoot, recipes, terrain, score, match: matchMod, hazards, MISSIONS: await missionsOf() }) }
+    } else if (task.kind === 'lattice') {
+      // (F9b: P-lattice, against the reference beside this file)
+      const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
+      const [nav, terrain, footprint] = await Promise.all([mod('core', 'nav.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'footprint.js')])
+      const ref = await import(new URL('./lattice-ref.mjs', import.meta.url).href)
+      out = { ok: true, counts: latticeTask({ nav, terrain, footprint, MISSIONS: await missionsOf(), RACES, ref }) }
     } else if (task.kind === 'setups') {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
@@ -5128,8 +5315,21 @@ function child(task, pkg) {
 // merge) the Powder Field among them: it takes War-Carts as Grand does)
 const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 } }
 
+// (F9b) P-lattice's run, on code with the lattice (core/nav.js hullReach):
+// [] when it holds (or, unless it was asked for alone, when the code has
+// no lattice), else its failure
+async function latticeRun(pkg, say, alone = false) {
+  if (!/^ {2}hullReach\(/m.test(readFileSync(join(pkg, 'core', 'nav.js'), 'utf8'))) return alone ? [{ error: 'P-lattice: the code has no lattice (core/nav.js hullReach)' }] : []
+  const r = await child({ kind: 'lattice' }, pkg)
+  const c = r.counts
+  say(`  P-lattice: ${r.ok ? `ok   ${c.plans} plans on ${c.boards} boards (Field and Grand, open and fortified; ${c.blasts} rebuilds after blasts, the memo empty after each) the reference lattice's on all ${c.states} states, dist and prev (${c.reached} reached; ${c.fresh} plans on fresh arrays, ${c.lent} on a plan's lent and reset by its touched list; ${c.masked} with masks by radius class, ${c.unstood} from a start that doesn't stand); cellBest the reference's on ${c.cells} cells, the body disc's reach a lower bound on all ${c.bounded}; ${c.paths} paths straight runs and pivots (${c.pivots} pivots) as their plans' chains; ${c.questions} questions of hullStands, hullSwings and hullRoom the reference's answers` : `FAIL ${r.error}`}`)
+  return r.ok ? [] : [r]
+}
+
 async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
+  // (F9b) --only lattice: P-lattice alone
+  if (only === 'lattice') return latticeRun(pkg, say, true)
   const { items: all } = loadCorpus()
   const items = only === 'none' ? [] : select(all, only)
   const tasks = [...items.map((it) => ({ kind: 'corpus', id: it.id })), ...Array.from({ length: games }, (_, i) => ({ kind: 'random', seed: seed + i }))]
@@ -5219,6 +5419,8 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-spell: ${r.ok ? `ok   ${r.counts.legal} casts taken at their targets and ${r.counts.refused} refused (the other side, past the range, the dead), ${r.counts.made} made and ${r.counts.fizzled} fizzled, each die for die and none twice a phase; ${r.counts.ends} marks worn off when they must; ${r.counts.wards} wards saving one better; ${r.counts.rerolls} resolute charges rolled again and ${r.counts.morale} resolute squads untested; the AI's pick on a friend ${r.counts.ai} times, its default its pick in ${r.counts.defaults} scenes` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (F9b) P-lattice, for code with the lattice
+  bad.push(...(await latticeRun(pkg, say)))
   // what the random games reached, over the whole run
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
@@ -5595,6 +5797,17 @@ const MUTATIONS = {
   'snared-boards': ['core/actions/transport.js', '  if (u.snared) return `${u.t.short} is snared`\n', ''],
   // the AI moves a snared hull
   'snared-hull-moves': ['core/ai/policy.js', '    if (!v.snared) yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n', '    yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n'],
+  // (F9b) P-lattice, each run on its own workload (P-lattice alone): the
+  // hull memo kept across a rebuild (the old terrain's tests read on the
+  // new), a pivot left made without its sweep, a lent plan's prev left
+  // unreset, and the lattice's heap popping ties another way (rule 25)
+  'lattice-memo-stale': [
+    ['core/nav.js', "    this.epoch++\n    // (F9b) the hull memo is the old terrain's\n    this.hullMemo.clear()\n", '    this.epoch++\n'],
+    ['core/nav.js', "    // (7, F9b) the hull memo is the old terrain's\n    this.hullMemo.clear()\n", ''],
+  ],
+  'lattice-pivot-unswept': ['core/nav.js', '            if (!(b & 8) || (forbid && !this.hullFree(w, fp, forbid, true))) continue\n', '            if (k === 2 && (!(b & 8) || (forbid && !this.hullFree(w, fp, forbid, true)))) continue\n'],
+  'lattice-lent-unreset': ['core/nav.js', '        dist[s] = Infinity\n        prev[s] = -1\n', '        dist[s] = Infinity\n'],
+  'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }
 
 if (a['self-test']) {
@@ -5610,13 +5823,20 @@ if (a['self-test']) {
     console.error(`property: no mutation ${unknown.join(', ')} (there are ${Object.keys(MUTATIONS).join(', ')})`)
     process.exit(2)
   }
-  const clean = await run(copyCode(dir, join(work, 'unbroken')), load)
-  if (clean.length) {
-    console.log(`property self-test: the unbroken copy fails the same workload, so no mutation can be judged: ${clean[0].error}`)
-    rmSync(work, { recursive: true, force: true })
-    process.exit(1)
+  // ((F9b) P-lattice's mutations each on P-lattice alone, its own workload;
+  // the unbroken copy passes each workload a named mutation runs)
+  const lattice = { only: 'lattice', quiet: true }
+  const loadOf = (name) => (name.startsWith('lattice-') ? lattice : load)
+  for (const [w, what] of [[load, 'three corpus battles, ten games'], [lattice, 'P-lattice alone']]) {
+    if (!names.some((x) => loadOf(x) === w)) continue
+    const clean = await run(copyCode(dir, join(work, 'unbroken')), w)
+    if (clean.length) {
+      console.log(`property self-test: the unbroken copy fails the same workload, so no mutation can be judged: ${clean[0].error}`)
+      rmSync(work, { recursive: true, force: true })
+      process.exit(1)
+    }
+    console.log(`  unbroken       passes (${what})`)
   }
-  console.log('  unbroken       passes (three corpus battles, ten games)')
   let missed = 0
   for (const [name, spec] of Object.entries(MUTATIONS).filter(([x]) => names.includes(x))) {
     const pkg = copyCode(dir, join(work, name))
@@ -5632,7 +5852,7 @@ if (a['self-test']) {
       const f = join(pkg, file)
       writeFileSync(f, readFileSync(f, 'utf8').replace(from, to))
     }
-    const bad = await run(pkg, load)
+    const bad = await run(pkg, loadOf(name))
     console.log(`  ${name.padEnd(14)} ${bad.length ? `caught: ${bad[0].error.slice(0, 150)}` : 'MISSED'}`)
     if (!bad.length) missed++
   }
@@ -5644,5 +5864,9 @@ if (a['self-test']) {
 console.log(`property: the pure core of ${dir === PKG ? 'the working tree' : dir}`)
 const bad = await run(dir, { games: GAMES, seed: SEED, only: a.only })
 for (const b of bad) if (!b.id) console.log(`  FAIL ${b.error}`)
+if (a.only === 'lattice') {
+  console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : "\nproperty passed (P-lattice alone): the long hulls' lattice is the reference lattice's on every state of every plan, its memo cleared by every rebuild, the body disc's reach its lower bound")
+  process.exit(bad.length ? 1 : 0)
+}
 console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, a setup the rules can\'t play is refused, and (F11a) a seat\'s army is refused for its own reason or played as its list says')
 process.exit(bad.length ? 1 : 0)

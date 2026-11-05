@@ -25,9 +25,24 @@ import { hypot, sin, cos } from './dmath.js'
 // Every rule that reads it sits behind `hasHeight` (§4.1 rule 18), its own
 // code path: classic and `open` boards never build a floor, and the code
 // they run is the code they always ran.
+//
+// (F9b, DESIGN §4.2.5) Long hulls. A unit with a footprint (core/footprint.js
+// t.fp: 2 or 3 discs turned with its facing) is planned over (cell, heading)
+// states, not cells: hullReach, a Dijkstra that drives forward, backs up and
+// pivots where the swept arc is clear, with its own path (hullPath: straight
+// runs and pivots, never string-pulled) and its per-cell digest (cellBest).
+// Its terrain-only tests are memoised per nav epoch (hullMemo, a derived
+// cache that never decides: §4.1 rule 21); no round unit's plan reads any
+// of it.
 // ---------------------------------------------------------------------------
 
 const SQRT2 = Math.SQRT2
+
+// (F9b) The eight headings, the nav's own neighbour steps: DIRS[h] = [dx, dz]
+// in cells, h = 0 facing +z, h = 2 facing +x, clockwise seen from above (the
+// turn core/footprint.js gives a footprint's discs, and the wreck raster's
+// yaw, h·π/4)
+export const DIRS = Object.freeze([[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]].map((d) => Object.freeze(d)))
 
 // (F7a) The height layer's constants (DESIGN §4.2.4's sizing table, each
 // measured at the worst of 24 yaws and 3 sub-cell origins): a neighbour step
@@ -81,6 +96,19 @@ export class NavGrid {
     // (F7a) false until a rebuild meets a chunk with a surface or a link; the
     // height arrays are allocated then, and only then (classic never has them)
     this.hasHeight = false
+    // (F9b) the long hulls' terrain tests, per footprint and mode, for this
+    // epoch: '<race>.<unit>:<mode>' → Uint8Array(N·8), a byte per state
+    // (cell·8 + heading): 1 stand known, 2 stand ok, 4 sweep known, 8 sweep
+    // ok, 16 this state's step costs double. Cleared by every rebuild;
+    // the forbid masks, a plan's own, are never in it.
+    this.hullMemo = new Map()
+    // (F9b) each footprint's tables as this grid's cells, by the footprint
+    // (hullTab: its offsets depend on the grid's row length alone, so they
+    // never go stale), and hullReach's touched list and heap, grown as
+    // they need
+    this.hullTabs = new Map()
+    this.hullTouch = new Int32Array(1024)
+    this.hullHeap = null
   }
 
   x(i) {
@@ -100,6 +128,8 @@ export class NavGrid {
   // after each explosion rather than patching incrementally.
   rebuild(chunks) {
     this.epoch++
+    // (F9b) the hull memo is the old terrain's
+    this.hullMemo.clear()
     // (F7a) a board with something to stand on builds the height layer, and
     // its rasters by level: its own path (rebuildHeight), never this one
     if (chunks.some((c) => c.alive && (c.surface || c.link))) return this.rebuildHeight(chunks)
@@ -467,6 +497,8 @@ export class NavGrid {
     }
     this.field(this.hard, null, this.clearHard)
     this.field(this.hard, this.soft, this.clearAll)
+    // (7, F9b) the hull memo is the old terrain's
+    this.hullMemo.clear()
   }
 
   // a point (lx, lz) of shape s's own frame, on the table (the inverse of the
@@ -688,6 +720,318 @@ export class NavGrid {
     }
     return true
   }
+
+  // ── Long hulls (F9b, DESIGN §4.2.5) ───────────────────────────────────────
+  // A state is (c, h), index c·8 + h: the body disc on cell c, facing h. A
+  // footprint `fp` is a unit type's t.fp (core/footprint.js): fp.H[h][q] its
+  // discs' cell offsets at heading h, fp.S[h] the pivot sweep from h to
+  // h + 1, fp.cls[q] disc q's radius class. `mode` is the plan's: 'walk' or
+  // 'wreck' (a wrecker measures clearHard, so it pivots through soft
+  // scenery and smashes it). `forbid`, null or one Uint8Array(N) (or null)
+  // per radius class (core/actions/move.js forbidMask, built per class): a
+  // disc never stands, nor sweeps, on a cell of its class's mask.
+
+  // The memo for one footprint and mode (a byte per state, hullMemo above)
+  hullMemoOf(fp, mode) {
+    const key = `${fp.id}:${mode}`
+    let m = this.hullMemo.get(key)
+    if (!m) this.hullMemo.set(key, (m = new Uint8Array(this.N * 8)))
+    return m
+  }
+
+  // A footprint's tables as this grid's cells, made once a grid for each
+  // footprint (its row length is the grid's): for H (each disc) and S (each sweep sample), per
+  // heading, `off` the cell index offset, `need` the clearance it needs
+  // there (r − 0.06 for a disc, the sample's need), `cls` its radius
+  // class, and `box` the offsets' extremes [lox, hix, loz, hiz] (a state is
+  // on the board, every disc or sample of it, exactly when they are).
+  hullTab(fp) {
+    let tab = this.hullTabs.get(fp)
+    if (tab) return tab
+    const nx = this.nx
+    const flat = (rows, needOf, clsOf) => {
+      const len = rows[0].length
+      const off = new Int32Array(8 * len), need = new Float64Array(8 * len), cls = new Int32Array(8 * len), box = new Int32Array(32)
+      rows.forEach((row, h) => {
+        let lox = 0, hix = 0, loz = 0, hiz = 0
+        row.forEach((p, k) => {
+          off[h * len + k] = p.iz * nx + p.ix
+          need[h * len + k] = needOf(p)
+          cls[h * len + k] = clsOf(p, k)
+          lox = Math.min(lox, p.ix)
+          hix = Math.max(hix, p.ix)
+          loz = Math.min(loz, p.iz)
+          hiz = Math.max(hiz, p.iz)
+        })
+        box.set([lox, hix, loz, hiz], 4 * h)
+      })
+      return { len, off, need, cls, box }
+    }
+    tab = { H: flat(fp.H, (d) => d.r - 0.06, (d, k) => fp.cls[k]), S: flat(fp.S, (p) => p.need, (p) => fp.cls[p.q]) }
+    this.hullTabs.set(fp, tab)
+    return tab
+  }
+
+  // Whether state s's entries of one of a footprint's flat tables fit (`t`,
+  // its H or its S): every entry's cell on the board with
+  // clearance (clearHard in wreck mode, clearAll else) ≥ its need and, with
+  // height, cliff ≥ its need and floor ≤ STEP (a ground hull never climbs)
+  hullFits(t, s, mode) {
+    const { nx, nz } = this
+    const c = s >> 3, h = s & 7, ix = c % nx, iz = (c / nx) | 0, b = 4 * h
+    if (ix + t.box[b] < 0 || ix + t.box[b + 1] >= nx || iz + t.box[b + 2] < 0 || iz + t.box[b + 3] >= nz) return false
+    const cl = mode === 'wreck' ? this.clearHard : this.clearAll
+    for (let k = h * t.len, e = k + t.len; k < e; k++) {
+      const j = c + t.off[k], need = t.need[k]
+      if (cl[j] < need || (this.hasHeight && (this.cliff[j] < need || this.floor[j] > STEP))) return false
+    }
+    return true
+  }
+
+  // State s's stand bits, measured once an epoch: 2 when its discs fit
+  // (hullFits, the tables' H: each disc r_q − 0.06); 16 with it when a step
+  // onto it costs double, a disc on difficult ground or a wrecker's disc
+  // ploughing (clearAll under r_q − 0.06)
+  hullStandBits(m, s, fp, mode) {
+    const b = m[s]
+    if (b & 1) return b
+    const t = this.hullTab(fp).H
+    let bits = 1
+    if (this.hullFits(t, s, mode)) {
+      bits |= 2
+      const c = s >> 3
+      for (let k = (s & 7) * t.len, e = k + t.len; k < e; k++) {
+        const j = c + t.off[k]
+        if (this.diff[j] || (mode === 'wreck' && this.clearAll[j] < t.need[k])) bits |= 16
+      }
+    }
+    return (m[s] = b | bits)
+  }
+
+  // State s's sweep bits, measured once an epoch: 8 when the pivot from s's
+  // heading h to h + 1 about its cell is clear (hullFits, the tables' S:
+  // each sample's need). The end states are the lattice's to test.
+  hullSweepBits(m, s, fp, mode) {
+    const b = m[s]
+    if (b & 4) return b
+    return (m[s] = b | 4 | (this.hullFits(this.hullTab(fp).S, s, mode) ? 8 : 0))
+  }
+
+  // whether no disc of state s (or, `sweep`, no sample of its pivot to
+  // h + 1) lies on its class's forbid mask; s's cells are on the board
+  hullFree(s, fp, forbid, sweep = false) {
+    if (!forbid) return true
+    const tab = this.hullTab(fp), t = sweep ? tab.S : tab.H, c = s >> 3
+    for (let k = (s & 7) * t.len, e = k + t.len; k < e; k++) {
+      const f = forbid[t.cls[k]]
+      if (f && f[c + t.off[k]]) return false
+    }
+    return true
+  }
+
+  // Does the hull stand at (c, h)? (Its terrain, memoised, and the masks.)
+  hullStands(c, h, fp, mode = 'walk', forbid = null) {
+    hullMasks(forbid)
+    const s = c * 8 + h
+    return c >= 0 && !!(this.hullStandBits(this.hullMemoOf(fp, mode), s, fp, mode) & 2) && this.hullFree(s, fp, forbid)
+  }
+
+  // Is the pivot from (c, h) to (c, h + 1) clear? (Its sweep alone: the end
+  // states stand or not on their own.)
+  hullSwings(c, h, fp, mode = 'walk', forbid = null) {
+    hullMasks(forbid)
+    const s = c * 8 + h
+    return c >= 0 && !!(this.hullSweepBits(this.hullMemoOf(fp, mode), s, fp, mode) & 8) && this.hullFree(s, fp, forbid, true)
+  }
+
+  // Can the hull at (c, h) pivot at least one way: right to h + 1 (S[h]
+  // clear, (c, h + 1) standing) or left to h − 1 (S[h − 1] clear, (c, h − 1)
+  // standing)? The AI's room term and the placement's "no room to turn here"
+  // ask it.
+  hullRoom(c, h, fp, mode = 'walk', forbid = null) {
+    const r = (h + 1) & 7, l = (h + 7) & 7
+    return (this.hullSwings(c, h, fp, mode, forbid) && this.hullStands(c, r, fp, mode, forbid)) ||
+      (this.hullSwings(c, l, fp, mode, forbid) && this.hullStands(c, l, fp, mode, forbid))
+  }
+
+  // The cells state (c, h)'s discs stand on, front to back (−1 for one off
+  // the board).
+  hullCells(c, h, fp) {
+    const { nx, nz } = this, ix = c % nx, iz = (c / nx) | 0
+    return fp.H[h].map((d) => {
+      const jx = ix + d.ix, jz = iz + d.iz
+      return jx < 0 || jz < 0 || jx >= nx || jz >= nz ? -1 : jz * nx + jx
+    })
+  }
+
+  // The lattice: a Dijkstra over states from the hull at (sx, sz) facing h0,
+  // out to `max` inches. From each popped state, in this order (§4.1 rule
+  // 25):
+  //   1. forward, to (c + DIRS[h], h), at step·mul, step 0.5" or 0.5·√2" as
+  //      reach's (the same expression, so the body disc's reach is an
+  //      exact lower bound: sim/property.mjs P-lattice);
+  //   2. reverse, to (c − DIRS[h], h), at step·rev·mul;
+  //   3. pivot right, to (c, h + 1), at turn, if the sweep S[h] is clear;
+  //   4. pivot left, to (c, h − 1), at turn, if the sweep S[h − 1] is clear;
+  // each onto a state that stands, `mul` 2 where the target's bit 16 says.
+  // The start state is accepted as it stands (no wriggle: nothing makes a
+  // ground hull's own cells unstandable between commands but F7c's
+  // collapse, whose settle moves it); its distance is from where the unit
+  // stands to its cell's centre, as reach's. Ties pop as reach's (the same
+  // heap). A flier never uses the lattice: a flying hull is round.
+  //
+  // Returns { fp, mode, max, sx, sz, h0, start, dist, prev, touched }:
+  // `start` the start state (−1 off the board), `dist` (Float64) and `prev`
+  // (Int32, −1 for none) of N·8, by state, and `touched` the states it
+  // reached, in the order it first reached them (cellBest's walk). `into`,
+  // an earlier result of this grid its caller is done with, lends its
+  // arrays: reset through its own touched list, not a fill (that earlier
+  // result reads the new plan from then on).
+  hullReach(sx, sz, h0, fp, { max, mode = 'walk', forbid = null, into = null } = {}) {
+    if (mode === 'fly') throw new Error('hullReach: a flier is round and never uses the lattice')
+    if (fp.cell !== this.cell) throw new Error(`hullReach: the footprint's offsets are in ${fp.cell}" cells, the grid's ${this.cell}"`)
+    if (!(Number.isInteger(h0) && h0 >= 0 && h0 < 8)) throw new Error(`hullReach: a heading is 0-7, not ${h0}`)
+    hullMasks(forbid)
+    const N8 = this.N * 8
+    let dist, prev
+    if (into && into.dist.length === N8) {
+      dist = into.dist
+      prev = into.prev
+      for (const s of into.touched) {
+        dist[s] = Infinity
+        prev[s] = -1
+      }
+    } else {
+      dist = new Float64Array(N8).fill(Infinity)
+      prev = new Int32Array(N8).fill(-1)
+    }
+    const c0 = this.index(sx, sz)
+    const res = { fp, mode, max, sx, sz, h0, start: c0 < 0 ? -1 : c0 * 8 + h0, dist, prev, touched: null }
+    let touch = this.hullTouch, n = 0
+    if (c0 >= 0) {
+      const m = this.hullMemoOf(fp, mode)
+      const { nx, nz, cell } = this
+      const turn = fp.turn, rev = fp.rev
+      const s0 = res.start
+      dist[s0] = hypot(sx - this.x(c0), sz - this.z(c0))
+      touch[n++] = s0
+      const heap = (this.hullHeap ??= new StateHeap())
+      heap.size = 0
+      heap.push(s0, dist[s0])
+      while (heap.size) {
+        const d = heap.topKey(), s = heap.pop()
+        if (d > dist[s]) continue
+        const c = s >> 3, h = s & 7, ix = c % nx, iz = (c / nx) | 0
+        const dir = DIRS[h], dx = dir[0], dz = dir[1]
+        const step = (h & 1 ? SQRT2 : 1) * cell
+        // the four moves in rule 25's order: forward, reverse, pivot right
+        // (the sweep S[h] from s), pivot left (S[h − 1], from the state it
+        // ends on); each target t standing (its memo bits, then the masks)
+        for (let k = 0; k < 4; k++) {
+          let t
+          if (k < 2) {
+            const jx = k ? ix - dx : ix + dx, jz = k ? iz - dz : iz + dz
+            if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+            t = (jz * nx + jx) * 8 + h
+          } else {
+            const w = k === 2 ? s : c * 8 + ((h + 7) & 7)
+            let b = m[w]
+            if (!(b & 4)) b = this.hullSweepBits(m, w, fp, mode)
+            if (!(b & 8) || (forbid && !this.hullFree(w, fp, forbid, true))) continue
+            t = k === 2 ? c * 8 + ((h + 1) & 7) : w
+          }
+          let b = m[t]
+          if (!(b & 1)) b = this.hullStandBits(m, t, fp, mode)
+          if (!(b & 2) || (forbid && !this.hullFree(t, fp, forbid))) continue
+          const nd = k === 0 ? d + step * (b & 16 ? 2 : 1) : k === 1 ? d + step * rev * (b & 16 ? 2 : 1) : d + turn
+          if (nd > max) continue
+          const old = dist[t]
+          if (!(nd < old)) continue
+          if (old === Infinity) {
+            if (n === touch.length) {
+              const more = new Int32Array(touch.length * 2)
+              more.set(touch)
+              this.hullTouch = touch = more
+            }
+            touch[n++] = t
+          }
+          dist[t] = nd
+          prev[t] = s
+          heap.push(t, nd)
+        }
+      }
+    }
+    res.touched = touch.slice(0, n)
+    return res
+  }
+
+  // The body's path to state (c, h) of a lattice plan, as { x, z, f } points
+  // from where the unit stands: consecutive steps one way merge into one
+  // straight run, a pivot is a repeated point with its new f (two pivots,
+  // two repeats); no string-pulling, so a long hull drives straight, pivots
+  // and drives straight. [] when the plan never reached (c, h). (A run's
+  // facing is its points' f; it backs up where it runs against DIRS[f].)
+  hullPath(res, c, h) {
+    const goal = c * 8 + h
+    if (res.start < 0 || !(res.dist[goal] < Infinity)) return []
+    const states = []
+    for (let s = goal; s !== -1; s = res.prev[s]) {
+      states.push(s)
+      if (s === res.start) break
+    }
+    states.reverse()
+    const pts = [{ x: res.sx, z: res.sz, f: res.h0 }]
+    let run = 0
+    for (let k = 1; k < states.length; k++) {
+      const a = states[k - 1] >> 3, b = states[k] >> 3, f = states[k] & 7
+      const last = pts[pts.length - 1]
+      if (a === b) {
+        pts.push({ x: last.x, z: last.z, f })
+        run = 0
+        continue
+      }
+      const p = { x: this.x(b), z: this.z(b), f }
+      if (run === b - a) pts[pts.length - 1] = p
+      else pts.push(p)
+      run = b - a
+    }
+    return pts
+  }
+
+  // A lattice plan by cell, over the states it touched: for each cell the
+  // least distance at any heading, `dist` (Float64, Infinity where none),
+  // and that heading, `h` (Int8, ties to the lowest index; −1 where none);
+  // `prev`, the cell that best state's path last left from (−1 at the
+  // start's cell or none: a cell chain for the cell-indexed readers, not a
+  // hull's path, which is hullPath's); `start`, the start's cell. The plan
+  // readers that index by cell read this (a footprint plan's plan.cells:
+  // core/actions/move.js), never the state arrays.
+  cellBest(res) {
+    const N = this.N
+    const dist = new Float64Array(N).fill(Infinity), h = new Int8Array(N).fill(-1), prev = new Int32Array(N).fill(-1)
+    for (const s of res.touched) {
+      const c = s >> 3, d = res.dist[s]
+      if (d < dist[c] || (d === dist[c] && (s & 7) < h[c])) {
+        dist[c] = d
+        h[c] = s & 7
+      }
+    }
+    for (const s of res.touched) {
+      const c = s >> 3
+      if ((s & 7) !== h[c]) continue
+      let p = res.prev[s]
+      while (p !== -1 && p >> 3 === c) p = res.prev[p]
+      prev[c] = p < 0 ? -1 : p >> 3
+    }
+    return { dist, h, prev, start: res.start < 0 ? -1 : res.start >> 3 }
+  }
+}
+
+// (F9b) a lattice's masks are one per radius class (a list, each entry a
+// mask or null), never one mask: indexed by class, one would read as
+// nothing at all
+function hullMasks(forbid) {
+  if (forbid !== null && !Array.isArray(forbid)) throw new Error('a long hull\'s forbid is a list of masks, one per radius class (core/actions/move.js forbidMask per class), not one mask')
 }
 
 // how far along a → b (0 to 1) the point nearest p lies
@@ -710,6 +1054,61 @@ export const pathLength = (pts) => {
   let L = 0
   for (let i = 1; i < pts.length; i++) L += hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z)
   return L
+}
+
+// (F9b) The lattice's heap: Heap's discipline exactly (the same sift up
+// and down, so ties pop in the same order: §4.1 rule 25), over typed
+// arrays the grid keeps between plans, popping without a pair per pop.
+class StateHeap {
+  constructor() {
+    this.ids = new Int32Array(1024)
+    this.keys = new Float64Array(1024)
+    this.size = 0
+  }
+  topKey() {
+    return this.keys[0]
+  }
+  push(id, key) {
+    if (this.size === this.ids.length) {
+      const ids = new Int32Array(this.size * 2), keys = new Float64Array(this.size * 2)
+      ids.set(this.ids)
+      keys.set(this.keys)
+      this.ids = ids
+      this.keys = keys
+    }
+    const { ids, keys } = this
+    let i = this.size++
+    while (i > 0) {
+      const p = (i - 1) >> 1
+      if (keys[p] <= key) break
+      ids[i] = ids[p]
+      keys[i] = keys[p]
+      i = p
+    }
+    ids[i] = id
+    keys[i] = key
+  }
+  pop() {
+    const { ids, keys } = this
+    const top = ids[0]
+    const n = --this.size
+    const id = ids[n], key = keys[n]
+    if (n) {
+      let i = 0
+      for (;;) {
+        let c = 2 * i + 1
+        if (c >= n) break
+        if (c + 1 < n && keys[c + 1] < keys[c]) c++
+        if (keys[c] >= key) break
+        ids[i] = ids[c]
+        keys[i] = keys[c]
+        i = c
+      }
+      ids[i] = id
+      keys[i] = key
+    }
+    return top
+  }
 }
 
 // Minimal binary heap keyed on cost.

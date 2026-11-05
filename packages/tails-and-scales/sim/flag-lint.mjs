@@ -58,6 +58,10 @@
 //                                         riders shown as pips and chips),
 //                                         so no file of core/ or data/ but
 //                                         the schema's check reads it
+//   (F9b) footprint                       core/footprint.js alone, which
+//                                         data/schema.js hands the record
+//                                         to: the rules read the tables it
+//                                         derives (t.fp), never the record
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
 // core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
@@ -153,6 +157,9 @@ export const OWNED = [
   [reads('vehicle'), ['core/actions/move.js', 'core/actions/transport.js'], 'the vehicle flag read outside the plans\' mode setup (core/actions/move.js groundOnly) and core/actions/transport.js\'s legality'],
   [reads('climb'), ['core/actions/move.js'], 'the climb flag read outside the plans\' mode setup (core/actions/move.js climbs)'],
   [reads('enclosed'), [], "an enclosed deck read by the rules (the view's alone: present/deck.js)"],
+  // (F9b) a long hull's footprint record: core/footprint.js derives t.fp
+  // from it, and every rule reads that
+  [reads('footprint'), ['core/footprint.js'], "a long hull's footprint record read outside core/footprint.js (the rules read its derived t.fp)"],
 ]
 // the patterns that apply to file `f`
 const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
@@ -225,6 +232,11 @@ export const ALLOW = [
   ['data/schema.js', 't.transport = transport', 1, 'the normalised type carries the checked transport record, only where the def gives one'],
   ['data/schema.js', 'def.climb === true', 1, 'refuses a vehicle that sets climb: true (a hull never climbs)'],
   ['core/queries.js', 'memo.climb', 1, "gateGraph: the climbers' gate graph's cache slot in the nav's memo (F7a), not a unit's climb flag"],
+  // (F9b, OWNED) the schema telling a long hull by its footprint (its rules:
+  // a vehicle, OC0, no flier) and handing the record to core/footprint.js
+  // through its check (footprintOf)
+  ['data/schema.js', 'const shaped = def.footprint !== undefined', 1, 'tells a long hull by its footprint, to hold it to its rules (a vehicle, OC0, no flier)'],
+  ['data/schema.js', 'footprintOf(def.footprint, def.base', 1, 'checks the footprint record and has core/footprint.js derive t.fp from it (footprintOf)'],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
   // (F16) the courtesy fog reads a battle-log line or a tray that names no
@@ -424,6 +436,11 @@ if (main && args['self-test']) {
     ['core/actions/transport.js', 'if (tr.enclosed) return 0'],
     ['data/mission.js', "const hidden = t.transport?.enclosed"],
     ['core/actions/transport.js', "const sealed = tr['enclosed']"],
+    // (F9b, OWNED) the footprint record read outside core/footprint.js
+    ['core/nav.js', 'for (const d of u.t.footprint.discs) x()'],
+    ['core/actions/move.js', "const turn = u.t['footprint'].turn"],
+    ['core/queries.js', 'const { footprint } = u.t'],
+    ['data/mission.js', 'if (t.footprint) return'],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -470,6 +487,10 @@ if (main && args['self-test']) {
     ['present/deck.js', 'if (t.transport.enclosed) return []'],
     ['view/units.js', 'const rides = u.t.transport && !u.t.transport.enclosed'],
     ['core/actions/move.js', 'L += pts[i].climb ? pts[i].cost : 1'],
+    // (F9b, OWNED) its one reader, and the rules reading the derived tables
+    ['core/footprint.js', 'const fp = deriveFootprint(rec.footprint, id)'],
+    ['core/actions/move.js', 'if (u.t.fp) return hullPlan(G, u)'],
+    ['core/queries.js', 'const R = u.t.fp ? u.t.fp.R : u.r'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -493,6 +514,6 @@ if (main && !args['self-test']) {
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck, and (F9b) a long hull\'s footprint')
   process.exit(bad ? 1 : 0)
 }

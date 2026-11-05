@@ -134,9 +134,14 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // 1111) and the fit put it at 103 ± 39; at 150 the points bind their
       // lists again (612 of 1,000), open is 47.2%, fortified 57.2%, and
       // every unit sits inside its band, the cart 112 ± 30.)
+      // ((F9b) The Howdah at 190 here, provisional: its trial Field cost,
+      // 50, times the War-Cart's Grand to Field (150 to 40), 187.5, up to
+      // the next 5, so a one-model unit can't fill the slots and models a
+      // list's points leave over, as the cart did at its Field price; the
+      // fit (sim/army-sim.mjs) sets it with the Field cost.)
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 190 },
       },
     },
     // (F7a) and `fortified`, as every mission's
@@ -202,7 +207,8 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // destroyed bails them out mid-blast (§4.1 rule 16), a cart's wrecking
   // walk sets a keg off as any wrecker's (F19a), and a hull never climbs a
   // wreck's deck (no vehicle climbs). The ×3 presets field none, so the
-  // powder/ corpus, preset against preset, is the same battle either way.)
+  // powder/ corpus, preset against preset, is the same battle either way.
+  // (F9b) The same for the Howdah, at Grand's price.)
   powder: {
     board: { W: 80, H: 56 },
     deploy: 14,
@@ -213,7 +219,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 190 },
       },
     },
     // (the Powder Field's own set alone)

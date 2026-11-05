@@ -41,6 +41,10 @@ export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/cha
 export { freeSpot } from './deploy.js'
 export { groundOnly } from './actions/move.js'
 export { hullOf, riders, room, mayBoard, embarkSpot, landing, isTransport } from './actions/transport.js'
+// ((F9b) a footprint unit's discs where it stands, and the least edge gaps
+// to them: the view's outline and the tools measure a long hull as the
+// rules do)
+export { discsOf, clearOf, fpGap } from './footprint.js'
 export { rngState } from './rng.js'
 
 export const alive = (u) => u.alive > 0
