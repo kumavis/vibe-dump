@@ -678,8 +678,16 @@ export function score(G, u, x, z, ctx, moving) {
     if (front < 8) s -= (8 - front) * 0.6
   }
   // don't bunch up for the blast templates
+  // ((F9b, rule 10: the play-report's tuning) a long hull measures its own
+  // side of the gap by its body disc, t.base, as its range terms do (Q13),
+  // never its bounding R: read by R, every cell within 4.5" of a friend's
+  // centre cost it (its 2.5"-wide body taken for a 6" disc), and the
+  // Howdahs stayed behind their own lines, moving in 87-91% of their
+  // movement phases (play-report's F9b row: 41 of 47 on four Field and
+  // Grand AI pairs, 706 of 774 on its 64-battle sweep), where DESIGN
+  // §4.2.9 asks 90%; by the body disc 94% on that sweep (713 of 760))
   for (const f of friends) {
-    const g = hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
+    const g = t.fp ? hypot(f.pos.x - x, f.pos.z - z) - f.r - t.base : hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
     if (g < 1.5) s -= (1.5 - g) * 0.6
   }
   // (F19a) a powder keg's blast, and a wrecker's walk through a keg
