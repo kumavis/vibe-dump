@@ -32,10 +32,11 @@
 // of their own (both seats human, the Coil's list holding two Howdahs, at
 // the Coil's movement phase): a group Move holding both Howdahs and a
 // friend lands each member on the cell its preview drew and each long hull
-// facing the heading its preview drew (its move's default there, which
-// the executor's {u, c} takes; the board unsmashed, else left out, as a
-// wrecker's is above); and a March with a long hull (its field its body
-// disc's) counts among the march scenarios and their 80%.
+// facing the heading its preview drew (its move's default there; (F9b's
+// sweep) the executor sends the planner's f, so each hull's f is held to
+// the default rule as its move is sent, too; the board unsmashed, else
+// left out, as a wrecker's is above); and a March with a long hull (its
+// field its body disc's) counts among the march scenarios and their 80%.
 // A third of the point orders take a line formation (as an Alt-drag pins
 // one), and a third of the moves +D6 (each member advancing first: its
 // landing the roll's, so held only to acting once, and only in the group).
@@ -489,6 +490,17 @@ async function ridersScenario(L, board, out) {
     const m = pv.members.find((x) => x.u.id === p.id)
     if (m && m.cell >= 0) return `board ${board}: the preview sends rider ${p.t.short} ${p.id} to cell ${m.cell} of its own, not riding along with its hull`
   }
+  // ((F9b's sweep) and the planner's own rule beneath GroupInput's movers,
+  // which take the riders out first: present/orders.js's previewGroup
+  // asked with the riders among the members keeps each with its hull.
+  // Until then only a random probe over the corpus met that rule, and
+  // with hull/'s Field battles recorded again (f686198) the probes no
+  // longer did: planner-sends-riders went uncaught)
+  const pr = ses.preview((G2, q) => L.previewGroup(G2, q, seat, 'move', ids.map((id) => G2.units.find((x) => x.id === id)), target, null, {}))
+  for (const p of riders) {
+    const m = pr.members.find((x) => x.u.id === p.id)
+    if (!m || m.cell >= 0 || m.why !== 'with the hull') return `board ${board}: the planner, asked with rider ${p.t.short} ${p.id} among the members, plans it ${JSON.stringify(m && { cell: m.cell, why: m.why })}, not riding along with its hull`
+  }
   const mh = pv.members.find((x) => x.u.id === hull.id)
   if (!mh || mh.cell < 0) return `board ${board}: the preview leaves the hull where it stands (${JSON.stringify(mh && { cell: mh.cell, why: mh.why })})`
   const count = ses.count, rejected = ses.folder.rejected.length
@@ -552,7 +564,34 @@ async function hullScenario(L, board, out) {
   const pv = ses.preview((G2, q) => L.previewGroup(G2, q, seat, 'move', members.map((u) => G2.units.find((x) => x.id === u.id)), target, null, {}))
   for (const m of pv.members) if (m.u.t.fp && m.cell >= 0 && !(Number.isInteger(m.f) && m.f >= 0 && m.f < 8)) return `board ${board}: the preview plans long hull ${m.u.id} onto cell ${m.cell} with no heading (${JSON.stringify(m.f)})`
   const rejected = ses.folder.rejected.length, epoch = G.nav.epoch
-  await L.runGroup({ session: ses, seat, verb: 'move', members, target, line: null, advance: false })
+  // ((F9b's sweep) and each long hull's heading held to the rule's, not
+  // only to its preview's: since F9b's view the executor sends the
+  // planner's f, so a planner wrong about the default heading lands the
+  // hull facing just what its preview drew, the two agreeing (the
+  // heading-lowest fault went uncaught). The default (DESIGN §4.2.5): the
+  // valid end heading at its cell its plan reaches shortest, ties to the
+  // lowest, on the board as its move finds it, the members before it where
+  // they went)
+  const submit = ses.submit.bind(ses), wrong = []
+  ses.submit = (s, body) => {
+    const u = body?.t === 'move' ? ses.G.units.find((x) => x.id === body.u) : null
+    if (u?.t.fp) {
+      const want = ses.preview((G2, q) => {
+        const v = G2.units.find((x) => x.id === u.id), plan = q.movePlan(G2, v, v.flags.advanced ? v.flags.advRoll : 0)
+        let f = -1
+        for (let h = 0; h < 8; h++) if (q.validEnd(G2, plan, body.c, null, h) && (f < 0 || plan.res.dist[body.c * 8 + h] < plan.res.dist[body.c * 8 + f])) f = h
+        return f
+      })
+      if (body.f !== undefined && body.f !== want) wrong.push(`long hull ${u.id} sent onto cell ${body.c} facing ${body.f}, its move's default heading there ${want}`)
+    }
+    return submit(s, body)
+  }
+  try {
+    await L.runGroup({ session: ses, seat, verb: 'move', members, target, line: null, advance: false })
+  } finally {
+    ses.submit = submit
+  }
+  if (wrong.length) return `board ${board}: the group Move's headings aren't the move's default: ${wrong.join('; ')}`
   if (ses.folder.rejected.length !== rejected) return `board ${board}: the group Move's entries were rejected (${ses.folder.rejected.length - rejected})`
   const G2 = ses.G
   if (G2.nav.epoch !== epoch) {
