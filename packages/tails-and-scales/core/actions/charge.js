@@ -26,9 +26,10 @@ import { hypot } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
 import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
-import { moveMode, climbs, forbidMask, resolveWalk } from './move.js'
+import { moveMode, climbs, forbidMask, resolveWalk, masksOf, latticeMode, hullWalk } from './move.js'
 import { kegsGoOff } from './shoot.js'
 import { settle } from './settle.js'
+import { clearOf } from '../footprint.js'
 
 // (F9a) A rider charges nobody while aboard, nor once it has stepped off a
 // hull that had moved this turn (`rode`: DESIGN §4.2.5's disembarking).
@@ -55,8 +56,15 @@ export function chargeTargets(G, u) {
 // HIGH of its own floor, as it engages (engagedWith) and forbids
 // (forbidMask) only there: one on the ground below a deck doesn't keep a
 // charge off the deck's top.
+//
+// (F9b, DESIGN §4.2.5) A long hull target: the window round it grows to its
+// R (its r), and a spot's edge gap is to its nearest disc (clearOf: from
+// 0.02" to ENGAGE − 0.08); another long hull among the other enemies or
+// the friends keeps its spacing by its nearest disc too. A long hull
+// charging plans on its lattice instead (hullChargePlan).
 export function chargePlan(G, u, target) {
   refreshNav(G)
+  if (u.t.fp) return hullChargePlan(G, u, target)
   const nav = G.nav
   const others = enemiesOf(G, u).filter((e) => e !== target)
   const mode = moveMode(u)
@@ -77,15 +85,20 @@ export function chargePlan(G, u, target) {
     const i = iz * nav.nx + ix
     const d = res.dist[i]
     if (!isFinite(d)) continue
-    const dd = hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
-    if (dd > want || dd < target.r + u.r + 0.02) continue
+    if (target.t.fp) {
+      const g = clearOf(target, nav.x(i), nav.z(i), u.r)
+      if (g > ENGAGE - 0.08 || g < 0.02) continue
+    } else {
+      const dd = hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z)
+      if (dd > want || dd < target.r + u.r + 0.02) continue
+    }
     if (nav.hasHeight && Math.abs(nav.floor[i] - ty) > HIGH) continue
     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
     if (nav.hasHeight) {
-      if (others.some((e, k) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
-    } else if (others.some((e) => hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE)) continue
+      if (others.some((e, k) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE) && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
+    } else if (others.some((e) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE))) continue
     // (a friend's spacing; F9a: a rider stands in nobody's way)
-    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && !o.aboard && hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05)) continue
+    if (G.units.some((o) => o !== u && o !== target && alive(o) && o.side === u.side && !o.aboard && (o.t.fp ? clearOf(o, nav.x(i), nav.z(i), u.r) < 0.05 : hypot(o.pos.x - nav.x(i), o.pos.z - nav.z(i)) < o.r + u.r + 0.05))) continue
     spots.push({ i, d })
     if (d < bd) {
       best = i
@@ -96,11 +109,117 @@ export function chargePlan(G, u, target) {
   return { cell: best, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd, spots }
 }
 
+// (F9b, DESIGN §4.2.5) A long hull's charge plan: its lattice from where it
+// stands and faces, out to CHARGE_RANGE + 0.5, its masks per radius class
+// (the target's 1" bubble open, its discs not). The spots are states: every
+// reached state whose least disc gap to the target is from 0.02" to
+// ENGAGE − 0.08 (clearOf, each disc to the target's nearest), its body's
+// floor within HIGH of the target's with height, and each disc clear of
+// the other enemies' 1" (within HIGH of their floor, with height) and of
+// the friends by 0.05" (a reached state stands, its masks held already).
+// `cell` and `f` the shortest spot's state (ties: the lowest state index,
+// c·8 + h), `need` from its distance. Beside a round plan's fields, `fp`,
+// `f`, `cells` (nav.cellBest, the plan by cell), and spotOk (chargeEnd's
+// legality: below). Null when no spot is reached.
+function hullChargePlan(G, u, target) {
+  const nav = G.nav, fp = u.t.fp
+  const others = enemiesOf(G, u).filter((e) => e !== target)
+  const mode = moveMode(u)
+  const forbid = masksOf(G, u, ENGAGE + 0.05, [target])
+  const res = nav.hullReach(u.pos.x, u.pos.z, u.facing, fp, { max: CHARGE_RANGE + 0.5, mode: latticeMode(mode), forbid })
+  const ty = nav.hasHeight ? groundY(G, target) : 0
+  const oy = nav.hasHeight ? others.map((e) => groundY(G, e)) : null
+  const friends = G.units.filter((o) => o !== u && o !== target && alive(o) && o.side === u.side && !o.aboard)
+  const spots = []
+  let best = -1, bd = Infinity
+  for (const s of res.touched) {
+    const c = s >> 3, h = s & 7, d = res.dist[s]
+    if (nav.hasHeight && Math.abs(nav.floor[c] - ty) > HIGH) continue
+    const x = nav.x(c), z = nav.z(c), row = fp.H[h]
+    let g = Infinity, clash = false
+    for (let q = 0; q < row.length && !clash; q++) {
+      const dx = x + row[q].ix * fp.cell, dz = z + row[q].iz * fp.cell, r = row[q].r
+      const v = clearOf(target, dx, dz, r)
+      if (v < g) g = v
+      if (others.some((e, k) => clearOf(e, dx, dz, r) < ENGAGE && (!oy || Math.abs(nav.floor[c] - oy[k]) <= HIGH))) clash = true
+      else if (friends.some((o) => clearOf(o, dx, dz, r) < 0.05)) clash = true
+    }
+    if (clash || g > ENGAGE - 0.08 || g < 0.02) continue
+    spots.push({ i: c, f: h, d })
+    if (d < bd || (d === bd && s < best)) {
+      best = s
+      bd = d
+    }
+  }
+  if (best < 0) return null
+  const cell = best >> 3, f = best & 7
+  const plan = { cell, f, need: Math.max(2, Math.ceil(bd - 0.01)), res, forbid, mode, dist: bd, spots, fp, cells: nav.cellBest(res) }
+  // may the charge end on state (c, f) (any heading, f undefined) on a
+  // roll of `rolled`? A spot it reaches, with chargeSpots' grace; the
+  // shortest spot always
+  plan.spotOk = (c, h, rolled) => (h === undefined || h === null ? chargeFacing(plan, c, rolled) >= 0 : spots.some((p) => p.i === c && p.f === h && (p.d <= rolled + 0.011 || (c === cell && h === f))))
+  return plan
+}
+
+// (F9b, DESIGN §4.2.5's default heading) The heading a long hull's charge
+// ends on at cell c when its seat names none: of the spot states at c the
+// roll of `rolled` reaches (and the shortest spot, always), the one the
+// plan reaches shortest, ties to the lowest index; −1 when none.
+export function chargeFacing(plan, c, rolled) {
+  let best = -1, bd = Infinity
+  for (const p of plan.spots) {
+    if (p.i !== c || !(p.d <= rolled + 0.011 || (c === plan.cell && p.f === plan.f))) continue
+    if (p.d < bd || (p.d === bd && p.f < best)) {
+      bd = p.d
+      best = p.f
+    }
+  }
+  return best
+}
+
+// (F9b, DESIGN §4.2.5's "body disc as an exact lower bound": the charge
+// prefilter, rule 10's AI code) For long hull `u`: a test of whether a
+// charge on a target could be made at all, before its lattice is planned.
+// The body disc's own reach (its r, its mode, every enemy's base alone
+// forbidden: a mask inside every charge plan's for the body's class) is a
+// lower bound on the lattice's distance to every cell, so a target with no
+// cell within target.r + R + ENGAGE of it the body reaches in CHARGE_RANGE
+// has no spot a roll could make (a spot's body lies within that of the
+// target, and 12 is the dice's most): skipped. The reach is made once, for
+// every target the hull weighs. Draws nothing.
+export function chargeReach(G, u) {
+  refreshNav(G)
+  const nav = G.nav, fp = u.t.fp, mode = moveMode(u)
+  const forbid = forbidMask(G, u, ENGAGE + 0.05, enemiesOf(G, u), u.t.base)
+  const dist = nav.reach(u.pos.x, u.pos.z, { r: u.t.base, max: CHARGE_RANGE, mode: latticeMode(mode), forbid, climb: false }).dist
+  return (target) => {
+    const R = target.r + fp.R + ENGAGE, k = Math.ceil(R / nav.cell)
+    const c0 = nav.index(target.pos.x, target.pos.z)
+    if (c0 < 0) return false
+    const tx = c0 % nav.nx, tz = (c0 / nav.nx) | 0
+    for (let dz = -k; dz <= k; dz++) for (let dx = -k; dx <= k; dx++) {
+      const ix = tx + dx, iz = tz + dz
+      if (ix < 0 || iz < 0 || ix >= nav.nx || iz >= nav.nz) continue
+      const i = iz * nav.nx + ix
+      if (dist[i] <= CHARGE_RANGE && hypot(nav.x(i) - target.pos.x, nav.z(i) - target.pos.z) <= R) return true
+    }
+    return false
+  }
+}
+
 // The spots a roll of `rolled` reaches, by nav cell (1: the charge may end
 // there). The same 0.01" grace `need` was rounded with, and the shortest
 // move's spot always counts, so a roll that made the charge never leaves
 // nowhere to stand.
+// (F9b) A long hull's: by cell (any spot heading the roll reaches), sized
+// by the grid (its res is by state); plan.spotOk asks of a state.
 export function chargeSpots(plan, rolled) {
+  if (plan.fp) {
+    const ok = new Uint8Array(plan.cells.dist.length)
+    for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
+    ok[plan.cell] = 1
+    return ok
+  }
   const ok = new Uint8Array(plan.res.dist.length)
   for (const s of plan.spots) if (s.d <= rolled + 0.011) ok[s.i] = 1
   ok[plan.cell] = 1
@@ -160,7 +279,17 @@ export function declareCharge(G, u, target, via) {
 // (F19a, DESIGN §4.1 rule 28) A powder keg a charging wrecker smashed on
 // its way goes off once the charge's walk has ended, the charger standing
 // where it stopped, its setter-off (shoot.js kegsGoOff).
-export function finishCharge(G, u, target, cell, plan = chargePlan(G, u, target)) {
+//
+// (F9b) A long hull ends on the state (cell, f), f the end's heading (the
+// shortest spot's for the AI), along its lattice's path (hullWalk).
+export function finishCharge(G, u, target, cell, plan = chargePlan(G, u, target), f = plan.f) {
+  if (plan.fp) {
+    const kegs = hullWalk(G, u, G.nav.hullPath(plan.res, cell, f), { speed: 11 })
+    refreshNav(G)
+    settle(G)
+    if (kegs.length) kegsGoOff(G, u, kegs)
+    return
+  }
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   const kegs = resolveWalk(G, u, pts, { speed: 11, fly: plan.mode === 'fly' })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)

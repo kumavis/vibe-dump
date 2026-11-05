@@ -29,7 +29,8 @@
 // no-rolloff-row. The rest (no-formation through no-move-status, no-place
 // and on) are caught by the mirror; so (F9a) are no-embark, no-embark-phase,
 // no-carry and no-place-carry, by the mirror of the battles with War-Carts
-// present-check plays in Node, and no-embark-owners by the vehicle/
+// present-check plays in Node, and (F9b) no-pivot-f and no-place-f by the
+// mirror of its battles with Howdahs, and no-embark-owners by the vehicle/
 // corpus's logs. And three
 // edits of the page, not of an
 // event, caught by the check's card test at a checkpoint: card-reads-match,
@@ -200,6 +201,12 @@ export const MUTATIONS = {
   'no-embark-owners': ['/core/actions/transport.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n  log(G, u.side, `<b>${u.t.short}</b> board", "  log(G, u.side, `<b>${u.t.short}</b> board"],
   'no-carry': ['/present/mirror.js', '      u.y = e.to.y ?? 0\n      carry(M, e.u, u)', '      u.y = e.to.y ?? 0'],
   'no-place-carry': ['/present/mirror.js', '      u.aboard = 0\n      carry(M, e.u, u)', '      u.aboard = 0'],
+  // (F9b) a long hull's heading: its walk's end reported with no `f` (so a
+  // pivot, and every turn on the way, never reaches the mirror), and a
+  // placement's `f` never read by the mirror: present-check's battles with
+  // Howdahs (in Node)
+  'no-pivot-f': ['/core/actions/move.js', 'to: high ? { x: u.pos.x, y: groundY(G, u), z: u.pos.z, f: u.facing } : { x: u.pos.x, z: u.pos.z, f: u.facing }', 'to: high ? { x: u.pos.x, y: groundY(G, u), z: u.pos.z } : { x: u.pos.x, z: u.pos.z }'],
+  'no-place-f': ['/present/mirror.js', '      if (e.f !== undefined) u.f = e.f\n', ''],
   // (F7c) a unit's fall with its deck not reported, and the mirror's fall
   // keeping the floor the unit stood on: present-check's falls in Node
   'no-fall': ['/core/actions/settle.js', "  emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...(", "  if (false) emit(G, 'unit.fall', { u: u.id, to: { x: u.pos.x, y, z: u.pos.z }, dy: d.surface.y - y, ...("],

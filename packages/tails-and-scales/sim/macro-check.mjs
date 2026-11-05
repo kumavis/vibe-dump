@@ -28,6 +28,14 @@
 // a rider under any standing
 // order does nothing of its own in the movement phase, its step reading
 // "with the hull", nor is it among the actors End would act for.
+// (F9b, DESIGN §4.2.9's P-macro row) And with long hulls, on Field battles
+// of their own (both seats human, the Coil's list holding two Howdahs, at
+// the Coil's movement phase): a group Move holding both Howdahs and a
+// friend lands each member on the cell its preview drew and each long hull
+// facing the heading its preview drew (its move's default there, which
+// the executor's {u, c} takes; the board unsmashed, else left out, as a
+// wrecker's is above); and a March with a long hull (its field its body
+// disc's) counts among the march scenarios and their 80%.
 // A third of the point orders take a line formation (as an Alt-drag pins
 // one), and a third of the moves +D6 (each member advancing first: its
 // landing the roll's, so held only to acting once, and only in the group).
@@ -57,8 +65,8 @@ const { values: a } = parseArgs({ options: { probes: { type: 'string' }, seed: {
 
 async function load(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [session, store, orders, exec, standing, book, sti, group] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null), at('input/group.js').catch(() => null)])
-  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput, GroupInput: group?.GroupInput }
+  const [session, store, orders, exec, standing, book, sti, group, core, schema, mission] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null), at('input/group.js').catch(() => null), at('core/index.js'), at('data/schema.js'), at('data/mission.js')])
+  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput, GroupInput: group?.GroupInput, army: core.army, RACES: schema.RACES, MISSIONS: mission.MISSIONS }
 }
 
 function stream(seed) {
@@ -501,6 +509,121 @@ async function ridersScenario(L, board, out) {
   return null
 }
 
+// ── (F9b) Long hulls ────────────────────────────────────────────────────────
+// A Field battle on `board`, both seats human: the Coil (seat 0) with a
+// list holding two Howdahs (autoList on the check's own seeds), the
+// Bushtails the riders' list; both deployed, the battle played on by Auto
+// until the Coil's first movement phase. null when the Coil fields no
+// Howdah (code before F9b).
+function hullSession(L, board) {
+  const race = L.RACES.serpent, k = race.roster.findIndex((key) => race.units[key].fp)
+  if (k < 0) return null
+  let army = null
+  for (let s = 1; s < 400 && !army; s++) {
+    const counts = L.army.autoList(race, L.MISSIONS.field.list, s + board)
+    if ((counts[k] ?? 0) >= 2) army = L.army.listText(counts)
+  }
+  if (!army) throw new Error(`board ${board}: no Field list of the Coil's holds two Howdahs`)
+  const setup = { board, dice: 7, mission: 'field', terrain: 'open', seats: [{ race: 'serpent', ctrl: 'human', army }, { race: 'squirrel', ctrl: 'human', army: RIDE_LIST }] }
+  const ses = new L.Session({ store: new L.LocalStore(), localSeats: [0, 1], dev: 'here' })
+  ses.start(seatDevices(setup, 'here'))
+  ses.submit(0, { t: 'deployed' })
+  ses.submit(1, { t: 'deployed' })
+  for (let n = 0; n < 60; n++) {
+    const P = ses.G.pending, who = ses.decisionFor()
+    if (!P || who < 0) return null
+    if (who === 0 && P.k === 'phase' && P.phase === 'move') return ses
+    ses.submit(who, P.k === 'chargeEnd' ? { t: 'chargeEnd', c: -1 } : P.k === 'roundLimit' ? { t: 'vote', more: false } : who === 0 ? { t: 'end' } : { t: 'auto' })
+  }
+  return null
+}
+// The group Move with both Howdahs and the friend nearest the first, 6"
+// toward the enemy: every member on its previewed cell, each long hull on
+// its previewed heading (when no smash changed the board)
+async function hullScenario(L, board, out) {
+  const ses = hullSession(L, board)
+  if (!ses) return null
+  const G = ses.G, seat = 0
+  const hulls = G.units.filter((u) => u.side === seat && u.alive > 0 && u.t.fp && !u.flags.moved)
+  if (!hulls.length) return `board ${board}: the Coil has no Howdah to move`
+  const friend = G.units.filter((u) => u.side === seat && u.alive > 0 && !u.aboard && !u.t.fp).sort((a, b) => Math.hypot(a.pos.x - hulls[0].pos.x, a.pos.z - hulls[0].pos.z) - Math.hypot(b.pos.x - hulls[0].pos.x, b.pos.z - hulls[0].pos.z))[0]
+  const members = [...hulls, friend].filter(Boolean)
+  const target = { x: hulls[0].pos.x - G.seats[seat].edge * 6, z: hulls[0].pos.z }
+  const pv = ses.preview((G2, q) => L.previewGroup(G2, q, seat, 'move', members.map((u) => G2.units.find((x) => x.id === u.id)), target, null, {}))
+  for (const m of pv.members) if (m.u.t.fp && m.cell >= 0 && !(Number.isInteger(m.f) && m.f >= 0 && m.f < 8)) return `board ${board}: the preview plans long hull ${m.u.id} onto cell ${m.cell} with no heading (${JSON.stringify(m.f)})`
+  const rejected = ses.folder.rejected.length, epoch = G.nav.epoch
+  await L.runGroup({ session: ses, seat, verb: 'move', members, target, line: null, advance: false })
+  if (ses.folder.rejected.length !== rejected) return `board ${board}: the group Move's entries were rejected (${ses.folder.rejected.length - rejected})`
+  const G2 = ses.G
+  if (G2.nav.epoch !== epoch) {
+    out.smashed++
+    return null
+  }
+  for (const m of pv.members) {
+    if (m.cell < 0) continue
+    const u = G2.units.find((x) => x.id === m.u.id), c = G2.nav.index(u.pos.x, u.pos.z)
+    if (c !== m.cell) return `board ${board}: ${u.t.short} ${u.id} was previewed to cell ${m.cell} and went to ${c}`
+    if (u.t.fp) {
+      if (u.facing !== m.f) return `board ${board}: long hull ${u.id} was previewed onto cell ${m.cell} facing ${m.f} and faces ${u.facing}`
+      out.headings++
+    }
+  }
+  out.groups++
+  return null
+}
+// A March with a long hull: a Howdah of the Coil's, a slot between one and
+// three moves away by its body disc's field, the march its only order, as
+// marchScenario's; counted into the same marches
+async function hullMarch(L, board, out) {
+  const ses = hullSession(L, board)
+  if (!ses) return null
+  const seat = 0, G = ses.G
+  const u0 = G.units.find((u) => u.side === seat && u.alive > 0 && u.t.fp && !u.flags.moved)
+  if (!u0) return null
+  const field = ses.preview((G2, q) => L.goalField(G2, q, u0.pos, q.moveMode(u0), u0.t.base, q.climbs?.(u0)))
+  const cand = []
+  for (let i = 0; i < field.length; i++) if (field[i] > u0.t.M + 1 && field[i] <= 3 * u0.t.M) cand.push(i)
+  if (!cand.length) return null
+  const slot = cand[(board * 7919) % cand.length]
+  let order = { k: 'march', anchor: slot, slot }
+  let turns = 0, arrived = false, blocked = false, engaged = false
+  for (let k = 0; k < 400 && ses.G.turn.stage !== 'over' && turns < 3 && !arrived && !blocked; k++) {
+    const P = ses.G.pending, who = ses.decisionFor()
+    if (!P || who < 0) break
+    if (!(ses.G.units.find((x) => x.id === u0.id)?.alive > 0)) return null
+    if (P.k === 'roundLimit') ses.submit(who, { t: 'vote', more: false })
+    else if (P.k === 'chargeEnd') ses.submit(who, { t: 'chargeEnd', c: -1 })
+    else if (who !== seat) ses.submit(who, { t: 'auto' })
+    else {
+      const wasMove = P.phase === 'move'
+      await L.runOrders({ session: ses, seat, orders: new Map([[u0.id, order]]), then: 'end' })
+      const u = ses.G.units.find((x) => x.id === u0.id)
+      if (!(u?.alive > 0)) return null
+      engaged ||= ses.preview((G2, q) => q.isEngaged(G2, u))
+      const done = ses.preview((G2, q) => L.standing.doneOf(G2, q, u, order))
+      if (done) arrived = done.note === 'Arrived'
+      else if (wasMove) {
+        turns++
+        const p = ses.preview((G2, q) => L.standing.progressOf(G2, q, u, order))
+        if (p.blocked) blocked = true
+        else order = p.order
+      }
+    }
+  }
+  if (engaged || (!arrived && !blocked && turns < 3)) {
+    out.march.cut++
+    return null
+  }
+  out.march.n++
+  out.march.hulls = (out.march.hulls ?? 0) + 1
+  if (arrived) {
+    out.march.arrived++
+    out.march.hullsArrived = (out.march.hullsArrived ?? 0) + 1
+  }
+  if (blocked) out.march.blocked++
+  return null
+}
+
 async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.log } = {}) {
   const L = await load(dir)
   const rand = stream(seed)
@@ -544,6 +667,20 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
     }
     if (!out.settled.pilots || !out.settled.ends) out.bad.push(`the settings did nothing: ${out.settled.pilots} autopilot pilots, ${out.settled.ends} Auto-Ends`)
   }
+  // (F9b) the long hulls' rows, on code with the Howdah: the group Moves,
+  // and the marches (counted with the others, so before the 80% is judged)
+  const longs = L.RACES.serpent.roster.some((k) => L.RACES.serpent.units[k].fp) ? { groups: 0, headings: 0, smashed: 0 } : null
+  if (longs) {
+    for (const board of [4242, 31, 808, 52, 77, 19]) {
+      const why = await hullScenario(L, board, longs).catch((e) => `board ${board}: threw: ${e.stack}`)
+      if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
+    }
+    if (!longs.headings) out.bad.push(`long hulls: no group Move held a long hull's heading to its preview's (${longs.groups} held, ${longs.smashed} left out for a smash)`)
+    if (L.runOrders) {
+      for (const board of [4242, 31, 808, 52]) await hullMarch(L, board, out).catch((e) => out.bad.length < 8 && out.bad.push(`a long hull's march threw: ${e.message}`))
+      if (!out.march.hulls) out.bad.push('long hulls: no march with a long hull was counted')
+    }
+  }
   // (F9a) the riders' rows, on code with transports
   const rides = existsSync(join(dir, 'core', 'actions', 'transport.js')) ? { groups: 0, carried: 0, orders: 0 } : null
   if (rides) {
@@ -557,12 +694,12 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${longs ? `; (F9b) ${longs.groups} group Moves with Howdahs (${longs.smashed} more left out for a smash), ${longs.headings} long hulls on their previewed cell and heading; ${M.hullsArrived ?? 0} of ${M.hulls ?? 0} marches with a long hull arrived (among the marches above)` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
 const MUTANTS = [
-  ['preview-alone', 'present/orders.js', '      if (leg.cell >= 0) at.set(u.id, { x: G.nav.x(leg.cell), z: G.nav.z(leg.cell) })\n', ''],
+  ['preview-alone', 'present/orders.js', '      if (leg.cell >= 0) at.set(u.id, atOf(G, leg.cell, leg.f))\n', ''],
   ['slots-lost', 'input/orders.js', 'target, first.slots, opts)', 'target, null, opts)'],
   ['engaged-falls-back', 'present/orders.js', ": q.isEngaged(G, u) ? 'in combat' : ''", ": ''", 2],
   ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
@@ -577,7 +714,10 @@ const MUTANTS = [
   ['march-stale-roll', 'input/orders.js', '    for (let k = 0; k < 2 && phaseNow() === phase; k++) {', '    for (let k = 0; k < 1 && phaseNow() === phase; k++) {'],
   // a march planned on a field from where the unit stands, not its anchor
   // (away from its slot it finds no way nearer)
-  ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.r, q.climbs(u))\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.r, q.climbs(u))\n'],
+  ['march-wrong-field', 'present/standing.js', '    const field = goalField(G, q, anchor, q.moveMode(u), u.t.fp ? u.t.base : u.r, q.climbs(u))\n', '    const field = goalField(G, q, u.pos, q.moveMode(u), u.t.fp ? u.t.base : u.r, q.climbs(u))\n'],
+  // (F9b) the preview's heading for a long hull the lowest valid one, not
+  // the move's default (the shortest): the hull ends facing another
+  ['heading-lowest', 'present/orders.js', '    if (d < bd && q.validEnd(G, plan, cell, at, h)) {', '    if (f < 0 && q.validEnd(G, plan, cell, at, h)) {'],
   // (F10c's review) Auto with orders sends a plain auto: the AI plays every
   // unit, a Hold walked off its post, a March in combat fallen back
   ['auto-plays-ordered', 'input/orders.js', "  if (then === 'auto' && phaseNow() === phase) {", '  if (false) {'],

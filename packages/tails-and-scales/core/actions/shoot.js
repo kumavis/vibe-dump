@@ -65,6 +65,7 @@ import { damage } from './damage.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { kegsIn } from '../terrain/terrain.js'
 import { settle } from './settle.js'
+import { discsOf } from '../footprint.js'
 
 // (V3c) The weapon a shot or a cast uses: the unit's ranged weapon, or with
 // `sp` its spell of that index; null for a spell it doesn't have (the
@@ -303,7 +304,9 @@ export function blastVolley(G, u, target, w, info) {
   for (let k = 0; k < n; k++) {
     if (!alive(u)) break
     if (!alive(target) && k > 0) break
-    const ang = draw(G.rng) * Math.PI * 2, off = draw(G.rng) * target.r * 0.5
+    // ((F9b) a long hull is aimed inside its body disc, not over its
+    // bounding circle: the same two draws, in the same order)
+    const ang = draw(G.rng) * Math.PI * 2, off = target.t.fp ? draw(G.rng) * target.t.base * 0.5 : draw(G.rng) * target.r * 0.5
     const aim = { x: target.pos.x + cos(ang) * off, z: target.pos.z + sin(ang) * off }
     emit(G, 'blast.aim', { x: aim.x, z: aim.z, r: w.blast })
     const r = roll(G, 1)
@@ -441,8 +444,13 @@ function landing(G, u, land, w, from = u.pos) {
 // The living models of `v` under `w`'s template landed at `land`: within
 // its radius and 0.6 of the model's base of the landing, (F7a) in 3D from
 // the floor there (`ly`) with height, flat without. (F18) blastLands'
-// victims, and friendsUnder's.
+// victims, and friendsUnder's. (F9b) A long hull's one model is under it
+// when any of its discs is, within the radius and 0.6 of that disc's r.
 function modelsUnder(G, v, land, ly, w) {
+  if (v.t.fp) {
+    const under = discsOf(v).some((d) => (G.nav.hasHeight ? hypot3(d.x - land.x, floorAt(G, d.x, d.z) - ly, d.z - land.z) : hypot(d.x - land.x, d.z - land.z)) <= w.blast + d.r * 0.6)
+    return under ? v.models.filter((m) => m.alive) : []
+  }
   return G.nav.hasHeight
     ? v.models.filter((m) => m.alive && hypot3(mx(v, m) - land.x, floorAt(G, mx(v, m), mz(v, m)) - ly, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)
     : v.models.filter((m) => m.alive && hypot(mx(v, m) - land.x, mz(v, m) - land.z) <= w.blast + v.t.base * 0.6)

@@ -316,14 +316,33 @@ function battery(core, G, seat, rand) {
       if (p) out.push({ t: 'place', u: u.id, c: nav.index(p.x, p.z) })
     }
     out.push({ t: 'place', u: theirs[0].id, c: nav.index(theirs[0].pos.x, theirs[0].pos.z) }, { t: 'deployed' })
+    // ((F9b, P-hull) headings: a long hull where it stands at each heading,
+    // at its free spot's, and at headings past 0-7; a round unit given one)
+    for (const u of mine.filter((x) => x.t.fp && q.alive(x))) {
+      const c = nav.index(u.pos.x, u.pos.z)
+      for (let f = 0; f < 8; f++) out.push({ t: 'place', u: u.id, c, f })
+      const p = q.freeSpot(G, u, (rand() - 0.5) * nav.W, (rand() - 0.5) * nav.H, seat, G.units.filter((o) => o !== u))
+      if (p) out.push({ t: 'place', u: u.id, c: nav.index(p.x, p.z), f: p.f }, { t: 'place', u: u.id, c: nav.index(p.x, p.z), f: (p.f + 1) & 7 })
+      out.push({ t: 'place', u: u.id, c, f: 8 }, { t: 'place', u: u.id, c, f: -1 })
+    }
+    if (mine.some((x) => x.t.fp)) for (const u of some(mine.filter((x) => !x.t.fp && q.alive(x)), 1)) out.push({ t: 'place', u: u.id, c: nav.index(u.pos.x, u.pos.z), f: 2 })
     // the movement phase: advances, and moves to cells the plan offers (its
     // valid ends, the one nearest a random point) and to random ones
     for (const u of mine.filter((u) => q.alive(u))) {
       out.push({ t: 'advance', u: u.id })
       const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
       const ok = []
-      for (let i = 0; i < nav.N; i++) if (isFinite(plan.res.dist[i]) && q.validEnd(G, plan, i)) ok.push(i)
+      // ((F9b) a long hull's plan by cell: plan.cells)
+      const byCell = plan.fp ? plan.cells : plan.res
+      for (let i = 0; i < nav.N; i++) if (isFinite(byCell.dist[i]) && q.validEnd(G, plan, i)) ok.push(i)
       for (const c of some(ok, 3)) out.push({ t: 'move', u: u.id, c })
+      // ((F9b, P-hull) a long hull's moves at headings: every heading at a
+      // few valid cells (some valid ends, some not), one past 0-7 and one
+      // below; a round unit's move given a heading)
+      if (u.t.fp) {
+        for (const c of some(ok, 2)) for (let f = 0; f < 8; f++) out.push({ t: 'move', u: u.id, c, f })
+        if (ok.length) out.push({ t: 'move', u: u.id, c: ok[0], f: 8 }, { t: 'move', u: u.id, c: ok[0], f: -1 })
+      } else if (mine.some((x) => x.t.fp) && ok.length) out.push({ t: 'move', u: u.id, c: ok[0], f: 0 })
       out.push({ t: 'move', u: u.id, c: q.nearestValid(G, plan, u.pos.x + (rand() - 0.5) * 16, u.pos.z + (rand() - 0.5) * 16) })
       out.push({ t: 'move', u: u.id, c: cell() })
       q.canAct(G, u)
@@ -365,6 +384,13 @@ function battery(core, G, seat, rand) {
       const spots = []
       if (plan) q.chargeSpots(plan, P.rolled).forEach((v, i) => v && spots.push(i))
       for (const c of some(spots, 3)) out.push({ t: 'chargeEnd', c })
+      // ((F9b, P-hull) a long hull's end at each heading of a few spots, -1
+      // with a heading, and headings past 0-7; a round charger's with one)
+      const ch = G.units.find((u) => u.id === P.u)
+      if (ch?.t.fp) {
+        for (const c of some(spots, 2)) for (let f = 0; f < 8; f++) out.push({ t: 'chargeEnd', c, f })
+        out.push({ t: 'chargeEnd', c: -1, f: 0 }, { t: 'chargeEnd', c: plan?.cell ?? 0, f: 8 })
+      } else if (G.units.some((u) => u.t.fp) && spots.length) out.push({ t: 'chargeEnd', c: spots[0], f: 1 })
     }
     out.push({ t: 'chargeEnd', c: -1 }, { t: 'chargeEnd', c: cell() }, { t: 'end' }, { t: 'auto' }, { t: 'concede' })
     // (F4) the round limit's say, either way (legal only there)
@@ -441,7 +467,8 @@ function actorsOutside(core, G, seat, m) {
 
 // bodies with a field their kind doesn't take, each of them refused
 const JUNK = [{ t: 'end', c: 0 }, { t: 'chargeEnd', c: -1, u: 0 }, { t: 'shoot', u: 0, tg: 1, c: 0 }]
-const KEYS = { place: ['u', 'c'], deployed: [], advance: ['u'], move: ['u', 'c'], shoot: ['u', 'tg', 'sp'], charge: ['u', 'tg'], chargeEnd: ['c'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [], embark: ['u', 'v'], disembark: ['u', 'c'] }
+// ((F9b) place, move and chargeEnd's optional heading f)
+const KEYS = { place: ['u', 'c', 'f'], deployed: [], advance: ['u'], move: ['u', 'c', 'f'], shoot: ['u', 'tg', 'sp'], charge: ['u', 'tg'], chargeEnd: ['c', 'f'], end: [], auto: [], pilot: ['m'], vote: ['more'], concede: [], embark: ['u', 'v'], disembark: ['u', 'c'] }
 
 // Judge the battery for `seat` (and some for the other seat and seats that
 // don't exist); every verdict must leave the match exactly as it was.
@@ -500,6 +527,16 @@ function probe(core, G, seat, rand, where) {
     if (units.some((u) => !core.q.alive(u))) throw new Error(`${where}: legal() accepted a pilot naming a destroyed unit: ${JSON.stringify(b)}`)
     if (!units.some((u) => core.q.canAct(G, u))) throw new Error(`${where}: legal() accepted a pilot none of whose units can act: ${JSON.stringify(b)}`)
     if (G.pending?.k !== 'phase') throw new Error(`${where}: legal() accepted a pilot outside a phase (${JSON.stringify(G.pending)})`)
+  }
+  // ((F9b, P-hull) every heading legal() takes is one DESIGN allows, and
+  // the three it must refuse are refused: judged here (hullWrong))
+  for (const b of cands) {
+    if (b?.f === undefined) continue
+    const wrong = hullWrong(core, G, seat, b), taken = ok.includes(b)
+    PHULL.judged++
+    if (wrong && taken) throw new Error(`${where}: legal() accepted ${JSON.stringify(b)}, which ${wrong.why}`)
+    if (wrong) PHULL[wrong.kind]++
+    else if (taken) PHULL.taken++
   }
   // (F9a) every embark and disembark legal() takes is one DESIGN §4.2.5's
   // table allows, judged here from the match (rideWrong), not by the
@@ -590,6 +627,132 @@ function invariants(core, G, where, last) {
     for (const [k, x] of Object.entries(v)) walk(x, `${path}.${k}`)
   }
   for (const [k, v] of Object.entries(G)) if (k !== 'out' && k !== 'onTrace') walk(v, `G.${k}`)
+  // (F9b) P-hull's state, on a match with a long hull on the table
+  hullState(core, G, where)
+}
+
+// ── P-hull (F9b) ────────────────────────────────────────────────────────────
+// (DESIGN §4.2.9's P-hull; §4.2.5) After every entry of every hull game
+// (invariants, at every command boundary; P-riders' AI battles at every
+// trace line): every long hull on the table faces one of the headings
+// 0-7, stands with its body on a cell's centre and every disc standing
+// (its cell on the board, its clearance, the hull's own mode's, and with
+// height its cliff and its floor on the ground), no disc of any unit
+// within spacing (0.02", the least a rule leaves: a charge's spot) of
+// another unit's discs, and its riders at its own place. Each measured
+// here, from the hull's own tables (t.fp) and the nav's arrays, never by
+// the core's hullStands, clearOf or fpGap. And at every decision of a game
+// with a human seat, every `place`, `move` and `chargeEnd` legal() takes
+// with a heading `f` is one DESIGN allows (hullWrong), and it refuses each
+// of the three: an `f` for a round unit, an `f` outside 0-7, and an `f`
+// whose state is no valid end (counted in PHULL, reported by the run).
+let HULL_STEP = null
+const PHULL = { hulls: 0, round: 0, range: 0, state: 0, taken: 0, judged: 0 }
+// a footprint unit's discs where it stands (or at (x, z) facing h), front
+// to back, from its tables
+function discsHere(u, x = u.pos.x, z = u.pos.z, h = u.facing) {
+  const fp = u.t.fp
+  return fp.H[h].map((d, q) => ({ x: x + d.ix * fp.cell, z: z + d.iz * fp.cell, r: d.r, q }))
+}
+// the least edge gap from the disc (x, z, r) to unit o (its discs, or its
+// one disc)
+function edgeTo(o, x, z, r) {
+  if (!o.t.fp) return Math.hypot(o.pos.x - x, o.pos.z - z) - o.r - r
+  let g = Infinity
+  for (const d of discsHere(o)) g = Math.min(g, Math.hypot(d.x - x, d.z - z) - d.r - r)
+  return g
+}
+// the least edge gap between two units' discs
+function unitsApart(a, b) {
+  const ds = a.t.fp ? discsHere(a) : [{ x: a.pos.x, z: a.pos.z, r: a.r }]
+  let g = Infinity
+  for (const d of ds) g = Math.min(g, edgeTo(b, d.x, d.z, d.r))
+  return g
+}
+// whether footprint `fp` stands on state (c, h) of nav, in `mode` ('wreck':
+// clearHard, else clearAll), its masks `forbid` (one per radius class, or
+// null) held too: every disc's cell on the board, clear by r − 0.06, and
+// with height its cliff by as much and its floor within STEP
+function standsHere(nav, fp, c, h, mode, forbid = null) {
+  const ix = c % nav.nx, iz = (c / nav.nx) | 0
+  const cl = mode === 'wreck' ? nav.clearHard : nav.clearAll
+  for (const [q, d] of fp.H[h].entries()) {
+    const jx = ix + d.ix, jz = iz + d.iz
+    if (jx < 0 || jz < 0 || jx >= nav.nx || jz >= nav.nz) return false
+    const j = jz * nav.nx + jx, need = d.r - 0.06
+    if (cl[j] < need) return false
+    if (nav.hasHeight && (nav.cliff[j] < need || nav.floor[j] > HULL_STEP)) return false
+    if (forbid?.[fp.cls[q]]?.[j]) return false
+  }
+  return true
+}
+function hullState(core, G, where) {
+  const q = core.q
+  const live = G.units.filter((u) => q.alive(u) && !u.aboard)
+  if (!live.some((u) => u.t.fp)) return 0
+  const nav = G.nav
+  let n = 0
+  for (const u of live) {
+    if (!u.t.fp) continue
+    const name = `unit ${u.id} (${u.t.short}, a long hull)`
+    if (!(Number.isInteger(u.facing) && u.facing >= 0 && u.facing < 8)) throw new Error(`${where}: ${name} faces ${JSON.stringify(u.facing)}, not one of the headings 0-7`)
+    const c = nav.index(u.pos.x, u.pos.z)
+    if (c < 0 || nav.x(c) !== u.pos.x || nav.z(c) !== u.pos.z) throw new Error(`${where}: ${name} stands at (${u.pos.x}, ${u.pos.z}), its body on no cell's centre`)
+    const mode = u.t.move === 'wreck' ? 'wreck' : 'walk'
+    if (!standsHere(nav, u.t.fp, c, u.facing, mode)) throw new Error(`${where}: ${name} at cell ${c} facing ${u.facing} has a disc that doesn't stand (its cell off the board, short of clearance${nav.hasHeight ? ', of cliff, or off the ground' : ''}, in ${mode} mode)`)
+    for (const o of live) {
+      if (o === u) continue
+      const g = unitsApart(u, o)
+      if (g < 0.02 - 1e-9) throw new Error(`${where}: ${name}'s discs and unit ${o.id} (${o.t.short})'s are ${g.toFixed(4)}" apart, within the 0.02" no rule leaves`)
+    }
+    for (const p of G.units) if (p.aboard === u.id && (p.pos.x !== u.pos.x || p.pos.z !== u.pos.z)) throw new Error(`${where}: unit ${p.id} rides ${name} but stands at (${p.pos.x}, ${p.pos.z}), not its hull's place`)
+    n++
+  }
+  PHULL.hulls += n
+  return n
+}
+
+// Why legal() should refuse body `b` (a place, move or chargeEnd naming a
+// heading `f`) for seat `seat`, judged here from the match, or null when
+// DESIGN §4.2.5 allows its heading: `kind` names the refusal ('round',
+// 'range', 'state'), `why` says it. Without an `f`, null: the default
+// heading is the core's to take (P-hull's state then holds where it went).
+function hullWrong(core, G, seat, b) {
+  if (b.f === undefined || !['place', 'move', 'chargeEnd'].includes(b.t)) return null
+  const q = core.q, nav = G.nav, P = G.pending
+  const u = G.units.find((x) => x.id === (b.t === 'chargeEnd' ? P?.u : b.u))
+  if (!u) return null
+  if (!u.t.fp) return { kind: 'round', why: `names a heading for ${u.t.short}, a round unit` }
+  if (!(Number.isInteger(b.f) && b.f >= 0 && b.f < 8)) return { kind: 'range', why: `names heading ${b.f}, none of 0-7` }
+  if (!Number.isInteger(b.c) || (b.t === 'chargeEnd' && b.c === -1)) return null
+  if (b.c < 0 || b.c >= nav.N) return null
+  const fp = u.t.fp, x = nav.x(b.c), z = nav.z(b.c), ds = discsHere(u, x, z, b.f)
+  const others = G.units.filter((o) => o !== u && q.alive(o) && !o.aboard)
+  const no = (why) => ({ kind: 'state', why })
+  if (b.t === 'place') {
+    const edge = G.seats[u.side].edge, { W, deploy } = G.board
+    const lo = Math.min(edge * (W / 2), edge * (W / 2 - deploy)), hi = Math.max(edge * (W / 2), edge * (W / 2 - deploy))
+    if (ds.some((d) => d.x - d.r < lo - 0.01 || d.x + d.r > hi + 0.01)) return no(`puts a disc of ${u.t.short} outside its zone`)
+    if (!standsHere(nav, fp, b.c, b.f, 'walk')) return no(`puts ${u.t.short} on cell ${b.c} facing ${b.f}, where a disc doesn't stand`)
+    for (const d of ds) for (const o of others) if (edgeTo(o, d.x, d.z, d.r) < 0.4 - 1e-9) return no(`puts a disc of ${u.t.short} within 0.4" of unit ${o.id}`)
+    return null
+  }
+  if (b.t === 'move') {
+    const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+    if (!(plan.res.dist[b.c * 8 + b.f] <= plan.max)) return no(`moves ${u.t.short} to state (${b.c}, ${b.f}), which its plan doesn't reach within ${plan.max}"`)
+    if (!standsHere(nav, fp, b.c, b.f, u.t.move === 'wreck' ? 'wreck' : 'walk', plan.endForbid)) return no(`moves ${u.t.short} to state (${b.c}, ${b.f}), where a disc doesn't stand (or stands in an enemy's 1")`)
+    for (const d of ds) for (const o of others) if (edgeTo(o, d.x, d.z, d.r) < 0.08 - 1e-9) return no(`moves a disc of ${u.t.short} within 0.08" of unit ${o.id}`)
+    return null
+  }
+  const tg = G.units.find((x) => x.id === P.tg), plan = q.chargePlan(G, u, tg)
+  if (!plan) return no('ends a charge that has no plan')
+  const d0 = plan.res.dist[b.c * 8 + b.f]
+  if (!(d0 <= P.rolled + 0.011) && !(b.c === plan.cell && b.f === plan.f)) return no(`ends ${u.t.short}'s charge on state (${b.c}, ${b.f}), which its roll of ${P.rolled}" doesn't reach`)
+  let g = Infinity
+  for (const d of ds) g = Math.min(g, edgeTo(tg, d.x, d.z, d.r))
+  const ENGAGE = 1
+  if (g < 0.02 - 1e-9 || g > ENGAGE - 0.08 + 1e-9) return no(`ends ${u.t.short}'s charge ${g.toFixed(3)}" from its target, outside 0.02" to ${ENGAGE - 0.08}"`)
+  return null
 }
 
 // The result agrees with how the battle ended (a concession is refused once
@@ -896,10 +1059,15 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     const pickList = mulberry32(seed * 40503 + 7), rules = lists.MISSIONS[lists.mission].list
     setup.mission = lists.mission
     if (lists.rides) setup.seats.forEach((x, i) => (x.race = i === 0 || seed % 2 === 0 ? 'squirrel' : 'serpent'))
+    // ((F9b, P-hull) a hull game: the Coil in seat 1, and in seat 0 on
+    // every other seed, each Coil list holding two Howdahs where its
+    // budget lets it, one at least)
+    if (lists.hulls) setup.seats.forEach((x, i) => (x.race = i === 1 || seed % 2 === 0 ? 'serpent' : 'squirrel'))
     for (const x of setup.seats) {
       const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
       const at = { ...rules, points: budget }
-      x.army = (lists.rides && cartList(core.army, lists.RACES[x.race], at, pickList)) || core.army.listText(core.army.autoList(lists.RACES[x.race], at, Math.floor(pickList() * 2 ** 32)))
+      x.army = (lists.hulls && x.race === 'serpent' && (cartList(core.army, lists.RACES[x.race], at, pickList, 2) || cartList(core.army, lists.RACES[x.race], at, pickList))) ||
+        (lists.rides && cartList(core.army, lists.RACES[x.race], at, pickList)) || core.army.listText(core.army.autoList(lists.RACES[x.race], at, Math.floor(pickList() * 2 ** 32)))
     }
   }
   // (F7a) two games in five on the fortified boards, for code whose mission
@@ -946,6 +1114,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const rides = !!watch && G.units.some((u) => u.t.transport)
   if (lists) unitsAre(core, G, lists.RACES, where0)
   if (lists?.rides && !rides) throw new Error(`${where0}: a P-riders game fields no War-Cart (its lists ${setup.seats.map((x) => x.army).join(', ')})`)
+  if (lists?.hulls && !G.units.some((u) => u.t.fp)) throw new Error(`${where0}: a P-hull game fields no long hull (its lists ${setup.seats.map((x) => x.army).join(', ')})`)
   if (rides) counts.rides = { games: 1, autoloaded: 0, hidden: 0, embarkDeploy: 0, embarkPhase: 0, disembarks: 0, steps: 0, bailed: 0, lost: 0 }
   const last = { trace: 0, n: 0 }
   let conceded = -1, piloted = ''
@@ -1725,7 +1894,9 @@ function armyGamesTask(core, RACES, MISSIONS, mission, n, seed, mods = null) {
     }
     const onTrace = watch ? (line, g) => {
       watch.G = g
-      if (!line.startsWith('log ')) ridersState(core, mods, g, `${where} at trace line ${g.journal.trace.length}`)
+      if (line.startsWith('log ')) return
+      ridersState(core, mods, g, `${where} at trace line ${g.journal.trace.length}`)
+      hullState(core, g, `${where} at trace line ${g.journal.trace.length}`)
     } : null
     try {
       G = core.createMatch(setup, { out, strict: true, onTrace })
@@ -1854,7 +2025,14 @@ function heightRules(core, G, where, rand) {
   const live = G.units.filter((u) => q.alive(u))
   for (const u of live) {
     const i = nav.index(u.pos.x, u.pos.z)
-    if (!(nav.cliff[i] >= u.r - 0.06)) throw new Error(`${where}: unit ${u.id} (${u.t.short}, r ${u.r.toFixed(3)}) straddles a ledge at (${u.pos.x}, ${u.pos.z}): cliff ${nav.cliff[i]}`)
+    // ((F9b) a long hull straddles no ledge by any disc: its r is its
+    // bounding R, no disc's)
+    if (u.t.fp && !u.aboard) {
+      for (const d of discsHere(u)) {
+        const j = nav.index(d.x, d.z)
+        if (!(nav.cliff[j] >= d.r - 0.06)) throw new Error(`${where}: unit ${u.id} (${u.t.short}, a long hull)'s disc ${d.q} (r ${d.r}) straddles a ledge at (${d.x}, ${d.z}): cliff ${nav.cliff[j]}`)
+      }
+    } else if (!(nav.cliff[i] >= u.r - 0.06)) throw new Error(`${where}: unit ${u.id} (${u.t.short}, r ${u.r.toFixed(3)}) straddles a ledge at (${u.pos.x}, ${u.pos.z}): cliff ${nav.cliff[i]}`)
     for (const e of q.engagedWith(G, u)) {
       const dy = Math.abs(q.groundY(G, u) - q.groundY(G, e))
       if (dy > q.HIGH) throw new Error(`${where}: unit ${u.id} is engaged with unit ${e.id} ${dy}" below or above it`)
@@ -2670,7 +2848,8 @@ function heightTask(core, mods) {
 // what it never met and fails. ((F9a, at its merge) No classic preset
 // fields the War-Cart, so on code with transports each board plays its
 // hulls' fight and clear shot again on a Field battle whose Bushtails
-// field the P-riders scenes' list, the Coil its Field preset.)
+// field the P-riders scenes' list, the Coil its Field preset; (F9b) on
+// code with the Howdah, the Coil's Field preset and a Howdah, HULL_LIST.)
 const FIGHT_BOARDS = 6
 function fightTask(core, mods) {
   const q = core.q
@@ -2678,6 +2857,8 @@ function fightTask(core, mods) {
   const met = { fight: new Set(), clear: new Set(), tie: new Set() }
   // ((F9a) the code has transports: their guns are met on Field boards)
   const HULLS = Object.values(RACES_F.squirrel.units).some((t) => t.transport)
+  // ((F9b) and the Coil's Howdah, its Venom lobber met there too)
+  const HULL_LIST = Object.values(RACES_F.serpent.units).some((t) => t.fp) ? '2242221' : 'field'
   const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
   const at = (u, x, z) => {
     u.pos.x = x
@@ -2690,7 +2871,7 @@ function fightTask(core, mods) {
   // fielding the P-riders scenes' list (two War-Carts), the Coil its Field
   // preset: no classic preset fields the War-Cart, a ranged unit like any)
   const fresh = (board, races, carts = false) => {
-    const seats = races.map((race) => ({ race, ctrl: 'human', ...(carts ? { army: race === 'squirrel' ? SCENE_LIST : 'field' } : {}) }))
+    const seats = races.map((race) => ({ race, ctrl: 'human', ...(carts ? { army: race === 'squirrel' ? SCENE_LIST : HULL_LIST } : {}) }))
     const G = core.createMatch({ board, dice: board, ...(carts ? { mission: 'field', terrain: 'open' } : {}), seats }, { out: [] })
     core.apply(G, 0, { t: 'deployed' })
     core.apply(G, 1, { t: 'deployed' })
@@ -4337,10 +4518,11 @@ function bailWatch(core, mods) {
     if (p.pos.x !== e.to.x || p.pos.z !== e.to.z) fail(`unit ${p.id}'s bail-out says (${e.to.x}, ${e.to.z}), but it stands at (${p.pos.x}, ${p.pos.z})`)
     const i = nav.index(p.pos.x, p.pos.z)
     if (nav.x(i) !== p.pos.x || nav.z(i) !== p.pos.z) fail(`unit ${p.id} bailed out to (${p.pos.x}, ${p.pos.z}), no cell's centre`)
-    const reach = Math.hypot(p.pos.x - v.pos.x, p.pos.z - v.pos.z) - v.r - p.r
+    // ((F9b) a long hull's edge, and another's, its nearest disc's)
+    const reach = edgeTo(v, p.pos.x, p.pos.z, p.r)
     if (reach > 3 + 1e-9) fail(`unit ${p.id} bailed out ${reach.toFixed(3)}" from its hull's edge, past the 3" of a landing`)
     if (!nav.standable(i, p.r, 'walk')) fail(`unit ${p.id} bailed out onto cell ${i}, where its base can't stand`)
-    const crowd = G.units.find((o) => o !== p && q.alive(o) && !o.aboard && Math.hypot(o.pos.x - p.pos.x, o.pos.z - p.pos.z) < o.r + p.r + 0.08)
+    const crowd = G.units.find((o) => o !== p && q.alive(o) && !o.aboard && edgeTo(o, p.pos.x, p.pos.z, p.r) < 0.08 - 1e-9)
     if (crowd) fail(`unit ${p.id} bailed out onto cell ${i}, within unit ${crowd.id}'s spacing (${Math.hypot(crowd.pos.x - p.pos.x, crowd.pos.z - p.pos.z).toFixed(3)}" apart, centre to centre)`)
     if (G.terrain.dirty) {
       w.counts.dirty++
@@ -4359,6 +4541,13 @@ function bailWatch(core, mods) {
       }
       if (best !== i) fail(`unit ${p.id} bailed out onto cell ${i}, not the landing cell nearest its hull's centre ${free.length ? 'outside the enemies\' 1"' : '(none outside the enemies\' 1" left)'} (cell ${best}, ${bd.toFixed(3)}" off, against ${Math.hypot(p.pos.x - v.pos.x, p.pos.z - v.pos.z).toFixed(3)}")`)
       w.counts[free.length ? 'nearest' : 'fallbacks']++
+      // ((F9b) and every landing cell within 3" of a long hull's discs,
+      // none past them)
+      if (v.t.fp) {
+        const far = pool.find((c) => edgeTo(v, nav.x(c), nav.z(c), p.r) > 3 + 1e-9)
+        if (far !== undefined) fail(`unit ${p.id}'s landing off long hull ${v.id} offers cell ${far}, ${edgeTo(v, nav.x(far), nav.z(far), p.r).toFixed(3)}" from its nearest disc, past 3"`)
+        w.counts.longs = (w.counts.longs ?? 0) + 1
+      }
     }
     w.dice = { u: p.id, alive: p.alive, short: p.t.short }
     w.counts.bailed++
@@ -4435,7 +4624,8 @@ function rideWrong(core, G, seat, b) {
       // (a valid end of its move within 1" of the hull: its own plan's)
       const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
       // (a hair's grace on the radius: the rule's measure is dmath's)
-      const reach = cellsWithin(G.nav, v.pos.x, v.pos.z, v.r + u.r + 1 + 1e-9).some((i) => isFinite(plan.res.dist[i]) && q.validEnd(G, plan, i))
+      // ((F9b) a long hull's: within 1" of any of its discs)
+      const reach = cellsWithin(G.nav, v.pos.x, v.pos.z, v.r + u.r + 1 + 1e-9).some((i) => isFinite(plan.res.dist[i]) && (!v.t.fp || edgeTo(v, G.nav.x(i), G.nav.z(i), u.r) <= 1 + 1e-9) && q.validEnd(G, plan, i))
       if (!reach) return `boards unit ${u.id}, whose move reaches no valid end within 1" of unit ${v.id}`
     }
     return null
@@ -4479,6 +4669,7 @@ function ridesBattle(core, mods, mirror, setup, where, rand) {
     const at = `${where} at trace line ${G.journal.trace.length}`
     if (seen.autoload < 0) seen.autoload = autoloadCheck(G, at)
     ridersState(core, mods, G, at)
+    hullState(core, G, at)
     seen.lines++
     if (line.startsWith('act ') && rand() < 0.12) seen.hidden += ridersHidden(core, mods, G, at)
   }
@@ -4540,10 +4731,11 @@ const SCENE_LIST = '1032012'
 // hand, which no event reports)
 // (`battle`: both seats' deployments closed, the battle begun: a scene
 // whose blows land there, as they only can)
-function sceneMatch(core, mods, mirror, { other = 'squirrel', board = 4242, terrain = 'open', battle = false } = {}) {
+// ((F9b) `otherArmy`, the other seat's list when it isn't the Bushtails')
+function sceneMatch(core, mods, mirror, { other = 'squirrel', board = 4242, terrain = 'open', battle = false, otherArmy = null } = {}) {
   const out = new Watched(), watch = bailWatch(core, mods)
   out.watch = watch.event
-  const setup = { board, dice: 99, mission: 'field', terrain, seats: [{ race: 'squirrel', ctrl: 'human', army: SCENE_LIST }, { race: other, ctrl: 'human', ...(other === 'squirrel' ? { army: SCENE_LIST } : {}) }] }
+  const setup = { board, dice: 99, mission: 'field', terrain, seats: [{ race: 'squirrel', ctrl: 'human', army: SCENE_LIST }, { race: other, ctrl: 'human', ...(other === 'squirrel' ? { army: SCENE_LIST } : otherArmy ? { army: otherArmy } : {}) }] }
   const G = core.createMatch(setup, { out })
   watch.G = G
   if (battle) for (const s of [0, 1]) core.apply(G, s, { t: 'deployed' })
@@ -4920,6 +5112,53 @@ function ridesScenes(core, mods, mirror, RACES, MISSIONS) {
     probe(core, G, s, mulberry32(29), `${where}, the probes`)
     c.scenes++
   }
+
+  // 9. (F9b) a long hull: a Howdah on open ground facing a diagonal, its
+  // riders' landing cells each within 3" of one of its discs, some past 3"
+  // of its body's edge (the head's and tail's 2" more); then destroyed
+  // with them aboard, each bailing out within 3" of its discs (bailWatch),
+  // its wreck a box along its facing (yaw h·π/4), the mirror the match's
+  if (RACES.serpent.roster.some((k) => RACES.serpent.units[k].fp)) {
+    const where = 'scene: a long hull'
+    const list = cartList(A, RACES.serpent, MISSIONS.field.list, mulberry32(9), 1)
+    if (!list) throw new Error(`${where}: no Field list of the Coil's holds a Howdah`)
+    const { G, look, watch, snap } = sceneMatch(core, mods, mirror, { other: 'serpent', otherArmy: list, battle: true })
+    const v = G.units.find((u) => u.side === 1 && u.t.fp && q.riders(G, u).length)
+    if (!v) throw new Error(`${where}: the Coil's Howdah carries nobody (its list ${list})`)
+    // (open ground nobody stands within 10" of, where the hull stands at
+    // heading 1, a diagonal: its wreck's yaw then π/4, no axis's)
+    const mode = v.t.move === 'wreck' ? 'wreck' : 'walk', { W, H } = G.nav
+    let spot = null
+    for (let r = 0; r < 20 && !spot; r += 0.5) for (let k = 0; k < 16 && !spot; k++) {
+      const x = r * Math.cos((k * Math.PI) / 8), z = r * Math.sin((k * Math.PI) / 8)
+      if (Math.abs(x) > W / 2 - 10 || Math.abs(z) > H / 2 - 10) continue
+      const i = G.nav.index(x, z)
+      if (!standsHere(G.nav, v.t.fp, i, 1, mode)) continue
+      if (G.units.every((u) => u === v || u.aboard || u.alive <= 0 || Math.hypot(u.pos.x - G.nav.x(i), u.pos.z - G.nav.z(i)) > 10 + u.r)) spot = { x: G.nav.x(i), z: G.nav.z(i) }
+    }
+    if (!spot) throw new Error(`${where}: no open ground where the Howdah stands facing a diagonal`)
+    mods.units.moveUnitTo(G, v, spot.x, spot.z)
+    v.facing = 1
+    snap()
+    hullState(core, G, where)
+    const p = q.riders(G, v)[0], cells = q.landing(G, p, v)
+    const far = cells.find((i) => edgeTo(v, G.nav.x(i), G.nav.z(i), p.r) > 3 + 1e-9)
+    if (far !== undefined) throw new Error(`${where}: the landing off the Howdah offers cell ${far}, past 3" of its discs`)
+    const beyond = cells.filter((i) => Math.hypot(G.nav.x(i) - v.pos.x, G.nav.z(i) - v.pos.z) - v.t.base - p.r > 3 + 1e-9)
+    if (!beyond.length) throw new Error(`${where}: of the Howdah's ${cells.length} landing cells none lies past 3" of its body disc: its head and tail deliver nothing`)
+    c.longBonus = beyond.length
+    const attacker = G.units.find((u) => u.side === 0 && u.alive > 0 && !u.aboard)
+    const aboard = q.riders(G, v).length
+    watch.where = where
+    mods.damage.damage(G, v, 1, 99, attacker)
+    if (q.alive(v)) throw new Error(`${where}: the Howdah stands after 99 damage`)
+    look(`${where}, destroyed with ${aboard} rider units aboard`)
+    const wreck = G.terrain.chunks.at(-1)
+    if (wreck?.kind !== 'wreck' || wreck.shape.x !== v.pos.x || wreck.shape.z !== v.pos.z || wreck.shape.yaw !== (v.facing * Math.PI) / 4) throw new Error(`${where}: the Howdah facing ${v.facing} left ${wreck ? `a ${wreck.kind} at (${wreck.shape.x}, ${wreck.shape.z}) of yaw ${wreck.shape.yaw}` : 'nothing'}, not its wreck at its place along its facing (yaw ${(v.facing * Math.PI) / 4})`)
+    if (!watch.counts.longs) throw new Error(`${where}: no rider bailed out of the Howdah`)
+    c.longBailed = watch.counts.longs
+    c.scenes++
+  }
   return c
 }
 // ── P-army: the deployment at the caps with hulls (F9a) ──────────────────────
@@ -4979,6 +5218,17 @@ function hullDeployTask(core, mods, RACES, MISSIONS, mission, n, seed) {
     if (G.pending?.k !== 'deploy') throw new Error(`${where}: the match waits on ${JSON.stringify(G.pending)}, not its deployment`)
     const hulls = G.units.filter((u) => u.t.transport)
     if (hulls.filter((u) => u.side === 0).length !== 2) throw new Error(`${where}: seat 0 fields ${hulls.filter((u) => u.side === 0).length} War-Carts, not two`)
+    // ((F9b) the Coil's side, on code with its Howdah: two long hulls,
+    // each deployed on a state place takes at its own heading, P-hull's)
+    const longs = G.units.filter((u) => u.t.fp)
+    if (races[1] === 'serpent' && RACES.serpent.roster.some((k) => RACES.serpent.units[k].fp) && longs.filter((u) => u.side === 1).length !== 2) throw new Error(`${where}: the Coil fields ${longs.filter((u) => u.side === 1).length} Howdahs, not two`)
+    for (const u of longs) {
+      const cell = G.nav.index(u.pos.x, u.pos.z)
+      const why = core.legal(G, u.side, { t: 'place', u: u.id, c: cell, f: u.facing })
+      if (why !== null) throw new Error(`${where}: long hull ${u.id} was deployed on cell ${cell} facing ${u.facing}, which place {f} refuses: ${why}`)
+      c.longs = (c.longs ?? 0) + 1
+    }
+    hullState(core, G, where)
     c.riders += autoloadCheck(G, where)
     ridersState(core, mods, G, where)
     for (const u of G.units) {
@@ -5185,6 +5435,8 @@ if (a.child) {
   const rng = await import(pathToFileURL(join(dir, 'core', 'rng.js')).href)
   const { RACES } = await import(pathToFileURL(join(dir, 'data', 'schema.js')).href)
   const mirror = await import(pathToFileURL(join(dir, 'present', 'mirror.js')).href)
+  // ((F9b) P-hull's ground: the nav's STEP)
+  HULL_STEP = (await import(pathToFileURL(join(dir, 'core', 'nav.js')).href)).STEP
   // the Session and the stores (R6b on; null for older code, which has no
   // match/: any other failure to load them fails the run), and (R8) the
   // Folder and the envelopes, which foldJob folds every log through
@@ -5214,7 +5466,7 @@ if (a.child) {
       const it = loadCorpus().items.find((x) => x.id === task.id)
       out = { ok: true, counts: corpusTask(core, rng, mirror, it, match, hud) }
     } else if (task.kind === 'random') {
-      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf(), mods: await ridesMods(), rides: !!task.rides } : null
+      const lists = task.lists ? { mission: task.lists, RACES, MISSIONS: await missionsOf(), mods: await ridesMods(), rides: !!task.rides, hulls: !!task.hulls } : null
       const r = randomTask(core, rng, mirror, Object.keys(RACES), task.seed, hud, lists)
       out = { ok: true, counts: r.counts, game: { setup: r.setup, log: r.log, trace: r.trace } }
     } else if (task.kind === 'interleave') {
@@ -5278,6 +5530,8 @@ if (a.child) {
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
   }
+  // ((F9b) what P-hull held in this child, for the run's sums)
+  if (out?.ok && out.counts) out.counts.phull = PHULL
   process.stdout.write(JSON.stringify(out))
   process.exit(0)
 }
@@ -5313,7 +5567,7 @@ function child(task, pkg) {
 // of 2), random games with War-Carts and a human seat, the scenes, and
 // P-army's deployments at the caps with hulls by mission ((V3d, at the V3
 // merge) the Powder Field among them: it takes War-Carts as Grand does)
-const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 } }
+const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6 }
 
 // (F9b) P-lattice's run, on code with the lattice (core/nav.js hullReach):
 // [] when it holds (or, unless it was asked for alone, when the code has
@@ -5352,17 +5606,21 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     for (let j = 0; j < (army.ridesHuman ?? 0); j++) tasks.push({ kind: 'random', seed: 800000 + seed * 1000 + j, lists: j % 3 === 2 ? 'grand' : 'field', rides: true })
     for (const [mission, n] of Object.entries(army.hullDeploy ?? {})) if (n) tasks.push({ kind: 'hullDeploy', mission, n, seed })
   }
+  // (F9b, code with the lattice: P-hull's games, a human seat or two
+  // against the AI, the Coil fielding Howdahs, every decision probed)
+  const longs = /hullReach\(/.test(readFileSync(join(pkg, 'core', 'nav.js'), 'utf8'))
+  if (rides && longs) for (let j = 0; j < (army.hullHuman ?? 0); j++) tasks.push({ kind: 'random', seed: 700000 + seed * 1000 + j, lists: j % 2 ? 'grand' : 'field', rides: true, hulls: true })
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
       : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
         : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
           : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts`
             : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places`
-              : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls, ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
+              : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls (${c.longs ?? 0} long hulls on the state place {f} takes), ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
                 : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}${c.rides ? ` (P-riders: ${c.rides.autoloaded} autoloaded, ${c.rides.hidden} hidden-rider queries, embark ${c.rides.embarkDeploy} in the deployment and ${c.rides.embarkPhase} in a phase, ${c.rides.steps} steps off, ${c.rides.bailed} bailed out, ${c.rides.lost} lost)` : ''}`
     say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
     return r
@@ -5466,6 +5724,23 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     }
     ridesSaid = `; (P-riders) ${ai.battles} AI battles with War-Carts (${ai.lines} trace lines held, riders stepping off ${ai.steps} times in ${ai.stepped} of them, ${ai.bailed} bail-outs) and ${human.length} random games with a human seat (embark ${sum('embarkDeploy')} in the deployment and ${sum('embarkPhase')} in a phase, disembark ${sum('disembarks')}, ${sum('hidden')} hidden-rider queries), ${scenes ? `${scenes.scenes} scenes` : 'no scenes'}; (P-army) ${deploys.reduce((n, c) => n + c.boards, 0)} deployments at the caps with hulls placed legally`
   }
+  // (F9b) P-hull: what it held over the run, and (with its games) what
+  // they must have reached: each of legal()'s three refusals, and a
+  // heading taken
+  let hullSaid = ''
+  if (rides && longs) {
+    const H = res.reduce((s, r) => {
+      for (const k of Object.keys(PHULL)) s[k] += r.counts?.phull?.[k] ?? 0
+      return s
+    }, Object.fromEntries(Object.keys(PHULL).map((k) => [k, 0])))
+    const games = res.filter((r, i) => r.ok && tasks[i].hulls).length
+    if (coverage && !bad.length && (army.hullHuman ?? 0) >= 2) {
+      const never = [!H.hulls && 'a long hull on the table', !H.round && 'a heading for a round unit refused', !H.range && 'a heading past 0-7 refused', !H.state && 'a heading on no valid end refused', !H.taken && 'a heading taken'].filter(Boolean)
+      if (games !== army.hullHuman) bad.push({ error: `P-hull ran short: ${games} of ${army.hullHuman} hull games` })
+      else if (never.length) bad.push({ error: `P-hull: the hull games never reached ${never.join(', ')} (more games?)` })
+    }
+    hullSaid = `; (P-hull) ${H.hulls} long hulls' states held at command boundaries and trace lines, ${H.judged} headings judged in ${games} hull games (${H.taken} taken, refused ${H.round} for a round unit, ${H.range} past 0-7, ${H.state} on no valid end)`
+  }
   // (V3c) every spell of every caster named by a human seat's command in
   // the random games (P-spell's rules held at each decision: spellRules)
   const cast = {}
@@ -5486,7 +5761,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists && !t.rides).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
     if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid}${hullSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -5660,11 +5935,11 @@ const MUTATIONS = {
   'fall-reach-short': ['core/actions/settle.js', 'export const FALL_REACH = 6\n', 'export const FALL_REACH = 5\n'],
   'fall-reach-long': ['core/actions/settle.js', 'export const FALL_REACH = 6\n', 'export const FALL_REACH = 8\n'],
   'fall-any-floor': ['core/actions/settle.js', '    if (nav.hasHeight && nav.floor[i] > STEP) continue\n', ''],
-  'fall-no-pad': ['core/actions/settle.js', '    if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false\n', '    if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r) return false\n'],
+  'fall-no-pad': ['core/actions/settle.js', '    } else if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false\n', '    } else if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r) return false\n'],
   'settle-unsorted': ['core/actions/settle.js', '  const decks = T.dropped.slice().sort((a, b) => a.id - b.id)\n', '  const decks = T.dropped.slice()\n'],
   'crushed-silent': ['core/actions/settle.js', "  if (G.out) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n}\n\n// Whether `u` standing", "  if (G.out && i >= 0) {\n    emit(G, 'objectives', { owners: ownersOf(G) })\n    emit(G, 'status', statusOf(G))\n  }\n}\n\n// Whether `u` standing"],
   'settle-skips-blast': ['core/actions/shoot.js', '  settle(G)\n  return kegsIn(broke)\n', '  return kegsIn(broke)\n'],
-  'settle-skips-move': ['core/actions/move.js', '  settle(G)\n  return kegs\n', '  return kegs\n'],
+  'settle-skips-move': ['core/actions/move.js', '  settle(G)\n  return kegs\n}\n// (F9b) doMove for a long hull', '  return kegs\n}\n// (F9b) doMove for a long hull'],
   'settle-skips-charge': ['core/actions/charge.js', '  settle(G)\n  if (kegs.length) kegsGoOff(G, u, kegs)\n', '  if (kegs.length) kegsGoOff(G, u, kegs)\n'],
   'memo-open': ['core/index.js', '  } finally {\n    G.nav.memo = null\n  }\n', '  } finally {\n  }\n'],
   // a command's handler leaves the nav grid stale
@@ -5762,10 +6037,10 @@ const MUTATIONS = {
   // a template over a hull wounds the riders on its deck
   'blast-hits-riders': ['core/actions/shoot.js', '    if (!alive(v) || v.aboard) continue\n', '    if (!alive(v)) continue\n'],
   // a hull's riders at its centre pen in its own move's ends
-  'riders-block-ends': ['core/actions/move.js', '    if (o === u || !alive(o) || o.aboard) continue', '    if (o === u || !alive(o)) continue'],
+  'riders-block-ends': ['core/actions/move.js', '    if (o === u || !alive(o) || o.aboard) continue\n    const p = at?.get(o.id) ?? o.pos\n    if (o.t.fp) {', '    if (o === u || !alive(o)) continue\n    const p = at?.get(o.id) ?? o.pos\n    if (o.t.fp) {'],
   // and its placement (fits), and its charge's spots (a friend's spacing)
-  'riders-block-place': ['core/deploy.js', 'if (others.some((o) => !o.aboard && hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false', 'if (others.some((o) => hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4)) return false'],
-  'riders-block-charge': ['core/actions/charge.js', 'o.side === u.side && !o.aboard && hypot(', 'o.side === u.side && hypot('],
+  'riders-block-place': ['core/deploy.js', 'if (others.some((o) => !o.aboard && (o.t.fp ? clearOf(o, cx, cz, u.r) < 0.4 : hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4))) return false', 'if (others.some((o) => (o.t.fp ? clearOf(o, cx, cz, u.r) < 0.4 : hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4))) return false'],
+  'riders-block-charge': ['core/actions/charge.js', 'o.side === u.side && !o.aboard && (o.t.fp ? clearOf(o, nav.x(i), nav.z(i), u.r) < 0.05 : hypot(', 'o.side === u.side && (o.t.fp ? clearOf(o, nav.x(i), nav.z(i), u.r) < 0.05 : hypot('],
   // the AI's friendly fire counts the riders, whom no template reaches
   // (the loop is weighed()'s since the V3 merge (3880346) moved V3c's
   // template cost out of aiShoot's target loop, six spaces in where it
@@ -5776,7 +6051,7 @@ const MUTATIONS = {
   // the bail-out ignores the enemies' 1"
   'bail-into-bubbles': ['core/actions/transport.js', '  const c = nearestCell(G, landing(G, p, v), v.pos.x, v.pos.z)', '  const c = nearestCell(G, landing(G, p, v, false), v.pos.x, v.pos.z)'],
   // a landing (a step off, a bail-out) crowds onto other units' bases
-  'landing-crowds': ['core/actions/transport.js', '    if (others.some((o) => hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08)) continue\n', ''],
+  'landing-crowds': ['core/actions/transport.js', '    if (others.some((o) => (o.t.fp ? clearOf(o, x, z, u.r) < 0.08 : hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08))) continue\n', ''],
   // a rider with nowhere to stand survives the wreck
   'lost-rider-lives': ['core/actions/transport.js', '      for (const m of p.models) if (m.alive) killModel(G, p, m, v, m.w)\n', ''],
   // (P-pilot, F9a) a mask naming a rider without its hull is taken
@@ -5807,6 +6082,18 @@ const MUTATIONS = {
   ],
   'lattice-pivot-unswept': ['core/nav.js', '            if (!(b & 8) || (forbid && !this.hullFree(w, fp, forbid, true))) continue\n', '            if (k === 2 && (!(b & 8) || (forbid && !this.hullFree(w, fp, forbid, true)))) continue\n'],
   'lattice-lent-unreset': ['core/nav.js', '        dist[s] = Infinity\n        prev[s] = -1\n', '        dist[s] = Infinity\n'],
+  // (F9b) P-hull, each on a workload with its hull games (hullLoad): a
+  // round unit taking a heading, a hull's end at a heading its plan never
+  // reached, its end's spacing held by the body disc alone, and the
+  // deployment putting a hull on a state that doesn't stand; (P-riders'
+  // long-hull row, scene 9) a long hull's landing measured from its centre
+  // by its bounding R, and its wreck lying at yaw 0 whatever its facing
+  'hull-round-facing': ['core/commands.js', "  if (!u.t.fp) return `${u.t.short}: a round unit has no facing`\n", ''],
+  'hull-end-unreached': ['core/actions/move.js', '  if (!(res.dist[i * 8 + h] <= plan.max)) return false\n', ''],
+  'hull-end-spacing-body': ['core/actions/move.js', '    for (let q = 0; q < row.length; q++) {\n      const d = row[q], dx = x + d.ix * fp.cell, dz = z + d.iz * fp.cell\n', '    for (let q = fp.body; q <= fp.body; q++) {\n      const d = row[q], dx = x + d.ix * fp.cell, dz = z + d.iz * fp.cell\n'],
+  'hull-deploy-unstanding': ['core/deploy.js', "  if (!nav.hullStands(i, f, fp, 'walk')) return false\n", ''],
+  'landing-long-centre': ['core/actions/transport.js', '    if (v.t.fp ? clearOf(v, x, z, u.r) > LAND_REACH : hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue', '    if (hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue'],
+  'wreck-unturned': ['core/actions/transport.js', 'yaw: v.t.fp ? (v.facing * Math.PI) / 4 : 0,', 'yaw: 0,'],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }
 
@@ -5826,8 +6113,11 @@ if (a['self-test']) {
   // ((F9b) P-lattice's mutations each on P-lattice alone, its own workload;
   // the unbroken copy passes each workload a named mutation runs)
   const lattice = { only: 'lattice', quiet: true }
-  const loadOf = (name) => (name.startsWith('lattice-') ? lattice : load)
-  for (const [w, what] of [[load, 'three corpus battles, ten games'], [lattice, 'P-lattice alone']]) {
+  // ((F9b) P-hull's mutations on the same workload with two hull games and
+  // a Field AI pair with Howdahs added)
+  const hullLoad = { ...load, army: { ...load.army, ridesAI: { field: 2 }, hullHuman: 2 } }
+  const loadOf = (name) => (name.startsWith('lattice-') ? lattice : name.startsWith('hull-') ? hullLoad : load)
+  for (const [w, what] of [[load, 'three corpus battles, ten games'], [hullLoad, 'the same, with two hull games and a Field pair with Howdahs'], [lattice, 'P-lattice alone']]) {
     if (!names.some((x) => loadOf(x) === w)) continue
     const clean = await run(copyCode(dir, join(work, 'unbroken')), w)
     if (clean.length) {

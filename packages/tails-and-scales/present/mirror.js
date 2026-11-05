@@ -64,6 +64,8 @@ export function project(G) {
       models: u.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })),
       alive: u.alive, mesmerized: u.mesmerized, engaged: alive(u) && isEngaged(G, u),
       snared: u.snared, warded: u.warded, resolute: u.resolute,
+      // ((F9b) a long hull's heading, and only a long hull's)
+      ...(u.t.fp ? { f: u.facing } : {}),
     }
   }
   const chunks = {}
@@ -96,9 +98,12 @@ export function applyEvent(M, e) {
     // only with height; without it the unit stands at 0) (F9a: a placed
     // rider steps off; a placed, walking or piling-in hull carries its
     // riders)
+    // ((F9b) a long hull's place and walk carry its heading, `f`; a round
+    // unit's never do)
     case 'unit.place':
       u.pos = { x: e.x, z: e.z }
       u.y = e.y ?? 0
+      if (e.f !== undefined) u.f = e.f
       u.aboard = 0
       carry(M, e.u, u)
       break
@@ -106,6 +111,7 @@ export function applyEvent(M, e) {
     // each as the walker passes it; the mirror holds them all at once)
     case 'unit.move':
       u.pos = { x: e.to.x, z: e.to.z }
+      if (e.to.f !== undefined) u.f = e.to.f
       u.y = e.to.y ?? 0
       carry(M, e.u, u)
       for (const { ev } of e.smashes) for (const x of ev) applyEvent(M, x)

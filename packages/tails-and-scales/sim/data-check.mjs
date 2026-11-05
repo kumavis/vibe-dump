@@ -1181,9 +1181,12 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // the extras
   // ((F9a) the first: `aboard`, 0 for a unit on the table; (V3c) the
   // spells' marks, each false until a spell sets it, and so on every unit
-  // core/units.js makes)
-  const extrasWant = { aboard: 0, resolute: false, snared: false, warded: false }
-  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, extrasWant), `UNIT_EXTRAS is frozen and names F9a's aboard, at 0, and V3c's spell marks, each false (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
+  // core/units.js makes; (F9b) a footprint unit's `facing`, its default
+  // undefined: a round unit holds none, so it prints for no round unit and
+  // for a long hull at every heading, 0 among them)
+  const extrasWant = { aboard: 0, facing: undefined, resolute: false, snared: false, warded: false }
+  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, extrasWant) && 'facing' in UNIT_EXTRAS, `UNIT_EXTRAS is frozen and names F9a's aboard, at 0, V3c's spell marks, each false, and F9b's facing, undefined (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
+  check(unitExtras({ facing: 0 }) === 'facing=0' && unitExtras({ facing: 6, aboard: 0 }) === 'facing=6' && unitExtras({}) === '' && unitExtras({ facing: undefined }) === '', '(F9b) a long hull prints facing=<h> at every heading, 0 among them, and a unit holding no facing prints none')
   const extras = Object.freeze({ zeta: false, aboard: 0 })
   check(unitExtras({}, extras) === '' && unitExtras({ aboard: 0, zeta: false }, extras) === '' && unitExtras({ aboard: 3 }, extras) === 'aboard=3' && unitExtras({ zeta: true, aboard: -0 }, extras) === 'aboard=-0,zeta=true', 'a unit\'s extras print only where they aren\'t their default, in sorted key=value (-0 apart from 0)')
   {

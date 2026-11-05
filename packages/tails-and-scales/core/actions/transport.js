@@ -37,6 +37,7 @@ import { alive, isEngaged, groundY, ownersOf, statusOf } from '../queries.js'
 import { movePlan, validEnd, forbidMask, climbs, resolveWalk, walkCost } from './move.js'
 import { damage, killModel } from './damage.js'
 import { settle } from './settle.js'
+import { clearOf } from '../footprint.js'
 
 const unitOf = (G, id) => G.units.find((u) => u.id === id)
 
@@ -104,7 +105,8 @@ export function mayBoard(G, u, v, inPhase) {
 // move (validEnd, on `plan`: movePlan's, with the advance roll when it
 // advanced) within 1" of the hull's edge (for a round hull, within v.r +
 // u.r + 1" of its centre), the one the plan reaches shortest, ties to the
-// lowest index; -1 for none. (F9b's long hulls measure each disc: clearOf.)
+// lowest index; -1 for none. (F9b) A long hull's edge is its nearest disc's
+// (clearOf ≤ 1"), the box round it its bounding R's (v.r) as a broadphase.
 export function embarkSpot(G, u, v, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)) {
   const nav = G.nav, R = v.r + u.r + BOARD_REACH
   const x0 = Math.max(0, Math.floor((v.pos.x - R + nav.W / 2) / nav.cell)), x1 = Math.min(nav.nx - 1, Math.floor((v.pos.x + R + nav.W / 2) / nav.cell))
@@ -113,7 +115,7 @@ export function embarkSpot(G, u, v, plan = movePlan(G, u, u.flags.advanced ? u.f
   for (let iz = z0; iz <= z1; iz++) for (let ix = x0; ix <= x1; ix++) {
     const i = iz * nav.nx + ix
     const d = plan.res.dist[i]
-    if (!(d < bd) || hypot(nav.x(i) - v.pos.x, nav.z(i) - v.pos.z) > R || !validEnd(G, plan, i)) continue
+    if (!(d < bd) || (v.t.fp ? clearOf(v, nav.x(i), nav.z(i), u.r) > BOARD_REACH : hypot(nav.x(i) - v.pos.x, nav.z(i) - v.pos.z) > R) || !validEnd(G, plan, i)) continue
     bd = d
     best = i
   }
@@ -169,6 +171,11 @@ export function doEmbark(G, u, v, inPhase) {
 // inches. The cells in index order. `bubbles` false (the bail-out's last
 // resort, bailSpot) drops the enemies' bubbles: the reach then walks
 // anywhere a base fits, still clear of every base.
+//
+// (F9b) From a long hull the reach runs out to R + u.r + 3" (v.r is its R),
+// and keeps the cells within 3" of any of its discs (clearOf): its riders
+// step off at its head and tail, 2" further than off a round hull's side;
+// another long hull on the table keeps them clear of its nearest disc.
 export function landing(G, u, v, bubbles = true) {
   refreshNav(G)
   const nav = G.nav, max = v.r + u.r + LAND_REACH
@@ -182,8 +189,8 @@ export function landing(G, u, v, bubbles = true) {
     const i = iz * nav.nx + ix
     if (!isFinite(res.dist[i]) || !nav.standable(i, u.r, 'walk', forbid)) continue
     const x = nav.x(i), z = nav.z(i)
-    if (hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue
-    if (others.some((o) => hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08)) continue
+    if (v.t.fp ? clearOf(v, x, z, u.r) > LAND_REACH : hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue
+    if (others.some((o) => (o.t.fp ? clearOf(o, x, z, u.r) < 0.08 : hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08))) continue
     cells.push(i)
   }
   return cells
@@ -259,6 +266,25 @@ export function autoload(G) {
   }
 }
 
+// (F9b, DESIGN §4.2.5's firing deck) Where long hull `v`'s eye stands when
+// it would stand at `from`: its deck point, the record's deckAt turned by
+// its facing and snapped to the 0.5" grid as a disc's offset is (sign ·
+// round(|v| / cell), never −0), from `from`; `from` itself where deckAt
+// is the body's centre (the Howdah's [0, 0]) or there is none. The axes
+// turn by 0 and ±1, the diagonals by Math.SQRT1_2 (§4.1 rule 24): no trig.
+const R2 = Math.SQRT1_2
+const COS8 = [1, R2, 0, 0 - R2, -1, 0 - R2, 0, R2], SIN8 = [0, R2, 1, R2, 0, 0 - R2, -1, 0 - R2]
+const snapCell = (x, cell) => {
+  const k = Math.round(Math.abs(x) / cell)
+  return (x < 0 && k ? -k : k) * cell
+}
+export function deckFrom(v, from) {
+  const at = v.t.transport?.deckAt
+  if (!at || (at[0] === 0 && at[1] === 0)) return from
+  const h = v.facing, c = COS8[h], s = SIN8[h], cell = v.t.fp.cell
+  return { x: from.x + snapCell(at[0] * c + at[1] * s, cell), z: from.z + snapCell(at[1] * c - at[0] * s, cell) }
+}
+
 // ── A hull destroyed (DESIGN §4.2.5, §4.1 rule 16) ──────────────────────────
 // The end of core/actions/damage.js's unitDestroyed, for every unit; only a
 // transport goes on. Its wreck joins the terrain where it stood (when its
@@ -278,7 +304,9 @@ export function hullDestroyed(G, v, by) {
   if (!tr) return
   if (tr.wreck) {
     const base = groundY(G, v)
-    G.terrain.wreck({ x: v.pos.x, z: v.pos.z, base, hx: tr.wreck.hx, hy: tr.wreck.hy, hz: tr.wreck.hz, yaw: 0, look: { piece: 'wreck', race: v.race } }, G.out)
+    // ((F9b) a long hull's wreck lies along its facing: yaw h·π/4, the
+    // raster's frame turning +z to +x at π/2 as h = 2 does)
+    G.terrain.wreck({ x: v.pos.x, z: v.pos.z, base, hx: tr.wreck.hx, hy: tr.wreck.hy, hz: tr.wreck.hz, yaw: v.t.fp ? (v.facing * Math.PI) / 4 : 0, look: { piece: 'wreck', race: v.race } }, G.out)
     refreshNav(G)
   }
   for (const p of G.units.filter((o) => o.aboard === v.id && alive(o))) {

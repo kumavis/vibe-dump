@@ -13,7 +13,8 @@ import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed
 import { draw } from '../rng.js'
 import { hypot, hypot3 } from '../dmath.js'
 import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
-import { climbs, moveMode } from '../actions/move.js'
+import { climbs, moveMode, latticeMode } from '../actions/move.js'
+import { clearOf } from '../footprint.js'
 import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
@@ -260,9 +261,18 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
 // strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
 // by default; `pre` is only ever its ranged weapon's.
+// (F9b) shotValue's gap when either is a long hull: from `from`, the
+// shooter's body disc (a long hull's base) to the target's nearest disc
+function hullGap(u, e, from) {
+  const r = u.t.fp ? u.t.base : u.r
+  return e.t.fp ? clearOf(e, from.x, from.z, r) : hypot(e.pos.x - from.x, e.pos.z - from.z) - r - e.r
+}
 export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
   if (!w) return 0
-  const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
+  // ((F9b, rule 10) a long hull shooting measures from its body disc, never
+  // its bounding R (which would claim shots the rules refuse); a long hull
+  // target from its nearest disc)
+  const g = u.t.fp || e.t.fp ? hullGap(u, e, from) : hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0
   const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
@@ -403,14 +413,26 @@ export function scanBox(nav, x, z, reach) {
 // (core/ai/policy.js hullRole: a raider while brawlers ride it, else a line
 // unit). (Friends never count riders: friendsOf leaves them out, so a hull
 // isn't pushed off by its own.)
+//
+// (F9b, DESIGN §4.2.5's AI; rule 10: it bumps with F9b) A long hull scans
+// its lattice by cell (plan.cells, the least distance at any heading), a
+// cell passing when it has a valid end at some heading (validEnd's null
+// heading), each such cell its one tie-break draw (§4.1 rule 25), scored
+// at the body's centre. The room term: a long hull ending, or staying,
+// where it could pivot neither way (nav.hullRoom on its terrain alone:
+// the memo's bits) scores ROOM less, at the cell's best heading (cellBest's,
+// the move's default where it is a valid end) or, staying put, where it
+// stands and faces, so it keeps out of the pockets it couldn't leave.
+export const ROOM = 1.5
 export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const { nav } = G
   const ctx = scoring(G, u, claimed, role)
+  const fp = plan.fp, roomOf = fp ? (c, h) => (nav.hullRoom(c, h, fp, latticeMode(plan.mode)) ? 0 : -ROOM) : null
   // stay put is always an option
-  let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
+  let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false) + (fp ? roomOf(nav.index(u.pos.x, u.pos.z), u.facing) : 0), dist: 0, ...ctx.last }
   const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
-  const res = plan.res
-  const box = scanBox(nav, res.sx, res.sz, plan.max)
+  const res = fp ? plan.cells : plan.res
+  const box = scanBox(nav, plan.res.sx, plan.res.sz, plan.max)
   for (let iz = Math.ceil(box.z0 / step) * step; iz <= box.z1; iz += step) {
     const off = (iz / step) % 2 ? 1 : 0
     for (let ix = off + Math.max(0, Math.ceil((box.x0 - off) / step)) * step; ix <= box.x1; ix += step) {
@@ -418,7 +440,7 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
       if (!isFinite(res.dist[i])) continue
       if (!validEnd(G, plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
-      const sc = score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
+      const sc = fp ? score(G, u, x, z, ctx, true) + roomOf(i, res.h[i]) + draw(G.rng) * 0.05 : score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }

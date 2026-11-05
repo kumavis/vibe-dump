@@ -24,6 +24,7 @@ import { pathLength, STEP } from '../nav.js'
 import { kegsIn } from '../terrain/terrain.js'
 import { settle } from './settle.js'
 import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
+import { discsOf } from '../footprint.js'
 
 export function moveMode(u) {
   return u.t.move
@@ -54,14 +55,25 @@ export function groundOnly(u) {
 // within HIGH of the floor it stands on, and its disc carries that floor
 // (`y`) for nav.walkable's shortcuts: a unit walks the foot of a wall whose
 // top an enemy holds.
-export function forbidMask(G, u, pad, onlyBodies = []) {
-  if (G.nav.hasHeight) return forbidHigh(G, u, pad, onlyBodies)
+//
+// (F9b, DESIGN §4.2.5) `r`, the radius the mask is for: the unit's own by
+// default, so every round call is the one it always was; a long hull's
+// plans make one mask per radius class of its footprint (masksOf), its
+// disc of that class tested against it. An enemy with a footprint
+// forbids a bubble round each of its discs (its own branch: forbidDiscs),
+// and its exact discs join `f.discs` for nav.walkable.
+export function forbidMask(G, u, pad, onlyBodies = [], r = u.r) {
+  if (G.nav.hasHeight) return forbidHigh(G, u, pad, onlyBodies, r)
   // (the grid's own size, S0: the board the match is played on)
   const nav = G.nav, { W, H } = nav
   const f = new Uint8Array(nav.N)
   f.discs = [] // the exact shapes, for nav.walkable's straight-line shortcuts
   for (const e of enemiesOf(G, u)) {
-    const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad)
+    if (e.t.fp) {
+      forbidDiscs(nav, f, e, r + (onlyBodies.includes(e) ? 0.02 : pad), null)
+      continue
+    }
+    const R = e.r + r + (onlyBodies.includes(e) ? 0.02 : pad)
     f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02 })
     const i0x = Math.max(0, Math.floor((e.pos.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((e.pos.x + R + W / 2) / nav.cell))
     const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
@@ -72,7 +84,7 @@ export function forbidMask(G, u, pad, onlyBodies = []) {
   }
   return f
 }
-function forbidHigh(G, u, pad, onlyBodies) {
+function forbidHigh(G, u, pad, onlyBodies, r) {
   const nav = G.nav, { W, H } = nav
   const f = new Uint8Array(nav.N)
   f.discs = []
@@ -81,7 +93,11 @@ function forbidHigh(G, u, pad, onlyBodies) {
   // end (standable) all keep it on the ground
   if (groundOnly(u)) for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
   for (const e of enemiesOf(G, u)) {
-    const R = e.r + u.r + (onlyBodies.includes(e) ? 0.02 : pad), y = groundY(G, e)
+    if (e.t.fp) {
+      forbidDiscs(nav, f, e, r + (onlyBodies.includes(e) ? 0.02 : pad), groundY(G, e))
+      continue
+    }
+    const R = e.r + r + (onlyBodies.includes(e) ? 0.02 : pad), y = groundY(G, e)
     f.discs.push({ x: e.pos.x, z: e.pos.z, R: R - 0.02, y })
     const i0x = Math.max(0, Math.floor((e.pos.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((e.pos.x + R + W / 2) / nav.cell))
     const i0z = Math.max(0, Math.floor((e.pos.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((e.pos.z + R + H / 2) / nav.cell))
@@ -92,6 +108,27 @@ function forbidHigh(G, u, pad, onlyBodies) {
   }
   return f
 }
+// (F9b) footprint enemy e's bubbles on mask f: round each of its discs (at
+// its facing), of the disc's r plus `add` (the mover's r and the pad), and
+// each disc's exact shape onto f.discs; with height (`y`, e's floor) only
+// the cells within HIGH of it, as a round enemy's
+function forbidDiscs(nav, f, e, add, y) {
+  const { W, H } = nav
+  for (const d of discsOf(e)) {
+    const R = d.r + add
+    f.discs.push(y === null ? { x: d.x, z: d.z, R: R - 0.02 } : { x: d.x, z: d.z, R: R - 0.02, y })
+    const i0x = Math.max(0, Math.floor((d.x - R + W / 2) / nav.cell)), i1x = Math.min(nav.nx - 1, Math.floor((d.x + R + W / 2) / nav.cell))
+    const i0z = Math.max(0, Math.floor((d.z - R + H / 2) / nav.cell)), i1z = Math.min(nav.nz - 1, Math.floor((d.z + R + H / 2) / nav.cell))
+    for (let iz = i0z; iz <= i1z; iz++) for (let ix = i0x; ix <= i1x; ix++) {
+      const i = iz * nav.nx + ix
+      if (hypot(nav.x(i) - d.x, nav.z(i) - d.z) < R && (y === null || Math.abs(nav.floor[i] - y) <= HIGH)) f[i] = 1
+    }
+  }
+}
+// (F9b) A long hull's masks, one per radius class of its footprint
+// (fp.radii, at most 3), in class order: what hullReach and the hull's
+// tests take (core/nav.js), each disc against its class's
+export const masksOf = (G, u, pad, onlyBodies = []) => u.t.fp.radii.map((r) => forbidMask(G, u, pad, onlyBodies, r))
 
 // Everything the movement phase needs for one unit: where it can go and how.
 //
@@ -105,10 +142,19 @@ function forbidHigh(G, u, pad, onlyBodies) {
 // otherwise keep every plan of the battle. Outside an apply there is no
 // memo (a preview, the HUD, a legality check of the page's): every plan is
 // fresh, so nothing the page asks can feed the fold.
+//
+// (F9b, DESIGN §4.2.5) A long hull (t.fp) plans on its lattice instead
+// (hullPlan): nav.hullReach from where it stands and the way it faces,
+// over (cell, heading) states, its masks one per radius class. Its plan
+// holds `fp`, the footprint, and `cells`, the lattice by cell (nav.cellBest:
+// `dist`, the least at any heading, `h` that heading, `prev` a cell
+// chain), which every reader that indexes a plan by cell reads in place of
+// `res` (`res.dist` is by state there, N·8 long).
 export function movePlan(G, u, extra = 0) {
   refreshNav(G)
   const memo = G.nav.memo, key = memo && planKey(G, u, extra)
   if (memo && memo.sig === key) return memo.plan
+  if (u.t.fp) return hullPlan(G, u, extra, memo, key)
   const fallback = isEngaged(G, u)
   const max = u.t.M + extra
   const mode = moveMode(u)
@@ -125,16 +171,41 @@ export function movePlan(G, u, extra = 0) {
   }
   return plan
 }
+// (F9b) movePlan for a long hull: the same plan, on the lattice, each mask
+// a list by radius class (a fall back's through the bubbles, never the
+// bases), and the plan's `fp` and `cells`
+function hullPlan(G, u, extra, memo, key) {
+  const fallback = isEngaged(G, u)
+  const max = u.t.M + extra
+  const mode = moveMode(u)
+  const endForbid = masksOf(G, u, ENGAGE + 0.05)
+  const forbid = fallback ? masksOf(G, u, ENGAGE + 0.05, enemiesOf(G, u)) : endForbid
+  const res = G.nav.hullReach(u.pos.x, u.pos.z, u.facing, u.t.fp, { max, mode: latticeMode(mode), forbid })
+  const plan = { u, res, max, mode, forbid, endForbid, fallback, fp: u.t.fp, cells: G.nav.cellBest(res) }
+  if (memo) {
+    memo.sig = key
+    memo.plan = plan
+  }
+  return plan
+}
+// (F9b) the lattice's mode for a hull's: a wrecker's measures clearHard
+// (it pivots through soft scenery and smashes it), any other walks (a
+// flier is round, and never on the lattice)
+export const latticeMode = (mode) => (mode === 'wreck' ? 'wreck' : 'walk')
 
 // What a plan reads, as a memo's key: the unit, where it stands, its base,
 // the extra inches, the nav grid's epoch, and every live unit's place and
 // base (numbers exactly, -0 apart from 0); (F9a) and which hull a rider
 // rides (aboard), where one does: a rider stands in nobody's way, so the
 // plan reads it too (a key without riders is the key it always was).
+// (F9b) And a footprint unit's facing (the plan's own unit's, its start,
+// and every other's, its discs): only a footprint unit holds one, so a key
+// with no long hull is the key it always was.
 const num = (n) => (Object.is(n, -0) ? '-0' : String(n))
+const faced = (u) => (u.facing !== undefined ? ` f${u.facing}` : '')
 function planKey(G, u, extra) {
-  let k = `${u.id}@${num(u.pos.x)},${num(u.pos.z)} r${num(u.r)} +${num(extra)} e${G.nav.epoch}`
-  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${o.aboard ? ` a${o.aboard}` : ''}`
+  let k = `${u.id}@${num(u.pos.x)},${num(u.pos.z)} r${num(u.r)}${faced(u)} +${num(extra)} e${G.nav.epoch}`
+  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${faced(o)}${o.aboard ? ` a${o.aboard}` : ''}`
   return k
 }
 
@@ -144,7 +215,14 @@ function planKey(G, u, extra) {
 // before this one where they will have gone. Null: today's question. (F9a)
 // A rider is off the table: it neither ends a move here nor stands in
 // anyone's way (a hull's own riders stand at its centre).
-export function validEnd(G, plan, i, at = null) {
+//
+// (F9b, DESIGN §4.2.5) `f`, a heading, for a long hull's plan: whether it
+// may end on the state (i, f); null, at any heading (endFacing finds the
+// one). A round mover beside a footprint unit keeps the spacing to its
+// nearest disc (clearAt), and `at`'s entries carry a planned hull's
+// heading too ({ x, z, f }: present/orders.js), its facing where not.
+export function validEnd(G, plan, i, at = null, f = null) {
+  if (plan.fp) return f === null || f === undefined ? endFacing(G, plan, i, at) >= 0 : hullEnd(G, plan, i, f, at)
   const { u, res, mode, endForbid } = plan
   const nav = G.nav
   if (i < 0 || !isFinite(res.dist[i])) return false
@@ -153,9 +231,67 @@ export function validEnd(G, plan, i, at = null) {
   for (const o of G.units) {
     if (o === u || !alive(o) || o.aboard) continue
     const p = at?.get(o.id) ?? o.pos
-    if (hypot(p.x - x, p.z - z) < o.r + u.r + 0.08) return false
+    if (o.t.fp) {
+      if (clearAt(o, p, at?.get(o.id)?.f ?? o.facing, x, z, u.r) < 0.08) return false
+    } else if (hypot(p.x - x, p.z - z) < o.r + u.r + 0.08) return false
   }
   return true
+}
+
+// (F9b) The least edge gap from the disc (x, z, r) to footprint unit o's
+// discs, o standing at p facing h (where a group's planner foresees it, or
+// where it stands: then exactly core/footprint.js's clearOf)
+function clearAt(o, p, h, x, z, r) {
+  const fp = o.t.fp, row = fp.H[h]
+  let g = Infinity
+  for (let q = 0; q < row.length; q++) {
+    const d = row[q]
+    const v = hypot(p.x + d.ix * fp.cell - x, p.z + d.iz * fp.cell - z) - d.r - r
+    if (v < g) g = v
+  }
+  return g
+}
+
+// (F9b) May a long hull's plan end on state (i, h)? The state reached
+// within the plan's inches (every reached state is), standing outside the
+// end's masks (a fall back's plan walks through the bubbles it may not end
+// in), and every disc clear of every other unit's discs (a round unit's
+// one) by 0.08", as a round mover's spacing.
+function hullEnd(G, plan, i, h, at) {
+  const { u, res, fp, mode, endForbid } = plan
+  const nav = G.nav
+  if (!(Number.isInteger(i) && i >= 0 && i < nav.N && Number.isInteger(h) && h >= 0 && h < 8)) return false
+  if (!(res.dist[i * 8 + h] <= plan.max)) return false
+  if (!nav.hullStands(i, h, fp, latticeMode(mode), endForbid)) return false
+  const x = nav.x(i), z = nav.z(i), row = fp.H[h]
+  for (const o of G.units) {
+    if (o === u || !alive(o) || o.aboard) continue
+    const p = at?.get(o.id) ?? o.pos
+    for (let q = 0; q < row.length; q++) {
+      const d = row[q], dx = x + d.ix * fp.cell, dz = z + d.iz * fp.cell
+      if ((o.t.fp ? clearAt(o, p, at?.get(o.id)?.f ?? o.facing, dx, dz, d.r) : hypot(p.x - dx, p.z - dz) - o.r - d.r) < 0.08) return false
+    }
+  }
+  return true
+}
+
+// (F9b, DESIGN §4.2.5's default heading) The heading a long hull's move to
+// cell i takes when the command names none: of the valid end states at i,
+// the one the plan reaches shortest, ties to the lowest index (§4.1 rule
+// 25: no draw); −1 when none is valid. The AI's and the macros' moves send
+// no heading, so this is theirs too.
+export function endFacing(G, plan, i, at = null) {
+  const nav = G.nav
+  if (!(Number.isInteger(i) && i >= 0 && i < nav.N) || !(plan.cells.dist[i] < Infinity)) return -1
+  let best = -1, bd = Infinity
+  for (let h = 0; h < 8; h++) {
+    const d = plan.res.dist[i * 8 + h]
+    if (!(d < bd)) continue
+    if (!hullEnd(G, plan, i, h, at)) continue
+    bd = d
+    best = h
+  }
+  return best
 }
 
 // The valid end cell nearest (x, z), within `within` inches; -1 for none.
@@ -196,7 +332,13 @@ export function nearestValid(G, plan, x, z, within = 2.4) {
 // smashed them, for the move's handler to set off (core/commands.js: a
 // keg's going off is shoot.js's kegsGoOff, which this module can't import
 // without a cycle, damage.js importing this one); [] for every other walk.
-export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)) {
+//
+// (F9b) A long hull moves to the state (cell, f): `f` the command's heading,
+// or the default (endFacing); along the lattice's own path (nav.hullPath:
+// straight runs and pivots), its log line the plan's cost there, turning
+// and backing included (hullWalk).
+export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), f = null) {
+  if (plan.fp) return hullMove(G, u, cell, plan, f ?? endFacing(G, plan, cell))
   const pts = G.nav.path(plan.res, cell, u.r, plan.mode === 'fly' ? null : plan.forbid)
   u.flags.moved = true
   if (plan.fallback) u.flags.fellBack = true
@@ -208,6 +350,19 @@ export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.fl
   refreshNav(G)
   // ((F7c, §4.1 rule 17) and the units on a timber deck whose posts the
   // walk smashed fall, before a keg it smashed goes off)
+  settle(G)
+  return kegs
+}
+// (F9b) doMove for a long hull, to state (cell, h): the same steps, its
+// path the lattice's, its length the plan's cost
+function hullMove(G, u, cell, plan, h) {
+  const pts = G.nav.hullPath(plan.res, cell, h)
+  const L = plan.res.dist[cell * 8 + h]
+  u.flags.moved = true
+  if (plan.fallback) u.flags.fellBack = true
+  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
+  const kegs = hullWalk(G, u, pts, { stomp: u.t.wrecker && L > 0.1 })
+  refreshNav(G)
   settle(G)
   return kegs
 }
@@ -310,6 +465,105 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
   return kegsIn(broke)
 }
 
+// ── A long hull's walk (F9b, DESIGN §4.2.5) ─────────────────────────────────
+// `u`, a footprint unit, goes along `pts`, a lattice path ({ x, z, f }
+// points from where it stands: nav.hullPath), all at once, as resolveWalk
+// does a round unit's. A wrecker hull smashes at fixed samples: every
+// 0.25" along each straight run, plus the end, as a round walk's, and at
+// each pivot's two 15° sub-steps; at each sample each disc, front to back,
+// runs smashAround with its own radius, at its place there (a run's discs
+// at the run's facing, a sub-step's at the pivot sweep's own cells, fp.S:
+// no trig at play), heading the way the run travels (backing, so, the way
+// its tail leads) or, on a pivot, along the disc's tangent. A smash's `s`
+// counts the path's inches plus 0.5" for each 45° pivot, for the view's
+// timing alone; the event's `L` is that whole measure. The hull ends on
+// the path's last point, a cell centre, facing its last f (moveUnitTo
+// carries its riders). A path that neither moves nor turns does nothing.
+//
+//   unit.move { u, path: [{ x, z, f }], L, speed, fly: false, stomp, smashes, to: { x, z, f } }
+//   (with height, each point and `to` carry their floor `y` too)
+//
+// Returns the powder kegs it smashed, as resolveWalk's.
+export const PIVOT_S = 0.5
+export function hullWalk(G, u, pts, { speed = 7, stomp = false } = {}) {
+  if (pts.length < 2) return []
+  const fp = u.t.fp, cell = fp.cell
+  // the path's pieces in order: a run ({ a, b, s, l }) or a pivot ({ a, f0,
+  // f1, s }), `s` the walk's measure where it starts
+  const seg = []
+  let acc = 0
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i]
+    if (a.x === b.x && a.z === b.z) {
+      seg.push({ pivot: true, a, f0: a.f, f1: b.f, s: acc })
+      acc += PIVOT_S
+    } else {
+      const l = hypot(b.x - a.x, b.z - a.z)
+      seg.push({ pivot: false, a, b, s: acc, l, f: b.f })
+      acc += l
+    }
+  }
+  const L = acc
+  const smashes = [], broke = []
+  if (u.t.wrecker) {
+    // one sample: the discs at (x, z) facing h, in front-to-back order,
+    // each heading `dir` (a run's) or its tangent (a pivot's, `turn` ±1)
+    const at = (s, x, z, row, dirOf) => {
+      const ev = G.out ? [] : null
+      let n = 0
+      for (let q = 0; q < row.length; q++) {
+        const d = row[q], ox = d.ix * cell, oz = d.iz * cell
+        n += smashAround(G, u, { x: x + ox, z: z + oz, dir: dirOf(ox, oz) }, ev, broke, d.r)
+      }
+      if (n && ev) smashes.push({ s, ev })
+    }
+    // a pivot from f0 to f1 = f0 ± 1 sweeps fp.S[lo] (lo the lower of the
+    // two, h to h + 1), its samples per disc front to back, 15° then 30°
+    // from lo: turning right reads them so, left the other way round
+    const sub = (p, k) => {
+      const right = p.f1 === ((p.f0 + 1) & 7), lo = right ? p.f0 : p.f1, S = fp.S[lo]
+      const j = right ? k : 1 - k
+      return { row: fp.r.map((r, q) => ({ ix: S[2 * q + j].ix, iz: S[2 * q + j].iz, r })), sign: right ? 1 : -1 }
+    }
+    let lastDir = null
+    for (const p of seg) {
+      if (p.pivot) {
+        for (let k = 0; k < 2; k++) {
+          const { row, sign } = sub(p, k)
+          // the tangent of a clockwise turn (seen from above, h rising) at
+          // offset (ox, oz) is (oz, −ox); anticlockwise its reverse (0 + and
+          // 0 −, so the body disc's, (0, 0), holds no −0)
+          at(p.s + (PIVOT_S * (k + 1)) / 3, p.a.x, p.a.z, row, (ox, oz) => atan2(0 + sign * oz, 0 - sign * ox))
+        }
+        lastDir = p
+        continue
+      }
+      const dir = atan2(p.b.x - p.a.x, p.b.z - p.a.z), row = fp.H[p.f]
+      for (let t = 0; t < p.l; t += 0.25) at(p.s + t, p.a.x + ((p.b.x - p.a.x) * t) / p.l, p.a.z + ((p.b.z - p.a.z) * t) / p.l, row, () => dir)
+      lastDir = dir
+    }
+    // the end, at its heading: the last run's way, or the last pivot's
+    // tangents when it ended turning
+    const end = pts[pts.length - 1], row = fp.H[end.f]
+    if (typeof lastDir === 'number') at(L, end.x, end.z, row, () => lastDir)
+    else {
+      const sign = lastDir.f1 === ((lastDir.f0 + 1) & 7) ? 1 : -1
+      at(L, end.x, end.z, row, (ox, oz) => atan2(0 + sign * oz, 0 - sign * ox))
+    }
+  }
+  const end = pts[pts.length - 1]
+  u.facing = end.f
+  moveUnitTo(G, u, end.x, end.z)
+  if (G.out) {
+    const high = G.nav.hasHeight
+    const path = high ? pts.map((p) => ({ x: p.x, y: floorAt(G, p.x, p.z), z: p.z, f: p.f })) : pts.map((p) => ({ x: p.x, z: p.z, f: p.f }))
+    emit(G, 'unit.move', { u: u.id, path, L, speed, fly: false, stomp, smashes, to: high ? { x: u.pos.x, y: groundY(G, u), z: u.pos.z, f: u.facing } : { x: u.pos.x, z: u.pos.z, f: u.facing } })
+    emit(G, 'objectives', { owners: ownersOf(G) })
+    emit(G, 'status', statusOf(G))
+  }
+  return kegsIn(broke)
+}
+
 // The Brute ploughs through anything breakable in its way, at one sample of
 // its walk ({ x, z, dir }: where, and which way it is heading). It walks the
 // live chunk list (§4.1 rule 6), so a log a tree it felled leaves in its
@@ -321,14 +575,17 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
 // (F7a) With height it skips a chunk whose base (the floor it stands on, 0
 // when absent) isn't within HIGH of the sample's floor: a Brute on the
 // ground doesn't smash the parapets on a deck beside it.
-export function smashAround(G, u, { x, z, dir }, out, broke = []) {
+//
+// (F9b) `r`, the radius smashing: the unit's own by default (every round
+// walk's), a long hull's disc's at each of its samples (hullWalk).
+export function smashAround(G, u, { x, z, dir }, out, broke = [], r = u.r) {
   let n = 0
   const y = G.nav.hasHeight ? floorAt(G, x, z) : 0
   for (const c of G.terrain.chunks) {
     if (!c.alive || !c.destructible) continue
     if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue
     const s = c.nav || c.shape
-    if (hypot(s.x - x, s.z - z) < u.r + Math.max(s.hx, s.hz) * 0.8) {
+    if (hypot(s.x - x, s.z - z) < r + Math.max(s.hx, s.hz) * 0.8) {
       G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out, broke)
       n++
     }

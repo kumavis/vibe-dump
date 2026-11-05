@@ -27,8 +27,21 @@
 // then). Where a figure is drawn this frame, which way it
 // faces and how it lunges or falls is the view's (view/units.js), never read
 // here.
+//
+// (F9b, DESIGN §4.2.5) A footprint unit (a long hull: t.fp, core/footprint.js)
+// has a `facing` too, one of the nav's eight headings (0-7: h = 0 faces +z,
+// h = 2 faces +x, core/nav.js DIRS), which turns its discs; no round unit
+// holds the field at all, so stateHash prints `facing=<h>` for a footprint
+// unit and nothing for any other (core/hash.js UNIT_EXTRAS). makeUnit gives
+// it the edge rule's heading, facing the enemy (defaultFacing: h = 2 from
+// the edge at −x, h = 6 from the edge at +x, the point mirror), the
+// deployment turns it where its row's spot needs (core/deploy.js), and
+// its walk's end, a `place` and a charge's end set it after that. Its `r`
+// is its footprint's bounding radius R, not one disc's (relayout): the AI's
+// heuristics and the broadphases read that, and every rule measures its
+// discs (§4.1 rule 26).
 import { hypot, sin, cos, atan2 } from './dmath.js'
-import { raceOf } from './match.js'
+import { raceOf, edgeOf } from './match.js'
 
 // Formation: one model in the middle and the rest in a ring, or a plain ring
 // for small squads. Recomputed as models fall so squads close ranks.
@@ -53,10 +66,19 @@ export function makeUnit(G, key, side) {
     pos: { x: 0, z: 0 }, models: [], alive: t.models, r: 0, flags: {}, lost: 0, mesmerized: false, aboard: 0,
     snared: false, warded: false, resolute: false,
   }
+  // ((F9b) a footprint unit faces the enemy from its seat's edge)
+  if (t.fp) u.facing = defaultFacing(G, side)
   for (let i = 0; i < t.models; i++) u.models.push({ w: t.W, alive: true, ox: 0, oz: 0 })
   relayout(u)
   return u
 }
+
+// (F9b) The heading a footprint unit of seat `side` takes when nothing else
+// says (its making, the deployment's first try: core/deploy.js), by the
+// edge it holds, so it faces the enemy across the table: h = 2 (+x) from
+// the edge at −x, h = 6 (−x) from the edge at +x. By the edge, not the
+// seat: a swapped setup's seats hold each other's edges.
+export const defaultFacing = (G, side) => (edgeOf(G, side) < 0 ? 2 : 6)
 
 // The survivors' slots, and the disc they make.
 export function relayout(u) {
@@ -68,7 +90,10 @@ export function relayout(u) {
     live[i].ox = ox
     live[i].oz = oz
   })
-  u.r = offs.reduce((m, [ox, oz]) => Math.max(m, hypot(ox, oz)), 0) + u.t.base
+  // ((F9b) a footprint unit's r is its bounding radius: read by the AI's
+  // heuristics and as a broadphase, never by a rule measuring its discs)
+  if (u.t.fp) u.r = u.t.fp.R
+  else u.r = offs.reduce((m, [ox, oz]) => Math.max(m, hypot(ox, oz)), 0) + u.t.base
 }
 
 export function setUnitPos(u, x, z) {
