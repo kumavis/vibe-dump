@@ -217,12 +217,22 @@ function describe(step) {
       })
       return {
         title: '7 · Repeat at every threshold, report the highest',
-        html: `<p>Accepted accounts per run — ${counts.join(' · ')}. The table below lists every account at every level; "reported level" is the highest level whose run accepted it, which is what <code>tmetric_run</code> writes out.</p><p class="muted">The three runs are independent maximum flows, so an account can be accepted at a higher level and lose a tie at a lower one; the report still says the higher level. Change the threshold in Settings to walk through a different run.</p>`,
+        html: `<p>Accepted accounts per run — ${counts.join(' · ')}. The table below lists every account at every level; "reported level" is the highest level whose run accepted it, which is what <code>tmetric_run</code> writes out.</p><p class="muted">The three runs are independent maximum flows, so an account can be accepted at a higher level and lose a tie at a lower one; the report still says the higher level. Change the threshold in Settings to walk through a different run.</p>${pendingAction()}`,
       }
     }
     default:
       return { title: '', html: '' }
   }
+}
+
+// The scenario's move, if it has one the reader has not made yet: the stepper
+// only ever walks the graph as it stands, so the final step says where the
+// story continues.
+function pendingAction() {
+  const s = app.scenario
+  const i = s.actions.findIndex((a, k) => !(a.once && app.usedActions.has(k)))
+  if (i < 0) return ''
+  return `<p><b>Next move:</b> press <b>${esc(s.actions[i].label)}</b> in the Scenario card, then compare.</p>`
 }
 
 function name(id) {
@@ -337,9 +347,11 @@ function renderScenario() {
   const s = app.scenario
   $('#scenario-lesson').textContent = s.lesson
   $('#scenario-intro').textContent = s.intro
+  $('#scenario-play').innerHTML = (s.play ?? []).map((p) => `<li>${p}</li>`).join('')
+  $('#scenario-argument').innerHTML = s.argument ? `<details class="argument" open><summary><h3>Ruderman's argument</h3></summary>${s.argument}</details>` : ''
   const actions = $('#scenario-actions')
   actions.innerHTML = s.actions
-    .map((a, i) => `<button type="button" data-action="${i}" ${a.once && app.usedActions.has(i) ? 'disabled' : ''}>${esc(a.label)}</button>`)
+    .map((a, i) => `<button type="button" data-action="${i}" class="${a.once && app.usedActions.has(i) ? '' : 'primary'}" ${a.once && app.usedActions.has(i) ? 'disabled' : ''}>${esc(a.label)}</button>`)
     .join('')
   const notes = $('#scenario-notes')
   if (!app.baseline) {

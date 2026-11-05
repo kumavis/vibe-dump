@@ -291,3 +291,16 @@ select { max-width: 100%; }
   .foot { padding: 16px; }
   h1 { font-size: 22px; }
 }
+
+/* ───────────────────────────── scenario how-to and argument */
+.play-head { margin: 10px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim); }
+ol.play { margin: 0; padding-left: 20px; font-size: 13.5px; }
+ol.play li + li { margin-top: 3px; }
+ol.play:empty, ol.play:empty + .actions:empty { display: none; }
+.argument { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; }
+.argument summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+.argument summary::before { content: "▸"; color: var(--dim); font-size: 12px; }
+.argument[open] summary::before { content: "▾"; }
+.argument summary::-webkit-details-marker { display: none; }
+.argument h3 { font-size: 13.5px; }
+.argument p { margin: 8px 0 0; font-size: 13.5px; }

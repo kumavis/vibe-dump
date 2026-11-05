@@ -21,6 +21,11 @@ export const SCENARIOS = [
     caps: [8, 6, 3, 2, 1],
     threshold: J,
     focus: 'Eli',
+    play: [
+      'The result is already shown. Press <b>Reset</b>, then <b>Step</b>, to watch the computation; at the augmenting paths one unit travels source → Ada → Bea → Dev → Eli.',
+      'Select <b>Eli</b>: distance 4, capacity 1, one unit consumed, none forwarded.',
+      'Switch the threshold to <b>Master</b>: only Ada → Bea survives. Switch to <b>Apprentice</b>: Fil joins.',
+    ],
     intro:
       'Ada is the only trusted seed. The synthetic source hands Ada one unit for herself and five to forward; each hop away from the seed the schedule gives less. Step through the computation and watch a single unit travel source → Ada → Bea → Dev → Eli. Switch the threshold to Master and most of the graph becomes unreachable; switch to Apprentice and Fil joins.',
     build() {
@@ -48,6 +53,11 @@ export const SCENARIOS = [
     caps: [8, 7, 3, 1],
     threshold: J,
     focus: 'Ed',
+    play: [
+      'Four accounts hang off Bo; two are accepted. <b>Ed</b> is selected: the inspector shows why — Bo forwards 2 of 2.',
+      'Press <b>Reset</b>, then <b>Step</b> through the augmenting paths: Bo\'s two forwarding units go to the first two accounts the search reaches.',
+      'Press <b>Give Bo more capacity</b> below, and all four get in.',
+    ],
     intro:
       'Bo is at distance 2, so the schedule gives Bo capacity 3: one unit for Bo, two to forward. Bo certifies four people. All four are reachable, all four have a certification path from the seed, and only two of them can be accepted. Select a rejected account to see the bottleneck. Which two win is a tie-break of the flow computation, not a judgement about the people.',
     build() {
@@ -85,6 +95,11 @@ export const SCENARIOS = [
     caps: [12, 9, 5, 3, 2, 1],
     threshold: J,
     focus: 'Mal',
+    play: [
+      '<b>Mal</b> is selected: accepted, forwarding 1 of 1. Select <b>F2</b>: reachable, rejected. The cluster holds exactly two slots.',
+      'Press <b>Add a fake account</b> below, several times. The accepted count in the notes stays at 2.',
+      'Switch to the <b>Flow network</b>: the only edge into the cluster is Di → Mal, carrying 2, and Di forwards 2 of 2.',
+    ],
     intro:
       'Di, an honest account, has been fooled into certifying Mal. Mal has created fake accounts that all certify Mal and one another at Master level. The only certification entering the cluster is Di → Mal, and Di can forward at most two units. However many fakes Mal adds, the cluster can never hold more than those two admission slots. The "fake" labels are drawn for you; the algorithm never sees them.',
     build() {
@@ -145,6 +160,17 @@ export const SCENARIOS = [
     caps: [40, 24, 20, 7, 3, 1],
     threshold: J,
     focus: 'Y2',
+    play: [
+      'Before the attack: <b>Y2</b> is selected — distance 5, capacity 1, forwards nothing. Select <b>B3</b>: reachable, rejected. The three confused accounts\' capacities add up to 3.',
+      'Press <b>Apply the attack</b> below. Mal appears, certified by Bo, and certifies Y1–Y3.',
+      'Read the notes: Y1–Y3 are now at distance 4 with capacity 3 each, and all six bad accounts are accepted.',
+      'Press <b>Reset</b>, then <b>Step</b>, to watch units run through Mal into Y1–Y3 and on to the bad accounts.',
+    ],
+    argument: `<p><b>The claim.</b> Levien's security argument bounds the number of bad accounts accepted by the total capacity of the <em>confused</em> accounts — honest accounts that have been talked into certifying a bad one. Here the confused accounts are Bo (expensive: near the seed, capacity 20) and Y1–Y3 (cheap: far away, capacity 1 each).</p>
+<p><b>Ruderman's observation.</b> That bound is computed from the confused accounts' capacities <em>after</em> the attack, and the attacker can raise them. Capacity is a function of distance from the seed, so a certification from an account near the seed shortens the distance of everything downstream. The recipe: confuse one expensive account and many cheap ones, then make the expensive one trust the cheap ones. In this scenario Bo → Mal → Y1–Y3 does it; the Y's move from distance 5 to 4 and their capacity goes from 1 to 3.</p>
+<p><b>Why that matters.</b> Measured against the capacities before the attack — the attack's cost — the gain is not linear. Confusing <i>k</i> cheap accounts and one expensive one yields about <i>k</i> times the cheap accounts' <em>new</em> capacity: a constant times the square of the cost, in Ruderman's estimate. Here a bound of 3 before the attack becomes 7 attacker slots after it (Mal plus six bad accounts), fed partly by forwarding capacity the honest certifiers H1–H3 had to spare.</p>
+<p><b>The objection and the reply.</b> Matt Brubeck noted that Levien's proof is vague about how much control the attacker has: if confused accounts can only be made to trust <em>bad</em> accounts, does the attack still work? Ruderman's answer is yes, by routing through a bad account — exactly the Bo → Mal → Y shape used here — at no more than four times the cost.</p>
+<p><b>The contrast.</b> Ruderman notes that PageRank bounds an attacker's gain by a small constant times the confused pages' <em>pre-attack</em> score, wherever the attacker places links; Advogato's capacities move after the attack, so the same kind of bound does not hold.</p>`,
     intro:
       'Before the attack, Y1–Y3 sit at distance 5 with capacity 1: they are accepted, but can forward nothing, so the "bad" accounts they certify are rejected. A bound computed from those capacities says the attacker gets at most three slots through them. Then the attacker creates an account, Mal, obtains one certification for it from Bo, near the seed, and certifies Y1–Y3 from it. Their distance drops to 4, their capacity triples, and the units their honest certifiers had to spare now reach the bad accounts. This is the distance-shortening attack described by Jesse Ruderman (2005).',
     build() {
