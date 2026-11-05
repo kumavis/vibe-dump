@@ -51,6 +51,18 @@
 //    the figure casting but a kept subtree on three's own layer (a gem, a
 //    machine's arm and wheels: they move), so no shadow proxy casts; and the
 //    base by one class, its plinth's.
+// 6b. (F9b) The Shell-Back Howdah in both figure styles (view/models/
+//    howdah.js's machine, as the War-Cart's rows hold warcart.js's): the
+//    'new' one as the game builds it (a fresh build, then its template's
+//    clone), the classic one by its kit's builder, baked: its anim the
+//    view's ('hull': its head and tail kept subtrees in the figure, which
+//    slither, and its deck's height for its riders, inside the figure's
+//    height); its base the outline of its discs (as long and as broad as
+//    they are, its plinth first, the one part a 'new' base casts by); the
+//    'new' one's shadow cast through its one caster (its head and tail,
+//    kept, casting for themselves) and its far stand-in as tall as it.
+//    (Section 1 bakes the classic one by R7a's bake.js and today's; 2 and 4
+//    the glossy one at each detail, and its stand-in.)
 // 7. The splats' preparation (splats.js's prepareSplats, a stub renderer
 //    1280×800 at pixel ratio 1): a figure ~28 px tall draws 1,500 splats and
 //    one ~60 px 6,000 ((V2) and at pixel ratio 0.5, ?lowfi's, one ~56 px
@@ -412,6 +424,53 @@ for (const key of Object.keys(RACES.squirrel.units)) {
 // ((F9a) the War-Cart's two crew too)
 if (surs.size !== 9) fail(`${surs.size} furs for the seven units, not 9 (one a unit, the trebuchet's crew two, the War-Cart's two)`)
 else console.log(`  ok   9 furs for the seven units, each drawn by every figure of its unit`)
+
+// ── 6b. (F9b) The Shell-Back Howdah ──────────────────────────────────────
+{
+  console.log(`\n6b. (F9b) the Shell-Back Howdah in both figure styles (view/models/howdah.js's machine)`)
+  const t = RACES.serpent.units.howdah
+  const { longBase } = await import('../view/models/howdah.js')
+  // the anim the view reads, and the deck inside the figure's height
+  const animIssues = (fig, a) => {
+    const out = []
+    if (a?.kind !== 'hull') out.push(`anim.kind ${a?.kind}`)
+    for (const k of ['head', 'tail']) if (!a?.[k]?.isObject3D || !a[k].userData.keep || !inFig(a[k], fig)) out.push(`anim.${k} not a kept subtree in the figure`)
+    fig.updateMatrixWorld(true)
+    const b = new THREE.Box3().setFromObject(fig, true)
+    if (!(typeof a?.deck === 'number' && a.deck > 0.5 && a.deck < b.max.y - fig.position.y)) out.push(`its deck at ${a?.deck}, the figure ${(b.max.y - fig.position.y).toFixed(2)} tall`)
+    return out
+  }
+  // the base: as long and broad as the discs (heading 0: along z), within
+  // its rim's thickness
+  const baseIssues = (b) => {
+    const out = [], bb = new THREE.Box3().setFromObject(b, true)
+    const fp = t.fp, zs = fp.H[0].map((d) => [d.iz * fp.cell - d.r, d.iz * fp.cell + d.r]).flat(), xs = fp.H[0].map((d) => [d.ix * fp.cell - d.r, d.ix * fp.cell + d.r]).flat()
+    const L = Math.max(...zs) - Math.min(...zs), W = Math.max(...xs) - Math.min(...xs)
+    if (Math.abs(bb.max.z - bb.min.z - L) > 0.2 || Math.abs(bb.max.x - bb.min.x - W) > 0.2) out.push(`a base ${(bb.max.x - bb.min.x).toFixed(2)} × ${(bb.max.z - bb.min.z).toFixed(2)}, its discs ${W.toFixed(2)} × ${L.toFixed(2)}`)
+    return out
+  }
+  for (const how of ['fresh', 'clone']) {
+    const root = cache.buildModel('serpent', 'howdah', t, '#46c27a')
+    const fig = root.userData.fig, issues = [...animIssues(fig, root.userData.anim), ...baseIssues(root.children[0]), ...casting(root)]
+    const stand = cache.lodOf(root)
+    stand.visible = false
+    root.updateMatrixWorld(true)
+    box.setFromObject(fig)
+    const tall = box.max.y, g = stand.geometry
+    g.computeBoundingBox()
+    if (Math.abs(g.boundingBox.max.y - tall) > 0.08 * tall) issues.push(`a stand-in ${g.boundingBox.max.y.toFixed(2)} tall, the figure ${tall.toFixed(2)}`)
+    console.log(`  ${issues.length ? 'FAIL' : 'ok  '} new     howdah ${how.padEnd(5)} anim ${Object.keys(root.userData.anim).join(' ')}, deck ${root.userData.anim.deck.toFixed(2)}; a long base; one caster; stand-in ${g.index.count / 3} triangles, ${g.boundingBox.max.y.toFixed(2)} tall (the figure ${tall.toFixed(2)})${issues.length ? ': ' + issues.join('; ') : ''}`)
+    bad += issues.length
+    cache.disposeFigure(root)
+  }
+  {
+    const fig = SERPENT.howdah()
+    bake(fig)
+    const issues = [...animIssues(fig, fig.userData.anim), ...baseIssues(longBase(t.fp, '#46c27a'))]
+    console.log(`  ${issues.length ? 'FAIL' : 'ok  '} classic howdah baked anim ${Object.keys(fig.userData.anim).join(' ')}, deck ${fig.userData.anim.deck.toFixed(2)}; a long base${issues.length ? ': ' + issues.join('; ') : ''}`)
+    bad += issues.length
+  }
+}
 
 // ── 7. The splats' preparation ─────────────────────────────────────────────
 {

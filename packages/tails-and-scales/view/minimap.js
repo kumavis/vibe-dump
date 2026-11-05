@@ -10,7 +10,9 @@
 //   - the zones and the objectives, each ringed in its holder's colour;
 //   - the order lines (a march's to its slot, an attack's to its target);
 //   - each standing unit as a dot in its seat's colour, as large as its disc
-//     (at least a pixel and a half), the ones picked up outlined;
+//     (at least a pixel and a half), the ones picked up outlined; (F9b) a
+//     long hull as a capsule along its facing (the mirror's f), from its
+//     front disc's centre to its back one's, as broad as its body disc;
 //   - the camera's ground trapezoid (the four corner rays met with the
 //     table, clipped to it);
 //   - pings: a ring that swells and fades where a unit lost models or a
@@ -210,7 +212,7 @@ export class Minimap {
   // what the map shows, as a string: a redraw only when it changes
   signature(M, b) {
     const parts = [b.W, b.H, this.canvas.width, M.owners?.join(), [...this.selected()].join()]
-    for (const d of this.dots(M)) parts.push(`${d.id}${d.ghost ? 'g' : ''}:${Math.round(d.x * 4)}:${Math.round(d.z * 4)}`)
+    for (const d of this.dots(M)) parts.push(`${d.id}${d.ghost ? 'g' : ''}:${Math.round(d.x * 4)}:${Math.round(d.z * 4)}${d.f !== undefined ? `f${d.f}` : ''}`)
     parts.push(this.terrainKey(M))
     for (const l of this.lines()) parts.push(`${l.k}${Math.round(l.from.x)}${Math.round(l.from.z)}${Math.round(l.to.x)}${Math.round(l.to.z)}`)
     const e = this.camera.matrixWorld.elements
@@ -236,12 +238,13 @@ export class Minimap {
   // the table shows it, in its seat's colour; and each ghost, grey, where
   // it was last seen. [{ id, x, z, r, color, ghost }] (?debug reads it)
   // ((F9a) a rider is its hull's dot: it has none of its own)
+  // ((F9b) a long hull's with its facing, `f`: drawn as a capsule)
   dots(M) {
     const fog = this.fog(), out = []
     for (const v of this.units.views.values()) {
       const mu = M.units[v.id]
       if (!(mu?.alive > 0) || mu.aboard || fog?.hide?.has(v.id)) continue
-      out.push({ id: v.id, x: mu.pos.x, z: mu.pos.z, r: mu.r, color: v.color, ghost: false })
+      out.push(v.u.t.fp && mu.f !== undefined ? { id: v.id, x: mu.pos.x, z: mu.pos.z, r: mu.r, color: v.color, ghost: false, f: mu.f } : { id: v.id, x: mu.pos.x, z: mu.pos.z, r: mu.r, color: v.color, ghost: false })
     }
     for (const [id, rec] of fog?.ghosts ?? []) out.push({ id, x: rec.pos.x, z: rec.pos.z, r: rec.r, color: '#9a9a94', ghost: true })
     return out
@@ -276,6 +279,39 @@ export class Minimap {
   seen(p) {
     tmp.set(p.x, 0.5, p.z).project(this.camera)
     return tmp.z < 1 && Math.abs(tmp.x) <= 1 && Math.abs(tmp.y) <= 1
+  }
+
+  // (F9b) A long hull's capsule: a round-capped stroke from its front
+  // disc's centre to its back one's at its heading (its discs' offsets
+  // along its own z, turned by f·45°), as broad as its body disc, in its
+  // seat's colour, outlined when picked up.
+  capsule(g, d, fp, k, picked) {
+    const zs = fp.H[0].map((q) => q.iz * fp.cell)
+    const a = (d.f * Math.PI) / 4, sx = Math.sin(a), sz = Math.cos(a)
+    const [x0, y0] = this.toPx(d.x + sx * Math.max(...zs), d.z + sz * Math.max(...zs))
+    const [x1, y1] = this.toPx(d.x + sx * Math.min(...zs), d.z + sz * Math.min(...zs))
+    const w = Math.max(3, 2 * fp.r[fp.body] * k)
+    g.lineCap = 'round'
+    if (picked) {
+      g.strokeStyle = '#ffe680'
+      g.lineWidth = w + Math.max(2.4, k * 0.7)
+      g.beginPath()
+      g.moveTo(x0, y0)
+      g.lineTo(x1, y1)
+      g.stroke()
+    }
+    g.strokeStyle = d.color
+    g.lineWidth = w
+    g.beginPath()
+    g.moveTo(x0, y0)
+    g.lineTo(x1, y1)
+    g.stroke()
+    // (its head a darker dot, so the capsule reads which way it faces)
+    g.fillStyle = 'rgba(20, 16, 10, 0.55)'
+    g.beginPath()
+    g.arc(x0, y0, Math.max(1, w * 0.22), 0, Math.PI * 2)
+    g.fill()
+    g.lineCap = 'butt'
   }
 
   // ── Drawing ───────────────────────────────────────────────────────────────
@@ -319,6 +355,13 @@ export class Minimap {
     const sel = new Set(this.selected())
     for (const d of this.dots(M)) {
       const [x, y] = this.toPx(d.x, d.z)
+      const fp = d.f !== undefined && this.units.views.get(d.id)?.u.t.fp
+      if (fp) {
+        // ((F9b) a long hull: a capsule along its facing, its front and
+        // back discs' centres its ends, its body disc's breadth)
+        this.capsule(g, d, fp, k, sel.has(d.id))
+        continue
+      }
       g.beginPath()
       g.arc(x, y, Math.max(1.5, d.r * k), 0, Math.PI * 2)
       if (d.ghost) {

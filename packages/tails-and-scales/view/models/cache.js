@@ -45,7 +45,10 @@
 //                                    rider's figure hides on a hull's deck
 //                                    (both styles' kits build the Acorn
 //                                    War-Cart from ./warcart.js, so its
-//                                    template is keyed by style like any)
+//                                    template is keyed by style like any;
+//                                    (F9b) and the Shell-Back Howdah from
+//                                    ./howdah.js, its base a long one, the
+//                                    outline of its discs: longBase)
 //   disposeFigure(root)              frees what only that figure used (a
 //                                    template's geometry is shared: kept)
 //                                    ((V2) and takes its splats off the
@@ -116,6 +119,7 @@
 // the classic style casts as it always did.
 import * as THREE from 'three'
 import { base } from './kit.js'
+import { longBase } from './howdah.js'
 import { bake } from './bake.js'
 import { BUILDERS as SQUIRREL, DRAWS as SQUIRREL_DRAWS } from './squirrel.js'
 import { BUILDERS as SERPENT, DRAWS as SERPENT_DRAWS } from './serpent.js'
@@ -159,7 +163,9 @@ export function buildModel(kit, key, t, sideColor, rim = 1) {
   built = true
   const id = `${style}/${kit}/${key}`, build = KITS[kit][key], draws = DRAWS.has(build)
   const root = new THREE.Group()
-  const b = base(t.base, sideColor, rim)
+  // ((F9b) a long hull's base the outline of its discs: ./howdah.js's
+  // longBase, its plinth first as a round base's)
+  const b = t.fp ? longBase(t.fp, sideColor, rim) : base(t.base, sideColor, rim)
   root.add(b)
   const fresh = draws || !templates.has(id)
   // ((V2) a fresh build timed, its bake with it: the perf overlay's)

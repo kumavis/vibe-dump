@@ -88,12 +88,33 @@
 // ⟨Nutkin 6 · Grenadiers 5⟩) and, while the unit picked up may board it, a
 // ⤒ on its count (boardable(): a class, so the label's HTML stays the
 // mirror's for the snap check); its chip a dot per rider squad.
+//
+// (F9b, DESIGN §4.2.5 "View, input, UI") Long hulls. A footprint unit
+// (t.fp) faces one of eight headings, rules state the mirror carries as its
+// `f` (0-7, h = 0 facing +z, h = 2 +x): its figure's yaw is f·π/4 (three's
+// rotation.y, the convention every figure here faces by and the wreck's
+// raster turns by), set from the mirror wherever a view is made or synced
+// and kept there, never the way it last walked nor the target a charge
+// faced it toward (unit.face is a round unit's: a hull's yaw is its facing
+// alone). Its ring is the outline of its discs (view/hull.js), not a
+// circle of its bounding R, turned with it, its transport's pips along
+// that outline; its hit volume its discs' cylinders, turned with it, so a
+// pick finds the hull and not the table beside it. It walks its
+// octilinear path (unit.move's points carry each run's f, a pivot a point
+// repeated with its new f: core/actions/move.js's hullWalk) straight,
+// backing without turning where a run goes against its facing, and turns
+// on the spot at its pivots at PIVOT_RATE (180°/s), the yaw tweened
+// there; its smashes play by their `s`, the path's inches plus 0.5" a
+// pivot (PIVOT_S), as the core counts them; its head and tail slither as
+// it goes (the figure's 'hull' anim, view/models/howdah.js). Its riders
+// stand on its deck, turned with it.
 import * as THREE from 'three'
 import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
 import { LADDER_OUT } from '../core/terrain/recipes.js'
 import { PACE } from '../present/pace.js'
 import { buildModel, disposeFigure, lodOf } from './models/cache.js'
+import { hullShapes } from './hull.js'
 import { deckSlots, RIDER_SCALE } from '../present/deck.js'
 import { pxPerInch, tierOf, glyphOf } from '../present/zoom.js'
 import { CONDITIONS, labelConds, ctxOf, unitTip } from '../present/conditions.js'
@@ -137,6 +158,13 @@ const LOD_FAR = 60
 const LOD_NEAR = 57
 // (F7b) how strongly a ring shows through what hides it (xray())
 const XRAY = 0.4
+// (F9b) a long hull's yaw as the mirror shows it (its heading f, 0-7), how
+// fast it turns on the spot at a pivot (rad/s: 180°/s, DESIGN §4.2.5), and
+// what a pivot counts in a walk's measure (core/actions/move.js PIVOT_S:
+// its smashes' `s`)
+const yawOf = (mu) => ((mu?.f ?? 0) * Math.PI) / 4
+const PIVOT_RATE = Math.PI
+const PIVOT_S = 0.5
 
 // (F7a, DESIGN §4.2.4) Units on decks. A unit stands at the height the
 // mirror gives it (`y`: its floor, 0 on the ground; a unit.move's path
@@ -286,11 +314,14 @@ export class UnitViews {
   // table, away from the seat's own edge: kept, so a fleeing figure runs off
   // over it), its ring, its hit cylinder, its label; the figures standing in
   // their slots as shown (only the models standing get one).
+  // ((F9b) a long hull's facing is its own, the mirror's f: never the
+  // table's)
   make(u, edge, color) {
-    const facing = -edge * Math.PI / 2
     const mu = this.shown(u.id)
+    const fp = u.t.fp ?? null
+    const facing = fp ? yawOf(mu) : -edge * Math.PI / 2
     // (at: where a walk has got to while a unit.move plays; null otherwise)
-    const v = { id: u.id, u, edge, color, facing, moving: false, at: null, models: [] }
+    const v = { id: u.id, u, edge, color, facing, moving: false, at: null, models: [], fp }
     const kit = RACES[u.race].look.models
     for (let i = 0; i < u.t.models; i++) {
       if (!mu.models[i].alive) {
@@ -298,11 +329,15 @@ export class UnitViews {
         continue
       }
       const mesh = buildModel(kit, u.key, u.t, color, this.rimOf(u.side))
+      // ((F9b) a long hull's figure knows its unit: the snap check reads its
+      // yaw, its facing)
+      if (fp) mesh.userData.hull = u.id
       this.scene.add(mesh)
       v.models.push({ mesh, x: 0, y: 0, z: 0, yaw: facing, lunge: 0, lungeDir: 0, lift: 0 })
     }
-    // selection / status ring
-    const { ring, hit } = ringShapes()
+    // selection / status ring ((F9b) a long hull's the outline of its
+    // discs, and its hit volume their cylinders: view/hull.js)
+    const { ring, hit } = fp ? hullShapes(fp) : ringShapes()
     v.ring = new THREE.Mesh(ring, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, toneMapped: false }))
     v.ring.position.y = 0.04
     v.ring.renderOrder = 2
@@ -318,9 +353,10 @@ export class UnitViews {
     v.label.dataset.unit = u.id
     v.ring.material.visible = this.tier !== 'strategic'
     // ((F9a) a transport's capacity pips, on its ring)
+    // ((F9b) a long hull's along its outline)
     if (u.t.transport) {
-      const kit = pipShapes(Math.ceil(u.t.transport.capacity / 2))
-      v.pips = kit.shapes.get(Math.ceil(u.t.transport.capacity / 2)).map((g) => {
+      const n = Math.ceil(u.t.transport.capacity / 2), kit = pipShapes(n)
+      v.pips = (fp ? hullShapes(fp).pips(n) : kit.shapes.get(n)).map((g) => {
         const m = new THREE.Mesh(g, kit.dim)
         m.renderOrder = 2
         m.visible = this.tier !== 'strategic'
@@ -435,7 +471,8 @@ export class UnitViews {
       v.at = null
       v.climb = null
       v.moving = false
-      v.facing = -edge * Math.PI / 2
+      // ((F9b) a long hull's its own heading, as shown)
+      v.facing = v.fp ? yawOf(mu) : -edge * Math.PI / 2
       v.models.forEach((f, k) => {
         if (!mu.models[k].alive) {
           this.unfigure(f)
@@ -446,6 +483,7 @@ export class UnitViews {
         if (!f.mesh || f.dying || f.fleeing || !f.mesh.parent) {
           this.unfigure(f)
           const mesh = buildModel(kit, u.key, u.t, color, this.rimOf(u.side))
+          if (v.fp) mesh.userData.hull = u.id
           this.scene.add(mesh)
           f = v.models[k] = { mesh, x: 0, y: 0, z: 0, yaw: v.facing, lunge: 0, lungeDir: 0, lift: 0 }
         }
@@ -695,8 +733,11 @@ export class UnitViews {
   // A unit placed (unit.place): a rider placed steps off its hull (the
   // deployment's re-arranging), the hull's deck closing up; a hull placed
   // takes its riders along (they stand on its deck).
+  // ((F9b) A long hull placed faces as placed, at once, as it stands
+  // where placed.)
   placed(e) {
     const v = this.views.get(e.u)
+    if (v.fp) v.facing = yawOf(this.shown(e.u))
     const from = v.models.find((f) => f.deck)?.deck
     if (from) {
       this.dismount(from, true, e.u)
@@ -714,12 +755,21 @@ export class UnitViews {
   // a raised unit's drop line from its ring to the ground, and its label's
   // height told again once it stands (the label is the mirror's: a snap
   // draws the same).
+  // ((F9b) A long hull's ring and hit volume are its discs' own shapes, at
+  // their own size, turned as its figure is: its facing, or where a walk's
+  // pivot has turned it to.)
   disc(id) {
     const v = this.views.get(id), u = v.u, mu = this.shown(id), p = v.at ?? mu.pos
     const y = v.at ? (v.at.y ?? 0) : yOf(mu)
-    v.ring.scale.setScalar(mu.r + 0.18)
     const tall = u.t.big ? 2.4 : u.t.fly ? 1.8 : 1.3
-    v.hit.scale.set(mu.r, tall, mu.r)
+    if (v.fp) {
+      v.ring.scale.setScalar(1)
+      v.hit.scale.set(1, tall, 1)
+      v.ring.rotation.y = v.hit.rotation.y = v.facing
+    } else {
+      v.ring.scale.setScalar(mu.r + 0.18)
+      v.hit.scale.set(mu.r, tall, mu.r)
+    }
     v.ring.position.x = v.hit.position.x = p.x
     v.ring.position.z = v.hit.position.z = p.z
     v.ring.position.y = 0.04 + y
@@ -727,6 +777,7 @@ export class UnitViews {
     if (v.xray) {
       v.xray.position.copy(v.ring.position)
       v.xray.scale.copy(v.ring.scale)
+      v.xray.rotation.y = v.ring.rotation.y
     }
     const raised = y > RAISED && mu.alive > 0 && !this.hid(id)
     if (raised && !v.dropLine) {
@@ -834,10 +885,12 @@ export class UnitViews {
   xray(v, col) {
     if (!col && !v.xray) return
     if (!v.xray) {
-      v.xray = new THREE.Mesh(ringShapes().ring, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: XRAY, depthWrite: false, depthFunc: THREE.GreaterDepth, toneMapped: false }))
+      // ((F9b) a long hull's its outline, as its ring)
+      v.xray = new THREE.Mesh(v.fp ? v.ring.geometry : ringShapes().ring, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: XRAY, depthWrite: false, depthFunc: THREE.GreaterDepth, toneMapped: false }))
       v.xray.renderOrder = 3
       v.xray.position.copy(v.ring.position)
       v.xray.scale.copy(v.ring.scale)
+      v.xray.rotation.y = v.ring.rotation.y
       v.xray.material.visible = this.tier !== 'strategic'
       this.scene.add(v.xray)
     }
@@ -957,9 +1010,18 @@ export class UnitViews {
           m.z += (tz - m.z) * k
           m.y = (m.y ?? 0) + (py - (m.y ?? 0)) * k
           const sp = Math.hypot(m.x - px, m.z - pz) / Math.max(dt, 1e-4)
-          const want = sp > 0.6 ? Math.atan2(m.x - px, m.z - pz) : m.look ?? v.facing
-          m.yaw += wrapAngle(want - m.yaw) * (1 - Math.exp(-dt * 8))
-          m.moving = sp > 0.6
+          if (v.fp) {
+            // ((F9b) a long hull faces its facing alone, never the way it
+            // goes (it backs up facing ahead): its pivots tweened by
+            // hullWalk(), a placement's new heading taken at once, as its
+            // place is)
+            m.yaw = v.facing
+            m.moving = v.moving
+          } else {
+            const want = sp > 0.6 ? Math.atan2(m.x - px, m.z - pz) : m.look ?? v.facing
+            m.yaw += wrapAngle(want - m.yaw) * (1 - Math.exp(-dt * 8))
+            m.moving = sp > 0.6
+          }
         }
         if (model.alive) {
           let lx = 0, lz = 0
@@ -990,6 +1052,12 @@ export class UnitViews {
           fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 1.4) * 0.015)
         } else if (a.kind === 'machine') {
           if (m.moving) for (const w of a.wheels) w.rotation.x += dt * 6
+        } else if (a.kind === 'hull') {
+          // ((F9b) a long hull's head and tail slither from side to side as
+          // it goes, the tail a beat behind; at rest they sway a little)
+          const k = m.moving ? 1 : 0.3, w = m.moving ? 5.5 : 0.9
+          a.head.rotation.y = Math.sin(t * w) * 0.2 * k
+          a.tail.rotation.y = -Math.sin(t * w + 1.1) * 0.34 * k
         }
         if (a.gem) a.gem.rotation.y = t * 2
         if (m.flash > 0) {
@@ -1236,8 +1304,11 @@ export class UnitViews {
   }
 
   // `e.u` turns to face `e.tg`, as both are shown (a unit.face event's).
+  // ((F9b) Not a long hull: its yaw is its facing, rules state, which its
+  // charge's walk turns as it goes.)
   face(e) {
     const v = this.views.get(e.u), at = this.shown(e.tg).pos, from = this.shown(e.u).pos
+    if (v.fp) return
     v.facing = Math.atan2(at.x - from.x, at.z - from.z)
     for (const f of v.models) f.look = Math.atan2(at.x - f.x, at.z - f.z)
   }
@@ -1300,6 +1371,8 @@ export class UnitViews {
   // without heights (no height layer) as ever.
   async walk(e, M, smash) {
     const v = this.views.get(e.u), gen = this.gen
+    // ((F9b) a long hull's path: its runs and pivots, hullWalk())
+    if (v.fp && e.path.length && e.path[0].f !== undefined) return this.hullWalk(e, smash)
     const { path: pts, L, speed, fly, smashes } = e
     // ((F16) a walker the fog veils stomps and smashes unheard)
     const hid = this.hid(e.u)
@@ -1358,6 +1431,82 @@ export class UnitViews {
     this.disc(e.u)
     v.moving = false
     if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
+    await wait(0.15)
+  }
+
+  // (F9b) A long hull walks its path (unit.move's, core/actions/move.js's
+  // hullWalk: { x, z, f } points from where it stood, each run a straight
+  // drive at its points' f, forward or backing, each pivot a point
+  // repeated with its new f): each run in game time at the walk's speed,
+  // facing its f whichever way it goes (a run against DIRS[f] backs up),
+  // and each pivot on the spot, the yaw tweened through its 45° at
+  // PIVOT_RATE (a quarter second); the disc (the outline, the hit volume,
+  // the figure following) where the walk has got to, as walk() does a
+  // round unit's. Its smashes play as the walk passes their `s`, which
+  // counts the path's inches and PIVOT_S a pivot (the event's L); a smash
+  // on a pivot plays as the pivot turns past it. A wrecker setting off
+  // stomps. The yaw, unwrapped as it turns, ends on the mirror's f.
+  async hullWalk(e, smash) {
+    const v = this.views.get(e.u), gen = this.gen
+    const { path: pts, speed, smashes } = e
+    const hid = this.hid(e.u)
+    if (e.stomp && !hid) sfx.boom(0.4)
+    v.moving = true
+    // the pieces: a run { a, b, l } or a pivot { a, y0, y1 }, each with its
+    // place in the walk's measure (s, ds) and in time (t, dt)
+    const seg = []
+    let s = 0, t = 0, yaw = (pts[0].f * Math.PI) / 4
+    const tops = pts.length > 0 && 'y' in pts[0]
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i]
+      if (a.x === b.x && a.z === b.z) {
+        // (a pivot to the next heading round, right (h + 1, the yaw up an
+        // eighth of a turn) or left)
+        const y1 = yaw + (b.f === ((a.f + 1) & 7) ? Math.PI / 4 : -Math.PI / 4)
+        seg.push({ pivot: true, a, y0: yaw, y1, s, ds: PIVOT_S, t, dt: Math.PI / 4 / PIVOT_RATE })
+        yaw = y1
+        s += PIVOT_S
+        t += Math.PI / 4 / PIVOT_RATE
+      } else {
+        const l = hypot(b.x - a.x, b.z - a.z)
+        seg.push({ pivot: false, a, b, yaw, s, ds: l, t, dt: l / speed })
+        s += l
+        t += l / speed
+      }
+    }
+    let next = 0
+    const play = ({ ev }) => {
+      smash(ev)
+      if (!hid) this.effects.shake = Math.max(this.effects.shake, 0.08)
+    }
+    const gone = () => this.gone(e.u, v, gen)
+    const T = t
+    if (seg.length) {
+      await tween(T + 0.15, (k) => {
+        if (gone()) return
+        const now = Math.min(T, k * (T + 0.15))
+        const q = seg.find((p) => now <= p.t + p.dt) ?? seg[seg.length - 1]
+        const f = q.dt > 0 ? Math.min(1, (now - q.t) / q.dt) : 1
+        if (q.pivot) {
+          v.facing = lerp(q.y0, q.y1, easeInOut(f))
+          v.at = { x: q.a.x, y: tops ? (q.a.y ?? 0) : 0, z: q.a.z }
+        } else {
+          v.facing = q.yaw
+          const x = lerp(q.a.x, q.b.x, f), z = lerp(q.a.z, q.b.z, f)
+          v.at = { x, y: tops ? this.floorAt(x, z) : 0, z }
+        }
+        this.disc(e.u)
+        const d = q.s + q.ds * f
+        while (next < smashes.length && smashes[next].s <= d + 1e-9) play(smashes[next++])
+      })
+    }
+    if (gone()) return
+    while (next < smashes.length) play(smashes[next++])
+    // there: drawn where the mirror has it, facing as it does
+    v.at = null
+    v.facing = yawOf(this.shown(e.u))
+    this.disc(e.u)
+    v.moving = false
     await wait(0.15)
   }
 }

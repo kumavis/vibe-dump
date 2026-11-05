@@ -35,16 +35,47 @@
 // group's hulls (input/human.js). A group Move or Approach moves its hulls
 // and leaves its riders out (`movers`): they ride along, and the preview
 // says so; a rider steps off alone (its own tool).
+//
+// (F9b, DESIGN §4.2.5 and §4.2.6's one exception) Long hulls. A long hull
+// picked up alone, in its seat's deployment or its movement phase while it
+// can still move, is a group of one (loneHull, pins()): a click on the
+// ground pins its ghost there (its outline, at the heading the move or the
+// placement would take by default: the planner's, present/orders.js) and
+// sends nothing; Enter, ✓ (the bar shows it for a pinned lone hull) or a
+// click on the pin's flag sends it; a double click on the ground pins and
+// sends at the default heading; Esc, a right click or ✕ drops it. Every
+// pinned long hull's ghost, alone or a group's member, carries a rotate
+// handle (a knob ahead of its head: ROT_AHEAD), hit-tested on screen
+// (HANDLE_PX across, a finger's 44 px) before the camera takes the press,
+// as the pin's other handles are: dragged, the ghost turns to the valid
+// heading nearest the pointer's bearing; tapped (a press that stays put),
+// it turns to the next valid one clockwise. [ and ] (only with a pin) turn
+// it to the previous or next valid heading (the lone hull, or the group's
+// lead if a long hull, else its first). Only headings the move (or the
+// placement) may end on are ever shown (validHeads: validEnd's, or
+// placeOk's, heading by heading), and the executor (input/orders.js) sends
+// each member's heading, the one turned to or the default, as its `f`. A
+// left drag on the table still orbits the camera.
+import * as THREE from 'three'
 import { previewGroup, slotsOf } from '../present/orders.js'
 import { runGroup } from './orders.js'
 import { unitPrice } from '../core/army.js'
 import { sfx } from '../view/sfx.js'
+import { hullText, NO_ROOM } from './tools/move.js'
 
 const FLAG_R = 1.2 // a click this near the pinned flag sends the formation
 const BOX_MIN = 6 // a drag shorter than this (px) is a click
 const DOUBLE = 320 // ms between the clicks of a double click
 const LONG = 450 // ms a finger held still is a long press
 const SPACE = new Set([' ']) // a focused button's own key
+// (F9b) a long hull's rotate handle: how far ahead of its ghost's front
+// disc it stands (view/overlay.js draws it there), and how wide a press
+// finds it on screen (a finger's 44 px)
+const ROT_AHEAD = 1.1
+const HANDLE_PX = 44
+const tmpV = new THREE.Vector3()
+// the circular distance between two angles
+const turnGap = (a, b) => Math.abs(((((a - b) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)
 
 export class GroupInput {
   // `human` (input/human.js), `view` (view/index.js), `selection`
@@ -102,6 +133,20 @@ export class GroupInput {
   isGroup() {
     return this.members().length >= 2
   }
+  // (F9b) The long hull picked up alone, where a ground click pins it: in
+  // its seat's deployment, or in its movement phase while it can move; else
+  // null.
+  loneHull() {
+    const ms = this.members()
+    if (ms.length !== 1 || !ms[0].t.fp) return null
+    const u = ms[0], verb = this.phase()
+    if (verb === 'place') return u
+    return verb === 'move' && !u.flags.moved && this.human.ask((G, q) => q.canAct(G, u)) ? u : null
+  }
+  // (F9b) whether a ground click pins: a group, or a lone long hull
+  pins() {
+    return this.isGroup() || !!this.loneHull()
+  }
 
   // what a click does with the group now: 'place', 'move', 'shoot', 'charge'
   // or null
@@ -152,11 +197,15 @@ export class GroupInput {
     }
     // (F10c) a press on the pin's handles: a drag of it (the flag's, once it
     // moves: a press that stays put on it is still the click that sends)
-    if (!multi && e.button === 0 && this.isGroup() && !e.shiftKey) {
+    // ((F9b) a lone long hull's pin too, and any pinned long hull's rotate
+    // handle ('rot', its hull's id `rot`): live once it moves, a press that
+    // stays put on it a tap)
+    if (!multi && e.button === 0 && this.pins() && !e.shiftKey) {
       const h = this.handleAt(e)
       if (h) {
-        const g = this.human.picker.pick(e).ground
-        this.drag = { id: e.pointerId, h, pin: this.rec.pin, from: { x: g.x, z: g.z }, x0: e.clientX, y0: e.clientY, live: h !== 'move' }
+        const g = this.human.picker.pick(e).ground ?? { x: 0, z: 0 }
+        const rot = typeof h === 'object' ? h.rot : null
+        this.drag = { id: e.pointerId, h: rot === null ? h : 'rot', rot, pin: this.rec.pin, from: { x: g.x, z: g.z }, x0: e.clientX, y0: e.clientY, live: rot === null && h !== 'move' }
         this.controls.enabled = false
         return true
       }
@@ -297,6 +346,11 @@ export class GroupInput {
     if (d && !(e && e.pointerId !== d.id)) {
       this.drag = null
       this.controls.enabled = true
+      // ((F9b) a tap on a rotate handle: the next valid heading round)
+      if (!d.live && d.h === 'rot') {
+        this.turn(1, d.rot)
+        return true
+      }
       // (a press on the flag that never moved: its click, which sends)
       return d.live
     }
@@ -433,7 +487,8 @@ export class GroupInput {
       if (this.isGroup()) this.setGroup([unit.id])
       return false
     }
-    if (!this.isGroup()) return false
+    // ((F9b) a lone long hull pins too, on a click on the ground)
+    if (!this.isGroup() && !(this.loneHull() && ground && !unit)) return false
     const verb = this.phase()
     // (a double click: the second click within DOUBLE ms and a few pixels of
     // the first; a quick click elsewhere only moves the pin)
@@ -491,6 +546,10 @@ export class GroupInput {
   // ── (F10c) The pin's handles ──────────────────────────────────────────────
   // where they stand: the flag (move), the turn knob and the line knob, each
   // a little beyond the formation's edge
+  // ((F9b) and `rot`, each pinned long hull's rotate handle, { id, x, z,
+  // f }: ROT_AHEAD ahead of its ghost's front disc at the heading it
+  // shows; a lone hull's pin has its flag and that alone, a formation of
+  // one having nothing to turn or stretch)
   handles(pin) {
     if (!pin || pin.target.x === undefined || (pin.verb !== 'move' && pin.verb !== 'place')) return null
     const a = pin.target, slots = [...(pin.preview.slots?.values() ?? [])]
@@ -499,19 +558,132 @@ export class GroupInput {
     // (kept on the table, where a press finds them)
     const { W, H } = this.G.nav
     const on = (x, z) => ({ x: Math.max(-W / 2 + 0.6, Math.min(W / 2 - 0.6, x)), z: Math.max(-H / 2 + 0.6, Math.min(H / 2 - 0.6, z)) })
+    const rot = this.rotHandles(pin)
+    if (pin.preview.members.length <= 1) return { move: { x: a.x, z: a.z }, rot }
     return {
       move: { x: a.x, z: a.z },
       turn: on(a.x + R * Math.cos(ang), a.z + R * Math.sin(ang)),
       line: on(a.x + R * Math.cos(ang + Math.PI / 2), a.z + R * Math.sin(ang + Math.PI / 2)),
+      rot,
     }
   }
+  // (F9b) each pinned long hull's rotate handle (above)
+  rotHandles(pin) {
+    const nav = this.G.nav, out = []
+    for (const m of pin.preview.members) {
+      if (!m.u.t.fp || m.cell < 0 || m.f === undefined) continue
+      const f = this.headOf(pin, m), a = (f * Math.PI) / 4
+      const reach = Math.max(...m.u.t.fp.H[0].map((d) => d.iz * m.u.t.fp.cell + d.r)) + ROT_AHEAD
+      out.push({ id: m.u.id, x: nav.x(m.cell) + Math.sin(a) * reach, z: nav.z(m.cell) + Math.cos(a) * reach, f })
+    }
+    return out
+  }
 
-  // a press on one of the pin's handles: the handle, or null
+  // a press on one of the pin's handles: the handle, or null ((F9b) a
+  // rotate handle first, { rot: id }, found on screen within HANDLE_PX
+  // across, whatever the zoom)
   handleAt(e) {
-    const hs = this.handles(this.rec.pin), g = hs && this.human.picker.pick(e).ground
+    const hs = this.handles(this.rec.pin)
+    if (!hs) return null
+    const cam = this.controls.object
+    for (const r of hs.rot ?? []) {
+      tmpV.set(r.x, 0.07, r.z).project(cam)
+      const px = (tmpV.x * 0.5 + 0.5) * innerWidth, py = (-tmpV.y * 0.5 + 0.5) * innerHeight
+      if (tmpV.z < 1 && Math.hypot(e.clientX - px, e.clientY - py) <= HANDLE_PX / 2) return { rot: r.id }
+    }
+    const g = this.human.picker.pick(e).ground
     if (!g) return null
-    const near = (p) => Math.hypot(g.x - p.x, g.z - p.z) < FLAG_R
+    const near = (p) => p && Math.hypot(g.x - p.x, g.z - p.z) < FLAG_R
     return near(hs.turn) ? 'turn' : near(hs.line) ? 'line' : near(hs.move) ? 'move' : null
+  }
+
+  // ── (F9b) A pinned long hull's heading ────────────────────────────────────
+  // The heading member m of `pin` ends on: the one it was turned to, else
+  // the planner's default.
+  headOf(pin, m) {
+    return pin.fs?.get(m.u.id) ?? m.f
+  }
+  // The headings member m of `pin` may end on at its planned cell, a bit
+  // each (kept on the pin): a placement's those placeOk takes there, a
+  // move's those validEnd takes, the members planned before it standing
+  // where they will (the planner's `at`, their headings as shown).
+  validHeads(pin, m) {
+    pin.heads ??= new Map()
+    if (pin.heads.has(m.u.id)) return pin.heads.get(m.u.id)
+    const ms = pin.preview.members, k = ms.indexOf(m)
+    const bits = this.human.ask((G, q) => {
+      const u = G.units.find((x) => x.id === m.u.id), nav = G.nav
+      let b = 0
+      if (pin.verb === 'place') {
+        for (let h = 0; h < 8; h++) if (q.placeOk(G, u, m.cell, h)) b |= 1 << h
+        return b
+      }
+      const at = new Map()
+      for (const o of ms.slice(0, k)) if (o.cell >= 0) at.set(o.u.id, o.f === undefined ? { x: nav.x(o.cell), z: nav.z(o.cell) } : { x: nav.x(o.cell), z: nav.z(o.cell), f: this.headOf(pin, o) })
+      const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+      for (let h = 0; h < 8; h++) if (q.validEnd(G, plan, m.cell, at, h)) b |= 1 << h
+      return b
+    })
+    pin.heads.set(m.u.id, bits)
+    return bits
+  }
+  // The long hull [ and ] turn: `id`'s, else the lone hull, the lead if a
+  // long hull, else the first long hull of the pin; its member, or null.
+  hullMember(pin, id = null) {
+    const ms = pin?.preview.members.filter((m) => m.u.t.fp && m.cell >= 0 && m.f !== undefined) ?? []
+    return (id !== null ? ms.find((m) => m.u.id === id) : ms.find((m) => m.u.id === this.rec.lead) ?? ms[0]) ?? null
+  }
+  // Turn a pinned long hull's ghost to the next valid heading round, `dir`
+  // 1 clockwise (h + 1, seen from above), −1 the other way; false when it
+  // has none other.
+  turn(dir, id = null) {
+    const pin = this.rec.pin, m = this.hullMember(pin, id)
+    if (!m) return false
+    const bits = this.validHeads(pin, m), f0 = this.headOf(pin, m)
+    for (let k = 1; k < 8; k++) {
+      const h = (f0 + dir * k + 8) & 7
+      if (bits & (1 << h)) return this.face(pin, m, h)
+    }
+    return false
+  }
+  // Turn it to heading h (one validHeads takes): its ghost, its handle and
+  // the bar's line drawn again; nothing sent.
+  face(pin, m, h) {
+    pin.fs ??= new Map()
+    pin.fs.set(m.u.id, h)
+    this.draw(pin.preview, pin.target, true)
+    this.human.flow.refreshUI()
+    if (this.loneHull() && this.human.mouse) this.tooltip?.show(this.pinText(pin), this.human.mouse)
+    sfx.click()
+    return true
+  }
+  // What a pinned lone long hull's move or placement says: its inches told
+  // apart (a move's), its heading, and "no room to turn here" where it
+  // could pivot neither way.
+  pinText(pin) {
+    const m = pin.preview.members[0]
+    if (!m || m.cell < 0) return pin.preview.summary
+    const f = this.headOf(pin, m), arrow = '↑↗→↘↓↙←↖'[f]
+    return this.human.ask((G, q) => {
+      if (pin.verb === 'place') return `Place ${m.u.t.short} facing ${arrow} · [ / ] or the handle turn it · Enter or ✓ places it${G.nav.hullRoom(m.cell, f, m.u.t.fp, 'walk') ? '' : NO_ROOM}`
+      const u = G.units.find((x) => x.id === m.u.id), plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+      return `Move ${m.u.t.short} facing ${arrow} · ${hullText(G, plan, m.cell, f)}`
+    })
+  }
+  // the drag of a rotate handle: the ghost turned to the valid heading
+  // nearest the pointer's bearing from it
+  dragTurn(id, g) {
+    const pin = this.rec.pin, m = this.hullMember(pin, id)
+    if (!m) return
+    const nav = this.G.nav, a = Math.atan2(g.x - nav.x(m.cell), g.z - nav.z(m.cell))
+    const bits = this.validHeads(pin, m)
+    let best = -1, bd = Infinity
+    for (let h = 0; h < 8; h++) {
+      if (!(bits & (1 << h))) continue
+      const d = turnGap((h * Math.PI) / 4, a)
+      if (d < bd - 1e-9) (bd = d), (best = h)
+    }
+    if (best >= 0 && best !== this.headOf(pin, m)) this.face(pin, m, best)
   }
 
   // the drag: the pin moved, turned or stretched where the pointer is
@@ -519,6 +691,8 @@ export class GroupInput {
     const d = this.drag, g = this.human.picker.pick(e).ground
     if (!g) return
     const pin = d.pin, a = pin.target
+    // ((F9b) a rotate handle's: the ghost turned toward the pointer)
+    if (d.h === 'rot') return this.dragTurn(d.rot, g)
     if (d.h === 'move') {
       const dx = g.x - d.from.x, dz = g.z - d.from.z, to = { x: a.x + dx, z: a.z + dz }
       const line = pin.line ? { a: { x: pin.line.a.x + dx, z: pin.line.a.z + dz }, b: { x: pin.line.b.x + dx, z: pin.line.b.z + dz } } : null
@@ -558,18 +732,24 @@ export class GroupInput {
   }
 
   // the formation's ghosts and its flag on the table
+  // ((F9b) a long hull member as its outline at its heading, its path
+  // the lattice's with its pivots, its rotate handle once pinned; a lone
+  // hull's path drawn hovering too, the move a click would pin)
   draw(p, target, pinned) {
-    const nav = this.G.nav
-    const members = p.members.filter((m) => m.cell >= 0).map((m) => ({ x: nav.x(m.cell), z: nav.z(m.cell), r: m.u.r, short: m.how === 'short' }))
+    const nav = this.G.nav, pin = pinned ? this.rec.pin : null
+    const head = (m) => (pin && pin.preview === p ? this.headOf(pin, m) : m.f)
+    const members = p.members.filter((m) => m.cell >= 0).map((m) => (m.u.t.fp && m.f !== undefined ? { x: nav.x(m.cell), z: nav.z(m.cell), r: m.u.r, short: m.how === 'short', fp: m.u.t.fp, f: head(m) } : { x: nav.x(m.cell), z: nav.z(m.cell), r: m.u.r, short: m.how === 'short' }))
     // ((F10c) pinned: the members' paths, faint, at most 24, and its handles)
-    const paths = pinned && p.members.some((m) => m.cell >= 0 && m.how !== 'stay' && m.u.flags) && !this.deploying()
+    const lone = p.members.length === 1 && p.members[0].u.t.fp
+    const paths = (pinned || lone) && p.members.some((m) => m.cell >= 0 && m.how !== 'stay' && m.u.flags) && !this.deploying()
       ? this.human.ask((G, q) => p.members.filter((m) => m.cell >= 0).slice(0, 24).map((m) => {
         const u = G.units.find((x) => x.id === m.u.id), plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
+        if (plan.fp) return Number.isFinite(plan.cells.dist[m.cell]) && head(m) >= 0 ? G.nav.hullPath(plan.res, m.cell, head(m)) : null
         return Number.isFinite(plan.res.dist[m.cell]) ? G.nav.path(plan.res, m.cell, u.r, plan.mode === 'fly' ? null : plan.forbid) : null
       }).filter(Boolean))
       : []
     const handles = pinned ? this.handles({ ...this.rec.pin, preview: p, target }) ?? null : null
-    this.view.overlay.formation({ members, anchor: target.pos ? null : target, pinned, paths, handles })
+    this.view.overlay.formation({ members, anchor: target.pos ? null : target, pinned, paths, handles, solo: !!lone })
   }
 
   deploying() {
@@ -579,7 +759,7 @@ export class GroupInput {
   // (F13) a hover's ghosts let go (a finger's aim over): a plan still coming
   // stops, and the pinned formation, if any, is drawn again
   unhover() {
-    if (!this.isGroup()) return
+    if (!this.pins()) return
     this.ghosts?.cancel()
     const pin = this.rec.pin
     if (pin) this.draw(pin.preview, pin.target, true)
@@ -604,7 +784,10 @@ export class GroupInput {
   commit() {
     const seat = this.seat(), pin = seat >= 0 ? this.selection.of(seat).pin : null
     if (!pin) return 'nothing pinned to send'
-    this.running = this.run(pin.verb, pin.target, pin.line, pin.preview.slots && pin.rot && !pin.line ? pin.preview.slots : null)
+    // ((F9b) each long hull's heading, as its ghost showed it: the
+    // executor sends it with the cell it was pinned for)
+    const facings = new Map(pin.preview.members.filter((m) => m.u.t.fp && m.cell >= 0 && m.f !== undefined).map((m) => [m.u.id, { cell: m.cell, f: this.headOf(pin, m) }]))
+    this.running = this.run(pin.verb, pin.target, pin.line, pin.preview.slots && pin.rot && !pin.line ? pin.preview.slots : null, facings)
     return null
   }
 
@@ -625,7 +808,8 @@ export class GroupInput {
 
   // Send the group's commands (input/orders.js); then keep picked the
   // members still able to act.
-  async run(verb, target, line = null, slots = null) {
+  // ((F9b) `facings`: id → { cell, f }, each long hull's pinned heading)
+  async run(verb, target, line = null, slots = null, facings = null) {
     if (this.busy) return
     // ((F9a) a Move or an Approach sends the movers: the riders ride along)
     const seat = this.seat(), members = verb === 'move' || verb === 'approach' ? this.movers() : this.members()
@@ -634,7 +818,7 @@ export class GroupInput {
     this.cancel()
     const s = this.selection.of(seat)
     try {
-      const r = await runGroup({ session: this.human.session, seat, verb: verb === 'shoot' ? 'fire' : verb, members, target, line, slots, advance: verb === 'move' && s.advance })
+      const r = await runGroup({ session: this.human.session, seat, verb: verb === 'shoot' ? 'fire' : verb, members, target, line, slots, advance: verb === 'move' && s.advance, facings })
       s.note = r.note
       s.fell = r.fell
       if (r.sent) sfx.click()
@@ -650,13 +834,29 @@ export class GroupInput {
 
   // The pointer over the table with a group picked: its formation's ghosts
   // where a click would pin it (none once pinned: the pin stays drawn).
+  // ((F9b) A lone long hull's: its ghost where a click would pin it, at
+  // the default heading, its path and its inches told apart; once pinned,
+  // the pin's own line, pinText.)
   hover({ unit, ground }) {
     const seat = this.seat()
+    const lone = !this.isGroup() && this.loneHull()
+    if (lone && this.selection.of(seat).pin && !this.busy) return this.pinText(this.selection.of(seat).pin)
     // ((F8b's review) every way out of the hover lets a plan still coming
     // go: no group, a pin, a send, nowhere to plan for, a shot or charge)
-    if (!this.isGroup() || this.selection.of(seat).pin || this.busy) {
+    if (!this.pins() || this.selection.of(seat).pin || this.busy) {
       this.ghosts?.cancel()
       return null
+    }
+    if (lone) {
+      if (!ground || unit) {
+        this.view.overlay.formation(null)
+        return null
+      }
+      const verb = this.phase(), target = { x: ground.x, z: ground.z }, p = this.preview(verb, target)
+      this.draw(p, target, false)
+      const m = p.members[0]
+      if (!m || m.cell < 0) return p.summary
+      return this.pinText({ verb, preview: p, target })
     }
     const verb = this.phase()
     let target = null, v = verb
@@ -698,6 +898,17 @@ export class GroupInput {
     if (/^(INPUT|SELECT|TEXTAREA)$/.test(tag) || (/^(BUTTON|A)$/.test(tag) && SPACE.has(e.key))) return false
     const s = this.selection.of(seat)
     switch (e.key) {
+      // ((F9b) a pinned long hull's heading, the next valid one round)
+      case ']':
+        if (!s.pin || e.ctrlKey || e.metaKey || e.altKey) break
+        e.preventDefault()
+        this.turn(1)
+        return true
+      case '[':
+        if (!s.pin || e.ctrlKey || e.metaKey || e.altKey) break
+        e.preventDefault()
+        this.turn(-1)
+        return true
       case 'Enter':
         if (!s.pin) break
         e.preventDefault()
@@ -782,6 +993,10 @@ export class GroupInput {
     // are still to act
     const verb = seat >= 0 ? this.phase() : null
     const ready = verb ? this.ready().length : null
+    // ((F9b) a pinned lone long hull: the bar with its ✓ and ✕, and what
+    // the pin would do, DESIGN §4.2.6's group of one)
+    const lone = ms.length === 1 && seat >= 0 && this.selection.of(seat).pin && this.loneHull()
+    if (lone) return { show: true, hull: true, ready, count: 1, models: ms[0].alive, chips: [], verbs: [], advance: null, pilot: null, orders: null, pinned: true, summary: this.pinText(this.selection.of(seat).pin).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(), note: '', name: ms[0].t.short }
     if (ms.length < 2) return { show: false, ready }
     const s = this.selection.of(seat)
     const types = []

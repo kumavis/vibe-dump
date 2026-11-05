@@ -7,7 +7,8 @@
 //                                   detail, 0.3 the ~28 px one (fewer rings and segments, no scute geometry,
 //                                   no claws or catchlights: the shader's own level of detail fades the
 //                                   gloss, scales and markings at those sizes). No Math.random.
-//   KEYS                            the six unit keys
+//   KEYS                            the six unit keys ((F9b) and the Howdah's, ../howdah.js's machine
+//                                   in this kit's finishes)
 //
 // What is different from serpent.js, and why:
 // - The coil, torso, shoulders and neck are ONE swept tube (shapes.js body), so the body has no join
@@ -41,6 +42,7 @@ import { part, rod, hold, shade } from '../kit.js'
 import { skin, belly as bellyMat, gloss, polished, satinMetal, glow } from './gloss.js'
 import { blob, ellipsoid, lathe, horn, body as sweepBody, tint, triangles, smooth, cutPaint, withPlain, occluder, occlude, sweepSimple, vertexNormals } from './shapes.js'
 import { smin, smax, roundCone, ellipsoid as sdfEllipsoid, fieldGeometry } from './sdf.js'
+import { howdah } from '../howdah.js'
 
 const col = (hex) => new THREE.Color(hex)
 const lerp = THREE.MathUtils.lerp
@@ -751,7 +753,26 @@ const BUILD = {
     a.gem.userData.keep = true
     return m
   },
+  // (F9b) The Shell-Back Howdah (../howdah.js, the machine both figure
+  // styles share), in this kit's finishes: its hide the clearcoated scaled
+  // skin (its scales sized for a figure three times a naga's, as the
+  // engine's crew's are for theirs: HOWDAH_K), the belly's lacquer, the
+  // shell a satin-coated horn over darker seams (lacquered, a plate facing
+  // the sun flared white at the table's distance), satin wood, polished
+  // gold, glowing eyes; its parts' resolution the detail's.
+  howdah(D) {
+    const own = { uScaleFreq: 52 / HOWDAH_K, uLodScale: HOWDAH_K }
+    return howdah((kind, geo, hex) => {
+      const m = kind === 'skin' ? new THREE.Mesh(tint(geo, hex), skin(own))
+        : kind === 'belly' ? new THREE.Mesh(tint(geo, hex), bellyMat())
+          : new THREE.Mesh(geo, kind === 'shell' ? gloss(hex, { roughness: 0.55, clearcoat: 0.45, clearcoatRoughness: 0.32 }) : kind === 'seam' || kind === 'wood' ? satin(hex) : kind === 'metal' ? polished(hex) : kind === 'eye' ? glow(hex) : kind === 'cloth' ? gloss(hex, { roughness: 0.7, clearcoat: 0.1, side: THREE.DoubleSide }) : lacquer(hex))
+      m.castShadow = true
+      return m
+    }, Math.max(0.6, D * 1.6))
+  },
 }
+// (F9b) the Howdah's size against a naga's, for its skin's scales
+const HOWDAH_K = 3
 // the scaleguard's crest: a fin
 function ridgeFin(D) {
   return blob(RES(D, 8, 2), (v, d) => {

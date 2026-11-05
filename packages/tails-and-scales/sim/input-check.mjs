@@ -119,32 +119,49 @@
 //               the scene's objects the same after every hover (the beams
 //               a pool, grown to the most models a target has had: the
 //               ray leaks nothing)
+//   (F9b) hulls  a page of its own, a hotseat Field battle whose Coil fields
+//               two Howdahs (DESIGN §4.2.5's long hulls, §4.2.9's row): in
+//               its deployment and again in its movement phase, a Howdah
+//               alone: a click picks it up, a ground click pins its ghost
+//               and sends nothing, the bar showing ✓ and ✕; ] and [ turn it
+//               through every heading the match takes there and no other;
+//               a tap on its rotate handle turns it to the next, a drag of
+//               the handle toward a bearing to the heading nearest it, the
+//               camera still; a left drag on the table still orbits, the
+//               pin kept; Enter (or, moving, a click on its flag) sends it,
+//               standing where its ghost stood, facing as it did; the other
+//               Howdah's double click on the ground sends it at once at
+//               the default heading (checkHulls)
 // and no page error throughout.
 //
-//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts | --fort]
+//   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts | --fort | --hulls]
+//   node sim/input-check.mjs --self-test [--mutations <names>]   (F9b) each
+//               edit of HULL_EDITS (the long hulls' input broken one way at
+//               a time, in a copy) must fail the hulls row, which the
+//               unedited code passes
 //
 // 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step;
 // (F13) --only aim plays the touch aim's cases alone; (V3a) --only tips the
 // conditions' alone (the Node part runs first in every run); (F9a) --carts
-// runs the War-Carts' page alone; (F7b) --fort the fortified rows alone
-// (without any, every lane runs).
+// runs the War-Carts' page alone; (F7b) --fort the fortified rows alone;
+// (F9b) --hulls the long hulls' page alone (without any, every lane runs).
 // Exit 0 when every step holds. Set CHROMIUM_PATH to the pre-installed
 // Chromium if Playwright's own isn't installed.
 import { parseArgs } from 'node:util'
-import { mkdtempSync, rmSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
+import { mkdtempSync, rmSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { tmpdir } from 'node:os'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
-import { buildApp } from './lib.mjs'
+import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { IDLE_MS } from './chromium.mjs'
 import { fortScene } from './fort-scene.mjs'
 
-const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' } } })
-if ((a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) || (a.fort && (a.only !== undefined || a.carts))) {
-  console.error('input-check: --only takes aim or tips, and not with --carts; --fort goes alone')
+const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' }, hulls: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } })
+if ((a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) || (a.fort && (a.only !== undefined || a.carts)) || ((a.hulls || a['self-test']) && (a.only !== undefined || a.carts || a.fort || (a.hulls && a['self-test'])))) {
+  console.error('input-check: --only takes aim or tips, and not with --carts; --fort, --hulls and --self-test each go alone')
   process.exit(2)
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -1452,6 +1469,271 @@ async function checkCarts(page, say) {
   say(`carts: a box over cart ${loaded} picked it and none of its riders, R added the ${aboard.length} riding it, and the group Move's hover said "${tip}"`)
 }
 
+// (F9b, DESIGN §4.2.9's input-check row) The long hulls' input, on a page of
+// its own: a hotseat Field battle whose Coil (seat 0, HULL_ARMIES) fields
+// two Howdahs, by the mouse and the keys. In seat 0's deployment and again
+// in its movement phase, each Howdah alone: a click picks it up, a click
+// on the ground pins its ghost and sends nothing, the bar showing its ✓
+// and ✕ (a group of one); ] and [ turn the ghost through every heading the
+// match would take there (session.legal of the place, or the move, with
+// that f) and no other, both ways round; a tap on the ghost's rotate handle
+// (found on screen) turns it to the next one clockwise, and a drag of the
+// handle to the one nearest the pointer's bearing, the camera still; a
+// left drag on the table orbits the camera, the pin kept and nothing sent;
+// Enter (the deployment) or a click on the flag (the movement phase) sends
+// it, the Howdah then standing on the pinned cell facing the turned
+// heading; the other Howdah's double click on the ground sends it at once
+// at the default heading (the one a single click there pins). Returns what
+// it saw, for --self-test's verdicts.
+const HULL_ARMIES = 'races=serpent,squirrel&armies=2232222,field'
+async function checkHulls(page, say) {
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  const fail = (m) => {
+    throw new Error(`hulls: ${m}`)
+  }
+  const count = () => ev(() => window.__ts.session.count)
+  const picked = () => ev(() => window.__ts.group.picked())
+  const seatNow = () => ev(() => window.__ts.session.decisionFor())
+  const pin = () => ev(() => window.__ts.group.pin())
+  const rot = async () => (await ev(() => window.__ts.group.handles()))?.rot?.[0] ?? null
+  const unit = (id) => ev((id) => {
+    const u = window.__ts.G.units.find((x) => x.id === id)
+    return { id: u.id, side: u.side, f: u.facing, moved: !!u.flags.moved, pos: { x: u.pos.x, z: u.pos.z }, r: u.r }
+  }, id)
+  const toScreen = async (x, z, y = 0) => {
+    const [sx, sy] = await ev(({ x, y, z }) => window.__ts.screen(x, y, z), { x, y, z })
+    return { x: sx, y: sy }
+  }
+  // (the camera's place, and whether it moved: by more than a hair, the
+  // controls' own update rounding it a thousandth now and then)
+  const camera = () => ev(() => window.__ts.camera.position.toArray())
+  const moved = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) > 0.02
+  const camText = (a) => a.map((v) => v.toFixed(3)).join()
+  const idle = () => page.waitForFunction(() => window.__ts.player.idle && !window.__ts.group.busy(), null, { timeout: IDLE_MS })
+  // the camera held over (x, z), from the seat's side (as the carts' page)
+  const over = async (x, z) => {
+    let held = 0
+    for (let k = 0; k < 150 && held < 3; k++) {
+      const ok = await ev(({ x, z }) => {
+        const ts = window.__ts, want = { x: x - 6, y: 17, z: z + 9 }
+        const was = ts.camera.position.distanceTo(want) < 0.01 && Math.hypot(ts.controls.target.x - x, ts.controls.target.z - z) < 0.01
+        ts.controls.target.set(x, 0, z)
+        ts.camera.position.set(want.x, want.y, want.z)
+        ts.controls.update()
+        return was
+      }, { x, z })
+      held = ok ? held + 1 : 0
+      await sleep(400)
+    }
+    if (held < 3) fail(`the camera never held still over (${x.toFixed(1)}, ${z.toFixed(1)})`)
+  }
+  // the headings the match takes for hull `id` on the pinned cell: the
+  // place's (the deployment) or the move's, with each f
+  const legalHeads = (id, verb) => ev(({ id, verb }) => {
+    const ts = window.__ts, p = ts.group.pin(), at = p.members[0].at, c = ts.nav.index(at.x, at.z), seat = ts.session.decisionFor()
+    return [0, 1, 2, 3, 4, 5, 6, 7].filter((f) => ts.session.legal(seat, verb === 'place' ? { t: 'place', u: id, c, f } : { t: 'move', u: id, c, f }) === null)
+  }, { id, verb })
+  // the camera at rest: its place the same over a second, three times
+  // running (a phase's glide back to its seat's bookmark may still come)
+  const still = async () => {
+    let was = null, same = 0
+    for (let k = 0; k < 120 && same < 3; k++) {
+      const now = await camera()
+      same = was && !moved(now, was) ? same + 1 : 0
+      was = now
+      await sleep(1000)
+    }
+  }
+  // (a click on its head: its deck's riders are picked by their figures;
+  // the camera over it and at rest, tried again should a glide take it)
+  const pick = async (id) => {
+    const u = await unit(id)
+    let got = []
+    for (let k = 0; k < 3; k++) {
+      await still()
+      await over(u.pos.x, u.pos.z)
+      const a = (u.f * Math.PI) / 4
+      const q = await toScreen(u.pos.x + Math.sin(a) * 2.3, u.pos.z + Math.cos(a) * 2.3, 0.9)
+      if ((await ev(({ x, y }) => window.__ts.group.pick(x, y), q)).unit !== id) continue
+      await page.mouse.click(q.x, q.y)
+      await sleep(500)
+      got = await picked()
+      if (got.length === 1 && got[0] === id) return u
+    }
+    fail(`a click on Howdah ${id}'s head picked up ${JSON.stringify(got)}`)
+  }
+  // a ground click near (x, z) that pins a ghost: tried round the point
+  // until one does (the pointer on the ground, clear of figures), with at
+  // least `heads` headings the match takes there; nothing sent
+  const pinNear = async (id, verb, x, z, heads = 2) => {
+    const tried = []
+    for (const d of [0, 1, 1.5, 2.5]) for (let k = 0; k < (d ? 8 : 1); k++) {
+      const a = (k / 8) * Math.PI * 2, px = x + Math.cos(a) * d, pz = z + Math.sin(a) * d
+      const q = await toScreen(px, pz)
+      const hit = await ev(({ x, y }) => window.__ts.group.pick(x, y), q)
+      if (hit.unit !== null || !hit.ground) continue
+      const n0 = await count()
+      await page.mouse.move(q.x, q.y)
+      await sleep(120)
+      await page.mouse.click(q.x, q.y)
+      await sleep(500)
+      if ((await count()) !== n0) fail(`a ground click with Howdah ${id} alone sent ${(await count()) - n0} command(s)`)
+      const p = await pin()
+      if (!p || !p.members[0]?.at) {
+        tried.push('no pin')
+        continue
+      }
+      const ok = await legalHeads(id, verb)
+      if (ok.length >= heads) return { q, p, ok, n0 }
+      tried.push(`${ok.length} headings`)
+      await page.keyboard.press('Escape')
+      await sleep(200)
+    }
+    fail(`no ground click near (${x.toFixed(1)}, ${z.toFixed(1)}) pinned Howdah ${id} where ${heads} headings fit (${tried.slice(0, 6).join(', ')})`)
+  }
+  // ] or [ pressed round: every heading it shows one the match takes, and
+  // every one the match takes shown
+  const keysRound = async (id, ok, key) => {
+    const seen = new Set([(await rot()).f])
+    for (let k = 0; k < 8; k++) {
+      await page.keyboard.press(key)
+      await sleep(150)
+      const f = (await rot()).f
+      if (!ok.includes(f)) fail(`${key} turned Howdah ${id}'s ghost to heading ${f}, which the match refuses there (it takes ${ok.join(', ')})`)
+      seen.add(f)
+    }
+    if (seen.size !== ok.length) fail(`${key} pressed 8 times showed headings ${[...seen].join(', ')}, the match taking ${ok.join(', ')}`)
+  }
+  // the rotate handle: a tap turns it to the next heading clockwise, a drag
+  // to the one nearest the pointer's bearing; the camera still, nothing sent
+  const handleCase = async (id, ok, n0) => {
+    let r = await rot()
+    if (!r) fail(`Howdah ${id}'s pinned ghost has no rotate handle`)
+    const def = r.f
+    const cam0 = await camera()
+    let q = await toScreen(r.x, r.z, 0.07)
+    const want1 = [1, 2, 3, 4, 5, 6, 7].map((k) => (r.f + k) & 7).find((h) => ok.includes(h))
+    await page.mouse.click(q.x, q.y)
+    await sleep(300)
+    r = await rot()
+    if (!r || r.f !== want1) fail(`a tap on the rotate handle ${r ? `turned the ghost to ${r.f}, not ${want1}, the next heading clockwise the match takes` : 'left no pinned ghost with a rotate handle'}`)
+    // (a drag from the handle round to the bearing of another valid
+    // heading, not the default where there is one: the heading sent then
+    // shows whether the executor sent it)
+    const target = ok.find((h) => h !== r.f && h !== def) ?? ok.find((h) => h !== r.f)
+    const cam1 = await camera()
+    const m = (await pin()).members[0].at
+    q = await toScreen(r.x, r.z, 0.07)
+    const a = (target * Math.PI) / 4, to = await toScreen(m.x + Math.sin(a) * 4, m.z + Math.cos(a) * 4)
+    await page.mouse.move(q.x, q.y)
+    await page.mouse.down()
+    for (let k = 1; k <= 12; k++) {
+      await page.mouse.move(q.x + ((to.x - q.x) * k) / 12, q.y + ((to.y - q.y) * k) / 12)
+      await sleep(30)
+    }
+    await page.mouse.up()
+    await sleep(300)
+    r = await rot()
+    if (!r || r.f !== target) fail(`the rotate handle dragged to heading ${target}'s bearing ${r ? `turned the ghost to ${r.f}` : 'left no pinned ghost with a rotate handle'}`)
+    const cam2 = await camera()
+    if (moved(cam2, cam0)) fail(`turning the ghost by its rotate handle moved the camera (${camText(cam0)} → ${camText(cam1)} after the tap → ${camText(cam2)} after the drag)`)
+    if ((await count()) !== n0) fail('turning the ghost sent a command')
+    return target
+  }
+  // a left drag on the table: the camera orbits, the pin kept, nothing sent
+  const orbitCase = async (n0) => {
+    const p0 = JSON.stringify(await pin()), cam0 = await camera()
+    let at = null
+    for (const [x, y] of [[640, 560], [520, 600], [760, 600], [640, 640]]) {
+      const hit = await ev(({ x, y }) => window.__ts.group.pick(x, y), { x, y })
+      if (hit.unit === null && hit.ground) {
+        at = { x, y }
+        break
+      }
+    }
+    if (!at) fail('no empty ground to drag on')
+    await page.mouse.move(at.x, at.y)
+    await page.mouse.down()
+    for (let k = 1; k <= 10; k++) {
+      await page.mouse.move(at.x + k * 16, at.y)
+      await sleep(30)
+    }
+    await page.mouse.up()
+    await sleep(400)
+    if (!moved(await camera(), cam0)) fail('a left drag on the table left the camera where it was')
+    if ((await count()) !== n0) fail('a left drag on the table sent a command')
+    if (JSON.stringify(await pin()) !== p0) fail('a left drag on the table moved the pin')
+  }
+
+  await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  for (let k = 0; k < 3 && (await seatNow()) !== 0; k++) await ev(() => window.__ts.endPhase())
+  if ((await seatNow()) !== 0) fail('seat 0 never held the deployment here')
+  const hulls = await ev(() => window.__ts.G.units.filter((u) => u.t.fp && u.side === 0).map((u) => u.id))
+  if (hulls.length !== 2) fail(`seat 0 fields ${hulls.length} Howdahs, not 2`)
+  const seen = {}
+  for (const [verb, label] of [['place', 'the deployment'], ['move', 'the movement phase']]) {
+    // ── one Howdah: pinned, turned, sent ──
+    let u = await pick(hulls[0])
+    const a = (u.f * Math.PI) / 4, ahead = verb === 'place' ? 1 : 1.5
+    let { p, ok, n0 } = await pinNear(hulls[0], verb, u.pos.x + Math.sin(a) * ahead, u.pos.z + Math.cos(a) * ahead, verb === 'place' ? 2 : 3)
+    const bar = await ev(() => window.__ts.group.bar())
+    if (!bar.show || !bar.hull || !bar.pinned) fail(`${label}: Howdah ${hulls[0]}'s pin shows no bar with ✓ and ✕ (${JSON.stringify({ show: bar.show, hull: bar.hull, pinned: bar.pinned })})`)
+    await keysRound(hulls[0], ok, ']')
+    await keysRound(hulls[0], ok, '[')
+    const turned = await handleCase(hulls[0], ok, n0)
+    await orbitCase(n0)
+    const cell = (await pin()).members[0].at
+    if (verb === 'place') await page.keyboard.press('Enter')
+    else {
+      // (its flag, where the pin was clicked, the camera back over it)
+      const hs = await ev(() => window.__ts.group.handles())
+      await over(hs.move.x, hs.move.z)
+      const fq = await toScreen(hs.move.x, hs.move.z)
+      const hit = await ev(({ x, y }) => window.__ts.group.pick(x, y), fq)
+      if (hit.unit !== null || !hit.ground) fail(`${label}: the pin's flag at (${Math.round(fq.x)}, ${Math.round(fq.y)}) is not on open ground on screen (${JSON.stringify(hit)})`)
+      await page.mouse.move(fq.x, fq.y)
+      await sleep(150)
+      await page.mouse.click(fq.x, fq.y)
+    }
+    await page.waitForFunction((n) => window.__ts.session.count > n, n0, { timeout: 60000 }).catch(() => fail(`${label}: ${verb === 'place' ? 'Enter' : 'a click on the flag'} sent nothing`))
+    await idle()
+    await sleep(500)
+    u = await unit(hulls[0])
+    if (u.pos.x !== cell.x || u.pos.z !== cell.z || u.f !== turned) fail(`${label}: Howdah ${hulls[0]} stands at (${u.pos.x}, ${u.pos.z}) facing ${u.f}, its ghost at (${cell.x}, ${cell.z}) facing ${turned}`)
+    say(`hulls: in ${label} Howdah ${hulls[0]} alone: a ground click pinned its ghost and sent nothing, the bar showing ✓ and ✕; ] and [ each turned it through headings ${ok.join(', ')}, the ones the match takes there; a tap on its rotate handle and a drag of it turned it (the camera still); a left drag orbited the camera, the pin kept; ${verb === 'place' ? 'Enter' : 'its flag'} sent it, facing ${turned} where its ghost stood`)
+    // ── the other: a double click, the default heading ──
+    const v = await pick(hulls[1])
+    const b = (v.f * Math.PI) / 4
+    const one = await pinNear(hulls[1], verb, v.pos.x + Math.sin(b) * (verb === 'place' ? 1 : 2), v.pos.z + Math.cos(b) * (verb === 'place' ? 1 : 2), 1)
+    const def = (await rot()).f, dcell = (await pin()).members[0].at
+    await page.keyboard.press('Escape')
+    await sleep(250)
+    if (await ev(() => window.__ts.group.pinned())) fail(`${label}: Esc left Howdah ${hulls[1]}'s pin`)
+    const n1 = await count()
+    await page.mouse.click(one.q.x, one.q.y)
+    await sleep(90)
+    await page.mouse.click(one.q.x, one.q.y)
+    await page.waitForFunction((n) => window.__ts.session.count > n, n1, { timeout: 60000 }).catch(() => fail(`${label}: a double click on the ground sent nothing`))
+    await idle()
+    await sleep(500)
+    const w = await unit(hulls[1])
+    if (w.pos.x !== dcell.x || w.pos.z !== dcell.z || w.f !== def) fail(`${label}: Howdah ${hulls[1]}'s double click left it at (${w.pos.x}, ${w.pos.z}) facing ${w.f}, the default pin at (${dcell.x}, ${dcell.z}) facing ${def}`)
+    say(`hulls: in ${label} a double click on the ground sent Howdah ${hulls[1]} at once, facing ${def}, the heading a single click there pins`)
+    seen[verb] = { ok, turned, def }
+    if (verb === 'place') {
+      // on to seat 0's movement phase
+      for (let k = 0; k < 40; k++) {
+        const P = await ev(() => ({ k: window.__ts.G.pending.k, phase: window.__ts.G.pending.phase, d: window.__ts.session.decisionFor(), idle: window.__ts.player.idle }))
+        if (P.k === 'phase' && P.phase === 'move' && P.d === 0 && P.idle) break
+        if (P.idle && P.d >= 0) await ev(() => window.__ts.endPhase()).catch(() => {})
+        await sleep(600)
+      }
+      if ((await seatNow()) !== 0) fail('seat 0 never reached its movement phase')
+    }
+  }
+  return seen
+}
+
 // (F13) Touch aim, by real touches through CDP, on a fresh hotseat battle of
 // the classic board (every unit still to act). In the movement phase of the
 // seat that moves first: a long press on the ground with a unit picked up
@@ -1839,8 +2121,11 @@ async function aimCase(page, say, h) {
 // that adds one fails here until it is explained. Throws on the first gap;
 // returns the lines to say.
 // the unit's own record that no condition is: who and where it is and its
-// models (the label's name and count, its place)
-const WHO = ['id', 'key', 't', 'side', 'race', 'pos', 'r', 'models', 'alive', 'flags']
+// models (the label's name and count, its place); (F9b) and which way a
+// long hull faces (the core's `facing`, the mirror's `f`), which its
+// figure, its outline and the minimap's capsule show as they show its
+// place
+const WHO = ['id', 'key', 't', 'side', 'race', 'pos', 'r', 'models', 'alive', 'flags', 'facing', 'f']
 // the code's names for a condition where the table names it otherwise
 const ALIAS = { y: 'high', isEngaged: 'engaged', inCover: 'cover' }
 // a literal's top-level keys ("{ a: { x: 1 }, b, c: f(1, 2) }" → a, b, c)
@@ -2323,6 +2608,90 @@ async function fortified(browser, url, say) {
   }
 }
 
+// (F9b) --self-test's edits: [file, text, replacement], each a way the long
+// hulls' input could break, which the hulls row must catch
+const HULL_EDITS = {
+  // a lone Howdah's ground click handed to the one-unit tools: it moves
+  // (or is placed) at once
+  'lone-sends': ['input/group.js', "    if (!this.isGroup() && !(this.loneHull() && ground && !unit)) return false\n", '    if (!this.isGroup()) return false\n'],
+  // ] and [ (and the handle's tap) turning to any heading round, valid or not
+  'turns-any': ['input/group.js', '      if (bits & (1 << h)) return this.face(pin, m, h)\n', '      return this.face(pin, m, h)\n'],
+  // the bar left hidden for a pinned lone hull: no ✓ or ✕
+  'bar-hidden': ['input/group.js', '    const lone = ms.length === 1 && seat >= 0', '    const lone = false && ms.length === 1 && seat >= 0'],
+  // Enter not sending a lone hull's pin
+  'enter-dead': ['input/group.js', "      case 'Enter':\n        if (!s.pin) break\n", "      case 'Enter':\n        if (!s.pin || this.loneHull()) break\n"],
+  // a click on a lone hull's flag pinning again rather than sending
+  'flag-dead': ['input/group.js', ' < FLAG_R) return this.commit(), true\n', ' < FLAG_R && !this.loneHull()) return this.commit(), true\n'],
+  // a click on the pin's flag (a double click's second, on the first's
+  // pin) sending the ghost turned a heading on from where it showed
+  'flag-turns': ['input/group.js', ' < FLAG_R) return this.commit(), true\n', ' < FLAG_R) return this.turn(1), this.commit(), true\n'],
+  // the rotate handle not found on screen: a press there is the ground's
+  'handle-blind': ['input/group.js', '      if (tmpV.z < 1 && Math.hypot(e.clientX - px, e.clientY - py) <= HANDLE_PX / 2) return { rot: r.id }\n', ''],
+  // a left drag on the table taking the lone hull's pin, not the camera
+  'drag-held': ['input/group.js', '      const h = this.handleAt(e)\n      if (h) {\n', "      const h = this.handleAt(e) ?? (this.loneHull() ? 'move' : null)\n      if (h) {\n"],
+  // the executor sending no heading: the hull lands as the match's
+  // default has it, not as its ghost was turned
+  'f-dropped': ['input/orders.js', '    const head = f !== undefined && f >= 0 ? { f } : {}\n', '    const head = {}\n'],
+}
+async function hullPage(browser, url, say) {
+  const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
+  page.setDefaultTimeout(IDLE_MS)
+  const errors = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+  try {
+    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1&mission=field&${HULL_ARMIES}`)
+    await page.waitForSelector('#title:not(.hidden)')
+    await page.click('[data-mode="hotseat"]')
+    await page.click('#setupStart')
+    await checkHulls(page, say)
+    if (errors.length) throw new Error(`hulls: page errors: ${errors.slice(0, 3).join('; ')}`)
+  } finally {
+    await page.context().close()
+  }
+}
+if (a['self-test']) {
+  const work = mkdtempSync(join(tmpdir(), 'input-check-self-'))
+  const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(HULL_EDITS)
+  const unknown = names.filter((x) => !HULL_EDITS[x])
+  if (unknown.length) {
+    console.error(`input-check: no edit ${unknown.join(', ')} (${Object.keys(HULL_EDITS).join(', ')})`)
+    process.exit(2)
+  }
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  let wrong = 0
+  console.log(`input-check self-test: ${names.length} edits of the long hulls' input, each must fail the hulls row, after the unedited code passes it`)
+  try {
+    for (const [k, name] of ['unedited', ...names].entries()) {
+      const dir = copyCode(PKG, join(work, `${k}`))
+      if (name !== 'unedited') {
+        const [f, from, to] = HULL_EDITS[name]
+        const src = readFileSync(join(dir, f), 'utf8')
+        if (src.split(from).length !== 2) throw new Error(`input-check self-test: ${name} finds no single "${from.trim().slice(0, 60)}" in ${f}`)
+        writeFileSync(join(dir, f), src.replace(from, to))
+      }
+      const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
+      let why = ''
+      try {
+        await hullPage(browser, served.url, () => {})
+      } catch (e) {
+        why = e.message.split('\n')[0]
+      } finally {
+        served.close()
+      }
+      const ok = name === 'unedited' ? !why : /^hulls: /.test(why)
+      if (!ok) wrong++
+      console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(12)} ${(why || 'the row held').slice(0, 220)}`)
+      if (name === 'unedited' && !ok) break
+    }
+  } finally {
+    await browser.close()
+    rmSync(work, { recursive: true, force: true })
+  }
+  console.log(wrong ? `\ninput-check self-test FAILED: ${wrong} wrong verdict(s)` : '\ninput-check self-test passed: the unedited code passes the hulls row, and every edit is caught')
+  process.exit(wrong ? 1 : 0)
+}
+
 const work = mkdtempSync(join(tmpdir(), 'input-check-'))
 if (a.shots) mkdirSync(a.shots, { recursive: true })
 let ok = false
@@ -2341,7 +2710,7 @@ try {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   try {
     let lanes = true
-    if (a.only !== 'tips' && !a.fort) {
+    if (a.only !== 'tips' && !a.fort && !a.hulls) {
       const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
       page.setDefaultTimeout(IDLE_MS)
       const errors = []
@@ -2376,7 +2745,7 @@ try {
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
-    if (a.only !== 'aim' && !a.fort) {
+    if (a.only !== 'aim' && !a.fort && !a.hulls) {
       console.log('\ninput-check (V3a): the conditions\' tips in Chromium, by the mouse and by touch\n')
       for (const vp of [{ width: 1280, height: 800 }, { width: 390, height: 844, touch: true }]) {
         try {
@@ -2389,10 +2758,21 @@ try {
     }
     // ((F7b) the see-through walls and the LOS ray, on a fortified board:
     // a page of its own; with --fort alone)
-    if (a.fort || (a.only === undefined && !a.carts)) {
+    if (a.fort || (a.only === undefined && !a.carts && !a.hulls)) {
       console.log('\ninput-check (F7b): the see-through walls and the LOS ray on a fortified board\n')
       try {
         await fortified(browser, url, (l) => console.log(`  ok   ${l}`))
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+        lanes = false
+      }
+    }
+    // ((F9b) the long hulls' input, on a page of its own: with --hulls
+    // alone, or every lane)
+    if (a.hulls || (a.only === undefined && !a.carts && !a.fort)) {
+      console.log('\ninput-check (F9b): a lone long hull pinned, turned and sent, by the mouse and the keys\n')
+      try {
+        await hullPage(browser, url, (l) => console.log(`  ok   ${l}`))
       } catch (e) {
         console.log(`  FAIL ${e.message}`)
         lanes = false
@@ -2406,6 +2786,6 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray'].filter(Boolean).join('; ')
+const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : a.hulls ? '(F9b) a lone long hull pinned and sending nothing, turned through only the headings the match takes by ] [ and its rotate handle, sent by Enter, its flag or a double click, left drag still orbiting' : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray', !a.carts && a.only === undefined && '(F9b) a lone long hull pinned, turned through its valid headings and sent'].filter(Boolean).join('; ')
 console.log(ok ? `\ninput-check passed: ${what}` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)
