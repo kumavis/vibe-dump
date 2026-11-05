@@ -227,11 +227,13 @@ export class Human {
   // End the charge on cell c, a spot the roll reaches (a click's,
   // nearestSpot's: its -1 for "no spot" is no command, though the wire's
   // Shortest move is -1 too, so that takes its own path, takeShortest).
-  placeCharge(c) {
+  // ((F9b) a long hull's at spot heading f, when given (the ?debug hook's);
+  // else the one its ghost showed)
+  placeCharge(c, f) {
     const pk = this.picking()
     if (!pk) return 'no charge to end'
     if (!(c >= 0 && pk.ok[c])) return `cell ${c} is no spot the roll reaches`
-    return this.endCharge(pk, c)
+    return this.endCharge(pk, c, f)
   }
   // End the charge with the shortest move (SHORTEST: the plan's own cell).
   takeShortest() {
@@ -241,14 +243,14 @@ export class Human {
   }
   // ((F9b) a long hull's at the spot heading its roll reaches shortest at
   // c: the one its ghost showed)
-  endCharge(pk, c) {
+  endCharge(pk, c, f) {
     const overlay = this.view.overlay
     this.pickShown = null
     overlay.clear()
     overlay.ghost.visible = false
     overlay.ghostHull(null)
     this.tooltip.hide()
-    return this.send(pk.seat, endAt(c, pk.plan.fp && c >= 0 ? spotFacing(pk.plan, c, pk.rolled) : undefined))
+    return this.send(pk.seat, endAt(c, pk.plan.fp && c >= 0 ? f ?? spotFacing(pk.plan, c, pk.rolled) : undefined))
   }
 
   // ── The buttons' intents (ui/actions.js) ──────────────────────────────────

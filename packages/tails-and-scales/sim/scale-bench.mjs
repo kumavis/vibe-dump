@@ -52,6 +52,20 @@
 // cost per plan with height against that flat board's (a report: the
 // estimate was +10%).
 //
+// (F9b) The long-hull rows: the cap lists' rows above, with two Howdahs on
+// the Coil's side (HULLS), are what the AI count budget's trigger reads
+// (§4.2.2). Beside them a report, never judged: what a long hull's own
+// turn costs on those same Grand boards (open and fortified, each cap
+// list's match at its deployment), per Howdah: its movement plan on the
+// lattice (movePlan: the masks per radius class, nav.hullReach, cellBest)
+// at a move's 6" and an advance's 12", the first plan after the match is
+// made (the hull memo cold) and the median of REPS after it (warm); and
+// its walk to the plan's farthest valid end at the default heading
+// (hullWalk: smashAround at every 0.25" and each pivot's two sub-steps,
+// for every disc, over the live chunk list, unbinned: §4.2.5's cost note,
+// open question 26's measure), against a War-Cart's walk of the same kind
+// (resolveWalk on its own 8" plan's farthest end) on the same table.
+//
 //   node sim/scale-bench.mjs [--boards N] [--dir <code>] [--json]
 //   node sim/scale-bench.mjs --caps [--dir <code>]   (the search's cap lists, to record CAPS anew)
 //
@@ -83,7 +97,14 @@ const PRESETS = { squirrel: '336333', serpent: '336333' }
 // ((F9a) the Bushtails' with two War-Carts: 24 units and 90 models, the
 // caps, at 1,460 points (the cart at Grand's 150); the search grew to 8^7
 // count vectors, about 8 s)
-const CAPS = { squirrel: '3157332', serpent: '317543' }
+// ((F9b) and the Coil's with two Howdahs, its hull rows: 24 units and 90
+// models, the caps, at 1,375 points (the Howdah at Grand's 5). The search
+// holds every list to HULLS transports at least (DESIGN §4.2.9's "two hulls
+// a side", the AI count budget's trigger, §4.2.2): unforced, the Coil's
+// caps are '3166431', one Howdah and a third Hierophant; the Bushtails'
+// list is the one it finds unforced)
+const HULLS = 2
+const CAPS = { squirrel: '3157332', serpent: '2166432' }
 // A Grand AI battle on `board` with `dice`, each seat naming its list
 // ((F7a, at the WIP merge) on the fortified set when `fortified`)
 const grandSetup = (board, dice, lists, fortified = false) => ({
@@ -93,11 +114,16 @@ const grandSetup = (board, dice, lists, fortified = false) => ({
 
 // A race's cap list under `rules` (a mission's list), by the search above:
 // counts in roster order. `A` is core/army.js (checkList, listCost: each
-// unit at the mission's price for it).
-export function capList(race, rules, A) {
+// unit at the mission's price for it). ((F9b) `hulls`: only lists holding
+// at least that many transports, every roster entry with a `transport`
+// counted, are searched; a race that fields fewer transports than that,
+// or none, is searched as it was)
+export function capList(race, rules, A, hulls = 0) {
   const n = race.roster.length, top = rules.perKind
   const counts = new Array(n).fill(0)
   const t = race.roster.map((key) => race.units[key])
+  const hullAt = t.map((u, k) => (u.transport ? k : -1)).filter((k) => k >= 0)
+  const least = Math.min(hulls, hullAt.length * top, rules.roles?.Vehicle?.[1] ?? hulls)
   let best = null
   const score = (c) => [
     c.reduce((s, x) => s + x, 0),
@@ -110,7 +136,7 @@ export function capList(race, rules, A) {
     return false
   }
   for (;;) {
-    if (A.checkList(race, rules, counts) === null) {
+    if (hullAt.reduce((s, k) => s + counts[k], 0) >= least && A.checkList(race, rules, counts) === null) {
       const sc = score(counts)
       if (!best || better(sc, best.sc) || (!better(best.sc, sc) && counts.join('') > best.c.join(''))) best = { c: [...counts], sc }
     }
@@ -173,7 +199,7 @@ if (a.caps) {
   const at = (f) => import(pathToFileURL(join(CODE, f)).href)
   const [{ MISSIONS }, { RACES }, A] = await Promise.all([at('data/mission.js'), at('data/schema.js'), at('core/army.js')])
   for (const race of GRAND_RACES) {
-    const r = RACES[race], c = capList(r, MISSIONS.grand.list, A)
+    const r = RACES[race], c = capList(r, MISSIONS.grand.list, A, HULLS)
     console.log(`${race}: '${A.listText(c)}', ${c.reduce((s, x) => s + x, 0)} units, ${c.reduce((s, x, k) => s + x * r.units[r.roster[k]].models, 0)} models, ${A.listCost(r, c, MISSIONS.grand.list)} points (CAPS records '${CAPS[race]}')`)
   }
   process.exit(0)
@@ -214,7 +240,7 @@ if (grand) {
   // would measure a lighter load than the caps, and the cap lists' rows are
   // the AI count budget's trigger)
   for (const race of GRAND_RACES) {
-    const got = A.listText(capList(RACES[race], grand.list, A))
+    const got = A.listText(capList(RACES[race], grand.list, A, HULLS))
     if (got !== CAPS[race]) {
       failed++
       notes.push(`FAIL capList finds the ${RACES[race].short}' cap list '${got}' (${JSON.stringify(sizeOf(race, got))}), CAPS records '${CAPS[race]}'${A.checkList(RACES[race], grand.list, [...CAPS[race]].map(Number)) ? '' : ` (${JSON.stringify(sizeOf(race, CAPS[race]))})`}: a price or rule moved, or CAPS was never the largest; record CAPS anew`)
@@ -290,6 +316,63 @@ async function heightCost(dir, boards, lists) {
   return { rebuild: avg(rebuild), rebuildMax: Math.max(...rebuild), flat: avg(flat), flatMax: Math.max(...flat), blocks: avg(blocked), reach: avg(reachH), reachFlat: avg(reachF), reachBlocks: avg(reachB), boards: boards.length }
 }
 
+// (F9b) The long hulls' own costs on the cap lists' Grand boards (above);
+// null for code with no long hull (no core/footprint.js's derived t.fp)
+async function hullCost(dir, boards, lists) {
+  const core = await import(pathToFileURL(join(dir, 'core', 'index.js')).href)
+  const M = await import(pathToFileURL(join(dir, 'core', 'actions', 'move.js')).href)
+  if (!M.hullWalk) return null
+  const REPS = 5
+  const out = { cold6: [], warm6: [], warm12: [], walk: [], walkIn: [], cart: [], cartIn: [], hulls: 0, carts: 0, boards: 0 }
+  const timed = (f) => {
+    const t0 = performance.now()
+    const v = f()
+    return [performance.now() - t0, v]
+  }
+  // the farthest valid end of a plan, by cell (a hull's: its cells' digest)
+  const farthest = (G, plan) => {
+    const dist = plan.fp ? plan.cells.dist : plan.res.dist
+    let best = -1
+    for (let i = 0; i < G.nav.N; i++) if (dist[i] < Infinity && (best < 0 || dist[i] > dist[best]) && M.validEnd(G, plan, i)) best = i
+    return best
+  }
+  for (const fortified of [false, true]) {
+    for (const [b, d] of boards) {
+      const setup = grandSetup(b, d, lists, fortified)
+      const G = core.createMatch({ ...setup, seats: setup.seats.map((x) => ({ ...x, ctrl: 'human' })) })
+      out.boards++
+      for (const u of G.units.filter((x) => x.t.fp && x.alive > 0 && !x.aboard)) {
+        out.hulls++
+        out.cold6.push(timed(() => M.movePlan(G, u, 0))[0])
+        const w6 = [], w12 = []
+        for (let k = 0; k < REPS; k++) {
+          w6.push(timed(() => M.movePlan(G, u, 0))[0])
+          w12.push(timed(() => M.movePlan(G, u, 6))[0])
+        }
+        out.warm6.push(median(w6))
+        out.warm12.push(median(w12))
+        const plan = M.movePlan(G, u, 0), c = farthest(G, plan)
+        if (c < 0) continue
+        const pts = G.nav.hullPath(plan.res, c, M.endFacing(G, plan, c))
+        const [ms, ] = timed(() => M.hullWalk(G, u, pts, { stomp: true }))
+        out.walk.push(ms)
+        out.walkIn.push(plan.res.dist[c * 8 + pts.at(-1).f])
+      }
+      for (const u of G.units.filter((x) => x.t.transport && !x.t.fp && x.t.wrecker && x.alive > 0 && !x.aboard)) {
+        const plan = M.movePlan(G, u, 0), c = farthest(G, plan)
+        if (c < 0) continue
+        out.carts++
+        const pts = G.nav.path(plan.res, c, u.r, plan.forbid)
+        const [ms, ] = timed(() => M.resolveWalk(G, u, pts, { stomp: true }))
+        out.cart.push(ms)
+        out.cartIn.push(plan.res.dist[c])
+      }
+    }
+  }
+  return out
+}
+if (grand) out.hulls = await hullCost(CODE, grandBoards, CAPS)
+
 if (a.json) console.log(JSON.stringify(out, null, 2))
 console.log(`scale-bench: the core at scale, on ${a.dir ? CODE : 'the working tree'} (ms; medians over boards, movement phases over every AI phase played)\n`)
 console.log('  row                     units  createMatch  move p50 / p90 / max     battle   (boards, phases)')
@@ -327,6 +410,16 @@ if (FORT) {
   console.log(`\nThe height layer at Grand (fortified, ${h.boards} boards; ms, the average and the worst board's)`)
   console.log(`  ${ok ? 'ok  ' : 'FAIL'} nav.rebuild with height ${ms(h.rebuild)} (max ${ms(h.rebuildMax)}) against ${HEIGHT_BUDGET} ms: the same table with its pieces as hard blocks ${ms(h.blocks)}, so the height layer ${ms(h.rebuild - h.blocks)}; (the table without its fortifications ${ms(h.flat)}, max ${ms(h.flatMax)})`)
   console.log(`  report: reach (r 1.06, 8") ${h.reach.toFixed(3)} ms a plan with height, ${h.reachBlocks.toFixed(3)} ms on the same table with its pieces as hard blocks (the height branch's cost: ${((h.reach / h.reachBlocks - 1) * 100).toFixed(0)}%); ${h.reachFlat.toFixed(3)} ms on the table without its fortifications (more open ground: ${((h.reach / h.reachFlat - 1) * 100).toFixed(0)}%)`)
+}
+// (F9b) the long hulls' own costs: a report
+const H = out.hulls
+if (H && H.hulls) {
+  const p = (xs) => `${ms(pct(xs, 0.5))} / ${ms(pct(xs, 0.9))}`
+  const three = (v) => (Number.isFinite(v) ? v.toFixed(2) : '–')
+  const p2 = (xs) => `${three(pct(xs, 0.5))} / ${three(pct(xs, 0.9))}`
+  console.log(`\nThe long hulls on the cap lists' Grand boards (open and fortified, ${H.boards} matches at their deployment, ${H.hulls} Howdahs; ms, p50 / p90; a report)`)
+  console.log(`  report: a move's plan (6") ${p2(H.warm6)} warm, ${p2(H.cold6)} the first after the match is made (the hull memo cold); an advance's (12") ${p2(H.warm12)} warm`)
+  console.log(`  report: a Howdah's walk to its 6" plan's farthest end (${p(H.walkIn)}" of path, pivots at 0.5"), smashing on every disc (smashAround unbinned) ${p2(H.walk)}; a War-Cart's to its 8" plan's farthest end (${p(H.cartIn)}", ${H.carts} carts) ${p2(H.cart)}`)
 }
 console.log(failed ? `\nscale-bench FAILED: ${failed} row(s) over ${OVER}× budget (on a busy machine? run it again on a quiet one)` : '\nscale-bench passed: Grand inside its budget')
 process.exit(failed ? 1 : 0)

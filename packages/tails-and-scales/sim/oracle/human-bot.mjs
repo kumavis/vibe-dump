@@ -17,6 +17,12 @@
 //                                          the deployment, or as its move)
 //   { s: 0, t: 'disembark', u: 3, c: 977 } (F9a) rider 3 steps off onto
 //                                          cell 977, as its move
+//   { s: 0, t: 'move', u: 7, c: 2210, f: 3 }  (F9b) a long hull's move to
+//                                          heading 3 (0-7, h = 0 facing +z,
+//                                          2 facing +x); without f, the
+//                                          match's default heading
+//   { s: 0, t: 'chargeEnd', c: 1871, f: 6 } (F9b) a long hull's charge
+//                                          ended at heading 6
 //
 // Each entry goes through the same hook calls a click or a button makes.
 // Before that the driver checks what the UI's own gates check: the entry's
@@ -167,8 +173,13 @@ export function humanDriver(ts, { entries = null, choose = null }) {
     const from = ts.trace.length
     let p = null, shortest = false
     switch (e.t) {
+      // ((F9b) the pick-up starts from nothing picked up: with a unit just
+      // placed still picked up, a click on a hull it may board would board
+      // it (the deployment's re-arranging, F9a's), not pick the hull up, and
+      // the page would play an embark the log doesn't hold)
       case 'place': {
         const u = own(e.u)
+        ts.select(null)
         ts.deployClick(u, null)
         // ((F8b) the match's own grid, read as each unit is placed: the
         // ?debug hooks' nav before the start is the title's, classic's, so a
@@ -185,12 +196,18 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         p = ts.doAdvance(u).then(() => ts.select(u))
         break
       }
+      // ((F9b) a long hull's names its end heading, `f`, the page's hooks
+      // taking it: validEnd's state and doMove's command; a move with none
+      // plays as it always has)
       case 'move': {
         const u = own(e.u)
         if (!q.canAct(u)) throw bad('cannot move')
+        if (e.f !== undefined && ts.doMove.length < 3) throw bad("the page's doMove hook takes no heading (code older than F9b)")
         ts.select(u)
-        if (!ts.validEnd(S.reach, e.c)) throw bad('not a valid end cell')
-        p = ts.doMove(u, e.c, S.reach)
+        if (!(e.f === undefined ? ts.validEnd(S.reach, e.c) : ts.validEnd(S.reach, e.c, e.f))) throw bad(e.f === undefined ? 'not a valid end cell' : 'not a valid end state (cell and heading)')
+        // (doMove's third argument is the heading: older drivers passed the
+        // plan there, which the hooks before F9b never read)
+        p = e.f === undefined ? ts.doMove(u, e.c) : ts.doMove(u, e.c, e.f)
         break
       }
       // ((V3c) a caster's names its spell, `sp`, which may be cast on a
@@ -211,12 +228,20 @@ export function humanDriver(ts, { entries = null, choose = null }) {
         p = ts.doCharge(u, tg)
         break
       }
+      // ((F9b) a long hull's names its end heading, `f`: a spot state the
+      // roll reaches, plan.spotOk's)
       case 'chargeEnd': {
         const pk = ts.chargePick
         const c = e.c === -1 ? pk.plan.cell : e.c
         if (!(c >= 0 && pk.ok[c])) throw bad('not a spot the roll reaches')
-        shortest = e.c >= 0 && c === pk.plan.cell
-        ts.placeCharge(c)
+        if (e.f !== undefined) {
+          if (e.c === -1) throw bad('the shortest move ends on its own heading: it takes no f')
+          if (ts.placeCharge.length < 2 || typeof pk.plan.spotOk !== 'function' || pk.rolled === undefined) throw bad("the page's placeCharge hook takes no heading, or its plan is no long hull's (code older than F9b)")
+          if (!pk.plan.spotOk(c, e.f, pk.rolled)) throw bad('not a spot state (cell and heading) the roll reaches')
+        }
+        shortest = e.c >= 0 && c === pk.plan.cell && (e.f === undefined || e.f === pk.plan.f)
+        if (e.f === undefined) ts.placeCharge(c)
+        else ts.placeCharge(c, e.f)
         break
       }
       case 'deployed':
@@ -345,15 +370,78 @@ export function mulberry32(seed) {
 // manned and shot out from under their defenders (a hotseat game plays
 // both seats so), and the `fort/` corpus can hold a human log with a
 // collapse (sim/corpus-add.mjs's `collapse` and `fall` needs).
+// `hull` (F9b): `aggressive`, with long hulls, which it steers by state
+// (cell and heading), every one of their moves and charge ends naming its
+// heading `f`: in the movement phase a hull backs up now and then (a
+// third of the time, when its plan reaches a state behind it at its own
+// heading by a path that backs: nav.hullPath's), else it makes for the
+// enemy as aggressive's units do, the cell nearest the nearest enemy, and
+// faces it (of the headings that cell takes, validEnd's, the one pointing
+// most nearly at that enemy), so it turns where the ground lets it; a
+// hull's charge ends at a random spot state the roll reaches (a spot's
+// cell, then a heading plan.spotOk takes there), never on Shortest move.
+// Its riders stay aboard (as every policy but `ride` leaves them), and its
+// shots and charges go at an enemy hull first (a transport among the
+// targets: the nearest), so a hull run into the enemy, or under the other
+// seat's guns in a hotseat game, may die with them on it: the hull/ corpus's
+// human logs (sim/corpus-add.mjs's `hullpivot`, `reverse`, `hullcharge`
+// and `hullbail`). It reads the page's ?debug nav (hullPath, the lattice's
+// own path) and the hooks' headings: validEnd(plan, c, f), doMove(u, c,
+// f), placeCharge(c, f) and chargePick's `rolled` (the ?debug block's F9b
+// members).
 // Every policy leaves a rider out of its moves, advances and pilots (it
 // moves only with its hull: the AI's), so a battle with transports plays
 // under any of them.
 export function makePolicy(name, seed) {
   const rand = mulberry32(seed)
   const pick = (a) => a[Math.floor(rand() * a.length)]
-  const collapse = name === 'collapse'
-  const aggressive = name === 'aggressive' || collapse, late = name === 'late', pilot = name === 'pilot', ride = name === 'ride'
+  const collapse = name === 'collapse', hull = name === 'hull'
+  const aggressive = name === 'aggressive' || collapse || hull, late = name === 'late', pilot = name === 'pilot', ride = name === 'ride'
   if (!aggressive && !late && !pilot && !ride && name !== 'random') throw new Error(`unknown policy ${name}`)
+  // (hull) the nav's eight headings (core/nav.js DIRS: h = 0 faces +z, 2 +x)
+  const DIRS = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
+  // (hull) of `tgs`, the enemy hull nearest u, or null
+  const hullFirst = (u, tgs) => {
+    const hs = tgs.filter((tg) => tg.t.transport)
+    return hs.length ? hs.reduce((a, b) => (Math.hypot(a.pos.x - u.pos.x, a.pos.z - u.pos.z) <= Math.hypot(b.pos.x - u.pos.x, b.pos.z - u.pos.z) ? a : b)) : null
+  }
+  // (hull) a long hull's move: { c, f }, or null for none
+  const hullMove = (ts, u, plan, ok) => {
+    const { nav } = ts
+    if (typeof plan.res?.dist?.length !== 'number' || plan.res.dist.length !== nav.N * 8 || typeof nav.hullPath !== 'function' || ts.validEnd.length < 3) throw new Error("the hull policy needs a long hull's plan by state and the page's ?debug headings (code older than F9b)")
+    const backs = (c, h) => {
+      const path = nav.hullPath(plan.res, c, h)
+      for (let i = 1; i < path.length; i++) {
+        const a = path[i - 1], b = path[i], d = DIRS[b.f]
+        if ((a.x !== b.x || a.z !== b.z) && (b.x - a.x) * d[0] + (b.z - a.z) * d[1] < 0) return true
+      }
+      return false
+    }
+    if (rand() < 1 / 3) {
+      const h = u.facing, d = DIRS[h]
+      const behind = ok.filter((c) => (nav.x(c) - u.pos.x) * d[0] + (nav.z(c) - u.pos.z) * d[1] < -1 && ts.validEnd(plan, c, h))
+      for (let k = 0; k < 6 && behind.length; k++) {
+        const c = behind.splice(Math.floor(rand() * behind.length), 1)[0]
+        if (backs(c, h)) return { c, f: h }
+      }
+    }
+    let best = nearest(ts, u, u.pos.x, u.pos.z) - 0.3, c = -1
+    for (const i of ok) {
+      const v = nearest(ts, u, nav.x(i), nav.z(i)) + rand() * 0.01
+      if (v < best) (best = v), (c = i)
+    }
+    if (c < 0) return null
+    // face the nearest enemy from there, of the headings c takes
+    const x = nav.x(c), z = nav.z(c)
+    const foe = enemies(ts, u).reduce((a, b) => (Math.hypot(a.pos.x - x, a.pos.z - z) <= Math.hypot(b.pos.x - x, b.pos.z - z) ? a : b))
+    let f = -1, fd = -Infinity
+    for (let h = 0; h < 8; h++) {
+      if (!ts.validEnd(plan, c, h)) continue
+      const d = DIRS[h], dot = ((foe.pos.x - x) * d[0] + (foe.pos.z - z) * d[1]) / Math.hypot(d[0], d[1])
+      if (dot > fd) (fd = dot), (f = h)
+    }
+    return f < 0 ? null : { c, f }
+  }
   // (collapse) of `tgs`, the target nearest a breakable post within reach
   // of u's template, or null: the posts as the page's scenery has them
   const atPost = (ts, u, tgs) => {
@@ -398,9 +486,10 @@ export function makePolicy(name, seed) {
 
   const enemies = (ts, u) => ts.units.filter((e) => e.side !== u.side && ts.q.alive(e))
   const nearest = (ts, u, x, z) => Math.min(...enemies(ts, u).map((e) => Math.hypot(e.pos.x - x, e.pos.z - z) - e.r))
+  // ((F9b) a long hull's plan is by state: its cells' digest, plan.cells)
   const cells = (ts, plan) => {
-    const out = []
-    for (let i = 0; i < ts.nav.N; i++) if (isFinite(plan.res.dist[i]) && ts.validEnd(plan, i)) out.push(i)
+    const out = [], dist = plan.fp ? plan.cells.dist : plan.res.dist
+    for (let i = 0; i < ts.nav.N; i++) if (isFinite(dist[i]) && ts.validEnd(plan, i)) out.push(i)
     return out
   }
 
@@ -529,6 +618,15 @@ export function makePolicy(name, seed) {
           const i = ok.reduce((a, b) => (far(b) < far(a) ? b : a))
           if (far(i) < far(ts.nav.index(u.pos.x, u.pos.z))) return acted++, { s, t: 'move', u: u.id, c: i }
         }
+        // (hull) a long hull by state, its heading named
+        if (hull && u.t.fp) {
+          const m = hullMove(ts, u, plan, ok)
+          if (!m) {
+            pass()
+            continue
+          }
+          return acted++, { s, t: 'move', u: u.id, c: m.c, f: m.f }
+        }
         if (aggressive) {
           let best = nearest(ts, u, u.pos.x, u.pos.z) - 0.3
           c = -1
@@ -559,7 +657,7 @@ export function makePolicy(name, seed) {
       }
       if (d.phase === 'shoot') {
         const tgs = q.shootTargets(u)
-        const tg = (collapse && atPost(ts, u, tgs)) || (aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs))
+        const tg = (hull && hullFirst(u, tgs)) || (collapse && atPost(ts, u, tgs)) || (aggressive ? tgs.reduce((a, b) => (a.alive * a.t.W <= b.alive * b.t.W ? a : b)) : pick(tgs))
         return acted++, { s, t: 'shoot', u: u.id, tg: tg.id }
       }
       if (d.phase === 'charge') {
@@ -568,7 +666,7 @@ export function makePolicy(name, seed) {
           pass()
           continue
         }
-        const tg = aggressive ? tgs.reduce((a, b) => (q.chargePlan(u, a).need <= q.chargePlan(u, b).need ? a : b)) : pick(tgs)
+        const tg = (hull && hullFirst(u, tgs)) || (aggressive ? tgs.reduce((a, b) => (q.chargePlan(u, a).need <= q.chargePlan(u, b).need ? a : b)) : pick(tgs))
         return acted++, { s, t: 'charge', u: u.id, tg: tg.id }
       }
       return end
@@ -585,6 +683,14 @@ export function makePolicy(name, seed) {
 
   function chargeEnd(ts, d) {
     const pk = ts.chargePick
+    // ((hull) a long hull's charge ends at a spot state it names)
+    if (hull && pk.plan.fp) {
+      if (typeof pk.plan.spotOk !== 'function' || pk.rolled === undefined || ts.placeCharge.length < 2) throw new Error("the hull policy needs the page's ?debug chargePick.rolled and placeCharge(c, f) (code older than F9b)")
+      const ok = []
+      for (let i = 0; i < pk.ok.length; i++) if (pk.ok[i]) ok.push(i)
+      const c = pick(ok), hs = [0, 1, 2, 3, 4, 5, 6, 7].filter((h) => pk.plan.spotOk(c, h, pk.rolled))
+      return { s: d.s, t: 'chargeEnd', c, f: pick(hs) }
+    }
     if (rand() < (aggressive ? 0.5 : 0.35)) return { s: d.s, t: 'chargeEnd', c: -1 }
     const ok = []
     for (let i = 0; i < pk.ok.length; i++) if (pk.ok[i]) ok.push(i)
