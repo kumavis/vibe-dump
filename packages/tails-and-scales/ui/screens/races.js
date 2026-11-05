@@ -6,11 +6,15 @@
 //
 //   new RacePicker({ root, diorama, pick })   builds its parts in `root`;
 //                         pick(race) when a race is chosen
-//   picker.render({ race, color, editable })  the race shown (its bases'
-//                         rims in `color`), its buttons offered or not
+//   picker.render({ race, color, editable, rules })  the race shown (its
+//                         bases' rims in `color`), its buttons offered or
+//                         not; (F11b) `rules` the battle's list rules (a
+//                         mission's `list`), whose prices the stats' head
+//                         names (none: each unit's cost, a Skirmish's)
 //   picker.close()        the figures let go of
 import { RACES } from '../../data/schema.js'
 import { statsHtml } from '../card.js'
+import { priceOf } from '../../core/army.js'
 
 const HINT = 'Point at a figure (or tap it) to read its stats.'
 
@@ -38,7 +42,7 @@ export class RacePicker {
     this.win.onpointerleave = (e) => e.pointerType === 'mouse' && this.point(null)
   }
 
-  render({ race, color, editable = true }) {
+  render({ race, color, editable = true, rules = null }) {
     // (another race: the last one's stats put away)
     if (race !== this.race) {
       this.shownType = null
@@ -46,6 +50,14 @@ export class RacePicker {
     }
     this.race = race
     this.editable = editable
+    // ((F11b) a battle size changed: the stats shown priced again)
+    const repriced = rules !== this.rules
+    this.rules = rules
+    if (repriced && this.shownType) {
+      const t = this.shownType
+      this.shownType = null
+      this.show(t)
+    }
     for (const b of this.row.querySelectorAll('button')) {
       const on = b.dataset.race === race
       b.classList.toggle('on', on)
@@ -62,8 +74,12 @@ export class RacePicker {
   point(x, y) {
     const t = x === null ? null : this.diorama.unitAt(this.win, x, y)
     if (t === this.shownType) return
+    this.show(t)
+  }
+  // ((F11b) the head names its price in this battle, as the unit card does)
+  show(t) {
     this.shownType = t
-    this.info.innerHTML = t ? `<div class="card-head"><b>${t.name}</b><span>${RACES[this.race].short} · ${t.role}</span></div>${statsHtml(t)}` : HINT
+    this.info.innerHTML = t ? `<div class="card-head"><b>${t.name}</b><span>${RACES[this.race].short} · ${t.role} · ${priceOf(RACES[this.race], t.key, this.rules ?? undefined)} pts</span></div>${statsHtml(t)}` : HINT
   }
 
   close() {

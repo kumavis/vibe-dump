@@ -15,6 +15,24 @@
 // Skirmish. (F16) The courtesy fog of war, a switch beside them, the host's
 // to turn (a change un-readies both seats: Ready is the agreement), shown
 // to the guest before its Ready as the size and terrain are.
+//
+// (F11b, DESIGN §4.2.8.9) Each seat's army. Your own seat's line: the
+// presets your battle size offers (and "List" while you hold one), Build…
+// (the Muster screen, ui/screens/muster.js, over the lobby: its Ready writes
+// the list into your seat and un-readies you), your total and units, and,
+// red, why the battle would refuse it ("Over by 40 pts" when the host's
+// size change leaves a list past the new limit); Ready is offered only on
+// an army the battle takes. Another seat's line is a sentence the page
+// hands over, never a list: "Preset: Classic", "Building…" or "Ready · 970
+// pts · 14 units" (courtesy sealing: nothing of another seat's list, not
+// its digits nor its units, is ever in this screen's DOM before the start;
+// app/online.js hands render nothing more). The AI online: a free seat
+// offers the host "Seat the AI here"; the host's AI seat is the host's to
+// change (its race in the picker, its preset, Random, Unseat), and every
+// other page sees it as another seat, sealed alike. ((F11b's review) An
+// AI-shaped seat naming the host's device that the host's page didn't
+// seat, another peer's write, shows there as another seat, sealed, with
+// Unseat: the page never readies it, and starts nothing while it sits.)
 import { RacePicker } from './races.js'
 import { terrainName } from './setup.js'
 
@@ -60,10 +78,14 @@ export class LobbyScreen {
   pickerOf(i) {
     if (this.pickers[i]) return this.pickers[i]
     const root = el('div', 'picker')
-    return (this.pickers[i] = { root, picker: new RacePicker({ root, diorama: this.diorama(), pick: (race) => this.on.race(race) }) })
+    // ((F11b) the seat's own index with the race: your seat's, or the
+    // host's AI seat's)
+    return (this.pickers[i] = { root, picker: new RacePicker({ root, diorama: this.diorama(), pick: (race) => this.on.race(race, i) }) })
   }
 
-  // `on`: { claim(i), leave(i), name(text), race(key), ready(bool),
+  // `on`: { claim(i), leave(i), name(text), race(key, i), ready(bool),
+  // (F11b) army(value) (your line's select: a preset's name, or 'list'),
+  // build() (Build…), ai: { seat(i), army(i, value), random(i), unseat(i) },
   // board(n), (F7a) terrain(set), (F8b) mission(key), (F16) fog(bool), reroll(), copy(), secondTab(), back(),
   // fit(text, typing) }
   wire(on) {
@@ -115,7 +137,11 @@ export class LobbyScreen {
   // mission and sizes ([{ mission, name, W, H, points }]), (F16) fog (the
   // courtesy fog agreed: on or off), seats: [{ name,
   // race (a free seat's: the race it would bring), color (its bases' rims),
-  // ready, mine, free, canSit }] }
+  // ready, mine, free, canSit, (F11b) canSeatAI (a free seat, the host's
+  // page), ai (the host's own AI seat, on the host's page), foreignAI (an
+  // AI seat on the host's page it didn't seat: Unseat), army (your
+  // seat's and the host's AI seat's: { options [{ value, label }], value,
+  // total, why, random }), armyLine (another seat's: its sentence alone) }] }
   render(m) {
     this.show()
     $('#lobbyStatus').textContent = m.status
@@ -159,7 +185,7 @@ export class LobbyScreen {
   seat(box, s, i) {
     box.classList.toggle('mine', !!s.mine)
     const { root, picker } = this.pickerOf(i)
-    picker.render({ race: s.race, color: s.color, editable: !!s.mine })
+    picker.render({ race: s.race, color: s.color, editable: !!(s.mine || s.ai) })
     const head = (who) => {
       const h = el('div', 'seatHead')
       h.append(el('span', 'who', who), el('span', 'edge', i ? 'east edge' : 'west edge'))
@@ -174,11 +200,41 @@ export class LobbyScreen {
       const sit = el('button', 'primary', 'Sit here')
       sit.onclick = () => this.on.claim(i)
       sit.disabled = !s.canSit
-      box.replaceChildren(head(`Seat ${i + 1} is free`), root, ctl(sit))
+      const row = el('div', 'row')
+      row.append(sit)
+      // ((F11b) the host may seat the AI here instead)
+      if (s.canSeatAI) {
+        const ai = el('button', 'seatAI', 'Seat the AI here')
+        ai.onclick = () => this.on.ai?.seat(i)
+        row.append(ai)
+      }
+      box.replaceChildren(head(`Seat ${i + 1} is free`), root, ctl(row))
+      return
+    }
+    // ((F11b) the host's AI seat, on the host's page: its army line and
+    // Unseat)
+    if (s.ai) {
+      const unseat = el('button', 'unseatAI', 'Unseat the AI')
+      unseat.onclick = () => this.on.ai?.unseat(i)
+      // ((F11b's review) ready only on an army the battle takes: its line
+      // says why it isn't)
+      box.replaceChildren(head(`${s.name} · seated by you`), root, ctl(this.armyRow(i, s.army, { ai: true }), el('div', s.ready ? 'ok' : 'wait', s.ready ? '✓ Ready (the AI is always ready)' : 'Not ready: pick it an army this battle takes'), unseat))
       return
     }
     if (!s.mine) {
-      box.replaceChildren(head(s.name || '…'), root, ctl(el('div', s.ready ? 'ok' : 'wait', s.ready ? '✓ Ready' : 'Getting ready…')))
+      // ((F11b) its army as a sentence: courtesy sealing, never the list;
+      // a seat ready says so in it, "✓ Ready · 970 pts · 14 units")
+      const state = el('div', s.ready ? 'ok' : 'wait', s.ready ? (s.armyLine ? '✓ ' : '✓ Ready') : 'Getting ready…')
+      const parts = [state]
+      if (s.armyLine && s.ready) state.append(el('span', 'armyState', s.armyLine))
+      else if (s.armyLine) parts.push(el('div', 'armyState small', s.armyLine))
+      // ((F11b's review) an AI seat the host's page didn't seat: Unseat)
+      if (s.foreignAI) {
+        const unseat = el('button', 'unseatAI', 'Unseat the AI')
+        unseat.onclick = () => this.on.ai?.unseat(i)
+        parts.push(unseat)
+      }
+      box.replaceChildren(head(s.name || '…'), root, ctl(...parts))
       return
     }
     // your own seat: the name box kept while it has focus
@@ -198,10 +254,51 @@ export class LobbyScreen {
     if (document.activeElement !== name) name.value = s.name
     const ready = el('button', s.ready ? 'on' : 'primary', s.ready ? '✓ Ready (click to wait)' : 'Ready')
     ready.onclick = () => this.on.ready(!s.ready)
+    // ((F11b) never Ready on an army the battle would refuse)
+    if (!s.ready && s.army?.why) {
+      ready.disabled = true
+      ready.title = s.army.why
+    }
     const leave = el('button', '', 'Leave seat')
     leave.onclick = () => this.on.leave(i)
     const row = el('div', 'row')
     row.append(ready, leave)
-    box.replaceChildren(head(`Seat ${i + 1} · you`), root, ctl(name, row))
+    box.replaceChildren(head(`Seat ${i + 1} · you`), root, ctl(name, ...(s.army ? [this.armyRow(i, s.army, { ai: false })] : []), row))
+  }
+
+  // (F11b) Seat i's army line, yours or the host's AI seat's: the presets
+  // (and the list held), Build… (yours) or Random (the AI's), the total, and
+  // why the battle would refuse it, in red. `a`: { options, value, total,
+  // why, random }.
+  armyRow(i, a, { ai }) {
+    const line = el('div', `armyLine${a.why ? ' bad' : ''}`)
+    line.dataset.seat = String(i)
+    const pick = el('select', 'armyPick')
+    pick.setAttribute('aria-label', ai ? "The AI's army" : 'Your army')
+    for (const o of a.options) {
+      const opt = el('option', '', o.label)
+      opt.value = o.value
+      pick.append(opt)
+    }
+    pick.value = a.value
+    pick.disabled = !a.options.length
+    pick.onchange = () => (ai ? this.on.ai?.army(i, pick.value) : this.on.army?.(pick.value))
+    const lbl = el('span', 'lbl', 'Army:')
+    const parts = [lbl, pick]
+    if (ai) {
+      const rnd = el('button', `armyRandom${a.random ? ' on' : ''}`, 'Random')
+      rnd.setAttribute('aria-pressed', String(!!a.random))
+      rnd.onclick = () => this.on.ai?.random(i)
+      parts.push(rnd)
+    } else {
+      const build = el('button', 'armyBuild', 'Build…')
+      build.disabled = !a.options.length
+      build.onclick = () => this.on.build?.()
+      parts.push(build)
+    }
+    parts.push(el('span', 'armyTotal small', a.total))
+    if (a.why) parts.push(el('p', 'armyWhy small', a.why))
+    line.append(...parts)
+    return line
   }
 }

@@ -24,7 +24,7 @@ import { Card } from '../ui/card.js'
 import { Tooltip } from '../ui/tooltip.js'
 import { tipOf } from '../present/conditions.js'
 import { GLYPH as ORDER_GLYPH, NAME as ORDER_NAME } from '../present/standing.js'
-import { Banner } from '../ui/banner.js'
+import { Banner, ArmyBanner } from '../ui/banner.js'
 import { Toast } from '../ui/toast.js'
 import { Hud } from '../ui/hud.js'
 import { Actions } from '../ui/actions.js'
@@ -34,6 +34,9 @@ import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
 import { SetupScreen, sizeName } from '../ui/screens/setup.js'
+import { MusterScreen, PassScreen, presetsFor, presetName, presetCounts } from '../ui/screens/muster.js'
+import { cyrb53 } from '../core/util.js'
+import { Lists } from './lists.js'
 // (F8b) drawing at scale: the chips, the roster, the minimap
 import { Chips } from '../ui/chips.js'
 import { Roster } from '../ui/roster.js'
@@ -290,6 +293,8 @@ export function boot(location) {
     // worded for the unit it belongs to: tipFor, below)
     tooltip: new Tooltip($('#tooltip'), { labels: $('#labels'), explain: (el, how) => tipFor(el, how) }),
     banner: new Banner($('#banner')),
+    // ((F11b) the deployment's points banner)
+    armyBanner: new ArmyBanner($('#armyBanner')),
     toast: new Toast($('#toast')),
     hud: new Hud(),
     actions: new Actions(),
@@ -326,6 +331,8 @@ export function boot(location) {
     if (el.dataset.tip === 'done') return '<b>✓ Done</b> — it has nothing more to do this phase.'
     // ((V3c) a spell bar's button: its spell, worded by ui/actions.js)
     if (el.dataset.tip === 'spell') return el.dataset.say ?? ''
+    // ((F11b) a Muster screen's + that can't: why, in plain text)
+    if (el.dataset.tip === 'say') return (el.dataset.say ?? '').replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`)
     return ''
   }
   ui.tooltip.watch(document)
@@ -478,11 +485,16 @@ export function boot(location) {
       setup.hide()
       title.show()
     }
+    // ((F11b) and the Muster screen or the hotseat's pass screen over it)
+    if (muster.up) muster.close()
+    if (pass.up) pass.hide()
     const go = async () => {
       if (!online) {
         const { Online, loadNet } = await import('./online.js')
         await loadNet()
-        online ??= new Online({ flow, params })
+        // ((F11b) with the page's Muster screen and saved lists: the
+        // lobby's Build… opens the panel's own screen)
+        online ??= new Online({ flow, params, muster, lists })
       }
       return how === 'host' ? online.host() : online.route()
     }
@@ -515,23 +527,118 @@ export function boot(location) {
   const setup = new SetupScreen({ diorama: () => view.diorama })
   const SETUP = { bushtail: 'Against the AI: you hold the west edge', serpent: 'Against the AI: you hold the east edge', hotseat: 'Two players, one screen', watch: 'Watch the AI fight' }
   const whoOf = (mode, s) => (mode === 'hotseat' ? `Player ${s + 1}` : MODES[mode][s] === 'human' ? 'You' : 'The AI')
+  const played = (mode, s) => MODES[mode][s] === 'human'
   let picking = null
+  // (F11b, DESIGN §4.2.8.8) Each seat's army line, as the picking holds
+  // it: { preset } a preset's name (null: the battle size's own, so the
+  // setup names no army, as every battle before lists did), or { counts } a
+  // list (one count per roster entry; `random` an AI seat's Random,
+  // `built` one readied on the Muster screen), and `url` the very value
+  // ?armies= gave the seat while the line still holds it (the door sim/'s
+  // harnesses start battles with lists by: the setup names it as given),
+  // `dflt` a line the player hasn't set (a size change defaults it again).
+  // Saved lists and the last list a race took into each size: app/lists.js.
+  const lists = new Lists()
+  const muster = new MusterScreen({ lists })
+  const pass = new PassScreen()
+  const NAME = /^[a-z][a-z0-9-]*$/
+  const digits = (race, text) => RACES[race].roster.map((k, i) => (i < text.length ? text.charCodeAt(i) - 48 : 0))
+  const countsOf = (race, mission, a) => a.counts ?? presetCounts(race, a.preset ?? MISSIONS[mission].army)
+  const whyOf = (race, mission, a) => (a.preset && !Object.hasOwn(RACES[race].armies, a.preset) ? `the ${RACES[race].name} have no army "${a.preset}"` : army.checkList(RACES[race], MISSIONS[mission].list, countsOf(race, mission, a)))
+  const valueOf = (mission, a) => a.url ?? (a.counts ? army.listText(a.counts) : a.preset && a.preset !== MISSIONS[mission].army ? a.preset : null)
+  const same = (x, y) => x.every((n, i) => n === (y[i] ?? 0))
+  // (§4.2.8.6) an AI seat's Random: autoList on cyrb53 of the board, the
+  // size and the seat, so the panel's preview holds still while the player
+  // builds, and another race or size draws another list
+  const randomOf = (s, race, mission) => army.autoList(RACES[race], MISSIONS[mission].list, cyrb53(`${flow.S.seed}:${mission}:${s}`) % 4294967296)
+  // The line a seat starts with: ?armies='s value for it where the flow
+  // judged one for this race and size; else, for a seat played here, the
+  // last list its race took into this size (ts.lists.last, its lost units
+  // dropped, taken only if legal under today's prices: a default never
+  // blocks Start), else the size's own preset. ((F11b's review) Never in
+  // hotseat: the device's last list is whichever player's Ready wrote it,
+  // the other player's in a mirror match, and the courtesy of §4.2.8.8's
+  // per-mode table shows a player nothing of the other's list.)
+  const armyDefault = (s, race, mission, mode) => {
+    const u = flow.armyFor(s, race, mission)
+    if (u != null) return NAME.test(u) ? { preset: u, url: u, dflt: true } : { counts: digits(race, u), url: u, dflt: true }
+    const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null
+    if (last && !army.checkList(RACES[race], MISSIONS[mission].list, last.counts) && !same(last.counts, presetCounts(race, MISSIONS[mission].army))) return { counts: last.counts, dflt: true }
+    return { preset: null, dflt: true }
+  }
+  // what the panel says whose army it is
+  const ownerOf = (mode, s) => (mode === 'hotseat' ? `player ${s + 1}'s army` : played(mode, s) ? 'your army' : "the AI's army")
+  // ((F11b's review, second pass) why a sealed hotseat list can't take
+  // the table, said without checkList's words: they name a unit and its
+  // count, or how many of a role, which is the list itself, and the other
+  // player reads the panel too (a size changed after both Readies). Its
+  // own player reads the refusal on the Muster screen, through the pass
+  // screen)
+  const unfit = (s, mission) => `doesn't fit a ${sizeName(mission, MISSIONS[mission])} battle: hand the screen to player ${s + 1} to change it`
+  const armyLine = (s) => {
+    const { mode, races, mission } = picking, race = races[s], a = picking.armies[s], r = RACES[race], rules = MISSIONS[mission].list
+    const presets = presetsFor(race, mission)
+    const options = presets.map((p) => ({ value: p, label: presetName(p) }))
+    if (a.preset && !presets.includes(a.preset) && !a.counts) options.push({ value: a.preset, label: presetName(a.preset) })
+    if (a.counts) options.push({ value: 'list', label: a.random ? 'Random list' : 'List' })
+    const counts = countsOf(race, mission, a), refused = whyOf(race, mission, a)
+    const cost = army.listCost(r, counts, rules), n = counts.reduce((x, y) => x + y, 0)
+    const sealed = mode === 'hotseat' && a.built
+    const why = sealed && refused ? `it ${unfit(s, mission)}` : refused
+    const total = `${sealed ? 'Ready · ' : ''}${cost.toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
+    // (against the AI, its units a tap away: no secrecy against the AI)
+    const units = !played(mode, s) && FOG_MODES.includes(mode) ? r.roster.flatMap((k, i) => (counts[i] ? [`${r.units[k].name}${counts[i] > 1 ? ` ×${counts[i]}` : ''}`] : [])).join(', ') : null
+    return { human: played(mode, s), options, value: a.counts ? 'list' : a.preset ?? MISSIONS[mission].army, random: !!a.random, total, why, units, sealed }
+  }
   // ((F7a) and the terrain line: the mission's sets, the table's picked;
-  // (F16) the fog line against the AI)
+  // (F16) the fog line against the AI; (F11b) each seat's army line, and
+  // Start while every army is legal)
   const showSetup = () => {
     const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog } })
+    const armies = [0, 1].map(armyLine)
+    const bad = armies.findIndex((x) => x.why)
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}` })
   }
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)
   const openSetup = (mode) => {
     picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick }
+    picking.armies = [0, 1].map((s) => armyDefault(s, picking.races[s], picking.mission, mode))
     title.away()
     showSetup()
   }
+  // (F11b) Seat s's Muster screen, opened on its line's army; its Ready the
+  // seat's list (and its race's last for this size). In hotseat player 1's
+  // Ready passes the screen to player 2 (the pass screen: player 1's total
+  // and Ready alone, the Muster screen's rows gone from the page), whose
+  // Ready comes back to the panel; both armies take the table at the
+  // deployment. ((F11b's review) A hotseat seat already built opens again
+  // only through the pass screen, handed back to its player: the panel
+  // shows the other player its total and Ready alone.)
+  const openMuster = (s, handed = false) => {
+    const { mode, races, mission } = picking, race = races[s], a = picking.armies[s]
+    if (mode === 'hotseat' && a.built && !handed) return pass.show({ to: s + 1, line: `Player ${s + 1}'s army is sealed: hand the screen to player ${s + 1} to change it`, onGo: () => openMuster(s, true), onBack: showSetup })
+    muster.open({
+      race, mission, counts: countsOf(race, mission, a),
+      onReady: (counts) => {
+        picking.armies[s] = { counts, built: true }
+        lists.keep(race, mission, counts)
+        if (mode === 'hotseat' && s === 0 && !picking.armies[1].built) {
+          const n = counts.reduce((x, y) => x + y, 0)
+          return pass.show({ to: 2, line: `Player 1: Ready · ${army.listCost(RACES[race], counts, MISSIONS[mission].list).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`, onGo: () => openMuster(1), onBack: showSetup })
+        }
+        showSetup()
+      },
+      onClose: showSetup,
+    })
+  }
   setup.wire({
+    // (F11b) a race changed: its seat's army line back to its default (a
+    // list's digits are other units in another race's roster, so a list is
+    // never carried across races); a Random AI seat rerolls for its race
     pick: (s, race) => {
       picking.races[s] = race
+      picking.armies[s] = picking.armies[s].random ? { counts: randomOf(s, race, picking.mission), random: true } : armyDefault(s, race, picking.mission, picking.mode)
       showSetup()
     },
     terrain: (set) => {
@@ -539,10 +646,14 @@ export function boot(location) {
       showSetup()
     },
     // (F8b) a battle size: its mission; (F7a) the terrain picked stays where
-    // the new size is fought on it, else the size's own default
+    // the new size is fought on it, else the size's own default; (F11b)
+    // each army line kept and checked against the new size (a list over
+    // its limits red, Start disabled), a line the player hasn't set taking
+    // the new size's default, a Random AI seat rerolled for it
     size: (mission) => {
       picking.mission = mission
       if (!MISSIONS[mission].sets.includes(picking.terrain)) picking.terrain = flow.terrainOf(mission)
+      picking.armies = picking.armies.map((a, s) => (a.random ? { counts: randomOf(s, picking.races[s], mission), random: true } : a.dflt ? armyDefault(s, picking.races[s], mission, picking.mode) : a))
       showSetup()
     },
     // (F16) the fog toggled: the flow's next default too, kept by this
@@ -554,10 +665,25 @@ export function boot(location) {
       } catch {}
       showSetup()
     },
+    // (F11b) the army line's preset (its own: none named), Build… and an
+    // AI seat's Random
+    army: (s, value) => {
+      if (value !== 'list') picking.armies[s] = { preset: value === MISSIONS[picking.mission].army ? null : value }
+      showSetup()
+    },
+    build: (s) => openMuster(s),
+    random: (s) => {
+      const a = picking.armies[s]
+      picking.armies[s] = a.random ? { preset: null } : { counts: randomOf(s, picking.races[s], picking.mission), random: true }
+      showSetup()
+    },
     start: () => {
+      // (F11b) never with an army the battle would refuse: Start is
+      // disabled then, and a stray press changes nothing
+      if (picking.armies.some((a, s) => whyOf(picking.races[s], picking.mission, a))) return
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog)
+        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog, picking.armies.map((a) => valueOf(picking.mission, a)))
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)

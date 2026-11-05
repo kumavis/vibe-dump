@@ -2242,3 +2242,510 @@ body:not(.playing) #roster {
 #tooltip .ledge {
   color: #ff8a7a;
 }
+
+/* F11b: the army builder (DESIGN §4.2.8.8). The battle-setup panel's army
+   line under each seat's race picker (ui/screens/setup.js), the Muster
+   screen (ui/screens/muster.js: one column, its points bar, counts and
+   tools at the top and Save list… and Ready at the bottom while the rows
+   scroll between, 44 px buttons and no horizontal scroll on a phone), the
+   hotseat's pass screen and the deployment's points banner (ui/banner.js) */
+:root {
+  --role-Hero: #ffd36e;
+  --role-Troops: #79b85e;
+  --role-Elite: #d0663e;
+  --role-Fast: #5aa8d8;
+  --role-Monster: #a77ad6;
+  --role-Artillery: #d9973f;
+  --role-Vehicle: #a09a8c;
+  --bad: #ff8a7a;
+}
+.setupSeat:has(.armyLine) .picker .unitInfo {
+  border-radius: 0;
+}
+.setupSeat .armyLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  background: rgba(30, 23, 16, 0.94);
+  border: 1px solid rgba(255, 210, 140, 0.25);
+  border-top: 1px solid var(--edge);
+  border-radius: 0 0 12px 12px;
+  padding: 8px 12px;
+}
+.armyLine .lbl {
+  color: var(--gold);
+  font-weight: bold;
+}
+.armyLine select {
+  font: inherit;
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 6px 7px;
+  min-width: 0;
+}
+.armyLine .armyTotal {
+  color: var(--dim);
+}
+.armyLine.bad .armyTotal,
+.armyLine .armyWhy {
+  color: var(--bad);
+}
+.armyLine .armyWhy,
+.armyLine .armyUnits {
+  flex-basis: 100%;
+  margin: 0;
+}
+.armyLine .armyUnits summary {
+  cursor: pointer;
+  color: var(--dim);
+}
+.armyLine .armyRandom.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#setup #setupWhy {
+  margin-right: auto;
+  align-self: center;
+  color: var(--bad);
+}
+#setup #setupWhy.hidden {
+  display: none;
+}
+/* (F11b) the lobby's army lines, inside a seat's card (ui/screens/lobby.js):
+   your own and the host's AI seat's; another seat's a sentence alone */
+.seat .seatCtl .armyLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.seat .seatCtl .armyLine.bad select {
+  border-color: var(--bad);
+}
+.seat .armyState {
+  color: #e0d4bc;
+}
+/* the Muster screen opened from the lobby: over it (both are modals, the
+   lobby later in the page) */
+body:has(#lobby:not(.hidden)) #muster {
+  z-index: 32;
+}
+
+/* the Muster screen: a dialog over the battle-setup panel */
+#muster {
+  background: rgba(10, 8, 6, 0.86);
+  padding: 16px;
+}
+#muster .hidden {
+  display: none;
+}
+.panel.muster {
+  width: min(760px, 100%);
+  max-width: none;
+  max-height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.muster .mTop {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--edge);
+}
+.muster .mHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.muster .mHead h2 {
+  font-size: 19px;
+  min-width: 0;
+}
+.muster .close {
+  position: static;
+  flex: none;
+  min-width: 40px;
+  min-height: 40px;
+}
+.muster .mBar {
+  display: flex;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+.muster .mBar.over {
+  box-shadow: inset 0 0 0 2px #ff5a4a;
+}
+.muster .mBar .seg {
+  height: 100%;
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+}
+.muster .mBar .seg.r-Hero { background: var(--role-Hero); }
+.muster .mBar .seg.r-Troops { background: var(--role-Troops); }
+.muster .mBar .seg.r-Elite { background: var(--role-Elite); }
+.muster .mBar .seg.r-Fast { background: var(--role-Fast); }
+.muster .mBar .seg.r-Monster { background: var(--role-Monster); }
+.muster .mBar .seg.r-Artillery { background: var(--role-Artillery); }
+.muster .mBar .seg.r-Vehicle { background: var(--role-Vehicle); }
+.muster .mPts {
+  font-weight: bold;
+  color: var(--gold);
+}
+.muster .mPts.over {
+  color: var(--bad);
+}
+.muster .mSum {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.muster .mCount {
+  flex: none;
+  color: var(--dim);
+  font-size: 12.5px;
+}
+.muster .mChips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  min-width: 0;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+.muster .chip {
+  flex: none;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  color: var(--ink);
+}
+.muster .chip.bad {
+  color: var(--bad);
+  border-color: #ff5a4a;
+}
+.muster .mTools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.muster .mTools button {
+  min-height: 40px;
+}
+.muster .mTools button[aria-pressed="true"] {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.muster .mNote {
+  margin: 0;
+  color: var(--gold);
+}
+.muster .mSaved {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 34vh;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+.muster .mSaved.hidden {
+  display: none;
+}
+.muster .mList {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas: "name open del" "what open del" "why open del";
+  column-gap: 8px;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+}
+.muster .mList .mlName { grid-area: name; overflow-wrap: anywhere; }
+.muster .mList .mlWhat { grid-area: what; color: var(--dim); }
+.muster .mList .mlWhy { grid-area: why; color: var(--bad); }
+.muster .mList .mlOpen { grid-area: open; min-height: 40px; }
+.muster .mList .mlDel { grid-area: del; min-height: 40px; }
+.muster .mList.bad .mlWhat {
+  color: var(--bad);
+}
+.muster .mRows {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px 16px;
+}
+.muster .mRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3em auto;
+  grid-template-areas: "name cost step" "info cost step";
+  align-items: center;
+  column-gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--edge);
+}
+.muster .mRow.none .mName,
+.muster .mRow.none .mCost {
+  opacity: 0.7;
+}
+.muster .mName {
+  grid-area: name;
+  justify-self: start;
+  max-width: 100%;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  text-align: left;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.muster .mName .g {
+  flex: none;
+  width: 1.2em;
+  text-align: center;
+  color: var(--gold);
+}
+.muster .mName .nm {
+  text-decoration: underline dotted rgba(255, 230, 180, 0.4);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.muster .mInfo {
+  grid-area: info;
+  color: var(--dim);
+  padding-left: calc(1.2em + 6px);
+}
+.muster .mCost {
+  grid-area: cost;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.muster .mStep {
+  grid-area: step;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.muster .mStep button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+.muster .mStep .plus.off {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.muster .mStep .n {
+  min-width: 1.6em;
+  text-align: center;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+.muster .mAboard {
+  grid-column: 1 / -1;
+  color: var(--dim);
+  padding-left: calc(1.2em + 6px);
+}
+.muster .mFoot {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--edge);
+}
+.muster .mFoot button {
+  min-height: 40px;
+}
+.muster .mReady {
+  margin-left: auto;
+  max-width: 100%;
+  white-space: normal;
+}
+.muster .mSaveForm {
+  display: flex;
+  gap: 6px;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.muster .mSaveForm.hidden {
+  display: none;
+}
+.muster .mSaveForm input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+.muster .mCard {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 74px;
+  max-height: 70%;
+  overflow-y: auto;
+  z-index: 2;
+  background: rgba(24, 18, 12, 0.98);
+  border: 1px solid rgba(255, 210, 140, 0.35);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  font-size: 12.5px;
+}
+.muster .mCard.hidden {
+  display: none;
+}
+.muster .mCard .close {
+  float: right;
+  margin: 0 0 6px 8px;
+}
+.muster .mCard .card-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+  margin-bottom: 4px;
+}
+.muster .mCard .card-head span {
+  color: var(--dim);
+}
+.muster .mCard .stats {
+  margin: 4px 0;
+}
+/* a phone: the screen whole, its buttons 44 px */
+@media (max-width: 700px) {
+  #muster {
+    padding: 0;
+  }
+  .panel.muster {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+  .muster .mTop {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .muster .mHead h2 {
+    font-size: 16px;
+  }
+  .muster .mRows {
+    padding: 0 12px;
+  }
+  .muster .mFoot {
+    padding: 8px 12px max(10px, env(safe-area-inset-bottom));
+  }
+  .muster .close,
+  .muster .mTools button,
+  .muster .mFoot button,
+  .muster .mList button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .muster .mStep button {
+    width: 44px;
+    height: 44px;
+  }
+  /* (F11b's review) the unit's name, a tap opening its card, a 44 px target
+     too (its row a little taller for it) */
+  .muster .mName {
+    min-height: 44px;
+    align-items: center;
+  }
+  .muster .mSum {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .muster .mChips {
+    width: 100%;
+  }
+}
+
+/* the hotseat's pass screen: the panel and the list behind it hidden */
+#pass {
+  background: rgba(10, 8, 6, 0.96);
+}
+.panel.pass {
+  max-width: 440px;
+}
+.panel.pass .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+.panel.pass button {
+  min-height: 44px;
+}
+#passLine {
+  color: var(--gold);
+  margin: 8px 0;
+}
+
+/* the deployment's points banner: under the HUD, fading after a while,
+   taking no pointer */
+#armyBanner {
+  position: fixed;
+  top: 21%;
+  left: 8px;
+  right: 8px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+  font-family: Georgia, serif;
+  font-size: 17px;
+  color: var(--ink);
+  text-shadow: 0 2px 8px #000, 0 0 2px #000;
+}
+#armyBanner.show {
+  animation: armyBanner 7s ease-out forwards;
+}
+@keyframes armyBanner {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (max-width: 700px) {
+  #armyBanner {
+    font-size: 14px;
+  }
+}
+/* (a + that can't says why in the tooltip, over the Muster screen) */
+body:has(#muster:not(.hidden)) #tooltip {
+  z-index: 40;
+}

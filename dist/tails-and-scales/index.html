@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-rYcR79QV.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DQbb11eL.css">
+    <script type="module" crossorigin src="./assets/index-ubzzqIEu.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B3FikEvN.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -60,6 +60,7 @@
 
     <div id="tooltip"></div>
     <div id="banner"></div>
+    <div id="armyBanner" aria-live="polite"></div>
 
     <div id="title" class="modal">
       <div class="panel">
@@ -93,8 +94,23 @@
         <p id="setupMirror" class="small hidden">A mirror match: the east army takes its race's other colours.</p>
         <div id="setupTerrain" class="terrainLine hidden"><span class="lbl">Terrain</span><span class="opts"></span><span class="what small"></span></div>
         <div class="row">
+          <span id="setupWhy" class="small hidden"></span>
           <button id="setupBack">Back</button>
           <button id="setupStart" class="primary">Start the battle</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="muster" class="modal hidden"></div>
+
+    <div id="pass" class="modal hidden">
+      <div class="panel pass">
+        <h2 id="passTitle">Pass to player 2</h2>
+        <p id="passLine"></p>
+        <p class="small">Hand the screen over: the next player musters their army without seeing this one. Both armies take the table at the deployment.</p>
+        <div class="row">
+          <button id="passBack">Back to the battle setup</button>
+          <button id="passGo" class="primary">Player 2: muster your army</button>
         </div>
       </div>
     </div>

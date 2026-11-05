@@ -6,8 +6,7 @@
 // then the last ones chosen. Two seats of one race make a mirror match: the
 // second army takes its race's other colours, and the panel says so. (F7a)
 // The terrain line: the sets the battle's mission is fought on (its first,
-// or ?terrain='s, then the last chosen), one button each. A later step adds
-// the army (F11b).
+// or ?terrain='s, then the last chosen), one button each.
 //
 // (F8b) The battle size: a line of the missions (Skirmish, Field, Grand,
 // (F19a) and the Powder keg, a Skirmish of its own), each with its board
@@ -24,9 +23,32 @@
 // and a note that the AI sees everything (core/ai reads the match whole).
 // Its default the page's (?fog, else the last choice, which the page keeps
 // in localStorage: app/boot.js).
+//
+// (F11b, DESIGN §4.2.8.8) The army line, under each seat's race picker: a
+// seat played here "Army: Classic ▾ · Build…" (the presets its battle size
+// allows, and "List" while it holds one built on the Muster screen,
+// ui/screens/muster.js, which Build… opens), an AI seat "Army: Classic ▾ /
+// Random" (Random a list app/boot.js draws for it, and, against the AI,
+// its units a tap away: no secrecy against the AI), each with its total
+// and units, red with why when it isn't legal in the size chosen (a list
+// built for a larger battle), and Start then disabled with the first
+// seat's why. In hotseat a seat's line shows a built list by its total
+// alone ("Ready · 970 pts · 14 units"), never its units, and its Build…
+// opens it again only through the pass screen, handed back to its player
+// (app/boot.js: nor does a hotseat seat default to the device's last list,
+// which may be the other player's). What each line
+// holds is app/boot.js's (the picking); this draws it, and every line's
+// DOM is made here with textContent: nothing of a list but its totals is
+// written into the panel.
 import { RacePicker } from './races.js'
 
 const $ = (s) => document.querySelector(s)
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag)
+  if (cls) e.className = cls
+  if (text !== undefined) e.textContent = text
+  return e
+}
 
 // (F7a) what each terrain set is called on the panel and in the lobby, and
 // what is on it (a set without a line here is shown by its name)
@@ -75,7 +97,8 @@ export class SetupScreen {
   }
 
   // { pick(seat, race), terrain(set), size(mission), (F16) fog(on), start(),
-  // back() }
+  // back(), (F11b) army(seat, value) (the line's select: a preset's name,
+  // or 'list'), build(seat) (Build…), random(seat) (an AI seat's Random) }
   wire(on) {
     this.on = on
     $('#setupStart').onclick = () => on.start()
@@ -85,21 +108,81 @@ export class SetupScreen {
   // { title, seats: [{ who, race, color }], mirror, (F8b) sizes: [{
   // mission, name, W, H, points, rounds }], size (the chosen one's mission),
   // (F7a) terrain: { sets, pick } (the mission's sets and the one picked),
-  // (F16) fog: { offered, on } (the mode takes it, and the toggle's state) }
-  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null }) {
+  // (F16) fog: { offered, on } (the mode takes it, and the toggle's state),
+  // (F11b) armies: each seat's army line (armyLine, below), and startWhy:
+  // why Start is disabled (null: it isn't) }
+  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null, armies = null, startWhy = null }) {
     // (the pickers made once, as the panel first opens: nothing is drawn
     // before)
     this.pickers ??= [0, 1].map((s) => new RacePicker({ root: $(`#setup .setupSeat[data-seat="${s}"] .picker`), diorama: this.diorama(), pick: (race) => this.on.pick(s, race) }))
     $('#setupTitle').textContent = title
     seats.forEach((x, s) => {
       $(`#setup .setupSeat[data-seat="${s}"] .who`).textContent = x.who
-      this.pickers[s].render({ race: x.race, color: x.color })
+      this.pickers[s].render({ race: x.race, color: x.color, rules: x.rules })
+      if (armies) this.armyLine(s, armies[s])
     })
+    // (F11b) Start, while every seat's army is legal
+    $('#setupStart').disabled = !!startWhy
+    const why = $('#setupWhy')
+    if (why) {
+      why.textContent = startWhy ? `${startWhy.charAt(0).toUpperCase()}${startWhy.slice(1)}.` : ''
+      why.classList.toggle('hidden', !startWhy)
+    }
     this.sizes(sizes, size)
     $('#setupMirror').classList.toggle('hidden', !mirror)
     this.terrainLine(terrain)
     this.fogLine(fog)
     this.root.classList.remove('hidden')
+  }
+
+  // (F11b) Seat s's army line: `a` { human (a seat played here), options
+  // [{ value, label }] (the presets, and 'list' while one is held), value
+  // (the option shown), random (an AI seat's Random on), total ("485 pts ·
+  // 7 units"), why (null, or why the army isn't legal here), units (an AI
+  // seat's units as text, a tap away; null: none shown), sealed (hotseat: a
+  // built list shown by its total alone) }.
+  armyLine(s, a) {
+    const seat = $(`#setup .setupSeat[data-seat="${s}"]`)
+    let line = seat.querySelector('.armyLine')
+    if (!line) {
+      line = el('div', 'armyLine')
+      line.dataset.seat = String(s)
+      seat.append(line)
+    }
+    line.classList.toggle('bad', !!a.why)
+    const lbl = el('span', 'lbl', 'Army:')
+    const pick = el('select', 'armyPick')
+    pick.setAttribute('aria-label', `Seat ${s + 1}'s army`)
+    for (const o of a.options) {
+      const opt = el('option', '', o.label)
+      opt.value = o.value
+      pick.append(opt)
+    }
+    pick.value = a.value
+    pick.onchange = () => this.on.army?.(s, pick.value)
+    const parts = [lbl, pick]
+    if (a.human) {
+      const build = el('button', 'armyBuild', 'Build…')
+      build.onclick = () => this.on.build?.(s)
+      parts.push(build)
+    } else {
+      const rnd = el('button', `armyRandom${a.random ? ' on' : ''}`, 'Random')
+      rnd.setAttribute('aria-pressed', String(!!a.random))
+      rnd.onclick = () => this.on.random?.(s)
+      parts.push(rnd)
+    }
+    const total = el('span', 'armyTotal small', a.total)
+    parts.push(total)
+    if (a.units) {
+      // (an AI seat's units, a tap away: open as it was across redraws)
+      const was = line.querySelector('.armyUnits')?.open ?? false
+      const box = el('details', 'armyUnits small')
+      box.open = was
+      box.append(el('summary', '', 'Its units'), el('span', '', a.units))
+      parts.push(box)
+    }
+    if (a.why) parts.push(el('p', 'armyWhy small', `${a.why.charAt(0).toUpperCase()}${a.why.slice(1)}`))
+    line.replaceChildren(...parts)
   }
 
   // (F16) The fog line: shown for a mode that takes it (against the AI), a

@@ -241,7 +241,9 @@ the commit, and add whatever the work turned up.
   N2 `node sim/lobby-rig.mjs` (and `--self-test`: online play in Chromium,
   pages meeting only through a local sync server, from the lobby to the
   rematch; from N3 the replay bar, replay files and the page that comes
-  back; from F10a a group placed and moved online), and from F10a
+  back; from F10a a group placed and moved online; from F11b the lists in
+  the lobby, a list sealed from the other page's DOM until the start, a
+  host-altered army, an AI seat and one a guest forged), and from F10a
   `node sim/input-check.mjs` (the group input by mouse, keys and real
   touches: the box, the pin and its sending, lines, +D6, Tab, Ready N,
   Select mode, long presses, the touch fallback; from F13 the touch aim,
@@ -259,7 +261,15 @@ the commit, and add whatever the work turned up.
   F15 `node sim/undo-check.mjs` (and `--self-test`: a hotseat battle's
   placement and move taken back by Undo and Ctrl-Z, the phase still open,
   and a battle-log line's scrub, no seat to act there, Live, ✕ and ▶
-  coming back; lobby-rig's `play` holds Undo hidden online). A step that changes what one of them reads ports it in the same
+  coming back; lobby-rig's `play` holds Undo hidden online), and from F11b
+  `node sim/ui-check.mjs` (and `--self-test`: the Muster screen's + disabled
+  at each cap with its why, Ready with the first refusal, Random always
+  legal, a saved list round-tripping, a list over its limit red after a
+  size change, a race change resetting the panel's army line, a 360 px
+  phone scrolling nothing sideways with 44 px buttons, the hotseat's pass
+  screen holding nothing of the first list and standing between a built
+  seat and its list, nor the panel after a size change refuses a sealed
+  list, and a list built on the screen fielded unit for unit). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
@@ -1039,14 +1049,54 @@ follows N3.
   (F8b's scale-bench builds its cap lists within the grand mission's limit
   by an exhaustive search, `capList`; F8b's retune never wanted the lifted
   fit; the fixture itself was deleted at the merged build's gate.)
-- [ ] **F11b** The Muster screen: build an army with +/− and a points bar,
+- [x] **F11b** The Muster screen: build an army with +/− and a points bar,
   presets, Random, lists saved on the device; hotseat builds in turn;
   online lists ride in the lobby, unseen until the battle starts; changing
   race resets the army.
   (Built at F11a: the `?armies=` door, checked by the fold's own `armyOf`,
   a race change on the panel already dropping that seat's list; the unit
-  card's cost and the group line's points standing. Still F11b's: the
-  cost on F6's race picker, the deployment's points banner.)
+  card's cost and the group line's points standing.)
+  (Client only: no bump, nothing under core/, present/, data/, match/ or
+  sim/oracle/, the corpus byte-identical and the PIN unmoved, nothing new
+  in the setup. `ui/screens/muster.js`: a row per roster entry with its
+  glyph, card, price and − +, a disabled + saying why in the tooltip, the
+  role-coloured points bar, the role chips, the presets, Random, Clear,
+  Saved and Save list…, Ready worded by `checkList`'s own refusal, the
+  War-Cart's riders, a 360 px phone layout; the hotseat's pass screen;
+  `app/lists.js`, saved lists by unit key (`ts.lists`, at most 50) and each
+  race's last list per size. The battle-setup panel's army line (preset ▾
+  · Build…, an AI seat's Random on §4.2.8.6's seed, its units a tap away
+  against the AI; red with why and Start disabled when the size refuses it;
+  reset by a race change), `Flow.start`'s `armies`, the race picker's
+  prices, the deployment's points banner. Online, a seat's `army` in N2's
+  lobby (un-ready on a change, let go on a race change, held by
+  `verifyStart`), courtesy sealing (another seat a sentence alone), and the
+  host's AI seat (`seatAI`, preset or Random, played inside the fold on
+  every page). `sim/ui-check.mjs` (ten cases, a 28-edit self-test),
+  lobby-rig's `lists`, `sealed`, `altered-army`, `ai-seat` and `forged` and
+  thirteen mutants, net-check's armies. Two reviews' ten findings, nine
+  fixed and one recorded below, and a second pass's four, fixed. DESIGN's
+  F11b notes.)
+- [ ] **Later (F11b's):** the result screen's totals for both armies
+  (§4.2.8.1; `ui/screens/result.js`); figure thumbnails on the Muster
+  screen's rows (a cheap still of each figure, not the diorama's window);
+  the Howdah's fire-slots tip, with F9c's firing decks; points in the group
+  bar's own count; the lobby's army line held to 44 px buttons at phone
+  width, and the panel's (its preset ▾, Build… and Random 33 px at 360 px,
+  F11b's review); `verifyStart` holding a start to the latest record each
+  device readied under the commitment rather than any of the last 8 it
+  kept (F11b's review: a host may start with a list the guest readied
+  earlier and then replaced, N2's "any of them will do"; tightening it
+  alone refuses an honest start that races a re-Ready, so it closes with
+  N4's real sealing, §4.2.8.9's commitments); the host's mission change keeping each seat's list and checking it
+  again ("over by N", §4.2.8.9) instead of dropping it, as F8b's
+  `editBattle` does; an online AI seat's Random on §4.2.8.6's seed, and
+  its Random kept by a rematch. Found on main by F11b's sweep: lobby-rig's
+  `no-relog` mutant, stale since F16 (its anchor lacks the second argument
+  `relog` gained), whose error the empty `uncaughtException` handler the
+  first case installs swallows, so `--self-test` ends after seven mutants
+  with exit 0 and no verdict line (the 29 after it, run by `--only`, are
+  each caught).
 - [x] **F7a** Climbable fortifications: decks, stairs and ladders sized for
   whole squads; ramparts, bastions, watchtowers, timber platforms and a keep
   on the centre objective; each side's own rampart at its zone's front (the
@@ -1206,7 +1256,10 @@ follows N3.
   each wants a battle where a dropped block outlives its blast and one is
   hurt as it falls; watch-carts-swapped-101, whose dropped blocks two of
   stand to the end and two are hurt, is the likeliest, untried), and
-  present-check's `no-embark-owners`.
+  present-check's `no-embark-owners`. Found at F11b's sweep, open:
+  lobby-rig's `no-relog` mutant, stale since F16, which ends the rig's
+  `--self-test` after seven mutants with exit 0 and no verdict (F11b's
+  Later item says how; the others run alone by `--only`).
 - [x] **F7c** Timber platforms that collapse under their defenders.
   (4e416f9; `CORE_VERSION` 14, `RULES_ID` unmoved; every classic, open,
   keg and powder battle byte-identical, and `scale/`'s 10 open pairs. A

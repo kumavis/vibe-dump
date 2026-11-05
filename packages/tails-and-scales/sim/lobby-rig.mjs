@@ -117,6 +117,69 @@
 //                deployment and the turns both pages play with Auto; a
 //                watcher's page keeps no fog. Some enemy was hidden on each
 //                page (or the case held nothing)
+//   (F11b, DESIGN §4.2.8.9: lists in the lobby)
+//   lists        a list past the size's limit in the host's seat shows red,
+//                "Over by N pts", Ready disabled, and the line's preset puts
+//                it right; the host readies, then opens Build…: its seat
+//                un-ready;
+//                on the Muster screen it builds a list of its own (− and +,
+//                each row to its count), and the Muster's Ready writes the
+//                list's digits into its seat, un-readied (its line showing
+//                the list and its total); a race change lets the army go,
+//                and the host builds it again; the guest keeps its preset
+//                (no army named). Both ready, the battle starts with the
+//                units the lists name on both pages (the host's list unit
+//                for unit, the guest's preset); a rematch keeps the seats,
+//                races and lists
+//   sealed       (a Field battle, the host's list with a War-Cart) while
+//                the host builds, the guest's page shows its seat as
+//                "Building…"; before the start it shows the host's seat as
+//                "Ready · N pts · M units", its total the list's, and holds
+//                in its DOM (the markup and every box's value) neither the
+//                list's digits nor the name of a unit the list fields and the
+//                page held nowhere before (a unit the preset leaves out); its
+//                own seat's line is its own. After the start both pages field
+//                both lists, that unit on the guest's table
+//   altered-army a host page that writes the start with the guest's army
+//                changed (the list the guest built and readied, swapped for
+//                its preset by name): the guest's page opens the battle
+//                read-only, "The start changed your seat (army)", and plays
+//                no seat
+//   ai-seat      the host seats the AI in the free seat (Seat the AI here:
+//                its preset, ready), then Random (a legal list autoList drew
+//                on the host's page, written into the seat); a watcher's page
+//                shows the AI's seat sealed, as any other; the host readies
+//                and the battle starts, its AI seat ctrl 'ai', the host's
+//                dev, its list fielded unit for unit. The host's page plays
+//                its own seat (the AI's moves fold inside the match on every
+//                page: no page sends for it), the watcher's none; the host
+//                plays round 1 with Auto (the AI its turn), then concedes:
+//                both pages over on the same entries and the same hash, and
+//                the host's page read-write throughout (its start check held
+//                the AI's seat to the record it readied). Then Rematch: the
+//                new lobby keeps the AI's seat, race and list, readied again
+//                by the host's page; the host leaves its own seat and a
+//                guest sits in it and readies: the guest's page plays its
+//                seat, the host's and a watcher's none, the guest plays
+//                round 1 and concedes, every page over on the same hash
+//   forged       (F11b's review) a guest's page writes a record of the AI's
+//                shape naming the host's device into the host's free seat:
+//                the host's page never readies it nor keeps it as a record
+//                it readied, shows it as another seat with Unseat (never
+//                "seated by you"), says why, and, the guest readying it and
+//                the host its own seat, starts no battle (asked to: the
+//                host's page's autoStart off); Unseat frees the
+//                seat, and the host's own AI seated there is readied.
+//                ((F11b's review, second pass) On Random, it stays the
+//                host's own through a size change and a reload, a list
+//                drawn again for each size, "Random list" still on its
+//                line; the guest deleting that list from the AI's record
+//                makes it another seat, never drawn again nor readied, the
+//                kept seat unchanged.) Then
+//                the guest, seated, writes an army past any roster into its
+//                own seat and readies it (no honest page can): the host's
+//                page says the lobby can't start for seat 2's army without
+//                quoting it, the list's digits nowhere in its DOM
 //
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
@@ -145,9 +208,12 @@ import { Folder } from '../match/fold.js'
 import { envelope, encode, decode } from '../match/envelope.js'
 import { commitOf } from '../net/seed.js'
 import { stateHash } from '../core/index.js'
+import { autoList, checkList, listText, keysOf, listCost } from '../core/army.js'
+import { RACES } from '../data/schema.js'
+import { MISSIONS } from '../data/mission.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog', 'lists', 'sealed', 'altered-army', 'ai-seat', 'forged']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -293,8 +359,371 @@ async function runCases(dist, cases) {
     handle.change((d) => d.log.insertAt(k, new ImmutableString(text)))
   }
   const live = (page, ms = 60000) => until(page, () => ['live', 'over'].includes(window.__ts.session?.status) && document.querySelector('#lobby').classList.contains('hidden'), null, ms, 'the battle begins on the page')
+  // (F11b) A list of `race` for `mission`'s battles other than its preset
+  // (autoList over seeds from 1), with `extra` one that fields a unit the
+  // preset leaves out: { counts, text, extra: that unit's key }
+  const listFor = (race, mission = 'classic', { extra: wanted = false } = {}) => {
+    const r = RACES[race], rules = MISSIONS[mission].list, preset = r.armies[MISSIONS[mission].army]
+    for (let seed = 1; seed < 500; seed++) {
+      const counts = autoList(r, rules, seed), text = listText(counts)
+      const extra = r.roster.find((k, i) => counts[i] > 0 && !(Number(preset[i] ?? 0) > 0))
+      if (!checkList(r, rules, counts) && text !== preset && (extra || !wanted)) return { counts, text, extra }
+    }
+    throw new Fail(`no list of the ${race} at ${mission} beside their preset${wanted ? ' fields a unit it leaves out' : ''}`)
+  }
+  // (F11b) The Muster screen, up on `page`, set to `counts` (every row's −
+  // first, then +, so no cap is passed on the way) and readied: what its
+  // rows held as Ready was pressed
+  const muster = async (page, counts) => {
+    await until(page, () => !document.querySelector('#muster').classList.contains('hidden') && document.querySelectorAll('#musterRows .mRow').length > 0, null, 20000, 'the Muster screen up')
+    const held = await page.evaluate((want) => {
+      const row = (i) => document.querySelectorAll('#musterRows .mRow')[i]
+      const n = (i) => Number(row(i).querySelector('.n').textContent)
+      const rows = document.querySelectorAll('#musterRows .mRow').length
+      for (const step of ['minus', 'plus']) {
+        for (let i = 0; i < rows; i++) {
+          for (let g = 0; g < 12 && (step === 'minus' ? n(i) > (want[i] ?? 0) : n(i) < (want[i] ?? 0)); g++) row(i).querySelector(`.${step}`).click()
+        }
+      }
+      return [...Array(rows)].map((_, i) => n(i))
+    }, counts)
+    must(held.join() === counts.join(), `the Muster screen's rows set to the list (${held.join('')}, wanted ${counts.join('')})`)
+    must(await page.evaluate(() => !document.querySelector('#musterReady').disabled), "the Muster screen's Ready offered on a legal list")
+    await page.click('#musterReady')
+    await until(page, () => document.querySelector('#muster').classList.contains('hidden'), null, 10000, 'the Muster screen closed by its Ready')
+    return held
+  }
+  // (F11b) what a page's DOM holds: its markup and every box's value
+  const domOf = (page) => page.evaluate(() => [document.documentElement.outerHTML, ...[...document.querySelectorAll('input, select, textarea')].map((e) => e.value)].join('\n'))
+  // (F11b) a side's units, by key and sorted, on a page's battle; and the
+  // ones its seat's army names (core/army.js's keysOf over the start's
+  // setup: a seat naming none its mission's preset)
+  const unitsOn = (page, side) => page.evaluate((s) => window.__ts.G.units.filter((u) => u.side === s).map((u) => u.key).sort().join(), side)
+  const unitsNamed = (setup, side) => {
+    const seat = setup.seats[side]
+    return keysOf(RACES[seat.race], seat.army ?? MISSIONS[setup.mission ?? 'classic'].army).slice().sort().join()
+  }
+  const recOf = async (page, k) => JSON.parse(await lobbyNow(page))?.seats?.[k] ?? null
+  // (F11b) the setup the log's start carries, as written (the match's own
+  // G.setup is fullSetup's, a seat naming no army filled in with its
+  // mission's preset)
+  const startOf = (page) => page.evaluate(() => window.__ts.session.store.entries().find((e) => e.t === 'start' && !e.bad && window.__ts.session.accepted.includes(e.id))?.setup ?? null)
 
   const RUN = {
+    // (F11b) lists in the lobby: built on the Muster screen, carried by the
+    // start, kept by a rematch
+    async lists() {
+      const { host, guest, link } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      // a list past this size's limit in the host's seat (a Field list, as a
+      // size changed under a concurrent edit leaves one): red, "Over by N",
+      // and no Ready; the line's preset puts it right
+      const field = RACES.squirrel.armies.field, over = listCost(RACES.squirrel, RACES.squirrel.roster.map((k, i) => Number(field[i] ?? 0)), MISSIONS.classic.list) - MISSIONS.classic.list.points
+      await host.evaluate((t) => window.__ts.net.handle.change((d) => (d.lobby.seats.s0.army = t)), field)
+      await until(host, () => document.querySelector('.seat.mine .armyLine.bad .armyWhy'), null, 10000, "the host's line red")
+      const red = await host.evaluate(() => ({ why: document.querySelector('.seat.mine .armyWhy').textContent, ready: [...document.querySelectorAll('.seat.mine button')].find((b) => b.textContent === 'Ready')?.disabled }))
+      must(red.why.startsWith(`Over by ${over} pts: `) && red.ready === true, `a list over the limit shows "Over by ${over} pts" on its owner's screen, Ready disabled: ${JSON.stringify(red)}`)
+      await host.selectOption('.seat.mine .armyPick', 'classic')
+      await until(host, () => !('army' in window.__ts.net.handle.doc().lobby.seats.s0), null, 10000, "the line's preset (the size's own: no army named)")
+      await press(host, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.ready === true, null, 10000, "the host's Ready")
+      await host.click('.seat.mine .armyBuild')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.ready === false, null, 10000, "Build… un-readying the host's seat")
+      const mine = listFor('squirrel')
+      await muster(host, mine.counts)
+      await until(host, (t) => window.__ts.net.handle.doc().lobby.seats.s0?.army === t, mine.text, 10000, "the Muster screen's list written into the host's seat")
+      const rec = await recOf(host, 's0')
+      must(rec.army === mine.text && rec.ready === false, `the Muster screen's Ready writes the list, un-readied: ${JSON.stringify(rec)}`)
+      const line = await host.evaluate(() => ({ value: document.querySelector('.seat.mine .armyPick')?.value, total: document.querySelector('.seat.mine .armyTotal')?.textContent }))
+      const cost = listCost(RACES.squirrel, mine.counts, MISSIONS.classic.list)
+      must(line.value === 'list' && line.total === `${cost.toLocaleString('en')} pts · ${mine.counts.reduce((x, y) => x + y, 0)} units`, `the host's army line shows its list and its total: ${JSON.stringify(line)}`)
+      // a race change lets it go; built again
+      await host.click('.seat.mine .raceRow button[data-race="serpent"]')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.race === 'serpent', null, 10000, "the host's race change")
+      must(!('army' in (await recOf(host, 's0'))), 'a race change lets the army go (no last list kept for the new race on this page)')
+      await host.click('.seat.mine .raceRow button[data-race="squirrel"]')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.race === 'squirrel', null, 10000, "the host's race back")
+      const back = await recOf(host, 's0')
+      must(back.army === mine.text, `back to its race, the host's seat takes the race's last list for this size, the one it built: ${JSON.stringify(back)}`)
+      must(!('army' in (await recOf(host, 's1'))), "the guest's seat keeps its preset (no army named)")
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const setups = await Promise.all([host, guest].map(startOf))
+      must(setups.every((st) => st.seats[0].army === mine.text && !('army' in st.seats[1])), `the start names the host's list and no army for the guest: ${JSON.stringify(setups.map((st) => st.seats.map((x) => x.army ?? null)))}`)
+      for (const [i, p] of [host, guest].entries()) {
+        for (const side of [0, 1]) {
+          const got = await unitsOn(p, side), want = unitsNamed(setups[0], side)
+          must(got === want, `${i ? "the guest's" : "the host's"} page fields side ${side}'s army as its seat names it (${got} against ${want})`)
+        }
+      }
+      // a rematch keeps the seats, races and lists
+      await guest.evaluate(() => window.__ts.session.submit(1, { t: 'concede' }))
+      await until(host, () => window.__ts.session.status === 'over' && !document.querySelector('#rematch').classList.contains('hidden'), null, 30000, "the host's Rematch button")
+      await host.click('#rematch')
+      const link2 = await linkOf(host, link)
+      const L2 = JSON.parse(await lobbyNow(host))
+      must(link2 !== link && L2.seats.s0.army === mine.text && L2.seats.s0.race === 'squirrel' && !('army' in L2.seats.s1) && L2.seats.s1.name === 'Ben' && !L2.seats.s0.ready && !L2.seats.s1.ready, `the rematch keeps the seats, races and lists, unready: ${JSON.stringify(L2.seats)}`)
+      return `the host built ${mine.text} on the Muster screen, un-readied; a race change let it go and the race's last list came back; the battle fielded it and the guest's preset on both pages; the rematch kept it`
+    },
+
+    // (F11b) courtesy sealing: nothing of the other seat's list in the DOM
+    // before the start
+    async sealed() {
+      const { host, guest } = await lobbyPair()
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      // (a Field battle: every unit but the War-Cart is in a Skirmish's
+      // preset, and so on the title's table behind the lobby; a list with a
+      // hull fields one no page has shown)
+      await host.selectOption('#lobbySize', 'field')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field' && document.querySelector('#lobbySize').value === 'field', null, 20000, 'Field on the guest\'s page')
+      const mine = listFor('squirrel', 'field', { extra: true }), r = RACES.squirrel
+      const before = await domOf(guest)
+      const names = r.roster.filter((k, i) => mine.counts[i] > 0 && !before.includes(r.units[k].name)).map((k) => r.units[k].name)
+      must(names.includes(r.units[mine.extra].name), `the list fields a unit whose name the guest's page held nowhere before (${r.units[mine.extra].name})`)
+      await host.click('.seat.mine .armyBuild')
+      await muster(host, mine.counts)
+      await until(guest, (t) => window.__ts.net.handle.doc().lobby.seats.s0?.army === t, mine.text, 20000, "the host's list in the guest's copy of the lobby")
+      const building = await guest.evaluate(() => document.querySelector('.seat[data-seat="0"] .armyState')?.textContent)
+      must(building === 'Building…', `the guest's page shows the host's seat as Building… while its list is unready: ${JSON.stringify(building)}`)
+      await press(host, 'Ready')
+      const cost = listCost(r, mine.counts, MISSIONS.field.list), n = mine.counts.reduce((x, y) => x + y, 0)
+      const want = `Ready · ${cost.toLocaleString('en')} pts · ${n} units`
+      await until(guest, (t) => document.querySelector('.seat[data-seat="0"] .armyState')?.textContent === t, want, 20000, `the guest's page showing "${want}"`)
+      const dom = await domOf(guest)
+      must(!dom.includes(mine.text), `the guest's DOM holds no digit string of the host's list (${mine.text})`)
+      const leaked = names.filter((x) => dom.includes(x))
+      must(!leaked.length, `the guest's DOM holds no unit name of the host's list it didn't hold before: ${leaked.join(', ') || 'none'} (looked for ${names.join(', ')})`)
+      const own = await guest.evaluate(() => document.querySelector('.seat.mine .armyTotal')?.textContent)
+      must(/^\d[\d,]* pts · \d+ units?$/.test(own ?? ''), `the guest's own seat shows its own army line: ${JSON.stringify(own)}`)
+      // the start: both lists on both pages
+      await press(guest, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const fielded = (await Promise.all([host, guest].map(startOf))).map((st) => st.seats[0].army)
+      must(fielded.every((a) => a === mine.text), `after the start both pages field the host's list: ${fielded.join(' | ')}`)
+      must((await unitsOn(guest, 0)) === unitsNamed(await startOf(guest), 0) && (await unitsOn(guest, 0)).split(',').includes(mine.extra), `the guest's table fields the host's list, ${mine.extra} among it`)
+      const shown = r.roster.filter((k, i) => mine.counts[i] > 0 && before.includes(r.units[k].name)).map((k) => r.units[k].name)
+      return `the guest saw "${want}" and no digit or unit name of ${mine.text} (looked for ${names.join(', ')}; on the page before the list existed: ${shown.join(', ') || 'none'}); the start fielded it on both pages`
+    },
+
+    // (F11b) a host page that swaps the guest's list in the start
+    async 'altered-army'() {
+      const { host, guest } = await lobbyPair({ autoStart: false })
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      const theirs = listFor('serpent')
+      await guest.click('.seat.mine .armyBuild')
+      await muster(guest, theirs.counts)
+      await until(host, (t) => window.__ts.net.handle.doc().lobby.seats.s1?.army === t, theirs.text, 20000, "the guest's list reaching the host")
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await until(host, () => {
+        const s = window.__ts.net.handle.doc().lobby.seats
+        return s.s0?.ready && s.s1?.ready
+      }, null, 30000, 'both seats ready on the host page')
+      await host.evaluate(() => window.__ts.net.startMatch((s) => ({ ...s, seats: [s.seats[0], { ...s.seats[1], army: 'classic' }] })))
+      await until(guest, () => !document.querySelector('#netdialog').classList.contains('hidden'), null, 30000, "the guest's dialog (its army changed)")
+      const why = await guest.$eval('#netWhy', (e) => e.textContent)
+      const seats = await guest.evaluate(() => window.__ts.session?.localSeats.length)
+      must(why.startsWith('The start changed your seat (army)') && seats === 0, `the guest's page, its list swapped by the host: "${why}", ${seats} seats played`)
+      return `read-only on a list swapped for the preset ("${why.split('.')[0]}")`
+    },
+
+    // (F11b) an AI seat in an online lobby
+    async 'ai-seat'() {
+      const host = await open()
+      await host.evaluate(() => window.__ts.goOnline('host'))
+      const link = await linkOf(host)
+      const hostDev = await host.evaluate(() => window.__ts.net.dev)
+      await until(host, () => [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Seat the AI here'), null, 30000, "the host's free seat offering Seat the AI here")
+      await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Seat the AI here').click())
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ctrl === 'ai', null, 10000, 'the AI seated')
+      const seated = await recOf(host, 's1')
+      must(seated.dev === hostDev && seated.nonce === '' && seated.ready === true && !('army' in seated), `the AI's seat: the host's dev, nonce '', ready, its preset: ${JSON.stringify(seated)}`)
+      await host.click('.seat[data-seat="1"] .armyRandom')
+      await until(host, () => typeof window.__ts.net.handle.doc().lobby.seats.s1?.army === 'string', null, 10000, "the AI's Random list written")
+      const ai = await recOf(host, 's1')
+      const aiCounts = RACES[ai.race].roster.map((k, i) => (i < ai.army.length ? ai.army.charCodeAt(i) - 48 : 0))
+      must(ai.ready && /^[0-9]+$/.test(ai.army) && !checkList(RACES[ai.race], MISSIONS.classic.list, aiCounts), `Random: a legal list drawn on the host's page, in the AI's seat, ready: ${JSON.stringify(ai)}`)
+      const watcher = await open(hashOf(link))
+      await until(watcher, () => /^Ready · /.test(document.querySelector('.seat[data-seat="1"] .armyState')?.textContent ?? ''), null, 30000, "the watcher's page showing the AI's seat sealed")
+      must(!(await domOf(watcher)).includes(ai.army), "the watcher's DOM holds no digit string of the AI's list")
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(watcher)])
+      const setup = await startOf(host)
+      must(setup.seats[1].ctrl === 'ai' && setup.seats[1].dev === hostDev && setup.seats[1].army === ai.army && setup.seats[0].ctrl === 'human', `the start carries the AI's seat as the host readied it: ${JSON.stringify(setup.seats)}`)
+      const seats = await Promise.all([host, watcher].map((p) => p.evaluate(() => ({ local: window.__ts.session.localSeats.join(), ro: window.__ts.net.readOnly ?? null, dialog: !document.querySelector('#netdialog').classList.contains('hidden') }))))
+      must(seats[0].local === '0' && !seats[0].ro && !seats[0].dialog && seats[1].local === '', `the host's page plays its seat, read-write (the AI's in the fold); the watcher's none: ${JSON.stringify(seats)}`)
+      for (const p of [host, watcher]) must((await unitsOn(p, 1)) === unitsNamed(setup, 1), "every page fields the AI's Random list unit for unit")
+      // the host plays round 1 (the AI its own turn, inside the fold)
+      const t0 = Date.now()
+      while (Date.now() - t0 < 120000) {
+        await host.evaluate(async () => {
+          const ts = window.__ts, ses = ts.session
+          if (!ses || ses.status !== 'live' || !ts.player.idle || ses.decisionFor() < 0) return
+          const P = ses.G.pending
+          if (P.k === 'deploy') await ts.endPhase()
+          else if (P.k === 'phase') await ts.autoPhase()
+        })
+        if ((await host.evaluate(() => window.__ts.G.turn.round)) >= 2) break
+        await sleep(150)
+      }
+      const round = await host.evaluate(() => window.__ts.G.turn.round)
+      must(round >= 2, `the host's page played round 1 against the AI online (round ${round})`)
+      await host.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+      for (const p of [host, watcher]) await until(p, () => window.__ts.session.status === 'over' && window.__ts.player.idle, null, 30000, 'every page over')
+      const ends = await Promise.all([host, watcher].map((p) => p.evaluate(() => ({ acc: window.__ts.session.accepted.join(), status: window.__ts.session.status }))))
+      const hashes = await Promise.all([host, watcher].map((p) => p.evaluate(() => window.__ts.net.hash())))
+      must(ends.every((e) => e.acc === ends[0].acc && e.status === 'over') && hashes.every((h) => h && h === hashes[0]), `both pages over on the same entries and hash: ${JSON.stringify(hashes)}`)
+      // the rematch keeps the AI's seat and list (readied again by the host's
+      // page, under the new match's commitment); the host leaves its own
+      // seat, and a guest sits in it: the guest's page plays its seat, the
+      // host's none (the AI's still its say), the watcher's none
+      await until(host, () => !document.querySelector('#rematch').classList.contains('hidden'), null, 20000, "the host's Rematch button")
+      await host.click('#rematch')
+      const link2 = await linkOf(host, link)
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true && window.__ts.net.handle.doc().log.length > 0, null, 20000, "the rematch's AI seat readied by the host's page")
+      const again = await recOf(host, 's1')
+      must(again.ctrl === 'ai' && again.dev === hostDev && again.army === ai.army && again.race === ai.race, `the rematch keeps the AI's seat, race and list: ${JSON.stringify(again)}`)
+      await press(host, 'Leave seat')
+      await until(host, () => !window.__ts.net.handle.doc().lobby.seats.s0, null, 10000, "the host's seat left")
+      const guest = await open(hashOf(link2))
+      await until(guest, () => document.querySelector('.seat[data-seat="0"] button.primary')?.textContent === 'Sit here', null, 30000, "the guest's page offers seat 1")
+      await guest.click('.seat[data-seat="0"] button.primary')
+      await until(guest, () => document.querySelector('.seat.mine input'), null, 30000, "the guest's own seat")
+      const watcher2 = await open(hashOf(link2))
+      await press(guest, 'Ready')
+      await Promise.all([live(host), live(guest), live(watcher2)])
+      const st2 = await startOf(guest)
+      must(st2.seats[0].ctrl === 'human' && st2.seats[0].dev !== hostDev && st2.seats[1].ctrl === 'ai' && st2.seats[1].dev === hostDev && st2.seats[1].army === ai.army, `the rematch's start: the guest's seat and the host's AI with its list: ${JSON.stringify(st2.seats)}`)
+      const seats2 = await Promise.all([host, guest, watcher2].map((p) => p.evaluate(() => ({ local: window.__ts.session.localSeats.join(), ro: window.__ts.net.readOnly ?? null }))))
+      must(seats2.map((x) => x.local).join('|') === '|0|' && seats2.every((x) => !x.ro), `the guest's page plays its own seat, the host's and the watcher's none, no page read-only: ${JSON.stringify(seats2)}`)
+      const t1 = Date.now()
+      while (Date.now() - t1 < 120000) {
+        await guest.evaluate(async () => {
+          const ts = window.__ts, ses = ts.session
+          if (!ses || ses.status !== 'live' || !ts.player.idle || ses.decisionFor() < 0) return
+          const P = ses.G.pending
+          if (P.k === 'deploy') await ts.endPhase()
+          else if (P.k === 'phase') await ts.autoPhase()
+        })
+        if ((await guest.evaluate(() => window.__ts.G.turn.round)) >= 2) break
+        await sleep(150)
+      }
+      const round2 = await guest.evaluate(() => window.__ts.G.turn.round)
+      must(round2 >= 2, `the guest's page played round 1 against the host's AI (round ${round2})`)
+      await guest.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+      for (const p of [host, guest, watcher2]) await until(p, () => window.__ts.session.status === 'over' && window.__ts.player.idle, null, 30000, 'every page over (the rematch)')
+      const acc2 = await Promise.all([host, guest, watcher2].map((p) => p.evaluate(() => window.__ts.session.accepted.join())))
+      const hashes2 = await Promise.all([host, guest, watcher2].map((p) => p.evaluate(() => window.__ts.net.hash())))
+      must(acc2.every((x) => x === acc2[0]) && hashes2.every((h) => h && h === hashes2[0]), `every page over on the same entries and hash (the rematch): ${JSON.stringify(hashes2)}`)
+      return `the AI seated with Random (${ai.army}, ${ai.race}); round ${round - 1} played by the host, conceded, host and watcher over on hash ${hashes[0]}; the rematch kept the AI and its list, a guest took the host's seat and played round ${round2 - 1}, three pages over on hash ${hashes2[0]}`
+    },
+
+    // (F11b's review) an AI seat the host's page didn't seat, and a refused
+    // army of another seat said without its words
+    async forged() {
+      // (the host's page starting nothing itself: the rig asks it to)
+      const host = await open()
+      await host.evaluate(() => window.__ts.goOnline('host').then(() => (window.__ts.net.autoStart = false)))
+      const link = await linkOf(host)
+      const hostDev = await host.evaluate(() => window.__ts.net.dev)
+      await until(host, () => window.__ts.net.handle.doc().log.length > 0, null, 30000, "the log's open")
+      const guest = await open(hashOf(link))
+      await until(guest, () => !!window.__ts.net?.handle?.doc()?.lobby && document.querySelector('.seat[data-seat="1"] button.primary')?.textContent === 'Sit here', null, 30000, "the guest's page on the lobby")
+      await guest.evaluate((dev) => window.__ts.net.handle.change((d) => {
+        d.lobby.seats.s1 = { ctrl: 'ai', dev, name: 'The AI', race: 'serpent', ready: false, nonce: '' }
+      }), hostDev)
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ctrl === 'ai', null, 20000, 'the forged AI seat reaching the host')
+      await until(host, () => /isn't one this page seated/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host's page saying the AI isn't its own")
+      await sleep(1500)
+      const rec = await recOf(host, 's1')
+      const readied = await host.evaluate(() => window.__ts.net.readied().filter((x) => x.seat === 1).length)
+      const box = await host.evaluate(() => ({ text: document.querySelector('.seat[data-seat="1"]').textContent, unseat: [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Unseat the AI'), pick: !!document.querySelector('.seat[data-seat="1"] .armyPick') }))
+      must(rec.ready === false && !readied, `the host's page never readies the forged AI seat nor keeps it as readied: ${JSON.stringify(rec)}, ${readied} records`)
+      must(!box.text.includes('seated by you') && box.unseat && !box.pick, `the host's page shows the forged AI as another seat, with Unseat: ${JSON.stringify(box)}`)
+      // the guest readies it itself: the host's Ready starts nothing
+      await guest.evaluate(() => window.__ts.net.handle.change((d) => {
+        d.lobby.seats.s1.ready = true
+      }))
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 20000, "the guest's Ready of the forged AI reaching the host")
+      await press(host, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.ready === true, null, 10000, "the host's Ready")
+      await host.evaluate(() => window.__ts.net.startMatch())
+      await sleep(3000)
+      const log = await host.evaluate(() => window.__ts.net.handle.doc().log.length)
+      must(log === 1 && (await host.evaluate(() => !document.querySelector('#lobby').classList.contains('hidden'))), `both seats ready, the forged AI among them: no start written (${log} log entries)`)
+      // Unseat: the seat free; the host's own AI there is readied
+      await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Unseat the AI').click())
+      await until(host, () => !window.__ts.net.handle.doc().lobby.seats.s1, null, 10000, 'the forged AI unseated')
+      await until(host, () => [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Seat the AI here'), null, 10000, 'Seat the AI here offered again')
+      await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Seat the AI here').click())
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 10000, "the host's own AI readied")
+      must((await host.evaluate(() => document.querySelector('.seat[data-seat="1"]').textContent)).includes('seated by you'), "the host's own AI seat shown as its own")
+      // ((F11b's review, second pass) the host's own AI on Random, through
+      // a size change and a reload: its own still, a list drawn again for
+      // each size; then a peer deleting that list from the AI's record: a
+      // seat the host's page didn't write, never drawn again nor readied)
+      const own = async (what) => {
+        await host.waitForFunction(() => { const r = window.__ts.net.handle.doc().lobby.seats.s1; return typeof r?.army === 'string' && r.ready === true && document.querySelector('.seat[data-seat="1"]')?.textContent.includes('seated by you') }, null, { timeout: 20000, polling: 100 }).catch(async () => {
+          const at = await host.evaluate(() => ({ s1: window.__ts.net.handle.doc().lobby.seats.s1 ?? null, mission: window.__ts.net.handle.doc().lobby.mission, kept: localStorage.getItem(window.__ts.net.aiKey()), status: document.querySelector('#lobbyStatus').textContent })).catch((e) => e.message.split('\n')[0])
+          throw new Fail(`${what} never held: ${JSON.stringify(at)}`)
+        })
+        return recOf(host, 's1')
+      }
+      await host.click('.seat[data-seat="1"] .armyRandom')
+      const drawn = await own("the host's own AI on Random, readied")
+      await host.selectOption('#lobbySize', 'field')
+      await until(host, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 10000, 'the size changed')
+      const sized = await own("the host's own AI, a list drawn for the new size, readied")
+      // (each write seen by the guest's page before the next step: through
+      // the sync server, so a reload finds it there, and a guest's write
+      // is made on the record as it stands, not on one it hasn't seen)
+      const seen = (army, what) => until(guest, (t) => window.__ts.net.handle.doc().lobby.seats.s1?.army === t, army, 20000, what)
+      await seen(sized.army, "the new size's list reaching the guest's page")
+      await host.reload()
+      await until(host, () => window.__ts?.net?.handle?.doc()?.lobby && document.querySelector('.seat[data-seat="1"]'), null, 60000, "the host's page back on the lobby")
+      await host.evaluate(() => (window.__ts.net.autoStart = false))
+      await own("the host's own AI after a reload")
+      await host.selectOption('#lobbySize', 'classic')
+      await until(host, () => window.__ts.net.handle.doc().lobby.mission === 'classic', null, 10000, 'the size changed back')
+      const reloaded = await own("the host's own AI, after a reload, a list drawn for the new size")
+      const line = await host.$eval('.seat[data-seat="1"]', (e) => e.textContent)
+      must(sized.army !== drawn.army || reloaded.army !== sized.army, `a list drawn again for each size: ${drawn.army}, ${sized.army}, ${reloaded.army}`)
+      must(line.includes('Random list'), `the host's own AI still on Random after a reload: ${line.slice(0, 200)}`)
+      const keptAI = () => host.evaluate(() => localStorage.getItem(window.__ts.net.aiKey()))
+      const before = await keptAI()
+      await seen(reloaded.army, "the list after the reload reaching the guest's page")
+      await guest.evaluate(() => window.__ts.net.handle.change((d) => {
+        delete d.lobby.seats.s1.army
+        d.lobby.seats.s1.ready = false
+      }))
+      await until(host, () => /isn't one this page seated/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host's page saying its AI's stripped record isn't its own")
+      await sleep(1500)
+      const stripped = await recOf(host, 's1')
+      must(!('army' in stripped) && stripped.ready === false && (await keptAI()) === before, `the AI's list deleted by a peer: never drawn again nor readied, the kept seat unchanged: ${JSON.stringify(stripped)}, ${await keptAI()}`)
+      await press(host, 'Ready')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.ready === true, null, 10000, "the host's Ready again")
+      // the guest seated, its army one no roster holds, readied by a write
+      // of its own: the host's page says why without quoting it
+      await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Unseat the AI').click())
+      await until(guest, () => document.querySelector('.seat[data-seat="1"] button.primary')?.textContent === 'Sit here', null, 20000, "the guest's page offering seat 2 again")
+      await guest.click('.seat[data-seat="1"] button.primary')
+      await until(guest, () => document.querySelector('.seat.mine input'), null, 30000, "the guest's own seat")
+      await setName(guest, 'Ben')
+      await press(guest, 'Ready')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.seats.s1?.ready === true, null, 10000, "the guest's Ready")
+      const digits = '21541129999'
+      await guest.evaluate((t) => window.__ts.net.handle.change((d) => {
+        d.lobby.seats.s1.army = t
+      }), digits)
+      await until(host, (t) => window.__ts.net.handle.doc().lobby.seats.s1?.army === t && window.__ts.net.handle.doc().lobby.seats.s0?.ready === true, digits, 20000, "the guest's army reaching the host, both seats ready")
+      await until(host, () => /can't start a battle/.test(document.querySelector('#lobbyStatus').textContent), null, 20000, "the host's page saying the lobby can't start")
+      const said = await host.$eval('#lobbyStatus', (e) => e.textContent)
+      must(said === "This lobby can't start a battle: seat 2's army isn't one this battle takes." && !(await domOf(host)).includes(digits), `the host's page on the guest's refused army: "${said}", the digits ${(await domOf(host)).includes(digits) ? 'in' : 'not in'} its DOM`)
+      return `the forged AI seat left unready and unkept, shown with Unseat, no start on both Readies; the host's own AI readied after Unseat, on Random ${drawn.army}, ${sized.army} (field), ${reloaded.army} (a reload, classic); its list deleted by a peer: foreign; a refused guest army: "${said}"`
+    },
+
     async play() {
       const { host, guest, link } = await lobbyPair()
       // (F6) each seat's card shows its race in the picker: yours to change
@@ -1113,7 +1542,36 @@ const MUTANTS = {
   // written by the host's switch
   'fog-unread': ['fog', 'app/online.js', 'leave: () => this.close(), fog: N.lobbyOf(this.handle.doc()).fog })', 'leave: () => this.close(), fog: false })'],
   'fog-unwired': ['fog', 'net/lobby.js', '    if (fields.fog !== undefined) d.lobby.fog = fields.fog === true\n', ''],
-  'size-unwired': ['size', 'app/online.js', "      mission: (name) => this.isHost() && Object.hasOwn(MISSIONS, name) && N.editBattle(this.handle, { mission: name, ...keptTerrain(N.lobbyOf(this.handle.doc()), name) }),\n", ''],
+  // (F11b) the opponent's list handed to the lobby screen raw (no sealing)
+  'army-unsealed': ['sealed', 'app/online.js', '        else if (r) seat.armyLine = this.sealedLine(r, L.mission)\n', "        else if (r) seat.armyLine = r.army ?? this.sealedLine(r, L.mission)\n"],
+  // a seat's army left out of the start (and of the record readied)
+  'army-not-started': ['lists', 'net/lobby.js', "nonce: r.nonce, ...(typeof r.army === 'string' ? { army: r.army } : {}) })", 'nonce: r.nonce })'],
+  // the Muster screen's Ready writes nothing into the seat
+  'list-unwritten': ['lists', 'app/online.js', '        this.editMine({ army: listText(counts) })\n', '        this.editMine({})\n'],
+  // a race change keeps the other race's digits (the page writes the
+  // seat's list back with the new race; net-check holds editSeat's own
+  // letting go)
+  'race-keeps-army': ['lists', 'app/online.js', 'this.editMine({ race: key, army: this.lastArmy(key) })', 'this.editMine({ race: key, army: N.lobbyOf(this.handle.doc()).seats.find((r) => r?.dev === this.dev)?.army ?? null })'],
+  // a rematch drops the lists
+  'rematch-drops-lists': ['lists', 'app/online.js', "      const army = typeof s.army === 'string' && s.army !== own ? { army: s.army } : {}\n", '      const army = {}\n'],
+  // verifyStart blind to a seat's army
+  'army-unchecked': ['altered-army', 'net/seed.js', ".filter((k) => k !== 'ready').sort()", ".filter((k) => k !== 'ready' && k !== 'army').sort()"],
+  // ready() never takes an AI seat; or the host's page keeps no record of
+  // readying it (its own start check then refuses the battle)
+  'ai-unready': ['ai-seat', 'net/lobby.js', '(humanOk(r) || aiOk(r, lobby.host))', 'humanOk(r)'],
+  'ai-unrecorded': ['ai-seat', 'app/online.js', '    if (ready) this.keepReadied(i, open)\n', ''],
+  // (F11b's review) the host's page adopting any AI-shaped seat naming it
+  'ai-adopted': ['forged', 'app/online.js', '    if (!e || !r) return false\n', "    if (!e || !r) return r?.ctrl === 'ai' && r.dev === this.dev\n"],
+  // ((F11b's review, second pass) the AI's record with no army its own
+  // whatever this page kept; a size change that keeps no word of the army
+  // it let go (the host's own AI then another seat); Random forgotten by a
+  // reload)
+  'ai-stripped': ['forged', 'app/online.js', "    return !N.seatDiff(typeof e.army === 'string' ? { ...say, army: e.army } : say, rec).length\n", "    return [say, ...(typeof e.army === 'string' ? [{ ...say, army: e.army }] : [])].some((x) => !N.seatDiff(x, rec).length)\n"],
+  'size-unmarked': ['forged', 'app/online.js', '        for (const [i, race] of ais) this.markAI(i, { race, army: null, random: this.aiRandom.has(i) })\n', ''],
+  'random-forgotten': ['forged', 'app/online.js', '    this.aiRandom = new Set(this.seatedAI().filter((x) => x?.random === true && Number.isInteger(x.seat)).map((x) => x.seat))\n', ''],
+  // another seat's refused army quoted in the status line
+  'problem-unsealed': ['forged', 'app/online.js', "        : theirs >= 0 ? `This lobby can't start a battle: seat ${theirs + 1}'s army isn't one this battle takes.`\n", ''],
+  'size-unwired': ['size', 'app/online.js', '        N.editBattle(this.handle, { mission: name, ...keptTerrain(L, name) })\n', ''],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

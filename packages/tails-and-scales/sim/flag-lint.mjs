@@ -232,6 +232,10 @@ export const ALLOW = [
   // name it starts with, to know whether it names an enemy unseen: the
   // log's own text, read back in the view, never a rule
   ['present/fog.js', 'const byName = (name) => units.filter((u) => u.short === name || u.name === name)', 1, "(F16) the fog finds whom a log line or tray with no unit in its events names, by the name it starts with: presentation"],
+  // (F11b) the lists this device keeps (app/lists.js): the Muster screen's
+  // Saved shows those of the race it builds for, storage read back in the
+  // view, never a rule
+  ['app/lists.js', '.filter((l) => l.race === race)', 1, "(F11b) the saved lists of the race the Muster screen builds for: the device's storage, presentation"],
 ]
 
 function files(dir) {

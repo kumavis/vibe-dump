@@ -68,7 +68,7 @@ import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { edgeOf } from '../core/match.js'
-import { createMatch, fullSetup, preview } from '../core/index.js'
+import { createMatch, fullSetup, preview, army } from '../core/index.js'
 import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
 import { MAX_ENTRIES, Folder } from '../match/fold.js'
@@ -495,11 +495,25 @@ export class Flow {
   // selected.
   // ((V3a) Every label drawn again: what a unit did shows on it only in its
   // seat's turn of the battle, so not once it is over.)
+  // ((F11b) The deployment's points banner as it begins, gone with it.)
   staged(e) {
     this.hud.phaseShown = false
     if (e.stage !== 'deploy') this.human.select(null)
+    if (e.stage === 'deploy' && this.session?.G) this.ui.armyBanner?.show(this.armiesLine(this.session.G.setup))
+    else this.ui.armyBanner?.hide()
     this.view.units.labelAll()
     this.refreshUI()
+  }
+
+  // (F11b) Both armies' totals as the battle's setup fields them (each
+  // seat's list priced by its mission's rules, core/army.js): "Bushtails
+  // 970 pts · 14 units vs Serpents 990 pts · 14 units".
+  armiesLine(setup) {
+    const rules = MISSIONS[setup.mission ?? 'classic'].list
+    return [0, 1].map((s) => {
+      const { counts } = army.armyOf(setup, s), n = counts.reduce((x, y) => x + y, 0)
+      return `${this.sides[s].short} ${army.listCost(RACES[setup.seats[s].race], counts, rules).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
+    }).join(' vs ')
   }
 
   // A phase begins: its banner, which the table waits on (longer when the
@@ -659,6 +673,15 @@ export class Flow {
     return sets.includes(this.terrain) ? this.terrain : sets[0]
   }
 
+  // (F11b) The army ?armies= gave seat s, where it was judged for `race`
+  // and `mission` (the table's races and the flow's mission: app/boot.js
+  // judged it for them), else null: the battle-setup panel's army line
+  // starts on it (DESIGN §4.2.8.8: a list's digits mean other units in
+  // another race's roster, and other limits bind in another size).
+  armyFor(s, race, mission) {
+    return this.armies && race === this.races[s] && mission === this.mission ? this.armies[s] ?? null : null
+  }
+
   // The title screen's table for a board seed: its board and both armies
   // where any battle on it deploys them, drawn from a match that is never
   // played (both seats human, so it waits at its deployment having drawn
@@ -702,6 +725,7 @@ export class Flow {
     view.overlay.clear()
     ui.log.clear()
     ui.tray.hide()
+    ui.armyBanner?.hide()
     // ((F16) no fog over a new table: a battle's own is set as it starts)
     this.fogReset()
     // its board, then the tufts strewn anew, then (the snap) its figures:
@@ -735,8 +759,14 @@ export class Flow {
   // (F8b) of the mission `size`, the panel's battle size; (F16) under the
   // courtesy fog when `fog` (the panel's toggle) and the mode is against
   // the AI (FOG_MODES: never hotseat, one screen, nor a watched battle), or
-  // for the seat `fog` names (a number: ?debug's door, any mode).
-  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick) {
+  // for the seat `fog` names (a number: ?debug's door, any mode). (F11b)
+  // `armies` the armies the panel's army lines hold ([seat 0's | null,
+  // seat 1's | null]: a preset's name or a list's digits, null the size's
+  // own preset, the setup naming none; a line still on its ?armies=
+  // default hands that value on as given, so a harness's URL starts the
+  // battle it always did); left out, the flow's own (?armies='s, as
+  // before the panel had an army line).
+  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick, armies = undefined) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
@@ -761,6 +791,9 @@ export class Flow {
       const kept = this.armies.map((a, i) => (races[i] === this.races[i] ? a : null))
       this.armies = kept.some((a) => a !== null) ? kept : null
     }
+    // ((F11b) the battle's own: the panel's, else what is left of the
+    // URL's)
+    const fielded = armies === undefined ? this.armies : armies.some((a) => a != null) ? [...armies] : null
     // (F7a) and its terrain the table's
     this.terrain = terrain
     // (F6) the races the battle-setup panel chose are the table's from now
@@ -773,7 +806,7 @@ export class Flow {
     // (a battle starts on a fresh table: a second start without the end
     // screen's Back would find the last battle's on show; (F8a) the fresh
     // one is the battle's mission's, so its board is made once)
-    if (this.session) this.showTable(this.S.seed, { mission: this.mission, terrain, armies: this.armies })
+    if (this.session) this.showTable(this.S.seed, { mission: this.mission, terrain, armies: fielded })
     // a fresh logic-dice stream per battle; ?dice=N replays one exactly
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     // (F4) a battle with a seat played by a human asks to play on past its
@@ -786,7 +819,7 @@ export class Flow {
     // preset, as every battle before lists did (the classic corpus's setups
     // among them)
     const mission = MISSIONS[this.mission]
-    const armyOf = (i) => (this.armies?.[i] == null ? {} : { army: this.armies[i] })
+    const armyOf = (i) => (fielded?.[i] == null ? {} : { army: fielded[i] })
     const setup = {
       board: this.S.seed, dice, mission: this.mission, terrain, rounds: mission.rounds, overtime, diceMode: 'shared',
       seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE, ...armyOf(i) } : { race, ctrl: who[i], ...armyOf(i) })),
