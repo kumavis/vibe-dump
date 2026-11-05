@@ -300,7 +300,7 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n) || HULL_NEEDS.includes(n)) || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n) || HULL_NEEDS.includes(n)) || a.set === 'hull' || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)

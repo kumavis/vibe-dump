@@ -1452,8 +1452,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     }
     return out
   }
-  // ((F9a) and the vehicle/ one, its War-Cart lists among them)
-  for (const set of ['army', 'scale', 'vehicle']) {
+  // ((F9a) and the vehicle/ one, its War-Cart lists among them; (F9b) and
+  // hull/, its Howdah lists)
+  for (const set of ['army', 'scale', 'vehicle', 'hull']) {
     const ARMY = join(PKG, 'sim', 'baselines', set)
     const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
     let lists = 0
