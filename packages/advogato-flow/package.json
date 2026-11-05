@@ -10,7 +10,7 @@
   },
   "gallery": {
     "title": "Advogato Flow",
-    "description": "An interactive explainer and simulator of Advogato's maximum-flow trust metric: draw a certification graph, pick seeds and a capacity schedule, step through the flow, and see why a cluster of fake accounts can't buy admission slots.",
+    "description": "An interactive explainer and simulator of Advogato's maximum-flow trust metric. Draw a certification graph, select seeds and a capacity schedule, step through the flow, and see why a cluster of fake accounts cannot get more admission slots.",
     "tags": [
       "simulation",
       "tutorial",

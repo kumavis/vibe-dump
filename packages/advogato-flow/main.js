@@ -133,32 +133,33 @@ function describe(step) {
   const capsStr = `[${app.caps.join(', ')}]`
   switch (step.phase) {
     case 'idle': {
-      const warn = seeds.length === 0 ? `<p class="verify-bad">There are no seeds. Nothing can be reached from the source, so nothing will be accepted. Select an account and tick "trusted seed".</p>` : ''
+      const warn = seeds.length === 0 ? `<p class="verify-bad">There are no seeds. The source cannot reach any account, so no account is accepted. Select an account and set it as a trusted seed.</p>` : ''
       return {
         title: 'The graph as drawn',
-        html: `<p>${plural(g.accounts.length, 'account')}, ${plural(g.certs.length, 'certification')}, ${plural(seeds.length, 'seed')} (${list(seeds.map((a) => a.name))}). Threshold: <b>${L}</b>. Schedule: <code>${capsStr}</code>.</p>${warn}<p class="muted">Press <b>Step</b> to walk through the computation one move at a time, or <b>Run</b> to jump to the result. The explanation here always describes the picture on the left.</p>`,
+        html: `<p>${plural(g.accounts.length, 'account')}, ${plural(g.certs.length, 'certification')}, ${plural(seeds.length, 'seed')} (${list(seeds.map((a) => a.name))}). Threshold: <b>${L}</b>. Schedule: <code>${capsStr}</code>.</p>${warn}<p class="muted">Click <b>Step</b> to go through the computation one move at a time. Click <b>Run</b> to go to the result. The text here always describes the picture on the left.</p>`,
       }
     }
     case 'filter': {
       const dropped = net.dropped.map((id) => g.certs.find((c) => c.id === id))
       return {
-        title: `1 · Keep certifications at ${L} or above`,
-        html: `<p>Keeping <b>${net.kept.length} of ${g.certs.length}</b> certifications. ${dropped.length ? `Dropped, drawn faint: ${dropped.map((c) => `<b>${esc(name(c.from))} → ${esc(name(c.to))}</b> (${levelName(c.level)})`).join(', ')}.` : 'Nothing is below the threshold.'}</p><p class="muted">In <code>tmetric_run</code> a certification at level <i>L</i> is added to the flow graphs of levels 1 … <i>L</i>, so each run sees the certifications at its level or higher. The metric is run once per level; this walkthrough follows the ${L} run.</p>`,
+        title: `1 · Keep the certifications at ${L} or higher`,
+        html: `<p>The metric keeps <b>${net.kept.length} of ${g.certs.length}</b> certifications. ${dropped.length ? `It removes these, drawn faint: ${dropped.map((c) => `<b>${esc(name(c.from))} → ${esc(name(c.to))}</b> (${levelName(c.level)})`).join(', ')}.` : 'No certification is below the threshold.'}</p><p class="muted">In <code>tmetric_run</code>, a certification at level <i>L</i> goes into the flow graphs of levels 1 to <i>L</i>. Thus each run sees the certifications at its level or higher. The metric runs one time for each level. This walkthrough follows the ${L} run.</p>`,
       }
     }
     case 'source':
       return {
         title: '2 · Connect a synthetic source to the seeds',
-        html: `<p>A node named <code>-</code> is created first (so it is node 0) and given an edge to each seed: ${list(seeds.map((a) => a.name))}. The square is the source; drag it where you like.</p><p class="muted">The reference treats it like any other node. It will sit at distance 0 with capacity <code>caps[0] = ${app.caps[0]}</code>, and one of those units will go to its own sink edge — so at most <b>${app.caps[0] - 1}</b> real accounts can ever be accepted, whatever the graph.</p>`,
+        html: `<p>The metric creates a node with the name <code>-</code> first, so it is node 0. It adds an edge from this node to each seed: ${list(seeds.map((a) => a.name))}. The square is the source. You can drag it.</p><p class="muted">The reference treats the source like all other nodes. The source is at distance 0 with capacity <code>caps[0] = ${app.caps[0]}</code>. It uses 1 of those units on its own sink edge. Thus the metric can accept at most <b>${app.caps[0] - 1}</b> real accounts, for any graph.</p>`,
       }
     case 'bfs': {
       const { layer } = step
       const names = layer.nodes.map((ix) => nm(ix))
       const beyond = layer.d >= app.caps.length
-      const via = layer.d === 0 ? '' : layer.d === 1 ? ' — the seeds, reached from the source' : ''
+      const who = layer.d === 0 ? 'The source' : layer.d === 1 ? `${list(names)}, the seeds, reached from the source` : list(names)
+      const from = beyond ? `The schedule has only ${app.caps.length} entries, so the last value continues.` : `This is <code>caps[${layer.d}]</code>.`
       return {
         title: `3 · Breadth-first search: distance ${layer.d}`,
-        html: `<p>${layer.d === 0 ? 'The source itself' : list(names)}${via}: capacity <code>c = ${layer.cap}</code>${beyond ? ` — the schedule has only ${app.caps.length} entries, so the last one persists` : ` (<code>caps[${layer.d}]</code>)`}. That is one unit to be accepted with and <b>${Math.max(layer.cap - 1, 0)}</b> to forward.</p><p class="muted">Each account's distance is the length of the shortest certification path from the source; the first time the search reaches an account fixes its distance and its capacity. An account certified by many people gets no more capacity than one certified by one person at the same distance.</p>`,
+        html: `<p>${who}: capacity <code>c = ${layer.cap}</code>. ${from} That is 1 unit for acceptance and <b>${Math.max(layer.cap - 1, 0)}</b> units to forward.</p><p class="muted">The distance of an account is the length of the shortest certification path from the source. The search sets the distance and the capacity when it reaches the account the first time. An account with many certifiers gets the same capacity as an account with 1 certifier at the same distance.</p>`,
       }
     }
     case 'bfs-done': {
@@ -166,14 +167,14 @@ function describe(step) {
       return {
         title: '3 · Search complete',
         html: u.length
-          ? `<p>Unreachable at ${L}: ${list(u)}. No certification path from a seed reaches them, so they keep capacity −1 and receive no trust at all; they will not appear in the flow network.</p>`
-          : `<p>Every account has a certification path from a seed, so every account has a capacity. Reachable is not the same as accepted — the next steps decide that.</p>`,
+          ? `<p>These accounts are unreachable at ${L}: ${list(u)}. No certification path from a seed reaches them. They keep capacity −1 and get no trust. They do not go into the flow network.</p>`
+          : `<p>Each account has a certification path from a seed, so each account has a capacity. Reachable is not the same as accepted. The next steps decide that.</p>`,
       }
     }
     case 'expand':
       return {
-        title: '4 · Split every node into in and out',
-        html: `<p>Each reachable node <i>v</i> becomes <i>v</i><sub>in</sub> and <i>v</i><sub>out</sub>. The through-edge <i>v</i><sub>in</sub> → <i>v</i><sub>out</sub> carries at most <b><i>c</i>(<i>v</i>) − 1</b>; the sink edge <i>v</i><sub>in</sub> → sink carries at most <b>1</b>; every kept certification <i>u</i> → <i>v</i> becomes <i>u</i><sub>out</sub> → <i>v</i><sub>in</sub> with no limit. Under each node: <code>forwarded / c − 1</code>.</p><p class="muted">The unit a node sends to the sink is the unit that admits it. Whatever else arrives can only go onward, and only up to <i>c</i>(<i>v</i>) − 1 of it. This is the <code>TWEAK</code> in <code>net_flow_max_flow</code>: <code>capacity[i]--</code> for every node, and a per-node <code>node_sink</code> that is 0 or 1.</p><p class="muted"><b>Why split at all?</b> A flow can only limit <em>edges</em>, and certification edges must stay unlimited, or certifying more people would buy more capacity. Splitting turns the account's capacity into one edge every unit must cross: everything that reaches <i>v</i> arrives at <i>v</i><sub>in</sub>, and the only way onward is <i>v</i><sub>in</sub> → <i>v</i><sub>out</sub>. However many people certify <i>v</i>, or <i>v</i> certifies, at most <i>c</i>(<i>v</i>) − 1 units pass through — and the unit that admits <i>v</i> leaves at <i>v</i><sub>in</sub>, so it is never spent on forwarding.</p>`,
+        title: '4 · Split each node into in and out',
+        html: `<p>Each reachable node <i>v</i> becomes <i>v</i><sub>in</sub> and <i>v</i><sub>out</sub>. The through-edge <i>v</i><sub>in</sub> → <i>v</i><sub>out</sub> carries at most <b><i>c</i>(<i>v</i>) − 1</b> units. The sink edge <i>v</i><sub>in</sub> → sink carries at most <b>1</b> unit. Each kept certification <i>u</i> → <i>v</i> becomes <i>u</i><sub>out</sub> → <i>v</i><sub>in</sub> with no limit. The label below each node shows <code>forwarded / c − 1</code>.</p><p class="muted">The unit that a node sends to the sink is the unit that admits it. All other units that arrive can only go on, and at most <i>c</i>(<i>v</i>) − 1 of them. In <code>net_flow_max_flow</code>, this is the <code>TWEAK</code>: <code>capacity[i]--</code> for each node, and a <code>node_sink</code> value of 0 or 1 for each node.</p><p class="muted"><b>Why split the nodes?</b> A flow can only limit edges. Certification edges must stay unlimited, or more certifications would give more capacity. The split changes the capacity of the account into 1 edge that each unit must cross. All units that reach <i>v</i> arrive at <i>v</i><sub>in</sub>. The only way onward is <i>v</i><sub>in</sub> → <i>v</i><sub>out</sub>. Thus at most <i>c</i>(<i>v</i>) − 1 units pass through <i>v</i>, with no regard to the number of certifications. The unit that admits <i>v</i> leaves at <i>v</i><sub>in</sub>, so it is never used for forwarding.</p>`,
       }
     case 'augment': {
       const { k, aug } = step
@@ -182,15 +183,15 @@ function describe(step) {
       const hasReverse = aug.path.some((s) => s.dir === -1)
       if (aug.node === SOURCE)
         return {
-          title: `5 · Augmenting path ${k}: the source's own unit`,
-          html: `${chain(aug.path, flowView)}<p>The search starts at source<sub>in</sub>, whose own sink edge is empty — so the first unit goes straight to the sink and "accepts" the source. This is not a quirk of this page: <code>net_flow_augment</code> dequeues the source first, and the source is the first node in <code>tmetric_run</code>'s result array (skipped when the table is printed). One unit of <code>caps[0]</code> is spent.</p>`,
+          title: `5 · Augmenting path ${k}: the own unit of the source`,
+          html: `${chain(aug.path, flowView)}<p>The search starts at source<sub>in</sub>. Its own sink edge is empty, so the first unit goes directly to the sink and accepts the source. This is not a special case of this page. <code>net_flow_augment</code> dequeues the source first, and the source is the first node in the result array of <code>tmetric_run</code>. The table skips it. The metric uses 1 unit of <code>caps[0]</code>.</p>`,
         }
       return {
-        title: `5 · Augmenting path ${k}: one unit reaches ${esc(nm(aug.node))}`,
-        html: `${chain(aug.path, flowView)}<p><b>${esc(nm(aug.node))}</b> is now accepted: its sink edge carries 1. Running total: <b>${total}</b> units at the sink (${total - 1} ${total - 1 === 1 ? 'account' : 'accounts'} plus the source).</p>${
+        title: `5 · Augmenting path ${k}: 1 unit reaches ${esc(nm(aug.node))}`,
+        html: `${chain(aug.path, flowView)}<p><b>${esc(nm(aug.node))}</b> is now accepted. Its sink edge carries 1 unit. Total: <b>${total}</b> units at the sink (${total - 1} ${total - 1 === 1 ? 'account' : 'accounts'} plus the source).</p>${
           hasReverse
-            ? `<p class="muted">A left-pointing step (⇠) walks <em>backwards</em> along an edge that already carries flow. That unit is re-routed so this one can get through — the residual graph lets the search undo an earlier choice. Nothing already accepted loses its unit; the total only grows.</p>`
-            : `<p class="muted">Breadth-first search over the residual graph: forward along a certification, through a node only while it has forwarding capacity left, and the first in-node reached with an empty sink edge wins the unit. Ties go to whichever was queued first.</p>`
+            ? `<p class="muted">A step with a left arrow (⇠) goes backward along an edge that already carries flow. The search re-routes that unit so that this unit can get through. The residual graph lets the search undo an earlier choice. No accepted account loses its unit. The total only increases.</p>`
+            : `<p class="muted">The search is a breadth-first search over the residual graph. It moves forward along a certification. It goes through a node only while the node has forwarding capacity. The first in-node that it reaches with an empty sink edge gets the unit. When there is a tie, the node that was queued first wins.</p>`
         }`,
       }
     }
@@ -206,8 +207,8 @@ function describe(step) {
       })
       const problems = checkFlow(r)
       return {
-        title: '6 · No augmenting path remains — accept',
-        html: `<p>The flow is maximum: <b>${r.totalFlow}</b> units reached the sink (${acc.length} accounts plus the source). Every accepted account consumed exactly one unit.</p><ul><li>Accepted: ${list(acc)}</li><li>Reachable but rejected: ${list(rej)}${rej.length ? ' — every path to them crosses an account that is forwarding all it can. Select one to see where.' : ''}</li><li>Unreachable: ${list(unr)}</li></ul><p class="${problems.length ? 'verify-bad' : 'verify-ok'}">${problems.length ? `Check failed: ${esc(problems.join('; '))}` : 'Checked: no node forwards more than c − 1, flow is conserved at every in-node and out-node, every sink edge carries 0 or 1, and nothing unreachable carries flow.'}</p>`,
+        title: '6 · No augmenting path remains. Accept.',
+        html: `<p>The flow is at its maximum. <b>${r.totalFlow}</b> units reached the sink (${acc.length} accounts plus the source). Each accepted account used exactly 1 unit.</p><ul><li>Accepted: ${list(acc)}</li><li>Reachable but rejected: ${list(rej)}${rej.length ? '. Each path to these accounts crosses an account that forwards all that it can. Select one to see where.' : ''}</li><li>Unreachable: ${list(unr)}</li></ul><p class="${problems.length ? 'verify-bad' : 'verify-ok'}">${problems.length ? `Check failed: ${esc(problems.join('; '))}` : 'Checked: no node forwards more than c − 1 units. The flow is conserved at each in-node and each out-node. Each sink edge carries 0 or 1 unit. No unreachable node carries flow.'}</p>`,
       }
     }
     case 'levels': {
@@ -216,8 +217,8 @@ function describe(step) {
         return `${levelName(lv)}: <b>${res.accepted.filter(Boolean).length - 1}</b>`
       })
       return {
-        title: '7 · Repeat at every threshold, report the highest',
-        html: `<p>Accepted accounts per run — ${counts.join(' · ')}. The table below lists every account at every level; "reported level" is the highest level whose run accepted it, which is what <code>tmetric_run</code> writes out.</p><p class="muted">The three runs are independent maximum flows, so an account can be accepted at a higher level and lose a tie at a lower one; the report still says the higher level. Change the threshold in Settings to walk through a different run.</p>${pendingAction()}`,
+        title: '7 · Do this again for each threshold. Report the highest level.',
+        html: `<p>Accepted accounts for each run: ${counts.join(' · ')}. The table below shows each account at each level. The reported level is the highest level at which the account is accepted. <code>tmetric_run</code> writes out this value.</p><p class="muted">The 3 runs are independent maximum flows. Thus an account can be accepted at a higher level and lose a tie at a lower level. The report shows the higher level. Change the threshold in Settings to go through a different run.</p>${pendingAction()}`,
       }
     }
     default:
@@ -232,7 +233,7 @@ function pendingAction() {
   const s = app.scenario
   const i = s.actions.findIndex((a, k) => !(a.once && app.usedActions.has(k)))
   if (i < 0) return ''
-  return `<p><b>Next move:</b> press <b>${esc(s.actions[i].label)}</b> in the Scenario card, then compare.</p>`
+  return `<p><b>Next move:</b> click <b>${esc(s.actions[i].label)}</b> in the Scenario card. Then compare the results.</p>`
 }
 
 function name(id) {
@@ -288,9 +289,9 @@ function renderHint() {
   const el = $('#hint')
   const lvl = levelName(app.newLevel)
   const hints = {
-    move: 'Drag accounts to move them. Click an account or a certification to inspect it.',
-    add: 'Click an empty spot to add an account.',
-    cert: app.certPending == null ? `Click the certifier, then the account it certifies (new certs are ${lvl}). Clicking an existing pair changes its level.` : `${esc(name(app.certPending))} will certify the next account you click, at ${lvl}. Press Escape to cancel.`,
+    move: 'Drag an account to move it. Click an account or a certification to inspect it.',
+    add: 'Click an empty area to add an account.',
+    cert: app.certPending == null ? `Click the account that certifies. Then click the account that it certifies. New certifications are ${lvl}. A click on an existing pair changes its level.` : `${esc(name(app.certPending))} certifies the next account that you click, at ${lvl}. Push Escape to cancel.`,
     delete: 'Click an account or a certification to delete it.',
   }
   el.innerHTML = hints[app.mode]
@@ -367,22 +368,22 @@ function renderScenario() {
     if (tag === 'unlabelled') continue
     const b = app.baseline.tags.get(tag) ?? { n: 0, accepted: 0, dist: new Set(), cap: new Set() }
     const n = now.tags.get(tag) ?? { n: 0, accepted: 0, dist: new Set(), cap: new Set() }
-    rows.push(`<div>accepted among "${esc(tag)}": ${arrow(b.accepted, n.accepted, `${b.accepted} (of ${b.n})`, `${n.accepted} (of ${n.n})`)}</div>`)
+    rows.push(`<div>accepted with the label "${esc(tag)}": ${arrow(b.accepted, n.accepted, `${b.accepted} (of ${b.n})`, `${n.accepted} (of ${n.n})`)}</div>`)
     if (range(b.dist) !== range(n.dist) || range(b.cap) !== range(n.cap))
-      rows.push(`<div>"${esc(tag)}" distance ${range(b.dist)} → ${range(n.dist)}, capacity ${range(b.cap)} → ${range(n.cap)}</div>`)
+      rows.push(`<div>"${esc(tag)}": distance ${range(b.dist)} → ${range(n.dist)}, capacity ${range(b.cap)} → ${range(n.cap)}</div>`)
   }
-  notes.innerHTML = `<p>${esc(app.lastNote ?? '')}</p><div class="delta">${rows.join('')}</div><p class="fine">Before the first action → now, at the ${levelName(app.threshold)} threshold. The labels are drawn for you; the metric never sees them.</p>`
+  notes.innerHTML = `<p>${esc(app.lastNote ?? '')}</p><div class="delta">${rows.join('')}</div><p class="fine">Before the first action → now, at the ${levelName(app.threshold)} threshold. The labels are for the reader. The metric does not see them.</p>`
 }
 
 function stateLabel(st) {
-  return { accepted: 'accepted ✓', rejected: 'reachable, rejected ✕', unreachable: 'unreachable –', reachable: 'reachable (not yet decided)', pending: 'not yet computed' }[st]
+  return { accepted: 'accepted ✓', rejected: 'reachable, rejected ✕', unreachable: 'unreachable –', reachable: 'reachable (not decided yet)', pending: 'not computed yet' }[st]
 }
 
 function renderInspector(snap) {
   const el = $('#inspector')
   const sel = app.selection
   if (!sel) {
-    el.innerHTML = `<p class="empty">Click an account or a certification to inspect it. An account shows its distance, capacity, consumed and forwarded units, and why it was or was not accepted.</p>`
+    el.innerHTML = `<p class="empty">Click an account or a certification to inspect it. For an account, the inspector shows the distance, the capacity, the consumed units, the forwarded units, and the reason for the result.</p>`
     return
   }
   const r = app.result
@@ -435,23 +436,23 @@ function renderInspector(snap) {
     if (ex.kind === 'rejected') {
       const sat = ex.saturated.map((v) => `<b>${esc(nm(v))}</b> (${r.flow.nodeFlow[v]} of ${r.capThrough[v]})`)
       const pathHtml = ex.path.map((v) => (v === SOURCE ? 'source' : `${esc(nm(v))}<span class="muted"> ${r.flow.nodeSink[v]}+${r.flow.nodeFlow[v]}/${r.cap[v]}</span>`)).join(' → ')
-      why = `<div class="why"><p><b>Why rejected:</b> ${esc(a.name)} is reachable (distance ${dist}), but every certification path to it crosses an account that forwards all it can. On the shortest path: ${sat.join(', ')} — marked <i>bottleneck</i> on the graph.</p><p class="chain">${pathHtml}</p><p class="muted">Each node: consumed + forwarded / capacity. Giving the bottleneck more capacity, or a shorter path, is the only way in; more certifications from accounts beyond it change nothing.</p></div>`
+      why = `<div class="why"><p><b>Why rejected:</b> ${esc(a.name)} is reachable at distance ${dist}. But each certification path to it crosses an account that forwards all that it can. On the shortest path, these accounts are full: ${sat.join(', ')}. The graph marks them as <i>bottleneck</i>.</p><p class="chain">${pathHtml}</p><p class="muted">Each node shows consumed + forwarded / capacity. To let a unit in, give the bottleneck more capacity or a shorter path. More certifications from accounts after the bottleneck change nothing.</p></div>`
     } else if (ex.kind === 'unreachable') {
-      why = `<div class="why"><p><b>Why rejected:</b> no certification path from a seed reaches ${esc(a.name)} at ${levelName(app.threshold)}, so it has no capacity and never joins the flow network.</p></div>`
+      why = `<div class="why"><p><b>Why rejected:</b> No certification path from a seed reaches ${esc(a.name)} at ${levelName(app.threshold)}. Thus it has no capacity, and it is not part of the flow network.</p></div>`
     }
   }
   el.innerHTML = `
     <div class="title"><input type="text" id="acct-name" value="${esc(a.name)}" aria-label="account name" />${a.seed ? '<span class="pill">seed</span>' : ''}${a.tag ? `<span class="pill tag">demo label: ${esc(a.tag)}</span>` : ''}</div>
     <dl>
       <dt>Distance</dt><dd>${dist == null ? '—' : dist < 0 ? 'unreachable' : dist}</dd>
-      <dt>Capacity c(v)</dt><dd>${cap == null || cap < 0 ? '—' : `${cap} = 1 to be accepted + ${cap - 1} to forward`}</dd>
+      <dt>Capacity c(v)</dt><dd>${cap == null || cap < 0 ? '—' : `${cap} = 1 for acceptance + ${cap - 1} to forward`}</dd>
       <dt>Consumed</dt><dd>${fl ? `${fl.nodeSink[ix]} of 1 (sink edge)` : '—'}</dd>
       <dt>Forwarded</dt><dd>${fl ? `${fl.nodeFlow[ix]} of ${snap.capThrough[ix]} (through-edge)` : '—'}</dd>
       <dt>At ${levelName(app.threshold)}</dt><dd class="result ${st}">${stateLabel(st)}</dd>
       <dt>Reported level</dt><dd>${levelNow ? levelName(levelNow) : 'none'} <span class="muted">(${LEVELS.map((lv) => `${levelName(lv)[0]}: ${app.all.perLevel[lv].accepted[app.all.perLevel[lv].net.indexOf.get(a.id)] ? '✓' : '✕'}`).join(' · ')})</span></dd>
     </dl>
     ${why}
-    ${a.tag ? `<p class="fine">"${esc(a.tag)}" is a label for this demonstration. The algorithm does not know which accounts are malicious; it sees only certifications.</p>` : ''}
+    ${a.tag ? `<p class="fine">"${esc(a.tag)}" is a label for this demonstration. The algorithm does not know which accounts are malicious. It sees only certifications.</p>` : ''}
     <div class="row">
       <label class="check"><input type="checkbox" id="acct-seed" ${a.seed ? 'checked' : ''} /> trusted seed</label>
       <button type="button" id="acct-delete" class="danger">Delete account</button>
@@ -501,10 +502,10 @@ function renderTable(snap) {
   const v = $('#verify')
   if (app.problems.length) {
     v.className = 'verify bad'
-    v.textContent = `✕ check failed: ${app.problems[0]}`
+    v.textContent = `✕ Check failed: ${app.problems[0]}`
   } else {
     v.className = 'verify ok'
-    v.textContent = '✓ verified at all three thresholds: capacities, conservation, one sink unit per accepted account'
+    v.textContent = '✓ Verified at all 3 thresholds: capacities, conservation, 1 sink unit for each accepted account'
   }
 }
 
@@ -799,7 +800,7 @@ reduceMotion.addEventListener?.('change', () => {
 })
 
 const scenarioSelect = $('#scenario')
-scenarioSelect.innerHTML = SCENARIOS.map((s) => `<option value="${s.key}">${esc(s.title)} — ${esc(s.lesson)}</option>`).join('')
+scenarioSelect.innerHTML = SCENARIOS.map((s) => `<option value="${s.key}">${esc(s.title)}: ${esc(s.lesson)}</option>`).join('')
 scenarioSelect.addEventListener('change', () => loadScenario(scenarioSelect.value))
 
 function loadScenario(key) {
