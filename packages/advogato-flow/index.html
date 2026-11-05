@@ -185,7 +185,9 @@
           <i>u</i><sub>out</sub> → <i>v</i><sub>in</sub> with no capacity limit. The one unit a node may send to the
           sink is the unit that admits it; the other <i>c</i>(<i>v</i>) − 1 units are all it can ever forward. In
           <code>net_flow_max_flow</code> this is the <code>TWEAK</code>: <code>capacity[i]--</code> plus a per-node
-          <code>node_sink ∈ {0, 1}</code>.
+          <code>node_sink ∈ {0, 1}</code>. The split exists because a flow can only limit edges while
+          certification edges must stay unlimited: it turns the account's capacity into a single edge that every
+          unit must cross, however many certifications the account has in or out.
         </li>
         <li>
           <b>Compute an integer maximum flow</b> from the source to the shared sink. The reference finds augmenting

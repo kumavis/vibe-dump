@@ -146,7 +146,7 @@ export const SCENARIOS = [
     threshold: J,
     focus: 'Y2',
     intro:
-      'Before the attack, Y1–Y3 sit at distance 5 with capacity 1: they are accepted, but can forward nothing, so the "bad" accounts they certify are rejected. A bound computed from those capacities says the attacker gets at most three slots through them. Then Mal obtains one certification from Bo, near the seed, and certifies Y1–Y3. Their distance drops to 4, their capacity triples, and the units their honest certifiers had to spare now reach the bad accounts. This is the distance-shortening attack described by Jesse Ruderman (2005).',
+      'Before the attack, Y1–Y3 sit at distance 5 with capacity 1: they are accepted, but can forward nothing, so the "bad" accounts they certify are rejected. A bound computed from those capacities says the attacker gets at most three slots through them. Then the attacker creates an account, Mal, obtains one certification for it from Bo, near the seed, and certifies Y1–Y3 from it. Their distance drops to 4, their capacity triples, and the units their honest certifiers had to spare now reach the bad accounts. This is the distance-shortening attack described by Jesse Ruderman (2005).',
     build() {
       const g = makeGraph()
       g.account('Ada', { seed: true, x: 70, y: 300 })
@@ -164,7 +164,6 @@ export const SCENARIOS = [
       g.account('B4', { x: 790, y: 350, tag: 'bad' })
       g.account('B5', { x: 790, y: 430, tag: 'bad' })
       g.account('B6', { x: 790, y: 530, tag: 'bad' })
-      g.account('Mal', { x: 330, y: 70, tag: 'attacker' })
       g.cert('Ada', 'Bo', M)
       g.cert('Bo', 'Cy', M)
       g.cert('Cy', 'H1', J)
@@ -183,15 +182,16 @@ export const SCENARIOS = [
     },
     actions: [
       {
-        label: 'Apply the attack: Bo → Mal, Mal → Y1–Y3',
+        label: 'Apply the attack: add Mal, Bo → Mal, Mal → Y1–Y3',
         kind: 'graph',
         once: true,
         apply(ctx) {
           const by = (n) => ctx.graph.accounts.find((a) => a.name === n)
-          addCert(ctx.graph, by('Bo').id, by('Mal').id, J)
-          for (const y of ['Y1', 'Y2', 'Y3']) addCert(ctx.graph, by('Mal').id, by(y).id, J)
+          const mal = by('Mal')?.id ?? addAccount(ctx.graph, 'Mal', { x: 330, y: 70, tag: 'attacker' })
+          addCert(ctx.graph, by('Bo').id, mal, J)
+          for (const y of ['Y1', 'Y2', 'Y3']) addCert(ctx.graph, mal, by(y).id, J)
         },
-        note: 'Four new certifications. Compare the distance and capacity of Y1–Y3, and the accepted count among the accounts labelled "bad", before and after.',
+        note: 'One new account and four new certifications. Compare the distance and capacity of Y1–Y3, and the accepted count among the accounts labelled "bad", before and after.',
       },
     ],
   },
