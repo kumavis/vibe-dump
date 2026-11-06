@@ -74,3 +74,50 @@ fix has landed in `dist/` and been looked at again.
 - **Open:** what the pond-wall feature draws at Kawainui and Kaʻelepulu in
   the Koʻolaupoko district in those years, and what the record says each
   pond was: a kuapā of stone, an earthen bank, or an open lagoon.
+
+### 7. Towns from the late 1800s on should follow their real streets
+
+- **Reported:** "late 1800s and onward Honolulu and other population centers
+  would benefit from knowing the actual road layouts at those times and
+  placing buildings around there."
+- **Seen:** the settlements lay lots on a modelled grid aligned to the shore
+  (features/settlements.js); no town's streets are surveyed ones except the
+  Pali road of 1898 among the works.
+- **Open:** dated street networks for Honolulu and the other centres (Hilo,
+  Lahaina, Wailuku, Kailua-Kona, Līhuʻe …) from the surveys and maps of each
+  period, and lots laid along them where they are known.
+
+### 8. More of the historic buildings, the palace first
+
+- **Reported:** "also more historical buildings like the palace in honolulu."
+- **Seen:** only the church of 1842 and the clock tower of 1926 are named
+  landmarks; everything else is modelled placement.
+- **Open:** ʻIolani Palace and the buildings around it (Aliʻiōlani Hale, the
+  first palace, the Fort, Kawaiahaʻo's neighbours, the cathedral, the Mission
+  Houses, Washington Place, Honolulu Hale, the hotels of Waikīkī, the Bishop
+  Museum …), each at its surveyed footprint with its dates and sources.
+
+### 9. Doubly placed and overlapping buildings read as dotted
+
+- **Reported:** "i also notice theres a lot of doubly placed and overlapping
+  buildings which result in the building being dotted out."
+- **Open:** which two placements overlap (the district's scatter and the
+  island's, the landmarks and the lots, the works' buildings and the lots)
+  and why the overlap draws as a dither; the fix in the placement rule.
+
+### 10. Too many high-rises in Honolulu in 1978
+
+- **Reported:** "i think there are too many high rises in 1978 honolulu".
+- **Seen:** towers come from today's zoning classes from 1960 on, scaled by
+  density and value, not from the record of when the towers rose.
+- **Open:** a dated count of Honolulu's high-rises by area (Waikīkī, downtown,
+  Makiki–Punchbowl, Salt Lake, Kakaʻako) and a ramp that follows it.
+
+### 11. The schools, at the times they existed
+
+- **Reported:** "since students may look at this, lets try to get all the
+  schools in at the various times they existed".
+- **Open:** every school as a dated, placed landmark: the public schools of
+  today with their opening years, the private and mission schools from
+  Lahainaluna (1831) on, the government schools of the kingdom and the
+  territory where their places are known, with sources.
