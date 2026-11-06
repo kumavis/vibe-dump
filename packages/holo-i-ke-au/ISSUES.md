@@ -121,3 +121,11 @@ fix has landed in `dist/` and been looked at again.
   today with their opening years, the private and mission schools from
   Lahainaluna (1831) on, the government schools of the kingdom and the
   territory where their places are known, with sources.
+
+### 12. Scrubbing the prologue's clock does not move the land
+
+- **Reported:** "using the timeline to navigate in the prologue does not
+  update the land forms".
+- **Open:** whether the slider's scrub reaches the geology at all (the ticks
+  ease the clock; the slider sets it directly), or whether the stages change
+  but the shapes drawn do not; reproduced headlessly first.
