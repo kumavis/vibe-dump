@@ -4454,6 +4454,36 @@ if (!geoHere) {
     console.log(`      ${t.labels.join(' · ')}; “${label}” off the tour; back to ${y.n} ticks and “${y.era} · ${y.year}”`)
   })
 
+  await check('the slider scrubbed in the prologue moves the land: the stages follow the age, off a step’s held stage', async () => {
+    // (a step shows its stage held at its age; the viewer dragging the clock off it must see the stages of the age, not the held one)
+    const st = await ui(`(() => { for (const ch of app.tour.prologue) for (const e of ch.events) if (e.kind !== 'slide' && e.stage) return [ch.at, ch.events.indexOf(e), e.stage, e.age]; return null })()`)
+    if (!st) throw new Error('no step with a stage to hold')
+    await run(`app.tour.goTo(${st[0]}, ${st[1]}, { jump: true }); app.settle()`)
+    await geoReady()
+    const held = await geo()
+    if (held.drawn.a !== st[2] || held.drawn.b !== st[2]) throw new Error(`the step holds ${JSON.stringify(held.drawn)}, not its stage ${st[2]}`)
+    // the slider to the oldest stage's age and to the youngest's, as a hand would
+    const S = await ui('app.data.geology.stages.map((s) => [s.id, s.age])')
+    const far = S[0][1] - st[3] > st[3] - S[S.length - 1][1] ? S[0] : S[S.length - 1]
+    await run(`const i = document.querySelector('.tl-input'); i.value = String(app.geoClock.uAt(${far[1]})); i.dispatchEvent(new Event('input', { bubbles: true }))`)
+    await expect('app.tour.active', false)
+    await page.waitForFunction((want) => { const d = window.__app.geology.drawn; return d && d.a === want && d.b === want && window.__app.geology.ready(want) }, far[0], { timeout: 300000 })
+    await frames(1)
+    const moved = await geo()
+    if (moved.drawn.a !== far[0]) throw new Error(`scrubbed to ${far[1]} Ma, drawn ${JSON.stringify(moved.drawn)}`)
+    // and halfway back between two stages, a crossfade of the two
+    const i = S.findIndex((x) => x[0] === far[0])
+    const j = i === 0 ? 1 : i - 1
+    const mid = await ui(`app.geoClock.ageAt((app.geoClock.uAt(${S[i][1]}) + app.geoClock.uAt(${S[j][1]})) / 2)`)
+    await run(`const i = document.querySelector('.tl-input'); i.value = String(app.geoClock.uAt(${mid})); i.dispatchEvent(new Event('input', { bubbles: true }))`)
+    await page.waitForFunction(() => { const g = window.__app.geology, d = g.drawn; return d && d.a !== d.b && g.ready(d.a) && g.ready(d.b) }, null, { timeout: 300000 })
+    await frames(1)
+    const half = await geo()
+    const pair = [half.drawn.a, half.drawn.b].sort().join()
+    if (pair !== [S[i][0], S[j][0]].sort().join() || half.drawn.mix < 0.2 || half.drawn.mix > 0.8) throw new Error(`halfway: ${JSON.stringify(half.drawn)}`)
+    console.log(`      held ${st[2]} at ${st[3]} Ma; scrubbed to ${far[0]} (${far[1]} Ma), then halfway to ${S[j][0]}: mix ${half.drawn.mix.toFixed(2)}`)
+  })
+
   await check('the sea floor is drawn only in the prologue, in place of the packs, the sea and the pins', async () => {
     await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
     // (the sea eases back to opaque before the packs take over again)

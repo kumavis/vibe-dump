@@ -317,7 +317,12 @@ export class Geology {
     }
     const K = this.keys
     if (K) {
-      if (K.from === K.to || Math.abs(K.toAge - K.fromAge) < 1e-9) return { a: K.to, b: K.to, mix: 0 }
+      // (a step's stage held at its age; the clock scrubbed off it is wandering, by the stages' own ages)
+      if (K.from === K.to || Math.abs(K.toAge - K.fromAge) < 1e-9) {
+        if (Math.abs(A - K.toAge) < 1e-6) return { a: K.to, b: K.to, mix: 0 }
+        this.keys = null
+        return this.pairAt(A)
+      }
       const lo = Math.min(K.fromAge, K.toAge)
       const hi = Math.max(K.fromAge, K.toAge)
       if (A >= lo - 1e-6 && A <= hi + 1e-6) return { a: K.from, b: K.to, mix: clamp((clk.uAt(A) - clk.uAt(K.fromAge)) / (clk.uAt(K.toAge) - clk.uAt(K.fromAge)), 0, 1) }

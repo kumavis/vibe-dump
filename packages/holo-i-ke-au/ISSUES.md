@@ -14,7 +14,8 @@ fix has landed in `dist/` and been looked at again.
   `,` five times; no link, no line in the help.
 - **Fix:** the tour opens on Prologue I where the data has a geology
   (`ui/tour.js begin()`); the help names the prologue; DESIGN.md §13.
-- **Status:** landed; to be looked at in the published build.
+- **Status:** published in version 16; the opening shot shows Prologue I's
+  card with the clock in millions of years and Back disabled.
 
 ### 2. The Clark avalanche slide draws a white screen
 
@@ -30,7 +31,8 @@ fix has landed in `dist/` and been looked at again.
   field has no scar, from the centre toward the farthest edge where it has
   neither; length and width never under a world unit; the shader's divisions
   guarded. DESIGN.md §13 says what a field without a scar runs.
-- **Status:** landed; Clark re-shot.
+- **Status:** published in version 16; Clark re-shot, the mass runs over
+  Lānaʻi's two fields.
 
 ### 3. Diffuse housing on Kauaʻi and Niʻihau in Māʻilikūkahi's era
 
@@ -126,6 +128,12 @@ fix has landed in `dist/` and been looked at again.
 
 - **Reported:** "using the timeline to navigate in the prologue does not
   update the land forms".
-- **Open:** whether the slider's scrub reaches the geology at all (the ticks
-  ease the clock; the slider sets it directly), or whether the stages change
-  but the shapes drawn do not; reproduced headlessly first.
+- **Cause:** a step shows its stage held at its age (the geology's keys,
+  `from` and `to` the same); the pair of stages drawn kept returning the held
+  one whatever the clock said, and only a tour move or leaving the prologue
+  cleared it. The slider's scrub reached the clock; the land never followed.
+- **Fix:** the held stage lets go as soon as the clock is scrubbed off its
+  age, and the stages either side of the age are drawn, crossfading as they
+  do when wandering (`render/geology.js pairAt`). A smoke check scrubs the
+  slider itself.
+- **Status:** fixed; to be published.
