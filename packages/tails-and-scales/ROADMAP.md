@@ -1707,9 +1707,9 @@ follows N3.
   beside the wall; the Brood Beetle's data against rule 24's half rule
   (F5b's: its discs at ±1.5" put 16 sweep samples on an exact half cell);
   F9c's eye height (Q1) and its re-fit of the Howdah with its riders
-  shooting; snap-check's whole `--self-test` on F9b's code (about five
-  hours of Chromium the sweep could not hold: its three Howdah edits
-  caught).
+  shooting; the rest of snap-check's whole `--self-test` on F9b's code
+  (seven edits in files F9b leaves as they were; its three Howdah edits
+  and the eight in `view/units.js` and `view/terrain.js` caught).
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
   F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
   AI steps every rider with a gun off once an enemy is in its reach; F9c
