@@ -25,8 +25,8 @@
 //
 // Where the data has a geology (DATA.md "Geology"), its chapters come before
 // chapter 1 as a prologue: their indices run below zero (-P .. -1, so the
-// main chapters keep theirs), Next and Back walk them and cross into chapter
-// 1 and back, and while the tour is in them the timeline is the prologue's
+// main chapters keep theirs), the tour opens on the first of them, Next and
+// Back walk them and cross into chapter 1 and back, and while the tour is in them the timeline is the prologue's
 // clock in millions of years (ui/timeline.js) and the far view is the
 // prologue's own (render/geology.js): the step's stage, carried along the
 // drift by its age, its debris fields lit, a slide run. Every view of the
@@ -242,9 +242,9 @@ export class Tour {
     return clamp(Math.round(this.app.timeline.s), 0, this.chapters.length - 1)
   }
 
-  /** The first chapter's card, the camera already there: how the app opens. */
+  /** The first chapter's card (the prologue's, where there is one), the camera already there: how the app opens. */
   begin() {
-    this.goTo(0, -1, { jump: true })
+    this.goTo(this.first, -1, { jump: true })
   }
 
   next() {

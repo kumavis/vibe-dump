@@ -667,8 +667,9 @@ The contract is DATA.md "Geology"; the chapters, stages and fields are the
 research's to settle. The main timeline (years) and the island and district
 zooms are not used in the prologue.
 
-**As drawn.** The tour opens on chapter 1 as before; Back from its card
-walks into the prologue's last step, and Next from there crosses back. The
+**As drawn.** The tour opens on Prologue I, the chain over the hotspot;
+Next walks the prologue and crosses into chapter 1, and Back from chapter
+1's card walks into the prologue's last step. The
 prologue's chapters are numbered "Prologue I … V" on their cards and in the
 pill. While the tour is in them the timeline is their clock: a log track in
 Ma ticked at 5, 2, 1, 0.5, 0.2, 0.1 and now, its label "about 2.1 million
@@ -682,10 +683,12 @@ of their slots). Everything the plate carries is drawn displaced by the
 drift at the clock's age, so as the clock runs down the islands slide
 north-west past a faint mark at the hotspot, which stays. A step's debris
 fields are a warm wash with their outline on the floor, the blocks named.
-A slide whose field has a scar runs once as the step opens (going forward):
-the flank whole, then a translucent mass running from the scar along the
-field to its far edge over five and a half seconds, the wash revealed
-behind it, the stage crossfading to the one after; its card has a control
+A slide runs once as the step opens (going forward): where its field has
+a scar, the flank whole, then a translucent mass running from the scar
+along the field to its far edge over five and a half seconds, the wash
+revealed behind it, the stage crossfading to the one after; a field drawn
+without a scar (a sketch, like the Clark avalanche's two) runs the mass
+from its volcano's summit on the step's own stage. The card has a control
 to run it again. Nothing splashes. On leaving, the sea eases back to
 opaque and every texture of the prologue is let go.
 

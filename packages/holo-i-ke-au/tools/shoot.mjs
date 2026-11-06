@@ -47,7 +47,7 @@ const nearShot = (name, place, year, [bearing, pitch, distance], first = false) 
 })
 // ==== chain: the whole chain and the routes that follow the story ==============
 //   node tools/shoot.mjs <outdir> chain          (and VIEWPORT=390x844 for a phone)
-// The opening (chapter 1's card over the chain, its events' routes faint), the
+// The opening (the first card over the chain: Prologue I's where the data has a geology, chapter 1's otherwise), the
 // chain alone from the home button, the chain at contact in each far view
 // with no card (no routes), the same with the routes toggle on (all of them),
 // the Pāʻao step (its own route), the far steps of Moʻikeha and Kaʻieʻiewaho

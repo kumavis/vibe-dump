@@ -55,7 +55,7 @@ float slideBody(vec2 q) {
   float along = dot(d, uSlideAxis.zw);
   float across = dot(d, vec2(-uSlideAxis.w, uSlideAxis.z));
   float c = uSlide.z * uSlide.x;
-  float u = (along - c) / (0.14 * uSlide.x);
+  float u = (along - c) / max(1.0, 0.14 * uSlide.x);
   float v = across / max(1.0, 0.7 * uSlide.y);
   return exp(-(u * u + v * v) * 1.6) * uSlide.w;
 }

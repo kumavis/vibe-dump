@@ -40,9 +40,9 @@ export class UI {
     this.build()
     this.bind()
     app.updaters.push((dt) => this.update(dt))
-    // Open on the first chapter's card, unless the address asks for a year
-    // or a view of its own; a year alone opens on the whole chain, framed
-    // as the home button frames it.
+    // Open on the first chapter's card (the prologue's, where the data has
+    // one), unless the address asks for a year or a view of its own; a year
+    // alone opens on the whole chain, framed as the home button frames it.
     if (!app.params.has('year') && !app.params.has('cam') && this.tour.chapters.length) {
       this.tour.begin()
       this.timeline.el.classList.add('invite')
@@ -109,7 +109,7 @@ export class UI {
         <p><em>Holo i ke au</em>: sail on the current, into the era. <em>Au</em> is both a period of time and a current, and the title rides it.</p>
         <p>The Hawaiian Islands from real terrain, across the eras from the first canoes to 1898. Far out, each moku takes the colour of the chiefdom or kingdom that held it; close in, the boundaries of moku and ahupuaʻa lie on the land. Pins are events of the chosen era: open one for its story, how sure the record is, and its sources. A number stands for several events in one spot; open it for the list.</p>
         <p>The switch on the legend turns the far view from the <b>Chiefdoms</b> to the <b>Land</b>: where it was cultivated, where people lived and how many, and the native forest, in the chosen year, blended between layers made for 1778, 1853, 1896 and now. A layer marked <em>modelled</em> was drawn by a written rule where no map of its time exists. From ${MAHELE_YEAR} it turns to the <b>Māhele</b> too: each ahupuaʻa in the class the land division gave it, crown, government or konohiki land, or mixed where the records give it more than one.</p>
-        <p><b>Next</b> walks the story an era at a time: each era opens with its card, then its events in order, the year and the camera moving to each. Look around as you like between steps; the timeline is free too, and Next picks the story up again from the nearest era.</p>
+        <p><b>Next</b> walks the story an era at a time: each era opens with its card, then its events in order, the year and the camera moving to each. Look around as you like between steps; the timeline is free too, and Next picks the story up again from the nearest era. Before chapter 1 comes a prologue, the making of the islands themselves on a clock in millions of years; Back from chapter 1 returns to it.</p>
         <div class="help-keys">
           <span><b>→ / Space</b> next</span><span><b>←</b> back</span><span><b>, .</b> era by era</span><span><b>Drag</b> move</span><span><b>Right-drag / Shift</b> turn and tilt</span><span><b>Scroll / pinch</b> zoom</span><span><b>Double-click</b> fly closer</span>
         </div>

@@ -402,19 +402,37 @@ export class Geology {
     }
   }
 
-  /** The axis a field runs along: from its volcano (or scar) out through the far edge of its spread, in the stage's frame. */
+  /**
+   * The axis a field runs along: from its scar, else its volcano's summit
+   * (volcanoes.json), out through the far edge of its spread, in the stage's
+   * frame. A field with neither runs from its own centre toward its farthest
+   * edge. The length and the width are never under a world unit: the shader
+   * divides by both.
+   */
   fieldAxis(f) {
     const ring = f.ring.map((p) => this.proj.toWorld(p))
     let o = null
     if (f.scarRing) o = this.proj.toWorld(geometryPoint({ type: 'Polygon', coordinates: [f.scarRing] }))
     else {
-      const v = this.app.tour?.places.get(f.volcano)
-      if (v) o = this.proj.toWorld(geometryPoint(v.geometry))
+      const v = this.geo.volcanoes?.get(f.volcano)
+      if (v?.at) o = v.at
     }
     const c = this.proj.toWorld(geometryPoint({ type: 'Polygon', coordinates: [f.ring] }))
     if (!o) o = c
     let dx = c[0] - o[0]
     let dz = c[1] - o[1]
+    if (Math.hypot(dx, dz) < 1e-3) {
+      // (the origin at the centre: toward the farthest point of the ring)
+      let far = 0
+      for (const [x, z] of ring) {
+        const d = Math.hypot(x - o[0], z - o[1])
+        if (d > far) {
+          far = d
+          dx = x - o[0]
+          dz = z - o[1]
+        }
+      }
+    }
     const L0 = Math.hypot(dx, dz) || 1
     dx /= L0
     dz /= L0
@@ -424,7 +442,7 @@ export class Geology {
       len = Math.max(len, (x - o[0]) * dx + (z - o[1]) * dz)
       wide = Math.max(wide, Math.abs(-(x - o[0]) * dz + (z - o[1]) * dx))
     }
-    return { o, d: [dx, dz], len, wide }
+    return { o, d: [dx, dz], len: Math.max(1, len), wide: Math.max(1, wide) }
   }
 
   /**

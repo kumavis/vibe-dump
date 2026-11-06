@@ -59,13 +59,21 @@ export async function loadGeology(abs, proj, warn = console.warn) {
     azimuth: Number.isFinite(hs.azimuth) ? hs.azimuth : 295,
     sources: hs.sources || [],
   }
+  // the volcanoes by id, each with its summit in world units (where volcanoes.json gives one)
+  const volcanoMap = new Map()
+  for (const v of (Array.isArray(volcanoes) ? volcanoes : volcanoes?.volcanoes) || []) {
+    if (!v?.id) continue
+    const c = v.summit?.coordinates
+    const at = Array.isArray(c) && c.length >= 2 && c.every(Number.isFinite) ? proj.toWorld([c[0], c[1]]) : null
+    volcanoMap.set(v.id, { ...v, at })
+  }
   const fields = new Map()
   for (const f of landslides?.features || []) {
     const p = f.properties || {}
     if (!p.id || f.geometry?.type !== 'Polygon') continue
     fields.set(p.id, { ...p, ring: f.geometry.coordinates[0], scarRing: p.scar?.type === 'Polygon' ? p.scar.coordinates[0] : null, blocks: (p.blocks || []).filter((b) => b?.coordinates || b?.geometry?.coordinates) })
   }
-  return { manifest, seafloor, stages, hotspot, fields, chapters: list, sources: manifest.sources || [] }
+  return { manifest, seafloor, stages, hotspot, fields, volcanoes: volcanoMap, chapters: list, sources: manifest.sources || [] }
 }
 
 /**

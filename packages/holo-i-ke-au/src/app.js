@@ -179,7 +179,8 @@ export class App {
     // A view asked for with no year opens at contact, or the keyframe nearest
     // it: the chiefdoms at their fullest, just before the record changes
     // character (DESIGN.md §3.2). Otherwise the tour opens on its first
-    // chapter (ui/tour.js), and the year is that era's.
+    // chapter (ui/tour.js; the prologue's where there is one, on its own
+    // clock), and the year is the first era's until the tour reaches it.
     else if (cam) this.timeline.set(Math.round(this.timeline.sAtYear(1778)))
     else this.timeline.set(0)
     this.timeline.onChange(() => this.syncEras())

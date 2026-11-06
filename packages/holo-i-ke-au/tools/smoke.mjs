@@ -110,9 +110,25 @@ const eras = await ui('app.timeline.n')
 const chapters = await ui('app.tour.chapters.length')
 
 if (eras > 0) {
-  await check('it opens on the first chapter: its era card, its year', async () => {
-    await expect('JSON.stringify([app.tour.active, app.tour.chapter, app.tour.step])', JSON.stringify([true, 0, -1]))
+  await check('it opens on the first chapter: the prologue’s where there is one, else chapter 1 with its era card and its year', async () => {
+    // (with a geology the app opens on Prologue I, its card up and the timeline its clock;
+    // the main chapters' checks below start from chapter 1, so step on to it as a viewer would)
+    const first = await ui('app.tour.first')
+    await expect('JSON.stringify([app.tour.active, app.tour.chapter, app.tour.step])', JSON.stringify([true, first, -1]))
     await expect('app.ui.card.mode', 'era')
+    if (first < 0) {
+      await expect('app.prologue', true)
+      await expect("document.querySelector('.timeline').classList.contains('ma')", true)
+      await expect("document.querySelector('.tl-back').disabled", true)
+      const pill = await ui("document.querySelector('.tl-tour').textContent")
+      if (!/Prologue I\b/.test(pill)) throw new Error(`the indicator reads “${pill}”`)
+      console.log(`      opens on ${pill.replace(/\s+/g, ' ')}`)
+      await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
+      await frames(2)
+      await expect('app.prologue', false)
+      await expect('JSON.stringify([app.tour.active, app.tour.chapter, app.tour.step])', JSON.stringify([true, 0, -1]))
+      await expect('app.ui.card.mode', 'era')
+    }
     await expect("document.querySelector('.card.show h1')?.textContent === app.timeline.eras[0].label", true)
     await expect('app.timeline.s', 0)
     const pill = await ui("document.querySelector('.tl-tour').textContent")
