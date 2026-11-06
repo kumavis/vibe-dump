@@ -1644,7 +1644,7 @@ follows N3.
   hull's move; `fireSlots` (0 until F9c); `smashAround` unbinned; `hull/`
   joins `LOG_SETS` as `vehicle` did.
   (c9c7ffa, 25f0dcb, 0089e6b, 6138dd4, edfcf2d, 5b6c3aa, 047fbcc and the
-  sweep's cfe8580 and afe540b; `CORE_VERSION` 15, `RULES_ID`
+  sweep's cfe8580, afe540b and ef52d40; `CORE_VERSION` 15, `RULES_ID`
   1vfoy8ii0e0; every battle without a long hull byte-identical but the
   AI count budget's nine. `core/footprint.js`, a footprint's tables
   derived at load from exact constants (the Howdah's snap error 0.121",
@@ -1673,8 +1673,19 @@ follows N3.
   human-bot logs (446d2aa, its Field four recorded again on the sweep's
   price, f686198), the corpus 97 battles, the PIN cfe8580. The sweep's
   fixes: cfe8580 (the group formation's clear, which threw on a path with
-  no pivot; the price) and afe540b (macro-check's self-test catching
-  `planner-sends-riders` and `heading-lowest` again). DESIGN's F9b
+  no pivot; the price), afe540b (macro-check's self-test catching
+  `planner-sends-riders` and `heading-lowest` again) and ef52d40 (a
+  figure's template letting its splat fur's bins go, whose first bin it
+  held for good, so renderer.info counted it only once a figure was seen
+  from there on a drawn frame: rematch-memory's default run one geometry
+  over at a battle that differed from run to run; the long hull's wreck
+  drawn along its facing). The known misses move: playback-check's
+  Grand fixture row passes under the AI count budget (182 s at most) and
+  the scale/ corpus's Grand row misses on `watch-hulls-grand-1`, 202.3 s
+  as watched against 200, main's class; army-sim's Field per-unit gate
+  misses on a rider (the Grenadiers 21 ± 9 against 45 at seed 1111, the
+  Venom Spitters 30 ± 8 against 50 at 4444), F9c's to re-fit with the
+  riders shooting. DESIGN's F9b
   notes, the slot table, the edge rule and `facing=<h>` corrected in
   place.)
 - [ ] **Later (F9b's):** the AI count budget's rows still over
@@ -1685,10 +1696,7 @@ follows N3.
   14% of a cap battle) and, only if a profile asks for it, binning
   `smashAround` (§4.2.5's note; not among the top costs); the lattice
   about 1.5× the prototype's timings (a fresh plan's arrays 0.25 ms of
-  it); a long hull's wreck look (`view/terrain.js` draws it as the
-  War-Cart's round cup, about 1" across, at its yaw plus a golden-angle
-  offset, where the rules' box lies 2.4 × 5.8" along its facing); a
-  charge end's rotate handle; a group placement's headings judged with
+  it); a charge end's rotate handle; a group placement's headings judged with
   the earlier members of the pin counted (`placeOk` against the table as
   it stands); the room term's heading where `cellBest`'s isn't a valid
   end; the Grand rebalance with the Howdah (it fits −224 ± 81 at Grand,
@@ -1699,7 +1707,9 @@ follows N3.
   beside the wall; the Brood Beetle's data against rule 24's half rule
   (F5b's: its discs at ±1.5" put 16 sweep samples on an exact half cell);
   F9c's eye height (Q1) and its re-fit of the Howdah with its riders
-  shooting; rematch-memory's default run, one geometry over its baseline (DESIGN's F9b Run line).
+  shooting; snap-check's whole `--self-test` on F9b's code (about five
+  hours of Chromium the sweep could not hold: its three Howdah edits
+  caught).
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
   F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
   AI steps every rider with a gun off once an enemy is in its reach; F9c
