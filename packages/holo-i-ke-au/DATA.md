@@ -486,7 +486,7 @@ the layers hold at `now` all the way.
 
 | keyframe | cultivation | settlement | forest |
 | --- | --- | --- | --- |
-| contact 1778 | modelled: the Kurashima–Kirch traditional agriculture zones, a valley-floor loʻi rule read from the pack, the 1848–1855 kuleana parcels, a fishpond-shore rule | modelled: fields, coast and kuleana, scaled per island to King's 1779 estimate | modelled: rain, elevation and lava age, cleared below 460–760 m after Kirch, never less than the native forest standing now |
+| contact 1778 | modelled: the Kurashima–Kirch traditional agriculture zones, a valley-floor loʻi rule read from the pack, the 1848–1855 kuleana parcels, a fishpond-shore rule | modelled: fields, shore and kuleana, and a floor that thins inland, scaled per island to King's 1779 estimate (Niʻihau and Kahoʻolawe back-cast from 1832) | modelled: rain, elevation and lava age, cleared below 460–760 m after Kirch, never less than the native forest standing now |
 | mahele 1853 | mixed: kuleana parcels mapped, the contact zones kept at reduced weight | mixed: the 1853 census by island, spread by kuleana parcels and the contact weights | none (interpolate) |
 | kingdom 1896 | mixed: 1900 cane and pineapple mapped, loʻi kept at 0.3–0.7 | mixed: the 1896 census by district, towns, cane camps, kuleana | mixed: between the contact forest less cane and new lava, and the forest standing now; forest reserves keep more |
 | now 2020 | mapped: 2020 agricultural baseline crops | mapped: 2020 census block groups spread over CAH developed land | mapped: CAH native forest classes |

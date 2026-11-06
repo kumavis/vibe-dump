@@ -452,6 +452,11 @@ be, what was read where, how the models were checked, and where they are weak.
 | Census 2020 block groups (TIGERweb) | 1,083 block groups with POP100. The Census API itself did not answer from here. | settlement now |
 | King 1784, vol. III, pp. 126–128 | King's estimate island by island, read in the archive.org text and checked by its sum: Hawaiʻi 150,000, Maui 65,400, Oʻahu 60,200, Kauaʻi 54,000, Molokaʻi 36,000, Lānaʻi 20,400, Niʻihau 10,000, "Oreehoua" (Lehua) 4,000; 400,000 in all; no Kahoʻolawe. | settlement 1778 |
 | Thrum, *Hawaiian Annual* for 1890, p. 11 | "Comparative Table of Population of the Hawaiian Islands", estimate 1823 and censuses 1832–1884 by island, read on the page image; the 1832, 1836 and 1853 columns sum to their printed totals. | settlement 1853; Kahoʻolawe's 1778 back-cast (80 people in 1832) |
+| Ke Kumu Hawaii, 14 Oct. 1835 p. 164 and 23 Dec. 1835 p. 204 (opened; read part, in the nupepa-hawaii.com transcriptions of the tables) | the 1835 count of Kauaʻi by ahupuaʻa, Keālia to Kalalau (3,118) and Nuʻuolo to Hanapēpē (2,616; 4,508 in 1831), and Niʻihau (993; 1,079 in 1831) | the Kauaʻi check of the 1778 settlement; Niʻihau's back-cast |
+| Kirch and others, PNAS 101 (2004), Kahikinui (opened; read part, the abstract) | permanent dryland settlement from about 1400; peak density 43–57 people a km² by 1700–1800 | the measure of Niʻihau's King figure; the 1480 question |
+| Ladefoged and others, J. Archaeol. Sci. 36 (2009) (opened; read part, the abstract) | Kauaʻi's potential intensive agriculture 58 km², all irrigated, none rain-fed | why Kauaʻi's people belong in its valleys |
+| P. T. Young, "Kōloa Field System", Images of Old Hawaiʻi, after Hal Hammatt and Cultural Surveys Hawaiʻi (opened; read full) | the field system fed from Waikomo Stream, begun possibly by 1450, in place by the mid-1500s, over 1,000 acres at its height; houses among the fields at the ʻauwai | the 1480 question (not a source of the masks) |
+| Earle 1978, The Halelea District (wanted; title only) | the irrigation complexes and house sites of Hanalei to Wainiha | would set the Haleleʻa valley weights |
 | Census of 1896, Table II | population by island and district, 1896 and 1890, read on the page image (the OCR garbles it). Molokaʻi 2,307 and Lānaʻi 105 are separate in 1896 only; Niʻihau 164. | settlement 1896 |
 | NPS, A Brief History of Kalaupapa | "over 1,100 people" at Kalawao in 1888–1902 | the Kalaupapa share of Molokaʻi's 1896 count |
 
@@ -488,8 +493,10 @@ The full rules are in `methods` in the manifest; in short:
   The valley rule exists because the published zones run on modern soils and stop at
   a straight line where Honolulu and Waikīkī are mapped as urban land or fill; with
   it, Waikīkī, Kalihi, Mānoa, Kawainui and the Pearl Harbor stream mouths come back.
-- **1778 settlement**: weights from fields, coast, rain and kuleana, scaled per island
-  to King. **1778 forest**: rain (700–1,500 mm ramp), tree line (1,900–2,700 m),
+- **1778 settlement**: weights from fields (agroforestry at half its weight), the
+  shore, rain and kuleana, and a thin floor that thins inland over a few kilometres,
+  scaled per island to King; Niʻihau and Kahoʻolawe back-cast from 1832 (below).
+  **1778 forest**: rain (700–1,500 mm ramp), tree line (1,900–2,700 m),
   lava age, then Kirch's clearing as FOREST.md gives it (below 460 m mostly farmed or
   burned, untouched above 760 m), never less than the native forest standing now.
 - **1853**: kuleana mapped; the contact zones kept at 0.25–0.9 (loʻi more where
@@ -533,7 +540,7 @@ parcels themselves enter every pre-1900 cultivation layer.
 | Kauaʻi | 54,000 | 6,991 | 15,228 | 73,165 |
 | Molokaʻi | 36,000 | 3,607 | 2,307 | 7,372 |
 | Lānaʻi | 20,400 | 600 | 105 | 3,398 |
-| Niʻihau | 10,000 | 790 | 164 | 84 |
+| Niʻihau | 3,210 (back-cast; King 10,000) | 790 | 164 | 84 |
 | Kahoʻolawe | 250 (back-cast) | none listed | not counted apart; the bake joins it to Makawao | 0 |
 
 Each layer reproduces its island's figure within the log rounding (Lānaʻi's 105
@@ -547,7 +554,32 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
 
 - **The 1778 figures are King's.** The estimates run from 200,000 to 1,000,000 (§3);
   every density scales with the choice. King's Lānaʻi (20,400) and Niʻihau (10,000)
-  are high against everything after.
+  are high against everything after: 12.8 and 9.6 times their 1832 counts, where the
+  chain is 3.1 times. King scaled the houses he counted at Kealakekua by each island's
+  length of coast (vol. III, p. 127), which favours long dry coasts. Niʻihau is now
+  back-cast from its 1,047 of 1832 as Kahoʻolawe is (3,210); Lānaʻi and Molokaʻi
+  (6.0 times) keep King's.
+- **The 1778 pattern stands for every era before it.** The eras from Māʻilikūkahi
+  (1480) to Kalaniʻōpuʻu use the contact keyframe whole; the app thins it only before
+  1450. Kōloa's irrigated field system was begun about 1450 and in place by the
+  mid-1500s (Hammatt, as Young gives it), and Kahikinui's dryland settlement began
+  about 1400 and peaked in 1700–1800 (Kirch and others 2004), so 1480 is drawn
+  fuller than it was.
+- **Kauaʻi against its 1835 counts** (issue 3, 2026-11-06). Ke Kumu Hawaii printed
+  the 1835 count by ahupuaʻa for Kona from Nuʻuolo to Hanapēpē with Niʻihau (23 Dec.,
+  p. 204) and for Keālia to Kalalau (14 Oct., p. 164), read in the nupepa-hawaii.com
+  transcriptions. With the 1836 island total (8,934, Thrum) they put about 63% of
+  Kauaʻi's people in those valleys and coves and 37% on the plain from Kapaʻa to
+  Kōloa and the uplands of east Kona. The rule before spread 30% of each island's
+  people over all habitable land by rain, which on Kauaʻi lit the wet plateau
+  between Kapaʻa and Līhuʻe evenly; it gave the plain 52%, the median land 1.49
+  times off its 1835 share. The floor now thins inland (exp(−distance to sea /
+  3 km)), the shore counts 0.7 (from 0.35) and agroforestry half in the fields
+  people lived among: the plain 51%, the median land 1.38 times off, land over
+  10 people a km² from 79% of the island to 46%, on Niʻihau from 98% to 44%. What still misses: Kalalau,
+  Hanakoa and Hāʻena (the floors too narrow for a 54 m pack) and Hanapēpē, which the
+  model gives a third of its 1835 share. Kauaʻi's 54,000 is 4.9 times its 1832
+  count, between Hawaiʻi Island's 3.3 and Molokaʻi's 6.0, and kept.
 - **East Hawaiʻi and windward East Maui are thin in 1778** for the reason above. The
   published zones show nothing there and the awards are thinly digitised on Hawaiʻi
   Island.
