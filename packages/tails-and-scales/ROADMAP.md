@@ -200,7 +200,29 @@ the commit, and add whatever the work turned up.
   (V3) note) every lane of the four together: input-check's group, carts,
   tips and spell steps, play-check's layout and cart lanes, present-check's
   riders, card oracle and spell order, snap-check's edits and its cart and
-  powder rows. A step
+  powder rows; and from F9b P-prop's P-lattice (`--only lattice`:
+  `hullReach`, memoised and lent, against `sim/lattice-ref.mjs`'s plain
+  lattice state for state, the body disc's lower bound, the paths and the
+  stand, sweep and room questions, after random blasts) and P-hull (at
+  every command boundary and AI trace line of every hull game: the facing,
+  the body on a cell centre, every disc standing and spaced, and
+  `legal()`'s three refusals of `f`), P-riders' long-hull scene and
+  bail-out row, P-army's two Howdahs, P-fight's Venom lobber, P-height's
+  ledges by disc, P-memo's facings, P-present's `f` and its walk order for
+  a long hull, P-macro's headings and its March with a long hull, P-scan's
+  budget, merge-sim's `hulls` and `badhull`, data-check's section 16 (the
+  footprint rules, the Howdah's figures, the deck's slots pinned, the AI
+  count budget) and `hull/`'s lists, flag-lint's `footprint` and
+  boundaries' helpers on queries.js's door, terrain-check's lattice rows
+  (the Howdah crossing zone to zone on every set a mission with a Vehicle
+  slot offers, seeds 1-500 and the Powder Field's 1-2000), scale-bench's
+  hull rows (the cap lists with two hulls a side, the Coil's '2166432',
+  and the long-hull report), play-report's F9b row (`--row f9b`, over
+  `hull/`'s AI pairs and a seeded sweep), bake-check's Howdah in both
+  styles, and the `hull/` set in every check that reads the corpus
+  (parity's 97 battles); and in Chromium input-check's long-hull row
+  (`--hulls`; its `--self-test`'s nine edits) and snap-check's Howdah row
+  (`--only howdah`; its three edits). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1612,7 +1634,7 @@ follows N3.
   `matchMedia`), without which present-check and corpus-add's page runs
   failed on main too. DESIGN's F9a notes, its merge and V2's figure
   styles among them.)
-- [ ] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
+- [x] **F9b** Long hulls: the Coil's Shell-Back Howdah, three segments that
   turn where there's room; a facing, set with a rotate handle or [ / ].
   F9a left it: `core/actions/transport.js` measures a round hull from its
   centre (`embarkSpot`'s `v.r + u.r + 1"`, `landing`'s reach from `v.pos`
@@ -1621,6 +1643,63 @@ follows N3.
   the AI's transport branch (`aiTransport`) is shape-free but for the
   hull's move; `fireSlots` (0 until F9c); `smashAround` unbinned; `hull/`
   joins `LOG_SETS` as `vehicle` did.
+  (c9c7ffa, 25f0dcb, 0089e6b, 6138dd4, edfcf2d, 5b6c3aa, 047fbcc and the
+  sweep's cfe8580 and afe540b; `CORE_VERSION` 15, `RULES_ID`
+  1vfoy8ii0e0; every battle without a long hull byte-identical but the
+  AI count budget's nine. `core/footprint.js`, a footprint's tables
+  derived at load from exact constants (the Howdah's snap error 0.121",
+  pivot gap 0.052", R 3.071"), `discsOf`, `clearOf` and `fpGap` on
+  queries.js's door; `nav.hullReach`, a Dijkstra over cell and heading
+  with its per-epoch memo, `hullPath`, `cellBest` and `hullRoom`; a
+  unit's `facing` (the edge rule's, `facing=<h>` in the hash, ` f<h>` in
+  the frozen shadow); `place`, `move` and `chargeEnd` taking `f`, the
+  default heading drawing nothing; every rule site a branch only a long
+  hull reaches; the AI's lattice scan, its room term and charge
+  prefilter, its range terms and anti-bunching by the body disc (the last
+  departing from DESIGN's letter, for play-report's row); the AI count
+  budget on `grand` and `powder` (lattice 3, targets 6), its nine battles
+  re-recorded (b180d81); the mirror's `f`; the Howdah's figure in both
+  styles, its outline ring, ghost and hit volume, the walk's pivots, the
+  hatched reach, the minimap's capsule, a lone hull pinned as a group of
+  one, its rotate handle and [ / ]; the Howdah at 20 at Field (the
+  sweep's: 5, the fit's floor, failed Field's score gate once the AI
+  drove it forward) and 5 at Grand and the Powder Field. P-lattice,
+  P-hull, P-riders', P-army's, P-fight's, P-height's, P-memo's,
+  P-present's, P-macro's and P-scan's long-hull rows, merge-sim's
+  `hulls`, data-check's section 16, terrain-check's lattice rows (every
+  Field and Grand board crossed), scale-bench's hull rows, input-check's
+  long-hull row and snap-check's Howdah row, bake-check's Howdah,
+  play-report's F9b row (96%, 100%, 4 of 4); `hull/`, 4 AI pairs and 2
+  human-bot logs (446d2aa, its Field four recorded again on the sweep's
+  price, f686198), the corpus 97 battles, the PIN cfe8580. The sweep's
+  fixes: cfe8580 (the group formation's clear, which threw on a path with
+  no pivot; the price) and afe540b (macro-check's self-test catching
+  `planner-sends-riders` and `heading-lowest` again). DESIGN's F9b
+  notes, the slot table, the edge rule and `facing=<h>` corrected in
+  place.)
+- [ ] **Later (F9b's):** the AI count budget's rows still over
+  scale-bench's `BUDGET` (every cap row over 350 ms a battle or 35 ms a
+  movement phase's p90, the open cap battle at the 1.5× line on the final
+  code: 466-722 ms over six runs), as b4044e9's cap rows were: the next
+  levers are memoising a long hull's charge plans (`hullChargePlan` about
+  14% of a cap battle) and, only if a profile asks for it, binning
+  `smashAround` (§4.2.5's note; not among the top costs); the lattice
+  about 1.5× the prototype's timings (a fresh plan's arrays 0.25 ms of
+  it); a long hull's wreck look (`view/terrain.js` draws it as the
+  War-Cart's round cup, about 1" across, at its yaw plus a golden-angle
+  offset, where the rules' box lies 2.4 × 5.8" along its facing); a
+  charge end's rotate handle; a group placement's headings judged with
+  the earlier members of the pin counted (`placeOk` against the table as
+  it stands); the room term's heading where `cellBest`'s isn't a valid
+  end; the Grand rebalance with the Howdah (it fits −224 ± 81 at Grand,
+  a random list taking 1.5-1.9 of them whatever the price, the points
+  binding 316 of 1,000 Coil lists at its 5); the points binding the
+  Coil's Field lists (834 of 1,000 at 20, 981 before the Howdah);
+  terrain-check's lattice row in wreck mode, and a lane control for it
+  beside the wall; the Brood Beetle's data against rule 24's half rule
+  (F5b's: its discs at ±1.5" put 16 sweep samples on an exact half cell);
+  F9c's eye height (Q1) and its re-fit of the Howdah with its riders
+  shooting; rematch-memory's default run, one geometry over its baseline (DESIGN's F9b Run line).
 - [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
   F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
   AI steps every rider with a gun off once an enemy is in its reach; F9c
