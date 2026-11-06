@@ -28,10 +28,10 @@ import { ISLANDS } from './lib/geo.mjs'
 import { readPNG, writeGreyPNG, writePNG } from './lib/png.mjs'
 import { readPack } from './lib/layers-raster.mjs'
 import {
+  BACKCAST_1832,
   CAH_FOREST,
   DISTRICTS_1896,
   ISLAND_POP,
-  KAHOOLAWE_BACKCAST,
   KEYFRAMES,
   NOT_CROPS,
   POP_SOURCES,
@@ -85,7 +85,7 @@ function parseArgs(argv) {
 // ---------------------------------------------------------------------------
 // How each keyframe's layers are made, written out for the manifest
 
-function methods(ledger, dir, kahoolawe1778) {
+function methods(ledger, dir, pop1778) {
   const v = (key, extra) => vectorSource(ledger, dir, key, extra)
   const cah = (extra) => cahSource(ledger, dir, extra)
   const pop = (id, extra = {}) => ({ ...POP_SOURCES[id], ...extra })
@@ -129,15 +129,43 @@ function methods(ledger, dir, kahoolawe1778) {
       settlement: {
         method: 'modelled',
         rule:
-          'A weight per texel, 0.5 × cultivation blurred at 400 m (people lived among their fields) + 0.35 × a coastal band ' +
-          'exp(−distance to sea / 600 m), fading out between 60 and 150 m elevation, times 0.4–1.0 by rain (500–1500 mm) + ' +
-          `0.15 × the kuleana parcels + ${RULES.settleFloor} × the rain factor everywhere (people lived thinly on all habitable ` +
-          'land); times habitability (none on slopes steeper than about 35°, fading out between 800 and ' +
-          '1,600 m) and 0.3 on lava younger than 50–200 years. Each island’s weights are scaled so that the island holds ' +
-          'King’s figure. Kahoʻolawe, which King leaves out, is back-cast from the 80 people the 1832 census counted there ' +
-          `by the ratio of King’s 400,000 to the 1832 total of 130,313: ${kahoolawe1778} people.`,
-        populations: { ...ISLAND_POP.contact, kahoolawe: kahoolawe1778 },
-        sources: [pop('king-1784-v3'), pop('thrum-1890-annual', { note: 'the 1832 census by island (Kahoʻolawe 80, all islands 130,313), read on the page image' }), boundaries],
+          `A weight per texel, ${RULES.settleFields} × the fields blurred at 400 m (people lived among their fields: the ` +
+          `cultivation’s terms, with agroforestry at ${RULES.settleAgroforestry} of its own weight, since houses stood by the ` +
+          `loʻi and the shore rather than in the groves above them) + ${RULES.settleCoast} × a coastal band exp(−distance to ` +
+          'sea / 600 m), fading out between 60 and 150 m elevation, times 0.4–1.0 by rain (500–1500 mm) + ' +
+          `${RULES.settleKuleana} × the kuleana parcels + ${RULES.settleFloor} × exp(−distance to sea / ` +
+          `${RULES.settleFloorMetres} m) (people lived thinly on the rest of the land, more thinly inland); times habitability ` +
+          '(none on slopes steeper than about 35°, fading out between 800 and 1,600 m) and 0.3 on lava younger than 50–200 ' +
+          'years. Each island’s weights are scaled so that the island holds King’s figure. Kahoʻolawe, which King leaves ' +
+          'out, and Niʻihau are back-cast from the 1832 census (80 and 1,047 people) by the ratio of King’s 400,000 to the ' +
+          `1832 total of 130,313: ${pop1778.kahoolawe} and ${pop1778.niihau} people. King gives Niʻihau ` +
+          `${BACKCAST_1832.kingSays.niihau.toLocaleString('en-US')} from the houses he counted at Kealakekua applied to its ` +
+          'length of coast; that is 9.6 times its 1832 count where the chain is 3.1 times, and Kahikinui’s peak density ' +
+          '(Kirch and others 2004) laid over the whole of a dry island with no running stream. Lānaʻi (12.8 times) and ' +
+          'Molokaʻi (6.0 times) keep King’s figures. ' +
+          'Checked on Kauaʻi against the 1835 counts by ahupuaʻa (Ke Kumu Hawaii), the earliest by land, as shares of ' +
+          'the island: the 23 lands counted, the valleys and coves from Keālia round by Haleleʻa and Nāpali to Waimea and ' +
+          'Hanapēpē, hold about 63% of its people in 1835–36, the plain from Kapaʻa to Kōloa the other 37%. The rule gives ' +
+          'the plain 51% (the median land 1.38 times off its 1835 share, the mean 1.54 times; the rule before this one, ' +
+          'which spread 30% of the people over all habitable land by rain alone, gave the plain 52%, 1.49 and 1.66). Its ' +
+          'misses are the small valleys under the cliffs (Kalalau, Hanakoa, Hāʻena), whose floors are too narrow for the ' +
+          'pack, and Hanapēpē.',
+        populations: pop1778,
+        sources: [
+          pop('king-1784-v3'),
+          pop('thrum-1890-annual', {
+            note:
+              'the 1832 census by island (Kahoʻolawe 80, Niʻihau 1,047, Kauaʻi 10,977, all islands 130,313), read on the page ' +
+              'image; the 1836 count (Niʻihau 993, Kauaʻi 8,934) and the 1823 estimate (Niʻihau 1,000, Kauaʻi 10,000) read in ' +
+              'the scan’s text layer',
+          }),
+          pop('kumu-hawaii-1835-kona'),
+          pop('kumu-hawaii-1835-waioli'),
+          pop('kirch-2004-kahikinui'),
+          pop('ladefoged-2009-intensive'),
+          pop('earle-1978-halelea'),
+          boundaries,
+        ],
       },
       forest: {
         method: 'modelled',
@@ -397,7 +425,7 @@ async function bake(dir) {
       }
     }
     // settlement weights
-    const wC = contactWeight(I, cult.contact)
+    const wC = contactWeight(I)
     const wK = new Float32Array(P.N)
     for (let o = 0; o < P.N; o++) wK[o] = P.land[o] ? I.kuleana[o] : 0
     const wCane = caneWeight(I)
@@ -428,10 +456,12 @@ async function bake(dir) {
     log(`    cultivation and forest written (${((Date.now() - t0) / 1000).toFixed(0)} s so far)`)
   }
 
-  // Kahoʻolawe in 1778, which King leaves out: its 1832 count back-cast by
-  // the ratio of King's total to the 1832 census.
+  // Kahoʻolawe, which King leaves out, and Niʻihau, whose figure from King's
+  // coast rule is out of all proportion to its later counts, in 1778: the
+  // 1832 count back-cast by the ratio of King's total to the 1832 census.
   const pop1778 = { ...ISLAND_POP.contact }
-  pop1778.kahoolawe = Math.round((KAHOOLAWE_BACKCAST.count1832 * KAHOOLAWE_BACKCAST.king) / KAHOOLAWE_BACKCAST.total1832 / 10) * 10
+  const B = BACKCAST_1832
+  for (const [isl, n] of Object.entries(B.counts)) pop1778[isl] = Math.round((n * B.king) / B.total1832 / 10) * 10
 
   // Pass 2: settlement in people per km², encoded.
   const dTowns = TOWNS_1896.map((t) => DISTRICTS_1896.findIndex((d) => d.name === t.district))
@@ -487,7 +517,7 @@ async function bake(dir) {
   }
 
   // manifest
-  const how = methods(ledger, dir, pop1778.kahoolawe)
+  const how = methods(ledger, dir, pop1778)
   const islands = {}
   for (const s of state) {
     const e = s.entry

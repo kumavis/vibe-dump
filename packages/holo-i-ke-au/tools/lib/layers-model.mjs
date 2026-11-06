@@ -89,6 +89,65 @@ export const POP_SOURCES = {
     licence: 'public domain',
     note: 'the 1896 count by island and district (109,020 in all), read on the page image; totals include every nationality',
   },
+  'kumu-hawaii-1835-kona': {
+    id: 'kumu-hawaii-1835-kona',
+    title: 'Ke Kumu Hawaii, 23 December 1835 (Buke 1, Pepa 26), p. 204: the count of Kona, Kauaʻi, from Nuʻuolo to Hanapēpē, and of Niʻihau, 1831 and 1835 (signed Wini, Samuel Whitney)',
+    url: 'https://nupepa-hawaii.com/2015/07/25/population-change-of-kona-kauai-and-niihau-1835/',
+    licence: 'public domain (1835); the table as transcribed at nupepa-hawaii.com, also https://nupepa-hawaii.com/2019/10/25/population-of-kona-kauai-and-niihau-1835/',
+    opened: true,
+    read: 'part',
+    note:
+      'by ahupuaʻa, 1835: Waimea 664, Hanapēpē 598, Makaweli 480, Kekaha 185, Kekupua 179, the fifteen small lands from Nuʻuolo ' +
+      'to Pokiʻi 510 between them; 2,616 in all (4,508 in 1831, when the chiefs lived at Waimea). Niʻihau 993 (1,079 in 1831). ' +
+      'Read in the transcription (the table; the letter’s text only in summary), not on the page image.',
+  },
+  'kumu-hawaii-1835-waioli': {
+    id: 'kumu-hawaii-1835-waioli',
+    title: 'Ke Kumu Hawaii, 14 October 1835 (Buke 1, Pepa 21), p. 164: letter from Waiʻoli, Kauaʻi, signed W. P. A., counting Keālia to Kalalau by ahupuaʻa',
+    url: 'https://nupepa-hawaii.com/2018/09/20/population-decline-1835/',
+    licence: 'public domain (1835); the table as transcribed at nupepa-hawaii.com',
+    opened: true,
+    read: 'part',
+    note:
+      'by ahupuaʻa, 1835: Hanalei 522, Anahola 323, Keālia 283, Wainiha 216, Kalihiwai 190, Kalalau 131, Pīlaʻa 126, ' +
+      'Lumahaʻi 119, Kīlauea 117, Hāʻena 116, Moloaʻa 115, Waiakalua 101 and the rest under 100; 3,118 in all. Read in the ' +
+      'transcription, not on the page image.',
+  },
+  'kirch-2004-kahikinui': {
+    id: 'kirch-2004-kahikinui',
+    title: 'P. V. Kirch, A. S. Hartshorn, O. A. Chadwick and others, Environment, agriculture, and settlement patterns in a marginal Polynesian landscape, PNAS 101 (2004)',
+    url: 'https://www.usgs.gov/publications/environment-agriculture-and-settlement-patterns-a-marginal-polynesian-landscape',
+    licence: 'cited, not reproduced',
+    opened: true,
+    read: 'part',
+    note:
+      'the abstract: permanent dryland settlement in Kahikinui, Maui, from about 1400, sweet potato its staple, peak density ' +
+      '43–57 people per km² reached by 1700–1800. Wanted from the full text: the house counts behind the density, and the area ' +
+      'it is taken over.',
+  },
+  'ladefoged-2009-intensive': {
+    id: 'ladefoged-2009-intensive',
+    title: 'T. N. Ladefoged, P. V. Kirch, S. M. Gon and others, Opportunities and constraints for intensive agriculture in the Hawaiian archipelago prior to European contact, Journal of Archaeological Science 36 (2009): 2374–2383',
+    url: 'https://www.conservationgateway.org/collections/hawaii-palmyra/indigenous-approach/hawaiian-intensive-agriculture-opportunities-constraints-pre-european-contact/',
+    licence: 'cited, not reproduced',
+    opened: true,
+    read: 'part',
+    note:
+      'the abstract: Kauaʻi could have supported 58 km² of intensive agriculture, all of it irrigated pondfield, none rain-fed. ' +
+      'Wanted from the full text: the model’s Kauaʻi map, valley by valley.',
+  },
+  'earle-1978-halelea': {
+    id: 'earle-1978-halelea',
+    title: 'Timothy Earle, Economic and Social Organization of a Complex Chiefdom: The Halelea District, Kauaʻi, Hawaii (University of Michigan Museum of Anthropology, Anthropological Papers 63, 1978)',
+    url: 'https://press.umich.edu/Books/E/Economic-and-Social-Organization-of-a-Complex-Chiefdom',
+    licence: 'cited, not reproduced',
+    opened: false,
+    read: 'title',
+    wanted:
+      'the irrigation complexes and house sites of Hanalei, Waiʻoli, Waipā, Lumahaʻi and Wainiha: where on the valley floors ' +
+      'and the beach ridges people lived, and any estimate of the district’s people before contact, to set the valley ' +
+      'weights against the 1835 counts.',
+  },
   'nps-kalaupapa': {
     id: 'nps-kalaupapa',
     title: 'National Park Service, A Brief History of Kalaupapa',
@@ -98,14 +157,27 @@ export const POP_SOURCES = {
   },
 }
 
-/** Island populations by keyframe. Kahoʻolawe in 1778 is modelled (see note). */
+/**
+ * Island populations by keyframe. Kahoʻolawe and Niʻihau in 1778 are
+ * back-cast from 1832 (BACKCAST_1832), not King's; null here.
+ */
 export const ISLAND_POP = {
-  contact: { hawaii: 150000, maui: 65400, oahu: 60200, kauai: 54000, molokai: 36000, lanai: 20400, niihau: 10000, kahoolawe: null },
+  contact: { hawaii: 150000, maui: 65400, oahu: 60200, kauai: 54000, molokai: 36000, lanai: 20400, niihau: null, kahoolawe: null },
   mahele: { hawaii: 24450, maui: 17574, oahu: 19126, kauai: 6991, molokai: 3607, lanai: 600, niihau: 790, kahoolawe: 0 },
 }
 
-/** Kahoʻolawe in 1778: the 1832 count (Thrum) times King's total over the 1832 total (Thrum). */
-export const KAHOOLAWE_BACKCAST = { count1832: 80, total1832: 130313, king: 400000 }
+/**
+ * The islands whose 1778 figure is their 1832 count (Thrum) times King's
+ * total over the 1832 total (Thrum), rounded to tens. Kahoʻolawe, which King
+ * leaves out. Niʻihau, for which King gives 10,000: his figures come from the
+ * houses he counted at Kealakekua "applied to the whole extent of coast"
+ * (King 1784, vol. III, p. 127), and a long, dry coast takes a large share
+ * by that rule; 10,000 is 9.6 times the 1,047 of 1832 (the 1823 estimate in
+ * the same table is 1,000), where the chain as a whole is 3.1 times, and it
+ * would put on all of Niʻihau the peak density Kirch and others (2004) found
+ * in Kahikinui's farmed zone alone.
+ */
+export const BACKCAST_1832 = { counts: { kahoolawe: 80, niihau: 1047 }, total1832: 130313, king: 400000, kingSays: { niihau: 10000 } }
 
 /**
  * The 1896 census districts, joined to the moku of boundaries/moku.geojson.
@@ -212,8 +284,16 @@ export const RULES = {
   pondMaxElevation: 6,
   pondShallowDepth: -3,
   pondShallowShare: [0.5, 0.85],
-  // pre-contact settlement: a thin floor over all habitable land
+  // pre-contact settlement (contactWeight): the fields people lived among
+  // (agroforestry, tree crops on the slopes above the loʻi and the shore,
+  // counts for less: houses stood by the loʻi and the shore, not in the
+  // groves), the shore, and a thin floor that thins inland
+  settleFields: 0.5,
+  settleAgroforestry: 0.5,
+  settleCoast: 0.7,
+  settleKuleana: 0.15,
   settleFloor: 0.03,
+  settleFloorMetres: 3000,
   // pre-contact forest
   forestRainMm: [700, 1500],
   treeLineMetres: [1900, 2700],
@@ -530,10 +610,25 @@ export function forest(I, key, cult) {
 // ---------------------------------------------------------------------------
 // Settlement: weights here; bake-layers.mjs scales them to people
 
-/** Where people lived before contact: near their fields, along the coast, on the kuleana. */
-export function contactWeight(I, cultContact) {
+/**
+ * Where people lived before contact: near their fields, along the shore, on
+ * the kuleana, and thinly on the rest of the land, thinning inland. The
+ * fields are the contact cultivation's terms with agroforestry counted at
+ * RULES.settleAgroforestry of its own weight.
+ */
+export function contactWeight(I) {
   const { N, W, H, land, metres, dSea, slope, rain, texelMetres } = I
-  const nearFields = blur(cultContact, W, H, 400, texelMetres)
+  const terms = CULTIVATION_TERMS.contact
+  const t = new Float64Array(terms.length)
+  const ia = terms.indexOf('agroforestry')
+  const fields = new Float32Array(N)
+  for (let o = 0; o < N; o++) {
+    if (!land[o]) continue
+    cultivationTerms(I, 'contact', o, t)
+    t[ia] *= RULES.settleAgroforestry
+    fields[o] = clamp01(Math.max(...t))
+  }
+  const nearFields = blur(fields, W, H, 400, texelMetres)
   const out = new Float32Array(N)
   for (let o = 0; o < N; o++) {
     if (!land[o]) continue
@@ -542,7 +637,11 @@ export function contactWeight(I, cultContact) {
     const fresh = 0.4 + 0.6 * smoothstep(500, 1500, rain[o])
     const habitable = (1 - smoothstep(0.35, 0.7, slope[o])) * (1 - smoothstep(800, 1600, h))
     const young = 1 - 0.7 * (I.ageAt1778.cover[o] * (1 - smoothstep(50, 200, I.ageAt1778.mean[o] || 0)))
-    out[o] = (0.5 * nearFields[o] + 0.35 * coast * fresh + 0.15 * clamp01(I.kuleana[o] * 3) + RULES.settleFloor * fresh) * habitable * young
+    const floor = RULES.settleFloor * Math.exp(-dSea[o] / RULES.settleFloorMetres)
+    out[o] =
+      (RULES.settleFields * nearFields[o] + RULES.settleCoast * coast * fresh + RULES.settleKuleana * clamp01(I.kuleana[o] * 3) + floor) *
+      habitable *
+      young
   }
   return out
 }
