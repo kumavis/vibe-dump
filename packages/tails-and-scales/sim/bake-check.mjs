@@ -578,7 +578,10 @@ else console.log(`  ok   9 furs for the seven units, each drawn by every figure 
   const skipped = before - splat.splatsPrepared.figures
   console.log(`  ${skipped === 2 ? 'ok  ' : 'FAIL'} a hidden figure, one off screen and one in another scene: ${splat.splatsPrepared.figures} of the ${before} in view prepared, the other scene's untouched`)
   if (skipped !== 2) issues.push(`${skipped} skipped, not 2`)
-  // freed: every figure off, then a while of preparing nothing: no order held but the templates'
+  // freed: every figure off, then a while of preparing nothing: no order held
+  // ((F9b's sweep) the templates' neither: until then each template held its
+  // fur's first bin for good, a geometry renderer.info counted only once a
+  // figure happened to be seen from that bin, cache.js's note)
   for (const f of [one, ...crowd, elsewhere]) {
     f.parent.remove(f)
     cache.disposeFigure(f)
@@ -586,10 +589,8 @@ else console.log(`  ok   9 furs for the seven units, each drawn by every figure 
   const held = splat.splatStats().orders
   for (let k = 0; k < 200; k++) splat.prepareSplats(cam, stub, toSun, scene)
   const left = splat.splatStats()
-  // (the six templates' own kept, cache.js's, the War-Cart's two crew among
-  // them: the trebuchet DRAWS, so it has none)
-  const freed = left.live === 0 && left.orders === 7
-  console.log(`  ${freed ? 'ok  ' : 'FAIL'} every figure freed: ${left.live} registered, draw orders ${held} → ${left.orders} after 200 preparations (the six templates' own kept, the War-Cart's two crew among them)`)
+  const freed = left.live === 0 && left.orders === 0
+  console.log(`  ${freed ? 'ok  ' : 'FAIL'} every figure freed: ${left.live} registered, draw orders ${held} → ${left.orders} after 200 preparations (none kept, the templates' own neither)`)
   if (!freed) issues.push('orders kept')
   bad += issues.length
 }

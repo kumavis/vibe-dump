@@ -80,6 +80,9 @@
 // event built); smoke rises from it every frame it stands (animate(), the
 // view's: cosmetic, on Math.random), and the embers flicker. It is never
 // tiled (tileable(): it burns), and a blast that breaks it scatters it.
+// ((F9b's sweep) A long hull's wreck, its box longer than it is wide, is
+// drawn along its facing, the box's yaw: the Howdah's split shell slumped
+// off its charred coils, longWreck().)
 // ---------------------------------------------------------------------------
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -312,9 +315,11 @@ const PIECES = {
   // over, its cupules charred, a wheel thrown flat and another leaning on
   // it, planks strewn, and flames licking out of the char among embers.
   // Turned by the chunk's id (a golden-angle step), so two wrecks don't lie
-  // alike.
+  // alike. ((F9b's sweep) A long hull's, its box longer than it is wide,
+  // is longWreck()'s, along its facing.)
   wreck(c) {
     const { shape: s } = c
+    if (s.hz > s.hx * 1.25) return longWreck(c)
     const g = new THREE.Group()
     g.position.set(s.x, c.base ?? 0, s.z)
     g.rotation.y = (s.yaw ?? 0) + ((c.id * 2.399963) % (Math.PI * 2))
@@ -380,6 +385,74 @@ const PIECES = {
     }
     return { obj: g, ember }
   },
+}
+// (F9b's sweep) A long hull's burning wreck (its box longer than it is
+// wide: the Howdah's 2.4 × 5.8"), lying along its facing as the rules' box
+// does: the shell split open and slumped off the coils, the serpent's body
+// charred in an S down the length, its head fallen forward and its tail
+// flung back, the deck's planks strewn, and flames out of the char. Built
+// from its def alone, as wreck() is (no Math.random: a snap builds what the
+// event built); its box's +z is the hull's head (core/actions/transport.js:
+// yaw h·π/4, h = 0 facing +z).
+function longWreck(c) {
+  const { shape: s } = c
+  const g = new THREE.Group()
+  g.position.set(s.x, c.base ?? 0, s.z)
+  g.rotation.y = s.yaw ?? 0
+  const w = s.hx, l = s.hz, H = Math.min(1, (s.hy * 2) / 1.2)
+  const char = mat('#2e231c'), scorched = mat('#46301f'), wood = mat('#5e3d25'), hide = mat('#3b3328')
+  const ember = mat('#ff8a2a', { emissive: '#ff5a10', emissiveIntensity: 1.4 })
+  // the scorch mark under it all, along the box
+  const burn = mesh(new THREE.CircleGeometry(1, 24).rotateX(-Math.PI / 2).scale(w * 1.15, 1, l * 1.06), mat('#221c18'), { shadow: false })
+  burn.position.y = 0.014
+  g.add(burn)
+  // the serpent's body, charred, an S down the length
+  const spine = new THREE.CatmullRomCurve3([[0.1, 0.9], [-0.35, 0.45], [0.3, 0], [-0.3, -0.45], [0.15, -0.85]].map(([x, z]) => new THREE.Vector3(x * w, 0.26 * H, z * l)))
+  g.add(mesh(new THREE.TubeGeometry(spine, 24, 0.3 * H + 0.05, 7, false), hide))
+  // its head fallen forward, its tail flung back
+  const head = mesh(new THREE.SphereGeometry(0.34, 8, 6).scale(0.8, 0.55, 1.25), char)
+  head.position.set(0.25 * w, 0.17, 0.86 * l)
+  head.rotation.y = 0.5
+  g.add(head)
+  const tail = mesh(new THREE.ConeGeometry(0.16, 0.9, 6).rotateX(-Math.PI / 2), char)
+  tail.position.set(-0.05 * w, 0.12, -0.84 * l)
+  tail.rotation.y = -0.6
+  g.add(tail)
+  // the shell, split open (a dome short of a full turn) and slumped off it
+  const shell = mesh(new THREE.SphereGeometry(1, 14, 6, 0.6, Math.PI * 1.35, 0, Math.PI / 2).scale(w * 0.95, s.hy * 1.1, l * 0.72), mat('#432d1d', { side: THREE.DoubleSide }))
+  shell.rotation.set(0.06, 0, 0.22)
+  shell.position.set(0.22 * w, 0.15, -0.05 * l)
+  g.add(shell)
+  // its plates, broken off and charred, round it
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2
+    const p = mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.06, 6), i % 2 ? char : scorched)
+    p.position.set(Math.sin(a) * w * 1.02, 0.04 + (i % 3) * 0.03, Math.cos(a) * l * 0.92)
+    p.rotation.set(0.2 * ((i % 3) - 1), a, 0.15)
+    g.add(p)
+  }
+  // the deck's planks, strewn along it
+  const planks = [[-0.8, 0.05, 0.55, 0.3], [0.85, 0.05, 0.3, -0.7], [-0.45, 0.07, -0.2, 1.2], [0.9, 0.05, -0.55, 0.15], [-0.9, 0.06, -0.65, -1.1], [0.3, 0.08, 0.75, 0.9]]
+  for (const [x, y, z, a] of planks) {
+    const p = mesh(BOX, a > 0 ? wood : scorched)
+    p.scale.set(0.2, 0.04, 0.9)
+    p.position.set(x * w, y, z * l)
+    p.rotation.set(0.06, a, 0.05)
+    g.add(p)
+  }
+  // flames out of the char, and embers glowing in it (both flicker:
+  // animate())
+  for (const [x, z, h, r] of [[0.05, 0.1, 0.8, 0.22], [0.35, 0.45, 0.6, 0.17], [-0.3, -0.25, 0.55, 0.16], [0.15, -0.6, 0.45, 0.14], [-0.4, 0.7, 0.32, 0.1], [0.5, -0.15, 0.4, 0.12]]) {
+    const f = mesh(new THREE.ConeGeometry(r, h * H, 6).translate(0, (h * H) / 2, 0), ember, { shadow: false })
+    f.position.set(x * w, 0.1, z * l)
+    g.add(f)
+  }
+  for (const [x, y, z] of [[0.1, 0.12, 0.05], [0.45, 0.2, -0.4], [-0.2, 0.08, -0.7], [0.6, 0.1, 0.5], [-0.45, 0.06, 0.25], [-0.6, 0.05, -0.3]]) {
+    const e = mesh(new THREE.IcosahedronGeometry(0.08, 0), ember, { shadow: false })
+    e.position.set(x * w, y, z * l)
+    g.add(e)
+  }
+  return { obj: g, ember }
 }
 // ── The Powder Field (V3d, DESIGN §4.2.11) ──────────────────────────────────
 // The wreckage of a day's fighting in the same chunky painted plastic as the
