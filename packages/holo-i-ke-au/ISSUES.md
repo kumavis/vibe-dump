@@ -69,8 +69,10 @@ fix has landed in `dist/` and been looked at again.
   the Kalihi entrance kept open at its surveyed width, from Malden's plan of
   1825, the 1881 and 1927 sheets. DATA.md "Patches" carries the extensions;
   RESEARCH.md §19 the record.
-- **Status:** landed on the branch; the after shots at 1850–2000 (the works
-  arriving on their dates) still to be looked at.
+- **Status:** landed; shots at 1480, 1850, 1900, 1950 and 2000 show the
+  natural shore until the first basin by 1900, and the piers, Sand Island
+  and Keʻehi's runways in place by 1950. The Kalihi entrance crosses the
+  flat as a fairly straight channel, as the 1881 trace has it.
 
 ### 5. Scars of H-1 and H-3 in the early eras
 
