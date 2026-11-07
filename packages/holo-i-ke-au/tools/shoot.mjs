@@ -37,11 +37,12 @@ const outDir = process.argv[2] || join(root, 'tools/shots')
 // raking angle (where the buildings once flickered); and every island's
 // (features/towns.js), once its towns in reach are built: Lahaina in 1850
 // and now, Kailua-Kona in 1820 and 1896, Hilo now, a Kohala hamlet in 1778.
-// `place` is a gazetteer id or [lon, lat].
+// `place` is a gazetteer id or [lon, lat]. The first leaves the prologue the app
+// opens on (where the data has a geology) for the years.
 const nearShot = (name, place, year, [bearing, pitch, distance], first = false) => ({
   name,
   year,
-  eval: `${first ? 'app.ui.card.close(); app.ui.onScrub(); ' : ''}const v = app.tour.cameraView(${typeof place === 'string' ? `app.tour.places.get('${place}')` : `{ geometry: { type: 'Point', coordinates: ${JSON.stringify(place)} } }`}, { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
+  eval: `${first ? `app.tour.setPrologue(false); app.timeline.setYear(${year}); app.ui.card.close(); app.ui.onScrub(); ` : ''}const v = app.tour.cameraView(${typeof place === 'string' ? `app.tour.places.get('${place}')` : `{ geometry: { type: 'Point', coordinates: ${JSON.stringify(place)} } }`}, { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
   until: "(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D.districtAt(t.x, t.z); return app.towns.idle && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()",
   report: "{ district: app.districts.cur?.features?.settlements.stats() ?? null, towns: app.towns.stats(), overlaps: app.footprints?.(app.timeline.year, app.rig.state.target.x, app.rig.state.target.z, 40) ?? null }",
 })
