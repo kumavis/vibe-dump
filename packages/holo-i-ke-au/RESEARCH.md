@@ -2701,7 +2701,7 @@ of the shore, and what was changed.
 | `src/data/district-decode.js`, `src/render/shaders/common.glsl.js`, `src/render/district.js`, `src/features/settlements.js` | a lower patch's texels laid at the reef round them where it is deeper than the patch's depth (`reefLevel`, kept in the carve); of two lowers in force on one texel, the deeper depth |
 | `tools/lib/patch-works.mjs` | the Kalihi passage; Quarantine Island and its cay, the harbour and the reef before the Esplanade as shapes; `OLD_LAND`; five lower works (`kou-esplanade` 1856, `kou-harbour-piers` 1896, `harbour-reef-piers` 1900, `keehi-lagoon-fills` 1944, `kamokuakulikuli-growth` 1869) with their sources |
 | `tools/lib/patch-bake.mjs` | the island's raises held to the pack's own reef; water cut into the old land laid back as land; the island's reef lowers laid at the reef round them; the appended works listed last |
-| `public/data/patches/` | re-baked: 63 patches (was 48), 15 new, listed last |
+| `public/data/patches/` | re-baked: 65 patches (was 48), 17 new, listed last |
 
 ### What could not be reached, or was not read
 
@@ -2722,3 +2722,19 @@ of the shore, and what was changed.
   the park and harbour are probably later.
 - Queen Street's line stands for the old shore within perhaps 30 m; the 1881 trace's own
   registration is 25–50 m.
+
+### After the first look
+
+- **The band west of the harbour** was not a seam: at 1480 the island pack and the district
+  both lay the reef either side of the district's west edge at −1.0 to −1.1 m. It was the
+  Kalihi entrance, kept at today's dredged depth (−8 to −11.5 m, near Malden's 5 fathoms),
+  and the island pack drew it two or three texels (about 200 m) wide, because any texel the
+  passage touched was kept from the raise, and that width eased 700 m into the district
+  across the hand-over. Malden draws the channel winding and about as wide as Sandy I. is long
+  (about 100 m). On the island pack a texel is now the passage's only where at least half of
+  it lies in the passage; the island draws it one or two texels wide, the district at its
+  traced width, and the two agree across the hand-over.
+- **The T at the harbour's mouth** was a spit of today's land off Kakaʻako on the east side of
+  the entrance (about 1.5 ha, up to 5 m high, seaward of the 1881 shore), which the fill unit
+  misses and no work took; with the made ground on the west side of the entrance it is now
+  `harbour-mouth-fills` (1900), back to the reef Malden draws along that shore.

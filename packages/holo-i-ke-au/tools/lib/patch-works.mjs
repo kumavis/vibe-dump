@@ -788,6 +788,22 @@ export const LOWER_WORKS = [
       'size with the dredging and infilling of Honolulu Harbor”. Its growth before 1881 is not dated in the sources read; given the station’s lease. The ' +
       'cay’s size and place are inferred, and Malden draws no islet there in 1825',
   },
+  {
+    id: 'harbour-mouth-fills',
+    appended: true,
+    name: 'the made ground either side of the harbour’s mouth',
+    until: 1900,
+    level: -1,
+    within: [sea],
+    outside: ['mamala1881'],
+    region: polygon([[-157.8705, 21.3035], [-157.8555, 21.3035], [-157.8555, 21.288], [-157.8705, 21.288]]),
+    sheets: [1899],
+    sources: ['malden-1825'],
+    note:
+      'today’s land at the harbour’s mouth seaward of the 1881 shore that the fill unit and the dated works leave: the spit off Kakaʻako on the east side ' +
+      'of the entrance and the made ground on the west, back to the reef Malden draws there in 1825, along the shore past Fishermen’s Point and either ' +
+      'side of the entrance. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here. The passage stays open',
+  },
 ]
 
 // ---------------------------------------------------------------------------

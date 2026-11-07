@@ -986,8 +986,10 @@ the manifest (`appended` in `patch-works.mjs`): lower the Esplanade and the
 wharves at Kou to the reef along the town, Queen Street its shore (1856);
 the piers in the harbour at Kou to its floor (1896); the piers and wharves on
 the reef of Iwilei and Kapālama that the fill unit misses (1900); the islets,
-dike and fills in Keʻehi lagoon (1944); and Quarantine Island, as the 1881
-sheet draws it, to the reef round a cay of about two hectares (1869).
+dike and fills in Keʻehi lagoon (1944); the made ground either side of the
+harbour's mouth, back to the reef Malden draws there (1900); and Quarantine
+Island, as the 1881 sheet draws it, to the reef round a cay of about two
+hectares (1869).
 
 Carried from `koolaupoko` onto `oahu` (`CARRIED_WORKS` in `patch-works.mjs`):
 the district reads Kāneʻohe Bay's works at its own scale and from its own
@@ -1016,8 +1018,9 @@ outside every zone are listed by the bake.
 The check (`--check`) reads every mask back on its pack: a greyscale image of
 the stated size; raise weights only over today's sea and only where today is
 deeper than `depth`, lower weights only over today's land and only where it
-stands above `depth`; no raise texel touching a passage; weights of one kind
-on one pack never over one; every patch with a note and sourced date, every
+stands above `depth`; no raise texel touching a passage (on the island pack,
+whose texels are wider than the Kalihi entrance, none at least half in one);
+weights of one kind on one pack never over one; every patch with a note and sourced date, every
 source with its URL, date and licence; and `public/data/patches/` under 1 MB.
 It prints, per raise patch, the median depth of its ground today and in 1795.
 

@@ -21,7 +21,7 @@ import { gridFromBounds } from './geo.mjs'
 import { readPack } from './layers-raster.mjs'
 import { readPNG, writePNG } from './png.mjs'
 import { resampleGrid } from './raster.mjs'
-import { patchPacks } from './patch-bake.mjs'
+import { inPassage as inPassageTexel, patchPacks } from './patch-bake.mjs'
 import { cudemMosaic, polygonCover } from './patch-raster.mjs'
 import { SHEETS, cudemTiles, patchPaths } from './patch-sources.mjs'
 import { allShapes } from './patch-works.mjs'
@@ -131,7 +131,7 @@ export function checkPatches({ data, log }) {
         if (e.kind === 'raise') {
           if (h > 0) wrongSide++
           if (!(h < e.depth)) wrongWay++
-          if (passage[o] > 0) inPassage++
+          if (inPassageTexel(pk.kind, passage[o])) inPassage++
         } else {
           if (h <= 0) wrongSide++
           if (!(h > e.depth)) wrongWay++

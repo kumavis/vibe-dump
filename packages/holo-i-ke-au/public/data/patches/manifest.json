@@ -9,7 +9,7 @@
       "id": "oahu-honolulu-bar-cut",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -7.92,
+      "depth": -7.89,
       "until": 1892,
       "file": "patches/oahu-honolulu-bar-cut.png",
       "size": [
@@ -53,9 +53,9 @@
         }
       ],
       "stats": {
-        "texels": 15,
-        "km2": 0.07,
-        "meanRaiseMetres": 1.79
+        "texels": 16,
+        "km2": 0.075,
+        "meanRaiseMetres": 1.94
       }
     },
     {
@@ -100,9 +100,9 @@
         }
       ],
       "stats": {
-        "texels": 638,
-        "km2": 2.975,
-        "meanLowerMetres": 0.91
+        "texels": 570,
+        "km2": 2.658,
+        "meanLowerMetres": 0.46
       }
     },
     {
@@ -161,16 +161,16 @@
         }
       ],
       "stats": {
-        "texels": 65,
-        "km2": 0.303,
-        "meanRaiseMetres": 15.95
+        "texels": 72,
+        "km2": 0.336,
+        "meanRaiseMetres": 15.45
       }
     },
     {
       "id": "oahu-sand-island-early",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -3.33,
+      "depth": -3.5,
       "until": 1908,
       "file": "patches/oahu-sand-island-early.png",
       "size": [
@@ -216,14 +216,14 @@
       "stats": {
         "texels": 261,
         "km2": 1.217,
-        "meanLowerMetres": 1.91
+        "meanLowerMetres": 1.89
       }
     },
     {
       "id": "oahu-pearl-channel",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.03,
+      "depth": -1.04,
       "until": 1911,
       "file": "patches/oahu-pearl-channel.png",
       "size": [
@@ -283,9 +283,9 @@
         }
       ],
       "stats": {
-        "texels": 154,
-        "km2": 0.718,
-        "meanRaiseMetres": 5.92
+        "texels": 196,
+        "km2": 0.914,
+        "meanRaiseMetres": 6.58
       }
     },
     {
@@ -869,7 +869,7 @@
       "id": "oahu-kalihi-channel",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.1,
+      "depth": -1.12,
       "until": 1944,
       "file": "patches/oahu-kalihi-channel.png",
       "size": [
@@ -921,9 +921,9 @@
         }
       ],
       "stats": {
-        "texels": 228,
-        "km2": 1.063,
-        "meanRaiseMetres": 3.39
+        "texels": 242,
+        "km2": 1.128,
+        "meanRaiseMetres": 3.38
       }
     },
     {
@@ -1037,9 +1037,9 @@
         }
       ],
       "stats": {
-        "texels": 778,
-        "km2": 3.628,
-        "meanRaiseMetres": 2.44
+        "texels": 790,
+        "km2": 3.684,
+        "meanRaiseMetres": 2.45
       }
     },
     {
@@ -2571,7 +2571,7 @@
       "id": "oahu-kou-esplanade",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1.44,
+      "depth": -1.52,
       "until": 1856,
       "file": "patches/oahu-kou-esplanade.png",
       "size": [
@@ -2617,7 +2617,7 @@
       "stats": {
         "texels": 100,
         "km2": 0.466,
-        "meanLowerMetres": 0.97
+        "meanLowerMetres": 0.98
       }
     },
     {
@@ -2735,10 +2735,55 @@
       }
     },
     {
+      "id": "oahu-harbour-mouth-fills",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1.97,
+      "until": 1900,
+      "file": "patches/oahu-harbour-mouth-fills.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the made ground either side of the harbour’s mouth",
+      "note": "today’s land at the harbour’s mouth seaward of the 1881 shore that the fill unit and the dated works leave: the spit off Kakaʻako on the east side of the entrance and the made ground on the west, back to the reef Malden draws there in 1825, along the shore past Fishermen’s Point and either side of the entrance. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here. The passage stays open",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 151,
+        "km2": 0.704,
+        "meanLowerMetres": 2.35
+      }
+    },
+    {
       "id": "oahu-harbour-reef-piers",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1.72,
+      "depth": -1.7,
       "until": 1900,
       "file": "patches/oahu-harbour-reef-piers.png",
       "size": [
@@ -2776,14 +2821,14 @@
       "stats": {
         "texels": 244,
         "km2": 1.138,
-        "meanLowerMetres": 0.77
+        "meanLowerMetres": 0.76
       }
     },
     {
       "id": "oahu-keehi-lagoon-fills",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1.6,
+      "depth": -1.51,
       "until": 1944,
       "file": "patches/oahu-keehi-lagoon-fills.png",
       "size": [
@@ -2827,8 +2872,8 @@
         }
       ],
       "stats": {
-        "texels": 342,
-        "km2": 1.595,
+        "texels": 343,
+        "km2": 1.599,
         "meanLowerMetres": 0.61
       }
     },
@@ -3262,6 +3307,51 @@
         "texels": 1748,
         "km2": 0.064,
         "meanLowerMetres": 4.69
+      }
+    },
+    {
+      "id": "nuuanu-harbour-mouth-fills",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1900,
+      "file": "districts/nuuanu/patch-harbour-mouth-fills.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the made ground either side of the harbour’s mouth",
+      "note": "today’s land at the harbour’s mouth seaward of the 1881 shore that the fill unit and the dated works leave: the spit off Kakaʻako on the east side of the entrance and the made ground on the west, back to the reef Malden draws there in 1825, along the shore past Fishermen’s Point and either side of the entrance. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here. The passage stays open",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 10852,
+        "km2": 0.397,
+        "meanLowerMetres": 3.96
       }
     },
     {

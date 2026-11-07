@@ -71,6 +71,15 @@ const SEAWALL_BELOW = 5 // ... if it stands lower than this
 const REEF_DEEPEST = -6 // the deepest a lower patch's reef is spread from the sea round it (island pack)
 const round = (v, d) => Math.round(v * 10 ** d) / 10 ** d
 
+/**
+ * Whether a texel is a passage's, from the share of it the passage covers:
+ * on a district any of it; on the island pack, whose 68 m texels are wider
+ * than a passage such as the Kalihi entrance (about 100 m), at least half,
+ * so the island does not draw the passage twice or three times its width
+ * (the bake and the check both hold the patches to it).
+ */
+export const inPassage = (kind, cover) => (kind === 'island' ? cover >= 0.5 : cover > 0)
+
 /** The packs patches go on: the oahu island pack and the districts on it. */
 export function patchPacks(data) {
   const islands = JSON.parse(readFileSync(join(data, 'manifest.json'), 'utf8'))
@@ -492,7 +501,7 @@ export async function bakePatches({ dir, data, log }) {
     const passageCover = new Uint8Array(PN)
     {
       const pc = polygonCover(PASSAGES.map((x) => x.geometry), P.grid, 4)
-      for (let o = 0; o < PN; o++) passageCover[o] = pc[o] > 0 ? 1 : 0
+      for (let o = 0; o < PN; o++) passageCover[o] = inPassage(pk.kind, pc[o]) ? 1 : 0
     }
 
     // --- raise: footprints first (each group claims its texels), then surfaces
