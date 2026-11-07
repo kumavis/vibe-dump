@@ -47,10 +47,13 @@
 // (F9a) A vehicle's row says which Troops the deployment's autoload would
 // put aboard it (DESIGN §4.2.8.7, core/actions/transport.js's rule: each
 // vehicle in turn, the seat's Troops in roster order whose bases fit and
-// whose models fit the room left), a line per hull. The tip a hull with
-// fewer rider units than its deck's fire slots would carry ("the Howdah's
-// deck fires 3; 2 units fit aboard") waits for F9c's firing decks: nothing
-// fires from a deck before then (transport.js's fireSlots is 0).
+// whose models fit the room left), a line per hull. (F9c, F11b's Departs)
+// Each vehicle row ends its line with its deck's fire slots ("⛭ deck fires
+// 3"), whose tip (a hover, a tap) says how many of its squads aboard shoot
+// from it a turn against how many units the autoload fits aboard ("The
+// Howdah's deck fires 3 a turn; 2 units fit aboard"), so a deck with a
+// slot left over shows it: the record's `fire` (t.transport.fire), the
+// slots core/actions/transport.js's fireSlots reads.
 //
 // Phones (360 px portrait): one column, the points bar, the counts and the
 // buttons in a block that stays at the top while the rows scroll, Save
@@ -453,6 +456,7 @@ export class MusterScreen {
         line.textContent = hulls.length
           ? hulls.map((h) => `${hulls.length > 1 ? `${t.short} ${h.n}` : 'Aboard at the deployment'}: ${h.riders.length ? h.riders.join(', ') : 'no Troops fit'} (${h.models} of ${h.capacity} models)`).join(' · ')
           : `Carries Troops at the deployment: up to ${t.transport.capacity} models`
+        line.append(' · ', this.fireTip(t, hulls))
         row.append(line)
       }
       return row
@@ -461,6 +465,18 @@ export class MusterScreen {
     const refusal = checkList(r, rules, counts)
     this.readyBtn.disabled = !!refusal
     this.readyBtn.textContent = refusal ? capital(refusal) : 'Ready ✓'
+  }
+
+  // (F9c) a vehicle row's fire slots: "⛭ deck fires N", its tip how many of
+  // the squads aboard shoot from it a turn against how many units the
+  // autoload fits aboard each of its hulls (`hulls`, aboardOf's)
+  fireTip(t, hulls) {
+    const k = t.transport.fire, tip = el('span', 'mFire', `⛭ deck fires ${k}`)
+    const ns = [...new Set(hulls.map((h) => h.riders.length))]
+    const fit = !hulls.length ? `up to ${plural(k, 'squad')} aboard shoot from it` : ns.length === 1 ? `${plural(ns[0], 'unit')} fit${ns[0] === 1 ? 's' : ''} aboard${hulls.length > 1 ? ' each' : ''}` : `${ns.join(', ')} units fit aboard them`
+    tip.dataset.tip = 'say'
+    tip.dataset.say = `The ${t.short}'s deck fires ${k} a turn; ${fit}`
+    return tip
   }
 
   // the unit card of roster entry i over the rows: its name, its race and

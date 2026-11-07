@@ -11,6 +11,11 @@
 // (to step it off, or in the deployment to place it), and that riders ride
 // under cover, firing decks to come (F9c); a rider's says what it rides.
 // Both read the mirror (`riders(u)`, `aboard(u)`), as the label does.
+// ((F9c, DESIGN §4.2.5's card) The transport's line is its firing deck's:
+// "Fire deck: 2 slots · 2 squads aboard · 11/12 models", its record's
+// `fire` the slots (squads that may shoot from it a turn), and the copy
+// says how a deck shoots; a rider's line that it shoots from its hull's
+// deck.)
 //
 // It reads the unit as shown (the mirror's: what stands, what wounds are
 // left, mesmerized, in combat), like its label. What the unit has done this
@@ -138,17 +143,17 @@ export class Card {
   // (F9a) a rider's line: the hull it rides, as shown
   ride(u, mu) {
     const h = mu?.aboard ? this.aboard(u) : null
-    return h ? `<div class="card-ride">▣ Aboard the ${h.short} · steps off as its move</div>` : ''
+    return h ? `<div class="card-ride">▣ Aboard the ${h.short} · steps off as its move · shoots from its deck</div>` : ''
   }
   // (F9a) a transport's riders, after its stats: how many squads and models
   // of its capacity, a chip per squad (pressed, it picks the squad up), and
-  // what riding means until the firing decks come
+  // ((F9c) its firing deck: the slots, and the copy saying how it shoots)
   cargo(u) {
     const tr = u.t.transport
     if (!tr) return ''
     const rs = this.riders(u), n = rs.reduce((k, r) => k + r.alive, 0)
     const chips = rs.map((r) => `<button data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</button>`).join('')
-    return `<div class="card-riders"><div><b>Riders:</b> ${rs.length} squad${rs.length === 1 ? '' : 's'} · ${n}/${tr.capacity} models</div>${chips ? `<div class="chips">${chips}</div>` : ''}<em>Riders ride under cover; firing decks come later.</em></div>`
+    return `<div class="card-riders"><div><b>Fire deck:</b> ${tr.fire} slot${tr.fire === 1 ? '' : 's'} · ${rs.length} squad${rs.length === 1 ? '' : 's'} aboard · ${n}/${tr.capacity} models</div>${chips ? `<div class="chips">${chips}</div>` : ''}<em>Riders shoot from the deck's height (sees over walls) and measure range from the hull's edge.</em></div>`
   }
 
   // (F7a) a unit standing on a deck or high on a stair (the mirror's `y`, its

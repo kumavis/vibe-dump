@@ -63,6 +63,13 @@
 //    kept, casting for themselves) and its far stand-in as tall as it.
 //    (Section 1 bakes the classic one by R7a's bake.js and today's; 2 and 4
 //    the glossy one at each detail, and its stand-in.)
+// 6c. (F9c, DESIGN §4.2.5's firing deck: decision Q1) The decks' height,
+//    where the view stands the riders, against the rules' own: for the
+//    War-Cart and the Howdah in both figure styles, the figure's lift (its
+//    y0, cache.js's) and its anim's deck (view/units.js's deckOf stands
+//    the riders' group at their sum) within DECK_TOL of the transport
+//    record's deckY, the height the rules see from (transport.js deckEye),
+//    so a rider is drawn where it shoots from.
 // 7. The splats' preparation (splats.js's prepareSplats, a stub renderer
 //    1280×800 at pixel ratio 1): a figure ~28 px tall draws 1,500 splats and
 //    one ~60 px 6,000 ((V2) and at pixel ratio 0.5, ?lowfi's, one ~56 px
@@ -85,6 +92,8 @@ import { PKG } from './oracle/pin.mjs'
 
 // R7a's view/models/bake.js (the last commit to touch it before V2)
 const BAKE_REF = '417c0127b037c414605ad1b59e18067a44f21478'
+// (F9c) how far the drawn deck may stand from the rules' deckY (inches)
+const DECK_TOL = 0.05
 
 let bad = 0
 const fail = (what) => {
@@ -472,6 +481,26 @@ else console.log(`  ok   9 furs for the seven units, each drawn by every figure 
   }
 }
 
+// ── 6c. (F9c) The decks' height against the rules' deckY ──────────────────
+{
+  console.log(`\n6c. (F9c) the decks' height, where the view stands the riders, against the rules' deckY (within ${DECK_TOL}")`)
+  const rows = [['squirrel', 'warcart', SQUIRREL], ['serpent', 'howdah', SERPENT]]
+  for (const [kit, key, classic] of rows) {
+    const t = RACES[kit].units[key], want = t.transport.deckY
+    // ('new': as the game builds it; classic: its kit's builder, at the
+    // lift cache.js gives every figure of its size in either style)
+    const root = cache.buildModel(kit, key, t, '#ec8a34')
+    const y0 = root.userData.fig.userData.y0, lift = t.big ? 0.09 : 0.06
+    const cfig = classic[key]()
+    for (const [style, at, deck] of [['new', y0, root.userData.anim?.deck], ['classic', lift, cfig.userData.anim?.deck]]) {
+      const y = at + deck, ok = typeof deck === 'number' && Math.abs(y - want) <= DECK_TOL && at === lift
+      console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${style.padEnd(7)} ${key.padEnd(7)} riders stand at ${at.toFixed(2)} + ${typeof deck === 'number' ? deck.toFixed(2) : deck} = ${y.toFixed(3)}", deckY ${want}" (${(y - want).toFixed(3)})${at === lift ? '' : `; the figure's lift ${at}, not ${lift}`}`)
+      if (!ok) bad++
+    }
+    cache.disposeFigure(root)
+  }
+}
+
 // ── 7. The splats' preparation ─────────────────────────────────────────────
 {
   console.log(`\n7. the splats' preparation (prepareSplats, 1280×800 at pixel ratio 1)`)
@@ -599,4 +628,4 @@ if (bad) {
   console.log(`\nbake-check FAILED: ${bad} problem(s)`)
   process.exit(1)
 }
-console.log("\nbake-check passed: bake.js bakes every classic figure exactly as R7a's did, and keeps the glossy ones whole, their far stand-ins in their paint; the splat Bushtails keep their splats, shadow proxies and anim through the bake and a clone; every 'new' figure casts through its one shadow caster; and the splats' preparation keeps its levels, its frame's budget and memory")
+console.log("\nbake-check passed: bake.js bakes every classic figure exactly as R7a's did, and keeps the glossy ones whole, their far stand-ins in their paint; the splat Bushtails keep their splats, shadow proxies and anim through the bake and a clone; every 'new' figure casts through its one shadow caster; (F9c) the War-Cart's and the Howdah's decks stand their riders at the rules' deckY in both styles; and the splats' preparation keeps its levels, its frame's budget and memory")

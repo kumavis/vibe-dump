@@ -108,6 +108,23 @@
 // pivot (PIVOT_S), as the core counts them; its head and tail slither as
 // it goes (the figure's 'hull' anim, view/models/howdah.js). Its riders
 // stand on its deck, turned with it.
+//
+// (F9c, DESIGN §4.2.5's "Deck fire") Firing decks. A rider that can shoot
+// from its hull's deck has no ring to show it, so in the shooting phase its
+// ring's look (paintRings, the same map: white while it can act, gold
+// picked up) lights it on the deck instead: a halo about each of its
+// figures there (deckGlow, in the deck's group, so the hull's LOD and the
+// fog take it with them), and its chip on the hull's label (cargo's `lit`,
+// the label drawn again as it changes, so a snap's label is the table's).
+// An enclosed hull (F5b) shows no rider figures, so its chips alone light.
+// A rider's figures stand at their slots in the world as well as on the
+// deck: ride() writes each one's world place from the deck's matrix, so a
+// volley or a throw from the deck leaves from the figure's slot
+// (view/effects/shots.js; an enclosed hull's from its deck point, deckAt,
+// its ports), at the deck's height. A rider that shoots turns on the deck to
+// face its target (face(): a look yaw relative to the hull, `deckLook`),
+// until its hull's next move turns its riders back to the hull's front
+// (walk()) or it steps off.
 import * as THREE from 'three'
 import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
@@ -142,6 +159,33 @@ const pipShapes = (n) => {
     pipKit.shapes.set(n, Array.from({ length: n }, (_, k) => new THREE.RingGeometry(1.025, 1.075, 8, 1, Math.PI / 2 - (k + 1) * arc + gap / 2, arc - gap).rotateX(-Math.PI / 2)))
   }
   return pipKit
+}
+// (F9c) a rider's deck glow: a soft halo about each of its figures on the
+// deck (a sprite of a radial fall-off, its own texture's numbers: no
+// canvas, so a page under the fake DOM makes it as well), additive, in its
+// ring's colour (a material per colour, shared), its figure in front of
+// its middle and the halo round its edges; made the first time a rider
+// lights (a table with nobody aboard able to shoot, the title's and a
+// watched battle's among them, makes none) and kept. (A ring under its
+// feet, first tried, was hidden by the riders standing on it.)
+const GLOW_OP = 0.6, GLOW_W = 1.5, GLOW_H = 1.7, GLOW_Y = 0.55
+let glowKit = null
+const glowShapes = () => {
+  if (glowKit) return glowKit
+  const n = 32, px = new Uint8Array(n * n * 4)
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+    const r = Math.hypot(((x + 0.5) / n) * 2 - 1, ((y + 0.5) / n) * 2 - 1), k = (y * n + x) * 4
+    px[k] = px[k + 1] = px[k + 2] = 255
+    px[k + 3] = Math.round(255 * Math.max(0, 1 - r) ** 1.5)
+  }
+  const tex = new THREE.DataTexture(px, n, n)
+  tex.needsUpdate = true
+  return (glowKit = { tex, mats: new Map() })
+}
+const glowMat = (col) => {
+  const k = glowShapes()
+  if (!k.mats.has(col)) k.mats.set(col, new THREE.SpriteMaterial({ map: k.tex, color: col, transparent: true, opacity: GLOW_OP, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }))
+  return k.mats.get(col)
 }
 // how long a figure's hop onto or off a deck takes (s), and how high it goes
 const HOP = 0.4, HOP_H = 0.55
@@ -544,6 +588,9 @@ export class UnitViews {
         // slot then holds the rest, as data-check holds every deck to its
         // capacity)
         const s = slots[Math.min(k++, slots.length - 1)] ?? { x: 0, z: 0 }
+        // ((F9c) one seated again on the deck it stands on keeps the turn
+        // it took there to its target; one new to it faces the hull's front)
+        const seated = f.mesh.parent === deck && f.deck === hullId
         if (f.mesh.parent !== deck) {
           if (hop && f.mesh.parent) {
             f.mesh.updateWorldMatrix(true, false)
@@ -563,11 +610,36 @@ export class UnitViews {
         // (standing on the deck itself: its base hidden)
         if (f.mesh.userData.base) f.mesh.userData.base.visible = false
         if (!(f.hop > 0)) f.mesh.position.set(s.x, 0, s.z)
-        f.mesh.rotation.y = 0
+        if (!seated) Object.assign(f, { deckYaw: 0, deckLook: undefined })
+        f.mesh.rotation.y = f.deckYaw ?? 0
         f.mesh.scale.setScalar(RIDER_SCALE)
         Object.assign(f, { lunge: 0, lift: 0, flash: 0, look: undefined })
+        // ((F9c) its deck glow as its unit is lit now)
+        this.deckGlow(f, r.deckLit ?? null)
       })
     }
+  }
+  // (F9c) Rider figure `f`'s glow on its deck in colour `col` (null: out),
+  // about it at its place on the deck (ride() keeps it there), sized to a
+  // rider at RIDER_SCALE.
+  deckGlow(f, col) {
+    if (!col && !f.glow) return
+    const deck = f.mesh?.parent
+    if (!col || !f.deck || deck?.userData.deck === undefined) {
+      if (f.glow) f.glow.visible = false
+      return
+    }
+    if (!f.glow) {
+      f.glow = new THREE.Sprite(glowMat(col))
+      f.glow.renderOrder = 2
+      f.glow.userData.glow = true
+      f.glow.userData.rider = f.mesh.userData.rider
+      f.glow.scale.set(GLOW_W * RIDER_SCALE, GLOW_H * RIDER_SCALE, 1)
+    }
+    if (f.glow.parent !== deck) deck.add(f.glow)
+    f.glow.material = glowMat(col)
+    f.glow.position.set(f.mesh.position.x, GLOW_Y, f.mesh.position.z)
+    f.glow.visible = f.mesh.visible
   }
   // every hull's riders seated (a sync's second pass, `hop` false)
   layDecks(hop) {
@@ -585,9 +657,10 @@ export class UnitViews {
         f.x = tmpV.x
         f.y = tmpV.y
         f.z = tmpV.z
-        // (turned as the hull it rode: its own yaw plus the hull's)
+        // (turned as the hull it rode: its own yaw plus the hull's; (F9c)
+        // its own the yaw it turned to on the deck)
         const hv = this.views.get(f.deck)
-        f.yaw = hv?.models[0]?.yaw ?? f.yaw
+        f.yaw = (hv?.models[0]?.yaw ?? f.yaw) + (f.deckYaw ?? 0)
         f.hop = 1
         f.hopFrom = null
       }
@@ -599,6 +672,11 @@ export class UnitViews {
     }
     f.deck = null
     f.slot = null
+    // ((F9c) its glow and its look on the deck go with it)
+    f.glow?.removeFromParent()
+    f.glow = null
+    f.deckLook = undefined
+    f.deckYaw = 0
     // ((F16) one the fog veils stays veiled off the deck)
     f.mesh.visible = !(f.mesh.userData.rider !== undefined && this.hid(f.mesh.userData.rider))
     if (f.mesh.userData.base) f.mesh.userData.base.visible = true
@@ -822,7 +900,9 @@ export class UnitViews {
     const lit = Math.ceil(n / 2)
     v.pips?.forEach((m, k) => (m.material = k < lit ? pipKit.lit : pipKit.dim))
     let html = `<span class="cg" title="Riders aboard: ${n} of ${tr.capacity} models">▣ ${n}/${tr.capacity}</span>`
-    if (rs.length) html += `<span class="rd">⟨${rs.map((r) => `<i data-rider="${r.id}" title="Pick up the ${r.short}">${r.short} ${r.alive}</i>`).join(' · ')}⟩</span>`
+    // ((F9c) a rider lit by its ring's look in the shooting phase, its chip
+    // lit: it can shoot from the deck, or is the one picked up)
+    if (rs.length) html += `<span class="rd">⟨${rs.map((r) => (this.views.get(r.id)?.deckLit ? `<i data-rider="${r.id}" class="lit" title="Pick up the ${r.short}: it can shoot from the deck">` : `<i data-rider="${r.id}" title="Pick up the ${r.short}">`) + `${r.short} ${r.alive}</i>`).join(' · ')}⟩</span>`
     return html
   }
   // (V3a) the conditions unit `id` shows on its label now, the context
@@ -859,17 +939,37 @@ export class UnitViews {
 
   // Each standing unit's ring in the colour and strength `look(v)` gives
   // ([colour, opacity]: picked up, a target, can act, under the pointer).
+  // ((F9c) A rider, ringless, is lit on its deck by the same look in the
+  // shooting phase (`deckLit`: its figures' glow, its chip on its hull's
+  // label, that label drawn again when it changes).)
   paintRings(look) {
+    const shoot = this.mirror()?.phase === 'shoot'
+    let hulls = null
     for (const v of this.views.values()) {
       // (the units the table shows standing)
-      if (!(this.shown(v.id).alive > 0)) continue
+      const mu = this.shown(v.id)
+      if (!(mu.alive > 0)) {
+        if (v.deckLit) v.deckLit = null
+        continue
+      }
       const [col, op] = look(v)
       v.ring.material.opacity = op
       v.ring.material.color.set(col)
       // ((F8b) what a chip's border shows when the rings are hidden)
       v.look = op > 0.15 ? col : null
       this.xray(v, op > 0.15 && this.own(v.u.side) ? col : null)
+      const lit = mu.aboard && shoot && op > 0.15 ? col : null
+      if ((v.deckLit ?? null) !== lit) {
+        v.deckLit = lit
+        for (const f of v.models) if (f.deck) this.deckGlow(f, lit)
+        // (one stepped off: its hull's label is drawn again as it goes)
+        if (mu.aboard) {
+          hulls ??= new Set()
+          hulls.add(mu.aboard)
+        }
+      }
     }
+    if (hulls) for (const id of hulls) if (this.views.has(id)) this.label(id)
   }
 
   // (F7b, DESIGN §4.2.4's see-through) The rings of the seats played here
@@ -948,7 +1048,7 @@ export class UnitViews {
         // ((F9a) on a hull's deck: it rides, standing at its slot (after its
         // hop on), turned the hull's way; the hull's LOD hides the deck)
         if (m.deck && model.alive) {
-          this.ride(m, dt, M)
+          this.ride(m, dt, v)
           // ((V2) its breath about its height as built, cache.js's sy, as a
           // figure's on the table)
           if (m.mesh.userData.anim?.kind === 'squirrel' && !m.lo) {
@@ -1107,9 +1207,14 @@ export class UnitViews {
 
   // (F9a) A rider's figure on its hull's deck, this frame: at its slot, or
   // on its hop there from where it boarded (an arc up and over the rim),
-  // facing the hull's front, at RIDER_SCALE; its world place (what a text
-  // over it reads) the hull's.
-  ride(m, dt, M) {
+  // facing the hull's front, at RIDER_SCALE. ((F9c) Or turned to the target
+  // it last shot (`deckLook`, relative to the hull: face()), the turn
+  // eased; its glow about it (deckGlow); and its world place (where a
+  // volley or a throw from the deck leaves, what a text over it reads)
+  // its slot's, from the deck's matrix, at the deck's height; an enclosed
+  // hull's riders, unseen, its deck point (deckAt), the ports' stand-in.)
+  // (`rv`: the rider's view)
+  ride(m, dt, rv) {
     const s = m.slot ?? { x: 0, z: 0 }
     if (m.hop > 0 && m.hopFrom) {
       m.hop = Math.max(0, m.hop - dt / HOP)
@@ -1119,13 +1224,33 @@ export class UnitViews {
       m.hop = 0
       m.mesh.position.set(s.x, 0, s.z)
     }
-    m.mesh.rotation.y = 0
+    const want = m.deckLook ?? 0
+    m.deckYaw = (m.deckYaw ?? 0) + wrapAngle(want - (m.deckYaw ?? 0)) * Math.min(1, 1 - Math.exp(-dt * 10))
+    if (Math.abs(wrapAngle(want - m.deckYaw)) < 1e-4) m.deckYaw = want
+    m.mesh.rotation.y = m.deckYaw
     if (m.mesh.scale.x !== RIDER_SCALE) m.mesh.scale.setScalar(RIDER_SCALE)
+    if (m.glow) {
+      if (m.glow.parent !== m.mesh.parent) m.mesh.parent?.add(m.glow)
+      m.glow.position.set(m.mesh.position.x, GLOW_Y + m.mesh.position.y, m.mesh.position.z)
+      m.glow.visible = !!rv?.deckLit && m.mesh.visible
+    }
     const hv = this.views.get(m.deck), h = hv?.models[0]
     if (h) {
-      m.x = h.x
-      m.y = (h.y ?? 0) + (hv.deck?.position.y ?? 0)
-      m.z = h.z
+      // (an enclosed hull's deck point: its deckAt in the deck's frame, the
+      // hull's own, as deckSlots packs it)
+      const tr = hv.u.t.transport, shut = !!tr?.enclosed, at = shut ? hv.deck : m.mesh
+      if (at?.parent) {
+        at.updateWorldMatrix(true, false)
+        if (shut) tmpV.set(tr.deckAt?.[0] ?? 0, 0, tr.deckAt?.[1] ?? 0).applyMatrix4(at.matrixWorld)
+        else tmpV.setFromMatrixPosition(at.matrixWorld)
+        m.x = tmpV.x
+        m.y = (h.y ?? 0) + (hv.deck?.position.y ?? 0)
+        m.z = tmpV.z
+      } else {
+        m.x = h.x
+        m.y = (h.y ?? 0) + (hv.deck?.position.y ?? 0)
+        m.z = h.z
+      }
       m.yaw = h.yaw
     }
   }
@@ -1306,11 +1431,22 @@ export class UnitViews {
   // `e.u` turns to face `e.tg`, as both are shown (a unit.face event's).
   // ((F9b) Not a long hull: its yaw is its facing, rules state, which its
   // charge's walk turns as it goes.)
+  // ((F9c) A rider on its hull's deck: each of its figures turns there to
+  // the target from its slot, a yaw relative to the hull (`deckLook`, eased
+  // by ride()), held until its hull moves or it steps off.)
   face(e) {
     const v = this.views.get(e.u), at = this.shown(e.tg).pos, from = this.shown(e.u).pos
     if (v.fp) return
     v.facing = Math.atan2(at.x - from.x, at.z - from.z)
     for (const f of v.models) f.look = Math.atan2(at.x - f.x, at.z - f.z)
+    const hv = this.shown(e.u).aboard ? this.views.get(this.shown(e.u).aboard) : null, hm = hv?.models[0]?.mesh
+    if (!hm) return
+    for (const f of v.models) {
+      if (!f.deck || !f.mesh?.parent) continue
+      f.mesh.updateWorldMatrix(true, false)
+      tmpV.setFromMatrixPosition(f.mesh.matrixWorld)
+      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)
+    }
   }
 
   // A charge roll's verdict, over the charger's head.
@@ -1371,6 +1507,9 @@ export class UnitViews {
   // without heights (no height layer) as ever.
   async walk(e, M, smash) {
     const v = this.views.get(e.u), gen = this.gen
+    // ((F9c) a hull's riders turned to their targets face its front again
+    // as it goes)
+    if (v.u.t.transport) for (const r of this.views.values()) for (const f of r.models) if (f.deck === e.u) f.deckLook = undefined
     // ((F9b) a long hull's path: its runs and pivots, hullWalk())
     if (v.fp && e.path.length && e.path[0].f !== undefined) return this.hullWalk(e, smash)
     const { path: pts, L, speed, fly, smashes } = e
