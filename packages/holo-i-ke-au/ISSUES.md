@@ -55,8 +55,22 @@ fix has landed in `dist/` and been looked at again.
   harbour's pier slips remain as finger inlets in the shore; a rectangular
   fill at Keʻehi and a small round islet are left standing; the runway and
   channel edges still show faintly through the mottling.
-- **Open:** the pre-contact shore and reef flat of Kou–Kalihi–Keʻehi as the
-  early surveys draw them; the reef flat drawn as the natural one beside it.
+- **Cause:** the sea shader gave every patched reef texel its own look, grey
+  coral heads at a screen-fixed size over near-white sand, while the natural
+  reef beside it is drawn by its depth alone; the fills were lowered to a
+  flat −1 m where the reef round them lies at −2.5 to −4 m; two soft mask
+  edges meeting left a rim of land (the ring round Quarantine Island); the
+  pier slips, the Esplanade, the Keʻehi fills and the harbour-mouth spit had
+  no patch at all.
+- **Fix:** the restored flat is drawn as the reef beside it; lowered ground
+  goes to the reef round it; six new works (the Esplanade to 1856, the
+  harbour piers to 1896, the reef piers to 1900, Keʻehi's fills to 1944,
+  Quarantine Island to a cay to 1869, the harbour-mouth fills to 1900) and
+  the Kalihi entrance kept open at its surveyed width, from Malden's plan of
+  1825, the 1881 and 1927 sheets. DATA.md "Patches" carries the extensions;
+  RESEARCH.md §19 the record.
+- **Status:** landed on the branch; the after shots at 1850–2000 (the works
+  arriving on their dates) still to be looked at.
 
 ### 5. Scars of H-1 and H-3 in the early eras
 
@@ -94,18 +108,38 @@ fix has landed in `dist/` and been looked at again.
 - **Reported:** "also more historical buildings like the palace in honolulu."
 - **Seen:** only the church of 1842 and the clock tower of 1926 are named
   landmarks; everything else is modelled placement.
-- **Open:** ʻIolani Palace and the buildings around it (Aliʻiōlani Hale, the
-  first palace, the Fort, Kawaiahaʻo's neighbours, the cathedral, the Mission
-  Houses, Washington Place, Honolulu Hale, the hotels of Waikīkī, the Bishop
-  Museum …), each at its surveyed footprint with its dates and sources.
+- **Fix:** `public/data/landmarks.json` (DATA.md "Landmarks, dated"), 18
+  named buildings at their footprints with their dates: Hale Aliʻi 1845–79,
+  ʻIolani Palace 1882, Aliʻiōlani Hale 1874, Kawaiahaʻo 1842, the Mission
+  Houses, Washington Place 1846, St. Andrew's 1902, the Kamehameha statue
+  1883, the Barracks at their 1965 site, Honolulu Hale 1929, the Post Office
+  1871, Aloha Tower 1926, the Hawaiʻi Theatre 1922, Hawaiian Hall 1898, the
+  Moana 1901, the Royal Hawaiian 1927; drawn by `features/landmarks.js` with
+  a kit per type, the lots keeping off their ground.
+- **Not yet placed:** the Fort, the courthouse of 1852, Kaumakapili, the
+  Hawaiian Hotel of 1872, the railway terminal, the Seamen's Bethel, the
+  Customs House (no outline or dates read); St. Andrew's only from 1902.
+- **Status:** landed on the branch.
 
 ### 9. Doubly placed and overlapping buildings read as dotted
 
 - **Reported:** "i also notice theres a lot of doubly placed and overlapping
   buildings which result in the building being dotted out."
-- **Open:** which two placements overlap (the district's scatter and the
-  island's, the landmarks and the lots, the works' buildings and the lots)
-  and why the overlap draws as a dither; the fix in the placement rule.
+- **Cause:** buildings caught mid-fade. A lot changing kind between two
+  years swapped its building at a moment of its own, the outgoing and the
+  incoming dithered over complementary pixels for about a year, so a view at
+  rest caught many lots mid-swap; kauhale yards and their lots changed at
+  different moments; the island's town handed over to the district's by the
+  same dither; and 67 works blocks boxed too loosely reached over their
+  neighbours.
+- **Fix:** every lot changes at a half-year, the outgoing building gone
+  before the incoming comes; buildings ease to the rounded year the label
+  reads; the island/district handover is a switch; works blocks are boxed
+  tight and pulled apart. `features/footprints.js` counts what is drawn, and
+  a smoke check fails on any ground carrying two buildings at once. Measured
+  at Honolulu: 71, 109 and 99 part-faded buildings in 1853, 1896 and 1930
+  before, none after.
+- **Status:** landed on the branch.
 
 ### 10. Too many high-rises in Honolulu in 1978
 
