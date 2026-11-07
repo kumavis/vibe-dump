@@ -391,7 +391,14 @@ export function mulberry32(seed) {
 // members).
 // Every policy leaves a rider out of its moves, advances and pilots (it
 // moves only with its hull: the AI's), so a battle with transports plays
-// under any of them.
+// under any of them. (F9c) In the shooting phase its riders are its units
+// like any other, in the seat's unit order: a rider shoots from its hull's
+// deck while canAct says it may (a fire slot free, its hull not in combat;
+// the shoot entry is checked by canAct and shotInfo, as every shot), so
+// the vehicle/ and hull/ corpus's human logs (their bots `random`, `ride`
+// and `hull`, the AI-against-human logs' among them) hold riders' shots
+// (sim/corpus-add.mjs's `deckfire`). Only a battle with a rider aboard
+// plays otherwise than before.
 export function makePolicy(name, seed) {
   const rand = mulberry32(seed)
   const pick = (a) => a[Math.floor(rand() * a.length)]
@@ -552,6 +559,9 @@ export function makePolicy(name, seed) {
     // ((F9a) a rider moves only with its hull: never one of these policies'
     // own moves, advances or pilots)
     const mine = ts.units.filter((u) => u.side === s && q.alive(u) && !skipped.has(u.id) && !u.aboard)
+    // ((F9c) but it shoots from the deck: in the shooting phase the seat's
+    // riders join its units, in the units' order)
+    const acting = d.phase === 'shoot' ? ts.units.filter((u) => u.side === s && q.alive(u) && !skipped.has(u.id)) : mine
     // (ride) a rider stepping off, a unit boarding, before its own moves
     if (ride && d.phase === 'move') {
       if (typeof q.landing !== 'function' || typeof q.mayBoard !== 'function') throw new Error("the ride policy needs the page's ?debug q.landing and q.mayBoard (code older than F9a)")
@@ -583,7 +593,7 @@ export function makePolicy(name, seed) {
       }
     }
     for (;;) {
-      const ready = mine.filter((u) => !skipped.has(u.id) && q.canAct(u))
+      const ready = acting.filter((u) => !skipped.has(u.id) && q.canAct(u))
       if (!ready.length) return end
       const u = aggressive ? ready[0] : pick(ready)
       const pass = () => skipped.add(u.id)

@@ -122,6 +122,10 @@
 //              with nowhere to stand)
 //   rearranged the autoload re-arranged in the deployment (a rider placed
 //              off its hull, or a unit boarding there)
+//   (F9c, read off the match as the log is folded again, as F9a's last two)
+//   deckfire   a rider shot from its hull's deck (a volley, a template or
+//              a spell cast while it rode: sim/rider-probe.mjs's
+//              hullDeckShots, either seat's)
 // --carts <n> (F9a, with --auto-armies) each seat whose race fields a
 // transport draws its list again (autoList on k + 1000·j, j = 1, 2, …)
 // until it holds n War-Carts at least: the vehicle/ corpus's lists
@@ -189,6 +193,8 @@ const NEEDS = {
   disembark: (r) => (r.entries ?? []).some((e) => e.t === 'disembark'),
   bailout: (r) => r.rides.bailed > 0 && r.rides.bailDeaths > 0,
   rearranged: (r) => r.rides.rearranged > 0,
+  // (F9c: the probe's, r.rides)
+  deckfire: (r) => Object.values(r.rides.hullDeckShots ?? {}).some((n) => n > 0),
   // (F19a: the keg's own line, traced as every battle-log line is)
   keg: (r) => r.trace.some((l) => /^log \d The powder keg goes up! rng:/.test(l)),
   // (F7c: the probe's, r.falls)
@@ -202,7 +208,7 @@ const NEEDS = {
   hullbail: (r) => r.hulls.bailed > 0,
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
-const RIDE_NEEDS = ['bailout', 'rearranged']
+const RIDE_NEEDS = ['bailout', 'rearranged', 'deckfire']
 const FALL_NEEDS = ['collapse', 'fall']
 const HULL_NEEDS = ['hullpivot', 'reverse', 'hullbail']
 const { values: a } = parseArgs({
@@ -425,7 +431,9 @@ for (const c of chosen) {
   const high = h?.height && [h.works === 2 && 'works', h.keep && `keep held at ${h.keepHeld} round end${h.keepHeld === 1 ? '' : 's'}`, h.deployed && `deployed on decks ${h.deployed}`, h.deckRounds.length && `on a deck at the end of rounds ${h.deckRounds.join(' ')}`, h.movedRounds?.length && `by a move at the end of rounds ${h.movedRounds.join(' ')}`, h.climbs && `ladders ${h.climbs} (${h.up} up)`, h.ontoDeck && `onto a deck ${h.ontoDeck}`, h.deckFights && `deck fights ${h.deckFights}`].filter(Boolean).join(', ')
   // ((F9a) what it did with its transports: sim/rider-probe.mjs's counts)
   const rd = c.res.rides
-  const rides = rd && [rd.rearranged && `re-arranged ${rd.rearranged}`, rd.embarks && `embarks ${rd.embarks} (${rd.embarkPhase} in a phase)`, rd.steps && `steps off ${rd.steps}`, rd.bailed && `bail-outs ${rd.bailed} (${rd.bailDeaths} models lost)`, rd.lost && `riders lost ${rd.lost}`].filter(Boolean).join(', ')
+  // ((F9c) and the attacks from a deck, by hull and by seat)
+  const decks = rd && Object.entries(rd.hullDeckShots ?? {}).filter(([, n]) => n)
+  const rides = rd && [rd.rearranged && `re-arranged ${rd.rearranged}`, rd.embarks && `embarks ${rd.embarks} (${rd.embarkPhase} in a phase)`, rd.steps && `steps off ${rd.steps}`, rd.bailed && `bail-outs ${rd.bailed} (${rd.bailDeaths} models lost)`, rd.lost && `riders lost ${rd.lost}`, decks?.length && `deck shots ${decks.map(([k, n]) => `${k} ${n}`).join(' ')} (seat 0 ${rd.deckSeats[0]}, seat 1 ${rd.deckSeats[1]})`].filter(Boolean).join(', ')
   // ((F7c) what it did with its platforms: sim/collapse-probe.mjs's counts)
   const fl = c.res.falls
   const falls = fl && (fl.posts || fl.postsHit) && [`posts hit ${fl.postsHit + fl.posts} (${fl.posts} broken)`, fl.decks && `platforms fallen ${fl.decks}`, fl.falls && `units fallen ${fl.falls} (${fl.fallSlain} models slain${fl.crushed ? `, ${fl.crushed} crushed` : ''})`].filter(Boolean).join(', ')
