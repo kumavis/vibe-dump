@@ -1649,6 +1649,133 @@ terminal of 1925, the Seamen's Bethel and the Customs House, the bandstands
 of the palace and Kapiʻolani Park; the Sanborn sheets of 1914 and 1927
 (Library of Congress) and the Government Survey's town sheets would place
 most of them. The Royal Mausoleum is a burial ground and is not placed (§4).
+## Schools, dated
+
+Every school the record dates and places, standing from the year it opened
+to the year it closed or moved (ISSUES.md 11): today's public and charter
+schools, the private and mission schools, the colleges and the university,
+and the schools of the kingdom and the territory where a source gives the
+site. Each is a dated landmark of `kind: "school"`, the shape the named
+buildings share (a kind, a place and grounds where they are known, years,
+sources), so a palace and a school can be read by one reader. One file,
+`public/data/schools.json`, a GeoJSON FeatureCollection in lon/lat (WGS84),
+under 1.2 MB.
+
+```jsonc
+{ "type": "FeatureCollection",
+  "about": "...", "baked": "2026-11-06", "tolerance": 4,       // metres the grounds were simplified to
+  "layers": [ { "id": "hawaii-gis-public-schools", "layer": "https://...", "fetched": "2026-11-06", "features": 292 } ],
+  "sources": [ /* the records the years and sites were read from, in sources.json's shape (§4) */ ],
+  "unplaced": [ { "name": "...", "type": "mission", "island": "oahu", "from": 1864, "to": 1907, "sources": [ ... ], "note": "..." } ],
+  "stats": { "oahu": { "schools": 263, "grounds": 175, "standing": 255, "by": 97, "types": { ... } } },
+  "features": [ { "type": "Feature", "geometry": { "type": "Polygon", ... }, "properties": { ... } } ] }
+```
+
+Every feature's `properties`:
+
+| field | values |
+| --- | --- |
+| `id` | kebab-case ASCII, unique (`lahainaluna-high`) |
+| `kind` | `school` |
+| `name` | as the school writes it, with the standard ʻokina and kahakō; the name of the placement's years where it changed (`Chiefs’ Children’s School`), `alt` for others |
+| `label` | optional: the name the app shows across all the placement's years, where the name changed in a year the record read does not give (Lahainaluna, a seminary before it was a high school) |
+| `type` | `public` · `charter` · `private` · `mission` · `government` (the kingdom's and the territory's schools now gone) · `college` · `university`: what it is today, or was when it closed; `opened_as` where it began otherwise (Lahainaluna: `mission`) |
+| `island` | the island pack's id |
+| `at` | `[lon, lat]`, the school's point (the State's layer, or the site a source gives) |
+| `from`, `to` | the years it stood here: `from` the year it opened or came to this site, `to` the last year here (`null` while it stands) |
+| `datePrecision` | `year` · `decade` · `by` (the first record that shows it, named in `by`; the true year is earlier) |
+| `precision` | of the place: `exact` (a surveyed layer) · `mapped` (a source's own coordinates or a mapped building) · `inferred` (a site a source describes: beside a named building, a street, a village) |
+| `group` | the placements of one school that moved, or one institution's campuses (`saint-louis-school`: Kamakela 1883–1927, Kalaepōhaku from 1928) |
+| `grades`, `pupils` | `pupils: { year, n, source }`, the size the kit is chosen by |
+| `look` | optional: `[{ kit, variant, from }]`, what stood there by year where the record says more than the eras would (Lahainaluna's thatched beginning) |
+| `layer` | `{ source, key }`: where the point came from (a layer's object id, an OSM element, a source's coordinates) |
+| `grounds` | on a Polygon: `{ source, key, area }`, the OSM way the grounds were taken from, and its area in m² |
+| `sources` | `[{ id, where }]`, ids in the file's own `sources` or in sources.json, at least one opened |
+| `note` | what the record says of the school, in its plain words; years and days only, no figures |
+
+The geometry is the school's grounds (a Polygon, the campus as
+OpenStreetMap draws it) where one holds its point, else the Point. A
+school that moved is a feature per site; where it stood between two sites
+that the record does not give, it is in `unplaced` for those years, with its
+sources and why.
+
+Rules, enforced by `tools/check-data.mjs`: ids unique; vocabularies as
+above; the point on its island's land (a moku polygon of that island, or
+within 150 m of its coast) and inside its pack; the grounds a closed ring
+holding the point or within 250 m of it, inside the pack; `from` a year from
+1820 to the bake's, `to` null or from `from` on; `by` among the sources and
+opened; every citation's id in the file's sources or sources.json, one of
+them opened; the file's own sources under §4's rules (`read`, `opened`,
+`wanted`), none repeating an id of sources.json; `look` within the years; the
+names Hawaiian-checked; notes under the copy rule (DESIGN.md §7.4) and
+carrying no figure but years and days; `unplaced` dated and sourced; the
+stats as the features have them.
+
+**What the app draws** (features/schools.js, data/schools.js): every school
+on an island in its slot, from the near zoom out to the island zoom as the
+works' buildings are (BLOCK_RIG), in the kit of its era (buildings.js
+schoolKits, in the town's manner and scale): the frame schoolhouse of one
+room, a porch and a bell for the kingdom's and the plantations' schools, of
+two rooms with a yard for the larger, and the mission's two-storey hall of
+coral and plaster for the mission's schools and the large private ones; from
+about 1910 (each school in a year of its own between 1903 and 1917) the
+territory's two-storey block of tall windows before a yard, an L of two for
+a large school; from about 1955 (1950–64) the campus of low wings with
+covered walks and a field, three, four or six wings by size. A college or a
+university is a block before 1946 and a campus after. A school's size is its
+pupils where the file has them (under 200, under 900, more), else its
+grounds' area, else its kind; a school on grounds is turned to their long
+axis and fitted inside them. The eras cross over on one window, dithered
+over complementary pixels. The names show at the near zoom while the school
+stands. The settlements (the district's and every island's) keep their lots
+off the building drawn in its years, and from the campus on off the whole of
+its grounds; the trees keep off the building: features/works.js joins the
+schools' polys to the works' exclusion, so every reader of the works' ground
+reads them. The schools' years are not among the settlements' sampled years (the works' are): a school keeps the lots off from four years before it opens to four after it closes (data/schools.js KEEP_SLACK), so the lot is refused at the last sample before it and comes back at the first after. A data set without `schools.json` has no schools; `?schools=<base>`
+reads them from another base.
+
+### How to bake the schools
+
+```bash
+node packages/holo-i-ke-au/tools/bake-schools.mjs --all        # download (about 1 MB), bake, check, delete the downloads
+```
+
+or `--download` (the State's three school layers and the OSM grounds the
+table names, by id, through the Overpass API), `--bake` (joins, simplifies
+the grounds to 4 m, winds them, writes `public/data/schools.json`; stops on
+any row that does not join, a point off its pack, a point more than 250 m
+from its grounds, or the budget), `--check` (runs `tools/check-data.mjs`),
+`--clean`. `--downloads DIR` (or `$HOLO_SCHOOLS_DOWNLOADS`) moves the
+downloads from `<os tmpdir>/holo-i-ke-au-bake/schools-downloads`. Node 22 and
+`curl`. A re-bake from the same downloads is byte-identical but for `baked`.
+
+**Where things live.** `tools/lib/schools-table.json` is the hand table:
+one row per placement with its name, type, island, years and their
+precision, sources, note and group, joined to its point by `at: { layer,
+key }` (the State layer and its `objectid`) or given one (`at: { lonlat,
+precision, source, key }`), and to its grounds by `footprint` (an OSM `way/`
+or `relation/` id, or null); with the sources the rows cite and the schools
+dated but not placed. The table was written from the research below; the
+bake does not read the reports themselves.
+
+**What it rests on**:
+
+| what | source |
+| --- | --- |
+| public and charter schools' places | the State's Public Schools layer (Infrastructure MapServer 7, the Department of Education's of November 2024), its `objectid` per school |
+| private schools' places | the State's Private Schools layer (MapServer 8, the Hawaiʻi Association of Independent Schools' members of November 2021) |
+| colleges' places | the State's Postsecondary Institutions layer (MapServer 27, April 2017), the institutions with campuses |
+| grounds | OpenStreetMap's `amenity=school`, `college` and `university` areas: the area holding the school's point whose name shares a word with the school's, else a named one within 350 m, else an unnamed one under 20 ha holding the point; one wrong match (Mililani High, given its neighbour's) set to none by hand |
+| public schools' years | the Department's School Status and Improvement Reports (SY 1999–2000, 2004–05, 2009–10, 2014–15, 2018–19, 2024–25): the year each school's description says it was founded, established, opened or built, read by hand where a description gave another year (a programme's, a building's, an award's) or a move; where none says, `by` the first report that has the school |
+| names | the Department's own titles of SY 2024–25 and the Hawaiian words of its reports, the Charter School Commission's names for the charter schools, by hand where the layers abbreviate |
+| private schools' and colleges' years, moves and earlier sites | Wikipedia's articles on each (tertiary, read for their dates, moves and the sites they describe) and Wikidata's inception dates as a finding aid; where neither, `by` the State's layer of 2021 or 2017 |
+| sites now gone | the place a source names, as OpenStreetMap draws it: the Chiefs' Children's School where ʻIolani Barracks stand, the Kamehameha School for Boys on the Bishop Museum's grounds, St. Louis College beside Washington Place and at College Walk, the convent school beside the Cathedral of Our Lady of Peace, Hawaii Baptist Academy on Heulu Street, Maui High School at Hāmākuapoko |
+
+The kingdom's Board of Education reports, the Government Survey's Honolulu
+sheet of 1887, Sanborn's maps and the mission's station reports would give
+the government and station schools of the 1840s–1890s and their sites; none
+was opened in this pass, and each is in the file's sources with its
+`wanted`.
 
 ## Crops, on the era layers
 

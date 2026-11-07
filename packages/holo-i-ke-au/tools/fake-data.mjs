@@ -41,6 +41,9 @@
 //
 // And one test named building (DATA.md "Landmarks, dated"; test-data/landmarks.json)
 // on the test Nuʻuanu's flat, standing from 1845.
+// And two test schools (DATA.md "Schools, dated"; test-data/schools.json)
+// on the plain of the test Nuʻuanu district: a schoolhouse of 1850–1905 on
+// a point, and a school from 1890 on its grounds.
 //
 // And a test geology (DATA.md "Geology"; test-data/geology/): a seafloor
 // pack over a box wider than the test archipelago, four stages with their
@@ -650,6 +653,7 @@ testDistricts(spots)
 testLayers(spots, g.eras)
 testWorks(spots)
 testLandmarks(spots)
+testSchools()
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -1945,3 +1949,60 @@ function testGeology() {
 geologyGazetteer()
 testGeology()
 // ==== test geology end ================================================================
+
+// ==== test schools ===================================================================== [schools]
+/**
+ * Two test schools on the made-up Oʻahu (DATA.md "Schools, dated";
+ * test-data/schools.json), on the plain inside the test Nuʻuanu district so
+ * the settlements' checks find them there: a schoolhouse that stood from 1850
+ * to 1905 on a point, and a school standing from 1890 on its grounds, so its
+ * kit goes from the schoolhouse to the block to the campus. Shapes, not a
+ * record of any school.
+ */
+function testSchools() {
+  const H = (x, z) => heightAt(x, z)
+  const ll = ([x, z]) => [r7(lonOf(x)), r7(latOf(z))]
+  // the nearest low, gentle ground to (lon, lat)
+  const near = (lon, lat) => {
+    const [x0, z0] = [xkm(lon), zkm(lat)]
+    let best = null
+    let bd = Infinity
+    for (let dz = -3; dz <= 3; dz += 0.05) {
+      for (let dx = -3; dx <= 3; dx += 0.05) {
+        const d = Math.hypot(dx, dz)
+        if (d >= bd) continue
+        const [x, z] = [x0 + dx, z0 + dz]
+        const h = H(x, z)
+        if (!(h > 4 && h < 60) || Math.abs(H(x + 0.15, z) - H(x - 0.15, z)) > 5 || Math.abs(H(x, z + 0.15) - H(x, z - 0.15)) > 5) continue
+        bd = d
+        best = [x, z]
+      }
+    }
+    if (!best) throw new Error(`no test school spot near ${lon}, ${lat}`)
+    return best
+  }
+  const a = near(-157.858, 21.312)
+  const b = near(-157.835, 21.302)
+  const r = 0.11 // km: the second school's grounds, a square about its point
+  const ring = [[-1, 1], [1, 1], [1, -1], [-1, -1], [-1, 1]].map(([u, v]) => ll([b[0] + u * r, b[1] + v * r]))
+  const src = [{ id: 'test-schools', where: 'tools/fake-data.mjs' }]
+  const fetched = new Date().toISOString().slice(0, 10)
+  const feature = (geometry, p) => ({ type: 'Feature', properties: { kind: 'school', island: 'oahu', datePrecision: 'year', precision: 'inferred', sources: src, layer: { source: 'test-schools', key: p.id }, ...p }, geometry })
+  const features = [
+    feature({ type: 'Point', coordinates: ll(a) }, { id: 'test-schoolhouse', name: 'Test Schoolhouse', type: 'government', at: ll(a), from: 1850, to: 1905, note: 'A test shape (tools/fake-data.mjs), not a record.' }),
+    feature({ type: 'Polygon', coordinates: [ring] }, { id: 'test-school', name: 'Test School', type: 'public', at: ll(b), from: 1890, to: null, pupils: { year: 2020, n: 600, source: 'test-schools' }, grounds: { source: 'test-grounds', key: 'test-school' }, note: 'A test shape (tools/fake-data.mjs), not a record.' }),
+  ]
+  const fc = {
+    type: 'FeatureCollection',
+    about: 'test schools (tools/fake-data.mjs): shapes on the made-up Oʻahu, not a record',
+    baked: fetched,
+    layers: [{ id: 'test-grounds', layer: 'tools/fake-data.mjs', fetched, features: 1 }],
+    sources: [{ id: 'test-schools', title: 'Test schools (tools/fake-data.mjs)', author: 'tools/fake-data.mjs', year: 2026, url: 'https://example.org/holo-i-ke-au/test-schools', access: 'open', opened: true, read: 'full', note: 'Synthetic, for the checks.' }],
+    unplaced: [],
+    stats: { oahu: { schools: 2, grounds: 1, standing: 1, by: 0, types: { government: 1, public: 1 } } },
+    features,
+  }
+  writeFileSync(join(out, 'schools.json'), JSON.stringify(fc, null, 2))
+  console.log(`  test schools in ${join(out, 'schools.json')}: ${features.map((f) => `${f.properties.id} ${f.properties.from}–${f.properties.to ?? ''} at ${f.properties.at}`).join('; ')}`)
+}
+// ==== test schools end ==================================================================

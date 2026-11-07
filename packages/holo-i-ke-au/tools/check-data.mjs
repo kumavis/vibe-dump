@@ -18,7 +18,8 @@
 // exists, the works (DATA.md, “Works, dated”), held to their island packs in
 // manifest.json; and, when landmarks.json exists, the named buildings (DATA.md
 // “Landmarks, dated”); and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
-// and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there.
+// and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there;
+// and, when schools.json exists, the schools (DATA.md “Schools, dated”), each on its island's land within its pack, its years in order, its sources its own or sources.json's.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -1487,6 +1488,174 @@ function checkCrops(lm) {
 let worksCounts = null
 if (existsSync(join(DATA, 'works', 'manifest.json'))) checkWorks()
 
+// ==== [schools] schools.json: every school dated and placed (DATA.md "Schools, dated") ====
+let schoolCounts = null
+if (existsSync(join(DATA, 'schools.json'))) checkSchools()
+
+function checkSchools() {
+  const TYPES = new Set(['public', 'charter', 'private', 'mission', 'government', 'college', 'university'])
+  const DATES = new Set(['year', 'decade', 'by'])
+  const PRECISION = new Set(['exact', 'mapped', 'inferred'])
+  const KITS = { schoolhouse: 3, block: 2, campus: 3 } // kits and their variants (data/schools.js KIT_BOX)
+  const YEARS = [1820, 2026] // no school here before the mission's, none after the bake
+  const BUDGET = 1.2e6 // bytes
+  const GROUNDS_M = 250 // a school's point within this of its grounds
+  const COAST_M = 150 // a point this far off the moku polygons' coast still stands on its island (their 50 m simplification, fill)
+  // numbers in a note: years, decades, days of a month, a short range's second year, a king's numeral; no other figures
+  const noteNumbers = (at, text) => {
+    if (typeof text !== 'string') return
+    const w = text.match(BIG_WORDS)
+    if (w) bad(at, `has the number word “${w[0]}”; figures go in the fields that hold them`)
+    const re = /\d+(?:[.,]\d+)*/g
+    let m
+    while ((m = re.exec(text))) {
+      const tok = m[0]
+      const before = text.slice(Math.max(0, m.index - 12), m.index)
+      const year = /^(?:1[89]\d\d|20[0-2]\d)$/.test(tok)
+      const range = /^\d{2}$/.test(tok) && /\d{4}[–-]$/.test(before)
+      const day = /^\d{1,2}$/.test(tok) && (new RegExp(`^ (${MONTHS})\\b`).test(text.slice(m.index + tok.length)) || new RegExp(`(${MONTHS}) $`).test(before))
+      if (!(year || range || day)) bad(at, `has the figure “${tok}”; a note carries only years and days`)
+    }
+  }
+  const fc = load('schools.json')
+  if (!fc) return
+  const bytes = readFileSync(join(DATA, 'schools.json')).length
+  if (bytes > BUDGET) bad('schools.json', `is ${(bytes / 1e6).toFixed(2)} MB, over the ${BUDGET / 1e6} MB budget`)
+  if (fc.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad('schools.json', 'must be a FeatureCollection'); return }
+  // its own sources, in sources.json's shape and held to its rules; none may repeat an id of sources.json
+  const own = new Map()
+  for (const s of fc.sources || []) {
+    const at = `schools.json source ${s?.id}`
+    if (typeof s?.id !== 'string' || !ID.test(s.id)) { bad(at, 'id is not kebab-case ASCII'); continue }
+    if (own.has(s.id)) bad(at, 'id is not unique')
+    if (S.has(s.id)) bad(at, 'repeats an id of sources.json')
+    own.set(s.id, s)
+    if (!s.title || !s.author) bad(at, 'has no title or author')
+    if (!ACCESS.has(s.access)) bad(at, `access “${s.access}” is not open | print | paywalled`)
+    if (typeof s.opened !== 'boolean') bad(at, 'opened must be true or false')
+    if (!READ.has(s.read)) bad(at, `read “${s.read}” is not full | part | title`)
+    else if (s.opened === false && s.read !== 'title') bad(at, 'a source not opened can only have read “title”')
+    else if (s.opened === true && s.read === 'title') bad(at, 'a source opened must have read “full” or “part”')
+    if (s.opened === false && !(s.note && typeof s.wanted === 'string' && s.wanted.trim())) bad(at, 'a source not opened says in note what it is believed to hold and in wanted what to look for')
+    if (s.read === 'full' && s.wanted !== undefined) bad(at, 'a source read in full has nothing left to want; drop wanted')
+    if (s.access === 'open' && s.opened && !/^https?:\/\//.test(s.url || '')) bad(at, 'an open source that was read needs its url')
+    if ('tertiary' in s && typeof s.tertiary !== 'boolean') bad(at, 'tertiary must be true or false')
+  }
+  const src = (id) => own.get(id) ?? S.get(id)
+  const layers = new Set()
+  for (const l of fc.layers || []) {
+    if (!l.id || !/^\d{4}-\d{2}-\d{2}$/.test(l.fetched || '')) bad(`schools.json layer ${l.id}`, 'needs an id and its fetched date')
+    layers.add(l.id)
+  }
+  const packs = new Map()
+  try { for (const p of JSON.parse(readFileSync(join(DATA, 'manifest.json'), 'utf8')).packs || []) if (p.kind === 'island') packs.set(p.id, p.bounds) } catch { warn('schools', 'no manifest.json, so the schools are not held to their packs') }
+  const land = mokuGeo ? landTest(mokuGeo) : null
+  // the moku keys of an island (Kahoʻolawe's land is in Maui's Honuaʻula)
+  const onIsland = (key, island) => key && (key === 'land' || key.startsWith(`${island}:`) || (island === 'kahoolawe' && key === 'maui:Honuaʻula'))
+  const cites = (at, list) => {
+    if (!Array.isArray(list) || !list.length) { bad(at, 'cites no source'); return false }
+    let opened = false
+    for (const s of list) {
+      const id = typeof s === 'string' ? s : s?.id
+      if (!src(id)) bad(at, `cites “${id}”, in neither schools.json's sources nor sources.json`)
+      else if (src(id).opened) opened = true
+      if (typeof s === 'object' && s && typeof s.where !== 'string') bad(at, `its citation of “${id}” says no where`)
+    }
+    if (!opened) bad(at, 'none of its sources has been opened')
+    return true
+  }
+  const ids = new Set()
+  const counts = { n: 0, islands: {}, types: {}, by: 0, grounds: 0, closed: 0 }
+  for (const [i, f] of fc.features.entries()) {
+    const p = f?.properties || {}
+    const at = `schools.json ${p.id ?? `[${i}]`}`
+    if (!ID.test(p.id || '')) bad(at, 'id is not kebab-case ASCII')
+    if (ids.has(p.id)) bad(at, 'id is not unique')
+    ids.add(p.id)
+    if (p.kind !== 'school') bad(at, `kind “${p.kind}” is not school`)
+    if (typeof p.name !== 'string' || !p.name.trim()) bad(at, 'has no name')
+    checkHawaiian(`${at} name`, p.name)
+    if (typeof p.name === 'string' && NONSTANDARD.test(p.name.replace(/[’']s\b/g, '').replace(/[‘’]/g, (c, k, s) => (/[A-Za-z]/.test(s[k - 1] || '') && /[a-z]/.test(s[k + 1] || '') ? c : '')))) bad(`${at} name`, 'carries a glyph other than the standard ʻokina or kahakō')
+    for (const a of p.alt || []) checkHawaiian(`${at} alt`, a)
+    if (p.label !== undefined) { checkHawaiian(`${at} label`, p.label); checkCopy(`${at} label`, p.label) }
+    if (!TYPES.has(p.type)) bad(at, `type “${p.type}” is not ${[...TYPES].join(' | ')}`)
+    if (p.opened_as !== undefined && !TYPES.has(p.opened_as)) bad(at, `opened_as “${p.opened_as}” is not a type`)
+    const b = packs.get(p.island)
+    if (!b && packs.size) bad(at, `island “${p.island}” is not an island pack`)
+    const pt = p.at
+    if (!Array.isArray(pt) || pt.length !== 2 || !pt.every(Number.isFinite)) { bad(at, 'at must be [lon, lat]'); continue }
+    if (b && !inBounds(pt, b)) bad(at, `its point lies outside the ${p.island} pack`)
+    if (land) {
+      const key = land(pt)
+      if (!onIsland(key, p.island) && !(key === null && land.depth(pt) <= COAST_M)) bad(at, `its point lies ${key ? `in ${key}` : 'at sea'}, not on ${p.island}`)
+    }
+    // the years
+    if (!Number.isInteger(p.from) || p.from < YEARS[0] || p.from > YEARS[1]) bad(at, `from ${p.from} is not a year in ${YEARS.join('–')}`)
+    if (p.to !== null && (!Number.isInteger(p.to) || p.to < p.from || p.to > YEARS[1])) bad(at, `to ${p.to} is not null or a year from its from (${p.from}) to ${YEARS[1]}`)
+    if (!DATES.has(p.datePrecision)) bad(at, `datePrecision “${p.datePrecision}” is not year | decade | by`)
+    if (p.datePrecision === 'by') {
+      if (!(p.sources || []).some((s) => (s?.id ?? s) === p.by)) bad(at, `by “${p.by}” is not among its sources`)
+      else if (!src(p.by)?.opened) bad(at, `by “${p.by}” names a source not opened`)
+      counts.by++
+    } else if (p.by !== undefined) bad(at, 'has by but is not dated by')
+    if (!PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not exact | mapped | inferred`)
+    // the place: a point, or the grounds holding it
+    const g = f.geometry
+    if (g?.type === 'Point') {
+      if (g.coordinates[0] !== pt[0] || g.coordinates[1] !== pt[1]) bad(at, 'its Point is not its at')
+      if (p.grounds) bad(at, 'has grounds but no Polygon')
+    } else if (g?.type === 'Polygon') {
+      const ring = g.coordinates[0]
+      if (!Array.isArray(ring) || ring.length < 4 || ring[0][0] !== ring.at(-1)[0] || ring[0][1] !== ring.at(-1)[1]) bad(at, 'its grounds are not a closed ring')
+      else {
+        checkRing(`${at} grounds`, ring, true)
+        const inside = worksInPolygon(g, pt)
+        if (!inside && worksEdgeMetres(g, pt) > GROUNDS_M) bad(at, `its point lies ${Math.round(worksEdgeMetres(g, pt))} m from its grounds`)
+        if (b && ring.some((c) => !inBounds(c, b))) bad(at, `its grounds reach outside the ${p.island} pack`)
+      }
+      if (!p.grounds?.key || !layers.has(p.grounds.source)) bad(at, 'its grounds say no layer and key')
+      counts.grounds++
+    } else bad(at, 'geometry must be a Point or a Polygon')
+    if (!p.layer || !(layers.has(p.layer.source) || src(p.layer.source) || p.layer.source === 'osm') || !p.layer.key) bad(at, 'its layer names no source and key for its place')
+    cites(at, p.sources)
+    if (p.pupils !== undefined) {
+      const q = p.pupils
+      if (!Number.isInteger(q?.year) || !Number.isInteger(q?.n) || q.n <= 0 || !src(q.source)) bad(at, 'pupils must be { year, n, source }')
+    }
+    if (p.look !== undefined) {
+      if (!Array.isArray(p.look) || !p.look.length) bad(at, 'look must be a list')
+      else for (const l of p.look) if (!(l.kit in KITS) || !(Number.isInteger(l.variant) && l.variant >= 0 && l.variant < KITS[l.kit]) || !Number.isInteger(l.from) || l.from < p.from || (p.to !== null && l.from > p.to)) bad(at, `look ${JSON.stringify(l)} names no kit and variant within its years`)
+    }
+    if (p.group !== undefined && !ID.test(p.group)) bad(at, 'group is not kebab-case ASCII')
+    if (p.note !== undefined) {
+      checkCopy(`${at} note`, p.note)
+      checkHawaiian(`${at} note`, p.note)
+      noteNumbers(`${at} note`, p.note)
+    }
+    counts.n++
+    counts.islands[p.island] = (counts.islands[p.island] || 0) + 1
+    counts.types[p.type] = (counts.types[p.type] || 0) + 1
+    if (p.to !== null) counts.closed++
+  }
+  // the schools dated but not placed: each with its years, its sources and why
+  for (const [i, u] of (fc.unplaced || []).entries()) {
+    const at = `schools.json unplaced ${u?.name ?? `[${i}]`}`
+    if (!u?.name || !TYPES.has(u.type) || !Number.isInteger(u.from)) bad(at, 'needs a name, a type and a from year')
+    if (u.to !== null && u.to !== undefined && (!Number.isInteger(u.to) || u.to < u.from)) bad(at, 'to is before from')
+    checkHawaiian(`${at} name`, u.name)
+    cites(at, u.sources)
+    if (u.note !== undefined) {
+      checkCopy(`${at} note`, u.note)
+      noteNumbers(`${at} note`, u.note)
+    }
+  }
+  // the stats the bake wrote, against the features
+  for (const [island, st] of Object.entries(fc.stats || {})) if (st.schools !== (counts.islands[island] || 0)) bad(`schools.json stats ${island}`, `${st.schools} schools, but the file has ${counts.islands[island] || 0}`)
+  for (const s of own.keys()) if (![...fc.features.flatMap((f) => f.properties?.sources || []), ...(fc.unplaced || []).flatMap((u) => u.sources || [])].some((c) => (c?.id ?? c) === s) && own.get(s).opened) warn(`schools.json source ${s}`, 'is opened but no school cites it')
+  schoolCounts = { ...counts, bytes, unplaced: (fc.unplaced || []).length, sources: own.size }
+}
+// ==== [schools] end ====
+
 function checkWorks() {
   const KIND_PARTS = {
     military: ['land', 'runway', 'pier', 'block', 'range'],
@@ -2147,6 +2316,11 @@ function finish() {
   if (landmarkCounts) {
     const l = landmarkCounts
     console.log(`  landmarks ${l.n} named buildings, ${l.standing} standing, ${(l.bytes / 1024).toFixed(0)} KB (${fmt(l.types)}; ${fmt(l.precision)}); none on another's ground in its years`)
+  }
+  if (schoolCounts) {
+    const c = schoolCounts
+    console.log(`  schools   ${c.n} placed, ${(c.bytes / 1024).toFixed(0)} KB (${fmt(c.types)}); ${c.grounds} on their grounds, ${c.closed} closed or moved, ${c.by} dated by a record; ${c.unplaced} dated but not placed; ${c.sources} sources of its own`)
+    console.log(`            ${fmt(c.islands)}`)
   }
   if (geoCounts) {
     const g = geoCounts

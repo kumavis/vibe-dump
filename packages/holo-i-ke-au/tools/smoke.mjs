@@ -2507,6 +2507,53 @@ if (nuuanuHere) {
     console.log('      towns perf', JSON.stringify(out))
   })
 }
+// ---- the schools (features/schools.js): each stands only within its dates, the lots off it ----
+// A few schools (the test data's two; on the real data a closed school, one
+// that moved, and Lahainaluna through its kits): what stands at each in the
+// year before it opened, the year it opened, its last year and the year
+// after (app.schools.standing, the shaders' own weight), the spans its
+// instances carry on the GPU, and no building of the district's scatter on
+// a school's building in a year it stands.
+if (await ui('!!app.schools')) {
+  await check('schools: each stands only within its dates, and the lots keep off it', async () => {
+    await run('app.schools.load()')
+    await page.waitForFunction(() => window.__app.schools.byIsland !== null, null, { timeout: 120000 })
+    const want = ['test-schoolhouse', 'test-school', 'chiefs-childrens-school', 'saint-francis-school', 'st-louis-college-kamakela', 'kamehameha-school-for-boys', 'lahainaluna-high']
+    const list = (await ui(`${JSON.stringify(want)}.map((id) => app.schools.school(id)).filter(Boolean).map((s) => ({ id: s.id, island: s.island, from: s.from, to: s.to, x: s.x, z: s.z, eras: s.eras.map((e) => [e.kit, e.from, e.to, e.x, e.z, e.dir, e.hx, e.hz]) }))`)) || []
+    if (!list.length) throw new Error('none of the schools looked for is in the data')
+    const out = []
+    for (const s of list) {
+      const at = (y) => ui(`app.schools.standing('${s.id}', ${y}).reduce((n, e) => n + e.weight, 0)`)
+      const before = await at(s.from - 1.01)
+      const first = await at(s.from)
+      if (before > 0 || first < 0.99) throw new Error(`${s.id}: ${before} in the year before ${s.from}, ${first} in it`)
+      if (s.to !== null) {
+        const last = await at(s.to)
+        const after = await at(s.to + 1.01)
+        if (last < 0.99 || after > 0) throw new Error(`${s.id}: ${last} in its last year ${s.to}, ${after} after it`)
+      }
+      // every year between: one era whole, or two crossing on one window
+      for (let y = s.from; y <= (s.to ?? 2025); y += 7) {
+        const w = await at(y + 0.5)
+        if (Math.abs(w - 1) > 0.02) throw new Error(`${s.id}: ${w.toFixed(3)} standing in ${y + 0.5}`)
+      }
+      // on the GPU: the island's view, its instances' spans the eras' own
+      const year = s.to !== null ? Math.round((s.from + s.to) / 2) : s.from + 2
+      await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish(); app.rig.jump({ x: ${s.x}, z: ${s.z}, distance: 12, yaw: 0.6, pitch: 0.7 }); app.settle()`)
+      await page.waitForFunction((isl) => { const a = window.__app; a.settle(); return !!a.schools.islands.get(isl)?.view && a.towns.idle && (() => { const D = a.districts, t = a.rig.state.target, d = D.districtAt(t.x, t.z); return !d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready) })() }, s.island, { timeout: 400000 })
+      const spans = await ui(`app.schools.islands.get('${s.island}').view.instances.filter((i) => i.school === '${s.id}').map((i) => Array.from(i.mesh.geometry.attributes.aSpan.array.slice(i.index * 4, i.index * 4 + 4)))`)
+      if (spans.length !== s.eras.length) throw new Error(`${s.id}: ${spans.length} instances for ${s.eras.length} eras`)
+      if (Math.min(...spans.map((q) => q[0])) !== s.from - 1 || (s.to !== null && Math.max(...spans.map((q) => q[3])) !== s.to + 1)) throw new Error(`${s.id}: spans ${JSON.stringify(spans)} for ${s.from}–${s.to}`)
+      // the district's buildings off the school's building, in a year it stands
+      const onIt = await ui(`(() => { const S = app.districts.cur?.features?.settlements; if (!S?.ready || !S.alive) return null; const e = ${JSON.stringify(s.eras)}.find((q) => ${year} >= q[1] && (q[2] === null || ${year} <= q[2])); if (!e) return null; const [, , , ex, ez, dir, hx, hz] = e; const c = Math.cos(dir), sn = Math.sin(dir); const mx = ${s.x}, mz = ${s.z}; return S.alive(${year}).filter((b) => !b.landmark).filter((b) => { const dx = b.x - mx, dz = b.z - mz; const u = dx * c + dz * sn, v = -dx * sn + dz * c; return Math.abs(u) < hx * 0.9 && Math.abs(v) < hz * 0.9 }).length })()`)
+      if (onIt) throw new Error(`${s.id}: ${onIt} of the district's buildings on its building in ${year}`)
+      out.push(`${s.id} ${s.from}–${s.to ?? ''} (${s.eras.map((e) => e[0]).join(' → ')}${onIt === null ? '' : ', lots clear'})`)
+    }
+    console.log(`      ${out.join('; ')}`)
+    const st = await ui('app.schools.stats()')
+    console.log(`      ${st.schools} schools; ${JSON.stringify(st.islands.filter((i) => i.drawn).map((i) => ({ id: i.id, standing: i.standing, kits: i.kits, calls: i.calls })))}`)
+  })
+}
 // ==== [settlements] end =======================================================
 
 // ==== two districts, one across the years it is drawn at, and the coda ========= [koolaupoko]
