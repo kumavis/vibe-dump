@@ -1803,7 +1803,7 @@
     "key": 59
    },
    "footprint": "way/487538022",
-   "from": 1999,
+   "from": 1914,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -1815,15 +1815,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "sanborn-honolulu-1914",
+     "where": "sheet 82: Kaʻahumanu Public School, in the block of Pensacola, Beretania, Piʻikoi and Kīnau streets"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "sanborn-honolulu-1914",
    "pupils": {
     "year": 2018,
     "n": 506,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "The 1914 atlas draws Kaʻahumanu Public School in the block where the school stands now. No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "kaala-elementary",
@@ -12497,6 +12501,63 @@
     }
    ],
    "note": "At the corner of Beretania and Victoria Streets from 1907, renamed for the president, until its King Street campus opened in 1923; the record read does not say which corner. Placed at the crossing."
+  },
+  {
+   "id": "royal-school-emma-street",
+   "name": "Royal School",
+   "type": "government",
+   "island": "oahu",
+   "at": {
+    "layer": "public",
+    "key": 218
+   },
+   "footprint": null,
+   "from": 1914,
+   "to": 1966,
+   "datePrecision": "by",
+   "by": "sanborn-honolulu-1914",
+   "group": "royal-school",
+   "sources": [
+    {
+     "id": "sanborn-honolulu-1914",
+     "where": "sheet 50: Royal Public School, a brick hall in the block of Emma, Lusitana, Punchbowl and Vineyard streets"
+    },
+    {
+     "id": "wikipedia-royal-school",
+     "where": "history"
+    }
+   ],
+   "note": "The 1914 atlas draws the Royal Public School’s brick hall in the block where the school stands now; the article has it move to its present campus in 1967, when the building was taken down for the new highway. Placed at the school’s point of today in that block. It stood before 1914; the record read does not give since when."
+  },
+  {
+   "id": "liliuokalani-school",
+   "name": "Queen Liliʻuokalani School",
+   "type": "public",
+   "island": "oahu",
+   "at": {
+    "lonlat": [
+     -157.79801,
+     21.28196
+    ],
+    "precision": "mapped",
+    "source": "sanborn-honolulu-1914",
+    "key": "sheet 114, read off Waiʻalae Avenue between Koko Head and 13th Avenues"
+   },
+   "footprint": null,
+   "from": 1912,
+   "to": 2009,
+   "datePrecision": "year",
+   "sources": [
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2004–05, school description; the last report read is of SY 2009–10, and the Department lists the school closed"
+    },
+    {
+     "id": "sanborn-honolulu-1914",
+     "where": "sheet 114: Liliuokalani Public School, reinforced concrete, in the block of Koko Head Avenue, Waiʻalae Road, 13th Avenue and Parker Avenue"
+    }
+   ],
+   "note": "Dedicated in 1912 by Queen Liliʻuokalani; the 1914 atlas draws its concrete building off Waiʻalae Avenue. It stands to the last year a report read shows it."
   }
  ],
  "unplaced": [
@@ -12521,14 +12582,14 @@
    "type": "government",
    "island": "oahu",
    "from": 1851,
-   "to": 1966,
+   "to": 1913,
    "sources": [
     {
      "id": "wikipedia-royal-school",
      "where": "history"
     }
    ],
-   "note": "A day school after 1850 and later a public school, at a site the record read does not give until it came to its present campus in 1967."
+   "note": "A day school after 1850 and later a public school, at a site the records read do not give before the atlas of 1914."
   },
   {
    "name": "Luaʻehu School",
@@ -12705,20 +12766,6 @@
     }
    ],
    "note": "The first mission school open to common people, started at Lāhainā at the chiefs’ request."
-  },
-  {
-   "name": "Queen Liliʻuokalani Elementary School",
-   "type": "public",
-   "island": "oahu",
-   "from": 1912,
-   "to": 2009,
-   "sources": [
-    {
-     "id": "hidoe-ssir",
-     "where": "SY 2004–05 and 2009–10; the last report read is of SY 2009–10, and the Department lists the school closed"
-    }
-   ],
-   "note": "Dedicated in 1912 by Queen Liliʻuokalani, on Waiʻalae Avenue in Kaimukī."
   },
   {
    "name": "Keʻanae Elementary School",
@@ -14003,7 +14050,7 @@
    "access": "open",
    "opened": false,
    "read": "title",
-   "note": "Believed to draw the school buildings of Honolulu, Hilo and the larger towns with their footprints and storeys.",
+   "note": "Sanborn’s atlases of Honolulu and the towns are at the Library of Congress from 1914 on (Honolulu 1914 and 1927, Hilo 1914, Kahului, Wailuku, Lahaina and Pāʻia 1914, Kapaʻau 1921, Kaunakakai and Waialua 1927 and others); the Honolulu atlas of 1914 was read (its own entry). Earlier atlases (1891, 1899) were not found online.",
    "wanted": "Each school building drawn, with its footprint, its storeys and its sheet's year."
   },
   {
@@ -14221,6 +14268,18 @@
    "read": "part",
    "tertiary": true,
    "note": "Read 2026-11-07 (revision of 2026-11-03): established 1932 (the infobox)."
+  },
+  {
+   "id": "sanborn-honolulu-1914",
+   "title": "Insurance Maps of Honolulu, Territory of Hawaii (1914)",
+   "author": "Sanborn Map Company",
+   "year": 1914,
+   "url": "https://www.loc.gov/item/sanborn01537_001/",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Read 2026-11-08 in the Library of Congress’s scans: the index of specials (the public schools and their sheets) and sheets 50 (the Royal Public School), 74 (Pohukaina), 82 (Kaʻahumanu) and 114 (Liliʻuokalani), each school drawn with its buildings in its block between named streets.",
+   "wanted": "The other schools’ sheets (Kaʻiulani 15, Kalihi-waena 4 and 6, Kauluwela 27 and 30, Mōʻiliʻili 102, Waikīkī 120, Central Grammar 49 and 51, the Normal School 62), and the 1927 atlas, for their sites and the years between."
   }
  ]
 }
